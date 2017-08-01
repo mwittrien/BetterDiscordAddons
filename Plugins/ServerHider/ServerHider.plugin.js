@@ -5,6 +5,7 @@ class ServerHider {
 		
 		this.labels = {};
 		
+		//css based on Megamit/Mitchell's "Renamer" Plugin
 		this.css = `
 			<style class='serverhider'>
 			
