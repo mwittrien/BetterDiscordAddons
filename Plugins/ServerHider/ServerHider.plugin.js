@@ -5,7 +5,6 @@ class ServerHider {
 		
 		this.labels = {};
 		
-		//css based on Megamit/Mitchell's "Renamer" Plugin
 		this.css = `
 			<style class='serverhider'>
 			
@@ -249,7 +248,7 @@ class ServerHider {
 			changes.forEach(
 				(change, i) => {
 					if (change.addedNodes) {
-						[ ...change.addedNodes ].forEach((node) => {
+						change.addedNodes.forEach((node) => {
 							if (node.nodeType == 1 && node.className.includes("context-menu")) {
 								this.onContextMenu(node);
 							}
