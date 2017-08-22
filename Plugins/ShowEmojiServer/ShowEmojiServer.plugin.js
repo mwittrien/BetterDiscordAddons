@@ -3,7 +3,6 @@
 class ShowEmojiServer {
 	constructor () {
 		this.emojiList = {};
-		this.hovering = false;
 	}
 
 	getName () {return "showEmojiServer";}
@@ -63,7 +62,6 @@ class ShowEmojiServer {
 				}
 			}
 		}
-		console.log(this.getName() + ": EmojiList loaded.");
 	}
 	
 	hoverEmoji () {
