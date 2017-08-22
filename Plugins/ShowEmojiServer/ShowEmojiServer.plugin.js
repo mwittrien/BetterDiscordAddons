@@ -47,7 +47,7 @@ class ShowEmojiServer {
 			
 			for (var i = 0; i < rows.length; i++) {
 				var currentServer = rows[i].category;
-				if (currentServer.indexOf("custom") != -1){	
+				if (currentServer.indexOf("custom") != -1) {	
 					var emojis = rows[i].items;
 					for (var j = 0; j < emojis.length; j++) {
 						var emoji = emojis[j].emoji;
