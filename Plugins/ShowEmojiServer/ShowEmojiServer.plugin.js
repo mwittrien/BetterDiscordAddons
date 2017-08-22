@@ -10,7 +10,7 @@ class ShowEmojiServer {
 
 	getDescription () {return "Shows the server of the emoji, when you hover over it";}
 
-	getVersion () {return "1.0.0";}
+	getVersion () {return "1.1.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -20,53 +20,50 @@ class ShowEmojiServer {
 	unload () {}
 
 	start () {
-		var that = this;
-		if (document.getElementsByClassName("guild selected").length == 0) {
-			document.getElementsByClassName("avatar-small")[0].click();
-		}
-		setTimeout(function(){
-			$('.emojiButton-38mF6t').trigger("click");
-		}, 100);
-		setTimeout(function(){
-			$('#bda-qem-emojis').trigger("click");
-		}, 200);
-		setTimeout(function(){
-			var emojiList = that.emojiList;
-
-			var firstEmoji = document.getElementsByClassName("emoji-item")[0];
-			if (firstEmoji) {
-				var firstEmojiObj = that.getReactObject(firstEmoji);
-				var rows = firstEmojiObj.cachedMetaDataNoSearch;
-				var categories = firstEmojiObj.categories;
-				
-				$('.emojiButton-38mF6t').trigger("click");
-				
-				for (var i = 0; i < rows.length; i++) {
-					var currentServer = rows[i].category;
-					if (currentServer.indexOf("custom") != -1){	
-						var emojis = rows[i].items;
-						for (var j = 0; j < emojis.length; j++) {
-							var emoji = emojis[j].emoji;
-							var url = emoji.url;
-							var serverName = that.getNameOfServer(currentServer, categories);
-							emojiList[url] = serverName;
-						}
-					}
-				}
-			}
-			console.log(that.getName() + ": EmojiList loaded.");
-		}, 300);
 	}
 
 	stop () {
 	}
 	
+	onEmojiPicker (ele) {
+		console.log(ele);
+	}
+	
 	observer (e) {
 		var elem = e.addedNodes[0];
 		
-		if($(elem).find('.emoji-item')){
+		if ($(elem).find('.emoji-item')) {
 			this.hoverEmoji();
 		}
+		
+		if (elem && elem.id && elem.id == "bda-qem") {
+			this.loadEmojiList();
+		}
+	}
+	
+	loadEmojiList () {
+		var emojiList = this.emojiList;
+
+		var firstEmoji = document.getElementsByClassName("emoji-item")[0];
+		if (firstEmoji) {
+			var firstEmojiObj = this.getReactObject(firstEmoji);
+			var rows = firstEmojiObj.cachedMetaDataNoSearch;
+			var categories = firstEmojiObj.categories;
+			
+			for (var i = 0; i < rows.length; i++) {
+				var currentServer = rows[i].category;
+				if (currentServer.indexOf("custom") != -1){	
+					var emojis = rows[i].items;
+					for (var j = 0; j < emojis.length; j++) {
+						var emoji = emojis[j].emoji;
+						var url = emoji.url;
+						var serverName = this.getNameOfServer(currentServer, categories);
+						emojiList[url] = serverName;
+					}
+				}
+			}
+		}
+		console.log(this.getName() + ": EmojiList loaded.");
 	}
 	
 	hoverEmoji () {
@@ -79,7 +76,7 @@ class ShowEmojiServer {
 					url = url.replace("url(\"","").replace("\")","");
 					var serverName = emojiList[url];
 					if (serverName){
-						$(this).attr("title",serverName);
+						$(this).attr("title", serverName);
 					}
 				}
 			},
