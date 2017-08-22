@@ -68,18 +68,12 @@ class ShowEmojiServer {
 		var emojiList = this.emojiList;
 		$(".emoji-item").hover(
 			function () {
-				if (!this.hovering) {
-					this.hovering = true;
-					var url = $(this).css("background-image");
-					url = url.replace("url(\"","").replace("\")","");
-					var serverName = emojiList[url];
-					if (serverName){
-						$(this).attr("title", serverName);
-					}
+				var url = $(this).css("background-image");
+				url = url.replace("url(\"","").replace("\")","");
+				var serverName = emojiList[url];
+				if (serverName){
+					$(this).attr("title", serverName);
 				}
-			},
-			function () {
-				this.hovering = false;
 			}
 		);
 	}
