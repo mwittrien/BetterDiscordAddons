@@ -67,10 +67,6 @@ class ShowEmojiServer {
 		if($(elem).find('.emoji-item')){
 			this.hoverEmoji();
 		}
-		
-		if($(elem).hasClass("tooltip")){
-			console.log(elem);
-		}
 	}
 	
 	hoverEmoji () {
