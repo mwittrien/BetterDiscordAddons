@@ -24,10 +24,6 @@ class ShowEmojiServer {
 	stop () {
 	}
 	
-	onEmojiPicker (ele) {
-		console.log(ele);
-	}
-	
 	observer (e) {
 		var elem = e.addedNodes[0];
 		
@@ -55,9 +51,10 @@ class ShowEmojiServer {
 					var emojis = rows[i].items;
 					for (var j = 0; j < emojis.length; j++) {
 						var emoji = emojis[j].emoji;
-						var url = emoji.url;
+						var emojiUrl = emoji.url;
+						var emojiName = emoji.allNamesString;
 						var serverName = this.getNameOfServer(currentServer, categories);
-						emojiList[url] = serverName;
+						emojiList[emojiUrl] = JSON.stringify({emojiName:emojiName,serverName:serverName});
 					}
 				}
 			}
@@ -68,11 +65,13 @@ class ShowEmojiServer {
 		var emojiList = this.emojiList;
 		$(".emoji-item").hover(
 			function () {
-				var url = $(this).css("background-image");
-				url = url.replace("url(\"","").replace("\")","");
-				var serverName = emojiList[url];
-				if (serverName){
-					$(this).attr("title", serverName);
+				var emojiUrl = $(this).css("background-image");
+				emojiUrl = emojiUrl.replace("url(\"","").replace("\")","");
+				if (emojiList[emojiUrl]){
+					var data = JSON.parse(emojiList[emojiUrl]);
+					var emojiName = data.emojiName;
+					var serverName = data.serverName;
+					$(this).attr("title", emojiName + "\n" + serverName);
 				}
 			}
 		);
