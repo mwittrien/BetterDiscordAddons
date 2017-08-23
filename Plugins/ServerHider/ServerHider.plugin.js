@@ -177,8 +177,7 @@ class ServerHider {
 		`;
 		
 		this.modalMarkup =
-			`<div class="flexcroll">
-			<span class="serverhider-modal">
+			`<span class="serverhider-modal">
 				<div class="callout-backdrop serverhider" style="background-color:#000; opacity:0.85"></div>
 				<div class="modal" style="opacity: 1">
 					<div class="modal-inner">
@@ -259,7 +258,7 @@ class ServerHider {
 				}
 			);
 		});
-		this.serverContextObserver.observe($("#app-mount>:first-child")[ 0 ], { childList: true });
+		this.serverContextObserver.observe($("#app-mount>:first-child")[0], {childList: true});
 		
 		$('head').append(this.css);
 		
