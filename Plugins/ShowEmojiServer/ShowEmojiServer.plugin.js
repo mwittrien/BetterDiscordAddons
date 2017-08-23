@@ -2,6 +2,8 @@
 
 class ShowEmojiServer {
 	constructor () {
+		this.emojiPickerObserver;
+		
 		this.emojiList = {};
 	}
 
@@ -9,7 +11,7 @@ class ShowEmojiServer {
 
 	getDescription () {return "Shows the server of the emoji, when you hover over it";}
 
-	getVersion () {return "1.1.0";}
+	getVersion () {return "1.2.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -19,21 +21,27 @@ class ShowEmojiServer {
 	unload () {}
 
 	start () {
+		this.emojiPickerObserver = new MutationObserver((changes, _) => {
+			changes.forEach(
+				(change, i) => {
+					if (change.addedNodes) {
+						change.addedNodes.forEach((node) => {
+							if ($(node).find('.emoji-item')) {
+								this.hoverEmoji();
+							}
+							if (node && node.id && node.id == "bda-qem") {
+								this.loadEmojiList();
+							}
+						});
+					}
+				}
+			);
+		});
+		this.emojiPickerObserver.observe($("#app-mount>:first-child")[0], {childList: true, subtree: true});
 	}
 
 	stop () {
-	}
-	
-	observer (e) {
-		var elem = e.addedNodes[0];
-		
-		if ($(elem).find('.emoji-item')) {
-			this.hoverEmoji();
-		}
-		
-		if (elem && elem.id && elem.id == "bda-qem") {
-			this.loadEmojiList();
-		}
+		this.emojiPickerObserver.disconnect();
 	}
 	
 	loadEmojiList () {
@@ -47,7 +55,7 @@ class ShowEmojiServer {
 			
 			for (var i = 0; i < rows.length; i++) {
 				var currentServer = rows[i].category;
-				if (currentServer.indexOf("custom") != -1) {	
+				if (currentServer.indexOf("custom") != -1){	
 					var emojis = rows[i].items;
 					for (var j = 0; j < emojis.length; j++) {
 						var emoji = emojis[j].emoji;
@@ -65,14 +73,21 @@ class ShowEmojiServer {
 		var emojiList = this.emojiList;
 		$(".emoji-item").hover(
 			function () {
-				var emojiUrl = $(this).css("background-image");
-				emojiUrl = emojiUrl.replace("url(\"","").replace("\")","");
-				if (emojiList[emojiUrl]){
-					var data = JSON.parse(emojiList[emojiUrl]);
-					var emojiName = data.emojiName;
-					var serverName = data.serverName;
-					$(this).attr("title", emojiName + "\n" + serverName);
+				if (!this.hovering) {
+					this.hovering = true;
+					var emojiUrl = $(this).css("background-image");
+					emojiUrl = emojiUrl.replace("url(\"","").replace("\")","");
+					if (emojiList[emojiUrl]){
+						var data = JSON.parse(emojiList[emojiUrl]);
+						var emojiName = data.emojiName;
+						var serverName = data.serverName;
+						console.log(emojiName + " " + serverName);
+						$(this).attr("title", emojiName + "\n" + serverName);
+					}
 				}
+			},
+			function () {
+				this.hovering = false;
 			}
 		);
 	}
