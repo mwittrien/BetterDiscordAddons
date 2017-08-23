@@ -81,7 +81,6 @@ class ShowEmojiServer {
 						var data = JSON.parse(emojiList[emojiUrl]);
 						var emojiName = data.emojiName;
 						var serverName = data.serverName;
-						console.log(emojiName + " " + serverName);
 						$(this).attr("title", emojiName + "\n" + serverName);
 					}
 				}
