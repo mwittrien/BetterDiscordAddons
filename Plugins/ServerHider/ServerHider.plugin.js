@@ -5,6 +5,8 @@ class ServerHider {
 		
 		this.labels = {};
 		
+		this.serverContextObserver;
+		
 		this.css = `
 			<style class='serverhider'>
 			
@@ -234,7 +236,7 @@ class ServerHider {
 
 	getDescription () {return "Hide Servers in your Serverlist";}
 
-	getVersion () {return "1.0.0";}
+	getVersion () {return "1.1.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -244,7 +246,7 @@ class ServerHider {
 	unload () {}
 
 	start () {
-		const contextmo = new MutationObserver((changes, _) => {
+		this.serverContextObserver = new MutationObserver((changes, _) => {
 			changes.forEach(
 				(change, i) => {
 					if (change.addedNodes) {
@@ -257,7 +259,7 @@ class ServerHider {
 				}
 			);
 		});
-		contextmo.observe($("#app-mount>:first-child")[ 0 ], { childList: true });
+		this.serverContextObserver.observe($("#app-mount>:first-child")[ 0 ], { childList: true });
 		
 		$('head').append(this.css);
 		
@@ -267,6 +269,7 @@ class ServerHider {
 	}
 
 	stop () {
+		this.serverContextObserver.disconnect();
 		$('.serverhider').remove();
 	}
 
