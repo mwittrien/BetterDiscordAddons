@@ -1,8 +1,7 @@
 //META{"name":"ServerHider"}*//
 
 class ServerHider {
-	constructor () {
-		
+	constructor () {	
 		this.labels = {};
 		
 		this.serverContextObserver;
