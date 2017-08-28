@@ -127,22 +127,50 @@ class ServerHider {
 				border-bottom: 1px solid #2F3237;
 			}
 			
-			.serverhider-modal .server-entry .modal-server-icon {
-				width: 50px;
+			.serverhider-modal .server-entry .modal-server-guild {
 				height: 50px;
-				border-radius: 25px;
-				vertical-align: middle;
+				width: 50px;
+				display: inline-block;
 			}
 			
-			.serverhider-modal .server-entry .modal-server-init {
+			.serverhider-modal .server-entry .modal-server-guild .modal-server-guildinner {
+				height: inherit;
+				width: inherit;
+				background-color: #484B51;
+				border-radius: 25px;
+			}
+			
+			.serverhider-modal .server-entry .modal-server-guild .modal-server-guildinner .modal-server-icon {
+				height: inherit;
+				width: inherit;
+				border-radius: inherit;
+			}
+			
+			.serverhider-modal .server-entry .modal-server-guild .modal-server-guildinner .modal-server-init {
 				color: #b9bbbe;
 				letter-spacing: .5px;
 				font-size: 16px;
 				font-weight: 600;
-				height: 50px;
-				width: 50px;
+				height: inherit;
+				width: inherit;
 				line-height: 50px;
 				display: inline-block;
+				text-align: center;
+			}
+			
+			.serverhider-modal .server-entry .modal-server-guild .modal-server-badge {
+				border-radius: 3px;
+				background-color: #f04747;
+				box-shadow: 0 1px 0 rgba(0,0,0,.25), inset 0 1px 0 hsla(0,0%,100%,.15);
+				color: #fff;
+				font-size: 12px;
+				font-weight 500;
+				line-height: 12px;
+				display: inline-block;
+				text-shadow: 0 1px 0 rgba(0,0,0,.25);
+				padding: 2px 6px;
+				margin-top: -30px;
+				margin-left: 35px;
 				text-align: center;
 				vertical-align: middle;
 			}
@@ -153,7 +181,7 @@ class ServerHider {
 				text-transform: uppercase;
 				flex: 1;
 				cursor: default;
-				margin-top: 0;
+				margin-top: -70px;
 				margin-left: 10px;
 				font-weight: 600;
 				line-height: 16px;
@@ -198,14 +226,20 @@ class ServerHider {
 
 		this.serverEntryMarkup =
 			`<div class="server-entry">
-				<img class="modal-server-icon" src="">
+				<div class="modal-server-guild">
+					<div class="modal-server-guildinner"><img class="modal-server-icon" src=""></div>
+					<div class="modal-server-badge"></div>
+				</div>
 				<label class="modal-servername-label" for="modal-text">modal-servername-label</label>
 				<button type="button" class="btn btn-hide">REPLACE_btn_visible_text</button>
 			</div>`;
 
 		this.serverEntryMarkupWoIcon =
 			`<div class="server-entry">
-				<div class="modal-server-init">modal-server-init</div>
+				<div class="modal-server-guild">
+					<div class="modal-server-guildinner"><div class="modal-server-init">modal-server-init</div></div>
+					<div class="modal-server-badge"></div>
+				</div>
 				<label class="modal-servername-label" for="modal-text">modal-servername-label</label>
 				<button type="button" class="btn btn-hide">REPLACE_btn_visible_text</button>
 			</div>`;
@@ -235,14 +269,12 @@ class ServerHider {
 
 	getDescription () {return "Hide Servers in your Serverlist";}
 
-	getVersion () {return "1.1.0";}
+	getVersion () {return "1.2.0";}
 
 	getAuthor () {return "DevilBro";}
 
 	//legacy
 	load () {}
-
-	unload () {}
 
 	start () {
 		this.serverContextObserver = new MutationObserver((changes, _) => {
@@ -356,6 +388,7 @@ class ServerHider {
 		
 		for (var i = 0; i < servers.length; i++) {
 			var data = this.getServerInformation(servers[i]);
+			var badge = this.getNotificationBadge(servers[i]);
 			if (data) {
 				var entry;
 				if (data.icon) {
@@ -365,6 +398,12 @@ class ServerHider {
 				else {
 					entry = $(this.serverEntryMarkupWoIcon);
 					entry.find(".modal-server-init").text(this.getDivOfServer(data.id).firstChild.innerText);
+				}
+				if (badge) {
+					entry.find(".modal-server-badge").text(badge.innerText);
+				}
+				else {
+					entry.find(".modal-server-badge").css("padding", "0px");
 				}
 				entry.find(".modal-servername-label").text(data.name);
 				entry.find(".modal-servername-label").attr("id", data.id);
@@ -487,6 +526,15 @@ class ServerHider {
 			else {
 				return null;
 			}
+		}
+		else {
+			return null;
+		}
+	}
+	
+	getNotificationBadge (server) {
+		if (server.childElementCount > 1) {
+			return server.children[1];
 		}
 		else {
 			return null;
