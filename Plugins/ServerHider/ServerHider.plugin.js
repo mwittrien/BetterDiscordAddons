@@ -544,7 +544,7 @@ class ServerHider {
 					btn_visible_text:		"Synlig",
 					btn_hidden_text:		"Skjult",
 					context_hide_text:		"Skjul Server",
-					context_hidemenu_text:		"Styre Serverliste"
+					context_hidemenu_text:	"Styre Serverliste"
 				};
 			case "de": 		//german
 				return {
@@ -554,7 +554,7 @@ class ServerHider {
 					btn_visible_text:		"Sichtbar",
 					btn_hidden_text:		"Versteckt",
 					context_hide_text:		"Verstecke Server",
-					context_hidemenu_text:		"Verwalte Serverliste"
+					context_hidemenu_text:	"Verwalte Serverliste"
 				};
 			case "es": 		//spanish
 				return {
@@ -564,7 +564,7 @@ class ServerHider {
 					btn_visible_text:		"Visible",
 					btn_hidden_text:		"Oculto",
 					context_hide_text:		"Ocultar servidor",
-					context_hidemenu_text:		"Administrar lista de servidores"
+					context_hidemenu_text:	"Administrar lista de servidores"
 				};
 			case "fr": 		//french
 				return {
@@ -574,7 +574,7 @@ class ServerHider {
 					btn_visible_text:		"Visible",
 					btn_hidden_text:		"Caché",
 					context_hide_text:		"Cacher le serveur",
-					context_hidemenu_text:		"Gérer la liste des serveurs"
+					context_hidemenu_text:	"Gérer la liste des serveurs"
 				};
 			case "it": 		//italian
 				return {
@@ -584,7 +584,7 @@ class ServerHider {
 					btn_visible_text:		"Visible",
 					btn_hidden_text:		"Nascosta",
 					context_hide_text:		"Nascondi il server",
-					context_hidemenu_text:		"Gestione elenco dei server"
+					context_hidemenu_text:	"Gestione elenco dei server"
 				};
 			case "nl":		//dutch
 				return {
@@ -594,7 +594,7 @@ class ServerHider {
 					btn_visible_text:		"Zichtbaar",
 					btn_hidden_text:		"Verborgen",
 					context_hide_text:		"Verberg server",
-					context_hidemenu_text:		"Beheer serverlijst"
+					context_hidemenu_text:	"Beheer serverlijst"
 				};
 			case "no":		//norwegian
 				return {
@@ -604,7 +604,7 @@ class ServerHider {
 					btn_visible_text:		"Synlig",
 					btn_hidden_text:		"Skjult",
 					context_hide_text:		"Skjul server",
-					context_hidemenu_text:		"Administrer serverliste"
+					context_hidemenu_text:	"Administrer serverliste"
 				};
 			case "pl":		//polish
 				return {
@@ -614,7 +614,7 @@ class ServerHider {
 					btn_visible_text:		"Widoczny",
 					btn_hidden_text:		"Ukryty",
 					context_hide_text:		"Ukryj serwer",
-					context_hidemenu_text:		"Zarządzaj listą serwerów"
+					context_hidemenu_text:	"Zarządzaj listą serwerów"
 				};
 			case "pt":		//portuguese (brazil)
 				return {
@@ -624,7 +624,7 @@ class ServerHider {
 					btn_visible_text:		"Visível",
 					btn_hidden_text:		"Oculto",
 					context_hide_text:		"Ocultar servidor",
-					context_hidemenu_text:		"Gerenciar lista de servidores"
+					context_hidemenu_text:	"Gerenciar lista de servidores"
 				};
 			case "fi":		//finnish
 				return {
@@ -634,7 +634,7 @@ class ServerHider {
 					btn_visible_text:		"Näkyvä",
 					btn_hidden_text:		"Kätketty",
 					context_hide_text:		"Piilota palvelin",
-					context_hidemenu_text:		"Hallinnoi palvelinluetteloa"
+					context_hidemenu_text:	"Hallinnoi palvelinluetteloa"
 				};
 			case "sv":		//swedish
 				return {
@@ -644,7 +644,7 @@ class ServerHider {
 					btn_visible_text:		"Synlig",
 					btn_hidden_text:		"Dold",
 					context_hide_text:		"Dölj server",
-					context_hidemenu_text:		"Hantera serverlistan"
+					context_hidemenu_text:	"Hantera serverlistan"
 				};
 			case "tr":		//turkish
 				return {
@@ -654,7 +654,7 @@ class ServerHider {
 					btn_visible_text:		"Görünür",
 					btn_hidden_text:		"Gizli",
 					context_hide_text:		"Sunucuyu Gizle",
-					context_hidemenu_text:		"Sunucu Listesini Yönet"
+					context_hidemenu_text:	"Sunucu Listesini Yönet"
 				};
 			case "cs":		//czech
 				return {
@@ -664,7 +664,7 @@ class ServerHider {
 					btn_visible_text:		"Viditelné",
 					btn_hidden_text:		"Skrytý",
 					context_hide_text:		"Skrýt server",
-					context_hidemenu_text:		"Správa seznamu serverů"
+					context_hidemenu_text:	"Správa seznamu serverů"
 				};
 			case "bg":		//bulgarian
 				return {
@@ -674,7 +674,7 @@ class ServerHider {
 					btn_visible_text:		"Bидим",
 					btn_hidden_text:		"Cкрит",
 					context_hide_text:		"Скриване на сървър",
-					context_hidemenu_text:		"Управление на списъка със сървъри"
+					context_hidemenu_text:	"Управление на списъка със сървъри"
 				};
 			case "ru":		//russian
 				return {
@@ -684,7 +684,7 @@ class ServerHider {
 					btn_visible_text:		"Bидимый",
 					btn_hidden_text:		"Cкрытый",
 					context_hide_text:		"Скрыть сервер",
-					context_hidemenu_text:		"Управление списком серверов"
+					context_hidemenu_text:	"Управление списком серверов"
 				};
 			case "uk":		//ukranian
 				return {
@@ -694,7 +694,7 @@ class ServerHider {
 					btn_visible_text:		"Видимий",
 					btn_hidden_text:		"Cхований",
 					context_hide_text:		"Сховати сервер",
-					context_hidemenu_text:		"Управління списком серверів"
+					context_hidemenu_text:	"Управління списком серверів"
 				};
 			case "ja":		//japanese
 				return {
@@ -704,7 +704,7 @@ class ServerHider {
 					btn_visible_text:		"見える",
 					btn_hidden_text:		"隠された",
 					context_hide_text:		"サーバーを隠す",
-					context_hidemenu_text:		"サーバーリストを管理する"
+					context_hidemenu_text:	"サーバーリストを管理する"
 				};
 			case "zh":		//chinese (traditional)
 				return {
@@ -714,7 +714,7 @@ class ServerHider {
 					btn_visible_text:		"可见",
 					btn_hidden_text:		"隐",
 					context_hide_text:		"隐藏服务器",
-					context_hidemenu_text:		"管理服务器列表"
+					context_hidemenu_text:	"管理服务器列表"
 				};
 			case "ko":		//korean
 				return {
@@ -724,7 +724,7 @@ class ServerHider {
 					btn_visible_text:		"명백한",
 					btn_hidden_text:		"숨겨진",
 					context_hide_text:		"서버 숨기기",
-					context_hidemenu_text:		"서버 목록 관리"
+					context_hidemenu_text:	"서버 목록 관리"
 				};
 			default:		//default: english
 				return {
@@ -734,7 +734,7 @@ class ServerHider {
 					btn_visible_text:		"Visible",
 					btn_hidden_text:		"Hidden",
 					context_hide_text:		"Hide Server",
-					context_hidemenu_text:		"Manage Serverlist"
+					context_hidemenu_text:	"Manage Serverlist"
 				};
 		}
 	}
