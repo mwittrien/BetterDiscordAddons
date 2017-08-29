@@ -10,16 +10,16 @@ class ServerHider {
 		this.css = `
 			<style class='serverhider'>
 			
-			#scrolldiv::-webkit-scrollbar {
+			#serverhider-scrolldiv::-webkit-scrollbar {
 				width: 12px;
 			}
 
-			#scrolldiv::-webkit-scrollbar-thumb {
+			#serverhider-scrolldiv::-webkit-scrollbar-thumb {
 				background-color: #1e2124;
 				border-radius: 7px;
 			}
 
-			#scrolldiv::-webkit-scrollbar-track-piece {
+			#serverhider-scrolldiv::-webkit-scrollbar-track-piece {
 				background-color: #2f3136;
 				border-radius: 7px;
 			}
@@ -172,10 +172,11 @@ class ServerHider {
 				flex: 1;
 				font-size: 12px;
 				font-weight: 600;
+				height: 50px;
 				letter-spacing: .5px;
-				line-height: 16px;
+				line-height: 50px;
 				margin-left: 10px;
-				margin-top: -75px;
+				margin-top: -77px;
 				overflow: hidden;
 				text-transform: uppercase;
 				vertical-align: middle;
@@ -194,16 +195,16 @@ class ServerHider {
 			'</style>
 		`;
 		
-		this.modalMarkup =
+		this.serverHiderModalMarkup =
 			`<span class="serverhider-modal">
-				<div class="callout-backdrop serverhider" style="background-color:#000; opacity:0.85"></div>
+				<div class="callout-backdrop" style="background-color:#000; opacity:0.85"></div>
 				<div class="modal" style="opacity: 1">
 					<div class="modal-inner">
 						<form class="form">
 							<div class="form-header">
 								<header class="modal-header">REPLACE_modal_header_text</header>
 							</div>
-							<div class="form-inner" id="scrolldiv">
+							<div class="form-inner" id="serverhider-scrolldiv">
 							</div>
 							<div class="form-actions">
 								<button type="button" class="btn btn-ok">REPLACE_btn_ok_text</button>
@@ -225,7 +226,7 @@ class ServerHider {
 			</div>`;
 
 		this.contextMarkup =
-			`<div class="item-group serverhider">
+			`<div class="item-group">
 				<div class="item hideserver-item">
 					<span>REPLACE_context_hide_text</span>
 					<div class="hint"></div>
@@ -288,9 +289,9 @@ class ServerHider {
 	}
 
 	changeLanguageStrings () {
-		this.modalMarkup = 				this.modalMarkup.replace("REPLACE_modal_header_text", this.labels.modal_header_text);
-		this.modalMarkup = 				this.modalMarkup.replace("REPLACE_btn_ok_text", this.labels.btn_ok_text);
-		this.modalMarkup = 				this.modalMarkup.replace("REPLACE_btn_all_text", this.labels.btn_all_text);
+		this.serverHiderModalMarkup = 	this.serverHiderModalMarkup.replace("REPLACE_modal_header_text", this.labels.modal_header_text);
+		this.serverHiderModalMarkup = 	this.serverHiderModalMarkup.replace("REPLACE_btn_ok_text", this.labels.btn_ok_text);
+		this.serverHiderModalMarkup = 	this.serverHiderModalMarkup.replace("REPLACE_btn_all_text", this.labels.btn_all_text);
 		
 		this.serverEntryMarkup = 		this.serverEntryMarkup.replace("REPLACE_btn_visible_text", this.labels.btn_visible_text);
 		
@@ -309,13 +310,13 @@ class ServerHider {
 					var { id, name } = children[i].props.guild;
 					var data = { id, name };
 					$(context).append(this.contextMarkup)
-					.on("click.serverhider", ".hideserver-item", data, this.onContextHide.bind(this))
-					.on("click.serverhider", ".openhidemenu-item", this.onContextHidemenu.bind(this))
+					.on("click", ".hideserver-item", data, this.onContextHide.bind(this))
+					.on("click", ".openhidemenu-item", this.onContextHidemenu.bind(this))
 					break;
 				}
 				else if (children[i] && children[i].type && children[i].type.displayName == "GuildCreateJoinGroup") {
 					$(context).append(this.contextMarkup)
-					.on("click.serverhider", ".openhidemenu-item", this.onContextHidemenu.bind(this))
+					.on("click", ".openhidemenu-item", this.onContextHidemenu.bind(this))
 					.find(".hideserver-item").hide();
 					break;
 				}
@@ -339,10 +340,10 @@ class ServerHider {
 	}
 	
 	showServerModal () {
-		var modal = $(this.modalMarkup);
-		modal.appendTo("#app-mount>:first-child")
+		var serverHiderModal = $(this.serverHiderModalMarkup);
+		serverHiderModal.appendTo("#app-mount")
 		.on("click", ".callout-backdrop,button.btn-ok", (e) => {
-			modal.remove();
+			serverHiderModal.remove();
 		})
 		.on("click", "button.btn-all", (e) => {
 			var servers = this.readServerList();
@@ -364,7 +365,7 @@ class ServerHider {
 					entry.find(".modal-server-icon").css("background-image", "url('https://cdn.discordapp.com/icons/" + data.id + "/" + data.icon + ".png')");
 				}
 				else {
-					entry.find(".modal-server-icon").text(this.getDivOfServer(data.id).firstChild.innerText);
+					entry.find(".modal-server-icon").text(servers[i].firstChild.innerText);
 				}
 				if (badge) {
 					entry.find(".modal-server-badge").text(badge.innerText);
