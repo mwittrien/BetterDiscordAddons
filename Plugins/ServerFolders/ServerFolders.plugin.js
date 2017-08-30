@@ -5,6 +5,8 @@ class ServerFolders {
 		
 		this.selectedFolder;
 		
+		this.folderIDs = {};
+		
 		this.serverContextObserver;
 
 		this.serverContextEntryMarkup =
@@ -29,7 +31,7 @@ class ServerFolders {
 			`<div class="guild folder">
 				<div draggable="true">
 					<div class="guild-inner" draggable="false" style="border-radius: 25px;">
-						<a draggable="false" class="avatar-small open"></a>
+						<a draggable="false" class="avatar-small"></a>
 					</div>
 				</div>
 			</div>`;
@@ -47,7 +49,7 @@ class ServerFolders {
 
 	getDescription () {return "Add pseudofolders to your serverlist to organize your servers.";}
 
-	getVersion () {return "1.0.0";}
+	getVersion () {return "2.0.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -69,10 +71,14 @@ class ServerFolders {
 			);
 		});
 		this.serverContextObserver.observe($("#app-mount>:first-child")[0], {childList: true});
+		
+		this.loadAllFolders();
 	}
 
 	stop () {
 		this.serverContextObserver.disconnect();
+		$(".guild.folder").remove();
+		
 	}
 	
 	// begin of own functions
@@ -96,45 +102,60 @@ class ServerFolders {
 					var { id, name } = children[i].props.guild;
 					var data = { id, name, };
 					$(context).append(this.serverContextEntryMarkup)
-					.on("click", ".createfolder-item", data, this.createFolder.bind(this))
+					.on("click", ".createfolder-item", data, this.createNewFolder.bind(this))
 					break;
 				}
 			}
 		}
 	}
 	
-	createFolder (e) {
-		var serverDiv = this.getDivOfServer(e.data.id);
+	createNewFolder (e) {
 		$(e.delegateTarget).hide();
-		$(this.folderIconMarkup).insertBefore(serverDiv)
-		.find(".avatar-small")
-		.css("background-image", this.folderOpenIcon)
-		.attr("id", Math.round(Math.random()*1000000000000))
-		.on("click", this.changeIconAndServers.bind(this))
-		.on("contextmenu", this.createFolderContextMenu.bind(this));
+		var serverID = e.data.id;
+		var serverDiv = this.getDivOfServer(serverID);
+		if ($(serverDiv).prev()[0].className != "guild folder") {
+			var folderID = "FLID" + (100000000000000+Math.round(Math.random()*899999999999999));
+			while(this.folderIDs[folderID]) {
+				folderID = "FLID" + (100000000000000+Math.round(Math.random()*899999999999999));
+			}
+			this.folderIDs[folderID] = true;
+			
+			var folderDiv = $(this.folderIconMarkup);
+			$(folderDiv).insertBefore(serverDiv)
+			.find(".avatar-small")
+			.css("background-image", this.folderOpenIcon)
+			.attr("id", folderID)
+			.attr("class", "avatar-small open")
+			.on("click", this.changeIconAndServers.bind(this))
+			.on("contextmenu", this.createFolderContextMenu.bind(this));
+			
+			var isOpen = true;
+			
+			this.saveSettings(serverID, {serverID,folderID,isOpen});
+		}
 	}
 	
 	changeIconAndServers (e) {
 		var folder = e.target;
+		var isOpen = true;
 		if (folder && folder.classList && folder.classList.contains("open")) {
-			folder.className = "avatar-small closed";
-			folder.style.backgroundImage = this.folderClosedIcon;
-			var folderDiv = this.getParentDivOfFolder(folder);
-			var includedServers = this.getIncludedServers(folderDiv);
-			this.hideAllServers(true, includedServers);
+			isOpen = false;
 		}
-		else if (folder && folder.classList && folder.classList.contains("closed")) {
-			folder.className = "avatar-small open";
-			folder.style.backgroundImage = this.folderOpenIcon;
-			var folderDiv = this.getParentDivOfFolder(folder);
-			var includedServers = this.getIncludedServers(folderDiv);
-			this.hideAllServers(false, includedServers);
-		}
+		
+		folder.className = isOpen ? "avatar-small open" : "avatar-small closed";
+		folder.style.backgroundImage = isOpen ? this.folderOpenIcon : this.folderClosedIcon;
+		var folderDiv = this.getParentDivOfFolder(folder);
+		var includedServers = this.getIncludedServers(folderDiv);
+		
+		this.hideAllServers(!isOpen, includedServers);
+		var serverID = this.getIdOfServer($(folderDiv).next()[0]);
+		var folderID = folder.id;
+		
+		this.saveSettings(serverID, {serverID,folderID,isOpen});
 	}
 	
 	createFolderContextMenu (e) {
 		this.selectedFolder = this.getParentDivOfFolder(e.target);
-		console.log(this.selectedFolder);
 		var folderContext = $(this.folderContextMarkup);
 		$("#app-mount>:first-child").append(folderContext)
 		.off("click", ".removefolder-item")
@@ -161,10 +182,69 @@ class ServerFolders {
 	
 	removeFolder (e) {
 		var folderDiv = this.selectedFolder;
+		var folderID = $(folderDiv).find(".avatar-small")[0].id;
 		var includedServers = this.getIncludedServers(folderDiv);
 		this.hideAllServers(false, includedServers);
+		
+		var serverID = this.getIdOfServer($(folderDiv).next()[0]);
+		var folderID = null;
+		var isOpen = null;
+		this.saveSettings(serverID, {serverID,folderID,isOpen});
+		
+		delete this.folderIDs[folderID];
 		folderDiv.remove();
 		this.selectedFolder = null;
+	}
+	
+	loadFolder (server) {
+		var id = this.getIdOfServer(server);
+		if (id) {
+			var serverID, folderID, isOpen;
+			var settings = this.loadSettings(id);
+			if (settings) {
+				serverID = settings.serverID;
+				folderID = settings.folderID;
+				isOpen = settings.isOpen;
+				
+				if (folderID) {
+					var serverDiv = this.getDivOfServer(serverID);
+					console.log(settings);
+					
+					var folderDiv = $(this.folderIconMarkup);				
+					$(folderDiv).insertBefore(serverDiv)
+					.find(".avatar-small")
+					.css("background-image", isOpen ? this.folderOpenIcon : this.folderClosedIcon)
+					.attr("id", folderID)
+					.attr("class", isOpen ? "avatar-small open" : "avatar-small closed")
+					.on("click", this.changeIconAndServers.bind(this))
+					.on("contextmenu", this.createFolderContextMenu.bind(this));
+					
+					this.folderIDs[folderID] = true;
+					
+					var includedServers = this.getIncludedServers(folderDiv);
+					console.log(includedServers);
+					
+					// seems like the icons are loaded too slowly, didn't get hidden without a little delay
+					var that = this;
+					setTimeout(function() {
+						that.hideAllServers(!isOpen, includedServers);
+					},1000);
+				}
+			}
+			else {
+				serverID = id;
+				folderID = null;
+				isOpen = null;
+				this.saveSettings(serverID, {serverID,folderID,isOpen});
+			}
+		}
+	}
+	
+	loadAllFolders () {
+		var servers = this.readServerList();
+		for (var i = 0; i < servers.length; i++) {
+			this.loadFolder(servers[i]);
+		}
 	}
 	
 	getIncludedServers (folder) {
@@ -203,14 +283,14 @@ class ServerFolders {
 		}
 	}
 	
-	getDivOfServer (id) {
+	getDivOfServer (serverID) {
 		var servers = this.readServerList();
 		var found = false;
 		for (var i = 0; i < servers.length; i++) {
 			var childNodes = servers[i].getElementsByTagName("*");
 			for (var j = 0; j < childNodes.length; j++) {
 				if (childNodes[j].href) {
-					if (childNodes[j].href.split("/")[4] == id) {
+					if (childNodes[j].href.split("/")[4] == serverID) {
 						return servers[i];
 						found = true;
 					}
@@ -240,6 +320,42 @@ class ServerFolders {
 		return foundServers;
 	}
 	
+	getIdOfServer (server) {
+		var inst = this.getReactInstance(server);
+		if (!inst) return null;
+		var curEle = inst._currentElement;
+		if (curEle) {
+			var serverInfo = this.checkForServerInformation(curEle); 
+			if (serverInfo && serverInfo.id) {
+				return serverInfo.id;
+			}
+			else {
+				return null;
+			}
+		}
+		else {
+			return null;
+		}
+	}
+	
+	checkForServerInformation (ele) {
+		if (ele && ele.props && ele.props.guild){
+			return ele.props.guild;
+		}
+		else if (ele && ele.props && ele.props.children){
+			var children = Array.isArray(ele.props.children) ? ele.props.children : [ele.props.children];
+			var i;
+			var result = null;
+			for (i = 0; result == null && i < children.length; i++){
+				result = this.checkForServerInformation(children[i]);
+			}
+			return result;
+		}
+		else {
+			return null;
+		}
+	}
+	
 	themeIsLightTheme () {
 		if ($(".theme-light").length > $(".theme-dark").length) {
 			return true;
@@ -247,5 +363,13 @@ class ServerFolders {
 		else {
 			return false;
 		}
+	}
+	
+	saveSettings (serverID, settings) {
+		bdPluginStorage.set(this.getName(), serverID, JSON.stringify(settings));
+	}
+
+	loadSettings (serverID) {
+		return JSON.parse(bdPluginStorage.get(this.getName(), serverID));
 	}
 }
