@@ -1,5 +1,3 @@
-
-
 # EmojiStatistics - [Download](https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/EmojiStatistics/EmojiStatistics.plugin.js)
 
 Adds several options to get more information about emojis and emojiservers.
