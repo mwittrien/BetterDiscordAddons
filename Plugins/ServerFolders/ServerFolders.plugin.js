@@ -3,9 +3,12 @@
 class ServerFolders {
 	constructor () {
 		
+		this.labels;
+		
 		this.selectedFolder;
 		
 		this.serverContextObserver;
+		this.serverListContextHandler;
     
 		this.css = `
 			<style class='serverfolders'>
@@ -179,7 +182,7 @@ class ServerFolders {
 		this.serverContextEntryMarkup =
 			`<div class="item-group">
 				<div class="item createfolder-item">
-					<span>Create Folder</span>
+					<span>REPLACE_servercontext_createfolder_text</span>
 					<div class="hint"></div>
 				</div>
 			</div>`;
@@ -188,11 +191,11 @@ class ServerFolders {
 			`<div class="context-menu">
 				<div class="item-group">
 					<div class="item foldersettings-item">
-						<span>Change Folder Settings</span>
+						<span>REPLACE_foldercontext_foldersettings_text</span>
 						<div class="hint"></div>
 					</div>
 					<div class="item removefolder-item">
-						<span>Remove Folder</span>
+						<span>REPLACE_foldercontext_removefolder_text</span>
 						<div class="hint"></div>
 					</div>
 				</div>
@@ -206,6 +209,9 @@ class ServerFolders {
 					</div>
 				</div>
 			</div>`;
+			
+		this.folderTooltipMarkup = 
+			`<div class="tooltip tooltip-right tooltip-brand guild-folder-tooltip"></div>`;
 
 		this.folderSettingsModalMarkup =
 			`<span class="serverfolders-modal">
@@ -220,9 +226,6 @@ class ServerFolders {
 								<div class="control-group">
 									<label class="modal-text-label" for="modal-text">REPLACE_modal_foldername_text</label>
 									<input type="text" id="modal-text" name="text">
-								</div>
-								<div class="control-group">
-									<label class="modal-reset"><a class="modal-reset-text">REPLACE_modal_reset_text</a></label>
 								</div>
 								<div class="control-group">
 									<label class="color-picker1-label">REPLACE_modal_colorpicker1_text</label>
@@ -283,13 +286,30 @@ class ServerFolders {
 		});
 		this.serverContextObserver.observe($("#app-mount>:first-child")[0], {childList: true});
 		
+		
+		this.serverListContextHandler = (e) => {	
+			$(".guild.folder").each( 
+				(i, folder) => {
+					this.checkIfServerDivChangedTellIfDeleted(folder);
+				}
+			);
+		};
+		$(".guilds.scroller").bind('mouseleave', this.serverListContextHandler);
+		
 		$('head').append(this.css);
 		
 		this.loadAllFolders();
+		
+		var that = this;
+		setTimeout(function() {
+			that.labels = that.setLabelsByLanguage();
+			that.changeLanguageStrings();
+		},1000);
 	}
 
 	stop () {
 		this.serverContextObserver.disconnect();
+		$(".guilds.scroller").unbind('mouseleave', this.serverListContextHandler);
 		$(".serverfolders").remove();
 		$(".guild.folder").remove();
 		
@@ -303,6 +323,20 @@ class ServerFolders {
 
 	getReactObject (node) { 
 		return ((inst) => (inst._currentElement._owner._instance))(this.getReactInstance(node));
+	}
+
+	changeLanguageStrings () {
+		this.serverContextEntryMarkup = 	this.serverContextEntryMarkup.replace("REPLACE_servercontext_createfolder_text", this.labels.servercontext_createfolder_text);
+		
+		this.folderContextMarkup = 			this.folderContextMarkup.replace("REPLACE_foldercontext_foldersettings_text", this.labels.foldercontext_foldersettings_text);
+		this.folderContextMarkup = 			this.folderContextMarkup.replace("REPLACE_foldercontext_removefolder_text", this.labels.foldercontext_removefolder_text);
+		
+		this.folderSettingsModalMarkup = 	this.folderSettingsModalMarkup.replace("REPLACE_modal_header_text", this.labels.modal_header_text);
+		this.folderSettingsModalMarkup = 	this.folderSettingsModalMarkup.replace("REPLACE_modal_foldername_text", this.labels.modal_foldername_text);
+		this.folderSettingsModalMarkup = 	this.folderSettingsModalMarkup.replace("REPLACE_modal_colorpicker1_text", this.labels.modal_colorpicker1_text);
+		this.folderSettingsModalMarkup = 	this.folderSettingsModalMarkup.replace("REPLACE_modal_colorpicker2_text", this.labels.modal_colorpicker2_text);
+		this.folderSettingsModalMarkup = 	this.folderSettingsModalMarkup.replace("REPLACE_btn_cancel_text", this.labels.btn_cancel_text);
+		this.folderSettingsModalMarkup = 	this.folderSettingsModalMarkup.replace("REPLACE_btn_save_text", this.labels.btn_save_text);
 	}
 	
 	onContextMenu (context) {
@@ -336,7 +370,9 @@ class ServerFolders {
 				.attr("id", "FL_ID_" + serverID)
 				.attr("class", "avatar-small open")
 				.on("click", this.changeIconAndServers.bind(this))
-				.on("contextmenu", this.createFolderContextMenu.bind(this));
+				.on("contextmenu", this.createFolderContextMenu.bind(this))
+				.on("mouseenter", this.createFolderToolTip.bind(this))
+				.on("mouseleave", this.deleteFolderToolTip.bind(this));
 			
 			var folderPlaced = 	true;
 			var folderName = 	null;
@@ -350,34 +386,51 @@ class ServerFolders {
 		}
 	}
 	
+	createFolderToolTip (e) {
+		if (e.target.name != "") {
+			var folderTooltip = $(this.folderTooltipMarkup);
+			$(".tooltips").append(folderTooltip)
+			$(folderTooltip)
+				.text(e.target.name)
+				.css("left", (e.target.x + 50) + "px")
+				.css("top", (e.target.y + 15) + "px");
+		}
+	}
+	
+	deleteFolderToolTip (e) {
+		$(".tooltips").find(".guild-folder-tooltip").remove();
+	}
+	
 	changeIconAndServers (e) {
 		var folder = e.target;
 		var folderDiv = this.getParentDivOfFolder(folder);
 		
-		this.checkIfServerDivChanged(folderDiv);
+		var wasDeleted = this.checkIfServerDivChangedTellIfDeleted(folderDiv);
 		
-		var id = this.getIdOfServer($(folderDiv).next()[0]);
-		
-		if (id) {
-			var settings = this.loadSettings(id);
-			if (settings) {
-				var serverID = 		settings.serverID;
-				var folderPlaced = 	settings.folderPlaced;
-				var folderName = 	settings.folderName;
-				var isOpen = 		!settings.isOpen;
-				var openIcon = 		settings.openIcon;
-				var closedIcon = 	settings.closedIcon;
-				var color1 = 		settings.color1;
-				var color2 = 		settings.color2;
-				
-				if (folderPlaced) {
-					folder.className = isOpen ? "avatar-small open" : "avatar-small closed";
-					folder.src = isOpen ? openIcon : closedIcon;
+		if (!wasDeleted) {
+			var id = this.getIdOfServer($(folderDiv).next()[0]);
+			
+			if (id) {
+				var settings = this.loadSettings(id);
+				if (settings) {
+					var serverID = 		settings.serverID;
+					var folderPlaced = 	settings.folderPlaced;
+					var folderName = 	settings.folderName;
+					var isOpen = 		!settings.isOpen;
+					var openIcon = 		settings.openIcon;
+					var closedIcon = 	settings.closedIcon;
+					var color1 = 		settings.color1;
+					var color2 = 		settings.color2;
 					
-					var includedServers = this.getIncludedServers(folderDiv);
-					this.hideAllServers(!isOpen, includedServers);
-					
-					this.saveSettings(serverID, {serverID,folderPlaced,folderName,isOpen,openIcon,closedIcon,color1,color2});
+					if (folderPlaced) {
+						folder.className = isOpen ? "avatar-small open" : "avatar-small closed";
+						folder.src = isOpen ? openIcon : closedIcon;
+						
+						var includedServers = this.getIncludedServers(folderDiv);
+						this.hideAllServers(!isOpen, includedServers);
+						
+						this.saveSettings(serverID, {serverID,folderPlaced,folderName,isOpen,openIcon,closedIcon,color1,color2});
+					}
 				}
 			}
 		}
@@ -385,38 +438,41 @@ class ServerFolders {
 	
 	createFolderContextMenu (e) {
 		this.selectedFolder = this.getParentDivOfFolder(e.target);
-		var folderContext = $(this.folderContextMarkup);
-		$("#app-mount>:first-child").append(folderContext)
-			.off("click", ".foldersettings-item")
-			.off("click", ".removefolder-item")
-			.on("click", ".foldersettings-item", this.showFolderSettings.bind(this))
-			.on("click", ".removefolder-item", this.removeFolder.bind(this))
-			.on("click", ".removefolder-item,.foldersettings-item", function() {
-				$(document).unbind('mousedown', folderContextEventHandler);
-				folderContext[0].remove();
-			});
+		
+		var wasDeleted = this.checkIfServerDivChangedTellIfDeleted(this.selectedFolder);
+		
+		if (!wasDeleted) {
+			var folderContext = $(this.folderContextMarkup);
+			$("#app-mount>:first-child").append(folderContext)
+				.off("click", ".foldersettings-item")
+				.off("click", ".removefolder-item")
+				.on("click", ".foldersettings-item", this.showFolderSettings.bind(this))
+				.on("click", ".removefolder-item", this.removeSelectedFolder.bind(this))
+				.on("click", ".removefolder-item,.foldersettings-item", function() {
+					$(document).unbind('mousedown', folderContextEventHandler);
+					folderContext[0].remove();
+				});
 
-		folderContext[0].style.left = e.pageX + "px";
-		folderContext[0].style.top = e.pageY + "px";
-		if (!this.themeIsLightTheme()) {
-			folderContext[0].className = "context-menu theme-dark";
+			var theme = this.themeIsLightTheme() ? "" : "theme-dark";
+			
+			$(folderContext)
+				.addClass(theme)
+				.css("left", e.pageX + "px")
+				.css("top", e.pageY + "px");
+				
+			var folderContextEventHandler = function(e) {	
+				if (!folderContext[0].contains(e.target)) {
+					$(document).unbind('mousedown', folderContextEventHandler);
+					$(folderContext).remove();
+					this.selectedFolder = null;
+				}
+			};
+			$(document).bind('mousedown', folderContextEventHandler);
 		}
-		var folderContextEventHandler = function(e) {	
-			if (!folderContext[0].contains(e.target)) {
-				$(document).unbind('mousedown', folderContextEventHandler);
-				folderContext[0].remove();
-				this.selectedFolder = null;
-			}
-		};
-		$(document).bind('mousedown', folderContextEventHandler);
 	}
 	
 	showFolderSettings (e) {
-		var folderDiv = $(this.selectedFolder);
-		
-		this.checkIfServerDivChanged(folderDiv);
-		
-		var id = this.getIdOfServer($(folderDiv).next()[0]);
+		var id = this.getIdOfServer($(this.selectedFolder).next()[0]);
 		if (id) {
 			var serverID, folderPlaced, folderName, isOpen, openIcon, closedIcon, color1, color2;
 			var settings = this.loadSettings(id);
@@ -448,7 +504,7 @@ class ServerFolders {
 						closedIcon = this.changeImgColor(false, color1, color2);
 						
 						$(this.selectedFolder).find(".avatar-small").attr("src", isOpen ? openIcon : closedIcon);
-						$(this.selectedFolder).find(".avatar-small").attr("title", folderName);
+						$(this.selectedFolder).find(".avatar-small").attr("name", folderName);
 						
 						this.saveSettings(serverID, {serverID,folderPlaced,folderName,isOpen,openIcon,closedIcon,color1,color2});
 						this.selectedFolder = null;
@@ -529,13 +585,12 @@ class ServerFolders {
 		});
 	}
 	
-	removeFolder (e) {
+	removeSelectedFolder (e) {
 		var folderDiv = this.selectedFolder;
-		var folderPlaced = $(folderDiv).find(".avatar-small")[0].id;
 		var includedServers = this.getIncludedServers(folderDiv);
 		this.hideAllServers(false, includedServers);
 		
-		var serverID = this.getIdOfServer($(folderDiv).next()[0]);
+		var serverID = $(folderDiv).find(".avatar-small")[0].id.split("FL_ID_")[1];
 		this.clearSettings(serverID);
 		
 		folderDiv.remove();
@@ -565,11 +620,13 @@ class ServerFolders {
 					$(folderDiv).insertBefore(serverDiv)
 						.find(".avatar-small")
 						.attr("src", isOpen ? openIcon : closedIcon)
-						.attr("title", folderName)
+						.attr("name", folderName)
 						.attr("id", "FL_ID_" + serverID)
 						.attr("class", isOpen ? "avatar-small open" : "avatar-small closed")
 						.on("click", this.changeIconAndServers.bind(this))
-						.on("contextmenu", this.createFolderContextMenu.bind(this));
+						.on("contextmenu", this.createFolderContextMenu.bind(this))
+						.on("mouseenter", this.createFolderToolTip.bind(this))
+						.on("mouseleave", this.deleteFolderToolTip.bind(this));
 					
 					var includedServers = this.getIncludedServers(folderDiv);
 					
@@ -601,13 +658,10 @@ class ServerFolders {
 		}
 	}
 	
-	checkIfServerDivChanged (folderDiv) {
+	checkIfServerDivChangedTellIfDeleted (folderDiv) {
 		var folder = $(folderDiv).find(".avatar-small")[0];
 		var folderID = folder.id.split("FL_ID_")[1];
 		var id = this.getIdOfServer($(folderDiv).next()[0]);
-		
-		console.log("id:" + id);
-		console.log("folderID:" + folderID);
 		
 		if (id) {
 			if (id != folderID) {
@@ -628,6 +682,13 @@ class ServerFolders {
 					this.clearSettings(folderID);
 				}
 			}
+			return false;
+		}
+		else {
+			this.selectedFolder = folderDiv;
+			this.removeSelectedFolder();
+			
+			return true;
 		}
 	}
 	
@@ -793,5 +854,250 @@ class ServerFolders {
 		var color1 = 		null;
 		var color2 = 		null;
 		this.saveSettings(serverID, {serverID,folderPlaced,folderName,isOpen,openIcon,closedIcon,color1,color2});
+	}
+	
+	setLabelsByLanguage () {
+		switch (document.getElementsByTagName("html")[0].lang.split("-")[0]) {
+			case "da": 		//danish
+				return {
+					servercontext_createfolder_text: 	"Opret mappe",
+					foldercontext_foldersettings_text: 	"Mappeindstillinger",
+					foldercontext_removefolder_text:	"Slet mappe",
+					modal_header_text:					"Mappindstillinger",
+					modal_foldername_text:				"Mappenavn",
+					modal_colorpicker1_text:			"Primær mappefarve",
+					modal_colorpicker2_text:			"Sekundær mappefarve",
+					btn_cancel_text:					"Afbryde",
+					btn_save_text:						"Spare"
+				};
+			case "de": 		//german
+				return {
+					servercontext_createfolder_text: 	"Erzeuge Ordner",
+					foldercontext_foldersettings_text: 	"Ordnereinstellungen",
+					foldercontext_removefolder_text:	"Lösche Ordner",
+					modal_header_text:					"Ordnereinstellungen",
+					modal_foldername_text:				"Ordnername",
+					modal_colorpicker1_text:			"Primäre Ordnerfarbe",
+					modal_colorpicker2_text:			"Sekundäre Ordnerfarbe",
+					btn_cancel_text:					"Abbrechen",
+					btn_save_text:						"Speichern"
+				};
+			case "es": 		//spanish
+				return {
+					servercontext_createfolder_text: 	"Crear carpeta",
+					foldercontext_foldersettings_text: 	"Ajustes de carpeta",
+					foldercontext_removefolder_text:	"Eliminar carpeta",
+					modal_header_text:					"Ajustes de carpeta",
+					modal_foldername_text:				"Nombre de la carpeta",
+					modal_colorpicker1_text:			"Color primaria de carpeta",
+					modal_colorpicker2_text:			"Color secundario de la carpeta",
+					btn_cancel_text:					"Cancelar",
+					btn_save_text:						"Guardar"
+				};
+			case "fr": 		//french
+				return {
+					servercontext_createfolder_text: 	"Créer le dossier",
+					foldercontext_foldersettings_text: 	"Paramètres du dossier",
+					foldercontext_removefolder_text:	"Supprimer le dossier",
+					modal_header_text:					"Paramètres du dossier",
+					modal_foldername_text:				"Nom de dossier",
+					modal_colorpicker1_text:			"Couleur primaire du dossier",
+					modal_colorpicker2_text:			"Couleur secondaire du dossier",
+					btn_cancel_text:					"Abandonner",
+					btn_save_text:						"Enregistrer"
+				};
+			case "it": 		//italian
+				return {
+					servercontext_createfolder_text: 	"Creare una cartella",
+					foldercontext_foldersettings_text: 	"Impostazioni cartella",
+					foldercontext_removefolder_text:	"Elimina cartella",
+					modal_header_text:					"Impostazioni cartella",
+					modal_foldername_text:				"Nome della cartella",
+					modal_colorpicker1_text:			"Colore primaria della cartella",
+					modal_colorpicker2_text:			"Colore secondaria della cartella",
+					btn_cancel_text:					"Cancellare",
+					btn_save_text:						"Salvare"
+				};
+			case "nl":		//dutch
+				return {
+					servercontext_createfolder_text: 	"Map aanmaken",
+					foldercontext_foldersettings_text: 	"Mapinstellingen",
+					foldercontext_removefolder_text:	"Verwijder map",
+					modal_header_text:					"Mapinstellingen",
+					modal_foldername_text:				"Mapnaam",
+					modal_colorpicker1_text:			"Primaire map kleur",
+					modal_colorpicker2_text:			"Tweede map kleur",
+					btn_cancel_text:					"Afbreken",
+					btn_save_text:						"Opslaan"
+				};
+			case "no":		//norwegian
+				return {
+					servercontext_createfolder_text: 	"Lag mappe",
+					foldercontext_foldersettings_text: 	"Mappinnstillinger",
+					foldercontext_removefolder_text:	"Slett mappe",
+					modal_header_text:					"Mappinnstillinger",
+					modal_foldername_text:				"Mappenavn",
+					modal_colorpicker1_text:			"Primær mappefarge",
+					modal_colorpicker2_text:			"Sekundær mappefarge",
+					btn_cancel_text:					"Avbryte",
+					btn_save_text:						"Lagre"
+				};
+			case "pl":		//polish
+				return {
+					servercontext_createfolder_text: 	"Utwórz folderu",
+					foldercontext_foldersettings_text: 	"Ustawienia folderu",
+					foldercontext_removefolder_text:	"Usuń folderu",
+					modal_header_text:					"Ustawienia folderu",
+					modal_foldername_text:				"Nazwa folderu",
+					modal_colorpicker1_text:			"Kolor folderu podstawowy",
+					modal_colorpicker2_text:			"Kolor folderu wtórny",
+					btn_cancel_text:					"Przerwać",
+					btn_save_text:						"Zapisz"
+				};
+			case "pt":		//portuguese (brazil)
+				return {
+					servercontext_createfolder_text: 	"Criar pasta",
+					foldercontext_foldersettings_text: 	"Configurações da pasta",
+					foldercontext_removefolder_text:	"Excluir pasta",
+					modal_header_text:					"Configurações da pasta",
+					modal_foldername_text:				"Nome da pasta",
+					modal_colorpicker1_text:			"Cor primária da pasta",
+					modal_colorpicker2_text:			"Cor secundária da pasta",
+					btn_cancel_text:					"Cancelar",
+					btn_save_text:						"Salvar"
+				};
+			case "fi":		//finnish
+				return {
+					servercontext_createfolder_text: 	"Luo kansio",
+					foldercontext_foldersettings_text: 	"Kansion kansio",
+					foldercontext_removefolder_text:	"Poista kansio",
+					modal_header_text:					"Kansion kansio",
+					modal_foldername_text:				"Kansion nimi",
+					modal_colorpicker1_text:			"Ensisijainen kansion väri",
+					modal_colorpicker2_text:			"Toissijainen kansion väri",
+					btn_cancel_text:					"Peruuttaa",
+					btn_save_text:						"Tallentaa"
+				};
+			case "sv":		//swedish
+				return {
+					servercontext_createfolder_text: 	"Skapa mapp",
+					foldercontext_foldersettings_text: 	"Mappinställningar",
+					foldercontext_removefolder_text:	"Ta bort mapp",
+					modal_header_text:					"Mappinställningar",
+					modal_foldername_text:				"Mappnamn",
+					modal_colorpicker1_text:			"Primär mappfärg",
+					modal_colorpicker2_text:			"Sekundär mappfärg",
+					btn_cancel_text:					"Avbryta",
+					btn_save_text:						"Spara"
+				};
+			case "tr":		//turkish
+				return {
+					servercontext_createfolder_text: 	"Klasör oluşturun",
+					foldercontext_foldersettings_text: 	"Klasör Ayarları",
+					foldercontext_removefolder_text:	"Klasörü sil",
+					modal_header_text:					"Klasör Ayarları",
+					modal_foldername_text:				"Klasör adı",
+					modal_colorpicker1_text:			"Birincil klasör rengi",
+					modal_colorpicker2_text:			"İkincil klasör rengi",
+					btn_cancel_text:					"Iptal",
+					btn_save_text:						"Kayıt"
+				};
+			case "cs":		//czech
+				return {
+					servercontext_createfolder_text: 	"Vytvořit složky",
+					foldercontext_foldersettings_text: 	"Nastavení složky",
+					foldercontext_removefolder_text:	"Smazat složky",
+					modal_header_text:					"Nastavení složky",
+					modal_foldername_text:				"Název složky",
+					modal_colorpicker1_text:			"Primární barva složky",
+					modal_colorpicker2_text:			"Sekundární barva složky",
+					btn_cancel_text:					"Zrušení",
+					btn_save_text:						"Uložit"
+				};
+			case "bg":		//bulgarian
+				return {
+					servercontext_createfolder_text: 	"Създай папка",
+					foldercontext_foldersettings_text: 	"Настройки папка",
+					foldercontext_removefolder_text:	"Изтриване на папка",
+					modal_header_text:					"Настройки папка",
+					modal_foldername_text:				"Име на папка",
+					modal_colorpicker1_text:			"Цвят основнен на папка",
+					modal_colorpicker2_text:			"цвят вторичен на папка",
+					btn_cancel_text:					"Зъбести",
+					btn_save_text:						"Cпасяване"
+				};
+			case "ru":		//russian
+				return {
+					servercontext_createfolder_text: 	"Создать папки",
+					foldercontext_foldersettings_text: 	"Настройки папки",
+					foldercontext_removefolder_text:	"Удалить папки",
+					modal_header_text:					"Настройки папки",
+					modal_foldername_text:				"Имя папки",
+					modal_colorpicker1_text:			"Цвет основной папки",
+					modal_colorpicker2_text:			"Цвет вторичной папки",
+					btn_cancel_text:					"Отмена",
+					btn_save_text:						"Cпасти"
+				};
+			case "uk":		//ukranian
+				return {
+					servercontext_createfolder_text: 	"Створити папки",
+					foldercontext_foldersettings_text: 	"Параметри папки",
+					foldercontext_removefolder_text:	"Видалити папки",
+					modal_header_text:					"Параметри папки",
+					modal_foldername_text:				"Ім'я папки",
+					modal_colorpicker1_text:			"Колір основної папки",
+					modal_colorpicker2_text:			"Колір вторинного папки",
+					btn_cancel_text:					"Скасувати",
+					btn_save_text:						"Зберегти"
+				};
+			case "ja":		//japanese
+				return {
+					servercontext_createfolder_text: 	"フォルダーを作る",
+					foldercontext_foldersettings_text: 	"フォルダ設定",
+					foldercontext_removefolder_text:	"フォルダを削除する",
+					modal_header_text:					"フォルダ設定",
+					modal_foldername_text:				"フォルダ名",
+					modal_colorpicker1_text:			"プライマリフォルダの色",
+					modal_colorpicker2_text:			"セカンダリフォルダの色",
+					btn_cancel_text:					"キャンセル",
+					btn_save_text:						"セーブ"
+				};
+			case "zh":		//chinese (traditional)
+				return {
+					servercontext_createfolder_text: 	"創建文件夾",
+					foldercontext_foldersettings_text: 	"文件夾設置",
+					foldercontext_removefolder_text:	"刪除文件夾",
+					modal_header_text:					"文件夾設置",
+					modal_foldername_text:				"文件夾名稱",
+					modal_colorpicker1_text:			"主文件夾顏色",
+					modal_colorpicker2_text:			"輔助文件夾顏色",
+					btn_cancel_text:					"取消",
+					btn_save_text:						"保存"
+				};
+			case "ko":		//korean
+				return {
+					servercontext_createfolder_text: 	"폴더 만들기",
+					foldercontext_foldersettings_text: 	"폴더 설정",
+					foldercontext_removefolder_text:	"폴더 삭제",
+					modal_header_text:					"폴더 설정",
+					modal_foldername_text:				"폴더 이름",
+					modal_colorpicker1_text:			"기본 폴더 색",
+					modal_colorpicker2_text:			"보조 폴더 색",
+					btn_cancel_text:					"취소",
+					btn_save_text:						"저장"
+				};
+			default:		//default: english
+				return {
+					servercontext_createfolder_text: 	"Create Folder",
+					foldercontext_foldersettings_text: 	"Foldersettings",
+					foldercontext_removefolder_text:	"Delete Folder",
+					modal_header_text:					"Foldersettings",
+					modal_foldername_text:				"Foldername",
+					modal_colorpicker1_text:			"Primary Foldercolor",
+					modal_colorpicker2_text:			"Secondary Foldercolor",
+					btn_cancel_text:					"Cancel",
+					btn_save_text:						"Save"
+				};
+		}
 	}
 }
