@@ -5,9 +5,176 @@ class ServerFolders {
 		
 		this.selectedFolder;
 		
-		this.folderIDs = {};
-		
 		this.serverContextObserver;
+    
+		this.css = `
+			<style class='serverfolders'>
+
+			.pick-wrap {
+				position: relative;
+				padding: 0;
+				margin: 0;
+			}
+
+			.pick-wrap .color-picker-popout {
+				position: absolute;
+			}
+
+			.ui-color-picker-swatch1,
+			.ui-color-picker-swatch2 {
+				width: 22px;
+				height: 22px;
+				margin-bottom: 5px;
+				margin-top: 5px;
+				border: 4px solid transparent;
+				border-radius: 12px;
+			}
+
+			.ui-color-picker-swatch1.large,
+			.ui-color-picker-swatch2.large {
+				min-width: 62px;
+				height: 62px;
+				border-radius: 25px;
+			}
+			
+			.serverfolders-modal .modal {
+				align-content: space-around;
+				align-items: center;
+				box-sizing: border-box;
+				display: flex;
+				flex-direction: column;
+				height: 100%;
+				justify-content: center;
+				max-height: 660px;
+				min-height: 340px;
+				opacity: 0;
+				padding-bottom: 60px;
+				padding-top: 60px;
+				pointer-events: none;
+				position: absolute;
+				user-select: none;
+				width: 100%;
+				z-index: 1000;
+			}
+			
+			.serverfolders-modal .form {
+				width: 100%;
+			}
+
+			.serverfolders-modal .form-header, .serverfolders-modal .form-actions {
+				background-color: rgba(32,34,37,.3);
+				box-shadow: inset 0 1px 0 rgba(32,34,37,.6);
+				padding: 20px;
+				
+			}
+
+			.serverfolders-modal .form-header {
+				color: #f6f6f7;
+				cursor: default;
+				font-size: 16px;
+				font-weight: 600;
+				letter-spacing: .3px;
+				line-height: 20px;
+				text-transform: uppercase;
+			}
+
+			.serverfolders-modal .form-actions {
+				display: flex;
+				flex-direction: row-reverse;
+				flex-wrap: nowrap;
+				flex: 0 0 auto;
+				padding-right: 32px;
+			}
+
+			.serverfolders-modal .form-inner{
+				margin: 10px 0;
+				max-height: 360px;
+				overflow-x: hidden;
+				overflow-y: hidden;
+				padding: 0 20px;
+				
+			}
+
+			.serverfolders-modal .modal-inner {
+				background-color: #36393E;
+				border-radius: 5px;
+				box-shadow: 0 0 0 1px rgba(32,34,37,.6),0 2px 10px 0 rgba(0,0,0,.2);
+				display: flex;
+				min-height: 200px;
+				pointer-events: auto;
+				width: 470px;
+			}
+
+			.serverfolders-modal input {
+				color: #f6f6f7;
+				background-color: rgba(0,0,0,.1);
+				border-color: rgba(0,0,0,.3);
+				padding: 10px;
+				height: 40px;
+				box-sizing: border-box;
+				width: 100%;
+				border-width: 1px;
+				border-style: solid;
+				border-radius: 3px;
+				outline: none;
+				transition: background-color .15s ease,border .15s ease;
+			}
+
+			.serverfolders-modal .btn {
+				align-items: center;
+				background: none;
+				border-radius: 3px;
+				border: none;
+				box-sizing: border-box;
+				display: flex;
+				font-size: 14px;
+				font-weight: 500;
+				justify-content: center;
+				line-height: 16px;
+				min-height: 38px;
+				min-width: 96px;
+				padding: 2px 16px;
+				position: relative;
+			}
+
+			.serverfolders-modal .btn-cancel {
+				background-color: #2f3136;
+				color: #fff;
+			}
+
+			.serverfolders-modal .btn-save {
+				background-color: #3A71C1;
+				color: #fff;
+			}
+
+			.serverfolders-modal .control-group label {
+				color: #b9bbbe;
+				letter-spacing: .5px;
+				text-transform: uppercase;
+				flex: 1;
+				cursor: default;
+				margin-bottom: 8px;
+				margin-top: 0;
+				font-weight: 600;
+				line-height: 16px;
+				font-size: 12px;
+			}
+
+			.serverfolders-modal label.modal-reset, .serverfolders-modal label.reset-nick {
+				color: #dcddde;
+				text-transform: capitalize;
+				opacity: .6;
+				margin-bottom: 20px;
+				font-weight: 600;
+				line-height: 16px;
+				font-size: 12px;
+			}
+
+			.serverfolders-modal .control-group {
+				margin-top: 10px;
+			}
+
+			'</style>`;
 
 		this.serverContextEntryMarkup =
 			`<div class="item-group">
@@ -20,6 +187,10 @@ class ServerFolders {
 		this.folderContextMarkup = 
 			`<div class="context-menu">
 				<div class="item-group">
+					<div class="item foldersettings-item">
+						<span>Change Folder Settings</span>
+						<div class="hint"></div>
+					</div>
 					<div class="item removefolder-item">
 						<span>Remove Folder</span>
 						<div class="hint"></div>
@@ -31,18 +202,58 @@ class ServerFolders {
 			`<div class="guild folder">
 				<div draggable="true">
 					<div class="guild-inner" draggable="false" style="border-radius: 25px;">
-						<a draggable="false" class="avatar-small"></a>
+						<img draggable="false" class="avatar-small"></img>
 					</div>
 				</div>
 			</div>`;
+
+		this.folderSettingsModalMarkup =
+			`<span class="serverfolders-modal">
+				<div class="callout-backdrop" style="background-color:#000; opacity:0.85"></div>
+				<div class="modal" style="opacity: 1">
+					<div class="modal-inner">
+						<form class="form">
+							<div class="form-header">
+								<header class="modal-header">REPLACE_modal_header_text</header>
+							</div>
+							<div class="form-inner">
+								<div class="control-group">
+									<label class="modal-text-label" for="modal-text">REPLACE_modal_foldername_text</label>
+									<input type="text" id="modal-text" name="text">
+								</div>
+								<div class="control-group">
+									<label class="modal-reset"><a class="modal-reset-text">REPLACE_modal_reset_text</a></label>
+								</div>
+								<div class="control-group">
+									<label class="color-picker1-label">REPLACE_modal_colorpicker1_text</label>
+									<div class="color-picker1">
+										<div class="swatches1"></div>
+									</div>
+									<label class="color-picker2-label">REPLACE_modal_colorpicker2_text</label>
+									<div class="color-picker2">
+										<div class="swatches2"></div>
+									</div>
+								</div>
+							</div>
+							<div class="form-actions">
+								<button type="button" class="btn btn-cancel">REPLACE_btn_cancel_text</button>
+								<button type="button" class="btn btn-save">REPLACE_btn_save_text</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</span>`;
+
+		this.colourList = 
+			['rgb(26, 188, 156)','rgb(46, 204, 113)','rgb(52, 152, 219)','rgb(155, 89, 182)','rgb(233, 30, 99)','rgb(241, 196, 15)','rgb(230, 126, 34)','rgb(231, 76, 60)','rgb(149, 165, 166)','rgb(96, 125, 139)','rgb(99, 99, 99)','rgb(77, 77, 77)',
+			'rgb(17, 128, 106)','rgb(31, 139, 76)','rgb(32, 102, 148)','rgb(113, 54, 138)','rgb(173, 20, 87)','rgb(194, 124, 14)','rgb(168, 67, 0)','rgb(153, 45, 34)','rgb(151, 156, 159)','rgb(84, 110, 122)','rgb(44, 44, 44)','rgb(33, 33, 33)'];
 			
+			
+		this.folderOpenIcon =	
+			"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEsAAABLCAYAAAA4TnrqAAAB2ElEQVR4Xu2Z4W6DMAwG4f0fmqloq0YJw0dIhLPb7y+qfT0Hr8yTf2ECczhpcBIWkEBYwgIEQFSzhAUIgKhmCQsQAFHNEhYgAKKaJSxAAETvMGsBn1eK3lFDZQmx4zWF1kL6rLCmlli3lamrBd4N6qeNq/VUYogdv1JcK1CPByasmFRrisJqbdWj7RLWAGaBFi5FqSSPHsNLBOAhDIwe6HVnwb4vx1H/KDxN02iw0ENOWGAjEJaw0B0WFiYc/P547yzwPYwI66j9nUiadW7Km5GwzmG91wthCStGAKRWqbqatSw5ng/zXL7bu8FKDKr/nSWs4NAnB9XXLGEFrXrFksPqt5QmB7XZGJo/DZPD2vBpCis5qN0eKqzXZr5fQosLezNYo1nV9N8dYYG3O8lhFSeuyRgmB3U4ccLaL9eHTG6HNapVTS745LD+lEeztmPYD9bIVt0+hsLaanr4I3pyUCFxbruzksMKcQiFfsk1qlkhDqHQGaz/YFVoTj8W3Bwv/sBP3uTdKTVr/Umd1fLoNOofhc/G8dFYysWh/lF4sJHEveMDhS8o01hW9Vt1OOHYVZUsLIBPWMICBEBUs4QFCICoZgkLEABRzRIWIACimiUsQABENQvA+gLIy3lMlnMoMQAAAABJRU5ErkJggg==";			
 			
 		this.folderClosedIcon =	
-			"url('data:image/png;base64,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')";
-			
-			
-		this.folderOpenIcon = 
-			"url('data:image/png;base64,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')";
+			"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEsAAABLCAYAAAA4TnrqAAABkElEQVR4Xu3a6xKCIABEYXz/h7bpOl1M94CWMqffywRfK1I2FF+xwBAnDRaxQAnEEgsIgKjNEgsIgKjNEgsIgKjNEgsIgKjNEgsIgOgazRrB+01F15hD4xSy4S0TbUV6n2HLXLLVNqZqJ7g21H0ZtfNpZMiG10xuK6jdg4mVleqSolhbt2rX7RKrg2aBJVRFaUl2fRlWCcBBGIwO+NWeBdddHUfrR+FSSm9Y6CYnFjgRNGON43HKNgyTy40N4uBtV3iRORLU4wD3CRYbxEGxwPUqlli/uxu6Z82f79zgwflXLLEyAY8O4CYnlljfL6uJrzxxYeKgh1JQQbHE8gQ/dxBwz8qOSdeHDv5Ek2uJlVvZLGAlllhEAGTds8QCAiBqs8QCAiBqs8QCAiBqs8QCAiD6t2ad53ikB61//ReNWOCJNGj/nqPxc4g4+LTa4/x7bfkjQutH4c7A8NrxgE7AqtZdNWi53X0mxAKfq1hiAQEQtVliAQEQtVliAQEQtVliAQEQtVliAQEQtVliAQEQPQHGLZBMBnSlGQAAAABJRU5ErkJggg==";
 	}
 		
 	getName () {return "ServerFolders";}
@@ -72,11 +283,14 @@ class ServerFolders {
 		});
 		this.serverContextObserver.observe($("#app-mount>:first-child")[0], {childList: true});
 		
+		$('head').append(this.css);
+		
 		this.loadAllFolders();
 	}
 
 	stop () {
 		this.serverContextObserver.disconnect();
+		$(".serverfolders").remove();
 		$(".guild.folder").remove();
 		
 	}
@@ -114,56 +328,73 @@ class ServerFolders {
 		var serverID = e.data.id;
 		var serverDiv = this.getDivOfServer(serverID);
 		if ($(serverDiv).prev()[0].className != "guild folder") {
-			var folderID = "FLID" + (100000000000000+Math.round(Math.random()*899999999999999));
-			while(this.folderIDs[folderID]) {
-				folderID = "FLID" + (100000000000000+Math.round(Math.random()*899999999999999));
-			}
-			this.folderIDs[folderID] = true;
 			
 			var folderDiv = $(this.folderIconMarkup);
 			$(folderDiv).insertBefore(serverDiv)
-			.find(".avatar-small")
-			.css("background-image", this.folderOpenIcon)
-			.attr("id", folderID)
-			.attr("class", "avatar-small open")
-			.on("click", this.changeIconAndServers.bind(this))
-			.on("contextmenu", this.createFolderContextMenu.bind(this));
+				.find(".avatar-small")
+				.attr("src", this.folderOpenIcon)
+				.attr("id", "FL_ID_" + serverID)
+				.attr("class", "avatar-small open")
+				.on("click", this.changeIconAndServers.bind(this))
+				.on("contextmenu", this.createFolderContextMenu.bind(this));
 			
-			var isOpen = true;
+			var folderPlaced = 	true;
+			var folderName = 	null;
+			var isOpen = 		true;
+			var openIcon = 		this.folderOpenIcon;
+			var closedIcon = 	this.folderClosedIcon;
+			var color1 = 		["0","0","0"];
+			var color2 = 		["255","255","255"];
 			
-			this.saveSettings(serverID, {serverID,folderID,isOpen});
+			this.saveSettings(serverID, {serverID,folderPlaced,folderName,isOpen,openIcon,closedIcon,color1,color2});
 		}
 	}
 	
 	changeIconAndServers (e) {
 		var folder = e.target;
-		var isOpen = true;
-		if (folder && folder.classList && folder.classList.contains("open")) {
-			isOpen = false;
-		}
-		
-		folder.className = isOpen ? "avatar-small open" : "avatar-small closed";
-		folder.style.backgroundImage = isOpen ? this.folderOpenIcon : this.folderClosedIcon;
 		var folderDiv = this.getParentDivOfFolder(folder);
-		var includedServers = this.getIncludedServers(folderDiv);
 		
-		this.hideAllServers(!isOpen, includedServers);
-		var serverID = this.getIdOfServer($(folderDiv).next()[0]);
-		var folderID = folder.id;
+		this.checkIfServerDivChanged(folderDiv);
 		
-		this.saveSettings(serverID, {serverID,folderID,isOpen});
+		var id = this.getIdOfServer($(folderDiv).next()[0]);
+		
+		if (id) {
+			var settings = this.loadSettings(id);
+			if (settings) {
+				var serverID = 		settings.serverID;
+				var folderPlaced = 	settings.folderPlaced;
+				var folderName = 	settings.folderName;
+				var isOpen = 		!settings.isOpen;
+				var openIcon = 		settings.openIcon;
+				var closedIcon = 	settings.closedIcon;
+				var color1 = 		settings.color1;
+				var color2 = 		settings.color2;
+				
+				if (folderPlaced) {
+					folder.className = isOpen ? "avatar-small open" : "avatar-small closed";
+					folder.src = isOpen ? openIcon : closedIcon;
+					
+					var includedServers = this.getIncludedServers(folderDiv);
+					this.hideAllServers(!isOpen, includedServers);
+					
+					this.saveSettings(serverID, {serverID,folderPlaced,folderName,isOpen,openIcon,closedIcon,color1,color2});
+				}
+			}
+		}
 	}
 	
 	createFolderContextMenu (e) {
 		this.selectedFolder = this.getParentDivOfFolder(e.target);
 		var folderContext = $(this.folderContextMarkup);
 		$("#app-mount>:first-child").append(folderContext)
-		.off("click", ".removefolder-item")
-		.on("click", ".removefolder-item", this.removeFolder.bind(this))
-		.on("click", ".removefolder-item", function() {
-			$(document).unbind('mousedown', folderContextEventHandler);
-			folderContext[0].remove();
-		});
+			.off("click", ".foldersettings-item")
+			.off("click", ".removefolder-item")
+			.on("click", ".foldersettings-item", this.showFolderSettings.bind(this))
+			.on("click", ".removefolder-item", this.removeFolder.bind(this))
+			.on("click", ".removefolder-item,.foldersettings-item", function() {
+				$(document).unbind('mousedown', folderContextEventHandler);
+				folderContext[0].remove();
+			});
 
 		folderContext[0].style.left = e.pageX + "px";
 		folderContext[0].style.top = e.pageY + "px";
@@ -180,49 +411,167 @@ class ServerFolders {
 		$(document).bind('mousedown', folderContextEventHandler);
 	}
 	
+	showFolderSettings (e) {
+		var folderDiv = $(this.selectedFolder);
+		
+		this.checkIfServerDivChanged(folderDiv);
+		
+		var id = this.getIdOfServer($(folderDiv).next()[0]);
+		if (id) {
+			var serverID, folderPlaced, folderName, isOpen, openIcon, closedIcon, color1, color2;
+			var settings = this.loadSettings(id);
+			if (settings) {
+				serverID = 		settings.serverID;
+				folderPlaced = 	settings.folderPlaced;
+				folderName = 	settings.folderName;
+				isOpen = 		settings.isOpen;
+				color1 = 		settings.color1;
+				color2 = 		settings.color2;
+				
+				var folderSettingsModal = $(this.folderSettingsModalMarkup);
+				folderSettingsModal.find("#modal-text")[0].value = folderName;
+				this.setSwatches(color1, this.colourList, folderSettingsModal.find(".swatches1"), "swatch1");
+				this.setSwatches(color2, this.colourList, folderSettingsModal.find(".swatches2"), "swatch2");
+				folderSettingsModal.appendTo("#app-mount")
+					.on("click", ".callout-backdrop,button.btn-cancel", (e) => {
+						folderSettingsModal.remove();
+						this.selectedFolder = null;
+					})
+					.on("click", "button.btn-save", (e) => {
+						
+						folderName = folderSettingsModal.find("#modal-text")[0].value;
+						
+						color1 = $(".ui-color-picker-swatch1.selected").css("backgroundColor").slice(4, -1).split(", ");
+						color2 = $(".ui-color-picker-swatch2.selected").css("backgroundColor").slice(4, -1).split(", ");
+						
+						openIcon = this.changeImgColor(true, color1, color2);
+						closedIcon = this.changeImgColor(false, color1, color2);
+						
+						$(this.selectedFolder).find(".avatar-small").attr("src", isOpen ? openIcon : closedIcon);
+						$(this.selectedFolder).find(".avatar-small").attr("title", folderName);
+						
+						this.saveSettings(serverID, {serverID,folderPlaced,folderName,isOpen,openIcon,closedIcon,color1,color2});
+						this.selectedFolder = null;
+						folderSettingsModal.remove();
+					});
+			}
+		}
+	}
+
+	setSwatches (currentCOMP, colorOptions, wrapper, swatch) {
+		var wrapperDiv = $(wrapper);
+		
+		var currentRGB = "rgb(" + (currentCOMP[0]) + ", " + (currentCOMP[1]) + ", " + (currentCOMP[2]) + ")";
+        var currentHex = '#' + (0x1000000 + (currentCOMP[2] | (currentCOMP[1] << 8) | (currentCOMP[0] << 16))).toString(16).slice(1);
+		
+		var invColor = "rgb(" + (255-currentCOMP[0]) + ", " + (255-currentCOMP[1]) + ", " + (255-currentCOMP[2]) + ")";
+		
+		var selection = colorOptions.indexOf(currentRGB);
+			
+		var swatches = swatch == "swatch1" ?
+			`<div class="ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-nowrap" style="flex: 1 1 auto; margin-top: 5px;">
+				<div class="ui-color-picker-swatch1 large custom" style="background-color: rgb(0, 0, 0);"></div>
+				<div class="regulars ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-wrap ui-color-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;">
+					${ colorOptions.map((val, i) => `<div class="ui-color-picker-swatch1" style="background-color: ${val};"></div>`).join("")}
+				</div>
+			</div>` :
+			`<div class="ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-nowrap" style="flex: 1 1 auto; margin-top: 5px;">
+				<div class="ui-color-picker-swatch2 large custom" style="background-color: rgb(255, 255, 255);"></div>
+				<div class="regulars ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-wrap ui-color-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;">
+					${ colorOptions.map((val, i) => `<div class="ui-color-picker-swatch2" style="background-color: ${val};"></div>`).join("")}
+				</div>
+			</div>`;
+		$(swatches).appendTo(wrapperDiv);
+		
+		if (selection > -1) {
+			wrapperDiv.find(".regulars .ui-color-picker-"+ swatch).eq(selection)
+				.addClass("selected")
+				.css("background-color", currentRGB)
+				.css("border", "4px solid " + invColor);
+		} 
+		else {
+			var invColor = "rgb(" + (255-currentCOMP[0]) + ", " + (255-currentCOMP[1]) + ", " + (255-currentCOMP[2]) + ")";
+			$(".custom", wrapperDiv)
+				.addClass("selected")
+				.css("background-color", currentRGB)
+				.css("border", "4px solid " + invColor);
+		}
+		
+		wrapperDiv.on("click", ".ui-color-picker-"+ swatch +":not(.custom)", (e) => {
+			var tempColor = $(e.target).css("background-color").slice(4, -1).split(", ");
+			var newInvColor = "rgb(" + (255-tempColor[0]) + ", " + (255-tempColor[1]) + ", " + (255-tempColor[2]) + ")";
+			
+			wrapperDiv.find(".ui-color-picker-"+ swatch +".selected")
+				.removeClass("selected")
+				.css("border", "4px solid transparent");
+			
+			$(e.target)
+				.addClass("selected")
+				.css("border", "4px solid " + newInvColor);
+		})
+		var custom = $(".ui-color-picker-"+ swatch +".custom", wrapperDiv).spectrum({
+			color: $(".custom", wrapperDiv).css("background-color"),
+			showInput: false,
+			showButtons: false,
+			move: (color) => {
+				var tempColor = color.toRgbString().slice(4, -1).split(", ");
+				var newInvColor = "rgb(" + (255-tempColor[0]) + ", " + (255-tempColor[1]) + ", " + (255-tempColor[2]) + ")";
+				
+				$(".ui-color-picker-"+ swatch +".selected")
+					.removeClass("selected")
+					.css("border", "4px solid transparent");
+				
+				custom
+					.addClass("selected")
+					.css("background-color", color.toRgbString())
+					.css("border", "4px solid " + newInvColor);
+			}
+		});
+	}
+	
 	removeFolder (e) {
 		var folderDiv = this.selectedFolder;
-		var folderID = $(folderDiv).find(".avatar-small")[0].id;
+		var folderPlaced = $(folderDiv).find(".avatar-small")[0].id;
 		var includedServers = this.getIncludedServers(folderDiv);
 		this.hideAllServers(false, includedServers);
 		
 		var serverID = this.getIdOfServer($(folderDiv).next()[0]);
-		var folderID = null;
-		var isOpen = null;
-		this.saveSettings(serverID, {serverID,folderID,isOpen});
+		this.clearSettings(serverID);
 		
-		delete this.folderIDs[folderID];
 		folderDiv.remove();
+		
 		this.selectedFolder = null;
 	}
 	
 	loadFolder (server) {
 		var id = this.getIdOfServer(server);
 		if (id) {
-			var serverID, folderID, isOpen;
+			var serverID, folderPlaced, folderName, isOpen, openIcon, closedIcon, color1, color2;
 			var settings = this.loadSettings(id);
 			if (settings) {
-				serverID = settings.serverID;
-				folderID = settings.folderID;
-				isOpen = settings.isOpen;
+				serverID = 		settings.serverID;
+				folderPlaced = 	settings.folderPlaced;
+				folderName = 	settings.folderName;
+				isOpen = 		settings.isOpen;
+				openIcon = 		settings.openIcon;
+				closedIcon = 	settings.closedIcon;
+				color1 = 		settings.color1;
+				color2 = 		settings.color2;
 				
-				if (folderID) {
+				if (folderPlaced) {
 					var serverDiv = this.getDivOfServer(serverID);
-					console.log(settings);
 					
 					var folderDiv = $(this.folderIconMarkup);				
 					$(folderDiv).insertBefore(serverDiv)
-					.find(".avatar-small")
-					.css("background-image", isOpen ? this.folderOpenIcon : this.folderClosedIcon)
-					.attr("id", folderID)
-					.attr("class", isOpen ? "avatar-small open" : "avatar-small closed")
-					.on("click", this.changeIconAndServers.bind(this))
-					.on("contextmenu", this.createFolderContextMenu.bind(this));
-					
-					this.folderIDs[folderID] = true;
+						.find(".avatar-small")
+						.attr("src", isOpen ? openIcon : closedIcon)
+						.attr("title", folderName)
+						.attr("id", "FL_ID_" + serverID)
+						.attr("class", isOpen ? "avatar-small open" : "avatar-small closed")
+						.on("click", this.changeIconAndServers.bind(this))
+						.on("contextmenu", this.createFolderContextMenu.bind(this));
 					
 					var includedServers = this.getIncludedServers(folderDiv);
-					console.log(includedServers);
 					
 					// seems like the icons are loaded too slowly, didn't get hidden without a little delay
 					var that = this;
@@ -232,10 +581,15 @@ class ServerFolders {
 				}
 			}
 			else {
-				serverID = id;
-				folderID = null;
-				isOpen = null;
-				this.saveSettings(serverID, {serverID,folderID,isOpen});
+				serverID = 		id;
+				folderPlaced = 	false;
+				folderName = 	null;
+				isOpen = 		null;
+				openIcon = 		null;
+				closedIcon = 	null;
+				color1 = 		null;
+				color2 = 		null;
+				this.saveSettings(serverID, {serverID,folderPlaced,folderName,isOpen,openIcon,closedIcon,color1,color2});
 			}
 		}
 	}
@@ -244,6 +598,36 @@ class ServerFolders {
 		var servers = this.readServerList();
 		for (var i = 0; i < servers.length; i++) {
 			this.loadFolder(servers[i]);
+		}
+	}
+	
+	checkIfServerDivChanged (folderDiv) {
+		var folder = $(folderDiv).find(".avatar-small")[0];
+		var folderID = folder.id.split("FL_ID_")[1];
+		var id = this.getIdOfServer($(folderDiv).next()[0]);
+		
+		console.log("id:" + id);
+		console.log("folderID:" + folderID);
+		
+		if (id) {
+			if (id != folderID) {
+				var settings = this.loadSettings(folderID);
+				if (settings) {
+					folder.id = "FL_ID_" + id;
+					
+					var serverID = 		id;
+					var folderPlaced = 	settings.folderPlaced;
+					var folderName = 	settings.folderName;
+					var isOpen = 		settings.isOpen;
+					var openIcon = 		settings.openIcon;
+					var closedIcon = 	settings.closedIcon;
+					var color1 = 		settings.color1;
+					var color2 = 		settings.color2;
+					
+					this.saveSettings(serverID, {serverID,folderPlaced,folderName,isOpen,openIcon,closedIcon,color1,color2});
+					this.clearSettings(folderID);
+				}
+			}
 		}
 	}
 	
@@ -365,11 +749,49 @@ class ServerFolders {
 		}
 	}
 	
+	changeImgColor (isOpen, color1, color2) {
+		var img = new Image();
+		img.src = isOpen ? this.folderOpenIcon : this.folderClosedIcon;
+		var can = document.createElement('canvas');
+		can.width = img.width;
+		can.height = img.height;
+		var ctx = can.getContext('2d');
+		ctx.drawImage(img, 0, 0);
+		var imageData = ctx.getImageData(0, 0, img.width, img.height);
+		var data = imageData.data;
+		for (var i = 0; i < data.length; i += 4) {
+			if (data[i] == 0 && data[i + 1] == 0 && data[i + 2] == 0) {
+				data[i] = color1[0];
+				data[i + 1] = color1[1];
+				data[i + 2] = color1[2];
+			}
+			else if (data[i] == 255 && data[i + 1] == 255 && data[i + 2] == 255) {
+				data[i] = color2[0];
+				data[i + 1] = color2[1];
+				data[i + 2] = color2[2];
+			}
+			// overwrite original image
+			ctx.putImageData(imageData, 0, 0);
+		}
+		return can.toDataURL("image/png");
+	}
+	
 	saveSettings (serverID, settings) {
 		bdPluginStorage.set(this.getName(), serverID, JSON.stringify(settings));
 	}
 
 	loadSettings (serverID) {
 		return JSON.parse(bdPluginStorage.get(this.getName(), serverID));
+	}
+	
+	clearSettings (serverID) {
+		var folderPlaced = 	false;
+		var folderName = 	null;
+		var isOpen = 		null;
+		var openIcon = 		null;
+		var closedIcon = 	null;
+		var color1 = 		null;
+		var color2 = 		null;
+		this.saveSettings(serverID, {serverID,folderPlaced,folderName,isOpen,openIcon,closedIcon,color1,color2});
 	}
 }
