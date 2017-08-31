@@ -192,8 +192,7 @@ class ServerHider {
 				vertical-align: middle;
 			}
 
-			'</style>
-		`;
+			'</style>`;
 		
 		this.serverHiderModalMarkup =
 			`<span class="serverhider-modal">
@@ -225,7 +224,7 @@ class ServerHider {
 				<button type="button" class="btn btn-hide">REPLACE_btn_visible_text</button>
 			</div>`;
 
-		this.contextMarkup =
+		this.serverContextEntryMarkup =
 			`<div class="item-group">
 				<div class="item hideserver-item">
 					<span>REPLACE_context_hide_text</span>
@@ -267,9 +266,13 @@ class ServerHider {
 		
 		$('head').append(this.css);
 		
-		this.labels = this.setLabelsByLanguage();
-		this.changeLanguageStrings();
 		this.updateAllDivStates();
+		
+		var that = this;
+		setTimeout(function() {
+			that.labels = that.setLabelsByLanguage();
+			that.changeLanguageStrings();
+		},1000);
 	}
 
 	stop () {
@@ -289,14 +292,14 @@ class ServerHider {
 	}
 
 	changeLanguageStrings () {
-		this.serverHiderModalMarkup = 	this.serverHiderModalMarkup.replace("REPLACE_modal_header_text", this.labels.modal_header_text);
-		this.serverHiderModalMarkup = 	this.serverHiderModalMarkup.replace("REPLACE_btn_ok_text", this.labels.btn_ok_text);
-		this.serverHiderModalMarkup = 	this.serverHiderModalMarkup.replace("REPLACE_btn_all_text", this.labels.btn_all_text);
+		this.serverHiderModalMarkup = 		this.serverHiderModalMarkup.replace("REPLACE_modal_header_text", this.labels.modal_header_text);
+		this.serverHiderModalMarkup = 		this.serverHiderModalMarkup.replace("REPLACE_btn_ok_text", this.labels.btn_ok_text);
+		this.serverHiderModalMarkup = 		this.serverHiderModalMarkup.replace("REPLACE_btn_all_text", this.labels.btn_all_text);
 		
-		this.serverEntryMarkup = 		this.serverEntryMarkup.replace("REPLACE_btn_visible_text", this.labels.btn_visible_text);
+		this.serverEntryMarkup = 			this.serverEntryMarkup.replace("REPLACE_btn_visible_text", this.labels.btn_visible_text);
 		
-		this.contextMarkup = 			this.contextMarkup.replace("REPLACE_context_hide_text", this.labels.context_hide_text);
-		this.contextMarkup = 			this.contextMarkup.replace("REPLACE_context_hidemenu_text", this.labels.context_hidemenu_text);
+		this.serverContextEntryMarkup = 	this.serverContextEntryMarkup.replace("REPLACE_context_hide_text", this.labels.context_hide_text);
+		this.serverContextEntryMarkup = 	this.serverContextEntryMarkup.replace("REPLACE_context_hidemenu_text", this.labels.context_hidemenu_text);
 	}
 	
 	onContextMenu (context) {
@@ -309,13 +312,13 @@ class ServerHider {
 				if (children[i] && children[i].props && children[i].props.guild && children[i].type && children[i].type.displayName == "GuildLeaveGroup") {
 					var { id, name } = children[i].props.guild;
 					var data = { id, name };
-					$(context).append(this.contextMarkup)
+					$(context).append(this.serverContextEntryMarkup)
 					.on("click", ".hideserver-item", data, this.onContextHide.bind(this))
 					.on("click", ".openhidemenu-item", this.onContextHidemenu.bind(this))
 					break;
 				}
 				else if (children[i] && children[i].type && children[i].type.displayName == "GuildCreateJoinGroup") {
-					$(context).append(this.contextMarkup)
+					$(context).append(this.serverContextEntryMarkup)
 					.on("click", ".openhidemenu-item", this.onContextHidemenu.bind(this))
 					.find(".hideserver-item").hide();
 					break;
@@ -484,7 +487,9 @@ class ServerHider {
 	}
 	
 	getServerInformation (server) {
-		var curEle = this.getReactInstance(server)._currentElement;
+		var inst = this.getReactInstance(server);
+		if (!inst) return null;
+		var curEle = inst._currentElement;
 		if (curEle) {
 			var serverInfo = this.checkForServerInformation(curEle); 
 			if (serverInfo.id) {
