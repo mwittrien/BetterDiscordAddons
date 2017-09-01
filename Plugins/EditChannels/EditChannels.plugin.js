@@ -436,7 +436,9 @@ class EditChannels {
 		})
 		var custom = $(".ui-color-picker-swatch1.custom", wrapperDiv).spectrum({
 			color: $(".custom", wrapperDiv).css("background-color"),
-			showInput: false,
+			preferredFormat: "rgb",
+			clickoutFiresChange: true,
+			showInput: true,
 			showButtons: false,
 			move: (color) => {
 				var tempColor = color.toRgbString().slice(4, -1).split(", ");
