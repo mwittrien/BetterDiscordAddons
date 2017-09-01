@@ -24,7 +24,6 @@ class ReadAllNotificationsButton {
 	load () {}
 
 	start () {
-		var that = this;
 		var readButton = $(this.RANbuttonMarkup);
 		$(readButton).insertBefore(".guild-separator")
 		.on("click", "#RANbutton", this.clearAllReadNotifications.bind(this));
