@@ -163,16 +163,6 @@ class ServerFolders {
 				font-size: 12px;
 			}
 
-			.serverfolders-modal label.modal-reset, .serverfolders-modal label.reset-nick {
-				color: #dcddde;
-				text-transform: capitalize;
-				opacity: .6;
-				margin-bottom: 20px;
-				font-weight: 600;
-				line-height: 16px;
-				font-size: 12px;
-			}
-
 			.serverfolders-modal .control-group {
 				margin-top: 10px;
 			}
@@ -352,7 +342,7 @@ class ServerFolders {
 					var { id, name } = children[i].props.guild;
 					var data = { id, name, };
 					$(context).append(this.serverContextEntryMarkup)
-					.on("click", ".createfolder-item", data, this.createNewFolder.bind(this))
+					.on("click", ".createfolder-item", data, this.createNewFolder.bind(this));
 					break;
 				}
 			}
@@ -391,7 +381,7 @@ class ServerFolders {
 	createFolderToolTip (e) {
 		if (e.target.name != "") {
 			var folderTooltip = $(this.folderTooltipMarkup);
-			$(".tooltips").append(folderTooltip)
+			$(".tooltips").append(folderTooltip);
 			$(folderTooltip)
 				.text(e.target.name)
 				.css("left", (e.target.x + 50) + "px")
@@ -548,7 +538,6 @@ class ServerFolders {
 				.css("border", "4px solid " + invColor);
 		} 
 		else {
-			var invColor = "rgb(" + (255-currentCOMP[0]) + ", " + (255-currentCOMP[1]) + ", " + (255-currentCOMP[2]) + ")";
 			$(".custom", wrapperDiv)
 				.addClass("selected")
 				.css("background-color", currentRGB)
@@ -569,7 +558,9 @@ class ServerFolders {
 		})
 		var custom = $(".ui-color-picker-"+ swatch +".custom", wrapperDiv).spectrum({
 			color: $(".custom", wrapperDiv).css("background-color"),
-			showInput: false,
+			preferredFormat: "rgb",
+			clickoutFiresChange: true,
+			showInput: true,
 			showButtons: false,
 			move: (color) => {
 				var tempColor = color.toRgbString().slice(4, -1).split(", ");
@@ -732,24 +723,17 @@ class ServerFolders {
 	
 	getDivOfServer (serverID) {
 		var servers = this.readServerList();
-		var found = false;
 		for (var i = 0; i < servers.length; i++) {
 			var childNodes = servers[i].getElementsByTagName("*");
 			for (var j = 0; j < childNodes.length; j++) {
 				if (childNodes[j].href) {
 					if (childNodes[j].href.split("/")[4] == serverID) {
 						return servers[i];
-						found = true;
 					}
 				}
-				if (found) {
-					break;
-				}
-			}
-			if (found) {
-				break;
 			}
 		}
+		return null;
 	}
 	
 	readServerList () {
@@ -771,7 +755,7 @@ class ServerFolders {
 		var inst = this.getReactInstance(server);
 		if (!inst) return null;
 		var curEle = inst._currentElement;
-		if (curEle) {
+			if (curEle && curEle._owner && curEle._owner._instance) {
 			var serverInfo = this.checkForServerInformation(curEle); 
 			if (serverInfo && serverInfo.id) {
 				return serverInfo.id;
