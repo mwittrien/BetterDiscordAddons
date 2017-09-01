@@ -70,7 +70,7 @@ class ReadAllNotificationsButton {
 						var context = document.getElementsByClassName("context-menu")[0];
 						$(".context-menu .item-group").each (
 							(i,ele) => {
-								var inst = this.getReactInstance(ele);
+								var inst = that.getReactInstance(ele);
 								if (inst) {
 									var childIndex = -1;
 									var curEle = inst._currentElement;
