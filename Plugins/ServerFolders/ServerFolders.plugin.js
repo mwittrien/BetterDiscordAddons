@@ -946,14 +946,14 @@ class ServerFolders {
 				};
 			case "pl":		//polish
 				return {
-					servercontext_createfolder_text: 	"Utwórz folderu",
+					servercontext_createfolder_text: 	"Utwórz folder",
 					foldercontext_foldersettings_text: 	"Ustawienia folderu",
-					foldercontext_removefolder_text:	"Usuń folderu",
+					foldercontext_removefolder_text:	"Usuń folder",
 					modal_header_text:					"Ustawienia folderu",
 					modal_foldername_text:				"Nazwa folderu",
-					modal_colorpicker1_text:			"Kolor folderu podstawowy",
-					modal_colorpicker2_text:			"Kolor folderu wtórny",
-					btn_cancel_text:					"Przerwać",
+					modal_colorpicker1_text:			"Podstawowy kolor folderu",
+					modal_colorpicker2_text:			"Drugorzędny kolor folderu",
+					btn_cancel_text:					"Anuluj",
 					btn_save_text:						"Zapisz"
 				};
 			case "pt":		//portuguese (brazil)
