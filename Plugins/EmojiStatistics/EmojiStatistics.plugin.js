@@ -271,8 +271,8 @@ class EmojiStatistics {
 								if (EmojiStatistics.getSettings().enableEmojiHovering) {this.hoverEmoji();}
 							}
 							if (node && node.id && node.id == "bda-qem") {
-								if (EmojiStatistics.getSettings().enableEmojiStatisticsButton) {this.addEmojiInformationButton();}
 								this.loadEmojiList();
+								if (EmojiStatistics.getSettings().enableEmojiStatisticsButton) {this.addEmojiInformationButton();}
 							}
 						});
 					}
@@ -468,7 +468,7 @@ class EmojiStatistics {
 				if (!this.hovering) {
 					this.hovering = true;
 					var emojiUrl = $(this).css("background-image");
-					emojiUrl = emojiUrl.replace("url(\":","").replace("\")","");
+					emojiUrl = emojiUrl.replace("url(\"","").replace("\")","");
 					if (emojiToServerList[emojiUrl]){
 						var data = JSON.parse(emojiToServerList[emojiUrl]);
 						var emojiName = data.emojiName;
