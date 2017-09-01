@@ -662,11 +662,11 @@ class EditChannels {
 				};
 			case "tr":		//turkish
 				return {
-					context_channelsettings_text: 		"",
-					context_resetsettings_text: 		"",
-					modal_header_text:					"",
-					modal_channelname_text:				"",
-					modal_colorpicker1_text:			"",
+					context_channelsettings_text: 		"Kanal Ayarları",
+					context_resetsettings_text: 		"Kanal Sıfırla",
+					modal_header_text:					"Kanal Ayarları",
+					modal_channelname_text:				"Yerel Kanal Adı",
+					modal_colorpicker1_text:			"Yerel Kanal Rengi",
 					btn_cancel_text:					"Iptal",
 					btn_save_text:						"Kayıt"
 				};
@@ -692,11 +692,11 @@ class EditChannels {
 				};
 			case "ru":		//russian
 				return {
-					context_channelsettings_text: 		"",
-					context_resetsettings_text: 		"",
-					modal_header_text:					"",
-					modal_channelname_text:				"",
-					modal_colorpicker1_text:			"",
+					context_channelsettings_text: 		"Настройки канала",
+					context_resetsettings_text: 		"Сбросить канал",
+					modal_header_text:					"Настройки канала",
+					modal_channelname_text:				"Имя локального канала",
+					modal_colorpicker1_text:			"Цвет локального канала",
 					btn_cancel_text:					"Отмена",
 					btn_save_text:						"Cпасти"
 				};
