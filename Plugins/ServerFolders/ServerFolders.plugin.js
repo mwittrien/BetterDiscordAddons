@@ -296,7 +296,9 @@ class ServerFolders {
 		};
 		$(".guilds.scroller").bind('mouseleave', this.serverListContextHandler);
 		
-		$('head').append(this.css);
+		$('head').append(this.css)
+			.append("<script src='https://bgrins.github.io/spectrum/spectrum.js'></script>")
+			.append("<link rel='stylesheet' href='https://bgrins.github.io/spectrum/spectrum.css' />");
 		
 		this.loadAllFolders();
 		
