@@ -288,7 +288,7 @@ class EditChannels {
 		setTimeout(function() {
 			that.labels = that.setLabelsByLanguage();
 			that.changeLanguageStrings();
-		},1000);
+		},5000);
 	}
 
 	stop () {
