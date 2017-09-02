@@ -332,7 +332,14 @@ class EditChannels {
 					var data = { id, guild_id, name, };
 					$(context).append(this.channelContextEntryMarkup)
 					.on("click", ".channelsettings-item", data, this.showChannelSettings.bind(this))
-					.on("click", ".resetsettings-item", data, this.resetChannel.bind(this));
+					
+					var settings = this.loadSettings(data.id + "_" + data.guild_id);
+					if (!settings.nickName && !settings.color) {
+						$(context).find(".resetsettings-item").addClass("disabled");
+					}
+					else {
+						$(context).on("click", ".resetsettings-item", data, this.resetChannel.bind(this));
+					}
 					break;
 				}
 			}
@@ -373,17 +380,23 @@ class EditChannels {
 							nickName = null;
 						}
 						
-						var pickedColor = $(".ui-color-picker-swatch1.selected").css("backgroundColor");
-						color = pickedColor.slice(4, -1).split(", ");
-						
-						var channel = this.getDivOfChannel(channelID, serverID);
-						
-						if (nickName) $(channel).text(nickName);
-						if (pickedColor) $(channel).css("color", pickedColor);
+						var colorRGB = $(".ui-color-picker-swatch1.selected").css("backgroundColor");
+						var color = colorRGB.slice(4, -1).split(", ").map(Number);
+						color = (color[0] < 30 && color[1] < 30 && color[2] < 30) ? 
+								[color[0]+30, color[1]+30, color[2]+30] : 
+								[color[0], color[1], color[2]];
+						color = (color[0] > 225 && color[1] > 225 && color[2] > 225) ? 
+								[color[0]-30, color[1]-30, color[2]-30] : 
+								[color[0], color[1], color[2]];
 						
 						this.saveSettings(id, {channelID,serverID,nickName,color});
+						
+						this.loadChannel(this.getDivOfChannel(channelID, serverID));
+						
 						channelSettingsModal.remove();
 					});
+					
+				channelSettingsModal.find("#modal-text")[0].focus();
 			}
 		}
 	}
@@ -456,6 +469,21 @@ class EditChannels {
 		});
 	}
 	
+	chooseColor (channel, colorCOMP) {
+		if (colorCOMP && channel && channel.className) {
+			if (channel.className.indexOf("nameMuted") > -1 || channel.className.indexOf("nameLocked") > -1) {
+				return "rgb(" + (colorCOMP[0]-50) + ", " + (colorCOMP[1]-50) + ", " + (colorCOMP[2]-50) + ")";
+			}
+			if (channel.className.indexOf("nameDefault") > -1) {
+				return "rgb(" + (colorCOMP[0]) + ", " + (colorCOMP[1]) + ", " + (colorCOMP[2]) + ")";
+			}
+			if (channel.className.indexOf("nameSelected") > -1 || channel.className.indexOf("nameHovered") > -1 ||  channel.className.indexOf("nameUnread") > -1) {
+				return "rgb(" + (colorCOMP[0]+50) + ", " + (colorCOMP[1]+50) + ", " + (colorCOMP[2]+50) + ")";
+			}
+		}
+		return null;
+	}
+	
 	resetChannel (e) {
 		$(e.delegateTarget).hide();
 		
@@ -481,8 +509,10 @@ class EditChannels {
 				nickName = 		settings.nickName;
 				color = 		settings.color;
 				
+				var colorRGB = this.chooseColor(channel, color);
+				
 				if (nickName) $(channel).text(nickName);
-				if (color) $(channel).css("color", "rgb(" + color[0] + ", " + color[1] + ", " + color[2] + ")");
+				if (colorRGB) $(channel).css("color", colorRGB);
 			}
 			else {
 				this.clearSettings(id);
