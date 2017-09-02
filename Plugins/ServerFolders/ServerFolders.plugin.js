@@ -296,7 +296,7 @@ class ServerFolders {
 		setTimeout(function() {
 			that.labels = that.setLabelsByLanguage();
 			that.changeLanguageStrings();
-		},1000);
+		},5000);
 	}
 
 	stop () {
@@ -502,6 +502,8 @@ class ServerFolders {
 						this.selectedFolder = null;
 						folderSettingsModal.remove();
 					});
+					
+				folderSettingsModal.find("#modal-text")[0].focus();
 			}
 		}
 	}
