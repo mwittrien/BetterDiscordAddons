@@ -272,7 +272,7 @@ class ServerHider {
 		setTimeout(function() {
 			that.labels = that.setLabelsByLanguage();
 			that.changeLanguageStrings();
-		},1000);
+		},5000);
 	}
 
 	stop () {
@@ -306,7 +306,7 @@ class ServerHider {
 		var inst = this.getReactInstance(context);
 		if (!inst) return;
 		var ele = inst._currentElement;
-		if (ele.props && ele.props.children) {
+		if (ele && ele.props && ele.props.children) {
 			var children = Array.isArray(ele.props.children) ? ele.props.children : [ele.props.children];
 			for (var i = 0; i < children.length; i++) {
 				if (children[i] && children[i].props && children[i].props.guild && children[i].type && children[i].type.displayName == "GuildLeaveGroup") {
@@ -314,7 +314,7 @@ class ServerHider {
 					var data = { id, name };
 					$(context).append(this.serverContextEntryMarkup)
 					.on("click", ".hideserver-item", data, this.onContextHide.bind(this))
-					.on("click", ".openhidemenu-item", this.onContextHidemenu.bind(this))
+					.on("click", ".openhidemenu-item", this.onContextHidemenu.bind(this));
 					break;
 				}
 				else if (children[i] && children[i].type && children[i].type.displayName == "GuildCreateJoinGroup") {
@@ -451,24 +451,17 @@ class ServerHider {
 	
 	getDivOfServer (id) {
 		var servers = this.readServerList();
-		var found = false;
 		for (var i = 0; i < servers.length; i++) {
 			var childNodes = servers[i].getElementsByTagName("*");
 			for (var j = 0; j < childNodes.length; j++) {
 				if (childNodes[j].href) {
 					if (childNodes[j].href.split("/")[4] == id) {
 						return servers[i];
-						found = true;
 					}
 				}
-				if (found) {
-					break;
-				}
-			}
-			if (found) {
-				break;
 			}
 		}
+		return null;
 	}
 	
 	readServerList () {
