@@ -267,7 +267,6 @@ class ServerFolders {
 					if (change.addedNodes) {
 						change.addedNodes.forEach((node) => {
 							if (node.nodeType == 1 && node.className.includes("context-menu")) {
-								console.log(node);
 								this.onContextMenu(node);
 							}
 						});
