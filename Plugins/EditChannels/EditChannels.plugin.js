@@ -201,7 +201,7 @@ class EditChannels {
 							</div>
 							<div class="form-actions">
 								<button type="button" class="btn btn-cancel">REPLACE_btn_cancel_text</button>
-								<button type="button" class="btn btn-save">REPLACE_btn_save_text</button>
+								<button type="submit" class="btn btn-save">REPLACE_btn_save_text</button>
 							</div>
 						</form>
 					</div>
@@ -217,7 +217,7 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "1.0.0";}
+	getVersion () {return "1.1.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -366,8 +366,8 @@ class EditChannels {
 					.on("click", ".callout-backdrop,button.btn-cancel", (e) => {
 						channelSettingsModal.remove();
 					})
-					.on("click", "button.btn-save", (e) => {
-						
+					.on("submit", "form", (e) => {
+						e.preventDefault();
 						if (channelSettingsModal.find("#modal-text")[0].value) {
 							if (channelSettingsModal.find("#modal-text")[0].value.trim().length > 0) {
 								nickName = channelSettingsModal.find("#modal-text")[0].value.trim();
