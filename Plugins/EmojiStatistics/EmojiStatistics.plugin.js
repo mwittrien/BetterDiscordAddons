@@ -283,8 +283,11 @@ class EmojiStatistics {
 		
 		$('head').append(this.css);
 		
-		this.labels = this.setLabelsByLanguage();
-		this.changeLanguageStrings();
+		var that = this;
+		setTimeout(function() {
+			that.labels = that.setLabelsByLanguage();
+			that.changeLanguageStrings();
+		},5000);
 	}
 
 	stop () {
