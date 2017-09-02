@@ -36,6 +36,15 @@ class EditChannels {
 				height: 62px;
 				border-radius: 25px;
 			}
+
+			.ui-color-picker-swatch1.nocolor {
+				cursor: default;
+				line-height: 22px;
+				color: red;
+				font-size: 28px;
+				font-weight: bold;
+				border: 4px solid red;
+			}
 			
 			.editchannels-modal .modal {
 				align-content: space-around;
@@ -168,13 +177,23 @@ class EditChannels {
 
 		this.channelContextEntryMarkup =
 			`<div class="item-group">
-				<div class="item channelsettings-item">
-					<span>REPLACE_context_channelsettings_text</span>
+				<div class="item localsettings-item item-subMenu">
+					<span>REPLACE_context_localsettings_text</span>
 					<div class="hint"></div>
 				</div>
-				<div class="item resetsettings-item">
-					<span>REPLACE_context_resetsettings_text</span>
-					<div class="hint"></div>
+			</div>`;
+			
+		this.channelContextSubMenuMarkup = 
+			`<div class="context-menu localChannelSettingsSubMenu">
+				<div class="item-group">
+					<div class="item channelsettings-item">
+						<span>REPLACE_submenu_channelsettings_text</span>
+						<div class="hint"></div>
+					</div>
+					<div class="item resetsettings-item">
+						<span>REPLACE_submenu_resetsettings_text</span>
+						<div class="hint"></div>
+					</div>
 				</div>
 			</div>`;
 
@@ -209,15 +228,15 @@ class EditChannels {
 			</span>`;
 
 		this.colourList = 
-			['rgb(26, 188, 156)','rgb(46, 204, 113)','rgb(52, 152, 219)','rgb(155, 89, 182)','rgb(233, 30, 99)','rgb(241, 196, 15)','rgb(230, 126, 34)','rgb(231, 76, 60)','rgb(149, 165, 166)','rgb(96, 125, 139)','rgb(99, 99, 99)','rgb(77, 77, 77)',
-			'rgb(17, 128, 106)','rgb(31, 139, 76)','rgb(32, 102, 148)','rgb(113, 54, 138)','rgb(173, 20, 87)','rgb(194, 124, 14)','rgb(168, 67, 0)','rgb(153, 45, 34)','rgb(151, 156, 159)','rgb(84, 110, 122)','rgb(44, 44, 44)','rgb(33, 33, 33)'];
+			['rgb(26, 188, 156)','rgb(46, 204, 113)','rgb(52, 152, 219)','rgb(155, 89, 182)','rgb(233, 30, 99)','rgb(241, 196, 15)','rgb(230, 126, 34)','rgb(231, 76, 60)','rgb(149, 165, 166)','rgb(96, 125, 139)','rgb(99, 99, 99)',
+			'rgb(255, 255, 255)','rgb(17, 128, 106)','rgb(31, 139, 76)','rgb(32, 102, 148)','rgb(113, 54, 138)','rgb(173, 20, 87)','rgb(194, 124, 14)','rgb(168, 67, 0)','rgb(153, 45, 34)','rgb(151, 156, 159)','rgb(84, 110, 122)','rgb(44, 44, 44)'];
 	}
 
 	getName () {return "EditChannels";}
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "1.1.0";}
+	getVersion () {return "2.0.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -310,8 +329,10 @@ class EditChannels {
 	}
 
 	changeLanguageStrings () {
-		this.channelContextEntryMarkup = 	this.channelContextEntryMarkup.replace("REPLACE_context_channelsettings_text", this.labels.context_channelsettings_text);
-		this.channelContextEntryMarkup = 	this.channelContextEntryMarkup.replace("REPLACE_context_resetsettings_text", this.labels.context_resetsettings_text);
+		this.channelContextEntryMarkup = 	this.channelContextEntryMarkup.replace("REPLACE_context_localsettings_text", this.labels.context_localsettings_text);
+		
+		this.channelContextSubMenuMarkup = 	this.channelContextSubMenuMarkup.replace("REPLACE_submenu_channelsettings_text", this.labels.submenu_channelsettings_text);
+		this.channelContextSubMenuMarkup = 	this.channelContextSubMenuMarkup.replace("REPLACE_submenu_resetsettings_text", this.labels.submenu_resetsettings_text);
 		
 		this.channelSettingsModalMarkup = 	this.channelSettingsModalMarkup.replace("REPLACE_modal_header_text", this.labels.modal_header_text);
 		this.channelSettingsModalMarkup = 	this.channelSettingsModalMarkup.replace("REPLACE_modal_channelname_text", this.labels.modal_channelname_text);
@@ -329,26 +350,50 @@ class EditChannels {
 			for (var i = 0; i < children.length; i++) {
 				if (children[i] && children[i].props && children[i].props.channel && children[i].type && children[i].type.displayName == "ChannelInviteCreateGroup") {
 					var { id, guild_id, name } = children[i].props.channel;
-					var data = { id, guild_id, name, };
+					var data = { id, guild_id, name };
 					$(context).append(this.channelContextEntryMarkup)
-					.on("click", ".channelsettings-item", data, this.showChannelSettings.bind(this))
-					
-					var settings = this.loadSettings(data.id + "_" + data.guild_id);
-					if (!settings.nickName && !settings.color) {
-						$(context).find(".resetsettings-item").addClass("disabled");
-					}
-					else {
-						$(context).on("click", ".resetsettings-item", data, this.resetChannel.bind(this));
-					}
+						.on("mouseenter", ".localsettings-item", data, this.createContextSubMenu.bind(this))
+						.on("mouseleave", ".localsettings-item", data, this.deleteContextSubMenu.bind(this));
 					break;
 				}
 			}
 		}
 	}
 	
-	showChannelSettings (e) {
-		$(e.delegateTarget).hide();
+	createContextSubMenu (e) {
+		var { id, guild_id, name } = e.data;
+		var data = { id, guild_id, name };
 		
+		var theme = this.themeIsLightTheme() ? "" : "theme-dark";
+		
+		var targetDiv = e.target.tagName != "SPAN" ? e.target : e.target.parentNode;
+		
+		var channelContextSubMenu = $(this.channelContextSubMenuMarkup);
+		$(targetDiv).append(channelContextSubMenu)
+			.off("click", ".channelsettings-item")
+			.on("click", ".channelsettings-item", data, this.showChannelSettings.bind(this));
+		$(channelContextSubMenu)
+			.addClass(theme)
+			.css("left", $(targetDiv).offset().left + "px")
+			.css("top", $(targetDiv).offset().top + "px");
+			
+		var settings = this.loadSettings(e.data.id + "_" + e.data.guild_id);
+		if (!settings.nickName && !settings.color) {
+			$(targetDiv).find(".resetsettings-item").addClass("disabled");
+		}
+		else {
+			$(targetDiv)
+				.off("click", ".resetsettings-item")
+				.on("click", ".resetsettings-item", data, this.resetChannel.bind(this));
+		}
+	}
+	
+	deleteContextSubMenu (e) {
+		$(".localChannelSettingsSubMenu").hide();
+	}
+	
+	showChannelSettings (e) {
+		$(".context-menu").hide();
 		var id = e.data.id + "_" + e.data.guild_id;
 		if (id) {
 			var channelID, serverID, nickName, color;
@@ -359,39 +404,50 @@ class EditChannels {
 				nickName = 		settings.nickName;
 				color = 		settings.color;
 				
+				var channel = this.getDivOfChannel(channelID, serverID);
+				
 				var channelSettingsModal = $(this.channelSettingsModalMarkup);
 				channelSettingsModal.find("#modal-text")[0].value = nickName;
 				this.setSwatches(color, this.colourList, channelSettingsModal.find(".swatches1"));
 				channelSettingsModal.appendTo("#app-mount")
-					.on("click", ".callout-backdrop,button.btn-cancel", (e) => {
+					.on("click", ".callout-backdrop,button.btn-cancel", (event) => {
 						channelSettingsModal.remove();
 					})
-					.on("submit", "form", (e) => {
-						e.preventDefault();
+					.on("submit", "form", (event) => {
+						event.preventDefault();
 						if (channelSettingsModal.find("#modal-text")[0].value) {
 							if (channelSettingsModal.find("#modal-text")[0].value.trim().length > 0) {
 								nickName = channelSettingsModal.find("#modal-text")[0].value.trim();
 							}
 							else {
 								nickName = null;
+								$(channel).text(e.data.name);
 							}
 						}
 						else {
 							nickName = null;
+							$(channel).text(e.data.name);
 						}
 						
-						var colorRGB = $(".ui-color-picker-swatch1.selected").css("backgroundColor");
-						var color = colorRGB.slice(4, -1).split(", ").map(Number);
-						color = (color[0] < 30 && color[1] < 30 && color[2] < 30) ? 
-								[color[0]+30, color[1]+30, color[2]+30] : 
-								[color[0], color[1], color[2]];
-						color = (color[0] > 225 && color[1] > 225 && color[2] > 225) ? 
-								[color[0]-30, color[1]-30, color[2]-30] : 
-								[color[0], color[1], color[2]];
+						if (!$(".ui-color-picker-swatch1.nocolor.selected")[0]) {
+							var colorRGB = $(".ui-color-picker-swatch1.selected").css("backgroundColor");
+							var color = colorRGB.slice(4, -1).split(", ").map(Number);
+							color = (color[0] < 30 && color[1] < 30 && color[2] < 30) ? 
+									[color[0]+30, color[1]+30, color[2]+30] : 
+									[color[0], color[1], color[2]];
+							color = (color[0] > 225 && color[1] > 225 && color[2] > 225) ? 
+									[color[0]-30, color[1]-30, color[2]-30] : 
+									[color[0], color[1], color[2]];
+						} 
+						else {
+							color = null;
+							$(channel).css("color","");
+						}
 						
+							
 						this.saveSettings(id, {channelID,serverID,nickName,color});
-						
-						this.loadChannel(this.getDivOfChannel(channelID, serverID));
+							
+						this.loadChannel(channel);
 						
 						channelSettingsModal.remove();
 					});
@@ -403,45 +459,50 @@ class EditChannels {
 
 	setSwatches (currentCOMP, colorOptions, wrapper) {
 		var wrapperDiv = $(wrapper);
-		
-		currentCOMP = currentCOMP ? currentCOMP : ["0", "0" ,"0"];
-		
-		var currentRGB = "rgb(" + (currentCOMP[0]) + ", " + (currentCOMP[1]) + ", " + (currentCOMP[2]) + ")";
-        var currentHex = '#' + (0x1000000 + (currentCOMP[2] | (currentCOMP[1] << 8) | (currentCOMP[0] << 16))).toString(16).slice(1);
-		
-		var invColor = "rgb(" + (255-currentCOMP[0]) + ", " + (255-currentCOMP[1]) + ", " + (255-currentCOMP[2]) + ")";
-		
-		var selection = colorOptions.indexOf(currentRGB);
 			
 		var swatches = 
 			`<div class="ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-nowrap" style="flex: 1 1 auto; margin-top: 5px;">
 				<div class="ui-color-picker-swatch1 large custom" style="background-color: rgb(0, 0, 0);"></div>
-				<div class="regulars ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-wrap ui-color-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;">
+				<div class="regulars ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-wrap ui-color-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;"><div class="ui-color-picker-swatch1 nocolor">✖</div>
 					${ colorOptions.map((val, i) => `<div class="ui-color-picker-swatch1" style="background-color: ${val};"></div>`).join("")}
 				</div>
 			</div>`;
 		$(swatches).appendTo(wrapperDiv);
 		
-		if (selection > -1) {
-			wrapperDiv.find(".regulars .ui-color-picker-swatch1").eq(selection)
-				.addClass("selected")
-				.css("background-color", currentRGB)
-				.css("border", "4px solid " + invColor);
-		} 
+		if (currentCOMP) {
+			var currentRGB = "rgb(" + (currentCOMP[0]) + ", " + (currentCOMP[1]) + ", " + (currentCOMP[2]) + ")";
+			var currentHex = '#' + (0x1000000 + (currentCOMP[2] | (currentCOMP[1] << 8) | (currentCOMP[0] << 16))).toString(16).slice(1);
+			
+			var invColor = "rgb(" + (255-currentCOMP[0]) + ", " + (255-currentCOMP[1]) + ", " + (255-currentCOMP[2]) + ")";
+			
+			var selection = colorOptions.indexOf(currentRGB);
+			
+			if (selection > -1) {
+				wrapperDiv.find(".regulars .ui-color-picker-swatch1").eq(selection+1)
+					.addClass("selected")
+					.css("background-color", currentRGB)
+					.css("border", "4px solid " + invColor);
+			} 
+			else {
+				$(".custom", wrapperDiv)
+					.addClass("selected")
+					.css("background-color", currentRGB)
+					.css("border", "4px solid " + invColor);
+			}
+		}
 		else {
-			$(".custom", wrapperDiv)
+			$(".nocolor", wrapperDiv)
 				.addClass("selected")
-				.css("background-color", currentRGB)
-				.css("border", "4px solid " + invColor);
+				.css("border", "4px solid black");
 		}
 		
 		wrapperDiv.on("click", ".ui-color-picker-swatch1:not(.custom)", (e) => {
 			var tempColor = $(e.target).css("background-color").slice(4, -1).split(", ");
-			var newInvColor = "rgb(" + (255-tempColor[0]) + ", " + (255-tempColor[1]) + ", " + (255-tempColor[2]) + ")";
+			var newInvColor = e.target.classList.contains("nocolor") ? "black" : "rgb(" + (255-tempColor[0]) + ", " + (255-tempColor[1]) + ", " + (255-tempColor[2]) + ")";
 			
 			wrapperDiv.find(".ui-color-picker-swatch1.selected")
 				.removeClass("selected")
-				.css("border", "4px solid transparent");
+				.css("border", "");
 			
 			$(e.target)
 				.addClass("selected")
@@ -457,6 +518,10 @@ class EditChannels {
 				var tempColor = color.toRgbString().slice(4, -1).split(", ");
 				var newInvColor = "rgb(" + (255-tempColor[0]) + ", " + (255-tempColor[1]) + ", " + (255-tempColor[2]) + ")";
 				
+				$(".ui-color-picker-swatch1.selected.nocolor")
+					.removeClass("selected")
+					.css("border", "4px solid red");
+					
 				$(".ui-color-picker-swatch1.selected")
 					.removeClass("selected")
 					.css("border", "4px solid transparent");
@@ -485,7 +550,7 @@ class EditChannels {
 	}
 	
 	resetChannel (e) {
-		$(e.delegateTarget).hide();
+		$(".context-menu").hide();
 		
 		var id = e.data.id + "_" + e.data.guild_id;
 		if (id) {
@@ -564,6 +629,15 @@ class EditChannels {
 		return null;
 	}
 	
+	themeIsLightTheme () {
+		if ($(".theme-light").length > $(".theme-dark").length) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
 	saveSettings (id, settings) {
 		bdPluginStorage.set(this.getName(), id, JSON.stringify(settings));
 	}
@@ -584,9 +658,10 @@ class EditChannels {
 		switch (document.getElementsByTagName("html")[0].lang.split("-")[0]) {
 			case "da": 		//danish
 				return {
-					context_channelsettings_text: 		"Kanalindstillinger",
-					context_resetsettings_text: 		"Nulstil kanal",
-					modal_header_text:					"Kanalindstillinger",
+					context_localsettings_text: 		"Lokal Kanalindstillinger",
+					submenu_channelsettings_text: 		"Skift indstillinger",
+					submenu_resetsettings_text: 		"Nulstil kanal",
+					modal_header_text:					"Lokal Kanalindstillinger",
 					modal_channelname_text:				"Lokalt kanalnavn",
 					modal_colorpicker1_text:			"Lokal kanalfarve",
 					btn_cancel_text:					"Afbryde",
@@ -594,9 +669,10 @@ class EditChannels {
 				};
 			case "de": 		//german
 				return {
-					context_channelsettings_text: 		"Kanaleinstellungen",
-					context_resetsettings_text: 		"Kanal zurücksetzen",
-					modal_header_text:					"Kanaleinstellungen",
+					context_localsettings_text: 		"Lokale Kanaleinstellungen",
+					submenu_channelsettings_text: 		"Ändere Einstellungen",
+					submenu_resetsettings_text: 		"Kanal zurücksetzen",
+					modal_header_text:					"Lokale Kanaleinstellungen",
 					modal_channelname_text:				"Lokaler Kanalname",
 					modal_colorpicker1_text:			"Lokale Kanalfarbe",
 					btn_cancel_text:					"Abbrechen",
@@ -604,9 +680,10 @@ class EditChannels {
 				};
 			case "es": 		//spanish
 				return {
-					context_channelsettings_text: 		"Ajustes de canal",
-					context_resetsettings_text: 		"Restablecer canal",
-					modal_header_text:					"Ajustes de canal",
+					context_localsettings_text: 		"Ajustes local de canal",
+					submenu_channelsettings_text: 		"Cambiar ajustes",
+					submenu_resetsettings_text: 		"Restablecer canal",
+					modal_header_text:					"Ajustes local de canal",
 					modal_channelname_text:				"Nombre local del canal",
 					modal_colorpicker1_text:			"Color local del canal",
 					btn_cancel_text:					"Cancelar",
@@ -614,9 +691,10 @@ class EditChannels {
 				};
 			case "fr": 		//french
 				return {
-					context_channelsettings_text: 		"Paramètres du canal",
-					context_resetsettings_text: 		"Réinitialiser le canal",
-					modal_header_text:					"Paramètres du canal",
+					context_localsettings_text: 		"Paramètres locale du canal",
+					submenu_channelsettings_text: 		"Modifier les paramètres",
+					submenu_resetsettings_text: 		"Réinitialiser le canal",
+					modal_header_text:					"Paramètres locale du canal",
 					modal_channelname_text:				"Nom local du canal",
 					modal_colorpicker1_text:			"Couleur locale de la chaîne",
 					btn_cancel_text:					"Abandonner",
@@ -624,9 +702,10 @@ class EditChannels {
 				};
 			case "it": 		//italian
 				return {
-					context_channelsettings_text: 		"Impostazioni canale",
-					context_resetsettings_text: 		"Ripristina canale",
-					modal_header_text:					"Impostazioni canale",
+					context_localsettings_text: 		"Impostazioni locale canale",
+					submenu_channelsettings_text: 		"Cambia impostazioni",
+					submenu_resetsettings_text: 		"Ripristina canale",
+					modal_header_text:					"Impostazioni locale canale",
 					modal_channelname_text:				"Nome locale canale",
 					modal_colorpicker1_text:			"Colore locale canale",
 					btn_cancel_text:					"Cancellare",
@@ -634,9 +713,10 @@ class EditChannels {
 				};
 			case "nl":		//dutch
 				return {
-					context_channelsettings_text: 		"Kanaalinstellingen",
-					context_resetsettings_text: 		"Reset kanaal",
-					modal_header_text:					"Kanaalinstellingen",
+					context_localsettings_text: 		"Lokale kanaalinstellingen",
+					submenu_channelsettings_text: 		"Verandere instellingen",
+					submenu_resetsettings_text: 		"Reset kanaal",
+					modal_header_text:					"Lokale kanaalinstellingen",
 					modal_channelname_text:				"Lokale kanaalnaam",
 					modal_colorpicker1_text:			"Lokale kanaalkleur",
 					btn_cancel_text:					"Afbreken",
@@ -644,9 +724,10 @@ class EditChannels {
 				};
 			case "no":		//norwegian
 				return {
-					context_channelsettings_text: 		"Kanalinnstillinger",
-					context_resetsettings_text: 		"Tilbakestill kanal",
-					modal_header_text:					"Kanalinnstillinger",
+					context_localsettings_text: 		"Lokal kanalinnstillinger",
+					submenu_channelsettings_text: 		"Endre innstillinger",
+					submenu_resetsettings_text: 		"Tilbakestill kanal",
+					modal_header_text:					"Lokal kanalinnstillinger",
 					modal_channelname_text:				"Lokalt kanalnavn",
 					modal_colorpicker1_text:			"Lokal kanalfarge",
 					btn_cancel_text:					"Avbryte",
@@ -654,9 +735,10 @@ class EditChannels {
 				};
 			case "pl":		//polish
 				return {
-					context_channelsettings_text: 		"Ustawienia kanału",
-					context_resetsettings_text: 		"Resetuj kanał",
-					modal_header_text:					"Ustawienia kanału",
+					context_localsettings_text: 		"Lokalny ustawienia kanału",
+					submenu_channelsettings_text: 		"Zmień ustawienia",
+					submenu_resetsettings_text: 		"Resetuj kanał",
+					modal_header_text:					"Lokalny ustawienia kanału",
 					modal_channelname_text:				"Lokalna nazwa kanału",
 					modal_colorpicker1_text:			"Lokalny kolor kanału",
 					btn_cancel_text:					"Anuluj",
@@ -664,9 +746,10 @@ class EditChannels {
 				};
 			case "pt":		//portuguese (brazil)
 				return {
-					context_channelsettings_text: 		"Configurações do canal",
-					context_resetsettings_text: 		"Redefinir canal",
-					modal_header_text:					"Configurações do canal",
+					context_localsettings_text: 		"Configurações local do canal",
+					submenu_channelsettings_text: 		"Mudar configurações",
+					submenu_resetsettings_text: 		"Redefinir canal",
+					modal_header_text:					"Configurações local do canal",
 					modal_channelname_text:				"Nome local do canal",
 					modal_colorpicker1_text:			"Cor local do canal",
 					btn_cancel_text:					"Cancelar",
@@ -674,9 +757,10 @@ class EditChannels {
 				};
 			case "fi":		//finnish
 				return {
-					context_channelsettings_text: 		"Kanavan asetukset",
-					context_resetsettings_text: 		"Nollaa kanava",
-					modal_header_text:					"Kanavan asetukset",
+					context_localsettings_text: 		"Paikallinen kanavan asetukset",
+					submenu_channelsettings_text: 		"Vaihda asetuksia",
+					submenu_resetsettings_text: 		"Nollaa kanava",
+					modal_header_text:					"Paikallinen kanavan asetukset",
 					modal_channelname_text:				"Paikallinen kanavanimi",
 					modal_colorpicker1_text:			"Paikallinen kanavanväri",
 					btn_cancel_text:					"Peruuttaa",
@@ -684,9 +768,10 @@ class EditChannels {
 				};
 			case "sv":		//swedish
 				return {
-					context_channelsettings_text: 		"Kanalinställningar",
-					context_resetsettings_text: 		"Återställ kanal",
-					modal_header_text:					"Kanalinställningar",
+					context_localsettings_text: 		"Lokal kanalinställningar",
+					submenu_channelsettings_text: 		"Ändra inställningar",
+					submenu_resetsettings_text: 		"Återställ kanal",
+					modal_header_text:					"Lokal kanalinställningar",
 					modal_channelname_text:				"Lokalt kanalnamn",
 					modal_colorpicker1_text:			"Lokal kanalfärg",
 					btn_cancel_text:					"Avbryta",
@@ -694,9 +779,10 @@ class EditChannels {
 				};
 			case "tr":		//turkish
 				return {
-					context_channelsettings_text: 		"Kanal Ayarları",
-					context_resetsettings_text: 		"Kanal Sıfırla",
-					modal_header_text:					"Kanal Ayarları",
+					context_localsettings_text: 		"Yerel Kanal Ayarları",
+					submenu_channelsettings_text: 		"Ayarları Değiştir",
+					submenu_resetsettings_text: 		"Kanal Sıfırla",
+					modal_header_text:					"Yerel Kanal Ayarları",
 					modal_channelname_text:				"Yerel Kanal Adı",
 					modal_colorpicker1_text:			"Yerel Kanal Rengi",
 					btn_cancel_text:					"Iptal",
@@ -704,19 +790,21 @@ class EditChannels {
 				};
 			case "cs":		//czech
 				return {
-					context_channelsettings_text: 		"Kanal Ayarları",
-					context_resetsettings_text: 		"Kanalı Sıfırla",
-					modal_header_text:					"Kanal Ayarları",
-					modal_channelname_text:				"Yerel Kanal Adı",
-					modal_colorpicker1_text:			"Yerel Kanal Rengi",
+					context_localsettings_text: 		"Místní nastavení kanálu",
+					submenu_channelsettings_text: 		"Změnit nastavení",
+					submenu_resetsettings_text: 		"Obnovit kanál",
+					modal_header_text:					"Místní nastavení kanálu",
+					modal_channelname_text:				"Místní název kanálu",
+					modal_colorpicker1_text:			"Místní barvy kanálu",
 					btn_cancel_text:					"Zrušení",
 					btn_save_text:						"Uložit"
 				};
 			case "bg":		//bulgarian
 				return {
-					context_channelsettings_text: 		"Настройки на канала",
-					context_resetsettings_text: 		"Възстановяване на канал",
-					modal_header_text:					"Настройки на канала",
+					context_localsettings_text: 		"Настройки за локални канали",
+					submenu_channelsettings_text: 		"Промяна на настройките",
+					submenu_resetsettings_text: 		"Възстановяване на канал",
+					modal_header_text:					"Настройки за локални канали",
 					modal_channelname_text:				"Локално име на канал",
 					modal_colorpicker1_text:			"Локален цветен канал",
 					btn_cancel_text:					"Зъбести",
@@ -724,9 +812,10 @@ class EditChannels {
 				};
 			case "ru":		//russian
 				return {
-					context_channelsettings_text: 		"Настройки канала",
-					context_resetsettings_text: 		"Сбросить канал",
-					modal_header_text:					"Настройки канала",
+					context_localsettings_text: 		"Настройки локального канала",
+					submenu_channelsettings_text: 		"Изменить настройки",
+					submenu_resetsettings_text: 		"Сбросить канал",
+					modal_header_text:					"Настройки локального канала",
 					modal_channelname_text:				"Имя локального канала",
 					modal_colorpicker1_text:			"Цвет локального канала",
 					btn_cancel_text:					"Отмена",
@@ -734,19 +823,21 @@ class EditChannels {
 				};
 			case "uk":		//ukranian
 				return {
-					context_channelsettings_text: 		"Настройки канала",
-					context_resetsettings_text: 		"Сбросить канал",
-					modal_header_text:					"Настройки канала",
-					modal_channelname_text:				"Имя локального канала",
-					modal_colorpicker1_text:			"Цвет локального канала",
+					context_localsettings_text: 		"Налаштування локального каналу",
+					submenu_channelsettings_text: 		"Змінити налаштування",
+					submenu_resetsettings_text: 		"Скидання каналу",
+					modal_header_text:					"Налаштування локального каналу",
+					modal_channelname_text:				"Локальне ім'я каналу",
+					modal_colorpicker1_text:			"Колір місцевого каналу",
 					btn_cancel_text:					"Скасувати",
 					btn_save_text:						"Зберегти"
 				};
 			case "ja":		//japanese
 				return {
-					context_channelsettings_text: 		"チャンネル設定",
-					context_resetsettings_text: 		"チャネルをリセットする",
-					modal_header_text:					"チャンネル設定",
+					context_localsettings_text: 		"ローカルチャネル設定",
+					submenu_channelsettings_text: 		"設定を変更する",
+					submenu_resetsettings_text: 		"チャネルをリセットする",
+					modal_header_text:					"ローカルチャネル設定",
 					modal_channelname_text:				"ローカルチャネル名",
 					modal_colorpicker1_text:			"ローカルチャネルの色",
 					btn_cancel_text:					"キャンセル",
@@ -754,9 +845,10 @@ class EditChannels {
 				};
 			case "zh":		//chinese (traditional)
 				return {
-					context_channelsettings_text: 		"頻道設置",
-					context_resetsettings_text: 		"重置通道",
-					modal_header_text:					"頻道設置",
+					context_localsettings_text: 		"本地頻道設置",
+					submenu_channelsettings_text: 		"更改設置",
+					submenu_resetsettings_text: 		"重置通道",
+					modal_header_text:					"本地頻道設置",
 					modal_channelname_text:				"本地頻道名稱",
 					modal_colorpicker1_text:			"本地頻道顏色",
 					btn_cancel_text:					"取消",
@@ -764,9 +856,10 @@ class EditChannels {
 				};
 			case "ko":		//korean
 				return {
-					context_channelsettings_text: 		"채널 설정",
-					context_resetsettings_text: 		"채널 재설정",
-					modal_header_text:					"채널 설정",
+					context_localsettings_text: 		"로컬 채널 설정",
+					submenu_channelsettings_text: 		"설정 변경",
+					submenu_resetsettings_text: 		"채널 재설정",
+					modal_header_text:					"로컬 채널 설정",
 					modal_channelname_text:				"로컬 채널 이름",
 					modal_colorpicker1_text:			"지역 채널 색상",
 					btn_cancel_text:					"취소",
@@ -774,9 +867,10 @@ class EditChannels {
 				};
 			default:		//default: english
 				return {
-					context_channelsettings_text: 		"Channelsettings",
-					context_resetsettings_text: 		"Reset Channel",
-					modal_header_text:					"Channelsettings",
+					context_localsettings_text: 		"Local Channelsettings",
+					submenu_channelsettings_text: 		"Change Settings",
+					submenu_resetsettings_text: 		"Reset Channel",
+					modal_header_text:					"Local Channelsettings",
 					modal_channelname_text:				"Local Channelname",
 					modal_colorpicker1_text:			"Local Channelcolor",
 					btn_cancel_text:					"Cancel",
