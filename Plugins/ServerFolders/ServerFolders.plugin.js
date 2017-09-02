@@ -253,7 +253,7 @@ class ServerFolders {
 
 	getDescription () {return "Add pseudofolders to your serverlist to organize your servers.";}
 
-	getVersion () {return "2.0.0";}
+	getVersion () {return "2.1.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -267,6 +267,7 @@ class ServerFolders {
 					if (change.addedNodes) {
 						change.addedNodes.forEach((node) => {
 							if (node.nodeType == 1 && node.className.includes("context-menu")) {
+								console.log(node);
 								this.onContextMenu(node);
 							}
 						});
@@ -485,7 +486,8 @@ class ServerFolders {
 						folderSettingsModal.remove();
 						this.selectedFolder = null;
 					})
-					.on("click", "button.btn-save", (e) => {
+					.on("submit", "form", (e) => {
+						e.preventDefault();
 						
 						folderName = folderSettingsModal.find("#modal-text")[0].value;
 						
