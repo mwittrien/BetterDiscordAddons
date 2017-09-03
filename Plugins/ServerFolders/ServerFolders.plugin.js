@@ -201,7 +201,7 @@ class ServerFolders {
 			`<div class="guild folder">
 				<div draggable="true">
 					<div class="guild-inner" draggable="false" style="border-radius: 25px;">
-						<img draggable="false" class="avatar-small"></img>
+						<a draggable="false" class="avatar-small"></a>
 					</div>
 				</div>
 				<div class="badge folder"></div>
@@ -422,7 +422,7 @@ class ServerFolders {
 			var folderDiv = $(this.folderIconMarkup);
 			$(folderDiv).insertBefore(serverDiv)
 				.find(".avatar-small")
-				.attr("src", this.folderOpenIcon)
+				.css("background-image", "url(\"" + this.folderOpenIcon + "\")")
 				.attr("id", "FL_ID_" + serverID)
 				.attr("class", "avatar-small open")
 				.on("click", this.changeIconAndServers.bind(this))
@@ -444,12 +444,13 @@ class ServerFolders {
 	
 	createFolderToolTip (e) {
 		if (e.target.name != "") {
+			console.log($(e.target));
 			var folderTooltip = $(this.folderTooltipMarkup);
 			$(".tooltips").append(folderTooltip);
 			$(folderTooltip)
 				.text(e.target.name)
-				.css("left", (e.target.x + 50) + "px")
-				.css("top", (e.target.y + 15) + "px");
+				.css("left", ($(e.target).offset().left + $(e.target).width()) + "px")
+				.css("top", ($(e.target).offset().top + $(e.target).height()-37) + "px");
 		}
 	}
 	
@@ -479,8 +480,9 @@ class ServerFolders {
 					var color2 = 		settings.color2;
 					
 					if (folderPlaced) {
-						folder.className = isOpen ? "avatar-small open" : "avatar-small closed";
-						folder.src = isOpen ? openIcon : closedIcon;
+						$(folder)
+							.css("background-image", isOpen ? "url(\"" + openIcon + "\")" : "url(\"" + closedIcon + "\")")
+							.attr("class", isOpen ? "avatar-small open" : "avatar-small closed");
 						
 						var includedServers = this.getIncludedServers(folderDiv);
 						this.hideAllServers(!isOpen, includedServers);
@@ -568,8 +570,9 @@ class ServerFolders {
 						openIcon = this.changeImgColor(true, color1, color2);
 						closedIcon = this.changeImgColor(false, color1, color2);
 						
-						$(this.selectedFolder).find(".avatar-small").attr("src", isOpen ? openIcon : closedIcon);
-						$(this.selectedFolder).find(".avatar-small").attr("name", folderName);
+						$(this.selectedFolder).find(".avatar-small")
+							.css("background-image", isOpen ? "url(\"" + openIcon + "\")" : "url(\"" + closedIcon + "\")")
+							.attr("name", folderName);
 						
 						this.saveSettings(serverID, {serverID,folderPlaced,folderName,isOpen,openIcon,closedIcon,color1,color2});
 						this.selectedFolder = null;
@@ -690,7 +693,7 @@ class ServerFolders {
 					var folderDiv = $(this.folderIconMarkup);				
 					$(folderDiv).insertBefore(serverDiv)
 						.find(".avatar-small")
-						.attr("src", isOpen ? openIcon : closedIcon)
+						.css("background-image", isOpen ? "url(\"" + openIcon + "\")" : "url(\"" + closedIcon + "\")")
 						.attr("name", folderName)
 						.attr("id", "FL_ID_" + serverID)
 						.attr("class", isOpen ? "avatar-small open" : "avatar-small closed")
