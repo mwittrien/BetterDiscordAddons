@@ -260,7 +260,7 @@ class ServerFolders {
 
 	getDescription () {return "Add pseudofolders to your serverlist to organize your servers.";}
 
-	getVersion () {return "3.0.0";}
+	getVersion () {return "3.1.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -289,27 +289,42 @@ class ServerFolders {
 					if (change.addedNodes) {
 						change.addedNodes.forEach((node) => {
 							if (node.className === "badge") {
-								this.badgeObserver.observe(node, {characterData: true, characterDataOldValue:true, subtree: true });
-								this.updateAllFolderBadges();
+								this.badgeObserver.observe(node, {characterData: true, subtree: true });
+								this.updateAllFolderNotifications();
+							}
+							if (node.classList && node.classList.contains("guild") && !node.classList.contains("guilds-add")) {
+								this.updateAllFolderNotifications();
 							}
 						});
 					}
 					if (change.removedNodes) {
 						change.removedNodes.forEach((node) => {
 							if (node.className === "badge") {
-								this.updateAllFolderBadges();
+								this.updateAllFolderNotifications();
+							}
+							else if (node.classList && node.classList.contains("guild") && !node.classList.contains("guilds-add")) {
+								this.updateAllFolderNotifications();
 							}
 						});
+					}
+					if (change.type == "attributes" && change.attributeName == "class") {
+						var serverInst = this.getReactInstance(change.target);
+						if (serverInst && serverInst._currentElement && serverInst._currentElement._owner && serverInst._currentElement._owner._instance) {
+							var serverObj = serverInst._currentElement._owner._instance;
+							if (serverObj && serverObj.props && serverObj.props.guild) {
+								this.updateAllFolderNotifications();
+							}
+						}
 					}
 				}
 			);
 		});
-		this.serverListObserver.observe($(".guilds.scroller")[0], {childList: true, subtree:true});
+		this.serverListObserver.observe($(".guilds.scroller")[0], {childList: true, attributes:true, subtree:true});
 		
 		this.badgeObserver = new MutationObserver((changes, _) => {
 			changes.forEach(
 				(change, i) => {
-					this.updateAllFolderBadges();
+					this.updateAllFolderNotifications();
 				}
 			);
 		});
@@ -335,7 +350,7 @@ class ServerFolders {
 		
 		this.loadAllFolders();
 		
-		this.updateAllFolderBadges();
+		this.updateAllFolderNotifications();
 		
 		var that = this;
 		setTimeout(function() {
@@ -424,8 +439,6 @@ class ServerFolders {
 			var color2 = 		["255","255","255"];
 			
 			this.saveSettings(serverID, {serverID,folderPlaced,folderName,isOpen,openIcon,closedIcon,color1,color2});
-			
-			this.updateFolderBadge(folderDiv);
 		}
 	}
 	
@@ -716,7 +729,16 @@ class ServerFolders {
 		}
 	}
 	
-	updateFolderBadge (folderDiv) {
+	updateFolderNotifications (folderDiv) {
+		var unreadServers = this.readUnreadServerList(folderDiv);
+		
+		if (unreadServers.length > 0) {
+			$(folderDiv).addClass("unread");
+		}
+		else {
+			$(folderDiv).removeClass("unread");
+		}
+		
 		var includedServers = this.getIncludedServers(folderDiv);
 		var badgeAmount = 0;
 		$(includedServers).each(  
@@ -736,10 +758,10 @@ class ServerFolders {
 		}
 	}
 	
-	updateAllFolderBadges () {
+	updateAllFolderNotifications () {
 		var folders = document.getElementsByClassName("guild folder");
 		for (var i = 0; folders.length > i; i++) {
-			this.updateFolderBadge(folders[i]);
+			this.updateFolderNotifications(folders[i]);
 		}
 	}
 	
