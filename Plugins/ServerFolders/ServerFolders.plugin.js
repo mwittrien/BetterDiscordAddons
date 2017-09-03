@@ -8,6 +8,7 @@ class ServerFolders {
 		this.selectedFolder;
 		
 		this.serverContextObserver;
+		this.serverListObserver;
 		this.serverListContextHandler;
     
 		this.css = `
@@ -198,6 +199,7 @@ class ServerFolders {
 						<img draggable="false" class="avatar-small"></img>
 					</div>
 				</div>
+				<div class="badge folder"></div>
 			</div>`;
 			
 		this.folderTooltipMarkup = 
@@ -253,7 +255,7 @@ class ServerFolders {
 
 	getDescription () {return "Add pseudofolders to your serverlist to organize your servers.";}
 
-	getVersion () {return "2.1.0";}
+	getVersion () {return "2.2.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -276,6 +278,42 @@ class ServerFolders {
 		});
 		this.serverContextObserver.observe($("#app-mount>:first-child")[0], {childList: true});
 		
+		this.serverListObserver = new MutationObserver((changes, _) => {
+			changes.forEach(
+				(change, i) => {
+					if (change.addedNodes) {
+						change.addedNodes.forEach((node) => {
+							if (node.className === "badge") {
+								this.badgeObserver.observe(node, {characterData: true, characterDataOldValue:true, subtree: true });
+								this.updateAllFolderBadges();
+							}
+						});
+					}
+					if (change.removedNodes) {
+						change.removedNodes.forEach((node) => {
+							if (node.className === "badge") {
+								this.updateAllFolderBadges();
+							}
+						});
+					}
+				}
+			);
+		});
+		this.serverListObserver.observe($(".guilds.scroller")[0], {childList: true, subtree:true});
+		
+		this.badgeObserver = new MutationObserver((changes, _) => {
+			changes.forEach(
+				(change, i) => {
+					this.updateAllFolderBadges();
+				}
+			);
+		});
+		
+		$(".badge:not(.folder)").each( 
+			(i, badge) => {
+				this.badgeObserver.observe(badge, {characterData: true, characterDataOldValue:true, subtree: true });
+			}
+		);
 		
 		this.serverListContextHandler = (e) => {	
 			$(".guild.folder").each( 
@@ -292,6 +330,8 @@ class ServerFolders {
 		
 		this.loadAllFolders();
 		
+		this.updateAllFolderBadges();
+		
 		var that = this;
 		setTimeout(function() {
 			that.labels = that.setLabelsByLanguage();
@@ -301,6 +341,8 @@ class ServerFolders {
 
 	stop () {
 		this.serverContextObserver.disconnect();
+		this.serverListObserver.disconnect();
+		this.badgeObserver.disconnect();
 		$(".guilds.scroller").unbind('mouseleave', this.serverListContextHandler);
 		$(".serverfolders").remove();
 		$(".guild.folder").remove();
@@ -652,6 +694,34 @@ class ServerFolders {
 		for (var i = 0; i < servers.length; i++) {
 			this.loadFolder(servers[i]);
 		}
+	}
+	
+	updateFolderBadge (folderDiv) {
+		var includedServers = this.getIncludedServers(folderDiv);
+		var badgeAmount = 0;
+		$(includedServers).each(  
+			(i, server) => {
+				var thisBadge = parseInt($(server).find(".badge").text());
+				if (thisBadge > 0) {
+					badgeAmount += thisBadge;
+				}
+			}
+		);
+		if (badgeAmount > 0) {
+			$(folderDiv).find(".folder.badge").show();
+			$(folderDiv).find(".folder.badge").text(badgeAmount);
+		}
+		else {
+			$(folderDiv).find(".folder.badge").hide();
+		}
+	}
+	
+	updateAllFolderBadges () {
+		var folders = document.getElementsByClassName("guild folder");
+		for (var i = 0; folders.length > i; i++) {
+			this.updateFolderBadge(folders[i]);
+		}
+		
 	}
 	
 	checkIfServerDivChangedTellIfDeleted (folderDiv) {
