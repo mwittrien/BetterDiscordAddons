@@ -260,7 +260,7 @@ class ServerFolders {
 
 	getDescription () {return "Add pseudofolders to your serverlist to organize your servers.";}
 
-	getVersion () {return "3.1.0";}
+	getVersion () {return "3.1.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -444,7 +444,6 @@ class ServerFolders {
 	
 	createFolderToolTip (e) {
 		if (e.target.name != "") {
-			console.log($(e.target));
 			var folderTooltip = $(this.folderTooltipMarkup);
 			$(".tooltips").append(folderTooltip);
 			$(folderTooltip)
