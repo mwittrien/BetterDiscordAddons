@@ -236,7 +236,7 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "2.0.0";}
+	getVersion () {return "1.2.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -421,12 +421,10 @@ class EditChannels {
 							}
 							else {
 								nickName = null;
-								$(channel).text(e.data.name);
 							}
 						}
 						else {
 							nickName = null;
-							$(channel).text(e.data.name);
 						}
 						
 						if (!$(".ui-color-picker-swatch1.nocolor.selected")[0]) {
@@ -441,7 +439,6 @@ class EditChannels {
 						} 
 						else {
 							color = null;
-							$(channel).css("color","");
 						}
 						
 							
@@ -564,10 +561,10 @@ class EditChannels {
 	}
 	
 	loadChannel (channel) {
-		var id = this.getIdOfChannelAndServer(channel);
-		if (id) {
+		var data = this.getChannelInformation(channel);
+		if (data) {
 			var channelID, serverID, nickName, color;
-			var settings = this.loadSettings(id);
+			var settings = this.loadSettings(data.channelID + "_" + data.serverID);
 			if (settings) {
 				channelID = 	settings.channelID;
 				serverID = 		settings.serverID;
@@ -576,11 +573,11 @@ class EditChannels {
 				
 				var colorRGB = this.chooseColor(channel, color);
 				
-				if (nickName) $(channel).text(nickName);
-				if (colorRGB) $(channel).css("color", colorRGB);
+				nickName ? $(channel).text(nickName) : $(channel).text(data.origName);
+				colorRGB ? $(channel).attr("style", function(i,s) { return s + "color: " + colorRGB + " !important;" }) : $(channel).css("color", "");
 			}
 			else {
-				this.clearSettings(id);
+				this.clearSettings(data.channelID + "_" + data.serverID);
 			}
 		}
 	}
@@ -602,14 +599,16 @@ class EditChannels {
 		return foundChannels;
 	}
 	
-	getIdOfChannelAndServer (channel) {
+	getChannelInformation (channel) {
 		var inst = this.getReactInstance(channel.parentElement);
 		if (!inst) return null;
 		var curEle = inst._currentElement;
 		if (curEle && curEle._owner && curEle._owner._instance && curEle._owner._instance.props && curEle._owner._instance.props.channel) {
 			var channelID = curEle._owner._instance.props.channel.id;
 			var serverID = curEle._owner._instance.props.channel.guild_id;
-			return channelID + "_" + serverID;
+			var origName = curEle._owner._instance.props.channel.name;
+			var data = {channelID, serverID, origName}
+			return data;
 		}
 		else {
 			return null;
@@ -619,9 +618,9 @@ class EditChannels {
 	getDivOfChannel (channelID, serverID) {
 		var channels = this.readChannelList();
 		for (var i = 0; i < channels.length; i++) {
-			var id = this.getIdOfChannelAndServer(channels[i]);
-			if (id) {
-				if (channelID == id.split("_")[0] && serverID == id.split("_")[1]) {
+			var data = this.getChannelInformation(channels[i]);
+			if (data) {
+				if (channelID == data.channelID && serverID == data.serverID) {
 					return channels[i];
 				}
 			}
