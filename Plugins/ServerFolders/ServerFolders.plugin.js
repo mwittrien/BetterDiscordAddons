@@ -10,6 +10,7 @@ class ServerFolders {
 		this.serverContextObserver;
 		this.serverListObserver;
 		this.serverListContextHandler;
+		this.folderContextEventHandler;
     
 		this.css = `
 			<style class='serverfolders'>
@@ -181,6 +182,10 @@ class ServerFolders {
 		this.folderContextMarkup = 
 			`<div class="context-menu">
 				<div class="item-group">
+					<div class="item unreadfolder-item">
+						<span>REPLACE_foldercontext_unreadfolder_text</span>
+						<div class="hint"></div>
+					</div>
 					<div class="item foldersettings-item">
 						<span>REPLACE_foldercontext_foldersettings_text</span>
 						<div class="hint"></div>
@@ -232,7 +237,7 @@ class ServerFolders {
 							</div>
 							<div class="form-actions">
 								<button type="button" class="btn btn-cancel">REPLACE_btn_cancel_text</button>
-								<button type="button" class="btn btn-save">REPLACE_btn_save_text</button>
+								<button type="submit" class="btn btn-save">REPLACE_btn_save_text</button>
 							</div>
 						</form>
 					</div>
@@ -255,7 +260,7 @@ class ServerFolders {
 
 	getDescription () {return "Add pseudofolders to your serverlist to organize your servers.";}
 
-	getVersion () {return "2.2.0";}
+	getVersion () {return "3.0.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -344,6 +349,7 @@ class ServerFolders {
 		this.serverListObserver.disconnect();
 		this.badgeObserver.disconnect();
 		$(".guilds.scroller").unbind('mouseleave', this.serverListContextHandler);
+		$(document).unbind('mousedown', this.folderContextEventHandler);
 		$(".serverfolders").remove();
 		$(".guild.folder").remove();
 		
@@ -362,6 +368,7 @@ class ServerFolders {
 	changeLanguageStrings () {
 		this.serverContextEntryMarkup = 	this.serverContextEntryMarkup.replace("REPLACE_servercontext_createfolder_text", this.labels.servercontext_createfolder_text);
 		
+		this.folderContextMarkup = 			this.folderContextMarkup.replace("REPLACE_foldercontext_unreadfolder_text", this.labels.foldercontext_unreadfolder_text);
 		this.folderContextMarkup = 			this.folderContextMarkup.replace("REPLACE_foldercontext_foldersettings_text", this.labels.foldercontext_foldersettings_text);
 		this.folderContextMarkup = 			this.folderContextMarkup.replace("REPLACE_foldercontext_removefolder_text", this.labels.foldercontext_removefolder_text);
 		
@@ -417,6 +424,8 @@ class ServerFolders {
 			var color2 = 		["255","255","255"];
 			
 			this.saveSettings(serverID, {serverID,folderPlaced,folderName,isOpen,openIcon,closedIcon,color1,color2});
+			
+			this.updateFolderBadge(folderDiv);
 		}
 	}
 	
@@ -481,12 +490,17 @@ class ServerFolders {
 				.off("click", ".foldersettings-item")
 				.off("click", ".removefolder-item")
 				.on("click", ".foldersettings-item", this.showFolderSettings.bind(this))
-				.on("click", ".removefolder-item", this.removeSelectedFolder.bind(this))
-				.on("click", ".removefolder-item,.foldersettings-item", function() {
-					$(document).unbind('mousedown', folderContextEventHandler);
-					folderContext[0].remove();
-				});
-
+				.on("click", ".removefolder-item", this.removeSelectedFolder.bind(this));
+			
+			if (this.readUnreadServerList(this.selectedFolder).length > 0) {
+				$(folderContext)
+					.off("click", ".unreadfolder-item")
+					.on("click", ".unreadfolder-item", this.clearAllReadNotifications.bind(this));
+			}
+			else {
+				$(folderContext).find(".unreadfolder-item").addClass("disabled");
+			}
+			
 			var theme = this.themeIsLightTheme() ? "" : "theme-dark";
 			
 			$(folderContext)
@@ -494,18 +508,21 @@ class ServerFolders {
 				.css("left", e.pageX + "px")
 				.css("top", e.pageY + "px");
 				
-			var folderContextEventHandler = function(e) {	
+			this.folderContextEventHandler = function(e) {	
 				if (!folderContext[0].contains(e.target)) {
-					$(document).unbind('mousedown', folderContextEventHandler);
+					$(document).unbind('mousedown', this.folderContextEventHandler);
 					$(folderContext).remove();
 					this.selectedFolder = null;
 				}
 			};
-			$(document).bind('mousedown', folderContextEventHandler);
+			$(document).bind('mousedown', this.folderContextEventHandler);
 		}
 	}
 	
 	showFolderSettings (e) {
+		$(".context-menu").hide();
+		$(document).unbind('mousedown', this.folderContextEventHandler);
+		
 		var id = this.getIdOfServer($(this.selectedFolder).next()[0]);
 		if (id) {
 			var serverID, folderPlaced, folderName, isOpen, openIcon, closedIcon, color1, color2;
@@ -624,6 +641,9 @@ class ServerFolders {
 	}
 	
 	removeSelectedFolder (e) {
+		$(".context-menu").hide();
+		$(document).unbind('mousedown', this.folderContextEventHandler);
+		
 		var folderDiv = this.selectedFolder;
 		var includedServers = this.getIncludedServers(folderDiv);
 		this.hideAllServers(false, includedServers);
@@ -721,7 +741,54 @@ class ServerFolders {
 		for (var i = 0; folders.length > i; i++) {
 			this.updateFolderBadge(folders[i]);
 		}
+	}
+	
+	clearAllReadNotifications () {
+		$(".context-menu").hide();
+		$(document).unbind('mousedown', this.folderContextEventHandler);
 		
+		var unreadServers = this.readUnreadServerList($(this.selectedFolder));
+		unreadServers.forEach(
+			(folder,i) => {
+				var that = this;
+				setTimeout(function() {
+					var div = folder.firstElementChild;
+					var divInst = that.getReactInstance(div);
+					
+					if (divInst && 
+					divInst._renderedChildren && 
+					divInst._renderedChildren[".0"] && 
+					divInst._renderedChildren[".0"]._instance && 
+					divInst._renderedChildren[".0"]._instance.handleContextMenu) {
+						var data = {
+							preventDefault: a=>a,
+							stopPropagation: a=>a,
+							pageX: -1000 + Math.round(Math.random()*500),
+						};
+						divInst._renderedChildren[".0"]._instance.handleContextMenu(data);
+						
+						var context = document.getElementsByClassName("context-menu")[0];
+						$(".context-menu .item-group").each (
+							(i,ele) => {
+								var inst = that.getReactInstance(ele);
+								if (inst) {
+									var childIndex = -1;
+									var curEle = inst._currentElement;
+									if (curEle && curEle.props && curEle.props.children) {
+										var children = Array.isArray(curEle.props.children) ? curEle.props.children : [curEle.props.children];
+										children.forEach((child,i) => {
+											if (child.type && child.type.displayName && child.type.displayName == "GuildMarkReadItem") {
+												ele.children[i].click();
+											}
+										});
+									}
+								}
+							}
+						);
+					}
+				},i*100);
+			}
+		); 
 	}
 	
 	checkIfServerDivChangedTellIfDeleted (folderDiv) {
@@ -824,6 +891,23 @@ class ServerFolders {
 		return foundServers;
 	}
 	
+	readUnreadServerList (folderDiv) {
+		var foundServers = [];
+		var servers = this.getIncludedServers(folderDiv);
+		for (var i = 0; i < servers.length; i++) {
+			var serverInst = this.getReactInstance(servers[i]);
+			if (serverInst && serverInst._currentElement && serverInst._currentElement._owner && serverInst._currentElement._owner._instance) {
+				var serverObj = serverInst._currentElement._owner._instance;
+				if (serverObj && serverObj.props && serverObj.props.guild) {
+					if (servers[i].classList.contains("unread") || servers[i].children[servers[i].childElementCount-1].className == "badge") {
+						foundServers.push(servers[i]);
+					}
+				}
+			}
+		}
+		return foundServers;
+	}
+	
 	getIdOfServer (server) {
 		var inst = this.getReactInstance(server);
 		if (!inst) return null;
@@ -920,6 +1004,7 @@ class ServerFolders {
 			case "da": 		//danish
 				return {
 					servercontext_createfolder_text: 	"Opret mappe",
+					foldercontext_unreadfolder_text:	"Markér alle som læst",
 					foldercontext_foldersettings_text: 	"Mappeindstillinger",
 					foldercontext_removefolder_text:	"Slet mappe",
 					modal_header_text:					"Mappindstillinger",
@@ -932,6 +1017,7 @@ class ServerFolders {
 			case "de": 		//german
 				return {
 					servercontext_createfolder_text: 	"Erzeuge Ordner",
+					foldercontext_unreadfolder_text:	"Alle als gelesen markieren",
 					foldercontext_foldersettings_text: 	"Ordnereinstellungen",
 					foldercontext_removefolder_text:	"Lösche Ordner",
 					modal_header_text:					"Ordnereinstellungen",
@@ -944,6 +1030,7 @@ class ServerFolders {
 			case "es": 		//spanish
 				return {
 					servercontext_createfolder_text: 	"Crear carpeta",
+					foldercontext_unreadfolder_text:	"Marcar todo como leido",
 					foldercontext_foldersettings_text: 	"Ajustes de carpeta",
 					foldercontext_removefolder_text:	"Eliminar carpeta",
 					modal_header_text:					"Ajustes de carpeta",
@@ -956,6 +1043,7 @@ class ServerFolders {
 			case "fr": 		//french
 				return {
 					servercontext_createfolder_text: 	"Créer le dossier",
+					foldercontext_unreadfolder_text:	"Tout marquer comme lu",
 					foldercontext_foldersettings_text: 	"Paramètres du dossier",
 					foldercontext_removefolder_text:	"Supprimer le dossier",
 					modal_header_text:					"Paramètres du dossier",
@@ -968,6 +1056,7 @@ class ServerFolders {
 			case "it": 		//italian
 				return {
 					servercontext_createfolder_text: 	"Creare una cartella",
+					foldercontext_unreadfolder_text:	"Segna tutti come letti",
 					foldercontext_foldersettings_text: 	"Impostazioni cartella",
 					foldercontext_removefolder_text:	"Elimina cartella",
 					modal_header_text:					"Impostazioni cartella",
@@ -980,6 +1069,7 @@ class ServerFolders {
 			case "nl":		//dutch
 				return {
 					servercontext_createfolder_text: 	"Map aanmaken",
+					foldercontext_unreadfolder_text:	"Alles als gelezen markeren",
 					foldercontext_foldersettings_text: 	"Mapinstellingen",
 					foldercontext_removefolder_text:	"Verwijder map",
 					modal_header_text:					"Mapinstellingen",
@@ -992,6 +1082,7 @@ class ServerFolders {
 			case "no":		//norwegian
 				return {
 					servercontext_createfolder_text: 	"Lag mappe",
+					foldercontext_unreadfolder_text:	"Marker alle som lest",
 					foldercontext_foldersettings_text: 	"Mappinnstillinger",
 					foldercontext_removefolder_text:	"Slett mappe",
 					modal_header_text:					"Mappinnstillinger",
@@ -1004,6 +1095,7 @@ class ServerFolders {
 			case "pl":		//polish
 				return {
 					servercontext_createfolder_text: 	"Utwórz folder",
+					foldercontext_unreadfolder_text:	"Oznacz wszystkie jako przeczytane",
 					foldercontext_foldersettings_text: 	"Ustawienia folderu",
 					foldercontext_removefolder_text:	"Usuń folder",
 					modal_header_text:					"Ustawienia folderu",
@@ -1016,6 +1108,7 @@ class ServerFolders {
 			case "pt":		//portuguese (brazil)
 				return {
 					servercontext_createfolder_text: 	"Criar pasta",
+					foldercontext_unreadfolder_text:	"Marcar tudo como lido",
 					foldercontext_foldersettings_text: 	"Configurações da pasta",
 					foldercontext_removefolder_text:	"Excluir pasta",
 					modal_header_text:					"Configurações da pasta",
@@ -1028,6 +1121,7 @@ class ServerFolders {
 			case "fi":		//finnish
 				return {
 					servercontext_createfolder_text: 	"Luo kansio",
+					foldercontext_unreadfolder_text:	"Merkitse kaikki luetuksi",
 					foldercontext_foldersettings_text: 	"Kansion kansio",
 					foldercontext_removefolder_text:	"Poista kansio",
 					modal_header_text:					"Kansion kansio",
@@ -1040,6 +1134,7 @@ class ServerFolders {
 			case "sv":		//swedish
 				return {
 					servercontext_createfolder_text: 	"Skapa mapp",
+					foldercontext_unreadfolder_text:	"Markera allt som läst",
 					foldercontext_foldersettings_text: 	"Mappinställningar",
 					foldercontext_removefolder_text:	"Ta bort mapp",
 					modal_header_text:					"Mappinställningar",
@@ -1052,6 +1147,7 @@ class ServerFolders {
 			case "tr":		//turkish
 				return {
 					servercontext_createfolder_text: 	"Klasör oluşturun",
+					foldercontext_unreadfolder_text:	"Tümünü Oku olarak işaretle",
 					foldercontext_foldersettings_text: 	"Klasör Ayarları",
 					foldercontext_removefolder_text:	"Klasörü sil",
 					modal_header_text:					"Klasör Ayarları",
@@ -1064,6 +1160,7 @@ class ServerFolders {
 			case "cs":		//czech
 				return {
 					servercontext_createfolder_text: 	"Vytvořit složky",
+					foldercontext_unreadfolder_text:	"Označit vše jako přečtené",
 					foldercontext_foldersettings_text: 	"Nastavení složky",
 					foldercontext_removefolder_text:	"Smazat složky",
 					modal_header_text:					"Nastavení složky",
@@ -1076,6 +1173,7 @@ class ServerFolders {
 			case "bg":		//bulgarian
 				return {
 					servercontext_createfolder_text: 	"Създай папка",
+					foldercontext_unreadfolder_text:	"Маркирай всички като прочетени",
 					foldercontext_foldersettings_text: 	"Настройки папка",
 					foldercontext_removefolder_text:	"Изтриване на папка",
 					modal_header_text:					"Настройки папка",
@@ -1088,6 +1186,7 @@ class ServerFolders {
 			case "ru":		//russian
 				return {
 					servercontext_createfolder_text: 	"Создать папки",
+					foldercontext_unreadfolder_text:	"Отметить все как прочитанное",
 					foldercontext_foldersettings_text: 	"Настройки папки",
 					foldercontext_removefolder_text:	"Удалить папки",
 					modal_header_text:					"Настройки папки",
@@ -1100,6 +1199,7 @@ class ServerFolders {
 			case "uk":		//ukranian
 				return {
 					servercontext_createfolder_text: 	"Створити папки",
+					foldercontext_unreadfolder_text:	"Позначити як прочитане",
 					foldercontext_foldersettings_text: 	"Параметри папки",
 					foldercontext_removefolder_text:	"Видалити папки",
 					modal_header_text:					"Параметри папки",
@@ -1112,6 +1212,7 @@ class ServerFolders {
 			case "ja":		//japanese
 				return {
 					servercontext_createfolder_text: 	"フォルダーを作る",
+					foldercontext_unreadfolder_text:	"すべてを読むようにマークする",
 					foldercontext_foldersettings_text: 	"フォルダ設定",
 					foldercontext_removefolder_text:	"フォルダを削除する",
 					modal_header_text:					"フォルダ設定",
@@ -1124,6 +1225,7 @@ class ServerFolders {
 			case "zh":		//chinese (traditional)
 				return {
 					servercontext_createfolder_text: 	"創建文件夾",
+					foldercontext_unreadfolder_text:	"標記為已讀",
 					foldercontext_foldersettings_text: 	"文件夾設置",
 					foldercontext_removefolder_text:	"刪除文件夾",
 					modal_header_text:					"文件夾設置",
@@ -1136,6 +1238,7 @@ class ServerFolders {
 			case "ko":		//korean
 				return {
 					servercontext_createfolder_text: 	"폴더 만들기",
+					foldercontext_unreadfolder_text:	"모두 읽은 상태로 표시",
 					foldercontext_foldersettings_text: 	"폴더 설정",
 					foldercontext_removefolder_text:	"폴더 삭제",
 					modal_header_text:					"폴더 설정",
@@ -1148,6 +1251,7 @@ class ServerFolders {
 			default:		//default: english
 				return {
 					servercontext_createfolder_text: 	"Create Folder",
+					foldercontext_unreadfolder_text:	"Mark All As Read",
 					foldercontext_foldersettings_text: 	"Foldersettings",
 					foldercontext_removefolder_text:	"Delete Folder",
 					modal_header_text:					"Foldersettings",
