@@ -761,8 +761,8 @@ class EmojiStatistics {
 			default:		//default: english
 				return {
 					modal_header_text: 				"Statistics of emojis",
-					modal_titlesicon_text : 		"Servername",
-					modal_titlesservername_text : 	"Icon",
+					modal_titlesicon_text : 		"Icon",
+					modal_titlesservername_text : 	"Servername",
 					modal_titlestotal_text : 		"Total:",
 					modal_titlesglobal_text : 		"Global:",
 					modal_titleslocal_text : 		"Local:",
