@@ -270,9 +270,18 @@ class EmojiStatistics {
 							if ($(node).find('.emoji-item')) {
 								if (EmojiStatistics.getSettings().enableEmojiHovering) {this.hoverEmoji();}
 							}
-							if (node && node.id && node.id == "bda-qem") {
-								this.loadEmojiList();
-								if (EmojiStatistics.getSettings().enableEmojiStatisticsButton) {this.addEmojiInformationButton();}
+							var inst = that.getReactInstance(node);
+							if (inst) {
+								var curEle = inst._currentElement;
+								if (curEle && curEle.props && curEle.props.children) {
+									var children = Array.isArray(curEle.props.children) ? curEle.props.children : [curEle.props.children];
+									children.forEach((child,i) => {
+										if (child && child.type && child.type.displayName && child.type.displayName == "EmojiPicker") {
+											this.loadEmojiList();
+											if (EmojiStatistics.getSettings().enableEmojiStatisticsButton) {this.addEmojiInformationButton();}
+										}
+									});
+								}
 							}
 						});
 					}
