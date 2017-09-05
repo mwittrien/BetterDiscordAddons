@@ -180,7 +180,7 @@ class ServerFolders {
 			</div>`;
 			
 		this.folderContextMarkup = 
-			`<div class="context-menu">
+			`<div class="context-menu folderSettings invertY">
 				<div class="item-group">
 					<div class="item unreadfolder-item">
 						<span>REPLACE_foldercontext_unreadfolder_text</span>
@@ -522,7 +522,7 @@ class ServerFolders {
 				.css("left", e.pageX + "px")
 				.css("top", e.pageY + "px");
 				
-			this.folderContextEventHandler = function(e) {	
+			this.folderContextEventHandler = (e) => {	
 				if (!folderContext[0].contains(e.target)) {
 					$(document).unbind('mousedown', this.folderContextEventHandler);
 					$(folderContext).remove();
