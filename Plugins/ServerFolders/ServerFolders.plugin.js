@@ -260,7 +260,7 @@ class ServerFolders {
 
 	getDescription () {return "Add pseudofolders to your serverlist to organize your servers.";}
 
-	getVersion () {return "3.1.1";}
+	getVersion () {return "3.1.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -534,7 +534,7 @@ class ServerFolders {
 	}
 	
 	showFolderSettings (e) {
-		$(".context-menu").hide();
+		$(".context-menu.folderSettings").remove();
 		$(document).unbind('mousedown', this.folderContextEventHandler);
 		
 		var id = this.getIdOfServer($(this.selectedFolder).next()[0]);
@@ -656,7 +656,7 @@ class ServerFolders {
 	}
 	
 	removeSelectedFolder (e) {
-		$(".context-menu").hide();
+		$(".context-menu.folderSettings").remove();
 		$(document).unbind('mousedown', this.folderContextEventHandler);
 		
 		var folderDiv = this.selectedFolder;
@@ -768,7 +768,7 @@ class ServerFolders {
 	}
 	
 	clearAllReadNotifications () {
-		$(".context-menu").hide();
+		$(".context-menu.folderSettings").remove();
 		$(document).unbind('mousedown', this.folderContextEventHandler);
 		
 		var unreadServers = this.readUnreadServerList($(this.selectedFolder));
@@ -796,7 +796,6 @@ class ServerFolders {
 							(i,ele) => {
 								var inst = that.getReactInstance(ele);
 								if (inst) {
-									var childIndex = -1;
 									var curEle = inst._currentElement;
 									if (curEle && curEle.props && curEle.props.children) {
 										var children = Array.isArray(curEle.props.children) ? curEle.props.children : [curEle.props.children];
