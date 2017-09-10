@@ -250,7 +250,7 @@ class EmojiStatistics {
 
 	getDescription () {return "Adds some helpful options to show you more information about emojis and emojiservers.";}
 
-	getVersion () {return "2.0.0";}
+	getVersion () {return "2.1.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -401,15 +401,14 @@ class EmojiStatistics {
 	}
 	
 	showEmojiInformationModal () {
+		var entries = [];
+		
 		var emojiInformationModal = $(this.emojiInformationModalMarkup);
 		emojiInformationModal.appendTo("#app-mount")
 		.on("click", ".callout-backdrop,button.btn-ok", (e) => {
 			emojiInformationModal.remove();
 		});
 		$(".popout").hide();
-		
-		var titleentry = $(this.emojiserverTitlesMarkup);
-		titleentry.appendTo(".form-titles");
 				
 		var servers = this.readServerList();
 		
@@ -463,13 +462,78 @@ class EmojiStatistics {
 						}
 					}
 				}
-				
 				entry.find(".modal-emojitotal-label").text(amountGlobal+amountLocal);
 				entry.find(".modal-emojiglobal-label").text(amountGlobal);
 				entry.find(".modal-emojilocal-label").text(amountLocal);
 				entry.find(".modal-emojireplicate-label").text(amountReplicate);
-				entry.appendTo(".form-inner");
+				entries.push({entry:entry, index:i, name:data.name, total:amountGlobal+amountLocal, global:amountGlobal, local:amountLocal, copies:amountReplicate});
 			}
+		}
+		
+		var titleentry = $(this.emojiserverTitlesMarkup)
+		.on("click", ".modal-titlesservername-label,.modal-titlestotal-label,.modal-titlesglobal-label,.modal-titleslocal-label,.modal-titlesreplicate-label", (e) => {
+			var oldTitle = e.target.innerText;
+			var sortKey = "index";
+			var reverse = oldTitle.indexOf("▼") < 0 ? false : true;
+			
+			titleentry.find(".modal-titlesservername-label").text(this.labels.modal_titlesservername_text);
+			titleentry.find(".modal-titlestotal-label").text(this.labels.modal_titlestotal_text);
+			titleentry.find(".modal-titlesglobal-label").text(this.labels.modal_titlesglobal_text);
+			titleentry.find(".modal-titleslocal-label").text(this.labels.modal_titleslocal_text);
+			titleentry.find(".modal-titlesreplicate-label").text(this.labels.modal_titlesreplicate_text);
+			
+			if (oldTitle.indexOf("▲") < 0) {
+				var title = "";
+				switch (e.target.className) {
+					case "modal-titlesservername-label": 
+						title = this.labels.modal_titlesservername_text;
+						sortKey = "name";
+						break;
+					case "modal-titlestotal-label": 
+						title = this.labels.modal_titlestotal_text;
+						sortKey = "total";
+						break;
+					case "modal-titlesglobal-label": 
+						title = this.labels.modal_titlesglobal_text;
+						sortKey = "global";
+						break;
+					case "modal-titleslocal-label": 
+						title = this.labels.modal_titleslocal_text;
+						sortKey = "local";
+						break;
+					case "modal-titlesreplicate-label": 
+						title = this.labels.modal_titlesreplicate_text;
+						sortKey = "copies";
+						break;
+				}
+				e.target.innerText = oldTitle.indexOf("▼") < 0 ? title + "▼" : title + "▲";
+			}
+			
+			var sortedEntries = this.sortArrayByKey(entries, sortKey);
+			
+			if (reverse) {
+				sortedEntries.reverse();
+			}
+			
+			this.updateAllEntries(sortedEntries);
+		})
+		.appendTo(".form-titles");
+				
+		this.updateAllEntries(entries);
+	}
+	
+	sortArrayByKey (array, key) {
+		return array.sort(function(a, b) {
+			var x = a[key]; var y = b[key];
+			return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+		});
+	}
+	
+	updateAllEntries (entries) {
+		$(".emojiserver-entry").remove();
+		for (var i = 0; entries.length > i; i++) {
+			var entry = entries[i].entry;
+			entry.appendTo(".form-inner");
 		}
 	}
 	
