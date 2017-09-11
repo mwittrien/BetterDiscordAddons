@@ -236,7 +236,7 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "1.2.0";}
+	getVersion () {return "2.0.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -266,23 +266,22 @@ class EditChannels {
 				(change, i) => {
 					if (change.addedNodes) {
 						change.addedNodes.forEach((node) => {
-							if ($(node).find(".container-0")[0] && $(node).find(".container-2")[0]) {
-								this.channelObserver.observe($(node).find(".container-0")[0], {childList: true, attributes: true, subtree: true});
-								this.channelObserver.observe($(node).find(".container-2")[0], {childList: true, attributes: true, subtree: true});
+							 if (node && node.className && node.className.length > 0 && node.className.indexOf("container-") > -1) {
+								this.channelObserver.observe(node, {childList: true, attributes: true, subtree: true});
 								this.loadAllChannels();
-							}
+							} 
 						});
 					}
 				}
 			);
 		});
-		this.channelListObserver.observe($(".flex-vertical.channels-wrap")[0], {childList: true});
+		this.channelListObserver.observe($(".flex-vertical.channels-wrap")[0], {childList: true, subtree: true});
 		
-		if ($(".container-0")[0] && $(".container-2")[0]) {
-			this.channelObserver.observe($(".container-0")[0], {childList: true, attributes: true, subtree: true});
-			this.channelObserver.observe($(".container-2")[0], {childList: true, attributes: true, subtree: true});
-			this.loadAllChannels();
-		}
+		$(".flex-vertical.channels-wrap .scroller-fzNley.scroller-NXV0-d [class^='container-']").each(
+			(i,category) => {
+				this.channelObserver.observe(category, {childList: true, attributes: true, subtree: true});
+			}
+		);
 		
 		this.channelContextObserver = new MutationObserver((changes, _) => {
 			changes.forEach(
@@ -303,6 +302,8 @@ class EditChannels {
 			.append("<script src='https://bgrins.github.io/spectrum/spectrum.js'></script>")
 			.append("<link rel='stylesheet' href='https://bgrins.github.io/spectrum/spectrum.css' />");
 		
+		this.loadAllChannels();
+								
 		var that = this;
 		setTimeout(function() {
 			that.labels = that.setLabelsByLanguage();
@@ -574,7 +575,7 @@ class EditChannels {
 				var colorRGB = this.chooseColor(channel, color);
 				
 				nickName ? $(channel).text(nickName) : $(channel).text(data.origName);
-				colorRGB ? $(channel).attr("style", function(i,s) { return s + "color: " + colorRGB + " !important;" }) : $(channel).css("color", "");
+				colorRGB ? $(channel).css("color", colorRGB) : $(channel).css("color", "");
 			}
 			else {
 				this.clearSettings(data.channelID + "_" + data.serverID);
