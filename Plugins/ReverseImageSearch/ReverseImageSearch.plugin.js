@@ -63,12 +63,15 @@ class ReverseImageSearch {
 		if (ele.props && ele.props.children) {
 			var children = Array.isArray(ele.props.children) ? ele.props.children : [ele.props.children];
 			for (var i = 0; i < children.length; i++) {
-				if (children[i] && children[i].props && children[i].props.src && children[i].props.src != undefined && children[i].type && children[i].type.displayName == "NativeLinkGroup") {
-					var { src } = children[i].props;
-					var data = { src };
-					$(context).append(this.messageContextEntryMarkup)
-					.on("click", ".reverseimagesearch-item", data, this.reverseImageSearch.bind(this));
-					break;
+				if (children[i] && children[i].props && children[i].props.src && children[i].type && children[i].type.displayName == "NativeLinkGroup") {
+					// discords default emotes are not publicly accessible, so they can't be reverse image searched
+					if (children[i].props.src.indexOf("https://discordapp.com/assets/") == -1) {
+						var { src } = children[i].props;
+						var data = { src };
+						$(context).append(this.messageContextEntryMarkup)
+						.on("click", ".reverseimagesearch-item", data, this.reverseImageSearch.bind(this));
+						break;
+					}
 				}
 			}
 		}
