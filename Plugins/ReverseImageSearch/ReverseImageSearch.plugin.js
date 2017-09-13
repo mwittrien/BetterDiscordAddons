@@ -63,8 +63,6 @@ class ReverseImageSearch {
 		if (ele.props && ele.props.children) {
 			var children = Array.isArray(ele.props.children) ? ele.props.children : [ele.props.children];
 			for (var i = 0; i < children.length; i++) {
-				if (children[i] && children[i].type) {
-				}
 				if (children[i] && children[i].props && children[i].props.src && children[i].props.src != undefined && children[i].type && children[i].type.displayName == "NativeLinkGroup") {
 					var { src } = children[i].props;
 					var data = { src };
