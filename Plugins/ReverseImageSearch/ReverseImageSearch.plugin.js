@@ -3,8 +3,6 @@
 class ReverseImageSearch {
 	constructor () {
 		
-		this.labels;
-		
 		this.messageContextObserver;
 
 		this.messageContextEntryMarkup =
