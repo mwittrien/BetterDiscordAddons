@@ -18,7 +18,7 @@ class ReverseImageSearch {
 
 	getDescription () {return "Adds a reverse image search option to the context menu.";}
 
-	getVersion () {return "1.0.0";}
+	getVersion () {return "1.1.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -64,10 +64,22 @@ class ReverseImageSearch {
 			var children = Array.isArray(ele.props.children) ? ele.props.children : [ele.props.children];
 			for (var i = 0; i < children.length; i++) {
 				if (children[i] && children[i].props && children[i].props.src && children[i].type && children[i].type.displayName == "NativeLinkGroup") {
-					var { src } = children[i].props;
-					var data = { src };
-					$(context).append(this.messageContextEntryMarkup)
-					.on("click", ".reverseimagesearch-item", data, this.reverseImageSearch.bind(this));
+					var url = children[i].props.src;
+					if (url.indexOf("https://discordapp.com/assets/") == -1) {
+						
+						if (url.indexOf("https://images-ext-1.discordapp.net/external/") > -1) {
+							if (url.split("/https/").length != 1) {
+								url = "https://" + url.split("/https/")[url.split("/https/").length-1];
+							}
+							else if (url.split("/http/").length != 1) {
+								url = "http://" + url.split("/http/")[url.split("/http/").length-1];
+							}
+						}
+							
+						var data = {"url": url};
+						$(context).append(this.messageContextEntryMarkup)
+							.on("click", ".reverseimagesearch-item", data, this.reverseImageSearch.bind(this));
+					}
 				}
 			}
 		}
@@ -75,7 +87,7 @@ class ReverseImageSearch {
 	
 	reverseImageSearch (e) {
 		$(e.delegateTarget).hide();
-		var imageurl = e.data.src;
+		var imageurl = e.data.url;
 		var searchurl = "https://images.google.com/searchbyimage?image_url=";
 		window.open(searchurl+imageurl, "_blank");
 	}
