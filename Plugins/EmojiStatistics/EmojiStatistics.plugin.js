@@ -250,7 +250,7 @@ class EmojiStatistics {
 
 	getDescription () {return "Adds some helpful options to show you more information about emojis and emojiservers.";}
 
-	getVersion () {return "2.1.0";}
+	getVersion () {return "2.1.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -324,9 +324,9 @@ class EmojiStatistics {
 			settings = {};
 		}
 		var saveSettings = false;
-		for (var key in this.defaultSettings) {
+		for (var key in defaultSettings) {
 			if (settings[key] == null) {
-				settings[key] = this.defaultSettings[key];
+				settings[key] = defaultSettings[key];
 				saveSettings = true;
 			}
 		}
@@ -337,7 +337,6 @@ class EmojiStatistics {
 	}
 
     static updateSettings (settingspanel) {
-		var oldSettings = EmojiStatistics.getSettings();
 		var settings = {};
 		var inputs = settingspanel.querySelectorAll("input");
 		for (var i = 0; i < inputs.length; i++) {
