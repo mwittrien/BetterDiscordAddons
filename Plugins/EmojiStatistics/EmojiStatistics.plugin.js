@@ -250,7 +250,7 @@ class EmojiStatistics {
 
 	getDescription () {return "Adds some helpful options to show you more information about emojis and emojiservers.";}
 
-	getVersion () {return "2.1.1";}
+	getVersion () {return "2.1.2";}
 
 	getAuthor () {return "DevilBro";}
 
