@@ -3,7 +3,7 @@
 class ReverseImageSearch {
 	constructor () {
 		
-		this.imageUrlReplaceString = "RIS_REPLACE_IMAGEURL";
+		this.imageUrlReplaceString = "DEVILBRO_BD_REVERSEIMAGESEARCH_REPLACE_IMAGEURL";
 		
 		this.searchEngines = [
 			{"name":"Baidu", 	"url":"http://image.baidu.com/pcdutu?queryImageUrl=" + this.imageUrlReplaceString},
@@ -13,7 +13,10 @@ class ReverseImageSearch {
 			{"name":"Sogou", 	"url":"http://pic.sogou.com/ris?flag=1&drag=0&query=" + this.imageUrlReplaceString + "&flag=1"},
 			{"name":"TinEye", 	"url":"https://tineye.com/search?url=" + this.imageUrlReplaceString},
 			{"name":"Yandex", 	"url":"https://yandex.com/images/search?url=" + this.imageUrlReplaceString + "&rpt=imageview"}
-		];
+		].sort(function(a, b) {
+			var x = a.name; var y = b.name;
+			return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+		});
 		
 		this.messageContextObserver;
 
