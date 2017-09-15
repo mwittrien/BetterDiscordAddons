@@ -450,7 +450,7 @@ class ServerFolders {
 			$(folderTooltip)
 				.text(e.target.name)
 				.css("left", ($(e.target).offset().left + $(e.target).width()) + "px")
-				.css("top", ($(e.target).offset().top + $(e.target).height()-40) + "px");
+				.css("top", ($(e.target).offset().top + $(e.target).height()-($(e.target).height()*(4/5))) + "px");
 		}
 	}
 	
