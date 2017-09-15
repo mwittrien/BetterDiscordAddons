@@ -208,7 +208,7 @@ class ServerFolders {
 			</div>`;
 			
 		this.folderTooltipMarkup = 
-			`<div class="tooltip tooltip-right tooltip-brand guild-folder-tooltip"></div>`;
+			`<div class="tooltip tooltip-right tooltip-black guild-folder-tooltip"></div>`;
 
 		this.folderSettingsModalMarkup =
 			`<span class="serverfolders-modal">
@@ -260,7 +260,7 @@ class ServerFolders {
 
 	getDescription () {return "Add pseudofolders to your serverlist to organize your servers.";}
 
-	getVersion () {return "3.1.2";}
+	getVersion () {return "3.1.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -438,6 +438,7 @@ class ServerFolders {
 			var color1 = 		["0","0","0"];
 			var color2 = 		["255","255","255"];
 			
+			
 			this.saveSettings(serverID, {serverID,folderPlaced,folderName,isOpen,openIcon,closedIcon,color1,color2});
 		}
 	}
@@ -449,7 +450,7 @@ class ServerFolders {
 			$(folderTooltip)
 				.text(e.target.name)
 				.css("left", ($(e.target).offset().left + $(e.target).width()) + "px")
-				.css("top", ($(e.target).offset().top + $(e.target).height()-37) + "px");
+				.css("top", ($(e.target).offset().top + $(e.target).height()-40) + "px");
 		}
 	}
 	
@@ -593,17 +594,13 @@ class ServerFolders {
 		
 		var selection = colorOptions.indexOf(currentRGB);
 			
-		var swatches = swatch == "swatch1" ?
+		var largeDefaultBgColor = swatch == "swatch1" ? "rgb(0, 0, 0)" : "rgb(255, 255, 255)";
+			
+		var swatches = 
 			`<div class="ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-nowrap" style="flex: 1 1 auto; margin-top: 5px;">
-				<div class="ui-color-picker-swatch1 large custom" style="background-color: rgb(0, 0, 0);"></div>
+				<div class="ui-color-picker-${swatch} large custom" style="background-color: ${largeDefaultBgColor};"></div>
 				<div class="regulars ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-wrap ui-color-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;">
-					${ colorOptions.map((val, i) => `<div class="ui-color-picker-swatch1" style="background-color: ${val};"></div>`).join("")}
-				</div>
-			</div>` :
-			`<div class="ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-nowrap" style="flex: 1 1 auto; margin-top: 5px;">
-				<div class="ui-color-picker-swatch2 large custom" style="background-color: rgb(255, 255, 255);"></div>
-				<div class="regulars ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-wrap ui-color-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;">
-					${ colorOptions.map((val, i) => `<div class="ui-color-picker-swatch2" style="background-color: ${val};"></div>`).join("")}
+					${ colorOptions.map((val, i) => `<div class="ui-color-picker-${swatch}" style="background-color: ${val};"></div>`).join("")}
 				</div>
 			</div>`;
 		$(swatches).appendTo(wrapperDiv);
@@ -880,7 +877,12 @@ class ServerFolders {
 	
 	hideAllServers (hide, servers) {
 		for (var i = 0; servers.length > i; i++) {
-			servers[i].hidden = hide;
+			if (!hide) {
+				$(servers[i]).show();
+			}
+			else {
+				$(servers[i]).hide();
+			}
 		}
 	}
 	
