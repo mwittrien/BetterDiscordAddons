@@ -1,6 +1,6 @@
-$(document).ready(function(){
+$(document).ready(function() {
 
-  var BDfunctionsDevilBro = {}
+  var BDfunctionsDevilBro = {};
 
   BDfunctionsDevilBro.test = function(){console.log("hi");}
 
