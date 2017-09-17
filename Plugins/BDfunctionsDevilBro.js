@@ -8,7 +8,7 @@ class BDfunctionsDevilBro {
 	}
 }
 
-var BDfunctionsDevilBro = new BDfunctionsDevilBro();
+var BDfunctionsDevilBro2 = new BDfunctionsDevilBro();
 
 var ABCZFG = "hi";
 
