@@ -6,8 +6,11 @@ $(document).ready(function() {
 
   alert("load");
   
+  console.log("1");
   console.log(this);
   
 });
 
-console.log("hi");
+
+  console.log("2");
+  console.log(this);
