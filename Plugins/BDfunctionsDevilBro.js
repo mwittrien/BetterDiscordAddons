@@ -1,5 +1,9 @@
-var BDfunctionsDevilBro = {}
+$(document).ready(function(){
 
-BDfunctionsDevilBro.test = function(){console.log("hi");}
+  var BDfunctionsDevilBro = {}
 
-alert("load");
+  BDfunctionsDevilBro.test = function(){console.log("hi");}
+
+  alert("load");
+  
+};
