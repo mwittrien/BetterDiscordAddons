@@ -1,15 +1,3 @@
-class BDfunctionsDevilBro {
-	constructor () {
-		BDfunctionsDevilBro.test();
-	}
-	
-	static test () {
-		console.log("test");
-	}
-}
+var BDfunctionsDevilBro2 = {}
 
-var BDfunctionsDevilBro2 = new BDfunctionsDevilBro();
-
-var ABCZFG = "hi";
-
-(function () {console.log("loaded");});
+BDfunctionsDevilBro2.test = function(){console.log("hi");}
