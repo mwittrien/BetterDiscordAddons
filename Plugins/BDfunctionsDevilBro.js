@@ -1,5 +1,6 @@
 class BDfunctionsDevilBro {
 	constructor () {
+		BDfunctionsDevilBro.test();
 	}
 	
 	static test () {
@@ -7,7 +8,7 @@ class BDfunctionsDevilBro {
 	}
 }
 
-const BDfunctionsDevilBro = new BDfunctionsDevilBro();
+var BDfunctionsDevilBro = new BDfunctionsDevilBro();
 
 var ABCZFG = "hi";
 
