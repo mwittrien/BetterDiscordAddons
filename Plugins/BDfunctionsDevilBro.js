@@ -4,5 +4,6 @@ if (typeof BDfunctionsDevilBroClass === "undefined") {
 		static test () {
 			console.log("HI");
 		}
+	}
 	BDfunctionsDevilBro = new BDfunctionsDevilBroClass();
 }
