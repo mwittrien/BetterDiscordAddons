@@ -1,4 +1,4 @@
-var BDfunctionsDevilBro;
+var BDfunctionsDevilBro = null;
 if (typeof BDfunctionsDevilBroClass === "undefined") {
 	class BDfunctionsDevilBroClass {
 		static test () {
