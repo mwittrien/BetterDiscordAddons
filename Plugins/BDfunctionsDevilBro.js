@@ -7,3 +7,6 @@ if (typeof BDfunctionsDevilBroClass === "undefined") {
 	}
 	BDfunctionsDevilBro = new BDfunctionsDevilBroClass();
 }
+else {
+	alert("Fatal Error could not create FunctionClass.");
+}
