@@ -6,3 +6,5 @@ class BDfunctionsDevilBro {
 		console.log("test");
 	}
 }
+
+BDfunctionsDevilBro = new BDfunctionsDevilBro();
