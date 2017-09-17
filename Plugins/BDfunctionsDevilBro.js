@@ -1,3 +1,3 @@
-var BDfunctionsDevilBro2 = {}
+var BDfunctionsDevilBro = {}
 
-BDfunctionsDevilBro2.test = function(){console.log("hi");}
+BDfunctionsDevilBro.test = function(){console.log("hi");}
