@@ -2,4 +2,4 @@
     function testDevilBro() {
 		console.log("hi");
     }
-});
+})
