@@ -11,4 +11,4 @@ const BDfunctionsDevilBro = new BDfunctionsDevilBro();
 
 var ABCZFG = "hi";
 
-console.log("loaded");
+(function () {console.log("loaded");});
