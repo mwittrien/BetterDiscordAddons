@@ -7,4 +7,5 @@ class BDfunctionsDevilBro {
 	}
 }
 
+console.log("done");
 var BDfunctionsDevilBro = new BDfunctionsDevilBro();
