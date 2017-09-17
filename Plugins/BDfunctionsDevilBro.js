@@ -7,4 +7,4 @@ class BDfunctionsDevilBro {
 	}
 }
 
-BDfunctionsDevilBro = new BDfunctionsDevilBro();
+const BDfunctionsDevilBro = new BDfunctionsDevilBro();
