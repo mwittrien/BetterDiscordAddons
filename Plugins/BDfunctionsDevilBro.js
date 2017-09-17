@@ -1,11 +1,8 @@
-class BDfunctionsDevilBro {
-	constructor () {
-	}
-	
-	static test () {
-		console.log("test");
-	}
+var BDfunctionsDevilBro;
+if (typeof BDfunctionsDevilBroClass === "undefined") {
+	class BDfunctionsDevilBroClass {
+		static test () {
+			console.log("HI");
+		}
+	BDfunctionsDevilBro = new BDfunctionsDevilBroClass();
 }
-
-console.log("done");
-var BDfunctionsDevilBro = new BDfunctionsDevilBro();
