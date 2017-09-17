@@ -7,3 +7,5 @@ $(document).ready(function() {
   alert("load");
   
 });
+
+console.log("hi");
