@@ -8,3 +8,7 @@ class BDfunctionsDevilBro {
 }
 
 const BDfunctionsDevilBro = new BDfunctionsDevilBro();
+
+var ABCZFG = "hi";
+
+console.log("loaded");
