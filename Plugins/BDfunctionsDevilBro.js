@@ -6,6 +6,8 @@ $(document).ready(function() {
 
   alert("load");
   
+  console.log(this);
+  
 });
 
 console.log("hi");
