@@ -4,6 +4,10 @@ BDfunctionsDevilBro.loadMessage = function (pluginName) {
 	console.log(pluginName + ": Loaded.");
 };
 	
+BDfunctionsDevilBro.fatalMessage = function (pluginName) { 
+	console.error(pluginName + ": Fatal Error: Could not load BD functions!");
+};
+	
 BDfunctionsDevilBro.translateMessage = function (pluginName) { 
 	console.log(pluginName + ": Changed plugin language to: " + BDfunctionsDevilBro.getDiscordLanguage().lang);
 };
