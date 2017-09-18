@@ -86,13 +86,15 @@ BDfunctionsDevilBro.readUnreadServerList = function (servers) {
 	return foundServers;
 };
 	
-BDfunctionsDevilBro.readChannelList = function  () {
+BDfunctionsDevilBro.readChannelList = function () {
 	var foundChannels = [];
-	$(".name-2SL4ev").each(
-		(i,channel) => {
-			foundChannels.push(channel);
+	var channels = document.getElementsByClassName(".containerDefault-7RImuF");
+	for (var i = 0; i < channels.length; i++) {
+		var channelData = BDfunctionsDevilBro.getKeyInformation(channels[i], "channel");
+		if (channelData) {
+			foundChannels.push(channels[i]);
 		}
-	);
+	}
 	return foundChannels;
 }
 	
@@ -115,17 +117,17 @@ BDfunctionsDevilBro.getIdOfServer = function (server) {
 };
 	
 BDfunctionsDevilBro.getDivOfChannel = function (channelID, serverID) {
-		var channels = BDfunctionsDevilBro.readChannelList();
-		for (var i = 0; i < channels.length; i++) {
-			var data = this.getKeyInformation(channels[i].parentElement, "channel");
-			if (data) {
-				if (channelID == data.id && serverID == data.guild_id) {
-					return channels[i];
-				}
+	var channels = BDfunctionsDevilBro.readChannelList();
+	for (var i = 0; i < channels.length; i++) {
+		var data = this.getKeyInformation(channels[i], "channel");
+		if (data) {
+			if (channelID == data.id && serverID == data.guild_id) {
+				return channels[i];
 			}
 		}
-		return null;
 	}
+	return null;
+}
 
 BDfunctionsDevilBro.themeIsLightTheme = function () {
 	if ($(".theme-light").length > $(".theme-dark").length) {
