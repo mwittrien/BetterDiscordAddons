@@ -1,5 +1,13 @@
 var BDfunctionsDevilBro = {};
 	
+BDfunctionsDevilBro.loadMessage = function (pluginName) { 
+	console.log(pluginName + ": Loaded.");
+};
+	
+BDfunctionsDevilBro.translateMessage = function (pluginName) { 
+	console.log(pluginName + ": Changed plugin language to: " + BDfunctionsDevilBro.getDiscordLanguage().lang);
+};
+	
 BDfunctionsDevilBro.getReactInstance = function (node) { 
 	return node[Object.keys(node).find((key) => key.startsWith("__reactInternalInstance"))];
 };
@@ -72,7 +80,6 @@ BDfunctionsDevilBro.getRec = function (node, searchedKey, searchedValue) {
 	
 	return rec(inst);
 
-	
 	function rec (ele) {
 		if (!ele) return null;
 		var keys = Object.keys(ele);
