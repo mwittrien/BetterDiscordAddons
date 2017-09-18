@@ -157,10 +157,10 @@ BDfunctionsDevilBro.appendWebStyle = function (filepath) {
 }
 
 BDfunctionsDevilBro.appendLocalStyle = function (pluginName, css) {
-	if ($('head style[class="' + pluginName + '"]').length > 0) return;
+	if ($('head style[id="' + pluginName + '"]').length > 0) return;
 
 	var ele = document.createElement('style');
-		.attr("class", pluginName)
+		.attr("id", pluginName)
 		.text(css);
 	$('head').append(ele);
 }
