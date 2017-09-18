@@ -77,8 +77,11 @@ BDfunctionsDevilBro.getRec = function (node, searchedKey, searchedValue) {
 		var keys = Object.keys(ele);
 		var result = null;
 		for (var i = 0; result === null && i < keys.length; i++) {
+			console.log("key value")
 			var key = keys[i];
+			console.log(key)
 			var value = ele[keys[i]];
+			console.log(key)
 			
 			if (searchedKey === key && (searchedValue === undefined || searchedValue === value)) {
 				result = value;
