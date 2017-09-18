@@ -126,7 +126,7 @@ BDfunctionsDevilBro.saveData = function (id, data, pluginName, keyName) {
 	
 	settings[id] = JSON.stringify(data);
 	
-	bdPluginStorage.set(pluginName, "folders", settings);
+	bdPluginStorage.set(pluginName, keyName, settings);
 };
 	
 BDfunctionsDevilBro.removeData = function (id, pluginName, keyName) {
@@ -134,7 +134,7 @@ BDfunctionsDevilBro.removeData = function (id, pluginName, keyName) {
 	
 	delete settings[id];
 	
-	bdPluginStorage.set(pluginName, "folders", settings);
+	bdPluginStorage.set(pluginName, keyName, settings);
 };
 
 BDfunctionsDevilBro.loadData = function (id, pluginName, keyName) {
