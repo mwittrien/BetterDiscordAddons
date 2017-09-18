@@ -119,7 +119,8 @@ BDfunctionsDevilBro.getIdOfServer = function (server) {
 BDfunctionsDevilBro.getDivOfChannel = function (channelID, serverID) {
 	var channels = BDfunctionsDevilBro.readChannelList();
 	for (var i = 0; i < channels.length; i++) {
-		var data = this.getKeyInformation(channels[i], "channel");
+		var data = BDfunctionsDevilBro.getKeyInformation(channels[i], "channel");
+		console.log(data);
 		if (data) {
 			if (channelID == data.id && serverID == data.guild_id) {
 				return channels[i];
