@@ -1,7 +1,4 @@
 var BDfunctionsDevilBro = {};
-BDfunctionsDevilBro.test = function () {
-	console.log("HI");
-};
 	
 BDfunctionsDevilBro.getReactInstance = function (node) { 
 	return node[Object.keys(node).find((key) => key.startsWith("__reactInternalInstance"))];
@@ -66,6 +63,7 @@ BDfunctionsDevilBro.readServerList = function () {
 };
 	
 BDfunctionsDevilBro.readUnreadServerList = function (servers) {
+	if (servers === undefined) servers = BDfunctionsDevilBro.readServerList();
 	var foundServers = [];
 	for (var i = 0; i < servers.length; i++) {
 		var serverData = BDfunctionsDevilBro.getKeyInformation(servers[i], "guild");
