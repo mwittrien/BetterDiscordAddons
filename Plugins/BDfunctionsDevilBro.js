@@ -193,7 +193,9 @@ BDfunctionsDevilBro.sortArrayByKey = function (array, key, except) {
 	if (except === undefined) except = null;
 	return array.sort(function(a, b) {
 		var x = a[key]; var y = b[key];
-		return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+		if (x != except) {
+			return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+		}
 	});
 };
 
