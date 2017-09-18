@@ -49,7 +49,9 @@ BDfunctionsDevilBro.searchKeyInReact = function (ele, key, value) {
 	return null;
 };
 
-BDfunctionsDevilBro.getRec = function (a,b,c) {
+BDfunctionsDevilBro.getRec = function (node,b,c) {
+	var a = BDfunctionsDevilBro.getReactInstance(node);
+	if (!a) return null;
 	// to avoid endless loops (parentnode > childnode > parentnode ...)
 	var objectWhiteList = {
 		"_currentElement":true,
