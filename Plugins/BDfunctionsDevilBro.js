@@ -112,6 +112,15 @@ BDfunctionsDevilBro.showHideAllEles = function (show, eles) {
 	}
 };
 
+BDfunctionsDevilBro.showHideEle = function (show, ele) {
+	if (show) {
+		$(ele).show();
+	}
+	else {
+		$(ele).hide();
+	}
+};
+
 BDfunctionsDevilBro.saveData = function (id, data, pluginName, keyName) {
 	var settings = bdPluginStorage.get(pluginName, keyName) ? bdPluginStorage.get(pluginName, keyName) : {};
 	
