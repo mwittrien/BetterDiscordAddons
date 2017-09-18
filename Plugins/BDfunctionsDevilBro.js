@@ -50,3 +50,90 @@ BDfunctionsDevilBro.searchKeyInReact = function (ele, key, value) {
 	}
 	return null;
 }
+	
+	
+BDfunctionsDevilBro.readServerList = function () {
+	var foundServers = [];
+	var servers = document.getElementsByClassName("guild");
+	for (var i = 0; i < servers.length; i++) {
+		var serverData = BDfunctionsDevilBro.getKeyInformation(servers[i], "guild");
+		if (serverData) {
+			foundServers.push(servers[i]);
+		}
+	}
+	return foundServers;
+}
+	
+BDfunctionsDevilBro.readUnreadServerList = function (servers) {
+	var foundServers = [];
+	for (var i = 0; i < servers.length; i++) {
+		var serverData = BDfunctionsDevilBro.getKeyInformation(servers[i], "guild");
+		if (serverData) {
+			if (servers[i].classList.contains("unread") || $(servers[i]).find(".badge")[0]) {
+				foundServers.push(servers[i]);
+			}
+		}
+	}
+	return foundServers;
+}
+	
+BDfunctionsDevilBro.getDivOfServer (id) {
+	var servers = BDfunctionsDevilBro.readServerList();
+	for (var i = 0; i < servers.length; i++) {
+		if (BDfunctionsDevilBro.getIdOfServer(servers[i]) == id) {
+			return servers[i];
+		}
+	}
+	return null;
+}
+	
+BDfunctionsDevilBro.getIdOfServer (server) {
+	var serverData = BDfunctionsDevilBro.getKeyInformation(server, "guild");
+	if (serverData) {
+		return serverData.id;
+	}
+}
+
+BDfunctionsDevilBro.themeIsLightTheme () {
+	if ($(".theme-light").length > $(".theme-dark").length) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+BDfunctionsDevilBro.showHideAllEles = function (show, eles) {
+	for (var i = 0; eles.length > i; i++) {
+		if (show) {
+			$(eles[i]).show();
+		}
+		else {
+			$(eles[i]).hide();
+		}
+	}
+}
+
+BDfunctionsDevilBro.saveData = function (id, data, pluginName, keyName) {
+	var settings = bdPluginStorage.get(pluginName, keyName) ? bdPluginStorage.get(pluginName), keyName) : {};
+	
+	settings[id] = JSON.stringify(data);
+	
+	bdPluginStorage.set(pluginName, "folders", settings);
+}
+	
+BDfunctionsDevilBro.removeData = function (id, pluginName, keyName) {
+	var settings = bdPluginStorage.get(pluginName, keyName) ? bdPluginStorage.get(pluginName), keyName) : {};
+	
+	delete settings[id];
+	
+	bdPluginStorage.set(pluginName, "folders", settings);
+}
+
+BDfunctionsDevilBro.loadData = function (id, pluginName, keyName) {
+	var settings = bdPluginStorage.get(pluginName, keyName) ? bdPluginStorage.get(pluginName), keyName) : {};
+	
+	var data = settings[id];
+	
+	return (data ? JSON.parse(data) : null);
+}
