@@ -160,6 +160,7 @@ BDfunctionsDevilBro.appendLocalStyle = function (pluginName, css) {
 	if ($('head style[id="' + pluginName + '"]').length > 0) return;
 
 	var ele = document.createElement('style');
+	$(ele)
 		.attr("id", pluginName)
 		.text(css);
 	$('head').append(ele);
