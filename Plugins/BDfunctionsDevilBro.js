@@ -186,7 +186,7 @@ BDfunctionsDevilBro.appendLocalStyle = function (pluginName, css) {
 };
 
 BDfunctionsDevilBro.removeLocalStyle = function (pluginName) {
-	if ($('head style[id="' + pluginName + '"]').length > 0) $('head style[id="' + pluginName + '"]').remove();
+	$('head style[id="' + pluginName + '"]').remove();
 };
 
 BDfunctionsDevilBro.sortArrayByKey = function (array, key, except) {
