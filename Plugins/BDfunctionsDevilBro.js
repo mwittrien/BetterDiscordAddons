@@ -72,6 +72,7 @@ BDfunctionsDevilBro.getRec = function (node, searchedKey, searchedValue) {
 	return rec(inst);
 
 	function rec (ele) {
+		if (!ele) return null;
 		console.log(ele);
 		var keys = Object.keys(ele);
 		var result = null;
