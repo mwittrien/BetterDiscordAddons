@@ -70,6 +70,7 @@ BDfunctionsDevilBro.getRec = function (node, searchedKey, searchedValue) {
 		"_renderedChildren":true,
 		"props":true,
 		"state":true,
+		"stateNode":true,
 		"refs":true,
 		"updater":true,
 		"children":true,
