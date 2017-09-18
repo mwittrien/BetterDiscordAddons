@@ -136,20 +136,31 @@ BDfunctionsDevilBro.loadData = function (id, pluginName, keyName) {
 	return (data ? JSON.parse(data) : null);
 };
 
-BDfunctionsDevilBro.appendScript = function (filepath) {
+BDfunctionsDevilBro.appendWebScript = function (filepath) {
 	if ($('head script[src="' + filepath + '"]').length > 0) return;
 	
 	var ele = document.createElement('script');
-	ele.setAttribute("src", filepath);
+	$(ele)
+		.attr("src", filepath);
 	$('head').append(ele);
 }
 
-BDfunctionsDevilBro.appendStyle = function (filepath) {
+BDfunctionsDevilBro.appendWebStyle = function (filepath) {
 	if ($('head link[href="' + filepath + '"]').length > 0) return;
 
 	var ele = document.createElement('link');
-	ele.setAttribute("type", "text/css");
-	ele.setAttribute("rel", "Stylesheet");
-	ele.setAttribute("href", filepath);
+	$(ele)
+		.attr("type", "text/css")
+		.attr("rel", "Stylesheet")
+		.attr("href", filepath);
+	$('head').append(ele);
+}
+
+BDfunctionsDevilBro.appendLocalStyle = function (pluginName, css) {
+	if ($('head style[class="' + pluginName + '"]').length > 0) return;
+
+	var ele = document.createElement('style');
+		.attr("class", pluginName)
+		.text(css);
 	$('head').append(ele);
 }
