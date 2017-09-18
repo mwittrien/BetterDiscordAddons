@@ -86,7 +86,7 @@ BDfunctionsDevilBro.getRec = function (node, searchedKey, searchedValue) {
 			if (searchedKey === key && (searchedValue === undefined || searchedValue === value)) {
 				result = value;
 			}
-			else if (typeof value === "object" && (key[0] == "." || !isNaN(key[0]) || keyWhiteList[key])) {
+			else if (typeof value === "object" && (key.charAt(0) == "." || !isNaN(key.charAt(0)) || keyWhiteList[key])) {
 				result = rec(value);
 			}
 		}
