@@ -86,6 +86,16 @@ BDfunctionsDevilBro.readUnreadServerList = function (servers) {
 	return foundServers;
 };
 	
+BDfunctionsDevilBro.readChannelList = function  () {
+	var foundChannels = [];
+	$(".name-2SL4ev").each(
+		(i,channel) => {
+			foundChannels.push(channel);
+		}
+	);
+	return foundChannels;
+}
+	
 BDfunctionsDevilBro.getDivOfServer = function (id) {
 	var servers = BDfunctionsDevilBro.readServerList();
 	for (var i = 0; i < servers.length; i++) {
@@ -103,6 +113,19 @@ BDfunctionsDevilBro.getIdOfServer = function (server) {
 	}
 	return null;
 };
+	
+BDfunctionsDevilBro.getDivOfChannel = function (channelID, serverID) {
+		var channels = BDfunctionsDevilBro.readChannelList();
+		for (var i = 0; i < channels.length; i++) {
+			var data = this.getKeyInformation(channels[i].parentElement, "channel");
+			if (data) {
+				if (channelID == data.id && serverID == data.guild_id) {
+					return channels[i];
+				}
+			}
+		}
+		return null;
+	}
 
 BDfunctionsDevilBro.themeIsLightTheme = function () {
 	if ($(".theme-light").length > $(".theme-dark").length) {
