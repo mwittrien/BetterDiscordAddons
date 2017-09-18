@@ -175,6 +175,14 @@ BDfunctionsDevilBro.appendLocalStyle = function (pluginName, css) {
 	$('head').append(ele);
 }
 
+BDfunctionsDevilBro.sortArrayByKey = function (array, key, except) {
+	if (except === undefined) except = null;
+	return array.sort(function(a, b) {
+		var x = a[key]; var y = b[key];
+		return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+	});
+}
+
 BDfunctionsDevilBro.getDiscordLanguage = function () {
 	switch ($("html").attr("lang").split("-")[0]) {
 		case "da": 		//danish
