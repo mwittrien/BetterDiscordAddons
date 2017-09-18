@@ -50,10 +50,10 @@ BDfunctionsDevilBro.searchKeyInReact = function (ele, key, value) {
 };
 
 BDfunctionsDevilBro.getRec = function (node, searchedKey, searchedValue) {
-	console.log("update3");
 	if (!node || !searchedKey) return null;
 	var inst = BDfunctionsDevilBro.getReactInstance(node);
 	if (!inst) return null;
+	
 	// to avoid endless loops (parentnode > childnode > parentnode ...)
 	var keyWhiteList = {
 		"_currentElement":true,
@@ -75,13 +75,10 @@ BDfunctionsDevilBro.getRec = function (node, searchedKey, searchedValue) {
 	
 	function rec (ele) {
 		if (!ele) return null;
-		console.log(ele);
 		var keys = Object.keys(ele);
 		var result = null;
 		for (var i = 0; result === null && i < keys.length; i++) {
 			var key = keys[i];
-			console.log(i)
-			console.log(key)
 			var value = ele[keys[i]];
 			
 			if (searchedKey === key && (searchedValue === undefined || searchedValue === value)) {
