@@ -80,7 +80,7 @@ BDfunctionsDevilBro.getRec = function (node, searchedKey, searchedValue) {
 			var key = keys[i];
 			var value = ele[keys[i]];
 			
-			if (searchedKey === key && (searchedValue === undefined || searchedValue === value) {
+			if (searchedKey === key && (searchedValue === undefined || searchedValue === value)) {
 				result = value;
 			}
 			else if (typeof value === "object" && keyWhiteList[key]) {
