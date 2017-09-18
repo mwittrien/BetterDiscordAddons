@@ -165,3 +165,48 @@ BDfunctionsDevilBro.appendLocalStyle = function (pluginName, css) {
 		.text(css);
 	$('head').append(ele);
 }
+
+BDfunctionsDevilBro.getDiscordLanguage = function () {
+	switch ($("html").attr("lang").split("-")[0]) {
+		case "da": 		//danish
+			return {"id":"da","lang":"danish"};
+		case "de": 		//german
+			return {"id":"de","lang":"german"};
+		case "es": 		//spanish
+			return {"id":"es","lang":"spanish"};
+		case "fr": 		//french
+			return {"id":"fr","lang":"italian"};
+		case "it": 		//italian
+			return {"id":"it","lang":"italian"};
+		case "nl":		//dutch
+			return {"id":"nl","lang":"dutch"};
+		case "no":		//norwegian
+			return {"id":"no","lang":"norwegian"};
+		case "pl":		//polish
+			return {"id":"pl","lang":"polish"};
+		case "pt":		//portuguese (brazil)
+			return {"id":"pt","lang":"portuguese"};
+		case "fi":		//finnish
+			return {"id":"fi","lang":"finnish"};
+		case "sv":		//swedish
+			return {"id":"sv","lang":"turkish"};
+		case "tr":		//turkish
+			return {"id":"tr","lang":"turkish"};
+		case "cs":		//czech
+			return {"id":"cs","lang":"czech"};
+		case "bg":		//bulgarian
+			return {"id":"bg","lang":"bulgarian"};
+		case "ru":		//russian
+			return {"id":"ru","lang":"russian"};
+		case "uk":		//ukranian
+			return {"id":"uk","lang":"ukranian"};
+		case "ja":		//japanese
+			return {"id":"ja","lang":"japanese"};
+		case "zh":		//chinese (traditional)
+			return {"id":"zh","lang":"chinese"};
+		case "ko":		//korean
+			return {"id":"ko","lang":"korean"};
+		default:		//default: english
+			return {"id":"en","lang":"english"};
+	}
+}
