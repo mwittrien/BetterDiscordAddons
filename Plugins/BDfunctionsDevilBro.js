@@ -5,7 +5,7 @@ BDfunctionsDevilBro.test = function () {
 	
 BDfunctionsDevilBro.getReactInstance = function (node) { 
 	return node[Object.keys(node).find((key) => key.startsWith("__reactInternalInstance"))];
-}
+};
 
 BDfunctionsDevilBro.getKeyInformation = function (node, key, value) {
 	var inst = BDfunctionsDevilBro.getReactInstance(node);
@@ -17,7 +17,7 @@ BDfunctionsDevilBro.getKeyInformation = function (node, key, value) {
 	else {
 		return null;
 	}
-}
+};
 
 BDfunctionsDevilBro.searchKeyInReact = function (ele, key, value) {
 	if (!ele) return null;
@@ -49,7 +49,7 @@ BDfunctionsDevilBro.searchKeyInReact = function (ele, key, value) {
 		return result;
 	}
 	return null;
-}
+};
 	
 	
 BDfunctionsDevilBro.readServerList = function () {
@@ -62,7 +62,7 @@ BDfunctionsDevilBro.readServerList = function () {
 		}
 	}
 	return foundServers;
-}
+};
 	
 BDfunctionsDevilBro.readUnreadServerList = function (servers) {
 	var foundServers = [];
@@ -75,9 +75,9 @@ BDfunctionsDevilBro.readUnreadServerList = function (servers) {
 		}
 	}
 	return foundServers;
-}
+};
 	
-BDfunctionsDevilBro.getDivOfServer (id) {
+BDfunctionsDevilBro.getDivOfServer = function (id) {
 	var servers = BDfunctionsDevilBro.readServerList();
 	for (var i = 0; i < servers.length; i++) {
 		if (BDfunctionsDevilBro.getIdOfServer(servers[i]) == id) {
@@ -85,23 +85,23 @@ BDfunctionsDevilBro.getDivOfServer (id) {
 		}
 	}
 	return null;
-}
+};
 	
-BDfunctionsDevilBro.getIdOfServer (server) {
+BDfunctionsDevilBro.getIdOfServer = function (server) {
 	var serverData = BDfunctionsDevilBro.getKeyInformation(server, "guild");
 	if (serverData) {
 		return serverData.id;
 	}
-}
+};
 
-BDfunctionsDevilBro.themeIsLightTheme () {
+BDfunctionsDevilBro.themeIsLightTheme = function () {
 	if ($(".theme-light").length > $(".theme-dark").length) {
 		return true;
 	}
 	else {
 		return false;
 	}
-}
+};
 
 BDfunctionsDevilBro.showHideAllEles = function (show, eles) {
 	for (var i = 0; eles.length > i; i++) {
@@ -112,28 +112,28 @@ BDfunctionsDevilBro.showHideAllEles = function (show, eles) {
 			$(eles[i]).hide();
 		}
 	}
-}
+};
 
 BDfunctionsDevilBro.saveData = function (id, data, pluginName, keyName) {
-	var settings = bdPluginStorage.get(pluginName, keyName) ? bdPluginStorage.get(pluginName), keyName) : {};
+	var settings = bdPluginStorage.get(pluginName, keyName) ? bdPluginStorage.get(pluginName, keyName) : {};
 	
 	settings[id] = JSON.stringify(data);
 	
 	bdPluginStorage.set(pluginName, "folders", settings);
-}
+};
 	
 BDfunctionsDevilBro.removeData = function (id, pluginName, keyName) {
-	var settings = bdPluginStorage.get(pluginName, keyName) ? bdPluginStorage.get(pluginName), keyName) : {};
+	var settings = bdPluginStorage.get(pluginName, keyName) ? bdPluginStorage.get(pluginName, keyName) : {};
 	
 	delete settings[id];
 	
 	bdPluginStorage.set(pluginName, "folders", settings);
-}
+};
 
 BDfunctionsDevilBro.loadData = function (id, pluginName, keyName) {
-	var settings = bdPluginStorage.get(pluginName, keyName) ? bdPluginStorage.get(pluginName), keyName) : {};
+	var settings = bdPluginStorage.get(pluginName, keyName) ? bdPluginStorage.get(pluginName, keyName) : {};
 	
 	var data = settings[id];
 	
 	return (data ? JSON.parse(data) : null);
-}
+};
