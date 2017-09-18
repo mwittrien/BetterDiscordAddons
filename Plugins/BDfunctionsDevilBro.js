@@ -92,15 +92,14 @@ BDfunctionsDevilBro.getIdOfServer = function (server) {
 	if (serverData) {
 		return serverData.id;
 	}
+	return null;
 };
 
 BDfunctionsDevilBro.themeIsLightTheme = function () {
 	if ($(".theme-light").length > $(".theme-dark").length) {
 		return true;
 	}
-	else {
-		return false;
-	}
+	return false;
 };
 
 BDfunctionsDevilBro.showHideAllEles = function (show, eles) {
