@@ -12,52 +12,7 @@ BDfunctionsDevilBro.getReactInstance = function (node) {
 	return node[Object.keys(node).find((key) => key.startsWith("__reactInternalInstance"))];
 };
 
-BDfunctionsDevilBro.getKeyInformation = function (node, key, value) {
-	var inst = BDfunctionsDevilBro.getReactInstance(node);
-	if (!inst) return null;
-	var curEle = inst.memoizedProps || inst._currentElement;
-	if (curEle) {
-		return BDfunctionsDevilBro.searchKeyInReact(curEle, key, value); 
-	}
-	else {
-		return null;
-	}
-};
-
-BDfunctionsDevilBro.searchKeyInReact = function (ele, key, value) {
-	if (!ele) return null;
-	if (value === undefined) {
-		if (ele[key] != null) 						return ele[key];
-		if (ele.props && ele.props[key] != null) 	return ele.props[key];
-		if (ele.type && ele.type[key] != null) 		return ele.type[key];
-		if (ele.state && ele.state[key] != null) 	return ele.state[key];
-	}
-	else {
-		if ((ele[key] === value) || (ele.props && ele.props[key] === value) || (ele.type && ele.type[key] === value) || (ele.state && ele.state[key] === value)) {
-			return value;
-		}
-	}
-	var children, result;
-	if (ele.children){
-		children = Array.isArray(ele.children) ? ele.children : [ele.children];
-		result = null;
-		for (let i = 0; result === null && i < children.length; i++){
-			result = BDfunctionsDevilBro.searchKeyInReact(children[i], key, value);
-		}
-		return result;
-	}
-	if (ele.props && ele.props.children){
-		children = Array.isArray(ele.props.children) ? ele.props.children : [ele.props.children];
-		result = null;
-		for (let i = 0; result === null && i < children.length; i++){
-			result = BDfunctionsDevilBro.searchKeyInReact(children[i], key, value);
-		}
-		return result;
-	}
-	return null;
-};
-
-BDfunctionsDevilBro.getRec = function (node, searchedKey, searchedValue) {
+BDfunctionsDevilBro.getKeyInformation = function (node, searchedKey, searchedValue) {
 	if (!node || !searchedKey) return null;
 	var inst = BDfunctionsDevilBro.getReactInstance(node);
 	if (!inst) return null;
@@ -79,9 +34,9 @@ BDfunctionsDevilBro.getRec = function (node, searchedKey, searchedValue) {
 		"memoizedState":true
 	};
 	
-	return rec(inst);
+	return searchKeyInReact(inst);
 
-	function rec (ele) {
+	function searchKeyInReact (ele) {
 		if (!ele) return null;
 		var keys = Object.keys(ele);
 		var result = null;
@@ -93,7 +48,7 @@ BDfunctionsDevilBro.getRec = function (node, searchedKey, searchedValue) {
 				result = value;
 			}
 			else if ((typeof value === "object" || typeof value === "function") && (keyWhiteList[key] || key[0] == "." || !isNaN(key[0]))) {
-				result = rec(value);
+				result = searchKeyInReact(value);
 			}
 		}
 		return result;
