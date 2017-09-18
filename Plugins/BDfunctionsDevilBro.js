@@ -32,17 +32,18 @@ BDfunctionsDevilBro.searchKeyInReact = function (ele, key, value) {
 			return value;
 		}
 	}
+	var children, result;
 	if (ele.children){
-		var children = Array.isArray(ele.children) ? ele.children : [ele.children];
-		var result = null;
+		children = Array.isArray(ele.children) ? ele.children : [ele.children];
+		result = null;
 		for (let i = 0; result === null && i < children.length; i++){
 			result = BDfunctionsDevilBro.searchKeyInReact(children[i], key, value);
 		}
 		return result;
 	}
 	if (ele.props && ele.props.children){
-		var children = Array.isArray(ele.props.children) ? ele.props.children : [ele.props.children];
-		var result = null;
+		children = Array.isArray(ele.props.children) ? ele.props.children : [ele.props.children];
+		result = null;
 		for (let i = 0; result === null && i < children.length; i++){
 			result = BDfunctionsDevilBro.searchKeyInReact(children[i], key, value);
 		}
