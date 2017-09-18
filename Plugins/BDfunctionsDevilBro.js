@@ -50,7 +50,7 @@ BDfunctionsDevilBro.searchKeyInReact = function (ele, key, value) {
 };
 
 BDfunctionsDevilBro.getRec = function (node, searchedKey, searchedValue) {
-	console.log("update2");
+	console.log("update3");
 	if (!node || !searchedKey) return null;
 	var inst = BDfunctionsDevilBro.getReactInstance(node);
 	if (!inst) return null;
@@ -79,16 +79,15 @@ BDfunctionsDevilBro.getRec = function (node, searchedKey, searchedValue) {
 		var keys = Object.keys(ele);
 		var result = null;
 		for (var i = 0; result === null && i < keys.length; i++) {
-			console.log("key value")
 			var key = keys[i];
+			console.log(i)
 			console.log(key)
 			var value = ele[keys[i]];
-			console.log(value)
 			
 			if (searchedKey === key && (searchedValue === undefined || searchedValue === value)) {
 				result = value;
 			}
-			else if (typeof value === "object" && key != "$$typeof" && (key[0] == "." || !isNaN(key[0]) || keyWhiteList[key])) {
+			else if (typeof value === "object" && (key[0] == "." || !isNaN(key[0]) || keyWhiteList[key])) {
 				result = rec(value);
 			}
 		}
