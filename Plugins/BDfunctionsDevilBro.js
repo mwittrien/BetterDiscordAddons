@@ -48,6 +48,42 @@ BDfunctionsDevilBro.searchKeyInReact = function (ele, key, value) {
 	}
 	return null;
 };
+
+BDfunctionsDevilBro.getRec = function (a,b,c) {
+	// to avoid endless loops (parentnode > childnode > parentnode ...)
+	var objectWhiteList = {
+		"_currentElement":true,
+		"_owner":true,
+		"_instance":true,
+		"_renderedChildren":true,
+		"props":true,
+		"state":true,
+		"refs":true,
+		"updater":true,
+		"children":true,
+		"type":true,
+		"memoizedProps":true,
+		"memoizedState":true
+	};
+	if (c === undefined) c = 10;
+	return rec(a,b,c);
+
+	function rec (a,b,c) {
+		if (c > 0) {
+			var keys = Object.keys(a);
+			var result = null;
+			for (var i = 0; result === null && i < keys.length; i++) {
+				if (keys[i] === b) {
+					result = a[keys[i]];
+				}
+				else if (typeof a[keys[i]] === "object" && objectWhiteList[keys[i]]) {
+					result = rec(a[keys[i]],b,c--);
+				}
+			}
+			return result;
+		}
+	}
+};
 	
 	
 BDfunctionsDevilBro.readServerList = function () {
@@ -152,7 +188,7 @@ BDfunctionsDevilBro.appendWebScript = function (filepath) {
 	$(ele)
 		.attr("src", filepath);
 	$('head').append(ele);
-}
+};
 
 BDfunctionsDevilBro.appendWebStyle = function (filepath) {
 	if ($('head link[href="' + filepath + '"]').length > 0) return;
@@ -163,7 +199,7 @@ BDfunctionsDevilBro.appendWebStyle = function (filepath) {
 		.attr("rel", "Stylesheet")
 		.attr("href", filepath);
 	$('head').append(ele);
-}
+};
 
 BDfunctionsDevilBro.appendLocalStyle = function (pluginName, css) {
 	if ($('head style[id="' + pluginName + '"]').length > 0) return;
@@ -173,7 +209,7 @@ BDfunctionsDevilBro.appendLocalStyle = function (pluginName, css) {
 		.attr("id", pluginName)
 		.text(css);
 	$('head').append(ele);
-}
+};
 
 BDfunctionsDevilBro.sortArrayByKey = function (array, key, except) {
 	if (except === undefined) except = null;
@@ -181,7 +217,7 @@ BDfunctionsDevilBro.sortArrayByKey = function (array, key, except) {
 		var x = a[key]; var y = b[key];
 		return ((x < y) ? -1 : ((x > y) ? 1 : 0));
 	});
-}
+};
 
 BDfunctionsDevilBro.getDiscordLanguage = function () {
 	switch ($("html").attr("lang").split("-")[0]) {
@@ -226,4 +262,4 @@ BDfunctionsDevilBro.getDiscordLanguage = function () {
 		default:		//default: english
 			return {"id":"en","lang":"english"};
 	}
-}
+};
