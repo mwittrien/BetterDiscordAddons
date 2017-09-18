@@ -135,3 +135,21 @@ BDfunctionsDevilBro.loadData = function (id, pluginName, keyName) {
 	
 	return (data ? JSON.parse(data) : null);
 };
+
+BDfunctionsDevilBro.appendScript = function (filepath) {
+	if ($('head script[src="' + filepath + '"]').length > 0) return;
+	
+	var ele = document.createElement('script');
+	ele.setAttribute("src", filepath);
+	$('head').append(ele);
+}
+
+BDfunctionsDevilBro.appendStyle = function (filepath) {
+	if ($('head link[href="' + filepath + '"]').length > 0) return;
+
+	var ele = document.createElement('link');
+	ele.setAttribute("type", "text/css");
+	ele.setAttribute("rel", "Stylesheet");
+	ele.setAttribute("href", filepath);
+	$('head').append(ele);
+}
