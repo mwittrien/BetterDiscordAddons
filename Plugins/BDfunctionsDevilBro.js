@@ -49,11 +49,12 @@ BDfunctionsDevilBro.searchKeyInReact = function (ele, key, value) {
 	return null;
 };
 
-BDfunctionsDevilBro.getRec = function (node,b,c) {
-	var a = BDfunctionsDevilBro.getReactInstance(node);
-	if (!a) return null;
+BDfunctionsDevilBro.getRec = function (node, searchedKey, searchedValue) {
+	if (!node || !searchedKey) return null;
+	var inst = BDfunctionsDevilBro.getReactInstance(node);
+	if (!inst) return null;
 	// to avoid endless loops (parentnode > childnode > parentnode ...)
-	var objectWhiteList = {
+	var keyWhiteList = {
 		"_currentElement":true,
 		"_owner":true,
 		"_instance":true,
@@ -67,23 +68,27 @@ BDfunctionsDevilBro.getRec = function (node,b,c) {
 		"memoizedProps":true,
 		"memoizedState":true
 	};
-	if (c === undefined) c = 10;
-	return rec(a,b,c);
+	
+	return rec(inst);
 
-	function rec (a,b,c) {
-		if (c > 0) {
-			var keys = Object.keys(a);
-			var result = null;
-			for (var i = 0; result === null && i < keys.length; i++) {
-				if (keys[i] === b) {
-					result = a[keys[i]];
-				}
-				else if (typeof a[keys[i]] === "object" && objectWhiteList[keys[i]]) {
-					result = rec(a[keys[i]],b,c--);
-				}
+	function rec (ele) {
+		var keys = Object.keys(ele);
+		var result = null;
+		for (var i = 0; result === null && i < keys.length; i++) {
+			var key = keys[i];
+			var value = ele[keys[i]];
+			
+			if (searchedKey === key && searchedValue === undefined) {
+				result = value;
 			}
-			return result;
+			else if (searchedKey === key && searchedKey === value) {
+				result = value;
+			}
+			else if (typeof value === "object" && keyWhiteList[key]) {
+				result = rec(value);
+			}
 		}
+		return result;
 	}
 };
 	
