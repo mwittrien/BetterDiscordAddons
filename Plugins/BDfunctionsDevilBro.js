@@ -50,6 +50,7 @@ BDfunctionsDevilBro.searchKeyInReact = function (ele, key, value) {
 };
 
 BDfunctionsDevilBro.getRec = function (node, searchedKey, searchedValue) {
+	console.log("update");
 	if (!node || !searchedKey) return null;
 	var inst = BDfunctionsDevilBro.getReactInstance(node);
 	if (!inst) return null;
@@ -71,6 +72,7 @@ BDfunctionsDevilBro.getRec = function (node, searchedKey, searchedValue) {
 	
 	return rec(inst);
 
+	
 	function rec (ele) {
 		if (!ele) return null;
 		console.log(ele);
@@ -86,7 +88,7 @@ BDfunctionsDevilBro.getRec = function (node, searchedKey, searchedValue) {
 			if (searchedKey === key && (searchedValue === undefined || searchedValue === value)) {
 				result = value;
 			}
-			else if (typeof value === "object" && (key.charAt(0) == "." || !isNaN(key.charAt(0)) || keyWhiteList[key])) {
+			else if (typeof value === "object" && (key.toString().charAt(0) == "." || !isNaN(key.toString().charAt(0)) || keyWhiteList[key])) {
 				result = rec(value);
 			}
 		}
