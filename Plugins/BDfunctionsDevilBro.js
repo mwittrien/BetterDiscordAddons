@@ -20,6 +20,9 @@ BDfunctionsDevilBro.loadMessage = function (pluginName, oldVersion) {
 							console.log("Download it on: " + downloadUrl);
 							break;
 						}
+						else if (newNmbrs[i] < oldNmbrs[i]) {
+							break;
+						}
 					}
 				}
 			}
