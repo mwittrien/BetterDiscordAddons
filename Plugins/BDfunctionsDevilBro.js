@@ -38,7 +38,8 @@ BDfunctionsDevilBro.getKeyInformation = function (config) {
 		"children":true,
 		"type":true,
 		"memoizedProps":true,
-		"memoizedState":true
+		"memoizedState":true,
+		"firsEffect":true
 	};
 	
 	var keyBlackList = typeof config.blackList === "object" ? config.blackList : {
