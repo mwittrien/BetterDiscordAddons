@@ -25,6 +25,8 @@ BDfunctionsDevilBro.getKeyInformation = function (config) {
 	
 	
 	// to avoid endless loops (parentnode > childnode > parentnode ...)
+	var maxDepth = config.depth === undefined ? 50 : config.depth;
+		
 	var keyWhiteList = typeof config.whiteList === "object" ? config.whiteList : {
 		"_currentElement":true,
 		"_renderedChildren":true,
@@ -48,8 +50,8 @@ BDfunctionsDevilBro.getKeyInformation = function (config) {
 	
 	return searchKeyInReact(inst);
 
-	function searchKeyInReact (ele) {
-		if (!ele) return null;
+	function searchKeyInReact (ele, depth) {
+		if (!ele || depth > maxDepth) return null;
 		var keys = Object.keys(ele);
 		var result = null;
 		for (var i = 0; result === null && i < keys.length; i++) {
@@ -60,7 +62,7 @@ BDfunctionsDevilBro.getKeyInformation = function (config) {
 				result = value;
 			}
 			else if ((typeof value === "object" || typeof value === "function") && ((keyWhiteList[key] && !keyBlackList[key]) || key[0] == "." || !isNaN(key[0]))) {
-				result = searchKeyInReact(value);
+				result = searchKeyInReact(value, depth++);
 			}
 		}
 		return result;
