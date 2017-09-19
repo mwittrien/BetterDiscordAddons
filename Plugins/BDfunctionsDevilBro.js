@@ -87,7 +87,7 @@ BDfunctionsDevilBro.readUnreadServerList = function (servers) {
 	
 BDfunctionsDevilBro.readChannelList = function () {
 	var foundChannels = [];
-	var channels = document.getElementsByClassName(".containerDefault-7RImuF");
+	var channels = $(".containerDefault-7RImuF");
 	for (var i = 0; i < channels.length; i++) {
 		var channelData = BDfunctionsDevilBro.getKeyInformation(channels[i], "channel");
 		if (channelData) {
@@ -119,7 +119,6 @@ BDfunctionsDevilBro.getDivOfChannel = function (channelID, serverID) {
 	var channels = BDfunctionsDevilBro.readChannelList();
 	for (var i = 0; i < channels.length; i++) {
 		var data = BDfunctionsDevilBro.getKeyInformation(channels[i], "channel");
-		console.log(data);
 		if (data) {
 			if (channelID == data.id && serverID == data.guild_id) {
 				return channels[i];
