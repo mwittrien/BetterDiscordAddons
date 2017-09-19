@@ -48,6 +48,12 @@ BDfunctionsDevilBro.getKeyInformation = function (node, searchedKey, searchedVal
 			var value = ele[keys[i]];
 			
 			if (searchedKey === key && (searchedValue === undefined || searchedValue === value)) {
+				console.log("key");
+				console.log(key);
+				console.log(key.toString());
+				console.log("value");
+				console.log(value);
+				console.log(value.toString());
 				result = value;
 			}
 			else if ((typeof value === "object" || typeof value === "function") && (keyWhiteList[key] || key[0] == "." || !isNaN(key[0]))) {
@@ -231,15 +237,9 @@ BDfunctionsDevilBro.clearReadNotifications = function (servers) {
 	servers.forEach(
 			(server,i) => {
 				setTimeout(() => {
-					console.log(server);
 					var handleContextMenu = BDfunctionsDevilBro.getKeyInformation(server.firstElementChild, "handleContextMenu");
-					console.log(server.firstElementChild);
 					
 					if (handleContextMenu) {
-						console.log("handleContextMenu");
-						console.log(handleContextMenu);
-						console.log("handleContextMenu.toString()");
-						console.log(handleContextMenu.toString());
 						var data = {
 							preventDefault: a=>a,
 							stopPropagation: a=>a,
