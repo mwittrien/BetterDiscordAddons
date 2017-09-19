@@ -1,4 +1,4 @@
-# NotificationSounds - [Download](https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/NotificationSounds/NotificationSounds.plugin.js)
+# Notification Sounds - [Download](https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/NotificationSounds/NotificationSounds.plugin.js)
 
 Plays a song when you get a direct message or are mentioned in a server.
 You can choose a song for either in the settings menu. "None" will mute the notifications.
