@@ -229,10 +229,10 @@ BDfunctionsDevilBro.clearReadNotifications = function (servers) {
 	servers.forEach(
 			(server,i) => {
 				setTimeout(() => {
+					console.log(server);
 					var handleContextMenu = BDfunctionsDevilBro.getKeyInformation(server.firstElementChild, "handleContextMenu");
 					
 					if (handleContextMenu) {
-						console.log(server);
 						console.log(handleContextMenu);
 						var data = {
 							preventDefault: a=>a,
