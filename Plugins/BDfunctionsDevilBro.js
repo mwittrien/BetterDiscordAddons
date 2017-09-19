@@ -71,7 +71,7 @@ BDfunctionsDevilBro.readServerList = function () {
 	var foundServers = [];
 	var servers = $(".guild");
 	for (var i = 0; i < servers.length; i++) {
-		var serverData = BDfunctionsDevilBro.getKeyInformation(servers[i], "guild");
+		var serverData = BDfunctionsDevilBro.getKeyInformation({"node":servers[i], "key":"guild"});
 		if (serverData) {
 			foundServers.push(servers[i]);
 		}
@@ -83,7 +83,7 @@ BDfunctionsDevilBro.readUnreadServerList = function (servers) {
 	if (servers === undefined) servers = BDfunctionsDevilBro.readServerList();
 	var foundServers = [];
 	for (var i = 0; i < servers.length; i++) {
-		var serverData = BDfunctionsDevilBro.getKeyInformation(servers[i], "guild");
+		var serverData = BDfunctionsDevilBro.getKeyInformation({"node":servers[i], "key":"guild"});
 		if (serverData) {
 			if (servers[i].classList.contains("unread") || $(servers[i]).find(".badge")[0]) {
 				foundServers.push(servers[i]);
@@ -97,7 +97,7 @@ BDfunctionsDevilBro.readChannelList = function () {
 	var foundChannels = [];
 	var channels = $(".containerDefault-7RImuF");
 	for (var i = 0; i < channels.length; i++) {
-		var channelData = BDfunctionsDevilBro.getKeyInformation(channels[i], "channel");
+		var channelData = BDfunctionsDevilBro.getKeyInformation({"node":channels[i], "key":"channel"});
 		if (channelData) {
 			foundChannels.push(channels[i]);
 		}
@@ -116,7 +116,7 @@ BDfunctionsDevilBro.getDivOfServer = function (id) {
 };
 	
 BDfunctionsDevilBro.getIdOfServer = function (server) {
-	var serverData = BDfunctionsDevilBro.getKeyInformation(server, "guild");
+	var serverData = BDfunctionsDevilBro.getKeyInformation({"node":server, "key":"guild"});
 	if (serverData) {
 		return serverData.id;
 	}
@@ -126,9 +126,9 @@ BDfunctionsDevilBro.getIdOfServer = function (server) {
 BDfunctionsDevilBro.getDivOfChannel = function (channelID, serverID) {
 	var channels = BDfunctionsDevilBro.readChannelList();
 	for (var i = 0; i < channels.length; i++) {
-		var data = BDfunctionsDevilBro.getKeyInformation(channels[i], "channel");
-		if (data) {
-			if (channelID == data.id && serverID == data.guild_id) {
+		var channelData = BDfunctionsDevilBro.getKeyInformation({"node":channels[i], "key":"channel"});
+		if (channelData) {
+			if (channelID == channelData.id && serverID == channelData.guild_id) {
 				return channels[i];
 			}
 		}
@@ -231,7 +231,6 @@ BDfunctionsDevilBro.sortArrayByKey = function (array, key, except) {
 	});
 };
 
-// FUNCTION CHECK TOSTRING
 BDfunctionsDevilBro.clearReadNotifications = function (servers) {
 	if (!servers) return;
 	servers = Array.isArray(servers) ? servers : Array.of(servers);
