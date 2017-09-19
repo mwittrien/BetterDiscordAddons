@@ -235,6 +235,7 @@ BDfunctionsDevilBro.clearReadNotifications = function (servers) {
 					
 					if (handleContextMenu) {
 						console.log(handleContextMenu);
+						console.log(JSON.stringify(handleContextMenu));
 						var data = {
 							preventDefault: a=>a,
 							stopPropagation: a=>a,
