@@ -51,7 +51,7 @@ BDfunctionsDevilBro.getKeyInformation = function (config) {
 	// to avoid endless loops (parentnode > childnode > parentnode ...)
 	var maxDepth = config.depth === undefined ? 30 : config.depth;
 		
-	var keyWhiteList = typeof config.whiteList === "object" ? config.whiteList : {
+	var keyWhiteList = {
 		"_currentElement":true,
 		"_renderedChildren":true,
 		"_instance":true,
@@ -68,6 +68,8 @@ BDfunctionsDevilBro.getKeyInformation = function (config) {
 		"child":true,
 		"firstEffect":true
 	};
+	
+	if (typeof config.whiteList === "object") Object.assign(keyWhiteList, config.whiteList);
 	
 	var keyBlackList = typeof config.blackList === "object" ? config.blackList : {
 	};
