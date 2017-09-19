@@ -25,7 +25,7 @@ BDfunctionsDevilBro.getKeyInformation = function (config) {
 	
 	
 	// to avoid endless loops (parentnode > childnode > parentnode ...)
-	var keyWhiteList = typeof config.keyWhiteList === "object" ? config.keyWhiteList : {
+	var keyWhiteList = typeof config.whiteList === "object" ? config.whiteList : {
 		"_currentElement":true,
 		"_renderedChildren":true,
 		"_instance":true,
@@ -41,7 +41,7 @@ BDfunctionsDevilBro.getKeyInformation = function (config) {
 		"memoizedState":true
 	};
 	
-	var keyBlackList = typeof config.keyBlackList === "object" ? config.keyBlackList : {
+	var keyBlackList = typeof config.blackList === "object" ? config.blackList : {
 	};
 	
 	return searchKeyInReact(inst);
@@ -237,7 +237,8 @@ BDfunctionsDevilBro.clearReadNotifications = function (servers) {
 	servers.forEach(
 			(server,i) => {
 				setTimeout(() => {
-					var handleContextMenu = BDfunctionsDevilBro.getKeyInformation(server.firstElementChild, "handleContextMenu");
+					var contextType = BDfunctionsDevilBro.getKeyInformation({"node":server.firstElementChild, "key":"handleContextMenu", "blackList":{"_owner":true}});
+					var handleContextMenu = BDfunctionsDevilBro.getKeyInformation(, "handleContextMenu");
 					
 					if (handleContextMenu) {
 						var data = {
@@ -252,7 +253,7 @@ BDfunctionsDevilBro.clearReadNotifications = function (servers) {
 						
 						for (var i = 0; contextentries.length > i; i++) {
 							var ele = contextentries[i];
-							var contextType = BDfunctionsDevilBro.getKeyInformation(ele, "displayName", "GuildMarkReadItem");
+							var contextType = BDfunctionsDevilBro.getKeyInformation({"node":ele, "key":"displayName", "value":"GuildMarkReadItem"});
 							if (contextType) {
 								ele.firstElementChild.click();
 								break;
