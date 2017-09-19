@@ -120,14 +120,13 @@ BDfunctionsDevilBro.readUnreadServerList = function (servers) {
 	return foundServers;
 };
 	
-	
 BDfunctionsDevilBro.readDmList = function () {
 	var foundDMs = [];
 	var dms = $(".dms .guild");
 	for (var i = 0; i < dms.length; i++) {
 		var dmData = BDfunctionsDevilBro.getKeyInformation({"node":dms[i], "key":"channel"});
 		if (dmData) {
-			foundDMs.push(servers[i]);
+			foundDMs.push(dms[i]);
 		}
 	}
 	return foundDMs;
