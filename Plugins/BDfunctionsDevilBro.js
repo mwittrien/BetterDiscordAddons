@@ -16,15 +16,16 @@ BDfunctionsDevilBro.getReactInstance = function (node) {
 	return node[Object.keys(node).find((key) => key.startsWith("__reactInternalInstance"))];
 };
 
-BDfunctionsDevilBro.getKeyInformation = function (node, searchedKey, settings) {
-	if (!node || !searchedKey) return null;
-	var inst = BDfunctionsDevilBro.getReactInstance(node);
+BDfunctionsDevilBro.getKeyInformation = function (settings) {
+	if (settings === undefined) return null;
+	if (settings.node === undefined || settings.key === undefined) return null;
+	
+	var inst = BDfunctionsDevilBro.getReactInstance(settings.node);
 	if (!inst) return null;
 	
-	if (settings === undefined) settings = {};
 	
 	// to avoid endless loops (parentnode > childnode > parentnode ...)
-	var keyWhiteList = typeof settings.keyWhiteList === "object" ? settings.keyWhiteList : {
+	var keyWhiteList = typeof config.keyWhiteList === "object" ? config.keyWhiteList : {
 		"_currentElement":true,
 		"_renderedChildren":true,
 		"_instance":true,
@@ -40,7 +41,7 @@ BDfunctionsDevilBro.getKeyInformation = function (node, searchedKey, settings) {
 		"memoizedState":true
 	};
 	
-	var keyBlackList = typeof settings.keyBlackList === "object" ? settings.keyBlackList : {
+	var keyBlackList = typeof config.keyBlackList === "object" ? config.keyBlackList : {
 	};
 	
 	return searchKeyInReact(inst);
@@ -53,7 +54,7 @@ BDfunctionsDevilBro.getKeyInformation = function (node, searchedKey, settings) {
 			var key = keys[i];
 			var value = ele[keys[i]];
 			
-			if (searchedKey === key && (settings.searchedValue === undefined || settings.searchedValue === value)) {
+			if (config.key === key && (config.value === undefined || config.value === value)) {
 				result = value;
 			}
 			else if ((typeof value === "object" || typeof value === "function") && ((keyWhiteList[key] && !keyBlackList[key]) || key[0] == "." || !isNaN(key[0]))) {
