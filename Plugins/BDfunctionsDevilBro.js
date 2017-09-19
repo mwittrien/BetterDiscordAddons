@@ -2,18 +2,9 @@ var BDfunctionsDevilBro = {};
 	
 BDfunctionsDevilBro.loadMessage = function (pluginName, pluginVersion) { 
 	console.log(pluginName + " Version: " + pluginVersion + " loaded.");
-};
-	
-BDfunctionsDevilBro.fatalMessage = function (pluginName) { 
-	console.error(pluginName + ": Fatal Error: Could not load BD functions!");
-};
-	
-BDfunctionsDevilBro.translateMessage = function (pluginName) { 
-	console.log(pluginName + ": Changed plugin language to: " + BDfunctionsDevilBro.getDiscordLanguage().lang);
-};
-
-BDfunctionsDevilBro.updateMessage = function (pluginName, pluginUrl, oldVersion) {
-	$.get(pluginUrl, (script) => {
+	var rawUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
+	var downloadUrl = "https://github.com/mwittrien/BetterDiscordAddons/blob/master/Plugins/" + pluginName;
+	$.get(rawUrl, (script) => {
 		if (script) {
 			script = script.split('getVersion () {return "')[1];
 			if (script) {
@@ -24,7 +15,7 @@ BDfunctionsDevilBro.updateMessage = function (pluginName, pluginUrl, oldVersion)
 					for (var i = 0; i < oldNmbrs.length; i++) {
 						if (newNmbrs[i] > oldNmbrs[i]) {
 							console.log(pluginName + ": Your version " + oldVersion + " is outdated. Newest version: " + newVersion);
-							console.log("Download it on: https://github.com/mwittrien/BetterDiscordAddons/blob/master/Plugins/" + pluginName);
+							console.log("Download it on: " + downloadUrl);
 							break;
 						}
 					}
@@ -32,7 +23,15 @@ BDfunctionsDevilBro.updateMessage = function (pluginName, pluginUrl, oldVersion)
 			}
 		}
 	});
-}
+};
+	
+BDfunctionsDevilBro.fatalMessage = function (pluginName) { 
+	console.error(pluginName + ": Fatal Error: Could not load BD functions!");
+};
+	
+BDfunctionsDevilBro.translateMessage = function (pluginName) { 
+	console.log(pluginName + ": Changed plugin language to: " + BDfunctionsDevilBro.getDiscordLanguage().lang);
+};
 	
 BDfunctionsDevilBro.getReactInstance = function (node) { 
 	return node[Object.keys(node).find((key) => key.startsWith("__reactInternalInstance"))];
