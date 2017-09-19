@@ -1,7 +1,7 @@
 var BDfunctionsDevilBro = {};
 	
-BDfunctionsDevilBro.loadMessage = function (pluginName) { 
-	console.log(pluginName + ": Loaded.");
+BDfunctionsDevilBro.loadMessage = function (pluginName, pluginVersion) { 
+	console.log(pluginName + " Version: " + pluginVersion + " loaded.");
 };
 	
 BDfunctionsDevilBro.fatalMessage = function (pluginName) { 
@@ -25,7 +25,7 @@ BDfunctionsDevilBro.getKeyInformation = function (config) {
 	
 	
 	// to avoid endless loops (parentnode > childnode > parentnode ...)
-	var maxDepth = config.depth === undefined ? 50 : config.depth;
+	var maxDepth = config.depth === undefined ? 30 : config.depth;
 		
 	var keyWhiteList = typeof config.whiteList === "object" ? config.whiteList : {
 		"_currentElement":true,
