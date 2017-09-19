@@ -157,8 +157,6 @@ class NotificationSounds {
 				}
 			);
 			
-			this.saveAllSongs();
-			
 			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
 		}
 		else {
@@ -234,17 +232,4 @@ class NotificationSounds {
 		}
 		bdPluginStorage.set("NotificationSounds", "settings", settings);
     }
-	
-	saveAllSongs () {
-		var songs = bdPluginStorage.get(this.getName(), "songs") ? bdPluginStorage.get(this.getName(), "songs") : {};
-		
-		this.audios.forEach((ele) => {
-			var song = Object.keys(ele)[0];
-			var url = ele[song];
-			
-			songs[song] = url;
-		});
-		
-		bdPluginStorage.set(this.getName(), "songs", songs);
-	}
 }
