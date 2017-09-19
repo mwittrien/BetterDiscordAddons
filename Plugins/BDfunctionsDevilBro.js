@@ -39,6 +39,7 @@ BDfunctionsDevilBro.getKeyInformation = function (config) {
 		"type":true,
 		"memoizedProps":true,
 		"memoizedState":true,
+		"child":true,
 		"firsEffect":true
 	};
 	
