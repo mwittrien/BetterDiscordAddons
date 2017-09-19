@@ -24,8 +24,6 @@ BDfunctionsDevilBro.getKeyInformation = function (node, searchedKey, searchedVal
 	// to avoid endless loops (parentnode > childnode > parentnode ...)
 	var keyWhiteList = {
 		"_currentElement":true,
-		"_owner":true,
-		"_instance":true,
 		"_renderedChildren":true,
 		"props":true,
 		"state":true,
