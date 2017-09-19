@@ -43,8 +43,6 @@ BDfunctionsDevilBro.getKeyInformation = function (config) {
 		"firsEffect":true
 	};
 	
-	console.log(keyWhiteList);
-	
 	var keyBlackList = typeof config.blackList === "object" ? config.blackList : {
 	};
 	
