@@ -237,8 +237,7 @@ BDfunctionsDevilBro.clearReadNotifications = function (servers) {
 	servers.forEach(
 			(server,i) => {
 				setTimeout(() => {
-					var contextType = BDfunctionsDevilBro.getKeyInformation({"node":server.firstElementChild, "key":"handleContextMenu", "blackList":{"_owner":true}});
-					var handleContextMenu = BDfunctionsDevilBro.getKeyInformation(, "handleContextMenu");
+					var handleContextMenu = BDfunctionsDevilBro.getKeyInformation({"node":server.firstElementChild, "key":"handleContextMenu", "blackList":{"_owner":true}});
 					
 					if (handleContextMenu) {
 						var data = {
