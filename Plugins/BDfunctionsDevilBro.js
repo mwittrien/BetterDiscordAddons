@@ -13,8 +13,6 @@ BDfunctionsDevilBro.loadMessage = function (pluginName, oldVersion) {
 				var newNmbrs = newVersion.split(".").map(Number); 
 				if (oldNmbrs.length == newNmbrs.length) {
 					for (var i = 0; i < oldNmbrs.length; i++) {
-						console.log("O: " + oldNmbrs[i]);
-						console.log("N: " + newNmbrs[i]);
 						if (newNmbrs[i] > oldNmbrs[i]) {
 							console.log(pluginName + ": Your version " + oldVersion + " is outdated. Newest version: " + newVersion);
 							console.log("Download it on: " + downloadUrl);
