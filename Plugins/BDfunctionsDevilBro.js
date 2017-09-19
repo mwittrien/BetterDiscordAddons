@@ -76,7 +76,7 @@ BDfunctionsDevilBro.getKeyInformation = function (config) {
 
 	function searchKeyInReact (ele, depth) {
 		if (!ele || depth > maxDepth) return null;
-		var keys = Object.keys(ele);
+		var keys = Object.getOwnPropertyNames(ele);
 		var result = null;
 		for (var i = 0; result === null && i < keys.length; i++) {
 			var key = keys[i];
