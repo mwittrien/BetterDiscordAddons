@@ -2,17 +2,17 @@
 
 class EmojiStatistics {
 	constructor () {
-		
 		this.labels = {};
-		this.emojiPickerObserver;
+		
+		this.emojiPickerObserver = new MutationObserver(() => {});
+		
 		this.emojiToServerList = {};
-		this.emojiCount = {};
+		this.emojiReplicaList = {};
+		
 		this.emojiInformation;
 		this.serverInformation;
 		
 		this.css = `
-			<style class='emojistatistics'>
-			
 			#emojistatistics-scrolldiv::-webkit-scrollbar {
 				width: 12px;
 			}
@@ -198,17 +198,14 @@ class EmojiStatistics {
 				height: 22px;
 				margin-right: 10px;
 				width: 22px;
-			}
-
-			'</style>
-		`;
+			}`;
 
 		this.emojiInformationModalMarkup =
 			`<span class="emojistatistics-modal">
 				<div class="callout-backdrop" style="background-color:#000; opacity:0.85"></div>
 				<div class="modal" style="opacity: 1">
 					<div class="modal-inner">
-						<form class="form">
+						<div class="form">
 							<div class="form-header">
 								<header class="modal-header">REPLACE_modal_header_text</header>
 							</div>
@@ -255,71 +252,65 @@ class EmojiStatistics {
 	getAuthor () {return "DevilBro";}
 
     getSettingsPanel () {
-		return `<input type="checkbox" onchange="EmojiStatistics.updateSettings(this.parentNode)" value="enableEmojiHovering"${(EmojiStatistics.getSettings().enableEmojiHovering ? " checked" : void 0)}> Show emojiinformation when hovering over an emoji in the emojipicker.<br>\n<input type="checkbox" onchange="EmojiStatistics.updateSettings(this.parentNode)" value="enableEmojiStatisticsButton"${(EmojiStatistics.getSettings().enableEmojiStatisticsButton ? " checked" : void 0)}> Add a button in the emojipicker to open statistics overview.<br>`;
+		return `<input type="checkbox" onchange="EmojiStatistics.updateSettings(this.parentNode)" value="enableEmojiHovering"${(this.getSettings().enableEmojiHovering ? " checked" : void 0)}> Show emojiinformation when hovering over an emoji in the emojipicker.<br>\n<input type="checkbox" onchange="EmojiStatistics.updateSettings(this.parentNode)" value="enableEmojiStatisticsButton"${(this.getSettings().enableEmojiStatisticsButton ? " checked" : void 0)}> Add a button in the emojipicker to open statistics overview.<br>`;
     }
 
 	//legacy
 	load () {}
 
 	start () {
-		this.emojiPickerObserver = new MutationObserver((changes, _) => {
-			changes.forEach(
-				(change, i) => {
-					if (change.addedNodes) {
-						change.addedNodes.forEach((node) => {
-							if ($(node).find('.emoji-item')) {
-								if (EmojiStatistics.getSettings().enableEmojiHovering) {this.hoverEmoji();}
-							}
-							var inst = that.getReactInstance(node);
-							if (inst) {
-								var curEle = inst._currentElement;
-								if (curEle && curEle.props && curEle.props.children) {
-									var children = Array.isArray(curEle.props.children) ? curEle.props.children : [curEle.props.children];
-									children.forEach((child,i) => {
-										if (child && child.type && child.type.displayName && child.type.displayName == "EmojiPicker") {
-											this.loadEmojiList();
-											if (EmojiStatistics.getSettings().enableEmojiStatisticsButton) {this.addEmojiInformationButton();}
-										}
-									});
+		if ($('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').length == 0) {
+			$('head').append("<script src='https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
+		}
+		if (typeof BDfunctionsDevilBro === "object") {
+			this.emojiPickerObserver = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.addedNodes) {
+							change.addedNodes.forEach((node) => {
+								if ($(node).find('.emoji-item')) {
+									if (this.getSettings().enableEmojiHovering) {this.hoverEmoji();}
 								}
-							}
-						});
+								
+								if (BDfunctionsDevilBro.getKeyInformation({"node":node, "key":"displayName", "value":"EmojiPicker"}) && $(".emojistatistics-button").length == 0) {
+									this.loadEmojiList();
+									if (this.getSettings().enableEmojiStatisticsButton) {this.addEmojiInformationButton();}
+								}
+							});
+						}
 					}
-				}
-			);
-		});
-		this.emojiPickerObserver.observe($("#app-mount>:first-child")[0], {childList: true, subtree: true});
+				);
+			});
+			this.emojiPickerObserver.observe($("#app-mount>:first-child")[0], {childList: true, subtree: true});
+			
+			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 		
-		$('head').append(this.css);
-		
-		var that = this;
-		setTimeout(function() {
-			that.labels = that.setLabelsByLanguage();
-			that.changeLanguageStrings();
-		},5000);
+			setTimeout(() => {
+				this.labels = this.setLabelsByLanguage();
+				this.changeLanguageStrings();
+			},5000);
+			
+			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
+		}
+		else {
+			BDfunctionsDevilBro.fatalMessage(this.getName());
+		}
 	}
 
 	stop () {
 		this.emojiPickerObserver.disconnect();
-		$('.emojistatistics').remove();
+		
+		BDfunctionsDevilBro.removeLocalStyle(this.getName());
 	}
 	
 	// begin of own functions
-
-	getReactInstance (node) { 
-		return node[Object.keys(node).find((key) => key.startsWith("__reactInternalInstance"))];
-	}
-
-	getReactObject (node) { 
-		return ((inst) => (inst._currentElement._owner._instance))(this.getReactInstance(node));
-	}
 	
-	static getSettings () {
+	getSettings () {
 		var defaultSettings = {
 			enableEmojiHovering: true,
 			enableEmojiStatisticsButton: true
 		};
-		var settings = bdPluginStorage.get("EmojiStatistics", "settings");
+		var settings = bdPluginStorage.get(this.getName(), "settings");
 		if (settings == null) {
 			settings = {};
 		}
@@ -331,7 +322,7 @@ class EmojiStatistics {
 			}
 		}
 		if (saveSettings) {
-			bdPluginStorage.set("EmojiStatistics", "settings", settings);
+			bdPluginStorage.set(this.getName(), "settings", settings);
 		}
 		return settings;
 	}
@@ -356,42 +347,43 @@ class EmojiStatistics {
 		this.emojiserverTitlesMarkup = 		this.emojiserverTitlesMarkup.replace("REPLACE_modal_titlesglobal_text", this.labels.modal_titlesglobal_text);
 		this.emojiserverTitlesMarkup = 		this.emojiserverTitlesMarkup.replace("REPLACE_modal_titleslocal_text", this.labels.modal_titleslocal_text);
 		this.emojiserverTitlesMarkup = 		this.emojiserverTitlesMarkup.replace("REPLACE_modal_titlesreplicate_text", this.labels.modal_titlesreplicate_text);
+		
+		BDfunctionsDevilBro.translateMessage(this.getName());
 	}
 	
 	loadEmojiList () {
-		var firstEmoji = document.getElementsByClassName("emoji-item")[0];
-		if (firstEmoji) {
-			var firstEmojiObj = this.getReactObject(firstEmoji);
-			var rows = firstEmojiObj.cachedMetaDataNoSearch;
+		var emojipicker = $(".emoji-picker")[0];
+		if (emojipicker) {
+			var rows = BDfunctionsDevilBro.getKeyInformation({"node":emojipicker, "key":"cachedMetaDataNoSearch"});
 			this.emojiInformation = rows;
-			var categories = firstEmojiObj.categories;
+			var categories = BDfunctionsDevilBro.getKeyInformation({"node":emojipicker, "key":"categories"});
 			this.serverInformation = categories;
-			var emojiReplicaList = {};
 			
-			for (var i = 0; i < rows.length; i++) {
-				var currentServer = rows[i].category;
-				if (currentServer.indexOf("custom") != -1){	
-					var emojis = rows[i].items;
-					for (var j = 0; j < emojis.length; j++) {
-						var emoji = emojis[j].emoji;
-						var emojiUrl = emoji.url;
-						var emojiName = emoji.allNamesString;
-						var emojiClearName = emojiName.split(":")[1].split("~")[0];
-						var serverName = this.getNameOfServer(currentServer, categories);
-						this.emojiToServerList[emojiUrl] = JSON.stringify({emojiName:emojiName,serverName:serverName});
-						if (emoji.managed) {
-							if (emojiReplicaList[emojiClearName] != undefined) {
-								emojiReplicaList[emojiClearName] = true;
-							}
-							else {
-								emojiReplicaList[emojiClearName] = false;
+			if (rows && categories) {
+				for (var i = 0; i < rows.length; i++) {
+					var currentServer = rows[i].category;
+					if (currentServer.indexOf("custom") != -1){	
+						var emojis = rows[i].items;
+						for (var j = 0; j < emojis.length; j++) {
+							var emoji = emojis[j].emoji;
+							var emojiUrl = emoji.url;
+							var emojiName = emoji.allNamesString;
+							var emojiClearName = emojiName.split(":")[1].split("~")[0];
+							var serverName = this.getNameOfServer(currentServer, categories);
+							this.emojiToServerList[emojiUrl] = {emojiName, serverName};
+							if (emoji.managed) {
+								if (this.emojiReplicaList[emojiClearName] != undefined) {
+									this.emojiReplicaList[emojiClearName] = true;
+								}
+								else {
+									this.emojiReplicaList[emojiClearName] = false;
+								}
 							}
 						}
 					}
 				}
 			}
 		}
-		this.emojiReplicaList = emojiReplicaList;
 	}
 	
 	addEmojiInformationButton () {
@@ -409,123 +401,118 @@ class EmojiStatistics {
 		});
 		$(".popout").hide();
 				
-		var servers = this.readServerList();
+		var servers = BDfunctionsDevilBro.readServerList();
 		
 		var rows = this.emojiInformation;
 		var categories = this.serverInformation;
 		
-		for (var i = 0; i < servers.length; i++) {
-			var data = this.getServerInformation(servers[i]);
-			if (data) {
-				var entry = $(this.emojiserverEntryMarkup);
-				if (data.icon) {
-					entry.find(".modal-emojiserver-icon").css("background-image", "url('https://cdn.discordapp.com/icons/" + data.id + "/" + data.icon + ".png')");
-				}
-				else {
-					entry.find(".modal-emojiserver-icon").text(servers[i].firstChild.innerText);
-				}
-				entry.find(".modal-emojiservername-label").text(data.name);
-				entry.find(".modal-emojiservername-label").attr("id", data.id);
-				
-				var currentServer = "";
-				var amountGlobal = 0;		
-				var amountLocal = 0;	
-				var amountReplicate = 0;
-				
-				for (var j = 0; j < rows.length; j++) {
-					var newServer = rows[j].category;
-					if (newServer.indexOf("custom") != -1) {	
-						if (currentServer == "" || currentServer == newServer) {
-							var serverName = this.getNameOfServer(newServer, categories);
-							if (serverName == data.name) {
-								currentServer = newServer;
-								var emojis = rows[j].items;
-								for (var k = 0; k < emojis.length; k++) {
-									var emoji = emojis[k].emoji;
-									var emojiName = emoji.allNamesString;
-									var emojiClearName = emojiName.split(":")[1].split("~")[0];
-									if (emoji.managed) {
-										amountGlobal++; 
-										if (this.emojiReplicaList[emojiClearName] == true) {
-											amountReplicate++;
-										} 
-									}
-									else {
-										amountLocal++; 
+		if (rows && categories) {
+			for (var i = 0; i < servers.length; i++) {
+				let data = BDfunctionsDevilBro.getKeyInformation({"node":servers[i], "key":"guild"});
+				if (data) {
+					var entry = $(this.emojiserverEntryMarkup);
+					if (data.icon) {
+						entry.find(".modal-emojiserver-icon").css("background-image", "url('https://cdn.discordapp.com/icons/" + data.id + "/" + data.icon + ".png')");
+					}
+					else {
+						entry.find(".modal-emojiserver-icon").text(servers[i].firstChild.innerText);
+					}
+					entry.find(".modal-emojiservername-label").text(data.name);
+					entry.find(".modal-emojiservername-label").attr("id", data.id);
+					
+					var currentServer = "";
+					var amountGlobal = 0;		
+					var amountLocal = 0;	
+					var amountReplicate = 0;
+					
+					for (var j = 0; j < rows.length; j++) {
+						var newServer = rows[j].category;
+						if (newServer.indexOf("custom") != -1) {	
+							if (currentServer == "" || currentServer == newServer) {
+								var serverName = this.getNameOfServer(newServer, categories);
+								if (serverName == data.name) {
+									currentServer = newServer;
+									var emojis = rows[j].items;
+									for (var k = 0; k < emojis.length; k++) {
+										var emoji = emojis[k].emoji;
+										var emojiName = emoji.allNamesString;
+										var emojiClearName = emojiName.split(":")[1].split("~")[0];
+										if (emoji.managed) {
+											amountGlobal++; 
+											if (this.emojiReplicaList[emojiClearName] == true) {
+												amountReplicate++;
+											} 
+										}
+										else {
+											amountLocal++; 
+										}
 									}
 								}
 							}
-						}
-						else {
-							break;
+							else {
+								break;
+							}
 						}
 					}
+					entry.find(".modal-emojitotal-label").text(amountGlobal+amountLocal);
+					entry.find(".modal-emojiglobal-label").text(amountGlobal);
+					entry.find(".modal-emojilocal-label").text(amountLocal);
+					entry.find(".modal-emojireplicate-label").text(amountReplicate);
+					entries.push({entry:entry, index:i, name:data.name, total:amountGlobal+amountLocal, global:amountGlobal, local:amountLocal, copies:amountReplicate});
 				}
-				entry.find(".modal-emojitotal-label").text(amountGlobal+amountLocal);
-				entry.find(".modal-emojiglobal-label").text(amountGlobal);
-				entry.find(".modal-emojilocal-label").text(amountLocal);
-				entry.find(".modal-emojireplicate-label").text(amountReplicate);
-				entries.push({entry:entry, index:i, name:data.name, total:amountGlobal+amountLocal, global:amountGlobal, local:amountLocal, copies:amountReplicate});
-			}
-		}
-		
-		var titleentry = $(this.emojiserverTitlesMarkup)
-		.on("click", ".modal-titlesservername-label,.modal-titlestotal-label,.modal-titlesglobal-label,.modal-titleslocal-label,.modal-titlesreplicate-label", (e) => {
-			var oldTitle = e.target.innerText;
-			var sortKey = "index";
-			var reverse = oldTitle.indexOf("▼") < 0 ? false : true;
-			
-			titleentry.find(".modal-titlesservername-label").text(this.labels.modal_titlesservername_text);
-			titleentry.find(".modal-titlestotal-label").text(this.labels.modal_titlestotal_text);
-			titleentry.find(".modal-titlesglobal-label").text(this.labels.modal_titlesglobal_text);
-			titleentry.find(".modal-titleslocal-label").text(this.labels.modal_titleslocal_text);
-			titleentry.find(".modal-titlesreplicate-label").text(this.labels.modal_titlesreplicate_text);
-			
-			if (oldTitle.indexOf("▲") < 0) {
-				var title = "";
-				switch (e.target.className) {
-					case "modal-titlesservername-label": 
-						title = this.labels.modal_titlesservername_text;
-						sortKey = "name";
-						break;
-					case "modal-titlestotal-label": 
-						title = this.labels.modal_titlestotal_text;
-						sortKey = "total";
-						break;
-					case "modal-titlesglobal-label": 
-						title = this.labels.modal_titlesglobal_text;
-						sortKey = "global";
-						break;
-					case "modal-titleslocal-label": 
-						title = this.labels.modal_titleslocal_text;
-						sortKey = "local";
-						break;
-					case "modal-titlesreplicate-label": 
-						title = this.labels.modal_titlesreplicate_text;
-						sortKey = "copies";
-						break;
-				}
-				e.target.innerText = oldTitle.indexOf("▼") < 0 ? title + "▼" : title + "▲";
 			}
 			
-			var sortedEntries = this.sortArrayByKey(entries, sortKey);
-			
-			if (reverse) {
-				sortedEntries.reverse();
-			}
-			
-			this.updateAllEntries(sortedEntries);
-		})
-		.appendTo(".form-titles");
+			var titleentry = $(this.emojiserverTitlesMarkup)
+			.on("click", ".modal-titlesservername-label,.modal-titlestotal-label,.modal-titlesglobal-label,.modal-titleslocal-label,.modal-titlesreplicate-label", (e) => {
+				var oldTitle = e.target.innerText;
+				var sortKey = "index";
+				var reverse = oldTitle.indexOf("▼") < 0 ? false : true;
 				
-		this.updateAllEntries(entries);
-	}
-	
-	sortArrayByKey (array, key) {
-		return array.sort(function(a, b) {
-			var x = a[key]; var y = b[key];
-			return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-		});
+				titleentry.find(".modal-titlesservername-label").text(this.labels.modal_titlesservername_text);
+				titleentry.find(".modal-titlestotal-label").text(this.labels.modal_titlestotal_text);
+				titleentry.find(".modal-titlesglobal-label").text(this.labels.modal_titlesglobal_text);
+				titleentry.find(".modal-titleslocal-label").text(this.labels.modal_titleslocal_text);
+				titleentry.find(".modal-titlesreplicate-label").text(this.labels.modal_titlesreplicate_text);
+				
+				if (oldTitle.indexOf("▲") < 0) {
+					var title = "";
+					switch (e.target.className) {
+						case "modal-titlesservername-label": 
+							title = this.labels.modal_titlesservername_text;
+							sortKey = "name";
+							break;
+						case "modal-titlestotal-label": 
+							title = this.labels.modal_titlestotal_text;
+							sortKey = "total";
+							break;
+						case "modal-titlesglobal-label": 
+							title = this.labels.modal_titlesglobal_text;
+							sortKey = "global";
+							break;
+						case "modal-titleslocal-label": 
+							title = this.labels.modal_titleslocal_text;
+							sortKey = "local";
+							break;
+						case "modal-titlesreplicate-label": 
+							title = this.labels.modal_titlesreplicate_text;
+							sortKey = "copies";
+							break;
+					}
+					e.target.innerText = oldTitle.indexOf("▼") < 0 ? title + "▼" : title + "▲";
+				}
+				
+				var sortedEntries = BDfunctionsDevilBro.sortArrayByKey(entries, sortKey);
+				
+				if (reverse) {
+					sortedEntries.reverse();
+				}
+				
+				this.updateAllEntries(sortedEntries);
+			})
+			.appendTo(".form-titles");
+					
+			this.updateAllEntries(entries);
+		}
 	}
 	
 	updateAllEntries (entries) {
@@ -545,7 +532,7 @@ class EmojiStatistics {
 					var emojiUrl = $(this).css("background-image");
 					emojiUrl = emojiUrl.replace("url(\"","").replace("\")","");
 					if (emojiToServerList[emojiUrl]){
-						var data = JSON.parse(emojiToServerList[emojiUrl]);
+						var data = emojiToServerList[emojiUrl];
 						var emojiName = data.emojiName;
 						var serverName = data.serverName;
 						$(this).attr("title", emojiName + "\n" + serverName);
@@ -556,56 +543,6 @@ class EmojiStatistics {
 				this.hovering = false;
 			}
 		);
-	}
-	
-	readServerList () {
-		var foundServers = [];
-		var servers = document.getElementsByClassName("guild");
-		for (var i = 0; i < servers.length; i++) {
-			var serverInst = this.getReactInstance(servers[i]);
-			if (serverInst && serverInst._currentElement && serverInst._currentElement._owner && serverInst._currentElement._owner._instance) {
-				var serverObj = serverInst._currentElement._owner._instance;
-				if (serverObj && serverObj.props && serverObj.props.guild) {
-					foundServers.push(servers[i]);
-				}
-			}
-		}
-		return foundServers;
-	}
-	
-	getServerInformation (server) {
-		var curEle = this.getReactInstance(server)._currentElement;
-		if (curEle) {
-			var serverInfo = this.checkForServerInformation(curEle); 
-			if (serverInfo.id) {
-				var {id, name, icon} = serverInfo;
-				return {id, name, icon};
-			}
-			else {
-				return null;
-			}
-		}
-		else {
-			return null;
-		}
-	}
-	
-	checkForServerInformation (ele) {
-		if (ele && ele.props && ele.props.guild){
-			return ele.props.guild;
-		}
-		else if (ele && ele.props && ele.props.children){
-			var children = Array.isArray(ele.props.children) ? ele.props.children : [ele.props.children];
-			var i;
-			var result = null;
-			for (i = 0; result == null && i < children.length; i++){
-				result = this.checkForServerInformation(children[i]);
-			}
-			return result;
-		}
-		else {
-			return null;
-		}
 	}
 	
 	getNameOfServer (server, categories) {
@@ -620,7 +557,7 @@ class EmojiStatistics {
 	}
 	
 	setLabelsByLanguage () {
-		switch (document.getElementsByTagName("html")[0].lang.split("-")[0]) {
+		switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
 			case "da": 		//danish
 				return {
 					modal_header_text: 				"Statistikker af emojis",
