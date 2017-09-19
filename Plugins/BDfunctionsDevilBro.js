@@ -271,7 +271,8 @@ BDfunctionsDevilBro.checkForNewPluginVersion = function (url, version) {
 }
 
 BDfunctionsDevilBro.getDiscordLanguage = function () {
-	switch ($("html").attr("lang").split("-")[0]) {
+	var lang = $("html").attr("lang").split("-")[0] ? $("html").attr("lang").split("-")[0] : "en";
+	switch (lang) {
 		case "da": 		//danish
 			return {"id":"da","lang":"danish"};
 		case "de": 		//german
