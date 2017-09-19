@@ -2,27 +2,28 @@
 
 class EditChannels {
 	constructor () {
+		this.labels = {};
 		
-		this.labels;
-		
-		this.channelObserver;
-		this.channelListObserver;
-		this.channelContextObserver;
+		this.channelObserver = new MutationObserver(() => {});
+		this.channelListObserver = new MutationObserver(() => {});
+		this.channelContextObserver = new MutationObserver(() => {});
     
 		this.css = `
-			<style class='editchannels'>
-
-			.pick-wrap {
+			.editchannels-modal .pick-wrap {
 				position: relative;
 				padding: 0;
 				margin: 0;
 			}
 
-			.pick-wrap .color-picker-popout {
+			.editchannels-modal .pick-wrap .color-picker-popout {
 				position: absolute;
 			}
 
-			.ui-color-picker-swatch1 {
+			.editchannels-modal [class^="swatch"] {
+				width: 430px;
+			}
+
+			.editchannels-modal [class^="ui-color-picker-swatch"] {
 				width: 22px;
 				height: 22px;
 				margin-bottom: 5px;
@@ -31,13 +32,13 @@ class EditChannels {
 				border-radius: 12px;
 			}
 
-			.ui-color-picker-swatch1.large {
+			.editchannels-modal [class^="ui-color-picker-swatch"].large {
 				min-width: 62px;
 				height: 62px;
 				border-radius: 25px;
 			}
 
-			.ui-color-picker-swatch1.nocolor {
+			.editchannels-modal [class^="ui-color-picker-swatch"].nocolor {
 				cursor: default;
 				line-height: 22px;
 				color: red;
@@ -171,9 +172,7 @@ class EditChannels {
 
 			.editchannels-modal .control-group {
 				margin-top: 10px;
-			}
-
-			'</style>`;
+			}`;
 
 		this.channelContextEntryMarkup =
 			`<div class="item-group">
@@ -202,7 +201,7 @@ class EditChannels {
 				<div class="callout-backdrop" style="background-color:#000; opacity:0.85"></div>
 				<div class="modal" style="opacity: 1">
 					<div class="modal-inner">
-						<form class="form">
+						<div class="form">
 							<div class="form-header">
 								<header class="modal-header">REPLACE_modal_header_text</header>
 							</div>
@@ -220,7 +219,7 @@ class EditChannels {
 							</div>
 							<div class="form-actions">
 								<button type="button" class="btn btn-cancel">REPLACE_btn_cancel_text</button>
-								<button type="submit" class="btn btn-save">REPLACE_btn_save_text</button>
+								<button type="button" class="btn btn-save">REPLACE_btn_save_text</button>
 							</div>
 						</form>
 					</div>
@@ -229,105 +228,125 @@ class EditChannels {
 
 		this.colourList = 
 			['rgb(26, 188, 156)','rgb(46, 204, 113)','rgb(52, 152, 219)','rgb(155, 89, 182)','rgb(233, 30, 99)','rgb(241, 196, 15)','rgb(230, 126, 34)','rgb(231, 76, 60)','rgb(149, 165, 166)','rgb(96, 125, 139)','rgb(99, 99, 99)',
-			'rgb(255, 255, 255)','rgb(17, 128, 106)','rgb(31, 139, 76)','rgb(32, 102, 148)','rgb(113, 54, 138)','rgb(173, 20, 87)','rgb(194, 124, 14)','rgb(168, 67, 0)','rgb(153, 45, 34)','rgb(151, 156, 159)','rgb(84, 110, 122)','rgb(44, 44, 44)'];
+			'rgb(254, 254, 254)','rgb(17, 128, 106)','rgb(31, 139, 76)','rgb(32, 102, 148)','rgb(113, 54, 138)','rgb(173, 20, 87)','rgb(194, 124, 14)','rgb(168, 67, 0)','rgb(153, 45, 34)','rgb(151, 156, 159)','rgb(84, 110, 122)','rgb(44, 44, 44)'];
 	}
 
 	getName () {return "EditChannels";}
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "2.0.0";}
+	getVersion () {return "3.0.0";}
 
 	getAuthor () {return "DevilBro";}
+	
+    getSettingsPanel () {
+		return `<button class=EditChannelsResetBtn" style="height:23px" onclick="EditChannels.resetAll()">Reset all Channels`;
+    }
 
 	//legacy
 	load () {}
 
 	start () {
-		this.channelObserver = new MutationObserver((changes, _) => {
-			changes.forEach(
-				(change, i) => {
-					if (change.attributeName == "class" && change.target && change.target.classList && change.target.classList.contains("name-2SL4ev")) {
-						this.loadChannel(change.target);
+		if ($('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').length == 0) {
+			$('head').append("<script src='https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
+		}
+		if (typeof BDfunctionsDevilBro === "object") {
+			this.channelObserver = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.attributeName == "class" && change.target && change.target.classList && change.target.classList.contains("wrapper-fDmxzK")) {
+							this.loadChannel(change.target.parentElement);
+						}
+						if (change.addedNodes) {
+							change.addedNodes.forEach((node) => {
+								if (node.classList && node.classList.contains("containerDefault-7RImuF")) {
+									this.loadChannel($(node));
+								}
+							});
+						}
 					}
-					if (change.addedNodes) {
-						change.addedNodes.forEach((node) => {
-							if (node.classList && node.classList.contains("containerDefault-7RImuF")) {
-								this.loadChannel($(node).find(".name-2SL4ev")[0]);
-							}
-						});
+				);
+			});
+			
+			this.channelListObserver = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.addedNodes) {
+							change.addedNodes.forEach((node) => {
+								 if (node && node.className && node.className.length > 0 && node.className.indexOf("container-") > -1) {
+									this.channelObserver.observe(node, {childList: true, attributes: true, subtree: true});
+									this.loadAllChannels();
+								} 
+							});
+						}
 					}
+				);
+			});
+			this.channelListObserver.observe($(".flex-vertical.channels-wrap")[0], {childList: true, subtree: true});
+			
+			$(".flex-vertical.channels-wrap .scroller-fzNley.scroller-NXV0-d [class^='container-']").each(
+				(i,category) => {
+					this.channelObserver.observe(category, {childList: true, attributes: true, subtree: true});
 				}
 			);
-		});
-		
-		this.channelListObserver = new MutationObserver((changes, _) => {
-			changes.forEach(
-				(change, i) => {
-					if (change.addedNodes) {
-						change.addedNodes.forEach((node) => {
-							 if (node && node.className && node.className.length > 0 && node.className.indexOf("container-") > -1) {
-								this.channelObserver.observe(node, {childList: true, attributes: true, subtree: true});
-								this.loadAllChannels();
-							} 
-						});
+			
+			this.channelContextObserver = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.addedNodes) {
+							change.addedNodes.forEach((node) => {
+								if (node.nodeType == 1 && node.className.includes("context-menu")) {
+									this.onContextMenu(node);
+								}
+							});
+						}
 					}
-				}
-			);
-		});
-		this.channelListObserver.observe($(".flex-vertical.channels-wrap")[0], {childList: true, subtree: true});
-		
-		$(".flex-vertical.channels-wrap .scroller-fzNley.scroller-NXV0-d [class^='container-']").each(
-			(i,category) => {
-				this.channelObserver.observe(category, {childList: true, attributes: true, subtree: true});
-			}
-		);
-		
-		this.channelContextObserver = new MutationObserver((changes, _) => {
-			changes.forEach(
-				(change, i) => {
-					if (change.addedNodes) {
-						change.addedNodes.forEach((node) => {
-							if (node.nodeType == 1 && node.className.includes("context-menu")) {
-								this.onContextMenu(node);
-							}
-						});
-					}
-				}
-			);
-		});
-		this.channelContextObserver.observe($("#app-mount>:first-child")[0], {childList: true});
-		
-		$('head').append(this.css)
-			.append("<script src='https://bgrins.github.io/spectrum/spectrum.js'></script>")
-			.append("<link rel='stylesheet' href='https://bgrins.github.io/spectrum/spectrum.css' />");
-		
-		this.loadAllChannels();
-								
-		var that = this;
-		setTimeout(function() {
-			that.labels = that.setLabelsByLanguage();
-			that.changeLanguageStrings();
-		},5000);
+				);
+			});
+			this.channelContextObserver.observe($(".tooltips").parent()[0], {childList: true});
+			
+			BDfunctionsDevilBro.appendWebScript("https://bgrins.github.io/spectrum/spectrum.js");
+			BDfunctionsDevilBro.appendWebStyle("https://bgrins.github.io/spectrum/spectrum.css");
+			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
+			
+			this.loadAllChannels();
+			
+			
+			setTimeout(() => {
+				this.labels = this.setLabelsByLanguage();
+				this.changeLanguageStrings();
+			},5000);
+			
+			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
+		}
+		else {
+			BDfunctionsDevilBro.fatalMessage(this.getName());
+		}
 	}
 
 	stop () {
 		this.channelObserver.disconnect();
 		this.channelListObserver.disconnect();
 		this.channelContextObserver.disconnect();
-		$(".editchannels").remove();
+		
+		BDfunctionsDevilBro.removeLocalStyle(this.getName());
 	}
 
 	
 	// begin of own functions
 
-	getReactInstance (node) { 
-		return node[Object.keys(node).find((key) => key.startsWith("__reactInternalInstance"))];
-	}
-
-	getReactObject (node) { 
-		return ((inst) => (inst._currentElement._owner._instance))(this.getReactInstance(node));
-	}
+    static resetAll () {
+		bdPluginStorage.set("EditChannels", "channels", {});
+		$(".containerDefault-7RImuF").each(
+			(i,channelDiv) => {
+				$(channelDiv).find(".name-2SL4ev.changed")
+					.text($(channelDiv).find(".name-2SL4ev.changed").attr("name"))
+					.attr("name", "")
+					.css("color", "")
+					.removeClass("changed");
+			}
+		);
+    }
 
 	changeLanguageStrings () {
 		this.channelContextEntryMarkup = 	this.channelContextEntryMarkup.replace("REPLACE_context_localsettings_text", this.labels.context_localsettings_text);
@@ -340,129 +359,132 @@ class EditChannels {
 		this.channelSettingsModalMarkup = 	this.channelSettingsModalMarkup.replace("REPLACE_modal_colorpicker1_text", this.labels.modal_colorpicker1_text);
 		this.channelSettingsModalMarkup = 	this.channelSettingsModalMarkup.replace("REPLACE_btn_cancel_text", this.labels.btn_cancel_text);
 		this.channelSettingsModalMarkup = 	this.channelSettingsModalMarkup.replace("REPLACE_btn_save_text", this.labels.btn_save_text);
+		
+		BDfunctionsDevilBro.translateMessage(this.getName());
 	}
 	
 	onContextMenu (context) {
-		var inst = this.getReactInstance(context);
-		if (!inst) return;
-		var ele = inst._currentElement;
-		if (ele.props && ele.props.children) {
-			var children = Array.isArray(ele.props.children) ? ele.props.children : [ele.props.children];
-			for (var i = 0; i < children.length; i++) {
-				if (children[i] && children[i].props && children[i].props.channel && children[i].type && children[i].type.displayName == "ChannelInviteCreateGroup") {
-					var { id, guild_id, name } = children[i].props.channel;
-					var data = { id, guild_id, name };
-					$(context).append(this.channelContextEntryMarkup)
-						.on("mouseenter", ".localsettings-item", data, this.createContextSubMenu.bind(this))
-						.on("mouseleave", ".localsettings-item", data, this.deleteContextSubMenu.bind(this));
-					break;
-				}
-			}
+		var channelData = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"channel"});
+		var contextType = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"ChannelInviteCreateGroup"});
+		
+		if (channelData && contextType) {
+			var { id, guild_id, name } = channelData;
+			var info = { id, guild_id, name };
+			$(context).append(this.channelContextEntryMarkup)
+				.on("mouseenter", ".localsettings-item", info, this.createContextSubMenu.bind(this))
+				.on("mouseleave", ".localsettings-item", info, this.deleteContextSubMenu.bind(this));
 		}
 	}
 	
 	createContextSubMenu (e) {
 		var { id, guild_id, name } = e.data;
-		var data = { id, guild_id, name };
+		var info = { id, guild_id, name };
 		
-		var theme = this.themeIsLightTheme() ? "" : "theme-dark";
+		var theme = BDfunctionsDevilBro.themeIsLightTheme() ? "" : "theme-dark";
 		
 		var targetDiv = e.target.tagName != "SPAN" ? e.target : e.target.parentNode;
 		
 		var channelContextSubMenu = $(this.channelContextSubMenuMarkup);
 		$(targetDiv).append(channelContextSubMenu)
 			.off("click", ".channelsettings-item")
-			.on("click", ".channelsettings-item", data, this.showChannelSettings.bind(this));
+			.on("click", ".channelsettings-item", info, this.showChannelSettings.bind(this));
 		$(channelContextSubMenu)
 			.addClass(theme)
 			.css("left", $(targetDiv).offset().left + "px")
 			.css("top", $(targetDiv).offset().top + "px");
-			
-		var settings = this.loadSettings(e.data.id + "_" + e.data.guild_id);
-		if (!settings.nickName && !settings.color) {
+		var id = e.data.id + "_" + e.data.guild_id;
+		var data = BDfunctionsDevilBro.loadData(id, this.getName(), "channels");
+		if (!data) {
 			$(targetDiv).find(".resetsettings-item").addClass("disabled");
 		}
 		else {
 			$(targetDiv)
 				.off("click", ".resetsettings-item")
-				.on("click", ".resetsettings-item", data, this.resetChannel.bind(this));
+				.on("click", ".resetsettings-item", info, this.resetChannel.bind(this));
 		}
 	}
 	
 	deleteContextSubMenu (e) {
-		$(".localChannelSettingsSubMenu").hide();
+		$(".localChannelSettingsSubMenu").remove();
 	}
 	
 	showChannelSettings (e) {
 		$(".context-menu").hide();
 		var id = e.data.id + "_" + e.data.guild_id;
 		if (id) {
-			var channelID, serverID, nickName, color;
-			var settings = this.loadSettings(id);
-			if (settings) {
-				channelID = 	settings.channelID;
-				serverID = 		settings.serverID;
-				nickName = 		settings.nickName;
-				color = 		settings.color;
-				
-				var channel = this.getDivOfChannel(channelID, serverID);
-				
-				var channelSettingsModal = $(this.channelSettingsModalMarkup);
-				channelSettingsModal.find("#modal-text")[0].value = nickName;
-				this.setSwatches(color, this.colourList, channelSettingsModal.find(".swatches1"));
-				channelSettingsModal.appendTo("#app-mount")
-					.on("click", ".callout-backdrop,button.btn-cancel", (event) => {
-						channelSettingsModal.remove();
-					})
-					.on("submit", "form", (event) => {
-						event.preventDefault();
-						if (channelSettingsModal.find("#modal-text")[0].value) {
-							if (channelSettingsModal.find("#modal-text")[0].value.trim().length > 0) {
-								nickName = channelSettingsModal.find("#modal-text")[0].value.trim();
-							}
-							else {
-								nickName = null;
-							}
+			var data = BDfunctionsDevilBro.loadData(id, this.getName(), "channels");
+			
+			var channelID = e.data.id;
+			var serverID = 	e.data.guild_id;
+			var nickName = 	data ? data.nickName : null;
+			var color = 	data ? data.color : null;
+			
+			var channelDiv = BDfunctionsDevilBro.getDivOfChannel(channelID, serverID);
+			var channel = $(channelDiv).find(".name-2SL4ev");
+			
+			var channelSettingsModal = $(this.channelSettingsModalMarkup);
+			channelSettingsModal.find("#modal-text")[0].value = nickName;
+			channelSettingsModal.find("#modal-text").attr("placeholder", e.data.name);
+			this.setSwatches(color, this.colourList, channelSettingsModal.find(".swatches1"), "swatch1");
+			channelSettingsModal.appendTo("#app-mount")
+				.on("click", ".callout-backdrop,button.btn-cancel", (event) => {
+					$(".sp-container").remove();
+					channelSettingsModal.remove();
+				})
+				.on("click", "button.btn-save", (event) => {
+					event.preventDefault();
+					if (channelSettingsModal.find("#modal-text")[0].value) {
+						if (channelSettingsModal.find("#modal-text")[0].value.trim().length > 0) {
+							nickName = channelSettingsModal.find("#modal-text")[0].value.trim();
 						}
 						else {
 							nickName = null;
 						}
-						
-						if (!$(".ui-color-picker-swatch1.nocolor.selected")[0]) {
-							var colorRGB = $(".ui-color-picker-swatch1.selected").css("backgroundColor");
-							var color = colorRGB.slice(4, -1).split(", ").map(Number);
-							color = (color[0] < 30 && color[1] < 30 && color[2] < 30) ? 
-									[color[0]+30, color[1]+30, color[2]+30] : 
-									[color[0], color[1], color[2]];
-							color = (color[0] > 225 && color[1] > 225 && color[2] > 225) ? 
-									[color[0]-30, color[1]-30, color[2]-30] : 
-									[color[0], color[1], color[2]];
-						} 
-						else {
-							color = null;
-						}
-						
-							
-						this.saveSettings(id, {channelID,serverID,nickName,color});
-							
-						this.loadChannel(channel);
-						
-						channelSettingsModal.remove();
-					});
+					}
+					else {
+						nickName = null;
+					}
 					
-				channelSettingsModal.find("#modal-text")[0].focus();
-			}
+					if (!$(".ui-color-picker-swatch1.nocolor.selected")[0]) {
+						var colorRGB = $(".ui-color-picker-swatch1.selected").css("backgroundColor");
+						var color = colorRGB.slice(4, -1).split(", ").map(Number);
+						color = (color[0] < 30 && color[1] < 30 && color[2] < 30) ? 
+								[color[0]+30, color[1]+30, color[2]+30] : 
+								[color[0], color[1], color[2]];
+						color = (color[0] > 225 && color[1] > 225 && color[2] > 225) ? 
+								[color[0]-30, color[1]-30, color[2]-30] : 
+								[color[0], color[1], color[2]];
+					} 
+					else {
+						color = null;
+					}
+					
+					if (nickName == null && color == null) {
+						this.resetChannel(e);
+					}
+					else {
+						BDfunctionsDevilBro.saveData(id, {channelID,serverID,nickName,color}, this.getName(), "channels");
+						this.loadChannel(channelDiv);
+					}
+					
+					$(".sp-container").remove();
+					channelSettingsModal.remove();
+				});
+				
+			channelSettingsModal.find("#modal-text")[0].focus();
 		}
 	}
-
-	setSwatches (currentCOMP, colorOptions, wrapper) {
+	
+	setSwatches (currentCOMP, colorOptions, wrapper, swatch) {
 		var wrapperDiv = $(wrapper);
+			
+		var largeDefaultBgColor = swatch == "swatch1" ? "rgb(0, 0, 0)" : "rgb(255, 255, 255)";
 			
 		var swatches = 
 			`<div class="ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-nowrap" style="flex: 1 1 auto; margin-top: 5px;">
-				<div class="ui-color-picker-swatch1 large custom" style="background-color: rgb(0, 0, 0);"></div>
-				<div class="regulars ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-wrap ui-color-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;"><div class="ui-color-picker-swatch1 nocolor">✖</div>
-					${ colorOptions.map((val, i) => `<div class="ui-color-picker-swatch1" style="background-color: ${val};"></div>`).join("")}
+				<div class="ui-color-picker-${swatch} large custom" style="background-color: ${largeDefaultBgColor};"></div>
+				<div class="regulars ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-wrap ui-color-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;"><div class="ui-color-picker-${swatch} nocolor">✖</div>
+					${ colorOptions.map((val, i) => `<div class="ui-color-picker-${swatch}" style="background-color: ${val};"></div>`).join("")}
 				</div>
 			</div>`;
 		$(swatches).appendTo(wrapperDiv);
@@ -476,7 +498,7 @@ class EditChannels {
 			var selection = colorOptions.indexOf(currentRGB);
 			
 			if (selection > -1) {
-				wrapperDiv.find(".regulars .ui-color-picker-swatch1").eq(selection+1)
+				wrapperDiv.find(".regulars .ui-color-picker-" + swatch).eq(selection+1)
 					.addClass("selected")
 					.css("background-color", currentRGB)
 					.css("border", "4px solid " + invColor);
@@ -494,19 +516,23 @@ class EditChannels {
 				.css("border", "4px solid black");
 		}
 		
-		wrapperDiv.on("click", ".ui-color-picker-swatch1:not(.custom)", (e) => {
+		wrapperDiv.on("click", ".ui-color-picker-" + swatch + ":not(.custom)", (e) => {
 			var tempColor = $(e.target).css("background-color").slice(4, -1).split(", ");
 			var newInvColor = e.target.classList.contains("nocolor") ? "black" : "rgb(" + (255-tempColor[0]) + ", " + (255-tempColor[1]) + ", " + (255-tempColor[2]) + ")";
 			
-			wrapperDiv.find(".ui-color-picker-swatch1.selected")
+			wrapperDiv.find(".ui-color-picker-" + swatch + ".selected.nocolor")
 				.removeClass("selected")
-				.css("border", "");
+				.css("border", "4px solid red");
+				
+			wrapperDiv.find(".ui-color-picker-" + swatch + ".selected")
+				.removeClass("selected")
+				.css("border", "4px solid transparent");
 			
 			$(e.target)
 				.addClass("selected")
 				.css("border", "4px solid " + newInvColor);
 		})
-		var custom = $(".ui-color-picker-swatch1.custom", wrapperDiv).spectrum({
+		var custom = $(".ui-color-picker-" + swatch + ".custom", wrapperDiv).spectrum({
 			color: $(".custom", wrapperDiv).css("background-color"),
 			preferredFormat: "rgb",
 			clickoutFiresChange: true,
@@ -516,11 +542,11 @@ class EditChannels {
 				var tempColor = color.toRgbString().slice(4, -1).split(", ");
 				var newInvColor = "rgb(" + (255-tempColor[0]) + ", " + (255-tempColor[1]) + ", " + (255-tempColor[2]) + ")";
 				
-				$(".ui-color-picker-swatch1.selected.nocolor")
+				$(".ui-color-picker-" + swatch + ".selected.nocolor")
 					.removeClass("selected")
 					.css("border", "4px solid red");
 					
-				$(".ui-color-picker-swatch1.selected")
+				$(".ui-color-picker-" + swatch + ".selected")
 					.removeClass("selected")
 					.css("border", "4px solid transparent");
 				
@@ -552,110 +578,49 @@ class EditChannels {
 		
 		var id = e.data.id + "_" + e.data.guild_id;
 		if (id) {
-			var channel = this.getDivOfChannel(e.data.id, e.data.guild_id);
+			var channelDiv = BDfunctionsDevilBro.getDivOfChannel(e.data.id, e.data.guild_id);
+			var channel = $(channelDiv).find(".name-2SL4ev");
 			
-			$(channel).text(e.data.name);
-			$(channel).css("color", "");
+			$(channel)
+				.text(e.data.name)
+				.attr("name", "")
+				.css("color", "")
+				.removeClass("changed");
 			
-			this.clearSettings(id);
+			BDfunctionsDevilBro.removeData(id, this.getName(), "channels");
 		}
 	}
 	
-	loadChannel (channel) {
-		var data = this.getChannelInformation(channel);
-		if (data) {
-			var channelID, serverID, nickName, color;
-			var settings = this.loadSettings(data.channelID + "_" + data.serverID);
-			if (settings) {
-				channelID = 	settings.channelID;
-				serverID = 		settings.serverID;
-				nickName = 		settings.nickName;
-				color = 		settings.color;
+	loadChannel (channelDiv) {
+		var info = BDfunctionsDevilBro.getKeyInformation({"node":channelDiv, "key":"channel"});
+		if (info) {
+			var channel = $(channelDiv).find(".name-2SL4ev");
+			var id = info.id + "_" + info.guild_id;
+			var data = BDfunctionsDevilBro.loadData(id, this.getName(), "channels");
+			if (data) {
+				var channelID = data.channelID;
+				var serverID = 	data.serverID;
+				var nickName = 	data.nickName ? data.nickName : info.name;
+				var color = 	data.color ? this.chooseColor(channel[0], data.color) : "";
 				
-				var colorRGB = this.chooseColor(channel, color);
-				
-				nickName ? $(channel).text(nickName) : $(channel).text(data.origName);
-				colorRGB ? $(channel).css("color", colorRGB) : $(channel).css("color", "");
-			}
-			else {
-				this.clearSettings(data.channelID + "_" + data.serverID);
+				$(channel)
+					.text(nickName)
+					.attr("name", info.name)
+					.css("color", color)
+					.addClass("changed");
 			}
 		}
 	}
 	
 	loadAllChannels () {
-		var channels = this.readChannelList();
+		var channels = BDfunctionsDevilBro.readChannelList();
 		for (var i = 0; i < channels.length; i++) {
 			this.loadChannel(channels[i]);
 		}
 	}
 	
-	readChannelList () {
-		var foundChannels = [];
-		$(".name-2SL4ev").each(
-			(i,channel) => {
-				foundChannels.push(channel);
-			}
-		);
-		return foundChannels;
-	}
-	
-	getChannelInformation (channel) {
-		var inst = this.getReactInstance(channel.parentElement);
-		if (!inst) return null;
-		var curEle = inst._currentElement;
-		if (curEle && curEle._owner && curEle._owner._instance && curEle._owner._instance.props && curEle._owner._instance.props.channel) {
-			var channelID = curEle._owner._instance.props.channel.id;
-			var serverID = curEle._owner._instance.props.channel.guild_id;
-			var origName = curEle._owner._instance.props.channel.name;
-			var data = {channelID, serverID, origName}
-			return data;
-		}
-		else {
-			return null;
-		}
-	}
-	
-	getDivOfChannel (channelID, serverID) {
-		var channels = this.readChannelList();
-		for (var i = 0; i < channels.length; i++) {
-			var data = this.getChannelInformation(channels[i]);
-			if (data) {
-				if (channelID == data.channelID && serverID == data.serverID) {
-					return channels[i];
-				}
-			}
-		}
-		return null;
-	}
-	
-	themeIsLightTheme () {
-		if ($(".theme-light").length > $(".theme-dark").length) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-	
-	saveSettings (id, settings) {
-		bdPluginStorage.set(this.getName(), id, JSON.stringify(settings));
-	}
-
-	loadSettings (id) {
-		return JSON.parse(bdPluginStorage.get(this.getName(), id));
-	}
-	
-	clearSettings (id) {
-		var channelID = 	id.split("_")[0];
-		var serverID = 		id.split("_")[1];
-		var nickName = 		null;
-		var color = 		null;
-		this.saveSettings(id, {channelID,serverID,nickName,color});
-	}
-	
 	setLabelsByLanguage () {
-		switch (document.getElementsByTagName("html")[0].lang.split("-")[0]) {
+		switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
 			case "da": 		//danish
 				return {
 					context_localsettings_text: 		"Lokal Kanalindstillinger",
