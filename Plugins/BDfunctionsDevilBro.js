@@ -1,7 +1,7 @@
 var BDfunctionsDevilBro = {};
 	
-BDfunctionsDevilBro.loadMessage = function (pluginName, pluginVersion) { 
-	console.log(pluginName + " Version: " + pluginVersion + " loaded.");
+BDfunctionsDevilBro.loadMessage = function (pluginName, oldVersion) { 
+	console.log(pluginName + " Version: " + oldVersion + " loaded.");
 	var rawUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
 	var downloadUrl = "https://github.com/mwittrien/BetterDiscordAddons/blob/master/Plugins/" + pluginName;
 	$.get(rawUrl, (script) => {
