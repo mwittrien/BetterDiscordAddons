@@ -2,14 +2,12 @@
 
 class ServerHider {
 	constructor () {
-		
 		this.labels = {};
 		
-		this.serverContextObserver;
+		this.serverContextObserver = new MutationObserver(() => {});
+		this.serverListContextHandler;
 		
 		this.css = `
-			<style class='serverhider'>
-			
 			#serverhider-scrolldiv::-webkit-scrollbar {
 				width: 12px;
 			}
@@ -183,8 +181,7 @@ class ServerHider {
 				width: 250px;
 			}
 
-			.serverhider-modal .btn-hide {
-				background-color: #3A71C1;
+			.serverhider-modal .server-entry .btn {
 				color: #fff;
 				display: inline-block;
 				float: right;
@@ -192,7 +189,13 @@ class ServerHider {
 				vertical-align: middle;
 			}
 
-			'</style>`;
+			.serverhider-modal .server-entry .btn-hide {
+				background-color: #202225;
+			}
+
+			.serverhider-modal .server-entry .btn-show {
+				background-color: #3A71C1;
+			}`;
 		
 		this.serverHiderModalMarkup =
 			`<span class="serverhider-modal">
@@ -221,7 +224,7 @@ class ServerHider {
 					<div class="modal-server-badge"></div>
 				</div>
 				<label class="modal-servername-label" for="modal-text">modal-servername-label</label>
-				<button type="button" class="btn btn-hide">REPLACE_btn_visible_text</button>
+				<button type="button" class="btn btn-show">REPLACE_btn_visible_text</button>
 			</div>`;
 
 		this.serverContextEntryMarkup =
@@ -241,55 +244,77 @@ class ServerHider {
 
 	getDescription () {return "Hide Servers in your Serverlist";}
 
-	getVersion () {return "1.2.0";}
+	getVersion () {return "2.0.0";}
 
 	getAuthor () {return "DevilBro";}
+	
+    getSettingsPanel () {
+		return `<button class="ServerHiderResetBtn" style="height:23px" onclick="ServerHider.resetAll()">Reset all Servers`;
+    }
 
 	//legacy
 	load () {}
 
 	start () {
-		this.serverContextObserver = new MutationObserver((changes, _) => {
-			changes.forEach(
-				(change, i) => {
-					if (change.addedNodes) {
-						change.addedNodes.forEach((node) => {
-							if (node.nodeType == 1 && node.className.includes("context-menu")) {
-								this.onContextMenu(node);
-							}
-						});
+		if ($('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').length == 0) {
+			$('head').append("<script src='https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
+		}
+		if (typeof BDfunctionsDevilBro === "object") {
+			this.serverContextObserver = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.addedNodes) {
+							change.addedNodes.forEach((node) => {
+								if (node.nodeType == 1 && node.className.includes("context-menu")) {
+									this.onContextMenu(node);
+								}
+							});
+						}
 					}
-				}
-			);
-		});
-		this.serverContextObserver.observe($("#app-mount>:first-child")[0], {childList: true});
-		
-		$('head').append(this.css);
-		
-		this.updateAllDivStates();
-		
-		var that = this;
-		setTimeout(function() {
-			that.labels = that.setLabelsByLanguage();
-			that.changeLanguageStrings();
-		},5000);
+				);
+			});
+			this.serverContextObserver.observe($(".tooltips").parent()[0], {childList: true});
+			
+			this.serverListContextHandler = (e) => {	
+				this.updateAllServers(false);
+			};
+			
+			$(".guilds.scroller").bind('mouseleave', this.serverListContextHandler);
+			
+			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
+			
+			this.updateAllServers(true);
+			
+			setTimeout(() => {
+				this.labels = this.setLabelsByLanguage();
+				this.changeLanguageStrings();
+			},5000);
+			
+			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
+		}
+		else {
+			BDfunctionsDevilBro.fatalMessage(this.getName());
+		}
 	}
 
 	stop () {
 		this.serverContextObserver.disconnect();
-		$('.serverhider').remove();
+		$(".guilds.scroller").unbind('mouseleave', this.serverListContextHandler);
+		
+		BDfunctionsDevilBro.removeLocalStyle(this.getName());
 	}
 
 	
 	// begin of own functions
 
-	getReactInstance (node) { 
-		return node[Object.keys(node).find((key) => key.startsWith("__reactInternalInstance"))];
-	}
-
-	getReactObject (node) { 
-		return ((inst) => (inst._currentElement._owner._instance))(this.getReactInstance(node));
-	}
+    static resetAll () {
+		bdPluginStorage.set("ServerHider", "servers", {});
+		$(".guild").each( 
+			(i,server) => {
+				if ($(server).find(".avatar-small")[0]) $(server).show();
+			}
+		);
+    }
 
 	changeLanguageStrings () {
 		this.serverHiderModalMarkup = 		this.serverHiderModalMarkup.replace("REPLACE_modal_header_text", this.labels.modal_header_text);
@@ -300,29 +325,42 @@ class ServerHider {
 		
 		this.serverContextEntryMarkup = 	this.serverContextEntryMarkup.replace("REPLACE_context_hide_text", this.labels.context_hide_text);
 		this.serverContextEntryMarkup = 	this.serverContextEntryMarkup.replace("REPLACE_context_hidemenu_text", this.labels.context_hidemenu_text);
+		
+		BDfunctionsDevilBro.translateMessage(this.getName());
 	}
 	
 	onContextMenu (context) {
-		var inst = this.getReactInstance(context);
-		if (!inst) return;
-		var ele = inst._currentElement;
-		if (ele && ele.props && ele.props.children) {
-			var children = Array.isArray(ele.props.children) ? ele.props.children : [ele.props.children];
-			for (var i = 0; i < children.length; i++) {
-				if (children[i] && children[i].props && children[i].props.guild && children[i].type && children[i].type.displayName == "GuildLeaveGroup") {
-					var { id, name } = children[i].props.guild;
-					var data = { id, name };
-					$(context).append(this.serverContextEntryMarkup)
-					.on("click", ".hideserver-item", data, this.onContextHide.bind(this))
-					.on("click", ".openhidemenu-item", this.onContextHidemenu.bind(this));
-					break;
-				}
-				else if (children[i] && children[i].type && children[i].type.displayName == "GuildCreateJoinGroup") {
-					$(context).append(this.serverContextEntryMarkup)
+		var serverData = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"guild"});
+		var contextType = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"GuildLeaveGroup"});
+		if (serverData && contextType) {
+			var { id, name } = serverData;
+			var data = { id, name };
+			$(context).append(this.serverContextEntryMarkup)
+				.on("click", ".hideserver-item", data, this.onContextHide.bind(this))
+				.on("click", ".openhidemenu-item", this.onContextHidemenu.bind(this));
+			
+		}
+		else {
+			var handleGuildCreate = null;
+					
+			var contextInst = BDfunctionsDevilBro.getReactInstance(context);
+			
+			var contextType = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"GuildCreateJoinGroup"});
+			if (contextType) {
+				handleGuildCreate = "found";
+			} 
+			else if (contextInst && 
+			contextInst.child && 
+			contextInst.child && 
+			contextInst.child.stateNode && 
+			contextInst.child.stateNode.handleGuildCreate) {
+				handleGuildCreate = contextInst.child.stateNode.handleGuildCreate;
+			}
+			
+			if (handleGuildCreate) {
+				$(context).append(this.serverContextEntryMarkup)
 					.on("click", ".openhidemenu-item", this.onContextHidemenu.bind(this))
 					.find(".hideserver-item").hide();
-					break;
-				}
 			}
 		}
 	}
@@ -330,10 +368,13 @@ class ServerHider {
 	onContextHide (e) {	
 		var id = e.data.id;
 		var name = e.data.name;
-		var isHidden = true;
-		this.getDivOfServer(e.data.id).hidden = isHidden;
+		var visible = false;
 		
-		this.saveSettings(id, {id,name,isHidden});
+		var serverDiv = BDfunctionsDevilBro.getDivOfServer(e.data.id);
+		
+		$(serverDiv).hide();
+		
+		BDfunctionsDevilBro.saveData(id, {id,name,visible}, this.getName(), "servers");
 		$(e.delegateTarget).hide();
 	}
 
@@ -349,19 +390,14 @@ class ServerHider {
 			serverHiderModal.remove();
 		})
 		.on("click", "button.btn-all", (e) => {
-			var servers = this.readServerList();
-			if (servers.length > 1) {
-				var isHidden = servers[0].hidden;
-				this.setAllButtonStates(!isHidden);
-				this.updateAllDivStates();
-			}
+			this.changeAllButtonAndServer();
 		});
 		
-		var servers = this.readServerList();
+		var servers = BDfunctionsDevilBro.readServerList();
 		
 		for (var i = 0; i < servers.length; i++) {
-			var data = this.getServerInformation(servers[i]);
-			var badge = this.getNotificationBadge(servers[i]);
+			let data = BDfunctionsDevilBro.getKeyInformation({"node":servers[i], "key":"guild"});
+			var badge = $(servers[i]).find(".badge")[0];
 			if (data) {
 				var entry = $(this.serverEntryMarkup);
 				if (data.icon) {
@@ -376,165 +412,107 @@ class ServerHider {
 				else {
 					entry.find(".modal-server-badge").css("padding", "0px");
 				}
-				entry.find(".modal-servername-label").text(data.name);
-				entry.find(".modal-servername-label").attr("id", data.id);
-				entry.appendTo(".form-inner")
-				.on("click", "button.btn-hide", (e) => {
-					var btn = e.target;
-					var id = btn.parentElement.children[1].id;
-					this.setButtonState(btn, !this.getDivOfServer(id).hidden);
-					this.updateDivState(this.getDivOfServer(id));
-				});
+				entry
+					.appendTo(".form-inner")
+					.on("click", ".btn-hide, .btn-show", (e) => {
+						var serverDiv = BDfunctionsDevilBro.getDivOfServer(data.id);
+						this.changeButtonAndServer(e.target, serverDiv);
+					})
+					.find(".modal-servername-label")
+						.text(data.name)
+						.attr("id", data.id);
+					
+				var visible = $(servers[i]).is(":visible");
+				
+				this.updateButton(visible, entry.find("button"));
 			}
 		}
-		this.updateAllButtonStates();
 	}
 	
-	setButtonState (btn, isHidden) {
-		if (!isHidden) {
-			btn.innerText = this.labels.btn_visible_text;
-			btn.style.backgroundColor = "#3A71C1";
+	changeButtonAndServer (btn, server) {
+		var data = BDfunctionsDevilBro.getKeyInformation({"node":server, "key":"guild"});
+		if (data) {
+			var id = data.id;
+			var name = data.name;
+			var visible = !$(server).is(":visible");
+			
+			this.updateButton(visible, btn);
+			BDfunctionsDevilBro.showHideEle(visible, server);
+			
+			BDfunctionsDevilBro.saveData(id, {id,name,visible}, this.getName(), "servers");
+		}
+	}
+	
+	changeAllButtonAndServer () {
+		var servers = BDfunctionsDevilBro.readServerList();
+		if (servers.length > 1) {
+			var visible = !$(servers[0]).is(":visible");
+			for (var i = 0; i < servers.length; i++) {
+				let data = BDfunctionsDevilBro.getKeyInformation({"node":servers[i], "key":"guild"});
+				if (data) {
+					var id = data.id;
+					var name = data.name;
+					
+					BDfunctionsDevilBro.saveData(id, {id,name,visible}, this.getName(), "servers");
+				}
+			}
+			this.updateAllButtons(visible);
+			BDfunctionsDevilBro.showHideAllEles(visible, servers);
+		}
+	}
+	
+	updateButton (visible, btn) {
+		if (visible) {
+			$(btn)
+				.text(this.labels.btn_visible_text)
+				.removeClass("btn-hide")
+				.addClass("btn-show");
 		}
 		else {
-			btn.innerText = this.labels.btn_hidden_text;
-			btn.style.backgroundColor = "#202225";
-		}
-		
-		var id = btn.parentElement.children[1].id;
-		var name = btn.parentElement.children[1].innerHTML;
-		
-		this.saveSettings(id, {id,name,isHidden});
-	}
-	
-	setAllButtonStates (isHidden) {
-		var buttons = document.getElementsByClassName("btn-hide");
-		for (var i = 0; i < buttons.length; i++) {
-			this.setButtonState(buttons[i], isHidden);
+			$(btn)
+				.text(this.labels.btn_hidden_text)
+				.removeClass("btn-show")
+				.addClass("btn-hide");
 		}
 	}
 	
-	updateAllButtonStates () {
-		var buttons = document.getElementsByClassName("btn-hide");
-		for (var i = 0; i < buttons.length; i++) {
-			var id = buttons[i].parentElement.children[1].id;
-			this.setButtonState(buttons[i], this.getDivOfServer(id).hidden);
+	updateAllButtons (visible) {
+		var btns = $(".btn-hide, .btn-show");
+		for (var i = 0; i < btns.length; i++) {
+			this.updateButton(visible, btns);
 		}
 	}
 	
-	updateDivState (server) {
-		var data = this.getServerInformation(server);
-		if (data) {
-			var id, name, isHidden;
-			var settings = this.loadSettings(data.id);
-			if (settings) {
-				id = settings.id;
-				name = settings.name;
-				isHidden = settings.isHidden;
-			}
-			else {
+	updateServer (serverDiv, write) {
+		var info = BDfunctionsDevilBro.getKeyInformation({"node":serverDiv, "key":"guild"});
+		if (info) {
+			var id, name, visible;
+			var data = BDfunctionsDevilBro.loadData(info.id, this.getName(), "servers");
+			if (data && write) {
 				id = data.id;
 				name = data.name;
-				isHidden = false;
-			}
-			server.hidden = isHidden;
-			
-			this.saveSettings(id, {id,name,isHidden});
-		}
-	}
-	
-	updateAllDivStates () {
-		var servers = this.readServerList();
-		for (var i = 0; i < servers.length; i++) {
-			this.updateDivState(servers[i]);
-		}
-	}
-	
-	getDivOfServer (id) {
-		var servers = this.readServerList();
-		for (var i = 0; i < servers.length; i++) {
-			var childNodes = servers[i].getElementsByTagName("*");
-			for (var j = 0; j < childNodes.length; j++) {
-				if (childNodes[j].href) {
-					if (childNodes[j].href.split("/")[4] == id) {
-						return servers[i];
-					}
-				}
-			}
-		}
-		return null;
-	}
-	
-	readServerList () {
-		var foundServers = [];
-		var servers = document.getElementsByClassName("guild");
-		for (var i = 0; i < servers.length; i++) {
-			var serverInst = this.getReactInstance(servers[i]);
-			if (serverInst && serverInst._currentElement && serverInst._currentElement._owner && serverInst._currentElement._owner._instance) {
-				var serverObj = serverInst._currentElement._owner._instance;
-				if (serverObj && serverObj.props && serverObj.props.guild) {
-					foundServers.push(servers[i]);
-				}
-			}
-		}
-		return foundServers;
-	}
-	
-	getServerInformation (server) {
-		var inst = this.getReactInstance(server);
-		if (!inst) return null;
-		var curEle = inst._currentElement;
-		if (curEle) {
-			var serverInfo = this.checkForServerInformation(curEle); 
-			if (serverInfo.id) {
-				var {id, name, icon} = serverInfo;
-				return {id, name, icon};
+				visible = data.visible;
 			}
 			else {
-				return null;
+				id = info.id;
+				name = info.name;
+				visible = $(serverDiv).is(":visible");
 			}
-		}
-		else {
-			return null;
-		}
-	}
-	
-	getNotificationBadge (server) {
-		if (server.childElementCount > 1) {
-			return server.children[1];
-		}
-		else {
-			return null;
+			
+			BDfunctionsDevilBro.saveData(id, {id,name,visible}, this.getName(), "servers");
 		}
 	}
 	
-	checkForServerInformation (ele){
-		if (ele && ele.props && ele.props.guild){
-			return ele.props.guild;
-		}
-		else if (ele && ele.props && ele.props.children){
-			var children = Array.isArray(ele.props.children) ? ele.props.children : [ele.props.children];
-			var i;
-			var result = null;
-			for (i = 0; result == null && i < children.length; i++){
-				result = this.checkForServerInformation(children[i]);
-			}
-			return result;
-		}
-		else {
-			return null;
+	updateAllServers (write) {
+		var servers = BDfunctionsDevilBro.readServerList();
+		for (var i = 0; i < servers.length; i++) {
+			this.updateServer(servers[i], write);
 		}
 	}
 	
-	saveSettings (id, settings) {
-		bdPluginStorage.set(this.getName(), id, JSON.stringify(settings));
-	}
-
-	loadSettings (id) {
-		return JSON.parse(bdPluginStorage.get(this.getName(), id));
-	}
 	
 	setLabelsByLanguage () {
-		switch (document.getElementsByTagName("html")[0].lang.split("-")[0]) {
+		switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
 			case "da": 		//danish
 				return {
 					modal_header_text: 		"Styring af Serverliste",
