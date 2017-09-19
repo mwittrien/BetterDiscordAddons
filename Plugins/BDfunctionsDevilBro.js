@@ -48,7 +48,7 @@ BDfunctionsDevilBro.getKeyInformation = function (config) {
 	var keyBlackList = typeof config.blackList === "object" ? config.blackList : {
 	};
 	
-	return searchKeyInReact(inst);
+	return searchKeyInReact(inst, 0);
 
 	function searchKeyInReact (ele, depth) {
 		if (!ele || depth > maxDepth) return null;
@@ -267,10 +267,15 @@ BDfunctionsDevilBro.clearReadNotifications = function (servers) {
 		); 
 };
 
-BDfunctionsDevilBro.checkForNewPluginVersion = function (url, version) {
-	$.get(url, (script) => {
-		console.log(script.split("getVersion"));
-		console.log(script.replace(" ",""));
+BDfunctionsDevilBro.checkForNewPluginVersion = function (pluginName, pluginUrl, oldVersion) {
+	$.get(pluginUrl, (script) => {
+		if (script) {
+			script = script.split('getVersion () {return "')[1];
+			if (script) {
+				var newVersion = script.split('";}')[0];
+				console.log(newVersion);
+			}
+		}
 	});
 }
 
