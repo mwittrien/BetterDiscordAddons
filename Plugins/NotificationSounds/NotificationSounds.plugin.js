@@ -157,11 +157,7 @@ class NotificationSounds {
 				}
 			);
 			
-			console.log(BDfunctionsDevilBro.getReactInstance($(".dms .guild")[0]));
-			
 			this.saveAllSongs();
-			
-			console.log();
 			
 			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
 		}
