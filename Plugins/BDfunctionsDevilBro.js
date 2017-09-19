@@ -224,6 +224,39 @@ BDfunctionsDevilBro.sortArrayByKey = function (array, key, except) {
 	});
 };
 
+BDfunctionsDevilBro.clearReadNotifications = function (servers) {
+	if (!servers) return;
+	servers = Array.isArray(servers) ? servers : Array.of(servers);
+	servers.forEach(
+			(server,i) => {
+				setTimeout(() => {
+					var handleContextMenu = BDfunctionsDevilBro.getKeyInformation(server.firstElementChild, "handleContextMenu");
+					
+					if (handleContextMenu) {
+						var data = {
+							preventDefault: a=>a,
+							stopPropagation: a=>a,
+							pageX: -1000 + Math.round(Math.random()*500),
+						};
+						
+						handleContextMenu(data);
+						
+						var contextentries = $(".context-menu .item-group");
+						
+						for (var i = 0; contextentries.length > i; i++) {
+							var ele = contextentries[i];
+							var contextType = BDfunctionsDevilBro.getKeyInformation(ele, "displayName", "GuildMarkReadItem");
+							if (contextType) {
+								ele.firstElementChild.click();
+								break;
+							}
+						}
+					}
+				},i*100);
+			}
+		); 
+};
+
 BDfunctionsDevilBro.getDiscordLanguage = function () {
 	switch ($("html").attr("lang").split("-")[0]) {
 		case "da": 		//danish
