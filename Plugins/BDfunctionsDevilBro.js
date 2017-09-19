@@ -17,7 +17,6 @@ BDfunctionsDevilBro.getReactInstance = function (node) {
 };
 
 BDfunctionsDevilBro.getKeyInformation = function (config) {
-	console.log(config);
 	if (config === undefined) return null;
 	if (config.node === undefined || config.key === undefined) return null;
 	
