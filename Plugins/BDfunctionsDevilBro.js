@@ -223,6 +223,7 @@ BDfunctionsDevilBro.sortArrayByKey = function (array, key, except) {
 	});
 };
 
+// FUNCTION CHECK TOSTRING
 BDfunctionsDevilBro.clearReadNotifications = function (servers) {
 	console.log(servers);
 	if (!servers) return;
@@ -236,7 +237,7 @@ BDfunctionsDevilBro.clearReadNotifications = function (servers) {
 					
 					if (handleContextMenu) {
 						console.log(handleContextMenu);
-						console.log(JSON.stringify(handleContextMenu));
+						console.log(handleContextMenu).toString());
 						var data = {
 							preventDefault: a=>a,
 							stopPropagation: a=>a,
