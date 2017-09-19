@@ -264,6 +264,12 @@ BDfunctionsDevilBro.clearReadNotifications = function (servers) {
 		); 
 };
 
+BDfunctionsDevilBro.checkForNewPluginVersion = function (url, version) {
+	$.get(url, (script) => {
+		console.log(script.replace(" ",""));
+	});
+}
+
 BDfunctionsDevilBro.getDiscordLanguage = function () {
 	switch ($("html").attr("lang").split("-")[0]) {
 		case "da": 		//danish
