@@ -36,6 +36,7 @@ class ReverseImageSearch {
 			</div>`;
 	}
 		
+		
 	getName () {return "ReverseImageSearch";}
 
 	getDescription () {return "Adds a reverse image search option to the context menu.";}
@@ -117,9 +118,8 @@ class ReverseImageSearch {
 	
 	onContextMenu (context) {
 		var url = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"src"});
-		var contextType = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"NativeLinkGroup"});
 		
-		if (url && contextType) {
+		if (url) {
 			if (url.indexOf("https://discordapp.com/assets/") == -1) {
 				
 				if (url.indexOf("https://images-ext-1.discordapp.net/external/") > -1) {
