@@ -61,7 +61,7 @@ BDfunctionsDevilBro.getKeyInformation = function (node, searchedKey, searchedVal
 	
 BDfunctionsDevilBro.readServerList = function () {
 	var foundServers = [];
-	var servers = document.getElementsByClassName("guild");
+	var servers = $(".guild");
 	for (var i = 0; i < servers.length; i++) {
 		var serverData = BDfunctionsDevilBro.getKeyInformation(servers[i], "guild");
 		if (serverData) {
