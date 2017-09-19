@@ -2,13 +2,14 @@
 
 class FixGermanTranslation {
 	constructor () {
+		this.serverContextObserver = new MutationObserver(() => {});
 	}
 
 	getName () {return "FixGermanTranslation";}
 
 	getDescription () {return "Fixes some german translation errors.";}
 
-	getVersion () {return "1.0.0";}
+	getVersion () {return "1.1.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -18,57 +19,58 @@ class FixGermanTranslation {
 	unload () {}
 
 	start () {
-		if (document.getElementsByTagName("html")[0].lang.split("-")[0] == "de") {
-			const contextmo = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								if (node.nodeType == 1 && node.className.includes("context-menu")) {
-									this.onContextMenu(node);
+		if ($('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').length == 0) {
+			$('head').append("<script src='https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
+		}
+		if (typeof BDfunctionsDevilBro === "object") {
+			setTimeout(() => {
+				if (BDfunctionsDevilBro.getDiscordLanguage().id == "de") {
+					this.serverContextObserver = new MutationObserver((changes, _) => {
+						changes.forEach(
+							(change, i) => {
+								if (change.addedNodes) {
+									change.addedNodes.forEach((node) => {
+										if (node.nodeType == 1 && node.className.includes("context-menu")) {
+											this.onContextMenu(node);
+										}
+									});
 								}
-							});
-						}
-					}
-				);
-			});
-			contextmo.observe($("#app-mount>:first-child")[ 0 ], { childList: true });
+							}
+						);
+					});
+					this.serverContextObserver.observe($(".tooltips").parent()[0], {childList: true});
+				}
+				BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
+			},5000);
+		}
+		else {
+			BDfunctionsDevilBro.fatalMessage(this.getName());
 		}
 	}
 
-	stop () {}
+	stop () {
+		this.serverContextObserver.disconnect();
+	}
 
 	
 	// begin of own functions
-
-	getReactInstance (node) { 
-		return node[Object.keys(node).find((key) => key.startsWith("__reactInternalInstance"))];
-	}
-
-	getReactObject (node) { 
-		return ((inst) => (inst._currentElement._owner._instance))(this.getReactInstance(node));
-	}
 	
 	onContextMenu (context) {
-		var inst = this.getReactInstance(context);
-		if (!inst) return;
-		var curEle = inst._currentElement;
-		if (curEle.props && curEle.props.children) {
-			var children = Array.isArray(curEle.props.children) ? curEle.props.children : [curEle.props.children];
-			for (var i = 0; i < children.length; i++) {
-				if (children[i] && children[i].props && children[i].props.guild && children[i].type && children[i].type.displayName == "GuildLeaveGroup") {
-					var allLabels = Array.from(context.getElementsByClassName("label"));
-					allLabels.forEach(function(label) {
-						if (label.innerText.indexOf("Serverweit Mikrofone deaktivieren") != -1) {
-							label.innerText = "Server stummschalten";
-						}
-						if (label.innerText.indexOf("Hide Muted Channels") != -1) {
-							label.innerText = "Verstecke stumme Kanäle";
-						}
-					});
-					break;
+		var serverData = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"guild"});
+		var contextType = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"GuildLeaveGroup"});
+		
+		if (serverData && contextType) {
+			var allLabels = Array.from(context.getElementsByClassName("label"));
+			allLabels.forEach(
+				(label) => {
+					if (label.innerText.indexOf("Serverweit Mikrofone deaktivieren") != -1) {
+						label.innerText = "Server stummschalten";
+					}
+					if (label.innerText.indexOf("Hide Muted Channels") != -1) {
+						label.innerText = "Verstecke stumme Kanäle";
+					}
 				}
-			}
+			);
 		}
 	}
 }
