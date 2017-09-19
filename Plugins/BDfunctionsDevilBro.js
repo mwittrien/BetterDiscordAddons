@@ -242,7 +242,7 @@ BDfunctionsDevilBro.clearReadNotifications = function (servers) {
 						var data = {
 							preventDefault: a=>a,
 							stopPropagation: a=>a,
-							pageX: 100 + Math.round(Math.random()*500),
+							pageX: -1000 + Math.round(Math.random()*500),
 						};
 						
 						handleContextMenu(data);
