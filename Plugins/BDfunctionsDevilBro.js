@@ -231,6 +231,7 @@ BDfunctionsDevilBro.clearReadNotifications = function (servers) {
 				setTimeout(() => {
 					console.log(server);
 					var handleContextMenu = BDfunctionsDevilBro.getKeyInformation(server.firstElementChild, "handleContextMenu");
+					console.log(server.firstElementChild);
 					
 					if (handleContextMenu) {
 						console.log(handleContextMenu);
