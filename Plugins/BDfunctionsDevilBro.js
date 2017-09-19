@@ -11,6 +11,28 @@ BDfunctionsDevilBro.fatalMessage = function (pluginName) {
 BDfunctionsDevilBro.translateMessage = function (pluginName) { 
 	console.log(pluginName + ": Changed plugin language to: " + BDfunctionsDevilBro.getDiscordLanguage().lang);
 };
+
+BDfunctionsDevilBro.updateMessage = function (pluginName, pluginUrl, oldVersion) {
+	$.get(pluginUrl, (script) => {
+		if (script) {
+			script = script.split('getVersion () {return "')[1];
+			if (script) {
+				var newVersion = script.split('";}')[0];
+				var oldNmbrs = oldVersion.split(".").map(Number); 
+				var newNmbrs = newVersion.split(".").map(Number); 
+				if (oldNmbrs.length == newNmbrs.length) {
+					for (var i = 0; i < oldNmbrs.length; i++) {
+						if (newNmbrs[i] > oldNmbrs[i]) {
+							console.log(pluginName + ": Your version " + oldVersion + " is outdated. Newest version: " + newVersion);
+							console.log("Download it on: https://github.com/mwittrien/BetterDiscordAddons/blob/master/Plugins/" + pluginName);
+							break;
+						}
+					}
+				}
+			}
+		}
+	});
+}
 	
 BDfunctionsDevilBro.getReactInstance = function (node) { 
 	return node[Object.keys(node).find((key) => key.startsWith("__reactInternalInstance"))];
@@ -266,18 +288,6 @@ BDfunctionsDevilBro.clearReadNotifications = function (servers) {
 			}
 		); 
 };
-
-BDfunctionsDevilBro.checkForNewPluginVersion = function (pluginName, pluginUrl, oldVersion) {
-	$.get(pluginUrl, (script) => {
-		if (script) {
-			script = script.split('getVersion () {return "')[1];
-			if (script) {
-				var newVersion = script.split('";}')[0];
-				console.log(newVersion);
-			}
-		}
-	});
-}
 
 BDfunctionsDevilBro.getDiscordLanguage = function () {
 	var lang = $("html").attr("lang").split("-")[0] ? $("html").attr("lang").split("-")[0] : "en";
