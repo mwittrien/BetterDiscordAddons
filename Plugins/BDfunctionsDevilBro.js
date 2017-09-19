@@ -48,12 +48,6 @@ BDfunctionsDevilBro.getKeyInformation = function (node, searchedKey, searchedVal
 			var value = ele[keys[i]];
 			
 			if (searchedKey === key && (searchedValue === undefined || searchedValue === value)) {
-				console.log("key");
-				console.log(key);
-				console.log(key.toString());
-				console.log("value");
-				console.log(value);
-				console.log(value.toString());
 				result = value;
 			}
 			else if ((typeof value === "object" || typeof value === "function") && (keyWhiteList[key] || key[0] == "." || !isNaN(key[0]))) {
@@ -231,7 +225,6 @@ BDfunctionsDevilBro.sortArrayByKey = function (array, key, except) {
 
 // FUNCTION CHECK TOSTRING
 BDfunctionsDevilBro.clearReadNotifications = function (servers) {
-	console.log(servers);
 	if (!servers) return;
 	servers = Array.isArray(servers) ? servers : Array.of(servers);
 	servers.forEach(
