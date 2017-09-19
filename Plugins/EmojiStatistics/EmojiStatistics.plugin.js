@@ -198,6 +198,16 @@ class EmojiStatistics {
 				height: 22px;
 				margin-right: 10px;
 				width: 22px;
+			}
+			
+			.emoji-tooltip {
+				position: relative;
+				z-index: 3000;
+			}
+			
+			.emoji-tooltip div {
+				white-space: nowrap;
+				overflow: hidden;
 			}`;
 
 		this.emojiInformationModalMarkup =
@@ -241,13 +251,16 @@ class EmojiStatistics {
 			
 		this.emojiButtonMarkup =
 			`<div class="emojistatistics-button"></div>`;
+			
+		this.emojiTooltipMarkup = 
+			`<div class="tooltip tooltip-right tooltip-black emoji-tooltip"><div class="emoji-name"></div><div class="emoji-server"></div></div>`;
 	}
 
 	getName () {return "EmojiStatistics";}
 
 	getDescription () {return "Adds some helpful options to show you more information about emojis and emojiservers.";}
 
-	getVersion () {return "2.1.2";}
+	getVersion () {return "2.1.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -525,21 +538,27 @@ class EmojiStatistics {
 	
 	hoverEmoji () {
 		var emojiToServerList = this.emojiToServerList;
+		var emojiTooltipMarkup = this.emojiTooltipMarkup;
 		$(".emoji-item").hover(
 			function () {
 				if (!this.hovering) {
 					this.hovering = true;
 					var emojiUrl = $(this).css("background-image");
 					emojiUrl = emojiUrl.replace("url(\"","").replace("\")","");
-					if (emojiToServerList[emojiUrl]){
-						var data = emojiToServerList[emojiUrl];
-						var emojiName = data.emojiName;
-						var serverName = data.serverName;
-						$(this).attr("title", emojiName + "\n" + serverName);
+					var data = emojiToServerList[emojiUrl];
+					if (data) {
+						var emojiTooltip = $(emojiTooltipMarkup);
+						$(".tooltips").append(emojiTooltip);
+						$(emojiTooltip).find(".emoji-name").text(data.emojiName);
+						$(emojiTooltip).find(".emoji-server").text(data.serverName);
+						$(emojiTooltip)
+							.css("left", ($(this).offset().left + $(this).width()) + "px")
+							.css("top", ($(this).offset().top + ($(this).outerHeight() - $(emojiTooltip).outerHeight())/2) + "px");
 					}
 				}
 			},
 			function () {
+				$(".tooltips").find(".emoji-tooltip").remove();
 				this.hovering = false;
 			}
 		);
@@ -660,7 +679,7 @@ class EmojiStatistics {
 			case "fi":		//finnish
 				return {
 					modal_header_text: 				"Tilastot emojista",
-					modal_titlesicon_text : 		"ikoni",
+					modal_titlesicon_text : 		"Ikoni",
 					modal_titlesservername_text : 	"Palvelimen nimi",
 					modal_titlestotal_text : 		"Koko:",
 					modal_titlesglobal_text : 		"Globaali:",
