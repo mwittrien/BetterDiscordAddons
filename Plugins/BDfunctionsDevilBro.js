@@ -266,6 +266,7 @@ BDfunctionsDevilBro.clearReadNotifications = function (servers) {
 
 BDfunctionsDevilBro.checkForNewPluginVersion = function (url, version) {
 	$.get(url, (script) => {
+		console.log(script.split("getVersion"));
 		console.log(script.replace(" ",""));
 	});
 }
