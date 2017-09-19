@@ -16,7 +16,7 @@ class NotificationSounds {
 			{"You wouldn't believe": 	"https://notificationsounds.com/soundfiles/087408522c31eeb1f982bc0eaf81d35f/file-sounds-949-you-wouldnt-believe.wav"},
 		];
 		
-		this.oldMentions;
+		this.oldMentions = {};
 		
 		this.dmObserver = new MutationObserver(() => {});
 		this.dmBadgeObserver = new MutationObserver(() => {});
@@ -29,7 +29,7 @@ class NotificationSounds {
 
 	getDescription () {return "Creates a notification sound when you receive a notification (mention or DM).";}
 
-	getVersion () {return "2.2.0";}
+	getVersion () {return "2.2.1";}
 
 	getAuthor () {return "DevilBro";}
 
