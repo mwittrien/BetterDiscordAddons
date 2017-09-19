@@ -94,7 +94,7 @@ BDfunctionsDevilBro.readChannelList = function () {
 		}
 	}
 	return foundChannels;
-}
+};
 	
 BDfunctionsDevilBro.getDivOfServer = function (id) {
 	var servers = BDfunctionsDevilBro.readServerList();
@@ -126,7 +126,7 @@ BDfunctionsDevilBro.getDivOfChannel = function (channelID, serverID) {
 		}
 	}
 	return null;
-}
+};
 
 BDfunctionsDevilBro.themeIsLightTheme = function () {
 	if ($(".theme-light").length > $(".theme-dark").length) {
