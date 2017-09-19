@@ -2,6 +2,7 @@
 
 class ReverseImageSearch {
 	constructor () {
+		this.messageContextObserver = new MutationObserver(() => {});
 		
 		this.imageUrlReplaceString = "DEVILBRO_BD_REVERSEIMAGESEARCH_REPLACE_IMAGEURL";
 		
@@ -13,12 +14,7 @@ class ReverseImageSearch {
 			{"name":"Sogou", 	"url":"http://pic.sogou.com/ris?flag=1&drag=0&query=" + this.imageUrlReplaceString + "&flag=1"},
 			{"name":"TinEye", 	"url":"https://tineye.com/search?url=" + this.imageUrlReplaceString},
 			{"name":"Yandex", 	"url":"https://yandex.com/images/search?url=" + this.imageUrlReplaceString + "&rpt=imageview"}
-		].sort(function(a, b) {
-			var x = a.name; var y = b.name;
-			return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-		});
-		
-		this.messageContextObserver;
+		];
 
 		this.messageContextEntryMarkup =
 			`<div class="item-group">
@@ -44,7 +40,7 @@ class ReverseImageSearch {
 
 	getDescription () {return "Adds a reverse image search option to the context menu.";}
 
-	getVersion () {return "2.1.0";}
+	getVersion () {return "3.1.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -63,20 +59,33 @@ class ReverseImageSearch {
 	load () {}
 
 	start () {
-		this.messageContextObserver = new MutationObserver((changes, _) => {
-			changes.forEach(
-				(change, i) => {
-					if (change.addedNodes) {
-						change.addedNodes.forEach((node) => {
-							if (node.nodeType == 1 && node.className.includes("context-menu")) {
-								this.onContextMenu(node);
-							}
-						});
+		if ($('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').length == 0) {
+			$('head').append("<script src='https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
+		}
+		if (typeof BDfunctionsDevilBro === "object") {
+			this.messageContextObserver = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.addedNodes) {
+							change.addedNodes.forEach((node) => {
+								if (node.nodeType == 1 && node.className.includes("context-menu")) {
+									this.onContextMenu(node);
+								}
+							});
+						}
 					}
-				}
-			);
-		});
-		this.messageContextObserver.observe($("#app-mount>:first-child")[0], {childList: true});
+				);
+			});
+			this.messageContextObserver.observe($(".tooltips").parent()[0], {childList: true});
+			
+		
+			this.searchEngines = BDfunctionsDevilBro.sortArrayByKey(this.searchEngines, "name");
+		
+			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
+		}
+		else {
+			BDfunctionsDevilBro.fatalMessage(this.getName());
+		}
 	}
 
 	stop () {
@@ -84,23 +93,15 @@ class ReverseImageSearch {
 	}
 	
 	// begin of own functions
-
-	getReactInstance (node) { 
-		return node[Object.keys(node).find((key) => key.startsWith("__reactInternalInstance"))];
-	}
-
-	getReactObject (node) { 
-		return ((inst) => (inst._currentElement._owner._instance))(this.getReactInstance(node));
-	}
 	
 	getSettings () {
-		var oldSettings = bdPluginStorage.get("ReverseImageSearch", "settings") ? bdPluginStorage.get("ReverseImageSearch", "settings") : {};
+		var oldSettings = bdPluginStorage.get(this.getName(), "settings") ? bdPluginStorage.get(this.getName(), "settings") : {};
 		var newSettings = {};
 		for (var i in this.searchEngines) {
 			var key = this.searchEngines[i].name;
 			newSettings[key] = oldSettings[key] != null ? oldSettings[key] : true;
 		}
-		bdPluginStorage.set("ReverseImageSearch", "settings", newSettings);
+		bdPluginStorage.set(this.getName(), "settings", newSettings);
 		return newSettings;
 	}
 
@@ -113,38 +114,33 @@ class ReverseImageSearch {
 		bdPluginStorage.set("ReverseImageSearch", "settings", settings);
     }
 	
+	
 	onContextMenu (context) {
-		var inst = this.getReactInstance(context);
-		if (!inst) return;
-		var ele = inst._currentElement;
-		if (ele.props && ele.props.children) {
-			var children = Array.isArray(ele.props.children) ? ele.props.children : [ele.props.children];
-			for (var i = 0; i < children.length; i++) {
-				if (children[i] && children[i].props && children[i].props.src && children[i].type && children[i].type.displayName == "NativeLinkGroup") {
-					var url = children[i].props.src;
-					if (url.indexOf("https://discordapp.com/assets/") == -1) {
-						
-						if (url.indexOf("https://images-ext-1.discordapp.net/external/") > -1) {
-							if (url.split("/https/").length != 1) {
-								url = "https://" + url.split("/https/")[url.split("/https/").length-1];
-							}
-							else if (url.split("/http/").length != 1) {
-								url = "http://" + url.split("/http/")[url.split("/http/").length-1];
-							}
-						}
-							
-						var data = {"url": url};
-						$(context).append(this.messageContextEntryMarkup)
-							.on("mouseenter", ".reverseimagesearch-item", data, this.createContextSubMenu.bind(this))
-							.on("mouseleave", ".reverseimagesearch-item", data, this.deleteContextSubMenu.bind(this));
+		var url = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"src"});
+		var contextType = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"NativeLinkGroup"});
+		
+		if (url && contextType) {
+			if (url.indexOf("https://discordapp.com/assets/") == -1) {
+				
+				if (url.indexOf("https://images-ext-1.discordapp.net/external/") > -1) {
+					if (url.split("/https/").length != 1) {
+						url = "https://" + url.split("/https/")[url.split("/https/").length-1];
+					}
+					else if (url.split("/http/").length != 1) {
+						url = "http://" + url.split("/http/")[url.split("/http/").length-1];
 					}
 				}
+					
+				var data = {"url": url};
+				$(context).append(this.messageContextEntryMarkup)
+					.on("mouseenter", ".reverseimagesearch-item", data, this.createContextSubMenu.bind(this))
+					.on("mouseleave", ".reverseimagesearch-item", data, this.deleteContextSubMenu.bind(this));
 			}
 		}
 	}
 	
 	createContextSubMenu (e) {
-		var theme = this.themeIsLightTheme() ? "" : "theme-dark";
+		var theme = BDfunctionsDevilBro.themeIsLightTheme() ? "" : "theme-dark";
 		
 		var imageurl = e.data.url;
 		
@@ -185,14 +181,5 @@ class ReverseImageSearch {
 	
 	deleteContextSubMenu (e) {
 		$(".reverseImageSearchSubMenu").remove();
-	}
-	
-	themeIsLightTheme () {
-		if ($(".theme-light").length > $(".theme-dark").length) {
-			return true;
-		}
-		else {
-			return false;
-		}
 	}
 }
