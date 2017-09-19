@@ -224,6 +224,7 @@ BDfunctionsDevilBro.sortArrayByKey = function (array, key, except) {
 };
 
 BDfunctionsDevilBro.clearReadNotifications = function (servers) {
+	console.log(servers);
 	if (!servers) return;
 	servers = Array.isArray(servers) ? servers : Array.of(servers);
 	servers.forEach(
