@@ -16,11 +16,11 @@ BDfunctionsDevilBro.getReactInstance = function (node) {
 	return node[Object.keys(node).find((key) => key.startsWith("__reactInternalInstance"))];
 };
 
-BDfunctionsDevilBro.getKeyInformation = function (settings) {
-	if (settings === undefined) return null;
-	if (settings.node === undefined || settings.key === undefined) return null;
+BDfunctionsDevilBro.getKeyInformation = function (config) {
+	if (config === undefined) return null;
+	if (config.node === undefined || config.key === undefined) return null;
 	
-	var inst = BDfunctionsDevilBro.getReactInstance(settings.node);
+	var inst = BDfunctionsDevilBro.getReactInstance(config.node);
 	if (!inst) return null;
 	
 	
