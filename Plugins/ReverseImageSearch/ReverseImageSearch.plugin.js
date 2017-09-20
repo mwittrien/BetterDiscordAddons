@@ -41,7 +41,7 @@ class ReverseImageSearch {
 
 	getDescription () {return "Adds a reverse image search option to the context menu.";}
 
-	getVersion () {return "3.1.0";}
+	getVersion () {return "3.1.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -120,7 +120,7 @@ class ReverseImageSearch {
 		var url = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"src"});
 		
 		if (url) {
-			if (url.indexOf("https://discordapp.com/assets/") == -1) {
+			if (url.indexOf("discordapp.com/assets/") == -1) {
 				
 				if (url.indexOf("https://images-ext-1.discordapp.net/external/") > -1) {
 					if (url.split("/https/").length != 1) {
