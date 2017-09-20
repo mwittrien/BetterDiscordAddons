@@ -24,6 +24,7 @@ class ReverseImageSearch {
 				</div>
 			</div>`;
 			
+			
 		this.messageContextSubMenuMarkup = 
 			`<div class="context-menu reverseImageSearchSubMenu">
 				<div class="item-group">
@@ -41,7 +42,8 @@ class ReverseImageSearch {
 
 	getDescription () {return "Adds a reverse image search option to the context menu.";}
 
-	getVersion () {return "3.1.1";}
+	getVersion () {return "3.1.2";}
+	
 
 	getAuthor () {return "DevilBro";}
 
@@ -117,9 +119,10 @@ class ReverseImageSearch {
 	
 	
 	onContextMenu (context) {
+		var messageData = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"message"});
 		var url = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"src"});
 		
-		if (url) {
+		if (messageData && url) {
 			if (url.indexOf("discordapp.com/assets/") == -1) {
 				
 				if (url.indexOf("https://images-ext-1.discordapp.net/external/") > -1) {
