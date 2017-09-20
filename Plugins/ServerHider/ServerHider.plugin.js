@@ -244,7 +244,7 @@ class ServerHider {
 
 	getDescription () {return "Hide Servers in your Serverlist";}
 
-	getVersion () {return "2.0.0";}
+	getVersion () {return "2.1.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -498,6 +498,8 @@ class ServerHider {
 				name = info.name;
 				visible = $(serverDiv).is(":visible");
 			}
+			
+			BDfunctionsDevilBro.showHideEle(visible, serverDiv);
 			
 			BDfunctionsDevilBro.saveData(id, {id,name,visible}, this.getName(), "servers");
 		}
