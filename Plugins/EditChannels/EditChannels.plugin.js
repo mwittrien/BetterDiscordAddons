@@ -337,8 +337,11 @@ class EditChannels {
 
     static resetAll () {
 		bdPluginStorage.set("EditChannels", "channels", {});
-		$(".containerDefault-7RImuF").each(
-			(i,channelDiv) => {
+		
+		var channels = BDfunctionsDevilBro.readChannelList();
+		
+		channels.forEach(
+			(channelDiv,i) => {
 				$(channelDiv).find(".name-2SL4ev.changed")
 					.text($(channelDiv).find(".name-2SL4ev.changed").attr("name"))
 					.attr("name", "")
