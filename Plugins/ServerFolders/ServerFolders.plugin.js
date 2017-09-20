@@ -364,7 +364,7 @@ class ServerFolders {
 
 	getDescription () {return "Add pseudofolders to your serverlist to organize your servers.";}
 
-	getVersion () {return "4.0.0";}
+	getVersion () {return "4.0.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -476,7 +476,10 @@ class ServerFolders {
 		this.serverListObserver.disconnect();
 		this.badgeObserver.disconnect();
 		$(document).unbind('mousedown', this.folderContextEventHandler);
+		
 		$(".guild.folder").remove();
+		
+		BDfunctionsDevilBro.showHideAllEles(true, BDfunctionsDevilBro.readServerList());
 		
 		BDfunctionsDevilBro.removeLocalStyle(this.getName());
 	}
@@ -485,10 +488,10 @@ class ServerFolders {
 	
     static resetAll () {
 		bdPluginStorage.set("ServerFolders", "folders", {});
+		
 		$(".guild.folder").remove();
-		$(".guild").each( (i,server) => {
-			if ($(server).find(".avatar-small")[0]) $(server).show();
-		});
+		
+		BDfunctionsDevilBro.showHideAllEles(true, BDfunctionsDevilBro.readServerList());
     }
 
 	changeLanguageStrings () {
@@ -572,7 +575,8 @@ class ServerFolders {
 				$(folderTooltip)
 					.text(data.folderName)
 					.css("left", ($(folder).offset().left + $(folder).width()) + "px")
-					.css("top", ($(folder).offset().top + $(folder).height()-($(folder).height()*(4/5))) + "px");
+					.css("top", ($(folder).offset().top + ($(folder).outerHeight() - $(folderTooltip).outerHeight())/2) + "px");
+				
 				if (data.color3) {
 					var bgColor = "rgb(" + (data.color3[0]) + ", " + (data.color3[1]) + ", " + (data.color3[2]) + ")";
 					$(folderTooltip)
@@ -584,7 +588,6 @@ class ServerFolders {
 							}`;
 						
 					BDfunctionsDevilBro.appendLocalStyle("customeServerfolderTooltipCSS", customeTooltipCSS);
-						
 				}
 				if (data.color4) {
 					var fontColor = "rgb(" + (data.color4[0]) + ", " + (data.color4[1]) + ", " + (data.color4[2]) + ")";
@@ -988,7 +991,7 @@ class ServerFolders {
 	}
 	
 	updateAllFolderNotifications () {
-		var folders = this.readFolderList();
+		var folders = $(".guild.folder");
 		for (var i = 0; folders.length > i; i++) {
 			this.updateFolderNotifications(folders[i]);
 		}
@@ -1039,12 +1042,8 @@ class ServerFolders {
 		}
 	}
 	
-	readFolderList () {
-		return document.getElementsByClassName("guild folder");
-	}
-	
 	getParentDivOfFolder (div) {
-		var folders = this.readFolderList();
+		var folders = $(".guild.folder");
 		var foundFolder;
 		for (var i = 0; folders.length > i; i++) {
 			if (folders[i].contains(div)) {
