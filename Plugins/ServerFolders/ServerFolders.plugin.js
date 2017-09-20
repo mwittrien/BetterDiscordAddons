@@ -523,7 +523,7 @@ class ServerFolders {
 		
 		if (serverData && contextType) {
 			var { id, name } = serverData;
-			var info = { id, name, };
+			var info = { id, name };
 			$(context).append(this.serverContextEntryMarkup)
 				.on("click", ".createfolder-item", info, this.createNewFolder.bind(this));
 		}
