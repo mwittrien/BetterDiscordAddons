@@ -364,7 +364,7 @@ class ServerFolders {
 
 	getDescription () {return "Add pseudofolders to your serverlist to organize your servers.";}
 
-	getVersion () {return "4.0.2";}
+	getVersion () {return "4.1.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -973,11 +973,15 @@ class ServerFolders {
 		}
 		
 		var badgeAmount = 0;
+		var voiceEnabled = false;
 		$(includedServers).each(  
 			(i, server) => {
 				var thisBadge = parseInt($(server).find(".badge").text());
 				if (thisBadge > 0) {
 					badgeAmount += thisBadge;
+				}
+				if ($(server).hasClass("audio")) {
+					voiceEnabled = true;
 				}
 			}
 		);
@@ -988,6 +992,13 @@ class ServerFolders {
 		else {
 			$(folderDiv).find(".folder.badge").hide();
 		}
+		
+		if (voiceEnabled) {
+			$(folderDiv).addClass("audio");
+		}
+		else {
+			$(folderDiv).removeClass("audio");
+		}	
 	}
 	
 	updateAllFolderNotifications () {
