@@ -235,7 +235,7 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "3.1.1";}
+	getVersion () {return "3.1.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -436,16 +436,12 @@ class EditChannels {
 				})
 				.on("click", "button.btn-save", (event) => {
 					event.preventDefault();
+					
+					nickName = null;
 					if (channelSettingsModal.find("#modal-text")[0].value) {
 						if (channelSettingsModal.find("#modal-text")[0].value.trim().length > 0) {
 							nickName = channelSettingsModal.find("#modal-text")[0].value.trim();
 						}
-						else {
-							nickName = null;
-						}
-					}
-					else {
-						nickName = null;
 					}
 					
 					if (!$(".ui-color-picker-swatch1.nocolor.selected")[0]) {
@@ -481,7 +477,9 @@ class EditChannels {
 	setSwatches (currentCOMP, colorOptions, wrapper, swatch) {
 		var wrapperDiv = $(wrapper);
 			
-		var largeDefaultBgColor = swatch == "swatch1" ? "rgb(0, 0, 0)" : "rgb(255, 255, 255)";
+		var defaultColors = {"swatch1":"rgb(0, 0, 0)"};
+			
+		var largeDefaultBgColor = defaultColors[swatch];
 			
 		var swatches = 
 			`<div class="ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-nowrap" style="flex: 1 1 auto; margin-top: 5px;">
