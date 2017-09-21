@@ -33,17 +33,21 @@ class EmojiStatistics {
 				box-sizing: border-box;
 				display: flex;
 				flex-direction: column;
-				height: 100%;
 				justify-content: center;
-				max-height: 660px;
-				min-height: 340px;
+				min-height: initial;
+				max-height: initial;
 				opacity: 0;
-				padding-bottom: 60px;
-				padding-top: 60px;
 				pointer-events: none;
-				position: absolute;
 				user-select: none;
+				height: 100%;
 				width: 100%;
+				margin: 0;
+				padding: 0;
+				position: absolute;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				left: 0;
 				z-index: 1000;
 			}
 			
@@ -260,7 +264,7 @@ class EmojiStatistics {
 
 	getDescription () {return "Adds some helpful options to show you more information about emojis and emojiservers.";}
 
-	getVersion () {return "2.1.3";}
+	getVersion () {return "2.2.0";}
 
 	getAuthor () {return "DevilBro";}
 
