@@ -412,6 +412,8 @@ class EditServers {
 					var bgImage = info.icon ? "url('https://cdn.discordapp.com/icons/" + info.id + "/" + info.icon + ".png')" : "";
 				
 					$(serverDiv)
+						.off("mouseenter")
+						.off("mouseleave")
 						.removeClass("custom");
 					$(server)
 						.text($(server).attr("name"))
@@ -712,6 +714,8 @@ class EditServers {
 				
 				$(serverDiv)
 					.addClass("custom")
+					.off("mouseenter")
+					.off("mouseleave")
 					.on("mouseenter", this.createServerToolTip.bind(this))
 					.on("mouseleave", this.deleteServerToolTip.bind(this));
 				$(server)
@@ -731,14 +735,18 @@ class EditServers {
 	}
 	
 	createServerToolTip (e) {
+		console.log($(".tooltip"));
+		
 		var serverDiv = e.target;
 		var info = BDfunctionsDevilBro.getKeyInformation({"node":serverDiv, "key":"guild"});
-		if (info) {
+		console.log($(".tooltips").find(".guild-custom-tooltip").length);
+		if (info && $(".tooltips").find(".guild-custom-tooltip").length == 0) {
 			var data = BDfunctionsDevilBro.loadData(info.id, this.getName(), "servers");
 			if (data) {
 				$(".tooltips").find(".tooltip").hide();
 				var serverTooltip = $(this.serverTooltipMarkup);
 				$(".tooltips").append(serverTooltip);
+				
 				$(serverTooltip)
 					.text(data.name ? data.name : info.name)
 					.css("left", ($(serverDiv).offset().left + $(serverDiv).width()) + "px")
@@ -750,9 +758,9 @@ class EditServers {
 						.css("background-color", bgColor)
 						
 					var customeTooltipCSS = `
-							.guild-custom-tooltip:after {
-								border-right-color: ` + bgColor + ` !important;
-							}`;
+						.guild-custom-tooltip:after {
+							border-right-color: ` + bgColor + ` !important;
+						}`;
 						
 					BDfunctionsDevilBro.appendLocalStyle("customeServerTooltipCSS", customeTooltipCSS);
 				}
