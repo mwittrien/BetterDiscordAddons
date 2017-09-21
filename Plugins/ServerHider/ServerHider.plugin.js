@@ -28,17 +28,21 @@ class ServerHider {
 				box-sizing: border-box;
 				display: flex;
 				flex-direction: column;
-				height: 100%;
 				justify-content: center;
-				max-height: 660px;
-				min-height: 340px;
+				min-height: initial;
+				max-height: initial;
 				opacity: 0;
-				padding-bottom: 60px;
-				padding-top: 60px;
 				pointer-events: none;
-				position: absolute;
 				user-select: none;
+				height: 100%;
 				width: 100%;
+				margin: 0;
+				padding: 0;
+				position: absolute;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				left: 0;
 				z-index: 1000;
 			}
 			
@@ -254,7 +258,7 @@ class ServerHider {
 
 	getDescription () {return "Hide Servers in your Serverlist";}
 
-	getVersion () {return "2.1.2";}
+	getVersion () {return "2.2.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -347,15 +351,13 @@ class ServerHider {
 		var serverData = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"guild"});
 		var contextType = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"GuildLeaveGroup"});
 		var guildCreate = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"handleGuildCreate"});
+		var data = Object.assign({},serverData,{guildCreate});
 		if (serverData && contextType) {
-			var { id, name } = serverData;
-			var data = { id, name , guildCreate };
 			$(context).append(this.serverContextEntryMarkup)
 				.on("mouseenter", ".serverhider-item", data, this.createContextSubMenu.bind(this))
 				.on("mouseleave", ".serverhider-item", data, this.deleteContextSubMenu.bind(this));
 		}
 		else if (guildCreate) {
-			var data = { guildCreate };
 			$(context).append(this.serverContextEntryMarkup)
 				.on("mouseenter", ".serverhider-item", data, this.createContextSubMenu.bind(this))
 				.on("mouseleave", ".serverhider-item", data, this.deleteContextSubMenu.bind(this));
