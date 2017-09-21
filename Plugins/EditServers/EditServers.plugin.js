@@ -613,13 +613,13 @@ class EditServers {
 				wrapperDiv.find(".regulars .ui-color-picker-" + swatch).eq(selection+1)
 					.addClass("selected")
 					.css("background-color", currentRGB)
-					.css("border", "4px solid " + invColor);
+					.css("border", "4px solid " + invRGB);
 			} 
 			else {
 				$(".custom", wrapperDiv)
 					.addClass("selected")
 					.css("background-color", currentRGB)
-					.css("border", "4px solid " + invColor);
+					.css("border", "4px solid " + invRGB);
 			}
 		}
 		else {
