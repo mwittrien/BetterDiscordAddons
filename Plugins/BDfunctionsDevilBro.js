@@ -3,7 +3,7 @@ var BDfunctionsDevilBro = {};
 BDfunctionsDevilBro.loadMessage = function (pluginName, oldVersion) { 
 	console.log(pluginName + " Version: " + oldVersion + " loaded.");
 	var rawUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
-	var downloadUrl = "https://github.com/mwittrien/BetterDiscordAddons/blob/master/Plugins/" + pluginName;
+	var downloadUrl = "https://betterdiscord.net/ghdl?url=https://github.com/mwittrien/BetterDiscordAddons/blob/master/Plugins/" + pluginName + "/" + + pluginName + + ".plugin.js";
 	$.get(rawUrl, (script) => {
 		if (script) {
 			script = script.split('getVersion () {return "')[1];
@@ -14,8 +14,37 @@ BDfunctionsDevilBro.loadMessage = function (pluginName, oldVersion) {
 				if (oldNmbrs.length == newNmbrs.length) {
 					for (var i = 0; i < oldNmbrs.length; i++) {
 						if (newNmbrs[i] > oldNmbrs[i]) {
-							console.log(pluginName + ": Your version " + oldVersion + " is outdated. Newest version: " + newVersion);
-							console.log("Download it on: " + downloadUrl);
+							var noticeCSS = `
+								#pluginNotice span, 
+								#pluginNotice span a {
+									-webkit-app-region: no-drag;
+									color:#fff;
+								} 
+								#pluginNotice span a:hover {
+									text-decoration:underline;
+								}`;
+							BDfunctionsDevilBro.removeLocalStyle("pluginNoticeCSS");
+							BDfunctionsDevilBro.appendLocalStyle("pluginNoticeCSS", noticeCSS);
+							var noticeElement = `<div class="notice notice-info" id="pluginNotice"><div class="notice-dismiss" id="pluginNoticeDismiss"></div>The following plugins have updates: &nbsp;<strong id="outdatedPlugins"></strong></div>`;
+							if (!$('#pluginNotice').length) {
+								$('.app.flex-vertical').children().first().before(noticeElement);
+								$('.win-buttons').addClass("win-buttons-notice");
+								$('#pluginNoticeDismiss').on('click', () => {
+									$('.win-buttons').animate({top: 0}, 400, "swing", () => {$('.win-buttons').css("top","").removeClass("win-buttons-notice")});
+									$('#pluginNotice').slideUp({complete: () => {
+										$('#pluginNotice').remove();
+									}});
+								});
+							}
+							var pluginNoticeID = pluginName + "-notice";
+							var pluginNoticeElement = $('<span id="' + pluginNoticeID + '">');
+							pluginNoticeElement.html('<a href="' + downloadUrl + '" target="_blank">' + pluginName + '</a>');
+							if (!$('#'+pluginNoticeID).length) {
+								if ($('#outdatedPlugins').children('span').length) {
+									pluginNoticeElement.html(", " + pluginNoticeElement.html());
+								}
+								$('#outdatedPlugins').append(pluginNoticeElement);
+							}
 							break;
 						}
 						else if (newNmbrs[i] < oldNmbrs[i]) {
