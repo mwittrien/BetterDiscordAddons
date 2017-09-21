@@ -361,18 +361,18 @@ BDfunctionsDevilBro.colorINV = function (color, conv) {
 };
 
 BDfunctionsDevilBro.checkColorType = function (color) {
-	if (typeof color === "object" && color.length == 3) {
-		return "comp";
+	if (color) {
+		if (typeof color === "object" && color.length == 3) {
+			return "comp";
+		}
+		else if (typeof color === "string" && color.indexOf("rgb(") == 0) {
+			return "rgb";
+		}
+		else if (typeof color === "string" && color.match(/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i).length == 4) {
+			return "hex";
+		}
 	}
-	else if (typeof color === "string" && color.indexOf("rgb(") == 0) {
-		return "rgb";
-	}
-	else if (typeof color === "string" && color.match(/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i).length == 4) {
-		return "hex";
-	}
-	else {
-		return null;
-	}
+	return null;
 };
 
 BDfunctionsDevilBro.clearReadNotifications = function (servers) {
