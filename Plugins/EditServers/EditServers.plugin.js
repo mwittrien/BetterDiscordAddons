@@ -326,7 +326,7 @@ class EditServers {
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	getVersion () {return "1.0.0";}
+	getVersion () {return "1.0.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -740,7 +740,7 @@ class EditServers {
 				var serverTooltip = $(this.serverTooltipMarkup);
 				$(".tooltips").append(serverTooltip);
 				$(serverTooltip)
-					.text(data.name)
+					.text(data.name ? data.name : info.name)
 					.css("left", ($(serverDiv).offset().left + $(serverDiv).width()) + "px")
 					.css("top", ($(serverDiv).offset().top + ($(serverDiv).outerHeight() - $(serverTooltip).outerHeight())/2) + "px");
 				
