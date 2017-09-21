@@ -3,6 +3,7 @@ A series of plugins and themes for BetterDiscord. If you got any question write 
 
 ## Plugins
  - [Edit Channels](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditChannels) - Allows the user to locally change the name and color of channels.
+ - [Edit Servers](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditServers) - Allows the user to locally change the name, initials, icon and color of servers.
  - [Emoji Statistics](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EmojiStatistics) - Displays emojiinformation when hovering over an emoji in the emojipicker and adds a button to the emojipicker to open a statistics overview.
  - [Fix German Translation](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/FixGermanTranslation) - Fixes some minor translation errors in the german version of Discord.
  - [Message Utilities](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/MessageUtilities) - Allows you to add shortcuts to interact with messages.
