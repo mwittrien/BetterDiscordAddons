@@ -704,8 +704,6 @@ class EditServers {
 					$(server).attr("name", $(server).text())
 				}
 				
-				console.log(data);
-				
 				var name = 			data.name ? data.name : info.name;
 				var shortName = 	data.shortName ? data.shortName : $(server).attr("name");
 				var bgImage = 		data.url ? "url(" + data.url + ")" : (info.icon ? "url('https://cdn.discordapp.com/icons/" + info.id + "/" + info.icon + ".png')" : "");
