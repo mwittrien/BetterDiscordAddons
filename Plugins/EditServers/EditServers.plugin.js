@@ -137,6 +137,14 @@ class EditServers {
 				transition: background-color .15s ease,border .15s ease;
 			}
 
+			.editservers-modal input.valid {
+				background-color: rgba(10,167,0,.5);
+			}
+
+			.editservers-modal input.invalid {
+				background-color: rgba(208,0,0,.5);
+			}
+
 			.editservers-modal input:disabled {
 				color: #a6a6a7;
 				cursor: no-drop;
@@ -267,6 +275,9 @@ class EditServers {
 			
 		this.serverTooltipMarkup = 
 			`<div class="tooltip tooltip-right tooltip-black guild-custom-tooltip"></div>`;
+			
+		this.noticeTooltipMarkup = 
+			`<div class="tooltip tooltip-right tooltip-black notice-tooltip"></div>`;
 
 		this.serverSettingsModalMarkup =
 			`<span class="editservers-modal">
@@ -349,7 +360,7 @@ class EditServers {
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	getVersion () {return "1.1.0";}
+	getVersion () {return "1.2.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -541,6 +552,7 @@ class EditServers {
 			serverSettingsModal.find("#modal-idtext").attr("placeholder", e.data.shortName);
 			serverSettingsModal.find("#modal-urltext")[0].value = url;
 			serverSettingsModal.find("#modal-urltext").attr("placeholder", e.data.icon ? "https://cdn.discordapp.com/icons/" + e.data.id + "/" + e.data.icon + ".png" : null);
+			serverSettingsModal.find("#modal-urltext").addClass(url ? "valid" : "");
 			serverSettingsModal.find("#modal-urltext").prop("disabled", removeIcon);
 			serverSettingsModal.find("#modal-urlcheck")[0].checked = removeIcon;
 			this.setSwatches(color1, this.colourList, serverSettingsModal.find(".swatches1"), "swatch1");
@@ -554,6 +566,15 @@ class EditServers {
 				})
 				.on("click", "#modal-urlcheck", (event) => {
 					serverSettingsModal.find("#modal-urltext").prop("disabled", event.target.checked);
+				})
+				.on("change keyup paste", "#modal-urltext", (event) => {
+					this.checkUrl(event, serverSettingsModal);
+				})
+				.on("mouseenter", "#modal-urltext", (event) => {
+					this.createNoticeTooltip(event);
+				})
+				.on("mouseleave", "#modal-urltext", (event) => {
+					this.deleteNoticeToolTip(event);
 				})
 				.on("click", "button.form-tablinks", (event) => {
 					this.changeTab(event, serverSettingsModal);
@@ -575,13 +596,15 @@ class EditServers {
 						}
 					}
 					
-					url = null;
-					if (!serverSettingsModal.find("#modal-urlcheck")[0].checked && serverSettingsModal.find("#modal-urltext")[0].value) {
-						if (serverSettingsModal.find("#modal-urltext")[0].value.trim().length > 0) {
-							url = serverSettingsModal.find("#modal-urltext")[0].value.trim();
+					if (serverSettingsModal.find("#modal-urltext:not('.invalid')")[0]) {
+						url = null;
+						if (!serverSettingsModal.find("#modal-urlcheck")[0].checked && serverSettingsModal.find("#modal-urltext")[0].value) {
+							if (serverSettingsModal.find("#modal-urltext")[0].value.trim().length > 0) {
+								url = serverSettingsModal.find("#modal-urltext")[0].value.trim();
+							}
 						}
 					}
-						
+					
 					removeIcon = serverSettingsModal.find("#modal-urlcheck")[0].checked;
 					
 					color1 = !$(".ui-color-picker-swatch1.nocolor.selected")[0] ? BDfunctionsDevilBro.color2COMP($(".ui-color-picker-swatch1.selected").css("background-color")) : null;
@@ -589,8 +612,7 @@ class EditServers {
 					color3 = !$(".ui-color-picker-swatch3.nocolor.selected")[0] ? BDfunctionsDevilBro.color2COMP($(".ui-color-picker-swatch3.selected").css("background-color")) : null;
 					color4 = !$(".ui-color-picker-swatch4.nocolor.selected")[0] ? BDfunctionsDevilBro.color2COMP($(".ui-color-picker-swatch4.selected").css("background-color")) : null;
 					
-						
-					if (name == null && shortName == null && url == null && removeIcon == false && color1 == null && color2 == null && color3 == null && color4 == null) {
+					if (name == null && shortName == null && url == null && !removeIcon && color1 == null && color2 == null && color3 == null && color4 == null) {
 						this.resetServer(e);
 					}
 					else {
@@ -601,12 +623,11 @@ class EditServers {
 					$(".sp-container").remove();
 					serverSettingsModal.remove();
 				});
-				
 			serverSettingsModal.find("#modal-nametext")[0].focus();
 		}
 	}
 	
-	changeTab(e,modal) {
+	changeTab (e, modal) {
 		var tab = e.target.value;
 
 		$(".form-tabcontent.open",modal)
@@ -620,6 +641,74 @@ class EditServers {
 			
 		$(e.target)
 			.addClass("active");
+	}
+	
+	checkUrl (e, modal) {
+		if (!e.target.value) {
+		$(e.target)
+			.removeClass("valid")
+			.removeClass("invalid");
+		}
+		else {
+			$.ajax({
+				type: "HEAD",
+				url : "https://cors-anywhere.herokuapp.com/" + e.target.value,
+				success: (message, text, response) => {
+					if (response.getResponseHeader('Content-Type').indexOf("image") != -1){
+						$(e.target)
+							.removeClass("invalid")
+							.addClass("valid");
+					}
+					else {
+						$(e.target)
+							.removeClass("valid")
+							.addClass("invalid");
+					}
+				},
+				error: () => {
+					$(e.target)
+						.removeClass("valid")
+						.addClass("invalid");
+				},
+				complete: () => {
+					if ($(e.target).hasClass("hovering")) this.createNoticeTooltip(e);
+				}
+			});
+		}
+	}
+	
+	createNoticeTooltip (e) {
+		BDfunctionsDevilBro.removeLocalStyle("customeNoticeTooltipCSS");
+		$(".tooltips").find(".notice-tooltip").remove();
+		
+		var input = e.target;
+		$(input).addClass("hovering");
+		var valid = $(input).hasClass("valid");
+		var invalid = $(input).hasClass("invalid");
+		if (valid || invalid) {
+			var bgColor = valid ? "#297828" : "#8C2528";
+			var noticeTooltip = $(this.noticeTooltipMarkup);
+			$(".tooltips").append(noticeTooltip);
+			$(noticeTooltip)
+				.text(valid ? "Valid imageurl" : "Invalid imageurl")
+				.css("background-color", bgColor)
+				.css("left", ($(input).offset().left + $(input).width() + parseInt($(input).css("marginLeft"), 10)) + "px")
+				.css("top", ($(input).offset().top + ($(input).outerHeight() - $(noticeTooltip).outerHeight())/2) + "px");
+				
+			var customeTooltipCSS = `
+				.notice-tooltip:after {
+					border-right-color: ` + bgColor + ` !important;
+				}`;
+				
+			BDfunctionsDevilBro.appendLocalStyle("customeNoticeTooltipCSS", customeTooltipCSS);
+		}
+	}
+	
+	deleteNoticeToolTip (e) {
+		var input = e.target;
+		$(input).removeClass("hovering");
+		BDfunctionsDevilBro.removeLocalStyle("customeNoticeTooltipCSS");
+		$(".tooltips").find(".notice-tooltip").remove();
 	}
 	
 	setSwatches (currentCOMP, colorOptions, wrapper, swatch) {
@@ -805,7 +894,7 @@ class EditServers {
 	}
 	
 	deleteServerToolTip (e) {
-		$("#customeServerTooltipCSS").remove();
+		BDfunctionsDevilBro.removeLocalStyle("customeServerTooltipCSS");
 		$(".tooltips").find(".guild-custom-tooltip").remove();
 	}
 	
