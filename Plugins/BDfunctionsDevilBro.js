@@ -184,6 +184,15 @@ BDfunctionsDevilBro.themeIsLightTheme = function () {
 	return false;
 };
 
+BDfunctionsDevilBro.showHideEle = function (show, ele) {
+	if (show) {
+		$(ele).show();
+	}
+	else {
+		$(ele).hide();
+	}
+};
+
 BDfunctionsDevilBro.showHideAllEles = function (show, eles) {
 	for (var i = 0; eles.length > i; i++) {
 		if (show) {
@@ -192,15 +201,6 @@ BDfunctionsDevilBro.showHideAllEles = function (show, eles) {
 		else {
 			$(eles[i]).hide();
 		}
-	}
-};
-
-BDfunctionsDevilBro.showHideEle = function (show, ele) {
-	if (show) {
-		$(ele).show();
-	}
-	else {
-		$(ele).hide();
 	}
 };
 
@@ -303,6 +303,26 @@ BDfunctionsDevilBro.clearReadNotifications = function (servers) {
 				},i*100);
 			}
 		); 
+};
+
+BDfunctionsDevilBro.colorCOMP2RGB = function (comp, invert) {
+	if (invert === undefined) return "rgb(" + (comp[0]) + ", " + (comp[1]) + ", " + (comp[2]) + ")";
+	if (invert === true) return "rgb(" + (255-comp[0]) + ", " + (255-comp[1]) + ", " + (255-comp[2]) + ")";
+	return "rgb(" + (comp[0]) + ", " + (comp[1]) + ", " + (comp[2]) + ")";
+
+BDfunctionsDevilBro.colorCOMP2HEX = function (comp, invert) {
+	if (invert === undefined) return "#" + (0x1000000 + ((comp[2]) | ((comp[1]) << 8) | ((comp[0]) << 16))).toString(16).slice(1);
+	if (invert === true) return "#" + (0x1000000 + ((255-comp[2]) | ((255-comp[1]) << 8) | ((255-comp[0]) << 16))).toString(16).slice(1);
+	return "#" + (0x1000000 + ((comp[2]) | ((comp[1]) << 8) | ((comp[0]) << 16))).toString(16).slice(1);
+};
+
+BDfunctionsDevilBro.colorRGB2COMP = function (rgb) {
+	return rgb.slice(4, -1).split(", ");
+};
+
+BDfunctionsDevilBro.colorHEX2COMP = function (hex) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+	return [result[1],result[2],result[3]];
 };
 
 BDfunctionsDevilBro.getDiscordLanguage = function () {
