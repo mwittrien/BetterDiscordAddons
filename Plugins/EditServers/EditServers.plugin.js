@@ -128,13 +128,35 @@ class EditServers {
 				padding: 10px;
 				height: 40px;
 				box-sizing: border-box;
-				margin: 0 5% 10px 5%;
 				width: 90%;
+				margin: 0 5% 10px 5%;
 				border-width: 1px;
 				border-style: solid;
 				border-radius: 3px;
 				outline: none;
 				transition: background-color .15s ease,border .15s ease;
+			}
+
+			.editservers-modal input:disabled {
+				color: #a6a6a7;
+				cursor: no-drop;
+				background-color: rgba(0,0,0,.5);
+			}
+
+			.editservers-modal input[type="checkbox"] {
+				margin: 0px 0px 0px 11px;
+				width: 10%;
+				height: 20px;
+			}
+
+			.editservers-modal .checkbox {
+				display: inline;
+			}
+
+			.editservers-modal .checkboxlabel {
+				position: relative;
+				top: -6px;
+				display: inline;
 			}
 
 			.editservers-modal .btn {
@@ -271,6 +293,7 @@ class EditServers {
 												<input type="text" id="modal-idtext" name="idtext">
 												<label class="modal-text-label" for="modal-urltext">REPLACE_modal_serverurl_text</label>
 												<input type="text" id="modal-urltext" name="urltext">
+												<div class="checkbox"><input type="checkbox" id="modal-urlcheck"></div><div class="checkboxlabel"><label class="modal-text-label" for="modal-urlcheck">REPLACE_modal_removeicon_text</label></div>
 											</div>
 										</div>
 									</div>
@@ -326,7 +349,7 @@ class EditServers {
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	getVersion () {return "1.0.2";}
+	getVersion () {return "1.1.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -435,6 +458,7 @@ class EditServers {
 		this.serverSettingsModalMarkup = 	this.serverSettingsModalMarkup.replace("REPLACE_modal_servername_text", this.labels.modal_servername_text);
 		this.serverSettingsModalMarkup = 	this.serverSettingsModalMarkup.replace("REPLACE_modal_servershortname_text", this.labels.modal_servershortname_text);
 		this.serverSettingsModalMarkup = 	this.serverSettingsModalMarkup.replace("REPLACE_modal_serverurl_text", this.labels.modal_serverurl_text);
+		this.serverSettingsModalMarkup = 	this.serverSettingsModalMarkup.replace("REPLACE_modal_removeicon_text", this.labels.modal_removeicon_text);
 		this.serverSettingsModalMarkup = 	this.serverSettingsModalMarkup.replace("REPLACE_modal_tabheader1_text", this.labels.modal_tabheader1_text);
 		this.serverSettingsModalMarkup = 	this.serverSettingsModalMarkup.replace("REPLACE_modal_tabheader2_text", this.labels.modal_tabheader2_text);
 		this.serverSettingsModalMarkup = 	this.serverSettingsModalMarkup.replace("REPLACE_modal_tabheader3_text", this.labels.modal_tabheader3_text);
@@ -501,6 +525,7 @@ class EditServers {
 			var name = 			data ? data.name : null;
 			var shortName = 	data ? data.shortName : null;
 			var url = 			data ? data.url : null;
+			var removeIcon = 	data ? data.removeIcon : false;
 			var color1 = 		data ? data.color1 : null;
 			var color2 = 		data ? data.color2 : null;
 			var color3 = 		data ? data.color3 : null;
@@ -516,6 +541,8 @@ class EditServers {
 			serverSettingsModal.find("#modal-idtext").attr("placeholder", e.data.shortName);
 			serverSettingsModal.find("#modal-urltext")[0].value = url;
 			serverSettingsModal.find("#modal-urltext").attr("placeholder", e.data.icon ? "https://cdn.discordapp.com/icons/" + e.data.id + "/" + e.data.icon + ".png" : null);
+			serverSettingsModal.find("#modal-urltext").prop("disabled", removeIcon);
+			serverSettingsModal.find("#modal-urlcheck")[0].checked = removeIcon;
 			this.setSwatches(color1, this.colourList, serverSettingsModal.find(".swatches1"), "swatch1");
 			this.setSwatches(color2, this.colourList, serverSettingsModal.find(".swatches2"), "swatch2");
 			this.setSwatches(color3, this.colourList, serverSettingsModal.find(".swatches3"), "swatch3");
@@ -525,8 +552,11 @@ class EditServers {
 					$(".sp-container").remove();
 					serverSettingsModal.remove();
 				})
+				.on("click", "#modal-urlcheck", (event) => {
+					serverSettingsModal.find("#modal-urltext").prop("disabled", event.target.checked);
+				})
 				.on("click", "button.form-tablinks", (event) => {
-					this.changeTab(event,serverSettingsModal);
+					this.changeTab(event, serverSettingsModal);
 				})
 				.on("click", "button.btn-save", (event) => {
 					event.preventDefault();
@@ -546,22 +576,25 @@ class EditServers {
 					}
 					
 					url = null;
-					if (serverSettingsModal.find("#modal-urltext")[0].value) {
+					if (!serverSettingsModal.find("#modal-urlcheck")[0].checked && serverSettingsModal.find("#modal-urltext")[0].value) {
 						if (serverSettingsModal.find("#modal-urltext")[0].value.trim().length > 0) {
 							url = serverSettingsModal.find("#modal-urltext")[0].value.trim();
 						}
 					}
+						
+					removeIcon = serverSettingsModal.find("#modal-urlcheck")[0].checked;
 					
 					color1 = !$(".ui-color-picker-swatch1.nocolor.selected")[0] ? BDfunctionsDevilBro.color2COMP($(".ui-color-picker-swatch1.selected").css("background-color")) : null;
 					color2 = !$(".ui-color-picker-swatch2.nocolor.selected")[0] ? BDfunctionsDevilBro.color2COMP($(".ui-color-picker-swatch2.selected").css("background-color")) : null;
 					color3 = !$(".ui-color-picker-swatch3.nocolor.selected")[0] ? BDfunctionsDevilBro.color2COMP($(".ui-color-picker-swatch3.selected").css("background-color")) : null;
 					color4 = !$(".ui-color-picker-swatch4.nocolor.selected")[0] ? BDfunctionsDevilBro.color2COMP($(".ui-color-picker-swatch4.selected").css("background-color")) : null;
 					
-					if (name == null && shortName == null && url == null && color1 == null && color2 == null && color3 == null && color4 == null) {
+						
+					if (name == null && shortName == null && url == null && removeIcon == false && color1 == null && color2 == null && color3 == null && color4 == null) {
 						this.resetServer(e);
 					}
 					else {
-						BDfunctionsDevilBro.saveData(id, {id,name,shortName,url,color1,color2,color3,color4}, this.getName(), "servers");
+						BDfunctionsDevilBro.saveData(id, {id,name,shortName,url,removeIcon,color1,color2,color3,color4}, this.getName(), "servers");
 						this.loadServer(serverDiv);
 					}
 					
@@ -709,6 +742,7 @@ class EditServers {
 				var name = 			data.name ? data.name : info.name;
 				var shortName = 	data.shortName ? data.shortName : $(server).attr("name");
 				var bgImage = 		data.url ? "url(" + data.url + ")" : (info.icon ? "url('https://cdn.discordapp.com/icons/" + info.id + "/" + info.icon + ".png')" : "");
+				var removeIcon = 	data.removeIcon;
 				var color1 = 		data.color1 ? BDfunctionsDevilBro.color2RGB(data.color1) : "";
 				var color2 = 		data.color2 ? BDfunctionsDevilBro.color2RGB(data.color2) : "";
 				
@@ -720,7 +754,7 @@ class EditServers {
 					.on("mouseleave", this.deleteServerToolTip.bind(this));
 				$(server)
 					.text(shortName)
-					.css("background-image", bgImage)
+					.css("background-image", removeIcon ? "" : bgImage)
 					.css("background-color", color1)
 					.css("color", color2);
 			}
@@ -786,6 +820,7 @@ class EditServers {
 					modal_servername_text: 				"Lokalt Servernavn",
 					modal_servershortname_text: 		"Initialer",
 					modal_serverurl_text: 				"Ikon",
+					modal_removeicon_text: 				"Fjern ikon",
 					modal_tabheader1_text: 				"Server",
 					modal_tabheader2_text: 				"Ikonfarve",
 					modal_tabheader3_text: 				"Tooltipfarve",
@@ -805,6 +840,7 @@ class EditServers {
 					modal_servername_text: 				"Lokaler Servername",
 					modal_servershortname_text: 		"Serverkürzel",
 					modal_serverurl_text: 				"Icon",
+					modal_removeicon_text: 				"Entferne Icon",
 					modal_tabheader1_text: 				"Server",
 					modal_tabheader2_text: 				"Iconfarbe",
 					modal_tabheader3_text: 				"Tooltipfarbe",
@@ -824,6 +860,7 @@ class EditServers {
 					modal_servername_text: 				"Nombre local del servidor",
 					modal_servershortname_text: 		"Iniciales",
 					modal_serverurl_text: 				"Icono",
+					modal_removeicon_text: 				"Eliminar icono",
 					modal_tabheader1_text: 				"Servidor",
 					modal_tabheader2_text: 				"Color del icono",
 					modal_tabheader3_text:				"Color de tooltip",
@@ -843,6 +880,7 @@ class EditServers {
 					modal_servername_text: 				"Nom local du serveur",
 					modal_servershortname_text: 		"Initiales",
 					modal_serverurl_text: 				"Icône",
+					modal_removeicon_text: 				"Supprimer l'icône",
 					modal_tabheader1_text: 				"Serveur",
 					modal_tabheader2_text: 				"Couleur de l'icône",
 					modal_tabheader3_text:				"Couleur de tooltip",
@@ -862,6 +900,7 @@ class EditServers {
 					modal_servername_text: 				"Nome locale server",
 					modal_servershortname_text: 		"Iniziali",
 					modal_serverurl_text: 				"Icona",
+					modal_removeicon_text: 				"Rimuova l'icona",
 					modal_tabheader1_text: 				"Server",
 					modal_tabheader2_text: 				"Colore dell'icona",
 					modal_tabheader3_text:				"Colore della tooltip",
@@ -881,6 +920,7 @@ class EditServers {
 					modal_servername_text: 				"Lokale servernaam",
 					modal_servershortname_text: 		"Initialen",
 					modal_serverurl_text: 				"Icoon",
+					modal_removeicon_text: 				"Verwijder icoon",
 					modal_tabheader1_text: 				"Server",
 					modal_tabheader2_text: 				"Icoon kleur",
 					modal_tabheader3_text:				"Tooltip kleur",
@@ -900,6 +940,7 @@ class EditServers {
 					modal_servername_text: 				"Lokalt servernavn",
 					modal_servershortname_text: 		"Initialer",
 					modal_serverurl_text: 				"Ikon",
+					modal_removeicon_text: 				"Fjern ikon",
 					modal_tabheader1_text: 				"Server",
 					modal_tabheader2_text: 				"Ikonfarge",
 					modal_tabheader3_text:				"Tooltipfarge",
@@ -919,6 +960,7 @@ class EditServers {
 					modal_servername_text: 				"Lokalna nazwa serwera",
 					modal_servershortname_text: 		"Inicjały",
 					modal_serverurl_text: 				"Ikony",
+					modal_removeicon_text: 				"Usuń ikonę",
 					modal_tabheader1_text: 				"Serwera",
 					modal_tabheader2_text: 				"Kolor ikony",
 					modal_tabheader3_text:				"Kolor tooltip",
@@ -938,6 +980,7 @@ class EditServers {
 					modal_servername_text: 				"Nome local do servidor",
 					modal_servershortname_text: 		"Iniciais",
 					modal_serverurl_text: 				"Icone",
+					modal_removeicon_text: 				"Remover ícone",
 					modal_tabheader1_text: 				"Servidor",
 					modal_tabheader2_text: 				"Cor do ícone",
 					modal_tabheader3_text:				"Cor da tooltip",
@@ -957,6 +1000,7 @@ class EditServers {
 					modal_servername_text: 				"Paikallinen palvelimenimi",
 					modal_servershortname_text: 		"Nimikirjaimet",
 					modal_serverurl_text: 				"Ikonin",
+					modal_removeicon_text: 				"Poista kuvake",
 					modal_tabheader1_text: 				"Palvelimen",
 					modal_tabheader2_text: 				"Ikonin väri",
 					modal_tabheader3_text:				"Tooltip väri",
@@ -976,6 +1020,7 @@ class EditServers {
 					modal_servername_text: 				"Lokalt servernamn",
 					modal_servershortname_text: 		"Initialer",
 					modal_serverurl_text: 				"Ikon",
+					modal_removeicon_text: 				"Ta bort ikonen",
 					modal_tabheader1_text: 				"Server",
 					modal_tabheader2_text: 				"Ikonfärg",
 					modal_tabheader3_text:				"Tooltipfärg",
@@ -995,6 +1040,7 @@ class EditServers {
 					modal_servername_text: 				"Yerel Sunucu Adı",
 					modal_servershortname_text: 		"Baş harfleri",
 					modal_serverurl_text: 				"Simge",
+					modal_removeicon_text: 				"Simge kaldır",
 					modal_tabheader1_text: 				"Sunucu",
 					modal_tabheader2_text: 				"Simge rengi",
 					modal_tabheader3_text:				"Tooltip rengi",
@@ -1014,6 +1060,7 @@ class EditServers {
 					modal_servername_text: 				"Místní název serveru",
 					modal_servershortname_text: 		"Iniciály",
 					modal_serverurl_text: 				"Ikony",
+					modal_removeicon_text: 				"Odstranit ikonu",
 					modal_tabheader1_text: 				"Server",
 					modal_tabheader2_text: 				"Barva ikony",
 					modal_tabheader3_text:				"Barva tooltip",
@@ -1033,6 +1080,7 @@ class EditServers {
 					modal_servername_text: 				"Локално име на cървър",
 					modal_servershortname_text: 		"Инициали",
 					modal_serverurl_text: 				"Икона",
+					modal_removeicon_text: 				"Премахване на иконата",
 					modal_tabheader1_text: 				"Cървър",
 					modal_tabheader2_text: 				"Цвят на иконата",
 					modal_tabheader3_text:				"Цвят на подсказка",
@@ -1052,6 +1100,7 @@ class EditServers {
 					modal_servername_text: 				"Имя локального cервер",
 					modal_servershortname_text: 		"Инициалы",
 					modal_serverurl_text: 				"Значок",
+					modal_removeicon_text: 				"Удалить значок",
 					modal_tabheader1_text: 				"Cервер",
 					modal_tabheader2_text: 				"Цвет значков",
 					modal_tabheader3_text:				"Цвет подсказка",
@@ -1071,6 +1120,7 @@ class EditServers {
 					modal_servername_text: 				"Локальне ім'я cервер",
 					modal_servershortname_text: 		"Ініціали",
 					modal_serverurl_text: 				"Іконка",
+					modal_removeicon_text: 				"Видалити піктограму",
 					modal_tabheader1_text: 				"Cервер",
 					modal_tabheader2_text: 				"Колір ікони",
 					modal_tabheader3_text:				"Колір підказка",
@@ -1090,6 +1140,7 @@ class EditServers {
 					modal_servername_text: 				"ローカルサーバー名",
 					modal_servershortname_text: 		"イニシャル",
 					modal_serverurl_text: 				"アイコン",
+					modal_removeicon_text: 				"アイコンを削除",
 					modal_tabheader1_text: 				"サーバー",
 					modal_tabheader2_text: 				"アイコンの色",
 					modal_tabheader3_text:				"ツールチップの色",
@@ -1109,6 +1160,7 @@ class EditServers {
 					modal_servername_text: 				"服務器名稱",
 					modal_servershortname_text: 		"聲母",
 					modal_serverurl_text: 				"圖標",
+					modal_removeicon_text: 				"刪除圖標",
 					modal_tabheader1_text: 				"服務器",
 					modal_tabheader2_text: 				"圖標顏色",
 					modal_tabheader3_text: 				"工具提示顏色",
@@ -1128,6 +1180,7 @@ class EditServers {
 					modal_servername_text: 				"로컬 서버 이름",
 					modal_servershortname_text: 		"머리 글자",
 					modal_serverurl_text: 				"상",
+					modal_removeicon_text: 				"상 삭제",
 					modal_tabheader1_text: 				"서버",
 					modal_tabheader2_text: 				"상 색깔",
 					modal_tabheader3_text:				"툴팁 색깔",
@@ -1147,6 +1200,7 @@ class EditServers {
 					modal_servername_text: 				"Local Servername",
 					modal_servershortname_text: 		"Initials",
 					modal_serverurl_text: 				"Icon",
+					modal_removeicon_text: 				"Remove Icon",
 					modal_tabheader1_text: 				"Server",
 					modal_tabheader2_text: 				"Iconcolor",
 					modal_tabheader3_text:				"Tooltipcolor",
