@@ -3,4 +3,4 @@
 Adds two options on your channel context menu.
 
 - You can open a popout, where you can change the local name and color for the selected channel.
-- You can set the selected channel back to it's original state.
+- You can set the selected channel back to its original state.
