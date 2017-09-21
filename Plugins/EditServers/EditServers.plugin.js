@@ -735,12 +735,9 @@ class EditServers {
 	}
 	
 	createServerToolTip (e) {
-		console.log($(".tooltip"));
-		
 		var serverDiv = e.target;
 		var info = BDfunctionsDevilBro.getKeyInformation({"node":serverDiv, "key":"guild"});
-		console.log($(".tooltips").find(".guild-custom-tooltip").length);
-		if (info && $(".tooltips").find(".guild-custom-tooltip").length == 0) {
+		if (info) {
 			var data = BDfunctionsDevilBro.loadData(info.id, this.getName(), "servers");
 			if (data) {
 				$(".tooltips").find(".tooltip").hide();
