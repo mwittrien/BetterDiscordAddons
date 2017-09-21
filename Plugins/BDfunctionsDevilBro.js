@@ -272,6 +272,27 @@ BDfunctionsDevilBro.sortArrayByKey = function (array, key, except) {
 	});
 };
 
+BDfunctionsDevilBro.colorCOMP2RGB = function (comp, invert) {
+	if (invert === undefined) return "rgb(" + (comp[0]) + ", " + (comp[1]) + ", " + (comp[2]) + ")";
+	if (invert === true) return "rgb(" + (255-comp[0]) + ", " + (255-comp[1]) + ", " + (255-comp[2]) + ")";
+	return "rgb(" + (comp[0]) + ", " + (comp[1]) + ", " + (comp[2]) + ")";
+};
+
+BDfunctionsDevilBro.colorCOMP2HEX = function (comp, invert) {
+	if (invert === undefined) return "#" + (0x1000000 + ((comp[2]) | ((comp[1]) << 8) | ((comp[0]) << 16))).toString(16).slice(1);
+	if (invert === true) return "#" + (0x1000000 + ((255-comp[2]) | ((255-comp[1]) << 8) | ((255-comp[0]) << 16))).toString(16).slice(1);
+	return "#" + (0x1000000 + ((comp[2]) | ((comp[1]) << 8) | ((comp[0]) << 16))).toString(16).slice(1);
+};
+
+BDfunctionsDevilBro.colorRGB2COMP = function (rgb) {
+	return rgb.replace(new RegExp(" ", 'g'), "").slice(4, -1).split(",");
+};
+
+BDfunctionsDevilBro.colorHEX2COMP = function (hex) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+	return [parseInt(result[1], 16).toString(),parseInt(result[2], 16).toString(),parseInt(result[3], 16).toString()];
+};
+
 BDfunctionsDevilBro.clearReadNotifications = function (servers) {
 	if (!servers) return;
 	servers = Array.isArray(servers) ? servers : Array.of(servers);
