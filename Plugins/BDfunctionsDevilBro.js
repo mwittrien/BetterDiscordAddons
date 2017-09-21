@@ -353,6 +353,9 @@ BDfunctionsDevilBro.checkColorType = function (color) {
 	else if (typeof color === "string" && color.match(/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i).length == 4) {
 		return "hex";
 	}
+	else {
+		return null;
+	}
 };
 
 BDfunctionsDevilBro.clearReadNotifications = function (servers) {
