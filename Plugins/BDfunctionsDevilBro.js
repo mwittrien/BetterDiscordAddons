@@ -317,7 +317,7 @@ BDfunctionsDevilBro.colorCOMP2HEX = function (comp, invert) {
 };
 
 BDfunctionsDevilBro.colorRGB2COMP = function (rgb) {
-	return rgb.slice(4, -1).split(", ");
+	return rgb.replace(new RegExp(" ", 'g'), "").slice(4, -1).split(",");
 };
 
 BDfunctionsDevilBro.colorHEX2COMP = function (hex) {
