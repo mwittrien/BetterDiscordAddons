@@ -272,27 +272,73 @@ BDfunctionsDevilBro.sortArrayByKey = function (array, key, except) {
 	});
 };
 
-console.log("1");
-
-BDfunctionsDevilBro.colorCOMP2RGB = function (comp, invert) {
-	if (invert === undefined) return "rgb(" + (comp[0]) + ", " + (comp[1]) + ", " + (comp[2]) + ")";
-	if (invert === true) return "rgb(" + (255-comp[0]) + ", " + (255-comp[1]) + ", " + (255-comp[2]) + ")";
-	return "rgb(" + (comp[0]) + ", " + (comp[1]) + ", " + (comp[2]) + ")";
+BDfunctionsDevilBro.color2COMP = function (color) {
+	switch (BDfunctionsDevilBro.checkColorType(color)) {
+		case "components":
+			return color;
+		case "rgb":
+			return color.replace(new RegExp(" ", 'g'), "").slice(4, -1).split(",");
+		case "hex":
+			var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(color);
+			return [parseInt(result[1], 16).toString(),parseInt(result[2], 16).toString(),parseInt(result[3], 16).toString()];
+		default:
+			return null;
+	}
 };
 
-BDfunctionsDevilBro.colorCOMP2HEX = function (comp, invert) {
-	if (invert === undefined) return "#" + (0x1000000 + ((comp[2]) | ((comp[1]) << 8) | ((comp[0]) << 16))).toString(16).slice(1);
-	if (invert === true) return "#" + (0x1000000 + ((255-comp[2]) | ((255-comp[1]) << 8) | ((255-comp[0]) << 16))).toString(16).slice(1);
-	return "#" + (0x1000000 + ((comp[2]) | ((comp[1]) << 8) | ((comp[0]) << 16))).toString(16).slice(1);
+BDfunctionsDevilBro.color2RGB = function (color) {
+	switch (BDfunctionsDevilBro.checkColorType(color)) {
+		case "components":
+			return "rgb(" + (color[0]) + ", " + (color[1]) + ", " + (color[2]) + ")";
+		case "rgb":
+			return color;
+		case "hex":
+			return BDfunctionsDevilBro.color2RGB(BDfunctionsDevilBro.color2COMP(color));
+		default:
+			return null;
+	}
 };
 
-BDfunctionsDevilBro.colorRGB2COMP = function (rgb) {
-	return rgb.replace(new RegExp(" ", 'g'), "").slice(4, -1).split(",");
+BDfunctionsDevilBro.color2HEX = function (color) {
+	switch (BDfunctionsDevilBro.checkColorType(color)) {
+		case "components":
+			return "#" + (0x1000000 + ((color[2]) | ((color[1]) << 8) | ((color[0]) << 16))).toString(16).slice(1);
+		case "rgb":
+			return BDfunctionsDevilBro.color2HEX(BDfunctionsDevilBro.color2COMP(color));
+		case "hex":
+			return color;
+		default:
+			return null;
+	}
 };
 
-BDfunctionsDevilBro.colorHEX2COMP = function (hex) {
-    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-	return [parseInt(result[1], 16).toString(),parseInt(result[2], 16).toString(),parseInt(result[3], 16).toString()];
+BDfunctionsDevilBro.colorINV = function (color) {
+	switch (BDfunctionsDevilBro.checkColorType(color)) {
+		case "components":
+			return [(255-color[0]), (255-color[1]), (255-color[2])];
+		case "rgb":
+			var temp = BDfunctionsDevilBro.color2COMP(color);
+			temp = [(255-temp[0]), (255-temp[1]), (255-temp[2])];
+			return BDfunctionsDevilBro.color2RGB(temp);
+		case "hex":
+			var temp = BDfunctionsDevilBro.color2COMP(color);
+			temp = [(255-temp[0]), (255-temp[1]), (255-temp[2])];
+			return BDfunctionsDevilBro.color2HEX(temp);
+		default:
+			return null;
+	}
+};
+
+BDfunctionsDevilBro.checkColorType = function (color) {
+	if (typeof color === "object" && color.length == 3) {
+		return "components";
+	}
+	else if (typeof color === "string" && color.indexOf("rgb(") == 0) {
+		return "rgb";
+	}
+	else if (typeof color === "string" && color.match(/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i).length == 4) {
+		return "hex";
+	}
 };
 
 BDfunctionsDevilBro.clearReadNotifications = function (servers) {
