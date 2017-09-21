@@ -67,16 +67,21 @@ class ServerFolders {
 				box-sizing: border-box;
 				display: flex;
 				flex-direction: column;
-				height: 100%;
 				justify-content: center;
-				min-height: 340px;
+				min-height: initial;
+				max-height: initial;
 				opacity: 0;
-				padding-bottom: 60px;
-				padding-top: 60px;
 				pointer-events: none;
-				position: absolute;
 				user-select: none;
+				height: 100%;
 				width: 100%;
+				margin: 0;
+				padding: 0;
+				position: absolute;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				left: 0;
 				z-index: 1000;
 			}
 			
@@ -364,7 +369,7 @@ class ServerFolders {
 
 	getDescription () {return "Add pseudofolders to your serverlist to organize your servers.";}
 
-	getVersion () {return "4.1.0";}
+	getVersion () {return "4.2.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -458,7 +463,6 @@ class ServerFolders {
 			
 			this.updateAllFolderNotifications();
 			
-			
 			setTimeout(() => {
 				this.labels = this.setLabelsByLanguage();
 				this.changeLanguageStrings();
@@ -522,10 +526,8 @@ class ServerFolders {
 		var contextType = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"GuildLeaveGroup"});
 		
 		if (serverData && contextType) {
-			var { id, name } = serverData;
-			var info = { id, name };
 			$(context).append(this.serverContextEntryMarkup)
-				.on("click", ".createfolder-item", info, this.createNewFolder.bind(this));
+				.on("click", ".createfolder-item", serverData, this.createNewFolder.bind(this));
 		}
 	}
 	
@@ -569,7 +571,7 @@ class ServerFolders {
 		var folderID = $(folder).attr("id").split("FL_ID_")[1];
 		var data = BDfunctionsDevilBro.loadData(folderID, this.getName(), "folders");
 		if (data) {
-			if (data.folderName != "") {
+			if (data.folderName) {
 				var folderTooltip = $(this.folderTooltipMarkup);
 				$(".tooltips").append(folderTooltip);
 				$(folderTooltip)
@@ -578,7 +580,7 @@ class ServerFolders {
 					.css("top", ($(folder).offset().top + ($(folder).outerHeight() - $(folderTooltip).outerHeight())/2) + "px");
 				
 				if (data.color3) {
-					var bgColor = "rgb(" + (data.color3[0]) + ", " + (data.color3[1]) + ", " + (data.color3[2]) + ")";
+					var bgColor = BDfunctionsDevilBro.color2RGB(data.color3);
 					$(folderTooltip)
 						.css("background-color", bgColor)
 						
@@ -590,7 +592,7 @@ class ServerFolders {
 					BDfunctionsDevilBro.appendLocalStyle("customeServerfolderTooltipCSS", customeTooltipCSS);
 				}
 				if (data.color4) {
-					var fontColor = "rgb(" + (data.color4[0]) + ", " + (data.color4[1]) + ", " + (data.color4[2]) + ")";
+					var fontColor = BDfunctionsDevilBro.color2RGB(data.color4);
 					$(folderTooltip)
 						.css("color", fontColor);
 				}
@@ -716,28 +718,19 @@ class ServerFolders {
 						this.changeTab(e,folderSettingsModal);
 					})
 					.on("click", "button.btn-save", (e) => {
-						folderName = folderSettingsModal.find("#modal-text")[0].value;
-						
-						if (!$(".ui-color-picker-swatch1.nocolor.selected")[0]) {
-							var colorRGB = $(".ui-color-picker-swatch1.selected").css("backgroundColor");
-							var color = colorRGB.slice(4, -1).split(", ").map(Number);
-							color = (color[0] < 30 && color[1] < 30 && color[2] < 30) ? 
-									[color[0]+30, color[1]+30, color[2]+30] : 
-									[color[0], color[1], color[2]];
-							color = (color[0] > 225 && color[1] > 225 && color[2] > 225) ? 
-									[color[0]-30, color[1]-30, color[2]-30] : 
-									[color[0], color[1], color[2]];
-						} 
-						else {
-							color = null;
+						folderName = null;
+						if (folderSettingsModal.find("#modal-text")[0].value) {
+							if (folderSettingsModal.find("#modal-text")[0].value.trim().length > 0) {
+								folderName = folderSettingsModal.find("#modal-text")[0].value.trim();
+							}
 						}
 						
 						iconID = $(".ui-icon-picker-icon.selected").attr("value");
 				
-						color1 = !$(".ui-color-picker-swatch1.nocolor.selected")[0] ? $(".ui-color-picker-swatch1.selected").css("backgroundColor").slice(4, -1).split(", ") : ["0","0","0"];
-						color2 = !$(".ui-color-picker-swatch2.nocolor.selected")[0] ? $(".ui-color-picker-swatch2.selected").css("backgroundColor").slice(4, -1).split(", ") : ["255","255","255"];
-						color3 = !$(".ui-color-picker-swatch3.nocolor.selected")[0] ? $(".ui-color-picker-swatch3.selected").css("backgroundColor").slice(4, -1).split(", ") : null;
-						color4 = !$(".ui-color-picker-swatch4.nocolor.selected")[0] ? $(".ui-color-picker-swatch4.selected").css("backgroundColor").slice(4, -1).split(", ") : null;
+						color1 = !$(".ui-color-picker-swatch1.nocolor.selected")[0] ? BDfunctionsDevilBro.color2COMP($(".ui-color-picker-swatch1.selected").css("background-color")) : ["0","0","0"];
+						color2 = !$(".ui-color-picker-swatch2.nocolor.selected")[0] ? BDfunctionsDevilBro.color2COMP($(".ui-color-picker-swatch2.selected").css("background-color")) : ["255","255","255"];
+						color3 = !$(".ui-color-picker-swatch3.nocolor.selected")[0] ? BDfunctionsDevilBro.color2COMP($(".ui-color-picker-swatch3.selected").css("background-color")) : null;
+						color4 = !$(".ui-color-picker-swatch4.nocolor.selected")[0] ? BDfunctionsDevilBro.color2COMP($(".ui-color-picker-swatch4.selected").css("background-color")) : null;
 						
 						if (iconID != data.iconID || JSON.stringify(color1) != JSON.stringify(data.color1) || JSON.stringify(color2) != JSON.stringify(data.color2)) {
 							var openicon = this.changeImgColor(color1, color2, this.folderIcons[iconID].openicon);
@@ -772,7 +765,6 @@ class ServerFolders {
 			
 		$(e.target)
 			.addClass("active");
-
 	}
 
 	setIcons (selection, folderIcons, wrapper) {
@@ -824,30 +816,28 @@ class ServerFolders {
 		var swatches = 
 			`<div class="ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-nowrap" style="flex: 1 1 auto; margin-top: 5px;">
 				<div class="ui-color-picker-${swatch} large custom" style="background-color: ${largeDefaultBgColor};"></div>
-				<div class="regulars ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-wrap ui-color-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;"><div class="ui-color-picker-${swatch} nocolor">✖</div>
+				<div class="regulars ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-wrap ui-color-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;"><div class="ui-color-picker-${swatch} nocolor" style="background-color: null;">✖</div>
 					${ colorOptions.map((val, i) => `<div class="ui-color-picker-${swatch}" style="background-color: ${val};"></div>`).join("")}
 				</div>
 			</div>`;
 		$(swatches).appendTo(wrapperDiv);
 		
 		if (currentCOMP) {
-			var currentRGB = "rgb(" + (currentCOMP[0]) + ", " + (currentCOMP[1]) + ", " + (currentCOMP[2]) + ")";
-			var currentHex = '#' + (0x1000000 + (currentCOMP[2] | (currentCOMP[1] << 8) | (currentCOMP[0] << 16))).toString(16).slice(1);
-			
-			var invColor = "rgb(" + (255-currentCOMP[0]) + ", " + (255-currentCOMP[1]) + ", " + (255-currentCOMP[2]) + ")";
+			var currentRGB = BDfunctionsDevilBro.color2RGB(currentCOMP);
+			var invRGB = BDfunctionsDevilBro.colorINV(currentRGB);
 			
 			var selection = colorOptions.indexOf(currentRGB);
 			
 			if (selection > -1) {
 				wrapperDiv.find(".regulars .ui-color-picker-" + swatch).eq(selection+1)
 					.addClass("selected")
-					.css("border", "4px solid " + invColor);
+					.css("border", "4px solid " + invRGB);
 			} 
 			else {
 				$(".custom", wrapperDiv)
 					.addClass("selected")
 					.css("background-color", currentRGB)
-					.css("border", "4px solid " + invColor);
+					.css("border", "4px solid " + invRGB);
 			}
 		}
 		else {
@@ -857,8 +847,8 @@ class ServerFolders {
 		}
 		
 		wrapperDiv.on("click", ".ui-color-picker-" + swatch + ":not(.custom)", (e) => {
-			var tempColor = $(e.target).css("background-color").slice(4, -1).split(", ");
-			var newInvColor = e.target.classList.contains("nocolor") ? "black" : "rgb(" + (255-tempColor[0]) + ", " + (255-tempColor[1]) + ", " + (255-tempColor[2]) + ")";
+			var bgColor = $(e.target).css("background-color");
+			var newInvRGB = BDfunctionsDevilBro.checkColorType(bgColor) ? BDfunctionsDevilBro.colorINV(bgColor,"rgb") : "black";
 			
 			wrapperDiv.find(".ui-color-picker-" + swatch + ".selected.nocolor")
 				.removeClass("selected")
@@ -870,7 +860,7 @@ class ServerFolders {
 			
 			$(e.target)
 				.addClass("selected")
-				.css("border", "4px solid " + newInvColor);
+				.css("border", "4px solid " + newInvRGB);
 		})
 		var custom = $(".ui-color-picker-" + swatch + ".custom", wrapperDiv).spectrum({
 			color: $(".custom", wrapperDiv).css("background-color"),
@@ -879,8 +869,7 @@ class ServerFolders {
 			showInput: true,
 			showButtons: false,
 			move: (color) => {
-				var tempColor = color.toRgbString().slice(4, -1).split(", ");
-				var newInvColor = "rgb(" + (255-tempColor[0]) + ", " + (255-tempColor[1]) + ", " + (255-tempColor[2]) + ")";
+				var newInvRGB = BDfunctionsDevilBro.colorINV(color.toRgbString(),"rgb");
 				
 				$(".ui-color-picker-" + swatch + ".selected.nocolor")
 					.removeClass("selected")
@@ -893,7 +882,7 @@ class ServerFolders {
 				custom
 					.addClass("selected")
 					.css("background-color", color.toRgbString())
-					.css("border", "4px solid " + newInvColor);
+					.css("border", "4px solid " + newInvRGB);
 			}
 		});
 	}
@@ -1461,12 +1450,12 @@ class ServerFolders {
 					modal_foldername_text:				"폴더 이름",
 					modal_tabheader1_text:				"폴더",
 					modal_tabheader2_text:				"폴더 색",
-					modal_tabheader3_text:				"툴팁 색상",
+					modal_tabheader3_text:				"툴팁 색깔",
 					modal_iconpicker_text:				"폴더 선택",
 					modal_colorpicker1_text:			"기본 폴더 색",
 					modal_colorpicker2_text:			"보조 폴더 색",
-					modal_colorpicker3_text:			"툴팁 색상",
-					modal_colorpicker4_text:			"글꼴 색상",
+					modal_colorpicker3_text:			"툴팁 색깔",
+					modal_colorpicker4_text:			"글꼴 색깔",
 					btn_cancel_text:					"취소",
 					btn_save_text:						"저장"
 				};
