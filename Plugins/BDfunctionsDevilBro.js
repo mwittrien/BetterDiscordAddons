@@ -383,7 +383,7 @@ BDfunctionsDevilBro.checkColorType = function (color) {
 		else if (typeof color === "string" && color.indexOf("rgb(") == 0) {
 			return "rgb";
 		}
-		else if (typeof color === "string" && color.match(/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i).length == 4) {
+		else if (typeof color === "string" && color.match(/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i)) {
 			return "hex";
 		}
 	}
