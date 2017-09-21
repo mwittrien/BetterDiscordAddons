@@ -314,7 +314,7 @@ BDfunctionsDevilBro.color2HEX = function (color) {
 
 BDfunctionsDevilBro.colorCHANGE = function (color, value) {
 	var comp = BDfunctionsDevilBro.color2COMP(color);
-	if (!comp || value === undefined) return null;
+	if (!comp || value === undefined || typeof value != "number") return null;
 	comp = comp.map(Number);
 	comp = [(comp[0]+value).toString(),(comp[1]+value).toString(),(comp[2]+value).toString()];
 	switch (BDfunctionsDevilBro.checkColorType(color)) {
