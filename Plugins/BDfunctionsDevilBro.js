@@ -312,6 +312,23 @@ BDfunctionsDevilBro.color2HEX = function (color) {
 	}
 };
 
+BDfunctionsDevilBro.colorCHANGE = function (color, value) {
+	var comp = BDfunctionsDevilBro.color2COMP(color);
+	if (!comp || value === undefined) return null;
+	comp = comp.map(Number);
+	comp = [(comp[0]+value).toString(),(comp[1]+value).toString(),(comp[2]+value).toString()];
+	switch (BDfunctionsDevilBro.checkColorType(color)) {
+		case "comp":
+			return comp;
+		case "rgb":
+			return BDfunctionsDevilBro.color2RGB(comp);
+		case "hex":
+			return BDfunctionsDevilBro.color2HEX(comp);
+		default:
+			return null;
+	}
+};
+
 BDfunctionsDevilBro.colorINV = function (color, conv) {
 	if (conv === undefined) {
 		switch (BDfunctionsDevilBro.checkColorType(color)) {
