@@ -258,7 +258,7 @@ class ServerHider {
 
 	getDescription () {return "Hide Servers in your Serverlist";}
 
-	getVersion () {return "2.2.0";}
+	getVersion () {return "2.2.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -272,6 +272,11 @@ class ServerHider {
 	start () {
 		if ($('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').length == 0) {
 			$('head').append("<script src='https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
+			if (typeof BDfunctionsDevilBro !== "object") {
+				if ($('head script[src="https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').length == 0) {
+					$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
+				}
+			}
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.serverContextObserver = new MutationObserver((changes, _) => {
@@ -307,29 +312,29 @@ class ServerHider {
 			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
 		}
 		else {
-			BDfunctionsDevilBro.fatalMessage(this.getName());
+			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
 		}
 	}
 
 	stop () {
-		this.serverContextObserver.disconnect();
-		$(".guilds.scroller").unbind('mouseleave', this.serverListContextHandler);
-		
-		BDfunctionsDevilBro.showHideAllEles(true, BDfunctionsDevilBro.readServerList());
-		
-		BDfunctionsDevilBro.removeLocalStyle(this.getName());
+		if (typeof BDfunctionsDevilBro === "object") {
+			this.serverContextObserver.disconnect();
+			$(".guilds.scroller").unbind('mouseleave', this.serverListContextHandler);
+			
+			BDfunctionsDevilBro.showHideAllEles(true, BDfunctionsDevilBro.readServerList());
+			
+			BDfunctionsDevilBro.removeLocalStyle(this.getName());
+		}
 	}
 
 	
 	// begin of own functions
 
     static resetAll () {
-		bdPluginStorage.set("ServerHider", "servers", {});
-		$(".guild").each( 
-			(i,server) => {
-				if ($(server).find(".avatar-small")[0]) $(server).show();
-			}
-		);
+		if (typeof BDfunctionsDevilBro === "object") {
+			bdPluginStorage.set("ServerHider", "servers", {});
+			BDfunctionsDevilBro.showHideAllEles(true, BDfunctionsDevilBro.readServerList());
+		}
     }
 
 	changeLanguageStrings () {
