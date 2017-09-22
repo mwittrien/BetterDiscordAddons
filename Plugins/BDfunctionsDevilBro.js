@@ -99,7 +99,11 @@ BDfunctionsDevilBro.getKeyInformation = function (config) {
 	var keyBlackList = typeof config.blackList === "object" ? config.blackList : {
 	};
 	
-	return searchKeyInReact(inst, 0);
+	var resultArray = [];
+	var singleResult = searchKeyInReact(inst, 0);
+	
+	if (config.all) return resultArray;
+	else return singleResult;
 
 	function searchKeyInReact (ele, depth) {
 		if (!ele || depth > maxDepth) return null;
@@ -110,7 +114,24 @@ BDfunctionsDevilBro.getKeyInformation = function (config) {
 			var value = ele[keys[i]];
 			
 			if (config.key === key && (config.value === undefined || config.value === value)) {
-				result = value;
+				if (config.all === undefined || !config.all) {
+					result = value;
+				}
+				else if (config.all) {
+					if (config.noCopies === undefined || !config.noCopies) {
+						resultArray.push(value);
+					}
+					else if (config.noCopies) {
+						var included = false;
+						for (var j = 0; j < resultArray.length; j++) {
+							if (BDfunctionsDevilBro.equals(value, resultArray[j])) {
+								included = true;
+								break;
+							}
+						}
+						if (!included) resultArray.push(value);
+					}
+				}
 			}
 			else if ((typeof value === "object" || typeof value === "function") && ((keyWhiteList[key] && !keyBlackList[key]) || key[0] == "." || !isNaN(key[0]))) {
 				result = searchKeyInReact(value, depth++);
@@ -119,7 +140,46 @@ BDfunctionsDevilBro.getKeyInformation = function (config) {
 		return result;
 	}
 };
+
+BDfunctionsDevilBro.equals = function (check1, check2, compareOrder) {
+	var depth = -1;
 	
+	if (compareOrder === undefined || typeof compareOrder !== "boolean") compareOrder = false;
+	
+	return recurseEquals(check1, check2);
+	
+	function recurseEquals (ele1, ele2) {
+		depth++;
+		var result = true;
+		if (depth > 1000) 							result = null;
+		else {
+			if (typeof ele1 != typeof ele2) 		result = false;
+			else if (typeof ele1 === "undefined") 	result = true;
+			else if (typeof ele1 === "symbol") 		result = true;
+			else if (typeof ele1 === "boolean") 	result = (ele1 == ele2);
+			else if (typeof ele1 === "string") 		result = (ele1 == ele2);
+			else if (typeof ele1 === "number") {
+				if (isNaN(ele1) || isNaN(ele2)) 	result = (isNaN(ele1) == isNaN(ele2));
+				else 								result = (ele1 == ele2);
+			}
+			else if (!ele1 && !ele2) 				result = true;
+			else if (!ele1 || !ele2) 				result = false;
+			else if (typeof ele1 === "function" || typeof ele1 === "object") {
+				var keys1 = Object.getOwnPropertyNames(ele1);
+				var keys2 = Object.getOwnPropertyNames(ele2);
+				if (keys1.length != keys2.length) 	result = false;
+				else {
+					for (var i = 0; result === true && i < keys1.length; i++) {
+						if (compareOrder) 			result = recurseEquals(ele1[keys1[i]], ele2[keys2[i]]);
+						else						result = recurseEquals(ele1[keys1[i]], ele2[keys1[i]]);
+					}
+				}
+			}
+		}
+		depth--;
+		return result;
+	}
+};
 	
 BDfunctionsDevilBro.readServerList = function () {
 	var foundServers = [];
