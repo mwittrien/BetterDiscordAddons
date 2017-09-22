@@ -360,7 +360,7 @@ class EditServers {
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	getVersion () {return "1.2.0";}
+	getVersion () {return "1.2.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -571,9 +571,11 @@ class EditServers {
 					this.checkUrl(event, serverSettingsModal);
 				})
 				.on("mouseenter", "#modal-urltext", (event) => {
+					$(event.target).addClass("hovering");
 					this.createNoticeTooltip(event);
 				})
 				.on("mouseleave", "#modal-urltext", (event) => {
+					$(event.target).removeClass("hovering");
 					this.deleteNoticeToolTip(event);
 				})
 				.on("click", "button.form-tablinks", (event) => {
@@ -645,9 +647,10 @@ class EditServers {
 	
 	checkUrl (e, modal) {
 		if (!e.target.value) {
-		$(e.target)
-			.removeClass("valid")
-			.removeClass("invalid");
+			$(e.target)
+				.removeClass("valid")
+				.removeClass("invalid");
+			if ($(e.target).hasClass("hovering")) this.deleteNoticeToolTip(e);
 		}
 		else {
 			$.ajax({
@@ -682,7 +685,6 @@ class EditServers {
 		$(".tooltips").find(".notice-tooltip").remove();
 		
 		var input = e.target;
-		$(input).addClass("hovering");
 		var valid = $(input).hasClass("valid");
 		var invalid = $(input).hasClass("invalid");
 		if (valid || invalid) {
@@ -705,8 +707,6 @@ class EditServers {
 	}
 	
 	deleteNoticeToolTip (e) {
-		var input = e.target;
-		$(input).removeClass("hovering");
 		BDfunctionsDevilBro.removeLocalStyle("customeNoticeTooltipCSS");
 		$(".tooltips").find(".notice-tooltip").remove();
 	}
