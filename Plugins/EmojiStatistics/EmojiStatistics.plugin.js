@@ -264,7 +264,7 @@ class EmojiStatistics {
 
 	getDescription () {return "Adds some helpful options to show you more information about emojis and emojiservers.";}
 
-	getVersion () {return "2.2.0";}
+	getVersion () {return "2.2.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -278,6 +278,11 @@ class EmojiStatistics {
 	start () {
 		if ($('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').length == 0) {
 			$('head').append("<script src='https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
+			if (typeof BDfunctionsDevilBro !== "object") {
+				if ($('head script[src="https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').length == 0) {
+					$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
+				}
+			}
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.emojiPickerObserver = new MutationObserver((changes, _) => {
@@ -310,14 +315,16 @@ class EmojiStatistics {
 			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
 		}
 		else {
-			BDfunctionsDevilBro.fatalMessage(this.getName());
+			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
 		}
 	}
 
 	stop () {
-		this.emojiPickerObserver.disconnect();
-		
-		BDfunctionsDevilBro.removeLocalStyle(this.getName());
+		if (typeof BDfunctionsDevilBro === "object") {
+			this.emojiPickerObserver.disconnect();
+			
+			BDfunctionsDevilBro.removeLocalStyle(this.getName());
+		}
 	}
 	
 	// begin of own functions
