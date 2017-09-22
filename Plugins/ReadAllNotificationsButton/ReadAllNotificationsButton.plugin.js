@@ -16,7 +16,7 @@ class ReadAllNotificationsButton {
 
 	getDescription () {return "Adds a button to clear all notifications.";}
 
-	getVersion () {return "1.2.0";}
+	getVersion () {return "1.2.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -26,6 +26,11 @@ class ReadAllNotificationsButton {
 	start () {
 		if ($('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').length == 0) {
 			$('head').append("<script src='https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
+			if (typeof BDfunctionsDevilBro !== "object") {
+				if ($('head script[src="https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').length == 0) {
+					$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
+				}
+			}
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
 			var readButton = $(this.RANbuttonMarkup);
@@ -35,12 +40,14 @@ class ReadAllNotificationsButton {
 			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
 		}
 		else {
-			BDfunctionsDevilBro.fatalMessage(this.getName());
+			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
 		}
 	}
 
 	stop () {
-		$("#RANbutton-frame").remove();
+		if (typeof BDfunctionsDevilBro === "object") {
+			$("#RANbutton-frame").remove();
+		}
 	}
 
 	
