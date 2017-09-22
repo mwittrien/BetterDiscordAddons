@@ -314,22 +314,22 @@ BDfunctionsDevilBro.loadData = function (id, pluginName, keyName) {
 };
 
 BDfunctionsDevilBro.appendWebScript = function (filepath) {
-	if ($('head script[src="https://cors-anywhere.herokuapp.com/' + filepath + '"]').length > 0) return;
+	if ($('head script[src="' + filepath + '"]').length > 0) return;
 	
 	var ele = document.createElement('script');
 	$(ele)
-		.attr("src", "https://cors-anywhere.herokuapp.com/" + filepath);
+		.attr("src", filepath);
 	$('head').append(ele);
 };
 
 BDfunctionsDevilBro.appendWebStyle = function (filepath) {
-	if ($('head link[href="https://cors-anywhere.herokuapp.com/' + filepath + '"]').length > 0) return;
+	if ($('head link[href="' + filepath + '"]').length > 0) return;
 
 	var ele = document.createElement('link');
 	$(ele)
 		.attr("type", "text/css")
 		.attr("rel", "Stylesheet")
-		.attr("href", "https://cors-anywhere.herokuapp.com/" + filepath);
+		.attr("href", filepath);
 	$('head').append(ele);
 };
 
