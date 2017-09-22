@@ -6,7 +6,7 @@ BDfunctionsDevilBro.loadMessage = function (pluginName, oldVersion) {
 	var downloadUrl = "https://betterdiscord.net/ghdl?url=https://github.com/mwittrien/BetterDiscordAddons/blob/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
 	$.get(rawUrl, (script) => {
 		if (script) {
-			script = script.replace(new RegExp(" ", 'g'), "").split('getVersion(){return"')[1];
+			script = script.replace(new RegExp(" |\t|\n|\r", 'g'), "").split('getVersion(){return"')[1];
 			if (script) {
 				var newVersion = script.split('";}')[0];
 				var oldNmbrs = oldVersion.split(".").map(Number); 
