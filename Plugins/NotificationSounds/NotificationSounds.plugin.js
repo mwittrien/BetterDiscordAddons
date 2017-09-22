@@ -29,7 +29,7 @@ class NotificationSounds {
 
 	getDescription () {return "Creates a notification sound when you receive a notification (mention or DM).";}
 
-	getVersion () {return "2.2.1";}
+	getVersion () {return "2.2.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -64,6 +64,11 @@ class NotificationSounds {
 	start () {	
 		if ($('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').length == 0) {
 			$('head').append("<script src='https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
+			if (typeof BDfunctionsDevilBro !== "object") {
+				if ($('head script[src="https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').length == 0) {
+					$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
+				}
+			}
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.dmBadgeObserver = new MutationObserver((changes, _) => {
@@ -160,17 +165,19 @@ class NotificationSounds {
 			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
 		}
 		else {
-			BDfunctionsDevilBro.fatalMessage(this.getName());
+			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
 		}
 		
 	}
 
 	stop () {
-		this.dmObserver.disconnect();
-		this.dmBadgeObserver.disconnect();
-		this.mentionObserver.disconnect();
-		this.mentionBadgeObserver.disconnect();
-		this.channelListObserver.disconnect();
+		if (typeof BDfunctionsDevilBro === "object") {
+			this.dmObserver.disconnect();
+			this.dmBadgeObserver.disconnect();
+			this.mentionObserver.disconnect();
+			this.mentionBadgeObserver.disconnect();
+			this.channelListObserver.disconnect();
+		}
 	}
 
 	
