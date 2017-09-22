@@ -360,7 +360,7 @@ class EditServers {
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	getVersion () {return "1.2.1";}
+	getVersion () {return "1.2.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -374,6 +374,11 @@ class EditServers {
 	start () {
 		if ($('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').length == 0) {
 			$('head').append("<script src='https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
+			if (typeof BDfunctionsDevilBro !== "object") {
+				if ($('head script[src="https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').length == 0) {
+					$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
+				}
+			}
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.serverContextObserver = new MutationObserver((changes, _) => {
@@ -417,46 +422,59 @@ class EditServers {
 				this.labels = this.setLabelsByLanguage();
 				this.changeLanguageStrings();
 			},5000);
-			
+			var rawUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + this.getName() + "/" + this.getName() + ".plugin.js";".plugin.js";
+			$.get(rawUrl, (script) => {
+				if (script) {
+					script = script.replace(new RegExp(" |\t|\n|\r", 'g'), "").split('getVersion(){return"')[1];
+					if (script) {
+						var newVersion = script.split('";}')[0];
+						console.log(newVersion);
+					}
+				} 
+			});
 			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
 		}
 		else {
-			BDfunctionsDevilBro.fatalMessage(this.getName());
+			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
 		}
 	}
 
 	stop () {
-		this.serverContextObserver.disconnect();
-		this.serverListObserver.disconnect();
-		
-		BDfunctionsDevilBro.removeLocalStyle(this.getName());
+		if (typeof BDfunctionsDevilBro === "object") {
+			this.serverContextObserver.disconnect();
+			this.serverListObserver.disconnect();
+			
+			BDfunctionsDevilBro.removeLocalStyle(this.getName());
+		}
 	}
 
 	
 	// begin of own functions
 
     static resetAll () {
-		bdPluginStorage.set("EditServers", "servers", {});
-		
-		$(".guild.custom").each(
-			(i,serverDiv) => {
-				var info = BDfunctionsDevilBro.getKeyInformation({"node":serverDiv, "key":"guild"});
-				if (info) {
-					var server = $(serverDiv).find(".avatar-small");
-					var bgImage = info.icon ? "url('https://cdn.discordapp.com/icons/" + info.id + "/" + info.icon + ".png')" : "";
-				
-					$(serverDiv)
-						.off("mouseenter")
-						.off("mouseleave")
-						.removeClass("custom");
-					$(server)
-						.text($(server).attr("name"))
-						.css("background-image", bgImage)
-						.css("background-color", "")
-						.css("color", "");
+		if (typeof BDfunctionsDevilBro === "object") {
+			bdPluginStorage.set("EditServers", "servers", {});
+			
+			$(".guild.custom").each(
+				(i,serverDiv) => {
+					var info = BDfunctionsDevilBro.getKeyInformation({"node":serverDiv, "key":"guild"});
+					if (info) {
+						var server = $(serverDiv).find(".avatar-small");
+						var bgImage = info.icon ? "url('https://cdn.discordapp.com/icons/" + info.id + "/" + info.icon + ".png')" : "";
+					
+						$(serverDiv)
+							.off("mouseenter")
+							.off("mouseleave")
+							.removeClass("custom");
+						$(server)
+							.text($(server).attr("name"))
+							.css("background-image", bgImage)
+							.css("background-color", "")
+							.css("color", "");
+					}
 				}
-			}
-		);
+			);
+		}
     }
 
 	changeLanguageStrings () {
