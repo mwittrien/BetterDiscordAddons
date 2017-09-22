@@ -369,7 +369,7 @@ class ServerFolders {
 
 	getDescription () {return "Add pseudofolders to your serverlist to organize your servers.";}
 
-	getVersion () {return "4.2.0";}
+	getVersion () {return "4.2.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -384,6 +384,11 @@ class ServerFolders {
 	start () {	
 		if ($('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').length == 0) {
 			$('head').append("<script src='https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
+			if (typeof BDfunctionsDevilBro !== "object") {
+				if ($('head script[src="https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').length == 0) {
+					$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
+				}
+			}
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.serverContextObserver = new MutationObserver((changes, _) => {
@@ -471,31 +476,35 @@ class ServerFolders {
 			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
 		}
 		else {
-			BDfunctionsDevilBro.fatalMessage(this.getName());
+			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
 		}
 	}
 
 	stop () {
-		this.serverContextObserver.disconnect();
-		this.serverListObserver.disconnect();
-		this.badgeObserver.disconnect();
-		$(document).unbind('mousedown', this.folderContextEventHandler);
-		
-		$(".guild.folder").remove();
-		
-		BDfunctionsDevilBro.showHideAllEles(true, BDfunctionsDevilBro.readServerList());
-		
-		BDfunctionsDevilBro.removeLocalStyle(this.getName());
+		if (typeof BDfunctionsDevilBro === "object") {
+			this.serverContextObserver.disconnect();
+			this.serverListObserver.disconnect();
+			this.badgeObserver.disconnect();
+			$(document).unbind('mousedown', this.folderContextEventHandler);
+			
+			$(".guild.folder").remove();
+			
+			BDfunctionsDevilBro.showHideAllEles(true, BDfunctionsDevilBro.readServerList());
+			
+			BDfunctionsDevilBro.removeLocalStyle(this.getName());
+		}
 	}
 	
 	// begin of own functions
 	
     static resetAll () {
-		bdPluginStorage.set("ServerFolders", "folders", {});
-		
-		$(".guild.folder").remove();
-		
-		BDfunctionsDevilBro.showHideAllEles(true, BDfunctionsDevilBro.readServerList());
+		if (typeof BDfunctionsDevilBro === "object") {
+			bdPluginStorage.set("ServerFolders", "folders", {});
+			
+			$(".guild.folder").remove();
+			
+			BDfunctionsDevilBro.showHideAllEles(true, BDfunctionsDevilBro.readServerList());
+		}
     }
 
 	changeLanguageStrings () {
@@ -585,9 +594,9 @@ class ServerFolders {
 						.css("background-color", bgColor)
 						
 					var customeTooltipCSS = `
-							.guild-folder-tooltip:after {
-								border-right-color: ` + bgColor + ` !important;
-							}`;
+						.guild-folder-tooltip:after {
+							border-right-color: ` + bgColor + ` !important;
+						}`;
 						
 					BDfunctionsDevilBro.appendLocalStyle("customeServerfolderTooltipCSS", customeTooltipCSS);
 				}
@@ -601,7 +610,7 @@ class ServerFolders {
 	}
 	
 	deleteFolderToolTip (e) {
-		$("#customeServerfolderTooltipCSS").remove();
+		BDfunctionsDevilBro.removeLocalStyle("customeServerfolderTooltipCSS");
 		$(".tooltips").find(".guild-folder-tooltip").remove();
 	}
 	
