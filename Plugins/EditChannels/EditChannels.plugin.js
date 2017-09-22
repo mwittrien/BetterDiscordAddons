@@ -239,7 +239,7 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "3.2.0";}
+	getVersion () {return "3.2.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -253,6 +253,11 @@ class EditChannels {
 	start () {
 		if ($('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').length == 0) {
 			$('head').append("<script src='https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
+			if (typeof BDfunctionsDevilBro !== "object") {
+				if ($('head script[src="https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').length == 0) {
+					$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
+				}
+			}
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.channelObserver = new MutationObserver((changes, _) => {
@@ -324,38 +329,42 @@ class EditChannels {
 			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
 		}
 		else {
-			BDfunctionsDevilBro.fatalMessage(this.getName());
+			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
 		}
 	}
 
 	stop () {
-		this.channelObserver.disconnect();
-		this.channelListObserver.disconnect();
-		this.channelContextObserver.disconnect();
-		
-		BDfunctionsDevilBro.removeLocalStyle(this.getName());
+		if (typeof BDfunctionsDevilBro === "object") {
+			this.channelObserver.disconnect();
+			this.channelListObserver.disconnect();
+			this.channelContextObserver.disconnect();
+			
+			BDfunctionsDevilBro.removeLocalStyle(this.getName());
+		}
 	}
 
 	
 	// begin of own functions
 
     static resetAll () {
-		bdPluginStorage.set("EditChannels", "channels", {});
-		
-		$(".containerDefault-7RImuF.custom").each(
-			(i,channelDiv) => {
-				var info = BDfunctionsDevilBro.getKeyInformation({"node":channelDiv, "key":"channel"});
-				if (info) {
-					var channel = $(channelDiv).find(".name-2SL4ev");
-				
-					$(channelDiv)
-						.removeClass("custom");
-					$(channel)
-						.text(info.name)
-						.css("color", "");
+		if (typeof BDfunctionsDevilBro === "object") {
+			bdPluginStorage.set("EditChannels", "channels", {});
+			
+			$(".containerDefault-7RImuF.custom").each(
+				(i,channelDiv) => {
+					var info = BDfunctionsDevilBro.getKeyInformation({"node":channelDiv, "key":"channel"});
+					if (info) {
+						var channel = $(channelDiv).find(".name-2SL4ev");
+					
+						$(channelDiv)
+							.removeClass("custom");
+						$(channel)
+							.text(info.name)
+							.css("color", "");
+					}
 				}
-			}
-		);
+			);
+		}
     }
 
 	changeLanguageStrings () {
