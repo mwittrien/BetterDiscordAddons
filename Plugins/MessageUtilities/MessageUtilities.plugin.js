@@ -47,7 +47,7 @@ class MessageUtilities {
 
 	getDescription () {return "Offers a number of useful message options.";}
 
-	getVersion () {return "1.0.0";}
+	getVersion () {return "1.0.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -56,31 +56,47 @@ class MessageUtilities {
 	//legacy
 	load () {}
 
-	start () {	
-		this.sglClickListener = this.onSglClick.bind(this);
-		$(document).bind("click", this.sglClickListener);
-		
-		this.dblClickListener = this.onDblClick.bind(this);
-		$(document).bind("dblclick", this.dblClickListener);
-		
-		this.keydownListener = (e) => {
-			if (this.pressedKeys.indexOf(e.which) < 0) {
-				this.pressedKeys.push(e.which);
-			}
-		};
-		this.keyupListener = (e) => {
-			this.pressedKeys.pop(e.which);
-		};
-		
-		$(window).bind("keydown", this.keydownListener);
-		$(window).bind("keyup", this.keyupListener);
+	start () {
+		if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
+		$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
+		$('head').append("<script src='https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
+		if (typeof BDfunctionsDevilBro !== "object") {
+			$('head script[src="https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
+			$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
+		}
+		if (typeof BDfunctionsDevilBro === "object") {
+			this.sglClickListener = this.onSglClick.bind(this);
+			$(document).bind("click", this.sglClickListener);
+			
+			this.dblClickListener = this.onDblClick.bind(this);
+			$(document).bind("dblclick", this.dblClickListener);
+			
+			this.keydownListener = (e) => {
+				if (this.pressedKeys.indexOf(e.which) < 0) {
+					this.pressedKeys.push(e.which);
+				}
+			};
+			this.keyupListener = (e) => {
+				this.pressedKeys.pop(e.which);
+			};
+			
+			$(window).bind("keydown", this.keydownListener);
+			$(window).bind("keyup", this.keyupListener);
+			
+			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
+		}
+		else {
+			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
+		}
 	}
 
 	stop () {
-		$(document).unbind("click", this.sglClickListener);
-		$(document).unbind("dblclick", this.dblClickListener);
-		$(window).unbind("keydown", this.keydownListener);
-		$(window).unbind("keyup", this.keyupListener);
+		if (typeof BDfunctionsDevilBro === "object") {
+			$(document).unbind("click", this.sglClickListener);
+			$(document).unbind("dblclick", this.dblClickListener);
+			$(window).unbind("keydown", this.keydownListener);
+			$(window).unbind("keyup", this.keyupListener);
+		}
 	}
 
 	
