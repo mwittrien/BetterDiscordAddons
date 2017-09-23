@@ -360,7 +360,7 @@ class EditServers {
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	getVersion () {return "1.2.2";}
+	getVersion () {return "1.2.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -372,13 +372,12 @@ class EditServers {
 	load () {}
 
 	start () {
-		if ($('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').length == 0) {
-			$('head').append("<script src='https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
-			if (typeof BDfunctionsDevilBro !== "object") {
-				if ($('head script[src="https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').length == 0) {
-					$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
-				}
-			}
+		if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
+		$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
+		$('head').append("<script src='https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
+		if (typeof BDfunctionsDevilBro !== "object") {
+			$('head script[src="https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
+			$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.serverContextObserver = new MutationObserver((changes, _) => {
