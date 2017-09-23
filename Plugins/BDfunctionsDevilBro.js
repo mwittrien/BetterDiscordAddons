@@ -1,8 +1,5 @@
 var BDfunctionsDevilBro = {};
 	
-BDfunctionsDevilBro.test = function () {};
-	
-	
 BDfunctionsDevilBro.loadMessage = function (pluginName, oldVersion) { 
 	console.log(pluginName + " Version: " + oldVersion + " loaded.");
 	var rawUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
