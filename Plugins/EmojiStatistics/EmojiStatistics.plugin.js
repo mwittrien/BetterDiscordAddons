@@ -269,7 +269,7 @@ class EmojiStatistics {
 	getAuthor () {return "DevilBro";}
 
     getSettingsPanel () {
-		return `<input type="checkbox" onchange="EmojiStatistics.updateSettings(this.parentNode)" value="enableEmojiHovering"${(this.getSettings().enableEmojiHovering ? " checked" : void 0)}> Show emojiinformation when hovering over an emoji in the emojipicker.<br>\n<input type="checkbox" onchange="EmojiStatistics.updateSettings(this.parentNode)" value="enableEmojiStatisticsButton"${(this.getSettings().enableEmojiStatisticsButton ? " checked" : void 0)}> Add a button in the emojipicker to open statistics overview.<br>`;
+		return `<input type="checkbox" onchange="` + this.getName() + `.updateSettings(this.parentNode)" value="enableEmojiHovering"${(this.getSettings().enableEmojiHovering ? " checked" : void 0)}><label style="color:grey;"> Show emojiinformation when hovering over an emoji in the emojipicker.</label><br>\n<input type="checkbox" onchange="` + this.getName() + `.updateSettings(this.parentNode)" value="enableEmojiStatisticsButton"${(this.getSettings().enableEmojiStatisticsButton ? " checked" : void 0)}><label style="color:grey;"> Add a button in the emojipicker to open statistics overview.</label>`;
     }
 
 	//legacy
