@@ -40,7 +40,7 @@ class NotificationSounds {
 		
 		for (var i in this.types) {
 			var key = this.types[i];
-			settingspanel += `<label>` + key + `-Sound:</label><div class="` + key + `-song-settings" style="margin:0px 0px 20px 0px; overflow:hidden;">`;
+			settingspanel += `<label style="color:grey;">` + key + `-Sound:</label><div class="` + key + `-song-settings" style="margin:0px 0px 20px 0px; overflow:hidden;">`;
 			settingspanel += `<div class="` + key + `-song-selection" style="margin:0px 20px 0px 0px; float:left;"><select name="` + key + `" id="` + key + `-select" onchange='` + this.getName() + `.updateSettings(this, "` + key + `" )' style="height: 25px;">`;
 			for (var song in this.audios) {
 				var src = this.audios[song] ? "src=" + this.audios[song] : "";
@@ -55,8 +55,7 @@ class NotificationSounds {
 			settingspanel += `</div>`;
 							
 		}
-		settingspanel += `<label>Make sure to disable your default notification sounds in the notifications settings of Discord or else you will hear both the default notifications and the new custom notifications.</label>`;
-		settingspanel += `<label>If you want to add your own sounds just open the plugin file and add a new song in the list on the top and make sure the link you are using is a direct link pointing to a source file on a website. .</label>`;
+		settingspanel += `<label style="color:grey;">Make sure to disable your default notification sounds in the notifications settings of Discord or else you will hear both the default notifications and the new custom notifications. If you want to add your own sounds just open the plugin file and add a new song (audio or video) in the list on the top and make sure the link you are using is a direct link pointing to a source file on a website or else it won't be added to the list and no a youtube link is not a direct link to a source file ...</label>`;
 		
 		
 		return settingspanel;
