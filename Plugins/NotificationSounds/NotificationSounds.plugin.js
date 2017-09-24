@@ -5,16 +5,16 @@ class NotificationSounds {
 		this.types = ["DM","Mention"];
 		
 		// to add a new song choose a name and add a new line in the array "NAME":"URL"
-		this.audios = [
-			{"None":					null},
-			{"Communication Channel": 	"https://notificationsounds.com/soundfiles/63538fe6ef330c13a05a3ed7e599d5f7/file-sounds-917-communication-channel.wav"},
-			{"Isn't it": 				"https://notificationsounds.com/soundfiles/ba2fd310dcaa8781a9a652a31baf3c68/file-sounds-969-isnt-it.wav"},
-			{"Job Done": 				"https://notificationsounds.com/soundfiles/5b69b9cb83065d403869739ae7f0995e/file-sounds-937-job-done.wav"},
-			{"Served": 					"https://notificationsounds.com/soundfiles/b337e84de8752b27eda3a12363109e80/file-sounds-913-served.wav"},
-			{"Solemn": 					"https://notificationsounds.com/soundfiles/53fde96fcc4b4ce72d7739202324cd49/file-sounds-882-solemn.wav"},
-			{"System Fault": 			"https://notificationsounds.com/soundfiles/ebd9629fc3ae5e9f6611e2ee05a31cef/file-sounds-990-system-fault.wav"},
-			{"You wouldn't believe": 	"https://notificationsounds.com/soundfiles/087408522c31eeb1f982bc0eaf81d35f/file-sounds-949-you-wouldnt-believe.wav"}
-		];
+		this.audios = {
+			"None":						null,
+			"Communication Channel": 	"https://notificationsounds.com/soundfiles/63538fe6ef330c13a05a3ed7e599d5f7/file-sounds-917-communication-channel.wav",
+			"Isn't it": 				"https://notificationsounds.com/soundfiles/ba2fd310dcaa8781a9a652a31baf3c68/file-sounds-969-isnt-it.wav",
+			"Job Done": 				"https://notificationsounds.com/soundfiles/5b69b9cb83065d403869739ae7f0995e/file-sounds-937-job-done.wav",
+			"Served": 					"https://notificationsounds.com/soundfiles/b337e84de8752b27eda3a12363109e80/file-sounds-913-served.wav",
+			"Solemn": 					"https://notificationsounds.com/soundfiles/53fde96fcc4b4ce72d7739202324cd49/file-sounds-882-solemn.wav",
+			"System Fault": 			"https://notificationsounds.com/soundfiles/ebd9629fc3ae5e9f6611e2ee05a31cef/file-sounds-990-system-fault.wav",
+			"You wouldn't believe": 	"https://notificationsounds.com/soundfiles/087408522c31eeb1f982bc0eaf81d35f/file-sounds-949-you-wouldnt-believe.wav"	
+		};
 		
 		this.oldMentions = {};
 		
@@ -29,7 +29,7 @@ class NotificationSounds {
 
 	getDescription () {return "Creates a notification sound when you receive a notification (mention or DM).";}
 
-	getVersion () {return "2.2.4";}
+	getVersion () {return "2.3.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -42,9 +42,8 @@ class NotificationSounds {
 			var key = this.types[i];
 			settingspanel += `<label>` + key + `-Sound:</label><div class="` + key + `-song-settings" style="margin:0px 0px 20px 0px; overflow:hidden;">`;
 			settingspanel += `<div class="` + key + `-song-selection" style="margin:0px 20px 0px 0px; float:left;"><select name="` + key + `" id="` + key + `-select" onchange='` + this.getName() + `.updateSettings(this, "` + key + `" )' style="height: 25px;">`;
-			for (var j in this.audios) {
-				var song = Object.keys(this.audios[j])[0];
-				var src = this.audios[j][song] ? "src=" + this.audios[j][song] : "";
+			for (var song in this.audios) {
+				var src = this.audios[song] ? "src=" + this.audios[song] : "";
 				if (song && song != "") {
 					var selected = settings[key].song == song ? " selected" : "";
 					settingspanel += `<option `+ src + ` ` + selected + `>` + song + `</option>`;
@@ -57,6 +56,7 @@ class NotificationSounds {
 							
 		}
 		settingspanel += `<label>Make sure to disable your default notification sounds in the notifications settings of Discord or else you will hear both the default notifications and the new custom notifications.</label>`;
+		settingspanel += `<label>If you want to add your own sounds just open the plugin file and add a new song in the list on the top and make sure the link you are using is a direct link pointing to a source file on a website. .</label>`;
 		
 		
 		return settingspanel;
@@ -165,6 +165,8 @@ class NotificationSounds {
 				}
 			);
 			
+			this.checkAudios();
+			
 			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
 		}
 		else {
@@ -191,20 +193,45 @@ class NotificationSounds {
 		var selectedSong = settings.song;
 		var volume = settings.volume;
 		
-		this.audios.forEach((ele) => {
-			var song = Object.keys(ele)[0];
-			var url = ele[song];
-			if (song && song != "") {
-				if (selectedSong == song) {
-					if (url != null) {
-						var audio = new Audio();
-						audio.src = url;
-						audio.volume = volume/100;
-						audio.play();
-					}
+		for (var song in this.audios) {
+			if (song && song != "" && selectedSong == song) {
+				var url = this.audios[song];
+				if (url != null) {
+					var audio = new Audio();
+					audio.src = url;
+					audio.volume = volume/100;
+					audio.play();
 				}
 			}
-		});
+		}
+	}
+	
+	checkAudios () {
+		var savedAudios = this.audios;
+		this.audios = {};
+		
+		for (var song in savedAudios) {
+			this.checkUrl(song, savedAudios[song]);
+		}
+	}
+	
+	checkUrl (song, url) {
+		if (!url) {
+			this.audios[song] = url;
+		}
+		else {
+			$.ajax({
+				type: "HEAD",
+				url : "https://cors-anywhere.herokuapp.com/" + url,
+				success: (message, text, response) => {
+					if (response.getResponseHeader('Content-Type').indexOf("audio") != -1 || 
+					response.getResponseHeader('Content-Type').indexOf("video") != -1 || 
+					response.getResponseHeader('Content-Type').indexOf("application") != -1) {
+						this.audios[song] = url;
+					}
+				}
+			});
+		}
 	}
 	
 	getSettings () {
@@ -214,14 +241,13 @@ class NotificationSounds {
 		for (var i in this.types) {
 			var key = this.types[i];
 			var songFound = false;
-			this.audios.forEach((ele) => {
-				var song = Object.keys(ele)[0];
+			for (var song in this.audios) {
 				if (song && song != "" && oldSettings[key] && oldSettings[key].song == song) {
 					var volume = oldSettings[key].volume ? oldSettings[key].volume : 100;
 					newSettings[key] = {"song":song,"volume":volume};
 					songFound = true;
 				}
-			});
+			}
 			if (!songFound) newSettings[key] = {"song":"None","volume":100};
 		}
 		
