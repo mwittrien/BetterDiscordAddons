@@ -360,7 +360,7 @@ class EditServers {
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	getVersion () {return "1.2.3";}
+	getVersion () {return "1.2.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -416,22 +416,6 @@ class EditServers {
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 			
 			this.loadAllServers();
-			
-			setTimeout(() => {
-				this.labels = this.setLabelsByLanguage();
-				this.changeLanguageStrings();
-			},5000);
-			var rawUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + this.getName() + "/" + this.getName() + ".plugin.js";".plugin.js";
-			$.get(rawUrl, (script) => {
-				if (script) {
-					script = script.replace(new RegExp(" |\t|\n|\r", 'g'), "").split('getVersion(){return"')[1];
-					if (script) {
-						var newVersion = script.split('";}')[0];
-						console.log(newVersion);
-					}
-				} 
-			});
-			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
