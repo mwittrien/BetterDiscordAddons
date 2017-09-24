@@ -49,12 +49,13 @@ class ReverseImageSearch {
 
     getSettingsPanel () {
 		var settings = this.getSettings();
-		var settingspanel = `<label>Reverse Search Engines</label><br>\n`;
+		var settingspanel = `<label style="color:grey;">Reverse Search Engines</label><br>\n`;
 		for (var i in this.searchEngines) {
 			var engine = this.searchEngines[i].name;
 			var checked = settings[engine] ? " checked" : "";
-			settingspanel += `<input type="checkbox" onchange="ReverseImageSearch.updateSettings(this.parentNode)" value="` + engine + `"` + checked + `> ` + engine + `<br>\n`;
+			settingspanel += `<input type="checkbox" onchange="` + this.getName() + `.updateSettings(this.parentNode)" value="` + engine + `"` + checked + `><label style="color:grey;"> ` + engine + `</label><br>\n`;
 		}
+		
 		return settingspanel;
     }
 	
