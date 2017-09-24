@@ -2,7 +2,7 @@
 
 class NotificationSounds {
 	constructor () {
-		this.types = ["Mention","DM"];
+		this.types = ["DM","Mention"];
 		
 		// to add a new song choose a name and add a new line in the array "NAME":"URL"
 		this.audios = [
@@ -13,7 +13,7 @@ class NotificationSounds {
 			{"Served": 					"https://notificationsounds.com/soundfiles/b337e84de8752b27eda3a12363109e80/file-sounds-913-served.wav"},
 			{"Solemn": 					"https://notificationsounds.com/soundfiles/53fde96fcc4b4ce72d7739202324cd49/file-sounds-882-solemn.wav"},
 			{"System Fault": 			"https://notificationsounds.com/soundfiles/ebd9629fc3ae5e9f6611e2ee05a31cef/file-sounds-990-system-fault.wav"},
-			{"You wouldn't believe": 	"https://notificationsounds.com/soundfiles/087408522c31eeb1f982bc0eaf81d35f/file-sounds-949-you-wouldnt-believe.wav"},
+			{"You wouldn't believe": 	"https://notificationsounds.com/soundfiles/087408522c31eeb1f982bc0eaf81d35f/file-sounds-949-you-wouldnt-believe.wav"}
 		];
 		
 		this.oldMentions = {};
@@ -29,28 +29,32 @@ class NotificationSounds {
 
 	getDescription () {return "Creates a notification sound when you receive a notification (mention or DM).";}
 
-	getVersion () {return "2.2.3";}
+	getVersion () {return "2.2.4";}
 
 	getAuthor () {return "DevilBro";}
 
     getSettingsPanel () {
 		var settings = this.getSettings();
 		
-		var settingspanel = ``;
+		var settingspanel = `<audio class="preview"></audio>`;
 		
 		for (var i in this.types) {
 			var key = this.types[i];
-			settingspanel += `<label>` + key + `-Sound:</label><br>`;
-			settingspanel += `<select name="` + key + `" onchange="NotificationSounds.updateSettings(this)">`;
+			settingspanel += `<label>` + key + `-Sound:</label><div class="` + key + `-song-settings" style="margin:0px 0px 20px 0px; overflow:hidden;">`;
+			settingspanel += `<div class="` + key + `-song-selection" style="margin:0px 20px 0px 0px; float:left;"><select name="` + key + `" id="` + key + `-select" onchange='` + this.getName() + `.updateSettings(this, "` + key + `" )' style="height: 25px;">`;
 			for (var j in this.audios) {
 				var song = Object.keys(this.audios[j])[0];
-				var url = this.audios[j][song];
+				var src = this.audios[j][song] ? "src=" + this.audios[j][song] : "";
 				if (song && song != "") {
-					var selected = settings[key] == song? " selected" : "";
-					settingspanel += `<option src="` + url + `"` + selected + `>` + song + `</option>`;
+					var selected = settings[key].song == song ? " selected" : "";
+					settingspanel += `<option `+ src + ` ` + selected + `>` + song + `</option>`;
 				}
 			}
-			settingspanel += `</select><br><br>`;
+			settingspanel += `</select></div>`;
+			settingspanel += `<div class="` + key + `-volume-slider" style="margin:0px 20px 0px 0px; float:left;"><input type="range" min="0" max="100" value="` + settings[key].volume + `" id="` + key + `-volume" onchange='` + this.getName() + `.updateSettings(this, "` + key + `")' oninput='` + this.getName() + `.updateSlider(this, "` + key + `")'></div>`;
+			settingspanel += `<div class="` + key + `-volume-value" style="margin:0px 0px 0px 0px; float:left;"><input type="number" min="0" max="100" value="` + settings[key].volume + `" id="` + key + `-volume-value" onchange='` + this.getName() + `.updateSettings(this, "` + key + `")' style="height: 25px; width:50px; text-align:center;"></div>`;
+			settingspanel += `</div>`;
+							
 		}
 		settingspanel += `<label>Make sure to disable your default notification sounds in the notifications settings of Discord or else you will hear both the default notifications and the new custom notifications.</label>`;
 		
@@ -183,7 +187,9 @@ class NotificationSounds {
 	// begin of own functions
 	
 	playAudio (type) {
-		var selectedSong = this.getSettings()[type];
+		var settings = this.getSettings()[type];
+		var selectedSong = settings.song;
+		var volume = settings.volume;
 		
 		this.audios.forEach((ele) => {
 			var song = Object.keys(ele)[0];
@@ -193,6 +199,7 @@ class NotificationSounds {
 					if (url != null) {
 						var audio = new Audio();
 						audio.src = url;
+						audio.volume = volume/100;
 						audio.play();
 					}
 				}
@@ -209,12 +216,13 @@ class NotificationSounds {
 			var songFound = false;
 			this.audios.forEach((ele) => {
 				var song = Object.keys(ele)[0];
-				if (song && song != "" && oldSettings[key] == song) {
-					newSettings[key] = song;
+				if (song && song != "" && oldSettings[key] && oldSettings[key].song == song) {
+					var volume = oldSettings[key].volume ? oldSettings[key].volume : 100;
+					newSettings[key] = {"song":song,"volume":volume};
 					songFound = true;
 				}
 			});
-			if (!songFound) newSettings[key] = "None";
+			if (!songFound) newSettings[key] = {"song":"None","volume":100};
 		}
 		
 		bdPluginStorage.set(this.getName(), "settings", newSettings);
@@ -222,20 +230,39 @@ class NotificationSounds {
 		return newSettings;
 	}
 
-    static updateSettings (input) {
-		var url = $(input).find(":selected").attr("src");
+    static updateSettings (ele, type) {
+		var settingspanel = ele.parentElement.parentElement.parentElement;
+		var selectinput = $(settingspanel).find("#" + type + "-select")[0];
+		var sliderinput = $(settingspanel).find("#" + type + "-volume")[0];
+		var valueinput = $(settingspanel).find("#" + type + "-volume-value")[0];
+		
+		var url = $(selectinput).find(":selected").attr("src");
 		if (url != null) {
-			var audio = new Audio();
+			var volume = ele.id == "#" + type + "-volume" ? sliderinput.value : valueinput.value;
+			volume = volume > 100 ? 100 : volume < 0 ? 0 : volume;
+			
+			var audio = $(settingspanel).find(".preview")[0];
 			audio.src = url;
+			audio.volume = volume/100;
 			audio.play();
 		}
 		
-		var settingspanel = input.parentNode;
+		var songs = settingspanel.querySelectorAll("select");
 		var settings = {};
-		var inputs = settingspanel.querySelectorAll("select");
-		for (var i = 0; i < inputs.length; i++) {
-			settings[inputs[i].name] = $(inputs[i]).find(":selected").text();
+		for (var i = 0; i < songs.length; i++) {
+			settings[songs[i].name] = {"song":$(songs[i]).find(":selected").text(),"volume":$("#" + $(songs[i]).attr("name") + "-volume")[0].value};
 		}
 		bdPluginStorage.set("NotificationSounds", "settings", settings);
+    }
+
+    static updateSlider (ele, type) {
+		var settingspanel = ele.parentElement.parentElement.parentElement;
+		var sliderinput = $(settingspanel).find("#" + type + "-volume")[0];
+		var valueinput = $(settingspanel).find("#" + type + "-volume-value")[0];
+		
+		var volume = sliderinput.value;
+		volume = volume > 100 ? 100 : volume < 0 ? 0 : volume;
+		
+		valueinput.value = volume;
     }
 }
