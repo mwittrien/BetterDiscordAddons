@@ -292,7 +292,7 @@ BDfunctionsDevilBro.showHideAllEles = function (show, eles) {
 BDfunctionsDevilBro.saveData = function (id, data, pluginName, keyName) {
 	var settings = bdPluginStorage.get(pluginName, keyName) ? bdPluginStorage.get(pluginName, keyName) : {};
 	
-	settings[id] = JSON.stringify(data);
+	settings[id] = data;
 	
 	bdPluginStorage.set(pluginName, keyName, settings);
 };
@@ -316,7 +316,7 @@ BDfunctionsDevilBro.loadData = function (id, pluginName, keyName) {
 	
 	var data = settings[id];
 	
-	return (data ? JSON.parse(data) : null);
+	return (data ? data : null);
 };
 
 BDfunctionsDevilBro.loadAllData = function (pluginName, keyName) {
