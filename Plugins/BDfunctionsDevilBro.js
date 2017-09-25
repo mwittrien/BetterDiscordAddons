@@ -535,7 +535,7 @@ BDfunctionsDevilBro.clearReadNotifications = function (servers) {
 };
 
 BDfunctionsDevilBro.getDiscordLanguage = function () {
-	var lang = $("html").attr("lang").split("-")[0] ? $("html").attr("lang").split("-")[0] : "en";
+	var lang = $("html").attr("lang") ? $("html").attr("lang").split("-")[0] : "en";
 	switch (lang) {
 		case "da": 		//danish
 			return {"id":"da","lang":"danish"};
