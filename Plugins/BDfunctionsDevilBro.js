@@ -330,7 +330,7 @@ BDfunctionsDevilBro.loadData = function (id, pluginName, keyName) {
 	if (typeof settings[id] == "string") {settings[id] = JSON.parse(settings[id]);bdPluginStorage.set(pluginName, keyName, settings)}
 	var data = settings[id];
 	
-	return (data ? data : null);
+	return (data === undefined ? null : data);
 };
 
 BDfunctionsDevilBro.loadAllData = function (pluginName, keyName) {
