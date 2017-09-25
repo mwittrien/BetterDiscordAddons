@@ -33,7 +33,7 @@ class NotificationSounds {
 
 	getDescription () {return "Creates a notification sound when you receive a notification (mention or DM).";}
 
-	getVersion () {return "2.4.0";}
+	getVersion () {return "2.4.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -242,14 +242,16 @@ class NotificationSounds {
 			var songs = BDfunctionsDevilBro.loadAllData(this.getName(), "songs");
 			
 			var songFound = false;
-			for (var category in songs) {
-				if (choice.category == category) {
-					for (var song in songs[category]) {
-						if (choice.song == song) {
-							var volume = choice.volume ? choice.volume : "100";
-							choice = {"category":category,"song":song,"volume":volume};
-							songFound = true;
-							break;
+			if (choice) {
+				for (var category in songs) {
+					if (choice.category == category) {
+						for (var song in songs[category]) {
+							if (choice.song == song) {
+								var volume = choice.volume ? choice.volume : "100";
+								choice = {"category":category,"song":song,"volume":volume};
+								songFound = true;
+								break;
+							}
 						}
 					}
 				}
