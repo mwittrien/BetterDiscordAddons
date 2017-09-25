@@ -6,14 +6,18 @@ class NotificationSounds {
 		
 		// to add a new song choose a name and add a new line in the array "NAME":"URL"
 		this.audios = {
-			"None":						null,
-			"Communication Channel": 	"https://notificationsounds.com/soundfiles/63538fe6ef330c13a05a3ed7e599d5f7/file-sounds-917-communication-channel.wav",
-			"Isn't it": 				"https://notificationsounds.com/soundfiles/ba2fd310dcaa8781a9a652a31baf3c68/file-sounds-969-isnt-it.wav",
-			"Job Done": 				"https://notificationsounds.com/soundfiles/5b69b9cb83065d403869739ae7f0995e/file-sounds-937-job-done.wav",
-			"Served": 					"https://notificationsounds.com/soundfiles/b337e84de8752b27eda3a12363109e80/file-sounds-913-served.wav",
-			"Solemn": 					"https://notificationsounds.com/soundfiles/53fde96fcc4b4ce72d7739202324cd49/file-sounds-882-solemn.wav",
-			"System Fault": 			"https://notificationsounds.com/soundfiles/ebd9629fc3ae5e9f6611e2ee05a31cef/file-sounds-990-system-fault.wav",
-			"You wouldn't believe": 	"https://notificationsounds.com/soundfiles/087408522c31eeb1f982bc0eaf81d35f/file-sounds-949-you-wouldnt-believe.wav"	
+			"---": {
+				"---":						null
+			},
+			"Default":{
+				"Communication Channel": 	"https://notificationsounds.com/soundfiles/63538fe6ef330c13a05a3ed7e599d5f7/file-sounds-917-communication-channel.wav",
+				"Isn't it": 				"https://notificationsounds.com/soundfiles/ba2fd310dcaa8781a9a652a31baf3c68/file-sounds-969-isnt-it.wav",
+				"Job Done": 				"https://notificationsounds.com/soundfiles/5b69b9cb83065d403869739ae7f0995e/file-sounds-937-job-done.wav",
+				"Served": 					"https://notificationsounds.com/soundfiles/b337e84de8752b27eda3a12363109e80/file-sounds-913-served.wav",
+				"Solemn": 					"https://notificationsounds.com/soundfiles/53fde96fcc4b4ce72d7739202324cd49/file-sounds-882-solemn.wav",
+				"System Fault": 			"https://notificationsounds.com/soundfiles/ebd9629fc3ae5e9f6611e2ee05a31cef/file-sounds-990-system-fault.wav",
+				"You wouldn't believe": 	"https://notificationsounds.com/soundfiles/087408522c31eeb1f982bc0eaf81d35f/file-sounds-949-you-wouldnt-believe.wav"
+			}
 		};
 		
 		this.oldMentions = {};
@@ -34,24 +38,35 @@ class NotificationSounds {
 	getAuthor () {return "DevilBro";}
 
     getSettingsPanel () {
-		var settings = this.getSettings();
-		
 		var settingspanel = `<audio class="preview"></audio>`;
+		
+		var songs = BDfunctionsDevilBro.loadAllData(this.getName(), "songs");
 		
 		for (var i in this.types) {
 			var key = this.types[i];
+			var choice = BDfunctionsDevilBro.loadData(key, this.getName(), "choices");
 			settingspanel += `<label style="color:grey;">` + key + `-Sound:</label><div class="` + key + `-song-settings" style="margin:0px 0px 20px 0px; overflow:hidden;">`;
-			settingspanel += `<div class="` + key + `-song-selection" style="margin:0px 20px 0px 0px; float:left;"><select name="` + key + `" id="` + key + `-select" onchange='` + this.getName() + `.updateSettings(this, "` + key + `" )' style="height: 25px;">`;
-			for (var song in this.audios) {
-				var src = this.audios[song] ? "src=" + this.audios[song] : "";
-				if (song && song != "") {
-					var selected = settings[key].song == song ? " selected" : "";
-					settingspanel += `<option `+ src + ` ` + selected + `>` + song + `</option>`;
+			settingspanel += `<div class="category-selection" style="margin:0px 20px 0px 0px; float:left;"><select id="` + key + `-category-select" onchange='` + this.getName() + `.updateSettings(this, "` + key + `", "` + this.types + `", "` + this.getName() + `")' style="width:150px; height: 25px;">`;
+			for (var category in songs) {
+				var cSelected = choice.category == category ? " selected" : "";
+				if (cSelected) {
+					var songSelection = `<div class="song-selection" style="margin:0px 20px 0px 0px; float:left;"><select id="` + key + `-song-select" onchange='` + this.getName() + `.updateSettings(this, "` + key + `", "` + this.types + `", "` + this.getName() + `")' style="width:150px; height: 25px;">`;
+					for (var song in songs[category]) {
+						var src = songs[category][song] ? "src=" + songs[category][song] : "";
+						if (song && song != "") {
+							var sSelected = choice.song == song ? " selected" : "";
+							songSelection += `<option `+ src + `` + sSelected + `>` + song + `</option>`;
+						}
+					}
+					songSelection += `</select></div>`;
 				}
+				settingspanel += `<option` + cSelected + `>` + category + `</option>`;
 			}
 			settingspanel += `</select></div>`;
-			settingspanel += `<div class="` + key + `-volume-slider" style="margin:0px 20px 0px 0px; float:left;"><input type="range" min="0" max="100" value="` + settings[key].volume + `" id="` + key + `-volume" onchange='` + this.getName() + `.updateSettings(this, "` + key + `")' oninput='` + this.getName() + `.updateSlider(this, "` + key + `")'></div>`;
-			settingspanel += `<div class="` + key + `-volume-value" style="margin:0px 0px 0px 0px; float:left;"><input type="number" min="0" max="100" value="` + settings[key].volume + `" id="` + key + `-volume-value" onchange='` + this.getName() + `.updateSettings(this, "` + key + `")' style="height: 25px; width:50px; text-align:center;"></div>`;
+			settingspanel += songSelection;
+			var volume = choice.volume ? choice.volume : "100";
+			settingspanel += `<div class="` + key + `-volume-slider" style="margin:0px 20px 0px 0px; float:left;"><input type="range" min="0" max="100" value="` + volume + `" id="` + key + `-volume" onchange='` + this.getName() + `.updateSettings(this, "` + key + `", "` + this.types + `", "` + this.getName() + `")' oninput='` + this.getName() + `.updateVolumeinput(this, "` + key + `")'></div>`;
+			settingspanel += `<div class="` + key + `-volume-value" style="margin:0px 0px 0px 0px; float:left;"><input type="number" min="0" max="100" value="` + volume + `" id="` + key + `-volume-value" onchange='` + this.getName() + `.updateSettings(this, "` + key + `", "` + this.types + `", "` + this.getName() + `")' oninput='` + this.getName() + `.updateVolumeinput(this, "` + key + `")' style="height: 25px; width:50px; text-align:center;"></div>`;
 			settingspanel += `</div>`;
 							
 		}
@@ -164,7 +179,9 @@ class NotificationSounds {
 				}
 			);
 			
-			this.checkAudios();
+			this.loadAudios();
+			
+			this.loadChoices();
 			
 			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
 		}
@@ -188,106 +205,140 @@ class NotificationSounds {
 	// begin of own functions
 	
 	playAudio (type) {
-		var settings = this.getSettings()[type];
-		var selectedSong = settings.song;
-		var volume = settings.volume;
+		var choice = BDfunctionsDevilBro.loadData(type, this.getName(), "choices");
+		var songs = BDfunctionsDevilBro.loadAllData(this.getName(), "songs");
 		
-		for (var song in this.audios) {
-			if (song && song != "" && selectedSong == song) {
-				var url = this.audios[song];
-				if (url != null) {
-					var audio = new Audio();
-					audio.src = url;
-					audio.volume = volume/100;
-					audio.play();
-				}
-			}
-		}
-	}
-	
-	checkAudios () {
-		var savedAudios = this.audios;
-		this.audios = {};
-		
-		for (var song in savedAudios) {
-			this.checkUrl(song, savedAudios[song]);
-		}
-	}
-	
-	checkUrl (song, url) {
-		if (!url) {
-			this.audios[song] = url;
-		}
-		else {
-			$.ajax({
-				type: "HEAD",
-				url : "https://cors-anywhere.herokuapp.com/" + url,
-				success: (message, text, response) => {
-					if (response.getResponseHeader('Content-Type').indexOf("audio") != -1 || 
-					response.getResponseHeader('Content-Type').indexOf("video") != -1 || 
-					response.getResponseHeader('Content-Type').indexOf("application") != -1) {
-						this.audios[song] = url;
+		for (var category in songs) {
+			if (choice.category == category) {
+				for (var song in songs[category]) {
+					if (choice.song == song) {
+						var url = songs[category][song];
+						if (url != null) {
+							var audio = new Audio();
+							audio.src = url;
+							audio.volume = choice.volume/100;
+							audio.play();
+						}
 					}
 				}
-			});
+			}
 		}
 	}
 	
-	getSettings () {
-		var oldSettings = bdPluginStorage.get(this.getName(), "settings") ? bdPluginStorage.get(this.getName(), "settings") : {};
-		var newSettings = {};
-		
+	loadAudios () {
+		for (var category in this.audios) {
+			var data = {};
+			for (var song in this.audios[category]) {
+				data[song] = this.audios[category][song];
+			}
+			BDfunctionsDevilBro.saveData(category, data, this.getName(), "songs");
+		}
+	}
+	
+	loadChoices () {
 		for (var i in this.types) {
 			var key = this.types[i];
+			var choice = BDfunctionsDevilBro.loadData(key, this.getName(), "choices");
+			var songs = BDfunctionsDevilBro.loadAllData(this.getName(), "songs");
+			
 			var songFound = false;
-			for (var song in this.audios) {
-				if (song && song != "" && oldSettings[key] && oldSettings[key].song == song) {
-					var volume = oldSettings[key].volume ? oldSettings[key].volume : 100;
-					newSettings[key] = {"song":song,"volume":volume};
-					songFound = true;
+			for (var category in songs) {
+				if (choice.category == category) {
+					for (var song in songs[category]) {
+						if (choice.song == song) {
+							var volume = choice.volume ? choice.volume : "100";
+							choice = {"category":category,"song":song,"volume":volume};
+							songFound = true;
+							break;
+						}
+					}
 				}
 			}
-			if (!songFound) newSettings[key] = {"song":"None","volume":100};
+			if (!songFound) choice = {"category":"---","song":"---","volume":"100"};
+			BDfunctionsDevilBro.saveData(key, choice, this.getName(), "choices");
 		}
-		
-		bdPluginStorage.set(this.getName(), "settings", newSettings);
-		
-		return newSettings;
+	}
+	
+	static checkUrl (url) {
+		$.ajax({
+			type: "HEAD",
+			url : "https://cors-anywhere.herokuapp.com/" + url,
+			success: (message, text, response) => {
+				if (response.getResponseHeader('Content-Type').indexOf("audio") != -1 || 
+				response.getResponseHeader('Content-Type').indexOf("video") != -1 || 
+				response.getResponseHeader('Content-Type').indexOf("application") != -1) {
+					return true;
+				}
+				else {
+					return false;
+				}
+			},
+			error: () => {
+				return false;
+			}
+		});
 	}
 
-    static updateSettings (ele, type) {
-		var settingspanel = ele.parentElement.parentElement.parentElement;
-		var selectinput = $(settingspanel).find("#" + type + "-select")[0];
-		var sliderinput = $(settingspanel).find("#" + type + "-volume")[0];
-		var valueinput = $(settingspanel).find("#" + type + "-volume-value")[0];
+    static updateSettings (ele, type, types, pluginName) {
+		var settingspanel = 	ele.parentElement.parentElement.parentElement;
+		var categoryselect = 	$(settingspanel).find("#" + type + "-category-select")[0];
+		var songselect = 		$(settingspanel).find("#" + type + "-song-select")[0];
+		var volumeslider = 		$(settingspanel).find("#" + type + "-volume")[0];
+		var volumeinput = 		$(settingspanel).find("#" + type + "-volume-value")[0];
 		
-		var url = $(selectinput).find(":selected").attr("src");
-		if (url != null) {
-			var volume = ele.id == "#" + type + "-volume" ? sliderinput.value : valueinput.value;
-			volume = volume > 100 ? 100 : volume < 0 ? 0 : volume;
+		if (ele.id == type + "-category-select") {
+			var newCategory = 		$(categoryselect).find(":selected").text();
+			var newSongs = 			BDfunctionsDevilBro.loadData(newCategory, pluginName, "songs");
 			
+			var firstSelected = false;
+			var songSelection = `<div class="song-selection" style="margin:0px 20px 0px 0px; float:left;"><select id="` + type + `-song-select" onchange='` + pluginName + `.updateSettings(this, "` + type + `", "` + types + `", "` + pluginName + `")' style="width:150px; height: 25px;">`;
+			for (var newSong in newSongs) {
+				var src = newSongs[newSong] ? "src=" + newSongs[newSong] : "";
+				if (newSong && newSong != "") {
+					var sSelected = !firstSelected ? " selected" : "";
+					firstSelected = true;
+					songSelection += `<option `+ src + `` + sSelected + `>` + newSong + `</option>`;
+				}
+			}
+			songSelection += `</select></div>`;
+			
+			$(songselect).html(songSelection);
+		}
+		
+		var volume = ele.id == type + "-volume" ? volumeslider.value : volumeinput.value;
+		volume = volume > 100 ? 100 : volume < 0 ? 0 : volume;
+		volumeslider.value = volume;
+		volumeinput.value = volume;
+		
+		var url = $(songselect).find(":selected").attr("src");
+		if (url != null) {
 			var audio = $(settingspanel).find(".preview")[0];
 			audio.src = url;
 			audio.volume = volume/100;
 			audio.play();
 		}
 		
-		var songs = settingspanel.querySelectorAll("select");
 		var settings = {};
-		for (var i = 0; i < songs.length; i++) {
-			settings[songs[i].name] = {"song":$(songs[i]).find(":selected").text(),"volume":$("#" + $(songs[i]).attr("name") + "-volume")[0].value};
+		types = types.split(",");
+		for (var i = 0; i < types.length; i++) {
+			var key = 			types[i];
+			var category = 		$(settingspanel).find("#" + key + "-category-select").find(":selected").text();
+			var song = 			$(settingspanel).find("#" + key + "-song-select").find(":selected").text();
+			var volume = 		$(settingspanel).find("#" + key + "-volume")[0].value;
+			BDfunctionsDevilBro.saveData(key, {category, song, volume}, pluginName, "choices");
 		}
-		bdPluginStorage.set("NotificationSounds", "settings", settings);
     }
 
-    static updateSlider (ele, type) {
+    static updateVolumeinput (ele, type) {
 		var settingspanel = ele.parentElement.parentElement.parentElement;
-		var sliderinput = $(settingspanel).find("#" + type + "-volume")[0];
-		var valueinput = $(settingspanel).find("#" + type + "-volume-value")[0];
+		var volumeslider = $(settingspanel).find("#" + type + "-volume")[0];
+		var volumeinput = $(settingspanel).find("#" + type + "-volume-value")[0];
 		
-		var volume = sliderinput.value;
-		volume = volume > 100 ? 100 : volume < 0 ? 0 : volume;
-		
-		valueinput.value = volume;
+		if (ele.id == type + "-volume") {
+			volumeinput.value = volumeslider.value;
+		}
+		else if (ele.id == type + "-volume-value") {
+			volumeslider.value = volumeinput.value;
+		}
     }
 }
