@@ -72,8 +72,7 @@ BDfunctionsDevilBro.getKeyInformation = function (config) {
 	var inst = BDfunctionsDevilBro.getReactInstance(config.node);
 	if (!inst) return null;
 	
-	
-	// to avoid endless loops (parentnode > childnode > parentnode ...)
+	var depth = -1;
 	var maxDepth = config.depth === undefined ? 30 : config.depth;
 		
 	var keyWhiteList = {
@@ -105,38 +104,42 @@ BDfunctionsDevilBro.getKeyInformation = function (config) {
 	if (config.all) return resultArray;
 	else return singleResult;
 
-	function searchKeyInReact (ele, depth) {
-		if (!ele || depth > maxDepth) return null;
-		var keys = Object.getOwnPropertyNames(ele);
-		var result = null;
-		for (var i = 0; result === null && i < keys.length; i++) {
-			var key = keys[i];
-			var value = ele[keys[i]];
-			
-			if (config.key === key && (config.value === undefined || config.value === value)) {
-				if (config.all === undefined || !config.all) {
-					result = value;
-				}
-				else if (config.all) {
-					if (config.noCopies === undefined || !config.noCopies) {
-						resultArray.push(value);
+	function searchKeyInReact (ele) {
+		depth++;
+		if (!ele || depth > maxDepth) result = null;
+		else {
+			var keys = Object.getOwnPropertyNames(ele);
+			var result = null;
+			for (var i = 0; result === null && i < keys.length; i++) {
+				var key = keys[i];
+				var value = ele[keys[i]];
+				
+				if (config.key === key && (config.value === undefined || config.value === value)) {
+					if (config.all === undefined || !config.all) {
+						result = value;
 					}
-					else if (config.noCopies) {
-						var included = false;
-						for (var j = 0; j < resultArray.length; j++) {
-							if (BDfunctionsDevilBro.equals(value, resultArray[j])) {
-								included = true;
-								break;
-							}
+					else if (config.all) {
+						if (config.noCopies === undefined || !config.noCopies) {
+							resultArray.push(value);
 						}
-						if (!included) resultArray.push(value);
+						else if (config.noCopies) {
+							var included = false;
+							for (var j = 0; j < resultArray.length; j++) {
+								if (BDfunctionsDevilBro.equals(value, resultArray[j])) {
+									included = true;
+									break;
+								}
+							}
+							if (!included) resultArray.push(value);
+						}
 					}
 				}
-			}
-			else if ((typeof value === "object" || typeof value === "function") && ((keyWhiteList[key] && !keyBlackList[key]) || key[0] == "." || !isNaN(key[0]))) {
-				result = searchKeyInReact(value, depth++);
+				else if ((typeof value === "object" || typeof value === "function") && ((keyWhiteList[key] && !keyBlackList[key]) || key[0] == "." || !isNaN(key[0]))) {
+					result = searchKeyInReact(value);
+				}
 			}
 		}
+		depth--;
 		return result;
 	}
 };
