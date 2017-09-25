@@ -304,6 +304,12 @@ BDfunctionsDevilBro.removeData = function (id, pluginName, keyName) {
 	
 	bdPluginStorage.set(pluginName, keyName, settings);
 };
+	
+BDfunctionsDevilBro.removeAllData = function (pluginName, keyName) {
+	var settings = {};
+	
+	bdPluginStorage.set(pluginName, keyName, settings);
+};
 
 BDfunctionsDevilBro.loadData = function (id, pluginName, keyName) {
 	var settings = bdPluginStorage.get(pluginName, keyName) ? bdPluginStorage.get(pluginName, keyName) : {};
@@ -311,6 +317,12 @@ BDfunctionsDevilBro.loadData = function (id, pluginName, keyName) {
 	var data = settings[id];
 	
 	return (data ? JSON.parse(data) : null);
+};
+
+BDfunctionsDevilBro.loadAllData = function (pluginName, keyName) {
+	var settings = bdPluginStorage.get(pluginName, keyName) ? bdPluginStorage.get(pluginName, keyName) : {};
+	
+	return settings;
 };
 
 BDfunctionsDevilBro.appendWebScript = function (filepath) {
