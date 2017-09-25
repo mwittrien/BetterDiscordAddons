@@ -33,7 +33,7 @@ class NotificationSounds {
 
 	getDescription () {return "Creates a notification sound when you receive a notification (mention or DM).";}
 
-	getVersion () {return "2.3.0";}
+	getVersion () {return "2.4.0";}
 
 	getAuthor () {return "DevilBro";}
 
