@@ -234,6 +234,16 @@ BDfunctionsDevilBro.readChannelList = function () {
 	return foundChannels;
 };
 	
+BDfunctionsDevilBro.getSelectedServer = function () {
+	var servers = BDfunctionsDevilBro.readServerList();
+	for (var i = 0; i < servers.length; i++) {
+		if ($(servers[i]).hasClass("selected")) {
+			return servers[i];
+		}
+	}
+	return null;
+};
+	
 BDfunctionsDevilBro.getDivOfServer = function (id) {
 	var servers = BDfunctionsDevilBro.readServerList();
 	for (var i = 0; i < servers.length; i++) {
