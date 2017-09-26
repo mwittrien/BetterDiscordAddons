@@ -35,7 +35,11 @@ class TopRoleEverywhere {
 
 	getAuthor () {return "DevilBro";}
 	
-    getSettingsPanel () {}
+    getSettingsPanel () {
+		return `
+		<input type="checkbox" onchange='` + this.getName() + `.updateSettings(this.parentNode, "` + this.getName() + `")' value="showInChat"${(this.getSettings().showInChat ? " checked" : void 0)}><label style="color:grey;"> Show tag in chat window.</label><br>\n
+		<input type="checkbox" onchange='` + this.getName() + `.updateSettings(this.parentNode, "` + this.getName() + `")' value="showInMemberList"${(this.getSettings().showInMemberList ? " checked" : void 0)}><label style="color:grey;"> Show tag in memberlist.</label>`;
+    }
 
 	//legacy
 	load () {}
@@ -70,9 +74,9 @@ class TopRoleEverywhere {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								var userData = BDfunctionsDevilBro.getKeyInformation({"node":node, "key":"user"});
-								if (userData) {
-									this.addRoleTag(node);
+								var user = $(node).find(".member-username")[0];
+								if (user && this.getSettings().showInMemberList) {
+									this.addRoleTag(user);
 								}
 							});
 						}
@@ -87,7 +91,7 @@ class TopRoleEverywhere {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								var user = $(node).find(".username-wrapper")[0];
-								if (user) {
+								if (user && this.getSettings().showInChat) {
 									this.addRoleTag(user);
 								}
 							});
@@ -119,15 +123,54 @@ class TopRoleEverywhere {
 	
 	
 	// begin of own functions
+	
+	getSettings () {
+		var defaultSettings = {
+			showInChat: true,
+			showInMemberList: true
+		};
+		var settings = bdPluginStorage.get(this.getName(), "settings");
+		if (settings == null) {
+			settings = {};
+		}
+		var saveSettings = false;
+		for (var key in defaultSettings) {
+			if (settings[key] == null) {
+				settings[key] = defaultSettings[key];
+				saveSettings = true;
+			}
+		}
+		if (saveSettings) {
+			bdPluginStorage.set(this.getName(), "settings", settings);
+		}
+		return settings;
+	}
+
+    static updateSettings (settingspanel, pluginName) {
+		var settings = {};
+		var inputs = settingspanel.querySelectorAll("input");
+		for (var i = 0; i < inputs.length; i++) {
+			settings[inputs[i].value] = inputs[i].checked;
+		}
+		bdPluginStorage.set(pluginName, "settings", settings);
+    }
 
 	loadRoleTags() {
 		var server = BDfunctionsDevilBro.getSelectedServer();
 		if (server) {
 			if ($(".role-tag").length == 0) {
 				this.roles = BDfunctionsDevilBro.getKeyInformation({"node":server,"key":"guild"}).roles;
-				var members = $("div.member-username, span.username-wrapper");
-				for (var i = 0; i < members.length; i++) {
-					this.addRoleTag(members[i]);
+				if (this.getSettings().showInChat) { 
+					var membersChat = $("span.username-wrapper");
+					for (var i = 0; i < membersChat.length; i++) {
+						this.addRoleTag(membersChat[i]);
+					}
+				}
+				if (this.getSettings().showInMemberListvar) { 
+					var membersList = $("div.member-username");
+					for (var j = 0; j < membersList.length; j++) {
+						this.addRoleTag(membersList[j]);
+					}
 				}
 			}
 		}
