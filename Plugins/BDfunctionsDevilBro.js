@@ -452,6 +452,15 @@ BDfunctionsDevilBro.colorCHANGE = function (color, value) {
 	return null;
 };
 
+BDfunctionsDevilBro.colorCOMPARE = function (color1, color2) {
+	if (color1 && color2) {
+		color1 = BDfunctionsDevilBro.color2RGB(color1);
+		color2 = BDfunctionsDevilBro.color2RGB(color2);
+		return BDfunctionsDevilBro.equals(color1,color2);
+	}
+	return null;
+};
+
 BDfunctionsDevilBro.colorINV = function (color, conv) {
 	if (color) {
 		if (conv === undefined) {
