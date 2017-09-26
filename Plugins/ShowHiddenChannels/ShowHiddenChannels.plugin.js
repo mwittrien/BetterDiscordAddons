@@ -112,7 +112,10 @@ class ShowHiddenChannels {
 					var channelIsHidden = true;
 					for (var j = 0; j < shownChannels.length; j++) {
 						var shownChannel = shownChannels[j].channel;
-						if (shownChannel.id == thisChannel.id) channelIsHidden = false;
+						if (shownChannel.id == thisChannel.id) {
+							channelIsHidden = false;
+							break;
+						}
 					}
 					if (channelIsHidden) hiddenChannels.push(thisChannel);
 				}
