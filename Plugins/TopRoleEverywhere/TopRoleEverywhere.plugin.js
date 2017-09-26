@@ -101,7 +101,7 @@ class TopRoleEverywhere {
 			
 			this.loadRoleTags();
 			
-			//BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
+			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
