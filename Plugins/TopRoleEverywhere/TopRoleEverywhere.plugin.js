@@ -235,8 +235,6 @@ class TopRoleEverywhere {
 							rolesSameColor.push({"roleName":this.roles[roleID].name,"colorString":this.roles[roleID].colorString});
 						}
 					}
-					console.log(member);
-					console.log(rolesSameColor);
 					if (rolesSameColor.length == 1) {
 						roleName = rolesSameColor[0].roleName;
 						roleColor = BDfunctionsDevilBro.color2COMP(rolesSameColor[0].colorString);
@@ -246,7 +244,6 @@ class TopRoleEverywhere {
 						$(".popout").hide();
 						var userRoles = $(".member-role");
 						$(".member-role").remove();
-						console.log(userRoles);
 						for (var j = 0; j < rolesSameColor.length; j++) {
 							for (var k = 0; k < userRoles.length; k++) {
 								var thisRoleName = $(userRoles[k]).find(".name").text();
@@ -261,12 +258,13 @@ class TopRoleEverywhere {
 						}
 					}
 				}
-				console.log(roleColor);
-				console.log(roleName);
-				console.log("__________");
 				if (roleColor && roleName) {
-					var width = $(member).find(".member-username-inner").css("width") ? $(member).find(".member-username-inner").css("width").replace("px","")*(4/5) + "px" : "";
-					$(member).find(".member-username-inner").css("min-width",width);
+					var width = $(member).find(".member-username-inner").css("width");
+					if (width) {
+						width = parseInt(width.replace("px",""));
+						width = width*(4/5) < 80 ? width+1 : width*(4/5);
+						$(member).find(".member-username-inner").css("min-width",width + "px");
+					}
 					this.userRoles[userID] = {"roleName":roleName,"colorString":BDfunctionsDevilBro.color2HEX(roleColor)};
 					var tag = $(this.tagMarkup)
 						.addClass(type + "-tag")
@@ -275,7 +273,7 @@ class TopRoleEverywhere {
 						.css("border", "1px solid rgba(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ", 0.498039)")
 						.text(roleName);
 					$(member).append(tag);
-					if (member.className == "username-wrapper") $(tag).css("bottom","1px");
+					if ($(wrapper).find("span.username-wrapper").length > 0) $(tag).css("bottom","1px");
 				}
 			}
 		}
