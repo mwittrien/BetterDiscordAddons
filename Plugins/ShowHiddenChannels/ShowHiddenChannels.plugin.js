@@ -36,7 +36,7 @@ class ShowHiddenChannels {
 
 	getDescription () {return "Displays channels that are hidden from you by role restrictions.";}
 
-	getVersion () {return "1.0.0";}
+	getVersion () {return "1.0.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -122,9 +122,7 @@ class ShowHiddenChannels {
 					hiddenChannels = BDfunctionsDevilBro.sortArrayByKey(hiddenChannels, "name");
 					
 					var isOpen = BDfunctionsDevilBro.loadData(serverID, this.getName(), "categorystatus");
-					console.log(isOpen);
 					isOpen = isOpen === null ? true : isOpen;
-					console.log(isOpen);
 					
 					var category = $(this.categoryMarkup)
 						.addClass(serverID)
