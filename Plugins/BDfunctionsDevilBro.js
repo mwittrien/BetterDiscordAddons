@@ -420,7 +420,7 @@ BDfunctionsDevilBro.color2HEX = function (color) {
 	if (color) {
 		switch (BDfunctionsDevilBro.checkColorType(color)) {
 			case "comp":
-				return "#" + (0x1000000 + ((color[2]) | ((color[1]) << 8) | ((color[0]) << 16))).toString(16).slice(1);
+				return ("#" + (0x1000000 + ((color[2]) | ((color[1]) << 8) | ((color[0]) << 16))).toString(16).slice(1)).toUpperCase();
 			case "rgb":
 				return BDfunctionsDevilBro.color2HEX(BDfunctionsDevilBro.color2COMP(color));
 			case "hex":
