@@ -340,7 +340,7 @@ BDfunctionsDevilBro.loadAllData = function (pluginName, keyName) {
 };
 
 BDfunctionsDevilBro.appendWebScript = function (filepath) {
-	if ($('head script[src="' + filepath + '"]').length > 0) return;
+	$('head script[src="' + filepath + '"]').remove();
 	
 	var ele = document.createElement('script');
 	$(ele)
@@ -349,7 +349,7 @@ BDfunctionsDevilBro.appendWebScript = function (filepath) {
 };
 
 BDfunctionsDevilBro.appendWebStyle = function (filepath) {
-	if ($('head link[href="' + filepath + '"]').length > 0) return;
+	$('head link[href="' + filepath + '"]').remove();
 
 	var ele = document.createElement('link');
 	$(ele)
@@ -360,7 +360,7 @@ BDfunctionsDevilBro.appendWebStyle = function (filepath) {
 };
 
 BDfunctionsDevilBro.appendLocalStyle = function (pluginName, css) {
-	if ($('head style[id="' + pluginName + '"]').length > 0) return;
+	$('head style[id="' + pluginName + '"]').remove();
 
 	var ele = document.createElement('style');
 	$(ele)
