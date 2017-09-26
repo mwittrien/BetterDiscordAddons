@@ -2,7 +2,8 @@
 
 class TopRoleEverywhere {
 	constructor () {
-		this.serverListObserver = new MutationObserver(() => {});
+		this.serverSwitchObserver = new MutationObserver(() => {});
+		this.channelSwitchObserver = new MutationObserver(() => {});
 		this.userListObserver = new MutationObserver(() => {});
 		this.chatWindowObserver = new MutationObserver(() => {});
 		
@@ -53,7 +54,7 @@ class TopRoleEverywhere {
 			$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
-			this.serverListObserver = new MutationObserver((changes, _) => {
+			this.serverSwitchObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.type == "attributes" && change.attributeName == "class" && change.oldValue && change.oldValue.indexOf("guild") != -1) {
@@ -62,12 +63,29 @@ class TopRoleEverywhere {
 								this.loadRoleTags();
 								if ($(".channel-members").length != 0) this.userListObserver.observe($(".channel-members")[0], {childList:true});
 								if ($(".messages.scroller").length != 0) this.chatWindowObserver.observe($(".messages.scroller")[0], {childList:true});
+								if ($(".chat").length != 0) this.channelSwitchObserver.observe($(".chat")[0], {childList:true, subtree:true});
 							}
 						}
 					}
 				);
 			});
-			this.serverListObserver.observe($(".guilds.scroller")[0], {subtree:true, attributes:true, attributeOldValue:true});
+			this.serverSwitchObserver.observe($(".guilds.scroller")[0], {subtree:true, attributes:true, attributeOldValue:true});
+			
+			this.channelSwitchObserver = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.addedNodes) {
+							change.addedNodes.forEach((node) => {
+								if ($(node).find(".messages.scroller").length > 0) {
+									this.loadRoleTags();
+									this.chatWindowObserver.observe($(".messages.scroller")[0], {childList:true});
+								}
+							});
+						}
+					}
+				);
+			});
+			if ($(".chat").length != 0) this.channelSwitchObserver.observe($(".chat")[0], {childList:true, subtree:true});
 			
 			this.userListObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -115,7 +133,8 @@ class TopRoleEverywhere {
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			$(".role-tag").remove();
-			this.serverListObserver.disconnect();
+			this.serverSwitchObserver.disconnect();
+			this.channelSwitchObserver.disconnect();
 			this.userListObserver.disconnect();
 			this.chatWindowObserver.disconnect();
 		}
@@ -158,19 +177,17 @@ class TopRoleEverywhere {
 	loadRoleTags() {
 		var server = BDfunctionsDevilBro.getSelectedServer();
 		if (server) {
-			if ($(".role-tag").length == 0) {
-				this.roles = BDfunctionsDevilBro.getKeyInformation({"node":server,"key":"guild"}).roles;
-				if (this.getSettings().showInChat) { 
-					var membersChat = $("span.username-wrapper");
-					for (var i = 0; i < membersChat.length; i++) {
-						this.addRoleTag(membersChat[i]);
-					}
+			this.roles = BDfunctionsDevilBro.getKeyInformation({"node":server,"key":"guild"}).roles;
+			if (this.getSettings().showInChat) { 
+				var membersChat = $("span.username-wrapper");
+				for (var i = 0; i < membersChat.length; i++) {
+					this.addRoleTag(membersChat[i]);
 				}
-				if (this.getSettings().showInMemberList) { 
-					var membersList = $("div.member-username");
-					for (var j = 0; j < membersList.length; j++) {
-						this.addRoleTag(membersList[j]);
-					}
+			}
+			if (this.getSettings().showInMemberList) { 
+				var membersList = $("div.member-username");
+				for (var j = 0; j < membersList.length; j++) {
+					this.addRoleTag(membersList[j]);
 				}
 			}
 		}
