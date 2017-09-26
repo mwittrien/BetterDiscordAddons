@@ -19,7 +19,6 @@ class TopRoleEverywhere {
 				padding: 1px 2px 1px 2px; 
 				margin-left: 5px; 
 				height: 13px;
-				max-width: 50px; 
 				border-radius: 3px;
 				text-transform: uppercase;
 				font-size: 12px;
@@ -35,7 +34,7 @@ class TopRoleEverywhere {
 
 	getDescription () {return "Adds the highest role of a user as a tag.";}
 
-	getVersion () {return "1.1.0";}
+	getVersion () {return "1.2.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -236,6 +235,8 @@ class TopRoleEverywhere {
 							rolesSameColor.push({"roleName":this.roles[roleID].name,"colorString":this.roles[roleID].colorString});
 						}
 					}
+					console.log(member);
+					console.log(rolesSameColor);
 					if (rolesSameColor.length == 1) {
 						roleName = rolesSameColor[0].roleName;
 						roleColor = BDfunctionsDevilBro.color2COMP(rolesSameColor[0].colorString);
@@ -244,6 +245,8 @@ class TopRoleEverywhere {
 						member.click();
 						$(".popout").hide();
 						var userRoles = $(".member-role");
+						$(".member-role").remove();
+						console.log(userRoles);
 						for (var j = 0; j < rolesSameColor.length; j++) {
 							for (var k = 0; k < userRoles.length; k++) {
 								var thisRoleName = $(userRoles[k]).find(".name").text();
@@ -258,7 +261,12 @@ class TopRoleEverywhere {
 						}
 					}
 				}
+				console.log(roleColor);
+				console.log(roleName);
+				console.log("__________");
 				if (roleColor && roleName) {
+					var width = $(member).find(".member-username-inner").css("width") ? $(member).find(".member-username-inner").css("width").replace("px","")*(4/5) + "px" : "";
+					$(member).find(".member-username-inner").css("min-width",width);
 					this.userRoles[userID] = {"roleName":roleName,"colorString":BDfunctionsDevilBro.color2HEX(roleColor)};
 					var tag = $(this.tagMarkup)
 						.addClass(type + "-tag")
