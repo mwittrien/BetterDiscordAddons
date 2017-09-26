@@ -166,7 +166,7 @@ class TopRoleEverywhere {
 						this.addRoleTag(membersChat[i]);
 					}
 				}
-				if (this.getSettings().showInMemberListvar) { 
+				if (this.getSettings().showInMemberList) { 
 					var membersList = $("div.member-username");
 					for (var j = 0; j < membersList.length; j++) {
 						this.addRoleTag(membersList[j]);
