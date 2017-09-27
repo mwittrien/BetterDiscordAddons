@@ -264,12 +264,14 @@ class EmojiStatistics {
 
 	getDescription () {return "Adds some helpful options to show you more information about emojis and emojiservers.";}
 
-	getVersion () {return "2.2.2";}
+	getVersion () {return "2.2.3";}
 
 	getAuthor () {return "DevilBro";}
 
     getSettingsPanel () {
-		return `<input type="checkbox" onchange="` + this.getName() + `.updateSettings(this.parentNode)" value="enableEmojiHovering"${(this.getSettings().enableEmojiHovering ? " checked" : void 0)}><label style="color:grey;"> Show emojiinformation when hovering over an emoji in the emojipicker.</label><br>\n<input type="checkbox" onchange="` + this.getName() + `.updateSettings(this.parentNode)" value="enableEmojiStatisticsButton"${(this.getSettings().enableEmojiStatisticsButton ? " checked" : void 0)}><label style="color:grey;"> Add a button in the emojipicker to open statistics overview.</label>`;
+		return `
+		<input type="checkbox" onchange='` + this.getName() + `.updateSettings(this.parentNode, "` + this.getName() + `")' value="enableEmojiHovering"${(this.getSettings().enableEmojiHovering ? " checked" : void 0)}><label style="color:grey;"> Show emojiinformation when hovering over an emoji in the emojipicker.</label><br>\n
+		<input type="checkbox" onchange='` + this.getName() + `.updateSettings(this.parentNode, "` + this.getName() + `")' value="enableEmojiStatisticsButton"${(this.getSettings().enableEmojiStatisticsButton ? " checked" : void 0)}><label style="color:grey;"> Add a button in the emojipicker to open statistics overview.</label>`;
     }
 
 	//legacy
@@ -292,10 +294,16 @@ class EmojiStatistics {
 								if ($(node).find('.emoji-item')) {
 									if (this.getSettings().enableEmojiHovering) {this.hoverEmoji();}
 								}
-								
 								if (BDfunctionsDevilBro.getKeyInformation({"node":node, "key":"displayName", "value":"EmojiPicker"}) && $(".emojistatistics-button").length == 0) {
 									this.loadEmojiList();
 									if (this.getSettings().enableEmojiStatisticsButton) {this.addEmojiInformationButton();}
+								}
+							});
+						}
+						if (change.removedNodes) {
+							change.removedNodes.forEach((node) => {
+								if ($(node).find(".emoji-picker").length > 0) {
+									$(".tooltips").find(".emoji-tooltip").remove();
 								}
 							});
 						}
@@ -350,13 +358,13 @@ class EmojiStatistics {
 		return settings;
 	}
 
-    static updateSettings (settingspanel) {
+    static updateSettings (settingspanel, pluginName) {
 		var settings = {};
 		var inputs = settingspanel.querySelectorAll("input");
 		for (var i = 0; i < inputs.length; i++) {
 			settings[inputs[i].value] = inputs[i].checked;
 		}
-		bdPluginStorage.set("EmojiStatistics", "settings", settings);
+		bdPluginStorage.set(pluginName, "settings", settings);
     }
 	
 	changeLanguageStrings () {
