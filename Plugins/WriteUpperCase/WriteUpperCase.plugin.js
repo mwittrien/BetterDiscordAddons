@@ -58,10 +58,10 @@ class WriteUpperCase {
 				if (!this.eventFired) {
 					this.eventFired = true;
 					var string = e.target.value;
-					if (string.length > 1){
+					if (string.length > 1) {
 						e.target.value = string.charAt(0).toUpperCase() + string.slice(1);
 					} 
-					else if (string.length > 0){
+					else if (string.length == 1) {
 						e.target.value = string.charAt(0).toUpperCase();
 					}
 					this.eventFired = false;
