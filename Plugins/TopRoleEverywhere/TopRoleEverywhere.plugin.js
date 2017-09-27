@@ -16,7 +16,7 @@ class TopRoleEverywhere {
 			.role-tag {
 				position: relative;
 				overflow: hidden; 
-				padding: 1px 2px 1px 2px; 
+				padding: 1px 3px 1px 3px; 
 				margin-left: 5px; 
 				height: 13px;
 				border-radius: 3px;
@@ -149,6 +149,7 @@ class TopRoleEverywhere {
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			$(".role-tag").remove();
+			$(".member-username-inner").css("min-width","");
 			this.serverSwitchObserver.disconnect();
 			this.channelSwitchObserver.disconnect();
 			this.userListObserver.disconnect();
