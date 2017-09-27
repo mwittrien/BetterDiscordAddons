@@ -16,7 +16,7 @@ class WriteUpperCase {
 
 	getAuthor () {return "DevilBro";}
 
-    start () {
+	start () {
 		if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
 		$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
 		$('head').append("<script src='https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
@@ -75,17 +75,17 @@ class WriteUpperCase {
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
 		}
-    }
+	}
 
-    stop () {
+	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.serverSwitchObserver.disconnect();
 			this.channelSwitchObserver.disconnect();
 			$("textarea.textArea-20yzAH").unbind("keyup", this.inputEventHandler);
 		}
-    }
+	}
 
-    load () {}
+	load () {}
 
 	
 	// begin of own functions
