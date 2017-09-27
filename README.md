@@ -15,3 +15,4 @@ A series of plugins and themes for BetterDiscord. If you got any question write 
  - [Server Folders](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ServerFolders) - Adds the option to create pseudo folders that, click the folder to hide/display all folders between two folders. Easily gets broken by moving server icons.
  - [Show Hidden Channels](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ShowHiddenChannels) - Displays all hidden channels that can't be accessed due to role restrictions in a new category.
  - [Top Role Everywhere](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/TopRoleEverywhere) - Adds the highest role of a user as a tag.
+ - [Write UpperCase](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/WriteUpperCase) - Changes the input in the textarea to uppercase.
