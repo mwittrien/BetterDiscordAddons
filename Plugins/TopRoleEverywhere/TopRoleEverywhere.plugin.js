@@ -18,13 +18,16 @@ class TopRoleEverywhere {
 				overflow: hidden; 
 				padding: 1px 3px 1px 3px; 
 				margin-left: 5px; 
-				height: 13px;
 				border-radius: 3px;
 				text-transform: uppercase;
 				font-size: 12px;
 				font-weight: 500;
 				line-height: 14px;
 				white-space: nowrap;
+			}
+			
+			.role-tag.chat-tag {
+				bottom: 1px;
 			}`;
 			
 		this.tagMarkup = `<span class="role-tag"></span>`;
@@ -34,7 +37,7 @@ class TopRoleEverywhere {
 
 	getDescription () {return "Adds the highest role of a user as a tag.";}
 
-	getVersion () {return "1.2.0";}
+	getVersion () {return "1.2.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -274,7 +277,6 @@ class TopRoleEverywhere {
 						.css("border", "1px solid rgba(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ", 0.498039)")
 						.text(roleName);
 					$(member).append(tag);
-					if ($(wrapper).find("span.username-wrapper").length > 0) $(tag).css("bottom","1px");
 				}
 			}
 		}
