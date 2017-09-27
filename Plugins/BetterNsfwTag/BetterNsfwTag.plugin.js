@@ -30,7 +30,7 @@ class BetterNsfwTag {
 
 	getDescription () {return "Adds a more noticeable tag to NSFW channels.";}
 
-	getVersion () {return "1.0.0";}
+	getVersion () {return "1.0.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -69,6 +69,9 @@ class BetterNsfwTag {
 							change.addedNodes.forEach((node) => {
 								if (node && node.className && node.className.length > 0 && node.className.indexOf("containerDefault-7RImuF") > -1) {
 									this.checkChannel(node);
+								} 
+								if (node && node.className && node.className.length > 0 && node.className.indexOf("container-") > -1) {
+									this.checkContainerForNsfwChannel(node);
 								} 
 							});
 						}
