@@ -20,7 +20,7 @@ class TopRoleEverywhere {
 				margin-left: 5px; 
 				border-radius: 3px;
 				text-transform: uppercase;
-				font-size: 12px;
+				font-size: 11px;
 				font-weight: 500;
 				line-height: 14px;
 				white-space: nowrap;
@@ -37,7 +37,7 @@ class TopRoleEverywhere {
 
 	getDescription () {return "Adds the highest role of a user as a tag.";}
 
-	getVersion () {return "1.2.1";}
+	getVersion () {return "1.3.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -65,7 +65,6 @@ class TopRoleEverywhere {
 						if (change.type == "attributes" && change.attributeName == "class" && change.oldValue && change.oldValue.indexOf("guild") != -1) {
 							var serverData = BDfunctionsDevilBro.getKeyInformation({"node":change.target, "key":"guild"});
 							if (serverData) {
-								this.userRoles = {};
 								this.loadRoleTags();
 								if ($(".channel-members").length != 0) this.userListObserver.observe($(".channel-members")[0], {childList:true});
 								if ($(".messages.scroller").length != 0) this.chatWindowObserver.observe($(".messages.scroller")[0], {childList:true});
@@ -98,9 +97,13 @@ class TopRoleEverywhere {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								var user = $(node).find(".member-username")[0];
-								if (user && this.getSettings().showInMemberList) {
-									this.addRoleTag(node, "list");
+								if ($(node).find(".member-username").length > 0 && this.getSettings().showInMemberList) {
+									var server = BDfunctionsDevilBro.getSelectedServer();
+									var serverData = BDfunctionsDevilBro.getKeyInformation({"node":server,"key":"guild"});
+									if (server && serverData) {
+										var serverID = serverData.id;
+										this.addRoleTag(node, "list", serverID);
+									}
 								}
 							});
 						}
@@ -114,9 +117,13 @@ class TopRoleEverywhere {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								var user = $(node).find(".username-wrapper")[0];
-								if (user && this.getSettings().showInChat) {
-									this.addRoleTag(node, "chat");
+								if ($(node).find(".username-wrapper").length > 0 && this.getSettings().showInChat) {
+									var server = BDfunctionsDevilBro.getSelectedServer();
+									var serverData = BDfunctionsDevilBro.getKeyInformation({"node":server,"key":"guild"});
+									if (server && serverData) {
+										var serverID = serverData.id;
+										this.addRoleTag(node, "chat", serverID);
+									}
 								}
 							});
 						}
@@ -152,7 +159,6 @@ class TopRoleEverywhere {
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			$(".role-tag").remove();
-			$(".member-username-inner").css("min-width","");
 			this.serverSwitchObserver.disconnect();
 			this.channelSwitchObserver.disconnect();
 			this.userListObserver.disconnect();
@@ -197,38 +203,47 @@ class TopRoleEverywhere {
 
 	loadRoleTags() {
 		var server = BDfunctionsDevilBro.getSelectedServer();
-		if (server) {
-			this.roles = BDfunctionsDevilBro.getKeyInformation({"node":server,"key":"guild"}).roles;
+		var serverData = BDfunctionsDevilBro.getKeyInformation({"node":server,"key":"guild"});
+		if (server && serverData) {
+			$(".role-tag").remove();
+			//$("span.member-username-inner").css("min-width","");
+			var serverID = serverData.id;
+			this.userRoles[serverID] = BDfunctionsDevilBro.loadData(serverID, this.getName(), "savedRoles");
+			this.userRoles[serverID] = this.userRoles[serverID] ? this.userRoles[serverID] : {};
+			this.roles = serverData.roles;
 			if (this.getSettings().showInMemberList) { 
 				var membersList = $("div.member");
 				for (var i = 0; i < membersList.length; i++) {
-					this.addRoleTag(membersList[i], "list");
+					this.addRoleTag(membersList[i], "list", serverID);
 				}
 			}
-			else {$(".role-tag.list-tag").remove();}
 			if (this.getSettings().showInChat) { 
 				var membersChat = $("div.message-group");
 				for (var j = 0; j < membersChat.length; j++) {
-					this.addRoleTag(membersChat[j], "chat");
+					this.addRoleTag(membersChat[j], "chat", serverID);
 				}
 			}
-			else {$(".role-tag.chat-tag").remove();}
-			
+			BDfunctionsDevilBro.saveData(serverID, this.userRoles[serverID], this.getName(), "savedRoles")
 		}
 	}
 	
-	addRoleTag(wrapper, type) {
+	addRoleTag(wrapper, type, serverID) {
 		var member = $(wrapper).find("div.member-username")[0] || $(wrapper).find("span.username-wrapper")[0];
-		if ($(member).find(".role-tag").length == 0) {
+		if (member && $(member).find(".role-tag").length == 0) {
 			var styleInfo = BDfunctionsDevilBro.getKeyInformation({"node":member,"key":"style"});
 			var userInfo = BDfunctionsDevilBro.getKeyInformation({"node":wrapper,"key":"user"});
 			var roleName;
 			var roleColor;
-			if (styleInfo && userInfo) {
-				var userID = userInfo.id;
-				if (this.userRoles[userID] && BDfunctionsDevilBro.colorCOMPARE(this.userRoles[userID].colorString, styleInfo.color)) {
-					roleName = this.userRoles[userID].roleName;
-					roleColor = BDfunctionsDevilBro.color2COMP(this.userRoles[userID].colorString);
+			var userID = userInfo ? userInfo.id : null;
+			if (userID == 278543574059057154) {
+				roleName = "Plugin Creator";
+				roleColor = [132, 70, 219];
+			}
+			else if (styleInfo && userID) {
+				var savedInfo = this.userRoles[serverID][userID];
+				if (savedInfo && BDfunctionsDevilBro.colorCOMPARE(savedInfo.colorString, styleInfo.color)) {
+					roleName = savedInfo.roleName;
+					roleColor = BDfunctionsDevilBro.color2COMP(savedInfo.colorString);
 				}
 				else {
 					var rolesSameColor = []
@@ -246,12 +261,12 @@ class TopRoleEverywhere {
 					else if (rolesSameColor.length > 1) {
 						member.click();
 						$(".popout").hide();
-						var userRoles = $(".member-role");
+						var foundRoles = $(".member-role");
 						$(".member-role").remove();
 						for (var j = 0; j < rolesSameColor.length; j++) {
-							for (var k = 0; k < userRoles.length; k++) {
-								var thisRoleName = $(userRoles[k]).find(".name").text();
-								var thisRoleColor = BDfunctionsDevilBro.color2HEX($(userRoles[k]).css("color"));
+							for (var k = 0; k < foundRoles.length; k++) {
+								var thisRoleName = $(foundRoles[k]).find(".name").text();
+								var thisRoleColor = BDfunctionsDevilBro.color2HEX($(foundRoles[k]).css("color"));
 								if (thisRoleName == rolesSameColor[j].roleName && BDfunctionsDevilBro.colorCOMPARE(thisRoleColor, rolesSameColor[j].colorString)) {
 									roleName = thisRoleName;
 									roleColor = BDfunctionsDevilBro.color2COMP(thisRoleColor);
@@ -262,22 +277,38 @@ class TopRoleEverywhere {
 						}
 					}
 				}
-				if (roleColor && roleName) {
-					var width = $(member).find(".member-username-inner").css("width");
-					if (width) {
-						width = parseInt(width.replace("px",""));
-						width = width*(4/5) < 80 ? width+1 : width*(4/5);
-						$(member).find(".member-username-inner").css("min-width",width + "px");
+			}
+			if (roleColor && roleName) {
+				var totalwidth, oldwidth, newwidth, maxwidth;
+				if (type == "list") {
+					totalwidth = $(member).css("width");
+					oldwidth = $(member).find("span.member-username-inner").css("width");
+					if (oldwidth && totalwidth) {
+						totalwidth = parseInt(totalwidth.replace("px",""));
+						oldwidth = parseInt(oldwidth.replace("px",""));
 					}
-					this.userRoles[userID] = {"roleName":roleName,"colorString":BDfunctionsDevilBro.color2HEX(roleColor)};
-					var tag = $(this.tagMarkup)
-						.addClass(type + "-tag")
-						.css("color", "rgb(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ")")
-						.css("background-color", "rgba(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ", 0.0980392)")
-						.css("border", "1px solid rgba(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ", 0.498039)")
-						.text(roleName);
-					$(member).append(tag);
 				}
+				
+				var tag = $(this.tagMarkup)
+					.addClass(type + "-tag")
+					.css("color", "rgb(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ")")
+					.css("background-color", "rgba(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ", 0.0980392)")
+					.css("border", "1px solid rgba(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ", 0.498039)")
+					.text(roleName);
+				$(member).append(tag);
+				
+				if (oldwidth && totalwidth) {
+					newwidth = $(member).find("span.member-username-inner").css("width");
+					if (newwidth) {
+						newwidth = parseInt(newwidth.replace("px",""));
+						if (newwidth < 100 && oldwidth < 100) {
+							maxwidth = totalwidth - oldwidth - 15; 
+							$(tag).css("max-width", maxwidth + "px");
+						}
+					}
+				}
+				
+				this.userRoles[serverID][userID] = {"roleName":roleName,"colorString":BDfunctionsDevilBro.color2HEX(roleColor)};
 			}
 		}
 	}
