@@ -3,6 +3,7 @@
 class WriteUpperCase {
 	constructor () {
 		this.serverSwitchObserver = new MutationObserver(() => {});
+		this.channelSwitchObserver = new MutationObserver(() => {});
 		this.inputEventHandler;
 		this.eventFired = false;
 	}
@@ -30,14 +31,28 @@ class WriteUpperCase {
 						if (change.type == "attributes" && change.attributeName == "class" && change.oldValue && change.oldValue.indexOf("guild") != -1) {
 							var serverData = BDfunctionsDevilBro.getKeyInformation({"node":change.target, "key":"guild"});
 							if (serverData) {
-								$(".chat textarea").unbind("keyup", this.inputEventHandler);
-								$(".chat textarea").bind("keyup", this.inputEventHandler);
+								this.bindEventToTextArea();
 							}
 						}
 					}
 				);
 			});
 			this.serverSwitchObserver.observe($(".guilds.scroller")[0], {subtree:true, attributes:true, attributeOldValue:true});
+			
+			this.channelSwitchObserver = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.addedNodes) {
+							change.addedNodes.forEach((node) => {
+								if ($(node).find(".messages.scroller").length > 0) {
+									this.bindEventToTextArea();
+								}
+							});
+						}
+					}
+				);
+			});
+			if ($(".chat").length != 0) this.channelSwitchObserver.observe($(".chat")[0], {childList:true, subtree:true});
 					
 			this.inputEventHandler = (e) => {
 				if (!this.eventFired) {
@@ -53,8 +68,7 @@ class WriteUpperCase {
 				}
 			};			
 			
-			$(".chat textarea").unbind("keyup", this.inputEventHandler);
-			$(".chat textarea").bind("keyup", this.inputEventHandler);
+			this.bindEventToTextArea();
 								
 			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
 		}
@@ -66,9 +80,18 @@ class WriteUpperCase {
     stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.serverSwitchObserver.disconnect();
-			$(".chat textarea").unbind("keyup", this.inputEventHandler);
+			this.channelSwitchObserver.disconnect();
+			$("textarea.textArea-20yzAH").unbind("keyup", this.inputEventHandler);
 		}
     }
 
     load () {}
+
+	
+	// begin of own functions
+	
+	bindEventToTextArea () {
+		$("textarea.textArea-20yzAH").unbind("keyup", this.inputEventHandler);
+		$("textarea.textArea-20yzAH").bind("keyup", this.inputEventHandler);
+	}
 }
