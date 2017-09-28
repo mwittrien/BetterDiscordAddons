@@ -327,7 +327,14 @@ BDfunctionsDevilBro.removeAllData = function (pluginName, keyName) {
 BDfunctionsDevilBro.loadData = function (id, pluginName, keyName) {
 	var settings = bdPluginStorage.get(pluginName, keyName) ? bdPluginStorage.get(pluginName, keyName) : {};
 	
-	if (typeof settings[id] == "string") {settings[id] = JSON.parse(settings[id]);bdPluginStorage.set(pluginName, keyName, settings)}
+    try {
+        var parse = JSON.parse(settings[id]);
+		settings[id] = parse;
+		bdPluginStorage.set(pluginName, keyName, settings);
+    }
+    catch (error) {
+    }
+	
 	var data = settings[id];
 	
 	return (data === undefined ? null : data);
