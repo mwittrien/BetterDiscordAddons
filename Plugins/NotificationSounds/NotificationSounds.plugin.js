@@ -33,47 +33,49 @@ class NotificationSounds {
 
 	getDescription () {return "Creates a notification sound when you receive a notification (mention or DM).";}
 
-	getVersion () {return "2.4.1";}
+	getVersion () {return "2.4.2";}
 
 	getAuthor () {return "DevilBro";}
 
     getSettingsPanel () {
-		var settingspanel = `<audio class="preview"></audio>`;
-		
-		var songs = BDfunctionsDevilBro.loadAllData(this.getName(), "songs");
-		
-		for (var i in this.types) {
-			var key = this.types[i];
-			var choice = BDfunctionsDevilBro.loadData(key, this.getName(), "choices");
-			settingspanel += `<label style="color:grey;">` + key + `-Sound:</label><div class="` + key + `-song-settings" style="margin:0px 0px 20px 0px; overflow:hidden;">`;
-			settingspanel += `<div class="category-selection" style="margin:0px 20px 0px 0px; float:left;"><select id="` + key + `-category-select" onchange='` + this.getName() + `.updateSettings(this, "` + key + `", "` + this.types + `", "` + this.getName() + `")' style="width:150px; height: 25px;">`;
-			for (var category in songs) {
-				var cSelected = choice.category == category ? " selected" : "";
-				if (cSelected) {
-					var songSelection = `<div class="song-selection" style="margin:0px 20px 0px 0px; float:left;"><select id="` + key + `-song-select" onchange='` + this.getName() + `.updateSettings(this, "` + key + `", "` + this.types + `", "` + this.getName() + `")' style="width:150px; height: 25px;">`;
-					for (var song in songs[category]) {
-						var src = songs[category][song] ? "src=" + songs[category][song] : "";
-						if (song && song != "") {
-							var sSelected = choice.song == song ? " selected" : "";
-							songSelection += `<option `+ src + `` + sSelected + `>` + song + `</option>`;
+		if (typeof BDfunctionsDevilBro === "object") {
+			var settingspanel = `<audio class="preview"></audio>`;
+			
+			var songs = BDfunctionsDevilBro.loadAllData(this.getName(), "songs");
+			
+			for (var i in this.types) {
+				var key = this.types[i];
+				var choice = BDfunctionsDevilBro.loadData(key, this.getName(), "choices");
+				settingspanel += `<label style="color:grey;">` + key + `-Sound:</label><div class="` + key + `-song-settings" style="margin:0px 0px 20px 0px; overflow:hidden;">`;
+				settingspanel += `<div class="category-selection" style="margin:0px 20px 0px 0px; float:left;"><select id="` + key + `-category-select" onchange='` + this.getName() + `.updateSettings(this, "` + key + `", "` + this.types + `", "` + this.getName() + `")' style="width:150px; height: 25px;">`;
+				for (var category in songs) {
+					var cSelected = choice.category == category ? " selected" : "";
+					if (cSelected) {
+						var songSelection = `<div class="song-selection" style="margin:0px 20px 0px 0px; float:left;"><select id="` + key + `-song-select" onchange='` + this.getName() + `.updateSettings(this, "` + key + `", "` + this.types + `", "` + this.getName() + `")' style="width:150px; height: 25px;">`;
+						for (var song in songs[category]) {
+							var src = songs[category][song] ? "src=" + songs[category][song] : "";
+							if (song && song != "") {
+								var sSelected = choice.song == song ? " selected" : "";
+								songSelection += `<option `+ src + `` + sSelected + `>` + song + `</option>`;
+							}
 						}
+						songSelection += `</select></div>`;
 					}
-					songSelection += `</select></div>`;
+					settingspanel += `<option` + cSelected + `>` + category + `</option>`;
 				}
-				settingspanel += `<option` + cSelected + `>` + category + `</option>`;
+				settingspanel += `</select></div>`;
+				settingspanel += songSelection;
+				var volume = choice.volume ? choice.volume : "100";
+				settingspanel += `<div class="` + key + `-volume-slider" style="margin:0px 20px 0px 0px; float:left;"><input type="range" min="0" max="100" value="` + volume + `" id="` + key + `-volume" onchange='` + this.getName() + `.updateSettings(this, "` + key + `", "` + this.types + `", "` + this.getName() + `")' oninput='` + this.getName() + `.updateVolumeinput(this, "` + key + `")'></div>`;
+				settingspanel += `<div class="` + key + `-volume-value" style="margin:0px 0px 0px 0px; float:left;"><input type="number" min="0" max="100" value="` + volume + `" id="` + key + `-volume-value" onchange='` + this.getName() + `.updateSettings(this, "` + key + `", "` + this.types + `", "` + this.getName() + `")' oninput='` + this.getName() + `.updateVolumeinput(this, "` + key + `")' style="height: 25px; width:50px; text-align:center;"></div>`;
+				settingspanel += `</div>`;
+								
 			}
-			settingspanel += `</select></div>`;
-			settingspanel += songSelection;
-			var volume = choice.volume ? choice.volume : "100";
-			settingspanel += `<div class="` + key + `-volume-slider" style="margin:0px 20px 0px 0px; float:left;"><input type="range" min="0" max="100" value="` + volume + `" id="` + key + `-volume" onchange='` + this.getName() + `.updateSettings(this, "` + key + `", "` + this.types + `", "` + this.getName() + `")' oninput='` + this.getName() + `.updateVolumeinput(this, "` + key + `")'></div>`;
-			settingspanel += `<div class="` + key + `-volume-value" style="margin:0px 0px 0px 0px; float:left;"><input type="number" min="0" max="100" value="` + volume + `" id="` + key + `-volume-value" onchange='` + this.getName() + `.updateSettings(this, "` + key + `", "` + this.types + `", "` + this.getName() + `")' oninput='` + this.getName() + `.updateVolumeinput(this, "` + key + `")' style="height: 25px; width:50px; text-align:center;"></div>`;
-			settingspanel += `</div>`;
-							
+			settingspanel += `<label style="color:grey;">Make sure to disable your default notification sounds in the notifications settings of Discord or else you will hear both the default notifications and the new custom notifications. If you want to add your own sounds just open the plugin file and add a new song (audio or video) in the list on the top and make sure the link you are using is a direct link pointing to a source file on a website or else it won't be added to the list and no a youtube link is not a direct link to a source file ...</label>`;
+			
+			
+			return settingspanel;
 		}
-		settingspanel += `<label style="color:grey;">Make sure to disable your default notification sounds in the notifications settings of Discord or else you will hear both the default notifications and the new custom notifications. If you want to add your own sounds just open the plugin file and add a new song (audio or video) in the list on the top and make sure the link you are using is a direct link pointing to a source file on a website or else it won't be added to the list and no a youtube link is not a direct link to a source file ...</label>`;
-		
-		
-		return settingspanel;
     }
 
 	//legacy
