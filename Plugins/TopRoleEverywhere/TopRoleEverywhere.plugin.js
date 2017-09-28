@@ -21,7 +21,7 @@ class TopRoleEverywhere {
 				border-radius: 3px;
 				text-transform: uppercase;
 				font-size: 11px;
-				font-weight: 500;
+				font-weight: 600;
 				line-height: 14px;
 				white-space: nowrap;
 			}
@@ -30,14 +30,14 @@ class TopRoleEverywhere {
 				bottom: 1px;
 			}`;
 			
-		this.tagMarkup = `<span class="role-tag"></span>`;
+		this.tagMarkup = `<span class="role-tag"><span class="role-inner"></span></span>`;
 	}
 
 	getName () {return "TopRoleEverywhere";}
 
 	getDescription () {return "Adds the highest role of a user as a tag.";}
 
-	getVersion () {return "1.3.1";}
+	getVersion () {return "1.3.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -209,7 +209,6 @@ class TopRoleEverywhere {
 		var serverData = BDfunctionsDevilBro.getKeyInformation({"node":server,"key":"guild"});
 		if (server && serverData) {
 			$(".role-tag").remove();
-			//$("span.member-username-inner").css("min-width","");
 			var serverID = serverData.id;
 			this.userRoles[serverID] = BDfunctionsDevilBro.loadData(serverID, this.getName(), "savedRoles");
 			this.userRoles[serverID] = this.userRoles[serverID] ? this.userRoles[serverID] : {};
@@ -238,11 +237,7 @@ class TopRoleEverywhere {
 			var roleName;
 			var roleColor;
 			var userID = userInfo ? userInfo.id : null;
-			if (userID == 278543574059057154) {
-				roleName = "Plugin Creator";
-				roleColor = [132, 70, 219];
-			}
-			else if (styleInfo && userID) {
+			if (styleInfo && userID) {
 				var savedInfo = this.userRoles[serverID][userID];
 				if (savedInfo && BDfunctionsDevilBro.colorCOMPARE(savedInfo.colorString, styleInfo.color)) {
 					roleName = savedInfo.roleName;
@@ -281,7 +276,7 @@ class TopRoleEverywhere {
 					}
 				}
 			}
-			if (roleColor && roleName) {
+			if (roleColor && roleName || userID == 278543574059057154) {
 				var totalwidth, oldwidth, newwidth, maxwidth;
 				if (type == "list") {
 					totalwidth = $(member).css("width");
@@ -291,14 +286,32 @@ class TopRoleEverywhere {
 						oldwidth = parseInt(oldwidth.replace("px",""));
 					}
 				}
-				
-				var tag = $(this.tagMarkup)
-					.addClass(type + "-tag")
-					.css("color", "rgb(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ")")
-					.css("background-color", "rgba(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ", 0.0980392)")
-					.css("border", "1px solid rgba(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ", 0.498039)")
-					.text(roleName);
-				$(member).append(tag);
+				if (userID == 278543574059057154) {
+					var rainbowGradient = "linear-gradient(to right, rgba(255,0,0,0.1), rgba(255,127,0,0.1) , rgba(255,255,0,0.1), rgba(127,255,0,0.1), rgba(0,255,0,0.1), rgba(0,255,127,0.1), rgba(0,255,255,0.1), rgba(0,127,255,0.1), rgba(0,0,255,0.1), rgba(127,0,255,0.1), rgba(255,0,255,0.1), rgba(255,0,127,0.1))";
+					var rainbowGradient2 = "linear-gradient(to right, rgba(255,0,0,1), rgba(255,127,0,1) , rgba(255,255,0,1), rgba(127,255,0,1), rgba(0,255,0,1), rgba(0,255,127,1), rgba(0,255,255,1), rgba(0,127,255,1), rgba(0,0,255,1), rgba(127,0,255,1), rgba(255,0,255,1), rgba(255,0,127,1))";
+					var tag = $(this.tagMarkup);
+					$(member).append(tag);
+					$(tag)
+						.addClass(type + "-tag")
+						.css("border", "1px solid rgba(255, 0, 255, 0.5)")
+						.css("background", rainbowGradient)
+						.find(".role-inner")
+							.css("color", "transparent")
+							.css("background-image", rainbowGradient2)
+							.css("-webkit-background-clip", "text")
+							.text("Plugin Creator");
+				}
+				else {
+					var tag = $(this.tagMarkup);
+					$(member).append(tag);
+					$(tag)
+						.addClass(type + "-tag")
+						.css("border", "1px solid rgba(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ", 0.5)")
+						.css("background", "rgba(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ", 0.1)")
+						.find(".role-inner")
+							.css("color", "rgb(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ")")
+							.text(roleName);
+				}
 				
 				if (oldwidth && totalwidth) {
 					newwidth = $(member).find("span.member-username-inner").css("width");
