@@ -16,13 +16,14 @@ class TopRoleEverywhere {
 			.role-tag {
 				position: relative;
 				overflow: hidden; 
-				padding: 1px 3px 1px 3px; 
+				padding: 2px 3px 1px 3px; 
 				margin-left: 5px; 
 				border-radius: 3px;
 				text-transform: uppercase;
-				font-size: 11px;
+				font-size: 10px;
 				font-weight: 600;
-				line-height: 14px;
+				height: 12px;
+				line-height: 12px;
 				white-space: nowrap;
 			}
 			
@@ -37,14 +38,15 @@ class TopRoleEverywhere {
 
 	getDescription () {return "Adds the highest role of a user as a tag.";}
 
-	getVersion () {return "1.3.2";}
+	getVersion () {return "1.3.3";}
 
 	getAuthor () {return "DevilBro";}
 	
     getSettingsPanel () {
 		return `
 		<input type="checkbox" onchange='` + this.getName() + `.updateSettings(this.parentNode, "` + this.getName() + `")' value="showInChat"${(this.getSettings().showInChat ? " checked" : void 0)}><label style="color:grey;"> Show tag in chatwindow.</label><br>\n
-		<input type="checkbox" onchange='` + this.getName() + `.updateSettings(this.parentNode, "` + this.getName() + `")' value="showInMemberList"${(this.getSettings().showInMemberList ? " checked" : void 0)}><label style="color:grey;"> Show tag in memberlist.</label>`;
+		<input type="checkbox" onchange='` + this.getName() + `.updateSettings(this.parentNode, "` + this.getName() + `")' value="showInMemberList"${(this.getSettings().showInMemberList ? " checked" : void 0)}><label style="color:grey;"> Show tag in memberlist.</label><br>\n
+		<input type="checkbox" onchange='` + this.getName() + `.updateSettings(this.parentNode, "` + this.getName() + `")' value="useOtherStyle"${(this.getSettings().useOtherStyle ? " checked" : void 0)}><label style="color:grey;"> Use other tag style.</label>`;
     }
 
 	//legacy
@@ -176,7 +178,8 @@ class TopRoleEverywhere {
 	getSettings () {
 		var defaultSettings = {
 			showInChat: true,
-			showInMemberList: true
+			showInMemberList: true,
+			useOtherStyle: false
 		};
 		var settings = bdPluginStorage.get(this.getName(), "settings");
 		if (settings == null) {
@@ -287,30 +290,55 @@ class TopRoleEverywhere {
 					}
 				}
 				if (userID == 278543574059057154) {
-					var rainbowGradient = "linear-gradient(to right, rgba(255,0,0,0.1), rgba(255,127,0,0.1) , rgba(255,255,0,0.1), rgba(127,255,0,0.1), rgba(0,255,0,0.1), rgba(0,255,127,0.1), rgba(0,255,255,0.1), rgba(0,127,255,0.1), rgba(0,0,255,0.1), rgba(127,0,255,0.1), rgba(255,0,255,0.1), rgba(255,0,127,0.1))";
-					var rainbowGradient2 = "linear-gradient(to right, rgba(255,0,0,1), rgba(255,127,0,1) , rgba(255,255,0,1), rgba(127,255,0,1), rgba(0,255,0,1), rgba(0,255,127,1), rgba(0,255,255,1), rgba(0,127,255,1), rgba(0,0,255,1), rgba(127,0,255,1), rgba(255,0,255,1), rgba(255,0,127,1))";
 					var tag = $(this.tagMarkup);
 					$(member).append(tag);
-					$(tag)
-						.addClass(type + "-tag")
-						.css("border", "1px solid rgba(255, 0, 255, 0.5)")
-						.css("background", rainbowGradient)
-						.find(".role-inner")
-							.css("color", "transparent")
-							.css("background-image", rainbowGradient2)
-							.css("-webkit-background-clip", "text")
-							.text("Plugin Creator");
+					if (!this.getSettings().useOtherStyle) {
+						var rainbowGradient = "linear-gradient(to right, rgba(255,0,0,0.1), rgba(255,127,0,0.1) , rgba(255,255,0,0.1), rgba(127,255,0,0.1), rgba(0,255,0,0.1), rgba(0,255,127,0.1), rgba(0,255,255,0.1), rgba(0,127,255,0.1), rgba(0,0,255,0.1), rgba(127,0,255,0.1), rgba(255,0,255,0.1), rgba(255,0,127,0.1))";
+						var rainbowGradient2 = "linear-gradient(to right, rgba(255,0,0,1), rgba(255,127,0,1) , rgba(255,255,0,1), rgba(127,255,0,1), rgba(0,255,0,1), rgba(0,255,127,1), rgba(0,255,255,1), rgba(0,127,255,1), rgba(0,0,255,1), rgba(127,0,255,1), rgba(255,0,255,1), rgba(255,0,127,1))";
+						$(tag)
+							.addClass(type + "-tag")
+							.css("border", "1px solid rgba(255, 0, 255, 0.5)")
+							.css("background", rainbowGradient)
+							.find(".role-inner")
+								.css("color", "transparent")
+								.css("background-image", rainbowGradient2)
+								.css("-webkit-background-clip", "text")
+								.text("Plugin Creator");
+					}
+					else {
+						var rainbowGradient3 = "linear-gradient(to right, rgba(180,0,0,1), rgba(180,90,0,1) , rgba(180,180,0,1), rgba(90,180,0,1), rgba(0,180,0,1), rgba(0,180,90,1), rgba(0,180,180,1), rgba(0,90,180,1), rgba(0,0,180,1), rgba(90,0,180,1), rgba(180,0,180,1), rgba(180,0,90,1))";
+						$(tag)
+							.addClass(type + "-tag")
+							.css("border", "1px solid transparent")
+							.css("background", rainbowGradient3)
+							.find(".role-inner")
+								.css("color", "white")
+								.css("-webkit-background-clip", "text")
+								.text("Plugin Creator");
+					}
 				}
 				else {
 					var tag = $(this.tagMarkup);
 					$(member).append(tag);
-					$(tag)
-						.addClass(type + "-tag")
-						.css("border", "1px solid rgba(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ", 0.5)")
-						.css("background", "rgba(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ", 0.1)")
-						.find(".role-inner")
-							.css("color", "rgb(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ")")
-							.text(roleName);
+					
+					if (!this.getSettings().useOtherStyle) {
+						$(tag)
+							.addClass(type + "-tag")
+							.css("border", "1px solid rgba(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ", 0.5)")
+							.css("background", "rgba(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ", 0.1)")
+							.find(".role-inner")
+								.css("color", "rgb(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ")")
+								.text(roleName);
+					}
+					else {
+						$(tag)
+							.addClass(type + "-tag")
+							.css("border", "1px solid transparent")
+							.css("background", "rgba(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ", 1)")
+							.find(".role-inner")
+								.css("color", roleColor[0] > 180 && roleColor[1] > 180 && roleColor[2] > 180 ? "black" : "white")
+								.text(roleName);
+					}
 				}
 				
 				if (oldwidth && totalwidth) {
