@@ -324,7 +324,7 @@ class ChatFilter {
 			
 			this.hideAllMessages();
 			
-			//BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
+			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -342,8 +342,6 @@ class ChatFilter {
 			$(".markup.blocked, .markup.censored").each((_,message) => {
 				this.resetMessage(message);
 			});
-			
-			BDfunctionsDevilBro.removeLocalStyle(this.getName());
 		}
 	}
 	
