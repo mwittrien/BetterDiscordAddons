@@ -30,7 +30,7 @@ class BetterNsfwTag {
 
 	getDescription () {return "Adds a more noticeable tag to NSFW channels.";}
 
-	getVersion () {return "1.0.1";}
+	getVersion () {return "1.0.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -96,8 +96,11 @@ class BetterNsfwTag {
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			$(".nsfw-tag").remove();
+			
 			this.serverSwitchObserver.disconnect();
 			this.channelListObserver.disconnect();
+			
+			BDfunctionsDevilBro.removeLocalStyle(this.getName());
 		}
 	}
 	
