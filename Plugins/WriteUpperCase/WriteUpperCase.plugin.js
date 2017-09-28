@@ -32,6 +32,7 @@ class WriteUpperCase {
 							var serverData = BDfunctionsDevilBro.getKeyInformation({"node":change.target, "key":"guild"});
 							if (serverData) {
 								this.bindEventToTextArea();
+								if ($(".chat").length != 0) this.channelSwitchObserver.observe($(".chat")[0], {childList:true, subtree:true});
 							}
 						}
 					}
@@ -58,12 +59,21 @@ class WriteUpperCase {
 				if (!this.eventFired) {
 					this.eventFired = true;
 					var string = e.target.value;
-					if (string.length > 1) {
-						e.target.value = string.charAt(0).toUpperCase() + string.slice(1);
+					if (string.length > 0) {
+						var first = string.charAt(0);
+						if (first === first.toUpperCase() && e.target.value.toLowerCase().indexOf("http") == 0) {
+							var position = e.target.selectionStart;
+							e.target.value = string.charAt(0).toLowerCase() + string.slice(1);
+							e.target.selectionStart = position;
+							e.target.selectionEnd = position;
+						}
+						else if (first === first.toLowerCase() && first !== first.toUpperCase() && e.target.value.toLowerCase().indexOf("http") != 0) {
+							var position = e.target.selectionStart;
+							e.target.value = string.charAt(0).toUpperCase() + string.slice(1);
+							e.target.selectionStart = position;
+							e.target.selectionEnd = position;
+						}
 					} 
-					else if (string.length == 1) {
-						e.target.value = string.charAt(0).toUpperCase();
-					}
 					this.eventFired = false;
 				}
 			};			
