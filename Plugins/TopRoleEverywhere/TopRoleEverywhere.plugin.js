@@ -37,7 +37,7 @@ class TopRoleEverywhere {
 
 	getDescription () {return "Adds the highest role of a user as a tag.";}
 
-	getVersion () {return "1.3.0";}
+	getVersion () {return "1.3.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -159,11 +159,14 @@ class TopRoleEverywhere {
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			$(".role-tag").remove();
+			
 			this.serverSwitchObserver.disconnect();
 			this.channelSwitchObserver.disconnect();
 			this.userListObserver.disconnect();
 			this.chatWindowObserver.disconnect();
 			this.settingsWindowObserver.disconnect();
+			
+			BDfunctionsDevilBro.removeLocalStyle(this.getName());
 		}
 	}
 	
