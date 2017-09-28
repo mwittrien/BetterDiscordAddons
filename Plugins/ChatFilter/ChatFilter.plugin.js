@@ -57,6 +57,7 @@ class ChatFilter {
 			}
 
 			.bda-slist button.word-add,
+			.bda-slist button.toggle-info,
 			.bda-slist button.remove-all {
 				height: 21px;
 				font-weight: 500;
@@ -70,8 +71,9 @@ class ChatFilter {
 				margin: 0 15px 0 15px !important;
 			}
 
-			.bda-slist input.showmsg-case,
-			.bda-slist input.blockhide-case,
+			.bda-slist input.showmsg-check,
+			.bda-slist input.blockhide-check,
+			.bda-slist input.word-exact,
 			.bda-slist input.word-case {
 				position: relative;
 				margin: 0 5px 0 0 !important;
@@ -83,14 +85,15 @@ class ChatFilter {
 			}
 
 			.bda-slist .replace-text,
-			.bda-slist .showmsg-case-text,
-			.bda-slist .blockhide-case-text,
+			.bda-slist .showmsg-check-text,
+			.bda-slist .blockhide-check-text,
+			.bda-slist .word-exact-text,
 			.bda-slist .word-case-text {
 				position: relative;
 				display: inline-block;
 				color: #757C87;
 				font-weight: bold;
-				margin: 0 5px 0 0 !important;
+				margin: 0 15px 0 0 !important;
 				padding: 0 !important;
 			}
 
@@ -99,8 +102,8 @@ class ChatFilter {
 			}
 			
 			.bda-slist .replace-text,
-			.bda-slist .showmsg-case-text,
-			.bda-slist .blockhide-case-text {
+			.bda-slist .showmsg-check-text,
+			.bda-slist .blockhide-check-text {
 				top: 1px;
 			}
 
@@ -118,13 +121,15 @@ class ChatFilter {
 			}
 
 			.bda-slist .added-word {
+				color: black;
 				position: relative;
 				display: inline-block;
 				font-weight: 500;
-				line-height: 12px;
 				margin: 2px !important;
-				padding: 3px 2px 2px 2px !important;
+				padding: 1px 2px 0 2px !important;
 				border-radius: 5px;
+				background-color: #757C7E;
+				border: 2px solid #757C7E;
 			}
 
 			.bda-slist .added-word.case {
@@ -135,7 +140,22 @@ class ChatFilter {
 				background-color: #ff6666;
 			}
 
+			.bda-slist .added-word.exact {
+				border: 2px solid #ffcc00;
+			}
+
+			.bda-slist .added-word.noexact {
+				border: 2px solid #009933;
+			}
+
+			.bda-slist .added-word.fake {
+				float: left;
+				text-align: center;
+				width: 90px;
+			}
+
 			.bda-slist .word-delete {
+				color: black;
 				position: relative;
 				display: inline-block;
 				bottom: 1px;
@@ -147,7 +167,7 @@ class ChatFilter {
 				border-radius: 5px;
 			}
 
-			.bda-slist .word-delete.fake{
+			.bda-slist .word-delete.fake {
 				bottom: 0px;
 			}
 
@@ -162,6 +182,7 @@ class ChatFilter {
 			}
 			
 			.bda-slist .replace-settings,
+			.bda-slist .wordtype-info,
 			.bda-slist .blocked-censored-info {
 				color: #757C87;
 				font-weight: bold;
@@ -169,6 +190,25 @@ class ChatFilter {
 				margin: 10px 2px 20px 2px !important;
 				padding: 10px !important;
 				border-radius: 5px;
+			}
+			
+			.bda-slist .wordtype-category {
+				overflow: hidden;
+				color: #757C87;
+				font-weight: bold;
+				margin: 10px 2px 10px 2px !important;
+				padding: 0 !important;
+			}
+			
+			.bda-slist .wordtype-description {
+				white-space: pre;
+				width: 500px;
+				float: left;
+				display: inline-block;
+				color: #757C87;
+				font-weight: bold;
+				margin: 0 0 0 10px !important;
+				padding: 0 !important;
 			}`;
 	}
 
@@ -176,7 +216,7 @@ class ChatFilter {
 
 	getDescription () {return "Allows the user to censor words or block complete messages based on words in the chatwindow.";}
 
-	getVersion () {return "1.0.0";}
+	getVersion () {return "1.1.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -185,7 +225,7 @@ class ChatFilter {
 			var replaceText = {
 				"blocked": "Replace blocked messages with:",
 				"censored": "Replace censored words with:"
-			}
+			};
 			var settingspanel = ``;
 			for (var i in this.types) {
 				var key = this.types[i];
@@ -195,14 +235,14 @@ class ChatFilter {
 				settingspanel += `<input class="word-value" id="` + key + `-word-value" onkeypress='` + this.getName() + `.updateContainer(this, "` + key + `", "` + this.getName() + `", event);'>`;
 				settingspanel += `<button name="add" class="word-add" id="` + key + `-word-add" onclick='` + this.getName() + `.updateContainer(this, "` + key + `", "` + this.getName() + `", event);'>Add</button>`;
 				settingspanel += `<input type="checkbox" class="word-case" id="` + key + `-word-case"><label class="word-case-text">case-sensitive</label>`;
-				settingspanel += `<div class="added-word case">case<div class="word-delete fake">✖</div></div>`;
-				settingspanel += `<div class="added-word nocase">nocase<div class="word-delete fake">✖</div></div>`;
+				settingspanel += `<input type="checkbox" class="word-exact" id="` + key + `-word-exact" checked><label class="word-exact-text">exact word</label>`;
 				settingspanel += `<button name="removeall" class="remove-all" id="` + key + `-remove-all" onclick='` + this.getName() + `.updateContainer(this, "` + key + `", "` + this.getName() + `", event);'>Remove All</button>`;
 				settingspanel += `</div>`;
 				settingspanel += `<div class="word-container" id="` + key + `-word-container">`;
 				for (let word in words) {
-					var casesensivity = words[word] ? "case" : "nocase";
-					settingspanel += `<div name="` + word + `" class="added-word ` + casesensivity + ` ` + key + `-word">` + word + `<div class="word-delete" onclick='` + this.getName() + `.updateContainer(this.parentElement, "` + key + `", "` + this.getName() + `", event);'>✖</div></div>`;
+					var wordcomparison = words[word].exact ? "exact" : "noexact";
+					var casesensivity = words[word].case ? "case" : "nocase";
+					settingspanel += `<div name="` + word + `" class="added-word ` + wordcomparison + ` ` + casesensivity + ` ` + key + `-word">` + word + `<div class="word-delete" onclick='` + this.getName() + `.updateContainer(this.parentElement, "` + key + `", "` + this.getName() + `", event);'>✖</div></div>`;
 				}		
 				settingspanel += `</div>`;
 				
@@ -216,16 +256,23 @@ class ChatFilter {
 				var replaceString = BDfunctionsDevilBro.loadData(key, this.getName(), "replaceString");
 				replaceString = (replaceString && replaceString.length > 0) ? replaceString : this.defaultReplace[key];
 				settingspanel += `<div class="replace-settings" id="` + key + `-replace-settings"><div class="replace-text" id="` + key + `-replace-text">` + replaceText[key] + `</div><input class="replace-value" id="` + key + `-replace-value" value="` + replaceString + `" placeholder="` + replaceString + `" onchange='` + this.getName() + `.saveReplace(this, "` + key + `", "` + this.getName() + `");'` + disabled + `>`;
-				settingspanel += `<div class="showmsg-settings"><input type="checkbox" name="showmsg" class="showmsg-case" onchange='` + this.getName() + `.saveCheckbox(this, "` + key + `", "` + this.getName() + `");'` + showMessageOnHover + `><label class="showmsg-case-text">Show original message on hover.</label></div>`;
+				settingspanel += `<div class="showmsg-settings"><input type="checkbox" name="showmsg" class="showmsg-check" onchange='` + this.getName() + `.saveCheckbox(this, "` + key + `", "` + this.getName() + `");'` + showMessageOnHover + `><label class="showmsg-check-text">Show original message on hover.</label></div>`;
 				
 				if (key == "blocked") {
-					settingspanel += `<div class="blockhide-settings"><input type="checkbox" name="blockhide" class="blockhide-case" onchange='` + this.getName() + `.saveCheckbox(this, "` + key + `", "` + this.getName() + `");'` + hideBlockedMessages + `><label class="blockhide-case-text">Completely hide blocked messages.</label></div>`;
+					settingspanel += `<div class="blockhide-settings"><input type="checkbox" name="blockhide" class="blockhide-check" onchange='` + this.getName() + `.saveCheckbox(this, "` + key + `", "` + this.getName() + `");'` + hideBlockedMessages + `><label class="blockhide-check-text">Completely hide blocked messages.</label></div>`;
 				}
 				
 				settingspanel += `</div>`;
 			}
-			
-			settingspanel += `<div class="blocked-censored-info">Blocked in this case means, that a message that contains one of the words will be completely blocked in your chat window. Censored means you will still be able to read the message but the censored words will be unreadable.</div>`;
+			var infoHidden = BDfunctionsDevilBro.loadData("hideInfo", this.getName(), "settings") ? " style='display:none;'" : "";
+			settingspanel += `<button class="toggle-info" onclick='` + this.getName() + `.toggleInfo(this, "` + this.getName() + `");'>Toggle Information</button>`;
+			settingspanel += `<div class="wordtype-info"` + infoHidden + `>`;
+			settingspanel += `<div class="wordtype-category"><div class="added-word case fake">case<div class="word-delete fake">✖</div></div><div class="wordtype-description">Will censor/block words while comparing lowercase/uppercase. \napple => apple, not APPLE or AppLe</div></div>`;
+			settingspanel += `<div class="wordtype-category"><div class="added-word nocase fake">not case<div class="word-delete fake">✖</div></div><div class="wordtype-description">Will censor/block words while ignoring lowercase/uppercase. \napple => apple, APPLE and AppLe</div></div>`;
+			settingspanel += `<div class="wordtype-category"><div class="added-word exact fake">exact<div class="word-delete fake">✖</div></div><div class="wordtype-description">Will only censor/block words that are exactly the selected word. \napple => apple, not applepie or pineapple</div></div>`;
+			settingspanel += `<div class="wordtype-category"><div class="added-word noexact fake">not exact<div class="word-delete fake">✖</div></div><div class="wordtype-description">Will censor/block all words containing the selected word. \napple => apple, applepie and pineapple</div></div>`;
+			settingspanel += `</div>`;
+			settingspanel += `<div class="blocked-censored-info"` + infoHidden + `>Blocked in this case means, that a message that contains one of the words will be completely blocked in your chat window. Censored means you will still be able to read the message but the censored words will be unreadable. Supports Regular Expressions.</div>`;
 			return settingspanel;
 		}
     }
@@ -359,7 +406,9 @@ class ChatFilter {
 				wordvalue = wordinput.value;
 				if (wordvalue && wordvalue.trim().length > 0) {
 					wordvalue = wordvalue.trim();
-					words[wordvalue] = $(settingspanel).find("#" + type + "-word-case").prop("checked");
+					words[wordvalue] = {};
+					words[wordvalue].exact = $(settingspanel).find("#" + type + "-word-exact").prop("checked");
+					words[wordvalue].case = $(settingspanel).find("#" + type + "-word-case").prop("checked");
 					wordinput.value = null;
 				}
 			}
@@ -372,7 +421,9 @@ class ChatFilter {
 				wordvalue = ele.value;
 				if (wordvalue && wordvalue.trim().length > 0) {
 					wordvalue = wordvalue.trim();
-					words[wordvalue] = $(settingspanel).find("#" + type + "-word-case").prop("checked");
+					words[wordvalue] = {};
+					words[wordvalue].exact = $(settingspanel).find("#" + type + "-word-exact").prop("checked");
+					words[wordvalue].case = $(settingspanel).find("#" + type + "-word-case").prop("checked");
 					ele.value = null;
 				}
 			}
@@ -389,8 +440,9 @@ class ChatFilter {
 		
 		var container = ``;
 		for (let word in words) {
-			var casesensivity = words[word] ? "case" : "nocase";
-			container += `<div name="` + word + `" class="added-word ` + casesensivity + ` ` + type + `-word">` + word + `<div class="word-delete" onclick='` + pluginName + `.updateContainer(this.parentElement, "` + type + `", "` + pluginName + `", event);'>✖</div></div>`;
+			var wordcomparison = words[word].exact ? "exact" : "noexact";
+			var casesensivity = words[word].case ? "case" : "nocase";
+			container += `<div name="` + word + `" class="added-word ` + wordcomparison + `  ` + casesensivity + ` ` + type + `-word">` + word + `<div class="word-delete" onclick='` + pluginName + `.updateContainer(this.parentElement, "` + type + `", "` + pluginName + `", event);'>✖</div></div>`;
 		}
 		
 		$(settingspanel).find("#" + type + "-word-container").html(container);
@@ -417,6 +469,20 @@ class ChatFilter {
 		}
 	}
 	
+	static toggleInfo (btn, pluginName) {
+		var settingspanel = btn.parentElement;
+		var visible = $(settingspanel).find(".wordtype-info").is(":visible");
+		if (visible) {
+			$(settingspanel).find(".wordtype-info").hide();
+			$(settingspanel).find(".blocked-censored-info").hide();
+		}
+		else if (!visible) {
+			$(settingspanel).find(".wordtype-info").show();
+			$(settingspanel).find(".blocked-censored-info").show();
+		}
+		BDfunctionsDevilBro.saveData("hideInfo", visible, pluginName, "settings");
+	}
+	
 	hideAllMessages () {
 		$(".markup.blocked, .markup.censored").each((_,message) => {
 			this.resetMessage(message);
@@ -440,12 +506,13 @@ class ChatFilter {
 				if (typeof txt === "string" && html) {
 					var blockedWords = BDfunctionsDevilBro.loadData("blocked", this.getName(), "words");
 					var blockedReplace = BDfunctionsDevilBro.loadData("blocked", this.getName(), "replaceString");
-					blockedReplace = (blockedReplace && blockedReplace.length > 0) ? blockedReplace : this.defaultReplace["blocked"];
+					blockedReplace = (blockedReplace && blockedReplace.length > 0) ? blockedReplace : this.defaultReplace.blocked;
 					for (let bWord in blockedWords) {
-						var modifier = blockedWords[bWord] ? "" : "i";
+						var modifier = blockedWords[bWord].case ? "" : "i";
+						bWord = blockedWords[bWord].exact ? "^" + bWord + "$" : bWord;
+						var reg = new RegExp(bWord, modifier);
 						txt.split(" ").forEach((word) => {
-							var newWord = word.replace(new RegExp("^" + bWord + "$", modifier), blockedReplace);
-							if (newWord != word) blocked = true;
+							if (reg.test(word)) blocked = true;
 						});
 						if (blocked) break;
 					}
@@ -466,12 +533,15 @@ class ChatFilter {
 					else {
 						var censoredWords = BDfunctionsDevilBro.loadData("censored", this.getName(), "words");
 						var censoredReplace = BDfunctionsDevilBro.loadData("censored", this.getName(), "replaceString");
-						censoredReplace = (censoredReplace && censoredReplace.length > 0) ? censoredReplace : this.defaultReplace["censored"];
+						censoredReplace = (censoredReplace && censoredReplace.length > 0) ? censoredReplace : this.defaultReplace.censored;
 						for (let cWord in censoredWords) {
-							var modifier = censoredWords[cWord] ? "" : "i";
+							var modifier = censoredWords[cWord].case ? "" : "i";
+							cWord = censoredWords[cWord].exact ? "^" + cWord + "$" : cWord;
 							var newTxt = "";
+							var reg = new RegExp(cWord, modifier);
 							txt.split(" ").forEach((word) => {
-								newTxt += word.replace(new RegExp("^" + cWord + "$", modifier), censoredReplace) + " ";
+								newTxt += reg.test(word) ? censoredReplace : word;
+								newTxt += " ";
 							});
 							newTxt = newTxt.trim();
 							html = html.replace("-->" + this.encodeToHTML(txt) + "<!--","-->" + this.encodeToHTML(newTxt) + "<!--");
