@@ -193,7 +193,6 @@ BDfunctionsDevilBro.getMyUserData = function () {
 
 BDfunctionsDevilBro.getMyUserID = function () {
 	var userData = BDfunctionsDevilBro.getMyUserData();
-	conso
 	return (userData && userData.id ? userData.id : null);
 }
 	
