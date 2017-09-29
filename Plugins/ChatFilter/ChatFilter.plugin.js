@@ -216,7 +216,7 @@ class ChatFilter {
 
 	getDescription () {return "Allows the user to censor words or block complete messages based on words in the chatwindow.";}
 
-	getVersion () {return "1.1.0";}
+	getVersion () {return "1.1.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -278,7 +278,9 @@ class ChatFilter {
     }
 
 	//legacy
-	load () {}
+	load () {
+		BdApi.injectCSS(this.getName(), this.css);
+	}
 
 	start () {
 		if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
@@ -366,8 +368,6 @@ class ChatFilter {
 					}
 				);
 			});
-			
-			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 			
 			this.hideAllMessages();
 			
