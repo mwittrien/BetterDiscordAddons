@@ -38,7 +38,7 @@ class TopRoleEverywhere {
 
 	getDescription () {return "Adds the highest role of a user as a tag.";}
 
-	getVersion () {return "1.3.3";}
+	getVersion () {return "1.4.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -228,7 +228,7 @@ class TopRoleEverywhere {
 					this.addRoleTag(membersChat[j], "chat", serverID);
 				}
 			}
-			BDfunctionsDevilBro.saveData(serverID, this.userRoles[serverID], this.getName(), "savedRoles")
+			BDfunctionsDevilBro.saveData(serverID, this.userRoles[serverID], this.getName(), "savedRoles");
 		}
 	}
 	
@@ -237,22 +237,32 @@ class TopRoleEverywhere {
 		if (member && $(member).find(".role-tag").length == 0) {
 			var styleInfo = BDfunctionsDevilBro.getKeyInformation({"node":member,"key":"style"});
 			var userInfo = BDfunctionsDevilBro.getKeyInformation({"node":wrapper,"key":"user"});
-			var roleName;
-			var roleColor;
+			var roleName = null;
+			var roleColor = null;
 			var userID = userInfo ? userInfo.id : null;
 			if (styleInfo && userID) {
 				var savedInfo = this.userRoles[serverID][userID];
 				if (savedInfo && BDfunctionsDevilBro.colorCOMPARE(savedInfo.colorString, styleInfo.color)) {
-					roleName = savedInfo.roleName;
-					roleColor = BDfunctionsDevilBro.color2COMP(savedInfo.colorString);
-				}
-				else {
-					var rolesSameColor = []
 					var roleIDs = Object.getOwnPropertyNames(this.roles);
 					for (var i = 0; i < roleIDs.length; i++) {
-						var roleID = roleIDs[i];
-						if (BDfunctionsDevilBro.colorCOMPARE(this.roles[roleID].colorString, styleInfo.color)) {
-							rolesSameColor.push({"roleName":this.roles[roleID].name,"colorString":this.roles[roleID].colorString});
+						var thisRoleName = this.roles[roleIDs[i]].name;
+						var thisRoleColor = this.roles[roleIDs[i]].colorString;
+						if (BDfunctionsDevilBro.equals(thisRoleName, savedInfo.roleName) && BDfunctionsDevilBro.colorCOMPARE(thisRoleColor, savedInfo.colorString)) {
+							roleName = savedInfo.roleName;
+							roleColor = BDfunctionsDevilBro.color2COMP(savedInfo.colorString);
+							break;
+						}
+
+					}
+				}
+				if (!roleName || !roleColor) {
+					var rolesSameColor = [];
+					var roleIDs = Object.getOwnPropertyNames(this.roles);
+					for (var i = 0; i < roleIDs.length; i++) {
+						var thisRoleName = this.roles[roleIDs[i]].name;
+						var thisRoleColor = this.roles[roleIDs[i]].colorString;
+						if (BDfunctionsDevilBro.colorCOMPARE(thisRoleColor, styleInfo.color)) {
+							rolesSameColor.push({"roleName":thisRoleName,"colorString":thisRoleColor});
 						}
 					}
 					if (rolesSameColor.length == 1) {
@@ -277,6 +287,21 @@ class TopRoleEverywhere {
 							if (roleName && roleColor) break;
 						}
 					}
+					else if (rolesSameColor.length == 0) {
+						member.click();
+						$(".popout").hide();
+						var foundRoles = $(".member-role");
+						$(".member-role").remove();
+						for (var l = 0; l < foundRoles.length; l++) {
+							var thisRoleName = $(foundRoles[l]).find(".name").text();
+							var thisRoleColor = BDfunctionsDevilBro.color2HEX($(foundRoles[l]).css("color"));
+							if (BDfunctionsDevilBro.colorCOMPARE(thisRoleColor, styleInfo.color)) {
+								roleName = thisRoleName;
+								roleColor = BDfunctionsDevilBro.color2COMP(thisRoleColor);
+								break;
+							}
+						}
+					}
 				}
 			}
 			if (roleColor && roleName || userID == 278543574059057154) {
@@ -289,9 +314,9 @@ class TopRoleEverywhere {
 						oldwidth = parseInt(oldwidth.replace("px",""));
 					}
 				}
+				var tag = $(this.tagMarkup);
+				$(member).append(tag);
 				if (userID == 278543574059057154) {
-					var tag = $(this.tagMarkup);
-					$(member).append(tag);
 					if (!this.getSettings().useOtherStyle) {
 						var rainbowGradient = "linear-gradient(to right, rgba(255,0,0,0.1), rgba(255,127,0,0.1) , rgba(255,255,0,0.1), rgba(127,255,0,0.1), rgba(0,255,0,0.1), rgba(0,255,127,0.1), rgba(0,255,255,0.1), rgba(0,127,255,0.1), rgba(0,0,255,0.1), rgba(127,0,255,0.1), rgba(255,0,255,0.1), rgba(255,0,127,0.1))";
 						var rainbowGradient2 = "linear-gradient(to right, rgba(255,0,0,1), rgba(255,127,0,1) , rgba(255,255,0,1), rgba(127,255,0,1), rgba(0,255,0,1), rgba(0,255,127,1), rgba(0,255,255,1), rgba(0,127,255,1), rgba(0,0,255,1), rgba(127,0,255,1), rgba(255,0,255,1), rgba(255,0,127,1))";
@@ -318,9 +343,6 @@ class TopRoleEverywhere {
 					}
 				}
 				else {
-					var tag = $(this.tagMarkup);
-					$(member).append(tag);
-					
 					if (!this.getSettings().useOtherStyle) {
 						$(tag)
 							.addClass(type + "-tag")
@@ -353,6 +375,9 @@ class TopRoleEverywhere {
 				}
 				
 				this.userRoles[serverID][userID] = {"roleName":roleName,"colorString":BDfunctionsDevilBro.color2HEX(roleColor)};
+			}
+			else if (this.userRoles[serverID][userID]) {
+				delete this.userRoles[serverID][userID];
 			}
 		}
 	}
