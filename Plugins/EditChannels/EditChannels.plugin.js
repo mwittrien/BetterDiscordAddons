@@ -47,6 +47,12 @@ class EditChannels {
 				border: 4px solid red;
 			}
 			
+			.editchannels-modal .color-picker-dropper {
+				position: relative;
+				left: 40px;
+				top: 10px;
+			}
+			
 			.editchannels-modal .modal {
 				align-content: space-around;
 				align-items: center;
@@ -239,12 +245,12 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "3.2.2";}
+	getVersion () {return "3.2.3";}
 
 	getAuthor () {return "DevilBro";}
 	
     getSettingsPanel () {
-		return `<button class=EditChannelsResetBtn" style="height:23px" onclick="EditChannels.resetAll()">Reset all Channels`;
+		return `<button class=EditChannelsResetBtn" style="height:23px" onclick="` + this.getName() + `.resetAll()">Reset all Channels`;
     }
 
 	//legacy
@@ -482,14 +488,16 @@ class EditChannels {
 	setSwatches (currentCOMP, colorOptions, wrapper, swatch) {
 		var wrapperDiv = $(wrapper);
 			
-		var defaultColors = {"swatch1":"rgb(0, 0, 0)"};
+		var defaultCustomColors = {"swatch1":"rgb(0, 0, 0)"};
+		var defaultPickerColors = {"swatch1":"#ffffff"};
 			
-		var largeDefaultBgColor = defaultColors[swatch];
+		var largeDefaultBgColor = defaultCustomColors[swatch];
+		var pickerDefaultBgColor = defaultPickerColors[swatch];
 			
 		var swatches = 
 			`<div class="ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-nowrap" style="flex: 1 1 auto; margin-top: 5px;">
-				<div class="ui-color-picker-${swatch} large custom" style="background-color: ${largeDefaultBgColor};"></div>
-				<div class="regulars ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-wrap ui-color-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;"><div class="ui-color-picker-${swatch} nocolor">✖</div>
+				<div class="ui-color-picker-${swatch} large custom" style="background-color: ${largeDefaultBgColor};"><svg class="color-picker-dropper" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 16 16"><path class="color-picker-dropper-fg" fill=${pickerDefaultBgColor} d="M14.994 1.006C13.858-.257 11.904-.3 10.72.89L8.637 2.975l-.696-.697-1.387 1.388 5.557 5.557 1.387-1.388-.697-.697 1.964-1.964c1.13-1.13 1.3-2.985.23-4.168zm-13.25 10.25c-.225.224-.408.48-.55.764L.02 14.37l1.39 1.39 2.35-1.174c.283-.14.54-.33.765-.55l4.808-4.808-2.776-2.776-4.813 4.803z"></path></svg></div>
+				<div class="regulars ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-wrap ui-color-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;"><div class="ui-color-picker-${swatch} nocolor" style="background-color: null;">✖</div>
 					${ colorOptions.map((val, i) => `<div class="ui-color-picker-${swatch}" style="background-color: ${val};"></div>`).join("")}
 				</div>
 			</div>`;
@@ -512,6 +520,9 @@ class EditChannels {
 					.addClass("selected")
 					.css("background-color", currentRGB)
 					.css("border", "4px solid " + invRGB);
+				
+				$(".color-picker-dropper-fg", wrapperDiv)
+					.attr("fill", currentCOMP[0] > 150 && currentCOMP[1] > 150 && currentCOMP[2] > 150 ? "#000000" : "#ffffff");
 			}
 		}
 		else {
@@ -543,7 +554,9 @@ class EditChannels {
 			showInput: true,
 			showButtons: false,
 			move: (color) => {
-				var newInvRGB = BDfunctionsDevilBro.colorINV(color.toRgbString(),"rgb");
+				var newRGB = color.toRgbString();
+				var newCOMP = BDfunctionsDevilBro.color2COMP(newRGB);
+				var newInvRGB = BDfunctionsDevilBro.colorINV(newRGB);
 				
 				$(".ui-color-picker-" + swatch + ".selected.nocolor")
 					.removeClass("selected")
@@ -555,8 +568,11 @@ class EditChannels {
 				
 				custom
 					.addClass("selected")
-					.css("background-color", color.toRgbString())
+					.css("background-color", newRGB)
 					.css("border", "4px solid " + newInvRGB);
+					
+				$(".color-picker-dropper-fg", wrapperDiv)
+					.attr("fill", newCOMP[0] > 150 && newCOMP[1] > 150 && newCOMP[2] > 150 ? "#000000" : "#ffffff");
 			}
 		});
 	}
