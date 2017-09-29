@@ -30,7 +30,7 @@ BDfunctionsDevilBro.loadMessage = function (pluginName, oldVersion) {
 								$('.app.flex-vertical').children().first().before(noticeElement);
 								$('.win-buttons').addClass("win-buttons-notice");
 								$('#pluginNoticeDismiss').on('click', () => {
-									$('.win-buttons').animate({top: 0}, 400, "swing", () => {$('.win-buttons').css("top","").removeClass("win-buttons-notice")});
+									$('.win-buttons').animate({top: 0}, 400, "swing", () => {$('.win-buttons').css("top","").removeClass("win-buttons-notice");});
 									$('#pluginNotice').slideUp({complete: () => {
 										$('#pluginNotice').remove();
 									}});
@@ -183,6 +183,18 @@ BDfunctionsDevilBro.equals = function (check1, check2, compareOrder) {
 		return result;
 	}
 };
+
+BDfunctionsDevilBro.getMyUserData = function () {
+	if ($(".container-iksrDt").length > 0) {
+		var userData = BDfunctionsDevilBro.getKeyInformation({"node":[0],"key":"user"});
+		return (userData ? userData : null);
+	}
+}
+
+BDfunctionsDevilBro.getMyUserID = function () {
+	var userData = BDfunctionsDevilBro.getMyUserData();
+	return (userData && userData.id ? userData.id : null);
+}
 	
 BDfunctionsDevilBro.readServerList = function () {
 	var foundServers = [];
