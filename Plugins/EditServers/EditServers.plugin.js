@@ -49,6 +49,12 @@ class EditServers {
 				border: 4px solid red;
 			}
 			
+			.editservers-modal .color-picker-dropper {
+				position: relative;
+				left: 40px;
+				top: 10px;
+			}
+			
 			.editservers-modal .modal {
 				align-content: space-around;
 				align-items: center;
@@ -360,12 +366,12 @@ class EditServers {
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	getVersion () {return "1.2.4";}
+	getVersion () {return "1.2.5";}
 
 	getAuthor () {return "DevilBro";}
 	
     getSettingsPanel () {
-		return `<button class=EditServersResetBtn" style="height:23px" onclick="EditServers.resetAll()">Reset all Servers`;
+		return `<button class=EditServersResetBtn" style="height:23px" onclick="` + this.getName() + `.resetAll()">Reset all Servers`;
     }
 
 	//legacy
@@ -416,6 +422,14 @@ class EditServers {
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 			
 			this.loadAllServers();
+			
+			
+			setTimeout(() => {
+				this.labels = this.setLabelsByLanguage();
+				this.changeLanguageStrings();
+			},5000);
+			
+			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -658,7 +672,7 @@ class EditServers {
 				type: "HEAD",
 				url : "https://cors-anywhere.herokuapp.com/" + e.target.value,
 				success: (message, text, response) => {
-					if (response.getResponseHeader('Content-Type').indexOf("image") != -1){
+					if (response.getResponseHeader('Content-Type').indexOf("image") != -1) {
 						$(e.target)
 							.removeClass("invalid")
 							.addClass("valid");
@@ -715,14 +729,16 @@ class EditServers {
 	setSwatches (currentCOMP, colorOptions, wrapper, swatch) {
 		var wrapperDiv = $(wrapper);
 			
-		var defaultColors = {"swatch1":"rgb(0, 0, 0)","swatch2":"rgb(255, 255, 255)","swatch3":"rgb(0, 0, 0)","swatch4":"rgb(255, 255, 255)"};
+		var defaultCustomColors = {"swatch1":"rgb(0, 0, 0)","swatch2":"rgb(255, 255, 255)","swatch3":"rgb(0, 0, 0)","swatch4":"rgb(255, 255, 255)"};
+		var defaultPickerColors = {"swatch1":"#ffffff","swatch2":"#000000","swatch3":"#ffffff","swatch4":"#000000"};
 			
-		var largeDefaultBgColor = defaultColors[swatch];
+		var largeDefaultBgColor = defaultCustomColors[swatch];
+		var pickerDefaultBgColor = defaultPickerColors[swatch];
 			
 		var swatches = 
 			`<div class="ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-nowrap" style="flex: 1 1 auto; margin-top: 5px;">
-				<div class="ui-color-picker-${swatch} large custom" style="background-color: ${largeDefaultBgColor};"></div>
-				<div class="regulars ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-wrap ui-color-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;"><div class="ui-color-picker-${swatch} nocolor">✖</div>
+				<div class="ui-color-picker-${swatch} large custom" style="background-color: ${largeDefaultBgColor};"><svg class="color-picker-dropper" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 16 16"><path class="color-picker-dropper-fg" fill=${pickerDefaultBgColor} d="M14.994 1.006C13.858-.257 11.904-.3 10.72.89L8.637 2.975l-.696-.697-1.387 1.388 5.557 5.557 1.387-1.388-.697-.697 1.964-1.964c1.13-1.13 1.3-2.985.23-4.168zm-13.25 10.25c-.225.224-.408.48-.55.764L.02 14.37l1.39 1.39 2.35-1.174c.283-.14.54-.33.765-.55l4.808-4.808-2.776-2.776-4.813 4.803z"></path></svg></div>
+				<div class="regulars ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-wrap ui-color-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;"><div class="ui-color-picker-${swatch} nocolor" style="background-color: null;">✖</div>
 					${ colorOptions.map((val, i) => `<div class="ui-color-picker-${swatch}" style="background-color: ${val};"></div>`).join("")}
 				</div>
 			</div>`;
@@ -745,6 +761,9 @@ class EditServers {
 					.addClass("selected")
 					.css("background-color", currentRGB)
 					.css("border", "4px solid " + invRGB);
+				
+				$(".color-picker-dropper-fg", wrapperDiv)
+					.attr("fill", currentCOMP[0] > 150 && currentCOMP[1] > 150 && currentCOMP[2] > 150 ? "#000000" : "#ffffff");
 			}
 		}
 		else {
@@ -768,7 +787,7 @@ class EditServers {
 			$(e.target)
 				.addClass("selected")
 				.css("border", "4px solid " + newInvRGB);
-		})
+		});
 		var custom = $(".ui-color-picker-" + swatch + ".custom", wrapperDiv).spectrum({
 			color: $(".custom", wrapperDiv).css("background-color"),
 			preferredFormat: "rgb",
@@ -776,7 +795,9 @@ class EditServers {
 			showInput: true,
 			showButtons: false,
 			move: (color) => {
-				var newInvRGB = BDfunctionsDevilBro.colorINV(color.toRgbString(),"rgb");
+				var newRGB = color.toRgbString();
+				var newCOMP = BDfunctionsDevilBro.color2COMP(newRGB);
+				var newInvRGB = BDfunctionsDevilBro.colorINV(newRGB);
 				
 				$(".ui-color-picker-" + swatch + ".selected.nocolor")
 					.removeClass("selected")
@@ -788,8 +809,11 @@ class EditServers {
 				
 				custom
 					.addClass("selected")
-					.css("background-color", color.toRgbString())
+					.css("background-color", newRGB)
 					.css("border", "4px solid " + newInvRGB);
+					
+				$(".color-picker-dropper-fg", wrapperDiv)
+					.attr("fill", newCOMP[0] > 150 && newCOMP[1] > 150 && newCOMP[2] > 150 ? "#000000" : "#ffffff");
 			}
 		});
 	}
@@ -826,7 +850,7 @@ class EditServers {
 			var data = BDfunctionsDevilBro.loadData(id, this.getName(), "servers");
 			if (data) {
 				if ($(server).attr("name") === undefined) {
-					$(server).attr("name", $(server).text())
+					$(server).attr("name", $(server).text());
 				}
 				
 				var name = 			data.name ? data.name : info.name;
@@ -876,7 +900,7 @@ class EditServers {
 				if (data.color3) {
 					var bgColor = BDfunctionsDevilBro.color2RGB(data.color3);
 					$(serverTooltip)
-						.css("background-color", bgColor)
+						.css("background-color", bgColor);
 						
 					var customeTooltipCSS = `
 						.guild-custom-tooltip:after {
