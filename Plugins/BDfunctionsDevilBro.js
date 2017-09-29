@@ -186,13 +186,14 @@ BDfunctionsDevilBro.equals = function (check1, check2, compareOrder) {
 
 BDfunctionsDevilBro.getMyUserData = function () {
 	if ($(".container-iksrDt").length > 0) {
-		var userData = BDfunctionsDevilBro.getKeyInformation({"node":[0],"key":"user"});
+		var userData = BDfunctionsDevilBro.getKeyInformation({"node":$(".container-iksrDt")[0],"key":"user"});
 		return (userData ? userData : null);
 	}
 }
 
 BDfunctionsDevilBro.getMyUserID = function () {
 	var userData = BDfunctionsDevilBro.getMyUserData();
+	conso
 	return (userData && userData.id ? userData.id : null);
 }
 	
