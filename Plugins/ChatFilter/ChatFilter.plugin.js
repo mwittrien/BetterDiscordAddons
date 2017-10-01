@@ -483,6 +483,34 @@ class ChatFilter {
 		BDfunctionsDevilBro.saveData("hideInfo", visible, pluginName, "settings");
 	}
 	
+	// messageData is an array of Objects mixed out of Stings, Markdown, Mentions and Emojis
+	// could probably be optimized... but it gets the job done
+	buildText (messageData) {
+		var buildString = "";
+		if (messageData.hasOwnProperty("props")) {
+			// is it an emoji?
+			if (messageData.props.hasOwnProperty("alt"))
+				buildString += messageData.props.alt;
+			// is it a mention?
+			else if (messageData.props.hasOwnProperty("children"))
+				buildString += this.buildText(messageData.props.children);
+		}
+		else {
+			for (let i = 0; i < messageData.length; i++) {
+				// is it a simple string?
+				if (typeof messageData[i] === "string")
+					buildString += messageData[i];
+				// has it more nested stuff?
+				else if (messageData[i].hasOwnProperty("props") && messageData[i].props.hasOwnProperty("children"))
+					buildString += this.buildText(messageData[i].props.children);
+				// last option (afaik): It was markdown formating and we can add the text
+				else
+					buildString += messageData[i].props.text;
+			}
+		}
+		return buildString;
+	}
+	
 	hideAllMessages () {
 		$(".markup.blocked, .markup.censored").each((_,message) => {
 			this.resetMessage(message);
@@ -499,7 +527,7 @@ class ChatFilter {
 		if (!$(message).hasClass("blocked") && !$(message).hasClass("censored")) {
 			var messageData = BDfunctionsDevilBro.getKeyInformation({"node":message,"key":"0"});
 			if (messageData) {
-				var txt = messageData[0];
+				var txt = this.buildText(messageData);
 				var html = $(message).html();
 				var orightml = html;
 				var blocked = false;
