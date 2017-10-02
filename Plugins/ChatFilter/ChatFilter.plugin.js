@@ -216,7 +216,7 @@ class ChatFilter {
 
 	getDescription () {return "Allows the user to censor words or block complete messages based on words in the chatwindow.";}
 
-	getVersion () {return "1.2.0";}
+	getVersion () {return "2.0.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -242,11 +242,11 @@ class ChatFilter {
 				for (let word in words) {
 					var wordcomparison = words[word].exact ? "exact" : "noexact";
 					var casesensivity = words[word].case ? "case" : "nocase";
-					settingspanel += `<div name="` + word + `" class="added-word ` + wordcomparison + ` ` + casesensivity + ` ` + key + `-word">` + word + `<div class="word-delete" onclick='` + this.getName() + `.updateContainer(this.parentElement, "` + key + `", "` + this.getName() + `", event);'>✖</div></div>`;
+					settingspanel += `<div name="` + word + `" class="added-word ` + wordcomparison + ` ` + casesensivity + ` ` + key + `-word">` + ChatFilter.encodeToHTML(word) + `<div class="word-delete" onclick='` + this.getName() + `.updateContainer(this.parentElement, "` + key + `", "` + this.getName() + `", event);'>✖</div></div>`;
 				}		
 				settingspanel += `</div>`;
 				
-				var showMessageOnHover = BDfunctionsDevilBro.loadData(key, this.getName(), "showMessageOnHover") ? " checked" : "";
+				var showMessageOnClick = BDfunctionsDevilBro.loadData(key, this.getName(), "showMessageOnClick") ? " checked" : "";
 				var hideBlockedMessages = "";
 				var disabled = "";
 				if (key == "blocked") {
@@ -256,7 +256,7 @@ class ChatFilter {
 				var replaceString = BDfunctionsDevilBro.loadData(key, this.getName(), "replaceString");
 				replaceString = (replaceString && replaceString.length > 0) ? replaceString : this.defaultReplace[key];
 				settingspanel += `<div class="replace-settings" id="` + key + `-replace-settings"><div class="replace-text" id="` + key + `-replace-text">` + replaceText[key] + `</div><input class="replace-value" id="` + key + `-replace-value" value="` + replaceString + `" placeholder="` + replaceString + `" onchange='` + this.getName() + `.saveReplace(this, "` + key + `", "` + this.getName() + `");'` + disabled + `>`;
-				settingspanel += `<div class="showmsg-settings"><input type="checkbox" name="showmsg" class="showmsg-check" onchange='` + this.getName() + `.saveCheckbox(this, "` + key + `", "` + this.getName() + `");'` + showMessageOnHover + `><label class="showmsg-check-text">Show original message on hover.</label></div>`;
+				settingspanel += `<div class="showmsg-settings"><input type="checkbox" name="showmsg" class="showmsg-check" onchange='` + this.getName() + `.saveCheckbox(this, "` + key + `", "` + this.getName() + `");'` + showMessageOnClick + `><label class="showmsg-check-text">Show original message on click.</label></div>`;
 				
 				if (key == "blocked") {
 					settingspanel += `<div class="blockhide-settings"><input type="checkbox" name="blockhide" class="blockhide-check" onchange='` + this.getName() + `.saveCheckbox(this, "` + key + `", "` + this.getName() + `");'` + hideBlockedMessages + `><label class="blockhide-check-text">Completely hide blocked messages.</label></div>`;
@@ -442,7 +442,7 @@ class ChatFilter {
 		for (let word in words) {
 			var wordcomparison = words[word].exact ? "exact" : "noexact";
 			var casesensivity = words[word].case ? "case" : "nocase";
-			container += `<div name="` + word + `" class="added-word ` + wordcomparison + `  ` + casesensivity + ` ` + type + `-word">` + word + `<div class="word-delete" onclick='` + pluginName + `.updateContainer(this.parentElement, "` + type + `", "` + pluginName + `", event);'>✖</div></div>`;
+			container += `<div name="` + word + `" class="added-word ` + wordcomparison + `  ` + casesensivity + ` ` + type + `-word">` + ChatFilter.encodeToHTML(word) + `<div class="word-delete" onclick='` + pluginName + `.updateContainer(this.parentElement, "` + type + `", "` + pluginName + `", event);'>✖</div></div>`;
 		}
 		
 		$(settingspanel).find("#" + type + "-word-container").html(container);
@@ -465,7 +465,7 @@ class ChatFilter {
 			BDfunctionsDevilBro.saveData(type, checked, pluginName, "hideBlockedMessages");
 		}
 		else if (input.name == "showmsg") {
-			BDfunctionsDevilBro.saveData(type, checked, pluginName, "showMessageOnHover");
+			BDfunctionsDevilBro.saveData(type, checked, pluginName, "showMessageOnClick");
 		}
 	}
 	
@@ -483,32 +483,10 @@ class ChatFilter {
 		BDfunctionsDevilBro.saveData("hideInfo", visible, pluginName, "settings");
 	}
 	
-	// messageData is an array of Objects mixed out of Stings, Markdown, Mentions and Emojis
-	// could probably be optimized... but it gets the job done
-	buildText (messageData) {
-		var buildString = "";
-		if (messageData.hasOwnProperty("props")) {
-			// is it an emoji?
-			if (messageData.props.hasOwnProperty("alt"))
-				buildString += messageData.props.alt;
-			// is it a mention?
-			else if (messageData.props.hasOwnProperty("children"))
-				buildString += this.buildText(messageData.props.children);
-		}
-		else {
-			for (let i = 0; i < messageData.length; i++) {
-				// is it a simple string?
-				if (typeof messageData[i] === "string")
-					buildString += messageData[i];
-				// has it more nested stuff?
-				else if (messageData[i].hasOwnProperty("props") && messageData[i].props.hasOwnProperty("children"))
-					buildString += this.buildText(messageData[i].props.children);
-				// last option (afaik): It was markdown formating and we can add the text
-				else
-					buildString += messageData[i].props.text;
-			}
-		}
-		return buildString;
+	static encodeToHTML (string) {
+		var ele = document.createElement("div");
+		ele.innerText = string;
+		return ele.innerHTML;
 	}
 	
 	hideAllMessages () {
@@ -525,104 +503,140 @@ class ChatFilter {
 	
 	hideMessage (message) {
 		if (!$(message).hasClass("blocked") && !$(message).hasClass("censored")) {
-			var messageData = BDfunctionsDevilBro.getKeyInformation({"node":message,"key":"0"});
-			if (messageData) {
-				var txt = this.buildText(messageData);
-				var html = $(message).html();
-				var orightml = html;
-				var blocked = false;
-				if (typeof txt === "string" && html) {
-					var blockedWords = BDfunctionsDevilBro.loadData("blocked", this.getName(), "words");
+			var orightml = $(message).html();
+			var newhtml = "";
+			
+			var strings = [];
+			var count = 0;
+			orightml.split("").forEach((chara) => { 
+				if(chara == "<") {
+					if (strings[count]) count++;
+				}
+				strings[count] = strings[count] ? strings[count] + chara : chara; 
+				if (chara == ">") {
+					count++;
+				}
+			});
+			console.log(strings);
+			
+			var blocked = false;
+			if (orightml) {
+				var blockedWords = BDfunctionsDevilBro.loadData("blocked", this.getName(), "words");
+				for (let bWord in blockedWords) {
+					var modifier = blockedWords[bWord].case ? "" : "i";
+					bWord = blockedWords[bWord].exact ? "^" + bWord + "$" : bWord;
+					bWord = ChatFilter.encodeToHTML(bWord);
+					
+					var reg = new RegExp(bWord, modifier);
+					strings.forEach((string,i) => {
+						if (string.indexOf("<img") == 0) {
+							var emojiname = string.split('alt="').length > 0 ? string.split('alt="')[1] : null;
+							emojiname = emojiname ? emojiname.split('" src')[0] : null;
+							emojiname = emojiname.replace(new RegExp(":", 'g'), "");
+							if (reg.test(emojiname)) blocked = true;
+						}
+						else if (string.indexOf("<") != 0) {
+							string.split(" ").forEach((word) => {
+								if (reg.test(string)) blocked = true;
+							});
+						}
+					});
+					if (blocked) break;
+				}
+				if (blocked) {
+					var hideMessage = BDfunctionsDevilBro.loadData("blocked", this.getName(), "hideBlockedMessages");
 					var blockedReplace = BDfunctionsDevilBro.loadData("blocked", this.getName(), "replaceString");
 					blockedReplace = (blockedReplace && blockedReplace.length > 0) ? blockedReplace : this.defaultReplace.blocked;
-					for (let bWord in blockedWords) {
-						var modifier = blockedWords[bWord].case ? "" : "i";
-						bWord = blockedWords[bWord].exact ? "^" + bWord + "$" : bWord;
-						var reg = new RegExp(bWord, modifier);
-						txt.split(" ").forEach((word) => {
-							if (reg.test(word)) blocked = true;
-						});
-						if (blocked) break;
+					if (hideMessage) {
+						$(message).hide();
 					}
-					if (blocked) {
-						var hideMessage = BDfunctionsDevilBro.loadData("blocked", this.getName(), "hideBlockedMessages");
-						if (hideMessage) {
-							$(message).hide();
-						}
-						html = this.encodeToHTML(blockedReplace);
+					newhtml = ChatFilter.encodeToHTML(blockedReplace);
+					$(message)
+						.html(newhtml)
+						.addClass("blocked")
+						.data("newhtml",newhtml)
+						.data("orightml",orightml);
+						
+					this.addClickListener(message, "blocked");
+				}
+				else {
+					var censoredWords = BDfunctionsDevilBro.loadData("censored", this.getName(), "words");
+					var censoredReplace = BDfunctionsDevilBro.loadData("censored", this.getName(), "replaceString");
+					censoredReplace = (censoredReplace && censoredReplace.length > 0) ? censoredReplace : this.defaultReplace.censored;
+					
+					for (let cWord in censoredWords) {
+						var modifier = censoredWords[cWord].case ? "" : "i";
+						cWord = censoredWords[cWord].exact ? "^" + cWord + "$" : cWord;
+						cWord = ChatFilter.encodeToHTML(cWord);
+						
+						var reg = new RegExp(cWord, modifier);
+						strings.forEach((string,i) => {
+							if (string.indexOf("<img") == 0) {
+								var emojiname = string.split('alt="').length > 0 ? string.split('alt="')[1] : null;
+								emojiname = emojiname ? emojiname.split('" src')[0] : null;
+								emojiname = emojiname.replace(new RegExp(":", 'g'), "");
+								if (reg.test(emojiname)) {
+									strings[i] = ChatFilter.encodeToHTML(censoredReplace);
+									if (strings[i+1] && strings[i+1].indexOf("<input") == 0) {
+										strings[i+1] = "";
+										if (strings[i-1] && strings[i-1].indexOf("<span") == 0) strings[i-1] = "";
+										if (strings[i+2] && strings[i+2].indexOf("</span") == 0) strings[i+2] = "";
+									}
+								}
+							}
+							else if (string.indexOf("<") != 0) {
+								var newstring = [];
+								string.split(" ").forEach((word) => {
+									newstring.push(reg.test(word) ? ChatFilter.encodeToHTML(censoredReplace) : word);
+								});
+								strings[i] = newstring.join(" ");
+							}
+						});
+					}
+					
+					newhtml = strings.join("");
+					
+					if (newhtml != orightml) {
 						$(message)
-							.html(html)
-							.addClass("blocked")
-							.data("newhtml",html)
+							.html(newhtml)
+							.addClass("censored")
+							.data("newhtml",newhtml)
 							.data("orightml",orightml);
 							
-						this.addHoverListener(message, "blocked");
-					}
-					else {
-						var censoredWords = BDfunctionsDevilBro.loadData("censored", this.getName(), "words");
-						var censoredReplace = BDfunctionsDevilBro.loadData("censored", this.getName(), "replaceString");
-						censoredReplace = (censoredReplace && censoredReplace.length > 0) ? censoredReplace : this.defaultReplace.censored;
-						for (let cWord in censoredWords) {
-							var modifier = censoredWords[cWord].case ? "" : "i";
-							cWord = censoredWords[cWord].exact ? "^" + cWord + "$" : cWord;
-							var newTxt = "";
-							var reg = new RegExp(cWord, modifier);
-							txt.split(" ").forEach((word) => {
-								newTxt += reg.test(word) ? censoredReplace : word;
-								newTxt += " ";
-							});
-							newTxt = newTxt.trim();
-							html = html.replace("-->" + this.encodeToHTML(txt) + "<!--","-->" + this.encodeToHTML(newTxt) + "<!--");
-							txt = newTxt;
-							$(message).html(html);
-						}
-						if (html != orightml) {
-							$(message)
-								.addClass("censored")
-								.data("newhtml",html)
-								.data("orightml",orightml);
-								
-							this.addHoverListener(message, "censored");
-						}
+						this.addClickListener(message, "censored");
 					}
 				}
 			}
 		}
 	}
 	
-	encodeToHTML (string) {
-		var ele = document.createElement("div");
-		ele.innerText = string;
-		return ele.innerHTML;
-	}
-	
 	resetMessage (message) {
 		var orightml = $(message).data("orightml");
 		$(message)
 			.html(orightml)
-			.off("mouseenter")
-			.off("mouseleave")
+			.off("click")
 			.removeClass("blocked")
 			.removeClass("censored");
 	}
 	
-	addHoverListener (message, type) {
-		var orightml = $(message).data("orightml");
-		var newhtml = $(message).data("newhtml");
+	addClickListener (message, type) {
 		$(message)
-			.off("mouseenter")
-			.off("mouseleave");
-		if (BDfunctionsDevilBro.loadData(type, this.getName(), "showMessageOnHover")) {
+			.off("click");
+		if (BDfunctionsDevilBro.loadData(type, this.getName(), "showMessageOnClick")) {
+			var orightml = $(message).data("orightml");
+			var newhtml = $(message).data("newhtml");
 			$(message)
-				.on("mouseenter", () => {	
-					$(message)
-						.html(orightml)
-						.removeClass(type);
-				})
-				.on("mouseleave", () => {
-					$(message)
-						.html(newhtml)
-						.addClass(type);
+				.on("click", () => {	
+					if ($(message).hasClass(type)) {
+						$(message)
+							.html(orightml)
+							.removeClass(type);
+					}
+					else {
+						$(message)
+							.html(newhtml)
+							.addClass(type);
+					}
 				});
 		}
 	}
