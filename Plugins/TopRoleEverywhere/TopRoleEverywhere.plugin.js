@@ -38,7 +38,7 @@ class TopRoleEverywhere {
 
 	getDescription () {return "Adds the highest role of a user as a tag.";}
 
-	getVersion () {return "1.4.0";}
+	getVersion () {return "1.4.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -68,38 +68,38 @@ class TopRoleEverywhere {
 							var serverData = BDfunctionsDevilBro.getKeyInformation({"node":change.target, "key":"guild"});
 							if (serverData) {
 								this.loadRoleTags();
-								if ($(".channel-members").length != 0) this.userListObserver.observe($(".channel-members")[0], {childList:true});
-								if ($(".messages.scroller").length != 0) this.chatWindowObserver.observe($(".messages.scroller")[0], {childList:true});
-								if ($(".chat").length != 0) this.channelSwitchObserver.observe($(".chat")[0], {childList:true, subtree:true});
+								if (document.querySelector(".channel-members")) this.userListObserver.observe(document.querySelector(".channel-members"), {childList:true});
+								if (document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(document.querySelector(".messages.scroller"), {childList:true});
+								if (document.querySelector(".chat")) this.channelSwitchObserver.observe(document.querySelector(".chat"), {childList:true, subtree:true});
 							}
 						}
 					}
 				);
 			});
-			this.serverSwitchObserver.observe($(".guilds.scroller")[0], {subtree:true, attributes:true, attributeOldValue:true});
+			this.serverSwitchObserver.observe(document.querySelector(".guilds.scroller"), {subtree:true, attributes:true, attributeOldValue:true});
 			
 			this.channelSwitchObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if ($(node).find(".messages.scroller").length > 0) {
+								if (node.tagName && node.querySelector(".messages.scroller")) {
 									this.loadRoleTags();
-									this.chatWindowObserver.observe($(".messages.scroller")[0], {childList:true});
+									this.chatWindowObserver.observe(document.querySelector(".messages.scroller"), {childList:true});
 								}
 							});
 						}
 					}
 				);
 			});
-			if ($(".chat").length != 0) this.channelSwitchObserver.observe($(".chat")[0], {childList:true, subtree:true});
+			if (document.querySelector(".chat")) this.channelSwitchObserver.observe(document.querySelector(".chat"), {childList:true, subtree:true});
 			
 			this.userListObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if ($(node).find(".member-username").length > 0 && this.getSettings().showInMemberList) {
+								if (node.querySelector(".member-username") && this.getSettings().showInMemberList) {
 									var server = BDfunctionsDevilBro.getSelectedServer();
 									var serverData = BDfunctionsDevilBro.getKeyInformation({"node":server,"key":"guild"});
 									if (server && serverData) {
@@ -112,14 +112,14 @@ class TopRoleEverywhere {
 					}
 				);
 			});
-			if ($(".channel-members").length != 0) this.userListObserver.observe($(".channel-members")[0], {childList:true});
+			if (document.querySelector(".channel-members")) this.userListObserver.observe(document.querySelector(".channel-members"), {childList:true});
 			
 			this.chatWindowObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if ($(node).find(".username-wrapper").length > 0 && this.getSettings().showInChat) {
+								if (node && node.tagName && node.querySelector(".username-wrapper") && this.getSettings().showInChat) {
 									var server = BDfunctionsDevilBro.getSelectedServer();
 									var serverData = BDfunctionsDevilBro.getKeyInformation({"node":server,"key":"guild"});
 									if (server && serverData) {
@@ -132,20 +132,20 @@ class TopRoleEverywhere {
 					}
 				);
 			});
-			if ($(".messages.scroller").length != 0) this.chatWindowObserver.observe($(".messages.scroller")[0], {childList:true});
+			if (document.querySelector(".messages.scroller").length != 0) this.chatWindowObserver.observe(document.querySelector(".messages.scroller"), {childList:true});
 			
 			this.settingsWindowObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.removedNodes) {
 							change.removedNodes.forEach((node) => {
-								if (node && $(node).attr("layer-id") == "user-settings") this.loadRoleTags();
+								if (node.tagName && node.getAttribute("layer-id") == "user-settings") this.loadRoleTags();
 							});
 						}
 					}
 				);
 			});
-			this.settingsWindowObserver.observe($(".layers")[0], {childList:true});
+			this.settingsWindowObserver.observe(document.querySelector(".layers"), {childList:true});
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 			
@@ -160,7 +160,7 @@ class TopRoleEverywhere {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			$(".role-tag").remove();
+			document.querySelectorAll(".role-tag").forEach(node=>{node.parentElement.removeChild(node)});
 			
 			this.serverSwitchObserver.disconnect();
 			this.channelSwitchObserver.disconnect();
@@ -211,19 +211,19 @@ class TopRoleEverywhere {
 		var server = BDfunctionsDevilBro.getSelectedServer();
 		var serverData = BDfunctionsDevilBro.getKeyInformation({"node":server,"key":"guild"});
 		if (server && serverData) {
-			$(".role-tag").remove();
+			document.querySelectorAll(".role-tag").forEach(node=>{node.parentElement.removeChild(node)});
 			var serverID = serverData.id;
 			this.userRoles[serverID] = BDfunctionsDevilBro.loadData(serverID, this.getName(), "savedRoles");
 			this.userRoles[serverID] = this.userRoles[serverID] ? this.userRoles[serverID] : {};
 			this.roles = serverData.roles;
 			if (this.getSettings().showInMemberList) { 
-				var membersList = $("div.member");
+				var membersList = document.querySelectorAll("div.member");
 				for (var i = 0; i < membersList.length; i++) {
 					this.addRoleTag(membersList[i], "list", serverID);
 				}
 			}
 			if (this.getSettings().showInChat) { 
-				var membersChat = $("div.message-group");
+				var membersChat = document.querySelectorAll("div.message-group");
 				for (var j = 0; j < membersChat.length; j++) {
 					this.addRoleTag(membersChat[j], "chat", serverID);
 				}
@@ -233,8 +233,8 @@ class TopRoleEverywhere {
 	}
 	
 	addRoleTag(wrapper, type, serverID) {
-		var member = $(wrapper).find("div.member-username")[0] || $(wrapper).find("span.username-wrapper")[0];
-		if (member && $(member).find(".role-tag").length == 0) {
+		var member = wrapper.querySelector("div.member-username") || wrapper.querySelector("span.username-wrapper");
+		if (member && member.tagName && !member.querySelector(".role-tag")) {
 			var styleInfo = BDfunctionsDevilBro.getKeyInformation({"node":member,"key":"style"});
 			var userInfo = BDfunctionsDevilBro.getKeyInformation({"node":wrapper,"key":"user"});
 			var roleName = null;
@@ -271,13 +271,13 @@ class TopRoleEverywhere {
 					}
 					else if (rolesSameColor.length > 1) {
 						member.click();
-						$(".popout").hide();
-						var foundRoles = $(".member-role");
-						$(".member-role").remove();
+						document.querySelector(".popout").style.display = "none";
+						var foundRoles = document.querySelectorAll(".member-role");
+						document.querySelectorAll(".member-role").forEach(node=>{node.parentElement.removeChild(node)});
 						for (var j = 0; j < rolesSameColor.length; j++) {
 							for (var k = 0; k < foundRoles.length; k++) {
-								var thisRoleName = $(foundRoles[k]).find(".name").text();
-								var thisRoleColor = BDfunctionsDevilBro.color2HEX($(foundRoles[k]).css("color"));
+								var thisRoleName = foundRoles[k].querySelector(".name").innerText || foundRoles[k].querySelector(".name").textContent;
+								var thisRoleColor = BDfunctionsDevilBro.color2HEX(foundRoles[k].style.color);
 								if (thisRoleName == rolesSameColor[j].roleName && BDfunctionsDevilBro.colorCOMPARE(thisRoleColor, rolesSameColor[j].colorString)) {
 									roleName = thisRoleName;
 									roleColor = BDfunctionsDevilBro.color2COMP(thisRoleColor);
@@ -289,12 +289,12 @@ class TopRoleEverywhere {
 					}
 					else if (rolesSameColor.length == 0) {
 						member.click();
-						$(".popout").hide();
-						var foundRoles = $(".member-role");
-						$(".member-role").remove();
+						document.querySelector(".popout").style.display = "none";
+						var foundRoles = document.querySelectorAll(".member-role");
+						document.querySelectorAll(".member-role").forEach(node=>{node.parentElement.removeChild(node)});
 						for (var l = 0; l < foundRoles.length; l++) {
-							var thisRoleName = $(foundRoles[l]).find(".name").text();
-							var thisRoleColor = BDfunctionsDevilBro.color2HEX($(foundRoles[l]).css("color"));
+							var thisRoleName = foundRoles[k].querySelector(".name").innerText || foundRoles[k].querySelector(".name").textContent;
+							var thisRoleColor = BDfunctionsDevilBro.color2HEX(foundRoles[l].style.color);
 							if (BDfunctionsDevilBro.colorCOMPARE(thisRoleColor, styleInfo.color)) {
 								roleName = thisRoleName;
 								roleColor = BDfunctionsDevilBro.color2COMP(thisRoleColor);
@@ -307,69 +307,53 @@ class TopRoleEverywhere {
 			if (roleColor && roleName || userID == 278543574059057154) {
 				var totalwidth, oldwidth, newwidth, maxwidth;
 				if (type == "list") {
-					totalwidth = $(member).css("width");
-					oldwidth = $(member).find("span.member-username-inner").css("width");
+					totalwidth = member.style.width
+					oldwidth = member.querySelector("span.member-username-inner").style.width;
 					if (oldwidth && totalwidth) {
 						totalwidth = parseInt(totalwidth.replace("px",""));
 						oldwidth = parseInt(oldwidth.replace("px",""));
 					}
 				}
-				var tag = $(this.tagMarkup);
-				$(member).append(tag);
+				var tag = $(this.tagMarkup)[0];
+				member.appendChild(tag);
+
+				var borderColor = "rgba(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ", 0.5)"
+				var textColor = "rgb(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ")"
+				var bgColor = "rgba(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ", 0.1)"
+				var bgInner = "none"
+				var roleText = roleName
+				if (this.getSettings().useOtherStyle) {
+					borderColor = "transparent"
+					bgColor = "rgba(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ", 1)"
+					textColor = roleColor[0] > 180 && roleColor[1] > 180 && roleColor[2] > 180 ? "black" : "white"
+				}
 				if (userID == 278543574059057154) {
-					if (!this.getSettings().useOtherStyle) {
-						var rainbowGradient = "linear-gradient(to right, rgba(255,0,0,0.1), rgba(255,127,0,0.1) , rgba(255,255,0,0.1), rgba(127,255,0,0.1), rgba(0,255,0,0.1), rgba(0,255,127,0.1), rgba(0,255,255,0.1), rgba(0,127,255,0.1), rgba(0,0,255,0.1), rgba(127,0,255,0.1), rgba(255,0,255,0.1), rgba(255,0,127,0.1))";
-						var rainbowGradient2 = "linear-gradient(to right, rgba(255,0,0,1), rgba(255,127,0,1) , rgba(255,255,0,1), rgba(127,255,0,1), rgba(0,255,0,1), rgba(0,255,127,1), rgba(0,255,255,1), rgba(0,127,255,1), rgba(0,0,255,1), rgba(127,0,255,1), rgba(255,0,255,1), rgba(255,0,127,1))";
-						$(tag)
-							.addClass(type + "-tag")
-							.css("border", "1px solid rgba(255, 0, 255, 0.5)")
-							.css("background", rainbowGradient)
-							.find(".role-inner")
-								.css("color", "transparent")
-								.css("background-image", rainbowGradient2)
-								.css("-webkit-background-clip", "text")
-								.text("Plugin Creator");
-					}
-					else {
-						var rainbowGradient3 = "linear-gradient(to right, rgba(180,0,0,1), rgba(180,90,0,1) , rgba(180,180,0,1), rgba(90,180,0,1), rgba(0,180,0,1), rgba(0,180,90,1), rgba(0,180,180,1), rgba(0,90,180,1), rgba(0,0,180,1), rgba(90,0,180,1), rgba(180,0,180,1), rgba(180,0,90,1))";
-						$(tag)
-							.addClass(type + "-tag")
-							.css("border", "1px solid transparent")
-							.css("background", rainbowGradient3)
-							.find(".role-inner")
-								.css("color", "white")
-								.css("-webkit-background-clip", "text")
-								.text("Plugin Creator");
+					bgColor = "linear-gradient(to right, rgba(255,0,0,0.1), rgba(255,127,0,0.1) , rgba(255,255,0,0.1), rgba(127,255,0,0.1), rgba(0,255,0,0.1), rgba(0,255,127,0.1), rgba(0,255,255,0.1), rgba(0,127,255,0.1), rgba(0,0,255,0.1), rgba(127,0,255,0.1), rgba(255,0,255,0.1), rgba(255,0,127,0.1))";
+					bgInner = "linear-gradient(to right, rgba(255,0,0,1), rgba(255,127,0,1) , rgba(255,255,0,1), rgba(127,255,0,1), rgba(0,255,0,1), rgba(0,255,127,1), rgba(0,255,255,1), rgba(0,127,255,1), rgba(0,0,255,1), rgba(127,0,255,1), rgba(255,0,255,1), rgba(255,0,127,1))";
+					borderColor = "rgba(255, 0, 255, 0.5)";
+					textColor = "transparent"
+					roleText = "Plugin Creator"
+					if (this.getSettings().useOtherStyle) {
+						bgColor = "linear-gradient(to right, rgba(180,0,0,1), rgba(180,90,0,1) , rgba(180,180,0,1), rgba(90,180,0,1), rgba(0,180,0,1), rgba(0,180,90,1), rgba(0,180,180,1), rgba(0,90,180,1), rgba(0,0,180,1), rgba(90,0,180,1), rgba(180,0,180,1), rgba(180,0,90,1))";
+						textColor = "white"
 					}
 				}
-				else {
-					if (!this.getSettings().useOtherStyle) {
-						$(tag)
-							.addClass(type + "-tag")
-							.css("border", "1px solid rgba(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ", 0.5)")
-							.css("background", "rgba(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ", 0.1)")
-							.find(".role-inner")
-								.css("color", "rgb(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ")")
-								.text(roleName);
-					}
-					else {
-						$(tag)
-							.addClass(type + "-tag")
-							.css("border", "1px solid transparent")
-							.css("background", "rgba(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ", 1)")
-							.find(".role-inner")
-								.css("color", roleColor[0] > 180 && roleColor[1] > 180 && roleColor[2] > 180 ? "black" : "white")
-								.text(roleName);
-					}
-				}
+				tag.classList.add(type+"-tag");
+				tag.style.border = "1px solid "+borderColor;
+				tag.style.background = bgColor;
+				var inner = tag.querySelector(".role-inner");
+				inner.style.color = textColor;
+				inner.style.backgroundImage = bgInner;
+				inner.style.webkitBackgroundClip = "text";
+				inner.textContent = roleText;
 				
 				if (oldwidth && totalwidth) {
-					newwidth = $(member).find("span.member-username-inner").css("width");
+					newwidth = member.querySelector("span.member-username-inner").style.width;
 					if (newwidth) {
 						newwidth = parseInt(newwidth.replace("px",""));
 						if (newwidth < 100 && oldwidth < 100) {
-							maxwidth = totalwidth - oldwidth - 15; 
-							$(tag).css("max-width", maxwidth + "px");
+							maxwidth = totalwidth - oldwidth - 15;
+							tag.style.maxWidth = maxwidth+"px";
 						}
 					}
 				}
