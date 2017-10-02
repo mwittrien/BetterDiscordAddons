@@ -33,7 +33,7 @@ class NotificationSounds {
 
 	getDescription () {return "Creates a notification sound when you receive a notification (mention or DM).";}
 
-	getVersion () {return "2.4.2";}
+	getVersion () {return "2.4.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -115,8 +115,10 @@ class NotificationSounds {
 							change.addedNodes.forEach((node) => {
 								if (node.className === "badge") {
 									var data = BDfunctionsDevilBro.getKeyInformation({"node":node.parentElement,"key":"guild"});
-									this.mentionBadgeObserver.observe(node, {characterData: true, subtree: true });
-									if (this.oldMentions[data.id] == 0) this.playAudio("Mention");
+									if (data) {
+										this.mentionBadgeObserver.observe(node, {characterData: true, subtree: true });
+										if (this.oldMentions[data.id] == 0) this.playAudio("Mention");
+									}
 								}
 								if (node.classList && node.classList.contains("guild") && !node.classList.contains("guilds-add") && node.parentNode.classList && !node.parentNode.classList.contains("dms") ) {
 									this.mentionBadgeObserver.observe(node, {characterData: true, subtree: true });
