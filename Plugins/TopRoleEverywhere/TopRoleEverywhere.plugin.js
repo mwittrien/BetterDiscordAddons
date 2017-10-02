@@ -304,8 +304,6 @@ class TopRoleEverywhere {
 					}
 				}
 			}
-				console.log(roleColor);
-				console.log(roleName);
 			if (roleColor && roleName || userID == 278543574059057154) {
 				roleColor = roleColor ? roleColor : [255,255,255];
 				var totalwidth, oldwidth, newwidth, maxwidth;
