@@ -38,7 +38,7 @@ class TopRoleEverywhere {
 
 	getDescription () {return "Adds the highest role of a user as a tag.";}
 
-	getVersion () {return "1.4.1";}
+	getVersion () {return "1.4.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -304,7 +304,10 @@ class TopRoleEverywhere {
 					}
 				}
 			}
+				console.log(roleColor);
+				console.log(roleName);
 			if (roleColor && roleName || userID == 278543574059057154) {
+				roleColor = roleColor ? roleColor : [255,255,255];
 				var totalwidth, oldwidth, newwidth, maxwidth;
 				if (type == "list") {
 					totalwidth = member.style.width
