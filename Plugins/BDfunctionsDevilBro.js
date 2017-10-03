@@ -529,6 +529,13 @@ BDfunctionsDevilBro.checkColorType = function (color) {
 	return null;
 };
 
+	
+BDfunctionsDevilBro.encodeToHTML = function (string) {
+	var ele = document.createElement("div");
+	ele.innerText = string;
+	return ele.innerHTML;
+}
+
 BDfunctionsDevilBro.clearReadNotifications = function (servers) {
 	if (!servers) return;
 	servers = Array.isArray(servers) ? servers : Array.of(servers);
