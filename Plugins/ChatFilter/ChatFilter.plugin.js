@@ -216,7 +216,7 @@ class ChatFilter {
 
 	getDescription () {return "Allows the user to censor words or block complete messages based on words in the chatwindow.";}
 
-	getVersion () {return "2.0.0";}
+	getVersion () {return "2.0.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -242,7 +242,7 @@ class ChatFilter {
 				for (let word in words) {
 					var wordcomparison = words[word].exact ? "exact" : "noexact";
 					var casesensivity = words[word].case ? "case" : "nocase";
-					settingspanel += `<div name="` + word + `" class="added-word ` + wordcomparison + ` ` + casesensivity + ` ` + key + `-word">` + ChatFilter.encodeToHTML(word) + `<div class="word-delete" onclick='` + this.getName() + `.updateContainer(this.parentElement, "` + key + `", "` + this.getName() + `", event);'>✖</div></div>`;
+					settingspanel += `<div name="` + word + `" class="added-word ` + wordcomparison + ` ` + casesensivity + ` ` + key + `-word">` + BDfunctionsDevilBro.encodeToHTML(word) + `<div class="word-delete" onclick='` + this.getName() + `.updateContainer(this.parentElement, "` + key + `", "` + this.getName() + `", event);'>✖</div></div>`;
 				}		
 				settingspanel += `</div>`;
 				
@@ -442,7 +442,7 @@ class ChatFilter {
 		for (let word in words) {
 			var wordcomparison = words[word].exact ? "exact" : "noexact";
 			var casesensivity = words[word].case ? "case" : "nocase";
-			container += `<div name="` + word + `" class="added-word ` + wordcomparison + `  ` + casesensivity + ` ` + type + `-word">` + ChatFilter.encodeToHTML(word) + `<div class="word-delete" onclick='` + pluginName + `.updateContainer(this.parentElement, "` + type + `", "` + pluginName + `", event);'>✖</div></div>`;
+			container += `<div name="` + word + `" class="added-word ` + wordcomparison + `  ` + casesensivity + ` ` + type + `-word">` + BDfunctionsDevilBro.encodeToHTML(word) + `<div class="word-delete" onclick='` + pluginName + `.updateContainer(this.parentElement, "` + type + `", "` + pluginName + `", event);'>✖</div></div>`;
 		}
 		
 		$(settingspanel).find("#" + type + "-word-container").html(container);
@@ -483,12 +483,6 @@ class ChatFilter {
 		BDfunctionsDevilBro.saveData("hideInfo", visible, pluginName, "settings");
 	}
 	
-	static encodeToHTML (string) {
-		var ele = document.createElement("div");
-		ele.innerText = string;
-		return ele.innerHTML;
-	}
-	
 	hideAllMessages () {
 		$(".markup.blocked, .markup.censored").each((_,message) => {
 			this.resetMessage(message);
@@ -525,7 +519,7 @@ class ChatFilter {
 				for (let bWord in blockedWords) {
 					var modifier = blockedWords[bWord].case ? "" : "i";
 					bWord = blockedWords[bWord].exact ? "^" + bWord + "$" : bWord;
-					bWord = ChatFilter.encodeToHTML(bWord);
+					bWord = BDfunctionsDevilBro.encodeToHTML(bWord);
 					
 					var reg = new RegExp(bWord, modifier);
 					strings.forEach((string,i) => {
@@ -550,7 +544,7 @@ class ChatFilter {
 					if (hideMessage) {
 						$(message).hide();
 					}
-					newhtml = ChatFilter.encodeToHTML(blockedReplace);
+					newhtml = BDfunctionsDevilBro.encodeToHTML(blockedReplace);
 					$(message)
 						.html(newhtml)
 						.addClass("blocked")
@@ -567,7 +561,7 @@ class ChatFilter {
 					for (let cWord in censoredWords) {
 						var modifier = censoredWords[cWord].case ? "" : "i";
 						cWord = censoredWords[cWord].exact ? "^" + cWord + "$" : cWord;
-						cWord = ChatFilter.encodeToHTML(cWord);
+						cWord = BDfunctionsDevilBro.encodeToHTML(cWord);
 						
 						var reg = new RegExp(cWord, modifier);
 						strings.forEach((string,i) => {
@@ -576,7 +570,7 @@ class ChatFilter {
 								emojiname = emojiname ? emojiname.split('" src')[0] : null;
 								emojiname = emojiname.replace(new RegExp(":", 'g'), "");
 								if (reg.test(emojiname)) {
-									strings[i] = ChatFilter.encodeToHTML(censoredReplace);
+									strings[i] = BDfunctionsDevilBro.encodeToHTML(censoredReplace);
 									if (strings[i+1] && strings[i+1].indexOf("<input") == 0) {
 										strings[i+1] = "";
 										if (strings[i-1] && strings[i-1].indexOf("<span") == 0) strings[i-1] = "";
@@ -587,7 +581,7 @@ class ChatFilter {
 							else if (string.indexOf("<") != 0) {
 								var newstring = [];
 								string.split(" ").forEach((word) => {
-									newstring.push(reg.test(word) ? ChatFilter.encodeToHTML(censoredReplace) : word);
+									newstring.push(reg.test(word) ? BDfunctionsDevilBro.encodeToHTML(censoredReplace) : word);
 								});
 								strings[i] = newstring.join(" ");
 							}
