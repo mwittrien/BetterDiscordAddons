@@ -38,7 +38,7 @@ class TopRoleEverywhere {
 
 	getDescription () {return "Adds the highest role of a user as a tag.";}
 
-	getVersion () {return "1.4.2";}
+	getVersion () {return "1.4.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -132,7 +132,7 @@ class TopRoleEverywhere {
 					}
 				);
 			});
-			if (document.querySelector(".messages.scroller").length != 0) this.chatWindowObserver.observe(document.querySelector(".messages.scroller"), {childList:true});
+			if (document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(document.querySelector(".messages.scroller"), {childList:true});
 			
 			this.settingsWindowObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
