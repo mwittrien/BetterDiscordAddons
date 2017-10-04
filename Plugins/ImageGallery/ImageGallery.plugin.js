@@ -23,7 +23,7 @@ class ImageGallery {
 
 	getName () {return "ImageGallery";}
 
-	getDescription () {return "Allows the user to browse trough images sent inside the same message.";}
+	getDescription () {return "Allows the user to browse through images sent inside the same message.";}
 
 	getVersion () {return "1.0.0";}
 
