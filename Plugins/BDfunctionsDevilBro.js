@@ -289,16 +289,6 @@ BDfunctionsDevilBro.getDivOfChannel = function (channelID, serverID) {
 	}
 	return null;
 };
-	
-BDfunctionsDevilBro.getMessageGroup = function (ele) {
-	var groups = $(".message-group");
-	for (var i = 0; i < groups.length; i++) {
-		if ($.contains(groups[i], ele)) {
-			return groups[i];
-		}
-	}
-	return null;
-};
 
 BDfunctionsDevilBro.themeIsLightTheme = function () {
 	if ($(".theme-light").length > $(".theme-dark").length) {
