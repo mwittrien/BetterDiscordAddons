@@ -216,7 +216,7 @@ class ChatFilter {
 
 	getDescription () {return "Allows the user to censor words or block complete messages based on words in the chatwindow.";}
 
-	getVersion () {return "2.0.3";}
+	getVersion () {return "2.0.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -299,7 +299,7 @@ class ChatFilter {
 							if (serverData) {
 								this.hideAllMessages();
 								if ($(".messages.scroller").length != 0) this.chatWindowObserver.observe($(".messages.scroller")[0], {childList:true});
-								if ($(".chat").length != 0) this.channelSwitchObserver.observe($(".chat")[0], {childList:true, subtree:true});
+								if ($(".flex-horizontal.flex-spacer").length != 0) this.channelSwitchObserver.observe($(".flex-horizontal.flex-spacer")[0], {childList:true, subtree:true});
 							}
 						}
 					}
@@ -321,7 +321,7 @@ class ChatFilter {
 					}
 				);
 			});
-			if ($(".chat").length != 0) this.channelSwitchObserver.observe($(".chat")[0], {childList:true, subtree:true});
+			if ($(".flex-horizontal.flex-spacer").length != 0) this.channelSwitchObserver.observe($(".flex-horizontal.flex-spacer")[0], {childList:true, subtree:true});
 			
 			this.chatWindowObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
