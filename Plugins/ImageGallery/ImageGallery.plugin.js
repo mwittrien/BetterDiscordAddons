@@ -4,6 +4,8 @@ class ImageGallery {
 	constructor () {
 		this.imageModalObserver = new MutationObserver(() => {});
 		
+		this.eventFired = false;
+		
 		this.css = ` 
 			.modal-image .image.prev,
 			.modal-image .image.next {
@@ -25,7 +27,7 @@ class ImageGallery {
 
 	getDescription () {return "Allows the user to browse through images sent inside the same message.";}
 
-	getVersion () {return "1.0.0";}
+	getVersion () {return "1.0.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -53,6 +55,13 @@ class ImageGallery {
 								}
 							});
 						}
+						if (change.removedNodes) {
+							change.removedNodes.forEach((node) => {
+								if ($(node).find(".modal-image").length != 0) {
+									$(document).off("keyup.ImageGallery").off("keydown.ImageGallery");
+								}
+							});
+						}
 					}
 				);
 			});
@@ -71,6 +80,8 @@ class ImageGallery {
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.imageModalObserver.disconnect();
+			
+			$(document).off("keyup.ImageGallery").off("keydown.ImageGallery");
 			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName());
 		}
@@ -139,9 +150,21 @@ class ImageGallery {
 		if (prevImg) $(modal).find(".modal-image").append($("<video/>", { 'class': 'image prev', 'poster': prevImg.src.split("?width")[0]}));
 		if (nextImg) $(modal).find(".modal-image").append($("<video/>", { 'class': 'image next', 'poster': nextImg.src.split("?width")[0]}));
 		
-		$(modal).find(".image.prev").off("click");
-		$(modal).find(".image.next").off("click");
-		$(modal).find(".image.prev").on("click", this.addImagePreviews.bind(this, modal, imgs, prevImg));
-		$(modal).find(".image.next").on("click", this.addImagePreviews.bind(this, modal, imgs, nextImg));
+		$(modal).find(".image.prev").off("click").on("click", this.addImagePreviews.bind(this, modal, imgs, prevImg));
+		$(modal).find(".image.next").off("click").on("click", this.addImagePreviews.bind(this, modal, imgs, nextImg));
+		$(document).off("keydown.ImageGallery").on("keydown.ImageGallery", {modal, imgs, prevImg, nextImg}, this.keyPressed.bind(this));
+		$(document).off("keyup.ImageGallery").on("keyup.ImageGallery", () => {this.eventFired = false});
+	}
+	
+	keyPressed (e) {
+		if (!this.eventFired) {
+			this.eventFired = true;
+			if (e.keyCode == 37) {
+				this.addImagePreviews(e.data.modal, e.data.imgs, e.data.prevImg)
+			}
+			else if (e.keyCode == 39) {
+				this.addImagePreviews(e.data.modal, e.data.imgs, e.data.nextImg)
+			}
+		}
 	}
 }
