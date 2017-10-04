@@ -38,7 +38,7 @@ class TopRoleEverywhere {
 
 	getDescription () {return "Adds the highest role of a user as a tag.";}
 
-	getVersion () {return "1.4.4";}
+	getVersion () {return "1.5.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -294,7 +294,7 @@ class TopRoleEverywhere {
 						var foundRoles = document.querySelectorAll(".member-role");
 						document.querySelectorAll(".member-role").forEach(node=>{node.parentElement.removeChild(node)});
 						for (var l = 0; l < foundRoles.length; l++) {
-							var thisRoleName = foundRoles[k].querySelector(".name").innerText || foundRoles[k].querySelector(".name").textContent;
+							var thisRoleName = foundRoles[l].querySelector(".name").innerText || foundRoles[k].querySelector(".name").textContent;
 							var thisRoleColor = BDfunctionsDevilBro.color2HEX(foundRoles[l].style.color);
 							if (BDfunctionsDevilBro.colorCOMPARE(thisRoleColor, styleInfo.color)) {
 								roleName = thisRoleName;
