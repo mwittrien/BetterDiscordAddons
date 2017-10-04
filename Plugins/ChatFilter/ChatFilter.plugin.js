@@ -216,7 +216,7 @@ class ChatFilter {
 
 	getDescription () {return "Allows the user to censor words or block complete messages based on words in the chatwindow.";}
 
-	getVersion () {return "2.0.2";}
+	getVersion () {return "2.0.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -609,28 +609,33 @@ class ChatFilter {
 			.html(orightml)
 			.off("click")
 			.removeClass("blocked")
-			.removeClass("censored");
+			.removeClass("censored")
+			.removeClass("revealed");
 	}
 	
 	addClickListener (message, type) {
+		console.log(message);
 		$(message)
 			.off("click");
 		if (BDfunctionsDevilBro.loadData(type, this.getName(), "showMessageOnClick")) {
 			var orightml = $(message).data("orightml");
 			var newhtml = $(message).data("newhtml");
+			console.log(orightml);
+			console.log(newhtml);
 			$(message)
 				.on("click", () => {	
-					if ($(message).hasClass(type)) {
+					if ($(message).hasClass("revealed")) {
 						$(message)
-							.html(orightml)
-							.removeClass(type);
+							.html(newhtml)
+							.removeClass("revealed");
 					}
 					else {
 						$(message)
-							.html(newhtml)
-							.addClass(type);
+							.html(orightml)
+							.addClass("revealed");
 					}
 				});
+				
 		}
 	}
 }
