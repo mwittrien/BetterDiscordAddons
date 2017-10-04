@@ -1,4 +1,6 @@
 var BDfunctionsDevilBro = {};
+
+console.log("Test1");
 	
 BDfunctionsDevilBro.loadMessage = function (pluginName, oldVersion) { 
 	console.log(pluginName + " Version: " + oldVersion + " loaded.");
