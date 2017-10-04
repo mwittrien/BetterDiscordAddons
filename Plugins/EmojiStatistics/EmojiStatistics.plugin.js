@@ -264,7 +264,7 @@ class EmojiStatistics {
 
 	getDescription () {return "Adds some helpful options to show you more information about emojis and emojiservers.";}
 
-	getVersion () {return "2.2.3";}
+	getVersion () {return "2.2.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -291,10 +291,10 @@ class EmojiStatistics {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if ($(node).find('.emoji-item')) {
+								if ($(node).find(".emoji-item")) {
 									if (this.getSettings().enableEmojiHovering) {this.hoverEmoji();}
 								}
-								if (BDfunctionsDevilBro.getKeyInformation({"node":node, "key":"displayName", "value":"EmojiPicker"}) && $(".emojistatistics-button").length == 0) {
+								if (node && node.classList && node.classList.contains("popout") && $(node).find(".emoji-picker").length != 0 && $(".emojistatistics-button").length == 0) {
 									this.loadEmojiList();
 									if (this.getSettings().enableEmojiStatisticsButton) {this.addEmojiInformationButton();}
 								}
