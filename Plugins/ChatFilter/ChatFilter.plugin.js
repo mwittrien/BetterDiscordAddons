@@ -216,7 +216,7 @@ class ChatFilter {
 
 	getDescription () {return "Allows the user to censor words or block complete messages based on words in the chatwindow.";}
 
-	getVersion () {return "2.0.1";}
+	getVersion () {return "2.0.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -511,7 +511,6 @@ class ChatFilter {
 					count++;
 				}
 			});
-			console.log(strings);
 			
 			var blocked = false;
 			if (orightml) {
