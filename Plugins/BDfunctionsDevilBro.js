@@ -110,7 +110,8 @@ BDfunctionsDevilBro.getKeyInformation = function (config) {
 
 	function searchKeyInReact (ele) {
 		depth++;
-		if (!ele || BDfunctionsDevilBro.getReactInstance(ele) || depth > maxDepth || performance.now() - start > maxTime) result = null;
+		if (!ele || BDfunctionsDevilBro.getReactInstance(ele) || depth > maxDepth) result = null;
+		//if (!ele || BDfunctionsDevilBro.getReactInstance(ele) || depth > maxDepth || performance.now() - start > maxTime) result = null;
 		else {
 			var keys = Object.getOwnPropertyNames(ele);
 			var result = null;
