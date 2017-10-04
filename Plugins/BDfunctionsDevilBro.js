@@ -1,6 +1,4 @@
 var BDfunctionsDevilBro = {};
-
-console.log("Test1");
 	
 BDfunctionsDevilBro.loadMessage = function (pluginName, oldVersion) { 
 	console.log(pluginName + " Version: " + oldVersion + " loaded.");
@@ -74,12 +72,11 @@ BDfunctionsDevilBro.getKeyInformation = function (config) {
 	var inst = BDfunctionsDevilBro.getReactInstance(config.node);
 	if (!inst) return null;
 	
-	
 	var depth = -1;
 	var maxDepth = config.depth === undefined ? 15 : config.depth;
 	
 	var start = performance.now();
-	var maxTime = config.time === undefined ? 10 : config.time;
+	var maxTime = config.time === undefined ? 20 : config.time;
 		
 	var keyWhiteList = {
 		"_currentElement":true,
@@ -112,8 +109,7 @@ BDfunctionsDevilBro.getKeyInformation = function (config) {
 
 	function searchKeyInReact (ele) {
 		depth++;
-		if (!ele || BDfunctionsDevilBro.getReactInstance(ele) || depth > maxDepth) result = null;
-		//if (!ele || BDfunctionsDevilBro.getReactInstance(ele) || depth > maxDepth || performance.now() - start > maxTime) result = null;
+		if (!ele || BDfunctionsDevilBro.getReactInstance(ele) || depth > maxDepth || performance.now() - start > maxTime) result = null;
 		else {
 			var keys = Object.getOwnPropertyNames(ele);
 			var result = null;
