@@ -944,37 +944,33 @@ class ServerFolders {
 		
 		var serverDiv = BDfunctionsDevilBro.getDivOfServer(folderID);
 		
-		var folderDiv = $(this.folderIconMarkup);				
-		$(folderDiv).insertBefore(serverDiv)
-			.find(".avatar-small")
-			.css("background-image", isOpen ? "url(\"" + icons.openicon + "\")" : "url(\"" + icons.closedicon + "\")")
-			.attr("name", folderName)
-			.attr("id", "FL_ID_" + folderID)
-			.attr("class", isOpen ? "avatar-small open" : "avatar-small closed")
-			.on("click", this.changeIconAndServers.bind(this))
-			.on("contextmenu", this.createFolderContextMenu.bind(this))
-			.on("mouseenter", this.createFolderToolTip.bind(this))
-			.on("mouseleave", this.deleteFolderToolTip.bind(this));
-		
-		var includedServers = this.readIncludedServerList(folderDiv);
-		
-		// seems like the icons are loaded too slowly, didn't get hidden without a little delay
-		setTimeout(() => {
-			BDfunctionsDevilBro.showHideAllEles(isOpen, includedServers);
-		},1000);
+		if (serverDiv) {
+			var folderDiv = $(this.folderIconMarkup);				
+			$(folderDiv).insertBefore(serverDiv)
+				.find(".avatar-small")
+				.css("background-image", isOpen ? "url(\"" + icons.openicon + "\")" : "url(\"" + icons.closedicon + "\")")
+				.attr("name", folderName)
+				.attr("id", "FL_ID_" + folderID)
+				.attr("class", isOpen ? "avatar-small open" : "avatar-small closed")
+				.on("click", this.changeIconAndServers.bind(this))
+				.on("contextmenu", this.createFolderContextMenu.bind(this))
+				.on("mouseenter", this.createFolderToolTip.bind(this))
+				.on("mouseleave", this.deleteFolderToolTip.bind(this));
+			
+			var includedServers = this.readIncludedServerList(folderDiv);
+			
+			// seems like the icons are loaded too slowly, didn't get hidden without a little delay
+			setTimeout(() => {
+				BDfunctionsDevilBro.showHideAllEles(isOpen, includedServers);
+			},1000);
+		}
 	}
 	
 	loadAllFolders () {
-		var servers = BDfunctionsDevilBro.readServerList();
+		var folders = BDfunctionsDevilBro.loadAllData(this.getName(), "folders");
 		
-		for (var i = 0; i < servers.length; i++) {
-			var id = BDfunctionsDevilBro.getIdOfServer(servers[i]);
-			if (id) {
-				var data = BDfunctionsDevilBro.loadData(id, this.getName(), "folders");
-				if (data) {
-					this.loadFolder(data);
-				}
-			}
+		for (var id in folders) {
+			this.loadFolder(folders[id]);
 		}
 	}
 	
