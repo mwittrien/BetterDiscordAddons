@@ -38,7 +38,7 @@ class TopRoleEverywhere {
 
 	getDescription () {return "Adds the highest role of a user as a tag.";}
 
-	getVersion () {return "1.4.3";}
+	getVersion () {return "1.4.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -233,6 +233,7 @@ class TopRoleEverywhere {
 	}
 	
 	addRoleTag(wrapper, type, serverID) {
+		if (!wrapper) return;
 		var member = wrapper.querySelector("div.member-username") || wrapper.querySelector("span.username-wrapper");
 		if (member && member.tagName && !member.querySelector(".role-tag")) {
 			var styleInfo = BDfunctionsDevilBro.getKeyInformation({"node":member,"key":"style"});
