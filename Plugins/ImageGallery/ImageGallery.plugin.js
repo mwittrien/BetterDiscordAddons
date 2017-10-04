@@ -83,7 +83,7 @@ class ImageGallery {
 	loadImages (modal) {
 		var start = performance.now();
 		var waitForImg = setInterval(() => {
-			var img = $("hi").find(".image")[0];
+			var img = $(modal).find(".image")[0];
 			if (img && img.src) {
 				clearInterval(waitForImg);
 				var message = this.getMessageGroupOfImage(img);
