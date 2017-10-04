@@ -441,6 +441,26 @@ class EditServers {
 			this.serverContextObserver.disconnect();
 			this.serverListObserver.disconnect();
 			
+			$(".guild.custom").each(
+				(i,serverDiv) => {
+					var info = BDfunctionsDevilBro.getKeyInformation({"node":serverDiv, "key":"guild"});
+					if (info) {
+						var server = $(serverDiv).find(".avatar-small");
+						var bgImage = info.icon ? "url('https://cdn.discordapp.com/icons/" + info.id + "/" + info.icon + ".png')" : "";
+					
+						$(serverDiv)
+							.off("mouseenter")
+							.off("mouseleave")
+							.removeClass("custom");
+						$(server)
+							.text($(server).attr("name"))
+							.css("background-image", bgImage)
+							.css("background-color", "")
+							.css("color", "");
+					}
+				}
+			);
+			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName());
 		}
 	}
@@ -821,9 +841,8 @@ class EditServers {
 	resetServer (e) {
 		$(".context-menu").hide();
 		
-		var id = e.data.id;
-		if (id) {
-			var serverDiv = BDfunctionsDevilBro.getDivOfServer(id);
+		if (e.data.id) {
+			var serverDiv = BDfunctionsDevilBro.getDivOfServer(e.data.id);
 			var server = $(serverDiv).find(".avatar-small");
 			var bgImage = e.data.icon ? "url('https://cdn.discordapp.com/icons/" + e.data.id + "/" + e.data.icon + ".png')" : "";
 			
@@ -838,17 +857,17 @@ class EditServers {
 				.css("background-color", "")
 				.css("color", "");
 			
-			BDfunctionsDevilBro.removeData(id, this.getName(), "servers");
+			BDfunctionsDevilBro.removeData(e.data.id, this.getName(), "servers");
 		}
 	}
 	
 	loadServer (serverDiv) {
+		var start = performance.now();
 		var info = BDfunctionsDevilBro.getKeyInformation({"node":serverDiv, "key":"guild"});
 		if (info) {
-			var server = $(serverDiv).find(".avatar-small");
-			var id = info.id;
-			var data = BDfunctionsDevilBro.loadData(id, this.getName(), "servers");
+			var data = BDfunctionsDevilBro.loadData(info.id, this.getName(), "servers");
 			if (data) {
+				var server = $(serverDiv).find(".avatar-small");
 				if ($(server).attr("name") === undefined) {
 					$(server).attr("name", $(server).text());
 				}
@@ -864,8 +883,8 @@ class EditServers {
 					.addClass("custom")
 					.off("mouseenter")
 					.off("mouseleave")
-					.on("mouseenter", this.createServerToolTip.bind(this))
-					.on("mouseleave", this.deleteServerToolTip.bind(this));
+					.on("mouseenter", {"div":serverDiv,"info":info}, this.createServerToolTip.bind(this))
+					.on("mouseleave", {"div":serverDiv,"info":info}, this.deleteServerToolTip.bind(this));
 				$(server)
 					.text(shortName)
 					.css("background-image", removeIcon ? "" : bgImage)
@@ -883,37 +902,35 @@ class EditServers {
 	}
 	
 	createServerToolTip (e) {
-		var serverDiv = e.target;
-		var info = BDfunctionsDevilBro.getKeyInformation({"node":serverDiv, "key":"guild"});
-		if (info) {
-			var data = BDfunctionsDevilBro.loadData(info.id, this.getName(), "servers");
-			if (data) {
-				$(".tooltips").find(".tooltip").hide();
-				var serverTooltip = $(this.serverTooltipMarkup);
-				$(".tooltips").append(serverTooltip);
-				
+		var serverDiv = e.data.div;
+		var info = e.data.info;
+		var data = BDfunctionsDevilBro.loadData(info.id, this.getName(), "servers");
+		if (data) {
+			$(".tooltips").find(".tooltip").hide();
+			var serverTooltip = $(this.serverTooltipMarkup);
+			$(".tooltips").append(serverTooltip);
+			
+			$(serverTooltip)
+				.text(data.name ? data.name : info.name)
+				.css("left", ($(serverDiv).offset().left + $(serverDiv).width()) + "px")
+				.css("top", ($(serverDiv).offset().top + ($(serverDiv).outerHeight() - $(serverTooltip).outerHeight())/2) + "px");
+			
+			if (data.color3) {
+				var bgColor = BDfunctionsDevilBro.color2RGB(data.color3);
 				$(serverTooltip)
-					.text(data.name ? data.name : info.name)
-					.css("left", ($(serverDiv).offset().left + $(serverDiv).width()) + "px")
-					.css("top", ($(serverDiv).offset().top + ($(serverDiv).outerHeight() - $(serverTooltip).outerHeight())/2) + "px");
-				
-				if (data.color3) {
-					var bgColor = BDfunctionsDevilBro.color2RGB(data.color3);
-					$(serverTooltip)
-						.css("background-color", bgColor);
-						
-					var customeTooltipCSS = `
-						.guild-custom-tooltip:after {
-							border-right-color: ` + bgColor + ` !important;
-						}`;
-						
-					BDfunctionsDevilBro.appendLocalStyle("customeServerTooltipCSS", customeTooltipCSS);
-				}
-				if (data.color4) {
-					var fontColor = BDfunctionsDevilBro.color2RGB(data.color4);
-					$(serverTooltip)
-						.css("color", fontColor);
-				}
+					.css("background-color", bgColor);
+					
+				var customeTooltipCSS = `
+					.guild-custom-tooltip:after {
+						border-right-color: ` + bgColor + ` !important;
+					}`;
+					
+				BDfunctionsDevilBro.appendLocalStyle("customeServerTooltipCSS", customeTooltipCSS);
+			}
+			if (data.color4) {
+				var fontColor = BDfunctionsDevilBro.color2RGB(data.color4);
+				$(serverTooltip)
+					.css("color", fontColor);
 			}
 		}
 	}
