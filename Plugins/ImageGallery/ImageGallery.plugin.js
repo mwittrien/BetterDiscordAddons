@@ -81,14 +81,18 @@ class ImageGallery {
 	
 	
 	loadImages (modal) {
+		var start = performance.now();
 		var waitForImg = setInterval(() => {
-			var img = $(modal).find(".image")[0];
-			if (img.src) {
+			var img = $("hi").find(".image")[0];
+			if (img && img.src) {
 				clearInterval(waitForImg);
 				var message = this.getMessageGroupOfImage(img);
 				var imgs = $(message).find(".image");
 				
 				this.addImagePreviews(modal, imgs, img);
+			}
+			else if (performance.now() - start > 10000) {
+				clearInterval(waitForImg);
 			}
 		}, 100);
 	}
