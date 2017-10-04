@@ -72,8 +72,12 @@ BDfunctionsDevilBro.getKeyInformation = function (config) {
 	var inst = BDfunctionsDevilBro.getReactInstance(config.node);
 	if (!inst) return null;
 	
+	
 	var depth = -1;
-	var maxDepth = config.depth === undefined ? 30 : config.depth;
+	var maxDepth = config.depth === undefined ? 15 : config.depth;
+	
+	var start = performance.now();
+	var maxTime = config.time === undefined ? 5 : config.time;
 		
 	var keyWhiteList = {
 		"_currentElement":true,
@@ -106,7 +110,7 @@ BDfunctionsDevilBro.getKeyInformation = function (config) {
 
 	function searchKeyInReact (ele) {
 		depth++;
-		if (!ele || depth > maxDepth) result = null;
+		if (!ele || depth > maxDepth || performance.now() - start > maxTime) result = null;
 		else {
 			var keys = Object.getOwnPropertyNames(ele);
 			var result = null;
