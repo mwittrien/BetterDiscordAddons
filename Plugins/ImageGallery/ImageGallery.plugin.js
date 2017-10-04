@@ -27,7 +27,7 @@ class ImageGallery {
 
 	getDescription () {return "Allows the user to browse through images sent inside the same message.";}
 
-	getVersion () {return "1.0.1";}
+	getVersion () {return "1.0.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -159,10 +159,10 @@ class ImageGallery {
 	keyPressed (e) {
 		if (!this.eventFired) {
 			this.eventFired = true;
-			if (e.keyCode == 37) {
+			if (e.keyCode == 37 && e.data.prevImg) {
 				this.addImagePreviews(e.data.modal, e.data.imgs, e.data.prevImg)
 			}
-			else if (e.keyCode == 39) {
+			else if (e.keyCode == 39 && e.data.nextImg) {
 				this.addImagePreviews(e.data.modal, e.data.imgs, e.data.nextImg)
 			}
 		}
