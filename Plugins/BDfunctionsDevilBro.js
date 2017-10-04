@@ -77,7 +77,7 @@ BDfunctionsDevilBro.getKeyInformation = function (config) {
 	var maxDepth = config.depth === undefined ? 15 : config.depth;
 	
 	var start = performance.now();
-	var maxTime = config.time === undefined ? 5 : config.time;
+	var maxTime = config.time === undefined ? 10 : config.time;
 		
 	var keyWhiteList = {
 		"_currentElement":true,
