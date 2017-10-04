@@ -76,7 +76,7 @@ BDfunctionsDevilBro.getKeyInformation = function (config) {
 	var maxDepth = config.depth === undefined ? 15 : config.depth;
 	
 	var start = performance.now();
-	var maxTime = config.time === undefined ? 20 : config.time;
+	var maxTime = config.time === undefined ? 200000 : config.time;
 		
 	var keyWhiteList = {
 		"_currentElement":true,
@@ -285,6 +285,16 @@ BDfunctionsDevilBro.getDivOfChannel = function (channelID, serverID) {
 			if (channelID == channelData.id && serverID == channelData.guild_id) {
 				return channels[i];
 			}
+		}
+	}
+	return null;
+};
+	
+BDfunctionsDevilBro.getMessageGroup = function (ele) {
+	var groups = $(".message-group");
+	for (var i = 0; i < groups.length; i++) {
+		if ($.contains(groups[i], ele)) {
+			return groups[i];
 		}
 	}
 	return null;
