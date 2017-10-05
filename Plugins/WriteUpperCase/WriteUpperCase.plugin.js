@@ -12,7 +12,7 @@ class WriteUpperCase {
 
 	getDescription () {return "Change input to uppercase.";}
 
-	getVersion () {return "1.0.0";}
+	getVersion () {return "1.0.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -63,13 +63,15 @@ class WriteUpperCase {
 						var first = string.charAt(0);
 						if (first === first.toUpperCase() && e.target.value.toLowerCase().indexOf("http") == 0) {
 							var position = e.target.selectionStart;
-							e.target.value = string.charAt(0).toLowerCase() + string.slice(1);
+							e.target.value = "";
+							document.execCommand("insertText", false, string.charAt(0).toLowerCase() + string.slice(1));
 							e.target.selectionStart = position;
 							e.target.selectionEnd = position;
 						}
 						else if (first === first.toLowerCase() && first !== first.toUpperCase() && e.target.value.toLowerCase().indexOf("http") != 0) {
 							var position = e.target.selectionStart;
-							e.target.value = string.charAt(0).toUpperCase() + string.slice(1);
+							e.target.value = "";
+							document.execCommand("insertText", false, string.charAt(0).toUpperCase() + string.slice(1));
 							e.target.selectionStart = position;
 							e.target.selectionEnd = position;
 						}
