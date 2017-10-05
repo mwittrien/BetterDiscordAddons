@@ -4,6 +4,8 @@ class EditUsers {
 	constructor () {
 		
 		this.labels = {};
+		
+		this.nickNames = {};
     
 		this.userContextObserver = new MutationObserver(() => {});
 		this.serverSwitchObserver = new MutationObserver(() => {});
@@ -388,7 +390,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users.";}
 
-	getVersion () {return "1.0.1";}
+	getVersion () {return "1.0.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -460,7 +462,12 @@ class EditUsers {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (node.querySelector(".member-username")) {
-									this.loadUser(node, "list");
+									var server = BDfunctionsDevilBro.getSelectedServer();
+									var serverData = BDfunctionsDevilBro.getKeyInformation({"node":server,"key":"guild"});
+									if (server && serverData) {
+										var serverID = serverData.id;
+										this.loadUser(node, "list", serverID);
+									}
 								}
 							});
 						}
@@ -475,7 +482,12 @@ class EditUsers {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (node && node.tagName && node.querySelector(".username-wrapper")) {
-									this.loadUser(node, "chat");
+									var server = BDfunctionsDevilBro.getSelectedServer();
+									var serverData = BDfunctionsDevilBro.getKeyInformation({"node":server,"key":"guild"});
+									if (server && serverData) {
+										var serverID = serverData.id;
+										this.loadUser(node, "chat", serverID);
+									}
 								}
 							});
 						}
@@ -548,6 +560,7 @@ class EditUsers {
 	onContextMenu (context) {
 		if ($(context).find(".localusersettings-item").length == 0) {
 			var userData = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"user"});
+			console.log(userData);
 			var contextType = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"UserMentionItem"});
 			
 			if (userData && contextType) {
@@ -873,7 +886,7 @@ class EditUsers {
 		}
 	}
 	
-	loadUser (div, type) {
+	loadUser (div, type, serverID) {
 		if (!div || div.classList.contains("custom")) return;
 		var avatar = div.querySelector("div.avatar-small") || div.querySelector("div.avatar-large");
 		var username = div.querySelector("strong.user-name") || div.querySelector("span.member-username-inner");
@@ -883,7 +896,9 @@ class EditUsers {
 			var styleInfo = BDfunctionsDevilBro.getKeyInformation({"node":wrapper,"key":"style"});
 			var data = BDfunctionsDevilBro.loadData(info.id, this.getName(), "users");
 			
-			var name = 			info.username;
+			if (!this.nickNames[serverID][info.id]) this.nickNames[serverID][info.id] = username.innerText;
+			
+			var name = 			this.nickNames[serverID][info.id];
 			var tag = 			null;
 			var bgImage = 		info.avatar ? "url('https://cdn.discordapp.com/avatars/" + info.id + "/" + info.avatar + ".webp')" : "";
 			var removeIcon = 	false;
@@ -891,7 +906,6 @@ class EditUsers {
 			var color2 = 		"";
 			var color3 = 		"";
 			var color4 = 		"white";
-			
 			
 			if (data) {
 				name = 			data.name ? data.name : name;
@@ -924,16 +938,21 @@ class EditUsers {
 	}
 
 	loadAllUsers() {
-		document.querySelectorAll("div.member, div.message-group").forEach(node=>{node.classList.remove("custom")});
-		document.querySelectorAll(".user-tag").forEach(node=>{node.parentElement.removeChild(node)});
-		
-		var membersList = document.querySelectorAll("div.member");
-		for (var i = 0; i < membersList.length; i++) {
-			this.loadUser(membersList[i], "list");
-		} 
-		var membersChat = document.querySelectorAll("div.message-group");
-		for (var j = 0; j < membersChat.length; j++) {
-			this.loadUser(membersChat[j], "chat");
+		var serverData = BDfunctionsDevilBro.getKeyInformation({"node":BDfunctionsDevilBro.getSelectedServer(),"key":"guild"});
+		if (serverData) {
+			document.querySelectorAll("div.member, div.message-group").forEach(node=>{node.classList.remove("custom")});
+			document.querySelectorAll(".user-tag").forEach(node=>{node.parentElement.removeChild(node)});
+			
+			if (!this.nickNames[serverData.id]) this.nickNames[serverData.id] = {};
+			
+			var membersList = document.querySelectorAll("div.member");
+			for (var i = 0; i < membersList.length; i++) {
+				this.loadUser(membersList[i], "list", serverData.id);
+			} 
+			var membersChat = document.querySelectorAll("div.message-group");
+			for (var j = 0; j < membersChat.length; j++) {
+				this.loadUser(membersChat[j], "chat", serverData.id);
+			}
 		}
 	}
 	
