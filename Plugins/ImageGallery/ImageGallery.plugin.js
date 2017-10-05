@@ -27,7 +27,7 @@ class ImageGallery {
 
 	getDescription () {return "Allows the user to browse through images sent inside the same message.";}
 
-	getVersion () {return "1.0.2";}
+	getVersion () {return "1.0.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -134,26 +134,38 @@ class ImageGallery {
 			}
 		}
 		
-		var height = img.clientHeight;
-		var width = img.clientWidth;
-		var resize = height > width ? modal.clientHeight/height * (4/5) : modal.clientWidth/width * (4/7);
-		
 		$(modal).find(".image")
-			.attr("height", height * resize)
-			.attr("width", width * resize)
 			.attr("placeholder", img.src.split("?width")[0])
 			.attr("src", img.src.split("?width")[0]);
 			
 		$(modal).find("a")
 			.attr("href", img.src.split("?width")[0]);
 		
-		if (prevImg) $(modal).find(".modal-image").append($("<video/>", { 'class': 'image prev', 'poster': prevImg.src.split("?width")[0]}));
-		if (nextImg) $(modal).find(".modal-image").append($("<video/>", { 'class': 'image next', 'poster': nextImg.src.split("?width")[0]}));
+		this.resizeImage(modal, img, modal.querySelector(".image"));
+			
+		if (prevImg) {
+			$(modal).find(".modal-image").append($("<video/>", { 'class': 'image prev', 'poster': prevImg.src.split("?width")[0]}));
+			this.resizeImage(modal, prevImg, modal.querySelector(".image.prev"));
+		}
+		if (nextImg) {
+			$(modal).find(".modal-image").append($("<video/>", { 'class': 'image next', 'poster': nextImg.src.split("?width")[0]}));
+			this.resizeImage(modal, nextImg, modal.querySelector(".image.next"));
+		}
 		
 		$(modal).find(".image.prev").off("click").on("click", this.addImagePreviews.bind(this, modal, imgs, prevImg));
 		$(modal).find(".image.next").off("click").on("click", this.addImagePreviews.bind(this, modal, imgs, nextImg));
 		$(document).off("keydown.ImageGallery").on("keydown.ImageGallery", {modal, imgs, prevImg, nextImg}, this.keyPressed.bind(this));
 		$(document).off("keyup.ImageGallery").on("keyup.ImageGallery", () => {this.eventFired = false});
+	}
+	
+	resizeImage (modal, src, img) {
+		var height = src.clientHeight;
+		var width = src.clientWidth;
+		var resize = height > width ? modal.clientHeight/height * (4/5) : modal.clientWidth/width * (4/7);
+		
+		$(img)
+			.attr("height", height * resize)
+			.attr("width", width * resize);
 	}
 	
 	keyPressed (e) {
