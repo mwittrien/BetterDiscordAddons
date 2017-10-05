@@ -8,6 +8,9 @@ class EditServers {
 		this.serverContextObserver = new MutationObserver(() => {});
 		this.serverListObserver = new MutationObserver(() => {});
 		
+		this.urlCheckTimeout;
+		this.urlCheckRequest;
+		
 		this.css = `
 			.editservers-modal .pick-wrap {
 				position: relative;
@@ -366,7 +369,7 @@ class EditServers {
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	getVersion () {return "1.2.6";}
+	getVersion () {return "1.2.7";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -684,6 +687,7 @@ class EditServers {
 	
 	checkUrl (e, modal) {
 		clearTimeout(this.urlCheckTimeout);
+		this.urlCheckRequest.abort();
 		if (!e.target.value) {
 			$(e.target)
 				.removeClass("valid")
@@ -692,7 +696,7 @@ class EditServers {
 		}
 		else {
 			this.urlCheckTimeout = setTimeout(() => {
-				$.ajax({
+				this.urlCheckRequest = $.ajax({
 					type: "HEAD",
 					url : "https://cors-anywhere.herokuapp.com/" + e.target.value,
 					success: (message, text, response) => {
