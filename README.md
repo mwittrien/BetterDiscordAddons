@@ -6,6 +6,7 @@ A series of plugins and themes for BetterDiscord. If you got any question write 
  - [Chat Filter](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ChatFilter) - Adds a more noticeable tag to NSFW channels.
  - [Edit Channels](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditChannels) - Allows the user to locally change the name and color of channels.
  - [Edit Servers](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditServers) - Allows the user to locally change the name, initials, icon and color of servers.
+ - [Edit Users](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditUsers) - Allows you to change the icon, name, tag and color of users.
  - [Emoji Statistics](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EmojiStatistics) - Displays emojiinformation when hovering over an emoji in the emojipicker and adds a button to the emojipicker to open a statistics overview.
  - [Fix German Translation](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/FixGermanTranslation) - Fixes some minor translation errors in the german version of Discord.
  - [Image Gallery](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ImageGallery) - Allows the user to browse through images sent inside the same message.
