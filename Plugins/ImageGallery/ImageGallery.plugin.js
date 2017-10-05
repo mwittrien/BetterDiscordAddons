@@ -27,7 +27,7 @@ class ImageGallery {
 
 	getDescription () {return "Allows the user to browse through images sent inside the same message.";}
 
-	getVersion () {return "1.0.3";}
+	getVersion () {return "1.1.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -129,6 +129,7 @@ class ImageGallery {
 		for (var i = 0; i < imgs.length; i++) {
 			if (img.src.split("?width")[0] == imgs[i].src.split("?width")[0]) {
 				prevImg = 	imgs[i-1];
+				img = 		imgs[i];
 				nextImg = 	imgs[i+1];
 				break;
 			}
@@ -159,13 +160,13 @@ class ImageGallery {
 	}
 	
 	resizeImage (modal, src, img) {
-		var height = src.clientHeight;
-		var width = src.clientWidth;
-		var resize = height > width ? modal.clientHeight/height * (4/5) : modal.clientWidth/width * (4/7);
+		var resizeX = (modal.clientWidth/src.clientWidth) * 0.71;
+		var resizeY = (modal.clientHeight/src.clientHeight) * 0.57;
+		var resize = resizeX < resizeY ? resizeX : resizeY;
 		
 		$(img)
-			.attr("height", height * resize)
-			.attr("width", width * resize);
+			.attr("width", src.clientWidth * resize)
+			.attr("height", src.clientHeight * resize);
 	}
 	
 	keyPressed (e) {
