@@ -954,11 +954,11 @@ class EditServers {
 		switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
 			case "da": 		//danish
 				return {
-					context_localserversettings_text: 	"Lokal Serverindstillinger",
+					context_localserversettings_text: 	"Lokal serverindstillinger",
 					submenu_serversettings_text: 		"Skift indstillinger",
 					submenu_resetsettings_text: 		"Nulstil server",
-					modal_header_text: 	 				"Lokal Serverindstillinger",
-					modal_servername_text: 				"Lokalt Servernavn",
+					modal_header_text: 	 				"Lokal serverindstillinger",
+					modal_servername_text: 				"Lokalt servernavn",
 					modal_servershortname_text: 		"Initialer",
 					modal_serverurl_text: 				"Ikon",
 					modal_removeicon_text: 				"Fjern ikon",
