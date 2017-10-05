@@ -388,7 +388,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users.";}
 
-	getVersion () {return "1.0.0";}
+	getVersion () {return "1.0.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -496,7 +496,7 @@ class EditUsers {
 				this.changeLanguageStrings();
 			},5000);
 			
-			//BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
+			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
