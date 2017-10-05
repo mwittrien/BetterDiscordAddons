@@ -560,7 +560,6 @@ class EditUsers {
 	onContextMenu (context) {
 		if ($(context).find(".localusersettings-item").length == 0) {
 			var userData = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"user"});
-			console.log(userData);
 			var contextType = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"UserMentionItem"});
 			
 			if (userData && contextType) {
