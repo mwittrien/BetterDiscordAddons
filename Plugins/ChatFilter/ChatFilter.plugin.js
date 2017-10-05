@@ -16,12 +16,14 @@ class ChatFilter {
 		this.settingsWindowObserver = new MutationObserver(() => {});
 		
 		this.css = ` 
-			.message-group .comment .markup.blocked {
+			.message-group .comment .accessory.blocked:not(.revealed),
+			.message-group .comment .markup.blocked:not(.revealed) {
 				font-weight: bold;
 				font-style: italic;
 			}
 			
-			.message-group .comment .markup.censored {
+			.message-group .comment .accessory.censored:not(.revealed),
+			.message-group .comment .markup.censored:not(.revealed) {
 				
 			}
 		
@@ -216,7 +218,7 @@ class ChatFilter {
 
 	getDescription () {return "Allows the user to censor words or block complete messages based on words in the chatwindow.";}
 
-	getVersion () {return "2.0.4";}
+	getVersion () {return "2.1.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -330,7 +332,7 @@ class ChatFilter {
 							change.addedNodes.forEach((node) => {
 								if ($(node).find(".message").length > 0) {
 									this.messageChangeObserver.observe(node, {childList:true, characterData:true, subtree:true});
-									$(node).find(".markup").each((_,message) => {
+									$(node).find(".markup, .accessory").each((_,message) => {
 										this.hideMessage(message);
 									});
 								}
@@ -484,12 +486,12 @@ class ChatFilter {
 	}
 	
 	hideAllMessages () {
-		$(".markup.blocked, .markup.censored").each((_,message) => {
+		$(".markup.blocked, .markup.censored, .accessory.blocked, .accessory.censored").each((_,message) => {
 			this.resetMessage(message);
 		});
 		$(".message-group").each((_,messageContainer) => {
 			this.messageChangeObserver.observe(messageContainer, {childList:true, characterData:true, subtree:true});
-			$(messageContainer).find(".markup").each((_,message) => {
+			$(messageContainer).find(".markup, .accessory").each((_,message) => {
 				this.hideMessage(message);
 			});
 		});
@@ -500,20 +502,21 @@ class ChatFilter {
 			var orightml = $(message).html();
 			var newhtml = "";
 			
-			var strings = [];
-			var count = 0;
-			orightml.split("").forEach((chara) => { 
-				if(chara == "<") {
-					if (strings[count]) count++;
-				}
-				strings[count] = strings[count] ? strings[count] + chara : chara; 
-				if (chara == ">") {
-					count++;
-				}
-			});
-			
-			var blocked = false;
 			if (orightml) {
+				var blocked = false;
+				
+				var strings = [];
+				var count = 0;
+				orightml.split("").forEach((chara) => { 
+					if(chara == "<") {
+						if (strings[count]) count++;
+					}
+					strings[count] = strings[count] ? strings[count] + chara : chara; 
+					if (chara == ">") {
+						count++;
+					}
+				});
+			
 				var blockedWords = BDfunctionsDevilBro.loadData("blocked", this.getName(), "words");
 				for (let bWord in blockedWords) {
 					var modifier = blockedWords[bWord].case ? "" : "i";
@@ -522,11 +525,16 @@ class ChatFilter {
 					
 					var reg = new RegExp(bWord, modifier);
 					strings.forEach((string,i) => {
-						if (string.indexOf("<img") == 0) {
+						if (string.indexOf("<img draggable") == 0) {
 							var emojiname = string.split('alt="').length > 0 ? string.split('alt="')[1] : null;
-							emojiname = emojiname ? emojiname.split('" src')[0] : null;
+							emojiname = emojiname ? emojiname.split('"')[0] : null;
 							emojiname = emojiname.replace(new RegExp(":", 'g'), "");
 							if (reg.test(emojiname)) blocked = true;
+						}
+						else if (string.indexOf('<a class="embed') == 0) {
+							var url = string.split('href="').length > 0 ? string.split('href="')[1] : null;
+							url = url ? url.split('"')[0] : null;
+							if (reg.test(url)) blocked = true;
 						}
 						else if (string.indexOf("<") != 0) {
 							string.split(" ").forEach((word) => {
@@ -564,7 +572,7 @@ class ChatFilter {
 						
 						var reg = new RegExp(cWord, modifier);
 						strings.forEach((string,i) => {
-							if (string.indexOf("<img") == 0) {
+							if (string.indexOf("<img draggable") == 0) {
 								var emojiname = string.split('alt="').length > 0 ? string.split('alt="')[1] : null;
 								emojiname = emojiname ? emojiname.split('" src')[0] : null;
 								emojiname = emojiname.replace(new RegExp(":", 'g'), "");
@@ -575,6 +583,13 @@ class ChatFilter {
 										if (strings[i-1] && strings[i-1].indexOf("<span") == 0) strings[i-1] = "";
 										if (strings[i+2] && strings[i+2].indexOf("</span") == 0) strings[i+2] = "";
 									}
+								}
+							}
+							else if (string.indexOf('<a class="embed') == 0) {
+								var url = string.split('href="').length > 0 ? string.split('href="')[1] : null;
+								url = url ? url.split('"')[0] : null;
+								if (reg.test(url)) {
+									strings = [BDfunctionsDevilBro.encodeToHTML(censoredReplace)];
 								}
 							}
 							else if (string.indexOf("<") != 0) {
@@ -614,14 +629,11 @@ class ChatFilter {
 	}
 	
 	addClickListener (message, type) {
-		console.log(message);
 		$(message)
 			.off("click");
 		if (BDfunctionsDevilBro.loadData(type, this.getName(), "showMessageOnClick")) {
 			var orightml = $(message).data("orightml");
 			var newhtml = $(message).data("newhtml");
-			console.log(orightml);
-			console.log(newhtml);
 			$(message)
 				.on("click", () => {	
 					if ($(message).hasClass("revealed")) {
