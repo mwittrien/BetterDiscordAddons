@@ -366,7 +366,7 @@ class EditServers {
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	getVersion () {return "1.2.5";}
+	getVersion () {return "1.2.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -519,17 +519,19 @@ class EditServers {
 	}
 	
 	onContextMenu (context) {
-		var serverData = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"guild"});
-		var contextType = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"GuildLeaveGroup"});
-		
-		if (serverData && contextType) {
-			var serverDiv = BDfunctionsDevilBro.getDivOfServer(serverData.id);
-			var server = $(serverDiv).find(".avatar-small");
-			var shortName = $(serverDiv).hasClass("custom") ? $(server).attr("name") : $(server).text();
-			var data = Object.assign({},serverData,{shortName});
-			$(context).append(this.serverContextEntryMarkup)
-				.on("mouseenter", ".localserversettings-item", data, this.createContextSubMenu.bind(this))
-				.on("mouseleave", ".localserversettings-item", data, this.deleteContextSubMenu.bind(this));
+		if ($(context).find(".localserversettings-item").length == 0) {
+			var serverData = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"guild"});
+			var contextType = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"GuildLeaveGroup"});
+			
+			if (serverData && contextType) {
+				var serverDiv = BDfunctionsDevilBro.getDivOfServer(serverData.id);
+				var server = $(serverDiv).find(".avatar-small");
+				var shortName = $(serverDiv).hasClass("custom") ? $(server).attr("name") : $(server).text();
+				var data = Object.assign({},serverData,{shortName});
+				$(context).append(this.serverContextEntryMarkup)
+					.on("mouseenter", ".localserversettings-item", data, this.createContextSubMenu.bind(this))
+					.on("mouseleave", ".localserversettings-item", data, this.deleteContextSubMenu.bind(this));
+			}
 		}
 	}
 	
@@ -566,16 +568,16 @@ class EditServers {
 		$(".context-menu").hide();
 		var id = e.data.id;
 		if (id) {
-			var data = BDfunctionsDevilBro.loadData(id, this.getName(), "servers");
+			var info = BDfunctionsDevilBro.loadData(id, this.getName(), "servers");
 			
-			var name = 			data ? data.name : null;
-			var shortName = 	data ? data.shortName : null;
-			var url = 			data ? data.url : null;
-			var removeIcon = 	data ? data.removeIcon : false;
-			var color1 = 		data ? data.color1 : null;
-			var color2 = 		data ? data.color2 : null;
-			var color3 = 		data ? data.color3 : null;
-			var color4 = 		data ? data.color4 : null;
+			var name = 			info ? info.name : null;
+			var shortName = 	info ? info.shortName : null;
+			var url = 			info ? info.url : null;
+			var removeIcon = 	info ? info.removeIcon : false;
+			var color1 = 		info ? info.color1 : null;
+			var color2 = 		info ? info.color2 : null;
+			var color3 = 		info ? info.color3 : null;
+			var color4 = 		info ? info.color4 : null;
 		
 			var serverDiv = BDfunctionsDevilBro.getDivOfServer(id);
 			var server = $(serverDiv).find(".avatar-small");
@@ -681,6 +683,7 @@ class EditServers {
 	}
 	
 	checkUrl (e, modal) {
+		clearTimeout(this.urlCheckTimeout);
 		if (!e.target.value) {
 			$(e.target)
 				.removeClass("valid")
@@ -688,30 +691,32 @@ class EditServers {
 			if ($(e.target).hasClass("hovering")) this.deleteNoticeToolTip(e);
 		}
 		else {
-			$.ajax({
-				type: "HEAD",
-				url : "https://cors-anywhere.herokuapp.com/" + e.target.value,
-				success: (message, text, response) => {
-					if (response.getResponseHeader('Content-Type').indexOf("image") != -1) {
-						$(e.target)
-							.removeClass("invalid")
-							.addClass("valid");
-					}
-					else {
+			this.urlCheckTimeout = setTimeout(() => {
+				$.ajax({
+					type: "HEAD",
+					url : "https://cors-anywhere.herokuapp.com/" + e.target.value,
+					success: (message, text, response) => {
+						if (response.getResponseHeader('Content-Type').indexOf("image") != -1) {
+							$(e.target)
+								.removeClass("invalid")
+								.addClass("valid");
+						}
+						else {
+							$(e.target)
+								.removeClass("valid")
+								.addClass("invalid");
+						}
+					},
+					error: () => {
 						$(e.target)
 							.removeClass("valid")
 							.addClass("invalid");
+					},
+					complete: () => {
+						if ($(e.target).hasClass("hovering")) this.createNoticeTooltip(e);
 					}
-				},
-				error: () => {
-					$(e.target)
-						.removeClass("valid")
-						.addClass("invalid");
-				},
-				complete: () => {
-					if ($(e.target).hasClass("hovering")) this.createNoticeTooltip(e);
-				}
-			});
+				});
+			},500);
 		}
 	}
 	
