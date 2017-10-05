@@ -344,6 +344,21 @@ class EditChannels {
 			this.channelListObserver.disconnect();
 			this.channelContextObserver.disconnect();
 			
+			$(".containerDefault-7RImuF.custom").each(
+				(i,channelDiv) => {
+					var info = BDfunctionsDevilBro.getKeyInformation({"node":channelDiv, "key":"channel"});
+					if (info) {
+						var channel = $(channelDiv).find(".name-2SL4ev");
+					
+						$(channelDiv)
+							.removeClass("custom");
+						$(channel)
+							.text(info.name)
+							.css("color", "");
+					}
+				}
+			);
+			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName());
 		}
 	}
@@ -388,13 +403,15 @@ class EditChannels {
 	}
 	
 	onContextMenu (context) {
-		var channelData = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"channel"});
-		var contextType = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"ChannelInviteCreateGroup"});
-		
-		if (channelData && contextType) {
-			$(context).append(this.channelContextEntryMarkup)
-				.on("mouseenter", ".localchannelsettings-item", channelData, this.createContextSubMenu.bind(this))
-				.on("mouseleave", ".localchannelsettings-item", channelData, this.deleteContextSubMenu.bind(this));
+		if ($(context).find(".localchannelsettings-item").length == 0) {
+			var channelData = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"channel"});
+			var contextType = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"ChannelInviteCreateGroup"});
+			
+			if (channelData && contextType) {
+				$(context).append(this.channelContextEntryMarkup)
+					.on("mouseenter", ".localchannelsettings-item", channelData, this.createContextSubMenu.bind(this))
+					.on("mouseleave", ".localchannelsettings-item", channelData, this.deleteContextSubMenu.bind(this));
+			}
 		}
 	}
 	
@@ -431,12 +448,12 @@ class EditChannels {
 		$(".context-menu").hide();
 		var id = e.data.id + "_" + e.data.guild_id;
 		if (id) {
-			var data = BDfunctionsDevilBro.loadData(id, this.getName(), "channels");
+			var info = BDfunctionsDevilBro.loadData(id, this.getName(), "channels");
 			
 			var channelID = e.data.id;
 			var serverID = 	e.data.guild_id;
-			var name = 		data ? data.name : null;
-			var color = 	data ? data.color : null;
+			var name = 		info ? info.name : null;
+			var color = 	info ? info.color : null;
 			
 			var channelDiv = BDfunctionsDevilBro.getDivOfChannel(channelID, serverID);
 			var channel = $(channelDiv).find(".name-2SL4ev");
@@ -641,10 +658,10 @@ class EditChannels {
 		switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
 			case "da": 		//danish
 				return {
-					context_localchannelsettings_text: 		"Lokal Kanalindstillinger",
+					context_localchannelsettings_text: 		"Lokal kanalindstillinger",
 					submenu_channelsettings_text: 			"Skift indstillinger",
 					submenu_resetsettings_text: 			"Nulstil kanal",
-					modal_header_text:						"Lokal Kanalindstillinger",
+					modal_header_text:						"Lokal kanalindstillinger",
 					modal_channelname_text:					"Lokalt kanalnavn",
 					modal_colorpicker1_text:				"Lokal kanalfarve",
 					btn_cancel_text:						"Afbryde",
