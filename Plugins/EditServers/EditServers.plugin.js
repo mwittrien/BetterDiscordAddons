@@ -729,14 +729,15 @@ class EditServers {
 		$(".tooltips").find(".notice-tooltip").remove();
 		
 		var input = e.target;
+		var disabled = $(input).prop("disabled");
 		var valid = $(input).hasClass("valid");
 		var invalid = $(input).hasClass("invalid");
-		if (valid || invalid) {
-			var bgColor = valid ? "#297828" : "#8C2528";
+		if (disabled || valid || invalid) {
+			var bgColor = disabled ? "#282524" : valid ? "#297828" : "#8C2528";
 			var noticeTooltip = $(this.noticeTooltipMarkup);
 			$(".tooltips").append(noticeTooltip);
 			$(noticeTooltip)
-				.text(valid ? "Valid imageurl" : "Invalid imageurl")
+				.text(disabled ? "Ignore imageurl" : valid ? "Valid imageurl" : "Invalid imageurl")
 				.css("background-color", bgColor)
 				.css("left", ($(input).offset().left + $(input).width() + parseInt($(input).css("marginLeft"), 10)) + "px")
 				.css("top", ($(input).offset().top + ($(input).outerHeight() - $(noticeTooltip).outerHeight())/2) + "px");
