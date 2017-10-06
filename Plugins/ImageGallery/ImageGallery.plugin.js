@@ -27,7 +27,7 @@ class ImageGallery {
 
 	getDescription () {return "Allows the user to browse through images sent inside the same message.";}
 
-	getVersion () {return "1.1.0";}
+	getVersion () {return "1.2.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -109,12 +109,14 @@ class ImageGallery {
 	}
 	
 	getMessageGroupOfImage (img) {
-		var groups = $(".message-group");
-		for (var i = 0; i < groups.length; i++) {
-			var imgs = $(groups[i]).find(".image");
-			for (var j = 0; j < imgs.length; j++) {
-				if (imgs[j].src.split("?width")[0] == img.src.split("?width")[0]) {
-					return groups[i];
+		if (img && img.src) {
+			var groups = $(".message-group");
+			for (var i = 0; i < groups.length; i++) {
+				var imgs = $(groups[i]).find(".image");
+				for (var j = 0; j < imgs.length; j++) {
+					if (imgs[j].src && imgs[j].src.split("?width")[0] == img.src.split("?width")[0]) {
+						return groups[i];
+					}
 				}
 			}
 		}
