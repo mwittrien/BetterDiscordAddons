@@ -38,7 +38,7 @@ class TopRoleEverywhere {
 
 	getDescription () {return "Adds the highest role of a user as a tag.";}
 
-	getVersion () {return "1.5.0";}
+	getVersion () {return "2.0.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -208,27 +208,23 @@ class TopRoleEverywhere {
     }
 
 	loadRoleTags() {
-		var server = BDfunctionsDevilBro.getSelectedServer();
-		var serverData = BDfunctionsDevilBro.getKeyInformation({"node":server,"key":"guild"});
-		if (server && serverData) {
+		var serverData = BDfunctionsDevilBro.getKeyInformation({"node":BDfunctionsDevilBro.getSelectedServer(),"key":"guild"});
+		if (serverData) {
 			document.querySelectorAll(".role-tag").forEach(node=>{node.parentElement.removeChild(node)});
-			var serverID = serverData.id;
-			this.userRoles[serverID] = BDfunctionsDevilBro.loadData(serverID, this.getName(), "savedRoles");
-			this.userRoles[serverID] = this.userRoles[serverID] ? this.userRoles[serverID] : {};
+			if (!this.userRoles[serverData.id]) this.userRoles[serverData.id] = {};
 			this.roles = serverData.roles;
 			if (this.getSettings().showInMemberList) { 
 				var membersList = document.querySelectorAll("div.member");
 				for (var i = 0; i < membersList.length; i++) {
-					this.addRoleTag(membersList[i], "list", serverID);
+					this.addRoleTag(membersList[i], "list", serverData.id);
 				}
 			}
 			if (this.getSettings().showInChat) { 
 				var membersChat = document.querySelectorAll("div.message-group");
 				for (var j = 0; j < membersChat.length; j++) {
-					this.addRoleTag(membersChat[j], "chat", serverID);
+					this.addRoleTag(membersChat[j], "chat", serverData.id);
 				}
 			}
-			BDfunctionsDevilBro.saveData(serverID, this.userRoles[serverID], this.getName(), "savedRoles");
 		}
 	}
 	
