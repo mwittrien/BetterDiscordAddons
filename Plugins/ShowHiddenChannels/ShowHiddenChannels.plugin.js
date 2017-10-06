@@ -3,6 +3,7 @@
 class ShowHiddenChannels {
 	constructor () {
 		this.serverListObserver = new MutationObserver(() => {});
+		this.channelListObserver = new MutationObserver(() => {});
 		
 		this.categoryMarkup = 
 			`<div class="container-hidden">
@@ -37,7 +38,7 @@ class ShowHiddenChannels {
 
 	getDescription () {return "Displays channels that are hidden from you by role restrictions.";}
 
-	getVersion () {return "1.2.0";}
+	getVersion () {return "1.3.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -69,6 +70,21 @@ class ShowHiddenChannels {
 			});
 			this.serverListObserver.observe($(".guilds.scroller")[0], {subtree:true, attributes:true, attributeOldValue:true});
 			
+			this.channelListObserver = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.addedNodes) {
+							change.addedNodes.forEach((node) => {
+								if (node && node.className && node.className.length > 0 && node.className.indexOf("container-") > -1 && node.className.indexOf("hidden") == -1) {
+									this.appendToChannelList(document.querySelector(".container-hidden"));
+								} 
+							});
+						}
+					}
+				);
+			});
+			this.channelListObserver.observe($(".flex-vertical.channels-wrap")[0], {childList: true, subtree: true});
+			
 			this.displayHiddenChannels();
 			
 			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
@@ -82,6 +98,7 @@ class ShowHiddenChannels {
 		if (typeof BDfunctionsDevilBro === "object") {
 			$(".container-hidden").remove();
 			this.serverListObserver.disconnect();
+			this.channelListObserver.disconnect();
 		}
 	}
 
@@ -91,167 +108,169 @@ class ShowHiddenChannels {
 	displayHiddenChannels () {
 		var server = BDfunctionsDevilBro.getSelectedServer();
 		if (server) {
-			var channelList = $(".scroller-fzNley.scroller-NXV0-d")[0];
 			var serverID = BDfunctionsDevilBro.getIdOfServer(server);
 			
-			if ($(".container-hidden." + serverID).length == 0) {
+			$(".container-hidden").remove();
 			
-				$(".container-hidden").remove();
-				
-				var allChannels = BDfunctionsDevilBro.getKeyInformation({"node":$(".flex-vertical.channels-wrap").parent()[0],"key":"channels"});
-				var shownChannels = BDfunctionsDevilBro.getKeyInformation({"node":$(".flex-vertical.channels-wrap")[0],"key":"channels"})[0];
-				var thisChannels = [];
-				var hiddenChannels = [];
-				
-				
-				for (var channelID in allChannels) {
-					var oneChannel = allChannels[channelID];
-					if (oneChannel.guild_id == serverID && oneChannel.type == 0) thisChannels.push(oneChannel);
+			var allChannels = BDfunctionsDevilBro.getKeyInformation({"node":$(".flex-vertical.channels-wrap").parent()[0],"key":"channels"});
+			var shownChannels = BDfunctionsDevilBro.getKeyInformation({"node":$(".flex-vertical.channels-wrap")[0],"key":"channels"})[0];
+			var thisChannels = [];
+			var hiddenChannels = [];
+			
+			
+			for (var channelID in allChannels) {
+				var oneChannel = allChannels[channelID];
+				if (oneChannel.guild_id == serverID && oneChannel.type == 0) thisChannels.push(oneChannel);
+			}
+			
+			for (var i = 0; i < thisChannels.length; i++) {
+				var thisChannel = thisChannels[i];
+				var channelIsHidden = true;
+				for (var j = 0; j < shownChannels.length; j++) {
+					var shownChannel = shownChannels[j].channel;
+					if (shownChannel.id == thisChannel.id) {
+						channelIsHidden = false;
+						break;
+					}
 				}
+				if (channelIsHidden) hiddenChannels.push(thisChannel);
+			}
+			
+			if (hiddenChannels.length > 0) {
 				
-				for (var i = 0; i < thisChannels.length; i++) {
-					var thisChannel = thisChannels[i];
-					var channelIsHidden = true;
-					for (var j = 0; j < shownChannels.length; j++) {
-						var shownChannel = shownChannels[j].channel;
-						if (shownChannel.id == thisChannel.id) {
-							channelIsHidden = false;
-							break;
+				hiddenChannels = BDfunctionsDevilBro.sortArrayByKey(hiddenChannels, "name");
+				
+				var isOpen = BDfunctionsDevilBro.loadData(serverID, this.getName(), "categorystatus");
+				isOpen = isOpen === null ? true : isOpen;
+				
+				var category = $(this.categoryMarkup)
+					.addClass(serverID)
+					.on("click", ".cursorPointer-3oKATS", () => {
+						var categoryContainer = category.find(".containerDefault-1bbItS");
+						if (categoryContainer.find(".nameHovered-1YFSWq").length > 0) {
+							categoryContainer.find(".nameHovered-1YFSWq")
+								.removeClass("nameHovered-1YFSWq")
+								.addClass("nameHoveredCollapsed-2c-EHI");
+							categoryContainer.find(".iconHovered-3PRzOR")
+								.attr("class","iconHoveredCollapsed-jNYgOD iconTransition-VhWJ85 closed-2Hef-I");
+							categoryContainer.find(".wrapperHovered-1KDCyZ")
+								.removeClass("wrapperHovered-1KDCyZ")
+								.addClass("wrapperHoveredCollapsed-25KVVp");
+							category.find(".containerDefault-7RImuF").hide();
+							BDfunctionsDevilBro.saveData(serverID, false, this.getName(), "categorystatus");
 						}
-					}
-					if (channelIsHidden) hiddenChannels.push(thisChannel);
-				}
-				
-				if (hiddenChannels.length > 0) {
-					
-					hiddenChannels = BDfunctionsDevilBro.sortArrayByKey(hiddenChannels, "name");
-					
-					var isOpen = BDfunctionsDevilBro.loadData(serverID, this.getName(), "categorystatus");
-					isOpen = isOpen === null ? true : isOpen;
-					
-					var category = $(this.categoryMarkup)
-						.addClass(serverID)
-						.on("click", ".cursorPointer-3oKATS", () => {
-							var categoryContainer = category.find(".containerDefault-1bbItS");
-							if (categoryContainer.find(".nameHovered-1YFSWq").length > 0) {
-								categoryContainer.find(".nameHovered-1YFSWq")
-									.removeClass("nameHovered-1YFSWq")
-									.addClass("nameHoveredCollapsed-2c-EHI");
-								categoryContainer.find(".iconHovered-3PRzOR")
-									.attr("class","iconHoveredCollapsed-jNYgOD iconTransition-VhWJ85 closed-2Hef-I");
-								categoryContainer.find(".wrapperHovered-1KDCyZ")
-									.removeClass("wrapperHovered-1KDCyZ")
-									.addClass("wrapperHoveredCollapsed-25KVVp");
-								category.find(".containerDefault-7RImuF").hide();
-								BDfunctionsDevilBro.saveData(serverID, false, this.getName(), "categorystatus");
-							}
-							else if (categoryContainer.find(".nameHoveredCollapsed-2c-EHI").length > 0) {
-								categoryContainer.find(".nameHoveredCollapsed-2c-EHI")
-									.removeClass("nameHoveredCollapsed-2c-EHI")
-									.addClass("nameHovered-1YFSWq");
-								categoryContainer.find(".iconHoveredCollapsed-jNYgOD")
-									.attr("class","iconHovered-3PRzOR iconTransition-VhWJ85");
-								categoryContainer.find(".wrapperHoveredCollapsed-25KVVp")
-									.removeClass("wrapperHoveredCollapsed-25KVVp")
-									.addClass("wrapperHovered-1KDCyZ");
-								category.find(".containerDefault-7RImuF").show();
-								BDfunctionsDevilBro.saveData(serverID, true, this.getName(), "categorystatus");
-							}
-						})
-						.on("mouseenter", ".cursorPointer-3oKATS", () => {
-							var categoryContainer = category.find(".containerDefault-1bbItS");
-							if (categoryContainer.find(".nameDefault-Lnjrwm").length > 0) {
-								categoryContainer.find(".nameDefault-Lnjrwm")
-									.removeClass("nameDefault-Lnjrwm")
-									.addClass("nameHovered-1YFSWq");
-								categoryContainer.find(".iconDefault-xzclSQ")
-									.attr("class","iconHovered-3PRzOR iconTransition-VhWJ85");
-								categoryContainer.find(".wrapperDefault-1Dl4SS")
-									.removeClass("wrapperDefault-1Dl4SS")
-									.addClass("wrapperHovered-1KDCyZ");
-							}
-							else if (categoryContainer.find(".nameCollapsed-3_ChMu").length > 0) {
-								categoryContainer.find(".nameCollapsed-3_ChMu")
-									.removeClass("nameCollapsed-3_ChMu")
-									.addClass("nameHoveredCollapsed-2c-EHI");
-								categoryContainer.find(".iconCollapsed-1INdMX")
-									.attr("class","iconHoveredCollapsed-jNYgOD iconTransition-VhWJ85 closed-2Hef-I");
-								categoryContainer.find(".wrapperCollapsed-18mf-c")
-									.removeClass("wrapperCollapsed-18mf-c")
-									.addClass("wrapperHoveredCollapsed-25KVVp");
-							}
-						})
-						.on("mouseleave", ".cursorPointer-3oKATS", () => {
-							var categoryContainer = category.find(".containerDefault-1bbItS");
-							if (categoryContainer.find(".nameHovered-1YFSWq").length > 0) {
-								categoryContainer.find(".nameHovered-1YFSWq")
-									.removeClass("nameHovered-1YFSWq")
-									.addClass("nameDefault-Lnjrwm");
-								categoryContainer.find(".iconHovered-3PRzOR")
-									.attr("class","iconDefault-xzclSQ iconTransition-VhWJ85");
-								categoryContainer.find(".wrapperHovered-1KDCyZ")
-									.removeClass("wrapperHovered-1KDCyZ")
-									.addClass("wrapperDefault-1Dl4SS");
-							}
-							else if (categoryContainer.find(".nameHoveredCollapsed-2c-EHI").length > 0) {
-								categoryContainer.find(".nameHoveredCollapsed-2c-EHI")
-									.removeClass("nameHoveredCollapsed-2c-EHI")
-									.addClass("nameCollapsed-3_ChMu");
-								categoryContainer.find(".iconHoverCollapsed-jNYgOD")
-									.attr("class","iconCollapsed-1INdMX iconTransition-VhWJ85 closed-2Hef-I");
-								categoryContainer.find(".wrapperHoveredCollapsed-25KVVp")
-									.removeClass("wrapperHoveredCollapsed-25KVVp")
-									.addClass("wrapperCollapsed-18mf-c");
-							}
-						});
-					channelList.insertBefore(category[0],channelList.lastChild);
-					
-					for (var k = 0; k < hiddenChannels.length; k++) {
-						var hiddenChannel = hiddenChannels[k];
-						let channel = $(this.channelMarkup);
-						channel.html(channel.html().replace("REPLACE_channel_name",hiddenChannel.name));
-						$(channel[0]).on("mouseenter", ".wrapper-fDmxzK", () => {
-							channel.find(".nameDefaultText-QoumjC")
-								.removeClass("nameDefaultText-QoumjC")
-								.addClass("nameHoveredText-2FFqiz");
-							channel.find(".contentDefaultText-2elG3R")
-								.removeClass("contentDefaultText-2elG3R")
-								.addClass("contentHoveredText-2HYGIY");
-							channel.find(".wrapperDefaultText-3M3F1R")
-								.removeClass("wrapperDefaultText-3M3F1R")
-								.addClass("wrapperHoveredText-1PA_Uk");
-						})
-						.on("mouseleave", ".wrapper-fDmxzK", () => {
-							channel.find(".nameHoveredText-2FFqiz")
-								.removeClass("nameHoveredText-2FFqiz")
-								.addClass("nameDefaultText-QoumjC");
-							channel.find(".contentHoveredText-2HYGIY")
-								.removeClass("contentHoveredText-2HYGIY")
-								.addClass("contentDefaultText-2elG3R");
-							channel.find(".wrapperHoveredText-1PA_Uk")
-								.removeClass("wrapperHoveredText-1PA_Uk")
-								.addClass("wrapperDefaultText-3M3F1R");
-						});
-						channel.appendTo(category);
-					}
-					if (!isOpen) {
+						else if (categoryContainer.find(".nameHoveredCollapsed-2c-EHI").length > 0) {
+							categoryContainer.find(".nameHoveredCollapsed-2c-EHI")
+								.removeClass("nameHoveredCollapsed-2c-EHI")
+								.addClass("nameHovered-1YFSWq");
+							categoryContainer.find(".iconHoveredCollapsed-jNYgOD")
+								.attr("class","iconHovered-3PRzOR iconTransition-VhWJ85");
+							categoryContainer.find(".wrapperHoveredCollapsed-25KVVp")
+								.removeClass("wrapperHoveredCollapsed-25KVVp")
+								.addClass("wrapperHovered-1KDCyZ");
+							category.find(".containerDefault-7RImuF").show();
+							BDfunctionsDevilBro.saveData(serverID, true, this.getName(), "categorystatus");
+						}
+					})
+					.on("mouseenter", ".cursorPointer-3oKATS", () => {
 						var categoryContainer = category.find(".containerDefault-1bbItS");
 						if (categoryContainer.find(".nameDefault-Lnjrwm").length > 0) {
 							categoryContainer.find(".nameDefault-Lnjrwm")
 								.removeClass("nameDefault-Lnjrwm")
-								.addClass("nameCollapsed-3_ChMu");
+								.addClass("nameHovered-1YFSWq");
 							categoryContainer.find(".iconDefault-xzclSQ")
-								.attr("class","iconCollapsed-1INdMX iconTransition-VhWJ85 closed-2Hef-I");
+								.attr("class","iconHovered-3PRzOR iconTransition-VhWJ85");
 							categoryContainer.find(".wrapperDefault-1Dl4SS")
 								.removeClass("wrapperDefault-1Dl4SS")
-								.addClass("wrapperCollapsed-18mf-c");
-							category.find(".containerDefault-7RImuF").hide();
+								.addClass("wrapperHovered-1KDCyZ");
 						}
-					}
-					
-					BDfunctionsDevilBro.saveData(serverID, isOpen, this.getName(), "categorystatus");
+						else if (categoryContainer.find(".nameCollapsed-3_ChMu").length > 0) {
+							categoryContainer.find(".nameCollapsed-3_ChMu")
+								.removeClass("nameCollapsed-3_ChMu")
+								.addClass("nameHoveredCollapsed-2c-EHI");
+							categoryContainer.find(".iconCollapsed-1INdMX")
+								.attr("class","iconHoveredCollapsed-jNYgOD iconTransition-VhWJ85 closed-2Hef-I");
+							categoryContainer.find(".wrapperCollapsed-18mf-c")
+								.removeClass("wrapperCollapsed-18mf-c")
+								.addClass("wrapperHoveredCollapsed-25KVVp");
+						}
+					})
+					.on("mouseleave", ".cursorPointer-3oKATS", () => {
+						var categoryContainer = category.find(".containerDefault-1bbItS");
+						if (categoryContainer.find(".nameHovered-1YFSWq").length > 0) {
+							categoryContainer.find(".nameHovered-1YFSWq")
+								.removeClass("nameHovered-1YFSWq")
+								.addClass("nameDefault-Lnjrwm");
+							categoryContainer.find(".iconHovered-3PRzOR")
+								.attr("class","iconDefault-xzclSQ iconTransition-VhWJ85");
+							categoryContainer.find(".wrapperHovered-1KDCyZ")
+								.removeClass("wrapperHovered-1KDCyZ")
+								.addClass("wrapperDefault-1Dl4SS");
+						}
+						else if (categoryContainer.find(".nameHoveredCollapsed-2c-EHI").length > 0) {
+							categoryContainer.find(".nameHoveredCollapsed-2c-EHI")
+								.removeClass("nameHoveredCollapsed-2c-EHI")
+								.addClass("nameCollapsed-3_ChMu");
+							categoryContainer.find(".iconHoverCollapsed-jNYgOD")
+								.attr("class","iconCollapsed-1INdMX iconTransition-VhWJ85 closed-2Hef-I");
+							categoryContainer.find(".wrapperHoveredCollapsed-25KVVp")
+								.removeClass("wrapperHoveredCollapsed-25KVVp")
+								.addClass("wrapperCollapsed-18mf-c");
+						}
+					});
+				
+				for (var k = 0; k < hiddenChannels.length; k++) {
+					var hiddenChannel = hiddenChannels[k];
+					let channel = $(this.channelMarkup);
+					channel.html(channel.html().replace("REPLACE_channel_name",hiddenChannel.name));
+					$(channel[0]).on("mouseenter", ".wrapper-fDmxzK", () => {
+						channel.find(".nameDefaultText-QoumjC")
+							.removeClass("nameDefaultText-QoumjC")
+							.addClass("nameHoveredText-2FFqiz");
+						channel.find(".contentDefaultText-2elG3R")
+							.removeClass("contentDefaultText-2elG3R")
+							.addClass("contentHoveredText-2HYGIY");
+						channel.find(".wrapperDefaultText-3M3F1R")
+							.removeClass("wrapperDefaultText-3M3F1R")
+							.addClass("wrapperHoveredText-1PA_Uk");
+					})
+					.on("mouseleave", ".wrapper-fDmxzK", () => {
+						channel.find(".nameHoveredText-2FFqiz")
+							.removeClass("nameHoveredText-2FFqiz")
+							.addClass("nameDefaultText-QoumjC");
+						channel.find(".contentHoveredText-2HYGIY")
+							.removeClass("contentHoveredText-2HYGIY")
+							.addClass("contentDefaultText-2elG3R");
+						channel.find(".wrapperHoveredText-1PA_Uk")
+							.removeClass("wrapperHoveredText-1PA_Uk")
+							.addClass("wrapperDefaultText-3M3F1R");
+					});
+					channel.appendTo(category);
 				}
+				if (!isOpen) {
+					var categoryContainer = category.find(".containerDefault-1bbItS");
+					if (categoryContainer.find(".nameDefault-Lnjrwm").length > 0) {
+						categoryContainer.find(".nameDefault-Lnjrwm")
+							.removeClass("nameDefault-Lnjrwm")
+							.addClass("nameCollapsed-3_ChMu");
+						categoryContainer.find(".iconDefault-xzclSQ")
+							.attr("class","iconCollapsed-1INdMX iconTransition-VhWJ85 closed-2Hef-I");
+						categoryContainer.find(".wrapperDefault-1Dl4SS")
+							.removeClass("wrapperDefault-1Dl4SS")
+							.addClass("wrapperCollapsed-18mf-c");
+						category.find(".containerDefault-7RImuF").hide();
+					}
+				}
+				
+				this.appendToChannelList(category[0]);
+				
+				BDfunctionsDevilBro.saveData(serverID, isOpen, this.getName(), "categorystatus");
 			}
 		}
+	}
+	
+	appendToChannelList(category) {
+		var channelList = document.querySelector(".scroller-fzNley.scroller-NXV0-d");
+		if (channelList && category) channelList.insertBefore(category,channelList.lastChild);
 	}
 }
