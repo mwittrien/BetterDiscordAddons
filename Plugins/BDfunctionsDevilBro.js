@@ -187,6 +187,16 @@ BDfunctionsDevilBro.equals = function (check1, check2, compareOrder) {
 	}
 };
 
+BDfunctionsDevilBro.onSwitchFix = function (plugin) {
+	plugin.switchFixObserver = new MutationObserver(m=>{
+		for(var i = 0; i < m.length; i++)
+			for(var j = 0; j < m[i].removedNodes.length; j++)
+				if(m[i].removedNodes[j].id === "friends")
+					return plugin.onSwitch(); 
+	});
+	plugin.switchFixObserver.observe(document.querySelector(":-webkit-any(.chat, #friends)").parentNode, {childList: true});
+}
+
 BDfunctionsDevilBro.getMyUserData = function () {
 	if ($(".container-iksrDt").length > 0) {
 		var userData = BDfunctionsDevilBro.getKeyInformation({"node":$(".container-iksrDt")[0],"key":"user"});
