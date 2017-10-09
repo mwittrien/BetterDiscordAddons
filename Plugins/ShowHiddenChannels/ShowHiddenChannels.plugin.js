@@ -2,7 +2,7 @@
 
 class ShowHiddenChannels {
 	constructor () {
-		this.serverListObserver = new MutationObserver(() => {});
+		this.switchFixObserver = new MutationObserver(() => {});
 		this.channelListObserver = new MutationObserver(() => {});
 		
 		this.categoryMarkup = 
@@ -38,7 +38,7 @@ class ShowHiddenChannels {
 
 	getDescription () {return "Displays channels that are hidden from you by role restrictions.";}
 
-	getVersion () {return "1.3.1";}
+	getVersion () {return "1.3.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -56,20 +56,6 @@ class ShowHiddenChannels {
 			$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
-			this.serverListObserver = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.type == "attributes" && change.attributeName == "class" && change.oldValue && change.oldValue.indexOf("guild") != -1) {
-							var serverData = BDfunctionsDevilBro.getKeyInformation({"node":change.target, "key":"guild"});
-							if (serverData) {
-								this.displayHiddenChannels();
-							}
-						}
-					}
-				);
-			});
-			this.serverListObserver.observe($(".guilds.scroller")[0], {subtree:true, attributes:true, attributeOldValue:true});
-			
 			this.channelListObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
@@ -85,6 +71,8 @@ class ShowHiddenChannels {
 			});
 			this.channelListObserver.observe($(".flex-vertical.channels-wrap")[0], {childList: true, subtree: true});
 			
+			this.switchFixObserver = BDfunctionsDevilBro.onSwitchFix(this);
+			
 			this.displayHiddenChannels();
 			
 			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
@@ -97,9 +85,13 @@ class ShowHiddenChannels {
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			$(".container-hidden").remove();
-			this.serverListObserver.disconnect();
+			this.switchFixObserver.disconnect();
 			this.channelListObserver.disconnect();
 		}
+	}
+	
+	onSwitch () {
+		this.displayHiddenChannels();
 	}
 
 	
@@ -117,7 +109,6 @@ class ShowHiddenChannels {
 				var shownChannels = BDfunctionsDevilBro.getKeyInformation({"node":$(".flex-vertical.channels-wrap")[0],"key":"channels"})[0];
 				var thisChannels = [];
 				var hiddenChannels = [];
-				
 				
 				for (var channelID in allChannels) {
 					var oneChannel = allChannels[channelID];
