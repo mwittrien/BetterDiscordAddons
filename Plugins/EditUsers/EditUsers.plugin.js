@@ -7,9 +7,10 @@ class EditUsers {
 		
 		this.nickNames = {};
     
+		this.switchFixObserver = new MutationObserver(() => {});
 		this.userContextObserver = new MutationObserver(() => {});
-		this.serverSwitchObserver = new MutationObserver(() => {});
-		this.channelSwitchObserver = new MutationObserver(() => {});
+		this.dmListObserver = new MutationObserver(() => {});
+		this.friendListObserver = new MutationObserver(() => {});
 		this.userListObserver = new MutationObserver(() => {});
 		this.chatWindowObserver = new MutationObserver(() => {});
 		this.settingsWindowObserver = new MutationObserver(() => {});
@@ -391,11 +392,19 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users.";}
 
-	getVersion () {return "1.1.0";}
+	getVersion () {return "1.2.0";}
 
 	getAuthor () {return "DevilBro";}
 	
-    getSettingsPanel () {}
+    getSettingsPanel () {
+		return `
+		<input type="checkbox" onchange='` + this.getName() + `.updateSettings(this.parentNode, "` + this.getName() + `")' value="changeInChatWindow"${(this.getSettings().changeInChatWindow ? " checked" : void 0)}><label style="color:grey;"> Change user information in the chat window.</label><br>\n
+		<input type="checkbox" onchange='` + this.getName() + `.updateSettings(this.parentNode, "` + this.getName() + `")' value="changeInMemberList"${(this.getSettings().changeInMemberList ? " checked" : void 0)}><label style="color:grey;"> Change user information in the member list.</label><br>\n
+		<input type="checkbox" onchange='` + this.getName() + `.updateSettings(this.parentNode, "` + this.getName() + `")' value="changeInDmsList"${(this.getSettings().changeInDmsList ? " checked" : void 0)}><label style="color:grey;"> Change user information in your DM list.</label><br>\n
+		<input type="checkbox" onchange='` + this.getName() + `.updateSettings(this.parentNode, "` + this.getName() + `")' value="changeInFriendList"${(this.getSettings().changeInFriendList ? " checked" : void 0)}><label style="color:grey;"> Change user information in your friend list.</label><br>\n
+		<input type="checkbox" onchange='` + this.getName() + `.updateSettings(this.parentNode, "` + this.getName() + `")' value="changeInUserAccount"${(this.getSettings().changeInUserAccount ? " checked" : void 0)}><label style="color:grey;"> Change user information in your account window.</label><br>\n<br>\n
+		<button class="` + this.getName() + `ResetBtn" style="height:23px" onclick='` + this.getName() + `.resetAll("` + this.getName() + `")'>Reset all Users`;
+    }
 
 	//legacy
 	load () {}
@@ -424,38 +433,35 @@ class EditUsers {
 			});
 			this.userContextObserver.observe(document.querySelector(".tooltips").parentElement, {childList: true});
 			
-			this.serverSwitchObserver = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.type == "attributes" && change.attributeName == "class" && change.oldValue && change.oldValue.indexOf("guild") != -1) {
-							var serverData = BDfunctionsDevilBro.getKeyInformation({"node":change.target, "key":"guild"});
-							if (serverData) {
-								this.loadAllUsers();
-								if (document.querySelector(".channel-members")) this.userListObserver.observe(document.querySelector(".channel-members"), {childList:true});
-								if (document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(document.querySelector(".messages.scroller"), {childList:true});
-								if (document.querySelector(".chat")) this.channelSwitchObserver.observe(document.querySelector(".chat"), {childList:true, subtree:true});
-							}
-						}
-					}
-				);
-			});
-			this.serverSwitchObserver.observe(document.querySelector(".guilds.scroller"), {subtree:true, attributes:true, attributeOldValue:true});
-			
-			this.channelSwitchObserver = new MutationObserver((changes, _) => {
+			this.dmListObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node.tagName && node.querySelector(".messages.scroller")) {
-									this.loadAllUsers();
-									this.chatWindowObserver.observe(document.querySelector(".messages.scroller"), {childList:true});
+								if (node.querySelector(".channel-name")) {
+									this.loadUser(node, "dms");
 								}
 							});
 						}
 					}
 				);
 			});
-			if (document.querySelector(".chat")) this.channelSwitchObserver.observe(document.querySelector(".chat"), {childList:true, subtree:true});
+			if (document.querySelector(".private-channels")) this.dmListObserver.observe(document.querySelector(".private-channels"), {childList:true, subtree:true});
+			
+			this.friendListObserver = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.addedNodes) {
+							change.addedNodes.forEach((node) => {
+								if (node.querySelector(".friends-column")) {
+									this.loadUser(node, "dms");
+								}
+							});
+						}
+					}
+				);
+			});
+			if (document.querySelector("#friends")) this.friendListObserver.observe(document.querySelector("#friends"), {childList:true, subtree:true});
 			
 			this.userListObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -463,12 +469,7 @@ class EditUsers {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (node.querySelector(".member-username")) {
-									var server = BDfunctionsDevilBro.getSelectedServer();
-									var serverData = BDfunctionsDevilBro.getKeyInformation({"node":server,"key":"guild"});
-									if (server && serverData) {
-										var serverID = serverData.id;
-										this.loadUser(node, "list", serverID);
-									}
+									this.loadUser(node, "list");
 								}
 							});
 						}
@@ -483,12 +484,7 @@ class EditUsers {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (node && node.tagName && node.querySelector(".username-wrapper")) {
-									var server = BDfunctionsDevilBro.getSelectedServer();
-									var serverData = BDfunctionsDevilBro.getKeyInformation({"node":server,"key":"guild"});
-									if (server && serverData) {
-										var serverID = serverData.id;
-										this.loadUser(node, "chat", serverID);
-									}
+									this.loadUser(node, "chat");
 								}
 							});
 						}
@@ -510,12 +506,13 @@ class EditUsers {
 			});
 			this.settingsWindowObserver.observe(document.querySelector(".layers"), {childList:true});
 			
+			this.switchFixObserver = BDfunctionsDevilBro.onSwitchFix(this);
+			
 			BDfunctionsDevilBro.appendWebScript("https://bgrins.github.io/spectrum/spectrum.js");
 			BDfunctionsDevilBro.appendWebStyle("https://bgrins.github.io/spectrum/spectrum.css");
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 			
 			this.loadAllUsers();
-			
 			
 			setTimeout(() => {
 				this.labels = this.setLabelsByLanguage();
@@ -532,21 +529,68 @@ class EditUsers {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
+			this.switchFixObserver.disconnect();
 			this.userContextObserver.disconnect();
-			this.serverSwitchObserver.disconnect();
-			this.channelSwitchObserver.disconnect();
+			this.dmListObserver.disconnect();
+			this.friendListObserver.disconnect();
 			this.userListObserver.disconnect();
 			this.chatWindowObserver.disconnect();
 			this.settingsWindowObserver.disconnect();
 			
-			document.querySelectorAll("div.member, div.message-group").forEach(node=>{node.classList.remove("custom")});
-			document.querySelectorAll(".user-tag").forEach(node=>{node.parentElement.removeChild(node)});
+			this.resetAllUsers();
 		}
+	}
+	
+	onSwitch () {
+		this.loadAllUsers();
+		if (document.querySelector(".private-channels")) this.dmListObserver.observe(document.querySelector(".private-channels"), {childList:true, subtree:true});
+		if (document.querySelector(".channel-members")) this.userListObserver.observe(document.querySelector(".channel-members"), {childList:true});
+		if (document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(document.querySelector(".messages.scroller"), {childList:true});
+		if (document.querySelector("#friends")) this.friendListObserver.observe(document.querySelector("#friends"), {childList:true, subtree:true});
 	}
 
 	
 	// begin of own functions
 	
+	getSettings () {
+		var defaultSettings = {
+			changeInChatWindow: true,
+			changeInMemberList: true,
+			changeInDmsList: true,
+			changeInFriendList: true,
+			changeInUserAccount: true
+		};
+		var settings = bdPluginStorage.get(this.getName(), "settings");
+		if (settings == null) {
+			settings = {};
+		}
+		var saveSettings = false;
+		for (var key in defaultSettings) {
+			if (settings[key] == null) {
+				settings[key] = defaultSettings[key];
+				saveSettings = true;
+			}
+		}
+		if (saveSettings) {
+			bdPluginStorage.set(this.getName(), "settings", settings);
+		}
+		return settings;
+	}
+
+    static updateSettings (settingspanel, pluginName) {
+		var settings = {};
+		var inputs = settingspanel.querySelectorAll("input");
+		for (var i = 0; i < inputs.length; i++) {
+			settings[inputs[i].value] = inputs[i].checked;
+		}
+		bdPluginStorage.set(pluginName, "settings", settings);
+    }
+
+    static resetAll (pluginName) {
+		if (typeof BDfunctionsDevilBro === "object") {
+			BDfunctionsDevilBro.removeAllData(pluginName, "users");
+		}
+    }
 
 	changeLanguageStrings () {
 		this.userContextEntryMarkup = 		this.userContextEntryMarkup.replace("REPLACE_context_localusersettings_text", this.labels.context_localusersettings_text);
@@ -575,7 +619,7 @@ class EditUsers {
 	onContextMenu (context) {
 		if ($(context).find(".localusersettings-item").length == 0) {
 			var userData = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"user"});
-			var contextType = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"UserMentionItem"});
+			var contextType = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"UserNoteItem"});
 			
 			if (userData && contextType) {
 				$(context).append(this.userContextEntryMarkup)
@@ -606,7 +650,13 @@ class EditUsers {
 		else {
 			$(targetDiv)
 				.off("click", ".resetsettings-item")
-				.on("click", ".resetsettings-item", e.data, this.resetUser.bind(this));
+				.on("click", ".resetsettings-item", () => {
+					$(".context-menu").hide();
+					if (e.data.id) {
+						BDfunctionsDevilBro.removeData(e.data.id, this.getName(), "users");
+						this.loadAllUsers();
+					}
+				});
 		}
 	}
 	
@@ -698,12 +748,12 @@ class EditUsers {
 					color4 = !$(".ui-color-picker-swatch4.nocolor.selected")[0] ? BDfunctionsDevilBro.color2COMP($(".ui-color-picker-swatch4.selected").css("background-color")) : null;
 					
 					if (name == null && tag == null && url == null && !removeIcon && color1 == null && color2 == null && color3 == null && color4 == null) {
-						this.resetUser(e);
+						BDfunctionsDevilBro.removeData(id, this.getName(), "users")
 					}
 					else {
 						BDfunctionsDevilBro.saveData(id, {id,name,tag,url,removeIcon,color1,color2,color3,color4}, this.getName(), "users");
-						this.loadAllUsers();
-					}
+					};
+					this.loadAllUsers();
 					
 					$(".sp-container").remove();
 					userSettingsModal.remove();
@@ -730,7 +780,7 @@ class EditUsers {
 	
 	checkUrl (e, modal) {
 		clearTimeout(this.urlCheckTimeout);
-		this.urlCheckRequest.abort();
+		if (typeof this.urlCheckRequest === "object") this.urlCheckRequest.abort();
 		if (!e.target.value) {
 			$(e.target)
 				.removeClass("valid")
@@ -891,20 +941,20 @@ class EditUsers {
 		});
 	}
 	
-	resetUser (e) {
-		$(".context-menu").hide();
-		if (e.data.id) {
-			BDfunctionsDevilBro.removeData(e.data.id, this.getName(), "users");
-			
-			this.loadAllUsers();
-		}
-	}
-	
-	loadUser (div, type, serverID) {
-		if (!div || div.classList.contains("custom")) return;
-		var avatar = div.querySelector("div.avatar-small") || div.querySelector("div.avatar-large");
-		var username = div.querySelector("strong.user-name") || div.querySelector("span.member-username-inner");
-		var wrapper = div.querySelector("div.member-username") || div.querySelector("span.username-wrapper");
+	loadUser (div, type) {
+		if (!div || div.classList.contains("custom-editusers")) return;
+		var avatar = 	div.querySelector("div.avatar-small") || 
+						div.querySelector("div.avatar-large");
+		var username = 	div.querySelector("strong.user-name") || 
+						div.querySelector("span.member-username-inner") ||
+						div.querySelector("span.channel-name") || 
+						div.querySelector("span.username");
+		var wrapper = 	div.querySelector("div.member-username") || 
+						div.querySelector("span.username-wrapper") || 
+						div.querySelector("span.channel-name") ||
+						div.querySelector("div.discord-tag") ||
+						div.querySelector("div.accountDetails-15i-_e");
+						
 		if (avatar && username && wrapper) {
 			var info = BDfunctionsDevilBro.getKeyInformation({"node":div,"key":"user"});
 			var styleInfo = BDfunctionsDevilBro.getKeyInformation({"node":wrapper,"key":"style"});
@@ -912,73 +962,137 @@ class EditUsers {
 			
 			if (!this.nickNames.names[info.id]) this.nickNames.names[info.id] = username.innerText;
 			
-			var name = 			this.nickNames.names[info.id];
-			var tag = 			null;
-			var bgImage = 		info.avatar ? "url('https://cdn.discordapp.com/avatars/" + info.id + "/" + info.avatar + ".webp')" : "";
-			var removeIcon = 	false;
-			var color1 = 		styleInfo ? BDfunctionsDevilBro.color2RGB(styleInfo.color) : "";
-			var color2 = 		"";
-			var color3 = 		"";
-			var color4 = 		"white";
-			
 			if (data) {
-				name = 			data.name ? data.name : name;
-				tag = 			data.tag ? data.tag : tag;
-				bgImage = 		data.url ? "url(" + data.url + ")" : bgImage;
-				removeIcon = 	data.removeIcon ? data.removeIcon : removeIcon;
-				color1 = 		data.color1 ? BDfunctionsDevilBro.color2RGB(data.color1) : color1;
-				color2 = 		data.color2 ? BDfunctionsDevilBro.color2RGB(data.color2) : color2;
-				color3 = 		data.color3 ? BDfunctionsDevilBro.color2RGB(data.color3) : color3;
-				color4 = 		data.color4 ? BDfunctionsDevilBro.color2RGB(data.color4) : color4;
-				div.classList.add("custom");
-			}
+				var name = 			data.name ? data.name : this.nickNames.names[info.id];
+				var tag = 			data.tag ? data.tag : null;
+				var bgImage = 		data.url ? "url(" + data.url + ")" : (info.avatar ? "url('https://cdn.discordapp.com/avatars/" + info.id + "/" + info.avatar + ".webp')" : "");
+				var removeIcon = 	data.removeIcon ? data.removeIcon : false;
+				var color1 = 		data.color1 ? BDfunctionsDevilBro.color2RGB(data.color1) : (styleInfo ? BDfunctionsDevilBro.color2RGB(styleInfo.color) : "");
+				var color2 = 		data.color2 ? BDfunctionsDevilBro.color2RGB(data.color2) : "";
+				var color3 = 		data.color3 ? BDfunctionsDevilBro.color2RGB(data.color3) : "";
+				var color4 = 		data.color4 ? BDfunctionsDevilBro.color2RGB(data.color4) : "white";
 			
-			username.innerText = name;
-			username.style.color = color1;
-			username.style.background = color2;
-			
-			avatar.style.background = removeIcon ? "" : bgImage;
-			avatar.style.backgroundSize = "cover";
+				username.innerText = type == "info" ? info.username : name;
+				username.style.color = color1;
+				username.style.background = color2;
 				
-			if (tag) {
-				var thisTag = $(this.tagMarkup)[0];
-				thisTag.classList.add(type+"-tag");
-				thisTag.innerText = tag;
-				thisTag.style.background = color3;
-				thisTag.style.color = color4;
-				wrapper.appendChild(thisTag);
-			}
-			
-			var messages = div.querySelectorAll(".markup");
-			for (var i = 0; i < messages.length; i++) {
-				var markup = messages[i];
-				if (settingsCookie["bda-gs-7"] && settingsCookie["bda-gs-7"] == true) {
-					markup.style.color = color1;
+				avatar.style.background = removeIcon ? "" : bgImage;
+				avatar.style.backgroundSize = "cover";
+					
+				if (tag && (type == "list" || type == "chat")) {
+					var thisTag = $(this.tagMarkup)[0];
+					thisTag.classList.add(type + "-tag");
+					thisTag.innerText = tag;
+					thisTag.style.background = color3;
+					thisTag.style.color = color4;
+					wrapper.appendChild(thisTag);
 				}
-				else {
-					markup.style.color = "";
+				
+				var messages = div.querySelectorAll(".markup");
+				for (var i = 0; i < messages.length; i++) {
+					var markup = messages[i];
+					if (settingsCookie["bda-gs-7"] && settingsCookie["bda-gs-7"] == true) {
+						markup.style.color = color1;
+					}
+					else {
+						markup.style.color = "";
+					}
 				}
+				
+				div.classList.add("custom-editusers");
 			}
 		}
 	}
 
-	loadAllUsers() {
+	loadAllUsers () {
+		this.resetAllUsers();
+		
 		var serverData = BDfunctionsDevilBro.getKeyInformation({"node":BDfunctionsDevilBro.getSelectedServer(),"key":"guild"});
-		if (serverData) {
-			document.querySelectorAll("div.member, div.message-group").forEach(node=>{node.classList.remove("custom")});
-			document.querySelectorAll(".user-tag").forEach(node=>{node.parentElement.removeChild(node)});
-			
-			if (!this.nickNames.id || this.nickNames.id != serverData.id) this.nickNames = {"id":serverData.id, "names":{}};
-			
+		var id = serverData ? serverData.id : "friend-list";
+		
+		if (!this.nickNames.id || this.nickNames.id != id) this.nickNames = {"id":id, "names":{}};
+		
+		var settings = this.getSettings();
+		
+		if (settings.changeInChatWindow) {
 			var membersList = document.querySelectorAll("div.member");
 			for (var i = 0; i < membersList.length; i++) {
-				this.loadUser(membersList[i], "list", serverData.id);
+				this.loadUser(membersList[i], "list");
 			} 
+		}
+		if (settings.changeInMemberList) {
 			var membersChat = document.querySelectorAll("div.message-group");
 			for (var j = 0; j < membersChat.length; j++) {
-				this.loadUser(membersChat[j], "chat", serverData.id);
+				this.loadUser(membersChat[j], "chat");
 			}
 		}
+		if (settings.changeInDmsList) {
+			var membersDMS = document.querySelectorAll("div.channel");
+			for (var k = 0; k < membersDMS.length; k++) {
+				this.loadUser(membersDMS[k], "dms");
+			}
+		}
+		if (settings.changeInFriendList) {
+			var membersFriends = document.querySelectorAll("div.friends-column");
+			for (var l = 0; l < membersFriends.length; l++) {
+				this.loadUser(membersFriends[l], "friends");
+			}
+		}
+		if (settings.changeInUserAccount) {
+			var account = document.querySelector("div.container-iksrDt");
+			if (account) {
+				this.loadUser(account, "info");
+			}
+		}
+	}
+	
+	resetAllUsers () {
+		document.querySelectorAll(".custom-editusers").forEach((div) => {
+			var avatar = 	div.querySelector("div.avatar-small") || 
+							div.querySelector("div.avatar-large");
+			var username = 	div.querySelector("strong.user-name") || 
+							div.querySelector("span.member-username-inner") ||
+							div.querySelector("span.channel-name") || 
+							div.querySelector("span.username");
+			var wrapper = 	div.querySelector("div.member-username") || 
+							div.querySelector("span.username-wrapper") || 
+							div.querySelector("span.channel-name") ||
+							div.querySelector("div.discord-tag") ||
+							div.querySelector("div.accountDetails-15i-_e");
+							
+			if (avatar && username && wrapper) {
+				var info = BDfunctionsDevilBro.getKeyInformation({"node":div,"key":"user"});
+				var styleInfo = BDfunctionsDevilBro.getKeyInformation({"node":wrapper,"key":"style"});
+				
+				if (!this.nickNames.names[info.id]) this.nickNames.names[info.id] = username.innerText;
+				
+				var name = 			div.classList.contains("container-iksrDt") ? info.username : this.nickNames.names[info.id];
+				var bgImage = 		info.avatar ? "url('https://cdn.discordapp.com/avatars/" + info.id + "/" + info.avatar + ".webp')" : "";
+				var color1 = 		styleInfo ? BDfunctionsDevilBro.color2RGB(styleInfo.color) : "";
+				var color2 = 		"";
+				
+				username.innerText = name;
+				username.style.color = color1;
+				username.style.background = color2;
+				
+				avatar.style.background = bgImage;
+				avatar.style.backgroundSize = "cover";
+				
+				var messages = div.querySelectorAll(".markup");
+				for (var i = 0; i < messages.length; i++) {
+					var markup = messages[i];
+					if (settingsCookie["bda-gs-7"] && settingsCookie["bda-gs-7"] == true) {
+						markup.style.color = color1;
+					}
+					else {
+						markup.style.color = "";
+					}
+				}
+			}
+			div.querySelectorAll(".user-tag").forEach(node=>{node.parentElement.removeChild(node)});
+			div.classList.remove("custom-editusers")
+		});
+		
 	}
 	
 	setLabelsByLanguage () {
