@@ -188,13 +188,14 @@ BDfunctionsDevilBro.equals = function (check1, check2, compareOrder) {
 };
 
 BDfunctionsDevilBro.onSwitchFix = function (plugin) {
-	plugin.switchFixObserver = new MutationObserver(m=>{
+	var switchFixObserver = new MutationObserver(m=>{
 		for(var i = 0; i < m.length; i++)
 			for(var j = 0; j < m[i].removedNodes.length; j++)
 				if(m[i].removedNodes[j].id === "friends")
-					return plugin.onSwitch(); 
+					plugin.onSwitch(); 
 	});
-	plugin.switchFixObserver.observe(document.querySelector(":-webkit-any(.chat, #friends)").parentNode, {childList: true});
+	switchFixObserver.observe(document.querySelector(":-webkit-any(.chat, #friends)").parentNode, {childList: true});
+	return switchFixObserver;
 }
 
 BDfunctionsDevilBro.getMyUserData = function () {
