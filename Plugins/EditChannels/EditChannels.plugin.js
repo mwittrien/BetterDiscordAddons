@@ -245,12 +245,12 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "3.2.3";}
+	getVersion () {return "3.2.4";}
 
 	getAuthor () {return "DevilBro";}
 	
     getSettingsPanel () {
-		return `<button class=EditChannelsResetBtn" style="height:23px" onclick="` + this.getName() + `.resetAll()">Reset all Channels`;
+		return `<button class="` + this.getName() + `ResetBtn" style="height:23px" onclick='` + this.getName() + `.resetAll("` + this.getName() + `")'>Reset all Channels`;
     }
 
 	//legacy
@@ -344,14 +344,14 @@ class EditChannels {
 			this.channelListObserver.disconnect();
 			this.channelContextObserver.disconnect();
 			
-			$(".containerDefault-7RImuF.custom").each(
+			$(".custom-editchannels").each(
 				(i,channelDiv) => {
 					var info = BDfunctionsDevilBro.getKeyInformation({"node":channelDiv, "key":"channel"});
 					if (info) {
 						var channel = $(channelDiv).find(".name-2SL4ev");
 					
 						$(channelDiv)
-							.removeClass("custom");
+							.removeClass("custom-editchannels");
 						$(channel)
 							.text(info.name)
 							.css("color", "");
@@ -366,18 +366,18 @@ class EditChannels {
 	
 	// begin of own functions
 
-    static resetAll () {
+    static resetAll (pluginName) {
 		if (typeof BDfunctionsDevilBro === "object") {
-			bdPluginStorage.set("EditChannels", "channels", {});
+			BDfunctionsDevilBro.removeAllData(pluginName, "channels");
 			
-			$(".containerDefault-7RImuF.custom").each(
+			$(".custom-editchannels").each(
 				(i,channelDiv) => {
 					var info = BDfunctionsDevilBro.getKeyInformation({"node":channelDiv, "key":"channel"});
 					if (info) {
 						var channel = $(channelDiv).find(".name-2SL4ev");
 					
 						$(channelDiv)
-							.removeClass("custom");
+							.removeClass("custom-editchannels");
 						$(channel)
 							.text(info.name)
 							.css("color", "");
@@ -619,7 +619,7 @@ class EditChannels {
 			var channel = $(channelDiv).find(".name-2SL4ev");
 			
 			$(channelDiv)
-				.removeClass("custom");
+				.removeClass("custom-editchannels");
 			$(channel)
 				.text(e.data.name)
 				.css("color", "");
@@ -639,7 +639,7 @@ class EditChannels {
 				var color = 	data.color ? this.chooseColor(channel[0], data.color) : "";
 				
 				$(channelDiv)
-					.addClass("custom");
+					.addClass("custom-editchannels");
 				$(channel)
 					.text(name)
 					.css("color", color);
