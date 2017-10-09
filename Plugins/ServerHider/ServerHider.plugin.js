@@ -258,12 +258,12 @@ class ServerHider {
 
 	getDescription () {return "Hide Servers in your Serverlist";}
 
-	getVersion () {return "2.2.2";}
+	getVersion () {return "2.2.3";}
 
 	getAuthor () {return "DevilBro";}
 	
     getSettingsPanel () {
-		return `<button class="ServerHiderResetBtn" style="height:23px" onclick="ServerHider.resetAll()">Reset all Servers`;
+		return `<button class="` + this.getName() + `ResetBtn" style="height:23px" onclick='` + this.getName() + `.resetAll("` + this.getName() + `")'>Reset all Servers`;
     }
 
 	//legacy
@@ -329,9 +329,9 @@ class ServerHider {
 	
 	// begin of own functions
 
-    static resetAll () {
+    static resetAll (pluginName) {
 		if (typeof BDfunctionsDevilBro === "object") {
-			bdPluginStorage.set("ServerHider", "servers", {});
+			BDfunctionsDevilBro.removeAllData(pluginName, "servers");
 			BDfunctionsDevilBro.showHideAllEles(true, BDfunctionsDevilBro.readServerList());
 		}
     }
