@@ -965,7 +965,7 @@ class EditUsers {
 			if (data) {
 				var name = 			data.name ? data.name : this.nickNames.names[info.id];
 				var tag = 			data.tag ? data.tag : null;
-				var bgImage = 		data.url ? "url(" + data.url + ")" : (info.avatar ? "url('https://cdn.discordapp.com/avatars/" + info.id + "/" + info.avatar + ".webp')" : "");
+				var bgImage = 		data.url ? "url(" + data.url + ")" : (info.avatar ? "url('https://cdn.discordapp.com/avatars/" + info.id + "/" + info.avatar + ".webp')" : "url(/assets/1cbd08c76f8af6dddce02c5138971129.png");
 				var removeIcon = 	data.removeIcon ? data.removeIcon : false;
 				var color1 = 		data.color1 ? BDfunctionsDevilBro.color2RGB(data.color1) : (styleInfo ? BDfunctionsDevilBro.color2RGB(styleInfo.color) : "");
 				var color2 = 		data.color2 ? BDfunctionsDevilBro.color2RGB(data.color2) : "";
@@ -1067,7 +1067,7 @@ class EditUsers {
 				if (!this.nickNames.names[info.id]) this.nickNames.names[info.id] = username.innerText;
 				
 				var name = 			div.classList.contains("container-iksrDt") ? info.username : this.nickNames.names[info.id];
-				var bgImage = 		info.avatar ? "url('https://cdn.discordapp.com/avatars/" + info.id + "/" + info.avatar + ".webp')" : "";
+				var bgImage = 		info.avatar ? "url('https://cdn.discordapp.com/avatars/" + info.id + "/" + info.avatar + ".webp')" : "url(/assets/1cbd08c76f8af6dddce02c5138971129.png";
 				var color1 = 		styleInfo ? BDfunctionsDevilBro.color2RGB(styleInfo.color) : "";
 				var color2 = 		"";
 				
