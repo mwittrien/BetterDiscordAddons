@@ -188,14 +188,19 @@ BDfunctionsDevilBro.equals = function (check1, check2, compareOrder) {
 };
 
 BDfunctionsDevilBro.onSwitchFix = function (plugin) {
-	var switchFixObserver = new MutationObserver(m=>{
-		for(var i = 0; i < m.length; i++)
-			for(var j = 0; j < m[i].addedNodes.length; j++)
-				if(m[i].addedNodes[j].id === "friends")
-					plugin.onSwitch();
-			for(var k = 0; k < m[i].removedNodes.length; k++)
-				if(m[i].removedNodes[j].id === "friends")
-					plugin.onSwitch(); 
+	var switchFixObserver = new MutationObserver((changes) => {
+		changes.forEach((change) => {
+			if (change.addedNodes) {
+				change.addedNodes.forEach((node) => {
+					if (node.id === "friends") plugin.onSwitch(); 
+				});
+			}
+			if (change.removedNodes) {
+				change.removedNodes.forEach((node) => {
+					if (node.id === "friends") plugin.onSwitch(); 
+				});
+			}
+		});
 	});
 	switchFixObserver.observe(document.querySelector(":-webkit-any(.chat, #friends)").parentNode, {childList: true});
 	return switchFixObserver;
