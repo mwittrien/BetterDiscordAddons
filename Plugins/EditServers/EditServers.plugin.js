@@ -369,12 +369,12 @@ class EditServers {
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	getVersion () {return "1.2.7";}
+	getVersion () {return "1.2.8";}
 
 	getAuthor () {return "DevilBro";}
 	
     getSettingsPanel () {
-		return `<button class=EditServersResetBtn" style="height:23px" onclick="` + this.getName() + `.resetAll()">Reset all Servers`;
+		return `<button class="` + this.getName() + `ResetBtn" style="height:23px" onclick='` + this.getName() + `.resetAll("` + this.getName() + `")'>Reset all Servers`;
     }
 
 	//legacy
@@ -409,8 +409,7 @@ class EditServers {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								var serverData = BDfunctionsDevilBro.getKeyInformation({"node":node, "key":"guild"});
-								if (serverData) {
+								if (BDfunctionsDevilBro.getKeyInformation({"node":node, "key":"guild"})) {
 									this.loadServer($(node));
 								}
 							});
@@ -444,7 +443,7 @@ class EditServers {
 			this.serverContextObserver.disconnect();
 			this.serverListObserver.disconnect();
 			
-			$(".guild.custom").each(
+			$(".custom-editservers").each(
 				(i,serverDiv) => {
 					var info = BDfunctionsDevilBro.getKeyInformation({"node":serverDiv, "key":"guild"});
 					if (info) {
@@ -454,7 +453,7 @@ class EditServers {
 						$(serverDiv)
 							.off("mouseenter")
 							.off("mouseleave")
-							.removeClass("custom");
+							.removeClass("custom-editservers");
 						$(server)
 							.text($(server).attr("name"))
 							.css("background-image", bgImage)
@@ -471,11 +470,11 @@ class EditServers {
 	
 	// begin of own functions
 
-    static resetAll () {
+    static resetAll (pluginName) {
 		if (typeof BDfunctionsDevilBro === "object") {
-			bdPluginStorage.set("EditServers", "servers", {});
+			BDfunctionsDevilBro.removeAllData(pluginName, "servers");
 			
-			$(".guild.custom").each(
+			$(".custom-editservers").each(
 				(i,serverDiv) => {
 					var info = BDfunctionsDevilBro.getKeyInformation({"node":serverDiv, "key":"guild"});
 					if (info) {
@@ -485,7 +484,7 @@ class EditServers {
 						$(serverDiv)
 							.off("mouseenter")
 							.off("mouseleave")
-							.removeClass("custom");
+							.removeClass("custom-editservers");
 						$(server)
 							.text($(server).attr("name"))
 							.css("background-image", bgImage)
@@ -529,7 +528,7 @@ class EditServers {
 			if (serverData && contextType) {
 				var serverDiv = BDfunctionsDevilBro.getDivOfServer(serverData.id);
 				var server = $(serverDiv).find(".avatar-small");
-				var shortName = $(serverDiv).hasClass("custom") ? $(server).attr("name") : $(server).text();
+				var shortName = $(serverDiv).hasClass("custom-editservers") ? $(server).attr("name") : $(server).text();
 				var data = Object.assign({},serverData,{shortName});
 				$(context).append(this.serverContextEntryMarkup)
 					.on("mouseenter", ".localserversettings-item", data, this.createContextSubMenu.bind(this))
@@ -687,7 +686,7 @@ class EditServers {
 	
 	checkUrl (e, modal) {
 		clearTimeout(this.urlCheckTimeout);
-		this.urlCheckRequest.abort();
+		if (typeof this.urlCheckRequest === "object") this.urlCheckRequest.abort();
 		if (!e.target.value) {
 			$(e.target)
 				.removeClass("valid")
@@ -857,7 +856,7 @@ class EditServers {
 			var bgImage = e.data.icon ? "url('https://cdn.discordapp.com/icons/" + e.data.id + "/" + e.data.icon + ".png')" : "";
 			
 			$(serverDiv)
-				.removeClass("custom")
+				.removeClass("custom-editservers")
 				.off("mouseenter")
 				.off("mouseleave");
 			$(server)
@@ -890,7 +889,7 @@ class EditServers {
 				var color2 = 		data.color2 ? BDfunctionsDevilBro.color2RGB(data.color2) : "";
 				
 				$(serverDiv)
-					.addClass("custom")
+					.addClass("custom-editservers")
 					.off("mouseenter")
 					.off("mouseleave")
 					.on("mouseenter", {"div":serverDiv,"info":info}, this.createServerToolTip.bind(this))
