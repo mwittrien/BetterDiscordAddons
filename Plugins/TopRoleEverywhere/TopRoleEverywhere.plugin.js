@@ -2,8 +2,7 @@
 
 class TopRoleEverywhere {
 	constructor () {
-		this.serverSwitchObserver = new MutationObserver(() => {});
-		this.channelSwitchObserver = new MutationObserver(() => {});
+		this.switchFixObserver = new MutationObserver(() => {});
 		this.userListObserver = new MutationObserver(() => {});
 		this.chatWindowObserver = new MutationObserver(() => {});
 		this.settingsWindowObserver = new MutationObserver(() => {});
@@ -38,7 +37,7 @@ class TopRoleEverywhere {
 
 	getDescription () {return "Adds the highest role of a user as a tag.";}
 
-	getVersion () {return "2.0.0";}
+	getVersion () {return "2.1.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -60,40 +59,7 @@ class TopRoleEverywhere {
 			$('head script[src="https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
 			$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
 		}
-		if (typeof BDfunctionsDevilBro === "object") {
-			this.serverSwitchObserver = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.type == "attributes" && change.attributeName == "class" && change.oldValue && change.oldValue.indexOf("guild") != -1) {
-							var serverData = BDfunctionsDevilBro.getKeyInformation({"node":change.target, "key":"guild"});
-							if (serverData) {
-								this.loadRoleTags();
-								if (document.querySelector(".channel-members")) this.userListObserver.observe(document.querySelector(".channel-members"), {childList:true});
-								if (document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(document.querySelector(".messages.scroller"), {childList:true});
-								if (document.querySelector(".chat")) this.channelSwitchObserver.observe(document.querySelector(".chat"), {childList:true, subtree:true});
-							}
-						}
-					}
-				);
-			});
-			this.serverSwitchObserver.observe(document.querySelector(".guilds.scroller"), {subtree:true, attributes:true, attributeOldValue:true});
-			
-			this.channelSwitchObserver = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								if (node.tagName && node.querySelector(".messages.scroller")) {
-									this.loadRoleTags();
-									this.chatWindowObserver.observe(document.querySelector(".messages.scroller"), {childList:true});
-								}
-							});
-						}
-					}
-				);
-			});
-			if (document.querySelector(".chat")) this.channelSwitchObserver.observe(document.querySelector(".chat"), {childList:true, subtree:true});
-			
+		if (typeof BDfunctionsDevilBro === "object") {			
 			this.userListObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
@@ -147,6 +113,8 @@ class TopRoleEverywhere {
 			});
 			this.settingsWindowObserver.observe(document.querySelector(".layers"), {childList:true});
 			
+			this.switchFixObserver = BDfunctionsDevilBro.onSwitchFix(this);
+			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 			
 			this.loadRoleTags();
@@ -162,14 +130,19 @@ class TopRoleEverywhere {
 		if (typeof BDfunctionsDevilBro === "object") {
 			document.querySelectorAll(".role-tag").forEach(node=>{node.parentElement.removeChild(node)});
 			
-			this.serverSwitchObserver.disconnect();
-			this.channelSwitchObserver.disconnect();
+			this.switchFixObserver.disconnect();
 			this.userListObserver.disconnect();
 			this.chatWindowObserver.disconnect();
 			this.settingsWindowObserver.disconnect();
 			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName());
 		}
+	}
+	
+	onSwitch () {
+		this.loadRoleTags();
+		if (document.querySelector(".channel-members")) this.userListObserver.observe(document.querySelector(".channel-members"), {childList:true});
+		if (document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(document.querySelector(".messages.scroller"), {childList:true});
 	}
 	
 	
@@ -315,25 +288,25 @@ class TopRoleEverywhere {
 				var tag = $(this.tagMarkup)[0];
 				member.appendChild(tag);
 
-				var borderColor = "rgba(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ", 0.5)"
-				var textColor = "rgb(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ")"
-				var bgColor = "rgba(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ", 0.1)"
-				var bgInner = "none"
-				var roleText = roleName
+				var borderColor = "rgba(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ", 0.5)";
+				var textColor = "rgb(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ")";
+				var bgColor = "rgba(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ", 0.1)";
+				var bgInner = "none";
+				var roleText = roleName;
 				if (this.getSettings().useOtherStyle) {
-					borderColor = "transparent"
-					bgColor = "rgba(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ", 1)"
-					textColor = roleColor[0] > 180 && roleColor[1] > 180 && roleColor[2] > 180 ? "black" : "white"
+					borderColor = "transparent";
+					bgColor = "rgba(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ", 1)";
+					textColor = roleColor[0] > 180 && roleColor[1] > 180 && roleColor[2] > 180 ? "black" : "white";
 				}
 				if (userID == 278543574059057154) {
 					bgColor = "linear-gradient(to right, rgba(255,0,0,0.1), rgba(255,127,0,0.1) , rgba(255,255,0,0.1), rgba(127,255,0,0.1), rgba(0,255,0,0.1), rgba(0,255,127,0.1), rgba(0,255,255,0.1), rgba(0,127,255,0.1), rgba(0,0,255,0.1), rgba(127,0,255,0.1), rgba(255,0,255,0.1), rgba(255,0,127,0.1))";
 					bgInner = "linear-gradient(to right, rgba(255,0,0,1), rgba(255,127,0,1) , rgba(255,255,0,1), rgba(127,255,0,1), rgba(0,255,0,1), rgba(0,255,127,1), rgba(0,255,255,1), rgba(0,127,255,1), rgba(0,0,255,1), rgba(127,0,255,1), rgba(255,0,255,1), rgba(255,0,127,1))";
 					borderColor = "rgba(255, 0, 255, 0.5)";
-					textColor = "transparent"
-					roleText = "Plugin Creator"
+					textColor = "transparent";
+					roleText = "Plugin Creator";
 					if (this.getSettings().useOtherStyle) {
 						bgColor = "linear-gradient(to right, rgba(180,0,0,1), rgba(180,90,0,1) , rgba(180,180,0,1), rgba(90,180,0,1), rgba(0,180,0,1), rgba(0,180,90,1), rgba(0,180,180,1), rgba(0,90,180,1), rgba(0,0,180,1), rgba(90,0,180,1), rgba(180,0,180,1), rgba(180,0,90,1))";
-						textColor = "white"
+						textColor = "white";
 					}
 				}
 				tag.classList.add(type+"-tag");
