@@ -12,6 +12,7 @@ class EditUsers {
 		this.channelSwitchObserver = new MutationObserver(() => {});
 		this.userListObserver = new MutationObserver(() => {});
 		this.chatWindowObserver = new MutationObserver(() => {});
+		this.settingsWindowObserver = new MutationObserver(() => {});
 		
 		this.urlCheckTimeout;
 		this.urlCheckRequest;
@@ -390,7 +391,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users.";}
 
-	getVersion () {return "1.0.2";}
+	getVersion () {return "1.1.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -496,6 +497,19 @@ class EditUsers {
 			});
 			if (document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(document.querySelector(".messages.scroller"), {childList:true});
 			
+			this.settingsWindowObserver = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.removedNodes) {
+							change.removedNodes.forEach((node) => {
+								if (node.tagName && node.getAttribute("layer-id") == "user-settings") this.loadAllUsers();
+							});
+						}
+					}
+				);
+			});
+			this.settingsWindowObserver.observe(document.querySelector(".layers"), {childList:true});
+			
 			BDfunctionsDevilBro.appendWebScript("https://bgrins.github.io/spectrum/spectrum.js");
 			BDfunctionsDevilBro.appendWebStyle("https://bgrins.github.io/spectrum/spectrum.css");
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
@@ -523,6 +537,7 @@ class EditUsers {
 			this.channelSwitchObserver.disconnect();
 			this.userListObserver.disconnect();
 			this.chatWindowObserver.disconnect();
+			this.settingsWindowObserver.disconnect();
 			
 			document.querySelectorAll("div.member, div.message-group").forEach(node=>{node.classList.remove("custom")});
 			document.querySelectorAll(".user-tag").forEach(node=>{node.parentElement.removeChild(node)});
@@ -895,9 +910,9 @@ class EditUsers {
 			var styleInfo = BDfunctionsDevilBro.getKeyInformation({"node":wrapper,"key":"style"});
 			var data = BDfunctionsDevilBro.loadData(info.id, this.getName(), "users");
 			
-			if (!this.nickNames[serverID][info.id]) this.nickNames[serverID][info.id] = username.innerText;
+			if (!this.nickNames.names[info.id]) this.nickNames.names[info.id] = username.innerText;
 			
-			var name = 			this.nickNames[serverID][info.id];
+			var name = 			this.nickNames.names[info.id];
 			var tag = 			null;
 			var bgImage = 		info.avatar ? "url('https://cdn.discordapp.com/avatars/" + info.id + "/" + info.avatar + ".webp')" : "";
 			var removeIcon = 	false;
@@ -933,6 +948,17 @@ class EditUsers {
 				thisTag.style.color = color4;
 				wrapper.appendChild(thisTag);
 			}
+			
+			var messages = div.querySelectorAll(".markup");
+			for (var i = 0; i < messages.length; i++) {
+				var markup = messages[i];
+				if (settingsCookie["bda-gs-7"] && settingsCookie["bda-gs-7"] == true) {
+					markup.style.color = color1;
+				}
+				else {
+					markup.style.color = "";
+				}
+			}
 		}
 	}
 
@@ -942,7 +968,7 @@ class EditUsers {
 			document.querySelectorAll("div.member, div.message-group").forEach(node=>{node.classList.remove("custom")});
 			document.querySelectorAll(".user-tag").forEach(node=>{node.parentElement.removeChild(node)});
 			
-			if (!this.nickNames[serverData.id]) this.nickNames[serverData.id] = {};
+			if (!this.nickNames.id || this.nickNames.id != serverData.id) this.nickNames = {"id":serverData.id, "names":{}};
 			
 			var membersList = document.querySelectorAll("div.member");
 			for (var i = 0; i < membersList.length; i++) {
