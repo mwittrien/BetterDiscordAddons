@@ -10,7 +10,7 @@ A series of plugins and themes for BetterDiscord. If you got any question write 
  - [Emoji Statistics](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EmojiStatistics) - Displays emojiinformation when hovering over an emoji in the emojipicker and adds a button to the emojipicker to open a statistics overview.
  - [Fix German Translation](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/FixGermanTranslation) - Fixes some minor translation errors in the german version of Discord.
  - [Image Gallery](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ImageGallery) - Allows the user to browse through images sent inside the same message.
- - [Message Utilities](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/MessageUtilities) - Allows you to add shortcuts to interact with messages.
+ - [Message Utilities](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/MessageUtilities) - UNFINISHED: Allows you to add shortcuts to interact with messages.
  - [Notification Sounds](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/NotificationSounds) - Rings a sound when someone writes you a DM or when someones mentions you in a server.
  - [Read All Notifications Button](https://github.com/mwittrien/BetterDiscordAddons/blob/master/Plugins/ReadAllNotificationsButton) - Adds a little button at the top of your serverlist that enables you to clear all mentions and messagesnotifications at once.
  - [Reverse Image Search](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ReverseImageSearch) - Adds the option to reverse image search images in discord via several engines.
