@@ -190,7 +190,10 @@ BDfunctionsDevilBro.equals = function (check1, check2, compareOrder) {
 BDfunctionsDevilBro.onSwitchFix = function (plugin) {
 	var switchFixObserver = new MutationObserver(m=>{
 		for(var i = 0; i < m.length; i++)
-			for(var j = 0; j < m[i].removedNodes.length; j++)
+			for(var j = 0; j < m[i].addedNodes.length; j++)
+				if(m[i].addedNodes[j].id === "friends")
+					plugin.onSwitch();
+			for(var k = 0; k < m[i].removedNodes.length; k++)
 				if(m[i].removedNodes[j].id === "friends")
 					plugin.onSwitch(); 
 	});
