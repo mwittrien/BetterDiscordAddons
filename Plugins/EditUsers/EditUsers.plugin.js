@@ -392,7 +392,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users.";}
 
-	getVersion () {return "1.2.0";}
+	getVersion () {return "1.2.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -439,7 +439,7 @@ class EditUsers {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (node.querySelector(".channel-name")) {
-									this.loadUser(node, "dms");
+									if (this.getSettings().changeInDmsList) this.loadUser(node, "dms");
 								}
 							});
 						}
@@ -454,7 +454,7 @@ class EditUsers {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (node.querySelector(".friends-column")) {
-									this.loadUser(node, "dms");
+									if (this.getSettings().changeInFriendList) this.loadUser(node, "friends");
 								}
 							});
 						}
@@ -469,7 +469,7 @@ class EditUsers {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (node.querySelector(".member-username")) {
-									this.loadUser(node, "list");
+									if (this.getSettings().changeInMemberList) this.loadUser(node, "list");
 								}
 							});
 						}
@@ -484,7 +484,7 @@ class EditUsers {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (node && node.tagName && node.querySelector(".username-wrapper")) {
-									this.loadUser(node, "chat");
+									if (this.getSettings().changeInChatWindow) this.loadUser(node, "chat");
 								}
 							});
 						}
@@ -1059,7 +1059,7 @@ class EditUsers {
 							div.querySelector("span.channel-name") ||
 							div.querySelector("div.discord-tag") ||
 							div.querySelector("div.accountDetails-15i-_e");
-							
+			
 			if (avatar && username && wrapper) {
 				var info = BDfunctionsDevilBro.getKeyInformation({"node":div,"key":"user"});
 				var styleInfo = BDfunctionsDevilBro.getKeyInformation({"node":wrapper,"key":"style"});
