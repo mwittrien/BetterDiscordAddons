@@ -375,13 +375,12 @@ class ServerFolders {
 
 	getDescription () {return "Add pseudofolders to your serverlist to organize your servers.";}
 
-	getVersion () {return "4.2.4";}
+	getVersion () {return "4.2.5";}
 
 	getAuthor () {return "DevilBro";}
 	
-	
     getSettingsPanel () {
-		return `<button class="ServerFoldersResetBtn" style="height:23px" onclick="` + this.getName() + `.resetAll()">Delete all Folders`;
+		return `<button class="` + this.getName() + `ResetBtn" style="height:23px" onclick='` + this.getName() + `.resetAll("` + this.getName() + `")'>Delete all Folders`;
     }
 
 	//legacy
@@ -420,7 +419,7 @@ class ServerFolders {
 									this.badgeObserver.observe(node, {characterData: true, subtree: true });
 									this.updateAllFolderNotifications();
 								}
-								if (node.classList && node.classList.contains("guild") && !node.classList.contains("guilds-add")) {
+								else if (node.classList && node.classList.contains("guild") && !node.classList.contains("guilds-add") && !node.querySelector(".guilds-error")) {
 									this.updateAllFolderNotifications();
 								}
 							});
@@ -430,7 +429,7 @@ class ServerFolders {
 								if (node.className === "badge") {
 									this.updateAllFolderNotifications();
 								}
-								else if (node.classList && node.classList.contains("guild") && !node.classList.contains("guilds-add")) {
+								else if (node.classList && node.classList.contains("guild") && !node.classList.contains("guilds-add") && !node.querySelector(".guilds-error")) {
 									$(".guild.folder").each( 
 										(i, folderDiv) => {
 											this.checkIfServerDivChangedTellIfDeleted(folderDiv);
@@ -502,9 +501,9 @@ class ServerFolders {
 	
 	// begin of own functions
 	
-    static resetAll () {
+    static resetAll (pluginName) {
 		if (typeof BDfunctionsDevilBro === "object") {
-			bdPluginStorage.set("ServerFolders", "folders", {});
+			BDfunctionsDevilBro.removeAllData(pluginName, "folders");
 			
 			$(".guild.folder").remove();
 			
