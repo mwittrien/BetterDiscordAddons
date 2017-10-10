@@ -319,7 +319,7 @@ class EditChannels {
 					}
 				);
 			});
-			this.channelContextObserver.observe($(".tooltips").parent()[0], {childList: true});
+			this.channelContextObserver.observe($(".app")[0], {childList: true});
 			
 			BDfunctionsDevilBro.appendWebScript("https://bgrins.github.io/spectrum/spectrum.js");
 			BDfunctionsDevilBro.appendWebStyle("https://bgrins.github.io/spectrum/spectrum.css");
@@ -462,7 +462,7 @@ class EditChannels {
 			channelSettingsModal.find("#modal-text")[0].value = name;
 			channelSettingsModal.find("#modal-text").attr("placeholder", e.data.name);
 			this.setSwatches(color, this.colourList, channelSettingsModal.find(".swatches1"), "swatch1");
-			channelSettingsModal.appendTo("#app-mount")
+			channelSettingsModal.appendTo(".app")
 				.on("click", ".callout-backdrop,button.btn-cancel", (event) => {
 					$(".sp-container").remove();
 					channelSettingsModal.remove();
