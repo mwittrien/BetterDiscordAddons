@@ -369,7 +369,7 @@ class EditServers {
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	getVersion () {return "1.3.0";}
+	getVersion () {return "1.3.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -404,7 +404,7 @@ class EditServers {
 					}
 				);
 			});
-			this.serverContextObserver.observe($(".app")[0], {childList: true});
+			this.serverContextObserver.observe($(".tooltips").parent()[0], {childList: true});
 			
 			this.serverListObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -412,7 +412,7 @@ class EditServers {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (BDfunctionsDevilBro.getKeyInformation({"node":node, "key":"guild"})) {
-									this.loadServer($(node));
+									this.loadServer(node);
 								}
 							});
 						}
@@ -473,27 +473,29 @@ class EditServers {
 	// begin of own functions
 
     static resetAll (pluginName) {
-		BDfunctionsDevilBro.removeAllData(pluginName, "servers");
-		
-		$(".custom-editservers").each(
-			(i,serverDiv) => {
-				var info = BDfunctionsDevilBro.getKeyInformation({"node":serverDiv, "key":"guild"});
-				if (info) {
-					var server = $(serverDiv).find(".avatar-small");
-					var bgImage = info.icon ? "url('https://cdn.discordapp.com/icons/" + info.id + "/" + info.icon + ".png')" : "";
-				
-					$(serverDiv)
-						.off("mouseenter")
-						.off("mouseleave")
-						.removeClass("custom-editservers");
-					$(server)
-						.text($(server).attr("name"))
-						.css("background-image", bgImage)
-						.css("background-color", "")
-						.css("color", "");
+		if (confirm("Are you sure you want to reset all servers?")) {
+			BDfunctionsDevilBro.removeAllData(pluginName, "servers");
+			
+			$(".custom-editservers").each(
+				(i,serverDiv) => {
+					var info = BDfunctionsDevilBro.getKeyInformation({"node":serverDiv, "key":"guild"});
+					if (info) {
+						var server = $(serverDiv).find(".avatar-small");
+						var bgImage = info.icon ? "url('https://cdn.discordapp.com/icons/" + info.id + "/" + info.icon + ".png')" : "";
+					
+						$(serverDiv)
+							.off("mouseenter")
+							.off("mouseleave")
+							.removeClass("custom-editservers");
+						$(server)
+							.text($(server).attr("name"))
+							.css("background-image", bgImage)
+							.css("background-color", "")
+							.css("color", "");
+					}
 				}
-			}
-		);
+			);
+		}
     }
 
 	changeLanguageStrings () {
@@ -598,7 +600,7 @@ class EditServers {
 			this.setSwatches(color2, this.colourList, serverSettingsModal.find(".swatches2"), "swatch2");
 			this.setSwatches(color3, this.colourList, serverSettingsModal.find(".swatches3"), "swatch3");
 			this.setSwatches(color4, this.colourList, serverSettingsModal.find(".swatches4"), "swatch4");
-			serverSettingsModal.appendTo(".app")
+			serverSettingsModal.appendTo($(".tooltips").parent())
 				.on("click", ".callout-backdrop,button.btn-cancel", (event) => {
 					$(".sp-container").remove();
 					serverSettingsModal.remove();
