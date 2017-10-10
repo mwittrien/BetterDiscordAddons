@@ -37,15 +37,17 @@ class TopRoleEverywhere {
 
 	getDescription () {return "Adds the highest role of a user as a tag.";}
 
-	getVersion () {return "2.1.0";}
+	getVersion () {return "2.2.0";}
 
 	getAuthor () {return "DevilBro";}
 	
     getSettingsPanel () {
-		return `
-		<input type="checkbox" onchange='` + this.getName() + `.updateSettings(this.parentNode, "` + this.getName() + `")' value="showInChat"${(this.getSettings().showInChat ? " checked" : void 0)}><label style="color:grey;"> Show tag in chatwindow.</label><br>\n
-		<input type="checkbox" onchange='` + this.getName() + `.updateSettings(this.parentNode, "` + this.getName() + `")' value="showInMemberList"${(this.getSettings().showInMemberList ? " checked" : void 0)}><label style="color:grey;"> Show tag in memberlist.</label><br>\n
-		<input type="checkbox" onchange='` + this.getName() + `.updateSettings(this.parentNode, "` + this.getName() + `")' value="useOtherStyle"${(this.getSettings().useOtherStyle ? " checked" : void 0)}><label style="color:grey;"> Use other tag style.</label>`;
+		if (typeof BDfunctionsDevilBro === "object") {
+			return `
+			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="showInChat"${(this.getSettings().showInChat ? " checked" : void 0)}> Show tag in chatwindow.</label><br>\n
+			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="showInMemberList"${(this.getSettings().showInMemberList ? " checked" : void 0)}> Show tag in memberlist.</label><br>\n
+			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="useOtherStyle"${(this.getSettings().useOtherStyle ? " checked" : void 0)}> Use other tag style.</label>`;
+		}
     }
 
 	//legacy
@@ -140,9 +142,11 @@ class TopRoleEverywhere {
 	}
 	
 	onSwitch () {
-		this.loadRoleTags();
-		if (document.querySelector(".channel-members")) this.userListObserver.observe(document.querySelector(".channel-members"), {childList:true});
-		if (document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(document.querySelector(".messages.scroller"), {childList:true});
+		if (typeof BDfunctionsDevilBro === "object") {
+			this.loadRoleTags();
+			if (document.querySelector(".channel-members")) this.userListObserver.observe(document.querySelector(".channel-members"), {childList:true});
+			if (document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(document.querySelector(".messages.scroller"), {childList:true});
+		}
 	}
 	
 	
@@ -154,30 +158,28 @@ class TopRoleEverywhere {
 			showInMemberList: true,
 			useOtherStyle: false
 		};
-		var settings = bdPluginStorage.get(this.getName(), "settings");
-		if (settings == null) {
-			settings = {};
-		}
+		var settings = BDfunctionsDevilBro.loadAllData(this.getName(), "settings");
 		var saveSettings = false;
 		for (var key in defaultSettings) {
 			if (settings[key] == null) {
-				settings[key] = defaultSettings[key];
+				settings[key] = settings[key] ? settings[key] : defaultSettings[key];
 				saveSettings = true;
 			}
 		}
 		if (saveSettings) {
-			bdPluginStorage.set(this.getName(), "settings", settings);
+			BDfunctionsDevilBro.saveAllData(settings, this.getName(), "settings");
 		}
 		return settings;
 	}
 
-    static updateSettings (settingspanel, pluginName) {
+    static updateSettings (ele, pluginName) {
+		var settingspanel = BDfunctionsDevilBro.getSettingsPanelDiv(ele);
 		var settings = {};
 		var inputs = settingspanel.querySelectorAll("input");
 		for (var i = 0; i < inputs.length; i++) {
 			settings[inputs[i].value] = inputs[i].checked;
 		}
-		bdPluginStorage.set(pluginName, "settings", settings);
+		BDfunctionsDevilBro.saveAllData(settings, pluginName, "settings");
     }
 
 	loadRoleTags() {
