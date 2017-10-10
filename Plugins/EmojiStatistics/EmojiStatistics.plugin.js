@@ -264,7 +264,7 @@ class EmojiStatistics {
 
 	getDescription () {return "Adds some helpful options to show you more information about emojis and emojiservers.";}
 
-	getVersion () {return "2.2.5";}
+	getVersion () {return "2.3.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -312,7 +312,7 @@ class EmojiStatistics {
 					}
 				);
 			});
-			this.emojiPickerObserver.observe($("#app-mount>:first-child")[0], {childList: true, subtree: true});
+			this.emojiPickerObserver.observe($(".app")[0], {childList: true, subtree: true});
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 		
@@ -426,7 +426,7 @@ class EmojiStatistics {
 		var entries = [];
 		
 		var emojiInformationModal = $(this.emojiInformationModalMarkup);
-		emojiInformationModal.appendTo("#app-mount")
+		emojiInformationModal.appendTo(".app")
 		.on("click", ".callout-backdrop,button.btn-ok", (e) => {
 			emojiInformationModal.remove();
 		});
