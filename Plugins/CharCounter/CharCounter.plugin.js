@@ -13,10 +13,7 @@ class CharCounter {
 				right: 0; 
 				bottom: -1.3em;
 				opacity: .5;
-			}
-
-			.typing {
-				background: transparent !important;
+				z-index: 1000;
 			}`;
 			
 		this.counterMarkup = `<div class="character-counter"></div>`;
