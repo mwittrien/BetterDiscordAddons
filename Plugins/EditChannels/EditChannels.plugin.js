@@ -245,7 +245,7 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "3.2.5";}
+	getVersion () {return "3.2.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -319,7 +319,7 @@ class EditChannels {
 					}
 				);
 			});
-			this.channelContextObserver.observe($(".app")[0], {childList: true});
+			this.channelContextObserver.observe($(".tooltips").parent()[0], {childList: true});
 			
 			BDfunctionsDevilBro.appendWebScript("https://bgrins.github.io/spectrum/spectrum.js");
 			BDfunctionsDevilBro.appendWebStyle("https://bgrins.github.io/spectrum/spectrum.css");
@@ -369,22 +369,24 @@ class EditChannels {
 	// begin of own functions
 
     static resetAll (pluginName) {
-		BDfunctionsDevilBro.removeAllData(pluginName, "channels");
-		
-		$(".custom-editchannels").each(
-			(i,channelDiv) => {
-				var info = BDfunctionsDevilBro.getKeyInformation({"node":channelDiv, "key":"channel"});
-				if (info) {
-					var channel = $(channelDiv).find(".name-2SL4ev");
-				
-					$(channelDiv)
-						.removeClass("custom-editchannels");
-					$(channel)
-						.text(info.name)
-						.css("color", "");
+		if (confirm("Are you sure you want to reset all channels?")) {
+			BDfunctionsDevilBro.removeAllData(pluginName, "channels");
+			
+			$(".custom-editchannels").each(
+				(i,channelDiv) => {
+					var info = BDfunctionsDevilBro.getKeyInformation({"node":channelDiv, "key":"channel"});
+					if (info) {
+						var channel = $(channelDiv).find(".name-2SL4ev");
+					
+						$(channelDiv)
+							.removeClass("custom-editchannels");
+						$(channel)
+							.text(info.name)
+							.css("color", "");
+					}
 				}
-			}
-		);
+			);
+		}
     }
 
 	changeLanguageStrings () {
@@ -462,7 +464,7 @@ class EditChannels {
 			channelSettingsModal.find("#modal-text")[0].value = name;
 			channelSettingsModal.find("#modal-text").attr("placeholder", e.data.name);
 			this.setSwatches(color, this.colourList, channelSettingsModal.find(".swatches1"), "swatch1");
-			channelSettingsModal.appendTo(".app")
+			channelSettingsModal.appendTo($(".tooltips").parent())
 				.on("click", ".callout-backdrop,button.btn-cancel", (event) => {
 					$(".sp-container").remove();
 					channelSettingsModal.remove();
