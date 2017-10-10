@@ -27,11 +27,9 @@ class ImageGallery {
 
 	getDescription () {return "Allows the user to browse through images sent inside the same message.";}
 
-	getVersion () {return "1.2.0";}
+	getVersion () {return "1.2.1";}
 
 	getAuthor () {return "DevilBro";}
-	
-    getSettingsPanel () {}
 
 	//legacy
 	load () {}
@@ -50,6 +48,7 @@ class ImageGallery {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
+								console.log(node);
 								if ($(node).find(".modal-image").length != 0) {
 									this.loadImages(node);
 								}
@@ -58,14 +57,14 @@ class ImageGallery {
 						if (change.removedNodes) {
 							change.removedNodes.forEach((node) => {
 								if ($(node).find(".modal-image").length != 0) {
-									$(document).off("keyup.ImageGallery").off("keydown.ImageGallery");
+									$(document).off("keyup." + this.getName()).off("keydown." + this.getName());
 								}
 							});
 						}
 					}
 				);
 			});
-			this.imageModalObserver.observe($("#app-mount>:first-child")[0], {childList: true, subtree: true});
+			this.imageModalObserver.observe($("#app-mount")[0], {childList: true, subtree: true});
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 			
@@ -81,7 +80,7 @@ class ImageGallery {
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.imageModalObserver.disconnect();
 			
-			$(document).off("keyup.ImageGallery").off("keydown.ImageGallery");
+			$(document).off("keyup." + this.getName()).off("keydown." + this.getName());
 			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName());
 		}
@@ -157,8 +156,8 @@ class ImageGallery {
 		
 		$(modal).find(".image.prev").off("click").on("click", this.addImagePreviews.bind(this, modal, imgs, prevImg));
 		$(modal).find(".image.next").off("click").on("click", this.addImagePreviews.bind(this, modal, imgs, nextImg));
-		$(document).off("keydown.ImageGallery").on("keydown.ImageGallery", {modal, imgs, prevImg, nextImg}, this.keyPressed.bind(this));
-		$(document).off("keyup.ImageGallery").on("keyup.ImageGallery", () => {this.eventFired = false});
+		$(document).off("keydown." + this.getName()).on("keydown." + this.getName(), {modal, imgs, prevImg, nextImg}, this.keyPressed.bind(this));
+		$(document).off("keyup." + this.getName()).on("keyup." + this.getName(), () => {this.eventFired = false});
 	}
 	
 	resizeImage (modal, src, img) {
