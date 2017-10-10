@@ -42,7 +42,7 @@ class FixGermanTranslation {
 							}
 						);
 					});
-					this.serverContextObserver.observe($(".tooltips").parent()[0], {childList: true});
+					this.serverContextObserver.observe($(".app")[0], {childList: true});
 				}
 				BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
 			},5000);
