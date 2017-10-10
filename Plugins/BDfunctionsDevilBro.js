@@ -309,6 +309,10 @@ BDfunctionsDevilBro.getDivOfChannel = function (channelID, serverID) {
 	return null;
 };
 
+BDfunctionsDevilBro.getSettingsPanelDiv = function (ele) {
+	return $(".bda-slist > li").has(ele)[0];
+}
+
 BDfunctionsDevilBro.themeIsLightTheme = function () {
 	if ($(".theme-light").length > $(".theme-dark").length) {
 		return true;
@@ -340,6 +344,12 @@ BDfunctionsDevilBro.saveData = function (id, data, pluginName, keyName) {
 	var settings = bdPluginStorage.get(pluginName, keyName) ? bdPluginStorage.get(pluginName, keyName) : {};
 	
 	settings[id] = data;
+	
+	bdPluginStorage.set(pluginName, keyName, settings);
+};
+
+BDfunctionsDevilBro.saveAllData = function (data, pluginName, keyName) {
+	var settings = data;
 	
 	bdPluginStorage.set(pluginName, keyName, settings);
 };
