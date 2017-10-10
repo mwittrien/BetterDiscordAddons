@@ -392,7 +392,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users.";}
 
-	getVersion () {return "1.2.2";}
+	getVersion () {return "1.2.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -433,7 +433,7 @@ class EditUsers {
 					}
 				);
 			});
-			this.userContextObserver.observe(document.querySelector(".app"), {childList: true});
+			this.userContextObserver.observe(document.querySelector(".tooltips").parentElement, {childList: true});
 			
 			this.dmListObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -589,7 +589,9 @@ class EditUsers {
     }
 
     static resetAll (pluginName) {
-		BDfunctionsDevilBro.removeAllData(pluginName, "users");
+		if (confirm("Are you sure you want to reset all users?")) {
+			BDfunctionsDevilBro.removeAllData(pluginName, "users");
+		}
     }
 
 	changeLanguageStrings () {
@@ -692,7 +694,7 @@ class EditUsers {
 			this.setSwatches(color2, this.colourList, userSettingsModal.find(".swatches2"), "swatch2");
 			this.setSwatches(color3, this.colourList, userSettingsModal.find(".swatches3"), "swatch3");
 			this.setSwatches(color4, this.colourList, userSettingsModal.find(".swatches4"), "swatch4");
-			userSettingsModal.appendTo(".app")
+			userSettingsModal.appendTo($(".tooltips").parent())
 				.on("click", ".callout-backdrop,button.btn-cancel", (event) => {
 					$(".sp-container").remove();
 					userSettingsModal.remove();
