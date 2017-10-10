@@ -85,7 +85,7 @@ class ReverseImageSearch {
 					}
 				);
 			});
-			this.messageContextObserver.observe($(".tooltips").parent()[0], {childList: true});
+			this.messageContextObserver.observe($(".app")[0], {childList: true});
 			
 		
 			this.searchEngines = BDfunctionsDevilBro.sortArrayByKey(this.searchEngines, "name");
