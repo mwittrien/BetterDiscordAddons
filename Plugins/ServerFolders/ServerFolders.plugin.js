@@ -375,7 +375,7 @@ class ServerFolders {
 
 	getDescription () {return "Add pseudofolders to your serverlist to organize your servers.";}
 
-	getVersion () {return "4.2.7";}
+	getVersion () {return "4.3.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -410,7 +410,7 @@ class ServerFolders {
 					}
 				);
 			});
-			this.serverContextObserver.observe($(".tooltips").parent()[0], {childList: true});
+			this.serverContextObserver.observe($(".app")[0], {childList: true});
 			
 			this.serverListObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -434,7 +434,7 @@ class ServerFolders {
 								else if (node.classList && node.classList.contains("guild") && !node.classList.contains("guilds-add") && !node.querySelector(".guilds-error")) {
 									$(".guild.folder").each( 
 										(i, folderDiv) => {
-											this.checkIfServerDivChangedTellIfDeleted(folderDiv);
+											this.checkIfServerDivChanged(folderDiv);
 										}
 									);
 									this.updateAllFolderNotifications();
@@ -622,34 +622,32 @@ class ServerFolders {
 		var folder = e.target;
 		var folderDiv = this.getParentDivOfFolder(folder);
 		
-		var wasDeleted = this.checkIfServerDivChangedTellIfDeleted(folderDiv);
+		this.checkIfServerDivChanged(folderDiv);
+	
+		var id = BDfunctionsDevilBro.getIdOfServer($(folderDiv).next()[0]);
 		
-		if (!wasDeleted) {
-			var id = BDfunctionsDevilBro.getIdOfServer($(folderDiv).next()[0]);
-			
-			if (id) {
-				var data = BDfunctionsDevilBro.loadData(id, this.getName(), "folders");
-				if (data) {
-					var folderID = 		data.folderID;
-					var folderName = 	data.folderName;
-					var isOpen = 		!data.isOpen;
-					var iconID = 		data.iconID;
-					var icons = 		data.icons;
-					var color1 = 		data.color1;
-					var color2 = 		data.color2;
-					var color3 = 		data.color3;
-					var color4 = 		data.color4;
-					
-					$(folder)
-						.css("background-image", isOpen ? "url(\"" + icons.openicon + "\")" : "url(\"" + icons.closedicon + "\")")
-						.attr("class", isOpen ? "avatar-small open" : "avatar-small closed");
-					
-					var includedServers = this.readIncludedServerList(folderDiv);
-					
-					BDfunctionsDevilBro.showHideAllEles(isOpen, includedServers);
-					
-					BDfunctionsDevilBro.saveData(folderID, {folderID,folderName,isOpen,iconID,icons,color1,color2,color3,color4}, this.getName(), "folders");
-				}
+		if (id) {
+			var data = BDfunctionsDevilBro.loadData(id, this.getName(), "folders");
+			if (data) {
+				var folderID = 		data.folderID;
+				var folderName = 	data.folderName;
+				var isOpen = 		!data.isOpen;
+				var iconID = 		data.iconID;
+				var icons = 		data.icons;
+				var color1 = 		data.color1;
+				var color2 = 		data.color2;
+				var color3 = 		data.color3;
+				var color4 = 		data.color4;
+				
+				$(folder)
+					.css("background-image", isOpen ? "url(\"" + icons.openicon + "\")" : "url(\"" + icons.closedicon + "\")")
+					.attr("class", isOpen ? "avatar-small open" : "avatar-small closed");
+				
+				var includedServers = this.readIncludedServerList(folderDiv);
+				
+				BDfunctionsDevilBro.showHideAllEles(isOpen, includedServers);
+				
+				BDfunctionsDevilBro.saveData(folderID, {folderID,folderName,isOpen,iconID,icons,color1,color2,color3,color4}, this.getName(), "folders");
 			}
 		}
 	}
@@ -660,40 +658,38 @@ class ServerFolders {
 		
 		var includedServers = this.readIncludedServerList(folderDiv);
 		
-		var wasDeleted = this.checkIfServerDivChangedTellIfDeleted(folderDiv);
+		this.checkIfServerDivChanged(folderDiv);
 		
-		if (!wasDeleted) {
-			var folderContext = $(this.folderContextMarkup);
-			$("#app-mount>:first-child").append(folderContext)
-				.off("click", ".foldersettings-item")
-				.off("click", ".removefolder-item")
-				.on("click", ".foldersettings-item", this.showFolderSettings.bind(this,folder))
-				.on("click", ".removefolder-item", this.removeFolder.bind(this,folder));
-			
-			if (BDfunctionsDevilBro.readUnreadServerList(includedServers).length > 0) {
-				$(folderContext)
-					.off("click", ".unreadfolder-item")
-					.on("click", ".unreadfolder-item", this.clearAllReadNotifications.bind(this,folder));
-			}
-			else {
-				$(folderContext).find(".unreadfolder-item").addClass("disabled");
-			}
-			
-			var theme = BDfunctionsDevilBro.themeIsLightTheme() ? "" : "theme-dark";
-			
+		var folderContext = $(this.folderContextMarkup);
+		$(".app").append(folderContext)
+			.off("click", ".foldersettings-item")
+			.off("click", ".removefolder-item")
+			.on("click", ".foldersettings-item", this.showFolderSettings.bind(this,folder))
+			.on("click", ".removefolder-item", this.removeFolder.bind(this,folder));
+		
+		if (BDfunctionsDevilBro.readUnreadServerList(includedServers).length > 0) {
 			$(folderContext)
-				.addClass(theme)
-				.css("left", e.pageX + "px")
-				.css("top", e.pageY + "px");
-				
-			this.folderContextEventHandler = (event) => {	
-				if (!folderContext[0].contains(event.target)) {
-					$(document).unbind('mousedown', this.folderContextEventHandler);
-					$(folderContext).remove();
-				}
-			};
-			$(document).bind('mousedown', this.folderContextEventHandler);
+				.off("click", ".unreadfolder-item")
+				.on("click", ".unreadfolder-item", this.clearAllReadNotifications.bind(this,folder));
 		}
+		else {
+			$(folderContext).find(".unreadfolder-item").addClass("disabled");
+		}
+		
+		var theme = BDfunctionsDevilBro.themeIsLightTheme() ? "" : "theme-dark";
+		
+		$(folderContext)
+			.addClass(theme)
+			.css("left", e.pageX + "px")
+			.css("top", e.pageY + "px");
+			
+		this.folderContextEventHandler = (event) => {	
+			if (!folderContext[0].contains(event.target)) {
+				$(document).unbind('mousedown', this.folderContextEventHandler);
+				$(folderContext).remove();
+			}
+		};
+		$(document).bind('mousedown', this.folderContextEventHandler);
 	}
 	
 	showFolderSettings (folder) {
@@ -722,7 +718,7 @@ class ServerFolders {
 				this.setSwatches(color2, this.colourList, folderSettingsModal.find(".swatches2"), "swatch2");
 				this.setSwatches(color3, this.colourList, folderSettingsModal.find(".swatches3"), "swatch3");
 				this.setSwatches(color4, this.colourList, folderSettingsModal.find(".swatches4"), "swatch4");
-				folderSettingsModal.appendTo("#app-mount")
+				folderSettingsModal.appendTo(".app")
 					.on("click", ".callout-backdrop,button.btn-cancel", (e) => {
 						$(".sp-container").remove();
 						folderSettingsModal.remove();
@@ -1032,7 +1028,7 @@ class ServerFolders {
 		BDfunctionsDevilBro.clearReadNotifications(unreadServers);
 	}
 	
-	checkIfServerDivChangedTellIfDeleted (folderDiv) {
+	checkIfServerDivChanged (folderDiv) {
 		var folder = $(folderDiv).find(".avatar-small")[0];
 		var oldFolderID = $(folder).attr("id").split("FL_ID_")[1];
 		var newFolderID = BDfunctionsDevilBro.getIdOfServer($(folderDiv).next()[0]);
@@ -1057,12 +1053,6 @@ class ServerFolders {
 					BDfunctionsDevilBro.removeData(oldFolderID, this.getName(), "folders");
 				}
 			}
-			return false;
-		}
-		else {
-			this.removeFolder(folder);
-			
-			return true;
 		}
 	}
 	
