@@ -48,7 +48,6 @@ class ImageGallery {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								console.log(node);
 								if ($(node).find(".modal-image").length != 0) {
 									this.loadImages(node);
 								}
