@@ -293,7 +293,7 @@ class ServerHider {
 					}
 				);
 			});
-			this.serverContextObserver.observe($(".tooltips").parent()[0], {childList: true});
+			this.serverContextObserver.observe($(".app")[0], {childList: true});
 			
 			this.serverListContextHandler = (e) => {	
 				this.updateAllServers(false);
@@ -412,7 +412,7 @@ class ServerHider {
 		$(".context-menu").hide();
 		
 		var serverHiderModal = $(this.serverHiderModalMarkup);
-		serverHiderModal.appendTo("#app-mount")
+		serverHiderModal.appendTo(".app")
 			.on("click", ".callout-backdrop,button.btn-ok", () => {
 				serverHiderModal.remove();
 			})
