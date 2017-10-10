@@ -375,7 +375,7 @@ class ServerFolders {
 
 	getDescription () {return "Add pseudofolders to your serverlist to organize your servers.";}
 
-	getVersion () {return "4.3.0";}
+	getVersion () {return "4.3.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -410,7 +410,7 @@ class ServerFolders {
 					}
 				);
 			});
-			this.serverContextObserver.observe($(".app")[0], {childList: true});
+			this.serverContextObserver.observe($(".tooltips").parent()[0], {childList: true});
 			
 			this.serverListObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -504,11 +504,13 @@ class ServerFolders {
 	// begin of own functions
 	
     static resetAll (pluginName) {
-		BDfunctionsDevilBro.removeAllData(pluginName, "folders");
-		
-		$(".guild.folder").remove();
-		
-		BDfunctionsDevilBro.showHideAllEles(true, BDfunctionsDevilBro.readServerList());
+		if (confirm("Are you sure you want to delete all folders?")) {
+			BDfunctionsDevilBro.removeAllData(pluginName, "folders");
+			
+			$(".guild.folder").remove();
+			
+			BDfunctionsDevilBro.showHideAllEles(true, BDfunctionsDevilBro.readServerList());
+		}
     }
 
 	changeLanguageStrings () {
@@ -661,7 +663,7 @@ class ServerFolders {
 		this.checkIfServerDivChanged(folderDiv);
 		
 		var folderContext = $(this.folderContextMarkup);
-		$(".app").append(folderContext)
+		$(".tooltips").parent().append(folderContext)
 			.off("click", ".foldersettings-item")
 			.off("click", ".removefolder-item")
 			.on("click", ".foldersettings-item", this.showFolderSettings.bind(this,folder))
@@ -718,7 +720,7 @@ class ServerFolders {
 				this.setSwatches(color2, this.colourList, folderSettingsModal.find(".swatches2"), "swatch2");
 				this.setSwatches(color3, this.colourList, folderSettingsModal.find(".swatches3"), "swatch3");
 				this.setSwatches(color4, this.colourList, folderSettingsModal.find(".swatches4"), "swatch4");
-				folderSettingsModal.appendTo(".app")
+				folderSettingsModal.appendTo($(".tooltips").parent())
 					.on("click", ".callout-backdrop,button.btn-cancel", (e) => {
 						$(".sp-container").remove();
 						folderSettingsModal.remove();
