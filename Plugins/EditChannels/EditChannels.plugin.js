@@ -245,12 +245,14 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "3.2.4";}
+	getVersion () {return "3.2.5";}
 
 	getAuthor () {return "DevilBro";}
 	
     getSettingsPanel () {
-		return `<button class="` + this.getName() + `ResetBtn" style="height:23px" onclick='` + this.getName() + `.resetAll("` + this.getName() + `")'>Reset all Channels`;
+		if (typeof BDfunctionsDevilBro === "object") {
+			return `<button class="` + this.getName() + `ResetBtn" style="height:23px" onclick='` + this.getName() + `.resetAll("` + this.getName() + `")'>Reset all Channels`;
+		}
     }
 
 	//legacy
@@ -367,24 +369,22 @@ class EditChannels {
 	// begin of own functions
 
     static resetAll (pluginName) {
-		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.removeAllData(pluginName, "channels");
-			
-			$(".custom-editchannels").each(
-				(i,channelDiv) => {
-					var info = BDfunctionsDevilBro.getKeyInformation({"node":channelDiv, "key":"channel"});
-					if (info) {
-						var channel = $(channelDiv).find(".name-2SL4ev");
-					
-						$(channelDiv)
-							.removeClass("custom-editchannels");
-						$(channel)
-							.text(info.name)
-							.css("color", "");
-					}
+		BDfunctionsDevilBro.removeAllData(pluginName, "channels");
+		
+		$(".custom-editchannels").each(
+			(i,channelDiv) => {
+				var info = BDfunctionsDevilBro.getKeyInformation({"node":channelDiv, "key":"channel"});
+				if (info) {
+					var channel = $(channelDiv).find(".name-2SL4ev");
+				
+					$(channelDiv)
+						.removeClass("custom-editchannels");
+					$(channel)
+						.text(info.name)
+						.css("color", "");
 				}
-			);
-		}
+			}
+		);
     }
 
 	changeLanguageStrings () {
