@@ -33,7 +33,7 @@ class NotificationSounds {
 
 	getDescription () {return "Creates a notification sound when you receive a notification (mention or DM).";}
 
-	getVersion () {return "2.4.3";}
+	getVersion () {return "2.4.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -286,7 +286,7 @@ class NotificationSounds {
 	}
 
     static updateSettings (ele, type, types, pluginName) {
-		var settingspanel = 	ele.parentElement.parentElement.parentElement;
+		var settingspanel = 	BDfunctionsDevilBro.getSettingsPanelDiv(ele);
 		var categoryselect = 	$(settingspanel).find("#" + type + "-category-select")[0];
 		var songselect = 		$(settingspanel).find("#" + type + "-song-select")[0];
 		var volumeslider = 		$(settingspanel).find("#" + type + "-volume")[0];
@@ -326,19 +326,21 @@ class NotificationSounds {
 		
 		var settings = {};
 		types = types.split(",");
+		var choices = {};
 		for (var i = 0; i < types.length; i++) {
 			var key = 			types[i];
 			var category = 		$(settingspanel).find("#" + key + "-category-select").find(":selected").text();
 			var song = 			$(settingspanel).find("#" + key + "-song-select").find(":selected").text();
 			var volume = 		$(settingspanel).find("#" + key + "-volume")[0].value;
-			BDfunctionsDevilBro.saveData(key, {category, song, volume}, pluginName, "choices");
+			choices[key] = 		{category, song, volume};
 		}
+		BDfunctionsDevilBro.saveAllData(choices, pluginName, "choices");
     }
 
     static updateVolumeinput (ele, type) {
-		var settingspanel = ele.parentElement.parentElement.parentElement;
-		var volumeslider = $(settingspanel).find("#" + type + "-volume")[0];
-		var volumeinput = $(settingspanel).find("#" + type + "-volume-value")[0];
+		var settingspanel = 	BDfunctionsDevilBro.getSettingsPanelDiv(ele);
+		var volumeslider = 		$(settingspanel).find("#" + type + "-volume")[0];
+		var volumeinput = 		$(settingspanel).find("#" + type + "-volume-value")[0];
 		
 		if (ele.id == type + "-volume") {
 			volumeinput.value = volumeslider.value;
