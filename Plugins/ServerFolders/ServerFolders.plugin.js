@@ -375,12 +375,14 @@ class ServerFolders {
 
 	getDescription () {return "Add pseudofolders to your serverlist to organize your servers.";}
 
-	getVersion () {return "4.2.5";}
+	getVersion () {return "4.2.7";}
 
 	getAuthor () {return "DevilBro";}
 	
     getSettingsPanel () {
-		return `<button class="` + this.getName() + `ResetBtn" style="height:23px" onclick='` + this.getName() + `.resetAll("` + this.getName() + `")'>Delete all Folders`;
+		if (typeof BDfunctionsDevilBro === "object") {
+			return `<button class="` + this.getName() + `ResetBtn" style="height:23px" onclick='` + this.getName() + `.resetAll("` + this.getName() + `")'>Delete all Folders`;
+		}
     }
 
 	//legacy
@@ -502,13 +504,11 @@ class ServerFolders {
 	// begin of own functions
 	
     static resetAll (pluginName) {
-		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.removeAllData(pluginName, "folders");
-			
-			$(".guild.folder").remove();
-			
-			BDfunctionsDevilBro.showHideAllEles(true, BDfunctionsDevilBro.readServerList());
-		}
+		BDfunctionsDevilBro.removeAllData(pluginName, "folders");
+		
+		$(".guild.folder").remove();
+		
+		BDfunctionsDevilBro.showHideAllEles(true, BDfunctionsDevilBro.readServerList());
     }
 
 	changeLanguageStrings () {
