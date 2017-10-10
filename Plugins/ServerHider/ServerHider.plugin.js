@@ -258,7 +258,7 @@ class ServerHider {
 
 	getDescription () {return "Hide Servers in your Serverlist";}
 
-	getVersion () {return "2.2.4";}
+	getVersion () {return "2.2.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -293,7 +293,7 @@ class ServerHider {
 					}
 				);
 			});
-			this.serverContextObserver.observe($(".app")[0], {childList: true});
+			this.serverContextObserver.observe($(".tooltips").parent()[0], {childList: true});
 			
 			this.serverListContextHandler = (e) => {	
 				this.updateAllServers(false);
@@ -332,8 +332,10 @@ class ServerHider {
 	// begin of own functions
 
     static resetAll (pluginName) {
-		BDfunctionsDevilBro.removeAllData(pluginName, "servers");
-		BDfunctionsDevilBro.showHideAllEles(true, BDfunctionsDevilBro.readServerList());
+		if (confirm("Are you sure you want to reset all servers?")) {
+			BDfunctionsDevilBro.removeAllData(pluginName, "servers");
+			BDfunctionsDevilBro.showHideAllEles(true, BDfunctionsDevilBro.readServerList());
+		}
     }
 
 	changeLanguageStrings () {
@@ -412,7 +414,7 @@ class ServerHider {
 		$(".context-menu").hide();
 		
 		var serverHiderModal = $(this.serverHiderModalMarkup);
-		serverHiderModal.appendTo(".app")
+		serverHiderModal.appendTo($(".tooltips").parent())
 			.on("click", ".callout-backdrop,button.btn-ok", () => {
 				serverHiderModal.remove();
 			})
