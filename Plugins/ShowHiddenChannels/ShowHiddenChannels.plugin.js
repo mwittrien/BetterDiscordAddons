@@ -41,8 +41,6 @@ class ShowHiddenChannels {
 	getVersion () {return "1.3.2";}
 
 	getAuthor () {return "DevilBro";}
-	
-    getSettingsPanel () {}
 
 	//legacy
 	load () {}
@@ -91,17 +89,17 @@ class ShowHiddenChannels {
 	}
 	
 	onSwitch () {
-		this.displayHiddenChannels();
+		if (typeof BDfunctionsDevilBro === "object") {
+			this.displayHiddenChannels();
+		}
 	}
 
 	
 	// begin of own functions
 	
 	displayHiddenChannels () {
-		var server = BDfunctionsDevilBro.getSelectedServer();
-		if (server) {
-			var serverID = BDfunctionsDevilBro.getIdOfServer(server);
-			
+		var serverID = BDfunctionsDevilBro.getIdOfServer(BDfunctionsDevilBro.getSelectedServer());
+		if (serverID) {
 			if ($(".container-hidden." + serverID).length == 0) {
 				$(".container-hidden").remove();
 				
