@@ -63,7 +63,7 @@ class ImageGallery {
 					}
 				);
 			});
-			this.imageModalObserver.observe($("#app-mount")[0], {childList: true, subtree: true});
+			this.imageModalObserver.observe($(".app")[0], {childList: true, subtree: true});
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 			
