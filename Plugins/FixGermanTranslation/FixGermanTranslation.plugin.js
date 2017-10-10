@@ -9,7 +9,7 @@ class FixGermanTranslation {
 
 	getDescription () {return "Fixes some german translation errors.";}
 
-	getVersion () {return "1.1.2";}
+	getVersion () {return "1.1.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -42,7 +42,7 @@ class FixGermanTranslation {
 							}
 						);
 					});
-					this.serverContextObserver.observe($(".app")[0], {childList: true});
+					this.serverContextObserver.observe($(".tooltips").parent()[0], {childList: true});
 				}
 				BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
 			},5000);
