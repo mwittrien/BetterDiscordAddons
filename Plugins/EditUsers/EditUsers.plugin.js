@@ -392,18 +392,20 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users.";}
 
-	getVersion () {return "1.2.1";}
+	getVersion () {return "1.2.2";}
 
 	getAuthor () {return "DevilBro";}
 	
     getSettingsPanel () {
-		return `
-		<input type="checkbox" onchange='` + this.getName() + `.updateSettings(this.parentNode, "` + this.getName() + `")' value="changeInChatWindow"${(this.getSettings().changeInChatWindow ? " checked" : void 0)}><label style="color:grey;"> Change user information in the chat window.</label><br>\n
-		<input type="checkbox" onchange='` + this.getName() + `.updateSettings(this.parentNode, "` + this.getName() + `")' value="changeInMemberList"${(this.getSettings().changeInMemberList ? " checked" : void 0)}><label style="color:grey;"> Change user information in the member list.</label><br>\n
-		<input type="checkbox" onchange='` + this.getName() + `.updateSettings(this.parentNode, "` + this.getName() + `")' value="changeInDmsList"${(this.getSettings().changeInDmsList ? " checked" : void 0)}><label style="color:grey;"> Change user information in your DM list.</label><br>\n
-		<input type="checkbox" onchange='` + this.getName() + `.updateSettings(this.parentNode, "` + this.getName() + `")' value="changeInFriendList"${(this.getSettings().changeInFriendList ? " checked" : void 0)}><label style="color:grey;"> Change user information in your friend list.</label><br>\n
-		<input type="checkbox" onchange='` + this.getName() + `.updateSettings(this.parentNode, "` + this.getName() + `")' value="changeInUserAccount"${(this.getSettings().changeInUserAccount ? " checked" : void 0)}><label style="color:grey;"> Change user information in your account window.</label><br>\n<br>\n
-		<button class="` + this.getName() + `ResetBtn" style="height:23px" onclick='` + this.getName() + `.resetAll("` + this.getName() + `")'>Reset all Users`;
+		if (typeof BDfunctionsDevilBro === "object") {
+			return `
+			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInChatWindow"${(this.getSettings().changeInChatWindow ? " checked" : void 0)}> Change user information in the chat window.</label><br>\n
+			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInMemberList"${(this.getSettings().changeInMemberList ? " checked" : void 0)}> Change user information in the member list.</label><br>\n
+			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInDmsList"${(this.getSettings().changeInDmsList ? " checked" : void 0)}> Change user information in your DM list.</label><br>\n
+			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInFriendList"${(this.getSettings().changeInFriendList ? " checked" : void 0)}> Change user information in your friend list.</label><br>\n
+			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInUserAccount"${(this.getSettings().changeInUserAccount ? " checked" : void 0)}> Change user information in your account window.</label><br>\n<br>\n
+			<button class="` + this.getName() + `ResetBtn" style="height:23px" onclick='` + this.getName() + `.resetAll("` + this.getName() + `")'>Reset all Users`;
+		}
     }
 
 	//legacy
@@ -542,11 +544,13 @@ class EditUsers {
 	}
 	
 	onSwitch () {
-		this.loadAllUsers();
-		if (document.querySelector(".private-channels")) this.dmListObserver.observe(document.querySelector(".private-channels"), {childList:true, subtree:true});
-		if (document.querySelector(".channel-members")) this.userListObserver.observe(document.querySelector(".channel-members"), {childList:true});
-		if (document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(document.querySelector(".messages.scroller"), {childList:true});
-		if (document.querySelector("#friends")) this.friendListObserver.observe(document.querySelector("#friends"), {childList:true, subtree:true});
+		if (typeof BDfunctionsDevilBro === "object") {
+			this.loadAllUsers();
+			if (document.querySelector(".private-channels")) this.dmListObserver.observe(document.querySelector(".private-channels"), {childList:true, subtree:true});
+			if (document.querySelector(".channel-members")) this.userListObserver.observe(document.querySelector(".channel-members"), {childList:true});
+			if (document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(document.querySelector(".messages.scroller"), {childList:true});
+			if (document.querySelector("#friends")) this.friendListObserver.observe(document.querySelector("#friends"), {childList:true, subtree:true});
+		}
 	}
 
 	
@@ -560,10 +564,7 @@ class EditUsers {
 			changeInFriendList: true,
 			changeInUserAccount: true
 		};
-		var settings = bdPluginStorage.get(this.getName(), "settings");
-		if (settings == null) {
-			settings = {};
-		}
+		var settings = BDfunctionsDevilBro.loadAllData(this.getName(), "settings");
 		var saveSettings = false;
 		for (var key in defaultSettings) {
 			if (settings[key] == null) {
@@ -572,24 +573,23 @@ class EditUsers {
 			}
 		}
 		if (saveSettings) {
-			bdPluginStorage.set(this.getName(), "settings", settings);
+			BDfunctionsDevilBro.saveAllData(settings, this.getName(), "settings");
 		}
 		return settings;
 	}
 
-    static updateSettings (settingspanel, pluginName) {
+    static updateSettings (ele, pluginName) {
+		var settingspanel = BDfunctionsDevilBro.getSettingsPanelDiv(ele);
 		var settings = {};
 		var inputs = settingspanel.querySelectorAll("input");
 		for (var i = 0; i < inputs.length; i++) {
 			settings[inputs[i].value] = inputs[i].checked;
 		}
-		bdPluginStorage.set(pluginName, "settings", settings);
+		BDfunctionsDevilBro.saveAllData(settings, pluginName, "settings");
     }
 
     static resetAll (pluginName) {
-		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.removeAllData(pluginName, "users");
-		}
+		BDfunctionsDevilBro.removeAllData(pluginName, "users");
     }
 
 	changeLanguageStrings () {
@@ -1007,8 +1007,8 @@ class EditUsers {
 	loadAllUsers () {
 		this.resetAllUsers();
 		
-		var serverData = BDfunctionsDevilBro.getKeyInformation({"node":BDfunctionsDevilBro.getSelectedServer(),"key":"guild"});
-		var id = serverData ? serverData.id : "friend-list";
+		var serverID = BDfunctionsDevilBro.getIdOfServer(BDfunctionsDevilBro.getSelectedServer());
+		var id = serverID ? serverID : "friend-list";
 		
 		if (!this.nickNames.id || this.nickNames.id != id) this.nickNames = {"id":id, "names":{}};
 		
