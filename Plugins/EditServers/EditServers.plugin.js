@@ -404,7 +404,7 @@ class EditServers {
 					}
 				);
 			});
-			this.serverContextObserver.observe($(".tooltips").parent()[0], {childList: true});
+			this.serverContextObserver.observe($(".app")[0], {childList: true});
 			
 			this.serverListObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -598,7 +598,7 @@ class EditServers {
 			this.setSwatches(color2, this.colourList, serverSettingsModal.find(".swatches2"), "swatch2");
 			this.setSwatches(color3, this.colourList, serverSettingsModal.find(".swatches3"), "swatch3");
 			this.setSwatches(color4, this.colourList, serverSettingsModal.find(".swatches4"), "swatch4");
-			serverSettingsModal.appendTo("#app-mount")
+			serverSettingsModal.appendTo(".app")
 				.on("click", ".callout-backdrop,button.btn-cancel", (event) => {
 					$(".sp-container").remove();
 					serverSettingsModal.remove();
