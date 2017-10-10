@@ -62,7 +62,7 @@ class CharCounter {
 			$(".character-counter").remove();
 			var textarea = document.querySelector(".channel-text-area-default");
 			var textinput = textarea.querySelector("textarea");
-			$(textinput).off("input." + this.getName()).off("click." + this.getName()).off("mousedown." + this.getName());
+			$(textinput).off("keydown." + this.getName()).off("click." + this.getName()).off("mousedown." + this.getName());
 			$(document).off("mouseup." + this.getName()).off("mousemove." + this.getName());
 			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName());
@@ -84,8 +84,8 @@ class CharCounter {
 			var counter = $(this.counterMarkup);
 			var textinput = textarea.querySelector("textarea");
 			$(textinput)
-				.off("input." + this.getName() + " click." + this.getName())
-				.on("input." + this.getName() + " click." + this.getName(), e => {
+				.off("keydown." + this.getName() + " click." + this.getName())
+				.on("keydown." + this.getName() + " click." + this.getName(), e => {
 					setTimeout(() => {counter.text(textinput.value.length + "/2000 (" + (textinput.selectionEnd - textinput.selectionStart) + ")")},10);
 				})
 				.off("mousedown." + this.getName())
