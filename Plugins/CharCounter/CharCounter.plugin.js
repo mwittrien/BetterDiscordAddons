@@ -62,7 +62,7 @@ class CharCounter {
 			$(".character-counter").remove();
 			var textarea = document.querySelector(".channel-text-area-default");
 			var textinput = textarea.querySelector("textarea");
-			$(textinput).off("input." + this.getName()).off("mousedown." + this.getName());
+			$(textinput).off("input." + this.getName()).off("click." + this.getName()).off("mousedown." + this.getName());
 			$(document).off("mouseup." + this.getName()).off("mousemove." + this.getName());
 			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName());
@@ -84,9 +84,9 @@ class CharCounter {
 			var counter = $(this.counterMarkup);
 			var textinput = textarea.querySelector("textarea");
 			$(textinput)
-				.off("input." + this.getName())
-				.on("input." + this.getName(), e => {
-					counter.text(textinput.value.length + "/2000 (0)");
+				.off("input." + this.getName() + " click." + this.getName())
+				.on("input." + this.getName() + " click." + this.getName(), e => {
+					setTimeout(() => {counter.text(textinput.value.length + "/2000 (" + (textinput.selectionEnd - textinput.selectionStart) + ")")},10);
 				})
 				.off("mousedown." + this.getName())
 				.on("mousedown." + this.getName(), e => {
@@ -97,17 +97,16 @@ class CharCounter {
 				.on("mouseup." + this.getName(), e => {
 					if (this.selecting) {
 						this.selecting = false;
-						counter.text(textinput.value.length + "/2000 (" + (textinput.selectionEnd - textinput.selectionStart) + ")");
 					}
 				})
 				.off("mousemove." + this.getName())
 				.on("mousemove." + this.getName(), e => {
 					if (this.selecting) {
-						counter.text(textinput.value.length + "/2000 (" + (textinput.selectionEnd - textinput.selectionStart) + ")");
+						setTimeout(() => {counter.text(textinput.value.length + "/2000 (" + (textinput.selectionEnd - textinput.selectionStart) + ")")},10);
 					}
 				});
 			$(textarea).append(counter);
-			counter.text(textinput.value.length + "/2000 (0)");
+			counter.text(textinput.value.length + "/2000 (" + (textinput.selectionEnd - textinput.selectionStart) + ")");
 		}
 	}
 }
