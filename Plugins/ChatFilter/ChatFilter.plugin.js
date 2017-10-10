@@ -9,8 +9,7 @@ class ChatFilter {
 			"censored":"$!%&%!&"
 		};
 		
-		this.serverSwitchObserver = new MutationObserver(() => {});
-		this.channelSwitchObserver = new MutationObserver(() => {});
+		this.switchFixObserver = new MutationObserver(() => {});
 		this.chatWindowObserver = new MutationObserver(() => {});
 		this.messageChangeObserver = new MutationObserver(() => {});
 		this.settingsWindowObserver = new MutationObserver(() => {});
@@ -80,7 +79,7 @@ class ChatFilter {
 				position: relative;
 				margin: 0 5px 0 0 !important;
 				padding: 0 !important;
-				top: 4px;
+				top: 3px;
 				width: 15px;
 				height: 15px;
 				cursor: pointer;
@@ -218,7 +217,7 @@ class ChatFilter {
 
 	getDescription () {return "Allows the user to censor words or block complete messages based on words in the chatwindow.";}
 
-	getVersion () {return "2.1.0";}
+	getVersion () {return "2.1.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -236,8 +235,8 @@ class ChatFilter {
 				settingspanel += `<div class="input-bar" id="` + key + `-input-bar">`;
 				settingspanel += `<input class="word-value" id="` + key + `-word-value" onkeypress='` + this.getName() + `.updateContainer(this, "` + key + `", "` + this.getName() + `", event);'>`;
 				settingspanel += `<button name="add" class="word-add" id="` + key + `-word-add" onclick='` + this.getName() + `.updateContainer(this, "` + key + `", "` + this.getName() + `", event);'>Add</button>`;
-				settingspanel += `<input type="checkbox" class="word-case" id="` + key + `-word-case"><label class="word-case-text">case-sensitive</label>`;
-				settingspanel += `<input type="checkbox" class="word-exact" id="` + key + `-word-exact" checked><label class="word-exact-text">exact word</label>`;
+				settingspanel += `<label class="word-case-text"><input type="checkbox" class="word-case" id="` + key + `-word-case">case-sensitive</label>`;
+				settingspanel += `<label class="word-exact-text"><input type="checkbox" class="word-exact" id="` + key + `-word-exact" checked>exact word</label>`;
 				settingspanel += `<button name="removeall" class="remove-all" id="` + key + `-remove-all" onclick='` + this.getName() + `.updateContainer(this, "` + key + `", "` + this.getName() + `", event);'>Remove All</button>`;
 				settingspanel += `</div>`;
 				settingspanel += `<div class="word-container" id="` + key + `-word-container">`;
@@ -258,10 +257,10 @@ class ChatFilter {
 				var replaceString = BDfunctionsDevilBro.loadData(key, this.getName(), "replaceString");
 				replaceString = (replaceString && replaceString.length > 0) ? replaceString : this.defaultReplace[key];
 				settingspanel += `<div class="replace-settings" id="` + key + `-replace-settings"><div class="replace-text" id="` + key + `-replace-text">` + replaceText[key] + `</div><input class="replace-value" id="` + key + `-replace-value" value="` + replaceString + `" placeholder="` + replaceString + `" onchange='` + this.getName() + `.saveReplace(this, "` + key + `", "` + this.getName() + `");'` + disabled + `>`;
-				settingspanel += `<div class="showmsg-settings"><input type="checkbox" name="showmsg" class="showmsg-check" onchange='` + this.getName() + `.saveCheckbox(this, "` + key + `", "` + this.getName() + `");'` + showMessageOnClick + `><label class="showmsg-check-text">Show original message on click.</label></div>`;
+				settingspanel += `<div class="showmsg-settings"><label class="showmsg-check-text"><input type="checkbox" name="showmsg" class="showmsg-check" onchange='` + this.getName() + `.saveCheckbox(this, "` + key + `", "` + this.getName() + `");'` + showMessageOnClick + `>Show original message on click.</label></div>`;
 				
 				if (key == "blocked") {
-					settingspanel += `<div class="blockhide-settings"><input type="checkbox" name="blockhide" class="blockhide-check" onchange='` + this.getName() + `.saveCheckbox(this, "` + key + `", "` + this.getName() + `");'` + hideBlockedMessages + `><label class="blockhide-check-text">Completely hide blocked messages.</label></div>`;
+					settingspanel += `<div class="blockhide-settings"><label class="blockhide-check-text"><input type="checkbox" name="blockhide" class="blockhide-check" onchange='` + this.getName() + `.saveCheckbox(this, "` + key + `", "` + this.getName() + `");'` + hideBlockedMessages + `>Completely hide blocked messages.</label></div>`;
 				}
 				
 				settingspanel += `</div>`;
@@ -293,38 +292,6 @@ class ChatFilter {
 			$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
-			this.serverSwitchObserver = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.type == "attributes" && change.attributeName == "class" && change.oldValue && change.oldValue.indexOf("guild") != -1) {
-							var serverData = BDfunctionsDevilBro.getKeyInformation({"node":change.target, "key":"guild"});
-							if (serverData) {
-								this.hideAllMessages();
-								if ($(".messages.scroller").length != 0) this.chatWindowObserver.observe($(".messages.scroller")[0], {childList:true});
-								if ($(".flex-horizontal.flex-spacer").length != 0) this.channelSwitchObserver.observe($(".flex-horizontal.flex-spacer")[0], {childList:true, subtree:true});
-							}
-						}
-					}
-				);
-			});
-			this.serverSwitchObserver.observe($(".guilds.scroller")[0], {subtree:true, attributes:true, attributeOldValue:true});
-			
-			this.channelSwitchObserver = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								if ($(node).find(".messages.scroller").length > 0) {
-									this.hideAllMessages();
-									this.chatWindowObserver.observe($(".messages.scroller")[0], {childList:true});
-								}
-							});
-						}
-					}
-				);
-			});
-			if ($(".flex-horizontal.flex-spacer").length != 0) this.channelSwitchObserver.observe($(".flex-horizontal.flex-spacer")[0], {childList:true, subtree:true});
-			
 			this.chatWindowObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
@@ -371,6 +338,8 @@ class ChatFilter {
 				);
 			});
 			
+			this.switchFixObserver = BDfunctionsDevilBro.onSwitchFix(this);
+			
 			this.hideAllMessages();
 			
 			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
@@ -382,8 +351,7 @@ class ChatFilter {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			this.serverSwitchObserver.disconnect();
-			this.channelSwitchObserver.disconnect();
+			this.switchFixObserver.disconnect();
 			this.chatWindowObserver.disconnect();
 			this.messageChangeObserver.disconnect();
 			this.settingsWindowObserver.disconnect();
@@ -394,11 +362,18 @@ class ChatFilter {
 		}
 	}
 	
+	onSwitch () {
+		if (typeof BDfunctionsDevilBro === "object") {
+			this.hideAllMessages();
+			if ($(".messages.scroller").length != 0) this.chatWindowObserver.observe($(".messages.scroller")[0], {childList:true});
+		}
+	}
+	
 	
 	// begin of own functions
 	
 	static updateContainer (ele, type, pluginName, event) {
-		var settingspanel = ele.parentElement.parentElement;
+		var settingspanel = BDfunctionsDevilBro.getSettingsPanelDiv(ele);
 		var words = BDfunctionsDevilBro.loadData(type, pluginName, "words");
 		words = words ? words : {};
 		var wordvalue = null;
@@ -451,7 +426,7 @@ class ChatFilter {
 	}
 	
 	static saveReplace (input, type, pluginName) {
-		var settingspanel = input.parentElement.parentElement;
+		var settingspanel = BDfunctionsDevilBro.getSettingsPanelDiv(input);
 		var wordvalue = input.value;
 		if (wordvalue && wordvalue.trim().length > 0) {
 			wordvalue = wordvalue.trim();
@@ -460,7 +435,7 @@ class ChatFilter {
 	}
 	
 	static saveCheckbox (input, type, pluginName) {
-		var settingspanel = input.parentElement.parentElement.parentElement;
+		var settingspanel = BDfunctionsDevilBro.getSettingsPanelDiv(input);
 		var checked = $(input).prop("checked");
 		if (input.name == "blockhide") {
 			$(settingspanel).find("#" + type + "-replace-value").prop("disabled", checked);
@@ -472,7 +447,7 @@ class ChatFilter {
 	}
 	
 	static toggleInfo (btn, pluginName) {
-		var settingspanel = btn.parentElement;
+		var settingspanel = BDfunctionsDevilBro.getSettingsPanelDiv(btn);
 		var visible = $(settingspanel).find(".wordtype-info").is(":visible");
 		if (visible) {
 			$(settingspanel).find(".wordtype-info").hide();
