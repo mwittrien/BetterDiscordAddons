@@ -369,12 +369,14 @@ class EditServers {
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	getVersion () {return "1.2.8";}
+	getVersion () {return "1.3.0";}
 
 	getAuthor () {return "DevilBro";}
 	
     getSettingsPanel () {
-		return `<button class="` + this.getName() + `ResetBtn" style="height:23px" onclick='` + this.getName() + `.resetAll("` + this.getName() + `")'>Reset all Servers`;
+		if (typeof BDfunctionsDevilBro === "object") {
+			return `<button class="` + this.getName() + `ResetBtn" style="height:23px" onclick='` + this.getName() + `.resetAll("` + this.getName() + `")'>Reset all Servers`;
+		}
     }
 
 	//legacy
@@ -471,29 +473,27 @@ class EditServers {
 	// begin of own functions
 
     static resetAll (pluginName) {
-		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.removeAllData(pluginName, "servers");
-			
-			$(".custom-editservers").each(
-				(i,serverDiv) => {
-					var info = BDfunctionsDevilBro.getKeyInformation({"node":serverDiv, "key":"guild"});
-					if (info) {
-						var server = $(serverDiv).find(".avatar-small");
-						var bgImage = info.icon ? "url('https://cdn.discordapp.com/icons/" + info.id + "/" + info.icon + ".png')" : "";
-					
-						$(serverDiv)
-							.off("mouseenter")
-							.off("mouseleave")
-							.removeClass("custom-editservers");
-						$(server)
-							.text($(server).attr("name"))
-							.css("background-image", bgImage)
-							.css("background-color", "")
-							.css("color", "");
-					}
+		BDfunctionsDevilBro.removeAllData(pluginName, "servers");
+		
+		$(".custom-editservers").each(
+			(i,serverDiv) => {
+				var info = BDfunctionsDevilBro.getKeyInformation({"node":serverDiv, "key":"guild"});
+				if (info) {
+					var server = $(serverDiv).find(".avatar-small");
+					var bgImage = info.icon ? "url('https://cdn.discordapp.com/icons/" + info.id + "/" + info.icon + ".png')" : "";
+				
+					$(serverDiv)
+						.off("mouseenter")
+						.off("mouseleave")
+						.removeClass("custom-editservers");
+					$(server)
+						.text($(server).attr("name"))
+						.css("background-image", bgImage)
+						.css("background-color", "")
+						.css("color", "");
 				}
-			);
-		}
+			}
+		);
     }
 
 	changeLanguageStrings () {
