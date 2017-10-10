@@ -42,7 +42,7 @@ class ReverseImageSearch {
 
 	getDescription () {return "Adds a reverse image search option to the context menu.";}
 
-	getVersion () {return "3.1.4";}
+	getVersion () {return "3.1.5";}
 	
 	getAuthor () {return "DevilBro";}
 
@@ -85,7 +85,7 @@ class ReverseImageSearch {
 					}
 				);
 			});
-			this.messageContextObserver.observe($(".app")[0], {childList: true});
+			this.messageContextObserver.observe($(".tooltips").parent()[0], {childList: true});
 			
 		
 			this.searchEngines = BDfunctionsDevilBro.sortArrayByKey(this.searchEngines, "name");
