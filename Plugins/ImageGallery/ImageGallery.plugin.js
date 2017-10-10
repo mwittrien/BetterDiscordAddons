@@ -27,7 +27,7 @@ class ImageGallery {
 
 	getDescription () {return "Allows the user to browse through images sent inside the same message.";}
 
-	getVersion () {return "1.2.1";}
+	getVersion () {return "1.2.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -63,7 +63,7 @@ class ImageGallery {
 					}
 				);
 			});
-			this.imageModalObserver.observe($(".app")[0], {childList: true, subtree: true});
+			this.imageModalObserver.observe($(".tooltips").parent()[0], {childList: true, subtree: true});
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 			
