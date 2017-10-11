@@ -369,7 +369,7 @@ class EditServers {
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	getVersion () {return "1.3.1";}
+	getVersion () {return "1.3.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -449,13 +449,15 @@ class EditServers {
 				(i,serverDiv) => {
 					var info = BDfunctionsDevilBro.getKeyInformation({"node":serverDiv, "key":"guild"});
 					if (info) {
+						var serverInner = $(serverDiv).find(".guild-inner");
 						var server = $(serverDiv).find(".avatar-small");
 						var bgImage = info.icon ? "url('https://cdn.discordapp.com/icons/" + info.id + "/" + info.icon + ".png')" : "";
 					
 						$(serverDiv)
-							.off("mouseenter")
-							.off("mouseleave")
 							.removeClass("custom-editservers");
+						$(serverInner)
+							.off("mouseenter")
+							.off("mouseleave");
 						$(server)
 							.text($(server).attr("name"))
 							.css("background-image", bgImage)
@@ -878,6 +880,7 @@ class EditServers {
 		if (info) {
 			var data = BDfunctionsDevilBro.loadData(info.id, this.getName(), "servers");
 			if (data) {
+				var serverInner = $(serverDiv).find(".guild-inner");
 				var server = $(serverDiv).find(".avatar-small");
 				if ($(server).attr("name") === undefined) {
 					$(server).attr("name", $(server).text());
@@ -891,7 +894,8 @@ class EditServers {
 				var color2 = 		data.color2 ? BDfunctionsDevilBro.color2RGB(data.color2) : "";
 				
 				$(serverDiv)
-					.addClass("custom-editservers")
+					.addClass("custom-editservers");
+				$(serverInner)
 					.off("mouseenter")
 					.off("mouseleave")
 					.on("mouseenter", {"div":serverDiv,"info":info}, this.createServerToolTip.bind(this))
