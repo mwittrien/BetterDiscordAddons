@@ -13,6 +13,7 @@ class EditUsers {
 		this.friendListObserver = new MutationObserver(() => {});
 		this.userListObserver = new MutationObserver(() => {});
 		this.chatWindowObserver = new MutationObserver(() => {});
+		this.userPopoutObserver = new MutationObserver(() => {});
 		this.settingsWindowObserver = new MutationObserver(() => {});
 		
 		this.urlCheckTimeout;
@@ -280,6 +281,7 @@ class EditUsers {
 				white-space: nowrap;
 			}
 			
+			.user-tag.popout-tag,
 			.user-tag.chat-tag {
 				bottom: 1px;
 			}`;
@@ -392,7 +394,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users.";}
 
-	getVersion () {return "1.2.3";}
+	getVersion () {return "1.3.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -403,7 +405,8 @@ class EditUsers {
 			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInMemberList"${(this.getSettings().changeInMemberList ? " checked" : void 0)}> Change user information in the member list.</label><br>\n
 			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInDmsList"${(this.getSettings().changeInDmsList ? " checked" : void 0)}> Change user information in your DM list.</label><br>\n
 			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInFriendList"${(this.getSettings().changeInFriendList ? " checked" : void 0)}> Change user information in your friend list.</label><br>\n
-			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInUserAccount"${(this.getSettings().changeInUserAccount ? " checked" : void 0)}> Change user information in your account window.</label><br>\n<br>\n
+			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInUserAccount"${(this.getSettings().changeInUserAccount ? " checked" : void 0)}> Change user information in your account window.</label><br>\n
+			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInUserPopout"${(this.getSettings().changeInUserPopout ? " checked" : void 0)}> Change user information in the user popup.</label><br>\n<br>\n
 			<button class="` + this.getName() + `ResetBtn" style="height:23px" onclick='` + this.getName() + `.resetAll("` + this.getName() + `")'>Reset all Users`;
 		}
     }
@@ -495,6 +498,21 @@ class EditUsers {
 			});
 			if (document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(document.querySelector(".messages.scroller"), {childList:true});
 			
+			this.userPopoutObserver = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.addedNodes) {
+							change.addedNodes.forEach((node) => {
+								if (node && node.tagName && node.querySelector("[class*='userPopout']")) {
+									if (this.getSettings().changeInUserPopout) this.loadUser(node, "popout");
+								}
+							});
+						}
+					}
+				);
+			});
+			this.userPopoutObserver.observe(document.querySelector(".tooltips").parentElement, {childList: true, subtree: true});
+			
 			this.settingsWindowObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
@@ -537,6 +555,7 @@ class EditUsers {
 			this.friendListObserver.disconnect();
 			this.userListObserver.disconnect();
 			this.chatWindowObserver.disconnect();
+			this.userPopoutObserver.disconnect();
 			this.settingsWindowObserver.disconnect();
 			
 			this.resetAllUsers();
@@ -562,7 +581,8 @@ class EditUsers {
 			changeInMemberList: true,
 			changeInDmsList: true,
 			changeInFriendList: true,
-			changeInUserAccount: true
+			changeInUserAccount: true,
+			changeInUserPopout: true
 		};
 		var settings = BDfunctionsDevilBro.loadAllData(this.getName(), "settings");
 		var saveSettings = false;
@@ -942,69 +962,6 @@ class EditUsers {
 			}
 		});
 	}
-	
-	loadUser (div, type) {
-		if (!div || div.classList.contains("custom-editusers")) return;
-		var avatar = 	div.querySelector("div.avatar-small") || 
-						div.querySelector("div.avatar-large");
-		var username = 	div.querySelector("strong.user-name") || 
-						div.querySelector("span.member-username-inner") ||
-						div.querySelector("span.channel-name") || 
-						div.querySelector("span.username");
-		var wrapper = 	div.querySelector("div.member-username") || 
-						div.querySelector("span.username-wrapper") || 
-						div.querySelector("span.channel-name") ||
-						div.querySelector("div.discord-tag") ||
-						div.querySelector("div.accountDetails-15i-_e");
-						
-		if (avatar && username && wrapper) {
-			var info = BDfunctionsDevilBro.getKeyInformation({"node":div,"key":"user"});
-			var styleInfo = BDfunctionsDevilBro.getKeyInformation({"node":wrapper,"key":"style"});
-			var data = BDfunctionsDevilBro.loadData(info.id, this.getName(), "users");
-			
-			if (!this.nickNames.names[info.id]) this.nickNames.names[info.id] = username.innerText;
-			
-			if (data) {
-				var name = 			data.name ? data.name : this.nickNames.names[info.id];
-				var tag = 			data.tag ? data.tag : null;
-				var bgImage = 		data.url ? "url(" + data.url + ")" : (info.avatar ? "url('https://cdn.discordapp.com/avatars/" + info.id + "/" + info.avatar + ".webp')" : "url(/assets/1cbd08c76f8af6dddce02c5138971129.png");
-				var removeIcon = 	data.removeIcon ? data.removeIcon : false;
-				var color1 = 		data.color1 ? BDfunctionsDevilBro.color2RGB(data.color1) : (styleInfo ? BDfunctionsDevilBro.color2RGB(styleInfo.color) : "");
-				var color2 = 		data.color2 ? BDfunctionsDevilBro.color2RGB(data.color2) : "";
-				var color3 = 		data.color3 ? BDfunctionsDevilBro.color2RGB(data.color3) : "";
-				var color4 = 		data.color4 ? BDfunctionsDevilBro.color2RGB(data.color4) : "white";
-			
-				username.innerText = type == "info" ? info.username : name;
-				username.style.color = color1;
-				username.style.background = color2;
-				
-				avatar.style.background = removeIcon ? "" : bgImage;
-				avatar.style.backgroundSize = "cover";
-					
-				if (tag && (type == "list" || type == "chat")) {
-					var thisTag = $(this.tagMarkup)[0];
-					thisTag.classList.add(type + "-tag");
-					thisTag.innerText = tag;
-					thisTag.style.background = color3;
-					thisTag.style.color = color4;
-					wrapper.appendChild(thisTag);
-				}
-				
-				var messages = div.querySelectorAll(".markup");
-				for (var i = 0; i < messages.length; i++) {
-					var markup = messages[i];
-					if (settingsCookie["bda-gs-7"] && settingsCookie["bda-gs-7"] == true) {
-						markup.style.color = color1;
-					}
-					else {
-						markup.style.color = "";
-					}
-				}
-				
-				div.classList.add("custom-editusers");
-			}
-		}
-	}
 
 	loadAllUsers () {
 		this.resetAllUsers();
@@ -1046,21 +1003,71 @@ class EditUsers {
 				this.loadUser(account, "info");
 			}
 		}
+		if (settings.changeInUserPopout) {
+			var popout = document.querySelector("[class*='userPopout']");
+			if (popout) {
+				this.loadUser(popout, "popout");
+			}
+		}
+	}
+	
+	loadUser (div, type) {
+		if (!div || div.classList.contains("custom-editusers")) return;
+		var {avatar, username, wrapper} = this.getAvatatNameWrapper(div);
+						
+		if (avatar && username && wrapper) {
+			var info = BDfunctionsDevilBro.getKeyInformation({"node":div,"key":"user"});
+			var styleInfo = BDfunctionsDevilBro.getKeyInformation({"node":wrapper,"key":"style"});
+			var data = BDfunctionsDevilBro.loadData(info.id, this.getName(), "users");
+			
+			if (!this.nickNames.names[info.id]) this.nickNames.names[info.id] = username.innerText;
+			
+			if (data) {
+				var name = 			data.name ? data.name : this.nickNames.names[info.id];
+				var tag = 			data.tag ? data.tag : null;
+				var bgImage = 		data.url ? "url(" + data.url + ")" : (info.avatar ? "url('https://cdn.discordapp.com/avatars/" + info.id + "/" + info.avatar + ".webp')" : "url(/assets/1cbd08c76f8af6dddce02c5138971129.png");
+				var removeIcon = 	data.removeIcon ? data.removeIcon : false;
+				var color1 = 		data.color1 ? BDfunctionsDevilBro.color2RGB(data.color1) : (styleInfo ? BDfunctionsDevilBro.color2RGB(styleInfo.color) : "");
+				var color2 = 		data.color2 ? BDfunctionsDevilBro.color2RGB(data.color2) : "";
+				var color3 = 		data.color3 ? BDfunctionsDevilBro.color2RGB(data.color3) : "";
+				var color4 = 		data.color4 ? BDfunctionsDevilBro.color2RGB(data.color4) : "white";
+			
+				username.innerText = type == "info" ? info.username : name;
+				username.style.color = color1;
+				username.style.background = color2;
+				
+				avatar.style.background = removeIcon ? "" : bgImage;
+				avatar.style.backgroundSize = "cover";
+					
+				if (tag && (type == "list" || type == "chat" || type == "popout")) {
+					var thisTag = $(this.tagMarkup)[0];
+					thisTag.classList.add(type + "-tag");
+					thisTag.innerText = tag;
+					thisTag.style.background = color3;
+					thisTag.style.color = color4;
+					wrapper.appendChild(thisTag);
+				}
+				
+				var messages = div.querySelectorAll(".markup");
+				for (var i = 0; i < messages.length; i++) {
+					var markup = messages[i];
+					if (settingsCookie["bda-gs-7"] && settingsCookie["bda-gs-7"] == true) {
+						markup.style.color = color1;
+					}
+					else {
+						markup.style.color = "";
+					}
+				}
+				
+				div.classList.add("custom-editusers");
+			}
+		}
 	}
 	
 	resetAllUsers () {
+		document.querySelectorAll(".user-tag").forEach(node=>{node.parentElement.removeChild(node)});
 		document.querySelectorAll(".custom-editusers").forEach((div) => {
-			var avatar = 	div.querySelector("div.avatar-small") || 
-							div.querySelector("div.avatar-large");
-			var username = 	div.querySelector("strong.user-name") || 
-							div.querySelector("span.member-username-inner") ||
-							div.querySelector("span.channel-name") || 
-							div.querySelector("span.username");
-			var wrapper = 	div.querySelector("div.member-username") || 
-							div.querySelector("span.username-wrapper") || 
-							div.querySelector("span.channel-name") ||
-							div.querySelector("div.discord-tag") ||
-							div.querySelector("div.accountDetails-15i-_e");
+			var {avatar, username, wrapper} = this.getAvatatNameWrapper(div);
 			
 			if (avatar && username && wrapper) {
 				var info = BDfunctionsDevilBro.getKeyInformation({"node":div,"key":"user"});
@@ -1091,10 +1098,31 @@ class EditUsers {
 					}
 				}
 			}
-			div.querySelectorAll(".user-tag").forEach(node=>{node.parentElement.removeChild(node)});
 			div.classList.remove("custom-editusers")
 		});
-		
+	}
+	
+	getAvatatNameWrapper (div) {
+		var avatar = 	div.querySelector("div.avatar-small") || 
+						div.querySelector("div.avatar-large") || 
+						div.querySelector("div.avatar-1BXaQj");
+						
+		var username = 	div.querySelector("strong.user-name") || 
+						div.querySelector("span.member-username-inner") ||
+						div.querySelector("span.channel-name") || 
+						div.querySelector("span.username") || 
+						div.querySelector("div.headerName-2N8Pdz") ||
+						div.querySelector("span.headerUsernameNoNickname-1iGxNP");
+						
+		var wrapper = 	div.querySelector("div.member-username") || 
+						div.querySelector("span.username-wrapper") || 
+						div.querySelector("span.channel-name") ||
+						div.querySelector("div.discord-tag") ||
+						div.querySelector("div.accountDetails-15i-_e") ||
+						div.querySelector("div.headerName-2N8Pdz") ||
+						div.querySelector("div.headerTag-3zin_i");
+						
+		return {avatar, username, wrapper};
 	}
 	
 	setLabelsByLanguage () {
