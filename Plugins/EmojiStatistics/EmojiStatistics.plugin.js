@@ -205,7 +205,7 @@ class EmojiStatistics {
 			}
 			
 			.emoji-tooltip {
-				position: relative;
+				position: absolute;
 				z-index: 3000;
 			}
 			
@@ -264,7 +264,7 @@ class EmojiStatistics {
 
 	getDescription () {return "Adds some helpful options to show you more information about emojis and emojiservers.";}
 
-	getVersion () {return "2.3.1";}
+	getVersion () {return "2.3.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -293,12 +293,14 @@ class EmojiStatistics {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if ($(node).find(".emoji-item")) {
-									if (this.getSettings().enableEmojiHovering) {this.hoverEmoji();}
-								}
 								if (node && node.classList && node.classList.contains("popout") && $(node).find(".emoji-picker").length != 0 && $(".emojistatistics-button").length == 0) {
 									this.loadEmojiList();
-									if (this.getSettings().enableEmojiStatisticsButton) {this.addEmojiInformationButton();}
+									if (this.getSettings().enableEmojiStatisticsButton) {
+										this.addEmojiInformationButton();
+									}
+									if ($(node).find(".emoji-item")) {
+										if (this.getSettings().enableEmojiHovering) {this.hoverEmoji();}
+									}
 								}
 							});
 						}
