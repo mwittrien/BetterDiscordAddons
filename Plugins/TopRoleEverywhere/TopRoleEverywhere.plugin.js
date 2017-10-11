@@ -37,7 +37,7 @@ class TopRoleEverywhere {
 
 	getDescription () {return "Adds the highest role of a user as a tag.";}
 
-	getVersion () {return "2.2.0";}
+	getVersion () {return "2.3.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -46,7 +46,8 @@ class TopRoleEverywhere {
 			return `
 			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="showInChat"${(this.getSettings().showInChat ? " checked" : void 0)}> Show tag in chatwindow.</label><br>\n
 			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="showInMemberList"${(this.getSettings().showInMemberList ? " checked" : void 0)}> Show tag in memberlist.</label><br>\n
-			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="useOtherStyle"${(this.getSettings().useOtherStyle ? " checked" : void 0)}> Use other tag style.</label>`;
+			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="useOtherStyle"${(this.getSettings().useOtherStyle ? " checked" : void 0)}> Use other tag style.</label><br>\n
+			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="showOwnerRole"${(this.getSettings().showOwnerRole ? " checked" : void 0)}> Display toprole of serverowner as \"Owner\".</label>`;
 		}
     }
 
@@ -156,7 +157,8 @@ class TopRoleEverywhere {
 		var defaultSettings = {
 			showInChat: true,
 			showInMemberList: true,
-			useOtherStyle: false
+			useOtherStyle: false,
+			showOwnerRole: false
 		};
 		var settings = BDfunctionsDevilBro.loadAllData(this.getName(), "settings");
 		var saveSettings = false;
@@ -191,19 +193,19 @@ class TopRoleEverywhere {
 			if (this.getSettings().showInMemberList) { 
 				var membersList = document.querySelectorAll("div.member");
 				for (var i = 0; i < membersList.length; i++) {
-					this.addRoleTag(membersList[i], "list", serverData.id);
+					this.addRoleTag(membersList[i], "list", serverData.id, serverData.ownerId);
 				}
 			}
 			if (this.getSettings().showInChat) { 
 				var membersChat = document.querySelectorAll("div.message-group");
 				for (var j = 0; j < membersChat.length; j++) {
-					this.addRoleTag(membersChat[j], "chat", serverData.id);
+					this.addRoleTag(membersChat[j], "chat", serverData.id, serverData.ownerId);
 				}
 			}
 		}
 	}
 	
-	addRoleTag(wrapper, type, serverID) {
+	addRoleTag(wrapper, type, serverID, ownerID) {
 		if (!wrapper) return;
 		var member = wrapper.querySelector("div.member-username") || wrapper.querySelector("span.username-wrapper");
 		if (member && member.tagName && !member.querySelector(".role-tag")) {
@@ -278,6 +280,7 @@ class TopRoleEverywhere {
 			}
 			if (roleColor && roleName || userID == 278543574059057154) {
 				roleColor = roleColor ? roleColor : [255,255,255];
+				roleName = userID == ownerID && this.getSettings().showOwnerRole ? "Owner" : roleName;
 				var totalwidth, oldwidth, newwidth, maxwidth;
 				if (type == "list") {
 					totalwidth = member.style.width
