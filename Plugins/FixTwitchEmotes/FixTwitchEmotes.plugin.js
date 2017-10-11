@@ -64,7 +64,8 @@ class FixTwitchEmotes {
 					.off("click." + this.getName())
 					.on("click." + this.getName(), (e) => {
 						textarea.focus();
-						document.execCommand("insertText", false, " " + emote.title);
+						var emotename = textarea.val().length == 0 ? emote.title : " " + emote.title;
+						document.execCommand("insertText", false, emotename);
 					});
 			});
 		}
