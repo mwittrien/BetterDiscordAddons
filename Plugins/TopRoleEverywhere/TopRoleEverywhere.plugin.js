@@ -10,6 +10,7 @@ class TopRoleEverywhere {
 		this.roles = {};
 		
 		this.userRoles = {};
+		this.ownerID = null;
 		
 		this.css = ` 
 			.role-tag {
@@ -37,7 +38,7 @@ class TopRoleEverywhere {
 
 	getDescription () {return "Adds the highest role of a user as a tag.";}
 
-	getVersion () {return "2.3.0";}
+	getVersion () {return "2.3.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -189,26 +190,28 @@ class TopRoleEverywhere {
 		if (serverData) {
 			document.querySelectorAll(".role-tag").forEach(node=>{node.parentElement.removeChild(node)});
 			if (!this.userRoles[serverData.id]) this.userRoles[serverData.id] = {};
+			if (this.getSettings().showOwnerRole) this.ownerID = serverData.ownerId;
 			this.roles = serverData.roles;
 			if (this.getSettings().showInMemberList) { 
 				var membersList = document.querySelectorAll("div.member");
 				for (var i = 0; i < membersList.length; i++) {
-					this.addRoleTag(membersList[i], "list", serverData.id, serverData.ownerId);
+					this.addRoleTag(membersList[i], "list", serverData.id);
 				}
 			}
 			if (this.getSettings().showInChat) { 
 				var membersChat = document.querySelectorAll("div.message-group");
 				for (var j = 0; j < membersChat.length; j++) {
-					this.addRoleTag(membersChat[j], "chat", serverData.id, serverData.ownerId);
+					this.addRoleTag(membersChat[j], "chat", serverData.id);
 				}
 			}
 		}
 	}
 	
-	addRoleTag(wrapper, type, serverID, ownerID) {
+	addRoleTag(wrapper, type, serverID) {
 		if (!wrapper) return;
 		var member = wrapper.querySelector("div.member-username") || wrapper.querySelector("span.username-wrapper");
 		if (member && member.tagName && !member.querySelector(".role-tag")) {
+			var settings = this.getSettings();
 			var styleInfo = BDfunctionsDevilBro.getKeyInformation({"node":member,"key":"style"});
 			var userInfo = BDfunctionsDevilBro.getKeyInformation({"node":wrapper,"key":"user"});
 			var roleName = null;
@@ -280,7 +283,6 @@ class TopRoleEverywhere {
 			}
 			if (roleColor && roleName || userID == 278543574059057154) {
 				roleColor = roleColor ? roleColor : [255,255,255];
-				roleName = userID == ownerID && this.getSettings().showOwnerRole ? "Owner" : roleName;
 				var totalwidth, oldwidth, newwidth, maxwidth;
 				if (type == "list") {
 					totalwidth = member.style.width
@@ -303,6 +305,9 @@ class TopRoleEverywhere {
 					bgColor = "rgba(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ", 1)";
 					textColor = roleColor[0] > 180 && roleColor[1] > 180 && roleColor[2] > 180 ? "black" : "white";
 				}
+				if (userID == this.ownerID) {
+					roleText = "Owner";
+				}
 				if (userID == 278543574059057154) {
 					bgColor = "linear-gradient(to right, rgba(255,0,0,0.1), rgba(255,127,0,0.1) , rgba(255,255,0,0.1), rgba(127,255,0,0.1), rgba(0,255,0,0.1), rgba(0,255,127,0.1), rgba(0,255,255,0.1), rgba(0,127,255,0.1), rgba(0,0,255,0.1), rgba(127,0,255,0.1), rgba(255,0,255,0.1), rgba(255,0,127,0.1))";
 					bgInner = "linear-gradient(to right, rgba(255,0,0,1), rgba(255,127,0,1) , rgba(255,255,0,1), rgba(127,255,0,1), rgba(0,255,0,1), rgba(0,255,127,1), rgba(0,255,255,1), rgba(0,127,255,1), rgba(0,0,255,1), rgba(127,0,255,1), rgba(255,0,255,1), rgba(255,0,127,1))";
@@ -314,8 +319,8 @@ class TopRoleEverywhere {
 						textColor = "white";
 					}
 				}
-				tag.classList.add(type+"-tag");
-				tag.style.border = "1px solid "+borderColor;
+				tag.classList.add(type + "-tag");
+				tag.style.border = "1px solid " + borderColor;
 				tag.style.background = bgColor;
 				var inner = tag.querySelector(".role-inner");
 				inner.style.color = textColor;
