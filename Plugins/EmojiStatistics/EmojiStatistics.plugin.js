@@ -293,13 +293,13 @@ class EmojiStatistics {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
+								if ($(node).find(".emoji-item")) {
+									if (this.getSettings().enableEmojiHovering) {this.hoverEmoji();}
+								}
 								if (node && node.classList && node.classList.contains("popout") && $(node).find(".emoji-picker").length != 0 && $(".emojistatistics-button").length == 0) {
 									this.loadEmojiList();
 									if (this.getSettings().enableEmojiStatisticsButton) {
 										this.addEmojiInformationButton();
-									}
-									if ($(node).find(".emoji-item")) {
-										if (this.getSettings().enableEmojiHovering) {this.hoverEmoji();}
 									}
 								}
 							});
