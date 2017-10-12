@@ -9,7 +9,7 @@ class FixGermanTranslation {
 
 	getDescription () {return "Fixes some german translation errors.";}
 
-	getVersion () {return "1.1.2";}
+	getVersion () {return "1.1.3";}
 
 	getAuthor () {return "DevilBro";}
 

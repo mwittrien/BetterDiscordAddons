@@ -205,7 +205,7 @@ class EmojiStatistics {
 			}
 			
 			.emoji-tooltip {
-				position: relative;
+				position: absolute;
 				z-index: 3000;
 			}
 			
@@ -264,14 +264,16 @@ class EmojiStatistics {
 
 	getDescription () {return "Adds some helpful options to show you more information about emojis and emojiservers.";}
 
-	getVersion () {return "2.2.3";}
+	getVersion () {return "2.3.2";}
 
 	getAuthor () {return "DevilBro";}
 
     getSettingsPanel () {
-		return `
-		<input type="checkbox" onchange='` + this.getName() + `.updateSettings(this.parentNode, "` + this.getName() + `")' value="enableEmojiHovering"${(this.getSettings().enableEmojiHovering ? " checked" : void 0)}><label style="color:grey;"> Show emojiinformation when hovering over an emoji in the emojipicker.</label><br>\n
-		<input type="checkbox" onchange='` + this.getName() + `.updateSettings(this.parentNode, "` + this.getName() + `")' value="enableEmojiStatisticsButton"${(this.getSettings().enableEmojiStatisticsButton ? " checked" : void 0)}><label style="color:grey;"> Add a button in the emojipicker to open statistics overview.</label>`;
+		if (typeof BDfunctionsDevilBro === "object") {
+			return `
+			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="enableEmojiHovering"${(this.getSettings().enableEmojiHovering ? " checked" : void 0)}> Show emojiinformation when hovering over an emoji in the emojipicker.</label><br>\n
+			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="enableEmojiStatisticsButton"${(this.getSettings().enableEmojiStatisticsButton ? " checked" : void 0)}> Add a button in the emojipicker to open statistics overview.</label>`;
+		}
     }
 
 	//legacy
@@ -291,12 +293,14 @@ class EmojiStatistics {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if ($(node).find('.emoji-item')) {
+								if ($(node).find(".emoji-item")) {
 									if (this.getSettings().enableEmojiHovering) {this.hoverEmoji();}
 								}
-								if (BDfunctionsDevilBro.getKeyInformation({"node":node, "key":"displayName", "value":"EmojiPicker"}) && $(".emojistatistics-button").length == 0) {
+								if (node && node.classList && node.classList.contains("popout") && $(node).find(".emoji-picker").length != 0 && $(".emojistatistics-button").length == 0) {
 									this.loadEmojiList();
-									if (this.getSettings().enableEmojiStatisticsButton) {this.addEmojiInformationButton();}
+									if (this.getSettings().enableEmojiStatisticsButton) {
+										this.addEmojiInformationButton();
+									}
 								}
 							});
 						}
@@ -310,7 +314,7 @@ class EmojiStatistics {
 					}
 				);
 			});
-			this.emojiPickerObserver.observe($("#app-mount>:first-child")[0], {childList: true, subtree: true});
+			this.emojiPickerObserver.observe($(".tooltips").parent()[0], {childList: true, subtree: true});
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 		
@@ -341,30 +345,28 @@ class EmojiStatistics {
 			enableEmojiHovering: true,
 			enableEmojiStatisticsButton: true
 		};
-		var settings = bdPluginStorage.get(this.getName(), "settings");
-		if (settings == null) {
-			settings = {};
-		}
+		var settings = BDfunctionsDevilBro.loadAllData(this.getName(), "settings");
 		var saveSettings = false;
 		for (var key in defaultSettings) {
 			if (settings[key] == null) {
-				settings[key] = defaultSettings[key];
+				settings[key] = settings[key] ? settings[key] : defaultSettings[key];
 				saveSettings = true;
 			}
 		}
 		if (saveSettings) {
-			bdPluginStorage.set(this.getName(), "settings", settings);
+			BDfunctionsDevilBro.saveAllData(settings, this.getName(), "settings");
 		}
 		return settings;
 	}
 
-    static updateSettings (settingspanel, pluginName) {
+    static updateSettings (ele, pluginName) {
+		var settingspanel = BDfunctionsDevilBro.getSettingsPanelDiv(ele);
 		var settings = {};
 		var inputs = settingspanel.querySelectorAll("input");
 		for (var i = 0; i < inputs.length; i++) {
 			settings[inputs[i].value] = inputs[i].checked;
 		}
-		bdPluginStorage.set(pluginName, "settings", settings);
+		BDfunctionsDevilBro.saveAllData(settings, pluginName, "settings");
     }
 	
 	changeLanguageStrings () {
@@ -426,7 +428,7 @@ class EmojiStatistics {
 		var entries = [];
 		
 		var emojiInformationModal = $(this.emojiInformationModalMarkup);
-		emojiInformationModal.appendTo("#app-mount")
+		emojiInformationModal.appendTo($(".tooltips").parent())
 		.on("click", ".callout-backdrop,button.btn-ok", (e) => {
 			emojiInformationModal.remove();
 		});

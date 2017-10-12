@@ -245,12 +245,14 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "3.2.3";}
+	getVersion () {return "3.2.6";}
 
 	getAuthor () {return "DevilBro";}
 	
     getSettingsPanel () {
-		return `<button class=EditChannelsResetBtn" style="height:23px" onclick="` + this.getName() + `.resetAll()">Reset all Channels`;
+		if (typeof BDfunctionsDevilBro === "object") {
+			return `<button class="` + this.getName() + `ResetBtn" style="height:23px" onclick='` + this.getName() + `.resetAll("` + this.getName() + `")'>Reset all Channels`;
+		}
     }
 
 	//legacy
@@ -344,6 +346,21 @@ class EditChannels {
 			this.channelListObserver.disconnect();
 			this.channelContextObserver.disconnect();
 			
+			$(".custom-editchannels").each(
+				(i,channelDiv) => {
+					var info = BDfunctionsDevilBro.getKeyInformation({"node":channelDiv, "key":"channel"});
+					if (info) {
+						var channel = $(channelDiv).find(".name-2SL4ev");
+					
+						$(channelDiv)
+							.removeClass("custom-editchannels");
+						$(channel)
+							.text(info.name)
+							.css("color", "");
+					}
+				}
+			);
+			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName());
 		}
 	}
@@ -351,18 +368,18 @@ class EditChannels {
 	
 	// begin of own functions
 
-    static resetAll () {
-		if (typeof BDfunctionsDevilBro === "object") {
-			bdPluginStorage.set("EditChannels", "channels", {});
+    static resetAll (pluginName) {
+		if (confirm("Are you sure you want to reset all channels?")) {
+			BDfunctionsDevilBro.removeAllData(pluginName, "channels");
 			
-			$(".containerDefault-7RImuF.custom").each(
+			$(".custom-editchannels").each(
 				(i,channelDiv) => {
 					var info = BDfunctionsDevilBro.getKeyInformation({"node":channelDiv, "key":"channel"});
 					if (info) {
 						var channel = $(channelDiv).find(".name-2SL4ev");
 					
 						$(channelDiv)
-							.removeClass("custom");
+							.removeClass("custom-editchannels");
 						$(channel)
 							.text(info.name)
 							.css("color", "");
@@ -388,13 +405,15 @@ class EditChannels {
 	}
 	
 	onContextMenu (context) {
-		var channelData = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"channel"});
-		var contextType = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"ChannelInviteCreateGroup"});
-		
-		if (channelData && contextType) {
-			$(context).append(this.channelContextEntryMarkup)
-				.on("mouseenter", ".localchannelsettings-item", channelData, this.createContextSubMenu.bind(this))
-				.on("mouseleave", ".localchannelsettings-item", channelData, this.deleteContextSubMenu.bind(this));
+		if ($(context).find(".localchannelsettings-item").length == 0) {
+			var channelData = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"channel"});
+			var contextType = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"ChannelInviteCreateGroup"});
+			
+			if (channelData && contextType) {
+				$(context).append(this.channelContextEntryMarkup)
+					.on("mouseenter", ".localchannelsettings-item", channelData, this.createContextSubMenu.bind(this))
+					.on("mouseleave", ".localchannelsettings-item", channelData, this.deleteContextSubMenu.bind(this));
+			}
 		}
 	}
 	
@@ -431,12 +450,12 @@ class EditChannels {
 		$(".context-menu").hide();
 		var id = e.data.id + "_" + e.data.guild_id;
 		if (id) {
-			var data = BDfunctionsDevilBro.loadData(id, this.getName(), "channels");
+			var info = BDfunctionsDevilBro.loadData(id, this.getName(), "channels");
 			
 			var channelID = e.data.id;
 			var serverID = 	e.data.guild_id;
-			var name = 		data ? data.name : null;
-			var color = 	data ? data.color : null;
+			var name = 		info ? info.name : null;
+			var color = 	info ? info.color : null;
 			
 			var channelDiv = BDfunctionsDevilBro.getDivOfChannel(channelID, serverID);
 			var channel = $(channelDiv).find(".name-2SL4ev");
@@ -445,7 +464,7 @@ class EditChannels {
 			channelSettingsModal.find("#modal-text")[0].value = name;
 			channelSettingsModal.find("#modal-text").attr("placeholder", e.data.name);
 			this.setSwatches(color, this.colourList, channelSettingsModal.find(".swatches1"), "swatch1");
-			channelSettingsModal.appendTo("#app-mount")
+			channelSettingsModal.appendTo($(".tooltips").parent())
 				.on("click", ".callout-backdrop,button.btn-cancel", (event) => {
 					$(".sp-container").remove();
 					channelSettingsModal.remove();
@@ -602,7 +621,7 @@ class EditChannels {
 			var channel = $(channelDiv).find(".name-2SL4ev");
 			
 			$(channelDiv)
-				.removeClass("custom");
+				.removeClass("custom-editchannels");
 			$(channel)
 				.text(e.data.name)
 				.css("color", "");
@@ -622,7 +641,7 @@ class EditChannels {
 				var color = 	data.color ? this.chooseColor(channel[0], data.color) : "";
 				
 				$(channelDiv)
-					.addClass("custom");
+					.addClass("custom-editchannels");
 				$(channel)
 					.text(name)
 					.css("color", color);
@@ -641,10 +660,10 @@ class EditChannels {
 		switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
 			case "da": 		//danish
 				return {
-					context_localchannelsettings_text: 		"Lokal Kanalindstillinger",
+					context_localchannelsettings_text: 		"Lokal kanalindstillinger",
 					submenu_channelsettings_text: 			"Skift indstillinger",
 					submenu_resetsettings_text: 			"Nulstil kanal",
-					modal_header_text:						"Lokal Kanalindstillinger",
+					modal_header_text:						"Lokal kanalindstillinger",
 					modal_channelname_text:					"Lokalt kanalnavn",
 					modal_colorpicker1_text:				"Lokal kanalfarve",
 					btn_cancel_text:						"Afbryde",

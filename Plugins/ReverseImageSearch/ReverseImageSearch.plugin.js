@@ -42,21 +42,22 @@ class ReverseImageSearch {
 
 	getDescription () {return "Adds a reverse image search option to the context menu.";}
 
-	getVersion () {return "3.1.4";}
+	getVersion () {return "3.1.5";}
 	
-
 	getAuthor () {return "DevilBro";}
 
     getSettingsPanel () {
-		var settings = this.getSettings();
-		var settingspanel = `<label style="color:grey;">Reverse Search Engines</label><br>\n`;
-		for (var i in this.searchEngines) {
-			var engine = this.searchEngines[i].name;
-			var checked = settings[engine] ? " checked" : "";
-			settingspanel += `<input type="checkbox" onchange="` + this.getName() + `.updateSettings(this.parentNode)" value="` + engine + `"` + checked + `><label style="color:grey;"> ` + engine + `</label><br>\n`;
+		if (typeof BDfunctionsDevilBro === "object") {
+			var settings = this.getSettings();
+			var settingspanel = `<label style="color:grey;">Reverse Search Engines</label><br>\n`;
+			for (var i in this.searchEngines) {
+				var engine = this.searchEngines[i].name;
+				var checked = settings[engine] ? " checked" : "";
+				settingspanel += `<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="` + engine + `"` + checked + `> ` + engine + `</label><br>\n`;
+			}
+			
+			return settingspanel;
 		}
-		
-		return settingspanel;
     }
 	
 	//legacy
@@ -105,23 +106,33 @@ class ReverseImageSearch {
 	// begin of own functions
 	
 	getSettings () {
-		var oldSettings = bdPluginStorage.get(this.getName(), "settings") ? bdPluginStorage.get(this.getName(), "settings") : {};
-		var newSettings = {};
+		var defaultSettings = {
+			enableEmojiHovering: true,
+			enableEmojiStatisticsButton: true
+		};
+		var settings = BDfunctionsDevilBro.loadAllData(this.getName(), "settings");
+		var saveSettings = false;
 		for (var i in this.searchEngines) {
 			var key = this.searchEngines[i].name;
-			newSettings[key] = oldSettings[key] != null ? oldSettings[key] : true;
+			if (settings[key] == null) {
+				settings[key] = settings[key] ? settings[key] : true;
+				saveSettings = true;
+			}
 		}
-		bdPluginStorage.set(this.getName(), "settings", newSettings);
-		return newSettings;
+		if (saveSettings) {
+			BDfunctionsDevilBro.saveAllData(settings, this.getName(), "settings");
+		}
+		return settings;
 	}
 
-    static updateSettings (settingspanel) {
+    static updateSettings (ele, pluginName) {
+		var settingspanel = BDfunctionsDevilBro.getSettingsPanelDiv(ele);
 		var settings = {};
 		var inputs = settingspanel.querySelectorAll("input");
 		for (var i = 0; i < inputs.length; i++) {
 			settings[inputs[i].value] = inputs[i].checked;
 		}
-		bdPluginStorage.set("ReverseImageSearch", "settings", settings);
+		BDfunctionsDevilBro.saveAllData(settings, pluginName, "settings");
     }
 	
 	

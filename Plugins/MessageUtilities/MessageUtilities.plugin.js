@@ -66,10 +66,10 @@ class MessageUtilities {
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.sglClickListener = this.onSglClick.bind(this);
-			$(document).bind("click", this.sglClickListener);
+			$(document).bind("click." + this.getName(), this.sglClickListener);
 			
 			this.dblClickListener = this.onDblClick.bind(this);
-			$(document).bind("dblclick", this.dblClickListener);
+			$(document).bind("dblclick." + this.getName(), this.dblClickListener);
 			
 			this.keydownListener = (e) => {
 				if (this.pressedKeys.indexOf(e.which) < 0) {
@@ -80,8 +80,8 @@ class MessageUtilities {
 				this.pressedKeys.pop(e.which);
 			};
 			
-			$(window).bind("keydown", this.keydownListener);
-			$(window).bind("keyup", this.keyupListener);
+			$(window).bind("keydown." + this.getName(), this.keydownListener);
+			$(window).bind("keyup." + this.getName(), this.keyupListener);
 			
 			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
 		}
@@ -92,23 +92,15 @@ class MessageUtilities {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			$(document).unbind("click", this.sglClickListener);
-			$(document).unbind("dblclick", this.dblClickListener);
-			$(window).unbind("keydown", this.keydownListener);
-			$(window).unbind("keyup", this.keyupListener);
+			$(document).unbind("click." + this.getName(), this.sglClickListener);
+			$(document).unbind("dblclick." + this.getName(), this.dblClickListener);
+			$(window).unbind("keydown." + this.getName(), this.keydownListener);
+			$(window).unbind("keyup." + this.getName(), this.keyupListener);
 		}
 	}
 
 	
 	//begin of own functions
-
-	getReactInstance (node) { 
-		return node[Object.keys(node).find((key) => key.startsWith("__reactInternalInstance"))];
-	}
-
-	getReactObject (node) { 
-		return ((inst) => (inst._currentElement._owner._instance))(this.getReactInstance(node));
-	}
 	
 	onSglClick (e) {
 		var key = this.pressedKeys[0];
@@ -117,16 +109,13 @@ class MessageUtilities {
 			if (this.firedEvents.indexOf("onSglClick") < 0) {
 				this.firedEvents.push("onSglClick");
 				var messageWrap = e.target.parentElement;
-				
 				if (messageWrap && messageWrap.classList && messageWrap.classList.contains("message-text")) {
 					$(messageWrap).find(".btn-option").click();
-					$(".btn-item").each( (_, item) => {
-						var itemInst = this.getReactInstance(item);
-						if (itemInst) {
-							var itemEle = itemInst._currentElement;
-							if (itemEle && itemEle.props && itemEle.props.onClick && itemEle.props.onClick.name === "bound handleDelete") {
-								itemEle.props.onClick();
-							}
+					$(".popout").find(".option-popout").parent().hide();
+					$(".btn-item").each((_, item) => {
+						var onClick = BDfunctionsDevilBro.getKeyInformation({"node":item,"key":"onClick"});
+						if (onClick && onClick.name === "bound handleDelete") {
+							onClick();
 						}
 					});
 				} 
@@ -143,13 +132,11 @@ class MessageUtilities {
 			
 			if (messageWrap && messageWrap.classList && messageWrap.classList.contains("message-text")) {
 				$(messageWrap).find(".btn-option").click();
+				$(".popout").find(".option-popout").parent().hide();
 				$(".btn-item").each( (_, item) => {
-					var itemInst = this.getReactInstance(item);
-					if (itemInst) {
-						var itemEle = itemInst._currentElement;
-						if (itemEle && itemEle.props && itemEle.props.onClick && itemEle.props.onClick.name === "bound handleEdit") {
-							itemEle.props.onClick();
-						}
+					var onClick = BDfunctionsDevilBro.getKeyInformation({"node":item,"key":"onClick"});
+					if (onClick && onClick.name === "bound handleEdit") {
+						onClick();
 					}
 				});
 			} 

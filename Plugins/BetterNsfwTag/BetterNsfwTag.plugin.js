@@ -2,7 +2,7 @@
 
 class BetterNsfwTag {
 	constructor () {
-		this.serverSwitchObserver = new MutationObserver(() => {});
+		this.switchFixObserver = new MutationObserver(() => {});
 		this.channelListObserver = new MutationObserver(() => {});
 		
 		this.css = ` 
@@ -30,7 +30,7 @@ class BetterNsfwTag {
 
 	getDescription () {return "Adds a more noticeable tag to NSFW channels.";}
 
-	getVersion () {return "1.0.2";}
+	getVersion () {return "1.1.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -45,23 +45,7 @@ class BetterNsfwTag {
 			$('head script[src="https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
 			$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
 		}
-		if (typeof BDfunctionsDevilBro === "object") {
-			this.serverSwitchObserver = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.type == "attributes" && change.attributeName == "class" && change.oldValue && change.oldValue.indexOf("guild") != -1) {
-							var serverData = BDfunctionsDevilBro.getKeyInformation({"node":change.target, "key":"guild"});
-							if (serverData) {
-								$(".channels-wrap").find("[class*=container-]").each((_,container) => {
-									this.checkContainerForNsfwChannel(container);
-								});
-							}
-						}
-					}
-				);
-			});
-			this.serverSwitchObserver.observe($(".guilds.scroller")[0], {subtree:true, attributes:true, attributeOldValue:true});
-			
+		if (typeof BDfunctionsDevilBro === "object") {			
 			this.channelListObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
@@ -80,11 +64,11 @@ class BetterNsfwTag {
 			});
 			this.channelListObserver.observe($(".flex-vertical.channels-wrap")[0], {childList: true, subtree: true});
 			
+			this.switchFixObserver = BDfunctionsDevilBro.onSwitchFix(this);
+			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 			
-			$(".channels-wrap").find("[class*=container-]").each((_,container) => {
-				this.checkContainerForNsfwChannel(container);
-			});
+			this.checkAllContainers();
 								
 			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
 		}
@@ -97,15 +81,27 @@ class BetterNsfwTag {
 		if (typeof BDfunctionsDevilBro === "object") {
 			$(".nsfw-tag").remove();
 			
-			this.serverSwitchObserver.disconnect();
+			this.switchFixObserver.disconnect();
 			this.channelListObserver.disconnect();
 			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName());
 		}
 	}
 	
+	onSwitch () {
+		if (typeof BDfunctionsDevilBro === "object") {
+			this.checkAllContainers();
+		}
+	}
+	
 	
 	// begin of own functions
+	
+	checkAllContainers () {
+		$(".channels-wrap").find("[class*=container-]").each((_,container) => {
+			this.checkContainerForNsfwChannel(container);
+		});
+	}
 	
 	checkContainerForNsfwChannel (container) {
 		$(container).find(".containerDefault-7RImuF").each((_,channel) => {

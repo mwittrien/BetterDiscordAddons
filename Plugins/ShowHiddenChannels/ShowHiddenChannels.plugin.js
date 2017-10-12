@@ -2,7 +2,8 @@
 
 class ShowHiddenChannels {
 	constructor () {
-		this.serverListObserver = new MutationObserver(() => {});
+		this.switchFixObserver = new MutationObserver(() => {});
+		this.channelListObserver = new MutationObserver(() => {});
 		
 		this.categoryMarkup = 
 			`<div class="container-hidden">
@@ -37,11 +38,9 @@ class ShowHiddenChannels {
 
 	getDescription () {return "Displays channels that are hidden from you by role restrictions.";}
 
-	getVersion () {return "1.1.0";}
+	getVersion () {return "1.3.3";}
 
 	getAuthor () {return "DevilBro";}
-	
-    getSettingsPanel () {}
 
 	//legacy
 	load () {}
@@ -55,19 +54,22 @@ class ShowHiddenChannels {
 			$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
-			this.serverListObserver = new MutationObserver((changes, _) => {
+			this.channelListObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
-						if (change.type == "attributes" && change.attributeName == "class" && change.oldValue && change.oldValue.indexOf("guild") != -1) {
-							var serverData = BDfunctionsDevilBro.getKeyInformation({"node":change.target, "key":"guild"});
-							if (serverData) {
-								this.displayHiddenChannels();
-							}
+						if (change.addedNodes) {
+							change.addedNodes.forEach((node) => {
+								if (node && node.className && node.className.length > 0 && node.className.indexOf("container-") > -1 && node.className.indexOf("hidden") == -1) {
+									this.appendToChannelList(document.querySelector(".container-hidden"));
+								} 
+							});
 						}
 					}
 				);
 			});
-			this.serverListObserver.observe($(".guilds.scroller")[0], {subtree:true, attributes:true, attributeOldValue:true});
+			this.channelListObserver.observe($(".flex-vertical.channels-wrap")[0], {childList: true, subtree: true});
+			
+			this.switchFixObserver = BDfunctionsDevilBro.onSwitchFix(this);
 			
 			this.displayHiddenChannels();
 			
@@ -81,7 +83,14 @@ class ShowHiddenChannels {
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			$(".container-hidden").remove();
-			this.serverListObserver.disconnect();
+			this.switchFixObserver.disconnect();
+			this.channelListObserver.disconnect();
+		}
+	}
+	
+	onSwitch () {
+		if (typeof BDfunctionsDevilBro === "object") {
+			setTimeout(() => {this.displayHiddenChannels()},100);
 		}
 	}
 
@@ -89,20 +98,15 @@ class ShowHiddenChannels {
 	// begin of own functions
 	
 	displayHiddenChannels () {
-		var server = BDfunctionsDevilBro.getSelectedServer();
-		if (server) {
-			var channelList = $(".scroller-fzNley.scroller-NXV0-d")[0];
-			var serverID = BDfunctionsDevilBro.getIdOfServer(server);
-			
+		var serverID = BDfunctionsDevilBro.getIdOfServer(BDfunctionsDevilBro.getSelectedServer());
+		if (serverID) {
 			if ($(".container-hidden." + serverID).length == 0) {
-			
 				$(".container-hidden").remove();
-				var allChannels = BDfunctionsDevilBro.getKeyInformation({"node":server,"key":"channels"});
-				var shownChannels = [];
-				BDfunctionsDevilBro.getKeyInformation({"node":channelList,"key":"channels","all":true,"noCopies":true}).forEach((obj) => {if (obj.count) shownChannels = obj[0];});
+				
+				var allChannels = BDfunctionsDevilBro.getKeyInformation({"node":$(".flex-vertical.channels-wrap").parent()[0],"key":"channels"});
+				var shownChannels = BDfunctionsDevilBro.getKeyInformation({"node":$(".flex-vertical.channels-wrap")[0],"key":"channels"})[0];
 				var thisChannels = [];
 				var hiddenChannels = [];
-				
 				
 				for (var channelID in allChannels) {
 					var oneChannel = allChannels[channelID];
@@ -204,7 +208,6 @@ class ShowHiddenChannels {
 									.addClass("wrapperCollapsed-18mf-c");
 							}
 						});
-					channelList.insertBefore(category[0],channelList.lastChild);
 					
 					for (var k = 0; k < hiddenChannels.length; k++) {
 						var hiddenChannel = hiddenChannels[k];
@@ -249,9 +252,16 @@ class ShowHiddenChannels {
 						}
 					}
 					
+					this.appendToChannelList(category[0]);
+					
 					BDfunctionsDevilBro.saveData(serverID, isOpen, this.getName(), "categorystatus");
 				}
 			}
 		}
+	}
+	
+	appendToChannelList(category) {
+		var channelList = document.querySelector(".scroller-fzNley.scroller-NXV0-d");
+		if (channelList && category) channelList.insertBefore(category,channelList.lastChild);
 	}
 }
