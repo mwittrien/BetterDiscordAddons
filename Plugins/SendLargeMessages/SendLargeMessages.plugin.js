@@ -200,7 +200,7 @@ class SendLargeMessages {
 
 	getDescription () {return "Opens a popout when your message is too large, which allows you to automatically send the message in several smaller messages.";}
 
-	getVersion () {return "1.1.0";}
+	getVersion () {return "1.1.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -287,7 +287,7 @@ class SendLargeMessages {
 				if (!clipboardData) return;
 				var pastedData = clipboardData.getData('Text');
 				console.log(pastedData);
-				var text = e.target.value.slice(0, e.target.selectionStart) + pastedData + e.target.value.slice(e.target.selectionEnd);
+				var text = e.target.value;
 				if (text.length > 1950) {
 					e.target.selectionStart = 0;
 					e.target.selectionEnd = e.target.value.length;
