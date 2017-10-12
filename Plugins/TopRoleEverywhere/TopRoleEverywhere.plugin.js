@@ -36,9 +36,9 @@ class TopRoleEverywhere {
 
 	getName () {return "TopRoleEverywhere";}
 
-	getDescription () {return "Adds the highest role of a user as a tag.";}
+	getDescription () {return "Adds the highest role of a user as a tag. Does not work in compact mode.";}
 
-	getVersion () {return "2.3.1";}
+	getVersion () {return "2.3.2";}
 
 	getAuthor () {return "DevilBro";}
 	
