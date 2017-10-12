@@ -616,7 +616,7 @@ BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
 		var currentRGB = BDfunctionsDevilBro.color2RGB(currentCOMP);
 		var invRGB = BDfunctionsDevilBro.colorINV(currentRGB);
 		
-		var selection = colorOptions.indexOf(currentRGB);
+		var selection = colourList.indexOf(currentRGB);
 		
 		if (selection > -1) {
 			wrapperDiv.find(".regulars .ui-color-picker-" + swatch).eq(selection+1)
