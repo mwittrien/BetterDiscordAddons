@@ -38,7 +38,7 @@ class ShowHiddenChannels {
 
 	getDescription () {return "Displays channels that are hidden from you by role restrictions.";}
 
-	getVersion () {return "1.3.2";}
+	getVersion () {return "1.3.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -90,7 +90,7 @@ class ShowHiddenChannels {
 	
 	onSwitch () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			this.displayHiddenChannels();
+			setTimeout(() => {this.displayHiddenChannels()},100);
 		}
 	}
 
