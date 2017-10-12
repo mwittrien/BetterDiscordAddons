@@ -200,7 +200,7 @@ class SendLargeMessages {
 
 	getDescription () {return "Opens a popout when your message is too large, which allows you to automatically send the message in several smaller messages.";}
 
-	getVersion () {return "1.0.2";}
+	getVersion () {return "1.1.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -282,22 +282,17 @@ class SendLargeMessages {
 			})
 			.off("paste." + this.getName())
 			.on("paste." + this.getName(), e => {
-				e.stopPropagation();
-				e.preventDefault();
 				e = e.originalEvent ? e.originalEvent : e;
-				
 				var clipboardData = e.clipboardData;
 				if (!clipboardData) return;
 				var pastedData = clipboardData.getData('Text');
+				console.log(pastedData);
 				var text = e.target.value.slice(0, e.target.selectionStart) + pastedData + e.target.value.slice(e.target.selectionEnd);
 				if (text.length > 1950) {
 					e.target.selectionStart = 0;
 					e.target.selectionEnd = e.target.value.length;
 					document.execCommand("insertText", false, "");
 					this.showSendModal(text);
-				}
-				else {
-					document.execCommand("insertText", false, pastedData);
 				}
 			});
 	}
@@ -311,15 +306,15 @@ class SendLargeMessages {
 				sendMessageModal.remove();
 			})
 			.on("click", "button.btn-send", (e) => {
-				if (!textinput.value.match(/[\S]{1950,}/gm) && (!textinput.value.match(/`{3,}/gm) || textinput.value.match(/`{3,}/gm).length % 2 == 0)) {
+				if (!textinput.value.match(/[\S]{1900,}/gm) && (!textinput.value.match(/`{3,}/gm) || textinput.value.match(/`{3,}/gm).length % 2 == 0)) {
 					e.preventDefault();
+					sendMessageModal.remove();
 					$(document).off("mouseup." + this.getName()).off("mousemove." + this.getName());
 					this.formatText(textinput.value).forEach((message,i) => {
 						setTimeout(() => {
 							this.sendMessage(message);
 						},i*1000);
 					});
-					sendMessageModal.remove();
 				}
 			});
 			
@@ -359,7 +354,7 @@ class SendLargeMessages {
 		var warning = modal.find("#warning-message");
 		var counter = modal.find("#character-counter");
 		var textinput = modal.find("#modal-inputtext")[0];
-		var messageAmmount = Math.ceil(textinput.value.length/1950);
+		var messageAmmount = Math.ceil(textinput.value.length/1900);
 		warning.text(messageAmmount > 15 ? this.labels.modal_messages_warning : "");
 		counter.text(textinput.value.length + " (" + (textinput.selectionEnd - textinput.selectionStart) + ") => " + this.labels.modal_messages_translation + ": " +  messageAmmount);
 	}
@@ -368,7 +363,7 @@ class SendLargeMessages {
 		var messages = [];
 		var count = 0;
 		text.split(" ").forEach((word) => {
-			if (messages[count] && messages[count].length > 1950) count++;
+			if (messages[count] && (messages[count].length + word.length) > 1900) count++;
 			messages[count] = messages[count] ? messages[count] + " " + word : word;
 		});
 		
