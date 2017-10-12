@@ -39,7 +39,7 @@ class TopRoleEverywhere {
 
 	getDescription () {return "Adds the highest role of a user as a tag. Does not work in compact mode.";}
 
-	getVersion () {return "2.3.3";}
+	getVersion () {return "2.3.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -49,7 +49,8 @@ class TopRoleEverywhere {
 			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="showInChat"${(this.getSettings().showInChat ? " checked" : void 0)}> Show tag in chatwindow.</label><br>\n
 			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="showInMemberList"${(this.getSettings().showInMemberList ? " checked" : void 0)}> Show tag in memberlist.</label><br>\n
 			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="useOtherStyle"${(this.getSettings().useOtherStyle ? " checked" : void 0)}> Use other tag style.</label><br>\n
-			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="showOwnerRole"${(this.getSettings().showOwnerRole ? " checked" : void 0)}> Display toprole of serverowner as \"Owner\".</label>`;
+			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="showOwnerRole"${(this.getSettings().showOwnerRole ? " checked" : void 0)}> Display toprole of serverowner as \"Owner\".</label><br>\n
+			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="disableForBots"${(this.getSettings().disableForBots ? " checked" : void 0)}> Disable toprole for bots.</label>`;
 		}
     }
 
@@ -173,7 +174,8 @@ class TopRoleEverywhere {
 			showInChat: true,
 			showInMemberList: true,
 			useOtherStyle: false,
-			showOwnerRole: false
+			showOwnerRole: false,
+			showOnBots: false
 		};
 		var settings = BDfunctionsDevilBro.loadAllData(this.getName(), "settings");
 		var saveSettings = false;
@@ -232,6 +234,7 @@ class TopRoleEverywhere {
 			var roleName = null;
 			var roleColor = null;
 			var userID = userInfo ? userInfo.id : null;
+			if (userInfo.bot && this.getSettings().disableForBots) return;
 			if (styleInfo && userID) {
 				var savedInfo = this.userRoles[serverID][userID];
 				if (savedInfo && BDfunctionsDevilBro.colorCOMPARE(savedInfo.colorString, styleInfo.color)) {
