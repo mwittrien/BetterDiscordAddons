@@ -227,7 +227,7 @@ class SendLargeMessages {
 			
 			this.bindEventToTextArea();
 			
-			//BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
+			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
 			
 			setTimeout(() => {
 				this.labels = this.setLabelsByLanguage();
