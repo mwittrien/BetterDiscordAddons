@@ -559,6 +559,8 @@ class EditUsers {
 			this.settingsWindowObserver.disconnect();
 			
 			this.resetAllUsers();
+			
+			BDfunctionsDevilBro.removeLocalStyle(this.getName());
 		}
 	}
 	
