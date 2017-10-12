@@ -200,7 +200,7 @@ class SendLargeMessages {
 
 	getDescription () {return "Opens a popout when your message is too large, which allows you to automatically send the message in several smaller messages.";}
 
-	getVersion () {return "1.0.1";}
+	getVersion () {return "1.0.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -311,7 +311,7 @@ class SendLargeMessages {
 				sendMessageModal.remove();
 			})
 			.on("click", "button.btn-send", (e) => {
-				if (!textinput.value.match(/`{3,}/gm) || textinput.value.match(/`{3,}/gm).length % 2 == 0) {
+				if (!textinput.value.match(/[\S]{1950,}/gm) && (!textinput.value.match(/`{3,}/gm) || textinput.value.match(/`{3,}/gm).length % 2 == 0)) {
 					e.preventDefault();
 					$(document).off("mouseup." + this.getName()).off("mousemove." + this.getName());
 					this.formatText(textinput.value).forEach((message,i) => {
