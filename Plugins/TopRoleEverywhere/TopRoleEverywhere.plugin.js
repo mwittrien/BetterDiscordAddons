@@ -39,7 +39,7 @@ class TopRoleEverywhere {
 
 	getDescription () {return "Adds the highest role of a user as a tag. Does not work in compact mode.";}
 
-	getVersion () {return "2.3.4";}
+	getVersion () {return "2.3.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -229,12 +229,12 @@ class TopRoleEverywhere {
 		var member = wrapper.querySelector("div.member-username") || wrapper.querySelector("span.username-wrapper");
 		if (member && member.tagName && !member.querySelector(".role-tag")) {
 			var settings = this.getSettings();
-			var styleInfo = BDfunctionsDevilBro.getKeyInformation({"node":member,"key":"style"});
 			var userInfo = BDfunctionsDevilBro.getKeyInformation({"node":wrapper,"key":"user"});
+			if (!userInfo || (userInfo.bot && this.getSettings().disableForBots)) return;
+			var styleInfo = BDfunctionsDevilBro.getKeyInformation({"node":member,"key":"style"});
 			var roleName = null;
 			var roleColor = null;
-			var userID = userInfo ? userInfo.id : null;
-			if (userInfo.bot && this.getSettings().disableForBots) return;
+			var userID = userInfo.id;
 			if (styleInfo && userID) {
 				var savedInfo = this.userRoles[serverID][userID];
 				if (savedInfo && BDfunctionsDevilBro.colorCOMPARE(savedInfo.colorString, styleInfo.color)) {
