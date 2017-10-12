@@ -6,6 +6,8 @@ class EditUsers {
 		this.labels = {};
 		
 		this.nickNames = {};
+		
+		this.selecting = false;
     
 		this.switchFixObserver = new MutationObserver(() => {});
 		this.userContextObserver = new MutationObserver(() => {});
@@ -392,9 +394,9 @@ class EditUsers {
 
 	getName () {return "EditUsers";}
 
-	getDescription () {return "Allows you to change the icon, name, tag and color of users.";}
+	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "1.3.0";}
+	getVersion () {return "1.3.1";}
 
 	getAuthor () {return "DevilBro";}
 	
