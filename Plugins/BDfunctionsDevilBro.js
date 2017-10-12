@@ -755,11 +755,6 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBroCSS", `
 	}
 
 	.modal-color-picker [class^="ui-color-picker-swatch"].nocolor {
-		cursor: default;
-		line-height: 22px;
-		color: red;
-		font-size: 28px;
-		font-weight: bold;
 		border: 4px solid red;
 	}
 	
