@@ -732,3 +732,40 @@ BDfunctionsDevilBro.getDiscordLanguage = function () {
 			return {"id":"en","lang":"english"};
 	}
 };
+
+BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBroCSS", `
+	.modal-color-picker [class^="swatches"] {
+		width: 430px;
+		margin: auto;
+	}
+
+	.modal-color-picker [class^="ui-color-picker-swatch"] {
+		width: 22px;
+		height: 22px;
+		margin-bottom: 5px;
+		margin-top: 5px;
+		border: 4px solid transparent;
+		border-radius: 12px;
+	}
+
+	.modal-color-picker [class^="ui-color-picker-swatch"].large {
+		min-width: 62px;
+		height: 62px;
+		border-radius: 25px;
+	}
+
+	.modal-color-picker [class^="ui-color-picker-swatch"].nocolor {
+		cursor: default;
+		line-height: 22px;
+		color: red;
+		font-size: 28px;
+		font-weight: bold;
+		border: 4px solid red;
+	}
+	
+	.modal-color-picker .color-picker-dropper {
+		position: relative;
+		left: 40px;
+		top: 10px;
+	}`
+);
