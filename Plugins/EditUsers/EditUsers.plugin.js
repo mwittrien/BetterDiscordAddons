@@ -6,8 +6,6 @@ class EditUsers {
 		this.labels = {};
 		
 		this.nickNames = {};
-		
-		this.selecting = false;
     
 		this.switchFixObserver = new MutationObserver(() => {});
 		this.userContextObserver = new MutationObserver(() => {});
@@ -15,6 +13,7 @@ class EditUsers {
 		this.friendListObserver = new MutationObserver(() => {});
 		this.userListObserver = new MutationObserver(() => {});
 		this.chatWindowObserver = new MutationObserver(() => {});
+		this.messageEditObserver = new MutationObserver(() => {});
 		this.userPopoutObserver = new MutationObserver(() => {});
 		this.settingsWindowObserver = new MutationObserver(() => {});
 		
@@ -396,7 +395,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "1.3.1";}
+	getVersion () {return "1.3.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -491,7 +490,10 @@ class EditUsers {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (node && node.tagName && node.querySelector(".username-wrapper")) {
-									if (this.getSettings().changeInChatWindow) this.loadUser(node, "chat");
+									if (this.getSettings().changeInChatWindow) {
+										this.loadUser(node, "chat");
+										this.messageEditObserver.observe(node, {childList:true, subtree:true});
+									}
 								}
 							});
 						}
@@ -499,6 +501,18 @@ class EditUsers {
 				);
 			});
 			if (document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(document.querySelector(".messages.scroller"), {childList:true});
+			
+			this.messageEditObserver = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.addedNodes) {
+							change.addedNodes.forEach((node) => {
+								this.loadUser($(".message-group").has(node)[0], "chat");
+							});
+						}
+					}
+				);
+			});
 			
 			this.userPopoutObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -557,6 +571,7 @@ class EditUsers {
 			this.friendListObserver.disconnect();
 			this.userListObserver.disconnect();
 			this.chatWindowObserver.disconnect();
+			this.messageEditObserver.disconnect();
 			this.userPopoutObserver.disconnect();
 			this.settingsWindowObserver.disconnect();
 			
@@ -977,15 +992,16 @@ class EditUsers {
 		
 		var settings = this.getSettings();
 		
-		if (settings.changeInChatWindow) {
+		if (settings.changeInMemberList) {
 			var membersList = document.querySelectorAll("div.member");
 			for (var i = 0; i < membersList.length; i++) {
 				this.loadUser(membersList[i], "list");
 			} 
 		}
-		if (settings.changeInMemberList) {
+		if (settings.changeInChatWindow) {
 			var membersChat = document.querySelectorAll("div.message-group");
 			for (var j = 0; j < membersChat.length; j++) {
+				this.messageEditObserver.observe(membersChat[j], {childList:true, subtree:true});
 				this.loadUser(membersChat[j], "chat");
 			}
 		}
@@ -1018,7 +1034,6 @@ class EditUsers {
 	loadUser (div, type) {
 		if (!div || div.classList.contains("custom-editusers")) return;
 		var {avatar, username, wrapper} = this.getAvatatNameWrapper(div);
-						
 		if (avatar && username && wrapper) {
 			var info = BDfunctionsDevilBro.getKeyInformation({"node":div,"key":"user"});
 			var styleInfo = BDfunctionsDevilBro.getKeyInformation({"node":wrapper,"key":"style"});
