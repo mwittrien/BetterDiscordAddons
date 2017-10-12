@@ -601,6 +601,92 @@ BDfunctionsDevilBro.clearReadNotifications = function (servers) {
 		); 
 };
 
+BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
+	var wrapperDiv = $(wrapper);
+		
+	var colourList = 
+		['rgb(26, 188, 156)','rgb(46, 204, 113)','rgb(52, 152, 219)','rgb(155, 89, 182)','rgb(233, 30, 99)','rgb(241, 196, 15)','rgb(230, 126, 34)','rgb(231, 76, 60)','rgb(149, 165, 166)','rgb(96, 125, 139)','rgb(99, 99, 99)',
+		'rgb(254, 254, 254)','rgb(17, 128, 106)','rgb(31, 139, 76)','rgb(32, 102, 148)','rgb(113, 54, 138)','rgb(173, 20, 87)','rgb(194, 124, 14)','rgb(168, 67, 0)','rgb(153, 45, 34)','rgb(151, 156, 159)','rgb(84, 110, 122)','rgb(44, 44, 44)'];
+		
+	var swatches = 
+		`<div class="ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-nowrap" style="flex: 1 1 auto; margin-top: 5px;"><div class="ui-color-picker-${swatch} large custom" style="background-color: rgb(0, 0, 0);"><svg class="color-picker-dropper" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 16 16"><path class="color-picker-dropper-fg" fill="#ffffff" d="M14.994 1.006C13.858-.257 11.904-.3 10.72.89L8.637 2.975l-.696-.697-1.387 1.388 5.557 5.557 1.387-1.388-.697-.697 1.964-1.964c1.13-1.13 1.3-2.985.23-4.168zm-13.25 10.25c-.225.224-.408.48-.55.764L.02 14.37l1.39 1.39 2.35-1.174c.283-.14.54-.33.765-.55l4.808-4.808-2.776-2.776-4.813 4.803z"></path></svg></div><div class="regulars ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-wrap ui-color-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;"><div class="ui-color-picker-${swatch} nocolor" style="background-color: null;"><svg clas="nocolor-cross" height="22" width="22"><path d="m 3 2 l 17 18 m 0 -18 l -17 18" stroke="red" stroke-width="3" fill="none" /></svg></div>${ colourList.map((val, i) => `<div class="ui-color-picker-${swatch}" style="background-color: ${val};"></div>`).join("")}</div></div>`;
+	$(swatches).appendTo(wrapperDiv);
+	
+	if (currentCOMP) {
+		var currentRGB = BDfunctionsDevilBro.color2RGB(currentCOMP);
+		var invRGB = BDfunctionsDevilBro.colorINV(currentRGB);
+		
+		var selection = colorOptions.indexOf(currentRGB);
+		
+		if (selection > -1) {
+			wrapperDiv.find(".regulars .ui-color-picker-" + swatch).eq(selection+1)
+				.addClass("selected")
+				.css("background-color", currentRGB)
+				.css("border", "4px solid " + invRGB);
+		} 
+		else {
+			$(".custom", wrapperDiv)
+				.addClass("selected")
+				.css("background-color", currentRGB)
+				.css("border", "4px solid " + invRGB);
+			
+			$(".color-picker-dropper-fg", wrapperDiv)
+				.attr("fill", currentCOMP[0] > 150 && currentCOMP[1] > 150 && currentCOMP[2] > 150 ? "#000000" : "#ffffff");
+		}
+	}
+	else {
+		$(".nocolor", wrapperDiv)
+			.addClass("selected")
+			.css("border", "4px solid black");
+	}
+	
+	wrapperDiv.on("click", ".ui-color-picker-" + swatch + ":not(.custom)", (e) => {
+		var bgColor = $(e.target).css("background-color");
+		var newInvRGB = BDfunctionsDevilBro.checkColorType(bgColor) ? BDfunctionsDevilBro.colorINV(bgColor,"rgb") : "black";
+		
+		wrapperDiv.find(".ui-color-picker-" + swatch + ".selected.nocolor")
+			.removeClass("selected")
+			.css("border", "4px solid red");
+			
+		wrapperDiv.find(".ui-color-picker-" + swatch + ".selected")
+			.removeClass("selected")
+			.css("border", "4px solid transparent");
+			
+		$(e.currentTarget)
+			.addClass("selected")
+			.css("border", "4px solid " + newInvRGB);
+	});
+	
+	var custom = $(".ui-color-picker-" + swatch + ".custom", wrapperDiv).spectrum({
+		color: $(".custom", wrapperDiv).css("background-color"),
+		preferredFormat: "rgb",
+		clickoutFiresChange: true,
+		showInput: true,
+		showButtons: false,
+		move: (color) => {
+			var newRGB = color.toRgbString();
+			var newCOMP = BDfunctionsDevilBro.color2COMP(newRGB);
+			var newInvRGB = BDfunctionsDevilBro.colorINV(newRGB);
+			
+			$(".ui-color-picker-" + swatch + ".selected.nocolor")
+				.removeClass("selected")
+				.css("border", "4px solid red");
+				
+			$(".ui-color-picker-" + swatch + ".selected")
+				.removeClass("selected")
+				.css("border", "4px solid transparent");
+			
+			custom
+				.addClass("selected")
+				.css("background-color", newRGB)
+				.css("border", "4px solid " + newInvRGB);
+				
+			$(".color-picker-dropper-fg", wrapperDiv)
+				.attr("fill", newCOMP[0] > 150 && newCOMP[1] > 150 && newCOMP[2] > 150 ? "#000000" : "#ffffff");
+		}
+	});
+}
+
 BDfunctionsDevilBro.getDiscordLanguage = function () {
 	var lang = $("html").attr("lang") ? $("html").attr("lang").split("-")[0] : "en";
 	switch (lang) {
