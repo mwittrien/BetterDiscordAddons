@@ -697,7 +697,7 @@ BDfunctionsDevilBro.getDiscordLanguage = function () {
 		case "es": 		//spanish
 			return {"id":"es","lang":"spanish"};
 		case "fr": 		//french
-			return {"id":"fr","lang":"italian"};
+			return {"id":"fr","lang":"french"};
 		case "it": 		//italian
 			return {"id":"it","lang":"italian"};
 		case "nl":		//dutch
