@@ -5,6 +5,7 @@ class TopRoleEverywhere {
 		this.switchFixObserver = new MutationObserver(() => {});
 		this.userListObserver = new MutationObserver(() => {});
 		this.chatWindowObserver = new MutationObserver(() => {});
+		this.messageEditObserver = new MutationObserver(() => {});
 		this.settingsWindowObserver = new MutationObserver(() => {});
 		
 		this.roles = {};
@@ -38,7 +39,7 @@ class TopRoleEverywhere {
 
 	getDescription () {return "Adds the highest role of a user as a tag. Does not work in compact mode.";}
 
-	getVersion () {return "2.3.2";}
+	getVersion () {return "2.3.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -70,11 +71,9 @@ class TopRoleEverywhere {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (node.querySelector(".member-username") && this.getSettings().showInMemberList) {
-									var server = BDfunctionsDevilBro.getSelectedServer();
-									var serverData = BDfunctionsDevilBro.getKeyInformation({"node":server,"key":"guild"});
-									if (server && serverData) {
-										var serverID = serverData.id;
-										this.addRoleTag(node, "list", serverID);
+									var serverData = BDfunctionsDevilBro.getKeyInformation({"node":BDfunctionsDevilBro.getSelectedServer(),"key":"guild"});
+									if (serverData) {
+										this.addRoleTag(node, "list", serverData.id);
 									}
 								}
 							});
@@ -90,11 +89,10 @@ class TopRoleEverywhere {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (node && node.tagName && node.querySelector(".username-wrapper") && this.getSettings().showInChat) {
-									var server = BDfunctionsDevilBro.getSelectedServer();
-									var serverData = BDfunctionsDevilBro.getKeyInformation({"node":server,"key":"guild"});
-									if (server && serverData) {
-										var serverID = serverData.id;
-										this.addRoleTag(node, "chat", serverID);
+									var serverData = BDfunctionsDevilBro.getKeyInformation({"node":BDfunctionsDevilBro.getSelectedServer(),"key":"guild"});
+									if (serverData) {
+										this.addRoleTag(node, "chat", serverData.id);
+										this.messageEditObserver.observe(node, {childList:true, subtree:true});
 									}
 								}
 							});
@@ -103,6 +101,21 @@ class TopRoleEverywhere {
 				);
 			});
 			if (document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(document.querySelector(".messages.scroller"), {childList:true});
+			
+			this.messageEditObserver = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.addedNodes) {
+							change.addedNodes.forEach((node) => {
+								var serverData = BDfunctionsDevilBro.getKeyInformation({"node":BDfunctionsDevilBro.getSelectedServer(),"key":"guild"});
+								if (serverData) {
+									this.addRoleTag($(".message-group").has(node)[0], "chat", serverData.id);
+								}
+							});
+						}
+					}
+				);
+			});
 			
 			this.settingsWindowObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -137,6 +150,7 @@ class TopRoleEverywhere {
 			this.switchFixObserver.disconnect();
 			this.userListObserver.disconnect();
 			this.chatWindowObserver.disconnect();
+			this.messageEditObserver.disconnect();
 			this.settingsWindowObserver.disconnect();
 			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName());
@@ -201,6 +215,7 @@ class TopRoleEverywhere {
 			if (this.getSettings().showInChat) { 
 				var membersChat = document.querySelectorAll("div.message-group");
 				for (var j = 0; j < membersChat.length; j++) {
+					this.messageEditObserver.observe(membersChat[j], {childList:true, subtree:true});
 					this.addRoleTag(membersChat[j], "chat", serverData.id);
 				}
 			}
