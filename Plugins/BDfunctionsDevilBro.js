@@ -920,7 +920,7 @@ BDfunctionsDevilBro.openColorPicker = function (colorDiv, swatch) {
 				break;
 			case "rgb":
 				red = colorPickerModal.querySelector(".colorpicker-red").value;
-				green = colorPickerModal.querySelector("´.colorpicker-green").value;
+				green = colorPickerModal.querySelector(".colorpicker-green").value;
 				blue = colorPickerModal.querySelector(".colorpicker-blue").value;
 				[hue, saturation, lightness] = BDfunctionsDevilBro.color2HSL([red, green, blue]).replace(new RegExp(" ", 'g'), "").slice(4, -1).split(",");
 				saturation *= 100;
