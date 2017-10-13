@@ -349,7 +349,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "1.3.3";}
+	getVersion () {return "1.3.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -707,7 +707,6 @@ class EditUsers {
 			BDfunctionsDevilBro.setColorSwatches(color4, userSettingsModal.find(".swatches4"), "swatch4");
 			userSettingsModal.appendTo($(".tooltips").parent())
 				.on("click", ".callout-backdrop,button.btn-cancel", (event) => {
-					$(".sp-container").remove();
 					userSettingsModal.remove();
 				})
 				.on("click", "#modal-urlcheck", (event) => {
@@ -768,7 +767,6 @@ class EditUsers {
 					};
 					this.loadAllUsers();
 					
-					$(".sp-container").remove();
 					userSettingsModal.remove();
 				});
 			userSettingsModal.find("#modal-nametext")[0].focus();
