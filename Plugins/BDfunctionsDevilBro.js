@@ -448,6 +448,24 @@ BDfunctionsDevilBro.color2COMP = function (color) {
 				return color;
 			case "rgb":
 				return color.replace(new RegExp(" ", 'g'), "").slice(4, -1).split(",");
+			case "hsl":
+				var hsl = color.replace(new RegExp(" ", 'g'), "").slice(4, -1).split(",");
+				var r, g, b, i, f, p, q, t;
+				var h = hsl[0]/360, s = hsl[1], l = hsl[2];
+				i = Math.floor(h * 6);
+				f = h * 6 - i;
+				p = l * (1 - s);
+				q = l * (1 - f * s);
+				t = l * (1 - (1 - f) * s);
+				switch (i % 6) {
+					case 0: r = l, g = t, b = p; break;
+					case 1: r = q, g = l, b = p; break;
+					case 2: r = p, g = l, b = t; break;
+					case 3: r = p, g = q, b = l; break;
+					case 4: r = t, g = p, b = l; break;
+					case 5: r = l, g = p, b = q; break;
+				}
+				return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
 			case "hex":
 				var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(color);
 				return [parseInt(result[1], 16).toString(),parseInt(result[2], 16).toString(),parseInt(result[3], 16).toString()];
@@ -465,8 +483,36 @@ BDfunctionsDevilBro.color2RGB = function (color) {
 				return "rgb(" + (color[0]) + ", " + (color[1]) + ", " + (color[2]) + ")";
 			case "rgb":
 				return color;
+			case "hsl":
+				return BDfunctionsDevilBro.color2RGB(BDfunctionsDevilBro.color2COMP(color));
 			case "hex":
 				return BDfunctionsDevilBro.color2RGB(BDfunctionsDevilBro.color2COMP(color));
+			default:
+				return null;
+		}
+	}
+	return null;
+};
+
+BDfunctionsDevilBro.color2HSL = function (color) {
+	if (color) {
+		switch (BDfunctionsDevilBro.checkColorType(color)) {
+			case "comp":
+				var r = color[0], g = color[1], b = color[2];
+				var max = Math.max(r, g, b), min = Math.min(r, g, b), d = max - min, h, s = (max === 0 ? 0 : d / max), l = max / 255;
+				switch (max) {
+					case min: h = 0; break;
+					case r: h = (g - b) + d * (g < b ? 6: 0); h /= 6 * d; break;
+					case g: h = (b - r) + d * 2; h /= 6 * d; break;
+					case b: h = (r - g) + d * 4; h /= 6 * d; break;
+				}
+				return "hsl(" + Math.round(h*360) + ", " + s + ", " + l + ")";
+			case "rgb":
+				return BDfunctionsDevilBro.color2HSL(BDfunctionsDevilBro.color2COMP(color));
+			case "hsl":
+				return color;
+			case "hex":
+				return BDfunctionsDevilBro.color2HSL(BDfunctionsDevilBro.color2COMP(color));
 			default:
 				return null;
 		}
@@ -480,6 +526,8 @@ BDfunctionsDevilBro.color2HEX = function (color) {
 			case "comp":
 				return ("#" + (0x1000000 + ((color[2]) | ((color[1]) << 8) | ((color[0]) << 16))).toString(16).slice(1)).toUpperCase();
 			case "rgb":
+				return BDfunctionsDevilBro.color2HEX(BDfunctionsDevilBro.color2COMP(color));
+			case "hsl":
 				return BDfunctionsDevilBro.color2HEX(BDfunctionsDevilBro.color2COMP(color));
 			case "hex":
 				return color;
@@ -501,6 +549,8 @@ BDfunctionsDevilBro.colorCHANGE = function (color, value) {
 				return comp;
 			case "rgb":
 				return BDfunctionsDevilBro.color2RGB(comp);
+			case "hsl":
+				return BDfunctionsDevilBro.color2HSL(comp);
 			case "hex":
 				return BDfunctionsDevilBro.color2HEX(comp);
 			default:
@@ -529,6 +579,10 @@ BDfunctionsDevilBro.colorINV = function (color, conv) {
 					var temp = BDfunctionsDevilBro.color2COMP(color);
 					temp = [(255-temp[0]), (255-temp[1]), (255-temp[2])];
 					return BDfunctionsDevilBro.color2RGB(temp);
+				case "hsl":
+					var temp = BDfunctionsDevilBro.color2COMP(color);
+					temp = [(255-temp[0]), (255-temp[1]), (255-temp[2])];
+					return BDfunctionsDevilBro.color2HSL(temp);
 				case "hex":
 					var temp = BDfunctionsDevilBro.color2COMP(color);
 					temp = [(255-temp[0]), (255-temp[1]), (255-temp[2])];
@@ -543,6 +597,8 @@ BDfunctionsDevilBro.colorINV = function (color, conv) {
 					return BDfunctionsDevilBro.colorINV(BDfunctionsDevilBro.color2COMP(color));
 				case "rgb":
 					return BDfunctionsDevilBro.colorINV(BDfunctionsDevilBro.color2RGB(color));
+				case "hsl":
+					return BDfunctionsDevilBro.colorINV(BDfunctionsDevilBro.color2HSL(color));
 				case "hex":
 					return BDfunctionsDevilBro.colorINV(BDfunctionsDevilBro.color2HEX(color));
 				default:
@@ -561,13 +617,15 @@ BDfunctionsDevilBro.checkColorType = function (color) {
 		else if (typeof color === "string" && color.indexOf("rgb(") == 0) {
 			return "rgb";
 		}
+		else if (typeof color === "string" && color.indexOf("hsl(") == 0) {
+			return "hsl";
+		}
 		else if (typeof color === "string" && color.match(/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i)) {
 			return "hex";
 		}
 	}
 	return null;
 };
-
 	
 BDfunctionsDevilBro.encodeToHTML = function (string) {
 	var ele = document.createElement("div");
@@ -773,5 +831,39 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBroCSS", `
 		position: relative;
 		left: 40px;
 		top: 10px;
+	}
+	
+	.colorpicker-modal .modal {
+		align-content: space-around;
+		align-items: center;
+		box-sizing: border-box;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		min-height: initial;
+		max-height: initial;
+		opacity: 0;
+		pointer-events: none;
+		user-select: none;
+		height: 100%;
+		width: 100%;
+		margin: 0;
+		padding: 0;
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		z-index: 1000;
+	}
+
+	.colorpicker-modal .modal-inner {
+		background-color: #36393E;
+		border-radius: 5px;
+		box-shadow: 0 0 0 1px rgba(32,34,37,.6),0 2px 10px 0 rgba(0,0,0,.2);
+		display: flex;
+		min-height: 200px;
+		pointer-events: auto;
+		width: 500px;
 	}`
 );
