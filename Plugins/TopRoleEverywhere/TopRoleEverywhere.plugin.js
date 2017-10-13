@@ -231,8 +231,8 @@ class TopRoleEverywhere {
 					}
 					else {
 						var markups = membersChat[j].querySelectorAll("div.markup");
-						for (var k = 0; k < markups.length; k++) {
-							this.addRoleTag(markups[k], "chat", serverData.id, true);
+						for (var j2 = 0; j2 < markups.length; j2++) {
+							this.addRoleTag(markups[j2], "chat", serverData.id, true);
 						}
 					}
 				}
