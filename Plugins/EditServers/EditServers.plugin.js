@@ -324,7 +324,7 @@ class EditServers {
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	getVersion () {return "1.3.3";}
+	getVersion () {return "1.3.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -559,7 +559,6 @@ class EditServers {
 			BDfunctionsDevilBro.setColorSwatches(color4, serverSettingsModal.find(".swatches4"), "swatch4");
 			serverSettingsModal.appendTo($(".tooltips").parent())
 				.on("click", ".callout-backdrop,button.btn-cancel", (event) => {
-					$(".sp-container").remove();
 					serverSettingsModal.remove();
 				})
 				.on("click", "#modal-urlcheck", (event) => {
@@ -620,7 +619,6 @@ class EditServers {
 						this.loadServer(serverDiv);
 					}
 					
-					$(".sp-container").remove();
 					serverSettingsModal.remove();
 				});
 			serverSettingsModal.find("#modal-nametext")[0].focus();
