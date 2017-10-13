@@ -723,11 +723,11 @@ BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
 	});
 	
 	wrapperDiv.on("click", ".ui-color-picker-" + swatch + ".custom", (e) => {
-		BDfunctionsDevilBro.openColorPicker(e.target, swatch);
+		BDfunctionsDevilBro.openColorPicker(e.target.style.backgroundColor, swatch);
 	});
 }
 
-BDfunctionsDevilBro.openColorPicker = function (colorDiv, swatch) {
+BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 	var colorPickerModalMarkup = 
 		`<span class="colorpicker-modal">
 			<div class="callout-backdrop" style="background-color:#000; opacity:0.2"></div>
@@ -819,6 +819,12 @@ BDfunctionsDevilBro.openColorPicker = function (colorDiv, swatch) {
 	var sHalfH = scursor.offsetHeight/2;
 	var sMinY = $(spane).offset().top;
 	var sMaxY = sMinY + spane.offsetHeight;
+	
+	[hue, saturation, lightness] = BDfunctionsDevilBro.color2HSL(currentColor).replace(new RegExp(" ", 'g'), "").slice(4, -1).split(",");
+	saturation *= 100;
+	lightness *= 100;
+	updateAllValues();
+	updateCursors();
 	
 	$(ppane)
 		.off("mousedown")
