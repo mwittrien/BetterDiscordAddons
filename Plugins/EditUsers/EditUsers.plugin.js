@@ -385,7 +385,7 @@ class EditUsers {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node.nodeType == 1 && node.className.includes("context-menu")) {
+								if (node && node.nodeType == 1 && node.className.includes("context-menu")) {
 									this.onContextMenu(node);
 								}
 							});
@@ -400,10 +400,10 @@ class EditUsers {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node.querySelector(".channel-name")) {
+								if (node && node.tagName && node.querySelector(".channel-name")) {
 									if (this.getSettings().changeInDmsList) this.loadUser(node, "dms", false);
 								}
-								if (node.querySelector(".userDefault-2_cnT0")) {
+								if (node && node.tagName && node.querySelector(".userDefault-2_cnT0")) {
 									if (this.getSettings().changeInVoiceChat) this.loadUser(node.querySelector(".userDefault-2_cnT0").parentElement, "voice", false);
 								}
 							});
@@ -418,7 +418,7 @@ class EditUsers {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node.querySelector(".friends-column")) {
+								if (node && node.querySelector(".friends-column")) {
 									if (this.getSettings().changeInFriendList) this.loadUser(node, "friends", false);
 								}
 							});
@@ -433,7 +433,7 @@ class EditUsers {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node.querySelector(".member-username")) {
+								if (node && node.querySelector(".member-username")) {
 									if (this.getSettings().changeInMemberList) this.loadUser(node, "list", false);
 								}
 							});
@@ -507,7 +507,7 @@ class EditUsers {
 					(change, i) => {
 						if (change.removedNodes) {
 							change.removedNodes.forEach((node) => {
-								if (node.tagName && node.getAttribute("layer-id") == "user-settings") this.loadAllUsers();
+								if (node && node.tagName && node.getAttribute("layer-id") == "user-settings") this.loadAllUsers();
 							});
 						}
 					}
@@ -755,10 +755,10 @@ class EditUsers {
 					
 					removeIcon = userSettingsModal.find("#modal-urlcheck")[0].checked;
 					
-					color1 = !$(".ui-color-picker-swatch1.nocolor.selected")[0] ? BDfunctionsDevilBro.color2COMP($(".ui-color-picker-swatch1.selected").css("background-color")) : null;
-					color2 = !$(".ui-color-picker-swatch2.nocolor.selected")[0] ? BDfunctionsDevilBro.color2COMP($(".ui-color-picker-swatch2.selected").css("background-color")) : null;
-					color3 = !$(".ui-color-picker-swatch3.nocolor.selected")[0] ? BDfunctionsDevilBro.color2COMP($(".ui-color-picker-swatch3.selected").css("background-color")) : null;
-					color4 = !$(".ui-color-picker-swatch4.nocolor.selected")[0] ? BDfunctionsDevilBro.color2COMP($(".ui-color-picker-swatch4.selected").css("background-color")) : null;
+					color1 = BDfunctionsDevilBro.getSwatchColor("swatch1");
+					color2 = BDfunctionsDevilBro.getSwatchColor("swatch2");
+					color3 = BDfunctionsDevilBro.getSwatchColor("swatch3");
+					color4 = BDfunctionsDevilBro.getSwatchColor("swatch4");
 					
 					if (name == null && tag == null && url == null && !removeIcon && color1 == null && color2 == null && color3 == null && color4 == null) {
 						BDfunctionsDevilBro.removeData(id, this.getName(), "users")
