@@ -674,7 +674,7 @@ BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
 		'rgb(254, 254, 254)','rgb(17, 128, 106)','rgb(31, 139, 76)','rgb(32, 102, 148)','rgb(113, 54, 138)','rgb(173, 20, 87)','rgb(194, 124, 14)','rgb(168, 67, 0)','rgb(153, 45, 34)','rgb(151, 156, 159)','rgb(84, 110, 122)','rgb(44, 44, 44)'];
 		
 	var swatches = 
-		`<div class="ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-nowrap" style="flex: 1 1 auto; margin-top: 5px;"><div class="ui-color-picker-${swatch} large custom" style="background-color: rgb(0, 0, 0);"><svg class="color-picker-dropper" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 16 16"><path class="color-picker-dropper-fg" fill="#ffffff" d="M14.994 1.006C13.858-.257 11.904-.3 10.72.89L8.637 2.975l-.696-.697-1.387 1.388 5.557 5.557 1.387-1.388-.697-.697 1.964-1.964c1.13-1.13 1.3-2.985.23-4.168zm-13.25 10.25c-.225.224-.408.48-.55.764L.02 14.37l1.39 1.39 2.35-1.174c.283-.14.54-.33.765-.55l4.808-4.808-2.776-2.776-4.813 4.803z"></path></svg></div><div class="regulars ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-wrap ui-color-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;"><div class="ui-color-picker-${swatch} nocolor" style="background-color: null;"><svg clas="nocolor-cross" height="22" width="22"><path d="m 3 2 l 17 18 m 0 -18 l -17 18" stroke="red" stroke-width="3" fill="none" /></svg></div>${ colourList.map((val, i) => `<div class="ui-color-picker-${swatch}" style="background-color: ${val};"></div>`).join("")}</div></div>`;
+		`<div class="ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-nowrap" style="flex: 1 1 auto; margin-top: 5px;"><div class="ui-color-picker-${swatch} large custom" style="background-color: rgb(0, 0, 0);"><svg class="color-picker-dropper-${swatch}" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 16 16"><path class="color-picker-dropper-fg-${swatch}" fill="#ffffff" d="M14.994 1.006C13.858-.257 11.904-.3 10.72.89L8.637 2.975l-.696-.697-1.387 1.388 5.557 5.557 1.387-1.388-.697-.697 1.964-1.964c1.13-1.13 1.3-2.985.23-4.168zm-13.25 10.25c-.225.224-.408.48-.55.764L.02 14.37l1.39 1.39 2.35-1.174c.283-.14.54-.33.765-.55l4.808-4.808-2.776-2.776-4.813 4.803z"></path></svg></div><div class="regulars ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-wrap ui-color-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;"><div class="ui-color-picker-${swatch} nocolor" style="background-color: null;"><svg clas="nocolor-cross" height="22" width="22"><path d="m 3 2 l 17 18 m 0 -18 l -17 18" stroke="red" stroke-width="3" fill="none" /></svg></div>${ colourList.map((val, i) => `<div class="ui-color-picker-${swatch}" style="background-color: ${val};"></div>`).join("")}</div></div>`;
 	$(swatches).appendTo(wrapperDiv);
 	
 	if (currentCOMP) {
@@ -722,14 +722,60 @@ BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
 			.css("border", "4px solid " + newInvRGB);
 	});
 	
-	var custom = $(".ui-color-picker-" + swatch + ".custom", wrapperDiv).spectrum({
-		color: $(".custom", wrapperDiv).css("background-color"),
-		preferredFormat: "rgb",
-		clickoutFiresChange: true,
-		showInput: true,
-		showButtons: false,
-		move: (color) => {
-			var newRGB = color.toRgbString();
+	wrapperDiv.on("click", ".ui-color-picker-" + swatch + ".custom", (e) => {
+		BDfunctionsDevilBro.openColorPicker(e.target, swatch);
+	});
+}
+
+BDfunctionsDevilBro.openColorPicker = function (colorDiv, swatch) {
+	var colorPickerModalMarkup = 
+		`<span class="colorpicker-modal">
+			<div class="callout-backdrop" style="background-color:#000; opacity:0.2"></div>
+			<div class="modal" style="opacity: 1">
+				<div class="modal-inner">
+					<div class="colorpicker-container">
+						<div class="colorpicker-color">
+							<div class="colorpicker-white" style="background: linear-gradient(to right, #fff, rgba(255,255,255,0))">
+								<div class="colorpicker-black" style="background: linear-gradient(to top, #000, rgba(0,0,0,0))">
+									<div class="colorpicker-pickercursor">
+										<svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+										   <circle cx="7" cy="7" r="6" stroke="black" stroke-width="2" fill="none" />
+										</svg>
+									</div>
+									<div class="colorpicker-pickerpane"></div>
+								</div>
+							</div>
+						</div>
+						<div class="colorpicker-slider" style="background: linear-gradient(to top, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%)">
+								<div class="colorpicker-slidercursor">
+									<svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+										<path stroke="grey" fill="white" d="M 0 0, l 5 5, l -5 5, m 29 0, l -5 -5, l 5 -5"></path>
+									</svg>
+								</div>
+								<div class="colorpicker-sliderpane"></div>
+						</div>
+						<div class="colorpicker-previewcontainer">
+							<div class="colorpicker-preview-0 selected" style="background-color:#808080;"></div>
+							<div class="colorpicker-preview-2" style="background-color:#808080;"></div>
+						</div>
+						<div class="colorpicker-inputs">
+							<div class="colorpicker-input"><label>Hex:</label><input class="colorpicker-hex" name="hex" value="#000000" maxlength="7"></div>
+							<div class="colorpicker-input"><label>R:</label><input class="colorpicker-red" name="rgb" value="0" type="number" min="0" max="255"></div>
+							<div class="colorpicker-input"><label>G:</label><input class="colorpicker-green" name="rgb" value="0" type="number" min="0" max="255"></div>
+							<div class="colorpicker-input"><label>B:</label><input class="colorpicker-blue" name="rgb" value="0" type="number" min="0" max="255"></div>
+							<div class="colorpicker-input"><label>H:</label><input class="colorpicker-hue" name="hsl" value="0" type="number" min="0" max="360"></div>
+							<div class="colorpicker-input"><label>S:</label><input class="colorpicker-saturation" name="hsl" value="0" type="number" min="0" max="100"></div>
+							<div class="colorpicker-input"><label>L:</label><input class="colorpicker-lightness" name="hsl" value="0" type="number" min="0" max="100"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</span>`;
+		
+	var colorPickerModal = $(colorPickerModalMarkup)[0];
+	$(colorPickerModal).appendTo($(".tooltips").parent())
+		.on("click", ".callout-backdrop", (event) => {
+			var newRGB = colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").style.backgroundColor;
 			var newCOMP = BDfunctionsDevilBro.color2COMP(newRGB);
 			var newInvRGB = BDfunctionsDevilBro.colorINV(newRGB);
 			
@@ -741,15 +787,195 @@ BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
 				.removeClass("selected")
 				.css("border", "4px solid transparent");
 			
-			custom
+			$(".ui-color-picker-" + swatch + ".custom")
 				.addClass("selected")
 				.css("background-color", newRGB)
 				.css("border", "4px solid " + newInvRGB);
 				
-			$(".color-picker-dropper-fg", wrapperDiv)
+			$(".color-picker-dropper-fg-" + swatch)
 				.attr("fill", newCOMP[0] > 150 && newCOMP[1] > 150 && newCOMP[2] > 150 ? "#000000" : "#ffffff");
+				
+			$(colorPickerModal).remove();
+		});
+	
+	var hex = 0, red = 0, green = 0, blue = 0, hue = 0, saturation = 0, lightness = 0;
+	
+	var ppane = colorPickerModal.querySelector(".colorpicker-pickerpane");
+	var pcursor = colorPickerModal.querySelector(".colorpicker-pickercursor");
+	
+	var pX = 0;
+	var pY = 0;
+	var pHalfW = pcursor.offsetWidth/2;
+	var pHalfH = pcursor.offsetHeight/2;
+	var pMinX = $(ppane).offset().left;
+	var pMaxX = pMinX + ppane.offsetWidth;
+	var pMinY = $(ppane).offset().top;
+	var pMaxY = pMinY + ppane.offsetHeight;
+	
+	var spane = colorPickerModal.querySelector(".colorpicker-sliderpane");
+	var scursor = colorPickerModal.querySelector(".colorpicker-slidercursor");
+	
+	var sY = 0;
+	var sHalfH = scursor.offsetHeight/2;
+	var sMinY = $(spane).offset().top;
+	var sMaxY = sMinY + spane.offsetHeight;
+	
+	$(ppane)
+		.off("mousedown")
+		.on("mousedown", (event) => {
+			switchPreviews(event.button);
+			pX = event.clientX - pHalfW;
+			pY = event.clientY - pHalfH;
+			$(pcursor).offset({"left":pX,"top":pY});
+			
+			saturation = mapRange([pMinX - pHalfW, pMaxX - pHalfW], [0, 100], pX);
+			lightness = mapRange([pMinY - pHalfH, pMaxY - pHalfH], [100, 0], pY);
+			updateAllValues();
+			
+			$(document)
+				.off("mouseup").off("mousemove")
+				.on("mouseup", () => {
+					$(document).off("mouseup").off("mousemove");
+				})
+				.on("mousemove", (event2) => {	
+					pX = event2.clientX > pMaxX ? pMaxX - pHalfW : (event2.clientX < pMinX ? pMinX - pHalfW : event2.clientX - pHalfW);
+					pY = event2.clientY > pMaxY ? pMaxY - pHalfH : (event2.clientY < pMinY ? pMinY - pHalfH : event2.clientY - pHalfH);
+					$(pcursor).offset({"left":pX,"top":pY});
+					
+					saturation = mapRange([pMinX - pHalfW, pMaxX - pHalfW], [0, 100], pX);
+					lightness = mapRange([pMinY - pHalfH, pMaxY - pHalfH], [100, 0], pY);
+					updateAllValues();
+				});
+		});
+	
+	$(spane)
+		.off("mousedown")
+		.on("mousedown", (event) => {
+			switchPreviews(event.button);
+			sY = event.clientY - sHalfH;
+			$(scursor).offset({"top":sY});
+			
+			hue = mapRange([sMinY - sHalfH, sMaxY - sHalfH], [360, 0], sY);
+			updateAllValues();
+			
+			$(document)
+				.off("mouseup").off("mousemove")
+				.on("mouseup", () => {
+					$(document).off("mouseup").off("mousemove");
+				})
+				.on("mousemove", (event2) => {
+					sY = event2.clientY > sMaxY ? sMaxY - sHalfH : (event2.clientY < sMinY ? sMinY - sHalfH : event2.clientY - sHalfH);
+					$(scursor).offset({"top":sY});
+					
+					hue = mapRange([sMinY - sHalfH, sMaxY - sHalfH], [360, 0], sY);
+					updateAllValues();
+				});
+		});
+		
+	$(".colorpicker-modal .colorpicker-inputs input")
+		.off("input")
+		.on("input", (event) => {
+			updateValues(event.target.name);
+		});
+		
+	$(".colorpicker-modal [class^='colorpicker-preview-']")
+		.off("click")
+		.on("click", (event) => {
+			colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").style.borderColor = "transparent";
+			colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").classList.remove("selected");
+			event.target.classList.add("selected");
+			[hue, saturation, lightness] = BDfunctionsDevilBro.color2HSL(event.target.style.backgroundColor).replace(new RegExp(" ", 'g'), "").slice(4, -1).split(",");
+			saturation *= 100;
+			lightness *= 100;
+			updateAllValues();
+			updateCursors();
+		});
+		
+	function mapRange (from, to, number) {
+		return to[0] + (number - from[0]) * (to[1] - to[0]) / (from[1] - from[0]);
+	}
+	
+	function switchPreviews (button) {
+		colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").style.borderColor = "transparent";
+		colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").classList.remove("selected");
+		colorPickerModal.querySelector(".colorpicker-preview-" + button).classList.add("selected");
+	}
+	
+	function updateValues (type) {
+		switch (type) {
+			case "hex":
+				hex = colorPickerModal.querySelector(".colorpicker-hex").value;
+				if (/^#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.test(hex)) {
+					[red, green, blue] = BDfunctionsDevilBro.color2COMP(hex);
+					[hue, saturation, lightness] = BDfunctionsDevilBro.color2HSL(hex).replace(new RegExp(" ", 'g'), "").slice(4, -1).split(",");
+					saturation *= 100;
+					lightness *= 100;
+					colorPickerModal.querySelector(".colorpicker-hue").value = Math.round(hue);
+					colorPickerModal.querySelector(".colorpicker-saturation").value = Math.round(saturation);
+					colorPickerModal.querySelector(".colorpicker-lightness").value = Math.round(lightness);
+					colorPickerModal.querySelector(".colorpicker-red").value = red;
+					colorPickerModal.querySelector(".colorpicker-green").value = green;
+					colorPickerModal.querySelector(".colorpicker-blue").value = blue;
+				}
+				break;
+			case "rgb":
+				red = colorPickerModal.querySelector(".colorpicker-red").value;
+				green = colorPickerModal.querySelector("´.colorpicker-green").value;
+				blue = colorPickerModal.querySelector(".colorpicker-blue").value;
+				[hue, saturation, lightness] = BDfunctionsDevilBro.color2HSL([red, green, blue]).replace(new RegExp(" ", 'g'), "").slice(4, -1).split(",");
+				saturation *= 100;
+				lightness *= 100;
+				colorPickerModal.querySelector(".colorpicker-hex").value = BDfunctionsDevilBro.color2HEX([red, green, blue]);
+				colorPickerModal.querySelector(".colorpicker-hue").value = Math.round(hue);
+				colorPickerModal.querySelector(".colorpicker-saturation").value = Math.round(saturation);
+				colorPickerModal.querySelector(".colorpicker-lightness").value = Math.round(lightness);
+				break;
+			case "hsl":
+				hue = colorPickerModal.querySelector(".colorpicker-hue").value;
+				saturation = colorPickerModal.querySelector(".colorpicker-saturation").value;
+				lightness = colorPickerModal.querySelector(".colorpicker-lightness").value;
+				[red, green, blue] = BDfunctionsDevilBro.color2COMP("hsl(" + hue + ", " + saturation/100 + ", " + lightness/100 + ")");
+				colorPickerModal.querySelector(".colorpicker-hex").value = BDfunctionsDevilBro.color2HEX([red, green, blue]);
+				colorPickerModal.querySelector(".colorpicker-red").value = red;
+				colorPickerModal.querySelector(".colorpicker-green").value = green;
+				colorPickerModal.querySelector(".colorpicker-blue").value = blue;
+				break; 
 		}
-	});
+		updateColors();
+		updateCursors();
+	}
+	
+	function updateCursors () {
+		sY = mapRange([360, 0], [sMinY - sHalfH, sMaxY - sHalfH], hue);
+		pX = mapRange([0, 100], [pMinX - pHalfW, pMaxX - pHalfW], saturation);
+		pY = mapRange([100, 0], [pMinY - pHalfH, pMaxY - pHalfH], lightness);
+		$(scursor).offset({"top":sY});
+		$(pcursor).offset({"left":pX,"top":pY});
+		$(pcursor).find("circle").attr("stroke", BDfunctionsDevilBro.colorINV([red, green, blue], "rgb"));
+		$(scursor).find("path").attr("stroke", BDfunctionsDevilBro.color2RGB("hsl(" + hue + ", 1, 1)"));
+	}
+	
+	function updateAllValues () {
+		[red, green, blue] = BDfunctionsDevilBro.color2COMP("hsl(" + hue + ", " + saturation/100 + ", " + lightness/100 + ")");
+		colorPickerModal.querySelector(".colorpicker-hex").value = BDfunctionsDevilBro.color2HEX([red, green, blue]);
+		colorPickerModal.querySelector(".colorpicker-hue").value = Math.round(hue);
+		colorPickerModal.querySelector(".colorpicker-saturation").value = Math.round(saturation);
+		colorPickerModal.querySelector(".colorpicker-lightness").value = Math.round(lightness);
+		colorPickerModal.querySelector(".colorpicker-red").value = Math.round(red);
+		colorPickerModal.querySelector(".colorpicker-green").value = Math.round(green);
+		colorPickerModal.querySelector(".colorpicker-blue").value = Math.round(blue);
+		
+		updateColors();
+		
+		$(pcursor).find("circle").attr("stroke", BDfunctionsDevilBro.colorINV([red, green, blue], "rgb"));
+		$(scursor).find("path").attr("stroke", BDfunctionsDevilBro.color2RGB("hsl(" + hue + ", 1, 1)"));
+	}
+	
+	function updateColors () {
+		colorPickerModal.querySelector(".colorpicker-color").style.background = BDfunctionsDevilBro.color2RGB("hsl(" + hue + ", 1, 1)");
+		colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").style.background = BDfunctionsDevilBro.color2RGB([red, green, blue]);
+		colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").style.borderColor = BDfunctionsDevilBro.colorINV([red, green, blue], "rgb");
+	}
 }
 
 BDfunctionsDevilBro.getSwatchColor = function (swatch) {
@@ -827,7 +1053,7 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBroCSS", `
 		border: 4px solid red;
 	}
 	
-	.modal-color-picker .color-picker-dropper {
+	.modal-color-picker [class^="color-picker-dropper"] {
 		position: relative;
 		left: 40px;
 		top: 10px;
@@ -864,6 +1090,145 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBroCSS", `
 		display: flex;
 		min-height: 200px;
 		pointer-events: auto;
-		width: 500px;
+		width: 480px;
+		padding: 15px;
+	}
+	
+	.colorpicker-modal .colorpicker-container {
+		padding: 15px;
+		overflow: hidden;
+		background-color: #484B51;
+		border-radius: 5px;
+	}
+	
+	.colorpicker-modal .colorpicker-pickerpane, 
+	.colorpicker-modal .colorpicker-black, 
+	.colorpicker-modal .colorpicker-white, 
+	.colorpicker-modal .colorpicker-color {
+		position: relative;
+		top: 0px;
+		left: 0px;
+		height: 256px;
+		width: 256px;
+	}
+	
+	.colorpicker-modal .colorpicker-color {
+		background-color: #808080;
+		border: 3px solid #36393E;
+		border-radius: 3px;
+		float: left;
+		margin-right: 20px;
+	}
+	
+	.colorpicker-modal .colorpicker-pickercursor {
+		position: absolute;
+		height: 14px;
+		width: 14px;
+		top: -7px;
+		left: -7px;
+	}
+	
+	.colorpicker-modal .colorpicker-pickercursor svg {
+		position: relative;
+		height: 14px;
+		width: 14px;
+	}
+	
+	.colorpicker-modal .colorpicker-sliderpane, 
+	.colorpicker-modal .colorpicker-slider {
+		position: relative;
+		top: 0px;
+		left: 0px;
+		height: 256px;
+		width: 20px;
+	}
+	.colorpicker-modal .colorpicker-slider {
+		border: 3px solid #36393E;
+		border-radius: 3px;
+		float: left;
+		margin-right: 20px;
+	}
+	
+	.colorpicker-modal .colorpicker-slidercursor {
+		position: absolute;
+		top: -4px;
+		left: -5px;
+		height: 12px;
+		width: 32px;
+	}
+	.colorpicker-modal .colorpicker-slidercursor svg {
+		position: relative;
+		height: 12px;
+		width: 32px;
+	}
+	
+	.colorpicker-modal .colorpicker-previewcontainer {
+		float: left;
+		margin: 7px 0 15px 0;
+		overflow: hidden;
+	}
+		
+	.colorpicker-modal [class^='colorpicker-preview-'] {
+		background-color: #808080;
+		border: 3px solid transparent;
+		height: 54px;
+		width: 58px;
+		float: left;
+	}
+	
+	.colorpicker-modal .colorpicker-preview-0 {
+		border-radius: 5px 0 0 5px;
+		border-right: none;
+	}
+	
+	.colorpicker-modal .colorpicker-preview-2 {
+		border-radius: 0 5px 5px 0;
+		border-left: none;
+	}
+	
+	.colorpicker-modal .colorpicker-comparison {
+		border: 3px solid #36393E;
+		height: 60px;
+		width: 58px;
+		position: relative;
+		left: 58px;
+		background: red;
+		border-radius: 0 5px 5px 0;
+	}
+	
+	.colorpicker-modal .colorpicker-inputs {
+		background-color: #7E8084;
+		border-radius: 5px;
+		width: 115px;
+		float: left;
+		padding: 3px;
+	}
+	
+	.colorpicker-modal .colorpicker-inputs label {
+		display: inline-block;
+		width: 30px;
+		color: #36393E;
+		letter-spacing: .5px;
+		text-transform: uppercase;
+		text-align: right;
+		flex: 1;
+		cursor: default;
+		font-weight: 600;
+		line-height: 16px;
+		font-size: 14px;
+		position: relative;
+		top: 1px;
+	}
+	
+	.colorpicker-modal .colorpicker-inputs input {
+		border: 3px solid #36393E;
+		width: 65px;
+		margin: 1px 0 1px 6px;
+		padding: 0 2px 0 2px;
+		line-height: 16px;
+		color: #36393E;
+		font-weight: 600;
+		line-height: 16px;
+		font-size: 13px;
 	}`
 );
