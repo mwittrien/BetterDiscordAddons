@@ -27,7 +27,7 @@ class ImageGallery {
 
 	getDescription () {return "Allows the user to browse through images sent inside the same message.";}
 
-	getVersion () {return "1.2.2";}
+	getVersion () {return "1.2.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -63,7 +63,7 @@ class ImageGallery {
 					}
 				);
 			});
-			this.imageModalObserver.observe($(".tooltips").parent()[0], {childList: true, subtree: true});
+			this.imageModalObserver.observe($(".platform-win")[0], {childList: true, subtree: true});
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 			
@@ -144,6 +144,7 @@ class ImageGallery {
 		
 		this.resizeImage(modal, img, modal.querySelector(".image"));
 			
+		
 		if (prevImg) {
 			$(modal).find(".modal-image").append($("<video/>", { 'class': 'image prev', 'poster': prevImg.src.split("?width")[0]}));
 			this.resizeImage(modal, prevImg, modal.querySelector(".image.prev"));
@@ -152,7 +153,6 @@ class ImageGallery {
 			$(modal).find(".modal-image").append($("<video/>", { 'class': 'image next', 'poster': nextImg.src.split("?width")[0]}));
 			this.resizeImage(modal, nextImg, modal.querySelector(".image.next"));
 		}
-		
 		$(modal).find(".image.prev").off("click").on("click", this.addImagePreviews.bind(this, modal, imgs, prevImg));
 		$(modal).find(".image.next").off("click").on("click", this.addImagePreviews.bind(this, modal, imgs, nextImg));
 		$(document).off("keydown." + this.getName()).on("keydown." + this.getName(), {modal, imgs, prevImg, nextImg}, this.keyPressed.bind(this));
