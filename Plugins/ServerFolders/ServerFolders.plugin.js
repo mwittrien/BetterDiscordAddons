@@ -327,7 +327,7 @@ class ServerFolders {
 
 	getDescription () {return "Add pseudofolders to your serverlist to organize your servers.";}
 
-	getVersion () {return "4.3.3";}
+	getVersion () {return "4.3.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -674,7 +674,6 @@ class ServerFolders {
 				BDfunctionsDevilBro.setColorSwatches(color4, folderSettingsModal.find(".swatches4"), "swatch4");
 				folderSettingsModal.appendTo($(".tooltips").parent())
 					.on("click", ".callout-backdrop,button.btn-cancel", (e) => {
-						$(".sp-container").remove();
 						folderSettingsModal.remove();
 					})
 					.on("click", "button.form-tablinks", (e) => {
@@ -706,7 +705,6 @@ class ServerFolders {
 						
 						BDfunctionsDevilBro.saveData(folderID, {folderID,folderName,isOpen,iconID,icons,color1,color2,color3,color4}, this.getName(), "folders");
 						
-						$(".sp-container").remove();
 						folderSettingsModal.remove();
 					});
 					
