@@ -694,6 +694,10 @@ BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
 	});
 }
 
+BDfunctionsDevilBro.getSwatchColor = function (swatch) {
+	return !$(".ui-color-picker-" + swatch + ".nocolor.selected")[0] ? BDfunctionsDevilBro.color2COMP($(".ui-color-picker-" + swatch + ".selected").css("background-color")) : null;
+}
+
 BDfunctionsDevilBro.getDiscordLanguage = function () {
 	var lang = $("html").attr("lang") ? $("html").attr("lang").split("-")[0] : "en";
 	switch (lang) {
