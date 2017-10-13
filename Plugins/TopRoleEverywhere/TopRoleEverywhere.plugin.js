@@ -71,7 +71,7 @@ class TopRoleEverywhere {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node.querySelector(".member-username") && this.getSettings().showInMemberList) {
+								if (node && node.querySelector(".member-username") && this.getSettings().showInMemberList) {
 									var serverData = BDfunctionsDevilBro.getKeyInformation({"node":BDfunctionsDevilBro.getSelectedServer(),"key":"guild"});
 									if (serverData) {
 										this.addRoleTag(node, "list", serverData.id, false);
@@ -133,7 +133,7 @@ class TopRoleEverywhere {
 					(change, i) => {
 						if (change.removedNodes) {
 							change.removedNodes.forEach((node) => {
-								if (node.tagName && node.getAttribute("layer-id") == "user-settings") this.loadRoleTags();
+								if (node && node.tagName && node.getAttribute("layer-id") == "user-settings") this.loadRoleTags();
 							});
 						}
 					}
