@@ -467,7 +467,7 @@ BDfunctionsDevilBro.color2COMP = function (color) {
 				}
 				return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
 			case "hex":
-				var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(color);
+				var result = /^#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(color);
 				return [parseInt(result[1], 16).toString(),parseInt(result[2], 16).toString(),parseInt(result[3], 16).toString()];
 			default:
 				return null;
