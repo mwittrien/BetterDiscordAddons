@@ -5,7 +5,6 @@ class TopRoleEverywhere {
 		this.switchFixObserver = new MutationObserver(() => {});
 		this.userListObserver = new MutationObserver(() => {});
 		this.chatWindowObserver = new MutationObserver(() => {});
-		this.messageEditObserver = new MutationObserver(() => {});
 		this.settingsWindowObserver = new MutationObserver(() => {});
 		
 		this.roles = {};
@@ -30,6 +29,7 @@ class TopRoleEverywhere {
 			
 			.role-tag.chat-tag {
 				bottom: 1px;
+				margin-right: 5px;
 			}`;
 			
 		this.tagMarkup = `<span class="role-tag"><span class="role-inner"></span></span>`;
@@ -37,9 +37,9 @@ class TopRoleEverywhere {
 
 	getName () {return "TopRoleEverywhere";}
 
-	getDescription () {return "Adds the highest role of a user as a tag. Does not work in compact mode.";}
+	getDescription () {return "Adds the highest role of a user as a tag.";}
 
-	getVersion () {return "2.3.5";}
+	getVersion () {return "2.3.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -74,7 +74,7 @@ class TopRoleEverywhere {
 								if (node.querySelector(".member-username") && this.getSettings().showInMemberList) {
 									var serverData = BDfunctionsDevilBro.getKeyInformation({"node":BDfunctionsDevilBro.getSelectedServer(),"key":"guild"});
 									if (serverData) {
-										this.addRoleTag(node, "list", serverData.id);
+										this.addRoleTag(node, "list", serverData.id, false);
 									}
 								}
 							});
@@ -89,11 +89,36 @@ class TopRoleEverywhere {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(".username-wrapper") && this.getSettings().showInChat) {
-									var serverData = BDfunctionsDevilBro.getKeyInformation({"node":BDfunctionsDevilBro.getSelectedServer(),"key":"guild"});
-									if (serverData) {
-										this.addRoleTag(node, "chat", serverData.id);
-										this.messageEditObserver.observe(node, {childList:true, subtree:true});
+								if (this.getSettings().showInChat) {
+									if ($(".message-group").has(".avatar-large").length > 0) {
+										if (node && node.tagName && node.querySelector(".username-wrapper")) {
+											var serverData = BDfunctionsDevilBro.getKeyInformation({"node":BDfunctionsDevilBro.getSelectedServer(),"key":"guild"});
+											if (serverData) {
+												this.addRoleTag(node, "chat", serverData.id, false);
+											}
+										}
+										else if (node && node.classList && node.classList.contains("message-text")) {
+											var serverData = BDfunctionsDevilBro.getKeyInformation({"node":BDfunctionsDevilBro.getSelectedServer(),"key":"guild"});
+											if (serverData) {
+												this.addRoleTag($(".message-group").has(node)[0], "chat", serverData.id, false);
+											}
+										}
+									}
+									else {
+										if (node && node.tagName && node.querySelector(".username-wrapper")) {
+											var serverData = BDfunctionsDevilBro.getKeyInformation({"node":BDfunctionsDevilBro.getSelectedServer(),"key":"guild"});
+											if (serverData) {
+												if (node.classList.contains("markup")) {
+													this.addRoleTag(node, "chat", serverData.id, true);
+												}
+												else {
+													var markups = node.querySelectorAll("div.markup");
+													for (var i = 0; i < markups.length; i++) {
+														this.addRoleTag(markups[i], "chat", serverData.id, true);
+													}
+												}
+											}
+										}
 									}
 								}
 							});
@@ -101,22 +126,7 @@ class TopRoleEverywhere {
 					}
 				);
 			});
-			if (document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(document.querySelector(".messages.scroller"), {childList:true});
-			
-			this.messageEditObserver = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								var serverData = BDfunctionsDevilBro.getKeyInformation({"node":BDfunctionsDevilBro.getSelectedServer(),"key":"guild"});
-								if (serverData) {
-									this.addRoleTag($(".message-group").has(node)[0], "chat", serverData.id);
-								}
-							});
-						}
-					}
-				);
-			});
+			if (document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(document.querySelector(".messages.scroller"), {childList:true, subtree:true});
 			
 			this.settingsWindowObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -151,7 +161,6 @@ class TopRoleEverywhere {
 			this.switchFixObserver.disconnect();
 			this.userListObserver.disconnect();
 			this.chatWindowObserver.disconnect();
-			this.messageEditObserver.disconnect();
 			this.settingsWindowObserver.disconnect();
 			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName());
@@ -160,9 +169,9 @@ class TopRoleEverywhere {
 	
 	onSwitch () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			this.loadRoleTags();
 			if (document.querySelector(".channel-members")) this.userListObserver.observe(document.querySelector(".channel-members"), {childList:true});
-			if (document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(document.querySelector(".messages.scroller"), {childList:true});
+			if (document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(document.querySelector(".messages.scroller"), {childList:true, subtree:true});
+			this.loadRoleTags();
 		}
 	}
 	
@@ -211,25 +220,34 @@ class TopRoleEverywhere {
 			if (this.getSettings().showInMemberList) { 
 				var membersList = document.querySelectorAll("div.member");
 				for (var i = 0; i < membersList.length; i++) {
-					this.addRoleTag(membersList[i], "list", serverData.id);
+					this.addRoleTag(membersList[i], "list", serverData.id, false);
 				}
 			}
 			if (this.getSettings().showInChat) { 
 				var membersChat = document.querySelectorAll("div.message-group");
 				for (var j = 0; j < membersChat.length; j++) {
-					this.messageEditObserver.observe(membersChat[j], {childList:true, subtree:true});
-					this.addRoleTag(membersChat[j], "chat", serverData.id);
+					if ($(membersChat[j]).has(".avatar-large").length > 0) {
+						this.addRoleTag(membersChat[j], "chat", serverData.id, false);
+					}
+					else {
+						var markups = membersChat[j].querySelectorAll("div.markup");
+						for (var k = 0; k < markups.length; k++) {
+							this.addRoleTag(markups[k], "chat", serverData.id, true);
+						}
+					}
 				}
 			}
 		}
 	}
 	
-	addRoleTag(wrapper, type, serverID) {
+	addRoleTag(wrapper, type, serverID, compact) {
 		if (!wrapper) return;
 		var member = wrapper.querySelector("div.member-username") || wrapper.querySelector("span.username-wrapper");
+		if (compact) wrapper = $(".message-group").has(wrapper)[0];
 		if (member && member.tagName && !member.querySelector(".role-tag")) {
 			var settings = this.getSettings();
-			var userInfo = BDfunctionsDevilBro.getKeyInformation({"node":wrapper,"key":"user"});
+			var userInfo = 
+				compact ? BDfunctionsDevilBro.getKeyInformation({"node":wrapper,"key":"message"}).author : BDfunctionsDevilBro.getKeyInformation({"node":wrapper,"key":"user"});
 			if (!userInfo || (userInfo.bot && this.getSettings().disableForBots)) return;
 			var styleInfo = BDfunctionsDevilBro.getKeyInformation({"node":member,"key":"style"});
 			var roleName = null;
