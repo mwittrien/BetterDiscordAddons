@@ -9,11 +9,10 @@ class EditUsers {
     
 		this.switchFixObserver = new MutationObserver(() => {});
 		this.userContextObserver = new MutationObserver(() => {});
-		this.dmListObserver = new MutationObserver(() => {});
 		this.friendListObserver = new MutationObserver(() => {});
 		this.userListObserver = new MutationObserver(() => {});
 		this.chatWindowObserver = new MutationObserver(() => {});
-		this.messageEditObserver = new MutationObserver(() => {});
+		this.channelListObserver = new MutationObserver(() => {});
 		this.userPopoutObserver = new MutationObserver(() => {});
 		this.settingsWindowObserver = new MutationObserver(() => {});
 		
@@ -21,52 +20,6 @@ class EditUsers {
 		this.urlCheckRequest;
 		
 		this.css = `
-			.editusers-modal .pick-wrap {
-				position: relative;
-				padding: 0;
-				margin: 0;
-			}
-
-			.editusers-modal .pick-wrap .color-picker-popout {
-				position: absolute;
-			}
-
-			.editusers-modal [class^="swatches"],
-			.editusers-modal .inputs {
-				width: 430px;
-				margin: auto;
-			}
-
-			.editusers-modal [class^="ui-color-picker-swatch"] {
-				width: 22px;
-				height: 22px;
-				margin-bottom: 5px;
-				margin-top: 5px;
-				border: 4px solid transparent;
-				border-radius: 12px;
-			}
-
-			.editusers-modal [class^="ui-color-picker-swatch"].large {
-				min-width: 62px;
-				height: 62px;
-				border-radius: 25px;
-			}
-
-			.editusers-modal [class^="ui-color-picker-swatch"].nocolor {
-				cursor: default;
-				line-height: 22px;
-				color: red;
-				font-size: 28px;
-				font-weight: bold;
-				border: 4px solid red;
-			}
-			
-			.editusers-modal .color-picker-dropper {
-				position: relative;
-				left: 40px;
-				top: 10px;
-			}
-			
 			.editusers-modal .modal {
 				align-content: space-around;
 				align-items: center;
@@ -137,6 +90,11 @@ class EditUsers {
 				min-height: 200px;
 				pointer-events: auto;
 				width: 500px;
+			}
+			
+			.editusers-modal .inputs {
+				width: 430px;
+				margin: auto;
 			}
 
 			.editusers-modal input {
@@ -346,14 +304,14 @@ class EditUsers {
 								</div>
 								<div class="form-tabcontent tab-name">
 									<div class="control-group">
-										<div class="color-picker1">
+										<div class="modal-color-picker">
 											<div class="swatches1">
 												<label class="color-picker1-label">REPLACE_modal_colorpicker1_text</label>
 											</div>
 										</div>
 									</div>
 									<div class="control-group">
-										<div class="color-picker2">
+										<div class="modal-color-picker">
 											<div class="swatches2">
 												<label class="color-picker2-label">REPLACE_modal_colorpicker2_text</label>
 											</div>
@@ -362,14 +320,14 @@ class EditUsers {
 								</div>
 								<div class="form-tabcontent tab-tag">
 									<div class="control-group">
-										<div class="color-picker3">
+										<div class="modal-color-picker">
 											<div class="swatches3">
 												<label class="color-picker3-label">REPLACE_modal_colorpicker3_text</label>
 											</div>
 										</div>
 									</div>
 									<div class="control-group">
-										<div class="color-picker4">
+										<div class="modal-color-picker">
 											<div class="swatches4">
 												<label class="color-picker4-label">REPLACE_modal_colorpicker4_text</label>
 											</div>
@@ -385,29 +343,27 @@ class EditUsers {
 					</div>
 				</div>
 			</span>`;
-
-		this.colourList = 
-			['rgb(26, 188, 156)','rgb(46, 204, 113)','rgb(52, 152, 219)','rgb(155, 89, 182)','rgb(233, 30, 99)','rgb(241, 196, 15)','rgb(230, 126, 34)','rgb(231, 76, 60)','rgb(149, 165, 166)','rgb(96, 125, 139)','rgb(99, 99, 99)',
-			'rgb(254, 254, 254)','rgb(17, 128, 106)','rgb(31, 139, 76)','rgb(32, 102, 148)','rgb(113, 54, 138)','rgb(173, 20, 87)','rgb(194, 124, 14)','rgb(168, 67, 0)','rgb(153, 45, 34)','rgb(151, 156, 159)','rgb(84, 110, 122)','rgb(44, 44, 44)'];
 	}
 
 	getName () {return "EditUsers";}
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "1.3.2";}
+	getVersion () {return "1.3.3";}
 
 	getAuthor () {return "DevilBro";}
 	
     getSettingsPanel () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			return `
-			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInChatWindow"${(this.getSettings().changeInChatWindow ? " checked" : void 0)}> Change user information in the chat window.</label><br>\n
-			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInMemberList"${(this.getSettings().changeInMemberList ? " checked" : void 0)}> Change user information in the member list.</label><br>\n
-			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInDmsList"${(this.getSettings().changeInDmsList ? " checked" : void 0)}> Change user information in your DM list.</label><br>\n
-			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInFriendList"${(this.getSettings().changeInFriendList ? " checked" : void 0)}> Change user information in your friend list.</label><br>\n
-			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInUserAccount"${(this.getSettings().changeInUserAccount ? " checked" : void 0)}> Change user information in your account window.</label><br>\n
-			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInUserPopout"${(this.getSettings().changeInUserPopout ? " checked" : void 0)}> Change user information in the user popup.</label><br>\n<br>\n
+			<label style="color:grey; font-size:20px; margin-bottom:5px;">Change user information in:</label><br>\n
+			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInChatWindow"${(this.getSettings().changeInChatWindow ? " checked" : void 0)}> Chat</label><br>\n
+			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInVoiceChat"${(this.getSettings().changeInVoiceChat ? " checked" : void 0)}> Voice Channels</label><br>\n
+			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInMemberList"${(this.getSettings().changeInMemberList ? " checked" : void 0)}> Server Member List</label><br>\n
+			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInDmsList"${(this.getSettings().changeInDmsList ? " checked" : void 0)}> DM-Conversation List</label><br>\n
+			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInFriendList"${(this.getSettings().changeInFriendList ? " checked" : void 0)}> Friends List</label><br>\n
+			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInUserPopout"${(this.getSettings().changeInUserPopout ? " checked" : void 0)}> User Popups</label><br>\n
+			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInUserAccount"${(this.getSettings().changeInUserAccount ? " checked" : void 0)}> Your Account Window</label><br>\n<br>\n
 			<button class="` + this.getName() + `ResetBtn" style="height:23px" onclick='` + this.getName() + `.resetAll("` + this.getName() + `")'>Reset all Users`;
 		}
     }
@@ -439,20 +395,23 @@ class EditUsers {
 			});
 			this.userContextObserver.observe(document.querySelector(".tooltips").parentElement, {childList: true});
 			
-			this.dmListObserver = new MutationObserver((changes, _) => {
+			this.channelListObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (node.querySelector(".channel-name")) {
-									if (this.getSettings().changeInDmsList) this.loadUser(node, "dms");
+									if (this.getSettings().changeInDmsList) this.loadUser(node, "dms", false);
+								}
+								if (node.querySelector(".userDefault-2_cnT0")) {
+									if (this.getSettings().changeInVoiceChat) this.loadUser(node.querySelector(".userDefault-2_cnT0").parentElement, "voice", false);
 								}
 							});
 						}
 					}
 				);
 			});
-			if (document.querySelector(".private-channels")) this.dmListObserver.observe(document.querySelector(".private-channels"), {childList:true, subtree:true});
+			this.channelListObserver.observe(document.querySelector(".flex-vertical.channels-wrap"), {childList:true, subtree:true});
 			
 			this.friendListObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -460,7 +419,7 @@ class EditUsers {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (node.querySelector(".friends-column")) {
-									if (this.getSettings().changeInFriendList) this.loadUser(node, "friends");
+									if (this.getSettings().changeInFriendList) this.loadUser(node, "friends", false);
 								}
 							});
 						}
@@ -475,7 +434,7 @@ class EditUsers {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (node.querySelector(".member-username")) {
-									if (this.getSettings().changeInMemberList) this.loadUser(node, "list");
+									if (this.getSettings().changeInMemberList) this.loadUser(node, "list", false);
 								}
 							});
 						}
@@ -489,10 +448,36 @@ class EditUsers {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(".username-wrapper")) {
-									if (this.getSettings().changeInChatWindow) {
-										this.loadUser(node, "chat");
-										this.messageEditObserver.observe(node, {childList:true, subtree:true});
+								if (this.getSettings().changeInChatWindow) {
+									if ($(".message-group").has(".avatar-large").length > 0) {
+										if (node && node.tagName && node.querySelector(".username-wrapper")) {
+											var serverData = BDfunctionsDevilBro.getKeyInformation({"node":BDfunctionsDevilBro.getSelectedServer(),"key":"guild"});
+											if (serverData) {
+												this.loadUser(node, "chat", false);
+											}
+										}
+										else if (node && node.classList && node.classList.contains("message-text")) {
+											var serverData = BDfunctionsDevilBro.getKeyInformation({"node":BDfunctionsDevilBro.getSelectedServer(),"key":"guild"});
+											if (serverData) {
+												this.loadUser($(".message-group").has(node)[0], "chat", false);
+											}
+										}
+									}
+									else {
+										if (node && node.tagName && node.querySelector(".username-wrapper")) {
+											var serverData = BDfunctionsDevilBro.getKeyInformation({"node":BDfunctionsDevilBro.getSelectedServer(),"key":"guild"});
+											if (serverData) {
+												if (node.classList.contains("markup")) {
+													this.loadUser(node, "chat", true);
+												}
+												else {
+													var markups = node.querySelectorAll("div.markup");
+													for (var i = 0; i < markups.length; i++) {
+														this.loadUser(markups[i], "chat", true);
+													}
+												}
+											}
+										}
 									}
 								}
 							});
@@ -500,19 +485,7 @@ class EditUsers {
 					}
 				);
 			});
-			if (document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(document.querySelector(".messages.scroller"), {childList:true});
-			
-			this.messageEditObserver = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								this.loadUser($(".message-group").has(node)[0], "chat");
-							});
-						}
-					}
-				);
-			});
+			if (document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(document.querySelector(".messages.scroller"), {childList:true, subtree:true});
 			
 			this.userPopoutObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -520,7 +493,7 @@ class EditUsers {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (node && node.tagName && node.querySelector("[class*='userPopout']")) {
-									if (this.getSettings().changeInUserPopout) this.loadUser(node, "popout");
+									if (this.getSettings().changeInUserPopout) this.loadUser(node, "popout", false);
 								}
 							});
 						}
@@ -567,11 +540,10 @@ class EditUsers {
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.switchFixObserver.disconnect();
 			this.userContextObserver.disconnect();
-			this.dmListObserver.disconnect();
 			this.friendListObserver.disconnect();
 			this.userListObserver.disconnect();
 			this.chatWindowObserver.disconnect();
-			this.messageEditObserver.disconnect();
+			this.channelListObserver.disconnect();
 			this.userPopoutObserver.disconnect();
 			this.settingsWindowObserver.disconnect();
 			
@@ -584,9 +556,8 @@ class EditUsers {
 	onSwitch () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.loadAllUsers();
-			if (document.querySelector(".private-channels")) this.dmListObserver.observe(document.querySelector(".private-channels"), {childList:true, subtree:true});
 			if (document.querySelector(".channel-members")) this.userListObserver.observe(document.querySelector(".channel-members"), {childList:true});
-			if (document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(document.querySelector(".messages.scroller"), {childList:true});
+			if (document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(document.querySelector(".messages.scroller"), {childList:true, subtree:true});
 			if (document.querySelector("#friends")) this.friendListObserver.observe(document.querySelector("#friends"), {childList:true, subtree:true});
 		}
 	}
@@ -596,8 +567,9 @@ class EditUsers {
 	
 	getSettings () {
 		var defaultSettings = {
-			changeInChatWindow: true,
 			changeInMemberList: true,
+			changeInChatWindow: true,
+			changeInVoiceChat: true,
 			changeInDmsList: true,
 			changeInFriendList: true,
 			changeInUserAccount: true,
@@ -729,10 +701,10 @@ class EditUsers {
 			userSettingsModal.find("#modal-urltext").addClass(url ? "valid" : "");
 			userSettingsModal.find("#modal-urltext").prop("disabled", removeIcon);
 			userSettingsModal.find("#modal-urlcheck")[0].checked = removeIcon;
-			this.setSwatches(color1, this.colourList, userSettingsModal.find(".swatches1"), "swatch1");
-			this.setSwatches(color2, this.colourList, userSettingsModal.find(".swatches2"), "swatch2");
-			this.setSwatches(color3, this.colourList, userSettingsModal.find(".swatches3"), "swatch3");
-			this.setSwatches(color4, this.colourList, userSettingsModal.find(".swatches4"), "swatch4");
+			BDfunctionsDevilBro.setColorSwatches(color1, userSettingsModal.find(".swatches1"), "swatch1");
+			BDfunctionsDevilBro.setColorSwatches(color2, userSettingsModal.find(".swatches2"), "swatch2");
+			BDfunctionsDevilBro.setColorSwatches(color3, userSettingsModal.find(".swatches3"), "swatch3");
+			BDfunctionsDevilBro.setColorSwatches(color4, userSettingsModal.find(".swatches4"), "swatch4");
 			userSettingsModal.appendTo($(".tooltips").parent())
 				.on("click", ".callout-backdrop,button.btn-cancel", (event) => {
 					$(".sp-container").remove();
@@ -889,98 +861,6 @@ class EditUsers {
 		BDfunctionsDevilBro.removeLocalStyle("customeNoticeTooltipCSS");
 		$(".tooltips").find(".notice-tooltip").remove();
 	}
-	
-	setSwatches (currentCOMP, colorOptions, wrapper, swatch) {
-		var wrapperDiv = $(wrapper);
-			
-		var defaultCustomColors = {"swatch1":"rgb(0, 0, 0)","swatch2":"rgb(255, 255, 255)","swatch3":"rgb(0, 0, 0)","swatch4":"rgb(255, 255, 255)"};
-		var defaultPickerColors = {"swatch1":"#ffffff","swatch2":"#000000","swatch3":"#ffffff","swatch4":"#000000"};
-			
-		var largeDefaultBgColor = defaultCustomColors[swatch];
-		var pickerDefaultBgColor = defaultPickerColors[swatch];
-			
-		var swatches = 
-			`<div class="ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-nowrap" style="flex: 1 1 auto; margin-top: 5px;">
-				<div class="ui-color-picker-${swatch} large custom" style="background-color: ${largeDefaultBgColor};"><svg class="color-picker-dropper" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 16 16"><path class="color-picker-dropper-fg" fill=${pickerDefaultBgColor} d="M14.994 1.006C13.858-.257 11.904-.3 10.72.89L8.637 2.975l-.696-.697-1.387 1.388 5.557 5.557 1.387-1.388-.697-.697 1.964-1.964c1.13-1.13 1.3-2.985.23-4.168zm-13.25 10.25c-.225.224-.408.48-.55.764L.02 14.37l1.39 1.39 2.35-1.174c.283-.14.54-.33.765-.55l4.808-4.808-2.776-2.776-4.813 4.803z"></path></svg></div>
-				<div class="regulars ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-wrap ui-color-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;"><div class="ui-color-picker-${swatch} nocolor" style="background-color: null;">✖</div>
-					${ colorOptions.map((val, i) => `<div class="ui-color-picker-${swatch}" style="background-color: ${val};"></div>`).join("")}
-				</div>
-			</div>`;
-		$(swatches).appendTo(wrapperDiv);
-		
-		if (currentCOMP) {
-			var currentRGB = BDfunctionsDevilBro.color2RGB(currentCOMP);
-			var invRGB = BDfunctionsDevilBro.colorINV(currentRGB);
-			
-			var selection = colorOptions.indexOf(currentRGB);
-			
-			if (selection > -1) {
-				wrapperDiv.find(".regulars .ui-color-picker-" + swatch).eq(selection+1)
-					.addClass("selected")
-					.css("background-color", currentRGB)
-					.css("border", "4px solid " + invRGB);
-			} 
-			else {
-				$(".custom", wrapperDiv)
-					.addClass("selected")
-					.css("background-color", currentRGB)
-					.css("border", "4px solid " + invRGB);
-				
-				$(".color-picker-dropper-fg", wrapperDiv)
-					.attr("fill", currentCOMP[0] > 150 && currentCOMP[1] > 150 && currentCOMP[2] > 150 ? "#000000" : "#ffffff");
-			}
-		}
-		else {
-			$(".nocolor", wrapperDiv)
-				.addClass("selected")
-				.css("border", "4px solid black");
-		}
-		
-		wrapperDiv.on("click", ".ui-color-picker-" + swatch + ":not(.custom)", (e) => {
-			var bgColor = $(e.target).css("background-color");
-			var newInvRGB = BDfunctionsDevilBro.checkColorType(bgColor) ? BDfunctionsDevilBro.colorINV(bgColor,"rgb") : "black";
-			
-			wrapperDiv.find(".ui-color-picker-" + swatch + ".selected.nocolor")
-				.removeClass("selected")
-				.css("border", "4px solid red");
-				
-			wrapperDiv.find(".ui-color-picker-" + swatch + ".selected")
-				.removeClass("selected")
-				.css("border", "4px solid transparent");
-			
-			$(e.target)
-				.addClass("selected")
-				.css("border", "4px solid " + newInvRGB);
-		});
-		var custom = $(".ui-color-picker-" + swatch + ".custom", wrapperDiv).spectrum({
-			color: $(".custom", wrapperDiv).css("background-color"),
-			preferredFormat: "rgb",
-			clickoutFiresChange: true,
-			showInput: true,
-			showButtons: false,
-			move: (color) => {
-				var newRGB = color.toRgbString();
-				var newCOMP = BDfunctionsDevilBro.color2COMP(newRGB);
-				var newInvRGB = BDfunctionsDevilBro.colorINV(newRGB);
-				
-				$(".ui-color-picker-" + swatch + ".selected.nocolor")
-					.removeClass("selected")
-					.css("border", "4px solid red");
-					
-				$(".ui-color-picker-" + swatch + ".selected")
-					.removeClass("selected")
-					.css("border", "4px solid transparent");
-				
-				custom
-					.addClass("selected")
-					.css("background-color", newRGB)
-					.css("border", "4px solid " + newInvRGB);
-					
-				$(".color-picker-dropper-fg", wrapperDiv)
-					.attr("fill", newCOMP[0] > 150 && newCOMP[1] > 150 && newCOMP[2] > 150 ? "#000000" : "#ffffff");
-			}
-		});
-	}
 
 	loadAllUsers () {
 		this.resetAllUsers();
@@ -995,47 +875,63 @@ class EditUsers {
 		if (settings.changeInMemberList) {
 			var membersList = document.querySelectorAll("div.member");
 			for (var i = 0; i < membersList.length; i++) {
-				this.loadUser(membersList[i], "list");
+				this.loadUser(membersList[i], "list", false);
 			} 
 		}
 		if (settings.changeInChatWindow) {
 			var membersChat = document.querySelectorAll("div.message-group");
 			for (var j = 0; j < membersChat.length; j++) {
-				this.messageEditObserver.observe(membersChat[j], {childList:true, subtree:true});
-				this.loadUser(membersChat[j], "chat");
+				if ($(membersChat[j]).has(".avatar-large").length > 0) {
+					this.loadUser(membersChat[j], "chat", false);
+				}
+				else {
+					var markups = membersChat[j].querySelectorAll("div.markup");
+					for (var j2 = 0; j2 < markups.length; j2++) {
+						this.loadUser(markups[j2], "chat", true);
+					}
+				}
+			}
+		}
+		if (settings.changeInVoiceChat) {
+			var membersVoice = document.querySelectorAll("div.userDefault-2_cnT0");
+			for (var k = 0; k < membersVoice.length; k++) {
+				this.loadUser(membersVoice[k].parentElement, "voice", false);
 			}
 		}
 		if (settings.changeInDmsList) {
 			var membersDMS = document.querySelectorAll("div.channel");
-			for (var k = 0; k < membersDMS.length; k++) {
-				this.loadUser(membersDMS[k], "dms");
+			for (var l = 0; l < membersDMS.length; l++) {
+				this.loadUser(membersDMS[l], "dms", false);
 			}
 		}
 		if (settings.changeInFriendList) {
 			var membersFriends = document.querySelectorAll("div.friends-column");
-			for (var l = 0; l < membersFriends.length; l++) {
-				this.loadUser(membersFriends[l], "friends");
+			for (var m = 0; m < membersFriends.length; m++) {
+				this.loadUser(membersFriends[m], "friends", false);
 			}
 		}
 		if (settings.changeInUserAccount) {
 			var account = document.querySelector("div.container-iksrDt");
 			if (account) {
-				this.loadUser(account, "info");
+				this.loadUser(account, "info", false);
 			}
 		}
 		if (settings.changeInUserPopout) {
 			var popout = document.querySelector("[class*='userPopout']");
 			if (popout) {
-				this.loadUser(popout, "popout");
+				this.loadUser(popout, "popout", false);
 			}
 		}
 	}
 	
-	loadUser (div, type) {
+	loadUser (div, type, compact) {
 		if (!div || div.classList.contains("custom-editusers")) return;
-		var {avatar, username, wrapper} = this.getAvatatNameWrapper(div);
-		if (avatar && username && wrapper) {
-			var info = BDfunctionsDevilBro.getKeyInformation({"node":div,"key":"user"});
+		var {avatar, username, wrapper} = this.getAvatarNameWrapper(div);
+		if (username && wrapper) {
+			if (compact) div = $(".message-group").has(div)[0];
+			var info = 
+				compact ? BDfunctionsDevilBro.getKeyInformation({"node":div,"key":"message"}).author : BDfunctionsDevilBro.getKeyInformation({"node":div,"key":"user"});
+			if (!info) return;
 			var styleInfo = BDfunctionsDevilBro.getKeyInformation({"node":wrapper,"key":"style"});
 			var data = BDfunctionsDevilBro.loadData(info.id, this.getName(), "users");
 			
@@ -1055,8 +951,10 @@ class EditUsers {
 				username.style.color = color1;
 				username.style.background = color2;
 				
-				avatar.style.background = removeIcon ? "" : bgImage;
-				avatar.style.backgroundSize = "cover";
+				if (avatar) {
+					avatar.style.background = removeIcon ? "" : bgImage;
+					avatar.style.backgroundSize = "cover";
+				}
 					
 				if (tag && (type == "list" || type == "chat" || type == "popout")) {
 					var thisTag = $(this.tagMarkup)[0];
@@ -1086,10 +984,11 @@ class EditUsers {
 	resetAllUsers () {
 		document.querySelectorAll(".user-tag").forEach(node=>{node.parentElement.removeChild(node)});
 		document.querySelectorAll(".custom-editusers").forEach((div) => {
-			var {avatar, username, wrapper} = this.getAvatatNameWrapper(div);
+			var {avatar, username, wrapper} = this.getAvatarNameWrapper(div);
 			
 			if (avatar && username && wrapper) {
 				var info = BDfunctionsDevilBro.getKeyInformation({"node":div,"key":"user"});
+				if (!info) return;
 				var styleInfo = BDfunctionsDevilBro.getKeyInformation({"node":wrapper,"key":"style"});
 				
 				if (!this.nickNames.names[info.id]) this.nickNames.names[info.id] = username.innerText;
@@ -1121,9 +1020,10 @@ class EditUsers {
 		});
 	}
 	
-	getAvatatNameWrapper (div) {
+	getAvatarNameWrapper (div) {
 		var avatar = 	div.querySelector("div.avatar-small") || 
 						div.querySelector("div.avatar-large") || 
+						div.querySelector("div.avatarDefault-3jtQoc") || 
 						div.querySelector("div.avatar-1BXaQj");
 						
 		var username = 	div.querySelector("strong.user-name") || 
@@ -1131,6 +1031,7 @@ class EditUsers {
 						div.querySelector("span.channel-name") || 
 						div.querySelector("span.username") || 
 						div.querySelector("div.headerName-2N8Pdz") ||
+						div.querySelector("div.nameDefault-1I0lx8") ||
 						div.querySelector("span.headerUsernameNoNickname-1iGxNP");
 						
 		var wrapper = 	div.querySelector("div.member-username") || 
@@ -1139,6 +1040,7 @@ class EditUsers {
 						div.querySelector("div.discord-tag") ||
 						div.querySelector("div.accountDetails-15i-_e") ||
 						div.querySelector("div.headerName-2N8Pdz") ||
+						div.querySelector("div.nameDefault-1I0lx8") ||
 						div.querySelector("div.headerTag-3zin_i");
 						
 		return {avatar, username, wrapper};
