@@ -12,6 +12,13 @@ BDfunctionsDevilBro.loadMessage = function (pluginName, oldVersion) {
 				var oldNmbrs = oldVersion.split(".").map(Number); 
 				var newNmbrs = newVersion.split(".").map(Number); 
 				if (oldNmbrs.length == newNmbrs.length) {
+					var notice = $('#' + pluginName + '-notice');
+					if (notice.length) {
+						if (notice.next('.separator').length) notice.next().remove();
+						else if (notice.prev('.separator').length) notice.prev().remove();
+						notice.remove();
+					}
+					if (!$('#outdatedPlugins').children('span').length) $('#pluginNoticeDismiss').click();
 					for (var i = 0; i < oldNmbrs.length; i++) {
 						if (newNmbrs[i] > oldNmbrs[i]) {
 							var noticeCSS = `
@@ -37,11 +44,11 @@ BDfunctionsDevilBro.loadMessage = function (pluginName, oldVersion) {
 								});
 							}
 							var pluginNoticeID = pluginName + "-notice";
-							var pluginNoticeElement = $('<span id="' + pluginNoticeID + '">');
-							pluginNoticeElement.html('<a href="' + downloadUrl + '" target="_blank">' + pluginName + '</a>');
 							if (!$('#'+pluginNoticeID).length) {
+								var pluginNoticeElement = $('<span id="' + pluginNoticeID + '">');
+								pluginNoticeElement.html('<a href="' + downloadUrl + '" target="_blank">' + pluginName + '</a>');
 								if ($('#outdatedPlugins').children('span').length) {
-									pluginNoticeElement.html(", " + pluginNoticeElement.html());
+									$('#outdatedPlugins').append("<span class='separator'>, </span>");
 								}
 								$('#outdatedPlugins').append(pluginNoticeElement);
 							}
