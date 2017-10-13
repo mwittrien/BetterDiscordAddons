@@ -195,7 +195,7 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "3.2.7";}
+	getVersion () {return "3.2.8";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -416,7 +416,6 @@ class EditChannels {
 			BDfunctionsDevilBro.setColorSwatches(color, channelSettingsModal.find(".swatches1"), "swatch1");
 			channelSettingsModal.appendTo($(".tooltips").parent())
 				.on("click", ".callout-backdrop,button.btn-cancel", (event) => {
-					$(".sp-container").remove();
 					channelSettingsModal.remove();
 				})
 				.on("click", "button.btn-save", (event) => {
@@ -444,7 +443,6 @@ class EditChannels {
 						this.loadChannel(channelDiv);
 					}
 					
-					$(".sp-container").remove();
 					channelSettingsModal.remove();
 				});
 				
