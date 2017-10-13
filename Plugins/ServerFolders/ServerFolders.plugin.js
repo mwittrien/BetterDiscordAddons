@@ -10,63 +10,6 @@ class ServerFolders {
 		this.folderContextEventHandler;
 		
 		this.css = `
-			.serverfolders-modal .pick-wrap {
-				position: relative;
-				padding: 0;
-				margin: 0;
-			}
-
-			.serverfolders-modal .pick-wrap .color-picker-popout {
-				position: absolute;
-			}
-
-			.serverfolders-modal [class^="icons"],
-			.serverfolders-modal [class^="swatches"] {
-				width: 430px;
-				margin: auto;
-			}
-
-			.serverfolders-modal [class^="ui-icon-picker-icon"] {
-				width: 75px;
-				height: 75px;
-				background-size: 75px 75px;
-				background-repeat: no-repeat;
-				margin-bottom: 5px;
-				margin-top: 5px;
-				border: 4px solid transparent;
-				border-radius: 12px;
-			}
-
-			.serverfolders-modal [class^="ui-color-picker-swatch"] {
-				width: 22px;
-				height: 22px;
-				margin-bottom: 5px;
-				margin-top: 5px;
-				border: 4px solid transparent;
-				border-radius: 12px;
-			}
-
-			.serverfolders-modal [class^="ui-color-picker-swatch"].large {
-				min-width: 62px;
-				height: 62px;
-				border-radius: 25px;
-			}
-
-			.serverfolders-modal [class^="ui-color-picker-swatch"].nocolor {
-				cursor: default;
-				line-height: 22px;
-				color: red;
-				font-size: 28px;
-				font-weight: bold;
-				border: 4px solid red;
-			}
-			
-			.serverfolders-modal .color-picker-dropper {
-				position: relative;
-				left: 40px;
-				top: 10px;
-			}
-			
 			.serverfolders-modal .modal {
 				align-content: space-around;
 				align-items: center;
@@ -126,7 +69,6 @@ class ServerFolders {
 				overflow-y: hidden;
 				padding: 0 20px;
 				height: 400px;
-				
 			}
 
 			.serverfolders-modal .modal-inner {
@@ -137,6 +79,22 @@ class ServerFolders {
 				min-height: 200px;
 				pointer-events: auto;
 				width: 500px;
+			}
+
+			.serverfolders-modal .icons {
+				width: 430px;
+				margin: auto;
+			}
+
+			.serverfolders-modal [class^="ui-icon-picker-icon"] {
+				width: 75px;
+				height: 75px;
+				background-size: 75px 75px;
+				background-repeat: no-repeat;
+				margin-bottom: 5px;
+				margin-top: 5px;
+				border: 4px solid transparent;
+				border-radius: 12px;
 			}
 
 			.serverfolders-modal input {
@@ -298,7 +256,7 @@ class ServerFolders {
 								</div>
 								<div class="form-tabcontent tab-icon open">
 									<div class="control-group">
-										<div class="icon-picker">
+										<div class="modal-icon-picker">
 											<div class="icons">
 												<label class="icon-picker-label">REPLACE_modal_iconpicker_text</label>
 											</div>
@@ -307,14 +265,14 @@ class ServerFolders {
 								</div>
 								<div class="form-tabcontent tab-iconcolor">
 									<div class="control-group">
-										<div class="color-picker1">
+										<div class="modal-color-picker">
 											<div class="swatches1">
 												<label class="color-picker1-label">REPLACE_modal_colorpicker1_text</label>
 											</div>
 										</div>
 									</div>
 									<div class="control-group">
-										<div class="color-picker2">
+										<div class="modal-color-picker">
 											<div class="swatches2">
 												<label class="color-picker2-label">REPLACE_modal_colorpicker2_text</label>
 											</div>
@@ -323,14 +281,14 @@ class ServerFolders {
 								</div>
 								<div class="form-tabcontent tab-tooltipcolor">
 									<div class="control-group">
-										<div class="color-picker3">
+										<div class="modal-color-picker">
 											<div class="swatches3">
 												<label class="color-picker3-label">REPLACE_modal_colorpicker3_text</label>
 											</div>
 										</div>
 									</div>
 									<div class="control-group">
-										<div class="color-picker4">
+										<div class="modal-color-picker">
 											<div class="swatches4">
 												<label class="color-picker4-label">REPLACE_modal_colorpicker4_text</label>
 											</div>
@@ -345,13 +303,7 @@ class ServerFolders {
 						</form>
 					</div>
 				</div>
-			</span>`;
-
-			
-			
-		this.colourList = 
-			['rgb(26, 188, 156)','rgb(46, 204, 113)','rgb(52, 152, 219)','rgb(155, 89, 182)','rgb(233, 30, 99)','rgb(241, 196, 15)','rgb(230, 126, 34)','rgb(231, 76, 60)','rgb(149, 165, 166)','rgb(96, 125, 139)','rgb(99, 99, 99)',
-			'rgb(254, 254, 254)','rgb(17, 128, 106)','rgb(31, 139, 76)','rgb(32, 102, 148)','rgb(113, 54, 138)','rgb(173, 20, 87)','rgb(194, 124, 14)','rgb(168, 67, 0)','rgb(153, 45, 34)','rgb(151, 156, 159)','rgb(84, 110, 122)','rgb(44, 44, 44)'];		
+			</span>`;	
 			
 		this.folderIcons = [
 			{"openicon":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEsAAABLCAYAAAA4TnrqAAAB2ElEQVR4Xu2Z4W6DMAwG4f0fmqloq0YJw0dIhLPb7y+qfT0Hr8yTf2ECczhpcBIWkEBYwgIEQFSzhAUIgKhmCQsQAFHNEhYgAKKaJSxAAETvMGsBn1eK3lFDZQmx4zWF1kL6rLCmlli3lamrBd4N6qeNq/VUYogdv1JcK1CPByasmFRrisJqbdWj7RLWAGaBFi5FqSSPHsNLBOAhDIwe6HVnwb4vx1H/KDxN02iw0ENOWGAjEJaw0B0WFiYc/P547yzwPYwI66j9nUiadW7Km5GwzmG91wthCStGAKRWqbqatSw5ng/zXL7bu8FKDKr/nSWs4NAnB9XXLGEFrXrFksPqt5QmB7XZGJo/DZPD2vBpCis5qN0eKqzXZr5fQosLezNYo1nV9N8dYYG3O8lhFSeuyRgmB3U4ccLaL9eHTG6HNapVTS745LD+lEeztmPYD9bIVt0+hsLaanr4I3pyUCFxbruzksMKcQiFfsk1qlkhDqHQGaz/YFVoTj8W3Bwv/sBP3uTdKTVr/Umd1fLoNOofhc/G8dFYysWh/lF4sJHEveMDhS8o01hW9Vt1OOHYVZUsLIBPWMICBEBUs4QFCICoZgkLEABRzRIWIACimiUsQABENQvA+gLIy3lMlnMoMQAAAABJRU5ErkJggg==", 
@@ -375,7 +327,7 @@ class ServerFolders {
 
 	getDescription () {return "Add pseudofolders to your serverlist to organize your servers.";}
 
-	getVersion () {return "4.3.1";}
+	getVersion () {return "4.3.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -402,7 +354,7 @@ class ServerFolders {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node.nodeType == 1 && node.className.includes("context-menu")) {
+								if (node && node.nodeType == 1 && node.className.includes("context-menu")) {
 									this.onContextMenu(node);
 								}
 							});
@@ -417,21 +369,21 @@ class ServerFolders {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node.className === "badge") {
+								if (node && node.className === "badge") {
 									this.badgeObserver.observe(node, {characterData: true, subtree: true });
 									this.updateAllFolderNotifications();
 								}
-								else if (node.classList && node.classList.contains("guild") && !node.classList.contains("guilds-add") && !node.querySelector(".guilds-error")) {
+								else if (node && node.classList && node.classList.contains("guild") && !node.classList.contains("guilds-add") && !node.querySelector(".guilds-error")) {
 									this.updateAllFolderNotifications();
 								}
 							});
 						}
 						if (change.removedNodes) {
 							change.removedNodes.forEach((node) => {
-								if (node.className === "badge") {
+								if (node && node.className === "badge") {
 									this.updateAllFolderNotifications();
 								}
-								else if (node.classList && node.classList.contains("guild") && !node.classList.contains("guilds-add") && !node.querySelector(".guilds-error")) {
+								else if (node && node.classList && node.classList.contains("guild") && !node.classList.contains("guilds-add") && !node.querySelector(".guilds-error")) {
 									$(".guild.folder").each( 
 										(i, folderDiv) => {
 											this.checkIfServerDivChanged(folderDiv);
@@ -552,7 +504,7 @@ class ServerFolders {
 		var data = BDfunctionsDevilBro.loadData(folderID, this.getName(), "folders");
 		if (!data) {
 			var serverDiv = BDfunctionsDevilBro.getDivOfServer(folderID);
-			if (serverDiv && $(serverDiv).prev().attr("class") != "guild folder") {
+			if (serverDiv && !$(serverDiv).prev().hasClass("folder")) {
 				
 				var folderDiv = $(this.folderIconMarkup);
 				$(folderDiv).insertBefore(serverDiv)
@@ -715,11 +667,11 @@ class ServerFolders {
 				
 				var folderSettingsModal = $(this.folderSettingsModalMarkup);
 				folderSettingsModal.find("#modal-text")[0].value = folderName;
-				this.setIcons(iconID, this.folderIcons, folderSettingsModal.find(".icons"));
-				this.setSwatches(color1, this.colourList, folderSettingsModal.find(".swatches1"), "swatch1");
-				this.setSwatches(color2, this.colourList, folderSettingsModal.find(".swatches2"), "swatch2");
-				this.setSwatches(color3, this.colourList, folderSettingsModal.find(".swatches3"), "swatch3");
-				this.setSwatches(color4, this.colourList, folderSettingsModal.find(".swatches4"), "swatch4");
+				this.setIcons(iconID, folderSettingsModal.find(".icons"));
+				BDfunctionsDevilBro.setColorSwatches(color1, folderSettingsModal.find(".swatches1"), "swatch1");
+				BDfunctionsDevilBro.setColorSwatches(color2, folderSettingsModal.find(".swatches2"), "swatch2");
+				BDfunctionsDevilBro.setColorSwatches(color3, folderSettingsModal.find(".swatches3"), "swatch3");
+				BDfunctionsDevilBro.setColorSwatches(color4, folderSettingsModal.find(".swatches4"), "swatch4");
 				folderSettingsModal.appendTo($(".tooltips").parent())
 					.on("click", ".callout-backdrop,button.btn-cancel", (e) => {
 						$(".sp-container").remove();
@@ -738,10 +690,10 @@ class ServerFolders {
 						
 						iconID = $(".ui-icon-picker-icon.selected").attr("value");
 				
-						color1 = !$(".ui-color-picker-swatch1.nocolor.selected")[0] ? BDfunctionsDevilBro.color2COMP($(".ui-color-picker-swatch1.selected").css("background-color")) : ["0","0","0"];
-						color2 = !$(".ui-color-picker-swatch2.nocolor.selected")[0] ? BDfunctionsDevilBro.color2COMP($(".ui-color-picker-swatch2.selected").css("background-color")) : ["255","255","255"];
-						color3 = !$(".ui-color-picker-swatch3.nocolor.selected")[0] ? BDfunctionsDevilBro.color2COMP($(".ui-color-picker-swatch3.selected").css("background-color")) : null;
-						color4 = !$(".ui-color-picker-swatch4.nocolor.selected")[0] ? BDfunctionsDevilBro.color2COMP($(".ui-color-picker-swatch4.selected").css("background-color")) : null;
+						color1 = BDfunctionsDevilBro.getSwatchColor("swatch1");
+						color2 = BDfunctionsDevilBro.getSwatchColor("swatch2");
+						color3 = BDfunctionsDevilBro.getSwatchColor("swatch3");
+						color4 = BDfunctionsDevilBro.getSwatchColor("swatch4");
 						
 						if (iconID != data.iconID || !BDfunctionsDevilBro.equals(color1, data.color1) || !BDfunctionsDevilBro.equals(color2, data.color2)) {
 							var openicon = this.changeImgColor(color1, color2, this.folderIcons[iconID].openicon);
@@ -779,17 +731,14 @@ class ServerFolders {
 			.addClass("active");
 	}
 
-	setIcons (selection, folderIcons, wrapper) {
+	setIcons (selection, wrapper) {
 		var wrapperDiv = $(wrapper);
 		
+		var folderIcons = this.folderIcons;
+		
 		var icons = 
-			`<div class="ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-nowrap" style="flex: 1 1 auto; margin-top: 5px;">
-				<div class="regulars ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-wrap ui-icon-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;">
-					${ folderIcons.map((val, i) => `<div class="ui-icon-picker-icon" value="${i}" style="background-image: url(${val.closedicon});"></div>`).join("")}
-				</div>
-			</div>`;
+			`<div class="ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-nowrap" style="flex: 1 1 auto; margin-top: 5px;"><div class="regulars ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-wrap ui-icon-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;">${ folderIcons.map((val, i) => `<div class="ui-icon-picker-icon" value="${i}" style="background-image: url(${val.closedicon});"></div>`).join("")}</div></div>`;
 		$(icons).appendTo(wrapperDiv);
-		selection
 		
 		if (!(selection < folderIcons.length && selection > -1)) {
 			selection = 0;
@@ -815,101 +764,6 @@ class ServerFolders {
 		wrapperDiv.on("mouseleave", ".ui-icon-picker-icon", (e) => {
 			$(e.target)
 				.css("background-image", "url(" + folderIcons[$(e.target).attr("value")].closedicon + ")");
-		});
-	}
-
-	setSwatches (currentCOMP, colorOptions, wrapper, swatch) {
-		var wrapperDiv = $(wrapper);
-			
-		var defaultCustomColors = {"swatch1":"rgb(0, 0, 0)","swatch2":"rgb(255, 255, 255)","swatch3":"rgb(0, 0, 0)","swatch4":"rgb(255, 255, 255)"};
-		var defaultPickerColors = {"swatch1":"#ffffff","swatch2":"#000000","swatch3":"#ffffff","swatch4":"#000000"};
-			
-		var largeDefaultBgColor = defaultCustomColors[swatch];
-		var pickerDefaultBgColor = defaultPickerColors[swatch];
-		
-		var swatches = 
-			`<div class="ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-nowrap" style="flex: 1 1 auto; margin-top: 5px;">
-				<div class="ui-color-picker-${swatch} large custom" style="background-color: ${largeDefaultBgColor};"><svg class="color-picker-dropper" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 16 16"><path class="color-picker-dropper-fg" fill=${pickerDefaultBgColor} d="M14.994 1.006C13.858-.257 11.904-.3 10.72.89L8.637 2.975l-.696-.697-1.387 1.388 5.557 5.557 1.387-1.388-.697-.697 1.964-1.964c1.13-1.13 1.3-2.985.23-4.168zm-13.25 10.25c-.225.224-.408.48-.55.764L.02 14.37l1.39 1.39 2.35-1.174c.283-.14.54-.33.765-.55l4.808-4.808-2.776-2.776-4.813 4.803z"></path></svg></div>
-				<div class="regulars ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-wrap ui-color-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;"><div class="ui-color-picker-${swatch} nocolor" style="background-color: null;">✖</div>
-					${ colorOptions.map((val, i) => `<div class="ui-color-picker-${swatch}" style="background-color: ${val};"></div>`).join("")}
-				</div>
-			</div>`;
-		$(swatches).appendTo(wrapperDiv);
-		
-		if (currentCOMP) {
-			var currentRGB = BDfunctionsDevilBro.color2RGB(currentCOMP);
-			var invRGB = BDfunctionsDevilBro.colorINV(currentRGB);
-			
-			var selection = colorOptions.indexOf(currentRGB);
-			
-			if (selection > -1) {
-				wrapperDiv.find(".regulars .ui-color-picker-" + swatch).eq(selection+1)
-					.addClass("selected")
-					.css("border", "4px solid " + invRGB);
-			} 
-			else {
-				$(".custom", wrapperDiv)
-					.addClass("selected")
-					.css("background-color", currentRGB)
-					.css("border", "4px solid " + invRGB);
-				
-				$(".color-picker-dropper-fg", wrapperDiv)
-					.attr("fill", currentCOMP[0] > 150 && currentCOMP[1] > 150 && currentCOMP[2] > 150 ? "#000000" : "#ffffff");
-			}
-			
-		}
-		else {
-			$(".nocolor", wrapperDiv)
-				.addClass("selected")
-				.css("border", "4px solid black");
-		}
-		
-		wrapperDiv.on("click", ".ui-color-picker-" + swatch + ":not(.custom)", (e) => {
-			var bgColor = $(e.target).css("background-color");
-			var newInvRGB = BDfunctionsDevilBro.checkColorType(bgColor) ? BDfunctionsDevilBro.colorINV(bgColor,"rgb") : "black";
-			
-			wrapperDiv.find(".ui-color-picker-" + swatch + ".selected.nocolor")
-				.removeClass("selected")
-				.css("border", "4px solid red");
-				
-			wrapperDiv.find(".ui-color-picker-" + swatch + ".selected")
-				.removeClass("selected")
-				.css("border", "4px solid transparent");
-			
-			$(e.target)
-				.addClass("selected")
-				.css("border", "4px solid " + newInvRGB);
-		})
-		var custom = $(".ui-color-picker-" + swatch + ".custom", wrapperDiv).spectrum({
-			color: $(".custom", wrapperDiv).css("background-color"),
-			preferredFormat: "rgb",
-			clickoutFiresChange: true,
-			showInput: true,
-			showButtons: false,
-			move: (color) => {
-				var newRGB = color.toRgbString();
-				var newCOMP = BDfunctionsDevilBro.color2COMP(newRGB);
-				var newInvRGB = BDfunctionsDevilBro.colorINV(newRGB);
-					
-				$(".color-picker-dropper-fg", wrapperDiv)
-					.attr("fill", newCOMP[0] > 150 && newCOMP[1] > 150 && newCOMP[2] > 150 ? "#000000" : "#ffffff");
-				
-				$(".ui-color-picker-" + swatch + ".selected.nocolor")
-					.removeClass("selected")
-					.css("border", "4px solid red");
-					
-				$(".ui-color-picker-" + swatch + ".selected")
-					.removeClass("selected")
-					.css("border", "4px solid transparent");
-				
-				custom
-					.addClass("selected")
-					.css("background-color", newRGB)
-					.css("border", "4px solid " + newInvRGB);
-					
-				$(".color-picker-dropper-fg", wrapperDiv)
-					.attr("fill", newCOMP[0] > 150 && newCOMP[1] > 150 && newCOMP[2] > 150 ? "#000000" : "#ffffff");
-			}
 		});
 	}
 	
