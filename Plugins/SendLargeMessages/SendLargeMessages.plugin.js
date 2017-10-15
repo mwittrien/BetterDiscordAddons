@@ -200,14 +200,9 @@ class SendLargeMessages {
 
 	getDescription () {return "Opens a popout when your message is too large, which allows you to automatically send the message in several smaller messages.";}
 
-	getVersion () {return "1.1.1";}
+	getVersion () {return "1.1.2";}
 
 	getAuthor () {return "DevilBro";}
-	
-    getSettingsPanel () {
-		if (typeof BDfunctionsDevilBro === "object") {
-		}
-	}
 
 	//legacy
 	load () {}
@@ -286,7 +281,6 @@ class SendLargeMessages {
 				var clipboardData = e.clipboardData;
 				if (!clipboardData) return;
 				var pastedData = clipboardData.getData('Text');
-				console.log(pastedData);
 				var text = e.target.value;
 				if (text.length > 1950) {
 					e.target.selectionStart = 0;
