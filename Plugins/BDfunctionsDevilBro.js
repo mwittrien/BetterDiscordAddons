@@ -4,6 +4,58 @@ BDfunctionsDevilBro.loadMessage = function (pluginName, oldVersion) {
 	console.log(pluginName + " Version: " + oldVersion + " loaded.");
 	var rawUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
 	var downloadUrl = "https://betterdiscord.net/ghdl?url=https://github.com/mwittrien/BetterDiscordAddons/blob/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
+	BDfunctionsDevilBro.checkUpdate(pluginName, rawUrl, downloadUrl, oldVersion);
+	
+	if (typeof window.PluginUpdates === "undefined") window.PluginUpdates = {plugins:{}};
+	window.PluginUpdates.plugins[rawUrl] = {name:pluginName, raw:rawUrl, download:downloadUrl, version:oldVersion};
+	
+	if (typeof window.PluginUpdates.interval === "undefined") {
+		window.PluginUpdates.interval = setInterval(() => {
+			BDfunctionsDevilBro.checkAllUpdates();
+		},7200000);
+	}
+	
+	if (typeof window.PluginUpdates.observer === "undefined") {
+		window.PluginUpdates.observer = new MutationObserver((changes, _) => {
+			changes.forEach(
+				(change, i) => {
+					if (change.addedNodes) {
+						change.addedNodes.forEach((node) => {
+							if (node && node.tagName && node.getAttribute("layer-id") == "user-settings") {
+								var settingsObserver = new MutationObserver((changes2, _) => {
+									changes2.forEach(
+										(change2, j) => {
+											if (change2.addedNodes) {
+												change2.addedNodes.forEach((node2) => {
+													if (!document.querySelector(".bd-updatebtn")) {
+														if (node2 && node2.tagName && node2.querySelector(".bd-pfbtn")) {
+															var updateButton = document.createElement("button");
+															updateButton.className = "bd-pfbtn bd-updatebtn";
+															updateButton.innerText = "Check for Updates";
+															updateButton.style.left = "220px";
+															updateButton.onclick = function () {
+																BDfunctionsDevilBro.checkAllUpdates();
+															};
+															node2.querySelector(".bd-pfbtn").parentElement.insertBefore(updateButton, node2.querySelector(".bda-slist"));
+														}
+													}
+												});
+											}
+										}
+									);
+								});
+								settingsObserver.observe(node, {childList:true, subtree:true});
+							}
+						});
+					}
+				}
+			);
+		});
+		window.PluginUpdates.observer.observe(document.querySelector(".layers"), {childList:true});
+	}
+};
+
+BDfunctionsDevilBro.checkUpdate = function (pluginName, rawUrl, downloadUrl, oldVersion) {
 	$.get(rawUrl, (script) => {
 		if (script) {
 			script = script.replace(new RegExp(" |\t|\n|\r", 'g'), "").split('getVersion(){return"')[1];
@@ -62,6 +114,13 @@ BDfunctionsDevilBro.loadMessage = function (pluginName, oldVersion) {
 			}
 		}
 	});
+};
+
+BDfunctionsDevilBro.checkAllUpdates = function () {
+	for (let key in window.PluginUpdates.plugins) {
+		let plugin = window.PluginUpdates.plugins[key];
+		BDfunctionsDevilBro.checkUpdate(plugin.name, plugin.raw, plugin.download, plugin.version);
+	}
 };
 	
 BDfunctionsDevilBro.translateMessage = function (pluginName) { 
