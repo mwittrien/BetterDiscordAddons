@@ -36,7 +36,7 @@ BDfunctionsDevilBro.loadMessage = function (pluginName, oldVersion) {
 															updateButton.onclick = function () {
 																BDfunctionsDevilBro.checkAllUpdates();
 															};
-															node2.querySelector(".bd-pfbtn").parentElement.insertBefore(updateButton, node2.querySelector(".bda-slist"));
+															node2.querySelector(".bd-pfbtn").parentElement.insertBefore(updateButton, node2.querySelector(".bd-pfbtn").nextSibling);
 														}
 													}
 												});
