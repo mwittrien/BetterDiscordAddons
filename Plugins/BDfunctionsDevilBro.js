@@ -131,6 +131,48 @@ BDfunctionsDevilBro.getReactInstance = function (node) {
 	return node[Object.keys(node).find((key) => key.startsWith("__reactInternalInstance"))];
 };
 
+BDfunctionsDevilBro.getOwnerInstance = function (config) { 
+	if (config === undefined) return null;
+	if (!config.node || !config.name) return null;
+	var inst = BDfunctionsDevilBro.getReactInstance(config.node);
+	if (!inst) return null;
+	
+	var depth = -1;
+	var maxDepth = config.depth === undefined ? 15 : config.depth;
+	
+	var start = performance.now();
+	var maxTime = config.time === undefined ? 200000 : config.time;
+		
+	var keyWhiteList = {
+		"child":true,
+		"sibling":true,
+	};
+	
+	return searchOwnerInReact(inst);
+	
+	function searchOwnerInReact (ele) {
+		depth++;
+		if (!ele || BDfunctionsDevilBro.getReactInstance(ele) || depth > maxDepth || performance.now() - start > maxTime) result = null;
+		else {
+			var keys = Object.getOwnPropertyNames(ele);
+			var result = null;
+			for (var i = 0; result === null && i < keys.length; i++) {
+				var key = keys[i];
+				var value = ele[keys[i]];
+				
+				if (ele.type && ele.type.displayName === config.name) {
+					result = ele.stateNode;
+				}
+				else if ((typeof value === "object" || typeof value === "function") && keyWhiteList[key]) {
+					result = searchOwnerInReact(value);
+				}
+			}
+		}
+		depth--;
+		return result;
+	}
+};
+
 BDfunctionsDevilBro.getKeyInformation = function (config) {
 	if (config === undefined) return null;
 	if (!config.node || !config.key) return null;
@@ -159,6 +201,7 @@ BDfunctionsDevilBro.getKeyInformation = function (config) {
 		"memoizedProps":true,
 		"memoizedState":true,
 		"child":true,
+		"sibling":true,
 		"firstEffect":true
 	};
 	
@@ -168,7 +211,7 @@ BDfunctionsDevilBro.getKeyInformation = function (config) {
 	};
 	
 	var resultArray = [];
-	var singleResult = searchKeyInReact(inst, 0);
+	var singleResult = searchKeyInReact(inst);
 	
 	if (config.all) return resultArray;
 	else return singleResult;
