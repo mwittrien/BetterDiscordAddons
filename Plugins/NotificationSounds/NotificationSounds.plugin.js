@@ -227,7 +227,6 @@ class NotificationSounds {
 			);
 			
 			this.myID = BDfunctionsDevilBro.getMyUserID();
-			console.log(this.myID);
 			
 			this.loadAudios();
 			
