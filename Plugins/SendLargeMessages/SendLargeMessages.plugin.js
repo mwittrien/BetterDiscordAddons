@@ -200,7 +200,7 @@ class SendLargeMessages {
 
 	getDescription () {return "Opens a popout when your message is too large, which allows you to automatically send the message in several smaller messages.";}
 
-	getVersion () {return "1.1.2";}
+	getVersion () {return "1.1.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -435,19 +435,19 @@ class SendLargeMessages {
 				};
 			case "it": 	//italian
 				return {
-					modal_messages_translation:			"Berichten",
-					modal_messages_warning:				"Stuur niet te veel berichten!",
-					modal_header_text:				 	"Stuur een groot bericht:",
+					modal_messages_translation:			"Messaggi",
+					modal_messages_warning:				"Non inviare troppi messaggi!",
+					modal_header_text:				 	"Invia grande messaggio:",
 					btn_cancel_text: 					"Cancellare",
-					btn_send_text: 						"Sturen"
+					btn_send_text: 						"Inviare"
 				};
 			case "nl": 	//dutch
 				return {
-					modal_messages_translation:			"",
-					modal_messages_warning:				"",
-					modal_header_text:				 	"",
+					modal_messages_translation:			"Berichten",
+					modal_messages_warning:				"Stuur niet te veel berichten!",
+					modal_header_text:				 	"Stuur een groot bericht:",
 					btn_cancel_text: 					"Afbreken",
-					btn_send_text: 						""
+					btn_send_text: 						"Sturen"
 				};
 			case "no": 	//norwegian
 				return {
