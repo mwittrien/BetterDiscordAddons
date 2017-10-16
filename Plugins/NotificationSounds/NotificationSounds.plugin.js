@@ -2,7 +2,7 @@
 
 class NotificationSounds {
 	constructor () {
-		this.types = ["DM","Mention"];
+		this.types = ["DM", "Mention", "Message"];
 		
 		// to add a new song choose a name and add a new line in the array "NAME":"URL"
 		this.audios = {
@@ -22,18 +22,25 @@ class NotificationSounds {
 		
 		this.oldMentions = {};
 		
+		this.switching;
+		
+		this.myID;
+		
+		this.switchFixObserver = new MutationObserver(() => {});
 		this.dmObserver = new MutationObserver(() => {});
 		this.dmBadgeObserver = new MutationObserver(() => {});
 		this.mentionObserver = new MutationObserver(() => {});
 		this.mentionBadgeObserver = new MutationObserver(() => {});
 		this.channelListObserver = new MutationObserver(() => {});
+		this.chatWindowObserver = new MutationObserver(() => {});
+		this.messageChangeObserver = new MutationObserver(() => {});
 	}
 
 	getName () {return "NotificationSounds";}
 
 	getDescription () {return "Creates a notification sound when you receive a notification (mention or DM).";}
 
-	getVersion () {return "2.4.4";}
+	getVersion () {return "2.4.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -165,6 +172,42 @@ class NotificationSounds {
 			});
 			this.channelListObserver.observe($(".flex-vertical.channels-wrap")[0], {childList: true, subtree: true});
 			
+			this.chatWindowObserver = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.addedNodes) {
+							change.addedNodes.forEach((node) => {
+								if (!this.switching && $(node).find(".message").length > 0 && node == $(".message-group").last()[0]) {
+									if (this.myID != BDfunctionsDevilBro.getKeyInformation({"node":node,"key":"message"}).author.id) {
+										this.playAudio("Message");
+										this.messageChangeObserver.observe(node, {childList:true, characterData:true, subtree:true});
+									}
+								}
+							});
+						}
+					}
+				);
+			});
+			if ($(".messages.scroller").length != 0) this.chatWindowObserver.observe($(".messages.scroller")[0], {childList:true});
+			
+			this.messageChangeObserver = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.addedNodes) {
+							change.addedNodes.forEach((node) => {
+								if ($(node).attr("class") == "message" && $(".message-group").has(node)[0] == $(".message-group").last()[0]) {
+									if (this.myID != BDfunctionsDevilBro.getKeyInformation({"node":$(".message-group").last()[0],"key":"message"}).author.id) {
+										this.playAudio("Message");
+									}
+								}
+							});
+						}
+					}
+				);
+			});
+			
+			this.switchFixObserver = BDfunctionsDevilBro.onSwitchFix(this);
+			
 			BDfunctionsDevilBro.readServerList().forEach( 
 				(server) => {
 					var badge = $(server).find(".badge")[0];
@@ -183,6 +226,9 @@ class NotificationSounds {
 				}
 			);
 			
+			this.myID = BDfunctionsDevilBro.getMyUserID();
+			console.log(this.myID);
+			
 			this.loadAudios();
 			
 			this.loadChoices();
@@ -197,14 +243,25 @@ class NotificationSounds {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
+			this.switchFixObserver.disconnect();
 			this.dmObserver.disconnect();
 			this.dmBadgeObserver.disconnect();
 			this.mentionObserver.disconnect();
 			this.mentionBadgeObserver.disconnect();
 			this.channelListObserver.disconnect();
+			this.chatWindowObserver.disconnect();
+			this.messageChangeObserver.disconnect();
 		}
 	}
-
+	
+	onSwitch () {
+		if (typeof BDfunctionsDevilBro === "object") {
+			this.switching = true;
+			if (document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(document.querySelector(".messages.scroller"), {childList:true});
+			setTimeout(() => {this.switching = false;},5000);
+		}
+	}
+	
 	
 	// begin of own functions
 	
