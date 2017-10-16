@@ -349,7 +349,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "1.3.5";}
+	getVersion () {return "1.3.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -451,30 +451,21 @@ class EditUsers {
 								if (this.getSettings().changeInChatWindow) {
 									if ($(".message-group").has(".avatar-large").length > 0) {
 										if (node && node.tagName && node.querySelector(".username-wrapper")) {
-											var serverData = BDfunctionsDevilBro.getKeyInformation({"node":BDfunctionsDevilBro.getSelectedServer(),"key":"guild"});
-											if (serverData) {
-												this.loadUser(node, "chat", false);
-											}
+											this.loadUser(node, "chat", false);
 										}
 										else if (node && node.classList && node.classList.contains("message-text")) {
-											var serverData = BDfunctionsDevilBro.getKeyInformation({"node":BDfunctionsDevilBro.getSelectedServer(),"key":"guild"});
-											if (serverData) {
-												this.loadUser($(".message-group").has(node)[0], "chat", false);
-											}
+											this.loadUser($(".message-group").has(node)[0], "chat", false);
 										}
 									}
 									else {
 										if (node && node.tagName && node.querySelector(".username-wrapper")) {
-											var serverData = BDfunctionsDevilBro.getKeyInformation({"node":BDfunctionsDevilBro.getSelectedServer(),"key":"guild"});
-											if (serverData) {
-												if (node.classList.contains("markup")) {
-													this.loadUser(node, "chat", true);
-												}
-												else {
-													var markups = node.querySelectorAll("div.markup");
-													for (var i = 0; i < markups.length; i++) {
-														this.loadUser(markups[i], "chat", true);
-													}
+											if (node.classList.contains("markup")) {
+												this.loadUser(node, "chat", true);
+											}
+											else {
+												var markups = node.querySelectorAll("div.markup");
+												for (var i = 0; i < markups.length; i++) {
+													this.loadUser(markups[i], "chat", true);
 												}
 											}
 										}
