@@ -4,6 +4,7 @@ A series of plugins and themes for BetterDiscord. If you got any question write 
 ## Plugins
  - [Better NSFW Tag](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/BetterNsfwTag) - Adds a more noticeable tag to NSFW channels.
  - [Char Counter](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CharCounter) - Adds a character counter to the chat.
+ - [Chat Aliases](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ChatAliases) - Allows the user configure their own chat-aliases that will automatically be replaced before the message is being sent.
  - [Chat Filter](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ChatFilter) - Allows the user to censor words or block complete messages based on words in the chatwindow.
  - [Edit Channels](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditChannels) - Allows the user to locally change the name and color of channels.
  - [Edit Servers](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditServers) - Allows the user to locally change the name, initials, icon and color of servers.
