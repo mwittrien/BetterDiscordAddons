@@ -22,7 +22,7 @@ class NotificationSounds {
 		
 		this.oldMentions = {};
 		
-		this.switching;
+		this.switching = false;
 		
 		this.myID;
 		
