@@ -26,7 +26,7 @@ class ChatFilter {
 				
 			}
 		
-			.bda-slist .title {
+			.chatfilter-settings .title {
 				color: #757C87;
 				font-size: 20px;
 				font-weight: bold;
@@ -35,13 +35,13 @@ class ChatFilter {
 				padding: 0 !important;
 			}
 
-			.bda-slist .input-bar {
+			.chatfilter-settings .input-bar {
 				margin: 0 !important;
 				padding: 0 !important;
 			}
 
-			.bda-slist input.replace-value,
-			.bda-slist input.word-value {
+			.chatfilter-settings input.replace-value,
+			.chatfilter-settings input.word-value {
 				width: 150px;
 				height: 21px;
 				margin: 0 15px 0 0 !important;
@@ -49,17 +49,17 @@ class ChatFilter {
 				border-radius: 5px;
 			}
 
-			.bda-slist input.replace-value:disabled ,
-			.bda-slist input.word-value:disabled {
+			.chatfilter-settings input.replace-value:disabled ,
+			.chatfilter-settings input.word-value:disabled {
 				color: #292B2F;
 				cursor: no-drop;
 				background-color: #36393F;
 				border-color: #292B2F;
 			}
 
-			.bda-slist button.word-add,
-			.bda-slist button.toggle-info,
-			.bda-slist button.remove-all {
+			.chatfilter-settings button.word-add,
+			.chatfilter-settings button.toggle-info,
+			.chatfilter-settings button.remove-all {
 				height: 21px;
 				font-weight: 500;
 				margin: 0 15px 0 0 !important;
@@ -67,15 +67,15 @@ class ChatFilter {
 				border-radius: 5px;
 			}
 
-			.bda-slist button.remove-all {
+			.chatfilter-settings button.remove-all {
 				color: red;
 				margin: 0 15px 0 15px !important;
 			}
 
-			.bda-slist input.showmsg-check,
-			.bda-slist input.blockhide-check,
-			.bda-slist input.word-exact,
-			.bda-slist input.word-case {
+			.chatfilter-settings input.showmsg-check,
+			.chatfilter-settings input.blockhide-check,
+			.chatfilter-settings input.word-exact,
+			.chatfilter-settings input.word-case {
 				position: relative;
 				margin: 0 5px 0 0 !important;
 				padding: 0 !important;
@@ -85,11 +85,11 @@ class ChatFilter {
 				cursor: pointer;
 			}
 
-			.bda-slist .replace-text,
-			.bda-slist .showmsg-check-text,
-			.bda-slist .blockhide-check-text,
-			.bda-slist .word-exact-text,
-			.bda-slist .word-case-text {
+			.chatfilter-settings .replace-text,
+			.chatfilter-settings .showmsg-check-text,
+			.chatfilter-settings .blockhide-check-text,
+			.chatfilter-settings .word-exact-text,
+			.chatfilter-settings .word-case-text {
 				position: relative;
 				display: inline-block;
 				color: #757C87;
@@ -98,22 +98,22 @@ class ChatFilter {
 				padding: 0 !important;
 			}
 
-			.bda-slist .replace-text {
+			.chatfilter-settings .replace-text {
 				width: 230px;
 			}
 			
-			.bda-slist .replace-text,
-			.bda-slist .showmsg-check-text,
-			.bda-slist .blockhide-check-text {
+			.chatfilter-settings .replace-text,
+			.chatfilter-settings .showmsg-check-text,
+			.chatfilter-settings .blockhide-check-text {
 				top: 1px;
 			}
 
-			.bda-slist .showmsg-settings,
-			.bda-slist .blockhide-settings {
+			.chatfilter-settings .showmsg-settings,
+			.chatfilter-settings .blockhide-settings {
 				margin: 10px 0 0 0 !important;
 				padding: 0 !important;
 			}
-			.bda-slist .word-container {
+			.chatfilter-settings .word-container {
 				min-height: 30px;
 				background-color: #36393F;
 				margin: 10px 2px 20px 2px !important;
@@ -121,7 +121,7 @@ class ChatFilter {
 				border-radius: 5px;
 			}
 
-			.bda-slist .added-word {
+			.chatfilter-settings .added-word {
 				color: black;
 				position: relative;
 				display: inline-block;
@@ -133,29 +133,29 @@ class ChatFilter {
 				border: 2px solid #757C7E;
 			}
 
-			.bda-slist .added-word.case {
+			.chatfilter-settings .added-word.case {
 				background-color: #6699ff;
 			}
 
-			.bda-slist .added-word.nocase {
+			.chatfilter-settings .added-word.nocase {
 				background-color: #ff6666;
 			}
 
-			.bda-slist .added-word.exact {
+			.chatfilter-settings .added-word.exact {
 				border: 2px solid #ffcc00;
 			}
 
-			.bda-slist .added-word.noexact {
+			.chatfilter-settings .added-word.noexact {
 				border: 2px solid #009933;
 			}
 
-			.bda-slist .added-word.fake {
+			.chatfilter-settings .added-word.fake {
 				float: left;
 				text-align: center;
 				width: 90px;
 			}
 
-			.bda-slist .word-delete {
+			.chatfilter-settings .word-delete {
 				color: black;
 				position: relative;
 				display: inline-block;
@@ -168,23 +168,23 @@ class ChatFilter {
 				border-radius: 5px;
 			}
 
-			.bda-slist .word-delete.fake {
+			.chatfilter-settings .word-delete.fake {
 				bottom: 0px;
 			}
 
-			.bda-slist .word-delete:hover {
+			.chatfilter-settings .word-delete:hover {
 				color: #757C87;
 				background-color: #26272B;
 				cursor: pointer;
 			}
 
-			.bda-slist .replace-word-text {
+			.chatfilter-settings .replace-word-text {
 				margin: 0 10px 0 0 !important;
 			}
 			
-			.bda-slist .replace-settings,
-			.bda-slist .wordtype-info,
-			.bda-slist .blocked-censored-info {
+			.chatfilter-settings .replace-settings,
+			.chatfilter-settings .wordtype-info,
+			.chatfilter-settings .blocked-censored-info {
 				color: #757C87;
 				font-weight: bold;
 				background-color: #36393F;
@@ -193,7 +193,7 @@ class ChatFilter {
 				border-radius: 5px;
 			}
 			
-			.bda-slist .wordtype-category {
+			.chatfilter-settings .wordtype-category {
 				overflow: hidden;
 				color: #757C87;
 				font-weight: bold;
@@ -201,7 +201,7 @@ class ChatFilter {
 				padding: 0 !important;
 			}
 			
-			.bda-slist .wordtype-description {
+			.chatfilter-settings .wordtype-description {
 				white-space: pre;
 				width: 500px;
 				float: left;
@@ -217,7 +217,7 @@ class ChatFilter {
 
 	getDescription () {return "Allows the user to censor words or block complete messages based on words in the chatwindow.";}
 
-	getVersion () {return "2.1.1";}
+	getVersion () {return "2.1.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -231,6 +231,7 @@ class ChatFilter {
 			for (var i in this.types) {
 				var key = this.types[i];
 				var words = BDfunctionsDevilBro.loadData(key, this.getName(), "words");
+				settingspanel += `<div class="chatfilter-settings">`;
 				settingspanel += `<div class="title">` + key + `-Words:</div>`;
 				settingspanel += `<div class="input-bar" id="` + key + `-input-bar">`;
 				settingspanel += `<input class="word-value" id="` + key + `-word-value" onkeypress='` + this.getName() + `.updateContainer(this, "` + key + `", "` + this.getName() + `", event);'>`;
@@ -274,6 +275,7 @@ class ChatFilter {
 			settingspanel += `<div class="wordtype-category"><div class="added-word noexact fake">not exact<div class="word-delete fake">✖</div></div><div class="wordtype-description">Will censor/block all words containing the selected word. \napple => apple, applepie and pineapple</div></div>`;
 			settingspanel += `</div>`;
 			settingspanel += `<div class="blocked-censored-info"` + infoHidden + `>Blocked in this case means, that a message that contains one of the words will be completely blocked in your chat window. Censored means you will still be able to read the message but the censored words will be unreadable. Supports Regular Expressions.</div>`;
+			settingspanel += `</div>`;
 			return settingspanel;
 		}
     }
