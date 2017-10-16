@@ -42,6 +42,7 @@ class ChatAliases {
 			}
 
 			.chataliases-settings button.word-add,
+			.chataliases-settings button.toggle-info,
 			.chataliases-settings button.remove-all {
 				height: 21px;
 				font-weight: 500;
@@ -94,6 +95,12 @@ class ChatAliases {
 				border: 2px solid #757C7E;
 			}
 
+			.chataliases-settings .added-word.fake {
+				float: left;
+				text-align: center;
+				width: 90px;
+			}
+
 			.chataliases-settings .added-word.case {
 				background-color: #6699ff;
 			}
@@ -121,8 +128,40 @@ class ChatAliases {
 				cursor: pointer;
 			}
 
+			.chatfilter-settings .word-delete.fake {
+				bottom: 0px;
+			}
+
 			.chataliases-settings .replace-word-text {
 				margin: 0 10px 0 0 !important;
+			}
+			
+			.chataliases-settings .wordtype-info {
+				color: #757C87;
+				font-weight: bold;
+				background-color: #36393F;
+				margin: 10px 2px 20px 2px !important;
+				padding: 10px !important;
+				border-radius: 5px;
+			}
+			
+			.chataliases-settings .wordtype-category {
+				overflow: hidden;
+				color: #757C87;
+				font-weight: bold;
+				margin: 10px 2px 10px 2px !important;
+				padding: 0 !important;
+			}
+			
+			.chataliases-settings .wordtype-description {
+				white-space: pre;
+				width: 500px;
+				float: left;
+				display: inline-block;
+				color: #757C87;
+				font-weight: bold;
+				margin: 0 0 0 10px !important;
+				padding: 0 !important;
 			}`;
 	}
 
@@ -130,7 +169,7 @@ class ChatAliases {
 
 	getDescription () {return "Allows the user configure their own chat-aliases that will automatically be replaced before the message is being sent.";}
 
-	getVersion () {return "1.1.0";}
+	getVersion () {return "1.2.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -152,6 +191,12 @@ class ChatAliases {
 				var casesensivity = words[word].case ? "case" : "nocase";
 				settingspanel += `<div name="` + word + `" class="added-word ` + casesensivity + ` chataliases-word">` + BDfunctionsDevilBro.encodeToHTML(word) + ` (` + BDfunctionsDevilBro.encodeToHTML(words[word].replace) + `)<div class="word-delete" onclick='` + this.getName() + `.updateContainer(this.parentElement, "` + this.getName() + `", event);'>✖</div></div>`;
 			}		
+			settingspanel += `</div>`;
+			var infoHidden = BDfunctionsDevilBro.loadData("hideInfo", this.getName(), "settings") ? " style='display:none;'" : "";
+			settingspanel += `<button class="toggle-info" onclick='` + this.getName() + `.toggleInfo(this, "` + this.getName() + `");'>Toggle Information</button>`;
+			settingspanel += `<div class="wordtype-info"` + infoHidden + `>`;
+			settingspanel += `<div class="wordtype-category"><div class="added-word case fake">case<div class="word-delete fake">✖</div></div><div class="wordtype-description">Will replace words while comparing lowercase/uppercase. \napple => apple, not APPLE or AppLe</div></div>`;
+			settingspanel += `<div class="wordtype-category"><div class="added-word nocase fake">not case<div class="word-delete fake">✖</div></div><div class="wordtype-description">Will replace words while ignoring lowercase/uppercase. \napple => apple, APPLE and AppLe</div></div>`;
 			settingspanel += `</div>`;
 			settingspanel += `</div>`;
 			return settingspanel;
@@ -259,6 +304,20 @@ class ChatAliases {
 		}
 		
 		$(settingspanel).find("#chataliases-word-container").html(container);
+	}
+	
+	static toggleInfo (btn, pluginName) {
+		var settingspanel = BDfunctionsDevilBro.getSettingsPanelDiv(btn);
+		var visible = $(settingspanel).find(".wordtype-info").is(":visible");
+		if (visible) {
+			$(settingspanel).find(".wordtype-info").hide();
+			$(settingspanel).find(".blocked-censored-info").hide();
+		}
+		else if (!visible) {
+			$(settingspanel).find(".wordtype-info").show();
+			$(settingspanel).find(".blocked-censored-info").show();
+		}
+		BDfunctionsDevilBro.saveData("hideInfo", visible, pluginName, "settings");
 	}
 	
 	bindEventToTextArea () {
