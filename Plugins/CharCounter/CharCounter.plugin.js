@@ -23,7 +23,7 @@ class CharCounter {
 
 	getDescription () {return "Adds a charcounter in the chat.";}
 
-	getVersion () {return "1.0.0";}
+	getVersion () {return "1.0.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -59,7 +59,7 @@ class CharCounter {
 			$(".character-counter").remove();
 			var textarea = document.querySelector(".channel-text-area-default");
 			var textinput = textarea.querySelector("textarea");
-			$(textinput).off("keydown." + this.getName()).off("click." + this.getName()).off("mousedown." + this.getName());
+			$(textinput).off("input." + this.getName()).off("click." + this.getName()).off("mousedown." + this.getName());
 			$(document).off("mouseup." + this.getName()).off("mousemove." + this.getName());
 			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName());
@@ -81,9 +81,11 @@ class CharCounter {
 			var counter = $(this.counterMarkup);
 			var textinput = textarea.querySelector("textarea");
 			$(textinput)
-				.off("keydown." + this.getName() + " click." + this.getName())
-				.on("keydown." + this.getName() + " click." + this.getName(), e => {
-					setTimeout(() => {counter.text(textinput.value.length + "/2000 (" + (textinput.selectionEnd - textinput.selectionStart) + ")")},10);
+				.off("input." + this.getName() + " click." + this.getName())
+				.on("input." + this.getName() + " click." + this.getName(), e => {
+					setTimeout(() => {
+						counter.text(textinput.value.length + "/2000 (" + (textinput.selectionEnd - textinput.selectionStart) + ")")
+					},10);
 				})
 				.off("mousedown." + this.getName())
 				.on("mousedown." + this.getName(), e => {
@@ -99,7 +101,9 @@ class CharCounter {
 				.off("mousemove." + this.getName())
 				.on("mousemove." + this.getName(), e => {
 					if (this.selecting) {
-						setTimeout(() => {counter.text(textinput.value.length + "/2000 (" + (textinput.selectionEnd - textinput.selectionStart) + ")")},10);
+						setTimeout(() => {
+							counter.text(textinput.value.length + "/2000 (" + (textinput.selectionEnd - textinput.selectionStart) + ")")
+						},10);
 					}
 				});
 			$(textarea).append(counter);
