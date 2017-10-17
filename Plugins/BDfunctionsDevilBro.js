@@ -6,7 +6,7 @@ BDfunctionsDevilBro.loadMessage = function (pluginName, oldVersion) {
 	var downloadUrl = "https://betterdiscord.net/ghdl?url=https://github.com/mwittrien/BetterDiscordAddons/blob/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
 	BDfunctionsDevilBro.checkUpdate(pluginName, rawUrl, downloadUrl, oldVersion);
 	
-	if (typeof window.PluginUpdates === "undefined") window.PluginUpdates = {plugins:{}};
+	if (typeof window.PluginUpdates !== "object" || !window.PluginUpdates) window.PluginUpdates = {plugins:{}};
 	window.PluginUpdates.plugins[rawUrl] = {name:pluginName, raw:rawUrl, download:downloadUrl, version:oldVersion};
 	
 	if (typeof window.PluginUpdates.interval === "undefined") {
@@ -30,12 +30,35 @@ BDfunctionsDevilBro.loadMessage = function (pluginName, oldVersion) {
 													if (!document.querySelector(".bd-updatebtn")) {
 														if (node2 && node2.tagName && node2.querySelector(".bd-pfbtn")) {
 															var updateButton = document.createElement("button");
+															var tooltip = document.createElement("div");
 															updateButton.className = "bd-pfbtn bd-updatebtn";
 															updateButton.innerText = "Check for Updates";
 															updateButton.style.left = "220px";
 															updateButton.onclick = function () {
 																BDfunctionsDevilBro.checkAllUpdates();
+															};			
+															updateButton.onmouseover = function () {
+																document.querySelector(".tooltips").appendChild(tooltip);
+																tooltip.className = "tooltip tooltip-right tooltip-black";
+																tooltip.innerText = "Only checks for updates of plugins, which support the updatecheck. Rightclick for a list.";
+																tooltip.style.left = $(updateButton).offset().left + $(updateButton).outerWidth() + "px";
+																tooltip.style.top = $(updateButton).offset().top + ($(updateButton).outerHeight() - $(tooltip).outerHeight())/2 + "px";
+															};		
+															updateButton.onmouseout = function () {
+																tooltip.remove();
+															};	
+															updateButton.oncontextmenu = function () {
+																if (window.PluginUpdates && window.PluginUpdates.plugins) {
+																	var list = [];
+																	for (var plugin in window.PluginUpdates.plugins) {
+																		list.push(window.PluginUpdates.plugins[plugin].name);
+																	}
+																	tooltip.innerText = list.join(", ");
+																	tooltip.style.left = $(updateButton).offset().left + $(updateButton).outerWidth() + "px";
+																	tooltip.style.top = $(updateButton).offset().top + ($(updateButton).outerHeight() - $(tooltip).outerHeight())/2 + "px";
+																}
 															};
+															
 															node2.querySelector(".bd-pfbtn").parentElement.insertBefore(updateButton, node2.querySelector(".bd-pfbtn").nextSibling);
 														}
 													}
