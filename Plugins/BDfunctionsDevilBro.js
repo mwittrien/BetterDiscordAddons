@@ -1,9 +1,9 @@
 var BDfunctionsDevilBro = {};
-	
+
 BDfunctionsDevilBro.loadMessage = function (pluginName, oldVersion) { 
 	console.log(pluginName + " Version: " + oldVersion + " loaded.");
-	var rawUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
-	var downloadUrl = "https://betterdiscord.net/ghdl?url=https://github.com/mwittrien/BetterDiscordAddons/blob/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
+	var rawUrl = BDfunctionsDevilBro.getRawUrl(pluginName);
+	var downloadUrl = BDfunctionsDevilBro.getDownloadUrl(pluginName);
 	BDfunctionsDevilBro.checkUpdate(pluginName, rawUrl, downloadUrl, oldVersion);
 	
 	if (typeof window.PluginUpdates !== "object" || !window.PluginUpdates) window.PluginUpdates = {plugins:{}};
@@ -168,6 +168,14 @@ BDfunctionsDevilBro.createUpdateButton = function () {
 	
 BDfunctionsDevilBro.translateMessage = function (pluginName) { 
 	console.log(pluginName + ": Changed plugin language to: " + BDfunctionsDevilBro.getDiscordLanguage().lang);
+};
+
+BDfunctionsDevilBro.getRawUrl = function (pluginName) {
+	return "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
+};
+
+BDfunctionsDevilBro.getDownloadUrl = function (pluginName) {
+	return "https://betterdiscord.net/ghdl?url=https://github.com/mwittrien/BetterDiscordAddons/blob/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
 };
 	
 BDfunctionsDevilBro.getReactInstance = function (node) { 
