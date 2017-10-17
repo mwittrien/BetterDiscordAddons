@@ -29,7 +29,7 @@ BDfunctionsDevilBro.loadMessage = function (pluginName, oldVersion) {
 												change2.addedNodes.forEach((node2) => {
 													if (!document.querySelector(".bd-updatebtn")) {
 														if (node2 && node2.tagName && node2.querySelector(".bd-pfbtn")) {
-															var updatButton = BDfunctionsDevilBro.createUpdateButton();
+															var updateButton = BDfunctionsDevilBro.createUpdateButton();
 															node2.querySelector(".bd-pfbtn").parentElement.insertBefore(updateButton, node2.querySelector(".bd-pfbtn").nextSibling);
 														}
 													}
