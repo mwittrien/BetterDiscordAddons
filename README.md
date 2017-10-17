@@ -13,7 +13,7 @@ A series of plugins and themes for BetterDiscord. If you got any question write 
  - [Fix German Translation](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/FixGermanTranslation) - Fixes some minor translation errors in the german version of Discord.
  - [Fix Twitch Emotes](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/FixTwitchEmotes) - Fixes the problem with twitch emotes not being properly inserted in the textarea.
  - [Image Gallery](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ImageGallery) - Allows the user to browse through images sent inside the same message.
- - [Message Utilities](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/MessageUtilities) - UNFINISHED: Allows you to add shortcuts to interact with messages.
+ - [Message Utilities](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/MessageUtilities) - Offers a number of useful message options.
  - [Notification Sounds](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/NotificationSounds) - Rings a sound when someone writes you a DM or when someones mentions you in a server.
  - [Read All Notifications Button](https://github.com/mwittrien/BetterDiscordAddons/blob/master/Plugins/ReadAllNotificationsButton) - Adds a little button at the top of your serverlist that enables you to clear all mentions and messagesnotifications at once.
  - [Reverse Image Search](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ReverseImageSearch) - Adds the option to reverse image search images in discord via several engines.
