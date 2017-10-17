@@ -31,6 +31,7 @@ BDfunctionsDevilBro.loadMessage = function (pluginName, oldVersion) {
 														if (node2 && node2.tagName && node2.querySelector(".bd-pfbtn")) {
 															var updateButton = document.createElement("button");
 															var tooltip = document.createElement("div");
+															var tooltipobserver = new MutationObserver(() => {});
 															updateButton.className = "bd-pfbtn bd-updatebtn";
 															updateButton.innerText = "Check for Updates";
 															updateButton.style.left = "220px";
@@ -43,8 +44,21 @@ BDfunctionsDevilBro.loadMessage = function (pluginName, oldVersion) {
 																tooltip.innerText = "Only checks for updates of plugins, which support the updatecheck. Rightclick for a list.";
 																tooltip.style.left = $(updateButton).offset().left + $(updateButton).outerWidth() + "px";
 																tooltip.style.top = $(updateButton).offset().top + ($(updateButton).outerHeight() - $(tooltip).outerHeight())/2 + "px";
+																var tooltipobserver = new MutationObserver((mutations) => {
+																	mutations.forEach((mutation) => {
+																		var nodes = Array.from(mutation.removedNodes);
+																		var directMatch = nodes.indexOf(updateButton) > -1;
+																		var parentMatch = nodes.some(parent => parent.contains(updateButton));
+																		if (directMatch || parentMatch) {
+																			tooltipobserver.disconnect();
+																			tooltip.remove();
+																		}
+																	});
+																});
+																tooltipobserver.observe(document.body, {subtree: true, childList: true});
 															};		
 															updateButton.onmouseout = function () {
+																tooltipobserver.disconnect();
 																tooltip.remove();
 															};	
 															updateButton.oncontextmenu = function () {
