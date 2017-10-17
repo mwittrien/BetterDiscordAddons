@@ -47,11 +47,9 @@ class MessageUtilities {
 
 	getDescription () {return "Offers a number of useful message options.";}
 
-	getVersion () {return "1.0.2";}
+	getVersion () {return "1.0.3";}
 
 	getAuthor () {return "DevilBro";}
-	
-	getUrl () {return "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/MessageUtilities/MessageUtilities.plugin.js";}
 
 	//legacy
 	load () {}
@@ -103,21 +101,15 @@ class MessageUtilities {
 	//begin of own functions
 	
 	onSglClick (e) {
-		var key = this.pressedKeys[0];
-		
 		if (this.pressedKeys.indexOf(46) > -1) {
-			if (this.firedEvents.indexOf("onSglClick") < 0) {
+			if (this.firedEvents.indexOf("onSglClick") == -1) {
 				this.firedEvents.push("onSglClick");
 				var messageWrap = e.target.parentElement;
 				if (messageWrap && messageWrap.classList && messageWrap.classList.contains("message-text")) {
-					$(messageWrap).find(".btn-option").click();
-					$(".popout").find(".option-popout").parent().hide();
-					$(".btn-item").each((_, item) => {
-						var onClick = BDfunctionsDevilBro.getKeyInformation({"node":item,"key":"onClick"});
-						if (onClick && onClick.name === "bound handleDelete") {
-							onClick();
-						}
-					});
+					this.doMessageAction(messageWrap, "bound handleDelete");
+					$(".callout-backdrop").hide();
+					$("div[class^='modal']").has("button[class^='buttonRedFilled']").hide();
+					$("div[class^='modal'] button[class^='buttonRedFilled']").click();
 				} 
 				this.firedEvents.pop("onSglClick");
 			}
@@ -125,22 +117,24 @@ class MessageUtilities {
 	}
 	
 	onDblClick (e) {
-		if (this.firedEvents.indexOf("onDblClick") < 0) {
+		if (this.firedEvents.indexOf("onDblClick") == -1) {
 			this.firedEvents.push("onDblClick");
-			this.eventFired = true;
 			var messageWrap = e.target.parentElement;
-			
 			if (messageWrap && messageWrap.classList && messageWrap.classList.contains("message-text")) {
-				$(messageWrap).find(".btn-option").click();
-				$(".popout").find(".option-popout").parent().hide();
-				$(".btn-item").each( (_, item) => {
-					var onClick = BDfunctionsDevilBro.getKeyInformation({"node":item,"key":"onClick"});
-					if (onClick && onClick.name === "bound handleEdit") {
-						onClick();
-					}
-				});
+				this.doMessageAction(messageWrap, "bound handleEdit");
 			} 
 			this.firedEvents.pop("onDblClick");
 		}
+	}
+	
+	doMessageAction (messageWrap, action) {
+		$(messageWrap).find(".btn-option").click();
+		$(".popout").find(".option-popout").parent().hide();
+		$(".btn-item").each((_, item) => {
+			var onClick = BDfunctionsDevilBro.getKeyInformation({"node":item,"key":"onClick","blackList":{"sibling":true}});
+			if (onClick && onClick.name === action) {
+				onClick();
+			}
+		});
 	}
 }
