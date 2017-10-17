@@ -29,52 +29,7 @@ BDfunctionsDevilBro.loadMessage = function (pluginName, oldVersion) {
 												change2.addedNodes.forEach((node2) => {
 													if (!document.querySelector(".bd-updatebtn")) {
 														if (node2 && node2.tagName && node2.querySelector(".bd-pfbtn")) {
-															var updateButton = document.createElement("button");
-															var tooltip = document.createElement("div");
-															var tooltipobserver = new MutationObserver(() => {});
-															updateButton.className = "bd-pfbtn bd-updatebtn";
-															updateButton.innerText = "Check for Updates";
-															updateButton.style.left = "220px";
-															updateButton.onclick = function () {
-																BDfunctionsDevilBro.checkAllUpdates();
-															};			
-															updateButton.onmouseover = function () {
-																document.querySelector(".tooltips").appendChild(tooltip);
-																tooltip.className = "tooltip tooltip-right tooltip-black";
-																tooltip.innerText = "Only checks for updates of plugins, which support the updatecheck. Rightclick for a list."
-																tooltip.style.maxWidth = "";
-																tooltip.style.left = $(updateButton).offset().left + $(updateButton).outerWidth() + "px";
-																tooltip.style.top = $(updateButton).offset().top + ($(updateButton).outerHeight() - $(tooltip).outerHeight())/2 + "px";
-																tooltipobserver = new MutationObserver((mutations) => {
-																	mutations.forEach((mutation) => {
-																		var nodes = Array.from(mutation.removedNodes);
-																		var directMatch = nodes.indexOf(updateButton) > -1;
-																		var parentMatch = nodes.some(parent => parent.contains(updateButton));
-																		if (directMatch || parentMatch) {
-																			tooltipobserver.disconnect();
-																			tooltip.remove();
-																		}
-																	});
-																});
-																tooltipobserver.observe(document.body, {subtree: true, childList: true});
-															};		
-															updateButton.onmouseout = function () {
-																tooltipobserver.disconnect();
-																tooltip.remove();
-															};	
-															updateButton.oncontextmenu = function () {
-																if (window.PluginUpdates && window.PluginUpdates.plugins) {
-																	var list = [];
-																	for (var plugin in window.PluginUpdates.plugins) {
-																		list.push(window.PluginUpdates.plugins[plugin].name);
-																	}
-																	tooltip.innerText = list.join(", ");
-																	tooltip.style.maxWidth = "400px";
-																	tooltip.style.left = $(updateButton).offset().left + $(updateButton).outerWidth() + "px";
-																	tooltip.style.top = $(updateButton).offset().top + ($(updateButton).outerHeight() - $(tooltip).outerHeight())/2 + "px";
-																}
-															};
-															
+															var updatButton = BDfunctionsDevilBro.createUpdateButton();
 															node2.querySelector(".bd-pfbtn").parentElement.insertBefore(updateButton, node2.querySelector(".bd-pfbtn").nextSibling);
 														}
 													}
@@ -161,6 +116,55 @@ BDfunctionsDevilBro.checkAllUpdates = function () {
 		BDfunctionsDevilBro.checkUpdate(plugin.name, plugin.raw, plugin.download, plugin.version);
 	}
 };
+
+BDfunctionsDevilBro.createUpdateButton = function () {
+	var updateButton = document.createElement("button");
+	var tooltip = document.createElement("div");
+	var tooltipobserver = new MutationObserver(() => {});
+	updateButton.className = "bd-pfbtn bd-updatebtn";
+	updateButton.innerText = "Check for Updates";
+	updateButton.style.left = "220px";
+	updateButton.onclick = function () {
+		BDfunctionsDevilBro.checkAllUpdates();
+	};			
+	updateButton.onmouseover = function () {
+		document.querySelector(".tooltips").appendChild(tooltip);
+		tooltip.className = "tooltip tooltip-right tooltip-black";
+		tooltip.innerText = "Only checks for updates of plugins, which support the updatecheck. Rightclick for a list."
+		tooltip.style.maxWidth = "";
+		tooltip.style.left = $(updateButton).offset().left + $(updateButton).outerWidth() + "px";
+		tooltip.style.top = $(updateButton).offset().top + ($(updateButton).outerHeight() - $(tooltip).outerHeight())/2 + "px";
+		tooltipobserver = new MutationObserver((mutations) => {
+			mutations.forEach((mutation) => {
+				var nodes = Array.from(mutation.removedNodes);
+				var directMatch = nodes.indexOf(updateButton) > -1;
+				var parentMatch = nodes.some(parent => parent.contains(updateButton));
+				if (directMatch || parentMatch) {
+					tooltipobserver.disconnect();
+					tooltip.remove();
+				}
+			});
+		});
+		tooltipobserver.observe(document.body, {subtree: true, childList: true});
+	};		
+	updateButton.onmouseout = function () {
+		tooltipobserver.disconnect();
+		tooltip.remove();
+	};	
+	updateButton.oncontextmenu = function () {
+		if (window.PluginUpdates && window.PluginUpdates.plugins) {
+			var list = [];
+			for (var plugin in window.PluginUpdates.plugins) {
+				list.push(window.PluginUpdates.plugins[plugin].name);
+			}
+			tooltip.innerText = list.join(", ");
+			tooltip.style.maxWidth = "400px";
+			tooltip.style.left = $(updateButton).offset().left + $(updateButton).outerWidth() + "px";
+			tooltip.style.top = $(updateButton).offset().top + ($(updateButton).outerHeight() - $(tooltip).outerHeight())/2 + "px";
+		}
+	};
+	return updatButton;
+}
 	
 BDfunctionsDevilBro.translateMessage = function (pluginName) { 
 	console.log(pluginName + ": Changed plugin language to: " + BDfunctionsDevilBro.getDiscordLanguage().lang);
