@@ -2,5 +2,5 @@
 
 Offers a number of useful message options. 
 For now:
-  - DoubleClick -> Edit
+  - Double Click -> Edit
   - Delete + Click -> Delete
