@@ -31,7 +31,15 @@ class FixTwitchEmotes {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (node && node.classList && node.classList.contains("popout") && $(node).find(".emoji-picker").length != 0) {
-									this.addClickListeners(node);
+									var textarea = document.querySelector(".channel-text-area-default textarea");
+									var textareaInstance = BDfunctionsDevilBro.getOwnerInstance({"node":document.querySelector(".layers"), "name":"ChannelTextAreaForm"});
+									if (textarea) {
+										$(node)
+											.off("click." + this.getName())
+											.on("click." + this.getName(), "img.emote-icon", (e) => {
+												textareaInstance.setState({textValue:textarea.value});
+											});
+									}
 								}
 							});
 						}
@@ -51,21 +59,6 @@ class FixTwitchEmotes {
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.emojiPickerObserver.disconnect();
-		}
-	}
-
-	
-	// begin of own functions
-	
-	addClickListeners (picker) {
-		var textarea = document.querySelector(".channel-text-area-default textarea");
-		var textareaInstance = BDfunctionsDevilBro.getOwnerInstance({"node":document.querySelector(".layers"), "name":"ChannelTextAreaForm"});
-		if (textarea) {
-			$(picker)
-				.off("click." + this.getName())
-				.on("click." + this.getName(), "img.emote-icon", (e) => {
-					textareaInstance.setState({textValue:textarea.value});
-				});
 		}
 	}
 }
