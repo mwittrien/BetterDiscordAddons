@@ -264,7 +264,7 @@ class EmojiStatistics {
 
 	getDescription () {return "Adds some helpful options to show you more information about emojis and emojiservers.";}
 
-	getVersion () {return "2.3.2";}
+	getVersion () {return "2.3.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -293,13 +293,13 @@ class EmojiStatistics {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if ($(node).find(".emoji-item")) {
-									if (this.getSettings().enableEmojiHovering) {this.hoverEmoji();}
-								}
-								if (node && node.classList && node.classList.contains("popout") && $(node).find(".emoji-picker").length != 0 && $(".emojistatistics-button").length == 0) {
+								if (node && node.classList && node.classList.contains("popout") && $(node).find(".emoji-picker").length != 0 ) {
 									this.loadEmojiList();
-									if (this.getSettings().enableEmojiStatisticsButton) {
-										this.addEmojiInformationButton();
+									if ($(".emojistatistics-button").length == 0 && this.getSettings().enableEmojiStatisticsButton) {
+										this.addEmojiInformationButton(node);
+									}
+									if (this.getSettings().enableEmojiHovering) {
+										this.hoverEmoji(node);
 									}
 								}
 							});
@@ -419,16 +419,43 @@ class EmojiStatistics {
 		}
 	}
 	
-	addEmojiInformationButton () {
-		$(document.getElementsByClassName("emoji-picker")[0].children[1]).append(this.emojiButtonMarkup)
-		.on("click", ".emojistatistics-button", this.showEmojiInformationModal.bind(this));
+	hoverEmoji (picker) {
+		$(picker)
+			.off("mouseover." + this.getName()).off("mouseout." + this.getName())
+			.on("mouseover." + this.getName(), "div.emoji-item", (e) => {
+				if (!this.hovering) {
+					this.hovering = true;
+					var emoji = e.target;
+					var emojiUrl = $(emoji).css("background-image");
+					emojiUrl = emojiUrl.replace("url(\"","").replace("\")","");
+					var data = this.emojiToServerList[emojiUrl];
+					if (data) {
+						var emojiTooltip = $(this.emojiTooltipMarkup);
+						$(".tooltips").append(emojiTooltip);
+						$(emojiTooltip).find(".emoji-name").text(data.emojiName);
+						$(emojiTooltip).find(".emoji-server").text(data.serverName);
+						$(emojiTooltip)
+							.css("left", ($(emoji).offset().left + $(emoji).outerWidth()) + "px")
+							.css("top", ($(emoji).offset().top + ($(emoji).outerHeight() - $(emojiTooltip).outerHeight())/2) + "px");
+					}
+				}
+			})
+			.on("mouseout." + this.getName(), "div.emoji-item", (e) => {
+				$(".tooltips").find(".emoji-tooltip").remove();
+				this.hovering = false;
+			});
+	}
+	
+	addEmojiInformationButton (node) {
+		$(node.querySelector(".emoji-picker .header")).append(this.emojiButtonMarkup)
+		.on("click." + this.getName(), ".emojistatistics-button", this.showEmojiInformationModal.bind(this));
 	}
 	
 	showEmojiInformationModal () {
 		var entries = [];
 		
 		var emojiInformationModal = $(this.emojiInformationModalMarkup);
-		emojiInformationModal.appendTo($(".tooltips").parent())
+		emojiInformationModal.appendTo($(".app"))
 		.on("click", ".callout-backdrop,button.btn-ok", (e) => {
 			emojiInformationModal.remove();
 		});
@@ -554,34 +581,6 @@ class EmojiStatistics {
 			var entry = entries[i].entry;
 			entry.appendTo(".form-inner");
 		}
-	}
-	
-	hoverEmoji () {
-		var emojiToServerList = this.emojiToServerList;
-		var emojiTooltipMarkup = this.emojiTooltipMarkup;
-		$(".emoji-item").hover(
-			function () {
-				if (!this.hovering) {
-					this.hovering = true;
-					var emojiUrl = $(this).css("background-image");
-					emojiUrl = emojiUrl.replace("url(\"","").replace("\")","");
-					var data = emojiToServerList[emojiUrl];
-					if (data) {
-						var emojiTooltip = $(emojiTooltipMarkup);
-						$(".tooltips").append(emojiTooltip);
-						$(emojiTooltip).find(".emoji-name").text(data.emojiName);
-						$(emojiTooltip).find(".emoji-server").text(data.serverName);
-						$(emojiTooltip)
-							.css("left", ($(this).offset().left + $(this).width()) + "px")
-							.css("top", ($(this).offset().top + ($(this).outerHeight() - $(emojiTooltip).outerHeight())/2) + "px");
-					}
-				}
-			},
-			function () {
-				$(".tooltips").find(".emoji-tooltip").remove();
-				this.hovering = false;
-			}
-		);
 	}
 	
 	getNameOfServer (server, categories) {
