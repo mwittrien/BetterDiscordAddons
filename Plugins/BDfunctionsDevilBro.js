@@ -41,7 +41,8 @@ BDfunctionsDevilBro.loadMessage = function (pluginName, oldVersion) {
 															updateButton.onmouseover = function () {
 																document.querySelector(".tooltips").appendChild(tooltip);
 																tooltip.className = "tooltip tooltip-right tooltip-black";
-																tooltip.innerText = "Only checks for updates of plugins, which support the updatecheck. Rightclick for a list.";
+																tooltip.innerText = "Only checks for updates of plugins, which support the updatecheck. Rightclick for a list."
+																tooltip.style.maxWidth = "";
 																tooltip.style.left = $(updateButton).offset().left + $(updateButton).outerWidth() + "px";
 																tooltip.style.top = $(updateButton).offset().top + ($(updateButton).outerHeight() - $(tooltip).outerHeight())/2 + "px";
 																tooltipobserver = new MutationObserver((mutations) => {
@@ -68,10 +69,9 @@ BDfunctionsDevilBro.loadMessage = function (pluginName, oldVersion) {
 																		list.push(window.PluginUpdates.plugins[plugin].name);
 																	}
 																	tooltip.innerText = list.join(", ");
+																	tooltip.style.maxWidth = "400px";
 																	tooltip.style.left = $(updateButton).offset().left + $(updateButton).outerWidth() + "px";
 																	tooltip.style.top = $(updateButton).offset().top + ($(updateButton).outerHeight() - $(tooltip).outerHeight())/2 + "px";
-																	tooltip.style.maxWidth = "400px";
-																	console.log("test2");
 																}
 															};
 															
