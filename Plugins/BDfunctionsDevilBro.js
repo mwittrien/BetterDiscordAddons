@@ -70,8 +70,8 @@ BDfunctionsDevilBro.loadMessage = function (pluginName, oldVersion) {
 																	tooltip.innerText = list.join(", ");
 																	tooltip.style.left = $(updateButton).offset().left + $(updateButton).outerWidth() + "px";
 																	tooltip.style.top = $(updateButton).offset().top + ($(updateButton).outerHeight() - $(tooltip).outerHeight())/2 + "px";
-																	$(tooltip).css("width", "400px");
-																	console.log("test1");
+																	tooltip.style.maxWidth = "400px";
+																	console.log("test2");
 																}
 															};
 															
