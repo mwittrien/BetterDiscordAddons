@@ -44,7 +44,7 @@ BDfunctionsDevilBro.loadMessage = function (pluginName, oldVersion) {
 																tooltip.innerText = "Only checks for updates of plugins, which support the updatecheck. Rightclick for a list.";
 																tooltip.style.left = $(updateButton).offset().left + $(updateButton).outerWidth() + "px";
 																tooltip.style.top = $(updateButton).offset().top + ($(updateButton).outerHeight() - $(tooltip).outerHeight())/2 + "px";
-																var tooltipobserver = new MutationObserver((mutations) => {
+																tooltipobserver = new MutationObserver((mutations) => {
 																	mutations.forEach((mutation) => {
 																		var nodes = Array.from(mutation.removedNodes);
 																		var directMatch = nodes.indexOf(updateButton) > -1;
@@ -70,7 +70,7 @@ BDfunctionsDevilBro.loadMessage = function (pluginName, oldVersion) {
 																	tooltip.innerText = list.join(", ");
 																	tooltip.style.left = $(updateButton).offset().left + $(updateButton).outerWidth() + "px";
 																	tooltip.style.top = $(updateButton).offset().top + ($(updateButton).outerHeight() - $(tooltip).outerHeight())/2 + "px";
-																	tooltip.style.width = "400px";
+																	$(tooltip).css("width", "400px");
 																}
 															};
 															
