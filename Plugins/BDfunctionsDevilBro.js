@@ -157,7 +157,7 @@ BDfunctionsDevilBro.createUpdateButton = function () {
 			for (var plugin in window.PluginUpdates.plugins) {
 				list.push(window.PluginUpdates.plugins[plugin].name);
 			}
-			tooltip.innerText = list.join(", ");
+			tooltip.innerText = list.sort().join(", ");
 			tooltip.style.maxWidth = "400px";
 			tooltip.style.left = $(updateButton).offset().left + $(updateButton).outerWidth() + "px";
 			tooltip.style.top = $(updateButton).offset().top + ($(updateButton).outerHeight() - $(tooltip).outerHeight())/2 + "px";
