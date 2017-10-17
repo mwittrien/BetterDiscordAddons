@@ -163,7 +163,7 @@ BDfunctionsDevilBro.createUpdateButton = function () {
 			tooltip.style.top = $(updateButton).offset().top + ($(updateButton).outerHeight() - $(tooltip).outerHeight())/2 + "px";
 		}
 	};
-	return updatButton;
+	return updateButton;
 }
 	
 BDfunctionsDevilBro.translateMessage = function (pluginName) { 
