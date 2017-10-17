@@ -9,7 +9,7 @@ class FixTwitchEmotes {
 
 	getDescription () {return "Fixes the problem with twitch emotes not being properly inserted in the textarea.";}
 
-	getVersion () {return "1.0.0";}
+	getVersion () {return "1.0.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -38,7 +38,8 @@ class FixTwitchEmotes {
 					}
 				);
 			});
-			this.emojiPickerObserver.observe($(".tooltips").parent()[0], {childList: true, subtree: true});
+			this.emojiPickerObserver.observe($(".app")[0], {childList: true, subtree: true});
+			
 			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
 		}
 		else {
@@ -57,17 +58,14 @@ class FixTwitchEmotes {
 	// begin of own functions
 	
 	addClickListeners (picker) {
-		var textarea = $(".channel-text-area-default").find("textarea");
+		var textarea = document.querySelector(".channel-text-area-default textarea");
+		var textareaInstance = BDfunctionsDevilBro.getOwnerInstance({"node":document.querySelector(".layers"), "name":"ChannelTextAreaForm"});
 		if (textarea) {
-			$(picker).find("img.emote-icon").each((_,emote) => {
-				$(emote)
-					.off("click." + this.getName())
-					.on("click." + this.getName(), (e) => {
-						textarea.focus();
-						var emotename = textarea.val().length == 0 ? emote.title : " " + emote.title;
-						document.execCommand("insertText", false, emotename);
-					});
-			});
+			$(picker)
+				.off("click." + this.getName())
+				.on("click." + this.getName(), "img.emote-icon", (e) => {
+					textareaInstance.setState({textValue:textarea.value});
+				});
 		}
 	}
 }
