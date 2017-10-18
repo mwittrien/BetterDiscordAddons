@@ -903,7 +903,7 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 						<div class="colorpicker-slider" style="background: linear-gradient(to top, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%)">
 								<div class="colorpicker-slidercursor">
 									<svg xmlns="http://www.w3.org/2000/svg" version="1.1">
-										<path stroke="grey" fill="white" d="M 0 0, l 5 5, l -5 5, m 29 0, l -5 -5, l 5 -5"></path>
+										<path stroke="grey" fill="white" d="M 0 0, l 5 5, l -5 5, m 31 0, l -5 -5, l 5 -5"></path>
 									</svg>
 								</div>
 								<div class="colorpicker-sliderpane"></div>
