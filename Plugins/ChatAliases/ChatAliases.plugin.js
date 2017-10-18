@@ -4,6 +4,7 @@ class ChatAliases {
 	constructor () {
 		
 		this.switchFixObserver = new MutationObserver(() => {});
+		this.settingsWindowObserver = new MutationObserver(() => {});
 		
 		this.format = false;
 		
@@ -169,7 +170,7 @@ class ChatAliases {
 
 	getDescription () {return "Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent.";}
 
-	getVersion () {return "1.2.3";}
+	getVersion () {return "1.2.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -217,6 +218,19 @@ class ChatAliases {
 			$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
+			this.settingsWindowObserver = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.removedNodes) {
+							change.removedNodes.forEach((node) => {
+								if (node && node.tagName && node.getAttribute("layer-id") == "user-settings") this.bindEventToTextArea();
+							});
+						}
+					}
+				);
+			});
+			this.settingsWindowObserver.observe(document.querySelector(".layers"), {childList:true});
+			
 			this.switchFixObserver = BDfunctionsDevilBro.onSwitchFix(this);	
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
@@ -233,6 +247,7 @@ class ChatAliases {
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.switchFixObserver.disconnect();
+			this.settingsWindowObserver.disconnect();
 			$(".channelTextArea-1HTP3C").find("textarea").off("keydown." + this.getName()).off("input." + this.getName());
 		}
 	}
@@ -321,16 +336,24 @@ class ChatAliases {
 	}
 	
 	bindEventToTextArea () {
-		if (typeof BetterFormattingRedux === "undefined") {
-			this.eventWithoutBFR();
-		}
-		else if (typeof BetterFormattingRedux === "function") {
-			this.eventWithBFR();
+		var textarea = document.querySelector(".channelTextArea-1HTP3C textarea");
+		if (textarea) {
+			var events = $._data(textarea, 'events');
+			var BFRenabled = false;
+			for (var event in events.keypress) {
+				if (events.keypress[event].namespace == "BFRedux") BFRenabled = true;
+			}
+			if (BFRenabled) {
+				this.eventWithBFR(textarea);
+			}
+			else {
+				this.eventWithoutBFR(textarea);
+			}
 		}
 	}
 	
-	eventWithoutBFR () {
-		$(".channelTextArea-1HTP3C").find("textarea")
+	eventWithoutBFR (textarea) {
+		$(textarea)
 			.off("keydown." + this.getName())
 			.on("keydown." + this.getName(), e => {
 				if (!e.shiftKey && e.which == 13) {
@@ -351,8 +374,8 @@ class ChatAliases {
 			});
 	}
 	
-	eventWithBFR () {
-		$(".channelTextArea-1HTP3C").find("textarea")
+	eventWithBFR (textarea) {
+		$(textarea)
 			.off("input." + this.getName())
 			.on("input." + this.getName(), e => {
 				if (!this.format) return;
