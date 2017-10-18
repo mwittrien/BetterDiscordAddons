@@ -30,7 +30,7 @@ class BetterNsfwTag {
 
 	getDescription () {return "Adds a more noticeable tag to NSFW channels.";}
 
-	getVersion () {return "1.1.0";}
+	getVersion () {return "1.1.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -62,7 +62,7 @@ class BetterNsfwTag {
 					}
 				);
 			});
-			this.channelListObserver.observe($(".flex-vertical.channels-wrap")[0], {childList: true, subtree: true});
+			if (document.querySelector("[class*='channels-'][class*='flex-']")) this.channelListObserver.observe(document.querySelector("[class*='channels-'][class*='flex-']"), {childList: true, subtree: true});
 			
 			this.switchFixObserver = BDfunctionsDevilBro.onSwitchFix(this);
 			
