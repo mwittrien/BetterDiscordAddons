@@ -200,7 +200,7 @@ class SendLargeMessages {
 
 	getDescription () {return "Opens a popout when your message is too large, which allows you to automatically send the message in several smaller messages.";}
 
-	getVersion () {return "1.1.4";}
+	getVersion () {return "1.1.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -382,10 +382,7 @@ class SendLargeMessages {
 		if (textarea) {
 			var textinput = textarea.querySelector("textarea");
 			if (textinput) {
-				textinput.focus();
-				textinput.selectionStart = 0;
-				textinput.selectionEnd = textinput.value.length;
-				document.execCommand("insertText", false, text);
+				BDfunctionsDevilBro.getOwnerInstance({"node":textarea, "name":"ChannelTextAreaForm", "up":true}).setState({textValue:text});
 				var options = { key: "Enter", code: "Enter", which: 13, keyCode: 13, bubbles: true };
 				var down = new KeyboardEvent("keydown", options);
 				Object.defineProperty(down, "keyCode", {value: 13});
