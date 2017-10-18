@@ -9,7 +9,7 @@ class FixTwitchEmotes {
 
 	getDescription () {return "Fixes the problem with twitch emotes not being properly inserted in the textarea.";}
 
-	getVersion () {return "1.0.1";}
+	getVersion () {return "1.0.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -31,9 +31,9 @@ class FixTwitchEmotes {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (node && node.classList && node.classList.contains("popout") && $(node).find(".emoji-picker").length != 0) {
-									var textarea = document.querySelector(".channel-text-area-default textarea");
-									var textareaInstance = BDfunctionsDevilBro.getOwnerInstance({"node":document.querySelector(".layers"), "name":"ChannelTextAreaForm"});
+									var textarea = document.querySelector(".channelTextArea-1HTP3C textarea");
 									if (textarea) {
+										var textareaInstance = BDfunctionsDevilBro.getOwnerInstance({"node":textarea, "name":"ChannelTextAreaForm", "up":true});
 										$(node)
 											.off("click." + this.getName())
 											.on("click." + this.getName(), "img.emote-icon", (e) => {
