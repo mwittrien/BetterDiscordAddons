@@ -47,7 +47,7 @@ class MessageUtilities {
 
 	getDescription () {return "Offers a number of useful message options.";}
 
-	getVersion () {return "1.0.3";}
+	getVersion () {return "1.0.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -107,7 +107,7 @@ class MessageUtilities {
 				var messageWrap = e.target.parentElement;
 				if (messageWrap && messageWrap.classList && messageWrap.classList.contains("message-text")) {
 					this.doMessageAction(messageWrap, "bound handleDelete");
-					$(".callout-backdrop").hide();
+					$(".callout-backdrop, .backdrop-2ohBEd").hide();
 					$("div[class^='modal']").has("button[class^='buttonRedFilled']").hide();
 					$("div[class^='modal'] button[class^='buttonRedFilled']").click();
 				} 
