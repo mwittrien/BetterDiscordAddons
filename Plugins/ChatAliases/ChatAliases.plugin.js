@@ -355,7 +355,6 @@ class ChatAliases {
 		$(".channelTextArea-1HTP3C").find("textarea")
 			.off("input." + this.getName())
 			.on("input." + this.getName(), e => {
-				console.log(!this.format);
 				if (!this.format) return;
 				this.format = false;
 				var textarea = e.target;
