@@ -11,9 +11,11 @@ class WriteUpperCase {
 
 	getDescription () {return "Change input to uppercase.";}
 
-	getVersion () {return "1.0.2";}
+	getVersion () {return "1.0.3";}
 
 	getAuthor () {return "DevilBro";}
+
+	load () {}
 
 	start () {
 		if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
@@ -38,12 +40,10 @@ class WriteUpperCase {
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.switchFixObserver.disconnect();
-			$(".channel-text-area-default").find("textarea")
+			$(".channelTextArea-1HTP3C").find("textarea")
 				.off("keyup." + this.getName() + " keydown." + this.getName());
 		}
 	}
-
-	load () {}
 	
 	onSwitch () {
 		if (typeof BDfunctionsDevilBro === "object") {
@@ -55,7 +55,7 @@ class WriteUpperCase {
 	// begin of own functions
 	
 	bindEventToTextArea () {
-		$(".channel-text-area-default").find("textarea")
+		$(".channelTextArea-1HTP3C").find("textarea")
 			.off("keyup." + this.getName() + " keydown." + this.getName())
 			.on("keyup." + this.getName() + " keydown." + this.getName(), e => {
 				if (!this.eventFired) {
