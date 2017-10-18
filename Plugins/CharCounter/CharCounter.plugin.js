@@ -23,7 +23,7 @@ class CharCounter {
 
 	getDescription () {return "Adds a charcounter in the chat.";}
 
-	getVersion () {return "1.0.1";}
+	getVersion () {return "1.0.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -57,8 +57,7 @@ class CharCounter {
 			this.switchFixObserver.disconnect();
 			
 			$(".character-counter").remove();
-			var textarea = document.querySelector(".channel-text-area-default");
-			var textinput = textarea.querySelector("textarea");
+			var textinput = document.querySelector(".channelTextArea-1HTP3C textarea");
 			$(textinput).off("keydown." + this.getName()).off("click." + this.getName()).off("mousedown." + this.getName());
 			$(document).off("mouseup." + this.getName()).off("mousemove." + this.getName());
 			
@@ -75,7 +74,7 @@ class CharCounter {
 	// begin of own functions
 	
 	appendCounter () {
-		var textarea = document.querySelector(".channel-text-area-default");
+		var textarea = document.querySelector(".channelTextArea-1HTP3C");
 		if (textarea) {
 			$(".character-counter").remove();
 			var counter = $(this.counterMarkup);
