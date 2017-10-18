@@ -79,7 +79,6 @@ BDfunctionsDevilBro.checkUpdate = function (pluginName, rawUrl, downloadUrl, old
 								#pluginNotice span a:hover {
 									text-decoration:underline;
 								}`;
-							BDfunctionsDevilBro.removeLocalStyle("pluginNoticeCSS");
 							BDfunctionsDevilBro.appendLocalStyle("pluginNoticeCSS", noticeCSS);
 							var noticeElement = `<div class="notice notice-info" id="pluginNotice"><div class="notice-dismiss" id="pluginNoticeDismiss"></div>The following plugins have updates: &nbsp;<strong id="outdatedPlugins"></strong></div>`;
 							if (!$('#pluginNotice').length) {
