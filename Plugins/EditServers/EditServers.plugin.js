@@ -249,7 +249,7 @@ class EditServers {
 
 		this.serverSettingsModalMarkup =
 			`<span class="editservers-modal">
-				<div class="callout-backdrop" style="background-color:#000; opacity:0.85"></div>
+				<div class="backdrop-2ohBEd callout-backdrop" style="background-color:#000; opacity:0.85"></div>
 				<div class="modal" style="opacity: 1">
 					<div class="modal-inner">
 						<div class="form">
@@ -324,7 +324,7 @@ class EditServers {
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	getVersion () {return "1.3.4";}
+	getVersion () {return "1.3.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -359,7 +359,7 @@ class EditServers {
 					}
 				);
 			});
-			this.serverContextObserver.observe($(".tooltips").parent()[0], {childList: true});
+			if (document.querySelector(".app")) this.serverContextObserver.observe(document.querySelector(".app"), {childList: true});
 			
 			this.serverListObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -374,7 +374,7 @@ class EditServers {
 					}
 				);
 			});
-			this.serverListObserver.observe($(".guilds.scroller")[0], {childList: true});
+			if (document.querySelector(".guilds.scroller")) this.serverListObserver.observe(document.querySelector(".guilds.scroller"), {childList: true});
 			
 			BDfunctionsDevilBro.appendWebScript("https://bgrins.github.io/spectrum/spectrum.js");
 			BDfunctionsDevilBro.appendWebStyle("https://bgrins.github.io/spectrum/spectrum.css");
@@ -557,7 +557,7 @@ class EditServers {
 			BDfunctionsDevilBro.setColorSwatches(color2, serverSettingsModal.find(".swatches2"), "swatch2");
 			BDfunctionsDevilBro.setColorSwatches(color3, serverSettingsModal.find(".swatches3"), "swatch3");
 			BDfunctionsDevilBro.setColorSwatches(color4, serverSettingsModal.find(".swatches4"), "swatch4");
-			serverSettingsModal.appendTo($(".tooltips").parent())
+			serverSettingsModal.appendTo($(".platform-win > div").last())
 				.on("click", ".callout-backdrop,button.btn-cancel", (event) => {
 					serverSettingsModal.remove();
 				})
