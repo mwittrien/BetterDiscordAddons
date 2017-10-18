@@ -170,7 +170,7 @@ class ChatAliases {
 
 	getDescription () {return "Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent.";}
 
-	getVersion () {return "1.2.5";}
+	getVersion () {return "1.2.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -338,8 +338,8 @@ class ChatAliases {
 	bindEventToTextArea () {
 		var textarea = document.querySelector(".channelTextArea-1HTP3C textarea");
 		if (textarea) {
-			var events = $._data(textarea, 'events');
 			var BFRenabled = false;
+			var events = $._data(textarea, 'events') ? $._data(textarea, 'events') : {};
 			for (var event in events.keypress) {
 				if (events.keypress[event].namespace == "BFRedux") BFRenabled = true;
 			}
