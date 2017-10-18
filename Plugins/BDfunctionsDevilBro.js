@@ -883,7 +883,7 @@ BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
 BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 	var colorPickerModalMarkup = 
 		`<span class="colorpicker-modal">
-			<div class="callout-backdrop" style="background-color:#000; opacity:0.2"></div>
+			<div class="backdrop-2ohBEd callout-backdrop" style="background-color:#000; opacity:0.2"></div>
 			<div class="modal" style="opacity: 1">
 				<div class="modal-inner">
 					<div class="colorpicker-container">
@@ -926,7 +926,7 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 		</span>`;
 		
 	var colorPickerModal = $(colorPickerModalMarkup)[0];
-	$(colorPickerModal).appendTo($(".tooltips").parent())
+	$(colorPickerModal).appendTo($(".platform-win > div").last())
 		.on("click", ".callout-backdrop", (event) => {
 			var newRGB = colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").style.backgroundColor;
 			var newCOMP = BDfunctionsDevilBro.color2COMP(newRGB);
