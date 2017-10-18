@@ -40,7 +40,7 @@ class NotificationSounds {
 
 	getDescription () {return "Creates a notification sound when you receive a notification (mention or DM).";}
 
-	getVersion () {return "2.5.0";}
+	getVersion () {return "2.5.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -124,7 +124,7 @@ class NotificationSounds {
 									var data = BDfunctionsDevilBro.getKeyInformation({"node":node.parentElement,"key":"guild"});
 									if (data) {
 										this.mentionBadgeObserver.observe(node, {characterData: true, subtree: true });
-										if (this.oldMentions[data.id] == 0) this.playAudio("Mention");
+										if (this.oldMentions && this.oldMentions[data.id] == 0) this.playAudio("Mention");
 									}
 								}
 								if (node.classList && node.classList.contains("guild") && !node.classList.contains("guilds-add") && node.parentNode.classList && !node.parentNode.classList.contains("dms") ) {
@@ -135,7 +135,7 @@ class NotificationSounds {
 						if (change.removedNodes) {
 							change.removedNodes.forEach((node) => {
 								if (node.className === "badge") {
-									this.oldMentions = BDfunctionsDevilBro.getKeyInformation({"node":$(".flex-vertical.channels-wrap").parent()[0],"key":"mentionCounts"});
+									this.oldMentions = BDfunctionsDevilBro.getKeyInformation({"node":document.querySelector(".layers"),"key":"mentionCounts"});
 								}
 							});
 						}
