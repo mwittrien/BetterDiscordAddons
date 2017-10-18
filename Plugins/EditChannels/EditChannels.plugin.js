@@ -162,7 +162,7 @@ class EditChannels {
 
 		this.channelSettingsModalMarkup =
 			`<span class="editchannels-modal">
-				<div class="callout-backdrop" style="background-color:#000; opacity:0.85"></div>
+				<div class="backdrop-2ohBEd callout-backdrop" style="background-color:#000; opacity:0.85"></div>
 				<div class="modal" style="opacity: 1">
 					<div class="modal-inner">
 						<div class="form">
@@ -195,7 +195,7 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "3.3.0";}
+	getVersion () {return "3.3.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -414,7 +414,7 @@ class EditChannels {
 			channelSettingsModal.find("#modal-text")[0].value = name;
 			channelSettingsModal.find("#modal-text").attr("placeholder", e.data.name);
 			BDfunctionsDevilBro.setColorSwatches(color, channelSettingsModal.find(".swatches1"), "swatch1");
-			channelSettingsModal.appendTo($(".tooltips").parent())
+			channelSettingsModal.appendTo($(".platform-win > div").last())
 				.on("click", ".callout-backdrop,button.btn-cancel", (event) => {
 					channelSettingsModal.remove();
 				})
