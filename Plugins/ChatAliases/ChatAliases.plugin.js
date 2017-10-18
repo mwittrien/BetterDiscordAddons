@@ -338,7 +338,7 @@ class ChatAliases {
 					});
 					text = newText.join(" ");
 				}
-				BDfunctionsDevilBro.getOwnerInstance({"node":e.target, "name":"ChannelTextAreaForm", "up":true}).setState({textValue:text});
+				BDfunctionsDevilBro.getOwnerInstance({"node":textarea, "name":"ChannelTextAreaForm", "up":true}).setState({textValue:text});
 			})
 			.off("keydown." + this.getName())
 			.on("keydown." + this.getName(), e => {
