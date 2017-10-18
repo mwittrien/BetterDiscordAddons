@@ -170,7 +170,7 @@ class SendLargeMessages {
 			
 		this.sendMessageModalMarkup =
 			`<span class="sendlargemessages-modal">
-				<div class="callout-backdrop" style="background-color:#000; opacity:0.85"></div>
+				<div class="backdrop-2ohBEd callout-backdrop" style="background-color:#000; opacity:0.85"></div>
 				<div class="modal" style="opacity: 1">
 					<div class="modal-inner">
 						<div class="form">
@@ -200,7 +200,7 @@ class SendLargeMessages {
 
 	getDescription () {return "Opens a popout when your message is too large, which allows you to automatically send the message in several smaller messages.";}
 
-	getVersion () {return "1.1.3";}
+	getVersion () {return "1.1.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -241,7 +241,7 @@ class SendLargeMessages {
 			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName());
 			
-			$(".channel-text-area-default").find("textarea").off("input." + this.getName()).off("paste." + this.getName());
+			$(".channelTextArea-1HTP3C").find("textarea").off("input." + this.getName()).off("paste." + this.getName());
 			$(document).off("mouseup." + this.getName()).off("mousemove." + this.getName());
 		}
 	}
@@ -264,7 +264,7 @@ class SendLargeMessages {
 	}
 	
 	bindEventToTextArea () {
-		$(".channel-text-area-default").find("textarea")
+		$(".channelTextArea-1HTP3C").find("textarea")
 			.off("input." + this.getName())
 			.on("input." + this.getName(), e => {
 				var text = e.target.value;
@@ -294,7 +294,7 @@ class SendLargeMessages {
 	showSendModal (text) {
 		var sendMessageModal = $(this.sendMessageModalMarkup);
 		var textinput = sendMessageModal.find("#modal-inputtext")[0];
-		sendMessageModal.appendTo($(".tooltips").parent())
+		sendMessageModal.appendTo($(".platform-win > div").last())
 			.on("click", ".callout-backdrop,button.btn-cancel", (e) => {
 				$(document).off("mouseup." + this.getName()).off("mousemove." + this.getName());
 				sendMessageModal.remove();
@@ -378,7 +378,7 @@ class SendLargeMessages {
 	}
 	
 	sendMessage (text) {
-		var textarea = document.querySelector(".channel-text-area-default");
+		var textarea = document.querySelector(".channelTextArea-1HTP3C");
 		if (textarea) {
 			var textinput = textarea.querySelector("textarea");
 			if (textinput) {
