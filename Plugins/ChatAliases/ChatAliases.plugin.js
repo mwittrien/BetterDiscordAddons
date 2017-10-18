@@ -167,9 +167,9 @@ class ChatAliases {
 
 	getName () {return "ChatAliases";}
 
-	getDescription () {return "Allows the user configure their own chat-aliases that will automatically be replaced before the message is being sent.";}
+	getDescription () {return "Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent.";}
 
-	getVersion () {return "1.2.0";}
+	getVersion () {return "1.2.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -233,7 +233,7 @@ class ChatAliases {
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.switchFixObserver.disconnect();
-			$(".channel-text-area-default").find("textarea").off("keydown." + this.getName()).off("input." + this.getName());
+			$(".channelTextArea-1HTP3C").find("textarea").off("keydown." + this.getName()).off("input." + this.getName());
 		}
 	}
 	
@@ -321,7 +321,7 @@ class ChatAliases {
 	}
 	
 	bindEventToTextArea () {
-		$(".channel-text-area-default").find("textarea")
+		$(".channelTextArea-1HTP3C").find("textarea")
 			.off("input." + this.getName())
 			.on("input." + this.getName(), e => {
 				if (!this.format) return;
