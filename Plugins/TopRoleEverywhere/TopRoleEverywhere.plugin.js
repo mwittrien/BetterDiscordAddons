@@ -39,7 +39,7 @@ class TopRoleEverywhere {
 
 	getDescription () {return "Adds the highest role of a user as a tag.";}
 
-	getVersion () {return "2.3.6";}
+	getVersion () {return "2.3.7";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -254,7 +254,7 @@ class TopRoleEverywhere {
 			var roleColor = null;
 			var userID = userInfo.id;
 			if (styleInfo && userID) {
-				var savedInfo = this.userRoles[serverID][userID];
+				var savedInfo = this.userRoles[serverID] ? this.userRoles[serverID][userID] : null;
 				if (savedInfo && BDfunctionsDevilBro.colorCOMPARE(savedInfo.colorString, styleInfo.color)) {
 					var roleIDs = Object.getOwnPropertyNames(this.roles);
 					for (var i = 0; i < roleIDs.length; i++) {
