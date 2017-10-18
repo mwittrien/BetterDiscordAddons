@@ -40,7 +40,7 @@ class NotificationSounds {
 
 	getDescription () {return "Creates a notification sound when you receive a notification (mention or DM).";}
 
-	getVersion () {return "2.4.5";}
+	getVersion () {return "2.5.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -113,7 +113,7 @@ class NotificationSounds {
 					}
 				);
 			});
-			this.dmObserver.observe(document.getElementsByClassName("dms")[0], {childList: true});
+			if (document.querySelector(".dms")) this.dmObserver.observe(document.querySelector(".dms"), {childList: true});
 			
 			this.mentionObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -142,7 +142,7 @@ class NotificationSounds {
 					}
 				);
 			});
-			this.mentionObserver.observe($(".guilds.scroller")[0], {childList: true, subtree:true});
+			if (document.querySelector(".guilds.scroller")) this.mentionObserver.observe(document.querySelector(".guilds.scroller"), {childList: true, subtree:true});
 			
 			this.mentionBadgeObserver = new MutationObserver((changes, _) => {
 				this.playAudio("Mention");
@@ -170,7 +170,7 @@ class NotificationSounds {
 					}
 				);
 			});
-			this.channelListObserver.observe($(".flex-vertical.channels-wrap")[0], {childList: true, subtree: true});
+			if (document.querySelector("[class*='channels-'][class*='flex-']")) this.channelListObserver.observe(document.querySelector("[class*='channels-'][class*='flex-']"), {childList: true, subtree: true});
 			
 			this.chatWindowObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -188,7 +188,7 @@ class NotificationSounds {
 					}
 				);
 			});
-			if ($(".messages.scroller").length != 0) this.chatWindowObserver.observe($(".messages.scroller")[0], {childList:true});
+			if (document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(document.querySelector(".messages.scroller"), {childList:true});
 			
 			this.messageChangeObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
