@@ -191,13 +191,12 @@ BDfunctionsDevilBro.getOwnerInstance = function (config) {
 	var depth = -1;
 	var maxDepth = config.depth === undefined ? 15 : config.depth;
 	
+	var upwards = config.up === undefined ? false : config.up;
+	
 	var start = performance.now();
 	var maxTime = config.time === undefined ? 200000 : config.time;
 		
-	var keyWhiteList = {
-		"child":true,
-		"sibling":true,
-	};
+	var keyWhiteList = upwards ? {"return":true,"sibling":true} : {"child":true,"sibling":true};
 	
 	return searchOwnerInReact(inst);
 	
