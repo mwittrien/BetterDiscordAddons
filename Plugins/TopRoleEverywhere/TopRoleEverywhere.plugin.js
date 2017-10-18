@@ -214,7 +214,6 @@ class TopRoleEverywhere {
 		var serverData = BDfunctionsDevilBro.getKeyInformation({"node":BDfunctionsDevilBro.getSelectedServer(),"key":"guild"});
 		if (serverData) {
 			document.querySelectorAll(".role-tag").forEach(node=>{node.parentElement.removeChild(node)});
-			if (!this.userRoles[serverData.id]) this.userRoles[serverData.id] = {};
 			if (this.getSettings().showOwnerRole) this.ownerID = serverData.ownerId;
 			this.roles = serverData.roles;
 			if (this.getSettings().showInMemberList) { 
@@ -242,6 +241,7 @@ class TopRoleEverywhere {
 	
 	addRoleTag(wrapper, type, serverID, compact) {
 		if (!wrapper) return;
+		if (!this.userRoles[serverID]) this.userRoles[serverID] = {};
 		var member = wrapper.querySelector("div.member-username") || wrapper.querySelector("span.username-wrapper");
 		if (compact) wrapper = $(".message-group").has(wrapper)[0];
 		if (member && member.tagName && !member.querySelector(".role-tag")) {
@@ -254,7 +254,7 @@ class TopRoleEverywhere {
 			var roleColor = null;
 			var userID = userInfo.id;
 			if (styleInfo && userID) {
-				var savedInfo = this.userRoles[serverID] ? this.userRoles[serverID][userID] : null;
+				var savedInfo = this.userRoles[serverID][userID];
 				if (savedInfo && BDfunctionsDevilBro.colorCOMPARE(savedInfo.colorString, styleInfo.color)) {
 					var roleIDs = Object.getOwnPropertyNames(this.roles);
 					for (var i = 0; i < roleIDs.length; i++) {
