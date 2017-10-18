@@ -351,12 +351,14 @@ BDfunctionsDevilBro.onSwitchFix = function (plugin) {
 		changes.forEach((change) => {
 			if (change.addedNodes) {
 				change.addedNodes.forEach((node) => {
-					if (node.id === "friends") plugin.onSwitch(); 
+					if (node && node.id === "friends") plugin.onSwitch(); 
+					else if (node && node.className && node.className.length > 0 && node.className.indexOf("noTopic-3Rq-dz") != -1) plugin.onSwitch(); 
+					else if (node && node.className && node.className.length > 0 && node.className.indexOf("topic-1KFf6J") != -1) plugin.onSwitch(); 
 				});
 			}
 			if (change.removedNodes) {
 				change.removedNodes.forEach((node) => {
-					if (node.id === "friends") plugin.onSwitch(); 
+					if (node && node.id === "friends") plugin.onSwitch(); 
 				});
 			}
 		});
