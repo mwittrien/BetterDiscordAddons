@@ -195,7 +195,7 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "3.2.8";}
+	getVersion () {return "3.3.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -248,7 +248,7 @@ class EditChannels {
 					}
 				);
 			});
-			this.channelListObserver.observe($(".flex-vertical.channels-wrap")[0], {childList: true, subtree: true});
+			if (document.querySelector("[class*='channels-'][class*='flex-']")) this.channelListObserver.observe(document.querySelector("[class*='channels-'][class*='flex-']"), {childList: true, subtree: true});
 			
 			$(".flex-vertical.channels-wrap .scroller-fzNley.scroller-NXV0-d [class^='container-']").each(
 				(i,category) => {
@@ -269,7 +269,7 @@ class EditChannels {
 					}
 				);
 			});
-			this.channelContextObserver.observe($(".tooltips").parent()[0], {childList: true});
+			if (document.querySelector(".app")) this.channelContextObserver.observe(document.querySelector(".app"), {childList: true});
 			
 			BDfunctionsDevilBro.appendWebScript("https://bgrins.github.io/spectrum/spectrum.js");
 			BDfunctionsDevilBro.appendWebStyle("https://bgrins.github.io/spectrum/spectrum.css");
