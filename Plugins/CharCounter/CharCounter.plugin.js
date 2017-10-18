@@ -23,7 +23,7 @@ class CharCounter {
 
 	getDescription () {return "Adds a charcounter in the chat.";}
 
-	getVersion () {return "1.0.2";}
+	getVersion () {return "1.0.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -83,7 +83,7 @@ class CharCounter {
 				.off("keydown." + this.getName() + " click." + this.getName())
 				.on("keydown." + this.getName() + " click." + this.getName(), e => {
 					setTimeout(() => {
-						counter.text(textinput.value.length + "/2000 (" + (textinput.selectionEnd - textinput.selectionStart) + ")")
+						updateCounter();
 					},10);
 				})
 				.off("mousedown." + this.getName())
@@ -101,12 +101,18 @@ class CharCounter {
 				.on("mousemove." + this.getName(), e => {
 					if (this.selecting) {
 						setTimeout(() => {
-							counter.text(textinput.value.length + "/2000 (" + (textinput.selectionEnd - textinput.selectionStart) + ")")
+							updateCounter();
 						},10);
 					}
 				});
 			$(textarea).append(counter);
-			counter.text(textinput.value.length + "/2000 (" + (textinput.selectionEnd - textinput.selectionStart) + ")");
+			
+			updateCounter();
+			
+			function updateCounter () {
+				var selection = textinput.selectionEnd - textinput.selectionStart == 0 ? "" : " (" + (textinput.selectionEnd - textinput.selectionStart) + ")";
+				counter.text(textinput.value.length + "/2000" + selection);
+			}
 		}
 	}
 }
