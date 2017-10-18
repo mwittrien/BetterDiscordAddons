@@ -216,7 +216,7 @@ class EmojiStatistics {
 
 		this.emojiInformationModalMarkup =
 			`<span class="emojistatistics-modal">
-				<div class="callout-backdrop" style="background-color:#000; opacity:0.85"></div>
+				<div class="backdrop-2ohBEd callout-backdrop" style="background-color:#000; opacity:0.85"></div>
 				<div class="modal" style="opacity: 1">
 					<div class="modal-inner">
 						<div class="form">
@@ -264,7 +264,7 @@ class EmojiStatistics {
 
 	getDescription () {return "Adds some helpful options to show you more information about emojis and emojiservers.";}
 
-	getVersion () {return "2.3.3";}
+	getVersion () {return "2.3.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -314,7 +314,7 @@ class EmojiStatistics {
 					}
 				);
 			});
-			this.emojiPickerObserver.observe($(".tooltips").parent()[0], {childList: true, subtree: true});
+			if (document.querySelector(".app")) this.emojiPickerObserver.observe(document.querySelector(".app"), {childList: true, subtree: true});
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 		
