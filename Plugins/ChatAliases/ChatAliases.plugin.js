@@ -169,7 +169,7 @@ class ChatAliases {
 
 	getDescription () {return "Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent.";}
 
-	getVersion () {return "1.2.2";}
+	getVersion () {return "1.2.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -321,9 +321,41 @@ class ChatAliases {
 	}
 	
 	bindEventToTextArea () {
+		if (typeof BetterFormattingRedux === "undefined") {
+			this.eventWithoutBFR();
+		}
+		else if (typeof BetterFormattingRedux === "function") {
+			this.eventWithBFR();
+		}
+	}
+	
+	eventWithoutBFR () {
+		$(".channelTextArea-1HTP3C").find("textarea")
+			.off("keydown." + this.getName())
+			.on("keydown." + this.getName(), e => {
+				if (!e.shiftKey && e.which == 13) {
+					var textarea = e.target;
+					var text = textarea.value;
+					var words = BDfunctionsDevilBro.loadAllData(this.getName(), "words");
+					
+					for (let wordvalue in words) {
+						let reg = new RegExp("^" + wordvalue + "$", words[wordvalue].case ? "" : "i");
+						var newText = [];
+						text.split(" ").forEach((word) => {
+							newText.push(reg.test(word) ? words[wordvalue].replace : word);
+						});
+						text = newText.join(" ");
+					}
+					BDfunctionsDevilBro.getOwnerInstance({"node":textarea, "name":"ChannelTextAreaForm", "up":true}).setState({textValue:text});
+				}
+			});
+	}
+	
+	eventWithBFR () {
 		$(".channelTextArea-1HTP3C").find("textarea")
 			.off("input." + this.getName())
 			.on("input." + this.getName(), e => {
+				console.log(!this.format);
 				if (!this.format) return;
 				this.format = false;
 				var textarea = e.target;
