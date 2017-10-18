@@ -349,7 +349,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "1.3.6";}
+	getVersion () {return "1.4.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -393,7 +393,7 @@ class EditUsers {
 					}
 				);
 			});
-			this.userContextObserver.observe(document.querySelector(".tooltips").parentElement, {childList: true});
+			if (document.querySelector(".app")) this.userContextObserver.observe(document.querySelector(".app"), {childList: true});
 			
 			this.channelListObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -411,7 +411,7 @@ class EditUsers {
 					}
 				);
 			});
-			this.channelListObserver.observe(document.querySelector(".flex-vertical.channels-wrap"), {childList:true, subtree:true});
+			if (document.querySelector("[class*='channels-'][class*='flex-']")) this.channelListObserver.observe(document.querySelector("[class*='channels-'][class*='flex-']"), {childList: true, subtree: true});
 			
 			this.friendListObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -491,7 +491,7 @@ class EditUsers {
 					}
 				);
 			});
-			this.userPopoutObserver.observe(document.querySelector(".tooltips").parentElement, {childList: true, subtree: true});
+			if (document.querySelector(".app")) this.userPopoutObserver.observe(document.querySelector(".app"), {childList: true, subtree: true});
 			
 			this.settingsWindowObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -504,7 +504,7 @@ class EditUsers {
 					}
 				);
 			});
-			this.settingsWindowObserver.observe(document.querySelector(".layers"), {childList:true});
+			if (document.querySelector(".layers")) this.settingsWindowObserver.observe(document.querySelector(".layers"), {childList:true});
 			
 			this.switchFixObserver = BDfunctionsDevilBro.onSwitchFix(this);
 			
