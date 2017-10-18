@@ -38,7 +38,7 @@ class ShowHiddenChannels {
 
 	getDescription () {return "Displays channels that are hidden from you by role restrictions.";}
 
-	getVersion () {return "1.3.3";}
+	getVersion () {return "1.4.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -67,7 +67,7 @@ class ShowHiddenChannels {
 					}
 				);
 			});
-			this.channelListObserver.observe($(".flex-vertical.channels-wrap")[0], {childList: true, subtree: true});
+			if (document.querySelector("[class*='channels-'][class*='flex-']")) this.channelListObserver.observe(document.querySelector("[class*='channels-'][class*='flex-']"), {childList: true, subtree: true});
 			
 			this.switchFixObserver = BDfunctionsDevilBro.onSwitchFix(this);
 			
