@@ -203,7 +203,7 @@ class ServerHider {
 		
 		this.serverHiderModalMarkup =
 			`<span class="serverhider-modal">
-				<div class="callout-backdrop" style="background-color:#000; opacity:0.85"></div>
+				<div class="backdrop-2ohBEd callout-backdrop" style="background-color:#000; opacity:0.85"></div>
 				<div class="modal" style="opacity: 1">
 					<div class="modal-inner">
 						<form class="form">
@@ -258,7 +258,7 @@ class ServerHider {
 
 	getDescription () {return "Hide Servers in your Serverlist";}
 
-	getVersion () {return "2.2.5";}
+	getVersion () {return "2.2.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -293,7 +293,7 @@ class ServerHider {
 					}
 				);
 			});
-			this.serverContextObserver.observe($(".tooltips").parent()[0], {childList: true});
+			if (document.querySelector(".app")) this.serverContextObserver.observe(document.querySelector(".app"), {childList: true});
 			
 			this.serverListContextHandler = (e) => {	
 				this.updateAllServers(false);
@@ -414,7 +414,7 @@ class ServerHider {
 		$(".context-menu").hide();
 		
 		var serverHiderModal = $(this.serverHiderModalMarkup);
-		serverHiderModal.appendTo($(".tooltips").parent())
+		serverHiderModal.appendTo($(".platform-win > div").last())
 			.on("click", ".callout-backdrop,button.btn-ok", () => {
 				serverHiderModal.remove();
 			})
