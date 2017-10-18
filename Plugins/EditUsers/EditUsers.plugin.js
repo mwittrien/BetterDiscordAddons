@@ -274,7 +274,7 @@ class EditUsers {
 
 		this.userSettingsModalMarkup =
 			`<span class="editusers-modal">
-				<div class="callout-backdrop" style="background-color:#000; opacity:0.85"></div>
+				<div class="backdrop-2ohBEd callout-backdrop" style="background-color:#000; opacity:0.85"></div>
 				<div class="modal" style="opacity: 1">
 					<div class="modal-inner">
 						<div class="form">
@@ -349,7 +349,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "1.4.0";}
+	getVersion () {return "1.4.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -696,7 +696,7 @@ class EditUsers {
 			BDfunctionsDevilBro.setColorSwatches(color2, userSettingsModal.find(".swatches2"), "swatch2");
 			BDfunctionsDevilBro.setColorSwatches(color3, userSettingsModal.find(".swatches3"), "swatch3");
 			BDfunctionsDevilBro.setColorSwatches(color4, userSettingsModal.find(".swatches4"), "swatch4");
-			userSettingsModal.appendTo($(".tooltips").parent())
+			userSettingsModal.appendTo($(".platform-win > div").last())
 				.on("click", ".callout-backdrop,button.btn-cancel", (event) => {
 					userSettingsModal.remove();
 				})
