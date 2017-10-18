@@ -68,6 +68,9 @@ BDfunctionsDevilBro.checkUpdate = function (pluginName, rawUrl, downloadUrl, old
 					for (var i = 0; i < oldNmbrs.length; i++) {
 						if (newNmbrs[i] > oldNmbrs[i]) {
 							var noticeCSS = `
+								#pluginNotice {
+									-webkit-app-region: drag;
+								} 
 								#pluginNotice span, 
 								#pluginNotice span a {
 									-webkit-app-region: no-drag;
