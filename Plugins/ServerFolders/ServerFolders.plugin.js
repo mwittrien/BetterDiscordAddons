@@ -237,7 +237,7 @@ class ServerFolders {
 
 		this.folderSettingsModalMarkup =
 			`<span class="serverfolders-modal">
-				<div class="callout-backdrop" style="background-color:#000; opacity:0.85"></div>
+				<div class="backdrop-2ohBEd callout-backdrop" style="background-color:#000; opacity:0.85"></div>
 				<div class="modal" style="opacity: 1">
 					<div class="modal-inner">
 						<div class="form">
@@ -327,7 +327,7 @@ class ServerFolders {
 
 	getDescription () {return "Add pseudofolders to your serverlist to organize your servers.";}
 
-	getVersion () {return "4.3.4";}
+	getVersion () {return "4.3.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -362,7 +362,7 @@ class ServerFolders {
 					}
 				);
 			});
-			this.serverContextObserver.observe($(".tooltips").parent()[0], {childList: true});
+			if (document.querySelector(".app")) this.serverContextObserver.observe(document.querySelector(".app"), {childList: true});
 			
 			this.serverListObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -402,7 +402,7 @@ class ServerFolders {
 					}
 				);
 			});
-			this.serverListObserver.observe($(".guilds.scroller")[0], {childList: true, attributes: true, subtree: true});
+			if (document.querySelector(".guilds.scroller")) this.serverListObserver.observe(document.querySelector(".guilds.scroller"), {childList: true, attributes: true, subtree: true});
 			
 			this.badgeObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -672,7 +672,7 @@ class ServerFolders {
 				BDfunctionsDevilBro.setColorSwatches(color2, folderSettingsModal.find(".swatches2"), "swatch2");
 				BDfunctionsDevilBro.setColorSwatches(color3, folderSettingsModal.find(".swatches3"), "swatch3");
 				BDfunctionsDevilBro.setColorSwatches(color4, folderSettingsModal.find(".swatches4"), "swatch4");
-				folderSettingsModal.appendTo($(".tooltips").parent())
+				folderSettingsModal.appendTo($(".platform-win > div").last())
 					.on("click", ".callout-backdrop,button.btn-cancel", (e) => {
 						folderSettingsModal.remove();
 					})
