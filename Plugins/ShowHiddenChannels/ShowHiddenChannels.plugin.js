@@ -38,7 +38,7 @@ class ShowHiddenChannels {
 
 	getDescription () {return "Displays channels that are hidden from you by role restrictions.";}
 
-	getVersion () {return "1.4.0";}
+	getVersion () {return "1.4.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -100,11 +100,12 @@ class ShowHiddenChannels {
 	displayHiddenChannels () {
 		var serverID = BDfunctionsDevilBro.getIdOfServer(BDfunctionsDevilBro.getSelectedServer());
 		if (serverID) {
-			if ($(".container-hidden." + serverID).length == 0) {
+			var chatWrap = document.querySelector(".layer");
+			var channelListWrap = document.querySelector("[class*='channels-'][class*='flex-']");
+			if ($(".container-hidden." + serverID).length == 0 && chatWrap && channelListWrap) {
 				$(".container-hidden").remove();
-				
-				var allChannels = BDfunctionsDevilBro.getKeyInformation({"node":$(".flex-vertical.channels-wrap").parent()[0],"key":"channels"});
-				var shownChannels = BDfunctionsDevilBro.getKeyInformation({"node":$(".flex-vertical.channels-wrap")[0],"key":"channels"})[0];
+				var allChannels = BDfunctionsDevilBro.getKeyInformation({"node":chatWrap,"key":"channels"});
+				var shownChannels = BDfunctionsDevilBro.getKeyInformation({"node":channelListWrap,"key":"channels"})[0];
 				var thisChannels = [];
 				var hiddenChannels = [];
 				
