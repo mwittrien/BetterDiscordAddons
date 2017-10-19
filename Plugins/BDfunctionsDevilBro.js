@@ -15,7 +15,7 @@ BDfunctionsDevilBro.loadMessage = function (pluginName, oldVersion) {
 		},7200000);
 	}
 	
-	if (typeof window.PluginUpdates.observer === "undefined") {
+	if (typeof window.PluginUpdates.observer === "undefined" && document.querySelector(".layers")) {
 		window.PluginUpdates.observer = new MutationObserver((changes, _) => {
 			changes.forEach(
 				(change, i) => {
