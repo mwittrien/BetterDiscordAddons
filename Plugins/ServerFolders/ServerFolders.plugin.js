@@ -327,7 +327,7 @@ class ServerFolders {
 
 	getDescription () {return "Add pseudofolders to your serverlist to organize your servers.";}
 
-	getVersion () {return "4.3.6";}
+	getVersion () {return "4.3.7";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -349,6 +349,8 @@ class ServerFolders {
 			$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
+			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
+			
 			this.serverContextObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
@@ -418,8 +420,6 @@ class ServerFolders {
 				}
 			);
 			
-			BDfunctionsDevilBro.appendWebScript("https://bgrins.github.io/spectrum/spectrum.js");
-			BDfunctionsDevilBro.appendWebStyle("https://bgrins.github.io/spectrum/spectrum.css");
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 			
 			this.loadAllFolders();
@@ -430,8 +430,6 @@ class ServerFolders {
 				this.labels = this.setLabelsByLanguage();
 				this.changeLanguageStrings();
 			},5000);
-			
-			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
