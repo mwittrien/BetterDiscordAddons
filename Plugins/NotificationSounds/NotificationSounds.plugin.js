@@ -40,7 +40,7 @@ class NotificationSounds {
 
 	getDescription () {return "Creates a notification sound when you receive a notification (mention or DM).";}
 
-	getVersion () {return "2.5.1";}
+	getVersion () {return "2.5.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -97,6 +97,8 @@ class NotificationSounds {
 			$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
+			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
+			
 			this.dmBadgeObserver = new MutationObserver((changes, _) => {
 				this.playAudio("DM");
 			});
@@ -231,8 +233,6 @@ class NotificationSounds {
 			this.loadAudios();
 			
 			this.loadChoices();
-			
-			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
