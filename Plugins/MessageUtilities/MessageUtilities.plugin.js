@@ -47,7 +47,7 @@ class MessageUtilities {
 
 	getDescription () {return "Offers a number of useful message options.";}
 
-	getVersion () {return "1.0.4";}
+	getVersion () {return "1.0.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -63,6 +63,8 @@ class MessageUtilities {
 			$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
+			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
+			
 			this.sglClickListener = this.onSglClick.bind(this);
 			$(document).bind("click." + this.getName(), this.sglClickListener);
 			
@@ -80,8 +82,6 @@ class MessageUtilities {
 			
 			$(window).bind("keydown." + this.getName(), this.keydownListener);
 			$(window).bind("keyup." + this.getName(), this.keyupListener);
-			
-			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
