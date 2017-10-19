@@ -324,7 +324,7 @@ class EditServers {
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	getVersion () {return "1.3.5";}
+	getVersion () {return "1.3.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -557,7 +557,7 @@ class EditServers {
 			BDfunctionsDevilBro.setColorSwatches(color2, serverSettingsModal.find(".swatches2"), "swatch2");
 			BDfunctionsDevilBro.setColorSwatches(color3, serverSettingsModal.find(".swatches3"), "swatch3");
 			BDfunctionsDevilBro.setColorSwatches(color4, serverSettingsModal.find(".swatches4"), "swatch4");
-			serverSettingsModal.appendTo($(".platform-win > div").last())
+			serverSettingsModal.appendTo($("body > div > [class*='platform-'] > div").last())
 				.on("click", ".callout-backdrop,button.btn-cancel", (event) => {
 					serverSettingsModal.remove();
 				})
