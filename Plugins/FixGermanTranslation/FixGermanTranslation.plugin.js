@@ -9,7 +9,7 @@ class FixGermanTranslation {
 
 	getDescription () {return "Fixes some german translation errors.";}
 
-	getVersion () {return "1.1.3";}
+	getVersion () {return "1.1.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -27,6 +27,8 @@ class FixGermanTranslation {
 			$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
+			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
+			
 			setTimeout(() => {
 				if (BDfunctionsDevilBro.getDiscordLanguage().id == "de") {
 					this.serverContextObserver = new MutationObserver((changes, _) => {
@@ -42,9 +44,8 @@ class FixGermanTranslation {
 							}
 						);
 					});
-					this.serverContextObserver.observe($(".tooltips").parent()[0], {childList: true});
+					if (document.querySelector(".app")) this.serverContextObserver.observe(document.querySelector(".app"), {childList: true});
 				}
-				BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
 			},5000);
 		}
 		else {
