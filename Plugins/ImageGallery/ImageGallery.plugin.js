@@ -27,7 +27,7 @@ class ImageGallery {
 
 	getDescription () {return "Allows the user to browse through images sent inside the same message.";}
 
-	getVersion () {return "1.2.3";}
+	getVersion () {return "1.2.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -43,6 +43,8 @@ class ImageGallery {
 			$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
+			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
+			
 			this.imageModalObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
@@ -63,17 +65,14 @@ class ImageGallery {
 					}
 				);
 			});
-			this.imageModalObserver.observe($(".platform-win")[0], {childList: true, subtree: true});
+			if (document.querySelector("body > div > [class*='platform-']")) this.imageModalObserver.observe(document.querySelector("body > div > [class*='platform-']"), {childList: true, subtree: true});
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
-			
-			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
 		}
 	}
-
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
