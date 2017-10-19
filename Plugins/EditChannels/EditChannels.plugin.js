@@ -195,7 +195,7 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "3.3.2";}
+	getVersion () {return "3.3.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -217,6 +217,8 @@ class EditChannels {
 			$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
+			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
+			
 			this.channelObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
@@ -271,19 +273,14 @@ class EditChannels {
 			});
 			if (document.querySelector(".app")) this.channelContextObserver.observe(document.querySelector(".app"), {childList: true});
 			
-			BDfunctionsDevilBro.appendWebScript("https://bgrins.github.io/spectrum/spectrum.js");
-			BDfunctionsDevilBro.appendWebStyle("https://bgrins.github.io/spectrum/spectrum.css");
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 			
 			this.loadAllChannels();
-			
 			
 			setTimeout(() => {
 				this.labels = this.setLabelsByLanguage();
 				this.changeLanguageStrings();
 			},5000);
-			
-			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
