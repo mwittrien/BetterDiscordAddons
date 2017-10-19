@@ -195,7 +195,7 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "3.3.1";}
+	getVersion () {return "3.3.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -414,7 +414,7 @@ class EditChannels {
 			channelSettingsModal.find("#modal-text")[0].value = name;
 			channelSettingsModal.find("#modal-text").attr("placeholder", e.data.name);
 			BDfunctionsDevilBro.setColorSwatches(color, channelSettingsModal.find(".swatches1"), "swatch1");
-			channelSettingsModal.appendTo($(".platform-win > div").last())
+			channelSettingsModal.appendTo($("body > div > [class*='platform-'] > div").last())
 				.on("click", ".callout-backdrop,button.btn-cancel", (event) => {
 					channelSettingsModal.remove();
 				})
