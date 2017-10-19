@@ -39,7 +39,7 @@ class TopRoleEverywhere {
 
 	getDescription () {return "Adds the highest role of a user as a tag.";}
 
-	getVersion () {return "2.3.7";}
+	getVersion () {return "2.3.8";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -66,6 +66,8 @@ class TopRoleEverywhere {
 			$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
 		}
 		if (typeof BDfunctionsDevilBro === "object") {			
+			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
+			
 			this.userListObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
@@ -146,8 +148,6 @@ class TopRoleEverywhere {
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 			
 			this.loadRoleTags();
-			
-			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
