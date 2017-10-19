@@ -264,7 +264,7 @@ class EmojiStatistics {
 
 	getDescription () {return "Adds some helpful options to show you more information about emojis and emojiservers.";}
 
-	getVersion () {return "2.3.4";}
+	getVersion () {return "2.3.5";}
 
 	getAuthor () {return "DevilBro";}
 
