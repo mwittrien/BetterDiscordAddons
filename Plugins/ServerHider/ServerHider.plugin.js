@@ -258,7 +258,7 @@ class ServerHider {
 
 	getDescription () {return "Hide Servers in your Serverlist";}
 
-	getVersion () {return "2.2.6";}
+	getVersion () {return "2.2.7";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -414,7 +414,7 @@ class ServerHider {
 		$(".context-menu").hide();
 		
 		var serverHiderModal = $(this.serverHiderModalMarkup);
-		serverHiderModal.appendTo($(".platform-win > div").last())
+		serverHiderModal.appendTo($("body > div > [class*='platform-'] > div").last())
 			.on("click", ".callout-backdrop,button.btn-ok", () => {
 				serverHiderModal.remove();
 			})
