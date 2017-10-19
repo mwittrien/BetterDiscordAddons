@@ -264,7 +264,7 @@ class EmojiStatistics {
 
 	getDescription () {return "Adds some helpful options to show you more information about emojis and emojiservers.";}
 
-	getVersion () {return "2.3.5";}
+	getVersion () {return "2.3.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -288,6 +288,8 @@ class EmojiStatistics {
 			$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
+			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
+			
 			this.emojiPickerObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
@@ -322,8 +324,6 @@ class EmojiStatistics {
 				this.labels = this.setLabelsByLanguage();
 				this.changeLanguageStrings();
 			},5000);
-			
-			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
