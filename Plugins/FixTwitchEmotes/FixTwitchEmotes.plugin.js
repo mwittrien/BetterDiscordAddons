@@ -9,7 +9,7 @@ class FixTwitchEmotes {
 
 	getDescription () {return "Fixes the problem with twitch emotes not being properly inserted in the textarea.";}
 
-	getVersion () {return "1.0.3";}
+	getVersion () {return "1.0.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -25,6 +25,8 @@ class FixTwitchEmotes {
 			$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
+			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
+			
 			this.emojiPickerObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
@@ -46,9 +48,7 @@ class FixTwitchEmotes {
 					}
 				);
 			});
-			this.emojiPickerObserver.observe($(".app")[0], {childList: true, subtree: true});
-			
-			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
+			if (document.querySelector(".app")) this.emojiPickerObserver.observe(document.querySelector(".app"), {childList: true, subtree: true});
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
