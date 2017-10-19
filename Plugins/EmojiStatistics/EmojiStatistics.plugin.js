@@ -455,7 +455,7 @@ class EmojiStatistics {
 		var entries = [];
 		
 		var emojiInformationModal = $(this.emojiInformationModalMarkup);
-		emojiInformationModal.appendTo($(".app"))
+		emojiInformationModal.appendTo($("body > div > [class*='platform-'] > div").last())
 		.on("click", ".callout-backdrop,button.btn-ok", (e) => {
 			emojiInformationModal.remove();
 		});
