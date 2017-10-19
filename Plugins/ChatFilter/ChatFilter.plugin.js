@@ -123,6 +123,7 @@ class ChatFilter {
 				margin: 10px 0 0 0 !important;
 				padding: 0 !important;
 			}
+			
 			.chatfilter-settings .word-container {
 				min-height: 30px;
 				background-color: #36393F;
@@ -227,7 +228,7 @@ class ChatFilter {
 
 	getDescription () {return "Allows the user to censor words or block complete messages based on words in the chatwindow.";}
 
-	getVersion () {return "3.0.0";}
+	getVersion () {return "3.0.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -306,6 +307,8 @@ class ChatFilter {
 			$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
+			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
+			
 			this.chatWindowObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
@@ -322,7 +325,7 @@ class ChatFilter {
 					}
 				);
 			});
-			if ($(".messages.scroller").length != 0) this.chatWindowObserver.observe($(".messages.scroller")[0], {childList:true});
+			if (document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(document.querySelector(".messages.scroller"), {childList:true});
 			
 			this.settingsWindowObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -335,7 +338,7 @@ class ChatFilter {
 					}
 				);
 			});
-			this.settingsWindowObserver.observe($(".layers")[0], {childList:true});
+			if (document.querySelector(".layers")) this.settingsWindowObserver.observe(document.querySelector(".layers"), {childList:true});
 			
 			this.messageChangeObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -357,8 +360,6 @@ class ChatFilter {
 			this.hideAllMessages();
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
-			
-			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -381,7 +382,7 @@ class ChatFilter {
 	onSwitch () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.hideAllMessages();
-			if ($(".messages.scroller").length != 0) this.chatWindowObserver.observe($(".messages.scroller")[0], {childList:true});
+			if (document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(document.querySelector(".messages.scroller"), {childList:true});
 		}
 	}
 	
