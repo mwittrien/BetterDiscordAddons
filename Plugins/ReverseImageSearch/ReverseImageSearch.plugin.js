@@ -42,7 +42,7 @@ class ReverseImageSearch {
 
 	getDescription () {return "Adds a reverse image search option to the context menu.";}
 
-	getVersion () {return "3.1.5";}
+	getVersion () {return "3.1.7";}
 	
 	getAuthor () {return "DevilBro";}
 
@@ -72,6 +72,8 @@ class ReverseImageSearch {
 			$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
+			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
+			
 			this.messageContextObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
@@ -85,12 +87,9 @@ class ReverseImageSearch {
 					}
 				);
 			});
-			this.messageContextObserver.observe($(".tooltips").parent()[0], {childList: true});
+			if (document.querySelector(".app")) this.messageContextObserver.observe(document.querySelector(".app"), {childList: true});
 			
-		
 			this.searchEngines = BDfunctionsDevilBro.sortArrayByKey(this.searchEngines, "name");
-		
-			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
