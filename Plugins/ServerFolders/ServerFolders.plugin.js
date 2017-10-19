@@ -327,7 +327,7 @@ class ServerFolders {
 
 	getDescription () {return "Add pseudofolders to your serverlist to organize your servers.";}
 
-	getVersion () {return "4.3.5";}
+	getVersion () {return "4.3.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -672,7 +672,7 @@ class ServerFolders {
 				BDfunctionsDevilBro.setColorSwatches(color2, folderSettingsModal.find(".swatches2"), "swatch2");
 				BDfunctionsDevilBro.setColorSwatches(color3, folderSettingsModal.find(".swatches3"), "swatch3");
 				BDfunctionsDevilBro.setColorSwatches(color4, folderSettingsModal.find(".swatches4"), "swatch4");
-				folderSettingsModal.appendTo($(".platform-win > div").last())
+				folderSettingsModal.appendTo($("body > div > [class*='platform-'] > div").last())
 					.on("click", ".callout-backdrop,button.btn-cancel", (e) => {
 						folderSettingsModal.remove();
 					})
