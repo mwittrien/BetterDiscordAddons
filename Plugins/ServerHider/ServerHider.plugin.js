@@ -258,7 +258,7 @@ class ServerHider {
 
 	getDescription () {return "Hide Servers in your Serverlist";}
 
-	getVersion () {return "2.2.7";}
+	getVersion () {return "2.2.8";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -280,6 +280,8 @@ class ServerHider {
 			$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
+			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
+			
 			this.serverContextObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
@@ -309,8 +311,6 @@ class ServerHider {
 				this.labels = this.setLabelsByLanguage();
 				this.changeLanguageStrings();
 			},5000);
-			
-			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
