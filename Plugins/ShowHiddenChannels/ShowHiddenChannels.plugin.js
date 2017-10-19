@@ -38,7 +38,7 @@ class ShowHiddenChannels {
 
 	getDescription () {return "Displays channels that are hidden from you by role restrictions.";}
 
-	getVersion () {return "1.4.1";}
+	getVersion () {return "1.4.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -54,6 +54,8 @@ class ShowHiddenChannels {
 			$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
+			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
+			
 			this.channelListObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
@@ -72,8 +74,6 @@ class ShowHiddenChannels {
 			this.switchFixObserver = BDfunctionsDevilBro.onSwitchFix(this);
 			
 			this.displayHiddenChannels();
-			
-			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
