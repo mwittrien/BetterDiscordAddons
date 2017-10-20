@@ -17,7 +17,7 @@ class ShowHiddenChannels {
 				</div>
 			</div>`;
 			
-		this.channelMarkup = 
+		this.channelTextMarkup = 
 			`<div class="containerDefault-7RImuF">
 				<div class="wrapperDefaultText-3M3F1R wrapper-fDmxzK">
 					<div class="contentDefaultText-2elG3R content-2mSKOj">
@@ -32,13 +32,29 @@ class ShowHiddenChannels {
 					</div>
 				</div>
 			</div>`;
+			
+		this.channelVoiceMarkup = 
+			`<div class="containerDefault-7RImuF">
+				<div class="wrapperDefaultVoice-2ud9mj wrapper-fDmxzK">
+					<div class="contentDefaultVoice-311dxZ content-2mSKOj">
+						<div class="marginReset-1YolDJ" style="flex: 0 0 auto;">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" class="colorDefaultVoice-1x4dEl icon-3tVJnl">
+								<path class="background-2nyTH_" fill="currentColor" d="M13.6005009,10 C12.8887426,11.8438372 11.2906136,13.2480521 9.33333333,13.6933333 L9.33333333,12.3133333 C10.5512947,11.950895 11.5614504,11.1062412 12.1398042,10 L13.6005009,10 Z M10.7736513,8.99497564 C10.4978663,9.6613459 9.98676114,10.2040442 9.33333333,10.5133333 L9.33333333,8.99497564 L10.7736513,8.99497564 Z M2,5.84666667 L4.66666667,5.84666667 L8,2.51333333 L8,13.18 L4.66666667,9.84666667 L2,9.84666667 L2,5.84666667 Z"></path>
+								<path class="foreground-2zy1hc" fill="currentColor" fill-rule="nonzero" d="M15.1,3.2 L15.1,2 C15.1,0.88 14.05,0 13,0 C11.95,0 10.9,0.88 10.9,2 L10.9,3.2 C10.45,3.2 10,3.68 10,4.16 L10,6.96 C10,7.52 10.45,8 10.9,8 L15.025,8 C15.55,8 16,7.52 16,7.04 L16,4.24 C16,3.68 15.55,3.2 15.1,3.2 Z M14,3 L12,3 L12,1.92857143 C12,1.35714286 12.4666667,1 13,1 C13.5333333,1 14,1.35714286 14,1.92857143 L14,3 Z"></path>
+							</svg>
+						</div>
+						<div class="nameDefaultVoice-1swZoh name-2SL4ev overflowEllipsis-3Rxxjf" style="flex: 1 1 auto;">REPLACE_channel_name</div>
+						<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginReset-1YolDJ" style="flex: 0 1 auto;"></div>
+					</div>
+				</div>
+			</div>`;
 	}
 
 	getName () {return "ShowHiddenChannels";}
 
 	getDescription () {return "Displays channels that are hidden from you by role restrictions.";}
 
-	getVersion () {return "1.4.2";}
+	getVersion () {return "2.0.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -105,157 +121,145 @@ class ShowHiddenChannels {
 			if ($(".container-hidden." + serverID).length == 0 && chatWrap && channelListWrap) {
 				$(".container-hidden").remove();
 				var allChannels = BDfunctionsDevilBro.getKeyInformation({"node":chatWrap,"key":"channels"});
-				var shownChannels = BDfunctionsDevilBro.getKeyInformation({"node":channelListWrap,"key":"channels"})[0];
-				var thisChannels = [];
-				var hiddenChannels = [];
+				var shownChannels = BDfunctionsDevilBro.getKeyInformation({"node":channelListWrap,"key":"channels"});
+				var shownChannelsText = shownChannels[0];
+				var shownChannelsVoice = shownChannels[2];
+				var thisChannelsText = [];
+				var thisChannelsVoice = [];
+				var hiddenChannelsText = [];
+				var hiddenChannelsVoice = [];
 				
 				for (var channelID in allChannels) {
 					var oneChannel = allChannels[channelID];
-					if (oneChannel.guild_id == serverID && oneChannel.type == 0) thisChannels.push(oneChannel);
+					if (oneChannel.guild_id == serverID) {
+						if (oneChannel.type == 0) thisChannelsText.push(oneChannel);
+						else if (oneChannel.type == 2) thisChannelsVoice.push(oneChannel);
+					}
 				}
 				
-				for (var i = 0; i < thisChannels.length; i++) {
-					var thisChannel = thisChannels[i];
+				for (var i1 = 0; i1 < thisChannelsText.length; i1++) {
+					var thisChannel = thisChannelsText[i1];
 					var channelIsHidden = true;
-					for (var j = 0; j < shownChannels.length; j++) {
-						var shownChannel = shownChannels[j].channel;
+					for (var j1 = 0; j1 < shownChannelsText.length; j1++) {
+						var shownChannel = shownChannelsText[j1].channel;
 						if (shownChannel.id == thisChannel.id) {
 							channelIsHidden = false;
 							break;
 						}
 					}
-					if (channelIsHidden) hiddenChannels.push(thisChannel);
+					if (channelIsHidden) hiddenChannelsText.push(thisChannel);
 				}
 				
-				if (hiddenChannels.length > 0) {
+				for (var i2 = 0; i2 < thisChannelsVoice.length; i2++) {
+					var thisChannel = thisChannelsVoice[i2];
+					var channelIsHidden = true;
+					for (var j2 = 0; j2 < shownChannelsVoice.length; j2++) {
+						var shownChannel = shownChannelsVoice[j2].channel;
+						if (shownChannel.id == thisChannel.id) {
+							channelIsHidden = false;
+							break;
+						}
+					}
+					if (channelIsHidden) hiddenChannelsVoice.push(thisChannel);
+				}
+				
+				if (hiddenChannelsText.length > 0 || hiddenChannelsVoice.length > 0) {
 					
-					hiddenChannels = BDfunctionsDevilBro.sortArrayByKey(hiddenChannels, "name");
+					hiddenChannelsText = BDfunctionsDevilBro.sortArrayByKey(hiddenChannelsText, "name");
+					hiddenChannelsVoice = BDfunctionsDevilBro.sortArrayByKey(hiddenChannelsVoice, "name");
 					
 					var isOpen = BDfunctionsDevilBro.loadData(serverID, this.getName(), "categorystatus");
 					isOpen = isOpen === null ? true : isOpen;
 					
-					var category = $(this.categoryMarkup)
+					var category = $(this.categoryMarkup)[0]
+					var wrapper = category.querySelector(".cursorPointer-3oKATS");
+					var icon = category.querySelector(".iconTransition-VhWJ85");
+					var name = category.querySelector(".colorTransition-2iZaYd");
+					$(category)
 						.addClass(serverID)
 						.on("click", ".cursorPointer-3oKATS", () => {
-							var categoryContainer = category.find(".containerDefault-1bbItS");
-							if (categoryContainer.find(".nameHovered-1YFSWq").length > 0) {
-								categoryContainer.find(".nameHovered-1YFSWq")
-									.removeClass("nameHovered-1YFSWq")
-									.addClass("nameHoveredCollapsed-2c-EHI");
-								categoryContainer.find(".iconHovered-3PRzOR")
-									.attr("class","iconHoveredCollapsed-jNYgOD iconTransition-VhWJ85 closed-2Hef-I");
-								categoryContainer.find(".wrapperHovered-1KDCyZ")
-									.removeClass("wrapperHovered-1KDCyZ")
-									.addClass("wrapperHoveredCollapsed-25KVVp");
-								category.find(".containerDefault-7RImuF").hide();
-								BDfunctionsDevilBro.saveData(serverID, false, this.getName(), "categorystatus");
-							}
-							else if (categoryContainer.find(".nameHoveredCollapsed-2c-EHI").length > 0) {
-								categoryContainer.find(".nameHoveredCollapsed-2c-EHI")
-									.removeClass("nameHoveredCollapsed-2c-EHI")
-									.addClass("nameHovered-1YFSWq");
-								categoryContainer.find(".iconHoveredCollapsed-jNYgOD")
-									.attr("class","iconHovered-3PRzOR iconTransition-VhWJ85");
-								categoryContainer.find(".wrapperHoveredCollapsed-25KVVp")
-									.removeClass("wrapperHoveredCollapsed-25KVVp")
-									.addClass("wrapperHovered-1KDCyZ");
-								category.find(".containerDefault-7RImuF").show();
-								BDfunctionsDevilBro.saveData(serverID, true, this.getName(), "categorystatus");
-							}
+							wrapper.classList.toggle("wrapperHovered-1KDCyZ");
+							wrapper.classList.toggle("wrapperHoveredCollapsed-25KVVp");
+							icon.classList.toggle("iconHovered-3PRzOR");
+							icon.classList.toggle("iconHoveredCollapsed-jNYgOD");
+							icon.classList.toggle("closed-2Hef-I");
+							name.classList.toggle("nameHoveredCollapsed-2c-EHI");
+							name.classList.toggle("nameHovered-1YFSWq");
+							
+							$(category).find(".containerDefault-7RImuF").toggle(!category.querySelector(".closed-2Hef-I"));
+							BDfunctionsDevilBro.saveData(serverID, !category.querySelector(".closed-2Hef-I"), this.getName(), "categorystatus");
 						})
-						.on("mouseenter", ".cursorPointer-3oKATS", () => {
-							var categoryContainer = category.find(".containerDefault-1bbItS");
-							if (categoryContainer.find(".nameDefault-Lnjrwm").length > 0) {
-								categoryContainer.find(".nameDefault-Lnjrwm")
-									.removeClass("nameDefault-Lnjrwm")
-									.addClass("nameHovered-1YFSWq");
-								categoryContainer.find(".iconDefault-xzclSQ")
-									.attr("class","iconHovered-3PRzOR iconTransition-VhWJ85");
-								categoryContainer.find(".wrapperDefault-1Dl4SS")
-									.removeClass("wrapperDefault-1Dl4SS")
-									.addClass("wrapperHovered-1KDCyZ");
+						.on("mouseenter mouseleave", ".cursorPointer-3oKATS", () => {
+							if (!category.querySelector(".closed-2Hef-I")) {
+								wrapper.classList.toggle("wrapperDefault-1Dl4SS");
+								wrapper.classList.toggle("wrapperHovered-1KDCyZ");
+								icon.classList.toggle("iconDefault-xzclSQ");
+								icon.classList.toggle("iconHovered-3PRzOR");
+								name.classList.toggle("nameDefault-Lnjrwm");
+								name.classList.toggle("nameHovered-1YFSWq");
 							}
-							else if (categoryContainer.find(".nameCollapsed-3_ChMu").length > 0) {
-								categoryContainer.find(".nameCollapsed-3_ChMu")
-									.removeClass("nameCollapsed-3_ChMu")
-									.addClass("nameHoveredCollapsed-2c-EHI");
-								categoryContainer.find(".iconCollapsed-1INdMX")
-									.attr("class","iconHoveredCollapsed-jNYgOD iconTransition-VhWJ85 closed-2Hef-I");
-								categoryContainer.find(".wrapperCollapsed-18mf-c")
-									.removeClass("wrapperCollapsed-18mf-c")
-									.addClass("wrapperHoveredCollapsed-25KVVp");
-							}
-						})
-						.on("mouseleave", ".cursorPointer-3oKATS", () => {
-							var categoryContainer = category.find(".containerDefault-1bbItS");
-							if (categoryContainer.find(".nameHovered-1YFSWq").length > 0) {
-								categoryContainer.find(".nameHovered-1YFSWq")
-									.removeClass("nameHovered-1YFSWq")
-									.addClass("nameDefault-Lnjrwm");
-								categoryContainer.find(".iconHovered-3PRzOR")
-									.attr("class","iconDefault-xzclSQ iconTransition-VhWJ85");
-								categoryContainer.find(".wrapperHovered-1KDCyZ")
-									.removeClass("wrapperHovered-1KDCyZ")
-									.addClass("wrapperDefault-1Dl4SS");
-							}
-							else if (categoryContainer.find(".nameHoveredCollapsed-2c-EHI").length > 0) {
-								categoryContainer.find(".nameHoveredCollapsed-2c-EHI")
-									.removeClass("nameHoveredCollapsed-2c-EHI")
-									.addClass("nameCollapsed-3_ChMu");
-								categoryContainer.find(".iconHoverCollapsed-jNYgOD")
-									.attr("class","iconCollapsed-1INdMX iconTransition-VhWJ85 closed-2Hef-I");
-								categoryContainer.find(".wrapperHoveredCollapsed-25KVVp")
-									.removeClass("wrapperHoveredCollapsed-25KVVp")
-									.addClass("wrapperCollapsed-18mf-c");
+							else {
+								wrapper.classList.toggle("wrapperCollapsed-18mf-c");
+								wrapper.classList.toggle("wrapperHoveredCollapsed-25KVVp")
+								icon.classList.toggle("iconCollapsed-1INdMX")
+								icon.classList.toggle("iconHoveredCollapsed-jNYgOD");
+								name.classList.toggle("nameCollapsed-3_ChMu");
+								name.classList.toggle("nameHoveredCollapsed-2c-EHI")
 							}
 						});
 					
-					for (var k = 0; k < hiddenChannels.length; k++) {
-						var hiddenChannel = hiddenChannels[k];
-						let channel = $(this.channelMarkup);
-						channel.html(channel.html().replace("REPLACE_channel_name",hiddenChannel.name));
-						$(channel[0]).on("mouseenter", ".wrapper-fDmxzK", () => {
-							channel.find(".nameDefaultText-QoumjC")
-								.removeClass("nameDefaultText-QoumjC")
-								.addClass("nameHoveredText-2FFqiz");
-							channel.find(".contentDefaultText-2elG3R")
-								.removeClass("contentDefaultText-2elG3R")
-								.addClass("contentHoveredText-2HYGIY");
-							channel.find(".wrapperDefaultText-3M3F1R")
-								.removeClass("wrapperDefaultText-3M3F1R")
-								.addClass("wrapperHoveredText-1PA_Uk");
-						})
-						.on("mouseleave", ".wrapper-fDmxzK", () => {
-							channel.find(".nameHoveredText-2FFqiz")
-								.removeClass("nameHoveredText-2FFqiz")
-								.addClass("nameDefaultText-QoumjC");
-							channel.find(".contentHoveredText-2HYGIY")
-								.removeClass("contentHoveredText-2HYGIY")
-								.addClass("contentDefaultText-2elG3R");
-							channel.find(".wrapperHoveredText-1PA_Uk")
-								.removeClass("wrapperHoveredText-1PA_Uk")
-								.addClass("wrapperDefaultText-3M3F1R");
-						});
-						channel.appendTo(category);
+					for (var k1 = 0; k1 < hiddenChannelsText.length; k1++) {
+						var hiddenChannel = hiddenChannelsText[k1];
+						let channel = $(this.channelTextMarkup)[0];
+						$(channel)
+							.html($(channel).html().replace("REPLACE_channel_name",hiddenChannel.name))
+							.on("mouseenter mouseleave", ".wrapper-fDmxzK", () => {
+								var channelwrapper = channel.querySelector(".wrapper-fDmxzK");
+								var channelicon = channel.querySelector(".content-2mSKOj");
+								var channelname = channel.querySelector(".name-2SL4ev");
+								channelwrapper.classList.toggle("wrapperDefaultText-3M3F1R")
+								channelwrapper.classList.toggle("wrapperHoveredText-1PA_Uk");
+								channelicon.classList.toggle("contentDefaultText-2elG3R")
+								channelicon.classList.toggle("contentHoveredText-2HYGIY");
+								channelname.classList.toggle("nameDefaultText-QoumjC")
+								channelname.classList.toggle("nameHoveredText-2FFqiz");
+							})
+							.appendTo(category);
 					}
+					
+					for (var k2 = 0; k2 < hiddenChannelsVoice.length; k2++) {
+						var hiddenChannel = hiddenChannelsVoice[k2];
+						let channel = $(this.channelVoiceMarkup)[0];
+						$(channel)
+							.html($(channel).html().replace("REPLACE_channel_name",hiddenChannel.name))
+							.on("mouseenter mouseleave", ".wrapper-fDmxzK", () => {
+								var channelwrapper = channel.querySelector(".wrapper-fDmxzK");
+								var channelicon = channel.querySelector(".content-2mSKOj");
+								var channelname = channel.querySelector(".name-2SL4ev");
+								channelwrapper.classList.toggle("wrapperDefaultVoice-2ud9mj")
+								channelwrapper.classList.toggle("wrapperHoveredVoice-3tbfNN");
+								channelicon.classList.toggle("contentDefaultVoice-311dxZ")
+								channelicon.classList.toggle("contentHoveredVoice-3qGNKh");
+								channelname.classList.toggle("nameDefaultVoice-1swZoh")
+								channelname.classList.toggle("nameHoveredVoice-TIoHRJ");
+							})
+							.appendTo(category);
+					}
+					
+					
 					if (!isOpen) {
-						var categoryContainer = category.find(".containerDefault-1bbItS");
-						if (categoryContainer.find(".nameDefault-Lnjrwm").length > 0) {
-							categoryContainer.find(".nameDefault-Lnjrwm")
-								.removeClass("nameDefault-Lnjrwm")
-								.addClass("nameCollapsed-3_ChMu");
-							categoryContainer.find(".iconDefault-xzclSQ")
-								.attr("class","iconCollapsed-1INdMX iconTransition-VhWJ85 closed-2Hef-I");
-							categoryContainer.find(".wrapperDefault-1Dl4SS")
-								.removeClass("wrapperDefault-1Dl4SS")
-								.addClass("wrapperCollapsed-18mf-c");
-							category.find(".containerDefault-7RImuF").hide();
-						}
+						wrapper.classList.toggle("wrapperDefault-1Dl4SS");
+						wrapper.classList.toggle("wrapperCollapsed-18mf-c");
+						icon.classList.toggle("iconDefault-xzclSQ");
+						icon.classList.toggle("iconCollapsed-1INdMX")
+						icon.classList.toggle("closed-2Hef-I");
+						name.classList.toggle("nameDefault-Lnjrwm");
+						name.classList.toggle("nameCollapsed-3_ChMu");
+						
+						$(category).find(".containerDefault-7RImuF").hide();
 					}
 					
-					this.appendToChannelList(category[0]);
-					
-					BDfunctionsDevilBro.saveData(serverID, isOpen, this.getName(), "categorystatus");
+					this.appendToChannelList(category);
 				}
 			}
 		}
