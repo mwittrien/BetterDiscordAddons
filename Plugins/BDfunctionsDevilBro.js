@@ -2,12 +2,11 @@ var BDfunctionsDevilBro = {};
 
 BDfunctionsDevilBro.loadMessage = function (pluginName, oldVersion) { 
 	console.log(pluginName + " Version: " + oldVersion + " loaded.");
-	var rawUrl = BDfunctionsDevilBro.getRawUrl(pluginName);
-	var downloadUrl = BDfunctionsDevilBro.getDownloadUrl(pluginName);
-	BDfunctionsDevilBro.checkUpdate(pluginName, rawUrl, downloadUrl, oldVersion);
+	var downloadUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
+	BDfunctionsDevilBro.checkUpdate(pluginName, downloadUrl);
 	
 	if (typeof window.PluginUpdates !== "object" || !window.PluginUpdates) window.PluginUpdates = {plugins:{}};
-	window.PluginUpdates.plugins[rawUrl] = {name:pluginName, raw:rawUrl, download:downloadUrl, version:oldVersion};
+	window.PluginUpdates.plugins[downloadUrl] = {name:pluginName, raw:downloadUrl, version:oldVersion};
 	
 	if (typeof window.PluginUpdates.interval === "undefined") {
 		window.PluginUpdates.interval = setInterval(() => {
@@ -49,74 +48,155 @@ BDfunctionsDevilBro.loadMessage = function (pluginName, oldVersion) {
 	}
 };
 
-BDfunctionsDevilBro.checkUpdate = function (pluginName, rawUrl, downloadUrl, oldVersion) {
-	$.get(rawUrl, (script) => {
-		if (script) {
-			script = script.replace(new RegExp(" |\t|\n|\r", 'g'), "").split('getVersion(){return"')[1];
-			if (script) {
-				var newVersion = script.split('";}')[0];
-				var oldNmbrs = oldVersion.split(".").map(Number); 
-				var newNmbrs = newVersion.split(".").map(Number); 
-				if (oldNmbrs.length == newNmbrs.length) {
-					var notice = $('#' + pluginName + '-notice');
-					if (notice.length) {
-						if (notice.next('.separator').length) notice.next().remove();
-						else if (notice.prev('.separator').length) notice.prev().remove();
-						notice.remove();
-					}
-					if (!$('#outdatedPlugins').children('span').length) $('#pluginNoticeDismiss').click();
-					for (var i = 0; i < oldNmbrs.length; i++) {
-						if (newNmbrs[i] > oldNmbrs[i]) {
-							var noticeCSS = `
-								#pluginNotice {
-									-webkit-app-region: drag;
-								} 
-								#pluginNotice span, 
-								#pluginNotice span a {
-									-webkit-app-region: no-drag;
-									color:#fff;
-								} 
-								#pluginNotice span a:hover {
-									text-decoration:underline;
-								}`;
-							BDfunctionsDevilBro.appendLocalStyle("pluginNoticeCSS", noticeCSS);
-							var noticeElement = `<div class="notice notice-info" id="pluginNotice"><div class="notice-dismiss" id="pluginNoticeDismiss"></div>The following plugins have updates: &nbsp;<strong id="outdatedPlugins"></strong></div>`;
-							if (!$('#pluginNotice').length) {
-								$('.app.flex-vertical').children().first().before(noticeElement);
-								$('.win-buttons').addClass("win-buttons-notice");
-								$('#pluginNoticeDismiss').on('click', () => {
-									$('.win-buttons').animate({top: 0}, 400, "swing", () => {$('.win-buttons').css("top","").removeClass("win-buttons-notice");});
-									$('#pluginNotice').slideUp({complete: () => {
-										$('#pluginNotice').remove();
-									}});
-								});
-							}
-							var pluginNoticeID = pluginName + "-notice";
-							if (!$('#'+pluginNoticeID).length) {
-								var pluginNoticeElement = $('<span id="' + pluginNoticeID + '">');
-								pluginNoticeElement.html('<a href="' + downloadUrl + '" target="_blank">' + pluginName + '</a>');
-								if ($('#outdatedPlugins').children('span').length) {
-									$('#outdatedPlugins').append("<span class='separator'>, </span>");
-								}
-								$('#outdatedPlugins').append(pluginNoticeElement);
-							}
-							break;
-						}
-						else if (newNmbrs[i] < oldNmbrs[i]) {
-							break;
-						}
-					}
-				}
-			}
-		}
+
+// plugin update notifications created in cooperation with Zerebos https://github.com/rauenzi/BetterDiscordAddons/blob/master/Plugins/PluginLibrary.js
+BDfunctionsDevilBro.checkUpdate = function (pluginName, downloadUrl) {
+	let request = require("request");
+	request(downloadUrl, (error, response, result) => {
+		if (error) return;
+		var remoteVersion = result.match(/['"][0-9]+\.[0-9]+\.[0-9]+['"]/i);
+		if (!remoteVersion) return;
+		remoteVersion = remoteVersion.toString().replace(/['"]/g, "");
+		var ver = remoteVersion.split(".");
+		var lver = window.PluginUpdates.plugins[downloadUrl].version.split(".");
+		var hasUpdate = false;
+		if (ver[0] > lver[0]) hasUpdate = true;
+		else if (ver[0] == lver[0] && ver[1] > lver[1]) hasUpdate = true;
+		else if (ver[0] == lver[0] && ver[1] == lver[1] && ver[2] > lver[2]) hasUpdate = true;
+		else hasUpdate = false;
+		if (hasUpdate) BDfunctionsDevilBro.showUpdateNotice(pluginName, downloadUrl);
+		else BDfunctionsDevilBro.removeUpdateNotice(pluginName);
 	});
 };
 
-BDfunctionsDevilBro.checkAllUpdates = function () {
-	for (let key in window.PluginUpdates.plugins) {
-		let plugin = window.PluginUpdates.plugins[key];
-		BDfunctionsDevilBro.checkUpdate(plugin.name, plugin.raw, plugin.download, plugin.version);
+BDfunctionsDevilBro.showUpdateNotice = function(pluginName, downloadUrl) {
+	let noticeElement = '<div class="notice notice-info" id="pluginNotice"><div class="notice-dismiss" id="pluginNoticeDismiss"></div><span class="notice-message">The following plugins have updates:</span>&nbsp;&nbsp;<strong id="outdatedPlugins"></strong></div>';
+	if (!$('#pluginNotice').length)  {
+		$('.app.flex-vertical').children().first().before(noticeElement);
+        $('.win-buttons').addClass("win-buttons-notice");
+		$('#pluginNoticeDismiss').on('click', () => {
+			$('.win-buttons').animate({top: 0}, 400, "swing", () => { $('.win-buttons').css("top","").removeClass("win-buttons-notice"); });
+			$('#pluginNotice').slideUp({complete: () => { $('#pluginNotice').remove(); }});
+		});
 	}
+	let pluginNoticeID = pluginName + '-notice';
+	if (!$('#' + pluginNoticeID).length) {
+		let pluginNoticeElement = $('<span id="' + pluginNoticeID + '">');
+        pluginNoticeElement.text(pluginName);
+        pluginNoticeElement.on('click', () => {
+            BDfunctionsDevilBro.downloadPlugin(pluginName, downloadUrl);
+        });
+		if ($('#outdatedPlugins').children('span').length) $('#outdatedPlugins').append("<span class='separator'>, </span>");
+		$('#outdatedPlugins').append(pluginNoticeElement);
+	}
+};
+
+BDfunctionsDevilBro.downloadPlugin = function(pluginName, downloadUrl) {
+    let request = require("request");
+    let fileSystem = require("fs");
+    let path = require("path");
+    request(downloadUrl, (error, response, body) => {
+        if (error) return console.warn("Unable to get update for " + pluginName);
+        let remoteVersion = body.match(/['"][0-9]+\.[0-9]+\.[0-9]+['"]/i);
+        remoteVersion = remoteVersion.toString().replace(/['"]/g, "");
+        let filename = downloadUrl.split('/');
+        filename = filename[filename.length - 1];
+        var file = path.join(BDfunctionsDevilBro.getPluginsFolder(), filename);
+        fileSystem.writeFileSync(file, body);
+        BDfunctionsDevilBro.showToast(`${pluginName} ${window.PluginUpdates.plugins[downloadUrl].version} has been replaced by ${pluginName} ${remoteVersion}`);
+        if (!window.bdplugins["Restart-No-More"] || !window.pluginCookie["Restart-No-More"]) {
+            if (!window.PluginUpdates.downloaded) {
+                window.PluginUpdates.downloaded = [];
+                let button = $('<button class="btn btn-reload">Reload</button>');
+                button.on('click', (e) => {
+                    e.preventDefault();
+                    window.location.reload(false);
+                });
+                var tooltip = document.createElement("div");
+                tooltip.className = "tooltip tooltip-bottom tooltip-black";
+                tooltip.style.maxWidth = "400px";
+                button.on('mouseenter', () => {
+                    document.querySelector(".tooltips").appendChild(tooltip);
+                    tooltip.innerText = window.PluginUpdates.downloaded.join(", ");
+                    tooltip.style.left = button.offset().left + (button.outerWidth() / 2) - ($(tooltip).outerWidth() / 2) + "px";
+                    tooltip.style.top = button.offset().top + button.outerHeight() + "px";
+                });
+    
+                button.on('mouseleave', () => {
+                    tooltip.remove();
+                });
+    
+                button.appendTo($('#pluginNotice'));
+            }
+            window.PluginUpdates.plugins[downloadUrl].version = remoteVersion;
+            window.PluginUpdates.downloaded.push(pluginName);
+            BDfunctionsDevilBro.removeUpdateNotice(pluginName);
+        }
+    });
+};
+
+BDfunctionsDevilBro.removeUpdateNotice = function(pluginName) {
+	let notice = $('#' + pluginName + '-notice');
+	if (notice.length) {
+		if (notice.next('.separator').length) notice.next().remove();
+		else if (notice.prev('.separator').length) notice.prev().remove();
+		notice.remove();
+    }
+
+	if (!$('#outdatedPlugins').children('span').length && !$('#pluginNotice .btn-reload').length) {
+        $('#pluginNoticeDismiss').click();
+    } 
+    else if (!$('#outdatedPlugins').children('span').length && $('#pluginNotice .btn-reload').length) {
+        $('#pluginNotice .notice-message').text("To finish updating you need to reload.");
+    }
+};
+
+BDfunctionsDevilBro.showToast = function(content) {
+    if (!$('.toasts').length) {
+        let toastWrapper = $('<div class="toasts">');
+        toastWrapper.css("left", $('.chat form').offset().left);
+        toastWrapper.css("width", $('.chat form').outerWidth());
+        toastWrapper.css("bottom", $('.chat form').outerHeight());
+        toastWrapper.appendTo('.app');
+    }
+    let toastHTML = `<div class="toast toast-info">`;
+    let toastElem = $(toastHTML);
+    toastElem.text(content);
+    toastElem.appendTo('.toasts');
+    setTimeout(() => {
+        toastElem.addClass('closing');
+        setTimeout(() => {
+            toastElem.remove();
+            if (!$('.toasts .toast').length) $('.toasts').remove();
+        }, 300);
+    }, 3000);
+};
+
+// Plugins/Themes folder resolver from Square
+BDfunctionsDevilBro.getPluginsFolder = function() {
+    let process = require("process");
+    let path = require("path");
+    switch (process.platform) {
+        case "win32":
+        return path.resolve(process.env.appdata, "BetterDiscord/plugins/");
+        case "darwin":
+        return path.resolve(process.env.HOME, "Library/Preferences/", "BetterDiscord/plugins/");
+        default:
+        return path.resolve(process.env.HOME, ".config/", "BetterDiscord/plugins/");
+    }
+};
+
+BDfunctionsDevilBro.getThemesFolder = function() {
+    let process = require("process");
+    let path = require("path");
+    switch (process.platform) {
+        case "win32":
+        return path.resolve(process.env.appdata, "BetterDiscord/themes/");
+        case "darwin":
+        return path.resolve(process.env.HOME, "Library/Preferences/", "BetterDiscord/themes/");
+        default:
+        return path.resolve(process.env.HOME, ".config/", "BetterDiscord/themes/");
+    }
 };
 
 BDfunctionsDevilBro.createUpdateButton = function () {
@@ -166,18 +246,17 @@ BDfunctionsDevilBro.createUpdateButton = function () {
 		}
 	};
 	return updateButton;
-}
+};
+
+BDfunctionsDevilBro.checkAllUpdates = function () {
+	for (let key in window.PluginUpdates.plugins) {
+		let plugin = window.PluginUpdates.plugins[key];
+		BDfunctionsDevilBro.checkUpdate(plugin.name, plugin.raw);
+	}
+};
 	
 BDfunctionsDevilBro.translateMessage = function (pluginName) { 
 	console.log(pluginName + ": Changed plugin language to: " + BDfunctionsDevilBro.getDiscordLanguage().lang);
-};
-
-BDfunctionsDevilBro.getRawUrl = function (pluginName) {
-	return "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
-};
-
-BDfunctionsDevilBro.getDownloadUrl = function (pluginName) {
-	return "https://betterdiscord.net/ghdl?url=https://github.com/mwittrien/BetterDiscordAddons/blob/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
 };
 	
 BDfunctionsDevilBro.getReactInstance = function (node) { 
@@ -1191,6 +1270,74 @@ BDfunctionsDevilBro.getDiscordLanguage = function () {
 };
 
 BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBroCSS", `
+	#pluginNotice {
+		-webkit-app-region: drag;
+	} 
+	
+	#pluginNotice #outdatedPlugins span {
+		-webkit-app-region: no-drag;
+		color:#fff;cursor:pointer;
+	} 
+	
+	#pluginNotice #outdatedPlugins span:hover {
+		text-decoration:underline;
+	}
+	
+	.toasts {
+		position: fixed;
+		display: flex;
+		top: 0;
+		flex-direction: column;
+		align-items: center;
+		justify-content: flex-end;
+		pointer-events: none;
+	}
+
+	@keyframes toast-up {
+		from {
+			transform: translateY(0);
+			opacity: 0;
+		}
+		to {
+			transform: translateY(-10px);
+			opacity: 1;
+		}
+	}
+	
+	.toast {
+		animation: toast-up 300ms ease;
+		animation-fill-mode: forwards;
+		transform: translateY(0);
+		background: #36393F; /* #2F3136, #36393F */
+		padding: 10px;
+		border-radius: 5px;
+		box-shadow: 0 0 0 1px rgba(32,34,37,.6), 0 2px 10px 0 rgba(0,0,0,.2);
+		color: #dcddde;
+		user-select: text;
+		font-size: 14px;
+		opacity: 0;
+		margin-top: 10px;
+		pointer-events: auto;
+	}
+
+	@keyframes toast-down {
+		from {
+			transform: translateY(-10px);
+			opacity: 1;
+		}
+		to {
+			transform: translateY(0px);
+			opacity: 0;
+		}
+	}
+
+	.toast.closing {
+		animation: toast-down 300ms ease;
+		animation-fill-mode: forwards;
+		opacity: 1;
+		transform: translateY(-10px);
+	}
+	
 	.modal-color-picker [class^="swatches"] {
 		width: 430px;
 		margin: auto;
