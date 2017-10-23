@@ -195,7 +195,7 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "3.3.3";}
+	getVersion () {return "3.3.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -252,7 +252,7 @@ class EditChannels {
 			});
 			if (document.querySelector("[class*='channels-'][class*='flex-']")) this.channelListObserver.observe(document.querySelector("[class*='channels-'][class*='flex-']"), {childList: true, subtree: true});
 			
-			$(".flex-vertical.channels-wrap .scroller-fzNley.scroller-NXV0-d [class^='container-']").each(
+			$("[class*='channels-'][class*='flex-'] [class*='scroller-'] [class^='container-']").each(
 				(i,category) => {
 					this.channelObserver.observe(category, {childList: true, attributes: true, subtree: true});
 				}
