@@ -3,7 +3,7 @@ var BDfunctionsDevilBro = {};
 BDfunctionsDevilBro.loadMessage = function (pluginName, oldVersion) { 
 	console.log(pluginName + " Version: " + oldVersion + " loaded.");
 	
-	BDfunctionsDevilBro.showToast(`${pluginName} ${remoteVersion} has been started.`);
+	BDfunctionsDevilBro.showToast(`${pluginName} ${oldVersion} has been started.`);
 	
 	var downloadUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
 	BDfunctionsDevilBro.checkUpdate(pluginName, downloadUrl);
