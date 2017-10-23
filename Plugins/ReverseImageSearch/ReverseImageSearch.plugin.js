@@ -138,8 +138,6 @@ class ReverseImageSearch {
 	onContextMenu (context) {
 		var url = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"src"});
 		
-		console.log(url);
-		
 		if (url) {
 			if (url.indexOf("discordapp.com/assets/") == -1) {
 				
