@@ -27,7 +27,7 @@ class ImageGallery {
 
 	getDescription () {return "Allows the user to browse through images sent inside the same message.";}
 
-	getVersion () {return "1.3.0";}
+	getVersion () {return "1.3.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -134,10 +134,6 @@ class ImageGallery {
 			}
 		}
 		
-		console.log(prevImg);
-		console.log(img);
-		console.log(nextImg);
-		
 		$(modal).find(".image")
 			.attr("placeholder", this.getSrcOfImage(img))
 			.attr("src", this.getSrcOfImage(img));
@@ -169,7 +165,6 @@ class ImageGallery {
 	resizeImage (modal, src, img) {
 		$(img).hide();
 		var temp = new Image();
-		console.log(src.src);
 		temp.src = src.src.split("?width=")[0];
 		temp.onload = function () {
 			var resizeX = (modal.clientWidth/src.clientWidth) * 0.71;
