@@ -436,8 +436,10 @@ BDfunctionsDevilBro.onSwitchFix = function (plugin) {
 			if (change.addedNodes) {
 				change.addedNodes.forEach((node) => {
 					if (node && node.id === "friends") plugin.onSwitch(); 
-					else if (node && node.className && node.className.length > 0 && node.className.indexOf("noTopic-3Rq-dz") != -1) plugin.onSwitch(); 
-					else if (node && node.className && node.className.length > 0 && node.className.indexOf("topic-1KFf6J") != -1) plugin.onSwitch(); 
+					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("no-topic")) 		plugin.onSwitch(); 
+					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("channel-topic")) 	plugin.onSwitch(); 
+					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("noTopic-3Rq-dz")) 	plugin.onSwitch(); 
+					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("topic-1KFf6J")) 	plugin.onSwitch(); 
 				});
 			}
 			if (change.removedNodes) {
