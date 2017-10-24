@@ -349,7 +349,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "1.4.3";}
+	getVersion () {return "1.4.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -493,7 +493,9 @@ class EditUsers {
 					}
 				);
 			});
-			if (document.querySelector(".app")) this.userPopoutObserver.observe(document.querySelector(".app"), {childList: true, subtree: true});
+			if (document.querySelector(".popouts")) this.userPopoutObserver.observe(document.querySelector(".popouts"), {childList: true});
+			//TODO delete when stable was updated to canary
+			else if (document.querySelector("#app-mount")) this.userPopoutObserver.observe(document.querySelector("#app-mount"), {childList: true, subtree:true});
 			
 			this.settingsWindowObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
