@@ -27,7 +27,7 @@ class ImageGallery {
 
 	getDescription () {return "Allows the user to browse through images sent inside the same message.";}
 
-	getVersion () {return "1.2.4";}
+	getVersion () {return "1.3.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -65,7 +65,7 @@ class ImageGallery {
 					}
 				);
 			});
-			if (document.querySelector("body > div > [class*='platform-']")) this.imageModalObserver.observe(document.querySelector("body > div > [class*='platform-']"), {childList: true, subtree: true});
+			if (document.querySelector("body > div > [class*='platform-'] > div")) this.imageModalObserver.observe($("body > div > [class*='platform-'] > div").last()[0], {childList: true});
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 		}
@@ -111,7 +111,7 @@ class ImageGallery {
 			for (var i = 0; i < groups.length; i++) {
 				var imgs = $(groups[i]).find(".image");
 				for (var j = 0; j < imgs.length; j++) {
-					if (imgs[j].src && imgs[j].src.split("?width")[0] == img.src.split("?width")[0]) {
+					if (imgs[j].src && this.getSrcOfImage(img) == this.getSrcOfImage(imgs[j])) {
 						return groups[i];
 					}
 				}
@@ -126,7 +126,7 @@ class ImageGallery {
 		var prevImg;
 		var nextImg;
 		for (var i = 0; i < imgs.length; i++) {
-			if (img.src.split("?width")[0] == imgs[i].src.split("?width")[0]) {
+			if (this.getSrcOfImage(img) == this.getSrcOfImage(imgs[i])) {
 				prevImg = 	imgs[i-1];
 				img = 		imgs[i];
 				nextImg = 	imgs[i+1];
@@ -134,22 +134,25 @@ class ImageGallery {
 			}
 		}
 		
+		console.log(prevImg);
+		console.log(img);
+		console.log(nextImg);
+		
 		$(modal).find(".image")
-			.attr("placeholder", img.src.split("?width")[0])
-			.attr("src", img.src.split("?width")[0]);
+			.attr("placeholder", this.getSrcOfImage(img))
+			.attr("src", this.getSrcOfImage(img));
 			
 		$(modal).find("a")
-			.attr("href", img.src.split("?width")[0]);
+			.attr("href", this.getSrcOfImage(img));
 		
 		this.resizeImage(modal, img, modal.querySelector(".image"));
 			
-		
 		if (prevImg) {
-			$(modal).find(".modal-image").append($("<video/>", { 'class': 'image prev', 'poster': prevImg.src.split("?width")[0]}));
+			$(modal).find(".modal-image").append($("<video/>", { 'class': 'image prev', 'poster': this.getSrcOfImage(prevImg)}));
 			this.resizeImage(modal, prevImg, modal.querySelector(".image.prev"));
 		}
 		if (nextImg) {
-			$(modal).find(".modal-image").append($("<video/>", { 'class': 'image next', 'poster': nextImg.src.split("?width")[0]}));
+			$(modal).find(".modal-image").append($("<video/>", { 'class': 'image next', 'poster': this.getSrcOfImage(nextImg)}));
 			this.resizeImage(modal, nextImg, modal.querySelector(".image.next"));
 		}
 		$(modal).find(".image.prev").off("click").on("click", this.addImagePreviews.bind(this, modal, imgs, prevImg));
@@ -158,14 +161,28 @@ class ImageGallery {
 		$(document).off("keyup." + this.getName()).on("keyup." + this.getName(), () => {this.eventFired = false});
 	}
 	
+	getSrcOfImage (img) {
+		var src = img.src ? img.src : (img.querySelector("canvas") ? img.querySelector("canvas").src : null);
+		return src.split("?width=")[0];
+	}
+	
 	resizeImage (modal, src, img) {
-		var resizeX = (modal.clientWidth/src.clientWidth) * 0.71;
-		var resizeY = (modal.clientHeight/src.clientHeight) * 0.57;
-		var resize = resizeX < resizeY ? resizeX : resizeY;
-		
-		$(img)
-			.attr("width", src.clientWidth * resize)
-			.attr("height", src.clientHeight * resize);
+		$(img).hide();
+		var temp = new Image();
+		console.log(src.src);
+		temp.src = src.src.split("?width=")[0];
+		temp.onload = function () {
+			var resizeX = (modal.clientWidth/src.clientWidth) * 0.71;
+			var resizeY = (modal.clientHeight/src.clientHeight) * 0.57;
+			var resize = resizeX < resizeY ? resizeX : resizeY;
+			var newWidth = src.clientWidth * resize;
+			var newHeight = src.clientHeight * resize;
+			
+			$(img)
+				.attr("width", temp.width > newWidth ? newWidth : temp.width)
+				.attr("height", temp.height > newHeight ? newHeight : temp.height)
+				.show();
+		};
 	}
 	
 	keyPressed (e) {
