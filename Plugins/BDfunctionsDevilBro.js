@@ -452,7 +452,7 @@ BDfunctionsDevilBro.onSwitchFix = function (plugin) {
 			}
 		});
 	});
-	switchFixObserver.observe(document.querySelector(":-webkit-any(.chat, #friends)").parentNode, {childList: true, subtree:true});
+	switchFixObserver.observe(document.querySelector(":-webkit-any(.chat, #friends, .noChannel-2EQ0a9)").parentNode, {childList: true, subtree:true});
 	return switchFixObserver;
 }
 
