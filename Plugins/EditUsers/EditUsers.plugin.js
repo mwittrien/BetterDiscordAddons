@@ -349,7 +349,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "1.4.4";}
+	getVersion () {return "1.4.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -402,7 +402,7 @@ class EditUsers {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(".channel-name")) {
+								if (node && node.tagName && node.classList && node.classList.length > 0 && node.classList.contains("channel") && node.classList.contains("private")) {
 									if (this.getSettings().changeInDmsList) this.loadUser(node, "dms", false);
 								}
 								if (node && node.tagName && node.querySelector(".userDefault-2_cnT0")) {
@@ -888,7 +888,7 @@ class EditUsers {
 			}
 		}
 		if (settings.changeInDmsList) {
-			var membersDMS = document.querySelectorAll("div.channel");
+			var membersDMS = document.querySelectorAll("div.channel.private");
 			for (var l = 0; l < membersDMS.length; l++) {
 				this.loadUser(membersDMS[l], "dms", false);
 			}
@@ -1037,7 +1037,7 @@ class EditUsers {
 	
 	setLabelsByLanguage () {
 		switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
-			case "da": 		//danish
+			case "da": 	//danish
 				return {
 					context_localusersettings_text: 	"Lokal brugerindstillinger",
 					submenu_usersettings_text: 			"Skift indstillinger",
