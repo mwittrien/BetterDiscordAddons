@@ -466,9 +466,7 @@ BDfunctionsDevilBro.onSwitchFix = function (plugin) {
 
 BDfunctionsDevilBro.triggerOnSwitch = function (plugin) {
 	plugin.onSwitchTriggered = true;
-	setTimeout(() => {
-		plugin.onSwitch();
-	},0);
+	plugin.onSwitch();
 	setTimeout(() => {
 		plugin.onSwitchTriggered = false;
 	},1);
