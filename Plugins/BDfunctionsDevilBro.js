@@ -1270,7 +1270,7 @@ BDfunctionsDevilBro.getDiscordLanguage = function () {
 		case "ja":		//japanese
 			return {"id":"ja","lang":"japanese"};
 		case "zh":		//chinese (traditional)
-			return {"id":"zh","lang":"chinese"};
+			return {"id":"zh","lang":"chinese","googleid":"zh-TW"};
 		case "ko":		//korean
 			return {"id":"ko","lang":"korean"};
 		default:		//default: english
