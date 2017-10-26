@@ -2,6 +2,9 @@
 
 class GoogleSearchReplace {
 	constructor () {
+		
+		this.labels = {};
+		
 		this.messageContextObserver = new MutationObserver(() => {});
 		
 		this.textUrlReplaceString = "DEVILBRO_BD_GOOGLESEARCHREPLACE_REPLACE_TEXTURL";
@@ -21,7 +24,7 @@ class GoogleSearchReplace {
 
 		this.messageContextEntryMarkup =
 			`<div class="item googlereplacesearch-item item-subMenu">
-				<span>Search with ...</span>
+				<span>REPLACE_context_googlesearchreplace_text</span>
 				<div class="hint"></div>
 			</div>`;
 			
@@ -30,7 +33,7 @@ class GoogleSearchReplace {
 			`<div class="context-menu googleReplaceSearchSubMenu">
 				<div class="item-group">
 					<div class="item alldisabled-item disabled">
-						<span>All disabled</span>
+						<span>REPLACE_submenu_disabled_text</span>
 						<div class="hint"></div>
 					</div>
 					${ this.searchEngines.map((val, i) => `<div class="item ${val.name.replace(new RegExp(" ", 'g'), "")} GRS-item"><span>${val.name}</span><div class="hint"></div></div>`).join("")}
@@ -43,7 +46,7 @@ class GoogleSearchReplace {
 
 	getDescription () {return "Replaces the default Google Text Search with a selection menu of several search engines.";}
 
-	getVersion () {return "1.0.0";}
+	getVersion () {return "1.0.1";}
 	
 	getAuthor () {return "DevilBro";}
 
@@ -91,6 +94,11 @@ class GoogleSearchReplace {
 			if (document.querySelector(".app")) this.messageContextObserver.observe(document.querySelector(".app"), {childList: true});
 			
 			this.searchEngines = BDfunctionsDevilBro.sortArrayByKey(this.searchEngines, "name");
+			
+			setTimeout(() => {
+				this.labels = this.setLabelsByLanguage();
+				this.changeLanguageStrings();
+			},5000);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -135,6 +143,13 @@ class GoogleSearchReplace {
 		BDfunctionsDevilBro.saveAllData(settings, pluginName, "settings");
     }
 	
+	changeLanguageStrings () {
+		this.messageContextEntryMarkup = 	this.messageContextEntryMarkup.replace("REPLACE_context_googlesearchreplace_text", this.labels.context_googlesearchreplace_text);
+		
+		this.messageContextSubMenuMarkup = 	this.messageContextSubMenuMarkup.replace("REPLACE_submenu_disabled_text", this.labels.submenu_disabled_text);
+		
+		BDfunctionsDevilBro.translateMessage(this.getName());
+	}
 	
 	onContextMenu (context) {
 		var groups = $(context).find(".item-group");
@@ -188,7 +203,7 @@ class GoogleSearchReplace {
 		var settings = this.getSettings();
 		for (var key in settings) {
 			if (!settings[key]) {
-				$(targetDiv).find("." + key).remove();
+				$(targetDiv).find("." + key.replace(new RegExp(" ", 'g'), "")).remove();
 			}
 		}
 		if ($(".googleReplaceSearchSubMenu .GRS-item").length > 0) {$(targetDiv).find(".alldisabled-item").remove();};
@@ -196,5 +211,110 @@ class GoogleSearchReplace {
 	
 	deleteContextSubMenu (e) {
 		$(".googleReplaceSearchSubMenu").remove();
+	}
+	
+	setLabelsByLanguage () {
+		switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
+			case "da": 	//danish
+				return {
+					context_googlesearchreplace_text: 	"Søg med ...",
+					submenu_disabled_text: 				"Alle deaktiveret"
+				};
+			case "de": 	//german
+				return {
+					context_googlesearchreplace_text: 	"Suche mit ...",
+					submenu_disabled_text: 				"Alle deaktiviert"
+				};
+			case "es": 	//spanish
+				return {
+					context_googlesearchreplace_text: 	"Buscar con ...",
+					submenu_disabled_text: 				"Todo desactivado"
+				};
+			case "fr": 	//french
+				return {
+					context_googlesearchreplace_text: 	"Rechercher avec ...",
+					submenu_disabled_text: 				"Tous désactivés"
+				};
+			case "it": 	//italian
+				return {
+					context_googlesearchreplace_text: 	"Cerca con ...",
+					submenu_disabled_text: 				"Tutto disattivato"
+				};
+			case "nl": 	//dutch
+				return {
+					context_googlesearchreplace_text: 	"Zoeken met ...",
+					submenu_disabled_text: 				"Alles gedeactiveerd"
+				};
+			case "no": 	//norwegian
+				return {
+					context_googlesearchreplace_text: 	"Søk med ...",
+					submenu_disabled_text: 				"Alle deaktivert"
+				};
+			case "pl": 	//polish
+				return {
+					context_googlesearchreplace_text: 	"Szukaj z ...",
+					submenu_disabled_text: 				"Wszystkie wyłączone"
+				};
+			case "pt": 	//portuguese (brazil)
+				return {
+					context_googlesearchreplace_text: 	"Pesquisar com ...",
+					submenu_disabled_text: 				"Todos desativados"
+				};
+			case "fi": 	//finnish
+				return {
+					context_googlesearchreplace_text: 	"Etsi ...",
+					submenu_disabled_text: 				"Kaikki on poistettu käytöstä"
+				};
+			case "sv": 	//swedish
+				return {
+					context_googlesearchreplace_text: 	"Sök med ...",
+					submenu_disabled_text: 				"Alla avaktiverade"
+				};
+			case "tr": 	//turkish
+				return {
+					context_googlesearchreplace_text: 	"Ile ara ...",
+					submenu_disabled_text: 				"Hepsi deaktive"
+				};
+			case "cs": 	//czech
+				return {
+					context_googlesearchreplace_text: 	"Hledat s ...",
+					submenu_disabled_text: 				"Všechny deaktivované"
+				};
+			case "bg": 	//bulgarian
+				return {
+					context_googlesearchreplace_text: 	"Търсене с ...",
+					submenu_disabled_text: 				"Всички са деактивирани"
+				};
+			case "ru": 	//russian
+				return {
+					context_googlesearchreplace_text: 	"Поиск с ...",
+					submenu_disabled_text: 				"Все деактивированные"
+				};
+			case "uk": 	//ukranian
+				return {
+					context_googlesearchreplace_text: 	"Пошук з ...",
+					submenu_disabled_text: 				"Всі вимкнені"
+				};
+			case "ja": 	//japanese
+				return {
+					context_googlesearchreplace_text: 	"で検索する ...",
+					submenu_disabled_text: 				"すべて非アクティブ化"
+				};
+			case "zh": 	//chinese (traditional)
+				return {
+					context_googlesearchreplace_text: 	"搜索 ...",
+					submenu_disabled_text: 				"全部停用"
+				};
+			case "ko": 	//korean
+				return {
+					context_googlesearchreplace_text: 	"다음으로 검색 ...",
+					submenu_disabled_text: 				"모두 비활성화 됨"
+				};
+			default: 	//default: english
+				return {
+					context_googlesearchreplace_text: 	"Search with ...",
+					submenu_disabled_text: 				"All disabled"
+				};
+		}
 	}
 }
