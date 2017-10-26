@@ -33,7 +33,7 @@ class ReverseImageSearch {
 						<span>All disabled</span>
 						<div class="hint"></div>
 					</div>
-					${ this.searchEngines.map((val, i) => `<div class="item ${val.name.replace(" ","")} RIS-item"><span>${val.name}</span><div class="hint"></div></div>`).join("")}
+					${ this.searchEngines.map((val, i) => `<div class="item ${val.name.replace(new RegExp(" ", 'g'), "")} RIS-item"><span>${val.name}</span><div class="hint"></div></div>`).join("")}
 				</div>
 			</div>`;
 	}
@@ -43,7 +43,7 @@ class ReverseImageSearch {
 
 	getDescription () {return "Adds a reverse image search option to the context menu.";}
 
-	getVersion () {return "3.2.0";}
+	getVersion () {return "3.2.1";}
 	
 	getAuthor () {return "DevilBro";}
 
@@ -176,7 +176,7 @@ class ReverseImageSearch {
 				var choice = e.target.tagName != "SPAN" ? e.target : e.target.parentNode;
 				for (var i in this.searchEngines) {
 					var engine = this.searchEngines[i].name;
-					if (choice.classList.contains(engine.replace(" ",""))) {
+					if (choice.classList.contains(engine.replace(new RegExp(" ", 'g'), ""))) {
 						var searchurl = this.searchEngines[i].url;
 						searchurl = searchurl.replace(this.imageUrlReplaceString,imageurl);
 						window.open(searchurl, "_blank");
