@@ -30,7 +30,7 @@ class ReverseImageSearch {
 			`<div class="context-menu reverseImageSearchSubMenu">
 				<div class="item-group">
 					<div class="item alldisabled-item disabled">
-						<span>All disabled</span>
+						<span>REPLACE_submenu_disabled_text</span>
 						<div class="hint"></div>
 					</div>
 					${ this.searchEngines.map((val, i) => `<div class="item ${val.name.replace(new RegExp(" ", 'g'), "")} RIS-item"><span>${val.name}</span><div class="hint"></div></div>`).join("")}
@@ -43,7 +43,7 @@ class ReverseImageSearch {
 
 	getDescription () {return "Adds a reverse image search option to the context menu.";}
 
-	getVersion () {return "3.2.1";}
+	getVersion () {return "3.2.3";}
 	
 	getAuthor () {return "DevilBro";}
 
@@ -91,6 +91,11 @@ class ReverseImageSearch {
 			if (document.querySelector(".app")) this.messageContextObserver.observe(document.querySelector(".app"), {childList: true});
 			
 			this.searchEngines = BDfunctionsDevilBro.sortArrayByKey(this.searchEngines, "name");
+			
+			setTimeout(() => {
+				this.labels = this.setLabelsByLanguage();
+				this.changeLanguageStrings();
+			},5000);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -135,6 +140,11 @@ class ReverseImageSearch {
 		BDfunctionsDevilBro.saveAllData(settings, pluginName, "settings");
     }
 	
+	changeLanguageStrings () {
+		this.messageContextSubMenuMarkup = 	this.messageContextSubMenuMarkup.replace("REPLACE_submenu_disabled_text", this.labels.submenu_disabled_text);
+		
+		BDfunctionsDevilBro.translateMessage(this.getName());
+	}
 	
 	onContextMenu (context) {
 		var url = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"src"});
@@ -193,7 +203,7 @@ class ReverseImageSearch {
 		var settings = this.getSettings();
 		for (var key in settings) {
 			if (!settings[key]) {
-				$(targetDiv).find("." + key).remove();
+				$(targetDiv).find("." + key.replace(new RegExp(" ", 'g'), "")).remove();
 			}
 		}
 		if ($(".reverseImageSearchSubMenu .RIS-item").length > 0) {$(targetDiv).find(".alldisabled-item").remove();};
@@ -201,5 +211,90 @@ class ReverseImageSearch {
 	
 	deleteContextSubMenu (e) {
 		$(".reverseImageSearchSubMenu").remove();
+	}
+	
+	setLabelsByLanguage () {
+		switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
+			case "da": 	//danish
+				return {
+					submenu_disabled_text: 				"Alle deaktiveret"
+				};
+			case "de": 	//german
+				return {
+					submenu_disabled_text: 				"Alle deaktiviert"
+				};
+			case "es": 	//spanish
+				return {
+					submenu_disabled_text: 				"Todo desactivado"
+				};
+			case "fr": 	//french
+				return {
+					submenu_disabled_text: 				"Tous désactivés"
+				};
+			case "it": 	//italian
+				return {
+					submenu_disabled_text: 				"Tutto disattivato"
+				};
+			case "nl": 	//dutch
+				return {
+					submenu_disabled_text: 				"Alles gedeactiveerd"
+				};
+			case "no": 	//norwegian
+				return {
+					submenu_disabled_text: 				"Alle deaktivert"
+				};
+			case "pl": 	//polish
+				return {
+					submenu_disabled_text: 				"Wszystkie wyłączone"
+				};
+			case "pt": 	//portuguese (brazil)
+				return {
+					submenu_disabled_text: 				"Todos desativados"
+				};
+			case "fi": 	//finnish
+				return {
+					submenu_disabled_text: 				"Kaikki on poistettu käytöstä"
+				};
+			case "sv": 	//swedish
+				return {
+					submenu_disabled_text: 				"Alla avaktiverade"
+				};
+			case "tr": 	//turkish
+				return {
+					submenu_disabled_text: 				"Hepsi deaktive"
+				};
+			case "cs": 	//czech
+				return {
+					submenu_disabled_text: 				"Všechny deaktivované"
+				};
+			case "bg": 	//bulgarian
+				return {
+					submenu_disabled_text: 				"Всички са деактивирани"
+				};
+			case "ru": 	//russian
+				return {
+					submenu_disabled_text: 				"Все деактивированные"
+				};
+			case "uk": 	//ukranian
+				return {
+					submenu_disabled_text: 				"Всі вимкнені"
+				};
+			case "ja": 	//japanese
+				return {
+					submenu_disabled_text: 				"すべて非アクティブ化"
+				};
+			case "zh": 	//chinese (traditional)
+				return {
+					submenu_disabled_text: 				"全部停用"
+				};
+			case "ko": 	//korean
+				return {
+					submenu_disabled_text: 				"모두 비활성화 됨"
+				};
+			default: 	//default: english
+				return {
+					submenu_disabled_text: 				"All disabled"
+				};
+		}
 	}
 }
