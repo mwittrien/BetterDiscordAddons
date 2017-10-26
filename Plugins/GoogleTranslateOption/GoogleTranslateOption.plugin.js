@@ -88,7 +88,7 @@ class GoogleTranslateOption {
 						.on("click", ".googletranslateoption-item", () => {
 							var language = BDfunctionsDevilBro.getDiscordLanguage();
 							var langid = language.googleid ? language.googleid : language.id;
-							var translateurl = "https://translate.google.com/#en/" + langid + "/" + text;
+							var translateurl = "https://translate.google.com/#en/" + langid + "/" +  encodeURIComponent(text);
 							window.open(translateurl, "_blank");
 						});
 				}
