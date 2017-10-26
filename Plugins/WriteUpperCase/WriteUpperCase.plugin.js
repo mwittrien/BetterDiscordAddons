@@ -3,15 +3,13 @@
 class WriteUpperCase {
 	constructor () {
 		this.switchFixObserver = new MutationObserver(() => {});
-		
-		this.eventFired = false;
 	}
 
 	getName () {return "WriteUpperCase";}
 
 	getDescription () {return "Change input to uppercase.";}
 
-	getVersion () {return "1.0.4";}
+	getVersion () {return "1.0.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -56,31 +54,24 @@ class WriteUpperCase {
 	
 	bindEventToTextArea () {
 		$(".channelTextArea-1HTP3C").find("textarea")
-			.off("keyup." + this.getName() + " keydown." + this.getName())
-			.on("keyup." + this.getName() + " keydown." + this.getName(), e => {
-				if (!this.eventFired) {
-					this.eventFired = true;
-					var string = e.target.value;
-					if (string.length > 0) {
-						var first = string.charAt(0);
-						if (first === first.toUpperCase() && e.target.value.toLowerCase().indexOf("http") == 0) {
-							var position = e.target.selectionStart;
-							e.target.selectionStart = 0;
-							e.target.selectionEnd = string.length;
-							document.execCommand("insertText", false, string.charAt(0).toLowerCase() + string.slice(1));
-							e.target.selectionStart = position;
-							e.target.selectionEnd = position;
-						}
-						else if (first === first.toLowerCase() && first !== first.toUpperCase() && e.target.value.toLowerCase().indexOf("http") != 0) {
-							var position = e.target.selectionStart;
-							e.target.selectionStart = 0;
-							e.target.selectionEnd = string.length;
-							document.execCommand("insertText", false, string.charAt(0).toUpperCase() + string.slice(1));
-							e.target.selectionStart = position;
-							e.target.selectionEnd = position;
-						}
-					} 
-					this.eventFired = false;
+			.off("keyup." + this.getName())
+			.on("keyup." + this.getName(), e => {
+				var textarea = e.target;
+				var string = textarea.value;
+				if (string.length > 0) {
+					var textareaInstance = BDfunctionsDevilBro.getOwnerInstance({"node":textarea, "name":"ChannelTextAreaForm", "up":true});
+					var first = string.charAt(0);
+					var position = e.target.selectionStart;
+					if (first === first.toUpperCase() && string.toLowerCase().indexOf("http") == 0) {
+						textareaInstance.setState({textValue:string.charAt(0).toLowerCase() + string.slice(1)});
+						textarea.selectionStart = position;
+						textarea.selectionEnd = position;
+					}
+					else if (first === first.toLowerCase() && first !== first.toUpperCase() && string.toLowerCase().indexOf("http") != 0) {
+						textareaInstance.setState({textValue:string.charAt(0).toUpperCase() + string.slice(1)});
+						textarea.selectionStart = position;
+						textarea.selectionEnd = position;
+					}
 				}
 			});
 	}
