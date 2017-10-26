@@ -1,7 +1,7 @@
 var BDfunctionsDevilBro = {};
 
 BDfunctionsDevilBro.loadMessage = function (pluginName, oldVersion) { 
-	console.log(pluginName + " Version: " + oldVersion + " loaded.");
+	console.log(`${pluginName} Version: ${oldVersion} loaded.`);
 	
 	BDfunctionsDevilBro.showToast(`${pluginName} ${oldVersion} has been started.`);
 	
@@ -263,7 +263,8 @@ BDfunctionsDevilBro.checkAllUpdates = function () {
 };
 	
 BDfunctionsDevilBro.translateMessage = function (pluginName) { 
-	console.log(pluginName + ": Changed plugin language to: " + BDfunctionsDevilBro.getDiscordLanguage().lang);
+	var lang = BDfunctionsDevilBro.getDiscordLanguage().lang;
+	console.log(`${pluginName}: Changed plugin language to: ${lang}.`);
 };
 	
 BDfunctionsDevilBro.getReactInstance = function (node) { 
