@@ -38,8 +38,7 @@ class WriteUpperCase {
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.switchFixObserver.disconnect();
-			$(".channelTextArea-1HTP3C").find("textarea")
-				.off("keyup." + this.getName() + " keydown." + this.getName());
+			$(".channelTextArea-1HTP3C").find("textarea").off("keyup." + this.getName());
 		}
 	}
 	
