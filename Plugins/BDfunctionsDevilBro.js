@@ -436,25 +436,41 @@ BDfunctionsDevilBro.equals = function (check1, check2, compareOrder) {
 
 BDfunctionsDevilBro.onSwitchFix = function (plugin) {
 	var switchFixObserver = new MutationObserver((changes) => {
-		changes.forEach((change) => {
+		changes.forEach((change) => { 
 			if (change.addedNodes) {
 				change.addedNodes.forEach((node) => {
-					if (node && node.id === "friends") plugin.onSwitch(); 
-					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("no-topic")) 		plugin.onSwitch(); 
-					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("channel-topic")) 	plugin.onSwitch(); 
-					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("noTopic-3Rq-dz")) 	plugin.onSwitch(); 
-					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("topic-1KFf6J")) 	plugin.onSwitch(); 
+					if (plugin.onSwitchTriggered) return;
+					else if (node && node.id === "friends") BDfunctionsDevilBro.triggerOnSwitch(plugin); 
+					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("no-topic")) 		BDfunctionsDevilBro.triggerOnSwitch(plugin); 
+					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("channel-topic")) 	BDfunctionsDevilBro.triggerOnSwitch(plugin); 
+					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("noTopic-3Rq-dz")) 	BDfunctionsDevilBro.triggerOnSwitch(plugin); 
+					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("topic-1KFf6J")) 	BDfunctionsDevilBro.triggerOnSwitch(plugin); 
 				});
 			}
 			if (change.removedNodes) {
 				change.removedNodes.forEach((node) => {
-					if (node && node.id === "friends") plugin.onSwitch(); 
+					if (plugin.onSwitchTriggered) return;
+					else if (node && node.id === "friends") BDfunctionsDevilBro.triggerOnSwitch(plugin); 
+					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("no-topic")) 		BDfunctionsDevilBro.triggerOnSwitch(plugin); 
+					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("channel-topic")) 	BDfunctionsDevilBro.triggerOnSwitch(plugin); 
+					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("noTopic-3Rq-dz")) 	BDfunctionsDevilBro.triggerOnSwitch(plugin); 
+					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("topic-1KFf6J")) 	BDfunctionsDevilBro.triggerOnSwitch(plugin); 
 				});
 			}
 		});
 	});
 	switchFixObserver.observe(document.querySelector(":-webkit-any(.chat, #friends, .noChannel-2EQ0a9)").parentNode, {childList: true, subtree:true});
 	return switchFixObserver;
+}
+
+BDfunctionsDevilBro.triggerOnSwitch = function (plugin) {
+	plugin.onSwitchTriggered = true;
+	setTimeout(() => {
+		plugin.onSwitch();
+	},0);
+	setTimeout(() => {
+		plugin.onSwitchTriggered = false;
+	},1);
 }
 
 BDfunctionsDevilBro.getMyUserData = function () {
