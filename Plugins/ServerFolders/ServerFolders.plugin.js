@@ -10,7 +10,42 @@ class ServerFolders {
 		this.folderContextEventHandler;
 		
 		this.css = `
+			@keyframes animation-serverfolders-backdrop {
+				to { opacity: 0.85; }
+			}
+
+			@keyframes animation-serverfolders-backdrop-closing {
+				to { opacity: 0; }
+			}
+
+			@keyframes animation-serverfolders-modal {
+				to { transform: scale(1); opacity: 1; }
+			}
+
+			@keyframes animation-serverfolders-modal-closing {
+				to { transform: scale(0.7); opacity: 0; }
+			}
+
+			.serverfolders-modal .callout-backdrop {
+				animation: animation-serverfolders-backdrop 250ms ease;
+				animation-fill-mode: forwards;
+				opacity: 0;
+				background-color: rgb(0, 0, 0);
+				transform: translateZ(0px);
+			}
+
+			.serverfolders-modal.closing .callout-backdrop {
+				animation: animation-serverfolders-backdrop-closing 200ms linear;
+				animation-fill-mode: forwards;
+				animation-delay: 50ms;
+				opacity: 0.85;
+			}
+			
 			.serverfolders-modal .modal {
+				animation: animation-serverfolders-modal 250ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+				animation-fill-mode: forwards;
+				transform: scale(0.7);
+				transform-origin: 50% 50%;
 				align-content: space-around;
 				align-items: center;
 				box-sizing: border-box;
@@ -32,6 +67,13 @@ class ServerFolders {
 				bottom: 0;
 				left: 0;
 				z-index: 1000;
+			}
+
+			.serverfolders-modal.closing .modal {
+				animation: animation-serverfolders-modal-closing 250ms cubic-bezier(0.19, 1, 0.22, 1);
+				animation-fill-mode: forwards;
+				opacity: 1;
+				transform: scale(1);
 			}
 			
 			.serverfolders-modal .form {
@@ -237,8 +279,8 @@ class ServerFolders {
 
 		this.folderSettingsModalMarkup =
 			`<span class="serverfolders-modal">
-				<div class="backdrop-2ohBEd callout-backdrop" style="background-color:#000; opacity:0.85"></div>
-				<div class="modal" style="opacity: 1">
+				<div class="backdrop-2ohBEd callout-backdrop"></div>
+				<div class="modal">
 					<div class="modal-inner">
 						<div class="form">
 							<div class="form-header">
@@ -327,7 +369,7 @@ class ServerFolders {
 
 	getDescription () {return "Add pseudofolders to your serverlist to organize your servers.";}
 
-	getVersion () {return "4.3.7";}
+	getVersion () {return "4.4.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -670,9 +712,10 @@ class ServerFolders {
 				BDfunctionsDevilBro.setColorSwatches(color2, folderSettingsModal.find(".swatches2"), "swatch2");
 				BDfunctionsDevilBro.setColorSwatches(color3, folderSettingsModal.find(".swatches3"), "swatch3");
 				BDfunctionsDevilBro.setColorSwatches(color4, folderSettingsModal.find(".swatches4"), "swatch4");
-				folderSettingsModal.appendTo($("body > div > [class*='platform-'] > div").last())
+				folderSettingsModal.appendTo($("#app-mount > [class^='theme-']").last())
 					.on("click", ".callout-backdrop,button.btn-cancel", (e) => {
-						folderSettingsModal.remove();
+						folderSettingsModal.addClass('closing');
+						setTimeout(() => {folderSettingsModal.remove();}, 300);
 					})
 					.on("click", "button.form-tablinks", (e) => {
 						this.changeTab(e,folderSettingsModal);
@@ -703,7 +746,8 @@ class ServerFolders {
 						
 						BDfunctionsDevilBro.saveData(folderID, {folderID,folderName,isOpen,iconID,icons,color1,color2,color3,color4}, this.getName(), "folders");
 						
-						folderSettingsModal.remove();
+						folderSettingsModal.addClass('closing');
+						setTimeout(() => {folderSettingsModal.remove();}, 300);
 					});
 					
 				folderSettingsModal.find("#modal-text")[0].focus();
