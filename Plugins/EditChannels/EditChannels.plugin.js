@@ -9,7 +9,42 @@ class EditChannels {
 		this.channelContextObserver = new MutationObserver(() => {});
     
 		this.css = `
+			@keyframes animation-editchannels-backdrop {
+				to { opacity: 0.85; }
+			}
+
+			@keyframes animation-editchannels-backdrop-closing {
+				to { opacity: 0; }
+			}
+
+			@keyframes animation-editchannels-modal {
+				to { transform: scale(1); opacity: 1; }
+			}
+
+			@keyframes animation-editchannels-modal-closing {
+				to { transform: scale(0.7); opacity: 0; }
+			}
+
+			.editchannels-modal .callout-backdrop {
+				animation: animation-editchannels-backdrop 250ms ease;
+				animation-fill-mode: forwards;
+				opacity: 0;
+				background-color: rgb(0, 0, 0);
+				transform: translateZ(0px);
+			}
+
+			.editchannels-modal.closing .callout-backdrop {
+				animation: animation-editchannels-backdrop-closing 200ms linear;
+				animation-fill-mode: forwards;
+				animation-delay: 50ms;
+				opacity: 0.85;
+			}
+			
 			.editchannels-modal .modal {
+				animation: animation-editchannels-modal 250ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+				animation-fill-mode: forwards;
+				transform: scale(0.7);
+				transform-origin: 50% 50%;
 				align-content: space-around;
 				align-items: center;
 				box-sizing: border-box;
@@ -31,6 +66,13 @@ class EditChannels {
 				bottom: 0;
 				left: 0;
 				z-index: 1000;
+			}
+
+			.editchannels-modal.closing .modal {
+				animation: animation-editchannels-modal-closing 250ms cubic-bezier(0.19, 1, 0.22, 1);
+				animation-fill-mode: forwards;
+				opacity: 1;
+				transform: scale(1);
 			}
 			
 			.editchannels-modal .form {
@@ -162,8 +204,8 @@ class EditChannels {
 
 		this.channelSettingsModalMarkup =
 			`<span class="editchannels-modal">
-				<div class="backdrop-2ohBEd callout-backdrop" style="background-color:#000; opacity:0.85"></div>
-				<div class="modal" style="opacity: 1">
+				<div class="backdrop-2ohBEd callout-backdrop"></div>
+				<div class="modal">
 					<div class="modal-inner">
 						<div class="form">
 							<div class="form-header">
@@ -195,7 +237,7 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "3.3.4";}
+	getVersion () {return "3.3.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -411,9 +453,10 @@ class EditChannels {
 			channelSettingsModal.find("#modal-text")[0].value = name;
 			channelSettingsModal.find("#modal-text").attr("placeholder", e.data.name);
 			BDfunctionsDevilBro.setColorSwatches(color, channelSettingsModal.find(".swatches1"), "swatch1");
-			channelSettingsModal.appendTo($("body > div > [class*='platform-'] > div").last())
+			channelSettingsModal.appendTo($("#app-mount > [class^='theme-']").last())
 				.on("click", ".callout-backdrop,button.btn-cancel", (event) => {
-					channelSettingsModal.remove();
+					channelSettingsModal.addClass('closing');
+					setTimeout(() => {channelSettingsModal.remove();}, 300);
 				})
 				.on("click", "button.btn-save", (event) => {
 					event.preventDefault();
@@ -440,7 +483,8 @@ class EditChannels {
 						this.loadChannel(channelDiv);
 					}
 					
-					channelSettingsModal.remove();
+					channelSettingsModal.addClass('closing');
+					setTimeout(() => {channelSettingsModal.remove();}, 300);
 				});
 				
 			channelSettingsModal.find("#modal-text")[0].focus();
