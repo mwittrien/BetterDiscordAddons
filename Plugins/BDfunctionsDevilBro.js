@@ -989,8 +989,8 @@ BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
 BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 	var colorPickerModalMarkup = 
 		`<span class="colorpicker-modal">
-			<div class="backdrop-2ohBEd callout-backdrop" style="background-color:#000; opacity:0.2"></div>
-			<div class="modal" style="opacity: 1">
+			<div class="backdrop-2ohBEd callout-backdrop"></div>
+			<div class="modal">
 				<div class="modal-inner">
 					<div class="colorpicker-container">
 						<div class="colorpicker-color">
@@ -1054,7 +1054,8 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 			$(".color-picker-dropper-fg-" + swatch)
 				.attr("fill", newCOMP[0] > 150 && newCOMP[1] > 150 && newCOMP[2] > 150 ? "#000000" : "#ffffff");
 				
-			$(colorPickerModal).remove();
+			colorPickerModal.addClass('closing');
+			setTimeout(() => {colorPickerModal.remove();}, 300);
 		});
 	
 	var hex = 0, red = 0, green = 0, blue = 0, hue = 0, saturation = 0, lightness = 0;
@@ -1429,7 +1430,42 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBroCSS", `
 		top: 10px;
 	}
 	
+	@keyframes animation-colorpicker-backdrop {
+		to { opacity: 0.2; }
+	}
+
+	@keyframes animation-colorpicker-backdrop-closing {
+		to { opacity: 0; }
+	}
+
+	@keyframes animation-colorpicker-modal {
+		to { transform: scale(1); opacity: 1; }
+	}
+
+	@keyframes animation-colorpicker-modal-closing {
+		to { transform: scale(0.7); opacity: 0; }
+	}
+
+	.colorpicker-modal .callout-backdrop {
+		animation: animation-colorpicker-backdrop 250ms ease;
+		animation-fill-mode: forwards;
+		opacity: 0;
+		background-color: rgb(0, 0, 0);
+		transform: translateZ(0px);
+	}
+
+	.colorpicker-modal.closing .callout-backdrop {
+		animation: animation-colorpicker-backdrop-closing 200ms linear;
+		animation-fill-mode: forwards;
+		animation-delay: 50ms;
+		opacity: 0.2;
+	}
+	
 	.colorpicker-modal .modal {
+		animation: animation-colorpicker-modal 250ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+		animation-fill-mode: forwards;
+		transform: scale(0.7);
+		transform-origin: 50% 50%;
 		align-content: space-around;
 		align-items: center;
 		box-sizing: border-box;
@@ -1451,6 +1487,13 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBroCSS", `
 		bottom: 0;
 		left: 0;
 		z-index: 1000;
+	}
+
+	.colorpicker-modal.closing .modal {
+		animation: animation-colorpicker-modal-closing 250ms cubic-bezier(0.19, 1, 0.22, 1);
+		animation-fill-mode: forwards;
+		opacity: 1;
+		transform: scale(1);
 	}
 
 	.colorpicker-modal .modal-inner {
