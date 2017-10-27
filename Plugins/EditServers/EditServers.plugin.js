@@ -366,7 +366,7 @@ class EditServers {
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	getVersion () {return "1.4.0";}
+	getVersion () {return "1.4.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -693,29 +693,19 @@ class EditServers {
 		}
 		else {
 			this.urlCheckTimeout = setTimeout(() => {
-				this.urlCheckRequest = $.ajax({
-					type: "HEAD",
-					url : "https://cors-anywhere.herokuapp.com/" + e.target.value,
-					success: (message, text, response) => {
-						if (response.getResponseHeader('Content-Type').indexOf("image") != -1) {
-							$(e.target)
+				let request = require("request");
+				this.urlCheckRequest = request(e.target.value, (error, response, result) => {
+					if (response && response.headers["content-type"] && response.headers["content-type"].indexOf("image") != -1) {
+						$(e.target)
 								.removeClass("invalid")
 								.addClass("valid");
-						}
-						else {
-							$(e.target)
-								.removeClass("valid")
-								.addClass("invalid");
-						}
-					},
-					error: () => {
+					}
+					else {
 						$(e.target)
 							.removeClass("valid")
 							.addClass("invalid");
-					},
-					complete: () => {
-						if ($(e.target).hasClass("hovering")) this.createNoticeTooltip(e);
 					}
+					if ($(e.target).hasClass("hovering")) this.createNoticeTooltip(e);
 				});
 			},500);
 		}
@@ -801,7 +791,7 @@ class EditServers {
 					.off("mouseenter." + this.getName())
 					.off("mouseleave." + this.getName())
 					.on("mouseenter." + this.getName(), {"div":serverDiv,"info":info}, this.createServerToolTip.bind(this))
-					.on("mouseleave." + this.getName(), {"div":serverDiv,"info":info}, this.deleteServerToolTip.bind(this));
+					.on("mouseleave." + this.getName(), this.deleteServerToolTip.bind(this));
 				$(server)
 					.text(shortName)
 					.css("background-image", removeIcon ? "" : bgImage)
