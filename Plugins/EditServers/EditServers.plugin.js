@@ -450,8 +450,8 @@ class EditServers {
 						$(serverDiv)
 							.removeClass("custom-editservers");
 						$(serverInner)
-							.off("mouseenter")
-							.off("mouseleave");
+							.off("mouseenter." + this.getName())
+							.off("mouseleave." + this.getName());
 						$(server)
 							.text($(server).attr("name"))
 							.css("background-image", bgImage)
@@ -798,10 +798,10 @@ class EditServers {
 				$(serverDiv)
 					.addClass("custom-editservers");
 				$(serverInner)
-					.off("mouseenter")
-					.off("mouseleave")
-					.on("mouseenter", {"div":serverDiv,"info":info}, this.createServerToolTip.bind(this))
-					.on("mouseleave", {"div":serverDiv,"info":info}, this.deleteServerToolTip.bind(this));
+					.off("mouseenter." + this.getName())
+					.off("mouseleave." + this.getName())
+					.on("mouseenter." + this.getName(), {"div":serverDiv,"info":info}, this.createServerToolTip.bind(this))
+					.on("mouseleave." + this.getName(), {"div":serverDiv,"info":info}, this.deleteServerToolTip.bind(this));
 				$(server)
 					.text(shortName)
 					.css("background-image", removeIcon ? "" : bgImage)
