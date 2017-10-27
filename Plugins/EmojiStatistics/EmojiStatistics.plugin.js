@@ -27,7 +27,42 @@ class EmojiStatistics {
 				border-radius: 7px;
 			}
 			
+			@keyframes animation-emojistatistics-backdrop {
+				to { opacity: 0.85; }
+			}
+
+			@keyframes animation-emojistatistics-backdrop-closing {
+				to { opacity: 0; }
+			}
+
+			@keyframes animation-emojistatistics-modal {
+				to { transform: scale(1); opacity: 1; }
+			}
+
+			@keyframes animation-emojistatistics-modal-closing {
+				to { transform: scale(0.7); opacity: 0; }
+			}
+
+			.emojistatistics-modal .callout-backdrop {
+				animation: animation-emojistatistics-backdrop 250ms ease;
+				animation-fill-mode: forwards;
+				opacity: 0;
+				background-color: rgb(0, 0, 0);
+				transform: translateZ(0px);
+			}
+
+			.emojistatistics-modal.closing .callout-backdrop {
+				animation: animation-emojistatistics-backdrop-closing 200ms linear;
+				animation-fill-mode: forwards;
+				animation-delay: 50ms;
+				opacity: 0.85;
+			}
+			
 			.emojistatistics-modal .modal {
+				animation: animation-emojistatistics-modal 250ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+				animation-fill-mode: forwards;
+				transform: scale(0.7);
+				transform-origin: 50% 50%;
 				align-content: space-around;
 				align-items: center;
 				box-sizing: border-box;
@@ -49,6 +84,13 @@ class EmojiStatistics {
 				bottom: 0;
 				left: 0;
 				z-index: 1000;
+			}
+
+			.emojistatistics-modal.closing .modal {
+				animation: animation-emojistatistics-modal-closing 250ms cubic-bezier(0.19, 1, 0.22, 1);
+				animation-fill-mode: forwards;
+				opacity: 1;
+				transform: scale(1);
 			}
 			
 			.emojistatistics-modal .form {
@@ -264,7 +306,7 @@ class EmojiStatistics {
 
 	getDescription () {return "Adds some helpful options to show you more information about emojis and emojiservers.";}
 
-	getVersion () {return "2.3.6";}
+	getVersion () {return "2.4.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -295,9 +337,9 @@ class EmojiStatistics {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.classList && node.classList.contains("popout") && $(node).find(".emoji-picker").length != 0 ) {
+								if (node && node.tagName && node.querySelector(".emoji-picker")) {
 									this.loadEmojiList();
-									if ($(".emojistatistics-button").length == 0 && this.getSettings().enableEmojiStatisticsButton) {
+									if (!node.querySelector(".emojistatistics-button") && this.getSettings().enableEmojiStatisticsButton) {
 										this.addEmojiInformationButton(node);
 									}
 									if (this.getSettings().enableEmojiHovering) {
@@ -308,7 +350,7 @@ class EmojiStatistics {
 						}
 						if (change.removedNodes) {
 							change.removedNodes.forEach((node) => {
-								if ($(node).find(".emoji-picker").length > 0) {
+								if (node.querySelector(".emoji-picker")) {
 									$(".tooltips").find(".emoji-tooltip").remove();
 								}
 							});
@@ -316,7 +358,7 @@ class EmojiStatistics {
 					}
 				);
 			});
-			if (document.querySelector(".app")) this.emojiPickerObserver.observe(document.querySelector(".app"), {childList: true, subtree: true});
+			if (document.querySelector(".popouts")) this.emojiPickerObserver.observe(document.querySelector(".popouts"), {childList: true});
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 		
@@ -455,9 +497,10 @@ class EmojiStatistics {
 		var entries = [];
 		
 		var emojiInformationModal = $(this.emojiInformationModalMarkup);
-		emojiInformationModal.appendTo($("body > div > [class*='platform-'] > div").last())
+		emojiInformationModal.appendTo($("#app-mount > [class^='theme-']").last())
 		.on("click", ".callout-backdrop,button.btn-ok", (e) => {
-			emojiInformationModal.remove();
+			emojiInformationModal.addClass('closing');
+			setTimeout(() => {emojiInformationModal.remove();}, 300);
 		});
 		$(".popout").hide();
 				
