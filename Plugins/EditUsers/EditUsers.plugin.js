@@ -9,6 +9,7 @@ class EditUsers {
     
 		this.switchFixObserver = new MutationObserver(() => {});
 		this.userContextObserver = new MutationObserver(() => {});
+		this.dmObserver = new MutationObserver(() => {});
 		this.friendListObserver = new MutationObserver(() => {});
 		this.userListObserver = new MutationObserver(() => {});
 		this.chatWindowObserver = new MutationObserver(() => {});
@@ -313,6 +314,9 @@ class EditUsers {
 			
 		this.noticeTooltipMarkup = 
 			`<div class="tooltip tooltip-right tooltip-black notice-tooltip"></div>`;
+			
+		this.dmTooltipMarkup = 
+			`<div class="tooltip tooltip-right tooltip-black dm-custom-tooltip"></div>`;
 
 		this.userSettingsModalMarkup =
 			`<span class="editusers-modal">
@@ -391,7 +395,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "1.5.0";}
+	getVersion () {return "1.6.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -402,6 +406,7 @@ class EditUsers {
 			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInChatWindow"${(this.getSettings().changeInChatWindow ? " checked" : void 0)}> Chat</label><br>\n
 			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInVoiceChat"${(this.getSettings().changeInVoiceChat ? " checked" : void 0)}> Voice Channels</label><br>\n
 			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInMemberList"${(this.getSettings().changeInMemberList ? " checked" : void 0)}> Server Member List</label><br>\n
+			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInRecentDms"${(this.getSettings().changeInRecentDms ? " checked" : void 0)}> Recent DMs</label><br>\n
 			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInDmsList"${(this.getSettings().changeInDmsList ? " checked" : void 0)}> DM-Conversation List</label><br>\n
 			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInFriendList"${(this.getSettings().changeInFriendList ? " checked" : void 0)}> Friends List</label><br>\n
 			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInUserPopout"${(this.getSettings().changeInUserPopout ? " checked" : void 0)}> User Popups</label><br>\n
@@ -438,6 +443,22 @@ class EditUsers {
 				);
 			});
 			if (document.querySelector(".app")) this.userContextObserver.observe(document.querySelector(".app"), {childList: true});
+			
+			this.dmObserver = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.addedNodes) {
+							change.addedNodes.forEach((node) => {
+								if (this.getSettings().changeInRecentDms) this.loadUser(node, "recentdms", false);
+							});
+						}
+						if (change.removedNodes) {
+							this.deleteDmToolTip();
+						}
+					}
+				);
+			});
+			if (document.querySelector(".dms")) this.dmObserver.observe(document.querySelector(".dms"), {childList: true});
 			
 			this.channelListObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -570,6 +591,7 @@ class EditUsers {
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.switchFixObserver.disconnect();
+			this.dmObserver.disconnect();
 			this.userContextObserver.disconnect();
 			this.friendListObserver.disconnect();
 			this.userListObserver.disconnect();
@@ -601,6 +623,7 @@ class EditUsers {
 			changeInMemberList: true,
 			changeInChatWindow: true,
 			changeInVoiceChat: true,
+			changeInRecentDms: true,
 			changeInDmsList: true,
 			changeInFriendList: true,
 			changeInUserAccount: true,
@@ -929,16 +952,22 @@ class EditUsers {
 				this.loadUser(membersVoice[k].parentElement, "voice", false);
 			}
 		}
+		if (settings.changeInRecentDms) {
+			var membersRecentDMS = document.querySelectorAll("span.dms div.guild");
+			for (var l = 0; l < membersRecentDMS.length; l++) {
+				this.loadUser(membersRecentDMS[l], "recentdms", false);
+			}
+		}
 		if (settings.changeInDmsList) {
 			var membersDMS = document.querySelectorAll("div.channel.private");
-			for (var l = 0; l < membersDMS.length; l++) {
-				this.loadUser(membersDMS[l], "dms", false);
+			for (var m = 0; m < membersDMS.length; m++) {
+				this.loadUser(membersDMS[m], "dms", false);
 			}
 		}
 		if (settings.changeInFriendList) {
 			var membersFriends = document.querySelectorAll("div.friends-column");
-			for (var m = 0; m < membersFriends.length; m++) {
-				this.loadUser(membersFriends[m], "friends", false);
+			for (var n = 0; n < membersFriends.length; n++) {
+				this.loadUser(membersFriends[n], "friends", false);
 			}
 		}
 		if (settings.changeInUserAccount) {
@@ -957,44 +986,27 @@ class EditUsers {
 	
 	loadUser (div, type, compact) {
 		if (!div || div.classList.contains("custom-editusers")) return;
+		
 		var {avatar, username, wrapper} = this.getAvatarNameWrapper(div);
-		if (username && wrapper) {
-			if (compact) div = $(".message-group").has(div)[0];
-			var info = 
-				compact ? BDfunctionsDevilBro.getKeyInformation({"node":div,"key":"message"}).author : BDfunctionsDevilBro.getKeyInformation({"node":div,"key":"user"});
-			if (!info) return;
-			var styleInfo = BDfunctionsDevilBro.getKeyInformation({"node":wrapper,"key":"style"});
-			var data = BDfunctionsDevilBro.loadData(info.id, this.getName(), "users");
 			
-			if (!this.nickNames.names[info.id]) this.nickNames.names[info.id] = username.innerText;
-			
-			if (data) {
-				var name = 			data.name ? data.name : this.nickNames.names[info.id];
-				var tag = 			data.tag ? data.tag : null;
-				var bgImage = 		data.url ? "url(" + data.url + ")" : (info.avatar ? "url('https://cdn.discordapp.com/avatars/" + info.id + "/" + info.avatar + ".webp')" : "url(/assets/1cbd08c76f8af6dddce02c5138971129.png");
-				var removeIcon = 	data.removeIcon ? data.removeIcon : false;
-				var color1 = 		data.color1 ? BDfunctionsDevilBro.color2RGB(data.color1) : (styleInfo ? BDfunctionsDevilBro.color2RGB(styleInfo.color) : "");
-				var color2 = 		data.color2 ? BDfunctionsDevilBro.color2RGB(data.color2) : "";
-				var color3 = 		data.color3 ? BDfunctionsDevilBro.color2RGB(data.color3) : "";
-				var color4 = 		data.color4 ? BDfunctionsDevilBro.color2RGB(data.color4) : "white";
-			
+		if (compact) div = $(".message-group").has(div)[0];
+		
+		var info = compact ? BDfunctionsDevilBro.getKeyInformation({"node":div,"key":"message"}).author : BDfunctionsDevilBro.getKeyInformation({"node":div,"key":"user"});
+		if (!info) return;
+		
+		var styleInfo = BDfunctionsDevilBro.getKeyInformation({"node":wrapper,"key":"style"});
+		
+		var data = BDfunctionsDevilBro.loadData(info.id, this.getName(), "users");
+		
+		if (data) {
+			if (username) {
+				if (!this.nickNames.names[info.id]) this.nickNames.names[info.id] = username.innerText;
+				var name = data.name ? data.name : this.nickNames.names[info.id];
+				var color1 = data.color1 ? BDfunctionsDevilBro.color2RGB(data.color1) : (styleInfo ? BDfunctionsDevilBro.color2RGB(styleInfo.color) : "");
+				var color2 = data.color2 ? BDfunctionsDevilBro.color2RGB(data.color2) : "";
 				username.innerText = type == "info" ? info.username : name;
 				username.style.color = color1;
 				username.style.background = color2;
-				
-				if (avatar) {
-					avatar.style.background = removeIcon ? "" : bgImage;
-					avatar.style.backgroundSize = "cover";
-				}
-					
-				if (tag && (type == "list" || type == "chat" || type == "popout")) {
-					var thisTag = $(this.tagMarkup)[0];
-					thisTag.classList.add(type + "-tag");
-					thisTag.innerText = tag;
-					thisTag.style.background = color3;
-					thisTag.style.color = color4;
-					wrapper.appendChild(thisTag);
-				}
 				
 				var messages = div.querySelectorAll(".markup");
 				for (var i = 0; i < messages.length; i++) {
@@ -1006,10 +1018,53 @@ class EditUsers {
 						markup.style.color = "";
 					}
 				}
-				
-				div.classList.add("custom-editusers");
 			}
+			
+			if (avatar) {
+				var removeIcon = data.removeIcon ? data.removeIcon : false;
+				var bgImage = data.url ? "url(" + data.url + ")" : (info.avatar ? "url('https://cdn.discordapp.com/avatars/" + info.id + "/" + info.avatar + ".webp')" : "url(/assets/1cbd08c76f8af6dddce02c5138971129.png");
+				avatar.style.background = removeIcon ? "" : bgImage;
+				avatar.style.backgroundSize = "cover";
+			}
+				
+			var tag = data.tag ? data.tag : null;
+			if (tag && (type == "list" || type == "chat" || type == "popout")) {
+				var color3 = data.color3 ? BDfunctionsDevilBro.color2RGB(data.color3) : "";
+				var color4 = data.color4 ? BDfunctionsDevilBro.color2RGB(data.color4) : "white";
+				var thisTag = $(this.tagMarkup)[0];
+				thisTag.classList.add(type + "-tag");
+				thisTag.innerText = tag;
+				thisTag.style.background = color3;
+				thisTag.style.color = color4;
+				wrapper.appendChild(thisTag);
+			}
+			
+			if (type == "recentdms") {
+				$(div).find(".guild-inner")
+					.off("mouseenter." + this.getName())
+					.off("mouseleave." + this.getName())
+					.on("mouseenter." + this.getName(), {"div":div,"nick":data.name,"name":info.username}, this.createDmToolTip.bind(this))
+					.on("mouseleave." + this.getName(), this.deleteDmToolTip.bind(this));
+			}
+			
+			div.classList.add("custom-editusers");
 		}
+	}
+	
+	createDmToolTip (e) {
+		var dmDiv = e.data.div;
+		$(".tooltips").find(".tooltip").hide();
+		var dmTooltip = $(this.dmTooltipMarkup);
+		$(".tooltips").append(dmTooltip);
+		
+		$(dmTooltip)
+			.text(e.data.nick ? e.data.nick : e.data.name)
+			.css("left", ($(dmDiv).offset().left + $(dmDiv).width()) + "px")
+			.css("top", ($(dmDiv).offset().top + ($(dmDiv).outerHeight() - $(dmTooltip).outerHeight())/2) + "px");
+	}
+	
+	deleteDmToolTip (e) {
+		$(".tooltips").find(".dm-custom-tooltip").remove();
 	}
 	
 	resetAllUsers () {
@@ -1017,24 +1072,18 @@ class EditUsers {
 		document.querySelectorAll(".custom-editusers").forEach((div) => {
 			var {avatar, username, wrapper} = this.getAvatarNameWrapper(div);
 			
-			if (avatar && username && wrapper) {
-				var info = BDfunctionsDevilBro.getKeyInformation({"node":div,"key":"user"});
-				if (!info) return;
-				var styleInfo = BDfunctionsDevilBro.getKeyInformation({"node":wrapper,"key":"style"});
-				
+			var info = BDfunctionsDevilBro.getKeyInformation({"node":div,"key":"user"});
+			if (!info) return;
+			var styleInfo = BDfunctionsDevilBro.getKeyInformation({"node":wrapper,"key":"style"});
+			
+			if (username) {
 				if (!this.nickNames.names[info.id]) this.nickNames.names[info.id] = username.innerText;
-				
-				var name = 			div.classList.contains("container-iksrDt") ? info.username : this.nickNames.names[info.id];
-				var bgImage = 		info.avatar ? "url('https://cdn.discordapp.com/avatars/" + info.id + "/" + info.avatar + ".webp')" : "url(/assets/1cbd08c76f8af6dddce02c5138971129.png";
-				var color1 = 		styleInfo ? BDfunctionsDevilBro.color2RGB(styleInfo.color) : "";
-				var color2 = 		"";
-				
+				var name = div.classList.contains("container-iksrDt") ? info.username : this.nickNames.names[info.id];
+				var color1 = styleInfo ? BDfunctionsDevilBro.color2RGB(styleInfo.color) : "";
+				var color2 = "";
 				username.innerText = name;
 				username.style.color = color1;
 				username.style.background = color2;
-				
-				avatar.style.background = bgImage;
-				avatar.style.backgroundSize = "cover";
 				
 				var messages = div.querySelectorAll(".markup");
 				for (var i = 0; i < messages.length; i++) {
@@ -1047,15 +1096,27 @@ class EditUsers {
 					}
 				}
 			}
-			div.classList.remove("custom-editusers")
+			
+			if (avatar) {
+				var bgImage = info.avatar ? "url('https://cdn.discordapp.com/avatars/" + info.id + "/" + info.avatar + ".webp')" :"url(/assets/1cbd08c76f8af6dddce02c5138971129.png";
+				avatar.style.background = bgImage;
+				avatar.style.backgroundSize = "cover";
+			}
+			
+			$(div).find(".guild-inner")
+				.off("mouseenter." + this.getName())
+				.off("mouseleave." + this.getName());
+			
+			div.classList.remove("custom-editusers");
 		});
 	}
 	
 	getAvatarNameWrapper (div) {
 		var avatar = 	div.querySelector("div.avatar-small") || 
+						div.querySelector("a.avatar-small") || 
 						div.querySelector("div.avatar-large") || 
 						div.querySelector("div.avatarDefault-3jtQoc") || 
-						div.querySelector("div.avatar-1BXaQj");
+						div.querySelector("div.avatar-1BXaQj div.image-EVRGPw");
 						
 		var username = 	div.querySelector("strong.user-name") || 
 						div.querySelector("span.member-username-inner") ||
