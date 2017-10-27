@@ -1054,7 +1054,7 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 			$(".color-picker-dropper-fg-" + swatch)
 				.attr("fill", newCOMP[0] > 150 && newCOMP[1] > 150 && newCOMP[2] > 150 ? "#000000" : "#ffffff");
 				
-			colorPickerModal.addClass('closing');
+			colorPickerModal.classList.add('closing');
 			setTimeout(() => {colorPickerModal.remove();}, 300);
 		});
 	
