@@ -1032,7 +1032,7 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 		</span>`;
 		
 	var colorPickerModal = $(colorPickerModalMarkup)[0];
-	$(colorPickerModal).appendTo($("body > div > [class*='platform-'] > div").last())
+	$(colorPickerModal).appendTo($("#app-mount > [class^='theme-']").last())
 		.on("click", ".callout-backdrop", (event) => {
 			var newRGB = colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").style.backgroundColor;
 			var newCOMP = BDfunctionsDevilBro.color2COMP(newRGB);
