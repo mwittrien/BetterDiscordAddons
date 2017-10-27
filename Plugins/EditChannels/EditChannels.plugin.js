@@ -237,7 +237,7 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "3.3.5";}
+	getVersion () {return "3.4.0";}
 
 	getAuthor () {return "DevilBro";}
 	
