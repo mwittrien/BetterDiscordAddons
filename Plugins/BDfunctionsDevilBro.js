@@ -107,7 +107,7 @@ BDfunctionsDevilBro.downloadPlugin = function(pluginName, downloadUrl) {
         var file = path.join(BDfunctionsDevilBro.getPluginsFolder(), filename);
         fileSystem.writeFileSync(file, body);
         BDfunctionsDevilBro.showToast(`${pluginName} ${window.PluginUpdates.plugins[downloadUrl].version} has been replaced by ${pluginName} ${remoteVersion}`);
-        if (!window.bdplugins["Restart-No-More"] || !window.pluginCookie["Restart-No-More"]) {
+        if (!window.bdplugins["Restart-No-More"] || !window.bdplugins["Restart No More"] || !window.pluginCookie["Restart-No-More"] || !window.pluginCookie["Restart No More"]) {
             if (!window.PluginUpdates.downloaded) {
                 window.PluginUpdates.downloaded = [];
                 let button = $('<button class="btn btn-reload">Reload</button>');
