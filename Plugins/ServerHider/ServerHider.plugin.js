@@ -22,7 +22,42 @@ class ServerHider {
 				border-radius: 7px;
 			}
 			
+			@keyframes animation-serverhider-backdrop {
+				to { opacity: 0.85; }
+			}
+
+			@keyframes animation-serverhider-backdrop-closing {
+				to { opacity: 0; }
+			}
+
+			@keyframes animation-serverhider-modal {
+				to { transform: scale(1); opacity: 1; }
+			}
+
+			@keyframes animation-serverhider-modal-closing {
+				to { transform: scale(0.7); opacity: 0; }
+			}
+
+			.serverhider-modal .callout-backdrop {
+				animation: animation-serverhider-backdrop 250ms ease;
+				animation-fill-mode: forwards;
+				opacity: 0;
+				background-color: rgb(0, 0, 0);
+				transform: translateZ(0px);
+			}
+
+			.serverhider-modal.closing .callout-backdrop {
+				animation: animation-serverhider-backdrop-closing 200ms linear;
+				animation-fill-mode: forwards;
+				animation-delay: 50ms;
+				opacity: 0.85;
+			}
+			
 			.serverhider-modal .modal {
+				animation: animation-serverhider-modal 250ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+				animation-fill-mode: forwards;
+				transform: scale(0.7);
+				transform-origin: 50% 50%;
 				align-content: space-around;
 				align-items: center;
 				box-sizing: border-box;
@@ -44,6 +79,13 @@ class ServerHider {
 				bottom: 0;
 				left: 0;
 				z-index: 1000;
+			}
+
+			.serverhider-modal.closing .modal {
+				animation: animation-serverhider-modal-closing 250ms cubic-bezier(0.19, 1, 0.22, 1);
+				animation-fill-mode: forwards;
+				opacity: 1;
+				transform: scale(1);
 			}
 			
 			.serverhider-modal .form {
@@ -203,8 +245,8 @@ class ServerHider {
 		
 		this.serverHiderModalMarkup =
 			`<span class="serverhider-modal">
-				<div class="backdrop-2ohBEd callout-backdrop" style="background-color:#000; opacity:0.85"></div>
-				<div class="modal" style="opacity: 1">
+				<div class="backdrop-2ohBEd callout-backdrop"></div>
+				<div class="modal">
 					<div class="modal-inner">
 						<form class="form">
 							<div class="form-header">
@@ -258,7 +300,7 @@ class ServerHider {
 
 	getDescription () {return "Hide Servers in your Serverlist";}
 
-	getVersion () {return "2.2.8";}
+	getVersion () {return "2.3.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -414,9 +456,10 @@ class ServerHider {
 		$(".context-menu").hide();
 		
 		var serverHiderModal = $(this.serverHiderModalMarkup);
-		serverHiderModal.appendTo($("body > div > [class*='platform-'] > div").last())
+		serverHiderModal.appendTo($("#app-mount > [class^='theme-']").last())
 			.on("click", ".callout-backdrop,button.btn-ok", () => {
-				serverHiderModal.remove();
+				serverHiderModal.addClass('closing');
+				setTimeout(() => {serverHiderModal.remove();}, 300);
 			})
 			.on("click", "button.btn-all", () => {
 				this.changeAllButtonAndServer();
