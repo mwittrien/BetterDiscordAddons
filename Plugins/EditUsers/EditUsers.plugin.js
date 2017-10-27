@@ -395,7 +395,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "1.6.0";}
+	getVersion () {return "1.6.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -856,29 +856,19 @@ class EditUsers {
 		}
 		else {
 			this.urlCheckTimeout = setTimeout(() => {
-				this.urlCheckRequest = $.ajax({
-					type: "HEAD",
-					url : "https://cors-anywhere.herokuapp.com/" + e.target.value,
-					success: (message, text, response) => {
-						if (response.getResponseHeader('Content-Type').indexOf("image") != -1) {
-							$(e.target)
+				let request = require("request");
+				this.urlCheckRequest = request(e.target.value, (error, response, result) => {
+					if (response && response.headers["content-type"] && response.headers["content-type"].indexOf("image") != -1) {
+						$(e.target)
 								.removeClass("invalid")
 								.addClass("valid");
-						}
-						else {
-							$(e.target)
-								.removeClass("valid")
-								.addClass("invalid");
-						}
-					},
-					error: () => {
+					}
+					else {
 						$(e.target)
 							.removeClass("valid")
 							.addClass("invalid");
-					},
-					complete: () => {
-						if ($(e.target).hasClass("hovering")) this.createNoticeTooltip(e);
 					}
+					if ($(e.target).hasClass("hovering")) this.createNoticeTooltip(e);
 				});
 			},500);
 		}
