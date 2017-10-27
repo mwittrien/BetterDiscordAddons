@@ -20,7 +20,42 @@ class EditUsers {
 		this.urlCheckRequest;
 		
 		this.css = `
+			@keyframes animation-editusers-backdrop {
+				to { opacity: 0.85; }
+			}
+
+			@keyframes animation-editusers-backdrop-closing {
+				to { opacity: 0; }
+			}
+
+			@keyframes animation-editusers-modal {
+				to { transform: scale(1); opacity: 1; }
+			}
+
+			@keyframes animation-editusers-modal-closing {
+				to { transform: scale(0.7); opacity: 0; }
+			}
+
+			.editusers-modal .callout-backdrop {
+				animation: animation-editusers-backdrop 250ms ease;
+				animation-fill-mode: forwards;
+				opacity: 0;
+				background-color: rgb(0, 0, 0);
+				transform: translateZ(0px);
+			}
+
+			.editusers-modal.closing .callout-backdrop {
+				animation: animation-editusers-backdrop-closing 200ms linear;
+				animation-fill-mode: forwards;
+				animation-delay: 50ms;
+				opacity: 0.85;
+			}
+			
 			.editusers-modal .modal {
+				animation: animation-editusers-modal 250ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+				animation-fill-mode: forwards;
+				transform: scale(0.7);
+				transform-origin: 50% 50%;
 				align-content: space-around;
 				align-items: center;
 				box-sizing: border-box;
@@ -42,6 +77,13 @@ class EditUsers {
 				bottom: 0;
 				left: 0;
 				z-index: 1000;
+			}
+
+			.editusers-modal.closing .modal {
+				animation: animation-editusers-modal-closing 250ms cubic-bezier(0.19, 1, 0.22, 1);
+				animation-fill-mode: forwards;
+				opacity: 1;
+				transform: scale(1);
 			}
 			
 			.editusers-modal .form {
@@ -274,8 +316,8 @@ class EditUsers {
 
 		this.userSettingsModalMarkup =
 			`<span class="editusers-modal">
-				<div class="backdrop-2ohBEd callout-backdrop" style="background-color:#000; opacity:0.85"></div>
-				<div class="modal" style="opacity: 1">
+				<div class="backdrop-2ohBEd callout-backdrop"></div>
+				<div class="modal">
 					<div class="modal-inner">
 						<div class="form">
 							<div class="form-header">
@@ -349,7 +391,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "1.4.5";}
+	getVersion () {return "1.5.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -494,8 +536,6 @@ class EditUsers {
 				);
 			});
 			if (document.querySelector(".popouts")) this.userPopoutObserver.observe(document.querySelector(".popouts"), {childList: true});
-			//TODO delete when stable was updated to canary
-			else if (document.querySelector("#app-mount")) this.userPopoutObserver.observe(document.querySelector("#app-mount"), {childList: true, subtree:true});
 			
 			this.settingsWindowObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -696,9 +736,10 @@ class EditUsers {
 			BDfunctionsDevilBro.setColorSwatches(color2, userSettingsModal.find(".swatches2"), "swatch2");
 			BDfunctionsDevilBro.setColorSwatches(color3, userSettingsModal.find(".swatches3"), "swatch3");
 			BDfunctionsDevilBro.setColorSwatches(color4, userSettingsModal.find(".swatches4"), "swatch4");
-			userSettingsModal.appendTo($("body > div > [class*='platform-'] > div").last())
+			userSettingsModal.appendTo($("#app-mount > [class^='theme-']").last())
 				.on("click", ".callout-backdrop,button.btn-cancel", (event) => {
-					userSettingsModal.remove();
+					userSettingsModal.addClass('closing');
+					setTimeout(() => {userSettingsModal.remove();}, 300);
 				})
 				.on("click", "#modal-urlcheck", (event) => {
 					userSettingsModal.find("#modal-urltext").prop("disabled", event.target.checked);
@@ -758,7 +799,8 @@ class EditUsers {
 					};
 					this.loadAllUsers();
 					
-					userSettingsModal.remove();
+					userSettingsModal.addClass('closing');
+					setTimeout(() => {userSettingsModal.remove();}, 300);
 				});
 			userSettingsModal.find("#modal-nametext")[0].focus();
 		}
