@@ -9,7 +9,7 @@ class FixTwitchEmotes {
 
 	getDescription () {return "Fixes the problem with twitch emotes not being properly inserted in the textarea.";}
 
-	getVersion () {return "2.0.0";}
+	getVersion () {return "2.1.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -34,14 +34,15 @@ class FixTwitchEmotes {
 							change.addedNodes.forEach((node) => {
 								if (node && node.tagName && node.querySelector(".emoji-picker")) {
 									$("img.emote-icon").each((_,emote) => {if ($._data(emote, 'events').click) delete $._data(emote, 'events').click;});
+									$(node).on("click." + this.getName(), "#bda-qem button", (e) => {
+										$("img.emote-icon").each((_,emote) => {if ($._data(emote, 'events').click) delete $._data(emote, 'events').click;});
+									});
 									var textarea = document.querySelector(".channelTextArea-1HTP3C textarea");
 									if (textarea) {
 										var textareaInstance = BDfunctionsDevilBro.getOwnerInstance({"node":textarea, "name":"ChannelTextAreaForm", "up":true});
-										$(node)
-											.off("click." + this.getName())
-											.on("click." + this.getName(), "img.emote-icon", (e) => {
-												textareaInstance.setState({textValue:textarea.value.length > 0 ? textarea.value + " " + e.target.title : e.target.title});
-											});
+										$(node).on("click." + this.getName(), "img.emote-icon", (e) => {
+											textareaInstance.setState({textValue:textarea.value.length > 0 ? textarea.value + " " + e.target.title : e.target.title});
+										});
 									}
 								}
 							});
