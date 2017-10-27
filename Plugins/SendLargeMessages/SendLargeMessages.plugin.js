@@ -7,8 +7,43 @@ class SendLargeMessages {
 		
 		this.switchFixObserver = new MutationObserver(() => {});
 		
-		this.css = `			
+		this.css = `
+			@keyframes animation-sendlargemessages-backdrop {
+				to { opacity: 0.85; }
+			}
+
+			@keyframes animation-sendlargemessages-backdrop-closing {
+				to { opacity: 0; }
+			}
+
+			@keyframes animation-sendlargemessages-modal {
+				to { transform: scale(1); opacity: 1; }
+			}
+
+			@keyframes animation-sendlargemessages-modal-closing {
+				to { transform: scale(0.7); opacity: 0; }
+			}
+
+			.sendlargemessages-modal .callout-backdrop {
+				animation: animation-sendlargemessages-backdrop 250ms ease;
+				animation-fill-mode: forwards;
+				opacity: 0;
+				background-color: rgb(0, 0, 0);
+				transform: translateZ(0px);
+			}
+
+			.sendlargemessages-modal.closing .callout-backdrop {
+				animation: animation-sendlargemessages-backdrop-closing 200ms linear;
+				animation-fill-mode: forwards;
+				animation-delay: 50ms;
+				opacity: 0.85;
+			}
+			
 			.sendlargemessages-modal .modal {
+				animation: animation-sendlargemessages-modal 250ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+				animation-fill-mode: forwards;
+				transform: scale(0.7);
+				transform-origin: 50% 50%;
 				align-content: space-around;
 				align-items: center;
 				box-sizing: border-box;
@@ -30,6 +65,13 @@ class SendLargeMessages {
 				bottom: 0;
 				left: 0;
 				z-index: 1000;
+			}
+
+			.sendlargemessages-modal.closing .modal {
+				animation: animation-sendlargemessages-modal-closing 250ms cubic-bezier(0.19, 1, 0.22, 1);
+				animation-fill-mode: forwards;
+				opacity: 1;
+				transform: scale(1);
 			}
 			
 			.sendlargemessages-modal .form {
@@ -170,8 +212,8 @@ class SendLargeMessages {
 			
 		this.sendMessageModalMarkup =
 			`<span class="sendlargemessages-modal">
-				<div class="backdrop-2ohBEd callout-backdrop" style="background-color:#000; opacity:0.85"></div>
-				<div class="modal" style="opacity: 1">
+				<div class="backdrop-2ohBEd callout-backdrop"></div>
+				<div class="modal">
 					<div class="modal-inner">
 						<div class="form">
 							<div class="form-header">
@@ -200,7 +242,7 @@ class SendLargeMessages {
 
 	getDescription () {return "Opens a popout when your message is too large, which allows you to automatically send the message in several smaller messages.";}
 
-	getVersion () {return "1.1.7";}
+	getVersion () {return "1.2.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -294,15 +336,17 @@ class SendLargeMessages {
 	showSendModal (text) {
 		var sendMessageModal = $(this.sendMessageModalMarkup);
 		var textinput = sendMessageModal.find("#modal-inputtext")[0];
-		sendMessageModal.appendTo($("body > div > [class*='platform-'] > div").last())
+		sendMessageModal.appendTo($("#app-mount > [class^='theme-']").last())
 			.on("click", ".callout-backdrop,button.btn-cancel", (e) => {
 				$(document).off("mouseup." + this.getName()).off("mousemove." + this.getName());
-				sendMessageModal.remove();
+				sendMessageModal.addClass('closing');
+				setTimeout(() => {sendMessageModal.remove();}, 300);
 			})
 			.on("click", "button.btn-send", (e) => {
 				if (!textinput.value.match(/[\S]{1900,}/gm) && (!textinput.value.match(/`{3,}/gm) || textinput.value.match(/`{3,}/gm).length % 2 == 0)) {
 					e.preventDefault();
-					sendMessageModal.remove();
+					sendMessageModal.addClass('closing');
+					setTimeout(() => {sendMessageModal.remove();}, 300);
 					$(document).off("mouseup." + this.getName()).off("mousemove." + this.getName());
 					this.formatText(textinput.value).forEach((message,i) => {
 						setTimeout(() => {
