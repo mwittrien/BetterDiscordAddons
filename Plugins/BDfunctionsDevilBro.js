@@ -681,7 +681,7 @@ BDfunctionsDevilBro.appendLocalStyle = function (pluginName, css) {
 
 	var ele = document.createElement('style');
 	$(ele)
-		.attr("id", pluginName)
+		.attr("id", pluginName + "CSS")
 		.text(css);
 	$('head').append(ele);
 };
@@ -1294,7 +1294,7 @@ BDfunctionsDevilBro.getDiscordLanguage = function () {
 	}
 };
 
-BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBroCSS", `
+BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 	#pluginNotice {
 		-webkit-app-region: drag;
 	} 
