@@ -54,7 +54,7 @@ class ShowHiddenChannels {
 
 	getDescription () {return "Displays channels that are hidden from you by role restrictions.";}
 
-	getVersion () {return "2.0.0";}
+	getVersion () {return "2.0.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -209,10 +209,10 @@ class ShowHiddenChannels {
 						});
 					
 					for (var k1 = 0; k1 < hiddenChannelsText.length; k1++) {
-						var hiddenChannel = hiddenChannelsText[k1];
+						let hiddenChannel = hiddenChannelsText[k1];
 						let channel = $(this.channelTextMarkup)[0];
 						$(channel)
-							.html($(channel).html().replace("REPLACE_channel_name",hiddenChannel.name))
+							.html($(channel).html().replace("REPLACE_channel_name", hiddenChannel.name))
 							.on("mouseenter mouseleave", ".wrapper-fDmxzK", () => {
 								var channelwrapper = channel.querySelector(".wrapper-fDmxzK");
 								var channelicon = channel.querySelector(".content-2mSKOj");
@@ -224,14 +224,17 @@ class ShowHiddenChannels {
 								channelname.classList.toggle("nameDefaultText-QoumjC")
 								channelname.classList.toggle("nameHoveredText-2FFqiz");
 							})
+							.on("click", () => {
+								BDfunctionsDevilBro.showToast(`You can not enter the hidden channel ${hiddenChannel.name}.`, {type:"error"});
+							})
 							.appendTo(category);
 					}
 					
 					for (var k2 = 0; k2 < hiddenChannelsVoice.length; k2++) {
-						var hiddenChannel = hiddenChannelsVoice[k2];
+						let hiddenChannel = hiddenChannelsVoice[k2];
 						let channel = $(this.channelVoiceMarkup)[0];
 						$(channel)
-							.html($(channel).html().replace("REPLACE_channel_name",hiddenChannel.name))
+							.html($(channel).html().replace("REPLACE_channel_name", hiddenChannel.name))
 							.on("mouseenter mouseleave", ".wrapper-fDmxzK", () => {
 								var channelwrapper = channel.querySelector(".wrapper-fDmxzK");
 								var channelicon = channel.querySelector(".content-2mSKOj");
@@ -242,6 +245,9 @@ class ShowHiddenChannels {
 								channelicon.classList.toggle("contentHoveredVoice-3qGNKh");
 								channelname.classList.toggle("nameDefaultVoice-1swZoh")
 								channelname.classList.toggle("nameHoveredVoice-TIoHRJ");
+							})
+							.on("click", () => {
+								BDfunctionsDevilBro.showToast(`You can not enter the hidden channel ${hiddenChannel.name}.`, {type:"error"});
 							})
 							.appendTo(category);
 					}
