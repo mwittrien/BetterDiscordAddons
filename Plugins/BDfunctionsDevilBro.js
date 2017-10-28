@@ -158,8 +158,8 @@ BDfunctionsDevilBro.showToast = function(content, options = {}) {
     if (!document.querySelector('.toasts')) {
         let toastWrapper = document.createElement("div");
         toastWrapper.classList.add("toasts");
-        toastWrapper.style.setProperty("left", document.querySelector('.chat form, #friends, .noChannel-2EQ0a9').getBoundingClientRect().left + "px");
-        toastWrapper.style.setProperty("width", document.querySelector('.chat form, #friends, .noChannel-2EQ0a9').offsetWidth + "px");
+        toastWrapper.style.setProperty("left", document.querySelector('.chat form, #friends, .noChannel-2EQ0a9, .activityFeed-HeiGwL').getBoundingClientRect().left + "px");
+        toastWrapper.style.setProperty("width", document.querySelector('.chat form, #friends, .noChannel-2EQ0a9, .activityFeed-HeiGwL').offsetWidth + "px");
         toastWrapper.style.setProperty("bottom", (document.querySelector('.chat form') ? document.querySelector('.chat form').offsetHeight : 80) + "px");
         document.querySelector('.app').appendChild(toastWrapper);
     }
@@ -677,7 +677,7 @@ BDfunctionsDevilBro.appendWebStyle = function (filepath) {
 };
 
 BDfunctionsDevilBro.appendLocalStyle = function (pluginName, css) {
-	$('head style[id="' + pluginName + '"]').remove();
+	$('head style[id="' + pluginName + 'CSS"]').remove();
 
 	var ele = document.createElement('style');
 	$(ele)
@@ -687,7 +687,7 @@ BDfunctionsDevilBro.appendLocalStyle = function (pluginName, css) {
 };
 
 BDfunctionsDevilBro.removeLocalStyle = function (pluginName) {
-	$('head style[id="' + pluginName + '"]').remove();
+	$('head style[id="' + pluginName + 'CSS"]').remove();
 };
 
 BDfunctionsDevilBro.sortArrayByKey = function (array, key, except) {
