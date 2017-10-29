@@ -369,7 +369,7 @@ class ServerFolders {
 
 	getDescription () {return "Add pseudofolders to your serverlist to organize your servers.";}
 
-	getVersion () {return "4.4.0";}
+	getVersion () {return "4.4.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -480,6 +480,7 @@ class ServerFolders {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
+			
 			this.serverContextObserver.disconnect();
 			this.serverListObserver.disconnect();
 			this.badgeObserver.disconnect();
@@ -490,6 +491,8 @@ class ServerFolders {
 			BDfunctionsDevilBro.showHideAllEles(true, BDfunctionsDevilBro.readServerList());
 			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName());
+			
+			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
 		}
 	}
 	
@@ -530,9 +533,8 @@ class ServerFolders {
 	
 	onContextMenu (context) {
 		var serverData = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"guild"});
-		var contextType = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"GuildLeaveGroup"});
 		
-		if (serverData && contextType) {
+		if (serverData && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"GuildLeaveGroup"})) {
 			$(context).append(this.serverContextEntryMarkup)
 				.on("click", ".createfolder-item", serverData, this.createNewFolder.bind(this));
 		}
