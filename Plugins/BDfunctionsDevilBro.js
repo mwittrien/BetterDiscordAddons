@@ -29,10 +29,9 @@ BDfunctionsDevilBro.loadMessage = function (pluginName, oldVersion) {
 										(change2, j) => {
 											if (change2.addedNodes) {
 												change2.addedNodes.forEach((node2) => {
-													if (!document.querySelector(".bd-updatebtn")) {
+													if (!node2.querySelector(".bd-pfbtn.bd-updatebtn")) {
 														if (node2 && node2.tagName && node2.querySelector(".bd-pfbtn")) {
-															var updateButton = BDfunctionsDevilBro.createUpdateButton();
-															node2.querySelector(".bd-pfbtn").parentElement.insertBefore(updateButton, node2.querySelector(".bd-pfbtn").nextSibling);
+															node2.querySelector(".bd-pfbtn").parentElement.insertBefore(BDfunctionsDevilBro.createUpdateButton(), node2.querySelector(".bd-pfbtn").nextSibling);
 														}
 													}
 												});
@@ -49,6 +48,8 @@ BDfunctionsDevilBro.loadMessage = function (pluginName, oldVersion) {
 		});
 		window.PluginUpdates.observer.observe(document.querySelector(".layers"), {childList:true});
 	}
+		
+	if (!document.querySelector("#bd-settingspane-container .bd-pfbtn.bd-updatebtn") && document.querySelector("#bd-settingspane-container .bd-pfbtn")) document.querySelector("#bd-settingspane-container .bd-pfbtn").parentElement.insertBefore(BDfunctionsDevilBro.createUpdateButton(), document.querySelector("#bd-settingspane-container .bd-pfbtn").nextSibling);
 };
 
 BDfunctionsDevilBro.unloadMessage = function (pluginName, oldVersion) { 
@@ -63,6 +64,7 @@ BDfunctionsDevilBro.unloadMessage = function (pluginName, oldVersion) {
 	if (BDfunctionsDevilBro.isObjectEmpty(window.PluginUpdates.plugins)) {
 		window.PluginUpdates.observer.disconnect();
 		delete window.PluginUpdates.observer;
+		$("#bd-settingspane-container .bd-pfbtn.bd-updatebtn").remove();
 	}
 };
 
