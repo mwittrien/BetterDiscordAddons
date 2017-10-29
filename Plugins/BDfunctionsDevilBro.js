@@ -51,6 +51,21 @@ BDfunctionsDevilBro.loadMessage = function (pluginName, oldVersion) {
 	}
 };
 
+BDfunctionsDevilBro.unloadMessage = function (pluginName, oldVersion) { 
+	console.log(`${pluginName} Version: ${oldVersion} unloaded.`);
+	
+	BDfunctionsDevilBro.showToast(`${pluginName} ${oldVersion} has been stopped.`);
+	
+	var downloadUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
+	
+	delete window.PluginUpdates.plugins[downloadUrl];
+	
+	if (BDfunctionsDevilBro.isObjectEmpty(window.PluginUpdates.plugins)) {
+		window.PluginUpdates.observer.disconnect();
+		delete window.PluginUpdates.observer;
+	}
+};
+
 
 // plugin update notifications created in cooperation with Zerebos https://github.com/rauenzi/BetterDiscordAddons/blob/master/Plugins/PluginLibrary.js
 BDfunctionsDevilBro.checkUpdate = function (pluginName, downloadUrl) {
@@ -434,6 +449,17 @@ BDfunctionsDevilBro.equals = function (check1, check2, compareOrder) {
 		return result;
 	}
 };
+
+BDfunctionsDevilBro.isObjectEmpty = function (obj) {
+   var empty = true;
+
+   for(var key in obj) {
+      empty = false;
+      break;
+   }
+
+   return empty;
+}
 
 BDfunctionsDevilBro.onSwitchFix = function (plugin) {
 	var switchFixObserver = new MutationObserver((changes) => {
