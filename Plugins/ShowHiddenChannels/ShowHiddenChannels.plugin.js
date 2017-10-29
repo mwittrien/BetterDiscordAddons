@@ -54,7 +54,7 @@ class ShowHiddenChannels {
 
 	getDescription () {return "Displays channels that are hidden from you by role restrictions.";}
 
-	getVersion () {return "2.0.1";}
+	getVersion () {return "2.0.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -101,6 +101,8 @@ class ShowHiddenChannels {
 			$(".container-hidden").remove();
 			this.switchFixObserver.disconnect();
 			this.channelListObserver.disconnect();
+			
+			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
 		}
 	}
 	
@@ -167,9 +169,6 @@ class ShowHiddenChannels {
 					
 					hiddenChannelsText = BDfunctionsDevilBro.sortArrayByKey(hiddenChannelsText, "name");
 					hiddenChannelsVoice = BDfunctionsDevilBro.sortArrayByKey(hiddenChannelsVoice, "name");
-					
-					var isOpen = BDfunctionsDevilBro.loadData(serverID, this.getName(), "categorystatus");
-					isOpen = isOpen === null ? true : isOpen;
 					
 					var category = $(this.categoryMarkup)[0]
 					var wrapper = category.querySelector(".cursorPointer-3oKATS");
@@ -252,6 +251,8 @@ class ShowHiddenChannels {
 							.appendTo(category);
 					}
 					
+					var isOpen = BDfunctionsDevilBro.loadData(serverID, this.getName(), "categorystatus");
+					isOpen = isOpen === null ? true : isOpen;
 					
 					if (!isOpen) {
 						wrapper.classList.toggle("wrapperDefault-1Dl4SS");
