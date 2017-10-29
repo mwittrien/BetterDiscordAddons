@@ -395,7 +395,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "1.6.1";}
+	getVersion () {return "1.6.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -603,6 +603,8 @@ class EditUsers {
 			this.resetAllUsers();
 			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName());
+			
+			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
 		}
 	}
 	
