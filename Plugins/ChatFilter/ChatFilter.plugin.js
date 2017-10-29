@@ -228,7 +228,7 @@ class ChatFilter {
 
 	getDescription () {return "Allows the user to censor words or block complete messages based on words in the chatwindow.";}
 
-	getVersion () {return "3.0.3";}
+	getVersion () {return "3.0.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -295,7 +295,7 @@ class ChatFilter {
 
 	//legacy
 	load () {
-		BdApi.injectCSS(this.getName(), this.css);
+		BdApi.injectCSS(this.getName() + "CSS", this.css);
 	}
 
 	start () {
