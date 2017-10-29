@@ -9,6 +9,13 @@ class OldTitleBar {
 			
 		this.dividerMarkup = `<div class="dividerOTB divider-1GKkV3"></div>`;
 			
+		this.reloadButtonMarkup = `
+			<svg class="reloadButtonOTB iconInactive-WWHQEI icon-mr9wAc iconMargin-2Js7V9" xmlns="http://www.w3.org/2000/svg">
+				<g fill="none" class="iconForeground-2c7s3m" fill-rule="evenodd">
+					<path fill="currentColor" transform="translate(4,4)" d="M17.061,7.467V0l-2.507,2.507C13.013,0.96,10.885,0,8.528,0C3.813,0,0.005,3.819,0.005,8.533s3.808,8.533,8.523,8.533c3.973,0,7.301-2.72,8.245-6.4h-2.219c-0.88,2.485-3.237,4.267-6.027,4.267c-3.536,0-6.4-2.864-6.4-6.4s2.864-6.4,6.4-6.4c1.765,0,3.349,0.736,4.507,1.893l-3.44,3.44H17.061z"/>
+				</g>
+			</svg>`;
+			
 		this.minButtonMarkup = `
 			<svg class="minButtonOTB iconInactive-WWHQEI icon-mr9wAc iconMargin-2Js7V9" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
 				<g fill="none" class="iconForeground-2c7s3m" fill-rule="evenodd">
@@ -32,19 +39,23 @@ class OldTitleBar {
 					<path fill="currentColor" d="M20 7.41L18.59 6 13 11.59 7.41 6 6 7.41 11.59 13 6 18.59 7.41 20 13 14.41 18.59 20 20 18.59 14.41 13 20 7.41z"/>
 				</g>
 			</svg>`;
+			
+		this.reloadButtonTooltipMarkup = 
+			`<div class="tooltip tooltip-bottom tooltip-black reload-button-tooltip"></div>`;
 	}
 
 	getName () {return "OldTitleBar";}
 
 	getDescription () {return "Reverts the title bar back to its former self.";}
 
-	getVersion () {return "1.0.0";}
+	getVersion () {return "1.0.1";}
 
 	getAuthor () {return "DevilBro";}
 
     getSettingsPanel () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			return `
+			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="reloadButton"${(this.getSettings().reloadButton ? " checked" : void 0)}> Add a reload button to the title bar.</label><br>\n
 			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="forceClose"${(this.getSettings().forceClose ? " checked" : void 0)}> Completely turn off Discord when pressing close.</label>`;
 		}
     }
@@ -113,6 +124,7 @@ class OldTitleBar {
 	
 	getSettings () {
 		var defaultSettings = {
+			reloadButton: false,
 			forceClose: false
 		};
 		var settings = BDfunctionsDevilBro.loadAllData(this.getName(), "settings");
@@ -140,7 +152,18 @@ class OldTitleBar {
     }
 	
 	addTitleBar () {
-		if ($(".dividerOTB, .minButtonOTB, .maxButtonOTB, .closeButtonOTB").length == 0) {
+		if ($(".dividerOTB, .reloadButtonOTB, .minButtonOTB, .maxButtonOTB, .closeButtonOTB").length == 0) {
+			var settings = this.getSettings();
+			if (settings.reloadButton) {
+				$(".iconInactive-WWHQEI").parent()
+					.append(this.dividerMarkup)
+					.append(this.reloadButtonMarkup)
+					.on("click." + this.getName(), ".reloadButtonOTB", () => {
+						require("electron").remote.getCurrentWindow().reload();
+					})
+					.on("mouseenter." + this.getName(), ".reloadButtonOTB", this.createReloadToolTip.bind(this))
+					.on("mouseleave." + this.getName(), ".reloadButtonOTB", this.deleteReloadToolTip.bind(this));
+			}
 			$(".iconInactive-WWHQEI").parent()
 				.append(this.dividerMarkup)
 				.append(this.minButtonMarkup)
@@ -153,7 +176,7 @@ class OldTitleBar {
 					require("electron").remote.getCurrentWindow().maximize();
 				})
 				.on("click." + this.getName(), ".closeButtonOTB", () => {
-					if (this.getSettings().forceClose) require("electron").remote.app.quit();
+					if (settings.forceClose) require("electron").remote.app.quit();
 					else require("electron").remote.getCurrentWindow().close();
 				})
 				.parent().css("-webkit-app-region", "drag");
@@ -165,11 +188,27 @@ class OldTitleBar {
 	removeTitleBar () {
 		$(".iconInactive-WWHQEI").parent()
 			.off("click." + this.getName())
-			.find(".dividerOTB, .minButtonOTB, .maxButtonOTB, .closeButtonOTB").remove();
+			.off("mouseenter." + this.getName())
+			.off("mouseleave." + this.getName())
+			.find(".dividerOTB, .reloadButtonOTB, .minButtonOTB, .maxButtonOTB, .closeButtonOTB").remove();
 			
 		$(".iconInactive-WWHQEI")
 			.parent().parent().css("-webkit-app-region", "initial");
 			
 		$(".titleBar-3_fDwJ").show();
+	}
+	
+	createReloadToolTip (e) {
+		var btn = e.target.tagName != "path" ? e.target : e.target.parentNode;
+		var reloadButtonTooltip = $(this.reloadButtonTooltipMarkup);
+		$(".tooltips").append(reloadButtonTooltip);
+		$(reloadButtonTooltip)
+			.text("Reload")
+			.css("left", ($(btn).offset().left + ($(btn).outerWidth() - $(reloadButtonTooltip).outerWidth())/2) + "px")
+			.css("top", ($(btn).offset().top + $(btn).height()) + "px");
+	}
+	
+	deleteReloadToolTip (e) {
+		$(".tooltips").find(".reload-button-tooltip").remove();
 	}
 }
