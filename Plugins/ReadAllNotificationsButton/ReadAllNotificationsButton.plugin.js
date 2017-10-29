@@ -16,7 +16,7 @@ class ReadAllNotificationsButton {
 
 	getDescription () {return "Adds a button to clear all notifications.";}
 
-	getVersion () {return "1.2.3";}
+	getVersion () {return "1.2.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -46,6 +46,8 @@ class ReadAllNotificationsButton {
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			$("#RANbutton-frame").remove();
+			
+			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
 		}
 	}
 
