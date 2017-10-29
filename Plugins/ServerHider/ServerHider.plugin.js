@@ -300,7 +300,7 @@ class ServerHider {
 
 	getDescription () {return "Hide Servers in your Serverlist";}
 
-	getVersion () {return "2.3.0";}
+	getVersion () {return "2.3.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -367,6 +367,8 @@ class ServerHider {
 			BDfunctionsDevilBro.showHideAllEles(true, BDfunctionsDevilBro.readServerList());
 			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName());
+			
+			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
 		}
 	}
 
