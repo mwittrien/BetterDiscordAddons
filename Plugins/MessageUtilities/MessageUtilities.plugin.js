@@ -47,7 +47,7 @@ class MessageUtilities {
 
 	getDescription () {return "Offers a number of useful message options.";}
 
-	getVersion () {return "1.0.5";}
+	getVersion () {return "1.0.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -94,6 +94,8 @@ class MessageUtilities {
 			$(document).unbind("dblclick." + this.getName(), this.dblClickListener);
 			$(window).unbind("keydown." + this.getName(), this.keydownListener);
 			$(window).unbind("keyup." + this.getName(), this.keyupListener);
+			
+			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
 		}
 	}
 
