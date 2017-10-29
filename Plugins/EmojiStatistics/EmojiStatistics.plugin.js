@@ -306,7 +306,7 @@ class EmojiStatistics {
 
 	getDescription () {return "Adds some helpful options to show you more information about emojis and emojiservers.";}
 
-	getVersion () {return "2.4.0";}
+	getVersion () {return "2.4.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -377,6 +377,8 @@ class EmojiStatistics {
 			this.emojiPickerObserver.disconnect();
 			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName());
+			
+			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
 		}
 	}
 	
