@@ -20,7 +20,7 @@ class GoogleTranslateOption {
 
 	getDescription () {return "Adds a Google Translate option to your context menu, which will open the selected text in Google Translate.";}
 
-	getVersion () {return "1.0.0";}
+	getVersion () {return "1.0.1";}
 	
 	getAuthor () {return "DevilBro";}
 	
@@ -66,6 +66,8 @@ class GoogleTranslateOption {
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.messageContextObserver.disconnect();
+			
+			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
 		}
 	}
 	
