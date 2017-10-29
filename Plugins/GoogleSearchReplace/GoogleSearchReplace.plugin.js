@@ -46,7 +46,7 @@ class GoogleSearchReplace {
 
 	getDescription () {return "Replaces the default Google Text Search with a selection menu of several search engines.";}
 
-	getVersion () {return "1.0.1";}
+	getVersion () {return "1.0.2";}
 	
 	getAuthor () {return "DevilBro";}
 
@@ -108,6 +108,8 @@ class GoogleSearchReplace {
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.messageContextObserver.disconnect();
+			
+			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
 		}
 	}
 	
