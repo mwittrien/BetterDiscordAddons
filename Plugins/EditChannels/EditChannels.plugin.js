@@ -237,7 +237,7 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "3.4.0";}
+	getVersion () {return "3.4.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -351,6 +351,8 @@ class EditChannels {
 			);
 			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName());
+			
+			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
 		}
 	}
 
@@ -394,11 +396,10 @@ class EditChannels {
 	}
 	
 	onContextMenu (context) {
-		if ($(context).find(".localchannelsettings-item").length == 0) {
+		if (!context.querySelector(".localchannelsettings-item")) {
 			var channelData = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"channel"});
-			var contextType = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"ChannelInviteCreateGroup"});
 			
-			if (channelData && contextType) {
+			if (channelData && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"ChannelInviteCreateGroup"})) {
 				$(context).append(this.channelContextEntryMarkup)
 					.on("mouseenter", ".localchannelsettings-item", channelData, this.createContextSubMenu.bind(this))
 					.on("mouseleave", ".localchannelsettings-item", channelData, this.deleteContextSubMenu.bind(this));
