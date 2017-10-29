@@ -39,7 +39,7 @@ class TopRoleEverywhere {
 
 	getDescription () {return "Adds the highest role of a user as a tag.";}
 
-	getVersion () {return "2.3.8";}
+	getVersion () {return "2.4.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -164,6 +164,8 @@ class TopRoleEverywhere {
 			this.settingsWindowObserver.disconnect();
 			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName());
+			
+			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
 		}
 	}
 	
