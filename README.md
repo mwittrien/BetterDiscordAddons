@@ -17,6 +17,7 @@ A series of plugins and themes for BetterDiscord. If you got any question write 
  - [Image Gallery](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ImageGallery) - Allows the user to browse through images sent inside the same message.
  - [Message Utilities](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/MessageUtilities) - Offers a number of useful message options.
  - [Notification Sounds](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/NotificationSounds) - Rings a sound when someone writes you a DM or when someones mentions you in a server.
+ - [Old Title Bar](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/OldTitleBar) - "Reverts the title bar back to its former self.
  - [Read All Notifications Button](https://github.com/mwittrien/BetterDiscordAddons/blob/master/Plugins/ReadAllNotificationsButton) - Adds a little button at the top of your serverlist that enables you to clear all mentions and messagesnotifications at once.
  - [Reverse Image Search](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ReverseImageSearch) - Adds the option to reverse image search images in discord via several engines.
  - [Send Large Messages](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SendLargeMessages) - Opens a popout when your message is too large, which allows you to automatically send the message in several smaller messages.
