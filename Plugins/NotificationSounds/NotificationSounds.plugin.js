@@ -40,7 +40,7 @@ class NotificationSounds {
 
 	getDescription () {return "Creates a notification sound when you receive a notification (mention or DM).";}
 
-	getVersion () {return "2.5.3";}
+	getVersion () {return "2.5.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -250,6 +250,8 @@ class NotificationSounds {
 			this.channelListObserver.disconnect();
 			this.chatWindowObserver.disconnect();
 			this.messageChangeObserver.disconnect();
+			
+			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
 		}
 	}
 	
