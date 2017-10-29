@@ -242,7 +242,7 @@ class SendLargeMessages {
 
 	getDescription () {return "Opens a popout when your message is too large, which allows you to automatically send the message in several smaller messages.";}
 
-	getVersion () {return "1.2.0";}
+	getVersion () {return "1.2.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -285,6 +285,8 @@ class SendLargeMessages {
 			
 			$(".channelTextArea-1HTP3C textarea").off("input." + this.getName()).off("paste." + this.getName());
 			$(document).off("mouseup." + this.getName()).off("mousemove." + this.getName());
+			
+			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
 		}
 	}
 	
