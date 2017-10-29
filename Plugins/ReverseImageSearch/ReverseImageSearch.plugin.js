@@ -43,7 +43,7 @@ class ReverseImageSearch {
 
 	getDescription () {return "Adds a reverse image search option to the context menu.";}
 
-	getVersion () {return "3.2.3";}
+	getVersion () {return "3.2.4";}
 	
 	getAuthor () {return "DevilBro";}
 
@@ -105,6 +105,8 @@ class ReverseImageSearch {
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.messageContextObserver.disconnect();
+			
+			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
 		}
 	}
 	
