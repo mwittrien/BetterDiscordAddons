@@ -242,7 +242,7 @@ class SendLargeMessages {
 
 	getDescription () {return "Opens a popout when your message is too large, which allows you to automatically send the message in several smaller messages.";}
 
-	getVersion () {return "1.2.2";}
+	getVersion () {return "1.2.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -400,7 +400,7 @@ class SendLargeMessages {
 	formatText (text) {
 		var longwords = text.match(/[\S]{1800,}/gm);
 		for (var i in longwords) {
-			let longword = b[i];
+			let longword = longwords[i];
 			let count1 = 0;
 			let shortwords = [];
 			longword.split("").forEach((char) => {
