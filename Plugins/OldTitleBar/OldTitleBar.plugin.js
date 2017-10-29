@@ -48,7 +48,7 @@ class OldTitleBar {
 
 	getDescription () {return "Reverts the title bar back to its former self.";}
 
-	getVersion () {return "1.0.1";}
+	getVersion () {return "1.0.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -155,7 +155,7 @@ class OldTitleBar {
 		if ($(".dividerOTB, .reloadButtonOTB, .minButtonOTB, .maxButtonOTB, .closeButtonOTB").length == 0) {
 			var settings = this.getSettings();
 			if (settings.reloadButton) {
-				$(".iconInactive-WWHQEI").parent()
+				$(".divider-1GKkV3").parent().has(".iconInactive-WWHQEI")
 					.append(this.dividerMarkup)
 					.append(this.reloadButtonMarkup)
 					.on("click." + this.getName(), ".reloadButtonOTB", () => {
@@ -164,7 +164,7 @@ class OldTitleBar {
 					.on("mouseenter." + this.getName(), ".reloadButtonOTB", this.createReloadToolTip.bind(this))
 					.on("mouseleave." + this.getName(), ".reloadButtonOTB", this.deleteReloadToolTip.bind(this));
 			}
-			$(".iconInactive-WWHQEI").parent()
+			$(".divider-1GKkV3").parent().has(".iconInactive-WWHQEI")
 				.append(this.dividerMarkup)
 				.append(this.minButtonMarkup)
 				.append(this.maxButtonMarkup)
@@ -186,14 +186,14 @@ class OldTitleBar {
 	}
 	
 	removeTitleBar () {
-		$(".iconInactive-WWHQEI").parent()
+		$(".divider-1GKkV3").parent().has(".iconInactive-WWHQEI")
 			.off("click." + this.getName())
 			.off("mouseenter." + this.getName())
 			.off("mouseleave." + this.getName())
 			.find(".dividerOTB, .reloadButtonOTB, .minButtonOTB, .maxButtonOTB, .closeButtonOTB").remove();
 			
-		$(".iconInactive-WWHQEI")
-			.parent().parent().css("-webkit-app-region", "initial");
+		$(".divider-1GKkV3")
+			.parent().has(".iconInactive-WWHQEI").parent().css("-webkit-app-region", "initial");
 			
 		$(".titleBar-3_fDwJ").show();
 	}
