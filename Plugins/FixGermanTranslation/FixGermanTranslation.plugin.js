@@ -9,7 +9,7 @@ class FixGermanTranslation {
 
 	getDescription () {return "Fixes some german translation errors.";}
 
-	getVersion () {return "1.1.5";}
+	getVersion () {return "1.1.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -56,6 +56,8 @@ class FixGermanTranslation {
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.serverContextObserver.disconnect();
+			
+			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
 		}
 	}
 
