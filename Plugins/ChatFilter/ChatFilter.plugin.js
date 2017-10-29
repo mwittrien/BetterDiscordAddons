@@ -228,7 +228,7 @@ class ChatFilter {
 
 	getDescription () {return "Allows the user to censor words or block complete messages based on words in the chatwindow.";}
 
-	getVersion () {return "3.0.2";}
+	getVersion () {return "3.0.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -376,6 +376,8 @@ class ChatFilter {
 			$(".markup.blocked, .markup.censored").each((_,message) => {
 				this.resetMessage(message);
 			});
+			
+			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
 		}
 	}
 	
