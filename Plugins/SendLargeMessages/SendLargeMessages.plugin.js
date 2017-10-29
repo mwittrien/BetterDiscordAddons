@@ -242,7 +242,7 @@ class SendLargeMessages {
 
 	getDescription () {return "Opens a popout when your message is too large, which allows you to automatically send the message in several smaller messages.";}
 
-	getVersion () {return "1.2.1";}
+	getVersion () {return "1.2.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -345,17 +345,15 @@ class SendLargeMessages {
 				setTimeout(() => {sendMessageModal.remove();}, 300);
 			})
 			.on("click", "button.btn-send", (e) => {
-				if (!textinput.value.match(/[\S]{1900,}/gm) && (!textinput.value.match(/`{3,}/gm) || textinput.value.match(/`{3,}/gm).length % 2 == 0)) {
-					e.preventDefault();
-					sendMessageModal.addClass('closing');
-					setTimeout(() => {sendMessageModal.remove();}, 300);
-					$(document).off("mouseup." + this.getName()).off("mousemove." + this.getName());
-					this.formatText(textinput.value).forEach((message,i) => {
-						setTimeout(() => {
-							this.sendMessage(message);
-						},i*1000);
-					});
-				}
+				e.preventDefault();
+				sendMessageModal.addClass('closing');
+				setTimeout(() => {sendMessageModal.remove();}, 300);
+				$(document).off("mouseup." + this.getName()).off("mousemove." + this.getName());
+				this.formatText(textinput.value).forEach((message,i) => {
+					setTimeout(() => {
+						this.sendMessage(message);
+					},i*1000);
+				});
 			});
 			
 		textinput.value = text;
@@ -400,22 +398,33 @@ class SendLargeMessages {
 	}
 	
 	formatText (text) {
+		var longwords = text.match(/[\S]{1800,}/gm);
+		for (var i in longwords) {
+			let longword = b[i];
+			let count1 = 0;
+			let shortwords = [];
+			longword.split("").forEach((char) => {
+				if (shortwords[count1] && shortwords[count1].length >= 1800) count1++;
+				shortwords[count1] = shortwords[count1] ? shortwords[count1] + char : char;
+			});
+			text = text.replace(longword, shortwords.join(" "));
+		}
 		var messages = [];
-		var count = 0;
+		var count2 = 0;
 		text.split(" ").forEach((word) => {
-			if (messages[count] && (messages[count].length + word.length) > 1900) count++;
-			messages[count] = messages[count] ? messages[count] + " " + word : word;
+			if (messages[count2] && (messages[count2].length + word.length) > 1900) count2++;
+			messages[count2] = messages[count2] ? messages[count2] + " " + word : word;
 		});
 		
 		var insertCodeBlock = null;
-		for (var i = 0; i < messages.length; i++) {
+		for (var j = 0; j < messages.length; j++) {
 			if (insertCodeBlock) {
-				messages[i] = insertCodeBlock + messages[i];
+				messages[j] = insertCodeBlock + messages[j];
 				insertCodeBlock = null;
 			}
-			var codeBlocks = messages[i].match(/`{3,}[\S]*\n|`{3,}/gm);
+			var codeBlocks = messages[j].match(/`{3,}[\S]*\n|`{3,}/gm);
 			if (codeBlocks && codeBlocks.length % 2 == 1) {
-				messages[i] = messages[i] + "```";
+				messages[j] = messages[j] + "```";
 				insertCodeBlock = codeBlocks[codeBlocks.length-1] + "\n";
 			}
 		}
