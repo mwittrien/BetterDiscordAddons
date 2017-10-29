@@ -283,7 +283,7 @@ BDfunctionsDevilBro.getOwnerInstance = function (config) {
 	var upwards = config.up === undefined ? false : config.up;
 	
 	var start = performance.now();
-	var maxTime = config.time === undefined ? 15 : config.time;
+	var maxTime = config.time === undefined ? 150 : config.time;
 		
 	var keyWhiteList = upwards ? {"return":true,"sibling":true} : {"child":true,"sibling":true};
 	
@@ -323,7 +323,7 @@ BDfunctionsDevilBro.getKeyInformation = function (config) {
 	var maxDepth = config.depth === undefined ? 15 : config.depth;
 	
 	var start = performance.now();
-	var maxTime = config.time === undefined ? 200000 : config.time;
+	var maxTime = config.time === undefined ? 150 : config.time;
 		
 	var keyWhiteList = {
 		"_currentElement":true,
