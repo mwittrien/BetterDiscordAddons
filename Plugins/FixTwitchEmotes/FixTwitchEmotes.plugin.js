@@ -9,7 +9,7 @@ class FixTwitchEmotes {
 
 	getDescription () {return "Fixes the problem with twitch emotes not being properly inserted in the textarea.";}
 
-	getVersion () {return "2.1.0";}
+	getVersion () {return "2.1.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -61,6 +61,8 @@ class FixTwitchEmotes {
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.emojiPickerObserver.disconnect();
+			
+			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
 		}
 	}
 }
