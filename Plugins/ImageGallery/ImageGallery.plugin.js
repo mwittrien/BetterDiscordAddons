@@ -53,7 +53,7 @@ class ImageGallery {
 
 	getDescription () {return "Allows the user to browse through images sent inside the same message.";}
 
-	getVersion () {return "1.3.3";}
+	getVersion () {return "1.3.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -107,6 +107,8 @@ class ImageGallery {
 			$(document).off("keyup." + this.getName()).off("keydown." + this.getName());
 			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName());
+			
+			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
 		}
 	}
 
