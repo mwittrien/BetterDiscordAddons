@@ -4,6 +4,15 @@ class OldTitleBar {
 	constructor () {
 		this.switchFixObserver = new MutationObserver(() => {});
 		this.settingsWindowObserver = new MutationObserver(() => {});
+		
+		this.css = `
+			.settings-titlebar {
+				position: relative;
+				z-index: 1000;
+				text-align: right;
+				padding: 10px;
+				-webkit-app-region: drag;
+			}`;
 			
 		this.dividerMarkup = `<div class="dividerOTB divider-1GKkV3"></div>`;
 			
@@ -46,13 +55,14 @@ class OldTitleBar {
 
 	getDescription () {return "Reverts the title bar back to its former self.";}
 
-	getVersion () {return "1.0.3";}
+	getVersion () {return "1.0.4";}
 
 	getAuthor () {return "DevilBro";}
 
     getSettingsPanel () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			return `
+			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="addToSettings"${(this.getSettings().addToSettings ? " checked" : void 0)}> Add an old fashioned title bar to settings windows.</label><br>\n
 			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="reloadButton"${(this.getSettings().reloadButton ? " checked" : void 0)}> Add a reload button to the title bar.</label><br>\n
 			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="forceClose"${(this.getSettings().forceClose ? " checked" : void 0)}> Completely turn off Discord when pressing close.</label>`;
 		}
@@ -78,16 +88,13 @@ class OldTitleBar {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (node && node.tagName && node.getAttribute("layer-id")) {
-									$(".divider-1GKkV3").parent().has(".iconInactive-WWHQEI").parent().css("-webkit-app-region", "initial");
+									if (this.getSettings().addToSettings) this.addSettingsTitleBar(node);
 								}
 							});
 						}
 						if (change.removedNodes) {
 							change.removedNodes.forEach((node) => {
 								if (node && node.tagName && node.getAttribute("layer-id")) {
-									$(".divider-1GKkV3").parent().has(".iconInactive-WWHQEI").parent().css("-webkit-app-region", "drag");
-								}
-								if (node && node.tagName && node.getAttribute("layer-id") == "user-settings") {
 									this.removeTitleBar();
 									this.addTitleBar();
 								}
@@ -100,7 +107,11 @@ class OldTitleBar {
 			
 			this.switchFixObserver = BDfunctionsDevilBro.onSwitchFix(this);
 			
+			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
+			
 			this.addTitleBar();
+			
+			if (this.getSettings().addToSettings && document.querySelector(".layer[layer-id]")) this.addSettingsTitleBar(document.querySelector(".layer[layer-id]"));
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -112,6 +123,8 @@ class OldTitleBar {
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.switchFixObserver.disconnect();
 			this.settingsWindowObserver.disconnect();
+			
+			BDfunctionsDevilBro.removeLocalStyle(this.getName(), this.css);
 			
 			this.removeTitleBar();
 			
@@ -132,6 +145,7 @@ class OldTitleBar {
 	
 	getSettings () {
 		var defaultSettings = {
+			addToSettings: true,
 			reloadButton: false,
 			forceClose: false
 		};
@@ -160,7 +174,7 @@ class OldTitleBar {
     }
 	
 	addTitleBar () {
-		if ($(".dividerOTB, .reloadButtonOTB, .minButtonOTB, .maxButtonOTB, .closeButtonOTB").length == 0) {
+		if (!document.querySelector(".dividerOTB, .reloadButtonOTB, .minButtonOTB, .maxButtonOTB, .closeButtonOTB")) {
 			var settings = this.getSettings();
 			if (settings.reloadButton) {
 				$(".divider-1GKkV3").parent().has(".iconInactive-WWHQEI")
@@ -193,7 +207,43 @@ class OldTitleBar {
 		}
 	}
 	
+	addSettingsTitleBar (settingspane) {
+		$(".divider-1GKkV3").parent().has(".iconInactive-WWHQEI").parent().css("-webkit-app-region", "initial");
+		
+		if (!settingspane.querySelector(".dividerOTB, .reloadButtonOTB, .minButtonOTB, .maxButtonOTB, .closeButtonOTB")) {
+			var settingsbar = $(`<div class="settings-titlebar"></div>`)
+			var settings = this.getSettings();
+			if (settings.reloadButton) {
+				$(settingsbar)
+					.append(this.reloadButtonMarkup)
+					.on("click." + this.getName(), ".reloadButtonOTB", () => {
+						require("electron").remote.getCurrentWindow().reload();
+					})
+					.on("mouseenter." + this.getName(), ".reloadButtonOTB", this.createReloadToolTip.bind(this))
+					.on("mouseleave." + this.getName(), ".reloadButtonOTB", this.deleteReloadToolTip.bind(this));
+			}
+			$(settingsbar)
+				.append(this.minButtonMarkup)
+				.append(this.maxButtonMarkup)
+				.append(this.closeButtonMarkup)
+				.on("click." + this.getName(), ".minButtonOTB", () => {
+					require("electron").remote.getCurrentWindow().minimize();
+				})
+				.on("click." + this.getName(), ".maxButtonOTB", () => {
+					require("electron").remote.getCurrentWindow().maximize();
+				})
+				.on("click." + this.getName(), ".closeButtonOTB", () => {
+					if (settings.forceClose) require("electron").remote.app.quit();
+					else require("electron").remote.getCurrentWindow().close();
+				});
+				
+			$(settingspane).append(settingsbar);
+		}
+	}
+	
 	removeTitleBar () {
+		$(".settings-titlebar").remove();
+		
 		$(".divider-1GKkV3").parent().has(".iconInactive-WWHQEI")
 			.off("click." + this.getName())
 			.off("mouseenter." + this.getName())
