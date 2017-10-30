@@ -6,6 +6,10 @@ class OldTitleBar {
 		this.settingsWindowObserver = new MutationObserver(() => {});
 		
 		this.css = `
+			.titleBar-3_fDwJ {
+				display: none;
+			}
+			
 			.settings-titlebar {
 				position: relative;
 				z-index: 1000;
@@ -55,7 +59,7 @@ class OldTitleBar {
 
 	getDescription () {return "Reverts the title bar back to its former self.";}
 
-	getVersion () {return "1.0.4";}
+	getVersion () {return "1.0.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -202,8 +206,6 @@ class OldTitleBar {
 					else require("electron").remote.getCurrentWindow().close();
 				})
 				.parent().css("-webkit-app-region", "drag");
-				
-			$(".titleBar-3_fDwJ").hide();
 		}
 	}
 	
@@ -252,8 +254,6 @@ class OldTitleBar {
 			
 		$(".divider-1GKkV3")
 			.parent().has(".iconInactive-WWHQEI").parent().css("-webkit-app-region", "initial");
-			
-		$(".titleBar-3_fDwJ").show();
 	}
 	
 	createReloadToolTip (e) {
