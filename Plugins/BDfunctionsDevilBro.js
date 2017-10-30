@@ -29,10 +29,8 @@ BDfunctionsDevilBro.loadMessage = function (pluginName, oldVersion) {
 										(change2, j) => {
 											if (change2.addedNodes) {
 												change2.addedNodes.forEach((node2) => {
-													if (!node2.querySelector(".bd-pfbtn.bd-updatebtn")) {
-														if (node2 && node2.tagName && node2.querySelector(".bd-pfbtn")) {
-															node2.querySelector(".bd-pfbtn").parentElement.insertBefore(BDfunctionsDevilBro.createUpdateButton(), node2.querySelector(".bd-pfbtn").nextSibling);
-														}
+													if (node2 && node2.tagName && !node2.querySelector(".bd-pfbtn.bd-updatebtn") && node2.querySelector(".bd-pfbtn")) {
+														node2.querySelector(".bd-pfbtn").parentElement.insertBefore(BDfunctionsDevilBro.createUpdateButton(), node2.querySelector(".bd-pfbtn").nextSibling);
 													}
 												});
 											}
