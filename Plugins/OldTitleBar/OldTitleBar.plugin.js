@@ -59,7 +59,7 @@ class OldTitleBar {
 
 	getDescription () {return "Reverts the title bar back to its former self.";}
 
-	getVersion () {return "1.0.5";}
+	getVersion () {return "1.0.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -255,7 +255,7 @@ class OldTitleBar {
 	}
 	
 	createReloadToolTip (e) {
-		var btn = e.target.tagName != "path" ? e.target : e.target.parentNode;
+		var btn = document.querySelector(".reloadButtonOTB");
 		var reloadButtonTooltip = $(this.reloadButtonTooltipMarkup);
 		$(".tooltips").append(reloadButtonTooltip);
 		$(reloadButtonTooltip)
