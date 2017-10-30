@@ -92,6 +92,7 @@ class OldTitleBar {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (node && node.tagName && node.getAttribute("layer-id")) {
+									this.removeTitleBar();
 									if (this.getSettings().addToSettings) this.addSettingsTitleBar(node);
 								}
 							});
@@ -99,7 +100,6 @@ class OldTitleBar {
 						if (change.removedNodes) {
 							change.removedNodes.forEach((node) => {
 								if (node && node.tagName && node.getAttribute("layer-id")) {
-									this.removeTitleBar();
 									this.addTitleBar();
 								}
 							});
@@ -210,8 +210,6 @@ class OldTitleBar {
 	}
 	
 	addSettingsTitleBar (settingspane) {
-		$(".divider-1GKkV3").parent().has(".iconInactive-WWHQEI").parent().css("-webkit-app-region", "initial");
-		
 		if (!settingspane.querySelector(".dividerOTB, .reloadButtonOTB, .minButtonOTB, .maxButtonOTB, .closeButtonOTB")) {
 			var settingsbar = $(`<div class="settings-titlebar"></div>`)
 			var settings = this.getSettings();
