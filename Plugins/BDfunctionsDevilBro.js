@@ -1118,8 +1118,16 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 		.off("mousedown")
 		.on("mousedown", (event) => {
 			switchPreviews(event.button);
+			
+			pHalfW = pcursor.offsetWidth/2;
+			pHalfH = pcursor.offsetHeight/2;
+			pMinX = $(ppane).offset().left;
+			pMaxX = pMinX + ppane.offsetWidth;
+			pMinY = $(ppane).offset().top;
+			pMaxY = pMinY + ppane.offsetHeight;
 			pX = event.clientX - pHalfW;
 			pY = event.clientY - pHalfH;
+			
 			$(pcursor).offset({"left":pX,"top":pY});
 			
 			saturation = mapRange([pMinX - pHalfW, pMaxX - pHalfW], [0, 100], pX);
@@ -1131,7 +1139,7 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 				.on("mouseup", () => {
 					$(document).off("mouseup").off("mousemove");
 				})
-				.on("mousemove", (event2) => {	
+				.on("mousemove", (event2) => {	var pX = 0;
 					pX = event2.clientX > pMaxX ? pMaxX - pHalfW : (event2.clientX < pMinX ? pMinX - pHalfW : event2.clientX - pHalfW);
 					pY = event2.clientY > pMaxY ? pMaxY - pHalfH : (event2.clientY < pMinY ? pMinY - pHalfH : event2.clientY - pHalfH);
 					$(pcursor).offset({"left":pX,"top":pY});
@@ -1146,7 +1154,12 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 		.off("mousedown")
 		.on("mousedown", (event) => {
 			switchPreviews(event.button);
+			
+			sHalfH = scursor.offsetHeight/2;
+			sMinY = $(spane).offset().top;
+			sMaxY = sMinY + spane.offsetHeight;
 			sY = event.clientY - sHalfH;
+			
 			$(scursor).offset({"top":sY});
 			
 			hue = mapRange([sMinY - sHalfH, sMaxY - sHalfH], [360, 0], sY);
