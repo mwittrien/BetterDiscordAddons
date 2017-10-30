@@ -47,7 +47,7 @@ class MessageUtilities {
 
 	getDescription () {return "Offers a number of useful message options.";}
 
-	getVersion () {return "1.0.6";}
+	getVersion () {return "1.1.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -106,8 +106,8 @@ class MessageUtilities {
 		if (this.pressedKeys.indexOf(46) > -1) {
 			if (this.firedEvents.indexOf("onSglClick") == -1) {
 				this.firedEvents.push("onSglClick");
-				var messageWrap = e.target.parentElement;
-				if (messageWrap && messageWrap.classList && messageWrap.classList.contains("message-text")) {
+				var messageWrap = $(".message-text").has(e.target)[0];
+				if (messageWrap) {
 					this.doMessageAction(messageWrap, "bound handleDelete");
 					$(".callout-backdrop, .backdrop-2ohBEd").hide();
 					$("div[class^='modal']").has("button[class^='buttonRedFilled']").hide();
@@ -121,8 +121,8 @@ class MessageUtilities {
 	onDblClick (e) {
 		if (this.firedEvents.indexOf("onDblClick") == -1) {
 			this.firedEvents.push("onDblClick");
-			var messageWrap = e.target.parentElement;
-			if (messageWrap && messageWrap.classList && messageWrap.classList.contains("message-text")) {
+			var messageWrap = $(".message-text").has(e.target)[0];
+			if (messageWrap) {
 				this.doMessageAction(messageWrap, "bound handleEdit");
 			} 
 			this.firedEvents.pop("onDblClick");
