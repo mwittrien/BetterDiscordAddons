@@ -4,8 +4,6 @@ class OldTitleBar {
 	constructor () {
 		this.switchFixObserver = new MutationObserver(() => {});
 		this.settingsWindowObserver = new MutationObserver(() => {});
-		
-		this.app = require("electron").remote.getCurrentWindow();
 			
 		this.dividerMarkup = `<div class="dividerOTB divider-1GKkV3"></div>`;
 			
@@ -48,7 +46,7 @@ class OldTitleBar {
 
 	getDescription () {return "Reverts the title bar back to its former self.";}
 
-	getVersion () {return "1.0.2";}
+	getVersion () {return "1.0.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -77,8 +75,18 @@ class OldTitleBar {
 			this.settingsWindowObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
+						if (change.addedNodes) {
+							change.addedNodes.forEach((node) => {
+								if (node && node.tagName && node.getAttribute("layer-id")) {
+									$(".divider-1GKkV3").parent().has(".iconInactive-WWHQEI").parent().css("-webkit-app-region", "initial");
+								}
+							});
+						}
 						if (change.removedNodes) {
 							change.removedNodes.forEach((node) => {
+								if (node && node.tagName && node.getAttribute("layer-id")) {
+									$(".divider-1GKkV3").parent().has(".iconInactive-WWHQEI").parent().css("-webkit-app-region", "drag");
+								}
 								if (node && node.tagName && node.getAttribute("layer-id") == "user-settings") {
 									this.removeTitleBar();
 									this.addTitleBar();
