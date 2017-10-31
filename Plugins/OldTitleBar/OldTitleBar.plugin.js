@@ -5,6 +5,9 @@ class OldTitleBar {
 		this.switchFixObserver = new MutationObserver(() => {});
 		this.settingsWindowObserver = new MutationObserver(() => {});
 		
+		this.oldWidth;
+		this.oldHeight;
+		
 		this.css = `
 			.titleBar-3_fDwJ {
 				display: none;
@@ -59,7 +62,7 @@ class OldTitleBar {
 
 	getDescription () {return "Reverts the title bar back to its former self.";}
 
-	getVersion () {return "1.1.0";}
+	getVersion () {return "1.1.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -185,7 +188,7 @@ class OldTitleBar {
 					.append(this.dividerMarkup)
 					.append(this.reloadButtonMarkup)
 					.on("click." + this.getName(), ".reloadButtonOTB", () => {
-						require("electron").remote.getCurrentWindow().reload();
+						this.doReload();
 					})
 					.on("mouseenter." + this.getName(), ".reloadButtonOTB", this.createReloadToolTip.bind(this))
 					.on("mouseleave." + this.getName(), ".reloadButtonOTB", this.deleteReloadToolTip.bind(this));
@@ -196,14 +199,13 @@ class OldTitleBar {
 				.append(this.maxButtonMarkup)
 				.append(this.closeButtonMarkup)
 				.on("click." + this.getName(), ".minButtonOTB", () => {
-					require("electron").remote.getCurrentWindow().minimize();
+					this.doMinimize();
 				})
 				.on("click." + this.getName(), ".maxButtonOTB", () => {
-					require("electron").remote.getCurrentWindow().maximize();
+					this.doMaximize();
 				})
 				.on("click." + this.getName(), ".closeButtonOTB", () => {
-					if (settings.forceClose) require("electron").remote.app.quit();
-					else require("electron").remote.getCurrentWindow().close();
+					this.doClose();
 				})
 				.parent().css("-webkit-app-region", "drag");
 		}
@@ -217,7 +219,7 @@ class OldTitleBar {
 				$(settingsbar)
 					.append(this.reloadButtonMarkup)
 					.on("click." + this.getName(), ".reloadButtonOTB", () => {
-						require("electron").remote.getCurrentWindow().reload();
+						this.doReload();
 					})
 					.on("mouseenter." + this.getName(), ".reloadButtonOTB", this.createReloadToolTip.bind(this))
 					.on("mouseleave." + this.getName(), ".reloadButtonOTB", this.deleteReloadToolTip.bind(this));
@@ -227,18 +229,49 @@ class OldTitleBar {
 				.append(this.maxButtonMarkup)
 				.append(this.closeButtonMarkup)
 				.on("click." + this.getName(), ".minButtonOTB", () => {
-					require("electron").remote.getCurrentWindow().minimize();
+					this.doMinimize();
 				})
 				.on("click." + this.getName(), ".maxButtonOTB", () => {
-					require("electron").remote.getCurrentWindow().maximize();
+					this.doMaximize();
 				})
 				.on("click." + this.getName(), ".closeButtonOTB", () => {
-					if (settings.forceClose) require("electron").remote.app.quit();
-					else require("electron").remote.getCurrentWindow().close();
+					this.doClose();
 				});
 				
 			$(settingspane).append(settingsbar);
 		}
+	}
+	
+	doReload () {
+		require("electron").remote.getCurrentWindow().reload();
+	}
+	
+	doMinimize () {
+		require("electron").remote.getCurrentWindow().minimize();
+	}
+	
+	doMaximize () {
+		if (require("electron").remote.getCurrentWindow().isMaximized()) {
+			var newWidth = this.oldWidth ? this.oldWidth : Math.round(screen.availWidth - Math.round(screen.availWidth/10));
+			var newHeight = this.oldHeight ? this.oldHeight : Math.round(screen.availHeight - Math.round(screen.availHeight/10));
+			var newLeft = this.oldLeft ? this.oldLeft : Math.round((screen.availWidth - newWidth)/2);
+			var newTop = this.oldTop ? this.oldTop : Math.round((screen.availHeight - newHeight)/2);
+			
+			require("electron").remote.getCurrentWindow().setSize(newWidth, newHeight);
+			require("electron").remote.getCurrentWindow().setPosition(newLeft, newTop);
+		}
+		else {
+			this.oldLeft = window.screenX;
+			this.oldTop = window.screenY;
+			this.oldWidth = window.outerWidth;
+			this.oldHeight = window.outerHeight;
+			require("electron").remote.getCurrentWindow().maximize();
+		}
+	}
+	
+	doClose () {
+		if (settings.forceClose) require("electron").remote.app.quit();
+		else require("electron").remote.getCurrentWindow().close();
 	}
 	
 	removeTitleBar () {
