@@ -15,6 +15,7 @@ class EditUsers {
 		this.chatWindowObserver = new MutationObserver(() => {});
 		this.channelListObserver = new MutationObserver(() => {});
 		this.userPopoutObserver = new MutationObserver(() => {});
+		this.userProfilModalObserver = new MutationObserver(() => {});
 		this.settingsWindowObserver = new MutationObserver(() => {});
 		
 		this.urlCheckTimeout;
@@ -283,6 +284,7 @@ class EditUsers {
 				white-space: nowrap;
 			}
 			
+			.user-tag.profil-tag,
 			.user-tag.popout-tag,
 			.user-tag.chat-tag {
 				bottom: 1px;
@@ -395,7 +397,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "1.6.2";}
+	getVersion () {return "1.7.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -410,6 +412,7 @@ class EditUsers {
 			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInDmsList"${(this.getSettings().changeInDmsList ? " checked" : void 0)}> DM-Conversation List</label><br>\n
 			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInFriendList"${(this.getSettings().changeInFriendList ? " checked" : void 0)}> Friends List</label><br>\n
 			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInUserPopout"${(this.getSettings().changeInUserPopout ? " checked" : void 0)}> User Popups</label><br>\n
+			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInUserProfil"${(this.getSettings().changeInUserProfil ? " checked" : void 0)}> User Profil</label><br>\n
 			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInUserAccount"${(this.getSettings().changeInUserAccount ? " checked" : void 0)}> Your Account Window</label><br>\n<br>\n
 			<button class="` + this.getName() + `ResetBtn" style="height:23px" onclick='` + this.getName() + `.resetAll("` + this.getName() + `")'>Reset all Users`;
 		}
@@ -549,7 +552,7 @@ class EditUsers {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (node && node.tagName && node.querySelector("[class*='userPopout']")) {
-									if (this.getSettings().changeInUserPopout) this.loadUser(node, "popout", false);
+									if (this.getSettings().changeInUserPopout) this.loadUser(node.querySelector("[class*='userPopout']"), "popout", false);
 								}
 							});
 						}
@@ -557,6 +560,21 @@ class EditUsers {
 				);
 			});
 			if (document.querySelector(".popouts")) this.userPopoutObserver.observe(document.querySelector(".popouts"), {childList: true});
+			
+			this.userProfilModalObserver = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.addedNodes) {
+							change.addedNodes.forEach((node) => {
+								if (node && node.tagName && node.querySelector("#user-profile-modal")) {
+									if (this.getSettings().changeInUserProfil) this.loadUser(node.querySelector("#user-profile-modal"), "profil", false);
+								}
+							});
+						}
+					}
+				);
+			});
+			if (document.querySelector("#app-mount > [class^='theme-']")) this.userProfilModalObserver.observe(document.querySelectorAll("#app-mount > [class^='theme-']")[document.querySelectorAll("#app-mount > [class^='theme-']").length-1], {childList: true});
 			
 			this.settingsWindowObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -598,6 +616,7 @@ class EditUsers {
 			this.chatWindowObserver.disconnect();
 			this.channelListObserver.disconnect();
 			this.userPopoutObserver.disconnect();
+			this.userProfilModalObserver.disconnect();
 			this.settingsWindowObserver.disconnect();
 			
 			this.resetAllUsers();
@@ -629,7 +648,8 @@ class EditUsers {
 			changeInDmsList: true,
 			changeInFriendList: true,
 			changeInUserAccount: true,
-			changeInUserPopout: true
+			changeInUserPopout: true,
+			changeInUserProfil: true
 		};
 		var settings = BDfunctionsDevilBro.loadAllData(this.getName(), "settings");
 		var saveSettings = false;
@@ -862,8 +882,8 @@ class EditUsers {
 				this.urlCheckRequest = request(e.target.value, (error, response, result) => {
 					if (response && response.headers["content-type"] && response.headers["content-type"].indexOf("image") != -1) {
 						$(e.target)
-								.removeClass("invalid")
-								.addClass("valid");
+							.removeClass("invalid")
+							.addClass("valid");
 					}
 					else {
 						$(e.target)
@@ -974,6 +994,12 @@ class EditUsers {
 				this.loadUser(popout, "popout", false);
 			}
 		}
+		if (settings.changeInUserProfil) {
+			var profil = document.querySelector("div#user-profile-modal");
+			if (profil) {
+				this.loadUser(profil, "profil", false);
+			}
+		}
 	}
 	
 	loadUser (div, type, compact) {
@@ -996,7 +1022,7 @@ class EditUsers {
 				var name = data.name ? data.name : this.nickNames.names[info.id];
 				var color1 = data.color1 ? BDfunctionsDevilBro.color2RGB(data.color1) : (styleInfo ? BDfunctionsDevilBro.color2RGB(styleInfo.color) : "");
 				var color2 = data.color2 ? BDfunctionsDevilBro.color2RGB(data.color2) : "";
-				username.innerText = type == "info" ? info.username : name;
+				username.innerText = type == "info" || type == "profil" ? info.username : name;
 				username.style.color = color1;
 				username.style.background = color2;
 				
@@ -1017,10 +1043,11 @@ class EditUsers {
 				var bgImage = data.url ? "url(" + data.url + ")" : (info.avatar ? "url('https://cdn.discordapp.com/avatars/" + info.id + "/" + info.avatar + ".webp')" : "url(/assets/1cbd08c76f8af6dddce02c5138971129.png");
 				avatar.style.background = removeIcon ? "" : bgImage;
 				avatar.style.backgroundSize = "cover";
+				avatar.style.backgroundPosition = "center";
 			}
 				
 			var tag = data.tag ? data.tag : null;
-			if (tag && (type == "list" || type == "chat" || type == "popout")) {
+			if (tag && (type == "list" || type == "chat" || type == "popout" || type == "profil")) {
 				var color3 = data.color3 ? BDfunctionsDevilBro.color2RGB(data.color3) : "";
 				var color4 = data.color4 ? BDfunctionsDevilBro.color2RGB(data.color4) : "white";
 				var thisTag = $(this.tagMarkup)[0];
@@ -1107,7 +1134,8 @@ class EditUsers {
 		var avatar = 	div.querySelector("div.avatar-small") || 
 						div.querySelector("a.avatar-small") || 
 						div.querySelector("div.avatar-large") || 
-						div.querySelector("div.avatarDefault-3jtQoc") || 
+						div.querySelector("div.avatarDefault-3jtQoc") ||
+						div.querySelector("div.avatar-profile") || 
 						div.querySelector("div.avatar-1BXaQj div.image-EVRGPw");
 						
 		var username = 	div.querySelector("strong.user-name") || 
