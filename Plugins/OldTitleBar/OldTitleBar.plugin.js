@@ -5,12 +5,13 @@ class OldTitleBar {
 		this.switchFixObserver = new MutationObserver(() => {});
 		this.settingsWindowObserver = new MutationObserver(() => {});
 		
-		this.oldWidth;
-		this.oldHeight;
-		
 		this.css = `
 			.titleBar-3_fDwJ {
 				display: none;
+			}
+			
+			.topic-1KFf6J {
+				-webkit-app-region: no-drag;
 			}
 			
 			.settings-titlebar {
@@ -62,7 +63,7 @@ class OldTitleBar {
 
 	getDescription () {return "Reverts the title bar back to its former self.";}
 
-	getVersion () {return "1.1.1";}
+	getVersion () {return "1.1.2";}
 
 	getAuthor () {return "DevilBro";}
 
