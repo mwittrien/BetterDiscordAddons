@@ -1,248 +1,59 @@
-//META{"name":"SendLargeMessages"}*//
+//META{"name":"ImageGallery"}*//
 
-class SendLargeMessages {
+class ImageGallery {
 	constructor () {
+		this.imageModalObserver = new MutationObserver(() => {});
 		
-		this.labels = {};
+		this.eventFired = false;
 		
-		this.switchFixObserver = new MutationObserver(() => {});
-		
-		this.css = `
-			@keyframes animation-sendlargemessages-backdrop {
-				to { opacity: 0.85; }
-			}
-
-			@keyframes animation-sendlargemessages-backdrop-closing {
-				to { opacity: 0; }
-			}
-
-			@keyframes animation-sendlargemessages-modal {
-				to { transform: scale(1); opacity: 1; }
-			}
-
-			@keyframes animation-sendlargemessages-modal-closing {
-				to { transform: scale(0.7); opacity: 0; }
-			}
-
-			.sendlargemessages-modal .callout-backdrop {
-				animation: animation-sendlargemessages-backdrop 250ms ease;
-				animation-fill-mode: forwards;
-				opacity: 0;
-				background-color: rgb(0, 0, 0);
-				transform: translateZ(0px);
-			}
-
-			.sendlargemessages-modal.closing .callout-backdrop {
-				animation: animation-sendlargemessages-backdrop-closing 200ms linear;
-				animation-fill-mode: forwards;
-				animation-delay: 50ms;
-				opacity: 0.85;
-			}
-			
-			.sendlargemessages-modal .modal {
-				animation: animation-sendlargemessages-modal 250ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
-				animation-fill-mode: forwards;
-				transform: scale(0.7);
-				transform-origin: 50% 50%;
-				align-content: space-around;
-				align-items: center;
-				box-sizing: border-box;
-				display: flex;
-				flex-direction: column;
-				justify-content: center;
-				min-height: initial;
-				max-height: initial;
-				opacity: 0;
-				pointer-events: none;
-				user-select: none;
-				height: 100%;
-				width: 100%;
-				margin: 0;
-				padding: 0;
+		this.css = ` 
+			.modal-image .image.prev,
+			.modal-image .image.next {
 				position: absolute;
-				top: 0;
-				right: 0;
-				bottom: 0;
-				left: 0;
-				z-index: 1000;
-			}
-
-			.sendlargemessages-modal.closing .modal {
-				animation: animation-sendlargemessages-modal-closing 250ms cubic-bezier(0.19, 1, 0.22, 1);
-				animation-fill-mode: forwards;
-				opacity: 1;
-				transform: scale(1);
+				top: 15%;
+				height: 66%;
+			} 
+			
+			.modal-image .image.prev {
+				right: 90%;
+			} 
+			
+			.modal-image .image.next {
+				left: 90%;
 			}
 			
-			.sendlargemessages-modal .form {
-				width: 100%;
-			}
-
-			.sendlargemessages-modal .form-header, .sendlargemessages-modal .form-actions {
-				background-color: rgba(32,34,37,.3);
-				box-shadow: inset 0 1px 0 rgba(32,34,37,.6);
-				padding: 20px;
-				
-			}
-
-			.sendlargemessages-modal .form-header {
-				color: #f6f6f7;
-				cursor: default;
-				font-size: 16px;
-				font-weight: 600;
-				letter-spacing: .3px;
-				line-height: 20px;
-				text-transform: uppercase;
-			}
-
-			.sendlargemessages-modal .form-actions {
-				display: flex;
-				flex-direction: row-reverse;
-				flex-wrap: nowrap;
-				flex: 0 0 auto;
-				padding-right: 32px;
-			}
-
-			.sendlargemessages-modal .form-inner{
-				margin: 10px 0;
-				overflow-x: hidden;
+			.modal-image .previewbar {
+				position: absolute;
+				top: 82%;
+				left: 10%;
+				height: 15%;
+				width: 80%;
+				background: red;
+				overflow-x: scroll;
 				overflow-y: hidden;
-				padding: 0 20px;
-				height: 450px;
-				
-			}
-
-			.sendlargemessages-modal .modal-inner {
-				background-color: #36393E;
-				border-radius: 5px;
-				box-shadow: 0 0 0 1px rgba(32,34,37,.6),0 2px 10px 0 rgba(0,0,0,.2);
-				display: flex;
-				min-height: 200px;
-				pointer-events: auto;
-				width: 700px;
-			}
-
-			.sendlargemessages-modal textarea {
-				color: #f6f6f7;
-				background-color: rgba(0,0,0,.1);
-				border-color: rgba(0,0,0,.3);
-				padding: 10px;
-				box-sizing: border-box;
-				font-size: 0.9375rem;
-				font-weight: 400;
-				letter-spacing: -0.025rem;
-				line-height: 1.25rem;
-				rows: 0;
-				cols: 0;
-				height: 410px;
-				width: 100%;
-				border-width: 1px;
-				border-style: solid;
-				border-radius: 5px;
-				overflow: scroll;
-				resize: none;
-				-webkit-rtl-ordering: logical;
-				user-select: text;
-				flex-direction: column;
-				white-space: pre-wrap;
-				word-wrap: break-word;
+				white-space: nowrap;
 			}
 			
-			.sendlargemessages-modal textarea::-webkit-scrollbar {
-				height: 12px;
-				width: 12px;
-			}
-
-			.sendlargemessages-modal textarea::-webkit-scrollbar-thumb {
-				background-color: #1e2124;
-				border-radius: 7px;
-			}
-
-			.sendlargemessages-modal textarea::-webkit-scrollbar-track-piece {
-				background-color: #2f3136;
-				border-radius: 7px;
-			}
-
-			.sendlargemessages-modal textarea::-webkit-scrollbar-corner {
-				background-color: #2f3136;
-			}
-
-			.sendlargemessages-modal .btn {
-				align-items: center;
-				background: none;
-				border-radius: 3px;
-				border: none;
-				box-sizing: border-box;
-				display: flex;
-				font-size: 14px;
-				font-weight: 500;
-				justify-content: center;
-				line-height: 16px;
-				min-height: 38px;
-				min-width: 96px;
-				padding: 2px 16px;
+			.modal-image .previewbar [class^="preview-"] {
 				position: relative;
-			}
-
-			.sendlargemessages-modal .btn-cancel {
-				background-color: #2f3136;
-				color: #fff;
-			}
-
-			.sendlargemessages-modal .btn-send {
-				background-color: #3A71C1;
-				color: #fff;
-			}
-
-			.sendlargemessages-modal .control-group {
-				margin-top: 10px;
+				top: 0px;
+				bottom: 0px;
+				height: 100%;
+				display: inline-block;
 			}
 			
-			.sendlargemessages-modal #warning-message {
-				font-weight: bold;
-				color: red;
-				opacity: 1;
-			}
-			
-			.sendlargemessages-modal #character-counter {
-				float: right;
-				color: white;
-				opacity: .5;
+			.modal-image .previewbar [class^="previewimage-"] {
+				position: relative;
+				top: 1px;
+				bottom: 0px;
 			}`;
-			
-		this.sendMessageModalMarkup =
-			`<span class="sendlargemessages-modal">
-				<div class="backdrop-2ohBEd callout-backdrop"></div>
-				<div class="modal">
-					<div class="modal-inner">
-						<div class="form">
-							<div class="form-header">
-								<header class="modal-header">REPLACE_modal_header_text</header>
-							</div>
-							<div class="form-inner">
-								<div class="control-group">
-									<textarea id="modal-inputtext" name="inputtext"></textarea>
-									<div class="info">
-										<div id="character-counter"></div>
-										<div id="warning-message"></div>
-									</div>
-								</div>
-							</div>
-							<div class="form-actions">
-								<button type="button" class="btn btn-cancel">REPLACE_btn_cancel_text</button>
-								<button type="button" class="btn btn-send">REPLACE_btn_send_text</button>
-							</div>
-						</form>
-					</div>
-				</div>
-			</span>`;
 	}
 
-	getName () {return "SendLargeMessages";}
+	getName () {return "ImageGallery";}
 
-	getDescription () {return "Opens a popout when your message is too large, which allows you to automatically send the message in several smaller messages.";}
+	getDescription () {return "Allows the user to browse through images sent inside the same message.";}
 
-	getVersion () {return "1.2.3";}
+	getVersion () {return "1.4.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -260,359 +71,183 @@ class SendLargeMessages {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
 			
-			this.switchFixObserver = BDfunctionsDevilBro.onSwitchFix(this);	
+			this.imageModalObserver = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.addedNodes) {
+							change.addedNodes.forEach((node) => {
+								if ($(node).find(".modal-image").length != 0) {
+									this.loadImages(node);
+								}
+							});
+						}
+						if (change.removedNodes) {
+							change.removedNodes.forEach((node) => {
+								if ($(node).find(".modal-image").length != 0) {
+									$(document).off("keyup." + this.getName()).off("keydown." + this.getName());
+								}
+							});
+						}
+					}
+				);
+			});
+			if (document.querySelector("#app-mount > [class^='theme-']")) this.imageModalObserver.observe(document.querySelectorAll("#app-mount > [class^='theme-']")[document.querySelectorAll("#app-mount > [class^='theme-']").length-1], {childList: true});
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
-			
-			this.bindEventToTextArea();
-			
-			setTimeout(() => {
-				this.labels = this.setLabelsByLanguage();
-				this.changeLanguageStrings();
-			},5000);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
 		}
 	}
 
-
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			this.switchFixObserver.disconnect();
+			this.imageModalObserver.disconnect();
+			
+			$(document).off("keyup." + this.getName()).off("keydown." + this.getName());
 			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName());
 			
-			$(".channelTextArea-1HTP3C textarea").off("input." + this.getName()).off("paste." + this.getName());
-			$(document).off("mouseup." + this.getName()).off("mousemove." + this.getName());
-			
 			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
-		}
-	}
-	
-	onSwitch () {
-		if (typeof BDfunctionsDevilBro === "object") {
-			this.bindEventToTextArea();
 		}
 	}
 
 	
 	// begin of own functions
-
-	changeLanguageStrings () {
-		this.sendMessageModalMarkup = 		this.sendMessageModalMarkup.replace("REPLACE_modal_header_text", this.labels.modal_header_text);
-		this.sendMessageModalMarkup = 		this.sendMessageModalMarkup.replace("REPLACE_btn_cancel_text", this.labels.btn_cancel_text);
-		this.sendMessageModalMarkup = 		this.sendMessageModalMarkup.replace("REPLACE_btn_send_text", this.labels.btn_send_text);
+	
+	
+	loadImages (modal) {
+		var start = performance.now();
+		var waitForImg = setInterval(() => {
+			var img = $(modal).find(".image")[0];
+			if (img && img.src) {
+				clearInterval(waitForImg);
+				var message = this.getMessageGroupOfImage(img);
+				var imgs = $(message).find(".image");
+				
+				this.addImages(modal, imgs, img);
+				
+				/* $(modal).find(".modal-image").append($("<div/>", { 'class': 'previewbar' }))
+				imgs.each((index, preview) => {
+					this.addImagePreview(modal, preview, index);
+				}); */
+			}
+			else if (performance.now() - start > 10000) {
+				clearInterval(waitForImg);
+			}
+		}, 100);
+	}
+	
+	getMessageGroupOfImage (img) {
+		if (img && img.src) {
+			var groups = $(".message-group");
+			for (var i = 0; i < groups.length; i++) {
+				var imgs = $(groups[i]).find(".image");
+				for (var j = 0; j < imgs.length; j++) {
+					if (imgs[j].src && this.getSrcOfImage(img) == this.getSrcOfImage(imgs[j])) {
+						return groups[i];
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
+	addImages (modal, imgs, img) {
+		$(modal).find(".image.prev").remove();
+		$(modal).find(".image.next").remove();
+		var prevImg;
+		var nextImg;
+		var index;
+		for (index = 0; index < imgs.length; index++) {
+			if (this.getSrcOfImage(img) == this.getSrcOfImage(imgs[index])) {
+				prevImg = 	imgs[index-1];
+				img = 		imgs[index];
+				nextImg = 	imgs[index+1];
+				break;
+			}
+		}
 		
-		BDfunctionsDevilBro.translateMessage(this.getName());
-	}
-	
-	bindEventToTextArea () {
-		$(".channelTextArea-1HTP3C textarea")
-			.off("input." + this.getName())
-			.on("input." + this.getName(), e => {
-				var text = e.target.value;
-				if (text.length > 1950) {
-					e.target.selectionStart = 0;
-					e.target.selectionEnd = e.target.value.length;
-					document.execCommand("insertText", false, "");
-					this.showSendModal(text);
-				}
-			})
-			.off("paste." + this.getName())
-			.on("paste." + this.getName(), e => {
-				e = e.originalEvent ? e.originalEvent : e;
-				var clipboardData = e.clipboardData;
-				if (!clipboardData) return;
-				var pastedData = clipboardData.getData('Text');
-				var text = e.target.value;
-				if (text.length > 1950) {
-					e.target.selectionStart = 0;
-					e.target.selectionEnd = e.target.value.length;
-					document.execCommand("insertText", false, "");
-					this.showSendModal(text);
-				}
-			});
-	}
-	
-	showSendModal (text) {
-		var sendMessageModal = $(this.sendMessageModalMarkup);
-		var textinput = sendMessageModal.find("#modal-inputtext")[0];
-		sendMessageModal.appendTo($("#app-mount > [class^='theme-']").last())
-			.on("click", ".callout-backdrop,button.btn-cancel", (e) => {
-				$(document).off("mouseup." + this.getName()).off("mousemove." + this.getName());
-				sendMessageModal.addClass('closing');
-				setTimeout(() => {sendMessageModal.remove();}, 300);
-			})
-			.on("click", "button.btn-send", (e) => {
-				e.preventDefault();
-				sendMessageModal.addClass('closing');
-				setTimeout(() => {sendMessageModal.remove();}, 300);
-				$(document).off("mouseup." + this.getName()).off("mousemove." + this.getName());
-				this.formatText(textinput.value).forEach((message,i) => {
-					setTimeout(() => {
-						this.sendMessage(message);
-					},i*1000);
-				});
-			});
+		$(modal).find(".image")
+			.attr("placeholder", this.getSrcOfImage(img))
+			.attr("src", this.getSrcOfImage(img));
 			
-		textinput.value = text;
-		$(textinput)
-			.off("keydown." + this.getName() + " click." + this.getName())
-			.on("keydown." + this.getName() + " click." + this.getName(), e => {
-				setTimeout(() => {
-					this.updateCounter(sendMessageModal);
-				},10);
-			})
-			.off("mousedown." + this.getName())
-			.on("mousedown." + this.getName(), e => {
-				this.selecting = true;
-			});
-		$(document)
-			.off("mouseup." + this.getName())
-			.on("mouseup." + this.getName(), e => {
-				if (this.selecting) {
-					this.selecting = false;
-				}
-			})
-			.off("mousemove." + this.getName())
-			.on("mousemove." + this.getName(), e => {
-				if (this.selecting) {
-					setTimeout(() => {
-						this.updateCounter(sendMessageModal);
-					},10);
-				}
-			});
-		this.updateCounter(sendMessageModal);
+		$(modal).find(".download-button").first()
+			.attr("href", this.getSrcOfImage(img));
 		
-		textinput.focus();
-	}
-	
-	updateCounter (modal) {
-		var warning = modal.find("#warning-message");
-		var counter = modal.find("#character-counter");
-		var textinput = modal.find("#modal-inputtext")[0];
-		var messageAmmount = Math.ceil(textinput.value.length/1900);
-		warning.text(messageAmmount > 15 ? this.labels.modal_messages_warning : "");
-		counter.text(textinput.value.length + " (" + (textinput.selectionEnd - textinput.selectionStart) + ") => " + this.labels.modal_messages_translation + ": " +  messageAmmount);
-	}
-	
-	formatText (text) {
-		var longwords = text.match(/[\S]{1800,}/gm);
-		for (var i in longwords) {
-			let longword = longwords[i];
-			let count1 = 0;
-			let shortwords = [];
-			longword.split("").forEach((char) => {
-				if (shortwords[count1] && shortwords[count1].length >= 1800) count1++;
-				shortwords[count1] = shortwords[count1] ? shortwords[count1] + char : char;
-			});
-			text = text.replace(longword, shortwords.join(" "));
+		this.resizeImage(modal, img, modal.querySelector(".image"));
+			
+		if (prevImg) {
+			$(modal).find(".modal-image").append($("<video/>", { 'class': 'image prev', 'poster': this.getSrcOfImage(prevImg)}));
+			this.resizeImage(modal, prevImg, modal.querySelector(".image.prev"));
 		}
-		var messages = [];
-		var count2 = 0;
-		text.split(" ").forEach((word) => {
-			if (messages[count2] && (messages[count2].length + word.length) > 1900) count2++;
-			messages[count2] = messages[count2] ? messages[count2] + " " + word : word;
-		});
-		
-		var insertCodeBlock = null;
-		for (var j = 0; j < messages.length; j++) {
-			if (insertCodeBlock) {
-				messages[j] = insertCodeBlock + messages[j];
-				insertCodeBlock = null;
-			}
-			var codeBlocks = messages[j].match(/`{3,}[\S]*\n|`{3,}/gm);
-			if (codeBlocks && codeBlocks.length % 2 == 1) {
-				messages[j] = messages[j] + "```";
-				insertCodeBlock = codeBlocks[codeBlocks.length-1] + "\n";
-			}
+		if (nextImg) {
+			$(modal).find(".modal-image").append($("<video/>", { 'class': 'image next', 'poster': this.getSrcOfImage(nextImg)}));
+			this.resizeImage(modal, nextImg, modal.querySelector(".image.next"));
 		}
 		
-		return messages;
+		$(modal).find(".image.prev").off("click").on("click", this.addImages.bind(this, modal, imgs, prevImg));
+		$(modal).find(".image.next").off("click").on("click", this.addImages.bind(this, modal, imgs, nextImg));
+		$(document).off("keydown." + this.getName()).on("keydown." + this.getName(), {modal, imgs, prevImg, nextImg}, this.keyPressed.bind(this));
+		$(document).off("keyup." + this.getName()).on("keyup." + this.getName(), () => {this.eventFired = false});
 	}
 	
-	sendMessage (text) {
-		var textarea = document.querySelector(".channelTextArea-1HTP3C");
-		if (textarea) {
-			var textinput = textarea.querySelector("textarea");
-			if (textinput) {
-				BDfunctionsDevilBro.getOwnerInstance({"node":textarea, "name":"ChannelTextAreaForm", "up":true}).setState({textValue:text});
-				var options = { key: "Enter", code: "Enter", which: 13, keyCode: 13, bubbles: true };
-				var down = new KeyboardEvent("keydown", options);
-				Object.defineProperty(down, "keyCode", {value: 13});
-				Object.defineProperty(down, "which", {value: 13});
-				var press = new KeyboardEvent("keypress", options);
-				Object.defineProperty(press, "keyCode", {value: 13});
-				Object.defineProperty(press, "which", {value: 13});
-				textinput.dispatchEvent(down);
-				textinput.dispatchEvent(press);
+	addImagePreview (modal, img, index) {
+		$(modal).find(".previewbar").append($("<div/>", { 'class': 'preview-' + index }));
+		$(modal).find(".preview-" + index).append($("<video/>", { 'class': 'previewimage-' + index, 'poster': this.getSrcOfImage(img)}));
+		this.resizePreview(modal.querySelector(".previewbar"), img, modal.querySelector(".previewimage-" + index));
+	}
+	
+	getSrcOfImage (img) {
+		var src = img.src ? img.src : (img.querySelector("canvas") ? img.querySelector("canvas").src : null);
+		return src.split("?width=")[0];
+	}
+	
+	resizeImage (container, src, img) {
+		$(img).hide();
+		var temp = new Image();
+		temp.src = src.src.split("?width=")[0];
+		temp.onload = function () {
+			var resizeX = (container.clientWidth/src.clientWidth) * 0.71;
+			var resizeY = (container.clientHeight/src.clientHeight) * 0.57;
+			var resize = resizeX < resizeY ? resizeX : resizeY;
+			var newWidth = src.clientWidth * resize;
+			var newHeight = src.clientHeight * resize;
+			
+			$(img)
+				.attr("width", temp.width > newWidth ? newWidth : temp.width)
+				.attr("height", temp.height > newHeight ? newHeight : temp.height)
+				.show();
+		};
+	}
+	
+	resizePreview (container, src, img) {
+		$(img).hide();
+		var temp = new Image();
+		temp.src = src.src.split("?width=")[0];
+		temp.onload = function () {
+			var resizeX = (container.clientWidth/src.clientWidth) * 0.1;
+			var resizeY = (container.clientHeight/src.clientHeight) * 0.9;
+			var resize = resizeX < resizeY ? resizeX : resizeY;
+			var newWidth = src.clientWidth * resize;
+			var newHeight = src.clientHeight * resize;
+			
+			$(img)
+				.attr("width", temp.width > newWidth ? newWidth : temp.width)
+				.attr("height", temp.height > newHeight ? newHeight : temp.height)
+				.show();
+		};
+	}
+	
+	keyPressed (e) {
+		if (!this.eventFired) {
+			this.eventFired = true;
+			if (e.keyCode == 37 && e.data.prevImg) {
+				this.addImages(e.data.modal, e.data.imgs, e.data.prevImg)
 			}
-		}
-	}
-	
-	setLabelsByLanguage () {
-		switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
-			case "da": 		//danish
-				return {
-					modal_messages_translation:			"Beskeder",
-					modal_messages_warning:				"Send ikke for mange beskeder!",
-					modal_header_text:				 	"Send stor besked:",
-					btn_cancel_text: 					"Afbryde",
-					btn_send_text: 						"Sende"
-				};
-			case "de": 	//german
-				return {
-					modal_messages_translation:			"Nachrichten",
-					modal_messages_warning:				"Schicke nicht zu viele Nachrichten!",
-					modal_header_text:				 	"Große Nachricht senden:",
-					btn_cancel_text: 					"Abbrechen",
-					btn_send_text: 						"Senden"
-				};
-			case "es": 	//spanish
-				return {
-					modal_messages_translation:			"Mensajes",
-					modal_messages_warning:				"¡No envíe demasiados mensajes!",
-					modal_header_text:				 	"Enviar mensaje grande:",
-					btn_cancel_text: 					"Cancelar",
-					btn_send_text: 						"Enviar"
-				};
-			case "fr": 	//french
-				return {
-					modal_messages_translation:			"Messages",
-					modal_messages_warning:				"N'envoyez pas trop de messages!",
-					modal_header_text:				 	"Envoyer un gros message:",
-					btn_cancel_text: 					"Abandonner",
-					btn_send_text: 						"Envoyer"
-				};
-			case "it": 	//italian
-				return {
-					modal_messages_translation:			"Messaggi",
-					modal_messages_warning:				"Non inviare troppi messaggi!",
-					modal_header_text:				 	"Invia grande messaggio:",
-					btn_cancel_text: 					"Cancellare",
-					btn_send_text: 						"Inviare"
-				};
-			case "nl": 	//dutch
-				return {
-					modal_messages_translation:			"Berichten",
-					modal_messages_warning:				"Stuur niet te veel berichten!",
-					modal_header_text:				 	"Stuur een groot bericht:",
-					btn_cancel_text: 					"Afbreken",
-					btn_send_text: 						"Sturen"
-				};
-			case "no": 	//norwegian
-				return {
-					modal_messages_translation:			"Meldinger",
-					modal_messages_warning:				"Ikke send for mange meldinger!",
-					modal_header_text:				 	"Send stor melding:",
-					btn_cancel_text: 					"Avbryte",
-					btn_send_text: 						"Sende"
-				};
-			case "pl": 	//polish
-				return {
-					modal_messages_translation:			"Wiadomości",
-					modal_messages_warning:				"Nie wysyłaj zbyt wielu wiadomości!",
-					modal_header_text:				 	"Wyślij dużą wiadomość:",
-					btn_cancel_text: 					"Anuluj",
-					btn_send_text: 						"Wysłać"
-				};
-			case "pt": 	//portuguese (brazil)
-				return {
-					modal_messages_translation:			"Mensagens",
-					modal_messages_warning:				"Não envie muitas mensagens!",
-					modal_header_text:				 	"Enviar mensagem grande:",
-					btn_cancel_text: 					"Cancelar",
-					btn_send_text: 						"Enviar"
-				};
-			case "fi": 	//finnish
-				return {
-					modal_messages_translation:			"Viestien",
-					modal_messages_warning:				"Älä lähetä liian monta viestiä!",
-					modal_header_text:				 	"Lähetä suuri viesti:",
-					btn_cancel_text: 					"Peruuttaa",
-					btn_send_text: 						"Lähettää"
-				};
-			case "sv": 	//swedish
-				return {
-					modal_messages_translation:			"Meddelanden",
-					modal_messages_warning:				"Skicka inte för många meddelanden!",
-					modal_header_text:				 	"Skicka stort meddelande:",
-					btn_cancel_text: 					"Avbryta",
-					btn_send_text: 						"Skicka"
-				};
-			case "tr": 	//turkish
-				return {
-					modal_messages_translation:			"Mesajları",
-					modal_messages_warning:				"Çok fazla mesaj göndermeyin!",
-					modal_header_text:				 	"Büyük mesaj gönder:",
-					btn_cancel_text: 					"Iptal",
-					btn_send_text: 						"Göndermek"
-				};
-			case "cs": 	//czech
-				return {
-					modal_messages_translation:			"Zpráv",
-					modal_messages_warning:				"Neposílejte příliš mnoho zpráv!",
-					modal_header_text:				 	"Odeslat velkou zprávu:",
-					btn_cancel_text: 					"Zrušení",
-					btn_send_text: 						"Poslat"
-				};
-			case "bg": 	//bulgarian
-				return {
-					modal_messages_translation:			"Съобщения",
-					modal_messages_warning:				"Не изпращайте твърде много съобщения!",
-					modal_header_text:				 	"Изпратете голямо съобщение:",
-					btn_cancel_text: 					"Зъбести",
-					btn_send_text: 						"изпращам"
-				};
-			case "ru": 	//russian
-				return {
-					modal_messages_translation:			"Сообщения",
-					modal_messages_warning:				"Не отправляйте слишком много сообщений!",
-					modal_header_text:				 	"Отправить сообщение:",
-					btn_cancel_text: 					"Отмена",
-					btn_send_text: 						"Послать"
-				};
-			case "uk": 	//ukranian
-				return {
-					modal_messages_translation:			"Повідомлення",
-					modal_messages_warning:				"Не надсилайте надто багато повідомлень!",
-					modal_header_text:				 	"Надіслати велике повідомлення:",
-					btn_cancel_text: 					"Скасувати",
-					btn_send_text: 						"Відправити"
-				};
-			case "ja": 	//japanese
-				return {
-					modal_messages_translation:			"メッセージ",
-					modal_messages_warning:				"あまりにも多くのメッセージを送信しないでください！",
-					modal_header_text:				 	"大きなメッセージを送信する：",
-					btn_cancel_text: 					"キャンセル",
-					btn_send_text: 						"送信"
-				};
-			case "zh": 	//chinese (traditional)
-				return {
-					modal_messages_translation:			"消息",
-					modal_messages_warning:				"不要發送太多信息！",
-					modal_header_text:				 	"發送大信息：",
-					btn_cancel_text: 					"取消",
-					btn_send_text: 						"發送"
-				};
-			case "ko": 	//korean
-				return {
-					modal_messages_translation:			"메시지",
-					modal_messages_warning:				"너무 많은 메시지를 보내지 마십시오!",
-					modal_header_text:				 	"큰 메시지 보내기:",
-					btn_cancel_text: 					"취소",
-					btn_send_text: 						"보내다"
-				};
-			default: 	//default: english
-				return {
-					modal_messages_translation:			"Messages",
-					modal_messages_warning:				"Do not send too many messages!",
-					modal_header_text:		 			"Send large message:",
-					btn_cancel_text: 					"Cancel",
-					btn_send_text: 						"Send"
-				};
+			else if (e.keyCode == 39 && e.data.nextImg) {
+				this.addImages(e.data.modal, e.data.imgs, e.data.nextImg)
+			}
 		}
 	}
 }
