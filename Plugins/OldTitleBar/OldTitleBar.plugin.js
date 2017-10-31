@@ -257,8 +257,8 @@ class OldTitleBar {
 			var newLeft = this.oldLeft ? this.oldLeft : Math.round((screen.availWidth - newWidth)/2);
 			var newTop = this.oldTop ? this.oldTop : Math.round((screen.availHeight - newHeight)/2);
 			
-			require("electron").remote.getCurrentWindow().setSize(newWidth, newHeight);
 			require("electron").remote.getCurrentWindow().setPosition(newLeft, newTop);
+			require("electron").remote.getCurrentWindow().setSize(newWidth, newHeight);
 		}
 		else {
 			this.oldLeft = window.screenX;
