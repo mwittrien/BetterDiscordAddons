@@ -99,7 +99,7 @@ class OldTitleBar {
 						}
 						if (change.removedNodes) {
 							change.removedNodes.forEach((node) => {
-								if (node && node.tagName && node.getAttribute("layer-id") || node).querySelector(".ui-standard-sidebar-view")) {
+								if (node && node.tagName && node.getAttribute("layer-id") || node.querySelector(".ui-standard-sidebar-view")) {
 									this.addTitleBar();
 								}
 							});
