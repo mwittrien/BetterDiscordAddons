@@ -65,6 +65,7 @@ class ChatAliases {
 				border-radius: 5px;
 			}
 			
+			.chataliases-settings input.word-exact,
 			.chataliases-settings input.word-case {
 				position: relative;
 				margin: 0 5px 0 0 !important;
@@ -75,6 +76,7 @@ class ChatAliases {
 				cursor: pointer;
 			}
 			
+			.chataliases-settings .word-exact-text,
 			.chataliases-settings .word-case-text {
 				position: relative;
 				display: inline-block;
@@ -108,6 +110,14 @@ class ChatAliases {
 
 			.chataliases-settings .added-word.nocase {
 				background-color: #ff6666;
+			}
+
+			.chataliases-settings .added-word.exact {
+				border: 2px solid #ffcc00;
+			}
+
+			.chataliases-settings .added-word.noexact {
+				border: 2px solid #009933;
 			}
 
 			.chataliases-settings .word-delete {
@@ -170,7 +180,7 @@ class ChatAliases {
 
 	getDescription () {return "Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent.";}
 
-	getVersion () {return "1.3.2";}
+	getVersion () {return "1.4.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -183,21 +193,25 @@ class ChatAliases {
 			settingspanel += `<div class="input-bar" id="chataliases-input-bar">`;
 			settingspanel += `<label class="word-value-label">Replace:</label><input class="word-value" id="chataliases-word-value" onkeypress='` + this.getName() + `.updateContainer(this, "` + this.getName() + `", event);'>`;
 			settingspanel += `<label class="replace-value-label">with:</label><input class="replace-value" id="chataliases-replace-value" onkeypress='` + this.getName() + `.updateContainer(this, "` + this.getName() + `", event);'>`;
-			settingspanel += `<label class="word-case-text"><input type="checkbox" class="word-case" id="chataliases-word-case" checked>case</label>`;
 			settingspanel += `<button name="add" class="word-add" id="chataliases-word-add" onclick='` + this.getName() + `.updateContainer(this, "` + this.getName() + `", event);'>Add</button>`;
-			settingspanel += `<button name="removeall" class="remove-all" id="chataliases-remove-all" onclick='` + this.getName() + `.updateContainer(this, "` + this.getName() + `", event);'>Remove All</button>`;
+			settingspanel += `<button name="removeall" class="remove-all" id="chataliases-remove-all" onclick='` + this.getName() + `.updateContainer(this, "` + this.getName() + `", event);'>Remove All</button></br>`;
+			settingspanel += `<label class="word-case-text"><input type="checkbox" class="word-case" id="chataliases-word-case">case-sensitive</label>`;
+			settingspanel += `<label class="word-exact-text"><input type="checkbox" class="word-exact" id="chataliases-word-exact" checked>exact word</label>`;
 			settingspanel += `</div>`;
 			settingspanel += `<div class="word-container" id="chataliases-word-container">`;
 			for (let word in words) {
+				var wordcomparison = words[word].exact ? "exact" : "noexact";
 				var casesensivity = words[word].case ? "case" : "nocase";
-				settingspanel += `<div name="` + word + `" class="added-word ` + casesensivity + ` chataliases-word">` + BDfunctionsDevilBro.encodeToHTML(word) + ` (` + BDfunctionsDevilBro.encodeToHTML(words[word].replace) + `)<div class="word-delete" onclick='` + this.getName() + `.updateContainer(this.parentElement, "` + this.getName() + `", event);'>✖</div></div>`;
+				settingspanel += `<div name="` + word + `" class="added-word ` + wordcomparison + ` ` + casesensivity + ` chataliases-word">` + BDfunctionsDevilBro.encodeToHTML(word) + ` (` + BDfunctionsDevilBro.encodeToHTML(words[word].replace) + `)<div class="word-delete" onclick='` + this.getName() + `.updateContainer(this.parentElement, "` + this.getName() + `", event);'>✖</div></div>`;
 			}		
 			settingspanel += `</div>`;
 			var infoHidden = BDfunctionsDevilBro.loadData("hideInfo", this.getName(), "settings") ? " style='display:none;'" : "";
 			settingspanel += `<button class="toggle-info" onclick='` + this.getName() + `.toggleInfo(this, "` + this.getName() + `");'>Toggle Information</button>`;
 			settingspanel += `<div class="wordtype-info"` + infoHidden + `>`;
-			settingspanel += `<div class="wordtype-category"><div class="added-word case fake">case<div class="word-delete fake">✖</div></div><div class="wordtype-description">Will replace words while comparing lowercase/uppercase. \napple => apple, not APPLE or AppLe</div></div>`;
-			settingspanel += `<div class="wordtype-category"><div class="added-word nocase fake">not case<div class="word-delete fake">✖</div></div><div class="wordtype-description">Will replace words while ignoring lowercase/uppercase. \napple => apple, APPLE and AppLe</div></div>`;
+			settingspanel += `<div class="wordtype-category"><div class="added-word case fake">case<div class="word-delete fake">✖</div></div><div class="wordtype-description">Will censor/block words while comparing lowercase/uppercase. \napple => apple, not APPLE or AppLe</div></div>`;
+			settingspanel += `<div class="wordtype-category"><div class="added-word nocase fake">not case<div class="word-delete fake">✖</div></div><div class="wordtype-description">Will censor/block words while ignoring lowercase/uppercase. \napple => apple, APPLE and AppLe</div></div>`;
+			settingspanel += `<div class="wordtype-category"><div class="added-word exact fake">exact<div class="word-delete fake">✖</div></div><div class="wordtype-description">Will only censor/block words that are exactly the selected word. \napple => apple, not applepie or pineapple</div></div>`;
+			settingspanel += `<div class="wordtype-category"><div class="added-word noexact fake">not exact<div class="word-delete fake">✖</div></div><div class="wordtype-description">Will censor/block all words containing the selected word. \napple => apple, applepie and pineapple</div></div>`;
 			settingspanel += `</div>`;
 			settingspanel += `</div>`;
 			return settingspanel;
@@ -280,6 +294,7 @@ class ChatAliases {
 					replacevalue = replacevalue.trim();
 					words[wordvalue] = {};
 					words[wordvalue].replace = replacevalue;
+					words[wordvalue].exact = $(settingspanel).find("#chataliases-word-exact").prop("checked");
 					words[wordvalue].case = $(settingspanel).find("#chataliases-word-case").prop("checked");
 					wordinput.value = null;
 					replaceinput.value = null;
@@ -298,6 +313,7 @@ class ChatAliases {
 					replacevalue = replacevalue.trim();
 					words[wordvalue] = {};
 					words[wordvalue].replace = replacevalue;
+					words[wordvalue].exact = $(settingspanel).find("#chataliases-word-exact").prop("checked");
 					words[wordvalue].case = $(settingspanel).find("#chataliases-word-case").prop("checked");
 					wordinput.value = null;
 					replaceinput.value = null;
@@ -316,8 +332,9 @@ class ChatAliases {
 		
 		var container = ``;
 		for (let word in words) {
+			var wordcomparison = words[word].exact ? "exact" : "noexact";
 			var casesensivity = words[word].case ? "case" : "nocase";
-			container += `<div name="` + word + `" class="added-word ` + casesensivity + ` chataliases-word">` + BDfunctionsDevilBro.encodeToHTML(word) + ` (` + BDfunctionsDevilBro.encodeToHTML(words[word].replace) + `)<div class="word-delete" onclick='` + pluginName + `.updateContainer(this.parentElement, "` + pluginName + `", event);'>✖</div></div>`;
+			container += `<div name="` + word + `" class="added-word ` + wordcomparison + ` ` + casesensivity + ` chataliases-word">` + BDfunctionsDevilBro.encodeToHTML(word) + ` (` + BDfunctionsDevilBro.encodeToHTML(words[word].replace) + `)<div class="word-delete" onclick='` + pluginName + `.updateContainer(this.parentElement, "` + pluginName + `", event);'>✖</div></div>`;
 		}
 		
 		$(settingspanel).find("#chataliases-word-container").html(container);
@@ -359,19 +376,7 @@ class ChatAliases {
 			.off("keydown." + this.getName())
 			.on("keydown." + this.getName(), e => {
 				if (!e.shiftKey && e.which == 13) {
-					var textarea = e.target;
-					var text = textarea.value;
-					var words = BDfunctionsDevilBro.loadAllData(this.getName(), "words");
-					
-					for (let wordvalue in words) {
-						let reg = new RegExp("^" + wordvalue + "$", words[wordvalue].case ? "" : "i");
-						var newText = [];
-						text.split(" ").forEach((word) => {
-							newText.push(reg.test(word) ? words[wordvalue].replace : word);
-						});
-						text = newText.join(" ");
-					}
-					BDfunctionsDevilBro.getOwnerInstance({"node":textarea, "name":"ChannelTextAreaForm", "up":true}).setState({textValue:text});
+					this.formatText(e.target);
 				}
 			});
 	}
@@ -382,23 +387,26 @@ class ChatAliases {
 			.on("input." + this.getName(), e => {
 				if (!this.format) return;
 				this.format = false;
-				var textarea = e.target;
-				var text = textarea.value;
-				var words = BDfunctionsDevilBro.loadAllData(this.getName(), "words");
-				
-				for (let wordvalue in words) {
-					let reg = new RegExp("^" + wordvalue + "$", words[wordvalue].case ? "" : "i");
-					var newText = [];
-					text.split(" ").forEach((word) => {
-						newText.push(reg.test(word) ? words[wordvalue].replace : word);
-					});
-					text = newText.join(" ");
-				}
-				BDfunctionsDevilBro.getOwnerInstance({"node":textarea, "name":"ChannelTextAreaForm", "up":true}).setState({textValue:text});
+				this.formatText(e.target);
 			})
 			.off("keydown." + this.getName())
 			.on("keydown." + this.getName(), e => {
 				if (!e.shiftKey && e.which == 13) this.format = true;
 			});
+	}
+	
+	formatText (textarea) {
+		var text = textarea.value;
+		var words = BDfunctionsDevilBro.loadAllData(this.getName(), "words");
+		
+		for (let wordvalue in words) {
+			let reg = new RegExp(words[wordvalue].exact ? "^" + wordvalue + "$" : "[" + wordvalue + "]", words[wordvalue].case ? "" : "i");
+			var newText = [];
+			text.split(" ").forEach((word) => {
+				newText.push(reg.test(word) ? word.replace(new RegExp(wordvalue, "g"), words[wordvalue].replace) : word);
+			});
+			text = newText.join(" ");
+		}
+		BDfunctionsDevilBro.getOwnerInstance({"node":textarea, "name":"ChannelTextAreaForm", "up":true}).setState({textValue:text});
 	}
 }
