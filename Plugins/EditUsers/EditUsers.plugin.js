@@ -284,11 +284,15 @@ class EditUsers {
 				white-space: nowrap;
 			}
 			
-			.user-tag.profil-tag,
+			.user-tag.dmheader-tag,
 			.user-tag.popout-tag,
+			.user-tag.profil-tag {
+				bottom: 2px;
+			}
+			
 			.user-tag.chat-tag {
 				bottom: 1px;
-			}`;
+			}`
 			
 		this.tagMarkup = `<span class="user-tag"></span>`;
 
@@ -1056,7 +1060,7 @@ class EditUsers {
 			}
 				
 			var tag = data.tag ? data.tag : null;
-			if (tag && (type == "list" || type == "chat" || type == "popout" || type == "profil")) {
+			if (tag && (type == "list" || type == "chat" || type == "popout" || type == "profil" || type == "dmheader")) {
 				var color3 = data.color3 ? BDfunctionsDevilBro.color2RGB(data.color3) : "";
 				var color4 = data.color4 ? BDfunctionsDevilBro.color2RGB(data.color4) : "white";
 				var thisTag = $(this.tagMarkup)[0];
