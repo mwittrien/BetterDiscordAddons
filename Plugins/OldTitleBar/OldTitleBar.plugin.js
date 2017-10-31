@@ -59,7 +59,7 @@ class OldTitleBar {
 
 	getDescription () {return "Reverts the title bar back to its former self.";}
 
-	getVersion () {return "1.0.6";}
+	getVersion () {return "1.1.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -91,7 +91,7 @@ class OldTitleBar {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.getAttribute("layer-id")) {
+								if (node && node.tagName && node.getAttribute("layer-id") || node.querySelector(".ui-standard-sidebar-view")) {
 									this.removeTitleBar();
 									if (this.getSettings().addToSettings) this.addSettingsTitleBar(node);
 								}
@@ -99,7 +99,7 @@ class OldTitleBar {
 						}
 						if (change.removedNodes) {
 							change.removedNodes.forEach((node) => {
-								if (node && node.tagName && node.getAttribute("layer-id")) {
+								if (node && node.tagName && node.getAttribute("layer-id") || node).querySelector(".ui-standard-sidebar-view")) {
 									this.addTitleBar();
 								}
 							});
