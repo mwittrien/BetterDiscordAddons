@@ -53,7 +53,7 @@ class ImageGallery {
 
 	getDescription () {return "Allows the user to browse through images sent inside the same message.";}
 
-	getVersion () {return "1.3.4";}
+	getVersion () {return "1.3.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -91,7 +91,7 @@ class ImageGallery {
 					}
 				);
 			});
-			if (document.querySelector("#app-mount")) this.imageModalObserver.observe(document.querySelector("#app-mount"), {childList: true, subtree:true});
+			if (document.querySelector("#app-mount > [class^='theme-']")) this.imageModalObserver.observe(document.querySelectorAll("#app-mount > [class^='theme-']")[document.querySelectorAll("#app-mount > [class^='theme-']").length-1], {childList: true});
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 		}
