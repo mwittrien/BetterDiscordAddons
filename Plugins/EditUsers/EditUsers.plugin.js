@@ -397,7 +397,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "1.7.0";}
+	getVersion () {return "1.7.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -1019,10 +1019,10 @@ class EditUsers {
 		if (data) {
 			if (username) {
 				if (!this.nickNames.names[info.id]) this.nickNames.names[info.id] = username.innerText;
-				var name = data.name ? data.name : this.nickNames.names[info.id];
+				var name = data.name ? data.name : (type == "info" || type == "profil" ? info.username : this.nickNames.names[info.id]);
 				var color1 = data.color1 ? BDfunctionsDevilBro.color2RGB(data.color1) : (styleInfo ? BDfunctionsDevilBro.color2RGB(styleInfo.color) : "");
 				var color2 = data.color2 ? BDfunctionsDevilBro.color2RGB(data.color2) : "";
-				username.innerText = type == "info" || type == "profil" ? info.username : name;
+				username.innerText = name;
 				username.style.color = color1;
 				username.style.background = color2;
 				
