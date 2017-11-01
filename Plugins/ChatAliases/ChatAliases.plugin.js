@@ -180,7 +180,7 @@ class ChatAliases {
 
 	getDescription () {return "Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent.";}
 
-	getVersion () {return "1.4.1";}
+	getVersion () {return "1.4.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -396,16 +396,12 @@ class ChatAliases {
 	}
 	
 	formatText (textarea) {
-		console.log(textarea);
 		var text = textarea.value;
 		var words = text.trim().split(" ");
 		var aliases = BDfunctionsDevilBro.loadAllData(this.getName(), "words");
 		var newText = [];
-		console.log(words);
-		console.log(words.length);
 		for (var i = 0; i < words.length; i++) {
 			var word = words[i];
-			console.log(word);
 			var swapped = false;
 			for (let alias in aliases) {
 				if (!swapped) {
