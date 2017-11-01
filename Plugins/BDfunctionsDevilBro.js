@@ -918,6 +918,10 @@ BDfunctionsDevilBro.encodeToHTML = function (string) {
 	return ele.innerHTML;
 }
 
+BDfunctionsDevilBro.regEscape = function (string) {
+	return string.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
+}
+
 BDfunctionsDevilBro.clearReadNotifications = function (servers) {
 	if (!servers) return;
 	servers = Array.isArray(servers) ? servers : Array.of(servers);
