@@ -1133,11 +1133,11 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 			updateAllValues();
 			
 			$(document)
-				.off("mouseup").off("mousemove")
-				.on("mouseup", () => {
-					$(document).off("mouseup").off("mousemove");
+				.off("mouseup.ColorPicker").off("mousemove.ColorPicker")
+				.on("mouseup.ColorPicker", () => {
+					$(document).off("mouseup.ColorPicker").off("mousemove.ColorPicker");
 				})
-				.on("mousemove", (event2) => {	var pX = 0;
+				.on("mousemove.ColorPicker", (event2) => {	var pX = 0;
 					pX = event2.clientX > pMaxX ? pMaxX - pHalfW : (event2.clientX < pMinX ? pMinX - pHalfW : event2.clientX - pHalfW);
 					pY = event2.clientY > pMaxY ? pMaxY - pHalfH : (event2.clientY < pMinY ? pMinY - pHalfH : event2.clientY - pHalfH);
 					$(pcursor).offset({"left":pX,"top":pY});
@@ -1164,11 +1164,11 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 			updateAllValues();
 			
 			$(document)
-				.off("mouseup").off("mousemove")
-				.on("mouseup", () => {
-					$(document).off("mouseup").off("mousemove");
+				.off("mouseup.ColorPicker").off("mousemove.ColorPicker")
+				.on("mouseup".ColorPicker, () => {
+					$(document).off("mouseup.ColorPicker").off("mousemove.ColorPicker");
 				})
-				.on("mousemove", (event2) => {
+				.on("mousemove.ColorPicker", (event2) => {
 					sY = event2.clientY > sMaxY ? sMaxY - sHalfH : (event2.clientY < sMinY ? sMinY - sHalfH : event2.clientY - sHalfH);
 					$(scursor).offset({"top":sY});
 					
