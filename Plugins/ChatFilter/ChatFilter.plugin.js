@@ -142,6 +142,8 @@ class ChatFilter {
 				border-radius: 5px;
 				background-color: #757C7E;
 				border: 2px solid #757C7E;
+				max-width: 600px;
+				overflow: hidden;
 			}
 
 			.chatfilter-settings .added-word.case {
@@ -228,7 +230,7 @@ class ChatFilter {
 
 	getDescription () {return "Allows the user to censor words or block complete messages based on words in the chatwindow.";}
 
-	getVersion () {return "3.0.5";}
+	getVersion () {return "3.0.6";}
 
 	getAuthor () {return "DevilBro";}
 	
