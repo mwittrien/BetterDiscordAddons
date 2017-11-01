@@ -401,7 +401,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "1.7.2";}
+	getVersion () {return "1.7.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -557,7 +557,7 @@ class EditUsers {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (node && node.tagName && node.querySelector("[class*='userPopout']")) {
-									if (this.getSettings().changeInUserPopout) this.loadUser(node.querySelector("[class*='userPopout']"), "popout", false);
+									if (this.getSettings().changeInUserPopout) this.loadUser(node, "popout", false);
 								}
 							});
 						}
@@ -1003,7 +1003,7 @@ class EditUsers {
 		if (settings.changeInUserPopout) {
 			var popout = document.querySelector("[class*='userPopout']");
 			if (popout) {
-				this.loadUser(popout, "popout", false);
+				this.loadUser(popout.parentElement, "popout", false);
 			}
 		}
 		if (settings.changeInUserProfil) {
@@ -1145,11 +1145,11 @@ class EditUsers {
 	}
 	
 	getAvatarNameWrapper (div) {
-		var avatar = 	div.querySelector(".avatar-small, .avatar-large, .avatarDefault-3jtQoc, .avatar-profile, .avatar-1BXaQj .image-EVRGPw");
+		var avatar = div.querySelector(".avatar-small, .avatar-large, .avatarDefault-3jtQoc, .avatar-profile, .avatar-1BXaQj .image-EVRGPw");
 						
-		var username = 	div.querySelector(".user-name, .member-username-inner, .channel-name, .username, .headerName-2N8Pdz, .nameDefault-1I0lx8, .headerUsernameNoNickname-1iGxNP, .channelName-1G03vu");
+		var username = div.querySelector(".user-name, .member-username-inner, .channel-name, .username, .headerName-2N8Pdz, .nameDefault-1I0lx8, .headerUsernameNoNickname-1iGxNP, .channelName-1G03vu");
 						
-		var wrapper = 	div.querySelector(".member-username, .username-wrapper, .channel-name, .discord-tag, .accountDetails-15i-_e, .headerName-2N8Pdz, .nameDefault-1I0lx8, .headerTag-3zin_i, .channelName-1G03vu");
+		var wrapper = div.querySelector(".member-username, .username-wrapper, .channel-name, .discord-tag, .accountDetails-15i-_e, .headerName-2N8Pdz, .nameDefault-1I0lx8, .headerTag-3zin_i, .channelName-1G03vu");
 						
 		return {avatar, username, wrapper};
 	}
