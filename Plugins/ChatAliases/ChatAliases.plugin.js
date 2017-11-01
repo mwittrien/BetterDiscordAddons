@@ -180,7 +180,7 @@ class ChatAliases {
 
 	getDescription () {return "Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent.";}
 
-	getVersion () {return "1.4.2";}
+	getVersion () {return "1.4.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -417,7 +417,6 @@ class ChatAliases {
 			}
 			newText.push(word);
 		}
-		console.log(newText);
 		newText = newText.length == 1 ? newText[0] : newText.join(" ");
 		BDfunctionsDevilBro.getOwnerInstance({"node":textarea, "name":"ChannelTextAreaForm", "up":true}).setState({textValue:newText});
 	}
