@@ -180,7 +180,7 @@ class ChatAliases {
 
 	getDescription () {return "Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent.";}
 
-	getVersion () {return "1.4.3";}
+	getVersion () {return "1.4.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -411,7 +411,7 @@ class ChatAliases {
 					let reg = new RegExp(aliases[alias].exact ? "^" + escpAlias + "$" : escpAlias, casemod + exactmod);
 					if (reg.test(word)) {
 						swapped = true;
-						word = word.replace(reg, aliases[alias].replace);
+						word = word.replace(reg, aliases[alias].replace.replace(new RegExp(BDfunctionsDevilBro.regEscape("\\n"),"g"),"\n"));
 					}
 				}
 			}
