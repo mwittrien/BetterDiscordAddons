@@ -96,6 +96,8 @@ class ChatAliases {
 				border-radius: 5px;
 				background-color: #757C7E;
 				border: 2px solid #757C7E;
+				max-width: 600px;
+				overflow: hidden;
 			}
 
 			.chataliases-settings .added-word.fake {
@@ -180,7 +182,7 @@ class ChatAliases {
 
 	getDescription () {return "Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent.";}
 
-	getVersion () {return "1.4.5";}
+	getVersion () {return "1.4.6";}
 
 	getAuthor () {return "DevilBro";}
 	
