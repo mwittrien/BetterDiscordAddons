@@ -410,6 +410,50 @@ BDfunctionsDevilBro.getKeyInformation = function (config) {
 	}
 };
 
+// code in this closure based on code by samogot
+// https://github.com/samogot/betterdiscord-plugins/blob/master/v2/1Lib%20Discord%20Internals/plugin.js
+BDfunctionsDevilBro.findInWebModules = function (filter) {
+	const req = webpackJsonp([], {'__extra_id__': (module, exports, req) => exports.default = req}, ['__extra_id__']).default;
+	delete req.c['__extra_id__'];
+	for (let i in req.c) { 
+		if (req.c.hasOwnProperty(i)) {
+			let m = req.c[i].exports;
+			if (m && m.__esModule && m.default && filter(m.default)) return m.default;
+			if (m && filter(m)) return m;
+		}
+	}
+	return null;
+};
+
+BDfunctionsDevilBro.getLanguageTable = function (lang) {
+	var ti = {
+		bg: "холандски", //bulgarian
+		cs: "Nizozemština", //czech
+		da: "Hollandsk", //danish
+		de: "Niederländisch", //german
+		en: "Dutch", //english
+		es: "Holandés", //spanish
+		fi: "hollanti", //finnish
+		fr: "Néerlandais", //french
+		it: "Olandese", //italian
+		ja: "オランダ語", //japanese
+		ko: "네덜란드어", //korean
+		nl: "Nederlands", //dutch
+		no: "Nederlandsk", //norwegian
+		pl: "Holenderski", //polish
+		pt: "Holandês", //portuguese (brazil)
+		ru: "Голландский", //russian
+		sv: "Holländska", //swedish
+		tr: "Flemenkçe", //turkish
+		uk: "Нідерландська", //ukranian
+		zh: "荷蘭文" //chinese (traditional)
+    };
+	lang = lang ? lang : BDfunctionsDevilBro.getDiscordLanguage().id;
+	return BDfunctionsDevilBro.findInWebModules(function(m) {
+		return m.nl === ti[lang];
+	});
+};
+
 BDfunctionsDevilBro.equals = function (check1, check2, compareOrder) {
 	var depth = -1;
 	
@@ -454,8 +498,8 @@ BDfunctionsDevilBro.isObjectEmpty = function (obj) {
    var empty = true;
 
    for(var key in obj) {
-      empty = false;
-      break;
+		empty = false;
+		break;
    }
 
    return empty;
