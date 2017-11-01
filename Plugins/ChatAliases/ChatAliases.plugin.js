@@ -180,7 +180,7 @@ class ChatAliases {
 
 	getDescription () {return "Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent.";}
 
-	getVersion () {return "1.4.0";}
+	getVersion () {return "1.4.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -396,17 +396,33 @@ class ChatAliases {
 	}
 	
 	formatText (textarea) {
+		console.log(textarea);
 		var text = textarea.value;
-		var words = BDfunctionsDevilBro.loadAllData(this.getName(), "words");
-		
-		for (let wordvalue in words) {
-			let reg = new RegExp(words[wordvalue].exact ? "^" + wordvalue + "$" : "[" + wordvalue + "]", words[wordvalue].case ? "" : "i");
-			var newText = [];
-			text.split(" ").forEach((word) => {
-				newText.push(reg.test(word) ? word.replace(new RegExp(wordvalue, "g"), words[wordvalue].replace) : word);
-			});
-			text = newText.join(" ");
+		var words = text.trim().split(" ");
+		var aliases = BDfunctionsDevilBro.loadAllData(this.getName(), "words");
+		var newText = [];
+		console.log(words);
+		console.log(words.length);
+		for (var i = 0; i < words.length; i++) {
+			var word = words[i];
+			console.log(word);
+			var swapped = false;
+			for (let alias in aliases) {
+				if (!swapped) {
+					let casemod = aliases[alias].case ? "" : "i";
+					let exactmod = aliases[alias].exact ? "" : "g";
+					let escpAlias = BDfunctionsDevilBro.regEscape(alias);
+					let reg = new RegExp(aliases[alias].exact ? "^" + escpAlias + "$" : escpAlias, casemod + exactmod);
+					if (reg.test(word)) {
+						swapped = true;
+						word = word.replace(reg, aliases[alias].replace);
+					}
+				}
+			}
+			newText.push(word);
 		}
-		BDfunctionsDevilBro.getOwnerInstance({"node":textarea, "name":"ChannelTextAreaForm", "up":true}).setState({textValue:text});
+		console.log(newText);
+		newText = newText.length == 1 ? newText[0] : newText.join(" ");
+		BDfunctionsDevilBro.getOwnerInstance({"node":textarea, "name":"ChannelTextAreaForm", "up":true}).setState({textValue:newText});
 	}
 }
