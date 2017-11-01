@@ -228,7 +228,7 @@ class ChatFilter {
 
 	getDescription () {return "Allows the user to censor words or block complete messages based on words in the chatwindow.";}
 
-	getVersion () {return "3.0.4";}
+	getVersion () {return "3.0.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -532,7 +532,7 @@ class ChatFilter {
 					bWord = blockedWords[bWord].exact ? "^" + bWord + "$" : bWord;
 					bWord = BDfunctionsDevilBro.encodeToHTML(bWord);
 					
-					var reg = new RegExp(bWord, modifier);
+					var reg = new RegExp(BDfunctionsDevilBro.regEscape(bWord), modifier);
 					strings.forEach((string,i) => {
 						if (string.indexOf("<img draggable") == 0) {
 							var emojiname = string.split('alt="').length > 0 ? string.split('alt="')[1] : null;
@@ -576,7 +576,7 @@ class ChatFilter {
 						cWord = censoredWords[cWord].exact ? "^" + cWord + "$" : cWord;
 						cWord = BDfunctionsDevilBro.encodeToHTML(cWord);
 						
-						var reg = new RegExp(cWord, modifier);
+						var reg = new RegExp(BDfunctionsDevilBro.regEscape(cWord), modifier);
 						strings.forEach((string,i) => {
 							if (string.indexOf("<img draggable") == 0) {
 								var emojiname = string.split('alt="').length > 0 ? string.split('alt="')[1] : null;
