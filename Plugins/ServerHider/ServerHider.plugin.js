@@ -300,7 +300,7 @@ class ServerHider {
 
 	getDescription () {return "Hide Servers in your Serverlist";}
 
-	getVersion () {return "2.3.1";}
+	getVersion () {return "2.3.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -458,7 +458,7 @@ class ServerHider {
 		$(".context-menu").hide();
 		
 		var serverHiderModal = $(this.serverHiderModalMarkup);
-		serverHiderModal.appendTo($("#app-mount > [class^='theme-']").last())
+		serverHiderModal.appendTo($(".app-XZYfmp"))
 			.on("click", ".callout-backdrop,button.btn-ok", () => {
 				serverHiderModal.addClass('closing');
 				setTimeout(() => {serverHiderModal.remove();}, 300);
