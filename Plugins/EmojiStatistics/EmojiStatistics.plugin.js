@@ -303,7 +303,7 @@ class EmojiStatistics {
 
 	getDescription () {return "Adds some helpful options to show you more information about emojis and emojiservers.";}
 
-	getVersion () {return "2.4.1";}
+	getVersion () {return "2.4.2";}
 
 	getAuthor () {return "DevilBro";}
 
