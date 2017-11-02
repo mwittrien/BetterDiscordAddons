@@ -369,7 +369,7 @@ class ServerFolders {
 
 	getDescription () {return "Add pseudofolders to your serverlist to organize your servers.";}
 
-	getVersion () {return "4.4.3";}
+	getVersion () {return "4.5.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -556,8 +556,7 @@ class ServerFolders {
 					.attr("class", "avatar-small open")
 					.on("click", this.changeIconAndServers.bind(this))
 					.on("contextmenu", this.createFolderContextMenu.bind(this))
-					.on("mouseenter", this.createFolderToolTip.bind(this))
-					.on("mouseleave", this.deleteFolderToolTip.bind(this));
+					.on("mouseenter", this.createFolderToolTip.bind(this));
 				
 				var folderName = 	"";
 				var isOpen = 		true;
@@ -581,32 +580,19 @@ class ServerFolders {
 		var data = BDfunctionsDevilBro.loadData(folderID, this.getName(), "folders");
 		if (data) {
 			if (data.folderName) {
-				var folderTooltip = BDfunctionsDevilBro.createTooltip(data.folderName, folder, {type:"right",selector:"guild-folder-tooltip"});
-				
-				if (data.color3) {
-					var bgColor = BDfunctionsDevilBro.color2RGB(data.color3);
-					$(folderTooltip)
-						.css("background-color", bgColor)
-						
-					var customeTooltipCSS = `
-						.guild-folder-tooltip:after {
-							border-right-color: ` + bgColor + ` !important;
-						}`;
-						
-					BDfunctionsDevilBro.appendLocalStyle("customeServerfolderTooltipCSS", customeTooltipCSS);
-				}
-				if (data.color4) {
-					var fontColor = BDfunctionsDevilBro.color2RGB(data.color4);
-					$(folderTooltip)
-						.css("color", fontColor);
-				}
+				var bgColor = data.color3 ? BDfunctionsDevilBro.color2RGB(data.color3) : "";
+				var fontColor = data.color4 ? BDfunctionsDevilBro.color2RGB(data.color4) : "";
+				var customTooltipCSS = `
+					.guild-folder-tooltip {
+						color: ${fontColor} !important;
+						background-color: ${bgColor} !important;
+					}
+					.guild-folder-tooltip:after {
+						border-right-color: ${bgColor} !important;
+					}`;
+				BDfunctionsDevilBro.createTooltip(data.folderName, folder, {type:"right",selector:"guild-folder-tooltip",css:customTooltipCSS});
 			}
 		}
-	}
-	
-	deleteFolderToolTip (e) {
-		BDfunctionsDevilBro.removeLocalStyle("customeServerfolderTooltipCSS");
-		$(".tooltips").find(".guild-folder-tooltip").remove();
 	}
 	
 	changeIconAndServers (e) {
@@ -842,8 +828,7 @@ class ServerFolders {
 				.attr("class", isOpen ? "avatar-small open" : "avatar-small closed")
 				.on("click", this.changeIconAndServers.bind(this))
 				.on("contextmenu", this.createFolderContextMenu.bind(this))
-				.on("mouseenter", this.createFolderToolTip.bind(this))
-				.on("mouseleave", this.deleteFolderToolTip.bind(this));
+				.on("mouseenter", this.createFolderToolTip.bind(this));
 			
 			var includedServers = this.readIncludedServerList(folderDiv);
 			
