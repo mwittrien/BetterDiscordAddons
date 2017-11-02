@@ -201,7 +201,9 @@ BDfunctionsDevilBro.createTooltip = function(content, container, options = {}) {
     tooltip.classList.add("tooltip-black");
 	if (options.type) tooltip.classList.add("tooltip-" + options.type);
 	if (options.selector) tooltip.classList.add(options.selector);
-    tooltip.innerHTML = content;
+	if (options.html == true) tooltip.innerHTML = content;
+	else tooltip.innerText = content;
+    
 	
 	document.querySelector(".tooltips").appendChild(tooltip);
 	
