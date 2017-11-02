@@ -182,7 +182,7 @@ class ChatAliases {
 
 	getDescription () {return "Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent.";}
 
-	getVersion () {return "1.4.6";}
+	getVersion () {return "1.4.7";}
 
 	getAuthor () {return "DevilBro";}
 	
