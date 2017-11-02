@@ -60,7 +60,7 @@ class OldTitleBar {
 
 	getDescription () {return "Reverts the title bar back to its former self.";}
 
-	getVersion () {return "1.1.5";}
+	getVersion () {return "1.2.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -188,8 +188,7 @@ class OldTitleBar {
 					.on("click." + this.getName(), ".reloadButtonOTB", () => {
 						this.doReload();
 					})
-					.on("mouseenter." + this.getName(), ".reloadButtonOTB", this.createReloadToolTip.bind(this))
-					.on("mouseleave." + this.getName(), ".reloadButtonOTB", this.deleteReloadToolTip.bind(this));
+					.on("mouseenter." + this.getName(), ".reloadButtonOTB", this.createReloadToolTip.bind(this));
 			}
 			$(".divider-1GKkV3").parent().has(".iconInactive-WWHQEI")
 				.append(this.dividerMarkup)
@@ -219,8 +218,7 @@ class OldTitleBar {
 					.on("click." + this.getName(), ".reloadButtonOTB", () => {
 						this.doReload();
 					})
-					.on("mouseenter." + this.getName(), ".reloadButtonOTB", this.createReloadToolTip.bind(this))
-					.on("mouseleave." + this.getName(), ".reloadButtonOTB", this.deleteReloadToolTip.bind(this));
+					.on("mouseenter." + this.getName(), ".reloadButtonOTB", this.createReloadToolTip.bind(this));
 			}
 			$(settingsbar)
 				.append(this.minButtonMarkup)
@@ -278,18 +276,12 @@ class OldTitleBar {
 		$(".divider-1GKkV3").parent().has(".iconInactive-WWHQEI")
 			.off("click." + this.getName())
 			.off("mouseenter." + this.getName())
-			.off("mouseleave." + this.getName())
 			.find(".dividerOTB, .reloadButtonOTB, .minButtonOTB, .maxButtonOTB, .closeButtonOTB").remove();
 			
 		$(".divider-1GKkV3").parent().has(".iconInactive-WWHQEI").parent().css("-webkit-app-region", "initial");
 	}
 	
 	createReloadToolTip (e) {
-		var btn = document.querySelector(".reloadButtonOTB");
-		BDfunctionsDevilBro.createTooltip("Reload", btn, {type:"bottom",selector:"reload-button-tooltip"});
-	}
-	
-	deleteReloadToolTip (e) {
-		$(".tooltips").find(".reload-button-tooltip").remove();
+		BDfunctionsDevilBro.createTooltip("Reload", document.querySelector(".reloadButtonOTB"), {type:"bottom",selector:"reload-button-tooltip"});
 	}
 }
