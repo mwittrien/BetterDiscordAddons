@@ -204,7 +204,6 @@ BDfunctionsDevilBro.createTooltip = function(content, container, options = {}) {
 	if (options.html == true) tooltip.innerHTML = content;
 	else tooltip.innerText = content;
     
-	
 	document.querySelector(".tooltips").appendChild(tooltip);
 	
 	var left, top;
@@ -278,8 +277,7 @@ BDfunctionsDevilBro.getThemesFolder = function() {
 
 BDfunctionsDevilBro.createUpdateButton = function () {
 	var updateButton = document.createElement("button");
-	var tooltip = document.createElement("div");
-	var tooltipobserver = new MutationObserver(() => {});
+	var tooltip;
 	updateButton.className = "bd-pfbtn bd-updatebtn";
 	updateButton.innerText = "Check for Updates";
 	updateButton.style.left = "220px";
@@ -287,39 +285,20 @@ BDfunctionsDevilBro.createUpdateButton = function () {
 		BDfunctionsDevilBro.checkAllUpdates();
 	};			
 	updateButton.onmouseover = function () {
-		document.querySelector(".tooltips").appendChild(tooltip);
-		tooltip.className = "tooltip tooltip-right tooltip-black";
-		tooltip.innerText = "Only checks for updates of plugins, which support the updatecheck. Rightclick for a list."
-		tooltip.style.maxWidth = "";
-		tooltip.style.left = $(updateButton).offset().left + $(updateButton).outerWidth() + "px";
-		tooltip.style.top = $(updateButton).offset().top + ($(updateButton).outerHeight() - $(tooltip).outerHeight())/2 + "px";
-		tooltipobserver = new MutationObserver((mutations) => {
-			mutations.forEach((mutation) => {
-				var nodes = Array.from(mutation.removedNodes);
-				var directMatch = nodes.indexOf(updateButton) > -1;
-				var parentMatch = nodes.some(parent => parent.contains(updateButton));
-				if (directMatch || parentMatch) {
-					tooltipobserver.disconnect();
-					tooltip.remove();
-				}
-			});
-		});
-		tooltipobserver.observe(document.body, {subtree: true, childList: true});
+		tooltip = BDfunctionsDevilBro.createTooltip("Only checks for updates of plugins, which support the updatecheck. Rightclick for a list.", updateButton, {type:"right",selector:"update-button-tooltip"});
+		
 	};		
 	updateButton.onmouseout = function () {
-		tooltipobserver.disconnect();
 		tooltip.remove();
 	};	
 	updateButton.oncontextmenu = function () {
 		if (window.PluginUpdates && window.PluginUpdates.plugins) {
+			tooltip.remove();
 			var list = [];
 			for (var plugin in window.PluginUpdates.plugins) {
 				list.push(window.PluginUpdates.plugins[plugin].name);
 			}
-			tooltip.innerText = list.sort().join(", ");
-			tooltip.style.maxWidth = "400px";
-			tooltip.style.left = $(updateButton).offset().left + $(updateButton).outerWidth() + "px";
-			tooltip.style.top = $(updateButton).offset().top + ($(updateButton).outerHeight() - $(tooltip).outerHeight())/2 + "px";
+			tooltip = BDfunctionsDevilBro.createTooltip(list.sort().join(", "), updateButton, {type:"right",selector:"update-list-tooltip"});
 		}
 	};
 	return updateButton;
@@ -1540,6 +1519,10 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 	.toast.toast-warning.icon,
 	.toast.toast-warn.icon {
 		background-image: url(data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjRkZGRkZGIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4gICAgPHBhdGggZD0iTTAgMGgyNHYyNEgweiIgZmlsbD0ibm9uZSIvPiAgICA8cGF0aCBkPSJNMSAyMWgyMkwxMiAyIDEgMjF6bTEyLTNoLTJ2LTJoMnYyem0wLTRoLTJ2LTRoMnY0eiIvPjwvc3ZnPg==);
+	}
+	
+	.update-list-tooltip {
+		max-width: 400px;
 	}
 	
 	.modal-color-picker [class^="swatches"] {
