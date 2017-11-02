@@ -1705,7 +1705,7 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 	.colorpicker-modal .colorpicker-slidercursor {
 		position: absolute;
 		top: -4px;
-		left: -5px;
+		left: -6px;
 		height: 12px;
 		width: 32px;
 	}
