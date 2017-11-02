@@ -244,7 +244,7 @@ class SendLargeMessages {
 
 	getDescription () {return "Opens a popout when your message is too large, which allows you to automatically send the message in several smaller messages.";}
 
-	getVersion () {return "1.2.4";}
+	getVersion () {return "1.2.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -340,7 +340,7 @@ class SendLargeMessages {
 	showSendModal (text) {
 		var sendMessageModal = $(this.sendMessageModalMarkup);
 		var textinput = sendMessageModal.find("#modal-inputtext")[0];
-		sendMessageModal.appendTo($("#app-mount > [class^='theme-']").last())
+		sendMessageModal.appendTo($(".app-XZYfmp"))
 			.on("click", ".callout-backdrop,button.btn-cancel", (e) => {
 				$(document).off("mouseup." + this.getName()).off("mousemove." + this.getName());
 				sendMessageModal.addClass('closing');
