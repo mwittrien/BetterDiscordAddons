@@ -303,7 +303,7 @@ class EmojiStatistics {
 
 	getDescription () {return "Adds some helpful options to show you more information about emojis and emojiservers.";}
 
-	getVersion () {return "2.5.0";}
+	getVersion () {return "2.5.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -487,7 +487,7 @@ class EmojiStatistics {
 		var entries = [];
 		
 		var emojiInformationModal = $(this.emojiInformationModalMarkup);
-		emojiInformationModal.appendTo($("#app-mount > [class^='theme-']").last())
+		emojiInformationModal.appendTo($(".app-XZYfmp"))
 		.on("click", ".callout-backdrop,button.btn-ok", (e) => {
 			emojiInformationModal.addClass('closing');
 			setTimeout(() => {emojiInformationModal.remove();}, 300);
