@@ -201,7 +201,7 @@ BDfunctionsDevilBro.createTooltip = function(content, container, options = {}) {
     tooltip.classList.add("tooltip-black");
 	if (options.type) tooltip.classList.add("tooltip-" + options.type);
 	if (options.selector) tooltip.classList.add(options.selector);
-    tooltip.innerText = content;
+    tooltip.innerHTML = content;
 	
 	document.querySelector(".tooltips").appendChild(tooltip);
 	
@@ -1266,7 +1266,7 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 			
 			$(document)
 				.off("mouseup.ColorPicker").off("mousemove.ColorPicker")
-				.on("mouseup".ColorPicker, () => {
+				.on("mouseup.ColorPicker", () => {
 					$(document).off("mouseup.ColorPicker").off("mousemove.ColorPicker");
 				})
 				.on("mousemove.ColorPicker", (event2) => {
