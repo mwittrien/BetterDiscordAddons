@@ -298,7 +298,7 @@ BDfunctionsDevilBro.createUpdateButton = function () {
 			for (var plugin in window.PluginUpdates.plugins) {
 				list.push(window.PluginUpdates.plugins[plugin].name);
 			}
-			tooltip = BDfunctionsDevilBro.createTooltip(list.sort().join(", "), updateButton, {type:"right",selector:"update-list-tooltip"});
+			tooltip = BDfunctionsDevilBro.createTooltip(list.sort().join(", "), updateButton, {type:"bottom",selector:"update-list-tooltip"});
 		}
 	};
 	return updateButton;
@@ -531,7 +531,7 @@ BDfunctionsDevilBro.equals = function (check1, check2, compareOrder) {
 BDfunctionsDevilBro.isObjectEmpty = function (obj) {
    var empty = true;
 
-   for(var key in obj) {
+   for (var key in obj) {
 		empty = false;
 		break;
    }
