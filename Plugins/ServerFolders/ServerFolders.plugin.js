@@ -369,7 +369,7 @@ class ServerFolders {
 
 	getDescription () {return "Add pseudofolders to your serverlist to organize your servers.";}
 
-	getVersion () {return "4.4.2";}
+	getVersion () {return "4.4.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -581,12 +581,7 @@ class ServerFolders {
 		var data = BDfunctionsDevilBro.loadData(folderID, this.getName(), "folders");
 		if (data) {
 			if (data.folderName) {
-				var folderTooltip = $(this.folderTooltipMarkup);
-				$(".tooltips").append(folderTooltip);
-				$(folderTooltip)
-					.text(data.folderName)
-					.css("left", ($(folder).offset().left + $(folder).width()) + "px")
-					.css("top", ($(folder).offset().top + ($(folder).outerHeight() - $(folderTooltip).outerHeight())/2) + "px");
+				var folderTooltip = BDfunctionsDevilBro.createTooltip(data.folderName, folder, {type:"right",selector:"guild-folder-tooltip"});
 				
 				if (data.color3) {
 					var bgColor = BDfunctionsDevilBro.color2RGB(data.color3);
