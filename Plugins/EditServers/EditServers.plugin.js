@@ -364,7 +364,7 @@ class EditServers {
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	getVersion () {return "1.5.0";}
+	getVersion () {return "1.5.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -607,7 +607,7 @@ class EditServers {
 			BDfunctionsDevilBro.setColorSwatches(color2, serverSettingsModal.find(".swatches2"), "swatch2");
 			BDfunctionsDevilBro.setColorSwatches(color3, serverSettingsModal.find(".swatches3"), "swatch3");
 			BDfunctionsDevilBro.setColorSwatches(color4, serverSettingsModal.find(".swatches4"), "swatch4");
-			serverSettingsModal.appendTo($("#app-mount > [class^='theme-']").last())
+			serverSettingsModal.appendTo($(".app-XZYfmp"))
 				.on("click", ".callout-backdrop,button.btn-cancel", (event) => {
 					serverSettingsModal.addClass('closing');
 					setTimeout(() => {serverSettingsModal.remove();}, 300);
