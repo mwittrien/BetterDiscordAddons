@@ -10,7 +10,7 @@ class MoveablePopups {
 
 	getDescription () {return "Adds the feature to move all popups and modals around like on a normal desktop. Ctrl + drag with your left mousebutton to drag element.";}
 
-	getVersion () {return "1.0.1";}
+	getVersion () {return "1.0.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -59,7 +59,7 @@ class MoveablePopups {
 					}
 				);
 			});
-			if (document.querySelector("#app-mount > [class^='theme-']")) this.modalObserver.observe(document.querySelectorAll("#app-mount > [class^='theme-']")[document.querySelectorAll("#app-mount > [class^='theme-']").length-1], {childList: true});
+			if (document.querySelector("#app-mount")) this.modalObserver.observe(document.querySelector("#app-mount"), {childList: true, subtree:true});
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
