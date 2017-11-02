@@ -286,12 +286,6 @@ class EditServers {
 					</div>
 				</div>
 			</div>`;
-			
-		this.serverTooltipMarkup = 
-			`<div class="tooltip tooltip-right tooltip-black guild-custom-tooltip"></div>`;
-			
-		this.noticeTooltipMarkup = 
-			`<div class="tooltip tooltip-right tooltip-black notice-tooltip"></div>`;
 
 		this.serverSettingsModalMarkup =
 			`<span class="editservers-modal">
@@ -370,7 +364,7 @@ class EditServers {
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	getVersion () {return "1.4.3";}
+	getVersion () {return "1.4.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -714,8 +708,8 @@ class EditServers {
 				this.urlCheckRequest = request(e.target.value, (error, response, result) => {
 					if (response && response.headers["content-type"] && response.headers["content-type"].indexOf("image") != -1) {
 						$(e.target)
-								.removeClass("invalid")
-								.addClass("valid");
+							.removeClass("invalid")
+							.addClass("valid");
 					}
 					else {
 						$(e.target)
@@ -737,14 +731,11 @@ class EditServers {
 		var valid = $(input).hasClass("valid");
 		var invalid = $(input).hasClass("invalid");
 		if (disabled || valid || invalid) {
+			var text = disabled ? "Ignore imageurl" : valid ? "Valid imageurl" : "Invalid imageurl";
 			var bgColor = disabled ? "#282524" : valid ? "#297828" : "#8C2528";
-			var noticeTooltip = $(this.noticeTooltipMarkup);
-			$(".tooltips").append(noticeTooltip);
+			var noticeTooltip = BDfunctionsDevilBro.createTooltip(text, input, {type:"right",selector:"notice-tooltip"});
 			$(noticeTooltip)
-				.text(disabled ? "Ignore imageurl" : valid ? "Valid imageurl" : "Invalid imageurl")
-				.css("background-color", bgColor)
-				.css("left", ($(input).offset().left + $(input).width() + parseInt($(input).css("marginLeft"), 10)) + "px")
-				.css("top", ($(input).offset().top + ($(input).outerHeight() - $(noticeTooltip).outerHeight())/2) + "px");
+				.css("background-color", bgColor);
 				
 			var customeTooltipCSS = `
 				.notice-tooltip:after {
@@ -830,13 +821,8 @@ class EditServers {
 		var data = BDfunctionsDevilBro.loadData(info.id, this.getName(), "servers");
 		if (data) {
 			$(".tooltips").find(".tooltip").hide();
-			var serverTooltip = $(this.serverTooltipMarkup);
-			$(".tooltips").append(serverTooltip);
-			
-			$(serverTooltip)
-				.text(data.name ? data.name : info.name)
-				.css("left", ($(serverDiv).offset().left + $(serverDiv).width()) + "px")
-				.css("top", ($(serverDiv).offset().top + ($(serverDiv).outerHeight() - $(serverTooltip).outerHeight())/2) + "px");
+			var text = data.name ? data.name : info.name;
+			var serverTooltip = BDfunctionsDevilBro.createTooltip(text, serverDiv, {type:"right",selector:"guild-custom-tooltip"});
 			
 			if (data.color3) {
 				var bgColor = BDfunctionsDevilBro.color2RGB(data.color3);
