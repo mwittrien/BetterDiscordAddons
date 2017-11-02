@@ -201,6 +201,7 @@ BDfunctionsDevilBro.createTooltip = function(content, container, options = {}) {
     tooltip.classList.add("tooltip-black");
 	if (options.type) tooltip.classList.add("tooltip-" + options.type);
 	if (options.selector) tooltip.classList.add(options.selector);
+	if (options.css) BDfunctionsDevilBro.appendLocalStyle("customTooltipDevilBro", options.css);
 	if (options.html == true) tooltip.innerHTML = content;
 	else tooltip.innerText = content;
     
@@ -240,10 +241,16 @@ BDfunctionsDevilBro.createTooltip = function(content, container, options = {}) {
 			if (ownMatch || directMatch || parentMatch) {
 				tooltipObserver.disconnect();
 				tooltip.remove();
+				$(container).off("mouseleave.BDfunctionsDevilBroTooltip");
+				BDfunctionsDevilBro.removeLocalStyle("customTooltipDevilBro");
 			}
 		});
 	});
 	tooltipObserver.observe(document.body, {subtree: true, childList: true});
+	
+	$(container).on("mouseleave.BDfunctionsDevilBroTooltip", () => {
+		tooltip.remove();
+	});
 	
 	return tooltip;
 };
