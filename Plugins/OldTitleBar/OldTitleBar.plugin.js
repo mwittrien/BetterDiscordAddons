@@ -60,7 +60,7 @@ class OldTitleBar {
 
 	getDescription () {return "Reverts the title bar back to its former self.";}
 
-	getVersion () {return "1.1.3";}
+	getVersion () {return "1.1.4";}
 
 	getAuthor () {return "DevilBro";}
 
