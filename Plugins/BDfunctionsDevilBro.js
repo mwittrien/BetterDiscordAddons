@@ -1143,7 +1143,7 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 		</span>`;
 		
 	var colorPickerModal = $(colorPickerModalMarkup)[0];
-	$(colorPickerModal).appendTo($("#app-mount > [class^='theme-']").last())
+	$(colorPickerModal).appendTo($(".app-XZYfmp"))
 		.on("click", ".callout-backdrop", (event) => {
 			var newRGB = colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").style.backgroundColor;
 			var newCOMP = BDfunctionsDevilBro.color2COMP(newRGB);
