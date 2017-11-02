@@ -395,7 +395,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "1.8.0";}
+	getVersion () {return "1.8.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -778,7 +778,7 @@ class EditUsers {
 			BDfunctionsDevilBro.setColorSwatches(color2, userSettingsModal.find(".swatches2"), "swatch2");
 			BDfunctionsDevilBro.setColorSwatches(color3, userSettingsModal.find(".swatches3"), "swatch3");
 			BDfunctionsDevilBro.setColorSwatches(color4, userSettingsModal.find(".swatches4"), "swatch4");
-			userSettingsModal.appendTo($("#app-mount > [class^='theme-']").last())
+			userSettingsModal.appendTo($(".app-XZYfmp"))
 				.on("click", ".callout-backdrop,button.btn-cancel", (event) => {
 					userSettingsModal.addClass('closing');
 					setTimeout(() => {userSettingsModal.remove();}, 300);
