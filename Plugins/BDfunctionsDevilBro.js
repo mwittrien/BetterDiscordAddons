@@ -285,28 +285,23 @@ BDfunctionsDevilBro.getThemesFolder = function() {
 
 BDfunctionsDevilBro.createUpdateButton = function () {
 	var updateButton = document.createElement("button");
-	var tooltip;
 	updateButton.className = "bd-pfbtn bd-updatebtn";
 	updateButton.innerText = "Check for Updates";
 	updateButton.style.left = "220px";
 	updateButton.onclick = function () {
 		BDfunctionsDevilBro.checkAllUpdates();
 	};			
-	updateButton.onmouseover = function () {
-		tooltip = BDfunctionsDevilBro.createTooltip("Only checks for updates of plugins, which support the updatecheck. Rightclick for a list.", updateButton, {type:"right",selector:"update-button-tooltip"});
+	updateButton.onmouseenter = function () {
+		BDfunctionsDevilBro.createTooltip("Only checks for updates of plugins, which support the updatecheck. Rightclick for a list.", updateButton, {type:"right",selector:"update-button-tooltip"});
 		
-	};		
-	updateButton.onmouseout = function () {
-		tooltip.remove();
-	};	
+	};
 	updateButton.oncontextmenu = function () {
-		if (window.PluginUpdates && window.PluginUpdates.plugins) {
-			tooltip.remove();
+		if (window.PluginUpdates && window.PluginUpdates.plugins && !document.querySelector(".update-list-tooltip")) {
 			var list = [];
 			for (var plugin in window.PluginUpdates.plugins) {
 				list.push(window.PluginUpdates.plugins[plugin].name);
 			}
-			tooltip = BDfunctionsDevilBro.createTooltip(list.sort().join(", "), updateButton, {type:"bottom",selector:"update-list-tooltip"});
+			BDfunctionsDevilBro.createTooltip(list.sort().join(", "), updateButton, {type:"bottom",selector:"update-list-tooltip"});
 		}
 	};
 	return updateButton;
