@@ -13,11 +13,6 @@ class MoveablePopups {
 	getVersion () {return "1.0.1";}
 
 	getAuthor () {return "DevilBro";}
-	
-    getSettingsPanel () {
-		if (typeof BDfunctionsDevilBro === "object") {
-		}
-	}
 
 	//legacy
 	load () {}
