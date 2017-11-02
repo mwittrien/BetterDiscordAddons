@@ -317,12 +317,6 @@ class EditUsers {
 					</div>
 				</div>
 			</div>`;
-			
-		this.noticeTooltipMarkup = 
-			`<div class="tooltip tooltip-right tooltip-black notice-tooltip"></div>`;
-			
-		this.dmTooltipMarkup = 
-			`<div class="tooltip tooltip-right tooltip-black dm-custom-tooltip"></div>`;
 
 		this.userSettingsModalMarkup =
 			`<span class="editusers-modal">
@@ -401,7 +395,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "1.7.3";}
+	getVersion () {return "1.7.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -911,14 +905,11 @@ class EditUsers {
 		var valid = $(input).hasClass("valid");
 		var invalid = $(input).hasClass("invalid");
 		if (disabled || valid || invalid) {
+			var text = disabled ? "Ignore imageurl" : valid ? "Valid imageurl" : "Invalid imageurl";
 			var bgColor = disabled ? "#282524" : valid ? "#297828" : "#8C2528";
-			var noticeTooltip = $(this.noticeTooltipMarkup);
-			$(".tooltips").append(noticeTooltip);
+			var noticeTooltip = BDfunctionsDevilBro.createTooltip(text, input, {type:"right",selector:"notice-tooltip"});
 			$(noticeTooltip)
-				.text(disabled ? "Ignore imageurl" : valid ? "Valid imageurl" : "Invalid imageurl")
-				.css("background-color", bgColor)
-				.css("left", ($(input).offset().left + $(input).width() + parseInt($(input).css("marginLeft"), 10)) + "px")
-				.css("top", ($(input).offset().top + ($(input).outerHeight() - $(noticeTooltip).outerHeight())/2) + "px");
+				.css("background-color", bgColor);
 				
 			var customeTooltipCSS = `
 				.notice-tooltip:after {
@@ -1084,15 +1075,9 @@ class EditUsers {
 	}
 	
 	createDmToolTip (e) {
-		var dmDiv = e.data.div;
 		$(".tooltips").find(".tooltip").hide();
-		var dmTooltip = $(this.dmTooltipMarkup);
-		$(".tooltips").append(dmTooltip);
-		
-		$(dmTooltip)
-			.text(e.data.nick ? e.data.nick : e.data.name)
-			.css("left", ($(dmDiv).offset().left + $(dmDiv).width()) + "px")
-			.css("top", ($(dmDiv).offset().top + ($(dmDiv).outerHeight() - $(dmTooltip).outerHeight())/2) + "px");
+		var text = e.data.nick ? e.data.nick : e.data.name;
+		BDfunctionsDevilBro.createTooltip(text, e.data.div, {type:"right",selector:"dm-custom-tooltip"});
 	}
 	
 	deleteDmToolTip (e) {
