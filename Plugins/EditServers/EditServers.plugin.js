@@ -7,9 +7,13 @@ class EditServers {
     
 		this.serverContextObserver = new MutationObserver(() => {});
 		this.serverListObserver = new MutationObserver(() => {});
+		this.serverDropHandler;
+		this.serverListLeaveHandler;
 		
 		this.urlCheckTimeout;
 		this.urlCheckRequest;
+		
+		this.serverDragged = false;;
 		
 		this.css = `
 			@keyframes animation-editservers-backdrop {
@@ -366,7 +370,7 @@ class EditServers {
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	getVersion () {return "1.4.2";}
+	getVersion () {return "1.4.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -410,15 +414,24 @@ class EditServers {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (BDfunctionsDevilBro.getKeyInformation({"node":node, "key":"guild"})) {
-									this.loadServer(node);
-								}
+								this.loadServer(node);
 							});
 						}
 					}
 				);
 			});
 			if (document.querySelector(".guilds.scroller")) this.serverListObserver.observe(document.querySelector(".guilds.scroller"), {childList: true});
+			
+			this.serverDropHandler = (e) => {	
+				this.serverDragged = true;
+			};
+			this.serverListLeaveHandler = (e) => {	
+				if (this.serverDragged) this.loadAllServers();
+				this.serverDragged = false;
+			};
+			
+			$(".guilds.scroller").bind('drop', this.serverDropHandler);
+			$(".guilds.scroller").bind('mouseleave', this.serverListLeaveHandler);
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 			
@@ -438,6 +451,8 @@ class EditServers {
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.serverContextObserver.disconnect();
 			this.serverListObserver.disconnect();
+			$(".guilds.scroller").unbind('drop', this.serverDropHandler);
+			$(".guilds.scroller").unbind('mouseleave', this.serverListLeaveHandler);
 			
 			$(".custom-editservers").each(
 				(i,serverDiv) => {
@@ -769,7 +784,6 @@ class EditServers {
 	}
 	
 	loadServer (serverDiv) {
-		var start = performance.now();
 		var info = BDfunctionsDevilBro.getKeyInformation({"node":serverDiv, "key":"guild"});
 		if (info) {
 			var data = BDfunctionsDevilBro.loadData(info.id, this.getName(), "servers");
