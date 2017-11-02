@@ -53,7 +53,7 @@ class ImageGallery {
 
 	getDescription () {return "Allows the user to browse through images sent inside the same message.";}
 
-	getVersion () {return "1.3.5";}
+	getVersion () {return "1.4.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -76,14 +76,14 @@ class ImageGallery {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if ($(node).find(".modal-image").length != 0) {
+								if (node && node.tagName && node.querySelector(".modal-image")) {
 									this.loadImages(node);
 								}
 							});
 						}
 						if (change.removedNodes) {
 							change.removedNodes.forEach((node) => {
-								if ($(node).find(".modal-image").length != 0) {
+								if (node && node.tagName && node.querySelector(".modal-image")) {
 									$(document).off("keyup." + this.getName()).off("keydown." + this.getName());
 								}
 							});
@@ -91,7 +91,7 @@ class ImageGallery {
 					}
 				);
 			});
-			if (document.querySelector("#app-mount > [class^='theme-']")) this.imageModalObserver.observe(document.querySelectorAll("#app-mount > [class^='theme-']")[document.querySelectorAll("#app-mount > [class^='theme-']").length-1], {childList: true});
+			if (document.querySelector("#app-mount")) this.imageModalObserver.observe(document.querySelector("#app-mount"), {childList: true, subtree:true});
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 		}
