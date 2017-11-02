@@ -196,19 +196,19 @@ BDfunctionsDevilBro.showToast = function(content, options = {}) {
 
 BDfunctionsDevilBro.createTooltip = function(content, container, options = {}) {
 	if (!document.querySelector(".tooltips") || !content || !container) return null;
-    const {direction = "", selector = ""} = options;
     let tooltip = document.createElement("div");
     tooltip.classList.add("tooltip");
     tooltip.classList.add("tooltip-black");
-	if (direction) tooltip.classList.add("tooltip-" + direction);
-	if (selector) tooltip.classList.add(selector);
+	if (options.type) tooltip.classList.add("tooltip-" + options.type);
+	if (options.selector) tooltip.classList.add(selector);
     tooltip.innerText = content;
 	
 	document.querySelector(".tooltips").appendChild(tooltip);
 	
 	var left, top;
 	
-	switch (options.direction) {
+	if (!options.position) options.position = options.type;
+	switch (options.position) {
 		case "top": 
 			left = $(container).offset().left + ($(container).outerWidth() - $(tooltip).outerWidth())/2;
 			top = $(container).offset().top - $(tooltip).outerHeight();
