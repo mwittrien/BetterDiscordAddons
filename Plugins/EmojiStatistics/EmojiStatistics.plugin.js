@@ -297,9 +297,6 @@ class EmojiStatistics {
 			
 		this.emojiButtonMarkup =
 			`<div class="emojistatistics-button"></div>`;
-			
-		this.emojiTooltipMarkup = 
-			`<div class="tooltip tooltip-right tooltip-black emoji-tooltip"><div class="emoji-name"></div><div class="emoji-server"></div></div>`;
 	}
 
 	getName () {return "EmojiStatistics";}
@@ -474,13 +471,10 @@ class EmojiStatistics {
 					emojiUrl = emojiUrl.replace("url(\"","").replace("\")","");
 					var data = this.emojiToServerList[emojiUrl];
 					if (data) {
-						var emojiTooltip = $(this.emojiTooltipMarkup);
-						$(".tooltips").append(emojiTooltip);
-						$(emojiTooltip).find(".emoji-name").text(data.emojiName);
-						$(emojiTooltip).find(".emoji-server").text(data.serverName);
-						$(emojiTooltip)
-							.css("left", ($(emoji).offset().left + $(emoji).outerWidth()) + "px")
-							.css("top", ($(emoji).offset().top + ($(emoji).outerHeight() - $(emojiTooltip).outerHeight())/2) + "px");
+						var emojiName = BDfunctionsDevilBro.encodeToHTML(data.emojiName);
+						var serverName = BDfunctionsDevilBro.encodeToHTML(data.serverName);
+						var html = `<div class="emoji-name">${emojiName}</div><div class="emoji-server">${serverName}</div>`;
+						var emojiTooltip = BDfunctionsDevilBro.createTooltip(html, emoji, {type:"right",selector:"emoji-tooltip",html:true});
 					}
 				}
 			})
@@ -491,8 +485,9 @@ class EmojiStatistics {
 	}
 	
 	addEmojiInformationButton (node) {
-		$(node.querySelector(".emoji-picker .header")).append(this.emojiButtonMarkup)
-		.on("click." + this.getName(), ".emojistatistics-button", this.showEmojiInformationModal.bind(this));
+		$(".emoji-picker .header", node)
+			.append(this.emojiButtonMarkup)
+			.on("click." + this.getName(), ".emojistatistics-button", this.showEmojiInformationModal.bind(this));
 	}
 	
 	showEmojiInformationModal () {
