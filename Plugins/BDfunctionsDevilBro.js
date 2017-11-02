@@ -194,6 +194,59 @@ BDfunctionsDevilBro.showToast = function(content, options = {}) {
     }, timeout);
 };
 
+BDfunctionsDevilBro.createTooltip = function(content, container, options = {}) {
+	if (!document.querySelector(".tooltips") || !content || !container) return null;
+    const {direction = "", selector = ""} = options;
+    let tooltip = document.createElement("div");
+    tooltip.classList.add("tooltip");
+    tooltip.classList.add("tooltip-black");
+	if (direction) tooltip.classList.add("tooltip-" + direction);
+	if (selector) tooltip.classList.add(selector);
+    tooltip.innerText = content;
+	
+	document.querySelector(".tooltips").appendChild(tooltip);
+	
+	var left, top;
+	
+	switch (options.direction) {
+		case "top": 
+			left = $(container).offset().left + ($(container).outerWidth() - $(tooltip).outerWidth())/2;
+			top = $(container).offset().top - $(tooltip).outerHeight();
+			break;
+		case "bottom": 
+			left = $(container).offset().left + ($(container).outerWidth() - $(tooltip).outerWidth())/2;
+			top = $(container).offset().top + $(container).outerHeight();
+			break;
+		case "left": 
+			left = $(container).offset().left - $(tooltip).outerWidth();
+			top = $(container).offset().top + ($(container).outerHeight() - $(tooltip).outerHeight())/2;
+			break;
+		default: 
+			left = $(container).offset().left + $(container).outerWidth();
+			top = $(container).offset().top + ($(container).outerHeight() - $(tooltip).outerHeight())/2;
+			break;
+	}
+	
+	tooltip.style.setProperty("left", left + "px");
+	tooltip.style.setProperty("top", top + "px");
+	
+	var tooltipObserver = new MutationObserver((mutations) => {
+		mutations.forEach((mutation) => {
+			var nodes = Array.from(mutation.removedNodes);
+			var ownMatch = nodes.indexOf(tooltip) > -1;
+			var directMatch = nodes.indexOf(container) > -1;
+			var parentMatch = nodes.some(parent => parent.contains(container));
+			if (ownMatch || directMatch || parentMatch) {
+				tooltipObserver.disconnect();
+				tooltip.remove();
+			}
+		});
+	});
+	tooltipObserver.observe(document.body, {subtree: true, childList: true});
+	
+	return tooltip;
+};
+
 // Plugins/Themes folder resolver from Square
 BDfunctionsDevilBro.getPluginsFolder = function() {
     let process = require("process");
