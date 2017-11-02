@@ -364,7 +364,7 @@ class EditServers {
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	getVersion () {return "1.4.4";}
+	getVersion () {return "1.5.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -459,8 +459,7 @@ class EditServers {
 						$(serverDiv)
 							.removeClass("custom-editservers");
 						$(serverInner)
-							.off("mouseenter." + this.getName())
-							.off("mouseleave." + this.getName());
+							.off("mouseenter." + this.getName());
 						$(server)
 							.text($(server).attr("name"))
 							.css("background-image", bgImage)
@@ -487,13 +486,14 @@ class EditServers {
 				(i,serverDiv) => {
 					var info = BDfunctionsDevilBro.getKeyInformation({"node":serverDiv, "key":"guild"});
 					if (info) {
+						var serverInner = $(serverDiv).find(".guild-inner");
 						var server = $(serverDiv).find(".avatar-small");
 						var bgImage = info.icon ? "url('https://cdn.discordapp.com/icons/" + info.id + "/" + info.icon + ".png')" : "";
 					
 						$(serverDiv)
-							.off("mouseenter")
-							.off("mouseleave")
 							.removeClass("custom-editservers");
+						$(serverInner)
+							.off("mouseenter." + pluginName);
 						$(server)
 							.text($(server).attr("name"))
 							.css("background-image", bgImage)
@@ -624,7 +624,6 @@ class EditServers {
 				})
 				.on("mouseleave", "#modal-urltext", (event) => {
 					$(event.target).removeClass("hovering");
-					this.deleteNoticeToolTip(event);
 				})
 				.on("click", "button.form-tablinks", (event) => {
 					this.changeTab(event, serverSettingsModal);
@@ -700,7 +699,7 @@ class EditServers {
 			$(e.target)
 				.removeClass("valid")
 				.removeClass("invalid");
-			if ($(e.target).hasClass("hovering")) this.deleteNoticeToolTip(e);
+			if ($(e.target).hasClass("hovering")) $(".tooltips").find(".notice-tooltip").remove();
 		}
 		else {
 			this.urlCheckTimeout = setTimeout(() => {
@@ -723,7 +722,6 @@ class EditServers {
 	}
 	
 	createNoticeTooltip (e) {
-		BDfunctionsDevilBro.removeLocalStyle("customeNoticeTooltipCSS");
 		$(".tooltips").find(".notice-tooltip").remove();
 		
 		var input = e.target;
@@ -733,22 +731,15 @@ class EditServers {
 		if (disabled || valid || invalid) {
 			var text = disabled ? "Ignore imageurl" : valid ? "Valid imageurl" : "Invalid imageurl";
 			var bgColor = disabled ? "#282524" : valid ? "#297828" : "#8C2528";
-			var noticeTooltip = BDfunctionsDevilBro.createTooltip(text, input, {type:"right",selector:"notice-tooltip"});
-			$(noticeTooltip)
-				.css("background-color", bgColor);
-				
-			var customeTooltipCSS = `
+			var customTooltipCSS = `
+				.notice-tooltip {
+					background-color: ${bgColor} !important;
+				}
 				.notice-tooltip:after {
-					border-right-color: ` + bgColor + ` !important;
+					border-right-color: ${bgColor} !important;
 				}`;
-				
-			BDfunctionsDevilBro.appendLocalStyle("customeNoticeTooltipCSS", customeTooltipCSS);
+			BDfunctionsDevilBro.createTooltip(text, input, {type:"right",selector:"notice-tooltip",css:customTooltipCSS});
 		}
-	}
-	
-	deleteNoticeToolTip (e) {
-		BDfunctionsDevilBro.removeLocalStyle("customeNoticeTooltipCSS");
-		$(".tooltips").find(".notice-tooltip").remove();
 	}
 	
 	resetServer (e) {
@@ -756,13 +747,14 @@ class EditServers {
 		
 		if (e.data.id) {
 			var serverDiv = BDfunctionsDevilBro.getDivOfServer(e.data.id);
+			var serverInner = $(serverDiv).find(".guild-inner");
 			var server = $(serverDiv).find(".avatar-small");
 			var bgImage = e.data.icon ? "url('https://cdn.discordapp.com/icons/" + e.data.id + "/" + e.data.icon + ".png')" : "";
 			
 			$(serverDiv)
-				.removeClass("custom-editservers")
-				.off("mouseenter")
-				.off("mouseleave");
+				.removeClass("custom-editservers");
+			$(serverInner)
+				.off("mouseenter." + this.getName());
 			$(server)
 				.text($(server).attr("name"))
 				.removeAttr("name")
@@ -796,9 +788,7 @@ class EditServers {
 					.addClass("custom-editservers");
 				$(serverInner)
 					.off("mouseenter." + this.getName())
-					.off("mouseleave." + this.getName())
-					.on("mouseenter." + this.getName(), {"div":serverDiv,"info":info}, this.createServerToolTip.bind(this))
-					.on("mouseleave." + this.getName(), this.deleteServerToolTip.bind(this));
+					.on("mouseenter." + this.getName(), {"div":serverDiv,"info":info}, this.createServerToolTip.bind(this));
 				$(server)
 					.text(shortName)
 					.css("background-image", removeIcon ? "" : bgImage)
@@ -822,31 +812,19 @@ class EditServers {
 		if (data) {
 			$(".tooltips").find(".tooltip").hide();
 			var text = data.name ? data.name : info.name;
-			var serverTooltip = BDfunctionsDevilBro.createTooltip(text, serverDiv, {type:"right",selector:"guild-custom-tooltip"});
-			
-			if (data.color3) {
-				var bgColor = BDfunctionsDevilBro.color2RGB(data.color3);
-				$(serverTooltip)
-					.css("background-color", bgColor);
-					
-				var customeTooltipCSS = `
-					.guild-custom-tooltip:after {
-						border-right-color: ` + bgColor + ` !important;
-					}`;
-					
-				BDfunctionsDevilBro.appendLocalStyle("customeServerTooltipCSS", customeTooltipCSS);
-			}
-			if (data.color4) {
-				var fontColor = BDfunctionsDevilBro.color2RGB(data.color4);
-				$(serverTooltip)
-					.css("color", fontColor);
-			}
+			var bgColor = data.color3 ? BDfunctionsDevilBro.color2RGB(data.color3) : "";
+			var fontColor = data.color4 ? BDfunctionsDevilBro.color2RGB(data.color4) : "";
+			var customTooltipCSS = `
+				.guild-custom-tooltip {
+					color: ${fontColor} !important;
+					background-color: ${bgColor} !important;
+				}
+				.guild-custom-tooltip:after {
+					border-right-color: ${bgColor} !important;
+				}`;
+				
+			BDfunctionsDevilBro.createTooltip(text, serverDiv, {type:"right",selector:"guild-custom-tooltip",css:customTooltipCSS});
 		}
-	}
-	
-	deleteServerToolTip (e) {
-		BDfunctionsDevilBro.removeLocalStyle("customeServerTooltipCSS");
-		$(".tooltips").find(".guild-custom-tooltip").remove();
 	}
 	
 	setLabelsByLanguage () {
