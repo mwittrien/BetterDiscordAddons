@@ -570,7 +570,7 @@ class EditUsers {
 					}
 				);
 			});
-			if (document.querySelector("#app-mount > [class^='theme-']")) this.userProfilModalObserver.observe(document.querySelectorAll("#app-mount > [class^='theme-']")[document.querySelectorAll("#app-mount > [class^='theme-']").length-1], {childList: true});
+			if (document.querySelector("#app-mount")) this.userProfilModalObserver.observe(document.querySelector("#app-mount"), {childList: true, subtree:true});
 			
 			this.settingsWindowObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
