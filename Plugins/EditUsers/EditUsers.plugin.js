@@ -395,7 +395,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "1.7.4";}
+	getVersion () {return "1.8.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -453,9 +453,6 @@ class EditUsers {
 							change.addedNodes.forEach((node) => {
 								if (this.getSettings().changeInRecentDms) this.loadUser(node, "recentdms", false);
 							});
-						}
-						if (change.removedNodes) {
-							this.deleteDmToolTip();
 						}
 					}
 				);
@@ -798,7 +795,6 @@ class EditUsers {
 				})
 				.on("mouseleave", "#modal-urltext", (event) => {
 					$(event.target).removeClass("hovering");
-					this.deleteNoticeToolTip(event);
 				})
 				.on("click", "button.form-tablinks", (event) => {
 					this.changeTab(event, userSettingsModal);
@@ -874,7 +870,7 @@ class EditUsers {
 			$(e.target)
 				.removeClass("valid")
 				.removeClass("invalid");
-			if ($(e.target).hasClass("hovering")) this.deleteNoticeToolTip(e);
+			if ($(e.target).hasClass("hovering")) $(".tooltips").find(".notice-tooltip").remove()
 		}
 		else {
 			this.urlCheckTimeout = setTimeout(() => {
@@ -897,7 +893,6 @@ class EditUsers {
 	}
 	
 	createNoticeTooltip (e) {
-		BDfunctionsDevilBro.removeLocalStyle("customeNoticeTooltipCSS");
 		$(".tooltips").find(".notice-tooltip").remove();
 		
 		var input = e.target;
@@ -907,22 +902,15 @@ class EditUsers {
 		if (disabled || valid || invalid) {
 			var text = disabled ? "Ignore imageurl" : valid ? "Valid imageurl" : "Invalid imageurl";
 			var bgColor = disabled ? "#282524" : valid ? "#297828" : "#8C2528";
-			var noticeTooltip = BDfunctionsDevilBro.createTooltip(text, input, {type:"right",selector:"notice-tooltip"});
-			$(noticeTooltip)
-				.css("background-color", bgColor);
-				
-			var customeTooltipCSS = `
+			var customTooltipCSS = `
+				.notice-tooltip {
+					background-color: ${bgColor} !important;
+				}
 				.notice-tooltip:after {
-					border-right-color: ` + bgColor + ` !important;
+					border-right-color: ${bgColor} !important;
 				}`;
-				
-			BDfunctionsDevilBro.appendLocalStyle("customeNoticeTooltipCSS", customeTooltipCSS);
+			BDfunctionsDevilBro.createTooltip(text, input, {type:"right",selector:"notice-tooltip",css:customTooltipCSS});
 		}
-	}
-	
-	deleteNoticeToolTip (e) {
-		BDfunctionsDevilBro.removeLocalStyle("customeNoticeTooltipCSS");
-		$(".tooltips").find(".notice-tooltip").remove();
 	}
 
 	loadAllUsers () {
@@ -1065,9 +1053,7 @@ class EditUsers {
 			if (type == "recentdms") {
 				$(div).find(".guild-inner")
 					.off("mouseenter." + this.getName())
-					.off("mouseleave." + this.getName())
-					.on("mouseenter." + this.getName(), {"div":div,"nick":data.name,"name":info.username}, this.createDmToolTip.bind(this))
-					.on("mouseleave." + this.getName(), this.deleteDmToolTip.bind(this));
+					.on("mouseenter." + this.getName(), {"div":div,"nick":data.name,"name":info.username}, this.createDmToolTip.bind(this));
 			}
 			
 			div.classList.add("custom-editusers");
@@ -1078,10 +1064,6 @@ class EditUsers {
 		$(".tooltips").find(".tooltip").hide();
 		var text = e.data.nick ? e.data.nick : e.data.name;
 		BDfunctionsDevilBro.createTooltip(text, e.data.div, {type:"right",selector:"dm-custom-tooltip"});
-	}
-	
-	deleteDmToolTip (e) {
-		$(".tooltips").find(".dm-custom-tooltip").remove();
 	}
 	
 	resetAllUsers () {
@@ -1122,8 +1104,7 @@ class EditUsers {
 			}
 			
 			$(div).find(".guild-inner")
-				.off("mouseenter." + this.getName())
-				.off("mouseleave." + this.getName());
+				.off("mouseenter." + this.getName());
 			
 			div.classList.remove("custom-editusers");
 		});
