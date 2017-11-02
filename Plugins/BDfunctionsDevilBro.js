@@ -196,12 +196,13 @@ BDfunctionsDevilBro.showToast = function(content, options = {}) {
 
 BDfunctionsDevilBro.createTooltip = function(content, container, options = {}) {
 	if (!document.querySelector(".tooltips") || !content || !container) return null;
+	let id = Math.round(Math.random()*10000000000000000);
     let tooltip = document.createElement("div");
     tooltip.classList.add("tooltip");
     tooltip.classList.add("tooltip-black");
 	if (options.type) tooltip.classList.add("tooltip-" + options.type);
 	if (options.selector) tooltip.classList.add(options.selector);
-	if (options.css) BDfunctionsDevilBro.appendLocalStyle("customTooltipDevilBro", options.css);
+	if (options.css) BDfunctionsDevilBro.appendLocalStyle("customTooltipDevilBro" + id, options.css);
 	if (options.html == true) tooltip.innerHTML = content;
 	else tooltip.innerText = content;
     
@@ -241,14 +242,14 @@ BDfunctionsDevilBro.createTooltip = function(content, container, options = {}) {
 			if (ownMatch || directMatch || parentMatch) {
 				tooltipObserver.disconnect();
 				tooltip.remove();
-				$(container).off("mouseleave.BDfunctionsDevilBroTooltip");
-				BDfunctionsDevilBro.removeLocalStyle("customTooltipDevilBro");
+				$(container).off("mouseleave.BDfunctionsDevilBroTooltip" + id);
+				BDfunctionsDevilBro.removeLocalStyle("customTooltipDevilBro" + id);
 			}
 		});
 	});
 	tooltipObserver.observe(document.body, {subtree: true, childList: true});
 	
-	$(container).on("mouseleave.BDfunctionsDevilBroTooltip", () => {
+	$(container).on("mouseleave.BDfunctionsDevilBroTooltip" + id, () => {
 		tooltip.remove();
 	});
 	
