@@ -16,7 +16,7 @@ class ReadAllNotificationsButton {
 
 	getDescription () {return "Adds a button to clear all notifications.";}
 
-	getVersion () {return "1.2.4";}
+	getVersion () {return "1.2.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -37,6 +37,8 @@ class ReadAllNotificationsButton {
 			var readButton = $(this.RANbuttonMarkup);
 			$(readButton).insertBefore(".guild-separator")
 				.on("click", "#RANbutton", this.clearAllReadNotifications.bind(this));
+				
+			$(".guilds.scroller").addClass("RAN-added");
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -46,6 +48,8 @@ class ReadAllNotificationsButton {
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			$("#RANbutton-frame").remove();
+			
+			$(".guilds.scroller").removeClass("RAN-added");
 			
 			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
 		}
