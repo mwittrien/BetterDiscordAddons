@@ -300,7 +300,7 @@ class ServerHider {
 
 	getDescription () {return "Hide Servers in your Serverlist";}
 
-	getVersion () {return "2.3.2";}
+	getVersion () {return "2.3.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -364,7 +364,7 @@ class ServerHider {
 			this.serverContextObserver.disconnect();
 			$(".guilds.scroller").unbind('mouseleave', this.serverListContextHandler);
 			
-			BDfunctionsDevilBro.showHideAllEles(true, BDfunctionsDevilBro.readServerList());
+			$(BDfunctionsDevilBro.readServerList()).show();
 			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName());
 			
@@ -378,7 +378,7 @@ class ServerHider {
     static resetAll (pluginName) {
 		if (confirm("Are you sure you want to reset all servers?")) {
 			BDfunctionsDevilBro.removeAllData(pluginName, "servers");
-			BDfunctionsDevilBro.showHideAllEles(true, BDfunctionsDevilBro.readServerList());
+			$(BDfunctionsDevilBro.readServerList()).show();
 		}
     }
 
@@ -449,7 +449,7 @@ class ServerHider {
 		
 		var serverDiv = BDfunctionsDevilBro.getDivOfServer(e.data.id);
 		
-		BDfunctionsDevilBro.showHideEle(false, serverDiv);
+		$(serverDiv).hide();
 		
 		BDfunctionsDevilBro.saveData(id, {id,name,visible}, this.getName(), "servers");
 	}
@@ -503,15 +503,15 @@ class ServerHider {
 		}
 	}
 	
-	changeButtonAndServer (btn, server) {
-		var data = BDfunctionsDevilBro.getKeyInformation({"node":server, "key":"guild"});
+	changeButtonAndServer (btn, serverDiv) {
+		var data = BDfunctionsDevilBro.getKeyInformation({"node":serverDiv, "key":"guild"});
 		if (data) {
 			var id = data.id;
 			var name = data.name;
-			var visible = !$(server).is(":visible");
+			var visible = !$(serverDiv).is(":visible");
 			
 			this.updateButton(visible, btn);
-			BDfunctionsDevilBro.showHideEle(visible, server);
+			$(serverDiv).toggle(visible);
 			
 			BDfunctionsDevilBro.saveData(id, {id,name,visible}, this.getName(), "servers");
 		}
@@ -531,7 +531,7 @@ class ServerHider {
 				}
 			}
 			this.updateAllButtons(visible);
-			BDfunctionsDevilBro.showHideAllEles(visible, servers);
+			$(servers).toggle(visible);
 		}
 	}
 	
@@ -573,7 +573,7 @@ class ServerHider {
 				visible = $(serverDiv).is(":visible");
 			}
 			
-			BDfunctionsDevilBro.showHideEle(visible, serverDiv);
+			$(serverDiv).toggle(visible);
 			
 			BDfunctionsDevilBro.saveData(id, {id,name,visible}, this.getName(), "servers");
 		}
