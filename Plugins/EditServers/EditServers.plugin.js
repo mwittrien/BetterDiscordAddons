@@ -364,7 +364,7 @@ class EditServers {
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	getVersion () {return "1.5.1";}
+	getVersion () {return "1.5.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -623,6 +623,7 @@ class EditServers {
 					this.createNoticeTooltip(event);
 				})
 				.on("mouseleave", "#modal-urltext", (event) => {
+					$(".tooltips").find(".notice-tooltip").remove();
 					$(event.target).removeClass("hovering");
 				})
 				.on("click", "button.form-tablinks", (event) => {
@@ -729,7 +730,7 @@ class EditServers {
 		var valid = $(input).hasClass("valid");
 		var invalid = $(input).hasClass("invalid");
 		if (disabled || valid || invalid) {
-			var text = disabled ? "Ignore imageurl" : valid ? "Valid imageurl" : "Invalid imageurl";
+			var text = disabled ? this.labels.modal_ignoreurl_text : valid ? this.labels.modal_validurl_text : this.labels.modal_invalidurl_text;
 			var bgColor = disabled ? "#282524" : valid ? "#297828" : "#8C2528";
 			var customTooltipCSS = `
 				.notice-tooltip {
@@ -810,11 +811,13 @@ class EditServers {
 		var info = e.data.info;
 		var data = BDfunctionsDevilBro.loadData(info.id, this.getName(), "servers");
 		if (data) {
-			$(".tooltips").find(".tooltip").hide();
 			var text = data.name ? data.name : info.name;
 			var bgColor = data.color3 ? BDfunctionsDevilBro.color2RGB(data.color3) : "";
 			var fontColor = data.color4 ? BDfunctionsDevilBro.color2RGB(data.color4) : "";
 			var customTooltipCSS = `
+				.tooltip:not(.guild-custom-tooltip) {
+					display: none !important;
+				}
 				.guild-custom-tooltip {
 					color: ${fontColor} !important;
 					background-color: ${bgColor} !important;
@@ -846,6 +849,9 @@ class EditServers {
 					modal_colorpicker2_text: 			"Skriftfarve",
 					modal_colorpicker3_text: 			"Tooltipfarve",
 					modal_colorpicker4_text: 			"Skriftfarve",
+					modal_ignoreurl_text: 				"Ignorer URL",
+					modal_validurl_text: 				"Gyldig URL",
+					modal_invalidurl_text: 				"Ugyldig URL",
 					btn_cancel_text: 					"Afbryde",
 					btn_save_text: 						"Spare"
 				};
@@ -866,6 +872,9 @@ class EditServers {
 					modal_colorpicker2_text: 			"Schriftfarbe",
 					modal_colorpicker3_text: 			"Tooltipfarbe",
 					modal_colorpicker4_text: 			"Schriftfarbe",
+					modal_ignoreurl_text: 				"URL ignorieren",
+					modal_validurl_text: 				"Gültige URL",
+					modal_invalidurl_text: 				"Ungültige URL",
 					btn_cancel_text: 					"Abbrechen",
 					btn_save_text: 						"Speichern"
 				};
@@ -886,6 +895,9 @@ class EditServers {
 					modal_colorpicker2_text: 			"Color de fuente",
 					modal_colorpicker3_text: 			"Color de tooltip",
 					modal_colorpicker4_text: 			"Color de fuente",
+					modal_ignoreurl_text: 				"Ignorar URL",
+					modal_validurl_text: 				"URL válida",
+					modal_invalidurl_text: 				"URL inválida",
 					btn_cancel_text: 					"Cancelar",
 					btn_save_text: 						"Guardar"
 				};
@@ -906,6 +918,9 @@ class EditServers {
 					modal_colorpicker2_text: 			"Couleur de la police",
 					modal_colorpicker3_text:			"Couleur de tooltip",
 					modal_colorpicker4_text:			"Couleur de la police",
+					modal_ignoreurl_text: 				"Ignorer l'URL",
+					modal_validurl_text: 				"URL valide",
+					modal_invalidurl_text: 				"URL invalide",
 					btn_cancel_text: 					"Abandonner",
 					btn_save_text: 						"Enregistrer"
 				};
@@ -926,6 +941,9 @@ class EditServers {
 					modal_colorpicker2_text: 			"Colore del carattere",
 					modal_colorpicker3_text:			"Colore della tooltip",
 					modal_colorpicker4_text:			"Colore del carattere",
+					modal_ignoreurl_text: 				"Ignora l'URL",
+					modal_validurl_text: 				"URL valido",
+					modal_invalidurl_text: 				"URL non valido",
 					btn_cancel_text: 					"Cancellare",
 					btn_save_text: 						"Salvare"
 				};
@@ -946,6 +964,9 @@ class EditServers {
 					modal_colorpicker2_text: 			"Doopvont kleur",
 					modal_colorpicker3_text:			"Tooltip kleur",
 					modal_colorpicker4_text:			"Doopvont kleur",
+					modal_ignoreurl_text: 				"URL negeren",
+					modal_validurl_text: 				"Geldige URL",
+					modal_invalidurl_text: 				"Ongeldige URL",
 					btn_cancel_text: 					"Afbreken",
 					btn_save_text: 						"Opslaan"
 				};
@@ -966,6 +987,9 @@ class EditServers {
 					modal_colorpicker2_text: 			"Skriftfarge",
 					modal_colorpicker3_text:			"Tooltipfarge",
 					modal_colorpicker4_text:			"Skriftfarge",
+					modal_ignoreurl_text: 				"Ignorer URL",
+					modal_validurl_text: 				"Gyldig URL",
+					modal_invalidurl_text: 				"Ugyldig URL",
 					btn_cancel_text: 					"Avbryte",
 					btn_save_text: 						"Lagre"
 				};
@@ -986,6 +1010,9 @@ class EditServers {
 					modal_colorpicker2_text: 			"Kolor czcionki",
 					modal_colorpicker3_text:			"Kolor tooltip",
 					modal_colorpicker4_text:			"Kolor czcionki",
+					modal_ignoreurl_text: 				"Zignoruj URL",
+					modal_validurl_text: 				"Prawidłowy URL",
+					modal_invalidurl_text: 				"Nieprawidłowy URL",
 					btn_cancel_text: 					"Anuluj",
 					btn_save_text: 						"Zapisz"
 				};
@@ -1006,6 +1033,9 @@ class EditServers {
 					modal_colorpicker2_text: 			"Cor da fonte",
 					modal_colorpicker3_text:			"Cor da tooltip",
 					modal_colorpicker4_text:			"Cor da fonte",
+					modal_ignoreurl_text: 				"Ignorar URL",
+					modal_validurl_text: 				"URL válido",
+					modal_invalidurl_text: 				"URL inválida",
 					btn_cancel_text: 					"Cancelar",
 					btn_save_text: 						"Salvar"
 				};
@@ -1026,6 +1056,9 @@ class EditServers {
 					modal_colorpicker2_text: 			"Fontin väri",
 					modal_colorpicker3_text:			"Tooltip väri",
 					modal_colorpicker4_text:			"Fontin väri",
+					modal_ignoreurl_text: 				"Ohita URL",
+					modal_validurl_text: 				"Voimassa URL",
+					modal_invalidurl_text: 				"Virheellinen URL",
 					btn_cancel_text: 					"Peruuttaa",
 					btn_save_text: 						"Tallentaa"
 				};
@@ -1046,6 +1079,9 @@ class EditServers {
 					modal_colorpicker2_text: 			"Fontfärg",
 					modal_colorpicker3_text:			"Tooltipfärg",
 					modal_colorpicker4_text:			"Fontfärg",
+					modal_ignoreurl_text: 				"Ignorera URL",
+					modal_validurl_text: 				"Giltig URL",
+					modal_invalidurl_text: 				"Ogiltig URL",
 					btn_cancel_text: 					"Avbryta",
 					btn_save_text: 						"Spara"
 				};
@@ -1066,6 +1102,9 @@ class EditServers {
 					modal_colorpicker2_text: 			"Yazı rengi",
 					modal_colorpicker3_text:			"Tooltip rengi",
 					modal_colorpicker4_text:			"Yazı rengi",
+					modal_ignoreurl_text: 				"URL yoksay",
+					modal_validurl_text: 				"Geçerli URL",
+					modal_invalidurl_text: 				"Geçersiz URL",
 					btn_cancel_text: 					"Iptal",
 					btn_save_text: 						"Kayıt"
 				};
@@ -1086,6 +1125,9 @@ class EditServers {
 					modal_colorpicker2_text: 			"Barva fontu",
 					modal_colorpicker3_text:			"Barva tooltip",
 					modal_colorpicker4_text:			"Barva fontu",
+					modal_ignoreurl_text: 				"Ignorovat URL",
+					modal_validurl_text: 				"Platná URL",
+					modal_invalidurl_text: 				"Neplatná URL",
 					btn_cancel_text: 					"Zrušení",
 					btn_save_text: 						"Uložit"
 				};
@@ -1106,6 +1148,9 @@ class EditServers {
 					modal_colorpicker2_text: 			"Цвят на шрифта",
 					modal_colorpicker3_text:			"Цвят на подсказка",
 					modal_colorpicker4_text:			"Цвят на шрифта",
+					modal_ignoreurl_text: 				"Игнориране на URL",
+					modal_validurl_text: 				"Валиден URL",
+					modal_invalidurl_text: 				"Невалиден URL",
 					btn_cancel_text: 					"Зъбести",
 					btn_save_text: 						"Cпасяване"
 				};
@@ -1126,6 +1171,9 @@ class EditServers {
 					modal_colorpicker2_text: 			"Цвет шрифта",
 					modal_colorpicker3_text:			"Цвет подсказка",
 					modal_colorpicker4_text:			"Цвет шрифта",
+					modal_ignoreurl_text: 				"Игнорировать URL",
+					modal_validurl_text: 				"Действительный URL",
+					modal_invalidurl_text: 				"Неверная URL",
 					btn_cancel_text: 					"Отмена",
 					btn_save_text: 						"Cпасти"
 				};
@@ -1146,6 +1194,9 @@ class EditServers {
 					modal_colorpicker2_text: 			"Колір шрифту",
 					modal_colorpicker3_text:			"Колір підказка",
 					modal_colorpicker4_text:			"Колір шрифту",
+					modal_ignoreurl_text: 				"Ігнорувати URL",
+					modal_validurl_text: 				"Дійсна URL",
+					modal_invalidurl_text: 				"Недійсна URL",
 					btn_cancel_text: 					"Скасувати",
 					btn_save_text: 						"Зберегти"
 				};
@@ -1166,6 +1217,9 @@ class EditServers {
 					modal_colorpicker2_text: 			"フォントの色",
 					modal_colorpicker3_text:			"ツールチップの色",
 					modal_colorpicker4_text:			"フォントの色",
+					modal_ignoreurl_text: 				"URL を無視する",
+					modal_validurl_text: 				"有効な URL",
+					modal_invalidurl_text: 				"無効な URL",
 					btn_cancel_text: 					"キャンセル",
 					btn_save_text: 						"セーブ"
 				};
@@ -1186,6 +1240,9 @@ class EditServers {
 					modal_colorpicker2_text: 			"字體顏色",
 					modal_colorpicker3_text:			"工具提示顏色",
 					modal_colorpicker4_text:			"字體顏色",
+					modal_ignoreurl_text: 				"忽略 URL",
+					modal_validurl_text: 				"有效的 URL",
+					modal_invalidurl_text: 				"無效的 URL",
 					btn_cancel_text: 					"取消",
 					btn_save_text: 						"保存"
 				};
@@ -1206,6 +1263,9 @@ class EditServers {
 					modal_colorpicker2_text: 			"글꼴 색깔",
 					modal_colorpicker3_text:			"툴팁 색깔",
 					modal_colorpicker4_text:			"글꼴 색깔",
+					modal_ignoreurl_text: 				"URL 무시",
+					modal_validurl_text: 				"유효한 URL",
+					modal_invalidurl_text: 				"잘못된 URL",
 					btn_cancel_text: 					"취소",
 					btn_save_text: 						"저장"
 				};
@@ -1226,6 +1286,9 @@ class EditServers {
 					modal_colorpicker2_text: 			"Fontcolor",
 					modal_colorpicker3_text:			"Tooltipcolor",
 					modal_colorpicker4_text:			"Fontcolor",
+					modal_ignoreurl_text: 				"Ignore URL",
+					modal_validurl_text: 				"Valid URL",
+					modal_invalidurl_text: 				"Invalid URL",
 					btn_cancel_text: 					"Cancel",
 					btn_save_text: 						"Save"
 				};
