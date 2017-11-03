@@ -395,7 +395,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "1.8.1";}
+	getVersion () {return "1.8.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -794,6 +794,7 @@ class EditUsers {
 					this.createNoticeTooltip(event);
 				})
 				.on("mouseleave", "#modal-urltext", (event) => {
+					$(".tooltips").find(".notice-tooltip").remove();
 					$(event.target).removeClass("hovering");
 				})
 				.on("click", "button.form-tablinks", (event) => {
@@ -900,7 +901,7 @@ class EditUsers {
 		var valid = $(input).hasClass("valid");
 		var invalid = $(input).hasClass("invalid");
 		if (disabled || valid || invalid) {
-			var text = disabled ? "Ignore imageurl" : valid ? "Valid imageurl" : "Invalid imageurl";
+			var text = disabled ? this.labels.modal_ignoreurl_text : valid ? this.labels.modal_validurl_text : this.labels.modal_invalidurl_text;
 			var bgColor = disabled ? "#282524" : valid ? "#297828" : "#8C2528";
 			var customTooltipCSS = `
 				.notice-tooltip {
@@ -1061,9 +1062,12 @@ class EditUsers {
 	}
 	
 	createDmToolTip (e) {
-		$(".tooltips").find(".tooltip").hide();
 		var text = e.data.nick ? e.data.nick : e.data.name;
-		BDfunctionsDevilBro.createTooltip(text, e.data.div, {type:"right",selector:"dm-custom-tooltip"});
+		var customTooltipCSS = `
+			.tooltip:not(.dm-custom-tooltip) {
+				display: none !important;
+			}`;
+		BDfunctionsDevilBro.createTooltip(text, e.data.div, {type:"right",selector:"dm-custom-tooltip",css:customTooltipCSS});
 	}
 	
 	resetAllUsers () {
@@ -1165,6 +1169,9 @@ class EditUsers {
 					modal_colorpicker2_text: 			"Baggrundsfarve",
 					modal_colorpicker3_text: 			"Etiketfarve",
 					modal_colorpicker4_text: 			"Skriftfarve",
+					modal_ignoreurl_text: 				"Ignorer URL",
+					modal_validurl_text: 				"Gyldig URL",
+					modal_invalidurl_text: 				"Ugyldig URL",
 					btn_cancel_text: 					"Afbryde",
 					btn_save_text: 						"Spare"
 				};
@@ -1185,6 +1192,9 @@ class EditUsers {
 					modal_colorpicker2_text: 			"Hintergrundfarbe",
 					modal_colorpicker3_text: 			"Etikettfarbe",
 					modal_colorpicker4_text: 			"Schriftfarbe",
+					modal_ignoreurl_text: 				"URL ignorieren",
+					modal_validurl_text: 				"Gültige URL",
+					modal_invalidurl_text: 				"Ungültige URL",
 					btn_cancel_text: 					"Abbrechen",
 					btn_save_text: 						"Speichern"
 				};
@@ -1205,6 +1215,9 @@ class EditUsers {
 					modal_colorpicker2_text: 			"Color de fondo",
 					modal_colorpicker3_text: 			"Color de la etiqueta",
 					modal_colorpicker4_text: 			"Color de fuente",
+					modal_ignoreurl_text: 				"Ignorar URL",
+					modal_validurl_text: 				"URL válida",
+					modal_invalidurl_text: 				"URL inválida",
 					btn_cancel_text: 					"Cancelar",
 					btn_save_text: 						"Guardar"
 				};
@@ -1225,6 +1238,9 @@ class EditUsers {
 					modal_colorpicker2_text: 			"Couleur de fond",
 					modal_colorpicker3_text:			"Couleur de l'étiquette",
 					modal_colorpicker4_text:			"Couleur de la police",
+					modal_ignoreurl_text: 				"Ignorer l'URL",
+					modal_validurl_text: 				"URL valide",
+					modal_invalidurl_text: 				"URL invalide",
 					btn_cancel_text: 					"Abandonner",
 					btn_save_text: 						"Enregistrer"
 				};
@@ -1245,6 +1261,9 @@ class EditUsers {
 					modal_colorpicker2_text: 			"Colore di sfondo",
 					modal_colorpicker3_text:			"Colore della etichetta",
 					modal_colorpicker4_text:			"Colore del carattere",
+					modal_ignoreurl_text: 				"Ignora l'URL",
+					modal_validurl_text: 				"URL valido",
+					modal_invalidurl_text: 				"URL non valido",
 					btn_cancel_text: 					"Cancellare",
 					btn_save_text: 						"Salvare"
 				};
@@ -1265,6 +1284,9 @@ class EditUsers {
 					modal_colorpicker2_text: 			"Achtergrond kleur",
 					modal_colorpicker3_text:			"Etiket kleur",
 					modal_colorpicker4_text:			"Doopvont kleur",
+					modal_ignoreurl_text: 				"URL negeren",
+					modal_validurl_text: 				"Geldige URL",
+					modal_invalidurl_text: 				"Ongeldige URL",
 					btn_cancel_text: 					"Afbreken",
 					btn_save_text: 						"Opslaan"
 				};
@@ -1285,6 +1307,9 @@ class EditUsers {
 					modal_colorpicker2_text: 			"Bakgrunnfarge",
 					modal_colorpicker3_text:			"Stikkordfarge",
 					modal_colorpicker4_text:			"Skriftfarge",
+					modal_ignoreurl_text: 				"Ignorer URL",
+					modal_validurl_text: 				"Gyldig URL",
+					modal_invalidurl_text: 				"Ugyldig URL",
 					btn_cancel_text: 					"Avbryte",
 					btn_save_text: 						"Lagre"
 				};
@@ -1305,6 +1330,9 @@ class EditUsers {
 					modal_colorpicker2_text: 			"Kolor tło",
 					modal_colorpicker3_text:			"Kolor etykietka",
 					modal_colorpicker4_text:			"Kolor czcionki",
+					modal_ignoreurl_text: 				"Zignoruj URL",
+					modal_validurl_text: 				"Prawidłowy URL",
+					modal_invalidurl_text: 				"Nieprawidłowy URL",
 					btn_cancel_text: 					"Anuluj",
 					btn_save_text: 						"Zapisz"
 				};
@@ -1325,6 +1353,9 @@ class EditUsers {
 					modal_colorpicker2_text: 			"Cor do fundo",
 					modal_colorpicker3_text:			"Cor da etiqueta",
 					modal_colorpicker4_text:			"Cor da fonte",
+					modal_ignoreurl_text: 				"Ignorar URL",
+					modal_validurl_text: 				"URL válido",
+					modal_invalidurl_text: 				"URL inválida",
 					btn_cancel_text: 					"Cancelar",
 					btn_save_text: 						"Salvar"
 				};
@@ -1345,6 +1376,9 @@ class EditUsers {
 					modal_colorpicker2_text: 			"Tausta väri",
 					modal_colorpicker3_text:			"Merkki väri",
 					modal_colorpicker4_text:			"Fontin väri",
+					modal_ignoreurl_text: 				"Ohita URL",
+					modal_validurl_text: 				"Voimassa URL",
+					modal_invalidurl_text: 				"Virheellinen URL",
 					btn_cancel_text: 					"Peruuttaa",
 					btn_save_text: 						"Tallentaa"
 				};
@@ -1365,6 +1399,9 @@ class EditUsers {
 					modal_colorpicker2_text: 			"Bakgrundfärg",
 					modal_colorpicker3_text:			"Märkafärg",
 					modal_colorpicker4_text:			"Fontfärg",
+					modal_ignoreurl_text: 				"Ignorera URL",
+					modal_validurl_text: 				"Giltig URL",
+					modal_invalidurl_text: 				"Ogiltig URL",
 					btn_cancel_text: 					"Avbryta",
 					btn_save_text: 						"Spara"
 				};
@@ -1385,6 +1422,9 @@ class EditUsers {
 					modal_colorpicker2_text: 			"Arka fon rengi",
 					modal_colorpicker3_text:			"Etiket rengi",
 					modal_colorpicker4_text:			"Yazı rengi",
+					modal_ignoreurl_text: 				"URL yoksay",
+					modal_validurl_text: 				"Geçerli URL",
+					modal_invalidurl_text: 				"Geçersiz URL",
 					btn_cancel_text: 					"Iptal",
 					btn_save_text: 						"Kayıt"
 				};
@@ -1405,6 +1445,9 @@ class EditUsers {
 					modal_colorpicker2_text: 			"Barva pozadí",
 					modal_colorpicker3_text:			"Barva štítek",
 					modal_colorpicker4_text:			"Barva fontu",
+					modal_ignoreurl_text: 				"Ignorovat URL",
+					modal_validurl_text: 				"Platná URL",
+					modal_invalidurl_text: 				"Neplatná URL",
 					btn_cancel_text: 					"Zrušení",
 					btn_save_text: 						"Uložit"
 				};
@@ -1425,6 +1468,9 @@ class EditUsers {
 					modal_colorpicker2_text: 			"Цвят на заден план",
 					modal_colorpicker3_text:			"Цвят на свободен край",
 					modal_colorpicker4_text:			"Цвят на шрифта",
+					modal_ignoreurl_text: 				"Игнориране на URL",
+					modal_validurl_text: 				"Валиден URL",
+					modal_invalidurl_text: 				"Невалиден URL",
 					btn_cancel_text: 					"Зъбести",
 					btn_save_text: 						"Cпасяване"
 				};
@@ -1445,6 +1491,9 @@ class EditUsers {
 					modal_colorpicker2_text: 			"Цвет задний план",
 					modal_colorpicker3_text:			"Цвет тег",
 					modal_colorpicker4_text:			"Цвет шрифта",
+					modal_ignoreurl_text: 				"Игнорировать URL",
+					modal_validurl_text: 				"Действительный URL",
+					modal_invalidurl_text: 				"Неверная URL",
 					btn_cancel_text: 					"Отмена",
 					btn_save_text: 						"Cпасти"
 				};
@@ -1465,6 +1514,9 @@ class EditUsers {
 					modal_colorpicker2_text: 			"Колір фон",
 					modal_colorpicker3_text:			"Колір тег",
 					modal_colorpicker4_text:			"Колір шрифту",
+					modal_ignoreurl_text: 				"Ігнорувати URL",
+					modal_validurl_text: 				"Дійсна URL",
+					modal_invalidurl_text: 				"Недійсна URL",
 					btn_cancel_text: 					"Скасувати",
 					btn_save_text: 						"Зберегти"
 				};
@@ -1485,6 +1537,9 @@ class EditUsers {
 					modal_colorpicker2_text: 			"バックグラウンドの色",
 					modal_colorpicker3_text:			"タグの色",
 					modal_colorpicker4_text:			"フォントの色",
+					modal_ignoreurl_text: 				"URL を無視する",
+					modal_validurl_text: 				"有効な URL",
+					modal_invalidurl_text: 				"無効な URL",
 					btn_cancel_text: 					"キャンセル",
 					btn_save_text: 						"セーブ"
 				};
@@ -1505,6 +1560,9 @@ class EditUsers {
 					modal_colorpicker2_text: 			"背景顏色",
 					modal_colorpicker3_text:			"標籤顏色",
 					modal_colorpicker4_text:			"字體顏色",
+					modal_ignoreurl_text: 				"忽略 URL",
+					modal_validurl_text: 				"有效的 URL",
+					modal_invalidurl_text: 				"無效的 URL",
 					btn_cancel_text: 					"取消",
 					btn_save_text: 						"保存"
 				};
@@ -1525,6 +1583,9 @@ class EditUsers {
 					modal_colorpicker2_text: 			"배경 색깔",
 					modal_colorpicker3_text:			"꼬리표 색깔",
 					modal_colorpicker4_text:			"글꼴 색깔",
+					modal_ignoreurl_text: 				"URL 무시",
+					modal_validurl_text: 				"유효한 URL",
+					modal_invalidurl_text: 				"잘못된 URL",
 					btn_cancel_text: 					"취소",
 					btn_save_text: 						"저장"
 				};
@@ -1545,6 +1606,9 @@ class EditUsers {
 					modal_colorpicker2_text: 			"Backgroundcolor",
 					modal_colorpicker3_text:			"Tagcolor",
 					modal_colorpicker4_text:			"Fontcolor",
+					modal_ignoreurl_text: 				"Ignore URL",
+					modal_validurl_text: 				"Valid URL",
+					modal_invalidurl_text: 				"Invalid URL",
 					btn_cancel_text: 					"Cancel",
 					btn_save_text: 						"Save"
 				};
