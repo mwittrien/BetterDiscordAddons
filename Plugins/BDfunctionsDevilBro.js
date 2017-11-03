@@ -695,23 +695,11 @@ BDfunctionsDevilBro.themeIsLightTheme = function () {
 };
 
 BDfunctionsDevilBro.showHideEle = function (show, ele) {
-	if (show) {
-		$(ele).show();
-	}
-	else {
-		$(ele).hide();
-	}
+	$(ele).toggle(show);
 };
 
 BDfunctionsDevilBro.showHideAllEles = function (show, eles) {
-	for (var i = 0; eles.length > i; i++) {
-		if (show) {
-			$(eles[i]).show();
-		}
-		else {
-			$(eles[i]).hide();
-		}
-	}
+	$(eles).toggle(show);
 };
 
 BDfunctionsDevilBro.saveData = function (id, data, pluginName, keyName) {
