@@ -320,6 +320,7 @@ BDfunctionsDevilBro.translateMessage = function (pluginName) {
 };
 	
 BDfunctionsDevilBro.getReactInstance = function (node) { 
+	if (!node) return null;
 	return node[Object.keys(node).find((key) => key.startsWith("__reactInternalInstance"))];
 };
 
@@ -1222,7 +1223,7 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 				.on("mouseup.ColorPicker", () => {
 					$(document).off("mouseup.ColorPicker").off("mousemove.ColorPicker");
 				})
-				.on("mousemove.ColorPicker", (event2) => {	var pX = 0;
+				.on("mousemove.ColorPicker", (event2) => {
 					pX = event2.clientX > pMaxX ? pMaxX - pHalfW : (event2.clientX < pMinX ? pMinX - pHalfW : event2.clientX - pHalfW);
 					pY = event2.clientY > pMaxY ? pMaxY - pHalfH : (event2.clientY < pMinY ? pMinY - pHalfH : event2.clientY - pHalfH);
 					$(pcursor).offset({"left":pX,"top":pY});
