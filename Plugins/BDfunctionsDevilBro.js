@@ -702,54 +702,40 @@ BDfunctionsDevilBro.showHideAllEles = function (show, eles) {
 	$(eles).toggle(show);
 };
 
-BDfunctionsDevilBro.saveData = function (id, data, pluginName, keyName) {
-	var settings = bdPluginStorage.get(pluginName, keyName) ? bdPluginStorage.get(pluginName, keyName) : {};
-	
-	settings[id] = data;
-	
+BDfunctionsDevilBro.saveAllData = function (settings, pluginName, keyName) {
 	bdPluginStorage.set(pluginName, keyName, settings);
-};
-
-BDfunctionsDevilBro.saveAllData = function (data, pluginName, keyName) {
-	var settings = data;
-	
-	bdPluginStorage.set(pluginName, keyName, settings);
-};
-	
-BDfunctionsDevilBro.removeData = function (id, pluginName, keyName) {
-	var settings = bdPluginStorage.get(pluginName, keyName) ? bdPluginStorage.get(pluginName, keyName) : {};
-	
-	delete settings[id];
-	
-	bdPluginStorage.set(pluginName, keyName, settings);
-};
-	
-BDfunctionsDevilBro.removeAllData = function (pluginName, keyName) {
-	var settings = {};
-	
-	bdPluginStorage.set(pluginName, keyName, settings);
-};
-
-BDfunctionsDevilBro.loadData = function (id, pluginName, keyName) {
-	var settings = bdPluginStorage.get(pluginName, keyName) ? bdPluginStorage.get(pluginName, keyName) : {};
-	
-    try {
-        var parse = JSON.parse(settings[id]);
-		settings[id] = parse;
-		bdPluginStorage.set(pluginName, keyName, settings);
-    }
-    catch (error) {
-    }
-	
-	var data = settings[id];
-	
-	return (data === undefined ? null : data);
 };
 
 BDfunctionsDevilBro.loadAllData = function (pluginName, keyName) {
-	var settings = bdPluginStorage.get(pluginName, keyName) ? bdPluginStorage.get(pluginName, keyName) : {};
+	return bdPluginStorage.get(pluginName, keyName) ? bdPluginStorage.get(pluginName, keyName) : {};
+};
+
+BDfunctionsDevilBro.removeAllData = function (pluginName, keyName) {
+	BDfunctionsDevilBro.saveAllData({}, pluginName, keyName);
+};
+
+BDfunctionsDevilBro.saveData = function (id, data, pluginName, keyName) {
+	var settings = BDfunctionsDevilBro.loadAllData(pluginName, keyName);
 	
-	return settings;
+	settings[id] = data;
+	
+	BDfunctionsDevilBro.saveAllData(settings, pluginName, keyName);
+};
+
+BDfunctionsDevilBro.loadData = function (id, pluginName, keyName) {
+	var settings = BDfunctionsDevilBro.loadAllData(pluginName, keyName);
+	
+	var data = settings[id];
+	
+	return data === undefined ? null : data;
+};
+	
+BDfunctionsDevilBro.removeData = function (id, pluginName, keyName) {
+	var settings = BDfunctionsDevilBro.loadAllData(pluginName, keyName);
+	
+	delete settings[id];
+	
+	BDfunctionsDevilBro.saveAllData(settings, pluginName, keyName);
 };
 
 BDfunctionsDevilBro.appendWebScript = function (filepath) {
