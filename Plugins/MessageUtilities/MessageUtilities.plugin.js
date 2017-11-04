@@ -47,7 +47,7 @@ class MessageUtilities {
 
 	getDescription () {return "Offers a number of useful message options.";}
 
-	getVersion () {return "1.1.0";}
+	getVersion () {return "1.1.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -72,12 +72,10 @@ class MessageUtilities {
 			$(document).bind("dblclick." + this.getName(), this.dblClickListener);
 			
 			this.keydownListener = (e) => {
-				if (this.pressedKeys.indexOf(e.which) < 0) {
-					this.pressedKeys.push(e.which);
-				}
+				if (!this.pressedKeys.includes(e.which)) this.pressedKeys.push(e.which);
 			};
 			this.keyupListener = (e) => {
-				this.pressedKeys.pop(e.which);
+				if (this.pressedKeys.includes(e.which)) this.pressedKeys.splice(this.pressedKeys.indexOf(e.which), 1);
 			};
 			
 			$(window).bind("keydown." + this.getName(), this.keydownListener);
@@ -103,8 +101,8 @@ class MessageUtilities {
 	//begin of own functions
 	
 	onSglClick (e) {
-		if (this.pressedKeys.indexOf(46) > -1) {
-			if (this.firedEvents.indexOf("onSglClick") == -1) {
+		if (this.pressedKeys.includes(46)) {
+			if (!this.firedEvents.includes("onSglClick")) {
 				this.firedEvents.push("onSglClick");
 				var messageWrap = $(".message-text").has(e.target)[0];
 				if (messageWrap) {
@@ -113,19 +111,19 @@ class MessageUtilities {
 					$("div[class^='modal']").has("button[class^='buttonRedFilled']").hide();
 					$("div[class^='modal'] button[class^='buttonRedFilled']").click();
 				} 
-				this.firedEvents.pop("onSglClick");
+				this.firedEvents.splice(this.firedEvents.indexOf("onSglClick"),1);
 			}
 		}
 	}
 	
 	onDblClick (e) {
-		if (this.firedEvents.indexOf("onDblClick") == -1) {
+		if (!this.firedEvents.includes("onDblClick")) {
 			this.firedEvents.push("onDblClick");
 			var messageWrap = $(".message-text").has(e.target)[0];
 			if (messageWrap) {
 				this.doMessageAction(messageWrap, "bound handleEdit");
 			} 
-			this.firedEvents.pop("onDblClick");
+			this.firedEvents.splice(this.firedEvents.indexOf("onDblClick"),1);
 		}
 	}
 	
