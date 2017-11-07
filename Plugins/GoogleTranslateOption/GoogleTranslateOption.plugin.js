@@ -18,9 +18,9 @@ class GoogleTranslateOption {
 		
 	getName () {return "GoogleTranslateOption";}
 
-	getDescription () {return "Adds a Google Translate option to your context menu, which will open the selected text in Google Translate.";}
+	getDescription () {return "Adds a Google Translate option to your context menu, which shows a preview of the translated text and on click will open the selected text in Google Translate.";}
 
-	getVersion () {return "1.0.1";}
+	getVersion () {return "1.0.2";}
 	
 	getAuthor () {return "DevilBro";}
 	
@@ -28,13 +28,13 @@ class GoogleTranslateOption {
 	load () {}
 
 	start () {
-		if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
+		/* if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
 		$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
 		$('head').append("<script src='https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
 		if (typeof BDfunctionsDevilBro !== "object") {
 			$('head script[src="https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
 			$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
-		}
+		} */
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
 			
@@ -86,17 +86,29 @@ class GoogleTranslateOption {
 			if (BDfunctionsDevilBro.getKeyInformation({"node":group, "key":"handleSearchWithGoogle"})) {
 				var text = BDfunctionsDevilBro.getKeyInformation({"node":group, "key":"value"});
 				if (text) {
+					var language = BDfunctionsDevilBro.getDiscordLanguage();
+					var langid = language.googleid ? language.googleid : language.id;
+					var translation = "";
+					let request = require("request");
+					request("https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=" + langid + "&dt=t&q=" + encodeURIComponent(text), (error, response, result) => {
+						if (response) JSON.parse(result)[0].forEach((array) => {translation += array[0];});
+					});
 					$(this.messageContextEntryMarkup).insertAfter(group)
-						.on("click", ".googletranslateoption-item", () => {
-							var language = BDfunctionsDevilBro.getDiscordLanguage();
-							var langid = language.googleid ? language.googleid : language.id;
-							var translateurl = "https://translate.google.com/#en/" + langid + "/" +  encodeURIComponent(text);
-							window.open(translateurl, "_blank");
+						.on("mouseenter", ".googletranslateoption-item", (e) => {
+							var targetDiv = e.target.tagName != "SPAN" ? e.target : e.target.parentNode;
+							BDfunctionsDevilBro.createTooltip(translation, targetDiv, {type: "right"});
+						})
+						.on("click", ".googletranslateoption-item", (e) => {
+							window.open("https://translate.google.com/#auto/" + langid + "/" +  encodeURIComponent(text), "_blank");
 						});
 				}
 				break;
 			}
 		}
+	}
+	
+	createTranslationTooltip (translation, e) {
+		console.log(BDfunctionsDevilBro);
 	}
 	
 	setLabelsByLanguage () {
