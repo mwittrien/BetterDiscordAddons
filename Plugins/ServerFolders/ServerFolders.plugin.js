@@ -10,125 +10,7 @@ class ServerFolders {
 		this.folderContextEventHandler;
 		
 		this.css = `
-			@keyframes animation-serverfolders-backdrop {
-				to { opacity: 0.85; }
-			}
-
-			@keyframes animation-serverfolders-backdrop-closing {
-				to { opacity: 0; }
-			}
-
-			@keyframes animation-serverfolders-modal {
-				to { transform: scale(1); opacity: 1; }
-			}
-
-			@keyframes animation-serverfolders-modal-closing {
-				to { transform: scale(0.7); opacity: 0; }
-			}
-
-			.serverfolders-modal .callout-backdrop {
-				animation: animation-serverfolders-backdrop 250ms ease;
-				animation-fill-mode: forwards;
-				opacity: 0;
-				background-color: rgb(0, 0, 0);
-				transform: translateZ(0px);
-			}
-
-			.serverfolders-modal.closing .callout-backdrop {
-				animation: animation-serverfolders-backdrop-closing 200ms linear;
-				animation-fill-mode: forwards;
-				animation-delay: 50ms;
-				opacity: 0.85;
-			}
-			
-			.serverfolders-modal .modal {
-				animation: animation-serverfolders-modal 250ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
-				animation-fill-mode: forwards;
-				transform: scale(0.7);
-				transform-origin: 50% 50%;
-				align-content: space-around;
-				align-items: center;
-				box-sizing: border-box;
-				display: flex;
-				flex-direction: column;
-				justify-content: center;
-				min-height: initial;
-				max-height: initial;
-				opacity: 0;
-				pointer-events: none;
-				user-select: none;
-				height: 100%;
-				width: 100%;
-				margin: 0;
-				padding: 0;
-				position: absolute;
-				top: 0;
-				right: 0;
-				bottom: 0;
-				left: 0;
-				z-index: 1000;
-			}
-
-			.serverfolders-modal.closing .modal {
-				animation: animation-serverfolders-modal-closing 250ms cubic-bezier(0.19, 1, 0.22, 1);
-				animation-fill-mode: forwards;
-				opacity: 1;
-				transform: scale(1);
-			}
-			
-			.serverfolders-modal .form {
-				width: 100%;
-			}
-
-			.serverfolders-modal .form-header, .serverfolders-modal .form-actions {
-				background-color: rgba(32,34,37,.3);
-				box-shadow: inset 0 1px 0 rgba(32,34,37,.6);
-				padding: 20px;
-				
-			}
-
-			.serverfolders-modal .form-header {
-				color: #f6f6f7;
-				cursor: default;
-				font-size: 16px;
-				font-weight: 600;
-				letter-spacing: .3px;
-				line-height: 20px;
-				text-transform: uppercase;
-			}
-
-			.serverfolders-modal .form-actions {
-				display: flex;
-				flex-direction: row-reverse;
-				flex-wrap: nowrap;
-				flex: 0 0 auto;
-				padding-right: 32px;
-			}
-
-			.serverfolders-modal .form-inner{
-				margin: 10px 0;
-				overflow-x: hidden;
-				overflow-y: hidden;
-				padding: 0 20px;
-				height: 400px;
-			}
-
-			.serverfolders-modal .modal-inner {
-				background-color: #36393E;
-				border-radius: 5px;
-				box-shadow: 0 0 0 1px rgba(32,34,37,.6),0 2px 10px 0 rgba(0,0,0,.2);
-				display: flex;
-				min-height: 200px;
-				pointer-events: auto;
-				width: 500px;
-			}
-
-			.serverfolders-modal .icons {
-				width: 430px;
-				margin: auto;
-			}
-
-			.serverfolders-modal [class^="ui-icon-picker-icon"] {
+			.serverfolders-modal .ui-icon-picker-icon {
 				width: 75px;
 				height: 75px;
 				background-size: 75px 75px;
@@ -138,111 +20,86 @@ class ServerFolders {
 				border: 4px solid transparent;
 				border-radius: 12px;
 			}
-
-			.serverfolders-modal input {
-				color: #f6f6f7;
-				background-color: rgba(0,0,0,.1);
-				border-color: rgba(0,0,0,.3);
-				padding: 10px;
-				height: 40px;
-				box-sizing: border-box;
-				margin-bottom: 10px;
-				width: 100%;
-				border-width: 1px;
-				border-style: solid;
-				border-radius: 3px;
-				outline: none;
-				transition: background-color .15s ease,border .15s ease;
-			}
-
-			.serverfolders-modal .btn {
-				align-items: center;
-				background: none;
-				border-radius: 3px;
-				border: none;
-				box-sizing: border-box;
-				display: flex;
-				font-size: 14px;
-				font-weight: 500;
-				justify-content: center;
-				line-height: 16px;
-				min-height: 38px;
-				min-width: 96px;
-				padding: 2px 16px;
-				position: relative;
-			}
-
-			.serverfolders-modal .btn-cancel {
-				background-color: #2f3136;
-				color: #fff;
-			}
-
-			.serverfolders-modal .btn-save {
-				background-color: #3A71C1;
-				color: #fff;
-			}
-
-			.serverfolders-modal .control-group label,
-			.serverfolders-modal .form-tab button {
-				color: #b9bbbe;
-				letter-spacing: .5px;
-				text-transform: uppercase;
-				flex: 1;
-				cursor: default;
-				font-weight: 600;
-				line-height: 16px;
-				font-size: 12px;
-			}
-
-			.serverfolders-modal .control-group {
-				margin-top: 10px;
+			
+			.guild.folder .badge.folder.count {
+				background: grey;
+				height: 12px;
+				top: -3px;
+				right: 30px;
 			}
 			
-			.serverfolders-modal .form-tab {
-				overflow: hidden;
-				background-color: #36393E;
+			.guild.serverToFolderPreview {
 				position: absolute;
-				z-index: 20px;
+				opacity: 0.5;
+				width: 50px;
+				height: 50px;
+				z-index: 1000;
 			}
-
-			.serverfolders-modal .form-tablinks {
-				background-color: inherit;
-				float: left;
-				border: none;
-				outline: none;
-				cursor: pointer;
-				padding: 14px 16px;
-				transition: 0.3s;
-				border-radius: 5px 5px 0px 0px;
+			
+			.guild.serverToFolderPreview a {
+				color: white;
+				width: 50px;
+				height: 50px;
+				background-size: cover;
+				background-position: center;
+				font-size: 16px;
+				font-weight: 600;
+				letter-spacing: .5px;
+				line-height: 50px;
+				text-align: center;
 			}
-
-			.serverfolders-modal .form-tablinks:hover {
-				background-color: #403F47;
+			
+			.foldercontainer {
+				max-height: 98%;
+				max-width: 98%;
+				position: absolute;
+				padding: 10px;
+				top: 0px;
+				left: 0px;
+				z-index: 1000;
 			}
-
-			.serverfolders-modal .form-tablinks.active {
-				background-color: #484B51;
-			}
-
-			.serverfolders-modal .form-tabcontent {
-				margin-top: 40px;
-				padding: 5px 0px 20px 0px;
-				background-color: #484B51;
+			
+			.foldercontainer::-webkit-scrollbar {
 				display: none;
-				border-radius: 5px 5px 5px 5px;
-				position: relative;
-				z-index: 10px;
+			}
+					
+			.foldercontainer [class^="foldercontent-"] {
+			   display: inline-block;
 			}
 
-			.serverfolders-modal .form-tabcontent.open {
-				display: block;
+			.foldercontainer .guild {
+			   display: inline-block;
+			}
+
+			.foldercontainer .guild-inner {
+			   border-radius: 25px !important;
+			   transition: border-radius 1s;
+			}
+
+			.foldercontainer .guild-inner:hover {
+			   border-radius: 15px !important;
+			   transition: border-radius 1s;
 			}`;
 
 		this.serverContextEntryMarkup =
 			`<div class="item-group">
-				<div class="item createfolder-item">
-					<span>REPLACE_servercontext_createfolder_text</span>
+				<div class="item serverfolders-item item-subMenu">
+					<span>REPLACE_servercontext_serverfolders_text</span>
 					<div class="hint"></div>
+				</div>
+			</div>`;
+			
+		this.serverContextSubMenuMarkup = 
+			`<div class="context-menu serverfolders-submenu">
+				<div class="item-group">
+					<div class="item createfolder-item">
+						<span>REPLACE_serversubmenu_createfolder_text</span>
+						<div class="hint"></div>
+					</div>
+					<div class="item removefromfolder-item disabled">
+						<span>REPLACE_serversubmenu_removefromfolder_text</span>
+						<div class="hint"></div>
+					</div>
 				</div>
 			</div>`;
 			
@@ -271,78 +128,91 @@ class ServerFolders {
 						<a draggable="false" class="avatar-small"></a>
 					</div>
 				</div>
-				<div class="badge folder"></div>
+				<div class="badge folder notifications"></div>
+				<div class="badge folder count"></div>
 			</div>`;
-			
-		this.folderTooltipMarkup = 
-			`<div class="tooltip tooltip-right tooltip-black guild-folder-tooltip"></div>`;
 
 		this.folderSettingsModalMarkup =
-			`<span class="serverfolders-modal">
-				<div class="backdrop-2ohBEd callout-backdrop"></div>
-				<div class="modal">
-					<div class="modal-inner">
-						<div class="form">
-							<div class="form-header">
-								<header class="modal-header">REPLACE_modal_header_text</header>
+			`<span class="serverfolders-modal DevilBro-modal">
+				<div class="backdrop-2ohBEd"></div>
+				<div class="modal-2LIEKY">
+					<div class="inner-1_1f7b">
+						<div class="modal-3HOjGZ sizeMedium-1-2BNS">
+							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO header-3sp3cE" style="flex: 0 0 auto;">
+								<div class="flexChild-1KGW5q" style="flex: 1 1 auto;">
+									<h4 class="h4-2IXpeI title-1pmpPr size16-3IvaX_ height20-165WbF weightSemiBold-T8sxWH defaultColor-v22dK1 defaultMarginh4-jAopYe marginReset-3hwONl">REPLACE_modal_header_text</h4>
+									<div class="guildName-1u0hy7 small-3-03j1 size12-1IGJl9 height16-1qXrGy primary-2giqSn"></div>
+								</div>
+								<svg class="btn-cancel close-3ejNTg flexChild-1KGW5q" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12">
+									<g fill="none" fill-rule="evenodd">
+										<path d="M0 0h12v12H0"></path>
+										<path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path>
+									</g>
+								</svg>
 							</div>
-							<div class="form-inner">
-								<div class="control-group">
-									<label class="modal-text-label" for="modal-text">REPLACE_modal_foldername_text</label>
-									<input type="text" id="modal-text" name="text">
-								</div>
-								<div class="form-tab">
-									<button class="form-tablinks active" value="tab-icon">REPLACE_modal_tabheader1_text</button>
-									<button class="form-tablinks" value="tab-iconcolor">REPLACE_modal_tabheader2_text</button>
-									<button class="form-tablinks" value="tab-tooltipcolor">REPLACE_modal_tabheader3_text</button>
-								</div>
-								<div class="form-tabcontent tab-icon open">
-									<div class="control-group">
-										<div class="modal-icon-picker">
-											<div class="icons">
-												<label class="icon-picker-label">REPLACE_modal_iconpicker_text</label>
-											</div>
+							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;">
+								<button type="button" value="modalTab-folder" class="modalTabButton buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 mediumGrow-uovsMu">
+									<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_tabheader1_text</h3>
+								</button>
+								<button type="button" value="modalTab-icon" class="modalTabButton buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 mediumGrow-uovsMu">
+									<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_tabheader2_text</h3>
+								</button>
+								<button type="button" value="modalTab-tooltip" class="modalTabButton buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 mediumGrow-uovsMu">
+									<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_tabheader3_text</h3>
+								</button>
+							</div>
+							<div class="scrollerWrap-2uBjct content-1Cut5s scrollerThemed-19vinI themeGhostHairline-2H8SiW">
+								<div class="scroller-fzNley inner-tqJwAU">
+									<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO switchItem-1uofoz marginBottom20-2Ifj-2 modalTab modalTab-folder" style="flex: 1 1 auto;">
+										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
+											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_foldername_text</h3>
+										</div>
+										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
+											<div class="inputWrapper-3xoRWR vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR flexChild-1KGW5q" style="flex: 1 1 auto;"><input type="text" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_" id="input-foldername"></div>
+										</div>
+										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO" style="flex: 1 1 auto;">
+											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_iconpicker_text</h3>
+										</div>
+										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
+											<div class="icons"></div>
 										</div>
 									</div>
-								</div>
-								<div class="form-tabcontent tab-iconcolor">
-									<div class="control-group">
-										<div class="modal-color-picker">
-											<div class="swatches1">
-												<label class="color-picker1-label">REPLACE_modal_colorpicker1_text</label>
-											</div>
+									<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO switchItem-1uofoz marginBottom20-2Ifj-2 modalTab modalTab-icon" style="flex: 1 1 auto;">
+										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO" style="flex: 1 1 auto;">
+											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_colorpicker1_text</h3>
+										</div>
+										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
+											<div class="swatches1"></div>
+										</div>
+										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO" style="flex: 1 1 auto;">
+											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_colorpicker2_text</h3>
+										</div>
+										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
+											<div class="swatches2"></div>
 										</div>
 									</div>
-									<div class="control-group">
-										<div class="modal-color-picker">
-											<div class="swatches2">
-												<label class="color-picker2-label">REPLACE_modal_colorpicker2_text</label>
-											</div>
+									<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO switchItem-1uofoz marginBottom20-2Ifj-2 modalTab modalTab-tooltip" style="flex: 1 1 auto;">
+										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO" style="flex: 1 1 auto;">
+											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_colorpicker3_text</h3>
 										</div>
-									</div>
-								</div>
-								<div class="form-tabcontent tab-tooltipcolor">
-									<div class="control-group">
-										<div class="modal-color-picker">
-											<div class="swatches3">
-												<label class="color-picker3-label">REPLACE_modal_colorpicker3_text</label>
-											</div>
+										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
+											<div class="swatches3"></div>
 										</div>
-									</div>
-									<div class="control-group">
-										<div class="modal-color-picker">
-											<div class="swatches4">
-												<label class="color-picker4-label">REPLACE_modal_colorpicker4_text</label>
-											</div>
+										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO" style="flex: 1 1 auto;">
+											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_colorpicker4_text</h3>
+										</div>
+										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
+											<div class="swatches4"></div>
 										</div>
 									</div>
 								</div>
 							</div>
-							<div class="form-actions">
-								<button type="button" class="btn btn-cancel">REPLACE_btn_cancel_text</button>
-								<button type="button" class="btn btn-save">REPLACE_btn_save_text</button>
+							<div class="flex-lFgbSz flex-3B1Tl4 horizontalReverse-2LanvO horizontalReverse-k5PqxT flex-3B1Tl4 directionRowReverse-2eZTxP justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO footer-1PYmcw">
+								<button type="button" class="btn-save buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu">
+									<div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx contents-4L4hQM">REPLACE_btn_save_text</div>
+								</button>
 							</div>
-						</form>
+						</div>
 					</div>
 				</div>
 			</span>`;	
@@ -367,9 +237,9 @@ class ServerFolders {
 		
 	getName () {return "ServerFolders";}
 
-	getDescription () {return "Add pseudofolders to your serverlist to organize your servers.";}
+	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "4.5.1";}
+	getVersion () {return "5.0.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -393,6 +263,15 @@ class ServerFolders {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
 			
+			if (!BDfunctionsDevilBro.loadData("warning", this.getName(), "warning")) {
+				if (confirm("Welcome to ServerFolders 2.0. I decided to rewrite the whole plugin to make the folders act more like actual folders. Sadly due to the internal changes all old folders will no longer work, hence why I recommend you to delete them all. If you press 'yes' / 'ok' whatever it is labeled in your language in this window, all folders will be removed, all servers will be displayed again and the old config will be cleared. Thanks and have fun. Also make sure to read the plugin description to learn how to work with ServerFolders 2.0")) {
+					/* BDfunctionsDevilBro.removeAllData(this.getName(), "folders");
+					$("div.guild.folder").remove();
+					$(BDfunctionsDevilBro.readServerList()).show(); */
+				}
+				BDfunctionsDevilBro.saveData("warning", true, this.getName(), "warning");
+			}
+			
 			this.serverContextObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
@@ -411,37 +290,47 @@ class ServerFolders {
 			this.serverListObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
+						var node = change.target;
+						if (document.querySelector(".dms").contains(node)) return;
+						if (change.type == "attributes" && change.attributeName == "class" && node && node.classList && node.classList.contains("guild") && !node.classList.contains("folder") && !node.classList.contains("copy") && !node.classList.contains("guilds-add") && !node.querySelector(".guilds-error")) {
+							this.addDragListener();
+							var serverDiv = node;
+							var folderDiv = this.getFolderOfServer(serverDiv);
+							if (folderDiv) {
+								this.updateCopyInFolderContent(serverDiv, folderDiv);
+								this.updateFolderNotifications(folderDiv);
+							}
+						}
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.className === "badge") {
-									this.badgeObserver.observe(node, {characterData: true, subtree: true });
-									this.updateAllFolderNotifications();
+								if (node && node.classList && node.classList.contains("guild") && !node.classList.contains("folder") && !node.classList.contains("copy") && !node.classList.contains("guilds-add") && !node.querySelector(".guilds-error")) {
+									this.addDragListener();
+									var serverDiv = node;
+									var folderDiv = this.getFolderOfServer(serverDiv);
+									if (folderDiv) {
+										this.addCopyToFolderContent(serverDiv, folderDiv);
+										this.updateFolderNotifications(folderDiv);
+										$(serverDiv).hide();
+									}
 								}
-								else if (node && node.classList && node.classList.contains("guild") && !node.classList.contains("guilds-add") && !node.querySelector(".guilds-error")) {
-									this.updateAllFolderNotifications();
+								if (node && node.classList && node.classList.contains("badge") && !node.classList.contains("folder")) {
+									this.badgeObserver.observe(node, {characterData: true, subtree: true});
 								}
 							});
 						}
 						if (change.removedNodes) {
 							change.removedNodes.forEach((node) => {
-								if (node && node.className === "badge") {
-									this.updateAllFolderNotifications();
-								}
-								else if (node && node.classList && node.classList.contains("guild") && !node.classList.contains("guilds-add") && !node.querySelector(".guilds-error")) {
-									$(".guild.folder").each( 
-										(i, folderDiv) => {
-											this.checkIfServerDivChanged(folderDiv);
-										}
-									);
-									this.updateAllFolderNotifications();
+								if (node && node.classList && node.classList.contains("guild") && !node.classList.contains("folder") && !node.classList.contains("copy") && !node.classList.contains("guilds-add") && !node.querySelector(".guilds-error")) {
+									this.addDragListener();
+									var serverDiv = node;
+									var folderDiv = this.getFolderOfServer(serverDiv);
+									if (folderDiv) {
+										var info = BDfunctionsDevilBro.getKeyInformation({"node":node, "key":"guild"});
+										if (info) $(".guild.copy_of_" + info.id).remove();
+										this.updateFolderNotifications(folderDiv);
+									}
 								}
 							});
-						}
-						if (change.type == "attributes" && change.attributeName == "class") {
-							var serverData = BDfunctionsDevilBro.getKeyInformation({"node":change.target, "key":"guild"});
-							if (serverData) {
-								this.updateAllFolderNotifications();
-							}
 						}
 					}
 				);
@@ -451,22 +340,29 @@ class ServerFolders {
 			this.badgeObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
-						this.updateAllFolderNotifications();
+						var serverDiv = this.getParentDivOfServer(change.target);
+						var folderDiv = this.getFolderOfServer(serverDiv);
+						if (folderDiv) {
+							this.updateCopyInFolderContent(serverDiv, folderDiv);
+							this.updateFolderNotifications(folderDiv);
+						}
 					}
 				);
 			});
 			
-			$(".badge:not(.folder)").each( 
-				(i, badge) => {
+			document.querySelectorAll(".badge:not(.folder)").forEach( 
+				(badge) => {
 					this.badgeObserver.observe(badge, {characterData: true, subtree: true});
 				}
 			);
 			
-			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
+			this.addDragListener();
 			
 			this.loadAllFolders();
 			
-			this.updateAllFolderNotifications();
+			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
+			
+			$(".guilds.scroller").addClass("folders");
 			
 			setTimeout(() => {
 				this.labels = this.setLabelsByLanguage();
@@ -480,17 +376,19 @@ class ServerFolders {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			
 			this.serverContextObserver.disconnect();
 			this.serverListObserver.disconnect();
 			this.badgeObserver.disconnect();
-			$(document).unbind('mousedown', this.folderContextEventHandler);
 			
-			$(".guild.folder").remove();
+			$(".foldercontainer").remove();
+			$("div.guild.folder").remove();
+			$(BDfunctionsDevilBro.readServerList()).show();
 			
-			BDfunctionsDevilBro.showHideAllEles(true, BDfunctionsDevilBro.readServerList());
+			$(".guilds.scroller").removeClass("folders");
+			$(".guilds.scroller.folders div.guild:not(.folder)").off("mousedown." + this.getName());
 			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName());
+			BDfunctionsDevilBro.removeLocalStyle("ChannelSizeCorrection");
 			
 			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
 		}
@@ -501,15 +399,20 @@ class ServerFolders {
     static resetAll (pluginName) {
 		if (confirm("Are you sure you want to delete all folders?")) {
 			BDfunctionsDevilBro.removeAllData(pluginName, "folders");
+			BDfunctionsDevilBro.removeAllData(pluginName, "folderIDs");
 			
-			$(".guild.folder").remove();
-			
-			BDfunctionsDevilBro.showHideAllEles(true, BDfunctionsDevilBro.readServerList());
+			$(".foldercontainer").remove();
+			$("div.guild.folder").remove();
+			$(BDfunctionsDevilBro.readServerList()).show();
+			BDfunctionsDevilBro.removeLocalStyle("ChannelSizeCorrection");
 		}
     }
 
 	changeLanguageStrings () {
-		this.serverContextEntryMarkup = 	this.serverContextEntryMarkup.replace("REPLACE_servercontext_createfolder_text", this.labels.servercontext_createfolder_text);
+		this.serverContextEntryMarkup = 	this.serverContextEntryMarkup.replace("REPLACE_servercontext_serverfolders_text", this.labels.servercontext_serverfolders_text);
+		
+		this.serverContextSubMenuMarkup = 	this.serverContextSubMenuMarkup.replace("REPLACE_serversubmenu_createfolder_text", this.labels.serversubmenu_createfolder_text);
+		this.serverContextSubMenuMarkup = 	this.serverContextSubMenuMarkup.replace("REPLACE_serversubmenu_removefromfolder_text", this.labels.serversubmenu_removefromfolder_text);
 		
 		this.folderContextMarkup = 			this.folderContextMarkup.replace("REPLACE_foldercontext_unreadfolder_text", this.labels.foldercontext_unreadfolder_text);
 		this.folderContextMarkup = 			this.folderContextMarkup.replace("REPLACE_foldercontext_foldersettings_text", this.labels.foldercontext_foldersettings_text);
@@ -525,7 +428,6 @@ class ServerFolders {
 		this.folderSettingsModalMarkup = 	this.folderSettingsModalMarkup.replace("REPLACE_modal_colorpicker2_text", this.labels.modal_colorpicker2_text);
 		this.folderSettingsModalMarkup = 	this.folderSettingsModalMarkup.replace("REPLACE_modal_colorpicker3_text", this.labels.modal_colorpicker3_text);
 		this.folderSettingsModalMarkup = 	this.folderSettingsModalMarkup.replace("REPLACE_modal_colorpicker4_text", this.labels.modal_colorpicker4_text);
-		this.folderSettingsModalMarkup = 	this.folderSettingsModalMarkup.replace("REPLACE_btn_cancel_text", this.labels.btn_cancel_text);
 		this.folderSettingsModalMarkup = 	this.folderSettingsModalMarkup.replace("REPLACE_btn_save_text", this.labels.btn_save_text);
 		
 		BDfunctionsDevilBro.translateMessage(this.getName());
@@ -536,48 +438,197 @@ class ServerFolders {
 		
 		if (serverData && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"GuildLeaveGroup"})) {
 			$(context).append(this.serverContextEntryMarkup)
-				.on("click", ".createfolder-item", serverData, this.createNewFolder.bind(this));
+				.on("mouseenter", ".serverfolders-item", serverData, this.createContextSubMenu.bind(this))
+				.on("mouseleave", ".serverfolders-item", serverData, this.deleteContextSubMenu.bind(this));
 		}
 	}
 	
-	createNewFolder (e) {
-		$(e.delegateTarget).hide();
-		var folderID = e.data.id;
-		var data = BDfunctionsDevilBro.loadData(folderID, this.getName(), "folders");
-		if (!data) {
-			var serverDiv = BDfunctionsDevilBro.getDivOfServer(folderID);
-			if (serverDiv && !$(serverDiv).prev().hasClass("folder")) {
-				
-				var folderDiv = $(this.folderIconMarkup);
-				$(folderDiv).insertBefore(serverDiv)
-					.find(".avatar-small")
-					.css("background-image", "url(\"" + this.folderIcons[0].openicon + "\")")
-					.attr("id", "FL_ID_" + folderID)
-					.attr("class", "avatar-small open")
-					.on("click", this.changeIconAndServers.bind(this))
-					.on("contextmenu", this.createFolderContextMenu.bind(this))
-					.on("mouseenter", this.createFolderToolTip.bind(this));
-				
-				var folderName = 	"";
-				var isOpen = 		true;
-				var iconID = 		0;
-				var icons = 		this.folderIcons[0];
-				var color1 = 		["0","0","0"];
-				var color2 = 		["255","255","255"];
-				var color3 = 		null;
-				var color4 = 		null;
-				
-				BDfunctionsDevilBro.saveData(folderID, {folderID,folderName,isOpen,iconID,icons,color1,color2,color3,color4}, this.getName(), "folders");
-				
-				this.showFolderSettings($(folderDiv).find(".avatar-small")[0]);
+	createContextSubMenu (e) {
+		var theme = BDfunctionsDevilBro.themeIsLightTheme() ? "" : "theme-dark";
+		
+		var targetDiv = e.target.tagName != "SPAN" ? e.target : e.target.parentNode;
+		
+		var serverContextSubMenu = $(this.serverContextSubMenuMarkup);
+		$(targetDiv).append(serverContextSubMenu)
+			.off("click", ".createfolder-item")
+			.on("click", ".createfolder-item", () => {this.createNewFolder();});
+		$(serverContextSubMenu)
+			.addClass(theme)
+			.css("left", $(targetDiv).offset().left + "px")
+			.css("top", $(targetDiv).offset().top + "px");
+			
+		var serverDiv = BDfunctionsDevilBro.getDivOfServer(e.data.id);
+		var folderDiv = this.getFolderOfServer(serverDiv);
+		if (folderDiv) {
+			$(targetDiv).find(".removefromfolder-item")
+				.removeClass("disabled")
+				.on("click", e.data, () => {this.removeServerFromFolder(serverDiv, folderDiv);});
+		}
+	}
+	
+	deleteContextSubMenu (e) {
+		$(".serverfolders-submenu").remove();
+	}
+	
+	addDragListener () {
+		$(".guilds.scroller div.guild:not(.folder)")
+			.off("mousedown." + this.getName())
+			.on("mousedown." + this.getName(), (e) => {
+				if (BDfunctionsDevilBro.pressedKeys.includes(17)) {				
+					e.stopPropagation();
+					e.preventDefault();
+					var draggedServer = this.getParentDivOfServer(e.target);
+					
+					if (draggedServer) {
+						var serverCopy = draggedServer.cloneNode(true);
+						$(serverCopy)
+							.appendTo("#app-mount")
+							.addClass("serverToFolderPreview")
+							.offset({"left":e.clientX + 5,"top":e.clientY + 5});
+						
+						$(document)
+							.off("mouseup." + this.getName()).off("mousemove." + this.getName())
+							.on("mouseup." + this.getName(), (e) => {
+								var folderDiv = this.getParentDivOfFolder(e.target);
+								if (folderDiv) {
+									this.addServerToFolder(draggedServer, folderDiv);
+								}
+								$(document).off("mouseup." + this.getName()).off("mousemove." + this.getName());
+								draggedServer = null;
+								serverCopy.remove();
+							})
+							.on("mousemove." + this.getName(), (e2) => {
+								$(serverCopy).offset({"left":e2.clientX + 5,"top":e2.clientY + 5})
+							});
+					}
+					else {
+						draggedServer = null;
+					}
+				}
+			});
+	}
+	
+	addServerToFolder (serverDiv, folderDiv) {
+		var data = BDfunctionsDevilBro.loadData(folderDiv.id, this.getName(), "folders");
+		var info = BDfunctionsDevilBro.getKeyInformation({"node":serverDiv, "key":"guild"});
+		if (data && info && !data.servers.includes(info.id)) {
+			data.servers.push(info.id);
+			BDfunctionsDevilBro.saveData(folderDiv.id, data, this.getName(), "folders");
+			$(serverDiv).hide();
+			var message = this.labels.toast_addserver_text ? this.labels.toast_addserver_text.replace("${servername}", info.name).replace("${foldername}", data.folderName ? " " + data.folderName : "") : "";
+			BDfunctionsDevilBro.showToast(message, {type:"success"});
+			this.addCopyToFolderContent(serverDiv, folderDiv);
+			this.updateFolderNotifications(folderDiv);
+		}
+	}
+	
+	removeServerFromFolder (serverDiv, folderDiv) {
+		$(".context-menu").hide();
+		var data = BDfunctionsDevilBro.loadData(folderDiv.id, this.getName(), "folders");
+		var info = BDfunctionsDevilBro.getKeyInformation({"node":serverDiv, "key":"guild"});
+		if (data && info) {
+			data.servers.splice(data.servers.indexOf(info.id),1);
+			BDfunctionsDevilBro.saveData(folderDiv.id, data, this.getName(), "folders");
+			$(serverDiv).show();
+			var message = this.labels.toast_removeserver_text ? this.labels.toast_removeserver_text.replace("${servername}", info.name).replace("${foldername}", data.folderName ? " " + data.folderName : "") : "";
+			BDfunctionsDevilBro.showToast(message, {type:"danger"});
+			$(".guild.copy_of_" + info.id).remove();
+			this.updateFolderNotifications(folderDiv);
+		}
+	}
+	
+	createNewFolder () {
+		$(".context-menu").hide();
+		var folderID = 		this.generateFolderID();
+		var folderName = 	"";
+		var position = 		document.querySelectorAll(".guild.folder").length;
+		var iconID = 		0;
+		var icons = 		this.folderIcons[0];
+		var color1 = 		["0","0","0"];
+		var color2 = 		["255","255","255"];
+		var color3 = 		null;
+		var color4 = 		null;
+		var servers = 		[];
+		
+		var folderDiv = $(this.folderIconMarkup)[0];
+		$(folderDiv).insertBefore(BDfunctionsDevilBro.readServerList()[0]);
+			
+		var folderInner = folderDiv.querySelector(".guild-inner");
+		var folder = folderDiv.querySelector(".avatar-small");
+		
+		$(folderDiv)
+			.addClass("closed")
+			.attr("id", folderID);
+		$(folderInner)
+			.on("click", () => {this.openCloseFolder(folderDiv);})
+			.on("contextmenu", (e) => {this.createFolderContextMenu(folderDiv, e);})
+			.on("mouseenter", () => {this.createFolderToolTip(folderDiv);});
+		$(folder)
+			.css("background-image", "url(\"" + icons.closedicon + "\")");
+		
+		BDfunctionsDevilBro.saveData(folderID, {folderID,folderName,position,iconID,icons,color1,color2,color3,color4,servers}, this.getName(), "folders");
+		
+		this.showFolderSettings(folderDiv);
+		this.updateFolderNotifications(folderDiv);
+		this.updateFolderPositions();
+	}
+	
+	generateFolderID () {
+		var folderIDs = BDfunctionsDevilBro.loadAllData(this.getName(), "folderIDs");
+		var folderID = "folder_" + Math.round(Math.random()*10000000000000000);
+		if (folderIDs[folderID]) {
+			return generateFolderID();
+		}
+		else {
+			folderIDs[folderID] = folderID;
+			BDfunctionsDevilBro.saveAllData(folderIDs, this.getName(), "folderIDs");
+			return folderID;
+		}
+	}
+	
+	createFolderContextMenu (folderDiv, e) {
+		var includedServers = this.readIncludedServerList(folderDiv);
+		
+		var folderContext = $(this.folderContextMarkup);
+		$(".app").append(folderContext)
+			.off("click", ".foldersettings-item")
+			.on("click", ".foldersettings-item", () => {
+				this.showFolderSettings(folderDiv);
+			})
+			.off("click", ".removefolder-item")
+			.on("click", ".removefolder-item", () => {
+				this.removeFolder(folderDiv);
+			});
+		
+		if (BDfunctionsDevilBro.readUnreadServerList(includedServers).length > 0) {
+			folderContext
+				.off("click", ".unreadfolder-item")
+				.on("click", ".unreadfolder-item", () => {
+					this.clearAllReadNotifications(folderDiv);
+				});
+		}
+		else {
+			folderContext.find(".unreadfolder-item").addClass("disabled");
+		}
+		
+		var theme = BDfunctionsDevilBro.themeIsLightTheme() ? "" : "theme-dark";
+		
+		folderContext
+			.addClass(theme)
+			.css("left", e.pageX + "px")
+			.css("top", e.pageY + "px");
+			
+		this.folderContextEventHandler = (event) => {	
+			if (folderContext.has(event.target).length == 0) {
+				$(document).unbind('mousedown', this.folderContextEventHandler);
+				$(folderContext).remove();
 			}
-		}
+		};
+		$(document).bind('mousedown', this.folderContextEventHandler);
 	}
 	
-	createFolderToolTip (e) {
-		var folder = e.target;
-		var folderID = $(folder).attr("id").split("FL_ID_")[1];
-		var data = BDfunctionsDevilBro.loadData(folderID, this.getName(), "folders");
+	createFolderToolTip (folderDiv) {
+		var data = BDfunctionsDevilBro.loadData(folderDiv.id, this.getName(), "folders");
 		if (data) {
 			if (data.folderName) {
 				var bgColor = data.color3 ? BDfunctionsDevilBro.color2RGB(data.color3) : "";
@@ -590,183 +641,110 @@ class ServerFolders {
 					.guild-folder-tooltip:after {
 						border-right-color: ${bgColor} !important;
 					}`;
-				BDfunctionsDevilBro.createTooltip(data.folderName, folder, {type:"right",selector:"guild-folder-tooltip",css:customTooltipCSS});
+				BDfunctionsDevilBro.createTooltip(data.folderName, folderDiv, {type:"right",selector:"guild-folder-tooltip",css:customTooltipCSS});
 			}
 		}
 	}
 	
-	changeIconAndServers (e) {
-		var folder = e.target;
-		var folderDiv = this.getParentDivOfFolder(folder);
-		
-		this.checkIfServerDivChanged(folderDiv);
-	
-		var id = BDfunctionsDevilBro.getIdOfServer($(folderDiv).next()[0]);
-		
-		if (id) {
-			var data = BDfunctionsDevilBro.loadData(id, this.getName(), "folders");
-			if (data) {
-				var folderID = 		data.folderID;
-				var folderName = 	data.folderName;
-				var isOpen = 		!data.isOpen;
-				var iconID = 		data.iconID;
-				var icons = 		data.icons;
-				var color1 = 		data.color1;
-				var color2 = 		data.color2;
-				var color3 = 		data.color3;
-				var color4 = 		data.color4;
-				
-				$(folder)
-					.css("background-image", isOpen ? "url(\"" + icons.openicon + "\")" : "url(\"" + icons.closedicon + "\")")
-					.attr("class", isOpen ? "avatar-small open" : "avatar-small closed");
-				
-				var includedServers = this.readIncludedServerList(folderDiv);
-				
-				BDfunctionsDevilBro.showHideAllEles(isOpen, includedServers);
-				
-				BDfunctionsDevilBro.saveData(folderID, {folderID,folderName,isOpen,iconID,icons,color1,color2,color3,color4}, this.getName(), "folders");
+	createServerToolTip (e) {
+		var serverDiv = e.data.div;
+		var info = e.data.info;
+		var data = BDfunctionsDevilBro.loadData(info.id, "EditServers", "servers");
+		var text = data ? (data.name ? data.name : info.name) : info.name;
+		var bgColor = data ? (data.color3 ? BDfunctionsDevilBro.color2RGB(data.color3) : "") : "";
+		var fontColor = data ? (data.color4 ? BDfunctionsDevilBro.color2RGB(data.color4) : "") : "";
+		var customTooltipCSS = `
+			.guild-custom-tooltip {
+				color: ${fontColor} !important;
+				background-color: ${bgColor} !important;
 			}
-		}
-	}
-	
-	createFolderContextMenu (e) {
-		var folder = e.target;
-		var folderDiv = this.getParentDivOfFolder(folder);
-		
-		var includedServers = this.readIncludedServerList(folderDiv);
-		
-		this.checkIfServerDivChanged(folderDiv);
-		
-		var folderContext = $(this.folderContextMarkup);
-		$(".tooltips").parent().append(folderContext)
-			.off("click", ".foldersettings-item")
-			.off("click", ".removefolder-item")
-			.on("click", ".foldersettings-item", this.showFolderSettings.bind(this,folder))
-			.on("click", ".removefolder-item", this.removeFolder.bind(this,folder));
-		
-		if (BDfunctionsDevilBro.readUnreadServerList(includedServers).length > 0) {
-			$(folderContext)
-				.off("click", ".unreadfolder-item")
-				.on("click", ".unreadfolder-item", this.clearAllReadNotifications.bind(this,folder));
-		}
-		else {
-			$(folderContext).find(".unreadfolder-item").addClass("disabled");
-		}
-		
-		var theme = BDfunctionsDevilBro.themeIsLightTheme() ? "" : "theme-dark";
-		
-		$(folderContext)
-			.addClass(theme)
-			.css("left", e.pageX + "px")
-			.css("top", e.pageY + "px");
+			.guild-custom-tooltip:after {
+				border-right-color: ${bgColor} !important;
+			}`;
 			
-		this.folderContextEventHandler = (event) => {	
-			if (!folderContext[0].contains(event.target)) {
-				$(document).unbind('mousedown', this.folderContextEventHandler);
-				$(folderContext).remove();
-			}
-		};
-		$(document).bind('mousedown', this.folderContextEventHandler);
+		BDfunctionsDevilBro.createTooltip(text, serverDiv, {type:"right",selector:"guild-custom-tooltip",css:customTooltipCSS});
 	}
 	
-	showFolderSettings (folder) {
-		var folderDiv = this.getParentDivOfFolder(folder);
+	showFolderSettings (folderDiv) {
 		$(".context-menu.folderSettings").remove();
 		$(document).unbind('mousedown', this.folderContextEventHandler);
 		
-		var id = BDfunctionsDevilBro.getIdOfServer($(folderDiv).next()[0]);
-		if (id) {
-			var data = BDfunctionsDevilBro.loadData(id, this.getName(), "folders");
-			if (data) {
-				var folderID = 		data.folderID;
-				var folderName = 	data.folderName;
-				var isOpen = 		data.isOpen;
-				var iconID = 		data.iconID;
-				var icons = 		data.icons;
-				var color1 = 		data.color1;
-				var color2 = 		data.color2;
-				var color3 = 		data.color3;
-				var color4 = 		data.color4;
-				
-				var folderSettingsModal = $(this.folderSettingsModalMarkup);
-				folderSettingsModal.find("#modal-text")[0].value = folderName;
-				this.setIcons(iconID, folderSettingsModal.find(".icons"));
-				BDfunctionsDevilBro.setColorSwatches(color1, folderSettingsModal.find(".swatches1"), "swatch1");
-				BDfunctionsDevilBro.setColorSwatches(color2, folderSettingsModal.find(".swatches2"), "swatch2");
-				BDfunctionsDevilBro.setColorSwatches(color3, folderSettingsModal.find(".swatches3"), "swatch3");
-				BDfunctionsDevilBro.setColorSwatches(color4, folderSettingsModal.find(".swatches4"), "swatch4");
-				folderSettingsModal.appendTo($(".app-XZYfmp"))
-					.on("click", ".callout-backdrop,button.btn-cancel", (e) => {
-						folderSettingsModal.addClass('closing');
-						setTimeout(() => {folderSettingsModal.remove();}, 300);
-					})
-					.on("click", "button.form-tablinks", (e) => {
-						this.changeTab(e,folderSettingsModal);
-					})
-					.on("click", "button.btn-save", (e) => {
-						folderName = null;
-						if (folderSettingsModal.find("#modal-text")[0].value) {
-							if (folderSettingsModal.find("#modal-text")[0].value.trim().length > 0) {
-								folderName = folderSettingsModal.find("#modal-text")[0].value.trim();
-							}
+		var folderID = folderDiv.id;
+		var data = BDfunctionsDevilBro.loadData(folderID, this.getName(), "folders");
+		if (data) {
+			var folderName = 	data.folderName;
+			var position = 		data.position;
+			var iconID = 		data.iconID;
+			var icons = 		data.icons;
+			var color1 = 		data.color1;
+			var color2 = 		data.color2;
+			var color3 = 		data.color3;
+			var color4 = 		data.color4;
+			var servers = 		data.servers;
+			
+			var folderSettingsModal = $(this.folderSettingsModalMarkup);
+			folderSettingsModal.find(".guildName-1u0hy7").text(folderName ? folderName : "");
+			folderSettingsModal.find("#input-foldername").val(folderName);
+			folderSettingsModal.find("#input-foldername").attr("placeholder", folderName);
+			this.setIcons(iconID, folderSettingsModal.find(".icons"));
+			BDfunctionsDevilBro.setColorSwatches(color1, folderSettingsModal.find(".swatches1"), "swatch1");
+			BDfunctionsDevilBro.setColorSwatches(color2, folderSettingsModal.find(".swatches2"), "swatch2");
+			BDfunctionsDevilBro.setColorSwatches(color3, folderSettingsModal.find(".swatches3"), "swatch3");
+			BDfunctionsDevilBro.setColorSwatches(color4, folderSettingsModal.find(".swatches4"), "swatch4");
+			BDfunctionsDevilBro.appendModal(folderSettingsModal);
+			folderSettingsModal
+				.on("click", "button.btn-save", (e) => {
+					folderName = null;
+					if (folderSettingsModal.find("#input-foldername").val()) {
+						if (folderSettingsModal.find("#input-foldername").val().trim().length > 0) {
+							folderName = folderSettingsModal.find("#input-foldername").val().trim();
 						}
-						
-						iconID = $(".ui-icon-picker-icon.selected").attr("value");
-				
-						color1 = BDfunctionsDevilBro.getSwatchColor("swatch1");
-						color2 = BDfunctionsDevilBro.getSwatchColor("swatch2");
-						color3 = BDfunctionsDevilBro.getSwatchColor("swatch3");
-						color4 = BDfunctionsDevilBro.getSwatchColor("swatch4");
-						
-						if (iconID != data.iconID || !BDfunctionsDevilBro.equals(color1, data.color1) || !BDfunctionsDevilBro.equals(color2, data.color2)) {
-							var openicon = this.changeImgColor(color1, color2, this.folderIcons[iconID].openicon);
-							var closedicon = this.changeImgColor(color1, color2, this.folderIcons[iconID].closedicon);
-							icons = {openicon,closedicon};
-						}
-						
-						
-						$(folder).css("background-image", isOpen ? "url(\"" + icons.openicon + "\")" : "url(\"" + icons.closedicon + "\")");
-						
-						BDfunctionsDevilBro.saveData(folderID, {folderID,folderName,isOpen,iconID,icons,color1,color2,color3,color4}, this.getName(), "folders");
-						
-						folderSettingsModal.addClass('closing');
-						setTimeout(() => {folderSettingsModal.remove();}, 300);
-					});
+					}
 					
-				folderSettingsModal.find("#modal-text")[0].focus();
-			}
+					iconID = $(".ui-icon-picker-icon.selected").attr("value");
+			
+					color1 = BDfunctionsDevilBro.getSwatchColor("swatch1");
+					color2 = BDfunctionsDevilBro.getSwatchColor("swatch2");
+					color3 = BDfunctionsDevilBro.getSwatchColor("swatch3");
+					color4 = BDfunctionsDevilBro.getSwatchColor("swatch4");
+					
+					if (iconID != data.iconID || !BDfunctionsDevilBro.equals(color1, data.color1) || !BDfunctionsDevilBro.equals(color2, data.color2)) {
+						this.changeImgColor(color1, color2, this.folderIcons[iconID].openicon, (openicon) => {
+							icons.openicon = openicon;
+							this.changeImgColor(color1, color2, this.folderIcons[iconID].closedicon, (closedicon) => {
+								icons.closedicon = closedicon;
+								var isOpen = folderDiv.classList.contains("open");
+								$(folderDiv).find(".avatar-small").css("background-image", isOpen ? "url(\"" + icons.openicon + "\")" : "url(\"" + icons.closedicon + "\")");
+								BDfunctionsDevilBro.saveData(folderID, {folderID,folderName,position,iconID,icons,color1,color2,color3,color4,servers}, this.getName(), "folders");
+							});
+						});
+					}
+					else {
+						BDfunctionsDevilBro.saveData(folderID, {folderID,folderName,position,iconID,icons,color1,color2,color3,color4,servers}, this.getName(), "folders");
+					}
+					
+				});
+			folderSettingsModal.find("#input-foldername").focus();
 		}
 	}
 	
-	changeTab(e,modal) {
-		var tab = e.target.value;
-
-		$(".form-tabcontent.open",modal)
-			.removeClass("open");
-			
-		$(".form-tablinks.active",modal)
-			.removeClass("active");
-			
-		$(".form-tabcontent." + tab ,modal)
-			.addClass("open");
-			
-		$(e.target)
-			.addClass("active");
-	}
-
 	setIcons (selection, wrapper) {
 		var wrapperDiv = $(wrapper);
 		
 		var folderIcons = this.folderIcons;
 		
 		var icons = 
-			`<div class="ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-nowrap" style="flex: 1 1 auto; margin-top: 5px;"><div class="regulars ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-wrap ui-icon-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;">${ folderIcons.map((val, i) => `<div class="ui-icon-picker-icon" value="${i}" style="background-image: url(${val.closedicon});"></div>`).join("")}</div></div>`;
+			`<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO" style="flex: 1 1 auto; margin-top: 5px;">
+				<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa wrap-1da0e3  ui-icon-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;">
+					${ folderIcons.map((val, i) => `<div class="ui-icon-picker-icon" value="${i}" style="background-image: url(${val.closedicon});"></div>`).join("")}
+				</div>
+			</div>`;
 		$(icons).appendTo(wrapperDiv);
 		
 		if (!(selection < folderIcons.length && selection > -1)) {
 			selection = 0;
 		}
-		wrapperDiv.find(".regulars .ui-icon-picker-icon").eq(selection)
+		wrapperDiv.find(".ui-icon-picker-icon").eq(selection)
 			.addClass("selected")
 			.css("background-color", "grey");
 		
@@ -790,77 +768,223 @@ class ServerFolders {
 		});
 	}
 	
-	removeFolder (folder) {
+	removeFolder (folderDiv) {
 		$(".context-menu.folderSettings").remove();
 		$(document).unbind('mousedown', this.folderContextEventHandler);
 		
-		var folderDiv = this.getParentDivOfFolder(folder);
-		var includedServers = this.readIncludedServerList(folderDiv);
-		BDfunctionsDevilBro.showHideAllEles(true, includedServers);
+		$(this.readIncludedServerList(folderDiv)).show();
 		
-		var folderID = $(folder).attr("id").split("FL_ID_")[1];
+		BDfunctionsDevilBro.removeData(folderDiv.id, this.getName(), "folders");
+		BDfunctionsDevilBro.removeData(folderDiv.id, this.getName(), "folderIDs");
 		
-		BDfunctionsDevilBro.removeData(folderID, this.getName(), "folders");
+		this.closeFolderContent(folderDiv);
 		
 		folderDiv.remove();
+		
+		this.updateFolderPositions();
+	}
+	
+	openCloseFolder (folderDiv) {
+		var data = BDfunctionsDevilBro.loadData(folderDiv.id, this.getName(), "folders");
+		if (data) {
+			var isOpen = folderDiv.classList.contains("open");
+			if (!isOpen) {
+				var includedServers = this.readIncludedServerList(folderDiv);
+				
+				if (includedServers.length > 0) {
+					$(folderDiv)
+						.addClass("open")
+						.removeClass("closed");
+						
+					if (!document.querySelector(".foldercontainer")) {
+						$(`<div class="foldercontainer"></div>`).appendTo(".guilds.scroller.folders");
+					}
+					
+					for (var i = 0; i < includedServers.length; i++) {
+						this.addCopyToFolderContent(includedServers[i], folderDiv);
+					}
+					
+					if (!document.querySelector("#ChannelSizeCorrectionCSS")) {
+						var guildswrapper = $(".guilds-wrapper");
+						
+						var ChannelSizeCorrectionCSS = `
+							.guilds-wrapper .scroller::-webkit-scrollbar {
+								display: none;
+							}`;
+							
+						if (guildswrapper.outerHeight() > guildswrapper.outerWidth()) {
+							ChannelSizeCorrectionCSS +=	`
+								.foldercontainer {
+									width: ${guildswrapper.outerWidth() - 20}px !important;
+									left: ${guildswrapper.outerWidth()}px !important;
+									overflow-x: hidden;
+									overflow-y: scroll;
+								}
+								
+								.guilds-wrapper {
+									overflow: visible;
+									width: ${guildswrapper.outerWidth() + $(".guild").outerWidth() + 20}px !important;
+								}`;
+						}
+						else {
+							ChannelSizeCorrectionCSS +=	`
+								.foldercontainer {
+									height: ${guildswrapper.outerWidth() - 20}px !important;
+									bottom: ${guildswrapper.outerHeight()}px !important;
+									overflow-x: scroll;
+									overflow-y: hidden;
+								}
+								
+								.guilds-wrapper {
+									overflow: visible;
+									height: ${guildswrapper.outerHeight() + $(".guild").outerHeight() + 20}px !important;
+								}`;
+						}
+						
+						BDfunctionsDevilBro.appendLocalStyle("ChannelSizeCorrection", ChannelSizeCorrectionCSS);
+					}
+				}
+				else return; // nothing to do when closed and empty
+			}
+			else {
+				this.closeFolderContent(folderDiv);
+			}
+			
+			$(folderDiv).find(".avatar-small").css("background-image", !isOpen ? "url(\"" + data.icons.openicon + "\")" : "url(\"" + data.icons.closedicon + "\")");
+		}
+	}
+	
+	addCopyToFolderContent (serverOrig, folderDiv) {
+		var foldercontainer = document.querySelector(".foldercontainer");
+		if (foldercontainer && folderDiv.classList.contains("open")) {
+			var sameFolderCopies = foldercontainer.querySelectorAll(".content_of_" + folderDiv.id);
+			var insertNode = sameFolderCopies.length > 0 ? sameFolderCopies[sameFolderCopies.length-1].nextSibling : null;
+			foldercontainer.insertBefore(this.createCopyOfServer(serverOrig, folderDiv), insertNode);
+		}
+	}
+	
+	updateCopyInFolderContent (serverOrig, folderDiv) {
+		var foldercontainer = document.querySelector(".foldercontainer");
+		if (foldercontainer && folderDiv.classList.contains("open")) {
+			var info = BDfunctionsDevilBro.getKeyInformation({"node":serverOrig, "key":"guild"});
+			var oldCopy = foldercontainer.querySelector(".guild.copy_of_" + info.id);
+			if (oldCopy) {
+				foldercontainer.insertBefore(this.createCopyOfServer(serverOrig, folderDiv), oldCopy);
+				oldCopy.remove();
+			}
+		}
+	}
+	
+	createCopyOfServer (serverOrig, folderDiv) {
+		var info = BDfunctionsDevilBro.getKeyInformation({"node":serverOrig, "key":"guild"});
+		var serverCopy = serverOrig.cloneNode(true);
+		$(serverCopy)
+			.addClass("copy")
+			.addClass("copy_of_" + info.id)
+			.addClass("content_of_" + folderDiv.id)
+			.css("display", "")
+			.on("mouseenter." + this.getName(), {"div":serverCopy,"info":info}, this.createServerToolTip.bind(this))
+			.on("click." + this.getName(), (e) => {
+				e.preventDefault();
+				if (BDfunctionsDevilBro.pressedKeys.includes(46)) this.removeServerFromFolder(serverOrig, folderDiv);
+				else serverOrig.querySelector("a").click();
+			})
+			.on("contextmenu." + this.getName(), (e) => {
+				var handleContextMenu = BDfunctionsDevilBro.getKeyInformation({"node":serverOrig.firstElementChild, "key":"handleContextMenu"});
+				if (handleContextMenu) {
+					var data = {
+						preventDefault: a=>a,
+						stopPropagation: a=>a,
+						pageX: e.pageX,
+						pageY: e.pageY,
+					};
+					
+					handleContextMenu(data);
+				}
+			});
+		return serverCopy;
+	}
+	
+	closeFolderContent (folderDiv) {
+		$(folderDiv)
+			.removeClass("open")
+			.addClass("closed");
+			
+		$(".content_of_" + folderDiv.id).remove();
+		var foldercontainer = document.querySelector(".foldercontainer");
+		if (foldercontainer && !foldercontainer.firstChild) {
+			foldercontainer.remove();
+			BDfunctionsDevilBro.removeLocalStyle("ChannelSizeCorrection");
+		}
 	}
 	
 	loadFolder (data) {
 		var folderID = 		data.folderID;
 		var folderName = 	data.folderName;
-		var isOpen = 		data.isOpen;
+		var position = 		data.position;
 		var iconID = 		data.iconID;
 		var icons = 		data.icons;
 		var color1 = 		data.color1;
 		var color2 = 		data.color2;
 		var color3 = 		data.color3;
 		var color4 = 		data.color4;
+		var servers = 		data.servers;
 		
-		var serverDiv = BDfunctionsDevilBro.getDivOfServer(folderID);
+		var folderDiv = $(this.folderIconMarkup)[0];
+		$(folderDiv).insertBefore(BDfunctionsDevilBro.readServerList()[0]);
+			
+		var folderInner = folderDiv.querySelector(".guild-inner");
+		var folder = folderDiv.querySelector(".avatar-small");
 		
-		if (serverDiv) {
-			var folderDiv = $(this.folderIconMarkup);				
-			$(folderDiv).insertBefore(serverDiv)
-				.find(".avatar-small")
-				.css("background-image", isOpen ? "url(\"" + icons.openicon + "\")" : "url(\"" + icons.closedicon + "\")")
-				.attr("name", folderName)
-				.attr("id", "FL_ID_" + folderID)
-				.attr("class", isOpen ? "avatar-small open" : "avatar-small closed")
-				.on("click", this.changeIconAndServers.bind(this))
-				.on("contextmenu", this.createFolderContextMenu.bind(this))
-				.on("mouseenter", this.createFolderToolTip.bind(this));
-			
-			var includedServers = this.readIncludedServerList(folderDiv);
-			
-			// seems like the icons are loaded too slowly, didn't get hidden without a little delay
-			setTimeout(() => {
-				BDfunctionsDevilBro.showHideAllEles(isOpen, includedServers);
-			},1000);
-		}
+		$(folderDiv)
+			.addClass("closed")
+			.attr("id", folderID);
+		$(folderInner)
+			.on("click", () => {this.openCloseFolder(folderDiv);})
+			.on("contextmenu", (e) => {this.createFolderContextMenu(folderDiv, e);})
+			.on("mouseenter", () => {this.createFolderToolTip(folderDiv);});
+		$(folder)
+			.css("background-image", "url(\"" + icons.closedicon + "\")");
+		
+		this.updateFolderNotifications(folderDiv);
+		
+		$(this.readIncludedServerList(folderDiv)).hide();
 	}
 	
 	loadAllFolders () {
 		var folders = BDfunctionsDevilBro.loadAllData(this.getName(), "folders");
+		var sortedFolders = [];
 		
 		for (var id in folders) {
-			this.loadFolder(folders[id]);
+			var data = folders[id];
+			sortedFolders[data.position] = data;
+		}
+		
+		for (var i = 0; i < sortedFolders.length; i++) {
+			if (sortedFolders[i]) this.loadFolder(sortedFolders[i]);
 		}
 	}
+	
+	updateFolderPositions () {
+		var folders = document.querySelectorAll(".guild.folder");
+		for (var i = 0; i < folders.length; i++) {
+			var folderID = folders[i].id;
+			var data = BDfunctionsDevilBro.loadData(folderID, this.getName(), "folders");
+			if (data) {
+				data.position = i;
+				BDfunctionsDevilBro.saveData(folderID, data, this.getName(), "folders");
+			}
+		}
+	}	
 	
 	updateFolderNotifications (folderDiv) {
 		var includedServers = this.readIncludedServerList(folderDiv);
 		
 		var unreadServers = BDfunctionsDevilBro.readUnreadServerList(includedServers);
 		
-		if (unreadServers.length > 0) {
-			$(folderDiv).addClass("unread");
-		}
-		else {
-			$(folderDiv).removeClass("unread");
-		}
-		
 		var badgeAmount = 0;
 		var voiceEnabled = false;
+		
 		$(includedServers).each(  
 			(i, server) => {
 				var thisBadge = parseInt($(server).find(".badge").text());
@@ -872,32 +996,24 @@ class ServerFolders {
 				}
 			}
 		);
-		if (badgeAmount > 0) {
-			$(folderDiv).find(".folder.badge").show();
-			$(folderDiv).find(".folder.badge").text(badgeAmount);
-		}
-		else {
-			$(folderDiv).find(".folder.badge").hide();
-		}
 		
-		if (voiceEnabled) {
-			$(folderDiv).addClass("audio");
-		}
-		else {
-			$(folderDiv).removeClass("audio");
-		}	
+		$(folderDiv)
+			.toggleClass("unread", unreadServers.length > 0)
+			.toggleClass("audio", voiceEnabled);
+		$(folderDiv)
+			.find(".folder.badge.notifications")
+				.toggle(badgeAmount > 0)
+				.text(badgeAmount);	
+		$(folderDiv)
+			.find(".folder.badge.count")
+				.toggle(includedServers.length > 0)
+				.text(includedServers.length);	
+	
+	
+		if ($(folderDiv).hasClass("open") && $(".content_of_" + folderDiv.id).length == 0) this.openCloseFolder(folderDiv);
 	}
 	
-	updateAllFolderNotifications () {
-		var folders = $(".guild.folder");
-		for (var i = 0; folders.length > i; i++) {
-			this.updateFolderNotifications(folders[i]);
-		}
-	}
-	
-	clearAllReadNotifications (folder) {
-		var folderDiv = this.getParentDivOfFolder(folder);
-		
+	clearAllReadNotifications (folderDiv) {
 		$(".context-menu.folderSettings").remove();
 		$(document).unbind('mousedown', this.folderContextEventHandler);
 		
@@ -906,469 +1022,553 @@ class ServerFolders {
 		BDfunctionsDevilBro.clearReadNotifications(unreadServers);
 	}
 	
-	checkIfServerDivChanged (folderDiv) {
-		var folder = $(folderDiv).find(".avatar-small")[0];
-		var oldFolderID = $(folder).attr("id").split("FL_ID_")[1];
-		var newFolderID = BDfunctionsDevilBro.getIdOfServer($(folderDiv).next()[0]);
-		
-		if (newFolderID) {
-			if (newFolderID != oldFolderID) {
-				var data = BDfunctionsDevilBro.loadData(oldFolderID, this.getName(), "folders");
-				if (data) {
-					$(folder).attr("id","FL_ID_" + newFolderID);
-					
-					var folderID = 		newFolderID;
-					var folderName = 	data.folderName;
-					var isOpen = 		data.isOpen;
-					var iconID = 		data.iconID;
-					var icons = 		data.icons;
-					var color1 = 		data.color1;
-					var color2 = 		data.color2;
-					var color3 = 		data.color3;
-					var color4 = 		data.color4;
-					
-					BDfunctionsDevilBro.saveData(folderID, {folderID,folderName,isOpen,iconID,icons,color1,color2,color3,color4}, this.getName(), "folders");
-					BDfunctionsDevilBro.removeData(oldFolderID, this.getName(), "folders");
-				}
+	getParentDivOfServer (div) {
+		var servers = document.querySelectorAll("div.guild:not(.folder)");
+		var foundServer;
+		for (var i = 0; servers.length > i; i++) {
+			var server = servers[i];
+			if (!server.querySelector(".guilds-error") && (server.contains(div) || server == div)) {
+				foundServer = server;
+				break;
 			}
 		}
+		return foundServer;
 	}
 	
 	getParentDivOfFolder (div) {
-		var folders = $(".guild.folder");
+		var folders = document.querySelectorAll("div.guild.folder");
 		var foundFolder;
 		for (var i = 0; folders.length > i; i++) {
-			if (folders[i].contains(div)) {
-				foundFolder = folders[i];
+			var folder = folders[i];
+			if (folder.contains(div) || folder == div) {
+				foundFolder = folder;
 				break;
 			}
 		}
 		return foundFolder;
 	}
 	
-	readIncludedServerList (folderDiv) {
-		var servers = $(folderDiv).nextAll();
-		var includedServers = [];
-		for (var i = 0; servers.length > i; i++) {
-			var serverData = BDfunctionsDevilBro.getKeyInformation({"node":servers[i], "key":"guild"});
-			if (serverData) {
-				includedServers.push(servers[i]);
+	getFolderOfServer (serverDiv) {
+		var info = BDfunctionsDevilBro.getKeyInformation({"node":serverDiv, "key":"guild"});
+		if (info) {
+			var folders = BDfunctionsDevilBro.loadAllData(this.getName(), "folders");
+			for (var id in folders) {
+				var serverIDs = folders[id].servers;
+				for (var i = 0; serverIDs.length > i; i++) {
+					if (serverIDs[i] == info.id) return document.querySelector("#" + folders[id].folderID);
+				}
 			}
-			else {
-				break;
+		}
+		return null;
+	}
+	
+	readIncludedServerList (folderDiv) {
+		var data = BDfunctionsDevilBro.loadData(folderDiv.id, this.getName(), "folders");
+		var includedServers = [];
+		if (data) {
+			var serverIDs = data.servers;
+			for (var i = 0; serverIDs.length > i; i++) {
+				var includedServer = BDfunctionsDevilBro.getDivOfServer(serverIDs[i]);
+				if (includedServer) {
+					includedServers.push(includedServer);
+				}
 			}
 		}
 		return includedServers;
 	}
 	
-	changeImgColor (color1, color2, icon) {
+	changeImgColor (color1, color2, icon, callback) {
+		color1 = BDfunctionsDevilBro.color2COMP(color1);
+		color2 = BDfunctionsDevilBro.color2COMP(color2);
+		if (!color1 || !color2 || !icon) return;
 		var img = new Image();
 		img.src = icon;
-		var can = document.createElement('canvas');
-		can.width = img.width;
-		can.height = img.height;
-		var ctx = can.getContext('2d');
-		ctx.drawImage(img, 0, 0);
-		var imageData = ctx.getImageData(0, 0, img.width, img.height);
-		var data = imageData.data;
-		for (var i = 0; i < data.length; i += 4) {
-			if (data[i] == 0 && data[i + 1] == 0 && data[i + 2] == 0) {
-				data[i] = color1[0];
-				data[i + 1] = color1[1];
-				data[i + 2] = color1[2];
+		img.onload = () => {
+			var can = document.createElement("canvas");
+			can.width = img.width;
+			can.height = img.height;
+			var ctx = can.getContext("2d");
+			ctx.drawImage(img, 0, 0);
+			var imageData = ctx.getImageData(0, 0, img.width, img.height);
+			var data = imageData.data;
+			for (var i = 0; i < data.length; i += 4) {
+				if (data[i] == 0 && data[i + 1] == 0 && data[i + 2] == 0) {
+					data[i] = color1[0];
+					data[i + 1] = color1[1];
+					data[i + 2] = color1[2];
+				}
+				else if (data[i] == 255 && data[i + 1] == 255 && data[i + 2] == 255) {
+					data[i] = color2[0];
+					data[i + 1] = color2[1];
+					data[i + 2] = color2[2];
+				}
+				ctx.putImageData(imageData, 0, 0);
 			}
-			else if (data[i] == 255 && data[i + 1] == 255 && data[i + 2] == 255) {
-				data[i] = color2[0];
-				data[i + 1] = color2[1];
-				data[i + 2] = color2[2];
-			}
-			// overwrite original image
-			ctx.putImageData(imageData, 0, 0);
-		}
-		return can.toDataURL("image/png");
+			callback(can.toDataURL("image/png"));
+		};
 	}
 	
 	setLabelsByLanguage () {
 		switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
 			case "da": 		//danish
 				return {
-					servercontext_createfolder_text: 	"Opret mappe",
-					foldercontext_unreadfolder_text:	"Markér alle som læst",
-					foldercontext_foldersettings_text: 	"Mappeindstillinger",
-					foldercontext_removefolder_text:	"Slet mappe",
-					modal_header_text:					"Mappindstillinger",
-					modal_foldername_text:				"Mappenavn",
-					modal_tabheader1_text:				"Mappe",
-					modal_tabheader2_text:				"Mappefarve",
-					modal_tabheader3_text:				"Tooltipfarve",
-					modal_iconpicker_text:				"Mappevalg",
-					modal_colorpicker1_text:			"Primær mappefarve",
-					modal_colorpicker2_text:			"Sekundær mappefarve",
-					modal_colorpicker3_text:			"Tooltipfarve",
-					modal_colorpicker4_text:			"Skriftfarve",
-					btn_cancel_text:					"Afbryde",
-					btn_save_text:						"Spare"
+					toast_addserver_text:					"${servername} er blevet tilføjet til mappe${foldername}.",
+					toast_removeserver_text:				"${servername} er blevet fjernet fra mappen${foldername}.",
+					servercontext_serverfolders_text: 		"Servermapper",
+					serversubmenu_createfolder_text: 		"Opret mappe",
+					serversubmenu_removefromfolder_text: 	"Fjern server fra mappe",
+					foldercontext_unreadfolder_text:		"Markér alle som læst",
+					foldercontext_foldersettings_text: 		"Mappeindstillinger",
+					foldercontext_removefolder_text:		"Slet mappe",
+					modal_header_text:						"Mappindstillinger",
+					modal_foldername_text:					"Mappenavn",
+					modal_tabheader1_text:					"Mappe",
+					modal_tabheader2_text:					"Mappefarve",
+					modal_tabheader3_text:					"Tooltipfarve",
+					modal_iconpicker_text:					"Mappevalg",
+					modal_colorpicker1_text:				"Primær mappefarve",
+					modal_colorpicker2_text:				"Sekundær mappefarve",
+					modal_colorpicker3_text:				"Tooltipfarve",
+					modal_colorpicker4_text:				"Skriftfarve",
+					btn_cancel_text:						"Afbryde",
+					btn_save_text:							"Spare"
 				};
 			case "de": 		//german
 				return {
-					servercontext_createfolder_text: 	"Erzeuge Ordner",
-					foldercontext_unreadfolder_text:	"Alle als gelesen markieren",
-					foldercontext_foldersettings_text: 	"Ordnereinstellungen",
-					foldercontext_removefolder_text:	"Lösche Ordner",
-					modal_header_text:					"Ordnereinstellungen",
-					modal_foldername_text:				"Ordnername",
-					modal_tabheader1_text:				"Ordner",
-					modal_tabheader2_text:				"Ordnerfarbe",
-					modal_tabheader3_text:				"Tooltipfarbe",
-					modal_iconpicker_text:				"Ordnerauswahl",
-					modal_colorpicker1_text:			"Primäre Ordnerfarbe",
-					modal_colorpicker2_text:			"Sekundäre Ordnerfarbe",
-					modal_colorpicker3_text:			"Tooltipfarbe",
-					modal_colorpicker4_text:			"Schriftfarbe",
-					btn_cancel_text:					"Abbrechen",
-					btn_save_text:						"Speichern"
+					toast_addserver_text:					"${servername} wurde dem Ordner${foldername} hinzugefügt.",
+					toast_removeserver_text:				"${servername} wurde aus dem Orderner${foldername} entfernt.",
+					servercontext_serverfolders_text: 		"Serverordner",
+					serversubmenu_createfolder_text: 		"Erzeuge Ordner",
+					serversubmenu_removefromfolder_text: 	"Entferne Server aus Ordner",
+					foldercontext_unreadfolder_text:		"Alle als gelesen markieren",
+					foldercontext_foldersettings_text: 		"Ordnereinstellungen",
+					foldercontext_removefolder_text:		"Lösche Ordner",
+					modal_header_text:						"Ordnereinstellungen",
+					modal_foldername_text:					"Ordnername",
+					modal_tabheader1_text:					"Ordner",
+					modal_tabheader2_text:					"Ordnerfarbe",
+					modal_tabheader3_text:					"Tooltipfarbe",
+					modal_iconpicker_text:					"Ordnerauswahl",
+					modal_colorpicker1_text:				"Primäre Ordnerfarbe",
+					modal_colorpicker2_text:				"Sekundäre Ordnerfarbe",
+					modal_colorpicker3_text:				"Tooltipfarbe",
+					modal_colorpicker4_text:				"Schriftfarbe",
+					btn_cancel_text:						"Abbrechen",
+					btn_save_text:							"Speichern"
 				};
 			case "es": 		//spanish
 				return {
-					servercontext_createfolder_text: 	"Crear carpeta",
-					foldercontext_unreadfolder_text:	"Marcar todo como leido",
-					foldercontext_foldersettings_text: 	"Ajustes de carpeta",
-					foldercontext_removefolder_text:	"Eliminar carpeta",
-					modal_header_text:					"Ajustes de carpeta",
-					modal_foldername_text:				"Nombre de la carpeta",
-					modal_tabheader1_text:				"Carpeta",
-					modal_tabheader2_text:				"Color de carpeta",
-					modal_tabheader3_text:				"Color de tooltip",
-					modal_iconpicker_text:				"Selección de carpeta",
-					modal_colorpicker1_text:			"Color primaria de carpeta",
-					modal_colorpicker2_text:			"Color secundario de la carpeta",
-					modal_colorpicker3_text:			"Color de tooltip",
-					modal_colorpicker4_text:			"Color de fuente",
-					btn_cancel_text:					"Cancelar",
-					btn_save_text:						"Guardar"
+					toast_addserver_text:					"${servername} ha sido agregado a la carpeta${foldername}.",
+					toast_removeserver_text:				"${servername} ha sido eliminado de la carpeta${foldername}.",
+					servercontext_serverfolders_text: 		"Carpetas de servidor",
+					serversubmenu_createfolder_text: 		"Crear carpeta",
+					serversubmenu_removefromfolder_text: 	"Eliminar servidor de la carpeta",
+					foldercontext_unreadfolder_text:		"Marcar todo como leido",
+					foldercontext_foldersettings_text: 		"Ajustes de carpeta",
+					foldercontext_removefolder_text:		"Eliminar carpeta",
+					modal_header_text:						"Ajustes de carpeta",
+					modal_foldername_text:					"Nombre de la carpeta",
+					modal_tabheader1_text:					"Carpeta",
+					modal_tabheader2_text:					"Color de carpeta",
+					modal_tabheader3_text:					"Color de tooltip",
+					modal_iconpicker_text:					"Selección de carpeta",
+					modal_colorpicker1_text:				"Color primaria de carpeta",
+					modal_colorpicker2_text:				"Color secundario de la carpeta",
+					modal_colorpicker3_text:				"Color de tooltip",
+					modal_colorpicker4_text:				"Color de fuente",
+					btn_cancel_text:						"Cancelar",
+					btn_save_text:							"Guardar"
 				};
 			case "fr": 		//french
 				return {
-					servercontext_createfolder_text: 	"Créer le dossier",
-					foldercontext_unreadfolder_text:	"Tout marquer comme lu",
-					foldercontext_foldersettings_text: 	"Paramètres du dossier",
-					foldercontext_removefolder_text:	"Supprimer le dossier",
-					modal_header_text:					"Paramètres du dossier",
-					modal_foldername_text:				"Nom de dossier",
-					modal_tabheader1_text:				"Dossier",
-					modal_tabheader2_text:				"Couleur du dossier",
-					modal_tabheader3_text:				"Couleur de tooltip",
-					modal_iconpicker_text:				"Choix du dossier",
-					modal_colorpicker1_text:			"Couleur primaire du dossier",
-					modal_colorpicker2_text:			"Couleur secondaire du dossier",
-					modal_colorpicker3_text:			"Couleur de tooltip",
-					modal_colorpicker4_text:			"Couleur de la police",
-					btn_cancel_text:					"Abandonner",
-					btn_save_text:						"Enregistrer"
+					toast_addserver_text:					"${servername} a été ajouté au dossier${foldername}.",
+					toast_removeserver_text:				"${servername} a été supprimé du dossier${foldername}.",
+					servercontext_serverfolders_text: 		"Dossiers du serveur",
+					serversubmenu_createfolder_text: 		"Créer le dossier",
+					serversubmenu_removefromfolder_text: 	"Supprimer le serveur du dossier",
+					foldercontext_unreadfolder_text:		"Tout marquer comme lu",
+					foldercontext_foldersettings_text: 		"Paramètres du dossier",
+					foldercontext_removefolder_text:		"Supprimer le dossier",
+					modal_header_text:						"Paramètres du dossier",
+					modal_foldername_text:					"Nom de dossier",
+					modal_tabheader1_text:					"Dossier",
+					modal_tabheader2_text:					"Couleur du dossier",
+					modal_tabheader3_text:					"Couleur de tooltip",
+					modal_iconpicker_text:					"Choix du dossier",
+					modal_colorpicker1_text:				"Couleur primaire du dossier",
+					modal_colorpicker2_text:				"Couleur secondaire du dossier",
+					modal_colorpicker3_text:				"Couleur de tooltip",
+					modal_colorpicker4_text:				"Couleur de la police",
+					btn_cancel_text:						"Abandonner",
+					btn_save_text:							"Enregistrer"
 				};
 			case "it": 		//italian
 				return {
-					servercontext_createfolder_text: 	"Creare una cartella",
-					foldercontext_unreadfolder_text:	"Segna tutti come letti",
-					foldercontext_foldersettings_text: 	"Impostazioni cartella",
-					foldercontext_removefolder_text:	"Elimina cartella",
-					modal_header_text:					"Impostazioni cartella",
-					modal_foldername_text:				"Nome della cartella",
-					modal_tabheader1_text:				"Cartella",
-					modal_tabheader2_text:				"Colore della cartella",
-					modal_tabheader3_text:				"Colore della tooltip",
-					modal_iconpicker_text:				"Selezione della cartella",
-					modal_colorpicker1_text:			"Colore primaria della cartella",
-					modal_colorpicker2_text:			"Colore secondaria della cartella",
-					modal_colorpicker3_text:			"Colore della tooltip",
-					modal_colorpicker4_text:			"Colore del carattere",
-					btn_cancel_text:					"Cancellare",
-					btn_save_text:						"Salvare"
+					toast_addserver_text:					"${servername} è stato aggiunto alla cartella${foldername}.",
+					toast_removeserver_text:				"${servername} è stato rimosso dalla cartella${foldername}.",
+					servercontext_serverfolders_text: 		"Cartelle del server",
+					serversubmenu_createfolder_text: 		"Creare una cartella",
+					serversubmenu_removefromfolder_text: 	"Rimuovere il server dalla cartella",
+					foldercontext_unreadfolder_text:		"Segna tutti come letti",
+					foldercontext_foldersettings_text: 		"Impostazioni cartella",
+					foldercontext_removefolder_text:		"Elimina cartella",
+					modal_header_text:						"Impostazioni cartella",
+					modal_foldername_text:					"Nome della cartella",
+					modal_tabheader1_text:					"Cartella",
+					modal_tabheader2_text:					"Colore della cartella",
+					modal_tabheader3_text:					"Colore della tooltip",
+					modal_iconpicker_text:					"Selezione della cartella",
+					modal_colorpicker1_text:				"Colore primaria della cartella",
+					modal_colorpicker2_text:				"Colore secondaria della cartella",
+					modal_colorpicker3_text:				"Colore della tooltip",
+					modal_colorpicker4_text:				"Colore del carattere",
+					btn_cancel_text:						"Cancellare",
+					btn_save_text:							"Salvare"
 				};
 			case "nl":		//dutch
 				return {
-					servercontext_createfolder_text: 	"Map aanmaken",
-					foldercontext_unreadfolder_text:	"Alles als gelezen markeren",
-					foldercontext_foldersettings_text: 	"Mapinstellingen",
-					foldercontext_removefolder_text:	"Verwijder map",
-					modal_header_text:					"Mapinstellingen",
-					modal_foldername_text:				"Mapnaam",
-					modal_tabheader1_text:				"Map",
-					modal_tabheader2_text:				"Map kleur",
-					modal_tabheader3_text:				"Tooltip kleur",
-					modal_iconpicker_text:				"Map keuze",
-					modal_colorpicker1_text:			"Primaire map kleur",
-					modal_colorpicker2_text:			"Tweede map kleur",
-					modal_colorpicker3_text:			"Tooltip kleur",
-					modal_colorpicker4_text:			"Doopvont kleur",
-					btn_cancel_text:					"Afbreken",
-					btn_save_text:						"Opslaan"
+					toast_addserver_text:					"${servername} is toegevoegd aan de map${foldername}.",
+					toast_removeserver_text:				"${servername} is verwijderd uit de map${foldername}.",
+					servercontext_serverfolders_text: 		"Servermappen",
+					serversubmenu_createfolder_text: 		"Map aanmaken",
+					serversubmenu_removefromfolder_text: 	"Server uit map verwijderen",
+					foldercontext_unreadfolder_text:		"Alles als gelezen markeren",
+					foldercontext_foldersettings_text: 		"Mapinstellingen",
+					foldercontext_removefolder_text:		"Verwijder map",
+					modal_header_text:						"Mapinstellingen",
+					modal_foldername_text:					"Mapnaam",
+					modal_tabheader1_text:					"Map",
+					modal_tabheader2_text:					"Map kleur",
+					modal_tabheader3_text:					"Tooltip kleur",
+					modal_iconpicker_text:					"Map keuze",
+					modal_colorpicker1_text:				"Primaire map kleur",
+					modal_colorpicker2_text:				"Tweede map kleur",
+					modal_colorpicker3_text:				"Tooltip kleur",
+					modal_colorpicker4_text:				"Doopvont kleur",
+					btn_cancel_text:						"Afbreken",
+					btn_save_text:							"Opslaan"
 				};
 			case "no":		//norwegian
 				return {
-					servercontext_createfolder_text: 	"Lag mappe",
-					foldercontext_unreadfolder_text:	"Marker alle som lest",
-					foldercontext_foldersettings_text: 	"Mappinnstillinger",
-					foldercontext_removefolder_text:	"Slett mappe",
-					modal_header_text:					"Mappinnstillinger",
-					modal_foldername_text:				"Mappenavn",
-					modal_tabheader1_text:				"Mappe",
-					modal_tabheader2_text:				"Mappefarge",
-					modal_tabheader3_text:				"Tooltipfarge",
-					modal_iconpicker_text:				"Mappevalg",
-					modal_colorpicker1_text:			"Primær mappefarge",
-					modal_colorpicker2_text:			"Sekundær mappefarge",
-					modal_colorpicker3_text:			"Tooltipfarge",
-					modal_colorpicker4_text:			"Skriftfarge",
-					btn_cancel_text:					"Avbryte",
-					btn_save_text:						"Lagre"
+					toast_addserver_text:					"${servername} er lagt til i mappe${foldername}.",
+					toast_removeserver_text:				"${servername} er fjernet fra mappen${foldername}.",
+					servercontext_serverfolders_text: 		"Servermapper",
+					serversubmenu_createfolder_text: 		"Lag mappe",
+					serversubmenu_removefromfolder_text: 	"Fjern server fra mappe",
+					foldercontext_unreadfolder_text:		"Marker alle som lest",
+					foldercontext_foldersettings_text: 		"Mappinnstillinger",
+					foldercontext_removefolder_text:		"Slett mappe",
+					modal_header_text:						"Mappinnstillinger",
+					modal_foldername_text:					"Mappenavn",
+					modal_tabheader1_text:					"Mappe",
+					modal_tabheader2_text:					"Mappefarge",
+					modal_tabheader3_text:					"Tooltipfarge",
+					modal_iconpicker_text:					"Mappevalg",
+					modal_colorpicker1_text:				"Primær mappefarge",
+					modal_colorpicker2_text:				"Sekundær mappefarge",
+					modal_colorpicker3_text:				"Tooltipfarge",
+					modal_colorpicker4_text:				"Skriftfarge",
+					btn_cancel_text:						"Avbryte",
+					btn_save_text:							"Lagre"
 				};
 			case "pl":		//polish
 				return {
-					servercontext_createfolder_text: 	"Utwórz folder",
-					foldercontext_unreadfolder_text:	"Oznacz wszystkie jako przeczytane",
-					foldercontext_foldersettings_text: 	"Ustawienia folderu",
-					foldercontext_removefolder_text:	"Usuń folder",
-					modal_header_text:					"Ustawienia folderu",
-					modal_foldername_text:				"Nazwa folderu",
-					modal_tabheader1_text:				"Folder",
-					modal_tabheader2_text:				"Kolor folderu",
-					modal_tabheader3_text:				"Kolor tooltip",
-					modal_iconpicker_text:				"Wybór folderu",
-					modal_colorpicker1_text:			"Podstawowy kolor folderu",
-					modal_colorpicker2_text:			"Drugorzędny kolor folderu",
-					modal_colorpicker3_text:			"Kolor tooltip",
-					modal_colorpicker4_text:			"Kolor czcionki",
-					btn_cancel_text:					"Anuluj",
-					btn_save_text:						"Zapisz"
+					toast_addserver_text:					"${servername} zostało dodane do folderu${foldername}.",
+					toast_removeserver_text:				"${servername} został usunięty z folderu${foldername}.",
+					servercontext_serverfolders_text: 		"Foldery serwera",
+					serversubmenu_createfolder_text: 		"Utwórz folder",
+					serversubmenu_removefromfolder_text: 	"Usuń serwer z folderu",
+					foldercontext_unreadfolder_text:		"Oznacz wszystkie jako przeczytane",
+					foldercontext_foldersettings_text: 		"Ustawienia folderu",
+					foldercontext_removefolder_text:		"Usuń folder",
+					modal_header_text:						"Ustawienia folderu",
+					modal_foldername_text:					"Nazwa folderu",
+					modal_tabheader1_text:					"Folder",
+					modal_tabheader2_text:					"Kolor folderu",
+					modal_tabheader3_text:					"Kolor tooltip",
+					modal_iconpicker_text:					"Wybór folderu",
+					modal_colorpicker1_text:				"Podstawowy kolor folderu",
+					modal_colorpicker2_text:				"Drugorzędny kolor folderu",
+					modal_colorpicker3_text:				"Kolor tooltip",
+					modal_colorpicker4_text:				"Kolor czcionki",
+					btn_cancel_text:						"Anuluj",
+					btn_save_text:							"Zapisz"
 				};
 			case "pt":		//portuguese (brazil)
 				return {
-					servercontext_createfolder_text: 	"Criar pasta",
-					foldercontext_unreadfolder_text:	"Marcar tudo como lido",
-					foldercontext_foldersettings_text: 	"Configurações da pasta",
-					foldercontext_removefolder_text:	"Excluir pasta",
-					modal_header_text:					"Configurações da pasta",
-					modal_foldername_text:				"Nome da pasta",
-					modal_tabheader1_text:				"Pasta",
-					modal_tabheader2_text:				"Cor da pasta",
-					modal_tabheader3_text:				"Cor da tooltip",
-					modal_iconpicker_text:				"Escolha da pasta",
-					modal_colorpicker1_text:			"Cor primária da pasta",
-					modal_colorpicker2_text:			"Cor secundária da pasta",
-					modal_colorpicker3_text:			"Cor da tooltip",
-					modal_colorpicker4_text:			"Cor da fonte",
-					btn_cancel_text:					"Cancelar",
-					btn_save_text:						"Salvar"
+					toast_addserver_text:					"${servername} foi adicionado à pasta${foldername}.",
+					toast_removeserver_text:				"${servername} foi removido da pasta${foldername}.",
+					servercontext_serverfolders_text: 		"Pastas de servidores",
+					serversubmenu_createfolder_text: 		"Criar pasta",
+					serversubmenu_removefromfolder_text: 	"Remover servidor da pasta",
+					foldercontext_unreadfolder_text:		"Marcar tudo como lido",
+					foldercontext_foldersettings_text: 		"Configurações da pasta",
+					foldercontext_removefolder_text:		"Excluir pasta",
+					modal_header_text:						"Configurações da pasta",
+					modal_foldername_text:					"Nome da pasta",
+					modal_tabheader1_text:					"Pasta",
+					modal_tabheader2_text:					"Cor da pasta",
+					modal_tabheader3_text:					"Cor da tooltip",
+					modal_iconpicker_text:					"Escolha da pasta",
+					modal_colorpicker1_text:				"Cor primária da pasta",
+					modal_colorpicker2_text:				"Cor secundária da pasta",
+					modal_colorpicker3_text:				"Cor da tooltip",
+					modal_colorpicker4_text:				"Cor da fonte",
+					btn_cancel_text:						"Cancelar",
+					btn_save_text:							"Salvar"
 				};
 			case "fi":		//finnish
 				return {
-					servercontext_createfolder_text: 	"Luo kansio",
-					foldercontext_unreadfolder_text:	"Merkitse kaikki luetuksi",
-					foldercontext_foldersettings_text: 	"Kansion kansio",
-					foldercontext_removefolder_text:	"Poista kansio",
-					modal_header_text:					"Kansion kansio",
-					modal_foldername_text:				"Kansion nimi",
-					modal_tabheader1_text:				"Kansio",
-					modal_tabheader2_text:				"Kansion väri",
-					modal_tabheader3_text:				"Tooltip väri",
-					modal_iconpicker_text:				"Kansion valinta",
-					modal_colorpicker1_text:			"Ensisijainen kansion väri",
-					modal_colorpicker2_text:			"Toissijainen kansion väri",
-					modal_colorpicker3_text:			"Tooltip väri",
-					modal_colorpicker4_text:			"Fontin väri",
-					btn_cancel_text:					"Peruuttaa",
-					btn_save_text:						"Tallentaa"
+					toast_addserver_text:					"${servername} on lisätty kansioon${foldername}.",
+					toast_removeserver_text:				"${servername} on poistettu kansioon${foldername}.",
+					servercontext_serverfolders_text: 		"Palvelinkansiot",
+					serversubmenu_createfolder_text: 		"Luo kansio",
+					serversubmenu_removefromfolder_text: 	"Poista palvelin kansioista",
+					foldercontext_unreadfolder_text:		"Merkitse kaikki luetuksi",
+					foldercontext_foldersettings_text: 		"Kansion kansio",
+					foldercontext_removefolder_text:		"Poista kansio",
+					modal_header_text:						"Kansion kansio",
+					modal_foldername_text:					"Kansion nimi",
+					modal_tabheader1_text:					"Kansio",
+					modal_tabheader2_text:					"Kansion väri",
+					modal_tabheader3_text:					"Tooltip väri",
+					modal_iconpicker_text:					"Kansion valinta",
+					modal_colorpicker1_text:				"Ensisijainen kansion väri",
+					modal_colorpicker2_text:				"Toissijainen kansion väri",
+					modal_colorpicker3_text:				"Tooltip väri",
+					modal_colorpicker4_text:				"Fontin väri",
+					btn_cancel_text:						"Peruuttaa",
+					btn_save_text:							"Tallentaa"
 				};
 			case "sv":		//swedish
 				return {
-					servercontext_createfolder_text: 	"Skapa mapp",
-					foldercontext_unreadfolder_text:	"Markera allt som läst",
-					foldercontext_foldersettings_text: 	"Mappinställningar",
-					foldercontext_removefolder_text:	"Ta bort mapp",
-					modal_header_text:					"Mappinställningar",
-					modal_foldername_text:				"Mappnamn",
-					modal_tabheader1_text:				"Mapp",
-					modal_tabheader2_text:				"Mappfärg",
-					modal_tabheader3_text:				"Tooltipfärg",
-					modal_iconpicker_text:				"Mappval",
-					modal_colorpicker1_text:			"Primär mappfärg",
-					modal_colorpicker2_text:			"Sekundär mappfärg",
-					modal_colorpicker3_text:			"Tooltipfärg",
-					modal_colorpicker4_text:			"Fontfärg",
-					btn_cancel_text:					"Avbryta",
-					btn_save_text:						"Spara"
+					toast_addserver_text:					"${servername} har lagts till i mapp${foldername}.",
+					toast_removeserver_text:				"${servername} har tagits bort från mappen${foldername}.",
+					servercontext_serverfolders_text: 		"Servermappar",
+					serversubmenu_createfolder_text: 		"Skapa mapp",
+					serversubmenu_removefromfolder_text: 	"Ta bort servern från mappen",
+					foldercontext_unreadfolder_text:		"Markera allt som läst",
+					foldercontext_foldersettings_text: 		"Mappinställningar",
+					foldercontext_removefolder_text:		"Ta bort mapp",
+					modal_header_text:						"Mappinställningar",
+					modal_foldername_text:					"Mappnamn",
+					modal_tabheader1_text:					"Mapp",
+					modal_tabheader2_text:					"Mappfärg",
+					modal_tabheader3_text:					"Tooltipfärg",
+					modal_iconpicker_text:					"Mappval",
+					modal_colorpicker1_text:				"Primär mappfärg",
+					modal_colorpicker2_text:				"Sekundär mappfärg",
+					modal_colorpicker3_text:				"Tooltipfärg",
+					modal_colorpicker4_text:				"Fontfärg",
+					btn_cancel_text:						"Avbryta",
+					btn_save_text:							"Spara"
 				};
 			case "tr":		//turkish
 				return {
-					servercontext_createfolder_text: 	"Klasör oluşturun",
-					foldercontext_unreadfolder_text:	"Tümünü Oku olarak işaretle",
-					foldercontext_foldersettings_text: 	"Klasör Ayarları",
-					foldercontext_removefolder_text:	"Klasörü sil",
-					modal_header_text:					"Klasör Ayarları",
-					modal_foldername_text:				"Klasör adı",
-					modal_tabheader1_text:				"Klasör",
-					modal_tabheader2_text:				"Klasör rengi",
-					modal_tabheader3_text:				"Tooltip rengi",
-					modal_iconpicker_text:				"Klasör seçimi",
-					modal_colorpicker1_text:			"Birincil klasör rengi",
-					modal_colorpicker2_text:			"İkincil klasör rengi",
-					modal_colorpicker3_text:			"Tooltip rengi",
-					modal_colorpicker4_text:			"Yazı rengi",
-					btn_cancel_text:					"Iptal",
-					btn_save_text:						"Kayıt"
+					toast_addserver_text:					"${servername} klasörü${foldername} eklendi.",
+					toast_removeserver_text:				"${servername} klasörü${foldername} kaldırıldı",
+					servercontext_serverfolders_text: 		"Sunucu klasörleri",
+					serversubmenu_createfolder_text: 		"Klasör oluşturun",
+					serversubmenu_removefromfolder_text: 	"Sunucuyu klasörden kaldır",
+					foldercontext_unreadfolder_text:		"Tümünü Oku olarak işaretle",
+					foldercontext_foldersettings_text: 		"Klasör Ayarları",
+					foldercontext_removefolder_text:		"Klasörü sil",
+					modal_header_text:						"Klasör Ayarları",
+					modal_foldername_text:					"Klasör adı",
+					modal_tabheader1_text:					"Klasör",
+					modal_tabheader2_text:					"Klasör rengi",
+					modal_tabheader3_text:					"Tooltip rengi",
+					modal_iconpicker_text:					"Klasör seçimi",
+					modal_colorpicker1_text:				"Birincil klasör rengi",
+					modal_colorpicker2_text:				"İkincil klasör rengi",
+					modal_colorpicker3_text:				"Tooltip rengi",
+					modal_colorpicker4_text:				"Yazı rengi",
+					btn_cancel_text:						"Iptal",
+					btn_save_text:							"Kayıt"
 				};
 			case "cs":		//czech
 				return {
-					servercontext_createfolder_text: 	"Vytvořit složky",
-					foldercontext_unreadfolder_text:	"Označit vše jako přečtené",
-					foldercontext_foldersettings_text: 	"Nastavení složky",
-					foldercontext_removefolder_text:	"Smazat složky",
-					modal_header_text:					"Nastavení složky",
-					modal_foldername_text:				"Název složky",
-					modal_tabheader1_text:				"Složky",
-					modal_tabheader2_text:				"Barva složky",
-					modal_tabheader3_text:				"Barva tooltip",
-					modal_iconpicker_text:				"Volba složky",
-					modal_colorpicker1_text:			"Primární barva složky",
-					modal_colorpicker2_text:			"Sekundární barva složky",
-					modal_colorpicker3_text:			"Barva tooltip",
-					modal_colorpicker4_text:			"Barva fontu",
-					btn_cancel_text:					"Zrušení",
-					btn_save_text:						"Uložit"
+					toast_addserver_text:					"${servername} byl přidán do složky${foldername}.",
+					toast_removeserver_text:				"${servername} byl odstraněn ze složky${foldername}.",
+					servercontext_serverfolders_text: 		"Složky serveru",
+					serversubmenu_createfolder_text: 		"Vytvořit složky",
+					serversubmenu_removefromfolder_text: 	"Odstranit server ze složky",
+					foldercontext_unreadfolder_text:		"Označit vše jako přečtené",
+					foldercontext_foldersettings_text: 		"Nastavení složky",
+					foldercontext_removefolder_text:		"Smazat složky",
+					modal_header_text:						"Nastavení složky",
+					modal_foldername_text:					"Název složky",
+					modal_tabheader1_text:					"Složky",
+					modal_tabheader2_text:					"Barva složky",
+					modal_tabheader3_text:					"Barva tooltip",
+					modal_iconpicker_text:					"Volba složky",
+					modal_colorpicker1_text:				"Primární barva složky",
+					modal_colorpicker2_text:				"Sekundární barva složky",
+					modal_colorpicker3_text:				"Barva tooltip",
+					modal_colorpicker4_text:				"Barva fontu",
+					btn_cancel_text:						"Zrušení",
+					btn_save_text:							"Uložit"
 				};
 			case "bg":		//bulgarian
 				return {
-					servercontext_createfolder_text: 	"Създай папка",
-					foldercontext_unreadfolder_text:	"Маркирай всички като прочетени",
-					foldercontext_foldersettings_text: 	"Настройки папка",
-					foldercontext_removefolder_text:	"Изтриване на папка",
-					modal_header_text:					"Настройки папка",
-					modal_foldername_text:				"Име на папка",
-					modal_tabheader1_text:				"Папка",
-					modal_tabheader2_text:				"Цвят на папка",
-					modal_tabheader3_text:				"Цвят на подсказка",
-					modal_iconpicker_text:				"Избор на папки",
-					modal_colorpicker1_text:			"Цвят основнен на папка",
-					modal_colorpicker2_text:			"цвят вторичен на папка",
-					modal_colorpicker3_text:			"Цвят на подсказка",
-					modal_colorpicker4_text:			"Цвят на шрифта",
-					btn_cancel_text:					"Зъбести",
-					btn_save_text:						"Cпасяване"
+					toast_addserver_text:					"${servername} е добавен към папката${foldername}.",
+					toast_removeserver_text:				"${servername} е премахнат от папката${foldername}.",
+					servercontext_serverfolders_text: 		"Сървърни папки",
+					serversubmenu_createfolder_text: 		"Създай папка",
+					serversubmenu_removefromfolder_text: 	"Премахване на сървър от папка",
+					foldercontext_unreadfolder_text:		"Маркирай всички като прочетени",
+					foldercontext_foldersettings_text: 		"Настройки папка",
+					foldercontext_removefolder_text:		"Изтриване на папка",
+					modal_header_text:						"Настройки папка",
+					modal_foldername_text:					"Име на папка",
+					modal_tabheader1_text:					"Папка",
+					modal_tabheader2_text:					"Цвят на папка",
+					modal_tabheader3_text:					"Цвят на подсказка",
+					modal_iconpicker_text:					"Избор на папки",
+					modal_colorpicker1_text:				"Цвят основнен на папка",
+					modal_colorpicker2_text:				"цвят вторичен на папка",
+					modal_colorpicker3_text:				"Цвят на подсказка",
+					modal_colorpicker4_text:				"Цвят на шрифта",
+					btn_cancel_text:						"Зъбести",
+					btn_save_text:							"Cпасяване"
 				};
 			case "ru":		//russian
 				return {
-					servercontext_createfolder_text: 	"Создать папки",
-					foldercontext_unreadfolder_text:	"Отметить все как прочитанное",
-					foldercontext_foldersettings_text: 	"Настройки папки",
-					foldercontext_removefolder_text:	"Удалить папки",
-					modal_header_text:					"Настройки папки",
-					modal_foldername_text:				"Имя папки",
-					modal_tabheader1_text:				"Папка",
-					modal_tabheader2_text:				"Цвет папки",
-					modal_tabheader3_text:				"Цвет подсказка",
-					modal_iconpicker_text:				"Выбор папки",
-					modal_colorpicker1_text:			"Цвет основной папки",
-					modal_colorpicker2_text:			"Цвет вторичной папки",
-					modal_colorpicker3_text:			"Цвет подсказка",
-					modal_colorpicker4_text:			"Цвет шрифта",
-					btn_cancel_text:					"Отмена",
-					btn_save_text:						"Cпасти"
+					toast_addserver_text:					"${servername} добавлен в папку${foldername}.",
+					toast_removeserver_text:				"${servername} был удален из папки${foldername}.",
+					servercontext_serverfolders_text: 		"Папки сервера",
+					serversubmenu_createfolder_text: 		"Создать папки",
+					serversubmenu_removefromfolder_text: 	"Удаление сервера из папки",
+					foldercontext_unreadfolder_text:		"Отметить все как прочитанное",
+					foldercontext_foldersettings_text: 		"Настройки папки",
+					foldercontext_removefolder_text:		"Удалить папки",
+					modal_header_text:						"Настройки папки",
+					modal_foldername_text:					"Имя папки",
+					modal_tabheader1_text:					"Папка",
+					modal_tabheader2_text:					"Цвет папки",
+					modal_tabheader3_text:					"Цвет подсказка",
+					modal_iconpicker_text:					"Выбор папки",
+					modal_colorpicker1_text:				"Цвет основной папки",
+					modal_colorpicker2_text:				"Цвет вторичной папки",
+					modal_colorpicker3_text:				"Цвет подсказка",
+					modal_colorpicker4_text:				"Цвет шрифта",
+					btn_cancel_text:						"Отмена",
+					btn_save_text:							"Cпасти"
 				};
 			case "uk":		//ukranian
 				return {
-					servercontext_createfolder_text: 	"Створити папки",
-					foldercontext_unreadfolder_text:	"Позначити як прочитане",
-					foldercontext_foldersettings_text: 	"Параметри папки",
-					foldercontext_removefolder_text:	"Видалити папки",
-					modal_header_text:					"Параметри папки",
-					modal_foldername_text:				"Ім'я папки",
-					modal_tabheader1_text:				"Папки",
-					modal_tabheader2_text:				"Колір папки",
-					modal_tabheader3_text:				"Колір підказка",
-					modal_iconpicker_text:				"Вибір папки",
-					modal_colorpicker1_text:			"Колір основної папки",
-					modal_colorpicker2_text:			"Колір вторинного папки",
-					modal_colorpicker3_text:			"Колір підказка",
-					modal_colorpicker4_text:			"Колір шрифту",
-					btn_cancel_text:					"Скасувати",
-					btn_save_text:						"Зберегти"
+					toast_addserver_text:					"${servername} було додано до папки${foldername}.",
+					toast_removeserver_text:				"${servername} був вилучений з папки${foldername}.",
+					servercontext_serverfolders_text: 		"Папки сервера",
+					serversubmenu_createfolder_text: 		"Створити папки",
+					serversubmenu_removefromfolder_text: 	"Видалити сервер із папки",
+					foldercontext_unreadfolder_text:		"Позначити як прочитане",
+					foldercontext_foldersettings_text: 		"Параметри папки",
+					foldercontext_removefolder_text:		"Видалити папки",
+					modal_header_text:						"Параметри папки",
+					modal_foldername_text:					"Ім'я папки",
+					modal_tabheader1_text:					"Папки",
+					modal_tabheader2_text:					"Колір папки",
+					modal_tabheader3_text:					"Колір підказка",
+					modal_iconpicker_text:					"Вибір папки",
+					modal_colorpicker1_text:				"Колір основної папки",
+					modal_colorpicker2_text:				"Колір вторинного папки",
+					modal_colorpicker3_text:				"Колір підказка",
+					modal_colorpicker4_text:				"Колір шрифту",
+					btn_cancel_text:						"Скасувати",
+					btn_save_text:							"Зберегти"
 				};
 			case "ja":		//japanese
 				return {
-					servercontext_createfolder_text: 	"フォルダーを作る",
-					foldercontext_unreadfolder_text:	"すべてを読むようにマークする",
-					foldercontext_foldersettings_text: 	"フォルダ設定",
-					foldercontext_removefolder_text:	"フォルダを削除する",
-					modal_header_text:					"フォルダ設定",
-					modal_foldername_text:				"フォルダ名",
-					modal_tabheader1_text:				"フォルダ",
-					modal_tabheader2_text:				"フォルダの色",
-					modal_tabheader3_text:				"ツールチップの色",
-					modal_iconpicker_text:				"フォルダの選択",
-					modal_colorpicker1_text:			"プライマリフォルダの色",
-					modal_colorpicker2_text:			"セカンダリフォルダの色",
-					modal_colorpicker3_text:			"ツールチップの色",
-					modal_colorpicker4_text:			"フォントの色",
-					btn_cancel_text:					"キャンセル",
-					btn_save_text:						"セーブ"
+					toast_addserver_text:					"${servername} がフォルダ${foldername} に追加されました。",
+					toast_removeserver_text:				"${servername} がフォルダ${foldername} から削除されました。",
+					servercontext_serverfolders_text: 		"サーバーフォルダ",
+					serversubmenu_createfolder_text: 		"フォルダーを作る",
+					serversubmenu_removefromfolder_text: 	"フォルダからサーバーを削除する",
+					foldercontext_unreadfolder_text:		"すべてを読むようにマークする",
+					foldercontext_foldersettings_text: 		"フォルダ設定",
+					foldercontext_removefolder_text:		"フォルダを削除する",
+					modal_header_text:						"フォルダ設定",
+					modal_foldername_text:					"フォルダ名",
+					modal_tabheader1_text:					"フォルダ",
+					modal_tabheader2_text:					"フォルダの色",
+					modal_tabheader3_text:					"ツールチップの色",
+					modal_iconpicker_text:					"フォルダの選択",
+					modal_colorpicker1_text:				"プライマリフォルダの色",
+					modal_colorpicker2_text:				"セカンダリフォルダの色",
+					modal_colorpicker3_text:				"ツールチップの色",
+					modal_colorpicker4_text:				"フォントの色",
+					btn_cancel_text:						"キャンセル",
+					btn_save_text:							"セーブ"
 				};
 			case "zh":		//chinese (traditional)
 				return {
-					servercontext_createfolder_text: 	"創建文件夾",
-					foldercontext_unreadfolder_text:	"標記為已讀",
-					foldercontext_foldersettings_text: 	"文件夾設置",
-					foldercontext_removefolder_text:	"刪除文件夾",
-					modal_header_text:					"文件夾設置",
-					modal_foldername_text:				"文件夾名稱",
-					modal_tabheader1_text:				"夾",
-					modal_tabheader2_text:				"文件夾顏色",
-					modal_tabheader3_text:				"工具提示顏色",
-					modal_iconpicker_text:				"文件夾選擇",
-					modal_colorpicker1_text:			"主文件夾顏色",
-					modal_colorpicker2_text:			"輔助文件夾顏色",
-					modal_colorpicker3_text:			"工具提示顏色",
-					modal_colorpicker4_text:			"字體顏色",
-					btn_cancel_text:					"取消",
-					btn_save_text:						"保存"
+					toast_addserver_text:					"${servername} 已被添加到文件夾${foldername}.",
+					toast_removeserver_text:				"${servername} 已從文件夾${foldername} 中刪除.",
+					servercontext_serverfolders_text: 		"服務器文件夾",
+					serversubmenu_createfolder_text: 		"創建文件夾",
+					serversubmenu_removefromfolder_text: 	"從服務器中刪除服務器",
+					foldercontext_unreadfolder_text:		"標記為已讀",
+					foldercontext_foldersettings_text: 		"文件夾設置",
+					foldercontext_removefolder_text:		"刪除文件夾",
+					modal_header_text:						"文件夾設置",
+					modal_foldername_text:					"文件夾名稱",
+					modal_tabheader1_text:					"夾",
+					modal_tabheader2_text:					"文件夾顏色",
+					modal_tabheader3_text:					"工具提示顏色",
+					modal_iconpicker_text:					"文件夾選擇",
+					modal_colorpicker1_text:				"主文件夾顏色",
+					modal_colorpicker2_text:				"輔助文件夾顏色",
+					modal_colorpicker3_text:				"工具提示顏色",
+					modal_colorpicker4_text:				"字體顏色",
+					btn_cancel_text:						"取消",
+					btn_save_text:							"保存"
 				};
 			case "ko":		//korean
 				return {
-					servercontext_createfolder_text: 	"폴더 만들기",
-					foldercontext_unreadfolder_text:	"모두 읽은 상태로 표시",
-					foldercontext_foldersettings_text: 	"폴더 설정",
-					foldercontext_removefolder_text:	"폴더 삭제",
-					modal_header_text:					"폴더 설정",
-					modal_foldername_text:				"폴더 이름",
-					modal_tabheader1_text:				"폴더",
-					modal_tabheader2_text:				"폴더 색",
-					modal_tabheader3_text:				"툴팁 색깔",
-					modal_iconpicker_text:				"폴더 선택",
-					modal_colorpicker1_text:			"기본 폴더 색",
-					modal_colorpicker2_text:			"보조 폴더 색",
-					modal_colorpicker3_text:			"툴팁 색깔",
-					modal_colorpicker4_text:			"글꼴 색깔",
-					btn_cancel_text:					"취소",
-					btn_save_text:						"저장"
+					toast_addserver_text:					"${servername} 가 폴더${foldername} 에 추가되었습니다.",
+					toast_removeserver_text:				"${servername} 가 폴더${foldername} 에서 제거되었습니다.",
+					servercontext_serverfolders_text: 		"서버 폴더",
+					serversubmenu_createfolder_text: 		"폴더 만들기",
+					serversubmenu_removefromfolder_text: 	"폴더에서 서버 제거",
+					foldercontext_unreadfolder_text:		"모두 읽은 상태로 표시",
+					foldercontext_foldersettings_text: 		"폴더 설정",
+					foldercontext_removefolder_text:		"폴더 삭제",
+					modal_header_text:						"폴더 설정",
+					modal_foldername_text:					"폴더 이름",
+					modal_tabheader1_text:					"폴더",
+					modal_tabheader2_text:					"폴더 색",
+					modal_tabheader3_text:					"툴팁 색깔",
+					modal_iconpicker_text:					"폴더 선택",
+					modal_colorpicker1_text:				"기본 폴더 색",
+					modal_colorpicker2_text:				"보조 폴더 색",
+					modal_colorpicker3_text:				"툴팁 색깔",
+					modal_colorpicker4_text:				"글꼴 색깔",
+					btn_cancel_text:						"취소",
+					btn_save_text:							"저장"
 				};
 			default:		//default: english
 				return {
-					servercontext_createfolder_text: 	"Create Folder",
-					foldercontext_unreadfolder_text:	"Mark All As Read",
-					foldercontext_foldersettings_text: 	"Foldersettings",
-					foldercontext_removefolder_text:	"Delete Folder",
-					modal_header_text:					"Foldersettings",
-					modal_foldername_text:				"Foldername",
-					modal_tabheader1_text:				"Folder",
-					modal_tabheader2_text:				"Foldercolor",
-					modal_tabheader3_text:				"Tooltipcolor",
-					modal_iconpicker_text:				"Folderchoice",
-					modal_colorpicker1_text:			"Primary Foldercolor",
-					modal_colorpicker2_text:			"Secondary Foldercolor",
-					modal_colorpicker3_text:			"Tooltipcolor",
-					modal_colorpicker4_text:			"Fontcolor",
-					btn_cancel_text:					"Cancel",
-					btn_save_text:						"Save"
+					toast_addserver_text:					"${servername} has been added to the folder${foldername}.",
+					toast_removeserver_text:				"${servername} has been removed from the folder${foldername}.",
+					servercontext_serverfolders_text: 		"Serverfolders",
+					serversubmenu_createfolder_text: 		"Create Folder",
+					serversubmenu_removefromfolder_text: 	"Remove Server From Folder",
+					foldercontext_unreadfolder_text:		"Mark All As Read",
+					foldercontext_foldersettings_text: 		"Foldersettings",
+					foldercontext_removefolder_text:		"Delete Folder",
+					modal_header_text:						"Foldersettings",
+					modal_foldername_text:					"Foldername",
+					modal_tabheader1_text:					"Folder",
+					modal_tabheader2_text:					"Foldercolor",
+					modal_tabheader3_text:					"Tooltipcolor",
+					modal_iconpicker_text:					"Folderchoice",
+					modal_colorpicker1_text:				"Primary Foldercolor",
+					modal_colorpicker2_text:				"Secondary Foldercolor",
+					modal_colorpicker3_text:				"Tooltipcolor",
+					modal_colorpicker4_text:				"Fontcolor",
+					btn_cancel_text:						"Cancel",
+					btn_save_text:							"Save"
 				};
 		}
 	}
