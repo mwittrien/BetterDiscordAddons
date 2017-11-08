@@ -1642,6 +1642,20 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		opacity: 0.5;
 	}
 
+	.DevilBro-modal input.valid {
+		background-color: rgba(10,167,0,.5);
+	}
+
+	.DevilBro-modal input.invalid {
+		background-color: rgba(208,0,0,.5);
+	}
+
+	.DevilBro-modal input:disabled {
+		color: #555555;
+		cursor: no-drop;
+		background-color: rgba(0,0,0,.5);
+	}
+
 	.colorpicker-modal .inner-1_1f7b {
 		background-color: #36393E;
 		border-radius: 5px;
