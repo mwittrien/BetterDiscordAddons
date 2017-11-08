@@ -1015,7 +1015,7 @@ BDfunctionsDevilBro.clearReadNotifications = function (servers) {
 		); 
 };
 
-BDfunctionsDevilBro.appendModal(modal) {
+BDfunctionsDevilBro.appendModal = function (modal) {
 	$(modal).appendTo(".app ~ [class^='theme-']");
 };
 
