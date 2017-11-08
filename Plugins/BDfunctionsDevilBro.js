@@ -88,24 +88,28 @@ BDfunctionsDevilBro.checkUpdate = function (pluginName, downloadUrl) {
 };
 
 BDfunctionsDevilBro.showUpdateNotice = function(pluginName, downloadUrl) {
-	let noticeElement = '<div class="notice notice-info" id="pluginNotice"><div class="notice-dismiss" id="pluginNoticeDismiss"></div><span class="notice-message">The following plugins have updates:</span>&nbsp;&nbsp;<strong id="outdatedPlugins"></strong></div>';
-	if (!$('#pluginNotice').length)  {
-		$('.app.flex-vertical').children().first().before(noticeElement);
-        $('.win-buttons').addClass("win-buttons-notice");
-		$('#pluginNoticeDismiss').on('click', () => {
-			$('.win-buttons').animate({top: 0}, 400, "swing", () => { $('.win-buttons').css("top","").removeClass("win-buttons-notice"); });
-			$('#pluginNotice').slideUp({complete: () => { $('#pluginNotice').remove(); }});
+	let noticeElement = `<div class="notice notice-info" id="pluginNotice"><div class="notice-dismiss" id="pluginNoticeDismiss"></div><span class="notice-message">The following plugins have updates:</span>&nbsp;&nbsp;<strong id="outdatedPlugins"></strong></div>`;
+	if (!$("#pluginNotice").length)  {
+		$(".app.flex-vertical").children().first().before(noticeElement);
+        $(".win-buttons").addClass("win-buttons-notice");
+		$("#pluginNoticeDismiss").on("click", () => {
+			$(".win-buttons").animate({top: 0}, 400, "swing", () => {
+				$(".win-buttons").css("top","").removeClass("win-buttons-notice");
+			});
+			$("#pluginNotice").slideUp({complete: () => {
+				$("#pluginNotice").remove();
+			}});
 		});
 	}
-	let pluginNoticeID = pluginName + '-notice';
-	if (!$('#' + pluginNoticeID).length) {
-		let pluginNoticeElement = $('<span id="' + pluginNoticeID + '">');
+	let pluginNoticeID = pluginName + "-notice";
+	if (!$("#" + pluginNoticeID).length) {
+		let pluginNoticeElement = $(`<span id="${pluginNoticeID}">`);
         pluginNoticeElement.text(pluginName);
-        pluginNoticeElement.on('click', () => {
+        pluginNoticeElement.on("click", () => {
             BDfunctionsDevilBro.downloadPlugin(pluginName, downloadUrl);
         });
-		if ($('#outdatedPlugins').children('span').length) $('#outdatedPlugins').append("<span class='separator'>, </span>");
-		$('#outdatedPlugins').append(pluginNoticeElement);
+		if ($("#outdatedPlugins").children("span").length) $("#outdatedPlugins").append(`<span class="separator">, </span>`);
+		$("#outdatedPlugins").append(pluginNoticeElement);
 	}
 };
 
@@ -117,7 +121,7 @@ BDfunctionsDevilBro.downloadPlugin = function(pluginName, downloadUrl) {
         if (error) return console.warn("Unable to get update for " + pluginName);
         let remoteVersion = body.match(/['"][0-9]+\.[0-9]+\.[0-9]+['"]/i);
         remoteVersion = remoteVersion.toString().replace(/['"]/g, "");
-        let filename = downloadUrl.split('/');
+        let filename = downloadUrl.split("/");
         filename = filename[filename.length - 1];
         var file = path.join(BDfunctionsDevilBro.getPluginsFolder(), filename);
         fileSystem.writeFileSync(file, body);
@@ -125,26 +129,26 @@ BDfunctionsDevilBro.downloadPlugin = function(pluginName, downloadUrl) {
         if (!(window.bdplugins["Restart-No-More"] && window.pluginCookie["Restart-No-More"] || window.bdplugins["Restart No More"] && window.pluginCookie["Restart No More"])) {
             if (!window.PluginUpdates.downloaded) {
                 window.PluginUpdates.downloaded = [];
-                let button = $('<button class="btn btn-reload">Reload</button>');
-                button.on('click', (e) => {
+                let button = $(`<button class="btn btn-reload">Reload</button>`);
+                button.on("click", (e) => {
                     e.preventDefault();
                     window.location.reload(false);
                 });
                 var tooltip = document.createElement("div");
                 tooltip.className = "tooltip tooltip-bottom tooltip-black";
                 tooltip.style.maxWidth = "400px";
-                button.on('mouseenter', () => {
+                button.on("mouseenter", () => {
                     document.querySelector(".tooltips").appendChild(tooltip);
                     tooltip.innerText = window.PluginUpdates.downloaded.join(", ");
                     tooltip.style.left = button.offset().left + (button.outerWidth() / 2) - ($(tooltip).outerWidth() / 2) + "px";
                     tooltip.style.top = button.offset().top + button.outerHeight() + "px";
                 });
     
-                button.on('mouseleave', () => {
+                button.on("mouseleave", () => {
                     tooltip.remove();
                 });
     
-                button.appendTo($('#pluginNotice'));
+                button.appendTo($("#pluginNotice"));
             }
             window.PluginUpdates.plugins[downloadUrl].version = remoteVersion;
             window.PluginUpdates.downloaded.push(pluginName);
@@ -154,29 +158,29 @@ BDfunctionsDevilBro.downloadPlugin = function(pluginName, downloadUrl) {
 };
 
 BDfunctionsDevilBro.removeUpdateNotice = function(pluginName) {
-	let notice = $('#' + pluginName + '-notice');
+	let notice = $("#" + pluginName + "-notice");
 	if (notice.length) {
-		if (notice.next('.separator').length) notice.next().remove();
-		else if (notice.prev('.separator').length) notice.prev().remove();
+		if (notice.next(".separator").length) notice.next().remove();
+		else if (notice.prev(".separator").length) notice.prev().remove();
 		notice.remove();
     }
 
-	if (!$('#outdatedPlugins').children('span').length && !$('#pluginNotice .btn-reload').length) {
-        $('#pluginNoticeDismiss').click();
+	if (!$("#outdatedPlugins").children("span").length && !$("#pluginNotice .btn-reload").length) {
+        $("#pluginNoticeDismiss").click();
     } 
-    else if (!$('#outdatedPlugins').children('span').length && $('#pluginNotice .btn-reload').length) {
-        $('#pluginNotice .notice-message').text("To finish updating you need to reload.");
+    else if (!$("#outdatedPlugins").children("span").length && $("#pluginNotice .btn-reload").length) {
+        $("#pluginNotice .notice-message").text("To finish updating you need to reload.");
     }
 };
 
 BDfunctionsDevilBro.showToast = function(content, options = {}) {
-    if (!document.querySelector('.toasts')) {
+    if (!document.querySelector(".toasts")) {
         let toastWrapper = document.createElement("div");
         toastWrapper.classList.add("toasts");
-        toastWrapper.style.setProperty("left", document.querySelector('.chat form, #friends, .noChannel-2EQ0a9, .activityFeed-HeiGwL').getBoundingClientRect().left + "px");
-        toastWrapper.style.setProperty("width", document.querySelector('.chat form, #friends, .noChannel-2EQ0a9, .activityFeed-HeiGwL').offsetWidth + "px");
-        toastWrapper.style.setProperty("bottom", (document.querySelector('.chat form') ? document.querySelector('.chat form').offsetHeight : 80) + "px");
-        document.querySelector('.app').appendChild(toastWrapper);
+        toastWrapper.style.setProperty("left", document.querySelector(".chat form, #friends, .noChannel-2EQ0a9, .activityFeed-HeiGwL").getBoundingClientRect().left + "px");
+        toastWrapper.style.setProperty("width", document.querySelector(".chat form, #friends, .noChannel-2EQ0a9, .activityFeed-HeiGwL").offsetWidth + "px");
+        toastWrapper.style.setProperty("bottom", (document.querySelector(".chat form") ? document.querySelector(".chat form").offsetHeight : 80) + "px");
+        document.querySelector(".app").appendChild(toastWrapper);
     }
     const {type = "", icon = true, timeout = 3000} = options;
     let toastElem = document.createElement("div");
@@ -184,12 +188,12 @@ BDfunctionsDevilBro.showToast = function(content, options = {}) {
 	if (type) toastElem.classList.add("toast-" + type);
 	if (type && icon) toastElem.classList.add("icon");
     toastElem.innerText = content;
-    document.querySelector('.toasts').appendChild(toastElem);
+    document.querySelector(".toasts").appendChild(toastElem);
     setTimeout(() => {
-        toastElem.classList.add('closing');
+        toastElem.classList.add("closing");
         setTimeout(() => {
             toastElem.remove();
-            if (!document.querySelectorAll('.toasts .toast').length) document.querySelector('.toasts').remove();
+            if (!document.querySelectorAll(".toasts .toast").length) document.querySelector(".toasts").remove();
         }, 300);
     }, timeout);
 };
@@ -203,7 +207,7 @@ BDfunctionsDevilBro.createTooltip = function(content, container, options = {}) {
 	if (options.type) tooltip.classList.add("tooltip-" + options.type);
 	if (options.selector) tooltip.classList.add(options.selector);
 	if (options.css) BDfunctionsDevilBro.appendLocalStyle("customTooltipDevilBro" + id, options.css);
-	if (options.html == true) tooltip.innerHTML = content;
+	if (options.html === true) tooltip.innerHTML = content;
 	else tooltip.innerText = content;
     
 	document.querySelector(".tooltips").appendChild(tooltip);
@@ -451,8 +455,8 @@ BDfunctionsDevilBro.getKeyInformation = function (config) {
 // code in this closure based on code by samogot
 // https://github.com/samogot/betterdiscord-plugins/blob/master/v2/1Lib%20Discord%20Internals/plugin.js
 BDfunctionsDevilBro.findInWebModules = function (filter) {
-	const req = webpackJsonp([], {'__extra_id__': (module, exports, req) => exports.default = req}, ['__extra_id__']).default;
-	delete req.c['__extra_id__'];
+	const req = webpackJsonp([], {"__extra_id__": (module, exports, req) => exports.default = req}, ["__extra_id__"]).default;
+	delete req.c["__extra_id__"];
 	for (let i in req.c) { 
 		if (req.c.hasOwnProperty(i)) {
 			let m = req.c[i].exports;
@@ -539,12 +543,12 @@ BDfunctionsDevilBro.isObjectEmpty = function (obj) {
 		break;
 	}
 	return empty;
-}
+};
 
 BDfunctionsDevilBro.removeFromArray = function (array, value) {
 	if (!array || !value || !Array.isArray(array) || !array.includes(value)) return;
 	array.splice(array.indexOf(value), 1);
-}
+};
 
 BDfunctionsDevilBro.onSwitchFix = function (plugin) {
 	var switchFixObserver = new MutationObserver((changes) => {
@@ -573,7 +577,7 @@ BDfunctionsDevilBro.onSwitchFix = function (plugin) {
 	});
 	switchFixObserver.observe(document.querySelector(":-webkit-any(.chat, #friends, .noChannel-2EQ0a9, .activityFeed-HeiGwL)").parentNode, {childList: true, subtree:true});
 	return switchFixObserver;
-}
+};
 
 BDfunctionsDevilBro.triggerOnSwitch = function (plugin) {
 	plugin.onSwitchTriggered = true;
@@ -581,19 +585,19 @@ BDfunctionsDevilBro.triggerOnSwitch = function (plugin) {
 	setTimeout(() => {
 		plugin.onSwitchTriggered = false;
 	},1);
-}
+};
 
 BDfunctionsDevilBro.getMyUserData = function () {
 	if ($(".container-iksrDt").length > 0) {
 		var userData = BDfunctionsDevilBro.getKeyInformation({"node":$(".container-iksrDt")[0],"key":"user"});
 		return (userData ? userData : null);
 	}
-}
+};
 
 BDfunctionsDevilBro.getMyUserID = function () {
 	var userData = BDfunctionsDevilBro.getMyUserData();
 	return (userData && userData.id ? userData.id : null);
-}
+};
 	
 BDfunctionsDevilBro.readServerList = function () {
 	var foundServers = [];
@@ -688,7 +692,7 @@ BDfunctionsDevilBro.getDivOfChannel = function (channelID, serverID) {
 
 BDfunctionsDevilBro.getSettingsPanelDiv = function (ele) {
 	return $(".bda-slist > li").has(ele)[0];
-}
+};
 
 BDfunctionsDevilBro.themeIsLightTheme = function () {
 	if ($(".theme-light").length > $(".theme-dark").length) {
@@ -744,31 +748,31 @@ BDfunctionsDevilBro.removeData = function (id, pluginName, keyName) {
 BDfunctionsDevilBro.appendWebScript = function (filepath) {
 	$('head script[src="' + filepath + '"]').remove();
 	
-	var ele = document.createElement('script');
+	var ele = document.createElement("script");
 	$(ele)
 		.attr("src", filepath);
-	$('head').append(ele);
+	$("head").append(ele);
 };
 
 BDfunctionsDevilBro.appendWebStyle = function (filepath) {
 	$('head link[href="' + filepath + '"]').remove();
 
-	var ele = document.createElement('link');
+	var ele = document.createElement("link");
 	$(ele)
 		.attr("type", "text/css")
 		.attr("rel", "Stylesheet")
 		.attr("href", filepath);
-	$('head').append(ele);
+	$("head").append(ele);
 };
 
 BDfunctionsDevilBro.appendLocalStyle = function (pluginName, css) {
 	$('head style[id="' + pluginName + 'CSS"]').remove();
 
-	var ele = document.createElement('style');
+	var ele = document.createElement("style");
 	$(ele)
 		.attr("id", pluginName + "CSS")
 		.text(css);
-	$('head').append(ele);
+	$("head").append(ele);
 };
 
 BDfunctionsDevilBro.removeLocalStyle = function (pluginName) {
@@ -791,9 +795,9 @@ BDfunctionsDevilBro.color2COMP = function (color) {
 			case "comp":
 				return color;
 			case "rgb":
-				return color.replace(new RegExp(" ", 'g'), "").slice(4, -1).split(",");
+				return color.replace(new RegExp(" ", "g"), "").slice(4, -1).split(",");
 			case "hsl":
-				var hsl = color.replace(new RegExp(" ", 'g'), "").slice(4, -1).split(",");
+				var hsl = color.replace(new RegExp(" ", "g"), "").slice(4, -1).split(",");
 				var r, g, b, i, f, p, q, t;
 				var h = hsl[0]/360, s = hsl[1], l = hsl[2];
 				i = Math.floor(h * 6);
@@ -915,38 +919,35 @@ BDfunctionsDevilBro.colorCOMPARE = function (color1, color2) {
 
 BDfunctionsDevilBro.colorINV = function (color, conv) {
 	if (color) {
-		if (conv === undefined) {
-			switch (BDfunctionsDevilBro.checkColorType(color)) {
-				case "comp":
-					return [(255-color[0]), (255-color[1]), (255-color[2])];
-				case "rgb":
-					var temp = BDfunctionsDevilBro.color2COMP(color);
-					temp = [(255-temp[0]), (255-temp[1]), (255-temp[2])];
-					return BDfunctionsDevilBro.color2RGB(temp);
-				case "hsl":
-					var temp = BDfunctionsDevilBro.color2COMP(color);
-					temp = [(255-temp[0]), (255-temp[1]), (255-temp[2])];
-					return BDfunctionsDevilBro.color2HSL(temp);
-				case "hex":
-					var temp = BDfunctionsDevilBro.color2COMP(color);
-					temp = [(255-temp[0]), (255-temp[1]), (255-temp[2])];
-					return BDfunctionsDevilBro.color2HEX(temp);
-				default:
-					return null;
+		var type = BDfunctionsDevilBro.checkColorType(color);
+		if (type) {
+			if (conv === undefined) {
+				var inv = BDfunctionsDevilBro.color2COMP(color);
+				inv = [(255-inv[0]), (255-inv[1]), (255-inv[2])];
+				switch (BDfunctionsDevilBro.checkColorType(color)) {
+					case "comp":
+						return inv;
+					case "rgb":
+						return BDfunctionsDevilBro.color2RGB(inv);
+					case "hsl":
+						return BDfunctionsDevilBro.color2HSL(inv);
+					case "hex":
+						return BDfunctionsDevilBro.color2HEX(inv);
+				}
 			}
-		}
-		else {
-			switch (conv.toLowerCase()) {
-				case "comp":
-					return BDfunctionsDevilBro.colorINV(BDfunctionsDevilBro.color2COMP(color));
-				case "rgb":
-					return BDfunctionsDevilBro.colorINV(BDfunctionsDevilBro.color2RGB(color));
-				case "hsl":
-					return BDfunctionsDevilBro.colorINV(BDfunctionsDevilBro.color2HSL(color));
-				case "hex":
-					return BDfunctionsDevilBro.colorINV(BDfunctionsDevilBro.color2HEX(color));
-				default:
-					return null;
+			else {
+				switch (conv.toLowerCase()) {
+					case "comp":
+						return BDfunctionsDevilBro.colorINV(BDfunctionsDevilBro.color2COMP(color));
+					case "rgb":
+						return BDfunctionsDevilBro.colorINV(BDfunctionsDevilBro.color2RGB(color));
+					case "hsl":
+						return BDfunctionsDevilBro.colorINV(BDfunctionsDevilBro.color2HSL(color));
+					case "hex":
+						return BDfunctionsDevilBro.colorINV(BDfunctionsDevilBro.color2HEX(color));
+					default:
+						return null;
+				}
 			}
 		}
 	}
@@ -975,11 +976,11 @@ BDfunctionsDevilBro.encodeToHTML = function (string) {
 	var ele = document.createElement("div");
 	ele.innerText = string;
 	return ele.innerHTML;
-}
+};
 
 BDfunctionsDevilBro.regEscape = function (string) {
-	return string.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
-}
+	return string.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
+};
 
 BDfunctionsDevilBro.clearReadNotifications = function (servers) {
 	if (!servers) return;
@@ -1018,11 +1019,25 @@ BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
 	var wrapperDiv = $(wrapper);
 		
 	var colourList = 
-		['rgb(26, 188, 156)','rgb(46, 204, 113)','rgb(52, 152, 219)','rgb(155, 89, 182)','rgb(233, 30, 99)','rgb(241, 196, 15)','rgb(230, 126, 34)','rgb(231, 76, 60)','rgb(149, 165, 166)','rgb(96, 125, 139)','rgb(99, 99, 99)',
-		'rgb(254, 254, 254)','rgb(17, 128, 106)','rgb(31, 139, 76)','rgb(32, 102, 148)','rgb(113, 54, 138)','rgb(173, 20, 87)','rgb(194, 124, 14)','rgb(168, 67, 0)','rgb(153, 45, 34)','rgb(151, 156, 159)','rgb(84, 110, 122)','rgb(44, 44, 44)'];
+		["rgb(82, 233, 30)","rgb(46, 204, 113)","rgb(26, 188, 156)","rgb(52, 152, 219)","rgb(52, 84, 219)","rgb(134, 30, 233)","rgb(155, 89, 182)","rgb(233, 30, 99)","rgb(233, 65, 30)","rgb(231, 76, 60)","rgb(230, 126, 34)","rgb(241, 196, 15)","rgb(199, 204, 205)","rgb(112, 128, 136)","rgb(99, 99, 99)",
+		"rgb(255, 255, 255)","rgb(59, 173, 20)","rgb(31, 139, 76)","rgb(17, 128, 106)","rgb(32, 102, 148)","rgb(32, 57, 148)","rgb(109, 20, 173)","rgb(113, 54, 138)","rgb(173, 20, 87)","rgb(173, 32, 20)","rgb(153, 45, 34)","rgb(168, 67, 0)","rgb(194, 124, 14)","rgb(151, 156, 159)","rgb(93, 104, 109)","rgb(44, 44, 44)"];
 		
 	var swatches = 
-		`<div class="ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-nowrap" style="flex: 1 1 auto; margin-top: 5px;"><div class="ui-color-picker-${swatch} large custom" style="background-color: rgb(0, 0, 0);"><svg class="color-picker-dropper-${swatch}" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 16 16"><path class="color-picker-dropper-fg-${swatch}" fill="#ffffff" d="M14.994 1.006C13.858-.257 11.904-.3 10.72.89L8.637 2.975l-.696-.697-1.387 1.388 5.557 5.557 1.387-1.388-.697-.697 1.964-1.964c1.13-1.13 1.3-2.985.23-4.168zm-13.25 10.25c-.225.224-.408.48-.55.764L.02 14.37l1.39 1.39 2.35-1.174c.283-.14.54-.33.765-.55l4.808-4.808-2.776-2.776-4.813 4.803z"></path></svg></div><div class="regulars ui-flex flex-horizontal flex-justify-start flex-align-stretch flex-wrap ui-color-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;"><div class="ui-color-picker-${swatch} nocolor" style="background-color: null;"><svg clas="nocolor-cross" height="22" width="22"><path d="m 3 2 l 17 18 m 0 -18 l -17 18" stroke="red" stroke-width="3" fill="none" /></svg></div>${ colourList.map((val, i) => `<div class="ui-color-picker-${swatch}" style="background-color: ${val};"></div>`).join("")}</div></div>`;
+		`<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO" style="flex: 1 1 auto; margin-top: 5px;">
+			<div class="ui-color-picker-${swatch} large custom" style="background-color: rgb(0, 0, 0);">
+				<svg class="color-picker-dropper-${swatch}" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 16 16">
+					<path class="color-picker-dropper-fg-${swatch}" fill="#ffffff" d="M14.994 1.006C13.858-.257 11.904-.3 10.72.89L8.637 2.975l-.696-.697-1.387 1.388 5.557 5.557 1.387-1.388-.697-.697 1.964-1.964c1.13-1.13 1.3-2.985.23-4.168zm-13.25 10.25c-.225.224-.408.48-.55.764L.02 14.37l1.39 1.39 2.35-1.174c.283-.14.54-.33.765-.55l4.808-4.808-2.776-2.776-4.813 4.803z"></path>
+				</svg>
+			</div>
+			<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa wrap-1da0e3  ui-color-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;">
+				<div class="ui-color-picker-${swatch} nocolor" style="background-color: null;">
+					<svg class="nocolor-cross" height="22" width="22">
+						<path d="m 3 2 l 17 18 m 0 -18 l -17 18" stroke="red" stroke-width="3" fill="none" />
+					</svg>
+				</div>
+				${ colourList.map((val, i) => `<div class="ui-color-picker-${swatch}" style="background-color: ${val};"></div>`).join("")}
+			</div>
+		</div>`;
 	$(swatches).appendTo(wrapperDiv);
 	
 	if (currentCOMP) {
@@ -1032,7 +1047,7 @@ BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
 		var selection = colourList.indexOf(currentRGB);
 		
 		if (selection > -1) {
-			wrapperDiv.find(".regulars .ui-color-picker-" + swatch).eq(selection+1)
+			wrapperDiv.find(".ui-color-picker-" + swatch + ":not(.custom, .nocolor)").eq(selection)
 				.addClass("selected")
 				.css("background-color", currentRGB)
 				.css("border", "4px solid " + invRGB);
@@ -1073,14 +1088,14 @@ BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
 	wrapperDiv.on("click", ".ui-color-picker-" + swatch + ".custom", (e) => {
 		BDfunctionsDevilBro.openColorPicker(e.target.style.backgroundColor, swatch);
 	});
-}
+};
 
 BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 	var colorPickerModalMarkup = 
-		`<span class="colorpicker-modal">
-			<div class="backdrop-2ohBEd callout-backdrop"></div>
-			<div class="modal">
-				<div class="modal-inner">
+		`<span class="colorpicker-modal DevilBro-modal">
+			<div class="backdrop-2ohBEd"></div>
+			<div class="modal-2LIEKY">
+				<div class="inner-1_1f7b">
 					<div class="colorpicker-container">
 						<div class="colorpicker-color">
 							<div class="colorpicker-white" style="background: linear-gradient(to right, #fff, rgba(255,255,255,0))">
@@ -1121,8 +1136,8 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 		</span>`;
 		
 	var colorPickerModal = $(colorPickerModalMarkup)[0];
-	$(colorPickerModal).appendTo($(".app-XZYfmp"))
-		.on("click", ".callout-backdrop", (event) => {
+	$(colorPickerModal).appendTo(".app-XZYfmp")
+		.on("click", ".backdrop-2ohBEd", (event) => {
 			var newRGB = colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").style.backgroundColor;
 			var newCOMP = BDfunctionsDevilBro.color2COMP(newRGB);
 			var newInvRGB = BDfunctionsDevilBro.colorINV(newRGB);
@@ -1143,7 +1158,7 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 			$(".color-picker-dropper-fg-" + swatch)
 				.attr("fill", newCOMP[0] > 150 && newCOMP[1] > 150 && newCOMP[2] > 150 ? "#000000" : "#ffffff");
 				
-			colorPickerModal.classList.add('closing');
+			colorPickerModal.classList.add("closing");
 			setTimeout(() => {colorPickerModal.remove();}, 300);
 		});
 	
@@ -1169,7 +1184,7 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 	var sMinY = $(spane).offset().top;
 	var sMaxY = sMinY + spane.offsetHeight;
 	
-	[hue, saturation, lightness] = BDfunctionsDevilBro.color2HSL(currentColor).replace(new RegExp(" ", 'g'), "").slice(4, -1).split(",");
+	[hue, saturation, lightness] = BDfunctionsDevilBro.color2HSL(currentColor).replace(new RegExp(" ", "g"), "").slice(4, -1).split(",");
 	saturation *= 100;
 	lightness *= 100;
 	updateAllValues();
@@ -1252,7 +1267,7 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 			colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").style.borderColor = "transparent";
 			colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").classList.remove("selected");
 			event.target.classList.add("selected");
-			[hue, saturation, lightness] = BDfunctionsDevilBro.color2HSL(event.target.style.backgroundColor).replace(new RegExp(" ", 'g'), "").slice(4, -1).split(",");
+			[hue, saturation, lightness] = BDfunctionsDevilBro.color2HSL(event.target.style.backgroundColor).replace(new RegExp(" ", "g"), "").slice(4, -1).split(",");
 			saturation *= 100;
 			lightness *= 100;
 			updateAllValues();
@@ -1275,7 +1290,7 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 				hex = colorPickerModal.querySelector(".colorpicker-hex").value;
 				if (/^#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.test(hex)) {
 					[red, green, blue] = BDfunctionsDevilBro.color2COMP(hex);
-					[hue, saturation, lightness] = BDfunctionsDevilBro.color2HSL(hex).replace(new RegExp(" ", 'g'), "").slice(4, -1).split(",");
+					[hue, saturation, lightness] = BDfunctionsDevilBro.color2HSL(hex).replace(new RegExp(" ", "g"), "").slice(4, -1).split(",");
 					saturation *= 100;
 					lightness *= 100;
 					colorPickerModal.querySelector(".colorpicker-hue").value = Math.round(hue);
@@ -1290,7 +1305,7 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 				red = colorPickerModal.querySelector(".colorpicker-red").value;
 				green = colorPickerModal.querySelector(".colorpicker-green").value;
 				blue = colorPickerModal.querySelector(".colorpicker-blue").value;
-				[hue, saturation, lightness] = BDfunctionsDevilBro.color2HSL([red, green, blue]).replace(new RegExp(" ", 'g'), "").slice(4, -1).split(",");
+				[hue, saturation, lightness] = BDfunctionsDevilBro.color2HSL([red, green, blue]).replace(new RegExp(" ", "g"), "").slice(4, -1).split(",");
 				saturation *= 100;
 				lightness *= 100;
 				colorPickerModal.querySelector(".colorpicker-hex").value = BDfunctionsDevilBro.color2HEX([red, green, blue]);
@@ -1314,9 +1329,19 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 	}
 	
 	function updateCursors () {
+		sHalfH = scursor.offsetHeight/2;
+		sMinY = $(spane).offset().top;
 		sY = mapRange([360, 0], [sMinY - sHalfH, sMaxY - sHalfH], hue);
+		
+		pHalfW = pcursor.offsetWidth/2;
+		pHalfH = pcursor.offsetHeight/2;
+		pMinX = $(ppane).offset().left;
+		pMaxX = pMinX + ppane.offsetWidth;
+		pMinY = $(ppane).offset().top;
+		pMaxY = pMinY + ppane.offsetHeight;
 		pX = mapRange([0, 100], [pMinX - pHalfW, pMaxX - pHalfW], saturation);
 		pY = mapRange([100, 0], [pMinY - pHalfH, pMaxY - pHalfH], lightness);
+		
 		$(scursor).offset({"top":sY});
 		$(pcursor).offset({"left":pX,"top":pY});
 		$(pcursor).find("circle").attr("stroke", BDfunctionsDevilBro.colorINV([red, green, blue], "rgb"));
@@ -1344,11 +1369,11 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 		colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").style.background = BDfunctionsDevilBro.color2RGB([red, green, blue]);
 		colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").style.borderColor = BDfunctionsDevilBro.colorINV([red, green, blue], "rgb");
 	}
-}
+};
 
 BDfunctionsDevilBro.getSwatchColor = function (swatch) {
 	return !$(".ui-color-picker-" + swatch + ".nocolor.selected")[0] ? BDfunctionsDevilBro.color2COMP($(".ui-color-picker-" + swatch + ".selected").css("background-color")) : null;
-}
+};
 
 BDfunctionsDevilBro.getDiscordLanguage = function () {
 	var lang = $("html").attr("lang") ? $("html").attr("lang").split("-")[0] : "en";
@@ -1517,13 +1542,8 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 	.update-list-tooltip {
 		max-width: 400px;
 	}
-	
-	.modal-color-picker [class^="swatches"] {
-		width: 430px;
-		margin: auto;
-	}
 
-	.modal-color-picker [class^="ui-color-picker-swatch"] {
+	[class^="ui-color-picker-swatch"] {
 		width: 22px;
 		height: 22px;
 		margin-bottom: 5px;
@@ -1532,95 +1552,70 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		border-radius: 12px;
 	}
 
-	.modal-color-picker [class^="ui-color-picker-swatch"].large {
+	[class^="ui-color-picker-swatch"].large {
 		min-width: 62px;
 		height: 62px;
 		border-radius: 25px;
 	}
 
-	.modal-color-picker [class^="ui-color-picker-swatch"].nocolor {
+	[class^="ui-color-picker-swatch"].nocolor {
 		border: 4px solid red;
 	}
 	
-	.modal-color-picker [class^="color-picker-dropper"] {
+	[class^="color-picker-dropper"] {
 		position: relative;
 		left: 40px;
 		top: 10px;
 	}
 	
-	@keyframes animation-colorpicker-backdrop {
+	@keyframes animation-backdrop {
 		to { opacity: 0.2; }
 	}
 
-	@keyframes animation-colorpicker-backdrop-closing {
+	@keyframes animation-backdrop-closing {
 		to { opacity: 0; }
 	}
 
-	@keyframes animation-colorpicker-modal {
+	@keyframes animation-modal {
 		to { transform: scale(1); opacity: 1; }
 	}
 
-	@keyframes animation-colorpicker-modal-closing {
+	@keyframes animation-modal-closing {
 		to { transform: scale(0.7); opacity: 0; }
 	}
 
-	.colorpicker-modal .callout-backdrop {
-		animation: animation-colorpicker-backdrop 250ms ease;
+	.DevilBro-modal .backdrop-2ohBEd {
+		animation: animation-backdrop 250ms ease;
 		animation-fill-mode: forwards;
 		opacity: 0;
 		background-color: rgb(0, 0, 0);
 		transform: translateZ(0px);
 	}
 
-	.colorpicker-modal.closing .callout-backdrop {
-		animation: animation-colorpicker-backdrop-closing 200ms linear;
+	.DevilBro-modal.closing .backdrop-2ohBEd {
+		animation: animation-backdrop-closing 200ms linear;
 		animation-fill-mode: forwards;
 		animation-delay: 50ms;
 		opacity: 0.2;
 	}
 	
-	.colorpicker-modal .modal {
-		animation: animation-colorpicker-modal 250ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+	.DevilBro-modal .modal-2LIEKY {
+		animation: animation-modal 250ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
 		animation-fill-mode: forwards;
 		transform: scale(0.7);
 		transform-origin: 50% 50%;
-		align-content: space-around;
-		align-items: center;
-		box-sizing: border-box;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		min-height: initial;
-		max-height: initial;
-		opacity: 0;
-		pointer-events: none;
-		user-select: none;
-		height: 100%;
-		width: 100%;
-		margin: 0;
-		padding: 0;
-		position: absolute;
-		top: 0;
-		right: 0;
-		bottom: 0;
-		left: 0;
-		z-index: 1000;
 	}
 
-	.colorpicker-modal.closing .modal {
-		animation: animation-colorpicker-modal-closing 250ms cubic-bezier(0.19, 1, 0.22, 1);
+	.DevilBro-modal.closing .modal-2LIEKY {
+		animation: animation-modal-closing 250ms cubic-bezier(0.19, 1, 0.22, 1);
 		animation-fill-mode: forwards;
 		opacity: 1;
 		transform: scale(1);
 	}
 
-	.colorpicker-modal .modal-inner {
+	.colorpicker-modal .inner-1_1f7b {
 		background-color: #36393E;
 		border-radius: 5px;
-		box-shadow: 0 0 0 1px rgba(32,34,37,.6),0 2px 10px 0 rgba(0,0,0,.2);
-		display: flex;
-		min-height: 200px;
-		pointer-events: auto;
 		width: 480px;
 		padding: 15px;
 	}
@@ -1699,7 +1694,7 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		overflow: hidden;
 	}
 		
-	.colorpicker-modal [class^='colorpicker-preview-'] {
+	.colorpicker-modal [class^="colorpicker-preview-"] {
 		background-color: #808080;
 		border: 3px solid transparent;
 		height: 54px;
