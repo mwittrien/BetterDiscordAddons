@@ -533,14 +533,17 @@ BDfunctionsDevilBro.equals = function (check1, check2, compareOrder) {
 };
 
 BDfunctionsDevilBro.isObjectEmpty = function (obj) {
-   var empty = true;
-
-   for (var key in obj) {
+	var empty = true;
+	for (var key in obj) {
 		empty = false;
 		break;
-   }
+	}
+	return empty;
+}
 
-   return empty;
+BDfunctionsDevilBro.removeFromArray = function (array, value) {
+	if (!array || !value || !Array.isArray(array) || !array.includes(value)) return;
+	array.splice(array.indexOf(value), 1);
 }
 
 BDfunctionsDevilBro.onSwitchFix = function (plugin) {
@@ -1393,16 +1396,16 @@ BDfunctionsDevilBro.getDiscordLanguage = function () {
 	}
 };
 
-BDfunctionsDevilBro.pressedKeys = [];
+BDfunctionsDevilBro.heldKeys = [];
 
 $(window)
 	.off("keydown.BDfunctionsDevilBroPressedKeys")
 	.off("keyup.BDfunctionsDevilBroPressedKeys")
 	.on("keydown.BDfunctionsDevilBroPressedKeys", (e) => {
-		if (!BDfunctionsDevilBro.pressedKeys.includes(e.which)) BDfunctionsDevilBro.pressedKeys.push(e.which);
+		if (!BDfunctionsDevilBro.heldKeys.includes(e.which)) BDfunctionsDevilBro.heldKeys.push(e.which);
 	})
 	.on("keyup.BDfunctionsDevilBroPressedKeys", (e) => {
-		if (BDfunctionsDevilBro.pressedKeys.includes(e.which)) BDfunctionsDevilBro.pressedKeys.splice(BDfunctionsDevilBro.pressedKeys.indexOf(e.which), 1);
+		BDfunctionsDevilBro.removeFromArray(BDfunctionsDevilBro.heldKeys, e.which);
 	});
 
 BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
