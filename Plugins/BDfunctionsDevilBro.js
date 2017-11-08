@@ -1396,16 +1396,16 @@ BDfunctionsDevilBro.getDiscordLanguage = function () {
 	}
 };
 
-BDfunctionsDevilBro.heldKeys = [];
+BDfunctionsDevilBro.pressedKeys = [];
 
 $(window)
 	.off("keydown.BDfunctionsDevilBroPressedKeys")
 	.off("keyup.BDfunctionsDevilBroPressedKeys")
 	.on("keydown.BDfunctionsDevilBroPressedKeys", (e) => {
-		if (!BDfunctionsDevilBro.heldKeys.includes(e.which)) BDfunctionsDevilBro.heldKeys.push(e.which);
+		if (!BDfunctionsDevilBro.pressedKeys.includes(e.which)) BDfunctionsDevilBro.pressedKeys.push(e.which);
 	})
 	.on("keyup.BDfunctionsDevilBroPressedKeys", (e) => {
-		BDfunctionsDevilBro.removeFromArray(BDfunctionsDevilBro.heldKeys, e.which);
+		BDfunctionsDevilBro.removeFromArray(BDfunctionsDevilBro.pressedKeys, e.which);
 	});
 
 BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
