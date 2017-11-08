@@ -1,779 +1,1760 @@
-//META{"name":"EditChannels"}*//
+var BDfunctionsDevilBro = {};
 
-class EditChannels {
-	constructor () {
-		this.labels = {};
+BDfunctionsDevilBro.loadMessage = function (pluginName, oldVersion) { 
+	console.log(`${pluginName} Version: ${oldVersion} loaded.`);
+	
+	BDfunctionsDevilBro.showToast(`${pluginName} ${oldVersion} has been started.`);
+	
+	var downloadUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
+	BDfunctionsDevilBro.checkUpdate(pluginName, downloadUrl);
+	
+	if (typeof window.PluginUpdates !== "object" || !window.PluginUpdates) window.PluginUpdates = {plugins:{}};
+	window.PluginUpdates.plugins[downloadUrl] = {name:pluginName, raw:downloadUrl, version:oldVersion};
+	
+	if (typeof window.PluginUpdates.interval === "undefined") {
+		window.PluginUpdates.interval = setInterval(() => {
+			BDfunctionsDevilBro.checkAllUpdates();
+		},7200000);
+	}
+	
+	if (typeof window.PluginUpdates.observer === "undefined" && document.querySelector(".layers")) {
+		window.PluginUpdates.observer = new MutationObserver((changes, _) => {
+			changes.forEach(
+				(change, i) => {
+					if (change.addedNodes) {
+						change.addedNodes.forEach((node) => {
+							if (node && node.tagName && node.getAttribute("layer-id") == "user-settings") {
+								var settingsObserver = new MutationObserver((changes2, _) => {
+									changes2.forEach(
+										(change2, j) => {
+											if (change2.addedNodes) {
+												change2.addedNodes.forEach((node2) => {
+													if (node2 && node2.tagName && !node2.querySelector(".bd-pfbtn.bd-updatebtn") && node2.querySelector(".bd-pfbtn")) {
+														node2.querySelector(".bd-pfbtn").parentElement.insertBefore(BDfunctionsDevilBro.createUpdateButton(), node2.querySelector(".bd-pfbtn").nextSibling);
+													}
+												});
+											}
+										}
+									);
+								});
+								settingsObserver.observe(node, {childList:true, subtree:true});
+							}
+						});
+					}
+				}
+			);
+		});
+		window.PluginUpdates.observer.observe(document.querySelector(".layers"), {childList:true});
+	}
 		
-		this.channelObserver = new MutationObserver(() => {});
-		this.channelListObserver = new MutationObserver(() => {});
-		this.channelContextObserver = new MutationObserver(() => {});
+	if (!document.querySelector("#bd-settingspane-container .bd-pfbtn.bd-updatebtn") && document.querySelector("#bd-settingspane-container .bd-pfbtn")) document.querySelector("#bd-settingspane-container .bd-pfbtn").parentElement.insertBefore(BDfunctionsDevilBro.createUpdateButton(), document.querySelector("#bd-settingspane-container .bd-pfbtn").nextSibling);
+};
+
+BDfunctionsDevilBro.unloadMessage = function (pluginName, oldVersion) { 
+	console.log(`${pluginName} Version: ${oldVersion} unloaded.`);
+	
+	BDfunctionsDevilBro.showToast(`${pluginName} ${oldVersion} has been stopped.`);
+	
+	var downloadUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
+	
+	delete window.PluginUpdates.plugins[downloadUrl];
+	
+	if (BDfunctionsDevilBro.isObjectEmpty(window.PluginUpdates.plugins)) {
+		window.PluginUpdates.observer.disconnect();
+		delete window.PluginUpdates.observer;
+		$("#bd-settingspane-container .bd-pfbtn.bd-updatebtn").remove();
+	}
+};
+
+
+// plugin update notifications created in cooperation with Zerebos https://github.com/rauenzi/BetterDiscordAddons/blob/master/Plugins/PluginLibrary.js
+BDfunctionsDevilBro.checkUpdate = function (pluginName, downloadUrl) {
+	let request = require("request");
+	request(downloadUrl, (error, response, result) => {
+		if (error) return;
+		var remoteVersion = result.match(/['"][0-9]+\.[0-9]+\.[0-9]+['"]/i);
+		if (!remoteVersion) return;
+		remoteVersion = remoteVersion.toString().replace(/['"]/g, "");
+		var ver = remoteVersion.split(".");
+		var lver = window.PluginUpdates.plugins[downloadUrl].version.split(".");
+		var hasUpdate = false;
+		if (ver[0] > lver[0]) hasUpdate = true;
+		else if (ver[0] == lver[0] && ver[1] > lver[1]) hasUpdate = true;
+		else if (ver[0] == lver[0] && ver[1] == lver[1] && ver[2] > lver[2]) hasUpdate = true;
+		else hasUpdate = false;
+		if (hasUpdate) BDfunctionsDevilBro.showUpdateNotice(pluginName, downloadUrl);
+		else BDfunctionsDevilBro.removeUpdateNotice(pluginName);
+	});
+};
+
+BDfunctionsDevilBro.showUpdateNotice = function(pluginName, downloadUrl) {
+	let noticeElement = `<div class="notice notice-info" id="pluginNotice"><div class="notice-dismiss" id="pluginNoticeDismiss"></div><span class="notice-message">The following plugins have updates:</span>&nbsp;&nbsp;<strong id="outdatedPlugins"></strong></div>`;
+	if (!$("#pluginNotice").length)  {
+		$(".app.flex-vertical").children().first().before(noticeElement);
+        $(".win-buttons").addClass("win-buttons-notice");
+		$("#pluginNoticeDismiss").on("click", () => {
+			$(".win-buttons").animate({top: 0}, 400, "swing", () => {
+				$(".win-buttons").css("top","").removeClass("win-buttons-notice");
+			});
+			$("#pluginNotice").slideUp({complete: () => {
+				$("#pluginNotice").remove();
+			}});
+		});
+	}
+	let pluginNoticeID = pluginName + "-notice";
+	if (!$("#" + pluginNoticeID).length) {
+		let pluginNoticeElement = $(`<span id="${pluginNoticeID}">`);
+        pluginNoticeElement.text(pluginName);
+        pluginNoticeElement.on("click", () => {
+            BDfunctionsDevilBro.downloadPlugin(pluginName, downloadUrl);
+        });
+		if ($("#outdatedPlugins").children("span").length) $("#outdatedPlugins").append(`<span class="separator">, </span>`);
+		$("#outdatedPlugins").append(pluginNoticeElement);
+	}
+};
+
+BDfunctionsDevilBro.downloadPlugin = function(pluginName, downloadUrl) {
+    let request = require("request");
+    let fileSystem = require("fs");
+    let path = require("path");
+    request(downloadUrl, (error, response, body) => {
+        if (error) return console.warn("Unable to get update for " + pluginName);
+        let remoteVersion = body.match(/['"][0-9]+\.[0-9]+\.[0-9]+['"]/i);
+        remoteVersion = remoteVersion.toString().replace(/['"]/g, "");
+        let filename = downloadUrl.split("/");
+        filename = filename[filename.length - 1];
+        var file = path.join(BDfunctionsDevilBro.getPluginsFolder(), filename);
+        fileSystem.writeFileSync(file, body);
+        BDfunctionsDevilBro.showToast(`${pluginName} ${window.PluginUpdates.plugins[downloadUrl].version} has been replaced by ${pluginName} ${remoteVersion}`);
+        if (!(window.bdplugins["Restart-No-More"] && window.pluginCookie["Restart-No-More"] || window.bdplugins["Restart No More"] && window.pluginCookie["Restart No More"])) {
+            if (!window.PluginUpdates.downloaded) {
+                window.PluginUpdates.downloaded = [];
+                let button = $(`<button class="btn btn-reload">Reload</button>`);
+                button.on("click", (e) => {
+                    e.preventDefault();
+                    window.location.reload(false);
+                });
+                var tooltip = document.createElement("div");
+                tooltip.className = "tooltip tooltip-bottom tooltip-black";
+                tooltip.style.maxWidth = "400px";
+                button.on("mouseenter", () => {
+                    document.querySelector(".tooltips").appendChild(tooltip);
+                    tooltip.innerText = window.PluginUpdates.downloaded.join(", ");
+                    tooltip.style.left = button.offset().left + (button.outerWidth() / 2) - ($(tooltip).outerWidth() / 2) + "px";
+                    tooltip.style.top = button.offset().top + button.outerHeight() + "px";
+                });
     
-		this.css = `
-			@keyframes animation-editchannels-backdrop {
-				to { opacity: 0.85; }
-			}
+                button.on("mouseleave", () => {
+                    tooltip.remove();
+                });
+    
+                button.appendTo($("#pluginNotice"));
+            }
+            window.PluginUpdates.plugins[downloadUrl].version = remoteVersion;
+            window.PluginUpdates.downloaded.push(pluginName);
+            BDfunctionsDevilBro.removeUpdateNotice(pluginName);
+        }
+    });
+};
 
-			@keyframes animation-editchannels-backdrop-closing {
-				to { opacity: 0; }
-			}
+BDfunctionsDevilBro.removeUpdateNotice = function(pluginName) {
+	let notice = $("#" + pluginName + "-notice");
+	if (notice.length) {
+		if (notice.next(".separator").length) notice.next().remove();
+		else if (notice.prev(".separator").length) notice.prev().remove();
+		notice.remove();
+    }
 
-			@keyframes animation-editchannels-modal {
-				to { transform: scale(1); opacity: 1; }
-			}
+	if (!$("#outdatedPlugins").children("span").length && !$("#pluginNotice .btn-reload").length) {
+        $("#pluginNoticeDismiss").click();
+    } 
+    else if (!$("#outdatedPlugins").children("span").length && $("#pluginNotice .btn-reload").length) {
+        $("#pluginNotice .notice-message").text("To finish updating you need to reload.");
+    }
+};
 
-			@keyframes animation-editchannels-modal-closing {
-				to { transform: scale(0.7); opacity: 0; }
-			}
+BDfunctionsDevilBro.showToast = function(content, options = {}) {
+    if (!document.querySelector(".toasts")) {
+        let toastWrapper = document.createElement("div");
+        toastWrapper.classList.add("toasts");
+        toastWrapper.style.setProperty("left", document.querySelector(".chat form, #friends, .noChannel-2EQ0a9, .activityFeed-HeiGwL").getBoundingClientRect().left + "px");
+        toastWrapper.style.setProperty("width", document.querySelector(".chat form, #friends, .noChannel-2EQ0a9, .activityFeed-HeiGwL").offsetWidth + "px");
+        toastWrapper.style.setProperty("bottom", (document.querySelector(".chat form") ? document.querySelector(".chat form").offsetHeight : 80) + "px");
+        document.querySelector(".app").appendChild(toastWrapper);
+    }
+    const {type = "", icon = true, timeout = 3000} = options;
+    let toastElem = document.createElement("div");
+    toastElem.classList.add("toast");
+	if (type) toastElem.classList.add("toast-" + type);
+	if (type && icon) toastElem.classList.add("icon");
+    toastElem.innerText = content;
+    document.querySelector(".toasts").appendChild(toastElem);
+    setTimeout(() => {
+        toastElem.classList.add("closing");
+        setTimeout(() => {
+            toastElem.remove();
+            if (!document.querySelectorAll(".toasts .toast").length) document.querySelector(".toasts").remove();
+        }, 300);
+    }, timeout);
+};
 
-			.editchannels-modal .callout-backdrop {
-				animation: animation-editchannels-backdrop 250ms ease;
-				animation-fill-mode: forwards;
-				opacity: 0;
-				background-color: rgb(0, 0, 0);
-				transform: translateZ(0px);
+BDfunctionsDevilBro.createTooltip = function(content, container, options = {}) {
+	if (!document.querySelector(".tooltips") || !content || !container) return null;
+	let id = Math.round(Math.random()*10000000000000000);
+    let tooltip = document.createElement("div");
+    tooltip.classList.add("tooltip");
+    tooltip.classList.add("tooltip-black");
+	if (options.type) tooltip.classList.add("tooltip-" + options.type);
+	if (options.selector) tooltip.classList.add(options.selector);
+	if (options.css) BDfunctionsDevilBro.appendLocalStyle("customTooltipDevilBro" + id, options.css);
+	if (options.html === true) tooltip.innerHTML = content;
+	else tooltip.innerText = content;
+    
+	document.querySelector(".tooltips").appendChild(tooltip);
+	
+	var left, top;
+	
+	if (!options.position) options.position = options.type;
+	switch (options.position) {
+		case "top": 
+			left = $(container).offset().left + ($(container).outerWidth() - $(tooltip).outerWidth())/2;
+			top = $(container).offset().top - $(tooltip).outerHeight();
+			break;
+		case "bottom": 
+			left = $(container).offset().left + ($(container).outerWidth() - $(tooltip).outerWidth())/2;
+			top = $(container).offset().top + $(container).outerHeight();
+			break;
+		case "left": 
+			left = $(container).offset().left - $(tooltip).outerWidth();
+			top = $(container).offset().top + ($(container).outerHeight() - $(tooltip).outerHeight())/2;
+			break;
+		default: 
+			left = $(container).offset().left + $(container).outerWidth();
+			top = $(container).offset().top + ($(container).outerHeight() - $(tooltip).outerHeight())/2;
+			break;
+	}
+	
+	tooltip.style.setProperty("left", left + "px");
+	tooltip.style.setProperty("top", top + "px");
+	
+	var tooltipObserver = new MutationObserver((mutations) => {
+		mutations.forEach((mutation) => {
+			var nodes = Array.from(mutation.removedNodes);
+			var ownMatch = nodes.indexOf(tooltip) > -1;
+			var directMatch = nodes.indexOf(container) > -1;
+			var parentMatch = nodes.some(parent => parent.contains(container));
+			if (ownMatch || directMatch || parentMatch) {
+				tooltipObserver.disconnect();
+				tooltip.remove();
+				$(container).off("mouseleave.BDfunctionsDevilBroTooltip" + id);
+				BDfunctionsDevilBro.removeLocalStyle("customTooltipDevilBro" + id);
 			}
+		});
+	});
+	tooltipObserver.observe(document.body, {subtree: true, childList: true});
+	
+	$(container).on("mouseleave.BDfunctionsDevilBroTooltip" + id, () => {
+		tooltip.remove();
+	});
+	
+	return tooltip;
+};
 
-			.editchannels-modal.closing .callout-backdrop {
-				animation: animation-editchannels-backdrop-closing 200ms linear;
-				animation-fill-mode: forwards;
-				animation-delay: 50ms;
-				opacity: 0.85;
-			}
-			
-			.editchannels-modal .modal {
-				animation: animation-editchannels-modal 250ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
-				animation-fill-mode: forwards;
-				transform: scale(0.7);
-				transform-origin: 50% 50%;
-				align-content: space-around;
-				align-items: center;
-				box-sizing: border-box;
-				display: flex;
-				flex-direction: column;
-				justify-content: center;
-				min-height: initial;
-				max-height: initial;
-				opacity: 0;
-				pointer-events: none;
-				user-select: none;
-				height: 100%;
-				width: 100%;
-				margin: 0;
-				padding: 0;
-				position: absolute;
-				top: 0;
-				right: 0;
-				bottom: 0;
-				left: 0;
-				z-index: 1000;
-			}
+// Plugins/Themes folder resolver from Square
+BDfunctionsDevilBro.getPluginsFolder = function() {
+    let process = require("process");
+    let path = require("path");
+    switch (process.platform) {
+        case "win32":
+        return path.resolve(process.env.appdata, "BetterDiscord/plugins/");
+        case "darwin":
+        return path.resolve(process.env.HOME, "Library/Preferences/", "BetterDiscord/plugins/");
+        default:
+        return path.resolve(process.env.HOME, ".config/", "BetterDiscord/plugins/");
+    }
+};
 
-			.editchannels-modal.closing .modal {
-				animation: animation-editchannels-modal-closing 250ms cubic-bezier(0.19, 1, 0.22, 1);
-				animation-fill-mode: forwards;
-				opacity: 1;
-				transform: scale(1);
-			}
-			
-			.editchannels-modal .form {
-				width: 100%;
-			}
+BDfunctionsDevilBro.getThemesFolder = function() {
+    let process = require("process");
+    let path = require("path");
+    switch (process.platform) {
+        case "win32":
+        return path.resolve(process.env.appdata, "BetterDiscord/themes/");
+        case "darwin":
+        return path.resolve(process.env.HOME, "Library/Preferences/", "BetterDiscord/themes/");
+        default:
+        return path.resolve(process.env.HOME, ".config/", "BetterDiscord/themes/");
+    }
+};
 
-			.editchannels-modal .form-header, .editchannels-modal .form-actions {
-				background-color: rgba(32,34,37,.3);
-				box-shadow: inset 0 1px 0 rgba(32,34,37,.6);
-				padding: 20px;
+BDfunctionsDevilBro.createUpdateButton = function () {
+	var updateButton = document.createElement("button");
+	updateButton.className = "bd-pfbtn bd-updatebtn";
+	updateButton.innerText = "Check for Updates";
+	updateButton.style.left = "220px";
+	updateButton.onclick = function () {
+		BDfunctionsDevilBro.checkAllUpdates();
+	};			
+	updateButton.onmouseenter = function () {
+		BDfunctionsDevilBro.createTooltip("Only checks for updates of plugins, which support the updatecheck. Rightclick for a list.", updateButton, {type:"right",selector:"update-button-tooltip"});
+		
+	};
+	updateButton.oncontextmenu = function () {
+		if (window.PluginUpdates && window.PluginUpdates.plugins && !document.querySelector(".update-list-tooltip")) {
+			var list = [];
+			for (var plugin in window.PluginUpdates.plugins) {
+				list.push(window.PluginUpdates.plugins[plugin].name);
+			}
+			BDfunctionsDevilBro.createTooltip(list.sort().join(", "), updateButton, {type:"bottom",selector:"update-list-tooltip"});
+		}
+	};
+	return updateButton;
+};
+
+BDfunctionsDevilBro.checkAllUpdates = function () {
+	for (let key in window.PluginUpdates.plugins) {
+		let plugin = window.PluginUpdates.plugins[key];
+		BDfunctionsDevilBro.checkUpdate(plugin.name, plugin.raw);
+	}
+};
+	
+BDfunctionsDevilBro.translateMessage = function (pluginName) { 
+	var lang = BDfunctionsDevilBro.getDiscordLanguage().lang;
+	console.log(`${pluginName}: Changed plugin language to: ${lang}.`);
+};
+	
+BDfunctionsDevilBro.getReactInstance = function (node) { 
+	if (!node) return null;
+	return node[Object.keys(node).find((key) => key.startsWith("__reactInternalInstance"))];
+};
+
+BDfunctionsDevilBro.getOwnerInstance = function (config) { 
+	if (config === undefined) return null;
+	if (!config.node || !config.name) return null;
+	var inst = BDfunctionsDevilBro.getReactInstance(config.node);
+	if (!inst) return null;
+	
+	var depth = -1;
+	var maxDepth = config.depth === undefined ? 15 : config.depth;
+	
+	var upwards = config.up === undefined ? false : config.up;
+	
+	var start = performance.now();
+	var maxTime = config.time === undefined ? 150 : config.time;
+		
+	var keyWhiteList = upwards ? {"return":true,"sibling":true} : {"child":true,"sibling":true};
+	
+	return searchOwnerInReact(inst);
+	
+	function searchOwnerInReact (ele) {
+		depth++;
+		if (!ele || BDfunctionsDevilBro.getReactInstance(ele) || depth > maxDepth || performance.now() - start > maxTime) result = null;
+		else {
+			var keys = Object.getOwnPropertyNames(ele);
+			var result = null;
+			for (var i = 0; result === null && i < keys.length; i++) {
+				var key = keys[i];
+				var value = ele[keys[i]];
 				
-			}
-
-			.editchannels-modal .form-header {
-				color: #f6f6f7;
-				cursor: default;
-				font-size: 16px;
-				font-weight: 600;
-				letter-spacing: .3px;
-				line-height: 20px;
-				text-transform: uppercase;
-			}
-
-			.editchannels-modal .form-actions {
-				display: flex;
-				flex-direction: row-reverse;
-				flex-wrap: nowrap;
-				flex: 0 0 auto;
-				padding-right: 32px;
-			}
-
-			.editchannels-modal .form-inner{
-				margin: 10px 0;
-				max-height: 360px;
-				overflow-x: hidden;
-				overflow-y: hidden;
-				padding: 0 20px;
-				height: 200px;
-			}
-
-			.editchannels-modal .modal-inner {
-				background-color: #36393E;
-				border-radius: 5px;
-				box-shadow: 0 0 0 1px rgba(32,34,37,.6),0 2px 10px 0 rgba(0,0,0,.2);
-				display: flex;
-				min-height: 200px;
-				pointer-events: auto;
-				width: 470px;
-			}
-
-			.editchannels-modal input {
-				color: #f6f6f7;
-				background-color: rgba(0,0,0,.1);
-				border-color: rgba(0,0,0,.3);
-				padding: 10px;
-				height: 40px;
-				box-sizing: border-box;
-				width: 100%;
-				border-width: 1px;
-				border-style: solid;
-				border-radius: 3px;
-				outline: none;
-				transition: background-color .15s ease,border .15s ease;
-			}
-
-			.editchannels-modal .btn {
-				align-items: center;
-				background: none;
-				border-radius: 3px;
-				border: none;
-				box-sizing: border-box;
-				display: flex;
-				font-size: 14px;
-				font-weight: 500;
-				justify-content: center;
-				line-height: 16px;
-				min-height: 38px;
-				min-width: 96px;
-				padding: 2px 16px;
-				position: relative;
-			}
-
-			.editchannels-modal .btn-cancel {
-				background-color: #2f3136;
-				color: #fff;
-			}
-
-			.editchannels-modal .btn-save {
-				background-color: #3A71C1;
-				color: #fff;
-			}
-
-			.editchannels-modal .control-group label {
-				color: #b9bbbe;
-				letter-spacing: .5px;
-				text-transform: uppercase;
-				flex: 1;
-				cursor: default;
-				font-weight: 600;
-				line-height: 16px;
-				font-size: 12px;
-			}
-
-			.editchannels-modal .control-group {
-				margin-top: 10px;
-			}`;
-
-		this.channelContextEntryMarkup =
-			`<div class="item-group">
-				<div class="item localchannelsettings-item item-subMenu">
-					<span>REPLACE_context_localchannelsettings_text</span>
-					<div class="hint"></div>
-				</div>
-			</div>`;
-			
-		this.channelContextSubMenuMarkup = 
-			`<div class="context-menu editchannels-submenu">
-				<div class="item-group">
-					<div class="item channelsettings-item">
-						<span>REPLACE_submenu_channelsettings_text</span>
-						<div class="hint"></div>
-					</div>
-					<div class="item resetsettings-item">
-						<span>REPLACE_submenu_resetsettings_text</span>
-						<div class="hint"></div>
-					</div>
-				</div>
-			</div>`;
-
-		this.channelSettingsModalMarkup =
-			`<span class="editchannels-modal">
-				<div class="backdrop-2ohBEd callout-backdrop"></div>
-				<div class="modal">
-					<div class="modal-inner">
-						<div class="form">
-							<div class="form-header">
-								<header class="modal-header">REPLACE_modal_header_text</header>
-							</div>
-							<div class="form-inner">
-								<div class="control-group">
-									<label class="modal-text-label" for="modal-text">REPLACE_modal_channelname_text</label>
-									<input type="text" id="modal-text" name="text">
-								</div>
-								<div class="control-group">
-									<div class="modal-color-picker">
-										<label class="color-picker-label">REPLACE_modal_colorpicker_text</label>
-										<div class="swatches1"></div>
-									</div>
-								</div>
-							</div>
-							<div class="form-actions">
-								<button type="button" class="btn btn-cancel">REPLACE_btn_cancel_text</button>
-								<button type="button" class="btn btn-save">REPLACE_btn_save_text</button>
-							</div>
-						</form>
-					</div>
-				</div>
-			</span>`;
-	}
-
-	getName () {return "EditChannels";}
-
-	getDescription () {return "Allows you to rename and recolor channelnames.";}
-
-	getVersion () {return "3.4.2";}
-
-	getAuthor () {return "DevilBro";}
-	
-    getSettingsPanel () {
-		if (typeof BDfunctionsDevilBro === "object") {
-			return `<button class="` + this.getName() + `ResetBtn" style="height:23px" onclick='` + this.getName() + `.resetAll("` + this.getName() + `")'>Reset all Channels`;
-		}
-    }
-
-	//legacy
-	load () {}
-
-	start () {
-		if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
-		$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-		$('head').append("<script src='https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
-		if (typeof BDfunctionsDevilBro !== "object") {
-			$('head script[src="https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-			$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
-		}
-		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
-			
-			this.channelObserver = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.attributeName == "class" && change.target && change.target.classList && change.target.classList.contains("wrapper-fDmxzK")) {
-							this.loadChannel(change.target.parentElement);
-						}
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								if (node && node.classList && node.classList.contains("containerDefault-7RImuF")) {
-									this.loadChannel($(node));
-								}
-							});
-						}
-					}
-				);
-			});
-			
-			this.channelListObserver = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								 if (node && node.className && node.className.length > 0 && node.className.indexOf("container-") > -1) {
-									this.channelObserver.observe(node, {childList: true, attributes: true, subtree: true});
-									this.loadAllChannels();
-								} 
-							});
-						}
-					}
-				);
-			});
-			if (document.querySelector("[class*='channels-'][class*='flex-']")) this.channelListObserver.observe(document.querySelector("[class*='channels-'][class*='flex-']"), {childList: true, subtree: true});
-			
-			$("[class*='channels-'][class*='flex-'] [class*='scroller-'] [class^='container-']").each(
-				(i,category) => {
-					this.channelObserver.observe(category, {childList: true, attributes: true, subtree: true});
+				if (ele.type && ele.type.displayName === config.name) {
+					result = ele.stateNode;
 				}
-			);
-			
-			this.channelContextObserver = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								if (node && node.nodeType == 1 && node.className.includes("context-menu")) {
-									this.onContextMenu(node);
-								}
-							});
-						}
-					}
-				);
-			});
-			if (document.querySelector(".app")) this.channelContextObserver.observe(document.querySelector(".app"), {childList: true});
-			
-			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
-			
-			this.loadAllChannels();
-			
-			setTimeout(() => {
-				this.labels = this.setLabelsByLanguage();
-				this.changeLanguageStrings();
-			},5000);
+				else if ((typeof value === "object" || typeof value === "function") && keyWhiteList[key]) {
+					result = searchOwnerInReact(value);
+				}
+			}
 		}
+		depth--;
+		return result;
+	}
+};
+
+BDfunctionsDevilBro.getKeyInformation = function (config) {
+	if (config === undefined) return null;
+	if (!config.node || !config.key) return null;
+	
+	var inst = BDfunctionsDevilBro.getReactInstance(config.node);
+	if (!inst) return null;
+	
+	var depth = -1;
+	var maxDepth = config.depth === undefined ? 15 : config.depth;
+	
+	var start = performance.now();
+	var maxTime = config.time === undefined ? 30 : config.time;
+		
+	var keyWhiteList = {
+		"_currentElement":true,
+		"_renderedChildren":true,
+		"_instance":true,
+		"_owner":true,
+		"props":true,
+		"state":true,
+		"stateNode":true,
+		"refs":true,
+		"updater":true,
+		"children":true,
+		"type":true,
+		"memoizedProps":true,
+		"memoizedState":true,
+		"child":true,
+		"sibling":true,
+		"firstEffect":true
+	};
+	
+	if (typeof config.whiteList === "object") Object.assign(keyWhiteList, config.whiteList);
+	
+	var keyBlackList = typeof config.blackList === "object" ? config.blackList : {
+	};
+	
+	var resultArray = [];
+	var singleResult = searchKeyInReact(inst);
+	
+	if (config.all) return resultArray;
+	else return singleResult;
+
+	function searchKeyInReact (ele) {
+		depth++;
+		if (!ele || BDfunctionsDevilBro.getReactInstance(ele) || depth > maxDepth || performance.now() - start > maxTime) result = null;
 		else {
-			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
-		}
-	}
-
-	stop () {
-		if (typeof BDfunctionsDevilBro === "object") {
-			this.channelObserver.disconnect();
-			this.channelListObserver.disconnect();
-			this.channelContextObserver.disconnect();
-			
-			$(".custom-editchannels").each(
-				(i,channelDiv) => {
-					var info = BDfunctionsDevilBro.getKeyInformation({"node":channelDiv, "key":"channel"});
-					if (info) {
-						var channel = $(channelDiv).find(".name-2SL4ev");
-					
-						$(channelDiv)
-							.removeClass("custom-editchannels");
-						$(channel)
-							.text(info.name)
-							.css("color", "");
+			var keys = Object.getOwnPropertyNames(ele);
+			var result = null;
+			for (var i = 0; result === null && i < keys.length; i++) {
+				var key = keys[i];
+				var value = ele[keys[i]];
+				
+				if (config.key === key && (config.value === undefined || config.value === value)) {
+					if (config.all === undefined || !config.all) {
+						result = value;
 					}
-				}
-			);
-			
-			BDfunctionsDevilBro.removeLocalStyle(this.getName());
-			
-			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
-		}
-	}
-
-	
-	// begin of own functions
-
-    static resetAll (pluginName) {
-		if (confirm("Are you sure you want to reset all channels?")) {
-			BDfunctionsDevilBro.removeAllData(pluginName, "channels");
-			
-			$(".custom-editchannels").each(
-				(i,channelDiv) => {
-					var info = BDfunctionsDevilBro.getKeyInformation({"node":channelDiv, "key":"channel"});
-					if (info) {
-						var channel = $(channelDiv).find(".name-2SL4ev");
-					
-						$(channelDiv)
-							.removeClass("custom-editchannels");
-						$(channel)
-							.text(info.name)
-							.css("color", "");
-					}
-				}
-			);
-		}
-    }
-
-	changeLanguageStrings () {
-		this.channelContextEntryMarkup = 	this.channelContextEntryMarkup.replace("REPLACE_context_localchannelsettings_text", this.labels.context_localchannelsettings_text);
-		
-		this.channelContextSubMenuMarkup = 	this.channelContextSubMenuMarkup.replace("REPLACE_submenu_channelsettings_text", this.labels.submenu_channelsettings_text);
-		this.channelContextSubMenuMarkup = 	this.channelContextSubMenuMarkup.replace("REPLACE_submenu_resetsettings_text", this.labels.submenu_resetsettings_text);
-		
-		this.channelSettingsModalMarkup = 	this.channelSettingsModalMarkup.replace("REPLACE_modal_header_text", this.labels.modal_header_text);
-		this.channelSettingsModalMarkup = 	this.channelSettingsModalMarkup.replace("REPLACE_modal_channelname_text", this.labels.modal_channelname_text);
-		this.channelSettingsModalMarkup = 	this.channelSettingsModalMarkup.replace("REPLACE_modal_colorpicker_text", this.labels.modal_colorpicker_text);
-		this.channelSettingsModalMarkup = 	this.channelSettingsModalMarkup.replace("REPLACE_btn_cancel_text", this.labels.btn_cancel_text);
-		this.channelSettingsModalMarkup = 	this.channelSettingsModalMarkup.replace("REPLACE_btn_save_text", this.labels.btn_save_text);
-		
-		BDfunctionsDevilBro.translateMessage(this.getName());
-	}
-	
-	onContextMenu (context) {
-		if (!context.querySelector(".localchannelsettings-item")) {
-			var channelData = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"channel"});
-			
-			if (channelData && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"ChannelInviteCreateGroup"})) {
-				$(context).append(this.channelContextEntryMarkup)
-					.on("mouseenter", ".localchannelsettings-item", channelData, this.createContextSubMenu.bind(this))
-					.on("mouseleave", ".localchannelsettings-item", channelData, this.deleteContextSubMenu.bind(this));
-			}
-		}
-	}
-	
-	createContextSubMenu (e) {
-		var theme = BDfunctionsDevilBro.themeIsLightTheme() ? "" : "theme-dark";
-		
-		var targetDiv = e.target.tagName != "SPAN" ? e.target : e.target.parentNode;
-		
-		var channelContextSubMenu = $(this.channelContextSubMenuMarkup);
-		$(targetDiv).append(channelContextSubMenu)
-			.off("click", ".channelsettings-item")
-			.on("click", ".channelsettings-item", e.data, this.showChannelSettings.bind(this));
-		$(channelContextSubMenu)
-			.addClass(theme)
-			.css("left", $(targetDiv).offset().left + "px")
-			.css("top", $(targetDiv).offset().top + "px");
-		var id = e.data.id + "_" + e.data.guild_id;
-		var info = BDfunctionsDevilBro.loadData(id, this.getName(), "channels");
-		if (!info) {
-			$(targetDiv).find(".resetsettings-item").addClass("disabled");
-		}
-		else {
-			$(targetDiv)
-				.off("click", ".resetsettings-item")
-				.on("click", ".resetsettings-item", e.data, this.resetChannel.bind(this));
-		}
-	}
-	
-	deleteContextSubMenu (e) {
-		$(".editchannels-submenu").remove();
-	}
-	
-	showChannelSettings (e) {
-		$(".context-menu").hide();
-		var id = e.data.id + "_" + e.data.guild_id;
-		if (id) {
-			var info = BDfunctionsDevilBro.loadData(id, this.getName(), "channels");
-			
-			var channelID = e.data.id;
-			var serverID = 	e.data.guild_id;
-			var name = 		info ? info.name : null;
-			var color = 	info ? info.color : null;
-			
-			var channelDiv = BDfunctionsDevilBro.getDivOfChannel(channelID, serverID);
-			var channel = $(channelDiv).find(".name-2SL4ev");
-			
-			var channelSettingsModal = $(this.channelSettingsModalMarkup);
-			channelSettingsModal.find("#modal-text")[0].value = name;
-			channelSettingsModal.find("#modal-text").attr("placeholder", e.data.name);
-			BDfunctionsDevilBro.setColorSwatches(color, channelSettingsModal.find(".swatches1"), "swatch1");
-			channelSettingsModal.appendTo($(".app-XZYfmp"))
-				.on("click", ".callout-backdrop,button.btn-cancel", (event) => {
-					channelSettingsModal.addClass('closing');
-					setTimeout(() => {channelSettingsModal.remove();}, 300);
-				})
-				.on("click", "button.btn-save", (event) => {
-					event.preventDefault();
-					
-					name = null;
-					if (channelSettingsModal.find("#modal-text")[0].value) {
-						if (channelSettingsModal.find("#modal-text")[0].value.trim().length > 0) {
-							name = channelSettingsModal.find("#modal-text")[0].value.trim();
+					else if (config.all) {
+						if (config.noCopies === undefined || !config.noCopies) {
+							resultArray.push(value);
+						}
+						else if (config.noCopies) {
+							var included = false;
+							for (var j = 0; j < resultArray.length; j++) {
+								if (BDfunctionsDevilBro.equals(value, resultArray[j])) {
+									included = true;
+									break;
+								}
+							}
+							if (!included) resultArray.push(value);
 						}
 					}
-					
-					
-					color = BDfunctionsDevilBro.getSwatchColor("swatch1");
-					if (color) {
-						if (color[0] < 30 && color[1] < 30 && color[2] < 30) BDfunctionsDevilBro.colorCHANGE(color, 30);
-						else if (color[0] > 225 && color[1] > 225 && color[2] > 225) BDfunctionsDevilBro.colorCHANGE(color, -30);
+				}
+				else if ((typeof value === "object" || typeof value === "function") && ((keyWhiteList[key] && !keyBlackList[key]) || key[0] == "." || !isNaN(key[0]))) {
+					result = searchKeyInReact(value);
+				}
+			}
+		}
+		depth--;
+		return result;
+	}
+};
+
+// code in this closure based on code by samogot
+// https://github.com/samogot/betterdiscord-plugins/blob/master/v2/1Lib%20Discord%20Internals/plugin.js
+BDfunctionsDevilBro.findInWebModules = function (filter) {
+	const req = webpackJsonp([], {"__extra_id__": (module, exports, req) => exports.default = req}, ["__extra_id__"]).default;
+	delete req.c["__extra_id__"];
+	for (let i in req.c) { 
+		if (req.c.hasOwnProperty(i)) {
+			let m = req.c[i].exports;
+			if (m && m.__esModule && m.default && filter(m.default)) return m.default;
+			if (m && filter(m)) return m;
+		}
+	}
+	return null;
+};
+
+BDfunctionsDevilBro.getLanguageTable = function (lang) {
+	var ti = {
+		bg: "холандски", //bulgarian
+		cs: "Nizozemština", //czech
+		da: "Hollandsk", //danish
+		de: "Niederländisch", //german
+		en: "Dutch", //english
+		es: "Holandés", //spanish
+		fi: "hollanti", //finnish
+		fr: "Néerlandais", //french
+		it: "Olandese", //italian
+		ja: "オランダ語", //japanese
+		ko: "네덜란드어", //korean
+		nl: "Nederlands", //dutch
+		no: "Nederlandsk", //norwegian
+		pl: "Holenderski", //polish
+		pt: "Holandês", //portuguese (brazil)
+		ru: "Голландский", //russian
+		sv: "Holländska", //swedish
+		tr: "Flemenkçe", //turkish
+		uk: "Нідерландська", //ukranian
+		zh: "荷蘭文" //chinese (traditional)
+    };
+	lang = lang ? lang : BDfunctionsDevilBro.getDiscordLanguage().id;
+	return BDfunctionsDevilBro.findInWebModules(function(m) {
+		return m.nl === ti[lang];
+	});
+};
+
+BDfunctionsDevilBro.equals = function (check1, check2, compareOrder) {
+	var depth = -1;
+	
+	if (compareOrder === undefined || typeof compareOrder !== "boolean") compareOrder = false;
+	
+	return recurseEquals(check1, check2);
+	
+	function recurseEquals (ele1, ele2) {
+		depth++;
+		var result = true;
+		if (depth > 1000) 							result = null;
+		else {
+			if (typeof ele1 != typeof ele2) 		result = false;
+			else if (typeof ele1 === "undefined") 	result = true;
+			else if (typeof ele1 === "symbol") 		result = true;
+			else if (typeof ele1 === "boolean") 	result = (ele1 == ele2);
+			else if (typeof ele1 === "string") 		result = (ele1 == ele2);
+			else if (typeof ele1 === "number") {
+				if (isNaN(ele1) || isNaN(ele2)) 	result = (isNaN(ele1) == isNaN(ele2));
+				else 								result = (ele1 == ele2);
+			}
+			else if (!ele1 && !ele2) 				result = true;
+			else if (!ele1 || !ele2) 				result = false;
+			else if (typeof ele1 === "function" || typeof ele1 === "object") {
+				var keys1 = Object.getOwnPropertyNames(ele1);
+				var keys2 = Object.getOwnPropertyNames(ele2);
+				if (keys1.length != keys2.length) 	result = false;
+				else {
+					for (var i = 0; result === true && i < keys1.length; i++) {
+						if (compareOrder) 			result = recurseEquals(ele1[keys1[i]], ele2[keys2[i]]);
+						else						result = recurseEquals(ele1[keys1[i]], ele2[keys1[i]]);
 					}
-					
-					if (name == null && color == null) {
-						this.resetChannel(e);
-					}
-					else {
-						BDfunctionsDevilBro.saveData(id, {channelID,serverID,name,color}, this.getName(), "channels");
-						this.loadChannel(channelDiv);
-					}
-					
-					channelSettingsModal.addClass('closing');
-					setTimeout(() => {channelSettingsModal.remove();}, 300);
+				}
+			}
+		}
+		depth--;
+		return result;
+	}
+};
+
+BDfunctionsDevilBro.isObjectEmpty = function (obj) {
+	var empty = true;
+	for (var key in obj) {
+		empty = false;
+		break;
+	}
+	return empty;
+};
+
+BDfunctionsDevilBro.removeFromArray = function (array, value) {
+	if (!array || !value || !Array.isArray(array) || !array.includes(value)) return;
+	array.splice(array.indexOf(value), 1);
+};
+
+BDfunctionsDevilBro.onSwitchFix = function (plugin) {
+	var switchFixObserver = new MutationObserver((changes) => {
+		changes.forEach((change) => { 
+			if (change.addedNodes) {
+				change.addedNodes.forEach((node) => {
+					if (plugin.onSwitchTriggered) return;
+					else if (node && node.id === "friends") BDfunctionsDevilBro.triggerOnSwitch(plugin); 
+					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("no-topic")) 		BDfunctionsDevilBro.triggerOnSwitch(plugin); 
+					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("channel-topic")) 	BDfunctionsDevilBro.triggerOnSwitch(plugin); 
+					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("noTopic-3Rq-dz")) 	BDfunctionsDevilBro.triggerOnSwitch(plugin); 
+					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("topic-1KFf6J")) 	BDfunctionsDevilBro.triggerOnSwitch(plugin); 
 				});
-				
-			channelSettingsModal.find("#modal-text")[0].focus();
+			}
+			if (change.removedNodes) {
+				change.removedNodes.forEach((node) => {
+					if (plugin.onSwitchTriggered) return;
+					else if (node && node.id === "friends") BDfunctionsDevilBro.triggerOnSwitch(plugin); 
+					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("no-topic")) 		BDfunctionsDevilBro.triggerOnSwitch(plugin); 
+					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("channel-topic")) 	BDfunctionsDevilBro.triggerOnSwitch(plugin); 
+					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("noTopic-3Rq-dz")) 	BDfunctionsDevilBro.triggerOnSwitch(plugin); 
+					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("topic-1KFf6J")) 	BDfunctionsDevilBro.triggerOnSwitch(plugin); 
+				});
+			}
+		});
+	});
+	switchFixObserver.observe(document.querySelector(":-webkit-any(.chat, #friends, .noChannel-2EQ0a9, .activityFeed-HeiGwL)").parentNode, {childList: true, subtree:true});
+	return switchFixObserver;
+};
+
+BDfunctionsDevilBro.triggerOnSwitch = function (plugin) {
+	plugin.onSwitchTriggered = true;
+	plugin.onSwitch();
+	setTimeout(() => {
+		plugin.onSwitchTriggered = false;
+	},1);
+};
+
+BDfunctionsDevilBro.getMyUserData = function () {
+	if ($(".container-iksrDt").length > 0) {
+		var userData = BDfunctionsDevilBro.getKeyInformation({"node":$(".container-iksrDt")[0],"key":"user"});
+		return (userData ? userData : null);
+	}
+};
+
+BDfunctionsDevilBro.getMyUserID = function () {
+	var userData = BDfunctionsDevilBro.getMyUserData();
+	return (userData && userData.id ? userData.id : null);
+};
+	
+BDfunctionsDevilBro.readServerList = function () {
+	var foundServers = [];
+	var servers = $(".guild");
+	for (var i = 0; i < servers.length; i++) {
+		var serverData = BDfunctionsDevilBro.getKeyInformation({"node":servers[i], "key":"guild"});
+		if (serverData) {
+			foundServers.push(servers[i]);
 		}
+	}
+	return foundServers;
+};
+	
+BDfunctionsDevilBro.readUnreadServerList = function (servers) {
+	if (servers === undefined) servers = BDfunctionsDevilBro.readServerList();
+	var foundServers = [];
+	for (var i = 0; i < servers.length; i++) {
+		var serverData = BDfunctionsDevilBro.getKeyInformation({"node":servers[i], "key":"guild"});
+		if (serverData) {
+			if (servers[i].classList.contains("unread") || $(servers[i]).find(".badge")[0]) {
+				foundServers.push(servers[i]);
+			}
+		}
+	}
+	return foundServers;
+};
+	
+BDfunctionsDevilBro.readDmList = function () {
+	var foundDMs = [];
+	var dms = $(".dms .guild");
+	for (var i = 0; i < dms.length; i++) {
+		var dmData = BDfunctionsDevilBro.getKeyInformation({"node":dms[i], "key":"channel"});
+		if (dmData) {
+			foundDMs.push(dms[i]);
+		}
+	}
+	return foundDMs;
+};
+	
+BDfunctionsDevilBro.readChannelList = function () {
+	var foundChannels = [];
+	var channels = $(".containerDefault-7RImuF");
+	for (var i = 0; i < channels.length; i++) {
+		var channelData = BDfunctionsDevilBro.getKeyInformation({"node":channels[i], "key":"channel"});
+		if (channelData) {
+			foundChannels.push(channels[i]);
+		}
+	}
+	return foundChannels;
+};
+	
+BDfunctionsDevilBro.getSelectedServer = function () {
+	var servers = BDfunctionsDevilBro.readServerList();
+	for (var i = 0; i < servers.length; i++) {
+		if ($(servers[i]).hasClass("selected")) {
+			return servers[i];
+		}
+	}
+	return null;
+};
+	
+BDfunctionsDevilBro.getDivOfServer = function (id) {
+	var servers = BDfunctionsDevilBro.readServerList();
+	for (var i = 0; i < servers.length; i++) {
+		if (BDfunctionsDevilBro.getIdOfServer(servers[i]) == id) {
+			return servers[i];
+		}
+	}
+	return null;
+};
+	
+BDfunctionsDevilBro.getIdOfServer = function (server) {
+	var serverData = BDfunctionsDevilBro.getKeyInformation({"node":server, "key":"guild"});
+	if (serverData) {
+		return serverData.id;
+	}
+	return null;
+};
+	
+BDfunctionsDevilBro.getDivOfChannel = function (channelID, serverID) {
+	var channels = BDfunctionsDevilBro.readChannelList();
+	for (var i = 0; i < channels.length; i++) {
+		var channelData = BDfunctionsDevilBro.getKeyInformation({"node":channels[i], "key":"channel"});
+		if (channelData) {
+			if (channelID == channelData.id && serverID == channelData.guild_id) {
+				return channels[i];
+			}
+		}
+	}
+	return null;
+};
+
+BDfunctionsDevilBro.getSettingsPanelDiv = function (ele) {
+	return $(".bda-slist > li").has(ele)[0];
+};
+
+BDfunctionsDevilBro.themeIsLightTheme = function () {
+	if ($(".theme-light").length > $(".theme-dark").length) {
+		return true;
+	}
+	return false;
+};
+
+BDfunctionsDevilBro.showHideEle = function (show, ele) {
+	$(ele).toggle(show);
+};
+
+BDfunctionsDevilBro.showHideAllEles = function (show, eles) {
+	$(eles).toggle(show);
+};
+
+BDfunctionsDevilBro.saveAllData = function (settings, pluginName, keyName) {
+	bdPluginStorage.set(pluginName, keyName, settings);
+};
+
+BDfunctionsDevilBro.loadAllData = function (pluginName, keyName) {
+	return bdPluginStorage.get(pluginName, keyName) ? bdPluginStorage.get(pluginName, keyName) : {};
+};
+
+BDfunctionsDevilBro.removeAllData = function (pluginName, keyName) {
+	BDfunctionsDevilBro.saveAllData({}, pluginName, keyName);
+};
+
+BDfunctionsDevilBro.saveData = function (id, data, pluginName, keyName) {
+	var settings = BDfunctionsDevilBro.loadAllData(pluginName, keyName);
+	
+	settings[id] = data;
+	
+	BDfunctionsDevilBro.saveAllData(settings, pluginName, keyName);
+};
+
+BDfunctionsDevilBro.loadData = function (id, pluginName, keyName) {
+	var settings = BDfunctionsDevilBro.loadAllData(pluginName, keyName);
+	
+	var data = settings[id];
+	
+	return data === undefined ? null : data;
+};
+	
+BDfunctionsDevilBro.removeData = function (id, pluginName, keyName) {
+	var settings = BDfunctionsDevilBro.loadAllData(pluginName, keyName);
+	
+	delete settings[id];
+	
+	BDfunctionsDevilBro.saveAllData(settings, pluginName, keyName);
+};
+
+BDfunctionsDevilBro.appendWebScript = function (filepath) {
+	$('head script[src="' + filepath + '"]').remove();
+	
+	var ele = document.createElement("script");
+	$(ele)
+		.attr("src", filepath);
+	$("head").append(ele);
+};
+
+BDfunctionsDevilBro.appendWebStyle = function (filepath) {
+	$('head link[href="' + filepath + '"]').remove();
+
+	var ele = document.createElement("link");
+	$(ele)
+		.attr("type", "text/css")
+		.attr("rel", "Stylesheet")
+		.attr("href", filepath);
+	$("head").append(ele);
+};
+
+BDfunctionsDevilBro.appendLocalStyle = function (pluginName, css) {
+	$('head style[id="' + pluginName + 'CSS"]').remove();
+
+	var ele = document.createElement("style");
+	$(ele)
+		.attr("id", pluginName + "CSS")
+		.text(css);
+	$("head").append(ele);
+};
+
+BDfunctionsDevilBro.removeLocalStyle = function (pluginName) {
+	$('head style[id="' + pluginName + 'CSS"]').remove();
+};
+
+BDfunctionsDevilBro.sortArrayByKey = function (array, key, except) {
+	if (except === undefined) except = null;
+	return array.sort(function(a, b) {
+		var x = a[key]; var y = b[key];
+		if (x != except) {
+			return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+		}
+	});
+};
+
+BDfunctionsDevilBro.color2COMP = function (color) {
+	if (color) {
+		switch (BDfunctionsDevilBro.checkColorType(color)) {
+			case "comp":
+				return color;
+			case "rgb":
+				return color.replace(new RegExp(" ", "g"), "").slice(4, -1).split(",");
+			case "hsl":
+				var hsl = color.replace(new RegExp(" ", "g"), "").slice(4, -1).split(",");
+				var r, g, b, i, f, p, q, t;
+				var h = hsl[0]/360, s = hsl[1], l = hsl[2];
+				i = Math.floor(h * 6);
+				f = h * 6 - i;
+				p = l * (1 - s);
+				q = l * (1 - f * s);
+				t = l * (1 - (1 - f) * s);
+				switch (i % 6) {
+					case 0: r = l, g = t, b = p; break;
+					case 1: r = q, g = l, b = p; break;
+					case 2: r = p, g = l, b = t; break;
+					case 3: r = p, g = q, b = l; break;
+					case 4: r = t, g = p, b = l; break;
+					case 5: r = l, g = p, b = q; break;
+				}
+				return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+			case "hex":
+				var result = /^#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(color);
+				return [parseInt(result[1], 16).toString(),parseInt(result[2], 16).toString(),parseInt(result[3], 16).toString()];
+			default:
+				return null;
+		}
+	}
+	return null;
+};
+
+BDfunctionsDevilBro.color2RGB = function (color) {
+	if (color) {
+		switch (BDfunctionsDevilBro.checkColorType(color)) {
+			case "comp":
+				return "rgb(" + (color[0]) + ", " + (color[1]) + ", " + (color[2]) + ")";
+			case "rgb":
+				return color;
+			case "hsl":
+				return BDfunctionsDevilBro.color2RGB(BDfunctionsDevilBro.color2COMP(color));
+			case "hex":
+				return BDfunctionsDevilBro.color2RGB(BDfunctionsDevilBro.color2COMP(color));
+			default:
+				return null;
+		}
+	}
+	return null;
+};
+
+BDfunctionsDevilBro.color2HSL = function (color) {
+	if (color) {
+		switch (BDfunctionsDevilBro.checkColorType(color)) {
+			case "comp":
+				var r = parseInt(color[0]), g = parseInt(color[1]), b = parseInt(color[2]);
+				var max = Math.max(r, g, b), min = Math.min(r, g, b), d = max - min, h, s = (max === 0 ? 0 : d / max), l = max / 255;
+				switch (max) {
+					case min: h = 0; break;
+					case r: h = (g - b) + d * (g < b ? 6 : 0); h /= 6 * d; break;
+					case g: h = (b - r) + d * 2; h /= 6 * d; break;
+					case b: h = (r - g) + d * 4; h /= 6 * d; break;
+				}
+				return "hsl(" + Math.round(h*360) + ", " + s + ", " + l + ")";
+			case "rgb":
+				return BDfunctionsDevilBro.color2HSL(BDfunctionsDevilBro.color2COMP(color));
+			case "hsl":
+				return color;
+			case "hex":
+				return BDfunctionsDevilBro.color2HSL(BDfunctionsDevilBro.color2COMP(color));
+			default:
+				return null;
+		}
+	}
+	return null;
+};
+
+BDfunctionsDevilBro.color2HEX = function (color) {
+	if (color) {
+		switch (BDfunctionsDevilBro.checkColorType(color)) {
+			case "comp":
+				return ("#" + (0x1000000 + ((color[2]) | ((color[1]) << 8) | ((color[0]) << 16))).toString(16).slice(1)).toUpperCase();
+			case "rgb":
+				return BDfunctionsDevilBro.color2HEX(BDfunctionsDevilBro.color2COMP(color));
+			case "hsl":
+				return BDfunctionsDevilBro.color2HEX(BDfunctionsDevilBro.color2COMP(color));
+			case "hex":
+				return color;
+			default:
+				return null;
+		}
+	}
+	return null;
+};
+
+BDfunctionsDevilBro.colorCHANGE = function (color, value) {
+	if (color) {
+		var comp = BDfunctionsDevilBro.color2COMP(color);
+		if (!comp || value === undefined || typeof value != "number") return null;
+		comp = comp.map(Number);
+		comp = [(comp[0]+value).toString(),(comp[1]+value).toString(),(comp[2]+value).toString()];
+		switch (BDfunctionsDevilBro.checkColorType(color)) {
+			case "comp":
+				return comp;
+			case "rgb":
+				return BDfunctionsDevilBro.color2RGB(comp);
+			case "hsl":
+				return BDfunctionsDevilBro.color2HSL(comp);
+			case "hex":
+				return BDfunctionsDevilBro.color2HEX(comp);
+			default:
+				return null;
+		}
+	}
+	return null;
+};
+
+BDfunctionsDevilBro.colorCOMPARE = function (color1, color2) {
+	if (color1 && color2) {
+		color1 = BDfunctionsDevilBro.color2RGB(color1);
+		color2 = BDfunctionsDevilBro.color2RGB(color2);
+		return BDfunctionsDevilBro.equals(color1,color2);
+	}
+	return null;
+};
+
+BDfunctionsDevilBro.colorINV = function (color, conv) {
+	if (color) {
+		var type = BDfunctionsDevilBro.checkColorType(color);
+		if (type) {
+			if (conv === undefined) {
+				var inv = BDfunctionsDevilBro.color2COMP(color);
+				inv = [(255-inv[0]), (255-inv[1]), (255-inv[2])];
+				switch (BDfunctionsDevilBro.checkColorType(color)) {
+					case "comp":
+						return inv;
+					case "rgb":
+						return BDfunctionsDevilBro.color2RGB(inv);
+					case "hsl":
+						return BDfunctionsDevilBro.color2HSL(inv);
+					case "hex":
+						return BDfunctionsDevilBro.color2HEX(inv);
+				}
+			}
+			else {
+				switch (conv.toLowerCase()) {
+					case "comp":
+						return BDfunctionsDevilBro.colorINV(BDfunctionsDevilBro.color2COMP(color));
+					case "rgb":
+						return BDfunctionsDevilBro.colorINV(BDfunctionsDevilBro.color2RGB(color));
+					case "hsl":
+						return BDfunctionsDevilBro.colorINV(BDfunctionsDevilBro.color2HSL(color));
+					case "hex":
+						return BDfunctionsDevilBro.colorINV(BDfunctionsDevilBro.color2HEX(color));
+					default:
+						return null;
+				}
+			}
+		}
+	}
+	return null;
+};
+
+BDfunctionsDevilBro.checkColorType = function (color) {
+	if (color) {
+		if (typeof color === "object" && color.length == 3) {
+			return "comp";
+		}
+		else if (typeof color === "string" && color.indexOf("rgb(") == 0) {
+			return "rgb";
+		}
+		else if (typeof color === "string" && color.indexOf("hsl(") == 0) {
+			return "hsl";
+		}
+		else if (typeof color === "string" && color.match(/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i)) {
+			return "hex";
+		}
+	}
+	return null;
+};
+	
+BDfunctionsDevilBro.encodeToHTML = function (string) {
+	var ele = document.createElement("div");
+	ele.innerText = string;
+	return ele.innerHTML;
+};
+
+BDfunctionsDevilBro.regEscape = function (string) {
+	return string.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
+};
+
+BDfunctionsDevilBro.clearReadNotifications = function (servers) {
+	if (!servers) return;
+	servers = Array.isArray(servers) ? servers : Array.of(servers);
+	servers.forEach(
+			(server,i) => {
+				setTimeout(() => {
+					var handleContextMenu = BDfunctionsDevilBro.getKeyInformation({"node":server.firstElementChild, "key":"handleContextMenu", "blackList":{"_owner":true}});
+					
+					if (handleContextMenu) {
+						var data = {
+							preventDefault: a=>a,
+							stopPropagation: a=>a,
+							pageX: -1000 + Math.round(Math.random()*500),
+						};
+						
+						handleContextMenu(data);
+						
+						var contextentries = $(".context-menu .item-group");
+						
+						for (var i = 0; contextentries.length > i; i++) {
+							var ele = contextentries[i];
+							var contextType = BDfunctionsDevilBro.getKeyInformation({"node":ele, "key":"displayName", "value":"GuildMarkReadItem"});
+							if (contextType) {
+								ele.firstElementChild.click();
+								break;
+							}
+						}
+					}
+				},i*100);
+			}
+		); 
+};
+
+BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
+	var wrapperDiv = $(wrapper);
+		
+	var colourList = 
+		["rgb(82, 233, 30)","rgb(46, 204, 113)","rgb(26, 188, 156)","rgb(52, 152, 219)","rgb(52, 84, 219)","rgb(134, 30, 233)","rgb(155, 89, 182)","rgb(233, 30, 99)","rgb(233, 65, 30)","rgb(231, 76, 60)","rgb(230, 126, 34)","rgb(241, 196, 15)","rgb(199, 204, 205)","rgb(112, 128, 136)","rgb(99, 99, 99)",
+		"rgb(255, 255, 255)","rgb(59, 173, 20)","rgb(31, 139, 76)","rgb(17, 128, 106)","rgb(32, 102, 148)","rgb(32, 57, 148)","rgb(109, 20, 173)","rgb(113, 54, 138)","rgb(173, 20, 87)","rgb(173, 32, 20)","rgb(153, 45, 34)","rgb(168, 67, 0)","rgb(194, 124, 14)","rgb(151, 156, 159)","rgb(93, 104, 109)","rgb(44, 44, 44)"];
+		
+	var swatches = 
+		`<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO" style="flex: 1 1 auto; margin-top: 5px;">
+			<div class="ui-color-picker-${swatch} large custom" style="background-color: rgb(0, 0, 0);">
+				<svg class="color-picker-dropper-${swatch}" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 16 16">
+					<path class="color-picker-dropper-fg-${swatch}" fill="#ffffff" d="M14.994 1.006C13.858-.257 11.904-.3 10.72.89L8.637 2.975l-.696-.697-1.387 1.388 5.557 5.557 1.387-1.388-.697-.697 1.964-1.964c1.13-1.13 1.3-2.985.23-4.168zm-13.25 10.25c-.225.224-.408.48-.55.764L.02 14.37l1.39 1.39 2.35-1.174c.283-.14.54-.33.765-.55l4.808-4.808-2.776-2.776-4.813 4.803z"></path>
+				</svg>
+			</div>
+			<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa wrap-1da0e3  ui-color-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;">
+				<div class="ui-color-picker-${swatch} nocolor" style="background-color: null;">
+					<svg class="nocolor-cross" height="22" width="22">
+						<path d="m 3 2 l 17 18 m 0 -18 l -17 18" stroke="red" stroke-width="3" fill="none" />
+					</svg>
+				</div>
+				${ colourList.map((val, i) => `<div class="ui-color-picker-${swatch}" style="background-color: ${val};"></div>`).join("")}
+			</div>
+		</div>`;
+	$(swatches).appendTo(wrapperDiv);
+	
+	if (currentCOMP) {
+		var currentRGB = BDfunctionsDevilBro.color2RGB(currentCOMP);
+		var invRGB = BDfunctionsDevilBro.colorINV(currentRGB);
+		
+		var selection = colourList.indexOf(currentRGB);
+		
+		if (selection > -1) {
+			wrapperDiv.find(".ui-color-picker-" + swatch + ":not(.custom, .nocolor)").eq(selection)
+				.addClass("selected")
+				.css("background-color", currentRGB)
+				.css("border", "4px solid " + invRGB);
+		} 
+		else {
+			$(".custom", wrapperDiv)
+				.addClass("selected")
+				.css("background-color", currentRGB)
+				.css("border", "4px solid " + invRGB);
+			
+			$(".color-picker-dropper-fg", wrapperDiv)
+				.attr("fill", currentCOMP[0] > 150 && currentCOMP[1] > 150 && currentCOMP[2] > 150 ? "#000000" : "#ffffff");
+		}
+	}
+	else {
+		$(".nocolor", wrapperDiv)
+			.addClass("selected")
+			.css("border", "4px solid black");
+	}
+	
+	wrapperDiv.on("click", ".ui-color-picker-" + swatch + ":not(.custom)", (e) => {
+		var bgColor = $(e.target).css("background-color");
+		var newInvRGB = BDfunctionsDevilBro.checkColorType(bgColor) ? BDfunctionsDevilBro.colorINV(bgColor,"rgb") : "black";
+		
+		wrapperDiv.find(".ui-color-picker-" + swatch + ".selected.nocolor")
+			.removeClass("selected")
+			.css("border", "4px solid red");
+			
+		wrapperDiv.find(".ui-color-picker-" + swatch + ".selected")
+			.removeClass("selected")
+			.css("border", "4px solid transparent");
+			
+		$(e.currentTarget)
+			.addClass("selected")
+			.css("border", "4px solid " + newInvRGB);
+	});
+	
+	wrapperDiv.on("click", ".ui-color-picker-" + swatch + ".custom", (e) => {
+		BDfunctionsDevilBro.openColorPicker(e.target.style.backgroundColor, swatch);
+	});
+};
+
+BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
+	var colorPickerModalMarkup = 
+		`<div class="colorpicker-modal DevilBro-modal">
+			<div class="backdrop-2ohBEd"></div>
+			<div class="modal-2LIEKY">
+				<div class="inner-1_1f7b">
+					<div class="colorpicker-container">
+						<div class="colorpicker-color">
+							<div class="colorpicker-white" style="background: linear-gradient(to right, #fff, rgba(255,255,255,0))">
+								<div class="colorpicker-black" style="background: linear-gradient(to top, #000, rgba(0,0,0,0))">
+									<div class="colorpicker-pickercursor">
+										<svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+										   <circle cx="7" cy="7" r="6" stroke="black" stroke-width="2" fill="none" />
+										</svg>
+									</div>
+									<div class="colorpicker-pickerpane"></div>
+								</div>
+							</div>
+						</div>
+						<div class="colorpicker-slider" style="background: linear-gradient(to top, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%)">
+								<div class="colorpicker-slidercursor">
+									<svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+										<path stroke="grey" fill="white" d="M 0 0, l 5 5, l -5 5, m 31 0, l -5 -5, l 5 -5"></path>
+									</svg>
+								</div>
+								<div class="colorpicker-sliderpane"></div>
+						</div>
+						<div class="colorpicker-previewcontainer">
+							<div class="colorpicker-preview-0 selected" style="background-color:#808080;"></div>
+							<div class="colorpicker-preview-2" style="background-color:#808080;"></div>
+						</div>
+						<div class="colorpicker-inputs">
+							<div class="colorpicker-input"><label>Hex:</label><input class="colorpicker-hex" name="hex" value="#000000" maxlength="7"></div>
+							<div class="colorpicker-input"><label>R:</label><input class="colorpicker-red" name="rgb" value="0" type="number" min="0" max="255"></div>
+							<div class="colorpicker-input"><label>G:</label><input class="colorpicker-green" name="rgb" value="0" type="number" min="0" max="255"></div>
+							<div class="colorpicker-input"><label>B:</label><input class="colorpicker-blue" name="rgb" value="0" type="number" min="0" max="255"></div>
+							<div class="colorpicker-input"><label>H:</label><input class="colorpicker-hue" name="hsl" value="0" type="number" min="0" max="360"></div>
+							<div class="colorpicker-input"><label>S:</label><input class="colorpicker-saturation" name="hsl" value="0" type="number" min="0" max="100"></div>
+							<div class="colorpicker-input"><label>L:</label><input class="colorpicker-lightness" name="hsl" value="0" type="number" min="0" max="100"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>`;
+		
+	var colorPickerModal = $(colorPickerModalMarkup)[0];
+	$(colorPickerModal).appendTo(".app-XZYfmp")
+		.on("click", ".backdrop-2ohBEd", (event) => {
+			var newRGB = colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").style.backgroundColor;
+			var newCOMP = BDfunctionsDevilBro.color2COMP(newRGB);
+			var newInvRGB = BDfunctionsDevilBro.colorINV(newRGB);
+			
+			$(".ui-color-picker-" + swatch + ".selected.nocolor")
+				.removeClass("selected")
+				.css("border", "4px solid red");
+				
+			$(".ui-color-picker-" + swatch + ".selected")
+				.removeClass("selected")
+				.css("border", "4px solid transparent");
+			
+			$(".ui-color-picker-" + swatch + ".custom")
+				.addClass("selected")
+				.css("background-color", newRGB)
+				.css("border", "4px solid " + newInvRGB);
+				
+			$(".color-picker-dropper-fg-" + swatch)
+				.attr("fill", newCOMP[0] > 150 && newCOMP[1] > 150 && newCOMP[2] > 150 ? "#000000" : "#ffffff");
+				
+			colorPickerModal.classList.add("closing");
+			setTimeout(() => {colorPickerModal.remove();}, 300);
+		});
+	
+	var hex = 0, red = 0, green = 0, blue = 0, hue = 0, saturation = 0, lightness = 0;
+	
+	var ppane = colorPickerModal.querySelector(".colorpicker-pickerpane");
+	var pcursor = colorPickerModal.querySelector(".colorpicker-pickercursor");
+	
+	var pX = 0;
+	var pY = 0;
+	var pHalfW = pcursor.offsetWidth/2;
+	var pHalfH = pcursor.offsetHeight/2;
+	var pMinX = $(ppane).offset().left;
+	var pMaxX = pMinX + ppane.offsetWidth;
+	var pMinY = $(ppane).offset().top;
+	var pMaxY = pMinY + ppane.offsetHeight;
+	
+	var spane = colorPickerModal.querySelector(".colorpicker-sliderpane");
+	var scursor = colorPickerModal.querySelector(".colorpicker-slidercursor");
+	
+	var sY = 0;
+	var sHalfH = scursor.offsetHeight/2;
+	var sMinY = $(spane).offset().top;
+	var sMaxY = sMinY + spane.offsetHeight;
+	
+	[hue, saturation, lightness] = BDfunctionsDevilBro.color2HSL(currentColor).replace(new RegExp(" ", "g"), "").slice(4, -1).split(",");
+	saturation *= 100;
+	lightness *= 100;
+	updateAllValues();
+	updateCursors();
+	
+	$(ppane)
+		.off("mousedown")
+		.on("mousedown", (event) => {
+			switchPreviews(event.button);
+			
+			pHalfW = pcursor.offsetWidth/2;
+			pHalfH = pcursor.offsetHeight/2;
+			pMinX = $(ppane).offset().left;
+			pMaxX = pMinX + ppane.offsetWidth;
+			pMinY = $(ppane).offset().top;
+			pMaxY = pMinY + ppane.offsetHeight;
+			pX = event.clientX - pHalfW;
+			pY = event.clientY - pHalfH;
+			
+			$(pcursor).offset({"left":pX,"top":pY});
+			
+			saturation = mapRange([pMinX - pHalfW, pMaxX - pHalfW], [0, 100], pX);
+			lightness = mapRange([pMinY - pHalfH, pMaxY - pHalfH], [100, 0], pY);
+			updateAllValues();
+			
+			$(document)
+				.off("mouseup.ColorPicker").off("mousemove.ColorPicker")
+				.on("mouseup.ColorPicker", () => {
+					$(document).off("mouseup.ColorPicker").off("mousemove.ColorPicker");
+				})
+				.on("mousemove.ColorPicker", (event2) => {
+					pX = event2.clientX > pMaxX ? pMaxX - pHalfW : (event2.clientX < pMinX ? pMinX - pHalfW : event2.clientX - pHalfW);
+					pY = event2.clientY > pMaxY ? pMaxY - pHalfH : (event2.clientY < pMinY ? pMinY - pHalfH : event2.clientY - pHalfH);
+					$(pcursor).offset({"left":pX,"top":pY});
+					
+					saturation = mapRange([pMinX - pHalfW, pMaxX - pHalfW], [0, 100], pX);
+					lightness = mapRange([pMinY - pHalfH, pMaxY - pHalfH], [100, 0], pY);
+					updateAllValues();
+				});
+		});
+	
+	$(spane)
+		.off("mousedown")
+		.on("mousedown", (event) => {
+			switchPreviews(event.button);
+			
+			sHalfH = scursor.offsetHeight/2;
+			sMinY = $(spane).offset().top;
+			sMaxY = sMinY + spane.offsetHeight;
+			sY = event.clientY - sHalfH;
+			
+			$(scursor).offset({"top":sY});
+			
+			hue = mapRange([sMinY - sHalfH, sMaxY - sHalfH], [360, 0], sY);
+			updateAllValues();
+			
+			$(document)
+				.off("mouseup.ColorPicker").off("mousemove.ColorPicker")
+				.on("mouseup.ColorPicker", () => {
+					$(document).off("mouseup.ColorPicker").off("mousemove.ColorPicker");
+				})
+				.on("mousemove.ColorPicker", (event2) => {
+					sY = event2.clientY > sMaxY ? sMaxY - sHalfH : (event2.clientY < sMinY ? sMinY - sHalfH : event2.clientY - sHalfH);
+					$(scursor).offset({"top":sY});
+					
+					hue = mapRange([sMinY - sHalfH, sMaxY - sHalfH], [360, 0], sY);
+					updateAllValues();
+				});
+		});
+		
+	$(".colorpicker-modal .colorpicker-inputs input")
+		.off("input")
+		.on("input", (event) => {
+			updateValues(event.target.name);
+		});
+		
+	$(".colorpicker-modal [class^='colorpicker-preview-']")
+		.off("click")
+		.on("click", (event) => {
+			colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").style.borderColor = "transparent";
+			colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").classList.remove("selected");
+			event.target.classList.add("selected");
+			[hue, saturation, lightness] = BDfunctionsDevilBro.color2HSL(event.target.style.backgroundColor).replace(new RegExp(" ", "g"), "").slice(4, -1).split(",");
+			saturation *= 100;
+			lightness *= 100;
+			updateAllValues();
+			updateCursors();
+		});
+		
+	function mapRange (from, to, number) {
+		return to[0] + (number - from[0]) * (to[1] - to[0]) / (from[1] - from[0]);
+	}
+	
+	function switchPreviews (button) {
+		colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").style.borderColor = "transparent";
+		colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").classList.remove("selected");
+		colorPickerModal.querySelector(".colorpicker-preview-" + button).classList.add("selected");
+	}
+	
+	function updateValues (type) {
+		switch (type) {
+			case "hex":
+				hex = colorPickerModal.querySelector(".colorpicker-hex").value;
+				if (/^#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.test(hex)) {
+					[red, green, blue] = BDfunctionsDevilBro.color2COMP(hex);
+					[hue, saturation, lightness] = BDfunctionsDevilBro.color2HSL(hex).replace(new RegExp(" ", "g"), "").slice(4, -1).split(",");
+					saturation *= 100;
+					lightness *= 100;
+					colorPickerModal.querySelector(".colorpicker-hue").value = Math.round(hue);
+					colorPickerModal.querySelector(".colorpicker-saturation").value = Math.round(saturation);
+					colorPickerModal.querySelector(".colorpicker-lightness").value = Math.round(lightness);
+					colorPickerModal.querySelector(".colorpicker-red").value = red;
+					colorPickerModal.querySelector(".colorpicker-green").value = green;
+					colorPickerModal.querySelector(".colorpicker-blue").value = blue;
+				}
+				break;
+			case "rgb":
+				red = colorPickerModal.querySelector(".colorpicker-red").value;
+				green = colorPickerModal.querySelector(".colorpicker-green").value;
+				blue = colorPickerModal.querySelector(".colorpicker-blue").value;
+				[hue, saturation, lightness] = BDfunctionsDevilBro.color2HSL([red, green, blue]).replace(new RegExp(" ", "g"), "").slice(4, -1).split(",");
+				saturation *= 100;
+				lightness *= 100;
+				colorPickerModal.querySelector(".colorpicker-hex").value = BDfunctionsDevilBro.color2HEX([red, green, blue]);
+				colorPickerModal.querySelector(".colorpicker-hue").value = Math.round(hue);
+				colorPickerModal.querySelector(".colorpicker-saturation").value = Math.round(saturation);
+				colorPickerModal.querySelector(".colorpicker-lightness").value = Math.round(lightness);
+				break;
+			case "hsl":
+				hue = colorPickerModal.querySelector(".colorpicker-hue").value;
+				saturation = colorPickerModal.querySelector(".colorpicker-saturation").value;
+				lightness = colorPickerModal.querySelector(".colorpicker-lightness").value;
+				[red, green, blue] = BDfunctionsDevilBro.color2COMP("hsl(" + hue + ", " + saturation/100 + ", " + lightness/100 + ")");
+				colorPickerModal.querySelector(".colorpicker-hex").value = BDfunctionsDevilBro.color2HEX([red, green, blue]);
+				colorPickerModal.querySelector(".colorpicker-red").value = red;
+				colorPickerModal.querySelector(".colorpicker-green").value = green;
+				colorPickerModal.querySelector(".colorpicker-blue").value = blue;
+				break; 
+		}
+		updateColors();
+		updateCursors();
+	}
+	
+	function updateCursors () {
+		sHalfH = scursor.offsetHeight/2;
+		sMinY = $(spane).offset().top;
+		sY = mapRange([360, 0], [sMinY - sHalfH, sMaxY - sHalfH], hue);
+		
+		pHalfW = pcursor.offsetWidth/2;
+		pHalfH = pcursor.offsetHeight/2;
+		pMinX = $(ppane).offset().left;
+		pMaxX = pMinX + ppane.offsetWidth;
+		pMinY = $(ppane).offset().top;
+		pMaxY = pMinY + ppane.offsetHeight;
+		pX = mapRange([0, 100], [pMinX - pHalfW, pMaxX - pHalfW], saturation);
+		pY = mapRange([100, 0], [pMinY - pHalfH, pMaxY - pHalfH], lightness);
+		
+		$(scursor).offset({"top":sY});
+		$(pcursor).offset({"left":pX,"top":pY});
+		$(pcursor).find("circle").attr("stroke", BDfunctionsDevilBro.colorINV([red, green, blue], "rgb"));
+		$(scursor).find("path").attr("stroke", BDfunctionsDevilBro.color2RGB("hsl(" + hue + ", 1, 1)"));
+	}
+	
+	function updateAllValues () {
+		[red, green, blue] = BDfunctionsDevilBro.color2COMP("hsl(" + hue + ", " + saturation/100 + ", " + lightness/100 + ")");
+		colorPickerModal.querySelector(".colorpicker-hex").value = BDfunctionsDevilBro.color2HEX([red, green, blue]);
+		colorPickerModal.querySelector(".colorpicker-hue").value = Math.round(hue);
+		colorPickerModal.querySelector(".colorpicker-saturation").value = Math.round(saturation);
+		colorPickerModal.querySelector(".colorpicker-lightness").value = Math.round(lightness);
+		colorPickerModal.querySelector(".colorpicker-red").value = Math.round(red);
+		colorPickerModal.querySelector(".colorpicker-green").value = Math.round(green);
+		colorPickerModal.querySelector(".colorpicker-blue").value = Math.round(blue);
+		
+		updateColors();
+		
+		$(pcursor).find("circle").attr("stroke", BDfunctionsDevilBro.colorINV([red, green, blue], "rgb"));
+		$(scursor).find("path").attr("stroke", BDfunctionsDevilBro.color2RGB("hsl(" + hue + ", 1, 1)"));
+	}
+	
+	function updateColors () {
+		colorPickerModal.querySelector(".colorpicker-color").style.background = BDfunctionsDevilBro.color2RGB("hsl(" + hue + ", 1, 1)");
+		colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").style.background = BDfunctionsDevilBro.color2RGB([red, green, blue]);
+		colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").style.borderColor = BDfunctionsDevilBro.colorINV([red, green, blue], "rgb");
+	}
+};
+
+BDfunctionsDevilBro.getSwatchColor = function (swatch) {
+	return !$(".ui-color-picker-" + swatch + ".nocolor.selected")[0] ? BDfunctionsDevilBro.color2COMP($(".ui-color-picker-" + swatch + ".selected").css("background-color")) : null;
+};
+
+BDfunctionsDevilBro.getDiscordLanguage = function () {
+	var lang = $("html").attr("lang") ? $("html").attr("lang").split("-")[0] : "en";
+	switch (lang) {
+		case "da": 		//danish
+			return {"id":"da","lang":"danish"};
+		case "de": 		//german
+			return {"id":"de","lang":"german"};
+		case "es": 		//spanish
+			return {"id":"es","lang":"spanish"};
+		case "fr": 		//french
+			return {"id":"fr","lang":"french"};
+		case "it": 		//italian
+			return {"id":"it","lang":"italian"};
+		case "nl":		//dutch
+			return {"id":"nl","lang":"dutch"};
+		case "no":		//norwegian
+			return {"id":"no","lang":"norwegian"};
+		case "pl":		//polish
+			return {"id":"pl","lang":"polish"};
+		case "pt":		//portuguese (brazil)
+			return {"id":"pt","lang":"portuguese"};
+		case "fi":		//finnish
+			return {"id":"fi","lang":"finnish"};
+		case "sv":		//swedish
+			return {"id":"sv","lang":"turkish"};
+		case "tr":		//turkish
+			return {"id":"tr","lang":"turkish"};
+		case "cs":		//czech
+			return {"id":"cs","lang":"czech"};
+		case "bg":		//bulgarian
+			return {"id":"bg","lang":"bulgarian"};
+		case "ru":		//russian
+			return {"id":"ru","lang":"russian"};
+		case "uk":		//ukranian
+			return {"id":"uk","lang":"ukranian"};
+		case "ja":		//japanese
+			return {"id":"ja","lang":"japanese"};
+		case "zh":		//chinese (traditional)
+			return {"id":"zh","lang":"chinese","googleid":"zh-TW"};
+		case "ko":		//korean
+			return {"id":"ko","lang":"korean"};
+		default:		//default: english
+			return {"id":"en","lang":"english"};
+	}
+};
+
+BDfunctionsDevilBro.pressedKeys = [];
+
+$(window)
+	.off("keydown.BDfunctionsDevilBroPressedKeys")
+	.off("keyup.BDfunctionsDevilBroPressedKeys")
+	.on("keydown.BDfunctionsDevilBroPressedKeys", (e) => {
+		if (!BDfunctionsDevilBro.pressedKeys.includes(e.which)) BDfunctionsDevilBro.pressedKeys.push(e.which);
+	})
+	.on("keyup.BDfunctionsDevilBroPressedKeys", (e) => {
+		BDfunctionsDevilBro.removeFromArray(BDfunctionsDevilBro.pressedKeys, e.which);
+	});
+
+BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
+	#pluginNotice {
+		-webkit-app-region: drag;
+	} 
+	
+	#pluginNotice #outdatedPlugins span {
+		-webkit-app-region: no-drag;
+		color:#fff;
+		cursor:pointer;
+	} 
+	
+	#pluginNotice #outdatedPlugins span:hover {
+		text-decoration:underline;
+	}
+	
+	.toasts {
+		position: fixed;
+		display: flex;
+		top: 0;
+		flex-direction: column;
+		align-items: center;
+		justify-content: flex-end;
+		pointer-events: none;
+		z-index: 4000;
+	}
+	
+	@keyframes toast-up {
+		from {
+			transform: translateY(0);
+			opacity: 0;
+		}
+	}
+	
+	.toast {
+		animation: toast-up 300ms ease;
+		transform: translateY(-10px);
+		background: #36393F;
+		padding: 10px;
+		border-radius: 5px;
+		box-shadow: 0 0 0 1px rgba(32,34,37,.6), 0 2px 10px 0 rgba(0,0,0,.2);
+		font-weight: 500;
+		color: #fff;
+		user-select: text;
+		font-size: 14px;
+		opacity: 1;
+		margin-top: 10px;
+		pointer-events: auto;
+	}
+	
+	@keyframes toast-down {
+		to {
+			transform: translateY(0px);
+			opacity: 0;
+		}
+	}
+	
+	.toast.closing {
+		animation: toast-down 200ms ease;
+		animation-fill-mode: forwards;
+		opacity: 1;
+		transform: translateY(-10px);
+	}
+	
+	
+	.toast.icon {
+		padding-left: 30px;
+		background-size: 20px 20px;
+		background-repeat: no-repeat;
+		background-position: 6px 50%;
+	}
+	
+	.toast.toast-info {
+		background-color: #4a90e2;
+	}
+	
+	.toast.toast-info.icon {
+		background-image: url(data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjRkZGRkZGIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4gICAgPHBhdGggZD0iTTAgMGgyNHYyNEgweiIgZmlsbD0ibm9uZSIvPiAgICA8cGF0aCBkPSJNMTIgMkM2LjQ4IDIgMiA2LjQ4IDIgMTJzNC40OCAxMCAxMCAxMCAxMC00LjQ4IDEwLTEwUzE3LjUyIDIgMTIgMnptMSAxNWgtMnYtNmgydjZ6bTAtOGgtMlY3aDJ2MnoiLz48L3N2Zz4=);
+	}
+	
+	.toast.toast-success {
+		background-color: #43b581;
+	}
+	
+	.toast.toast-success.icon {
+		background-image: url(data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjRkZGRkZGIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4gICAgPHBhdGggZD0iTTAgMGgyNHYyNEgweiIgZmlsbD0ibm9uZSIvPiAgICA8cGF0aCBkPSJNMTIgMkM2LjQ4IDIgMiA2LjQ4IDIgMTJzNC40OCAxMCAxMCAxMCAxMC00LjQ4IDEwLTEwUzE3LjUyIDIgMTIgMnptLTIgMTVsLTUtNSAxLjQxLTEuNDFMMTAgMTQuMTdsNy41OS03LjU5TDE5IDhsLTkgOXoiLz48L3N2Zz4=);
+	}
+	.toast.toast-danger, .toast.toast-error {
+		background-color: #f04747;
+	}
+	
+	.toast.toast-danger.icon,
+	.toast.toast-error.icon {
+		background-image: url(data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjRkZGRkZGIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4gICAgPHBhdGggZD0iTTEyIDJDNi40NyAyIDIgNi40NyAyIDEyczQuNDcgMTAgMTAgMTAgMTAtNC40NyAxMC0xMFMxNy41MyAyIDEyIDJ6bTUgMTMuNTlMMTUuNTkgMTcgMTIgMTMuNDEgOC40MSAxNyA3IDE1LjU5IDEwLjU5IDEyIDcgOC40MSA4LjQxIDcgMTIgMTAuNTkgMTUuNTkgNyAxNyA4LjQxIDEzLjQxIDEyIDE3IDE1LjU5eiIvPiAgICA8cGF0aCBkPSJNMCAwaDI0djI0SDB6IiBmaWxsPSJub25lIi8+PC9zdmc+);
+	}
+	
+	.toast.toast-warning,
+	.toast.toast-warn {
+		background-color: #FFA600;
+		color: white;
+	}
+	
+	.toast.toast-warning.icon,
+	.toast.toast-warn.icon {
+		background-image: url(data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjRkZGRkZGIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4gICAgPHBhdGggZD0iTTAgMGgyNHYyNEgweiIgZmlsbD0ibm9uZSIvPiAgICA8cGF0aCBkPSJNMSAyMWgyMkwxMiAyIDEgMjF6bTEyLTNoLTJ2LTJoMnYyem0wLTRoLTJ2LTRoMnY0eiIvPjwvc3ZnPg==);
+	}
+	
+	.update-list-tooltip {
+		max-width: 400px;
 	}
 
-	chooseColor (channel, color) {
-		if (color && channel && channel.className) {
-			if (channel.className.indexOf("nameMuted") > -1 || channel.className.indexOf("nameLocked") > -1) {
-				color = BDfunctionsDevilBro.colorCHANGE(color, -50);
-			}
-			if (channel.className.indexOf("nameDefault") > -1) {
-				color = color;
-			}
-			if (channel.className.indexOf("nameSelected") > -1 || channel.className.indexOf("nameHovered") > -1 ||  channel.className.indexOf("nameUnread") > -1) {
-				color = BDfunctionsDevilBro.colorCHANGE(color, 50);
-			}
-			return BDfunctionsDevilBro.color2RGB(color);
-		}
-		return null;
+	[class^="ui-color-picker-swatch"] {
+		width: 22px;
+		height: 22px;
+		margin-bottom: 5px;
+		margin-top: 5px;
+		border: 4px solid transparent;
+		border-radius: 12px;
+	}
+
+	[class^="ui-color-picker-swatch"].large {
+		min-width: 62px;
+		height: 62px;
+		border-radius: 25px;
+	}
+
+	[class^="ui-color-picker-swatch"].nocolor {
+		border: 4px solid red;
 	}
 	
-	resetChannel (e) {
-		$(".context-menu").hide();
+	[class^="color-picker-dropper"] {
+		position: relative;
+		left: 40px;
+		top: 10px;
+	}
+	
+	@keyframes animation-backdrop {
+		to { opacity: 0.2; }
+	}
+
+	@keyframes animation-backdrop-closing {
+		to { opacity: 0; }
+	}
+
+	@keyframes animation-modal {
+		to { transform: scale(1); opacity: 1; }
+	}
+
+	@keyframes animation-modal-closing {
+		to { transform: scale(0.7); opacity: 0; }
+	}
+
+	.DevilBro-modal .backdrop-2ohBEd {
+		animation: animation-backdrop 250ms ease;
+		animation-fill-mode: forwards;
+		opacity: 0;
+		background-color: rgb(0, 0, 0);
+		transform: translateZ(0px);
+	}
+
+	.DevilBro-modal.closing .backdrop-2ohBEd {
+		animation: animation-backdrop-closing 200ms linear;
+		animation-fill-mode: forwards;
+		animation-delay: 50ms;
+		opacity: 0.2;
+	}
+	
+	.DevilBro-modal .modal-2LIEKY {
+		animation: animation-modal 250ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+		animation-fill-mode: forwards;
+		transform: scale(0.7);
+		transform-origin: 50% 50%;
+	}
+
+	.DevilBro-modal.closing .modal-2LIEKY {
+		animation: animation-modal-closing 250ms cubic-bezier(0.19, 1, 0.22, 1);
+		animation-fill-mode: forwards;
+		opacity: 1;
+		transform: scale(1);
+	}
+
+	.colorpicker-modal .inner-1_1f7b {
+		background-color: #36393E;
+		border-radius: 5px;
+		width: 480px;
+		padding: 15px;
+	}
+	
+	.colorpicker-modal .colorpicker-container {
+		padding: 15px;
+		overflow: hidden;
+		background-color: #484B51;
+		border-radius: 5px;
+	}
+	
+	.colorpicker-modal .colorpicker-pickerpane, 
+	.colorpicker-modal .colorpicker-black, 
+	.colorpicker-modal .colorpicker-white, 
+	.colorpicker-modal .colorpicker-color {
+		position: relative;
+		top: 0px;
+		left: 0px;
+		height: 256px;
+		width: 256px;
+	}
+	
+	.colorpicker-modal .colorpicker-color {
+		background-color: #808080;
+		border: 3px solid #36393E;
+		border-radius: 3px;
+		float: left;
+		margin-right: 20px;
+	}
+	
+	.colorpicker-modal .colorpicker-pickercursor {
+		position: absolute;
+		height: 14px;
+		width: 14px;
+		top: -7px;
+		left: -7px;
+	}
+	
+	.colorpicker-modal .colorpicker-pickercursor svg {
+		position: relative;
+		height: 14px;
+		width: 14px;
+	}
+	
+	.colorpicker-modal .colorpicker-sliderpane, 
+	.colorpicker-modal .colorpicker-slider {
+		position: relative;
+		top: 0px;
+		left: 0px;
+		height: 256px;
+		width: 20px;
+	}
+	.colorpicker-modal .colorpicker-slider {
+		border: 3px solid #36393E;
+		border-radius: 3px;
+		float: left;
+		margin-right: 20px;
+	}
+	
+	.colorpicker-modal .colorpicker-slidercursor {
+		position: absolute;
+		top: -4px;
+		left: -6px;
+		height: 12px;
+		width: 32px;
+	}
+	.colorpicker-modal .colorpicker-slidercursor svg {
+		position: relative;
+		height: 12px;
+		width: 32px;
+	}
+	
+	.colorpicker-modal .colorpicker-previewcontainer {
+		float: left;
+		margin: 7px 0 15px 0;
+		overflow: hidden;
+	}
 		
-		var id = e.data.id + "_" + e.data.guild_id;
-		if (id) {
-			var channelDiv = BDfunctionsDevilBro.getDivOfChannel(e.data.id, e.data.guild_id);
-			var channel = $(channelDiv).find(".name-2SL4ev");
-			
-			$(channelDiv)
-				.removeClass("custom-editchannels");
-			$(channel)
-				.text(e.data.name)
-				.css("color", "");
-			
-			BDfunctionsDevilBro.removeData(id, this.getName(), "channels");
-		}
+	.colorpicker-modal [class^="colorpicker-preview-"] {
+		background-color: #808080;
+		border: 3px solid transparent;
+		height: 54px;
+		width: 58px;
+		float: left;
 	}
 	
-	loadChannel (channelDiv) {
-		var info = BDfunctionsDevilBro.getKeyInformation({"node":channelDiv, "key":"channel"});
-		if (info) {
-			var channel = $(channelDiv).find(".name-2SL4ev");
-			var id = info.id + "_" + info.guild_id;
-			var data = BDfunctionsDevilBro.loadData(id, this.getName(), "channels");
-			if (data) {
-				var name = 		data.name ? data.name : info.name;
-				var color = 	data.color ? this.chooseColor(channel[0], data.color) : "";
-				
-				$(channelDiv)
-					.addClass("custom-editchannels");
-				$(channel)
-					.text(name)
-					.css("color", color);
-			}
-		}
+	.colorpicker-modal .colorpicker-preview-0 {
+		border-radius: 5px 0 0 5px;
+		border-right: none;
 	}
 	
-	loadAllChannels () {
-		var channels = BDfunctionsDevilBro.readChannelList();
-		for (var i = 0; i < channels.length; i++) {
-			this.loadChannel(channels[i]);
-		}
+	.colorpicker-modal .colorpicker-preview-2 {
+		border-radius: 0 5px 5px 0;
+		border-left: none;
 	}
 	
-	setLabelsByLanguage () {
-		switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
-			case "da": 		//danish
-				return {
-					context_localchannelsettings_text: 		"Lokal kanalindstillinger",
-					submenu_channelsettings_text: 			"Skift indstillinger",
-					submenu_resetsettings_text: 			"Nulstil kanal",
-					modal_header_text:						"Lokal kanalindstillinger",
-					modal_channelname_text:					"Lokalt kanalnavn",
-					modal_colorpicker_text:				"Lokal kanalfarve",
-					btn_cancel_text:						"Afbryde",
-					btn_save_text:							"Spare"
-				};
-			case "de": 		//german
-				return {
-					context_localchannelsettings_text: 		"Lokale Kanaleinstellungen",
-					submenu_channelsettings_text: 			"Ändere Einstellungen",
-					submenu_resetsettings_text: 			"Kanal zurücksetzen",
-					modal_header_text:						"Lokale Kanaleinstellungen",
-					modal_channelname_text:					"Lokaler Kanalname",
-					modal_colorpicker_text:				"Lokale Kanalfarbe",
-					btn_cancel_text:						"Abbrechen",
-					btn_save_text:							"Speichern"
-				};
-			case "es": 		//spanish
-				return {
-					context_localchannelsettings_text: 		"Ajustes local de canal",
-					submenu_channelsettings_text: 			"Cambiar ajustes",
-					submenu_resetsettings_text: 			"Restablecer canal",
-					modal_header_text:						"Ajustes local de canal",
-					modal_channelname_text:					"Nombre local del canal",
-					modal_colorpicker_text:				"Color local del canal",
-					btn_cancel_text:						"Cancelar",
-					btn_save_text:							"Guardar"
-				};
-			case "fr": 		//french
-				return {
-					context_localchannelsettings_text: 		"Paramètres locale du canal",
-					submenu_channelsettings_text: 			"Modifier les paramètres",
-					submenu_resetsettings_text: 			"Réinitialiser le canal",
-					modal_header_text:						"Paramètres locale du canal",
-					modal_channelname_text:					"Nom local du canal",
-					modal_colorpicker_text:				"Couleur locale de la chaîne",
-					btn_cancel_text:						"Abandonner",
-					btn_save_text:							"Enregistrer"
-				};
-			case "it": 		//italian
-				return {
-					context_localchannelsettings_text: 		"Impostazioni locale canale",
-					submenu_channelsettings_text: 			"Cambia impostazioni",
-					submenu_resetsettings_text: 			"Ripristina canale",
-					modal_header_text:						"Impostazioni locale canale",
-					modal_channelname_text:					"Nome locale canale",
-					modal_colorpicker_text:				"Colore locale canale",
-					btn_cancel_text:						"Cancellare",
-					btn_save_text:							"Salvare"
-				};
-			case "nl":		//dutch
-				return {
-					context_localchannelsettings_text: 		"Lokale kanaalinstellingen",
-					submenu_channelsettings_text: 			"Verandere instellingen",
-					submenu_resetsettings_text: 			"Reset kanaal",
-					modal_header_text:						"Lokale kanaalinstellingen",
-					modal_channelname_text:					"Lokale kanaalnaam",
-					modal_colorpicker_text:				"Lokale kanaalkleur",
-					btn_cancel_text:						"Afbreken",
-					btn_save_text:							"Opslaan"
-				};
-			case "no":		//norwegian
-				return {
-					context_localchannelsettings_text: 		"Lokal kanalinnstillinger",
-					submenu_channelsettings_text: 			"Endre innstillinger",
-					submenu_resetsettings_text: 			"Tilbakestill kanal",
-					modal_header_text:						"Lokal kanalinnstillinger",
-					modal_channelname_text:					"Lokalt kanalnavn",
-					modal_colorpicker_text:				"Lokal kanalfarge",
-					btn_cancel_text:						"Avbryte",
-					btn_save_text:							"Lagre"
-				};
-			case "pl":		//polish
-				return {
-					context_localchannelsettings_text: 		"Lokalny ustawienia kanału",
-					submenu_channelsettings_text: 			"Zmień ustawienia",
-					submenu_resetsettings_text: 			"Resetuj kanał",
-					modal_header_text:						"Lokalny ustawienia kanału",
-					modal_channelname_text:					"Lokalna nazwa kanału",
-					modal_colorpicker_text:				"Lokalny kolor kanału",
-					btn_cancel_text:						"Anuluj",
-					btn_save_text:							"Zapisz"
-				};
-			case "pt":		//portuguese (brazil)
-				return {
-					context_localchannelsettings_text: 		"Configurações local do canal",
-					submenu_channelsettings_text: 			"Mudar configurações",
-					submenu_resetsettings_text: 			"Redefinir canal",
-					modal_header_text:						"Configurações local do canal",
-					modal_channelname_text:					"Nome local do canal",
-					modal_colorpicker_text:				"Cor local do canal",
-					btn_cancel_text:						"Cancelar",
-					btn_save_text:							"Salvar"
-				};
-			case "fi":		//finnish
-				return {
-					context_localchannelsettings_text: 		"Paikallinen kanavan asetukset",
-					submenu_channelsettings_text: 			"Vaihda asetuksia",
-					submenu_resetsettings_text: 			"Nollaa kanava",
-					modal_header_text:						"Paikallinen kanavan asetukset",
-					modal_channelname_text:					"Paikallinen kanavanimi",
-					modal_colorpicker_text:				"Paikallinen kanavanväri",
-					btn_cancel_text:						"Peruuttaa",
-					btn_save_text:							"Tallentaa"
-				};
-			case "sv":		//swedish
-				return {
-					context_localchannelsettings_text: 		"Lokal kanalinställningar",
-					submenu_channelsettings_text: 			"Ändra inställningar",
-					submenu_resetsettings_text: 			"Återställ kanal",
-					modal_header_text:						"Lokal kanalinställningar",
-					modal_channelname_text:					"Lokalt kanalnamn",
-					modal_colorpicker_text:				"Lokal kanalfärg",
-					btn_cancel_text:						"Avbryta",
-					btn_save_text:							"Spara"
-				};
-			case "tr":		//turkish
-				return {
-					context_localchannelsettings_text: 		"Yerel Kanal Ayarları",
-					submenu_channelsettings_text: 			"Ayarları Değiştir",
-					submenu_resetsettings_text: 			"Kanal Sıfırla",
-					modal_header_text:						"Yerel Kanal Ayarları",
-					modal_channelname_text:					"Yerel Kanal Adı",
-					modal_colorpicker_text:				"Yerel Kanal Rengi",
-					btn_cancel_text:						"Iptal",
-					btn_save_text:							"Kayıt"
-				};
-			case "cs":		//czech
-				return {
-					context_localchannelsettings_text: 		"Místní nastavení kanálu",
-					submenu_channelsettings_text: 			"Změnit nastavení",
-					submenu_resetsettings_text: 			"Obnovit kanál",
-					modal_header_text:						"Místní nastavení kanálu",
-					modal_channelname_text:					"Místní název kanálu",
-					modal_colorpicker_text:				"Místní barvy kanálu",
-					btn_cancel_text:						"Zrušení",
-					btn_save_text:							"Uložit"
-				};
-			case "bg":		//bulgarian
-				return {
-					context_localchannelsettings_text: 		"Настройки за локални канали",
-					submenu_channelsettings_text: 			"Промяна на настройките",
-					submenu_resetsettings_text: 			"Възстановяване на канал",
-					modal_header_text:						"Настройки за локални канали",
-					modal_channelname_text:					"Локално име на канал",
-					modal_colorpicker_text:				"Локален цветен канал",
-					btn_cancel_text:						"Зъбести",
-					btn_save_text:							"Cпасяване"
-				};
-			case "ru":		//russian
-				return {
-					context_localchannelsettings_text: 		"Настройки локального канала",
-					submenu_channelsettings_text: 			"Изменить настройки",
-					submenu_resetsettings_text: 			"Сбросить канал",
-					modal_header_text:						"Настройки локального канала",
-					modal_channelname_text:					"Имя локального канала",
-					modal_colorpicker_text:				"Цвет локального канала",
-					btn_cancel_text:						"Отмена",
-					btn_save_text:							"Cпасти"
-				};
-			case "uk":		//ukranian
-				return {
-					context_localchannelsettings_text: 		"Налаштування локального каналу",
-					submenu_channelsettings_text: 			"Змінити налаштування",
-					submenu_resetsettings_text: 			"Скидання каналу",
-					modal_header_text:						"Налаштування локального каналу",
-					modal_channelname_text:					"Локальне ім'я каналу",
-					modal_colorpicker_text:				"Колір місцевого каналу",
-					btn_cancel_text:						"Скасувати",
-					btn_save_text:							"Зберегти"
-				};
-			case "ja":		//japanese
-				return {
-					context_localchannelsettings_text: 		"ローカルチャネル設定",
-					submenu_channelsettings_text: 			"設定を変更する",
-					submenu_resetsettings_text: 			"チャネルをリセットする",
-					modal_header_text:						"ローカルチャネル設定",
-					modal_channelname_text:					"ローカルチャネル名",
-					modal_colorpicker_text:				"ローカルチャネルの色",
-					btn_cancel_text:						"キャンセル",
-					btn_save_text:							"セーブ"
-				};
-			case "zh":		//chinese (traditional)
-				return {
-					context_localchannelsettings_text: 		"本地頻道設置",
-					submenu_channelsettings_text: 			"更改設置",
-					submenu_resetsettings_text: 			"重置通道",
-					modal_header_text:						"本地頻道設置",
-					modal_channelname_text:					"本地頻道名稱",
-					modal_colorpicker_text:				"本地頻道顏色",
-					btn_cancel_text:						"取消",
-					btn_save_text:							"保存"
-				};
-			case "ko":		//korean
-				return {
-					context_localchannelsettings_text: 		"로컬 채널 설정",
-					submenu_channelsettings_text: 			"설정 변경",
-					submenu_resetsettings_text: 			"채널 재설정",
-					modal_header_text:						"로컬 채널 설정",
-					modal_channelname_text:					"로컬 채널 이름",
-					modal_colorpicker_text:				"지역 채널 색깔",
-					btn_cancel_text:						"취소",
-					btn_save_text:							"저장"
-				};
-			default:		//default: english
-				return {
-					context_localchannelsettings_text: 		"Local Channelsettings",
-					submenu_channelsettings_text: 			"Change Settings",
-					submenu_resetsettings_text: 			"Reset Channel",
-					modal_header_text:						"Local Channelsettings",
-					modal_channelname_text:					"Local Channelname",
-					modal_colorpicker_text:				"Local Channelcolor",
-					btn_cancel_text:						"Cancel",
-					btn_save_text:							"Save"
-				};
-		}
+	.colorpicker-modal .colorpicker-comparison {
+		border: 3px solid #36393E;
+		height: 60px;
+		width: 58px;
+		position: relative;
+		left: 58px;
+		background: red;
+		border-radius: 0 5px 5px 0;
 	}
-}
+	
+	.colorpicker-modal .colorpicker-inputs {
+		background-color: #7E8084;
+		border-radius: 5px;
+		width: 115px;
+		float: left;
+		padding: 3px;
+	}
+	
+	.colorpicker-modal .colorpicker-inputs label {
+		display: inline-block;
+		width: 30px;
+		color: #36393E;
+		letter-spacing: .5px;
+		text-transform: uppercase;
+		text-align: right;
+		flex: 1;
+		cursor: default;
+		font-weight: 600;
+		line-height: 16px;
+		font-size: 14px;
+		position: relative;
+		top: 1px;
+	}
+	
+	.colorpicker-modal .colorpicker-inputs input {
+		border: 3px solid #36393E;
+		width: 65px;
+		margin: 1px 0 1px 6px;
+		padding: 0 2px 0 2px;
+		line-height: 16px;
+		color: #36393E;
+		font-weight: 600;
+		line-height: 16px;
+		font-size: 13px;
+	}`
+);
