@@ -8,176 +8,23 @@ class ServerHider {
 		this.serverListContextHandler;
 		
 		this.css = `
-			#serverhider-scrolldiv::-webkit-scrollbar {
-				width: 12px;
-			}
-
-			#serverhider-scrolldiv::-webkit-scrollbar-thumb {
-				background-color: #1e2124;
-				border-radius: 7px;
-			}
-
-			#serverhider-scrolldiv::-webkit-scrollbar-track-piece {
-				background-color: #2f3136;
-				border-radius: 7px;
-			}
-			
-			@keyframes animation-serverhider-backdrop {
-				to { opacity: 0.85; }
-			}
-
-			@keyframes animation-serverhider-backdrop-closing {
-				to { opacity: 0; }
-			}
-
-			@keyframes animation-serverhider-modal {
-				to { transform: scale(1); opacity: 1; }
-			}
-
-			@keyframes animation-serverhider-modal-closing {
-				to { transform: scale(0.7); opacity: 0; }
-			}
-
-			.serverhider-modal .callout-backdrop {
-				animation: animation-serverhider-backdrop 250ms ease;
-				animation-fill-mode: forwards;
-				opacity: 0;
-				background-color: rgb(0, 0, 0);
-				transform: translateZ(0px);
-			}
-
-			.serverhider-modal.closing .callout-backdrop {
-				animation: animation-serverhider-backdrop-closing 200ms linear;
-				animation-fill-mode: forwards;
-				animation-delay: 50ms;
-				opacity: 0.85;
-			}
-			
-			.serverhider-modal .modal {
-				animation: animation-serverhider-modal 250ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
-				animation-fill-mode: forwards;
-				transform: scale(0.7);
-				transform-origin: 50% 50%;
-				align-content: space-around;
-				align-items: center;
-				box-sizing: border-box;
-				display: flex;
-				flex-direction: column;
-				justify-content: center;
-				min-height: initial;
-				max-height: initial;
-				opacity: 0;
-				pointer-events: none;
-				user-select: none;
-				height: 100%;
-				width: 100%;
-				margin: 0;
-				padding: 0;
-				position: absolute;
-				top: 0;
-				right: 0;
-				bottom: 0;
-				left: 0;
-				z-index: 1000;
-			}
-
-			.serverhider-modal.closing .modal {
-				animation: animation-serverhider-modal-closing 250ms cubic-bezier(0.19, 1, 0.22, 1);
-				animation-fill-mode: forwards;
-				opacity: 1;
-				transform: scale(1);
-			}
-			
-			.serverhider-modal .form {
-				width: 100%;
-			}
-
-			.serverhider-modal .form-header, .serverhider-modal .form-actions {
-				background-color: rgba(32,34,37,.3);
-				box-shadow: inset 0 1px 0 rgba(32,34,37,.6);
-				padding: 20px;
-				
-			}
-
-			.serverhider-modal .form-header {
-				color: #f6f6f7;
-				cursor: default;
-				font-size: 16px;
-				font-weight: 600;
-				letter-spacing: .3px;
-				line-height: 20px;
-				text-transform: uppercase;
-			}
-
-			.serverhider-modal .form-actions {
-				display: flex;
-				flex-direction: row-reverse;
-				flex-wrap: nowrap;
-				flex: 0 0 auto;
-				padding-right: 32px;
-			}
-
-			.serverhider-modal .form-inner{
-				margin: 10px 0;
-				max-height: 360px;
-				overflow-x: hidden;
-				overflow-y: scroll;
-				padding: 0 20px;
-				
-			}
-
-			.serverhider-modal .modal-inner {
-				background-color: #36393E;
-				border-radius: 5px;
-				box-shadow: 0 0 0 1px rgba(32,34,37,.6),0 2px 10px 0 rgba(0,0,0,.2);
-				display: flex;
-				min-height: 200px;
-				pointer-events: auto;
-				width: 470px;
-			}
-
-			.serverhider-modal .btn {
-				align-items: center;
-				background: none;
-				border-radius: 3px;
-				border: none;
-				box-sizing: border-box;
-				display: flex;
-				font-size: 14px;
-				font-weight: 500;
-				justify-content: center;
-				line-height: 16px;
-				min-height: 38px;
-				min-width: 96px;
-				padding: 2px 16px;
-				position: relative;
-			}
-
-			.serverhider-modal .btn-ok {
-				background-color: #3A71C1;
-				color: #fff;
-			}
-
 			.serverhider-modal .btn-all {
-				background-color: #1E2124;
-				color: #fff;
+				background-color: transparent;
 			}
 
-			.serverhider-modal .server-entry {
-				border-bottom: 1px solid #2F3237;
-				border-top: 1px solid #2F3237;
+			.serverhider-modal .serverhiderEntry {
 				height: 50px;
 				padding-top: 5px;
 				padding-bottom: 5px;
 			}
 			
-			.serverhider-modal .server-entry .modal-server-guild {
+			.serverhider-modal .serverhiderEntry .serverhiderGuild {
 				display: inline-block;
 				height: 50px;
 				width: 50px;
 			}
 			
-			.serverhider-modal .server-entry .modal-server-guild .modal-server-icon {
+			.serverhider-modal .serverhiderEntry .serverhiderGuild .serverhiderIcon {
 				background-color: #484B51;
 				background-size: cover;
 				border-radius: 25px;
@@ -185,14 +32,14 @@ class ServerHider {
 				display: inline-block;
 				font-size: 16px;
 				font-weight: 600;
-				height: inherit;
+				height: 35px;
 				letter-spacing: .5px;
-				line-height: 50px;
+				padding-top: 15px;
 				text-align: center;
-				width: inherit;
+				width: 50px;
 			}
 			
-			.serverhider-modal .server-entry .modal-server-guild .modal-server-badge {
+			.serverhider-modal .serverhiderEntry .serverhiderGuild .serverhiderBadge {
 				background-color: #f04747;
 				border-radius: 3px;
 				box-shadow: 0 1px 0 rgba(0,0,0,.25), inset 0 1px 0 hsla(0,0%,100%,.15);
@@ -209,7 +56,7 @@ class ServerHider {
 				vertical-align: middle;
 			}
 			
-			.serverhider-modal .server-entry label {
+			.serverhider-modal .serverhiderEntry .serverhiderName {
 				color: #b9bbbe;
 				cursor: default;
 				display: inline-block;
@@ -218,60 +65,68 @@ class ServerHider {
 				font-weight: 600;
 				height: 50px;
 				letter-spacing: .5px;
-				line-height: 50px;
 				margin-left: 10px;
-				margin-top: -77px;
+				margin-top: -38px;
 				overflow: hidden;
 				text-transform: uppercase;
 				vertical-align: middle;
 				width: 250px;
 			}
 
-			.serverhider-modal .server-entry .btn {
-				color: #fff;
+			.serverhider-modal .serverhiderEntry .btn-showserver {
+				margin: 12px 12px 0 0;
 				display: inline-block;
 				float: right;
-				margin-top: 5px;
-				vertical-align: middle;
-			}
-
-			.serverhider-modal .server-entry .btn-hide {
-				background-color: #202225;
-			}
-
-			.serverhider-modal .server-entry .btn-show {
-				background-color: #3A71C1;
 			}`;
 		
+			
 		this.serverHiderModalMarkup =
-			`<span class="serverhider-modal">
-				<div class="backdrop-2ohBEd callout-backdrop"></div>
-				<div class="modal">
-					<div class="modal-inner">
-						<form class="form">
-							<div class="form-header">
-								<header class="modal-header">REPLACE_modal_header_text</header>
+			`<span class="serverhider-modal DevilBro-modal">
+				<div class="backdrop-2ohBEd"></div>
+				<div class="modal-2LIEKY">
+					<div class="inner-1_1f7b">
+						<div class="modal-3HOjGZ sizeMedium-1-2BNS">
+							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO header-3sp3cE" style="flex: 0 0 auto;">
+								<div class="flexChild-1KGW5q" style="flex: 1 1 auto;">
+									<h4 class="h4-2IXpeI title-1pmpPr size16-3IvaX_ height20-165WbF weightSemiBold-T8sxWH defaultColor-v22dK1 defaultMarginh4-jAopYe marginReset-3hwONl">REPLACE_modal_header_text</h4>
+									<div class="guildName-1u0hy7 small-3-03j1 size12-1IGJl9 height16-1qXrGy primary-2giqSn"></div>
+								</div>
+								<svg class="btn-cancel close-3ejNTg flexChild-1KGW5q" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12">
+									<g fill="none" fill-rule="evenodd">
+										<path d="M0 0h12v12H0"></path>
+										<path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path>
+									</g>
+								</svg>
 							</div>
-							<div class="form-inner" id="serverhider-scrolldiv">
+							<div class="scrollerWrap-2uBjct content-1Cut5s scrollerThemed-19vinI themeGhostHairline-2H8SiW">
+								<div class="scroller-fzNley inner-tqJwAU"></div>
 							</div>
-							<div class="form-actions">
-								<button type="button" class="btn btn-ok">REPLACE_btn_ok_text</button>
-								<button type="button" class="btn btn-all">REPLACE_btn_all_text</button>
+							<div class="flex-lFgbSz flex-3B1Tl4 horizontalReverse-2LanvO horizontalReverse-k5PqxT flex-3B1Tl4 directionRowReverse-2eZTxP justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO footer-1PYmcw">
+								<button type="button" class="btn-save buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu">
+									<div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx contents-4L4hQM">REPLACE_btn_ok_text</div>
+								</button>
+								<button type="button" class="btn-all buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu">
+									<div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx contents-4L4hQM">REPLACE_btn_all_text</div>
+								</button>
 							</div>
-						</form>
+						</div>
 					</div>
 				</div>
 			</span>`;
 
 		this.serverEntryMarkup =
-			`<div class="server-entry">
-				<div class="modal-server-guild">
-					<div class="modal-server-icon"></div>
-					<div class="modal-server-badge"></div>
+			`<div class="serverhiderEntry">
+				<div class="serverhiderGuild">
+					<div class="serverhiderIcon"></div>
+					<div class="serverhiderBadge"></div>
 				</div>
-				<label class="modal-servername-label" for="modal-text">modal-servername-label</label>
-				<button type="button" class="btn btn-show">REPLACE_btn_visible_text</button>
+				<label class="serverhiderName"></label>
+				<div class="switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU btn-showserver">
+					<input type="checkbox" class="checkboxEnabled-4QfryV checkbox-1KYsPm input-showserver">
+				</div>
 			</div>`;
+			
+		this.dividerMarkup = `<div class="divider-1G01Z9 dividerDefault-77PXsz"></div>`;
 
 		this.serverContextEntryMarkup =
 			`<div class="item-group">
@@ -300,7 +155,7 @@ class ServerHider {
 
 	getDescription () {return "Hide Servers in your Serverlist";}
 
-	getVersion () {return "2.3.4";}
+	getVersion () {return "2.4.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -399,18 +254,15 @@ class ServerHider {
 	
 	onContextMenu (context) {
 		var serverData = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"guild"});
-		var contextType = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"GuildLeaveGroup"});
-		var guildCreate = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"handleGuildCreate"});
-		var data = Object.assign({},serverData,{guildCreate});
-		if (serverData && contextType) {
+		if (serverData && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"GuildLeaveGroup"})) {
 			$(context).append(this.serverContextEntryMarkup)
-				.on("mouseenter", ".serverhider-item", data, this.createContextSubMenu.bind(this))
-				.on("mouseleave", ".serverhider-item", data, this.deleteContextSubMenu.bind(this));
+				.on("mouseenter", ".serverhider-item", serverData, this.createContextSubMenu.bind(this))
+				.on("mouseleave", ".serverhider-item", serverData, this.deleteContextSubMenu.bind(this));
 		}
-		else if (guildCreate) {
+		else if (BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"handleGuildCreate"})) {
 			$(context).append(this.serverContextEntryMarkup)
-				.on("mouseenter", ".serverhider-item", data, this.createContextSubMenu.bind(this))
-				.on("mouseleave", ".serverhider-item", data, this.deleteContextSubMenu.bind(this));
+				.on("mouseenter", ".serverhider-item", {guildCreate:true}, this.createContextSubMenu.bind(this))
+				.on("mouseleave", ".serverhider-item", {guildCreate:true}, this.deleteContextSubMenu.bind(this));
 		}
 	}
 	
@@ -444,148 +296,92 @@ class ServerHider {
 		$(".context-menu").hide();
 		
 		var id = e.data.id;
-		var name = e.data.name;
-		var visible = false;
-		
-		var serverDiv = BDfunctionsDevilBro.getDivOfServer(e.data.id);
+		var serverDiv = BDfunctionsDevilBro.getDivOfServer(id);
 		
 		$(serverDiv).hide();
 		
-		BDfunctionsDevilBro.saveData(id, {id,name,visible}, this.getName(), "servers");
+		BDfunctionsDevilBro.saveData(id, {id, visible:false}, this.getName(), "servers");
 	}
 	
 	showServerModal (e) {
 		$(".context-menu").hide();
 		
+		var servers = BDfunctionsDevilBro.readServerList();
+		
 		var serverHiderModal = $(this.serverHiderModalMarkup);
-		serverHiderModal.appendTo($(".app-XZYfmp"))
-			.on("click", ".callout-backdrop,button.btn-ok", () => {
-				serverHiderModal.addClass('closing');
-				setTimeout(() => {serverHiderModal.remove();}, 300);
-			})
+		serverHiderModal
 			.on("click", "button.btn-all", () => {
-				this.changeAllButtonAndServer();
+				var hideAll = $(servers[0]).is(":visible");
+				for (let i = 0; i < servers.length; i++) {
+					let data = BDfunctionsDevilBro.getKeyInformation({"node":servers[i], "key":"guild"});
+					if (data) BDfunctionsDevilBro.saveData(data.id, {id:data.id, visible:!hideAll}, this.getName(), "servers");
+				}
+				$(servers).toggle(!hideAll);
+				$(".input-showserver").each((_, checkBox) => {if ($(checkBox).prop("checked") == hideAll) checkBox.click();});
 			});
 		
-		var servers = BDfunctionsDevilBro.readServerList();
-		
-		for (var i = 0; i < servers.length; i++) {
-			let data = BDfunctionsDevilBro.getKeyInformation({"node":servers[i], "key":"guild"});
-			var badge = $(servers[i]).find(".badge")[0];
+		for (let i = 0; i < servers.length; i++) {
+			let serverDiv = servers[i];
+			let data = BDfunctionsDevilBro.getKeyInformation({"node":serverDiv, "key":"guild"});
+			let badge = serverDiv.querySelector(".badge");
 			if (data) {
 				var entry = $(this.serverEntryMarkup);
+				if (i > 0) serverHiderModal.find(".inner-tqJwAU").append(this.dividerMarkup);
+				serverHiderModal.find(".inner-tqJwAU").append(entry);
 				if (data.icon) {
-					entry.find(".modal-server-icon").css("background-image", "url('https://cdn.discordapp.com/icons/" + data.id + "/" + data.icon + ".png')");
+					entry.find(".serverhiderIcon")
+						.css("background-image", "url('https://cdn.discordapp.com/icons/" + data.id + "/" + data.icon + ".png')");
 				}
 				else {
-					entry.find(".modal-server-icon").text(servers[i].firstChild.innerText);
+					entry.find(".serverhiderIcon")
+						.text(serverDiv.firstChild.innerText);
 				}
 				if (badge) {
-					entry.find(".modal-server-badge").text(badge.innerText);
+					entry.find(".serverhiderBadge")
+						.text(badge.innerText);
 				}
 				else {
-					entry.find(".modal-server-badge").css("padding", "0px");
+					entry.find(".serverhiderBadge")
+						.css("padding", "0px");
 				}
-				entry
-					.appendTo(".form-inner")
-					.on("click", ".btn-hide, .btn-show", (event) => {
-						var serverDiv = BDfunctionsDevilBro.getDivOfServer(data.id);
-						this.changeButtonAndServer(event.target, serverDiv);
-					})
-					.find(".modal-servername-label")
-						.text(data.name)
-						.attr("id", data.id);
-					
-				var visible = $(servers[i]).is(":visible");
-				
-				this.updateButton(visible, entry.find("button"));
+				entry.find(".serverhiderName")
+					.text(data.name)
+					.attr("id", data.id);
+				entry.find(".input-showserver")
+					.prop("checked", $(serverDiv).is(":visible"))
+					.on("click", (event) => {
+						var visible = $(event.target).prop("checked");
+						$(serverDiv).toggle(visible);
+						BDfunctionsDevilBro.saveData(data.id, {id:data.id, visible:visible}, this.getName(), "servers");
+					});
 			}
 		}
-	}
-	
-	changeButtonAndServer (btn, serverDiv) {
-		var data = BDfunctionsDevilBro.getKeyInformation({"node":serverDiv, "key":"guild"});
-		if (data) {
-			var id = data.id;
-			var name = data.name;
-			var visible = !$(serverDiv).is(":visible");
-			
-			this.updateButton(visible, btn);
-			$(serverDiv).toggle(visible);
-			
-			BDfunctionsDevilBro.saveData(id, {id,name,visible}, this.getName(), "servers");
-		}
-	}
-	
-	changeAllButtonAndServer () {
-		var servers = BDfunctionsDevilBro.readServerList();
-		if (servers.length > 1) {
-			var visible = !$(servers[0]).is(":visible");
-			for (var i = 0; i < servers.length; i++) {
-				let data = BDfunctionsDevilBro.getKeyInformation({"node":servers[i], "key":"guild"});
-				if (data) {
-					var id = data.id;
-					var name = data.name;
-					
-					BDfunctionsDevilBro.saveData(id, {id,name,visible}, this.getName(), "servers");
-				}
-			}
-			this.updateAllButtons(visible);
-			$(servers).toggle(visible);
-		}
-	}
-	
-	updateButton (visible, btn) {
-		if (visible) {
-			$(btn)
-				.text(this.labels.btn_visible_text)
-				.removeClass("btn-hide")
-				.addClass("btn-show");
-		}
-		else {
-			$(btn)
-				.text(this.labels.btn_hidden_text)
-				.removeClass("btn-show")
-				.addClass("btn-hide");
-		}
-	}
-	
-	updateAllButtons (visible) {
-		var btns = $(".btn-hide, .btn-show");
-		for (var i = 0; i < btns.length; i++) {
-			this.updateButton(visible, btns);
-		}
-	}
-	
-	updateServer (serverDiv, write) {
-		var info = BDfunctionsDevilBro.getKeyInformation({"node":serverDiv, "key":"guild"});
-		if (info) {
-			var id, name, visible;
-			var data = BDfunctionsDevilBro.loadData(info.id, this.getName(), "servers");
-			if (data && write) {
-				id = data.id;
-				name = data.name;
-				visible = data.visible;
-			}
-			else {
-				id = info.id;
-				name = info.name;
-				visible = $(serverDiv).is(":visible");
-			}
-			
-			$(serverDiv).toggle(visible);
-			
-			BDfunctionsDevilBro.saveData(id, {id,name,visible}, this.getName(), "servers");
-		}
+		BDfunctionsDevilBro.appendModal(serverHiderModal);
 	}
 	
 	updateAllServers (write) {
 		var servers = BDfunctionsDevilBro.readServerList();
 		for (var i = 0; i < servers.length; i++) {
-			this.updateServer(servers[i], write);
+			var serverDiv = servers[i];
+			var info = BDfunctionsDevilBro.getKeyInformation({"node":serverDiv, "key":"guild"});
+			if (info) {
+				var id, visible;
+				var data = BDfunctionsDevilBro.loadData(info.id, this.getName(), "servers");
+				if (data && write) {
+					id = data.id;
+					visible = data.visible;
+				}
+				else {
+					id = info.id;
+					visible = $(serverDiv).is(":visible");
+				}
+				
+				$(serverDiv).toggle(visible);
+				
+				BDfunctionsDevilBro.saveData(id, {id, visible}, this.getName(), "servers");
+			}
 		}
 	}
-	
 	
 	setLabelsByLanguage () {
 		switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
@@ -594,8 +390,6 @@ class ServerHider {
 					modal_header_text: 				"Styring af Serverliste",
 					btn_ok_text: 					"OK",
 					btn_all_text:					"Alle",
-					btn_visible_text:				"Synlig",
-					btn_hidden_text:				"Skjult",
 					context_serverhider_text:		"Server synlighed",
 					submenu_hideserver_text:		"Skjul Server",
 					submenu_openhidemenu_text:		"Styre Serverliste"
@@ -605,8 +399,6 @@ class ServerHider {
 					modal_header_text: 				"Verwaltung der Serverliste",
 					btn_ok_text: 					"OK",
 					btn_all_text:					"Alle",
-					btn_visible_text:				"Sichtbar",
-					btn_hidden_text:				"Versteckt",
 					context_serverhider_text:		"Serversichtbarkeit",
 					submenu_hideserver_text:		"Verstecke Server",
 					submenu_openhidemenu_text:		"Verwalte Serverliste"
@@ -616,8 +408,6 @@ class ServerHider {
 					modal_header_text: 				"Administración de lista de servidores",
 					btn_ok_text: 					"OK",
 					btn_all_text:					"Todo",
-					btn_visible_text:				"Visible",
-					btn_hidden_text:				"Oculto",
 					context_serverhider_text:		"Visibilidad del servidor",
 					submenu_hideserver_text:		"Ocultar servidor",
 					submenu_openhidemenu_text:		"Administrar lista de servidores"
@@ -627,8 +417,6 @@ class ServerHider {
 					modal_header_text: 				"Gestion de la liste des serveurs",
 					btn_ok_text: 					"OK",
 					btn_all_text:					"Tout",
-					btn_visible_text:				"Visible",
-					btn_hidden_text:				"Caché",
 					context_serverhider_text:		"Visibilité du serveur",
 					submenu_hideserver_text:		"Cacher le serveur",
 					submenu_openhidemenu_text:		"Gérer la liste des serveurs"
@@ -638,8 +426,6 @@ class ServerHider {
 					modal_header_text: 				"Gestione dell'elenco dei server",
 					btn_ok_text: 					"OK",
 					btn_all_text:					"Tutto",
-					btn_visible_text:				"Visible",
-					btn_hidden_text:				"Nascosta",
 					context_serverhider_text:		"Visibilità del server",
 					submenu_hideserver_text:		"Nascondi il server",
 					submenu_openhidemenu_text:		"Gestione elenco dei server"
@@ -649,9 +435,7 @@ class ServerHider {
 					modal_header_text: 				"Beheer van de Serverlijst",
 					btn_ok_text: 					"OK",
 					btn_all_text:					"Alle",
-					btn_visible_text:				"Zichtbaar",
-					btn_hidden_text:				"Verborgen",
-					context_serverhider_text:		"",
+					context_serverhider_text:		"Server zichtbaarheid",
 					submenu_hideserver_text:		"Verberg server",
 					submenu_openhidemenu_text:		"Beheer serverlijst"
 				};
@@ -660,9 +444,7 @@ class ServerHider {
 					modal_header_text: 				"Administrasjon av serverlisten",
 					btn_ok_text: 					"OK",
 					btn_all_text:					"Alle",
-					btn_visible_text:				"Synlig",
-					btn_hidden_text:				"Skjult",
-					context_serverhider_text:		"Server zichtbaarheid",
+					context_serverhider_text:		"Server synlighet",
 					submenu_hideserver_text:		"Skjul server",
 					submenu_openhidemenu_text:		"Administrer serverliste"
 				};
@@ -671,8 +453,6 @@ class ServerHider {
 					modal_header_text: 				"Zarządzanie listą serwerów",
 					btn_ok_text: 					"OK",
 					btn_all_text:					"Każdy",
-					btn_visible_text:				"Widoczny",
-					btn_hidden_text:				"Ukryty",
 					context_serverhider_text:		"Widoczność serwera",
 					submenu_hideserver_text:		"Ukryj serwer",
 					submenu_openhidemenu_text:		"Zarządzaj listą serwerów"
@@ -682,8 +462,6 @@ class ServerHider {
 					modal_header_text: 				"Gerenciamento da lista de servidores",
 					btn_ok_text: 					"OK",
 					btn_all_text:					"Todo",
-					btn_visible_text:				"Visível",
-					btn_hidden_text:				"Oculto",
 					context_serverhider_text:		"Visibilidade do servidor",
 					submenu_hideserver_text:		"Ocultar servidor",
 					submenu_openhidemenu_text:		"Gerenciar lista de servidores"
@@ -693,8 +471,6 @@ class ServerHider {
 					modal_header_text: 				"Palvelinluettelon hallinta",
 					btn_ok_text: 					"OK",
 					btn_all_text:					"Kaikki",
-					btn_visible_text:				"Näkyvä",
-					btn_hidden_text:				"Kätketty",
 					context_serverhider_text:		"Palvelimen näkyvyys",
 					submenu_hideserver_text:		"Piilota palvelin",
 					submenu_openhidemenu_text:		"Hallinnoi palvelinluetteloa"
@@ -704,8 +480,6 @@ class ServerHider {
 					modal_header_text: 				"Hantering av serverlistan",
 					btn_ok_text: 					"OK",
 					btn_all_text:					"All",
-					btn_visible_text:				"Synlig",
-					btn_hidden_text:				"Dold",
 					context_serverhider_text:		"Server sikt",
 					submenu_hideserver_text:		"Dölj server",
 					submenu_openhidemenu_text:		"Hantera serverlistan"
@@ -715,8 +489,6 @@ class ServerHider {
 					modal_header_text: 				"Sunucu Listesinin Yönetimi",
 					btn_ok_text: 					"Okey",
 					btn_all_text:					"Her",
-					btn_visible_text:				"Görünür",
-					btn_hidden_text:				"Gizli",
 					context_serverhider_text:		"Sunucu görünürlüğü",
 					submenu_hideserver_text:		"Sunucuyu Gizle",
 					submenu_openhidemenu_text:		"Sunucu Listesini Yönet"
@@ -726,8 +498,6 @@ class ServerHider {
 					modal_header_text: 				"Správa seznamu serverů",
 					btn_ok_text: 					"OK",
 					btn_all_text:					"Vše",
-					btn_visible_text:				"Viditelné",
-					btn_hidden_text:				"Skrytý",
 					context_serverhider_text:		"Viditelnost serveru",
 					submenu_hideserver_text:		"Skrýt server",
 					submenu_openhidemenu_text:		"Správa seznamu serverů"
@@ -737,8 +507,6 @@ class ServerHider {
 					modal_header_text: 				"Управление на списъка със сървъри",
 					btn_ok_text: 					"Добре",
 					btn_all_text:					"Bсичко",
-					btn_visible_text:				"Bидим",
-					btn_hidden_text:				"Cкрит",
 					context_serverhider_text:		"Видимост на сървъра",
 					submenu_hideserver_text:		"Скриване на сървър",
 					submenu_openhidemenu_text:		"Управление на списъка със сървъри"
@@ -748,8 +516,6 @@ class ServerHider {
 					modal_header_text: 				"Управление списком серверов",
 					btn_ok_text: 					"ОК",
 					btn_all_text:					"Все",
-					btn_visible_text:				"Bидимый",
-					btn_hidden_text:				"Cкрытый",
 					context_serverhider_text:		"Видимость сервера",
 					submenu_hideserver_text:		"Скрыть сервер",
 					submenu_openhidemenu_text:		"Управление списком серверов"
@@ -759,8 +525,6 @@ class ServerHider {
 					modal_header_text: 				"Управління списком серверів",
 					btn_ok_text: 					"Добре",
 					btn_all_text:					"Все",
-					btn_visible_text:				"Видимий",
-					btn_hidden_text:				"Cхований",
 					context_serverhider_text:		"Видимість сервера",
 					submenu_hideserver_text:		"Сховати сервер",
 					submenu_openhidemenu_text:		"Управління списком серверів"
@@ -770,8 +534,6 @@ class ServerHider {
 					modal_header_text: 				"サーバリストの管理",
 					btn_ok_text: 					"はい",
 					btn_all_text:					"すべて",
-					btn_visible_text:				"見える",
-					btn_hidden_text:				"隠された",
 					context_serverhider_text:		"サーバーの可視性",
 					submenu_hideserver_text:		"サーバーを隠す",
 					submenu_openhidemenu_text:		"サーバーリストを管理する"
@@ -781,8 +543,6 @@ class ServerHider {
 					modal_header_text: 				"管理服务器列表",
 					btn_ok_text: 					"好",
 					btn_all_text:					"所有",
-					btn_visible_text:				"可见",
-					btn_hidden_text:				"隐",
 					context_serverhider_text:		"服務器可見性",
 					submenu_hideserver_text:		"隐藏服务器",
 					submenu_openhidemenu_text:		"管理服务器列表"
@@ -792,8 +552,6 @@ class ServerHider {
 					modal_header_text: 				"서버 목록 관리",
 					btn_ok_text: 					"승인",
 					btn_all_text:					"모든",
-					btn_visible_text:				"명백한",
-					btn_hidden_text:				"숨겨진",
 					context_serverhider_text:		"서버 가시성",
 					submenu_hideserver_text:		"서버 숨기기",
 					submenu_openhidemenu_text:		"서버 목록 관리"
@@ -803,8 +561,6 @@ class ServerHider {
 					modal_header_text: 				"Managing Serverlist",
 					btn_ok_text: 					"OK",
 					btn_all_text:					"All",
-					btn_visible_text:				"Visible",
-					btn_hidden_text:				"Hidden",
 					context_serverhider_text:		"Server Visibility",
 					submenu_hideserver_text:		"Hide Server",
 					submenu_openhidemenu_text:		"Manage Serverlist"
