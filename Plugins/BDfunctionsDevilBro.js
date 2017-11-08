@@ -1018,7 +1018,20 @@ BDfunctionsDevilBro.clearReadNotifications = function (servers) {
 BDfunctionsDevilBro.appendModal = function (modal) {
 	$(modal)
 		.appendTo(".app ~ [class^='theme-']")
-		.on("click", ".backdrop-2ohBEd, .btn-cancel, .btn-save", (event) => {
+		.on("click", ".modalTabButton", (e) => {
+			$(".form-tabcontent.open", modal)
+				.removeClass("open");
+				
+			$(".form-tablinks.active", modal)
+				.removeClass("active");
+				
+			$(".form-tabcontent." + e.target.value, modal)
+				.addClass("open");
+				
+			$(e.target)
+				.addClass("active");
+		})
+		.on("click", ".backdrop-2ohBEd, .btn-cancel, .btn-save", () => {
 			$(modal).addClass("closing");
 			setTimeout(() => {modal.remove();}, 300);
 		});
