@@ -1018,6 +1018,11 @@ BDfunctionsDevilBro.clearReadNotifications = function (servers) {
 BDfunctionsDevilBro.appendModal = function (modal) {
 	$(modal)
 		.appendTo(".app ~ [class^='theme-']")
+		.on("click", ".checkbox-1KYsPm", (e) => {
+			$(e.target.parentElement)
+				.toggleClass("valueChecked-3Bzkbm", $(e.target).prop("checked"))
+				.toggleClass("valueUnchecked-XR6AOk", $(e.target).prop("checked"));
+		})
 		.on("click", ".modalTabButton", (e) => {
 			$(".modalTab.open", modal)
 				.addClass("hidden")
@@ -1036,6 +1041,11 @@ BDfunctionsDevilBro.appendModal = function (modal) {
 		.on("click", ".backdrop-2ohBEd, .btn-cancel, .btn-save", () => {
 			$(modal).addClass("closing");
 			setTimeout(() => {modal.remove();}, 300);
+		})
+		.find(".checkbox-1KYsPm").each((_, checkBox) => {
+			$(checkBox.parentElement)
+				.toggleClass("valueChecked-3Bzkbm", $(checkBox).prop("checked"))
+				.toggleClass("valueUnchecked-XR6AOk", $(checkBox).prop("checked"));
 		});
 };
 
