@@ -1027,7 +1027,7 @@ BDfunctionsDevilBro.appendModal = function (modal) {
 			$(".modalTab.modalTabOpen", modal)
 				.removeClass("modalTabOpen");
 				
-			$(".modalTabButton.modalTabOpen", modal)
+			$(".modalTabButton.modalTabButtonActive", modal)
 				.removeClass("modalTabButtonActive");
 				
 			$(".modalTab." + e.currentTarget.value, modal)
