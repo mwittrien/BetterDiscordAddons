@@ -300,7 +300,7 @@ class ServerHider {
 
 	getDescription () {return "Hide Servers in your Serverlist";}
 
-	getVersion () {return "2.3.3";}
+	getVersion () {return "2.3.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -607,7 +607,7 @@ class ServerHider {
 					btn_all_text:					"Alle",
 					btn_visible_text:				"Sichtbar",
 					btn_hidden_text:				"Versteckt",
-					context_serverhider_text:		"Server Sichtbarkeit",
+					context_serverhider_text:		"Serversichtbarkeit",
 					submenu_hideserver_text:		"Verstecke Server",
 					submenu_openhidemenu_text:		"Verwalte Serverliste"
 				};
@@ -805,7 +805,7 @@ class ServerHider {
 					btn_all_text:					"All",
 					btn_visible_text:				"Visible",
 					btn_hidden_text:				"Hidden",
-					context_serverhider_text:		"Server Visibiity",
+					context_serverhider_text:		"Server Visibility",
 					submenu_hideserver_text:		"Hide Server",
 					submenu_openhidemenu_text:		"Manage Serverlist"
 				};
