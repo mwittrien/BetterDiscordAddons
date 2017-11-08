@@ -7,263 +7,8 @@ class EditServers {
     
 		this.serverContextObserver = new MutationObserver(() => {});
 		this.serverListObserver = new MutationObserver(() => {});
-		this.serverDropHandler;
-		this.serverListLeaveHandler;
 		
-		this.urlCheckTimeout;
-		this.urlCheckRequest;
-		
-		this.serverDragged = false;;
-		
-		this.css = `
-			@keyframes animation-editservers-backdrop {
-				to { opacity: 0.85; }
-			}
-
-			@keyframes animation-editservers-backdrop-closing {
-				to { opacity: 0; }
-			}
-
-			@keyframes animation-editservers-modal {
-				to { transform: scale(1); opacity: 1; }
-			}
-
-			@keyframes animation-editservers-modal-closing {
-				to { transform: scale(0.7); opacity: 0; }
-			}
-
-			.editservers-modal .callout-backdrop {
-				animation: animation-editservers-backdrop 250ms ease;
-				animation-fill-mode: forwards;
-				opacity: 0;
-				background-color: rgb(0, 0, 0);
-				transform: translateZ(0px);
-			}
-
-			.editservers-modal.closing .callout-backdrop {
-				animation: animation-editservers-backdrop-closing 200ms linear;
-				animation-fill-mode: forwards;
-				animation-delay: 50ms;
-				opacity: 0.85;
-			}
-			
-			.editservers-modal .modal {
-				animation: animation-editservers-modal 250ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
-				animation-fill-mode: forwards;
-				transform: scale(0.7);
-				transform-origin: 50% 50%;
-				align-content: space-around;
-				align-items: center;
-				box-sizing: border-box;
-				display: flex;
-				flex-direction: column;
-				justify-content: center;
-				min-height: initial;
-				max-height: initial;
-				opacity: 0;
-				pointer-events: none;
-				user-select: none;
-				height: 100%;
-				width: 100%;
-				margin: 0;
-				padding: 0;
-				position: absolute;
-				top: 0;
-				right: 0;
-				bottom: 0;
-				left: 0;
-				z-index: 1000;
-			}
-
-			.editservers-modal.closing .modal {
-				animation: animation-editservers-modal-closing 250ms cubic-bezier(0.19, 1, 0.22, 1);
-				animation-fill-mode: forwards;
-				opacity: 1;
-				transform: scale(1);
-			}
-			
-			.editservers-modal .form {
-				width: 100%;
-			}
-
-			.editservers-modal .form-header, .editservers-modal .form-actions {
-				background-color: rgba(32,34,37,.3);
-				box-shadow: inset 0 1px 0 rgba(32,34,37,.6);
-				padding: 20px;
-				
-			}
-
-			.editservers-modal .form-header {
-				color: #f6f6f7;
-				cursor: default;
-				font-size: 16px;
-				font-weight: 600;
-				letter-spacing: .3px;
-				line-height: 20px;
-				text-transform: uppercase;
-			}
-
-			.editservers-modal .form-actions {
-				display: flex;
-				flex-direction: row-reverse;
-				flex-wrap: nowrap;
-				flex: 0 0 auto;
-				padding-right: 32px;
-			}
-
-			.editservers-modal .form-inner{
-				margin: 10px 0;
-				overflow-x: hidden;
-				overflow-y: hidden;
-				padding: 0 20px;
-				height: 350px;
-				
-			}
-
-			.editservers-modal .modal-inner {
-				background-color: #36393E;
-				border-radius: 5px;
-				box-shadow: 0 0 0 1px rgba(32,34,37,.6),0 2px 10px 0 rgba(0,0,0,.2);
-				display: flex;
-				min-height: 200px;
-				pointer-events: auto;
-				width: 500px;
-			}
-			
-			.editservers-modal .inputs {
-				width: 430px;
-				margin: auto;
-			}
-
-			.editservers-modal input {
-				color: #f6f6f7;
-				background-color: rgba(0,0,0,.1);
-				border-color: rgba(0,0,0,.3);
-				padding: 10px;
-				height: 40px;
-				box-sizing: border-box;
-				width: 90%;
-				margin: 0 5% 10px 5%;
-				border-width: 1px;
-				border-style: solid;
-				border-radius: 3px;
-				outline: none;
-				transition: background-color .15s ease,border .15s ease;
-			}
-
-			.editservers-modal input.valid {
-				background-color: rgba(10,167,0,.5);
-			}
-
-			.editservers-modal input.invalid {
-				background-color: rgba(208,0,0,.5);
-			}
-
-			.editservers-modal input:disabled {
-				color: #a6a6a7;
-				cursor: no-drop;
-				background-color: rgba(0,0,0,.5);
-			}
-
-			.editservers-modal input[type="checkbox"] {
-				margin: 0px 0px 0px 11px;
-				width: 10%;
-				height: 20px;
-			}
-
-			.editservers-modal .checkbox {
-				display: inline;
-			}
-
-			.editservers-modal .checkboxlabel {
-				position: relative;
-				top: -6px;
-				display: inline;
-			}
-
-			.editservers-modal .btn {
-				align-items: center;
-				background: none;
-				border-radius: 3px;
-				border: none;
-				box-sizing: border-box;
-				display: flex;
-				font-size: 14px;
-				font-weight: 500;
-				justify-content: center;
-				line-height: 16px;
-				min-height: 38px;
-				min-width: 96px;
-				padding: 2px 16px;
-				position: relative;
-			}
-
-			.editservers-modal .btn-cancel {
-				background-color: #2f3136;
-				color: #fff;
-			}
-
-			.editservers-modal .btn-save {
-				background-color: #3A71C1;
-				color: #fff;
-			}
-
-			.editservers-modal .control-group label,
-			.editservers-modal .form-tab button {
-				color: #b9bbbe;
-				letter-spacing: .5px;
-				text-transform: uppercase;
-				flex: 1;
-				cursor: default;
-				font-weight: 600;
-				line-height: 16px;
-				font-size: 12px;
-			}
-
-			.editservers-modal .control-group {
-				margin-top: 10px;
-			}
-			
-			.editservers-modal .form-tab {
-				overflow: hidden;
-				background-color: #36393E;
-				position: absolute;
-				z-index: 20px;
-			}
-
-			.editservers-modal .form-tablinks {
-				background-color: inherit;
-				float: left;
-				border: none;
-				outline: none;
-				cursor: pointer;
-				padding: 14px 16px;
-				transition: 0.3s;
-				border-radius: 5px 5px 0px 0px;
-			}
-
-			.editservers-modal .form-tablinks:hover {
-				background-color: #403F47;
-			}
-
-			.editservers-modal .form-tablinks.active {
-				background-color: #484B51;
-			}
-
-			.editservers-modal .form-tabcontent {
-				margin-top: 40px;
-				padding: 5px 0px 20px 0px;
-				background-color: #484B51;
-				display: none;
-				border-radius: 5px 5px 5px 5px;
-				position: relative;
-				z-index: 10px;
-			}
-
-			.editservers-modal .form-tabcontent.open {
-				display: block;
-			}`;
-
+		this.serverDragged = false;
 
 		this.serverContextEntryMarkup =
 			`<div class="item-group">
@@ -288,73 +33,98 @@ class EditServers {
 			</div>`;
 
 		this.serverSettingsModalMarkup =
-			`<span class="editservers-modal">
-				<div class="backdrop-2ohBEd callout-backdrop"></div>
-				<div class="modal">
-					<div class="modal-inner">
-						<div class="form">
-							<div class="form-header">
-								<header class="modal-header">REPLACE_modal_header_text</header>
+			`<span class="editservers-modal DevilBro-modal">
+				<div class="backdrop-2ohBEd"></div>
+				<div class="modal-2LIEKY">
+					<div class="inner-1_1f7b">
+						<div class="modal-3HOjGZ sizeMedium-1-2BNS">
+							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO header-3sp3cE" style="flex: 0 0 auto;">
+								<div class="flexChild-1KGW5q" style="flex: 1 1 auto;">
+									<h4 class="h4-2IXpeI title-1pmpPr size16-3IvaX_ height20-165WbF weightSemiBold-T8sxWH defaultColor-v22dK1 defaultMarginh4-jAopYe marginReset-3hwONl">REPLACE_modal_header_text</h4>
+									<div class="guildName-1u0hy7 small-3-03j1 size12-1IGJl9 height16-1qXrGy primary-2giqSn"></div>
+								</div>
+								<svg class="btn-cancel close-3ejNTg flexChild-1KGW5q" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12">
+									<g fill="none" fill-rule="evenodd">
+										<path d="M0 0h12v12H0"></path>
+										<path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path>
+									</g>
+								</svg>
 							</div>
-							<div class="form-inner">
-								<div class="form-tab">
-									<button class="form-tablinks active" value="tab-text">REPLACE_modal_tabheader1_text</button>
-									<button class="form-tablinks" value="tab-icon">REPLACE_modal_tabheader2_text</button>
-									<button class="form-tablinks" value="tab-tooltip">REPLACE_modal_tabheader3_text</button>
-								</div>
-								<div class="form-tabcontent tab-text open">
-									<div class="control-group">
-										<div class="input-settings">
-											<div class="inputs">
-												<label class="modal-text-label" for="modal-nametext">REPLACE_modal_servername_text</label>
-												<input type="text" id="modal-nametext" name="nametext">
-												<label class="modal-text-label" for="modal-idtext">REPLACE_modal_servershortname_text</label>
-												<input type="text" id="modal-idtext" name="idtext">
-												<label class="modal-text-label" for="modal-urltext">REPLACE_modal_serverurl_text</label>
-												<input type="text" id="modal-urltext" name="urltext">
-												<div class="checkbox"><input type="checkbox" id="modal-urlcheck"></div><div class="checkboxlabel"><label class="modal-text-label" for="modal-urlcheck">REPLACE_modal_removeicon_text</label></div>
+							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;">
+								<button type="button" value="modalTab-server" class="modalTabButton buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 mediumGrow-uovsMu">
+									<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_tabheader1_text</h3>
+								</button>
+								<button type="button" value="modalTab-icon" class="modalTabButton buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 mediumGrow-uovsMu modalTabButtonInactive">
+									<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_tabheader2_text</h3>
+								</button>
+								<button type="button" value="modalTab-tooltip" class="modalTabButton buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 mediumGrow-uovsMu modalTabButtonInactive">
+									<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_tabheader3_text</h3>
+								</button>
+							</div>
+							<div class="scrollerWrap-2uBjct content-1Cut5s scrollerThemed-19vinI themeGhostHairline-2H8SiW">
+								<div class="scroller-fzNley inner-tqJwAU">
+									<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO switchItem-1uofoz marginBottom20-2Ifj-2 modalTab modalTab-server modalTabOpen" style="flex: 1 1 auto;">
+										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
+											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_servername_text</h3>
+										</div>
+										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
+											<div class="inputWrapper-3xoRWR vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR flexChild-1KGW5q" style="flex: 1 1 auto;"><input type="text" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_" id="input-servername"></div>
+										</div>
+										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
+											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_servershortname_text</h3>
+										</div>
+										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
+											<div class="inputWrapper-3xoRWR vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR flexChild-1KGW5q" style="flex: 1 1 auto;"><input type="text" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_" id="input-servershortname"></div>
+										</div>
+										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
+											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_serverurl_text</h3>
+										</div>
+										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
+											<div class="inputWrapper-3xoRWR vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR flexChild-1KGW5q" style="flex: 1 1 auto;"><input type="text" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_" id="input-serverurl"></div>
+										</div>
+										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO  marginBottom8-1mABJ4" style="flex: 1 1 auto;">
+											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">REPLACE_modal_removeicon_text</h3>
+											<div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;">
+												<input type="checkbox" class="checkboxEnabled-4QfryV checkbox-1KYsPm" id="input-removeicon">
 											</div>
 										</div>
 									</div>
-								</div>
-								<div class="form-tabcontent tab-icon">
-									<div class="control-group">
-										<div class="modal-color-picker">
-											<div class="swatches1">
-												<label class="color-picker1-label">REPLACE_modal_colorpicker1_text</label>
-											</div>
+									<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO switchItem-1uofoz marginBottom20-2Ifj-2 modalTab modalTab-icon" style="flex: 1 1 auto;">
+										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO" style="flex: 1 1 auto;">
+											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_colorpicker1_text</h3>
+										</div>
+										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
+											<div class="swatches1"></div>
+										</div>
+										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO" style="flex: 1 1 auto;">
+											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_colorpicker2_text</h3>
+										</div>
+										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
+											<div class="swatches2"></div>
 										</div>
 									</div>
-									<div class="control-group">
-										<div class="modal-color-picker">
-											<div class="swatches2">
-												<label class="color-picker2-label">REPLACE_modal_colorpicker2_text</label>
-											</div>
+									<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO switchItem-1uofoz marginBottom20-2Ifj-2 modalTab modalTab-tooltip" style="flex: 1 1 auto;">
+										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO" style="flex: 1 1 auto;">
+											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_colorpicker3_text</h3>
 										</div>
-									</div>
-								</div>
-								<div class="form-tabcontent tab-tooltip">
-									<div class="control-group">
-										<div class="modal-color-picker">
-											<div class="swatches3">
-												<label class="color-picker3-label">REPLACE_modal_colorpicker3_text</label>
-											</div>
+										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
+											<div class="swatches3"></div>
 										</div>
-									</div>
-									<div class="control-group">
-										<div class="modal-color-picker">
-											<div class="swatches4">
-												<label class="color-picker4-label">REPLACE_modal_colorpicker4_text</label>
-											</div>
+										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO" style="flex: 1 1 auto;">
+											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_colorpicker4_text</h3>
+										</div>
+										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
+											<div class="swatches4"></div>
 										</div>
 									</div>
 								</div>
 							</div>
-							<div class="form-actions">
-								<button type="button" class="btn btn-cancel">REPLACE_btn_cancel_text</button>
-								<button type="button" class="btn btn-save">REPLACE_btn_save_text</button>
+							<div class="flex-lFgbSz flex-3B1Tl4 horizontalReverse-2LanvO horizontalReverse-k5PqxT flex-3B1Tl4 directionRowReverse-2eZTxP justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO footer-1PYmcw">
+								<button type="button" class="btn-save buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu">
+									<div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx contents-4L4hQM">REPLACE_btn_save_text</div>
+								</button>
 							</div>
-						</form>
+						</div>
 					</div>
 				</div>
 			</span>`;
@@ -364,7 +134,7 @@ class EditServers {
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	getVersion () {return "1.5.2";}
+	getVersion () {return "1.6.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -416,18 +186,13 @@ class EditServers {
 			});
 			if (document.querySelector(".guilds.scroller")) this.serverListObserver.observe(document.querySelector(".guilds.scroller"), {childList: true});
 			
-			this.serverDropHandler = (e) => {	
+			$(".guilds.scroller").on("drop" + this.getName(), () => {	
 				this.serverDragged = true;
-			};
-			this.serverListLeaveHandler = (e) => {	
+			});
+			$(".guilds.scroller").on("mouseleave" + this.getName(), () => {	
 				if (this.serverDragged) this.loadAllServers();
 				this.serverDragged = false;
-			};
-			
-			$(".guilds.scroller").bind('drop', this.serverDropHandler);
-			$(".guilds.scroller").bind('mouseleave', this.serverListLeaveHandler);
-			
-			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
+			});
 			
 			this.loadAllServers();
 			
@@ -445,8 +210,8 @@ class EditServers {
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.serverContextObserver.disconnect();
 			this.serverListObserver.disconnect();
-			$(".guilds.scroller").unbind('drop', this.serverDropHandler);
-			$(".guilds.scroller").unbind('mouseleave', this.serverListLeaveHandler);
+			$(".guilds.scroller").off("drop" + this.getName());
+			$(".guilds.scroller").off("mouseleave" + this.getName());
 			
 			$(".custom-editservers").each(
 				(i,serverDiv) => {
@@ -468,8 +233,6 @@ class EditServers {
 					}
 				}
 			);
-			
-			BDfunctionsDevilBro.removeLocalStyle(this.getName());
 			
 			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
 		}
@@ -523,7 +286,6 @@ class EditServers {
 		this.serverSettingsModalMarkup = 	this.serverSettingsModalMarkup.replace("REPLACE_modal_colorpicker2_text", this.labels.modal_colorpicker2_text);
 		this.serverSettingsModalMarkup = 	this.serverSettingsModalMarkup.replace("REPLACE_modal_colorpicker3_text", this.labels.modal_colorpicker3_text);
 		this.serverSettingsModalMarkup = 	this.serverSettingsModalMarkup.replace("REPLACE_modal_colorpicker4_text", this.labels.modal_colorpicker4_text);
-		this.serverSettingsModalMarkup = 	this.serverSettingsModalMarkup.replace("REPLACE_btn_cancel_text", this.labels.btn_cancel_text);
 		this.serverSettingsModalMarkup = 	this.serverSettingsModalMarkup.replace("REPLACE_btn_save_text", this.labels.btn_save_text);
 		
 		BDfunctionsDevilBro.translateMessage(this.getName());
@@ -594,68 +356,63 @@ class EditServers {
 			var server = $(serverDiv).find(".avatar-small");
 			
 			var serverSettingsModal = $(this.serverSettingsModalMarkup);
-			serverSettingsModal.find("#modal-nametext")[0].value = name;
-			serverSettingsModal.find("#modal-nametext").attr("placeholder", e.data.name);
-			serverSettingsModal.find("#modal-idtext")[0].value = shortName;
-			serverSettingsModal.find("#modal-idtext").attr("placeholder", e.data.shortName);
-			serverSettingsModal.find("#modal-urltext")[0].value = url;
-			serverSettingsModal.find("#modal-urltext").attr("placeholder", e.data.icon ? "https://cdn.discordapp.com/icons/" + e.data.id + "/" + e.data.icon + ".png" : null);
-			serverSettingsModal.find("#modal-urltext").addClass(url ? "valid" : "");
-			serverSettingsModal.find("#modal-urltext").prop("disabled", removeIcon);
-			serverSettingsModal.find("#modal-urlcheck")[0].checked = removeIcon;
+			serverSettingsModal.find(".guildName-1u0hy7").text(e.data.name);
+			serverSettingsModal.find("#input-servername").val(name);
+			serverSettingsModal.find("#input-servername").attr("placeholder", e.data.name);
+			serverSettingsModal.find("#input-servershortname").val(shortName);
+			serverSettingsModal.find("#input-servershortname").attr("placeholder", e.data.shortName);
+			serverSettingsModal.find("#input-serverurl").val(url);
+			serverSettingsModal.find("#input-serverurl").attr("placeholder", e.data.icon ? "https://cdn.discordapp.com/icons/" + e.data.id + "/" + e.data.icon + ".png" : null);
+			serverSettingsModal.find("#input-serverurl").addClass(url ? "valid" : "");
+			serverSettingsModal.find("#input-serverurl").prop("disabled", removeIcon);
+			serverSettingsModal.find("#input-removeicon").prop("checked", removeIcon);
 			BDfunctionsDevilBro.setColorSwatches(color1, serverSettingsModal.find(".swatches1"), "swatch1");
 			BDfunctionsDevilBro.setColorSwatches(color2, serverSettingsModal.find(".swatches2"), "swatch2");
 			BDfunctionsDevilBro.setColorSwatches(color3, serverSettingsModal.find(".swatches3"), "swatch3");
 			BDfunctionsDevilBro.setColorSwatches(color4, serverSettingsModal.find(".swatches4"), "swatch4");
-			serverSettingsModal.appendTo($(".app-XZYfmp"))
-				.on("click", ".callout-backdrop,button.btn-cancel", (event) => {
-					serverSettingsModal.addClass('closing');
-					setTimeout(() => {serverSettingsModal.remove();}, 300);
+			BDfunctionsDevilBro.appendModal(serverSettingsModal);
+			serverSettingsModal
+				.on("click", "#input-removeicon", (event) => {
+					serverSettingsModal.find("#input-serverurl").prop("disabled", event.target.checked);
 				})
-				.on("click", "#modal-urlcheck", (event) => {
-					serverSettingsModal.find("#modal-urltext").prop("disabled", event.target.checked);
-				})
-				.on("change keyup paste", "#modal-urltext", (event) => {
+				.on("change keyup paste", "#input-serverurl", (event) => {
 					this.checkUrl(event, serverSettingsModal);
 				})
-				.on("mouseenter", "#modal-urltext", (event) => {
+				.on("mouseenter", "#input-serverurl", (event) => {
 					$(event.target).addClass("hovering");
 					this.createNoticeTooltip(event);
 				})
-				.on("mouseleave", "#modal-urltext", (event) => {
+				.on("mouseleave", "#input-serverurl", (event) => {
 					$(".tooltips").find(".notice-tooltip").remove();
 					$(event.target).removeClass("hovering");
-				})
-				.on("click", "button.form-tablinks", (event) => {
-					this.changeTab(event, serverSettingsModal);
 				})
 				.on("click", "button.btn-save", (event) => {
 					event.preventDefault();
 					
 					name = null;
-					if (serverSettingsModal.find("#modal-nametext")[0].value) {
-						if (serverSettingsModal.find("#modal-nametext")[0].value.trim().length > 0) {
-							name = serverSettingsModal.find("#modal-nametext")[0].value.trim();
+					if (serverSettingsModal.find("#input-servername").val()) {
+						if (serverSettingsModal.find("#input-servername").val().trim().length > 0) {
+							name = serverSettingsModal.find("#input-servername").val().trim();
 						}
 					}
 					
 					shortName = null;
-					if (serverSettingsModal.find("#modal-idtext")[0].value) {
-						if (serverSettingsModal.find("#modal-idtext")[0].value.trim().length > 0) {
-							shortName = serverSettingsModal.find("#modal-idtext")[0].value.trim();
+					if (serverSettingsModal.find("#input-servershortname").val()) {
+						if (serverSettingsModal.find("#input-servershortname").val().trim().length > 0) {
+							shortName = serverSettingsModal.find("#modal-servershortname").val().trim();
 						}
 					}
 					
-					if (serverSettingsModal.find("#modal-urltext:not('.invalid')")[0]) {
+					if (serverSettingsModal.find("#input-serverurl:not('.invalid')").length > 0) {
 						url = null;
-						if (!serverSettingsModal.find("#modal-urlcheck")[0].checked && serverSettingsModal.find("#modal-urltext")[0].value) {
-							if (serverSettingsModal.find("#modal-urltext")[0].value.trim().length > 0) {
-								url = serverSettingsModal.find("#modal-urltext")[0].value.trim();
+						if (!serverSettingsModal.find("#input-removeicon").prop("checked") && serverSettingsModal.find("#input-serverurl").val()) {
+							if (serverSettingsModal.find("#input-serverurl").val().trim().length > 0) {
+								url = serverSettingsModal.find("#input-serverurl").val().trim();
 							}
 						}
 					}
 					
-					removeIcon = serverSettingsModal.find("#modal-urlcheck")[0].checked;
+					removeIcon = serverSettingsModal.find("#input-removeicon").prop("checked");
 					
 					color1 = BDfunctionsDevilBro.getSwatchColor("swatch1");
 					color2 = BDfunctionsDevilBro.getSwatchColor("swatch2");
@@ -669,33 +426,12 @@ class EditServers {
 						BDfunctionsDevilBro.saveData(id, {id,name,shortName,url,removeIcon,color1,color2,color3,color4}, this.getName(), "servers");
 						this.loadServer(serverDiv);
 					}
-					
-					serverSettingsModal.addClass('closing');
-					setTimeout(() => {serverSettingsModal.remove();}, 300);
 				});
-			serverSettingsModal.find("#modal-nametext")[0].focus();
+			serverSettingsModal.find("#input-servername").focus();
 		}
 	}
 	
-	changeTab (e, modal) {
-		var tab = e.target.value;
-
-		$(".form-tabcontent.open",modal)
-			.removeClass("open");
-			
-		$(".form-tablinks.active",modal)
-			.removeClass("active");
-			
-		$(".form-tabcontent." + tab ,modal)
-			.addClass("open");
-			
-		$(e.target)
-			.addClass("active");
-	}
-	
 	checkUrl (e, modal) {
-		clearTimeout(this.urlCheckTimeout);
-		if (typeof this.urlCheckRequest === "object") this.urlCheckRequest.abort();
 		if (!e.target.value) {
 			$(e.target)
 				.removeClass("valid")
@@ -703,22 +439,20 @@ class EditServers {
 			if ($(e.target).hasClass("hovering")) $(".tooltips").find(".notice-tooltip").remove();
 		}
 		else {
-			this.urlCheckTimeout = setTimeout(() => {
-				let request = require("request");
-				this.urlCheckRequest = request(e.target.value, (error, response, result) => {
-					if (response && response.headers["content-type"] && response.headers["content-type"].indexOf("image") != -1) {
-						$(e.target)
-							.removeClass("invalid")
-							.addClass("valid");
-					}
-					else {
-						$(e.target)
-							.removeClass("valid")
-							.addClass("invalid");
-					}
-					if ($(e.target).hasClass("hovering")) this.createNoticeTooltip(e);
-				});
-			},500);
+			let request = require("request");
+			request(e.target.value, (error, response, result) => {
+				if (response && response.headers["content-type"] && response.headers["content-type"].indexOf("image") != -1) {
+					$(e.target)
+						.removeClass("invalid")
+						.addClass("valid");
+				}
+				else {
+					$(e.target)
+						.removeClass("valid")
+						.addClass("invalid");
+				}
+				if ($(e.target).hasClass("hovering")) this.createNoticeTooltip(e);
+			});
 		}
 	}
 	
