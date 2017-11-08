@@ -1027,13 +1027,13 @@ BDfunctionsDevilBro.appendModal = function (modal) {
 			$(".modalTab.modalTabOpen", modal)
 				.removeClass("modalTabOpen");
 				
-			$(".modalTab." + e.target.value, modal)
+			$(".modalTab." + e.currentTarget.value, modal)
 				.addClass("modalTabOpen");
 				
 			$(".modalTabButton", modal)
 				.addClass("inactive");
 				
-			$(e.target)
+			$(e.currentTarget)
 				.removeClass("inactive");
 		})
 		.on("click", ".backdrop-2ohBEd, .btn-cancel, .btn-save", () => {
