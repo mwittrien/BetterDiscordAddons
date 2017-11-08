@@ -265,9 +265,9 @@ class ServerFolders {
 			
 			if (!BDfunctionsDevilBro.loadData("warning", this.getName(), "warning")) {
 				if (confirm("Welcome to ServerFolders 2.0. I decided to rewrite the whole plugin to make the folders act more like actual folders. Sadly due to the internal changes all old folders will no longer work, hence why I recommend you to delete them all. If you press 'yes' / 'ok' whatever it is labeled in your language in this window, all folders will be removed, all servers will be displayed again and the old config will be cleared. Thanks and have fun. Also make sure to read the plugin description to learn how to work with ServerFolders 2.0")) {
-					/* BDfunctionsDevilBro.removeAllData(this.getName(), "folders");
+					BDfunctionsDevilBro.removeAllData(this.getName(), "folders");
 					$("div.guild.folder").remove();
-					$(BDfunctionsDevilBro.readServerList()).show(); */
+					$(BDfunctionsDevilBro.readServerList()).show();
 				}
 				BDfunctionsDevilBro.saveData("warning", true, this.getName(), "warning");
 			}
