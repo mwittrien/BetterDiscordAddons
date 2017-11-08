@@ -1024,13 +1024,11 @@ BDfunctionsDevilBro.appendModal = function (modal) {
 				.toggleClass("valueUnchecked-XR6AOk", $(e.target).prop("checked"));
 		})
 		.on("click", ".modalTabButton", (e) => {
-			$(".modalTab.open", modal)
-				.addClass("hidden")
-				.removeClass("open");
+			$(".modalTab.modalTabOpen", modal)
+				.removeClass("modalTabOpen");
 				
 			$(".modalTab." + e.target.value, modal)
-				.removeClass("hidden")
-				.addClass("open");
+				.addClass("modalTabOpen");
 				
 			$(".modalTabButton", modal)
 				.addClass("inactive");
@@ -1664,6 +1662,14 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		color: #555555;
 		cursor: no-drop;
 		background-color: rgba(0,0,0,.5);
+	}
+
+	.DevilBro-modal .modalTab {
+		display: none;
+	}
+
+	.DevilBro-modal .modalTab.modalTabOpen {
+		display: initial;
 	}
 
 	.colorpicker-modal .inner-1_1f7b {
