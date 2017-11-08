@@ -1015,6 +1015,10 @@ BDfunctionsDevilBro.clearReadNotifications = function (servers) {
 		); 
 };
 
+BDfunctionsDevilBro.appendModal(modal) {
+	$(modal).appendTo(".app ~ [class^='theme-']");
+};
+
 BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
 	var wrapperDiv = $(wrapper);
 		
@@ -1136,7 +1140,8 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 		</span>`;
 		
 	var colorPickerModal = $(colorPickerModalMarkup)[0];
-	$(colorPickerModal).appendTo(".app ~ [class^='theme-']")
+	BDfunctionsDevilBro.appendModal(colorPickerModal);
+	$(colorPickerModal)
 		.on("click", ".backdrop-2ohBEd", (event) => {
 			var newRGB = colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").style.backgroundColor;
 			var newCOMP = BDfunctionsDevilBro.color2COMP(newRGB);
