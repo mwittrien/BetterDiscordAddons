@@ -1016,7 +1016,12 @@ BDfunctionsDevilBro.clearReadNotifications = function (servers) {
 };
 
 BDfunctionsDevilBro.appendModal = function (modal) {
-	$(modal).appendTo(".app ~ [class^='theme-']");
+	$(modal)
+		.appendTo(".app ~ [class^='theme-']")
+		.on("click", ".backdrop-2ohBEd, .btn-cancel, .btn-save", (event) => {
+			$(modal).addClass("closing");
+			setTimeout(() => {modal.remove();}, 300);
+		});
 };
 
 BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
