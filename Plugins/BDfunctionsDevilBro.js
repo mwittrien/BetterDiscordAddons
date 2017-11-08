@@ -1393,6 +1393,18 @@ BDfunctionsDevilBro.getDiscordLanguage = function () {
 	}
 };
 
+BDfunctionsDevilBro.pressedKeys = [];
+
+$(window)
+	.off("keydown.BDfunctionsDevilBro")
+	.off("keyup.BDfunctionsDevilBro")
+	.on("keydown.BDfunctionsDevilBro", (e) => {
+		if (!BDfunctionsDevilBro.pressedKeys.includes(e.which)) BDfunctionsDevilBro.pressedKeys.push(e.which);
+	})
+	.on("keyup.BDfunctionsDevilBro", (e) => {
+		if (BDfunctionsDevilBro.pressedKeys.includes(e.which)) BDfunctionsDevilBro.pressedKeys.splice(BDfunctionsDevilBro.pressedKeys.indexOf(e.which), 1);
+	});
+
 BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 	#pluginNotice {
 		-webkit-app-region: drag;
