@@ -1396,12 +1396,12 @@ BDfunctionsDevilBro.getDiscordLanguage = function () {
 BDfunctionsDevilBro.pressedKeys = [];
 
 $(window)
-	.off("keydown.BDfunctionsDevilBro")
-	.off("keyup.BDfunctionsDevilBro")
-	.on("keydown.BDfunctionsDevilBro", (e) => {
+	.off("keydown.BDfunctionsDevilBroPressedKeys")
+	.off("keyup.BDfunctionsDevilBroPressedKeys")
+	.on("keydown.BDfunctionsDevilBroPressedKeys", (e) => {
 		if (!BDfunctionsDevilBro.pressedKeys.includes(e.which)) BDfunctionsDevilBro.pressedKeys.push(e.which);
 	})
-	.on("keyup.BDfunctionsDevilBro", (e) => {
+	.on("keyup.BDfunctionsDevilBroPressedKeys", (e) => {
 		if (BDfunctionsDevilBro.pressedKeys.includes(e.which)) BDfunctionsDevilBro.pressedKeys.splice(BDfunctionsDevilBro.pressedKeys.indexOf(e.which), 1);
 	});
 
