@@ -797,7 +797,7 @@ class ServerFolders {
 						.removeClass("closed");
 						
 					if (!document.querySelector(".foldercontainer")) {
-						$(`<div class="foldercontainer"></div>`).appendTo(".guilds.scroller.folders");
+						$(`<div class="foldercontainer"></div>`).appendTo(".guilds.scroller");
 					}
 					
 					for (var i = 0; i < includedServers.length; i++) {
