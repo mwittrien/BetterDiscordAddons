@@ -60,8 +60,8 @@ class EditChannels {
 										<div class="divider-1G01Z9 dividerDefault-77PXsz marginTop20-3UscxH"></div>
 									</div>
 									<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO switchItem-1uofoz marginBottom20-2Ifj-2" style="flex: 1 1 auto;">
-										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
-											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_colorpicker_text</h3>
+										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO" style="flex: 1 1 auto;">
+											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_colorpicker1_text</h3>
 										</div>
 										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
 											<div class="swatches1"></div>
@@ -231,7 +231,7 @@ class EditChannels {
 		
 		this.channelSettingsModalMarkup = 	this.channelSettingsModalMarkup.replace("REPLACE_modal_header_text", this.labels.modal_header_text);
 		this.channelSettingsModalMarkup = 	this.channelSettingsModalMarkup.replace("REPLACE_modal_channelname_text", this.labels.modal_channelname_text);
-		this.channelSettingsModalMarkup = 	this.channelSettingsModalMarkup.replace("REPLACE_modal_colorpicker_text", this.labels.modal_colorpicker_text);
+		this.channelSettingsModalMarkup = 	this.channelSettingsModalMarkup.replace("REPLACE_modal_colorpicker1_text", this.labels.modal_colorpicker1_text);
 		this.channelSettingsModalMarkup = 	this.channelSettingsModalMarkup.replace("REPLACE_btn_cancel_text", this.labels.btn_cancel_text);
 		this.channelSettingsModalMarkup = 	this.channelSettingsModalMarkup.replace("REPLACE_btn_save_text", this.labels.btn_save_text);
 		
@@ -396,7 +396,7 @@ class EditChannels {
 					submenu_resetsettings_text: 			"Nulstil kanal",
 					modal_header_text:						"Lokal kanalindstillinger",
 					modal_channelname_text:					"Lokalt kanalnavn",
-					modal_colorpicker_text:					"Lokal kanalfarve",
+					modal_colorpicker1_text:					"Lokal kanalfarve",
 					btn_cancel_text:						"Afbryde",
 					btn_save_text:							"Spare"
 				};
@@ -407,7 +407,7 @@ class EditChannels {
 					submenu_resetsettings_text: 			"Kanal zurücksetzen",
 					modal_header_text:						"Lokale Kanaleinstellungen",
 					modal_channelname_text:					"Lokaler Kanalname",
-					modal_colorpicker_text:					"Lokale Kanalfarbe",
+					modal_colorpicker1_text:					"Lokale Kanalfarbe",
 					btn_cancel_text:						"Abbrechen",
 					btn_save_text:							"Speichern"
 				};
@@ -418,7 +418,7 @@ class EditChannels {
 					submenu_resetsettings_text: 			"Restablecer canal",
 					modal_header_text:						"Ajustes local de canal",
 					modal_channelname_text:					"Nombre local del canal",
-					modal_colorpicker_text:					"Color local del canal",
+					modal_colorpicker1_text:					"Color local del canal",
 					btn_cancel_text:						"Cancelar",
 					btn_save_text:							"Guardar"
 				};
@@ -429,7 +429,7 @@ class EditChannels {
 					submenu_resetsettings_text: 			"Réinitialiser le canal",
 					modal_header_text:						"Paramètres locale du canal",
 					modal_channelname_text:					"Nom local du canal",
-					modal_colorpicker_text:					"Couleur locale de la chaîne",
+					modal_colorpicker1_text:					"Couleur locale de la chaîne",
 					btn_cancel_text:						"Abandonner",
 					btn_save_text:							"Enregistrer"
 				};
@@ -440,7 +440,7 @@ class EditChannels {
 					submenu_resetsettings_text: 			"Ripristina canale",
 					modal_header_text:						"Impostazioni locale canale",
 					modal_channelname_text:					"Nome locale canale",
-					modal_colorpicker_text:					"Colore locale canale",
+					modal_colorpicker1_text:					"Colore locale canale",
 					btn_cancel_text:						"Cancellare",
 					btn_save_text:							"Salvare"
 				};
@@ -451,7 +451,7 @@ class EditChannels {
 					submenu_resetsettings_text: 			"Reset kanaal",
 					modal_header_text:						"Lokale kanaalinstellingen",
 					modal_channelname_text:					"Lokale kanaalnaam",
-					modal_colorpicker_text:					"Lokale kanaalkleur",
+					modal_colorpicker1_text:					"Lokale kanaalkleur",
 					btn_cancel_text:						"Afbreken",
 					btn_save_text:							"Opslaan"
 				};
@@ -462,7 +462,7 @@ class EditChannels {
 					submenu_resetsettings_text: 			"Tilbakestill kanal",
 					modal_header_text:						"Lokal kanalinnstillinger",
 					modal_channelname_text:					"Lokalt kanalnavn",
-					modal_colorpicker_text:					"Lokal kanalfarge",
+					modal_colorpicker1_text:					"Lokal kanalfarge",
 					btn_cancel_text:						"Avbryte",
 					btn_save_text:							"Lagre"
 				};
@@ -473,7 +473,7 @@ class EditChannels {
 					submenu_resetsettings_text: 			"Resetuj kanał",
 					modal_header_text:						"Lokalny ustawienia kanału",
 					modal_channelname_text:					"Lokalna nazwa kanału",
-					modal_colorpicker_text:					"Lokalny kolor kanału",
+					modal_colorpicker1_text:					"Lokalny kolor kanału",
 					btn_cancel_text:						"Anuluj",
 					btn_save_text:							"Zapisz"
 				};
@@ -484,7 +484,7 @@ class EditChannels {
 					submenu_resetsettings_text: 			"Redefinir canal",
 					modal_header_text:						"Configurações local do canal",
 					modal_channelname_text:					"Nome local do canal",
-					modal_colorpicker_text:					"Cor local do canal",
+					modal_colorpicker1_text:					"Cor local do canal",
 					btn_cancel_text:						"Cancelar",
 					btn_save_text:							"Salvar"
 				};
@@ -495,7 +495,7 @@ class EditChannels {
 					submenu_resetsettings_text: 			"Nollaa kanava",
 					modal_header_text:						"Paikallinen kanavan asetukset",
 					modal_channelname_text:					"Paikallinen kanavanimi",
-					modal_colorpicker_text:					"Paikallinen kanavanväri",
+					modal_colorpicker1_text:					"Paikallinen kanavanväri",
 					btn_cancel_text:						"Peruuttaa",
 					btn_save_text:							"Tallentaa"
 				};
@@ -506,7 +506,7 @@ class EditChannels {
 					submenu_resetsettings_text: 			"Återställ kanal",
 					modal_header_text:						"Lokal kanalinställningar",
 					modal_channelname_text:					"Lokalt kanalnamn",
-					modal_colorpicker_text:					"Lokal kanalfärg",
+					modal_colorpicker1_text:					"Lokal kanalfärg",
 					btn_cancel_text:						"Avbryta",
 					btn_save_text:							"Spara"
 				};
@@ -517,7 +517,7 @@ class EditChannels {
 					submenu_resetsettings_text: 			"Kanal Sıfırla",
 					modal_header_text:						"Yerel Kanal Ayarları",
 					modal_channelname_text:					"Yerel Kanal Adı",
-					modal_colorpicker_text:					"Yerel Kanal Rengi",
+					modal_colorpicker1_text:					"Yerel Kanal Rengi",
 					btn_cancel_text:						"Iptal",
 					btn_save_text:							"Kayıt"
 				};
@@ -528,7 +528,7 @@ class EditChannels {
 					submenu_resetsettings_text: 			"Obnovit kanál",
 					modal_header_text:						"Místní nastavení kanálu",
 					modal_channelname_text:					"Místní název kanálu",
-					modal_colorpicker_text:					"Místní barvy kanálu",
+					modal_colorpicker1_text:					"Místní barvy kanálu",
 					btn_cancel_text:						"Zrušení",
 					btn_save_text:							"Uložit"
 				};
@@ -539,7 +539,7 @@ class EditChannels {
 					submenu_resetsettings_text: 			"Възстановяване на канал",
 					modal_header_text:						"Настройки за локални канали",
 					modal_channelname_text:					"Локално име на канал",
-					modal_colorpicker_text:					"Локален цветен канал",
+					modal_colorpicker1_text:					"Локален цветен канал",
 					btn_cancel_text:						"Зъбести",
 					btn_save_text:							"Cпасяване"
 				};
@@ -550,7 +550,7 @@ class EditChannels {
 					submenu_resetsettings_text: 			"Сбросить канал",
 					modal_header_text:						"Настройки локального канала",
 					modal_channelname_text:					"Имя локального канала",
-					modal_colorpicker_text:					"Цвет локального канала",
+					modal_colorpicker1_text:					"Цвет локального канала",
 					btn_cancel_text:						"Отмена",
 					btn_save_text:							"Cпасти"
 				};
@@ -561,7 +561,7 @@ class EditChannels {
 					submenu_resetsettings_text: 			"Скидання каналу",
 					modal_header_text:						"Налаштування локального каналу",
 					modal_channelname_text:					"Локальне ім'я каналу",
-					modal_colorpicker_text:					"Колір місцевого каналу",
+					modal_colorpicker1_text:					"Колір місцевого каналу",
 					btn_cancel_text:						"Скасувати",
 					btn_save_text:							"Зберегти"
 				};
@@ -572,7 +572,7 @@ class EditChannels {
 					submenu_resetsettings_text: 			"チャネルをリセットする",
 					modal_header_text:						"ローカルチャネル設定",
 					modal_channelname_text:					"ローカルチャネル名",
-					modal_colorpicker_text:					"ローカルチャネルの色",
+					modal_colorpicker1_text:					"ローカルチャネルの色",
 					btn_cancel_text:						"キャンセル",
 					btn_save_text:							"セーブ"
 				};
@@ -583,7 +583,7 @@ class EditChannels {
 					submenu_resetsettings_text: 			"重置通道",
 					modal_header_text:						"本地頻道設置",
 					modal_channelname_text:					"本地頻道名稱",
-					modal_colorpicker_text:					"本地頻道顏色",
+					modal_colorpicker1_text:					"本地頻道顏色",
 					btn_cancel_text:						"取消",
 					btn_save_text:							"保存"
 				};
@@ -594,7 +594,7 @@ class EditChannels {
 					submenu_resetsettings_text: 			"채널 재설정",
 					modal_header_text:						"로컬 채널 설정",
 					modal_channelname_text:					"로컬 채널 이름",
-					modal_colorpicker_text:					"지역 채널 색깔",
+					modal_colorpicker1_text:					"지역 채널 색깔",
 					btn_cancel_text:						"취소",
 					btn_save_text:							"저장"
 				};
@@ -605,7 +605,7 @@ class EditChannels {
 					submenu_resetsettings_text: 			"Reset Channel",
 					modal_header_text:						"Local Channelsettings",
 					modal_channelname_text:					"Local Channelname",
-					modal_colorpicker_text:					"Local Channelcolor",
+					modal_colorpicker1_text:					"Local Channelcolor",
 					btn_cancel_text:						"Cancel",
 					btn_save_text:							"Save"
 				};
