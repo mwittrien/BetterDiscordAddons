@@ -1019,17 +1019,19 @@ BDfunctionsDevilBro.appendModal = function (modal) {
 	$(modal)
 		.appendTo(".app ~ [class^='theme-']")
 		.on("click", ".modalTabButton", (e) => {
-			$(".form-tabcontent.open", modal)
+			$(".modalTab.open", modal)
+				.addClass("hidden")
 				.removeClass("open");
 				
-			$(".form-tablinks.active", modal)
-				.removeClass("active");
-				
-			$(".form-tabcontent." + e.target.value, modal)
+			$(".modalTab." + e.target.value, modal)
+				.removeClass("hidden")
 				.addClass("open");
 				
+			$(".modalTabButton", modal)
+				.addClass("inactive");
+				
 			$(e.target)
-				.addClass("active");
+				.removeClass("inactive");
 		})
 		.on("click", ".backdrop-2ohBEd, .btn-cancel, .btn-save", () => {
 			$(modal).addClass("closing");
@@ -1634,6 +1636,10 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		animation-fill-mode: forwards;
 		opacity: 1;
 		transform: scale(1);
+	}
+	
+	.DevilBro-modal .inactive {
+		opacity: 0.5;
 	}
 
 	.colorpicker-modal .inner-1_1f7b {
