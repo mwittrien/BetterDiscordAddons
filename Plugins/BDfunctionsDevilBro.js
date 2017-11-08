@@ -1664,6 +1664,10 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		background-color: rgba(0,0,0,.5);
 	}
 
+	.DevilBro-modal .modalTabButton * {
+		cursor: inherit;
+	}
+
 	.DevilBro-modal .modalTab {
 		display: none;
 	}
