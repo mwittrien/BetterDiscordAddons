@@ -1136,7 +1136,7 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 		</span>`;
 		
 	var colorPickerModal = $(colorPickerModalMarkup)[0];
-	$(colorPickerModal).appendTo(".app-XZYfmp")
+	$(colorPickerModal).appendTo(".app ~ [class^='theme-']")
 		.on("click", ".backdrop-2ohBEd", (event) => {
 			var newRGB = colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").style.backgroundColor;
 			var newCOMP = BDfunctionsDevilBro.color2COMP(newRGB);
@@ -1569,7 +1569,7 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 	}
 	
 	@keyframes animation-backdrop {
-		to { opacity: 0.2; }
+		to { opacity: 0.7; }
 	}
 
 	@keyframes animation-backdrop-closing {
