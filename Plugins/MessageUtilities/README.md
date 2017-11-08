@@ -4,3 +4,4 @@ Offers a number of useful message options.
 For now:
   - Double Click -> Edit
   - Delete + Click -> Delete
+  - Escape in Textarea -> Clear Input
