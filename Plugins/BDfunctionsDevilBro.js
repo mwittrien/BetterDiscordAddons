@@ -1027,19 +1027,23 @@ BDfunctionsDevilBro.appendModal = function (modal) {
 			$(".modalTab.modalTabOpen", modal)
 				.removeClass("modalTabOpen");
 				
+			$(".modalTabButton.modalTabOpen", modal)
+				.removeClass("modalTabButtonActive");
+				
 			$(".modalTab." + e.currentTarget.value, modal)
 				.addClass("modalTabOpen");
 				
-			$(".modalTabButton", modal)
-				.addClass("inactive");
-				
 			$(e.currentTarget)
-				.removeClass("inactive");
+				.addClass("modalTabButtonActive");
 		})
 		.on("click", ".backdrop-2ohBEd, .btn-cancel, .btn-save", () => {
 			$(modal).addClass("closing");
 			setTimeout(() => {modal.remove();}, 300);
 		})
+		
+	$(modal).find(".modalTabButton").first().addClass("modalTabButtonActive");
+	$(modal).find(".modalTab").first().addClass("modalTabOpen");
+	$(modal)
 		.find(".checkbox-1KYsPm").each((_, checkBox) => {
 			$(checkBox.parentElement)
 				.toggleClass("valueChecked-3Bzkbm", $(checkBox).prop("checked"))
@@ -1645,10 +1649,6 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		opacity: 1;
 		transform: scale(1);
 	}
-	
-	.DevilBro-modal .inactive {
-		opacity: 0.5;
-	}
 
 	.DevilBro-modal input.valid {
 		background-color: rgba(10,167,0,.5);
@@ -1666,6 +1666,18 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 
 	.DevilBro-modal .modalTabButton * {
 		cursor: inherit;
+	}
+
+	.DevilBro-modal .modalTabButton:hover {
+		opacity: 1;
+	}
+
+	.DevilBro-modal .modalTabButton {
+		opacity: 0.4;
+	}
+	
+	.DevilBro-modal .modalTabButtonActive {
+		opacity: 0.8;
 	}
 
 	.DevilBro-modal .modalTab {
