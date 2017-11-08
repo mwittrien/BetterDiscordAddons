@@ -66,6 +66,7 @@ class EditUsers {
 					</div>
 				</div>
 			</div>`;
+			
 		this.userSettingsModalMarkup =
 			`<span class="editusers-modal DevilBro-modal">
 				<div class="backdrop-2ohBEd"></div>
