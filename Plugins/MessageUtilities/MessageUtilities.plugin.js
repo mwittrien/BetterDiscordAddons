@@ -1,13 +1,7 @@
 //META{"name":"MessageUtilities"}*//
 
 class MessageUtilities {
-	constructor () {	
-		this.sglClickListener;
-		this.dblClickListener;
-		this.keydownListener;
-		this.keyupListener;
-		
-		this.pressedKeys = [];
+	constructor () {
 		this.firedEvents = [];
 		
 		this.keyboardMap = [
@@ -45,9 +39,9 @@ class MessageUtilities {
 
 	getName () {return "MessageUtilities";}
 
-	getDescription () {return "Offers a number of useful message options.";}
+	getDescription () {return "Offers a number of useful message options. Doubleclick a message to edit it. Hold Del and click a message to delete it. Press Esc to clear the chatinput.";}
 
-	getVersion () {return "1.1.1";}
+	getVersion () {return "1.2.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -65,21 +59,9 @@ class MessageUtilities {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
 			
-			this.sglClickListener = this.onSglClick.bind(this);
-			$(document).bind("click." + this.getName(), this.sglClickListener);
-			
-			this.dblClickListener = this.onDblClick.bind(this);
-			$(document).bind("dblclick." + this.getName(), this.dblClickListener);
-			
-			this.keydownListener = (e) => {
-				if (!this.pressedKeys.includes(e.which)) this.pressedKeys.push(e.which);
-			};
-			this.keyupListener = (e) => {
-				if (this.pressedKeys.includes(e.which)) this.pressedKeys.splice(this.pressedKeys.indexOf(e.which), 1);
-			};
-			
-			$(window).bind("keydown." + this.getName(), this.keydownListener);
-			$(window).bind("keyup." + this.getName(), this.keyupListener);
+			$(document).on("click." + this.getName(), this.onSglClick.bind(this));
+			$(document).on("dblclick." + this.getName(), this.onDblClick.bind(this));
+			$(document).on("keydown." + this.getName(), this.onKeyDown.bind(this));
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -88,10 +70,9 @@ class MessageUtilities {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			$(document).unbind("click." + this.getName(), this.sglClickListener);
-			$(document).unbind("dblclick." + this.getName(), this.dblClickListener);
-			$(window).unbind("keydown." + this.getName(), this.keydownListener);
-			$(window).unbind("keyup." + this.getName(), this.keyupListener);
+			$(document).off("click." + this.getName());
+			$(document).off("dblclick." + this.getName());
+			$(document).off("keydown." + this.getName());
 			
 			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
 		}
@@ -101,8 +82,8 @@ class MessageUtilities {
 	//begin of own functions
 	
 	onSglClick (e) {
-		if (this.pressedKeys.includes(46)) {
-			if (!this.firedEvents.includes("onSglClick")) {
+		if (!this.firedEvents.includes("onSglClick")) {
+			if (BDfunctionsDevilBro.pressedKeys.includes(46)) {
 				this.firedEvents.push("onSglClick");
 				var messageWrap = $(".message-text").has(e.target)[0];
 				if (messageWrap) {
@@ -111,7 +92,7 @@ class MessageUtilities {
 					$("div[class^='modal']").has("button[class^='buttonRedFilled']").hide();
 					$("div[class^='modal'] button[class^='buttonRedFilled']").click();
 				} 
-				this.firedEvents.splice(this.firedEvents.indexOf("onSglClick"),1);
+				BDfunctionsDevilBro.removeFromArray(this.firedEvents, "onSglClick");
 			}
 		}
 	}
@@ -123,7 +104,21 @@ class MessageUtilities {
 			if (messageWrap) {
 				this.doMessageAction(messageWrap, "bound handleEdit");
 			} 
-			this.firedEvents.splice(this.firedEvents.indexOf("onDblClick"),1);
+			BDfunctionsDevilBro.removeFromArray(this.firedEvents, "onDblClick");
+		}
+	}
+	
+	onKeyDown (e) {
+		if (!this.firedEvents.includes("onKeyDown")) {
+			if (e.which == 27) {
+				this.firedEvents.push("onKeyDown");
+				var activeElement = document.activeElement;
+				if (activeElement && activeElement.tagName == "TEXTAREA") {
+					var instance = BDfunctionsDevilBro.getOwnerInstance({"node":activeElement, "name":"ChannelTextAreaForm", "up":true});
+					if (instance) instance.setState({textValue:""});
+				}
+				BDfunctionsDevilBro.removeFromArray(this.firedEvents, "onKeyDown");
+			}
 		}
 	}
 	
