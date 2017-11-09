@@ -162,7 +162,7 @@ class ServerFolders {
 							</div>
 							<div class="scrollerWrap-2uBjct content-1Cut5s scrollerThemed-19vinI themeGhostHairline-2H8SiW">
 								<div class="scroller-fzNley inner-tqJwAU">
-									<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO switchItem-1uofoz marginBottom20-2Ifj-2 modalTab modalTab-folder" style="flex: 1 1 auto;">
+									<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginBottom20-2Ifj-2 modalTab modalTab-folder" style="flex: 1 1 auto;">
 										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
 											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_foldername_text</h3>
 										</div>
@@ -176,7 +176,7 @@ class ServerFolders {
 											<div class="icons"></div>
 										</div>
 									</div>
-									<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO switchItem-1uofoz marginBottom20-2Ifj-2 modalTab modalTab-icon" style="flex: 1 1 auto;">
+									<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginBottom20-2Ifj-2 modalTab modalTab-icon" style="flex: 1 1 auto;">
 										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO" style="flex: 1 1 auto;">
 											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_colorpicker1_text</h3>
 										</div>
@@ -190,7 +190,7 @@ class ServerFolders {
 											<div class="swatches2"></div>
 										</div>
 									</div>
-									<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO switchItem-1uofoz marginBottom20-2Ifj-2 modalTab modalTab-tooltip" style="flex: 1 1 auto;">
+									<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginBottom20-2Ifj-2 modalTab modalTab-tooltip" style="flex: 1 1 auto;">
 										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO" style="flex: 1 1 auto;">
 											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_colorpicker3_text</h3>
 										</div>
@@ -238,7 +238,7 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.0.2";}
+	getVersion () {return "5.0.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -313,6 +313,12 @@ class ServerFolders {
 									}
 								}
 								if (node && node.classList && node.classList.contains("badge") && !node.classList.contains("folder")) {
+									var serverDiv = this.getParentDivOfFolder(node);
+									var folderDiv = this.getFolderOfServer(serverDiv);
+									if (folderDiv) {
+										this.updateCopyInFolderContent(serverDiv, folderDiv);
+										this.updateFolderNotifications(folderDiv);
+									}
 									this.badgeObserver.observe(node, {characterData: true, subtree: true});
 								}
 							});
@@ -526,7 +532,7 @@ class ServerFolders {
 		var data = BDfunctionsDevilBro.loadData(folderDiv.id, this.getName(), "folders");
 		var info = BDfunctionsDevilBro.getKeyInformation({"node":serverDiv, "key":"guild"});
 		if (data && info) {
-			data.servers.splice(data.servers.indexOf(info.id),1);
+			BDfunctionsDevilBro.removeFromArray(data.servers, info.id);
 			BDfunctionsDevilBro.saveData(folderDiv.id, data, this.getName(), "folders");
 			$(serverDiv).show();
 			var message = this.labels.toast_removeserver_text ? this.labels.toast_removeserver_text.replace("${servername}", info.name).replace("${foldername}", data.folderName ? " " + data.folderName : "") : "";
@@ -1093,27 +1099,32 @@ class ServerFolders {
 		var img = new Image();
 		img.src = icon;
 		img.onload = () => {
-			var can = document.createElement("canvas");
-			can.width = img.width;
-			can.height = img.height;
-			var ctx = can.getContext("2d");
-			ctx.drawImage(img, 0, 0);
-			var imageData = ctx.getImageData(0, 0, img.width, img.height);
-			var data = imageData.data;
-			for (var i = 0; i < data.length; i += 4) {
-				if (data[i] == 0 && data[i + 1] == 0 && data[i + 2] == 0) {
-					data[i] = color1[0];
-					data[i + 1] = color1[1];
-					data[i + 2] = color1[2];
+			if (icon.indexOf("data:image") == 0 && img.width < 200 && img.height < 200) {
+				var can = document.createElement("canvas");
+				can.width = img.width;
+				can.height = img.height;
+				var ctx = can.getContext("2d");
+				ctx.drawImage(img, 0, 0);
+				var imageData = ctx.getImageData(0, 0, img.width, img.height);
+				var data = imageData.data;
+				for (var i = 0; i < data.length; i += 4) {
+					if (data[i] == 0 && data[i + 1] == 0 && data[i + 2] == 0) {
+						data[i] = color1[0];
+						data[i + 1] = color1[1];
+						data[i + 2] = color1[2];
+					}
+					else if (data[i] == 255 && data[i + 1] == 255 && data[i + 2] == 255) {
+						data[i] = color2[0];
+						data[i + 1] = color2[1];
+						data[i + 2] = color2[2];
+					}
+					ctx.putImageData(imageData, 0, 0);
 				}
-				else if (data[i] == 255 && data[i + 1] == 255 && data[i + 2] == 255) {
-					data[i] = color2[0];
-					data[i + 1] = color2[1];
-					data[i + 2] = color2[2];
-				}
-				ctx.putImageData(imageData, 0, 0);
+				callback(can.toDataURL("image/png"));
 			}
-			callback(can.toDataURL("image/png"));
+			else {
+				callback(img.src);
+			}
 		};
 	}
 	
@@ -1464,7 +1475,7 @@ class ServerFolders {
 					btn_cancel_text:						"Отмена",
 					btn_save_text:							"Cпасти"
 				};
-			case "uk":		//ukranian
+			case "uk":		//ukrainian
 				return {
 					toast_addserver_text:					"${servername} було додано до папки${foldername}.",
 					toast_removeserver_text:				"${servername} був вилучений з папки${foldername}.",
