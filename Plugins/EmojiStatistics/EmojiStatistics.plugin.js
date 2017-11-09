@@ -22,8 +22,6 @@ class EmojiStatistics {
 			}
 			
 			.emojistatistics-modal .emojiserver-entry {
-				border-bottom: 1px solid #2F3237;
-				border-top: 1px solid #2F3237;
 				height: 50px;
 				padding-top: 5px;
 				padding-bottom: 5px;
@@ -167,6 +165,8 @@ class EmojiStatistics {
 				<label class="modal-emojilocal-label" for="modal-text">modal-emojilocal-label</label>
 				<label class="modal-emojireplicate-label" for="modal-text">modal-emojireplicate-label</label>
 			</div>`;
+			
+		this.dividerMarkup = `<div class="divider-1G01Z9 dividerDefault-77PXsz"></div>`;
 			
 		this.emojiButtonMarkup =
 			`<div class="emojistatistics-button"></div>`;
@@ -478,10 +478,10 @@ class EmojiStatistics {
 	}
 	
 	updateAllEntries (entries) {
-		$(".emojiserver-entry").remove();
-		for (var i = 0; entries.length > i; i++) {
-			var entry = entries[i].entry;
-			entry.appendTo(".emojistatistics-modal .entries");
+		$(".emojistatistics-modal .entries").children().remove();
+		for (let i = 0; entries.length > i; i++) {
+			if (i > 0) $(".emojistatistics-modal .entries").append(this.dividerMarkup);
+			entries[i].entry.appendTo(".emojistatistics-modal .entries");
 		}
 	}
 	
