@@ -1,9 +1,9 @@
 var BDfunctionsDevilBro = {};
 
 BDfunctionsDevilBro.loadMessage = function (pluginName, oldVersion) { 
-	console.log(`${pluginName} Version: ${oldVersion} loaded.`);
-	
-	BDfunctionsDevilBro.showToast(`${pluginName} ${oldVersion} has been started.`);
+	var loadMessage = BDfunctionsDevilBro.getLibraryStrings().toast_plugin_started.replace("${pluginName}", pluginName).replace("${oldVersion}", oldVersion);
+	console.log(loadMessage);
+	BDfunctionsDevilBro.showToast(loadMessage);
 	
 	var downloadUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
 	BDfunctionsDevilBro.checkUpdate(pluginName, downloadUrl);
@@ -319,8 +319,9 @@ BDfunctionsDevilBro.checkAllUpdates = function () {
 };
 	
 BDfunctionsDevilBro.translateMessage = function (pluginName) { 
-	var lang = BDfunctionsDevilBro.getDiscordLanguage().lang;
-	console.log(`${pluginName}: Changed plugin language to: ${lang}.`);
+	var ownlang = BDfunctionsDevilBro.getDiscordLanguage().ownlang;
+	var translateMessage = BDfunctionsDevilBro.getLibraryStrings().toast_plugin_translated.replace("${pluginName}", pluginName).replace("${ownlang}", ownlang);
+	console.log(translateMessage);
 };
 	
 BDfunctionsDevilBro.getReactInstance = function (node) { 
@@ -1037,9 +1038,10 @@ BDfunctionsDevilBro.appendModal = function (modal) {
 				.addClass("modalTabButtonActive");
 		})
 		.on("click", ".backdrop-2ohBEd, .btn-cancel, .btn-save", () => {
+			$(document).off("keydown.modalEscapeListenerDevilBro");
 			$(modal).addClass("closing");
 			setTimeout(() => {modal.remove();}, 300);
-		})
+		});
 		
 	$(modal).find(".modalTabButton").first().addClass("modalTabButtonActive");
 	$(modal).find(".modalTab").first().addClass("modalTabOpen");
@@ -1048,6 +1050,12 @@ BDfunctionsDevilBro.appendModal = function (modal) {
 			$(checkBox.parentElement)
 				.toggleClass("valueChecked-3Bzkbm", $(checkBox).prop("checked"))
 				.toggleClass("valueUnchecked-XR6AOk", $(checkBox).prop("checked"));
+		});
+		
+	$(document)
+		.off("keydown.modalEscapeListenerDevilBro")
+		.on("keydown.modalEscapeListenerDevilBro", (e) => {
+			if (e.which == 27) $(modal).find(".backdrop-2ohBEd").click();
 		});
 };
 
@@ -1127,44 +1135,66 @@ BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
 };
 
 BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
+	var strings = BDfunctionsDevilBro.getLibraryStrings();
 	var colorPickerModalMarkup = 
 		`<span class="colorpicker-modal DevilBro-modal">
 			<div class="backdrop-2ohBEd"></div>
 			<div class="modal-2LIEKY">
 				<div class="inner-1_1f7b">
-					<div class="colorpicker-container">
-						<div class="colorpicker-color">
-							<div class="colorpicker-white" style="background: linear-gradient(to right, #fff, rgba(255,255,255,0))">
-								<div class="colorpicker-black" style="background: linear-gradient(to top, #000, rgba(0,0,0,0))">
-									<div class="colorpicker-pickercursor">
+					<div class="modal-3HOjGZ sizeMedium-1-2BNS">
+						<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO header-3sp3cE" style="flex: 0 0 auto;">
+							<div class="flexChild-1KGW5q" style="flex: 1 1 auto;">
+								<h4 class="h4-2IXpeI title-1pmpPr size16-3IvaX_ height20-165WbF weightSemiBold-T8sxWH defaultColor-v22dK1 defaultMarginh4-jAopYe marginReset-3hwONl">${strings.colorpicker_modal_header_text}</h4>
+								<div class="guildName-1u0hy7 small-3-03j1 size12-1IGJl9 height16-1qXrGy primary-2giqSn"></div>
+							</div>
+							<svg class="btn-cancel close-3ejNTg flexChild-1KGW5q" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12">
+								<g fill="none" fill-rule="evenodd">
+									<path d="M0 0h12v12H0"></path>
+									<path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path>
+								</g>
+							</svg>
+						</div>
+						<div class="flex-lFgbSz flex-3B1Tl4 inner-tqJwAU vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO colorpicker-container" style="flex: 1 1 auto;">
+							<div class="colorpicker-color">
+								<div class="colorpicker-white" style="background: linear-gradient(to right, #fff, rgba(255,255,255,0))">
+									<div class="colorpicker-black" style="background: linear-gradient(to top, #000, rgba(0,0,0,0))">
+										<div class="colorpicker-pickercursor">
+											<svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+											   <circle cx="7" cy="7" r="6" stroke="black" stroke-width="2" fill="none" />
+											</svg>
+										</div>
+										<div class="colorpicker-pickerpane"></div>
+									</div>
+								</div>
+							</div>
+							<div class="colorpicker-slider" style="background: linear-gradient(to top, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%)">
+									<div class="colorpicker-slidercursor">
 										<svg xmlns="http://www.w3.org/2000/svg" version="1.1">
-										   <circle cx="7" cy="7" r="6" stroke="black" stroke-width="2" fill="none" />
+											<path stroke="grey" fill="white" d="M 0 0, l 5 5, l -5 5, m 31 0, l -5 -5, l 5 -5"></path>
 										</svg>
 									</div>
-									<div class="colorpicker-pickerpane"></div>
+									<div class="colorpicker-sliderpane"></div>
+							</div>
+							<div class="colorpicker-controls">
+								<div class="colorpicker-previewcontainer">
+									<div class="colorpicker-preview-0 selected" style="background-color:#808080;"></div>
+									<div class="colorpicker-preview-2" style="background-color:#808080;"></div>
+								</div>
+								<div class="colorpicker-inputs">
+									<div class="colorpicker-input"><label>Hex:</label><input class="colorpicker-hex" name="hex" value="#000000" maxlength="7"></div>
+									<div class="colorpicker-input"><label>R:</label><input class="colorpicker-red" name="rgb" value="0" type="number" min="0" max="255"></div>
+									<div class="colorpicker-input"><label>G:</label><input class="colorpicker-green" name="rgb" value="0" type="number" min="0" max="255"></div>
+									<div class="colorpicker-input"><label>B:</label><input class="colorpicker-blue" name="rgb" value="0" type="number" min="0" max="255"></div>
+									<div class="colorpicker-input"><label>H:</label><input class="colorpicker-hue" name="hsl" value="0" type="number" min="0" max="360"></div>
+									<div class="colorpicker-input"><label>S:</label><input class="colorpicker-saturation" name="hsl" value="0" type="number" min="0" max="100"></div>
+									<div class="colorpicker-input"><label>L:</label><input class="colorpicker-lightness" name="hsl" value="0" type="number" min="0" max="100"></div>
 								</div>
 							</div>
 						</div>
-						<div class="colorpicker-slider" style="background: linear-gradient(to top, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%)">
-								<div class="colorpicker-slidercursor">
-									<svg xmlns="http://www.w3.org/2000/svg" version="1.1">
-										<path stroke="grey" fill="white" d="M 0 0, l 5 5, l -5 5, m 31 0, l -5 -5, l 5 -5"></path>
-									</svg>
-								</div>
-								<div class="colorpicker-sliderpane"></div>
-						</div>
-						<div class="colorpicker-previewcontainer">
-							<div class="colorpicker-preview-0 selected" style="background-color:#808080;"></div>
-							<div class="colorpicker-preview-2" style="background-color:#808080;"></div>
-						</div>
-						<div class="colorpicker-inputs">
-							<div class="colorpicker-input"><label>Hex:</label><input class="colorpicker-hex" name="hex" value="#000000" maxlength="7"></div>
-							<div class="colorpicker-input"><label>R:</label><input class="colorpicker-red" name="rgb" value="0" type="number" min="0" max="255"></div>
-							<div class="colorpicker-input"><label>G:</label><input class="colorpicker-green" name="rgb" value="0" type="number" min="0" max="255"></div>
-							<div class="colorpicker-input"><label>B:</label><input class="colorpicker-blue" name="rgb" value="0" type="number" min="0" max="255"></div>
-							<div class="colorpicker-input"><label>H:</label><input class="colorpicker-hue" name="hsl" value="0" type="number" min="0" max="360"></div>
-							<div class="colorpicker-input"><label>S:</label><input class="colorpicker-saturation" name="hsl" value="0" type="number" min="0" max="100"></div>
-							<div class="colorpicker-input"><label>L:</label><input class="colorpicker-lightness" name="hsl" value="0" type="number" min="0" max="100"></div>
+						<div class="flex-lFgbSz flex-3B1Tl4 horizontalReverse-2LanvO horizontalReverse-k5PqxT flex-3B1Tl4 directionRowReverse-2eZTxP justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO footer-1PYmcw">
+							<button type="button" class="btn-save buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu">
+								<div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx contents-4L4hQM">${strings.btn_ok_text}</div>
+							</button>
 						</div>
 					</div>
 				</div>
@@ -1174,7 +1204,7 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 	var colorPickerModal = $(colorPickerModalMarkup)[0];
 	BDfunctionsDevilBro.appendModal(colorPickerModal);
 	$(colorPickerModal)
-		.on("click", ".backdrop-2ohBEd", (event) => {
+		.on("click", ".btn-save", (event) => {
 			var newRGB = colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").style.backgroundColor;
 			var newCOMP = BDfunctionsDevilBro.color2COMP(newRGB);
 			var newInvRGB = BDfunctionsDevilBro.colorINV(newRGB);
@@ -1194,9 +1224,6 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 				
 			$(".color-picker-dropper-fg-" + swatch)
 				.attr("fill", newCOMP[0] > 150 && newCOMP[1] > 150 && newCOMP[2] > 150 ? "#000000" : "#ffffff");
-				
-			colorPickerModal.classList.add("closing");
-			setTimeout(() => {colorPickerModal.remove();}, 300);
 		});
 	
 	var hex = 0, red = 0, green = 0, blue = 0, hue = 0, saturation = 0, lightness = 0;
@@ -1230,6 +1257,8 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 	$(ppane)
 		.off("mousedown")
 		.on("mousedown", (event) => {
+			BDfunctionsDevilBro.appendLocalStyle("crossHairColorPicker", `* {cursor: crosshair !important;}`);
+			
 			switchPreviews(event.button);
 			
 			pHalfW = pcursor.offsetWidth/2;
@@ -1250,6 +1279,7 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 			$(document)
 				.off("mouseup.ColorPicker").off("mousemove.ColorPicker")
 				.on("mouseup.ColorPicker", () => {
+					BDfunctionsDevilBro.removeLocalStyle("crossHairColorPicker");
 					$(document).off("mouseup.ColorPicker").off("mousemove.ColorPicker");
 				})
 				.on("mousemove.ColorPicker", (event2) => {
@@ -1266,6 +1296,8 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 	$(spane)
 		.off("mousedown")
 		.on("mousedown", (event) => {
+			BDfunctionsDevilBro.appendLocalStyle("crossHairColorPicker", `* {cursor: crosshair !important;}`);
+			
 			switchPreviews(event.button);
 			
 			sHalfH = scursor.offsetHeight/2;
@@ -1281,6 +1313,7 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 			$(document)
 				.off("mouseup.ColorPicker").off("mousemove.ColorPicker")
 				.on("mouseup.ColorPicker", () => {
+					BDfunctionsDevilBro.removeLocalStyle("crossHairColorPicker");
 					$(document).off("mouseup.ColorPicker").off("mousemove.ColorPicker");
 				})
 				.on("mousemove.ColorPicker", (event2) => {
@@ -1416,47 +1449,212 @@ BDfunctionsDevilBro.getDiscordLanguage = function () {
 	var lang = $("html").attr("lang") ? $("html").attr("lang").split("-")[0] : "en";
 	switch (lang) {
 		case "da": 		//danish
-			return {"id":"da","lang":"danish"};
+			return {"id":"da","lang":"danish","ownlang":"Dansk"};
 		case "de": 		//german
-			return {"id":"de","lang":"german"};
+			return {"id":"de","lang":"german","ownlang":"Deutsch"};
 		case "es": 		//spanish
-			return {"id":"es","lang":"spanish"};
+			return {"id":"es","lang":"spanish","ownlang":"Español"};
 		case "fr": 		//french
-			return {"id":"fr","lang":"french"};
+			return {"id":"fr","lang":"french","ownlang":"Français"};
 		case "it": 		//italian
-			return {"id":"it","lang":"italian"};
+			return {"id":"it","lang":"italian","ownlang":"Italiano"};
 		case "nl":		//dutch
-			return {"id":"nl","lang":"dutch"};
+			return {"id":"nl","lang":"dutch","ownlang":"Nederlands"};
 		case "no":		//norwegian
-			return {"id":"no","lang":"norwegian"};
+			return {"id":"no","lang":"norwegian","ownlang":"Norsk"};
 		case "pl":		//polish
-			return {"id":"pl","lang":"polish"};
+			return {"id":"pl","lang":"polish","ownlang":"Polskie"};
 		case "pt":		//portuguese (brazil)
-			return {"id":"pt","lang":"portuguese"};
+			return {"id":"pt","lang":"portuguese","ownlang":"Português"};
 		case "fi":		//finnish
-			return {"id":"fi","lang":"finnish"};
+			return {"id":"fi","lang":"finnish","ownlang":"Suomalainen"};
 		case "sv":		//swedish
-			return {"id":"sv","lang":"turkish"};
+			return {"id":"sv","lang":"turkish","ownlang":"Svenska"};
 		case "tr":		//turkish
-			return {"id":"tr","lang":"turkish"};
+			return {"id":"tr","lang":"turkish","ownlang":"Türk"};
 		case "cs":		//czech
-			return {"id":"cs","lang":"czech"};
+			return {"id":"cs","lang":"czech","ownlang":"Čeština"};
 		case "bg":		//bulgarian
-			return {"id":"bg","lang":"bulgarian"};
+			return {"id":"bg","lang":"bulgarian","ownlang":"български"};
 		case "ru":		//russian
-			return {"id":"ru","lang":"russian"};
-		case "uk":		//ukranian
-			return {"id":"uk","lang":"ukranian"};
+			return {"id":"ru","lang":"russian","ownlang":"Pусский"};
+		case "uk":		//ukrainian
+			return {"id":"uk","lang":"ukrainian","ownlang":"Yкраїнський"};
 		case "ja":		//japanese
-			return {"id":"ja","lang":"japanese"};
+			return {"id":"ja","lang":"japanese","ownlang":"日本語"};
 		case "zh":		//chinese (traditional)
-			return {"id":"zh","lang":"chinese","googleid":"zh-TW"};
+			return {"id":"zh","lang":"chinese","ownlang":"中文","googleid":"zh-TW"};
 		case "ko":		//korean
-			return {"id":"ko","lang":"korean"};
+			return {"id":"ko","lang":"korean","ownlang":"한국어"};
 		default:		//default: english
-			return {"id":"en","lang":"english"};
+			return {"id":"en","lang":"english","ownlang":"English"};
 	}
 };
+
+BDfunctionsDevilBro.getLibraryStrings = function () {
+	switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
+		case "da": 		//danish
+			return {
+				toast_plugin_started:			"${pluginName} ${oldVersion} er startet.",
+				toast_plugin_stopped:			"${pluginName} ${oldVersion} er stoppet.",
+				toast_plugin_translated:		"${pluginName} oversat til ${ownlang}.",
+				colorpicker_modal_header_text:	"Farvevælger",
+				btn_ok_text: 					"OK"
+			};
+		case "de": 		//german
+			return {
+				toast_plugin_started:			"${pluginName} ${oldVersion} wurde gestarted.",
+				toast_plugin_stopped:			"${pluginName} ${oldVersion} wurde gestoppt.",
+				toast_plugin_translated:		"${pluginName} auf ${ownlang} übersetzt.",
+				colorpicker_modal_header_text:	"Farbwähler",
+				btn_ok_text: 					"OK"
+			};
+		case "es": 		//spanish
+			return {
+				toast_plugin_started:			"${pluginName} ${oldVersion} se ha iniciado.",
+				toast_plugin_stopped:			"${pluginName} ${oldVersion} se ha detenido.",
+				toast_plugin_translated:		"${pluginName} traducido a ${ownlang}.",
+				colorpicker_modal_header_text:	"Selector de color",
+				btn_ok_text: 					"OK"
+			};
+		case "fr": 		//french
+			return {
+				toast_plugin_started:			"${pluginName} ${oldVersion} a été démarré.",
+				toast_plugin_stopped:			"${pluginName} ${oldVersion} a été arrêté.",
+				toast_plugin_translated:		"${pluginName} traduit en ${ownlang}.",
+				colorpicker_modal_header_text:	"Pipette à couleurs",
+				btn_ok_text: 					"OK"
+			};
+		case "it": 		//italian
+			return {
+				toast_plugin_started:			"${pluginName} ${oldVersion} è stato avviato.",
+				toast_plugin_stopped:			"${pluginName} ${oldVersion} è stato interrotto.",
+				toast_plugin_translated:		"${pluginName} tradotto in ${ownlang}.",
+				colorpicker_modal_header_text:	"Raccoglitore di colore",
+				btn_ok_text: 					"OK"
+			};
+		case "nl":		//dutch
+			return {
+				toast_plugin_started:			"${pluginName} ${oldVersion} is gestart.",
+				toast_plugin_stopped:			"${pluginName} ${oldVersion} is gestopt.",
+				toast_plugin_translated:		"${pluginName} vertaald naar ${ownlang}.",
+				colorpicker_modal_header_text:	"Kleur kiezer",
+				btn_ok_text: 					"OK"
+			};
+		case "no":		//norwegian
+			return {
+				toast_plugin_started:			"${pluginName} ${oldVersion} er startet.",
+				toast_plugin_stopped:			"${pluginName} ${oldVersion} er stoppet.",
+				toast_plugin_translated:		"${pluginName} oversatt til ${ownlang}.",
+				colorpicker_modal_header_text:	"Fargevelger",
+				btn_ok_text: 					"OK"
+			};
+		case "pl":		//polish
+			return {
+				toast_plugin_started:			"${pluginName} ${oldVersion} został uruchomiony.",
+				toast_plugin_stopped:			"${pluginName} ${oldVersion} został zatrzymany.",
+				toast_plugin_translated:		"${pluginName} przetłumaczono na ${ownlang}.",
+				colorpicker_modal_header_text:	"Narzędzie do wybierania kolorów",
+				btn_ok_text: 					"OK"
+			};
+		case "pt":		//portuguese (brazil)
+			return {
+				toast_plugin_started:			"${pluginName} ${oldVersion} foi iniciado.",
+				toast_plugin_stopped:			"${pluginName} ${oldVersion} foi interrompido.",
+				toast_plugin_translated:		"${pluginName} traduzido para ${ownlang}.",
+				colorpicker_modal_header_text:	"Seletor de cores",
+				btn_ok_text: 					"OK"
+			};
+		case "fi":		//finnish
+			return {
+				toast_plugin_started:			"${pluginName} ${oldVersion} on käynnistetty.",
+				toast_plugin_stopped:			"${pluginName} ${oldVersion} on pysäytetty.",
+				toast_plugin_translated:		"${pluginName} käännetty osoitteeseen ${ownlang}.",
+				colorpicker_modal_header_text:	"Värinvalitsija",
+				btn_ok_text: 					"OK"
+			};
+		case "sv":		//swedish
+			return {
+				toast_plugin_started:			"${pluginName} ${oldVersion} har startats.",
+				toast_plugin_stopped:			"${pluginName} ${oldVersion} har blivit stoppad.",
+				toast_plugin_translated:		"${pluginName} översatt till ${ownlang}.",
+				colorpicker_modal_header_text:	"Färgväljare",
+				btn_ok_text: 					"OK"
+			};
+		case "tr":		//turkish
+			return {
+				toast_plugin_started:			"${pluginName} ${oldVersion} başlatıldı.",
+				toast_plugin_stopped:			"${pluginName} ${oldVersion} durduruldu.",
+				toast_plugin_translated:		"${pluginName} ${ownlang} olarak çevrildi.",
+				colorpicker_modal_header_text:	"Renk seçici",
+				btn_ok_text: 					"Okey"
+			};
+		case "cs":		//czech
+			return {
+				toast_plugin_started:			"${pluginName} ${oldVersion} byl spuštěn.",
+				toast_plugin_stopped:			"${pluginName} ${oldVersion} byl zastaven.",
+				toast_plugin_translated:		"${pluginName} přeložen do ${ownlang}.",
+				colorpicker_modal_header_text:	"Výběr barev",
+				btn_ok_text: 					"OK"
+			};
+		case "bg":		//bulgarian
+			return {
+				toast_plugin_started:			"${pluginName} ${oldVersion} е стартиран.",
+				toast_plugin_stopped:			"${pluginName} ${oldVersion} е спрян.",
+				toast_plugin_translated:		"${pluginName} преведена на ${ownlang}.",
+				colorpicker_modal_header_text:	"Избор на цвят",
+				btn_ok_text: 					"Добре"
+			};
+		case "ru":		//russian
+			return {
+				toast_plugin_started:			"${pluginName} ${oldVersion} запущен.",
+				toast_plugin_stopped:			"${pluginName} ${oldVersion} остановлен.",
+				toast_plugin_translated:		"${pluginName} переведен на ${ownlang}.",
+				colorpicker_modal_header_text:	"Выбор цвета",
+				btn_ok_text: 					"ОК"
+			};
+		case "uk":		//ukranian
+			return {
+				toast_plugin_started:			"${pluginName} ${oldVersion} було запущено.",
+				toast_plugin_stopped:			"${pluginName} ${oldVersion} було зупинено.",
+				toast_plugin_translated:		"${pluginName} перекладено ${ownlang}.",
+				colorpicker_modal_header_text:	"Колір обкладинки",
+				btn_ok_text: 					"Добре"
+			};
+		case "ja":		//japanese
+			return {
+				toast_plugin_started:			"${pluginName} ${oldVersion}が開始されました.",
+				toast_plugin_stopped:			"${pluginName} ${oldVersion}が停止しました.",
+				toast_plugin_translated:		"${pluginName} は${ownlang}に翻訳されました.",
+				colorpicker_modal_header_text:	"カラーピッカー",
+				btn_ok_text: 					"はい"
+			};
+		case "zh":		//chinese (traditional)
+			return {
+				toast_plugin_started:			"${pluginName} ${oldVersion}已經啟動.",
+				toast_plugin_stopped:			"${pluginName} ${oldVersion}已停止.",
+				toast_plugin_translated:		"${pluginName} 翻譯為${ownlang}.",
+				colorpicker_modal_header_text:	"選色器",
+				btn_ok_text: 					"好"
+			};
+		case "ko":		//korean
+			return {
+				toast_plugin_started:			"${pluginName} ${oldVersion} 시작되었습니다.",
+				toast_plugin_stopped:			"${pluginName} ${oldVersion} 중지되었습니다.",
+				toast_plugin_translated:		"${pluginName} ${ownlang} 로 번역되었습니다.",
+				colorpicker_modal_header_text:	"색상 선택 도구",
+				btn_ok_text: 					"승인"
+			};
+		default:		//default: english
+			return {
+				toast_plugin_started:			"${pluginName} ${oldVersion} has been started.",
+				toast_plugin_stopped:			"${pluginName} ${oldVersion} has been stopped.",
+				toast_plugin_translated:		"${pluginName} translated to ${ownlang}.",
+				colorpicker_modal_header_text:	"Color Picker",
+				btn_ok_text: 					"OK"
+			};
+	}
+}
 
 BDfunctionsDevilBro.pressedKeys = [];
 
@@ -1687,19 +1885,28 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 	.DevilBro-modal .modalTab.modalTabOpen {
 		display: initial;
 	}
-
-	.colorpicker-modal .inner-1_1f7b {
-		background-color: #36393E;
-		border-radius: 5px;
-		width: 480px;
-		padding: 15px;
-	}
 	
 	.colorpicker-modal .colorpicker-container {
 		padding: 15px;
 		overflow: hidden;
-		background-color: #484B51;
+		display: initial;
+		margin: auto;
+	}
+	
+	.colorpicker-modal .colorpicker-color,
+	.colorpicker-modal .colorpicker-slider,
+	.colorpicker-modal .colorpicker-controls {
+		float: left;
+		margin-right: 20px;
+	}
+	
+	.colorpicker-modal .colorpicker-inputs {
+		text-align: center;
+		background-color: #7E8084;
 		border-radius: 5px;
+		width: 115px;
+		padding: 3px;
+		margin-top: 87px;
 	}
 	
 	.colorpicker-modal .colorpicker-pickerpane, 
@@ -1711,14 +1918,6 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		left: 0px;
 		height: 256px;
 		width: 256px;
-	}
-	
-	.colorpicker-modal .colorpicker-color {
-		background-color: #808080;
-		border: 3px solid #36393E;
-		border-radius: 3px;
-		float: left;
-		margin-right: 20px;
 	}
 	
 	.colorpicker-modal .colorpicker-pickercursor {
@@ -1743,12 +1942,6 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		height: 256px;
 		width: 20px;
 	}
-	.colorpicker-modal .colorpicker-slider {
-		border: 3px solid #36393E;
-		border-radius: 3px;
-		float: left;
-		margin-right: 20px;
-	}
 	
 	.colorpicker-modal .colorpicker-slidercursor {
 		position: absolute;
@@ -1761,12 +1954,6 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		position: relative;
 		height: 12px;
 		width: 32px;
-	}
-	
-	.colorpicker-modal .colorpicker-previewcontainer {
-		float: left;
-		margin: 7px 0 15px 0;
-		overflow: hidden;
 	}
 		
 	.colorpicker-modal [class^="colorpicker-preview-"] {
@@ -1787,24 +1974,6 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		border-left: none;
 	}
 	
-	.colorpicker-modal .colorpicker-comparison {
-		border: 3px solid #36393E;
-		height: 60px;
-		width: 58px;
-		position: relative;
-		left: 58px;
-		background: red;
-		border-radius: 0 5px 5px 0;
-	}
-	
-	.colorpicker-modal .colorpicker-inputs {
-		background-color: #7E8084;
-		border-radius: 5px;
-		width: 115px;
-		float: left;
-		padding: 3px;
-	}
-	
 	.colorpicker-modal .colorpicker-inputs label {
 		display: inline-block;
 		width: 30px;
@@ -1818,7 +1987,7 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		line-height: 16px;
 		font-size: 14px;
 		position: relative;
-		top: 1px;
+		top: 2px;
 	}
 	
 	.colorpicker-modal .colorpicker-inputs input {
