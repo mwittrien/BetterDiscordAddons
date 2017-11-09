@@ -1131,7 +1131,7 @@ BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
 	});
 	
 	wrapperDiv.on("click", ".ui-color-picker-" + swatch + ".custom", (e) => {
-		BDfunctionsDevilBro.openColorPicker(e.target.style.backgroundColor, swatch);
+		BDfunctionsDevilBro.openColorPicker(e.currentTarget.style.backgroundColor, swatch);
 	});
 };
 
