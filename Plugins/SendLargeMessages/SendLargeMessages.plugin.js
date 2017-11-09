@@ -10,196 +10,12 @@ class SendLargeMessages {
 		this.messageDelay = 1000; //changing at own danger, might result in bans or mutes
 		
 		this.css = `
-			@keyframes animation-sendlargemessages-backdrop {
-				to { opacity: 0.85; }
-			}
-
-			@keyframes animation-sendlargemessages-backdrop-closing {
-				to { opacity: 0; }
-			}
-
-			@keyframes animation-sendlargemessages-modal {
-				to { transform: scale(1); opacity: 1; }
-			}
-
-			@keyframes animation-sendlargemessages-modal-closing {
-				to { transform: scale(0.7); opacity: 0; }
-			}
-
-			.sendlargemessages-modal .callout-backdrop {
-				animation: animation-sendlargemessages-backdrop 250ms ease;
-				animation-fill-mode: forwards;
-				opacity: 0;
-				background-color: rgb(0, 0, 0);
-				transform: translateZ(0px);
-			}
-
-			.sendlargemessages-modal.closing .callout-backdrop {
-				animation: animation-sendlargemessages-backdrop-closing 200ms linear;
-				animation-fill-mode: forwards;
-				animation-delay: 50ms;
-				opacity: 0.85;
-			}
-			
-			.sendlargemessages-modal .modal {
-				animation: animation-sendlargemessages-modal 250ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
-				animation-fill-mode: forwards;
-				transform: scale(0.7);
-				transform-origin: 50% 50%;
-				align-content: space-around;
-				align-items: center;
-				box-sizing: border-box;
-				display: flex;
-				flex-direction: column;
-				justify-content: center;
-				min-height: initial;
-				max-height: initial;
-				opacity: 0;
-				pointer-events: none;
-				user-select: none;
-				height: 100%;
-				width: 100%;
-				margin: 0;
-				padding: 0;
-				position: absolute;
-				top: 0;
-				right: 0;
-				bottom: 0;
-				left: 0;
-				z-index: 1000;
-			}
-
-			.sendlargemessages-modal.closing .modal {
-				animation: animation-sendlargemessages-modal-closing 250ms cubic-bezier(0.19, 1, 0.22, 1);
-				animation-fill-mode: forwards;
-				opacity: 1;
-				transform: scale(1);
-			}
-			
-			.sendlargemessages-modal .form {
-				width: 100%;
-			}
-
-			.sendlargemessages-modal .form-header, .sendlargemessages-modal .form-actions {
-				background-color: rgba(32,34,37,.3);
-				box-shadow: inset 0 1px 0 rgba(32,34,37,.6);
-				padding: 20px;
-				
-			}
-
-			.sendlargemessages-modal .form-header {
-				color: #f6f6f7;
-				cursor: default;
-				font-size: 16px;
-				font-weight: 600;
-				letter-spacing: .3px;
-				line-height: 20px;
-				text-transform: uppercase;
-			}
-
-			.sendlargemessages-modal .form-actions {
-				display: flex;
-				flex-direction: row-reverse;
-				flex-wrap: nowrap;
-				flex: 0 0 auto;
-				padding-right: 32px;
-			}
-
-			.sendlargemessages-modal .form-inner{
-				margin: 10px 0;
-				overflow-x: hidden;
-				overflow-y: hidden;
-				padding: 0 20px;
-				height: 450px;
-				
-			}
-
-			.sendlargemessages-modal .modal-inner {
-				background-color: #36393E;
-				border-radius: 5px;
-				box-shadow: 0 0 0 1px rgba(32,34,37,.6),0 2px 10px 0 rgba(0,0,0,.2);
-				display: flex;
-				min-height: 200px;
-				pointer-events: auto;
-				width: 700px;
-			}
-
 			.sendlargemessages-modal textarea {
-				color: #f6f6f7;
-				background-color: rgba(0,0,0,.1);
-				border-color: rgba(0,0,0,.3);
-				padding: 10px;
-				box-sizing: border-box;
-				font-size: 0.9375rem;
-				font-weight: 400;
-				letter-spacing: -0.025rem;
-				line-height: 1.25rem;
 				rows: 0;
 				cols: 0;
-				height: 410px;
-				width: 100%;
-				border-width: 1px;
-				border-style: solid;
-				border-radius: 5px;
-				overflow: scroll;
+				height: 100vw;
 				resize: none;
-				-webkit-rtl-ordering: logical;
-				user-select: text;
-				flex-direction: column;
-				white-space: pre-wrap;
-				word-wrap: break-word;
 			}
-			
-			.sendlargemessages-modal textarea::-webkit-scrollbar {
-				height: 12px;
-				width: 12px;
-			}
-
-			.sendlargemessages-modal textarea::-webkit-scrollbar-thumb {
-				background-color: #1e2124;
-				border-radius: 7px;
-			}
-
-			.sendlargemessages-modal textarea::-webkit-scrollbar-track-piece {
-				background-color: #2f3136;
-				border-radius: 7px;
-			}
-
-			.sendlargemessages-modal textarea::-webkit-scrollbar-corner {
-				background-color: #2f3136;
-			}
-
-			.sendlargemessages-modal .btn {
-				align-items: center;
-				background: none;
-				border-radius: 3px;
-				border: none;
-				box-sizing: border-box;
-				display: flex;
-				font-size: 14px;
-				font-weight: 500;
-				justify-content: center;
-				line-height: 16px;
-				min-height: 38px;
-				min-width: 96px;
-				padding: 2px 16px;
-				position: relative;
-			}
-
-			.sendlargemessages-modal .btn-cancel {
-				background-color: #2f3136;
-				color: #fff;
-			}
-
-			.sendlargemessages-modal .btn-send {
-				background-color: #3A71C1;
-				color: #fff;
-			}
-
-			.sendlargemessages-modal .control-group {
-				margin-top: 10px;
-			}
-			
 			.sendlargemessages-modal #warning-message {
 				font-weight: bold;
 				color: red;
@@ -211,30 +27,38 @@ class SendLargeMessages {
 				color: white;
 				opacity: .5;
 			}`;
-			
+
 		this.sendMessageModalMarkup =
-			`<span class="sendlargemessages-modal">
-				<div class="backdrop-2ohBEd callout-backdrop"></div>
-				<div class="modal">
-					<div class="modal-inner">
-						<div class="form">
-							<div class="form-header">
-								<header class="modal-header">REPLACE_modal_header_text</header>
-							</div>
-							<div class="form-inner">
-								<div class="control-group">
-									<textarea id="modal-inputtext" name="inputtext"></textarea>
-									<div class="info">
-										<div id="character-counter"></div>
-										<div id="warning-message"></div>
-									</div>
+			`<span class="sendlargemessages-modal DevilBro-modal">
+				<div class="backdrop-2ohBEd"></div>
+				<div class="modal-2LIEKY">
+					<div class="inner-1_1f7b">
+						<div class="modal-3HOjGZ sizeMedium-1-2BNS">
+							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO header-3sp3cE" style="flex: 0 0 auto;">
+								<div class="flexChild-1KGW5q" style="flex: 1 1 auto;">
+									<h4 class="h4-2IXpeI title-1pmpPr size16-3IvaX_ height20-165WbF weightSemiBold-T8sxWH defaultColor-v22dK1 defaultMarginh4-jAopYe marginReset-3hwONl">REPLACE_modal_header_text</h4>
+									<div class="guildName-1u0hy7 small-3-03j1 size12-1IGJl9 height16-1qXrGy primary-2giqSn"></div>
 								</div>
+								<svg class="btn-cancel close-3ejNTg flexChild-1KGW5q" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12">
+									<g fill="none" fill-rule="evenodd">
+										<path d="M0 0h12v12H0"></path>
+										<path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path>
+									</g>
+								</svg>
 							</div>
-							<div class="form-actions">
-								<button type="button" class="btn btn-cancel">REPLACE_btn_cancel_text</button>
-								<button type="button" class="btn btn-send">REPLACE_btn_send_text</button>
+							<div class="scrollerWrap-2uBjct content-1Cut5s scrollerThemed-19vinI themeGhostHairline-2H8SiW inputWrapper-3xoRWR vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR flexChild-1KGW5q inner-tqJwAU" style="flex: 1 1 auto;">
+								<textarea class="scroller-fzNley inputDefault-Y_U37D input-2YozMi" id="modal-inputtext"></textarea>
 							</div>
-						</form>
+							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 noWrap-v6g9vO inner-tqJwAU marginBottom8-1mABJ4" style="flex: 0 0 auto;">
+								<h5 id="warning-message" class="flexChild-1KGW5q h5-3KssQU title-1pmpPr size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH defaultMarginh5-2UwwFY" style="flex: 1 1 auto;"></h5>
+								<h5 id="character-counter" class="flexChild-1KGW5q h5-3KssQU title-1pmpPr size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH defaultMarginh5-2UwwFY" style="flex: 0 0 auto;"></h5>
+							</div>
+							<div class="flex-lFgbSz flex-3B1Tl4 horizontalReverse-2LanvO horizontalReverse-k5PqxT flex-3B1Tl4 directionRowReverse-2eZTxP justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO footer-1PYmcw">
+								<button type="button" class="btn-send buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu">
+									<div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx contents-4L4hQM">REPLACE_btn_send_text</div>
+								</button>
+							</div>
+						</div>
 					</div>
 				</div>
 			</span>`;
@@ -244,7 +68,7 @@ class SendLargeMessages {
 
 	getDescription () {return "Opens a popout when your message is too large, which allows you to automatically send the message in several smaller messages.";}
 
-	getVersion () {return "1.2.5";}
+	getVersion () {return "1.3.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -339,55 +163,44 @@ class SendLargeMessages {
 	
 	showSendModal (text) {
 		var sendMessageModal = $(this.sendMessageModalMarkup);
-		var textinput = sendMessageModal.find("#modal-inputtext")[0];
-		sendMessageModal.appendTo($(".app-XZYfmp"))
-			.on("click", ".callout-backdrop,button.btn-cancel", (e) => {
-				$(document).off("mouseup." + this.getName()).off("mousemove." + this.getName());
-				sendMessageModal.addClass('closing');
-				setTimeout(() => {sendMessageModal.remove();}, 300);
-			})
+		var textinput = sendMessageModal.find("#modal-inputtext");
+		BDfunctionsDevilBro.appendModal(sendMessageModal);
+		sendMessageModal
 			.on("click", "button.btn-send", (e) => {
 				e.preventDefault();
-				sendMessageModal.addClass('closing');
-				setTimeout(() => {sendMessageModal.remove();}, 300);
-				$(document).off("mouseup." + this.getName()).off("mousemove." + this.getName());
-				this.formatText(textinput.value).forEach((message,i) => {
+				this.formatText(textinput.val()).forEach((message,i) => {
 					setTimeout(() => {
 						this.sendMessage(message);
 					},this.messageDelay * i);
 				});
 			});
 			
-		textinput.value = text;
-		$(textinput)
+		textinput
+			.val(text)
+			.focus()
 			.off("keydown." + this.getName() + " click." + this.getName())
-			.on("keydown." + this.getName() + " click." + this.getName(), e => {
+			.on("keydown." + this.getName() + " click." + this.getName(), () => {
 				setTimeout(() => {
 					this.updateCounter(sendMessageModal);
 				},10);
 			})
 			.off("mousedown." + this.getName())
-			.on("mousedown." + this.getName(), e => {
-				this.selecting = true;
-			});
-		$(document)
-			.off("mouseup." + this.getName())
-			.on("mouseup." + this.getName(), e => {
-				if (this.selecting) {
-					this.selecting = false;
-				}
-			})
-			.off("mousemove." + this.getName())
-			.on("mousemove." + this.getName(), e => {
-				if (this.selecting) {
-					setTimeout(() => {
-						this.updateCounter(sendMessageModal);
-					},10);
-				}
+			.on("mousedown." + this.getName(), () => {
+				$(document)
+					.off("mouseup." + this.getName())
+					.on("mouseup." + this.getName(), () => {
+						$(document)
+							.off("mouseup." + this.getName())
+							.off("mousemove." + this.getName());
+					})
+					.off("mousemove." + this.getName())
+					.on("mousemove." + this.getName(), () => {
+						setTimeout(() => {
+							this.updateCounter(sendMessageModal);
+						},10);
+					});
 			});
 		this.updateCounter(sendMessageModal);
-		
-		textinput.focus();
 	}
 	
 	updateCounter (modal) {
