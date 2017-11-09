@@ -51,9 +51,9 @@ BDfunctionsDevilBro.loadMessage = function (pluginName, oldVersion) {
 };
 
 BDfunctionsDevilBro.unloadMessage = function (pluginName, oldVersion) { 
-	console.log(`${pluginName} Version: ${oldVersion} unloaded.`);
-	
-	BDfunctionsDevilBro.showToast(`${pluginName} ${oldVersion} has been stopped.`);
+	var unloadMessage = BDfunctionsDevilBro.getLibraryStrings().toast_plugin_stopped.replace("${pluginName}", pluginName).replace("${oldVersion}", oldVersion);
+	console.log(unloadMessage);
+	BDfunctionsDevilBro.showToast(unloadMessage);
 	
 	var downloadUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
 	
