@@ -13,160 +13,14 @@ class EmojiStatistics {
 		this.serverInformation;
 		
 		this.css = `
-			#emojistatistics-scrolldiv::-webkit-scrollbar {
-				width: 12px;
-			}
-
-			#emojistatistics-scrolldiv::-webkit-scrollbar-thumb {
-				background-color: #1e2124;
-				border-radius: 7px;
-			}
-
-			#emojistatistics-scrolldiv::-webkit-scrollbar-track-piece {
-				background-color: #2f3136;
-				border-radius: 7px;
-			}
-			
-			@keyframes animation-emojistatistics-backdrop {
-				to { opacity: 0.85; }
-			}
-
-			@keyframes animation-emojistatistics-backdrop-closing {
-				to { opacity: 0; }
-			}
-
-			@keyframes animation-emojistatistics-modal {
-				to { transform: scale(1); opacity: 1; }
-			}
-
-			@keyframes animation-emojistatistics-modal-closing {
-				to { transform: scale(0.7); opacity: 0; }
-			}
-
-			.emojistatistics-modal .callout-backdrop {
-				animation: animation-emojistatistics-backdrop 250ms ease;
-				animation-fill-mode: forwards;
-				opacity: 0;
-				background-color: rgb(0, 0, 0);
-				transform: translateZ(0px);
-			}
-
-			.emojistatistics-modal.closing .callout-backdrop {
-				animation: animation-emojistatistics-backdrop-closing 200ms linear;
-				animation-fill-mode: forwards;
-				animation-delay: 50ms;
-				opacity: 0.85;
-			}
-			
-			.emojistatistics-modal .modal {
-				animation: animation-emojistatistics-modal 250ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
-				animation-fill-mode: forwards;
-				transform: scale(0.7);
-				transform-origin: 50% 50%;
-				align-content: space-around;
-				align-items: center;
-				box-sizing: border-box;
-				display: flex;
-				flex-direction: column;
-				justify-content: center;
-				min-height: initial;
-				max-height: initial;
-				opacity: 0;
-				pointer-events: none;
-				user-select: none;
-				height: 100%;
-				width: 100%;
-				margin: 0;
-				padding: 0;
-				position: absolute;
-				top: 0;
-				right: 0;
-				bottom: 0;
-				left: 0;
-				z-index: 1000;
-			}
-
-			.emojistatistics-modal.closing .modal {
-				animation: animation-emojistatistics-modal-closing 250ms cubic-bezier(0.19, 1, 0.22, 1);
-				animation-fill-mode: forwards;
-				opacity: 1;
-				transform: scale(1);
-			}
-			
-			.emojistatistics-modal .form {
-				width: 100%;
-			}
-
-			.emojistatistics-modal .form-header, .emojistatistics-modal .form-actions {
-				background-color: rgba(32,34,37,.3);
-				box-shadow: inset 0 1px 0 rgba(32,34,37,.6);
-				padding: 20px;
-				
-			}
-
-			.emojistatistics-modal .form-header {
-				color: #f6f6f7;
-				cursor: default;
-				font-size: 16px;
-				font-weight: 600;
-				letter-spacing: .3px;
-				line-height: 20px;
-				text-transform: uppercase;
-			}
-
-			.emojistatistics-modal .form-actions {
-				display: flex;
-				flex-direction: row-reverse;
-				flex-wrap: nowrap;
-				flex: 0 0 auto;
-				padding-right: 32px;
-			}
-
-			.emojistatistics-modal .form-titles, 
-			.emojistatistics-modal .form-inner {
-				margin: 10px 0;
-				overflow-x: hidden;
-				overflow-y: hidden;
-				padding: 0 20px;	
-			}
-
-			.emojistatistics-modal .form-inner {
-				max-height: 340px;
-				overflow-y: scroll;
-			}
-			
-			.emojistatistics-modal .modal-inner {
-				background-color: #36393E;
-				border-radius: 5px;
-				box-shadow: 0 0 0 1px rgba(32,34,37,.6),0 2px 10px 0 rgba(0,0,0,.2);
-				display: flex;
-				min-height: 200px;
-				pointer-events: auto;
+			.emojistatistics-modal .modal-3HOjGZ {
 				width: 680px;
 			}
-
-			.emojistatistics-modal .btn {
-				align-items: center;
-				background: none;
-				border-radius: 3px;
-				border: none;
-				box-sizing: border-box;
-				display: flex;
-				font-size: 14px;
-				font-weight: 500;
-				justify-content: center;
-				line-height: 16px;
-				min-height: 38px;
-				min-width: 96px;
-				padding: 2px 16px;
-				position: relative;
+			
+			.emojistatistics-modal .titles {
+				height: 20px;
 			}
-
-			.emojistatistics-modal .btn-ok {
-				background-color: #3A71C1;
-				color: #fff;
-			}
-
+			
 			.emojistatistics-modal .emojiserver-entry {
 				border-bottom: 1px solid #2F3237;
 				border-top: 1px solid #2F3237;
@@ -183,11 +37,10 @@ class EmojiStatistics {
 				display: inline-block;
 				font-size: 16px;
 				font-weight: 600;
-				height: 32px;
+				height: 35px;
 				letter-spacing: .5px;
-				padding-top: 18px;
+				padding-top: 15px;
 				text-align: center;
-				vertical-align: middle;
 				width: 50px;
 			}
 			
@@ -228,6 +81,13 @@ class EmojiStatistics {
 			.emojistatistics-modal .titles-entry .modal-titlestotal-label,
 			.emojistatistics-modal .titles-entry .modal-titlesglobal-label,
 			.emojistatistics-modal .titles-entry .modal-titleslocal-label,
+			.emojistatistics-modal .titles-entry .modal-titlesreplicate-label {
+				cursor: pointer;
+			}
+			
+			.emojistatistics-modal .titles-entry .modal-titlestotal-label,
+			.emojistatistics-modal .titles-entry .modal-titlesglobal-label,
+			.emojistatistics-modal .titles-entry .modal-titleslocal-label,
 			.emojistatistics-modal .titles-entry .modal-titlesreplicate-label,
 			.emojistatistics-modal .emojiserver-entry .modal-emojitotal-label,
 			.emojistatistics-modal .emojiserver-entry .modal-emojiglobal-label,
@@ -255,22 +115,35 @@ class EmojiStatistics {
 				white-space: nowrap;
 				overflow: hidden;
 			}`;
-
+			
 		this.emojiInformationModalMarkup =
-			`<span class="emojistatistics-modal">
-				<div class="backdrop-2ohBEd callout-backdrop" style="background-color:#000; opacity:0.85"></div>
-				<div class="modal" style="opacity: 1">
-					<div class="modal-inner">
-						<div class="form">
-							<div class="form-header">
-								<header class="modal-header">REPLACE_modal_header_text</header>
+			`<span class="emojistatistics-modal DevilBro-modal">
+				<div class="backdrop-2ohBEd"></div>
+				<div class="modal-2LIEKY">
+					<div class="inner-1_1f7b">
+						<div class="modal-3HOjGZ sizeMedium-1-2BNS">
+							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO header-3sp3cE" style="flex: 0 0 auto;">
+								<div class="flexChild-1KGW5q" style="flex: 1 1 auto;">
+									<h4 class="h4-2IXpeI title-1pmpPr size16-3IvaX_ height20-165WbF weightSemiBold-T8sxWH defaultColor-v22dK1 defaultMarginh4-jAopYe marginReset-3hwONl">REPLACE_modal_header_text</h4>
+									<div class="guildName-1u0hy7 small-3-03j1 size12-1IGJl9 height16-1qXrGy primary-2giqSn"></div>
+								</div>
+								<svg class="btn-cancel close-3ejNTg flexChild-1KGW5q" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12">
+									<g fill="none" fill-rule="evenodd">
+										<path d="M0 0h12v12H0"></path>
+										<path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path>
+									</g>
+								</svg>
 							</div>
-							<div class="form-titles"></div>
-							<div class="form-inner" id="emojistatistics-scrolldiv"></div>
-							<div class="form-actions">
-								<button type="button" class="btn btn-ok">REPLACE_btn_ok_text</button>
+							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO inner-tqJwAU titles" style="flex: 0 0 auto;"></div>
+							<div class="scrollerWrap-2uBjct content-1Cut5s scrollerThemed-19vinI themeGhostHairline-2H8SiW">
+								<div class="scroller-fzNley inner-tqJwAU entries"></div>
 							</div>
-						</form>
+							<div class="flex-lFgbSz flex-3B1Tl4 horizontalReverse-2LanvO horizontalReverse-k5PqxT flex-3B1Tl4 directionRowReverse-2eZTxP justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO footer-1PYmcw">
+								<button type="button" class="btn-save buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu">
+									<div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx contents-4L4hQM">REPLACE_btn_ok_text</div>
+								</button>
+							</div>
+						</div>
 					</div>
 				</div>
 			</span>`;
@@ -303,7 +176,7 @@ class EmojiStatistics {
 
 	getDescription () {return "Adds some helpful options to show you more information about emojis and emojiservers.";}
 
-	getVersion () {return "2.5.1";}
+	getVersion () {return "2.6.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -483,16 +356,12 @@ class EmojiStatistics {
 			.on("click." + this.getName(), ".emojistatistics-button", this.showEmojiInformationModal.bind(this));
 	}
 	
-	showEmojiInformationModal () {
+	showEmojiInformationModal (e) {
 		var entries = [];
 		
 		var emojiInformationModal = $(this.emojiInformationModalMarkup);
-		emojiInformationModal.appendTo($(".app-XZYfmp"))
-		.on("click", ".callout-backdrop,button.btn-ok", (e) => {
-			emojiInformationModal.addClass('closing');
-			setTimeout(() => {emojiInformationModal.remove();}, 300);
-		});
-		$(".popout").hide();
+		BDfunctionsDevilBro.appendModal(emojiInformationModal);
+		$(".popout").has(e.target).hide();
 				
 		var servers = BDfunctionsDevilBro.readServerList();
 		
@@ -556,53 +425,53 @@ class EmojiStatistics {
 			}
 			
 			var titleentry = $(this.emojiserverTitlesMarkup)
-			.on("click", ".modal-titlesservername-label,.modal-titlestotal-label,.modal-titlesglobal-label,.modal-titleslocal-label,.modal-titlesreplicate-label", (e) => {
-				var oldTitle = e.target.innerText;
-				var sortKey = "index";
-				var reverse = oldTitle.indexOf("▼") < 0 ? false : true;
-				
-				titleentry.find(".modal-titlesservername-label").text(this.labels.modal_titlesservername_text);
-				titleentry.find(".modal-titlestotal-label").text(this.labels.modal_titlestotal_text);
-				titleentry.find(".modal-titlesglobal-label").text(this.labels.modal_titlesglobal_text);
-				titleentry.find(".modal-titleslocal-label").text(this.labels.modal_titleslocal_text);
-				titleentry.find(".modal-titlesreplicate-label").text(this.labels.modal_titlesreplicate_text);
-				
-				if (oldTitle.indexOf("▲") < 0) {
-					var title = "";
-					switch (e.target.className) {
-						case "modal-titlesservername-label": 
-							title = this.labels.modal_titlesservername_text;
-							sortKey = "name";
-							break;
-						case "modal-titlestotal-label": 
-							title = this.labels.modal_titlestotal_text;
-							sortKey = "total";
-							break;
-						case "modal-titlesglobal-label": 
-							title = this.labels.modal_titlesglobal_text;
-							sortKey = "global";
-							break;
-						case "modal-titleslocal-label": 
-							title = this.labels.modal_titleslocal_text;
-							sortKey = "local";
-							break;
-						case "modal-titlesreplicate-label": 
-							title = this.labels.modal_titlesreplicate_text;
-							sortKey = "copies";
-							break;
+				.appendTo(".emojistatistics-modal .titles")
+				.on("click", ".modal-titlesservername-label,.modal-titlestotal-label,.modal-titlesglobal-label,.modal-titleslocal-label,.modal-titlesreplicate-label", (e) => {
+					var oldTitle = e.target.innerText;
+					var sortKey = "index";
+					var reverse = oldTitle.indexOf("▼") < 0 ? false : true;
+					
+					titleentry.find(".modal-titlesservername-label").text(this.labels.modal_titlesservername_text);
+					titleentry.find(".modal-titlestotal-label").text(this.labels.modal_titlestotal_text);
+					titleentry.find(".modal-titlesglobal-label").text(this.labels.modal_titlesglobal_text);
+					titleentry.find(".modal-titleslocal-label").text(this.labels.modal_titleslocal_text);
+					titleentry.find(".modal-titlesreplicate-label").text(this.labels.modal_titlesreplicate_text);
+					
+					if (oldTitle.indexOf("▲") < 0) {
+						var title = "";
+						switch (e.target.className) {
+							case "modal-titlesservername-label": 
+								title = this.labels.modal_titlesservername_text;
+								sortKey = "name";
+								break;
+							case "modal-titlestotal-label": 
+								title = this.labels.modal_titlestotal_text;
+								sortKey = "total";
+								break;
+							case "modal-titlesglobal-label": 
+								title = this.labels.modal_titlesglobal_text;
+								sortKey = "global";
+								break;
+							case "modal-titleslocal-label": 
+								title = this.labels.modal_titleslocal_text;
+								sortKey = "local";
+								break;
+							case "modal-titlesreplicate-label": 
+								title = this.labels.modal_titlesreplicate_text;
+								sortKey = "copies";
+								break;
+						}
+						e.target.innerText = oldTitle.indexOf("▼") < 0 ? title + "▼" : title + "▲";
 					}
-					e.target.innerText = oldTitle.indexOf("▼") < 0 ? title + "▼" : title + "▲";
-				}
-				
-				var sortedEntries = BDfunctionsDevilBro.sortArrayByKey(entries, sortKey);
-				
-				if (reverse) {
-					sortedEntries.reverse();
-				}
-				
-				this.updateAllEntries(sortedEntries);
-			})
-			.appendTo(".form-titles");
+					
+					var sortedEntries = BDfunctionsDevilBro.sortArrayByKey(entries, sortKey);
+					
+					if (reverse) {
+						sortedEntries.reverse();
+					}
+					
+					this.updateAllEntries(sortedEntries);
+				});
 					
 			this.updateAllEntries(entries);
 		}
@@ -612,7 +481,7 @@ class EmojiStatistics {
 		$(".emojiserver-entry").remove();
 		for (var i = 0; entries.length > i; i++) {
 			var entry = entries[i].entry;
-			entry.appendTo(".form-inner");
+			entry.appendTo(".emojistatistics-modal .entries");
 		}
 	}
 	
@@ -794,7 +663,7 @@ class EmojiStatistics {
 					modal_titlesreplicate_text : 	"Копии:",
 					btn_ok_text: 					"ОК"
 				};
-			case "uk":		//ukranian
+			case "uk":		//ukrainian
 				return {
 					modal_header_text: 				"Статистика емідій",
 					modal_titlesicon_text : 		"Ікона",
