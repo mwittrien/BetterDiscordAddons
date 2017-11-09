@@ -702,14 +702,6 @@ BDfunctionsDevilBro.themeIsLightTheme = function () {
 	return false;
 };
 
-BDfunctionsDevilBro.showHideEle = function (show, ele) {
-	$(ele).toggle(show);
-};
-
-BDfunctionsDevilBro.showHideAllEles = function (show, eles) {
-	$(eles).toggle(show);
-};
-
 BDfunctionsDevilBro.saveAllData = function (settings, pluginName, keyName) {
 	bdPluginStorage.set(pluginName, keyName, settings);
 };
