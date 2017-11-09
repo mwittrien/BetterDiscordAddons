@@ -53,7 +53,6 @@ class ServerFolders {
 				max-height: 98%;
 				max-width: 98%;
 				position: absolute;
-				padding: 10px;
 				top: 0px;
 				left: 0px;
 				z-index: 1000;
@@ -239,7 +238,7 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.0.1";}
+	getVersion () {return "5.0.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -806,16 +805,26 @@ class ServerFolders {
 					
 					if (!document.querySelector("#ChannelSizeCorrectionCSS")) {
 						var guildswrapper = $(".guilds-wrapper");
+						var guildsscroller = guildswrapper.find(".guilds.scroller");
 						
 						var ChannelSizeCorrectionCSS = `
+							.guilds-wrapper .scroller {
+								position: static !important;
+							}
+							
 							.guilds-wrapper .scroller::-webkit-scrollbar {
-								display: none;
+								display: none !important;
+							}
+							
+							.foldercontainer {
+								padding: ${guildsscroller.css("padding")};
+								margin: ${guildsscroller.css("margin")};
 							}`;
 							
 						if (guildswrapper.outerHeight() > guildswrapper.outerWidth()) {
 							ChannelSizeCorrectionCSS +=	`
 								.foldercontainer {
-									width: ${guildswrapper.outerWidth() - 20}px !important;
+									width: ${guildswrapper.outerWidth()}px !important;
 									left: ${guildswrapper.outerWidth()}px !important;
 									overflow-x: hidden;
 									overflow-y: scroll;
@@ -823,13 +832,13 @@ class ServerFolders {
 								
 								.guilds-wrapper {
 									overflow: visible !important;
-									width: ${guildswrapper.outerWidth() + $(".guild").outerWidth() + 20}px !important;
+									width: calc(${guildswrapper.outerWidth()}px + ${$(".guild").outerWidth()}px + ${guildsscroller.css("padding-left")} + ${guildsscroller.css("padding-right")} + 5px) !important;
 								}`;
 						}
 						else {
 							ChannelSizeCorrectionCSS +=	`
 								.foldercontainer {
-									height: ${guildswrapper.outerWidth() - 20}px !important;
+									height: ${guildswrapper.outerHeight()}px !important;
 									bottom: ${guildswrapper.outerHeight()}px !important;
 									overflow-x: scroll;
 									overflow-y: hidden;
@@ -837,7 +846,7 @@ class ServerFolders {
 								
 								.guilds-wrapper {
 									overflow: visible !important;
-									height: ${guildswrapper.outerHeight() + $(".guild").outerHeight() + 20}px !important;
+									height: calc(${guildswrapper.outerHeight()}px + ${$(".guild").outerHeight()}px + ${guildsscroller.css("padding-top")} + ${guildsscroller.css("padding-bottom")} + 5px) !important;
 								}`;
 						}
 						
