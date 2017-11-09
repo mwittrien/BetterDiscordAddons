@@ -1017,6 +1017,7 @@ BDfunctionsDevilBro.clearReadNotifications = function (servers) {
 };
 
 BDfunctionsDevilBro.appendModal = function (modal) {
+	let id = Math.round(Math.random()*10000000000000000);
 	$(modal)
 		.appendTo(".app ~ [class^='theme-']")
 		.on("click", ".checkbox-1KYsPm", (e) => {
@@ -1038,7 +1039,7 @@ BDfunctionsDevilBro.appendModal = function (modal) {
 				.addClass("modalTabButtonActive");
 		})
 		.on("click", ".backdrop-2ohBEd, .btn-cancel, .btn-save", () => {
-			$(document).off("keydown.modalEscapeListenerDevilBro");
+			$(document).off("keydown.modalEscapeListenerDevilBro" + id);
 			$(modal).addClass("closing");
 			setTimeout(() => {modal.remove();}, 300);
 		});
@@ -1053,8 +1054,8 @@ BDfunctionsDevilBro.appendModal = function (modal) {
 		});
 		
 	$(document)
-		.off("keydown.modalEscapeListenerDevilBro")
-		.on("keydown.modalEscapeListenerDevilBro", (e) => {
+		.off("keydown.modalEscapeListenerDevilBro" + id)
+		.on("keydown.modalEscapeListenerDevilBro" + id, (e) => {
 			if (e.which == 27) $(modal).find(".backdrop-2ohBEd").click();
 		});
 };
