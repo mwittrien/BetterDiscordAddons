@@ -238,7 +238,7 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.0.4";}
+	getVersion () {return "5.0.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -313,7 +313,7 @@ class ServerFolders {
 									}
 								}
 								if (node && node.classList && node.classList.contains("badge") && !node.classList.contains("folder")) {
-									var serverDiv = this.getParentDivOfFolder(node);
+									var serverDiv = this.getParentDivOfServer(node);
 									var folderDiv = this.getFolderOfServer(serverDiv);
 									if (folderDiv) {
 										this.updateCopyInFolderContent(serverDiv, folderDiv);
@@ -390,7 +390,7 @@ class ServerFolders {
 			$(BDfunctionsDevilBro.readServerList()).show();
 			
 			$(".guilds.scroller").removeClass("folders");
-			$(".guilds.scroller.folders div.guild:not(.folder)").off("mousedown." + this.getName());
+			$(".guilds.scroller div.guild:not(.folder)").off("mousedown." + this.getName());
 			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName());
 			BDfunctionsDevilBro.removeLocalStyle("ChannelSizeCorrection");
@@ -1039,28 +1039,20 @@ class ServerFolders {
 	
 	getParentDivOfServer (div) {
 		var servers = document.querySelectorAll("div.guild:not(.folder)");
-		var foundServer;
 		for (var i = 0; servers.length > i; i++) {
 			var server = servers[i];
-			if (!server.querySelector(".guilds-error") && (server.contains(div) || server == div)) {
-				foundServer = server;
-				break;
-			}
+			if (!server.querySelector(".guilds-error") && (server.contains(div) || server == div)) return server;
 		}
-		return foundServer;
+		return null;
 	}
 	
 	getParentDivOfFolder (div) {
 		var folders = document.querySelectorAll("div.guild.folder");
-		var foundFolder;
 		for (var i = 0; folders.length > i; i++) {
 			var folder = folders[i];
-			if (folder.contains(div) || folder == div) {
-				foundFolder = folder;
-				break;
-			}
+			if (folder.contains(div) || folder == div) return folder;
 		}
-		return foundFolder;
+		return null;
 	}
 	
 	getFolderOfServer (serverDiv) {
