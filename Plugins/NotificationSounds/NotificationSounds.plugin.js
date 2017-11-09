@@ -40,7 +40,7 @@ class NotificationSounds {
 
 	getDescription () {return "Creates a notification sound when you receive a notification (mention or DM).";}
 
-	getVersion () {return "2.5.4";}
+	getVersion () {return "2.5.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -122,21 +122,21 @@ class NotificationSounds {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node.className === "badge") {
+								if (node && node.className === "badge") {
 									var data = BDfunctionsDevilBro.getKeyInformation({"node":node.parentElement,"key":"guild"});
 									if (data) {
 										this.mentionBadgeObserver.observe(node, {characterData: true, subtree: true });
 										if (this.oldMentions && this.oldMentions[data.id] == 0) this.playAudio("Mention");
 									}
 								}
-								if (node.classList && node.classList.contains("guild") && !node.classList.contains("guilds-add") && node.parentNode.classList && !node.parentNode.classList.contains("dms") ) {
+								if (node && node.classList && node.classList.contains("guild") && !node.classList.contains("guilds-add") && !document.querySelector(".dms").contains(node)) {
 									this.mentionBadgeObserver.observe(node, {characterData: true, subtree: true });
 								}
 							});
 						}
 						if (change.removedNodes) {
 							change.removedNodes.forEach((node) => {
-								if (node.className === "badge") {
+								if (node && node.className === "badge") {
 									this.oldMentions = BDfunctionsDevilBro.getKeyInformation({"node":document.querySelector(".layers"),"key":"mentionCounts"});
 								}
 							});
@@ -172,7 +172,7 @@ class NotificationSounds {
 					}
 				);
 			});
-			if (document.querySelector("[class*='channels-'][class*='flex-']")) this.channelListObserver.observe(document.querySelector("[class*='channels-'][class*='flex-']"), {childList: true, subtree: true});
+			if (document.querySelector(".channels-3g2vYe")) this.channelListObserver.observe(document.querySelector(".channels-3g2vYe"), {childList: true, subtree: true});
 			
 			this.chatWindowObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
