@@ -90,7 +90,7 @@ BDfunctionsDevilBro.checkUpdate = function (pluginName, downloadUrl) {
 BDfunctionsDevilBro.showUpdateNotice = function(pluginName, downloadUrl) {
 	let noticeElement = `<div class="notice notice-info" id="pluginNotice"><div class="notice-dismiss" id="pluginNoticeDismiss"></div><span class="notice-message">The following plugins have updates:</span>&nbsp;&nbsp;<strong id="outdatedPlugins"></strong></div>`;
 	if (!$("#pluginNotice").length)  {
-		$(".app.flex-vertical").children().first().before(noticeElement);
+		$(".app .guilds-wrapper + div > div:first > div:first").before(noticeElement);
         $(".win-buttons").addClass("win-buttons-notice");
 		$("#pluginNoticeDismiss").on("click", () => {
 			$(".win-buttons").animate({top: 0}, 400, "swing", () => {
