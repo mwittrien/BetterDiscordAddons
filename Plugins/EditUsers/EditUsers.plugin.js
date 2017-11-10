@@ -169,7 +169,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "1.9.1";}
+	getVersion () {return "1.9.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -784,7 +784,7 @@ class EditUsers {
 			}
 				
 			var tag = data.tag ? data.tag : null;
-			if (tag && (type == "list" || type == "chat" || type == "popout" || type == "profil" || type == "dmheader")) {
+			if (wrapper && !wrapper.querySelector(".user-tag") && (type == "list" || type == "chat" || type == "popout" || type == "profil" || type == "dmheader")) {
 				var color3 = data.color3 ? BDfunctionsDevilBro.color2RGB(data.color3) : "";
 				var color4 = data.color4 ? BDfunctionsDevilBro.color2RGB(data.color4) : "white";
 				var thisTag = $(this.tagMarkup)[0];
