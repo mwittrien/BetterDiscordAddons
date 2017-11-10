@@ -28,7 +28,7 @@ class ServerFolders {
 				right: 30px;
 			}
 			
-			.guild.serverToFolderPreview {
+			.guild.serverFoldersPreview {
 				position: absolute;
 				opacity: 0.5;
 				width: 50px;
@@ -36,7 +36,11 @@ class ServerFolders {
 				z-index: 1000;
 			}
 			
-			.guild.serverToFolderPreview a {
+			.guild.serverFoldersPreview .badge {
+				display: none;
+			}
+			
+			.guild.serverFoldersPreview a {
 				color: white;
 				width: 50px;
 				height: 50px;
@@ -230,7 +234,7 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.0.6";}
+	getVersion () {return "5.1.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -261,6 +265,11 @@ class ServerFolders {
 					$(BDfunctionsDevilBro.readServerList()).show();
 				}
 				BDfunctionsDevilBro.saveData("warning", true, this.getName(), "warning");
+			}
+			
+			if (!BDfunctionsDevilBro.loadData("warning2", this.getName(), "warning2")) {
+				alert("Since so many people asked for it: here another 'big' update. You can now change the order of folders by dragging them around. Just drag a folder ontop of another folder and it will place it below the hovered folder. Same thing for servers within a folder, you can drag a server on top of a server (only on servers that are in the same folder to prevent them from mixing) and release the mouse button to place the dragged server below of the hovered server. As an extra you can now move a server from one folder to another by dragging it from the foldercontentlist to another folder. Have fun.");
+				BDfunctionsDevilBro.saveData("warning2", true, this.getName(), "warning2");
 			}
 			
 			this.serverContextObserver = new MutationObserver((changes, _) => {
@@ -323,7 +332,7 @@ class ServerFolders {
 									var folderDiv = this.getFolderOfServer(serverDiv);
 									if (folderDiv) {
 										var info = BDfunctionsDevilBro.getKeyInformation({"node":node, "key":"guild"});
-										if (info) $(".guild.copy_of_" + info.id).remove();
+										if (info) $("#copy_of_" + info.id).remove();
 										this.updateFolderNotifications(folderDiv);
 									}
 								}
@@ -477,29 +486,25 @@ class ServerFolders {
 					var draggedServer = this.getParentDivOfServer(e.target);
 					
 					if (draggedServer) {
-						var serverCopy = draggedServer.cloneNode(true);
-						$(serverCopy)
+						var serverPreview = draggedServer.cloneNode(true);
+						$(serverPreview)
 							.appendTo("#app-mount")
-							.addClass("serverToFolderPreview")
+							.addClass("serverFoldersPreview")
 							.offset({"left":e.clientX + 5,"top":e.clientY + 5});
 						
 						$(document)
 							.off("mouseup." + this.getName()).off("mousemove." + this.getName())
-							.on("mouseup." + this.getName(), (e) => {
-								var folderDiv = this.getParentDivOfFolder(e.target);
+							.on("mouseup." + this.getName(), (e2) => {
+								var folderDiv = this.getParentDivOfFolder(e2.target);
 								if (folderDiv) {
 									this.addServerToFolder(draggedServer, folderDiv);
 								}
 								$(document).off("mouseup." + this.getName()).off("mousemove." + this.getName());
-								draggedServer = null;
-								serverCopy.remove();
+								serverPreview.remove();
 							})
 							.on("mousemove." + this.getName(), (e2) => {
-								$(serverCopy).offset({"left":e2.clientX + 5,"top":e2.clientY + 5})
+								$(serverPreview).offset({"left":e2.clientX + 5,"top":e2.clientY + 5});
 							});
-					}
-					else {
-						draggedServer = null;
 					}
 				}
 			});
@@ -529,7 +534,7 @@ class ServerFolders {
 			$(serverDiv).show();
 			var message = this.labels.toast_removeserver_text ? this.labels.toast_removeserver_text.replace("${servername}", info.name).replace("${foldername}", data.folderName ? " " + data.folderName : "") : "";
 			BDfunctionsDevilBro.showToast(message, {type:"danger"});
-			$(".guild.copy_of_" + info.id).remove();
+			$("#copy_of_" + info.id).remove();
 			this.updateFolderNotifications(folderDiv);
 		}
 	}
@@ -555,10 +560,10 @@ class ServerFolders {
 		
 		$(folderDiv)
 			.addClass("closed")
-			.attr("id", folderID);
-		$(folderInner)
+			.attr("id", folderID)
 			.on("click", () => {this.openCloseFolder(folderDiv);})
-			.on("contextmenu", (e) => {this.createFolderContextMenu(folderDiv, e);})
+			.on("contextmenu", (e) => {this.createFolderContextMenu(folderDiv, e);});
+		$(folderInner)
 			.on("mouseenter", () => {this.createFolderToolTip(folderDiv);});
 		$(folder)
 			.css("background-image", "url(\"" + icons.closedicon + "\")");
@@ -878,7 +883,7 @@ class ServerFolders {
 		var foldercontainer = document.querySelector(".foldercontainer");
 		if (foldercontainer && folderDiv.classList.contains("open")) {
 			var info = BDfunctionsDevilBro.getKeyInformation({"node":serverOrig, "key":"guild"});
-			var oldCopy = foldercontainer.querySelector(".guild.copy_of_" + info.id);
+			var oldCopy = foldercontainer.querySelector("#copy_of_" + info.id);
 			if (oldCopy) {
 				foldercontainer.insertBefore(this.createCopyOfServer(serverOrig, folderDiv), oldCopy);
 				oldCopy.remove();
@@ -887,11 +892,12 @@ class ServerFolders {
 	}
 	
 	createCopyOfServer (serverOrig, folderDiv) {
+		var foldercontainer = document.querySelector(".foldercontainer");
 		var info = BDfunctionsDevilBro.getKeyInformation({"node":serverOrig, "key":"guild"});
 		var serverCopy = serverOrig.cloneNode(true);
 		$(serverCopy)
+			.attr("id", "copy_of_" + info.id)
 			.addClass("copy")
-			.addClass("copy_of_" + info.id)
 			.addClass("content_of_" + folderDiv.id)
 			.css("display", "")
 			.on("mouseenter." + this.getName(), {"div":serverCopy,"info":info}, this.createServerToolTip.bind(this))
@@ -912,6 +918,48 @@ class ServerFolders {
 					
 					handleContextMenu(data);
 				}
+			})
+			.on("mousedown." + this.getName(), (e) => {
+				var serverPreview = serverOrig.cloneNode(true);
+				var hoveredServer = null;
+				var placeholder = $(`<div class="guild guild-placeholder copy copy-placeholder"></div>`)[0];
+				$(serverPreview)
+					.appendTo("#app-mount")
+					.addClass("serverFoldersPreview")
+					.offset({"left":e.clientX + 5,"top":e.clientY + 5});
+				
+				$(document)
+					.off("mouseup." + this.getName()).off("mousemove." + this.getName())
+					.on("mouseup." + this.getName(), (e2) => {
+						placeholder.remove();
+						serverPreview.remove();
+						$(serverCopy).css("display","");
+						var newFolderDiv = this.getParentDivOfFolder(e2.target);
+						if (newFolderDiv && newFolderDiv != folderDiv) {
+							this.removeServerFromFolder(serverOrig, folderDiv);
+							this.addServerToFolder(serverOrig, newFolderDiv);
+						}
+						else {
+							if (hoveredServer) {
+								foldercontainer.insertBefore(serverCopy, hoveredServer.nextSibling);
+								this.updateServerPositions(folderDiv);
+							}
+						}
+						$(document).off("mouseup." + this.getName()).off("mousemove." + this.getName());
+					})
+					.on("mousemove." + this.getName(), (e2) => {
+						placeholder.remove();
+						$(serverCopy).hide();
+						$(serverPreview)
+							.show()
+							.offset({"left":e2.clientX + 5,"top":e2.clientY + 5});
+						if (foldercontainer.contains(e2.target)) {
+							hoveredServer = this.getParentDivOfServer(e2.target);
+							if (hoveredServer && hoveredServer.classList.contains("content_of_" + folderDiv.id)) {
+								foldercontainer.insertBefore(placeholder, hoveredServer.nextSibling);
+							}
+						}
+					});
 			});
 		return serverCopy;
 	}
@@ -949,10 +997,44 @@ class ServerFolders {
 		
 		$(folderDiv)
 			.addClass("closed")
-			.attr("id", folderID);
-		$(folderInner)
+			.attr("id", folderID)
 			.on("click", () => {this.openCloseFolder(folderDiv);})
 			.on("contextmenu", (e) => {this.createFolderContextMenu(folderDiv, e);})
+			.on("mousedown." + this.getName(), (e) => {
+				var folderPreview = folderDiv.cloneNode(true);
+				var hoveredFolder = null;
+				var placeholder = $(`<div class="guild guild-placeholder folder folder-placeholder"></div>`)[0];
+				$(folderPreview)
+					.hide()
+					.appendTo("#app-mount")
+					.addClass("serverFoldersPreview")
+					.offset({"left":e.clientX + 5,"top":e.clientY + 5});
+				
+				$(document)
+					.off("mouseup." + this.getName()).off("mousemove." + this.getName())
+					.on("mouseup." + this.getName(), (e2) => {
+						placeholder.remove();
+						folderPreview.remove();
+						$(folderDiv).css("display","");
+						$(document).off("mouseup." + this.getName()).off("mousemove." + this.getName());
+						if (hoveredFolder) {
+							document.querySelector(".guilds.scroller").insertBefore(folderDiv, hoveredFolder.nextSibling);
+							this.updateFolderPositions(folderDiv);
+						}
+					})
+					.on("mousemove." + this.getName(), (e2) => {
+						placeholder.remove();
+						$(folderDiv).hide();
+						$(folderPreview)
+							.show()
+							.offset({"left":e2.clientX + 5,"top":e2.clientY + 5});
+						hoveredFolder = this.getParentDivOfFolder(e2.target);
+						if (hoveredFolder) {
+							document.querySelector(".guilds.scroller").insertBefore(placeholder, hoveredFolder.nextSibling);
+						}
+					});
+			});;
+		$(folderInner)
 			.on("mouseenter", () => {this.createFolderToolTip(folderDiv);});
 		$(folder)
 			.css("background-image", "url(\"" + icons.closedicon + "\")");
@@ -985,6 +1067,19 @@ class ServerFolders {
 				data.position = i;
 				BDfunctionsDevilBro.saveData(folderID, data, this.getName(), "folders");
 			}
+		}
+	}	
+	
+	updateServerPositions (folderDiv) {
+		var data = BDfunctionsDevilBro.loadData(folderDiv.id, this.getName(), "folders");
+		if (data) {
+			var serversInData = data.servers;
+			var serversInFolder = Array.from(document.querySelectorAll(".content_of_" + folderDiv.id)).map(server => {return server.id.replace("copy_of_", "");});
+			for (var i = 0; i < serversInFolder.length; i++) {
+				BDfunctionsDevilBro.removeFromArray(serversInData, serversInFolder[i]);
+			}
+			data.servers = serversInFolder.concat(serversInData);
+			BDfunctionsDevilBro.saveData(folderDiv.id, data, this.getName(), "folders");
 		}
 	}	
 	
