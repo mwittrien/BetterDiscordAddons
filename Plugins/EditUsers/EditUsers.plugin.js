@@ -98,7 +98,7 @@ class EditUsers {
 							</div>
 							<div class="scrollerWrap-2uBjct content-1Cut5s scrollerThemed-19vinI themeGhostHairline-2H8SiW">
 								<div class="scroller-fzNley inner-tqJwAU">
-									<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO switchItem-1uofoz marginBottom20-2Ifj-2 modalTab modalTab-user" style="flex: 1 1 auto;">
+									<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginBottom20-2Ifj-2 modalTab modalTab-user" style="flex: 1 1 auto;">
 										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
 											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_username_text</h3>
 										</div>
@@ -124,7 +124,7 @@ class EditUsers {
 											</div>
 										</div>
 									</div>
-									<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO switchItem-1uofoz marginBottom20-2Ifj-2 modalTab modalTab-name" style="flex: 1 1 auto;">
+									<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginBottom20-2Ifj-2 modalTab modalTab-name" style="flex: 1 1 auto;">
 										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO" style="flex: 1 1 auto;">
 											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_colorpicker1_text</h3>
 										</div>
@@ -138,7 +138,7 @@ class EditUsers {
 											<div class="swatches2"></div>
 										</div>
 									</div>
-									<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO switchItem-1uofoz marginBottom20-2Ifj-2 modalTab modalTab-tag" style="flex: 1 1 auto;">
+									<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginBottom20-2Ifj-2 modalTab modalTab-tag" style="flex: 1 1 auto;">
 										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO" style="flex: 1 1 auto;">
 											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_colorpicker3_text</h3>
 										</div>
@@ -399,7 +399,7 @@ class EditUsers {
 	
 	onSwitch () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			this.loadAllUsers();
+			setTimeout(() => {this.loadAllUsers();}, 30000);
 			if (document.querySelector(".channel-members")) this.userListObserver.observe(document.querySelector(".channel-members"), {childList:true});
 			if (document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(document.querySelector(".messages.scroller"), {childList:true, subtree:true});
 			if (document.querySelector("#friends")) this.friendListObserver.observe(document.querySelector("#friends"), {childList:true, subtree:true});
@@ -490,16 +490,13 @@ class EditUsers {
 	}
 	
 	createContextSubMenu (e) {
-		var theme = BDfunctionsDevilBro.themeIsLightTheme() ? "" : "theme-dark";
-		
-		var targetDiv = e.target.tagName != "SPAN" ? e.target : e.target.parentNode;
-		
+		var targetDiv = e.currentTarget;
 		var userContextSubMenu = $(this.userContextSubMenuMarkup);
 		$(targetDiv).append(userContextSubMenu)
 			.off("click", ".usersettings-item")
 			.on("click", ".usersettings-item", e.data, this.showUserSettings.bind(this));
 		$(userContextSubMenu)
-			.addClass(theme)
+			.addClass(BDfunctionsDevilBro.getDiscordTheme())
 			.css("left", $(targetDiv).offset().left + "px")
 			.css("top", $(targetDiv).offset().top + "px");
 			
@@ -672,19 +669,19 @@ class EditUsers {
 		
 		if (settings.changeInMemberList) {
 			var membersList = document.querySelectorAll("div.member");
-			for (var i = 0; i < membersList.length; i++) {
+			for (let i = 0; i < membersList.length; i++) {
 				this.loadUser(membersList[i], "list", false);
 			} 
 		}
 		if (settings.changeInChatWindow) {
 			var membersChat = document.querySelectorAll("div.message-group");
-			for (var j = 0; j < membersChat.length; j++) {
+			for (let j = 0; j < membersChat.length; j++) {
 				if ($(membersChat[j]).has(".avatar-large").length > 0) {
 					this.loadUser(membersChat[j], "chat", false);
 				}
 				else {
 					var markups = membersChat[j].querySelectorAll("div.markup");
-					for (var j2 = 0; j2 < markups.length; j2++) {
+					for (let j2 = 0; j2 < markups.length; j2++) {
 						this.loadUser(markups[j2], "chat", true);
 					}
 				}
@@ -692,19 +689,19 @@ class EditUsers {
 		}
 		if (settings.changeInVoiceChat) {
 			var membersVoice = document.querySelectorAll("div.userDefault-2_cnT0");
-			for (var k = 0; k < membersVoice.length; k++) {
+			for (let k = 0; k < membersVoice.length; k++) {
 				this.loadUser(membersVoice[k].parentElement, "voice", false);
 			}
 		}
 		if (settings.changeInRecentDms) {
 			var membersRecentDMS = document.querySelectorAll("span.dms div.guild");
-			for (var l = 0; l < membersRecentDMS.length; l++) {
+			for (let l = 0; l < membersRecentDMS.length; l++) {
 				this.loadUser(membersRecentDMS[l], "recentdms", false);
 			}
 		}
 		if (settings.changeInDmsList) {
 			var membersDMS = document.querySelectorAll("div.channel.private");
-			for (var m = 0; m < membersDMS.length; m++) {
+			for (let m = 0; m < membersDMS.length; m++) {
 				this.loadUser(membersDMS[m], "dms", false);
 			}
 		}
@@ -716,7 +713,7 @@ class EditUsers {
 		}
 		if (settings.changeInFriendList) {
 			var membersFriends = document.querySelectorAll("div.friends-column");
-			for (var n = 0; n < membersFriends.length; n++) {
+			for (let n = 0; n < membersFriends.length; n++) {
 				this.loadUser(membersFriends[n], "friends", false);
 			}
 		}
@@ -743,7 +740,7 @@ class EditUsers {
 	loadUser (div, type, compact) {
 		if (!div || div.classList.contains("custom-editusers")) return;
 		
-		var {avatar, username, wrapper} = this.getAvatarNameWrapper(div);
+		let {avatar, username, wrapper} = this.getAvatarNameWrapper(div);
 		if (!avatar && !username && !wrapper) return;
 		
 		$(div).data("compact", compact);
@@ -751,9 +748,10 @@ class EditUsers {
 		var info = this.getUserInfo(compact ? $(".message-group").has(div)[0] : div);
 		if (!info) return;
 		
-		var styleInfo = BDfunctionsDevilBro.getKeyInformation({"node":wrapper,"key":"style"});
+		var styleInfo = BDfunctionsDevilBro.getKeyInformation({"node":type == "list" ? div : wrapper,"key":"style","blackList":{"child":true}});
 		
 		var data = BDfunctionsDevilBro.loadData(info.id, this.getName(), "users");
+		
 		
 		if (data) {
 			if (username) {
@@ -761,6 +759,7 @@ class EditUsers {
 				var name = data.name ? data.name : (type == "info" || type == "profil" ? info.username : this.nickNames.names[info.id]);
 				var color1 = data.color1 ? BDfunctionsDevilBro.color2RGB(data.color1) : (styleInfo ? BDfunctionsDevilBro.color2RGB(styleInfo.color) : "");
 				var color2 = data.color2 ? BDfunctionsDevilBro.color2RGB(data.color2) : "";
+				console.log(color1);
 				this.setUserName(username, name);
 				username.style.color = color1;
 				username.style.background = color2;
@@ -1243,7 +1242,7 @@ class EditUsers {
 					btn_cancel_text: 					"Отмена",
 					btn_save_text: 						"Cпасти"
 				};
-			case "uk": 	//ukranian
+			case "uk": 	//ukrainian
 				return {
 					context_localusersettings_text: 	"Налаштування локального користувач",
 					submenu_usersettings_text: 			"Змінити налаштування",
