@@ -759,7 +759,6 @@ class EditUsers {
 				var name = data.name ? data.name : (type == "info" || type == "profil" ? info.username : this.nickNames.names[info.id]);
 				var color1 = data.color1 ? BDfunctionsDevilBro.color2RGB(data.color1) : (styleInfo ? BDfunctionsDevilBro.color2RGB(styleInfo.color) : "");
 				var color2 = data.color2 ? BDfunctionsDevilBro.color2RGB(data.color2) : "";
-				console.log(color1);
 				this.setUserName(username, name);
 				username.style.color = color1;
 				username.style.background = color2;
