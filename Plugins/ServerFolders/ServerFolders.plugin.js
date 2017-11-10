@@ -51,6 +51,41 @@ class ServerFolders {
 				letter-spacing: .5px;
 				line-height: 50px;
 				text-align: center;
+			}
+			
+			.guilds-wrapper.folderopen {
+				overflow: visible !important;
+			}
+			
+			.guilds-wrapper.folderopen .scroller {
+				position: static !important;
+			}
+			
+			.guilds-wrapper.folderopen .scroller::-webkit-scrollbar {
+				display: none !important;
+			}
+			
+			.foldercontainer {
+				max-height: 98%;
+				max-width: 98%;
+				position: absolute;
+				top: 0px;
+				left: 0px;
+				z-index: 1000;
+			}
+			
+			.foldercontainer::-webkit-scrollbar {
+				display: none;
+			}
+
+			.foldercontainer .guild-inner {
+			   border-radius: 25px !important;
+			   transition: border-radius 1s;
+			}
+
+			.foldercontainer .guild-inner:hover {
+			   border-radius: 15px !important;
+			   transition: border-radius 1s;
 			}`;
 
 		this.serverContextEntryMarkup =
@@ -855,37 +890,9 @@ class ServerFolders {
 						var guildsscroller = guildswrapper.find(".guilds.scroller");
 						
 						var ChannelSizeCorrectionCSS = `
-							.guilds-wrapper.folderopen .scroller {
-								position: static !important;
-							}
-							
-							.guilds-wrapper.folderopen .scroller::-webkit-scrollbar {
-								display: none !important;
-							}
-							
 							.foldercontainer {
-								max-height: 98%;
-								max-width: 98%;
-								position: absolute;
-								top: 0px;
-								left: 0px;
-								z-index: 1000;
-								padding: ${guildsscroller.css("padding")};
-								margin: ${guildsscroller.css("margin")};
-							}
-							
-							.foldercontainer::-webkit-scrollbar {
-								display: none;
-							}
-
-							.foldercontainer .guild-inner {
-							   border-radius: 25px !important;
-							   transition: border-radius 1s;
-							}
-
-							.foldercontainer .guild-inner:hover {
-							   border-radius: 15px !important;
-							   transition: border-radius 1s;
+								padding: ${guildsscroller.css("padding")} !important;
+								margin: ${guildsscroller.css("margin")} !important;
 							}`;
 							
 						if (guildswrapper.outerHeight() > guildswrapper.outerWidth()) {
@@ -893,30 +900,28 @@ class ServerFolders {
 								.foldercontainer {
 									width: ${guildswrapper.outerWidth()}px !important;
 									left: ${guildswrapper.outerWidth()}px !important;
-									overflow-x: hidden;
-									overflow-y: scroll;
+									overflow-x: hidden !important;
+									overflow-y: scroll !important;
 								}
 								
 								.guilds-wrapper.folderopen {
-									overflow: visible !important;
 									width: calc(${guildswrapper.outerWidth()}px + ${$(".guild").outerWidth()}px + ${guildsscroller.css("padding-left")} + ${guildsscroller.css("padding-right")} + 5px) !important;
 								}`;
 						}
 						else {
 							ChannelSizeCorrectionCSS +=	`
 								.foldercontainer .guild {
-								   display: inline-block;
+								   display: inline-block !important;
 								}
 								
 								.foldercontainer {
 									height: ${guildswrapper.outerHeight()}px !important;
 									bottom: ${guildswrapper.outerHeight()}px !important;
-									overflow-x: scroll;
-									overflow-y: hidden;
+									overflow-x: scroll !important;
+									overflow-y: hidden !important;
 								}
 								
 								.guilds-wrapper.folderopen {
-									overflow: visible !important;
 									height: calc(${guildswrapper.outerHeight()}px + ${$(".guild").outerHeight()}px + ${guildsscroller.css("padding-top")} + ${guildsscroller.css("padding-bottom")} + 5px) !important;
 								}`;
 						}
