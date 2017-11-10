@@ -7,7 +7,6 @@ class ServerFolders {
 		this.serverContextObserver = new MutationObserver(() => {});
 		this.serverListObserver = new MutationObserver(() => {});
 		this.badgeObserver = new MutationObserver(() => {});
-		this.folderContextEventHandler;
 		
 		this.css = `
 			.serverfolders-modal .ui-icon-picker-icon {
@@ -246,7 +245,7 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.1.4";}
+	getVersion () {return "5.1.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -457,19 +456,20 @@ class ServerFolders {
 	}
 	
 	createContextSubMenu (e) {
+		var targetDiv = e.currentTarget;
 		var serverContextSubMenu = $(this.serverContextSubMenuMarkup);
-		$(e.currentTarget).append(serverContextSubMenu)
+		$(targetDiv).append(serverContextSubMenu)
 			.off("click", ".createfolder-item")
 			.on("click", ".createfolder-item", () => {this.createNewFolder();});
 		$(serverContextSubMenu)
 			.addClass(BDfunctionsDevilBro.getDiscordTheme())
-			.css("left", $(e.currentTarget).offset().left + "px")
-			.css("top", $(e.currentTarget).offset().top + "px");
+			.css("left", $(targetDiv).offset().left + "px")
+			.css("top", $(targetDiv).offset().top + "px");
 			
 		var serverDiv = BDfunctionsDevilBro.getDivOfServer(e.data.id);
 		var folderDiv = this.getFolderOfServer(serverDiv);
 		if (folderDiv) {
-			$(e.currentTarget).find(".removefromfolder-item")
+			$(targetDiv).find(".removefromfolder-item")
 				.removeClass("disabled")
 				.on("click", e.data, () => {this.removeServerFromFolder(serverDiv, folderDiv);});
 		}
@@ -669,7 +669,6 @@ class ServerFolders {
 				.off("click", ".unreadfolder-item")
 				.on("click", ".unreadfolder-item", () => {
 					this.clearAllReadNotifications(folderDiv);
-					this.updateFolderNotifications(folderDiv);
 				});
 		}
 		else {
@@ -682,8 +681,8 @@ class ServerFolders {
 			.css("top", e.pageY + "px");
 			
 		$(document).on("mousedown." + this.getName(), (e2) => {
+			$(document).off("mousedown." + this.getName());
 			if (folderContext.has(e2.target).length == 0) {
-				$(document).off("mousedown." + this.getName());
 				$(folderContext).remove();
 			}
 		});
@@ -729,7 +728,6 @@ class ServerFolders {
 	
 	showFolderSettings (folderDiv) {
 		$(".context-menu.folderSettings").remove();
-		$(document).unbind('mousedown', this.folderContextEventHandler);
 		
 		var folderID = folderDiv.id;
 		var data = BDfunctionsDevilBro.loadData(folderID, this.getName(), "folders");
@@ -832,7 +830,6 @@ class ServerFolders {
 	
 	removeFolder (folderDiv) {
 		$(".context-menu.folderSettings").remove();
-		$(document).unbind('mousedown', this.folderContextEventHandler);
 		
 		$(this.readIncludedServerList(folderDiv)).show();
 		
@@ -1094,11 +1091,10 @@ class ServerFolders {
 	
 	clearAllReadNotifications (folderDiv) {
 		$(".context-menu.folderSettings").remove();
-		$(document).unbind('mousedown', this.folderContextEventHandler);
 		
 		var unreadServers = BDfunctionsDevilBro.readUnreadServerList(this.readIncludedServerList(folderDiv));
 		
-		BDfunctionsDevilBro.clearReadNotifications(unreadServers);
+		BDfunctionsDevilBro.clearReadNotifications(unreadServers, () => {this.updateFolderNotifications(folderDiv);});
 	}
 	
 	getParentDivOfServer (div) {
