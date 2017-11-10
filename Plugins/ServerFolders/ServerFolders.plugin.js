@@ -51,29 +51,6 @@ class ServerFolders {
 				letter-spacing: .5px;
 				line-height: 50px;
 				text-align: center;
-			}
-			
-			.foldercontainer {
-				max-height: 98%;
-				max-width: 98%;
-				position: absolute;
-				top: 0px;
-				left: 0px;
-				z-index: 1000;
-			}
-			
-			.foldercontainer::-webkit-scrollbar {
-				display: none;
-			}
-
-			.foldercontainer .guild-inner {
-			   border-radius: 25px !important;
-			   transition: border-radius 1s;
-			}
-
-			.foldercontainer .guild-inner:hover {
-			   border-radius: 15px !important;
-			   transition: border-radius 1s;
 			}`;
 
 		this.serverContextEntryMarkup =
@@ -234,7 +211,7 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.1.1";}
+	getVersion () {return "5.1.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -368,8 +345,6 @@ class ServerFolders {
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 			
-			$(".guilds.scroller").addClass("folders");
-			
 			setTimeout(() => {
 				this.labels = this.setLabelsByLanguage();
 				this.changeLanguageStrings();
@@ -390,8 +365,8 @@ class ServerFolders {
 			$("div.guild.folder").remove();
 			$(BDfunctionsDevilBro.readServerList()).show();
 			
-			$(".guilds.scroller").removeClass("folders");
-			$(".guilds.scroller div.guild:not(.folder)").off("mousedown." + this.getName());
+			$(".guilds-wrapper").removeClass("folderopen");
+			$(".guilds.scroller div.guild").off("mousedown." + this.getName());
 			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName());
 			BDfunctionsDevilBro.removeLocalStyle("ChannelSizeCorrection");
@@ -477,7 +452,7 @@ class ServerFolders {
 	}
 	
 	addDragListener () {
-		$(".guilds.scroller div.guild:not(.folder)")
+		$(".guilds.scroller div.guild:not(.folder):not(.copy)")
 			.off("mousedown." + this.getName())
 			.on("mousedown." + this.getName(), (e) => {
 				if (BDfunctionsDevilBro.pressedKeys.includes(17)) {				
@@ -864,30 +839,53 @@ class ServerFolders {
 						.addClass("open")
 						.removeClass("closed");
 						
-					if (!document.querySelector(".foldercontainer")) {
-						$(`<div class="foldercontainer"></div>`).appendTo(".guilds.scroller");
+					var alreadyOpen = document.querySelector(".foldercontainer");
+						
+					if (!alreadyOpen) {
+						$(".guilds-wrapper").addClass("folderopen");
+						$(`<div class="foldercontainer"></div>`).insertAfter(".guild.folder:last");
 					}
 					
 					for (var i = 0; i < includedServers.length; i++) {
 						this.addCopyToFolderContent(includedServers[i], folderDiv);
 					}
 					
-					if (!document.querySelector("#ChannelSizeCorrectionCSS")) {
+					if (!alreadyOpen) {
 						var guildswrapper = $(".guilds-wrapper");
 						var guildsscroller = guildswrapper.find(".guilds.scroller");
 						
 						var ChannelSizeCorrectionCSS = `
-							.guilds-wrapper .scroller {
+							.guilds-wrapper.folderopen .scroller {
 								position: static !important;
 							}
 							
-							.guilds-wrapper .scroller::-webkit-scrollbar {
+							.guilds-wrapper.folderopen .scroller::-webkit-scrollbar {
 								display: none !important;
 							}
 							
 							.foldercontainer {
+								max-height: 98%;
+								max-width: 98%;
+								position: absolute;
+								top: 0px;
+								left: 0px;
+								z-index: 1000;
 								padding: ${guildsscroller.css("padding")};
 								margin: ${guildsscroller.css("margin")};
+							}
+							
+							.foldercontainer::-webkit-scrollbar {
+								display: none;
+							}
+
+							.foldercontainer .guild-inner {
+							   border-radius: 25px !important;
+							   transition: border-radius 1s;
+							}
+
+							.foldercontainer .guild-inner:hover {
+							   border-radius: 15px !important;
+							   transition: border-radius 1s;
 							}`;
 							
 						if (guildswrapper.outerHeight() > guildswrapper.outerWidth()) {
@@ -899,7 +897,7 @@ class ServerFolders {
 									overflow-y: scroll;
 								}
 								
-								.guilds-wrapper {
+								.guilds-wrapper.folderopen {
 									overflow: visible !important;
 									width: calc(${guildswrapper.outerWidth()}px + ${$(".guild").outerWidth()}px + ${guildsscroller.css("padding-left")} + ${guildsscroller.css("padding-right")} + 5px) !important;
 								}`;
@@ -917,7 +915,7 @@ class ServerFolders {
 									overflow-y: hidden;
 								}
 								
-								.guilds-wrapper {
+								.guilds-wrapper.folderopen {
 									overflow: visible !important;
 									height: calc(${guildswrapper.outerHeight()}px + ${$(".guild").outerHeight()}px + ${guildsscroller.css("padding-top")} + ${guildsscroller.css("padding-bottom")} + 5px) !important;
 								}`;
@@ -1039,6 +1037,7 @@ class ServerFolders {
 		var foldercontainer = document.querySelector(".foldercontainer");
 		if (foldercontainer && !foldercontainer.firstChild) {
 			foldercontainer.remove();
+			$(".guilds-wrapper").removeClass("folderopen");
 			BDfunctionsDevilBro.removeLocalStyle("ChannelSizeCorrection");
 		}
 	}
