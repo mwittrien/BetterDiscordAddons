@@ -553,9 +553,27 @@ BDfunctionsDevilBro.removeFromArray = function (array, value) {
 
 BDfunctionsDevilBro.onSwitchFix = function (plugin) {
 	var switchFixObserver = new MutationObserver((changes) => {
-		changes.forEach((change) => {
-			if (change.addedNodes.length && change.addedNodes[0] instanceof Element && (change.addedNodes[0].classList.contains("messages-wrapper") || change.addedNodes[0].classList.contains("activityFeed-HeiGwL") || change.addedNodes[0].id === "friends")) BDfunctionsDevilBro.triggerOnSwitch(plugin);
-			if (change.removedNodes.length && change.removedNodes[0] instanceof Element && (change.removedNodes[0].classList.contains("activityFeed-HeiGwL") || change.removedNodes[0].id === "friends")) BDfunctionsDevilBro.triggerOnSwitch(plugin);
+		changes.forEach((change) => { 
+			if (change.addedNodes) {
+				change.addedNodes.forEach((node) => {
+					if (plugin.onSwitchTriggered) return;
+					else if (node && node.id === "friends") BDfunctionsDevilBro.triggerOnSwitch(plugin); 
+					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("no-topic")) 		BDfunctionsDevilBro.triggerOnSwitch(plugin); 
+					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("channel-topic")) 	BDfunctionsDevilBro.triggerOnSwitch(plugin); 
+					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("noTopic-3Rq-dz")) 	BDfunctionsDevilBro.triggerOnSwitch(plugin); 
+					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("topic-1KFf6J")) 	BDfunctionsDevilBro.triggerOnSwitch(plugin); 
+				});
+			}
+			if (change.removedNodes) {
+				change.removedNodes.forEach((node) => {
+					if (plugin.onSwitchTriggered) return;
+					else if (node && node.id === "friends") BDfunctionsDevilBro.triggerOnSwitch(plugin); 
+					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("no-topic")) 		BDfunctionsDevilBro.triggerOnSwitch(plugin); 
+					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("channel-topic")) 	BDfunctionsDevilBro.triggerOnSwitch(plugin); 
+					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("noTopic-3Rq-dz")) 	BDfunctionsDevilBro.triggerOnSwitch(plugin); 
+					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("topic-1KFf6J")) 	BDfunctionsDevilBro.triggerOnSwitch(plugin); 
+				});
+			}
 		});
 	});
 	switchFixObserver.observe(document.querySelector(":-webkit-any(.chat, #friends, .noChannel-2EQ0a9, .activityFeed-HeiGwL)").parentNode, {childList: true, subtree:true});
@@ -567,7 +585,7 @@ BDfunctionsDevilBro.triggerOnSwitch = function (plugin) {
 	plugin.onSwitch();
 	setTimeout(() => {
 		plugin.onSwitchTriggered = false;
-	},1);
+	},1000);
 };
 
 BDfunctionsDevilBro.getMyUserData = function () {
@@ -957,11 +975,11 @@ BDfunctionsDevilBro.regEscape = function (string) {
 	return string.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
 };
 
-BDfunctionsDevilBro.clearReadNotifications = function (servers) {
+BDfunctionsDevilBro.clearReadNotifications = function (servers, callback) {
 	if (!servers) return;
 	servers = Array.isArray(servers) ? servers : Array.of(servers);
 	servers.forEach(
-			(server,i) => {
+			(server, i) => {
 				setTimeout(() => {
 					var handleContextMenu = BDfunctionsDevilBro.getKeyInformation({"node":server.firstElementChild, "key":"handleContextMenu", "blackList":{"_owner":true}});
 					
@@ -976,8 +994,8 @@ BDfunctionsDevilBro.clearReadNotifications = function (servers) {
 						
 						var contextentries = $(".context-menu .item-group");
 						
-						for (var i = 0; contextentries.length > i; i++) {
-							var ele = contextentries[i];
+						for (var j = 0; contextentries.length > j; j++) {
+							var ele = contextentries[j];
 							var contextType = BDfunctionsDevilBro.getKeyInformation({"node":ele, "key":"displayName", "value":"GuildMarkReadItem"});
 							if (contextType) {
 								ele.firstElementChild.click();
@@ -985,6 +1003,7 @@ BDfunctionsDevilBro.clearReadNotifications = function (servers) {
 							}
 						}
 					}
+					if (i == servers.length-1 && typeof callback === "function") callback();
 				},i*100);
 			}
 		); 
