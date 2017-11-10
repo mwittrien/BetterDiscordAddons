@@ -562,7 +562,40 @@ class ServerFolders {
 			.addClass("closed")
 			.attr("id", folderID)
 			.on("click", () => {this.openCloseFolder(folderDiv);})
-			.on("contextmenu", (e) => {this.createFolderContextMenu(folderDiv, e);});
+			.on("contextmenu", (e) => {this.createFolderContextMenu(folderDiv, e);})
+			.on("mousedown." + this.getName(), (e) => {
+				var folderPreview = folderDiv.cloneNode(true);
+				var hoveredFolder = null;
+				var placeholder = $(`<div class="guild guild-placeholder folder folder-placeholder"></div>`)[0];
+				$(folderPreview)
+					.hide()
+					.appendTo("#app-mount")
+					.addClass("serverFoldersPreview")
+					.offset({"left":e.clientX + 5,"top":e.clientY + 5});
+				
+				$(document)
+					.off("mouseup." + this.getName()).off("mousemove." + this.getName())
+					.on("mouseup." + this.getName(), (e2) => {
+						placeholder.remove();
+						folderPreview.remove();
+						$(folderDiv).css("display","");
+						$(document).off("mouseup." + this.getName()).off("mousemove." + this.getName());
+						if (hoveredFolder) {
+							document.querySelector(".guilds.scroller").insertBefore(folderDiv, hoveredFolder.nextSibling);
+							this.updateFolderPositions(folderDiv);
+						}
+					})
+					.on("mousemove." + this.getName(), (e2) => {
+						placeholder.remove();
+						$(folderDiv).hide();
+						$(folderPreview)
+							.show()
+							.offset({"left":e2.clientX + 5,"top":e2.clientY + 5});
+						hoveredFolder = this.getParentDivOfFolder(e2.target);
+						if (hoveredFolder) {
+							document.querySelector(".guilds.scroller").insertBefore(placeholder, hoveredFolder.nextSibling);
+						}
+					});
 		$(folderInner)
 			.on("mouseenter", () => {this.createFolderToolTip(folderDiv);});
 		$(folder)
