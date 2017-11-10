@@ -596,6 +596,7 @@ class ServerFolders {
 							document.querySelector(".guilds.scroller").insertBefore(placeholder, hoveredFolder.nextSibling);
 						}
 					});
+			});
 		$(folderInner)
 			.on("mouseenter", () => {this.createFolderToolTip(folderDiv);});
 		$(folder)
