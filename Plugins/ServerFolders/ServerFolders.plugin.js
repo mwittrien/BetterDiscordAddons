@@ -850,7 +850,7 @@ class ServerFolders {
 						
 					if (!alreadyOpen) {
 						$(".guilds-wrapper").addClass("folderopen");
-						$(`<div class="foldercontainer"></div>`).insertAfter(".guilds > .guild:last");
+						$(`<div class="foldercontainer"></div>`).insertAfter(".guild.guilds-add");
 					}
 					
 					for (var i = 0; i < includedServers.length; i++) {
