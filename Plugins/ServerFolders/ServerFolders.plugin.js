@@ -305,7 +305,6 @@ class ServerFolders {
 						var node = change.target;
 						if (document.querySelector(".dms").contains(node)) return;
 						if (change.type == "attributes" && change.attributeName == "class" && node && node.classList && node.classList.contains("guild") && !node.classList.contains("folder") && !node.classList.contains("copy") && !node.classList.contains("guilds-add") && !node.querySelector(".guilds-error")) {
-							this.addDragListener();
 							var serverDiv = node;
 							var folderDiv = this.getFolderOfServer(serverDiv);
 							if (folderDiv) {
@@ -316,7 +315,6 @@ class ServerFolders {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (node && node.classList && node.classList.contains("guild") && !node.classList.contains("folder") && !node.classList.contains("copy") && !node.classList.contains("guilds-add") && !node.querySelector(".guilds-error")) {
-									this.addDragListener();
 									var serverDiv = node;
 									var folderDiv = this.getFolderOfServer(serverDiv);
 									if (folderDiv) {
@@ -339,7 +337,6 @@ class ServerFolders {
 						if (change.removedNodes) {
 							change.removedNodes.forEach((node) => {
 								if (node && node.classList && node.classList.contains("guild") && !node.classList.contains("folder") && !node.classList.contains("copy") && !node.classList.contains("guilds-add") && !node.querySelector(".guilds-error")) {
-									this.addDragListener();
 									var serverDiv = node;
 									var folderDiv = this.getFolderOfServer(serverDiv);
 									if (folderDiv) {
@@ -401,7 +398,7 @@ class ServerFolders {
 			$(BDfunctionsDevilBro.readServerList()).show();
 			
 			$(".guilds-wrapper").removeClass("folderopen");
-			$(".guilds.scroller div.guild").off("mousedown." + this.getName());
+			$(".guilds.scroller").off("mousedown." + this.getName());
 			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName());
 			BDfunctionsDevilBro.removeLocalStyle("ChannelSizeCorrection");
@@ -487,15 +484,15 @@ class ServerFolders {
 	}
 	
 	addDragListener () {
-		$(".guilds.scroller div.guild:not(.folder, .copy)")
+		$(".guilds.scroller")
 			.off("mousedown." + this.getName())
-			.on("mousedown." + this.getName(), (e) => {
-				if (BDfunctionsDevilBro.pressedKeys.includes(17)) {				
+			.on("mousedown." + this.getName(), "div.guild:not(.folder, .copy)", (e) => {
+				if (BDfunctionsDevilBro.pressedKeys.includes(17)) {
 					e.stopPropagation();
 					e.preventDefault();
 					var draggedServer = this.getParentDivOfServer(e.target);
 					
-					if (draggedServer) {
+					if (draggedServer && BDfunctionsDevilBro.getKeyInformation({"node":draggedServer,"key":"guild"})) {
 						var serverPreview = draggedServer.cloneNode(true);
 						$(serverPreview)
 							.appendTo("#app-mount")
