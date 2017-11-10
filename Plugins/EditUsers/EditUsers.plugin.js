@@ -399,7 +399,7 @@ class EditUsers {
 	
 	onSwitch () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			setTimeout(() => {this.loadAllUsers();}, 30000);
+			this.loadAllUsers();
 			if (document.querySelector(".channel-members")) this.userListObserver.observe(document.querySelector(".channel-members"), {childList:true});
 			if (document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(document.querySelector(".messages.scroller"), {childList:true, subtree:true});
 			if (document.querySelector("#friends")) this.friendListObserver.observe(document.querySelector("#friends"), {childList:true, subtree:true});
