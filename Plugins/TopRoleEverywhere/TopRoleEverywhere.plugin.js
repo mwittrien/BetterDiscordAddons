@@ -39,7 +39,7 @@ class TopRoleEverywhere {
 
 	getDescription () {return "Adds the highest role of a user as a tag.";}
 
-	getVersion () {return "2.4.0";}
+	getVersion () {return "2.4.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -241,7 +241,7 @@ class TopRoleEverywhere {
 		}
 	}
 	
-	addRoleTag(wrapper, type, serverID, compact) {
+	addRoleTag (wrapper, type, serverID, compact) {
 		if (!wrapper) return;
 		if (!this.userRoles[serverID]) this.userRoles[serverID] = {};
 		var member = wrapper.querySelector("div.member-username") || wrapper.querySelector("span.username-wrapper");
@@ -251,7 +251,7 @@ class TopRoleEverywhere {
 			var userInfo = 
 				compact ? BDfunctionsDevilBro.getKeyInformation({"node":wrapper,"key":"message"}).author : BDfunctionsDevilBro.getKeyInformation({"node":wrapper,"key":"user"});
 			if (!userInfo || (userInfo.bot && this.getSettings().disableForBots)) return;
-			var styleInfo = BDfunctionsDevilBro.getKeyInformation({"node":member,"key":"style"});
+			var styleInfo = BDfunctionsDevilBro.getKeyInformation({"node":type == "list" ? wrapper : member,"key":"style","blackList":{"child":true}});
 			var roleName = null;
 			var roleColor = null;
 			var userID = userInfo.id;
