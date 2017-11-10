@@ -246,7 +246,7 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.1.3";}
+	getVersion () {return "5.1.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -457,23 +457,19 @@ class ServerFolders {
 	}
 	
 	createContextSubMenu (e) {
-		var theme = BDfunctionsDevilBro.themeIsLightTheme() ? "" : "theme-dark";
-		
-		var targetDiv = e.target.tagName != "SPAN" ? e.target : e.target.parentNode;
-		
 		var serverContextSubMenu = $(this.serverContextSubMenuMarkup);
-		$(targetDiv).append(serverContextSubMenu)
+		$(e.currentTarget).append(serverContextSubMenu)
 			.off("click", ".createfolder-item")
 			.on("click", ".createfolder-item", () => {this.createNewFolder();});
 		$(serverContextSubMenu)
-			.addClass(theme)
-			.css("left", $(targetDiv).offset().left + "px")
-			.css("top", $(targetDiv).offset().top + "px");
+			.addClass(BDfunctionsDevilBro.getDiscordTheme())
+			.css("left", $(e.currentTarget).offset().left + "px")
+			.css("top", $(e.currentTarget).offset().top + "px");
 			
 		var serverDiv = BDfunctionsDevilBro.getDivOfServer(e.data.id);
 		var folderDiv = this.getFolderOfServer(serverDiv);
 		if (folderDiv) {
-			$(targetDiv).find(".removefromfolder-item")
+			$(e.currentTarget).find(".removefromfolder-item")
 				.removeClass("disabled")
 				.on("click", e.data, () => {this.removeServerFromFolder(serverDiv, folderDiv);});
 		}
@@ -567,17 +563,7 @@ class ServerFolders {
 		
 		this.showFolderSettings(folderDiv);
 		
-		this.updateFolderNotifications(folderDiv);
-		
 		this.updateFolderPositions();
-	}
-	
-	loadFolder (data) {
-		var folderDiv = this.createFolderDiv(data);
-		
-		this.updateFolderNotifications(folderDiv);
-		
-		$(this.readIncludedServerList(folderDiv)).hide();
 	}
 	
 	loadAllFolders () {
@@ -585,12 +571,15 @@ class ServerFolders {
 		var sortedFolders = [];
 		
 		for (var id in folders) {
-			var data = folders[id];
-			sortedFolders[data.position] = data;
+			sortedFolders[folders[id].position] = folders[id];
 		}
 		
 		for (var i = 0; i < sortedFolders.length; i++) {
-			if (sortedFolders[i]) this.loadFolder(sortedFolders[i]);
+			var data = sortedFolders[i];
+			if (data) {
+				var folderDiv = this.createFolderDiv(data);
+				$(this.readIncludedServerList(folderDiv)).hide();
+			}
 		}
 	}
 	
@@ -645,6 +634,8 @@ class ServerFolders {
 		$(folder)
 			.css("background-image", "url(\"" + data.icons.closedicon + "\")");
 			
+		this.updateFolderNotifications(folderDiv);
+			
 		return folderDiv;
 	}
 	
@@ -662,8 +653,6 @@ class ServerFolders {
 	}
 	
 	createFolderContextMenu (folderDiv, e) {
-		var includedServers = this.readIncludedServerList(folderDiv);
-		
 		var folderContext = $(this.folderContextMarkup);
 		$(".app").append(folderContext)
 			.off("click", ".foldersettings-item")
@@ -675,31 +664,29 @@ class ServerFolders {
 				this.removeFolder(folderDiv);
 			});
 		
-		if (BDfunctionsDevilBro.readUnreadServerList(includedServers).length > 0) {
+		if (BDfunctionsDevilBro.readUnreadServerList(this.readIncludedServerList(folderDiv)).length > 0) {
 			folderContext
 				.off("click", ".unreadfolder-item")
 				.on("click", ".unreadfolder-item", () => {
 					this.clearAllReadNotifications(folderDiv);
+					this.updateFolderNotifications(folderDiv);
 				});
 		}
 		else {
 			folderContext.find(".unreadfolder-item").addClass("disabled");
 		}
 		
-		var theme = BDfunctionsDevilBro.themeIsLightTheme() ? "" : "theme-dark";
-		
 		folderContext
-			.addClass(theme)
+			.addClass(BDfunctionsDevilBro.getDiscordTheme())
 			.css("left", e.pageX + "px")
 			.css("top", e.pageY + "px");
 			
-		this.folderContextEventHandler = (event) => {	
-			if (folderContext.has(event.target).length == 0) {
-				$(document).unbind('mousedown', this.folderContextEventHandler);
+		$(document).on("mousedown." + this.getName(), (e2) => {
+			if (folderContext.has(e2.target).length == 0) {
+				$(document).off("mousedown." + this.getName());
 				$(folderContext).remove();
 			}
-		};
-		$(document).bind('mousedown', this.folderContextEventHandler);
+		});
 	}
 	
 	createFolderToolTip (folderDiv) {
