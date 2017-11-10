@@ -553,27 +553,9 @@ BDfunctionsDevilBro.removeFromArray = function (array, value) {
 
 BDfunctionsDevilBro.onSwitchFix = function (plugin) {
 	var switchFixObserver = new MutationObserver((changes) => {
-		changes.forEach((change) => { 
-			if (change.addedNodes) {
-				change.addedNodes.forEach((node) => {
-					if (plugin.onSwitchTriggered) return;
-					else if (node && node.id === "friends") BDfunctionsDevilBro.triggerOnSwitch(plugin); 
-					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("no-topic")) 		BDfunctionsDevilBro.triggerOnSwitch(plugin); 
-					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("channel-topic")) 	BDfunctionsDevilBro.triggerOnSwitch(plugin); 
-					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("noTopic-3Rq-dz")) 	BDfunctionsDevilBro.triggerOnSwitch(plugin); 
-					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("topic-1KFf6J")) 	BDfunctionsDevilBro.triggerOnSwitch(plugin); 
-				});
-			}
-			if (change.removedNodes) {
-				change.removedNodes.forEach((node) => {
-					if (plugin.onSwitchTriggered) return;
-					else if (node && node.id === "friends") BDfunctionsDevilBro.triggerOnSwitch(plugin); 
-					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("no-topic")) 		BDfunctionsDevilBro.triggerOnSwitch(plugin); 
-					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("channel-topic")) 	BDfunctionsDevilBro.triggerOnSwitch(plugin); 
-					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("noTopic-3Rq-dz")) 	BDfunctionsDevilBro.triggerOnSwitch(plugin); 
-					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("topic-1KFf6J")) 	BDfunctionsDevilBro.triggerOnSwitch(plugin); 
-				});
-			}
+		changes.forEach((change) => {
+			if (change.addedNodes.length && change.addedNodes[0] instanceof Element && (change.addedNodes[0].classList.contains("messages-wrapper") || change.addedNodes[0].classList.contains("activityFeed-HeiGwL") || change.addedNodes[0].id === "friends")) BDfunctionsDevilBro.triggerOnSwitch(plugin);
+			if (change.removedNodes.length && change.removedNodes[0] instanceof Element && (change.removedNodes[0].classList.contains("activityFeed-HeiGwL") || change.removedNodes[0].id === "friends")) BDfunctionsDevilBro.triggerOnSwitch(plugin);
 		});
 	});
 	switchFixObserver.observe(document.querySelector(":-webkit-any(.chat, #friends, .noChannel-2EQ0a9, .activityFeed-HeiGwL)").parentNode, {childList: true, subtree:true});
@@ -700,11 +682,6 @@ BDfunctionsDevilBro.themeIsLightTheme = function () {
 		return true;
 	}
 	return false;
-};
-
-BDfunctionsDevilBro.getDiscordTheme = function () {
-	if ($(".theme-light").length > $(".theme-dark").length) return "theme-light";
-	else return "theme-dark";
 };
 
 BDfunctionsDevilBro.saveAllData = function (settings, pluginName, keyName) {
@@ -1441,6 +1418,11 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 
 BDfunctionsDevilBro.getSwatchColor = function (swatch) {
 	return !$(".ui-color-picker-" + swatch + ".nocolor.selected")[0] ? BDfunctionsDevilBro.color2COMP($(".ui-color-picker-" + swatch + ".selected").css("background-color")) : null;
+};
+
+BDfunctionsDevilBro.getDiscordTheme = function () {
+	if ($(".theme-light").length > $(".theme-dark").length) return "theme-light";
+	else return "theme-dark";
 };
 
 BDfunctionsDevilBro.getDiscordLanguage = function () {
