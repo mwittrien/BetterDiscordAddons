@@ -487,7 +487,7 @@ class ServerFolders {
 	}
 	
 	addDragListener () {
-		$(".guilds.scroller div.guild:not(.folder):not(.copy)")
+		$(".guilds.scroller div.guild:not(.folder, .copy)")
 			.off("mousedown." + this.getName())
 			.on("mousedown." + this.getName(), (e) => {
 				if (BDfunctionsDevilBro.pressedKeys.includes(17)) {				
