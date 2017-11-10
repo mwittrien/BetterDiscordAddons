@@ -234,7 +234,7 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.1.0";}
+	getVersion () {return "5.1.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -552,6 +552,42 @@ class ServerFolders {
 		var color4 = 		null;
 		var servers = 		[];
 		
+		var data = {folderID,folderName,position,iconID,icons,color1,color2,color3,color4,servers};
+		
+		var folderDiv = this.createFolderDiv(data);
+		
+		BDfunctionsDevilBro.saveData(folderID, data, this.getName(), "folders");
+		
+		this.showFolderSettings(folderDiv);
+		
+		this.updateFolderNotifications(folderDiv);
+		
+		this.updateFolderPositions();
+	}
+	
+	loadFolder (data) {
+		var folderDiv = this.createFolderDiv(data);
+		
+		this.updateFolderNotifications(folderDiv);
+		
+		$(this.readIncludedServerList(folderDiv)).hide();
+	}
+	
+	loadAllFolders () {
+		var folders = BDfunctionsDevilBro.loadAllData(this.getName(), "folders");
+		var sortedFolders = [];
+		
+		for (var id in folders) {
+			var data = folders[id];
+			sortedFolders[data.position] = data;
+		}
+		
+		for (var i = 0; i < sortedFolders.length; i++) {
+			if (sortedFolders[i]) this.loadFolder(sortedFolders[i]);
+		}
+	}
+	
+	createFolderDiv (data) {
 		var folderDiv = $(this.folderIconMarkup)[0];
 		$(folderDiv).insertBefore(BDfunctionsDevilBro.readServerList()[0]);
 			
@@ -560,7 +596,7 @@ class ServerFolders {
 		
 		$(folderDiv)
 			.addClass("closed")
-			.attr("id", folderID)
+			.attr("id", data.folderID)
 			.on("click", () => {this.openCloseFolder(folderDiv);})
 			.on("contextmenu", (e) => {this.createFolderContextMenu(folderDiv, e);})
 			.on("mousedown." + this.getName(), (e) => {
@@ -600,13 +636,9 @@ class ServerFolders {
 		$(folderInner)
 			.on("mouseenter", () => {this.createFolderToolTip(folderDiv);});
 		$(folder)
-			.css("background-image", "url(\"" + icons.closedicon + "\")");
-		
-		BDfunctionsDevilBro.saveData(folderID, {folderID,folderName,position,iconID,icons,color1,color2,color3,color4,servers}, this.getName(), "folders");
-		
-		this.showFolderSettings(folderDiv);
-		this.updateFolderNotifications(folderDiv);
-		this.updateFolderPositions();
+			.css("background-image", "url(\"" + data.icons.closedicon + "\")");
+			
+		return folderDiv;
 	}
 	
 	generateFolderID () {
@@ -1008,87 +1040,6 @@ class ServerFolders {
 		if (foldercontainer && !foldercontainer.firstChild) {
 			foldercontainer.remove();
 			BDfunctionsDevilBro.removeLocalStyle("ChannelSizeCorrection");
-		}
-	}
-	
-	loadFolder (data) {
-		var folderID = 		data.folderID;
-		var folderName = 	data.folderName;
-		var position = 		data.position;
-		var iconID = 		data.iconID;
-		var icons = 		data.icons;
-		var color1 = 		data.color1;
-		var color2 = 		data.color2;
-		var color3 = 		data.color3;
-		var color4 = 		data.color4;
-		var servers = 		data.servers;
-		
-		var folderDiv = $(this.folderIconMarkup)[0];
-		$(folderDiv).insertBefore(BDfunctionsDevilBro.readServerList()[0]);
-			
-		var folderInner = folderDiv.querySelector(".guild-inner");
-		var folder = folderDiv.querySelector(".avatar-small");
-		
-		$(folderDiv)
-			.addClass("closed")
-			.attr("id", folderID)
-			.on("click", () => {this.openCloseFolder(folderDiv);})
-			.on("contextmenu", (e) => {this.createFolderContextMenu(folderDiv, e);})
-			.on("mousedown." + this.getName(), (e) => {
-				var folderPreview = folderDiv.cloneNode(true);
-				var hoveredFolder = null;
-				var placeholder = $(`<div class="guild guild-placeholder folder folder-placeholder"></div>`)[0];
-				$(folderPreview)
-					.hide()
-					.appendTo("#app-mount")
-					.addClass("serverFoldersPreview")
-					.offset({"left":e.clientX + 5,"top":e.clientY + 5});
-				
-				$(document)
-					.off("mouseup." + this.getName()).off("mousemove." + this.getName())
-					.on("mouseup." + this.getName(), (e2) => {
-						placeholder.remove();
-						folderPreview.remove();
-						$(folderDiv).css("display","");
-						$(document).off("mouseup." + this.getName()).off("mousemove." + this.getName());
-						if (hoveredFolder) {
-							document.querySelector(".guilds.scroller").insertBefore(folderDiv, hoveredFolder.nextSibling);
-							this.updateFolderPositions(folderDiv);
-						}
-					})
-					.on("mousemove." + this.getName(), (e2) => {
-						placeholder.remove();
-						$(folderDiv).hide();
-						$(folderPreview)
-							.show()
-							.offset({"left":e2.clientX + 5,"top":e2.clientY + 5});
-						hoveredFolder = this.getParentDivOfFolder(e2.target);
-						if (hoveredFolder) {
-							document.querySelector(".guilds.scroller").insertBefore(placeholder, hoveredFolder.nextSibling);
-						}
-					});
-			});;
-		$(folderInner)
-			.on("mouseenter", () => {this.createFolderToolTip(folderDiv);});
-		$(folder)
-			.css("background-image", "url(\"" + icons.closedicon + "\")");
-		
-		this.updateFolderNotifications(folderDiv);
-		
-		$(this.readIncludedServerList(folderDiv)).hide();
-	}
-	
-	loadAllFolders () {
-		var folders = BDfunctionsDevilBro.loadAllData(this.getName(), "folders");
-		var sortedFolders = [];
-		
-		for (var id in folders) {
-			var data = folders[id];
-			sortedFolders[data.position] = data;
-		}
-		
-		for (var i = 0; i < sortedFolders.length; i++) {
-			if (sortedFolders[i]) this.loadFolder(sortedFolders[i]);
 		}
 	}
 	
