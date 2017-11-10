@@ -702,6 +702,11 @@ BDfunctionsDevilBro.themeIsLightTheme = function () {
 	return false;
 };
 
+BDfunctionsDevilBro.getDiscordTheme = function () {
+	if ($(".theme-light").length > $(".theme-dark").length) return "theme-light";
+	else return "theme-dark";
+};
+
 BDfunctionsDevilBro.saveAllData = function (settings, pluginName, keyName) {
 	bdPluginStorage.set(pluginName, keyName, settings);
 };
