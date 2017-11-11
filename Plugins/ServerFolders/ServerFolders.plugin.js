@@ -245,7 +245,7 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.2.1";}
+	getVersion () {return "5.2.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -307,7 +307,7 @@ class ServerFolders {
 				changes.forEach(
 					(change, i) => {
 						if (change.type == "attributes" && change.attributeName == "class") {
-							var serverDiv = this.getParentDivOfServer(change.target);
+							var serverDiv = this.getGuildParentDiv(change.target, "guild");
 							var folderDiv = this.getFolderOfServer(serverDiv);
 							if (folderDiv) {
 								this.updateCopyInFolderContent(serverDiv, folderDiv);
@@ -316,7 +316,7 @@ class ServerFolders {
 						}
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								var serverDiv = this.getParentDivOfServer(node);
+								var serverDiv = this.getGuildParentDiv(node, "guild");
 								var folderDiv = this.getFolderOfServer(serverDiv);
 								if (folderDiv) {
 									this.updateCopyInFolderContent(serverDiv, folderDiv);
@@ -328,7 +328,7 @@ class ServerFolders {
 						}
 						if (change.removedNodes) {
 							change.removedNodes.forEach((node) => {
-								var serverDiv = this.getParentDivOfServer(node);
+								var serverDiv = this.getGuildParentDiv(node, "guild");
 								var folderDiv = this.getFolderOfServer(serverDiv);
 								if (folderDiv && !node.classList.contains("badge")) {
 									var info = BDfunctionsDevilBro.getKeyInformation({"node":serverDiv, "key":"guild"});
@@ -345,7 +345,7 @@ class ServerFolders {
 			this.badgeObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
-						var serverDiv = this.getParentDivOfServer(change.target);
+						var serverDiv = this.getGuildParentDiv(change.target, "guild");
 						var folderDiv = this.getFolderOfServer(serverDiv);
 						if (folderDiv) {
 							this.updateCopyInFolderContent(serverDiv, folderDiv);
@@ -477,7 +477,7 @@ class ServerFolders {
 				if (BDfunctionsDevilBro.pressedKeys.includes(17)) {
 					e.stopPropagation();
 					e.preventDefault();
-					var draggedServer = this.getParentDivOfServer(e.target);
+					var draggedServer = this.getGuildParentDiv(e.target, "guild");
 					
 					if (draggedServer && BDfunctionsDevilBro.getKeyInformation({"node":draggedServer,"key":"guild"})) {
 						var serverPreview = draggedServer.cloneNode(true);
@@ -489,7 +489,7 @@ class ServerFolders {
 						$(document)
 							.off("mouseup." + this.getName()).off("mousemove." + this.getName())
 							.on("mouseup." + this.getName(), (e2) => {
-								var folderDiv = this.getParentDivOfFolder(e2.target);
+								var folderDiv = this.getGuildParentDiv(e2.target, "folder");
 								if (folderDiv) {
 									this.addServerToFolder(draggedServer, folderDiv);
 								}
@@ -587,6 +587,7 @@ class ServerFolders {
 			.on("click", () => {this.openCloseFolder(folderDiv);})
 			.on("contextmenu", (e) => {this.createFolderContextMenu(folderDiv, e);})
 			.on("mousedown." + this.getName(), (e) => {
+				var mouseTimeout = null;
 				var folderPreview = folderDiv.cloneNode(true);
 				var hoveredElement = null;
 				var placeholder = $(`<div class="guild guild-placeholder folder folder-placeholder"></div>`)[0];
@@ -597,8 +598,9 @@ class ServerFolders {
 					.offset({"left":e.clientX + 5,"top":e.clientY + 5});
 				
 				$(document)
-					.off("mouseup." + this.getName()).off("mousemove." + this.getName())
+					.off("mouseup." + this.getName())
 					.on("mouseup." + this.getName(), (e2) => {
+						clearTimeout(mouseTimeout);
 						placeholder.remove();
 						folderPreview.remove();
 						$(folderDiv).css("display","");
@@ -607,18 +609,22 @@ class ServerFolders {
 							document.querySelector(".guilds.scroller").insertBefore(folderDiv, hoveredElement.nextSibling);
 							this.updateFolderPositions(folderDiv);
 						}
-					})
-					.on("mousemove." + this.getName(), (e2) => {
-						placeholder.remove();
-						$(folderDiv).hide();
-						$(folderPreview)
-							.show()
-							.offset({"left":e2.clientX + 5,"top":e2.clientY + 5});
-						hoveredElement = this.getParentDivOfFolder(e2.target) || this.getParentDivOfServer(e2.target);
-						if (hoveredElement) {
-							document.querySelector(".guilds.scroller").insertBefore(placeholder, hoveredElement.nextSibling);
-						}
 					});
+				mouseTimeout = setTimeout(() => {
+					$(document)
+						.off("mousemove." + this.getName())
+						.on("mousemove." + this.getName(), (e2) => {
+							placeholder.remove();
+							$(folderDiv).hide();
+							$(folderPreview)
+								.show()
+								.offset({"left":e2.clientX + 5,"top":e2.clientY + 5});
+							hoveredElement = this.getGuildParentDiv(e2.target, "folder") || this.getGuildParentDiv(e2.target, "guild");
+							if (hoveredElement) {
+								document.querySelector(".guilds.scroller").insertBefore(placeholder, hoveredElement.nextSibling);
+							}
+						});
+				},100);
 			});
 		$(folderInner)
 			.on("mouseenter", () => {this.createFolderToolTip(folderDiv);});
@@ -957,6 +963,7 @@ class ServerFolders {
 				}
 			})
 			.on("mousedown." + this.getName(), (e) => {
+				var mouseTimeout = null;
 				var serverPreview = serverOrig.cloneNode(true);
 				var hoveredCopy = null;
 				var placeholder = $(`<div class="guild guild-placeholder copy copy-placeholder"></div>`)[0];
@@ -966,12 +973,13 @@ class ServerFolders {
 					.offset({"left":e.clientX + 5,"top":e.clientY + 5});
 				
 				$(document)
-					.off("mouseup." + this.getName()).off("mousemove." + this.getName())
+					.off("mouseup." + this.getName())
 					.on("mouseup." + this.getName(), (e2) => {
+						clearTimeout(mouseTimeout);
 						placeholder.remove();
 						serverPreview.remove();
 						$(serverCopy).css("display","");
-						var newFolderDiv = this.getParentDivOfFolder(e2.target);
+						var newFolderDiv = this.getGuildParentDiv(e2.target, "folder");
 						if (newFolderDiv && newFolderDiv != folderDiv) {
 							this.removeServerFromFolder(serverOrig, folderDiv);
 							this.addServerToFolder(serverOrig, newFolderDiv);
@@ -983,20 +991,25 @@ class ServerFolders {
 							}
 						}
 						$(document).off("mouseup." + this.getName()).off("mousemove." + this.getName());
-					})
-					.on("mousemove." + this.getName(), (e2) => {
-						placeholder.remove();
-						$(serverCopy).hide();
-						$(serverPreview)
-							.show()
-							.offset({"left":e2.clientX + 5,"top":e2.clientY + 5});
-						if (foldercontainer.contains(e2.target)) {
-							hoveredCopy = this.getParentDivOfCopy(e2.target);
-							if (hoveredCopy && hoveredCopy.classList.contains("content_of_" + folderDiv.id)) {
-								foldercontainer.insertBefore(placeholder, hoveredCopy.nextSibling);
-							}
-						}
 					});
+				mouseTimeout = setTimeout(() => {
+					$(document)
+						.off("mousemove." + this.getName())
+						.on("mousemove." + this.getName(), (e2) => {
+							placeholder.remove();
+							$(serverCopy).hide();
+							$(serverPreview)
+								.show()
+								.offset({"left":e2.clientX + 5,"top":e2.clientY + 5});
+							if (foldercontainer.contains(e2.target)) {
+								hoveredCopy = this.getGuildParentDiv(e2.target, "copy");
+								if (hoveredCopy && hoveredCopy.classList.contains("content_of_" + folderDiv.id)) {
+									foldercontainer.insertBefore(placeholder, hoveredCopy.nextSibling);
+								}
+								else hoveredCopy = null;
+							}
+						});
+				},100);
 			});
 		return serverCopy;
 	}
@@ -1018,7 +1031,7 @@ class ServerFolders {
 	updateFolderPositions () {
 		var serverAndFolders = document.querySelectorAll("div.guild-separator ~ div.guild");
 		for (let i = 0; i < serverAndFolders.length; i++) {
-			var folderDiv = this.getParentDivOfFolder(serverAndFolders[i]);
+			var folderDiv = this.getGuildParentDiv(serverAndFolders[i], "folder");
 			if (folderDiv) {
 				var folderID = folderDiv.id;
 				var data = BDfunctionsDevilBro.loadData(folderID, this.getName(), "folders");
@@ -1087,34 +1100,10 @@ class ServerFolders {
 		BDfunctionsDevilBro.clearReadNotifications(unreadServers, () => {this.updateFolderNotifications(folderDiv);});
 	}
 	
-	getParentDivOfServer (div) {
-		if (!div || (div.tagName && div.querySelector(".guilds-error")) || document.querySelector(".dms").contains(div)) return null;
-		var servers = document.querySelectorAll("div.guild:not(.folder):not(.copy)");
-		for (var i = 0; servers.length > i; i++) {
-			var server = servers[i];
-			if (server.querySelector(".avatar-small") && (server.contains(div) || server == div)) return server;
-		}
-		return null;
-	}
-	
-	getParentDivOfCopy (div) {
-		if (!div || (div.tagName && div.querySelector(".guilds-error")) || document.querySelector(".dms").contains(div)) return null;
-		var copies = document.querySelectorAll("div.guild.copy");
-		for (var i = 0; copies.length > i; i++) {
-			var copy = copies[i];
-			if (copy.querySelector(".avatar-small") && (copy.contains(div) || copy == div)) return copy;
-		}
-		return null;
-	}
-	
-	getParentDivOfFolder (div) {
-		if (!div || (div.tagName && div.querySelector(".guilds-error")) || document.querySelector(".dms").contains(div)) return null;
-		var folders = document.querySelectorAll("div.guild.folder");
-		for (var i = 0; folders.length > i; i++) {
-			var folder = folders[i];
-			if (folder.querySelector(".avatar-small") && folder.contains(div) || folder == div) return folder;
-		}
-		return null;
+	getGuildParentDiv (div, type) {
+		if (!div || (div.tagName && div.querySelector(".guilds-error")) || document.querySelector(".dms").contains(div) || !document.querySelector(".guilds").contains(div)) return null;
+		else if (div.classList && div.classList.length > 0 && div.classList.contains("guild") && div.classList.contains(type) && div.querySelector(".avatar-small")) return div;
+		else return this.getGuildParentDiv(div.parentElement, type);
 	}
 	
 	getFolderOfServer (serverDiv) {
