@@ -246,7 +246,7 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.2.4";}
+	getVersion () {return "5.2.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -334,7 +334,7 @@ class ServerFolders {
 							change.removedNodes.forEach((node) => {
 								var serverDiv = this.getGuildParentDiv(node, "guild");
 								var folderDiv = this.getFolderOfServer(serverDiv);
-								if (folderDiv && !node.classList.contains("badge")) {
+								if (folderDiv) {
 									var info = BDfunctionsDevilBro.getKeyInformation({"node":serverDiv, "key":"guild"});
 									if (info) $("#copy_of_" + info.id).remove();
 									this.updateFolderNotifications(folderDiv);
@@ -351,7 +351,7 @@ class ServerFolders {
 					(change, i) => {
 						if (change.removedNodes) {
 							change.removedNodes.forEach((node) => {
-								Array.from(document.querySelectorAll(".folder")).forEach(folderDiv => {this.updateFolderNotifications(folderDiv);});
+								document.querySelectorAll(".folder").forEach(folderDiv => {this.updateFolderNotifications(folderDiv);});
 							});
 						}
 					}
@@ -402,7 +402,8 @@ class ServerFolders {
 			this.badgeObserver.disconnect();
 			
 			$(".foldercontainer").remove();
-			$("div.guild.folder").remove();
+			$(".guild.folder").remove();
+			$(".serverFoldersPreview").remove();
 			$(BDfunctionsDevilBro.readServerList()).show();
 			
 			$(".guilds-wrapper").removeClass("folderopen");
@@ -633,7 +634,7 @@ class ServerFolders {
 			.attr("id", data.folderID)
 			.on("click", () => {
 				if (this.getSettings().closeOtherFolders) {
-					Array.from(document.querySelectorAll(".folder.open")).forEach(openFolder => {
+					document.querySelectorAll(".folder.open").forEach(openFolder => {
 						if (openFolder != folderDiv) this.openCloseFolder(openFolder);
 					});
 				}
@@ -990,8 +991,8 @@ class ServerFolders {
 	
 	createCopyOfServer (serverOrig, folderDiv) {
 		var foldercontainer = document.querySelector(".foldercontainer");
-		var info = BDfunctionsDevilBro.getKeyInformation({"node":serverOrig, "key":"guild"});
 		var serverCopy = serverOrig.cloneNode(true);
+		var info = BDfunctionsDevilBro.getKeyInformation({"node":serverOrig, "key":"guild"});
 		$(serverCopy)
 			.attr("id", "copy_of_" + info.id)
 			.addClass("copy")
@@ -1151,7 +1152,9 @@ class ServerFolders {
 		
 		var unreadServers = BDfunctionsDevilBro.readUnreadServerList(this.readIncludedServerList(folderDiv));
 		
-		BDfunctionsDevilBro.clearReadNotifications(unreadServers, () => {this.updateFolderNotifications(folderDiv);});
+		BDfunctionsDevilBro.clearReadNotifications(unreadServers, () => {
+			setTimeout(() => {this.updateFolderNotifications(folderDiv);},1000);
+		});
 	}
 	
 	getGuildParentDiv (div, type) {
