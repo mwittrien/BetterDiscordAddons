@@ -6,6 +6,7 @@ class ServerFolders {
 		
 		this.serverContextObserver = new MutationObserver(() => {});
 		this.serverListObserver = new MutationObserver(() => {});
+		this.settingsWindowObserver = new MutationObserver(() => {});
 		this.badgeObserver = new MutationObserver(() => {});
 		
 		this.css = `
@@ -245,13 +246,16 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.2.3";}
+	getVersion () {return "5.2.4";}
 
 	getAuthor () {return "DevilBro";}
 	
     getSettingsPanel () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			return `<button class="` + this.getName() + `ResetBtn" style="height:23px" onclick='` + this.getName() + `.resetAll("` + this.getName() + `")'>Delete all Folders`;
+			return `
+			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="closeOtherFolders"${(this.getSettings().closeOtherFolders ? " checked" : void 0)}> Close other folders when opening a folder.</label><br>\n
+			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="showCountBadge"${(this.getSettings().showCountBadge ? " checked" : void 0)}> Display badge for amount of servers in a folder.</label><br><br>
+			<button class="` + this.getName() + `ResetBtn" style="height:23px" onclick='` + this.getName() + `.resetAll("` + this.getName() + `")'>Delete all Folders`;
 		}
     }
 
@@ -342,6 +346,19 @@ class ServerFolders {
 			});
 			if (document.querySelector(".guilds.scroller")) this.serverListObserver.observe(document.querySelector(".guilds.scroller"), {childList: true, attributes: true, subtree: true});
 			
+			this.settingsWindowObserver = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.removedNodes) {
+							change.removedNodes.forEach((node) => {
+								Array.from(document.querySelectorAll(".folder")).forEach(folderDiv => {this.updateFolderNotifications(folderDiv);});
+							});
+						}
+					}
+				);
+			});
+			this.settingsWindowObserver.observe(document.querySelector(".layers"), {childList:true});
+			
 			this.badgeObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
@@ -381,6 +398,7 @@ class ServerFolders {
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.serverContextObserver.disconnect();
 			this.serverListObserver.disconnect();
+			this.settingsWindowObserver.disconnect();
 			this.badgeObserver.disconnect();
 			
 			$(".foldercontainer").remove();
@@ -398,6 +416,35 @@ class ServerFolders {
 	}
 	
 	// begin of own functions
+	
+	getSettings () {
+		var defaultSettings = {
+			closeOtherFolders: false,
+			showCountBadge: true
+		};
+		var settings = BDfunctionsDevilBro.loadAllData(this.getName(), "settings");
+		var saveSettings = false;
+		for (var key in defaultSettings) {
+			if (settings[key] == null) {
+				settings[key] = settings[key] ? settings[key] : defaultSettings[key];
+				saveSettings = true;
+			}
+		}
+		if (saveSettings) {
+			BDfunctionsDevilBro.saveAllData(settings, this.getName(), "settings");
+		}
+		return settings;
+	}
+
+    static updateSettings (ele, pluginName) {
+		var settingspanel = BDfunctionsDevilBro.getSettingsPanelDiv(ele);
+		var settings = {};
+		var inputs = settingspanel.querySelectorAll("input");
+		for (var i = 0; i < inputs.length; i++) {
+			settings[inputs[i].value] = inputs[i].checked;
+		}
+		BDfunctionsDevilBro.saveAllData(settings, pluginName, "settings");
+    }
 	
     static resetAll (pluginName) {
 		if (confirm("Are you sure you want to delete all folders?")) {
@@ -584,7 +631,14 @@ class ServerFolders {
 		$(folderDiv)
 			.addClass("closed")
 			.attr("id", data.folderID)
-			.on("click", () => {this.openCloseFolder(folderDiv);})
+			.on("click", () => {
+				if (this.getSettings().closeOtherFolders) {
+					Array.from(document.querySelectorAll(".folder.open")).forEach(openFolder => {
+						if (openFolder != folderDiv) this.openCloseFolder(openFolder);
+					});
+				}
+				this.openCloseFolder(folderDiv);
+			})
 			.on("contextmenu", (e) => {this.createFolderContextMenu(folderDiv, e);})
 			.on("mousedown." + this.getName(), (e) => {
 				var mouseTimeout = null;
@@ -1085,7 +1139,7 @@ class ServerFolders {
 				.text(badgeAmount);	
 		$(folderDiv)
 			.find(".folder.badge.count")
-				.toggle(includedServers.length > 0)
+				.toggle(includedServers.length > 0 && this.getSettings().showCountBadge)
 				.text(includedServers.length);	
 	
 	
