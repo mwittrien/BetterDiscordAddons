@@ -7,7 +7,7 @@ class SendLargeMessages {
 		
 		this.switchFixObserver = new MutationObserver(() => {});
 		
-		this.messageDelay = 1000; //changing at own danger, might result in bans or mutes
+		this.messageDelay = 1000; //changing at own risk, might result in bans or mutes
 		
 		this.css = `
 			.sendlargemessages-modal textarea {
@@ -54,7 +54,7 @@ class SendLargeMessages {
 								<h5 id="character-counter" class="flexChild-1KGW5q h5-3KssQU title-1pmpPr size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH defaultMarginh5-2UwwFY" style="flex: 0 0 auto;"></h5>
 							</div>
 							<div class="flex-lFgbSz flex-3B1Tl4 horizontalReverse-2LanvO horizontalReverse-k5PqxT flex-3B1Tl4 directionRowReverse-2eZTxP justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO footer-1PYmcw">
-								<button type="button" class="btn-send buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu">
+								<button type="button" class="btn-save buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu">
 									<div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx contents-4L4hQM">REPLACE_btn_send_text</div>
 								</button>
 							</div>
@@ -68,7 +68,7 @@ class SendLargeMessages {
 
 	getDescription () {return "Opens a popout when your message is too large, which allows you to automatically send the message in several smaller messages.";}
 
-	getVersion () {return "1.3.0";}
+	getVersion () {return "1.3.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -166,11 +166,13 @@ class SendLargeMessages {
 		var textinput = sendMessageModal.find("#modal-inputtext");
 		BDfunctionsDevilBro.appendModal(sendMessageModal);
 		sendMessageModal
-			.on("click", "button.btn-send", (e) => {
+			.on("click", "button.btn-save", (e) => {
 				e.preventDefault();
-				this.formatText(textinput.val()).forEach((message,i) => {
+				var messages = this.formatText(textinput.val());
+				messages.forEach((message,i) => {
 					setTimeout(() => {
 						this.sendMessage(message);
+						if (i == messages.length-1) BDfunctionsDevilBro.showToast(this.labels.toast_allsent_text, {type:"success"});
 					},this.messageDelay * i);
 				});
 			});
@@ -253,28 +255,25 @@ class SendLargeMessages {
 		if (textarea) {
 			var textinput = textarea.querySelector("textarea");
 			if (textinput) {
-				setTimeout(() => {
-					BDfunctionsDevilBro.getOwnerInstance({"node":textarea, "name":"ChannelTextAreaForm", "up":true}).setState({textValue:text});
-				}, this.messageDelay * (1/3));
-				setTimeout(() => {
-					var options = { key: "Enter", code: "Enter", which: 13, keyCode: 13, bubbles: true };
-					var down = new KeyboardEvent("keydown", options);
-					Object.defineProperty(down, "keyCode", {value: 13});
-					Object.defineProperty(down, "which", {value: 13});
-					var press = new KeyboardEvent("keypress", options);
-					Object.defineProperty(press, "keyCode", {value: 13});
-					Object.defineProperty(press, "which", {value: 13});
-					textinput.dispatchEvent(down);
-					textinput.dispatchEvent(press);
-				}, this.messageDelay * (2/3));
+				BDfunctionsDevilBro.getOwnerInstance({"node":textarea, "name":"ChannelTextAreaForm", "up":true}).setState({textValue:text});
+				var options = { key: "Enter", code: "Enter", which: 13, keyCode: 13, bubbles: true };
+				var down = new KeyboardEvent("keydown", options);
+				Object.defineProperty(down, "keyCode", {value: 13});
+				Object.defineProperty(down, "which", {value: 13});
+				var press = new KeyboardEvent("keypress", options);
+				Object.defineProperty(press, "keyCode", {value: 13});
+				Object.defineProperty(press, "which", {value: 13});
+				textinput.dispatchEvent(down);
+				textinput.dispatchEvent(press);
 			}
 		}
 	}
 	
 	setLabelsByLanguage () {
 		switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
-			case "da": 		//danish
+			case "da": 	//danish
 				return {
+					toast_allsent_text:					"Alle beskeder sendes.",
 					modal_messages_translation:			"Beskeder",
 					modal_messages_warning:				"Send ikke for mange beskeder!",
 					modal_header_text:				 	"Send stor besked:",
@@ -283,6 +282,7 @@ class SendLargeMessages {
 				};
 			case "de": 	//german
 				return {
+					toast_allsent_text:					"Alle Nachrichten versendet.",
 					modal_messages_translation:			"Nachrichten",
 					modal_messages_warning:				"Schicke nicht zu viele Nachrichten!",
 					modal_header_text:				 	"Große Nachricht senden:",
@@ -291,6 +291,7 @@ class SendLargeMessages {
 				};
 			case "es": 	//spanish
 				return {
+					toast_allsent_text:					"Todos los mensajes enviados.",
 					modal_messages_translation:			"Mensajes",
 					modal_messages_warning:				"¡No envíe demasiados mensajes!",
 					modal_header_text:				 	"Enviar mensaje grande:",
@@ -299,6 +300,7 @@ class SendLargeMessages {
 				};
 			case "fr": 	//french
 				return {
+					toast_allsent_text:					"Tous les messages envoyés",
 					modal_messages_translation:			"Messages",
 					modal_messages_warning:				"N'envoyez pas trop de messages!",
 					modal_header_text:				 	"Envoyer un gros message:",
@@ -307,6 +309,7 @@ class SendLargeMessages {
 				};
 			case "it": 	//italian
 				return {
+					toast_allsent_text:					"Tutti i messaggi inviati.",
 					modal_messages_translation:			"Messaggi",
 					modal_messages_warning:				"Non inviare troppi messaggi!",
 					modal_header_text:				 	"Invia grande messaggio:",
@@ -315,6 +318,7 @@ class SendLargeMessages {
 				};
 			case "nl": 	//dutch
 				return {
+					toast_allsent_text:					"Alle berichten verzonden.",
 					modal_messages_translation:			"Berichten",
 					modal_messages_warning:				"Stuur niet te veel berichten!",
 					modal_header_text:				 	"Stuur een groot bericht:",
@@ -323,6 +327,7 @@ class SendLargeMessages {
 				};
 			case "no": 	//norwegian
 				return {
+					toast_allsent_text:					"Alle meldinger sendt.",
 					modal_messages_translation:			"Meldinger",
 					modal_messages_warning:				"Ikke send for mange meldinger!",
 					modal_header_text:				 	"Send stor melding:",
@@ -331,6 +336,7 @@ class SendLargeMessages {
 				};
 			case "pl": 	//polish
 				return {
+					toast_allsent_text:					"Wszystkie wiadomości wysłane.",
 					modal_messages_translation:			"Wiadomości",
 					modal_messages_warning:				"Nie wysyłaj zbyt wielu wiadomości!",
 					modal_header_text:				 	"Wyślij dużą wiadomość:",
@@ -339,6 +345,7 @@ class SendLargeMessages {
 				};
 			case "pt": 	//portuguese (brazil)
 				return {
+					toast_allsent_text:					"Todas as mensagens enviadas.",
 					modal_messages_translation:			"Mensagens",
 					modal_messages_warning:				"Não envie muitas mensagens!",
 					modal_header_text:				 	"Enviar mensagem grande:",
@@ -347,6 +354,7 @@ class SendLargeMessages {
 				};
 			case "fi": 	//finnish
 				return {
+					toast_allsent_text:					"Kaikki lähetetyt viestit.",
 					modal_messages_translation:			"Viestien",
 					modal_messages_warning:				"Älä lähetä liian monta viestiä!",
 					modal_header_text:				 	"Lähetä suuri viesti:",
@@ -355,6 +363,7 @@ class SendLargeMessages {
 				};
 			case "sv": 	//swedish
 				return {
+					toast_allsent_text:					"Alla meddelanden skickade.",
 					modal_messages_translation:			"Meddelanden",
 					modal_messages_warning:				"Skicka inte för många meddelanden!",
 					modal_header_text:				 	"Skicka stort meddelande:",
@@ -363,6 +372,7 @@ class SendLargeMessages {
 				};
 			case "tr": 	//turkish
 				return {
+					toast_allsent_text:					"Tüm mesajlar gönderildi.",
 					modal_messages_translation:			"Mesajları",
 					modal_messages_warning:				"Çok fazla mesaj göndermeyin!",
 					modal_header_text:				 	"Büyük mesaj gönder:",
@@ -371,6 +381,7 @@ class SendLargeMessages {
 				};
 			case "cs": 	//czech
 				return {
+					toast_allsent_text:					"Všechny zprávy byly odeslány.",
 					modal_messages_translation:			"Zpráv",
 					modal_messages_warning:				"Neposílejte příliš mnoho zpráv!",
 					modal_header_text:				 	"Odeslat velkou zprávu:",
@@ -379,6 +390,7 @@ class SendLargeMessages {
 				};
 			case "bg": 	//bulgarian
 				return {
+					toast_allsent_text:					"Всички изпратени съобщения.",
 					modal_messages_translation:			"Съобщения",
 					modal_messages_warning:				"Не изпращайте твърде много съобщения!",
 					modal_header_text:				 	"Изпратете голямо съобщение:",
@@ -387,14 +399,16 @@ class SendLargeMessages {
 				};
 			case "ru": 	//russian
 				return {
+					toast_allsent_text:					"Все отправленные сообщения.",
 					modal_messages_translation:			"Сообщения",
 					modal_messages_warning:				"Не отправляйте слишком много сообщений!",
 					modal_header_text:				 	"Отправить сообщение:",
 					btn_cancel_text: 					"Отмена",
 					btn_send_text: 						"Послать"
 				};
-			case "uk": 	//ukranian
+			case "uk": 	//ukrainian
 				return {
+					toast_allsent_text:					"Всі повідомлення надіслано.",
 					modal_messages_translation:			"Повідомлення",
 					modal_messages_warning:				"Не надсилайте надто багато повідомлень!",
 					modal_header_text:				 	"Надіслати велике повідомлення:",
@@ -403,6 +417,7 @@ class SendLargeMessages {
 				};
 			case "ja": 	//japanese
 				return {
+					toast_allsent_text:					"すべてのメッセージが送信されました。",
 					modal_messages_translation:			"メッセージ",
 					modal_messages_warning:				"あまりにも多くのメッセージを送信しないでください！",
 					modal_header_text:				 	"大きなメッセージを送信する：",
@@ -411,6 +426,7 @@ class SendLargeMessages {
 				};
 			case "zh": 	//chinese (traditional)
 				return {
+					toast_allsent_text:					"發送的所有消息。",
 					modal_messages_translation:			"消息",
 					modal_messages_warning:				"不要發送太多信息！",
 					modal_header_text:				 	"發送大信息：",
@@ -419,6 +435,7 @@ class SendLargeMessages {
 				};
 			case "ko": 	//korean
 				return {
+					toast_allsent_text:					"모든 메시지가 전송되었습니다.",
 					modal_messages_translation:			"메시지",
 					modal_messages_warning:				"너무 많은 메시지를 보내지 마십시오!",
 					modal_header_text:				 	"큰 메시지 보내기:",
@@ -427,6 +444,7 @@ class SendLargeMessages {
 				};
 			default: 	//default: english
 				return {
+					toast_allsent_text:					"All messages sent.",
 					modal_messages_translation:			"Messages",
 					modal_messages_warning:				"Do not send too many messages!",
 					modal_header_text:		 			"Send large message:",
