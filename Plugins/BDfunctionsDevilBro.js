@@ -977,7 +977,7 @@ BDfunctionsDevilBro.regEscape = function (string) {
 
 BDfunctionsDevilBro.clearReadNotifications = function (servers, callback) {
 	if (!servers) return;
-	servers = Array.isArray(servers) ? servers : Array.of(servers);
+	servers = Array.isArray(servers) ? servers : Array.from(servers);
 	servers.forEach(
 			(server, i) => {
 				setTimeout(() => {
@@ -1445,7 +1445,7 @@ BDfunctionsDevilBro.getDiscordTheme = function () {
 };
 
 BDfunctionsDevilBro.getDiscordLanguage = function () {
-	var lang = $("html").attr("lang") ? $("html").attr("lang").split("-")[0] : "en";
+	var lang = document.querySelector("html").lang ? document.querySelector("html").lang.split("-")[0] : "en";
 	switch (lang) {
 		case "da": 		//danish
 			return {"id":"da","lang":"danish","ownlang":"Dansk"};
