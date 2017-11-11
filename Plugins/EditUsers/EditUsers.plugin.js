@@ -169,7 +169,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "1.9.2";}
+	getVersion () {return "1.9.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -660,11 +660,6 @@ class EditUsers {
 	loadAllUsers () {
 		this.resetAllUsers();
 		
-		var serverID = BDfunctionsDevilBro.getIdOfServer(BDfunctionsDevilBro.getSelectedServer());
-		var id = serverID ? serverID : "friend-list";
-		
-		if (!this.nickNames.id || this.nickNames.id != id) this.nickNames = {"id":id, "names":{}};
-		
 		var settings = this.getSettings();
 		
 		if (settings.changeInMemberList) {
@@ -752,9 +747,11 @@ class EditUsers {
 		
 		var data = BDfunctionsDevilBro.loadData(info.id, this.getName(), "users");
 		
-		
 		if (data) {
 			if (username) {
+				var serverID = BDfunctionsDevilBro.getIdOfServer(BDfunctionsDevilBro.getSelectedServer());
+				serverID = serverID ? serverID : "friend-list";
+				if (!this.nickNames.id || this.nickNames.id != serverID) this.nickNames = {"id":serverID, "names":{}};
 				if (!this.nickNames.names[info.id]) this.nickNames.names[info.id] = this.getUserName(username);
 				var name = data.name ? data.name : (type == "info" || type == "profil" ? info.username : this.nickNames.names[info.id]);
 				var color1 = data.color1 ? BDfunctionsDevilBro.color2RGB(data.color1) : (styleInfo ? BDfunctionsDevilBro.color2RGB(styleInfo.color) : "");
@@ -784,7 +781,7 @@ class EditUsers {
 			}
 				
 			var tag = data.tag ? data.tag : null;
-			if (wrapper && !wrapper.querySelector(".user-tag") && (type == "list" || type == "chat" || type == "popout" || type == "profil" || type == "dmheader")) {
+			if (tag && wrapper && !wrapper.querySelector(".user-tag") && (type == "list" || type == "chat" || type == "popout" || type == "profil" || type == "dmheader")) {
 				var color3 = data.color3 ? BDfunctionsDevilBro.color2RGB(data.color3) : "";
 				var color4 = data.color4 ? BDfunctionsDevilBro.color2RGB(data.color4) : "white";
 				var thisTag = $(this.tagMarkup)[0];
