@@ -330,9 +330,6 @@ class ServerFolders {
 							change.removedNodes.forEach((node) => {
 								var serverDiv = this.getGuildParentDiv(node, "guild");
 								var folderDiv = this.getFolderOfServer(serverDiv);
-								console.log(node);
-								console.log(serverDiv);
-								console.log(folderDiv);
 								if (folderDiv && !node.classList.contains("badge")) {
 									var info = BDfunctionsDevilBro.getKeyInformation({"node":serverDiv, "key":"guild"});
 									if (info) $("#copy_of_" + info.id).remove();
