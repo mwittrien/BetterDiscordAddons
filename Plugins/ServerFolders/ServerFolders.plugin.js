@@ -252,10 +252,17 @@ class ServerFolders {
 	
     getSettingsPanel () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			return `
-			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="closeOtherFolders"${(this.getSettings().closeOtherFolders ? " checked" : void 0)}> Close other folders when opening a folder.</label><br>\n
-			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="showCountBadge"${(this.getSettings().showCountBadge ? " checked" : void 0)}> Display badge for amount of servers in a folder.</label><br><br>
-			<button class="` + this.getName() + `ResetBtn" style="height:23px" onclick='` + this.getName() + `.resetAll("` + this.getName() + `")'>Delete all Folders`;
+			var settings = this.getSettings();
+			var settingspanel = 
+				$(`<div class="${this.getName()}-settings">
+					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="closeOtherFolders"${settings.closeOtherFolders ? " checked" : void 0}>Close other folders when opening a folder.</label><br>
+					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="showCountBadge"${settings.showCountBadge ? " checked" : void 0}>Display badge for amount of servers in a folder.</label><br><br>
+					<button class="reset-button" style="height:23px">Delete all Folders</button>
+				</div>`)[0];
+			$(settingspanel)
+				.on("change", ".settings-checkbox", () => {this.updateSettings(settingspanel);})
+				.on("click", ".reset-button", () => {this.resetAll();});
+			return settingspanel;
 		}
     }
 
@@ -418,7 +425,7 @@ class ServerFolders {
 	
 	// begin of own functions
 	
-	getSettings () {
+	getSettings (defaultSettings) {
 		var defaultSettings = {
 			closeOtherFolders: false,
 			showCountBadge: true
@@ -437,20 +444,19 @@ class ServerFolders {
 		return settings;
 	}
 
-    static updateSettings (ele, pluginName) {
-		var settingspanel = BDfunctionsDevilBro.getSettingsPanelDiv(ele);
+    updateSettings (settingspanel) {
 		var settings = {};
-		var inputs = settingspanel.querySelectorAll("input");
+		var inputs = settingspanel.querySelectorAll(".settings-checkbox");
 		for (var i = 0; i < inputs.length; i++) {
 			settings[inputs[i].value] = inputs[i].checked;
 		}
-		BDfunctionsDevilBro.saveAllData(settings, pluginName, "settings");
+		BDfunctionsDevilBro.saveAllData(settings, this.getName(), "settings");
     }
 	
-    static resetAll (pluginName) {
+    resetAll () {
 		if (confirm("Are you sure you want to delete all folders?")) {
-			BDfunctionsDevilBro.removeAllData(pluginName, "folders");
-			BDfunctionsDevilBro.removeAllData(pluginName, "folderIDs");
+			BDfunctionsDevilBro.removeAllData(this.getName(), "folders");
+			BDfunctionsDevilBro.removeAllData(this.getName(), "folderIDs");
 			
 			$(".foldercontainer").remove();
 			$("div.guild.folder").remove();
