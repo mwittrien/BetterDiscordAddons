@@ -245,7 +245,7 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.2.0";}
+	getVersion () {return "5.2.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -319,7 +319,7 @@ class ServerFolders {
 								var serverDiv = this.getParentDivOfServer(node);
 								var folderDiv = this.getFolderOfServer(serverDiv);
 								if (folderDiv) {
-									this.addCopyToFolderContent(serverDiv, folderDiv);
+									this.updateCopyInFolderContent(serverDiv, folderDiv);
 									this.updateFolderNotifications(folderDiv);
 									if (node.classList.contains("badge")) this.badgeObserver.observe(node, {characterData: true, subtree: true});
 									$(serverDiv).hide();
@@ -355,7 +355,7 @@ class ServerFolders {
 				);
 			});
 			
-			document.querySelectorAll(".badge:not(.folder)").forEach( 
+			document.querySelectorAll(".badge:not(.folder):not(.copy)").forEach( 
 				(badge) => {
 					this.badgeObserver.observe(badge, {characterData: true, subtree: true});
 				}
@@ -513,7 +513,7 @@ class ServerFolders {
 			$(serverDiv).hide();
 			var message = this.labels.toast_addserver_text ? this.labels.toast_addserver_text.replace("${servername}", info.name).replace("${foldername}", data.folderName ? " " + data.folderName : "") : "";
 			BDfunctionsDevilBro.showToast(message, {type:"success"});
-			this.addCopyToFolderContent(serverDiv, folderDiv);
+			this.updateCopyInFolderContent(serverDiv, folderDiv);
 			this.updateFolderNotifications(folderDiv);
 		}
 	}
@@ -854,7 +854,7 @@ class ServerFolders {
 					}
 					
 					for (var i = 0; i < includedServers.length; i++) {
-						this.addCopyToFolderContent(includedServers[i], folderDiv);
+						this.updateCopyInFolderContent(includedServers[i], folderDiv);
 					}
 					
 					if (!alreadyOpen) {
@@ -911,15 +911,6 @@ class ServerFolders {
 		}
 	}
 	
-	addCopyToFolderContent (serverOrig, folderDiv) {
-		var foldercontainer = document.querySelector(".foldercontainer");
-		if (foldercontainer && folderDiv.classList.contains("open")) {
-			var sameFolderCopies = foldercontainer.querySelectorAll(".content_of_" + folderDiv.id);
-			var insertNode = sameFolderCopies.length > 0 ? sameFolderCopies[sameFolderCopies.length-1].nextSibling : null;
-			foldercontainer.insertBefore(this.createCopyOfServer(serverOrig, folderDiv), insertNode);
-		}
-	}
-	
 	updateCopyInFolderContent (serverOrig, folderDiv) {
 		var foldercontainer = document.querySelector(".foldercontainer");
 		if (foldercontainer && folderDiv.classList.contains("open")) {
@@ -928,6 +919,11 @@ class ServerFolders {
 			if (oldCopy) {
 				foldercontainer.insertBefore(this.createCopyOfServer(serverOrig, folderDiv), oldCopy);
 				oldCopy.remove();
+			}
+			else {
+				var sameFolderCopies = foldercontainer.querySelectorAll(".content_of_" + folderDiv.id);
+				var insertNode = sameFolderCopies.length > 0 ? sameFolderCopies[sameFolderCopies.length-1].nextSibling : null;
+				foldercontainer.insertBefore(this.createCopyOfServer(serverOrig, folderDiv), insertNode);
 			}
 		}
 	}
@@ -1092,7 +1088,7 @@ class ServerFolders {
 	}
 	
 	getParentDivOfServer (div) {
-		if (!div || !div.tagName || div.querySelector(".guilds-error") || document.querySelector(".dms").contains(div)) return null;
+		if (!div || (div.tagName && div.querySelector(".guilds-error")) || document.querySelector(".dms").contains(div)) return null;
 		var servers = document.querySelectorAll("div.guild:not(.folder):not(.copy)");
 		for (var i = 0; servers.length > i; i++) {
 			var server = servers[i];
@@ -1102,7 +1098,7 @@ class ServerFolders {
 	}
 	
 	getParentDivOfCopy (div) {
-		if (!div || !div.tagName || div.querySelector(".guilds-error") || document.querySelector(".dms").contains(div)) return null;
+		if (!div || (div.tagName && div.querySelector(".guilds-error")) || document.querySelector(".dms").contains(div)) return null;
 		var copies = document.querySelectorAll("div.guild.copy");
 		for (var i = 0; copies.length > i; i++) {
 			var copy = copies[i];
@@ -1112,7 +1108,7 @@ class ServerFolders {
 	}
 	
 	getParentDivOfFolder (div) {
-		if (!div || !div.tagName || div.querySelector(".guilds-error") || document.querySelector(".dms").contains(div)) return null;
+		if (!div || (div.tagName && div.querySelector(".guilds-error")) || document.querySelector(".dms").contains(div)) return null;
 		var folders = document.querySelectorAll("div.guild.folder");
 		for (var i = 0; folders.length > i; i++) {
 			var folder = folders[i];
