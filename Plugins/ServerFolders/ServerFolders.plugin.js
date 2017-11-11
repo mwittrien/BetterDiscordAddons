@@ -245,7 +245,7 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.2.2";}
+	getVersion () {return "5.2.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -330,6 +330,9 @@ class ServerFolders {
 							change.removedNodes.forEach((node) => {
 								var serverDiv = this.getGuildParentDiv(node, "guild");
 								var folderDiv = this.getFolderOfServer(serverDiv);
+								console.log(node);
+								console.log(serverDiv);
+								console.log(folderDiv);
 								if (folderDiv && !node.classList.contains("badge")) {
 									var info = BDfunctionsDevilBro.getKeyInformation({"node":serverDiv, "key":"guild"});
 									if (info) $("#copy_of_" + info.id).remove();
@@ -1101,9 +1104,12 @@ class ServerFolders {
 	}
 	
 	getGuildParentDiv (div, type) {
-		if (!div || (div.tagName && div.querySelector(".guilds-error")) || document.querySelector(".dms").contains(div) || !document.querySelector(".guilds").contains(div)) return null;
-		else if (div.classList && div.classList.length > 0 && div.classList.contains("guild") && div.classList.contains(type) && div.querySelector(".avatar-small")) return div;
-		else return this.getGuildParentDiv(div.parentElement, type);
+		if (!div) return null;
+		if (document.querySelector(".dms").contains(div)) return null;
+		if (div.tagName && div.querySelector(".guilds-error")) return null;
+		if (div.classList && div.classList.length > 0 && div.classList.contains(".guilds")) return null;
+		if (div.classList && div.classList.length > 0 && div.classList.contains("guild") && div.classList.contains(type) && div.querySelector(".avatar-small")) return div;
+		return this.getGuildParentDiv(div.parentElement, type);
 	}
 	
 	getFolderOfServer (serverDiv) {
