@@ -43,7 +43,7 @@ class ReverseImageSearch {
 
 	getDescription () {return "Adds a reverse image search option to the context menu.";}
 
-	getVersion () {return "3.2.4";}
+	getVersion () {return "3.2.5";}
 	
 	getAuthor () {return "DevilBro";}
 
@@ -92,10 +92,7 @@ class ReverseImageSearch {
 			
 			this.searchEngines = BDfunctionsDevilBro.sortArrayByKey(this.searchEngines, "name");
 			
-			setTimeout(() => {
-				this.labels = this.setLabelsByLanguage();
-				this.changeLanguageStrings();
-			},5000);
+			BDfunctionsDevilBro.translatePlugin(this);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -144,8 +141,6 @@ class ReverseImageSearch {
 	
 	changeLanguageStrings () {
 		this.messageContextSubMenuMarkup = 	this.messageContextSubMenuMarkup.replace("REPLACE_submenu_disabled_text", this.labels.submenu_disabled_text);
-		
-		BDfunctionsDevilBro.translateMessage(this.getName());
 	}
 	
 	onContextMenu (context) {
@@ -172,20 +167,14 @@ class ReverseImageSearch {
 	}
 	
 	createContextSubMenu (e) {
-		var theme = BDfunctionsDevilBro.themeIsLightTheme() ? "" : "theme-dark";
-		
+		var targetDiv = e.currentTarget;
 		var imageurl = e.data.url;
-		
-		var targetDiv = e.target.tagName != "SPAN" ? e.target : e.target.parentNode;
-		
 		var messageContextSubMenu = $(this.messageContextSubMenuMarkup);
-		
 		$(targetDiv).append(messageContextSubMenu)
 			.off("click", ".RIS-item")
-			.on("click", ".RIS-item", (e) => {
+			.on("click", ".RIS-item", (e2) => {
 				$(".context-menu").hide();
-				
-				var choice = e.target.tagName != "SPAN" ? e.target : e.target.parentNode;
+				var choice = e2.currentTarget;
 				for (var i in this.searchEngines) {
 					var engine = this.searchEngines[i].name;
 					if (choice.classList.contains(engine.replace(new RegExp(" ", 'g'), ""))) {
@@ -198,7 +187,7 @@ class ReverseImageSearch {
 				
 			});
 		$(messageContextSubMenu)
-			.addClass(theme)
+			.addClass(BDfunctionsDevilBro.getDiscordTheme())
 			.css("left", $(targetDiv).offset().left + "px")
 			.css("top", $(targetDiv).offset().top + "px");
 		
@@ -277,7 +266,7 @@ class ReverseImageSearch {
 				return {
 					submenu_disabled_text: 				"Все деактивированные"
 				};
-			case "uk": 	//ukranian
+			case "uk": 	//ukrainian
 				return {
 					submenu_disabled_text: 				"Всі вимкнені"
 				};
