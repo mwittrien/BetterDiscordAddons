@@ -6,7 +6,7 @@ class EditUsers {
 		this.labels = {};
 		
 		this.nickNames = {};
-    
+
 		this.switchFixObserver = new MutationObserver(() => {});
 		this.userContextObserver = new MutationObserver(() => {});
 		this.dmObserver = new MutationObserver(() => {});
@@ -117,7 +117,7 @@ class EditUsers {
 										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
 											<div class="inputWrapper-3xoRWR vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR flexChild-1KGW5q" style="flex: 1 1 auto;"><input type="text" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_" id="input-userurl"></div>
 										</div>
-										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO  marginBottom8-1mABJ4" style="flex: 1 1 auto;">
+										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vOmarginBottom8-1mABJ4" style="flex: 1 1 auto;">
 											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">REPLACE_modal_removeicon_text</h3>
 											<div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;">
 												<input type="checkbox" class="checkboxEnabled-4QfryV checkbox-1KYsPm" id="input-removeicon">
@@ -169,11 +169,11 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "1.9.3";}
+	getVersion () {return "1.9.5";}
 
 	getAuthor () {return "DevilBro";}
 	
-    getSettingsPanel () {
+	getSettingsPanel () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			return `
 			<label style="color:grey; font-size:20px; margin-bottom:5px;">Change user information in:</label><br>\n
@@ -189,7 +189,7 @@ class EditUsers {
 			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInUserAccount"${(this.getSettings().changeInUserAccount ? " checked" : void 0)}> Your Account Window</label><br>\n<br>\n
 			<button class="` + this.getName() + `ResetBtn" style="height:23px" onclick='` + this.getName() + `.resetAll("` + this.getName() + `")'>Reset all Users`;
 		}
-    }
+	}
 
 	//legacy
 	load () {}
@@ -365,10 +365,7 @@ class EditUsers {
 			
 			this.loadAllUsers();
 			
-			setTimeout(() => {
-				this.labels = this.setLabelsByLanguage();
-				this.changeLanguageStrings();
-			},5000);
+			BDfunctionsDevilBro.translatePlugin(this);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -436,7 +433,7 @@ class EditUsers {
 		return settings;
 	}
 
-    static updateSettings (ele, pluginName) {
+	static updateSettings (ele, pluginName) {
 		var settingspanel = BDfunctionsDevilBro.getSettingsPanelDiv(ele);
 		var settings = {};
 		var inputs = settingspanel.querySelectorAll("input");
@@ -444,13 +441,13 @@ class EditUsers {
 			settings[inputs[i].value] = inputs[i].checked;
 		}
 		BDfunctionsDevilBro.saveAllData(settings, pluginName, "settings");
-    }
+	}
 
-    static resetAll (pluginName) {
+	static resetAll (pluginName) {
 		if (confirm("Are you sure you want to reset all users?")) {
 			BDfunctionsDevilBro.removeAllData(pluginName, "users");
 		}
-    }
+	}
 
 	changeLanguageStrings () {
 		this.userContextEntryMarkup = 		this.userContextEntryMarkup.replace("REPLACE_context_localusersettings_text", this.labels.context_localusersettings_text);
@@ -472,8 +469,6 @@ class EditUsers {
 		this.userSettingsModalMarkup = 		this.userSettingsModalMarkup.replace("REPLACE_modal_colorpicker4_text", this.labels.modal_colorpicker4_text);
 		this.userSettingsModalMarkup = 		this.userSettingsModalMarkup.replace("REPLACE_btn_cancel_text", this.labels.btn_cancel_text);
 		this.userSettingsModalMarkup = 		this.userSettingsModalMarkup.replace("REPLACE_btn_save_text", this.labels.btn_save_text);
-		
-		BDfunctionsDevilBro.translateMessage(this.getName());
 	}
 	
 	onContextMenu (context) {
@@ -1056,24 +1051,24 @@ class EditUsers {
 				};
 			case "pl": 	//polish
 				return {
-					context_localusersettings_text: 	"Lokalny ustawienia użytkownik",
-					submenu_usersettings_text: 			"Zmień ustawienia",
-					submenu_resetsettings_text: 		"Resetuj użytkownik",
-					modal_header_text: 					"Lokalny ustawienia użytkownik",
-					modal_username_text: 				"Lokalna nazwa użytkownik",
-					modal_usertag_text:			 		"Etykietka",
-					modal_userurl_text: 				"Ikony",
-					modal_removeicon_text: 				"Usuń ikonę",
-					modal_tabheader1_text: 				"Użytkownik",
-					modal_tabheader2_text: 				"Kolor nazwa",
-					modal_tabheader3_text:				"Kolor etykietka",
-					modal_colorpicker1_text: 			"Kolor nazwa",
-					modal_colorpicker2_text: 			"Kolor tło",
-					modal_colorpicker3_text:			"Kolor etykietka",
+					context_localusersettings_text:		"Lokalne ustawienia użytkownika",
+					submenu_usersettings_text:			"Zmień ustawienia",
+					submenu_resetsettings_text:			"Resetuj ustawienia",
+					modal_header_text:					"Lokalne ustawienia użytkownika",
+					modal_username_text:				"Lokalna nazwa użytkownika",
+					modal_usertag_text:					"Etykieta",
+					modal_userurl_text:					"Ikona",
+					modal_removeicon_text:				"Usuń ikonę",
+					modal_tabheader1_text:				"Użytkownik",
+					modal_tabheader2_text:				"Kolor nazwy",
+					modal_tabheader3_text:				"Kolor etykiety",
+					modal_colorpicker1_text:			"Kolor nazwy",
+					modal_colorpicker2_text:			"Kolor tła",
+					modal_colorpicker3_text:			"Kolor etykiety",
 					modal_colorpicker4_text:			"Kolor czcionki",
-					modal_ignoreurl_text: 				"Zignoruj URL",
-					modal_validurl_text: 				"Prawidłowy URL",
-					modal_invalidurl_text: 				"Nieprawidłowy URL",
+					modal_ignoreurl_text:				"Ignoruj URL",
+					modal_validurl_text:				"Prawidłowe URL",
+					modal_invalidurl_text: 				"Nieprawidłowe URL",
 					btn_cancel_text: 					"Anuluj",
 					btn_save_text: 						"Zapisz"
 				};
