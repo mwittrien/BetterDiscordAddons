@@ -46,7 +46,7 @@ class GoogleSearchReplace {
 
 	getDescription () {return "Replaces the default Google Text Search with a selection menu of several search engines.";}
 
-	getVersion () {return "1.0.2";}
+	getVersion () {return "1.0.3";}
 	
 	getAuthor () {return "DevilBro";}
 
@@ -95,10 +95,7 @@ class GoogleSearchReplace {
 			
 			this.searchEngines = BDfunctionsDevilBro.sortArrayByKey(this.searchEngines, "name");
 			
-			setTimeout(() => {
-				this.labels = this.setLabelsByLanguage();
-				this.changeLanguageStrings();
-			},5000);
+			BDfunctionsDevilBro.translatePlugin(this);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -149,8 +146,6 @@ class GoogleSearchReplace {
 		this.messageContextEntryMarkup = 	this.messageContextEntryMarkup.replace("REPLACE_context_googlesearchreplace_text", this.labels.context_googlesearchreplace_text);
 		
 		this.messageContextSubMenuMarkup = 	this.messageContextSubMenuMarkup.replace("REPLACE_submenu_disabled_text", this.labels.submenu_disabled_text);
-		
-		BDfunctionsDevilBro.translateMessage(this.getName());
 	}
 	
 	onContextMenu (context) {
@@ -172,14 +167,9 @@ class GoogleSearchReplace {
 	}
 	
 	createContextSubMenu (e) {
-		var theme = BDfunctionsDevilBro.themeIsLightTheme() ? "" : "theme-dark";
-		
-		var searchtext =  encodeURIComponent(e.data.text);
-		
-		var targetDiv = e.target.tagName != "SPAN" ? e.target : e.target.parentNode;
-		
+		var targetDiv = e.currentTarget;
+		var searchtext = encodeURIComponent(e.data.text);
 		var messageContextSubMenu = $(this.messageContextSubMenuMarkup);
-		
 		$(targetDiv).append(messageContextSubMenu)
 			.off("click", ".GRS-item")
 			.on("click", ".GRS-item", (e) => {
@@ -198,7 +188,7 @@ class GoogleSearchReplace {
 				
 			});
 		$(messageContextSubMenu)
-			.addClass(theme)
+			.addClass(BDfunctionsDevilBro.getDiscordTheme())
 			.css("left", $(targetDiv).offset().left + "px")
 			.css("top", $(targetDiv).offset().top + "px");
 		
@@ -254,8 +244,8 @@ class GoogleSearchReplace {
 				};
 			case "pl": 	//polish
 				return {
-					context_googlesearchreplace_text: 	"Szukaj z ...",
-					submenu_disabled_text: 				"Wszystkie wyłączone"
+					context_googlesearchreplace_text:	"Szukaj za pomocą ...",
+                    submenu_disabled_text:				"Wszystkie wyłączone"
 				};
 			case "pt": 	//portuguese (brazil)
 				return {
@@ -292,7 +282,7 @@ class GoogleSearchReplace {
 					context_googlesearchreplace_text: 	"Поиск с ...",
 					submenu_disabled_text: 				"Все деактивированные"
 				};
-			case "uk": 	//ukranian
+			case "uk": 	//ukrainian
 				return {
 					context_googlesearchreplace_text: 	"Пошук з ...",
 					submenu_disabled_text: 				"Всі вимкнені"
