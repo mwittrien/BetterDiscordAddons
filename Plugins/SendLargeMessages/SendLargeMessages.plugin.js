@@ -68,7 +68,7 @@ class SendLargeMessages {
 
 	getDescription () {return "Opens a popout when your message is too large, which allows you to automatically send the message in several smaller messages.";}
 
-	getVersion () {return "1.3.1";}
+	getVersion () {return "1.3.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -92,10 +92,7 @@ class SendLargeMessages {
 			
 			this.bindEventToTextArea();
 			
-			setTimeout(() => {
-				this.labels = this.setLabelsByLanguage();
-				this.changeLanguageStrings();
-			},5000);
+			BDfunctionsDevilBro.translatePlugin(this);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -129,8 +126,6 @@ class SendLargeMessages {
 		this.sendMessageModalMarkup = 		this.sendMessageModalMarkup.replace("REPLACE_modal_header_text", this.labels.modal_header_text);
 		this.sendMessageModalMarkup = 		this.sendMessageModalMarkup.replace("REPLACE_btn_cancel_text", this.labels.btn_cancel_text);
 		this.sendMessageModalMarkup = 		this.sendMessageModalMarkup.replace("REPLACE_btn_send_text", this.labels.btn_send_text);
-		
-		BDfunctionsDevilBro.translateMessage(this.getName());
 	}
 	
 	bindEventToTextArea () {
@@ -336,12 +331,12 @@ class SendLargeMessages {
 				};
 			case "pl": 	//polish
 				return {
-					toast_allsent_text:					"Wszystkie wiadomości wysłane.",
-					modal_messages_translation:			"Wiadomości",
-					modal_messages_warning:				"Nie wysyłaj zbyt wielu wiadomości!",
-					modal_header_text:				 	"Wyślij dużą wiadomość:",
-					btn_cancel_text: 					"Anuluj",
-					btn_send_text: 						"Wysłać"
+					toast_allsent_text:					"Wszystkie wiadomości zostały wysłane.",
+                    modal_messages_translation:			"Wiadomości",
+                    modal_messages_warning:				"Nie wysyłaj zbyt wielu wiadomości!",
+                    modal_header_text:					"Wyślij dużą wiadomość:",
+                    btn_cancel_text:					"Anuluj",
+                    btn_send_text:						"Wyślij"
 				};
 			case "pt": 	//portuguese (brazil)
 				return {
