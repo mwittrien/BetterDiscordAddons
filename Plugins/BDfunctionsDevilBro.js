@@ -1,6 +1,6 @@
 var BDfunctionsDevilBro = {};
 
-BDfunctionsDevilBro.loadMessage = function (pluginName, oldVersion) { 
+BDfunctionsDevilBro.loadMessage = function (pluginName, oldVersion) {
 	var loadMessage = BDfunctionsDevilBro.getLibraryStrings().toast_plugin_started.replace("${pluginName}", pluginName).replace("${oldVersion}", oldVersion);
 	console.log(loadMessage);
 	BDfunctionsDevilBro.showToast(loadMessage);
@@ -319,10 +319,22 @@ BDfunctionsDevilBro.checkAllUpdates = function () {
 };
 	
 BDfunctionsDevilBro.translateMessage = function (pluginName) { 
-	var ownlang = BDfunctionsDevilBro.getDiscordLanguage().ownlang;
-	var translateMessage = BDfunctionsDevilBro.getLibraryStrings().toast_plugin_translated.replace("${pluginName}", pluginName).replace("${ownlang}", ownlang);
-	console.log(translateMessage);
+	console.log(BDfunctionsDevilBro.getLibraryStrings().toast_plugin_translated.replace("${pluginName}", pluginName).replace("${ownlang}", BDfunctionsDevilBro.getDiscordLanguage().ownlang));
 };
+
+BDfunctionsDevilBro.translatePlugin = function (plugin) {
+	if (typeof plugin.labels === "object") {
+		var translateInterval = setInterval(() => {
+			if (document.querySelector("html").lang) {
+				clearInterval(translateInterval);
+				var language = BDfunctionsDevilBro.getDiscordLanguage();
+				plugin.labels = plugin.setLabelsByLanguage(language.id);
+				plugin.changeLanguageStrings();
+				console.log(BDfunctionsDevilBro.getLibraryStrings().toast_plugin_translated.replace("${pluginName}", plugin.getName()).replace("${ownlang}", language.ownlang));
+			}
+		},100);
+	}
+}
 	
 BDfunctionsDevilBro.getReactInstance = function (node) { 
 	if (!node) return null;
