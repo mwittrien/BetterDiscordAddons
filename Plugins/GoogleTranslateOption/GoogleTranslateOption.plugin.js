@@ -20,7 +20,7 @@ class GoogleTranslateOption {
 
 	getDescription () {return "Adds a Google Translate option to your context menu, which shows a preview of the translated text and on click will open the selected text in Google Translate.";}
 
-	getVersion () {return "1.0.2";}
+	getVersion () {return "1.0.3";}
 	
 	getAuthor () {return "DevilBro";}
 	
@@ -28,13 +28,13 @@ class GoogleTranslateOption {
 	load () {}
 
 	start () {
-		/* if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
+		if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
 		$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
 		$('head').append("<script src='https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
 		if (typeof BDfunctionsDevilBro !== "object") {
 			$('head script[src="https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
 			$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
-		} */
+		}
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
 			
@@ -53,10 +53,7 @@ class GoogleTranslateOption {
 			});
 			if (document.querySelector(".app")) this.messageContextObserver.observe(document.querySelector(".app"), {childList: true});
 			
-			setTimeout(() => {
-				this.labels = this.setLabelsByLanguage();
-				this.changeLanguageStrings();
-			},5000);
+			BDfunctionsDevilBro.translatePlugin(this);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -74,9 +71,7 @@ class GoogleTranslateOption {
 	// begin of own functions
 	
 	changeLanguageStrings () {
-		this.messageContextEntryMarkup = 	this.messageContextEntryMarkup.replace("REPLACE_context_googletranslateoption_text", this.labels.context_googletranslateoption_text);
-		
-		BDfunctionsDevilBro.translateMessage(this.getName());
+		this.messageContextEntryMarkup = this.messageContextEntryMarkup.replace("REPLACE_context_googletranslateoption_text", this.labels.context_googletranslateoption_text);
 	}
 	
 	onContextMenu (context) {
@@ -173,7 +168,7 @@ class GoogleTranslateOption {
 				return {
 					context_googletranslateoption_text: 	"Поиск перевода"
 				};
-			case "uk": 	//ukranian
+			case "uk": 	//ukrainian
 				return {
 					context_googletranslateoption_text: 	"Пошук перекладу"
 				};
