@@ -176,7 +176,7 @@ class EmojiStatistics {
 
 	getDescription () {return "Adds some helpful options to show you more information about emojis and emojiservers.";}
 
-	getVersion () {return "2.6.0";}
+	getVersion () {return "2.6.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -231,11 +231,8 @@ class EmojiStatistics {
 			if (document.querySelector(".popouts")) this.emojiPickerObserver.observe(document.querySelector(".popouts"), {childList: true});
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
-		
-			setTimeout(() => {
-				this.labels = this.setLabelsByLanguage();
-				this.changeLanguageStrings();
-			},5000);
+			
+			BDfunctionsDevilBro.translatePlugin(this);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -294,8 +291,6 @@ class EmojiStatistics {
 		this.emojiserverTitlesMarkup = 		this.emojiserverTitlesMarkup.replace("REPLACE_modal_titlesglobal_text", this.labels.modal_titlesglobal_text);
 		this.emojiserverTitlesMarkup = 		this.emojiserverTitlesMarkup.replace("REPLACE_modal_titleslocal_text", this.labels.modal_titleslocal_text);
 		this.emojiserverTitlesMarkup = 		this.emojiserverTitlesMarkup.replace("REPLACE_modal_titlesreplicate_text", this.labels.modal_titlesreplicate_text);
-		
-		BDfunctionsDevilBro.translateMessage(this.getName());
 	}
 	
 	loadEmojiList () {
@@ -501,221 +496,221 @@ class EmojiStatistics {
 			case "da": 		//danish
 				return {
 					modal_header_text: 				"Statistikker af emojis",
-					modal_titlesicon_text : 		"Icon",
-					modal_titlesservername_text : 	"Servernavn",
-					modal_titlestotal_text : 		"Total:",
-					modal_titlesglobal_text : 		"Global:",
-					modal_titleslocal_text : 		"Lokal:",
-					modal_titlesreplicate_text : 	"Copies:",
+					modal_titlesicon_text: 			"Icon",
+					modal_titlesservername_text: 	"Servernavn",
+					modal_titlestotal_text: 		"Total:",
+					modal_titlesglobal_text: 		"Global:",
+					modal_titleslocal_text: 		"Lokal:",
+					modal_titlesreplicate_text: 	"Copies:",
 					btn_ok_text: 					"OK"
 				};
 			case "de": 		//german
 				return {
 					modal_header_text: 				"Statistiken über Emojis",
-					modal_titlesicon_text : 		"Symbol",
-					modal_titlesservername_text : 	"Servername",
-					modal_titlestotal_text : 		"Gesamt:",
-					modal_titlesglobal_text : 		"Global:",
-					modal_titleslocal_text : 		"Lokal:",
-					modal_titlesreplicate_text : 	"Kopien:",
+					modal_titlesicon_text: 			"Symbol",
+					modal_titlesservername_text: 	"Servername",
+					modal_titlestotal_text: 		"Gesamt:",
+					modal_titlesglobal_text: 		"Global:",
+					modal_titleslocal_text: 		"Lokal:",
+					modal_titlesreplicate_text: 	"Kopien:",
 					btn_ok_text: 					"OK"
 				};
 			case "es": 		//spanish
 				return {
 					modal_header_text: 				"Estadísticas de emojis",
-					modal_titlesicon_text : 		"Icono",
-					modal_titlesservername_text : 	"Nombre del servidor",
-					modal_titlestotal_text : 		"Total:",
-					modal_titlesglobal_text : 		"Global:",
-					modal_titleslocal_text : 		"Local:",
-					modal_titlesreplicate_text : 	"Copias:",
+					modal_titlesicon_text: 			"Icono",
+					modal_titlesservername_text: 	"Nombre del servidor",
+					modal_titlestotal_text: 		"Total:",
+					modal_titlesglobal_text: 		"Global:",
+					modal_titleslocal_text: 		"Local:",
+					modal_titlesreplicate_text: 	"Copias:",
 					btn_ok_text: 					"OK"
 				};
 			case "fr": 		//french
 				return {
 					modal_header_text: 				"Statistiques des emojis",
-					modal_titlesicon_text : 		"Icône",
-					modal_titlesservername_text : 	"Nom du serveur",
-					modal_titlestotal_text : 		"Total:",
-					modal_titlesglobal_text : 		"Global:",
-					modal_titleslocal_text : 		"Local:",
-					modal_titlesreplicate_text : 	"Copies:",
+					modal_titlesicon_text: 			"Icône",
+					modal_titlesservername_text: 	"Nom du serveur",
+					modal_titlestotal_text: 		"Total:",
+					modal_titlesglobal_text: 		"Global:",
+					modal_titleslocal_text: 		"Local:",
+					modal_titlesreplicate_text: 	"Copies:",
 					btn_ok_text: 					"OK"
 				};
 			case "it": 		//italian
 				return {
 					modal_header_text: 				"Statistiche di emojis",
-					modal_titlesicon_text : 		"Icona",
-					modal_titlesservername_text : 	"Nome del server",
-					modal_titlestotal_text : 		"Totale:",
-					modal_titlesglobal_text : 		"Globale:",
-					modal_titleslocal_text : 		"Locale:",
-					modal_titlesreplicate_text : 	"Copie:",
+					modal_titlesicon_text: 			"Icona",
+					modal_titlesservername_text: 	"Nome del server",
+					modal_titlestotal_text: 		"Totale:",
+					modal_titlesglobal_text: 		"Globale:",
+					modal_titleslocal_text: 		"Locale:",
+					modal_titlesreplicate_text: 	"Copie:",
 					btn_ok_text: 					"OK"
 				};
 			case "nl":		//dutch
 				return {
 					modal_header_text: 				"Statistieken van emojis",
-					modal_titlesicon_text : 		"Icoon",
-					modal_titlesservername_text : 	"Servernaam",
-					modal_titlestotal_text : 		"Totaal:",
-					modal_titlesglobal_text : 		"Globaal:",
-					modal_titleslocal_text : 		"Lokaal:",
-					modal_titlesreplicate_text : 	"Kopieën:",
+					modal_titlesicon_text: 			"Icoon",
+					modal_titlesservername_text: 	"Servernaam",
+					modal_titlestotal_text: 		"Totaal:",
+					modal_titlesglobal_text: 		"Globaal:",
+					modal_titleslocal_text: 		"Lokaal:",
+					modal_titlesreplicate_text: 	"Kopieën:",
 					btn_ok_text: 					"OK"
 				};
 			case "no":		//norwegian
 				return {
 					modal_header_text: 				"Statistikk av emojis",
-					modal_titlesicon_text : 		"Ikon",
-					modal_titlesservername_text : 	"Servernavn",
-					modal_titlestotal_text : 		"Total:",
-					modal_titlesglobal_text : 		"Global:",
-					modal_titleslocal_text : 		"Lokal:",
-					modal_titlesreplicate_text : 	"Kopier:",
+					modal_titlesicon_text: 			"Ikon",
+					modal_titlesservername_text: 	"Servernavn",
+					modal_titlestotal_text: 		"Total:",
+					modal_titlesglobal_text: 		"Global:",
+					modal_titleslocal_text: 		"Lokal:",
+					modal_titlesreplicate_text: 	"Kopier:",
 					btn_ok_text: 					"OK"
 				};
 			case "pl":		//polish
 				return {
-					modal_header_text: 				"Statystyki emojisa",
-					modal_titlesicon_text : 		"Ikona",
-					modal_titlesservername_text : 	"Nome do servidor",
-					modal_titlestotal_text : 		"Całkowity:",
-					modal_titlesglobal_text : 		"Światowy:",
-					modal_titleslocal_text : 		"Lokalny:",
-					modal_titlesreplicate_text : 	"Kopie:",
-					btn_ok_text: 					"OK"
+					modal_header_text:				"Statystyki emoji",
+                    modal_titlesicon_text:			"Ikona",
+                    modal_titlesservername_text:	"Nazwa",
+                    modal_titlestotal_text:			"Całkowity:",
+                    modal_titlesglobal_text:		"Światowy:",
+                    modal_titleslocal_text:			"Lokalny:",
+                    modal_titlesreplicate_text:		"Kopie:",
+                    btn_ok_text:					"OK"
 				};
 			case "pt":		//portuguese (brazil)
 				return {
 					modal_header_text: 				"Estatísticas de emojis",
-					modal_titlesicon_text : 		"Ícone",
-					modal_titlesservername_text : 	"Nome do servidor",
-					modal_titlestotal_text : 		"Total:",
-					modal_titlesglobal_text : 		"Global:",
-					modal_titleslocal_text : 		"Local:",
-					modal_titlesreplicate_text : 	"Cópias:",
+					modal_titlesicon_text: 			"Ícone",
+					modal_titlesservername_text: 	"Nome do servidor",
+					modal_titlestotal_text: 		"Total:",
+					modal_titlesglobal_text: 		"Global:",
+					modal_titleslocal_text: 		"Local:",
+					modal_titlesreplicate_text: 	"Cópias:",
 					btn_ok_text: 					"OK"
 				};
 			case "fi":		//finnish
 				return {
 					modal_header_text: 				"Tilastot emojista",
-					modal_titlesicon_text : 		"Ikoni",
-					modal_titlesservername_text : 	"Palvelimen nimi",
-					modal_titlestotal_text : 		"Koko:",
-					modal_titlesglobal_text : 		"Globaali:",
-					modal_titleslocal_text : 		"Paikallinen:",
-					modal_titlesreplicate_text : 	"Kopiot:",
+					modal_titlesicon_text: 			"Ikoni",
+					modal_titlesservername_text: 	"Palvelimen nimi",
+					modal_titlestotal_text: 		"Koko:",
+					modal_titlesglobal_text: 		"Globaali:",
+					modal_titleslocal_text: 		"Paikallinen:",
+					modal_titlesreplicate_text: 	"Kopiot:",
 					btn_ok_text: 					"OK"
 				};
 			case "sv":		//swedish
 				return {
 					modal_header_text: 				"Statistik för emojis",
-					modal_titlesicon_text : 		"Ikon",
-					modal_titlesservername_text : 	"Servernamn",
-					modal_titlestotal_text : 		"Total:",
-					modal_titlesglobal_text : 		"Global:",
-					modal_titleslocal_text : 		"Lokal:",
-					modal_titlesreplicate_text : 	"Kopior:",
+					modal_titlesicon_text: 			"Ikon",
+					modal_titlesservername_text: 	"Servernamn",
+					modal_titlestotal_text: 		"Total:",
+					modal_titlesglobal_text: 		"Global:",
+					modal_titleslocal_text: 		"Lokal:",
+					modal_titlesreplicate_text: 	"Kopior:",
 					btn_ok_text: 					"OK"
 				};
 			case "tr":		//turkish
 				return {
 					modal_header_text: 				"Emojis istatistikleri",
-					modal_titlesicon_text : 		"Icon",
-					modal_titlesservername_text : 	"Sunucuadı",
-					modal_titlestotal_text : 		"Toplam:",
-					modal_titlesglobal_text : 		"Global:",
-					modal_titleslocal_text : 		"Yerel:",
-					modal_titlesreplicate_text : 	"Kopya:",
+					modal_titlesicon_text: 			"Icon",
+					modal_titlesservername_text: 	"Sunucuadı",
+					modal_titlestotal_text: 		"Toplam:",
+					modal_titlesglobal_text: 		"Global:",
+					modal_titleslocal_text: 		"Yerel:",
+					modal_titlesreplicate_text: 	"Kopya:",
 					btn_ok_text: 					"Okey"
 				};
 			case "cs":		//czech
 				return {
 					modal_header_text: 				"Statistiky emojis",
-					modal_titlesicon_text : 		"Ikona",
-					modal_titlesservername_text : 	"Název serveru",
-					modal_titlestotal_text : 		"Celkový:",
-					modal_titlesglobal_text : 		"Globální:",
-					modal_titleslocal_text : 		"Místní:",
-					modal_titlesreplicate_text : 	"Kopie:",
+					modal_titlesicon_text: 			"Ikona",
+					modal_titlesservername_text: 	"Název serveru",
+					modal_titlestotal_text: 		"Celkový:",
+					modal_titlesglobal_text: 		"Globální:",
+					modal_titleslocal_text: 		"Místní:",
+					modal_titlesreplicate_text: 	"Kopie:",
 					btn_ok_text: 					"OK"
 				};
 			case "bg":		//bulgarian
 				return {
 					modal_header_text: 				"Статистика на емотис",
-					modal_titlesicon_text : 		"Икона",
-					modal_titlesservername_text : 	"Име на сървъра",
-					modal_titlestotal_text : 		"Oбщо:",
-					modal_titlesglobal_text : 		"Cветовен:",
-					modal_titleslocal_text : 		"Mестен:",
-					modal_titlesreplicate_text : 	"Копия:",
+					modal_titlesicon_text: 			"Икона",
+					modal_titlesservername_text: 	"Име на сървъра",
+					modal_titlestotal_text: 		"Oбщо:",
+					modal_titlesglobal_text: 		"Cветовен:",
+					modal_titleslocal_text: 		"Mестен:",
+					modal_titlesreplicate_text: 	"Копия:",
 					btn_ok_text: 					"Добре"
 				};
 			case "ru":		//russian
 				return {
 					modal_header_text: 				"Статистика emojis",
-					modal_titlesicon_text : 		"Значок",
-					modal_titlesservername_text : 	"Имя сервера",
-					modal_titlestotal_text : 		"Всего:",
-					modal_titlesglobal_text : 		"Mировой:",
-					modal_titleslocal_text : 		"Местный:",
-					modal_titlesreplicate_text : 	"Копии:",
+					modal_titlesicon_text: 			"Значок",
+					modal_titlesservername_text: 	"Имя сервера",
+					modal_titlestotal_text: 		"Всего:",
+					modal_titlesglobal_text: 		"Mировой:",
+					modal_titleslocal_text: 		"Местный:",
+					modal_titlesreplicate_text: 	"Копии:",
 					btn_ok_text: 					"ОК"
 				};
 			case "uk":		//ukrainian
 				return {
 					modal_header_text: 				"Статистика емідій",
-					modal_titlesicon_text : 		"Ікона",
-					modal_titlesservername_text : 	"Ім'я сервера",
-					modal_titlestotal_text : 		"Всього:",
-					modal_titlesglobal_text : 		"Cвітовий:",
-					modal_titleslocal_text : 		"Місцевий:",
-					modal_titlesreplicate_text : 	"Копії:",
+					modal_titlesicon_text: 			"Ікона",
+					modal_titlesservername_text: 	"Ім'я сервера",
+					modal_titlestotal_text: 		"Всього:",
+					modal_titlesglobal_text: 		"Cвітовий:",
+					modal_titleslocal_text: 		"Місцевий:",
+					modal_titlesreplicate_text: 	"Копії:",
 					btn_ok_text: 					"Добре"
 				};
 			case "ja":		//japanese
 				return {
 					modal_header_text: 				"エモジスの統計",
-					modal_titlesicon_text : 		"アイコン",
-					modal_titlesservername_text : 	"サーバーの名前",
-					modal_titlestotal_text : 		"合計:",
-					modal_titlesglobal_text : 		"グローバル:",
-					modal_titleslocal_text : 		"地元:",
-					modal_titlesreplicate_text : 	"コピー:",
+					modal_titlesicon_text: 			"アイコン",
+					modal_titlesservername_text: 	"サーバーの名前",
+					modal_titlestotal_text: 		"合計:",
+					modal_titlesglobal_text: 		"グローバル:",
+					modal_titleslocal_text: 		"地元:",
+					modal_titlesreplicate_text: 	"コピー:",
 					btn_ok_text: 					"はい"
 				};
 			case "zh":		//chinese (traditional)
 				return {
 					modal_header_text: 				"表情統計",
-					modal_titlesicon_text : 		"圖標",
-					modal_titlesservername_text : 	"服務器名稱",
-					modal_titlestotal_text : 		"總:",
-					modal_titlesglobal_text : 		"全球:",
-					modal_titleslocal_text : 		"本地:",
-					modal_titlesreplicate_text : 	"副本:",
+					modal_titlesicon_text: 			"圖標",
+					modal_titlesservername_text: 	"服務器名稱",
+					modal_titlestotal_text: 		"總:",
+					modal_titlesglobal_text: 		"全球:",
+					modal_titleslocal_text: 		"本地:",
+					modal_titlesreplicate_text: 	"副本:",
 					btn_ok_text: 					"好"
 				};
 			case "ko":		//korean
 				return {
 					modal_header_text: 				"그림 이모티콘의 통계",
-					modal_titlesicon_text : 		"상",
-					modal_titlesservername_text : 	"서버 이름",
-					modal_titlestotal_text : 		"합계:",
-					modal_titlesglobal_text : 		"글로벌:",
-					modal_titleslocal_text : 		"지방의:",
-					modal_titlesreplicate_text : 	"사본:",
+					modal_titlesicon_text: 			"상",
+					modal_titlesservername_text: 	"서버 이름",
+					modal_titlestotal_text: 		"합계:",
+					modal_titlesglobal_text: 		"글로벌:",
+					modal_titleslocal_text: 		"지방의:",
+					modal_titlesreplicate_text: 	"사본:",
 					btn_ok_text: 					"승인"
 				};
 			default:		//default: english
 				return {
 					modal_header_text: 				"Statistics of emojis",
-					modal_titlesicon_text : 		"Icon",
-					modal_titlesservername_text : 	"Servername",
-					modal_titlestotal_text : 		"Total:",
-					modal_titlesglobal_text : 		"Global:",
-					modal_titleslocal_text : 		"Local:",
-					modal_titlesreplicate_text : 	"Copies:",
+					modal_titlesicon_text: 			"Icon",
+					modal_titlesservername_text: 	"Servername",
+					modal_titlestotal_text: 		"Total:",
+					modal_titlesglobal_text: 		"Global:",
+					modal_titleslocal_text: 		"Local:",
+					modal_titlesreplicate_text: 	"Copies:",
 					btn_ok_text: 					"OK"
 				};
 		}
