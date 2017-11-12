@@ -155,7 +155,7 @@ class ServerHider {
 
 	getDescription () {return "Hide Servers in your Serverlist";}
 
-	getVersion () {return "2.4.0";}
+	getVersion () {return "2.4.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -204,10 +204,7 @@ class ServerHider {
 			
 			this.updateAllServers(true);
 			
-			setTimeout(() => {
-				this.labels = this.setLabelsByLanguage();
-				this.changeLanguageStrings();
-			},5000);
+			BDfunctionsDevilBro.translatePlugin(this);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -248,8 +245,6 @@ class ServerHider {
 		this.serverHiderModalMarkup = 		this.serverHiderModalMarkup.replace("REPLACE_btn_all_text", this.labels.btn_all_text);
 		
 		this.serverEntryMarkup = 			this.serverEntryMarkup.replace("REPLACE_btn_visible_text", this.labels.btn_visible_text);
-		
-		BDfunctionsDevilBro.translateMessage(this.getName());
 	}
 	
 	onContextMenu (context) {
@@ -267,10 +262,7 @@ class ServerHider {
 	}
 	
 	createContextSubMenu (e) {
-		var theme = BDfunctionsDevilBro.themeIsLightTheme() ? "" : "theme-dark";
-		
-		var targetDiv = e.target.tagName != "SPAN" ? e.target : e.target.parentNode;
-		
+		var targetDiv = e.currentTarget;
 		var serverContextSubMenu = $(this.serverContextSubMenuMarkup);
 		$(targetDiv).append(serverContextSubMenu)
 			.off("click", ".hideserver-item")
@@ -278,7 +270,7 @@ class ServerHider {
 			.on("click", ".hideserver-item", e.data, this.hideServer.bind(this))
 			.on("click", ".openhidemenu-item", this.showServerModal.bind(this));
 		$(serverContextSubMenu)
-			.addClass(theme)
+			.addClass(BDfunctionsDevilBro.getDiscordTheme())
 			.css("left", $(targetDiv).offset().left + "px")
 			.css("top", $(targetDiv).offset().top + "px");
 			
@@ -450,12 +442,12 @@ class ServerHider {
 				};
 			case "pl":		//polish
 				return {
-					modal_header_text: 				"Zarządzanie listą serwerów",
-					btn_ok_text: 					"OK",
-					btn_all_text:					"Każdy",
-					context_serverhider_text:		"Widoczność serwera",
-					submenu_hideserver_text:		"Ukryj serwer",
-					submenu_openhidemenu_text:		"Zarządzaj listą serwerów"
+					modal_header_text:				"Zarządzanie listą serwerów",
+                    btn_ok_text:					"OK",
+                    btn_all_text:					"Wszystkie",
+                    context_serverhider_text:		"Widoczność serwera",
+                    submenu_hideserver_text:		"Ukryj serwer",
+                    submenu_openhidemenu_text:		"Zarządzaj listą serwerów"
 				};
 			case "pt":		//portuguese (brazil)
 				return {
@@ -520,7 +512,7 @@ class ServerHider {
 					submenu_hideserver_text:		"Скрыть сервер",
 					submenu_openhidemenu_text:		"Управление списком серверов"
 				};
-			case "uk":		//ukranian
+			case "uk":		//ukrainian
 				return {
 					modal_header_text: 				"Управління списком серверів",
 					btn_ok_text: 					"Добре",
