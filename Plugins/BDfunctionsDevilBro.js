@@ -1517,7 +1517,7 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				toast_plugin_started:			"${pluginName} ${oldVersion} wurde gestartet.",
 				toast_plugin_stopped:			"${pluginName} ${oldVersion} wurde gestoppt.",
 				toast_plugin_translated:		"${pluginName} auf ${ownlang} übersetzt.",
-				colorpicker_modal_header_text:	"Farbwähler",
+				colorpicker_modal_header_text:	"Farbauswahl",
 				btn_ok_text: 					"OK"
 			};
 		case "es": 		//spanish
