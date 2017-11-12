@@ -63,7 +63,7 @@ class EditServers {
 							</div>
 							<div class="scrollerWrap-2uBjct content-1Cut5s scrollerThemed-19vinI themeGhostHairline-2H8SiW">
 								<div class="scroller-fzNley inner-tqJwAU">
-									<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO switchItem-1uofoz marginBottom20-2Ifj-2 modalTab modalTab-server" style="flex: 1 1 auto;">
+									<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginBottom20-2Ifj-2 modalTab modalTab-server" style="flex: 1 1 auto;">
 										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
 											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_servername_text</h3>
 										</div>
@@ -89,7 +89,7 @@ class EditServers {
 											</div>
 										</div>
 									</div>
-									<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO switchItem-1uofoz marginBottom20-2Ifj-2 modalTab modalTab-icon" style="flex: 1 1 auto;">
+									<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginBottom20-2Ifj-2 modalTab modalTab-icon" style="flex: 1 1 auto;">
 										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO" style="flex: 1 1 auto;">
 											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_colorpicker1_text</h3>
 										</div>
@@ -103,7 +103,7 @@ class EditServers {
 											<div class="swatches2"></div>
 										</div>
 									</div>
-									<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO switchItem-1uofoz marginBottom20-2Ifj-2 modalTab modalTab-tooltip" style="flex: 1 1 auto;">
+									<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginBottom20-2Ifj-2 modalTab modalTab-tooltip" style="flex: 1 1 auto;">
 										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO" style="flex: 1 1 auto;">
 											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_colorpicker3_text</h3>
 										</div>
@@ -134,7 +134,7 @@ class EditServers {
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	getVersion () {return "1.6.0";}
+	getVersion () {return "1.6.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -196,10 +196,7 @@ class EditServers {
 			
 			this.loadAllServers();
 			
-			setTimeout(() => {
-				this.labels = this.setLabelsByLanguage();
-				this.changeLanguageStrings();
-			},5000);
+			BDfunctionsDevilBro.translatePlugin(this);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -287,8 +284,6 @@ class EditServers {
 		this.serverSettingsModalMarkup = 	this.serverSettingsModalMarkup.replace("REPLACE_modal_colorpicker3_text", this.labels.modal_colorpicker3_text);
 		this.serverSettingsModalMarkup = 	this.serverSettingsModalMarkup.replace("REPLACE_modal_colorpicker4_text", this.labels.modal_colorpicker4_text);
 		this.serverSettingsModalMarkup = 	this.serverSettingsModalMarkup.replace("REPLACE_btn_save_text", this.labels.btn_save_text);
-		
-		BDfunctionsDevilBro.translateMessage(this.getName());
 	}
 	
 	onContextMenu (context) {
@@ -309,16 +304,13 @@ class EditServers {
 	}
 	
 	createContextSubMenu (e) {
-		var theme = BDfunctionsDevilBro.themeIsLightTheme() ? "" : "theme-dark";
-		
-		var targetDiv = e.target.tagName != "SPAN" ? e.target : e.target.parentNode;
-		
+		var targetDiv = e.currentTarget;
 		var serverContextSubMenu = $(this.serverContextSubMenuMarkup);
 		$(targetDiv).append(serverContextSubMenu)
 			.off("click", ".serversettings-item")
 			.on("click", ".serversettings-item", e.data, this.showServerSettings.bind(this));
 		$(serverContextSubMenu)
-			.addClass(theme)
+			.addClass(BDfunctionsDevilBro.getDiscordTheme())
 			.css("left", $(targetDiv).offset().left + "px")
 			.css("top", $(targetDiv).offset().top + "px");
 			
@@ -729,26 +721,26 @@ class EditServers {
 				};
 			case "pl": 	//polish
 				return {
-					context_localserversettings_text: 	"Lokalny ustawienia serwera",
-					submenu_serversettings_text: 		"Zmień ustawienia",
-					submenu_resetsettings_text: 		"Resetuj serwera",
-					modal_header_text: 					"Lokalny ustawienia serwera",
-					modal_servername_text: 				"Lokalna nazwa serwera",
-					modal_servershortname_text: 		"Inicjały",
-					modal_serverurl_text: 				"Ikony",
-					modal_removeicon_text: 				"Usuń ikonę",
-					modal_tabheader1_text: 				"Serwera",
-					modal_tabheader2_text: 				"Kolor ikony",
-					modal_tabheader3_text:				"Kolor tooltip",
-					modal_colorpicker1_text: 			"Kolor ikony",
-					modal_colorpicker2_text: 			"Kolor czcionki",
-					modal_colorpicker3_text:			"Kolor tooltip",
-					modal_colorpicker4_text:			"Kolor czcionki",
-					modal_ignoreurl_text: 				"Zignoruj URL",
-					modal_validurl_text: 				"Prawidłowy URL",
-					modal_invalidurl_text: 				"Nieprawidłowy URL",
-					btn_cancel_text: 					"Anuluj",
-					btn_save_text: 						"Zapisz"
+					context_localserversettings_text:	"Lokalne ustawienia serwera",
+                    submenu_serversettings_text:		"Zmień ustawienia",
+                    submenu_resetsettings_text:			"Resetuj ustawienia",
+                    modal_header_text:					"Lokalne ustawienia serwera",
+                    modal_servername_text:				"Lokalna nazwa serwera",
+                    modal_servershortname_text:			"Krótka nazwa",
+                    modal_serverurl_text:				"Ikona",
+                    modal_removeicon_text:				"Usuń ikonę",
+                    modal_tabheader1_text:				"Serwer",
+                    modal_tabheader2_text:				"Kolor ikony",
+                    modal_tabheader3_text:				"Kolor podpowiedzi",
+                    modal_colorpicker1_text:			"Kolor ikony",
+                    modal_colorpicker2_text:			"Kolor czcionki",
+                    modal_colorpicker3_text:			"Kolor podpowiedzi",
+                    modal_colorpicker4_text:			"Kolor czcionki",
+                    modal_ignoreurl_text:				"Ignoruj URL",
+                    modal_validurl_text:				"Prawidłowe URL",
+                    modal_invalidurl_text:				"Nieprawidłowe URL",
+                    btn_cancel_text:					"Anuluj",
+                    btn_save_text:						"Zapisz"
 				};
 			case "pt": 	//portuguese (brazil)
 				return {
@@ -911,7 +903,7 @@ class EditServers {
 					btn_cancel_text: 					"Отмена",
 					btn_save_text: 						"Cпасти"
 				};
-			case "uk": 	//ukranian
+			case "uk": 	//ukrainian
 				return {
 					context_localserversettings_text: 	"Налаштування локального cервер",
 					submenu_serversettings_text: 		"Змінити налаштування",
