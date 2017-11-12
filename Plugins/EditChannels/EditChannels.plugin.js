@@ -50,7 +50,7 @@ class EditChannels {
 							</div>
 							<div class="scrollerWrap-2uBjct content-1Cut5s scrollerThemed-19vinI themeGhostHairline-2H8SiW">
 								<div class="scroller-fzNley inner-tqJwAU">
-									<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO switchItem-1uofoz marginBottom20-2Ifj-2" style="flex: 1 1 auto;">
+									<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 1 1 auto;">
 										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
 											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_channelname_text</h3>
 										</div>
@@ -59,7 +59,7 @@ class EditChannels {
 										</div>
 										<div class="divider-1G01Z9 dividerDefault-77PXsz marginTop20-3UscxH"></div>
 									</div>
-									<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO switchItem-1uofoz marginBottom20-2Ifj-2" style="flex: 1 1 auto;">
+									<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 1 1 auto;">
 										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO" style="flex: 1 1 auto;">
 											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_colorpicker1_text</h3>
 										</div>
@@ -84,7 +84,7 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "3.5.0";}
+	getVersion () {return "3.5.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -164,10 +164,7 @@ class EditChannels {
 			
 			this.loadAllChannels();
 			
-			setTimeout(() => {
-				this.labels = this.setLabelsByLanguage();
-				this.changeLanguageStrings();
-			},5000);
+			BDfunctionsDevilBro.translatePlugin(this);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -233,8 +230,6 @@ class EditChannels {
 		this.channelSettingsModalMarkup = 	this.channelSettingsModalMarkup.replace("REPLACE_modal_channelname_text", this.labels.modal_channelname_text);
 		this.channelSettingsModalMarkup = 	this.channelSettingsModalMarkup.replace("REPLACE_modal_colorpicker1_text", this.labels.modal_colorpicker1_text);
 		this.channelSettingsModalMarkup = 	this.channelSettingsModalMarkup.replace("REPLACE_btn_save_text", this.labels.btn_save_text);
-		
-		BDfunctionsDevilBro.translateMessage(this.getName());
 	}
 	
 	onContextMenu (context) {
@@ -250,16 +245,13 @@ class EditChannels {
 	}
 	
 	createContextSubMenu (e) {
-		var theme = BDfunctionsDevilBro.themeIsLightTheme() ? "" : "theme-dark";
-		
-		var targetDiv = e.target.tagName != "SPAN" ? e.target : e.target.parentNode;
-		
+		var targetDiv = e.currentTarget;
 		var channelContextSubMenu = $(this.channelContextSubMenuMarkup);
 		$(targetDiv).append(channelContextSubMenu)
 			.off("click", ".channelsettings-item")
 			.on("click", ".channelsettings-item", e.data, this.showChannelSettings.bind(this));
 		$(channelContextSubMenu)
-			.addClass(theme)
+			.addClass(BDfunctionsDevilBro.getDiscordTheme())
 			.css("left", $(targetDiv).offset().left + "px")
 			.css("top", $(targetDiv).offset().top + "px");
 		var id = e.data.id + "_" + e.data.guild_id;
@@ -468,14 +460,14 @@ class EditChannels {
 				};
 			case "pl":		//polish
 				return {
-					context_localchannelsettings_text: 		"Lokalny ustawienia kanału",
-					submenu_channelsettings_text: 			"Zmień ustawienia",
-					submenu_resetsettings_text: 			"Resetuj kanał",
-					modal_header_text:						"Lokalny ustawienia kanału",
-					modal_channelname_text:					"Lokalna nazwa kanału",
-					modal_colorpicker1_text:				"Lokalny kolor kanału",
-					btn_cancel_text:						"Anuluj",
-					btn_save_text:							"Zapisz"
+					context_localchannelsettings_text:		"Lokalne ustawienia kanału",
+                    submenu_channelsettings_text:			"Zmień ustawienia",
+                    submenu_resetsettings_text:				"Resetuj ustawienia",
+                    modal_header_text:						"Lokalne ustawienia kanału",
+                    modal_channelname_text:					"Lokalna nazwa kanału",
+                    modal_colorpicker1_text:				"Lokalny kolor kanału",
+                    btn_cancel_text:						"Anuluj",
+                    btn_save_text:							"Zapisz"
 				};
 			case "pt":		//portuguese (brazil)
 				return {
@@ -554,7 +546,7 @@ class EditChannels {
 					btn_cancel_text:						"Отмена",
 					btn_save_text:							"Cпасти"
 				};
-			case "uk":		//ukranian
+			case "uk":		//ukrainian
 				return {
 					context_localchannelsettings_text: 		"Налаштування локального каналу",
 					submenu_channelsettings_text: 			"Змінити налаштування",
