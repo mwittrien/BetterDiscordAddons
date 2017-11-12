@@ -246,7 +246,7 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.2.5";}
+	getVersion () {return "5.2.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -332,7 +332,7 @@ class ServerFolders {
 								if (folderDiv) {
 									this.updateCopyInFolderContent(serverDiv, folderDiv);
 									this.updateFolderNotifications(folderDiv);
-									if (node.classList.contains("badge")) this.badgeObserver.observe(node, {characterData: true, subtree: true});
+									if (node.tagName && node.classList.contains("badge")) this.badgeObserver.observe(node, {characterData: true, subtree: true});
 									$(serverDiv).hide();
 								}
 							});
@@ -391,10 +391,7 @@ class ServerFolders {
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 			
-			setTimeout(() => {
-				this.labels = this.setLabelsByLanguage();
-				this.changeLanguageStrings();
-			},5000);
+			BDfunctionsDevilBro.translatePlugin(this);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -486,8 +483,6 @@ class ServerFolders {
 		this.folderSettingsModalMarkup = 	this.folderSettingsModalMarkup.replace("REPLACE_modal_colorpicker3_text", this.labels.modal_colorpicker3_text);
 		this.folderSettingsModalMarkup = 	this.folderSettingsModalMarkup.replace("REPLACE_modal_colorpicker4_text", this.labels.modal_colorpicker4_text);
 		this.folderSettingsModalMarkup = 	this.folderSettingsModalMarkup.replace("REPLACE_btn_save_text", this.labels.btn_save_text);
-		
-		BDfunctionsDevilBro.translateMessage(this.getName());
 	}
 	
 	onContextMenu (context) {
@@ -1402,26 +1397,26 @@ class ServerFolders {
 				};
 			case "pl":		//polish
 				return {
-					toast_addserver_text:					"${servername} zostało dodane do folderu${foldername}.",
-					toast_removeserver_text:				"${servername} został usunięty z folderu${foldername}.",
-					servercontext_serverfolders_text: 		"Foldery serwera",
-					serversubmenu_createfolder_text: 		"Utwórz folder",
-					serversubmenu_removefromfolder_text: 	"Usuń serwer z folderu",
-					foldercontext_unreadfolder_text:		"Oznacz wszystkie jako przeczytane",
-					foldercontext_foldersettings_text: 		"Ustawienia folderu",
-					foldercontext_removefolder_text:		"Usuń folder",
-					modal_header_text:						"Ustawienia folderu",
-					modal_foldername_text:					"Nazwa folderu",
-					modal_tabheader1_text:					"Folder",
-					modal_tabheader2_text:					"Kolor folderu",
-					modal_tabheader3_text:					"Kolor tooltip",
-					modal_iconpicker_text:					"Wybór folderu",
-					modal_colorpicker1_text:				"Podstawowy kolor folderu",
-					modal_colorpicker2_text:				"Drugorzędny kolor folderu",
-					modal_colorpicker3_text:				"Kolor tooltip",
-					modal_colorpicker4_text:				"Kolor czcionki",
-					btn_cancel_text:						"Anuluj",
-					btn_save_text:							"Zapisz"
+					toast_addserver_text:					"${servername} został dodany do folderu${foldername}.",
+                    toast_removeserver_text:				"${servername} został usunięty z folderu${foldername}.",
+                    servercontext_serverfolders_text:		"Foldery serwera",
+                    serversubmenu_createfolder_text:		"Utwórz folder",
+                    serversubmenu_removefromfolder_text:	"Usuń serwer z folderu",
+                    foldercontext_unreadfolder_text:		"Oznacz wszystkie jako przeczytane",
+                    foldercontext_foldersettings_text:		"Ustawienia folderu",
+                    foldercontext_removefolder_text:		"Usuń folder",
+                    modal_header_text:						"Ustawienia folderu",
+                    modal_foldername_text:					"Nazwa folderu",
+                    modal_tabheader1_text:					"Folder",
+                    modal_tabheader2_text:					"Kolor folderu",
+                    modal_tabheader3_text:					"Kolor podpowiedzi",
+                    modal_iconpicker_text:					"Wybór folderu",
+                    modal_colorpicker1_text:				"Podstawowy kolor folderu",
+                    modal_colorpicker2_text:				"Drugorzędny kolor folderu",
+                    modal_colorpicker3_text:				"Kolor podpowiedzi",
+                    modal_colorpicker4_text:				"Kolor czcionki",
+                    btn_cancel_text:						"Anuluj",
+                    btn_save_text:							"Zapisz"
 				};
 			case "pt":		//portuguese (brazil)
 				return {
