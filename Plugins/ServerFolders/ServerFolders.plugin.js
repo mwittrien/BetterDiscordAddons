@@ -246,7 +246,7 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.2.6";}
+	getVersion () {return "5.2.7";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -333,7 +333,7 @@ class ServerFolders {
 									this.updateCopyInFolderContent(serverDiv, folderDiv);
 									this.updateFolderNotifications(folderDiv);
 									if (node.tagName && node.classList.contains("badge")) this.badgeObserver.observe(node, {characterData: true, subtree: true});
-									$(serverDiv).hide();
+									$(serverDiv).addClass("in_folder").hide();
 								}
 							});
 						}
@@ -559,7 +559,7 @@ class ServerFolders {
 		if (data && info && !data.servers.includes(info.id)) {
 			data.servers.push(info.id);
 			BDfunctionsDevilBro.saveData(folderDiv.id, data, this.getName(), "folders");
-			$(serverDiv).hide();
+			$(serverDiv).addClass("in_folder").hide();
 			var message = this.labels.toast_addserver_text ? this.labels.toast_addserver_text.replace("${servername}", info.name).replace("${foldername}", data.folderName ? " " + data.folderName : "") : "";
 			BDfunctionsDevilBro.showToast(message, {type:"success"});
 			this.updateCopyInFolderContent(serverDiv, folderDiv);
@@ -574,7 +574,7 @@ class ServerFolders {
 		if (data && info) {
 			BDfunctionsDevilBro.removeFromArray(data.servers, info.id);
 			BDfunctionsDevilBro.saveData(folderDiv.id, data, this.getName(), "folders");
-			$(serverDiv).show();
+			$(serverDiv).removeClass("in_folder").show();
 			var message = this.labels.toast_removeserver_text ? this.labels.toast_removeserver_text.replace("${servername}", info.name).replace("${foldername}", data.folderName ? " " + data.folderName : "") : "";
 			BDfunctionsDevilBro.showToast(message, {type:"danger"});
 			$("#copy_of_" + info.id).remove();
@@ -618,7 +618,7 @@ class ServerFolders {
 			var data = sortedFolders[i];
 			if (data) {
 				var folderDiv = this.createFolderDiv(data);
-				$(this.readIncludedServerList(folderDiv)).hide();
+				$(this.readIncludedServerList(folderDiv)).addClass("in_folder").hide();
 			}
 		}
 	}
@@ -884,7 +884,7 @@ class ServerFolders {
 	removeFolder (folderDiv) {
 		$(".context-menu.folderSettings").remove();
 		
-		$(this.readIncludedServerList(folderDiv)).show();
+		$(this.readIncludedServerList(folderDiv)).removeClass("in_folder").show();
 		
 		BDfunctionsDevilBro.removeData(folderDiv.id, this.getName(), "folders");
 		BDfunctionsDevilBro.removeData(folderDiv.id, this.getName(), "folderIDs");
