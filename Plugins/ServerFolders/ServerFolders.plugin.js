@@ -246,7 +246,7 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.2.7";}
+	getVersion () {return "5.2.8";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -339,11 +339,16 @@ class ServerFolders {
 						}
 						if (change.removedNodes) {
 							change.removedNodes.forEach((node) => {
-								var serverDiv = this.getGuildParentDiv(node, "guild");
+								var serverDiv = this.getGuildParentDiv($(node).hasClass("badge") ? change.target : node, "guild");
 								var folderDiv = this.getFolderOfServer(serverDiv);
 								if (folderDiv) {
-									var info = BDfunctionsDevilBro.getKeyInformation({"node":serverDiv, "key":"guild"});
-									if (info) $("#copy_of_" + info.id).remove();
+									if ($(node).hasClass("badge")) {
+										this.updateCopyInFolderContent(serverDiv, folderDiv);
+									}
+									else {
+										var info = BDfunctionsDevilBro.getKeyInformation({"node":serverDiv, "key":"guild"});
+										if (info) $("#copy_of_" + info.id).remove();
+									}
 									this.updateFolderNotifications(folderDiv);
 								}
 							});
@@ -1153,9 +1158,7 @@ class ServerFolders {
 		
 		var unreadServers = BDfunctionsDevilBro.readUnreadServerList(this.readIncludedServerList(folderDiv));
 		
-		BDfunctionsDevilBro.clearReadNotifications(unreadServers, () => {
-			setTimeout(() => {this.updateFolderNotifications(folderDiv);},1000);
-		});
+		BDfunctionsDevilBro.clearReadNotifications(unreadServers);
 	}
 	
 	getGuildParentDiv (div, type) {
