@@ -60,16 +60,21 @@ class OldTitleBar {
 
 	getDescription () {return "Reverts the title bar back to its former self.";}
 
-	getVersion () {return "1.2.0";}
+	getVersion () {return "1.2.1";}
 
 	getAuthor () {return "DevilBro";}
 
     getSettingsPanel () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			return `
-			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="addToSettings"${(this.getSettings().addToSettings ? " checked" : void 0)}> Add an old fashioned title bar to settings windows.</label><br>\n
-			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="reloadButton"${(this.getSettings().reloadButton ? " checked" : void 0)}> Add a reload button to the title bar.</label><br>\n
-			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="forceClose"${(this.getSettings().forceClose ? " checked" : void 0)}> Completely turn off Discord when pressing close.</label>`;
+			var settings = this.getSettings();
+			var settingspanel = 
+				$(`<div class="${this.getName()}-settings">
+					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="addToSettings"${settings.addToSettings ? " checked" : void 0}>Add an old fashioned title bar to settings windows.</label><br>
+					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="reloadButton"${settings.reloadButton ? " checked" : void 0}>Add a reload button to the title bar.</label>
+				</div>`)[0];
+			$(settingspanel)
+				.on("change", ".settings-checkbox", () => {this.updateSettings(settingspanel);});
+			return settingspanel;
 		}
     }
 
@@ -151,8 +156,7 @@ class OldTitleBar {
 	getSettings () {
 		var defaultSettings = {
 			addToSettings: true,
-			reloadButton: false,
-			forceClose: false
+			reloadButton: false
 		};
 		var settings = BDfunctionsDevilBro.loadAllData(this.getName(), "settings");
 		var saveSettings = false;
@@ -168,14 +172,13 @@ class OldTitleBar {
 		return settings;
 	}
 
-    static updateSettings (ele, pluginName) {
-		var settingspanel = BDfunctionsDevilBro.getSettingsPanelDiv(ele);
+    updateSettings (settingspanel) {
 		var settings = {};
 		var inputs = settingspanel.querySelectorAll("input");
 		for (var i = 0; i < inputs.length; i++) {
 			settings[inputs[i].value] = inputs[i].checked;
 		}
-		BDfunctionsDevilBro.saveAllData(settings, pluginName, "settings");
+		BDfunctionsDevilBro.saveAllData(settings, this.getName(), "settings");
     }
 	
 	addTitleBar () {
@@ -266,8 +269,7 @@ class OldTitleBar {
 	}
 	
 	doClose () {
-		if (settings.forceClose) require("electron").remote.app.quit();
-		else require("electron").remote.getCurrentWindow().close();
+		require("electron").remote.getCurrentWindow().close();
 	}
 	
 	removeTitleBar () {
