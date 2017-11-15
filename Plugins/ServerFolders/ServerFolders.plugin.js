@@ -53,10 +53,6 @@ class ServerFolders {
 				text-align: center;
 			}
 			
-			.guilds-wrapper.folderopen {
-				overflow: visible !important;
-			}
-			
 			.guilds-wrapper.folderopen .scroller {
 				position: static !important;
 			}
@@ -1263,7 +1259,7 @@ class ServerFolders {
 			case "de": 		//german
 				return {
 					toast_addserver_text:					"${servername} wurde dem Ordner${foldername} hinzugefügt.",
-					toast_removeserver_text:				"${servername} wurde aus dem Orderner${foldername} entfernt.",
+					toast_removeserver_text:				"${servername} wurde aus dem Ordner${foldername} entfernt.",
 					servercontext_serverfolders_text: 		"Serverordner",
 					serversubmenu_createfolder_text: 		"Erzeuge Ordner",
 					serversubmenu_removefromfolder_text: 	"Entferne Server aus Ordner",
