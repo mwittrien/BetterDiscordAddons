@@ -180,7 +180,7 @@ class ChatAliases {
 
 	getDescription () {return "Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent.";}
 
-	getVersion () {return "1.5.0";}
+	getVersion () {return "1.5.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -202,12 +202,12 @@ class ChatAliases {
 			for (let word in words) {
 				var wordcomparison = words[word].exact ? "exact" : "noexact";
 				var casesensivity = words[word].case ? "case" : "nocase";
-				settingshtml += `<div name="` + word + `" class="added-word ` + wordcomparison + ` ` + casesensivity + ` chataliases-word">` + BDfunctionsDevilBro.encodeToHTML(word) + ` (` + BDfunctionsDevilBro.encodeToHTML(words[word].replace) + `)<div name="remove" class="word-delete">✖</div></div>`;
+				settingshtml += `<div name="${word}" class="added-word ${wordcomparison} ${casesensivity} chataliases-word">${BDfunctionsDevilBro.encodeToHTML(word)} (${BDfunctionsDevilBro.encodeToHTML(words[word].replace)})<div name="remove" class="word-delete">✖</div></div>`;
 			}		
 			settingshtml += `</div>`;
 			var infoHidden = BDfunctionsDevilBro.loadData("hideInfo", this.getName(), "settings") ? " style='display:none;'" : "";
 			settingshtml += `<button class="toggle-info">Toggle Information</button>`;
-			settingshtml += `<div class="wordtype-info"` + infoHidden + `>`;
+			settingshtml += `<div class="wordtype-info"${infoHidden}>`;
 			settingshtml += `<div class="wordtype-category"><div class="added-word case fake">case<div class="word-delete fake">✖</div></div><div class="wordtype-description">Will replace words while comparing lowercase/uppercase. \napple => apple, not APPLE or AppLe</div></div>`;
 			settingshtml += `<div class="wordtype-category"><div class="added-word nocase fake">not case<div class="word-delete fake">✖</div></div><div class="wordtype-description">Will replace words while ignoring lowercase/uppercase. \napple => apple, APPLE and AppLe</div></div>`;
 			settingshtml += `<div class="wordtype-category"><div class="added-word exact fake">exact<div class="word-delete fake">✖</div></div><div class="wordtype-description">Will only replace words that are exactly the selected word. \napple to pear => applepieapple stays applepieapple</div></div>`;
@@ -343,7 +343,7 @@ class ChatAliases {
 			for (let word in words) {
 				var wordcomparison = words[word].exact ? "exact" : "noexact";
 				var casesensivity = words[word].case ? "case" : "nocase";
-				containerhtml += `<div name="` + word + `" class="added-word ` + wordcomparison + ` ` + casesensivity + ` chataliases-word">` + BDfunctionsDevilBro.encodeToHTML(word) + ` (` + BDfunctionsDevilBro.encodeToHTML(words[word].replace) + `)<div name="remove" class="word-delete">✖</div></div>`;
+				containerhtml += `<div name="${word}" class="added-word ${wordcomparison} ${casesensivity} chataliases-word">${BDfunctionsDevilBro.encodeToHTML(word)} (${BDfunctionsDevilBro.encodeToHTML(words[word].replace)})<div name="remove" class="word-delete">✖</div></div>`;
 			}
 			$(settingspanel).find("#chataliases-word-container").html(containerhtml);
 		}
@@ -351,14 +351,8 @@ class ChatAliases {
 	
 	toggleInfo (settingspanel) {
 		var visible = $(settingspanel).find(".wordtype-info").is(":visible");
-		if (visible) {
-			$(settingspanel).find(".wordtype-info").hide();
-			$(settingspanel).find(".blocked-censored-info").hide();
-		}
-		else if (!visible) {
-			$(settingspanel).find(".wordtype-info").show();
-			$(settingspanel).find(".blocked-censored-info").show();
-		}
+		$(settingspanel).find(".wordtype-info").toggle(!visible);
+		$(settingspanel).find(".blocked-censored-info").toggle(!visible);
 		BDfunctionsDevilBro.saveData("hideInfo", visible, this.getName(), "settings");
 	}
 	
