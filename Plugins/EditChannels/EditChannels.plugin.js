@@ -360,7 +360,7 @@ class EditChannels {
 				}
 				
 				if (name == null && color == null) {
-					this.resetChannel(e);
+					this.resetChannel(channelDiv);
 				}
 				else {
 					BDfunctionsDevilBro.saveData(id, {id,name,color}, this.getName(), "channels");
