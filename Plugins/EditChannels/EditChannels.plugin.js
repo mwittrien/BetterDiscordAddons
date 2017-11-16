@@ -98,6 +98,7 @@ class EditChannels {
 					<button class="reset-button" style="height:23px">Reset all Channels</button>
 				</div>`)[0];
 			$(settingspanel)
+				.on("change", ".settings-checkbox", () => {this.updateSettings(settingspanel);})
 				.on("click", ".reset-button", () => {this.resetAll();});
 			return settingspanel;
 		}
