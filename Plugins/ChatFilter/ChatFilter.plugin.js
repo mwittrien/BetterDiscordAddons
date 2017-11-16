@@ -230,7 +230,7 @@ class ChatFilter {
 
 	getDescription () {return "Allows the user to censor words or block complete messages based on words in the chatwindow.";}
 
-	getVersion () {return "3.0.7";}
+	getVersion () {return "3.0.8";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -321,9 +321,9 @@ class ChatFilter {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if ($(node).find(".message").length > 0) {
+								if (node && node.tagName && node.querySelector(".message")) {
 									this.messageChangeObserver.observe(node, {childList:true, characterData:true, subtree:true});
-									$(node).find(".markup, .accessory").each((_,message) => {
+									node.querySelectorAll(".markup, .accessory").forEach(message => {
 										this.hideMessage(message);
 									});
 								}
@@ -380,7 +380,7 @@ class ChatFilter {
 			this.messageChangeObserver.disconnect();
 			this.settingsWindowObserver.disconnect();
 			
-			$(".markup.blocked, .markup.censored").each((_,message) => {
+			document.querySelectorAll(".markup.blocked, .markup.censored").forEach(message => {
 				this.resetMessage(message);
 			});
 			
@@ -500,12 +500,12 @@ class ChatFilter {
 	}
 	
 	hideAllMessages () {
-		$(".markup.blocked, .markup.censored, .accessory.blocked, .accessory.censored").each((_,message) => {
+		document.querySelectorAll(".markup.blocked, .markup.censored, .accessory.blocked, .accessory.censored").forEach(message => {
 			this.resetMessage(message);
 		});
-		$(".message-group").each((_,messageContainer) => {
+		document.querySelectorAll(".message-group").forEach(messageContainer => {
 			this.messageChangeObserver.observe(messageContainer, {childList:true, characterData:true, subtree:true});
-			$(messageContainer).find(".markup, .accessory").each((_,message) => {
+			messageContainer.querySelectorAll(".markup, .accessory").forEach(message => {
 				this.hideMessage(message);
 			});
 		});
@@ -537,11 +537,11 @@ class ChatFilter {
 					var blockedReplace = blockedWords[bWord].replace ? blockedWords[bWord].replace : BDfunctionsDevilBro.loadData("blocked", this.getName(), "replaceString");
 					blockedReplace = (blockedReplace && blockedReplace.length > 0) ? blockedReplace : this.defaultReplace.blocked;
 					var modifier = blockedWords[bWord].case ? "" : "i";
-					bWord = blockedWords[bWord].exact ? "^" + bWord + "$" : bWord;
+					bWord = blockedWords[bWord].exact ? "^" + BDfunctionsDevilBro.regEscape(bWord) + "$" : BDfunctionsDevilBro.regEscape(bWord);
 					bWord = BDfunctionsDevilBro.encodeToHTML(bWord);
 					
-					var reg = new RegExp(BDfunctionsDevilBro.regEscape(bWord), modifier);
-					strings.forEach((string,i) => {
+					var reg = new RegExp(bWord, modifier);
+					strings.forEach(string => {
 						if (string.indexOf("<img draggable") == 0) {
 							var emojiname = string.split('alt="').length > 0 ? string.split('alt="')[1] : null;
 							emojiname = emojiname ? emojiname.split('"')[0] : null;
@@ -581,10 +581,10 @@ class ChatFilter {
 						var censoredReplace = censoredWords[cWord].replace ? censoredWords[cWord].replace : BDfunctionsDevilBro.loadData("censored", this.getName(), "replaceString");
 						censoredReplace = (censoredReplace && censoredReplace.length > 0) ? censoredReplace : this.defaultReplace.censored;
 						var modifier = censoredWords[cWord].case ? "" : "i";
-						cWord = censoredWords[cWord].exact ? "^" + cWord + "$" : cWord;
+						cWord = censoredWords[cWord].exact ? "^" + BDfunctionsDevilBro.regEscape(cWord) + "$" : BDfunctionsDevilBro.regEscape(cWord);
 						cWord = BDfunctionsDevilBro.encodeToHTML(cWord);
 						
-						var reg = new RegExp(BDfunctionsDevilBro.regEscape(cWord), modifier);
+						var reg = new RegExp(cWord, modifier);
 						strings.forEach((string,i) => {
 							if (string.indexOf("<img draggable") == 0) {
 								var emojiname = string.split('alt="').length > 0 ? string.split('alt="')[1] : null;
