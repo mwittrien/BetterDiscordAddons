@@ -277,12 +277,12 @@ class EditChannels {
 	
 	onContextMenu (context) {
 		if (!context.querySelector(".localchannelsettings-item")) {
-			var channelData = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"channel"});
+			var channelInfo = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"channel"});
 			
-			if (channelData && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"ChannelInviteCreateGroup"})) {
+			if (channelInfo && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"ChannelInviteCreateGroup"})) {
 				$(context).append(this.channelContextEntryMarkup)
 					.on("mouseenter", ".localchannelsettings-item", (e) => {
-						this.createContextSubMenu(channelData, e);
+						this.createContextSubMenu(channelInfo, e);
 					})
 					.on("mouseleave", ".localchannelsettings-item", () => {
 						this.deleteContextSubMenu();
@@ -291,8 +291,8 @@ class EditChannels {
 		}
 	}
 	
-	createContextSubMenu (channelData, e) {
-		var id = channelData.id;
+	createContextSubMenu (channelInfo, e) {
+		var id = channelInfo.id;
 		
 		var targetDiv = e.currentTarget;
 		var channelContextSubMenu = $(this.channelContextSubMenuMarkup);
@@ -300,7 +300,7 @@ class EditChannels {
 		$(targetDiv).append(channelContextSubMenu)
 			.off("click", ".channelsettings-item")
 			.on("click", ".channelsettings-item", () => {
-				this.showChannelSettings(channelData);
+				this.showChannelSettings(channelInfo);
 			});
 			
 		$(channelContextSubMenu)
@@ -312,7 +312,7 @@ class EditChannels {
 			$(targetDiv)
 				.off("click", ".resetsettings-item")
 				.on("click", ".resetsettings-item", () => {
-					this.removeChannelData(channelData);
+					this.removechannelInfo(channelInfo);
 				});
 		}
 		else {
@@ -324,22 +324,22 @@ class EditChannels {
 		$(".editchannels-submenu").remove();
 	}
 	
-	showChannelSettings (channelData) {
+	showChannelSettings (channelInfo) {
 		$(".context-menu").hide();
 		
-		var id = channelData.id;
+		var id = channelInfo.id;
 		
-		var info = BDfunctionsDevilBro.loadData(id, this.getName(), "channels");
+		var data = BDfunctionsDevilBro.loadData(id, this.getName(), "channels");
 		
-		var name = info ? info.name : null;
-		var color = info ? info.color : null;
+		var name = data ? data.name : null;
+		var color = data ? data.color : null;
 		
 		var channelDiv = BDfunctionsDevilBro.getDivOfChannel(id);
 		
 		var channelSettingsModal = $(this.channelSettingsModalMarkup);
-		channelSettingsModal.find(".guildName-1u0hy7").text(channelData.name);
+		channelSettingsModal.find(".guildName-1u0hy7").text(channelInfo.name);
 		channelSettingsModal.find("#input-channelname").val(name);
-		channelSettingsModal.find("#input-channelname").attr("placeholder", channelData.name);
+		channelSettingsModal.find("#input-channelname").attr("placeholder", channelInfo.name);
 		BDfunctionsDevilBro.setColorSwatches(color, channelSettingsModal.find(".swatches1"), "swatch1");
 		BDfunctionsDevilBro.appendModal(channelSettingsModal);
 		channelSettingsModal
@@ -372,10 +372,10 @@ class EditChannels {
 		channelSettingsModal.find("#input-channelname").focus();
 	}
 	
-	removeChannelData (channelData) {
+	removechannelInfo (channelInfo) {
 		$(".context-menu").hide();
 		
-		var id = channelData.id;
+		var id = channelInfo.id;
 		
 		this.resetChannel(BDfunctionsDevilBro.getDivOfChannel(id));
 		
@@ -426,11 +426,11 @@ class EditChannels {
 		if (this.getSettings().changeInChannelHeader) {
 			var channelHeader = document.querySelector("div.titleText-2IfpkV");
 			if (!channelHeader) return;
-			var info = BDfunctionsDevilBro.getKeyInformation({"node":channelHeader,"key":"channel"});
-			if (info) {
-				var data = BDfunctionsDevilBro.loadData(info.id, this.getName(), "channels");
+			var channelInfo = BDfunctionsDevilBro.getKeyInformation({"node":channelHeader,"key":"channel"});
+			if (channelInfo) {
+				var data = BDfunctionsDevilBro.loadData(channelInfo.id, this.getName(), "channels");
 				var channel = channelHeader.querySelector(".channelName-1G03vu");
-				var name = data && data.name ? data.name : info.name;
+				var name = data && data.name ? data.name : channelInfo.name;
 				var color = data && data.color ? BDfunctionsDevilBro.color2RGB(data.color) : "";
 				this.setChannelHeader(channel, name);
 				$(channel).css("color", color);
