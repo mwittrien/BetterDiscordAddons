@@ -85,7 +85,7 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "3.5.2";}
+	getVersion () {return "3.5.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -412,7 +412,7 @@ class EditChannels {
 	}
 	
 	changeChannelHeader () {
-		if (this.getSettings().changeInChannelHeader) {
+		if (this.getSettings().changeInChannelHeader && BDfunctionsDevilBro.getSelectedServer()) {
 			var channelHeader = document.querySelector("div.titleText-2IfpkV");
 			if (!channelHeader) return;
 			var info = BDfunctionsDevilBro.getKeyInformation({"node":channelHeader,"key":"channel"});
