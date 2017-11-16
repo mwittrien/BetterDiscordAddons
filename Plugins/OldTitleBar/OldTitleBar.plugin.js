@@ -60,7 +60,7 @@ class OldTitleBar {
 
 	getDescription () {return "Reverts the title bar back to its former self.";}
 
-	getVersion () {return "1.2.1";}
+	getVersion () {return "1.2.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -98,7 +98,6 @@ class OldTitleBar {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (node && node.tagName && node.getAttribute("layer-id") || node.querySelector(".ui-standard-sidebar-view")) {
-									this.removeTitleBar();
 									if (this.getSettings().addToSettings) this.addSettingsTitleBar(node);
 								}
 							});
@@ -106,6 +105,7 @@ class OldTitleBar {
 						if (change.removedNodes) {
 							change.removedNodes.forEach((node) => {
 								if (node && node.tagName && node.getAttribute("layer-id") || node.querySelector(".ui-standard-sidebar-view")) {
+									this.removeTitleBar();
 									this.addTitleBar();
 								}
 							});
@@ -213,7 +213,7 @@ class OldTitleBar {
 	
 	addSettingsTitleBar (settingspane) {
 		if (!settingspane.querySelector(".dividerOTB, .reloadButtonOTB, .minButtonOTB, .maxButtonOTB, .closeButtonOTB")) {
-			var settingsbar = $(`<div class="settings-titlebar"></div>`)
+			var settingsbar = $(`<div class="settings-titlebar"></div>`);
 			var settings = this.getSettings();
 			if (settings.reloadButton) {
 				$(settingsbar)
@@ -284,6 +284,6 @@ class OldTitleBar {
 	}
 	
 	createReloadToolTip (e) {
-		BDfunctionsDevilBro.createTooltip("Reload", document.querySelector(".reloadButtonOTB"), {type:"bottom",selector:"reload-button-tooltip"});
+		BDfunctionsDevilBro.createTooltip("Reload", e.currentTarget, {type:"bottom",selector:"reload-button-tooltip"});
 	}
 }
