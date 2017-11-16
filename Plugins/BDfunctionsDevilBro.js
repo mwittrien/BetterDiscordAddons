@@ -690,12 +690,12 @@ BDfunctionsDevilBro.getIdOfServer = function (server) {
 	return null;
 };
 	
-BDfunctionsDevilBro.getDivOfChannel = function (channelID, serverID) {
+BDfunctionsDevilBro.getDivOfChannel = function (channelID) {
 	var channels = BDfunctionsDevilBro.readChannelList();
 	for (var i = 0; i < channels.length; i++) {
 		var channelData = BDfunctionsDevilBro.getKeyInformation({"node":channels[i], "key":"channel"});
 		if (channelData) {
-			if (channelID == channelData.id && serverID == channelData.guild_id) {
+			if (channelID == channelData.id) {
 				return channels[i];
 			}
 		}
