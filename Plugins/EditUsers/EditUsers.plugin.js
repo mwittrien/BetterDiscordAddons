@@ -169,25 +169,32 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "1.9.5";}
+	getVersion () {return "1.9.6";}
 
 	getAuthor () {return "DevilBro";}
 	
 	getSettingsPanel () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			return `
-			<label style="color:grey; font-size:20px; margin-bottom:5px;">Change user information in:</label><br>\n
-			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInChatWindow"${(this.getSettings().changeInChatWindow ? " checked" : void 0)}> Chat</label><br>\n
-			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInVoiceChat"${(this.getSettings().changeInVoiceChat ? " checked" : void 0)}> Voice Channels</label><br>\n
-			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInMemberList"${(this.getSettings().changeInMemberList ? " checked" : void 0)}> Server Member List</label><br>\n
-			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInDmHeader"${(this.getSettings().changeInDmHeader ? " checked" : void 0)}> DM Title</label><br>\n
-			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInRecentDms"${(this.getSettings().changeInRecentDms ? " checked" : void 0)}> Recent DMs</label><br>\n
-			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInDmsList"${(this.getSettings().changeInDmsList ? " checked" : void 0)}> DM-Conversation List</label><br>\n
-			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInFriendList"${(this.getSettings().changeInFriendList ? " checked" : void 0)}> Friends List</label><br>\n
-			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInUserPopout"${(this.getSettings().changeInUserPopout ? " checked" : void 0)}> User Popups</label><br>\n
-			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInUserProfil"${(this.getSettings().changeInUserProfil ? " checked" : void 0)}> User Profil</label><br>\n
-			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="changeInUserAccount"${(this.getSettings().changeInUserAccount ? " checked" : void 0)}> Your Account Window</label><br>\n<br>\n
-			<button class="` + this.getName() + `ResetBtn" style="height:23px" onclick='` + this.getName() + `.resetAll("` + this.getName() + `")'>Reset all Users`;
+			var settings = this.getSettings();
+			var settingspanel = 
+				$(`<div class="${this.getName()}-settings">
+					<label style="color:grey; font-size:20px; margin-bottom:5px;">Change user information in:</label><br>
+					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="changeInChatWindow"${settings.changeInChatWindow ? " checked" : void 0}>Chat</label><br>
+					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="changeInVoiceChat"${settings.changeInVoiceChat ? " checked" : void 0}>Voice Channels</label><br>
+					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="changeInMemberList"${settings.changeInMemberList ? " checked" : void 0}>Server Member List</label><br>
+					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="changeInDmHeader"${settings.changeInDmHeader ? " checked" : void 0}>DM Title</label><br>
+					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="changeInRecentDms"${settings.changeInRecentDms ? " checked" : void 0}>Recent DMs</label><br>
+					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="changeInDmsList"${settings.changeInDmsList ? " checked" : void 0}>DM-Conversation List</label><br>
+					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="changeInFriendList"${settings.changeInFriendList ? " checked" : void 0}>Friends List</label><br>
+					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="changeInUserPopout"${settings.changeInUserPopout ? " checked" : void 0}>User Popups</label><br>
+					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="changeInUserProfil"${settings.changeInUserProfil ? " checked" : void 0}>User Profil</label><br>
+					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="changeInUserAccount"${settings.changeInUserAccount ? " checked" : void 0}>Your Account Window</label><br><br>
+					<button class="reset-button" style="height:23px">Reset all Users</button>
+				</div>`)[0];
+			$(settingspanel)
+				.on("change", ".settings-checkbox", () => {this.updateSettings(settingspanel);})
+				.on("click", ".reset-button", () => {this.resetAll();});
+			return settingspanel;
 		}
 	}
 
@@ -433,19 +440,19 @@ class EditUsers {
 		return settings;
 	}
 
-	static updateSettings (ele, pluginName) {
-		var settingspanel = BDfunctionsDevilBro.getSettingsPanelDiv(ele);
+	updateSettings (settingspanel) {
 		var settings = {};
 		var inputs = settingspanel.querySelectorAll("input");
 		for (var i = 0; i < inputs.length; i++) {
 			settings[inputs[i].value] = inputs[i].checked;
 		}
-		BDfunctionsDevilBro.saveAllData(settings, pluginName, "settings");
+		BDfunctionsDevilBro.saveAllData(settings, this.getName(), "settings");
 	}
 
-	static resetAll (pluginName) {
+	resetAll () {
 		if (confirm("Are you sure you want to reset all users?")) {
-			BDfunctionsDevilBro.removeAllData(pluginName, "users");
+			BDfunctionsDevilBro.removeAllData(this.getName(), "users");
+			this.resetAllUsers();
 		}
 	}
 
@@ -473,140 +480,145 @@ class EditUsers {
 	
 	onContextMenu (context) {
 		if ($(context).find(".localusersettings-item").length == 0) {
-			var userData = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"user"});
-			var contextType = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"UserNoteItem"});
-			
-			if (userData && contextType) {
+			var info = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"user"});
+			if (info && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"UserNoteItem"})) {
 				$(context).append(this.userContextEntryMarkup)
-					.on("mouseenter", ".localusersettings-item", userData, this.createContextSubMenu.bind(this))
-					.on("mouseleave", ".localusersettings-item", userData, this.deleteContextSubMenu.bind(this));
+					.on("mouseenter", ".localusersettings-item", (e) => {
+						this.createContextSubMenu(info, e);
+					})
+					.on("mouseleave", ".localusersettings-item", () => {
+						this.deleteContextSubMenu();
+					});
 			}
 		}
 	}
 	
-	createContextSubMenu (e) {
+	createContextSubMenu (info, e) {
+		var id = info.id;
+		
 		var targetDiv = e.currentTarget;
 		var userContextSubMenu = $(this.userContextSubMenuMarkup);
+		
 		$(targetDiv).append(userContextSubMenu)
 			.off("click", ".usersettings-item")
-			.on("click", ".usersettings-item", e.data, this.showUserSettings.bind(this));
+			.on("click", ".usersettings-item", () => {
+				this.showUserSettings(info);
+			});
+			
 		$(userContextSubMenu)
 			.addClass(BDfunctionsDevilBro.getDiscordTheme())
 			.css("left", $(targetDiv).offset().left + "px")
 			.css("top", $(targetDiv).offset().top + "px");
 			
-		var info = BDfunctionsDevilBro.loadData(e.data.id, this.getName(), "users");
-		if (!info) {
-			$(targetDiv).find(".resetsettings-item").addClass("disabled");
-		}
-		else {
+		if (BDfunctionsDevilBro.loadData(id, this.getName(), "users")) {
 			$(targetDiv)
 				.off("click", ".resetsettings-item")
 				.on("click", ".resetsettings-item", () => {
 					$(".context-menu").hide();
-					if (e.data.id) {
-						BDfunctionsDevilBro.removeData(e.data.id, this.getName(), "users");
-						this.loadAllUsers();
-					}
+					BDfunctionsDevilBro.removeData(id, this.getName(), "users");
+					this.loadAllUsers();
 				});
+		}
+		else {
+			$(targetDiv).find(".resetsettings-item").addClass("disabled");
 		}
 	}
 	
-	deleteContextSubMenu (e) {
+	deleteContextSubMenu () {
 		$(".editusers-submenu").remove();
 	}
 	
-	showUserSettings (e) {
+	showUserSettings (info, e) {
 		$(".context-menu").hide();
-		var id = e.data.id;
-		if (id) {
-			var info = BDfunctionsDevilBro.loadData(id, this.getName(), "users");
-			
-			var name = 			info ? info.name : null;
-			var tag = 			info ? info.tag : null;
-			var url = 			info ? info.url : null;
-			var removeIcon = 	info ? info.removeIcon : false;
-			var color1 = 		info ? info.color1 : null;
-			var color2 = 		info ? info.color2 : null;
-			var color3 = 		info ? info.color3 : null;
-			var color4 = 		info ? info.color4 : null;
-			
-			var userSettingsModal = $(this.userSettingsModalMarkup);
-			userSettingsModal.find(".guildName-1u0hy7").text(e.data.username);
-			userSettingsModal.find("#input-username").val(name);
-			userSettingsModal.find("#input-username").attr("placeholder", e.data.username);
-			userSettingsModal.find("#input-usertag").val(tag);
-			userSettingsModal.find("#input-userurl").val(url);
-			userSettingsModal.find("#input-userurl").attr("placeholder", e.data.avatar ? "https://cdn.discordapp.com/avatars/" + e.data.id + "/" + e.data.avatar + ".webp" : null);
-			userSettingsModal.find("#input-userurl").addClass(url ? "valid" : "");
-			userSettingsModal.find("#input-userurl").prop("disabled", removeIcon);
-			userSettingsModal.find("#input-removeicon").prop("checked", removeIcon);
-			BDfunctionsDevilBro.setColorSwatches(color1, userSettingsModal.find(".swatches1"), "swatch1");
-			BDfunctionsDevilBro.setColorSwatches(color2, userSettingsModal.find(".swatches2"), "swatch2");
-			BDfunctionsDevilBro.setColorSwatches(color3, userSettingsModal.find(".swatches3"), "swatch3");
-			BDfunctionsDevilBro.setColorSwatches(color4, userSettingsModal.find(".swatches4"), "swatch4");
-			BDfunctionsDevilBro.appendModal(userSettingsModal);
-			userSettingsModal
-				.on("click", "#input-removeicon", (event) => {
-					userSettingsModal.find("#input-userurl").prop("disabled", event.target.checked);
-				})
-				.on("change keyup paste", "#input-userurl", (event) => {
-					this.checkUrl(event, userSettingsModal);
-				})
-				.on("mouseenter", "#input-userurl", (event) => {
-					$(event.target).addClass("hovering");
-					this.createNoticeTooltip(event);
-				})
-				.on("mouseleave", "#input-userurl", (event) => {
-					$(".tooltips").find(".notice-tooltip").remove();
-					$(event.target).removeClass("hovering");
-				})
-				.on("click", "button.btn-save", (event) => {
-					event.preventDefault();
-					
-					name = null;
-					if (userSettingsModal.find("#input-username").val()) {
-						if (userSettingsModal.find("#input-username").val().trim().length > 0) {
-							name = userSettingsModal.find("#input-username").val().trim();
+		
+		var id = info.id;
+	
+		var data = BDfunctionsDevilBro.loadData(id, this.getName(), "users");
+		
+		var name = 			data ? data.name : null;
+		var tag = 			data ? data.tag : null;
+		var url = 			data ? data.url : null;
+		var removeIcon = 	data ? data.removeIcon : false;
+		var color1 = 		data ? data.color1 : null;
+		var color2 = 		data ? data.color2 : null;
+		var color3 = 		data ? data.color3 : null;
+		var color4 = 		data ? data.color4 : null;
+		
+		var userSettingsModal = $(this.userSettingsModalMarkup);
+		userSettingsModal.find(".guildName-1u0hy7").text(info.username);
+		userSettingsModal.find("#input-username").val(name);
+		userSettingsModal.find("#input-username").attr("placeholder", info.username);
+		userSettingsModal.find("#input-usertag").val(tag);
+		userSettingsModal.find("#input-userurl").val(url);
+		userSettingsModal.find("#input-userurl").attr("placeholder", info.avatar ? "https://cdn.discordapp.com/avatars/" + id + "/" + info.avatar + ".webp" : null);
+		userSettingsModal.find("#input-userurl").addClass(url ? "valid" : "");
+		userSettingsModal.find("#input-userurl").prop("disabled", removeIcon);
+		userSettingsModal.find("#input-removeicon").prop("checked", removeIcon);
+		BDfunctionsDevilBro.setColorSwatches(color1, userSettingsModal.find(".swatches1"), "swatch1");
+		BDfunctionsDevilBro.setColorSwatches(color2, userSettingsModal.find(".swatches2"), "swatch2");
+		BDfunctionsDevilBro.setColorSwatches(color3, userSettingsModal.find(".swatches3"), "swatch3");
+		BDfunctionsDevilBro.setColorSwatches(color4, userSettingsModal.find(".swatches4"), "swatch4");
+		BDfunctionsDevilBro.appendModal(userSettingsModal);
+		userSettingsModal
+			.on("click", "#input-removeicon", (event) => {
+				userSettingsModal.find("#input-userurl").prop("disabled", event.target.checked);
+			})
+			.on("change keyup paste", "#input-userurl", (event) => {
+				this.checkUrl(userSettingsModal, event);
+			})
+			.on("mouseenter", "#input-userurl", (event) => {
+				$(event.target).addClass("hovering");
+				this.createNoticeTooltip(event);
+			})
+			.on("mouseleave", "#input-userurl", (event) => {
+				$(".tooltips").find(".notice-tooltip").remove();
+				$(event.target).removeClass("hovering");
+			})
+			.on("click", "button.btn-save", (event) => {
+				event.preventDefault();
+				
+				name = null;
+				if (userSettingsModal.find("#input-username").val()) {
+					if (userSettingsModal.find("#input-username").val().trim().length > 0) {
+						name = userSettingsModal.find("#input-username").val().trim();
+					}
+				}
+				
+				tag = null;
+				if (userSettingsModal.find("#input-usertag").val()) {
+					if (userSettingsModal.find("#input-usertag").val().trim().length > 0) {
+						tag = userSettingsModal.find("#input-usertag").val().trim();
+					}
+				}
+				
+				if (userSettingsModal.find("#input-userurl:not('.invalid')").length > 0) {
+					url = null;
+					if (!userSettingsModal.find("#input-removeicon").prop("checked") && userSettingsModal.find("#input-userurl").val()) {
+						if (userSettingsModal.find("#input-userurl").val().trim().length > 0) {
+							url = userSettingsModal.find("#input-userurl").val().trim();
 						}
 					}
-					
-					tag = null;
-					if (userSettingsModal.find("#input-usertag").val()) {
-						if (userSettingsModal.find("#input-usertag").val().trim().length > 0) {
-							tag = userSettingsModal.find("#input-usertag").val().trim();
-						}
-					}
-					
-					if (userSettingsModal.find("#input-userurl:not('.invalid')").length > 0) {
-						url = null;
-						if (!userSettingsModal.find("#input-removeicon").prop("checked") && userSettingsModal.find("#input-userurl").val()) {
-							if (userSettingsModal.find("#input-userurl").val().trim().length > 0) {
-								url = userSettingsModal.find("#input-userurl").val().trim();
-							}
-						}
-					}
-					
-					removeIcon = userSettingsModal.find("#input-removeicon").prop("checked");
-					
-					color1 = BDfunctionsDevilBro.getSwatchColor("swatch1");
-					color2 = BDfunctionsDevilBro.getSwatchColor("swatch2");
-					color3 = BDfunctionsDevilBro.getSwatchColor("swatch3");
-					color4 = BDfunctionsDevilBro.getSwatchColor("swatch4");
-					
-					if (name == null && tag == null && url == null && !removeIcon && color1 == null && color2 == null && color3 == null && color4 == null) {
-						BDfunctionsDevilBro.removeData(id, this.getName(), "users")
-					}
-					else {
-						BDfunctionsDevilBro.saveData(id, {id,name,tag,url,removeIcon,color1,color2,color3,color4}, this.getName(), "users");
-					};
-					this.loadAllUsers();
-				});
-			userSettingsModal.find("#input-username").focus();
-		}
+				}
+				
+				removeIcon = userSettingsModal.find("#input-removeicon").prop("checked");
+				
+				color1 = BDfunctionsDevilBro.getSwatchColor("swatch1");
+				color2 = BDfunctionsDevilBro.getSwatchColor("swatch2");
+				color3 = BDfunctionsDevilBro.getSwatchColor("swatch3");
+				color4 = BDfunctionsDevilBro.getSwatchColor("swatch4");
+				
+				if (name == null && tag == null && url == null && !removeIcon && color1 == null && color2 == null && color3 == null && color4 == null) {
+					BDfunctionsDevilBro.removeData(id, this.getName(), "users")
+				}
+				else {
+					BDfunctionsDevilBro.saveData(id, {id,name,tag,url,removeIcon,color1,color2,color3,color4}, this.getName(), "users");
+				};
+				this.loadAllUsers();
+			});
+		userSettingsModal.find("#input-username").focus();
 	}
 	
-	checkUrl (e, modal) {
+	checkUrl (modal, e) {
 		if (!e.target.value) {
 			$(e.target)
 				.removeClass("valid")
@@ -807,7 +819,7 @@ class EditUsers {
 	}
 	
 	resetAllUsers () {
-		document.querySelectorAll(".user-tag").forEach(node=>{node.parentElement.removeChild(node)});
+		document.querySelectorAll(".user-tag").forEach(node=>{node.remove();});
 		document.querySelectorAll(".custom-editusers").forEach((div) => {
 			var {avatar, username, wrapper} = this.getAvatarNameWrapper(div);
 			if (!avatar && !username && !wrapper) return;
