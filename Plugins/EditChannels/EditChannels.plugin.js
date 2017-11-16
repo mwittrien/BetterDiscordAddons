@@ -4,6 +4,7 @@ class EditChannels {
 	constructor () {
 		this.labels = {};
 		
+		this.switchFixObserver = new MutationObserver(() => {});
 		this.channelObserver = new MutationObserver(() => {});
 		this.channelListObserver = new MutationObserver(() => {});
 		this.channelContextObserver = new MutationObserver(() => {});
@@ -84,13 +85,21 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "3.5.1";}
+	getVersion () {return "3.5.2";}
 
 	getAuthor () {return "DevilBro";}
 	
     getSettingsPanel () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			return `<button class="` + this.getName() + `ResetBtn" style="height:23px" onclick='` + this.getName() + `.resetAll("` + this.getName() + `")'>Reset all Channels`;
+			var settings = this.getSettings();
+			var settingspanel = 
+				$(`<div class="${this.getName()}-settings">
+					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="changeInChannelHeader"${settings.changeInChannelHeader ? " checked" : void 0}>Change in Channel Header</label><br><br>
+					<button class="reset-button" style="height:23px">Reset all Channels</button>
+				</div>`)[0];
+			$(settingspanel)
+				.on("click", ".reset-button", () => {this.resetAll();});
+			return settingspanel;
 		}
     }
 
@@ -162,7 +171,11 @@ class EditChannels {
 			});
 			if (document.querySelector(".app")) this.channelContextObserver.observe(document.querySelector(".app"), {childList: true});
 			
+			this.switchFixObserver = BDfunctionsDevilBro.onSwitchFix(this);
+			
 			this.loadAllChannels();
+			
+			this.changeChannelHeader();
 			
 			BDfunctionsDevilBro.translatePlugin(this);
 		}
@@ -173,21 +186,25 @@ class EditChannels {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
+			this.switchFixObserver.disconnect();
 			this.channelObserver.disconnect();
 			this.channelListObserver.disconnect();
 			this.channelContextObserver.disconnect();
 			
 			$(".custom-editchannels").each(
-				(i,channelDiv) => {
-					var info = BDfunctionsDevilBro.getKeyInformation({"node":channelDiv, "key":"channel"});
+				(_, channelDiv) => {
+					this.resetChannel(channelDiv);
+				}
+			);
+			
+			$(".custom-editchannelsheader").each(
+				(_, channelHeader) => {
+					var info = BDfunctionsDevilBro.getKeyInformation({"node":channelHeader, "key":"channel"});
 					if (info) {
-						var channel = $(channelDiv).find(".name-2SL4ev");
-					
-						$(channelDiv)
-							.removeClass("custom-editchannels");
-						$(channel)
-							.text(info.name)
-							.css("color", "");
+						var channel = channelHeader.querySelector(".channelName-1G03vu");
+						this.setChannelHeader(channel, info.name);
+						$(channel).css("color", "");
+						$(channelHeader).removeClass("custom-editchannelsheader");
 					}
 				}
 			);
@@ -195,28 +212,53 @@ class EditChannels {
 			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
 		}
 	}
-
+	
+	onSwitch () {
+		if (typeof BDfunctionsDevilBro === "object") {
+			this.changeChannelHeader();
+		}
+	}
 	
 	// begin of own functions
+	
+	getSettings () {
+		var defaultSettings = {
+			changeInChannelHeader: true
+		};
+		var settings = BDfunctionsDevilBro.loadAllData(this.getName(), "settings");
+		var saveSettings = false;
+		for (var key in defaultSettings) {
+			if (settings[key] == null) {
+				settings[key] = defaultSettings[key];
+				saveSettings = true;
+			}
+		}
+		if (saveSettings) {
+			BDfunctionsDevilBro.saveAllData(settings, this.getName(), "settings");
+		}
+		return settings;
+	}
 
-    static resetAll (pluginName) {
+	updateSettings (settingspanel) {
+		var settings = {};
+		var inputs = settingspanel.querySelectorAll("input");
+		for (var i = 0; i < inputs.length; i++) {
+			settings[inputs[i].value] = inputs[i].checked;
+		}
+		BDfunctionsDevilBro.saveAllData(settings, this.getName(), "settings");
+	}
+
+    resetAll () {
 		if (confirm("Are you sure you want to reset all channels?")) {
-			BDfunctionsDevilBro.removeAllData(pluginName, "channels");
+			BDfunctionsDevilBro.removeAllData(this.getName(), "channels");
 			
 			$(".custom-editchannels").each(
-				(i,channelDiv) => {
-					var info = BDfunctionsDevilBro.getKeyInformation({"node":channelDiv, "key":"channel"});
-					if (info) {
-						var channel = $(channelDiv).find(".name-2SL4ev");
-					
-						$(channelDiv)
-							.removeClass("custom-editchannels");
-						$(channel)
-							.text(info.name)
-							.css("color", "");
-					}
+				(_, channelDiv) => {
+					this.resetChannel(channelDiv);
 				}
 			);
+			
+			this.changeChannelHeader();
 		}
     }
 
@@ -238,85 +280,165 @@ class EditChannels {
 			
 			if (channelData && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"ChannelInviteCreateGroup"})) {
 				$(context).append(this.channelContextEntryMarkup)
-					.on("mouseenter", ".localchannelsettings-item", channelData, this.createContextSubMenu.bind(this))
-					.on("mouseleave", ".localchannelsettings-item", channelData, this.deleteContextSubMenu.bind(this));
+					.on("mouseenter", ".localchannelsettings-item", (e) => {
+						this.createContextSubMenu(channelData, e);
+					})
+					.on("mouseleave", ".localchannelsettings-item", () => {
+						this.deleteContextSubMenu();
+					});
 			}
 		}
 	}
 	
-	createContextSubMenu (e) {
+	createContextSubMenu (channelData, e) {
 		var targetDiv = e.currentTarget;
 		var channelContextSubMenu = $(this.channelContextSubMenuMarkup);
+		
 		$(targetDiv).append(channelContextSubMenu)
 			.off("click", ".channelsettings-item")
-			.on("click", ".channelsettings-item", e.data, this.showChannelSettings.bind(this));
+			.on("click", ".channelsettings-item", () => {
+				this.showChannelSettings(channelData);
+			});
+			
 		$(channelContextSubMenu)
 			.addClass(BDfunctionsDevilBro.getDiscordTheme())
 			.css("left", $(targetDiv).offset().left + "px")
 			.css("top", $(targetDiv).offset().top + "px");
-		var id = e.data.id + "_" + e.data.guild_id;
-		var info = BDfunctionsDevilBro.loadData(id, this.getName(), "channels");
-		if (!info) {
-			$(targetDiv).find(".resetsettings-item").addClass("disabled");
-		}
-		else {
+			
+		if (BDfunctionsDevilBro.loadData(channelData.id, this.getName(), "channels")) {
 			$(targetDiv)
 				.off("click", ".resetsettings-item")
-				.on("click", ".resetsettings-item", e.data, this.resetChannel.bind(this));
+				.on("click", ".resetsettings-item", () => {
+					this.removeChannelData(channelData);
+				});
+		}
+		else {
+			$(targetDiv).find(".resetsettings-item").addClass("disabled");
 		}
 	}
 	
-	deleteContextSubMenu (e) {
+	deleteContextSubMenu () {
 		$(".editchannels-submenu").remove();
 	}
 	
-	showChannelSettings (e) {
+	showChannelSettings (channelData) {
 		$(".context-menu").hide();
-		var id = e.data.id + "_" + e.data.guild_id;
-		if (id) {
-			var info = BDfunctionsDevilBro.loadData(id, this.getName(), "channels");
-			
-			var channelID = e.data.id;
-			var serverID = 	e.data.guild_id;
-			var name = 		info ? info.name : null;
-			var color = 	info ? info.color : null;
-			
-			var channelDiv = BDfunctionsDevilBro.getDivOfChannel(channelID, serverID);
-			
-			var channelSettingsModal = $(this.channelSettingsModalMarkup);
-			channelSettingsModal.find(".guildName-1u0hy7").text(e.data.name);
-			channelSettingsModal.find("#input-channelname").val(name);
-			channelSettingsModal.find("#input-channelname").attr("placeholder", e.data.name);
-			BDfunctionsDevilBro.setColorSwatches(color, channelSettingsModal.find(".swatches1"), "swatch1");
-			BDfunctionsDevilBro.appendModal(channelSettingsModal);
-			channelSettingsModal
-				.on("click", ".btn-save", (event) => {
-					event.preventDefault();
-					
-					name = null;
-					if (channelSettingsModal.find("#input-channelname").val()) {
-						if (channelSettingsModal.find("#input-channelname").val().trim().length > 0) {
-							name = channelSettingsModal.find("#input-channelname").val().trim();
-						}
-					}
-					
-					color = BDfunctionsDevilBro.getSwatchColor("swatch1");
-					if (color) {
-						if (color[0] < 30 && color[1] < 30 && color[2] < 30) BDfunctionsDevilBro.colorCHANGE(color, 30);
-						else if (color[0] > 225 && color[1] > 225 && color[2] > 225) BDfunctionsDevilBro.colorCHANGE(color, -30);
-					}
-					
-					if (name == null && color == null) {
-						this.resetChannel(e);
-					}
-					else {
-						BDfunctionsDevilBro.saveData(id, {channelID,serverID,name,color}, this.getName(), "channels");
-						this.loadChannel(channelDiv);
-					}
-				});
+		
+		var channelID = channelData.id;
+		
+		var info = BDfunctionsDevilBro.loadData(channelID, this.getName(), "channels");
+		
+		var name = info ? info.name : null;
+		var color = info ? info.color : null;
+		
+		var channelDiv = BDfunctionsDevilBro.getDivOfChannel(channelID);
+		
+		var channelSettingsModal = $(this.channelSettingsModalMarkup);
+		channelSettingsModal.find(".guildName-1u0hy7").text(channelData.name);
+		channelSettingsModal.find("#input-channelname").val(name);
+		channelSettingsModal.find("#input-channelname").attr("placeholder", channelData.name);
+		BDfunctionsDevilBro.setColorSwatches(color, channelSettingsModal.find(".swatches1"), "swatch1");
+		BDfunctionsDevilBro.appendModal(channelSettingsModal);
+		channelSettingsModal
+			.on("click", ".btn-save", (event) => {
+				event.preventDefault();
 				
-			channelSettingsModal.find("#input-channelname").focus();
+				name = null;
+				if (channelSettingsModal.find("#input-channelname").val()) {
+					if (channelSettingsModal.find("#input-channelname").val().trim().length > 0) {
+						name = channelSettingsModal.find("#input-channelname").val().trim();
+					}
+				}
+				
+				color = BDfunctionsDevilBro.getSwatchColor("swatch1");
+				if (color) {
+					if (color[0] < 30 && color[1] < 30 && color[2] < 30) BDfunctionsDevilBro.colorCHANGE(color, 30);
+					else if (color[0] > 225 && color[1] > 225 && color[2] > 225) BDfunctionsDevilBro.colorCHANGE(color, -30);
+				}
+				
+				if (name == null && color == null) {
+					this.resetChannel(e);
+				}
+				else {
+					BDfunctionsDevilBro.saveData(channelID, {channelID,name,color}, this.getName(), "channels");
+					this.loadChannel(channelDiv);
+					this.changeChannelHeader();
+				}
+			});
+			
+		channelSettingsModal.find("#input-channelname").focus();
+	}
+	
+	removeChannelData (channelData) {
+		$(".context-menu").hide();
+		
+		this.resetChannel(BDfunctionsDevilBro.getDivOfChannel(channelData.id));
+		
+		BDfunctionsDevilBro.removeData(channelData.id, this.getName(), "channels");
+		
+		this.changeChannelHeader();
+	}
+	
+	resetChannel (channelDiv) {
+		var info = BDfunctionsDevilBro.getKeyInformation({"node":channelDiv, "key":"channel"});
+		if (info) {
+			var channel = channelDiv.querySelector(".name-2SL4ev");
+		
+			$(channelDiv)
+				.removeClass("custom-editchannels");
+			$(channel)
+				.text(info.name)
+				.css("color", "");
 		}
+	}
+	
+	loadChannel (channelDiv) {
+		var info = BDfunctionsDevilBro.getKeyInformation({"node":channelDiv, "key":"channel"});
+		if (info) {
+			var channel = channelDiv.querySelector(".name-2SL4ev");
+			var data = BDfunctionsDevilBro.loadData(info.id, this.getName(), "channels");
+			if (data) {
+				var name = data.name ? data.name : info.name;
+				var color = data.color ? this.chooseColor(channel, data.color) : "";
+				
+				$(channelDiv)
+					.addClass("custom-editchannels");
+				$(channel)
+					.text(name)
+					.css("color", color);
+			}
+		}
+	}
+	
+	loadAllChannels () {
+		var channels = BDfunctionsDevilBro.readChannelList();
+		for (var i = 0; i < channels.length; i++) {
+			this.loadChannel(channels[i]);
+		}
+	}
+	
+	changeChannelHeader () {
+		if (this.getSettings().changeInChannelHeader) {
+			var channelHeader = document.querySelector("div.titleText-2IfpkV");
+			if (!channelHeader) return;
+			var info = BDfunctionsDevilBro.getKeyInformation({"node":channelHeader,"key":"channel"});
+			if (info) {
+				var data = BDfunctionsDevilBro.loadData(info.id, this.getName(), "channels");
+				var channel = channelHeader.querySelector(".channelName-1G03vu");
+				var name = data && data.name ? data.name : info.name;
+				var color = data && data.color ? BDfunctionsDevilBro.color2RGB(data.color) : "";
+				this.setChannelHeader(channel, name);
+				$(channel).css("color", color);
+				
+				$(channelHeader).toggleClass("custom-editchannelsheader", data && (data.name || data.color));
+			}
+		}
+	}
+	
+	setChannelHeader (div, name) {
+		return $(div).contents().filter(function() {
+			return this.nodeType == Node.TEXT_NODE;
+		})[0].textContent = name;
 	}
 
 	chooseColor (channel, color) {
@@ -333,50 +455,6 @@ class EditChannels {
 			return BDfunctionsDevilBro.color2RGB(color);
 		}
 		return null;
-	}
-	
-	resetChannel (e) {
-		$(".context-menu").hide();
-		
-		var id = e.data.id + "_" + e.data.guild_id;
-		if (id) {
-			var channelDiv = BDfunctionsDevilBro.getDivOfChannel(e.data.id, e.data.guild_id);
-			var channel = channelDiv.querySelector(".name-2SL4ev");
-			
-			$(channelDiv)
-				.removeClass("custom-editchannels");
-			$(channel)
-				.text(e.data.name)
-				.css("color", "");
-			
-			BDfunctionsDevilBro.removeData(id, this.getName(), "channels");
-		}
-	}
-	
-	loadChannel (channelDiv) {
-		var info = BDfunctionsDevilBro.getKeyInformation({"node":channelDiv, "key":"channel"});
-		if (info) {
-			var channel = channelDiv.querySelector(".name-2SL4ev");
-			var id = info.id + "_" + info.guild_id;
-			var data = BDfunctionsDevilBro.loadData(id, this.getName(), "channels");
-			if (data) {
-				var name = 		data.name ? data.name : info.name;
-				var color = 	data.color ? this.chooseColor(channel, data.color) : "";
-				
-				$(channelDiv)
-					.addClass("custom-editchannels");
-				$(channel)
-					.text(name)
-					.css("color", color);
-			}
-		}
-	}
-	
-	loadAllChannels () {
-		var channels = BDfunctionsDevilBro.readChannelList();
-		for (var i = 0; i < channels.length; i++) {
-			this.loadChannel(channels[i]);
-		}
 	}
 	
 	setLabelsByLanguage () {
