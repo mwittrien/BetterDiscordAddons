@@ -192,23 +192,18 @@ class EditChannels {
 			this.channelListObserver.disconnect();
 			this.channelContextObserver.disconnect();
 			
-			$(".custom-editchannels").each(
-				(_, channelDiv) => {
-					this.resetChannel(channelDiv);
-				}
-			);
+			document.querySelectorAll(".custom-editchannels").forEach(channelDiv => {this.resetChannel(channelDiv);});
 			
-			$(".custom-editchannelsheader").each(
-				(_, channelHeader) => {
-					var info = BDfunctionsDevilBro.getKeyInformation({"node":channelHeader, "key":"channel"});
-					if (info) {
-						var channel = channelHeader.querySelector(".channelName-1G03vu");
-						this.setChannelHeader(channel, info.name);
-						$(channel).css("color", "");
-						$(channelHeader).removeClass("custom-editchannelsheader");
-					}
+			var channelHeader = document.querySelector(".custom-editchannelsheader");
+			if (channelHeader) {
+				var info = BDfunctionsDevilBro.getKeyInformation({"node":channelHeader, "key":"channel"});
+				if (info) {
+					var channel = channelHeader.querySelector(".channelName-1G03vu");
+					this.setChannelHeader(channel, info.name);
+					$(channel).css("color", "");
+					$(channelHeader).removeClass("custom-editchannelsheader");
 				}
-			);
+			}
 			
 			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
 		}
@@ -253,11 +248,7 @@ class EditChannels {
 		if (confirm("Are you sure you want to reset all channels?")) {
 			BDfunctionsDevilBro.removeAllData(this.getName(), "channels");
 			
-			$(".custom-editchannels").each(
-				(_, channelDiv) => {
-					this.resetChannel(channelDiv);
-				}
-			);
+			document.querySelectorAll(".custom-editchannels").forEach(channelDiv => {this.resetChannel(channelDiv);});
 			
 			this.changeChannelHeader();
 		}
