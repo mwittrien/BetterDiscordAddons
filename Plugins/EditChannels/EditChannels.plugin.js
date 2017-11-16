@@ -312,7 +312,7 @@ class EditChannels {
 			$(targetDiv)
 				.off("click", ".resetsettings-item")
 				.on("click", ".resetsettings-item", () => {
-					this.removechannelInfo(info);
+					this.removeChannelData(info);
 				});
 		}
 		else {
@@ -360,7 +360,7 @@ class EditChannels {
 				}
 				
 				if (name == null && color == null) {
-					this.resetChannel(channelDiv);
+					this.removeChannelData(info);
 				}
 				else {
 					BDfunctionsDevilBro.saveData(id, {id,name,color}, this.getName(), "channels");
@@ -372,7 +372,7 @@ class EditChannels {
 		channelSettingsModal.find("#input-channelname").focus();
 	}
 	
-	removechannelInfo (info) {
+	removeChannelData (info) {
 		$(".context-menu").hide();
 		
 		var id = info.id;
