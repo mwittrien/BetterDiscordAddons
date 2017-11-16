@@ -39,18 +39,24 @@ class TopRoleEverywhere {
 
 	getDescription () {return "Adds the highest role of a user as a tag.";}
 
-	getVersion () {return "2.4.1";}
+	getVersion () {return "2.4.2";}
 
 	getAuthor () {return "DevilBro";}
 	
     getSettingsPanel () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			return `
-			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="showInChat"${(this.getSettings().showInChat ? " checked" : void 0)}> Show tag in chatwindow.</label><br>\n
-			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="showInMemberList"${(this.getSettings().showInMemberList ? " checked" : void 0)}> Show tag in memberlist.</label><br>\n
-			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="useOtherStyle"${(this.getSettings().useOtherStyle ? " checked" : void 0)}> Use other tag style.</label><br>\n
-			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="showOwnerRole"${(this.getSettings().showOwnerRole ? " checked" : void 0)}> Display toprole of serverowner as \"Owner\".</label><br>\n
-			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="disableForBots"${(this.getSettings().disableForBots ? " checked" : void 0)}> Disable toprole for bots.</label>`;
+			var settings = this.getSettings();
+			var settingspanel = 
+				$(`<div class="${this.getName()}-settings">
+					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="showInChat"${settings.showInChat ? " checked" : void 0}>Show tag in chatwindow.</label><br>
+					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="showInMemberList"${settings.showInMemberList ? " checked" : void 0}>Show tag in memberlist.</label><br>
+					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="useOtherStyle"${settings.useOtherStyle ? " checked" : void 0}>Use other tag style.</label><br>
+					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="showOwnerRole"${settings.showOwnerRole ? " checked" : void 0}>Display toprole of serverowner as \"Owner\".</label><br>
+					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="disableForBots"${settings.disableForBots ? " checked" : void 0}>Disable toprole for bots.</label>
+				</div>`)[0];
+			$(settingspanel)
+				.on("change", ".settings-checkbox", () => {this.updateSettings(settingspanel);});
+			return settingspanel;
 		}
     }
 
@@ -68,12 +74,14 @@ class TopRoleEverywhere {
 		if (typeof BDfunctionsDevilBro === "object") {			
 			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
 			
+			var settings = this.getSettings();
+			
 			this.userListObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.querySelector(".member-username") && this.getSettings().showInMemberList) {
+								if (node && node.querySelector(".member-username") && settings.showInMemberList) {
 									var serverData = BDfunctionsDevilBro.getKeyInformation({"node":BDfunctionsDevilBro.getSelectedServer(),"key":"guild"});
 									if (serverData) {
 										this.addRoleTag(node, "list", serverData.id, false);
@@ -91,7 +99,7 @@ class TopRoleEverywhere {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (this.getSettings().showInChat) {
+								if (settings.showInChat) {
 									if ($(".message-group").has(".avatar-large").length > 0) {
 										if (node && node.tagName && node.querySelector(".username-wrapper")) {
 											var serverData = BDfunctionsDevilBro.getKeyInformation({"node":BDfunctionsDevilBro.getSelectedServer(),"key":"guild"});
@@ -202,29 +210,29 @@ class TopRoleEverywhere {
 		return settings;
 	}
 
-    static updateSettings (ele, pluginName) {
-		var settingspanel = BDfunctionsDevilBro.getSettingsPanelDiv(ele);
+    updateSettings (settingspanel) {
 		var settings = {};
 		var inputs = settingspanel.querySelectorAll("input");
 		for (var i = 0; i < inputs.length; i++) {
 			settings[inputs[i].value] = inputs[i].checked;
 		}
-		BDfunctionsDevilBro.saveAllData(settings, pluginName, "settings");
+		BDfunctionsDevilBro.saveAllData(settings, this.getName(), "settings");
     }
 
 	loadRoleTags() {
 		var serverData = BDfunctionsDevilBro.getKeyInformation({"node":BDfunctionsDevilBro.getSelectedServer(),"key":"guild"});
 		if (serverData) {
-			document.querySelectorAll(".role-tag").forEach(node=>{node.parentElement.removeChild(node)});
-			if (this.getSettings().showOwnerRole) this.ownerID = serverData.ownerId;
+			document.querySelectorAll(".role-tag").forEach(node=>{node.remove();});
+			var settings = this.getSettings();
+			this.ownerID = settings.showOwnerRole ? serverData.ownerId : null;
 			this.roles = serverData.roles;
-			if (this.getSettings().showInMemberList) { 
+			if (settings.showInMemberList) { 
 				var membersList = document.querySelectorAll("div.member");
 				for (var i = 0; i < membersList.length; i++) {
 					this.addRoleTag(membersList[i], "list", serverData.id, false);
 				}
 			}
-			if (this.getSettings().showInChat) { 
+			if (settings.showInChat) { 
 				var membersChat = document.querySelectorAll("div.message-group");
 				for (var j = 0; j < membersChat.length; j++) {
 					if ($(membersChat[j]).has(".avatar-large").length > 0) {
@@ -250,7 +258,7 @@ class TopRoleEverywhere {
 			var settings = this.getSettings();
 			var userInfo = 
 				compact ? BDfunctionsDevilBro.getKeyInformation({"node":wrapper,"key":"message"}).author : BDfunctionsDevilBro.getKeyInformation({"node":wrapper,"key":"user"});
-			if (!userInfo || (userInfo.bot && this.getSettings().disableForBots)) return;
+			if (!userInfo || (userInfo.bot && settings.disableForBots)) return;
 			var styleInfo = BDfunctionsDevilBro.getKeyInformation({"node":type == "list" ? wrapper : member,"key":"style","blackList":{"child":true}});
 			var roleName = null;
 			var roleColor = null;
@@ -338,7 +346,7 @@ class TopRoleEverywhere {
 				var bgColor = "rgba(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ", 0.1)";
 				var bgInner = "none";
 				var roleText = roleName;
-				if (this.getSettings().useOtherStyle) {
+				if (settings.useOtherStyle) {
 					borderColor = "transparent";
 					bgColor = "rgba(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ", 1)";
 					textColor = roleColor[0] > 180 && roleColor[1] > 180 && roleColor[2] > 180 ? "black" : "white";
@@ -352,7 +360,7 @@ class TopRoleEverywhere {
 					borderColor = "rgba(255, 0, 255, 0.5)";
 					textColor = "transparent";
 					roleText = "Plugin Creator";
-					if (this.getSettings().useOtherStyle) {
+					if (settings.useOtherStyle) {
 						bgColor = "linear-gradient(to right, rgba(180,0,0,1), rgba(180,90,0,1) , rgba(180,180,0,1), rgba(90,180,0,1), rgba(0,180,0,1), rgba(0,180,90,1), rgba(0,180,180,1), rgba(0,90,180,1), rgba(0,0,180,1), rgba(90,0,180,1), rgba(180,0,180,1), rgba(180,0,90,1))";
 						textColor = "white";
 					}
