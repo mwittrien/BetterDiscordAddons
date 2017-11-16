@@ -277,12 +277,12 @@ class EditChannels {
 	
 	onContextMenu (context) {
 		if (!context.querySelector(".localchannelsettings-item")) {
-			var channelInfo = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"channel"});
+			var info = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"channel"});
 			
-			if (channelInfo && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"ChannelInviteCreateGroup"})) {
+			if (info && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"ChannelInviteCreateGroup"})) {
 				$(context).append(this.channelContextEntryMarkup)
 					.on("mouseenter", ".localchannelsettings-item", (e) => {
-						this.createContextSubMenu(channelInfo, e);
+						this.createContextSubMenu(info, e);
 					})
 					.on("mouseleave", ".localchannelsettings-item", () => {
 						this.deleteContextSubMenu();
@@ -291,8 +291,8 @@ class EditChannels {
 		}
 	}
 	
-	createContextSubMenu (channelInfo, e) {
-		var id = channelInfo.id;
+	createContextSubMenu (info, e) {
+		var id = info.id;
 		
 		var targetDiv = e.currentTarget;
 		var channelContextSubMenu = $(this.channelContextSubMenuMarkup);
@@ -300,7 +300,7 @@ class EditChannels {
 		$(targetDiv).append(channelContextSubMenu)
 			.off("click", ".channelsettings-item")
 			.on("click", ".channelsettings-item", () => {
-				this.showChannelSettings(channelInfo);
+				this.showChannelSettings(info);
 			});
 			
 		$(channelContextSubMenu)
@@ -312,7 +312,7 @@ class EditChannels {
 			$(targetDiv)
 				.off("click", ".resetsettings-item")
 				.on("click", ".resetsettings-item", () => {
-					this.removechannelInfo(channelInfo);
+					this.removechannelInfo(info);
 				});
 		}
 		else {
@@ -324,10 +324,10 @@ class EditChannels {
 		$(".editchannels-submenu").remove();
 	}
 	
-	showChannelSettings (channelInfo) {
+	showChannelSettings (info) {
 		$(".context-menu").hide();
 		
-		var id = channelInfo.id;
+		var id = info.id;
 		
 		var data = BDfunctionsDevilBro.loadData(id, this.getName(), "channels");
 		
@@ -337,9 +337,9 @@ class EditChannels {
 		var channelDiv = BDfunctionsDevilBro.getDivOfChannel(id);
 		
 		var channelSettingsModal = $(this.channelSettingsModalMarkup);
-		channelSettingsModal.find(".guildName-1u0hy7").text(channelInfo.name);
+		channelSettingsModal.find(".guildName-1u0hy7").text(info.name);
 		channelSettingsModal.find("#input-channelname").val(name);
-		channelSettingsModal.find("#input-channelname").attr("placeholder", channelInfo.name);
+		channelSettingsModal.find("#input-channelname").attr("placeholder", info.name);
 		BDfunctionsDevilBro.setColorSwatches(color, channelSettingsModal.find(".swatches1"), "swatch1");
 		BDfunctionsDevilBro.appendModal(channelSettingsModal);
 		channelSettingsModal
@@ -372,10 +372,10 @@ class EditChannels {
 		channelSettingsModal.find("#input-channelname").focus();
 	}
 	
-	removechannelInfo (channelInfo) {
+	removechannelInfo (info) {
 		$(".context-menu").hide();
 		
-		var id = channelInfo.id;
+		var id = info.id;
 		
 		this.resetChannel(BDfunctionsDevilBro.getDivOfChannel(id));
 		
@@ -426,11 +426,11 @@ class EditChannels {
 		if (this.getSettings().changeInChannelHeader) {
 			var channelHeader = document.querySelector("div.titleText-2IfpkV");
 			if (!channelHeader) return;
-			var channelInfo = BDfunctionsDevilBro.getKeyInformation({"node":channelHeader,"key":"channel"});
-			if (channelInfo) {
-				var data = BDfunctionsDevilBro.loadData(channelInfo.id, this.getName(), "channels");
+			var info = BDfunctionsDevilBro.getKeyInformation({"node":channelHeader,"key":"channel"});
+			if (info) {
+				var data = BDfunctionsDevilBro.loadData(info.id, this.getName(), "channels");
 				var channel = channelHeader.querySelector(".channelName-1G03vu");
-				var name = data && data.name ? data.name : channelInfo.name;
+				var name = data && data.name ? data.name : info.name;
 				var color = data && data.color ? BDfunctionsDevilBro.color2RGB(data.color) : "";
 				this.setChannelHeader(channel, name);
 				$(channel).css("color", color);
