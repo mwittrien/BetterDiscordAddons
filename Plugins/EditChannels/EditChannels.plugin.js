@@ -292,6 +292,8 @@ class EditChannels {
 	}
 	
 	createContextSubMenu (channelData, e) {
+		var id = channelData.id;
+		
 		var targetDiv = e.currentTarget;
 		var channelContextSubMenu = $(this.channelContextSubMenuMarkup);
 		
@@ -306,7 +308,7 @@ class EditChannels {
 			.css("left", $(targetDiv).offset().left + "px")
 			.css("top", $(targetDiv).offset().top + "px");
 			
-		if (BDfunctionsDevilBro.loadData(channelData.id, this.getName(), "channels")) {
+		if (BDfunctionsDevilBro.loadData(id, this.getName(), "channels")) {
 			$(targetDiv)
 				.off("click", ".resetsettings-item")
 				.on("click", ".resetsettings-item", () => {
@@ -325,14 +327,14 @@ class EditChannels {
 	showChannelSettings (channelData) {
 		$(".context-menu").hide();
 		
-		var channelID = channelData.id;
+		var id = channelData.id;
 		
-		var info = BDfunctionsDevilBro.loadData(channelID, this.getName(), "channels");
+		var info = BDfunctionsDevilBro.loadData(id, this.getName(), "channels");
 		
 		var name = info ? info.name : null;
 		var color = info ? info.color : null;
 		
-		var channelDiv = BDfunctionsDevilBro.getDivOfChannel(channelID);
+		var channelDiv = BDfunctionsDevilBro.getDivOfChannel(id);
 		
 		var channelSettingsModal = $(this.channelSettingsModalMarkup);
 		channelSettingsModal.find(".guildName-1u0hy7").text(channelData.name);
@@ -361,7 +363,7 @@ class EditChannels {
 					this.resetChannel(e);
 				}
 				else {
-					BDfunctionsDevilBro.saveData(channelID, {channelID,name,color}, this.getName(), "channels");
+					BDfunctionsDevilBro.saveData(id, {id,name,color}, this.getName(), "channels");
 					this.loadChannel(channelDiv);
 					this.changeChannelHeader();
 				}
@@ -373,9 +375,11 @@ class EditChannels {
 	removeChannelData (channelData) {
 		$(".context-menu").hide();
 		
-		this.resetChannel(BDfunctionsDevilBro.getDivOfChannel(channelData.id));
+		var id = channelData.id;
 		
-		BDfunctionsDevilBro.removeData(channelData.id, this.getName(), "channels");
+		this.resetChannel(BDfunctionsDevilBro.getDivOfChannel(id));
+		
+		BDfunctionsDevilBro.removeData(id, this.getName(), "channels");
 		
 		this.changeChannelHeader();
 	}
