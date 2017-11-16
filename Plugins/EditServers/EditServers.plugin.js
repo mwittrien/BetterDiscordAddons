@@ -134,13 +134,19 @@ class EditServers {
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	getVersion () {return "1.6.1";}
+	getVersion () {return "1.6.2";}
 
 	getAuthor () {return "DevilBro";}
 	
     getSettingsPanel () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			return `<button class="` + this.getName() + `ResetBtn" style="height:23px" onclick='` + this.getName() + `.resetAll("` + this.getName() + `")'>Reset all Servers`;
+			var settingspanel = 
+				$(`<div class="${this.getName()}-settings">
+					<button class="reset-button" style="height:23px">Reset all Servers</button>
+				</div>`)[0];
+			$(settingspanel)
+				.on("click", ".reset-button", () => {this.resetAll();});
+			return settingspanel;
 		}
     }
 
@@ -210,26 +216,7 @@ class EditServers {
 			$(".guilds.scroller").off("drop" + this.getName());
 			$(".guilds.scroller").off("mouseleave" + this.getName());
 			
-			$(".custom-editservers").each(
-				(i,serverDiv) => {
-					var info = BDfunctionsDevilBro.getKeyInformation({"node":serverDiv, "key":"guild"});
-					if (info) {
-						var serverInner = $(serverDiv).find(".guild-inner");
-						var server = $(serverDiv).find(".avatar-small");
-						var bgImage = info.icon ? "url('https://cdn.discordapp.com/icons/" + info.id + "/" + info.icon + ".png')" : "";
-					
-						$(serverDiv)
-							.removeClass("custom-editservers");
-						$(serverInner)
-							.off("mouseenter." + this.getName());
-						$(server)
-							.text($(server).attr("name"))
-							.css("background-image", bgImage)
-							.css("background-color", "")
-							.css("color", "");
-					}
-				}
-			);
+			document.querySelectorAll(".custom-editservers").forEach(serverDiv => {this.resetServer(serverDiv);});
 			
 			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
 		}
@@ -238,30 +225,11 @@ class EditServers {
 	
 	// begin of own functions
 
-    static resetAll (pluginName) {
+    resetAll () {
 		if (confirm("Are you sure you want to reset all servers?")) {
-			BDfunctionsDevilBro.removeAllData(pluginName, "servers");
+			BDfunctionsDevilBro.removeAllData(this.getName(), "servers");
 			
-			$(".custom-editservers").each(
-				(i,serverDiv) => {
-					var info = BDfunctionsDevilBro.getKeyInformation({"node":serverDiv, "key":"guild"});
-					if (info) {
-						var serverInner = $(serverDiv).find(".guild-inner");
-						var server = $(serverDiv).find(".avatar-small");
-						var bgImage = info.icon ? "url('https://cdn.discordapp.com/icons/" + info.id + "/" + info.icon + ".png')" : "";
-					
-						$(serverDiv)
-							.removeClass("custom-editservers");
-						$(serverInner)
-							.off("mouseenter." + pluginName);
-						$(server)
-							.text($(server).attr("name"))
-							.css("background-image", bgImage)
-							.css("background-color", "")
-							.css("color", "");
-					}
-				}
-			);
+			document.querySelectorAll(".custom-editservers").forEach(serverDiv => {this.resetServer(serverDiv);});
 		}
     }
 
@@ -288,142 +256,153 @@ class EditServers {
 	
 	onContextMenu (context) {
 		if ($(context).find(".localserversettings-item").length == 0) {
-			var serverData = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"guild"});
+			var info = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"guild"});
 			var contextType = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"GuildLeaveGroup"});
 			
-			if (serverData && contextType) {
-				var serverDiv = BDfunctionsDevilBro.getDivOfServer(serverData.id);
+			if (info && contextType) {
+				var serverDiv = BDfunctionsDevilBro.getDivOfServer(info.id);
 				var server = $(serverDiv).find(".avatar-small");
 				var shortName = $(serverDiv).hasClass("custom-editservers") ? $(server).attr("name") : $(server).text();
-				var data = Object.assign({},serverData,{shortName});
+				info = Object.assign({},info,{shortName});
 				$(context).append(this.serverContextEntryMarkup)
-					.on("mouseenter", ".localserversettings-item", data, this.createContextSubMenu.bind(this))
-					.on("mouseleave", ".localserversettings-item", data, this.deleteContextSubMenu.bind(this));
+					.on("mouseenter", ".localserversettings-item", (e) => {
+						this.createContextSubMenu(info, e);
+					})
+					.on("mouseleave", ".localserversettings-item", () => {
+						this.deleteContextSubMenu();
+					});
 			}
 		}
 	}
 	
-	createContextSubMenu (e) {
+	createContextSubMenu (info, e) {
+		var id = info.id;
+		
 		var targetDiv = e.currentTarget;
 		var serverContextSubMenu = $(this.serverContextSubMenuMarkup);
+		
 		$(targetDiv).append(serverContextSubMenu)
 			.off("click", ".serversettings-item")
-			.on("click", ".serversettings-item", e.data, this.showServerSettings.bind(this));
+			.on("click", ".serversettings-item", () => {
+				this.showServerSettings(info);
+			});
+			
 		$(serverContextSubMenu)
 			.addClass(BDfunctionsDevilBro.getDiscordTheme())
 			.css("left", $(targetDiv).offset().left + "px")
 			.css("top", $(targetDiv).offset().top + "px");
 			
-		var info = BDfunctionsDevilBro.loadData(e.data.id, this.getName(), "servers");
-		if (!info) {
-			$(targetDiv).find(".resetsettings-item").addClass("disabled");
-		}
-		else {
+		if (BDfunctionsDevilBro.loadData(id, this.getName(), "servers")) {
 			$(targetDiv)
 				.off("click", ".resetsettings-item")
-				.on("click", ".resetsettings-item", e.data, this.resetServer.bind(this));
+				.on("click", ".resetsettings-item", () => {
+					this.removeServerData(info.id);
+				});
+		}
+		else {
+			$(targetDiv).find(".resetsettings-item").addClass("disabled");
 		}
 	}
 	
-	deleteContextSubMenu (e) {
+	deleteContextSubMenu () {
 		$(".editservers-submenu").remove();
 	}
 	
-	showServerSettings (e) {
+	showServerSettings (info) {
 		$(".context-menu").hide();
-		var id = e.data.id;
-		if (id) {
-			var info = BDfunctionsDevilBro.loadData(id, this.getName(), "servers");
-			
-			var name = 			info ? info.name : null;
-			var shortName = 	info ? info.shortName : null;
-			var url = 			info ? info.url : null;
-			var removeIcon = 	info ? info.removeIcon : false;
-			var color1 = 		info ? info.color1 : null;
-			var color2 = 		info ? info.color2 : null;
-			var color3 = 		info ? info.color3 : null;
-			var color4 = 		info ? info.color4 : null;
 		
-			var serverDiv = BDfunctionsDevilBro.getDivOfServer(id);
-			var server = $(serverDiv).find(".avatar-small");
-			
-			var serverSettingsModal = $(this.serverSettingsModalMarkup);
-			serverSettingsModal.find(".guildName-1u0hy7").text(e.data.name);
-			serverSettingsModal.find("#input-servername").val(name);
-			serverSettingsModal.find("#input-servername").attr("placeholder", e.data.name);
-			serverSettingsModal.find("#input-servershortname").val(shortName);
-			serverSettingsModal.find("#input-servershortname").attr("placeholder", e.data.shortName);
-			serverSettingsModal.find("#input-serverurl").val(url);
-			serverSettingsModal.find("#input-serverurl").attr("placeholder", e.data.icon ? "https://cdn.discordapp.com/icons/" + e.data.id + "/" + e.data.icon + ".png" : null);
-			serverSettingsModal.find("#input-serverurl").addClass(url ? "valid" : "");
-			serverSettingsModal.find("#input-serverurl").prop("disabled", removeIcon);
-			serverSettingsModal.find("#input-removeicon").prop("checked", removeIcon);
-			BDfunctionsDevilBro.setColorSwatches(color1, serverSettingsModal.find(".swatches1"), "swatch1");
-			BDfunctionsDevilBro.setColorSwatches(color2, serverSettingsModal.find(".swatches2"), "swatch2");
-			BDfunctionsDevilBro.setColorSwatches(color3, serverSettingsModal.find(".swatches3"), "swatch3");
-			BDfunctionsDevilBro.setColorSwatches(color4, serverSettingsModal.find(".swatches4"), "swatch4");
-			BDfunctionsDevilBro.appendModal(serverSettingsModal);
-			serverSettingsModal
-				.on("click", "#input-removeicon", (event) => {
-					serverSettingsModal.find("#input-serverurl").prop("disabled", event.target.checked);
-				})
-				.on("change keyup paste", "#input-serverurl", (event) => {
-					this.checkUrl(event, serverSettingsModal);
-				})
-				.on("mouseenter", "#input-serverurl", (event) => {
-					$(event.target).addClass("hovering");
-					this.createNoticeTooltip(event);
-				})
-				.on("mouseleave", "#input-serverurl", (event) => {
-					$(".tooltips").find(".notice-tooltip").remove();
-					$(event.target).removeClass("hovering");
-				})
-				.on("click", "button.btn-save", (event) => {
-					event.preventDefault();
-					
-					name = null;
-					if (serverSettingsModal.find("#input-servername").val()) {
-						if (serverSettingsModal.find("#input-servername").val().trim().length > 0) {
-							name = serverSettingsModal.find("#input-servername").val().trim();
+		var id = info.id;
+		
+		var info = BDfunctionsDevilBro.loadData(id, this.getName(), "servers");
+		
+		var name = 			info ? info.name : null;
+		var shortName = 	info ? info.shortName : null;
+		var url = 			info ? info.url : null;
+		var removeIcon = 	info ? info.removeIcon : false;
+		var color1 = 		info ? info.color1 : null;
+		var color2 = 		info ? info.color2 : null;
+		var color3 = 		info ? info.color3 : null;
+		var color4 = 		info ? info.color4 : null;
+	
+		var serverDiv = BDfunctionsDevilBro.getDivOfServer(id);
+		var server = $(serverDiv).find(".avatar-small");
+		
+		var serverSettingsModal = $(this.serverSettingsModalMarkup);
+		serverSettingsModal.find(".guildName-1u0hy7").text(info.name);
+		serverSettingsModal.find("#input-servername").val(name);
+		serverSettingsModal.find("#input-servername").attr("placeholder", info.name);
+		serverSettingsModal.find("#input-servershortname").val(shortName);
+		serverSettingsModal.find("#input-servershortname").attr("placeholder", info.shortName);
+		serverSettingsModal.find("#input-serverurl").val(url);
+		serverSettingsModal.find("#input-serverurl").attr("placeholder", info.icon ? "https://cdn.discordapp.com/icons/" + info.id + "/" + info.icon + ".png" : null);
+		serverSettingsModal.find("#input-serverurl").addClass(url ? "valid" : "");
+		serverSettingsModal.find("#input-serverurl").prop("disabled", removeIcon);
+		serverSettingsModal.find("#input-removeicon").prop("checked", removeIcon);
+		BDfunctionsDevilBro.setColorSwatches(color1, serverSettingsModal.find(".swatches1"), "swatch1");
+		BDfunctionsDevilBro.setColorSwatches(color2, serverSettingsModal.find(".swatches2"), "swatch2");
+		BDfunctionsDevilBro.setColorSwatches(color3, serverSettingsModal.find(".swatches3"), "swatch3");
+		BDfunctionsDevilBro.setColorSwatches(color4, serverSettingsModal.find(".swatches4"), "swatch4");
+		BDfunctionsDevilBro.appendModal(serverSettingsModal);
+		serverSettingsModal
+			.on("click", "#input-removeicon", (event) => {
+				serverSettingsModal.find("#input-serverurl").prop("disabled", event.target.checked);
+			})
+			.on("change keyup paste", "#input-serverurl", (event) => {
+				this.checkUrl(serverSettingsModal, event);
+			})
+			.on("mouseenter", "#input-serverurl", (event) => {
+				$(event.target).addClass("hovering");
+				this.createNoticeTooltip(event);
+			})
+			.on("mouseleave", "#input-serverurl", (event) => {
+				$(".tooltips").find(".notice-tooltip").remove();
+				$(event.target).removeClass("hovering");
+			})
+			.on("click", "button.btn-save", (event) => {
+				event.preventDefault();
+				
+				name = null;
+				if (serverSettingsModal.find("#input-servername").val()) {
+					if (serverSettingsModal.find("#input-servername").val().trim().length > 0) {
+						name = serverSettingsModal.find("#input-servername").val().trim();
+					}
+				}
+				
+				shortName = null;
+				if (serverSettingsModal.find("#input-servershortname").val()) {
+					if (serverSettingsModal.find("#input-servershortname").val().trim().length > 0) {
+						shortName = serverSettingsModal.find("#modal-servershortname").val().trim();
+					}
+				}
+				
+				if (serverSettingsModal.find("#input-serverurl:not('.invalid')").length > 0) {
+					url = null;
+					if (!serverSettingsModal.find("#input-removeicon").prop("checked") && serverSettingsModal.find("#input-serverurl").val()) {
+						if (serverSettingsModal.find("#input-serverurl").val().trim().length > 0) {
+							url = serverSettingsModal.find("#input-serverurl").val().trim();
 						}
 					}
-					
-					shortName = null;
-					if (serverSettingsModal.find("#input-servershortname").val()) {
-						if (serverSettingsModal.find("#input-servershortname").val().trim().length > 0) {
-							shortName = serverSettingsModal.find("#modal-servershortname").val().trim();
-						}
-					}
-					
-					if (serverSettingsModal.find("#input-serverurl:not('.invalid')").length > 0) {
-						url = null;
-						if (!serverSettingsModal.find("#input-removeicon").prop("checked") && serverSettingsModal.find("#input-serverurl").val()) {
-							if (serverSettingsModal.find("#input-serverurl").val().trim().length > 0) {
-								url = serverSettingsModal.find("#input-serverurl").val().trim();
-							}
-						}
-					}
-					
-					removeIcon = serverSettingsModal.find("#input-removeicon").prop("checked");
-					
-					color1 = BDfunctionsDevilBro.getSwatchColor("swatch1");
-					color2 = BDfunctionsDevilBro.getSwatchColor("swatch2");
-					color3 = BDfunctionsDevilBro.getSwatchColor("swatch3");
-					color4 = BDfunctionsDevilBro.getSwatchColor("swatch4");
-					
-					if (name == null && shortName == null && url == null && !removeIcon && color1 == null && color2 == null && color3 == null && color4 == null) {
-						this.resetServer(e);
-					}
-					else {
-						BDfunctionsDevilBro.saveData(id, {id,name,shortName,url,removeIcon,color1,color2,color3,color4}, this.getName(), "servers");
-						this.loadServer(serverDiv);
-					}
-				});
-			serverSettingsModal.find("#input-servername").focus();
-		}
+				}
+				
+				removeIcon = serverSettingsModal.find("#input-removeicon").prop("checked");
+				
+				color1 = BDfunctionsDevilBro.getSwatchColor("swatch1");
+				color2 = BDfunctionsDevilBro.getSwatchColor("swatch2");
+				color3 = BDfunctionsDevilBro.getSwatchColor("swatch3");
+				color4 = BDfunctionsDevilBro.getSwatchColor("swatch4");
+				
+				if (name == null && shortName == null && url == null && !removeIcon && color1 == null && color2 == null && color3 == null && color4 == null) {
+					this.removeServerData(info.id);
+				}
+				else {
+					BDfunctionsDevilBro.saveData(id, {id,name,shortName,url,removeIcon,color1,color2,color3,color4}, this.getName(), "servers");
+					this.loadServer(serverDiv);
+				}
+			});
+		serverSettingsModal.find("#input-servername").focus();
 	}
 	
-	checkUrl (e, modal) {
+	checkUrl (modal, e) {
 		if (!e.target.value) {
 			$(e.target)
 				.removeClass("valid")
@@ -469,14 +448,20 @@ class EditServers {
 		}
 	}
 	
-	resetServer (e) {
+	removeServerData (id) {
 		$(".context-menu").hide();
 		
-		if (e.data.id) {
-			var serverDiv = BDfunctionsDevilBro.getDivOfServer(e.data.id);
-			var serverInner = $(serverDiv).find(".guild-inner");
-			var server = $(serverDiv).find(".avatar-small");
-			var bgImage = e.data.icon ? "url('https://cdn.discordapp.com/icons/" + e.data.id + "/" + e.data.icon + ".png')" : "";
+		this.resetServer(BDfunctionsDevilBro.getDivOfServer(id));
+		
+		BDfunctionsDevilBro.removeData(id, this.getName(), "servers");
+	}
+	
+	resetServer (serverDiv) {
+		var info = BDfunctionsDevilBro.getKeyInformation({"node":serverDiv, "key":"guild"});
+		if (info) {
+			var serverInner = serverDiv.querySelector(".guild-inner");
+			var server = serverDiv.querySelector(".avatar-small");
+			var bgImage = info.icon ? "url('https://cdn.discordapp.com/icons/" + info.id + "/" + info.icon + ".png')" : "";
 			
 			$(serverDiv)
 				.removeClass("custom-editservers");
@@ -488,8 +473,6 @@ class EditServers {
 				.css("background-image", bgImage)
 				.css("background-color", "")
 				.css("color", "");
-			
-			BDfunctionsDevilBro.removeData(e.data.id, this.getName(), "servers");
 		}
 	}
 	
@@ -498,8 +481,8 @@ class EditServers {
 		if (info) {
 			var data = BDfunctionsDevilBro.loadData(info.id, this.getName(), "servers");
 			if (data) {
-				var serverInner = $(serverDiv).find(".guild-inner");
-				var server = $(serverDiv).find(".avatar-small");
+				var serverInner = serverDiv.querySelector(".guild-inner");
+				var server = serverDiv.querySelector(".avatar-small");
 				if ($(server).attr("name") === undefined) {
 					$(server).attr("name", $(server).text());
 				}
