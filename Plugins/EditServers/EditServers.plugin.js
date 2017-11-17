@@ -134,7 +134,7 @@ class EditServers {
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	getVersion () {return "1.6.3";}
+	getVersion () {return "1.6.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -216,7 +216,7 @@ class EditServers {
 			$(".guilds.scroller").off("drop" + this.getName());
 			$(".guilds.scroller").off("mouseleave" + this.getName());
 			
-			document.querySelectorAll(".custom-editservers").forEach(serverDiv => {this.resetServer(serverDiv);});
+			document.querySelectorAll("[custom-editservers]").forEach(serverDiv => {this.resetServer(serverDiv);});
 			
 			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
 		}
@@ -229,7 +229,7 @@ class EditServers {
 		if (confirm("Are you sure you want to reset all servers?")) {
 			BDfunctionsDevilBro.removeAllData(this.getName(), "servers");
 			
-			document.querySelectorAll(".custom-editservers").forEach(serverDiv => {this.resetServer(serverDiv);});
+			document.querySelectorAll("[custom-editservers]").forEach(serverDiv => {this.resetServer(serverDiv);});
 		}
     }
 
@@ -262,7 +262,7 @@ class EditServers {
 			if (info && contextType) {
 				var serverDiv = BDfunctionsDevilBro.getDivOfServer(info.id);
 				var server = $(serverDiv).find(".avatar-small");
-				var shortName = $(serverDiv).hasClass("custom-editservers") ? $(server).attr("name") : $(server).text();
+				var shortName = $(serverDiv).attr("custom-editservers") ? $(server).attr("name") : $(server).text();
 				info = Object.assign({},info,{shortName});
 				$(context).append(this.serverContextEntryMarkup)
 					.on("mouseenter", ".localserversettings-item", (e) => {
@@ -464,7 +464,7 @@ class EditServers {
 			var bgImage = info.icon ? "url('https://cdn.discordapp.com/icons/" + info.id + "/" + info.icon + ".png')" : "";
 			
 			$(serverDiv)
-				.removeClass("custom-editservers");
+				.removeAttr("custom-editservers");
 			$(serverInner)
 				.off("mouseenter." + this.getName());
 			$(server)
@@ -495,7 +495,7 @@ class EditServers {
 				var color2 = 		data.color2 ? BDfunctionsDevilBro.color2RGB(data.color2) : "";
 				
 				$(serverDiv)
-					.addClass("custom-editservers");
+					.attr("custom-editservers", true);
 				$(serverInner)
 					.off("mouseenter." + this.getName())
 					.on("mouseenter." + this.getName(), {"div":serverDiv,"info":info}, this.createServerToolTip.bind(this));
