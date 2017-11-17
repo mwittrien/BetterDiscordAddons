@@ -442,7 +442,7 @@ class EditUsers {
 
 	updateSettings (settingspanel) {
 		var settings = {};
-		var inputs = settingspanel.querySelectorAll("input");
+		var inputs = settingspanel.querySelectorAll(".settings-checkbox");
 		for (var i = 0; i < inputs.length; i++) {
 			settings[inputs[i].value] = inputs[i].checked;
 		}
@@ -740,7 +740,7 @@ class EditUsers {
 	}
 	
 	loadUser (div, type, compact) {
-		if (!div || div.classList.contains("custom-editusers")) return;
+		if (!div || $(div).attr("custom-editusers")) return;
 		
 		let {avatar, username, wrapper} = this.getAvatarNameWrapper(div);
 		if (!avatar && !username && !wrapper) return;
@@ -805,7 +805,7 @@ class EditUsers {
 					.on("mouseenter." + this.getName(), {"div":div,"nick":data.name,"name":info.username}, this.createDmToolTip.bind(this));
 			}
 			
-			div.classList.add("custom-editusers");
+			$(div).attr("custom-editusers", true);
 		}
 	}
 	
@@ -820,7 +820,7 @@ class EditUsers {
 	
 	resetAllUsers () {
 		document.querySelectorAll(".user-tag").forEach(node=>{node.remove();});
-		document.querySelectorAll(".custom-editusers").forEach((div) => {
+		document.querySelectorAll("[custom-editusers]").forEach((div) => {
 			var {avatar, username, wrapper} = this.getAvatarNameWrapper(div);
 			if (!avatar && !username && !wrapper) return;
 			
@@ -858,7 +858,7 @@ class EditUsers {
 			$(div).find(".guild-inner")
 				.off("mouseenter." + this.getName());
 			
-			div.classList.remove("custom-editusers");
+			$(div).removeAttr("custom-editusers");
 		});
 	}
 	
