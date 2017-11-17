@@ -242,7 +242,7 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.2.8";}
+	getVersion () {return "5.2.9";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -329,7 +329,7 @@ class ServerFolders {
 									this.updateCopyInFolderContent(serverDiv, folderDiv);
 									this.updateFolderNotifications(folderDiv);
 									if (node.tagName && node.classList.contains("badge")) this.badgeObserver.observe(node, {characterData: true, subtree: true});
-									$(serverDiv).addClass("in_folder").hide();
+									$(serverDiv).attr("folder",folderDiv.id).hide();
 								}
 							});
 						}
@@ -409,7 +409,7 @@ class ServerFolders {
 			$(".foldercontainer").remove();
 			$(".guild.folder").remove();
 			$(".serverFoldersPreview").remove();
-			$(BDfunctionsDevilBro.readServerList()).show();
+			$(BDfunctionsDevilBro.readServerList()).removeAttr("folder").show();
 			
 			$(".guilds-wrapper").removeClass("folderopen");
 			$(".guilds.scroller").off("mousedown." + this.getName());
@@ -458,7 +458,7 @@ class ServerFolders {
 			
 			$(".foldercontainer").remove();
 			$("div.guild.folder").remove();
-			$(BDfunctionsDevilBro.readServerList()).show();
+			$(BDfunctionsDevilBro.readServerList()).removeAttr("folder").show();
 			BDfunctionsDevilBro.removeLocalStyle("ChannelSizeCorrection");
 		}
     }
@@ -560,7 +560,7 @@ class ServerFolders {
 		if (data && info && !data.servers.includes(info.id)) {
 			data.servers.push(info.id);
 			BDfunctionsDevilBro.saveData(folderDiv.id, data, this.getName(), "folders");
-			$(serverDiv).addClass("in_folder").hide();
+			$(serverDiv).attr("folder",folderDiv.id).hide();
 			var message = this.labels.toast_addserver_text ? this.labels.toast_addserver_text.replace("${servername}", info.name).replace("${foldername}", data.folderName ? " " + data.folderName : "") : "";
 			BDfunctionsDevilBro.showToast(message, {type:"success"});
 			this.updateCopyInFolderContent(serverDiv, folderDiv);
@@ -575,7 +575,7 @@ class ServerFolders {
 		if (data && info) {
 			BDfunctionsDevilBro.removeFromArray(data.servers, info.id);
 			BDfunctionsDevilBro.saveData(folderDiv.id, data, this.getName(), "folders");
-			$(serverDiv).removeClass("in_folder").show();
+			$(serverDiv).removeAttr("folder").show();
 			var message = this.labels.toast_removeserver_text ? this.labels.toast_removeserver_text.replace("${servername}", info.name).replace("${foldername}", data.folderName ? " " + data.folderName : "") : "";
 			BDfunctionsDevilBro.showToast(message, {type:"danger"});
 			$("#copy_of_" + info.id).remove();
@@ -619,7 +619,7 @@ class ServerFolders {
 			var data = sortedFolders[i];
 			if (data) {
 				var folderDiv = this.createFolderDiv(data);
-				$(this.readIncludedServerList(folderDiv)).addClass("in_folder").hide();
+				$(this.readIncludedServerList(folderDiv)).attr("folder",folderDiv.id).hide();
 			}
 		}
 	}
@@ -885,7 +885,7 @@ class ServerFolders {
 	removeFolder (folderDiv) {
 		$(".context-menu.folderSettings").remove();
 		
-		$(this.readIncludedServerList(folderDiv)).removeClass("in_folder").show();
+		$(this.readIncludedServerList(folderDiv)).removeAttr("folder").show();
 		
 		BDfunctionsDevilBro.removeData(folderDiv.id, this.getName(), "folders");
 		BDfunctionsDevilBro.removeData(folderDiv.id, this.getName(), "folderIDs");
@@ -1119,7 +1119,8 @@ class ServerFolders {
 		var unreadServers = BDfunctionsDevilBro.readUnreadServerList(includedServers);
 		
 		var badgeAmount = 0;
-		var voiceEnabled = false;
+		var audioEnabled = false;
+		var videoEnabled = false;
 		
 		$(includedServers).each(  
 			(i, server) => {
@@ -1128,14 +1129,18 @@ class ServerFolders {
 					badgeAmount += thisBadge;
 				}
 				if ($(server).hasClass("audio")) {
-					voiceEnabled = true;
+					audioEnabled = true;
+				}
+				if ($(server).hasClass("video")) {
+					videoEnabled = true;
 				}
 			}
 		);
 		
 		$(folderDiv)
 			.toggleClass("unread", unreadServers.length > 0)
-			.toggleClass("audio", voiceEnabled);
+			.toggleClass("audio", audioEnabled)
+			.toggleClass("video", videoEnabled);
 		$(folderDiv)
 			.find(".folder.badge.notifications")
 				.toggle(badgeAmount > 0)
