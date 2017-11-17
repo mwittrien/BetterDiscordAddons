@@ -168,13 +168,19 @@ class ServerHider {
 
 	getDescription () {return "Hide Servers in your Serverlist";}
 
-	getVersion () {return "2.4.2";}
+	getVersion () {return "2.4.3";}
 
 	getAuthor () {return "DevilBro";}
 	
     getSettingsPanel () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			return `<button class="` + this.getName() + `ResetBtn" style="height:23px" onclick='` + this.getName() + `.resetAll("` + this.getName() + `")'>Reset all Servers`;
+			var settingspanel = 
+				$(`<div class="${this.getName()}-settings">
+					<button class="reset-button" style="height:23px">Reset all Servers</button>
+				</div>`)[0];
+			$(settingspanel)
+				.on("click", ".reset-button", () => {this.resetAll();});
+			return settingspanel;
 		}
     }
 
@@ -240,9 +246,9 @@ class ServerHider {
 	
 	// begin of own functions
 
-    static resetAll (pluginName) {
+    resetAll () {
 		if (confirm("Are you sure you want to reset all servers?")) {
-			BDfunctionsDevilBro.removeAllData(pluginName, "servers");
+			BDfunctionsDevilBro.removeAllData(this.getName(), "servers");
 			$(BDfunctionsDevilBro.readServerList()).show();
 		}
     }
@@ -338,7 +344,7 @@ class ServerHider {
 			if (data) {
 				let entry = $(this.serverEntryMarkup);
 				let divider = $(this.dividerMarkup);
-				let isHiddenByFolder = serverDiv.classList.contains("in_folder");
+				let isHiddenByFolder = $(serverDiv).attr("folder") ? true : false;
 				entry.toggleClass("hidefolder", isHiddenByFolder);
 				serverHiderModal.find(".entries").append(entry);
 				divider.toggleClass("hidefolder", isHiddenByFolder);
