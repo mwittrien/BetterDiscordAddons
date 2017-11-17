@@ -85,7 +85,7 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "3.5.3";}
+	getVersion () {return "3.5.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -192,16 +192,16 @@ class EditChannels {
 			this.channelListObserver.disconnect();
 			this.channelContextObserver.disconnect();
 			
-			document.querySelectorAll(".custom-editchannels").forEach(channelDiv => {this.resetChannel(channelDiv);});
+			document.querySelectorAll("[custom-editchannels]").forEach(channelDiv => {this.resetChannel(channelDiv);});
 			
-			var channelHeader = document.querySelector(".custom-editchannelsheader");
+			var channelHeader = document.querySelector("[custom-editchannelsheader]");
 			if (channelHeader) {
 				var info = BDfunctionsDevilBro.getKeyInformation({"node":channelHeader, "key":"channel"});
 				if (info) {
 					var channel = channelHeader.querySelector(".channelName-1G03vu");
 					this.setChannelHeader(channel, info.name);
 					$(channel).css("color", "");
-					$(channelHeader).removeClass("custom-editchannelsheader");
+					$(channelHeader).removeAttr("custom-editchannelsheader");
 				}
 			}
 			
@@ -237,7 +237,7 @@ class EditChannels {
 
 	updateSettings (settingspanel) {
 		var settings = {};
-		var inputs = settingspanel.querySelectorAll("input");
+		var inputs = settingspanel.querySelectorAll(".settings-checkbox");
 		for (var i = 0; i < inputs.length; i++) {
 			settings[inputs[i].value] = inputs[i].checked;
 		}
@@ -248,7 +248,7 @@ class EditChannels {
 		if (confirm("Are you sure you want to reset all channels?")) {
 			BDfunctionsDevilBro.removeAllData(this.getName(), "channels");
 			
-			document.querySelectorAll(".custom-editchannels").forEach(channelDiv => {this.resetChannel(channelDiv);});
+			document.querySelectorAll("[custom-editchannels]").forEach(channelDiv => {this.resetChannel(channelDiv);});
 			
 			this.changeChannelHeader();
 		}
@@ -379,7 +379,7 @@ class EditChannels {
 			var channel = channelDiv.querySelector(".name-2SL4ev");
 		
 			$(channelDiv)
-				.removeClass("custom-editchannels");
+				.removeAttr("custom-editchannels");
 			$(channel)
 				.text(info.name)
 				.css("color", "");
@@ -396,7 +396,7 @@ class EditChannels {
 				var color = data.color ? this.chooseColor(channel, data.color) : "";
 				
 				$(channelDiv)
-					.addClass("custom-editchannels");
+					.attr("custom-editchannels", true);
 				$(channel)
 					.text(name)
 					.css("color", color);
@@ -424,7 +424,12 @@ class EditChannels {
 				this.setChannelHeader(channel, name);
 				$(channel).css("color", color);
 				
-				$(channelHeader).toggleClass("custom-editchannelsheader", data && (data.name || data.color));
+				if (data && (data.name || data.color)) {
+					$(channelHeader).attr("custom-editchannelsheader", true);
+				}
+				else {
+					$(channelHeader).removeAttr("custom-editchannelsheader");
+				}
 			}
 		}
 	}
