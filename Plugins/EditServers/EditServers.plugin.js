@@ -134,7 +134,7 @@ class EditServers {
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	getVersion () {return "1.6.2";}
+	getVersion () {return "1.6.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -313,16 +313,16 @@ class EditServers {
 		
 		var id = info.id;
 		
-		var info = BDfunctionsDevilBro.loadData(id, this.getName(), "servers");
+		var data = BDfunctionsDevilBro.loadData(id, this.getName(), "servers");
 		
-		var name = 			info ? info.name : null;
-		var shortName = 	info ? info.shortName : null;
-		var url = 			info ? info.url : null;
-		var removeIcon = 	info ? info.removeIcon : false;
-		var color1 = 		info ? info.color1 : null;
-		var color2 = 		info ? info.color2 : null;
-		var color3 = 		info ? info.color3 : null;
-		var color4 = 		info ? info.color4 : null;
+		var name = 			data ? data.name : null;
+		var shortName = 	data ? data.shortName : null;
+		var url = 			data ? data.url : null;
+		var removeIcon = 	data ? data.removeIcon : false;
+		var color1 = 		data ? data.color1 : null;
+		var color2 = 		data ? data.color2 : null;
+		var color3 = 		data ? data.color3 : null;
+		var color4 = 		data ? data.color4 : null;
 	
 		var serverDiv = BDfunctionsDevilBro.getDivOfServer(id);
 		var server = $(serverDiv).find(".avatar-small");
