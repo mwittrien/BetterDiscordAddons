@@ -601,15 +601,22 @@ BDfunctionsDevilBro.triggerOnSwitch = function (plugin) {
 };
 
 BDfunctionsDevilBro.getMyUserData = function () {
-	if ($(".container-iksrDt").length > 0) {
-		var userData = BDfunctionsDevilBro.getKeyInformation({"node":$(".container-iksrDt")[0],"key":"user"});
-		return (userData ? userData : null);
-	}
+	var userData = null;
+	var container = document.querySelector(".container-iksrDt");
+	if (container) userData = BDfunctionsDevilBro.getKeyInformation({"node":container,"key":"user"});
+	return userData;
 };
 
 BDfunctionsDevilBro.getMyUserID = function () {
 	var userData = BDfunctionsDevilBro.getMyUserData();
 	return (userData && userData.id ? userData.id : null);
+};
+
+BDfunctionsDevilBro.getMyUserStatus = function () {
+	var userStatus = "invisible";
+	var status = document.querySelector(".container-iksrDt .status");
+	if (status) userStatus = status.classList[1].split("-")[1];
+	return userStatus;
 };
 	
 BDfunctionsDevilBro.readServerList = function () {
