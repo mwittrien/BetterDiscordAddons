@@ -40,47 +40,55 @@ class NotificationSounds {
 
 	getDescription () {return "Creates a notification sound when you receive a notification (mention or DM).";}
 
-	getVersion () {return "2.5.6";}
+	getVersion () {return "2.5.7";}
 
 	getAuthor () {return "DevilBro";}
 
     getSettingsPanel () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			var settingspanel = `<audio class="preview"></audio>`;
+			var settingshtml = `<div class="${this.getName()}-settings">`;
 			
 			var songs = BDfunctionsDevilBro.loadAllData(this.getName(), "songs");
 			
 			for (var i in this.types) {
-				var key = this.types[i];
-				var choice = BDfunctionsDevilBro.loadData(key, this.getName(), "choices");
-				settingspanel += `<label style="color:grey;">` + key + `-Sound:</label><div class="` + key + `-song-settings" style="margin:0px 0px 20px 0px; overflow:hidden;">`;
-				settingspanel += `<div class="category-selection" style="margin:0px 20px 0px 0px; float:left;"><select id="` + key + `-category-select" onchange='` + this.getName() + `.updateSettings(this, "` + key + `", "` + this.types + `", "` + this.getName() + `")' style="width:150px; height: 25px;">`;
+				var type = this.types[i];
+				var choice = BDfunctionsDevilBro.loadData(type, this.getName(), "choices");
+				settingshtml += `<label style="color:grey;">${type}-Sound:</label><div class="${type}-song-settings" style="margin:0px 0px 0px 0px; overflow:hidden;">`;
+				settingshtml += `<div class="category-select-wrapper" style="margin:0px 20px 0px 0px; float:left;"><select soundtype="${type}" class="category-select" id="${type}-category-select" style="width:150px; height: 25px;">`;
 				for (var category in songs) {
 					var cSelected = choice.category == category ? " selected" : "";
 					if (cSelected) {
-						var songSelection = `<div class="song-selection" style="margin:0px 20px 0px 0px; float:left;"><select id="` + key + `-song-select" onchange='` + this.getName() + `.updateSettings(this, "` + key + `", "` + this.types + `", "` + this.getName() + `")' style="width:150px; height: 25px;">`;
+						var songselectionhtml = `<div class="song-select-wrapper" style="margin:0px 20px 0px 0px; float:left;"><select soundtype="${type}" class="song-select" id="${type}-song-select" style="width:150px; height: 25px;">`;
 						for (var song in songs[category]) {
-							var src = songs[category][song] ? "src=" + songs[category][song] : "";
+							var src = songs[category][song] ? " src=" + songs[category][song] : "";
 							if (song && song != "") {
 								var sSelected = choice.song == song ? " selected" : "";
-								songSelection += `<option `+ src + `` + sSelected + `>` + song + `</option>`;
+								songselectionhtml += `<option${src}${sSelected}>${song}</option>`;
 							}
 						}
-						songSelection += `</select></div>`;
+						songselectionhtml += `</select></div>`;
 					}
-					settingspanel += `<option` + cSelected + `>` + category + `</option>`;
+					settingshtml += `<option${cSelected}>${category}</option>`;
 				}
-				settingspanel += `</select></div>`;
-				settingspanel += songSelection;
+				settingshtml += `</select></div>`;
+				settingshtml += songselectionhtml;
 				var volume = choice.volume ? choice.volume : "100";
-				settingspanel += `<div class="` + key + `-volume-slider" style="margin:0px 20px 0px 0px; float:left;"><input type="range" min="0" max="100" value="` + volume + `" id="` + key + `-volume" onchange='` + this.getName() + `.updateSettings(this, "` + key + `", "` + this.types + `", "` + this.getName() + `")' oninput='` + this.getName() + `.updateVolumeinput(this, "` + key + `")'></div>`;
-				settingspanel += `<div class="` + key + `-volume-value" style="margin:0px 0px 0px 0px; float:left;"><input type="number" min="0" max="100" value="` + volume + `" id="` + key + `-volume-value" onchange='` + this.getName() + `.updateSettings(this, "` + key + `", "` + this.types + `", "` + this.getName() + `")' oninput='` + this.getName() + `.updateVolumeinput(this, "` + key + `")' style="height: 25px; width:50px; text-align:center;"></div>`;
-				settingspanel += `</div>`;
+				settingshtml += `<div class="volume-slider-wrapper" style="margin:0px 20px 0px 0px; float:left;"><input soundtype="${type}" type="range" min="0" max="100" value="${volume}" class="volume-slider" id="${type}-volume-slider"></div>`;
+				settingshtml += `<div class="volume-input-wrapper" style="margin:0px 0px 0px 0px; float:left;"><input soundtype="${type}" type="number" min="0" max="100" value="${volume}" class="volume-input" id="${type}-volume-input" style="height: 25px; width:50px; text-align:center;"></div>`;
+				settingshtml += `</div>`;
+				settingshtml += `<div class="checkbox-wrapper" style="margin:0px 0px 20px 0px;"><label style="color:grey;"><input class="dnddisable-checkbox" type="checkbox" value="${type}"${BDfunctionsDevilBro.loadData(type, this.getName(), "dnddisable") ? " checked" : ""}>Disable notifications when status is set to do not disturb.</label></div>`;
 								
 			}
-			settingspanel += `<label style="color:grey;">Make sure to disable your default notification sounds in the notifications settings of Discord or else you will hear both the default notifications and the new custom notifications. If you want to add your own sounds just open the plugin file and add a new song (audio or video) in the list on the top and make sure the link you are using is a direct link pointing to a source file on a website or else it won't be added to the list and no a youtube link is not a direct link to a source file ...</label>`;
+			settingshtml += `<label style="color:grey;">Make sure to disable your default notification sounds in the notifications settings of Discord or else you will hear both the default notifications and the new custom notifications. If you want to add your own sounds just open the plugin file and add a new song (audio or video) in the list on the top and make sure the link you are using is a direct link pointing to a source file on a website or else it won't be added to the list and no a youtube link is not a direct link to a source file ...</label>`;
+			settingshtml += `<audio class="sound-preview"></audio>`;
+			settingshtml += `</div>`;
 			
-			
+			var settingspanel = $(settingshtml)[0];
+			$(settingspanel)
+				.on("change", ".dnddisable-checkbox", () => {this.updateDNDdisable(settingspanel);})
+				.on("change", ".category-select, .song-select, .volume-slider, .volume-input", (e) => {this.updateSettings(settingspanel, e);})
+				.on("input", ".volume-slider, .volume-input", (e) => {this.updateVolumeinput(settingspanel, e);});
+				
 			return settingspanel;
 		}
     }
@@ -267,6 +275,7 @@ class NotificationSounds {
 	// begin of own functions
 	
 	playAudio (type) {
+		if (BDfunctionsDevilBro.loadData(type, this.getName(), "dnddisable") && BDfunctionsDevilBro.getMyUserStatus() == "dnd") return;
 		var choice = BDfunctionsDevilBro.loadData(type, this.getName(), "choices");
 		var songs = BDfunctionsDevilBro.loadAllData(this.getName(), "songs");
 		
@@ -299,8 +308,8 @@ class NotificationSounds {
 	
 	loadChoices () {
 		for (var i in this.types) {
-			var key = this.types[i];
-			var choice = BDfunctionsDevilBro.loadData(key, this.getName(), "choices");
+			var type = this.types[i];
+			var choice = BDfunctionsDevilBro.loadData(type, this.getName(), "choices");
 			var songs = BDfunctionsDevilBro.loadAllData(this.getName(), "songs");
 			
 			var songFound = false;
@@ -319,92 +328,83 @@ class NotificationSounds {
 				}
 			}
 			if (!songFound) choice = {"category":"---","song":"---","volume":"100"};
-			BDfunctionsDevilBro.saveData(key, choice, this.getName(), "choices");
+			BDfunctionsDevilBro.saveData(type, choice, this.getName(), "choices");
 		}
 	}
-	
-	static checkUrl (url) {
-		$.ajax({
-			type: "HEAD",
-			url : "https://cors-anywhere.herokuapp.com/" + url,
-			success: (message, text, response) => {
-				if (response.getResponseHeader('Content-Type').indexOf("audio") != -1 || 
-				response.getResponseHeader('Content-Type').indexOf("video") != -1 || 
-				response.getResponseHeader('Content-Type').indexOf("application") != -1) {
-					return true;
-				}
-				else {
-					return false;
-				}
-			},
-			error: () => {
-				return false;
-			}
-		});
-	}
 
-    static updateSettings (ele, type, types, pluginName) {
-		var settingspanel = 	BDfunctionsDevilBro.getSettingsPanelDiv(ele);
-		var categoryselect = 	$(settingspanel).find("#" + type + "-category-select")[0];
-		var songselect = 		$(settingspanel).find("#" + type + "-song-select")[0];
-		var volumeslider = 		$(settingspanel).find("#" + type + "-volume")[0];
-		var volumeinput = 		$(settingspanel).find("#" + type + "-volume-value")[0];
+    updateSettings (settingspanel, e) {
+		var ele = e.target;
+		var type = $(ele).attr("soundtype");
 		
-		if (ele.id == type + "-category-select") {
-			var newCategory = 		$(categoryselect).find(":selected").text();
-			var newSongs = 			BDfunctionsDevilBro.loadData(newCategory, pluginName, "songs");
+		var categoryselect = 	settingspanel.querySelector("#" + type + "-category-select");
+		var songselect = 		settingspanel.querySelector("#" + type + "-song-select");
+		var volumeslider = 		settingspanel.querySelector("#" + type + "-volume-slider");
+		var volumeinput = 		settingspanel.querySelector("#" + type + "-volume-input");
+		
+		if (ele == categoryselect) {
+			var newCategory = $(categoryselect).find(":selected").text();
+			var newSongs = BDfunctionsDevilBro.loadData(newCategory, this.getName(), "songs");
 			
 			var firstSelected = false;
-			var songSelection = `<div class="song-selection" style="margin:0px 20px 0px 0px; float:left;"><select id="` + type + `-song-select" onchange='` + pluginName + `.updateSettings(this, "` + type + `", "` + types + `", "` + pluginName + `")' style="width:150px; height: 25px;">`;
+			var songselectionhtml = `<div class="song-select-wrapper" style="margin:0px 20px 0px 0px; float:left;"><select soundtype="${type}" class="song-select" id="${type}-song-select" style="width:150px; height: 25px;">`;
 			for (var newSong in newSongs) {
-				var src = newSongs[newSong] ? "src=" + newSongs[newSong] : "";
+				var src = newSongs[newSong] ? " src=" + newSongs[newSong] : "";
 				if (newSong && newSong != "") {
 					var sSelected = !firstSelected ? " selected" : "";
 					firstSelected = true;
-					songSelection += `<option `+ src + `` + sSelected + `>` + newSong + `</option>`;
+					songselectionhtml += `<option${src}${sSelected}>${newSong}</option>`;
 				}
 			}
-			songSelection += `</select></div>`;
+			songselectionhtml += `</select></div>`;
 			
-			$(songselect).html(songSelection);
+			$(songselect).html(songselectionhtml);
 		}
 		
-		var volume = ele.id == type + "-volume" ? volumeslider.value : volumeinput.value;
+		var volume = ele == volumeslider ? volumeslider.value : volumeinput.value;
 		volume = volume > 100 ? 100 : volume < 0 ? 0 : volume;
 		volumeslider.value = volume;
 		volumeinput.value = volume;
 		
 		var url = $(songselect).find(":selected").attr("src");
-		if (url != null) {
-			var audio = $(settingspanel).find(".preview")[0];
+		if (url) {
+			var audio = settingspanel.querySelector(".sound-preview");
 			audio.src = url;
 			audio.volume = volume/100;
 			audio.play();
 		}
 		
-		var settings = {};
-		types = types.split(",");
 		var choices = {};
-		for (var i = 0; i < types.length; i++) {
-			var key = 			types[i];
-			var category = 		$(settingspanel).find("#" + key + "-category-select").find(":selected").text();
-			var song = 			$(settingspanel).find("#" + key + "-song-select").find(":selected").text();
-			var volume = 		$(settingspanel).find("#" + key + "-volume")[0].value;
-			choices[key] = 		{category, song, volume};
+		for (var i in this.types) {
+			var type = 			this.types[i];
+			var category = 		$(settingspanel).find("#" + type + "-category-select").find(":selected").text();
+			var song = 			$(settingspanel).find("#" + type + "-song-select").find(":selected").text();
+			var volume = 		$(settingspanel).find("#" + type + "-volume-slider").val();
+			choices[type] = 	{category, song, volume};
 		}
-		BDfunctionsDevilBro.saveAllData(choices, pluginName, "choices");
+		BDfunctionsDevilBro.saveAllData(choices, this.getName(), "choices");
     }
 
-    static updateVolumeinput (ele, type) {
-		var settingspanel = 	BDfunctionsDevilBro.getSettingsPanelDiv(ele);
-		var volumeslider = 		$(settingspanel).find("#" + type + "-volume")[0];
-		var volumeinput = 		$(settingspanel).find("#" + type + "-volume-value")[0];
+    updateVolumeinput (settingspanel, e) {
+		var ele = e.target;
+		var type = $(ele).attr("soundtype");
 		
-		if (ele.id == type + "-volume") {
+		var volumeslider = 		settingspanel.querySelector("#" + type + "-volume-slider");
+		var volumeinput = 		settingspanel.querySelector("#" + type + "-volume-input");
+		
+		if (ele == volumeslider) {
 			volumeinput.value = volumeslider.value;
 		}
-		else if (ele.id == type + "-volume-value") {
+		else if (ele == volumeinput) {
 			volumeslider.value = volumeinput.value;
 		}
+    }
+
+    updateDNDdisable (settingspanel) {
+		var settings = {};
+		var inputs = settingspanel.querySelectorAll(".dnddisable-checkbox");
+		for (var i = 0; i < inputs.length; i++) {
+			settings[inputs[i].value] = inputs[i].checked;
+		}
+		BDfunctionsDevilBro.saveAllData(settings, this.getName(), "dnddisable");
     }
 }
