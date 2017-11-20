@@ -31,6 +31,7 @@ class PersonalPins {
 				<div class="messages-popout-wrap themed-popout" style="max-height: 740px;">
 					<div class="header">
 						<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;">
+							<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">Notes:</h3>
 							<button type="button" value="channel" class="modalTabButton tabButtonType modalTabButtonActive buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 mediumGrow-uovsMu">
 								<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">Channel</h3>
 							</button>
@@ -51,7 +52,8 @@ class PersonalPins {
 						</div>
 					</div>
 					<div class="footer">
-						<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;">
+						<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4 inner-tqJwAU" style="flex: 0 0 auto;">
+							<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">Sort by:</h3>
 							<button type="button" value="timestamp" class="modalTabButton tabButtonDate modalTabButtonActive buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 mediumGrow-uovsMu">
 								<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">Message-Date</h3>
 							</button>
@@ -100,7 +102,7 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.0.5";}
+	getVersion () {return "1.0.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -242,7 +244,7 @@ class PersonalPins {
 		var groups = $(context).find(".item-group");
 		for (let i = 0; i < groups.length; i++) {
 			var group = groups[i];
-			if (BDfunctionsDevilBro.getKeyInformation({"node":group, "key":"handleCopyItem"})) {
+			if (BDfunctionsDevilBro.getKeyInformation({"node":group, "key":"displayName", "value":"MessagePinItem"})) {
 				$(this.messageContextEntryMarkup).insertAfter(group)
 					.on("click", ".personalpin-item", () => {
 						$(".context-menu").hide();
