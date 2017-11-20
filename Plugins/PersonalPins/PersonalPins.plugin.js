@@ -2,6 +2,8 @@
 
 class PersonalPins {
 	constructor () {
+		this.labels = {};
+		
 		this.switchFixObserver = new MutationObserver(() => {});
 		this.messageContextObserver = new MutationObserver(() => {});
 		this.chatWindowObserver = new MutationObserver(() => {});
@@ -10,7 +12,7 @@ class PersonalPins {
 		this.messageContextEntryMarkup =
 			`<div class="item-group">
 				<div class="item personalpin-item">
-					<span>Add Message to Notes</span>
+					<span>REPLACE_context_noteoption_text</span>
 					<div class="hint"></div>
 				</div>
 			</div>`;
@@ -28,18 +30,18 @@ class PersonalPins {
 			
 		this.notesPopoutMarkup = 
 			`<div class="popout popout-bottom-right no-arrow no-shadow popout-personalpins-notes DevilBro-modal" style="z-index: 1000; visibility: visible; left: 544.844px; top: 35.9896px; transform: translateX(-100%) translateY(0%) translateZ(0px);">
-				<div class="messages-popout-wrap themed-popout" style="max-height: 740px;">
+				<div class="messages-popout-wrap themed-popout" style="max-height: 740px; width: 500px;">
 					<div class="header">
 						<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;">
-							<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">Notes:</h3>
+							<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_popout_note_text</h3>
 							<button type="button" value="channel" class="modalTabButton tabButtonType modalTabButtonActive buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 mediumGrow-uovsMu">
-								<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">Channel</h3>
+								<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_popout_channel_text</h3>
 							</button>
 							<button type="button" value="server" class="modalTabButton tabButtonType buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 mediumGrow-uovsMu">
-								<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">Server</h3>
+								<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_popout_server_text</h3>
 							</button>
 							<button type="button" value="allservers" class="modalTabButton tabButtonType buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 mediumGrow-uovsMu">
-								<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">All Servers</h3>
+								<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_popout_allservers_text</h3>
 							</button>
 						</div>
 					</div>
@@ -53,12 +55,12 @@ class PersonalPins {
 					</div>
 					<div class="footer">
 						<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4 inner-tqJwAU" style="flex: 0 0 auto;">
-							<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">Sort by:</h3>
+							<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_popout_sort_text</h3>
 							<button type="button" value="timestamp" class="modalTabButton tabButtonDate modalTabButtonActive buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 mediumGrow-uovsMu">
-								<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">Message-Date</h3>
+								<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_popout_messagesort_text</h3>
 							</button>
 							<button type="button" value="addedat" class="modalTabButton tabButtonDate buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 mediumGrow-uovsMu">
-								<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">Note-Date</h3>
+								<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_popout_datesort_text</h3>
 							</button>
 						</div>
 					</div>
@@ -74,7 +76,7 @@ class PersonalPins {
 			</div>`;
 			
 		this.popoutEntryMarkup = 
-			`<div class="btn-item btn-item-personalpins">Note</div>`;
+			`<div class="btn-item btn-item-personalpins">REPLACE_popout_noteoption_text</div>`;
 			
 		this.messageMarkup = 
 			`<div class="message-group hide-overflow">
@@ -102,7 +104,7 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.0.6";}
+	getVersion () {return "1.1.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -205,6 +207,8 @@ class PersonalPins {
 			document.querySelectorAll(".messages-group .message").forEach(message => {this.addOptionButton(message);});
 			
 			this.addNotesButton();
+			
+			BDfunctionsDevilBro.translatePlugin(this);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -239,6 +243,20 @@ class PersonalPins {
 
 	
 	// begin of own functions
+
+	changeLanguageStrings () {
+		this.messageContextEntryMarkup = 	this.messageContextEntryMarkup.replace("REPLACE_context_noteoption_text", this.labels.context_noteoption_text);
+		
+		this.notesPopoutMarkup = 			this.notesPopoutMarkup.replace("REPLACE_popout_note_text", this.labels.popout_note_text + ":");
+		this.notesPopoutMarkup = 			this.notesPopoutMarkup.replace("REPLACE_popout_channel_text", this.labels.popout_channel_text);
+		this.notesPopoutMarkup = 			this.notesPopoutMarkup.replace("REPLACE_popout_server_text", this.labels.popout_server_text);
+		this.notesPopoutMarkup = 			this.notesPopoutMarkup.replace("REPLACE_popout_allservers_text", this.labels.popout_allservers_text);
+		this.notesPopoutMarkup = 			this.notesPopoutMarkup.replace("REPLACE_popout_sort_text", this.labels.popout_sort_text + ":");
+		this.notesPopoutMarkup = 			this.notesPopoutMarkup.replace("REPLACE_popout_messagesort_text", this.labels.popout_messagesort_text);
+		this.notesPopoutMarkup = 			this.notesPopoutMarkup.replace("REPLACE_popout_datesort_text", this.labels.popout_datesort_text);
+		
+		this.popoutEntryMarkup = 			this.popoutEntryMarkup.replace("REPLACE_popout_noteoption_text", this.labels.popout_noteoption_text);
+	}
 	
 	onContextMenu (context) {
 		var groups = $(context).find(".item-group");
@@ -263,7 +281,7 @@ class PersonalPins {
 				this.openNotesPopout(e);
 			})
 			.on("mouseenter." + this.getName(), (e) => {
-				BDfunctionsDevilBro.createTooltip("Notes", e.currentTarget, {type:"bottom",selector:"note-button-tooltip"});
+				BDfunctionsDevilBro.createTooltip(this.labels.popout_note_text, e.currentTarget, {type:"bottom",selector:"note-button-tooltip"});
 			});
 	}
 	
@@ -360,6 +378,7 @@ class PersonalPins {
 			};
 			data[serverID][channelID][messageID + "_" + position] = message;
 			BDfunctionsDevilBro.saveAllData(data, this.getName(), "servers");
+			BDfunctionsDevilBro.showToast(this.labels.toast_noteadd_text, {type:"success"});
 		}
 		this.message = null;
 	}
@@ -369,6 +388,7 @@ class PersonalPins {
 		var info = BDfunctionsDevilBro.getKeyInformation({"node":document.querySelector(".chat"),"key":"channel"});
 		if (info) {
 			var serverID = info.guild_id;
+			serverID = serverID ? serverID : "dms";
 			var channelID = info.id;
 			let data = BDfunctionsDevilBro.loadAllData(this.getName(), "servers");
 			if (!BDfunctionsDevilBro.isObjectEmpty(data)) {
@@ -408,9 +428,295 @@ class PersonalPins {
 						delete data[messageData.server][messageData.channel][messageData.id + "_" + messageData.pos];
 						BDfunctionsDevilBro.saveAllData(data, this.getName(), "servers");
 						if (!container.querySelector(".message-group")) $(placeholder).show();
+						BDfunctionsDevilBro.showToast(this.labels.toast_noteremove_text, {type:"danger"});
 					});
 				}
 			}
+		}
+	}
+	
+	setLabelsByLanguage () {
+		switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
+			case "da": 		//danish
+				return {
+					popout_note_text: 				"Noter",
+					popout_channel_text: 			"Kanal",
+					popout_server_text: 			"Server",
+					popout_allservers_text: 		"Alle servere",
+					popout_sort_text: 				"Sorter efter",
+					popout_messagesort_text: 		"Meddelelse-Dato",
+					popout_datesort_text: 			"Note-Dato",
+					context_noteoption_text: 		"Noter Meddelelse",
+					popout_noteoption_text: 		"Noter",
+					toast_noteadd_text: 			"Meddelelse tilføjet til notesbog.",
+					toast_noteremove_text: 			"Meddelelse fjernet fra notesbog."
+				};
+			case "de": 		//german
+				return {
+					popout_note_text: 				"Notizen",
+					popout_channel_text: 			"Kanal",
+					popout_server_text: 			"Server",
+					popout_allservers_text: 		"Alle Server",
+					popout_sort_text: 				"Sortieren nach",
+					popout_messagesort_text: 		"Nachrichten-Datum",
+					popout_datesort_text: 			"Notiz-Datum",
+					context_noteoption_text: 		"Nachricht notieren",
+					popout_noteoption_text: 		"Notieren",
+					toast_noteadd_text: 			"Nachricht zum Notizbuch hinzugefügt.",
+					toast_noteremove_text: 			"Nachricht aus dem Notizbuch entfernt."
+				};
+			case "es": 		//spanish
+				return {
+					popout_note_text: 				"Notas",
+					popout_channel_text: 			"Canal",
+					popout_server_text: 			"Servidor",
+					popout_allservers_text: 		"Todos los servidores",
+					popout_sort_text: 				"Ordenar por",
+					popout_messagesort_text: 		"Mensaje-Fecha",
+					popout_datesort_text: 			"Nota-Fecha",
+					context_noteoption_text: 		"Anotar mensaje",
+					popout_noteoption_text: 		"Anotar",
+					toast_noteadd_text: 			"Mensaje agregado al cuaderno.",
+					toast_noteremove_text: 			"Mensaje eliminado del cuaderno."
+				};
+			case "fr": 		//french
+				return {
+					popout_note_text: 				"Notes",
+					popout_channel_text: 			"Canal",
+					popout_server_text: 			"Serveur",
+					popout_allservers_text: 		"Tous les serveurs",
+					popout_sort_text: 				"Trier par",
+					popout_messagesort_text: 		"Message-Date",
+					popout_datesort_text: 			"Note-Date",
+					context_noteoption_text: 		"Noter le message",
+					popout_noteoption_text: 		"Noter",
+					toast_noteadd_text: 			"Message ajouté au bloc-notes.",
+					toast_noteremove_text: 			"Message supprimé du bloc-notes."
+				};
+			case "it": 		//italian
+				return {
+					popout_note_text: 				"Note",
+					popout_channel_text: 			"Canale",
+					popout_server_text: 			"Server",
+					popout_allservers_text: 		"Tutti i server",
+					popout_sort_text: 				"Ordina per",
+					popout_messagesort_text: 		"Messaggio-Data",
+					popout_datesort_text: 			"Nota-Data",
+					context_noteoption_text: 		"Annotare il messaggio",
+					popout_noteoption_text: 		"Annotare",
+					toast_noteadd_text: 			"Messaggio aggiunto al blocco note.",
+					toast_noteremove_text: 			"Messaggio rimosso dal blocco note."
+				};
+			case "nl":		//dutch
+				return {
+					popout_note_text: 				"Notities",
+					popout_channel_text: 			"Kanaal",
+					popout_server_text: 			"Server",
+					popout_allservers_text: 		"Alle servers",
+					popout_sort_text: 				"Sorteer op",
+					popout_messagesort_text: 		"Bericht-Datum",
+					popout_datesort_text: 			"Notitie-Datum",
+					context_noteoption_text: 		"Noteer bericht",
+					popout_noteoption_text: 		"Noteer",
+					toast_noteadd_text: 			"Bericht toegevoegd aan notitieblok.",
+					toast_noteremove_text: 			"Bericht verwijderd van notitieblok."
+				};
+			case "no":		//norwegian
+				return {
+					popout_note_text: 				"Notatene",
+					popout_channel_text: 			"Kanal",
+					popout_server_text: 			"Server",
+					popout_allservers_text: 		"Alle servere",
+					popout_sort_text: 				"Sorter etter",
+					popout_messagesort_text: 		"Melding-Dato",
+					popout_datesort_text: 			"Merknad-Dato",
+					context_noteoption_text: 		"Notat ned meldingen",
+					popout_noteoption_text: 		"Notere",
+					toast_noteadd_text: 			"Melding lagt til i notisboken.",
+					toast_noteremove_text: 			"Melding fjernet fra notatboken."
+				};
+			case "pl":		//polish
+				return {
+					popout_note_text: 				"Notatki",
+					popout_channel_text: 			"Kanał",
+					popout_server_text: 			"Serwer",
+					popout_allservers_text: 		"Wszystkie serwery",
+					popout_sort_text: 				"Sortuj według",
+					popout_messagesort_text: 		"Wiadomość-data",
+					popout_datesort_text: 			"Notatka-Data",
+					context_noteoption_text: 		"Notuj wiadomość",
+					popout_noteoption_text: 		"Notuj",
+					toast_noteadd_text: 			"Wiadomość została dodana do notatnika.",
+					toast_noteremove_text: 			"Wiadomość została usunięta z notatnika."
+				};
+			case "pt":		//portuguese (brazil)
+				return {
+					popout_note_text: 				"Notas",
+					popout_channel_text: 			"Canal",
+					popout_server_text: 			"Servidor",
+					popout_allservers_text: 		"Todos os servidores",
+					popout_sort_text: 				"Ordenar por",
+					popout_messagesort_text: 		"Mensagem-Data",
+					popout_datesort_text: 			"Nota-Data",
+					context_noteoption_text: 		"Anote a mensagem",
+					popout_noteoption_text: 		"Anotar",
+					toast_noteadd_text: 			"Mensagem adicionada ao caderno.",
+					toast_noteremove_text: 			"Mensagem removida do caderno."
+				};
+			case "fi":		//finnish
+				return {
+					popout_note_text: 				"Muistiinpanot",
+					popout_channel_text: 			"Kanava",
+					popout_server_text: 			"Palvelin",
+					popout_allservers_text: 		"Kaikki palvelimet",
+					popout_sort_text: 				"Järjestä",
+					popout_messagesort_text: 		"Viesti-Päivämäärä",
+					popout_datesort_text: 			"Huomaa-Päivämäärä",
+					context_noteoption_text: 		"Huomaa viesti",
+					popout_noteoption_text: 		"Huomaa",
+					toast_noteadd_text: 			"Viesti lisätty muistikirjaan.",
+					toast_noteremove_text: 			"Viesti poistettiin muistikirjaan."
+				};
+			case "sv":		//swedish
+				return {
+					popout_note_text: 				"Anteckningarna",
+					popout_channel_text: 			"Kanal",
+					popout_server_text: 			"Server",
+					popout_allservers_text: 		"Alla servrar",
+					popout_sort_text: 				"Sortera efter",
+					popout_messagesort_text: 		"Meddelande-Datum",
+					popout_datesort_text: 			"Anteckningen-Datum",
+					context_noteoption_text: 		"Anteckna meddelande",
+					popout_noteoption_text: 		"Anteckna",
+					toast_noteadd_text: 			"Meddelandet läggs till i anteckningsboken.",
+					toast_noteremove_text: 			"Meddelande borttaget från anteckningsboken."
+				};
+			case "tr":		//turkish
+				return {
+					popout_note_text: 				"Notlar",
+					popout_channel_text: 			"Kanal",
+					popout_server_text: 			"Sunucu",
+					popout_allservers_text: 		"Tüm Sunucular",
+					popout_sort_text: 				"Göre sırala",
+					popout_messagesort_text: 		"Mesaj-Tarih",
+					popout_datesort_text: 			"Not-Tarih",
+					context_noteoption_text: 		"Mesajı not alın",
+					popout_noteoption_text: 		"Not almak",
+					toast_noteadd_text: 			"Mesaj not defteri'ya eklendi.",
+					toast_noteremove_text: 			"Mesaj not defteri'dan kaldırıldı."
+				};
+			case "cs":		//czech
+				return {
+					popout_note_text: 				"Poznámky",
+					popout_channel_text: 			"Kanál",
+					popout_server_text: 			"Server",
+					popout_allservers_text: 		"Všechny servery",
+					popout_sort_text: 				"Seřazeno podle",
+					popout_messagesort_text: 		"Zpráva-datum",
+					popout_datesort_text: 			"Poznámka-datum",
+					context_noteoption_text: 		"Poznámka dolů zprávu",
+					popout_noteoption_text: 		"Poznámka dolů",
+					toast_noteadd_text: 			"Zpráva byla přidána do notebooku.",
+					toast_noteremove_text: 			"Zpráva byla odebrána z notebooku."
+				};
+			case "bg":		//bulgarian
+				return {
+					popout_note_text: 				"бележките",
+					popout_channel_text: 			"Канал",
+					popout_server_text: 			"Сървър",
+					popout_allservers_text: 		"Всички сървъри",
+					popout_sort_text: 				"Сортиране по",
+					popout_messagesort_text: 		"Съобщение-Дата",
+					popout_datesort_text: 			"Забележка-Дата",
+					context_noteoption_text: 		"Oтбележете съобщението",
+					popout_noteoption_text: 		"Oтбележете",
+					toast_noteadd_text: 			"Съобщението бе добавено към бележника.",
+					toast_noteremove_text: 			"Съобщението е премахнато от преносимия компютър."
+				};
+			case "ru":		//russian
+				return {
+					popout_note_text: 				"Заметки",
+					popout_channel_text: 			"Канал",
+					popout_server_text: 			"Cервер",
+					popout_allservers_text: 		"Все серверы",
+					popout_sort_text: 				"Сортировать по",
+					popout_messagesort_text: 		"Сообщение-дата",
+					popout_datesort_text: 			"Заметки-Дата",
+					context_noteoption_text: 		"Записывать вниз",
+					popout_noteoption_text: 		"Записывать",
+					toast_noteadd_text: 			"Сообщение добавлено в блокнот.",
+					toast_noteremove_text: 			"Сообщение удалено из записной книжки."
+				};
+			case "uk":		//ukrainian
+				return {
+					popout_note_text: 				"Замітки",
+					popout_channel_text: 			"Канал",
+					popout_server_text: 			"Сервер",
+					popout_allservers_text: 		"Всі сервери",
+					popout_sort_text: 				"Сортувати за",
+					popout_messagesort_text: 		"Повідомлення-дата",
+					popout_datesort_text: 			"Примітка-дата",
+					context_noteoption_text: 		"Зверніть увагу на повідомлення",
+					popout_noteoption_text: 		"Занотуйте",
+					toast_noteadd_text: 			"Повідомлення додається до ноутбука.",
+					toast_noteremove_text: 			"Повідомлення видалено з ноутбука."
+				};
+			case "ja":		//japanese
+				return {
+					popout_note_text: 				"ノート",
+					popout_channel_text: 			"チャネル",
+					popout_server_text: 			"サーバ",
+					popout_allservers_text: 		"すべてのサーバー",
+					popout_sort_text: 				"並び替え",
+					popout_messagesort_text: 		"メッセージ-日付",
+					popout_datesort_text: 			"注-日付",
+					context_noteoption_text: 		"ノートダウンメッセージ",
+					popout_noteoption_text: 		"書き留める",
+					toast_noteadd_text: 			"ノートブックにメッセージが追加されました.",
+					toast_noteremove_text: 			"ノートブックからメッセージが削除されました."
+				};
+			case "zh":		//chinese (traditional)
+				return {
+					popout_note_text: 				"筆記",
+					popout_channel_text: 			"渠道",
+					popout_server_text: 			"服務器",
+					popout_allservers_text: 		"所有服務器",
+					popout_sort_text: 				"排序方式",
+					popout_messagesort_text: 		"消息-日期",
+					popout_datesort_text: 			"注-日期",
+					context_noteoption_text: 		"記下下來的消息",
+					popout_noteoption_text: 		"記下",
+					toast_noteadd_text: 			"消息添加到筆記本.",
+					toast_noteremove_text: 			"消息從筆記本中刪除."
+				};
+			case "ko":		//korean
+				return {
+					popout_note_text: 				"노트",
+					popout_channel_text: 			"채널",
+					popout_server_text: 			"섬기는 사람",
+					popout_allservers_text: 		"모든 서버",
+					popout_sort_text: 				"정렬 기준",
+					popout_messagesort_text: 		"메시지-날짜",
+					popout_datesort_text: 			"주-날짜",
+					context_noteoption_text: 		"메모 다운 메시지",
+					popout_noteoption_text: 		"메모하다",
+					toast_noteadd_text: 			"노트북에 메시지 추가됨.",
+					toast_noteremove_text: 			"노트에서 메시지 삭제됨."
+				};
+			default:		//default: english
+				return {
+					popout_note_text: 				"Notes",
+					popout_channel_text: 			"Channel",
+					popout_server_text: 			"Server",
+					popout_allservers_text: 		"All Servers",
+					popout_sort_text: 				"Sort by",
+					popout_messagesort_text: 		"Message-Date",
+					popout_datesort_text: 			"Note-Date",
+					context_noteoption_text: 		"Note Message",
+					popout_noteoption_text: 		"Note",
+					toast_noteadd_text: 			"Message added to notebook.",
+					toast_noteremove_text: 			"Message removed from notebook."
+				};
 		}
 	}
 }
