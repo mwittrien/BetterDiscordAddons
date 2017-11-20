@@ -169,7 +169,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "1.9.6";}
+	getVersion () {return "1.9.7";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -893,6 +893,10 @@ class EditUsers {
 			else {
 				info = BDfunctionsDevilBro.getKeyInformation({"node":div,"key":"channel"});
 				if (info) info = {"id":info.recipients[0]};
+				else {
+					info = BDfunctionsDevilBro.getKeyInformation({"node":$(".message-group").has(div)[0],"key":"message"});
+					if (info) info = info.author;
+				}
 			}
 		}
 		return info;
