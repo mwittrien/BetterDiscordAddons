@@ -18,7 +18,7 @@ class PersonalPins {
 			</svg>`;
 			
 		this.notesPopoutMarkup = 
-			`<div class="popout popout-bottom-right no-arrow no-shadow" style="z-index: 1000; visibility: visible; left: 544.844px; top: 35.9896px; transform: translateX(-100%) translateY(0%) translateZ(0px);">
+			`<div class="popout popout-bottom-right no-arrow no-shadow popout-personalpins-notes" style="z-index: 1000; visibility: visible; left: 544.844px; top: 35.9896px; transform: translateX(-100%) translateY(0%) translateZ(0px);">
 				<div class="messages-popout-wrap themed-popout" style="max-height: 740px;">
 					<div class="header">
 						<div class="title">Notes</div>
@@ -41,7 +41,7 @@ class PersonalPins {
 			`<div class="btn-option btn-personalpins"></div>`;
 		
 		this.optionsPopoutMarkup = 
-			`<div class="popout popout-bottom no-arrow popout-personalpins" style="z-index: 1000; visibility: visible;">
+			`<div class="popout popout-bottom no-arrow popout-personalpins-options" style="z-index: 1000; visibility: visible;">
 				<div class="option-popout small-popout-box"></div
 			</div>`;
 			
@@ -74,7 +74,7 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.0.2s";}
+	getVersion () {return "1.0.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -121,8 +121,10 @@ class PersonalPins {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (node && node.tagName && node.querySelector(".option-popout") && !node.querySelector(".btn-item-personalpins")) {
-									$(node).find(".option-popout").append(this.popoutEntryMarkup);
-									this.addClickListener(node);
+									if (this.message) {
+										$(node).find(".option-popout").append(this.popoutEntryMarkup);
+										this.addClickListener(node);
+									}
 								}
 							});
 						}
@@ -136,9 +138,14 @@ class PersonalPins {
 			$(document).off("click." + this.getName(), ".btn-option")
 				.on("click." + this.getName(), ".btn-option", (e) => {
 					var div = $(".message").has(e.currentTarget)[0];
-					this.message = {
-						"div": div,
-						"pos": $(".message-group").has(e.currentTarget).find(".message").index(div)
+					if (div && !div.querySelector(".system-message")) {
+						this.message = {
+							"div": div,
+							"pos": $(".message-group").has(e.currentTarget).find(".message").index(div)
+						}
+					}
+					else {
+						$(".btn-item-personalpins").remove();
 					}
 				});
 			
@@ -201,6 +208,7 @@ class PersonalPins {
 	}
 	
 	openNotesPopout (e) {
+		if (document.querySelector(".popout-personalpins-notes")) return;
 		var popout = $(this.notesPopoutMarkup);
 		$(".popouts").append(popout);
 		popout
@@ -210,7 +218,7 @@ class PersonalPins {
 		$(document).on("mousedown." + this.getName(), (e2) => {
 			if (popout.has(e2.target).length == 0) {
 				$(document).off("mousedown." + this.getName());
-				popout.remove();
+				setTimeout(() => {popout.remove();},100);
 			}
 		});
 		
