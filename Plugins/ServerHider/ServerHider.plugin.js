@@ -5,7 +5,6 @@ class ServerHider {
 		this.labels = {};
 		
 		this.serverContextObserver = new MutationObserver(() => {});
-		this.serverListContextHandler;
 		
 		this.css = `
 			.serverhider-modal .btn-all {
@@ -168,7 +167,7 @@ class ServerHider {
 
 	getDescription () {return "Hide Servers in your Serverlist";}
 
-	getVersion () {return "2.4.3";}
+	getVersion () {return "2.4.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -213,11 +212,28 @@ class ServerHider {
 			});
 			if (document.querySelector(".app")) this.serverContextObserver.observe(document.querySelector(".app"), {childList: true});
 			
-			this.serverListContextHandler = (e) => {	
-				this.updateAllServers(false);
-			};
+			this.serverListObserver = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.addedNodes) {
+							change.addedNodes.forEach((node) => {
+								if (node && node.classList && node.classList.contains("guild") && !node.querySelector(".guilds-error")) {
+									var info = BDfunctionsDevilBro.getKeyInformation({"node":node, "key":"guild"});
+									if (info) {
+										var data = BDfunctionsDevilBro.loadData(info.id, this.getName(), "servers");
+										if (data) {
+											$(node).toggle(data.visible);
+										}
+									}
+								}
+							});
+						}
+					}
+				);
+			});
+			if (document.querySelector(".guilds.scroller")) this.serverListObserver.observe(document.querySelector(".guilds.scroller"), {childList: true});
 			
-			$(".guilds.scroller").bind('mouseleave', this.serverListContextHandler);
+			$(".guilds.scroller").on("mouseleave." + this.getName(), () => {this.updateAllServers(false);};
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 			
@@ -233,7 +249,8 @@ class ServerHider {
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.serverContextObserver.disconnect();
-			$(".guilds.scroller").unbind('mouseleave', this.serverListContextHandler);
+			
+			$(".guilds.scroller").off("mouseleave." + this.getName());
 			
 			$(BDfunctionsDevilBro.readServerList()).show();
 			
