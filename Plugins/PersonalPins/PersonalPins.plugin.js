@@ -74,7 +74,7 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.0.3";}
+	getVersion () {return "1.0.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -208,17 +208,20 @@ class PersonalPins {
 	}
 	
 	openNotesPopout (e) {
-		if (document.querySelector(".popout-personalpins-notes")) return;
+		var icon = e.currentTarget;
+		if (icon.classList.contains("popout-open")) return;
+		icon.classList.add("popout-open");
 		var popout = $(this.notesPopoutMarkup);
 		$(".popouts").append(popout);
 		popout
-			.css("left", $(e.currentTarget).outerWidth()/2 + $(e.currentTarget).offset().left + "px")
-			.css("top", $(e.currentTarget).outerHeight() + $(e.currentTarget).offset().top + "px");
+			.css("left", $(icon).outerWidth()/2 + $(icon).offset().left + "px")
+			.css("top", $(icon).outerHeight() + $(icon).offset().top + "px");
 			
 		$(document).on("mousedown." + this.getName(), (e2) => {
 			if (popout.has(e2.target).length == 0) {
 				$(document).off("mousedown." + this.getName());
-				setTimeout(() => {popout.remove();},100);
+				popout.remove();
+				setTimeout(() => {icon.classList.remove("popout-open");},300);
 			}
 		});
 		
