@@ -5,6 +5,7 @@ class ServerHider {
 		this.labels = {};
 		
 		this.serverContextObserver = new MutationObserver(() => {});
+		this.serverListObserver = new MutationObserver(() => {});
 		
 		this.css = `
 			.serverhider-modal .btn-all {
@@ -167,7 +168,7 @@ class ServerHider {
 
 	getDescription () {return "Hide Servers in your Serverlist";}
 
-	getVersion () {return "2.4.4";}
+	getVersion () {return "2.4.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -233,7 +234,7 @@ class ServerHider {
 			});
 			if (document.querySelector(".guilds.scroller")) this.serverListObserver.observe(document.querySelector(".guilds.scroller"), {childList: true});
 			
-			$(".guilds.scroller").on("mouseleave." + this.getName(), () => {this.updateAllServers(false);};
+			$(".guilds.scroller").on("mouseleave." + this.getName(), () => {this.updateAllServers(false);});
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 			
@@ -249,6 +250,7 @@ class ServerHider {
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.serverContextObserver.disconnect();
+			this.serverListObserver.disconnect();
 			
 			$(".guilds.scroller").off("mouseleave." + this.getName());
 			
