@@ -74,7 +74,7 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.0.1";}
+	getVersion () {return "1.0.2s";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -183,7 +183,7 @@ class PersonalPins {
 	addNotesButton () {
 		$(".notesButton").remove();
 		$(this.notesButton)
-			.insertBefore($("svg[name='Pin']").parent().find(".search-2--6aU"))
+			.insertBefore($(".iconInactive-WWHQEI").parent().find(".search-2--6aU"))
 			.on("click." + this.getName(), (e) => {
 				this.openNotesPopout(e);
 			})
