@@ -19,7 +19,7 @@ A series of plugins and themes for BetterDiscord. If you got any question write 
  - [Moveable Popups](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/MoveablePopups) - Adds the feature to move all popups and modals around like on a normal desktop. Ctrl + drag with your left mousebutton to drag element.
  - [Notification Sounds](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/NotificationSounds) - Rings a sound when someone writes you a DM or when someones mentions you in a server.
  - [Old Title Bar](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/OldTitleBar) - Reverts the title bar back to its former self.
- - [Personal Pins](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/Personal Pins) - Similar to normal pins. Lets you save messages as notes for yourself.
+ - [Personal Pins](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/PersonalPins) - Similar to normal pins. Lets you save messages as notes for yourself.
  - [Read All Notifications Button](https://github.com/mwittrien/BetterDiscordAddons/blob/master/Plugins/ReadAllNotificationsButton) - Adds a little button at the top of your serverlist that enables you to clear all mentions and messagesnotifications at once.
  - [Reverse Image Search](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ReverseImageSearch) - Adds the option to reverse image search images in discord via several engines.
  - [Send Large Messages](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SendLargeMessages) - Opens a popout when your message is too large, which allows you to automatically send the message in several smaller messages.
