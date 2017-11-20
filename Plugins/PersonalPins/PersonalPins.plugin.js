@@ -140,7 +140,6 @@ class PersonalPins {
 						"div": div,
 						"pos": $(".message-group").has(e.currentTarget).find(".message").index(div)
 					}
-					console.log(this.message);
 				});
 			
 			document.querySelectorAll(".messages-group .message").forEach(message => {this.addOptionButton(message);});
