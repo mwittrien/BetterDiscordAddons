@@ -72,7 +72,7 @@ class PersonalPins {
 
 	getName () {return "PersonalPins";}
 
-	getDescription () {return "Similar to normal pins. Lets you save messages as pins for yourself.";}
+	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
 	getVersion () {return "1.0.0";}
 
