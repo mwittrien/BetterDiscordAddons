@@ -85,7 +85,7 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "3.5.4";}
+	getVersion () {return "3.5.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -121,12 +121,12 @@ class EditChannels {
 			this.channelObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
-						if (change.attributeName == "class" && change.target && change.target.classList && change.target.classList.contains("wrapper-fDmxzK")) {
+						if (change.attributeName == "class" && $(change.target).attr("class").indexOf("wrapper") > -1) {
 							this.loadChannel(change.target.parentElement);
 						}
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.classList && node.classList.contains("containerDefault-7RImuF")) {
+								if (node && node.classList && (node.classList.contains("containerDefault-7RImuF") || node.classList.contains("containerDefault-1bbItS"))) {
 									this.loadChannel(node);
 								}
 							});
@@ -269,8 +269,7 @@ class EditChannels {
 	onContextMenu (context) {
 		if (!context.querySelector(".localchannelsettings-item")) {
 			var info = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"channel"});
-			
-			if (info && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"ChannelInviteCreateGroup"})) {
+			if (info && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"ChannelMuteItem"})) {
 				$(context).append(this.channelContextEntryMarkup)
 					.on("mouseenter", ".localchannelsettings-item", (e) => {
 						this.createContextSubMenu(info, e);
@@ -376,7 +375,7 @@ class EditChannels {
 	resetChannel (channelDiv) {
 		var info = BDfunctionsDevilBro.getKeyInformation({"node":channelDiv, "key":"channel"});
 		if (info) {
-			var channel = channelDiv.querySelector(".name-2SL4ev");
+			var channel = channelDiv.querySelector(".name-2SL4ev, .colorTransition-2iZaYd");
 		
 			$(channelDiv)
 				.removeAttr("custom-editchannels");
@@ -389,7 +388,7 @@ class EditChannels {
 	loadChannel (channelDiv) {
 		var info = BDfunctionsDevilBro.getKeyInformation({"node":channelDiv, "key":"channel"});
 		if (info) {
-			var channel = channelDiv.querySelector(".name-2SL4ev");
+			var channel = channelDiv.querySelector(".name-2SL4ev, .colorTransition-2iZaYd");
 			var data = BDfunctionsDevilBro.loadData(info.id, this.getName(), "channels");
 			if (data) {
 				var name = data.name ? data.name : info.name;
