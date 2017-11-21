@@ -659,7 +659,7 @@ BDfunctionsDevilBro.readDmList = function () {
 	
 BDfunctionsDevilBro.readChannelList = function () {
 	var foundChannels = [];
-	var channels = $(".containerDefault-7RImuF");
+	var channels = $(".containerDefault-7RImuF, .containerDefault-1bbItS");
 	for (var i = 0; i < channels.length; i++) {
 		var channelData = BDfunctionsDevilBro.getKeyInformation({"node":channels[i], "key":"channel"});
 		if (channelData) {
@@ -667,18 +667,6 @@ BDfunctionsDevilBro.readChannelList = function () {
 		}
 	}
 	return foundChannels;
-};
-	
-BDfunctionsDevilBro.readCategoryList = function () {
-	var foundCategories = [];
-	var categories = $(".containerDefault-1bbItS");
-	for (var i = 0; i < categories.length; i++) {
-		var channelData = BDfunctionsDevilBro.getKeyInformation({"node":categories[i], "key":"channel"});
-		if (channelData) {
-			foundCategories.push(categories[i]);
-		}
-	}
-	return foundCategories;
 };
 	
 BDfunctionsDevilBro.getSelectedServer = function () {
