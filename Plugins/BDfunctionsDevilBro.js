@@ -1882,10 +1882,6 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		background-color: rgba(0,0,0,.5);
 	}
 
-	.DevilBro-modal .tab * {
-		cursor: inherit;
-	}
-
 	.DevilBro-modal .tab {
 		opacity: .3;
 		-webkit-box-flex: 0;
