@@ -74,14 +74,22 @@ class ServerFolders {
 				display: none;
 			}
 
-			.foldercontainer .guild-inner {
-			   border-radius: 25px !important;
-			   transition: border-radius 1s;
+			.foldercontainer .guild:not(.selected) .guild-inner {
+				border-radius: 25px !important;
+				transition: border-radius 1s;
 			}
 
-			.foldercontainer .guild-inner:hover {
-			   border-radius: 15px !important;
-			   transition: border-radius 1s;
+			.foldercontainer .guild.selected .guild-inner,
+			.foldercontainer .guild:not(.selected) .guild-inner:hover {
+				border-radius: 15px !important;
+				transition: border-radius 1s;
+			}
+
+			.foldercontainer .guild:not(.selected) .guild-inner a[style*=font] {
+				background-color: rgb(47, 49, 54);
+			}
+			.foldercontainer .guild.selected .guild-inner a[style*=font] {
+				background-color: rgb(114, 137, 218);
 			}`;
 
 		this.serverContextEntryMarkup =
@@ -153,20 +161,14 @@ class ServerFolders {
 									</g>
 								</svg>
 							</div>
-							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;">
-								<button type="button" value="modalTab-folder" class="modalTabButton buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 mediumGrow-uovsMu">
-									<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_tabheader1_text</h3>
-								</button>
-								<button type="button" value="modalTab-icon" class="modalTabButton buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 mediumGrow-uovsMu">
-									<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_tabheader2_text</h3>
-								</button>
-								<button type="button" value="modalTab-tooltip" class="modalTabButton buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 mediumGrow-uovsMu">
-									<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_tabheader3_text</h3>
-								</button>
+							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4 inner-tqJwAU" style="flex: 0 0 auto;">
+								<div tab="folder" class="tab">REPLACE_modal_tabheader1_text</div>
+								<div tab="icon" class="tab">REPLACE_modal_tabheader2_text</div>
+								<div tab="tooltip" class="tab">REPLACE_modal_tabheader3_text</div>
 							</div>
 							<div class="scrollerWrap-2uBjct content-1Cut5s scrollerThemed-19vinI themeGhostHairline-2H8SiW">
 								<div class="scroller-fzNley inner-tqJwAU">
-									<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginBottom20-2Ifj-2 modalTab modalTab-folder" style="flex: 1 1 auto;">
+									<div tab="folder" class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginBottom20-2Ifj-2 tab-content" style="flex: 1 1 auto;">
 										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
 											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_foldername_text</h3>
 										</div>
@@ -180,7 +182,7 @@ class ServerFolders {
 											<div class="icons"></div>
 										</div>
 									</div>
-									<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginBottom20-2Ifj-2 modalTab modalTab-icon" style="flex: 1 1 auto;">
+									<div tab="icon" class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginBottom20-2Ifj-2 tab-content" style="flex: 1 1 auto;">
 										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO" style="flex: 1 1 auto;">
 											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_colorpicker1_text</h3>
 										</div>
@@ -194,7 +196,7 @@ class ServerFolders {
 											<div class="swatches2"></div>
 										</div>
 									</div>
-									<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginBottom20-2Ifj-2 modalTab modalTab-tooltip" style="flex: 1 1 auto;">
+									<div tab="tooltip" class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginBottom20-2Ifj-2 tab-content" style="flex: 1 1 auto;">
 										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO" style="flex: 1 1 auto;">
 											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_colorpicker3_text</h3>
 										</div>
@@ -242,7 +244,7 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.3.0";}
+	getVersion () {return "5.3.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -1151,7 +1153,6 @@ class ServerFolders {
 			.find(".folder.badge.count")
 				.toggle(includedServers.length > 0 && this.getSettings().showCountBadge)
 				.text(includedServers.length);	
-	
 	
 		if ($(folderDiv).hasClass("open") && $(".content_of_" + folderDiv.id).length == 0) this.openCloseFolder(folderDiv);
 	}
