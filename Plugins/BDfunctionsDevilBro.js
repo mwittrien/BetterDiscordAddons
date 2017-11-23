@@ -1037,18 +1037,18 @@ BDfunctionsDevilBro.appendModal = function (modal) {
 				.toggleClass("valueChecked-3Bzkbm", $(e.target).prop("checked"))
 				.toggleClass("valueUnchecked-XR6AOk", $(e.target).prop("checked"));
 		})
-		.on("click", ".modalTabButton", (e) => {
-			$(".modalTab.modalTabOpen", modal)
-				.removeClass("modalTabOpen");
+		.on("click", ".tab", (e) => {
+			$(".tab-content.open", modal)
+				.removeClass("open");
 				
-			$(".modalTabButton.modalTabButtonActive", modal)
-				.removeClass("modalTabButtonActive");
+			$(".tab.selected", modal)
+				.removeClass("selected");
 				
-			$(".modalTab." + e.currentTarget.value, modal)
-				.addClass("modalTabOpen");
+			$(".tab-content." + $(e.currentTarget).attr("value") + ", .tab-content[tab='" + $(e.currentTarget).attr("tab") + "']", modal)
+				.addClass("open");
 				
 			$(e.currentTarget)
-				.addClass("modalTabButtonActive");
+				.addClass("selected");
 		})
 		.on("click", ".backdrop-2ohBEd, .btn-cancel, .btn-save", () => {
 			$(document).off("keydown.modalEscapeListenerDevilBro" + id);
@@ -1056,8 +1056,10 @@ BDfunctionsDevilBro.appendModal = function (modal) {
 			setTimeout(() => {modal.remove();}, 300);
 		});
 		
-	$(modal).find(".modalTabButton").first().addClass("modalTabButtonActive");
-	$(modal).find(".modalTab").first().addClass("modalTabOpen");
+	$(modal).find(".modalTabButton").addClass("tab");
+	$(modal).find(".tab").first().addClass("selected");
+	$(modal).find(".modalTab").addClass("tab-content");
+	$(modal).find(".tab-content").first().addClass("open");
 	$(modal)
 		.find(".checkbox-1KYsPm").each((_, checkBox) => {
 			$(checkBox.parentElement)
@@ -1880,27 +1882,37 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		background-color: rgba(0,0,0,.5);
 	}
 
-	.DevilBro-modal .modalTabButton * {
+	.DevilBro-modal .tab * {
 		cursor: inherit;
 	}
 
-	.DevilBro-modal .modalTabButton:hover {
+	.DevilBro-modal .tab {
+		opacity: .3;
+		-webkit-box-flex: 0;
+		cursor: pointer;
+		flex-grow: 0;
+		flex-shrink: 0;
+		margin-right: 12px;
+		padding: 0px 5px 15px 5px;
+		text-align: center;   
+		border-bottom: 2px solid transparent;
+		color: #fff;
+	}
+
+	.DevilBro-modal .tab:hover {
+		border-bottom-color: #fff;
+	}
+
+	.DevilBro-modal .tab.selected {
 		opacity: 1;
+		border-bottom-color: #fff;
 	}
 
-	.DevilBro-modal .modalTabButton {
-		opacity: 0.4;
-	}
-	
-	.DevilBro-modal .modalTabButtonActive {
-		opacity: 0.8;
-	}
-
-	.DevilBro-modal .modalTab {
+	.DevilBro-modal .tab-content {
 		display: none;
 	}
 
-	.DevilBro-modal .modalTab.modalTabOpen {
+	.DevilBro-modal .tab-content.open {
 		display: initial;
 	}
 	
