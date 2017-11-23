@@ -31,12 +31,14 @@ class PersonalPins {
 		this.notesPopoutMarkup = 
 			`<div class="popout popout-bottom-right no-arrow no-shadow popout-personalpins-notes DevilBro-modal" style="z-index: 1000; visibility: visible; left: 544.844px; top: 35.9896px; transform: translateX(-100%) translateY(0%) translateZ(0px);">
 				<div class="messages-popout-wrap themed-popout" style="max-height: 740px; width: 500px;">
-					<div class="header">
-						<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto; padding-top:13px;">
-							<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto; margin-top:-19px;">REPLACE_popout_note_text</h3>
-							<div tab="channel" class="tab tab-range selected">REPLACE_popout_channel_text</div>
-							<div tab="server" class="tab tab-range">REPLACE_popout_server_text</div>
-							<div tab="allservers" class="tab tab-range">REPLACE_popout_allservers_text</div>
+					<div class="header" style="padding-bottom:0;">
+						<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;">
+							<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto; margin: -5px 0 5px 0;">REPLACE_popout_note_text</h3>
+						</div>
+						<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO" style="flex: 0 0 auto;">
+							<div tab="channel" class="tab selected">REPLACE_popout_channel_text</div>
+							<div tab="server" class="tab">REPLACE_popout_server_text</div>
+							<div tab="allservers" class="tab">REPLACE_popout_allservers_text</div>
 						</div>
 					</div>
 					<div class="scroller-wrap dark">
@@ -47,11 +49,43 @@ class PersonalPins {
 							</div>
 						</div>
 					</div>
-					<div class="footer">
-						<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4 inner-tqJwAU" style="flex: 0 0 auto; padding-top:13px;">
+					<div class="header" style="padding-bottom:0; border-radius: 0 0 5px 5px;">
+						<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO" style="flex: 0 0 auto;">
 							<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto; margin-top:-19px;">REPLACE_popout_sort_text</h3>
-							<div tab="timestamp" class="tab tab-date selected">REPLACE_popout_messagesort_text</div>
-							<div tab="addedat" class="tab tab-date">REPLACE_popout_datesort_text</div>
+							<div class="ui-form-item flexChild-1KGW5q" style="flex: 1 1 auto; position: relative; bottom: 7px;">
+								<div class="ui-select">
+									<div class="Select Select--single has-value">
+										<div class="Select-control">
+											<span class="Select-multi-value-wrapper">
+												<div class="Select-value">
+													<span class="Select-value-label">
+														<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a" style="flex: 1 1 auto;">
+															<div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm selectedOption" option="timestamp">REPLACE_popout_messagesort_text</div>
+														</div>
+													</span>
+												</div>
+											</span>
+											<span class="Select-arrow-zone">
+												<span class="Select-arrow"></span>
+											</span>
+										</div>
+										<div class="Select-menu-outer" style="display: none;">
+											<div class="Select-menu">
+												<div class="Select-option is-selected">
+													<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a" style="flex: 1 1 auto;">
+														<div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm selectValue" option="timestamp">REPLACE_popout_messagesort_text</div>
+													</div>
+												</div>
+												<div class="Select-option">
+													<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a" style="flex: 1 1 auto;">
+														<div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm selectValue" option="addedat">REPLACE_popout_datesort_text</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -94,7 +128,7 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.1.1";}
+	getVersion () {return "1.2.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -237,11 +271,12 @@ class PersonalPins {
 	changeLanguageStrings () {
 		this.messageContextEntryMarkup = 	this.messageContextEntryMarkup.replace("REPLACE_context_noteoption_text", this.labels.context_noteoption_text);
 		
-		this.notesPopoutMarkup = 			this.notesPopoutMarkup.replace("REPLACE_popout_note_text", this.labels.popout_note_text + ":");
+		this.notesPopoutMarkup = 			this.notesPopoutMarkup.replace("REPLACE_popout_note_text", this.labels.popout_note_text);
 		this.notesPopoutMarkup = 			this.notesPopoutMarkup.replace("REPLACE_popout_channel_text", this.labels.popout_channel_text);
 		this.notesPopoutMarkup = 			this.notesPopoutMarkup.replace("REPLACE_popout_server_text", this.labels.popout_server_text);
 		this.notesPopoutMarkup = 			this.notesPopoutMarkup.replace("REPLACE_popout_allservers_text", this.labels.popout_allservers_text);
 		this.notesPopoutMarkup = 			this.notesPopoutMarkup.replace("REPLACE_popout_sort_text", this.labels.popout_sort_text + ":");
+		this.notesPopoutMarkup = 			this.notesPopoutMarkup.replace("REPLACE_popout_messagesort_text", this.labels.popout_messagesort_text);
 		this.notesPopoutMarkup = 			this.notesPopoutMarkup.replace("REPLACE_popout_messagesort_text", this.labels.popout_messagesort_text);
 		this.notesPopoutMarkup = 			this.notesPopoutMarkup.replace("REPLACE_popout_datesort_text", this.labels.popout_datesort_text);
 		
@@ -293,19 +328,44 @@ class PersonalPins {
 			.appendTo(".popouts")
 			.css("left", $(icon).outerWidth()/2 + $(icon).offset().left + "px")
 			.css("top", $(icon).outerHeight() + $(icon).offset().top + "px")
-			.on("click", ".tab", (e) => {
-				$(".tab.selected", e.currentTarget.parentElement)
-					.removeClass("selected");
-					
-				$(e.currentTarget)
-					.addClass("selected");
-					
+			.on("click", ".tab", (e2) => {
+				$(".tab.selected", popout).removeClass("selected");
+				$(e2.currentTarget).addClass("selected");
 				this.addNotes(popout[0]);
+			})
+			.on("click", ".Select-control", (e2) => {
+				var selectWrap = $(".Select").has(e2.currentTarget);
+				var selectControl = selectWrap.find(".Select-control");
+				var selectMenu = selectWrap.find(".Select-menu-outer");
+				var selectInner = selectWrap.find(".selectedOption");
+				
+				selectWrap.toggleClass("is-open");
+				selectMenu.toggle();
+				
+				if (selectWrap.hasClass("is-open")) {
+					$(document).on("mousedown.select" + this.getName(), (e3) => {
+						$(document).off("mousedown.select" + this.getName());
+						if (selectControl.index(e3.target) > -1 || selectControl.has(e3.target)[0]) return;
+						selectWrap.removeClass("is-open");
+						selectMenu.hide();
+						var selectedOption = selectWrap.find(".Select-option").index(e3.target) > -1 ? e3.target : selectWrap.find(".Select-option").has(e3.target)[0];
+						if (selectedOption) {
+							$(".Select-option.is-selected", popout).removeClass("is-selected");
+							$(selectedOption).addClass("is-selected");
+							selectInner.text($(selectedOption).find(".selectValue").text());
+							selectInner.attr("option", $(selectedOption).find(".selectValue").attr("option"));
+							this.addNotes(popout[0]);
+						}
+					});
+				}
+				else {
+					$(document).off("mousedown.select" + this.getName());
+				}
 			});
 			
-		$(document).on("mousedown." + this.getName(), (e2) => {
+		$(document).on("mousedown.popout" + this.getName(), (e2) => {
 			if (popout.has(e2.target).length == 0) {
-				$(document).off("mousedown." + this.getName());
+				$(document).off("mousedown.popout" + this.getName());
 				popout.remove();
 				setTimeout(() => {icon.classList.remove("popout-open");},300);
 			}
@@ -386,7 +446,7 @@ class PersonalPins {
 				var container = popout.querySelector(".messages-popout");
 				var placeholder = popout.querySelector(".empty-placeholder");
 				var messages = {};
-				switch ($(".tab-range.selected", popout).attr("tab")) {
+				switch ($(".tab.selected", popout).attr("tab")) {
 					case "channel":
 						messages = data[serverID] && data[serverID][channelID] ? data[serverID][channelID] : {};
 						break;
@@ -401,7 +461,7 @@ class PersonalPins {
 				for (var id in messages) {
 					messageArray.push(messages[id]);
 				}
-				messageArray = BDfunctionsDevilBro.sortArrayByKey(messageArray, $(".tab-date.selected", popout).attr("tab"));
+				messageArray = BDfunctionsDevilBro.sortArrayByKey(messageArray, $(".Select .selectedOption", popout).attr("option"));
 				$(placeholder).toggle(messageArray.length == 0);
 				for (let i in messageArray) {
 					let messageData = messageArray[i];
