@@ -32,17 +32,11 @@ class PersonalPins {
 			`<div class="popout popout-bottom-right no-arrow no-shadow popout-personalpins-notes DevilBro-modal" style="z-index: 1000; visibility: visible; left: 544.844px; top: 35.9896px; transform: translateX(-100%) translateY(0%) translateZ(0px);">
 				<div class="messages-popout-wrap themed-popout" style="max-height: 740px; width: 500px;">
 					<div class="header">
-						<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;">
-							<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_popout_note_text</h3>
-							<button type="button" value="channel" class="modalTabButton tabButtonType modalTabButtonActive buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 mediumGrow-uovsMu">
-								<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_popout_channel_text</h3>
-							</button>
-							<button type="button" value="server" class="modalTabButton tabButtonType buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 mediumGrow-uovsMu">
-								<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_popout_server_text</h3>
-							</button>
-							<button type="button" value="allservers" class="modalTabButton tabButtonType buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 mediumGrow-uovsMu">
-								<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_popout_allservers_text</h3>
-							</button>
+						<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto; padding-top:13px;">
+							<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto; margin-top:-19px;">REPLACE_popout_note_text</h3>
+							<div tab="channel" class="tab tab-range selected">REPLACE_popout_channel_text</div>
+							<div tab="server" class="tab tab-range">REPLACE_popout_server_text</div>
+							<div tab="allservers" class="tab tab-range">REPLACE_popout_allservers_text</div>
 						</div>
 					</div>
 					<div class="scroller-wrap dark">
@@ -54,14 +48,10 @@ class PersonalPins {
 						</div>
 					</div>
 					<div class="footer">
-						<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4 inner-tqJwAU" style="flex: 0 0 auto;">
-							<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_popout_sort_text</h3>
-							<button type="button" value="timestamp" class="modalTabButton tabButtonDate modalTabButtonActive buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 mediumGrow-uovsMu">
-								<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_popout_messagesort_text</h3>
-							</button>
-							<button type="button" value="addedat" class="modalTabButton tabButtonDate buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 mediumGrow-uovsMu">
-								<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_popout_datesort_text</h3>
-							</button>
+						<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4 inner-tqJwAU" style="flex: 0 0 auto; padding-top:13px;">
+							<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto; margin-top:-19px;">REPLACE_popout_sort_text</h3>
+							<div tab="timestamp" class="tab tab-date selected">REPLACE_popout_messagesort_text</div>
+							<div tab="addedat" class="tab tab-date">REPLACE_popout_datesort_text</div>
 						</div>
 					</div>
 				</div>
@@ -104,7 +94,7 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.1.0";}
+	getVersion () {return "1.1.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -303,12 +293,12 @@ class PersonalPins {
 			.appendTo(".popouts")
 			.css("left", $(icon).outerWidth()/2 + $(icon).offset().left + "px")
 			.css("top", $(icon).outerHeight() + $(icon).offset().top + "px")
-			.on("click", ".modalTabButton", (e) => {
-				$(".modalTabButton.modalTabButtonActive", e.currentTarget.parentElement)
-					.removeClass("modalTabButtonActive");
+			.on("click", ".tab", (e) => {
+				$(".tab.selected", e.currentTarget.parentElement)
+					.removeClass("selected");
 					
 				$(e.currentTarget)
-					.addClass("modalTabButtonActive");
+					.addClass("selected");
 					
 				this.addNotes(popout[0]);
 			});
@@ -396,7 +386,7 @@ class PersonalPins {
 				var container = popout.querySelector(".messages-popout");
 				var placeholder = popout.querySelector(".empty-placeholder");
 				var messages = {};
-				switch (popout.querySelector(".tabButtonType.modalTabButtonActive").value) {
+				switch ($(".tab-range.selected", popout).attr("tab")) {
 					case "channel":
 						messages = data[serverID] && data[serverID][channelID] ? data[serverID][channelID] : {};
 						break;
@@ -411,7 +401,7 @@ class PersonalPins {
 				for (var id in messages) {
 					messageArray.push(messages[id]);
 				}
-				messageArray = BDfunctionsDevilBro.sortArrayByKey(messageArray, popout.querySelector(".tabButtonDate.modalTabButtonActive").value);
+				messageArray = BDfunctionsDevilBro.sortArrayByKey(messageArray, $(".tab-date.selected", popout).attr("tab"));
 				$(placeholder).toggle(messageArray.length == 0);
 				for (let i in messageArray) {
 					let messageData = messageArray[i];
