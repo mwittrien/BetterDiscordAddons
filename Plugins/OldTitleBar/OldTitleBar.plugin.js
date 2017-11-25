@@ -60,7 +60,7 @@ class OldTitleBar {
 
 	getDescription () {return "Reverts the title bar back to its former self.";}
 
-	getVersion () {return "1.2.2";}
+	getVersion () {return "1.2.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -70,7 +70,8 @@ class OldTitleBar {
 			var settingspanel = 
 				$(`<div class="${this.getName()}-settings">
 					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="addToSettings"${settings.addToSettings ? " checked" : void 0}>Add an old fashioned title bar to settings windows.</label><br>
-					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="reloadButton"${settings.reloadButton ? " checked" : void 0}>Add a reload button to the title bar.</label>
+					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="reloadButton"${settings.reloadButton ? " checked" : void 0}>Add a reload button to the title bar.</label><br>
+					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="forceClose"${settings.forceClose ? " checked" : void 0}>Force close the app when clicking the</label>
 				</div>`)[0];
 			$(settingspanel)
 				.on("change", ".settings-checkbox", () => {this.updateSettings(settingspanel);});
@@ -156,7 +157,8 @@ class OldTitleBar {
 	getSettings () {
 		var defaultSettings = {
 			addToSettings: true,
-			reloadButton: false
+			reloadButton: false,
+ 			forceClose: false
 		};
 		var settings = BDfunctionsDevilBro.loadAllData(this.getName(), "settings");
 		var saveSettings = false;
@@ -174,7 +176,7 @@ class OldTitleBar {
 
     updateSettings (settingspanel) {
 		var settings = {};
-		var inputs = settingspanel.querySelectorAll("input");
+		var inputs = settingspanel.querySelectorAll(".settings-checkbox");
 		for (var i = 0; i < inputs.length; i++) {
 			settings[inputs[i].value] = inputs[i].checked;
 		}
@@ -269,7 +271,8 @@ class OldTitleBar {
 	}
 	
 	doClose () {
-		require("electron").remote.getCurrentWindow().close();
+		if (this.getSettings().forceClose) require("electron").remote.app.quit();
+ 		else require("electron").remote.getCurrentWindow().close();
 	}
 	
 	removeTitleBar () {
