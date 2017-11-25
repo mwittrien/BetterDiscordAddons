@@ -39,7 +39,7 @@ class TopRoleEverywhere {
 
 	getDescription () {return "Adds the highest role of a user as a tag.";}
 
-	getVersion () {return "2.4.2";}
+	getVersion () {return "2.4.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -52,7 +52,8 @@ class TopRoleEverywhere {
 					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="showInMemberList"${settings.showInMemberList ? " checked" : void 0}>Show tag in memberlist.</label><br>
 					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="useOtherStyle"${settings.useOtherStyle ? " checked" : void 0}>Use other tag style.</label><br>
 					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="showOwnerRole"${settings.showOwnerRole ? " checked" : void 0}>Display toprole of serverowner as \"Owner\".</label><br>
-					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="disableForBots"${settings.disableForBots ? " checked" : void 0}>Disable toprole for bots.</label>
+					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="disableForBots"${settings.disableForBots ? " checked" : void 0}>Disable toprole for bots.</label><br>
+					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="addUserID"${settings.addUserID ? " checked" : void 0}>Add the userID inside the tag in the chat window.</label>
 				</div>`)[0];
 			$(settingspanel)
 				.on("change", ".settings-checkbox", () => {this.updateSettings(settingspanel);});
@@ -194,7 +195,8 @@ class TopRoleEverywhere {
 			showInMemberList: true,
 			useOtherStyle: false,
 			showOwnerRole: false,
-			showOnBots: false
+			showOnBots: false,
+			addUserID: false
 		};
 		var settings = BDfunctionsDevilBro.loadAllData(this.getName(), "settings");
 		var saveSettings = false;
@@ -212,7 +214,7 @@ class TopRoleEverywhere {
 
     updateSettings (settingspanel) {
 		var settings = {};
-		var inputs = settingspanel.querySelectorAll("input");
+		var inputs = settingspanel.querySelectorAll(".settings-checkbox");
 		for (var i = 0; i < inputs.length; i++) {
 			settings[inputs[i].value] = inputs[i].checked;
 		}
@@ -372,7 +374,7 @@ class TopRoleEverywhere {
 				inner.style.color = textColor;
 				inner.style.backgroundImage = bgInner;
 				inner.style.webkitBackgroundClip = "text";
-				inner.textContent = roleText;
+				inner.textContent = type == "chat" && settings.addUserID ? roleText + " ID:" + userID : roleText;
 				
 				if (oldwidth && totalwidth) {
 					newwidth = member.querySelector("span.member-username-inner").style.width;
