@@ -39,7 +39,7 @@ class TopRoleEverywhere {
 
 	getDescription () {return "Adds the highest role of a user as a tag.";}
 
-	getVersion () {return "2.4.3";}
+	getVersion () {return "2.4.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -52,8 +52,7 @@ class TopRoleEverywhere {
 					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="showInMemberList"${settings.showInMemberList ? " checked" : void 0}>Show tag in memberlist.</label><br>
 					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="useOtherStyle"${settings.useOtherStyle ? " checked" : void 0}>Use other tag style.</label><br>
 					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="showOwnerRole"${settings.showOwnerRole ? " checked" : void 0}>Display toprole of serverowner as \"Owner\".</label><br>
-					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="disableForBots"${settings.disableForBots ? " checked" : void 0}>Disable toprole for bots.</label><br>
-					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="addUserID"${settings.addUserID ? " checked" : void 0}>Add the userID inside the tag in the chat window.</label>
+					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="disableForBots"${settings.disableForBots ? " checked" : void 0}>Disable toprole for bots.</label>
 				</div>`)[0];
 			$(settingspanel)
 				.on("change", ".settings-checkbox", () => {this.updateSettings(settingspanel);});
@@ -195,8 +194,7 @@ class TopRoleEverywhere {
 			showInMemberList: true,
 			useOtherStyle: false,
 			showOwnerRole: false,
-			showOnBots: false,
-			addUserID: false
+			showOnBots: false
 		};
 		var settings = BDfunctionsDevilBro.loadAllData(this.getName(), "settings");
 		var saveSettings = false;
@@ -374,7 +372,7 @@ class TopRoleEverywhere {
 				inner.style.color = textColor;
 				inner.style.backgroundImage = bgInner;
 				inner.style.webkitBackgroundClip = "text";
-				inner.textContent = type == "chat" && settings.addUserID ? roleText + " ID:" + userID : roleText;
+				inner.textContent = roleText;
 				
 				if (oldwidth && totalwidth) {
 					newwidth = member.querySelector("span.member-username-inner").style.width;
