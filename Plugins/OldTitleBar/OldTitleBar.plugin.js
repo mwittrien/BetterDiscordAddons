@@ -71,7 +71,7 @@ class OldTitleBar {
 				$(`<div class="${this.getName()}-settings">
 					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="addToSettings"${settings.addToSettings ? " checked" : void 0}>Add an old fashioned title bar to settings windows.</label><br>
 					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="reloadButton"${settings.reloadButton ? " checked" : void 0}>Add a reload button to the title bar.</label><br>
-					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="forceClose"${settings.forceClose ? " checked" : void 0}>Force close the app when clicking the</label>
+					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="forceClose"${settings.forceClose ? " checked" : void 0}>Force close the app when clicking the close button.</label>
 				</div>`)[0];
 			$(settingspanel)
 				.on("change", ".settings-checkbox", () => {this.updateSettings(settingspanel);});
