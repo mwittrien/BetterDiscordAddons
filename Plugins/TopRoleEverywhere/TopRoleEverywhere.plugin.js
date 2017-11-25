@@ -27,7 +27,7 @@ class TopRoleEverywhere {
 				white-space: nowrap;
 			}
 			
-			.role-tag.chat-tag {
+			.role-tag.chat-tag, .role-tag.id-tag {
 				bottom: 1px;
 				margin-right: 5px;
 			}`;
@@ -39,7 +39,7 @@ class TopRoleEverywhere {
 
 	getDescription () {return "Adds the highest role of a user as a tag.";}
 
-	getVersion () {return "2.4.2";}
+	getVersion () {return "2.4.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -52,7 +52,9 @@ class TopRoleEverywhere {
 					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="showInMemberList"${settings.showInMemberList ? " checked" : void 0}>Show tag in memberlist.</label><br>
 					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="useOtherStyle"${settings.useOtherStyle ? " checked" : void 0}>Use other tag style.</label><br>
 					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="showOwnerRole"${settings.showOwnerRole ? " checked" : void 0}>Display toprole of serverowner as \"Owner\".</label><br>
-					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="disableForBots"${settings.disableForBots ? " checked" : void 0}>Disable toprole for bots.</label>
+					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="disableForBots"${settings.disableForBots ? " checked" : void 0}>Disable toprole for bots.</label><br>
+					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="addUserID"${settings.addUserID ? " checked" : void 0}>Add the userID as a tag to the chat window.</label><br>
+					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="darkIdTag"${settings.darkIdTag ? " checked" : void 0}>Use a dark version for the ID tag.</label>
 				</div>`)[0];
 			$(settingspanel)
 				.on("change", ".settings-checkbox", () => {this.updateSettings(settingspanel);});
@@ -194,7 +196,9 @@ class TopRoleEverywhere {
 			showInMemberList: true,
 			useOtherStyle: false,
 			showOwnerRole: false,
-			showOnBots: false
+			showOnBots: false,
+			addUserID: false,
+			darkIdTag: false
 		};
 		var settings = BDfunctionsDevilBro.loadAllData(this.getName(), "settings");
 		var saveSettings = false;
@@ -389,6 +393,28 @@ class TopRoleEverywhere {
 			}
 			else if (this.userRoles[serverID][userID]) {
 				delete this.userRoles[serverID][userID];
+			}
+			if (type == "chat" && settings.addUserID) {
+				var idtag = $(this.tagMarkup)[0];
+				member.appendChild(idtag);
+				var idColor = settings.darkIdTag ? [33,33,33] : [222,222,222];
+				var borderColorID = "rgba(" + idColor[0] + ", " + idColor[1] + ", " + idColor[2] + ", 0.5)";
+				var textColorID = "rgb(" + idColor[0] + ", " + idColor[1] + ", " + idColor[2] + ")";
+				var bgColorID = "rgba(" + idColor[0] + ", " + idColor[1] + ", " + idColor[2] + ", 0.1)";
+				var bgInnerID = "none";
+				if (settings.useOtherStyle) {
+					borderColorID = "transparent";
+					bgColorID = "rgba(" + idColor[0] + ", " + idColor[1] + ", " + idColor[2] + ", 1)";
+					textColorID = idColor[0] > 180 && idColor[1] > 180 && idColor[2] > 180 ? "black" : "white";
+				}
+				idtag.classList.add("id-tag");
+				idtag.style.border = "1px solid " + borderColorID;
+				idtag.style.background = bgColorID;
+				var idinner = idtag.querySelector(".role-inner");
+				idinner.style.color = textColorID;
+				idinner.style.backgroundImage = bgInnerID;
+				idinner.style.webkitBackgroundClip = "text";
+				idinner.textContent = userID;
 			}
 		}
 	}
