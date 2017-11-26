@@ -128,6 +128,9 @@ class PersonalPins {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
 			
+			this.HistoryUtils = BDfunctionsDevilBro.findInWebModules(module => ['transitionTo', 'replaceWith', 'getHistory'].every(prop => module[prop] !== undefined));
+			this.MainDiscord  = BDfunctionsDevilBro.findInWebModules(module => ["ActionTypes"].every(prop => module[prop] !== undefined));
+			
 			this.messageContextObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
@@ -453,13 +456,23 @@ class PersonalPins {
 					message.querySelector(".timestamp").innerText = new Date(messageData.timestamp).toLocaleDateString(language);
 					message.querySelector(".markup").innerHTML = messageData.markup;
 					message.querySelector(".accessory").innerHTML = messageData.accessory;
-					$(message).on("click." + this.getName(), ".close-button", (e) => {
-						message.remove();
-						delete data[messageData.server][messageData.channel][messageData.id + "_" + messageData.pos];
-						BDfunctionsDevilBro.saveAllData(data, this.getName(), "servers");
-						if (!container.querySelector(".message-group")) $(placeholder).show();
-						BDfunctionsDevilBro.showToast(this.labels.toast_noteremove_text, {type:"danger"});
-					});
+					$(message)
+						.on("click." + this.getName(), ".close-button", (e) => {
+							message.remove();
+							delete data[messageData.server][messageData.channel][messageData.id + "_" + messageData.pos];
+							BDfunctionsDevilBro.saveAllData(data, this.getName(), "servers");
+							if (!container.querySelector(".message-group")) $(placeholder).show();
+							BDfunctionsDevilBro.showToast(this.labels.toast_noteremove_text, {type:"danger"});
+						})
+						.on("click." + this.getName(), ".clickable", (e) => {
+							let {server, channel, id} = messageData;
+							server = server == 'dms' ? null : server;
+							if (!server || BDfunctionsDevilBro.getDivOfServer(server)) {
+								this.HistoryUtils.transitionTo(this.MainDiscord.Routes.MESSAGE(server, channel, id));
+							} else {
+								BDfunctionsDevilBro.getReactInstance(document.querySelector(".app")).return.stateNode.shake();
+							}
+						});
 				}
 			}
 		}
