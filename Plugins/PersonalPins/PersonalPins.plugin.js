@@ -95,8 +95,6 @@ class PersonalPins {
 							</div>
 						</div>
 						<div class="accessory"></div>
-					</div>
-					<div class="message">
 						<div class="body">
 							<h2 class="old-h2">
 								<span class="timestamp server" style="margin-left:0px;"></span>
