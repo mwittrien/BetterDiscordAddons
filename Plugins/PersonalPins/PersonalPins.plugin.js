@@ -87,15 +87,28 @@ class PersonalPins {
 						<div class="body">
 							<h2 class="old-h2">
 								<span class="username-wrapper"><strong class="user-name"></strong></span>
-								<span class="highlight-separator"> - </span><span class="timestamp"></span>
-							</h2><div class="message-text">
-							<div class="markup"></div>
+								<span class="highlight-separator"> - </span>
+								<span class="timestamp time"></span>
+							</h2>
+							<div class="message-text">
+								<div class="markup"></div>
+							</div>
+						</div>
+						<div class="accessory"></div>
+					</div>
+					<div class="message">
+						<div class="body">
+							<h2 class="old-h2">
+								<span class="timestamp server" style="margin-left:0px;"></span>
+								<span class="highlight-separator"> - </span>
+								<span class="timestamp channel"></span>
+							</h2>
 						</div>
 					</div>
-					<div class="accessory"></div></div>
 				</div>
 				<div class="sink-interactions clickable"></div>
 				<div class="action-buttons">
+					<div class="jump-button"><div class="text">REPLACE_popout_jump_text</div></div>
 					<div class="close-button"></div>
 				</div>
 			</div>`;
@@ -105,7 +118,7 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.2.1";}
+	getVersion () {return "1.2.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -127,6 +140,9 @@ class PersonalPins {
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
+			
+			this.HistoryUtils = BDfunctionsDevilBro.findInWebModules(module => ["transitionTo", "replaceWith", "getHistory"].every(prop => module[prop] !== undefined));
+			this.MainDiscord  = BDfunctionsDevilBro.findInWebModules(module => ["ActionTypes"].every(prop => module[prop] !== undefined));	
 			
 			this.messageContextObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -255,6 +271,8 @@ class PersonalPins {
 		this.notesPopoutMarkup = 			this.notesPopoutMarkup.replace("REPLACE_popout_sort_text", this.labels.popout_sort_text);
 		this.notesPopoutMarkup = 			this.notesPopoutMarkup.replace("REPLACE_popout_messagesort_text", this.labels.popout_messagesort_text);
 		
+		this.messageMarkup = 				this.messageMarkup.replace("REPLACE_popout_jump_text", this.labels.popout_jump_text);
+		
 		this.sortPopoutMarkup = 			this.sortPopoutMarkup.replace("REPLACE_popout_messagesort_text", this.labels.popout_messagesort_text);
 		this.sortPopoutMarkup = 			this.sortPopoutMarkup.replace("REPLACE_popout_datesort_text", this.labels.popout_datesort_text);
 		
@@ -298,14 +316,14 @@ class PersonalPins {
 	}
 	
 	openNotesPopout (e) {
-		var icon = e.currentTarget;
-		if (icon.classList.contains("popout-open")) return;
-		icon.classList.add("popout-open");
+		var wrapper = e.currentTarget;
+		if (wrapper.classList.contains("popout-open")) return;
+		wrapper.classList.add("popout-open");
 		var popout = $(this.notesPopoutMarkup);
 		popout
 			.appendTo(".popouts")
-			.css("left", $(icon).outerWidth()/2 + $(icon).offset().left + "px")
-			.css("top", $(icon).outerHeight() + $(icon).offset().top + "px")
+			.css("left", $(wrapper).outerWidth()/2 + $(wrapper).offset().left + "px")
+			.css("top", $(wrapper).outerHeight() + $(wrapper).offset().top + "px")
 			.on("click", ".tab-bar-item", (e2) => {
 				$(".tab-bar-item.selected", popout).removeClass("selected");
 				$(e2.currentTarget).addClass("selected");
@@ -319,7 +337,7 @@ class PersonalPins {
 			if (popout.has(e2.target).length == 0 && $(".personalpins-sort-popout").has(e2.target).length == 0) {
 				$(document).off("mousedown.notepopout" + this.getName());
 				popout.remove();
-				setTimeout(() => {icon.classList.remove("popout-open");},300);
+				setTimeout(() => {wrapper.classList.remove("popout-open");},300);
 			}
 		});
 		
@@ -327,7 +345,10 @@ class PersonalPins {
 	}
 	
 	openSortPopout (e) {
-		var value = $(e.currentTarget).find(".value");
+		var wrapper = e.currentTarget;
+		if (wrapper.classList.contains("popout-open")) return;
+		wrapper.classList.add("popout-open");
+		var value = $(wrapper).find(".value");
 		var popout = $(this.sortPopoutMarkup);
 		$(".popouts").append(popout)
 			.off("click", ".item")
@@ -336,6 +357,7 @@ class PersonalPins {
 				value.attr("option", $(e2.currentTarget).attr("option"));
 				$(document).off("mousedown.sortpopout" + this.getName());
 				popout.remove();
+				setTimeout(() => {wrapper.classList.remove("popout-open");},300);
 				this.addNotes();
 			});
 			
@@ -348,6 +370,7 @@ class PersonalPins {
 			if (popout.has(e2.target).length == 0) {
 				$(document).off("mousedown.sortpopout" + this.getName());
 				popout.remove();
+				setTimeout(() => {wrapper.classList.remove("popout-open");},300);
 			}
 		});
 	}
@@ -381,26 +404,29 @@ class PersonalPins {
 	
 	addMessageToNotes () {
 		if (!this.message) return;
-		var info = BDfunctionsDevilBro.getKeyInformation({"node":this.message.div.parentElement,"key":"message"});
-		if (info) {
-			var serverID = BDfunctionsDevilBro.getIdOfServer(BDfunctionsDevilBro.getSelectedServer());
-			serverID = serverID ? serverID : "dms";
-			var channelID = info.channel_id;
+		var messageInfo = BDfunctionsDevilBro.getKeyInformation({"node":this.message.div.parentElement,"key":"message"});
+		var guildInfo = BDfunctionsDevilBro.getKeyInformation({"node":document.querySelector(".chat"),"key":"guild"});
+		var channelInfo = BDfunctionsDevilBro.getKeyInformation({"node":document.querySelector(".chat"),"key":"channel"});
+		if (messageInfo && channelInfo) {
+			var serverID = guildInfo ? guildInfo.id : "dms";
+			var channelID = channelInfo.id;
 			var data = BDfunctionsDevilBro.loadAllData(this.getName(), "servers");
 			data[serverID] = data[serverID] ? data[serverID] : {}
 			data[serverID][channelID] = data[serverID][channelID] ? data[serverID][channelID] : {}
-			var messageID = info.id;
+			var messageID = messageInfo.id;
 			var position = this.message.pos;
 			var message = {
 				"server": serverID,
+				"serverName": guildInfo ? guildInfo.name : "Direct Messages",
 				"channel": channelID,
+				"channelName": channelInfo.name ? channelInfo.name : BDfunctionsDevilBro.getInnerText(document.querySelector(".channel.selected .channel-name")),
 				"id": messageID,
 				"pos": position,
-				"timestamp": info.timestamp._i.getTime(),
+				"timestamp": messageInfo.timestamp._i.getTime(),
 				"addedat": new Date().getTime(),
-				"color": info.colorString,
-				"author": info.author.username,
-				"avatar": "url('https://cdn.discordapp.com/avatars/" + info.author.id + "/" + info.author.avatar + ".webp')",
+				"color": messageInfo.colorString,
+				"author": messageInfo.author.username,
+				"avatar": "url('https://cdn.discordapp.com/avatars/" + messageInfo.author.id + "/" + messageInfo.author.avatar + ".webp')",
 				"markup": this.message.div.querySelector(".markup").innerHTML,
 				"accessory": this.message.div.querySelector(".accessory").innerHTML
 			};
@@ -446,11 +472,14 @@ class PersonalPins {
 				for (let i in messageArray) {
 					let messageData = messageArray[i];
 					let message = $(this.messageMarkup)[0];
+					let date = new Date(messageData.timestamp);
 					container.insertBefore(message, container.firstChild);
 					message.querySelector(".avatar-large").style.backgroundImage = messageData.avatar;
 					message.querySelector(".user-name").innerText = messageData.author;
 					message.querySelector(".user-name").style.color = messageData.color;
-					message.querySelector(".timestamp").innerText = new Date(messageData.timestamp).toLocaleDateString(language);
+					message.querySelector(".time").innerText = date.toLocaleTimeString() + ", " + date.toLocaleDateString(language);
+					message.querySelector(".server").innerText = messageData.serverName ? messageData.serverName : "";
+					message.querySelector(".channel").innerText = messageData.channelName ? messageData.channelName : "";
 					message.querySelector(".markup").innerHTML = messageData.markup;
 					message.querySelector(".accessory").innerHTML = messageData.accessory;
 					$(message).on("click." + this.getName(), ".close-button", (e) => {
@@ -459,6 +488,14 @@ class PersonalPins {
 						BDfunctionsDevilBro.saveAllData(data, this.getName(), "servers");
 						if (!container.querySelector(".message-group")) $(placeholder).show();
 						BDfunctionsDevilBro.showToast(this.labels.toast_noteremove_text, {type:"danger"});
+					})
+					.on("click." + this.getName(), ".jump-button", (e) => {
+						if (BDfunctionsDevilBro.getDivOfServer(messageData.server)) {
+							this.HistoryUtils.transitionTo(this.MainDiscord.Routes.MESSAGE(messageData.server, messageData.channel, messageData.id));
+						} 
+						else {
+							BDfunctionsDevilBro.getReactInstance(document.querySelector(".app")).return.stateNode.shake();
+						}
 					});
 				}
 			}
@@ -476,6 +513,7 @@ class PersonalPins {
 					popout_sort_text: 				"Sorter efter",
 					popout_messagesort_text: 		"Meddelelse-Dato",
 					popout_datesort_text: 			"Note-Dato",
+					popout_jump_text: 				"Hop",
 					context_noteoption_text: 		"Noter Meddelelse",
 					popout_noteoption_text: 		"Noter",
 					toast_noteadd_text: 			"Meddelelse tilføjet til notesbog.",
@@ -490,6 +528,7 @@ class PersonalPins {
 					popout_sort_text: 				"Sortieren nach",
 					popout_messagesort_text: 		"Nachrichten-Datum",
 					popout_datesort_text: 			"Notiz-Datum",
+					popout_jump_text: 				"Springen",
 					context_noteoption_text: 		"Nachricht notieren",
 					popout_noteoption_text: 		"Notieren",
 					toast_noteadd_text: 			"Nachricht zum Notizbuch hinzugefügt.",
@@ -504,6 +543,7 @@ class PersonalPins {
 					popout_sort_text: 				"Ordenar por",
 					popout_messagesort_text: 		"Mensaje-Fecha",
 					popout_datesort_text: 			"Nota-Fecha",
+					popout_jump_text: 				"Ir a",
 					context_noteoption_text: 		"Anotar mensaje",
 					popout_noteoption_text: 		"Anotar",
 					toast_noteadd_text: 			"Mensaje agregado al cuaderno.",
@@ -518,6 +558,7 @@ class PersonalPins {
 					popout_sort_text: 				"Trier par",
 					popout_messagesort_text: 		"Message-Date",
 					popout_datesort_text: 			"Note-Date",
+					popout_jump_text: 				"Accéder",
 					context_noteoption_text: 		"Noter le message",
 					popout_noteoption_text: 		"Noter",
 					toast_noteadd_text: 			"Message ajouté au bloc-notes.",
@@ -532,6 +573,7 @@ class PersonalPins {
 					popout_sort_text: 				"Ordina per",
 					popout_messagesort_text: 		"Messaggio-Data",
 					popout_datesort_text: 			"Nota-Data",
+					popout_jump_text: 				"Vai",
 					context_noteoption_text: 		"Annotare il messaggio",
 					popout_noteoption_text: 		"Annotare",
 					toast_noteadd_text: 			"Messaggio aggiunto al blocco note.",
@@ -546,6 +588,7 @@ class PersonalPins {
 					popout_sort_text: 				"Sorteer op",
 					popout_messagesort_text: 		"Bericht-Datum",
 					popout_datesort_text: 			"Notitie-Datum",
+					popout_jump_text: 				"Openen",
 					context_noteoption_text: 		"Noteer bericht",
 					popout_noteoption_text: 		"Noteer",
 					toast_noteadd_text: 			"Bericht toegevoegd aan notitieblok.",
@@ -560,6 +603,7 @@ class PersonalPins {
 					popout_sort_text: 				"Sorter etter",
 					popout_messagesort_text: 		"Melding-Dato",
 					popout_datesort_text: 			"Merknad-Dato",
+					popout_jump_text: 				"Hoppe",
 					context_noteoption_text: 		"Notat ned meldingen",
 					popout_noteoption_text: 		"Notere",
 					toast_noteadd_text: 			"Melding lagt til i notisboken.",
@@ -574,6 +618,7 @@ class PersonalPins {
 					popout_sort_text: 				"Sortuj według",
 					popout_messagesort_text: 		"Wiadomość-data",
 					popout_datesort_text: 			"Notatka-Data",
+					popout_jump_text: 				"Skocz",
 					context_noteoption_text: 		"Notuj wiadomość",
 					popout_noteoption_text: 		"Notuj",
 					toast_noteadd_text: 			"Wiadomość została dodana do notatnika.",
@@ -588,6 +633,7 @@ class PersonalPins {
 					popout_sort_text: 				"Ordenar por",
 					popout_messagesort_text: 		"Mensagem-Data",
 					popout_datesort_text: 			"Nota-Data",
+					popout_jump_text: 				"Pular",
 					context_noteoption_text: 		"Anote a mensagem",
 					popout_noteoption_text: 		"Anotar",
 					toast_noteadd_text: 			"Mensagem adicionada ao caderno.",
@@ -602,6 +648,7 @@ class PersonalPins {
 					popout_sort_text: 				"Järjestä",
 					popout_messagesort_text: 		"Viesti-Päivämäärä",
 					popout_datesort_text: 			"Huomaa-Päivämäärä",
+					popout_jump_text: 				"Siirry",
 					context_noteoption_text: 		"Huomaa viesti",
 					popout_noteoption_text: 		"Huomaa",
 					toast_noteadd_text: 			"Viesti lisätty muistikirjaan.",
@@ -616,6 +663,7 @@ class PersonalPins {
 					popout_sort_text: 				"Sortera efter",
 					popout_messagesort_text: 		"Meddelande-Datum",
 					popout_datesort_text: 			"Anteckningen-Datum",
+					popout_jump_text: 				"Hoppa",
 					context_noteoption_text: 		"Anteckna meddelande",
 					popout_noteoption_text: 		"Anteckna",
 					toast_noteadd_text: 			"Meddelandet läggs till i anteckningsboken.",
@@ -630,6 +678,7 @@ class PersonalPins {
 					popout_sort_text: 				"Göre sırala",
 					popout_messagesort_text: 		"Mesaj-Tarih",
 					popout_datesort_text: 			"Not-Tarih",
+					popout_jump_text: 				"Git",
 					context_noteoption_text: 		"Mesajı not alın",
 					popout_noteoption_text: 		"Not almak",
 					toast_noteadd_text: 			"Mesaj not defteri'ya eklendi.",
@@ -644,6 +693,7 @@ class PersonalPins {
 					popout_sort_text: 				"Seřazeno podle",
 					popout_messagesort_text: 		"Zpráva-datum",
 					popout_datesort_text: 			"Poznámka-datum",
+					popout_jump_text: 				"Skok",
 					context_noteoption_text: 		"Poznámka dolů zprávu",
 					popout_noteoption_text: 		"Poznámka dolů",
 					toast_noteadd_text: 			"Zpráva byla přidána do notebooku.",
@@ -658,6 +708,7 @@ class PersonalPins {
 					popout_sort_text: 				"Сортиране по",
 					popout_messagesort_text: 		"Съобщение-Дата",
 					popout_datesort_text: 			"Забележка-Дата",
+					popout_jump_text: 				"Направо",
 					context_noteoption_text: 		"Oтбележете съобщението",
 					popout_noteoption_text: 		"Oтбележете",
 					toast_noteadd_text: 			"Съобщението бе добавено към бележника.",
@@ -672,6 +723,7 @@ class PersonalPins {
 					popout_sort_text: 				"Сортировать по",
 					popout_messagesort_text: 		"Сообщение-дата",
 					popout_datesort_text: 			"Заметки-Дата",
+					popout_jump_text: 				"Перейти",
 					context_noteoption_text: 		"Записывать вниз",
 					popout_noteoption_text: 		"Записывать",
 					toast_noteadd_text: 			"Сообщение добавлено в блокнот.",
@@ -686,6 +738,7 @@ class PersonalPins {
 					popout_sort_text: 				"Сортувати за",
 					popout_messagesort_text: 		"Повідомлення-дата",
 					popout_datesort_text: 			"Примітка-дата",
+					popout_jump_text: 				"Плиг",
 					context_noteoption_text: 		"Зверніть увагу на повідомлення",
 					popout_noteoption_text: 		"Занотуйте",
 					toast_noteadd_text: 			"Повідомлення додається до ноутбука.",
@@ -700,6 +753,7 @@ class PersonalPins {
 					popout_sort_text: 				"並び替え",
 					popout_messagesort_text: 		"メッセージ-日付",
 					popout_datesort_text: 			"注-日付",
+					popout_jump_text: 				"ジャンプ",
 					context_noteoption_text: 		"ノートダウンメッセージ",
 					popout_noteoption_text: 		"書き留める",
 					toast_noteadd_text: 			"ノートブックにメッセージが追加されました.",
@@ -714,6 +768,7 @@ class PersonalPins {
 					popout_sort_text: 				"排序方式",
 					popout_messagesort_text: 		"消息-日期",
 					popout_datesort_text: 			"注-日期",
+					popout_jump_text: 				"跳到",
 					context_noteoption_text: 		"記下下來的消息",
 					popout_noteoption_text: 		"記下",
 					toast_noteadd_text: 			"消息添加到筆記本.",
@@ -728,6 +783,7 @@ class PersonalPins {
 					popout_sort_text: 				"정렬 기준",
 					popout_messagesort_text: 		"메시지-날짜",
 					popout_datesort_text: 			"주-날짜",
+					popout_jump_text: 				"이동",
 					context_noteoption_text: 		"메모 다운 메시지",
 					popout_noteoption_text: 		"메모하다",
 					toast_noteadd_text: 			"노트북에 메시지 추가됨.",
@@ -742,6 +798,7 @@ class PersonalPins {
 					popout_sort_text: 				"Sort by",
 					popout_messagesort_text: 		"Message-Date",
 					popout_datesort_text: 			"Note-Date",
+					popout_jump_text: 				"Jump",
 					context_noteoption_text: 		"Note Message",
 					popout_noteoption_text: 		"Note",
 					toast_noteadd_text: 			"Message added to notebook.",
