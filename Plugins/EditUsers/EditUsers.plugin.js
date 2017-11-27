@@ -163,7 +163,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "1.9.8";}
+	getVersion () {return "1.9.9";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -753,11 +753,11 @@ class EditUsers {
 				var serverID = BDfunctionsDevilBro.getIdOfServer(BDfunctionsDevilBro.getSelectedServer());
 				serverID = serverID ? serverID : "friend-list";
 				if (!this.nickNames.id || this.nickNames.id != serverID) this.nickNames = {"id":serverID, "names":{}};
-				if (!this.nickNames.names[info.id]) this.nickNames.names[info.id] = this.getUserName(username);
+				if (!this.nickNames.names[info.id]) this.nickNames.names[info.id] = BDfunctionsDevilBro.getInnerText(username);
 				var name = data.name ? data.name : (type == "info" || type == "profil" ? info.username : this.nickNames.names[info.id]);
 				var color1 = data.color1 ? BDfunctionsDevilBro.color2RGB(data.color1) : (styleInfo ? BDfunctionsDevilBro.color2RGB(styleInfo.color) : "");
 				var color2 = data.color2 ? BDfunctionsDevilBro.color2RGB(data.color2) : "";
-				this.setUserName(username, name);
+				BDfunctionsDevilBro.setInnerText(username, name);
 				username.style.color = color1;
 				username.style.background = color2;
 				
@@ -775,7 +775,7 @@ class EditUsers {
 			
 			if (avatar) {
 				var removeIcon = data.removeIcon ? data.removeIcon : false;
-				var bgImage = data.url ? "url(" + data.url + ")" : (info.avatar ? "url('https://cdn.discordapp.com/avatars/" + info.id + "/" + info.avatar + ".webp')" : "url(/assets/1cbd08c76f8af6dddce02c5138971129.png");
+				var bgImage = data.url ? "url(" + data.url + ")" : (info.avatar ? "url('https://cdn.discordapp.com/avatars/" + info.id + "/" + info.avatar + ".webp')" : "url(/assets/1cbd08c76f8af6dddce02c5138971129.png)");
 				avatar.style.background = removeIcon ? "" : bgImage;
 				avatar.style.backgroundSize = "cover";
 				avatar.style.backgroundPosition = "center";
@@ -827,7 +827,7 @@ class EditUsers {
 				var name = div.classList.contains("container-iksrDt") ? info.username : this.nickNames.names[info.id];
 				var color1 = styleInfo ? BDfunctionsDevilBro.color2RGB(styleInfo.color) : "";
 				var color2 = "";
-				this.setUserName(username, name);
+				BDfunctionsDevilBro.setInnerText(username, name);
 				username.style.color = color1;
 				username.style.background = color2;
 				
@@ -864,18 +864,6 @@ class EditUsers {
 		var wrapper = div.querySelector(".member-username, .username-wrapper, .channel-name, .discord-tag, .accountDetails-15i-_e, .headerName-2N8Pdz, .nameDefault-1I0lx8, .headerTag-3zin_i, .channelName-1G03vu");
 						
 		return {avatar, username, wrapper};
-	}
-	
-	setUserName (div, name) {
-		return $(div).contents().filter(function() {
-			return this.nodeType == Node.TEXT_NODE;
-		})[0].textContent = name;
-	}
-	
-	getUserName (div) {
-		return $(div).contents().filter(function() {
-			return this.nodeType == Node.TEXT_NODE;
-		}).text();
 	}
 	
 	getUserInfo (div) {
