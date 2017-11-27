@@ -29,7 +29,7 @@ BDfunctionsDevilBro.loadMessage = function (pluginName, oldVersion) {
 										(change2, j) => {
 											if (change2.addedNodes) {
 												change2.addedNodes.forEach((node2) => {
-													if (node2 && node2.tagName && !node2.querySelector(".bd-pfbtn.bd-updatebtn") && node2.querySelector(".bd-pfbtn")) {
+													if (node2 && node2.tagName && !node2.querySelector(".bd-pfbtn.bd-updatebtn") && node2.querySelector(".bd-pfbtn") && node2.querySelector("h2") && node2.querySelector("h2").innerText.toLowerCase() === "plugins") {
 														node2.querySelector(".bd-pfbtn").parentElement.insertBefore(BDfunctionsDevilBro.createUpdateButton(), node2.querySelector(".bd-pfbtn").nextSibling);
 													}
 												});
@@ -1091,7 +1091,7 @@ BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
 			<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa wrap-1da0e3  ui-color-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;">
 				<div class="ui-color-picker-${swatch} nocolor" style="background-color: null;">
 					<svg class="nocolor-cross" height="22" width="22">
-						<path d="m 3 2 l 17 18 m 0 -18 l -17 18" stroke="red" stroke-width="3" fill="none" />
+						<path d="m 3 2 l 17 18 m 0 -18 l -17 18" stroke="red" stroke-width="3" fill="none"/>
 					</svg>
 				</div>
 				${ colourList.map((val, i) => `<div class="ui-color-picker-${swatch}" style="background-color: ${val};"></div>`).join("")}
