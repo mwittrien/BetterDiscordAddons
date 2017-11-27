@@ -983,6 +983,18 @@ BDfunctionsDevilBro.checkColorType = function (color) {
 	}
 	return null;
 };
+
+BDfunctionsDevilBro.setInnerText = function (div, text) {
+	$(div).contents().filter(function() {
+		return this.nodeType == Node.TEXT_NODE;
+	})[0].textContent = text;
+}
+	
+BDfunctionsDevilBro.getInnerText = function (div) {
+	return $(div).contents().filter(function() {
+		return this.nodeType == Node.TEXT_NODE;
+	})[0].textContent;
+}
 	
 BDfunctionsDevilBro.encodeToHTML = function (string) {
 	var ele = document.createElement("div");
