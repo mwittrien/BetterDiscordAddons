@@ -1,0 +1,2 @@
+https://raw.githubusercontent.com/redsauce117/SauceysDiscordThemes/master/DarkerDiscordTheme.theme.css
+https://raw.githubusercontent.com/intrnl/discordAdditions/master/macTitlebar/macTitlebar.theme.css
