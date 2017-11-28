@@ -24,5 +24,6 @@ function receiveMessage(e) {
 window.addEventListener("message", receiveMessage, false);
 
 window.onload = function () {
-	window.parent.postMessage({origin:"DiscordPrevie",reason:"OnLoad"},"*");
+	console.log("hi");
+	window.parent.postMessage({origin:"DiscordPreview",reason:"OnLoad"},"*");
 };
