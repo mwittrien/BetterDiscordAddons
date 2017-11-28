@@ -6,8 +6,8 @@ window.onkeyup = function (e) {
 };
 window.onmessage = function (e) {
 	if (typeof e.data === "object" && e.data.origin == "ThemeRepo") {
+		var body = document.querySelector("body"), head = document.querySelector("head"), theme;
 		switch (e.data.reason) {
-			var body = document.querySelector("body"), head = document.querySelector("head"), theme;
 			case "OnLoad":
 				body.innerHTML = body.innerHTML.replace(new RegExp("REPLACE_USERNAME", "g"), e.data.username);
 				body.innerHTML = body.innerHTML.replace(new RegExp("REPLACE_AVATAR", "g"), e.data.avatar.split('"').join(''));
