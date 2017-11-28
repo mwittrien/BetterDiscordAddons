@@ -4,7 +4,7 @@ function receiveMessage(e) {
 			case "OnLoad":
 				var body = document.querySelector("body");
 				body.innerHTML = body.innerHTML.replace(new RegExp("REPLACE_USERNAME", "g"), e.data.username);
-				body.innerHTML = body.innerHTML.replace(new RegExp("REPLACE_AVATAR", "g"), e.data.avatar);
+				body.innerHTML = body.innerHTML.replace(new RegExp("REPLACE_AVATAR", "g"), e.data.avatar.innerHTML.replace(new RegExp("\"", "g"), ""));
 				body.innerHTML = body.innerHTML.replace(new RegExp("REPLACE_DISCRIMINATOR", "g"), e.data.discriminator);
 				break;
 			case "NewTheme":
