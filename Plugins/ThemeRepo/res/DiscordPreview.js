@@ -1,5 +1,5 @@
 function receiveMessage(e) {
-	if (e.data && e.data.origin == "ThemeRepo" && e.data.reason == "NewTheme") {
+	if (typeof e.data === "object" && e.data.origin == "ThemeRepo" && e.data.reason == "NewTheme") {
 		$("link.previewTheme").remove());
 		
 		var ele = document.createElement("link");
