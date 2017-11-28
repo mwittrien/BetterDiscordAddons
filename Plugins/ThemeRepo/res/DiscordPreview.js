@@ -1,5 +1,5 @@
-function receiveMessage(event) {
-	event.source.postMessage("hi", event.origin);
+function receiveMessage(e) {
+	console.log(e);
 }
 
 window.addEventListener("message", receiveMessage, false);
