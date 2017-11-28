@@ -1,16 +1,6 @@
-function receiveMessage(e) {
+$(window).on("message", (e) => {
 	if (typeof e.data === "object" && e.data.origin == "ThemeRepo" && e.data.reason == "NewTheme") {
-		$("link.previewTheme").remove());
-		
-		var ele = document.createElement("link");
-		$(ele)
-			.addClass("previewTheme")
-			.attr("type", "text/css")
-			.attr("rel", "Stylesheet")
-			.attr("href", e.data.url);
-			
-		$("head").append(ele);
+		$("link.previewTheme").remove();
+		$("head").append(`<link class="previewTheme" type="text/css" rel="Stylesheet" href="${e.data.url}"></link>`);
 	}
-}
-
-window.addEventListener("message", receiveMessage, false);
+});
