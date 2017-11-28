@@ -17,6 +17,11 @@ function receiveMessage(e) {
 				document.querySelector("head").appendChild(theme);
 				break;
 			case "DarkLight":
+				var body = document.querySelector("body");
+				if (e.data.light)
+					body.innerHTML = body.innerHTML.replace(new RegExp("theme-dark", "g"), "theme-light");
+				else 
+					body.innerHTML = body.innerHTML.replace(new RegExp("theme-light", "g"), "theme-dark");
 				break;
 		}
 	}
