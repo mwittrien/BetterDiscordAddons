@@ -1,5 +1,6 @@
 function receiveMessage(e) {
 	if (typeof e.data === "object" && e.data.origin == "ThemeRepo") {
+		console.log(e);
 		switch (e.data.reason) {
 			case "OnLoad":
 				document.innerHTML = document.innerHTML.replace(new RegExp("REPLACE_USERNAME", "g"), e.data.username);
