@@ -22,17 +22,20 @@ window.onmessage = function (e) {
 				head.appendChild(theme);
 				break;
 			case "DarkLight":
-				if (e.data.light)
+				if (e.data.light) {
 					body.innerHTML = body.innerHTML.replace(new RegExp("theme-dark", "g"), "theme-light");
-				else 
+				}
+				else {
 					body.innerHTML = body.innerHTML.replace(new RegExp("theme-light", "g"), "theme-dark");
+				}
 				break;
 			case "CustomCSS":
-				if (e.data.custom)
+				if (e.data.custom) {
 					theme = document.createElement("style");
 					theme.classList.add("customCSS");
 					theme.innerText = e.data.css;
 					head.appendChild(theme);
+				}
 				else {
 					document.querySelectorAll("style.customCSS").forEach(theme => theme.remove());
 				}
