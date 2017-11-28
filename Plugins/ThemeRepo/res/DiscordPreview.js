@@ -1,4 +1,10 @@
-function receiveMessage(e) {
+window.onload = function () {
+	window.parent.postMessage({origin:"DiscordPreview",reason:"OnLoad"},"*");
+};
+window.onkeyup = function (e) {
+	window.parent.postMessage({origin:"DiscordPreview",reason:"KeyUp",key:e.which},"*");
+};
+window.onmessage = function (e) {
 	if (typeof e.data === "object" && e.data.origin == "ThemeRepo") {
 		switch (e.data.reason) {
 			case "OnLoad":
@@ -25,10 +31,4 @@ function receiveMessage(e) {
 				break;
 		}
 	}
-}
-
-window.addEventListener("message", receiveMessage, false);
-
-window.onload = function () {
-	window.parent.postMessage({origin:"DiscordPreview",reason:"OnLoad"},"*");
 };
