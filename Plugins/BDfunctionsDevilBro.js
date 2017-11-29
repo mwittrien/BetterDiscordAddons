@@ -1069,7 +1069,7 @@ BDfunctionsDevilBro.appendModal = function (modal) {
 		});
 		
 	$(modal).find(".modalTabButton").addClass("tab");
-	$(modal).find(".tab").first().addClass("selected");
+	$(modal).find(".tab, .tab-bar-item").first().addClass("selected");
 	$(modal).find(".modalTab").addClass("tab-content");
 	$(modal).find(".tab-content").first().addClass("open");
 	$(modal)
