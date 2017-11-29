@@ -135,6 +135,14 @@ class ThemeRepo {
 			</div>`;
 		
 		this.css = `
+			.discordPreview {
+				position: relative;
+				z-index: 10000 !important;
+			}
+			.themerepo-modal {
+				position: relative;
+				z-index: 20000 !important;
+			}
 			.themerepo-modal .inner-1_1f7b {
 				min-height: 100%;
 			}
@@ -167,7 +175,7 @@ class ThemeRepo {
 
 	getDescription () {return "Allows you to preview all themes inside the themerepo and download them on the fly. Repo button is in the theme settings.";}
 
-	getVersion () {return "1.0.0";}
+	getVersion () {return "1.0.1";}
 
 	getAuthor () {return "DevilBro";}
 	
