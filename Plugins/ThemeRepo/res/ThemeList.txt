@@ -1,5 +1,9 @@
 https://raw.githubusercontent.com/redsauce117/SauceysDiscordThemes/master/DarkerDiscordTheme.theme.css
 https://raw.githubusercontent.com/intrnl/discordAdditions/master/macTitlebar/macTitlebar.theme.css
+https://raw.githubusercontent.com/intrnl/discordAdditions/master/discordNotoEmojis/discordNotoEmojis.theme.css
+https://raw.githubusercontent.com/intrnl/discordAdditions/master/darkDiscord/darkDiscord.theme.css
+https://raw.githubusercontent.com/intrnl/discordAdditions/master/nativeTitlebar/nativeTitlebar.theme.css
+https://raw.githubusercontent.com/intrnl/discordAdditions/master/revertTitlebar/revertTitlebar.theme.css
 https://raw.githubusercontent.com/NFLD99/Better-Discord/master/Theme_File/Anti_Lag.theme.css
 https://raw.githubusercontent.com/NFLD99/Better-Discord/master/Theme_File/Halloween.theme.css
 https://raw.githubusercontent.com/NFLD99/Better-Discord/master/Theme_File/Mini_ladd.theme.css
@@ -95,3 +99,15 @@ https://raw.githubusercontent.com/mrmaple240/Full-Light-Theme/master/FullLightTh
 https://raw.githubusercontent.com/trueprominency/Shades-of-Red-Theme/master/shades-of-red.theme.css
 https://raw.githubusercontent.com/Dddsasul/TeamKappa-theme/master/ClearDiscord.theme.css
 https://raw.githubusercontent.com/Quietess/Casual-Dark/master/Casual_Dark.theme.css
+https://raw.githubusercontent.com/ImBastion/BD-Themes/master/No2ABase.theme.css
+https://raw.githubusercontent.com/TheBaconSpace/TMEMETheme/master/tmeme.theme.css
+https://raw.githubusercontent.com/motoenduroboy/BetterDiscord-Themes/master/release/master/Deku.theme.css
+https://raw.githubusercontent.com/motoenduroboy/BetterDiscord-Themes/master/release/master/OniiChan.theme.css
+https://raw.githubusercontent.com/motoenduroboy/BetterDiscord-Themes/master/release/master/OrangeisaMassiveWeeb.theme.css
+https://raw.githubusercontent.com/motoenduroboy/BetterDiscord-Themes/master/release/master/Waifu.theme.css
+https://raw.githubusercontent.com/motoenduroboy/BetterDiscord-Themes/master/release/master/rust.theme.css
+https://raw.githubusercontent.com/motoenduroboy/BetterDiscord-Themes/master/release/master/sneaksTheme.theme.css
+https://raw.githubusercontent.com/motoenduroboy/BetterDiscord-Themes/master/release/master/yourabloodyweeb.theme.css
+https://raw.githubusercontent.com/KaminariKillua/Themes/master/SakuraPrison/SakuraPrison.theme.css
+https://raw.githubusercontent.com/KaminariKillua/Themes/master/InfernalPrison/InfernalPrison.theme.css
+https://raw.githubusercontent.com/KaminariKillua/Themes/master/GlacialPrison/GlacialPrison.theme.css
