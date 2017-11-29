@@ -34,7 +34,6 @@ https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Windo
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Winter.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Yoshi.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Yumeko.theme.css
-https://raw.githubusercontent.com/dperolio/twitchcordTheme/master/theme/latest-version.css
 https://raw.githubusercontent.com/fluffingtons/fulldark/master/fulldark.theme.css
 https://raw.githubusercontent.com/GimoTheBeast/Gaia/master/Gaia.theme.css
 https://raw.githubusercontent.com/HansAnonymous/BD-Themes-and-Plugins/master/Themes/Glossy-Cyan/Glossy-Cyan.H.theme.css
