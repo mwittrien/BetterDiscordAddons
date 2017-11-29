@@ -1044,6 +1044,7 @@ BDfunctionsDevilBro.appendModal = function (modal) {
 	let id = Math.round(Math.random()*10000000000000000);
 	$(modal)
 		.appendTo(".app ~ [class^='theme-']")
+		.addClass(BDfunctionsDevilBro.getDiscordLanguage())
 		.on("click", ".checkbox-1KYsPm", (e) => {
 			$(e.target.parentElement)
 				.toggleClass("valueChecked-3Bzkbm", $(e.target).prop("checked"))
