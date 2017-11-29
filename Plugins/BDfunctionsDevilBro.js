@@ -1049,11 +1049,11 @@ BDfunctionsDevilBro.appendModal = function (modal) {
 				.toggleClass("valueChecked-3Bzkbm", $(e.target).prop("checked"))
 				.toggleClass("valueUnchecked-XR6AOk", $(e.target).prop("checked"));
 		})
-		.on("click", ".tab", (e) => {
+		.on("click", ".tab, .tab-bar-item", (e) => {
 			$(".tab-content.open", modal)
 				.removeClass("open");
 				
-			$(".tab.selected", modal)
+			$(".tab.selected, .tab-bar-item.selected", modal)
 				.removeClass("selected");
 				
 			$(".tab-content." + $(e.currentTarget).attr("value") + ", .tab-content[tab='" + $(e.currentTarget).attr("tab") + "']", modal)
