@@ -14,7 +14,7 @@ class ThemeRepo {
 			`<button class="bd-pfbtn bd-themerepobutton" style="left: 220px;">Theme Repo</button>`;
 		
 		this.frameMarkup = 
-			`<iframe class="discordPreview" style="width:100vw;height:100vh;" src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/DiscordPreview.html"></iframe>`;
+			`<iframe class="discordPreview" src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/DiscordPreview.html"></iframe>`;
 
 		this.themeEntryMarkup =
 			`<li class="themeEntry" style="position:relative;">
@@ -136,11 +136,13 @@ class ThemeRepo {
 		
 		this.css = `
 			.discordPreview {
-				position: relative;
+				width:100vw !important;
+				height:100vh !important;
+				position: relative !important;
 				z-index: 10000 !important;
 			}
 			.themerepo-modal {
-				position: relative;
+				position: relative !important;
 				z-index: 20000 !important;
 			}
 			.themerepo-modal .inner-1_1f7b {
