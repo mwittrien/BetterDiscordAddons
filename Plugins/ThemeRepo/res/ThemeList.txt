@@ -1,2 +1,13 @@
 https://raw.githubusercontent.com/redsauce117/SauceysDiscordThemes/master/DarkerDiscordTheme.theme.css
 https://raw.githubusercontent.com/intrnl/discordAdditions/master/macTitlebar/macTitlebar.theme.css
+https://raw.githubusercontent.com/NFLD99/Better-Discord/master/Theme_File/Anti_Lag.theme.css
+https://raw.githubusercontent.com/NFLD99/Better-Discord/master/Theme_File/Halloween.theme.css
+https://raw.githubusercontent.com/NFLD99/Better-Discord/master/Theme_File/Mini_ladd.theme.css
+https://raw.githubusercontent.com/NFLD99/Better-Discord/master/Theme_File/One_Up.theme.css
+https://raw.githubusercontent.com/NFLD99/Better-Discord/master/Theme_File/Portal_Blue.theme.css
+https://raw.githubusercontent.com/NFLD99/Better-Discord/master/Theme_File/Portal_Orange.theme.css
+https://raw.githubusercontent.com/NFLD99/Better-Discord/master/Theme_File/Scratched_Up.theme.css
+https://raw.githubusercontent.com/NFLD99/Better-Discord/master/Theme_File/Super_Mario_World.theme.css
+https://raw.githubusercontent.com/NFLD99/Better-Discord/master/Theme_File/Thanksgiving.theme.css
+https://raw.githubusercontent.com/NFLD99/Better-Discord/master/Theme_File/Winter.theme.css
+https://raw.githubusercontent.com/NFLD99/Better-Discord/master/Theme_File/X-Miss.theme.css
