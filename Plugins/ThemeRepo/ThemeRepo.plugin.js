@@ -175,7 +175,7 @@ class ThemeRepo {
 
 	getName () {return "ThemeRepo";}
 
-	getDescription () {return "Allows you to preview all themes inside the themerepo and download them on the fly. Repo button is in the theme settings.";}
+	getDescription () {return "Allows you to preview all themes from the themerepo and download them on the fly. Repo button is in the theme settings.";}
 
 	getVersion () {return "1.0.2";}
 
