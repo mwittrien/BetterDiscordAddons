@@ -15,7 +15,6 @@ https://raw.githubusercontent.com/Arashiryuu/crap/master/killxd.plugin.js
 https://raw.githubusercontent.com/Arashiryuu/crap/master/orangeTexting.plugin.js
 https://raw.githubusercontent.com/Arashiryuu/crap/master/TitleForTitlebar.plugin.js
 https://raw.githubusercontent.com/Arashiryuu/crap/master/ToastIntegrated/HideUtils/HideUtils.plugin.js
-https://raw.githubusercontent.com/Arashiryuu/crap/master/ToastIntegrated/HideUtils/HideUtils.plugin.js
 https://raw.githubusercontent.com/ciaran/bd-switcher/master/switcher.plugin.js
 https://raw.githubusercontent.com/cosmicsalad/Discord-Themes-and-Plugins/master/plugins/emoteSorter.plugin.js
 https://raw.githubusercontent.com/cosmicsalad/Discord-Themes-and-Plugins/master/plugins/replyer.plugin.js
