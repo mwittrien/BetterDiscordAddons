@@ -211,7 +211,7 @@ class ThemeRepo {
 											(change2, j) => {
 												if (change2.addedNodes) {
 													change2.addedNodes.forEach((node2) => {
-														if (node2 && node2.tagName && !node2.querySelector(".bd-pfbtn.bd-updatebtn") && node2.querySelector(".bd-pfbtn") && node2.querySelector("h2") && node2.querySelector("h2").innerText.toLowerCase() === "themes") {
+														if (node2 && node2.tagName && node2.querySelector(".bd-pfbtn") && node2.querySelector("h2") && node2.querySelector("h2").innerText.toLowerCase() === "themes") {
 															this.addThemeRepoButton(node2);
 														}
 													});
