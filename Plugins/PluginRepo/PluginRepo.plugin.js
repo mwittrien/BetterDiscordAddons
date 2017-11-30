@@ -401,7 +401,6 @@ class PluginRepo {
 						loadedPlugins[url] = plugin;
 					}
 					else {
-						console.log(url);
 						let name = body.replace(new RegExp("\\s*\:\\s*", "g"), ":").split('"name":"');
 						if (name.length > 1) {
 							name = name[1].split('"')[0];
@@ -416,7 +415,6 @@ class PluginRepo {
 									}; 
 									Promise.resolve(data);`
 								).then((plugin) => {
-									console.log(url);
 									plugin.url = url;
 									loadedPlugins[url] = plugin;
 								});
