@@ -244,7 +244,7 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.3.1";}
+	getVersion () {return "5.3.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -277,25 +277,6 @@ class ServerFolders {
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
-			
-			if (!BDfunctionsDevilBro.loadData("warning", this.getName(), "warning")) {
-				if (confirm("Welcome to ServerFolders 2.0. I decided to rewrite the whole plugin to make the folders act more like actual folders. Sadly due to the internal changes all old folders will no longer work, hence why I recommend you to delete them all. If you press 'yes' / 'ok' whatever it is labeled in your language in this window, all folders will be removed, all servers will be displayed again and the old config will be cleared. Thanks and have fun. Also make sure to read the plugin description to learn how to work with ServerFolders 2.0")) {
-					BDfunctionsDevilBro.removeAllData(this.getName(), "folders");
-					$("div.guild.folder").remove();
-					$(BDfunctionsDevilBro.readServerList()).show();
-				}
-				BDfunctionsDevilBro.saveData("warning", true, this.getName(), "warning");
-			}
-			
-			if (!BDfunctionsDevilBro.loadData("warning2", this.getName(), "warning2")) {
-				alert("Since so many people asked for it: here another 'big' update. You can now change the order of folders by dragging them around. Just drag a folder ontop of another folder and it will place it below the hovered folder. Same thing for servers within a folder, you can drag a server on top of a server (only on servers that are in the same folder to prevent them from mixing) and release the mouse button to place the dragged server below of the hovered server. As an extra you can now move a server from one folder to another by dragging it from the foldercontentlist to another folder. Have fun.");
-				BDfunctionsDevilBro.saveData("warning2", true, this.getName(), "warning2");
-			}
-			
-			if (!BDfunctionsDevilBro.loadData("warning3", this.getName(), "warning3")) {
-				alert("Still not satisfied eh. You can now move folders freely in the whole server list. Also folders are again created below the server that was right clicked. And again please read the description of the plugin before asking me how it works or why it isn't working like the old version. Have fun.");
-				BDfunctionsDevilBro.saveData("warning3", true, this.getName(), "warning3");
-			}
 			
 			this.serverContextObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -1269,11 +1250,11 @@ class ServerFolders {
 					toast_addserver_text:					"${servername} wurde dem Ordner${foldername} hinzugefügt.",
 					toast_removeserver_text:				"${servername} wurde aus dem Ordner${foldername} entfernt.",
 					servercontext_serverfolders_text: 		"Serverordner",
-					serversubmenu_createfolder_text: 		"Erzeuge Ordner",
-					serversubmenu_removefromfolder_text: 	"Entferne Server aus Ordner",
+					serversubmenu_createfolder_text: 		"Ordner erzeugen",
+					serversubmenu_removefromfolder_text: 	"Server aus Ordner entfernen",
 					foldercontext_unreadfolder_text:		"Alle als gelesen markieren",
 					foldercontext_foldersettings_text: 		"Ordnereinstellungen",
-					foldercontext_removefolder_text:		"Lösche Ordner",
+					foldercontext_removefolder_text:		"Ordner löschen",
 					modal_header_text:						"Ordnereinstellungen",
 					modal_foldername_text:					"Ordnername",
 					modal_tabheader1_text:					"Ordner",
