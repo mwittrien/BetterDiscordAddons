@@ -139,11 +139,11 @@ class ThemeRepo {
 				width:100vw !important;
 				height:100vh !important;
 				position: relative !important;
-				z-index: 10000 !important;
+				z-index: 3499 !important;
 			}
 			.themerepo-modal {
 				position: relative !important;
-				z-index: 20000 !important;
+				z-index: 3500 !important;
 			}
 			.themerepo-modal .inner-1_1f7b {
 				min-height: 100%;
@@ -177,7 +177,7 @@ class ThemeRepo {
 
 	getDescription () {return "Allows you to preview all themes inside the themerepo and download them on the fly. Repo button is in the theme settings.";}
 
-	getVersion () {return "1.0.1";}
+	getVersion () {return "1.0.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -254,15 +254,17 @@ class ThemeRepo {
 	// begin of own functions
 	
 	addThemeRepoButton (container) {
-		$(this.themeRepoButtonMarkup)
-			.insertAfter(container.querySelector(".bd-pfbtn"))
-			.on("click", () => {
-				if (!this.loading) this.openDiscordPreview(); 
-				else BDfunctionsDevilBro.showToast(`Themes are still being fetched. Try again in some seconds.`, {type:"danger"});
-			})
-			.on("onmouseenter", (e) => {
-				BDfunctionsDevilBro.createTooltip("Open Theme Repo", e.currentTarget, {type:"right",selector:"update-button-tooltip"});
-			});
+		if (container && !container.querySelector(".bd-themerepobutton")) {
+			$(this.themeRepoButtonMarkup)
+				.insertAfter(container.querySelector(".bd-pfbtn"))
+				.on("click", () => {
+					if (!this.loading) this.openDiscordPreview(); 
+					else BDfunctionsDevilBro.showToast(`Themes are still being fetched. Try again in some seconds.`, {type:"danger"});
+				})
+				.on("onmouseenter", (e) => {
+					BDfunctionsDevilBro.createTooltip("Open Theme Repo", e.currentTarget, {type:"right",selector:"update-button-tooltip"});
+				});
+		}
 	}
 	
 	openDiscordPreview () {
@@ -431,12 +433,12 @@ class ThemeRepo {
 					let text = body;
 					if (text.split("*//").length > 1) {
 						for (let tag of tags) {
-							let temp = text.split('"' + tag + '":"');
+							let temp = text.replace(new RegExp("\\s*\:\\s*", "g"), ":").split('"' + tag + '":"');
 							temp = temp.length > 1 ? temp[1].split('",')[0].split('"}')[0] : null;
 							temp = temp && tag != "version" ? temp.charAt(0).toUpperCase() + temp.slice(1) : temp;
 							theme[tag] = temp;
 						}
-						theme.css = text.replace(new RegExp("[\r|\n|\t]", "g"), "").split("}*//")[1];
+						theme.css = text.replace(new RegExp("[\\r|\\n|\\t]", "g"), "").split("}*//")[1];
 						theme.url = url;
 						loadedThemes[url] = theme;
 					}
