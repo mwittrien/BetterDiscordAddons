@@ -33,3 +33,4 @@ https://raw.githubusercontent.com/Zerthox/BetterDiscord-Plugins/master/plugins/L
 https://raw.githubusercontent.com/Zerthox/BetterDiscord-Plugins/master/plugins/SendEmbeds.plugin.js
 https://raw.githubusercontent.com/Zerthox/BetterDiscord-Plugins/master/plugins/ThemeCustomizer.plugin.js
 https://raw.githubusercontent.com/Zerthox/BetterDiscord-Plugins/master/plugins/ToggleAll.plugin.js
+https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/charCounter.plugin.js
