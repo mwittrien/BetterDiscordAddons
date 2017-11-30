@@ -177,7 +177,7 @@ class ThemeRepo {
 
 	getDescription () {return "Allows you to preview all themes from the themerepo and download them on the fly. Repo button is in the theme settings.";}
 
-	getVersion () {return "1.0.2";}
+	getVersion () {return "1.0.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -383,8 +383,8 @@ class ThemeRepo {
 		for (let theme of themes) {
 			let entry = $(this.themeEntryMarkup);
 			modal.find(".themes").append(entry);
-			entry.find(".bda-name").text(theme.name + (theme.version ? " v" + theme.version : "") + (theme.author ? " by " + theme.author : ""));
-			entry.find(".bda-description").text(theme.description);
+			entry.find(".bda-name").html(theme.name + (theme.version ? " v" + theme.version : "") + (theme.author ? " by " + theme.author : ""));
+			entry.find(".bda-description").html(theme.description);
 			if (!theme.fav) entry.find(".favStar")[0].classList.add("favorized");
 			entry
 				.on("change." + this.getName(), ".previewCheckbox", (e) => {
