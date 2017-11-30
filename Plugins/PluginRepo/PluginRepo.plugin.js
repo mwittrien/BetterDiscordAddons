@@ -3,6 +3,7 @@
 class PluginRepo {
 	constructor () {
 		this.settingsWindowObserver = new MutationObserver(() => {});
+		this.innerSettingsWindowObserver = new MutationObserver(() => {});
 		
 		this.loading = false;
 		
@@ -53,7 +54,7 @@ class PluginRepo {
 									</div>
 									<div class="mention-filter sort-filter">
 										<div class="label">Sort by:</div>
-										<div option="getName" class="value" style="text-transform:none;">Name</div>
+										<div option="Name" class="value" style="text-transform:none;">Name</div>
 									</div>
 									<div class="mention-filter order-filter">
 										<div class="label">Order:</div>
@@ -79,11 +80,11 @@ class PluginRepo {
 				<div>
 					<div class="context-menu recent-mentions-filter-popout">
 						<div class="item-group">
-							<div option="getName" class="item">Name</div>
-							<div option="getAuthor" class="item">Author</div>
-							<div option="getVersion" class="item">Version</div>
-							<div option="state" class="item">Update Status</div>
-							<div option="fav" class="item">Favorites</div>
+							<div option="Name" class="item">Name</div>
+							<div option="Author" class="item">Author</div>
+							<div option="Version" class="item">Version</div>
+							<div option="State" class="item">Update Status</div>
+							<div option="Fav" class="item">Favorites</div>
 						</div>
 					</div>
 				</div>
@@ -139,7 +140,7 @@ class PluginRepo {
 
 	getDescription () {return "Allows you to preview all plugins from the pluginrepo and download them on the fly. Repo button is in the plugin settings.";}
 
-	getVersion () {return "1.0.0";}
+	getVersion () {return "1.0.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -168,20 +169,7 @@ class PluginRepo {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (node && node.tagName && node.getAttribute("layer-id") == "user-settings") {
-									var settingsObserver = new MutationObserver((changes2, _) => {
-										changes2.forEach(
-											(change2, j) => {
-												if (change2.addedNodes) {
-													change2.addedNodes.forEach((node2) => {
-														if (node2 && node2.tagName && node2.querySelector(".bd-pfbtn") && node2.querySelector("h2") && node2.querySelector("h2").innerText.toLowerCase() === "plugins") {
-															this.addPluginRepoButton(node2);
-														}
-													});
-												}
-											}
-										);
-									});
-									settingsObserver.observe(node, {childList:true, subtree:true});
+									this.innerSettingsWindowObserver.observe(node, {childList:true, subtree:true});
 								}
 							});
 						}
@@ -189,6 +177,26 @@ class PluginRepo {
 				);
 			});
 			this.settingsWindowObserver.observe(document.querySelector(".layers"), {childList:true});
+			
+			this.innerSettingsWindowObserver =  new MutationObserver((changes2, _) => {
+				changes2.forEach(
+					(change2, j) => {
+						if (change2.addedNodes) {
+							change2.addedNodes.forEach((node2) => {
+								if (node2 && node2.tagName && node2.querySelector(".bd-pfbtn") && node2.querySelector("h2") && node2.querySelector("h2").innerText.toLowerCase() === "plugins") {
+									this.addPluginRepoButton(node2);
+								}
+							});
+						}
+					}
+				);
+			});
+			if (document.querySelector(".layer[layer-id='user-settings']")) this.innerSettingsWindowObserver.observe(document.querySelector(".layer[layer-id='user-settings']"), {childList:true, subtree:true});
+			
+			var bdbutton = document.querySelector(".bd-pfbtn");
+			if (bdbutton && bdbutton.parentElement.querySelector("h2") && bdbutton.parentElement.querySelector("h2").innerText.toLowerCase() === "plugins") {
+				this.addPluginRepoButton(bdbutton.parentElement);
+			}
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 			
@@ -205,10 +213,11 @@ class PluginRepo {
 			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
 			
 			this.settingsWindowObserver.disconnect();
+			this.innerSettingsWindowObserver.disconnect();
 			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName());
 			
-			$(".pluginrepo-modal").remove();
+			$(".pluginrepo-modal, .bd-pluginrepobutton, webview[webview-PluginRepo]").remove();
 		}
 	}
 
@@ -223,8 +232,8 @@ class PluginRepo {
 					if (!this.loading) this.openPluginRepoModal(); 
 					else BDfunctionsDevilBro.showToast(`Plugins are still being fetched. Try again in some seconds.`, {type:"danger"});
 				})
-				.on("onmouseenter", (e) => {
-					BDfunctionsDevilBro.createTooltip("Open Plugin Repo", e.currentTarget, {type:"right",selector:"update-button-tooltip"});
+				.on("mouseenter", (e) => {
+					BDfunctionsDevilBro.createTooltip("Open Plugin Repo", e.currentTarget, {type:"right",selector:"pluginrepo-button-tooltip"});
 				});
 		}
 	}
@@ -238,6 +247,9 @@ class PluginRepo {
 			})
 			.on("click." + this.getName(), ".order-filter", (e) => {
 				this.openSortPopout(e, this.orderPopoutMarkup, pluginRepoModal);
+			})
+			.on("click." + this.getName(), ".tab-bar-item[tab=plugins]", (e) => {
+				this.addPluginEntries(pluginRepoModal);
 			});
 			
 		this.addPluginEntries(pluginRepoModal);
@@ -281,30 +293,30 @@ class PluginRepo {
 		var favorites = BDfunctionsDevilBro.loadAllData(this.getName(), "favorites");
 		var plugins = [];
 		for (var url in this.loadedPlugins) {
-			this.loadedPlugins[url].fav = favorites[url] ? 0 : 1;
+			this.loadedPlugins[url].getFav = favorites[url] ? 0 : 1;
 			var installedPlugin = BdApi.getPlugin(this.loadedPlugins[url].getName);
 			if (installedPlugin) {
 				if (installedPlugin.getVersion() != this.loadedPlugins[url].getVersion) {
-					this.loadedPlugins[url].state = 1;
+					this.loadedPlugins[url].getState = 1;
 				}
 				else {
-					this.loadedPlugins[url].state = 0;
+					this.loadedPlugins[url].getState = 0;
 				}
 			}
 			else {
-				this.loadedPlugins[url].state = 2;
+				this.loadedPlugins[url].getState = 2;
 			}
 			plugins.push(this.loadedPlugins[url]);
 		}
-		plugins = BDfunctionsDevilBro.sortArrayByKey(plugins, modal.find(".sort-filter .value").attr("option"));
+		plugins = BDfunctionsDevilBro.sortArrayByKey(plugins, "get" + modal.find(".sort-filter .value").attr("option"));
 		if (modal.find(".order-filter .value").attr("option") == "desc") plugins.reverse();
 		for (let plugin of plugins) {
 			let entry = $(this.pluginEntryMarkup);
 			modal.find(".plugins").append(entry);
 			entry.find(".bda-name").html(plugin.getName + " v" + plugin.getVersion + " by " + plugin.getAuthor);
 			entry.find(".bda-description").html(plugin.getDescription ? plugin.getDescription : "No Description found.");
-			if (plugin.state != 2) {
-				if (plugin.state == 1) {
+			if (plugin.getState != 2) {
+				if (plugin.getState == 1) {
 					entry.addClass("outdated")
 						.find(".btn-download div").text("Outdated");
 				}
@@ -313,7 +325,7 @@ class PluginRepo {
 						.find(".btn-download div").text("Updated");
 				}
 			}
-			if (plugin.fav == 0) entry.find(".favStar")[0].classList.add("favorized");
+			if (plugin.getFav == 0) entry.find(".favStar")[0].classList.add("favorized");
 			entry
 				.on("click." + this.getName(), ".favStar", (e) => {
 					e.currentTarget.classList.toggle("favorized");
@@ -339,14 +351,17 @@ class PluginRepo {
 			if (response) {
 				grabbedPlugins = result.split("\n");
 				this.loading = true;
-				getPluginInfo(this.loadedPlugins, () => {
-					this.loading = false;
-					if (document.querySelector(".bd-pluginrepobutton")) BDfunctionsDevilBro.showToast(`Finished fetching Plugins.`, {type:"success"});
+				createWebview().then((webview) => {
+					getPluginInfo(webview, this.loadedPlugins, () => {
+						this.loading = false;
+						webview.remove();
+						if (document.querySelector(".bd-pluginrepobutton")) BDfunctionsDevilBro.showToast(`Finished fetching Plugins.`, {type:"success"});
+					});
 				});
 			}
 		});
 		
-		function getPluginInfo (loadedPlugins, callback) {
+		function getPluginInfo (webview, loadedPlugins, callback) {
 			if (i >= grabbedPlugins.length) {
 				callback();
 				return;
@@ -355,8 +370,9 @@ class PluginRepo {
 			request(url, (error, response, body) => {
 				if (response) {
 					let plugin = {};
+					let valid = true;
 					for (let tag of tags) {
-						let reg = new RegExp(tag + "[\\s|\\t|\\n|\\r|=|function|\(|\)|\{|return]*([\"|\'|\`]).*?\\1","gi");
+						let reg = new RegExp(tag + "[\\s|\\t|\\n|\\r|=|>|function|\(|\)|\{|return]*([\"|\'|\`]).*?\\1","gi");
 						let temp = reg.exec(body);
 						if (temp) {
 							temp = temp[0];
@@ -377,13 +393,52 @@ class PluginRepo {
 							}
 						}
 					}
-					if (plugin.getName && plugin.getAuthor && plugin.getVersion) {
+					for (let tag of tags) {
+						if (!plugin[tag]) valid = false;
+					}
+					if (valid) {
 						plugin.url = url;
 						loadedPlugins[url] = plugin;
 					}
+					else {
+						console.log(url);
+						let name = body.replace(new RegExp("\\s*\:\\s*", "g"), ":").split('"name":"');
+						if (name.length > 1) {
+							name = name[1].split('"')[0];
+							webview.getWebContents().executeJavaScript(body).then(() => {
+								webview.getWebContents().executeJavaScript(`
+									var p = new ` + name + `(); 
+									var data = {
+										"getName":p.getName(),
+										"getAuthor":p.getAuthor(),
+										"getVersion":p.getVersion(),
+										"getDescription":p.getDescription()
+									}; 
+									Promise.resolve(data);`
+								).then((plugin) => {
+									console.log(url);
+									plugin.url = url;
+									loadedPlugins[url] = plugin;
+								});
+							});
+						}
+					}
 				}
 				i++;
-				getPluginInfo(loadedPlugins, callback);
+				getPluginInfo(webview, loadedPlugins, callback);
+			});
+		}
+		
+		function createWebview () {
+			return new Promise(function(callback) {
+				var webview;
+				webview = document.createElement("webview");
+				webview.src = "non-existent.dummy";
+				webview.setAttribute("webview-PluginRepo", null);
+				webview.addEventListener("dom-ready", function() {
+					callback(webview);
+				});
+				document.body.appendChild(webview);
 			});
 		}
 	}
