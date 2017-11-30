@@ -415,9 +415,12 @@ class ThemeRepo {
 		let request = require("request");
 		request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/ThemeList.txt", (error, response, result) => {
 			if (response) {
-				grabbedThemes = response.body.split("\r\n");
+				grabbedThemes = response.body.split("\n");
 				this.loading = true;
-				getThemeInfo(this.loadedThemes, () => {this.loading = false;});
+				getThemeInfo(this.loadedThemes, () => {
+					this.loading = false;
+					if (document.querySelector(".bd-themerepobutton")) BDfunctionsDevilBro.showToast(`Finished fetching Themes.`, {type:"success"});
+				});
 			}
 		});
 		
@@ -426,19 +429,19 @@ class ThemeRepo {
 				callback();
 				return;
 			}
-			let url = grabbedThemes[i];
+			let url = grabbedThemes[i].replace(new RegExp("[\\r|\\n|\\t]", "g"), "");
 			request(url, (error, response, body) => {
 				if (response) {
 					let theme = {};
 					let text = body;
-					if (text.split("*//").length > 1) {
+					if (text.split("*//").length > 1 && text.split("\n").length > 1) {
 						for (let tag of tags) {
 							let temp = text.replace(new RegExp("\\s*\:\\s*", "g"), ":").split('"' + tag + '":"');
 							temp = temp.length > 1 ? temp[1].split('",')[0].split('"}')[0] : null;
 							temp = temp && tag != "version" ? temp.charAt(0).toUpperCase() + temp.slice(1) : temp;
 							theme[tag] = temp;
 						}
-						theme.css = text.replace(new RegExp("[\\r|\\n|\\t]", "g"), "").split("}*//")[1];
+						theme.css = text.split("\n").slice(1).join("\n").replace(new RegExp("[\\r|\\n|\\t]", "g"), "");
 						theme.url = url;
 						loadedThemes[url] = theme;
 					}
