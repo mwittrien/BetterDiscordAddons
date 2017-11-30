@@ -138,7 +138,7 @@ class PluginRepo {
 
 	getName () {return "PluginRepo";}
 
-	getDescription () {return "Allows you to preview all plugins from the pluginrepo and download them on the fly. Repo button is in the plugin settings.";}
+	getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
 
 	getVersion () {return "1.0.1";}
 
