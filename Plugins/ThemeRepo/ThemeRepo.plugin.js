@@ -178,32 +178,35 @@ class ThemeRepo {
 			.themerepo-modal .searchWrapper #input-search {
 				padding: 1px 8px !important;
 			}
-			.themerepo-modal .previewCheckboxWrapper {
+			.themerepo-modal .themeEntry {
+				overflow: visible !important;
+			}
+			.themerepo-modal .themeEntry .previewCheckboxWrapper {
 				position: absolute;
 				right: 10px;
 				top: 10px;
 			}
-			.themerepo-modal .gitIcon,
-			.themerepo-modal .favIcon {
+			.themerepo-modal .themeEntry .gitIcon,
+			.themerepo-modal .themeEntry .favIcon {
 				position: absolute;
 				cursor: pointer;
 				top: 12px;
 			}
-			.themerepo-modal .gitIcon {
+			.themerepo-modal .themeEntry .gitIcon {
 				right: 60px;
 			}
-			.themerepo-modal .favIcon {
+			.themerepo-modal .themeEntry .favIcon {
 				right: 90px;
 			}
-			.themerepo-modal .favIcon path {
+			.themerepo-modal .themeEntry .favIcon path {
 				stroke: yellow;
 				fill: none;
 			}
-			.themerepo-modal .favIcon.favorized path {
+			.themerepo-modal .themeEntry .favIcon.favorized path {
 				stroke: yellow;
 				fill: yellow;
 			}
-			.themerepo-modal .btn-download {
+			.themerepo-modal .themeEntry .btn-download {
 				position: absolute;
 				right: 5px; 
 				bottom: 10px;
@@ -214,7 +217,7 @@ class ThemeRepo {
 
 	getDescription () {return "Allows you to preview all themes from the theme repo and download them on the fly. Repo button is in the theme settings.";}
 
-	getVersion () {return "1.0.5";}
+	getVersion () {return "1.0.6";}
 
 	getAuthor () {return "DevilBro";}
 	
