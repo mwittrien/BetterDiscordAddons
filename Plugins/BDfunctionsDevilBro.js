@@ -46,8 +46,11 @@ BDfunctionsDevilBro.loadMessage = function (pluginName, oldVersion) {
 		});
 		window.PluginUpdates.observer.observe(document.querySelector(".layers"), {childList:true});
 	}
-		
-	if (!document.querySelector("#bd-settingspane-container .bd-pfbtn.bd-updatebtn") && document.querySelector("#bd-settingspane-container .bd-pfbtn")) document.querySelector("#bd-settingspane-container .bd-pfbtn").parentElement.insertBefore(BDfunctionsDevilBro.createUpdateButton(), document.querySelector("#bd-settingspane-container .bd-pfbtn").nextSibling);
+	
+	var bdbutton = document.querySelector(".bd-pfbtn");
+	if (bdbutton && bdbutton.parentElement.querySelector("h2") && bdbutton.parentElement.querySelector("h2").innerText.toLowerCase() === "plugins") {
+		bdbutton.parentElement.insertBefore(BDfunctionsDevilBro.createUpdateButton(), bdbutton.nextSibling);
+	}
 };
 
 BDfunctionsDevilBro.unloadMessage = function (pluginName, oldVersion) { 
