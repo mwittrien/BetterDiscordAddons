@@ -7,7 +7,10 @@ class ThemeRepo {
 		
 		this.loading = false;
 		
+		this.grabbedThemes = {};
 		this.loadedThemes = {};
+		
+		this.updateInterval;
 		
 		this.themeFixerCSS = `#voice-connection,#friends,.friends-header,.friends-table,.guilds-wrapper,.guild-headerheader,.channels-wrap,.private-channels.search-bar,.private-channels,.guild-channels,.account,.friend-table-add-header,.chat,.content,.layers,.title-wrap:not(.search-bar),.messages-wrapper,.messages.dividerspan,.messages.divider:before,.content,.message-group-blocked,.is-local-bot-message,.channel-members-loading,.channel-members-loading.heading,.channel-members-loading.member,.typing,.layer,.layers,.container-RYiLUQ,.theme-dark.ui-standard-sidebar-view,.theme-dark.ui-standard-sidebar-view.sidebar-region,.theme-dark.ui-standard-sidebar-view.content-region,.theme-dark.channel-members,.layer,.layers,.container-2OU7Cz,.theme-dark.title-qAcLxz,.theme-dark.chatform,.channels-3g2vYe,.theme-dark.friends-table,.theme-dark.messages-wrapper,.content.flex-spacer,.theme-dark.chat>.content,.theme-dark.chat,.container-2OU7Cz,.theme-dark.channel-members,.channel-members,.channels-3g2vYe,.guilds-wrapper,.search.search-bar,.theme-dark.chatform,.container-iksrDt,.container-3lnMWU,.theme-dark.title-qAcLxz{background:transparent!important;}.theme-dark.layer,.theme-dark.layers,.typeWindows-15E0Ys{background:rgba(0,0,0,0.18)!important;}`
 		
@@ -211,7 +214,7 @@ class ThemeRepo {
 
 	getDescription () {return "Allows you to preview all themes from the theme repo and download them on the fly. Repo button is in the theme settings.";}
 
-	getVersion () {return "1.0.4";}
+	getVersion () {return "1.0.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -272,6 +275,8 @@ class ThemeRepo {
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 			
 			this.loadThemes();
+			
+			this.updateInterval = setInterval(() => {this.checkForNewThemes();},1000*60*30);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -285,6 +290,8 @@ class ThemeRepo {
 			
 			this.settingsWindowObserver.disconnect();
 			this.innerSettingsWindowObserver.disconnect();
+			
+			clearInterval(this.updateInterval);
 			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName());
 			
@@ -486,21 +493,21 @@ class ThemeRepo {
 	
 	loadThemes () {
 		var i = 0;
-		var grabbedThemes = [];
 		var tags = ["name","description","author","version"];
 		let request = require("request");
 		request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/ThemeList.txt", (error, response, result) => {
 			if (response) {
-				grabbedThemes = response.body.split("\n");
+				this.loadedThemes = {};
+				this.grabbedThemes = result.split("\n");
 				this.loading = true;
-				getThemeInfo(this.loadedThemes, () => {
+				getThemeInfo(this.grabbedThemes, this.loadedThemes, () => {
 					this.loading = false;
 					if (document.querySelector(".bd-themerepobutton")) BDfunctionsDevilBro.showToast(`Finished fetching Themes.`, {type:"success"});
 				});
 			}
 		});
 		
-		function getThemeInfo (loadedThemes, callback) {
+		function getThemeInfo (grabbedThemes, loadedThemes, callback) {
 			if (i >= grabbedThemes.length) {
 				callback();
 				return;
@@ -523,9 +530,16 @@ class ThemeRepo {
 					}
 				}
 				i++;
-				getThemeInfo(loadedThemes, callback);
+				getThemeInfo(grabbedThemes, loadedThemes, callback);
 			});
 		}
+	}
+	
+	checkForNewThemes () {
+		let request = require("request");
+		request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/ThemeList.txt", (error, response, result) => {
+			if (response && !BDfunctionsDevilBro.equals(result.split("\n"), this.grabbedThemes)) this.loadedThemes();
+		});
 	}
 	
 	downloadTheme (theme) {
