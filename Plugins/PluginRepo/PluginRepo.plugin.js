@@ -7,7 +7,10 @@ class PluginRepo {
 		
 		this.loading = false;
 		
+		this.grabbedPlugins = [];
 		this.loadedPlugins = {};
+		
+		this.updateInterval;
 		
 		this.pluginRepoButtonMarkup = 
 			`<button class="bd-pfbtn bd-pluginrepobutton" style="left: 360px;">Plugin Repo</button>`;
@@ -179,7 +182,7 @@ class PluginRepo {
 
 	getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
 
-	getVersion () {return "1.0.4";}
+	getVersion () {return "1.0.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -240,6 +243,8 @@ class PluginRepo {
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 			
 			this.loadPlugins();
+			
+			this.updateInterval = setInterval(() => {this.checkForNewPlugins();},1000*60*30);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -253,6 +258,8 @@ class PluginRepo {
 			
 			this.settingsWindowObserver.disconnect();
 			this.innerSettingsWindowObserver.disconnect();
+			
+			clearInterval(this.updateInterval);
 			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName());
 			
@@ -434,16 +441,16 @@ class PluginRepo {
 	
 	loadPlugins () {
 		var i = 0;
-		var grabbedPlugins = [];
 		var tags = ["getName", "getVersion", "getAuthor", "getDescription"];
 		var seps = ["\"", "\'", "\`"];
 		let request = require("request");
 		request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/PluginRepo/res/PluginList.txt", (error, response, result) => {
 			if (response) {
-				grabbedPlugins = result.split("\n");
+				this.loadedPlugins = {};
+				this.grabbedPlugins = result.split("\n");
 				this.loading = true;
 				createWebview().then((webview) => {
-					getPluginInfo(webview, this.loadedPlugins, () => {
+					getPluginInfo(webview, this.grabbedPlugins, this.loadedPlugins, () => {
 						this.loading = false;
 						webview.remove();
 						if (document.querySelector(".bd-pluginrepobutton")) BDfunctionsDevilBro.showToast(`Finished fetching Plugins.`, {type:"success"});
@@ -452,7 +459,7 @@ class PluginRepo {
 			}
 		});
 		
-		function getPluginInfo (webview, loadedPlugins, callback) {
+		function getPluginInfo (webview, grabbedPlugins, loadedPlugins, callback) {
 			if (i >= grabbedPlugins.length) {
 				callback();
 				return;
@@ -514,7 +521,7 @@ class PluginRepo {
 					}
 				}
 				i++;
-				getPluginInfo(webview, loadedPlugins, callback);
+				getPluginInfo(webview, grabbedPlugins, loadedPlugins, callback);
 			});
 		}
 		
@@ -530,6 +537,13 @@ class PluginRepo {
 				document.body.appendChild(webview);
 			});
 		}
+	}
+	
+	checkForNewPlugins () {
+		let request = require("request");
+		request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/PluginRepo/res/PluginList.txt", (error, response, result) => {
+			if (response && !BDfunctionsDevilBro.equals(result.split("\n"), this.grabbedPlugins)) this.loadPlugins();
+		});
 	}
 	
 	downloadPlugin (plugin) {
