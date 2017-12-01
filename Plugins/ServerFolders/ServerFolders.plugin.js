@@ -244,7 +244,7 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.3.2";}
+	getVersion () {return "5.3.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -914,9 +914,10 @@ class ServerFolders {
 							}`;
 							
 						if (guildswrapper.outerHeight() > guildswrapper.outerWidth()) {
+							var columnamount = Math.round(guildswrapper.outerWidth() / $(".guild").outerWidth());
 							ChannelSizeCorrectionCSS +=	`
 								.foldercontainer {
-									width: ${guildswrapper.outerWidth()}px !important;
+									width: ${guildswrapper.outerWidth() / columnamount}px !important;
 									left: ${guildswrapper.outerWidth()}px !important;
 									overflow-x: hidden !important;
 									overflow-y: scroll !important;
@@ -928,13 +929,14 @@ class ServerFolders {
 								}`;
 						}
 						else {
+							var rowamount = Math.round(guildswrapper.outerHeight() / $(".guild").outerHeight());
 							ChannelSizeCorrectionCSS +=	`
 								.foldercontainer .guild {
 								   display: inline-block !important;
 								}
 								
 								.foldercontainer {
-									height: ${guildswrapper.outerHeight()}px !important;
+									height: ${guildswrapper.outerHeight() / rowamount}px !important;
 									bottom: ${guildswrapper.outerHeight()}px !important;
 									overflow-x: scroll !important;
 									overflow-y: hidden !important;
