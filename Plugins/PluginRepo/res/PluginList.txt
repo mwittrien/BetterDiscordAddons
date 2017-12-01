@@ -40,7 +40,6 @@ https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/res
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/scrollToLast.plugin.js
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/toggleYourStuff.plugin.js
 https://raw.githubusercontent.com/IRDeNial/BD-Server-Themes/master/serverTheme.plugin.js
-https://raw.githubusercontent.com/Jiiks/BetterDiscordApp/master/Plugins/AutoPlayGifs.plugin.js
 https://raw.githubusercontent.com/Jiiks/BetterDiscordApp/master/Plugins/clock.plugin.js
 https://raw.githubusercontent.com/Jiiks/BetterDiscordApp/master/Plugins/dblClickEdit.plugin.js
 https://raw.githubusercontent.com/Jiiks/BetterDiscordApp/master/Plugins/mediaSupport.plugin.js
