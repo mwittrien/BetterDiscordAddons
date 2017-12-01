@@ -320,7 +320,7 @@ class PluginRepo {
 		wrapper.classList.add("popout-open");
 		var value = $(wrapper).find(".value");
 		var popout = $(markup);
-		$(wrapper).append(popout)
+		$(".popouts").append(popout)
 			.off("click", ".item")
 			.on("click", ".item", (e2) => {
 				value.text($(e2.currentTarget).text());
