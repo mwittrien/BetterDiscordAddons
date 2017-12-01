@@ -22,6 +22,7 @@ https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Avata
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Bowser.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/ChocolaTheme.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/DoritosTheme.theme.css
+https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/EpicBubbleTheme.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Luigi.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Mario.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/MountainDew.theme.css
