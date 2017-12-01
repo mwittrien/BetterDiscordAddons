@@ -419,10 +419,10 @@ class PluginRepo {
 					}
 				})
 				.on("mouseenter." + this.getName(), ".favIcon", (e) => {
-					BDfunctionsDevilBro.createTooltip("Favorize", e.currentTarget, {type:"top",selector:"favicon-tooltip"});
+					BDfunctionsDevilBro.createTooltip("Favorize", e.currentTarget, {type:"top",selector:"pluginrepo-favicon-tooltip"});
 				})
 				.on("mouseenter." + this.getName(), ".gitIcon", (e) => {
-					BDfunctionsDevilBro.createTooltip("Go to Git", e.currentTarget, {type:"top",selector:"giticon-tooltip"});
+					BDfunctionsDevilBro.createTooltip("Go to Git", e.currentTarget, {type:"top",selector:"pluginrepo-giticon-tooltip"});
 				})
 				.on("click." + this.getName(), ".btn-download", () => {
 					this.downloadPlugin(plugin);
