@@ -496,15 +496,10 @@ class ThemeRepo {
 					let text = body;
 					if (text.split("*//").length > 1 && text.split("\n").length > 1) {
 						for (let tag of tags) {
-							if (theme.name == "Rainbow_Kitten") console.log(tag);
 							let temp = text.replace(new RegExp("\\s*\:\\s*", "g"), ":").replace(new RegExp("\\s*\}\\s*", "g"), "}").split('"' + tag + '":"');
-							if (theme.name == "Rainbow_Kitten") console.log(temp);
 							temp = temp.length > 1 ? temp[1].split('",')[0].split('"}')[0] : null;
-							if (theme.name == "Rainbow_Kitten") console.log(temp);
 							temp = temp && tag != "version" ? temp.charAt(0).toUpperCase() + temp.slice(1) : temp;
-							if (theme.name == "Rainbow_Kitten") console.log(temp);
 							theme[tag] = temp;
-							if (theme.name == "Rainbow_Kitten") console.log(temp);
 						}
 						theme.css = text.split("\n").slice(1).join("\n").replace(new RegExp("[\\r|\\n|\\t]", "g"), "");
 						theme.url = url;
