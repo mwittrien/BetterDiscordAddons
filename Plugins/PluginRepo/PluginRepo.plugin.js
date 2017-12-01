@@ -145,27 +145,30 @@ class PluginRepo {
 			.pluginrepo-modal .searchWrapper #input-search {
 				padding: 1px 8px !important;
 			}
-			.pluginrepo-modal .gitIcon,
-			.pluginrepo-modal .favIcon {
+			.pluginrepo-modal .pluginEntry {
+				overflow: visible !important;
+			}
+			.pluginrepo-modal .pluginEntry .gitIcon,
+			.pluginrepo-modal .pluginEntry .favIcon {
 				position: absolute;
 				cursor: pointer;
 				top: 12px;
 			}
-			.pluginrepo-modal .gitIcon {
+			.pluginrepo-modal .pluginEntry .gitIcon {
 				right: 10px;
 			}
-			.pluginrepo-modal .favIcon {
+			.pluginrepo-modal .pluginEntry .favIcon {
 				right: 40px;
 			}
-			.pluginrepo-modal .favIcon path {
+			.pluginrepo-modal .pluginEntry .favIcon path {
 				stroke: yellow;
 				fill: none;
 			}
-			.pluginrepo-modal .favIcon.favorized path {
+			.pluginrepo-modal .pluginEntry .favIcon.favorized path {
 				stroke: yellow;
 				fill: yellow;
 			}
-			.pluginrepo-modal .btn-download {
+			.pluginrepo-modal .pluginEntry .btn-download {
 				position: absolute;
 				right: 5px; 
 				bottom: 10px;
@@ -182,7 +185,7 @@ class PluginRepo {
 
 	getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
 
-	getVersion () {return "1.0.5";}
+	getVersion () {return "1.0.6";}
 
 	getAuthor () {return "DevilBro";}
 	
