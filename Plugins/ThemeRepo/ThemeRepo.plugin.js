@@ -143,8 +143,18 @@ class ThemeRepo {
 			.discordPreview {
 				width:100vw !important;
 				height:100vh !important;
-				position: relative !important;
-				z-index: 3499 !important;
+				position: absolute !important;
+				z-index: 3400 !important;
+			}
+			.discordPreview ~ #app-mount{
+				position: absolute !important;
+				top: 0 !important;
+			}
+			.themerepo-sort-popout,
+			.themerepo-order-popout,
+			.themerepo-favicon-tooltip,
+			.themerepo-giticon-tooltip {
+				z-index: 3600 !important;
 			}
 			.themerepo-modal {
 				position: relative !important;
@@ -383,7 +393,7 @@ class ThemeRepo {
 		wrapper.classList.add("popout-open");
 		var value = $(wrapper).find(".value");
 		var popout = $(markup);
-		$(wrapper).append(popout)
+		$(".popouts").append(popout)
 			.off("click", ".item")
 			.on("click", ".item", (e2) => {
 				value.text($(e2.currentTarget).text());
@@ -461,6 +471,12 @@ class ThemeRepo {
 					if (giturl) {
 						window.open(giturl, "_blank");
 					}
+				})
+				.on("mouseenter." + this.getName(), ".favIcon", (e) => {
+					BDfunctionsDevilBro.createTooltip("Favorize", e.currentTarget, {type:"top",selector:"themerepo-favicon-tooltip"});
+				})
+				.on("mouseenter." + this.getName(), ".gitIcon", (e) => {
+					BDfunctionsDevilBro.createTooltip("Go to Git", e.currentTarget, {type:"top",selector:"themerepo-giticon-tooltip"});
 				})
 				.on("click." + this.getName(), ".btn-download", () => {
 					this.downloadTheme(theme);
