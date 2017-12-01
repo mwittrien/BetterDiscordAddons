@@ -914,7 +914,7 @@ class ServerFolders {
 							}`;
 							
 						if (guildswrapper.outerHeight() > guildswrapper.outerWidth()) {
-							var columnamount = Math.round(guildswrapper.outerWidth() / $(".guild").outerWidth());
+							var columnamount = Math.floor(guildswrapper.outerWidth() / $(".guild").outerWidth());
 							ChannelSizeCorrectionCSS +=	`
 								.foldercontainer {
 									width: ${guildswrapper.outerWidth() / columnamount}px !important;
@@ -925,11 +925,11 @@ class ServerFolders {
 								
 								.guilds-wrapper.folderopen {
 									overflow: visible !important;
-									width: calc(${guildswrapper.outerWidth()}px + ${$(".guild").outerWidth()}px + ${guildsscroller.css("padding-left")} + ${guildsscroller.css("padding-right")} + 5px) !important;
+									width: ${guildswrapper.outerWidth() + (guildswrapper.outerWidth() / columnamount)}px !important;
 								}`;
 						}
 						else {
-							var rowamount = Math.round(guildswrapper.outerHeight() / $(".guild").outerHeight());
+							var rowamount = Math.floor(guildswrapper.outerHeight() / $(".guild").outerHeight());
 							ChannelSizeCorrectionCSS +=	`
 								.foldercontainer .guild {
 								   display: inline-block !important;
@@ -944,7 +944,7 @@ class ServerFolders {
 								
 								.guilds-wrapper.folderopen {
 									overflow: visible !important;
-									height: calc(${guildswrapper.outerHeight()}px + ${$(".guild").outerHeight()}px + ${guildsscroller.css("padding-top")} + ${guildsscroller.css("padding-bottom")} + 5px) !important;
+									height: ${guildswrapper.outerouterHeightWidth() + (guildswrapper.outerHeight() / rowamount)}px !important;
 								}`;
 						}
 						
