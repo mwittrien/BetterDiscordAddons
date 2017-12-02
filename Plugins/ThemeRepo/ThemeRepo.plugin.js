@@ -34,6 +34,7 @@ class ThemeRepo {
 					</div>
 					<svg class="favIcon" version="1.1" xmlns="http://www.w3.org/2000/svg" width="20px" height="20px"><path fill="none" stroke="black" d="M 19.542, 9.092 c 0.393 -0.383, 0.532 -0.946, 0.362 -1.468 c -0.17 -0.523 -0.613 -0.896 -1.157 -0.975 l -4.837 -0.703 c -0.206 -0.03 -0.384 -0.159 -0.476 -0.346 L 11.273, 1.217 c -0.243 -0.492 -0.736 -0.798 -1.285 -0.798 c -0.549, 0 -1.042, 0.306 -1.284, 0.798 L 6.541, 5.6 c -0.092, 0.187 -0.27, 0.316 -0.476, 0.346 L 1.228, 6.649 c -0.544, 0.079 -0.987, 0.452 -1.157, 0.975 c -0.17, 0.523 -0.031, 1.085, 0.362, 1.468 l 3.5, 3.411 c 0.149, 0.146, 0.218, 0.355, 0.182, 0.56 L 3.29, 17.88 c -0.073, 0.424, 0.038, 0.836, 0.312, 1.162 c 0.426, 0.507, 1.171, 0.661, 1.766, 0.348 l 4.326 -2.274 c 0.181 -0.095, 0.408 -0.094, 0.589, 0 l 4.326, 2.274 c 0.21, 0.111, 0.435, 0.167, 0.666, 0.167 c 0.423, 0, 0.824 -0.188, 1.099 -0.515 c 0.275 -0.325, 0.386 -0.738, 0.312 -1.162 l -0.826 -4.817 c -0.035 -0.205, 0.033 -0.414, 0.182 -0.56 L 19.542, 9.092 z"/></svg>
 					<svg class="gitIcon" version="1.1" xmlns="http://www.w3.org/2000/svg" width="20px" height="20px"><g fill="white"><path d="M 7.19, 16.027 c -0.139, 0.026 -0.199, 0.091 -0.182, 0.195 c 0.017, 0.104, 0.095, 0.138, 0.234, 0.104 c 0.139 -0.035, 0.199 -0.095, 0.182 -0.182 C 7.406, 16.049, 7.328, 16.01, 7.19, 16.027 z"/><path d="M 6.45, 16.131 c -0.138, 0 -0.208, 0.047 -0.208, 0.143 c 0, 0.112, 0.074, 0.16, 0.221, 0.143 c 0.138, 0, 0.208 -0.048, 0.208 -0.143 C 6.671, 16.162, 6.597, 16.114, 6.45, 16.131 z"/><path d="M 5.438, 16.092 c -0.035, 0.095, 0.022, 0.16, 0.169, 0.195 c 0.13, 0.052, 0.212, 0.026, 0.247 -0.078 c 0.026 -0.095 -0.03 -0.164 -0.169 -0.208 C 5.554, 15.967, 5.472, 15.996, 5.438, 16.092 z"/><path d="M 18.837, 1.097 C 18.106, 0.366, 17.226, 0, 16.196, 0 H 3.738 C 2.708, 0, 1.828, 0.366, 1.097, 1.097 C 0.366, 1.828, 0, 2.708, 0, 3.738 v 12.459 c 0, 1.03, 0.366, 1.91, 1.097, 2.641 c 0.731, 0.731, 1.612, 1.097, 2.641, 1.097 h 2.907 c 0.19, 0, 0.333 -0.007, 0.428 -0.019 c 0.095 -0.013, 0.19 -0.069, 0.285 -0.169 c 0.095 -0.099, 0.143 -0.244, 0.143 -0.435 c 0 -0.026 -0.002 -0.32 -0.007 -0.883 c -0.004 -0.562 -0.007 -1.008 -0.007 -1.337 l -0.298, 0.052 c -0.19, 0.035 -0.43, 0.05 -0.72, 0.045 c -0.29 -0.004 -0.59 -0.035 -0.902 -0.091 c -0.312 -0.056 -0.601 -0.186 -0.87 -0.389 c -0.268 -0.203 -0.458 -0.469 -0.571 -0.798 l -0.13 -0.299 c -0.086 -0.199 -0.223 -0.419 -0.409 -0.662 c -0.186 -0.242 -0.374 -0.407 -0.564 -0.493 l -0.091 -0.065 c -0.06 -0.043 -0.117 -0.095 -0.169 -0.156 c -0.052 -0.061 -0.091 -0.121 -0.117 -0.182 c -0.026 -0.061 -0.004 -0.11, 0.065 -0.149 c 0.069 -0.039, 0.195 -0.058, 0.376 -0.058 l 0.259, 0.039 c 0.173, 0.035, 0.387, 0.138, 0.642, 0.311 c 0.255, 0.173, 0.465, 0.398, 0.629, 0.675 c 0.199, 0.355, 0.439, 0.625, 0.72, 0.811 c 0.281, 0.186, 0.565, 0.279, 0.85, 0.279 s 0.532 -0.022, 0.74 -0.065 c 0.208 -0.043, 0.402 -0.108, 0.584 -0.195 c 0.078 -0.58, 0.29 -1.025, 0.636 -1.337 c -0.493 -0.052 -0.936 -0.13 -1.33 -0.234 c -0.394 -0.104 -0.8 -0.272 -1.22 -0.506 c -0.42 -0.234 -0.768 -0.523 -1.045 -0.87 c -0.277 -0.346 -0.504 -0.8 -0.681 -1.363 c -0.177 -0.562 -0.266 -1.211 -0.266 -1.947 c 0 -1.047, 0.342 -1.938, 1.025 -2.673 c -0.32 -0.787 -0.29 -1.67, 0.091 -2.647 c 0.251 -0.078, 0.623 -0.019, 1.116, 0.175 c 0.493, 0.195, 0.854, 0.361, 1.084, 0.5 c 0.229, 0.138, 0.413, 0.255, 0.552, 0.35 c 0.805 -0.225, 1.635 -0.337, 2.492 -0.337 c 0.856, 0, 1.687, 0.112, 2.492, 0.337 l 0.493 -0.311 c 0.338 -0.208, 0.735 -0.398, 1.194 -0.571 c 0.459 -0.173, 0.809 -0.221, 1.051 -0.143 c 0.389, 0.978, 0.424, 1.86, 0.104, 2.647 c 0.683, 0.735, 1.025, 1.627, 1.025, 2.673 c 0, 0.735 -0.089, 1.387 -0.266, 1.953 c -0.177, 0.567 -0.406, 1.021 -0.688, 1.363 c -0.281, 0.342 -0.632, 0.629 -1.051, 0.863 c -0.42, 0.234 -0.826, 0.402 -1.22, 0.506 c -0.394, 0.104 -0.837, 0.182 -1.33, 0.234 c 0.45, 0.389, 0.675, 1.003, 0.675, 1.843 v 3.102 c 0, 0.147, 0.021, 0.266, 0.065, 0.357 c 0.044, 0.091, 0.113, 0.153, 0.208, 0.188 c 0.096, 0.035, 0.18, 0.056, 0.253, 0.065 c 0.074, 0.009, 0.18, 0.013, 0.318, 0.013 h 2.907 c 1.029, 0, 1.91 -0.366, 2.641 -1.097 c 0.731 -0.731, 1.097 -1.612, 1.097 -2.641 V 3.738 C 19.933, 2.708, 19.568, 1.827, 18.837, 1.097 z"/><path d="M 3.945, 14.509 c -0.06, 0.043 -0.052, 0.112, 0.026, 0.208 c 0.087, 0.086, 0.156, 0.1, 0.208, 0.039 c 0.061 -0.043, 0.052 -0.112 -0.026 -0.208 C 4.066, 14.47, 3.997, 14.457, 3.945, 14.509 z"/><path d="M 3.517, 14.184 c -0.026, 0.061, 0.004, 0.113, 0.091, 0.156 c 0.069, 0.043, 0.126, 0.035, 0.169 -0.026 c 0.026 -0.061 -0.004 -0.113 -0.091 -0.156 C 3.599, 14.132, 3.543, 14.141, 3.517, 14.184 z"/><path d="M 4.348, 15.015 c -0.078, 0.043 -0.078, 0.121, 0, 0.234 c 0.078, 0.113, 0.151, 0.143, 0.221, 0.091 c 0.078 -0.061, 0.078 -0.143, 0 -0.247 C 4.499, 14.981, 4.425, 14.954, 4.348, 15.015 z"/><path d="M 4.802, 15.599 c -0.078, 0.069 -0.061, 0.151, 0.052, 0.247 c 0.104, 0.104, 0.19, 0.117, 0.259, 0.039 c 0.069 -0.069, 0.052 -0.151 -0.052 -0.246 C 4.958, 15.534, 4.871, 15.521, 4.802, 15.599 z"/></g></svg>
+					<svg class="trashIcon" version="1.1" xmlns="http://www.w3.org/2000/svg" width="20px" height="20px"><g fill="white"><path d="M 18.012, 0.648 H 12.98 C 12.944, 0.284, 12.637, 0, 12.264, 0 H 8.136 c -0.373, 0 -0.68, 0.284 -0.716, 0.648 H 2.389 c -0.398, 0 -0.72, 0.322 -0.72, 0.72 v 1.368 c 0, 0.398, 0.322, 0.72, 0.72, 0.72 h 15.623 c 0.398, 0, 0.72 -0.322, 0.72 -0.72 V 1.368 C 18.731, 0.97, 18.409, 0.648, 18.012, 0.648 z"/><path d="M 3.178, 4.839 v 14.841 c 0, 0.397, 0.322, 0.72, 0.72, 0.72 h 12.604 c 0.398, 0, 0.72 -0.322, 0.72 -0.72 V 4.839 H 3.178 z M 8.449, 15.978 c 0, 0.438 -0.355, 0.794 -0.794, 0.794 c -0.438, 0 -0.794 -0.355 -0.794 -0.794 V 8.109 c 0 -0.438, 0.355 -0.794, 0.794 -0.794 c 0.438, 0, 0.794, 0.355, 0.794, 0.794 V 15.978 z M 13.538, 15.978 c 0, 0.438 -0.355, 0.794 -0.794, 0.794 s -0.794 -0.355 -0.794 -0.794 V 8.109 c 0 -0.438, 0.355 -0.794, 0.794 -0.794 c 0.438, 0, 0.794, 0.355, 0.794, 0.794 V 15.978 z"/></g></svg>
 					<button type="button" class="btn-download buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu">
 						<div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx contents-4L4hQM">Download</div>
 					</button>
@@ -110,6 +111,30 @@ class ThemeRepo {
 										<div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx contents-4L4hQM">Download</div>
 									</button>
 								</div>
+								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;">
+									<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Hide updated Plugins.</h3>
+									<div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;">
+										<input type="checkbox" value="updated" class="checkboxEnabled-4QfryV checkbox-1KYsPm hide-checkbox" id="input-hideupdated">
+									</div>
+								</div>
+								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;">
+									<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Hide outdated Plugins.</h3>
+									<div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;">
+										<input type="checkbox" value="outdated" class="checkboxEnabled-4QfryV checkbox-1KYsPm hide-checkbox" id="input-hideoutdated">
+									</div>
+								</div>
+								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;">
+									<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Hide downloadable Plugins.</h3>
+									<div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;">
+										<input type="checkbox" value="downloadable" class="checkboxEnabled-4QfryV checkbox-1KYsPm hide-checkbox" id="input-hidedownloadable">
+									</div>
+								</div>
+								<div id="RNMoption" class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;">
+									<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Apply Theme after Download (Restart-No-More needed)</h3>
+									<div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;">
+										<input type="checkbox" class="checkboxEnabled-4QfryV checkbox-1KYsPm" id="input-rnmstart">
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -124,6 +149,7 @@ class ThemeRepo {
 							<div option="name" class="item">Name</div>
 							<div option="author" class="item">Author</div>
 							<div option="version" class="item">Version</div>
+							<div option="state" class="item">Update State</div>
 							<div option="fav" class="item">Favorites</div>
 						</div>
 					</div>
@@ -187,16 +213,14 @@ class ThemeRepo {
 				top: 10px;
 			}
 			.themerepo-modal .themeEntry .gitIcon,
-			.themerepo-modal .themeEntry .favIcon {
+			.themerepo-modal .themeEntry .favIcon,
+			.themerepo-modal .themeEntry .trashIcon {
 				position: absolute;
 				cursor: pointer;
-				top: 12px;
-			}
-			.themerepo-modal .themeEntry .gitIcon {
-				right: 60px;
 			}
 			.themerepo-modal .themeEntry .favIcon {
 				right: 90px;
+				top: 12px;
 			}
 			.themerepo-modal .themeEntry .favIcon path {
 				stroke: yellow;
@@ -206,10 +230,29 @@ class ThemeRepo {
 				stroke: yellow;
 				fill: yellow;
 			}
+			.themerepo-modal .themeEntry .gitIcon {
+				right: 60px;
+				top: 12px;
+			}
+			.themerepo-modal .themeEntry .trashIcon {
+				right: 120px;
+				bottom: 25px;
+				display: none;
+			}
+			.themerepo-modal .themeEntry.outdated .trashIcon,
+			.themerepo-modal .themeEntry.updated .trashIcon {
+				display: block;
+			}
 			.themerepo-modal .themeEntry .btn-download {
 				position: absolute;
 				right: 5px; 
 				bottom: 10px;
+			}
+			.themerepo-modal .themeEntry.outdated .btn-download {
+				background-color: rgb(240, 71, 71) !important;
+			}
+			.themerepo-modal .themeEntry.updated .btn-download {
+				background-color: rgb(67, 181, 129) !important;
 			}`;
 	}
 
@@ -217,7 +260,7 @@ class ThemeRepo {
 
 	getDescription () {return "Allows you to preview all themes from the theme repo and download them on the fly. Repo button is in the theme settings.";}
 
-	getVersion () {return "1.0.6";}
+	getVersion () {return "1.0.7";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -255,7 +298,7 @@ class ThemeRepo {
 			});
 			this.settingsWindowObserver.observe(document.querySelector(".layers"), {childList:true});
 			
-			this.innerSettingsWindowObserver =  new MutationObserver((changes2, _) => {
+			this.innerSettingsWindowObserver = new MutationObserver((changes2, _) => {
 				changes2.forEach(
 					(change2, j) => {
 						if (change2.addedNodes) {
@@ -310,7 +353,7 @@ class ThemeRepo {
 			$(this.themeRepoButtonMarkup)
 				.insertAfter(container.querySelector(".bd-pfbtn"))
 				.on("click", () => {
-					if (!this.loading) this.openDiscordPreview(); 
+					if (!this.loading) this.openThemeRepoModal(); 
 					else BDfunctionsDevilBro.showToast(`Themes are still being fetched. Try again in some seconds.`, {type:"danger"});
 				})
 				.on("mouseenter", (e) => {
@@ -319,17 +362,29 @@ class ThemeRepo {
 		}
 	}
 	
-	openDiscordPreview () {
+	openThemeRepoModal () {
 		var frame = $(this.frameMarkup)[0];
 		var lightTheme = BDfunctionsDevilBro.getDiscordTheme() == "theme-light";
 		var themeRepoModal = $(this.themeRepoModalMarkup);
+		themeRepoModal.updateModal = true;
 		themeRepoModal.enableSearch = false;
+		var hiddenSettings = BDfunctionsDevilBro.loadAllData(this.getName(), "hidden");
 		themeRepoModal.find("#input-darklight").prop("checked", lightTheme);
 		themeRepoModal.find("#input-customcss").prop("checked", false);
 		themeRepoModal.find("#input-themefixer").prop("checked", false);
+		themeRepoModal.find("#input-hideupdated").prop("checked", hiddenSettings.updated);
+		themeRepoModal.find("#input-hideoutdated").prop("checked", hiddenSettings.outdated);
+		themeRepoModal.find("#input-hidedownloadable").prop("checked", hiddenSettings.downloadable);
+		if (!(window.bdplugins["Restart-No-More"] && window.pluginCookie["Restart-No-More"] || window.bdplugins["Restart No More"] && window.pluginCookie["Restart No More"])) {
+			themeRepoModal.find("#RNMoption").remove();
+		}
+		else {
+			themeRepoModal.find("#input-rnmstart").prop("checked", BDfunctionsDevilBro.loadData("RNMstart", this.getName(), "settings"));
+		}
 		themeRepoModal
 			.on("keyup." + this.getName(), "#input-search", (e) => {
 				if (e.which == 13) {
+					themeRepoModal.updateModal = true;
 					themeRepoModal.enableSearch = true;
 					this.addThemeEntries(themeRepoModal);	
 				}
@@ -338,9 +393,6 @@ class ThemeRepo {
 				frame.remove();
 				$(document).off("keyup." + this.getName());
 				$(window).off("message." + this.getName());
-			})
-			.on("click." + this.getName(), "#download-themefixer", (e) => {
-				this.createThemeFile("ThemeFixer.theme.css", `//META{"name":"ThemeFixer","description":"ThemeFixerCSS for transparent themes","author":"xNightWulf","version":"1.0.0"}*//\n\n` + this.themeFixerCSS);
 			})
 			.on("click." + this.getName(), ".sort-filter", (e) => {
 				this.openSortPopout(e, this.sortPopoutMarkup, themeRepoModal, frame);
@@ -358,6 +410,21 @@ class ThemeRepo {
 			})
 			.on("change." + this.getName(), "#input-themefixer", (e) => {
 				frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"ThemeFixer",checked:$(e.target).prop("checked"),css:this.themeFixerCSS},"*");
+			})
+			.on("click." + this.getName(), "#download-themefixer", (e) => {
+				this.createThemeFile("ThemeFixer.theme.css", `//META{"name":"ThemeFixer","description":"ThemeFixerCSS for transparent themes","author":"xNightWulf","version":"1.0.0"}*//\n\n` + this.themeFixerCSS);
+			})
+			.on("change." + this.getName(), ".hide-checkbox", (e) => {
+				var hideButton = $(e.currentTarget);
+				hiddenSettings[hideButton.val()] = hideButton.prop("checked");
+				BDfunctionsDevilBro.saveAllData(hiddenSettings, this.getName(), "hidden");
+				themeRepoModal.updateModal = true;
+			})
+			.on("change." + this.getName(), "#input-rnmstart", (e) => {
+				BDfunctionsDevilBro.saveData("RNMstart", $(e.currentTarget).prop("checked"), this.getName(), "settings");
+			})
+			.on("click." + this.getName(), ".tab-bar-item[tab=plugins]:not(.selected)", (e) => {
+				this.addThemeEntries(themeRepoModal);
 			});
 			
 		$(document).off("keyup." + this.getName())
@@ -410,6 +477,7 @@ class ThemeRepo {
 				value.attr("option", $(e2.currentTarget).attr("option"));
 				$(document).off("mousedown.sortpopout" + this.getName());
 				popout.remove();
+				modal.updateModal = true;
 				this.addThemeEntries(modal, frame);
 				setTimeout(() => {wrapper.classList.remove("popout-open");},300);
 			});
@@ -429,13 +497,30 @@ class ThemeRepo {
 	}
 	
 	addThemeEntries (modal, frame) {
+		if (!modal.updateModal) return;
+		modal.updateModal = false;
 		modal.find(".themeEntry").remove();
 		var favorites = BDfunctionsDevilBro.loadAllData(this.getName(), "favorites");
 		var themes = [];
 		for (var url in this.loadedThemes) {
 			this.loadedThemes[url].fav = favorites[url] ? false : true;
+			var installedTheme = window.bdthemes[this.loadedThemes[url].name];
+			if (installedTheme) {
+				if (installedTheme.version != this.loadedThemes[url].version) {
+					this.loadedThemes[url].state = 1;
+				}
+				else {
+					this.loadedThemes[url].state = 0;
+				}
+			}
+			else {
+				this.loadedThemes[url].state = 2;
+			}
 			themes.push(this.loadedThemes[url]);
 		}
+		if (modal.find("#input-hideupdated").prop("checked")) 		themes = themes.filter((theme) => {return theme.state != 0 ? theme : null;});
+		if (modal.find("#input-hideoutdated").prop("checked")) 		themes = themes.filter((theme) => {return theme.state != 1 ? theme : null;});
+		if (modal.find("#input-hidedownloadable").prop("checked")) 	themes = themes.filter((theme) => {return theme.state != 2 ? theme : null;});
 		if (modal.enableSearch) {
 			var searchInput = modal.find("#input-search");
 			themes = themes.filter((theme) => {
@@ -453,6 +538,16 @@ class ThemeRepo {
 			modal.find(".themes").append(entry);
 			entry.find(".bda-name").html(theme.name + (theme.version ? " v" + theme.version : "") + (theme.author ? " by " + theme.author : ""));
 			entry.find(".bda-description").html(theme.description);
+			if (theme.state != 2) {
+				if (theme.state == 1) {
+					entry.addClass("outdated")
+						.find(".btn-download div").text("Outdated");
+				}
+				else {
+					entry.addClass("updated")
+						.find(".btn-download div").text("Updated");
+				}
+			}
 			if (!theme.fav) entry.find(".favIcon")[0].classList.add("favorized");
 			entry
 				.on("change." + this.getName(), ".previewCheckbox", (e) => {
@@ -482,14 +577,26 @@ class ThemeRepo {
 						window.open(giturl, "_blank");
 					}
 				})
+				.on("click." + this.getName(), ".trashIcon", () => {
+					entry.removeClass("outdated").removeClass("updated")
+						.find(".btn-download div").text("Download");
+					this.deleteThemeFile(theme);
+					if (!(window.bdplugins["Restart-No-More"] && window.pluginCookie["Restart-No-More"] || window.bdplugins["Restart No More"] && window.pluginCookie["Restart No More"])) removeTheme(theme);
+				})
 				.on("mouseenter." + this.getName(), ".favIcon", (e) => {
 					BDfunctionsDevilBro.createTooltip("Favorize", e.currentTarget, {type:"top",selector:"themerepo-favicon-tooltip"});
 				})
 				.on("mouseenter." + this.getName(), ".gitIcon", (e) => {
 					BDfunctionsDevilBro.createTooltip("Go to Git", e.currentTarget, {type:"top",selector:"themerepo-giticon-tooltip"});
 				})
+				.on("mouseenter." + this.getName(), ".trashIcon", (e) => {
+					BDfunctionsDevilBro.createTooltip("Delete Pluginfile", e.currentTarget, {type:"top",selector:"themerepo-trashIcon-tooltip"});
+				})
 				.on("click." + this.getName(), ".btn-download", () => {
 					this.downloadTheme(theme);
+					entry.removeClass("outdated").addClass("updated")
+						.find(".btn-download div").text("Updated");
+					if (modal.find("#input-rnmstart").prop("checked")) setTimeout(() => {this.applyTheme(theme);},3000);
 				});
 		}
 	}
@@ -505,6 +612,7 @@ class ThemeRepo {
 				this.loading = true;
 				getThemeInfo(this.grabbedThemes, this.loadedThemes, () => {
 					this.loading = false;
+					console.log("ThemeRepo: Finished fetching Themes.");
 					if (document.querySelector(".bd-themerepobutton")) BDfunctionsDevilBro.showToast(`Finished fetching Themes.`, {type:"success"});
 				});
 			}
@@ -570,5 +678,41 @@ class ThemeRepo {
 				BDfunctionsDevilBro.showToast(`Successfully saved Theme "${filename}".`, {type:"success"});
 			}
 		});
+	}
+	
+	applyTheme (theme) {
+		var name = theme.name;
+		if (typeof window.bdthemes[name] == "object" && window.themeCookie[name] == false) {
+			$(`style#${name}`).remove();
+			$("head").append(`<style id=${name}>${theme.css}</style>`);
+			window.themeCookie[name] = true;
+			console.log("ThemeRepo: applied Theme " + name);
+		}
+	}
+	
+	deleteThemeFile (theme) {
+		let fileSystem = require("fs");
+		let path = require("path");
+		let filename = theme.url.split("/");
+		filename = filename[filename.length - 1];
+		var file = path.join(BDfunctionsDevilBro.getThemesFolder(), filename);
+		fileSystem.unlink(file, (error) => {
+			if (error) {
+				BDfunctionsDevilBro.showToast(`Unable to delete Theme "${filename}".`, {type:"danger"});
+			}
+			else {
+				BDfunctionsDevilBro.showToast(`Successfully deleted Theme "${filename}".`, {type:"success"});
+			}
+		});
+	}
+	
+	removeTheme (plugin) {
+		var name = theme.name;
+		if (typeof window.bdthemes[name] == "object" && window.themeCookie[name] == true) {
+			$(`style#${name}`).remove();
+			window.themeCookie[name] = false;
+			delete window.bdthemes[name];
+			console.log("ThemeRepo: removed Theme " + name);
+		}
 	}
 }
