@@ -578,10 +578,12 @@ class ThemeRepo {
 					}
 				})
 				.on("click." + this.getName(), ".trashIcon", () => {
-					entry.removeClass("outdated").removeClass("updated")
-						.find(".btn-download div").text("Download");
-					this.deleteThemeFile(theme);
-					if (!(window.bdplugins["Restart-No-More"] && window.pluginCookie["Restart-No-More"] || window.bdplugins["Restart No More"] && window.pluginCookie["Restart No More"])) removeTheme(theme);
+					if (entry.hasClass("outdated") || entry.hasClass("updated") {
+						entry.removeClass("outdated").removeClass("updated")
+							.find(".btn-download div").text("Download");
+						this.deleteThemeFile(theme);
+						if (!(window.bdplugins["Restart-No-More"] && window.pluginCookie["Restart-No-More"] || window.bdplugins["Restart No More"] && window.pluginCookie["Restart No More"])) removeTheme(theme);
+					}
 				})
 				.on("mouseenter." + this.getName(), ".favIcon", (e) => {
 					BDfunctionsDevilBro.createTooltip("Favorize", e.currentTarget, {type:"top",selector:"themerepo-favicon-tooltip"});
