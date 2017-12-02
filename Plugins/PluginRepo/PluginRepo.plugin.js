@@ -203,7 +203,7 @@ class PluginRepo {
 
 	getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
 
-	getVersion () {return "1.0.7";}
+	getVersion () {return "1.0.8";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -313,12 +313,8 @@ class PluginRepo {
 		pluginRepoModal.find("#input-hideupdated").prop("checked", hiddenSettings.updated);
 		pluginRepoModal.find("#input-hideoutdated").prop("checked", hiddenSettings.outdated);
 		pluginRepoModal.find("#input-hidedownloadable").prop("checked", hiddenSettings.downloadable);
-		if (!(window.bdplugins["Restart-No-More"] && window.pluginCookie["Restart-No-More"] || window.bdplugins["Restart No More"] && window.pluginCookie["Restart No More"])) {
-			pluginRepoModal.find("#RNMoption").remove();
-		}
-		else {
-			pluginRepoModal.find("#input-rnmstart").prop("checked", BDfunctionsDevilBro.loadData("RNMstart", this.getName(), "settings"));
-		}
+		if (!BDfunctionsDevilBro.isRestartNoMoreEnabled()) pluginRepoModal.find("#RNMoption").remove();
+		else pluginRepoModal.find("#input-rnmstart").prop("checked", BDfunctionsDevilBro.loadData("RNMstart", this.getName(), "settings"));
 		pluginRepoModal
 			.on("keyup." + this.getName(), "#input-search", (e) => {
 				if (e.which == 13) {
@@ -460,7 +456,7 @@ class PluginRepo {
 						entry.removeClass("outdated").removeClass("updated")
 							.find(".btn-download div").text("Download");
 						this.deletePluginFile(plugin);
-						if (!(window.bdplugins["Restart-No-More"] && window.pluginCookie["Restart-No-More"] || window.bdplugins["Restart No More"] && window.pluginCookie["Restart No More"])) stopPlugin(plugin);
+						if (!BDfunctionsDevilBro.isRestartNoMoreEnabled()) stopPlugin(plugin);
 					}
 				})
 				.on("mouseenter." + this.getName(), ".favIcon", (e) => {
