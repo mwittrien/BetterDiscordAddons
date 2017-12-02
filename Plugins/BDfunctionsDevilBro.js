@@ -129,7 +129,7 @@ BDfunctionsDevilBro.downloadPlugin = function(pluginName, downloadUrl) {
         var file = path.join(BDfunctionsDevilBro.getPluginsFolder(), filename);
         fileSystem.writeFileSync(file, body);
         BDfunctionsDevilBro.showToast(`${pluginName} ${window.PluginUpdates.plugins[downloadUrl].version} has been replaced by ${pluginName} ${remoteVersion}`);
-        if (!(window.bdplugins["Restart-No-More"] && window.pluginCookie["Restart-No-More"] || window.bdplugins["Restart No More"] && window.pluginCookie["Restart No More"])) {
+        if (!BDfunctionsDevilBro.isRestartNoMoreEnabled()) {
             if (!window.PluginUpdates.downloaded) {
                 window.PluginUpdates.downloaded = [];
                 let button = $(`<button class="btn btn-reload">Reload</button>`);
@@ -1475,9 +1475,9 @@ BDfunctionsDevilBro.getSwatchColor = function (swatch) {
 	return !$(".ui-color-picker-" + swatch + ".nocolor.selected")[0] ? BDfunctionsDevilBro.color2COMP($(".ui-color-picker-" + swatch + ".selected").css("background-color")) : null;
 };
 
-BDfunctionsDevilBro.isRestartNoMoreEnabled () {
+BDfunctionsDevilBro.isRestartNoMoreEnabled = function () {
 	return (window.bdplugins["Restart-No-More"] && window.pluginCookie["Restart-No-More"] || window.bdplugins["Restart No More"] && window.pluginCookie["Restart No More"]);
-}
+};
 
 BDfunctionsDevilBro.getDiscordTheme = function () {
 	if ($(".theme-light").length > $(".theme-dark").length) return "theme-light";
