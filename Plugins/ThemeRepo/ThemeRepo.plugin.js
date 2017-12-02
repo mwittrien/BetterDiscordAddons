@@ -578,7 +578,7 @@ class ThemeRepo {
 					}
 				})
 				.on("click." + this.getName(), ".trashIcon", () => {
-					if (entry.hasClass("outdated") || entry.hasClass("updated") {
+					if (entry.hasClass("outdated") || entry.hasClass("updated")) {
 						entry.removeClass("outdated").removeClass("updated")
 							.find(".btn-download div").text("Download");
 						this.deleteThemeFile(theme);
