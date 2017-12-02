@@ -456,10 +456,12 @@ class PluginRepo {
 					}
 				})
 				.on("click." + this.getName(), ".trashIcon", () => {
-					entry.removeClass("outdated").removeClass("updated")
-						.find(".btn-download div").text("Download");
-					this.deletePluginFile(plugin);
-					if (!(window.bdplugins["Restart-No-More"] && window.pluginCookie["Restart-No-More"] || window.bdplugins["Restart No More"] && window.pluginCookie["Restart No More"])) stopPlugin(plugin);
+					if (entry.hasClass("outdated") || entry.hasClass("updated") {
+						entry.removeClass("outdated").removeClass("updated")
+							.find(".btn-download div").text("Download");
+						this.deletePluginFile(plugin);
+						if (!(window.bdplugins["Restart-No-More"] && window.pluginCookie["Restart-No-More"] || window.bdplugins["Restart No More"] && window.pluginCookie["Restart No More"])) stopPlugin(plugin);
+					}
 				})
 				.on("mouseenter." + this.getName(), ".favIcon", (e) => {
 					BDfunctionsDevilBro.createTooltip("Favorize", e.currentTarget, {type:"top",selector:"pluginrepo-favicon-tooltip"});
