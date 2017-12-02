@@ -260,7 +260,7 @@ class ThemeRepo {
 
 	getDescription () {return "Allows you to preview all themes from the theme repo and download them on the fly. Repo button is in the theme settings.";}
 
-	getVersion () {return "1.0.7";}
+	getVersion () {return "1.0.8";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -375,12 +375,8 @@ class ThemeRepo {
 		themeRepoModal.find("#input-hideupdated").prop("checked", hiddenSettings.updated);
 		themeRepoModal.find("#input-hideoutdated").prop("checked", hiddenSettings.outdated);
 		themeRepoModal.find("#input-hidedownloadable").prop("checked", hiddenSettings.downloadable);
-		if (!(window.bdplugins["Restart-No-More"] && window.pluginCookie["Restart-No-More"] || window.bdplugins["Restart No More"] && window.pluginCookie["Restart No More"])) {
-			themeRepoModal.find("#RNMoption").remove();
-		}
-		else {
-			themeRepoModal.find("#input-rnmstart").prop("checked", BDfunctionsDevilBro.loadData("RNMstart", this.getName(), "settings"));
-		}
+		if (!BDfunctionsDevilBro.isRestartNoMoreEnabled()) themeRepoModal.find("#RNMoption").remove();
+		else themeRepoModal.find("#input-rnmstart").prop("checked", BDfunctionsDevilBro.loadData("RNMstart", this.getName(), "settings"));
 		themeRepoModal
 			.on("keyup." + this.getName(), "#input-search", (e) => {
 				if (e.which == 13) {
@@ -459,7 +455,7 @@ class ThemeRepo {
 		$(frame).insertBefore("#app-mount");
 			
 		function keyPressed (key) {
-			if (key == 17) themeRepoModal.toggle();
+			if (key == 17 && !themeRepoModal.find("#input-search").is(":focus")) themeRepoModal.toggle();
 			if (key == 27) frame.remove();
 		}
 	}
@@ -582,7 +578,7 @@ class ThemeRepo {
 						entry.removeClass("outdated").removeClass("updated")
 							.find(".btn-download div").text("Download");
 						this.deleteThemeFile(theme);
-						if (!(window.bdplugins["Restart-No-More"] && window.pluginCookie["Restart-No-More"] || window.bdplugins["Restart No More"] && window.pluginCookie["Restart No More"])) removeTheme(theme);
+						if (!BDfunctionsDevilBro.isRestartNoMoreEnabled()) removeTheme(theme);
 					}
 				})
 				.on("mouseenter." + this.getName(), ".favIcon", (e) => {
