@@ -180,7 +180,7 @@ class ChatAliases {
 
 	getDescription () {return "Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent.";}
 
-	getVersion () {return "1.5.2";}
+	getVersion () {return "1.5.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -359,53 +359,36 @@ class ChatAliases {
 	bindEventToTextArea () {
 		var textarea = document.querySelector(".channelTextArea-1HTP3C textarea");
 		if (textarea) {
-			var BFRenabled = false;
-			var events = $._data(textarea, 'events') ? $._data(textarea, 'events') : {};
-			for (var event in events.keypress) {
-				if (events.keypress[event].namespace == "BFRedux") BFRenabled = true;
-			}
-			if (BFRenabled) {
-				this.eventWithBFR(textarea);
-			}
-			else {
-				this.eventWithoutBFR(textarea);
-			}
-		}
-	}
-	
-	eventWithoutBFR (textarea) {
-		$(textarea)
-			.off("keydown." + this.getName())
-			.on("keydown." + this.getName(), e => {
-				if (!e.shiftKey && e.which == 13 && !this.stopLoop && !document.querySelector(".chat form .innerAutocomplete-2qsvzH")) {
-					this.stopLoop = true;
+			$(textarea)
+				.off("input." + this.getName())
+				.on("input." + this.getName(), e => {
+					if (!this.format) return;
+					this.format = false;
 					this.formatText(e.target);
-					var options = { key: "Enter", code: "Enter", which: 13, keyCode: 13, bubbles: true };
-					var down = new KeyboardEvent("keydown", options);
-					Object.defineProperty(down, "keyCode", {value: 13});
-					Object.defineProperty(down, "which", {value: 13});
-					var press = new KeyboardEvent("keypress", options);
-					Object.defineProperty(press, "keyCode", {value: 13});
-					Object.defineProperty(press, "which", {value: 13});
-					textarea.dispatchEvent(down);
-					textarea.dispatchEvent(press);
-					setTimeout(() => {this.stopLoop = false;},1);
-				}
-			});
-	}
-	
-	eventWithBFR (textarea) {
-		$(textarea)
-			.off("input." + this.getName())
-			.on("input." + this.getName(), e => {
-				if (!this.format) return;
-				this.format = false;
-				this.formatText(e.target);
-			})
-			.off("keydown." + this.getName())
-			.on("keydown." + this.getName(), e => {
-				if (!e.shiftKey && e.which == 13) this.format = true;
-			});
+				})
+				.off("keydown." + this.getName())
+				.on("keydown." + this.getName(), e => {
+					if (!e.shiftKey && e.which == 13 && !this.stopLoop && !document.querySelector(".chat form .autocomplete-1TnWNR")) {
+						if (window.bdplugins["BetterFormattingRedux"] && window.pluginCookie["BetterFormattingRedux"]) {
+							this.format = true;
+						}
+						else {
+							this.stopLoop = true;
+							this.formatText(e.target);
+							var options = { key: "Enter", code: "Enter", which: 13, keyCode: 13, bubbles: true };
+							var down = new KeyboardEvent("keydown", options);
+							Object.defineProperty(down, "keyCode", {value: 13});
+							Object.defineProperty(down, "which", {value: 13});
+							var press = new KeyboardEvent("keypress", options);
+							Object.defineProperty(press, "keyCode", {value: 13});
+							Object.defineProperty(press, "which", {value: 13});
+							textarea.dispatchEvent(down);
+							textarea.dispatchEvent(press);
+							setTimeout(() => {this.stopLoop = false;},1);
+						}
+					}
+				});
+		}
 	}
 	
 	formatText (textarea) {
