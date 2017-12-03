@@ -26,6 +26,7 @@ https://raw.githubusercontent.com/hammy13/BDPlugins/master/plugins/dateViewer/da
 https://raw.githubusercontent.com/Hyperbot-one/hideServersChannels-plugin/master/hideServersChannels.plugin.js
 https://raw.githubusercontent.com/Hyperbot-one/showEmojiServer-plugin/master/showEmojiServer.plugin.js
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/autocompleteHoverFix.plugin.js
+https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/botInfo.plugin.js
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/charCounter.plugin.js
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/clearInputOnEsc.plugin.js
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/debugger.plugin.js
