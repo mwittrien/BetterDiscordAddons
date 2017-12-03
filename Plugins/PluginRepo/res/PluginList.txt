@@ -39,6 +39,7 @@ https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/lin
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/minimizeShortcut.plugin.js
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/restartNoMore.plugin.js
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/scrollToLast.plugin.js
+https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/Snowfall.plugin.js
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/toggleYourStuff.plugin.js
 https://raw.githubusercontent.com/IRDeNial/BD-Server-Themes/master/serverTheme.plugin.js
 https://raw.githubusercontent.com/Jiiks/BetterDiscordApp/master/Plugins/clock.plugin.js
