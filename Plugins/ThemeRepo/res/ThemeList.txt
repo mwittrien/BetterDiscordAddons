@@ -88,6 +88,7 @@ https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Themes/Radi
 https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Themes/SwitchFix/SwitchFix.theme.css
 https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Themes/TransientMaterial/TransientMaterial.theme.css
 https://raw.githubusercontent.com/redsauce117/SauceysDiscordThemes/master/DarkerDiscordTheme.theme.css
+https://raw.githubusercontent.com/spthiel/BetterDiscord/master/Themes/CodeBlocks/CodeBlocks.theme.css
 https://raw.githubusercontent.com/TakosThings/Battlefield/master/battlefield.theme.css
 https://raw.githubusercontent.com/TakosThings/Metro-for-Discord/master/dist/Metro_for_Discord.theme.css
 https://raw.githubusercontent.com/tehbasshunter/theme-fixes/master/Nova.theme.css
