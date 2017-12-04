@@ -20,7 +20,7 @@ class GoogleTranslateOption {
 
 	getDescription () {return "Adds a Google Translate option to your context menu, which shows a preview of the translated text and on click will open the selected text in Google Translate.";}
 
-	getVersion () {return "1.0.3";}
+	getVersion () {return "1.0.4";}
 	
 	getAuthor () {return "DevilBro";}
 	
@@ -85,8 +85,11 @@ class GoogleTranslateOption {
 					var langid = language.googleid ? language.googleid : language.id;
 					var translation = "";
 					let request = require("request");
-					request("https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=" + langid + "&dt=t&q=" + encodeURIComponent(text), (error, response, result) => {
-						if (response) JSON.parse(result)[0].forEach((array) => {translation += array[0];});
+					request("https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=" + langid + "&dt=t&ie=UTF-8&oe=UTF-8&q=" + encodeURIComponent(text), (error, response, result) => {
+						if (response) {
+							console.log(result);
+							JSON.parse(result)[0].forEach((array) => {translation += array[0];});
+						}
 					});
 					$(this.messageContextEntryMarkup).insertAfter(group)
 						.on("mouseenter", ".googletranslateoption-item", (e) => {
