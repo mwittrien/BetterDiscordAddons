@@ -41,7 +41,7 @@ class PersonalPins {
 							</div>
 							<div class="mention-filter">
 								<div class="label">REPLACE_popout_sort_text:</div>
-								<div option="timestamp" class="value" style="text-transform:none";>REPLACE_popout_messagesort_text</div>
+								<div option="timestamp" class="value" style="text-transform:none;">REPLACE_popout_messagesort_text</div>
 							</div>
 						</div>
 					</div>
@@ -57,7 +57,7 @@ class PersonalPins {
 			</div>`;
 			
 		this.sortPopoutMarkup =
-			`<div class="popout popout-bottom-right no-shadow personalpins-sort-popout" style="z-index: 1100; visibility: visible; left: 851.267px; top: 102.535px; transform: translateX(-100%) translateY(0%) translateZ(0px);">
+			`<div class="popout popout-bottom-right no-shadow personalpins-sort-popout" style="z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
 				<div>
 					<div class="context-menu recent-mentions-filter-popout">
 						<div class="item-group">
@@ -116,14 +116,21 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.2.2";}
+	getVersion () {return "1.2.3";}
 
 	getAuthor () {return "DevilBro";}
 	
     getSettingsPanel () {
 		if (typeof BDfunctionsDevilBro === "object") {
+			var settingspanel = 
+				$(`<div class="${this.getName()}-settings">
+					<button class="reset-button" style="height:23px">Delete all Notes</button>
+				</div>`)[0];
+			$(settingspanel)
+				.on("click", ".reset-button", () => {this.resetAll();});
+			return settingspanel;
 		}
-	}
+    }
 
 	//legacy
 	load () {}
@@ -259,6 +266,12 @@ class PersonalPins {
 	
 	// begin of own functions
 
+    resetAll () {
+		if (confirm("Are you sure you want to delete all pinned notes?")) {
+			BDfunctionsDevilBro.removeAllData(this.getName(), "servers");
+		}
+    }
+	
 	changeLanguageStrings () {
 		this.messageContextEntryMarkup = 	this.messageContextEntryMarkup.replace("REPLACE_context_noteoption_text", this.labels.context_noteoption_text);
 		
