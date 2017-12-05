@@ -116,7 +116,7 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.2.3";}
+	getVersion () {return "1.2.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -419,7 +419,7 @@ class PersonalPins {
 		var guildInfo = BDfunctionsDevilBro.getKeyInformation({"node":document.querySelector(".chat"),"key":"guild"});
 		var channelInfo = BDfunctionsDevilBro.getKeyInformation({"node":document.querySelector(".chat"),"key":"channel"});
 		if (messageInfo && channelInfo) {
-			var serverID = guildInfo ? guildInfo.id : "dms";
+			var serverID = guildInfo ? guildInfo.id : "@me";
 			var channelID = channelInfo.id;
 			var data = BDfunctionsDevilBro.loadAllData(this.getName(), "servers");
 			data[serverID] = data[serverID] ? data[serverID] : {}
@@ -455,7 +455,7 @@ class PersonalPins {
 		var info = BDfunctionsDevilBro.getKeyInformation({"node":document.querySelector(".chat"),"key":"channel"});
 		if (info) {
 			var serverID = info.guild_id;
-			serverID = serverID ? serverID : "dms";
+			serverID = serverID ? serverID : "@me";
 			var channelID = info.id;
 			let data = BDfunctionsDevilBro.loadAllData(this.getName(), "servers");
 			if (!BDfunctionsDevilBro.isObjectEmpty(data)) {
@@ -501,12 +501,7 @@ class PersonalPins {
 						BDfunctionsDevilBro.showToast(this.labels.toast_noteremove_text, {type:"danger"});
 					})
 					.on("click." + this.getName(), ".jump-button", (e) => {
-						if (BDfunctionsDevilBro.getDivOfServer(messageData.server)) {
-							this.HistoryUtils.transitionTo(this.MainDiscord.Routes.MESSAGE(messageData.server, messageData.channel, messageData.id));
-						} 
-						else {
-							BDfunctionsDevilBro.getReactInstance(document.querySelector(".app")).return.stateNode.shake();
-						}
+						this.HistoryUtils.transitionTo(this.MainDiscord.Routes.MESSAGE(messageData.server, messageData.channel, messageData.id));
 					});
 				}
 			}
