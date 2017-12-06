@@ -91,9 +91,9 @@ BDfunctionsDevilBro.checkUpdate = function (pluginName, downloadUrl) {
 };
 
 BDfunctionsDevilBro.showUpdateNotice = function(pluginName, downloadUrl) {
-	let noticeElement = `<div class="notice notice-info" id="pluginNotice"><div class="notice-dismiss" id="pluginNoticeDismiss"></div><span class="notice-message">The following plugins have updates:</span>&nbsp;&nbsp;<strong id="outdatedPlugins"></strong></div>`;
+	let noticeElement = `<div class="notice notice-info DevilBro-notice" id="pluginNotice"><div class="notice-dismiss" id="pluginNoticeDismiss"></div><span class="notice-message">The following plugins have updates:</span>&nbsp;&nbsp;<strong id="outdatedPlugins"></strong></div>`;
 	if (!$("#pluginNotice").length)  {
-		$(".app .guilds-wrapper + div > div:first > div:first").before(noticeElement);
+		$(".app .guilds-wrapper + div > div:first > div:first").append(noticeElement);
         $(".win-buttons").addClass("win-buttons-notice");
 		$("#pluginNoticeDismiss").on("click", () => {
 			$(".win-buttons").animate({top: 0}, 400, "swing", () => {
@@ -205,10 +205,9 @@ BDfunctionsDevilBro.createTooltip = function(content, container, options = {}) {
 	if (!document.querySelector(".tooltips") || !content || !container) return null;
 	let id = Math.round(Math.random()*10000000000000000);
     let tooltip = document.createElement("div");
-    tooltip.classList.add("tooltip");
-    tooltip.classList.add("tooltip-black");
+    tooltip.classList.add("tooltip", "tooltip-black", "DevilBro-tooltip");
 	if (options.type) tooltip.classList.add("tooltip-" + options.type);
-	if (options.selector) tooltip.classList.add(options.selector);
+	if (options.selector) options.selector.split(" ").forEach(selector => {if(selector) tooltip.classList.add(selector);});
 	if (options.css) BDfunctionsDevilBro.appendLocalStyle("customTooltipDevilBro" + id, options.css);
 	if (options.html === true) tooltip.innerHTML = content;
 	else tooltip.innerText = content;
@@ -261,6 +260,51 @@ BDfunctionsDevilBro.createTooltip = function(content, container, options = {}) {
 	});
 	
 	return tooltip;
+};
+
+BDfunctionsDevilBro.createNotificationsBar = function(content, options = {}) {
+	if (!content) return;
+	let id = Math.round(Math.random()*10000000000000000);
+    let notifiybar = document.createElement("div");
+    notifiybar.classList.add("notice", "DevilBro-notice", "notice-" + id);
+	notifiybar.innerHTML = `<div class="notice-dismiss"></div><span class="notice-message">${content}</span></strong>`;
+	$(".app .guilds-wrapper + div > div:first > div:first").append(notifiybar);
+	if (options.btn) {
+		$(`<button class="btn">${options.btn}</button>`).insertAfter(notifiybar.querySelector(".notice-message"));
+	}
+	if (options.selector) options.selector.split(" ").forEach(selector => {if(selector) notifiybar.classList.add(selector);});
+	if (options.css) BDfunctionsDevilBro.appendLocalStyle("customNotificationsBarDevilBro" + id, options.css);
+	var comp = BDfunctionsDevilBro.color2COMP(options.color);
+	var color = comp && comp[0] > 180 && comp[1] > 180 && comp[2] > 180 ? "#000" : "#FFF";
+	var bgColor = comp ? BDfunctionsDevilBro.color2HEX(comp) : "#F26522";
+	var dismissFilter = comp && comp[0] > 180 && comp[1] > 180 && comp[2] > 180 ? "brightness(0%)" : "brightness(100%)";
+	BDfunctionsDevilBro.appendLocalStyle("customNotificationsBarColorCorrectionDevilBro" + id, 
+		`.DevilBro-notice.notice-${id} {
+			background-color: ${bgColor};
+		}
+		.DevilBro-notice.notice-${id} .notice-message {
+			color: ${color};
+		}
+		.DevilBro-notice.notice-${id} .btn {
+			color: ${color};
+			border-color: ${color};
+		}
+		.DevilBro-notice.notice-${id} .btn:hover {
+			color: ${bgColor};
+			background-color: ${color};
+		}
+		.DevilBro-notice.notice-${id} .notice-dismiss {
+			filter: ${dismissFilter};
+		}`);
+	$(notifiybar).on("click", ".notice-dismiss", () => {
+		$(notifiybar).slideUp({complete: () => {
+			BDfunctionsDevilBro.removeLocalStyle("customNotificationsBarDevilBro" + id);
+			BDfunctionsDevilBro.removeLocalStyle("customNotificationsBarColorCorrectionDevilBro" + id);
+			notifiybar.remove();
+		}});
+	});
+	
+	return notifiybar;
 };
 
 // Plugins/Themes folder resolver from Square
@@ -1708,7 +1752,7 @@ $(window)
 	});
 
 BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
-	#pluginNotice {
+	#pluginNotice, .DevilBro-notice {
 		-webkit-app-region: drag;
 	} 
 	
