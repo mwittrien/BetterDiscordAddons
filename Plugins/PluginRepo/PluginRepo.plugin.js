@@ -203,7 +203,7 @@ class PluginRepo {
 
 	getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
 
-	getVersion () {return "1.0.8";}
+	getVersion () {return "1.1.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -305,14 +305,14 @@ class PluginRepo {
 		}
 	}
 	
-	openPluginRepoModal () {
+	openPluginRepoModal (showOnlyOutdated = false) {
 		var pluginRepoModal = $(this.pluginRepoModalMarkup);
 		pluginRepoModal.updateModal = true;
 		pluginRepoModal.enableSearch = false;
 		var hiddenSettings = BDfunctionsDevilBro.loadAllData(this.getName(), "hidden");
-		pluginRepoModal.find("#input-hideupdated").prop("checked", hiddenSettings.updated);
-		pluginRepoModal.find("#input-hideoutdated").prop("checked", hiddenSettings.outdated);
-		pluginRepoModal.find("#input-hidedownloadable").prop("checked", hiddenSettings.downloadable);
+		pluginRepoModal.find("#input-hideupdated").prop("checked", hiddenSettings.updated || showOnlyOutdated);
+		pluginRepoModal.find("#input-hideoutdated").prop("checked", hiddenSettings.outdated && !showOnlyOutdated);
+		pluginRepoModal.find("#input-hidedownloadable").prop("checked", hiddenSettings.downloadable || showOnlyOutdated);
 		if (!BDfunctionsDevilBro.isRestartNoMoreEnabled()) pluginRepoModal.find("#RNMoption").remove();
 		else pluginRepoModal.find("#input-rnmstart").prop("checked", BDfunctionsDevilBro.loadData("RNMstart", this.getName(), "settings"));
 		pluginRepoModal
@@ -478,6 +478,7 @@ class PluginRepo {
 	}
 	
 	loadPlugins () {
+		var outdated = 0;
 		var i = 0;
 		var tags = ["getName", "getVersion", "getAuthor", "getDescription"];
 		var seps = ["\"", "\'", "\`"];
@@ -493,6 +494,13 @@ class PluginRepo {
 						webview.remove();
 						console.log("PluginRepo: Finished fetching Plugins.");
 						if (document.querySelector(".bd-pluginrepobutton")) BDfunctionsDevilBro.showToast(`Finished fetching Plugins.`, {type:"success"});
+						if (outdated > 0) {
+							var text = `${outdated} of your Plugins ${outdated == 1 ? "is" : "are"} outdated. Check:`;
+							var bar = BDfunctionsDevilBro.createNotificationsBar(text,{color:"#F04747",btn:"PluginRepo"});
+							$(bar).on("click." + this.getName(), ".btn", () => {
+								this.openPluginRepoModal(true);
+							});
+						}
 					});
 				});
 			}
@@ -507,7 +515,6 @@ class PluginRepo {
 			request(url, (error, response, body) => {
 				if (response) {
 					let plugin = {};
-					let valid = true;
 					for (let tag of tags) {
 						let reg = new RegExp(tag + "[\\s|\\t|\\n|\\r|=|>|function|\(|\)|\{|return]*([\"|\'|\`]).*?\\1","gi");
 						let temp = reg.exec(body);
@@ -530,12 +537,14 @@ class PluginRepo {
 							}
 						}
 					}
+					let valid = true;
 					for (let tag of tags) {
-						if (!plugin[tag]) valid = false;
+						if (plugin[tag] === null) valid = false;
 					}
 					if (valid) {
 						plugin.url = url;
 						loadedPlugins[url] = plugin;
+						if (window.bdplugins[plugin.getName] && window.bdplugins[plugin.getName].plugin.getVersion() != plugin.getVersion) outdated++;
 					}
 					else {
 						let name = body.replace(new RegExp("\\s*\:\\s*", "g"), ":").split('"name":"');
@@ -554,6 +563,7 @@ class PluginRepo {
 								).then((plugin) => {
 									plugin.url = url;
 									loadedPlugins[url] = plugin;
+									if (window.bdplugins[plugin.getName] && window.bdplugins[plugin.getName].plugin.getVersion() != plugin.getVersion) outdated++;
 								});
 							});
 						}
