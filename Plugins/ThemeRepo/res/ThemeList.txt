@@ -8,7 +8,6 @@ https://raw.githubusercontent.com/CAtOSe/Neon-Space-BetterDiscord-Theme/master/n
 https://raw.githubusercontent.com/CurimuChizu/CC-Themes/master/CC-Themes/Red.n.Black.theme.css
 https://raw.githubusercontent.com/CurimuChizu/CC-Themes/master/CC-Themes/ReZero.theme.css
 https://raw.githubusercontent.com/Dddsasul/TeamKappa-theme/master/ClearDiscord.theme.css
-https://raw.githubusercontent.com/Dddsasul/TeamKappa-theme/master/ClearDiscord.theme.css
 https://raw.githubusercontent.com/Dddsasul/TeamKappa-theme/master/JustBlack.theme.css
 https://raw.githubusercontent.com/denBot/Cyan-Firewatch/master/cyan-firewatch.theme.css
 https://raw.githubusercontent.com/denBot/Simplistic-CSS/master/DubaiOrange.theme.css
