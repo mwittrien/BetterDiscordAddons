@@ -260,7 +260,7 @@ class ThemeRepo {
 
 	getDescription () {return "Allows you to preview all themes from the theme repo and download them on the fly. Repo button is in the theme settings.";}
 
-	getVersion () {return "1.0.9";}
+	getVersion () {return "1.1.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -362,7 +362,7 @@ class ThemeRepo {
 		}
 	}
 	
-	openThemeRepoModal () {
+	openThemeRepoModal (showOnlyOutdated = false) {
 		var frame = $(this.frameMarkup)[0];
 		var lightTheme = BDfunctionsDevilBro.getDiscordTheme() == "theme-light";
 		var themeRepoModal = $(this.themeRepoModalMarkup);
@@ -372,9 +372,9 @@ class ThemeRepo {
 		themeRepoModal.find("#input-darklight").prop("checked", lightTheme);
 		themeRepoModal.find("#input-customcss").prop("checked", false);
 		themeRepoModal.find("#input-themefixer").prop("checked", false);
-		themeRepoModal.find("#input-hideupdated").prop("checked", hiddenSettings.updated);
-		themeRepoModal.find("#input-hideoutdated").prop("checked", hiddenSettings.outdated);
-		themeRepoModal.find("#input-hidedownloadable").prop("checked", hiddenSettings.downloadable);
+		themeRepoModal.find("#input-hideupdated").prop("checked", hiddenSettings.updated || showOnlyOutdated);
+		themeRepoModal.find("#input-hideoutdated").prop("checked", hiddenSettings.outdated && !showOnlyOutdated);
+		themeRepoModal.find("#input-hidedownloadable").prop("checked", hiddenSettings.downloadable || showOnlyOutdated);
 		if (!BDfunctionsDevilBro.isRestartNoMoreEnabled()) themeRepoModal.find("#RNMoption").remove();
 		else themeRepoModal.find("#input-rnmstart").prop("checked", BDfunctionsDevilBro.loadData("RNMstart", this.getName(), "settings"));
 		themeRepoModal
@@ -600,6 +600,7 @@ class ThemeRepo {
 	}
 	
 	loadThemes () {
+		var outdated = 0;
 		var i = 0;
 		var tags = ["name","description","author","version"];
 		let request = require("request");
@@ -612,6 +613,13 @@ class ThemeRepo {
 					this.loading = false;
 					console.log("ThemeRepo: Finished fetching Themes.");
 					if (document.querySelector(".bd-themerepobutton")) BDfunctionsDevilBro.showToast(`Finished fetching Themes.`, {type:"success"});
+					if (outdated > 0) {
+						var text = `${outdated} of your Themes ${outdated == 1 ? "is" : "are"} outdated. Check:`;
+						var bar = BDfunctionsDevilBro.createNotificationsBar(text,{color:"#F04747",btn:"ThemeRepo"});
+						$(bar).on("click." + this.getName(), ".btn", () => {
+							this.openThemeRepoModal(true);
+						});
+					}
 				});
 			}
 		});
@@ -633,9 +641,16 @@ class ThemeRepo {
 							temp = temp && tag != "version" ? temp.charAt(0).toUpperCase() + temp.slice(1) : temp;
 							theme[tag] = temp;
 						}
-						theme.css = text.split("\n").slice(1).join("\n").replace(new RegExp("[\\r|\\n|\\t]", "g"), "");
-						theme.url = url;
-						loadedThemes[url] = theme;
+						let valid = true;
+						for (let tag of tags) {
+							if (theme[tag] === null) valid = false;
+						}
+						if (valid) {
+							theme.css = text.split("\n").slice(1).join("\n").replace(new RegExp("[\\r|\\n|\\t]", "g"), "");
+							theme.url = url;
+							loadedThemes[url] = theme;
+							if (window.bdthemes[theme.name] && window.bdthemes[theme.name].version != theme.version) outdated++;
+						}
 					}
 				}
 				i++;
