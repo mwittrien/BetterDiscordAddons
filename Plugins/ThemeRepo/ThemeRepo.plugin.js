@@ -260,7 +260,7 @@ class ThemeRepo {
 
 	getDescription () {return "Allows you to preview all themes from the theme repo and download them on the fly. Repo button is in the theme settings.";}
 
-	getVersion () {return "1.1.1";}
+	getVersion () {return "1.1.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -501,7 +501,7 @@ class ThemeRepo {
 		for (var url in this.loadedThemes) {
 			this.loadedThemes[url].fav = favorites[url] ? false : true;
 			var installedTheme = window.bdthemes[this.loadedThemes[url].name];
-			if (installedTheme) {
+			if (installedTheme && installedTheme.author.toUpperCase() == this.loadedThemes[url].author.toUpperCase()) {
 				if (installedTheme.version != this.loadedThemes[url].version) {
 					this.loadedThemes[url].state = 1;
 				}
@@ -650,7 +650,8 @@ class ThemeRepo {
 							theme.css = text.split("\n").slice(1).join("\n").replace(new RegExp("[\\r|\\n|\\t]", "g"), "");
 							theme.url = url;
 							loadedThemes[url] = theme;
-							if (window.bdthemes[theme.name] && window.bdthemes[theme.name].version != theme.version) outdated++;
+							var installedTheme = window.bdthemes[theme.name];
+							if (installedTheme && installedTheme.author.toUpperCase() == theme.author.toUpperCase() && installedTheme.version != theme.version) outdated++;
 						}
 					}
 				}
