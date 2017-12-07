@@ -203,7 +203,7 @@ class PluginRepo {
 
 	getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
 
-	getVersion () {return "1.1.0";}
+	getVersion () {return "1.1.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -497,8 +497,9 @@ class PluginRepo {
 						if (outdated > 0) {
 							var text = `${outdated} of your Plugins ${outdated == 1 ? "is" : "are"} outdated. Check:`;
 							var bar = BDfunctionsDevilBro.createNotificationsBar(text,{color:"#F04747",btn:"PluginRepo",selector:"pluginrepo-notice"});
-							$(bar).on("click." + this.getName(), ".btn", () => {
+							$(bar).on("click." + this.getName(), ".btn", (e) => {
 								this.openPluginRepoModal(true);
+								e.delegateTarget.querySelector(".notice-dismiss").click();
 							});
 						}
 					});
