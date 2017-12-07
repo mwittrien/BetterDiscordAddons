@@ -35,6 +35,7 @@ https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/dis
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/enableReactDevtools.plugin.js
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/forceClose.plugin.js
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/linkProfilePicture.plugin.js
+https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/localFileServer.plugin.js
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/minimizeShortcut.plugin.js
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/restartNoMore.plugin.js
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/scrollToLast.plugin.js
