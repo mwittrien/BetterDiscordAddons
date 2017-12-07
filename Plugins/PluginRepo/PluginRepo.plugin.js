@@ -203,7 +203,7 @@ class PluginRepo {
 
 	getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
 
-	getVersion () {return "1.1.1";}
+	getVersion () {return "1.1.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -388,7 +388,7 @@ class PluginRepo {
 		for (var url in this.loadedPlugins) {
 			this.loadedPlugins[url].getFav = favorites[url] ? 0 : 1;
 			var installedPlugin = window.bdplugins[this.loadedPlugins[url].getName] ? window.bdplugins[this.loadedPlugins[url].getName].plugin : null;
-			if (installedPlugin) {
+			if (installedPlugin && installedPlugin.getAuthor().toUpperCase() == this.loadedPlugins[url].getAuthor.toUpperCase()) {
 				if (installedPlugin.getVersion() != this.loadedPlugins[url].getVersion) {
 					this.loadedPlugins[url].getState = 1;
 				}
@@ -545,7 +545,8 @@ class PluginRepo {
 					if (valid) {
 						plugin.url = url;
 						loadedPlugins[url] = plugin;
-						if (window.bdplugins[plugin.getName] && window.bdplugins[plugin.getName].plugin.getVersion() != plugin.getVersion) outdated++;
+						var installedPlugin = window.bdplugins[plugin.getName] ? window.bdplugins[plugin.getName].plugin : null;
+						if (installedPlugin && installedPlugin.getAuthor().toUpperCase() == plugin.getAuthor.toUpperCase() && installedPlugin.getVersion() != plugin.getVersion) outdated++;
 					}
 					else {
 						let name = body.replace(new RegExp("\\s*\:\\s*", "g"), ":").split('"name":"');
@@ -564,7 +565,8 @@ class PluginRepo {
 								).then((plugin) => {
 									plugin.url = url;
 									loadedPlugins[url] = plugin;
-									if (window.bdplugins[plugin.getName] && window.bdplugins[plugin.getName].plugin.getVersion() != plugin.getVersion) outdated++;
+									var installedPlugin = window.bdplugins[plugin.getName] ? window.bdplugins[plugin.getName].plugin : null;
+									if (installedPlugin && installedPlugin.getAuthor().toUpperCase() == plugin.getAuthor.toUpperCase() && installedPlugin.getVersion() != plugin.getVersion) outdated++;
 								});
 							});
 						}
