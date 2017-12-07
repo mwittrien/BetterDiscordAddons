@@ -112,19 +112,19 @@ class ThemeRepo {
 									</button>
 								</div>
 								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;">
-									<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Hide updated Plugins.</h3>
+									<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Hide updated Themes.</h3>
 									<div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;">
 										<input type="checkbox" value="updated" class="checkboxEnabled-4QfryV checkbox-1KYsPm hide-checkbox" id="input-hideupdated">
 									</div>
 								</div>
 								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;">
-									<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Hide outdated Plugins.</h3>
+									<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Hide outdated Themes.</h3>
 									<div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;">
 										<input type="checkbox" value="outdated" class="checkboxEnabled-4QfryV checkbox-1KYsPm hide-checkbox" id="input-hideoutdated">
 									</div>
 								</div>
 								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;">
-									<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Hide downloadable Plugins.</h3>
+									<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Hide downloadable Themes.</h3>
 									<div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;">
 										<input type="checkbox" value="downloadable" class="checkboxEnabled-4QfryV checkbox-1KYsPm hide-checkbox" id="input-hidedownloadable">
 									</div>
@@ -260,7 +260,7 @@ class ThemeRepo {
 
 	getDescription () {return "Allows you to preview all themes from the theme repo and download them on the fly. Repo button is in the theme settings.";}
 
-	getVersion () {return "1.1.0";}
+	getVersion () {return "1.1.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -419,7 +419,7 @@ class ThemeRepo {
 			.on("change." + this.getName(), "#input-rnmstart", (e) => {
 				BDfunctionsDevilBro.saveData("RNMstart", $(e.currentTarget).prop("checked"), this.getName(), "settings");
 			})
-			.on("click." + this.getName(), ".tab-bar-item[tab=plugins]:not(.selected)", (e) => {
+			.on("click." + this.getName(), ".tab-bar-item[tab=themes]:not(.selected)", (e) => {
 				this.addThemeEntries(themeRepoModal, frame);
 			});
 			
@@ -588,7 +588,7 @@ class ThemeRepo {
 					BDfunctionsDevilBro.createTooltip("Go to Git", e.currentTarget, {type:"top",selector:"themerepo-giticon-tooltip"});
 				})
 				.on("mouseenter." + this.getName(), ".trashIcon", (e) => {
-					BDfunctionsDevilBro.createTooltip("Delete Pluginfile", e.currentTarget, {type:"top",selector:"themerepo-trashIcon-tooltip"});
+					BDfunctionsDevilBro.createTooltip("Delete Themefile", e.currentTarget, {type:"top",selector:"themerepo-trashIcon-tooltip"});
 				})
 				.on("click." + this.getName(), ".btn-download", () => {
 					this.downloadTheme(theme);
@@ -616,8 +616,9 @@ class ThemeRepo {
 					if (outdated > 0) {
 						var text = `${outdated} of your Themes ${outdated == 1 ? "is" : "are"} outdated. Check:`;
 						var bar = BDfunctionsDevilBro.createNotificationsBar(text,{color:"#F04747",btn:"ThemeRepo",selector:"themerepo-notice"});
-						$(bar).on("click." + this.getName(), ".btn", () => {
+						$(bar).on("click." + this.getName(), ".btn", (e) => {
 							this.openThemeRepoModal(true);
+							e.delegateTarget.querySelector(".notice-dismiss").click();
 						});
 					}
 				});
@@ -719,7 +720,7 @@ class ThemeRepo {
 		});
 	}
 	
-	removeTheme (plugin) {
+	removeTheme (theme) {
 		var name = theme.name;
 		if (typeof window.bdthemes[name] == "object" && window.themeCookie[name] == true) {
 			$(`style#${name}`).remove();
