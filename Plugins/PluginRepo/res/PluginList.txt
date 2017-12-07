@@ -1,6 +1,5 @@
 https://gist.githubusercontent.com/Jiiks/7eb81b8950c073a09fbc2493da3ec714/raw/249f01f981a9a6a14bfbd170f28b8bf0e0a540d3/fullSizeLightbox.plugin.js
 https://gist.githubusercontent.com/LuaTenshi/c43c220d1cadd7af4ab8734daf7a6706/raw/4b2c5a5acee5a5e570a83995772f2b4149ea1238/spoilerAlert.plugin.js
-https://gist.githubusercontent.com/megamit/7a686742c2768f34cf4d83e1055e9375/raw/2fc3bd67ef1f69c349b6e627a1e283eced124596/renamer.plugin.js
 https://gist.githubusercontent.com/megamit/29757d819de5356595271cebb577f6a8/raw/dfaf0d0474e4545a2968eaad1838ac01c31494bd/DetachableYoutube.plugin.js
 https://gist.githubusercontent.com/samogot/355ba0ff414a6a9551baff500b1af60e/raw/4251658b52b9591ea6bbd38e1a5309ffd101e266/count-unread.plugin.js
 https://gist.githubusercontent.com/shtrih/8a72a36d513ec704c7a9/raw/957d08fe0d802d8d74668f6374bb868f82f002ab/EmbedAV.plugin.js
@@ -54,6 +53,7 @@ https://raw.githubusercontent.com/mashirochan/Mashiro-chan/master/Plugins/EmoteB
 https://raw.githubusercontent.com/mashirochan/Mashiro-chan/master/Plugins/HorizontalCodeScroll/HorizontalCodeScroll.plugin.js
 https://raw.githubusercontent.com/mashirochan/Mashiro-chan/master/Plugins/PasteSend/PasteSend.plugin.js
 https://raw.githubusercontent.com/mashirochan/Mashiro-chan/master/Plugins/TransparencyPatcher/TransparencyPatcher.plugin.js
+https://raw.githubusercontent.com/megamit/repository/gh-pages/renamer/1.5.4/renamer.plugin.js
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/BetterNsfwTag/BetterNsfwTag.plugin.js
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/CharCounter/CharCounter.plugin.js
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ChatAliases/ChatAliases.plugin.js
