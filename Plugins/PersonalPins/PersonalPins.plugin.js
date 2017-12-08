@@ -507,6 +507,7 @@ class PersonalPins {
 					.on("click." + this.getName(), ".jump-button.copy", (e) => {
 						let clipboard = require("electron").clipboard;
 						if (messageData.content) clipboard.write({text: messageData.content});
+						else if (message.querySelector(".markup").innerText) clipboard.write({text: message.querySelector(".markup").innerText});
 						else {
 							var image = message.querySelector(".attachment-image .image");
 							if (image) {
