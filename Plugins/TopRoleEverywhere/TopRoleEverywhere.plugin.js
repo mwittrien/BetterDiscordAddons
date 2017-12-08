@@ -39,7 +39,7 @@ class TopRoleEverywhere {
 
 	getDescription () {return "Adds the highest role of a user as a tag.";}
 
-	getVersion () {return "2.4.3";}
+	getVersion () {return "2.4.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -299,12 +299,12 @@ class TopRoleEverywhere {
 					else if (rolesSameColor.length > 1) {
 						member.click();
 						document.querySelector(".popout").style.display = "none";
-						var foundRoles = document.querySelectorAll(".member-role");
-						document.querySelectorAll(".member-role").forEach(node=>{node.parentElement.removeChild(node)});
+						var foundRoles = document.querySelectorAll(".role-3rahR_");
+						document.querySelectorAll(".role-3rahR_").forEach(node=>{node.parentElement.removeChild(node)});
 						for (var j = 0; j < rolesSameColor.length; j++) {
 							for (var k = 0; k < foundRoles.length; k++) {
-								var thisRoleName = foundRoles[k].querySelector(".name").innerText || foundRoles[k].querySelector(".name").textContent;
-								var thisRoleColor = BDfunctionsDevilBro.color2HEX(foundRoles[k].style.color);
+								var thisRoleName = foundRoles[k].querySelector(".roleName-DUQZ9m").innerText;
+								var thisRoleColor = BDfunctionsDevilBro.color2HEX(foundRoles[k].querySelector(".roleCircle-3-vPZq").style.backgroundColor);
 								if (thisRoleName == rolesSameColor[j].roleName && BDfunctionsDevilBro.colorCOMPARE(thisRoleColor, rolesSameColor[j].colorString)) {
 									roleName = thisRoleName;
 									roleColor = BDfunctionsDevilBro.color2COMP(thisRoleColor);
@@ -317,11 +317,11 @@ class TopRoleEverywhere {
 					else if (rolesSameColor.length == 0) {
 						member.click();
 						document.querySelector(".popout").style.display = "none";
-						var foundRoles = document.querySelectorAll(".member-role");
-						document.querySelectorAll(".member-role").forEach(node=>{node.parentElement.removeChild(node)});
+						var foundRoles = document.querySelectorAll(".role-3rahR_");
+						document.querySelectorAll(".role-3rahR_").forEach(node=>{node.parentElement.removeChild(node)});
 						for (var l = 0; l < foundRoles.length; l++) {
-							var thisRoleName = foundRoles[l].querySelector(".name").innerText || foundRoles[k].querySelector(".name").textContent;
-							var thisRoleColor = BDfunctionsDevilBro.color2HEX(foundRoles[l].style.color);
+							var thisRoleName = foundRoles[l].querySelector(".roleName-DUQZ9m").innerText;
+							var thisRoleColor = BDfunctionsDevilBro.color2HEX(foundRoles[l].querySelector(".roleCircle-3-vPZq").style.backgroundColor);
 							if (BDfunctionsDevilBro.colorCOMPARE(thisRoleColor, styleInfo.color)) {
 								roleName = thisRoleName;
 								roleColor = BDfunctionsDevilBro.color2COMP(thisRoleColor);
