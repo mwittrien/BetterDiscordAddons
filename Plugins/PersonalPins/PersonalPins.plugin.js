@@ -106,7 +106,8 @@ class PersonalPins {
 				</div>
 				<div class="sink-interactions clickable"></div>
 				<div class="action-buttons">
-					<div class="jump-button"><div class="text">REPLACE_popout_jump_text</div></div>
+					<div class="jump-button jump"><div class="text">REPLACE_popout_jump_text</div></div>
+					<div class="jump-button copy"><div class="text">REPLACE_popout_copy_text</div></div>
 					<div class="close-button"></div>
 				</div>
 			</div>`;
@@ -116,7 +117,7 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.2.4";}
+	getVersion () {return "1.2.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -283,6 +284,7 @@ class PersonalPins {
 		this.notesPopoutMarkup = 			this.notesPopoutMarkup.replace("REPLACE_popout_messagesort_text", this.labels.popout_messagesort_text);
 		
 		this.messageMarkup = 				this.messageMarkup.replace("REPLACE_popout_jump_text", this.labels.popout_jump_text);
+		this.messageMarkup = 				this.messageMarkup.replace("REPLACE_popout_copy_text", this.labels.popout_copy_text);
 		
 		this.sortPopoutMarkup = 			this.sortPopoutMarkup.replace("REPLACE_popout_messagesort_text", this.labels.popout_messagesort_text);
 		this.sortPopoutMarkup = 			this.sortPopoutMarkup.replace("REPLACE_popout_datesort_text", this.labels.popout_datesort_text);
@@ -500,8 +502,33 @@ class PersonalPins {
 						if (!container.querySelector(".message-group")) $(placeholder).show();
 						BDfunctionsDevilBro.showToast(this.labels.toast_noteremove_text, {type:"danger"});
 					})
-					.on("click." + this.getName(), ".jump-button", (e) => {
+					.on("click." + this.getName(), ".jump-button.jump", (e) => {
 						this.HistoryUtils.transitionTo(this.MainDiscord.Routes.MESSAGE(messageData.server, messageData.channel, messageData.id));
+					})
+					.on("click." + this.getName(), ".jump-button.copy", (e) => {
+						let clipboard = require("electron").clipboard;
+						var text = message.querySelector(".markup").innerText;
+						if (text) clipboard.write({text: text});
+						else {
+							var image = message.querySelector(".attachment-image .image");
+							if (image) {
+								// stolen from Image2Clipboard
+								require("request")({url: image.src, encoding: null}, (error, response, buffer) => {
+									if (buffer) {
+										var platform = require("process").platform;
+										if (platform === "win32" || platform === "darwin") {
+											clipboard.write({image: require("electron").nativeImage.createFromBuffer(buffer)});
+										}
+										else {
+											var file = require("path").join(require("process").env["HOME"], "personalpinstemp.png");
+											require("fs").writeFileSync(file, buffer, {encoding: null});
+											clipboard.write({image: file});
+											require("fs").unlinkSync(file);
+										}
+									}
+								});
+							}
+						}
 					});
 				}
 			}
@@ -520,6 +547,7 @@ class PersonalPins {
 					popout_messagesort_text: 		"Meddelelse-Dato",
 					popout_datesort_text: 			"Note-Dato",
 					popout_jump_text: 				"Hop",
+					popout_copy_text: 				"Kopi",
 					context_noteoption_text: 		"Noter Meddelelse",
 					popout_noteoption_text: 		"Noter",
 					toast_noteadd_text: 			"Meddelelse tilføjet til notesbog.",
@@ -535,6 +563,7 @@ class PersonalPins {
 					popout_messagesort_text: 		"Nachrichten-Datum",
 					popout_datesort_text: 			"Notiz-Datum",
 					popout_jump_text: 				"Springen",
+					popout_copy_text: 				"Kopieren",
 					context_noteoption_text: 		"Nachricht notieren",
 					popout_noteoption_text: 		"Notieren",
 					toast_noteadd_text: 			"Nachricht zum Notizbuch hinzugefügt.",
@@ -550,6 +579,7 @@ class PersonalPins {
 					popout_messagesort_text: 		"Mensaje-Fecha",
 					popout_datesort_text: 			"Nota-Fecha",
 					popout_jump_text: 				"Ir a",
+					popout_copy_text: 				"Copiar",
 					context_noteoption_text: 		"Anotar mensaje",
 					popout_noteoption_text: 		"Anotar",
 					toast_noteadd_text: 			"Mensaje agregado al cuaderno.",
@@ -565,6 +595,7 @@ class PersonalPins {
 					popout_messagesort_text: 		"Message-Date",
 					popout_datesort_text: 			"Note-Date",
 					popout_jump_text: 				"Accéder",
+					popout_copy_text:				"Copier",
 					context_noteoption_text: 		"Noter le message",
 					popout_noteoption_text: 		"Noter",
 					toast_noteadd_text: 			"Message ajouté au bloc-notes.",
@@ -580,6 +611,7 @@ class PersonalPins {
 					popout_messagesort_text: 		"Messaggio-Data",
 					popout_datesort_text: 			"Nota-Data",
 					popout_jump_text: 				"Vai",
+					popout_copy_text:				"Copiare",
 					context_noteoption_text: 		"Annotare il messaggio",
 					popout_noteoption_text: 		"Annotare",
 					toast_noteadd_text: 			"Messaggio aggiunto al blocco note.",
@@ -595,6 +627,7 @@ class PersonalPins {
 					popout_messagesort_text: 		"Bericht-Datum",
 					popout_datesort_text: 			"Notitie-Datum",
 					popout_jump_text: 				"Openen",
+					popout_copy_text:				"Kopiëren",
 					context_noteoption_text: 		"Noteer bericht",
 					popout_noteoption_text: 		"Noteer",
 					toast_noteadd_text: 			"Bericht toegevoegd aan notitieblok.",
@@ -610,6 +643,7 @@ class PersonalPins {
 					popout_messagesort_text: 		"Melding-Dato",
 					popout_datesort_text: 			"Merknad-Dato",
 					popout_jump_text: 				"Hoppe",
+					popout_copy_text:				"Kopiere",
 					context_noteoption_text: 		"Notat ned meldingen",
 					popout_noteoption_text: 		"Notere",
 					toast_noteadd_text: 			"Melding lagt til i notisboken.",
@@ -625,6 +659,7 @@ class PersonalPins {
 					popout_messagesort_text: 		"Wiadomość-data",
 					popout_datesort_text: 			"Notatka-Data",
 					popout_jump_text: 				"Skocz",
+					popout_copy_text:				"Kopiować",
 					context_noteoption_text: 		"Notuj wiadomość",
 					popout_noteoption_text: 		"Notuj",
 					toast_noteadd_text: 			"Wiadomość została dodana do notatnika.",
@@ -640,6 +675,7 @@ class PersonalPins {
 					popout_messagesort_text: 		"Mensagem-Data",
 					popout_datesort_text: 			"Nota-Data",
 					popout_jump_text: 				"Pular",
+					popout_copy_text:				"Copiar",
 					context_noteoption_text: 		"Anote a mensagem",
 					popout_noteoption_text: 		"Anotar",
 					toast_noteadd_text: 			"Mensagem adicionada ao caderno.",
@@ -655,6 +691,7 @@ class PersonalPins {
 					popout_messagesort_text: 		"Viesti-Päivämäärä",
 					popout_datesort_text: 			"Huomaa-Päivämäärä",
 					popout_jump_text: 				"Siirry",
+					popout_copy_text:				"Kopioida",
 					context_noteoption_text: 		"Huomaa viesti",
 					popout_noteoption_text: 		"Huomaa",
 					toast_noteadd_text: 			"Viesti lisätty muistikirjaan.",
@@ -670,6 +707,7 @@ class PersonalPins {
 					popout_messagesort_text: 		"Meddelande-Datum",
 					popout_datesort_text: 			"Anteckningen-Datum",
 					popout_jump_text: 				"Hoppa",
+					popout_copy_text:				"Kopiera",
 					context_noteoption_text: 		"Anteckna meddelande",
 					popout_noteoption_text: 		"Anteckna",
 					toast_noteadd_text: 			"Meddelandet läggs till i anteckningsboken.",
@@ -685,6 +723,7 @@ class PersonalPins {
 					popout_messagesort_text: 		"Mesaj-Tarih",
 					popout_datesort_text: 			"Not-Tarih",
 					popout_jump_text: 				"Git",
+					popout_copy_text:				"Kopyalamak",
 					context_noteoption_text: 		"Mesajı not alın",
 					popout_noteoption_text: 		"Not almak",
 					toast_noteadd_text: 			"Mesaj not defteri'ya eklendi.",
@@ -700,6 +739,7 @@ class PersonalPins {
 					popout_messagesort_text: 		"Zpráva-datum",
 					popout_datesort_text: 			"Poznámka-datum",
 					popout_jump_text: 				"Skok",
+					popout_copy_text:				"Kopírovat",
 					context_noteoption_text: 		"Poznámka dolů zprávu",
 					popout_noteoption_text: 		"Poznámka dolů",
 					toast_noteadd_text: 			"Zpráva byla přidána do notebooku.",
@@ -715,6 +755,7 @@ class PersonalPins {
 					popout_messagesort_text: 		"Съобщение-Дата",
 					popout_datesort_text: 			"Забележка-Дата",
 					popout_jump_text: 				"Направо",
+					popout_copy_text:				"Копирам",
 					context_noteoption_text: 		"Oтбележете съобщението",
 					popout_noteoption_text: 		"Oтбележете",
 					toast_noteadd_text: 			"Съобщението бе добавено към бележника.",
@@ -730,6 +771,7 @@ class PersonalPins {
 					popout_messagesort_text: 		"Сообщение-дата",
 					popout_datesort_text: 			"Заметки-Дата",
 					popout_jump_text: 				"Перейти",
+					popout_copy_text:				"Копировать",
 					context_noteoption_text: 		"Записывать вниз",
 					popout_noteoption_text: 		"Записывать",
 					toast_noteadd_text: 			"Сообщение добавлено в блокнот.",
@@ -745,6 +787,7 @@ class PersonalPins {
 					popout_messagesort_text: 		"Повідомлення-дата",
 					popout_datesort_text: 			"Примітка-дата",
 					popout_jump_text: 				"Плиг",
+					popout_copy_text:				"Копіювати",
 					context_noteoption_text: 		"Зверніть увагу на повідомлення",
 					popout_noteoption_text: 		"Занотуйте",
 					toast_noteadd_text: 			"Повідомлення додається до ноутбука.",
@@ -760,6 +803,7 @@ class PersonalPins {
 					popout_messagesort_text: 		"メッセージ-日付",
 					popout_datesort_text: 			"注-日付",
 					popout_jump_text: 				"ジャンプ",
+					popout_copy_text:				"写す",
 					context_noteoption_text: 		"ノートダウンメッセージ",
 					popout_noteoption_text: 		"書き留める",
 					toast_noteadd_text: 			"ノートブックにメッセージが追加されました.",
@@ -775,6 +819,7 @@ class PersonalPins {
 					popout_messagesort_text: 		"消息-日期",
 					popout_datesort_text: 			"注-日期",
 					popout_jump_text: 				"跳到",
+					popout_copy_text:				"複製",
 					context_noteoption_text: 		"記下下來的消息",
 					popout_noteoption_text: 		"記下",
 					toast_noteadd_text: 			"消息添加到筆記本.",
@@ -790,6 +835,7 @@ class PersonalPins {
 					popout_messagesort_text: 		"메시지-날짜",
 					popout_datesort_text: 			"주-날짜",
 					popout_jump_text: 				"이동",
+					popout_copy_text:				"베끼다",
 					context_noteoption_text: 		"메모 다운 메시지",
 					popout_noteoption_text: 		"메모하다",
 					toast_noteadd_text: 			"노트북에 메시지 추가됨.",
@@ -805,6 +851,7 @@ class PersonalPins {
 					popout_messagesort_text: 		"Message-Date",
 					popout_datesort_text: 			"Note-Date",
 					popout_jump_text: 				"Jump",
+					popout_copy_text:				"Copy",
 					context_noteoption_text: 		"Note Message",
 					popout_noteoption_text: 		"Note",
 					toast_noteadd_text: 			"Message added to notebook.",
