@@ -117,7 +117,7 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.2.5";}
+	getVersion () {return "1.2.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -203,28 +203,10 @@ class PersonalPins {
 			
 			$(document).off("click." + this.getName(), ".btn-option").off("contextmenu." + this.getName(), ".message")
 				.on("click." + this.getName(), ".btn-option", (e) => {
-					var div = $(".message").has(e.currentTarget)[0];
-					if (div && !div.querySelector(".system-message")) {
-						this.message = {
-							"div": div,
-							"pos": $(".message-group").has(e.currentTarget).find(".message").index(div)
-						}
-					}
-					else {
-						this.message = null;
-					}
+					this.getMessageElements($(".message").has(e.currentTarget)[0]);
 				})
 				.on("contextmenu." + this.getName(), ".message", (e) => {
-					var div = e.currentTarget;
-					if (div && !div.querySelector(".system-message")) {
-						this.message = {
-							"div": div,
-							"pos": $(".message-group").has(e.currentTarget).find(".message").index(div)
-						}
-					}
-					else {
-						this.message = null;
-					}
+					this.getMessageElements(e.currentTarget);
 				});
 			
 			document.querySelectorAll(".messages-group .message").forEach(message => {this.addOptionButton(message);});
@@ -304,6 +286,20 @@ class PersonalPins {
 					});
 				break;
 			}
+		}
+	}
+	
+	getMessageElements (div) {
+		if (div && !div.querySelector(".system-message")) {
+			var messagegroup = $(".message-group").has(div);
+			this.message = {
+				"div": div,
+				"group": messagegroup[0],
+				"pos": messagegroup.find(".message").index(div)
+			}
+		}
+		else {
+			this.message = null;
 		}
 	}
 	
@@ -417,10 +413,12 @@ class PersonalPins {
 	
 	addMessageToNotes () {
 		if (!this.message) return;
-		var messageInfo = BDfunctionsDevilBro.getKeyInformation({"node":this.message.div.parentElement,"key":"message"});
+		console.log(BDfunctionsDevilBro.getReactInstance(this.message.div));
+		var messageInfo = BDfunctionsDevilBro.getKeyInformation({"node":this.message.group,"key":"messages"})[this.message.pos];
 		var guildInfo = BDfunctionsDevilBro.getKeyInformation({"node":document.querySelector(".chat"),"key":"guild"});
 		var channelInfo = BDfunctionsDevilBro.getKeyInformation({"node":document.querySelector(".chat"),"key":"channel"});
 		if (messageInfo && channelInfo) {
+			console.log(messageInfo);
 			var serverID = guildInfo ? guildInfo.id : "@me";
 			var channelID = channelInfo.id;
 			var data = BDfunctionsDevilBro.loadAllData(this.getName(), "servers");
@@ -440,6 +438,7 @@ class PersonalPins {
 				"color": messageInfo.colorString,
 				"author": messageInfo.author.username,
 				"avatar": "url('https://cdn.discordapp.com/avatars/" + messageInfo.author.id + "/" + messageInfo.author.avatar + ".webp')",
+				"content": messageInfo.content,
 				"markup": this.message.div.querySelector(".markup").innerHTML,
 				"accessory": this.message.div.querySelector(".accessory").innerHTML
 			};
@@ -507,8 +506,7 @@ class PersonalPins {
 					})
 					.on("click." + this.getName(), ".jump-button.copy", (e) => {
 						let clipboard = require("electron").clipboard;
-						var text = message.querySelector(".markup").innerText;
-						if (text) clipboard.write({text: text});
+						if (messageData.content) clipboard.write({text: messageData.content});
 						else {
 							var image = message.querySelector(".attachment-image .image");
 							if (image) {
