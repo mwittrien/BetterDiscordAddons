@@ -40,7 +40,7 @@ class NotificationSounds {
 
 	getDescription () {return "Creates a notification sound when you receive a notification (mention or DM).";}
 
-	getVersion () {return "2.5.7";}
+	getVersion () {return "2.5.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -53,6 +53,7 @@ class NotificationSounds {
 			for (var i in this.types) {
 				var type = this.types[i];
 				var choice = BDfunctionsDevilBro.loadData(type, this.getName(), "choices");
+				choice = choice ? choice : {};
 				settingshtml += `<label style="color:grey;">${type}-Sound:</label><div class="${type}-song-settings" style="margin:0px 0px 0px 0px; overflow:hidden;">`;
 				settingshtml += `<div class="category-select-wrapper" style="margin:0px 20px 0px 0px; float:left;"><select soundtype="${type}" class="category-select" id="${type}-category-select" style="width:150px; height: 25px;">`;
 				for (var category in songs) {
@@ -277,6 +278,7 @@ class NotificationSounds {
 	playAudio (type) {
 		if (BDfunctionsDevilBro.loadData(type, this.getName(), "dnddisable") && BDfunctionsDevilBro.getMyUserStatus() == "dnd") return;
 		var choice = BDfunctionsDevilBro.loadData(type, this.getName(), "choices");
+		choice = choice ? choice : {};
 		var songs = BDfunctionsDevilBro.loadAllData(this.getName(), "songs");
 		
 		for (var category in songs) {
@@ -310,19 +312,18 @@ class NotificationSounds {
 		for (var i in this.types) {
 			var type = this.types[i];
 			var choice = BDfunctionsDevilBro.loadData(type, this.getName(), "choices");
+			choice = choice ? choice : {};
 			var songs = BDfunctionsDevilBro.loadAllData(this.getName(), "songs");
 			
 			var songFound = false;
-			if (choice) {
-				for (var category in songs) {
-					if (choice.category == category) {
-						for (var song in songs[category]) {
-							if (choice.song == song) {
-								var volume = choice.volume ? choice.volume : "100";
-								choice = {"category":category,"song":song,"volume":volume};
-								songFound = true;
-								break;
-							}
+			for (var category in songs) {
+				if (choice.category == category) {
+					for (var song in songs[category]) {
+						if (choice.song == song) {
+							var volume = choice.volume ? choice.volume : "100";
+							choice = {"category":category,"song":song,"volume":volume};
+							songFound = true;
+							break;
 						}
 					}
 				}
