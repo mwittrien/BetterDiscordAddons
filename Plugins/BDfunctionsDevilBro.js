@@ -528,7 +528,7 @@ BDfunctionsDevilBro.findInWebModules = function (filter) {
 };
 
 BDfunctionsDevilBro.findInWebModulesByName = function (names) {
-	return BDfunctionsDevilBro.findInWebModules(module => name.every(prop => module[prop] !== undefined));
+	return BDfunctionsDevilBro.findInWebModules(module => names.every(prop => module[prop] !== undefined));
 };
 
 BDfunctionsDevilBro.getLanguageTable = function (lang) {
