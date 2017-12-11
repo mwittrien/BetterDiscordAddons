@@ -840,6 +840,14 @@ BDfunctionsDevilBro.sortArrayByKey = function (array, key, except) {
 	});
 };
 
+BDfunctionsDevilBro.getAllIndexes = function (array, val) {
+    var indexes = [], i = -1;
+    while ((i = array.indexOf(val, i+1)) != -1){
+        indexes.push(i);
+    }
+    return indexes;
+};
+
 BDfunctionsDevilBro.color2COMP = function (color) {
 	if (color) {
 		switch (BDfunctionsDevilBro.checkColorType(color)) {
