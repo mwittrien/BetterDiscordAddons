@@ -13,10 +13,6 @@ class EmojiStatistics {
 		this.serverInformation;
 		
 		this.css = `
-			.emojistatistics-modal .modal-3HOjGZ {
-				width: 680px;
-			}
-			
 			.emojistatistics-modal .titles {
 				height: 20px;
 			}
@@ -73,7 +69,7 @@ class EmojiStatistics {
 			
 			.emojistatistics-modal .titles-entry .modal-titlesservername-label,
 			.emojistatistics-modal .emojiserver-entry .modal-emojiservername-label {
-				width: 180px;
+				width: 300px;
 			}
 			
 			.emojistatistics-modal .titles-entry .modal-titlestotal-label,
@@ -119,7 +115,7 @@ class EmojiStatistics {
 				<div class="backdrop-2ohBEd"></div>
 				<div class="modal-2LIEKY">
 					<div class="inner-1_1f7b">
-						<div class="modal-3HOjGZ sizeMedium-1-2BNS">
+						<div class="modal-3HOjGZ sizeLarge-1AHXtx">
 							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO header-3sp3cE" style="flex: 0 0 auto;">
 								<div class="flexChild-1KGW5q" style="flex: 1 1 auto;">
 									<h4 class="h4-2IXpeI title-1pmpPr size16-3IvaX_ height20-165WbF weightSemiBold-T8sxWH defaultColor-v22dK1 defaultMarginh4-jAopYe marginReset-3hwONl">REPLACE_modal_header_text</h4>
@@ -176,15 +172,21 @@ class EmojiStatistics {
 
 	getDescription () {return "Adds some helpful options to show you more information about emojis and emojiservers.";}
 
-	getVersion () {return "2.6.1";}
+	getVersion () {return "2.6.2";}
 
 	getAuthor () {return "DevilBro";}
 
     getSettingsPanel () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			return `
-			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="enableEmojiHovering"${(this.getSettings().enableEmojiHovering ? " checked" : void 0)}> Show emojiinformation when hovering over an emoji in the emojipicker.</label><br>\n
-			<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="enableEmojiStatisticsButton"${(this.getSettings().enableEmojiStatisticsButton ? " checked" : void 0)}> Add a button in the emojipicker to open statistics overview.</label>`;
+			var settings = this.getSettings();
+			var settingspanel = 
+				$(`<div class="${this.getName()}-settings">
+					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="enableEmojiHovering"${settings.enableEmojiHovering ? " checked" : void 0}>Show emojiinformation when hovering over an emoji in the emojipicker.</label><br>
+					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="enableEmojiStatisticsButton"${settings.enableEmojiStatisticsButton ? " checked" : void 0}>Add a button in the emojipicker to open the statistics overview.</label>
+				</div>`)[0];
+			$(settingspanel)
+				.on("change", ".settings-checkbox", () => {this.updateSettings(settingspanel);});
+			return settingspanel;
 		}
     }
 
@@ -270,14 +272,13 @@ class EmojiStatistics {
 		return settings;
 	}
 
-    static updateSettings (ele, pluginName) {
-		var settingspanel = BDfunctionsDevilBro.getSettingsPanelDiv(ele);
+    updateSettings (settingspanel) {
 		var settings = {};
-		var inputs = settingspanel.querySelectorAll("input");
+		var inputs = settingspanel.querySelectorAll(".settings-checkbox");
 		for (var i = 0; i < inputs.length; i++) {
 			settings[inputs[i].value] = inputs[i].checked;
 		}
-		BDfunctionsDevilBro.saveAllData(settings, pluginName, "settings");
+		BDfunctionsDevilBro.saveAllData(settings, this.getName(), "settings");
     }
 	
 	changeLanguageStrings () {
