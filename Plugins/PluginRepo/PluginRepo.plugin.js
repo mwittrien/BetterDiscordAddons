@@ -62,7 +62,7 @@ class PluginRepo {
 									</div>
 									<div class="mention-filter sort-filter">
 										<div class="label">Sort by:</div>
-										<div option="Name" class="value" style="text-transform:none;">Name</div>
+										<div option="name" class="value" style="text-transform:none;">Name</div>
 									</div>
 									<div class="mention-filter order-filter">
 										<div class="label">Order:</div>
@@ -114,11 +114,12 @@ class PluginRepo {
 				<div>
 					<div class="context-menu recent-mentions-filter-popout">
 						<div class="item-group">
-							<div option="Name" class="item">Name</div>
-							<div option="Author" class="item">Author</div>
-							<div option="Version" class="item">Version</div>
-							<div option="State" class="item">Update Status</div>
-							<div option="Fav" class="item">Favorites</div>
+							<div option="name" class="item">Name</div>
+							<div option="author" class="item">Author</div>
+							<div option="version" class="item">Version</div>
+							<div option="description" class="item">Description</div>
+							<div option="state" class="item">Update Status</div>
+							<div option="fav" class="item">Favorites</div>
 						</div>
 					</div>
 				</div>
@@ -191,6 +192,9 @@ class PluginRepo {
 				right: 5px; 
 				bottom: 10px;
 			}
+			.pluginrepo-modal .pluginEntry.downloadable .btn-download {
+				background-color: rgb(114, 137, 218) !important;
+			}
 			.pluginrepo-modal .pluginEntry.outdated .btn-download {
 				background-color: rgb(240, 71, 71) !important;
 			}
@@ -203,7 +207,7 @@ class PluginRepo {
 
 	getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
 
-	getVersion () {return "1.1.2";}
+	getVersion () {return "1.1.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -317,17 +321,13 @@ class PluginRepo {
 		else pluginRepoModal.find("#input-rnmstart").prop("checked", BDfunctionsDevilBro.loadData("RNMstart", this.getName(), "settings"));
 		pluginRepoModal
 			.on("keyup." + this.getName(), "#input-search", (e) => {
-				if (e.which == 13) {
-					pluginRepoModal.updateModal = true;
-					pluginRepoModal.enableSearch = true;
-					this.addPluginEntries(pluginRepoModal);	
-				}
+				clearTimeout(pluginRepoModal.searchTimeout);
+				pluginRepoModal.searchTimeout = setTimeout(() => {this.addPluginEntries(pluginRepoModal);},1000);
 			})
 			.on("change." + this.getName(), ".hide-checkbox", (e) => {
 				var hideButton = $(e.currentTarget);
 				hiddenSettings[hideButton.val()] = hideButton.prop("checked");
 				BDfunctionsDevilBro.saveAllData(hiddenSettings, this.getName(), "hidden");
-				pluginRepoModal.updateModal = true;
 			})
 			.on("change." + this.getName(), "#input-rnmstart", (e) => {
 				BDfunctionsDevilBro.saveData("RNMstart", $(e.currentTarget).prop("checked"), this.getName(), "settings");
@@ -342,7 +342,7 @@ class PluginRepo {
 				this.addPluginEntries(pluginRepoModal);
 			});
 			
-		this.addPluginEntries(pluginRepoModal);
+		this.createPluginEntries(pluginRepoModal);
 			
 		BDfunctionsDevilBro.appendModal(pluginRepoModal);
 	}
@@ -360,7 +360,6 @@ class PluginRepo {
 				value.attr("option", $(e2.currentTarget).attr("option"));
 				$(document).off("mousedown.sortpopout" + this.getName());
 				popout.remove();
-				modal.updateModal = true;
 				this.addPluginEntries(modal);
 				setTimeout(() => {wrapper.classList.remove("popout-open");},300);
 			});
@@ -379,85 +378,113 @@ class PluginRepo {
 		});
 	}
 	
-	addPluginEntries (modal) {
-		if (!modal.updateModal) return;
-		modal.updateModal = false;
-		modal.find(".pluginEntry").remove();
+	createPluginEntries (modal) {
 		var favorites = BDfunctionsDevilBro.loadAllData(this.getName(), "favorites");
-		var plugins = [];
-		for (var url in this.loadedPlugins) {
-			this.loadedPlugins[url].getFav = favorites[url] ? 0 : 1;
-			var installedPlugin = window.bdplugins[this.loadedPlugins[url].getName] ? window.bdplugins[this.loadedPlugins[url].getName].plugin : null;
-			if (installedPlugin && installedPlugin.getAuthor().toUpperCase() == this.loadedPlugins[url].getAuthor.toUpperCase()) {
-				if (installedPlugin.getVersion() != this.loadedPlugins[url].getVersion) {
-					this.loadedPlugins[url].getState = 1;
-				}
-				else {
-					this.loadedPlugins[url].getState = 0;
-				}
-			}
-			else {
-				this.loadedPlugins[url].getState = 2;
-			}
-			plugins.push(this.loadedPlugins[url]);
-		}
-		if (modal.find("#input-hideupdated").prop("checked")) 		plugins = plugins.filter((plugin) => {return plugin.getState != 0 ? plugin : null;});
-		if (modal.find("#input-hideoutdated").prop("checked")) 		plugins = plugins.filter((plugin) => {return plugin.getState != 1 ? plugin : null;});
-		if (modal.find("#input-hidedownloadable").prop("checked")) 	plugins = plugins.filter((plugin) => {return plugin.getState != 2 ? plugin : null;});
-		if (modal.enableSearch) {
-			var searchInput = modal.find("#input-search");
-			plugins = plugins.filter((plugin) => {
-				var pluginText = plugin.getName + " " + plugin.getVersion + " " + plugin.getAuthor + " " + plugin.getDescription;
-				return pluginText.toLowerCase().indexOf(searchInput.val().toLowerCase()) > -1 ? plugin : null;
-			});
-			modal.enableSearch = false;
-			searchInput.val("");
-		}
-		plugins = BDfunctionsDevilBro.sortArrayByKey(plugins, "get" + modal.find(".sort-filter .value").attr("option"));
-		if (modal.find(".order-filter .value").attr("option") == "desc") plugins.reverse();
-		modal.find(".pluginAmount").text("Plugin Repository " + plugins.length + "/" + Object.keys(this.loadedPlugins).length + " Plugins");
-		for (let plugin of plugins) {
-			let entry = $(this.pluginEntryMarkup);
-			modal.find(".plugins").append(entry);
-			entry.find(".bda-name").html(plugin.getName + " v" + plugin.getVersion + " by " + plugin.getAuthor);
-			entry.find(".bda-description").html(plugin.getDescription ? plugin.getDescription : "No Description found.");
-			if (plugin.getState != 2) {
-				if (plugin.getState == 1) {
-					entry.addClass("outdated")
+		modal.entries = [];
+		for (let url in this.loadedPlugins) {
+			let plugin = this.loadedPlugins[url];
+			let div = $(this.pluginEntryMarkup);
+			div.find(".bda-name").html(plugin.getName + " v" + plugin.getVersion + " by " + plugin.getAuthor);
+			div.find(".bda-description").html(plugin.getDescription ? plugin.getDescription : "No Description found.");
+			
+			var installedPlugin = window.bdplugins[plugin.getName] ? window.bdplugins[plugin.getName].plugin : null;
+			if (installedPlugin && installedPlugin.getAuthor().toUpperCase() == plugin.getAuthor.toUpperCase()) {
+				if (installedPlugin.getVersion() != plugin.getVersion) {
+					plugin.getState = 1;
+					div.addClass("outdated")
 						.find(".btn-download div").text("Outdated");
 				}
 				else {
-					entry.addClass("updated")
+					plugin.getState = 0;
+					div.addClass("updated")
 						.find(".btn-download div").text("Updated");
 				}
 			}
-			if (plugin.getFav == 0) entry.find(".favIcon")[0].classList.add("favorized");
-			entry
+			else {
+				plugin.getState = 2;
+				div.addClass("download")
+					.find(".btn-download div").text("Download");
+			}
+			if (favorites[url]) {
+				plugin.getFav = 0;
+				div.find(".favIcon")[0].classList.add("favorized");
+			}
+			else {
+				plugin.getFav = 1;
+				div.find(".favIcon")[0].classList.remove("favorized");
+			}
+				
+			modal.entries.push({
+				div: div,
+				url: plugin.url,
+				search: (plugin.getName + " " + plugin.getVersion + " " + plugin.getAuthor + " " + plugin.getDescription).toUpperCase(),
+				name: plugin.getName,
+				version: plugin.getVersion,
+				author: plugin.getAuthor,
+				description: plugin.getDescription,
+				fav: plugin.getFav,
+				state: plugin.getState
+			});
+		}
+		this.addPluginEntries(modal);
+	}
+	
+	addPluginEntries (modal) {
+		if (typeof modal.entries != "object") return;
+		modal.find(".pluginEntry").remove();
+		
+		var entries = modal.entries;
+		if (modal.find("#input-hideupdated").prop("checked")) 		entries = entries.filter((entry) => {return entry.state != 0 ? entry : null;});
+		if (modal.find("#input-hideoutdated").prop("checked")) 		entries = entries.filter((entry) => {return entry.state != 1 ? entry : null;});
+		if (modal.find("#input-hidedownloadable").prop("checked")) 	entries = entries.filter((entry) => {return entry.state != 2 ? entry : null;});
+		entries = entries.filter((entry) => {return entry.search.indexOf(modal.find("#input-search").val().toUpperCase()) > -1 ? entry : null;});
+		entries = BDfunctionsDevilBro.sortArrayByKey(entries, modal.find(".sort-filter .value").attr("option"));
+		if (modal.find(".order-filter .value").attr("option") == "desc") entries.reverse();
+		
+		modal.find(".pluginAmount").text("Plugin Repository " + entries.length + "/" + Object.keys(this.loadedPlugins).length + " Plugins");
+		
+		var container = modal.find(".plugins");
+		entries.forEach((entry) => {
+			var div = $(entry.div);
+			div
 				.on("click." + this.getName(), ".favIcon", (e) => {
 					e.currentTarget.classList.toggle("favorized");
-					if (e.currentTarget.classList.contains("favorized")) favorites[plugin.url] = true;
-					else delete favorites[plugin.url];
-					BDfunctionsDevilBro.saveAllData(favorites, this.getName(), "favorites");
+					if (e.currentTarget.classList.contains("favorized")) {
+						entry.fav = 0;
+						BDfunctionsDevilBro.saveData(entry.url, true, this.getName(), "favorites");
+					}
+					else {
+						entry.fav = 1;
+						BDfunctionsDevilBro.removeData(entry.url, this.getName(), "favorites");
+					}
 				})
 				.on("click." + this.getName(), ".gitIcon", (e) => {
 					var giturl = null;
-					if (plugin.url.indexOf("https://raw.githubusercontent.com") == 0) {
-						giturl = plugin.url.replace("//raw.githubusercontent", "//github").replace("/master/", "/blob/master/");
+					if (entry.url.indexOf("https://raw.githubusercontent.com") == 0) {
+						giturl = entry.url.replace("//raw.githubusercontent", "//github").replace("/master/", "/blob/master/");
 					}
-					else if (plugin.url.indexOf("https://gist.githubusercontent.com/") == 0) {
-						giturl = plugin.url.replace("//gist.githubusercontent", "//gist.github").split("/raw/")[0];
+					else if (entry.url.indexOf("https://gist.githubusercontent.com/") == 0) {
+						giturl = entry.url.replace("//gist.githubusercontent", "//gist.github").split("/raw/")[0];
 					}
 					if (giturl) {
 						window.open(giturl, "_blank");
 					}
 				})
 				.on("click." + this.getName(), ".trashIcon", () => {
-					if (entry.hasClass("outdated") || entry.hasClass("updated")) {
-						entry.removeClass("outdated").removeClass("updated")
+					if (div.hasClass("outdated") || div.hasClass("updated")) {
+						entry.state = 2;
+						div.removeClass("outdated").removeClass("updated")
 							.find(".btn-download div").text("Download");
-						this.deletePluginFile(plugin);
-						if (!BDfunctionsDevilBro.isRestartNoMoreEnabled()) stopPlugin(plugin);
+						this.deletePluginFile(entry);
+						if (!BDfunctionsDevilBro.isRestartNoMoreEnabled()) stopPlugin(entry);
 					}
+				})
+				.on("click." + this.getName(), ".btn-download", () => {
+					entry.state = 0;
+					div.removeClass("outdated").addClass("updated")
+						.find(".btn-download div").text("Updated");
+					this.downloadPlugin(entry);
+					if (modal.find("#input-rnmstart").prop("checked")) setTimeout(() => {this.startPlugin(entry);},3000);
 				})
 				.on("mouseenter." + this.getName(), ".favIcon", (e) => {
 					BDfunctionsDevilBro.createTooltip("Favorize", e.currentTarget, {type:"top",selector:"pluginrepo-favicon-tooltip"});
@@ -467,14 +494,10 @@ class PluginRepo {
 				})
 				.on("mouseenter." + this.getName(), ".trashIcon", (e) => {
 					BDfunctionsDevilBro.createTooltip("Delete Pluginfile", e.currentTarget, {type:"top",selector:"pluginrepo-trashIcon-tooltip"});
-				})
-				.on("click." + this.getName(), ".btn-download", () => {
-					entry.removeClass("outdated").addClass("updated")
-						.find(".btn-download div").text("Updated");
-					this.downloadPlugin(plugin);
-					if (modal.find("#input-rnmstart").prop("checked")) setTimeout(() => {this.startPlugin(plugin);},3000);
 				});
-		}
+				
+			container.append(div);
+		});
 	}
 	
 	loadPlugins () {
@@ -598,14 +621,14 @@ class PluginRepo {
 		});
 	}
 	
-	downloadPlugin (plugin) {
+	downloadPlugin (entry) {
 		let request = require("request");
-		request(plugin.url, (error, response, body) => {
+		request(entry.url, (error, response, body) => {
 			if (error) {
 				BDfunctionsDevilBro.showToast(`Unable to download Plugin "${plugin.getName}".`, {type:"danger"});
 			}
 			else {
-				let filename = plugin.url.split("/");
+				let filename = entry.url.split("/");
 				this.createPluginFile(filename[filename.length - 1], body);
 			}
 		});
@@ -625,8 +648,8 @@ class PluginRepo {
 		});
 	}
 	
-	startPlugin (plugin) {
-		var name = plugin.getName;
+	startPlugin (entry) {
+		var name = entry.name;
 		if (typeof window.bdplugins[name] == "object" && window.pluginCookie[name] == false) {
 			window.bdplugins[name].plugin.start();
 			window.pluginCookie[name] = true;
@@ -634,10 +657,10 @@ class PluginRepo {
 		}
 	}
 	
-	deletePluginFile (plugin) {
+	deletePluginFile (entry) {
 		let fileSystem = require("fs");
 		let path = require("path");
-		let filename = plugin.url.split("/");
+		let filename = entry.url.split("/");
 		filename = filename[filename.length - 1];
 		var file = path.join(BDfunctionsDevilBro.getPluginsFolder(), filename);
 		fileSystem.unlink(file, (error) => {
@@ -650,8 +673,8 @@ class PluginRepo {
 		});
 	}
 	
-	stopPlugin (plugin) {
-		var name = plugin.getName;
+	stopPlugin (entry) {
+		var name = entry.name;
 		if (typeof window.bdplugins[name] == "object" && window.pluginCookie[name] == true) {
 			window.bdplugins[name].plugin.stop();
 			window.pluginCookie[name] = false;
