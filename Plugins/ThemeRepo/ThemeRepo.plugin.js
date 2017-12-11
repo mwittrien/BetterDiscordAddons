@@ -264,7 +264,7 @@ class ThemeRepo {
 
 	getDescription () {return "Allows you to preview all themes from the theme repo and download them on the fly. Repo button is in the theme settings.";}
 
-	getVersion () {return "1.1.3";}
+	getVersion () {return "1.1.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -354,6 +354,8 @@ class ThemeRepo {
 	
 	addThemeRepoButton (container) {
 		if (container && !container.querySelector(".bd-themerepobutton")) {
+			$(container).find(".scroller").css("display", "block");
+			container.querySelectorAll(".bda-name, .bda-description").forEach(ele => {ele.innerHTML = ele.innerText;});
 			$(this.themeRepoButtonMarkup)
 				.insertAfter(container.querySelector(".bd-pfbtn"))
 				.on("click", () => {
@@ -498,8 +500,6 @@ class ThemeRepo {
 		for (let url in this.loadedThemes) {
 			let theme = this.loadedThemes[url];
 			let div = $(this.themeEntryMarkup);
-			div.find(".bda-name").html(theme.name + (theme.version ? " v" + theme.version : "") + (theme.author ? " by " + theme.author : ""));
-			div.find(".bda-description").html(theme.description);
 			
 			var installedTheme = window.bdthemes[this.loadedThemes[url].name];
 			if (installedTheme && installedTheme.author.toUpperCase() == theme.author.toUpperCase()) {
@@ -548,6 +548,8 @@ class ThemeRepo {
 		if (typeof modal.entries != "object") return;
 		modal.find(".themeEntry").remove();
 		
+		var searchstring = modal.find("#input-search").val().replace(/[<|>]/g, "").toUpperCase();
+		
 		var entries = modal.entries;
 		if (modal.find("#input-hideupdated").prop("checked")) 		entries = entries.filter((entry) => {return entry.state != 0 ? entry : null;});
 		if (modal.find("#input-hideoutdated").prop("checked")) 		entries = entries.filter((entry) => {return entry.state != 1 ? entry : null;});
@@ -560,7 +562,31 @@ class ThemeRepo {
 		
 		var container = modal.find(".themes");
 		entries.forEach((entry) => {
-			var div = $(entry.div);
+			var div = entry.div;
+			
+			var values = [entry.name, entry.version, entry.author, entry.description];
+			if (searchstring.length > 0) {
+				for (let i in values) {
+					let value = values[i];
+					let added = 0;
+					BDfunctionsDevilBro.getAllIndexes(value.toUpperCase(), searchstring).forEach((start) => {
+						let wrapperopen = "<span class='highlight'>";
+						let wrapperclose = "</span>";
+						let offset = added*(wrapperopen.length + wrapperclose.length);
+						start = start + offset;
+						let end = start + searchstring.length;
+						var openIndexes = [0].concat(BDfunctionsDevilBro.getAllIndexes(value.substring(0, start), "<"));
+						var closedIndexes = [0].concat(BDfunctionsDevilBro.getAllIndexes(value.substring(0, start), ">"));
+						if (openIndexes[openIndexes.length-1] > closedIndexes[closedIndexes.length-1]) return;
+						value = value.substring(0, start) + wrapperopen + value.substring(start, end) + wrapperclose + value.substring(end);
+						added++;
+					});
+					values[i] = value ? value : values[i];
+				}
+			}
+			div.find(".bda-name").html(values[0] + " v" + values[1] + " by " + values[2]);
+			div.find(".bda-description").html(values[3]);
+			
 			div
 				.on("change." + this.getName(), ".previewCheckbox", (e) => {
 					modal.find(".previewCheckbox").not(e.target).prop("checked", false);
