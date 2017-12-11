@@ -715,7 +715,7 @@ class ThemeRepo {
 	checkForNewThemes () {
 		let request = require("request");
 		request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/ThemeList.txt", (error, response, result) => {
-			if (response && !BDfunctionsDevilBro.equals(result.split("\n"), this.grabbedThemes)) this.loadedThemes();
+			if (response && !BDfunctionsDevilBro.equals(result.split("\n"), this.grabbedThemes)) this.loadThemes();
 		});
 	}
 	
