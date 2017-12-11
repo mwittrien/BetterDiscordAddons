@@ -527,6 +527,10 @@ BDfunctionsDevilBro.findInWebModules = function (filter) {
 	return null;
 };
 
+BDfunctionsDevilBro.findInWebModulesByName = function (name) {
+	return BDfunctionsDevilBro.findInWebModules(module => [name].every(prop => module[prop] !== undefined));
+};
+
 BDfunctionsDevilBro.getLanguageTable = function (lang) {
 	var ti = {
 		bg: "холандски", //bulgarian
