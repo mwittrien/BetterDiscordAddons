@@ -33,7 +33,7 @@ class SendLargeMessages {
 				<div class="backdrop-2ohBEd"></div>
 				<div class="modal-2LIEKY">
 					<div class="inner-1_1f7b">
-						<div class="modal-3HOjGZ sizeMedium-1-2BNS">
+						<div class="modal-3HOjGZ sizeLarge-1AHXtx">
 							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO header-3sp3cE" style="flex: 0 0 auto;">
 								<div class="flexChild-1KGW5q" style="flex: 1 1 auto;">
 									<h4 class="h4-2IXpeI title-1pmpPr size16-3IvaX_ height20-165WbF weightSemiBold-T8sxWH defaultColor-v22dK1 defaultMarginh4-jAopYe marginReset-3hwONl">REPLACE_modal_header_text</h4>
@@ -68,7 +68,7 @@ class SendLargeMessages {
 
 	getDescription () {return "Opens a popout when your message is too large, which allows you to automatically send the message in several smaller messages.";}
 
-	getVersion () {return "1.3.2";}
+	getVersion () {return "1.3.3";}
 
 	getAuthor () {return "DevilBro";}
 
