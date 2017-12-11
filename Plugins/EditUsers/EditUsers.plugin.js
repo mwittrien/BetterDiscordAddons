@@ -161,7 +161,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "2.0.0";}
+	getVersion () {return "2.0.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -736,7 +736,7 @@ class EditUsers {
 	}
 	
 	loadUser (div, type, compact) {
-		if (!div || $(div).attr("custom-editusers")) return;
+		if (!div || $(div).attr("custom-editusers") || !div.tagName || div.querySelector(".channel-activity")) return;
 		
 		let {avatar, username, wrapper} = this.getAvatarNameWrapper(div);
 		if (!avatar && !username && !wrapper) return;
@@ -824,6 +824,8 @@ class EditUsers {
 				var name = div.classList.contains("container-iksrDt") || !member || !member.nick ? info.username : member.nick;
 				var color1 = member && member.colorString ? BDfunctionsDevilBro.color2RGB(member.colorString) : "";
 				var color2 = "";
+				console.log(username);
+				
 				BDfunctionsDevilBro.setInnerText(username, name);
 				username.style.color = color1;
 				username.style.background = color2;
