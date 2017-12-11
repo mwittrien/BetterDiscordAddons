@@ -1032,12 +1032,14 @@ BDfunctionsDevilBro.checkColorType = function (color) {
 };
 
 BDfunctionsDevilBro.setInnerText = function (div, text) {
+	if (!div) return;
 	$(div).contents().filter(function() {
 		return this.nodeType == Node.TEXT_NODE;
 	})[0].textContent = text;
 }
 	
 BDfunctionsDevilBro.getInnerText = function (div) {
+	if (!div) return;
 	return $(div).contents().filter(function() {
 		return this.nodeType == Node.TEXT_NODE;
 	})[0].textContent;
