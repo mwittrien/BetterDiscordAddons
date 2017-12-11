@@ -4,8 +4,6 @@ class EditUsers {
 	constructor () {
 		
 		this.labels = {};
-		
-		this.nickNames = {};
 
 		this.switchFixObserver = new MutationObserver(() => {});
 		this.userContextObserver = new MutationObserver(() => {});
@@ -163,7 +161,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "1.9.9";}
+	getVersion () {return "2.0.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -205,6 +203,8 @@ class EditUsers {
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
+			
+			this.MemberPerms = BDfunctionsDevilBro.findInWebModulesByName(["getNicknames", "getNick"]);
 			
 			this.userContextObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -538,10 +538,12 @@ class EditUsers {
 		var color3 = 		data ? data.color3 : null;
 		var color4 = 		data ? data.color4 : null;
 		
+		var member = this.MemberPerms.getMember(BDfunctionsDevilBro.getIdOfServer(BDfunctionsDevilBro.getSelectedServer()), id);
+		
 		var userSettingsModal = $(this.userSettingsModalMarkup);
-		userSettingsModal.find(".guildName-1u0hy7").text(info.username);
+		userSettingsModal.find(".guildName-1u0hy7").text(member && member.nick ? member.nick : info.username);
 		userSettingsModal.find("#input-username").val(name);
-		userSettingsModal.find("#input-username").attr("placeholder", info.username);
+		userSettingsModal.find("#input-username").attr("placeholder", member && member.nick ? member.nick : info.username);
 		userSettingsModal.find("#input-usertag").val(tag);
 		userSettingsModal.find("#input-userurl").val(url);
 		userSettingsModal.find("#input-userurl").attr("placeholder", info.avatar ? "https://cdn.discordapp.com/avatars/" + id + "/" + info.avatar + ".webp" : null);
@@ -744,18 +746,13 @@ class EditUsers {
 		var info = this.getUserInfo(compact ? $(".message-group").has(div)[0] : div);
 		if (!info) return;
 		
-		var styleInfo = BDfunctionsDevilBro.getKeyInformation({"node":type == "list" ? div : wrapper,"key":"style","blackList":{"child":true}});
-		
 		var data = BDfunctionsDevilBro.loadData(info.id, this.getName(), "users");
 		
 		if (data) {
 			if (username) {
-				var serverID = BDfunctionsDevilBro.getIdOfServer(BDfunctionsDevilBro.getSelectedServer());
-				serverID = serverID ? serverID : "friend-list";
-				if (!this.nickNames.id || this.nickNames.id != serverID) this.nickNames = {"id":serverID, "names":{}};
-				if (!this.nickNames.names[info.id]) this.nickNames.names[info.id] = BDfunctionsDevilBro.getInnerText(username);
-				var name = data.name ? data.name : (type == "info" || type == "profil" ? info.username : this.nickNames.names[info.id]);
-				var color1 = data.color1 ? BDfunctionsDevilBro.color2RGB(data.color1) : (styleInfo ? BDfunctionsDevilBro.color2RGB(styleInfo.color) : "");
+				var member = this.MemberPerms.getMember(BDfunctionsDevilBro.getIdOfServer(BDfunctionsDevilBro.getSelectedServer()), info.id);
+				var name = data.name ? data.name : (type == "info" || type == "profil" || !member || !member.nick ? info.username : member.nick);
+				var color1 = data.color1 ? BDfunctionsDevilBro.color2RGB(data.color1) : (member && member.colorString ? BDfunctionsDevilBro.color2RGB(member.colorString) : "");
 				var color2 = data.color2 ? BDfunctionsDevilBro.color2RGB(data.color2) : "";
 				BDfunctionsDevilBro.setInnerText(username, name);
 				username.style.color = color1;
@@ -821,11 +818,11 @@ class EditUsers {
 			var info = this.getUserInfo($(div).data("compact") ? $(".message-group").has(div)[0] : div);
 			if (!info) return;
 			
-			var styleInfo = BDfunctionsDevilBro.getKeyInformation({"node":wrapper,"key":"style"});
 			
 			if (username) {
-				var name = div.classList.contains("container-iksrDt") ? info.username : this.nickNames.names[info.id];
-				var color1 = styleInfo ? BDfunctionsDevilBro.color2RGB(styleInfo.color) : "";
+				var member = this.MemberPerms.getMember(BDfunctionsDevilBro.getIdOfServer(BDfunctionsDevilBro.getSelectedServer()), info.id);
+				var name = div.classList.contains("container-iksrDt") || !member || !member.nick ? info.username : member.nick;
+				var color1 = member && member.colorString ? BDfunctionsDevilBro.color2RGB(member.colorString) : "";
 				var color2 = "";
 				BDfunctionsDevilBro.setInnerText(username, name);
 				username.style.color = color1;
