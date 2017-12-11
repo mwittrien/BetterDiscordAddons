@@ -354,7 +354,7 @@ class ThemeRepo {
 	
 	addThemeRepoButton (container) {
 		if (container && !container.querySelector(".bd-themerepobutton")) {
-			$(container).find(".scroller").css("display", "block");
+			$(container).find(".bda-description").css("display", "block");
 			container.querySelectorAll(".bda-name, .bda-description").forEach(ele => {ele.innerHTML = ele.innerText;});
 			$(this.themeRepoButtonMarkup)
 				.insertAfter(container.querySelector(".bd-pfbtn"))
