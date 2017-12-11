@@ -207,7 +207,7 @@ class PluginRepo {
 
 	getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
 
-	getVersion () {return "1.1.3";}
+	getVersion () {return "1.1.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -297,6 +297,8 @@ class PluginRepo {
 	
 	addPluginRepoButton (container) {
 		if (container && !container.querySelector(".bd-pluginrepobutton")) {
+			$(container).find(".scroller").css("display", "block");
+			container.querySelectorAll(".bda-name, .bda-description").forEach(ele => {ele.innerHTML = ele.innerText;});
 			$(this.pluginRepoButtonMarkup)
 				.insertAfter(container.querySelector(".bd-pfbtn"))
 				.on("click", () => {
@@ -384,9 +386,6 @@ class PluginRepo {
 		for (let url in this.loadedPlugins) {
 			let plugin = this.loadedPlugins[url];
 			let div = $(this.pluginEntryMarkup);
-			div.find(".bda-name").html(plugin.getName + " v" + plugin.getVersion + " by " + plugin.getAuthor);
-			div.find(".bda-description").html(plugin.getDescription ? plugin.getDescription : "No Description found.");
-			
 			var installedPlugin = window.bdplugins[plugin.getName] ? window.bdplugins[plugin.getName].plugin : null;
 			if (installedPlugin && installedPlugin.getAuthor().toUpperCase() == plugin.getAuthor.toUpperCase()) {
 				if (installedPlugin.getVersion() != plugin.getVersion) {
@@ -417,11 +416,11 @@ class PluginRepo {
 			modal.entries.push({
 				div: div,
 				url: plugin.url,
-				search: (plugin.getName + " " + plugin.getVersion + " " + plugin.getAuthor + " " + plugin.getDescription).toUpperCase(),
+				search: (plugin.getName + " " + plugin.getVersion + " " + plugin.getAuthor + " " + plugin.getDescription ? plugin.getDescription : "No Description found.").toUpperCase(),
 				name: plugin.getName,
 				version: plugin.getVersion,
 				author: plugin.getAuthor,
-				description: plugin.getDescription,
+				description: plugin.getDescription ? plugin.getDescription : "No Description found.",
 				fav: plugin.getFav,
 				state: plugin.getState
 			});
@@ -433,11 +432,13 @@ class PluginRepo {
 		if (typeof modal.entries != "object") return;
 		modal.find(".pluginEntry").remove();
 		
+		var searchstring = modal.find("#input-search").val().replace(/[<|>]/g, "").toUpperCase();
+		
 		var entries = modal.entries;
 		if (modal.find("#input-hideupdated").prop("checked")) 		entries = entries.filter((entry) => {return entry.state != 0 ? entry : null;});
 		if (modal.find("#input-hideoutdated").prop("checked")) 		entries = entries.filter((entry) => {return entry.state != 1 ? entry : null;});
 		if (modal.find("#input-hidedownloadable").prop("checked")) 	entries = entries.filter((entry) => {return entry.state != 2 ? entry : null;});
-		entries = entries.filter((entry) => {return entry.search.indexOf(modal.find("#input-search").val().toUpperCase()) > -1 ? entry : null;});
+		entries = entries.filter((entry) => {return entry.search.indexOf(searchstring) > -1 ? entry : null;});
 		entries = BDfunctionsDevilBro.sortArrayByKey(entries, modal.find(".sort-filter .value").attr("option"));
 		if (modal.find(".order-filter .value").attr("option") == "desc") entries.reverse();
 		
@@ -445,7 +446,31 @@ class PluginRepo {
 		
 		var container = modal.find(".plugins");
 		entries.forEach((entry) => {
-			var div = $(entry.div);
+			var div = entry.div;
+			
+			var values = [entry.name, entry.version, entry.author, entry.description];
+			if (searchstring.length > 0) {
+				for (let i in values) {
+					let value = values[i];
+					let added = 0;
+					BDfunctionsDevilBro.getAllIndexes(value.toUpperCase(), searchstring).forEach((start) => {
+						let wrapperopen = "<span class='highlight'>";
+						let wrapperclose = "</span>";
+						let offset = added*(wrapperopen.length + wrapperclose.length);
+						start = start + offset;
+						let end = start + searchstring.length;
+						var openIndexes = [0].concat(BDfunctionsDevilBro.getAllIndexes(value.substring(0, start), "<"));
+						var closedIndexes = [0].concat(BDfunctionsDevilBro.getAllIndexes(value.substring(0, start), ">"));
+						if (openIndexes[openIndexes.length-1] > closedIndexes[closedIndexes.length-1]) return;
+						value = value.substring(0, start) + wrapperopen + value.substring(start, end) + wrapperclose + value.substring(end);
+						added++;
+					});
+					values[i] = value ? value : values[i];
+				}
+			}
+			div.find(".bda-name").html(values[0] + " v" + values[1] + " by " + values[2]);
+			div.find(".bda-description").html(values[3]);
+			
 			div
 				.on("click." + this.getName(), ".favIcon", (e) => {
 					e.currentTarget.classList.toggle("favorized");
@@ -563,7 +588,7 @@ class PluginRepo {
 					}
 					let valid = true;
 					for (let tag of tags) {
-						if (plugin[tag] === null) valid = false;
+						if (!plugin[tag]) valid = false;
 					}
 					if (valid) {
 						plugin.url = url;
