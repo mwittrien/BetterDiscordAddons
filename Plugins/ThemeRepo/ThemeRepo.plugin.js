@@ -149,6 +149,7 @@ class ThemeRepo {
 							<div option="name" class="item">Name</div>
 							<div option="author" class="item">Author</div>
 							<div option="version" class="item">Version</div>
+							<div option="description" class="item">Description</div>
 							<div option="state" class="item">Update State</div>
 							<div option="fav" class="item">Favorites</div>
 						</div>
@@ -248,6 +249,9 @@ class ThemeRepo {
 				right: 5px; 
 				bottom: 10px;
 			}
+			.themerepo-modal .themeEntry.downloadable .btn-download {
+				background-color: rgb(114, 137, 218) !important;
+			}
 			.themerepo-modal .themeEntry.outdated .btn-download {
 				background-color: rgb(240, 71, 71) !important;
 			}
@@ -260,7 +264,7 @@ class ThemeRepo {
 
 	getDescription () {return "Allows you to preview all themes from the theme repo and download them on the fly. Repo button is in the theme settings.";}
 
-	getVersion () {return "1.1.2";}
+	getVersion () {return "1.1.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -379,11 +383,8 @@ class ThemeRepo {
 		else themeRepoModal.find("#input-rnmstart").prop("checked", BDfunctionsDevilBro.loadData("RNMstart", this.getName(), "settings"));
 		themeRepoModal
 			.on("keyup." + this.getName(), "#input-search", (e) => {
-				if (e.which == 13) {
-					themeRepoModal.updateModal = true;
-					themeRepoModal.enableSearch = true;
-					this.addThemeEntries(themeRepoModal, frame);	
-				}
+				clearTimeout(themeRepoModal.searchTimeout);
+				themeRepoModal.searchTimeout = setTimeout(() => {this.addThemeEntries(themeRepoModal, frame);},1000);
 			})
 			.on("click." + this.getName(), ".btn-cancel, .backdrop-2ohBEd", () => {
 				frame.remove();
@@ -414,7 +415,6 @@ class ThemeRepo {
 				var hideButton = $(e.currentTarget);
 				hiddenSettings[hideButton.val()] = hideButton.prop("checked");
 				BDfunctionsDevilBro.saveAllData(hiddenSettings, this.getName(), "hidden");
-				themeRepoModal.updateModal = true;
 			})
 			.on("change." + this.getName(), "#input-rnmstart", (e) => {
 				BDfunctionsDevilBro.saveData("RNMstart", $(e.currentTarget).prop("checked"), this.getName(), "settings");
@@ -427,6 +427,7 @@ class ThemeRepo {
 			.on("keyup." + this.getName(), (e) => {
 				keyPressed(e.which);
 			});
+			
 		$(window).off("message." + this.getName())
 			.on("message." + this.getName(), (e) => {
 				e = e.originalEvent;
@@ -449,7 +450,7 @@ class ThemeRepo {
 				}
 			});
 			
-		this.addThemeEntries(themeRepoModal, frame);
+		this.createThemeEntries(themeRepoModal, frame);
 			
 		BDfunctionsDevilBro.appendModal(themeRepoModal);
 		$(frame).insertBefore("#app-mount");
@@ -473,7 +474,6 @@ class ThemeRepo {
 				value.attr("option", $(e2.currentTarget).attr("option"));
 				$(document).off("mousedown.sortpopout" + this.getName());
 				popout.remove();
-				modal.updateModal = true;
 				this.addThemeEntries(modal, frame);
 				setTimeout(() => {wrapper.classList.remove("popout-open");},300);
 			});
@@ -492,60 +492,76 @@ class ThemeRepo {
 		});
 	}
 	
-	addThemeEntries (modal, frame) {
-		if (!modal.updateModal) return;
-		modal.updateModal = false;
-		modal.find(".themeEntry").remove();
+	createThemeEntries (modal, frame) {
 		var favorites = BDfunctionsDevilBro.loadAllData(this.getName(), "favorites");
-		var themes = [];
-		for (var url in this.loadedThemes) {
-			this.loadedThemes[url].fav = favorites[url] ? false : true;
+		modal.entries = [];
+		for (let url in this.loadedThemes) {
+			let theme = this.loadedThemes[url];
+			let div = $(this.themeEntryMarkup);
+			div.find(".bda-name").html(theme.name + (theme.version ? " v" + theme.version : "") + (theme.author ? " by " + theme.author : ""));
+			div.find(".bda-description").html(theme.description);
+			
 			var installedTheme = window.bdthemes[this.loadedThemes[url].name];
-			if (installedTheme && installedTheme.author.toUpperCase() == this.loadedThemes[url].author.toUpperCase()) {
-				if (installedTheme.version != this.loadedThemes[url].version) {
-					this.loadedThemes[url].state = 1;
-				}
-				else {
-					this.loadedThemes[url].state = 0;
-				}
-			}
-			else {
-				this.loadedThemes[url].state = 2;
-			}
-			themes.push(this.loadedThemes[url]);
-		}
-		if (modal.find("#input-hideupdated").prop("checked")) 		themes = themes.filter((theme) => {return theme.state != 0 ? theme : null;});
-		if (modal.find("#input-hideoutdated").prop("checked")) 		themes = themes.filter((theme) => {return theme.state != 1 ? theme : null;});
-		if (modal.find("#input-hidedownloadable").prop("checked")) 	themes = themes.filter((theme) => {return theme.state != 2 ? theme : null;});
-		if (modal.enableSearch) {
-			var searchInput = modal.find("#input-search");
-			themes = themes.filter((theme) => {
-				var themeText = theme.name + " " + theme.version + " " + theme.author + " " + theme.description;
-				return themeText.toLowerCase().indexOf(searchInput.val().toLowerCase()) > -1 ? theme : null;
-			});
-			modal.enableSearch = false;
-			searchInput.val("");
-		}
-		themes = BDfunctionsDevilBro.sortArrayByKey(themes, modal.find(".sort-filter .value").attr("option"));
-		if (modal.find(".order-filter .value").attr("option") == "desc") themes.reverse();
-		modal.find(".themeAmount").text("Theme Repository " + themes.length + "/" + Object.keys(this.loadedThemes).length + " Themes");
-		for (let theme of themes) {
-			let entry = $(this.themeEntryMarkup);
-			modal.find(".themes").append(entry);
-			entry.find(".bda-name").html(theme.name + (theme.version ? " v" + theme.version : "") + (theme.author ? " by " + theme.author : ""));
-			entry.find(".bda-description").html(theme.description);
-			if (theme.state != 2) {
-				if (theme.state == 1) {
-					entry.addClass("outdated")
+			if (installedTheme && installedTheme.author.toUpperCase() == theme.author.toUpperCase()) {
+				if (installedTheme.version != theme.version) {
+					theme.state = 1;
+					div.addClass("outdated")
 						.find(".btn-download div").text("Outdated");
 				}
 				else {
-					entry.addClass("updated")
+					theme.state = 0;
+					div.addClass("updated")
 						.find(".btn-download div").text("Updated");
 				}
 			}
-			if (!theme.fav) entry.find(".favIcon")[0].classList.add("favorized");
-			entry
+			else {
+				theme.state = 2;
+				div.addClass("download")
+					.find(".btn-download div").text("Download");
+			}
+			if (favorites[url]) {
+				theme.fav = 0;
+				div.find(".favIcon")[0].classList.add("favorized");
+			}
+			else {
+				theme.fav = 1;
+				div.find(".favIcon")[0].classList.remove("favorized");
+			}
+				
+			modal.entries.push({
+				div: div,
+				url: theme.url,
+				search: (theme.name + " " + theme.version + " " + theme.author + " " + theme.description).toUpperCase(),
+				name: theme.name,
+				version: theme.version,
+				author: theme.author,
+				description: theme.description,
+				fav: theme.fav,
+				state: theme.state,
+				css: theme.css
+			});
+		}
+		this.addThemeEntries(modal, frame);
+	}
+	
+	addThemeEntries (modal) {
+		if (typeof modal.entries != "object") return;
+		modal.find(".themeEntry").remove();
+		
+		var entries = modal.entries;
+		if (modal.find("#input-hideupdated").prop("checked")) 		entries = entries.filter((entry) => {return entry.state != 0 ? entry : null;});
+		if (modal.find("#input-hideoutdated").prop("checked")) 		entries = entries.filter((entry) => {return entry.state != 1 ? entry : null;});
+		if (modal.find("#input-hidedownloadable").prop("checked")) 	entries = entries.filter((entry) => {return entry.state != 2 ? entry : null;});
+		entries = entries.filter((entry) => {return entry.search.indexOf(modal.find("#input-search").val().toUpperCase()) > -1 ? entry : null;});
+		entries = BDfunctionsDevilBro.sortArrayByKey(entries, modal.find(".sort-filter .value").attr("option"));
+		if (modal.find(".order-filter .value").attr("option") == "desc") entries.reverse();
+		
+		modal.find(".themeAmount").text("Theme Repository " + entries.length + "/" + Object.keys(this.loadedThemes).length + " Themes");
+		
+		var container = modal.find(".themes");
+		entries.forEach((entry) => {
+			var div = $(entry.div);
+			div
 				.on("change." + this.getName(), ".previewCheckbox", (e) => {
 					modal.find(".previewCheckbox").not(e.target).prop("checked", false);
 					modal.find(".previewCheckbox").each((_, checkBox) => {
@@ -553,32 +569,38 @@ class ThemeRepo {
 							.toggleClass("valueChecked-3Bzkbm", $(checkBox).prop("checked"))
 							.toggleClass("valueUnchecked-XR6AOk", $(checkBox).prop("checked"));
 					});
-					frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"NewTheme",checked:$(e.target).prop("checked"),css:theme.css},"*");
+					frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"NewTheme",checked:$(e.target).prop("checked"),css:entry.css},"*");
 				})
 				.on("click." + this.getName(), ".favIcon", (e) => {
 					e.currentTarget.classList.toggle("favorized");
-					if (e.currentTarget.classList.contains("favorized")) favorites[theme.url] = true;
-					else delete favorites[theme.url];
-					BDfunctionsDevilBro.saveAllData(favorites, this.getName(), "favorites");
+					if (e.currentTarget.classList.contains("favorized")) {
+						entry.fav = 0;
+						BDfunctionsDevilBro.saveData(entry.url, true, this.getName(), "favorites");
+					}
+					else {
+						entry.fav = 1;
+						BDfunctionsDevilBro.removeData(entry.url, this.getName(), "favorites");
+					}
 				})
 				.on("click." + this.getName(), ".gitIcon", (e) => {
 					var giturl = null;
-					if (theme.url.indexOf("https://raw.githubusercontent.com") == 0) {
-						giturl = theme.url.replace("//raw.githubusercontent", "//github").replace("/master/", "/blob/master/");
+					if (entry.url.indexOf("https://raw.githubusercontent.com") == 0) {
+						giturl = entry.url.replace("//raw.githubusercontent", "//github").replace("/master/", "/blob/master/");
 					}
-					else if (theme.url.indexOf("https://gist.githubusercontent.com/") == 0) {
-						giturl = theme.url.replace("//gist.githubusercontent", "//gist.github").split("/raw/")[0];
+					else if (entry.url.indexOf("https://gist.githubusercontent.com/") == 0) {
+						giturl = entry.url.replace("//gist.githubusercontent", "//gist.github").split("/raw/")[0];
 					}
 					if (giturl) {
 						window.open(giturl, "_blank");
 					}
 				})
 				.on("click." + this.getName(), ".trashIcon", () => {
-					if (entry.hasClass("outdated") || entry.hasClass("updated")) {
-						entry.removeClass("outdated").removeClass("updated")
+					if (div.hasClass("outdated") || div.hasClass("updated")) {
+						entry.state = 2;
+						div.removeClass("outdated").removeClass("updated")
 							.find(".btn-download div").text("Download");
-						this.deleteThemeFile(theme);
-						if (!BDfunctionsDevilBro.isRestartNoMoreEnabled()) removeTheme(theme);
+						this.deleteThemeFile(entry);
+						if (!BDfunctionsDevilBro.isRestartNoMoreEnabled()) removeTheme(entry);
 					}
 				})
 				.on("mouseenter." + this.getName(), ".favIcon", (e) => {
@@ -591,12 +613,15 @@ class ThemeRepo {
 					BDfunctionsDevilBro.createTooltip("Delete Themefile", e.currentTarget, {type:"top",selector:"themerepo-trashIcon-tooltip"});
 				})
 				.on("click." + this.getName(), ".btn-download", () => {
-					this.downloadTheme(theme);
-					entry.removeClass("outdated").addClass("updated")
+					entry.state = 0;
+					this.downloadTheme(entry);
+					div.removeClass("outdated").addClass("updated")
 						.find(".btn-download div").text("Updated");
-					if (modal.find("#input-rnmstart").prop("checked")) setTimeout(() => {this.applyTheme(theme);},3000);
+					if (modal.find("#input-rnmstart").prop("checked")) setTimeout(() => {this.applyTheme(entry);},3000);
 				});
-		}
+				
+			container.append(div);
+		});
 	}
 	
 	loadThemes () {
@@ -668,14 +693,14 @@ class ThemeRepo {
 		});
 	}
 	
-	downloadTheme (theme) {
+	downloadTheme (entry) {
 		let request = require("request");
-		request(theme.url, (error, response, body) => {
+		request(entry.url, (error, response, body) => {
 			if (error) {
-				BDfunctionsDevilBro.showToast(`Unable to download Theme "${theme.name}".`, {type:"danger"});
+				BDfunctionsDevilBro.showToast(`Unable to download Theme "${entry.name}".`, {type:"danger"});
 			}
 			else {
-				let filename = theme.url.split("/");
+				let filename = entry.url.split("/");
 				this.createThemeFile(filename[filename.length - 1], body);
 			}
 		});
@@ -695,20 +720,20 @@ class ThemeRepo {
 		});
 	}
 	
-	applyTheme (theme) {
-		var name = theme.name;
+	applyTheme (entry) {
+		var name = entry.name;
 		if (typeof window.bdthemes[name] == "object" && window.themeCookie[name] == false) {
 			$(`style#${name}`).remove();
-			$("head").append(`<style id=${name}>${theme.css}</style>`);
+			$("head").append(`<style id=${name}>${entry.css}</style>`);
 			window.themeCookie[name] = true;
 			console.log("ThemeRepo: applied Theme " + name);
 		}
 	}
 	
-	deleteThemeFile (theme) {
+	deleteThemeFile (entry) {
 		let fileSystem = require("fs");
 		let path = require("path");
-		let filename = theme.url.split("/");
+		let filename = entry.url.split("/");
 		filename = filename[filename.length - 1];
 		var file = path.join(BDfunctionsDevilBro.getThemesFolder(), filename);
 		fileSystem.unlink(file, (error) => {
@@ -721,8 +746,8 @@ class ThemeRepo {
 		});
 	}
 	
-	removeTheme (theme) {
-		var name = theme.name;
+	removeTheme (entry) {
+		var name = entry.name;
 		if (typeof window.bdthemes[name] == "object" && window.themeCookie[name] == true) {
 			$(`style#${name}`).remove();
 			window.themeCookie[name] = false;
