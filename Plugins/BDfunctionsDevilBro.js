@@ -674,10 +674,7 @@ BDfunctionsDevilBro.readServerList = function () {
 	var foundServers = [];
 	var servers = $(".guild");
 	for (var i = 0; i < servers.length; i++) {
-		var serverData = BDfunctionsDevilBro.getKeyInformation({"node":servers[i], "key":"guild"});
-		if (serverData) {
-			foundServers.push(servers[i]);
-		}
+		if (BDfunctionsDevilBro.getKeyInformation({"node":servers[i], "key":"guild"})) foundServers.push(servers[i]);
 	}
 	return foundServers;
 };
@@ -686,11 +683,8 @@ BDfunctionsDevilBro.readUnreadServerList = function (servers) {
 	if (servers === undefined) servers = BDfunctionsDevilBro.readServerList();
 	var foundServers = [];
 	for (var i = 0; i < servers.length; i++) {
-		var serverData = BDfunctionsDevilBro.getKeyInformation({"node":servers[i], "key":"guild"});
-		if (serverData) {
-			if (servers[i].classList.contains("unread") || $(servers[i]).find(".badge")[0]) {
-				foundServers.push(servers[i]);
-			}
+		if (BDfunctionsDevilBro.getKeyInformation({"node":servers[i], "key":"guild"})) {
+			if (servers[i].classList.contains("unread") || servers[i].querySelector(".badge")) foundServers.push(servers[i]);
 		}
 	}
 	return foundServers;
@@ -700,10 +694,7 @@ BDfunctionsDevilBro.readDmList = function () {
 	var foundDMs = [];
 	var dms = $(".dms .guild");
 	for (var i = 0; i < dms.length; i++) {
-		var dmData = BDfunctionsDevilBro.getKeyInformation({"node":dms[i], "key":"channel"});
-		if (dmData) {
-			foundDMs.push(dms[i]);
-		}
+		if (BDfunctionsDevilBro.getKeyInformation({"node":dms[i], "key":"channel"})) foundDMs.push(dms[i]);
 	}
 	return foundDMs;
 };
@@ -712,10 +703,7 @@ BDfunctionsDevilBro.readChannelList = function () {
 	var foundChannels = [];
 	var channels = $(".containerDefault-7RImuF, .containerDefault-1bbItS");
 	for (var i = 0; i < channels.length; i++) {
-		var channelData = BDfunctionsDevilBro.getKeyInformation({"node":channels[i], "key":"channel"});
-		if (channelData) {
-			foundChannels.push(channels[i]);
-		}
+		if (BDfunctionsDevilBro.getKeyInformation({"node":channels[i], "key":"channel"})) foundChannels.push(channels[i]);
 	}
 	return foundChannels;
 };
@@ -723,7 +711,7 @@ BDfunctionsDevilBro.readChannelList = function () {
 BDfunctionsDevilBro.getSelectedServer = function () {
 	var servers = BDfunctionsDevilBro.readServerList();
 	for (var i = 0; i < servers.length; i++) {
-		if ($(servers[i]).hasClass("selected")) {
+		if (servers[i].classList.contains("selected")) {
 			return servers[i];
 		}
 	}
@@ -1057,38 +1045,14 @@ BDfunctionsDevilBro.regEscape = function (string) {
 	return string.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
 };
 
-BDfunctionsDevilBro.clearReadNotifications = function (servers, callback) {
-	if (!servers) return;
+BDfunctionsDevilBro.clearReadNotifications = function (servers) {
+	var GuildActions = BDfunctionsDevilBro.findInWebModulesByName(['markGuildAsRead']);
+	if (!servers || !GuildActions) return;
 	servers = Array.isArray(servers) ? servers : Array.from(servers);
-	servers.forEach(
-			(server, i) => {
-				setTimeout(() => {
-					var handleContextMenu = BDfunctionsDevilBro.getKeyInformation({"node":server.firstElementChild, "key":"handleContextMenu", "blackList":{"_owner":true}});
-					
-					if (handleContextMenu) {
-						var data = {
-							preventDefault: a=>a,
-							stopPropagation: a=>a,
-							pageX: -1000 + Math.round(Math.random()*500),
-						};
-						
-						handleContextMenu(data);
-						
-						var contextentries = $(".context-menu .item-group");
-						
-						for (var j = 0; contextentries.length > j; j++) {
-							var ele = contextentries[j];
-							var contextType = BDfunctionsDevilBro.getKeyInformation({"node":ele, "key":"displayName", "value":"GuildMarkReadItem"});
-							if (contextType) {
-								ele.firstElementChild.click();
-								break;
-							}
-						}
-					}
-					if (i == servers.length-1 && typeof callback === "function") callback();
-				},i*100);
-			}
-		); 
+	servers.forEach((server, i) => {
+		var serverData = BDfunctionsDevilBro.getKeyInformation({"node":server, "key":"guild"});
+		if (serverData) GuildActions.markGuildAsRead(serverData.id);
+	}); 
 };
 
 BDfunctionsDevilBro.appendModal = function (modal) {
