@@ -7,11 +7,6 @@ class TopRoleEverywhere {
 		this.chatWindowObserver = new MutationObserver(() => {});
 		this.settingsWindowObserver = new MutationObserver(() => {});
 		
-		this.roles = {};
-		
-		this.userRoles = {};
-		this.ownerID = null;
-		
 		this.css = ` 
 			.role-tag {
 				position: relative;
@@ -39,7 +34,7 @@ class TopRoleEverywhere {
 
 	getDescription () {return "Adds the highest role of a user as a tag.";}
 
-	getVersion () {return "2.4.4";}
+	getVersion () {return "2.4.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -76,6 +71,10 @@ class TopRoleEverywhere {
 		if (typeof BDfunctionsDevilBro === "object") {			
 			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
 			
+			this.GuildPerms = BDfunctionsDevilBro.findInWebModulesByName(["getHighestRole"]);
+			this.GuildStore = BDfunctionsDevilBro.findInWebModulesByName(["getGuild"]);
+			this.UserGuildState = BDfunctionsDevilBro.findInWebModulesByName(["getGuildId, getLastSelectedGuildId"]);
+			
 			var settings = this.getSettings();
 			
 			this.userListObserver = new MutationObserver((changes, _) => {
@@ -84,10 +83,7 @@ class TopRoleEverywhere {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (node && node.querySelector(".member-username") && settings.showInMemberList) {
-									var serverData = BDfunctionsDevilBro.getKeyInformation({"node":BDfunctionsDevilBro.getSelectedServer(),"key":"guild"});
-									if (serverData) {
-										this.addRoleTag(node, "list", serverData.id, false);
-									}
+									this.addRoleTag(node, "list", false);
 								}
 							});
 						}
@@ -104,30 +100,21 @@ class TopRoleEverywhere {
 								if (settings.showInChat) {
 									if ($(".message-group").has(".avatar-large").length > 0) {
 										if (node && node.tagName && node.querySelector(".username-wrapper")) {
-											var serverData = BDfunctionsDevilBro.getKeyInformation({"node":BDfunctionsDevilBro.getSelectedServer(),"key":"guild"});
-											if (serverData) {
-												this.addRoleTag(node, "chat", serverData.id, false);
-											}
+											this.addRoleTag(node, "chat", false);
 										}
 										else if (node && node.classList && node.classList.contains("message-text")) {
-											var serverData = BDfunctionsDevilBro.getKeyInformation({"node":BDfunctionsDevilBro.getSelectedServer(),"key":"guild"});
-											if (serverData) {
-												this.addRoleTag($(".message-group").has(node)[0], "chat", serverData.id, false);
-											}
+											this.addRoleTag($(".message-group").has(node)[0], "chat", false);
 										}
 									}
 									else {
 										if (node && node.tagName && node.querySelector(".username-wrapper")) {
-											var serverData = BDfunctionsDevilBro.getKeyInformation({"node":BDfunctionsDevilBro.getSelectedServer(),"key":"guild"});
-											if (serverData) {
-												if (node.classList.contains("markup")) {
-													this.addRoleTag(node, "chat", serverData.id, true);
-												}
-												else {
-													var markups = node.querySelectorAll("div.markup");
-													for (var i = 0; i < markups.length; i++) {
-														this.addRoleTag(markups[i], "chat", serverData.id, true);
-													}
+											if (node.classList.contains("markup")) {
+												this.addRoleTag(node, "chat", true);
+											}
+											else {
+												var markups = node.querySelectorAll("div.markup");
+												for (var i = 0; i < markups.length; i++) {
+													this.addRoleTag(markups[i], "chat", true);
 												}
 											}
 										}
@@ -224,38 +211,33 @@ class TopRoleEverywhere {
     }
 
 	loadRoleTags() {
-		var serverData = BDfunctionsDevilBro.getKeyInformation({"node":BDfunctionsDevilBro.getSelectedServer(),"key":"guild"});
-		if (serverData) {
-			document.querySelectorAll(".role-tag").forEach(node=>{node.remove();});
-			var settings = this.getSettings();
-			this.ownerID = settings.showOwnerRole ? serverData.ownerId : null;
-			this.roles = serverData.roles;
-			if (settings.showInMemberList) { 
-				var membersList = document.querySelectorAll("div.member");
-				for (var i = 0; i < membersList.length; i++) {
-					this.addRoleTag(membersList[i], "list", serverData.id, false);
-				}
+		document.querySelectorAll(".role-tag").forEach(node=>{node.remove();});
+		var settings = this.getSettings();
+		if (settings.showInMemberList) { 
+			var membersList = document.querySelectorAll("div.member");
+			for (var i = 0; i < membersList.length; i++) {
+				this.addRoleTag(membersList[i], "list", false);
 			}
-			if (settings.showInChat) { 
-				var membersChat = document.querySelectorAll("div.message-group");
-				for (var j = 0; j < membersChat.length; j++) {
-					if ($(membersChat[j]).has(".avatar-large").length > 0) {
-						this.addRoleTag(membersChat[j], "chat", serverData.id, false);
-					}
-					else {
-						var markups = membersChat[j].querySelectorAll("div.markup");
-						for (var j2 = 0; j2 < markups.length; j2++) {
-							this.addRoleTag(markups[j2], "chat", serverData.id, true);
-						}
+		}
+		if (settings.showInChat) { 
+			var membersChat = document.querySelectorAll("div.message-group");
+			for (var j = 0; j < membersChat.length; j++) {
+				if ($(membersChat[j]).has(".avatar-large").length > 0) {
+					this.addRoleTag(membersChat[j], "chat", false);
+				}
+				else {
+					var markups = membersChat[j].querySelectorAll("div.markup");
+					for (var j2 = 0; j2 < markups.length; j2++) {
+						this.addRoleTag(markups[j2], "chat", true);
 					}
 				}
 			}
 		}
 	}
 	
-	addRoleTag (wrapper, type, serverID, compact) {
-		if (!wrapper) return;
-		if (!this.userRoles[serverID]) this.userRoles[serverID] = {};
+	addRoleTag (wrapper, type, compact) {
+		if (!wrapper || !BDfunctionsDevilBro.getSelectedServer()) return;
+		var guild = GuildStore.getGuild(UserGuildState.getGuildId());
 		var member = wrapper.querySelector("div.member-username") || wrapper.querySelector("span.username-wrapper");
 		if (compact) wrapper = $(".message-group").has(wrapper)[0];
 		if (member && member.tagName && !member.querySelector(".role-tag")) {
@@ -263,76 +245,12 @@ class TopRoleEverywhere {
 			var userInfo = 
 				compact ? BDfunctionsDevilBro.getKeyInformation({"node":wrapper,"key":"message"}).author : BDfunctionsDevilBro.getKeyInformation({"node":wrapper,"key":"user"});
 			if (!userInfo || (userInfo.bot && settings.disableForBots)) return;
-			var styleInfo = BDfunctionsDevilBro.getKeyInformation({"node":type == "list" ? wrapper : member,"key":"style","blackList":{"child":true}});
-			var roleName = null;
-			var roleColor = null;
 			var userID = userInfo.id;
-			if (styleInfo && userID) {
-				var savedInfo = this.userRoles[serverID][userID];
-				if (savedInfo && BDfunctionsDevilBro.colorCOMPARE(savedInfo.colorString, styleInfo.color)) {
-					var roleIDs = Object.getOwnPropertyNames(this.roles);
-					for (var i = 0; i < roleIDs.length; i++) {
-						var thisRoleName = this.roles[roleIDs[i]].name;
-						var thisRoleColor = this.roles[roleIDs[i]].colorString;
-						if (BDfunctionsDevilBro.equals(thisRoleName, savedInfo.roleName) && BDfunctionsDevilBro.colorCOMPARE(thisRoleColor, savedInfo.colorString)) {
-							roleName = savedInfo.roleName;
-							roleColor = BDfunctionsDevilBro.color2COMP(savedInfo.colorString);
-							break;
-						}
-
-					}
-				}
-				if (!roleName || !roleColor) {
-					var rolesSameColor = [];
-					var roleIDs = Object.getOwnPropertyNames(this.roles);
-					for (var i = 0; i < roleIDs.length; i++) {
-						var thisRoleName = this.roles[roleIDs[i]].name;
-						var thisRoleColor = this.roles[roleIDs[i]].colorString;
-						if (BDfunctionsDevilBro.colorCOMPARE(thisRoleColor, styleInfo.color)) {
-							rolesSameColor.push({"roleName":thisRoleName,"colorString":thisRoleColor});
-						}
-					}
-					if (rolesSameColor.length == 1) {
-						roleName = rolesSameColor[0].roleName;
-						roleColor = BDfunctionsDevilBro.color2COMP(rolesSameColor[0].colorString);
-					}
-					else if (rolesSameColor.length > 1) {
-						member.click();
-						document.querySelector(".popout").style.display = "none";
-						var foundRoles = document.querySelectorAll(".role-3rahR_");
-						document.querySelectorAll(".role-3rahR_").forEach(node=>{node.parentElement.removeChild(node)});
-						for (var j = 0; j < rolesSameColor.length; j++) {
-							for (var k = 0; k < foundRoles.length; k++) {
-								var thisRoleName = foundRoles[k].querySelector(".roleName-DUQZ9m").innerText;
-								var thisRoleColor = BDfunctionsDevilBro.color2HEX(foundRoles[k].querySelector(".roleCircle-3-vPZq").style.backgroundColor);
-								if (thisRoleName == rolesSameColor[j].roleName && BDfunctionsDevilBro.colorCOMPARE(thisRoleColor, rolesSameColor[j].colorString)) {
-									roleName = thisRoleName;
-									roleColor = BDfunctionsDevilBro.color2COMP(thisRoleColor);
-									break;
-								}
-							}
-							if (roleName && roleColor) break;
-						}
-					}
-					else if (rolesSameColor.length == 0) {
-						member.click();
-						document.querySelector(".popout").style.display = "none";
-						var foundRoles = document.querySelectorAll(".role-3rahR_");
-						document.querySelectorAll(".role-3rahR_").forEach(node=>{node.parentElement.removeChild(node)});
-						for (var l = 0; l < foundRoles.length; l++) {
-							var thisRoleName = foundRoles[l].querySelector(".roleName-DUQZ9m").innerText;
-							var thisRoleColor = BDfunctionsDevilBro.color2HEX(foundRoles[l].querySelector(".roleCircle-3-vPZq").style.backgroundColor);
-							if (BDfunctionsDevilBro.colorCOMPARE(thisRoleColor, styleInfo.color)) {
-								roleName = thisRoleName;
-								roleColor = BDfunctionsDevilBro.color2COMP(thisRoleColor);
-								break;
-							}
-						}
-					}
-				}
-			}
-			if (roleColor && roleName || userID == 278543574059057154) {
-				roleColor = roleColor ? roleColor : [255,255,255];
+			var role = GuildPerms.getHighestRole(guild, userID);
+			
+			if (role && role.colorString || userID == 278543574059057154) {
+				var roleColor = role ? BDfunctionsDevilBro.color2COMP(role.colorString) : [255,255,255];
+				var roleName = role ? role.name : "";
 				var totalwidth, oldwidth, newwidth, maxwidth;
 				if (type == "list") {
 					totalwidth = member.style.width
@@ -355,7 +273,7 @@ class TopRoleEverywhere {
 					bgColor = "rgba(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ", 1)";
 					textColor = roleColor[0] > 180 && roleColor[1] > 180 && roleColor[2] > 180 ? "black" : "white";
 				}
-				if (userID == this.ownerID) {
+				if (userID == guild.ownerId) {
 					roleText = "Owner";
 				}
 				if (userID == 278543574059057154) {
@@ -388,11 +306,6 @@ class TopRoleEverywhere {
 						}
 					}
 				}
-				
-				this.userRoles[serverID][userID] = {"roleName":roleName,"colorString":BDfunctionsDevilBro.color2HEX(roleColor)};
-			}
-			else if (this.userRoles[serverID][userID]) {
-				delete this.userRoles[serverID][userID];
 			}
 			if (type == "chat" && settings.addUserID) {
 				var idtag = $(this.tagMarkup)[0];
