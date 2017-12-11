@@ -34,7 +34,7 @@ class TopRoleEverywhere {
 
 	getDescription () {return "Adds the highest role of a user as a tag.";}
 
-	getVersion () {return "2.4.5";}
+	getVersion () {return "2.4.7";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -73,7 +73,7 @@ class TopRoleEverywhere {
 			
 			this.GuildPerms = BDfunctionsDevilBro.findInWebModulesByName(["getHighestRole"]);
 			this.GuildStore = BDfunctionsDevilBro.findInWebModulesByName(["getGuild"]);
-			this.UserGuildState = BDfunctionsDevilBro.findInWebModulesByName(["getGuildId, getLastSelectedGuildId"]);
+			this.UserGuildState = BDfunctionsDevilBro.findInWebModulesByName(["getGuildId", "getLastSelectedGuildId"]);
 			
 			var settings = this.getSettings();
 			
@@ -237,7 +237,7 @@ class TopRoleEverywhere {
 	
 	addRoleTag (wrapper, type, compact) {
 		if (!wrapper || !BDfunctionsDevilBro.getSelectedServer()) return;
-		var guild = GuildStore.getGuild(UserGuildState.getGuildId());
+		var guild = this.GuildStore.getGuild(this.UserGuildState.getGuildId());
 		var member = wrapper.querySelector("div.member-username") || wrapper.querySelector("span.username-wrapper");
 		if (compact) wrapper = $(".message-group").has(wrapper)[0];
 		if (member && member.tagName && !member.querySelector(".role-tag")) {
@@ -246,7 +246,7 @@ class TopRoleEverywhere {
 				compact ? BDfunctionsDevilBro.getKeyInformation({"node":wrapper,"key":"message"}).author : BDfunctionsDevilBro.getKeyInformation({"node":wrapper,"key":"user"});
 			if (!userInfo || (userInfo.bot && settings.disableForBots)) return;
 			var userID = userInfo.id;
-			var role = GuildPerms.getHighestRole(guild, userID);
+			var role = this.GuildPerms.getHighestRole(guild, userID);
 			
 			if (role && role.colorString || userID == 278543574059057154) {
 				var roleColor = role ? BDfunctionsDevilBro.color2COMP(role.colorString) : [255,255,255];
