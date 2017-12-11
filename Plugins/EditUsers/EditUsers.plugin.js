@@ -824,7 +824,6 @@ class EditUsers {
 				var name = div.classList.contains("container-iksrDt") || !member || !member.nick ? info.username : member.nick;
 				var color1 = member && member.colorString ? BDfunctionsDevilBro.color2RGB(member.colorString) : "";
 				var color2 = "";
-				console.log(username);
 				
 				BDfunctionsDevilBro.setInnerText(username, name);
 				username.style.color = color1;
