@@ -93,6 +93,7 @@ https://raw.githubusercontent.com/tehbasshunter/theme-fixes/master/Nova.theme.cs
 https://raw.githubusercontent.com/tehbasshunter/theme-fixes/master/Overwatch.theme.css
 https://raw.githubusercontent.com/tehbasshunter/theme-fixes/master/Space_Nova.theme.css
 https://raw.githubusercontent.com/TheBaconSpace/TMEMETheme/master/tmeme.theme.css
+https://raw.githubusercontent.com/TheWrestlingDiscordia/MiniTheme/master/MiniTheme.theme.css
 https://raw.githubusercontent.com/trueprominency/Shades-of-Red-Theme/master/shades-of-red.theme.css
 https://raw.githubusercontent.com/Wahrandz/NieR-Automata-/master/Theme%20css/Final%3B%20Nier_Automata%20By%20AbdelBouklech.theme.css
 https://raw.githubusercontent.com/WhatDaPuck/NotAnotherAnimeTheme/master/NotAnotherAnimeTheme.theme.css
