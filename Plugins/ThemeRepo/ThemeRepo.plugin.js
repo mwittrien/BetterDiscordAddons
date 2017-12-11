@@ -264,7 +264,7 @@ class ThemeRepo {
 
 	getDescription () {return "Allows you to preview all themes from the theme repo and download them on the fly. Repo button is in the theme settings.";}
 
-	getVersion () {return "1.1.4";}
+	getVersion () {return "1.1.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -544,7 +544,7 @@ class ThemeRepo {
 		this.addThemeEntries(modal, frame);
 	}
 	
-	addThemeEntries (modal) {
+	addThemeEntries (modal, frame) {
 		if (typeof modal.entries != "object") return;
 		modal.find(".themeEntry").remove();
 		
