@@ -13,7 +13,10 @@ BDfunctionsDevilBro.loadMessage = function (plugin, oldVersionRemove) {
 	console.log(loadMessage);
 	BDfunctionsDevilBro.showToast(loadMessage);
 	
-	if (typeof plugin.onSwitch == "function") BDfunctionsDevilBro.addOnSwitchListener(plugin);
+	if (typeof plugin.onSwitch == "function") {
+		plugin.onSwitch = plugin.onSwitch.bind(plugin);
+		BDfunctionsDevilBro.addOnSwitchListener(plugin.onSwitch);
+	}
 	
 	var downloadUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
 	BDfunctionsDevilBro.checkUpdate(pluginName, downloadUrl);
@@ -70,7 +73,7 @@ BDfunctionsDevilBro.unloadMessage = function (plugin, oldVersionRemove) {
 	console.log(unloadMessage);
 	BDfunctionsDevilBro.showToast(unloadMessage);
 	
-	if (typeof plugin.onSwitch == "function") BDfunctionsDevilBro.removeOnSwitchListener(plugin);
+	if (typeof plugin.onSwitch == "function") BDfunctionsDevilBro.removeOnSwitchListener(plugin.onSwitch);
 	
 	var downloadUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
 	
@@ -108,7 +111,7 @@ BDfunctionsDevilBro.showUpdateNotice = function (pluginName, downloadUrl) {
 	let noticeElement = `<div class="notice notice-info DevilBro-notice" id="pluginNotice"><div class="notice-dismiss" id="pluginNoticeDismiss"></div><span class="notice-message">The following plugins have updates:</span>&nbsp;&nbsp;<strong id="outdatedPlugins"></strong></div>`;
 	if (!$("#pluginNotice").length)  {
 		$(".app .guilds-wrapper + div > div:first > div:first").append(noticeElement);
-        $(".win-buttons").addClass("win-buttons-notice");
+		$(".win-buttons").addClass("win-buttons-notice");
 		$("#pluginNoticeDismiss").on("click", () => {
 			$(".win-buttons").animate({top: 0}, 400, "swing", () => {
 				$(".win-buttons").css("top","").removeClass("win-buttons-notice");
@@ -121,57 +124,57 @@ BDfunctionsDevilBro.showUpdateNotice = function (pluginName, downloadUrl) {
 	let pluginNoticeID = pluginName + "-notice";
 	if (!$("#" + pluginNoticeID).length) {
 		let pluginNoticeElement = $(`<span id="${pluginNoticeID}">`);
-        pluginNoticeElement.text(pluginName);
-        pluginNoticeElement.on("click", () => {
-            BDfunctionsDevilBro.downloadPlugin(pluginName, downloadUrl);
-        });
+		pluginNoticeElement.text(pluginName);
+		pluginNoticeElement.on("click", () => {
+			BDfunctionsDevilBro.downloadPlugin(pluginName, downloadUrl);
+		});
 		if ($("#outdatedPlugins").children("span").length) $("#outdatedPlugins").append(`<span class="separator">, </span>`);
 		$("#outdatedPlugins").append(pluginNoticeElement);
 	}
 };
 
 BDfunctionsDevilBro.downloadPlugin = function (pluginName, downloadUrl) {
-    let request = require("request");
-    let fileSystem = require("fs");
-    let path = require("path");
-    request(downloadUrl, (error, response, body) => {
-        if (error) return console.warn("Unable to get update for " + pluginName);
-        let remoteVersion = body.match(/['"][0-9]+\.[0-9]+\.[0-9]+['"]/i);
-        remoteVersion = remoteVersion.toString().replace(/['"]/g, "");
-        let filename = downloadUrl.split("/");
-        filename = filename[filename.length - 1];
-        var file = path.join(BDfunctionsDevilBro.getPluginsFolder(), filename);
-        fileSystem.writeFileSync(file, body);
-        BDfunctionsDevilBro.showToast(`${pluginName} ${window.PluginUpdates.plugins[downloadUrl].version} has been replaced by ${pluginName} ${remoteVersion}`);
-        if (!BDfunctionsDevilBro.isRestartNoMoreEnabled()) {
-            if (!window.PluginUpdates.downloaded) {
-                window.PluginUpdates.downloaded = [];
-                let button = $(`<button class="btn btn-reload">Reload</button>`);
-                button.on("click", (e) => {
-                    e.preventDefault();
-                    window.location.reload(false);
-                });
-                var tooltip = document.createElement("div");
-                tooltip.className = "tooltip tooltip-bottom tooltip-black";
-                tooltip.style.maxWidth = "400px";
-                button.on("mouseenter", () => {
-                    document.querySelector(".tooltips").appendChild(tooltip);
-                    tooltip.innerText = window.PluginUpdates.downloaded.join(", ");
-                    tooltip.style.left = button.offset().left + (button.outerWidth() / 2) - ($(tooltip).outerWidth() / 2) + "px";
-                    tooltip.style.top = button.offset().top + button.outerHeight() + "px";
-                });
-    
-                button.on("mouseleave", () => {
-                    tooltip.remove();
-                });
-    
-                button.appendTo($("#pluginNotice"));
-            }
-            window.PluginUpdates.plugins[downloadUrl].version = remoteVersion;
-            window.PluginUpdates.downloaded.push(pluginName);
-            BDfunctionsDevilBro.removeUpdateNotice(pluginName);
-        }
-    });
+	let request = require("request");
+	let fileSystem = require("fs");
+	let path = require("path");
+	request(downloadUrl, (error, response, body) => {
+		if (error) return console.warn("Unable to get update for " + pluginName);
+		let remoteVersion = body.match(/['"][0-9]+\.[0-9]+\.[0-9]+['"]/i);
+		remoteVersion = remoteVersion.toString().replace(/['"]/g, "");
+		let filename = downloadUrl.split("/");
+		filename = filename[filename.length - 1];
+		var file = path.join(BDfunctionsDevilBro.getPluginsFolder(), filename);
+		fileSystem.writeFileSync(file, body);
+		BDfunctionsDevilBro.showToast(`${pluginName} ${window.PluginUpdates.plugins[downloadUrl].version} has been replaced by ${pluginName} ${remoteVersion}`);
+		if (!BDfunctionsDevilBro.isRestartNoMoreEnabled()) {
+			if (!window.PluginUpdates.downloaded) {
+				window.PluginUpdates.downloaded = [];
+				let button = $(`<button class="btn btn-reload">Reload</button>`);
+				button.on("click", (e) => {
+					e.preventDefault();
+					window.location.reload(false);
+				});
+				var tooltip = document.createElement("div");
+				tooltip.className = "tooltip tooltip-bottom tooltip-black";
+				tooltip.style.maxWidth = "400px";
+				button.on("mouseenter", () => {
+					document.querySelector(".tooltips").appendChild(tooltip);
+					tooltip.innerText = window.PluginUpdates.downloaded.join(", ");
+					tooltip.style.left = button.offset().left + (button.outerWidth() / 2) - ($(tooltip).outerWidth() / 2) + "px";
+					tooltip.style.top = button.offset().top + button.outerHeight() + "px";
+				});
+	
+				button.on("mouseleave", () => {
+					tooltip.remove();
+				});
+	
+				button.appendTo($("#pluginNotice"));
+			}
+			window.PluginUpdates.plugins[downloadUrl].version = remoteVersion;
+			window.PluginUpdates.downloaded.push(pluginName);
+			BDfunctionsDevilBro.removeUpdateNotice(pluginName);
+		}
+	});
 };
 
 BDfunctionsDevilBro.removeUpdateNotice = function (pluginName) {
@@ -180,52 +183,52 @@ BDfunctionsDevilBro.removeUpdateNotice = function (pluginName) {
 		if (notice.next(".separator").length) notice.next().remove();
 		else if (notice.prev(".separator").length) notice.prev().remove();
 		notice.remove();
-    }
+	}
 
 	if (!$("#outdatedPlugins").children("span").length && !$("#pluginNotice .btn-reload").length) {
-        $("#pluginNoticeDismiss").click();
-    } 
-    else if (!$("#outdatedPlugins").children("span").length && $("#pluginNotice .btn-reload").length) {
-        $("#pluginNotice .notice-message").text("To finish updating you need to reload.");
-    }
+		$("#pluginNoticeDismiss").click();
+	} 
+	else if (!$("#outdatedPlugins").children("span").length && $("#pluginNotice .btn-reload").length) {
+		$("#pluginNotice .notice-message").text("To finish updating you need to reload.");
+	}
 };
 
 BDfunctionsDevilBro.showToast = function (content, options = {}) {
-    if (!document.querySelector(".toasts")) {
-        let toastWrapper = document.createElement("div");
-        toastWrapper.classList.add("toasts");
-        toastWrapper.style.setProperty("left", document.querySelector(".chat form, #friends, .noChannel-2EQ0a9, .activityFeed-HeiGwL").getBoundingClientRect().left + "px");
-        toastWrapper.style.setProperty("width", document.querySelector(".chat form, #friends, .noChannel-2EQ0a9, .activityFeed-HeiGwL").offsetWidth + "px");
-        toastWrapper.style.setProperty("bottom", (document.querySelector(".chat form") ? document.querySelector(".chat form").offsetHeight : 80) + "px");
-        document.querySelector(".app").appendChild(toastWrapper);
-    }
-    const {type = "", icon = true, timeout = 3000} = options;
-    let toastElem = document.createElement("div");
-    toastElem.classList.add("toast");
+	if (!document.querySelector(".toasts")) {
+		let toastWrapper = document.createElement("div");
+		toastWrapper.classList.add("toasts");
+		toastWrapper.style.setProperty("left", document.querySelector(".chat form, #friends, .noChannel-2EQ0a9, .activityFeed-HeiGwL").getBoundingClientRect().left + "px");
+		toastWrapper.style.setProperty("width", document.querySelector(".chat form, #friends, .noChannel-2EQ0a9, .activityFeed-HeiGwL").offsetWidth + "px");
+		toastWrapper.style.setProperty("bottom", (document.querySelector(".chat form") ? document.querySelector(".chat form").offsetHeight : 80) + "px");
+		document.querySelector(".app").appendChild(toastWrapper);
+	}
+	const {type = "", icon = true, timeout = 3000} = options;
+	let toastElem = document.createElement("div");
+	toastElem.classList.add("toast");
 	if (type) toastElem.classList.add("toast-" + type);
 	if (type && icon) toastElem.classList.add("icon");
-    toastElem.innerText = content;
-    document.querySelector(".toasts").appendChild(toastElem);
-    setTimeout(() => {
-        toastElem.classList.add("closing");
-        setTimeout(() => {
-            toastElem.remove();
-            if (!document.querySelectorAll(".toasts .toast").length) document.querySelector(".toasts").remove();
-        }, 300);
-    }, timeout);
+	toastElem.innerText = content;
+	document.querySelector(".toasts").appendChild(toastElem);
+	setTimeout(() => {
+		toastElem.classList.add("closing");
+		setTimeout(() => {
+			toastElem.remove();
+			if (!document.querySelectorAll(".toasts .toast").length) document.querySelector(".toasts").remove();
+		}, 300);
+	}, timeout);
 };
 
 BDfunctionsDevilBro.createTooltip = function (content, container, options = {}) {
 	if (!document.querySelector(".tooltips") || !content || !container) return null;
 	let id = Math.round(Math.random()*10000000000000000);
-    let tooltip = document.createElement("div");
-    tooltip.classList.add("tooltip", "tooltip-black", "DevilBro-tooltip");
+	let tooltip = document.createElement("div");
+	tooltip.classList.add("tooltip", "tooltip-black", "DevilBro-tooltip");
 	if (options.type) tooltip.classList.add("tooltip-" + options.type);
 	if (options.selector) options.selector.split(" ").forEach(selector => {if(selector) tooltip.classList.add(selector);});
 	if (options.css) BDfunctionsDevilBro.appendLocalStyle("customTooltipDevilBro" + id, options.css);
 	if (options.html === true) tooltip.innerHTML = content;
 	else tooltip.innerText = content;
-    
+	
 	document.querySelector(".tooltips").appendChild(tooltip);
 	
 	var left, top;
@@ -279,8 +282,8 @@ BDfunctionsDevilBro.createTooltip = function (content, container, options = {}) 
 BDfunctionsDevilBro.createNotificationsBar = function (content, options = {}) {
 	if (!content) return;
 	let id = Math.round(Math.random()*10000000000000000);
-    let notifiybar = document.createElement("div");
-    notifiybar.classList.add("notice", "DevilBro-notice", "notice-" + id);
+	let notifiybar = document.createElement("div");
+	notifiybar.classList.add("notice", "DevilBro-notice", "notice-" + id);
 	notifiybar.innerHTML = `<div class="notice-dismiss"></div><span class="notice-message">${content}</span></strong>`;
 	$(".app .guilds-wrapper + div > div:first > div:first").append(notifiybar);
 	if (options.btn) {
@@ -323,29 +326,29 @@ BDfunctionsDevilBro.createNotificationsBar = function (content, options = {}) {
 
 // Plugins/Themes folder resolver from Square
 BDfunctionsDevilBro.getPluginsFolder = function () {
-    let process = require("process");
-    let path = require("path");
-    switch (process.platform) {
-        case "win32":
-        return path.resolve(process.env.appdata, "BetterDiscord/plugins/");
-        case "darwin":
-        return path.resolve(process.env.HOME, "Library/Preferences/", "BetterDiscord/plugins/");
-        default:
-        return path.resolve(process.env.HOME, ".config/", "BetterDiscord/plugins/");
-    }
+	let process = require("process");
+	let path = require("path");
+	switch (process.platform) {
+		case "win32":
+		return path.resolve(process.env.appdata, "BetterDiscord/plugins/");
+		case "darwin":
+		return path.resolve(process.env.HOME, "Library/Preferences/", "BetterDiscord/plugins/");
+		default:
+		return path.resolve(process.env.HOME, ".config/", "BetterDiscord/plugins/");
+	}
 };
 
 BDfunctionsDevilBro.getThemesFolder = function () {
-    let process = require("process");
-    let path = require("path");
-    switch (process.platform) {
-        case "win32":
-        return path.resolve(process.env.appdata, "BetterDiscord/themes/");
-        case "darwin":
-        return path.resolve(process.env.HOME, "Library/Preferences/", "BetterDiscord/themes/");
-        default:
-        return path.resolve(process.env.HOME, ".config/", "BetterDiscord/themes/");
-    }
+	let process = require("process");
+	let path = require("path");
+	switch (process.platform) {
+		case "win32":
+		return path.resolve(process.env.appdata, "BetterDiscord/themes/");
+		case "darwin":
+		return path.resolve(process.env.HOME, "Library/Preferences/", "BetterDiscord/themes/");
+		default:
+		return path.resolve(process.env.HOME, ".config/", "BetterDiscord/themes/");
+	}
 };
 
 BDfunctionsDevilBro.createUpdateButton = function () {
@@ -551,35 +554,33 @@ BDfunctionsDevilBro.findInWebModulesByName = function (names) {
 	return BDfunctionsDevilBro.WebModules.find(module => names.every(prop => module[prop] !== undefined));
 };
 
-BDfunctionsDevilBro.WebModules.addListener = function (internalModule, moduleFunction, identifier, callback) {
-	if (typeof internalModule !== "object" || !moduleFunction || !identifier || typeof callback !== "function") return;
-    if (typeof internalModule[moduleFunction] !== "function") return;
-    if (typeof internalModule.__internalListeners !== "object") internalModule.__internalListeners = {};
-    if (typeof internalModule.__internalListeners[moduleFunction] !== "object") internalModule.__internalListeners[moduleFunction] = {};
+BDfunctionsDevilBro.WebModules.addListener = function (internalModule, moduleFunction, callback) {
+	if (typeof internalModule !== "object" || !moduleFunction || typeof callback !== "function") return;
+	if (!internalModule[moduleFunction] || typeof(internalModule[moduleFunction]) !== "function") return;
+	if (!internalModule.__internalListeners) internalModule.__internalListeners = {};
+	if (!internalModule.__internalListeners[moduleFunction]) internalModule.__internalListeners[moduleFunction] = new Set();
 	
-    if (!internalModule.__listenerPatches) internalModule.__listenerPatches = {};
-    if (!internalModule.__listenerPatches[moduleFunction]) {
-        internalModule.__listenerPatches[moduleFunction] = BDfunctionsDevilBro.WebModules.monkeyPatch(internalModule, moduleFunction, {after: (data) => {
-            for (let thisidentifier in internalModule.__internalListeners[moduleFunction]) internalModule.__internalListeners[moduleFunction][thisidentifier]();
-        }});
-    }
-	
-    internalModule.__internalListeners[moduleFunction][identifier] = callback;
-	
-	console.log(internalModule.__internalListeners[moduleFunction]);
+	if (!internalModule.__listenerPatches) internalModule.__listenerPatches = {};
+	if (!internalModule.__listenerPatches[moduleFunction]) {
+		internalModule.__listenerPatches[moduleFunction] = BDfunctionsDevilBro.WebModules.monkeyPatch(internalModule, moduleFunction, {after: (data) => {
+			for (let listener of internalModule.__internalListeners[moduleFunction]) listener();
+		}});
+	}
+
+	internalModule.__internalListeners[moduleFunction].add(callback);
 };
 
-BDfunctionsDevilBro.WebModules.removeListener = function (internalModule, moduleFunction, identifier) {
-	if (typeof internalModule !== "object" || !moduleFunction || !identifier) return;
-    if (typeof internalModule[moduleFunction] !== "function") return;
-    if (typeof internalModule.__internalListeners !== "object" || typeof internalModule.__internalListeners[moduleFunction] !== "object") return;
-    
-    delete internalModule.__internalListeners[moduleFunction][identifier];
-    
-    if (BDfunctionsDevilBro.isObjectEmpty(internalModule.__internalListeners[moduleFunction])) {
-        internalModule.__listenerPatches[moduleFunction]();
-        delete internalModule.__listenerPatches[moduleFunction];
-    }
+BDfunctionsDevilBro.WebModules.removeListener = function (internalModule, moduleFunction, callback) {
+	if (typeof internalModule !== "object" || !moduleFunction || typeof callback !== "function") return;
+	if (!internalModule[moduleFunction] || typeof(internalModule[moduleFunction]) !== "function") return;
+	if (!internalModule.__internalListeners || !internalModule.__internalListeners[moduleFunction] || !internalModule.__internalListeners[moduleFunction].size) return;
+	
+	internalModule.__internalListeners[moduleFunction].delete(callback);
+	
+	if (!internalModule.__internalListeners[moduleFunction].size) {
+		internalModule.__listenerPatches[moduleFunction]();
+		delete internalModule.__listenerPatches[moduleFunction];
+	}
 };
 
 BDfunctionsDevilBro.WebModules.monkeyPatch = function (internalModule, moduleFunction, {before, after, instead, once = false, silent = false} = options) {
@@ -621,18 +622,18 @@ BDfunctionsDevilBro.WebModules.monkeyPatch = function (internalModule, moduleFun
 	return cancel;
 };
 
-BDfunctionsDevilBro.addOnSwitchListener = function (plugin) {
-    var SelectedChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getLastSelectedChannelId"]);
-    BDfunctionsDevilBro.WebModules.addListener(SelectedChannelStore._actionHandlers, "CHANNEL_SELECT", plugin.getName(), plugin.onSwitch.bind(plugin));
-    var GuildActions = BDfunctionsDevilBro.WebModules.findByProperties(["markGuildAsRead"]);
-    BDfunctionsDevilBro.WebModules.addListener(GuildActions, "nsfwAgree", plugin.getName(), plugin.onSwitch.bind(plugin));
+BDfunctionsDevilBro.addOnSwitchListener = function (callback) {
+	var SelectedChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getLastSelectedChannelId"]);
+	BDfunctionsDevilBro.WebModules.addListener(SelectedChannelStore._actionHandlers, "CHANNEL_SELECT", callback);
+	var GuildActions = BDfunctionsDevilBro.WebModules.findByProperties(["markGuildAsRead"]);
+	BDfunctionsDevilBro.WebModules.addListener(GuildActions, "nsfwAgree", callback);
 };
 
-BDfunctionsDevilBro.removeOnSwitchListener = function (plugin) {
-    var SelectedChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getLastSelectedChannelId"]);
-    BDfunctionsDevilBro.WebModules.removeListener(SelectedChannelStore._actionHandlers, "CHANNEL_SELECT", plugin.getName());
-    var GuildActions = BDfunctionsDevilBro.WebModules.findByProperties(["markGuildAsRead"]);
-    BDfunctionsDevilBro.WebModules.removeListener(GuildActions, "nsfwAgree", plugin.getName());
+BDfunctionsDevilBro.removeOnSwitchListener = function (callback) {
+	var SelectedChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getLastSelectedChannelId"]);
+	BDfunctionsDevilBro.WebModules.removeListener(SelectedChannelStore._actionHandlers, "CHANNEL_SELECT", callback);
+	var GuildActions = BDfunctionsDevilBro.WebModules.findByProperties(["markGuildAsRead"]);
+	BDfunctionsDevilBro.WebModules.removeListener(GuildActions, "nsfwAgree", callback);
 };
 
 BDfunctionsDevilBro.getLanguageTable = function (lang) {
@@ -657,7 +658,7 @@ BDfunctionsDevilBro.getLanguageTable = function (lang) {
 		tr: "Flemenkçe", //turkish
 		uk: "Нідерландська", //ukranian
 		zh: "荷蘭文" //chinese (traditional)
-    };
+	};
 	lang = lang ? lang : BDfunctionsDevilBro.getDiscordLanguage().id;
 	return BDfunctionsDevilBro.WebModules.find(function (m) {
 		return m.nl === ti[lang];
@@ -905,11 +906,11 @@ BDfunctionsDevilBro.sortArrayByKey = function (array, key, except) {
 };
 
 BDfunctionsDevilBro.getAllIndexes = function (array, val) {
-    var indexes = [], i = -1;
-    while ((i = array.indexOf(val, i+1)) != -1){
-        indexes.push(i);
-    }
-    return indexes;
+	var indexes = [], i = -1;
+	while ((i = array.indexOf(val, i+1)) != -1){
+		indexes.push(i);
+	}
+	return indexes;
 };
 
 BDfunctionsDevilBro.color2COMP = function (color) {
