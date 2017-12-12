@@ -14,8 +14,9 @@ BDfunctionsDevilBro.loadMessage = function (plugin, oldVersionRemove) {
 	BDfunctionsDevilBro.showToast(loadMessage);
 	
 	if (typeof plugin.onSwitch == "function") {
-		plugin.onSwitchImmediate = () => {process.nextTick(plugin.onSwitch.bind(plugin));};
-		BDfunctionsDevilBro.addOnSwitchListener(plugin.onSwitchImmediate);
+		BDfunctionsDevilBro.onSwitchFix(plugin);
+		//plugin.onSwitchImmediate = () => {setImmediate(plugin.onSwitch.bind(plugin));};
+		//BDfunctionsDevilBro.addOnSwitchListener(plugin.onSwitchImmediate);
 	}
 	
 	var downloadUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
@@ -73,7 +74,7 @@ BDfunctionsDevilBro.unloadMessage = function (plugin, oldVersionRemove) {
 	console.log(unloadMessage);
 	BDfunctionsDevilBro.showToast(unloadMessage);
 	
-	if (typeof plugin.onSwitchTriggered == "function") BDfunctionsDevilBro.removeOnSwitchListener(plugin.onSwitchImmediate);
+	if (plugin.switchFixObserver && typeof plugin.switchFixObserver.disconnect == "function") plugin.switchFixObserver.disconnect(); //BDfunctionsDevilBro.removeOnSwitchListener(plugin.onSwitchImmediate);
 	
 	var downloadUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
 	
