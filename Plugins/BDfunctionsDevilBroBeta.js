@@ -572,7 +572,7 @@ BDfunctionsDevilBro.WebModules.removeListener = function (internalModule, module
     if (!internalModule[moduleFunction] || typeof(internalModule[moduleFunction]) !== "function") return;
     if (!internalModule.__internalListeners || !internalModule.__internalListeners[moduleFunction] || !internalModule.__internalListeners[moduleFunction].size) return;
     
-    internalModule.__internalListeners[moduleFunction][identifier] delete;
+    delete internalModule.__internalListeners[moduleFunction][identifier];
     
     if (BDfunctionsDevilBro.isObjectEmpty(internalModule.__internalListeners[moduleFunction])) {
         internalModule.__listenerPatches[moduleFunction]();
