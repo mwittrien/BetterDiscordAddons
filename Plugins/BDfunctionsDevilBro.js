@@ -1,5 +1,11 @@
 var BDfunctionsDevilBro = {};
 
+BDfunctionsDevilBro.creationTime = performance.now();
+
+BDfunctionsDevilBro.isLibraryOutdated = function () {
+	return performance.now() - BDfunctionsDevilBro.creationTime > 600000;
+};
+
 BDfunctionsDevilBro.loadMessage = function (plugin, oldVersionRemove) {
 	var pluginName = typeof plugin == "object" ? plugin.getName() : plugin;
 	var oldVersion = typeof plugin == "object" ? plugin.getVersion() : oldVersionRemove;
