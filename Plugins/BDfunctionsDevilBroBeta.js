@@ -383,7 +383,7 @@ BDfunctionsDevilBro.checkAllUpdates = function () {
 };
 
 BDfunctionsDevilBro.translatePlugin = function (plugin) {
-	if (typeof plugin.labels === "object") {
+	if (typeof plugin.setLabelsByLanguage === "function" && typeof plugin.changeLanguageStrings === "function") {
 		var translateInterval = setInterval(() => {
 			if (document.querySelector("html").lang) {
 				clearInterval(translateInterval);
