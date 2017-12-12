@@ -720,7 +720,7 @@ BDfunctionsDevilBro.removeFromArray = function (array, value) {
 };
 
 BDfunctionsDevilBro.onSwitchFix = function (plugin) {
-	if (typeof BDfunctionsDevilBro.onSwitchTriggered !== "object") BDfunctionsDevilBro.onSwitchTriggered = [];
+	if (!Array.is(BDfunctionsDevilBro.onSwitchTriggered)) BDfunctionsDevilBro.onSwitchTriggered = [];
 	plugin.switchFixObserver = new MutationObserver((changes) => {
 		changes.forEach((change) => { 
 			if (change.addedNodes) {
@@ -744,7 +744,7 @@ BDfunctionsDevilBro.onSwitchFix = function (plugin) {
 	
 	function triggerOnSwitch () {
 		var identifier = plugin.getName() + "_" + plugin.getAuthor();
-		if (BDfunctionsDevilBro.onSwitchTriggered.includes(identifier)) return;
+		if (Array.is(BDfunctionsDevilBro.onSwitchTriggered) && BDfunctionsDevilBro.onSwitchTriggered.includes(identifier)) return;
 		BDfunctionsDevilBro.onSwitchTriggered.push(identifier);
 		plugin.onSwitch();
 		setTimeout(() => {BDfunctionsDevilBro.removeFromArray(BDfunctionsDevilBro.onSwitchTriggered, identifier);},1000);
