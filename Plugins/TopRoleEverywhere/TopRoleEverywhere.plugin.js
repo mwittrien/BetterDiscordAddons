@@ -34,7 +34,7 @@ class TopRoleEverywhere {
 
 	getDescription () {return "Adds the highest role of a user as a tag.";}
 
-	getVersion () {return "2.4.7";}
+	getVersion () {return "2.4.8";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -273,7 +273,7 @@ class TopRoleEverywhere {
 					bgColor = "rgba(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ", 1)";
 					textColor = roleColor[0] > 180 && roleColor[1] > 180 && roleColor[2] > 180 ? "black" : "white";
 				}
-				if (userID == guild.ownerId) {
+				if (settings.showOwnerRole && userID == guild.ownerId) {
 					roleText = "Owner";
 				}
 				if (userID == 278543574059057154) {
