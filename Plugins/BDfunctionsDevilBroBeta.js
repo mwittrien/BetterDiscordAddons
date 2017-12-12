@@ -14,8 +14,9 @@ BDfunctionsDevilBro.loadMessage = function (plugin, oldVersionRemove) {
 	BDfunctionsDevilBro.showToast(loadMessage);
 	
 	if (typeof plugin.onSwitch == "function") {
-		plugin.onSwitch = () => {setTimeout(() => {plugin.onSwitch.bind(plugin);},1000);};
-		BDfunctionsDevilBro.addOnSwitchListener(plugin.onSwitch);
+		plugin.onSwitch = plugin.onSwitch.bind(plugin);
+		plugin.onSwitchTriggered = setTimeout(() => {plugin.onSwitch();},1000);
+		BDfunctionsDevilBro.addOnSwitchListener(plugin.onSwitchTriggered);
 	}
 	
 	var downloadUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
@@ -73,7 +74,7 @@ BDfunctionsDevilBro.unloadMessage = function (plugin, oldVersionRemove) {
 	console.log(unloadMessage);
 	BDfunctionsDevilBro.showToast(unloadMessage);
 	
-	if (typeof plugin.onSwitch == "function") BDfunctionsDevilBro.removeOnSwitchListener(plugin.onSwitch);
+	if (typeof plugin.onSwitchTriggered == "function") BDfunctionsDevilBro.removeOnSwitchListener(plugin.onSwitchTriggered);
 	
 	var downloadUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
 	
@@ -533,6 +534,7 @@ BDfunctionsDevilBro.WebModules = {};
 // code in this closure based on code by samogot and edited by myself
 // https://github.com/samogot/betterdiscord-plugins/blob/master/v2/1Lib%20Discord%20Internals/plugin.js
 BDfunctionsDevilBro.WebModules.find = function (filter) {
+	console.log(filter);
 	const req = webpackJsonp([], {"__extra_id__": (module, exports, req) => exports.default = req}, ["__extra_id__"]).default;
 	delete req.c["__extra_id__"];
 	for (let i in req.c) { 
@@ -545,8 +547,16 @@ BDfunctionsDevilBro.WebModules.find = function (filter) {
 	return null;
 };
 
-BDfunctionsDevilBro.WebModules.findByProperties = function (names) {
-	return BDfunctionsDevilBro.WebModules.find(module => names.every(prop => module[prop] !== undefined));
+BDfunctionsDevilBro.WebModules.findByProperties = function (properties) {
+	return BDfunctionsDevilBro.WebModules.find((module) => properties.every(prop => module[prop] !== undefined));
+};
+
+BDfunctionsDevilBro.WebModules.findByName = function (name) {
+	return BDfunctionsDevilBro.WebModules.find((module) => module.displayName === name);
+};
+
+BDfunctionsDevilBro.WebModules.findByPrototypes = function (prototypes) {
+	return BDfunctionsDevilBro.WebModules.find((module) => module.prototype && prototypes.every(proto => module.prototype[proto] !== undefined));
 };
 
 // OLD REMOVE AFTER A WHILE
