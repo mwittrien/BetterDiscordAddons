@@ -2,11 +2,11 @@ var BDfunctionsDevilBro = {};
 
 BDfunctionsDevilBro.creationTime = performance.now();
 
-BDfunctionsDevilBro.isLibraryOutdated = function () {
+BDfunctionsDevilBro.isLibraryOutdated = () => {
 	return performance.now() - BDfunctionsDevilBro.creationTime > 600000;
 };
 
-BDfunctionsDevilBro.loadMessage = function (plugin, oldVersionRemove) {
+BDfunctionsDevilBro.loadMessage = (plugin, oldVersionRemove) => {
 	var pluginName = typeof plugin == "object" ? plugin.getName() : plugin;
 	var oldVersion = typeof plugin == "object" ? plugin.getVersion() : oldVersionRemove;
 	var loadMessage = BDfunctionsDevilBro.getLibraryStrings().toast_plugin_started.replace("${pluginName}", pluginName).replace("${oldVersion}", oldVersion);
@@ -63,7 +63,7 @@ BDfunctionsDevilBro.loadMessage = function (plugin, oldVersionRemove) {
 	}
 };
 
-BDfunctionsDevilBro.unloadMessage = function (plugin, oldVersionRemove) { 
+BDfunctionsDevilBro.unloadMessage = (plugin, oldVersionRemove) => { 
 	var pluginName = typeof plugin == "object" ? plugin.getName() : plugin;
 	var oldVersion = typeof plugin == "object" ? plugin.getVersion() : oldVersionRemove;
 	var unloadMessage = BDfunctionsDevilBro.getLibraryStrings().toast_plugin_stopped.replace("${pluginName}", pluginName).replace("${oldVersion}", oldVersion);
@@ -85,7 +85,7 @@ BDfunctionsDevilBro.unloadMessage = function (plugin, oldVersionRemove) {
 
 
 // plugin update notifications created in cooperation with Zerebos https://github.com/rauenzi/BetterDiscordAddons/blob/master/Plugins/PluginLibrary.js
-BDfunctionsDevilBro.checkUpdate = function (pluginName, downloadUrl) {
+BDfunctionsDevilBro.checkUpdate = (pluginName, downloadUrl) => {
 	let request = require("request");
 	request(downloadUrl, (error, response, result) => {
 		if (error) return;
@@ -104,7 +104,7 @@ BDfunctionsDevilBro.checkUpdate = function (pluginName, downloadUrl) {
 	});
 };
 
-BDfunctionsDevilBro.showUpdateNotice = function(pluginName, downloadUrl) {
+BDfunctionsDevilBro.showUpdateNotice = (pluginName, downloadUrl) => {
 	let noticeElement = `<div class="notice notice-info DevilBro-notice" id="pluginNotice"><div class="notice-dismiss" id="pluginNoticeDismiss"></div><span class="notice-message">The following plugins have updates:</span>&nbsp;&nbsp;<strong id="outdatedPlugins"></strong></div>`;
 	if (!$("#pluginNotice").length)  {
 		$(".app .guilds-wrapper + div > div:first > div:first").append(noticeElement);
@@ -130,7 +130,7 @@ BDfunctionsDevilBro.showUpdateNotice = function(pluginName, downloadUrl) {
 	}
 };
 
-BDfunctionsDevilBro.downloadPlugin = function(pluginName, downloadUrl) {
+BDfunctionsDevilBro.downloadPlugin = (pluginName, downloadUrl) => {
     let request = require("request");
     let fileSystem = require("fs");
     let path = require("path");
@@ -174,7 +174,7 @@ BDfunctionsDevilBro.downloadPlugin = function(pluginName, downloadUrl) {
     });
 };
 
-BDfunctionsDevilBro.removeUpdateNotice = function(pluginName) {
+BDfunctionsDevilBro.removeUpdateNotice = (pluginName) => {
 	let notice = $("#" + pluginName + "-notice");
 	if (notice.length) {
 		if (notice.next(".separator").length) notice.next().remove();
@@ -190,7 +190,7 @@ BDfunctionsDevilBro.removeUpdateNotice = function(pluginName) {
     }
 };
 
-BDfunctionsDevilBro.showToast = function(content, options = {}) {
+BDfunctionsDevilBro.showToast = (content, options = {}) => {
     if (!document.querySelector(".toasts")) {
         let toastWrapper = document.createElement("div");
         toastWrapper.classList.add("toasts");
@@ -215,7 +215,7 @@ BDfunctionsDevilBro.showToast = function(content, options = {}) {
     }, timeout);
 };
 
-BDfunctionsDevilBro.createTooltip = function(content, container, options = {}) {
+BDfunctionsDevilBro.createTooltip = (content, container, options = {}) => {
 	if (!document.querySelector(".tooltips") || !content || !container) return null;
 	let id = Math.round(Math.random()*10000000000000000);
     let tooltip = document.createElement("div");
@@ -276,7 +276,7 @@ BDfunctionsDevilBro.createTooltip = function(content, container, options = {}) {
 	return tooltip;
 };
 
-BDfunctionsDevilBro.createNotificationsBar = function(content, options = {}) {
+BDfunctionsDevilBro.createNotificationsBar = (content, options = {}) => {
 	if (!content) return;
 	let id = Math.round(Math.random()*10000000000000000);
     let notifiybar = document.createElement("div");
@@ -322,7 +322,7 @@ BDfunctionsDevilBro.createNotificationsBar = function(content, options = {}) {
 };
 
 // Plugins/Themes folder resolver from Square
-BDfunctionsDevilBro.getPluginsFolder = function() {
+BDfunctionsDevilBro.getPluginsFolder = () => {
     let process = require("process");
     let path = require("path");
     switch (process.platform) {
@@ -335,7 +335,7 @@ BDfunctionsDevilBro.getPluginsFolder = function() {
     }
 };
 
-BDfunctionsDevilBro.getThemesFolder = function() {
+BDfunctionsDevilBro.getThemesFolder = () => {
     let process = require("process");
     let path = require("path");
     switch (process.platform) {
@@ -348,19 +348,19 @@ BDfunctionsDevilBro.getThemesFolder = function() {
     }
 };
 
-BDfunctionsDevilBro.createUpdateButton = function () {
+BDfunctionsDevilBro.createUpdateButton = () => {
 	var updateButton = document.createElement("button");
 	updateButton.className = "bd-pfbtn bd-updatebtn";
 	updateButton.innerText = "Check for Updates";
 	updateButton.style.left = "220px";
-	updateButton.onclick = function () {
+	updateButton.onclick = () => {
 		BDfunctionsDevilBro.checkAllUpdates();
 	};			
-	updateButton.onmouseenter = function () {
+	updateButton.onmouseenter = () => {
 		BDfunctionsDevilBro.createTooltip("Only checks for updates of plugins, which support the updatecheck. Rightclick for a list.", updateButton, {type:"right",selector:"update-button-tooltip"});
 		
 	};
-	updateButton.oncontextmenu = function () {
+	updateButton.oncontextmenu = () => {
 		if (window.PluginUpdates && window.PluginUpdates.plugins && !document.querySelector(".update-list-tooltip")) {
 			var list = [];
 			for (var plugin in window.PluginUpdates.plugins) {
@@ -372,18 +372,18 @@ BDfunctionsDevilBro.createUpdateButton = function () {
 	return updateButton;
 };
 
-BDfunctionsDevilBro.checkAllUpdates = function () {
+BDfunctionsDevilBro.checkAllUpdates = () => {
 	for (let key in window.PluginUpdates.plugins) {
 		let plugin = window.PluginUpdates.plugins[key];
 		BDfunctionsDevilBro.checkUpdate(plugin.name, plugin.raw);
 	}
 };
 	
-BDfunctionsDevilBro.translateMessage = function (pluginName) { 
+BDfunctionsDevilBro.translateMessage = (pluginName) => { 
 	console.log(BDfunctionsDevilBro.getLibraryStrings().toast_plugin_translated.replace("${pluginName}", pluginName).replace("${ownlang}", BDfunctionsDevilBro.getDiscordLanguage().ownlang));
 };
 
-BDfunctionsDevilBro.translatePlugin = function (plugin) {
+BDfunctionsDevilBro.translatePlugin = (plugin) => {
 	if (typeof plugin.labels === "object") {
 		var translateInterval = setInterval(() => {
 			if (document.querySelector("html").lang) {
@@ -397,12 +397,12 @@ BDfunctionsDevilBro.translatePlugin = function (plugin) {
 	}
 };
 	
-BDfunctionsDevilBro.getReactInstance = function (node) { 
+BDfunctionsDevilBro.getReactInstance = (node) => { 
 	if (!node) return null;
 	return node[Object.keys(node).find((key) => key.startsWith("__reactInternalInstance"))];
 };
 
-BDfunctionsDevilBro.getOwnerInstance = function (config) { 
+BDfunctionsDevilBro.getOwnerInstance = (config) => { 
 	if (config === undefined) return null;
 	if (!config.node || !config.name) return null;
 	var inst = BDfunctionsDevilBro.getReactInstance(config.node);
@@ -443,7 +443,7 @@ BDfunctionsDevilBro.getOwnerInstance = function (config) {
 	}
 };
 
-BDfunctionsDevilBro.getKeyInformation = function (config) {
+BDfunctionsDevilBro.getKeyInformation = (config) => {
 	if (config === undefined) return null;
 	if (!config.node || !config.key) return null;
 	
@@ -529,7 +529,7 @@ BDfunctionsDevilBro.getKeyInformation = function (config) {
 BDfunctionsDevilBro.WebModules = {};
 // code in this closure based on code by samogot and edited by myself
 // https://github.com/samogot/betterdiscord-plugins/blob/master/v2/1Lib%20Discord%20Internals/plugin.js
-BDfunctionsDevilBro.WebModules.find = function (filter) {
+BDfunctionsDevilBro.WebModules.find = (filter) => {
 	const req = webpackJsonp([], {"__extra_id__": (module, exports, req) => exports.default = req}, ["__extra_id__"]).default;
 	delete req.c["__extra_id__"];
 	for (let i in req.c) { 
@@ -542,12 +542,12 @@ BDfunctionsDevilBro.WebModules.find = function (filter) {
 	return null;
 };
 
-BDfunctionsDevilBro.WebModules.findByProperties = function (names) {
+BDfunctionsDevilBro.WebModules.findByProperties = (names) => {
 	return BDfunctionsDevilBro.WebModules.find(module => names.every(prop => module[prop] !== undefined));
 };
 
 // OLD REMOVE AFTER A WHILE
-BDfunctionsDevilBro.findInWebModulesByName = function (names) {
+BDfunctionsDevilBro.findInWebModulesByName = (names) => {
 	return BDfunctionsDevilBro.WebModules.find(module => names.every(prop => module[prop] !== undefined));
 };
 
@@ -633,7 +633,7 @@ BDfunctionsDevilBro.removeOnSwitchListener = (callback) => {
     BDfunctionsDevilBro.WebModules.removeListener(GuildActions, "nsfwAgree", callback);
 };
 
-BDfunctionsDevilBro.getLanguageTable = function (lang) {
+BDfunctionsDevilBro.getLanguageTable = (lang) => {
 	var ti = {
 		bg: "холандски", //bulgarian
 		cs: "Nizozemština", //czech
@@ -657,12 +657,12 @@ BDfunctionsDevilBro.getLanguageTable = function (lang) {
 		zh: "荷蘭文" //chinese (traditional)
     };
 	lang = lang ? lang : BDfunctionsDevilBro.getDiscordLanguage().id;
-	return BDfunctionsDevilBro.WebModules.find(function(m) {
+	return BDfunctionsDevilBro.WebModules.find((m) => {
 		return m.nl === ti[lang];
 	});
 };
 
-BDfunctionsDevilBro.equals = function (check1, check2, compareOrder) {
+BDfunctionsDevilBro.equals = (check1, check2, compareOrder) => {
 	var depth = -1;
 	
 	if (compareOrder === undefined || typeof compareOrder !== "boolean") compareOrder = false;
@@ -702,7 +702,7 @@ BDfunctionsDevilBro.equals = function (check1, check2, compareOrder) {
 	}
 };
 
-BDfunctionsDevilBro.isObjectEmpty = function (obj) {
+BDfunctionsDevilBro.isObjectEmpty = (obj) => {
 	var empty = true;
 	for (var key in obj) {
 		empty = false;
@@ -711,33 +711,33 @@ BDfunctionsDevilBro.isObjectEmpty = function (obj) {
 	return empty;
 };
 
-BDfunctionsDevilBro.removeFromArray = function (array, value) {
+BDfunctionsDevilBro.removeFromArray = (array, value) => {
 	if (!array || !value || !Array.isArray(array) || !array.includes(value)) return;
 	array.splice(array.indexOf(value), 1);
 };
 
-BDfunctionsDevilBro.onSwitchFix = function (plugin) {
+BDfunctionsDevilBro.onSwitchFix = (plugin) => {
 	return new MutationObserver(() => {});
 };
 
-BDfunctionsDevilBro.getMyUserData = function () {
+BDfunctionsDevilBro.getMyUserData = () => {
 	var UserActions = BDfunctionsDevilBro.WebModules.findByProperties(["getCurrentUser"]);
 	return UserActions ? UserActions.getCurrentUser() : null;
 };
 
-BDfunctionsDevilBro.getMyUserID = function () {
+BDfunctionsDevilBro.getMyUserID = () => {
 	var userData = BDfunctionsDevilBro.getMyUserData();
 	return (userData && userData.id ? userData.id : null);
 };
 
-BDfunctionsDevilBro.getMyUserStatus = function () {
+BDfunctionsDevilBro.getMyUserStatus = () => {
 	var userStatus = "invisible";
 	var status = document.querySelector(".container-iksrDt .status");
 	if (status) userStatus = status.classList[1].split("-")[1];
 	return userStatus;
 };
 	
-BDfunctionsDevilBro.readServerList = function () {
+BDfunctionsDevilBro.readServerList = () => {
 	var foundServers = [];
 	var servers = $(".guild");
 	for (var i = 0; i < servers.length; i++) {
@@ -746,7 +746,7 @@ BDfunctionsDevilBro.readServerList = function () {
 	return foundServers;
 };
 	
-BDfunctionsDevilBro.readUnreadServerList = function (servers) {
+BDfunctionsDevilBro.readUnreadServerList = (servers) => {
 	if (servers === undefined) servers = BDfunctionsDevilBro.readServerList();
 	var foundServers = [];
 	for (var i = 0; i < servers.length; i++) {
@@ -757,7 +757,7 @@ BDfunctionsDevilBro.readUnreadServerList = function (servers) {
 	return foundServers;
 };
 	
-BDfunctionsDevilBro.readDmList = function () {
+BDfunctionsDevilBro.readDmList = () => {
 	var foundDMs = [];
 	var dms = $(".dms .guild");
 	for (var i = 0; i < dms.length; i++) {
@@ -766,7 +766,7 @@ BDfunctionsDevilBro.readDmList = function () {
 	return foundDMs;
 };
 	
-BDfunctionsDevilBro.readChannelList = function () {
+BDfunctionsDevilBro.readChannelList = () => {
 	var foundChannels = [];
 	var channels = $(".containerDefault-7RImuF, .containerDefault-1bbItS");
 	for (var i = 0; i < channels.length; i++) {
@@ -775,7 +775,7 @@ BDfunctionsDevilBro.readChannelList = function () {
 	return foundChannels;
 };
 	
-BDfunctionsDevilBro.getSelectedServer = function () {
+BDfunctionsDevilBro.getSelectedServer = () => {
 	var servers = BDfunctionsDevilBro.readServerList();
 	for (var i = 0; i < servers.length; i++) {
 		if (servers[i].classList.contains("selected")) {
@@ -785,7 +785,7 @@ BDfunctionsDevilBro.getSelectedServer = function () {
 	return null;
 };
 	
-BDfunctionsDevilBro.getDivOfServer = function (id) {
+BDfunctionsDevilBro.getDivOfServer = (id) => {
 	var servers = BDfunctionsDevilBro.readServerList();
 	for (var i = 0; i < servers.length; i++) {
 		if (BDfunctionsDevilBro.getIdOfServer(servers[i]) == id) {
@@ -795,7 +795,7 @@ BDfunctionsDevilBro.getDivOfServer = function (id) {
 	return null;
 };
 	
-BDfunctionsDevilBro.getIdOfServer = function (server) {
+BDfunctionsDevilBro.getIdOfServer = (server) => {
 	var serverData = BDfunctionsDevilBro.getKeyInformation({"node":server, "key":"guild"});
 	if (serverData) {
 		return serverData.id;
@@ -803,7 +803,7 @@ BDfunctionsDevilBro.getIdOfServer = function (server) {
 	return null;
 };
 	
-BDfunctionsDevilBro.getDivOfChannel = function (channelID) {
+BDfunctionsDevilBro.getDivOfChannel = (channelID) => {
 	var channels = BDfunctionsDevilBro.readChannelList();
 	for (var i = 0; i < channels.length; i++) {
 		var channelData = BDfunctionsDevilBro.getKeyInformation({"node":channels[i], "key":"channel"});
@@ -816,30 +816,30 @@ BDfunctionsDevilBro.getDivOfChannel = function (channelID) {
 	return null;
 };
 
-BDfunctionsDevilBro.getSettingsPanelDiv = function (ele) {
+BDfunctionsDevilBro.getSettingsPanelDiv = (ele) => {
 	return $(".bda-slist > li").has(ele)[0];
 };
 
-BDfunctionsDevilBro.themeIsLightTheme = function () {
+BDfunctionsDevilBro.themeIsLightTheme = () => {
 	if ($(".theme-light").length > $(".theme-dark").length) {
 		return true;
 	}
 	return false;
 };
 
-BDfunctionsDevilBro.saveAllData = function (settings, pluginName, keyName) {
+BDfunctionsDevilBro.saveAllData = (settings, pluginName, keyName) => {
 	bdPluginStorage.set(pluginName, keyName, settings);
 };
 
-BDfunctionsDevilBro.loadAllData = function (pluginName, keyName) {
+BDfunctionsDevilBro.loadAllData = (pluginName, keyName) => {
 	return bdPluginStorage.get(pluginName, keyName) ? bdPluginStorage.get(pluginName, keyName) : {};
 };
 
-BDfunctionsDevilBro.removeAllData = function (pluginName, keyName) {
+BDfunctionsDevilBro.removeAllData = (pluginName, keyName) => {
 	BDfunctionsDevilBro.saveAllData({}, pluginName, keyName);
 };
 
-BDfunctionsDevilBro.saveData = function (id, data, pluginName, keyName) {
+BDfunctionsDevilBro.saveData = (id, data, pluginName, keyName) => {
 	var settings = BDfunctionsDevilBro.loadAllData(pluginName, keyName);
 	
 	settings[id] = data;
@@ -847,7 +847,7 @@ BDfunctionsDevilBro.saveData = function (id, data, pluginName, keyName) {
 	BDfunctionsDevilBro.saveAllData(settings, pluginName, keyName);
 };
 
-BDfunctionsDevilBro.loadData = function (id, pluginName, keyName) {
+BDfunctionsDevilBro.loadData = (id, pluginName, keyName) => {
 	var settings = BDfunctionsDevilBro.loadAllData(pluginName, keyName);
 	
 	var data = settings[id];
@@ -855,7 +855,7 @@ BDfunctionsDevilBro.loadData = function (id, pluginName, keyName) {
 	return data === undefined ? null : data;
 };
 	
-BDfunctionsDevilBro.removeData = function (id, pluginName, keyName) {
+BDfunctionsDevilBro.removeData = (id, pluginName, keyName) => {
 	var settings = BDfunctionsDevilBro.loadAllData(pluginName, keyName);
 	
 	delete settings[id];
@@ -863,7 +863,7 @@ BDfunctionsDevilBro.removeData = function (id, pluginName, keyName) {
 	BDfunctionsDevilBro.saveAllData(settings, pluginName, keyName);
 };
 
-BDfunctionsDevilBro.appendWebScript = function (filepath) {
+BDfunctionsDevilBro.appendWebScript = (filepath) => {
 	$('head script[src="' + filepath + '"]').remove();
 	
 	var ele = document.createElement("script");
@@ -872,7 +872,7 @@ BDfunctionsDevilBro.appendWebScript = function (filepath) {
 	$("head").append(ele);
 };
 
-BDfunctionsDevilBro.appendWebStyle = function (filepath) {
+BDfunctionsDevilBro.appendWebStyle = (filepath) => {
 	$('head link[href="' + filepath + '"]').remove();
 
 	var ele = document.createElement("link");
@@ -883,7 +883,7 @@ BDfunctionsDevilBro.appendWebStyle = function (filepath) {
 	$("head").append(ele);
 };
 
-BDfunctionsDevilBro.appendLocalStyle = function (pluginName, css) {
+BDfunctionsDevilBro.appendLocalStyle = (pluginName, css) => {
 	$('head style[id="' + pluginName + 'CSS"]').remove();
 
 	var ele = document.createElement("style");
@@ -893,13 +893,13 @@ BDfunctionsDevilBro.appendLocalStyle = function (pluginName, css) {
 	$("head").append(ele);
 };
 
-BDfunctionsDevilBro.removeLocalStyle = function (pluginName) {
+BDfunctionsDevilBro.removeLocalStyle = (pluginName) => {
 	$('head style[id="' + pluginName + 'CSS"]').remove();
 };
 
-BDfunctionsDevilBro.sortArrayByKey = function (array, key, except) {
+BDfunctionsDevilBro.sortArrayByKey = (array, key, except) => {
 	if (except === undefined) except = null;
-	return array.sort(function(a, b) {
+	return array.sort((a, b) => {
 		var x = a[key]; var y = b[key];
 		if (x != except) {
 			return ((x < y) ? -1 : ((x > y) ? 1 : 0));
@@ -907,7 +907,7 @@ BDfunctionsDevilBro.sortArrayByKey = function (array, key, except) {
 	});
 };
 
-BDfunctionsDevilBro.getAllIndexes = function (array, val) {
+BDfunctionsDevilBro.getAllIndexes = (array, val) => {
     var indexes = [], i = -1;
     while ((i = array.indexOf(val, i+1)) != -1){
         indexes.push(i);
@@ -915,7 +915,7 @@ BDfunctionsDevilBro.getAllIndexes = function (array, val) {
     return indexes;
 };
 
-BDfunctionsDevilBro.color2COMP = function (color) {
+BDfunctionsDevilBro.color2COMP = (color) => {
 	if (color) {
 		switch (BDfunctionsDevilBro.checkColorType(color)) {
 			case "comp":
@@ -950,7 +950,7 @@ BDfunctionsDevilBro.color2COMP = function (color) {
 	return null;
 };
 
-BDfunctionsDevilBro.color2RGB = function (color) {
+BDfunctionsDevilBro.color2RGB = (color) => {
 	if (color) {
 		switch (BDfunctionsDevilBro.checkColorType(color)) {
 			case "comp":
@@ -968,7 +968,7 @@ BDfunctionsDevilBro.color2RGB = function (color) {
 	return null;
 };
 
-BDfunctionsDevilBro.color2HSL = function (color) {
+BDfunctionsDevilBro.color2HSL = (color) => {
 	if (color) {
 		switch (BDfunctionsDevilBro.checkColorType(color)) {
 			case "comp":
@@ -994,7 +994,7 @@ BDfunctionsDevilBro.color2HSL = function (color) {
 	return null;
 };
 
-BDfunctionsDevilBro.color2HEX = function (color) {
+BDfunctionsDevilBro.color2HEX = (color) => {
 	if (color) {
 		switch (BDfunctionsDevilBro.checkColorType(color)) {
 			case "comp":
@@ -1012,7 +1012,7 @@ BDfunctionsDevilBro.color2HEX = function (color) {
 	return null;
 };
 
-BDfunctionsDevilBro.colorCHANGE = function (color, value) {
+BDfunctionsDevilBro.colorCHANGE = (color, value) => {
 	if (color) {
 		var comp = BDfunctionsDevilBro.color2COMP(color);
 		if (!comp || value === undefined || typeof value != "number") return null;
@@ -1034,7 +1034,7 @@ BDfunctionsDevilBro.colorCHANGE = function (color, value) {
 	return null;
 };
 
-BDfunctionsDevilBro.colorCOMPARE = function (color1, color2) {
+BDfunctionsDevilBro.colorCOMPARE = (color1, color2) => {
 	if (color1 && color2) {
 		color1 = BDfunctionsDevilBro.color2RGB(color1);
 		color2 = BDfunctionsDevilBro.color2RGB(color2);
@@ -1043,7 +1043,7 @@ BDfunctionsDevilBro.colorCOMPARE = function (color1, color2) {
 	return null;
 };
 
-BDfunctionsDevilBro.colorINV = function (color, conv) {
+BDfunctionsDevilBro.colorINV = (color, conv) => {
 	if (color) {
 		var type = BDfunctionsDevilBro.checkColorType(color);
 		if (type) {
@@ -1080,7 +1080,7 @@ BDfunctionsDevilBro.colorINV = function (color, conv) {
 	return null;
 };
 
-BDfunctionsDevilBro.checkColorType = function (color) {
+BDfunctionsDevilBro.checkColorType = (color) => {
 	if (color) {
 		if (typeof color === "object" && color.length == 3) {
 			return "comp";
@@ -1098,29 +1098,29 @@ BDfunctionsDevilBro.checkColorType = function (color) {
 	return null;
 };
 
-BDfunctionsDevilBro.setInnerText = function (div, text) {
+BDfunctionsDevilBro.setInnerText = (div, text) => {
 	if (!div) return;
-	var textNode = $(div).contents().filter(function() {return this.nodeType == Node.TEXT_NODE;})[0];
+	var textNode = $(div).contents().filter(() => {return this.nodeType == Node.TEXT_NODE;})[0];
 	if (textNode) textNode.textContent = text;
 }
 	
-BDfunctionsDevilBro.getInnerText = function (div) {
+BDfunctionsDevilBro.getInnerText = (div) => {
 	if (!div) return;
-	var textNode = $(div).contents().filter(function() {return this.nodeType == Node.TEXT_NODE;})[0];
+	var textNode = $(div).contents().filter(() => {return this.nodeType == Node.TEXT_NODE;})[0];
 	return textNode ? textNode.textContent : undefined;
 }
 	
-BDfunctionsDevilBro.encodeToHTML = function (string) {
+BDfunctionsDevilBro.encodeToHTML = (string) => {
 	var ele = document.createElement("div");
 	ele.innerText = string;
 	return ele.innerHTML;
 };
 
-BDfunctionsDevilBro.regEscape = function (string) {
+BDfunctionsDevilBro.regEscape = (string) => {
 	return string.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
 };
 
-BDfunctionsDevilBro.clearReadNotifications = function (servers) {
+BDfunctionsDevilBro.clearReadNotifications = (servers) => {
 	var GuildActions = BDfunctionsDevilBro.WebModules.findByProperties(['markGuildAsRead']);
 	if (!servers || !GuildActions) return;
 	servers = Array.isArray(servers) ? servers : Array.from(servers);
@@ -1130,7 +1130,7 @@ BDfunctionsDevilBro.clearReadNotifications = function (servers) {
 	}); 
 };
 
-BDfunctionsDevilBro.appendModal = function (modal) {
+BDfunctionsDevilBro.appendModal = (modal) => {
 	let id = Math.round(Math.random()*10000000000000000);
 	$(modal)
 		.appendTo(".app ~ [class^='theme-']")
@@ -1176,7 +1176,7 @@ BDfunctionsDevilBro.appendModal = function (modal) {
 		});
 };
 
-BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
+BDfunctionsDevilBro.setColorSwatches = (currentCOMP, wrapper, swatch) => {
 	var wrapperDiv = $(wrapper);
 		
 	var colourList = 
@@ -1251,7 +1251,7 @@ BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
 	});
 };
 
-BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
+BDfunctionsDevilBro.openColorPicker = (currentColor, swatch) => {
 	var strings = BDfunctionsDevilBro.getLibraryStrings();
 	var colorPickerModalMarkup = 
 		`<span class="colorpicker-modal DevilBro-modal">
@@ -1558,20 +1558,20 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 	}
 };
 
-BDfunctionsDevilBro.getSwatchColor = function (swatch) {
+BDfunctionsDevilBro.getSwatchColor = (swatch) => {
 	return !$(".ui-color-picker-" + swatch + ".nocolor.selected")[0] ? BDfunctionsDevilBro.color2COMP($(".ui-color-picker-" + swatch + ".selected").css("background-color")) : null;
 };
 
-BDfunctionsDevilBro.isRestartNoMoreEnabled = function () {
+BDfunctionsDevilBro.isRestartNoMoreEnabled = () => {
 	return (window.bdplugins["Restart-No-More"] && window.pluginCookie["Restart-No-More"] || window.bdplugins["Restart No More"] && window.pluginCookie["Restart No More"]);
 };
 
-BDfunctionsDevilBro.getDiscordTheme = function () {
+BDfunctionsDevilBro.getDiscordTheme = () => {
 	if ($(".theme-light").length > $(".theme-dark").length) return "theme-light";
 	else return "theme-dark";
 };
 
-BDfunctionsDevilBro.getDiscordLanguage = function () {
+BDfunctionsDevilBro.getDiscordLanguage = () => {
 	var lang = document.querySelector("html").lang ? document.querySelector("html").lang.split("-")[0] : "en";
 	switch (lang) {
 		case "da": 		//danish
@@ -1617,7 +1617,7 @@ BDfunctionsDevilBro.getDiscordLanguage = function () {
 	}
 };
 
-BDfunctionsDevilBro.getLibraryStrings = function () {
+BDfunctionsDevilBro.getLibraryStrings = () => {
 	switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
 		case "da": 		//danish
 			return {
