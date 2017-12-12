@@ -553,7 +553,7 @@ BDfunctionsDevilBro.findInWebModulesByName = function (names) {
 
 BDfunctionsDevilBro.WebModules.addListener = (internalModule, moduleFunction, callback) => {
     const moduleName = internalModule.displayName || internalModule.name || internalModule.constructor.displayName || internalModule.constructor.name; // borrowed from Samogot
-    if (!internalModule[moduleFunction] || typeof(internalModule[moduleFunction]) !== "function") return console.error(`Module ${moduleName} has no function ${moduleFunction}`);
+    if (!internalModule[moduleFunction] || typeof(internalModule[moduleFunction]) !== "function") return;
     if (!internalModule.__internalListeners) internalModule.__internalListeners = {};
     if (!internalModule.__internalListeners[moduleFunction]) internalModule.__internalListeners[moduleFunction] = new Set();
 	
@@ -561,7 +561,6 @@ BDfunctionsDevilBro.WebModules.addListener = (internalModule, moduleFunction, ca
 	
     if (!internalModule.__listenerPatches) internalModule.__listenerPatches = {};
     if (!internalModule.__listenerPatches[moduleFunction]) {
-        if (internalModule[moduleFunction].__monkeyPatched) console.warn(`Function ${moduleFunction} of module ${moduleName} has already been patched by someone else.`);
         internalModule.__listenerPatches[moduleFunction] = BDfunctionsDevilBro.WebModules.monkeyPatch(internalModule, moduleFunction, {after: (data) => {
             for (let listener of internalModule.__internalListeners[moduleFunction]) listener();
         }});
@@ -570,7 +569,7 @@ BDfunctionsDevilBro.WebModules.addListener = (internalModule, moduleFunction, ca
 
 BDfunctionsDevilBro.WebModules.removeListener = (internalModule, moduleFunction, callback) => {
     const moduleName = internalModule.displayName || internalModule.name || internalModule.constructor.displayName || internalModule.constructor.name; // borrowed from Samogot
-    if (!internalModule[moduleFunction] || typeof(internalModule[moduleFunction]) !== "function") return console.error(`Module ${moduleName} has no function ${moduleFunction}`);
+    if (!internalModule[moduleFunction] || typeof(internalModule[moduleFunction]) !== "function") return;
     if (!internalModule.__internalListeners || !internalModule.__internalListeners[moduleFunction] || !internalModule.__internalListeners[moduleFunction].size) return;
     
     internalModule.__internalListeners[moduleFunction].delete(callback);
