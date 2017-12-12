@@ -13,9 +13,11 @@ BDfunctionsDevilBro.loadMessage = function (plugin, oldVersionRemove) {
 	console.log(loadMessage);
 	BDfunctionsDevilBro.showToast(loadMessage);
 	
-	if (typeof plugin.onSwitch === "function") BDfunctionsDevilBro.onSwitchFix(plugin);
-	/* plugin.onSwitchImmediate = () => {setImmediate(plugin.onSwitch.bind(plugin));};
-	BDfunctionsDevilBro.addOnSwitchListener(plugin.onSwitchImmediate); */
+	if (typeof plugin.onSwitch == "function") {
+		BDfunctionsDevilBro.onSwitchFix(plugin);
+		//plugin.onSwitchImmediate = () => {setImmediate(plugin.onSwitch.bind(plugin));};
+		//BDfunctionsDevilBro.addOnSwitchListener(plugin.onSwitchImmediate);
+	}
 	
 	var downloadUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
 	BDfunctionsDevilBro.checkUpdate(pluginName, downloadUrl);
@@ -72,8 +74,7 @@ BDfunctionsDevilBro.unloadMessage = function (plugin, oldVersionRemove) {
 	console.log(unloadMessage);
 	BDfunctionsDevilBro.showToast(unloadMessage);
 	
-	if (plugin.switchFixObserver && typeof plugin.switchFixObserver.disconnect === "function") plugin.switchFixObserver.disconnect(); 
-	/* BDfunctionsDevilBro.removeOnSwitchListener(plugin.onSwitchImmediate); */
+	if (plugin.switchFixObserver && typeof plugin.switchFixObserver.disconnect == "function") plugin.switchFixObserver.disconnect(); //BDfunctionsDevilBro.removeOnSwitchListener(plugin.onSwitchImmediate);
 	
 	var downloadUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
 	
@@ -640,39 +641,6 @@ BDfunctionsDevilBro.removeOnSwitchListener = function (callback) {
 	BDfunctionsDevilBro.WebModules.removeListener(GuildActions, "nsfwAgree", callback);
 };
 
-BDfunctionsDevilBro.onSwitchFix = function (plugin) {
-	console.log(plugin);
-	if (typeof BDfunctionsDevilBro.onSwitchTriggered !== "object") BDfunctionsDevilBro.onSwitchTriggered = [];
-	plugin.switchFixObserver = new MutationObserver((changes) => {
-		changes.forEach((change) => { 
-			if (change.addedNodes) {
-				change.addedNodes.forEach((node) => {
-					if (node && node.id === "friends") triggerOnSwitch(); 
-					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("noTopic-3Rq-dz")) 	triggerOnSwitch(); 
-					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("topic-1KFf6J")) 	triggerOnSwitch(); 
-				});
-			}
-			if (change.removedNodes) {
-				change.removedNodes.forEach((node) => {
-					if (node && node.id === "friends") triggerOnSwitch(); 
-					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("noTopic-3Rq-dz")) 	triggerOnSwitch(); 
-					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("topic-1KFf6J")) 	triggerOnSwitch(); 
-				});
-			}
-		});
-	});
-	plugin.switchFixObserver.observe(document.querySelector(":-webkit-any(.chat, #friends, .noChannel-2EQ0a9, .activityFeed-HeiGwL)").parentNode, {childList: true, subtree:true});
-	
-	function triggerOnSwitch () {
-		var name = plugin.getName() + "_" + plugin.getAuthor();
-		console.log(name);
-		if (BDfunctionsDevilBro.onSwitchTriggered.includes(name)) return;
-		BDfunctionsDevilBro.onSwitchTriggered.push(name);
-		plugin.onSwitch();
-		setTimeout(() => {BDfunctionsDevilBro.removeFromArray(BDfunctionsDevilBro.onSwitchTriggered, name);},1000);
-	}
-};
-
 BDfunctionsDevilBro.getLanguageTable = function (lang) {
 	var ti = {
 		bg: "холандски", //bulgarian
@@ -752,8 +720,37 @@ BDfunctionsDevilBro.removeFromArray = function (array, value) {
 };
 
 BDfunctionsDevilBro.onSwitchFix = function (plugin) {
-	return new MutationObserver(() => {});
+	if (typeof BDfunctionsDevilBro.onSwitchTriggered !== "object") BDfunctionsDevilBro.onSwitchTriggered = [];
+	plugin.switchFixObserver = new MutationObserver((changes) => {
+		changes.forEach((change) => { 
+			if (change.addedNodes) {
+				change.addedNodes.forEach((node) => {
+					if (node && node.id === "friends") triggerOnSwitch(); 
+					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("noTopic-3Rq-dz")) 	triggerOnSwitch(); 
+					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("topic-1KFf6J")) 	triggerOnSwitch(); 
+				});
+			}
+			if (change.removedNodes) {
+				change.removedNodes.forEach((node) => {
+					if (node && node.id === "friends") triggerOnSwitch();  
+					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("noTopic-3Rq-dz")) 	triggerOnSwitch(); 
+					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("topic-1KFf6J")) 	triggerOnSwitch(); 
+				});
+			}
+		});
+	});
+	plugin.switchFixObserver.observe(document.querySelector(":-webkit-any(.chat, #friends, .noChannel-2EQ0a9, .activityFeed-HeiGwL)").parentNode, {childList: true, subtree:true});
+	return plugin.switchFixObserver;
+	
+	function triggerOnSwitch (plugin) {
+		var identifier = plugin.getName() + "_" + plugin.getAuthor();
+		if (BDfunctionsDevilBro.onSwitchTriggered.contains(identifier)) return;
+		BDfunctionsDevilBro.onSwitchTriggered.push(identifier);
+		plugin.onSwitch();
+		setTimeout(() => {BDfunctionsDevilBro.removeFromArray(BDfunctionsDevilBro.onSwitchTriggered, identifier);},1000);
+	};
 };
+
 
 BDfunctionsDevilBro.getMyUserData = function () {
 	var UserActions = BDfunctionsDevilBro.WebModules.findByProperties(["getCurrentUser"]);
