@@ -14,8 +14,7 @@ BDfunctionsDevilBro.loadMessage = function (plugin, oldVersionRemove) {
 	BDfunctionsDevilBro.showToast(loadMessage);
 	
 	if (typeof plugin.onSwitch == "function") {
-		plugin.onSwitch = plugin.onSwitch.bind(plugin);
-		plugin.onSwitchTriggered = setTimeout(() => {plugin.onSwitch();},1000);
+		plugin.onSwitchTriggered = () => {setTimeout(plugin.onSwitch.bind(plugin),1000);};
 		BDfunctionsDevilBro.addOnSwitchListener(plugin.onSwitchTriggered);
 	}
 	
@@ -382,10 +381,6 @@ BDfunctionsDevilBro.checkAllUpdates = function () {
 		BDfunctionsDevilBro.checkUpdate(plugin.name, plugin.raw);
 	}
 };
-	
-BDfunctionsDevilBro.translateMessage = function (pluginName) { 
-	console.log(BDfunctionsDevilBro.getLibraryStrings().toast_plugin_translated.replace("${pluginName}", pluginName).replace("${ownlang}", BDfunctionsDevilBro.getDiscordLanguage().ownlang));
-};
 
 BDfunctionsDevilBro.translatePlugin = function (plugin) {
 	if (typeof plugin.labels === "object") {
@@ -534,7 +529,6 @@ BDfunctionsDevilBro.WebModules = {};
 // code in this closure based on code by samogot and edited by myself
 // https://github.com/samogot/betterdiscord-plugins/blob/master/v2/1Lib%20Discord%20Internals/plugin.js
 BDfunctionsDevilBro.WebModules.find = function (filter) {
-	console.log(filter);
 	const req = webpackJsonp([], {"__extra_id__": (module, exports, req) => exports.default = req}, ["__extra_id__"]).default;
 	delete req.c["__extra_id__"];
 	for (let i in req.c) { 
