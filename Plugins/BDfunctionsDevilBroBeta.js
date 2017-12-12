@@ -594,7 +594,7 @@ BDfunctionsDevilBro.WebModules.monkeyPatch = (internalModule, moduleFunction, {b
 			console.error('Error occurred in ' + desiption, e)
 		}
 	};
-	internalModule[moduleFunction] = () => {
+	internalModule[moduleFunction] = function() {
 		const data = {
 			thisObject: this,
 			methodArguments: arguments,
