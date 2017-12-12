@@ -74,7 +74,8 @@ BDfunctionsDevilBro.unloadMessage = function (plugin, oldVersionRemove) {
 	console.log(unloadMessage);
 	BDfunctionsDevilBro.showToast(unloadMessage);
 	
-	if (typeof plugin.onSwitchImmediate == "function") plugin.switchFixObserver.disconnect(); /* BDfunctionsDevilBro.removeOnSwitchListener(plugin.onSwitchImmediate); */
+	if (plugin.switchFixObserver && typeof plugin.switchFixObserver.disconnect === "function") plugin.switchFixObserver.disconnect(); 
+	/* BDfunctionsDevilBro.removeOnSwitchListener(plugin.onSwitchImmediate); */
 	
 	var downloadUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
 	
