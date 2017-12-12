@@ -552,6 +552,7 @@ BDfunctionsDevilBro.findInWebModulesByName = (names) => {
 };
 
 BDfunctionsDevilBro.WebModules.addListener = (internalModule, moduleFunction, callback) => {
+	if (typeof internalModule !== "object" || !moduleFunction || typeof callback !== "function") return;
     const moduleName = internalModule.displayName || internalModule.name || internalModule.constructor.displayName || internalModule.constructor.name; // borrowed from Samogot
     if (!internalModule[moduleFunction] || typeof(internalModule[moduleFunction]) !== "function") return;
     if (!internalModule.__internalListeners) internalModule.__internalListeners = {};
@@ -568,6 +569,7 @@ BDfunctionsDevilBro.WebModules.addListener = (internalModule, moduleFunction, ca
 };
 
 BDfunctionsDevilBro.WebModules.removeListener = (internalModule, moduleFunction, callback) => {
+	if (typeof internalModule !== "object" || !moduleFunction || typeof callback !== "function") return;
     const moduleName = internalModule.displayName || internalModule.name || internalModule.constructor.displayName || internalModule.constructor.name; // borrowed from Samogot
     if (!internalModule[moduleFunction] || typeof(internalModule[moduleFunction]) !== "function") return;
     if (!internalModule.__internalListeners || !internalModule.__internalListeners[moduleFunction] || !internalModule.__internalListeners[moduleFunction].size) return;
