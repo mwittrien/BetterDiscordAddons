@@ -2,18 +2,18 @@ var BDfunctionsDevilBro = {};
 
 BDfunctionsDevilBro.creationTime = performance.now();
 
-BDfunctionsDevilBro.isLibraryOutdated = () => {
+BDfunctionsDevilBro.isLibraryOutdated = function () {
 	return performance.now() - BDfunctionsDevilBro.creationTime > 600000;
 };
 
-BDfunctionsDevilBro.loadMessage = (plugin, oldVersionRemove) => {
+BDfunctionsDevilBro.loadMessage = function (plugin, oldVersionRemove) {
 	var pluginName = typeof plugin == "object" ? plugin.getName() : plugin;
 	var oldVersion = typeof plugin == "object" ? plugin.getVersion() : oldVersionRemove;
 	var loadMessage = BDfunctionsDevilBro.getLibraryStrings().toast_plugin_started.replace("${pluginName}", pluginName).replace("${oldVersion}", oldVersion);
 	console.log(loadMessage);
 	BDfunctionsDevilBro.showToast(loadMessage);
 	
-	if (typeof plugin.onSwitch == "function") BDfunctionsDevilBro.addOnSwitchListener(plugin.onSwitch);
+	if (typeof plugin.onSwitch == "function") BDfunctionsDevilBro.addOnSwitchListener(plugin);
 	
 	var downloadUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
 	BDfunctionsDevilBro.checkUpdate(pluginName, downloadUrl);
@@ -63,14 +63,14 @@ BDfunctionsDevilBro.loadMessage = (plugin, oldVersionRemove) => {
 	}
 };
 
-BDfunctionsDevilBro.unloadMessage = (plugin, oldVersionRemove) => { 
+BDfunctionsDevilBro.unloadMessage = function (plugin, oldVersionRemove) { 
 	var pluginName = typeof plugin == "object" ? plugin.getName() : plugin;
 	var oldVersion = typeof plugin == "object" ? plugin.getVersion() : oldVersionRemove;
 	var unloadMessage = BDfunctionsDevilBro.getLibraryStrings().toast_plugin_stopped.replace("${pluginName}", pluginName).replace("${oldVersion}", oldVersion);
 	console.log(unloadMessage);
 	BDfunctionsDevilBro.showToast(unloadMessage);
 	
-	if (typeof plugin.onSwitch == "function") BDfunctionsDevilBro.removeOnSwitchListener(plugin.onSwitch);
+	if (typeof plugin.onSwitch == "function") BDfunctionsDevilBro.removeOnSwitchListener(plugin);
 	
 	var downloadUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
 	
@@ -85,7 +85,7 @@ BDfunctionsDevilBro.unloadMessage = (plugin, oldVersionRemove) => {
 
 
 // plugin update notifications created in cooperation with Zerebos https://github.com/rauenzi/BetterDiscordAddons/blob/master/Plugins/PluginLibrary.js
-BDfunctionsDevilBro.checkUpdate = (pluginName, downloadUrl) => {
+BDfunctionsDevilBro.checkUpdate = function (pluginName, downloadUrl) {
 	let request = require("request");
 	request(downloadUrl, (error, response, result) => {
 		if (error) return;
@@ -104,7 +104,7 @@ BDfunctionsDevilBro.checkUpdate = (pluginName, downloadUrl) => {
 	});
 };
 
-BDfunctionsDevilBro.showUpdateNotice = (pluginName, downloadUrl) => {
+BDfunctionsDevilBro.showUpdateNotice = function (pluginName, downloadUrl) {
 	let noticeElement = `<div class="notice notice-info DevilBro-notice" id="pluginNotice"><div class="notice-dismiss" id="pluginNoticeDismiss"></div><span class="notice-message">The following plugins have updates:</span>&nbsp;&nbsp;<strong id="outdatedPlugins"></strong></div>`;
 	if (!$("#pluginNotice").length)  {
 		$(".app .guilds-wrapper + div > div:first > div:first").append(noticeElement);
@@ -130,7 +130,7 @@ BDfunctionsDevilBro.showUpdateNotice = (pluginName, downloadUrl) => {
 	}
 };
 
-BDfunctionsDevilBro.downloadPlugin = (pluginName, downloadUrl) => {
+BDfunctionsDevilBro.downloadPlugin = function (pluginName, downloadUrl) {
     let request = require("request");
     let fileSystem = require("fs");
     let path = require("path");
@@ -174,7 +174,7 @@ BDfunctionsDevilBro.downloadPlugin = (pluginName, downloadUrl) => {
     });
 };
 
-BDfunctionsDevilBro.removeUpdateNotice = (pluginName) => {
+BDfunctionsDevilBro.removeUpdateNotice = function (pluginName) {
 	let notice = $("#" + pluginName + "-notice");
 	if (notice.length) {
 		if (notice.next(".separator").length) notice.next().remove();
@@ -190,7 +190,7 @@ BDfunctionsDevilBro.removeUpdateNotice = (pluginName) => {
     }
 };
 
-BDfunctionsDevilBro.showToast = (content, options = {}) => {
+BDfunctionsDevilBro.showToast = function (content, options = {}) {
     if (!document.querySelector(".toasts")) {
         let toastWrapper = document.createElement("div");
         toastWrapper.classList.add("toasts");
@@ -215,7 +215,7 @@ BDfunctionsDevilBro.showToast = (content, options = {}) => {
     }, timeout);
 };
 
-BDfunctionsDevilBro.createTooltip = (content, container, options = {}) => {
+BDfunctionsDevilBro.createTooltip = function (content, container, options = {}) {
 	if (!document.querySelector(".tooltips") || !content || !container) return null;
 	let id = Math.round(Math.random()*10000000000000000);
     let tooltip = document.createElement("div");
@@ -276,7 +276,7 @@ BDfunctionsDevilBro.createTooltip = (content, container, options = {}) => {
 	return tooltip;
 };
 
-BDfunctionsDevilBro.createNotificationsBar = (content, options = {}) => {
+BDfunctionsDevilBro.createNotificationsBar = function (content, options = {}) {
 	if (!content) return;
 	let id = Math.round(Math.random()*10000000000000000);
     let notifiybar = document.createElement("div");
@@ -322,7 +322,7 @@ BDfunctionsDevilBro.createNotificationsBar = (content, options = {}) => {
 };
 
 // Plugins/Themes folder resolver from Square
-BDfunctionsDevilBro.getPluginsFolder = () => {
+BDfunctionsDevilBro.getPluginsFolder = function () {
     let process = require("process");
     let path = require("path");
     switch (process.platform) {
@@ -335,7 +335,7 @@ BDfunctionsDevilBro.getPluginsFolder = () => {
     }
 };
 
-BDfunctionsDevilBro.getThemesFolder = () => {
+BDfunctionsDevilBro.getThemesFolder = function () {
     let process = require("process");
     let path = require("path");
     switch (process.platform) {
@@ -348,19 +348,19 @@ BDfunctionsDevilBro.getThemesFolder = () => {
     }
 };
 
-BDfunctionsDevilBro.createUpdateButton = () => {
+BDfunctionsDevilBro.createUpdateButton = function () {
 	var updateButton = document.createElement("button");
 	updateButton.className = "bd-pfbtn bd-updatebtn";
 	updateButton.innerText = "Check for Updates";
 	updateButton.style.left = "220px";
-	updateButton.onclick = () => {
+	updateButton.onclick = function () {
 		BDfunctionsDevilBro.checkAllUpdates();
 	};			
-	updateButton.onmouseenter = () => {
+	updateButton.onmouseenter = function () {
 		BDfunctionsDevilBro.createTooltip("Only checks for updates of plugins, which support the updatecheck. Rightclick for a list.", updateButton, {type:"right",selector:"update-button-tooltip"});
 		
 	};
-	updateButton.oncontextmenu = () => {
+	updateButton.oncontextmenu = function () {
 		if (window.PluginUpdates && window.PluginUpdates.plugins && !document.querySelector(".update-list-tooltip")) {
 			var list = [];
 			for (var plugin in window.PluginUpdates.plugins) {
@@ -372,18 +372,18 @@ BDfunctionsDevilBro.createUpdateButton = () => {
 	return updateButton;
 };
 
-BDfunctionsDevilBro.checkAllUpdates = () => {
+BDfunctionsDevilBro.checkAllUpdates = function () {
 	for (let key in window.PluginUpdates.plugins) {
 		let plugin = window.PluginUpdates.plugins[key];
 		BDfunctionsDevilBro.checkUpdate(plugin.name, plugin.raw);
 	}
 };
 	
-BDfunctionsDevilBro.translateMessage = (pluginName) => { 
+BDfunctionsDevilBro.translateMessage = function (pluginName) { 
 	console.log(BDfunctionsDevilBro.getLibraryStrings().toast_plugin_translated.replace("${pluginName}", pluginName).replace("${ownlang}", BDfunctionsDevilBro.getDiscordLanguage().ownlang));
 };
 
-BDfunctionsDevilBro.translatePlugin = (plugin) => {
+BDfunctionsDevilBro.translatePlugin = function (plugin) {
 	if (typeof plugin.labels === "object") {
 		var translateInterval = setInterval(() => {
 			if (document.querySelector("html").lang) {
@@ -397,12 +397,12 @@ BDfunctionsDevilBro.translatePlugin = (plugin) => {
 	}
 };
 	
-BDfunctionsDevilBro.getReactInstance = (node) => { 
+BDfunctionsDevilBro.getReactInstance = function (node) { 
 	if (!node) return null;
 	return node[Object.keys(node).find((key) => key.startsWith("__reactInternalInstance"))];
 };
 
-BDfunctionsDevilBro.getOwnerInstance = (config) => { 
+BDfunctionsDevilBro.getOwnerInstance = function (config) { 
 	if (config === undefined) return null;
 	if (!config.node || !config.name) return null;
 	var inst = BDfunctionsDevilBro.getReactInstance(config.node);
@@ -443,7 +443,7 @@ BDfunctionsDevilBro.getOwnerInstance = (config) => {
 	}
 };
 
-BDfunctionsDevilBro.getKeyInformation = (config) => {
+BDfunctionsDevilBro.getKeyInformation = function (config) {
 	if (config === undefined) return null;
 	if (!config.node || !config.key) return null;
 	
@@ -529,7 +529,7 @@ BDfunctionsDevilBro.getKeyInformation = (config) => {
 BDfunctionsDevilBro.WebModules = {};
 // code in this closure based on code by samogot and edited by myself
 // https://github.com/samogot/betterdiscord-plugins/blob/master/v2/1Lib%20Discord%20Internals/plugin.js
-BDfunctionsDevilBro.WebModules.find = (filter) => {
+BDfunctionsDevilBro.WebModules.find = function (filter) {
 	const req = webpackJsonp([], {"__extra_id__": (module, exports, req) => exports.default = req}, ["__extra_id__"]).default;
 	delete req.c["__extra_id__"];
 	for (let i in req.c) { 
@@ -542,16 +542,16 @@ BDfunctionsDevilBro.WebModules.find = (filter) => {
 	return null;
 };
 
-BDfunctionsDevilBro.WebModules.findByProperties = (names) => {
+BDfunctionsDevilBro.WebModules.findByProperties = function (names) {
 	return BDfunctionsDevilBro.WebModules.find(module => names.every(prop => module[prop] !== undefined));
 };
 
 // OLD REMOVE AFTER A WHILE
-BDfunctionsDevilBro.findInWebModulesByName = (names) => {
+BDfunctionsDevilBro.findInWebModulesByName = function (names) {
 	return BDfunctionsDevilBro.WebModules.find(module => names.every(prop => module[prop] !== undefined));
 };
 
-BDfunctionsDevilBro.WebModules.addListener = (internalModule, moduleFunction, callback) => {
+BDfunctionsDevilBro.WebModules.addListener = function (internalModule, moduleFunction, callback) {
 	if (typeof internalModule !== "object" || !moduleFunction || typeof callback !== "function") return;
     const moduleName = internalModule.displayName || internalModule.name || internalModule.constructor.displayName || internalModule.constructor.name; // borrowed from Samogot
     if (!internalModule[moduleFunction] || typeof(internalModule[moduleFunction]) !== "function") return;
@@ -568,7 +568,7 @@ BDfunctionsDevilBro.WebModules.addListener = (internalModule, moduleFunction, ca
     }
 };
 
-BDfunctionsDevilBro.WebModules.removeListener = (internalModule, moduleFunction, callback) => {
+BDfunctionsDevilBro.WebModules.removeListener = function (internalModule, moduleFunction, callback) {
 	if (typeof internalModule !== "object" || !moduleFunction || typeof callback !== "function") return;
     const moduleName = internalModule.displayName || internalModule.name || internalModule.constructor.displayName || internalModule.constructor.name; // borrowed from Samogot
     if (!internalModule[moduleFunction] || typeof(internalModule[moduleFunction]) !== "function") return;
@@ -584,7 +584,7 @@ BDfunctionsDevilBro.WebModules.removeListener = (internalModule, moduleFunction,
 
 BDfunctionsDevilBro.WebModules.monkeyPatch = function (internalModule, moduleFunction, {before, after, instead, once = false, silent = false} = options) {
 	const origMethod = internalModule[moduleFunction];
-	const cancel = () => {
+	const cancel = function () {
 		internalModule[moduleFunction] = origMethod;
 	};
 	const suppressErrors = (method, desiption) => (...params) => {
@@ -595,7 +595,7 @@ BDfunctionsDevilBro.WebModules.monkeyPatch = function (internalModule, moduleFun
 			console.error('Error occurred in ' + desiption, e)
 		}
 	};
-	internalModule[moduleFunction] = function() {
+	internalModule[moduleFunction] = function () {
 		const data = {
 			thisObject: this,
 			methodArguments: arguments,
@@ -621,21 +621,23 @@ BDfunctionsDevilBro.WebModules.monkeyPatch = function (internalModule, moduleFun
 	return cancel;
 };
 
-BDfunctionsDevilBro.addOnSwitchListener = (callback) => {
+BDfunctionsDevilBro.addOnSwitchListener function (plugin) => {
+	var callback = plugin.onSwitch.bind(plugin);
     SelectedChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getLastSelectedChannelId"]);
     BDfunctionsDevilBro.WebModules.addListener(SelectedChannelStore._actionHandlers, "CHANNEL_SELECT", callback);
     GuildActions = BDfunctionsDevilBro.WebModules.findByProperties(["markGuildAsRead"]);
     BDfunctionsDevilBro.WebModules.addListener(GuildActions, "nsfwAgree", callback);
 };
 
-BDfunctionsDevilBro.removeOnSwitchListener = (callback) => {
+BDfunctionsDevilBro.removeOnSwitchListener = function (plugin) {
+	var callback = plugin.onSwitch.bind(plugin);
     SelectedChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getLastSelectedChannelId"]);
     BDfunctionsDevilBro.WebModules.removeListener(SelectedChannelStore._actionHandlers, "CHANNEL_SELECT", callback);
     GuildActions = BDfunctionsDevilBro.WebModules.findByProperties(["markGuildAsRead"]);
     BDfunctionsDevilBro.WebModules.removeListener(GuildActions, "nsfwAgree", callback);
 };
 
-BDfunctionsDevilBro.getLanguageTable = (lang) => {
+BDfunctionsDevilBro.getLanguageTable = function (lang) {
 	var ti = {
 		bg: "холандски", //bulgarian
 		cs: "Nizozemština", //czech
@@ -659,12 +661,12 @@ BDfunctionsDevilBro.getLanguageTable = (lang) => {
 		zh: "荷蘭文" //chinese (traditional)
     };
 	lang = lang ? lang : BDfunctionsDevilBro.getDiscordLanguage().id;
-	return BDfunctionsDevilBro.WebModules.find((m) => {
+	return BDfunctionsDevilBro.WebModules.find(function (m) {
 		return m.nl === ti[lang];
 	});
 };
 
-BDfunctionsDevilBro.equals = (check1, check2, compareOrder) => {
+BDfunctionsDevilBro.equals = function (check1, check2, compareOrder) {
 	var depth = -1;
 	
 	if (compareOrder === undefined || typeof compareOrder !== "boolean") compareOrder = false;
@@ -704,7 +706,7 @@ BDfunctionsDevilBro.equals = (check1, check2, compareOrder) => {
 	}
 };
 
-BDfunctionsDevilBro.isObjectEmpty = (obj) => {
+BDfunctionsDevilBro.isObjectEmpty = function (obj) {
 	var empty = true;
 	for (var key in obj) {
 		empty = false;
@@ -713,33 +715,33 @@ BDfunctionsDevilBro.isObjectEmpty = (obj) => {
 	return empty;
 };
 
-BDfunctionsDevilBro.removeFromArray = (array, value) => {
+BDfunctionsDevilBro.removeFromArray = function (array, value) {
 	if (!array || !value || !Array.isArray(array) || !array.includes(value)) return;
 	array.splice(array.indexOf(value), 1);
 };
 
-BDfunctionsDevilBro.onSwitchFix = (plugin) => {
+BDfunctionsDevilBro.onSwitchFix = function (plugin) {
 	return new MutationObserver(() => {});
 };
 
-BDfunctionsDevilBro.getMyUserData = () => {
+BDfunctionsDevilBro.getMyUserData = function () {
 	var UserActions = BDfunctionsDevilBro.WebModules.findByProperties(["getCurrentUser"]);
 	return UserActions ? UserActions.getCurrentUser() : null;
 };
 
-BDfunctionsDevilBro.getMyUserID = () => {
+BDfunctionsDevilBro.getMyUserID = function () {
 	var userData = BDfunctionsDevilBro.getMyUserData();
 	return (userData && userData.id ? userData.id : null);
 };
 
-BDfunctionsDevilBro.getMyUserStatus = () => {
+BDfunctionsDevilBro.getMyUserStatus = function () {
 	var userStatus = "invisible";
 	var status = document.querySelector(".container-iksrDt .status");
 	if (status) userStatus = status.classList[1].split("-")[1];
 	return userStatus;
 };
 	
-BDfunctionsDevilBro.readServerList = () => {
+BDfunctionsDevilBro.readServerList = function () {
 	var foundServers = [];
 	var servers = $(".guild");
 	for (var i = 0; i < servers.length; i++) {
@@ -748,7 +750,7 @@ BDfunctionsDevilBro.readServerList = () => {
 	return foundServers;
 };
 	
-BDfunctionsDevilBro.readUnreadServerList = (servers) => {
+BDfunctionsDevilBro.readUnreadServerList = function (servers) {
 	if (servers === undefined) servers = BDfunctionsDevilBro.readServerList();
 	var foundServers = [];
 	for (var i = 0; i < servers.length; i++) {
@@ -759,7 +761,7 @@ BDfunctionsDevilBro.readUnreadServerList = (servers) => {
 	return foundServers;
 };
 	
-BDfunctionsDevilBro.readDmList = () => {
+BDfunctionsDevilBro.readDmList = function () {
 	var foundDMs = [];
 	var dms = $(".dms .guild");
 	for (var i = 0; i < dms.length; i++) {
@@ -768,7 +770,7 @@ BDfunctionsDevilBro.readDmList = () => {
 	return foundDMs;
 };
 	
-BDfunctionsDevilBro.readChannelList = () => {
+BDfunctionsDevilBro.readChannelList = function () {
 	var foundChannels = [];
 	var channels = $(".containerDefault-7RImuF, .containerDefault-1bbItS");
 	for (var i = 0; i < channels.length; i++) {
@@ -777,7 +779,7 @@ BDfunctionsDevilBro.readChannelList = () => {
 	return foundChannels;
 };
 	
-BDfunctionsDevilBro.getSelectedServer = () => {
+BDfunctionsDevilBro.getSelectedServer = function () {
 	var servers = BDfunctionsDevilBro.readServerList();
 	for (var i = 0; i < servers.length; i++) {
 		if (servers[i].classList.contains("selected")) {
@@ -787,7 +789,7 @@ BDfunctionsDevilBro.getSelectedServer = () => {
 	return null;
 };
 	
-BDfunctionsDevilBro.getDivOfServer = (id) => {
+BDfunctionsDevilBro.getDivOfServer = function (id) {
 	var servers = BDfunctionsDevilBro.readServerList();
 	for (var i = 0; i < servers.length; i++) {
 		if (BDfunctionsDevilBro.getIdOfServer(servers[i]) == id) {
@@ -797,7 +799,7 @@ BDfunctionsDevilBro.getDivOfServer = (id) => {
 	return null;
 };
 	
-BDfunctionsDevilBro.getIdOfServer = (server) => {
+BDfunctionsDevilBro.getIdOfServer = function (server) {
 	var serverData = BDfunctionsDevilBro.getKeyInformation({"node":server, "key":"guild"});
 	if (serverData) {
 		return serverData.id;
@@ -805,7 +807,7 @@ BDfunctionsDevilBro.getIdOfServer = (server) => {
 	return null;
 };
 	
-BDfunctionsDevilBro.getDivOfChannel = (channelID) => {
+BDfunctionsDevilBro.getDivOfChannel = function (channelID) {
 	var channels = BDfunctionsDevilBro.readChannelList();
 	for (var i = 0; i < channels.length; i++) {
 		var channelData = BDfunctionsDevilBro.getKeyInformation({"node":channels[i], "key":"channel"});
@@ -818,30 +820,30 @@ BDfunctionsDevilBro.getDivOfChannel = (channelID) => {
 	return null;
 };
 
-BDfunctionsDevilBro.getSettingsPanelDiv = (ele) => {
+BDfunctionsDevilBro.getSettingsPanelDiv = function (ele) {
 	return $(".bda-slist > li").has(ele)[0];
 };
 
-BDfunctionsDevilBro.themeIsLightTheme = () => {
+BDfunctionsDevilBro.themeIsLightTheme = function () {
 	if ($(".theme-light").length > $(".theme-dark").length) {
 		return true;
 	}
 	return false;
 };
 
-BDfunctionsDevilBro.saveAllData = (settings, pluginName, keyName) => {
+BDfunctionsDevilBro.saveAllData = function (settings, pluginName, keyName) {
 	bdPluginStorage.set(pluginName, keyName, settings);
 };
 
-BDfunctionsDevilBro.loadAllData = (pluginName, keyName) => {
+BDfunctionsDevilBro.loadAllData = function (pluginName, keyName) {
 	return bdPluginStorage.get(pluginName, keyName) ? bdPluginStorage.get(pluginName, keyName) : {};
 };
 
-BDfunctionsDevilBro.removeAllData = (pluginName, keyName) => {
+BDfunctionsDevilBro.removeAllData = function (pluginName, keyName) {
 	BDfunctionsDevilBro.saveAllData({}, pluginName, keyName);
 };
 
-BDfunctionsDevilBro.saveData = (id, data, pluginName, keyName) => {
+BDfunctionsDevilBro.saveData = function (id, data, pluginName, keyName) {
 	var settings = BDfunctionsDevilBro.loadAllData(pluginName, keyName);
 	
 	settings[id] = data;
@@ -849,7 +851,7 @@ BDfunctionsDevilBro.saveData = (id, data, pluginName, keyName) => {
 	BDfunctionsDevilBro.saveAllData(settings, pluginName, keyName);
 };
 
-BDfunctionsDevilBro.loadData = (id, pluginName, keyName) => {
+BDfunctionsDevilBro.loadData = function (id, pluginName, keyName) {
 	var settings = BDfunctionsDevilBro.loadAllData(pluginName, keyName);
 	
 	var data = settings[id];
@@ -857,7 +859,7 @@ BDfunctionsDevilBro.loadData = (id, pluginName, keyName) => {
 	return data === undefined ? null : data;
 };
 	
-BDfunctionsDevilBro.removeData = (id, pluginName, keyName) => {
+BDfunctionsDevilBro.removeData = function (id, pluginName, keyName) {
 	var settings = BDfunctionsDevilBro.loadAllData(pluginName, keyName);
 	
 	delete settings[id];
@@ -865,7 +867,7 @@ BDfunctionsDevilBro.removeData = (id, pluginName, keyName) => {
 	BDfunctionsDevilBro.saveAllData(settings, pluginName, keyName);
 };
 
-BDfunctionsDevilBro.appendWebScript = (filepath) => {
+BDfunctionsDevilBro.appendWebScript = function (filepath) {
 	$('head script[src="' + filepath + '"]').remove();
 	
 	var ele = document.createElement("script");
@@ -874,7 +876,7 @@ BDfunctionsDevilBro.appendWebScript = (filepath) => {
 	$("head").append(ele);
 };
 
-BDfunctionsDevilBro.appendWebStyle = (filepath) => {
+BDfunctionsDevilBro.appendWebStyle = function (filepath) {
 	$('head link[href="' + filepath + '"]').remove();
 
 	var ele = document.createElement("link");
@@ -885,7 +887,7 @@ BDfunctionsDevilBro.appendWebStyle = (filepath) => {
 	$("head").append(ele);
 };
 
-BDfunctionsDevilBro.appendLocalStyle = (pluginName, css) => {
+BDfunctionsDevilBro.appendLocalStyle = function (pluginName, css) {
 	$('head style[id="' + pluginName + 'CSS"]').remove();
 
 	var ele = document.createElement("style");
@@ -895,13 +897,13 @@ BDfunctionsDevilBro.appendLocalStyle = (pluginName, css) => {
 	$("head").append(ele);
 };
 
-BDfunctionsDevilBro.removeLocalStyle = (pluginName) => {
+BDfunctionsDevilBro.removeLocalStyle = function (pluginName) {
 	$('head style[id="' + pluginName + 'CSS"]').remove();
 };
 
-BDfunctionsDevilBro.sortArrayByKey = (array, key, except) => {
+BDfunctionsDevilBro.sortArrayByKey = function (array, key, except) {
 	if (except === undefined) except = null;
-	return array.sort((a, b) => {
+	return array.sort(function (a, b) {
 		var x = a[key]; var y = b[key];
 		if (x != except) {
 			return ((x < y) ? -1 : ((x > y) ? 1 : 0));
@@ -909,7 +911,7 @@ BDfunctionsDevilBro.sortArrayByKey = (array, key, except) => {
 	});
 };
 
-BDfunctionsDevilBro.getAllIndexes = (array, val) => {
+BDfunctionsDevilBro.getAllIndexes = function (array, val) {
     var indexes = [], i = -1;
     while ((i = array.indexOf(val, i+1)) != -1){
         indexes.push(i);
@@ -917,7 +919,7 @@ BDfunctionsDevilBro.getAllIndexes = (array, val) => {
     return indexes;
 };
 
-BDfunctionsDevilBro.color2COMP = (color) => {
+BDfunctionsDevilBro.color2COMP = function (color) {
 	if (color) {
 		switch (BDfunctionsDevilBro.checkColorType(color)) {
 			case "comp":
@@ -952,7 +954,7 @@ BDfunctionsDevilBro.color2COMP = (color) => {
 	return null;
 };
 
-BDfunctionsDevilBro.color2RGB = (color) => {
+BDfunctionsDevilBro.color2RGB = function (color) {
 	if (color) {
 		switch (BDfunctionsDevilBro.checkColorType(color)) {
 			case "comp":
@@ -970,7 +972,7 @@ BDfunctionsDevilBro.color2RGB = (color) => {
 	return null;
 };
 
-BDfunctionsDevilBro.color2HSL = (color) => {
+BDfunctionsDevilBro.color2HSL = function (color) {
 	if (color) {
 		switch (BDfunctionsDevilBro.checkColorType(color)) {
 			case "comp":
@@ -996,7 +998,7 @@ BDfunctionsDevilBro.color2HSL = (color) => {
 	return null;
 };
 
-BDfunctionsDevilBro.color2HEX = (color) => {
+BDfunctionsDevilBro.color2HEX = function (color) {
 	if (color) {
 		switch (BDfunctionsDevilBro.checkColorType(color)) {
 			case "comp":
@@ -1014,7 +1016,7 @@ BDfunctionsDevilBro.color2HEX = (color) => {
 	return null;
 };
 
-BDfunctionsDevilBro.colorCHANGE = (color, value) => {
+BDfunctionsDevilBro.colorCHANGE = function (color, value) {
 	if (color) {
 		var comp = BDfunctionsDevilBro.color2COMP(color);
 		if (!comp || value === undefined || typeof value != "number") return null;
@@ -1036,7 +1038,7 @@ BDfunctionsDevilBro.colorCHANGE = (color, value) => {
 	return null;
 };
 
-BDfunctionsDevilBro.colorCOMPARE = (color1, color2) => {
+BDfunctionsDevilBro.colorCOMPARE = function (color1, color2) {
 	if (color1 && color2) {
 		color1 = BDfunctionsDevilBro.color2RGB(color1);
 		color2 = BDfunctionsDevilBro.color2RGB(color2);
@@ -1045,7 +1047,7 @@ BDfunctionsDevilBro.colorCOMPARE = (color1, color2) => {
 	return null;
 };
 
-BDfunctionsDevilBro.colorINV = (color, conv) => {
+BDfunctionsDevilBro.colorINV = function (color, conv) {
 	if (color) {
 		var type = BDfunctionsDevilBro.checkColorType(color);
 		if (type) {
@@ -1082,7 +1084,7 @@ BDfunctionsDevilBro.colorINV = (color, conv) => {
 	return null;
 };
 
-BDfunctionsDevilBro.checkColorType = (color) => {
+BDfunctionsDevilBro.checkColorType = function (color) {
 	if (color) {
 		if (typeof color === "object" && color.length == 3) {
 			return "comp";
@@ -1100,29 +1102,29 @@ BDfunctionsDevilBro.checkColorType = (color) => {
 	return null;
 };
 
-BDfunctionsDevilBro.setInnerText = (div, text) => {
+BDfunctionsDevilBro.setInnerText = function (div, text) {
 	if (!div) return;
-	var textNode = $(div).contents().filter(() => {return this.nodeType == Node.TEXT_NODE;})[0];
+	var textNode = $(div).contents().filter(function () {return this.nodeType == Node.TEXT_NODE;})[0];
 	if (textNode) textNode.textContent = text;
 }
 	
-BDfunctionsDevilBro.getInnerText = (div) => {
+BDfunctionsDevilBro.getInnerText = function (div) {
 	if (!div) return;
-	var textNode = $(div).contents().filter(() => {return this.nodeType == Node.TEXT_NODE;})[0];
+	var textNode = $(div).contents().filter(function () {return this.nodeType == Node.TEXT_NODE;})[0];
 	return textNode ? textNode.textContent : undefined;
 }
 	
-BDfunctionsDevilBro.encodeToHTML = (string) => {
+BDfunctionsDevilBro.encodeToHTML = function (string) {
 	var ele = document.createElement("div");
 	ele.innerText = string;
 	return ele.innerHTML;
 };
 
-BDfunctionsDevilBro.regEscape = (string) => {
+BDfunctionsDevilBro.regEscape = function (string) {
 	return string.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
 };
 
-BDfunctionsDevilBro.clearReadNotifications = (servers) => {
+BDfunctionsDevilBro.clearReadNotifications = function (servers) {
 	var GuildActions = BDfunctionsDevilBro.WebModules.findByProperties(['markGuildAsRead']);
 	if (!servers || !GuildActions) return;
 	servers = Array.isArray(servers) ? servers : Array.from(servers);
@@ -1132,7 +1134,7 @@ BDfunctionsDevilBro.clearReadNotifications = (servers) => {
 	}); 
 };
 
-BDfunctionsDevilBro.appendModal = (modal) => {
+BDfunctionsDevilBro.appendModal = function (modal) {
 	let id = Math.round(Math.random()*10000000000000000);
 	$(modal)
 		.appendTo(".app ~ [class^='theme-']")
@@ -1178,7 +1180,7 @@ BDfunctionsDevilBro.appendModal = (modal) => {
 		});
 };
 
-BDfunctionsDevilBro.setColorSwatches = (currentCOMP, wrapper, swatch) => {
+BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
 	var wrapperDiv = $(wrapper);
 		
 	var colourList = 
@@ -1253,7 +1255,7 @@ BDfunctionsDevilBro.setColorSwatches = (currentCOMP, wrapper, swatch) => {
 	});
 };
 
-BDfunctionsDevilBro.openColorPicker = (currentColor, swatch) => {
+BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 	var strings = BDfunctionsDevilBro.getLibraryStrings();
 	var colorPickerModalMarkup = 
 		`<span class="colorpicker-modal DevilBro-modal">
@@ -1560,20 +1562,20 @@ BDfunctionsDevilBro.openColorPicker = (currentColor, swatch) => {
 	}
 };
 
-BDfunctionsDevilBro.getSwatchColor = (swatch) => {
+BDfunctionsDevilBro.getSwatchColor = function (swatch) {
 	return !$(".ui-color-picker-" + swatch + ".nocolor.selected")[0] ? BDfunctionsDevilBro.color2COMP($(".ui-color-picker-" + swatch + ".selected").css("background-color")) : null;
 };
 
-BDfunctionsDevilBro.isRestartNoMoreEnabled = () => {
+BDfunctionsDevilBro.isRestartNoMoreEnabled = function () {
 	return (window.bdplugins["Restart-No-More"] && window.pluginCookie["Restart-No-More"] || window.bdplugins["Restart No More"] && window.pluginCookie["Restart No More"]);
 };
 
-BDfunctionsDevilBro.getDiscordTheme = () => {
+BDfunctionsDevilBro.getDiscordTheme = function () {
 	if ($(".theme-light").length > $(".theme-dark").length) return "theme-light";
 	else return "theme-dark";
 };
 
-BDfunctionsDevilBro.getDiscordLanguage = () => {
+BDfunctionsDevilBro.getDiscordLanguage = function () {
 	var lang = document.querySelector("html").lang ? document.querySelector("html").lang.split("-")[0] : "en";
 	switch (lang) {
 		case "da": 		//danish
@@ -1619,7 +1621,7 @@ BDfunctionsDevilBro.getDiscordLanguage = () => {
 	}
 };
 
-BDfunctionsDevilBro.getLibraryStrings = () => {
+BDfunctionsDevilBro.getLibraryStrings = function () {
 	switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
 		case "da": 		//danish
 			return {
