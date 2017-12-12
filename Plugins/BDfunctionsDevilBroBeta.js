@@ -13,7 +13,7 @@ BDfunctionsDevilBro.loadMessage = function (plugin, oldVersionRemove) {
 	console.log(loadMessage);
 	BDfunctionsDevilBro.showToast(loadMessage);
 	
-	if (typeof plugin.onSwitch == "function") BDfunctionsDevilBro.addOnSwitchListener(plugin.onSwitch.bind(plugin));
+	if (typeof plugin.onSwitch == "function") BDfunctionsDevilBro.addOnSwitchListener(plugin);
 	
 	var downloadUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
 	BDfunctionsDevilBro.checkUpdate(pluginName, downloadUrl);
@@ -70,7 +70,7 @@ BDfunctionsDevilBro.unloadMessage = function (plugin, oldVersionRemove) {
 	console.log(unloadMessage);
 	BDfunctionsDevilBro.showToast(unloadMessage);
 	
-	if (typeof plugin.onSwitch == "function") BDfunctionsDevilBro.removeOnSwitchListener(plugin.onSwitch.bind(plugin));
+	if (typeof plugin.onSwitch == "function") BDfunctionsDevilBro.removeOnSwitchListener(plugin);
 	
 	var downloadUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
 	
@@ -551,31 +551,30 @@ BDfunctionsDevilBro.findInWebModulesByName = function (names) {
 	return BDfunctionsDevilBro.WebModules.find(module => names.every(prop => module[prop] !== undefined));
 };
 
-BDfunctionsDevilBro.WebModules.addListener = function (internalModule, moduleFunction, callback) {
+BDfunctionsDevilBro.WebModules.addListener = function (internalModule, moduleFunction, identifier, callback) {
 	if (typeof internalModule !== "object" || !moduleFunction || typeof callback !== "function") return;
     if (!internalModule[moduleFunction] || typeof(internalModule[moduleFunction]) !== "function") return;
     if (!internalModule.__internalListeners) internalModule.__internalListeners = {};
-    if (!internalModule.__internalListeners[moduleFunction]) internalModule.__internalListeners[moduleFunction] = new Set();
+    if (!internalModule.__internalListeners[moduleFunction]) internalModule.__internalListeners[moduleFunction] = {};
 	
     if (!internalModule.__listenerPatches) internalModule.__listenerPatches = {};
     if (!internalModule.__listenerPatches[moduleFunction]) {
         internalModule.__listenerPatches[moduleFunction] = BDfunctionsDevilBro.WebModules.monkeyPatch(internalModule, moduleFunction, {after: (data) => {
-            for (let listener of internalModule.__internalListeners[moduleFunction]) listener();
+            for (let thisidentifier in internalModule.__internalListeners[moduleFunction]) internalModule.__internalListeners[moduleFunction][thisidentifier]();
         }});
     }
 	
-    internalModule.__internalListeners[moduleFunction].add(callback);
-	console.log(internalModule.__internalListeners[moduleFunction]);
+    internalModule.__internalListeners[moduleFunction][identifier] = callback;
 };
 
-BDfunctionsDevilBro.WebModules.removeListener = function (internalModule, moduleFunction, callback) {
+BDfunctionsDevilBro.WebModules.removeListener = function (internalModule, moduleFunction, identifier) {
 	if (typeof internalModule !== "object" || !moduleFunction || typeof callback !== "function") return;
     if (!internalModule[moduleFunction] || typeof(internalModule[moduleFunction]) !== "function") return;
     if (!internalModule.__internalListeners || !internalModule.__internalListeners[moduleFunction] || !internalModule.__internalListeners[moduleFunction].size) return;
     
-    internalModule.__internalListeners[moduleFunction].delete(callback);
+    internalModule.__internalListeners[moduleFunction][identifier] delete;
     
-    if (!internalModule.__internalListeners[moduleFunction].size) {
+    if (BDfunctionsDevilBro.isObjectEmpty(internalModule.__internalListeners[moduleFunction])) {
         internalModule.__listenerPatches[moduleFunction]();
         delete internalModule.__listenerPatches[moduleFunction];
     }
@@ -620,18 +619,18 @@ BDfunctionsDevilBro.WebModules.monkeyPatch = function (internalModule, moduleFun
 	return cancel;
 };
 
-BDfunctionsDevilBro.addOnSwitchListener = function (callback) {
+BDfunctionsDevilBro.addOnSwitchListener = function (plugin) {
     SelectedChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getLastSelectedChannelId"]);
-    BDfunctionsDevilBro.WebModules.addListener(SelectedChannelStore._actionHandlers, "CHANNEL_SELECT", callback);
+    BDfunctionsDevilBro.WebModules.addListener(SelectedChannelStore._actionHandlers, "CHANNEL_SELECT", plugin.getName(), plugin.onSwitch.bind(plugin));
     GuildActions = BDfunctionsDevilBro.WebModules.findByProperties(["markGuildAsRead"]);
-    BDfunctionsDevilBro.WebModules.addListener(GuildActions, "nsfwAgree", callback);
+    BDfunctionsDevilBro.WebModules.addListener(GuildActions, "nsfwAgree", plugin.getName(), plugin.onSwitch.bind(plugin));
 };
 
-BDfunctionsDevilBro.removeOnSwitchListener = function (callback) {
+BDfunctionsDevilBro.removeOnSwitchListener = function (plugin) {
     SelectedChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getLastSelectedChannelId"]);
-    BDfunctionsDevilBro.WebModules.removeListener(SelectedChannelStore._actionHandlers, "CHANNEL_SELECT", callback);
+    BDfunctionsDevilBro.WebModules.removeListener(SelectedChannelStore._actionHandlers, "CHANNEL_SELECT", plugin.getName());
     GuildActions = BDfunctionsDevilBro.WebModules.findByProperties(["markGuildAsRead"]);
-    BDfunctionsDevilBro.WebModules.removeListener(GuildActions, "nsfwAgree", callback);
+    BDfunctionsDevilBro.WebModules.removeListener(GuildActions, "nsfwAgree", plugin.getName());
 };
 
 BDfunctionsDevilBro.getLanguageTable = function (lang) {
