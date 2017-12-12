@@ -744,7 +744,7 @@ BDfunctionsDevilBro.onSwitchFix = function (plugin) {
 	
 	function triggerOnSwitch () {
 		var identifier = plugin.getName() + "_" + plugin.getAuthor();
-		if (BDfunctionsDevilBro.onSwitchTriggered.contains(identifier)) return;
+		if (BDfunctionsDevilBro.onSwitchTriggered.includes(identifier)) return;
 		BDfunctionsDevilBro.onSwitchTriggered.push(identifier);
 		plugin.onSwitch();
 		setTimeout(() => {BDfunctionsDevilBro.removeFromArray(BDfunctionsDevilBro.onSwitchTriggered, identifier);},1000);
