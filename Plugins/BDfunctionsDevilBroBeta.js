@@ -14,8 +14,9 @@ BDfunctionsDevilBro.loadMessage = function (plugin, oldVersionRemove) {
 	BDfunctionsDevilBro.showToast(loadMessage);
 	
 	if (typeof plugin.onSwitch == "function") {
-		plugin.onSwitchImmediate = () => {setImmediate(plugin.onSwitch.bind(plugin));};
-		BDfunctionsDevilBro.addOnSwitchListener(plugin.onSwitchImmediate);
+		plugin.switchFixObserver = BDfunctionsDevilBro.onSwitchFix(plugin);
+		/* plugin.onSwitchImmediate = () => {setImmediate(plugin.onSwitch.bind(plugin));};
+		BDfunctionsDevilBro.addOnSwitchListener(plugin.onSwitchImmediate); */
 	}
 	
 	var downloadUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
@@ -73,7 +74,7 @@ BDfunctionsDevilBro.unloadMessage = function (plugin, oldVersionRemove) {
 	console.log(unloadMessage);
 	BDfunctionsDevilBro.showToast(unloadMessage);
 	
-	if (typeof plugin.onSwitchImmediate == "function") BDfunctionsDevilBro.removeOnSwitchListener(plugin.onSwitchImmediate);
+	if (typeof plugin.onSwitchImmediate == "function") plugin.switchFixObserver.disconnect(); /* BDfunctionsDevilBro.removeOnSwitchListener(plugin.onSwitchImmediate); */
 	
 	var downloadUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
 	
@@ -638,6 +639,38 @@ BDfunctionsDevilBro.removeOnSwitchListener = function (callback) {
 	BDfunctionsDevilBro.WebModules.removeListener(SelectedChannelStore._actionHandlers, "CHANNEL_SELECT", callback);
 	var GuildActions = BDfunctionsDevilBro.WebModules.findByProperties(["markGuildAsRead"]);
 	BDfunctionsDevilBro.WebModules.removeListener(GuildActions, "nsfwAgree", callback);
+};
+
+BDfunctionsDevilBro.onSwitchFix = function (plugin) {
+	if (typeof BDfunctionsDevilBro.onSwitchTriggered !== "object") BDfunctionsDevilBro.onSwitchTriggered = [];
+	var switchFixObserver = new MutationObserver((changes) => {
+		changes.forEach((change) => { 
+			if (change.addedNodes) {
+				change.addedNodes.forEach((node) => {
+					if (node && node.id === "friends") triggerOnSwitch(); 
+					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("noTopic-3Rq-dz")) 	triggerOnSwitch(); 
+					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("topic-1KFf6J")) 	triggerOnSwitch(); 
+				});
+			}
+			if (change.removedNodes) {
+				change.removedNodes.forEach((node) => {
+					if (node && node.id === "friends") triggerOnSwitch(); 
+					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("noTopic-3Rq-dz")) 	triggerOnSwitch(); 
+					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("topic-1KFf6J")) 	triggerOnSwitch(); 
+				});
+			}
+		});
+	});
+	switchFixObserver.observe(document.querySelector(":-webkit-any(.chat, #friends, .noChannel-2EQ0a9, .activityFeed-HeiGwL)").parentNode, {childList: true, subtree:true});
+	return switchFixObserver;
+	
+	function triggerOnSwitch = function () {
+		var name = plugin.getName();
+		if (BDfunctionsDevilBro.onSwitchTriggered.includes(name)) return;
+		BDfunctionsDevilBro.onSwitchTriggered.push(name);
+		plugin.onSwitch();
+		setTimeout(() => {BDfunctionsDevilBro.removeFromArray(BDfunctionsDevilBro.onSwitchTriggered, name);},1000);
+	}
 };
 
 BDfunctionsDevilBro.getLanguageTable = function (lang) {
