@@ -553,7 +553,6 @@ BDfunctionsDevilBro.findInWebModulesByName = function (names) {
 
 BDfunctionsDevilBro.WebModules.addListener = function (internalModule, moduleFunction, callback) {
 	if (typeof internalModule !== "object" || !moduleFunction || typeof callback !== "function") return;
-    const moduleName = internalModule.displayName || internalModule.name || internalModule.constructor.displayName || internalModule.constructor.name; // borrowed from Samogot
     if (!internalModule[moduleFunction] || typeof(internalModule[moduleFunction]) !== "function") return;
     if (!internalModule.__internalListeners) internalModule.__internalListeners = {};
     if (!internalModule.__internalListeners[moduleFunction]) internalModule.__internalListeners[moduleFunction] = new Set();
@@ -570,7 +569,6 @@ BDfunctionsDevilBro.WebModules.addListener = function (internalModule, moduleFun
 
 BDfunctionsDevilBro.WebModules.removeListener = function (internalModule, moduleFunction, callback) {
 	if (typeof internalModule !== "object" || !moduleFunction || typeof callback !== "function") return;
-    const moduleName = internalModule.displayName || internalModule.name || internalModule.constructor.displayName || internalModule.constructor.name; // borrowed from Samogot
     if (!internalModule[moduleFunction] || typeof(internalModule[moduleFunction]) !== "function") return;
     if (!internalModule.__internalListeners || !internalModule.__internalListeners[moduleFunction] || !internalModule.__internalListeners[moduleFunction].size) return;
     
@@ -592,7 +590,7 @@ BDfunctionsDevilBro.WebModules.monkeyPatch = function (internalModule, moduleFun
 			return method(...params);
 		}
 		catch (e) {
-			console.error('Error occurred in ' + desiption, e)
+			console.error('Error occurred in ' + desiption, e);
 		}
 	};
 	internalModule[moduleFunction] = function () {
@@ -621,7 +619,7 @@ BDfunctionsDevilBro.WebModules.monkeyPatch = function (internalModule, moduleFun
 	return cancel;
 };
 
-BDfunctionsDevilBro.addOnSwitchListener = function (plugin) => {
+BDfunctionsDevilBro.addOnSwitchListener = function (plugin) {
 	var callback = plugin.onSwitch.bind(plugin);
     SelectedChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getLastSelectedChannelId"]);
     BDfunctionsDevilBro.WebModules.addListener(SelectedChannelStore._actionHandlers, "CHANNEL_SELECT", callback);
@@ -707,12 +705,7 @@ BDfunctionsDevilBro.equals = function (check1, check2, compareOrder) {
 };
 
 BDfunctionsDevilBro.isObjectEmpty = function (obj) {
-	var empty = true;
-	for (var key in obj) {
-		empty = false;
-		break;
-	}
-	return empty;
+	return typeof obj !== "object" || Object.getOwnPropertyNames(obj).length == 0;
 };
 
 BDfunctionsDevilBro.removeFromArray = function (array, value) {
@@ -1106,13 +1099,13 @@ BDfunctionsDevilBro.setInnerText = function (div, text) {
 	if (!div) return;
 	var textNode = $(div).contents().filter(function () {return this.nodeType == Node.TEXT_NODE;})[0];
 	if (textNode) textNode.textContent = text;
-}
+};
 	
 BDfunctionsDevilBro.getInnerText = function (div) {
 	if (!div) return;
 	var textNode = $(div).contents().filter(function () {return this.nodeType == Node.TEXT_NODE;})[0];
 	return textNode ? textNode.textContent : undefined;
-}
+};
 	
 BDfunctionsDevilBro.encodeToHTML = function (string) {
 	var ele = document.createElement("div");
@@ -1784,7 +1777,7 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				btn_ok_text: 					"OK"
 			};
 	}
-}
+};
 
 BDfunctionsDevilBro.pressedKeys = [];
 
