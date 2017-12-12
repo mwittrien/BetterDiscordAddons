@@ -664,7 +664,7 @@ BDfunctionsDevilBro.onSwitchFix = function (plugin) {
 	switchFixObserver.observe(document.querySelector(":-webkit-any(.chat, #friends, .noChannel-2EQ0a9, .activityFeed-HeiGwL)").parentNode, {childList: true, subtree:true});
 	return switchFixObserver;
 	
-	function triggerOnSwitch = function () {
+	function triggerOnSwitch () {
 		var name = plugin.getName();
 		if (BDfunctionsDevilBro.onSwitchTriggered.includes(name)) return;
 		BDfunctionsDevilBro.onSwitchTriggered.push(name);
