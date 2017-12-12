@@ -552,10 +552,10 @@ BDfunctionsDevilBro.findInWebModulesByName = function (names) {
 };
 
 BDfunctionsDevilBro.WebModules.addListener = function (internalModule, moduleFunction, identifier, callback) {
-	if (typeof internalModule !== "object" || !moduleFunction || typeof callback !== "function") return;
-    if (!internalModule[moduleFunction] || typeof(internalModule[moduleFunction]) !== "function") return;
-    if (!internalModule.__internalListeners) internalModule.__internalListeners = {};
-    if (!internalModule.__internalListeners[moduleFunction]) internalModule.__internalListeners[moduleFunction] = {};
+	if (typeof internalModule !== "object" || !moduleFunction || !identifier || typeof callback !== "function") return;
+    if (typeof internalModule[moduleFunction] !== "function") return;
+    if (typeof internalModule.__internalListeners !== "object") internalModule.__internalListeners = {};
+    if (typeof internalModule.__internalListeners[moduleFunction] !== "object") internalModule.__internalListeners[moduleFunction] = {};
 	
     if (!internalModule.__listenerPatches) internalModule.__listenerPatches = {};
     if (!internalModule.__listenerPatches[moduleFunction]) {
@@ -568,9 +568,9 @@ BDfunctionsDevilBro.WebModules.addListener = function (internalModule, moduleFun
 };
 
 BDfunctionsDevilBro.WebModules.removeListener = function (internalModule, moduleFunction, identifier) {
-	if (typeof internalModule !== "object" || !moduleFunction || typeof callback !== "function") return;
-    if (!internalModule[moduleFunction] || typeof(internalModule[moduleFunction]) !== "function") return;
-    if (!internalModule.__internalListeners || !internalModule.__internalListeners[moduleFunction] || !internalModule.__internalListeners[moduleFunction].size) return;
+	if (typeof internalModule !== "object" || !moduleFunction || !identifier) return;
+    if (typeof internalModule[moduleFunction] !== "function") return;
+    if (typeof internalModule.__internalListeners !== "object" || typeof internalModule.__internalListeners[moduleFunction] !== "object") return;
     
     delete internalModule.__internalListeners[moduleFunction][identifier];
     
