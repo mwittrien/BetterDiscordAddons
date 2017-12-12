@@ -565,6 +565,8 @@ BDfunctionsDevilBro.WebModules.addListener = function (internalModule, moduleFun
     }
 	
     internalModule.__internalListeners[moduleFunction][identifier] = callback;
+	
+	console.log(internalModule.__internalListeners[moduleFunction]);
 };
 
 BDfunctionsDevilBro.WebModules.removeListener = function (internalModule, moduleFunction, identifier) {
@@ -620,16 +622,16 @@ BDfunctionsDevilBro.WebModules.monkeyPatch = function (internalModule, moduleFun
 };
 
 BDfunctionsDevilBro.addOnSwitchListener = function (plugin) {
-    SelectedChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getLastSelectedChannelId"]);
+    var SelectedChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getLastSelectedChannelId"]);
     BDfunctionsDevilBro.WebModules.addListener(SelectedChannelStore._actionHandlers, "CHANNEL_SELECT", plugin.getName(), plugin.onSwitch.bind(plugin));
-    GuildActions = BDfunctionsDevilBro.WebModules.findByProperties(["markGuildAsRead"]);
+    var GuildActions = BDfunctionsDevilBro.WebModules.findByProperties(["markGuildAsRead"]);
     BDfunctionsDevilBro.WebModules.addListener(GuildActions, "nsfwAgree", plugin.getName(), plugin.onSwitch.bind(plugin));
 };
 
 BDfunctionsDevilBro.removeOnSwitchListener = function (plugin) {
-    SelectedChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getLastSelectedChannelId"]);
+    var SelectedChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getLastSelectedChannelId"]);
     BDfunctionsDevilBro.WebModules.removeListener(SelectedChannelStore._actionHandlers, "CHANNEL_SELECT", plugin.getName());
-    GuildActions = BDfunctionsDevilBro.WebModules.findByProperties(["markGuildAsRead"]);
+    var GuildActions = BDfunctionsDevilBro.WebModules.findByProperties(["markGuildAsRead"]);
     BDfunctionsDevilBro.WebModules.removeListener(GuildActions, "nsfwAgree", plugin.getName());
 };
 
