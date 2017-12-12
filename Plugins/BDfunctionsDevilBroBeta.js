@@ -13,11 +13,9 @@ BDfunctionsDevilBro.loadMessage = function (plugin, oldVersionRemove) {
 	console.log(loadMessage);
 	BDfunctionsDevilBro.showToast(loadMessage);
 	
-	if (typeof plugin.onSwitch == "function") {
-		plugin.switchFixObserver = BDfunctionsDevilBro.onSwitchFix(plugin);
-		/* plugin.onSwitchImmediate = () => {setImmediate(plugin.onSwitch.bind(plugin));};
-		BDfunctionsDevilBro.addOnSwitchListener(plugin.onSwitchImmediate); */
-	}
+	if (typeof plugin.onSwitch === "function") BDfunctionsDevilBro.onSwitchFix(plugin);
+	/* plugin.onSwitchImmediate = () => {setImmediate(plugin.onSwitch.bind(plugin));};
+	BDfunctionsDevilBro.addOnSwitchListener(plugin.onSwitchImmediate); */
 	
 	var downloadUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
 	BDfunctionsDevilBro.checkUpdate(pluginName, downloadUrl);
@@ -643,8 +641,9 @@ BDfunctionsDevilBro.removeOnSwitchListener = function (callback) {
 };
 
 BDfunctionsDevilBro.onSwitchFix = function (plugin) {
+	console.log(plugin);
 	if (typeof BDfunctionsDevilBro.onSwitchTriggered !== "object") BDfunctionsDevilBro.onSwitchTriggered = [];
-	var switchFixObserver = new MutationObserver((changes) => {
+	plugin.switchFixObserver = new MutationObserver((changes) => {
 		changes.forEach((change) => { 
 			if (change.addedNodes) {
 				change.addedNodes.forEach((node) => {
@@ -662,11 +661,11 @@ BDfunctionsDevilBro.onSwitchFix = function (plugin) {
 			}
 		});
 	});
-	switchFixObserver.observe(document.querySelector(":-webkit-any(.chat, #friends, .noChannel-2EQ0a9, .activityFeed-HeiGwL)").parentNode, {childList: true, subtree:true});
-	return switchFixObserver;
+	plugin.switchFixObserver.observe(document.querySelector(":-webkit-any(.chat, #friends, .noChannel-2EQ0a9, .activityFeed-HeiGwL)").parentNode, {childList: true, subtree:true});
 	
 	function triggerOnSwitch () {
-		var name = plugin.getName();
+		var name = plugin.getName() + "_" + plugin.getAuthor();
+		console.log(name);
 		if (BDfunctionsDevilBro.onSwitchTriggered.includes(name)) return;
 		BDfunctionsDevilBro.onSwitchTriggered.push(name);
 		plugin.onSwitch();
