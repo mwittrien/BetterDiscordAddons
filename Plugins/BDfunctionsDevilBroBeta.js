@@ -14,7 +14,7 @@ BDfunctionsDevilBro.loadMessage = function (plugin, oldVersionRemove) {
 	BDfunctionsDevilBro.showToast(loadMessage);
 	
 	if (typeof plugin.onSwitch == "function") {
-		plugin.onSwitchTriggered = () => {setTimeout(plugin.onSwitch.bind(plugin),1000);};
+		plugin.onSwitchTriggered = () => {setTimeout(plugin.onSwitch.bind(plugin),100);};
 		BDfunctionsDevilBro.addOnSwitchListener(plugin.onSwitchTriggered);
 	}
 	
