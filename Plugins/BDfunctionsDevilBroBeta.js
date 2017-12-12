@@ -621,7 +621,7 @@ BDfunctionsDevilBro.WebModules.monkeyPatch = function (internalModule, moduleFun
 	return cancel;
 };
 
-BDfunctionsDevilBro.addOnSwitchListener function (plugin) => {
+BDfunctionsDevilBro.addOnSwitchListener = function (plugin) => {
 	var callback = plugin.onSwitch.bind(plugin);
     SelectedChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getLastSelectedChannelId"]);
     BDfunctionsDevilBro.WebModules.addListener(SelectedChannelStore._actionHandlers, "CHANNEL_SELECT", callback);
