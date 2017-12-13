@@ -1939,6 +1939,7 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 	}
 	
 	[class^="swatches"].disabled {
+		cursor: no-drop;
 		filter: graysclae(70%) brightness(50%);
 	}
 
