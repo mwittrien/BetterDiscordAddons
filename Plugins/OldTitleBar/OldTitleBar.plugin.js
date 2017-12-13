@@ -2,7 +2,6 @@
 
 class OldTitleBar {
 	constructor () {
-		this.switchFixObserver = new MutationObserver(() => {});
 		this.settingsWindowObserver = new MutationObserver(() => {});
 		
 		this.css = `
@@ -14,6 +13,10 @@ class OldTitleBar {
 				-webkit-app-region: no-drag;
 			}
 			
+			.elementOTB {
+				float: right;
+			}
+			
 			.settings-titlebar {
 				position: relative;
 				z-index: 1000;
@@ -22,17 +25,17 @@ class OldTitleBar {
 				-webkit-app-region: drag;
 			}`;
 			
-		this.dividerMarkup = `<div class="dividerOTB divider-1GKkV3"></div>`;
+		this.dividerMarkup = `<div class="elementOTB dividerOTB divider-1GKkV3"></div>`;
 			
 		this.reloadButtonMarkup = 
-			`<svg class="reloadButtonOTB iconInactive-WWHQEI icon-mr9wAc iconMargin-2Js7V9" xmlns="http://www.w3.org/2000/svg">
+			`<svg class="elementOTB reloadButtonOTB iconInactive-WWHQEI icon-mr9wAc iconMargin-2Js7V9" xmlns="http://www.w3.org/2000/svg">
 				<g fill="none" class="iconForeground-2c7s3m" fill-rule="evenodd">
 					<path fill="currentColor" transform="translate(4,4)" d="M17.061,7.467V0l-2.507,2.507C13.013,0.96,10.885,0,8.528,0C3.813,0,0.005,3.819,0.005,8.533s3.808,8.533,8.523,8.533c3.973,0,7.301-2.72,8.245-6.4h-2.219c-0.88,2.485-3.237,4.267-6.027,4.267c-3.536,0-6.4-2.864-6.4-6.4s2.864-6.4,6.4-6.4c1.765,0,3.349,0.736,4.507,1.893l-3.44,3.44H17.061z"/>
 				</g>
 			</svg>`;
 			
 		this.minButtonMarkup = 
-			`<svg class="minButtonOTB iconInactive-WWHQEI icon-mr9wAc iconMargin-2Js7V9" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
+			`<svg class="elementOTB minButtonOTB iconInactive-WWHQEI icon-mr9wAc iconMargin-2Js7V9" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
 				<g fill="none" class="iconForeground-2c7s3m" fill-rule="evenodd">
 					<path fill="currentColor" d="M19 19v-2H7v2h12z"/>
 					<path d="M1 25h24V1H1v24z"/>
@@ -40,7 +43,7 @@ class OldTitleBar {
 			</svg>`;
 			
 		this.maxButtonMarkup = 
-			`<svg class="maxButtonOTB iconInactive-WWHQEI icon-mr9wAc iconMargin-2Js7V9" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
+			`<svg class="elementOTB maxButtonOTB iconInactive-WWHQEI icon-mr9wAc iconMargin-2Js7V9" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
 				<g fill="none" class="iconForeground-2c7s3m" fill-rule="evenodd">
 					<path d="M1 1h24v24H1V1z"/>
 					<path fill="currentColor" d="M8 13H6v7h7v-2H8v-5zm-2 0h2V8h5V6H6v7zm7 5v2h7v-7h-2v5h-5zm0-12v2h5v5h2V6h-7z"/>
@@ -48,7 +51,7 @@ class OldTitleBar {
 			</svg>`;
 			
 		this.closeButtonMarkup = 
-			`<svg class="closeButtonOTB iconInactive-WWHQEI icon-mr9wAc iconMargin-2Js7V9" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
+			`<svg class="elementOTB closeButtonOTB iconInactive-WWHQEI icon-mr9wAc iconMargin-2Js7V9" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
 				<g fill="none" class="iconForeground-2c7s3m" fill-rule="evenodd">
 					<path d="M1 1h24v24H1V1z"/>
 					<path fill="currentColor" d="M20 7.41L18.59 6 13 11.59 7.41 6 6 7.41 11.59 13 6 18.59 7.41 20 13 14.41 18.59 20 20 18.59 14.41 13 20 7.41z"/>
@@ -60,7 +63,7 @@ class OldTitleBar {
 
 	getDescription () {return "Reverts the title bar back to its former self.";}
 
-	getVersion () {return "1.2.4";}
+	getVersion () {return "1.2.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -70,8 +73,7 @@ class OldTitleBar {
 			var settingspanel = 
 				$(`<div class="${this.getName()}-settings">
 					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="addToSettings"${settings.addToSettings ? " checked" : void 0}>Add an old fashioned title bar to settings windows.</label><br>
-					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="reloadButton"${settings.reloadButton ? " checked" : void 0}>Add a reload button to the title bar.</label><br>
-					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="forceClose"${settings.forceClose ? " checked" : void 0}>Force close the app when clicking the close button.</label>
+					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="reloadButton"${settings.reloadButton ? " checked" : void 0}>Add a reload button to the title bar.</label>
 				</div>`)[0];
 			$(settingspanel)
 				.on("change", ".settings-checkbox", () => {this.updateSettings(settingspanel);});
@@ -83,15 +85,13 @@ class OldTitleBar {
 	load () {}
 
 	start () {
-		if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
-		$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-		$('head').append("<script src='https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
-		if (typeof BDfunctionsDevilBro !== "object") {
-			$('head script[src="https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-			$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
+		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
+			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
+			$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBroBeta.js"]').remove();
+			$('head').append('<script src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBroBeta.js"></script>');
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
+			BDfunctionsDevilBro.loadMessage(this);
 			
 			this.settingsWindowObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -117,8 +117,6 @@ class OldTitleBar {
 			});
 			this.settingsWindowObserver.observe(document.querySelector(".layers"), {childList:true});
 			
-			this.switchFixObserver = BDfunctionsDevilBro.onSwitchFix(this);
-			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 			
 			this.addTitleBar();
@@ -133,22 +131,19 @@ class OldTitleBar {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			this.switchFixObserver.disconnect();
 			this.settingsWindowObserver.disconnect();
 			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName(), this.css);
 			
 			this.removeTitleBar();
 			
-			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
+			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
 	
 	onSwitch () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			setTimeout(() => {
-				this.addTitleBar();
-			},1);
+			this.addTitleBar();
 		}
 	}
 
@@ -185,48 +180,51 @@ class OldTitleBar {
     }
 	
 	addTitleBar () {
-		if (!document.querySelector(".dividerOTB, .reloadButtonOTB, .minButtonOTB, .maxButtonOTB, .closeButtonOTB")) {
-			var settings = this.getSettings();
-			if (settings.reloadButton) {
-				$(".divider-1GKkV3").parent().has(".iconInactive-WWHQEI")
-					.append(this.dividerMarkup)
-					.append(this.reloadButtonMarkup)
-					.on("click." + this.getName(), ".reloadButtonOTB", () => {
-						this.doReload();
-					})
-					.on("mouseenter." + this.getName(), ".reloadButtonOTB", this.createReloadToolTip.bind(this));
-			}
+		this.removeTitleBar();
+		var settings = this.getSettings();
+		if (settings.reloadButton) {
 			$(".divider-1GKkV3").parent().has(".iconInactive-WWHQEI")
 				.append(this.dividerMarkup)
-				.append(this.minButtonMarkup)
-				.append(this.maxButtonMarkup)
-				.append(this.closeButtonMarkup)
-				.on("click." + this.getName(), ".minButtonOTB", () => {
-					this.doMinimize();
+				.append(this.reloadButtonMarkup)
+				.on("click." + this.getName(), ".reloadButtonOTB", () => {
+					this.doReload();
 				})
-				.on("click." + this.getName(), ".maxButtonOTB", () => {
-					this.doMaximize();
-				})
-				.on("click." + this.getName(), ".closeButtonOTB", () => {
-					this.doClose();
-				})
-				.parent().css("-webkit-app-region", "drag");
+				.on("mouseenter." + this.getName(), ".reloadButtonOTB", (e) => {
+					this.createReloadToolTip(e);
+				});
 		}
+		$(".divider-1GKkV3").parent().has(".iconInactive-WWHQEI")
+			.append(this.dividerMarkup)
+			.append(this.minButtonMarkup)
+			.append(this.maxButtonMarkup)
+			.append(this.closeButtonMarkup)
+			.on("click." + this.getName(), ".minButtonOTB", () => {
+				this.doMinimize();
+			})
+			.on("click." + this.getName(), ".maxButtonOTB", () => {
+				this.doMaximize();
+			})
+			.on("click." + this.getName(), ".closeButtonOTB", () => {
+				this.doClose();
+			})
+			.parent().css("-webkit-app-region", "drag");
 	}
 	
 	addSettingsTitleBar (settingspane) {
 		if (!settingspane.querySelector(".dividerOTB, .reloadButtonOTB, .minButtonOTB, .maxButtonOTB, .closeButtonOTB")) {
-			var settingsbar = $(`<div class="settings-titlebar"></div>`);
+			var settingsbar = $(`<div class="settings-titlebar-OTB"></div>`);
 			var settings = this.getSettings();
 			if (settings.reloadButton) {
-				$(settingsbar)
+				settingsbar
 					.append(this.reloadButtonMarkup)
 					.on("click." + this.getName(), ".reloadButtonOTB", () => {
 						this.doReload();
 					})
-					.on("mouseenter." + this.getName(), ".reloadButtonOTB", this.createReloadToolTip.bind(this));
+					.on("mouseenter." + this.getName(), ".reloadButtonOTB", (e) => {
+						this.createReloadToolTip(e);
+					});
 			}
-			$(settingsbar)
+			settingsbar
 				.append(this.minButtonMarkup)
 				.append(this.maxButtonMarkup)
 				.append(this.closeButtonMarkup)
@@ -272,8 +270,7 @@ class OldTitleBar {
 	}
 	
 	doClose () {
-		if (this.getSettings().forceClose) require("electron").remote.app.quit();
- 		else require("electron").remote.getCurrentWindow().close();
+		require("electron").remote.getCurrentWindow().close();
 	}
 	
 	removeTitleBar () {
