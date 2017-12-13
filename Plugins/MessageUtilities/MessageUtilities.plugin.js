@@ -41,7 +41,7 @@ class MessageUtilities {
 
 	getDescription () {return "Offers a number of useful message options. Doubleclick a message to edit it. Hold Del and click a message to delete it. Press Esc to clear the chatinput.";}
 
-	getVersion () {return "1.2.0";}
+	getVersion () {return "1.2.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -49,19 +49,24 @@ class MessageUtilities {
 	load () {}
 
 	start () {
-		if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
-		$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-		$('head').append("<script src='https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
-		if (typeof BDfunctionsDevilBro !== "object") {
-			$('head script[src="https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-			$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
+		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
+			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
+			$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBroBeta.js"]').remove();
+			$('head').append('<script src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBroBeta.js"></script>');
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
+			BDfunctionsDevilBro.loadMessage(this);
 			
-			$(document).on("click." + this.getName(), this.onSglClick.bind(this));
-			$(document).on("dblclick." + this.getName(), this.onDblClick.bind(this));
-			$(document).on("keydown." + this.getName(), this.onKeyDown.bind(this));
+			$(document)
+				.on("click." + this.getName(), (e) => {
+					this.onSglClick(e.target);
+				})
+				.on("dblclick." + this.getName(), (e) => {
+					this.onDblClick(e.target);
+				})
+				.on("keydown." + this.getName(), (e) => {
+					this.onKeyDown(e.which);
+				});
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -74,18 +79,18 @@ class MessageUtilities {
 			$(document).off("dblclick." + this.getName());
 			$(document).off("keydown." + this.getName());
 			
-			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
+			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
 
 	
 	//begin of own functions
 	
-	onSglClick (e) {
+	onSglClick (target) {
 		if (!this.firedEvents.includes("onSglClick")) {
 			if (BDfunctionsDevilBro.pressedKeys.includes(46)) {
 				this.firedEvents.push("onSglClick");
-				var messageWrap = $(".message-text").has(e.target)[0];
+				var messageWrap = this.getMessageWrap(target);
 				if (messageWrap) {
 					this.doMessageAction(messageWrap, "bound handleDelete");
 					$(".callout-backdrop, .backdrop-2ohBEd").hide();
@@ -94,13 +99,25 @@ class MessageUtilities {
 				} 
 				BDfunctionsDevilBro.removeFromArray(this.firedEvents, "onSglClick");
 			}
+			else if (BDfunctionsDevilBro.pressedKeys.includes(17)) {
+				this.firedEvents.push("onSglClick");
+				var messageWrap = this.getMessageWrap(target);
+				if (messageWrap) {
+					this.doMessageAction(messageWrap, "bound handlePin");
+					this.doMessageAction(messageWrap, "bound handleUnpin");
+					$(".callout-backdrop, .backdrop-2ohBEd").hide();
+					$("div[class^='modal']").has("button[class^='buttonBrandFilled']").hide();
+					$("div[class^='modal'] button[class^='buttonBrandFilled']").click();
+				} 
+				BDfunctionsDevilBro.removeFromArray(this.firedEvents, "onSglClick");
+			}
 		}
 	}
 	
-	onDblClick (e) {
+	onDblClick (target) {
 		if (!this.firedEvents.includes("onDblClick")) {
 			this.firedEvents.push("onDblClick");
-			var messageWrap = $(".message-text").has(e.target)[0];
+			var messageWrap = this.getMessageWrap(target);
 			if (messageWrap) {
 				this.doMessageAction(messageWrap, "bound handleEdit");
 			} 
@@ -108,9 +125,9 @@ class MessageUtilities {
 		}
 	}
 	
-	onKeyDown (e) {
+	onKeyDown (key) {
 		if (!this.firedEvents.includes("onKeyDown")) {
-			if (e.which == 27) {
+			if (key == 27) {
 				this.firedEvents.push("onKeyDown");
 				var activeElement = document.activeElement;
 				if (activeElement && activeElement.tagName == "TEXTAREA") {
@@ -126,10 +143,14 @@ class MessageUtilities {
 		$(messageWrap).find(".btn-option").click();
 		$(".popout").find(".option-popout").parent().hide();
 		$(".btn-item").each((_, item) => {
-			var onClick = BDfunctionsDevilBro.getKeyInformation({"node":item,"key":"onClick","blackList":{"sibling":true}});
+			let onClick = BDfunctionsDevilBro.getKeyInformation({"node":item,"key":"onClick","blackList":{"sibling":true}});
 			if (onClick && onClick.name === action) {
-				onClick();
+				onClick({shiftKey:true});
 			}
 		});
+	}
+	
+	getMessageWrap (div) {
+		return $(".message, system-message").has(div)[0];
 	}
 }
