@@ -31,6 +31,7 @@ https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/TheQu
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/RamTheme.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/RemTheme.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/ShadeofGreenTheme.theme.css
+https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/TheGreenChristmas.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/WindowsTheme.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Winter.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Yoshi.theme.css
