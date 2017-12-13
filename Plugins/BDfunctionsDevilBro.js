@@ -634,21 +634,25 @@ BDfunctionsDevilBro.WebModules.monkeyPatch = function (internalModule, moduleFun
 	return cancel;
 };
 
-BDfunctionsDevilBro.WebModules.patchFunction = function (newFunction, index) {
+BDfunctionsDevilBro.WebModules.patchFunction = function (newOutput, index) {
 	const req = webpackJsonp([], {"__extra_id__": (module, exports, req) => exports.default = req}, ["__extra_id__"]).default;
 	try {
+		var oldFunction = req.m[index];
 		var output = {};
-		req.m[index](output,{},function(){return;});
-		req.m[index](output,t,req);
-		
-		var oldFunction = output.exports;
+		req.m[index](output,{},req);
+		var oldOutput = output.exports;
 		req.c[index] = {
 			id: index,
 			loaded: true,
-			exports: newFunction
+			exports: newOutput
 		};
 		const cancel = function () {
 			req.m[index] = oldFunction;
+			req.c[index] = {
+				id: index,
+				loaded: true,
+				exports: oldOutput
+			};
 		};
 		return cancel;
 	}
