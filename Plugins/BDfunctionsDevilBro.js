@@ -539,6 +539,18 @@ BDfunctionsDevilBro.WebModules.find = function (filter) {
 			if (m && filter(m)) return m;
 		}
 	}
+};
+
+BDfunctionsDevilBro.WebModules.findFunction = function (filter) {
+	const req = webpackJsonp([], {"__extra_id__": (module, exports, req) => exports.default = req}, ["__extra_id__"]).default;
+	delete req.c["__extra_id__"];
+	for (let i in req.m) { 
+		if (req.m.hasOwnProperty(i)) {
+			let m = req.m[i];
+			if (m && m.__esModule && m.default && filter(m.default)) return {func:m.default,id:i,array:req.c};
+			if (m && filter(m)) return {func:m,id:i,array:req.m};
+		}
+	}
 	return null;
 };
 
@@ -552,11 +564,6 @@ BDfunctionsDevilBro.WebModules.findByName = function (name) {
 
 BDfunctionsDevilBro.WebModules.findByPrototypes = function (prototypes) {
 	return BDfunctionsDevilBro.WebModules.find((module) => module.prototype && prototypes.every(proto => module.prototype[proto] !== undefined));
-};
-
-// OLD REMOVE AFTER A WHILE
-BDfunctionsDevilBro.findInWebModulesByName = function (names) {
-	return BDfunctionsDevilBro.WebModules.find(module => names.every(prop => module[prop] !== undefined));
 };
 
 BDfunctionsDevilBro.WebModules.addListener = function (internalModule, moduleFunction, callback) {
