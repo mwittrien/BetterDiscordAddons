@@ -1952,6 +1952,10 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		border: 4px solid transparent;
 		border-radius: 12px;
 	}
+	
+	[class^="swatches"].disabled [class^="ui-color-picker-swatch"] {
+		cursor: no-drop;
+	}
 
 	[class^="ui-color-picker-swatch"].large {
 		min-width: 62px;
