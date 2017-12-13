@@ -644,7 +644,7 @@ BDfunctionsDevilBro.WebModules.patchFunction = function (newOutput, index) {
 		req.c[index] = {
 			id: index,
 			loaded: true,
-			exports: (e) => {try{newOutput(e);}catch(err){oldOutput(e);};}
+			exports: (...params) => {try{newOutput(...params);}catch(err){oldOutput(...params);};}
 		};
 		const cancel = function () {
 			req.m[index] = oldFunction;
