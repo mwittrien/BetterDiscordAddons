@@ -5,7 +5,6 @@ class EditUsers {
 		
 		this.labels = {};
 
-		this.switchFixObserver = new MutationObserver(() => {});
 		this.userContextObserver = new MutationObserver(() => {});
 		this.dmObserver = new MutationObserver(() => {});
 		this.friendListObserver = new MutationObserver(() => {});
@@ -143,6 +142,12 @@ class EditUsers {
 										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
 											<div class="swatches4"></div>
 										</div>
+										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
+											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">REPLACE_modal_ignoretagcolor_text</h3>
+											<div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;">
+												<input type="checkbox" class="checkboxEnabled-4QfryV checkbox-1KYsPm" id="input-ignoretagcolor">
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -161,7 +166,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "2.0.1";}
+	getVersion () {return "2.0.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -194,17 +199,16 @@ class EditUsers {
 	load () {}
 
 	start () {
-		if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
-		$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-		$('head').append("<script src='https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
-		if (typeof BDfunctionsDevilBro !== "object") {
-			$('head script[src="https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-			$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
+		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
+			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
+			$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBroBeta.js"]').remove();
+			$('head').append('<script src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBroBeta.js"></script>');
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
+			BDfunctionsDevilBro.loadMessage(this);
 			
-			this.MemberPerms = BDfunctionsDevilBro.findInWebModulesByName(["getNicknames", "getNick"]);
+			this.UserStore = BDfunctionsDevilBro.WebModules.findByProperties(["getUsers", "getUser"]);
+			this.MemberPerms = BDfunctionsDevilBro.WebModules.findByProperties(["getNicknames", "getNick"]);
 			
 			this.userContextObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -360,8 +364,6 @@ class EditUsers {
 			});
 			if (document.querySelector(".layers")) this.settingsWindowObserver.observe(document.querySelector(".layers"), {childList:true});
 			
-			this.switchFixObserver = BDfunctionsDevilBro.onSwitchFix(this);
-			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 			
 			this.loadAllUsers();
@@ -376,7 +378,6 @@ class EditUsers {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			this.switchFixObserver.disconnect();
 			this.dmObserver.disconnect();
 			this.userContextObserver.disconnect();
 			this.friendListObserver.disconnect();
@@ -391,7 +392,7 @@ class EditUsers {
 			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName());
 			
-			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
+			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
 	
@@ -449,27 +450,73 @@ class EditUsers {
 			this.resetAllUsers();
 		}
 	}
+	
+	resetAllUsers () {
+		document.querySelectorAll(".user-tag").forEach(node=>{node.remove();});
+		document.querySelectorAll("[custom-editusers]").forEach((div) => {
+			var {avatar, username, wrapper} = this.getAvatarNameWrapper(div);
+			if (!avatar && !username && !wrapper) return;
+			
+			var info = this.getUserInfo($(div).data("compact") ? $(".message-group").has(div)[0] : div);
+			if (!info) return;
+			
+			if (username) {
+				var serverObj = BDfunctionsDevilBro.getSelectedServer();
+				var member = serverObj ? this.MemberPerms.getMember(serverObj.info.id, info.id) : null;
+				var name = div.classList.contains("container-iksrDt") || !member || !member.nick ? info.username : member.nick;
+				var color1 = member && member.colorString ? BDfunctionsDevilBro.color2RGB(member.colorString) : "";
+				var color2 = "";
+				
+				BDfunctionsDevilBro.setInnerText(username, name);
+				username.style.color = color1;
+				username.style.background = color2;
+				
+				var messages = div.querySelectorAll(".markup");
+				for (var i = 0; i < messages.length; i++) {
+					var markup = messages[i];
+					if (settingsCookie["bda-gs-7"] && settingsCookie["bda-gs-7"] == true) {
+						markup.style.color = color1;
+					}
+					else {
+						markup.style.color = "";
+					}
+				}
+			}
+			
+			if (avatar) {
+				var bgImage = info.avatar ? "url('https://cdn.discordapp.com/avatars/" + info.id + "/" + info.avatar + ".webp')" :"url(/assets/1cbd08c76f8af6dddce02c5138971129.png";
+				avatar.style.background = bgImage;
+				avatar.style.backgroundSize = "cover";
+			}
+			
+			$(div).find(".guild-inner")
+				.off("mouseenter." + this.getName());
+			
+			$(div).removeAttr("custom-editusers");
+		});
+	}
 
 	changeLanguageStrings () {
-		this.userContextEntryMarkup = 		this.userContextEntryMarkup.replace("REPLACE_context_localusersettings_text", this.labels.context_localusersettings_text);
+		this.userContextEntryMarkup =		this.userContextEntryMarkup.replace("REPLACE_context_localusersettings_text", this.labels.context_localusersettings_text);
 		
-		this.userContextSubMenuMarkup = 	this.userContextSubMenuMarkup.replace("REPLACE_submenu_usersettings_text", this.labels.submenu_usersettings_text);
-		this.userContextSubMenuMarkup = 	this.userContextSubMenuMarkup.replace("REPLACE_submenu_resetsettings_text", this.labels.submenu_resetsettings_text);
+		this.userContextSubMenuMarkup =	this.userContextSubMenuMarkup.replace("REPLACE_submenu_usersettings_text", this.labels.submenu_usersettings_text);
+		this.userContextSubMenuMarkup =	this.userContextSubMenuMarkup.replace("REPLACE_submenu_resetsettings_text", this.labels.submenu_resetsettings_text);
 		
-		this.userSettingsModalMarkup = 		this.userSettingsModalMarkup.replace("REPLACE_modal_header_text", this.labels.modal_header_text);
-		this.userSettingsModalMarkup = 		this.userSettingsModalMarkup.replace("REPLACE_modal_username_text", this.labels.modal_username_text);
-		this.userSettingsModalMarkup = 		this.userSettingsModalMarkup.replace("REPLACE_modal_usertag_text", this.labels.modal_usertag_text);
-		this.userSettingsModalMarkup = 		this.userSettingsModalMarkup.replace("REPLACE_modal_userurl_text", this.labels.modal_userurl_text);
-		this.userSettingsModalMarkup = 		this.userSettingsModalMarkup.replace("REPLACE_modal_removeicon_text", this.labels.modal_removeicon_text);
-		this.userSettingsModalMarkup = 		this.userSettingsModalMarkup.replace("REPLACE_modal_tabheader1_text", this.labels.modal_tabheader1_text);
-		this.userSettingsModalMarkup = 		this.userSettingsModalMarkup.replace("REPLACE_modal_tabheader2_text", this.labels.modal_tabheader2_text);
-		this.userSettingsModalMarkup = 		this.userSettingsModalMarkup.replace("REPLACE_modal_tabheader3_text", this.labels.modal_tabheader3_text);
-		this.userSettingsModalMarkup = 		this.userSettingsModalMarkup.replace("REPLACE_modal_colorpicker1_text", this.labels.modal_colorpicker1_text);
-		this.userSettingsModalMarkup = 		this.userSettingsModalMarkup.replace("REPLACE_modal_colorpicker2_text", this.labels.modal_colorpicker2_text);
-		this.userSettingsModalMarkup = 		this.userSettingsModalMarkup.replace("REPLACE_modal_colorpicker3_text", this.labels.modal_colorpicker3_text);
-		this.userSettingsModalMarkup = 		this.userSettingsModalMarkup.replace("REPLACE_modal_colorpicker4_text", this.labels.modal_colorpicker4_text);
-		this.userSettingsModalMarkup = 		this.userSettingsModalMarkup.replace("REPLACE_btn_cancel_text", this.labels.btn_cancel_text);
-		this.userSettingsModalMarkup = 		this.userSettingsModalMarkup.replace("REPLACE_btn_save_text", this.labels.btn_save_text);
+		this.userSettingsModalMarkup =		this.userSettingsModalMarkup.replace("REPLACE_modal_header_text", this.labels.modal_header_text);
+		this.userSettingsModalMarkup =		this.userSettingsModalMarkup.replace("REPLACE_modal_username_text", this.labels.modal_username_text);
+		this.userSettingsModalMarkup =		this.userSettingsModalMarkup.replace("REPLACE_modal_usertag_text", this.labels.modal_usertag_text);
+		this.userSettingsModalMarkup =		this.userSettingsModalMarkup.replace("REPLACE_modal_userurl_text", this.labels.modal_userurl_text);
+		this.userSettingsModalMarkup =		this.userSettingsModalMarkup.replace("REPLACE_modal_removeicon_text", this.labels.modal_removeicon_text);
+		this.userSettingsModalMarkup =		this.userSettingsModalMarkup.replace("REPLACE_modal_ignoretagcolor_text", this.labels.modal_ignoretagcolor_text);
+		this.userSettingsModalMarkup =		this.userSettingsModalMarkup.replace("REPLACE_modal_tabheader1_text", this.labels.modal_tabheader1_text);
+		this.userSettingsModalMarkup =		this.userSettingsModalMarkup.replace("REPLACE_modal_tabheader2_text", this.labels.modal_tabheader2_text);
+		this.userSettingsModalMarkup =		this.userSettingsModalMarkup.replace("REPLACE_modal_tabheader3_text", this.labels.modal_tabheader3_text);
+		this.userSettingsModalMarkup =		this.userSettingsModalMarkup.replace("REPLACE_modal_colorpicker1_text", this.labels.modal_colorpicker1_text);
+		this.userSettingsModalMarkup =		this.userSettingsModalMarkup.replace("REPLACE_modal_colorpicker2_text", this.labels.modal_colorpicker2_text);
+		this.userSettingsModalMarkup =		this.userSettingsModalMarkup.replace("REPLACE_modal_colorpicker3_text", this.labels.modal_colorpicker3_text);
+		this.userSettingsModalMarkup =		this.userSettingsModalMarkup.replace("REPLACE_modal_colorpicker4_text", this.labels.modal_colorpicker4_text);
+		this.userSettingsModalMarkup =		this.userSettingsModalMarkup.replace("REPLACE_btn_cancel_text", this.labels.btn_cancel_text);
+		this.userSettingsModalMarkup =		this.userSettingsModalMarkup.replace("REPLACE_btn_save_text", this.labels.btn_save_text);
 	}
 	
 	onContextMenu (context) {
@@ -529,16 +576,18 @@ class EditUsers {
 	
 		var data = BDfunctionsDevilBro.loadData(id, this.getName(), "users");
 		
-		var name = 			data ? data.name : null;
-		var tag = 			data ? data.tag : null;
-		var url = 			data ? data.url : null;
-		var removeIcon = 	data ? data.removeIcon : false;
-		var color1 = 		data ? data.color1 : null;
-		var color2 = 		data ? data.color2 : null;
-		var color3 = 		data ? data.color3 : null;
-		var color4 = 		data ? data.color4 : null;
+		var name =				data ? data.name : null;
+		var tag =				data ? data.tag : null;
+		var url =				data ? data.url : null;
+		var removeIcon =		data ? data.removeIcon : false;
+		var ignoreTagColor =	data && data.ignoreTagColor ? data.ignoreTagColor : false;
+		var color1 =			data ? data.color1 : null;
+		var color2 =			data ? data.color2 : null;
+		var color3 =			data ? data.color3 : null;
+		var color4 =			data ? data.color4 : null;
 		
-		var member = this.MemberPerms.getMember(BDfunctionsDevilBro.getIdOfServer(BDfunctionsDevilBro.getSelectedServer()), id);
+		var serverObj = BDfunctionsDevilBro.getSelectedServer();
+		var member = serverObj ? this.MemberPerms.getMember(serverObj.info.id, id) : null;
 		
 		var userSettingsModal = $(this.userSettingsModalMarkup);
 		userSettingsModal.find(".guildName-1u0hy7").text(member && member.nick ? member.nick : info.username);
@@ -550,6 +599,8 @@ class EditUsers {
 		userSettingsModal.find("#input-userurl").addClass(url ? "valid" : "");
 		userSettingsModal.find("#input-userurl").prop("disabled", removeIcon);
 		userSettingsModal.find("#input-removeicon").prop("checked", removeIcon);
+		userSettingsModal.find(".swatches3, .swatches4").toggleClass("disabled", ignoreTagColor);
+		userSettingsModal.find("#input-ignoretagcolor").prop("checked", ignoreTagColor);
 		BDfunctionsDevilBro.setColorSwatches(color1, userSettingsModal.find(".swatches1"), "swatch1");
 		BDfunctionsDevilBro.setColorSwatches(color2, userSettingsModal.find(".swatches2"), "swatch2");
 		BDfunctionsDevilBro.setColorSwatches(color3, userSettingsModal.find(".swatches3"), "swatch3");
@@ -558,6 +609,9 @@ class EditUsers {
 		userSettingsModal
 			.on("click", "#input-removeicon", (event) => {
 				userSettingsModal.find("#input-userurl").prop("disabled", event.target.checked);
+			})
+			.on("click", "#input-ignoretagcolor", (event) => {
+				userSettingsModal.find(".swatches3, .swatches4").toggleClass("disabled", event.target.checked);
 			})
 			.on("change keyup paste", "#input-userurl", (event) => {
 				this.checkUrl(userSettingsModal, event);
@@ -572,6 +626,9 @@ class EditUsers {
 			})
 			.on("click", "button.btn-save", (event) => {
 				event.preventDefault();
+				
+				removeIcon = userSettingsModal.find("#input-removeicon").prop("checked");
+				ignoreTagColor = userSettingsModal.find("#input-ignoretagcolor").prop("checked");
 				
 				name = null;
 				if (userSettingsModal.find("#input-username").val()) {
@@ -589,25 +646,23 @@ class EditUsers {
 				
 				if (userSettingsModal.find("#input-userurl:not('.invalid')").length > 0) {
 					url = null;
-					if (!userSettingsModal.find("#input-removeicon").prop("checked") && userSettingsModal.find("#input-userurl").val()) {
+					if (!removeIcon && userSettingsModal.find("#input-userurl").val()) {
 						if (userSettingsModal.find("#input-userurl").val().trim().length > 0) {
 							url = userSettingsModal.find("#input-userurl").val().trim();
 						}
 					}
 				}
 				
-				removeIcon = userSettingsModal.find("#input-removeicon").prop("checked");
-				
 				color1 = BDfunctionsDevilBro.getSwatchColor("swatch1");
 				color2 = BDfunctionsDevilBro.getSwatchColor("swatch2");
 				color3 = BDfunctionsDevilBro.getSwatchColor("swatch3");
 				color4 = BDfunctionsDevilBro.getSwatchColor("swatch4");
 				
-				if (name == null && tag == null && url == null && !removeIcon && color1 == null && color2 == null && color3 == null && color4 == null) {
+				if (name == null && tag == null && url == null && !removeIcon && !ignoreTagColor && color1 == null && color2 == null && color3 == null && color4 == null) {
 					BDfunctionsDevilBro.removeData(id, this.getName(), "users")
 				}
 				else {
-					BDfunctionsDevilBro.saveData(id, {id,name,tag,url,removeIcon,color1,color2,color3,color4}, this.getName(), "users");
+					BDfunctionsDevilBro.saveData(id, {id,name,tag,url,removeIcon,ignoreTagColor,color1,color2,color3,color4}, this.getName(), "users");
 				};
 				this.loadAllUsers();
 			});
@@ -749,8 +804,9 @@ class EditUsers {
 		var data = BDfunctionsDevilBro.loadData(info.id, this.getName(), "users");
 		
 		if (data) {
+			var serverObj = BDfunctionsDevilBro.getSelectedServer();
+			var member = serverObj ? this.MemberPerms.getMember(serverObj.info.id, info.id) : null;
 			if (username) {
-				var member = this.MemberPerms.getMember(BDfunctionsDevilBro.getIdOfServer(BDfunctionsDevilBro.getSelectedServer()), info.id);
 				var name = data.name ? data.name : (type == "info" || type == "profil" || !member || !member.nick ? info.username : member.nick);
 				var color1 = data.color1 ? BDfunctionsDevilBro.color2RGB(data.color1) : (member && member.colorString ? BDfunctionsDevilBro.color2RGB(member.colorString) : "");
 				var color2 = data.color2 ? BDfunctionsDevilBro.color2RGB(data.color2) : "";
@@ -780,8 +836,14 @@ class EditUsers {
 				
 			var tag = data.tag ? data.tag : null;
 			if (tag && wrapper && !wrapper.querySelector(".user-tag") && (type == "list" || type == "chat" || type == "popout" || type == "profil" || type == "dmheader")) {
-				var color3 = data.color3 ? BDfunctionsDevilBro.color2RGB(data.color3) : "";
-				var color4 = data.color4 ? BDfunctionsDevilBro.color2RGB(data.color4) : "white";
+				var ignoreTagColor = data.ignoreTagColor ? data.ignoreTagColor : false;
+				var color3 = ignoreTagColor ? 
+								(member && member.colorString ? BDfunctionsDevilBro.color2RGB(member.colorString) : "") :
+								(data.color3 ? BDfunctionsDevilBro.color2RGB(data.color3) : "");
+				var color3COMP = color3 ? BDfunctionsDevilBro.color2COMP(color3) : [0,0,0];
+				var color4 = !ignoreTagColor && data.color4 ? 
+								BDfunctionsDevilBro.color2RGB(data.color4) : 
+								(color3COMP[0] > 180 && color3COMP[1] > 180 && color3COMP[2] > 180 ? "black" : "white");
 				var thisTag = $(this.tagMarkup)[0];
 				thisTag.classList.add(type + "-tag");
 				thisTag.innerText = tag;
@@ -793,65 +855,22 @@ class EditUsers {
 			if (type == "recentdms") {
 				$(div).find(".guild-inner")
 					.off("mouseenter." + this.getName())
-					.on("mouseenter." + this.getName(), {"div":div,"nick":data.name,"name":info.username}, this.createDmToolTip.bind(this));
+					.on("mouseenter." + this.getName(), () => {
+						this.createDmToolTip({"div":div,"nick":data.name,"name":info.username});
+					});
 			}
 			
 			$(div).attr("custom-editusers", true);
 		}
 	}
 	
-	createDmToolTip (e) {
-		var text = e.data.nick ? e.data.nick : e.data.name;
+	createDmToolTip (userObj) {
+		var text = userObj.nick ? userObj.nick : userObj.name;
 		var customTooltipCSS = `
 			.tooltip:not(.dm-custom-tooltip) {
 				display: none !important;
 			}`;
-		BDfunctionsDevilBro.createTooltip(text, e.data.div, {type:"right",selector:"dm-custom-tooltip",css:customTooltipCSS});
-	}
-	
-	resetAllUsers () {
-		document.querySelectorAll(".user-tag").forEach(node=>{node.remove();});
-		document.querySelectorAll("[custom-editusers]").forEach((div) => {
-			var {avatar, username, wrapper} = this.getAvatarNameWrapper(div);
-			if (!avatar && !username && !wrapper) return;
-			
-			var info = this.getUserInfo($(div).data("compact") ? $(".message-group").has(div)[0] : div);
-			if (!info) return;
-			
-			
-			if (username) {
-				var member = this.MemberPerms.getMember(BDfunctionsDevilBro.getIdOfServer(BDfunctionsDevilBro.getSelectedServer()), info.id);
-				var name = div.classList.contains("container-iksrDt") || !member || !member.nick ? info.username : member.nick;
-				var color1 = member && member.colorString ? BDfunctionsDevilBro.color2RGB(member.colorString) : "";
-				var color2 = "";
-				
-				BDfunctionsDevilBro.setInnerText(username, name);
-				username.style.color = color1;
-				username.style.background = color2;
-				
-				var messages = div.querySelectorAll(".markup");
-				for (var i = 0; i < messages.length; i++) {
-					var markup = messages[i];
-					if (settingsCookie["bda-gs-7"] && settingsCookie["bda-gs-7"] == true) {
-						markup.style.color = color1;
-					}
-					else {
-						markup.style.color = "";
-					}
-				}
-			}
-			
-			if (avatar) {
-				var bgImage = info.avatar ? "url('https://cdn.discordapp.com/avatars/" + info.id + "/" + info.avatar + ".webp')" :"url(/assets/1cbd08c76f8af6dddce02c5138971129.png";
-				avatar.style.background = bgImage;
-				avatar.style.backgroundSize = "cover";
-			}
-			
-			$(div).find(".guild-inner")
-				.off("mouseenter." + this.getName());
-			
-			$(div).removeAttr("custom-editusers");
-		});
+		BDfunctionsDevilBro.createTooltip(text, userObj.div, {type:"right",selector:"dm-custom-tooltip",css:customTooltipCSS});
 	}
 	
 	getAvatarNameWrapper (div) {
@@ -866,8 +885,7 @@ class EditUsers {
 	
 	getUserInfo (div) {
 		var info = BDfunctionsDevilBro.getKeyInformation({"node":div,"key":"user"});
-		if (info) info = info;
-		else {
+		if (!info) {
 			info = BDfunctionsDevilBro.getKeyInformation({"node":div,"key":"message"});
 			if (info) info = info.author;
 			else {
@@ -879,173 +897,180 @@ class EditUsers {
 				}
 			}
 		}
-		return info;
+		return info && info.id ? this.UserStore.getUser(info.id) : null;
 	}
 	
 	setLabelsByLanguage () {
 		switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
-			case "da": 	//danish
+			case "da":	//danish
 				return {
-					context_localusersettings_text: 	"Lokal brugerindstillinger",
-					submenu_usersettings_text: 			"Skift indstillinger",
-					submenu_resetsettings_text: 		"Nulstil bruger",
-					modal_header_text: 	 				"Lokal brugerindstillinger",
-					modal_username_text: 				"Lokalt brugernavn",
-					modal_usertag_text:			 		"Initialer",
-					modal_userurl_text: 				"Ikon",
-					modal_removeicon_text: 				"Fjern ikon",
-					modal_tabheader1_text: 				"Bruger",
-					modal_tabheader2_text: 				"Navnefarve",
-					modal_tabheader3_text: 				"Etiketfarve",
-					modal_colorpicker1_text: 			"Navnefarve",
-					modal_colorpicker2_text: 			"Baggrundsfarve",
-					modal_colorpicker3_text: 			"Etiketfarve",
-					modal_colorpicker4_text: 			"Skriftfarve",
-					modal_ignoreurl_text: 				"Ignorer URL",
-					modal_validurl_text: 				"Gyldig URL",
-					modal_invalidurl_text: 				"Ugyldig URL",
-					btn_cancel_text: 					"Afbryde",
-					btn_save_text: 						"Spare"
+					context_localusersettings_text:		"Lokal brugerindstillinger",
+					submenu_usersettings_text:			"Skift indstillinger",
+					submenu_resetsettings_text:			"Nulstil bruger",
+					modal_header_text:					"Lokal brugerindstillinger",
+					modal_username_text:				"Lokalt brugernavn",
+					modal_usertag_text:					"Initialer",
+					modal_userurl_text:					"Ikon",
+					modal_removeicon_text:				"Fjern ikon",
+					modal_tabheader1_text:				"Bruger",
+					modal_tabheader2_text:				"Navnefarve",
+					modal_tabheader3_text:				"Etiketfarve",
+					modal_colorpicker1_text:			"Navnefarve",
+					modal_colorpicker2_text:			"Baggrundsfarve",
+					modal_colorpicker3_text:			"Etiketfarve",
+					modal_colorpicker4_text:			"Skriftfarve",
+					modal_ignoreurl_text:				"Ignorer URL",
+					modal_ignoretagcolor_text:			"Brug rollefarve",
+					modal_validurl_text:				"Gyldig URL",
+					modal_invalidurl_text:				"Ugyldig URL",
+					btn_cancel_text:					"Afbryde",
+					btn_save_text:						"Spare"
 				};
-			case "de": 	//german
+			case "de":	//german
 				return {
-					context_localusersettings_text: 	"Lokale Benutzereinstellungen",
-					submenu_usersettings_text: 			"Ändere Einstellungen",
-					submenu_resetsettings_text: 		"Benutzer zurücksetzen",
-					modal_header_text: 					"Lokale Benutzereinstellungen",
-					modal_username_text: 				"Lokaler Benutzername",
-					modal_usertag_text:			 		"Etikett",
-					modal_userurl_text: 				"Icon",
-					modal_removeicon_text: 				"Entferne Icon",
-					modal_tabheader1_text: 				"Benutzer",
-					modal_tabheader2_text: 				"Namensfarbe",
-					modal_tabheader3_text: 				"Etikettfarbe",
-					modal_colorpicker1_text: 			"Namensfarbe",
-					modal_colorpicker2_text: 			"Hintergrundfarbe",
-					modal_colorpicker3_text: 			"Etikettfarbe",
-					modal_colorpicker4_text: 			"Schriftfarbe",
-					modal_ignoreurl_text: 				"URL ignorieren",
-					modal_validurl_text: 				"Gültige URL",
-					modal_invalidurl_text: 				"Ungültige URL",
-					btn_cancel_text: 					"Abbrechen",
-					btn_save_text: 						"Speichern"
+					context_localusersettings_text:		"Lokale Benutzereinstellungen",
+					submenu_usersettings_text:			"Ändere Einstellungen",
+					submenu_resetsettings_text:			"Benutzer zurücksetzen",
+					modal_header_text:					"Lokale Benutzereinstellungen",
+					modal_username_text:				"Lokaler Benutzername",
+					modal_usertag_text:					"Etikett",
+					modal_userurl_text:					"Icon",
+					modal_removeicon_text:				"Entferne Icon",
+					modal_tabheader1_text:				"Benutzer",
+					modal_tabheader2_text:				"Namensfarbe",
+					modal_tabheader3_text:				"Etikettfarbe",
+					modal_colorpicker1_text:			"Namensfarbe",
+					modal_colorpicker2_text:			"Hintergrundfarbe",
+					modal_colorpicker3_text:			"Etikettfarbe",
+					modal_colorpicker4_text:			"Schriftfarbe",
+					modal_ignoreurl_text:				"URL ignorieren",
+					modal_ignoretagcolor_text:			"Benutze Rollenfarbe",
+					modal_validurl_text:				"Gültige URL",
+					modal_invalidurl_text:				"Ungültige URL",
+					btn_cancel_text:					"Abbrechen",
+					btn_save_text:						"Speichern"
 				};
-			case "es": 	//spanish
+			case "es":	//spanish
 				return {
-					context_localusersettings_text: 	"Ajustes local de usuario",
-					submenu_usersettings_text: 			"Cambiar ajustes",
-					submenu_resetsettings_text: 		"Restablecer usuario",
-					modal_header_text: 					"Ajustes local de usuario",
-					modal_username_text: 				"Nombre local de usuario",
-					modal_usertag_text:			 		"Etiqueta",
-					modal_userurl_text: 				"Icono",
-					modal_removeicon_text: 				"Eliminar icono",
-					modal_tabheader1_text: 				"Usuario",
-					modal_tabheader2_text: 				"Color del nombre",
+					context_localusersettings_text:		"Ajustes local de usuario",
+					submenu_usersettings_text:			"Cambiar ajustes",
+					submenu_resetsettings_text:			"Restablecer usuario",
+					modal_header_text:					"Ajustes local de usuario",
+					modal_username_text:				"Nombre local de usuario",
+					modal_usertag_text:					"Etiqueta",
+					modal_userurl_text:					"Icono",
+					modal_removeicon_text:				"Eliminar icono",
+					modal_tabheader1_text:				"Usuario",
+					modal_tabheader2_text:				"Color del nombre",
 					modal_tabheader3_text:				"Color de la etiqueta",
-					modal_colorpicker1_text: 			"Color del nombre",
-					modal_colorpicker2_text: 			"Color de fondo",
-					modal_colorpicker3_text: 			"Color de la etiqueta",
-					modal_colorpicker4_text: 			"Color de fuente",
-					modal_ignoreurl_text: 				"Ignorar URL",
-					modal_validurl_text: 				"URL válida",
-					modal_invalidurl_text: 				"URL inválida",
-					btn_cancel_text: 					"Cancelar",
-					btn_save_text: 						"Guardar"
+					modal_colorpicker1_text:			"Color del nombre",
+					modal_colorpicker2_text:			"Color de fondo",
+					modal_colorpicker3_text:			"Color de la etiqueta",
+					modal_colorpicker4_text:			"Color de fuente",
+					modal_ignoreurl_text:				"Ignorar URL",
+					modal_ignoretagcolor_text:			"Usar color de rol",
+					modal_validurl_text:				"URL válida",
+					modal_invalidurl_text:				"URL inválida",
+					btn_cancel_text:					"Cancelar",
+					btn_save_text:						"Guardar"
 				};
-			case "fr": 	//french
+			case "fr":	//french
 				return {
-					context_localusersettings_text: 	"Paramètres locale d'utilisateur",
-					submenu_usersettings_text: 			"Modifier les paramètres",
-					submenu_resetsettings_text: 		"Réinitialiser l'utilisateur",
-					modal_header_text: 					"Paramètres locale d'utilisateur",
-					modal_username_text: 				"Nom local d'utilisateur",
-					modal_usertag_text:			 		"Étiquette",
-					modal_userurl_text: 				"Icône",
-					modal_removeicon_text: 				"Supprimer l'icône",
-					modal_tabheader1_text: 				"Serveur",
-					modal_tabheader2_text: 				"Couleur du nom",
+					context_localusersettings_text:		"Paramètres locale d'utilisateur",
+					submenu_usersettings_text:			"Modifier les paramètres",
+					submenu_resetsettings_text:			"Réinitialiser l'utilisateur",
+					modal_header_text:					"Paramètres locale d'utilisateur",
+					modal_username_text:				"Nom local d'utilisateur",
+					modal_usertag_text:					"Étiquette",
+					modal_userurl_text:					"Icône",
+					modal_removeicon_text:				"Supprimer l'icône",
+					modal_tabheader1_text:				"Serveur",
+					modal_tabheader2_text:				"Couleur du nom",
 					modal_tabheader3_text:				"Couleur de l'étiquette",
-					modal_colorpicker1_text: 			"Couleur du nom",
-					modal_colorpicker2_text: 			"Couleur de fond",
+					modal_colorpicker1_text:			"Couleur du nom",
+					modal_colorpicker2_text:			"Couleur de fond",
 					modal_colorpicker3_text:			"Couleur de l'étiquette",
 					modal_colorpicker4_text:			"Couleur de la police",
-					modal_ignoreurl_text: 				"Ignorer l'URL",
-					modal_validurl_text: 				"URL valide",
-					modal_invalidurl_text: 				"URL invalide",
-					btn_cancel_text: 					"Abandonner",
-					btn_save_text: 						"Enregistrer"
+					modal_ignoreurl_text:				"Ignorer l'URL",
+					modal_ignoretagcolor_text:			"Utiliser la couleur de rôle",
+					modal_validurl_text:				"URL valide",
+					modal_invalidurl_text:				"URL invalide",
+					btn_cancel_text:					"Abandonner",
+					btn_save_text:						"Enregistrer"
 				};
-			case "it": 	//italian
+			case "it":	//italian
 				return {
-					context_localusersettings_text: 	"Impostazioni locale utente",
-					submenu_usersettings_text: 			"Cambia impostazioni",
-					submenu_resetsettings_text: 		"Ripristina utente",
-					modal_header_text: 					"Impostazioni locale utente",
-					modal_username_text: 				"Nome locale utente",
-					modal_usertag_text:			 		"Etichetta",
-					modal_userurl_text: 				"Icona",
-					modal_removeicon_text: 				"Rimuova l'icona",
-					modal_tabheader1_text: 				"Utente",
-					modal_tabheader2_text: 				"Colore del nome",
+					context_localusersettings_text:		"Impostazioni locale utente",
+					submenu_usersettings_text:			"Cambia impostazioni",
+					submenu_resetsettings_text:			"Ripristina utente",
+					modal_header_text:					"Impostazioni locale utente",
+					modal_username_text:				"Nome locale utente",
+					modal_usertag_text:					"Etichetta",
+					modal_userurl_text:					"Icona",
+					modal_removeicon_text:				"Rimuova l'icona",
+					modal_tabheader1_text:				"Utente",
+					modal_tabheader2_text:				"Colore del nome",
 					modal_tabheader3_text:				"Colore della etichetta",
-					modal_colorpicker1_text: 			"Colore del nome",
-					modal_colorpicker2_text: 			"Colore di sfondo",
+					modal_colorpicker1_text:			"Colore del nome",
+					modal_colorpicker2_text:			"Colore di sfondo",
 					modal_colorpicker3_text:			"Colore della etichetta",
 					modal_colorpicker4_text:			"Colore del carattere",
-					modal_ignoreurl_text: 				"Ignora l'URL",
-					modal_validurl_text: 				"URL valido",
-					modal_invalidurl_text: 				"URL non valido",
-					btn_cancel_text: 					"Cancellare",
-					btn_save_text: 						"Salvare"
+					modal_ignoreurl_text:				"Ignora l'URL",
+					modal_ignoretagcolor_text:			"Usa il colore del ruolo",
+					modal_validurl_text:				"URL valido",
+					modal_invalidurl_text:				"URL non valido",
+					btn_cancel_text:					"Cancellare",
+					btn_save_text:						"Salvare"
 				};
-			case "nl": 	//dutch
+			case "nl":	//dutch
 				return {
-					context_localusersettings_text: 	"Lokale gebruikerinstellingen",
-					submenu_usersettings_text: 			"Verandere instellingen",
-					submenu_resetsettings_text: 		"Reset gebruiker",
-					modal_header_text: 					"Lokale gebruikerinstellingen",
-					modal_username_text: 				"Lokale gebruikernaam",
-					modal_usertag_text:			 		"Etiket",
-					modal_userurl_text: 				"Icoon",
-					modal_removeicon_text: 				"Verwijder icoon",
-					modal_tabheader1_text: 				"Gebruiker",
-					modal_tabheader2_text: 				"Naam kleur",
-					modal_tabheader3_text:				"Etiket kleur",
-					modal_colorpicker1_text: 			"Naam kleur",
-					modal_colorpicker2_text: 			"Achtergrond kleur",
-					modal_colorpicker3_text:			"Etiket kleur",
-					modal_colorpicker4_text:			"Doopvont kleur",
-					modal_ignoreurl_text: 				"URL negeren",
-					modal_validurl_text: 				"Geldige URL",
-					modal_invalidurl_text: 				"Ongeldige URL",
-					btn_cancel_text: 					"Afbreken",
-					btn_save_text: 						"Opslaan"
+					context_localusersettings_text:		"Lokale gebruikerinstellingen",
+					submenu_usersettings_text:			"Verandere instellingen",
+					submenu_resetsettings_text:			"Reset gebruiker",
+					modal_header_text:					"Lokale gebruikerinstellingen",
+					modal_username_text:				"Lokale gebruikernaam",
+					modal_usertag_text:					"Etiket",
+					modal_userurl_text:					"Icoon",
+					modal_removeicon_text:				"Verwijder icoon",
+					modal_tabheader1_text:				"Gebruiker",
+					modal_tabheader2_text:				"Naamkleur",
+					modal_tabheader3_text:				"Etiketkleur",
+					modal_colorpicker1_text:			"Naamkleur",
+					modal_colorpicker2_text:			"Achtergrondkleur",
+					modal_colorpicker3_text:			"Etiketkleur",
+					modal_colorpicker4_text:			"Doopvontkleur",
+					modal_ignoreurl_text:				"URL negeren",
+					modal_ignoretagcolor_text:			"Gebruik rolkleur",
+					modal_validurl_text:				"Geldige URL",
+					modal_invalidurl_text:				"Ongeldige URL",
+					btn_cancel_text:					"Afbreken",
+					btn_save_text:						"Opslaan"
 				};
-			case "no": 	//norwegian
+			case "no":	//norwegian
 				return {
-					context_localusersettings_text: 	"Lokal brukerinnstillinger",
-					submenu_usersettings_text: 			"Endre innstillinger",
-					submenu_resetsettings_text: 		"Tilbakestill bruker",
-					modal_header_text: 					"Lokal brukerinnstillinger",
-					modal_username_text: 				"Lokalt gebruikernavn",
-					modal_usertag_text:			 		"Stikkord",
-					modal_userurl_text: 				"Ikon",
-					modal_removeicon_text: 				"Fjern ikon",
-					modal_tabheader1_text: 				"Bruker",
-					modal_tabheader2_text: 				"Navnfarge",
+					context_localusersettings_text:		"Lokal brukerinnstillinger",
+					submenu_usersettings_text:			"Endre innstillinger",
+					submenu_resetsettings_text:			"Tilbakestill bruker",
+					modal_header_text:					"Lokal brukerinnstillinger",
+					modal_username_text:				"Lokalt gebruikernavn",
+					modal_usertag_text:					"Stikkord",
+					modal_userurl_text:					"Ikon",
+					modal_removeicon_text:				"Fjern ikon",
+					modal_tabheader1_text:				"Bruker",
+					modal_tabheader2_text:				"Navnfarge",
 					modal_tabheader3_text:				"Stikkordfarge",
-					modal_colorpicker1_text: 			"Navnfarge",
-					modal_colorpicker2_text: 			"Bakgrunnfarge",
+					modal_colorpicker1_text:			"Navnfarge",
+					modal_colorpicker2_text:			"Bakgrunnfarge",
 					modal_colorpicker3_text:			"Stikkordfarge",
 					modal_colorpicker4_text:			"Skriftfarge",
-					modal_ignoreurl_text: 				"Ignorer URL",
-					modal_validurl_text: 				"Gyldig URL",
-					modal_invalidurl_text: 				"Ugyldig URL",
-					btn_cancel_text: 					"Avbryte",
-					btn_save_text: 						"Lagre"
+					modal_ignoreurl_text:				"Ignorer URL",
+					modal_ignoretagcolor_text:			"Bruk rollefarge",
+					modal_validurl_text:				"Gyldig URL",
+					modal_invalidurl_text:				"Ugyldig URL",
+					btn_cancel_text:					"Avbryte",
+					btn_save_text:						"Lagre"
 				};
-			case "pl": 	//polish
+			case "pl":	//polish
 				return {
 					context_localusersettings_text:		"Lokalne ustawienia użytkownika",
 					submenu_usersettings_text:			"Zmień ustawienia",
@@ -1063,286 +1088,299 @@ class EditUsers {
 					modal_colorpicker3_text:			"Kolor etykiety",
 					modal_colorpicker4_text:			"Kolor czcionki",
 					modal_ignoreurl_text:				"Ignoruj URL",
+					modal_ignoretagcolor_text:			"Użyj kolor roli",
 					modal_validurl_text:				"Prawidłowe URL",
-					modal_invalidurl_text: 				"Nieprawidłowe URL",
-					btn_cancel_text: 					"Anuluj",
-					btn_save_text: 						"Zapisz"
+					modal_invalidurl_text:				"Nieprawidłowe URL",
+					btn_cancel_text:					"Anuluj",
+					btn_save_text:						"Zapisz"
 				};
-			case "pt": 	//portuguese (brazil)
+			case "pt":	//portuguese (brazil)
 				return {
-					context_localusersettings_text: 	"Configurações local do utilizador",
-					submenu_usersettings_text: 			"Mudar configurações",
-					submenu_resetsettings_text: 		"Redefinir utilizador",
-					modal_header_text: 					"Configurações local do utilizador",
-					modal_username_text: 				"Nome local do utilizador",
-					modal_usertag_text:			 		"Etiqueta",
-					modal_userurl_text: 				"Icone",
-					modal_removeicon_text: 				"Remover ícone",
-					modal_tabheader1_text: 				"Utilizador",
-					modal_tabheader2_text: 				"Cor do nome",
+					context_localusersettings_text:		"Configurações local do utilizador",
+					submenu_usersettings_text:			"Mudar configurações",
+					submenu_resetsettings_text:			"Redefinir utilizador",
+					modal_header_text:					"Configurações local do utilizador",
+					modal_username_text:				"Nome local do utilizador",
+					modal_usertag_text:					"Etiqueta",
+					modal_userurl_text:					"Icone",
+					modal_removeicon_text:				"Remover ícone",
+					modal_tabheader1_text:				"Utilizador",
+					modal_tabheader2_text:				"Cor do nome",
 					modal_tabheader3_text:				"Cor da etiqueta",
-					modal_colorpicker1_text: 			"Cor do nome",
-					modal_colorpicker2_text: 			"Cor do fundo",
+					modal_colorpicker1_text:			"Cor do nome",
+					modal_colorpicker2_text:			"Cor do fundo",
 					modal_colorpicker3_text:			"Cor da etiqueta",
 					modal_colorpicker4_text:			"Cor da fonte",
-					modal_ignoreurl_text: 				"Ignorar URL",
-					modal_validurl_text: 				"URL válido",
-					modal_invalidurl_text: 				"URL inválida",
-					btn_cancel_text: 					"Cancelar",
-					btn_save_text: 						"Salvar"
+					modal_ignoreurl_text:				"Ignorar URL",
+					modal_ignoretagcolor_text:			"Use a cor do papel",
+					modal_validurl_text:				"URL válido",
+					modal_invalidurl_text:				"URL inválida",
+					btn_cancel_text:					"Cancelar",
+					btn_save_text:						"Salvar"
 				};
-			case "fi": 	//finnish
+			case "fi":	//finnish
 				return {
-					context_localusersettings_text: 	"Paikallinen käyttäjä asetukset",
-					submenu_usersettings_text: 			"Vaihda asetuksia",
-					submenu_resetsettings_text: 		"Nollaa käyttäjä",
-					modal_header_text: 					"Paikallinen käyttäjä asetukset",
-					modal_username_text: 				"Paikallinen käyttäjätunnus",
-					modal_usertag_text:			 		"Merkki",
-					modal_userurl_text: 				"Ikonin",
-					modal_removeicon_text: 				"Poista kuvake",
-					modal_tabheader1_text: 				"Käyttäjä",
-					modal_tabheader2_text: 				"Nimi väri",
-					modal_tabheader3_text:				"Merkki väri",
-					modal_colorpicker1_text: 			"Nimi väri",
-					modal_colorpicker2_text: 			"Tausta väri",
-					modal_colorpicker3_text:			"Merkki väri",
-					modal_colorpicker4_text:			"Fontin väri",
-					modal_ignoreurl_text: 				"Ohita URL",
-					modal_validurl_text: 				"Voimassa URL",
-					modal_invalidurl_text: 				"Virheellinen URL",
-					btn_cancel_text: 					"Peruuttaa",
-					btn_save_text: 						"Tallentaa"
+					context_localusersettings_text:		"Paikallinen käyttäjä asetukset",
+					submenu_usersettings_text:			"Vaihda asetuksia",
+					submenu_resetsettings_text:			"Nollaa käyttäjä",
+					modal_header_text:					"Paikallinen käyttäjä asetukset",
+					modal_username_text:				"Paikallinen käyttäjätunnus",
+					modal_usertag_text:					"Merkki",
+					modal_userurl_text:					"Ikonin",
+					modal_removeicon_text:				"Poista kuvake",
+					modal_tabheader1_text:				"Käyttäjä",
+					modal_tabheader2_text:				"Nimiväri",
+					modal_tabheader3_text:				"Merkkiväri",
+					modal_colorpicker1_text:			"Nimiväri",
+					modal_colorpicker2_text:			"Taustaväri",
+					modal_colorpicker3_text:			"Merkkiväri",
+					modal_colorpicker4_text:			"Fontinväri",
+					modal_ignoreurl_text:				"Ohita URL",
+					modal_ignoretagcolor_text:			"Käytä rooliväriä",
+					modal_validurl_text:				"Voimassa URL",
+					modal_invalidurl_text:				"Virheellinen URL",
+					btn_cancel_text:					"Peruuttaa",
+					btn_save_text:						"Tallentaa"
 				};
-			case "sv": 	//swedish
+			case "sv":	//swedish
 				return {
-					context_localusersettings_text: 	"Lokal användareinställningar",
-					submenu_usersettings_text: 			"Ändra inställningar",
-					submenu_resetsettings_text: 		"Återställ användare",
-					modal_header_text: 					"Lokal användareinställningar",
-					modal_username_text: 				"Lokalt användarenamn",
-					modal_usertag_text:			 		"Märka",
-					modal_userurl_text: 				"Ikon",
-					modal_removeicon_text: 				"Ta bort ikonen",
-					modal_tabheader1_text: 				"Användare",
-					modal_tabheader2_text: 				"Namnfärg",
+					context_localusersettings_text:		"Lokal användareinställningar",
+					submenu_usersettings_text:			"Ändra inställningar",
+					submenu_resetsettings_text:			"Återställ användare",
+					modal_header_text:					"Lokal användareinställningar",
+					modal_username_text:				"Lokalt användarenamn",
+					modal_usertag_text:					"Märka",
+					modal_userurl_text:					"Ikon",
+					modal_removeicon_text:				"Ta bort ikonen",
+					modal_tabheader1_text:				"Användare",
+					modal_tabheader2_text:				"Namnfärg",
 					modal_tabheader3_text:				"Märkafärg",
-					modal_colorpicker1_text: 			"Namnfärg",
-					modal_colorpicker2_text: 			"Bakgrundfärg",
+					modal_colorpicker1_text:			"Namnfärg",
+					modal_colorpicker2_text:			"Bakgrundfärg",
 					modal_colorpicker3_text:			"Märkafärg",
 					modal_colorpicker4_text:			"Fontfärg",
-					modal_ignoreurl_text: 				"Ignorera URL",
-					modal_validurl_text: 				"Giltig URL",
-					modal_invalidurl_text: 				"Ogiltig URL",
-					btn_cancel_text: 					"Avbryta",
-					btn_save_text: 						"Spara"
+					modal_ignoreurl_text:				"Ignorera URL",
+					modal_ignoretagcolor_text:			"Använd rollfärg",
+					modal_validurl_text:				"Giltig URL",
+					modal_invalidurl_text:				"Ogiltig URL",
+					btn_cancel_text:					"Avbryta",
+					btn_save_text:						"Spara"
 				};
-			case "tr": 	//turkish
+			case "tr":	//turkish
 				return {
-					context_localusersettings_text: 	"Yerel Kullanıcı Ayarları",
-					submenu_usersettings_text: 			"Ayarları Değiştir",
-					submenu_resetsettings_text: 		"Kullanıcı Sıfırla",
-					modal_header_text: 					"Yerel Kullanıcı Ayarları",
-					modal_username_text: 				"Yerel Kullanıcı Isim",
-					modal_usertag_text:			 		"Etiket",
-					modal_userurl_text: 				"Simge",
-					modal_removeicon_text: 				"Simge kaldır",
-					modal_tabheader1_text: 				"Kullanıcı",
-					modal_tabheader2_text: 				"Simge rengi",
+					context_localusersettings_text:		"Yerel Kullanıcı Ayarları",
+					submenu_usersettings_text:			"Ayarları Değiştir",
+					submenu_resetsettings_text:			"Kullanıcı Sıfırla",
+					modal_header_text:					"Yerel Kullanıcı Ayarları",
+					modal_username_text:				"Yerel Kullanıcı Isim",
+					modal_usertag_text:					"Etiket",
+					modal_userurl_text:					"Simge",
+					modal_removeicon_text:				"Simge kaldır",
+					modal_tabheader1_text:				"Kullanıcı",
+					modal_tabheader2_text:				"Simge rengi",
 					modal_tabheader3_text:				"Isim rengi",
-					modal_colorpicker1_text: 			"Simge rengi",
-					modal_colorpicker2_text: 			"Arka fon rengi",
+					modal_colorpicker1_text:			"Simge rengi",
+					modal_colorpicker2_text:			"Arka fon rengi",
 					modal_colorpicker3_text:			"Etiket rengi",
 					modal_colorpicker4_text:			"Yazı rengi",
-					modal_ignoreurl_text: 				"URL yoksay",
-					modal_validurl_text: 				"Geçerli URL",
-					modal_invalidurl_text: 				"Geçersiz URL",
-					btn_cancel_text: 					"Iptal",
-					btn_save_text: 						"Kayıt"
+					modal_ignoreurl_text:				"URL yoksay",
+					modal_ignoretagcolor_text:			"Rol rengini kullan",
+					modal_validurl_text:				"Geçerli URL",
+					modal_invalidurl_text:				"Geçersiz URL",
+					btn_cancel_text:					"Iptal",
+					btn_save_text:						"Kayıt"
 				};
-			case "cs": 	//czech
+			case "cs":	//czech
 				return {
-					context_localusersettings_text: 	"Místní nastavení uživatel",
-					submenu_usersettings_text: 			"Změnit nastavení",
-					submenu_resetsettings_text: 		"Obnovit uživatel",
-					modal_header_text: 					"Místní nastavení uživatel",
-					modal_username_text: 				"Místní název uživatel",
-					modal_usertag_text:			 		"Štítek",
-					modal_userurl_text: 				"Ikony",
-					modal_removeicon_text: 				"Odstranit ikonu",
-					modal_tabheader1_text: 				"Uživatel",
-					modal_tabheader2_text: 				"Barva název",
+					context_localusersettings_text:		"Místní nastavení uživatel",
+					submenu_usersettings_text:			"Změnit nastavení",
+					submenu_resetsettings_text:			"Obnovit uživatel",
+					modal_header_text:					"Místní nastavení uživatel",
+					modal_username_text:				"Místní název uživatel",
+					modal_usertag_text:					"Štítek",
+					modal_userurl_text:					"Ikony",
+					modal_removeicon_text:				"Odstranit ikonu",
+					modal_tabheader1_text:				"Uživatel",
+					modal_tabheader2_text:				"Barva název",
 					modal_tabheader3_text:				"Barva štítek",
-					modal_colorpicker1_text: 			"Barva název",
-					modal_colorpicker2_text: 			"Barva pozadí",
+					modal_colorpicker1_text:			"Barva název",
+					modal_colorpicker2_text:			"Barva pozadí",
 					modal_colorpicker3_text:			"Barva štítek",
 					modal_colorpicker4_text:			"Barva fontu",
-					modal_ignoreurl_text: 				"Ignorovat URL",
-					modal_validurl_text: 				"Platná URL",
-					modal_invalidurl_text: 				"Neplatná URL",
-					btn_cancel_text: 					"Zrušení",
-					btn_save_text: 						"Uložit"
+					modal_ignoreurl_text:				"Ignorovat URL",
+					modal_ignoretagcolor_text:			"Použijte barva role",
+					modal_validurl_text:				"Platná URL",
+					modal_invalidurl_text:				"Neplatná URL",
+					btn_cancel_text:					"Zrušení",
+					btn_save_text:						"Uložit"
 				};
-			case "bg": 	//bulgarian
+			case "bg":	//bulgarian
 				return {
-					context_localusersettings_text: 	"Настройки за локални потребител",
-					submenu_usersettings_text: 			"Промяна на настройките",
-					submenu_resetsettings_text: 		"Възстановяване на потребител",
-					modal_header_text: 					"Настройки за локални потребител",
-					modal_username_text: 				"Локално име на потребител",
-					modal_usertag_text:			 		"Cвободен край",
-					modal_userurl_text: 				"Икона",
-					modal_removeicon_text: 				"Премахване на иконата",
-					modal_tabheader1_text: 				"Потребител",
-					modal_tabheader2_text: 				"Цвят на име",
+					context_localusersettings_text:		"Настройки за локални потребител",
+					submenu_usersettings_text:			"Промяна на настройките",
+					submenu_resetsettings_text:			"Възстановяване на потребител",
+					modal_header_text:					"Настройки за локални потребител",
+					modal_username_text:				"Локално име на потребител",
+					modal_usertag_text:					"Cвободен край",
+					modal_userurl_text:					"Икона",
+					modal_removeicon_text:				"Премахване на иконата",
+					modal_tabheader1_text:				"Потребител",
+					modal_tabheader2_text:				"Цвят на име",
 					modal_tabheader3_text:				"Цвят на свободен край",
-					modal_colorpicker1_text: 			"Цвят на име",
-					modal_colorpicker2_text: 			"Цвят на заден план",
+					modal_colorpicker1_text:			"Цвят на име",
+					modal_colorpicker2_text:			"Цвят на заден план",
 					modal_colorpicker3_text:			"Цвят на свободен край",
 					modal_colorpicker4_text:			"Цвят на шрифта",
-					modal_ignoreurl_text: 				"Игнориране на URL",
-					modal_validurl_text: 				"Валиден URL",
-					modal_invalidurl_text: 				"Невалиден URL",
-					btn_cancel_text: 					"Зъбести",
-					btn_save_text: 						"Cпасяване"
+					modal_ignoreurl_text:				"Игнориране на URL",
+					modal_ignoretagcolor_text:			"Използвайте цвят на ролите",
+					modal_validurl_text:				"Валиден URL",
+					modal_invalidurl_text:				"Невалиден URL",
+					btn_cancel_text:					"Зъбести",
+					btn_save_text:						"Cпасяване"
 				};
-			case "ru": 	//russian
+			case "ru":	//russian
 				return {
-					context_localusersettings_text: 	"Настройки локального пользователь",
-					submenu_usersettings_text: 			"Изменить настройки",
-					submenu_resetsettings_text: 		"Сбросить пользователь",
-					modal_header_text: 					"Настройки локального пользователь",
-					modal_username_text: 				"Имя локального пользователь",
-					modal_usertag_text:			 		"Tег",
-					modal_userurl_text: 				"Значок",
-					modal_removeicon_text: 				"Удалить значок",
-					modal_tabheader1_text: 				"Пользователь",
-					modal_tabheader2_text: 				"Цвет имя",
+					context_localusersettings_text:		"Настройки локального пользователь",
+					submenu_usersettings_text:			"Изменить настройки",
+					submenu_resetsettings_text:			"Сбросить пользователь",
+					modal_header_text:					"Настройки локального пользователь",
+					modal_username_text:				"Имя локального пользователь",
+					modal_usertag_text:					"Tег",
+					modal_userurl_text:					"Значок",
+					modal_removeicon_text:				"Удалить значок",
+					modal_tabheader1_text:				"Пользователь",
+					modal_tabheader2_text:				"Цвет имя",
 					modal_tabheader3_text:				"Цвет тег",
-					modal_colorpicker1_text: 			"Цвет имя",
-					modal_colorpicker2_text: 			"Цвет задний план",
+					modal_colorpicker1_text:			"Цвет имя",
+					modal_colorpicker2_text:			"Цвет задний план",
 					modal_colorpicker3_text:			"Цвет тег",
 					modal_colorpicker4_text:			"Цвет шрифта",
-					modal_ignoreurl_text: 				"Игнорировать URL",
-					modal_validurl_text: 				"Действительный URL",
-					modal_invalidurl_text: 				"Неверная URL",
-					btn_cancel_text: 					"Отмена",
-					btn_save_text: 						"Cпасти"
+					modal_ignoreurl_text:				"Игнорировать URL",
+					modal_ignoretagcolor_text:			"Использовать цвет ролей",
+					modal_validurl_text:				"Действительный URL",
+					modal_invalidurl_text:				"Неверная URL",
+					btn_cancel_text:					"Отмена",
+					btn_save_text:						"Cпасти"
 				};
-			case "uk": 	//ukrainian
+			case "uk":	//ukrainian
 				return {
-					context_localusersettings_text: 	"Налаштування локального користувач",
-					submenu_usersettings_text: 			"Змінити налаштування",
-					submenu_resetsettings_text: 		"Скидання користувач",
-					modal_header_text: 					"Налаштування локального користувач",
-					modal_username_text: 				"Локальне ім'я користувач",
-					modal_usertag_text:			 		"Tег",
-					modal_userurl_text: 				"Іконка",
-					modal_removeicon_text: 				"Видалити піктограму",
-					modal_tabheader1_text: 				"Користувач",
-					modal_tabheader2_text: 				"Колір ім'я",
+					context_localusersettings_text:		"Налаштування локального користувач",
+					submenu_usersettings_text:			"Змінити налаштування",
+					submenu_resetsettings_text:			"Скидання користувач",
+					modal_header_text:					"Налаштування локального користувач",
+					modal_username_text:				"Локальне ім'я користувач",
+					modal_usertag_text:					"Tег",
+					modal_userurl_text:					"Іконка",
+					modal_removeicon_text:				"Видалити піктограму",
+					modal_tabheader1_text:				"Користувач",
+					modal_tabheader2_text:				"Колір ім'я",
 					modal_tabheader3_text:				"Колір тег",
-					modal_colorpicker1_text: 			"Колір ім'я",
-					modal_colorpicker2_text: 			"Колір фон",
+					modal_colorpicker1_text:			"Колір ім'я",
+					modal_colorpicker2_text:			"Колір фон",
 					modal_colorpicker3_text:			"Колір тег",
 					modal_colorpicker4_text:			"Колір шрифту",
-					modal_ignoreurl_text: 				"Ігнорувати URL",
-					modal_validurl_text: 				"Дійсна URL",
-					modal_invalidurl_text: 				"Недійсна URL",
-					btn_cancel_text: 					"Скасувати",
-					btn_save_text: 						"Зберегти"
+					modal_ignoreurl_text:				"Ігнорувати URL",
+					modal_ignoretagcolor_text:			"Використовуйте рольовий колір",
+					modal_validurl_text:				"Дійсна URL",
+					modal_invalidurl_text:				"Недійсна URL",
+					btn_cancel_text:					"Скасувати",
+					btn_save_text:						"Зберегти"
 				};
-			case "ja": 	//japanese
+			case "ja":	//japanese
 				return {
-					context_localusersettings_text: 	"ローカルユーザーー設定",
-					submenu_usersettings_text: 			"設定を変更する",
-					submenu_resetsettings_text: 		"ユーザーーをリセットする",
-					modal_header_text: 					"ローカルユーザーー設定",
-					modal_username_text: 				"ローカルユーザーー名",
-					modal_usertag_text:			 		"タグ",
-					modal_userurl_text: 				"アイコン",
-					modal_removeicon_text: 				"アイコンを削除",
-					modal_tabheader1_text: 				"ユーザー",
-					modal_tabheader2_text: 				"名の色",
+					context_localusersettings_text:		"ローカルユーザーー設定",
+					submenu_usersettings_text:			"設定を変更する",
+					submenu_resetsettings_text:			"ユーザーーをリセットする",
+					modal_header_text:					"ローカルユーザーー設定",
+					modal_username_text:				"ローカルユーザーー名",
+					modal_usertag_text:					"タグ",
+					modal_userurl_text:					"アイコン",
+					modal_removeicon_text:				"アイコンを削除",
+					modal_tabheader1_text:				"ユーザー",
+					modal_tabheader2_text:				"名の色",
 					modal_tabheader3_text:				"タグの色",
-					modal_colorpicker1_text: 			"名の色",
-					modal_colorpicker2_text: 			"バックグラウンドの色",
+					modal_colorpicker1_text:			"名の色",
+					modal_colorpicker2_text:			"バックグラウンドの色",
 					modal_colorpicker3_text:			"タグの色",
 					modal_colorpicker4_text:			"フォントの色",
-					modal_ignoreurl_text: 				"URL を無視する",
-					modal_validurl_text: 				"有効な URL",
-					modal_invalidurl_text: 				"無効な URL",
-					btn_cancel_text: 					"キャンセル",
-					btn_save_text: 						"セーブ"
+					modal_ignoreurl_text:				"URL を無視する",
+					modal_ignoretagcolor_text:			"ロールカラーを使用する",
+					modal_validurl_text:				"有効な URL",
+					modal_invalidurl_text:				"無効な URL",
+					btn_cancel_text:					"キャンセル",
+					btn_save_text:						"セーブ"
 				};
-			case "zh": 	//chinese (traditional)
+			case "zh":	//chinese (traditional)
 				return {
-					context_localusersettings_text: 	"本地用戶設置",
-					submenu_usersettings_text: 			"更改設置",
-					submenu_resetsettings_text: 		"重置用戶",
-					modal_header_text: 					"本地用戶設置",
-					modal_username_text: 				"用戶名稱",
-					modal_usertag_text:			 		"標籤",
-					modal_userurl_text: 				"圖標",
-					modal_removeicon_text: 				"刪除圖標",
-					modal_tabheader1_text: 				"用戶",
-					modal_tabheader2_text: 				"名稱顏色",
-					modal_tabheader3_text: 				"標籤顏色",
-					modal_colorpicker1_text: 			"名稱顏色",
-					modal_colorpicker2_text: 			"背景顏色",
+					context_localusersettings_text:		"本地用戶設置",
+					submenu_usersettings_text:			"更改設置",
+					submenu_resetsettings_text:			"重置用戶",
+					modal_header_text:					"本地用戶設置",
+					modal_username_text:				"用戶名稱",
+					modal_usertag_text:					"標籤",
+					modal_userurl_text:					"圖標",
+					modal_removeicon_text:				"刪除圖標",
+					modal_tabheader1_text:				"用戶",
+					modal_tabheader2_text:				"名稱顏色",
+					modal_tabheader3_text:				"標籤顏色",
+					modal_colorpicker1_text:			"名稱顏色",
+					modal_colorpicker2_text:			"背景顏色",
 					modal_colorpicker3_text:			"標籤顏色",
 					modal_colorpicker4_text:			"字體顏色",
-					modal_ignoreurl_text: 				"忽略 URL",
-					modal_validurl_text: 				"有效的 URL",
-					modal_invalidurl_text: 				"無效的 URL",
-					btn_cancel_text: 					"取消",
-					btn_save_text: 						"保存"
+					modal_ignoreurl_text:				"忽略 URL",
+					modal_ignoretagcolor_text:			"使用角色",
+					modal_validurl_text:				"有效的 URL",
+					modal_invalidurl_text:				"無效的 URL",
+					btn_cancel_text:					"取消",
+					btn_save_text:						"保存"
 				};
-			case "ko": 	//korean
+			case "ko":	//korean
 				return {
-					context_localusersettings_text: 	"로컬 사용자 설정",
-					submenu_usersettings_text: 			"설정 변경",
-					submenu_resetsettings_text: 		"사용자 재설정",
-					modal_header_text: 					"로컬 사용자 설정",
-					modal_username_text: 				"로컬 사용자 이름",
-					modal_usertag_text:			 		"꼬리표",
-					modal_userurl_text: 				"상",
-					modal_removeicon_text: 				"상 삭제",
-					modal_tabheader1_text: 				"사용자",
-					modal_tabheader2_text: 				"이름 색깔",
+					context_localusersettings_text:		"로컬 사용자 설정",
+					submenu_usersettings_text:			"설정 변경",
+					submenu_resetsettings_text:			"사용자 재설정",
+					modal_header_text:					"로컬 사용자 설정",
+					modal_username_text:				"로컬 사용자 이름",
+					modal_usertag_text:					"꼬리표",
+					modal_userurl_text:					"상",
+					modal_removeicon_text:				"상 삭제",
+					modal_tabheader1_text:				"사용자",
+					modal_tabheader2_text:				"이름 색깔",
 					modal_tabheader3_text:				"꼬리표 색깔",
-					modal_colorpicker1_text: 			"이름 색깔",
-					modal_colorpicker2_text: 			"배경 색깔",
+					modal_colorpicker1_text:			"이름 색깔",
+					modal_colorpicker2_text:			"배경 색깔",
 					modal_colorpicker3_text:			"꼬리표 색깔",
 					modal_colorpicker4_text:			"글꼴 색깔",
-					modal_ignoreurl_text: 				"URL 무시",
-					modal_validurl_text: 				"유효한 URL",
-					modal_invalidurl_text: 				"잘못된 URL",
-					btn_cancel_text: 					"취소",
-					btn_save_text: 						"저장"
+					modal_ignoreurl_text:				"URL 무시",
+					modal_ignoretagcolor_text:			"역할 색상 사용",
+					modal_validurl_text:				"유효한 URL",
+					modal_invalidurl_text:				"잘못된 URL",
+					btn_cancel_text:					"취소",
+					btn_save_text:						"저장"
 				};
-			default: 	//default: english
+			default:	//default: english
 				return {
-					context_localusersettings_text: 	"Local Usersettings",
-					submenu_usersettings_text: 			"Change Settings",
-					submenu_resetsettings_text: 		"Reset User",
-					modal_header_text: 					"Local Usersettings",
-					modal_username_text: 				"Local Username",
-					modal_usertag_text:			 		"Tag",
-					modal_userurl_text: 				"Icon",
-					modal_removeicon_text: 				"Remove Icon",
-					modal_tabheader1_text: 				"User",
-					modal_tabheader2_text: 				"Namecolor",
+					context_localusersettings_text:		"Local Usersettings",
+					submenu_usersettings_text:			"Change Settings",
+					submenu_resetsettings_text:			"Reset User",
+					modal_header_text:					"Local Usersettings",
+					modal_username_text:				"Local Username",
+					modal_usertag_text:					"Tag",
+					modal_userurl_text:					"Icon",
+					modal_removeicon_text:				"Remove Icon",
+					modal_tabheader1_text:				"User",
+					modal_tabheader2_text:				"Namecolor",
 					modal_tabheader3_text:				"Tagcolor",
-					modal_colorpicker1_text: 			"Namecolor",
-					modal_colorpicker2_text: 			"Backgroundcolor",
+					modal_colorpicker1_text:			"Namecolor",
+					modal_colorpicker2_text:			"Backgroundcolor",
 					modal_colorpicker3_text:			"Tagcolor",
 					modal_colorpicker4_text:			"Fontcolor",
-					modal_ignoreurl_text: 				"Ignore URL",
-					modal_validurl_text: 				"Valid URL",
-					modal_invalidurl_text: 				"Invalid URL",
-					btn_cancel_text: 					"Cancel",
-					btn_save_text: 						"Save"
+					modal_ignoreurl_text:				"Ignore URL",
+					modal_ignoretagcolor_text:			"Use Rolecolor",
+					modal_validurl_text:				"Valid URL",
+					modal_invalidurl_text:				"Invalid URL",
+					btn_cancel_text:					"Cancel",
+					btn_save_text:						"Save"
 				};
 		}
 	}
