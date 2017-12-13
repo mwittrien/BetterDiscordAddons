@@ -634,6 +634,29 @@ BDfunctionsDevilBro.WebModules.monkeyPatch = function (internalModule, moduleFun
 	return cancel;
 };
 
+BDfunctionsDevilBro.WebModules.patchFunction = function (newFunction, index) {
+	const req = webpackJsonp([], {"__extra_id__": (module, exports, req) => exports.default = req}, ["__extra_id__"]).default;
+	try {
+		var output = {};
+		req.m[index](output,{},function(){return;});
+		req.m[index](output,t,req);
+		
+		var oldFunction = output.exports;
+		req.c[index] = {
+			id: index,
+			loaded: true,
+			exports: newFunction
+		};
+		const cancel = function () {
+			req.m[index] = oldFunction;
+		};
+		return cancel;
+	};
+	catch (e) {
+		console.warn("BDfunctionsDevilBro: Could not patch Function. Error: " + e);
+	}
+};
+
 BDfunctionsDevilBro.addOnSwitchListener = function (callback) {
 	var SelectedChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getLastSelectedChannelId"]);
 	BDfunctionsDevilBro.WebModules.addListener(SelectedChannelStore._actionHandlers, "CHANNEL_SELECT", callback);
