@@ -1152,9 +1152,9 @@ BDfunctionsDevilBro.clearReadNotifications = function (servers) {
 	var GuildActions = BDfunctionsDevilBro.WebModules.findByProperties(['markGuildAsRead']);
 	if (!servers || !GuildActions) return;
 	servers = Array.isArray(servers) ? servers : Array.from(servers);
-	servers.forEach((server, i) => {
-		var info = BDfunctionsDevilBro.getKeyInformation({"node":server, "key":"guild"});
-		if (info) GuildActions.markGuildAsRead(info.id);
+	servers.forEach((serverObj, i) => {
+		if (!serverObj || !serverObj.info) return;
+		GuildActions.markGuildAsRead(serverObj.info.id);
 	}); 
 };
 
