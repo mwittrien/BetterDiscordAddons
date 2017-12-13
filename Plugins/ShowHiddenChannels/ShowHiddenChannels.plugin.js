@@ -2,7 +2,6 @@
 
 class ShowHiddenChannels {
 	constructor () {
-		this.switchFixObserver = new MutationObserver(() => {});
 		this.channelListObserver = new MutationObserver(() => {});
 		
 		this.categoryMarkup = 
@@ -23,8 +22,7 @@ class ShowHiddenChannels {
 					<div class="contentDefaultText-2elG3R content-2mSKOj">
 						<div class="marginReset-1YolDJ" style="flex: 0 0 auto;">
 							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" class="colorDefaultText-2v6rRX icon-3tVJnl">
-								<path class="background-2nyTH_" fill="currentColor" d="M7.92,4.66666667 L6.50666667,4.66666667 L6.98,2 L5.64666667,2 L5.17333333,4.66666667 L2.50666667,4.66666667 L2.27333333,6 L4.94,6 L4.23333333,10 L1.56666667,10 L1.33333333,11.3333333 L4,11.3333333 L3.52666667,14 L4.86,14 L5.33333333,11.3333333 L9.33333333,11.3333333 L8.86,14 L10.1933333,14 L10.6666667,11.3333333 L13.3333333,11.3333333 L13.5666667,10 L12.2333333,10 L8.74333333,10 L5.56666667,10 L6.27333333,6 L7.92,6 L7.92,4.66666667 Z"></path>
-								<path class="foreground-2zy1hc" fill="currentColor" fill-rule="nonzero" d="M15.1,3.2 L15.1,2 C15.1,0.88 14.05,0 13,0 C11.95,0 10.9,0.88 10.9,2 L10.9,3.2 C10.45,3.2 10,3.68 10,4.16 L10,6.96 C10,7.52 10.45,8 10.9,8 L15.025,8 C15.55,8 16,7.52 16,7.04 L16,4.24 C16,3.68 15.55,3.2 15.1,3.2 Z M14,3 L12,3 L12,1.92857143 C12,1.35714286 12.4666667,1 13,1 C13.5333333,1 14,1.35714286 14,1.92857143 L14,3 Z"></path>
+								<path class="foreground-2zy1hc" fill="currentColor" d="M10.8,7 L10.8,5.5 C10.8,4.1 9.4,3 8,3 C6.6,3 5.2,4.1 5.2,5.5 L5.2,7 C4.6,7 4,7.6 4,8.2 L4,11.7 C4,12.4 4.6,13 5.2,13 L10.7,13 C11.4,13 12,12.4 12,11.8 L12,8.3 C12,7.6 11.4,7 10.8,7 Z M9.5,7 L6.5,7 L6.5,5.5 C6.5,4.7 7.2,4.2 8,4.2 C8.8,4.2 9.5,4.7 9.5,5.5 L9.5,7 Z"></path>
 							</svg>
 						</div>
 						<div class="nameDefaultText-QoumjC name-2SL4ev overflowEllipsis-3Rxxjf" style="flex: 1 1 auto;">REPLACE_channel_name</div>
@@ -39,8 +37,7 @@ class ShowHiddenChannels {
 					<div class="contentDefaultVoice-311dxZ content-2mSKOj">
 						<div class="marginReset-1YolDJ" style="flex: 0 0 auto;">
 							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" class="colorDefaultVoice-1x4dEl icon-3tVJnl">
-								<path class="background-2nyTH_" fill="currentColor" d="M13.6005009,10 C12.8887426,11.8438372 11.2906136,13.2480521 9.33333333,13.6933333 L9.33333333,12.3133333 C10.5512947,11.950895 11.5614504,11.1062412 12.1398042,10 L13.6005009,10 Z M10.7736513,8.99497564 C10.4978663,9.6613459 9.98676114,10.2040442 9.33333333,10.5133333 L9.33333333,8.99497564 L10.7736513,8.99497564 Z M2,5.84666667 L4.66666667,5.84666667 L8,2.51333333 L8,13.18 L4.66666667,9.84666667 L2,9.84666667 L2,5.84666667 Z"></path>
-								<path class="foreground-2zy1hc" fill="currentColor" fill-rule="nonzero" d="M15.1,3.2 L15.1,2 C15.1,0.88 14.05,0 13,0 C11.95,0 10.9,0.88 10.9,2 L10.9,3.2 C10.45,3.2 10,3.68 10,4.16 L10,6.96 C10,7.52 10.45,8 10.9,8 L15.025,8 C15.55,8 16,7.52 16,7.04 L16,4.24 C16,3.68 15.55,3.2 15.1,3.2 Z M14,3 L12,3 L12,1.92857143 C12,1.35714286 12.4666667,1 13,1 C13.5333333,1 14,1.35714286 14,1.92857143 L14,3 Z"></path>
+								<path class="foreground-2zy1hc" fill="currentColor" d="M10.8,7 L10.8,5.5 C10.8,4.1 9.4,3 8,3 C6.6,3 5.2,4.1 5.2,5.5 L5.2,7 C4.6,7 4,7.6 4,8.2 L4,11.7 C4,12.4 4.6,13 5.2,13 L10.7,13 C11.4,13 12,12.4 12,11.8 L12,8.3 C12,7.6 11.4,7 10.8,7 Z M9.5,7 L6.5,7 L6.5,5.5 C6.5,4.7 7.2,4.2 8,4.2 C8.8,4.2 9.5,4.7 9.5,5.5 L9.5,7 Z"></path>
 							</svg>
 						</div>
 						<div class="nameDefaultVoice-1swZoh name-2SL4ev overflowEllipsis-3Rxxjf" style="flex: 1 1 auto;">REPLACE_channel_name</div>
@@ -54,7 +51,7 @@ class ShowHiddenChannels {
 
 	getDescription () {return "Displays channels that are hidden from you by role restrictions.";}
 
-	getVersion () {return "2.0.3";}
+	getVersion () {return "2.0.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -62,15 +59,13 @@ class ShowHiddenChannels {
 	load () {}
 
 	start () {
-		if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
-		$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-		$('head').append("<script src='https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
-		if (typeof BDfunctionsDevilBro !== "object") {
-			$('head script[src="https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-			$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
+		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
+			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
+			$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBroBeta.js"]').remove();
+			$('head').append('<script src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBroBeta.js"></script>');
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
+			BDfunctionsDevilBro.loadMessage(this);
 			
 			this.channelListObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -87,8 +82,6 @@ class ShowHiddenChannels {
 			});
 			if (document.querySelector(".channels-3g2vYe")) this.channelListObserver.observe(document.querySelector(".channels-3g2vYe"), {childList: true, subtree: true});
 			
-			this.switchFixObserver = BDfunctionsDevilBro.onSwitchFix(this);
-			
 			this.displayHiddenChannels();
 		}
 		else {
@@ -99,10 +92,9 @@ class ShowHiddenChannels {
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			$(".container-hidden").remove();
-			this.switchFixObserver.disconnect();
 			this.channelListObserver.disconnect();
 			
-			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
+			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
 	
@@ -116,8 +108,9 @@ class ShowHiddenChannels {
 	// begin of own functions
 	
 	displayHiddenChannels () {
-		var serverID = BDfunctionsDevilBro.getIdOfServer(BDfunctionsDevilBro.getSelectedServer());
-		if (serverID) {
+		var serverObj = BDfunctionsDevilBro.getSelectedServer();
+		if (serverObj && serverObj.info) {
+			var serverID = serverObj.info.id;
 			var chatWrap = document.querySelector(".layer");
 			var channelListWrap = document.querySelector(".channels-3g2vYe");
 			if ($(".container-hidden." + serverID).length == 0 && chatWrap && channelListWrap) {
