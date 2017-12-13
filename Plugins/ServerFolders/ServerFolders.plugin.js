@@ -244,7 +244,7 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.3.5";}
+	getVersion () {return "5.3.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -605,7 +605,7 @@ class ServerFolders {
 			var data = sortedFolders[i];
 			if (data) {
 				var folderDiv = this.createFolderDiv(data);
-				$(this.readIncludedServerList(folderDiv)).attr("folder",folderDiv.id).hide();
+				this.readIncludedServerList(folderDiv).forEach((serverObj) => {$(serverObj.div).attr("folder",folderDiv.id).hide();});
 			}
 		}
 	}
@@ -628,7 +628,9 @@ class ServerFolders {
 				}
 				this.openCloseFolder(folderDiv);
 			})
-			.on("contextmenu", (e) => {this.createFolderContextMenu(folderDiv, e);})
+			.on("contextmenu", (e) => {
+				this.createFolderContextMenu(folderDiv, e);
+			})
 			.on("mousedown." + this.getName(), (e) => {
 				var mouseTimeout = null;
 				var folderPreview = folderDiv.cloneNode(true);
@@ -664,6 +666,8 @@ class ServerFolders {
 								.offset({"left":e2.clientX + 5,"top":e2.clientY + 5});
 							hoveredElement = this.getGuildParentDiv(e2.target, "folder") || this.getGuildParentDiv(e2.target, "guild");
 							hoveredElement = typeof hoveredElement === "object" ? hoveredElement.div : hoveredElement;
+							console.log(hoveredElement);
+							
 							if (hoveredElement) document.querySelector(".guilds.scroller").insertBefore(placeholder, hoveredElement.nextSibling);
 						});
 				},100);
