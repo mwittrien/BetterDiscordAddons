@@ -172,7 +172,7 @@ class EmojiStatistics {
 
 	getDescription () {return "Adds some helpful options to show you more information about emojis and emojiservers.";}
 
-	getVersion () {return "2.6.2";}
+	getVersion () {return "2.6.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -194,15 +194,13 @@ class EmojiStatistics {
 	load () {}
 
 	start () {
-		if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
-		$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-		$('head').append("<script src='https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
-		if (typeof BDfunctionsDevilBro !== "object") {
-			$('head script[src="https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-			$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
+		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
+			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
+			$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBroBeta.js"]').remove();
+			$('head').append('<script src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBroBeta.js"></script>');
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
+			BDfunctionsDevilBro.loadMessage(this);
 			
 			this.emojiPickerObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -247,7 +245,7 @@ class EmojiStatistics {
 			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName());
 			
-			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
+			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
 	
@@ -349,7 +347,9 @@ class EmojiStatistics {
 	addEmojiInformationButton (node) {
 		$(".emoji-picker .header", node)
 			.append(this.emojiButtonMarkup)
-			.on("click." + this.getName(), ".emojistatistics-button", this.showEmojiInformationModal.bind(this));
+			.on("click." + this.getName(), ".emojistatistics-button", (e) => {
+				this.showEmojiInformationModal(e);
+			});
 	}
 	
 	showEmojiInformationModal (e) {
@@ -359,71 +359,73 @@ class EmojiStatistics {
 		BDfunctionsDevilBro.appendModal(emojiInformationModal);
 		$(".popout").has(e.target).hide();
 				
-		var servers = BDfunctionsDevilBro.readServerList();
+		var serverObjs = BDfunctionsDevilBro.readServerList();
 		
 		var rows = this.emojiInformation;
 		var categories = this.serverInformation;
 		
 		if (rows && categories) {
-			for (var i = 0; i < servers.length; i++) {
-				let data = BDfunctionsDevilBro.getKeyInformation({"node":servers[i], "key":"guild"});
-				if (data) {
-					var entry = $(this.emojiserverEntryMarkup);
-					if (data.icon) {
-						entry.find(".modal-emojiserver-icon").css("background-image", "url('https://cdn.discordapp.com/icons/" + data.id + "/" + data.icon + ".png')");
-					}
-					else {
-						entry.find(".modal-emojiserver-icon").text(servers[i].firstChild.innerText);
-					}
-					entry.find(".modal-emojiservername-label").text(data.name);
-					entry.find(".modal-emojiservername-label").attr("id", data.id);
-					
-					var currentServer = "";
-					var amountGlobal = 0;		
-					var amountLocal = 0;	
-					var amountReplicate = 0;
-					
-					for (var j = 0; j < rows.length; j++) {
-						var newServer = rows[j].category;
-						if (newServer.indexOf("custom") != -1) {	
-							if (currentServer == "" || currentServer == newServer) {
-								var serverName = this.getNameOfServer(newServer, categories);
-								if (serverName == data.name) {
-									currentServer = newServer;
-									var emojis = rows[j].items;
-									for (var k = 0; k < emojis.length; k++) {
-										var emoji = emojis[k].emoji;
-										var emojiName = emoji.allNamesString;
-										var emojiClearName = emojiName.split(":")[1].split("~")[0];
-										if (emoji.managed) {
-											amountGlobal++; 
-											if (this.emojiReplicaList[emojiClearName] == true) {
-												amountReplicate++;
-											} 
-										}
-										else {
-											amountLocal++; 
-										}
+			for (var i = 0; i < serverObjs.length; i++) {
+				let serverDiv = serverObjs[i].div;
+				let info = serverObjs[i].info;
+				
+				if (!serverDiv || !info) return;
+				
+				var entry = $(this.emojiserverEntryMarkup);
+				if (info.icon) {
+					entry.find(".modal-emojiserver-icon").css("background-image", "url('https://cdn.discordapp.com/icons/" + info.id + "/" + info.icon + ".png')");
+				}
+				else {
+					entry.find(".modal-emojiserver-icon").text(serverDiv.querySelector("a").innerText);
+				}
+				entry.find(".modal-emojiservername-label").text(info.name);
+				entry.find(".modal-emojiservername-label").attr("id", info.id);
+				
+				var currentServer = "";
+				var amountGlobal = 0;		
+				var amountLocal = 0;	
+				var amountReplicate = 0;
+				
+				for (var j = 0; j < rows.length; j++) {
+					var newServer = rows[j].category;
+					if (newServer.indexOf("custom") != -1) {	
+						if (currentServer == "" || currentServer == newServer) {
+							var serverName = this.getNameOfServer(newServer, categories);
+							if (serverName == info.name) {
+								currentServer = newServer;
+								var emojis = rows[j].items;
+								for (var k = 0; k < emojis.length; k++) {
+									var emoji = emojis[k].emoji;
+									var emojiName = emoji.allNamesString;
+									var emojiClearName = emojiName.split(":")[1].split("~")[0];
+									if (emoji.managed) {
+										amountGlobal++; 
+										if (this.emojiReplicaList[emojiClearName] == true) {
+											amountReplicate++;
+										} 
+									}
+									else {
+										amountLocal++; 
 									}
 								}
 							}
-							else {
-								break;
-							}
+						}
+						else {
+							break;
 						}
 					}
-					entry.find(".modal-emojitotal-label").text(amountGlobal+amountLocal);
-					entry.find(".modal-emojiglobal-label").text(amountGlobal);
-					entry.find(".modal-emojilocal-label").text(amountLocal);
-					entry.find(".modal-emojireplicate-label").text(amountReplicate);
-					entries.push({entry:entry, index:i, name:data.name, total:amountGlobal+amountLocal, global:amountGlobal, local:amountLocal, copies:amountReplicate});
 				}
+				entry.find(".modal-emojitotal-label").text(amountGlobal+amountLocal);
+				entry.find(".modal-emojiglobal-label").text(amountGlobal);
+				entry.find(".modal-emojilocal-label").text(amountLocal);
+				entry.find(".modal-emojireplicate-label").text(amountReplicate);
+				entries.push({entry:entry, index:i, name:info.name, total:amountGlobal+amountLocal, global:amountGlobal, local:amountLocal, copies:amountReplicate});
 			}
 			
 			var titleentry = $(this.emojiserverTitlesMarkup)
 				.appendTo(".emojistatistics-modal .titles")
-				.on("click", ".modal-titlesservername-label,.modal-titlestotal-label,.modal-titlesglobal-label,.modal-titleslocal-label,.modal-titlesreplicate-label", (e) => {
-					var oldTitle = e.target.innerText;
+				.on("click", ".modal-titlesservername-label,.modal-titlestotal-label,.modal-titlesglobal-label,.modal-titleslocal-label,.modal-titlesreplicate-label", (e2) => {
+					var oldTitle = e2.target.innerText;
 					var sortKey = "index";
 					var reverse = oldTitle.indexOf("▼") < 0 ? false : true;
 					
@@ -435,7 +437,7 @@ class EmojiStatistics {
 					
 					if (oldTitle.indexOf("▲") < 0) {
 						var title = "";
-						switch (e.target.className) {
+						switch (e2.target.className) {
 							case "modal-titlesservername-label": 
 								title = this.labels.modal_titlesservername_text;
 								sortKey = "name";
@@ -457,7 +459,7 @@ class EmojiStatistics {
 								sortKey = "copies";
 								break;
 						}
-						e.target.innerText = oldTitle.indexOf("▼") < 0 ? title + "▼" : title + "▲";
+						e2.target.innerText = oldTitle.indexOf("▼") < 0 ? title + "▼" : title + "▲";
 					}
 					
 					var sortedEntries = BDfunctionsDevilBro.sortArrayByKey(entries, sortKey);
