@@ -1937,7 +1937,7 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 	}
 	
 	[class^="swatches"].disabled {
-		filter: brightness(50%);
+		filter: graysclae(70%) brightness(50%);
 	}
 
 	[class^="ui-color-picker-swatch"] {
