@@ -2,7 +2,6 @@
 
 class TopRoleEverywhere {
 	constructor () {
-		this.switchFixObserver = new MutationObserver(() => {});
 		this.userListObserver = new MutationObserver(() => {});
 		this.chatWindowObserver = new MutationObserver(() => {});
 		this.settingsWindowObserver = new MutationObserver(() => {});
@@ -34,7 +33,7 @@ class TopRoleEverywhere {
 
 	getDescription () {return "Adds the highest role of a user as a tag.";}
 
-	getVersion () {return "2.4.8";}
+	getVersion () {return "2.4.9";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -61,19 +60,17 @@ class TopRoleEverywhere {
 	load () {}
 
 	start () {
-		if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
-		$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-		$('head').append("<script src='https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
-		if (typeof BDfunctionsDevilBro !== "object") {
-			$('head script[src="https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-			$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
+		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
+			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
+			$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBroBeta.js"]').remove();
+			$('head').append('<script src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBroBeta.js"></script>');
 		}
 		if (typeof BDfunctionsDevilBro === "object") {			
-			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
+			BDfunctionsDevilBro.loadMessage(this);
 			
-			this.GuildPerms = BDfunctionsDevilBro.findInWebModulesByName(["getHighestRole"]);
-			this.GuildStore = BDfunctionsDevilBro.findInWebModulesByName(["getGuild"]);
-			this.UserGuildState = BDfunctionsDevilBro.findInWebModulesByName(["getGuildId", "getLastSelectedGuildId"]);
+			this.GuildPerms = BDfunctionsDevilBro.WebModules.findByProperties(["getHighestRole"]);
+			this.GuildStore = BDfunctionsDevilBro.WebModules.findByProperties(["getGuild"]);
+			this.UserGuildState = BDfunctionsDevilBro.WebModules.findByProperties(["getGuildId", "getLastSelectedGuildId"]);
 			
 			var settings = this.getSettings();
 			
@@ -140,8 +137,6 @@ class TopRoleEverywhere {
 			});
 			this.settingsWindowObserver.observe(document.querySelector(".layers"), {childList:true});
 			
-			this.switchFixObserver = BDfunctionsDevilBro.onSwitchFix(this);
-			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 			
 			this.loadRoleTags();
@@ -155,14 +150,13 @@ class TopRoleEverywhere {
 		if (typeof BDfunctionsDevilBro === "object") {
 			document.querySelectorAll(".role-tag").forEach(node=>{node.parentElement.removeChild(node)});
 			
-			this.switchFixObserver.disconnect();
 			this.userListObserver.disconnect();
 			this.chatWindowObserver.disconnect();
 			this.settingsWindowObserver.disconnect();
 			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName());
 			
-			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
+			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
 	
