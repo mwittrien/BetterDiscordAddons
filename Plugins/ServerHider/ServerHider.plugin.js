@@ -168,7 +168,7 @@ class ServerHider {
 
 	getDescription () {return "Hide Servers in your Serverlist";}
 
-	getVersion () {return "2.4.5";}
+	getVersion () {return "2.4.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -188,15 +188,13 @@ class ServerHider {
 	load () {}
 
 	start () {
-		if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
-		$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-		$('head').append("<script src='https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
-		if (typeof BDfunctionsDevilBro !== "object") {
-			$('head script[src="https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-			$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
+		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
+			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
+			$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBroBeta.js"]').remove();
+			$('head').append('<script src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBroBeta.js"></script>');
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
+			BDfunctionsDevilBro.loadMessage(this);
 			
 			this.serverContextObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -254,11 +252,11 @@ class ServerHider {
 			
 			$(".guilds.scroller").off("mouseleave." + this.getName());
 			
-			$(BDfunctionsDevilBro.readServerList()).show();
+			BDfunctionsDevilBro.readServerList().forEach(serverObj => $(serverObj.div).show());
 			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName());
 			
-			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
+			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
 
@@ -268,7 +266,7 @@ class ServerHider {
     resetAll () {
 		if (confirm("Are you sure you want to reset all servers?")) {
 			BDfunctionsDevilBro.removeAllData(this.getName(), "servers");
-			$(BDfunctionsDevilBro.readServerList()).show();
+			BDfunctionsDevilBro.readServerList().forEach(serverObj => $(serverObj.div).show());
 		}
     }
 
@@ -287,49 +285,63 @@ class ServerHider {
 	}
 	
 	onContextMenu (context) {
-		var serverData = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"guild"});
-		if (serverData && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"GuildLeaveGroup"})) {
-			$(context).append(this.serverContextEntryMarkup)
-				.on("mouseenter", ".serverhider-item", serverData, this.createContextSubMenu.bind(this))
-				.on("mouseleave", ".serverhider-item", serverData, this.deleteContextSubMenu.bind(this));
+		if (context.querySelector(".serverhider-item")) return;
+		var info = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"guild"});
+		var valid = false;
+		if (info && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"GuildLeaveGroup"})) {
+			valid = true;
 		}
 		else if (BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"handleGuildCreate"})) {
+			info = {guildCreate:true};
+			valid = true;
+		}
+		if (valid) {
 			$(context).append(this.serverContextEntryMarkup)
-				.on("mouseenter", ".serverhider-item", {guildCreate:true}, this.createContextSubMenu.bind(this))
-				.on("mouseleave", ".serverhider-item", {guildCreate:true}, this.deleteContextSubMenu.bind(this));
+				.on("mouseenter", ".serverhider-item", (e) => {
+					this.createContextSubMenu(info, e);
+				})
+				.on("mouseleave", ".serverhider-item", () => {
+					this.deleteContextSubMenu();
+				});
 		}
 	}
 	
-	createContextSubMenu (e) {
+	createContextSubMenu (info, e) {
 		var targetDiv = e.currentTarget;
 		var serverContextSubMenu = $(this.serverContextSubMenuMarkup);
-		$(targetDiv).append(serverContextSubMenu)
-			.off("click", ".hideserver-item")
-			.off("click", ".openhidemenu-item")
-			.on("click", ".hideserver-item", e.data, this.hideServer.bind(this))
-			.on("click", ".openhidemenu-item", this.showServerModal.bind(this));
+		$(targetDiv).append(serverContextSubMenu);
+			
 		$(serverContextSubMenu)
 			.addClass(BDfunctionsDevilBro.getDiscordTheme())
 			.css("left", $(targetDiv).offset().left + "px")
-			.css("top", $(targetDiv).offset().top + "px");
+			.css("top", $(targetDiv).offset().top + "px")
+			.on("click", ".openhidemenu-item", (e2) => {
+				this.showServerModal(e2);
+			});;
 			
-		if (e.data.guildCreate) {
+		if (!info.guildCreate) {
 			$(serverContextSubMenu)
-				.find(".hideserver-item").hide();
-		} 
+				.on("click", ".hideserver-item", () => {
+					this.hideServer(info);
+				});
+		}
+		else {
+			$(serverContextSubMenu).find(".hideserver-item").addClass("disabled");
+		}
 	}
 	
-	deleteContextSubMenu (e) {
+	deleteContextSubMenu () {
 		$(".serverhider-submenu").remove();
 	}
 
-	hideServer (e) {	
+	hideServer (info) {	
 		$(".context-menu").hide();
+		var id = info.id;
+		var serverObj = BDfunctionsDevilBro.getDivOfServer(id);
 		
-		var id = e.data.id;
-		var serverDiv = BDfunctionsDevilBro.getDivOfServer(id);
+		if (!serverObj) return;
 		
-		$(serverDiv).hide();
+		$(serverObj.div).hide();
 		
 		BDfunctionsDevilBro.saveData(id, {id, visible:false}, this.getName(), "servers");
 	}
@@ -337,7 +349,7 @@ class ServerHider {
 	showServerModal (e) {
 		$(".context-menu").hide();
 		
-		var servers = BDfunctionsDevilBro.readServerList();
+		var serverObjs = BDfunctionsDevilBro.readServerList();
 		
 		var serverHiderModal = $(this.serverHiderModalMarkup);
 		serverHiderModal
@@ -345,81 +357,84 @@ class ServerHider {
 				serverHiderModal.find(".hidefolder").toggle($(e.target).prop("checked"));
 			})
 			.on("click", "button.btn-all", () => {
-				var hideAll = $(servers[0]).is(":visible");
-				for (let i = 0; i < servers.length; i++) {
-					let data = BDfunctionsDevilBro.getKeyInformation({"node":servers[i], "key":"guild"});
-					if (data) BDfunctionsDevilBro.saveData(data.id, {id:data.id, visible:!hideAll}, this.getName(), "servers");
+				var hideAll = $(serverObjs[0].div).is(":visible");
+				for (let i = 0; i < serverObjs.length; i++) {
+					let info = serverObjs[i].info;
+					if (info) BDfunctionsDevilBro.saveData(info.id, {id:info.id, visible:!hideAll}, this.getName(), "servers");
 				}
-				$(servers).toggle(!hideAll);
+				serverObjs.forEach(serverObj => $(serverObj.div).toggle(!hideAll));
 				$(".serverhiderCheckbox").each((_, checkBox) => {if ($(checkBox).prop("checked") == hideAll) checkBox.click();});
 			});
 			
 		if (!(window.bdplugins["ServerFolders"] && window.pluginCookie["ServerFolders"])) serverHiderModal.find(".folderhideSettings").hide();
 		
-		for (let i = 0; i < servers.length; i++) {
-			let serverDiv = servers[i];
-			let data = BDfunctionsDevilBro.getKeyInformation({"node":serverDiv, "key":"guild"});
+		for (let i = 0; i < serverObjs.length; i++) {
+			let serverDiv = serverObjs[i].div;
+			let info = serverObjs[i].info;
+			
+			if (!serverDiv || !info) return;
+			
 			let badge = serverDiv.querySelector(".badge");
-			if (data) {
-				let entry = $(this.serverEntryMarkup);
-				let divider = $(this.dividerMarkup);
-				let isHiddenByFolder = $(serverDiv).attr("folder") ? true : false;
-				entry.toggleClass("hidefolder", isHiddenByFolder);
-				serverHiderModal.find(".entries").append(entry);
-				divider.toggleClass("hidefolder", isHiddenByFolder);
-				serverHiderModal.find(".entries").append(divider);
-				if (data.icon) {
-					entry.find(".serverhiderIcon")
-						.css("background-image", "url('https://cdn.discordapp.com/icons/" + data.id + "/" + data.icon + ".png')");
-				}
-				else {
-					entry.find(".serverhiderIcon")
-						.text(serverDiv.firstChild.innerText);
-				}
-				if (badge) {
-					entry.find(".serverhiderBadge")
-						.text(badge.innerText);
-				}
-				else {
-					entry.find(".serverhiderBadge")
-						.css("padding", "0px");
-				}
-				entry.find(".serverhiderName")
-					.text(data.name)
-					.attr("id", data.id);
-				entry.find(".serverhiderCheckbox")
-					.prop("checked", $(serverDiv).is(":visible"))
-					.on("click", (event) => {
-						var visible = $(event.target).prop("checked");
-						$(serverDiv).toggle(visible);
-						BDfunctionsDevilBro.saveData(data.id, {id:data.id, visible:visible}, this.getName(), "servers");
-					});
+			
+			let entry = $(this.serverEntryMarkup);
+			let divider = $(this.dividerMarkup);
+			let isHiddenByFolder = $(serverDiv).attr("folder") ? true : false;
+			entry.toggleClass("hidefolder", isHiddenByFolder);
+			serverHiderModal.find(".entries").append(entry);
+			divider.toggleClass("hidefolder", isHiddenByFolder);
+			serverHiderModal.find(".entries").append(divider);
+			if (info.icon) {
+				entry.find(".serverhiderIcon")
+					.css("background-image", "url('https://cdn.discordapp.com/icons/" + info.id + "/" + info.icon + ".png')");
 			}
+			else {
+				entry.find(".serverhiderIcon")
+					.text(serverDiv.querySelector("a").innerText);
+			}
+			if (badge) {
+				entry.find(".serverhiderBadge")
+					.text(badge.innerText);
+			}
+			else {
+				entry.find(".serverhiderBadge")
+					.css("padding", "0px");
+			}
+			entry.find(".serverhiderName")
+				.text(info.name)
+				.attr("id", info.id);
+			entry.find(".serverhiderCheckbox")
+				.prop("checked", $(serverDiv).is(":visible"))
+				.on("click", (event) => {
+					var visible = $(event.target).prop("checked");
+					$(serverDiv).toggle(visible);
+					BDfunctionsDevilBro.saveData(info.id, {id:info.id, visible:visible}, this.getName(), "servers");
+				});
 		}
 		BDfunctionsDevilBro.appendModal(serverHiderModal);
 	}
 	
 	updateAllServers (write) {
-		var servers = BDfunctionsDevilBro.readServerList();
-		for (var i = 0; i < servers.length; i++) {
-			var serverDiv = servers[i];
-			var info = BDfunctionsDevilBro.getKeyInformation({"node":serverDiv, "key":"guild"});
-			if (info) {
-				var id, visible;
-				var data = BDfunctionsDevilBro.loadData(info.id, this.getName(), "servers");
-				if (data && write) {
-					id = data.id;
-					visible = data.visible;
-				}
-				else {
-					id = info.id;
-					visible = $(serverDiv).is(":visible");
-				}
-				
-				$(serverDiv).toggle(visible);
-				
-				BDfunctionsDevilBro.saveData(id, {id, visible}, this.getName(), "servers");
+		var serverObjs = BDfunctionsDevilBro.readServerList();
+		for (var i = 0; i < serverObjs.length; i++) {
+			var serverDiv = serverObjs[i].div;
+			var info = serverObjs[i].info;
+			
+			if (!serverDiv || !info) return;
+			
+			var id, visible;
+			var data = BDfunctionsDevilBro.loadData(info.id, this.getName(), "servers");
+			if (data && write) {
+				id = data.id;
+				visible = data.visible;
 			}
+			else {
+				id = info.id;
+				visible = $(serverDiv).is(":visible");
+			}
+			
+			$(serverDiv).toggle(visible);
+			
+			BDfunctionsDevilBro.saveData(id, {id, visible}, this.getName(), "servers");
 		}
 	}
 	
