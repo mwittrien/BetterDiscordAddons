@@ -758,8 +758,8 @@ BDfunctionsDevilBro.getMyUserData = function () {
 };
 
 BDfunctionsDevilBro.getMyUserID = function () {
-	var userData = BDfunctionsDevilBro.getMyUserData();
-	return (userData && userData.id ? userData.id : null);
+	var info = BDfunctionsDevilBro.getMyUserData();
+	return (info && info.id ? info.id : null);
 };
 
 BDfunctionsDevilBro.getMyUserStatus = function () {
@@ -768,95 +768,91 @@ BDfunctionsDevilBro.getMyUserStatus = function () {
 	if (status) userStatus = status.classList[1].split("-")[1];
 	return userStatus;
 };
-	
+
 BDfunctionsDevilBro.readServerList = function () {
 	var foundServers = [];
-	var servers = $(".guild");
+	var servers = document.querySelectorAll(".guild-separator ~ .guild");
 	for (var i = 0; i < servers.length; i++) {
-		if (BDfunctionsDevilBro.getKeyInformation({"node":servers[i], "key":"guild"})) foundServers.push(servers[i]);
+		var info = BDfunctionsDevilBro.getKeyInformation({"node":servers[i], "key":"guild"});
+		if (info) foundServers.push({div:servers[i],info});
 	}
 	return foundServers;
 };
-	
+
 BDfunctionsDevilBro.readUnreadServerList = function (servers) {
-	if (servers === undefined) servers = BDfunctionsDevilBro.readServerList();
+	if (servers === undefined || !Array.isArray(servers)) servers = BDfunctionsDevilBro.readServerList();
 	var foundServers = [];
 	for (var i = 0; i < servers.length; i++) {
-		if (BDfunctionsDevilBro.getKeyInformation({"node":servers[i], "key":"guild"})) {
-			if (servers[i].classList.contains("unread") || servers[i].querySelector(".badge")) foundServers.push(servers[i]);
-		}
+		if (servers[i] && servers[i].div && (servers[i].div.classList.contains("unread") || servers[i].div.querySelector(".badge"))) foundServers.push(servers[i]);
 	}
 	return foundServers;
 };
-	
-BDfunctionsDevilBro.readDmList = function () {
-	var foundDMs = [];
-	var dms = $(".dms .guild");
-	for (var i = 0; i < dms.length; i++) {
-		if (BDfunctionsDevilBro.getKeyInformation({"node":dms[i], "key":"channel"})) foundDMs.push(dms[i]);
-	}
-	return foundDMs;
-};
-	
-BDfunctionsDevilBro.readChannelList = function () {
-	var foundChannels = [];
-	var channels = $(".containerDefault-7RImuF, .containerDefault-1bbItS");
-	for (var i = 0; i < channels.length; i++) {
-		if (BDfunctionsDevilBro.getKeyInformation({"node":channels[i], "key":"channel"})) foundChannels.push(channels[i]);
-	}
-	return foundChannels;
-};
-	
+
 BDfunctionsDevilBro.getSelectedServer = function () {
 	var servers = BDfunctionsDevilBro.readServerList();
 	for (var i = 0; i < servers.length; i++) {
-		if (servers[i].classList.contains("selected")) {
-			return servers[i];
-		}
+		if (servers[i].div.classList.contains("selected")) return servers[i];
 	}
 	return null;
 };
-	
+
 BDfunctionsDevilBro.getDivOfServer = function (id) {
 	var servers = BDfunctionsDevilBro.readServerList();
 	for (var i = 0; i < servers.length; i++) {
-		if (BDfunctionsDevilBro.getIdOfServer(servers[i]) == id) {
-			return servers[i];
-		}
+		if (servers[i].info.id == id) return servers[i];
 	}
 	return null;
 };
-	
-BDfunctionsDevilBro.getIdOfServer = function (server) {
-	var serverData = BDfunctionsDevilBro.getKeyInformation({"node":server, "key":"guild"});
-	if (serverData) {
-		return serverData.id;
-	}
-	return null;
+
+BDfunctionsDevilBro.getIdOfServer = function (div) {
+	var info = BDfunctionsDevilBro.getKeyInformation({"node":div, "key":"guild"});
+	return info ? info.id : null;
 };
-	
-BDfunctionsDevilBro.getDivOfChannel = function (channelID) {
+
+BDfunctionsDevilBro.readChannelList = function () {
+	var foundChannels = [];
+	var channels = document.querySelectorAll(".containerDefault-7RImuF, .containerDefault-1bbItS");
+	for (var i = 0; i < channels.length; i++) {
+		var info = BDfunctionsDevilBro.getKeyInformation({"node":channels[i], "key":"channel"});
+		if (info) foundChannels.push({div:channels[i],info});
+	}
+	return foundChannels;
+};
+
+BDfunctionsDevilBro.getDivOfChannel = function (id) {
 	var channels = BDfunctionsDevilBro.readChannelList();
 	for (var i = 0; i < channels.length; i++) {
-		var channelData = BDfunctionsDevilBro.getKeyInformation({"node":channels[i], "key":"channel"});
-		if (channelData) {
-			if (channelID == channelData.id) {
-				return channels[i];
-			}
-		}
+		if (channels[i].info.id == id) return channels[i];
 	}
 	return null;
 };
 
-BDfunctionsDevilBro.getSettingsPanelDiv = function (ele) {
-	return $(".bda-slist > li").has(ele)[0];
+BDfunctionsDevilBro.getIdOfChannel = function (div) {
+	var info = BDfunctionsDevilBro.getKeyInformation({"node":div, "key":"channel"});
+	return info ? info.id : null;
 };
 
-BDfunctionsDevilBro.themeIsLightTheme = function () {
-	if ($(".theme-light").length > $(".theme-dark").length) {
-		return true;
+BDfunctionsDevilBro.readDmList = function () {
+	var foundDMs = [];
+	var dms = document.querySelectorAll(".dms .guild");
+	for (var i = 0; i < dms.length; i++) {
+		var info = BDfunctionsDevilBro.getKeyInformation({"node":dms[i], "key":"channel"});
+		if (info) foundDMs.push({div:dms[i],info});
 	}
-	return false;
+	return foundDMs;
+};
+
+BDfunctionsDevilBro.getDivOfDM = function (id) {
+	var dms = BDfunctionsDevilBro.readDmList();
+	for (var i = 0; i < dms.length; i++) {
+		if (dms[i].info.id == id) return dms[i];
+	}
+	return null;
+};
+
+BDfunctionsDevilBro.getIdOfDM = function (div) {
+	var info = BDfunctionsDevilBro.getKeyInformation({"node":div, "key":"channel"});
+	return info ? info.id : null;
 };
 
 BDfunctionsDevilBro.saveAllData = function (settings, pluginName, keyName) {
@@ -1157,8 +1153,8 @@ BDfunctionsDevilBro.clearReadNotifications = function (servers) {
 	if (!servers || !GuildActions) return;
 	servers = Array.isArray(servers) ? servers : Array.from(servers);
 	servers.forEach((server, i) => {
-		var serverData = BDfunctionsDevilBro.getKeyInformation({"node":server, "key":"guild"});
-		if (serverData) GuildActions.markGuildAsRead(serverData.id);
+		var info = BDfunctionsDevilBro.getKeyInformation({"node":server, "key":"guild"});
+		if (info) GuildActions.markGuildAsRead(info.id);
 	}); 
 };
 
