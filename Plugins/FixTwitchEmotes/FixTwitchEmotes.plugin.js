@@ -9,7 +9,7 @@ class FixTwitchEmotes {
 
 	getDescription () {return "Fixes the problem with twitch emotes not being properly inserted in the textarea.";}
 
-	getVersion () {return "2.1.1";}
+	getVersion () {return "2.1.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -17,15 +17,13 @@ class FixTwitchEmotes {
 	load () {}
 
 	start () {
-		if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
-		$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-		$('head').append("<script src='https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
-		if (typeof BDfunctionsDevilBro !== "object") {
-			$('head script[src="https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-			$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
+		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
+			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
+			$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBroBeta.js"]').remove();
+			$('head').append('<script src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBroBeta.js"></script>');
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
+			BDfunctionsDevilBro.loadMessage(this);
 			
 			this.emojiPickerObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -62,7 +60,7 @@ class FixTwitchEmotes {
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.emojiPickerObserver.disconnect();
 			
-			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
+			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
 }
