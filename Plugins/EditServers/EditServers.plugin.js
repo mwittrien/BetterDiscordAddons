@@ -128,7 +128,7 @@ class EditServers {
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	getVersion () {return "1.6.5";}
+	getVersion () {return "1.6.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -148,15 +148,13 @@ class EditServers {
 	load () {}
 
 	start () {
-		if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
-		$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-		$('head').append("<script src='https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
-		if (typeof BDfunctionsDevilBro !== "object") {
-			$('head script[src="https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-			$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
+		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
+			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
+			$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBroBeta.js"]').remove();
+			$('head').append('<script src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBroBeta.js"></script>');
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
+			BDfunctionsDevilBro.loadMessage(this);
 			
 			this.serverContextObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -178,7 +176,8 @@ class EditServers {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								this.loadServer(node);
+								var info = BDfunctionsDevilBro.getKeyInformation({"node":node, "key":"guild"});
+								if (info) this.loadServer({div:node,info});
 							});
 						}
 					}
@@ -212,7 +211,7 @@ class EditServers {
 			
 			document.querySelectorAll("[custom-editservers]").forEach(serverDiv => {this.resetServer(serverDiv);});
 			
-			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
+			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
 
@@ -251,10 +250,8 @@ class EditServers {
 	onContextMenu (context) {
 		if ($(context).find(".localserversettings-item").length == 0) {
 			var info = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"guild"});
-			var contextType = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"GuildLeaveGroup"});
-			
-			if (info && contextType) {
-				var serverDiv = BDfunctionsDevilBro.getDivOfServer(info.id);
+			if (info && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"GuildLeaveGroup"})) {
+				var serverDiv = BDfunctionsDevilBro.getDivOfServer(info.id).div;
 				var server = $(serverDiv).find(".avatar-small");
 				var shortName = $(serverDiv).attr("custom-editservers") ? $(server).attr("name") : $(server).text();
 				info = Object.assign({},info,{shortName});
@@ -307,6 +304,8 @@ class EditServers {
 		
 		var id = info.id;
 		
+		var serverDiv = BDfunctionsDevilBro.getDivOfServer(id).div;
+		
 		var data = BDfunctionsDevilBro.loadData(id, this.getName(), "servers");
 		
 		var name = 			data ? data.name : null;
@@ -318,7 +317,6 @@ class EditServers {
 		var color3 = 		data ? data.color3 : null;
 		var color4 = 		data ? data.color4 : null;
 	
-		var serverDiv = BDfunctionsDevilBro.getDivOfServer(id);
 		var server = $(serverDiv).find(".avatar-small");
 		
 		var serverSettingsModal = $(this.serverSettingsModalMarkup);
@@ -390,7 +388,7 @@ class EditServers {
 				}
 				else {
 					BDfunctionsDevilBro.saveData(id, {id,name,shortName,url,removeIcon,color1,color2,color3,color4}, this.getName(), "servers");
-					this.loadServer(serverDiv);
+					this.loadServer({div:serverDiv,info});
 				}
 			});
 		serverSettingsModal.find("#input-servername").focus();
@@ -470,48 +468,49 @@ class EditServers {
 		}
 	}
 	
-	loadServer (serverDiv) {
-		var info = BDfunctionsDevilBro.getKeyInformation({"node":serverDiv, "key":"guild"});
-		if (info) {
-			var data = BDfunctionsDevilBro.loadData(info.id, this.getName(), "servers");
-			if (data) {
-				var serverInner = serverDiv.querySelector(".guild-inner");
-				var server = serverDiv.querySelector(".avatar-small");
-				if ($(server).attr("name") === undefined) {
-					$(server).attr("name", $(server).text());
-				}
-				
-				var name = 			data.name ? data.name : info.name;
-				var shortName = 	data.shortName ? data.shortName : $(server).attr("name");
-				var bgImage = 		data.url ? "url(" + data.url + ")" : (info.icon ? "url('https://cdn.discordapp.com/icons/" + info.id + "/" + info.icon + ".png')" : "");
-				var removeIcon = 	data.removeIcon;
-				var color1 = 		data.color1 ? BDfunctionsDevilBro.color2RGB(data.color1) : "";
-				var color2 = 		data.color2 ? BDfunctionsDevilBro.color2RGB(data.color2) : "";
-				
-				$(serverDiv)
-					.attr("custom-editservers", true);
-				$(serverInner)
-					.off("mouseenter." + this.getName())
-					.on("mouseenter." + this.getName(), {"div":serverDiv,"info":info}, this.createServerToolTip.bind(this));
-				$(server)
-					.text(shortName)
-					.css("background-image", removeIcon ? "" : bgImage)
-					.css("background-color", color1)
-					.css("color", color2);
+	loadServer (serverObj) {
+		if (typeof serverObj !== "object" || !serverObj.div || !serverObj.info) return;
+		var serverDiv = serverObj.div;
+		var info = serverObj.info;
+		var data = BDfunctionsDevilBro.loadData(info.id, this.getName(), "servers");
+		if (data) {
+			var serverInner = serverDiv.querySelector(".guild-inner");
+			var server = serverDiv.querySelector(".avatar-small");
+			if ($(server).attr("name") === undefined) {
+				$(server).attr("name", $(server).text());
 			}
+			
+			var name = 			data.name ? data.name : info.name;
+			var shortName = 	data.shortName ? data.shortName : $(server).attr("name");
+			var bgImage = 		data.url ? "url(" + data.url + ")" : (info.icon ? "url('https://cdn.discordapp.com/icons/" + info.id + "/" + info.icon + ".png')" : "");
+			var removeIcon = 	data.removeIcon;
+			var color1 = 		data.color1 ? BDfunctionsDevilBro.color2RGB(data.color1) : "";
+			var color2 = 		data.color2 ? BDfunctionsDevilBro.color2RGB(data.color2) : "";
+			
+			$(serverDiv)
+				.attr("custom-editservers", true);
+			$(serverInner)
+				.off("mouseenter." + this.getName())
+				.on("mouseenter." + this.getName(), () => {
+					this.createServerToolTip(serverObj);
+				});
+			$(server)
+				.text(shortName)
+				.css("background-image", removeIcon ? "" : bgImage)
+				.css("background-color", color1)
+				.css("color", color2);
 		}
 	}
 	
 	loadAllServers () {
-		var servers = BDfunctionsDevilBro.readServerList();
-		for (var i = 0; i < servers.length; i++) {
-			this.loadServer(servers[i]);
+		var serverObjs = BDfunctionsDevilBro.readServerList();
+		for (var i = 0; i < serverObjs.length; i++) {
+			this.loadServer(serverObjs[i]);
 		}
 	}
 	
-	createServerToolTip (e) {
-		var serverDiv = e.data.div;
-		var info = e.data.info;
+	createServerToolTip (serverObj) {
+		var info = serverObj.info;
 		var data = BDfunctionsDevilBro.loadData(info.id, this.getName(), "servers");
 		if (data) {
 			var text = data.name ? data.name : info.name;
@@ -529,7 +528,7 @@ class EditServers {
 					border-right-color: ${bgColor} !important;
 				}`;
 				
-			BDfunctionsDevilBro.createTooltip(text, serverDiv, {type:"right",selector:"guild-custom-tooltip",css:customTooltipCSS});
+			BDfunctionsDevilBro.createTooltip(text, serverObj.div, {type:"right",selector:"guild-custom-tooltip",css:customTooltipCSS});
 		}
 	}
 	
@@ -661,12 +660,12 @@ class EditServers {
 					modal_serverurl_text: 				"Icoon",
 					modal_removeicon_text: 				"Verwijder icoon",
 					modal_tabheader1_text: 				"Server",
-					modal_tabheader2_text: 				"Icoon kleur",
-					modal_tabheader3_text:				"Tooltip kleur",
-					modal_colorpicker1_text: 			"Icoon kleur",
-					modal_colorpicker2_text: 			"Doopvont kleur",
-					modal_colorpicker3_text:			"Tooltip kleur",
-					modal_colorpicker4_text:			"Doopvont kleur",
+					modal_tabheader2_text: 				"Icoonkleur",
+					modal_tabheader3_text:				"Tooltipkleur",
+					modal_colorpicker1_text: 			"Icoonkleur",
+					modal_colorpicker2_text: 			"Doopvontkleur",
+					modal_colorpicker3_text:			"Tooltipkleur",
+					modal_colorpicker4_text:			"Doopvontkleur",
 					modal_ignoreurl_text: 				"URL negeren",
 					modal_validurl_text: 				"Geldige URL",
 					modal_invalidurl_text: 				"Ongeldige URL",
@@ -753,12 +752,12 @@ class EditServers {
 					modal_serverurl_text: 				"Ikonin",
 					modal_removeicon_text: 				"Poista kuvake",
 					modal_tabheader1_text: 				"Palvelimen",
-					modal_tabheader2_text: 				"Ikonin väri",
-					modal_tabheader3_text:				"Tooltip väri",
-					modal_colorpicker1_text: 			"Ikonin väri",
-					modal_colorpicker2_text: 			"Fontin väri",
-					modal_colorpicker3_text:			"Tooltip väri",
-					modal_colorpicker4_text:			"Fontin väri",
+					modal_tabheader2_text: 				"Ikoninväri",
+					modal_tabheader3_text:				"Tooltipväri",
+					modal_colorpicker1_text: 			"Ikoninväri",
+					modal_colorpicker2_text: 			"Fontinväri",
+					modal_colorpicker3_text:			"Tooltipväri",
+					modal_colorpicker4_text:			"Fontinväri",
 					modal_ignoreurl_text: 				"Ohita URL",
 					modal_validurl_text: 				"Voimassa URL",
 					modal_invalidurl_text: 				"Virheellinen URL",
