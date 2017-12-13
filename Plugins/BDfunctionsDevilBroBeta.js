@@ -1940,10 +1940,11 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 	
 	[class^="swatches"].disabled {
 		cursor: no-drop;
-		filter: graysclae(70%) brightness(50%);
+		filter: grayscale(70%) brightness(50%);
 	}
 
 	[class^="ui-color-picker-swatch"] {
+		cursor: pointer;
 		width: 22px;
 		height: 22px;
 		margin-bottom: 5px;
