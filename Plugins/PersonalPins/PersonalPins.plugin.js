@@ -4,7 +4,6 @@ class PersonalPins {
 	constructor () {
 		this.labels = {};
 		
-		this.switchFixObserver = new MutationObserver(() => {});
 		this.messageContextObserver = new MutationObserver(() => {});
 		this.chatWindowObserver = new MutationObserver(() => {});
 		this.optionPopoutObserver = new MutationObserver(() => {});
@@ -117,7 +116,7 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.2.6";}
+	getVersion () {return "1.2.7";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -137,18 +136,16 @@ class PersonalPins {
 	load () {}
 
 	start () {
-		if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
-		$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-		$('head').append("<script src='https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
-		if (typeof BDfunctionsDevilBro !== "object") {
-			$('head script[src="https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-			$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
+		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
+			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
+			$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBroBeta.js"]').remove();
+			$('head').append('<script src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBroBeta.js"></script>');
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
+			BDfunctionsDevilBro.loadMessage(this);
 			
-			this.HistoryUtils = BDfunctionsDevilBro.findInWebModules(module => ["transitionTo", "replaceWith", "getHistory"].every(prop => module[prop] !== undefined));
-			this.MainDiscord  = BDfunctionsDevilBro.findInWebModules(module => ["ActionTypes"].every(prop => module[prop] !== undefined));	
+			this.HistoryUtils = BDfunctionsDevilBro.WebModules.findByProperties(["transitionTo", "replaceWith", "getHistory"]);
+			this.MainDiscord  = BDfunctionsDevilBro.WebModules.findByProperties(["ActionTypes"]);	
 			
 			this.messageContextObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -199,8 +196,6 @@ class PersonalPins {
 			});
 			if (document.querySelector(".popouts")) this.optionPopoutObserver.observe(document.querySelector(".popouts"), {childList: true});
 			
-			this.switchFixObserver = BDfunctionsDevilBro.onSwitchFix(this);
-			
 			$(document).off("click." + this.getName(), ".btn-option").off("contextmenu." + this.getName(), ".message")
 				.on("click." + this.getName(), ".btn-option", (e) => {
 					this.getMessageElements($(".message").has(e.currentTarget)[0]);
@@ -223,7 +218,6 @@ class PersonalPins {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			this.switchFixObserver.disconnect();
 			this.messageContextObserver.disconnect();
 			this.chatWindowObserver.disconnect();
 			this.optionPopoutObserver.disconnect();
@@ -232,7 +226,7 @@ class PersonalPins {
 			
 			$(".btn-personalpins, .notesButton").remove();
 			
-			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
+			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
 	
