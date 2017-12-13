@@ -153,8 +153,7 @@ class OldTitleBar {
 	getSettings () {
 		var defaultSettings = {
 			addToSettings: true,
-			reloadButton: false,
- 			forceClose: false
+			reloadButton: false
 		};
 		var settings = BDfunctionsDevilBro.loadAllData(this.getName(), "settings");
 		var saveSettings = false;
