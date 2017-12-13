@@ -2,7 +2,6 @@
 
 class CharCounter {
 	constructor () {
-		this.switchFixObserver = new MutationObserver(() => {});
 		
 		this.selecting = false;
 		
@@ -23,7 +22,7 @@ class CharCounter {
 
 	getDescription () {return "Adds a charcounter in the chat.";}
 
-	getVersion () {return "1.0.5";}
+	getVersion () {return "1.0.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -31,19 +30,19 @@ class CharCounter {
 	load () {}
 
 	start () {
-		if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
-		$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-		$('head').append("<script src='https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
-		if (typeof BDfunctionsDevilBro !== "object") {
-			$('head script[src="https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-			$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
+		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
+			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
+			$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBroBeta.js"]').remove();
+			$('head').append('<script src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBroBeta.js"></script>');
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
-			
-			this.switchFixObserver = BDfunctionsDevilBro.onSwitchFix(this);
+			BDfunctionsDevilBro.loadMessage(this);
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
+			
+			this.appendCounter = this.appendCounter.bind(this);
+			this.TextArea = BDfunctionsDevilBro.WebModules.findByPrototypes(["saveCurrentText"]);
+			BDfunctionsDevilBro.WebModules.addListener(this.TextArea.prototype, "componentDidMount", this.appendCounter);
 			
 			this.appendCounter();
 		}
@@ -55,31 +54,26 @@ class CharCounter {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			this.switchFixObserver.disconnect();
 			
 			$(".character-counter").remove();
-			var textinput = document.querySelector(".channelTextArea-1HTP3C textarea");
+			var textinput = document.querySelector(".channelTextArea-os01xC textarea");
 			$(textinput).off("keydown." + this.getName()).off("click." + this.getName()).off("mousedown." + this.getName());
 			$(document).off("mouseup." + this.getName()).off("mousemove." + this.getName());
 			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName());
 			
-			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
-		}
-	}
-	
-	onSwitch () {
-		if (typeof BDfunctionsDevilBro === "object") {
-			this.appendCounter();
+			BDfunctionsDevilBro.WebModules.removeListener(this.TextArea.prototype, "componentDidMount", this.appendCounter);
+			
+			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
 	
 	// begin of own functions
 	
 	appendCounter () {
-		var textarea = document.querySelector(".channelTextArea-1HTP3C");
+		if (document.querySelector(".character-counter")) return;
+		var textarea = document.querySelector(".channelTextArea-os01xC");
 		if (textarea) {
-			$(".character-counter").remove();
 			var counter = $(this.counterMarkup);
 			var textinput = textarea.querySelector("textarea");
 			$(textinput)
