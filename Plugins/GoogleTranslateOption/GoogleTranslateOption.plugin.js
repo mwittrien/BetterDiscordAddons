@@ -20,7 +20,7 @@ class GoogleTranslateOption {
 
 	getDescription () {return "Adds a Google Translate option to your context menu, which shows a preview of the translated text and on click will open the selected text in Google Translate.";}
 
-	getVersion () {return "1.0.4";}
+	getVersion () {return "1.0.5";}
 	
 	getAuthor () {return "DevilBro";}
 	
@@ -28,15 +28,13 @@ class GoogleTranslateOption {
 	load () {}
 
 	start () {
-		if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
-		$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-		$('head').append("<script src='https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
-		if (typeof BDfunctionsDevilBro !== "object") {
-			$('head script[src="https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-			$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
+		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
+			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
+			$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBroBeta.js"]').remove();
+			$('head').append('<script src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBroBeta.js"></script>');
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
+			BDfunctionsDevilBro.loadMessage(this);
 			
 			this.messageContextObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -64,7 +62,7 @@ class GoogleTranslateOption {
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.messageContextObserver.disconnect();
 			
-			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
+			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
 	
@@ -87,7 +85,6 @@ class GoogleTranslateOption {
 					let request = require("request");
 					request("https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=" + langid + "&dt=t&ie=UTF-8&oe=UTF-8&q=" + encodeURIComponent(text), (error, response, result) => {
 						if (response) {
-							console.log(result);
 							JSON.parse(result)[0].forEach((array) => {translation += array[0];});
 						}
 					});
