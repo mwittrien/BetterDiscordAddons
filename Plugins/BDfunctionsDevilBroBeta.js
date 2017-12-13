@@ -742,7 +742,7 @@ BDfunctionsDevilBro.onSwitchFix = function (plugin) {
 	plugin.switchFixObserver.observe(document.querySelector(":-webkit-any(.chat, #friends, .noChannel-2EQ0a9, .activityFeed-HeiGwL)").parentNode, {childList: true, subtree:true});
 	return plugin.switchFixObserver;
 	
-	triggerOnSwitch = () => {
+	var triggerOnSwitch = () => {
 		var identifier = plugin.getName() + "_" + plugin.getAuthor();
 		if (Array.isArray(BDfunctionsDevilBro.onSwitchTriggered) && BDfunctionsDevilBro.onSwitchTriggered.includes(identifier)) return;
 		BDfunctionsDevilBro.onSwitchTriggered.push(identifier);
@@ -1934,6 +1934,10 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 	
 	.update-list-tooltip {
 		max-width: 400px;
+	}
+	
+	[class^="swatches"].disabled {
+		filter: brightness(50%);
 	}
 
 	[class^="ui-color-picker-swatch"] {
