@@ -26,7 +26,6 @@ class NotificationSounds {
 		
 		this.myID;
 		
-		this.switchFixObserver = new MutationObserver(() => {});
 		this.dmObserver = new MutationObserver(() => {});
 		this.dmBadgeObserver = new MutationObserver(() => {});
 		this.mentionObserver = new MutationObserver(() => {});
@@ -40,7 +39,7 @@ class NotificationSounds {
 
 	getDescription () {return "Creates a notification sound when you receive a notification (mention or DM).";}
 
-	getVersion () {return "2.5.8";}
+	getVersion () {return "2.5.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -97,16 +96,14 @@ class NotificationSounds {
 	//legacy
 	load () {}
 
-	start () {	
-		if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
-		$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-		$('head').append("<script src='https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
-		if (typeof BDfunctionsDevilBro !== "object") {
-			$('head script[src="https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-			$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
+	start () {
+		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
+			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
+			$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBroBeta.js"]').remove();
+			$('head').append('<script src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBroBeta.js"></script>');
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
+			BDfunctionsDevilBro.loadMessage(this);
 			
 			this.dmBadgeObserver = new MutationObserver((changes, _) => {
 				this.playAudio("DM");
@@ -189,7 +186,8 @@ class NotificationSounds {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (!this.switching && $(node).find(".message").length > 0 && node == $(".message-group").last()[0]) {
-									if (this.myID != BDfunctionsDevilBro.getKeyInformation({"node":node,"key":"message"}).author.id) {
+									var messageData = BDfunctionsDevilBro.getKeyInformation({"node":node,"key":"message"});
+									if (messageData && this.myID != messageData.author.id) {
 										this.playAudio("Message");
 										this.messageChangeObserver.observe(node, {childList:true, characterData:true, subtree:true});
 									}
@@ -217,25 +215,19 @@ class NotificationSounds {
 				);
 			});
 			
-			this.switchFixObserver = BDfunctionsDevilBro.onSwitchFix(this);
-			
-			BDfunctionsDevilBro.readServerList().forEach( 
-				(server) => {
-					var badge = $(server).find(".badge")[0];
-					if (badge) {
-						this.mentionBadgeObserver.observe(badge, {characterData: true, subtree: true });
-					}
+			BDfunctionsDevilBro.readServerList().forEach((serverObj) => {
+				var badge = serverObj.div.querySelector(".badge");
+				if (badge) {
+					this.mentionBadgeObserver.observe(badge, {characterData: true, subtree: true});
 				}
-			);
+			});
 			
-			BDfunctionsDevilBro.readDmList().forEach( 
-				(dm) => {
-					var badge = $(dm).find(".badge")[0];
-					if (badge) {
-						this.dmBadgeObserver.observe(badge, {characterData: true, subtree: true });
-					}
+			BDfunctionsDevilBro.readDmList().forEach((dmObj) => {
+				var badge = dmObj.div.querySelector(".badge");
+				if (badge) {
+					this.dmBadgeObserver.observe(badge, {characterData: true, subtree: true});
 				}
-			);
+			});
 			
 			this.myID = BDfunctionsDevilBro.getMyUserID();
 			
@@ -251,7 +243,6 @@ class NotificationSounds {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			this.switchFixObserver.disconnect();
 			this.dmObserver.disconnect();
 			this.dmBadgeObserver.disconnect();
 			this.mentionObserver.disconnect();
@@ -260,7 +251,7 @@ class NotificationSounds {
 			this.chatWindowObserver.disconnect();
 			this.messageChangeObserver.disconnect();
 			
-			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
+			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
 	
