@@ -104,6 +104,7 @@ https://raw.githubusercontent.com/xNightWulf/ThemesForBetterDiscord/master/Desti
 https://raw.githubusercontent.com/xNightWulf/ThemesForBetterDiscord/master/Destiny_2_Warlock.theme.css
 https://raw.githubusercontent.com/xNightWulf/ThemesForBetterDiscord/master/Luxury_Carbon.theme.css
 https://raw.githubusercontent.com/xNightWulf/ThemesForBetterDiscord/master/NeonWaves.theme.css
+https://raw.githubusercontent.com/xNightWulf/ThemesForBetterDiscord/master/Snowy_Mountain.theme.css
 https://raw.githubusercontent.com/xNightWulf/ThemesForBetterDiscord/master/Space.theme.css
 https://raw.githubusercontent.com/xNightWulf/ThemesForBetterDiscord/master/Transparent_Glass.theme.css
 https://raw.githubusercontent.com/xNightWulf/ThemesForBetterDiscord/master/TrueDark.theme.css
