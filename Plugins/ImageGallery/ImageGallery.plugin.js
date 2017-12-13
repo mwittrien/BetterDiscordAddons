@@ -53,7 +53,7 @@ class ImageGallery {
 
 	getDescription () {return "Allows the user to browse through images sent inside the same message.";}
 
-	getVersion () {return "1.4.1";}
+	getVersion () {return "1.4.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -61,15 +61,13 @@ class ImageGallery {
 	load () {}
 
 	start () {
-		if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
-		$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-		$('head').append("<script src='https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
-		if (typeof BDfunctionsDevilBro !== "object") {
-			$('head script[src="https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-			$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
+		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
+			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
+			$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBroBeta.js"]').remove();
+			$('head').append('<script src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBroBeta.js"></script>');
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
+			BDfunctionsDevilBro.loadMessage(this);
 			
 			this.imageModalObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -108,7 +106,7 @@ class ImageGallery {
 			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName());
 			
-			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
+			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
 
@@ -186,10 +184,18 @@ class ImageGallery {
 			this.resizeImage(modal, nextImg, modal.querySelector(".image.next"));
 		}
 		
-		$(modal).find(".image.prev").off("click").on("click", this.addImages.bind(this, modal, imgs, prevImg));
-		$(modal).find(".image.next").off("click").on("click", this.addImages.bind(this, modal, imgs, nextImg));
-		$(document).off("keydown." + this.getName()).on("keydown." + this.getName(), {modal, imgs, prevImg, nextImg}, this.keyPressed.bind(this));
-		$(document).off("keyup." + this.getName()).on("keyup." + this.getName(), () => {this.eventFired = false});
+		$(modal).find(".image.prev").off("click").on("click", () => {
+			this.addImages(modal, imgs, prevImg);
+		});
+		$(modal).find(".image.next").off("click").on("click", () => {
+			this.addImages(modal, imgs, nextImg);
+		});
+		$(document).off("keydown." + this.getName()).on("keydown." + this.getName(), () => {
+			this.keyPressed({modal, imgs, prevImg, nextImg}, e);
+		});
+		$(document).off("keyup." + this.getName()).on("keyup." + this.getName(), () => {
+			this.eventFired = false;
+		});
 	}
 	
 	addImagePreview (modal, img, index) {
@@ -239,14 +245,14 @@ class ImageGallery {
 		};
 	}
 	
-	keyPressed (e) {
+	keyPressed (data, e) {
 		if (!this.eventFired) {
 			this.eventFired = true;
-			if (e.keyCode == 37 && e.data.prevImg) {
-				this.addImages(e.data.modal, e.data.imgs, e.data.prevImg)
+			if (e.keyCode == 37 && data.prevImg) {
+				this.addImages(data.modal, data.imgs, data.prevImg)
 			}
 			else if (e.keyCode == 39 && e.data.nextImg) {
-				this.addImages(e.data.modal, e.data.imgs, e.data.nextImg)
+				this.addImages(data.modal, data.imgs, data.nextImg)
 			}
 		}
 	}
