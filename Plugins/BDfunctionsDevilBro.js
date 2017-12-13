@@ -644,7 +644,7 @@ BDfunctionsDevilBro.WebModules.patchFunction = function (newOutput, index) {
 		req.c[index] = {
 			id: index,
 			loaded: true,
-			exports: newOutput
+			exports: (e) => {try{newOutput(e);}catch(err){oldOutput(e);};}
 		};
 		const cancel = function () {
 			req.m[index] = oldFunction;
@@ -656,8 +656,8 @@ BDfunctionsDevilBro.WebModules.patchFunction = function (newOutput, index) {
 		};
 		return cancel;
 	}
-	catch (e) {
-		console.warn("BDfunctionsDevilBro: Could not patch Function. Error: " + e);
+	catch (err) {
+		console.warn("BDfunctionsDevilBro: Could not patch Function. Error: " + err);
 	}
 };
 
