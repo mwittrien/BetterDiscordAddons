@@ -789,9 +789,10 @@ BDfunctionsDevilBro.readUnreadServerList = function (servers) {
 };
 
 BDfunctionsDevilBro.getSelectedServer = function () {
-	var servers = BDfunctionsDevilBro.readServerList();
+	var servers = document.querySelectorAll(".guild-separator ~ .guild.selected");
 	for (var i = 0; i < servers.length; i++) {
-		if (servers[i].div.classList.contains("selected")) return servers[i];
+		var info = BDfunctionsDevilBro.getKeyInformation({"node":servers[i], "key":"guild"});
+		if (info) return {div:servers[i],info};
 	}
 	return null;
 };
@@ -802,11 +803,6 @@ BDfunctionsDevilBro.getDivOfServer = function (id) {
 		if (servers[i].info.id == id) return servers[i];
 	}
 	return null;
-};
-
-BDfunctionsDevilBro.getIdOfServer = function (div) {
-	var info = BDfunctionsDevilBro.getKeyInformation({"node":div, "key":"guild"});
-	return info ? info.id : null;
 };
 
 BDfunctionsDevilBro.readChannelList = function () {
@@ -827,11 +823,6 @@ BDfunctionsDevilBro.getDivOfChannel = function (id) {
 	return null;
 };
 
-BDfunctionsDevilBro.getIdOfChannel = function (div) {
-	var info = BDfunctionsDevilBro.getKeyInformation({"node":div, "key":"channel"});
-	return info ? info.id : null;
-};
-
 BDfunctionsDevilBro.readDmList = function () {
 	var foundDMs = [];
 	var dms = document.querySelectorAll(".dms .guild");
@@ -848,11 +839,6 @@ BDfunctionsDevilBro.getDivOfDM = function (id) {
 		if (dms[i].info.id == id) return dms[i];
 	}
 	return null;
-};
-
-BDfunctionsDevilBro.getIdOfDM = function (div) {
-	var info = BDfunctionsDevilBro.getKeyInformation({"node":div, "key":"channel"});
-	return info ? info.id : null;
 };
 
 BDfunctionsDevilBro.saveAllData = function (settings, pluginName, keyName) {
