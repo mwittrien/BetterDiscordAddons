@@ -9,7 +9,6 @@ class ChatFilter {
 			"censored":"$!%&%!&"
 		};
 		
-		this.switchFixObserver = new MutationObserver(() => {});
 		this.chatWindowObserver = new MutationObserver(() => {});
 		this.messageChangeObserver = new MutationObserver(() => {});
 		this.settingsWindowObserver = new MutationObserver(() => {});
@@ -230,7 +229,7 @@ class ChatFilter {
 
 	getDescription () {return "Allows the user to censor words or block complete messages based on words in the chatwindow.";}
 
-	getVersion () {return "3.0.8";}
+	getVersion () {return "3.0.9";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -306,15 +305,13 @@ class ChatFilter {
 	}
 
 	start () {
-		if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
-		$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-		$('head').append("<script src='https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
-		if (typeof BDfunctionsDevilBro !== "object") {
-			$('head script[src="https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-			$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
+		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
+			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
+			$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBroBeta.js"]').remove();
+			$('head').append('<script src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBroBeta.js"></script>');
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
+			BDfunctionsDevilBro.loadMessage(this);
 			
 			this.chatWindowObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -362,8 +359,6 @@ class ChatFilter {
 				);
 			});
 			
-			this.switchFixObserver = BDfunctionsDevilBro.onSwitchFix(this);
-			
 			this.hideAllMessages();
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
@@ -375,7 +370,6 @@ class ChatFilter {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			this.switchFixObserver.disconnect();
 			this.chatWindowObserver.disconnect();
 			this.messageChangeObserver.disconnect();
 			this.settingsWindowObserver.disconnect();
@@ -384,7 +378,7 @@ class ChatFilter {
 				this.resetMessage(message);
 			});
 			
-			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
+			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
 	
