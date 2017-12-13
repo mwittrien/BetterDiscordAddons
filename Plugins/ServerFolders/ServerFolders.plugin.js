@@ -244,7 +244,7 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.3.6";}
+	getVersion () {return "5.3.7";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -664,11 +664,13 @@ class ServerFolders {
 							$(folderPreview)
 								.show()
 								.offset({"left":e2.clientX + 5,"top":e2.clientY + 5});
-							hoveredElement = this.getGuildParentDiv(e2.target, "folder") || this.getGuildParentDiv(e2.target, "guild");
-							hoveredElement = typeof hoveredElement === "object" ? hoveredElement.div : hoveredElement;
-							console.log(hoveredElement);
-							
+							hoveredElement = this.getGuildParentDiv(e2.target, "folder");
 							if (hoveredElement) document.querySelector(".guilds.scroller").insertBefore(placeholder, hoveredElement.nextSibling);
+							else {
+								hoveredElement = this.getGuildParentDiv(e2.target, "guild");
+								if (hoveredElement) document.querySelector(".guilds.scroller").insertBefore(placeholder, hoveredElement.div.nextSibling);
+							}
+							
 						});
 				},100);
 			});
