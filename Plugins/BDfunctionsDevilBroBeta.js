@@ -725,30 +725,30 @@ BDfunctionsDevilBro.onSwitchFix = function (plugin) {
 		changes.forEach((change) => { 
 			if (change.addedNodes) {
 				change.addedNodes.forEach((node) => {
-					if (node && node.id === "friends") triggerOnSwitch(); 
-					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("noTopic-3Rq-dz")) 	triggerOnSwitch(); 
-					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("topic-1KFf6J")) 	triggerOnSwitch(); 
+					if (node && node.id === "friends") BDfunctionsDevilBro.triggerOnSwitch(plugin); 
+					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("noTopic-3Rq-dz")) 	BDfunctionsDevilBro.triggerOnSwitch(plugin); 
+					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("topic-1KFf6J")) 	BDfunctionsDevilBro.triggerOnSwitch(plugin); 
 				});
 			}
 			if (change.removedNodes) {
 				change.removedNodes.forEach((node) => {
-					if (node && node.id === "friends") triggerOnSwitch();  
-					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("noTopic-3Rq-dz")) 	triggerOnSwitch(); 
-					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("topic-1KFf6J")) 	triggerOnSwitch(); 
+					if (node && node.id === "friends") BDfunctionsDevilBro.triggerOnSwitch(plugin);  
+					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("noTopic-3Rq-dz")) 	BDfunctionsDevilBro.triggerOnSwitch(plugin); 
+					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("topic-1KFf6J")) 	BDfunctionsDevilBro.triggerOnSwitch(plugin); 
 				});
 			}
 		});
 	});
 	plugin.switchFixObserver.observe(document.querySelector(":-webkit-any(.chat, #friends, .noChannel-2EQ0a9, .activityFeed-HeiGwL)").parentNode, {childList: true, subtree:true});
 	return plugin.switchFixObserver;
-	
-	function triggerOnSwitch () {
-		var identifier = plugin.getName() + "_" + plugin.getAuthor();
-		if (Array.isArray(BDfunctionsDevilBro.onSwitchTriggered) && BDfunctionsDevilBro.onSwitchTriggered.includes(identifier)) return;
-		BDfunctionsDevilBro.onSwitchTriggered.push(identifier);
-		plugin.onSwitch();
-		setTimeout(() => {BDfunctionsDevilBro.removeFromArray(BDfunctionsDevilBro.onSwitchTriggered, identifier);},1000);
-	};
+};
+
+BDfunctionsDevilBro.triggerOnSwitch = function (plugin) {
+	var identifier = plugin.getName() + "_" + plugin.getAuthor();
+	if (Array.isArray(BDfunctionsDevilBro.onSwitchTriggered) && BDfunctionsDevilBro.onSwitchTriggered.includes(identifier)) return;
+	BDfunctionsDevilBro.onSwitchTriggered.push(identifier);
+	plugin.onSwitch();
+	setTimeout(() => {BDfunctionsDevilBro.removeFromArray(BDfunctionsDevilBro.onSwitchTriggered, identifier);},1000);
 };
 
 
