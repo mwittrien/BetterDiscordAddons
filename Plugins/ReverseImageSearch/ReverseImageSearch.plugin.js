@@ -43,20 +43,23 @@ class ReverseImageSearch {
 
 	getDescription () {return "Adds a reverse image search option to the context menu.";}
 
-	getVersion () {return "3.2.5";}
+	getVersion () {return "3.2.6";}
 	
 	getAuthor () {return "DevilBro";}
 
     getSettingsPanel () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			var settings = this.getSettings();
-			var settingspanel = `<label style="color:grey;">Reverse Search Engines</label><br>\n`;
+			var settingshtml = `<div class="${this.getName()}-settings"><label style="color:grey;">Reverse Search Engines:</label><br>`;
 			for (var i in this.searchEngines) {
 				var engine = this.searchEngines[i].name;
 				var checked = settings[engine] ? " checked" : "";
-				settingspanel += `<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="` + engine + `"` + checked + `> ` + engine + `</label><br>\n`;
+				settingshtml += `<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="${engine}"${checked}>${engine}</label><br>`;
 			}
-			
+			settingshtml += `</div>`;
+			var settingspanel = $(settingshtml)[0];
+			$(settingspanel)
+				.on("change", ".settings-checkbox", () => {this.updateSettings(settingspanel);});
 			return settingspanel;
 		}
     }
@@ -65,15 +68,13 @@ class ReverseImageSearch {
 	load () {}
 
 	start () {
-		if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
-		$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-		$('head').append("<script src='https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
-		if (typeof BDfunctionsDevilBro !== "object") {
-			$('head script[src="https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-			$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
+		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
+			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
+			$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBroBeta.js"]').remove();
+			$('head').append('<script src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBroBeta.js"></script>');
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
+			BDfunctionsDevilBro.loadMessage(this);
 			
 			this.messageContextObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -103,17 +104,13 @@ class ReverseImageSearch {
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.messageContextObserver.disconnect();
 			
-			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
+			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
 	
 	// begin of own functions
 	
 	getSettings () {
-		var defaultSettings = {
-			enableEmojiHovering: true,
-			enableEmojiStatisticsButton: true
-		};
 		var settings = BDfunctionsDevilBro.loadAllData(this.getName(), "settings");
 		var saveSettings = false;
 		for (var i in this.searchEngines) {
@@ -129,14 +126,13 @@ class ReverseImageSearch {
 		return settings;
 	}
 
-    static updateSettings (ele, pluginName) {
-		var settingspanel = BDfunctionsDevilBro.getSettingsPanelDiv(ele);
+    updateSettings (settingspanel) {
 		var settings = {};
-		var inputs = settingspanel.querySelectorAll("input");
+		var inputs = settingspanel.querySelectorAll(".settings-checkbox");
 		for (var i = 0; i < inputs.length; i++) {
 			settings[inputs[i].value] = inputs[i].checked;
 		}
-		BDfunctionsDevilBro.saveAllData(settings, pluginName, "settings");
+		BDfunctionsDevilBro.saveAllData(settings, this.getName(), "settings");
     }
 	
 	changeLanguageStrings () {
