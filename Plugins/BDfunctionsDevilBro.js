@@ -651,7 +651,7 @@ BDfunctionsDevilBro.WebModules.patchFunction = function (newFunction, index) {
 			req.m[index] = oldFunction;
 		};
 		return cancel;
-	};
+	}
 	catch (e) {
 		console.warn("BDfunctionsDevilBro: Could not patch Function. Error: " + e);
 	}
