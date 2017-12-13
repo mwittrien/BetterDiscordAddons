@@ -1262,6 +1262,7 @@ BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
 	}
 	
 	wrapperDiv.on("click", ".ui-color-picker-" + swatch + ":not(.custom)", (e) => {
+		if (wrapperDiv.hasClass("disabled")) return;
 		var bgColor = $(e.target).css("background-color");
 		var newInvRGB = BDfunctionsDevilBro.checkColorType(bgColor) ? BDfunctionsDevilBro.colorINV(bgColor,"rgb") : "black";
 		
@@ -1279,6 +1280,7 @@ BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
 	});
 	
 	wrapperDiv.on("click", ".ui-color-picker-" + swatch + ".custom", (e) => {
+		if (wrapperDiv.hasClass("disabled")) return;
 		BDfunctionsDevilBro.openColorPicker(e.currentTarget.style.backgroundColor, swatch);
 	});
 };
