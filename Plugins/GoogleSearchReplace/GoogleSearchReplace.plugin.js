@@ -46,20 +46,23 @@ class GoogleSearchReplace {
 
 	getDescription () {return "Replaces the default Google Text Search with a selection menu of several search engines.";}
 
-	getVersion () {return "1.0.3";}
+	getVersion () {return "1.0.5";}
 	
 	getAuthor () {return "DevilBro";}
 
     getSettingsPanel () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			var settings = this.getSettings();
-			var settingspanel = `<label style="color:grey;">Search Engines</label><br>\n`;
+			var settingshtml = `<div class="${this.getName()}-settings"><label style="color:grey;">Search Engines:</label><br>`;
 			for (var i in this.searchEngines) {
 				var engine = this.searchEngines[i].name;
 				var checked = settings[engine] ? " checked" : "";
-				settingspanel += `<label style="color:grey;"><input type="checkbox" onchange='` + this.getName() + `.updateSettings(this, "` + this.getName() + `")' value="` + engine + `"` + checked + `> ` + engine + `</label><br>\n`;
+				settingshtml += `<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="${engine}"${checked}>${engine}</label><br>\n`;
 			}
-			
+			settingshtml += `</div>`;
+			var settingspanel = $(settingshtml)[0];
+			$(settingspanel)
+				.on("change", ".settings-checkbox", () => {this.updateSettings(settingspanel);});
 			return settingspanel;
 		}
     }
@@ -68,15 +71,13 @@ class GoogleSearchReplace {
 	load () {}
 
 	start () {
-		if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
-		$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-		$('head').append("<script src='https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
-		if (typeof BDfunctionsDevilBro !== "object") {
-			$('head script[src="https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-			$('head').append("<script src='https://cors-anywhere.herokuapp.com/https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js'></script>");
+		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
+			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
+			$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBroBeta.js"]').remove();
+			$('head').append('<script src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBroBeta.js"></script>');
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.loadMessage(this.getName(), this.getVersion());
+			BDfunctionsDevilBro.loadMessage(this);
 			
 			this.messageContextObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -106,21 +107,17 @@ class GoogleSearchReplace {
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.messageContextObserver.disconnect();
 			
-			BDfunctionsDevilBro.unloadMessage(this.getName(), this.getVersion());
+			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
 	
 	// begin of own functions
 	
 	getSettings () {
-		var defaultSettings = {
-			enableEmojiHovering: true,
-			enableEmojiStatisticsButton: true
-		};
 		var settings = BDfunctionsDevilBro.loadAllData(this.getName(), "settings");
 		var saveSettings = false;
-		for (var i in this.searchEngines) {
-			var key = this.searchEngines[i].name;
+		for (var engine of this.searchEngines) {
+			var key = engine.name;
 			if (settings[key] == null) {
 				settings[key] = settings[key] ? settings[key] : true;
 				saveSettings = true;
@@ -132,14 +129,13 @@ class GoogleSearchReplace {
 		return settings;
 	}
 
-    static updateSettings (ele, pluginName) {
-		var settingspanel = BDfunctionsDevilBro.getSettingsPanelDiv(ele);
+    updateSettings (settingspanel) {
 		var settings = {};
-		var inputs = settingspanel.querySelectorAll("input");
+		var inputs = settingspanel.querySelectorAll(".settings-checkbox");
 		for (var i = 0; i < inputs.length; i++) {
 			settings[inputs[i].value] = inputs[i].checked;
 		}
-		BDfunctionsDevilBro.saveAllData(settings, pluginName, "settings");
+		BDfunctionsDevilBro.saveAllData(settings, this.getName(), "settings");
     }
 	
 	changeLanguageStrings () {
@@ -156,36 +152,35 @@ class GoogleSearchReplace {
 				var text = BDfunctionsDevilBro.getKeyInformation({"node":group, "key":"value"});
 				if (text) {
 					$(group).find(".item").hide();
-					var data = {"text":text};
 					$(group).append(this.messageContextEntryMarkup)
-						.on("mouseenter", ".googlereplacesearch-item", data, this.createContextSubMenu.bind(this))
-						.on("mouseleave", ".googlereplacesearch-item", data, this.deleteContextSubMenu.bind(this));
+						.on("mouseenter", ".googlereplacesearch-item", (e) => {
+							this.createContextSubMenu(text, e);
+						})
+						.on("mouseleave", ".googlereplacesearch-item", () => {
+							this.deleteContextSubMenu();
+						});
 				}
 				break;
 			}
 		}
 	}
 	
-	createContextSubMenu (e) {
+	createContextSubMenu (text, e) {
 		var targetDiv = e.currentTarget;
-		var searchtext = encodeURIComponent(e.data.text);
+		var searchtext = encodeURIComponent(text);
 		var messageContextSubMenu = $(this.messageContextSubMenuMarkup);
 		$(targetDiv).append(messageContextSubMenu)
 			.off("click", ".GRS-item")
-			.on("click", ".GRS-item", (e) => {
+			.on("click", ".GRS-item", (e2) => {
 				$(".context-menu").hide();
-				
-				var choice = e.target.tagName != "SPAN" ? e.target : e.target.parentNode;
-				for (var i in this.searchEngines) {
-					var engine = this.searchEngines[i].name;
-					if (choice.classList.contains(engine.replace(new RegExp(" ", 'g'), ""))) {
-						var searchurl = this.searchEngines[i].url;
+				for (var engine of this.searchEngines) {
+					if (e2.currentTarget.classList.contains(engine.name.replace(new RegExp(" ", 'g'), ""))) {
+						var searchurl = engine.url;
 						searchurl = searchurl.replace(this.textUrlReplaceString,searchtext);
 						window.open(searchurl, "_blank");
 						break;
 					}
 				}
-				
 			});
 		$(messageContextSubMenu)
 			.addClass(BDfunctionsDevilBro.getDiscordTheme())
@@ -201,7 +196,7 @@ class GoogleSearchReplace {
 		if ($(".googleReplaceSearchSubMenu .GRS-item").length > 0) {$(targetDiv).find(".alldisabled-item").remove();};
 	}
 	
-	deleteContextSubMenu (e) {
+	deleteContextSubMenu () {
 		$(".googleReplaceSearchSubMenu").remove();
 	}
 	
