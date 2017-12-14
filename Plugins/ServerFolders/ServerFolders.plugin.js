@@ -244,11 +244,11 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.3.7";}
+	getVersion () {return "5.3.8";}
 
 	getAuthor () {return "DevilBro";}
 	
-    getSettingsPanel () {
+	getSettingsPanel () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			var settings = this.getSettings();
 			var settingspanel = 
@@ -262,7 +262,7 @@ class ServerFolders {
 				.on("click", ".reset-button", () => {this.resetAll();});
 			return settingspanel;
 		}
-    }
+	}
 
 	//legacy
 	load () {}
@@ -414,23 +414,23 @@ class ServerFolders {
 		return settings;
 	}
 
-    updateSettings (settingspanel) {
+	updateSettings (settingspanel) {
 		var settings = {};
 		var inputs = settingspanel.querySelectorAll(".settings-checkbox");
 		for (var i = 0; i < inputs.length; i++) {
 			settings[inputs[i].value] = inputs[i].checked;
 		}
 		BDfunctionsDevilBro.saveAllData(settings, this.getName(), "settings");
-    }
+	}
 	
-    resetAll () {
+	resetAll () {
 		if (confirm("Are you sure you want to delete all folders?")) {
 			BDfunctionsDevilBro.removeAllData(this.getName(), "folders");
 			BDfunctionsDevilBro.removeAllData(this.getName(), "folderIDs");
 			
 			this.resetAllElements();
 		}
-    }
+	}
 	
 	resetAllElements () {
 		$(".foldercontainer").remove();
@@ -840,7 +840,7 @@ class ServerFolders {
 		
 		var icons = 
 			`<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO" style="flex: 1 1 auto; margin-top: 5px;">
-				<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa wrap-1da0e3  ui-icon-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;">
+				<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa wrap-1da0e3 ui-icon-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;">
 					${ folderIcons.map((val, i) => `<div class="ui-icon-picker-icon" value="${i}" style="background-image: url(${val.closedicon});"></div>`).join("")}
 				</div>
 			</div>`;
@@ -940,7 +940,7 @@ class ServerFolders {
 							var rowamount = Math.floor(guildswrapper.outerHeight() / $(".guild").outerHeight());
 							ChannelSizeCorrectionCSS +=	`
 								.foldercontainer .guild {
-								   display: inline-block !important;
+									display: inline-block !important;
 								}
 								
 								.foldercontainer {
@@ -1005,7 +1005,7 @@ class ServerFolders {
 				else serverDiv.querySelector("a").click();
 			})
 			.on("contextmenu." + this.getName(), (e) => {
-				var handleContextMenu = BDfunctionsDevilBro.getKeyInformation({"node":serverObj.firstElementChild, "key":"handleContextMenu"});
+				var handleContextMenu = BDfunctionsDevilBro.getKeyInformation({"node":serverDiv.firstElementChild, "key":"handleContextMenu"});
 				if (handleContextMenu) {
 					var data = {
 						preventDefault: a=>a,
@@ -1231,11 +1231,11 @@ class ServerFolders {
 				return {
 					toast_addserver_text:					"${servername} er blevet tilføjet til mappe${foldername}.",
 					toast_removeserver_text:				"${servername} er blevet fjernet fra mappen${foldername}.",
-					servercontext_serverfolders_text: 		"Servermapper",
-					serversubmenu_createfolder_text: 		"Opret mappe",
-					serversubmenu_removefromfolder_text: 	"Fjern server fra mappe",
+					servercontext_serverfolders_text:		"Servermapper",
+					serversubmenu_createfolder_text:		"Opret mappe",
+					serversubmenu_removefromfolder_text:	"Fjern server fra mappe",
 					foldercontext_unreadfolder_text:		"Markér alle som læst",
-					foldercontext_foldersettings_text: 		"Mappeindstillinger",
+					foldercontext_foldersettings_text:		"Mappeindstillinger",
 					foldercontext_removefolder_text:		"Slet mappe",
 					modal_header_text:						"Mappindstillinger",
 					modal_foldername_text:					"Mappenavn",
@@ -1254,11 +1254,11 @@ class ServerFolders {
 				return {
 					toast_addserver_text:					"${servername} wurde dem Ordner${foldername} hinzugefügt.",
 					toast_removeserver_text:				"${servername} wurde aus dem Ordner${foldername} entfernt.",
-					servercontext_serverfolders_text: 		"Serverordner",
-					serversubmenu_createfolder_text: 		"Ordner erzeugen",
-					serversubmenu_removefromfolder_text: 	"Server aus Ordner entfernen",
+					servercontext_serverfolders_text:		"Serverordner",
+					serversubmenu_createfolder_text:		"Ordner erzeugen",
+					serversubmenu_removefromfolder_text:	"Server aus Ordner entfernen",
 					foldercontext_unreadfolder_text:		"Alle als gelesen markieren",
-					foldercontext_foldersettings_text: 		"Ordnereinstellungen",
+					foldercontext_foldersettings_text:		"Ordnereinstellungen",
 					foldercontext_removefolder_text:		"Ordner löschen",
 					modal_header_text:						"Ordnereinstellungen",
 					modal_foldername_text:					"Ordnername",
@@ -1277,11 +1277,11 @@ class ServerFolders {
 				return {
 					toast_addserver_text:					"${servername} ha sido agregado a la carpeta${foldername}.",
 					toast_removeserver_text:				"${servername} ha sido eliminado de la carpeta${foldername}.",
-					servercontext_serverfolders_text: 		"Carpetas de servidor",
-					serversubmenu_createfolder_text: 		"Crear carpeta",
-					serversubmenu_removefromfolder_text: 	"Eliminar servidor de la carpeta",
+					servercontext_serverfolders_text:		"Carpetas de servidor",
+					serversubmenu_createfolder_text:		"Crear carpeta",
+					serversubmenu_removefromfolder_text:	"Eliminar servidor de la carpeta",
 					foldercontext_unreadfolder_text:		"Marcar todo como leido",
-					foldercontext_foldersettings_text: 		"Ajustes de carpeta",
+					foldercontext_foldersettings_text:		"Ajustes de carpeta",
 					foldercontext_removefolder_text:		"Eliminar carpeta",
 					modal_header_text:						"Ajustes de carpeta",
 					modal_foldername_text:					"Nombre de la carpeta",
@@ -1300,11 +1300,11 @@ class ServerFolders {
 				return {
 					toast_addserver_text:					"${servername} a été ajouté au dossier${foldername}.",
 					toast_removeserver_text:				"${servername} a été supprimé du dossier${foldername}.",
-					servercontext_serverfolders_text: 		"Dossiers du serveur",
-					serversubmenu_createfolder_text: 		"Créer le dossier",
-					serversubmenu_removefromfolder_text: 	"Supprimer le serveur du dossier",
+					servercontext_serverfolders_text:		"Dossiers du serveur",
+					serversubmenu_createfolder_text:		"Créer le dossier",
+					serversubmenu_removefromfolder_text:	"Supprimer le serveur du dossier",
 					foldercontext_unreadfolder_text:		"Tout marquer comme lu",
-					foldercontext_foldersettings_text: 		"Paramètres du dossier",
+					foldercontext_foldersettings_text:		"Paramètres du dossier",
 					foldercontext_removefolder_text:		"Supprimer le dossier",
 					modal_header_text:						"Paramètres du dossier",
 					modal_foldername_text:					"Nom de dossier",
@@ -1323,11 +1323,11 @@ class ServerFolders {
 				return {
 					toast_addserver_text:					"${servername} è stato aggiunto alla cartella${foldername}.",
 					toast_removeserver_text:				"${servername} è stato rimosso dalla cartella${foldername}.",
-					servercontext_serverfolders_text: 		"Cartelle del server",
-					serversubmenu_createfolder_text: 		"Creare una cartella",
-					serversubmenu_removefromfolder_text: 	"Rimuovere il server dalla cartella",
+					servercontext_serverfolders_text:		"Cartelle del server",
+					serversubmenu_createfolder_text:		"Creare una cartella",
+					serversubmenu_removefromfolder_text:	"Rimuovere il server dalla cartella",
 					foldercontext_unreadfolder_text:		"Segna tutti come letti",
-					foldercontext_foldersettings_text: 		"Impostazioni cartella",
+					foldercontext_foldersettings_text:		"Impostazioni cartella",
 					foldercontext_removefolder_text:		"Elimina cartella",
 					modal_header_text:						"Impostazioni cartella",
 					modal_foldername_text:					"Nome della cartella",
@@ -1346,11 +1346,11 @@ class ServerFolders {
 				return {
 					toast_addserver_text:					"${servername} is toegevoegd aan de map${foldername}.",
 					toast_removeserver_text:				"${servername} is verwijderd uit de map${foldername}.",
-					servercontext_serverfolders_text: 		"Servermappen",
-					serversubmenu_createfolder_text: 		"Map aanmaken",
-					serversubmenu_removefromfolder_text: 	"Server uit map verwijderen",
+					servercontext_serverfolders_text:		"Servermappen",
+					serversubmenu_createfolder_text:		"Map aanmaken",
+					serversubmenu_removefromfolder_text:	"Server uit map verwijderen",
 					foldercontext_unreadfolder_text:		"Alles als gelezen markeren",
-					foldercontext_foldersettings_text: 		"Mapinstellingen",
+					foldercontext_foldersettings_text:		"Mapinstellingen",
 					foldercontext_removefolder_text:		"Verwijder map",
 					modal_header_text:						"Mapinstellingen",
 					modal_foldername_text:					"Mapnaam",
@@ -1369,11 +1369,11 @@ class ServerFolders {
 				return {
 					toast_addserver_text:					"${servername} er lagt til i mappe${foldername}.",
 					toast_removeserver_text:				"${servername} er fjernet fra mappen${foldername}.",
-					servercontext_serverfolders_text: 		"Servermapper",
-					serversubmenu_createfolder_text: 		"Lag mappe",
-					serversubmenu_removefromfolder_text: 	"Fjern server fra mappe",
+					servercontext_serverfolders_text:		"Servermapper",
+					serversubmenu_createfolder_text:		"Lag mappe",
+					serversubmenu_removefromfolder_text:	"Fjern server fra mappe",
 					foldercontext_unreadfolder_text:		"Marker alle som lest",
-					foldercontext_foldersettings_text: 		"Mappinnstillinger",
+					foldercontext_foldersettings_text:		"Mappinnstillinger",
 					foldercontext_removefolder_text:		"Slett mappe",
 					modal_header_text:						"Mappinnstillinger",
 					modal_foldername_text:					"Mappenavn",
@@ -1391,35 +1391,35 @@ class ServerFolders {
 			case "pl":		//polish
 				return {
 					toast_addserver_text:					"${servername} został dodany do folderu${foldername}.",
-                    toast_removeserver_text:				"${servername} został usunięty z folderu${foldername}.",
-                    servercontext_serverfolders_text:		"Foldery serwera",
-                    serversubmenu_createfolder_text:		"Utwórz folder",
-                    serversubmenu_removefromfolder_text:	"Usuń serwer z folderu",
-                    foldercontext_unreadfolder_text:		"Oznacz wszystkie jako przeczytane",
-                    foldercontext_foldersettings_text:		"Ustawienia folderu",
-                    foldercontext_removefolder_text:		"Usuń folder",
-                    modal_header_text:						"Ustawienia folderu",
-                    modal_foldername_text:					"Nazwa folderu",
-                    modal_tabheader1_text:					"Folder",
-                    modal_tabheader2_text:					"Kolor folderu",
-                    modal_tabheader3_text:					"Kolor podpowiedzi",
-                    modal_iconpicker_text:					"Wybór folderu",
-                    modal_colorpicker1_text:				"Podstawowy kolor folderu",
-                    modal_colorpicker2_text:				"Drugorzędny kolor folderu",
-                    modal_colorpicker3_text:				"Kolor podpowiedzi",
-                    modal_colorpicker4_text:				"Kolor czcionki",
-                    btn_cancel_text:						"Anuluj",
-                    btn_save_text:							"Zapisz"
+					toast_removeserver_text:				"${servername} został usunięty z folderu${foldername}.",
+					servercontext_serverfolders_text:		"Foldery serwera",
+					serversubmenu_createfolder_text:		"Utwórz folder",
+					serversubmenu_removefromfolder_text:	"Usuń serwer z folderu",
+					foldercontext_unreadfolder_text:		"Oznacz wszystkie jako przeczytane",
+					foldercontext_foldersettings_text:		"Ustawienia folderu",
+					foldercontext_removefolder_text:		"Usuń folder",
+					modal_header_text:						"Ustawienia folderu",
+					modal_foldername_text:					"Nazwa folderu",
+					modal_tabheader1_text:					"Folder",
+					modal_tabheader2_text:					"Kolor folderu",
+					modal_tabheader3_text:					"Kolor podpowiedzi",
+					modal_iconpicker_text:					"Wybór folderu",
+					modal_colorpicker1_text:				"Podstawowy kolor folderu",
+					modal_colorpicker2_text:				"Drugorzędny kolor folderu",
+					modal_colorpicker3_text:				"Kolor podpowiedzi",
+					modal_colorpicker4_text:				"Kolor czcionki",
+					btn_cancel_text:						"Anuluj",
+					btn_save_text:							"Zapisz"
 				};
 			case "pt":		//portuguese (brazil)
 				return {
 					toast_addserver_text:					"${servername} foi adicionado à pasta${foldername}.",
 					toast_removeserver_text:				"${servername} foi removido da pasta${foldername}.",
-					servercontext_serverfolders_text: 		"Pastas de servidores",
-					serversubmenu_createfolder_text: 		"Criar pasta",
-					serversubmenu_removefromfolder_text: 	"Remover servidor da pasta",
+					servercontext_serverfolders_text:		"Pastas de servidores",
+					serversubmenu_createfolder_text:		"Criar pasta",
+					serversubmenu_removefromfolder_text:	"Remover servidor da pasta",
 					foldercontext_unreadfolder_text:		"Marcar tudo como lido",
-					foldercontext_foldersettings_text: 		"Configurações da pasta",
+					foldercontext_foldersettings_text:		"Configurações da pasta",
 					foldercontext_removefolder_text:		"Excluir pasta",
 					modal_header_text:						"Configurações da pasta",
 					modal_foldername_text:					"Nome da pasta",
@@ -1438,11 +1438,11 @@ class ServerFolders {
 				return {
 					toast_addserver_text:					"${servername} on lisätty kansioon${foldername}.",
 					toast_removeserver_text:				"${servername} on poistettu kansioon${foldername}.",
-					servercontext_serverfolders_text: 		"Palvelinkansiot",
-					serversubmenu_createfolder_text: 		"Luo kansio",
-					serversubmenu_removefromfolder_text: 	"Poista palvelin kansioista",
+					servercontext_serverfolders_text:		"Palvelinkansiot",
+					serversubmenu_createfolder_text:		"Luo kansio",
+					serversubmenu_removefromfolder_text:	"Poista palvelin kansioista",
 					foldercontext_unreadfolder_text:		"Merkitse kaikki luetuksi",
-					foldercontext_foldersettings_text: 		"Kansion kansio",
+					foldercontext_foldersettings_text:		"Kansion kansio",
 					foldercontext_removefolder_text:		"Poista kansio",
 					modal_header_text:						"Kansion kansio",
 					modal_foldername_text:					"Kansion nimi",
@@ -1461,11 +1461,11 @@ class ServerFolders {
 				return {
 					toast_addserver_text:					"${servername} har lagts till i mapp${foldername}.",
 					toast_removeserver_text:				"${servername} har tagits bort från mappen${foldername}.",
-					servercontext_serverfolders_text: 		"Servermappar",
-					serversubmenu_createfolder_text: 		"Skapa mapp",
-					serversubmenu_removefromfolder_text: 	"Ta bort servern från mappen",
+					servercontext_serverfolders_text:		"Servermappar",
+					serversubmenu_createfolder_text:		"Skapa mapp",
+					serversubmenu_removefromfolder_text:	"Ta bort servern från mappen",
 					foldercontext_unreadfolder_text:		"Markera allt som läst",
-					foldercontext_foldersettings_text: 		"Mappinställningar",
+					foldercontext_foldersettings_text:		"Mappinställningar",
 					foldercontext_removefolder_text:		"Ta bort mapp",
 					modal_header_text:						"Mappinställningar",
 					modal_foldername_text:					"Mappnamn",
@@ -1484,11 +1484,11 @@ class ServerFolders {
 				return {
 					toast_addserver_text:					"${servername} klasörü${foldername} eklendi.",
 					toast_removeserver_text:				"${servername} klasörü${foldername} kaldırıldı",
-					servercontext_serverfolders_text: 		"Sunucu klasörleri",
-					serversubmenu_createfolder_text: 		"Klasör oluşturun",
-					serversubmenu_removefromfolder_text: 	"Sunucuyu klasörden kaldır",
+					servercontext_serverfolders_text:		"Sunucu klasörleri",
+					serversubmenu_createfolder_text:		"Klasör oluşturun",
+					serversubmenu_removefromfolder_text:	"Sunucuyu klasörden kaldır",
 					foldercontext_unreadfolder_text:		"Tümünü Oku olarak işaretle",
-					foldercontext_foldersettings_text: 		"Klasör Ayarları",
+					foldercontext_foldersettings_text:		"Klasör Ayarları",
 					foldercontext_removefolder_text:		"Klasörü sil",
 					modal_header_text:						"Klasör Ayarları",
 					modal_foldername_text:					"Klasör adı",
@@ -1507,11 +1507,11 @@ class ServerFolders {
 				return {
 					toast_addserver_text:					"${servername} byl přidán do složky${foldername}.",
 					toast_removeserver_text:				"${servername} byl odstraněn ze složky${foldername}.",
-					servercontext_serverfolders_text: 		"Složky serveru",
-					serversubmenu_createfolder_text: 		"Vytvořit složky",
-					serversubmenu_removefromfolder_text: 	"Odstranit server ze složky",
+					servercontext_serverfolders_text:		"Složky serveru",
+					serversubmenu_createfolder_text:		"Vytvořit složky",
+					serversubmenu_removefromfolder_text:	"Odstranit server ze složky",
 					foldercontext_unreadfolder_text:		"Označit vše jako přečtené",
-					foldercontext_foldersettings_text: 		"Nastavení složky",
+					foldercontext_foldersettings_text:		"Nastavení složky",
 					foldercontext_removefolder_text:		"Smazat složky",
 					modal_header_text:						"Nastavení složky",
 					modal_foldername_text:					"Název složky",
@@ -1530,11 +1530,11 @@ class ServerFolders {
 				return {
 					toast_addserver_text:					"${servername} е добавен към папката${foldername}.",
 					toast_removeserver_text:				"${servername} е премахнат от папката${foldername}.",
-					servercontext_serverfolders_text: 		"Сървърни папки",
-					serversubmenu_createfolder_text: 		"Създай папка",
-					serversubmenu_removefromfolder_text: 	"Премахване на сървър от папка",
+					servercontext_serverfolders_text:		"Сървърни папки",
+					serversubmenu_createfolder_text:		"Създай папка",
+					serversubmenu_removefromfolder_text:	"Премахване на сървър от папка",
 					foldercontext_unreadfolder_text:		"Маркирай всички като прочетени",
-					foldercontext_foldersettings_text: 		"Настройки папка",
+					foldercontext_foldersettings_text:		"Настройки папка",
 					foldercontext_removefolder_text:		"Изтриване на папка",
 					modal_header_text:						"Настройки папка",
 					modal_foldername_text:					"Име на папка",
@@ -1553,11 +1553,11 @@ class ServerFolders {
 				return {
 					toast_addserver_text:					"${servername} добавлен в папку${foldername}.",
 					toast_removeserver_text:				"${servername} был удален из папки${foldername}.",
-					servercontext_serverfolders_text: 		"Папки сервера",
-					serversubmenu_createfolder_text: 		"Создать папки",
-					serversubmenu_removefromfolder_text: 	"Удаление сервера из папки",
+					servercontext_serverfolders_text:		"Папки сервера",
+					serversubmenu_createfolder_text:		"Создать папки",
+					serversubmenu_removefromfolder_text:	"Удаление сервера из папки",
 					foldercontext_unreadfolder_text:		"Отметить все как прочитанное",
-					foldercontext_foldersettings_text: 		"Настройки папки",
+					foldercontext_foldersettings_text:		"Настройки папки",
 					foldercontext_removefolder_text:		"Удалить папки",
 					modal_header_text:						"Настройки папки",
 					modal_foldername_text:					"Имя папки",
@@ -1576,11 +1576,11 @@ class ServerFolders {
 				return {
 					toast_addserver_text:					"${servername} було додано до папки${foldername}.",
 					toast_removeserver_text:				"${servername} був вилучений з папки${foldername}.",
-					servercontext_serverfolders_text: 		"Папки сервера",
-					serversubmenu_createfolder_text: 		"Створити папки",
-					serversubmenu_removefromfolder_text: 	"Видалити сервер із папки",
+					servercontext_serverfolders_text:		"Папки сервера",
+					serversubmenu_createfolder_text:		"Створити папки",
+					serversubmenu_removefromfolder_text:	"Видалити сервер із папки",
 					foldercontext_unreadfolder_text:		"Позначити як прочитане",
-					foldercontext_foldersettings_text: 		"Параметри папки",
+					foldercontext_foldersettings_text:		"Параметри папки",
 					foldercontext_removefolder_text:		"Видалити папки",
 					modal_header_text:						"Параметри папки",
 					modal_foldername_text:					"Ім'я папки",
@@ -1599,11 +1599,11 @@ class ServerFolders {
 				return {
 					toast_addserver_text:					"${servername} がフォルダ${foldername} に追加されました。",
 					toast_removeserver_text:				"${servername} がフォルダ${foldername} から削除されました。",
-					servercontext_serverfolders_text: 		"サーバーフォルダ",
-					serversubmenu_createfolder_text: 		"フォルダーを作る",
-					serversubmenu_removefromfolder_text: 	"フォルダからサーバーを削除する",
+					servercontext_serverfolders_text:		"サーバーフォルダ",
+					serversubmenu_createfolder_text:		"フォルダーを作る",
+					serversubmenu_removefromfolder_text:	"フォルダからサーバーを削除する",
 					foldercontext_unreadfolder_text:		"すべてを読むようにマークする",
-					foldercontext_foldersettings_text: 		"フォルダ設定",
+					foldercontext_foldersettings_text:		"フォルダ設定",
 					foldercontext_removefolder_text:		"フォルダを削除する",
 					modal_header_text:						"フォルダ設定",
 					modal_foldername_text:					"フォルダ名",
@@ -1622,11 +1622,11 @@ class ServerFolders {
 				return {
 					toast_addserver_text:					"${servername} 已被添加到文件夾${foldername}.",
 					toast_removeserver_text:				"${servername} 已從文件夾${foldername} 中刪除.",
-					servercontext_serverfolders_text: 		"服務器文件夾",
-					serversubmenu_createfolder_text: 		"創建文件夾",
-					serversubmenu_removefromfolder_text: 	"從服務器中刪除服務器",
+					servercontext_serverfolders_text:		"服務器文件夾",
+					serversubmenu_createfolder_text:		"創建文件夾",
+					serversubmenu_removefromfolder_text:	"從服務器中刪除服務器",
 					foldercontext_unreadfolder_text:		"標記為已讀",
-					foldercontext_foldersettings_text: 		"文件夾設置",
+					foldercontext_foldersettings_text:		"文件夾設置",
 					foldercontext_removefolder_text:		"刪除文件夾",
 					modal_header_text:						"文件夾設置",
 					modal_foldername_text:					"文件夾名稱",
@@ -1645,11 +1645,11 @@ class ServerFolders {
 				return {
 					toast_addserver_text:					"${servername} 가 폴더${foldername} 에 추가되었습니다.",
 					toast_removeserver_text:				"${servername} 가 폴더${foldername} 에서 제거되었습니다.",
-					servercontext_serverfolders_text: 		"서버 폴더",
-					serversubmenu_createfolder_text: 		"폴더 만들기",
-					serversubmenu_removefromfolder_text: 	"폴더에서 서버 제거",
+					servercontext_serverfolders_text:		"서버 폴더",
+					serversubmenu_createfolder_text:		"폴더 만들기",
+					serversubmenu_removefromfolder_text:	"폴더에서 서버 제거",
 					foldercontext_unreadfolder_text:		"모두 읽은 상태로 표시",
-					foldercontext_foldersettings_text: 		"폴더 설정",
+					foldercontext_foldersettings_text:		"폴더 설정",
 					foldercontext_removefolder_text:		"폴더 삭제",
 					modal_header_text:						"폴더 설정",
 					modal_foldername_text:					"폴더 이름",
@@ -1668,11 +1668,11 @@ class ServerFolders {
 				return {
 					toast_addserver_text:					"${servername} has been added to the folder${foldername}.",
 					toast_removeserver_text:				"${servername} has been removed from the folder${foldername}.",
-					servercontext_serverfolders_text: 		"Serverfolders",
-					serversubmenu_createfolder_text: 		"Create Folder",
-					serversubmenu_removefromfolder_text: 	"Remove Server From Folder",
+					servercontext_serverfolders_text:		"Serverfolders",
+					serversubmenu_createfolder_text:		"Create Folder",
+					serversubmenu_removefromfolder_text:	"Remove Server From Folder",
 					foldercontext_unreadfolder_text:		"Mark All As Read",
-					foldercontext_foldersettings_text: 		"Foldersettings",
+					foldercontext_foldersettings_text:		"Foldersettings",
 					foldercontext_removefolder_text:		"Delete Folder",
 					modal_header_text:						"Foldersettings",
 					modal_foldername_text:					"Foldername",
