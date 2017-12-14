@@ -3,34 +3,37 @@
 class NotificationSounds {
 	constructor () {
 		this.types = {
-			"call_calling":			{implemented:true,	src:"c6e92752668dde4eee5923d70441579f.mp3"},
-			"call_ringing":			{implemented:true,	src:"84a1b4e11d634dbfa1e5dd97a96de3ad.mp3"},
-			"call_ringing_beat":	{implemented:false,	src:"b9411af07f154a6fef543e7e442e4da9.mp3"},
-			"ddr-down":				{implemented:false,	src:"71f048f8aa7d4b24bf4268a87cbbb192.mp3"},
-			"ddr-left":				{implemented:false,	src:"1de04408e62b5d52ae3ebbb91e9e1978.mp3"},
-			"ddr-right":			{implemented:false,	src:"2c0433f93db8449e4a82b76dc520cb29.mp3"},
-			"ddr-up":				{implemented:false,	src:"68472713f7a62c7c37e0a6a5d5a1faeb.mp3"},
-			"deafen":				{implemented:true,	src:"e4d539271704b87764dc465b1a061abd.mp3"},
-			"disconnect":			{implemented:true,	src:"7e125dc075ec6e5ae796e4c3ab83abb3.mp3"},
-			"human_man":			{implemented:false,	src:"a37dcd6272ae41cf49295d58c9806fe3.mp3"},
-			"mention1":				{implemented:false,	src:"fa4d62c3cbc80733bf1f01b9c6f181de.mp3"},
-			"mention2":				{implemented:false,	src:"a5f42064e8120e381528b14fd3188b72.mp3"},
-			"mention3":				{implemented:false,	src:"84c9fa3d07da865278bd77c97d952db4.mp3"},
-			"message1":				{implemented:true,	src:"dd920c06a01e5bb8b09678581e29d56f.mp3"},
-			"message2":				{implemented:false,	src:"15fe810f6cfab609c7fcda61652b9b34.mp3"},
-			"message3":				{implemented:false,	src:"53ce6a92d3c233e8b4ac529d34d374e4.mp3"},
-			"mute":					{implemented:true,	src:"429d09ee3b86e81a75b5e06d3fb482be.mp3"},
-			"overlayunlock":		{implemented:false,	src:"ad322ffe0a88436296158a80d5d11baa.mp3"},
-			"ptt_start":			{implemented:true,	src:"8b63833c8d252fedba6b9c4f2517c705.mp3"},
-			"ptt_stop":				{implemented:true,	src:"74ab980d6890a0fa6aa0336182f9f620.mp3"},
-			"reconnect":			{implemented:false,	src:"471cfd0005b112ff857705e894bf41a6.mp3"},
-			"robot_man":			{implemented:false,	src:"66598bea6e59eb8acdf32cf2d9d75ba9.mp3"},
-			"undeafen":				{implemented:true,	src:"5a000a0d4dff083d12a1d4fc2c7cbf66.mp3"},
-			"unmute":				{implemented:true,	src:"43805b9dd757ac4f6b9b58c1a8ee5f0d.mp3"},
-			"user_join":			{implemented:true,	src:"5dd43c946894005258d85770f0d10cff.mp3"},
-			"user_leave":			{implemented:true,	src:"4fcfeb2cba26459c4750e60f626cebdc.mp3"},
-			"user_moved":			{implemented:true,	src:"e81d11590762728c1b811eadfa5be766.mp3"}
+			"call_calling":			{implemented:true,	src:"/assets/c6e92752668dde4eee5923d70441579f.mp3"},
+			"call_ringing":			{implemented:true,	src:"/assets/84a1b4e11d634dbfa1e5dd97a96de3ad.mp3"},
+			"call_ringing_beat":	{implemented:false,	src:"/assets/b9411af07f154a6fef543e7e442e4da9.mp3"},
+			"ddr-down":				{implemented:false,	src:"/assets/71f048f8aa7d4b24bf4268a87cbbb192.mp3"},
+			"ddr-left":				{implemented:false,	src:"/assets/1de04408e62b5d52ae3ebbb91e9e1978.mp3"},
+			"ddr-right":			{implemented:false,	src:"/assets/2c0433f93db8449e4a82b76dc520cb29.mp3"},
+			"ddr-up":				{implemented:false,	src:"/assets/68472713f7a62c7c37e0a6a5d5a1faeb.mp3"},
+			"deafen":				{implemented:true,	src:"/assets/e4d539271704b87764dc465b1a061abd.mp3"},
+			"disconnect":			{implemented:true,	src:"/assets/7e125dc075ec6e5ae796e4c3ab83abb3.mp3"},
+			"dm":					{implemented:true,	src:"/assets/84c9fa3d07da865278bd77c97d952db4.mp3"},
+			"human_man":			{implemented:false,	src:"/assets/fa4d62c3cbc80733bf1f01b9c6f181de.mp3"},
+			"mentioned":			{implemented:true,	src:"/assets/a5f42064e8120e381528b14fd3188b72.mp3"},
+			"mention1":				{implemented:false,	src:"/assets/fa4d62c3cbc80733bf1f01b9c6f181de.mp3"},
+			"mention2":				{implemented:false,	src:"/assets/a5f42064e8120e381528b14fd3188b72.mp3"},
+			"mention3":				{implemented:false,	src:"/assets/84c9fa3d07da865278bd77c97d952db4.mp3"},
+			"message1":				{implemented:true,	src:"/assets/dd920c06a01e5bb8b09678581e29d56f.mp3"},
+			"message2":				{implemented:false,	src:"/assets/15fe810f6cfab609c7fcda61652b9b34.mp3"},
+			"message3":				{implemented:false,	src:"/assets/53ce6a92d3c233e8b4ac529d34d374e4.mp3"},
+			"mute":					{implemented:true,	src:"/assets/429d09ee3b86e81a75b5e06d3fb482be.mp3"},
+			"overlayunlock":		{implemented:false,	src:"/assets/ad322ffe0a88436296158a80d5d11baa.mp3"},
+			"ptt_start":			{implemented:true,	src:"/assets/8b63833c8d252fedba6b9c4f2517c705.mp3"},
+			"ptt_stop":				{implemented:true,	src:"/assets/74ab980d6890a0fa6aa0336182f9f620.mp3"},
+			"reconnect":			{implemented:false,	src:"/assets/471cfd0005b112ff857705e894bf41a6.mp3"},
+			"robot_man":			{implemented:false,	src:"/assets/66598bea6e59eb8acdf32cf2d9d75ba9.mp3"},
+			"undeafen":				{implemented:true,	src:"/assets/5a000a0d4dff083d12a1d4fc2c7cbf66.mp3"},
+			"unmute":				{implemented:true,	src:"/assets/43805b9dd757ac4f6b9b58c1a8ee5f0d.mp3"},
+			"user_join":			{implemented:true,	src:"/assets/5dd43c946894005258d85770f0d10cff.mp3"},
+			"user_leave":			{implemented:true,	src:"/assets/4fcfeb2cba26459c4750e60f626cebdc.mp3"},
+			"user_moved":			{implemented:true,	src:"/assets/e81d11590762728c1b811eadfa5be766.mp3"}
 		};
+		
 		
 		this.defaults = {
 			"---": {
@@ -53,26 +56,31 @@ class NotificationSounds {
 		
 		this.oldmentions = {};
 		
+		this.firedEvents = {};
+		
 		this.dmObserver = new MutationObserver(() => {});
 		this.dmBadgeObserver = new MutationObserver(() => {});
 		this.mentionObserver = new MutationObserver(() => {});
 		this.mentionBadgeObserver = new MutationObserver(() => {});
 		this.channelListObserver = new MutationObserver(() => {});
 		 
-		this.css = `.NotificationSounds-settings div {margin-top:0 !important;}`;
+		this.css = `.NotificationSounds-settings div {margin-top:0 !important;} .NotificationSounds-settings .grabber-1TZCZi{margin-top:-13px !important;}`;
 	}
 
 	getName () {return "NotificationSounds";}
+	
 
-	getDescription () {return "Template to create my plugins.";}
+	getDescription () {return "Let's you change the internal sounds to your own custom ones for all native sounds of Discord.";}
 
-	getVersion () {return "3.0.0";}
+	getVersion () {return "3.0.1";}
 
 	getAuthor () {return "DevilBro";}
 	
     getSettingsPanel () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			if (!this.functionData) return;
+			if (!this.SoundUtils) return;
+			
+			var fields = ["category","song"];
 			
 			var settingshtml = `<div class="${this.getName()}-settings marginTop20-3UscxH">`;
 			
@@ -86,9 +94,10 @@ class NotificationSounds {
 				var choice = BDfunctionsDevilBro.loadData(type, this.getName(), "choices");
 				var unimplemented = this.types[type].implemented ? "" : " unimplemented";
 				settingshtml += `<div class="${type}-song-settings flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginBottom8-1mABJ4${unimplemented}" style="flex: 1 1 auto;">`;
-				for (var key in choice) {
+				for (var key of fields) {
 					settingshtml += `<div class="ui-form-item flexChild-1KGW5q" style="flex: 1 1 auto;"><h5 class="h5-3KssQU title-1pmpPr size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH defaultMarginh5-2UwwFY marginBottom4-_yArcI">${type}-${key}:</h5><div class="ui-select ${key}-select-wrapper"><div type="${type}" option="${key}" value="${choice[key]}" class="Select Select--single has-value"><div class="Select-control"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-value" style="flex: 1 1 auto;"><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm">${choice[key]}</div></div><span class="Select-arrow-zone"><span class="Select-arrow"></span></span></div></div></div></div>`;
 				}
+				settingshtml += `<div class="ui-form-item flexChild-1KGW5q" style="flex: 1 1 auto;"><h5 class="h5-3KssQU title-1pmpPr size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH defaultMarginh5-2UwwFY marginBottom4-_yArcI">${type}-volume:</h5><div type="${type}" class="slider-2e2iXJ"><input type="number" class="${type}-volume input-27JrJm volumeInput" value="${choice.volume}" readonly=""><div class="bar-2cFRGz"><div class="barFill-18ABna" style="width: ${choice.volume}%;"></div></div><div class="track-1h2wOF"><div class="grabber-1TZCZi" style="left: ${choice.volume}%;"></div></div></div></div>`;
 				settingshtml += `</div>`;
 			}
 			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Show unimplemented Sounds</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;"><input type="checkbox" class="checkboxEnabled-4QfryV checkbox-1KYsPm" id="input-unimplemented"></div></div>`;
@@ -102,6 +111,7 @@ class NotificationSounds {
 				.on("keyup", ".songInput", (e) => {if (e.which == 13) this.saveAudio(settingspanel);})
 				.on("click", ".reset-button", () => {this.resetAll(settingspanel);})
 				.on("click", "#input-unimplemented", (e) => {this.toggleUnimplemented(settingspanel,e);})
+				.on("mousedown", ".grabber-1TZCZi", (e) => {this.dragSlider(settingspanel,e);})
 				.find(".unimplemented").hide();
 				
 			return settingspanel;
@@ -117,25 +127,124 @@ class NotificationSounds {
 			$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
 			$('head').append('<script src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"></script>');
 		}
+		
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
-			if (!BDfunctionsDevilBro.loadData("warning1", this.getName(), "warning1")) {
+			if (!BDfunctionsDevilBro.loadData("warning2", this.getName(), "warnings")) {
 				BDfunctionsDevilBro.removeAllData(this.getName(), "songs");
 				BDfunctionsDevilBro.removeAllData(this.getName(), "choices");
 				BDfunctionsDevilBro.removeAllData(this.getName(), "audios");
-				alert("Welcome to the new NotificationSounds Plugin using the internal functions of Discord, this allows you to change all internal sounds that Discord offers. And also let's you explore sounds that aren't yet implemented.");
-				BDfunctionsDevilBro.saveData("warning1", true, this.getName(), "warning1");
+				alert("Another semi big update. Volume sliders are back in business. Also you can now set a sound for mentions and DMs. Muting 'Messages' in your Notifications-Settings will mute all three sounds (messages, dms, mentions) for now. I'll probably add options to mute them seperatly in the future.");
+				BDfunctionsDevilBro.saveData("warning2", true, this.getName(), "warnings");
 			}
 			
-			this.functionData = BDfunctionsDevilBro.WebModules.findFunction((module) => module.toString().indexOf("./call_ringing.mp3") > -1);
-			if (this.functionData) {
-				this.patchCancel = BDfunctionsDevilBro.WebModules.patchFunction((e) => {
-					return this.choices && this.choices[e] ? this.choices[e].sound : null;
-				},this.functionData.id);
+			this.SoundUtils = BDfunctionsDevilBro.WebModules.findByProperties(["playSound"]);
+			
+			if (this.SoundUtils) {
+				this.patchCancel = BDfunctionsDevilBro.WebModules.monkeyPatch(this.SoundUtils, "playSound", {instead: (e) => {
+					setImmediate(() => {
+						var type = e.methodArguments[0];
+						if (type == "message1") type = this.firedEvents["dm"] ? "dm" : this.firedEvents["mentioned"] ? "mentioned" : type;
+						var audio = new Audio();
+						audio.src = this.choices[type].src;
+						audio.volume = this.choices[type].volume/100;
+						audio.play();
+					});
+				}});
 				
 				this.loadAudios();
 				this.loadChoices();
+				
+				
+				this.dmBadgeObserver = new MutationObserver((changes, _) => {
+					this.fireEvent("dm");
+				});
+				
+				this.dmObserver = new MutationObserver((changes, _) => {
+					changes.forEach(
+						(change, i) => {
+							if (change.addedNodes) {
+								change.addedNodes.forEach((node) => {
+									this.dmBadgeObserver.observe(node, {characterData: true, subtree: true });
+									this.fireEvent("dm");
+								});
+							}
+						}
+					);
+				});
+				if (document.querySelector(".dms")) this.dmObserver.observe(document.querySelector(".dms"), {childList: true});
+				
+				this.mentionObserver = new MutationObserver((changes, _) => {
+					changes.forEach(
+						(change, i) => {
+							if (change.addedNodes) {
+								change.addedNodes.forEach((node) => {
+									if (node && node.className === "badge") {
+										var data = BDfunctionsDevilBro.getKeyInformation({"node":node.parentElement,"key":"guild"});
+										if (data) {
+											this.mentionBadgeObserver.observe(node, {characterData: true, subtree: true });
+											if (this.oldmentions && this.oldmentions[data.id] == 0) this.fireEvent("mentioned");
+										}
+									}
+									if (node && node.classList && node.classList.contains("guild") && !node.classList.contains("guilds-add") && !document.querySelector(".dms").contains(node)) {
+										this.mentionBadgeObserver.observe(node, {characterData: true, subtree: true });
+									}
+								});
+							}
+							if (change.removedNodes) {
+								change.removedNodes.forEach((node) => {
+									if (node && node.className === "badge") {
+										this.oldmentions = BDfunctionsDevilBro.getKeyInformation({"node":document.querySelector(".layers"),"key":"mentionCounts"});
+									}
+								});
+							}
+						}
+					);
+				});
+				if (document.querySelector(".guilds.scroller")) this.mentionObserver.observe(document.querySelector(".guilds.scroller"), {childList: true, subtree:true});
+				
+				this.mentionBadgeObserver = new MutationObserver((changes, _) => {
+					this.fireEvent("mentioned");
+				});
+				
+				this.channelListObserver = new MutationObserver((changes, _) => {
+					changes.forEach(
+						(change, i) => {
+							if (change.addedNodes) {
+								change.addedNodes.forEach((node) => {
+									if (node.classList && node.classList.contains("iconSpacing-5GIHkT") && $(node).find(".wrapper-2xO9RX").length > 0) {
+										this.mentionBadgeObserver.observe(node, {characterData: true, subtree: true });
+										this.fireEvent("mentioned");
+										this.oldmentions = BDfunctionsDevilBro.getKeyInformation({"node":$(".flex-vertical.channels-wrap").parent()[0],"key":"mentionCounts"});
+									}
+								});
+							}
+							if (change.removedNodes) {
+								change.removedNodes.forEach((node) => {
+									if (node.classList && node.classList.contains("iconSpacing-5GIHkT") && $(node).find(".wrapper-2xO9RX").length > 0) {
+										this.oldmentions = BDfunctionsDevilBro.getKeyInformation({"node":$(".flex-vertical.channels-wrap").parent()[0],"key":"mentionCounts"});
+									}
+								});
+							}
+						}
+					);
+				});
+				if (document.querySelector(".channels-3g2vYe")) this.channelListObserver.observe(document.querySelector(".channels-3g2vYe"), {childList: true, subtree: true});
+				
+				BDfunctionsDevilBro.readServerList().forEach((serverObj) => {
+					var badge = serverObj.div.querySelector(".badge");
+					if (badge) {
+						this.mentionBadgeObserver.observe(badge, {characterData: true, subtree: true});
+					}
+				});
+				
+				BDfunctionsDevilBro.readDmList().forEach((dmObj) => {
+					var badge = dmObj.div.querySelector(".badge");
+					if (badge) {
+						this.dmBadgeObserver.observe(badge, {characterData: true, subtree: true});
+					}
+				});
 				
 				BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 			}
@@ -150,9 +259,13 @@ class NotificationSounds {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.unloadMessage(this);
 			
-			if (this.patchCancel) {
-				this.patchCancel();
-			}
+			this.dmObserver.disconnect();
+			this.dmBadgeObserver.disconnect();
+			this.mentionObserver.disconnect();
+			this.mentionBadgeObserver.disconnect();
+			this.channelListObserver.disconnect();
+			
+			if (typeof this.patchCancel === "function") this.patchCancel();
 			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName());
 		}
@@ -171,6 +284,15 @@ class NotificationSounds {
 				wrap.setAttribute("value", "---");
 				wrap.querySelector(".title-3I2bY1").innerText = "---";
 			});
+			settingspanel.querySelectorAll(".grabber-1TZCZi").forEach((grabber) => {
+				grabber.style.left = "100%";
+			});
+			settingspanel.querySelectorAll(".barFill-18ABna").forEach((bar) => {
+				bar.style.width = "100%";
+			});
+			settingspanel.querySelectorAll(".volumeInput").forEach((input) => {
+				input.value = 100;
+			});
 		}
 	}
 	
@@ -186,9 +308,6 @@ class NotificationSounds {
 		var option = selectWrap.getAttribute("option");
 		var categorySelect = settingspanel.querySelector(`.Select[type="${type}"][option="category"]`);
 		var songSelect = settingspanel.querySelector(`.Select[type="${type}"][option="song"]`);
-		var audioPreview = settingspanel.querySelector(".sound-preview");
-		
-		if (!categorySelect || !songSelect || !audioPreview) return;
 		
 		var category = categorySelect.getAttribute("value");
 		var song = songSelect.getAttribute("value");
@@ -206,14 +325,10 @@ class NotificationSounds {
 				choice.song = Object.keys(this.audios[selection])[0];
 				songSelect.outerHTML = `<div type="${type}" option="song" value="${choice.song}" class="Select Select--single has-value"><div class="Select-control"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-value" style="flex: 1 1 auto;"><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm">${choice.song}</div></div><span class="Select-arrow-zone"><span class="Select-arrow"></span></span></div></div>`;
 			}
-			this.saveChoice(type, choice);
-			var url = this.audios[choice.category][choice.song];
-			url = url ? url : "/assets/" + this.types[type].src;
-			if (url) {
-				audioPreview.pause();
-				audioPreview.src = url;
-				audioPreview.play();
-			}
+			choice.src = this.audios[choice.category][choice.song];
+			choice.src = choice.src ? choice.src : this.types[type].src;
+			choice.volume = settingspanel.querySelector(`.${type}-volume`).value;
+			this.saveChoice(type, choice, settingspanel.querySelector(".sound-preview"));
 		});
 		$(document).on("mousedown.select" + this.getName(), () => {
 			$(document).off("mousedown.select" + this.getName());
@@ -234,6 +349,36 @@ class NotificationSounds {
 		return $(menuhtml)[0];
 	}
 	
+	dragSlider (settingspanel, e) {
+		var grabber = e.target;
+		var track = grabber.parentNode;
+		var slider = track.parentNode;
+		var input = slider.querySelector(".volumeInput");
+		var bar = slider.querySelector(".barFill-18ABna");
+		
+		var volume = 0;
+		var sY = 0;
+		var sHalfW = grabber.offsetWidth/2;
+		var sMinX = $(track).offset().left;
+		var sMaxX = sMinX + track.offsetWidth;
+		$(document)
+			.off("mouseup.slider" + this.getName()).off("mousemove.slider" + this.getName())
+			.on("mouseup.slider" + this.getName(), () => {
+				$(document).off("mouseup.slider" + this.getName()).off("mousemove.slider" + this.getName());
+				var type = slider.getAttribute("type");
+				var choice = this.choices[type];
+				choice.volume = volume;
+				this.saveChoice(type, choice, settingspanel.querySelector(".sound-preview"));
+			})
+			.on("mousemove.slider" + this.getName(), (e2) => {
+				sY = e2.clientX > sMaxX ? sMaxX - sHalfW : (e2.clientX < sMinX ? sMinX - sHalfW : e2.clientX - sHalfW);
+				volume = BDfunctionsDevilBro.mapRange([sMinX - sHalfW, sMaxX - sHalfW], [0, 100], sY);
+				grabber.style.left = volume + "%";
+				bar.style.width = volume + "%";
+				input.value = volume;
+			});
+	}
+	
 	toggleUnimplemented (settingspanel, e) {
 		var checked = $(e.target).prop("checked");
 		$(e.target.parentElement)
@@ -251,7 +396,8 @@ class NotificationSounds {
 	
 	saveAudio (settingspanel) {
 		var valid = true;
-		settingspanel.querySelectorAll(".songInput").forEach((input) => {
+		var inputs = settingspanel.querySelectorAll(".songInput");
+		inputs.forEach((input) => {
 			if (!input.value || input.value.length == 0 || input.value.trim().length == 0) valid = false;
 		});
 		if (valid) {
@@ -267,6 +413,9 @@ class NotificationSounds {
 						if (!this.audios[category]) this.audios[category] = {};
 						this.audios[category][song] = url;
 						BDfunctionsDevilBro.saveAllData(this.audios, this.getName(), "audios");
+						inputs.forEach((input) => {
+							input.value = "";
+						});
 						return;
 					}
 				}
@@ -288,20 +437,30 @@ class NotificationSounds {
 				if (choice.category == category) {
 					for (var song in this.audios[category]) {
 						if (choice.song == song) {
-							choice = {"category":category,"song":song};
 							songFound = true;
 							break;
 						}
 					}
 				}
 			}
-			if (!songFound) choice = {"category":"---","song":"---"};
-			this.saveChoice(type, choice);
+			if (!songFound) choice = {"category":"---","song":"---","volume":100,"src":this.types[type].src};
+			this.saveChoice(type, choice, null);
 		}
 	}
 	
-	saveChoice (type, choice) {
+	saveChoice (type, choice, audio) {
 		BDfunctionsDevilBro.saveData(type, choice, this.getName(), "choices");
-		this.choices["./" + type + ".mp3"] = {sound: this.audios[choice.category][choice.song]};
+		this.choices[type] = choice;
+		if (audio) {
+			audio.pause();
+			audio.volume = choice.volume/100;
+			audio.src = choice.src;
+			audio.play();
+		}
+	}
+	
+	fireEvent (type) {
+		this.firedEvents[type] = true;
+		setTimeout(() => {this.firedEvents[type] = false;},100);
 	}
 }
