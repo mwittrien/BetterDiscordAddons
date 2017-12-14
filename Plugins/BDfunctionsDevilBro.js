@@ -636,7 +636,6 @@ BDfunctionsDevilBro.WebModules.findFunction = function (filter) {
 
 BDfunctionsDevilBro.WebModules.patchFunction = function (newOutput, index) {
 	const req = webpackJsonp([], {"__extra_id__": (module, exports, req) => exports.default = req}, ["__extra_id__"]).default;
-	console.log(index);
 	try {
 		var output = {};
 		var oldFunction = req.m[index];
@@ -647,7 +646,7 @@ BDfunctionsDevilBro.WebModules.patchFunction = function (newOutput, index) {
 			loaded: true,
 			exports: (...params) => {return newOutput(...params) || oldOutput(...params);}
 		};
-		const cancel = function () {
+		return function () {
 			req.m[index] = oldFunction;
 			req.c[index] = {
 				id: index,
@@ -655,7 +654,6 @@ BDfunctionsDevilBro.WebModules.patchFunction = function (newOutput, index) {
 				exports: oldOutput
 			};
 		};
-		return cancel;
 	}
 	catch (err) {
 		console.warn("BDfunctionsDevilBro: Could not patch Function. Error: " + err);
