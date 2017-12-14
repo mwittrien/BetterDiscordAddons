@@ -1438,8 +1438,8 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 			
 			$(pcursor).offset({"left":pX,"top":pY});
 			
-			saturation = mapRange([pMinX - pHalfW, pMaxX - pHalfW], [0, 100], pX);
-			lightness = mapRange([pMinY - pHalfH, pMaxY - pHalfH], [100, 0], pY);
+			saturation = BDfunctionsDevilBro.mapRange([pMinX - pHalfW, pMaxX - pHalfW], [0, 100], pX);
+			lightness = BDfunctionsDevilBro.mapRange([pMinY - pHalfH, pMaxY - pHalfH], [100, 0], pY);
 			updateAllValues();
 			
 			$(document)
@@ -1453,8 +1453,8 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 					pY = event2.clientY > pMaxY ? pMaxY - pHalfH : (event2.clientY < pMinY ? pMinY - pHalfH : event2.clientY - pHalfH);
 					$(pcursor).offset({"left":pX,"top":pY});
 					
-					saturation = mapRange([pMinX - pHalfW, pMaxX - pHalfW], [0, 100], pX);
-					lightness = mapRange([pMinY - pHalfH, pMaxY - pHalfH], [100, 0], pY);
+					saturation = BDfunctionsDevilBro.mapRange([pMinX - pHalfW, pMaxX - pHalfW], [0, 100], pX);
+					lightness = BDfunctionsDevilBro.mapRange([pMinY - pHalfH, pMaxY - pHalfH], [100, 0], pY);
 					updateAllValues();
 				});
 		});
@@ -1473,7 +1473,7 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 			
 			$(scursor).offset({"top":sY});
 			
-			hue = mapRange([sMinY - sHalfH, sMaxY - sHalfH], [360, 0], sY);
+			hue = BDfunctionsDevilBro.mapRange([sMinY - sHalfH, sMaxY - sHalfH], [360, 0], sY);
 			updateAllValues();
 			
 			$(document)
@@ -1486,7 +1486,7 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 					sY = event2.clientY > sMaxY ? sMaxY - sHalfH : (event2.clientY < sMinY ? sMinY - sHalfH : event2.clientY - sHalfH);
 					$(scursor).offset({"top":sY});
 					
-					hue = mapRange([sMinY - sHalfH, sMaxY - sHalfH], [360, 0], sY);
+					hue = BDfunctionsDevilBro.mapRange([sMinY - sHalfH, sMaxY - sHalfH], [360, 0], sY);
 					updateAllValues();
 				});
 		});
@@ -1509,10 +1509,6 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 			updateAllValues();
 			updateCursors();
 		});
-		
-	function mapRange (from, to, number) {
-		return to[0] + (number - from[0]) * (to[1] - to[0]) / (from[1] - from[0]);
-	}
 	
 	function switchPreviews (button) {
 		colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").style.borderColor = "transparent";
@@ -1567,7 +1563,7 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 	function updateCursors () {
 		sHalfH = scursor.offsetHeight/2;
 		sMinY = $(spane).offset().top;
-		sY = mapRange([360, 0], [sMinY - sHalfH, sMaxY - sHalfH], hue);
+		sY = BDfunctionsDevilBro.mapRange([360, 0], [sMinY - sHalfH, sMaxY - sHalfH], hue);
 		
 		pHalfW = pcursor.offsetWidth/2;
 		pHalfH = pcursor.offsetHeight/2;
@@ -1575,8 +1571,8 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 		pMaxX = pMinX + ppane.offsetWidth;
 		pMinY = $(ppane).offset().top;
 		pMaxY = pMinY + ppane.offsetHeight;
-		pX = mapRange([0, 100], [pMinX - pHalfW, pMaxX - pHalfW], saturation);
-		pY = mapRange([100, 0], [pMinY - pHalfH, pMaxY - pHalfH], lightness);
+		pX = BDfunctionsDevilBro.mapRange([0, 100], [pMinX - pHalfW, pMaxX - pHalfW], saturation);
+		pY = BDfunctionsDevilBro.mapRange([100, 0], [pMinY - pHalfH, pMaxY - pHalfH], lightness);
 		
 		$(scursor).offset({"top":sY});
 		$(pcursor).offset({"left":pX,"top":pY});
@@ -1605,6 +1601,10 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 		colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").style.background = BDfunctionsDevilBro.color2RGB([red, green, blue]);
 		colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").style.borderColor = BDfunctionsDevilBro.colorINV([red, green, blue], "rgb");
 	}
+};
+
+BDfunctionsDevilBro.mapRange = function (from, to, number) {
+	return to[0] + (number - from[0]) * (to[1] - to[0]) / (from[1] - from[0]);
 };
 
 BDfunctionsDevilBro.getSwatchColor = function (swatch) {
