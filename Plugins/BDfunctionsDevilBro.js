@@ -627,7 +627,7 @@ BDfunctionsDevilBro.WebModules.findFunction = function (filter) {
 	for (let i in req.m) { 
 		if (req.m.hasOwnProperty(i)) {
 			let m = req.m[i];
-			if (m && m.__esModule && m.default && filter(m.default)) return {func:m.default,id:i,array:req.c};
+			if (m && m.__esModule && m.default && filter(m.default)) return {func:m.default,id:i};
 			if (m && filter(m)) return {func:m,id:i,array:req.m};
 		}
 	}
