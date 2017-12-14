@@ -541,19 +541,6 @@ BDfunctionsDevilBro.WebModules.find = function (filter) {
 	}
 };
 
-BDfunctionsDevilBro.WebModules.findFunction = function (filter) {
-	const req = webpackJsonp([], {"__extra_id__": (module, exports, req) => exports.default = req}, ["__extra_id__"]).default;
-	delete req.c["__extra_id__"];
-	for (let i in req.m) { 
-		if (req.m.hasOwnProperty(i)) {
-			let m = req.m[i];
-			if (m && m.__esModule && m.default && filter(m.default)) return {func:m.default,id:i,array:req.c};
-			if (m && filter(m)) return {func:m,id:i,array:req.m};
-		}
-	}
-	return null;
-};
-
 BDfunctionsDevilBro.WebModules.findByProperties = function (properties) {
 	return BDfunctionsDevilBro.WebModules.find((module) => properties.every(prop => module[prop] !== undefined));
 };
@@ -634,17 +621,31 @@ BDfunctionsDevilBro.WebModules.monkeyPatch = function (internalModule, moduleFun
 	return cancel;
 };
 
+BDfunctionsDevilBro.WebModules.findFunction = function (filter) {
+	const req = webpackJsonp([], {"__extra_id__": (module, exports, req) => exports.default = req}, ["__extra_id__"]).default;
+	delete req.c["__extra_id__"];
+	for (let i in req.m) { 
+		if (req.m.hasOwnProperty(i)) {
+			let m = req.m[i];
+			if (m && m.__esModule && m.default && filter(m.default)) return {func:m.default,id:i,array:req.c};
+			if (m && filter(m)) return {func:m,id:i,array:req.m};
+		}
+	}
+	return null;
+};
+
 BDfunctionsDevilBro.WebModules.patchFunction = function (newOutput, index) {
 	const req = webpackJsonp([], {"__extra_id__": (module, exports, req) => exports.default = req}, ["__extra_id__"]).default;
+	console.log(index);
 	try {
-		var oldFunction = req.m[index];
 		var output = {};
-		req.m[index](output,{},req);
+		var oldFunction = req.m[index];
+		oldFunction(output,{},req);
 		var oldOutput = output.exports;
 		req.c[index] = {
 			id: index,
 			loaded: true,
-			exports: (...params) => {try{newOutput(...params);}catch(err){oldOutput(...params);};}
+			exports: (...params) => {return newOutput(...params) || oldOutput(...params);}
 		};
 		const cancel = function () {
 			req.m[index] = oldFunction;
