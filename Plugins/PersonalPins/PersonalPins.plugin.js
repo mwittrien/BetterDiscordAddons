@@ -90,7 +90,7 @@ class PersonalPins {
 								<span class="timestamp time"></span>
 							</h2>
 							<div class="message-text">
-								<div class="markup"></div>
+								<div class="markup" style="width: 380px;"></div>
 							</div>
 						</div>
 						<div class="accessory"></div>
