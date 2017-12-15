@@ -787,12 +787,7 @@ BDfunctionsDevilBro.triggerOnSwitch = function (plugin) {
 
 BDfunctionsDevilBro.getMyUserData = function () {
 	var UserActions = BDfunctionsDevilBro.WebModules.findByProperties(["getCurrentUser"]);
-	return UserActions ? UserActions.getCurrentUser() : null;
-};
-
-BDfunctionsDevilBro.getMyUserID = function () {
-	var info = BDfunctionsDevilBro.getMyUserData();
-	return (info && info.id ? info.id : null);
+	return UserActions ? UserActions.getCurrentUser() : {};
 };
 
 BDfunctionsDevilBro.getMyUserStatus = function () {
