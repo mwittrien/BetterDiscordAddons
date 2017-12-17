@@ -12,7 +12,7 @@ class ReverseImageSearch {
 			{"name":"Google", 	"url":"https://images.google.com/searchbyimage?image_url=" + this.imageUrlReplaceString},
 			{"name":"IQDB",		"url":"https://iqdb.org/?url=" + this.imageUrlReplaceString},
 			{"name":"Reddit", 	"url":"http://karmadecay.com/search?q=" + this.imageUrlReplaceString},
-			{"name":"SauceNAO", "url":"https://saucenao.com/search.php?db=999&url=" + this.imageUrlReplaceString},
+			{"name":"SauceNAO",	"url":"https://saucenao.com/search.php?db=999&url=" + this.imageUrlReplaceString},
 			{"name":"Sogou", 	"url":"http://pic.sogou.com/ris?flag=1&drag=0&query=" + this.imageUrlReplaceString + "&flag=1"},
 			{"name":"TinEye", 	"url":"https://tineye.com/search?url=" + this.imageUrlReplaceString},
 			{"name":"Yandex", 	"url":"https://yandex.com/images/search?url=" + this.imageUrlReplaceString + "&rpt=imageview"}
