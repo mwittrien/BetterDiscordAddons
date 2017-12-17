@@ -44,7 +44,7 @@ class ReverseImageSearch {
 
 	getDescription () {return "Adds a reverse image search option to the context menu.";}
 
-	getVersion () {return "3.2.7";}
+	getVersion () {return "3.2.8";}
 	
 	getAuthor () {return "DevilBro";}
 
@@ -69,11 +69,11 @@ class ReverseImageSearch {
 	load () {}
 
 	start () {
-		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
+		/* if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
 			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
 			$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
 			$('head').append('<script src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"></script>');
-		}
+		} */
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
@@ -167,8 +167,8 @@ class ReverseImageSearch {
 		var targetDiv = e.currentTarget;
 		var imageurl = e.data.url;
 		var messageContextSubMenu = $(this.messageContextSubMenuMarkup);
-		$(targetDiv).append(messageContextSubMenu)
-			.off("click", ".RIS-item")
+		
+		messageContextSubMenu
 			.on("click", ".RIS-item", (e2) => {
 				$(".context-menu").hide();
 				var choice = e2.currentTarget;
@@ -183,18 +183,16 @@ class ReverseImageSearch {
 				}
 				
 			});
-		$(messageContextSubMenu)
-			.addClass(BDfunctionsDevilBro.getDiscordTheme())
-			.css("left", $(targetDiv).offset().left + "px")
-			.css("top", $(targetDiv).offset().top + "px");
 		
 		var settings = this.getSettings();
 		for (var key in settings) {
 			if (!settings[key]) {
-				$(targetDiv).find("." + key.replace(new RegExp(" ", 'g'), "")).remove();
+				messageContextSubMenu.find("." + key.replace(new RegExp(" ", 'g'), "")).remove();
 			}
 		}
-		if ($(".reverseImageSearchSubMenu .RIS-item").length > 0) {$(targetDiv).find(".alldisabled-item").remove();};
+		if (messageContextSubMenu.find(".RIS-item").length > 0) {messageContextSubMenu.find(".alldisabled-item").remove();};
+		
+		BDfunctionsDevilBro.appendSubMenu(targetDiv, messageContextSubMenu);
 	}
 	
 	deleteContextSubMenu (e) {
