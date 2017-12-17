@@ -207,11 +207,11 @@ class PluginRepo {
 
 	getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
 
-	getVersion () {return "1.1.6";}
+	getVersion () {return "1.1.7";}
 
 	getAuthor () {return "DevilBro";}
 	
-    getSettingsPanel () {
+	getSettingsPanel () {
 		if (typeof BDfunctionsDevilBro === "object") {
 		}
 	}
@@ -243,7 +243,7 @@ class PluginRepo {
 			});
 			this.settingsWindowObserver.observe(document.querySelector(".layers"), {childList:true});
 			
-			this.innerSettingsWindowObserver =  new MutationObserver((changes2, _) => {
+			this.innerSettingsWindowObserver = new MutationObserver((changes2, _) => {
 				changes2.forEach(
 					(change2, j) => {
 						if (change2.addedNodes) {
@@ -414,7 +414,7 @@ class PluginRepo {
 			modal.entries.push({
 				div: div,
 				url: plugin.url,
-				search: (plugin.getName + " " + plugin.getVersion + " " + plugin.getAuthor + " " + plugin.getDescription ? plugin.getDescription : "No Description found.").toUpperCase(),
+				search: (plugin.getName + " " + plugin.getVersion + " " + plugin.getAuthor + " " + plugin.getDescription).toUpperCase(),
 				name: plugin.getName,
 				version: plugin.getVersion,
 				author: plugin.getAuthor,
@@ -459,7 +459,10 @@ class PluginRepo {
 						let end = start + searchstring.length;
 						var openIndexes = [0].concat(BDfunctionsDevilBro.getAllIndexes(value.substring(0, start), "<"));
 						var closedIndexes = [0].concat(BDfunctionsDevilBro.getAllIndexes(value.substring(0, start), ">"));
-						if (openIndexes[openIndexes.length-1] > closedIndexes[closedIndexes.length-1]) return;
+						console.log(value.substring(0, start));
+						console.log(openIndexes);
+						console.log(closedIndexes);
+						if (openIndexes[openIndexes.length-1] >= closedIndexes[closedIndexes.length-1]) return;
 						value = value.substring(0, start) + wrapperopen + value.substring(start, end) + wrapperclose + value.substring(end);
 						added++;
 					});
