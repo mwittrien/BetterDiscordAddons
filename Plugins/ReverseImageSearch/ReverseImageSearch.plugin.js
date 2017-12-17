@@ -273,7 +273,7 @@ class ReverseImageSearch {
 				return {
 					submenu_disabled_text:				"모두 비활성화 됨"
 				};
-			default: 	//default: english
+			default:		//default: english
 				return {
 					submenu_disabled_text:				"All disabled"
 				};
