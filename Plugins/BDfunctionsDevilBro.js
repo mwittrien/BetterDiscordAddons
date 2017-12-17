@@ -1218,8 +1218,8 @@ BDfunctionsDevilBro.appendModal = function (modal) {
 		});
 };
 
-BDfunctionsDevilBro.appendSubMenu (target, menu) {
-	$(target).append(menu)
+BDfunctionsDevilBro.appendSubMenu = function (target, menu) {
+	$(target).append(menu);
 	var offsets = $(target).offset();
 	$(menu)
 		.addClass(BDfunctionsDevilBro.getDiscordTheme())
