@@ -1218,6 +1218,15 @@ BDfunctionsDevilBro.appendModal = function (modal) {
 		});
 };
 
+BDfunctionsDevilBro.appendSubMenu (target, menu) {
+	$(target).append(menu)
+	var offsets = $(target).offset();
+	$(menu)
+		.addClass(BDfunctionsDevilBro.getDiscordTheme())
+		.css("left", offsets.left + "px")
+		.css("top", offsets.top > window.outerHeight/2 ? (offsets.top - $(menu).outerHeight() + $(target).outerHeight()) + "px" : offsets.top + "px");
+};
+
 BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
 	var wrapperDiv = $(wrapper);
 		
