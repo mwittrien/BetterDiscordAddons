@@ -155,17 +155,15 @@ class ReverseImageSearch {
 					}
 				}
 					
-				var data = {"url": url};
 				$(context).append(this.messageContextEntryMarkup)
-					.on("mouseenter", ".reverseimagesearch-item", data, this.createContextSubMenu.bind(this))
-					.on("mouseleave", ".reverseimagesearch-item", data, this.deleteContextSubMenu.bind(this));
+					.on("mouseenter", ".reverseimagesearch-item", (e) => {
+						this.createContextSubMenu(url, e);
+					});
 			}
 		}
 	}
 	
-	createContextSubMenu (e) {
-		var targetDiv = e.currentTarget;
-		var imageurl = e.data.url;
+	createContextSubMenu (imageurl, e) {
 		var messageContextSubMenu = $(this.messageContextSubMenuMarkup);
 		
 		messageContextSubMenu
@@ -176,7 +174,7 @@ class ReverseImageSearch {
 					var engine = this.searchEngines[i].name;
 					if (choice.classList.contains(engine.replace(new RegExp(" ", 'g'), ""))) {
 						var searchurl = this.searchEngines[i].url;
-						searchurl = searchurl.replace(this.imageUrlReplaceString,imageurl);
+						searchurl = searchurl.replace(this.imageUrlReplaceString, imageurl);
 						window.open(searchurl, "_blank");
 						break;
 					}
@@ -190,90 +188,88 @@ class ReverseImageSearch {
 				messageContextSubMenu.find("." + key.replace(new RegExp(" ", 'g'), "")).remove();
 			}
 		}
-		if (messageContextSubMenu.find(".RIS-item").length > 0) {messageContextSubMenu.find(".alldisabled-item").remove();};
+		if (messageContextSubMenu.find(".RIS-item").length > 0) {
+			messageContextSubMenu.find(".alldisabled-item").remove();
+		}
 		
-		BDfunctionsDevilBro.appendSubMenu(targetDiv, messageContextSubMenu);
-	}
-	
-	deleteContextSubMenu (e) {
-		$(".reverseImageSearchSubMenu").remove();
+		BDfunctionsDevilBro.appendSubMenu(e.currentTarget, messageContextSubMenu);
 	}
 	
 	setLabelsByLanguage () {
 		switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
-			case "da": 	//danish
+			case "da":		//danish
 				return {
 					submenu_disabled_text:				"Alle deaktiveret"
 				};
-			case "de": 	//german
+			case "de":		//german
 				return {
 					submenu_disabled_text:				"Alle deaktiviert"
 				};
-			case "es": 	//spanish
+			case "es":		//spanish
 				return {
 					submenu_disabled_text:				"Todo desactivado"
 				};
-			case "fr": 	//french
+			case "fr":		//french
 				return {
 					submenu_disabled_text:				"Tous désactivés"
 				};
-			case "it": 	//italian
+			case "it":		//italian
 				return {
 					submenu_disabled_text:				"Tutto disattivato"
 				};
-			case "nl": 	//dutch
+			case "nl":		//dutch
 				return {
 					submenu_disabled_text:				"Alles gedeactiveerd"
 				};
-			case "no": 	//norwegian
+			case "no":		//norwegian
 				return {
 					submenu_disabled_text:				"Alle deaktivert"
 				};
-			case "pl": 	//polish
+			case "pl":		//polish
 				return {
 					submenu_disabled_text:				"Wszystkie wyłączone"
 				};
-			case "pt": 	//portuguese (brazil)
+			case "pt":		//portuguese (brazil)
 				return {
 					submenu_disabled_text:				"Todos desativados"
 				};
-			case "fi": 	//finnish
+			case "fi":		//finnish
 				return {
 					submenu_disabled_text:				"Kaikki on poistettu käytöstä"
 				};
-			case "sv": 	//swedish
+			case "sv":		//swedish
 				return {
 					submenu_disabled_text:				"Alla avaktiverade"
 				};
-			case "tr": 	//turkish
+			case "tr":		//turkish
 				return {
 					submenu_disabled_text:				"Hepsi deaktive"
 				};
-			case "cs": 	//czech
+			case "cs":		//czech
 				return {
 					submenu_disabled_text:				"Všechny deaktivované"
 				};
-			case "bg": 	//bulgarian
+			case "bg":		//bulgarian
 				return {
 					submenu_disabled_text:				"Всички са деактивирани"
 				};
-			case "ru": 	//russian
+			case "ru":		//russian
 				return {
 					submenu_disabled_text:				"Все деактивированные"
 				};
-			case "uk": 	//ukrainian
+			case "uk":		//ukrainian
 				return {
 					submenu_disabled_text:				"Всі вимкнені"
 				};
-			case "ja": 	//japanese
+			case "ja":		//japanese
 				return {
 					submenu_disabled_text:				"すべて非アクティブ化"
 				};
-			case "zh": 	//chinese (traditional)
+			case "zh":		//chinese (traditional)
 				return {
 					submenu_disabled_text:				"全部停用"
 				};
-			case "ko": 	//korean
+			case "ko":		//korean
 				return {
 					submenu_disabled_text:				"모두 비활성화 됨"
 				};
