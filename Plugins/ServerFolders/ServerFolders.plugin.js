@@ -244,7 +244,7 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.3.8";}
+	getVersion () {return "5.3.9";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -471,38 +471,30 @@ class ServerFolders {
 			$(context).append(this.serverContextEntryMarkup)
 				.on("mouseenter", ".serverfolders-item", (e) => {
 					this.createContextSubMenu(info, e);
-				})
-				.on("mouseleave", ".serverfolders-item", () => {
-					this.deleteContextSubMenu();
 				});
 		}
 	}
 	
 	createContextSubMenu (info, e) {
-		var targetDiv = e.currentTarget;
 		var serverDiv = BDfunctionsDevilBro.getDivOfServer(info.id).div;
+		
 		var serverContextSubMenu = $(this.serverContextSubMenuMarkup);
-		$(targetDiv).append(serverContextSubMenu);
-		$(serverContextSubMenu)
-			.addClass(BDfunctionsDevilBro.getDiscordTheme())
-			.css("left", $(targetDiv).offset().left + "px")
-			.css("top", $(targetDiv).offset().top + "px")
+		
+		serverContextSubMenu
 			.on("click", ".createfolder-item", () => {
 				this.createNewFolder(serverDiv);
 			});
 			
 		var folderDiv = this.getFolderOfServer(serverDiv);
 		if (folderDiv) {
-			$(serverContextSubMenu).find(".removefromfolder-item")
+			serverContextSubMenu.find(".removefromfolder-item")
 				.removeClass("disabled")
 				.on("click", () => {
 					this.removeServerFromFolder({div:serverDiv,info}, folderDiv);
 				});
 		}
-	}
-	
-	deleteContextSubMenu (e) {
-		$(".serverfolders-submenu").remove();
+		
+		BDfunctionsDevilBro.appendSubMenu(e.currentTarget, serverContextSubMenu);
 	}
 	
 	addDragListener () {
@@ -1149,9 +1141,9 @@ class ServerFolders {
 	
 	getGuildParentDiv (div, type) {
 		if (!div) return null;
-		if (document.querySelector(".dms").contains(div)) return null;
+		if (document.querySelector(".dms") && document.querySelector(".dms").contains(div)) return null;
 		if (div.tagName && div.querySelector(".guilds-error")) return null;
-		if (div.classList && div.classList.length > 0 && div.classList.contains(".guilds")) return null;
+		if (div.classList && div.classList.length > 0 && (div.classList.contains("guilds") || div.classList.contains("serverFoldersPreview"))) return null;
 		if (div.classList && div.classList.length > 0 && div.classList.contains("guild") && div.classList.contains(type) && div.querySelector(".avatar-small")) {
 			if (type == "guild") {
 				var info = BDfunctionsDevilBro.getKeyInformation({"node":div, "key":"guild"});
@@ -1227,7 +1219,7 @@ class ServerFolders {
 	
 	setLabelsByLanguage () {
 		switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
-			case "da": 		//danish
+			case "da":		//danish
 				return {
 					toast_addserver_text:					"${servername} er blevet tilføjet til mappe${foldername}.",
 					toast_removeserver_text:				"${servername} er blevet fjernet fra mappen${foldername}.",
@@ -1250,7 +1242,7 @@ class ServerFolders {
 					btn_cancel_text:						"Afbryde",
 					btn_save_text:							"Spare"
 				};
-			case "de": 		//german
+			case "de":		//german
 				return {
 					toast_addserver_text:					"${servername} wurde dem Ordner${foldername} hinzugefügt.",
 					toast_removeserver_text:				"${servername} wurde aus dem Ordner${foldername} entfernt.",
@@ -1273,7 +1265,7 @@ class ServerFolders {
 					btn_cancel_text:						"Abbrechen",
 					btn_save_text:							"Speichern"
 				};
-			case "es": 		//spanish
+			case "es":		//spanish
 				return {
 					toast_addserver_text:					"${servername} ha sido agregado a la carpeta${foldername}.",
 					toast_removeserver_text:				"${servername} ha sido eliminado de la carpeta${foldername}.",
@@ -1296,7 +1288,7 @@ class ServerFolders {
 					btn_cancel_text:						"Cancelar",
 					btn_save_text:							"Guardar"
 				};
-			case "fr": 		//french
+			case "fr":		//french
 				return {
 					toast_addserver_text:					"${servername} a été ajouté au dossier${foldername}.",
 					toast_removeserver_text:				"${servername} a été supprimé du dossier${foldername}.",
@@ -1319,7 +1311,7 @@ class ServerFolders {
 					btn_cancel_text:						"Abandonner",
 					btn_save_text:							"Enregistrer"
 				};
-			case "it": 		//italian
+			case "it":		//italian
 				return {
 					toast_addserver_text:					"${servername} è stato aggiunto alla cartella${foldername}.",
 					toast_removeserver_text:				"${servername} è stato rimosso dalla cartella${foldername}.",
