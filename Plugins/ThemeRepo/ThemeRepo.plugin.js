@@ -264,11 +264,11 @@ class ThemeRepo {
 
 	getDescription () {return "Allows you to preview all themes from the theme repo and download them on the fly. Repo button is in the theme settings.";}
 
-	getVersion () {return "1.1.6";}
+	getVersion () {return "1.1.7";}
 
 	getAuthor () {return "DevilBro";}
 	
-    getSettingsPanel () {
+	getSettingsPanel () {
 		if (typeof BDfunctionsDevilBro === "object") {
 		}
 	}
@@ -575,7 +575,7 @@ class ThemeRepo {
 						let end = start + searchstring.length;
 						var openIndexes = [0].concat(BDfunctionsDevilBro.getAllIndexes(value.substring(0, start), "<"));
 						var closedIndexes = [0].concat(BDfunctionsDevilBro.getAllIndexes(value.substring(0, start), ">"));
-						if (openIndexes[openIndexes.length-1] > closedIndexes[closedIndexes.length-1]) return;
+						if (openIndexes[openIndexes.length-1] >= closedIndexes[closedIndexes.length-1]) return;
 						value = value.substring(0, start) + wrapperopen + value.substring(start, end) + wrapperclose + value.substring(end);
 						added++;
 					});
