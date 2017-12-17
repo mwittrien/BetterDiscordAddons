@@ -1221,10 +1221,11 @@ BDfunctionsDevilBro.appendModal = function (modal) {
 BDfunctionsDevilBro.appendSubMenu = function (target, menu) {
 	$(target).append(menu);
 	var offsets = $(target).offset();
+	var menuHeight = $(menu).outerHeight();
 	$(menu)
 		.addClass(BDfunctionsDevilBro.getDiscordTheme())
 		.css("left", offsets.left + "px")
-		.css("top", offsets.top > window.outerHeight/2 ? (offsets.top - $(menu).outerHeight() + $(target).outerHeight()) + "px" : offsets.top + "px");
+		.css("top", offsets.top + menuHeight > window.outerHeight ? (offsets.top - menuHeight + $(target).outerHeight()) + "px" : offsets.top + "px");
 };
 
 BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
