@@ -1226,6 +1226,11 @@ BDfunctionsDevilBro.appendSubMenu = function (target, menu) {
 		.addClass(BDfunctionsDevilBro.getDiscordTheme())
 		.css("left", offsets.left + "px")
 		.css("top", offsets.top + menuHeight > window.outerHeight ? (offsets.top - menuHeight + $(target).outerHeight()) + "px" : offsets.top + "px");
+		
+	$(target).on("mouseleave.BDfunctionsDevilBroSubContextMenu", () => {
+		$(target).off("mouseleave.BDfunctionsDevilBroSubContextMenu");
+		menu.remove();
+	});
 };
 
 BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
