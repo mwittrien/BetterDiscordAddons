@@ -2201,5 +2201,23 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		font-weight: 600;
 		line-height: 16px;
 		font-size: 13px;
+	}
+	
+	.member .avatar-small[style*="278543574059057154"] ~ .member-inner .member-username-inner:after,
+	.message-group .avatar-large[style*="278543574059057154"] ~ .comment .timestamp:before,
+	.embed .embed-author-name[href*="278543574059057154"]:after {
+		background: #4271f4;
+		border-radius: 3px;
+		color: white;
+		content: "Plugin Creator";
+		font-size: 12px;
+		font-weight: 500;
+		margin: 0 0 0 5px;
+		padding: 0 3px 0 3px;
+		position: relative;
+		bottom: 1px;
+	}
+	.message-group .avatar-large[style*="278543574059057154"] ~ .comment .timestamp:before {
+		margin: 0 5px 0 0;
 	}`
 );
