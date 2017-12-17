@@ -12,6 +12,7 @@ class ReverseImageSearch {
 			{"name":"Google", 	"url":"https://images.google.com/searchbyimage?image_url=" + this.imageUrlReplaceString},
 			{"name":"IQDB",		"url":"https://iqdb.org/?url=" + this.imageUrlReplaceString},
 			{"name":"Reddit", 	"url":"http://karmadecay.com/search?q=" + this.imageUrlReplaceString},
+			{"name":"SauceNAO", "url":"https://saucenao.com/search.php?db=999&url=" + this.imageUrlReplaceString},
 			{"name":"Sogou", 	"url":"http://pic.sogou.com/ris?flag=1&drag=0&query=" + this.imageUrlReplaceString + "&flag=1"},
 			{"name":"TinEye", 	"url":"https://tineye.com/search?url=" + this.imageUrlReplaceString},
 			{"name":"Yandex", 	"url":"https://yandex.com/images/search?url=" + this.imageUrlReplaceString + "&rpt=imageview"}
@@ -43,11 +44,11 @@ class ReverseImageSearch {
 
 	getDescription () {return "Adds a reverse image search option to the context menu.";}
 
-	getVersion () {return "3.2.6";}
+	getVersion () {return "3.2.7";}
 	
 	getAuthor () {return "DevilBro";}
 
-    getSettingsPanel () {
+	getSettingsPanel () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			var settings = this.getSettings();
 			var settingshtml = `<div class="${this.getName()}-settings"><label style="color:grey;">Reverse Search Engines:</label><br>`;
@@ -62,7 +63,7 @@ class ReverseImageSearch {
 				.on("change", ".settings-checkbox", () => {this.updateSettings(settingspanel);});
 			return settingspanel;
 		}
-    }
+	}
 	
 	//legacy
 	load () {}
@@ -126,14 +127,14 @@ class ReverseImageSearch {
 		return settings;
 	}
 
-    updateSettings (settingspanel) {
+	updateSettings (settingspanel) {
 		var settings = {};
 		var inputs = settingspanel.querySelectorAll(".settings-checkbox");
 		for (var i = 0; i < inputs.length; i++) {
 			settings[inputs[i].value] = inputs[i].checked;
 		}
 		BDfunctionsDevilBro.saveAllData(settings, this.getName(), "settings");
-    }
+	}
 	
 	changeLanguageStrings () {
 		this.messageContextSubMenuMarkup = 	this.messageContextSubMenuMarkup.replace("REPLACE_submenu_disabled_text", this.labels.submenu_disabled_text);
@@ -204,83 +205,83 @@ class ReverseImageSearch {
 		switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
 			case "da": 	//danish
 				return {
-					submenu_disabled_text: 				"Alle deaktiveret"
+					submenu_disabled_text:				"Alle deaktiveret"
 				};
 			case "de": 	//german
 				return {
-					submenu_disabled_text: 				"Alle deaktiviert"
+					submenu_disabled_text:				"Alle deaktiviert"
 				};
 			case "es": 	//spanish
 				return {
-					submenu_disabled_text: 				"Todo desactivado"
+					submenu_disabled_text:				"Todo desactivado"
 				};
 			case "fr": 	//french
 				return {
-					submenu_disabled_text: 				"Tous désactivés"
+					submenu_disabled_text:				"Tous désactivés"
 				};
 			case "it": 	//italian
 				return {
-					submenu_disabled_text: 				"Tutto disattivato"
+					submenu_disabled_text:				"Tutto disattivato"
 				};
 			case "nl": 	//dutch
 				return {
-					submenu_disabled_text: 				"Alles gedeactiveerd"
+					submenu_disabled_text:				"Alles gedeactiveerd"
 				};
 			case "no": 	//norwegian
 				return {
-					submenu_disabled_text: 				"Alle deaktivert"
+					submenu_disabled_text:				"Alle deaktivert"
 				};
 			case "pl": 	//polish
 				return {
-					submenu_disabled_text: 				"Wszystkie wyłączone"
+					submenu_disabled_text:				"Wszystkie wyłączone"
 				};
 			case "pt": 	//portuguese (brazil)
 				return {
-					submenu_disabled_text: 				"Todos desativados"
+					submenu_disabled_text:				"Todos desativados"
 				};
 			case "fi": 	//finnish
 				return {
-					submenu_disabled_text: 				"Kaikki on poistettu käytöstä"
+					submenu_disabled_text:				"Kaikki on poistettu käytöstä"
 				};
 			case "sv": 	//swedish
 				return {
-					submenu_disabled_text: 				"Alla avaktiverade"
+					submenu_disabled_text:				"Alla avaktiverade"
 				};
 			case "tr": 	//turkish
 				return {
-					submenu_disabled_text: 				"Hepsi deaktive"
+					submenu_disabled_text:				"Hepsi deaktive"
 				};
 			case "cs": 	//czech
 				return {
-					submenu_disabled_text: 				"Všechny deaktivované"
+					submenu_disabled_text:				"Všechny deaktivované"
 				};
 			case "bg": 	//bulgarian
 				return {
-					submenu_disabled_text: 				"Всички са деактивирани"
+					submenu_disabled_text:				"Всички са деактивирани"
 				};
 			case "ru": 	//russian
 				return {
-					submenu_disabled_text: 				"Все деактивированные"
+					submenu_disabled_text:				"Все деактивированные"
 				};
 			case "uk": 	//ukrainian
 				return {
-					submenu_disabled_text: 				"Всі вимкнені"
+					submenu_disabled_text:				"Всі вимкнені"
 				};
 			case "ja": 	//japanese
 				return {
-					submenu_disabled_text: 				"すべて非アクティブ化"
+					submenu_disabled_text:				"すべて非アクティブ化"
 				};
 			case "zh": 	//chinese (traditional)
 				return {
-					submenu_disabled_text: 				"全部停用"
+					submenu_disabled_text:				"全部停用"
 				};
 			case "ko": 	//korean
 				return {
-					submenu_disabled_text: 				"모두 비활성화 됨"
+					submenu_disabled_text:				"모두 비활성화 됨"
 				};
 			default: 	//default: english
 				return {
-					submenu_disabled_text: 				"All disabled"
+					submenu_disabled_text:				"All disabled"
 				};
 		}
 	}
