@@ -1655,8 +1655,12 @@ BDfunctionsDevilBro.getSwatchColor = function (swatch) {
 	return !$(".ui-color-picker-" + swatch + ".nocolor.selected")[0] ? BDfunctionsDevilBro.color2COMP($(".ui-color-picker-" + swatch + ".selected").css("background-color")) : null;
 };
 
+BDfunctionsDevilBro.isPluginEnabled = function (name) {
+	return window.bdplugins[name] && window.pluginCookie[name];
+};
+
 BDfunctionsDevilBro.isRestartNoMoreEnabled = function () {
-	return (window.bdplugins["Restart-No-More"] && window.pluginCookie["Restart-No-More"] || window.bdplugins["Restart No More"] && window.pluginCookie["Restart No More"]);
+	return BDfunctionsDevilBro.isPluginEnabled("Restart-No-More") || BDfunctionsDevilBro.isPluginEnabled("Restart No More");
 };
 
 BDfunctionsDevilBro.getDiscordTheme = function () {
