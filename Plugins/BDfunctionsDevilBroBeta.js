@@ -539,7 +539,6 @@ BDfunctionsDevilBro.WebModules.find = function (filter) {
 			if (m && filter(m)) return m;
 		}
 	}
-	return null;
 };
 
 BDfunctionsDevilBro.WebModules.findByProperties = function (properties) {
@@ -552,11 +551,6 @@ BDfunctionsDevilBro.WebModules.findByName = function (name) {
 
 BDfunctionsDevilBro.WebModules.findByPrototypes = function (prototypes) {
 	return BDfunctionsDevilBro.WebModules.find((module) => module.prototype && prototypes.every(proto => module.prototype[proto] !== undefined));
-};
-
-// OLD REMOVE AFTER A WHILE
-BDfunctionsDevilBro.findInWebModulesByName = function (names) {
-	return BDfunctionsDevilBro.WebModules.find(module => names.every(prop => module[prop] !== undefined));
 };
 
 BDfunctionsDevilBro.WebModules.addListener = function (internalModule, moduleFunction, callback) {
@@ -625,6 +619,45 @@ BDfunctionsDevilBro.WebModules.monkeyPatch = function (internalModule, moduleFun
 	internalModule[moduleFunction].__monkeyPatched = true;
 	internalModule[moduleFunction].displayName = 'patched ' + (internalModule[moduleFunction].displayName || moduleFunction);
 	return cancel;
+};
+
+BDfunctionsDevilBro.WebModules.findFunction = function (filter) {
+	const req = webpackJsonp([], {"__extra_id__": (module, exports, req) => exports.default = req}, ["__extra_id__"]).default;
+	delete req.c["__extra_id__"];
+	for (let i in req.m) { 
+		if (req.m.hasOwnProperty(i)) {
+			let m = req.m[i];
+			if (m && m.__esModule && m.default && filter(m.default)) return {func:m.default,id:i};
+			if (m && filter(m)) return {func:m,id:i,array:req.m};
+		}
+	}
+	return null;
+};
+
+BDfunctionsDevilBro.WebModules.patchFunction = function (newOutput, index) {
+	const req = webpackJsonp([], {"__extra_id__": (module, exports, req) => exports.default = req}, ["__extra_id__"]).default;
+	try {
+		var output = {};
+		var oldFunction = req.m[index];
+		oldFunction(output,{},req);
+		var oldOutput = output.exports;
+		req.c[index] = {
+			id: index,
+			loaded: true,
+			exports: (...params) => {return newOutput(...params) || oldOutput(...params);}
+		};
+		return function () {
+			req.m[index] = oldFunction;
+			req.c[index] = {
+				id: index,
+				loaded: true,
+				exports: oldOutput
+			};
+		};
+	}
+	catch (err) {
+		console.warn("BDfunctionsDevilBro: Could not patch Function. Error: " + err);
+	}
 };
 
 BDfunctionsDevilBro.addOnSwitchListener = function (callback) {
@@ -754,12 +787,7 @@ BDfunctionsDevilBro.triggerOnSwitch = function (plugin) {
 
 BDfunctionsDevilBro.getMyUserData = function () {
 	var UserActions = BDfunctionsDevilBro.WebModules.findByProperties(["getCurrentUser"]);
-	return UserActions ? UserActions.getCurrentUser() : null;
-};
-
-BDfunctionsDevilBro.getMyUserID = function () {
-	var info = BDfunctionsDevilBro.getMyUserData();
-	return (info && info.id ? info.id : null);
+	return UserActions ? UserActions.getCurrentUser() : {};
 };
 
 BDfunctionsDevilBro.getMyUserStatus = function () {
@@ -770,73 +798,90 @@ BDfunctionsDevilBro.getMyUserStatus = function () {
 };
 
 BDfunctionsDevilBro.readServerList = function () {
-	var foundServers = [];
-	var servers = document.querySelectorAll(".guild-separator ~ .guild");
-	for (var i = 0; i < servers.length; i++) {
-		var info = BDfunctionsDevilBro.getKeyInformation({"node":servers[i], "key":"guild"});
-		if (info) foundServers.push({div:servers[i],info});
+	var server, info, foundServers = [], GuildStore = BDfunctionsDevilBro.WebModules.findByProperties(["getGuilds"]);
+	for (server of document.querySelectorAll(".guild-separator ~ .guild")) {
+		info = BDfunctionsDevilBro.getKeyInformation({"node":server, "key":"guild"});
+		if (info) info = GuildStore.getGuild(info.id);
+		if (info) foundServers.push(Object.assign({div:server},info));
 	}
 	return foundServers;
 };
 
 BDfunctionsDevilBro.readUnreadServerList = function (servers) {
-	if (servers === undefined || !Array.isArray(servers)) servers = BDfunctionsDevilBro.readServerList();
-	var foundServers = [];
-	for (var i = 0; i < servers.length; i++) {
-		if (servers[i] && servers[i].div && (servers[i].div.classList.contains("unread") || servers[i].div.querySelector(".badge"))) foundServers.push(servers[i]);
+	var serverObj, foundServers = [];
+	for (serverObj of (servers === undefined || !Array.isArray(servers) ? BDfunctionsDevilBro.readServerList() : servers)) {
+		if (serverObj && serverObj.div && (serverObj.div.classList.contains("unread") || serverObj.div.querySelector(".badge"))) foundServers.push(serverObj);
 	}
 	return foundServers;
 };
 
 BDfunctionsDevilBro.getSelectedServer = function () {
-	var servers = document.querySelectorAll(".guild-separator ~ .guild.selected");
-	for (var i = 0; i < servers.length; i++) {
-		var info = BDfunctionsDevilBro.getKeyInformation({"node":servers[i], "key":"guild"});
-		if (info) return {div:servers[i],info};
+	var server, info, GuildStore = BDfunctionsDevilBro.WebModules.findByProperties(["getGuilds"]);
+	for (server of document.querySelectorAll(".guild-separator ~ .guild.selected")) {
+		info = BDfunctionsDevilBro.getKeyInformation({"node":server, "key":"guild"});
+		if (info) info = GuildStore.getGuild(info.id);
+		if (info) return Object.assign({div:server},info);
 	}
 	return null;
 };
 
 BDfunctionsDevilBro.getDivOfServer = function (id) {
-	var servers = BDfunctionsDevilBro.readServerList();
-	for (var i = 0; i < servers.length; i++) {
-		if (servers[i].info.id == id) return servers[i];
+	for (var serverObj of BDfunctionsDevilBro.readServerList()) {
+		if (serverObj && serverObj.id == id) return serverObj;
 	}
 	return null;
 };
 
 BDfunctionsDevilBro.readChannelList = function () {
-	var foundChannels = [];
-	var channels = document.querySelectorAll(".containerDefault-7RImuF, .containerDefault-1bbItS");
-	for (var i = 0; i < channels.length; i++) {
-		var info = BDfunctionsDevilBro.getKeyInformation({"node":channels[i], "key":"channel"});
-		if (info) foundChannels.push({div:channels[i],info});
+	var channel, info, foundChannels = [], ChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getChannels"]);
+	for (channel of document.querySelectorAll(".containerDefault-7RImuF, .containerDefault-1bbItS")) {
+		info = BDfunctionsDevilBro.getKeyInformation({"node":channel, "key":"channel"});
+		if (info) info = ChannelStore.getChannel(info.id);
+		if (info) foundChannels.push(Object.assign({div:channel},info));
+	}
+	for (channel of document.querySelectorAll(".channel.private")) {
+		info = BDfunctionsDevilBro.getKeyInformation({"node":channel, "key":"user"}) || BDfunctionsDevilBro.getKeyInformation({"node":channel, "key":"channel"});
+		if (info) info = ChannelStore.getChannel(ChannelStore.getDMFromUserId(info.id)) || ChannelStore.getChannel(info.id)
+		if (info) foundChannels.push(Object.assign({div:channel},info));
 	}
 	return foundChannels;
 };
 
+BDfunctionsDevilBro.getSelectedChannel = function () {
+	var channel, info, ChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getChannels"]);
+	for (channel of document.querySelectorAll(".wrapperSelectedText-31jJa8")) {
+		info = BDfunctionsDevilBro.getKeyInformation({"node":channel.parentElement, "key":"channel"});
+		if (info) info = ChannelStore.getChannel(info.id);
+		if (info) return Object.assign({div:channel},info);
+	}
+	for (channel of document.querySelectorAll(".channel.private.selected")) {
+		info = BDfunctionsDevilBro.getKeyInformation({"node":channel, "key":"user"}) || BDfunctionsDevilBro.getKeyInformation({"node":channel, "key":"channel"});
+		if (info) info = ChannelStore.getChannel(ChannelStore.getDMFromUserId(info.id)) || ChannelStore.getChannel(info.id)
+		if (info) return Object.assign({div:channel},info);
+	}
+	return null;
+};
+
 BDfunctionsDevilBro.getDivOfChannel = function (id) {
-	var channels = BDfunctionsDevilBro.readChannelList();
-	for (var i = 0; i < channels.length; i++) {
-		if (channels[i].info.id == id) return channels[i];
+	for (var channelObj of BDfunctionsDevilBro.readChannelList()) {
+		if (channelObj && channelObj.id == id) return channelObj;
 	}
 	return null;
 };
 
 BDfunctionsDevilBro.readDmList = function () {
-	var foundDMs = [];
-	var dms = document.querySelectorAll(".dms .guild");
-	for (var i = 0; i < dms.length; i++) {
-		var info = BDfunctionsDevilBro.getKeyInformation({"node":dms[i], "key":"channel"});
-		if (info) foundDMs.push({div:dms[i],info});
+	var dm, info, foundDMs = [], ChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getChannels"]);
+	for (dm of document.querySelectorAll(".dms .guild")) {
+		info = BDfunctionsDevilBro.getKeyInformation({"node":dm, "key":"channel"});
+		if (info) info = ChannelStore.getChannel(info.id);
+		if (info) foundDMs.push(Object.assign({div:dm},info));
 	}
 	return foundDMs;
 };
 
 BDfunctionsDevilBro.getDivOfDM = function (id) {
-	var dms = BDfunctionsDevilBro.readDmList();
-	for (var i = 0; i < dms.length; i++) {
-		if (dms[i].info.id == id) return dms[i];
+	for (var dmObj of BDfunctionsDevilBro.readDmList()) {
+		if (dmObj && dmObj.id == id) return dmObj;
 	}
 	return null;
 };
@@ -1190,6 +1235,21 @@ BDfunctionsDevilBro.appendModal = function (modal) {
 		});
 };
 
+BDfunctionsDevilBro.appendSubMenu = function (target, menu) {
+	$(target).append(menu);
+	var offsets = $(target).offset();
+	var menuHeight = $(menu).outerHeight();
+	$(menu)
+		.addClass(BDfunctionsDevilBro.getDiscordTheme())
+		.css("left", offsets.left + "px")
+		.css("top", offsets.top + menuHeight > window.outerHeight ? (offsets.top - menuHeight + $(target).outerHeight()) + "px" : offsets.top + "px");
+		
+	$(target).on("mouseleave.BDfunctionsDevilBroSubContextMenu", () => {
+		$(target).off("mouseleave.BDfunctionsDevilBroSubContextMenu");
+		menu.remove();
+	});
+};
+
 BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
 	var wrapperDiv = $(wrapper);
 		
@@ -1405,8 +1465,8 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 			
 			$(pcursor).offset({"left":pX,"top":pY});
 			
-			saturation = mapRange([pMinX - pHalfW, pMaxX - pHalfW], [0, 100], pX);
-			lightness = mapRange([pMinY - pHalfH, pMaxY - pHalfH], [100, 0], pY);
+			saturation = BDfunctionsDevilBro.mapRange([pMinX - pHalfW, pMaxX - pHalfW], [0, 100], pX);
+			lightness = BDfunctionsDevilBro.mapRange([pMinY - pHalfH, pMaxY - pHalfH], [100, 0], pY);
 			updateAllValues();
 			
 			$(document)
@@ -1420,8 +1480,8 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 					pY = event2.clientY > pMaxY ? pMaxY - pHalfH : (event2.clientY < pMinY ? pMinY - pHalfH : event2.clientY - pHalfH);
 					$(pcursor).offset({"left":pX,"top":pY});
 					
-					saturation = mapRange([pMinX - pHalfW, pMaxX - pHalfW], [0, 100], pX);
-					lightness = mapRange([pMinY - pHalfH, pMaxY - pHalfH], [100, 0], pY);
+					saturation = BDfunctionsDevilBro.mapRange([pMinX - pHalfW, pMaxX - pHalfW], [0, 100], pX);
+					lightness = BDfunctionsDevilBro.mapRange([pMinY - pHalfH, pMaxY - pHalfH], [100, 0], pY);
 					updateAllValues();
 				});
 		});
@@ -1440,7 +1500,7 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 			
 			$(scursor).offset({"top":sY});
 			
-			hue = mapRange([sMinY - sHalfH, sMaxY - sHalfH], [360, 0], sY);
+			hue = BDfunctionsDevilBro.mapRange([sMinY - sHalfH, sMaxY - sHalfH], [360, 0], sY);
 			updateAllValues();
 			
 			$(document)
@@ -1453,7 +1513,7 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 					sY = event2.clientY > sMaxY ? sMaxY - sHalfH : (event2.clientY < sMinY ? sMinY - sHalfH : event2.clientY - sHalfH);
 					$(scursor).offset({"top":sY});
 					
-					hue = mapRange([sMinY - sHalfH, sMaxY - sHalfH], [360, 0], sY);
+					hue = BDfunctionsDevilBro.mapRange([sMinY - sHalfH, sMaxY - sHalfH], [360, 0], sY);
 					updateAllValues();
 				});
 		});
@@ -1476,10 +1536,6 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 			updateAllValues();
 			updateCursors();
 		});
-		
-	function mapRange (from, to, number) {
-		return to[0] + (number - from[0]) * (to[1] - to[0]) / (from[1] - from[0]);
-	}
 	
 	function switchPreviews (button) {
 		colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").style.borderColor = "transparent";
@@ -1534,7 +1590,7 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 	function updateCursors () {
 		sHalfH = scursor.offsetHeight/2;
 		sMinY = $(spane).offset().top;
-		sY = mapRange([360, 0], [sMinY - sHalfH, sMaxY - sHalfH], hue);
+		sY = BDfunctionsDevilBro.mapRange([360, 0], [sMinY - sHalfH, sMaxY - sHalfH], hue);
 		
 		pHalfW = pcursor.offsetWidth/2;
 		pHalfH = pcursor.offsetHeight/2;
@@ -1542,8 +1598,8 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 		pMaxX = pMinX + ppane.offsetWidth;
 		pMinY = $(ppane).offset().top;
 		pMaxY = pMinY + ppane.offsetHeight;
-		pX = mapRange([0, 100], [pMinX - pHalfW, pMaxX - pHalfW], saturation);
-		pY = mapRange([100, 0], [pMinY - pHalfH, pMaxY - pHalfH], lightness);
+		pX = BDfunctionsDevilBro.mapRange([0, 100], [pMinX - pHalfW, pMaxX - pHalfW], saturation);
+		pY = BDfunctionsDevilBro.mapRange([100, 0], [pMinY - pHalfH, pMaxY - pHalfH], lightness);
 		
 		$(scursor).offset({"top":sY});
 		$(pcursor).offset({"left":pX,"top":pY});
@@ -1572,6 +1628,10 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 		colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").style.background = BDfunctionsDevilBro.color2RGB([red, green, blue]);
 		colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").style.borderColor = BDfunctionsDevilBro.colorINV([red, green, blue], "rgb");
 	}
+};
+
+BDfunctionsDevilBro.mapRange = function (from, to, number) {
+	return to[0] + (number - from[0]) * (to[1] - to[0]) / (from[1] - from[0]);
 };
 
 BDfunctionsDevilBro.getSwatchColor = function (swatch) {
@@ -2158,5 +2218,23 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		font-weight: 600;
 		line-height: 16px;
 		font-size: 13px;
+	}
+	
+	.member .avatar-small[style*="278543574059057154"] ~ .member-inner .member-username-inner:after,
+	.message-group .avatar-large[style*="278543574059057154"] ~ .comment .timestamp:before,
+	.embed .embed-author-name[href*="278543574059057154"]:after {
+		background: #4271f4;
+		border-radius: 3px;
+		color: white;
+		content: "Plugin Creator";
+		font-size: 12px;
+		font-weight: 500;
+		margin: 0 0 0 5px;
+		padding: 0 3px 0 3px;
+		position: relative;
+		bottom: 1px;
+	}
+	.message-group .avatar-large[style*="278543574059057154"] ~ .comment .timestamp:before {
+		margin: 0 5px 0 0;
 	}`
 );
