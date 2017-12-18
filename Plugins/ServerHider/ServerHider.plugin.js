@@ -168,11 +168,11 @@ class ServerHider {
 
 	getDescription () {return "Hide Servers in your Serverlist";}
 
-	getVersion () {return "2.4.6";}
+	getVersion () {return "2.4.7";}
 
 	getAuthor () {return "DevilBro";}
 	
-    getSettingsPanel () {
+	getSettingsPanel () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			var settingspanel = 
 				$(`<div class="${this.getName()}-settings">
@@ -182,7 +182,7 @@ class ServerHider {
 				.on("click", ".reset-button", () => {this.resetAll();});
 			return settingspanel;
 		}
-    }
+	}
 
 	//legacy
 	load () {}
@@ -263,12 +263,12 @@ class ServerHider {
 	
 	// begin of own functions
 
-    resetAll () {
+	resetAll () {
 		if (confirm("Are you sure you want to reset all servers?")) {
 			BDfunctionsDevilBro.removeAllData(this.getName(), "servers");
 			BDfunctionsDevilBro.readServerList().forEach(serverObj => $(serverObj.div).show());
 		}
-    }
+	}
 
 	changeLanguageStrings () {
 		this.serverContextEntryMarkup = 	this.serverContextEntryMarkup.replace("REPLACE_context_serverhider_text", this.labels.context_serverhider_text);
@@ -299,39 +299,29 @@ class ServerHider {
 			$(context).append(this.serverContextEntryMarkup)
 				.on("mouseenter", ".serverhider-item", (e) => {
 					this.createContextSubMenu(info, e);
-				})
-				.on("mouseleave", ".serverhider-item", () => {
-					this.deleteContextSubMenu();
 				});
 		}
 	}
 	
 	createContextSubMenu (info, e) {
-		var targetDiv = e.currentTarget;
 		var serverContextSubMenu = $(this.serverContextSubMenuMarkup);
-		$(targetDiv).append(serverContextSubMenu);
 			
-		$(serverContextSubMenu)
-			.addClass(BDfunctionsDevilBro.getDiscordTheme())
-			.css("left", $(targetDiv).offset().left + "px")
-			.css("top", $(targetDiv).offset().top + "px")
+		serverContextSubMenu
 			.on("click", ".openhidemenu-item", (e2) => {
 				this.showServerModal(e2);
-			});;
+			});
 			
 		if (!info.guildCreate) {
-			$(serverContextSubMenu)
+			serverContextSubMenu
 				.on("click", ".hideserver-item", () => {
 					this.hideServer(info);
 				});
 		}
 		else {
-			$(serverContextSubMenu).find(".hideserver-item").addClass("disabled");
+			serverContextSubMenu.find(".hideserver-item").addClass("disabled");
 		}
-	}
-	
-	deleteContextSubMenu () {
-		$(".serverhider-submenu").remove();
+		
+		BDfunctionsDevilBro.appendSubMenu(e.currentTarget, serverContextSubMenu);
 	}
 
 	hideServer (info) {	
@@ -358,38 +348,33 @@ class ServerHider {
 			})
 			.on("click", "button.btn-all", () => {
 				var hideAll = $(serverObjs[0].div).is(":visible");
-				for (let i = 0; i < serverObjs.length; i++) {
-					let info = serverObjs[i].info;
-					if (info) BDfunctionsDevilBro.saveData(info.id, {id:info.id, visible:!hideAll}, this.getName(), "servers");
+				for (let serverObj of serverObjs) {
+					$(serverObj.div).toggle(!hideAll);
+					BDfunctionsDevilBro.saveData(serverObj.id, {id:serverObj.id, visible:!hideAll}, this.getName(), "servers");
 				}
-				serverObjs.forEach(serverObj => $(serverObj.div).toggle(!hideAll));
 				$(".serverhiderCheckbox").each((_, checkBox) => {if ($(checkBox).prop("checked") == hideAll) checkBox.click();});
 			});
 			
 		if (!(window.bdplugins["ServerFolders"] && window.pluginCookie["ServerFolders"])) serverHiderModal.find(".folderhideSettings").hide();
 		
-		for (let i = 0; i < serverObjs.length; i++) {
-			let serverDiv = serverObjs[i].div;
-			let info = serverObjs[i].info;
+		for (let serverObj of serverObjs) {
 			
-			if (!serverDiv || !info) return;
-			
-			let badge = serverDiv.querySelector(".badge");
+			let badge = serverObj.div.querySelector(".badge");
 			
 			let entry = $(this.serverEntryMarkup);
 			let divider = $(this.dividerMarkup);
-			let isHiddenByFolder = $(serverDiv).attr("folder") ? true : false;
+			let isHiddenByFolder = $(serverObj.div).attr("folder") ? true : false;
 			entry.toggleClass("hidefolder", isHiddenByFolder);
 			serverHiderModal.find(".entries").append(entry);
 			divider.toggleClass("hidefolder", isHiddenByFolder);
 			serverHiderModal.find(".entries").append(divider);
-			if (info.icon) {
+			if (serverObj.icon) {
 				entry.find(".serverhiderIcon")
-					.css("background-image", "url('https://cdn.discordapp.com/icons/" + info.id + "/" + info.icon + ".png')");
+					.css("background-image", "url('https://cdn.discordapp.com/icons/" + serverObj.id + "/" + serverObj.icon + ".png')");
 			}
 			else {
 				entry.find(".serverhiderIcon")
-					.text(serverDiv.querySelector("a").innerText);
+					.text(serverObj.div.querySelector("a").innerText);
 			}
 			if (badge) {
 				entry.find(".serverhiderBadge")
@@ -400,39 +385,33 @@ class ServerHider {
 					.css("padding", "0px");
 			}
 			entry.find(".serverhiderName")
-				.text(info.name)
-				.attr("id", info.id);
+				.text(serverObj.name)
+				.attr("id", serverObj.id);
 			entry.find(".serverhiderCheckbox")
-				.prop("checked", $(serverDiv).is(":visible"))
+				.prop("checked", $(serverObj.div).is(":visible"))
 				.on("click", (event) => {
 					var visible = $(event.target).prop("checked");
-					$(serverDiv).toggle(visible);
-					BDfunctionsDevilBro.saveData(info.id, {id:info.id, visible:visible}, this.getName(), "servers");
+					$(serverObj.div).toggle(visible);
+					BDfunctionsDevilBro.saveData(serverObj.id, {id:serverObj.id, visible:visible}, this.getName(), "servers");
 				});
 		}
 		BDfunctionsDevilBro.appendModal(serverHiderModal);
 	}
 	
 	updateAllServers (write) {
-		var serverObjs = BDfunctionsDevilBro.readServerList();
-		for (var i = 0; i < serverObjs.length; i++) {
-			var serverDiv = serverObjs[i].div;
-			var info = serverObjs[i].info;
-			
-			if (!serverDiv || !info) return;
-			
+		for (let serverObj of BDfunctionsDevilBro.readServerList()) {
 			var id, visible;
-			var data = BDfunctionsDevilBro.loadData(info.id, this.getName(), "servers");
+			var data = BDfunctionsDevilBro.loadData(serverObj.id, this.getName(), "servers");
 			if (data && write) {
 				id = data.id;
 				visible = data.visible;
 			}
 			else {
-				id = info.id;
-				visible = $(serverDiv).is(":visible");
+				id = serverObj.id;
+				visible = $(serverObj.div).is(":visible");
 			}
 			
-			$(serverDiv).toggle(visible);
+			$(serverObj.div).toggle(visible);
 			
 			BDfunctionsDevilBro.saveData(id, {id, visible}, this.getName(), "servers");
 		}
@@ -440,51 +419,51 @@ class ServerHider {
 	
 	setLabelsByLanguage () {
 		switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
-			case "da": 		//danish
+			case "da":		//danish
 				return {
-					modal_header_text: 				"Styring af Serverliste",
-					modal_folderhide_text: 			"Vis ingen servere, som er gemt af mapper",
-					btn_ok_text: 					"OK",
+					modal_header_text:				"Styring af Serverliste",
+					modal_folderhide_text:			"Vis ingen servere, som er gemt af mapper",
+					btn_ok_text:					"OK",
 					btn_all_text:					"Alle",
 					context_serverhider_text:		"Server synlighed",
 					submenu_hideserver_text:		"Skjul Server",
 					submenu_openhidemenu_text:		"Styre Serverliste"
 				};
-			case "de": 		//german
+			case "de":		//german
 				return {
-					modal_header_text: 				"Verwaltung der Serverliste",
-					modal_folderhide_text: 			"Zeige keine Server, die durch Order versteckt wurden",
-					btn_ok_text: 					"OK",
+					modal_header_text:				"Verwaltung der Serverliste",
+					modal_folderhide_text:			"Zeige keine Server, die durch Order versteckt wurden",
+					btn_ok_text:					"OK",
 					btn_all_text:					"Alle",
 					context_serverhider_text:		"Serversichtbarkeit",
-					submenu_hideserver_text:		"Verstecke Server",
-					submenu_openhidemenu_text:		"Verwalte Serverliste"
+					submenu_hideserver_text:		"Server verstecken",
+					submenu_openhidemenu_text:		"Serverliste verwalten"
 				};
-			case "es": 		//spanish
+			case "es":		//spanish
 				return {
-					modal_header_text: 				"Administración de lista de servidores",
-					modal_folderhide_text: 			"No mostrar servidores, que están ocultos por las carpetas",
-					btn_ok_text: 					"OK",
+					modal_header_text:				"Administración de lista de servidores",
+					modal_folderhide_text:			"No mostrar servidores, que están ocultos por las carpetas",
+					btn_ok_text:					"OK",
 					btn_all_text:					"Todo",
 					context_serverhider_text:		"Visibilidad del servidor",
 					submenu_hideserver_text:		"Ocultar servidor",
 					submenu_openhidemenu_text:		"Administrar lista de servidores"
 				};
-			case "fr": 		//french
+			case "fr":		//french
 				return {
-					modal_header_text: 				"Gestion de la liste des serveurs",
-					modal_folderhide_text: 			"Afficher aucun serveur, qui sont cachés par des dossiers",
-					btn_ok_text: 					"OK",
+					modal_header_text:				"Gestion de la liste des serveurs",
+					modal_folderhide_text:			"Afficher aucun serveur, qui sont cachés par des dossiers",
+					btn_ok_text:					"OK",
 					btn_all_text:					"Tout",
 					context_serverhider_text:		"Visibilité du serveur",
 					submenu_hideserver_text:		"Cacher le serveur",
 					submenu_openhidemenu_text:		"Gérer la liste des serveurs"
 				};
-			case "it": 		//italian
+			case "it":		//italian
 				return {
-					modal_header_text: 				"Gestione dell'elenco dei server",
-					modal_folderhide_text: 			"Mostra nessun server nascosto nelle cartelle",
-					btn_ok_text: 					"OK",
+					modal_header_text:				"Gestione dell'elenco dei server",
+					modal_folderhide_text:			"Mostra nessun server nascosto nelle cartelle",
+					btn_ok_text:					"OK",
 					btn_all_text:					"Tutto",
 					context_serverhider_text:		"Visibilità del server",
 					submenu_hideserver_text:		"Nascondi il server",
@@ -492,9 +471,9 @@ class ServerHider {
 				};
 			case "nl":		//dutch
 				return {
-					modal_header_text: 				"Beheer van de Serverlijst",
-					modal_folderhide_text: 			"Toon geen servers, die zijn verborgen door mappen",
-					btn_ok_text: 					"OK",
+					modal_header_text:				"Beheer van de Serverlijst",
+					modal_folderhide_text:			"Toon geen servers, die zijn verborgen door mappen",
+					btn_ok_text:					"OK",
 					btn_all_text:					"Alle",
 					context_serverhider_text:		"Server zichtbaarheid",
 					submenu_hideserver_text:		"Verberg server",
@@ -502,9 +481,9 @@ class ServerHider {
 				};
 			case "no":		//norwegian
 				return {
-					modal_header_text: 				"Administrasjon av serverlisten",
-					modal_folderhide_text: 			"Vis ingen servere, som er skjult av mapper",
-					btn_ok_text: 					"OK",
+					modal_header_text:				"Administrasjon av serverlisten",
+					modal_folderhide_text:			"Vis ingen servere, som er skjult av mapper",
+					btn_ok_text:					"OK",
 					btn_all_text:					"Alle",
 					context_serverhider_text:		"Server synlighet",
 					submenu_hideserver_text:		"Skjul server",
@@ -513,18 +492,18 @@ class ServerHider {
 			case "pl":		//polish
 				return {
 					modal_header_text:				"Zarządzanie listą serwerów",
-					modal_folderhide_text: 			"Nie pokazuj żadnych serwerów, które są ukryte w folderach",
-                    btn_ok_text:					"OK",
-                    btn_all_text:					"Wszystkie",
-                    context_serverhider_text:		"Widoczność serwera",
-                    submenu_hideserver_text:		"Ukryj serwer",
-                    submenu_openhidemenu_text:		"Zarządzaj listą serwerów"
+					modal_folderhide_text:			"Nie pokazuj żadnych serwerów, które są ukryte w folderach",
+					btn_ok_text:					"OK",
+					btn_all_text:					"Wszystkie",
+					context_serverhider_text:		"Widoczność serwera",
+					submenu_hideserver_text:		"Ukryj serwer",
+					submenu_openhidemenu_text:		"Zarządzaj listą serwerów"
 				};
 			case "pt":		//portuguese (brazil)
 				return {
-					modal_header_text: 				"Gerenciamento da lista de servidores",
-					modal_folderhide_text: 			"Não exiba servidores, que estão ocultos por pastas",
-					btn_ok_text: 					"OK",
+					modal_header_text:				"Gerenciamento da lista de servidores",
+					modal_folderhide_text:			"Não exiba servidores, que estão ocultos por pastas",
+					btn_ok_text:					"OK",
 					btn_all_text:					"Todo",
 					context_serverhider_text:		"Visibilidade do servidor",
 					submenu_hideserver_text:		"Ocultar servidor",
@@ -532,9 +511,9 @@ class ServerHider {
 				};
 			case "fi":		//finnish
 				return {
-					modal_header_text: 				"Palvelinluettelon hallinta",
-					modal_folderhide_text: 			"Näytä mitään palvelimia, jotka ovat kansioiden piilossa",
-					btn_ok_text: 					"OK",
+					modal_header_text:				"Palvelinluettelon hallinta",
+					modal_folderhide_text:			"Näytä mitään palvelimia, jotka ovat kansioiden piilossa",
+					btn_ok_text:					"OK",
 					btn_all_text:					"Kaikki",
 					context_serverhider_text:		"Palvelimen näkyvyys",
 					submenu_hideserver_text:		"Piilota palvelin",
@@ -542,9 +521,9 @@ class ServerHider {
 				};
 			case "sv":		//swedish
 				return {
-					modal_header_text: 				"Hantering av serverlistan",
-					modal_folderhide_text: 			"Visa inga servrar, vilka är dolda av mappar",
-					btn_ok_text: 					"OK",
+					modal_header_text:				"Hantering av serverlistan",
+					modal_folderhide_text:			"Visa inga servrar, vilka är dolda av mappar",
+					btn_ok_text:					"OK",
 					btn_all_text:					"All",
 					context_serverhider_text:		"Server sikt",
 					submenu_hideserver_text:		"Dölj server",
@@ -552,9 +531,9 @@ class ServerHider {
 				};
 			case "tr":		//turkish
 				return {
-					modal_header_text: 				"Sunucu Listesinin Yönetimi",
-					modal_folderhide_text: 			"Klasörler tarafından gizlenen hiçbir sunucu gösterme",
-					btn_ok_text: 					"Okey",
+					modal_header_text:				"Sunucu Listesinin Yönetimi",
+					modal_folderhide_text:			"Klasörler tarafından gizlenen hiçbir sunucu gösterme",
+					btn_ok_text:					"Okey",
 					btn_all_text:					"Her",
 					context_serverhider_text:		"Sunucu görünürlüğü",
 					submenu_hideserver_text:		"Sunucuyu Gizle",
@@ -562,9 +541,9 @@ class ServerHider {
 				};
 			case "cs":		//czech
 				return {
-					modal_header_text: 				"Správa seznamu serverů",
-					modal_folderhide_text: 			"Zobrazit žádné servery, které jsou skryty podle složek",
-					btn_ok_text: 					"OK",
+					modal_header_text:				"Správa seznamu serverů",
+					modal_folderhide_text:			"Zobrazit žádné servery, které jsou skryty podle složek",
+					btn_ok_text:					"OK",
 					btn_all_text:					"Vše",
 					context_serverhider_text:		"Viditelnost serveru",
 					submenu_hideserver_text:		"Skrýt server",
@@ -572,9 +551,9 @@ class ServerHider {
 				};
 			case "bg":		//bulgarian
 				return {
-					modal_header_text: 				"Управление на списъка със сървъри",
-					modal_folderhide_text: 			"Показване на сървъри, които са скрити от папки",
-					btn_ok_text: 					"Добре",
+					modal_header_text:				"Управление на списъка със сървъри",
+					modal_folderhide_text:			"Показване на сървъри, които са скрити от папки",
+					btn_ok_text:					"Добре",
 					btn_all_text:					"Bсичко",
 					context_serverhider_text:		"Видимост на сървъра",
 					submenu_hideserver_text:		"Скриване на сървър",
@@ -582,9 +561,9 @@ class ServerHider {
 				};
 			case "ru":		//russian
 				return {
-					modal_header_text: 				"Управление списком серверов",
-					modal_folderhide_text: 			"Показывать никакие серверы, скрытые папками",
-					btn_ok_text: 					"ОК",
+					modal_header_text:				"Управление списком серверов",
+					modal_folderhide_text:			"Показывать никакие серверы, скрытые папками",
+					btn_ok_text:					"ОК",
 					btn_all_text:					"Все",
 					context_serverhider_text:		"Видимость сервера",
 					submenu_hideserver_text:		"Скрыть сервер",
@@ -592,9 +571,9 @@ class ServerHider {
 				};
 			case "uk":		//ukrainian
 				return {
-					modal_header_text: 				"Управління списком серверів",
-					modal_folderhide_text: 			"Не показувати жодних серверів, які приховуються папками",
-					btn_ok_text: 					"Добре",
+					modal_header_text:				"Управління списком серверів",
+					modal_folderhide_text:			"Не показувати жодних серверів, які приховуються папками",
+					btn_ok_text:					"Добре",
 					btn_all_text:					"Все",
 					context_serverhider_text:		"Видимість сервера",
 					submenu_hideserver_text:		"Сховати сервер",
@@ -602,9 +581,9 @@ class ServerHider {
 				};
 			case "ja":		//japanese
 				return {
-					modal_header_text: 				"サーバリストの管理",
-					modal_folderhide_text: 			"フォルダに隠されているサーバーは表示しない",
-					btn_ok_text: 					"はい",
+					modal_header_text:				"サーバリストの管理",
+					modal_folderhide_text:			"フォルダに隠されているサーバーは表示しない",
+					btn_ok_text:					"はい",
 					btn_all_text:					"すべて",
 					context_serverhider_text:		"サーバーの可視性",
 					submenu_hideserver_text:		"サーバーを隠す",
@@ -612,9 +591,9 @@ class ServerHider {
 				};
 			case "zh":		//chinese (traditional)
 				return {
-					modal_header_text: 				"管理服务器列表",
-					modal_folderhide_text: 			"不顯示被文件夾隱藏的服務器",
-					btn_ok_text: 					"好",
+					modal_header_text:				"管理服务器列表",
+					modal_folderhide_text:			"不顯示被文件夾隱藏的服務器",
+					btn_ok_text:					"好",
 					btn_all_text:					"所有",
 					context_serverhider_text:		"服務器可見性",
 					submenu_hideserver_text:		"隐藏服务器",
@@ -622,9 +601,9 @@ class ServerHider {
 				};
 			case "ko":		//korean
 				return {
-					modal_header_text: 				"서버 목록 관리",
-					modal_folderhide_text: 			"폴더별로 숨겨진 서버 표시 안 함",
-					btn_ok_text: 					"승인",
+					modal_header_text:				"서버 목록 관리",
+					modal_folderhide_text:			"폴더별로 숨겨진 서버 표시 안 함",
+					btn_ok_text:					"승인",
 					btn_all_text:					"모든",
 					context_serverhider_text:		"서버 가시성",
 					submenu_hideserver_text:		"서버 숨기기",
@@ -632,9 +611,9 @@ class ServerHider {
 				};
 			default:		//default: english
 				return {
-					modal_header_text: 				"Managing Serverlist",
-					modal_folderhide_text: 			"Show no servers, which are hidden by folders",
-					btn_ok_text: 					"OK",
+					modal_header_text:				"Managing Serverlist",
+					modal_folderhide_text:			"Show no servers, which are hidden by folders",
+					btn_ok_text:					"OK",
 					btn_all_text:					"All",
 					context_serverhider_text:		"Server Visibility",
 					submenu_hideserver_text:		"Hide Server",
