@@ -1,14 +1,12 @@
-var BDfunctionsDevilBro = {};
-
-BDfunctionsDevilBro.creationTime = performance.now();
+var BDfunctionsDevilBro = {creationTime:performance.now(), pressedKeys:[]};
 
 BDfunctionsDevilBro.isLibraryOutdated = function () {
 	return performance.now() - BDfunctionsDevilBro.creationTime > 600000;
 };
 
 BDfunctionsDevilBro.loadMessage = function (plugin, oldVersionRemove) {
-	var pluginName = typeof plugin == "object" ? plugin.getName() : plugin;
-	var oldVersion = typeof plugin == "object" ? plugin.getVersion() : oldVersionRemove;
+	var pluginName = plugin.getName();
+	var oldVersion = plugin.getVersion();
 	var loadMessage = BDfunctionsDevilBro.getLibraryStrings().toast_plugin_started.replace("${pluginName}", pluginName).replace("${oldVersion}", oldVersion);
 	console.log(loadMessage);
 	BDfunctionsDevilBro.showToast(loadMessage);
@@ -67,9 +65,9 @@ BDfunctionsDevilBro.loadMessage = function (plugin, oldVersionRemove) {
 	}
 };
 
-BDfunctionsDevilBro.unloadMessage = function (plugin, oldVersionRemove) { 
-	var pluginName = typeof plugin == "object" ? plugin.getName() : plugin;
-	var oldVersion = typeof plugin == "object" ? plugin.getVersion() : oldVersionRemove;
+BDfunctionsDevilBro.unloadMessage = function (plugin) { 
+	var pluginName = plugin.getName();
+	var oldVersion = plugin.getVersion();
 	var unloadMessage = BDfunctionsDevilBro.getLibraryStrings().toast_plugin_stopped.replace("${pluginName}", pluginName).replace("${oldVersion}", oldVersion);
 	console.log(unloadMessage);
 	BDfunctionsDevilBro.showToast(unloadMessage);
@@ -801,32 +799,33 @@ BDfunctionsDevilBro.readServerList = function () {
 	var server, info, foundServers = [], GuildStore = BDfunctionsDevilBro.WebModules.findByProperties(["getGuilds"]);
 	for (server of document.querySelectorAll(".guild-separator ~ .guild")) {
 		info = BDfunctionsDevilBro.getKeyInformation({"node":server, "key":"guild"});
-		if (info) foundServers.push({div:server, info:GuildStore.getGuild(info.id)});
+		if (info) info = GuildStore.getGuild(info.id);
+		if (info) foundServers.push(Object.assign({div:server},info));
 	}
 	return foundServers;
 };
 
 BDfunctionsDevilBro.readUnreadServerList = function (servers) {
-	if (servers === undefined || !Array.isArray(servers)) servers = BDfunctionsDevilBro.readServerList();
-	var server, foundServers = [];
-	for (server of servers) {
-		if (server && server.div && (server.div.classList.contains("unread") || server.div.querySelector(".badge"))) foundServers.push(server);
+	var serverObj, foundServers = [];
+	for (serverObj of (servers === undefined || !Array.isArray(servers) ? BDfunctionsDevilBro.readServerList() : servers)) {
+		if (serverObj && serverObj.div && (serverObj.div.classList.contains("unread") || serverObj.div.querySelector(".badge"))) foundServers.push(serverObj);
 	}
 	return foundServers;
 };
 
 BDfunctionsDevilBro.getSelectedServer = function () {
-	var server, info, foundServers = [], GuildStore = BDfunctionsDevilBro.WebModules.findByProperties(["getGuilds"]);
+	var server, info, GuildStore = BDfunctionsDevilBro.WebModules.findByProperties(["getGuilds"]);
 	for (server of document.querySelectorAll(".guild-separator ~ .guild.selected")) {
 		info = BDfunctionsDevilBro.getKeyInformation({"node":server, "key":"guild"});
-		if (info) return {div:server, info:GuildStore.getGuild(info.id)};
+		if (info) info = GuildStore.getGuild(info.id);
+		if (info) return Object.assign({div:server},info);
 	}
 	return null;
 };
 
 BDfunctionsDevilBro.getDivOfServer = function (id) {
 	for (var serverObj of BDfunctionsDevilBro.readServerList()) {
-		if (serverObj && serverObj.info && serverObj.info.id == id) return serverObj;
+		if (serverObj && serverObj.id == id) return serverObj;
 	}
 	return null;
 };
@@ -835,11 +834,13 @@ BDfunctionsDevilBro.readChannelList = function () {
 	var channel, info, foundChannels = [], ChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getChannels"]);
 	for (channel of document.querySelectorAll(".containerDefault-7RImuF, .containerDefault-1bbItS")) {
 		info = BDfunctionsDevilBro.getKeyInformation({"node":channel, "key":"channel"});
-		if (info) foundChannels.push({div:channel, info:ChannelStore.getChannel(info.id)});
+		if (info) info = ChannelStore.getChannel(info.id);
+		if (info) foundChannels.push(Object.assign({div:channel},info));
 	}
 	for (channel of document.querySelectorAll(".channel.private")) {
 		info = BDfunctionsDevilBro.getKeyInformation({"node":channel, "key":"user"}) || BDfunctionsDevilBro.getKeyInformation({"node":channel, "key":"channel"});
-		if (info) foundChannels.push({div:channel, info:ChannelStore.getChannel(ChannelStore.getDMFromUserId(info.id)) || ChannelStore.getChannel(info.id)});
+		if (info) info = ChannelStore.getChannel(ChannelStore.getDMFromUserId(info.id)) || ChannelStore.getChannel(info.id)
+		if (info) foundChannels.push(Object.assign({div:channel},info));
 	}
 	return foundChannels;
 };
@@ -847,35 +848,38 @@ BDfunctionsDevilBro.readChannelList = function () {
 BDfunctionsDevilBro.getSelectedChannel = function () {
 	var channel, info, ChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getChannels"]);
 	for (channel of document.querySelectorAll(".wrapperSelectedText-31jJa8")) {
-		var info = BDfunctionsDevilBro.getKeyInformation({"node":channel.parentElement, "key":"channel"});
-		if (info) return {div:channel.parentElement, info:ChannelStore.getChannel(info.id)};
+		info = BDfunctionsDevilBro.getKeyInformation({"node":channel.parentElement, "key":"channel"});
+		if (info) info = ChannelStore.getChannel(info.id);
+		if (info) return Object.assign({div:channel},info);
 	}
 	for (channel of document.querySelectorAll(".channel.private.selected")) {
-		var info = BDfunctionsDevilBro.getKeyInformation({"node":channel, "key":"user"}) || BDfunctionsDevilBro.getKeyInformation({"node":channel, "key":"channel"});
-		if (info) return {div:channel, info:ChannelStore.getChannel(ChannelStore.getDMFromUserId(info.id)) || ChannelStore.getChannel(info.id)};
+		info = BDfunctionsDevilBro.getKeyInformation({"node":channel, "key":"user"}) || BDfunctionsDevilBro.getKeyInformation({"node":channel, "key":"channel"});
+		if (info) info = ChannelStore.getChannel(ChannelStore.getDMFromUserId(info.id)) || ChannelStore.getChannel(info.id)
+		if (info) return Object.assign({div:channel},info);
 	}
 	return null;
 };
 
 BDfunctionsDevilBro.getDivOfChannel = function (id) {
 	for (var channelObj of BDfunctionsDevilBro.readChannelList()) {
-		if (channelObj && channelObj.info && channelObj.info.id == id) return channelObj;
+		if (channelObj && channelObj.id == id) return channelObj;
 	}
 	return null;
 };
 
 BDfunctionsDevilBro.readDmList = function () {
-	var dm, info, foundDMs = [];
+	var dm, info, foundDMs = [], ChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getChannels"]);
 	for (dm of document.querySelectorAll(".dms .guild")) {
 		info = BDfunctionsDevilBro.getKeyInformation({"node":dm, "key":"channel"});
-		if (info) foundDMs.push({div:dm, info});
+		if (info) info = ChannelStore.getChannel(info.id);
+		if (info) foundDMs.push(Object.assign({div:dm},info));
 	}
 	return foundDMs;
 };
 
 BDfunctionsDevilBro.getDivOfDM = function (id) {
 	for (var dmObj of BDfunctionsDevilBro.readDmList()) {
-		if (dmObj && dmObj.info && dmObj.info.id == id) return dmObj;
+		if (dmObj && dmObj.id == id) return dmObj;
 	}
 	return null;
 };
@@ -1174,12 +1178,12 @@ BDfunctionsDevilBro.regEscape = function (string) {
 };
 
 BDfunctionsDevilBro.clearReadNotifications = function (servers) {
-	var GuildActions = BDfunctionsDevilBro.WebModules.findByProperties(['markGuildAsRead']);
+	var GuildActions = BDfunctionsDevilBro.WebModules.findByProperties(["markGuildAsRead"]);
 	if (!servers || !GuildActions) return;
 	servers = Array.isArray(servers) ? servers : Array.from(servers);
 	servers.forEach((serverObj, i) => {
-		if (!serverObj || !serverObj.info) return;
-		GuildActions.markGuildAsRead(serverObj.info.id);
+		if (!serverObj || !serverObj.id) return;
+		GuildActions.markGuildAsRead(serverObj.id);
 	}); 
 };
 
@@ -1851,8 +1855,6 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 			};
 	}
 };
-
-BDfunctionsDevilBro.pressedKeys = [];
 
 $(window)
 	.off("keydown.BDfunctionsDevilBroPressedKeys")
