@@ -1239,7 +1239,7 @@ BDfunctionsDevilBro.appendContextMenu = function (menu, e) {
 	$(menu)
 		.addClass(BDfunctionsDevilBro.getDiscordTheme())
 		.css("left", e.pageX + "px")
-		.css("top", e.pageY + menuHeight > window.outerHeight ? (e.pageY - menuHeight + $(target).outerHeight()) + "px" : e.pageY + "px");
+		.css("top", e.pageY + menuHeight > window.outerHeight ? (e.pageY - menuHeight) + "px" : e.pageY + "px");
 	
 	$(document).on("mousedown.BDfunctionsDevilBroContextMenu", (e2) => {
 		$(document).off("mousedown.BDfunctionsDevilBroContextMenu");
