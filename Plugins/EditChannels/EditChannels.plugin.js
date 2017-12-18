@@ -84,7 +84,7 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "3.5.6";}
+	getVersion () {return "3.5.7";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -360,6 +360,8 @@ class EditChannels {
 	}
 	
 	resetChannel (channelObj) {
+		if (!channelObj || !channelObj.div) return;
+		
 		var channel = channelObj.div.querySelector(".name-2SL4ev, .colorTransition-2iZaYd");
 	
 		$(channelObj.div)
@@ -371,6 +373,8 @@ class EditChannels {
 	}
 	
 	loadChannel (channelObj) {
+		if (!channelObj || !channelObj.div) return;
+		
 		var channel = channelObj.div.querySelector(".name-2SL4ev, .colorTransition-2iZaYd");
 		
 		var data = BDfunctionsDevilBro.loadData(channelObj.id, this.getName(), "channels");
