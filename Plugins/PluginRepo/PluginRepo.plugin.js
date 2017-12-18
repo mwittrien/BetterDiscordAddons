@@ -459,9 +459,6 @@ class PluginRepo {
 						let end = start + searchstring.length;
 						var openIndexes = [0].concat(BDfunctionsDevilBro.getAllIndexes(value.substring(0, start), "<"));
 						var closedIndexes = [0].concat(BDfunctionsDevilBro.getAllIndexes(value.substring(0, start), ">"));
-						console.log(value.substring(0, start));
-						console.log(openIndexes);
-						console.log(closedIndexes);
 						if (openIndexes[openIndexes.length-1] >= closedIndexes[closedIndexes.length-1]) return;
 						value = value.substring(0, start) + wrapperopen + value.substring(start, end) + wrapperclose + value.substring(end);
 						added++;
