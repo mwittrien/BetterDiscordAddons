@@ -51,7 +51,7 @@ class ShowHiddenChannels {
 
 	getDescription () {return "Displays channels that are hidden from you by role restrictions.";}
 
-	getVersion () {return "2.0.4";}
+	getVersion () {return "2.0.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -109,8 +109,8 @@ class ShowHiddenChannels {
 	
 	displayHiddenChannels () {
 		var serverObj = BDfunctionsDevilBro.getSelectedServer();
-		if (serverObj && serverObj.info) {
-			var serverID = serverObj.info.id;
+		if (serverObj) {
+			var serverID = serverObj.id;
 			var chatWrap = document.querySelector(".layer");
 			var channelListWrap = document.querySelector(".channels-3g2vYe");
 			if ($(".container-hidden." + serverID).length == 0 && chatWrap && channelListWrap) {
