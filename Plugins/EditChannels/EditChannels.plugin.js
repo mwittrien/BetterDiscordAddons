@@ -84,7 +84,7 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "3.5.7";}
+	getVersion () {return "3.5.8";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -382,7 +382,7 @@ class EditChannels {
 			var name = data.name ? data.name : channelObj.name;
 			var color = data.color ? this.chooseColor(channel, data.color) : "";
 			
-			$(channelDiv)
+			$(channelObj.div)
 				.attr("custom-editchannels", true);
 			$(channel)
 				.css("color", color);
