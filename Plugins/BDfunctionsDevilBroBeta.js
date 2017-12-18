@@ -1,6 +1,4 @@
-var BDfunctionsDevilBro = {};
-
-BDfunctionsDevilBro.creationTime = performance.now();
+var BDfunctionsDevilBro = {creationTime:performance.now(), pressedKeys = []};
 
 BDfunctionsDevilBro.isLibraryOutdated = function () {
 	return performance.now() - BDfunctionsDevilBro.creationTime > 600000;
@@ -1857,8 +1855,6 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 			};
 	}
 };
-
-BDfunctionsDevilBro.pressedKeys = [];
 
 $(window)
 	.off("keydown.BDfunctionsDevilBroPressedKeys")
