@@ -244,7 +244,7 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.3.9";}
+	getVersion () {return "5.4.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -321,7 +321,7 @@ class ServerFolders {
 								var folderDiv = this.getFolderOfServer(serverObj);
 								if (folderDiv) {
 									if (isBadge) this.updateCopyInFolderContent(serverObj, folderDiv);
-									else $("#copy_of_" + serverObj.info.id).remove();
+									else $("#copy_of_" + serverObj.id).remove();
 									this.updateFolderNotifications(folderDiv);
 								}
 							});
@@ -531,14 +531,13 @@ class ServerFolders {
 	}
 	
 	addServerToFolder (serverObj, folderDiv) {
-		var info = serverObj.info;
 		var data = BDfunctionsDevilBro.loadData(folderDiv.id, this.getName(), "folders");
-		if (info && data && !data.servers.includes(info.id)) {
-			data.servers.push(info.id);
+		if (serverObj && data && !data.servers.includes(serverObj.id)) {
+			data.servers.push(serverObj.id);
 			BDfunctionsDevilBro.saveData(folderDiv.id, data, this.getName(), "folders");
 			$(serverObj.div).attr("folder",folderDiv.id).hide();
 			var message = this.labels.toast_addserver_text ? 
-							this.labels.toast_addserver_text.replace("${servername}", info.name).replace("${foldername}", data.folderName ? " " + data.folderName : "") : "";
+							this.labels.toast_addserver_text.replace("${servername}", serverObj.name).replace("${foldername}", data.folderName ? " " + data.folderName : "") : "";
 			BDfunctionsDevilBro.showToast(message, {type:"success"});
 			this.updateCopyInFolderContent(serverObj, folderDiv);
 			this.updateFolderNotifications(folderDiv);
@@ -547,16 +546,15 @@ class ServerFolders {
 	
 	removeServerFromFolder (serverObj, folderDiv) {
 		$(".context-menu").hide();
-		var info = serverObj.info;
 		var data = BDfunctionsDevilBro.loadData(folderDiv.id, this.getName(), "folders");
-		if (info && data) {
-			BDfunctionsDevilBro.removeFromArray(data.servers, info.id);
+		if (serverObj && data) {
+			BDfunctionsDevilBro.removeFromArray(data.servers, serverObj.id);
 			BDfunctionsDevilBro.saveData(folderDiv.id, data, this.getName(), "folders");
 			$(serverObj.div).removeAttr("folder").show();
 			var message = this.labels.toast_removeserver_text ? 
-							this.labels.toast_removeserver_text.replace("${servername}", info.name).replace("${foldername}", data.folderName ? " " + data.folderName : "") : "";
+				this.labels.toast_removeserver_text.replace("${servername}", serverObj.name).replace("${foldername}", data.folderName ? " " + data.folderName : "") : "";
 			BDfunctionsDevilBro.showToast(message, {type:"danger"});
-			$("#copy_of_" + info.id).remove();
+			$("#copy_of_" + serverObj.id).remove();
 			this.updateFolderNotifications(folderDiv);
 		}
 	}
@@ -746,9 +744,8 @@ class ServerFolders {
 	
 	createServerToolTip (serverObj, e) {
 		var serverDiv = serverObj.div;
-		var info = serverObj.info;
-		var data = (window.bdplugins["EditServers"] && window.pluginCookie["EditServers"]) ? BDfunctionsDevilBro.loadData(info.id, "EditServers", "servers") : null;
-		var text = data ? (data.name ? data.name : info.name) : info.name;
+		var data = (window.bdplugins["EditServers"] && window.pluginCookie["EditServers"]) ? BDfunctionsDevilBro.loadData(serverObj.id, "EditServers", "servers") : null;
+		var text = data ? (data.name ? data.name : serverObj.name) : serverObj.name;
 		var bgColor = data ? (data.color3 ? BDfunctionsDevilBro.color2RGB(data.color3) : "") : "";
 		var fontColor = data ? (data.color4 ? BDfunctionsDevilBro.color2RGB(data.color4) : "") : "";
 		var customTooltipCSS = `
@@ -962,10 +959,10 @@ class ServerFolders {
 	}
 	
 	updateCopyInFolderContent (serverObj, folderDiv) {
-		if (!serverObj || !serverObj.div || !serverObj.info) return;
+		if (!serverObj) return;
 		var foldercontainer = document.querySelector(".foldercontainer");
 		if (foldercontainer && folderDiv.classList.contains("open")) {
-			var oldCopy = foldercontainer.querySelector("#copy_of_" + serverObj.info.id);
+			var oldCopy = foldercontainer.querySelector("#copy_of_" + serverObj.id);
 			if (oldCopy) {
 				foldercontainer.insertBefore(this.createCopyOfServer(serverObj, folderDiv), oldCopy);
 				oldCopy.remove();
@@ -980,16 +977,15 @@ class ServerFolders {
 	
 	createCopyOfServer (serverObj, folderDiv) {
 		var serverDiv = serverObj.div;
-		var info = serverObj.info;
 		var foldercontainer = document.querySelector(".foldercontainer");
 		var serverCopy = serverDiv.cloneNode(true);
 		$(serverCopy)
-			.attr("id", "copy_of_" + info.id)
+			.attr("id", "copy_of_" + serverObj.id)
 			.addClass("copy")
 			.addClass("content_of_" + folderDiv.id)
 			.css("display", "")
 			.on("mouseenter." + this.getName(), (e) => {
-				this.createServerToolTip({"div":serverCopy,info},e);
+				this.createServerToolTip({"div":serverCopy,serverObj},e);
 			})
 			.on("click." + this.getName(), (e) => {
 				e.preventDefault();
@@ -1147,7 +1143,7 @@ class ServerFolders {
 		if (div.classList && div.classList.length > 0 && div.classList.contains("guild") && div.classList.contains(type) && div.querySelector(".avatar-small")) {
 			if (type == "guild") {
 				var info = BDfunctionsDevilBro.getKeyInformation({"node":div, "key":"guild"});
-				if (info) return {div,info};
+				if (info) return BDfunctionsDevilBro.getDivOfServer(info.id);
 			}
 			else {
 				return div;
@@ -1157,12 +1153,12 @@ class ServerFolders {
 	}
 	
 	getFolderOfServer (serverObj) {
-		if (!serverObj || !serverObj.info) return;
+		if (!serverObj) return;
 		var folders = BDfunctionsDevilBro.loadAllData(this.getName(), "folders");
 		for (var id in folders) {
 			var serverIDs = folders[id].servers;
 			for (var i = 0; serverIDs.length > i; i++) {
-				if (serverIDs[i] == serverObj.info.id) return document.querySelector("#" + folders[id].folderID);
+				if (serverIDs[i] == serverObj.id) return document.querySelector("#" + folders[id].folderID);
 			}
 		}
 		return null;
