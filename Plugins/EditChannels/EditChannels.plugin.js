@@ -369,7 +369,7 @@ class EditChannels {
 		$(channel)
 			.css("color", "");
 			
-		BDfunctionsDevilBro.setInnerText(channel, info.name);
+		BDfunctionsDevilBro.setInnerText(channel, channelObj.name);
 	}
 	
 	loadChannel (channelObj) {
