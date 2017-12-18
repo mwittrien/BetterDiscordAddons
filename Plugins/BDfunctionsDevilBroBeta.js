@@ -1178,12 +1178,12 @@ BDfunctionsDevilBro.regEscape = function (string) {
 };
 
 BDfunctionsDevilBro.clearReadNotifications = function (servers) {
-	var GuildActions = BDfunctionsDevilBro.WebModules.findByProperties(['markGuildAsRead']);
+	var GuildActions = BDfunctionsDevilBro.WebModules.findByProperties(["markGuildAsRead"]);
 	if (!servers || !GuildActions) return;
 	servers = Array.isArray(servers) ? servers : Array.from(servers);
 	servers.forEach((serverObj, i) => {
-		if (!serverObj || !serverObj.info) return;
-		GuildActions.markGuildAsRead(serverObj.info.id);
+		if (!serverObj || !serverObj.id) return;
+		GuildActions.markGuildAsRead(serverObj.id);
 	}); 
 };
 
