@@ -798,73 +798,84 @@ BDfunctionsDevilBro.getMyUserStatus = function () {
 };
 
 BDfunctionsDevilBro.readServerList = function () {
-	var foundServers = [];
-	var servers = document.querySelectorAll(".guild-separator ~ .guild");
-	for (var i = 0; i < servers.length; i++) {
-		var info = BDfunctionsDevilBro.getKeyInformation({"node":servers[i], "key":"guild"});
-		if (info) foundServers.push({div:servers[i],info});
+	var server, info, foundServers = [], GuildStore = BDfunctionsDevilBro.WebModules.findByProperties(["getGuilds"]);
+	for (server of document.querySelectorAll(".guild-separator ~ .guild")) {
+		info = BDfunctionsDevilBro.getKeyInformation({"node":server, "key":"guild"});
+		if (info) foundServers.push({div:server, info:GuildStore.getGuild(info.id)});
 	}
 	return foundServers;
 };
 
 BDfunctionsDevilBro.readUnreadServerList = function (servers) {
 	if (servers === undefined || !Array.isArray(servers)) servers = BDfunctionsDevilBro.readServerList();
-	var foundServers = [];
-	for (var i = 0; i < servers.length; i++) {
-		if (servers[i] && servers[i].div && (servers[i].div.classList.contains("unread") || servers[i].div.querySelector(".badge"))) foundServers.push(servers[i]);
+	var server, foundServers = [];
+	for (server of servers) {
+		if (server && server.div && (server.div.classList.contains("unread") || server.div.querySelector(".badge"))) foundServers.push(server);
 	}
 	return foundServers;
 };
 
 BDfunctionsDevilBro.getSelectedServer = function () {
-	var servers = document.querySelectorAll(".guild-separator ~ .guild.selected");
-	for (var i = 0; i < servers.length; i++) {
-		var info = BDfunctionsDevilBro.getKeyInformation({"node":servers[i], "key":"guild"});
-		if (info) return {div:servers[i],info};
+	var server, info, foundServers = [], GuildStore = BDfunctionsDevilBro.WebModules.findByProperties(["getGuilds"]);
+	for (server of document.querySelectorAll(".guild-separator ~ .guild.selected")) {
+		info = BDfunctionsDevilBro.getKeyInformation({"node":server, "key":"guild"});
+		if (info) return {div:server, info:GuildStore.getGuild(info.id)};
 	}
 	return null;
 };
 
 BDfunctionsDevilBro.getDivOfServer = function (id) {
-	var servers = BDfunctionsDevilBro.readServerList();
-	for (var i = 0; i < servers.length; i++) {
-		if (servers[i].info.id == id) return servers[i];
+	for (var serverObj of BDfunctionsDevilBro.readServerList()) {
+		if (serverObj && serverObj.info && serverObj.info.id == id) return serverObj;
 	}
 	return null;
 };
 
 BDfunctionsDevilBro.readChannelList = function () {
-	var foundChannels = [];
-	var channels = document.querySelectorAll(".containerDefault-7RImuF, .containerDefault-1bbItS");
-	for (var i = 0; i < channels.length; i++) {
-		var info = BDfunctionsDevilBro.getKeyInformation({"node":channels[i], "key":"channel"});
-		if (info) foundChannels.push({div:channels[i],info});
+	var channel, info, foundChannels = [], ChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getChannels"]);
+	for (channel of document.querySelectorAll(".containerDefault-7RImuF, .containerDefault-1bbItS")) {
+		info = BDfunctionsDevilBro.getKeyInformation({"node":channel, "key":"channel"});
+		if (info) foundChannels.push({div:channel, info:ChannelStore.getChannel(info.id)});
+	}
+	for (channel of document.querySelectorAll(".channel.private")) {
+		info = BDfunctionsDevilBro.getKeyInformation({"node":channel, "key":"user"}) || BDfunctionsDevilBro.getKeyInformation({"node":channel, "key":"channel"});
+		if (info) foundChannels.push({div:channel, info:ChannelStore.getChannel(ChannelStore.getDMFromUserId(info.id)) || ChannelStore.getChannel(info.id)});
 	}
 	return foundChannels;
 };
 
+BDfunctionsDevilBro.getSelectedChannel = function () {
+	var channel, info, ChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getChannels"]);
+	for (channel of document.querySelectorAll(".wrapperSelectedText-31jJa8")) {
+		var info = BDfunctionsDevilBro.getKeyInformation({"node":channel.parentElement, "key":"channel"});
+		if (info) return {div:channel.parentElement, info:ChannelStore.getChannel(info.id)};
+	}
+	for (channel of document.querySelectorAll(".channel.private.selected")) {
+		var info = BDfunctionsDevilBro.getKeyInformation({"node":channel, "key":"user"}) || BDfunctionsDevilBro.getKeyInformation({"node":channel, "key":"channel"});
+		if (info) return {div:channel, info:ChannelStore.getChannel(ChannelStore.getDMFromUserId(info.id)) || ChannelStore.getChannel(info.id)};
+	}
+	return null;
+};
+
 BDfunctionsDevilBro.getDivOfChannel = function (id) {
-	var channels = BDfunctionsDevilBro.readChannelList();
-	for (var i = 0; i < channels.length; i++) {
-		if (channels[i].info.id == id) return channels[i];
+	for (var channelObj of BDfunctionsDevilBro.readChannelList()) {
+		if (channelObj && channelObj.info && channelObj.info.id == id) return channelObj;
 	}
 	return null;
 };
 
 BDfunctionsDevilBro.readDmList = function () {
-	var foundDMs = [];
-	var dms = document.querySelectorAll(".dms .guild");
-	for (var i = 0; i < dms.length; i++) {
-		var info = BDfunctionsDevilBro.getKeyInformation({"node":dms[i], "key":"channel"});
-		if (info) foundDMs.push({div:dms[i],info});
+	var dm, info, foundDMs = [];
+	for (dm of document.querySelectorAll(".dms .guild")) {
+		info = BDfunctionsDevilBro.getKeyInformation({"node":dm, "key":"channel"});
+		if (info) foundDMs.push({div:dm, info});
 	}
 	return foundDMs;
 };
 
 BDfunctionsDevilBro.getDivOfDM = function (id) {
-	var dms = BDfunctionsDevilBro.readDmList();
-	for (var i = 0; i < dms.length; i++) {
-		if (dms[i].info.id == id) return dms[i];
+	for (var dmObj of BDfunctionsDevilBro.readDmList()) {
+		if (dmObj && dmObj.info && dmObj.info.id == id) return dmObj;
 	}
 	return null;
 };
