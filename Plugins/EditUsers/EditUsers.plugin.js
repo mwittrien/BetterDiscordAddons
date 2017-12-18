@@ -166,7 +166,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "2.0.2";}
+	getVersion () {return "2.0.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -462,7 +462,7 @@ class EditUsers {
 			
 			if (username) {
 				var serverObj = BDfunctionsDevilBro.getSelectedServer();
-				var member = serverObj ? this.MemberPerms.getMember(serverObj.info.id, info.id) : null;
+				var member = serverObj ? this.MemberPerms.getMember(serverObj.id, info.id) : null;
 				var name = div.classList.contains("container-iksrDt") || !member || !member.nick ? info.username : member.nick;
 				var color1 = member && member.colorString ? BDfunctionsDevilBro.color2RGB(member.colorString) : "";
 				var color2 = "";
@@ -526,9 +526,6 @@ class EditUsers {
 				$(context).append(this.userContextEntryMarkup)
 					.on("mouseenter", ".localusersettings-item", (e) => {
 						this.createContextSubMenu(info, e);
-					})
-					.on("mouseleave", ".localusersettings-item", () => {
-						this.deleteContextSubMenu();
 					});
 			}
 		}
@@ -537,23 +534,15 @@ class EditUsers {
 	createContextSubMenu (info, e) {
 		var id = info.id;
 		
-		var targetDiv = e.currentTarget;
 		var userContextSubMenu = $(this.userContextSubMenuMarkup);
 		
-		$(targetDiv).append(userContextSubMenu)
-			.off("click", ".usersettings-item")
+		userContextSubMenu
 			.on("click", ".usersettings-item", () => {
 				this.showUserSettings(info);
 			});
 			
-		$(userContextSubMenu)
-			.addClass(BDfunctionsDevilBro.getDiscordTheme())
-			.css("left", $(targetDiv).offset().left + "px")
-			.css("top", $(targetDiv).offset().top + "px");
-			
 		if (BDfunctionsDevilBro.loadData(id, this.getName(), "users")) {
-			$(targetDiv)
-				.off("click", ".resetsettings-item")
+			userContextSubMenu
 				.on("click", ".resetsettings-item", () => {
 					$(".context-menu").hide();
 					BDfunctionsDevilBro.removeData(id, this.getName(), "users");
@@ -561,12 +550,10 @@ class EditUsers {
 				});
 		}
 		else {
-			$(targetDiv).find(".resetsettings-item").addClass("disabled");
+			userContextSubMenu.find(".resetsettings-item").addClass("disabled");
 		}
-	}
-	
-	deleteContextSubMenu () {
-		$(".editusers-submenu").remove();
+		
+		BDfunctionsDevilBro.appendSubMenu(e.currentTarget, userContextSubMenu);
 	}
 	
 	showUserSettings (info, e) {
@@ -587,7 +574,7 @@ class EditUsers {
 		var color4 =			data ? data.color4 : null;
 		
 		var serverObj = BDfunctionsDevilBro.getSelectedServer();
-		var member = serverObj ? this.MemberPerms.getMember(serverObj.info.id, id) : null;
+		var member = serverObj ? this.MemberPerms.getMember(serverObj.id, id) : null;
 		
 		var userSettingsModal = $(this.userSettingsModalMarkup);
 		userSettingsModal.find(".guildName-1u0hy7").text(member && member.nick ? member.nick : info.username);
@@ -805,7 +792,7 @@ class EditUsers {
 		
 		if (data) {
 			var serverObj = BDfunctionsDevilBro.getSelectedServer();
-			var member = serverObj ? this.MemberPerms.getMember(serverObj.info.id, info.id) : null;
+			var member = serverObj ? this.MemberPerms.getMember(serverObj.id, info.id) : null;
 			if (username) {
 				var name = data.name ? data.name : (type == "info" || type == "profil" || !member || !member.nick ? info.username : member.nick);
 				var color1 = data.color1 ? BDfunctionsDevilBro.color2RGB(data.color1) : (member && member.colorString ? BDfunctionsDevilBro.color2RGB(member.colorString) : "");
@@ -902,7 +889,7 @@ class EditUsers {
 	
 	setLabelsByLanguage () {
 		switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
-			case "da":	//danish
+			case "da":		//danish
 				return {
 					context_localusersettings_text:		"Lokal brugerindstillinger",
 					submenu_usersettings_text:			"Skift indstillinger",
@@ -926,10 +913,10 @@ class EditUsers {
 					btn_cancel_text:					"Afbryde",
 					btn_save_text:						"Spare"
 				};
-			case "de":	//german
+			case "de":		//german
 				return {
 					context_localusersettings_text:		"Lokale Benutzereinstellungen",
-					submenu_usersettings_text:			"Ändere Einstellungen",
+					submenu_usersettings_text:			"Einstellungen ändern",
 					submenu_resetsettings_text:			"Benutzer zurücksetzen",
 					modal_header_text:					"Lokale Benutzereinstellungen",
 					modal_username_text:				"Lokaler Benutzername",
@@ -950,7 +937,7 @@ class EditUsers {
 					btn_cancel_text:					"Abbrechen",
 					btn_save_text:						"Speichern"
 				};
-			case "es":	//spanish
+			case "es":		//spanish
 				return {
 					context_localusersettings_text:		"Ajustes local de usuario",
 					submenu_usersettings_text:			"Cambiar ajustes",
@@ -974,7 +961,7 @@ class EditUsers {
 					btn_cancel_text:					"Cancelar",
 					btn_save_text:						"Guardar"
 				};
-			case "fr":	//french
+			case "fr":		//french
 				return {
 					context_localusersettings_text:		"Paramètres locale d'utilisateur",
 					submenu_usersettings_text:			"Modifier les paramètres",
@@ -998,7 +985,7 @@ class EditUsers {
 					btn_cancel_text:					"Abandonner",
 					btn_save_text:						"Enregistrer"
 				};
-			case "it":	//italian
+			case "it":		//italian
 				return {
 					context_localusersettings_text:		"Impostazioni locale utente",
 					submenu_usersettings_text:			"Cambia impostazioni",
@@ -1022,7 +1009,7 @@ class EditUsers {
 					btn_cancel_text:					"Cancellare",
 					btn_save_text:						"Salvare"
 				};
-			case "nl":	//dutch
+			case "nl":		//dutch
 				return {
 					context_localusersettings_text:		"Lokale gebruikerinstellingen",
 					submenu_usersettings_text:			"Verandere instellingen",
@@ -1046,7 +1033,7 @@ class EditUsers {
 					btn_cancel_text:					"Afbreken",
 					btn_save_text:						"Opslaan"
 				};
-			case "no":	//norwegian
+			case "no":		//norwegian
 				return {
 					context_localusersettings_text:		"Lokal brukerinnstillinger",
 					submenu_usersettings_text:			"Endre innstillinger",
@@ -1070,7 +1057,7 @@ class EditUsers {
 					btn_cancel_text:					"Avbryte",
 					btn_save_text:						"Lagre"
 				};
-			case "pl":	//polish
+			case "pl":		//polish
 				return {
 					context_localusersettings_text:		"Lokalne ustawienia użytkownika",
 					submenu_usersettings_text:			"Zmień ustawienia",
@@ -1094,7 +1081,7 @@ class EditUsers {
 					btn_cancel_text:					"Anuluj",
 					btn_save_text:						"Zapisz"
 				};
-			case "pt":	//portuguese (brazil)
+			case "pt":		//portuguese (brazil)
 				return {
 					context_localusersettings_text:		"Configurações local do utilizador",
 					submenu_usersettings_text:			"Mudar configurações",
@@ -1118,7 +1105,7 @@ class EditUsers {
 					btn_cancel_text:					"Cancelar",
 					btn_save_text:						"Salvar"
 				};
-			case "fi":	//finnish
+			case "fi":		//finnish
 				return {
 					context_localusersettings_text:		"Paikallinen käyttäjä asetukset",
 					submenu_usersettings_text:			"Vaihda asetuksia",
@@ -1142,7 +1129,7 @@ class EditUsers {
 					btn_cancel_text:					"Peruuttaa",
 					btn_save_text:						"Tallentaa"
 				};
-			case "sv":	//swedish
+			case "sv":		//swedish
 				return {
 					context_localusersettings_text:		"Lokal användareinställningar",
 					submenu_usersettings_text:			"Ändra inställningar",
@@ -1166,7 +1153,7 @@ class EditUsers {
 					btn_cancel_text:					"Avbryta",
 					btn_save_text:						"Spara"
 				};
-			case "tr":	//turkish
+			case "tr":		//turkish
 				return {
 					context_localusersettings_text:		"Yerel Kullanıcı Ayarları",
 					submenu_usersettings_text:			"Ayarları Değiştir",
@@ -1190,7 +1177,7 @@ class EditUsers {
 					btn_cancel_text:					"Iptal",
 					btn_save_text:						"Kayıt"
 				};
-			case "cs":	//czech
+			case "cs":		//czech
 				return {
 					context_localusersettings_text:		"Místní nastavení uživatel",
 					submenu_usersettings_text:			"Změnit nastavení",
@@ -1214,7 +1201,7 @@ class EditUsers {
 					btn_cancel_text:					"Zrušení",
 					btn_save_text:						"Uložit"
 				};
-			case "bg":	//bulgarian
+			case "bg":		//bulgarian
 				return {
 					context_localusersettings_text:		"Настройки за локални потребител",
 					submenu_usersettings_text:			"Промяна на настройките",
@@ -1238,7 +1225,7 @@ class EditUsers {
 					btn_cancel_text:					"Зъбести",
 					btn_save_text:						"Cпасяване"
 				};
-			case "ru":	//russian
+			case "ru":		//russian
 				return {
 					context_localusersettings_text:		"Настройки локального пользователь",
 					submenu_usersettings_text:			"Изменить настройки",
@@ -1262,7 +1249,7 @@ class EditUsers {
 					btn_cancel_text:					"Отмена",
 					btn_save_text:						"Cпасти"
 				};
-			case "uk":	//ukrainian
+			case "uk":		//ukrainian
 				return {
 					context_localusersettings_text:		"Налаштування локального користувач",
 					submenu_usersettings_text:			"Змінити налаштування",
@@ -1286,7 +1273,7 @@ class EditUsers {
 					btn_cancel_text:					"Скасувати",
 					btn_save_text:						"Зберегти"
 				};
-			case "ja":	//japanese
+			case "ja":		//japanese
 				return {
 					context_localusersettings_text:		"ローカルユーザーー設定",
 					submenu_usersettings_text:			"設定を変更する",
@@ -1310,7 +1297,7 @@ class EditUsers {
 					btn_cancel_text:					"キャンセル",
 					btn_save_text:						"セーブ"
 				};
-			case "zh":	//chinese (traditional)
+			case "zh":		//chinese (traditional)
 				return {
 					context_localusersettings_text:		"本地用戶設置",
 					submenu_usersettings_text:			"更改設置",
@@ -1334,7 +1321,7 @@ class EditUsers {
 					btn_cancel_text:					"取消",
 					btn_save_text:						"保存"
 				};
-			case "ko":	//korean
+			case "ko":		//korean
 				return {
 					context_localusersettings_text:		"로컬 사용자 설정",
 					submenu_usersettings_text:			"설정 변경",
