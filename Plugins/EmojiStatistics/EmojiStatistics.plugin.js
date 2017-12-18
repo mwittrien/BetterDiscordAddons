@@ -172,7 +172,7 @@ class EmojiStatistics {
 
 	getDescription () {return "Adds some helpful options to show you more information about emojis and emojiservers.";}
 
-	getVersion () {return "2.6.4";}
+	getVersion () {return "2.6.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -363,6 +363,7 @@ class EmojiStatistics {
 		var categories = this.serverInformation;
 		
 		if (rows && categories) {
+			var index = 0;
 			for (let serverObj of BDfunctionsDevilBro.readServerList()) {
 				
 				var entry = $(this.emojiserverEntryMarkup);
@@ -413,7 +414,7 @@ class EmojiStatistics {
 				entry.find(".modal-emojiglobal-label").text(amountGlobal);
 				entry.find(".modal-emojilocal-label").text(amountLocal);
 				entry.find(".modal-emojireplicate-label").text(amountReplicate);
-				entries.push({entry:entry, index:i, name:serverObj.name, total:amountGlobal+amountLocal, global:amountGlobal, local:amountLocal, copies:amountReplicate});
+				entries.push({entry:entry, index:index++, name:serverObj.name, total:amountGlobal+amountLocal, global:amountGlobal, local:amountLocal, copies:amountReplicate});
 			}
 			
 			var titleentry = $(this.emojiserverTitlesMarkup)
