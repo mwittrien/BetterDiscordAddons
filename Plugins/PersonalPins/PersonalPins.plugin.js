@@ -110,7 +110,7 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.3.0";}
+	getVersion () {return "1.3.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -201,10 +201,10 @@ class PersonalPins {
 			
 			$(document).off("click." + this.getName(), ".btn-option").off("contextmenu." + this.getName(), ".message")
 				.on("click." + this.getName(), ".btn-option", (e) => {
-					this.getMessageElements($(".message").has(e.currentTarget)[0]);
+					this.getMessageData($(".message").has(e.currentTarget)[0]);
 				})
 				.on("contextmenu." + this.getName(), ".message", (e) => {
-					this.getMessageElements(e.currentTarget);
+					this.getMessageData(e.currentTarget);
 				});
 			
 			document.querySelectorAll(".messages-group .message").forEach(message => {this.addOptionButton(message);});
@@ -286,17 +286,13 @@ class PersonalPins {
 		}
 	}
 	
-	getMessageElements (div) {
+	getMessageData (div) {
 		if (div && !div.querySelector(".system-message")) {
 			var messagegroup = $(".message-group").has(div);
 			var pos = messagegroup.find(".message").index(div);
-			if (messagegroup.length) {
-				this.message = {
-					"div": div,
-					"group": messagegroup[0],
-					"pos": pos,
-					"info": BDfunctionsDevilBro.getKeyInformation({"node":messagegroup[0],"key":"messages"})[pos]
-				}
+			if (messagegroup[0] && pos > -1) {
+				var info = BDfunctionsDevilBro.getKeyInformation({"node":messagegroup[0],"key":"messages","time":1000});
+				if (info) this.message = Object.assign(info[pos],{"div":div, "group":messagegroup[0], "pos":pos});
 			}
 		}
 		else {
@@ -414,17 +410,16 @@ class PersonalPins {
 	
 	addMessageToNotes () {
 		if (!this.message) return;
-		var messageInfo = this.message.info;
 		var channelObj = BDfunctionsDevilBro.getSelectedChannel();
 		var serverObj = BDfunctionsDevilBro.getSelectedServer() || {};
-		if (messageInfo && channelObj) {
-			var author = messageInfo.author;
+		if (this.message && channelObj) {
+			var author = this.message.author;
 			var channelID = channelObj.id;
 			var serverID = serverObj.id ? serverObj.id : "@me";
 			var pins = BDfunctionsDevilBro.loadAllData(this.getName(), "pins");
 			pins[serverID] = pins[serverID] ? pins[serverID] : {}
 			pins[serverID][channelID] = pins[serverID][channelID] ? pins[serverID][channelID] : {}
-			var messageID = messageInfo.id;
+			var messageID = this.message.id;
 			var position = this.message.pos;
 			var message = {
 				"serverID": serverID,
@@ -433,13 +428,13 @@ class PersonalPins {
 				"channelName": channelObj.name ? channelObj.name : BDfunctionsDevilBro.getInnerText(channelObj.div.querySelector(".channel-name")),
 				"id": messageID,
 				"pos": position,
-				"timestamp": messageInfo.timestamp._i.getTime(),
+				"timestamp": this.message.timestamp._i.getTime(),
 				"addedat": new Date().getTime(),
-				"color": messageInfo.colorString,
+				"color": this.message.colorString,
 				"authorID": author.id,
 				"authorName": author.username,
 				"avatar": author.avatar ? "url('https://cdn.discordapp.com/avatars/" + author.id + "/" + author.avatar + ".webp')" : "url('/assets/1cbd08c76f8af6dddce02c5138971129.png')",
-				"content": messageInfo.content,
+				"content": this.message.content,
 				"markup": this.message.div.querySelector(".markup").innerHTML,
 				"accessory": this.message.div.querySelector(".accessory").innerHTML
 			};
