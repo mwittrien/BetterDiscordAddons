@@ -1233,6 +1233,22 @@ BDfunctionsDevilBro.appendModal = function (modal) {
 		});
 };
 
+BDfunctionsDevilBro.appendContextMenu = function (menu, e) {
+	$(".app").append(menu);
+	var menuHeight = $(menu).outerHeight();
+	$(menu)
+		.addClass(BDfunctionsDevilBro.getDiscordTheme())
+		.css("left", e.pageX + "px")
+		.css("top", e.pageY + menuHeight > window.outerHeight ? (e.pageY - menuHeight + $(target).outerHeight()) + "px" : e.pageY + "px");
+	
+	$(document).on("mousedown.BDfunctionsDevilBroContextMenu", (e2) => {
+		$(document).off("mousedown.BDfunctionsDevilBroContextMenu");
+		if ($(menu).has(e2.currentTarget).length == 0) {
+			menu.remove();
+		}
+	});
+};
+
 BDfunctionsDevilBro.appendSubMenu = function (target, menu) {
 	$(target).append(menu);
 	var offsets = $(target).offset();
