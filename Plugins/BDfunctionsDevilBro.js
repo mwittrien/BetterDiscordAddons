@@ -857,6 +857,9 @@ BDfunctionsDevilBro.getSelectedChannel = function () {
 		if (info) info = ChannelStore.getChannel(ChannelStore.getDMFromUserId(info.id)) || ChannelStore.getChannel(info.id)
 		if (info) return Object.assign(info,{div:channel});
 	}
+	info = BDfunctionsDevilBro.getKeyInformation({"node":document.querySelector(".chat"), "key":"channel"});
+	if (info) info = ChannelStore.getChannel(info.id)
+	if (info) return Object.assign(info,{div:null});
 	return null;
 };
 
