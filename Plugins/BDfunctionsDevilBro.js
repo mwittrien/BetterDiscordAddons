@@ -1995,12 +1995,12 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		max-width: 400px;
 	}
 	
-	[class^="swatches"].disabled {
+	.DevilBro-modal [class^="swatches"].disabled {
 		cursor: no-drop;
 		filter: grayscale(70%) brightness(50%);
 	}
 
-	[class^="ui-color-picker-swatch"] {
+	.DevilBro-modal [class^="ui-color-picker-swatch"] {
 		cursor: pointer;
 		width: 22px;
 		height: 22px;
@@ -2010,21 +2010,21 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		border-radius: 12px;
 	}
 	
-	[class^="swatches"].disabled [class^="ui-color-picker-swatch"] {
+	.DevilBro-modal [class^="swatches"].disabled [class^="ui-color-picker-swatch"] {
 		cursor: no-drop;
 	}
 
-	[class^="ui-color-picker-swatch"].large {
+	.DevilBro-modal [class^="ui-color-picker-swatch"].large {
 		min-width: 62px;
 		height: 62px;
 		border-radius: 25px;
 	}
 
-	[class^="ui-color-picker-swatch"].nocolor {
+	.DevilBro-modal [class^="ui-color-picker-swatch"].nocolor {
 		border: 4px solid red;
 	}
 	
-	[class^="color-picker-dropper"] {
+	.DevilBro-modal [class^="color-picker-dropper"] {
 		position: relative;
 		left: 40px;
 		top: 10px;
