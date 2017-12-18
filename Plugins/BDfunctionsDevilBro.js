@@ -1243,7 +1243,7 @@ BDfunctionsDevilBro.appendContextMenu = function (menu, e) {
 	
 	$(document).on("mousedown.BDfunctionsDevilBroContextMenu", (e2) => {
 		$(document).off("mousedown.BDfunctionsDevilBroContextMenu");
-		if ($(menu).has(e2.currentTarget).length == 0) {
+		if ($(menu).has(e2.target).length == 0) {
 			menu.remove();
 		}
 	});
