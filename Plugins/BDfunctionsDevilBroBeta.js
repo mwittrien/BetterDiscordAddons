@@ -1,4 +1,4 @@
-var BDfunctionsDevilBro = {creationTime:performance.now(), pressedKeys = []};
+var BDfunctionsDevilBro = {creationTime:performance.now(), pressedKeys:[]};
 
 BDfunctionsDevilBro.isLibraryOutdated = function () {
 	return performance.now() - BDfunctionsDevilBro.creationTime > 600000;
