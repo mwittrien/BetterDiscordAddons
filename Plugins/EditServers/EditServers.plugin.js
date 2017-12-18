@@ -4,7 +4,7 @@ class EditServers {
 	constructor () {
 		
 		this.labels = {};
-    
+	
 		this.serverContextObserver = new MutationObserver(() => {});
 		this.serverListObserver = new MutationObserver(() => {});
 		
@@ -76,7 +76,7 @@ class EditServers {
 										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
 											<div class="inputWrapper-3xoRWR vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR flexChild-1KGW5q" style="flex: 1 1 auto;"><input type="text" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_" id="input-serverurl"></div>
 										</div>
-										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO  marginBottom8-1mABJ4" style="flex: 1 1 auto;">
+										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
 											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">REPLACE_modal_removeicon_text</h3>
 											<div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;">
 												<input type="checkbox" class="checkboxEnabled-4QfryV checkbox-1KYsPm" id="input-removeicon">
@@ -128,11 +128,11 @@ class EditServers {
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	getVersion () {return "1.6.6";}
+	getVersion () {return "1.6.7";}
 
 	getAuthor () {return "DevilBro";}
 	
-    getSettingsPanel () {
+	getSettingsPanel () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			var settingspanel = 
 				$(`<div class="${this.getName()}-settings">
@@ -142,7 +142,7 @@ class EditServers {
 				.on("click", ".reset-button", () => {this.resetAll();});
 			return settingspanel;
 		}
-    }
+	}
 
 	//legacy
 	load () {}
@@ -218,13 +218,13 @@ class EditServers {
 	
 	// begin of own functions
 
-    resetAll () {
+	resetAll () {
 		if (confirm("Are you sure you want to reset all servers?")) {
 			BDfunctionsDevilBro.removeAllData(this.getName(), "servers");
 			
 			document.querySelectorAll("[custom-editservers]").forEach(serverDiv => {this.resetServer(serverDiv);});
 		}
-    }
+	}
 
 	changeLanguageStrings () {
 		this.serverContextEntryMarkup = 	this.serverContextEntryMarkup.replace("REPLACE_context_localserversettings_text", this.labels.context_localserversettings_text);
@@ -258,9 +258,6 @@ class EditServers {
 				$(context).append(this.serverContextEntryMarkup)
 					.on("mouseenter", ".localserversettings-item", (e) => {
 						this.createContextSubMenu(info, e);
-					})
-					.on("mouseleave", ".localserversettings-item", () => {
-						this.deleteContextSubMenu();
 					});
 			}
 		}
@@ -269,34 +266,24 @@ class EditServers {
 	createContextSubMenu (info, e) {
 		var id = info.id;
 		
-		var targetDiv = e.currentTarget;
 		var serverContextSubMenu = $(this.serverContextSubMenuMarkup);
 		
-		$(targetDiv).append(serverContextSubMenu)
-			.off("click", ".serversettings-item")
+		serverContextSubMenu
 			.on("click", ".serversettings-item", () => {
 				this.showServerSettings(info);
 			});
 			
-		$(serverContextSubMenu)
-			.addClass(BDfunctionsDevilBro.getDiscordTheme())
-			.css("left", $(targetDiv).offset().left + "px")
-			.css("top", $(targetDiv).offset().top + "px");
-			
 		if (BDfunctionsDevilBro.loadData(id, this.getName(), "servers")) {
-			$(targetDiv)
-				.off("click", ".resetsettings-item")
+			serverContextSubMenu
 				.on("click", ".resetsettings-item", () => {
 					this.removeServerData(info.id);
 				});
 		}
 		else {
-			$(targetDiv).find(".resetsettings-item").addClass("disabled");
+			serverContextSubMenu.find(".resetsettings-item").addClass("disabled");
 		}
-	}
-	
-	deleteContextSubMenu () {
-		$(".editservers-submenu").remove();
+		
+		BDfunctionsDevilBro.appendSubMenu(e.currentTarget, serverContextSubMenu);
 	}
 	
 	showServerSettings (info) {
@@ -469,25 +456,23 @@ class EditServers {
 	}
 	
 	loadServer (serverObj) {
-		if (typeof serverObj !== "object" || !serverObj.div || !serverObj.info) return;
-		var serverDiv = serverObj.div;
-		var info = serverObj.info;
-		var data = BDfunctionsDevilBro.loadData(info.id, this.getName(), "servers");
+		if (typeof serverObj !== "object") return;
+		var data = BDfunctionsDevilBro.loadData(serverObj.id, this.getName(), "servers");
 		if (data) {
-			var serverInner = serverDiv.querySelector(".guild-inner");
-			var server = serverDiv.querySelector(".avatar-small");
+			var serverInner = serverObj.div.querySelector(".guild-inner");
+			var server = serverObj.div.querySelector(".avatar-small");
 			if ($(server).attr("name") === undefined) {
 				$(server).attr("name", $(server).text());
 			}
 			
-			var name = 			data.name ? data.name : info.name;
-			var shortName = 	data.shortName ? data.shortName : $(server).attr("name");
-			var bgImage = 		data.url ? "url(" + data.url + ")" : (info.icon ? "url('https://cdn.discordapp.com/icons/" + info.id + "/" + info.icon + ".png')" : "");
-			var removeIcon = 	data.removeIcon;
-			var color1 = 		data.color1 ? BDfunctionsDevilBro.color2RGB(data.color1) : "";
-			var color2 = 		data.color2 ? BDfunctionsDevilBro.color2RGB(data.color2) : "";
+			var name = data.name ? data.name : serverObj.name;
+			var shortName = data.shortName ? data.shortName : $(server).attr("name");
+			var bgImage = data.url ? "url(" + data.url + ")" : (serverObj.icon ? "url('https://cdn.discordapp.com/icons/" + serverObj.id + "/" + serverObj.icon + ".png')" : "");
+			var removeIcon = data.removeIcon;
+			var color1 = data.color1 ? BDfunctionsDevilBro.color2RGB(data.color1) : "";
+			var color2 = data.color2 ? BDfunctionsDevilBro.color2RGB(data.color2) : "";
 			
-			$(serverDiv)
+			$(serverObj.div)
 				.attr("custom-editservers", true);
 			$(serverInner)
 				.off("mouseenter." + this.getName())
@@ -510,10 +495,9 @@ class EditServers {
 	}
 	
 	createServerToolTip (serverObj) {
-		var info = serverObj.info;
-		var data = BDfunctionsDevilBro.loadData(info.id, this.getName(), "servers");
+		var data = BDfunctionsDevilBro.loadData(serverObj.id, this.getName(), "servers");
 		if (data) {
-			var text = data.name ? data.name : info.name;
+			var text = data.name ? data.name : serverObj.name;
 			var bgColor = data.color3 ? BDfunctionsDevilBro.color2RGB(data.color3) : "";
 			var fontColor = data.color4 ? BDfunctionsDevilBro.color2RGB(data.color4) : "";
 			var customTooltipCSS = `
@@ -534,465 +518,465 @@ class EditServers {
 	
 	setLabelsByLanguage () {
 		switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
-			case "da": 		//danish
+			case "da":		//danish
 				return {
-					context_localserversettings_text: 	"Lokal serverindstillinger",
-					submenu_serversettings_text: 		"Skift indstillinger",
-					submenu_resetsettings_text: 		"Nulstil server",
-					modal_header_text: 	 				"Lokal serverindstillinger",
-					modal_servername_text: 				"Lokalt servernavn",
-					modal_servershortname_text: 		"Initialer",
-					modal_serverurl_text: 				"Ikon",
-					modal_removeicon_text: 				"Fjern ikon",
-					modal_tabheader1_text: 				"Server",
-					modal_tabheader2_text: 				"Ikonfarve",
-					modal_tabheader3_text: 				"Tooltipfarve",
-					modal_colorpicker1_text: 			"Ikonfarve",
-					modal_colorpicker2_text: 			"Skriftfarve",
-					modal_colorpicker3_text: 			"Tooltipfarve",
-					modal_colorpicker4_text: 			"Skriftfarve",
-					modal_ignoreurl_text: 				"Ignorer URL",
-					modal_validurl_text: 				"Gyldig URL",
-					modal_invalidurl_text: 				"Ugyldig URL",
-					btn_cancel_text: 					"Afbryde",
-					btn_save_text: 						"Spare"
+					context_localserversettings_text:	"Lokal serverindstillinger",
+					submenu_serversettings_text:		"Skift indstillinger",
+					submenu_resetsettings_text:			"Nulstil server",
+					modal_header_text:	 				"Lokal serverindstillinger",
+					modal_servername_text:				"Lokalt servernavn",
+					modal_servershortname_text:			"Initialer",
+					modal_serverurl_text:				"Ikon",
+					modal_removeicon_text:				"Fjern ikon",
+					modal_tabheader1_text:				"Server",
+					modal_tabheader2_text:				"Ikonfarve",
+					modal_tabheader3_text:				"Tooltipfarve",
+					modal_colorpicker1_text:			"Ikonfarve",
+					modal_colorpicker2_text:			"Skriftfarve",
+					modal_colorpicker3_text:			"Tooltipfarve",
+					modal_colorpicker4_text:			"Skriftfarve",
+					modal_ignoreurl_text:				"Ignorer URL",
+					modal_validurl_text:				"Gyldig URL",
+					modal_invalidurl_text:				"Ugyldig URL",
+					btn_cancel_text:					"Afbryde",
+					btn_save_text:						"Spare"
 				};
-			case "de": 	//german
+			case "de":		//german
 				return {
-					context_localserversettings_text: 	"Lokale Servereinstellungen",
-					submenu_serversettings_text: 		"Ändere Einstellungen",
-					submenu_resetsettings_text: 		"Server zurücksetzen",
-					modal_header_text: 					"Lokale Servereinstellungen",
-					modal_servername_text: 				"Lokaler Servername",
-					modal_servershortname_text: 		"Serverkürzel",
-					modal_serverurl_text: 				"Icon",
-					modal_removeicon_text: 				"Entferne Icon",
-					modal_tabheader1_text: 				"Server",
-					modal_tabheader2_text: 				"Iconfarbe",
-					modal_tabheader3_text: 				"Tooltipfarbe",
-					modal_colorpicker1_text: 			"Iconfarbe",
-					modal_colorpicker2_text: 			"Schriftfarbe",
-					modal_colorpicker3_text: 			"Tooltipfarbe",
-					modal_colorpicker4_text: 			"Schriftfarbe",
-					modal_ignoreurl_text: 				"URL ignorieren",
-					modal_validurl_text: 				"Gültige URL",
-					modal_invalidurl_text: 				"Ungültige URL",
-					btn_cancel_text: 					"Abbrechen",
-					btn_save_text: 						"Speichern"
+					context_localserversettings_text:	"Lokale Servereinstellungen",
+					submenu_serversettings_text:		"Einstellungen ändern",
+					submenu_resetsettings_text:			"Server zurücksetzen",
+					modal_header_text:					"Lokale Servereinstellungen",
+					modal_servername_text:				"Lokaler Servername",
+					modal_servershortname_text:			"Serverkürzel",
+					modal_serverurl_text:				"Icon",
+					modal_removeicon_text:				"Entferne Icon",
+					modal_tabheader1_text:				"Server",
+					modal_tabheader2_text:				"Iconfarbe",
+					modal_tabheader3_text:				"Tooltipfarbe",
+					modal_colorpicker1_text:			"Iconfarbe",
+					modal_colorpicker2_text:			"Schriftfarbe",
+					modal_colorpicker3_text:			"Tooltipfarbe",
+					modal_colorpicker4_text:			"Schriftfarbe",
+					modal_ignoreurl_text:				"URL ignorieren",
+					modal_validurl_text:				"Gültige URL",
+					modal_invalidurl_text:				"Ungültige URL",
+					btn_cancel_text:					"Abbrechen",
+					btn_save_text:						"Speichern"
 				};
-			case "es": 	//spanish
+			case "es":		//spanish
 				return {
-					context_localserversettings_text: 	"Ajustes local de servidor",
-					submenu_serversettings_text: 		"Cambiar ajustes",
-					submenu_resetsettings_text: 		"Restablecer servidor",
-					modal_header_text: 					"Ajustes local de servidor",
-					modal_servername_text: 				"Nombre local del servidor",
-					modal_servershortname_text: 		"Iniciales",
-					modal_serverurl_text: 				"Icono",
-					modal_removeicon_text: 				"Eliminar icono",
-					modal_tabheader1_text: 				"Servidor",
-					modal_tabheader2_text: 				"Color del icono",
+					context_localserversettings_text:	"Ajustes local de servidor",
+					submenu_serversettings_text:		"Cambiar ajustes",
+					submenu_resetsettings_text:			"Restablecer servidor",
+					modal_header_text:					"Ajustes local de servidor",
+					modal_servername_text:				"Nombre local del servidor",
+					modal_servershortname_text:			"Iniciales",
+					modal_serverurl_text:				"Icono",
+					modal_removeicon_text:				"Eliminar icono",
+					modal_tabheader1_text:				"Servidor",
+					modal_tabheader2_text:				"Color del icono",
 					modal_tabheader3_text:				"Color de tooltip",
-					modal_colorpicker1_text: 			"Color del icono",
-					modal_colorpicker2_text: 			"Color de fuente",
-					modal_colorpicker3_text: 			"Color de tooltip",
-					modal_colorpicker4_text: 			"Color de fuente",
-					modal_ignoreurl_text: 				"Ignorar URL",
-					modal_validurl_text: 				"URL válida",
-					modal_invalidurl_text: 				"URL inválida",
-					btn_cancel_text: 					"Cancelar",
-					btn_save_text: 						"Guardar"
+					modal_colorpicker1_text:			"Color del icono",
+					modal_colorpicker2_text:			"Color de fuente",
+					modal_colorpicker3_text:			"Color de tooltip",
+					modal_colorpicker4_text:			"Color de fuente",
+					modal_ignoreurl_text:				"Ignorar URL",
+					modal_validurl_text:				"URL válida",
+					modal_invalidurl_text:				"URL inválida",
+					btn_cancel_text:					"Cancelar",
+					btn_save_text:						"Guardar"
 				};
-			case "fr": 	//french
+			case "fr":		//french
 				return {
-					context_localserversettings_text: 	"Paramètres locale du serveur",
-					submenu_serversettings_text: 		"Modifier les paramètres",
-					submenu_resetsettings_text: 		"Réinitialiser le serveur",
-					modal_header_text: 					"Paramètres locale du serveur",
-					modal_servername_text: 				"Nom local du serveur",
-					modal_servershortname_text: 		"Initiales",
-					modal_serverurl_text: 				"Icône",
-					modal_removeicon_text: 				"Supprimer l'icône",
-					modal_tabheader1_text: 				"Serveur",
-					modal_tabheader2_text: 				"Couleur de l'icône",
+					context_localserversettings_text:	"Paramètres locale du serveur",
+					submenu_serversettings_text:		"Modifier les paramètres",
+					submenu_resetsettings_text:			"Réinitialiser le serveur",
+					modal_header_text:					"Paramètres locale du serveur",
+					modal_servername_text:				"Nom local du serveur",
+					modal_servershortname_text:			"Initiales",
+					modal_serverurl_text:				"Icône",
+					modal_removeicon_text:				"Supprimer l'icône",
+					modal_tabheader1_text:				"Serveur",
+					modal_tabheader2_text:				"Couleur de l'icône",
 					modal_tabheader3_text:				"Couleur de tooltip",
-					modal_colorpicker1_text: 			"Couleur de l'icône",
-					modal_colorpicker2_text: 			"Couleur de la police",
+					modal_colorpicker1_text:			"Couleur de l'icône",
+					modal_colorpicker2_text:			"Couleur de la police",
 					modal_colorpicker3_text:			"Couleur de tooltip",
 					modal_colorpicker4_text:			"Couleur de la police",
-					modal_ignoreurl_text: 				"Ignorer l'URL",
-					modal_validurl_text: 				"URL valide",
-					modal_invalidurl_text: 				"URL invalide",
-					btn_cancel_text: 					"Abandonner",
-					btn_save_text: 						"Enregistrer"
+					modal_ignoreurl_text:				"Ignorer l'URL",
+					modal_validurl_text:				"URL valide",
+					modal_invalidurl_text:				"URL invalide",
+					btn_cancel_text:					"Abandonner",
+					btn_save_text:						"Enregistrer"
 				};
-			case "it": 	//italian
+			case "it":		//italian
 				return {
-					context_localserversettings_text: 	"Impostazioni locale server",
-					submenu_serversettings_text: 		"Cambia impostazioni",
-					submenu_resetsettings_text: 		"Ripristina server",
-					modal_header_text: 					"Impostazioni locale server",
-					modal_servername_text: 				"Nome locale server",
-					modal_servershortname_text: 		"Iniziali",
-					modal_serverurl_text: 				"Icona",
-					modal_removeicon_text: 				"Rimuova l'icona",
-					modal_tabheader1_text: 				"Server",
-					modal_tabheader2_text: 				"Colore dell'icona",
+					context_localserversettings_text:	"Impostazioni locale server",
+					submenu_serversettings_text:		"Cambia impostazioni",
+					submenu_resetsettings_text:			"Ripristina server",
+					modal_header_text:					"Impostazioni locale server",
+					modal_servername_text:				"Nome locale server",
+					modal_servershortname_text:			"Iniziali",
+					modal_serverurl_text:				"Icona",
+					modal_removeicon_text:				"Rimuova l'icona",
+					modal_tabheader1_text:				"Server",
+					modal_tabheader2_text:				"Colore dell'icona",
 					modal_tabheader3_text:				"Colore della tooltip",
-					modal_colorpicker1_text: 			"Colore dell'icona",
-					modal_colorpicker2_text: 			"Colore del carattere",
+					modal_colorpicker1_text:			"Colore dell'icona",
+					modal_colorpicker2_text:			"Colore del carattere",
 					modal_colorpicker3_text:			"Colore della tooltip",
 					modal_colorpicker4_text:			"Colore del carattere",
-					modal_ignoreurl_text: 				"Ignora l'URL",
-					modal_validurl_text: 				"URL valido",
-					modal_invalidurl_text: 				"URL non valido",
-					btn_cancel_text: 					"Cancellare",
-					btn_save_text: 						"Salvare"
+					modal_ignoreurl_text:				"Ignora l'URL",
+					modal_validurl_text:				"URL valido",
+					modal_invalidurl_text:				"URL non valido",
+					btn_cancel_text:					"Cancellare",
+					btn_save_text:						"Salvare"
 				};
-			case "nl": 	//dutch
+			case "nl":		//dutch
 				return {
-					context_localserversettings_text: 	"Lokale serverinstellingen",
-					submenu_serversettings_text: 		"Verandere instellingen",
-					submenu_resetsettings_text: 		"Reset server",
-					modal_header_text: 					"Lokale serverinstellingen",
-					modal_servername_text: 				"Lokale servernaam",
-					modal_servershortname_text: 		"Initialen",
-					modal_serverurl_text: 				"Icoon",
-					modal_removeicon_text: 				"Verwijder icoon",
-					modal_tabheader1_text: 				"Server",
-					modal_tabheader2_text: 				"Icoonkleur",
+					context_localserversettings_text:	"Lokale serverinstellingen",
+					submenu_serversettings_text:		"Verandere instellingen",
+					submenu_resetsettings_text:			"Reset server",
+					modal_header_text:					"Lokale serverinstellingen",
+					modal_servername_text:				"Lokale servernaam",
+					modal_servershortname_text:			"Initialen",
+					modal_serverurl_text:				"Icoon",
+					modal_removeicon_text:				"Verwijder icoon",
+					modal_tabheader1_text:				"Server",
+					modal_tabheader2_text:				"Icoonkleur",
 					modal_tabheader3_text:				"Tooltipkleur",
-					modal_colorpicker1_text: 			"Icoonkleur",
-					modal_colorpicker2_text: 			"Doopvontkleur",
+					modal_colorpicker1_text:			"Icoonkleur",
+					modal_colorpicker2_text:			"Doopvontkleur",
 					modal_colorpicker3_text:			"Tooltipkleur",
 					modal_colorpicker4_text:			"Doopvontkleur",
-					modal_ignoreurl_text: 				"URL negeren",
-					modal_validurl_text: 				"Geldige URL",
-					modal_invalidurl_text: 				"Ongeldige URL",
-					btn_cancel_text: 					"Afbreken",
-					btn_save_text: 						"Opslaan"
+					modal_ignoreurl_text:				"URL negeren",
+					modal_validurl_text:				"Geldige URL",
+					modal_invalidurl_text:				"Ongeldige URL",
+					btn_cancel_text:					"Afbreken",
+					btn_save_text:						"Opslaan"
 				};
-			case "no": 	//norwegian
+			case "no":		//norwegian
 				return {
-					context_localserversettings_text: 	"Lokal serverinnstillinger",
-					submenu_serversettings_text: 		"Endre innstillinger",
-					submenu_resetsettings_text: 		"Tilbakestill server",
-					modal_header_text: 					"Lokal serverinnstillinger",
-					modal_servername_text: 				"Lokalt servernavn",
-					modal_servershortname_text: 		"Initialer",
-					modal_serverurl_text: 				"Ikon",
-					modal_removeicon_text: 				"Fjern ikon",
-					modal_tabheader1_text: 				"Server",
-					modal_tabheader2_text: 				"Ikonfarge",
+					context_localserversettings_text:	"Lokal serverinnstillinger",
+					submenu_serversettings_text:		"Endre innstillinger",
+					submenu_resetsettings_text:			"Tilbakestill server",
+					modal_header_text:					"Lokal serverinnstillinger",
+					modal_servername_text:				"Lokalt servernavn",
+					modal_servershortname_text:			"Initialer",
+					modal_serverurl_text:				"Ikon",
+					modal_removeicon_text:				"Fjern ikon",
+					modal_tabheader1_text:				"Server",
+					modal_tabheader2_text:				"Ikonfarge",
 					modal_tabheader3_text:				"Tooltipfarge",
-					modal_colorpicker1_text: 			"Ikonfarge",
-					modal_colorpicker2_text: 			"Skriftfarge",
+					modal_colorpicker1_text:			"Ikonfarge",
+					modal_colorpicker2_text:			"Skriftfarge",
 					modal_colorpicker3_text:			"Tooltipfarge",
 					modal_colorpicker4_text:			"Skriftfarge",
-					modal_ignoreurl_text: 				"Ignorer URL",
-					modal_validurl_text: 				"Gyldig URL",
-					modal_invalidurl_text: 				"Ugyldig URL",
-					btn_cancel_text: 					"Avbryte",
-					btn_save_text: 						"Lagre"
+					modal_ignoreurl_text:				"Ignorer URL",
+					modal_validurl_text:				"Gyldig URL",
+					modal_invalidurl_text:				"Ugyldig URL",
+					btn_cancel_text:					"Avbryte",
+					btn_save_text:						"Lagre"
 				};
-			case "pl": 	//polish
+			case "pl":		//polish
 				return {
 					context_localserversettings_text:	"Lokalne ustawienia serwera",
-                    submenu_serversettings_text:		"Zmień ustawienia",
-                    submenu_resetsettings_text:			"Resetuj ustawienia",
-                    modal_header_text:					"Lokalne ustawienia serwera",
-                    modal_servername_text:				"Lokalna nazwa serwera",
-                    modal_servershortname_text:			"Krótka nazwa",
-                    modal_serverurl_text:				"Ikona",
-                    modal_removeicon_text:				"Usuń ikonę",
-                    modal_tabheader1_text:				"Serwer",
-                    modal_tabheader2_text:				"Kolor ikony",
-                    modal_tabheader3_text:				"Kolor podpowiedzi",
-                    modal_colorpicker1_text:			"Kolor ikony",
-                    modal_colorpicker2_text:			"Kolor czcionki",
-                    modal_colorpicker3_text:			"Kolor podpowiedzi",
-                    modal_colorpicker4_text:			"Kolor czcionki",
-                    modal_ignoreurl_text:				"Ignoruj URL",
-                    modal_validurl_text:				"Prawidłowe URL",
-                    modal_invalidurl_text:				"Nieprawidłowe URL",
-                    btn_cancel_text:					"Anuluj",
-                    btn_save_text:						"Zapisz"
+					submenu_serversettings_text:		"Zmień ustawienia",
+					submenu_resetsettings_text:				"Resetuj ustawienia",
+					modal_header_text:					"Lokalne ustawienia serwera",
+					modal_servername_text:				"Lokalna nazwa serwera",
+					modal_servershortname_text:				"Krótka nazwa",
+					modal_serverurl_text:				"Ikona",
+					modal_removeicon_text:				"Usuń ikonę",
+					modal_tabheader1_text:				"Serwer",
+					modal_tabheader2_text:				"Kolor ikony",
+					modal_tabheader3_text:				"Kolor podpowiedzi",
+					modal_colorpicker1_text:			"Kolor ikony",
+					modal_colorpicker2_text:			"Kolor czcionki",
+					modal_colorpicker3_text:			"Kolor podpowiedzi",
+					modal_colorpicker4_text:			"Kolor czcionki",
+					modal_ignoreurl_text:				"Ignoruj URL",
+					modal_validurl_text:				"Prawidłowe URL",
+					modal_invalidurl_text:				"Nieprawidłowe URL",
+					btn_cancel_text:					"Anuluj",
+					btn_save_text:						"Zapisz"
 				};
-			case "pt": 	//portuguese (brazil)
+			case "pt":		//portuguese (brazil)
 				return {
-					context_localserversettings_text: 	"Configurações local do servidor",
-					submenu_serversettings_text: 		"Mudar configurações",
-					submenu_resetsettings_text: 		"Redefinir servidor",
-					modal_header_text: 					"Configurações local do servidor",
-					modal_servername_text: 				"Nome local do servidor",
-					modal_servershortname_text: 		"Iniciais",
-					modal_serverurl_text: 				"Icone",
-					modal_removeicon_text: 				"Remover ícone",
-					modal_tabheader1_text: 				"Servidor",
-					modal_tabheader2_text: 				"Cor do ícone",
+					context_localserversettings_text:	"Configurações local do servidor",
+					submenu_serversettings_text:		"Mudar configurações",
+					submenu_resetsettings_text:			"Redefinir servidor",
+					modal_header_text:					"Configurações local do servidor",
+					modal_servername_text:				"Nome local do servidor",
+					modal_servershortname_text:			"Iniciais",
+					modal_serverurl_text:				"Icone",
+					modal_removeicon_text:				"Remover ícone",
+					modal_tabheader1_text:				"Servidor",
+					modal_tabheader2_text:				"Cor do ícone",
 					modal_tabheader3_text:				"Cor da tooltip",
-					modal_colorpicker1_text: 			"Cor do ícone",
-					modal_colorpicker2_text: 			"Cor da fonte",
+					modal_colorpicker1_text:			"Cor do ícone",
+					modal_colorpicker2_text:			"Cor da fonte",
 					modal_colorpicker3_text:			"Cor da tooltip",
 					modal_colorpicker4_text:			"Cor da fonte",
-					modal_ignoreurl_text: 				"Ignorar URL",
-					modal_validurl_text: 				"URL válido",
-					modal_invalidurl_text: 				"URL inválida",
-					btn_cancel_text: 					"Cancelar",
-					btn_save_text: 						"Salvar"
+					modal_ignoreurl_text:				"Ignorar URL",
+					modal_validurl_text:				"URL válido",
+					modal_invalidurl_text:				"URL inválida",
+					btn_cancel_text:					"Cancelar",
+					btn_save_text:						"Salvar"
 				};
-			case "fi": 	//finnish
+			case "fi":		//finnish
 				return {
-					context_localserversettings_text: 	"Paikallinen palvelimen asetukset",
-					submenu_serversettings_text: 		"Vaihda asetuksia",
-					submenu_resetsettings_text: 		"Nollaa palvelimen",
-					modal_header_text: 					"Paikallinen palvelimen asetukset",
-					modal_servername_text: 				"Paikallinen palvelimenimi",
-					modal_servershortname_text: 		"Nimikirjaimet",
-					modal_serverurl_text: 				"Ikonin",
-					modal_removeicon_text: 				"Poista kuvake",
-					modal_tabheader1_text: 				"Palvelimen",
-					modal_tabheader2_text: 				"Ikoninväri",
+					context_localserversettings_text:	"Paikallinen palvelimen asetukset",
+					submenu_serversettings_text:		"Vaihda asetuksia",
+					submenu_resetsettings_text:			"Nollaa palvelimen",
+					modal_header_text:					"Paikallinen palvelimen asetukset",
+					modal_servername_text:				"Paikallinen palvelimenimi",
+					modal_servershortname_text:			"Nimikirjaimet",
+					modal_serverurl_text:				"Ikonin",
+					modal_removeicon_text:				"Poista kuvake",
+					modal_tabheader1_text:				"Palvelimen",
+					modal_tabheader2_text:				"Ikoninväri",
 					modal_tabheader3_text:				"Tooltipväri",
-					modal_colorpicker1_text: 			"Ikoninväri",
-					modal_colorpicker2_text: 			"Fontinväri",
+					modal_colorpicker1_text:			"Ikoninväri",
+					modal_colorpicker2_text:			"Fontinväri",
 					modal_colorpicker3_text:			"Tooltipväri",
 					modal_colorpicker4_text:			"Fontinväri",
-					modal_ignoreurl_text: 				"Ohita URL",
-					modal_validurl_text: 				"Voimassa URL",
-					modal_invalidurl_text: 				"Virheellinen URL",
-					btn_cancel_text: 					"Peruuttaa",
-					btn_save_text: 						"Tallentaa"
+					modal_ignoreurl_text:				"Ohita URL",
+					modal_validurl_text:				"Voimassa URL",
+					modal_invalidurl_text:				"Virheellinen URL",
+					btn_cancel_text:					"Peruuttaa",
+					btn_save_text:						"Tallentaa"
 				};
-			case "sv": 	//swedish
+			case "sv":		//swedish
 				return {
-					context_localserversettings_text: 	"Lokal serverinställningar",
-					submenu_serversettings_text: 		"Ändra inställningar",
-					submenu_resetsettings_text: 		"Återställ server",
-					modal_header_text: 					"Lokal serverinställningar",
-					modal_servername_text: 				"Lokalt servernamn",
-					modal_servershortname_text: 		"Initialer",
-					modal_serverurl_text: 				"Ikon",
-					modal_removeicon_text: 				"Ta bort ikonen",
-					modal_tabheader1_text: 				"Server",
-					modal_tabheader2_text: 				"Ikonfärg",
+					context_localserversettings_text:	"Lokal serverinställningar",
+					submenu_serversettings_text:		"Ändra inställningar",
+					submenu_resetsettings_text:			"Återställ server",
+					modal_header_text:					"Lokal serverinställningar",
+					modal_servername_text:				"Lokalt servernamn",
+					modal_servershortname_text:			"Initialer",
+					modal_serverurl_text:				"Ikon",
+					modal_removeicon_text:				"Ta bort ikonen",
+					modal_tabheader1_text:				"Server",
+					modal_tabheader2_text:				"Ikonfärg",
 					modal_tabheader3_text:				"Tooltipfärg",
-					modal_colorpicker1_text: 			"Ikonfärg",
-					modal_colorpicker2_text: 			"Fontfärg",
+					modal_colorpicker1_text:			"Ikonfärg",
+					modal_colorpicker2_text:			"Fontfärg",
 					modal_colorpicker3_text:			"Tooltipfärg",
 					modal_colorpicker4_text:			"Fontfärg",
-					modal_ignoreurl_text: 				"Ignorera URL",
-					modal_validurl_text: 				"Giltig URL",
-					modal_invalidurl_text: 				"Ogiltig URL",
-					btn_cancel_text: 					"Avbryta",
-					btn_save_text: 						"Spara"
+					modal_ignoreurl_text:				"Ignorera URL",
+					modal_validurl_text:				"Giltig URL",
+					modal_invalidurl_text:				"Ogiltig URL",
+					btn_cancel_text:					"Avbryta",
+					btn_save_text:						"Spara"
 				};
-			case "tr": 	//turkish
+			case "tr":		//turkish
 				return {
-					context_localserversettings_text: 	"Yerel Sunucu Ayarları",
-					submenu_serversettings_text: 		"Ayarları Değiştir",
-					submenu_resetsettings_text: 		"Sunucu Sıfırla",
-					modal_header_text: 					"Yerel Sunucu Ayarları",
-					modal_servername_text: 				"Yerel Sunucu Adı",
-					modal_servershortname_text: 		"Baş harfleri",
-					modal_serverurl_text: 				"Simge",
-					modal_removeicon_text: 				"Simge kaldır",
-					modal_tabheader1_text: 				"Sunucu",
-					modal_tabheader2_text: 				"Simge rengi",
+					context_localserversettings_text:	"Yerel Sunucu Ayarları",
+					submenu_serversettings_text:		"Ayarları Değiştir",
+					submenu_resetsettings_text:			"Sunucu Sıfırla",
+					modal_header_text:					"Yerel Sunucu Ayarları",
+					modal_servername_text:				"Yerel Sunucu Adı",
+					modal_servershortname_text:			"Baş harfleri",
+					modal_serverurl_text:				"Simge",
+					modal_removeicon_text:				"Simge kaldır",
+					modal_tabheader1_text:				"Sunucu",
+					modal_tabheader2_text:				"Simge rengi",
 					modal_tabheader3_text:				"Tooltip rengi",
-					modal_colorpicker1_text: 			"Simge rengi",
-					modal_colorpicker2_text: 			"Yazı rengi",
+					modal_colorpicker1_text:			"Simge rengi",
+					modal_colorpicker2_text:			"Yazı rengi",
 					modal_colorpicker3_text:			"Tooltip rengi",
 					modal_colorpicker4_text:			"Yazı rengi",
-					modal_ignoreurl_text: 				"URL yoksay",
-					modal_validurl_text: 				"Geçerli URL",
-					modal_invalidurl_text: 				"Geçersiz URL",
-					btn_cancel_text: 					"Iptal",
-					btn_save_text: 						"Kayıt"
+					modal_ignoreurl_text:				"URL yoksay",
+					modal_validurl_text:				"Geçerli URL",
+					modal_invalidurl_text:				"Geçersiz URL",
+					btn_cancel_text:					"Iptal",
+					btn_save_text:						"Kayıt"
 				};
-			case "cs": 	//czech
+			case "cs":		//czech
 				return {
-					context_localserversettings_text: 	"Místní nastavení serveru",
-					submenu_serversettings_text: 		"Změnit nastavení",
-					submenu_resetsettings_text: 		"Obnovit server",
-					modal_header_text: 					"Místní nastavení serveru",
-					modal_servername_text: 				"Místní název serveru",
-					modal_servershortname_text: 		"Iniciály",
-					modal_serverurl_text: 				"Ikony",
-					modal_removeicon_text: 				"Odstranit ikonu",
-					modal_tabheader1_text: 				"Server",
-					modal_tabheader2_text: 				"Barva ikony",
+					context_localserversettings_text:	"Místní nastavení serveru",
+					submenu_serversettings_text:		"Změnit nastavení",
+					submenu_resetsettings_text:			"Obnovit server",
+					modal_header_text:					"Místní nastavení serveru",
+					modal_servername_text:				"Místní název serveru",
+					modal_servershortname_text:			"Iniciály",
+					modal_serverurl_text:				"Ikony",
+					modal_removeicon_text:				"Odstranit ikonu",
+					modal_tabheader1_text:				"Server",
+					modal_tabheader2_text:				"Barva ikony",
 					modal_tabheader3_text:				"Barva tooltip",
-					modal_colorpicker1_text: 			"Barva ikony",
-					modal_colorpicker2_text: 			"Barva fontu",
+					modal_colorpicker1_text:			"Barva ikony",
+					modal_colorpicker2_text:			"Barva fontu",
 					modal_colorpicker3_text:			"Barva tooltip",
 					modal_colorpicker4_text:			"Barva fontu",
-					modal_ignoreurl_text: 				"Ignorovat URL",
-					modal_validurl_text: 				"Platná URL",
-					modal_invalidurl_text: 				"Neplatná URL",
-					btn_cancel_text: 					"Zrušení",
-					btn_save_text: 						"Uložit"
+					modal_ignoreurl_text:				"Ignorovat URL",
+					modal_validurl_text:				"Platná URL",
+					modal_invalidurl_text:				"Neplatná URL",
+					btn_cancel_text:					"Zrušení",
+					btn_save_text:						"Uložit"
 				};
-			case "bg": 	//bulgarian
+			case "bg":		//bulgarian
 				return {
-					context_localserversettings_text: 	"Настройки за локални cървър",
-					submenu_serversettings_text: 		"Промяна на настройките",
-					submenu_resetsettings_text: 		"Възстановяване на cървър",
-					modal_header_text: 					"Настройки за локални cървър",
-					modal_servername_text: 				"Локално име на cървър",
-					modal_servershortname_text: 		"Инициали",
-					modal_serverurl_text: 				"Икона",
-					modal_removeicon_text: 				"Премахване на иконата",
-					modal_tabheader1_text: 				"Cървър",
-					modal_tabheader2_text: 				"Цвят на иконата",
+					context_localserversettings_text:	"Настройки за локални cървър",
+					submenu_serversettings_text:		"Промяна на настройките",
+					submenu_resetsettings_text:			"Възстановяване на cървър",
+					modal_header_text:					"Настройки за локални cървър",
+					modal_servername_text:				"Локално име на cървър",
+					modal_servershortname_text:			"Инициали",
+					modal_serverurl_text:				"Икона",
+					modal_removeicon_text:				"Премахване на иконата",
+					modal_tabheader1_text:				"Cървър",
+					modal_tabheader2_text:				"Цвят на иконата",
 					modal_tabheader3_text:				"Цвят на подсказка",
-					modal_colorpicker1_text: 			"Цвят на иконата",
-					modal_colorpicker2_text: 			"Цвят на шрифта",
+					modal_colorpicker1_text:			"Цвят на иконата",
+					modal_colorpicker2_text:			"Цвят на шрифта",
 					modal_colorpicker3_text:			"Цвят на подсказка",
 					modal_colorpicker4_text:			"Цвят на шрифта",
-					modal_ignoreurl_text: 				"Игнориране на URL",
-					modal_validurl_text: 				"Валиден URL",
-					modal_invalidurl_text: 				"Невалиден URL",
-					btn_cancel_text: 					"Зъбести",
-					btn_save_text: 						"Cпасяване"
+					modal_ignoreurl_text:				"Игнориране на URL",
+					modal_validurl_text:				"Валиден URL",
+					modal_invalidurl_text:				"Невалиден URL",
+					btn_cancel_text:					"Зъбести",
+					btn_save_text:						"Cпасяване"
 				};
-			case "ru": 	//russian
+			case "ru":		//russian
 				return {
-					context_localserversettings_text: 	"Настройки локального cервер",
-					submenu_serversettings_text: 		"Изменить настройки",
-					submenu_resetsettings_text: 		"Сбросить cервер",
-					modal_header_text: 					"Настройки локального cервер",
-					modal_servername_text: 				"Имя локального cервер",
-					modal_servershortname_text: 		"Инициалы",
-					modal_serverurl_text: 				"Значок",
-					modal_removeicon_text: 				"Удалить значок",
-					modal_tabheader1_text: 				"Cервер",
-					modal_tabheader2_text: 				"Цвет значков",
+					context_localserversettings_text:	"Настройки локального cервер",
+					submenu_serversettings_text:		"Изменить настройки",
+					submenu_resetsettings_text:			"Сбросить cервер",
+					modal_header_text:					"Настройки локального cервер",
+					modal_servername_text:				"Имя локального cервер",
+					modal_servershortname_text:			"Инициалы",
+					modal_serverurl_text:				"Значок",
+					modal_removeicon_text:				"Удалить значок",
+					modal_tabheader1_text:				"Cервер",
+					modal_tabheader2_text:				"Цвет значков",
 					modal_tabheader3_text:				"Цвет подсказка",
-					modal_colorpicker1_text: 			"Цвет значков",
-					modal_colorpicker2_text: 			"Цвет шрифта",
+					modal_colorpicker1_text:			"Цвет значков",
+					modal_colorpicker2_text:			"Цвет шрифта",
 					modal_colorpicker3_text:			"Цвет подсказка",
 					modal_colorpicker4_text:			"Цвет шрифта",
-					modal_ignoreurl_text: 				"Игнорировать URL",
-					modal_validurl_text: 				"Действительный URL",
-					modal_invalidurl_text: 				"Неверная URL",
-					btn_cancel_text: 					"Отмена",
-					btn_save_text: 						"Cпасти"
+					modal_ignoreurl_text:				"Игнорировать URL",
+					modal_validurl_text:				"Действительный URL",
+					modal_invalidurl_text:				"Неверная URL",
+					btn_cancel_text:					"Отмена",
+					btn_save_text:						"Cпасти"
 				};
-			case "uk": 	//ukrainian
+			case "uk":		//ukrainian
 				return {
-					context_localserversettings_text: 	"Налаштування локального cервер",
-					submenu_serversettings_text: 		"Змінити налаштування",
-					submenu_resetsettings_text: 		"Скидання cервер",
-					modal_header_text: 					"Налаштування локального cервер",
-					modal_servername_text: 				"Локальне ім'я cервер",
-					modal_servershortname_text: 		"Ініціали",
-					modal_serverurl_text: 				"Іконка",
-					modal_removeicon_text: 				"Видалити піктограму",
-					modal_tabheader1_text: 				"Cервер",
-					modal_tabheader2_text: 				"Колір ікони",
+					context_localserversettings_text:	"Налаштування локального cервер",
+					submenu_serversettings_text:		"Змінити налаштування",
+					submenu_resetsettings_text:			"Скидання cервер",
+					modal_header_text:					"Налаштування локального cервер",
+					modal_servername_text:				"Локальне ім'я cервер",
+					modal_servershortname_text:			"Ініціали",
+					modal_serverurl_text:				"Іконка",
+					modal_removeicon_text:				"Видалити піктограму",
+					modal_tabheader1_text:				"Cервер",
+					modal_tabheader2_text:				"Колір ікони",
 					modal_tabheader3_text:				"Колір підказка",
-					modal_colorpicker1_text: 			"Колір ікони",
-					modal_colorpicker2_text: 			"Колір шрифту",
+					modal_colorpicker1_text:			"Колір ікони",
+					modal_colorpicker2_text:			"Колір шрифту",
 					modal_colorpicker3_text:			"Колір підказка",
 					modal_colorpicker4_text:			"Колір шрифту",
-					modal_ignoreurl_text: 				"Ігнорувати URL",
-					modal_validurl_text: 				"Дійсна URL",
-					modal_invalidurl_text: 				"Недійсна URL",
-					btn_cancel_text: 					"Скасувати",
-					btn_save_text: 						"Зберегти"
+					modal_ignoreurl_text:				"Ігнорувати URL",
+					modal_validurl_text:				"Дійсна URL",
+					modal_invalidurl_text:				"Недійсна URL",
+					btn_cancel_text:					"Скасувати",
+					btn_save_text:						"Зберегти"
 				};
-			case "ja": 	//japanese
+			case "ja":		//japanese
 				return {
-					context_localserversettings_text: 	"ローカルサーバー設定",
-					submenu_serversettings_text: 		"設定を変更する",
-					submenu_resetsettings_text: 		"サーバーをリセットする",
-					modal_header_text: 					"ローカルサーバー設定",
-					modal_servername_text: 				"ローカルサーバー名",
-					modal_servershortname_text: 		"イニシャル",
-					modal_serverurl_text: 				"アイコン",
-					modal_removeicon_text: 				"アイコンを削除",
-					modal_tabheader1_text: 				"サーバー",
-					modal_tabheader2_text: 				"アイコンの色",
+					context_localserversettings_text:	"ローカルサーバー設定",
+					submenu_serversettings_text:		"設定を変更する",
+					submenu_resetsettings_text:			"サーバーをリセットする",
+					modal_header_text:					"ローカルサーバー設定",
+					modal_servername_text:				"ローカルサーバー名",
+					modal_servershortname_text:			"イニシャル",
+					modal_serverurl_text:				"アイコン",
+					modal_removeicon_text:				"アイコンを削除",
+					modal_tabheader1_text:				"サーバー",
+					modal_tabheader2_text:				"アイコンの色",
 					modal_tabheader3_text:				"ツールチップの色",
-					modal_colorpicker1_text: 			"アイコンの色",
-					modal_colorpicker2_text: 			"フォントの色",
+					modal_colorpicker1_text:			"アイコンの色",
+					modal_colorpicker2_text:			"フォントの色",
 					modal_colorpicker3_text:			"ツールチップの色",
 					modal_colorpicker4_text:			"フォントの色",
-					modal_ignoreurl_text: 				"URL を無視する",
-					modal_validurl_text: 				"有効な URL",
-					modal_invalidurl_text: 				"無効な URL",
-					btn_cancel_text: 					"キャンセル",
-					btn_save_text: 						"セーブ"
+					modal_ignoreurl_text:				"URL を無視する",
+					modal_validurl_text:				"有効な URL",
+					modal_invalidurl_text:				"無効な URL",
+					btn_cancel_text:					"キャンセル",
+					btn_save_text:						"セーブ"
 				};
-			case "zh": 	//chinese (traditional)
+			case "zh":		//chinese (traditional)
 				return {
-					context_localserversettings_text: 	"本地服務器設置",
-					submenu_serversettings_text: 		"更改設置",
-					submenu_resetsettings_text: 		"重置服務器",
-					modal_header_text: 					"本地服務器設置",
-					modal_servername_text: 				"服務器名稱",
-					modal_servershortname_text: 		"聲母",
-					modal_serverurl_text: 				"圖標",
-					modal_removeicon_text: 				"刪除圖標",
-					modal_tabheader1_text: 				"服務器",
-					modal_tabheader2_text: 				"圖標顏色",
-					modal_tabheader3_text: 				"工具提示顏色",
-					modal_colorpicker1_text: 			"圖標顏色",
-					modal_colorpicker2_text: 			"字體顏色",
+					context_localserversettings_text:	"本地服務器設置",
+					submenu_serversettings_text:		"更改設置",
+					submenu_resetsettings_text:			"重置服務器",
+					modal_header_text:					"本地服務器設置",
+					modal_servername_text:				"服務器名稱",
+					modal_servershortname_text:			"聲母",
+					modal_serverurl_text:				"圖標",
+					modal_removeicon_text:				"刪除圖標",
+					modal_tabheader1_text:				"服務器",
+					modal_tabheader2_text:				"圖標顏色",
+					modal_tabheader3_text:				"工具提示顏色",
+					modal_colorpicker1_text:			"圖標顏色",
+					modal_colorpicker2_text:			"字體顏色",
 					modal_colorpicker3_text:			"工具提示顏色",
 					modal_colorpicker4_text:			"字體顏色",
-					modal_ignoreurl_text: 				"忽略 URL",
-					modal_validurl_text: 				"有效的 URL",
-					modal_invalidurl_text: 				"無效的 URL",
-					btn_cancel_text: 					"取消",
-					btn_save_text: 						"保存"
+					modal_ignoreurl_text:				"忽略 URL",
+					modal_validurl_text:				"有效的 URL",
+					modal_invalidurl_text:				"無效的 URL",
+					btn_cancel_text:					"取消",
+					btn_save_text:						"保存"
 				};
-			case "ko": 	//korean
+			case "ko":		//korean
 				return {
-					context_localserversettings_text: 	"로컬 서버 설정",
-					submenu_serversettings_text: 		"설정 변경",
-					submenu_resetsettings_text: 		"서버 재설정",
-					modal_header_text: 					"로컬 서버 설정",
-					modal_servername_text: 				"로컬 서버 이름",
-					modal_servershortname_text: 		"머리 글자",
-					modal_serverurl_text: 				"상",
-					modal_removeicon_text: 				"상 삭제",
-					modal_tabheader1_text: 				"서버",
-					modal_tabheader2_text: 				"상 색깔",
+					context_localserversettings_text:	"로컬 서버 설정",
+					submenu_serversettings_text:		"설정 변경",
+					submenu_resetsettings_text:			"서버 재설정",
+					modal_header_text:					"로컬 서버 설정",
+					modal_servername_text:				"로컬 서버 이름",
+					modal_servershortname_text:			"머리 글자",
+					modal_serverurl_text:				"상",
+					modal_removeicon_text:				"상 삭제",
+					modal_tabheader1_text:				"서버",
+					modal_tabheader2_text:				"상 색깔",
 					modal_tabheader3_text:				"툴팁 색깔",
-					modal_colorpicker1_text: 			"상 색깔",
-					modal_colorpicker2_text: 			"글꼴 색깔",
+					modal_colorpicker1_text:			"상 색깔",
+					modal_colorpicker2_text:			"글꼴 색깔",
 					modal_colorpicker3_text:			"툴팁 색깔",
 					modal_colorpicker4_text:			"글꼴 색깔",
-					modal_ignoreurl_text: 				"URL 무시",
-					modal_validurl_text: 				"유효한 URL",
-					modal_invalidurl_text: 				"잘못된 URL",
-					btn_cancel_text: 					"취소",
-					btn_save_text: 						"저장"
+					modal_ignoreurl_text:				"URL 무시",
+					modal_validurl_text:				"유효한 URL",
+					modal_invalidurl_text:				"잘못된 URL",
+					btn_cancel_text:					"취소",
+					btn_save_text:						"저장"
 				};
-			default: 	//default: english
+			default:		//default: english
 				return {
-					context_localserversettings_text: 	"Local Serversettings",
-					submenu_serversettings_text: 		"Change Settings",
-					submenu_resetsettings_text: 		"Reset Server",
-					modal_header_text: 					"Local Serversettings",
-					modal_servername_text: 				"Local Servername",
-					modal_servershortname_text: 		"Initials",
-					modal_serverurl_text: 				"Icon",
-					modal_removeicon_text: 				"Remove Icon",
-					modal_tabheader1_text: 				"Server",
-					modal_tabheader2_text: 				"Iconcolor",
+					context_localserversettings_text:	"Local Serversettings",
+					submenu_serversettings_text:		"Change Settings",
+					submenu_resetsettings_text:			"Reset Server",
+					modal_header_text:					"Local Serversettings",
+					modal_servername_text:				"Local Servername",
+					modal_servershortname_text:			"Initials",
+					modal_serverurl_text:				"Icon",
+					modal_removeicon_text:				"Remove Icon",
+					modal_tabheader1_text:				"Server",
+					modal_tabheader2_text:				"Iconcolor",
 					modal_tabheader3_text:				"Tooltipcolor",
-					modal_colorpicker1_text: 			"Iconcolor",
-					modal_colorpicker2_text: 			"Fontcolor",
+					modal_colorpicker1_text:			"Iconcolor",
+					modal_colorpicker2_text:			"Fontcolor",
 					modal_colorpicker3_text:			"Tooltipcolor",
 					modal_colorpicker4_text:			"Fontcolor",
-					modal_ignoreurl_text: 				"Ignore URL",
-					modal_validurl_text: 				"Valid URL",
-					modal_invalidurl_text: 				"Invalid URL",
-					btn_cancel_text: 					"Cancel",
-					btn_save_text: 						"Save"
+					modal_ignoreurl_text:				"Ignore URL",
+					modal_validurl_text:				"Valid URL",
+					modal_invalidurl_text:				"Invalid URL",
+					btn_cancel_text:					"Cancel",
+					btn_save_text:						"Save"
 				};
 		}
 	}
