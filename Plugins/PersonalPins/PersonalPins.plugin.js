@@ -87,20 +87,14 @@ class PersonalPins {
 							<h2 class="old-h2">
 								<span class="username-wrapper"><strong class="user-name"></strong></span>
 								<span class="highlight-separator"> - </span>
-								<span class="timestamp time"></span>
+								<span class="timestamp"></span>
 							</h2>
 							<div class="message-text">
 								<div class="markup" style="width: 380px;"></div>
 							</div>
 						</div>
 						<div class="accessory"></div>
-						<div class="body">
-							<h2 class="old-h2">
-								<span class="timestamp server" style="margin-left:0px;"></span>
-								<span class="highlight-separator"> - </span>
-								<span class="timestamp channel"></span>
-							</h2>
-						</div>
+						<div class="description-3MVziF formText-1L-zZB note-UEZmbY marginTop4-2rEBfJ modeDefault-389VjU primary-2giqSn server-channel"></div>
 					</div>
 				</div>
 				<div class="sink-interactions clickable"></div>
@@ -116,7 +110,7 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.2.8";}
+	getVersion () {return "1.2.9";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -290,10 +284,14 @@ class PersonalPins {
 	getMessageElements (div) {
 		if (div && !div.querySelector(".system-message")) {
 			var messagegroup = $(".message-group").has(div);
-			this.message = {
-				"div": div,
-				"group": messagegroup[0],
-				"pos": messagegroup.find(".message").index(div)
+			var pos = messagegroup.find(".message").index(div);
+			if (messagegroup.length) {
+				this.message = {
+					"div": div,
+					"group": messagegroup[0],
+					"pos": pos,
+					"info": BDfunctionsDevilBro.getKeyInformation({"node":messagegroup[0],"key":"messages"})[pos]
+				}
 			}
 		}
 		else {
@@ -411,7 +409,7 @@ class PersonalPins {
 	
 	addMessageToNotes () {
 		if (!this.message) return;
-		var messageInfo = BDfunctionsDevilBro.getKeyInformation({"node":this.message.group,"key":"messages"})[this.message.pos];
+		var messageInfo = this.message.info;
 		var guildInfo = BDfunctionsDevilBro.getKeyInformation({"node":document.querySelector(".chat"),"key":"guild"});
 		var channelInfo = BDfunctionsDevilBro.getKeyInformation({"node":document.querySelector(".chat"),"key":"channel"});
 		if (messageInfo && channelInfo) {
@@ -489,9 +487,8 @@ class PersonalPins {
 					message.querySelector(".avatar-large").style.backgroundImage = user ? "url('https://cdn.discordapp.com/avatars/" + user.id + "/" + user.avatar + ".webp')" : messageData.avatar;
 					message.querySelector(".user-name").innerText = user ? user.username : messageData.author;
 					message.querySelector(".user-name").style.color = member ? member.colorString : messageData.color;
-					message.querySelector(".time").innerText = date.toLocaleTimeString() + ", " + date.toLocaleDateString(language);
-					message.querySelector(".server").innerText = server ? server.name : messageData.serverName;
-					message.querySelector(".channel").innerText = channel ? channel.name : messageData.channelName;
+					message.querySelector(".timestamp").innerText = date.toLocaleTimeString() + ", " + date.toLocaleDateString(language);
+					message.querySelector(".server-channel").innerText = (server ? server.name : messageData.serverName) + " #" + (channel ? channel.name : messageData.channelName);
 					message.querySelector(".markup").innerHTML = messageData.markup;
 					message.querySelector(".accessory").innerHTML = messageData.accessory;
 					$(message).on("click." + this.getName(), ".close-button", (e) => {
@@ -536,7 +533,7 @@ class PersonalPins {
 	
 	setLabelsByLanguage () {
 		switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
-			case "da": 		//danish
+			case "da":		//danish
 				return {
 					popout_note_text:				"Noter",
 					popout_channel_text:			"Kanal",
@@ -552,7 +549,7 @@ class PersonalPins {
 					toast_noteadd_text:				"Meddelelse tilføjet til notesbog.",
 					toast_noteremove_text:			"Meddelelse fjernet fra notesbog."
 				};
-			case "de": 		//german
+			case "de":		//german
 				return {
 					popout_note_text:				"Notizen",
 					popout_channel_text:			"Kanal",
@@ -568,7 +565,7 @@ class PersonalPins {
 					toast_noteadd_text:				"Nachricht zum Notizbuch hinzugefügt.",
 					toast_noteremove_text:			"Nachricht aus dem Notizbuch entfernt."
 				};
-			case "es": 		//spanish
+			case "es":		//spanish
 				return {
 					popout_note_text:				"Notas",
 					popout_channel_text:			"Canal",
@@ -584,7 +581,7 @@ class PersonalPins {
 					toast_noteadd_text:				"Mensaje agregado al cuaderno.",
 					toast_noteremove_text:			"Mensaje eliminado del cuaderno."
 				};
-			case "fr": 		//french
+			case "fr":		//french
 				return {
 					popout_note_text:				"Notes",
 					popout_channel_text:			"Canal",
@@ -600,7 +597,7 @@ class PersonalPins {
 					toast_noteadd_text:				"Message ajouté au bloc-notes.",
 					toast_noteremove_text:			"Message supprimé du bloc-notes."
 				};
-			case "it": 		//italian
+			case "it":		//italian
 				return {
 					popout_note_text:				"Note",
 					popout_channel_text:			"Canale",
