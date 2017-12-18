@@ -800,7 +800,7 @@ BDfunctionsDevilBro.readServerList = function () {
 	for (server of document.querySelectorAll(".guild-separator ~ .guild")) {
 		info = BDfunctionsDevilBro.getKeyInformation({"node":server, "key":"guild"});
 		if (info) info = GuildStore.getGuild(info.id);
-		if (info) foundServers.push(Object.assign({div:server},info));
+		if (info) foundServers.push(Object.assign(info,{div:server}));
 	}
 	return foundServers;
 };
@@ -818,7 +818,7 @@ BDfunctionsDevilBro.getSelectedServer = function () {
 	for (server of document.querySelectorAll(".guild-separator ~ .guild.selected")) {
 		info = BDfunctionsDevilBro.getKeyInformation({"node":server, "key":"guild"});
 		if (info) info = GuildStore.getGuild(info.id);
-		if (info) return Object.assign({div:server},info);
+		if (info) return Object.assign(info,{div:server});
 	}
 	return null;
 };
@@ -835,12 +835,12 @@ BDfunctionsDevilBro.readChannelList = function () {
 	for (channel of document.querySelectorAll(".containerDefault-7RImuF, .containerDefault-1bbItS")) {
 		info = BDfunctionsDevilBro.getKeyInformation({"node":channel, "key":"channel"});
 		if (info) info = ChannelStore.getChannel(info.id);
-		if (info) foundChannels.push(Object.assign({div:channel},info));
+		if (info) foundChannels.push(Object.assign(info,{div:channel}));
 	}
 	for (channel of document.querySelectorAll(".channel.private")) {
 		info = BDfunctionsDevilBro.getKeyInformation({"node":channel, "key":"user"}) || BDfunctionsDevilBro.getKeyInformation({"node":channel, "key":"channel"});
 		if (info) info = ChannelStore.getChannel(ChannelStore.getDMFromUserId(info.id)) || ChannelStore.getChannel(info.id)
-		if (info) foundChannels.push(Object.assign({div:channel},info));
+		if (info) foundChannels.push(Object.assign(info,{div:channel}));
 	}
 	return foundChannels;
 };
@@ -850,12 +850,12 @@ BDfunctionsDevilBro.getSelectedChannel = function () {
 	for (channel of document.querySelectorAll(".wrapperSelectedText-31jJa8")) {
 		info = BDfunctionsDevilBro.getKeyInformation({"node":channel.parentElement, "key":"channel"});
 		if (info) info = ChannelStore.getChannel(info.id);
-		if (info) return Object.assign({div:channel},info);
+		if (info) return Object.assign(info,{div:channel});
 	}
 	for (channel of document.querySelectorAll(".channel.private.selected")) {
 		info = BDfunctionsDevilBro.getKeyInformation({"node":channel, "key":"user"}) || BDfunctionsDevilBro.getKeyInformation({"node":channel, "key":"channel"});
 		if (info) info = ChannelStore.getChannel(ChannelStore.getDMFromUserId(info.id)) || ChannelStore.getChannel(info.id)
-		if (info) return Object.assign({div:channel},info);
+		if (info) return Object.assign(info,{div:channel});
 	}
 	return null;
 };
@@ -872,7 +872,7 @@ BDfunctionsDevilBro.readDmList = function () {
 	for (dm of document.querySelectorAll(".dms .guild")) {
 		info = BDfunctionsDevilBro.getKeyInformation({"node":dm, "key":"channel"});
 		if (info) info = ChannelStore.getChannel(info.id);
-		if (info) foundDMs.push(Object.assign({div:dm},info));
+		if (info) foundDMs.push(Object.assign(info,{div:dm}));
 	}
 	return foundDMs;
 };
