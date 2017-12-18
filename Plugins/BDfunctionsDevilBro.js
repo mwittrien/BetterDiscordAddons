@@ -1663,6 +1663,10 @@ BDfunctionsDevilBro.isRestartNoMoreEnabled = function () {
 	return BDfunctionsDevilBro.isPluginEnabled("Restart-No-More") || BDfunctionsDevilBro.isPluginEnabled("Restart No More");
 };
 
+BDfunctionsDevilBro.isThemeEnabled = function (name) {
+	return window.bdthemes[name] && window.themeCookie[name];
+};
+
 BDfunctionsDevilBro.getDiscordTheme = function () {
 	if ($(".theme-light").length > $(".theme-dark").length) return "theme-light";
 	else return "theme-dark";
