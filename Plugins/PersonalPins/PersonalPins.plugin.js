@@ -110,7 +110,7 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.2.9";}
+	getVersion () {return "1.3.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -137,6 +137,11 @@ class PersonalPins {
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
+			
+			if (!BDfunctionsDevilBro.loadData("reset1", this.getName(), "resets")) {
+				BDfunctionsDevilBro.removeAllData(this.getName(), "servers");
+				BDfunctionsDevilBro.saveData("reset1", true, this.getName(), "resets");
+			}
 			
 			this.GuildStore = BDfunctionsDevilBro.WebModules.findByProperties(["getGuild"]);
 			this.ChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getChannel"]);
@@ -243,7 +248,7 @@ class PersonalPins {
 
 	resetAll () {
 		if (confirm("Are you sure you want to delete all pinned notes?")) {
-			BDfunctionsDevilBro.removeAllData(this.getName(), "servers");
+			BDfunctionsDevilBro.removeAllData(this.getName(), "pins");
 		}
 	}
 	
@@ -410,35 +415,36 @@ class PersonalPins {
 	addMessageToNotes () {
 		if (!this.message) return;
 		var messageInfo = this.message.info;
-		var guildInfo = BDfunctionsDevilBro.getKeyInformation({"node":document.querySelector(".chat"),"key":"guild"});
-		var channelInfo = BDfunctionsDevilBro.getKeyInformation({"node":document.querySelector(".chat"),"key":"channel"});
-		if (messageInfo && channelInfo) {
-			var serverID = guildInfo ? guildInfo.id : "@me";
-			var channelID = channelInfo.id;
-			var data = BDfunctionsDevilBro.loadAllData(this.getName(), "servers");
-			data[serverID] = data[serverID] ? data[serverID] : {}
-			data[serverID][channelID] = data[serverID][channelID] ? data[serverID][channelID] : {}
+		var channelObj = BDfunctionsDevilBro.getSelectedChannel();
+		var serverObj = BDfunctionsDevilBro.getSelectedServer() || {};
+		if (messageInfo && channelObj) {
+			var author = messageInfo.author;
+			var channelID = channelObj.id;
+			var serverID = serverObj.id ? serverObj.id : "@me";
+			var pins = BDfunctionsDevilBro.loadAllData(this.getName(), "pins");
+			pins[serverID] = pins[serverID] ? pins[serverID] : {}
+			pins[serverID][channelID] = pins[serverID][channelID] ? pins[serverID][channelID] : {}
 			var messageID = messageInfo.id;
 			var position = this.message.pos;
 			var message = {
-				"server": serverID,
-				"serverName": guildInfo ? guildInfo.name : "Direct Messages",
-				"channel": channelID,
-				"channelName": channelInfo.name ? channelInfo.name : BDfunctionsDevilBro.getInnerText(document.querySelector(".channel.selected .channel-name")),
+				"serverID": serverID,
+				"serverName": serverObj.name ? serverObj.name : "Direct Messages",
+				"channelID": channelID,
+				"channelName": channelObj.name ? channelObj.name : BDfunctionsDevilBro.getInnerText(channelObj.div.querySelector(".channel-name")),
 				"id": messageID,
 				"pos": position,
 				"timestamp": messageInfo.timestamp._i.getTime(),
 				"addedat": new Date().getTime(),
 				"color": messageInfo.colorString,
-				"author": messageInfo.author.username,
-				"authorID": messageInfo.author.id,
-				"avatar": "url('https://cdn.discordapp.com/avatars/" + messageInfo.author.id + "/" + messageInfo.author.avatar + ".webp')",
+				"authorID": author.id,
+				"authorName": author.username,
+				"avatar": author.avatar ? "url('https://cdn.discordapp.com/avatars/" + author.id + "/" + author.avatar + ".webp')" : "url('/assets/1cbd08c76f8af6dddce02c5138971129.png')",
 				"content": messageInfo.content,
 				"markup": this.message.div.querySelector(".markup").innerHTML,
 				"accessory": this.message.div.querySelector(".accessory").innerHTML
 			};
-			data[serverID][channelID][messageID + "_" + position] = message;
-			BDfunctionsDevilBro.saveAllData(data, this.getName(), "servers");
+			pins[serverID][channelID][messageID + "_" + position] = message;
+			BDfunctionsDevilBro.saveAllData(pins, this.getName(), "pins");
 			BDfunctionsDevilBro.showToast(this.labels.toast_noteadd_text, {type:"success"});
 		}
 		this.message = null;
@@ -448,26 +454,25 @@ class PersonalPins {
 		var popout = document.querySelector(".popout-personalpins-notes");
 		if (!popout) return;
 		$(popout).find(".message-group").remove();
-		var info = BDfunctionsDevilBro.getKeyInformation({"node":document.querySelector(".chat"),"key":"channel"});
-		if (info) {
-			var serverID = info.guild_id;
-			serverID = serverID ? serverID : "@me";
-			var channelID = info.id;
-			let data = BDfunctionsDevilBro.loadAllData(this.getName(), "servers");
-			if (!BDfunctionsDevilBro.isObjectEmpty(data)) {
+		var channelObj = BDfunctionsDevilBro.getSelectedChannel();
+		if (channelObj) {
+			var serverID = channelObj.guild_id ? channelObj.guild_id : "@me";
+			var channelID = channelObj.id;
+			var pins = BDfunctionsDevilBro.loadAllData(this.getName(), "pins");
+			if (!BDfunctionsDevilBro.isObjectEmpty(pins)) {
 				var language = BDfunctionsDevilBro.getDiscordLanguage().id;
 				var container = popout.querySelector(".messages-popout");
 				var placeholder = popout.querySelector(".empty-placeholder");
 				var messages = {};
 				switch ($(".tab-bar-item.selected", popout).attr("tab")) {
 					case "channel":
-						messages = data[serverID] && data[serverID][channelID] ? data[serverID][channelID] : {};
+						messages = pins[serverID] && pins[serverID][channelID] ? pins[serverID][channelID] : {};
 						break;
 					case "server":
-						if (data[serverID]) for (let channel in data[serverID]) messages = Object.assign(messages, data[serverID][channel]); 
+						if (pins[serverID]) for (let channel in pins[serverID]) messages = Object.assign(messages, pins[serverID][channel]); 
 						break;
 					case "allservers":
-						for (let server in data) if (data[server]) for (let channel in data[server]) messages = Object.assign(messages, data[server][channel]); 
+						for (let server in pins) if (pins[server]) for (let channel in pins[server]) messages = Object.assign(messages, pins[server][channel]); 
 						break;
 				}
 				var messageArray = [];
@@ -484,27 +489,30 @@ class PersonalPins {
 					let member = this.MemberStore.getMember(messageData.serverID, messageData.authorID);
 					let date = new Date(messageData.timestamp);
 					container.insertBefore(message, container.firstChild);
-					message.querySelector(".avatar-large").style.backgroundImage = user ? "url('https://cdn.discordapp.com/avatars/" + user.id + "/" + user.avatar + ".webp')" : messageData.avatar;
-					message.querySelector(".user-name").innerText = user ? user.username : messageData.author;
+					message.querySelector(".avatar-large").style.backgroundImage = 
+						user && user.avatar ? "url('https://cdn.discordapp.com/avatars/" + user.id + "/" + user.avatar + ".webp')" : messageData.avatar;
+					message.querySelector(".user-name").innerText = user ? user.username : messageData.authorName;
 					message.querySelector(".user-name").style.color = member ? member.colorString : messageData.color;
 					message.querySelector(".timestamp").innerText = date.toLocaleTimeString() + ", " + date.toLocaleDateString(language);
-					message.querySelector(".server-channel").innerText = (server ? server.name : messageData.serverName) + " #" + (channel ? channel.name : messageData.channelName);
+					message.querySelector(".server-channel").innerText = 
+						(server && server.name ? server.name : messageData.serverName) + 
+						(messageData.serverID == "@me" ? " @" : " #") + 
+						(channel && channel.name ? channel.name : messageData.channelName);
 					message.querySelector(".markup").innerHTML = messageData.markup;
 					message.querySelector(".accessory").innerHTML = messageData.accessory;
 					$(message).on("click." + this.getName(), ".close-button", (e) => {
 						message.remove();
-						delete data[messageData.server][messageData.channel][messageData.id + "_" + messageData.pos];
-						BDfunctionsDevilBro.saveAllData(data, this.getName(), "servers");
+						delete pins[messageData.serverID][messageData.channelID][messageData.id + "_" + messageData.pos];
+						BDfunctionsDevilBro.saveAllData(pins, this.getName(), "pins");
 						if (!container.querySelector(".message-group")) $(placeholder).show();
 						BDfunctionsDevilBro.showToast(this.labels.toast_noteremove_text, {type:"danger"});
 					})
 					.on("click." + this.getName(), ".jump-button.jump", (e) => {
-						this.HistoryUtils.transitionTo(this.MainDiscord.Routes.MESSAGE(messageData.server, messageData.channel, messageData.id));
+						this.HistoryUtils.transitionTo(this.MainDiscord.Routes.MESSAGE(messageData.serverID, messageData.channelID, messageData.id));
 					})
 					.on("click." + this.getName(), ".jump-button.copy", (e) => {
 						let clipboard = require("electron").clipboard;
 						if (messageData.content) clipboard.write({text: messageData.content});
-						else if (message.querySelector(".markup").innerText) clipboard.write({text: message.querySelector(".markup").innerText});
 						else {
 							var image = message.querySelector(".attachment-image .image");
 							if (image) {
@@ -652,7 +660,7 @@ class PersonalPins {
 					popout_server_text:				"Serwer",
 					popout_allservers_text:			"Wszystkie serwery",
 					popout_sort_text:				"Sortuj według",
-					popout_messagesort_text:		"Wiadomość-data",
+					popout_messagesort_text:		"Wiadomość-Data",
 					popout_datesort_text:			"Notatka-Data",
 					popout_jump_text:				"Skocz",
 					popout_copy_text:				"Kopiować",
