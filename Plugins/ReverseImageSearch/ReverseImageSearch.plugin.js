@@ -6,17 +6,17 @@ class ReverseImageSearch {
 		
 		this.imageUrlReplaceString = "DEVILBRO_BD_REVERSEIMAGESEARCH_REPLACE_IMAGEURL";
 		
-		this.searchEngines = [
-			{"name":"Baidu", 	"url":"http://image.baidu.com/pcdutu?queryImageUrl=" + this.imageUrlReplaceString},
-			{"name":"Bing", 	"url":"https://www.bing.com/images/search?q=imgurl:" + this.imageUrlReplaceString + "&view=detailv2&iss=sbi&FORM=IRSBIQ"},
-			{"name":"Google", 	"url":"https://images.google.com/searchbyimage?image_url=" + this.imageUrlReplaceString},
-			{"name":"IQDB",		"url":"https://iqdb.org/?url=" + this.imageUrlReplaceString},
-			{"name":"Reddit", 	"url":"http://karmadecay.com/search?q=" + this.imageUrlReplaceString},
-			{"name":"SauceNAO",	"url":"https://saucenao.com/search.php?db=999&url=" + this.imageUrlReplaceString},
-			{"name":"Sogou", 	"url":"http://pic.sogou.com/ris?flag=1&drag=0&query=" + this.imageUrlReplaceString + "&flag=1"},
-			{"name":"TinEye", 	"url":"https://tineye.com/search?url=" + this.imageUrlReplaceString},
-			{"name":"Yandex", 	"url":"https://yandex.com/images/search?url=" + this.imageUrlReplaceString + "&rpt=imageview"}
-		];
+		this.searchEngines = {
+			Baidu: 		{value:true, 	name:"Baidu", 		url:"http://image.baidu.com/pcdutu?queryImageUrl=" + this.imageUrlReplaceString},
+			Bing: 		{value:true, 	name:"Bing", 		url:"https://www.bing.com/images/search?q=imgurl:" + this.imageUrlReplaceString + "&view=detailv2&iss=sbi&FORM=IRSBIQ"},
+			Google:		{value:true, 	name:"Google", 		url:"https://images.google.com/searchbyimage?image_url=" + this.imageUrlReplaceString},
+			IQDB:		{value:true, 	name:"IQDB", 		url:"https://iqdb.org/?url=" + this.imageUrlReplaceString},
+			Reddit: 	{value:true, 	name:"Reddit", 		url:"http://karmadecay.com/search?q=" + this.imageUrlReplaceString},
+			SauceNAO: 	{value:true, 	name:"SauceNAO", 	url:"https://saucenao.com/search.php?db=999&url=" + this.imageUrlReplaceString},
+			Sogou: 		{value:true, 	name:"Sogou", 		url:"http://pic.sogou.com/ris?flag=1&drag=0&query=" + this.imageUrlReplaceString + "&flag=1"},
+			TinEye:		{value:true, 	name:"TinEye", 		url:"https://tineye.com/search?url=" + this.imageUrlReplaceString},
+			Yandex: 	{value:true, 	name:"Yandex", 		url:"https://yandex.com/images/search?url=" + this.imageUrlReplaceString + "&rpt=imageview"}
+		};
 
 		this.messageContextEntryMarkup =
 			`<div class="item-group">
@@ -34,7 +34,7 @@ class ReverseImageSearch {
 						<span>REPLACE_submenu_disabled_text</span>
 						<div class="hint"></div>
 					</div>
-					${ this.searchEngines.map((val, i) => `<div class="item ${val.name.replace(new RegExp(" ", 'g'), "")} RIS-item"><span>${val.name}</span><div class="hint"></div></div>`).join("")}
+					${Object.keys(this.searchEngines).map((key, i) => `<div class="item ${key} RIS-item"><span>${this.searchEngines[key].name}</span><div class="hint"></div></div>`).join("")}
 				</div>
 			</div>`;
 	}
@@ -44,23 +44,23 @@ class ReverseImageSearch {
 
 	getDescription () {return "Adds a reverse image search option to the context menu.";}
 
-	getVersion () {return "3.2.8";}
+	getVersion () {return "3.2.9";}
 	
 	getAuthor () {return "DevilBro";}
 
 	getSettingsPanel () {
 		if (typeof BDfunctionsDevilBro === "object") {
+			var settingshtml = `<div class="${this.getName()}-settings"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">Search Engines:</h3></div><div class="inner-tqJwAU" style=" margin: 0;">`;
 			var settings = this.getSettings();
-			var settingshtml = `<div class="${this.getName()}-settings"><label style="color:grey;">Reverse Search Engines:</label><br>`;
-			for (var i in this.searchEngines) {
-				var engine = this.searchEngines[i].name;
-				var checked = settings[engine] ? " checked" : "";
-				settingshtml += `<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="${engine}"${checked}>${engine}</label><br>`;
+			for (let key in settings) {
+				settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto; margin-top: 0;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.searchEngines[key].name}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU ${settings[key] ? "valueChecked-3Bzkbm" : "valueUnchecked-XR6AOk"}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
 			}
-			settingshtml += `</div>`;
+			settingshtml += `</div></div>`;
+			
 			var settingspanel = $(settingshtml)[0];
 			$(settingspanel)
-				.on("change", ".settings-checkbox", () => {this.updateSettings(settingspanel);});
+				.on("click", ".checkbox-1KYsPm", () => {this.updateSettings(settingspanel);});
+				
 			return settingspanel;
 		}
 	}
@@ -92,8 +92,6 @@ class ReverseImageSearch {
 			});
 			if (document.querySelector(".app")) this.messageContextObserver.observe(document.querySelector(".app"), {childList: true});
 			
-			this.searchEngines = BDfunctionsDevilBro.sortArrayByKey(this.searchEngines, "name");
-			
 			BDfunctionsDevilBro.translatePlugin(this);
 		}
 		else {
@@ -112,26 +110,27 @@ class ReverseImageSearch {
 	// begin of own functions
 	
 	getSettings () {
-		var settings = BDfunctionsDevilBro.loadAllData(this.getName(), "settings");
-		var saveSettings = false;
-		for (var i in this.searchEngines) {
-			var key = this.searchEngines[i].name;
-			if (settings[key] == null) {
-				settings[key] = settings[key] ? settings[key] : true;
+		var oldSettings = BDfunctionsDevilBro.loadAllData(this.getName(), "settings"), newSettings = {}, saveSettings = false;
+		for (let key in this.searchEngines) {
+			if (oldSettings[key] == null) {
+				newSettings[key] = this.searchEngines[key].value;
 				saveSettings = true;
 			}
+			else {
+				newSettings[key] = oldSettings[key];
+			}
 		}
-		if (saveSettings) {
-			BDfunctionsDevilBro.saveAllData(settings, this.getName(), "settings");
-		}
-		return settings;
+		if (saveSettings) BDfunctionsDevilBro.saveAllData(newSettings, this.getName(), "settings");
+		return newSettings;
 	}
+	
 
 	updateSettings (settingspanel) {
 		var settings = {};
-		var inputs = settingspanel.querySelectorAll(".settings-checkbox");
-		for (var i = 0; i < inputs.length; i++) {
-			settings[inputs[i].value] = inputs[i].checked;
+		for (var input of settingspanel.querySelectorAll(".checkbox-1KYsPm")) {
+			settings[input.value] = input.checked;
+			input.parentElement.classList.toggle("valueChecked-3Bzkbm", input.checked);
+			input.parentElement.classList.toggle("valueUnchecked-XR6AOk", !input.checked);
 		}
 		BDfunctionsDevilBro.saveAllData(settings, this.getName(), "settings");
 	}
@@ -145,7 +144,6 @@ class ReverseImageSearch {
 		
 		if (url) {
 			if (url.indexOf("discordapp.com/assets/") == -1) {
-				
 				if (url.indexOf("https://images-ext-1.discordapp.net/external/") > -1) {
 					if (url.split("/https/").length != 1) {
 						url = "https://" + url.split("/https/")[url.split("/https/").length-1];
@@ -169,24 +167,19 @@ class ReverseImageSearch {
 		messageContextSubMenu
 			.on("click", ".RIS-item", (e2) => {
 				$(".context-menu").hide();
-				var choice = e2.currentTarget;
-				for (var i in this.searchEngines) {
-					var engine = this.searchEngines[i].name;
-					if (choice.classList.contains(engine.replace(new RegExp(" ", 'g'), ""))) {
-						var searchurl = this.searchEngines[i].url;
+				for (let key in this.searchEngines) {
+					if (e2.currentTarget.classList.contains(key)) {
+						var searchurl = this.searchEngines[key].url;
 						searchurl = searchurl.replace(this.imageUrlReplaceString, imageurl);
 						window.open(searchurl, "_blank");
 						break;
 					}
 				}
-				
 			});
 		
 		var settings = this.getSettings();
-		for (var key in settings) {
-			if (!settings[key]) {
-				messageContextSubMenu.find("." + key.replace(new RegExp(" ", 'g'), "")).remove();
-			}
+		for (let key in settings) {
+			if (!settings[key]) messageContextSubMenu.find("." + key).remove();
 		}
 		if (messageContextSubMenu.find(".RIS-item").length > 0) {
 			messageContextSubMenu.find(".alldisabled-item").remove();
