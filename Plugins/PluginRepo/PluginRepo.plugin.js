@@ -207,7 +207,7 @@ class PluginRepo {
 
 	getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
 
-	getVersion () {return "1.1.7";}
+	getVersion () {return "1.1.8";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -457,9 +457,9 @@ class PluginRepo {
 						let offset = added*(wrapperopen.length + wrapperclose.length);
 						start = start + offset;
 						let end = start + searchstring.length;
-						var openIndexes = [0].concat(BDfunctionsDevilBro.getAllIndexes(value.substring(0, start), "<"));
-						var closedIndexes = [0].concat(BDfunctionsDevilBro.getAllIndexes(value.substring(0, start), ">"));
-						if (openIndexes[openIndexes.length-1] >= closedIndexes[closedIndexes.length-1]) return;
+						var openIndexes = [-1].concat(BDfunctionsDevilBro.getAllIndexes(value.substring(0, start), "<"));
+						var closedIndexes = [-1].concat(BDfunctionsDevilBro.getAllIndexes(value.substring(0, start), ">"));
+						if (openIndexes[openIndexes.length-1] > closedIndexes[closedIndexes.length-1]) return;
 						value = value.substring(0, start) + wrapperopen + value.substring(start, end) + wrapperclose + value.substring(end);
 						added++;
 					});
@@ -673,7 +673,7 @@ class PluginRepo {
 	
 	startPlugin (entry) {
 		var name = entry.name;
-		if (typeof window.bdplugins[name] == "object" && window.pluginCookie[name] == false) {
+		if (BDfunctionsDevilBro.isPluginEnabled(name) == false) {
 			window.bdplugins[name].plugin.start();
 			window.pluginCookie[name] = true;
 			console.log("PluginRepo: started Plugin " + name);
@@ -698,7 +698,7 @@ class PluginRepo {
 	
 	stopPlugin (entry) {
 		var name = entry.name;
-		if (typeof window.bdplugins[name] == "object" && window.pluginCookie[name] == true) {
+		if (BDfunctionsDevilBro.isPluginEnabled(name) == true) {
 			window.bdplugins[name].plugin.stop();
 			window.pluginCookie[name] = false;
 			delete window.bdplugins[name];
