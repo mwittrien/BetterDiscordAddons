@@ -6,12 +6,6 @@ class EmojiStatistics {
 		
 		this.emojiPickerObserver = new MutationObserver(() => {});
 		
-		this.emojiToServerList = {};
-		this.emojiReplicaList = {};
-		
-		this.emojiInformation;
-		this.serverInformation;
-		
 		this.css = `
 			.emojistatistics-modal .titles {
 				height: 20px;
@@ -98,16 +92,6 @@ class EmojiStatistics {
 				height: 22px;
 				margin-right: 10px;
 				width: 22px;
-			}
-			
-			.emoji-tooltip {
-				position: absolute;
-				z-index: 3000;
-			}
-			
-			.emoji-tooltip div {
-				white-space: nowrap;
-				overflow: hidden;
 			}`;
 			
 		this.emojiInformationModalMarkup =
@@ -176,7 +160,7 @@ class EmojiStatistics {
 
 	getDescription () {return "Adds some helpful options to show you more information about emojis and emojiservers.";}
 
-	getVersion () {return "2.6.6";}
+	getVersion () {return "2.6.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -236,6 +220,8 @@ class EmojiStatistics {
 				);
 			});
 			if (document.querySelector(".popouts")) this.emojiPickerObserver.observe(document.querySelector(".popouts"), {childList: true});
+			
+			this.GuildEmojis = BDfunctionsDevilBro.WebModules.findByProperties(["getGuildEmoji", "getDisambiguatedEmojiContext"]);
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 			
@@ -297,34 +283,17 @@ class EmojiStatistics {
 	}
 	
 	loadEmojiList () {
-		var emojipicker = $(".emoji-picker")[0];
-		if (emojipicker) {
-			var rows = BDfunctionsDevilBro.getKeyInformation({"node":emojipicker, "key":"cachedMetaDataNoSearch"});
-			this.emojiInformation = rows;
-			var categories = BDfunctionsDevilBro.getKeyInformation({"node":emojipicker, "key":"categories"});
-			this.serverInformation = categories;
-			
-			if (rows && categories) {
-				for (var i = 0; i < rows.length; i++) {
-					var currentServer = rows[i].category;
-					if (currentServer.indexOf("custom") != -1){	
-						var emojis = rows[i].items;
-						for (var j = 0; j < emojis.length; j++) {
-							var emoji = emojis[j].emoji;
-							var emojiUrl = emoji.url;
-							var emojiName = emoji.allNamesString;
-							var emojiClearName = emojiName.split(":")[1].split("~")[0];
-							var serverName = this.getNameOfServer(currentServer, categories);
-							this.emojiToServerList[emojiUrl] = {emojiName, serverName};
-							if (emoji.managed) {
-								if (this.emojiReplicaList[emojiClearName] != undefined) {
-									this.emojiReplicaList[emojiClearName] = true;
-								}
-								else {
-									this.emojiReplicaList[emojiClearName] = false;
-								}
-							}
-						}
+		this.emojiReplicaList = {};
+		this.emojiToServerList = {};
+		for (let serverObj of BDfunctionsDevilBro.readServerList()) {
+			for (let emoji of this.GuildEmojis.getGuildEmoji(serverObj.id)) {
+				this.emojiToServerList[emoji.url] = {emoji:emoji.allNamesString, server:serverObj.name};
+				if (emoji.managed) {
+					if (this.emojiReplicaList[emoji.name] != undefined) {
+						this.emojiReplicaList[emoji.name] = true;
+					}
+					else {
+						this.emojiReplicaList[emoji.name] = false;
 					}
 				}
 			}
@@ -334,163 +303,111 @@ class EmojiStatistics {
 	hoverEmoji (picker) {
 		$(picker)
 			.off("mouseenter." + this.getName())
-			.on("mouseenter." + this.getName(), "div.emoji-item", (e) => {
-				var emoji = e.target;
-				var emojiUrl = $(emoji).css("background-image");
-				emojiUrl = emojiUrl.replace("url(\"","").replace("\")","");
-				var data = this.emojiToServerList[emojiUrl];
+			.on("mouseenter." + this.getName(), ".emoji-item", (e) => {
+				var data = this.emojiToServerList[$(e.target).css("background-image").replace("url(\"","").replace("\")","")];
 				if (data) {
-					var emojiName = BDfunctionsDevilBro.encodeToHTML(data.emojiName);
-					var serverName = BDfunctionsDevilBro.encodeToHTML(data.serverName);
-					var html = `<div class="emoji-name">${emojiName}</div><div class="emoji-server">${serverName}</div>`;
-					var emojiTooltip = BDfunctionsDevilBro.createTooltip(html, emoji, {type:"right",selector:"emoji-tooltip",html:true});
+					var text = `${BDfunctionsDevilBro.encodeToHTML(data.emoji)}\n${BDfunctionsDevilBro.encodeToHTML(data.server)}`;
+					BDfunctionsDevilBro.createTooltip(text, e.target, {type:"right",selector:"emoji-tooltip",css:`.emoji-tooltip{z-index:30000;}`});
 				}
 			});
 	}
 	
 	addEmojiInformationButton (node) {
-		$(".emoji-picker .header", node)
+		$(node).find(".emoji-picker .header")
 			.append(this.emojiButtonMarkup)
-			.on("click." + this.getName(), ".emojistatistics-button", (e) => {
-				this.showEmojiInformationModal(e);
+			.on("click." + this.getName(), ".emojistatistics-button", () => {
+				$(node).hide();
+				this.showEmojiInformationModal();
 			});
 	}
 	
-	showEmojiInformationModal (e) {
-		var entries = [];
-		
+	showEmojiInformationModal () {
 		var emojiInformationModal = $(this.emojiInformationModalMarkup);
 		BDfunctionsDevilBro.appendModal(emojiInformationModal);
-		$(".popout").has(e.target).hide();
 		
-		var rows = this.emojiInformation;
-		var categories = this.serverInformation;
-		
-		if (rows && categories) {
-			var index = 0;
-			for (let serverObj of BDfunctionsDevilBro.readServerList()) {
-				
-				var entry = $(this.emojiserverEntryMarkup);
-				if (serverObj.icon) {
-					entry.find(".modal-emojiserver-icon").css("background-image", "url('https://cdn.discordapp.com/icons/" + serverObj.id + "/" + serverObj.icon + ".png')");
+		var entries = [], index = 0;
+		for (let serverObj of BDfunctionsDevilBro.readServerList()) {
+			let amountGlobal = 0, amountLocal = 0, amountReplicate = 0;
+			for (let emoji of this.GuildEmojis.getGuildEmoji(serverObj.id)) {
+				if (emoji.managed) {
+					amountGlobal++;
+					if (this.emojiReplicaList[emoji.name]) amountReplicate++;
 				}
 				else {
-					entry.find(".modal-emojiserver-icon").text(serverObj.div.querySelector("a").innerText);
+					amountLocal++;
 				}
-				entry.find(".modal-emojiservername-label").text(serverObj.name);
-				entry.find(".modal-emojiservername-label").attr("id", serverObj.id);
+			}
+			var entry = $(this.emojiserverEntryMarkup);
+			if (serverObj.icon) {
+				entry.find(".modal-emojiserver-icon").css("background-image", "url('https://cdn.discordapp.com/icons/" + serverObj.id + "/" + serverObj.icon + ".png')");
+			}
+			else {
+				entry.find(".modal-emojiserver-icon").text(serverObj.div.querySelector("a").innerText);
+			}
+			entry.find(".modal-emojiservername-label").text(serverObj.name);
+			entry.find(".modal-emojitotal-label").text(amountGlobal+amountLocal);
+			entry.find(".modal-emojiglobal-label").text(amountGlobal);
+			entry.find(".modal-emojilocal-label").text(amountLocal);
+			entry.find(".modal-emojireplicate-label").text(amountReplicate);
+			entries.push({entry:entry, index:index++, name:serverObj.name, total:amountGlobal+amountLocal, global:amountGlobal, local:amountLocal, copies:amountReplicate});
+		}
+		
+		var titleentry = $(this.emojiserverTitlesMarkup)
+			.appendTo(".emojistatistics-modal .titles")
+			.on("click", ".modal-titlesservername-label,.modal-titlestotal-label,.modal-titlesglobal-label,.modal-titleslocal-label,.modal-titlesreplicate-label", (e2) => {
+				var oldTitle = e2.target.innerText;
 				
-				var currentServer = "";
-				var amountGlobal = 0;		
-				var amountLocal = 0;	
-				var amountReplicate = 0;
+				var reverse = oldTitle.indexOf("▼") < 0 ? false : true;
 				
-				for (var j = 0; j < rows.length; j++) {
-					var newServer = rows[j].category;
-					if (newServer.indexOf("custom") != -1) {	
-						if (currentServer == "" || currentServer == newServer) {
-							var serverName = this.getNameOfServer(newServer, categories);
-							if (serverName == serverObj.name) {
-								currentServer = newServer;
-								var emojis = rows[j].items;
-								for (var k = 0; k < emojis.length; k++) {
-									var emoji = emojis[k].emoji;
-									var emojiName = emoji.allNamesString;
-									var emojiClearName = emojiName.split(":")[1].split("~")[0];
-									if (emoji.managed) {
-										amountGlobal++; 
-										if (this.emojiReplicaList[emojiClearName] == true) {
-											amountReplicate++;
-										} 
-									}
-									else {
-										amountLocal++; 
-									}
-								}
-							}
-						}
-						else {
+				titleentry.find(".modal-titlesservername-label").text(this.labels.modal_titlesservername_text);
+				titleentry.find(".modal-titlestotal-label").text(this.labels.modal_titlestotal_text);
+				titleentry.find(".modal-titlesglobal-label").text(this.labels.modal_titlesglobal_text);
+				titleentry.find(".modal-titleslocal-label").text(this.labels.modal_titleslocal_text);
+				titleentry.find(".modal-titlesreplicate-label").text(this.labels.modal_titlesreplicate_text);
+				
+				var sortKey = "index", title = "";
+				if (oldTitle.indexOf("▲") < 0) {
+					switch (e2.target.className) {
+						case "modal-titlesservername-label": 
+							title = this.labels.modal_titlesservername_text;
+							sortKey = "name";
 							break;
-						}
+						case "modal-titlestotal-label": 
+							title = this.labels.modal_titlestotal_text;
+							sortKey = "total";
+							break;
+						case "modal-titlesglobal-label": 
+							title = this.labels.modal_titlesglobal_text;
+							sortKey = "global";
+							break;
+						case "modal-titleslocal-label": 
+							title = this.labels.modal_titleslocal_text;
+							sortKey = "local";
+							break;
+						case "modal-titlesreplicate-label": 
+							title = this.labels.modal_titlesreplicate_text;
+							sortKey = "copies";
+							break;
 					}
+					e2.target.innerText = oldTitle.indexOf("▼") < 0 ? title + "▼" : title + "▲";
 				}
-				entry.find(".modal-emojitotal-label").text(amountGlobal+amountLocal);
-				entry.find(".modal-emojiglobal-label").text(amountGlobal);
-				entry.find(".modal-emojilocal-label").text(amountLocal);
-				entry.find(".modal-emojireplicate-label").text(amountReplicate);
-				entries.push({entry:entry, index:index++, name:serverObj.name, total:amountGlobal+amountLocal, global:amountGlobal, local:amountLocal, copies:amountReplicate});
-			}
-			
-			var titleentry = $(this.emojiserverTitlesMarkup)
-				.appendTo(".emojistatistics-modal .titles")
-				.on("click", ".modal-titlesservername-label,.modal-titlestotal-label,.modal-titlesglobal-label,.modal-titleslocal-label,.modal-titlesreplicate-label", (e2) => {
-					var oldTitle = e2.target.innerText;
-					var sortKey = "index";
-					var reverse = oldTitle.indexOf("▼") < 0 ? false : true;
-					
-					titleentry.find(".modal-titlesservername-label").text(this.labels.modal_titlesservername_text);
-					titleentry.find(".modal-titlestotal-label").text(this.labels.modal_titlestotal_text);
-					titleentry.find(".modal-titlesglobal-label").text(this.labels.modal_titlesglobal_text);
-					titleentry.find(".modal-titleslocal-label").text(this.labels.modal_titleslocal_text);
-					titleentry.find(".modal-titlesreplicate-label").text(this.labels.modal_titlesreplicate_text);
-					
-					if (oldTitle.indexOf("▲") < 0) {
-						var title = "";
-						switch (e2.target.className) {
-							case "modal-titlesservername-label": 
-								title = this.labels.modal_titlesservername_text;
-								sortKey = "name";
-								break;
-							case "modal-titlestotal-label": 
-								title = this.labels.modal_titlestotal_text;
-								sortKey = "total";
-								break;
-							case "modal-titlesglobal-label": 
-								title = this.labels.modal_titlesglobal_text;
-								sortKey = "global";
-								break;
-							case "modal-titleslocal-label": 
-								title = this.labels.modal_titleslocal_text;
-								sortKey = "local";
-								break;
-							case "modal-titlesreplicate-label": 
-								title = this.labels.modal_titlesreplicate_text;
-								sortKey = "copies";
-								break;
-						}
-						e2.target.innerText = oldTitle.indexOf("▼") < 0 ? title + "▼" : title + "▲";
-					}
-					
-					var sortedEntries = BDfunctionsDevilBro.sortArrayByKey(entries, sortKey);
-					
-					if (reverse) {
-						sortedEntries.reverse();
-					}
-					
-					this.updateAllEntries(sortedEntries);
-				});
-					
-			this.updateAllEntries(entries);
-		}
+				
+				var sortedEntries = BDfunctionsDevilBro.sortArrayByKey(entries, sortKey);
+				if (reverse) sortedEntries.reverse();
+				
+				this.updateAllEntries(emojiInformationModal, sortedEntries);
+			});
+				
+		this.updateAllEntries(emojiInformationModal, entries);
 	}
 	
-	updateAllEntries (entries) {
-		$(".emojistatistics-modal .entries").children().remove();
+	updateAllEntries (modal, entries) {
+		var container = modal.find(".entries");
+		container.children().remove();
 		for (let i = 0; entries.length > i; i++) {
-			if (i > 0) $(".emojistatistics-modal .entries").append(this.dividerMarkup);
-			entries[i].entry.appendTo(".emojistatistics-modal .entries");
+			if (i > 0) container.append(this.dividerMarkup);
+			container.append(entries[i].entry);
 		}
-	}
-	
-	getNameOfServer (server, categories) {
-		var name = "";
-		for (var i = 0; i < categories.length; i++) {
-			if (server == categories[i].category) {
-				name = categories[i].title;
-				break;
-			}
-		}
-		return name;
 	}
 	
 	setLabelsByLanguage () {
