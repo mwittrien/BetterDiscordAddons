@@ -238,27 +238,34 @@ class ServerFolders {
 			{"openicon":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEsAAABLCAYAAAA4TnrqAAABrklEQVR4Xu3ayZLCMAxFUfz/H50upnQanFjXdi8SXba8TAdJGBfl5issUMJJgzexQBGIJRYQAFErSywgAKJWllhAAEStLLGAAIhaWWIBARC1ssQCAiDaU1kLOH8t2nPNwUvOOZze+CjU+67pdec87eBZ6E3PwrrfNr324KOOH05veCbW6cCGsJZltt34p986QymFPvN6SnrgqnNGqHVgdoJ1YZ0Z6tH7YrUa8Pd9seJWj2QPWMo2fGHhb+PsWAhMLLA4Fkus9rTfrB7CBXMUPN/yvG0USeya7L2RFepwV6SGlR1qF0ys/cb8shFLrMgcb2asrCbR5vf2Z9Y2tA1B/Qxi3Q/Pvnyorj9dlNYrSyzQnGL9F1bmuYV/SItVKUO3aL5RrKzReRXZrM+23jrcNW1tqYq1KUmx/vanlTVjXkVmVqYlRKvLQv++yzK3xJrVgrYhGO5RrAxzq9mCYh3st9faNySaYOc05BAKifWssyjWledW2CAcvHB1hQ3CQbBeuWxULPDRiiUWEABRK0ssIACiVpZYQABErSyxgACIWlliAQEQtbLEAgIgamUBrB+JEUtMl61hQwAAAABJRU5ErkJggg==", 
 			"closedicon":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEsAAABLCAYAAAA4TnrqAAABhUlEQVR4Xu3YwQqDMBBF0eT/P9oiVAji4l1rIh1u1w8zHifTaG/+YoEeJw02sUATiCUWEABRO0ssIACidpZYQABE7SyxgACI2lliAQEQtbPEAgIgeqezNnD9q+idNa+us7wOWvivBR43Tdc9Y71SBy36qSL3m6drH2BP1oDqoAW/VuhX6un112Ft24zarydi7/S5xpM1vnAcPD/ZIlDzO6sQVB2siVtv3KPx7oqD4zZc0VmLoOZ3Vjw6/yMYN0wcnPjX/TZpbBAHW2vrzglr+WKDOCgWe+Wws0DHiyVW/kLvzAKjSCyxwHARSywkAMLxKIqDHkrBfhVLrGmfaDzBg0Eolli+7oAeEEssIgCy8VkzDnrO8pzlOQtsQbHEggIgHs/tOOiAd8A7s8AWFEssKADi8dyOgw54B7wzC2zBaVj7hat9LSVjKP/wNTytKmAICrUgbO2ScaxbUiG8KbFCKLchgBJLLCgA4s4ssYAAiNpZYgEBELWzxAICIGpniQUEQNTOAlgf/fBATBZ555AAAAAASUVORK5CYII="}
 		];
+			
+		this.defaultSettings = {
+			closeOtherFolders:	{value:false, 	description:"Close other Folders when opening a Folder."},
+			showCountBadge:		{value:true, 	description:"Display Badge for Amount of Servers in a Folder."}
+		};
 	}
 		
 	getName () {return "ServerFolders";}
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.4.2";}
+	getVersion () {return "5.4.3";}
 
 	getAuthor () {return "DevilBro";}
 	
 	getSettingsPanel () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			var settings = this.getSettings();
-			var settingspanel = 
-				$(`<div class="${this.getName()}-settings">
-					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="closeOtherFolders"${settings.closeOtherFolders ? " checked" : void 0}>Close other folders when opening a folder.</label><br>
-					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="showCountBadge"${settings.showCountBadge ? " checked" : void 0}>Display badge for amount of servers in a folder.</label><br><br>
-					<button class="reset-button" style="height:23px">Delete all Folders</button>
-				</div>`)[0];
+			var settingshtml = `<div class="${this.getName()}-settings inner-tqJwAU">`;
+			var settings = this.getSettings(); 
+			for (let key in settings) {
+				settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto; margin-top: 0;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaultSettings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU ${settings[key] ? "valueChecked-3Bzkbm" : "valueUnchecked-XR6AOk"}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
+			}
+			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto; margin-top: 0;""><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto; padding-top:8px;">Reset all Folders.</h3><button type="button" class="flexChild-1KGW5q buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu reset-button" style="flex: 0 0 auto;"><div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx contents-4L4hQM">Reset</div></button></div>`;
+			settingshtml += `</div>`;
+			
+			var settingspanel = $(settingshtml)[0];
 			$(settingspanel)
-				.on("change", ".settings-checkbox", () => {this.updateSettings(settingspanel);})
+				.on("click", ".checkbox-1KYsPm", () => {this.updateSettings(settingspanel);})
 				.on("click", ".reset-button", () => {this.resetAll();});
 			return settingspanel;
 		}
@@ -395,30 +402,27 @@ class ServerFolders {
 	
 	// begin of own functions
 	
-	getSettings (defaultSettings) {
-		var defaultSettings = {
-			closeOtherFolders: false,
-			showCountBadge: true
-		};
-		var settings = BDfunctionsDevilBro.loadAllData(this.getName(), "settings");
-		var saveSettings = false;
-		for (var key in defaultSettings) {
-			if (settings[key] == null) {
-				settings[key] = settings[key] ? settings[key] : defaultSettings[key];
+	getSettings () {
+		var oldSettings = BDfunctionsDevilBro.loadAllData(this.getName(), "settings"), newSettings = {}, saveSettings = false;
+		for (let key in this.defaultSettings) {
+			if (oldSettings[key] == null) {
+				newSettings[key] = this.defaultSettings[key].value;
 				saveSettings = true;
 			}
+			else {
+				newSettings[key] = oldSettings[key];
+			}
 		}
-		if (saveSettings) {
-			BDfunctionsDevilBro.saveAllData(settings, this.getName(), "settings");
-		}
-		return settings;
+		if (saveSettings) BDfunctionsDevilBro.saveAllData(newSettings, this.getName(), "settings");
+		return newSettings;
 	}
 
 	updateSettings (settingspanel) {
 		var settings = {};
-		var inputs = settingspanel.querySelectorAll(".settings-checkbox");
-		for (var i = 0; i < inputs.length; i++) {
-			settings[inputs[i].value] = inputs[i].checked;
+		for (var input of settingspanel.querySelectorAll(".checkbox-1KYsPm")) {
+			settings[input.value] = input.checked;
+			input.parentElement.classList.toggle("valueChecked-3Bzkbm", input.checked);
+			input.parentElement.classList.toggle("valueUnchecked-XR6AOk", !input.checked);
 		}
 		BDfunctionsDevilBro.saveAllData(settings, this.getName(), "settings");
 	}
