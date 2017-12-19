@@ -29,7 +29,7 @@ class MessageUtilities {
 
 	getDescription () {return "Offers a number of useful message options. Remap the keybindings in the settings.";}
 
-	getVersion () {return "1.2.2";}
+	getVersion () {return "1.2.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -251,7 +251,7 @@ class MessageUtilities {
 	
 	doDelete (message) {
 		var channel = this.ChannelStore.getChannel(message.channel_id);
-		if (channel && this.CurrentUserPerms.can(this.Permissions.MANAGE_MESSAGES, channel)) {
+		if ((channel && this.CurrentUserPerms.can(this.Permissions.MANAGE_MESSAGES, channel)) || message.author.id == this.myID) {
 			this.MessageActions.deleteMessage(message.channel_id, message.id);
 		}
 	}
