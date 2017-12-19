@@ -29,8 +29,8 @@ class TopRoleEverywhere {
 		this.tagMarkup = `<span class="role-tag"><span class="role-inner"></span></span>`;
 			
 		this.defaultSettings = {
-			showInChat:			{value:true, 	description:"Show tag in Chatwindow."},
-			showInMemberList:	{value:true, 	description:"Show tag in Memberlist."},
+			showInChat:			{value:true, 	description:"Show Tag in Chatwindow."},
+			showInMemberList:	{value:true, 	description:"Show Tag in Memberlist."},
 			useOtherStyle:		{value:false, 	description:"Use other Tagstyle."},
 			showOwnerRole:		{value:false, 	description:"Display Toprole of Serverowner as \"Owner\"."},
 			showOnBots:			{value:false, 	description:"Disable Toprole for Bots."},
