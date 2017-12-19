@@ -13,10 +13,6 @@ class OldTitleBar {
 				-webkit-app-region: no-drag;
 			}
 			
-			.elementOTB {
-				float: right;
-			}
-			
 			.settings-titlebar {
 				position: relative;
 				z-index: 1000;
@@ -25,17 +21,17 @@ class OldTitleBar {
 				-webkit-app-region: drag;
 			}`;
 			
-		this.dividerMarkup = `<div class="elementOTB dividerOTB divider-1GKkV3"></div>`;
+		this.dividerMarkup = `<div class="dividerOTB divider-1GKkV3"></div>`;
 			
 		this.reloadButtonMarkup = 
-			`<svg class="elementOTB reloadButtonOTB iconInactive-WWHQEI icon-mr9wAc iconMargin-2Js7V9" xmlns="http://www.w3.org/2000/svg">
+			`<svg class="reloadButtonOTB iconInactive-WWHQEI icon-mr9wAc iconMargin-2Js7V9" xmlns="http://www.w3.org/2000/svg">
 				<g fill="none" class="iconForeground-2c7s3m" fill-rule="evenodd">
 					<path fill="currentColor" transform="translate(4,4)" d="M17.061,7.467V0l-2.507,2.507C13.013,0.96,10.885,0,8.528,0C3.813,0,0.005,3.819,0.005,8.533s3.808,8.533,8.523,8.533c3.973,0,7.301-2.72,8.245-6.4h-2.219c-0.88,2.485-3.237,4.267-6.027,4.267c-3.536,0-6.4-2.864-6.4-6.4s2.864-6.4,6.4-6.4c1.765,0,3.349,0.736,4.507,1.893l-3.44,3.44H17.061z"/>
 				</g>
 			</svg>`;
 			
 		this.minButtonMarkup = 
-			`<svg class="elementOTB minButtonOTB iconInactive-WWHQEI icon-mr9wAc iconMargin-2Js7V9" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
+			`<svg class="minButtonOTB iconInactive-WWHQEI icon-mr9wAc iconMargin-2Js7V9" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
 				<g fill="none" class="iconForeground-2c7s3m" fill-rule="evenodd">
 					<path fill="currentColor" d="M19 19v-2H7v2h12z"/>
 					<path d="M1 25h24V1H1v24z"/>
@@ -43,7 +39,7 @@ class OldTitleBar {
 			</svg>`;
 			
 		this.maxButtonMarkup = 
-			`<svg class="elementOTB maxButtonOTB iconInactive-WWHQEI icon-mr9wAc iconMargin-2Js7V9" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
+			`<svg class="maxButtonOTB iconInactive-WWHQEI icon-mr9wAc iconMargin-2Js7V9" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
 				<g fill="none" class="iconForeground-2c7s3m" fill-rule="evenodd">
 					<path d="M1 1h24v24H1V1z"/>
 					<path fill="currentColor" d="M8 13H6v7h7v-2H8v-5zm-2 0h2V8h5V6H6v7zm7 5v2h7v-7h-2v5h-5zm0-12v2h5v5h2V6h-7z"/>
@@ -51,35 +47,43 @@ class OldTitleBar {
 			</svg>`;
 			
 		this.closeButtonMarkup = 
-			`<svg class="elementOTB closeButtonOTB iconInactive-WWHQEI icon-mr9wAc iconMargin-2Js7V9" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
+			`<svg class="closeButtonOTB iconInactive-WWHQEI icon-mr9wAc iconMargin-2Js7V9" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
 				<g fill="none" class="iconForeground-2c7s3m" fill-rule="evenodd">
 					<path d="M1 1h24v24H1V1z"/>
 					<path fill="currentColor" d="M20 7.41L18.59 6 13 11.59 7.41 6 6 7.41 11.59 13 6 18.59 7.41 20 13 14.41 18.59 20 20 18.59 14.41 13 20 7.41z"/>
 				</g>
 			</svg>`;
+			
+		this.defaultSettings = {
+			addToSettings:		{value:true, 	description:"Add a Title Bar to Settings Windows."},
+			reloadButton:		{value:false, 	description:"Add a Reload Button to the Title Bar."}
+		};
 	}
 
 	getName () {return "OldTitleBar";}
 
 	getDescription () {return "Reverts the title bar back to its former self.";}
 
-	getVersion () {return "1.2.5";}
+	getVersion () {return "1.2.6";}
 
 	getAuthor () {return "DevilBro";}
 
-    getSettingsPanel () {
+	getSettingsPanel () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			var settings = this.getSettings();
-			var settingspanel = 
-				$(`<div class="${this.getName()}-settings">
-					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="addToSettings"${settings.addToSettings ? " checked" : void 0}>Add an old fashioned title bar to settings windows.</label><br>
-					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="reloadButton"${settings.reloadButton ? " checked" : void 0}>Add a reload button to the title bar.</label>
-				</div>`)[0];
+			var settingshtml = `<div class="${this.getName()}-settings inner-tqJwAU">`;
+			var settings = this.getSettings(); 
+			for (let key in settings) {
+				settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto; margin-top: 0;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaultSettings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU ${settings[key] ? "valueChecked-3Bzkbm" : "valueUnchecked-XR6AOk"}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
+			}
+			settingshtml += `</div>`;
+			
+			var settingspanel = $(settingshtml)[0];
 			$(settingspanel)
-				.on("change", ".settings-checkbox", () => {this.updateSettings(settingspanel);});
+				.on("click", ".checkbox-1KYsPm", () => {this.updateSettings(settingspanel);});
+				
 			return settingspanel;
 		}
-    }
+	}
 
 	//legacy
 	load () {}
@@ -151,32 +155,29 @@ class OldTitleBar {
 	// begin of own functions
 	
 	getSettings () {
-		var defaultSettings = {
-			addToSettings: true,
-			reloadButton: false
-		};
-		var settings = BDfunctionsDevilBro.loadAllData(this.getName(), "settings");
-		var saveSettings = false;
-		for (var key in defaultSettings) {
-			if (settings[key] == null) {
-				settings[key] = settings[key] ? settings[key] : defaultSettings[key];
+		var oldSettings = BDfunctionsDevilBro.loadAllData(this.getName(), "settings"), newSettings = {}, saveSettings = false;
+		for (let key in this.defaultSettings) {
+			if (oldSettings[key] == null) {
+				newSettings[key] = this.defaultSettings[key].value;
 				saveSettings = true;
 			}
+			else {
+				newSettings[key] = oldSettings[key];
+			}
 		}
-		if (saveSettings) {
-			BDfunctionsDevilBro.saveAllData(settings, this.getName(), "settings");
-		}
-		return settings;
+		if (saveSettings) BDfunctionsDevilBro.saveAllData(newSettings, this.getName(), "settings");
+		return newSettings;
 	}
 
-    updateSettings (settingspanel) {
+	updateSettings (settingspanel) {
 		var settings = {};
-		var inputs = settingspanel.querySelectorAll(".settings-checkbox");
-		for (var i = 0; i < inputs.length; i++) {
-			settings[inputs[i].value] = inputs[i].checked;
+		for (var input of settingspanel.querySelectorAll(".checkbox-1KYsPm")) {
+			settings[input.value] = input.checked;
+			input.parentElement.classList.toggle("valueChecked-3Bzkbm", input.checked);
+			input.parentElement.classList.toggle("valueUnchecked-XR6AOk", !input.checked);
 		}
 		BDfunctionsDevilBro.saveAllData(settings, this.getName(), "settings");
-    }
+	}
 	
 	addTitleBar () {
 		this.removeTitleBar();
