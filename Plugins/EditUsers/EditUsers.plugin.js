@@ -160,36 +160,43 @@ class EditUsers {
 					</div>
 				</div>
 			</span>`;
+			
+		this.defaultSettings = {
+			changeInChatWindow:		{value:true, 	description:"Chat"},
+			changeInVoiceChat:		{value:true, 	description:"Voice Channels"},
+			changeInMemberList:		{value:true, 	description:"Member List"},
+			changeInDmHeader:		{value:true, 	description:"Direct Message Header"},
+			changeInRecentDms:		{value:true, 	description:"Direct Message Notifications"},
+			changeInDmsList:		{value:true, 	description:"Direct Message List"},
+			changeInFriendList:		{value:true, 	description:"Friend List"},
+			changeInUserPopout:		{value:true, 	description:"User Popouts"},
+			changeInUserProfil:		{value:true, 	description:"User Profil Modal"},
+			changeInUserAccount:	{value:true, 	description:"Your Account Information"}
+		};
 	}
 
 	getName () {return "EditUsers";}
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "2.0.3";}
+	getVersion () {return "2.0.4";}
 
 	getAuthor () {return "DevilBro";}
 	
 	getSettingsPanel () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			var settings = this.getSettings();
-			var settingspanel = 
-				$(`<div class="${this.getName()}-settings">
-					<label style="color:grey; font-size:20px; margin-bottom:5px;">Change user information in:</label><br>
-					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="changeInChatWindow"${settings.changeInChatWindow ? " checked" : void 0}>Chat</label><br>
-					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="changeInVoiceChat"${settings.changeInVoiceChat ? " checked" : void 0}>Voice Channels</label><br>
-					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="changeInMemberList"${settings.changeInMemberList ? " checked" : void 0}>Server Member List</label><br>
-					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="changeInDmHeader"${settings.changeInDmHeader ? " checked" : void 0}>DM Title</label><br>
-					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="changeInRecentDms"${settings.changeInRecentDms ? " checked" : void 0}>Recent DMs</label><br>
-					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="changeInDmsList"${settings.changeInDmsList ? " checked" : void 0}>DM-Conversation List</label><br>
-					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="changeInFriendList"${settings.changeInFriendList ? " checked" : void 0}>Friends List</label><br>
-					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="changeInUserPopout"${settings.changeInUserPopout ? " checked" : void 0}>User Popups</label><br>
-					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="changeInUserProfil"${settings.changeInUserProfil ? " checked" : void 0}>User Profil</label><br>
-					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="changeInUserAccount"${settings.changeInUserAccount ? " checked" : void 0}>Your Account Window</label><br><br>
-					<button class="reset-button" style="height:23px">Reset all Users</button>
-				</div>`)[0];
+			var settingshtml = `<div class="${this.getName()}-settings"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">Change User in:</h3></div><div class="inner-tqJwAU" style=" margin: 0;">`;
+			var settings = this.getSettings(); 
+			for (let key in settings) {
+				settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto; margin-top: 0;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaultSettings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU ${settings[key] ? "valueChecked-3Bzkbm" : "valueUnchecked-XR6AOk"}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
+			}
+			settingshtml += `</div>`;
+			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto; margin-top: 0;""><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto; padding-top:8px;">Reset all Users.</h3><button type="button" class="flexChild-1KGW5q buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu reset-button" style="flex: 0 0 auto;"><div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx contents-4L4hQM">Reset</div></button></div>`;
+			settingshtml += `</div>`;
+			
+			var settingspanel = $(settingshtml)[0];
 			$(settingspanel)
-				.on("change", ".settings-checkbox", () => {this.updateSettings(settingspanel);})
+				.on("click", ".checkbox-1KYsPm", () => {this.updateSettings(settingspanel);})
 				.on("click", ".reset-button", () => {this.resetAll();});
 			return settingspanel;
 		}
@@ -409,37 +416,26 @@ class EditUsers {
 	// begin of own functions
 	
 	getSettings () {
-		var defaultSettings = {
-			changeInMemberList: true,
-			changeInChatWindow: true,
-			changeInVoiceChat: true,
-			changeInDmHeader: true,
-			changeInRecentDms: true,
-			changeInDmsList: true,
-			changeInFriendList: true,
-			changeInUserAccount: true,
-			changeInUserPopout: true,
-			changeInUserProfil: true
-		};
-		var settings = BDfunctionsDevilBro.loadAllData(this.getName(), "settings");
-		var saveSettings = false;
-		for (var key in defaultSettings) {
-			if (settings[key] == null) {
-				settings[key] = defaultSettings[key];
+		var oldSettings = BDfunctionsDevilBro.loadAllData(this.getName(), "settings"), newSettings = {}, saveSettings = false;
+		for (let key in this.defaultSettings) {
+			if (oldSettings[key] == null) {
+				newSettings[key] = this.defaultSettings[key].value;
 				saveSettings = true;
 			}
+			else {
+				newSettings[key] = oldSettings[key];
+			}
 		}
-		if (saveSettings) {
-			BDfunctionsDevilBro.saveAllData(settings, this.getName(), "settings");
-		}
-		return settings;
+		if (saveSettings) BDfunctionsDevilBro.saveAllData(newSettings, this.getName(), "settings");
+		return newSettings;
 	}
 
 	updateSettings (settingspanel) {
 		var settings = {};
-		var inputs = settingspanel.querySelectorAll(".settings-checkbox");
-		for (var i = 0; i < inputs.length; i++) {
-			settings[inputs[i].value] = inputs[i].checked;
+		for (var input of settingspanel.querySelectorAll(".checkbox-1KYsPm")) {
+			settings[input.value] = input.checked;
+			input.parentElement.classList.toggle("valueChecked-3Bzkbm", input.checked);
+			input.parentElement.classList.toggle("valueUnchecked-XR6AOk", !input.checked);
 		}
 		BDfunctionsDevilBro.saveAllData(settings, this.getName(), "settings");
 	}
