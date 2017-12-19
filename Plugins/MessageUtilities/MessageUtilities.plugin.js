@@ -264,7 +264,7 @@ class MessageUtilities {
 	
 	doOpenReact (message) {
 		var reactButton = message.div.parentElement.querySelector(".btn-reaction");
-		if (reactButton) reactButton.trigger("onclick");
+		if (reactButton) reactButton.click();
 	}
 	
 	doPinUnPin (message) {
