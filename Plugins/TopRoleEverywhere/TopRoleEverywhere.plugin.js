@@ -29,12 +29,12 @@ class TopRoleEverywhere {
 		this.tagMarkup = `<span class="role-tag"><span class="role-inner"></span></span>`;
 			
 		this.defaultSettings = {
-			showInChat:			{value:true, 	description:"Show Tag in Chatwindow."},
-			showInMemberList:	{value:true, 	description:"Show Tag in Memberlist."},
+			showInChat:			{value:true, 	description:"Show Tag in Chat Window."},
+			showInMemberList:	{value:true, 	description:"Show Tag in Member List."},
 			useOtherStyle:		{value:false, 	description:"Use other Tagstyle."},
 			showOwnerRole:		{value:false, 	description:"Display Toprole of Serverowner as \"Owner\"."},
 			showOnBots:			{value:false, 	description:"Disable Toprole for Bots."},
-			addUserID:			{value:false, 	description:"Add the UserID as a Tag to the Chatwindow."},
+			addUserID:			{value:false, 	description:"Add the UserID as a Tag to the Chat Window."},
 			darkIdTag:			{value:false, 	description:"Use a dark version for the UserID-Tag."}
 		};
 	}
