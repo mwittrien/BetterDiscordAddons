@@ -264,7 +264,7 @@ class ThemeRepo {
 
 	getDescription () {return "Allows you to preview all themes from the theme repo and download them on the fly. Repo button is in the theme settings.";}
 
-	getVersion () {return "1.1.7";}
+	getVersion () {return "1.1.8";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -573,9 +573,9 @@ class ThemeRepo {
 						let offset = added*(wrapperopen.length + wrapperclose.length);
 						start = start + offset;
 						let end = start + searchstring.length;
-						var openIndexes = [0].concat(BDfunctionsDevilBro.getAllIndexes(value.substring(0, start), "<"));
-						var closedIndexes = [0].concat(BDfunctionsDevilBro.getAllIndexes(value.substring(0, start), ">"));
-						if (openIndexes[openIndexes.length-1] >= closedIndexes[closedIndexes.length-1]) return;
+						var openIndexes = [-1].concat(BDfunctionsDevilBro.getAllIndexes(value.substring(0, start), "<"));
+						var closedIndexes = [-1].concat(BDfunctionsDevilBro.getAllIndexes(value.substring(0, start), ">"));
+						if (openIndexes[openIndexes.length-1] > closedIndexes[closedIndexes.length-1]) return;
 						value = value.substring(0, start) + wrapperopen + value.substring(start, end) + wrapperclose + value.substring(end);
 						added++;
 					});
@@ -746,7 +746,7 @@ class ThemeRepo {
 	
 	applyTheme (entry) {
 		var name = entry.name;
-		if (typeof window.bdthemes[name] == "object" && window.themeCookie[name] == false) {
+		if (BDfunctionsDevilBro.isThemeEnabled(name) == false) {
 			$(`style#${name}`).remove();
 			$("head").append(`<style id=${name}>${entry.css}</style>`);
 			window.themeCookie[name] = true;
@@ -772,7 +772,7 @@ class ThemeRepo {
 	
 	removeTheme (entry) {
 		var name = entry.name;
-		if (typeof window.bdthemes[name] == "object" && window.themeCookie[name] == true) {
+		if (BDfunctionsDevilBro.isThemeEnabled(name) == true) {
 			$(`style#${name}`).remove();
 			window.themeCookie[name] = false;
 			delete window.bdthemes[name];
