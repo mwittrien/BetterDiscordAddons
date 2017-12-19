@@ -164,28 +164,35 @@ class EmojiStatistics {
 			
 		this.dividerMarkup = `<div class="divider-1G01Z9 dividerDefault-77PXsz"></div>`;
 			
-		this.emojiButtonMarkup =
-			`<div class="emojistatistics-button"></div>`;
+		this.emojiButtonMarkup = `<div class="emojistatistics-button"></div>`;
+			
+		this.defaultSettings = {
+			enableEmojiHovering:			{value:true, 	description:"Show Information about Emojis on hovver over an Emoji in the Emojipicker."},
+			enableEmojiStatisticsButton:	{value:true, 	description:"Add a Button in the Emojipicker to open the Statistics Overview."}
+		};
 	}
 
 	getName () {return "EmojiStatistics";}
 
 	getDescription () {return "Adds some helpful options to show you more information about emojis and emojiservers.";}
 
-	getVersion () {return "2.6.5";}
+	getVersion () {return "2.6.6";}
 
 	getAuthor () {return "DevilBro";}
 
 	getSettingsPanel () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			var settings = this.getSettings();
-			var settingspanel = 
-				$(`<div class="${this.getName()}-settings">
-					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="enableEmojiHovering"${settings.enableEmojiHovering ? " checked" : void 0}>Show emojiinformation when hovering over an emoji in the emojipicker.</label><br>
-					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="enableEmojiStatisticsButton"${settings.enableEmojiStatisticsButton ? " checked" : void 0}>Add a button in the emojipicker to open the statistics overview.</label>
-				</div>`)[0];
+			var settingshtml = `<div class="${this.getName()}-settings inner-tqJwAU">`;
+			var settings = this.getSettings(); 
+			for (let key in settings) {
+				settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto; margin-top: 0;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaultSettings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU ${settings[key] ? "valueChecked-3Bzkbm" : "valueUnchecked-XR6AOk"}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
+			}
+			settingshtml += `</div>`;
+			
+			var settingspanel = $(settingshtml)[0];
 			$(settingspanel)
-				.on("change", ".settings-checkbox", () => {this.updateSettings(settingspanel);});
+				.on("click", ".checkbox-1KYsPm", () => {this.updateSettings(settingspanel);});
+				
 			return settingspanel;
 		}
 	}
@@ -252,29 +259,26 @@ class EmojiStatistics {
 	// begin of own functions
 	
 	getSettings () {
-		var defaultSettings = {
-			enableEmojiHovering: true,
-			enableEmojiStatisticsButton: true
-		};
-		var settings = BDfunctionsDevilBro.loadAllData(this.getName(), "settings");
-		var saveSettings = false;
-		for (var key in defaultSettings) {
-			if (settings[key] == null) {
-				settings[key] = settings[key] ? settings[key] : defaultSettings[key];
+		var oldSettings = BDfunctionsDevilBro.loadAllData(this.getName(), "settings"), newSettings = {}, saveSettings = false;
+		for (let key in this.defaultSettings) {
+			if (oldSettings[key] == null) {
+				newSettings[key] = this.defaultSettings[key].value;
 				saveSettings = true;
 			}
+			else {
+				newSettings[key] = oldSettings[key];
+			}
 		}
-		if (saveSettings) {
-			BDfunctionsDevilBro.saveAllData(settings, this.getName(), "settings");
-		}
-		return settings;
+		if (saveSettings) BDfunctionsDevilBro.saveAllData(newSettings, this.getName(), "settings");
+		return newSettings;
 	}
 
 	updateSettings (settingspanel) {
 		var settings = {};
-		var inputs = settingspanel.querySelectorAll(".settings-checkbox");
-		for (var i = 0; i < inputs.length; i++) {
-			settings[inputs[i].value] = inputs[i].checked;
+		for (var input of settingspanel.querySelectorAll(".checkbox-1KYsPm")) {
+			settings[input.value] = input.checked;
+			input.parentElement.classList.toggle("valueChecked-3Bzkbm", input.checked);
+			input.parentElement.classList.toggle("valueUnchecked-XR6AOk", !input.checked);
 		}
 		BDfunctionsDevilBro.saveAllData(settings, this.getName(), "settings");
 	}
