@@ -27,34 +27,42 @@ class TopRoleEverywhere {
 			}`;
 			
 		this.tagMarkup = `<span class="role-tag"><span class="role-inner"></span></span>`;
+			
+		this.defaultSettings = {
+			showInChat:			{value:true, 	description:"Show tag in Chatwindow."},
+			showInMemberList:	{value:true, 	description:"Show tag in Memberlist."},
+			useOtherStyle:		{value:false, 	description:"Use other Tagstyle."},
+			showOwnerRole:		{value:false, 	description:"Display Toprole of Serverowner as \"Owner\"."},
+			showOnBots:			{value:false, 	description:"Disable Toprole for Bots."},
+			addUserID:			{value:false, 	description:"Add the UserID as a Tag to the Chatwindow."},
+			darkIdTag:			{value:false, 	description:"Use a dark version for the UserID-Tag."}
+		};
 	}
 
 	getName () {return "TopRoleEverywhere";}
 
 	getDescription () {return "Adds the highest role of a user as a tag.";}
 
-	getVersion () {return "2.4.9";}
+	getVersion () {return "2.5.0";}
 
 	getAuthor () {return "DevilBro";}
 	
-    getSettingsPanel () {
+	getSettingsPanel () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			var settings = this.getSettings();
-			var settingspanel = 
-				$(`<div class="${this.getName()}-settings">
-					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="showInChat"${settings.showInChat ? " checked" : void 0}>Show tag in chatwindow.</label><br>
-					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="showInMemberList"${settings.showInMemberList ? " checked" : void 0}>Show tag in memberlist.</label><br>
-					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="useOtherStyle"${settings.useOtherStyle ? " checked" : void 0}>Use other tag style.</label><br>
-					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="showOwnerRole"${settings.showOwnerRole ? " checked" : void 0}>Display toprole of serverowner as \"Owner\".</label><br>
-					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="disableForBots"${settings.disableForBots ? " checked" : void 0}>Disable toprole for bots.</label><br>
-					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="addUserID"${settings.addUserID ? " checked" : void 0}>Add the userID as a tag to the chat window.</label><br>
-					<label style="color:grey;"><input class="settings-checkbox" type="checkbox" value="darkIdTag"${settings.darkIdTag ? " checked" : void 0}>Use a dark version for the ID tag.</label>
-				</div>`)[0];
+			var settingshtml = `<div class="${this.getName()}-settings inner-tqJwAU">`;
+			var settings = this.getSettings(); 
+			for (let key in settings) {
+				settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto; margin-top: 0;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaultSettings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU ${settings[key] ? "valueChecked-3Bzkbm" : "valueUnchecked-XR6AOk"}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
+			}
+			settingshtml += `</div>`;
+			
+			var settingspanel = $(settingshtml)[0];
 			$(settingspanel)
-				.on("change", ".settings-checkbox", () => {this.updateSettings(settingspanel);});
+				.on("click", ".checkbox-1KYsPm", () => {this.updateSettings(settingspanel);});
+				
 			return settingspanel;
 		}
-    }
+	}
 
 	//legacy
 	load () {}
@@ -172,37 +180,29 @@ class TopRoleEverywhere {
 	// begin of own functions
 	
 	getSettings () {
-		var defaultSettings = {
-			showInChat: true,
-			showInMemberList: true,
-			useOtherStyle: false,
-			showOwnerRole: false,
-			showOnBots: false,
-			addUserID: false,
-			darkIdTag: false
-		};
-		var settings = BDfunctionsDevilBro.loadAllData(this.getName(), "settings");
-		var saveSettings = false;
-		for (var key in defaultSettings) {
-			if (settings[key] == null) {
-				settings[key] = settings[key] ? settings[key] : defaultSettings[key];
+		var oldSettings = BDfunctionsDevilBro.loadAllData(this.getName(), "settings"), newSettings = {}, saveSettings = false;
+		for (let key in this.defaultSettings) {
+			if (oldSettings[key] == null) {
+				newSettings[key] = this.defaultSettings[key].value;
 				saveSettings = true;
 			}
+			else {
+				newSettings[key] = oldSettings[key];
+			}
 		}
-		if (saveSettings) {
-			BDfunctionsDevilBro.saveAllData(settings, this.getName(), "settings");
-		}
-		return settings;
+		if (saveSettings) BDfunctionsDevilBro.saveAllData(newSettings, this.getName(), "settings");
+		return newSettings;
 	}
 
-    updateSettings (settingspanel) {
+	updateSettings (settingspanel) {
 		var settings = {};
-		var inputs = settingspanel.querySelectorAll(".settings-checkbox");
-		for (var i = 0; i < inputs.length; i++) {
-			settings[inputs[i].value] = inputs[i].checked;
+		for (var input of settingspanel.querySelectorAll(".checkbox-1KYsPm")) {
+			settings[input.value] = input.checked;
+			input.parentElement.classList.toggle("valueChecked-3Bzkbm", input.checked);
+			input.parentElement.classList.toggle("valueUnchecked-XR6AOk", !input.checked);
 		}
 		BDfunctionsDevilBro.saveAllData(settings, this.getName(), "settings");
-    }
+	}
 
 	loadRoleTags() {
 		document.querySelectorAll(".role-tag").forEach(node=>{node.remove();});
