@@ -1677,6 +1677,8 @@ BDfunctionsDevilBro.getDiscordTheme = function () {
 BDfunctionsDevilBro.getDiscordLanguage = function () {
 	var lang = document.querySelector("html").lang ? document.querySelector("html").lang.split("-")[0] : "en";
 	switch (lang) {
+		case "hr": 		//croatian
+			return {"id":"hr","lang":"croatian","ownlang":"Hrvatski"};
 		case "da": 		//danish
 			return {"id":"da","lang":"danish","ownlang":"Dansk"};
 		case "de": 		//german
@@ -1722,6 +1724,14 @@ BDfunctionsDevilBro.getDiscordLanguage = function () {
 
 BDfunctionsDevilBro.getLibraryStrings = function () {
 	switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
+		case "hr": 		//croatian
+			return {
+				toast_plugin_started:			"${pluginName} ${oldVersion} je započeo.",
+				toast_plugin_stopped:			"${pluginName} ${oldVersion} zaustavljen.",
+				toast_plugin_translated:		"${pluginName} prijevod na ${ownlang}.",
+				colorpicker_modal_header_text:	"Birač boja",
+				btn_ok_text: 					"OK"
+			};
 		case "da": 		//danish
 			return {
 				toast_plugin_started:			"${pluginName} ${oldVersion} er startet.",
