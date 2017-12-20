@@ -110,7 +110,7 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.3.2";}
+	getVersion () {return "1.3.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -211,8 +211,6 @@ class PersonalPins {
 			document.querySelectorAll(".messages-group .message").forEach(message => {this.addOptionButton(message);});
 			
 			this.addNotesButton();
-			
-			BDfunctionsDevilBro.translatePlugin(this);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -537,6 +535,22 @@ class PersonalPins {
 	
 	setLabelsByLanguage () {
 		switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
+			case "hr":		//croatian
+				return {
+					popout_note_text:				"Bilješke",
+					popout_channel_text:			"Kanal",
+					popout_server_text:				"Poslužavnik",
+					popout_allservers_text:			"Svi poslužitelji",
+					popout_sort_text:				"Poredaj po",
+					popout_messagesort_text:		"Vijesti-Datum",
+					popout_datesort_text:			"Bilješka-Datum",
+					popout_jump_text:				"Skok",
+					popout_copy_text:				"Kopija",
+					context_noteoption_text:		"Napominjemo poruku",
+					popout_noteoption_text:			"Bilješka",
+					toast_noteadd_text:				"Poruka dodana u bilježnicu.",
+					toast_noteremove_text:			"Poruka uklonjena iz bilježnice."
+				};
 			case "da":		//danish
 				return {
 					popout_note_text:				"Noter",
