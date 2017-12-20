@@ -38,7 +38,7 @@ class EditUsers {
 			
 			.user-tag.chat-tag {
 				bottom: 1px;
-			}`
+			}`;
 			
 		this.tagMarkup = `<span class="user-tag"></span>`;
 
@@ -179,7 +179,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "2.0.4";}
+	getVersion () {return "2.0.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -215,6 +215,7 @@ class EditUsers {
 			BDfunctionsDevilBro.loadMessage(this);
 			
 			this.UserStore = BDfunctionsDevilBro.WebModules.findByProperties(["getUsers", "getUser"]);
+			this.IconUtils = BDfunctionsDevilBro.WebModules.findByProperties(["getUserAvatarURL"]);
 			this.MemberPerms = BDfunctionsDevilBro.WebModules.findByProperties(["getNicknames", "getNick"]);
 			
 			this.userContextObserver = new MutationObserver((changes, _) => {
@@ -446,57 +447,12 @@ class EditUsers {
 			this.resetAllUsers();
 		}
 	}
-	
-	resetAllUsers () {
-		document.querySelectorAll(".user-tag").forEach(node=>{node.remove();});
-		document.querySelectorAll("[custom-editusers]").forEach((div) => {
-			var {avatar, username, wrapper} = this.getAvatarNameWrapper(div);
-			if (!avatar && !username && !wrapper) return;
-			
-			var info = this.getUserInfo($(div).data("compact") ? $(".message-group").has(div)[0] : div);
-			if (!info) return;
-			
-			if (username) {
-				var serverObj = BDfunctionsDevilBro.getSelectedServer();
-				var member = serverObj ? this.MemberPerms.getMember(serverObj.id, info.id) : null;
-				var name = div.classList.contains("container-iksrDt") || !member || !member.nick ? info.username : member.nick;
-				var color1 = member && member.colorString ? BDfunctionsDevilBro.color2RGB(member.colorString) : "";
-				var color2 = "";
-				
-				BDfunctionsDevilBro.setInnerText(username, name);
-				username.style.color = color1;
-				username.style.background = color2;
-				
-				var messages = div.querySelectorAll(".markup");
-				for (var i = 0; i < messages.length; i++) {
-					var markup = messages[i];
-					if (settingsCookie["bda-gs-7"] && settingsCookie["bda-gs-7"] == true) {
-						markup.style.color = color1;
-					}
-					else {
-						markup.style.color = "";
-					}
-				}
-			}
-			
-			if (avatar) {
-				var bgImage = info.avatar ? "url('https://cdn.discordapp.com/avatars/" + info.id + "/" + info.avatar + ".webp')" :"url(/assets/1cbd08c76f8af6dddce02c5138971129.png";
-				avatar.style.background = bgImage;
-				avatar.style.backgroundSize = "cover";
-			}
-			
-			$(div).find(".guild-inner")
-				.off("mouseenter." + this.getName());
-			
-			$(div).removeAttr("custom-editusers");
-		});
-	}
 
 	changeLanguageStrings () {
 		this.userContextEntryMarkup =		this.userContextEntryMarkup.replace("REPLACE_context_localusersettings_text", this.labels.context_localusersettings_text);
 		
-		this.userContextSubMenuMarkup =	this.userContextSubMenuMarkup.replace("REPLACE_submenu_usersettings_text", this.labels.submenu_usersettings_text);
-		this.userContextSubMenuMarkup =	this.userContextSubMenuMarkup.replace("REPLACE_submenu_resetsettings_text", this.labels.submenu_resetsettings_text);
+		this.userContextSubMenuMarkup =		this.userContextSubMenuMarkup.replace("REPLACE_submenu_usersettings_text", this.labels.submenu_usersettings_text);
+		this.userContextSubMenuMarkup =		this.userContextSubMenuMarkup.replace("REPLACE_submenu_resetsettings_text", this.labels.submenu_resetsettings_text);
 		
 		this.userSettingsModalMarkup =		this.userSettingsModalMarkup.replace("REPLACE_modal_header_text", this.labels.modal_header_text);
 		this.userSettingsModalMarkup =		this.userSettingsModalMarkup.replace("REPLACE_modal_username_text", this.labels.modal_username_text);
@@ -528,20 +484,19 @@ class EditUsers {
 	}
 	
 	createContextSubMenu (info, e) {
-		var id = info.id;
-		
 		var userContextSubMenu = $(this.userContextSubMenuMarkup);
 		
 		userContextSubMenu
 			.on("click", ".usersettings-item", () => {
+				$(".context-menu").hide();
 				this.showUserSettings(info);
 			});
 			
-		if (BDfunctionsDevilBro.loadData(id, this.getName(), "users")) {
+		if (BDfunctionsDevilBro.loadData(info.id, this.getName(), "users")) {
 			userContextSubMenu
 				.on("click", ".resetsettings-item", () => {
 					$(".context-menu").hide();
-					BDfunctionsDevilBro.removeData(id, this.getName(), "users");
+					BDfunctionsDevilBro.removeData(info.id, this.getName(), "users");
 					this.loadAllUsers();
 				});
 		}
@@ -553,11 +508,7 @@ class EditUsers {
 	}
 	
 	showUserSettings (info, e) {
-		$(".context-menu").hide();
-		
-		var id = info.id;
-	
-		var data = BDfunctionsDevilBro.loadData(id, this.getName(), "users");
+		var data = BDfunctionsDevilBro.loadData(info.id, this.getName(), "users");
 		
 		var name =				data ? data.name : null;
 		var tag =				data ? data.tag : null;
@@ -570,7 +521,7 @@ class EditUsers {
 		var color4 =			data ? data.color4 : null;
 		
 		var serverObj = BDfunctionsDevilBro.getSelectedServer();
-		var member = serverObj ? this.MemberPerms.getMember(serverObj.id, id) : null;
+		var member = serverObj ? this.MemberPerms.getMember(serverObj.id, info.id) : null;
 		
 		var userSettingsModal = $(this.userSettingsModalMarkup);
 		userSettingsModal.find(".guildName-1u0hy7").text(member && member.nick ? member.nick : info.username);
@@ -578,7 +529,7 @@ class EditUsers {
 		userSettingsModal.find("#input-username").attr("placeholder", member && member.nick ? member.nick : info.username);
 		userSettingsModal.find("#input-usertag").val(tag);
 		userSettingsModal.find("#input-userurl").val(url);
-		userSettingsModal.find("#input-userurl").attr("placeholder", info.avatar ? "https://cdn.discordapp.com/avatars/" + id + "/" + info.avatar + ".webp" : null);
+		userSettingsModal.find("#input-userurl").attr("placeholder", this.IconUtils.getUserAvatarURL(info));
 		userSettingsModal.find("#input-userurl").addClass(url ? "valid" : "");
 		userSettingsModal.find("#input-userurl").prop("disabled", removeIcon);
 		userSettingsModal.find("#input-removeicon").prop("checked", removeIcon);
@@ -642,11 +593,11 @@ class EditUsers {
 				color4 = BDfunctionsDevilBro.getSwatchColor("swatch4");
 				
 				if (name == null && tag == null && url == null && !removeIcon && !ignoreTagColor && color1 == null && color2 == null && color3 == null && color4 == null) {
-					BDfunctionsDevilBro.removeData(id, this.getName(), "users")
+					BDfunctionsDevilBro.removeData(info.id, this.getName(), "users")
 				}
 				else {
-					BDfunctionsDevilBro.saveData(id, {id,name,tag,url,removeIcon,ignoreTagColor,color1,color2,color3,color4}, this.getName(), "users");
-				};
+					BDfunctionsDevilBro.saveData(info.id, {name,tag,url,removeIcon,ignoreTagColor,color1,color2,color3,color4}, this.getName(), "users");
+				}
 				this.loadAllUsers();
 			});
 		userSettingsModal.find("#input-username").focus();
@@ -657,7 +608,7 @@ class EditUsers {
 			$(e.target)
 				.removeClass("valid")
 				.removeClass("invalid");
-			if ($(e.target).hasClass("hovering")) $(".tooltips").find(".notice-tooltip").remove();
+			if ($(e.target).hasClass("hovering")) $(".tooltips .notice-tooltip").remove();
 		}
 		else {
 			let request = require("request");
@@ -810,21 +761,18 @@ class EditUsers {
 			}
 			
 			if (avatar) {
-				var removeIcon = data.removeIcon ? data.removeIcon : false;
-				var bgImage = data.url ? "url(" + data.url + ")" : (info.avatar ? "url('https://cdn.discordapp.com/avatars/" + info.id + "/" + info.avatar + ".webp')" : "url(/assets/1cbd08c76f8af6dddce02c5138971129.png)");
-				avatar.style.background = removeIcon ? "" : bgImage;
+				avatar.style.background = data.removeIcon ? "" : (data.url ? "url(" + data.url + ")" : "url(" + this.IconUtils.getUserAvatarURL(info) + ")");
 				avatar.style.backgroundSize = "cover";
 				avatar.style.backgroundPosition = "center";
 			}
 				
 			var tag = data.tag ? data.tag : null;
 			if (tag && wrapper && !wrapper.querySelector(".user-tag") && (type == "list" || type == "chat" || type == "popout" || type == "profil" || type == "dmheader")) {
-				var ignoreTagColor = data.ignoreTagColor ? data.ignoreTagColor : false;
-				var color3 = ignoreTagColor ? 
+				var color3 = data.ignoreTagColor ? 
 								(member && member.colorString ? BDfunctionsDevilBro.color2RGB(member.colorString) : "") :
 								(data.color3 ? BDfunctionsDevilBro.color2RGB(data.color3) : "");
 				var color3COMP = color3 ? BDfunctionsDevilBro.color2COMP(color3) : [0,0,0];
-				var color4 = !ignoreTagColor && data.color4 ? 
+				var color4 = !data.ignoreTagColor && data.color4 ? 
 								BDfunctionsDevilBro.color2RGB(data.color4) : 
 								(color3COMP[0] > 180 && color3COMP[1] > 180 && color3COMP[2] > 180 ? "black" : "white");
 				var thisTag = $(this.tagMarkup)[0];
@@ -845,6 +793,41 @@ class EditUsers {
 			
 			$(div).attr("custom-editusers", true);
 		}
+	}
+	
+	resetAllUsers () {
+		document.querySelectorAll(".user-tag").forEach(node=>{node.remove();});
+		document.querySelectorAll("[custom-editusers]").forEach((div) => {
+			var {avatar, username, wrapper} = this.getAvatarNameWrapper(div);
+			if (!avatar && !username && !wrapper) return;
+			
+			var info = this.getUserInfo($(div).data("compact") ? $(".message-group").has(div)[0] : div);
+			if (!info) return;
+			
+			if (username) {
+				var serverObj = BDfunctionsDevilBro.getSelectedServer();
+				var member = serverObj ? this.MemberPerms.getMember(serverObj.id, info.id) : null;
+				var name = div.classList.contains("container-iksrDt") || !member || !member.nick ? info.username : member.nick;
+				var color1 = member && member.colorString ? BDfunctionsDevilBro.color2RGB(member.colorString) : "";
+				var color2 = "";
+				
+				BDfunctionsDevilBro.setInnerText(username, name);
+				username.style.color = color1;
+				username.style.background = color2;
+				
+				for (let markup of div.querySelectorAll(".markup")) {
+					markup.style.color = settingsCookie["bda-gs-7"] && settingsCookie["bda-gs-7"] == true ? color1 : "";
+				}
+			}
+			
+			if (avatar) {
+				avatar.style.background = "url(" + this.IconUtils.getUserAvatarURL(info) + ")";
+				avatar.style.backgroundSize = "cover";
+			}
+			
+			$(div).removeAttr("custom-editusers")
+				.find(".guild-inner").off("mouseenter." + this.getName());
+		});
 	}
 	
 	createDmToolTip (userObj) {
