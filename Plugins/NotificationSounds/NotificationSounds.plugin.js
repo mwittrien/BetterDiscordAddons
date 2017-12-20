@@ -69,7 +69,7 @@ class NotificationSounds {
 
 	getName () {return "NotificationSounds";}
 	
-	getDescription () {return "Let's you change the internal sounds to your own custom ones for all native sounds of Discord.";}
+	getDescription () {return "Allows you to replace the native sounds of Discord with your own";}
 
 	getVersion () {return "3.0.2";}
 
@@ -373,7 +373,7 @@ class NotificationSounds {
 		var checked = $(e.target).prop("checked");
 		$(e.target.parentElement)
 			.toggleClass("valueChecked-3Bzkbm", checked)
-			.toggleClass("valueUnchecked-XR6AOk", checked);
+			.toggleClass("valueUnchecked-XR6AOk", !checked);
 			
 		$(settingspanel).find(".unimplemented").toggle(checked);
 	}
