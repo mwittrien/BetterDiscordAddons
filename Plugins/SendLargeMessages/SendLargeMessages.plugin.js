@@ -67,7 +67,7 @@ class SendLargeMessages {
 
 	getDescription () {return "Opens a popout when your message is too large, which allows you to automatically send the message in several smaller messages.";}
 
-	getVersion () {return "1.3.4";}
+	getVersion () {return "1.3.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -86,8 +86,6 @@ class SendLargeMessages {
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 			
 			this.bindEventToTextArea();
-			
-			BDfunctionsDevilBro.translatePlugin(this);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -200,11 +198,11 @@ class SendLargeMessages {
 		var textinput = modal.find("#modal-inputtext")[0];
 		var messageAmmount = Math.ceil(textinput.value.length/1900);
 		warning.text(messageAmmount > 15 ? this.labels.modal_messages_warning : "");
-		counter.text(textinput.value.length + " (" + (textinput.selectionEnd - textinput.selectionStart) + ") => " + this.labels.modal_messages_translation + ": " +  messageAmmount);
+		counter.text(textinput.value.length + " (" + (textinput.selectionEnd - textinput.selectionStart) + ") => " + this.labels.modal_messages_translation + ": " + messageAmmount);
 	}
 	
 	formatText (text) {
-		text = text.replace(new RegExp("\t", 'g'), "    ");
+		text = text.replace(new RegExp("\t", 'g'), "	");
 		var longwords = text.match(/[\S]{1800,}/gm);
 		for (var i in longwords) {
 			let longword = longwords[i];
@@ -260,185 +258,194 @@ class SendLargeMessages {
 	
 	setLabelsByLanguage () {
 		switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
-			case "da": 	//danish
+			case "hr":		//croatian
+				return {
+					toast_allsent_text:					"Sve veliku poslane.",
+					modal_messages_translation:			"Vijesti",
+					modal_messages_warning:				"Nemojte slati previše veliku!",
+					modal_header_text:				 	"Pošalji veliku poruku:",
+					btn_cancel_text:					"Prekid",
+					btn_send_text:						"Poslati"
+				};
+			case "da":		//danish
 				return {
 					toast_allsent_text:					"Alle beskeder sendes.",
 					modal_messages_translation:			"Beskeder",
 					modal_messages_warning:				"Send ikke for mange beskeder!",
 					modal_header_text:				 	"Send stor besked:",
-					btn_cancel_text: 					"Afbryde",
-					btn_send_text: 						"Sende"
+					btn_cancel_text:					"Afbryde",
+					btn_send_text:						"Sende"
 				};
-			case "de": 	//german
+			case "de":		//german
 				return {
 					toast_allsent_text:					"Alle Nachrichten versendet.",
 					modal_messages_translation:			"Nachrichten",
 					modal_messages_warning:				"Schicke nicht zu viele Nachrichten!",
 					modal_header_text:				 	"Große Nachricht senden:",
-					btn_cancel_text: 					"Abbrechen",
-					btn_send_text: 						"Senden"
+					btn_cancel_text:					"Abbrechen",
+					btn_send_text:						"Senden"
 				};
-			case "es": 	//spanish
+			case "es":		//spanish
 				return {
 					toast_allsent_text:					"Todos los mensajes enviados.",
 					modal_messages_translation:			"Mensajes",
 					modal_messages_warning:				"¡No envíe demasiados mensajes!",
 					modal_header_text:				 	"Enviar mensaje grande:",
-					btn_cancel_text: 					"Cancelar",
-					btn_send_text: 						"Enviar"
+					btn_cancel_text:					"Cancelar",
+					btn_send_text:						"Enviar"
 				};
-			case "fr": 	//french
+			case "fr":		//french
 				return {
 					toast_allsent_text:					"Tous les messages envoyés",
 					modal_messages_translation:			"Messages",
 					modal_messages_warning:				"N'envoyez pas trop de messages!",
 					modal_header_text:				 	"Envoyer un gros message:",
-					btn_cancel_text: 					"Abandonner",
-					btn_send_text: 						"Envoyer"
+					btn_cancel_text:					"Abandonner",
+					btn_send_text:						"Envoyer"
 				};
-			case "it": 	//italian
+			case "it":		//italian
 				return {
 					toast_allsent_text:					"Tutti i messaggi inviati.",
 					modal_messages_translation:			"Messaggi",
 					modal_messages_warning:				"Non inviare troppi messaggi!",
 					modal_header_text:				 	"Invia grande messaggio:",
-					btn_cancel_text: 					"Cancellare",
-					btn_send_text: 						"Inviare"
+					btn_cancel_text:					"Cancellare",
+					btn_send_text:						"Inviare"
 				};
-			case "nl": 	//dutch
+			case "nl":		//dutch
 				return {
 					toast_allsent_text:					"Alle berichten verzonden.",
 					modal_messages_translation:			"Berichten",
 					modal_messages_warning:				"Stuur niet te veel berichten!",
 					modal_header_text:				 	"Stuur een groot bericht:",
-					btn_cancel_text: 					"Afbreken",
-					btn_send_text: 						"Sturen"
+					btn_cancel_text:					"Afbreken",
+					btn_send_text:						"Sturen"
 				};
-			case "no": 	//norwegian
+			case "no":		//norwegian
 				return {
 					toast_allsent_text:					"Alle meldinger sendt.",
 					modal_messages_translation:			"Meldinger",
 					modal_messages_warning:				"Ikke send for mange meldinger!",
 					modal_header_text:				 	"Send stor melding:",
-					btn_cancel_text: 					"Avbryte",
-					btn_send_text: 						"Sende"
+					btn_cancel_text:					"Avbryte",
+					btn_send_text:						"Sende"
 				};
-			case "pl": 	//polish
+			case "pl":		//polish
 				return {
 					toast_allsent_text:					"Wszystkie wiadomości zostały wysłane.",
-                    modal_messages_translation:			"Wiadomości",
-                    modal_messages_warning:				"Nie wysyłaj zbyt wielu wiadomości!",
-                    modal_header_text:					"Wyślij dużą wiadomość:",
-                    btn_cancel_text:					"Anuluj",
-                    btn_send_text:						"Wyślij"
+					modal_messages_translation:			"Wiadomości",
+					modal_messages_warning:				"Nie wysyłaj zbyt wielu wiadomości!",
+					modal_header_text:					"Wyślij dużą wiadomość:",
+					btn_cancel_text:					"Anuluj",
+					btn_send_text:						"Wyślij"
 				};
-			case "pt": 	//portuguese (brazil)
+			case "pt":		//portuguese (brazil)
 				return {
 					toast_allsent_text:					"Todas as mensagens enviadas.",
 					modal_messages_translation:			"Mensagens",
 					modal_messages_warning:				"Não envie muitas mensagens!",
 					modal_header_text:				 	"Enviar mensagem grande:",
-					btn_cancel_text: 					"Cancelar",
-					btn_send_text: 						"Enviar"
+					btn_cancel_text:					"Cancelar",
+					btn_send_text:						"Enviar"
 				};
-			case "fi": 	//finnish
+			case "fi":		//finnish
 				return {
 					toast_allsent_text:					"Kaikki lähetetyt viestit.",
 					modal_messages_translation:			"Viestien",
 					modal_messages_warning:				"Älä lähetä liian monta viestiä!",
 					modal_header_text:				 	"Lähetä suuri viesti:",
-					btn_cancel_text: 					"Peruuttaa",
-					btn_send_text: 						"Lähettää"
+					btn_cancel_text:					"Peruuttaa",
+					btn_send_text:						"Lähettää"
 				};
-			case "sv": 	//swedish
+			case "sv":		//swedish
 				return {
 					toast_allsent_text:					"Alla meddelanden skickade.",
 					modal_messages_translation:			"Meddelanden",
 					modal_messages_warning:				"Skicka inte för många meddelanden!",
 					modal_header_text:				 	"Skicka stort meddelande:",
-					btn_cancel_text: 					"Avbryta",
-					btn_send_text: 						"Skicka"
+					btn_cancel_text:					"Avbryta",
+					btn_send_text:						"Skicka"
 				};
-			case "tr": 	//turkish
+			case "tr":		//turkish
 				return {
 					toast_allsent_text:					"Tüm mesajlar gönderildi.",
 					modal_messages_translation:			"Mesajları",
 					modal_messages_warning:				"Çok fazla mesaj göndermeyin!",
 					modal_header_text:				 	"Büyük mesaj gönder:",
-					btn_cancel_text: 					"Iptal",
-					btn_send_text: 						"Göndermek"
+					btn_cancel_text:					"Iptal",
+					btn_send_text:						"Göndermek"
 				};
-			case "cs": 	//czech
+			case "cs":		//czech
 				return {
 					toast_allsent_text:					"Všechny zprávy byly odeslány.",
 					modal_messages_translation:			"Zpráv",
 					modal_messages_warning:				"Neposílejte příliš mnoho zpráv!",
 					modal_header_text:				 	"Odeslat velkou zprávu:",
-					btn_cancel_text: 					"Zrušení",
-					btn_send_text: 						"Poslat"
+					btn_cancel_text:					"Zrušení",
+					btn_send_text:						"Poslat"
 				};
-			case "bg": 	//bulgarian
+			case "bg":		//bulgarian
 				return {
 					toast_allsent_text:					"Всички изпратени съобщения.",
 					modal_messages_translation:			"Съобщения",
 					modal_messages_warning:				"Не изпращайте твърде много съобщения!",
 					modal_header_text:				 	"Изпратете голямо съобщение:",
-					btn_cancel_text: 					"Зъбести",
-					btn_send_text: 						"изпращам"
+					btn_cancel_text:					"Зъбести",
+					btn_send_text:						"изпращам"
 				};
-			case "ru": 	//russian
+			case "ru":		//russian
 				return {
 					toast_allsent_text:					"Все отправленные сообщения.",
 					modal_messages_translation:			"Сообщения",
 					modal_messages_warning:				"Не отправляйте слишком много сообщений!",
 					modal_header_text:				 	"Отправить сообщение:",
-					btn_cancel_text: 					"Отмена",
-					btn_send_text: 						"Послать"
+					btn_cancel_text:					"Отмена",
+					btn_send_text:						"Послать"
 				};
-			case "uk": 	//ukrainian
+			case "uk":		//ukrainian
 				return {
 					toast_allsent_text:					"Всі повідомлення надіслано.",
 					modal_messages_translation:			"Повідомлення",
 					modal_messages_warning:				"Не надсилайте надто багато повідомлень!",
 					modal_header_text:				 	"Надіслати велике повідомлення:",
-					btn_cancel_text: 					"Скасувати",
-					btn_send_text: 						"Відправити"
+					btn_cancel_text:					"Скасувати",
+					btn_send_text:						"Відправити"
 				};
-			case "ja": 	//japanese
+			case "ja":		//japanese
 				return {
 					toast_allsent_text:					"すべてのメッセージが送信されました。",
 					modal_messages_translation:			"メッセージ",
 					modal_messages_warning:				"あまりにも多くのメッセージを送信しないでください！",
 					modal_header_text:				 	"大きなメッセージを送信する：",
-					btn_cancel_text: 					"キャンセル",
-					btn_send_text: 						"送信"
+					btn_cancel_text:					"キャンセル",
+					btn_send_text:						"送信"
 				};
-			case "zh": 	//chinese (traditional)
+			case "zh":		//chinese (traditional)
 				return {
 					toast_allsent_text:					"發送的所有消息。",
 					modal_messages_translation:			"消息",
 					modal_messages_warning:				"不要發送太多信息！",
 					modal_header_text:				 	"發送大信息：",
-					btn_cancel_text: 					"取消",
-					btn_send_text: 						"發送"
+					btn_cancel_text:					"取消",
+					btn_send_text:						"發送"
 				};
-			case "ko": 	//korean
+			case "ko":		//korean
 				return {
 					toast_allsent_text:					"모든 메시지가 전송되었습니다.",
 					modal_messages_translation:			"메시지",
 					modal_messages_warning:				"너무 많은 메시지를 보내지 마십시오!",
 					modal_header_text:				 	"큰 메시지 보내기:",
-					btn_cancel_text: 					"취소",
-					btn_send_text: 						"보내다"
+					btn_cancel_text:					"취소",
+					btn_send_text:						"보내다"
 				};
-			default: 	//default: english
+			default:		//default: english
 				return {
 					toast_allsent_text:					"All messages sent.",
 					modal_messages_translation:			"Messages",
 					modal_messages_warning:				"Do not send too many messages!",
 					modal_header_text:		 			"Send large message:",
-					btn_cancel_text: 					"Cancel",
-					btn_send_text: 						"Send"
+					btn_cancel_text:					"Cancel",
+					btn_send_text:						"Send"
 				};
 		}
 	}
