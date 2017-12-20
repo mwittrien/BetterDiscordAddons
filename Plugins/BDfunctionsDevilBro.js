@@ -382,13 +382,13 @@ BDfunctionsDevilBro.checkAllUpdates = function () {
 };
 
 BDfunctionsDevilBro.translatePlugin = function (plugin) {
-	if (typeof plugin.setLabelsByLanguage === "function" && typeof plugin.changeLanguageStrings === "function") {
+	if (typeof plugin.setLabelsByLanguage === "function" || typeof plugin.changeLanguageStrings === "function") {
 		var translateInterval = setInterval(() => {
 			if (document.querySelector("html").lang) {
 				clearInterval(translateInterval);
 				var language = BDfunctionsDevilBro.getDiscordLanguage();
-				plugin.labels = plugin.setLabelsByLanguage(language.id);
-				plugin.changeLanguageStrings();
+				if (typeof plugin.setLabelsByLanguage === "function") 		plugin.labels = plugin.setLabelsByLanguage(language.id);
+				if (typeof plugin.changeLanguageStrings === "function") 	plugin.changeLanguageStrings();
 				console.log(BDfunctionsDevilBro.getLibraryStrings().toast_plugin_translated.replace("${pluginName}", plugin.getName()).replace("${ownlang}", language.ownlang));
 			}
 		},100);
