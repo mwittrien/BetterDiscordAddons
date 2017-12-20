@@ -88,7 +88,7 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "3.6.0";}
+	getVersion () {return "3.6.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -181,8 +181,6 @@ class EditChannels {
 			this.loadAllChannels();
 			
 			this.changeChannelHeader();
-			
-			BDfunctionsDevilBro.translatePlugin(this);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -444,6 +442,17 @@ class EditChannels {
 	
 	setLabelsByLanguage () {
 		switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
+			case "hr":		//croatian
+				return {
+					context_localchannelsettings_text:		"Postavke lokalnih kanala",
+					submenu_channelsettings_text:			"Promijeni postavke",
+					submenu_resetsettings_text:				"Vraćanje kanala",
+					modal_header_text:						"Postavke lokalnih kanala",
+					modal_channelname_text:					"Naziv lokalnog kanala",
+					modal_colorpicker1_text:				"Boja lokalnog kanala",
+					btn_cancel_text:						"Prekid",
+					btn_save_text:							"Uštedjeti"
+				};
 			case "da":		//danish
 				return {
 					context_localchannelsettings_text:		"Lokal kanalindstillinger",
