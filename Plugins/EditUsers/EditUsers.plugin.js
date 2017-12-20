@@ -357,7 +357,7 @@ class EditUsers {
 					}
 				);
 			});
-			if (document.querySelector("#app-mount")) this.userProfilModalObserver.observe(document.querySelector("#app-mount"), {childList: true, subtree:true});
+			if (document.querySelector(".app ~ [class^='theme-']")) this.userProfilModalObserver.observe(document.querySelector(".app ~ [class^='theme-']"), {childList: true});
 			
 			this.settingsWindowObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
