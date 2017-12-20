@@ -160,7 +160,7 @@ class EmojiStatistics {
 
 	getDescription () {return "Adds some helpful options to show you more information about emojis and emojiservers.";}
 
-	getVersion () {return "2.6.8";}
+	getVersion () {return "2.6.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -224,8 +224,6 @@ class EmojiStatistics {
 			this.GuildEmojis = BDfunctionsDevilBro.WebModules.findByProperties(["getGuildEmoji", "getDisambiguatedEmojiContext"]);
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
-			
-			BDfunctionsDevilBro.translatePlugin(this);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
