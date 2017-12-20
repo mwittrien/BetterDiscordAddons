@@ -168,7 +168,7 @@ class ServerHider {
 
 	getDescription () {return "Hide Servers in your Serverlist";}
 
-	getVersion () {return "2.4.8";}
+	getVersion () {return "2.4.9";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -238,8 +238,6 @@ class ServerHider {
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 			
 			this.updateAllServers(true);
-			
-			BDfunctionsDevilBro.translatePlugin(this);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -420,6 +418,16 @@ class ServerHider {
 	
 	setLabelsByLanguage () {
 		switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
+			case "hr":		//croatian
+				return {
+					modal_header_text:				"Upravljanje popisom poslužitelja",
+					modal_folderhide_text:			"Nemoj prikazivati poslužitelje skrivene po narudžbi",
+					btn_ok_text:					"OK",
+					btn_all_text:					"Sve",
+					context_serverhider_text:		"Vidljivost poslužitelj",
+					submenu_hideserver_text:		"Sakrij poslužitelj",
+					submenu_openhidemenu_text:		"Upravljanje popisom poslužitelja"
+				};
 			case "da":		//danish
 				return {
 					modal_header_text:				"Styring af Serverliste",
