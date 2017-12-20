@@ -1222,9 +1222,7 @@ BDfunctionsDevilBro.appendModal = function (modal) {
 			setTimeout(() => {modal.remove();}, 300);
 		});
 		
-	$(modal).find(".modalTabButton").addClass("tab");
 	$(modal).find(".tab, .tab-bar-item").first().addClass("selected");
-	$(modal).find(".modalTab").addClass("tab-content");
 	$(modal).find(".tab-content").first().addClass("open");
 	$(modal)
 		.find(".checkbox-1KYsPm").each((_, checkBox) => {
