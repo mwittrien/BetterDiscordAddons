@@ -160,7 +160,7 @@ class EmojiStatistics {
 
 	getDescription () {return "Adds some helpful options to show you more information about emojis and emojiservers.";}
 
-	getVersion () {return "2.6.7";}
+	getVersion () {return "2.6.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -412,6 +412,17 @@ class EmojiStatistics {
 	
 	setLabelsByLanguage () {
 		switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
+			case "hr":		//croatian
+				return {
+					modal_header_text:						"Statistike o emojima",
+					modal_titlesicon_text:					"Ikona",
+					modal_titlesservername_text:			"Naziv poslužitelja",
+					modal_titlestotal_text:					"Cjelokupni:",
+					modal_titlesglobal_text:				"Globalno:",
+					modal_titleslocal_text:					"Kokalne:",
+					modal_titlesreplicate_text:				"Kopije:",
+					btn_ok_text:							"OK"
+				};
 			case "da":		//danish
 				return {
 					modal_header_text:						"Statistikker af emojis",
@@ -426,7 +437,7 @@ class EmojiStatistics {
 			case "de":		//german
 				return {
 					modal_header_text:						"Statistiken über Emojis",
-					modal_titlesicon_text:					"Symbol",
+					modal_titlesicon_text:					"Icon",
 					modal_titlesservername_text:			"Servername",
 					modal_titlestotal_text:					"Gesamt:",
 					modal_titlesglobal_text:				"Global:",
