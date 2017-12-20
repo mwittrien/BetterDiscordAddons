@@ -13,6 +13,12 @@ class CharCounter {
 				bottom: -1.3em;
 				opacity: .5;
 				z-index: 1000;
+			}
+			.character-counter.normal {
+				bottom: -1.3em;
+			}
+			.character-counter.edit {
+				bottom: 3.1em;
 			}`;
 			
 		this.counterMarkup = `<div class="character-counter"></div>`;
@@ -22,7 +28,7 @@ class CharCounter {
 
 	getDescription () {return "Adds a charcounter in the chat.";}
 
-	getVersion () {return "1.0.6";}
+	getVersion () {return "1.0.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -40,11 +46,22 @@ class CharCounter {
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 			
-			this.appendCounter = this.appendCounter.bind(this);
 			this.TextArea = BDfunctionsDevilBro.WebModules.findByPrototypes(["saveCurrentText"]);
-			BDfunctionsDevilBro.WebModules.addListener(this.TextArea.prototype, "componentDidMount", this.appendCounter);
+			this.patchCancel = BDfunctionsDevilBro.WebModules.monkeyPatch(this.TextArea.prototype, "componentDidMount", {after: (e) => {
+				if (e && e.thisObject && e.thisObject.props && e.thisObject.props.type) {
+					switch (e.thisObject.props.type) {
+						case "normal":
+							this.appendCounter("form .channelTextArea-os01xC", e.thisObject.props.type);
+							break;
+						case "edit":
+							this.appendCounter(".edit-message .channelTextArea-1HTP3C", e.thisObject.props.type);
+							break;
+					}
+				}
+			}});
 			
-			this.appendCounter();
+			this.appendCounter("form .channelTextArea-os01xC", "normal");
+			this.appendCounter(".edit-message .channelTextArea-1HTP3C", "edit");
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -62,7 +79,7 @@ class CharCounter {
 			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName());
 			
-			BDfunctionsDevilBro.WebModules.removeListener(this.TextArea.prototype, "componentDidMount", this.appendCounter);
+			if (typeof this.patchCancel === "function") this.patchCancel();
 			
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
@@ -70,11 +87,11 @@ class CharCounter {
 	
 	// begin of own functions
 	
-	appendCounter () {
-		if (document.querySelector(".character-counter")) return;
-		var textarea = document.querySelector(".channelTextArea-os01xC");
-		if (textarea) {
+	appendCounter (selector, type) {
+		var textarea = document.querySelector(selector);
+		if (textarea && !textarea.querySelector(".character-counter." + type)) {
 			var counter = $(this.counterMarkup);
+			counter.addClass(type);
 			var textinput = textarea.querySelector("textarea");
 			$(textinput)
 				.off("keydown." + this.getName() + " click." + this.getName())
