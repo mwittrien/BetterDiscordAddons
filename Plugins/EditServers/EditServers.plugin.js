@@ -128,7 +128,7 @@ class EditServers {
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	getVersion () {return "1.6.8";}
+	getVersion () {return "1.6.9";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -195,8 +195,6 @@ class EditServers {
 			});
 			
 			this.loadAllServers();
-			
-			BDfunctionsDevilBro.translatePlugin(this);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -519,6 +517,29 @@ class EditServers {
 	
 	setLabelsByLanguage () {
 		switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
+			case "hr":		//croatian
+				return {
+					context_localserversettings_text:	"Lokalne postavke poslužitelja",
+					submenu_serversettings_text:		"Promijeni postavke",
+					submenu_resetsettings_text:			"Ponovno postavite poslužitelj",
+					modal_header_text:					"Lokalne postavke poslužitelja",
+					modal_servername_text:				"Naziv lokalnog poslužitelja",
+					modal_servershortname_text:			"Poslužitelj prečaca",
+					modal_serverurl_text:				"Ikona",
+					modal_removeicon_text:				"Ukloni ikonu",
+					modal_tabheader1_text:				"Poslužitelja",
+					modal_tabheader2_text:				"Boja ikona",
+					modal_tabheader3_text:				"Boja tooltip",
+					modal_colorpicker1_text:			"Boja ikona",
+					modal_colorpicker2_text:			"Boja fonta",
+					modal_colorpicker3_text:			"Boja tooltip",
+					modal_colorpicker4_text:			"Boja fonta",
+					modal_ignoreurl_text:				"URL ignorirati",
+					modal_validurl_text:				"Vrijedi URL",
+					modal_invalidurl_text:				"Nevažeći URL",
+					btn_cancel_text:					"Prekid",
+					btn_save_text:						"Uštedjeti"
+				};
 			case "da":		//danish
 				return {
 					context_localserversettings_text:	"Lokal serverindstillinger",
