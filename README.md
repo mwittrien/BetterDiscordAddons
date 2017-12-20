@@ -17,7 +17,7 @@ A series of plugins and themes for BetterDiscord. If you got any question write 
  - [Image Gallery](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ImageGallery) - Allows the user to browse through images sent inside the same message.
  - [Message Utilities](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/MessageUtilities) - Offers a number of useful message options.
  - [Moveable Popups](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/MoveablePopups) - Adds the feature to move all popups and modals around like on a normal desktop. Ctrl + drag with your left mousebutton to drag element.
- - [Notification Sounds](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/NotificationSounds) - Rings a sound when someone writes you a DM or when someones mentions you in a server.
+ - [Notification Sounds](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/NotificationSounds) - Allows you to replace the native sounds of Discord with your own.
  - [Old Title Bar](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/OldTitleBar) - Reverts the title bar back to its former self.
  - [Personal Pins](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/PersonalPins) - Similar to normal pins. Lets you save messages as notes for yourself.
  - [Plugin Repo](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/PluginRepo) - Allows you to look at all plugins from the plugin repo and download them on the fly.
