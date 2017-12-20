@@ -375,8 +375,6 @@ class ServerFolders {
 			this.loadAllFolders();
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
-			
-			BDfunctionsDevilBro.translatePlugin(this);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -1202,6 +1200,29 @@ class ServerFolders {
 	
 	setLabelsByLanguage () {
 		switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
+			case "hr":		//croatian
+				return {
+					toast_addserver_text:					"${servername} je dodan u mapu${foldername}.",
+					toast_removeserver_text:				"${servername} je uklonjena iz mape${foldername}.",
+					servercontext_serverfolders_text:		"Poslužitelj mapu",
+					serversubmenu_createfolder_text:		"Izradi mapu",
+					serversubmenu_removefromfolder_text:	"Ukloni poslužitelj iz mape",
+					foldercontext_unreadfolder_text:		"Označi sve kao pročitano",
+					foldercontext_foldersettings_text:		"Postavke map",
+					foldercontext_removefolder_text:		"Izbriši mapu",
+					modal_header_text:						"Postavke mapa",
+					modal_foldername_text:					"Naziv mape",
+					modal_tabheader1_text:					"Mape",
+					modal_tabheader2_text:					"Boja mape",
+					modal_tabheader3_text:					"Boja tooltip",
+					modal_iconpicker_text:					"Odabir mape",
+					modal_colorpicker1_text:				"Boja primarne mape",
+					modal_colorpicker2_text:				"Boja sekundarne mape",
+					modal_colorpicker3_text:				"Boja tooltip",
+					modal_colorpicker4_text:				"Boja fonta",
+					btn_cancel_text:						"Prekid",
+					btn_save_text:							"Uštedjeti"
+				};
 			case "da":		//danish
 				return {
 					toast_addserver_text:					"${servername} er blevet tilføjet til mappe${foldername}.",
