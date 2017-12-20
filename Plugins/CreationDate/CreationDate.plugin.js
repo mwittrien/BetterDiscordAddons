@@ -2,10 +2,10 @@
 
 class CreationDate {
 	constructor () {
+		this.labels = {};
+		
 		this.userPopoutObserver = new MutationObserver(() => {});
 		this.userProfilModalObserver = new MutationObserver(() => {});
-		
-		this.labels = {};
 		
 		this.creationDateMarkup = `<div class="creationDate nameNormal-1LgIgN textRow-1_JoJf"></div>`
 		
@@ -46,7 +46,7 @@ class CreationDate {
 
 	getDescription () {return "Displays the Creation Date of an Account in the UserPopout and UserModal.";}
 
-	getVersion () {return "1.0.1";}
+	getVersion () {return "1.0.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -161,9 +161,8 @@ class CreationDate {
 		var info = BDfunctionsDevilBro.getKeyInformation({"node":container,"key":"user"});
 		if (info) {
 			var creationDate = $(this.creationDateMarkup);
-			var timestamp = new Date((info.id / 4194304) + 1420070400000);
 			var language = BDfunctionsDevilBro.getDiscordLanguage().id;
-			creationDate.text(this.labels.createdat_text + " " + timestamp.toLocaleString(language)).appendTo(container);
+			creationDate.text(this.labels.createdat_text + " " + info.createdAt.toLocaleString(language)).appendTo(container);
 		}
 	}
 	
