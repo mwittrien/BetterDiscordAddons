@@ -20,7 +20,7 @@ class GoogleTranslateOption {
 
 	getDescription () {return "Adds a Google Translate option to your context menu, which shows a preview of the translated text and on click will open the selected text in Google Translate.";}
 
-	getVersion () {return "1.0.5";}
+	getVersion () {return "1.0.6";}
 	
 	getAuthor () {return "DevilBro";}
 	
@@ -50,8 +50,6 @@ class GoogleTranslateOption {
 				);
 			});
 			if (document.querySelector(".app")) this.messageContextObserver.observe(document.querySelector(".app"), {childList: true});
-			
-			BDfunctionsDevilBro.translatePlugin(this);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -94,7 +92,7 @@ class GoogleTranslateOption {
 							BDfunctionsDevilBro.createTooltip(translation, targetDiv, {type: "right"});
 						})
 						.on("click", ".googletranslateoption-item", (e) => {
-							window.open("https://translate.google.com/#auto/" + langid + "/" +  encodeURIComponent(text), "_blank");
+							window.open("https://translate.google.com/#auto/" + langid + "/" + encodeURIComponent(text), "_blank");
 						});
 				}
 				break;
@@ -102,91 +100,91 @@ class GoogleTranslateOption {
 		}
 	}
 	
-	createTranslationTooltip (translation, e) {
-		console.log(BDfunctionsDevilBro);
-	}
-	
 	setLabelsByLanguage () {
 		switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
-			case "da": 	//danish
+			case "hr":		//croatian
 				return {
-					context_googletranslateoption_text: 	"Søg oversættelse"
+					context_googletranslateoption_text:	"Traži prijevod"
 				};
-			case "de": 	//german
+			case "da":		//danish
 				return {
-					context_googletranslateoption_text: 	"Suche Übersetzung"
+					context_googletranslateoption_text:	"Søg oversættelse"
 				};
-			case "es": 	//spanish
+			case "de":		//german
 				return {
-					context_googletranslateoption_text: 	"Buscar traducción"
+					context_googletranslateoption_text:	"Suche Übersetzung"
 				};
-			case "fr": 	//french
+			case "es":		//spanish
 				return {
-					context_googletranslateoption_text: 	"Rechercher une traduction"
+					context_googletranslateoption_text:	"Buscar traducción"
 				};
-			case "it": 	//italian
+			case "fr":		//french
 				return {
-					context_googletranslateoption_text: 	"Cerca la traduzione"
+					context_googletranslateoption_text:	"Rechercher une traduction"
 				};
-			case "nl": 	//dutch
+			case "it":		//italian
 				return {
-					context_googletranslateoption_text: 	"Zoek vertaling"
+					context_googletranslateoption_text:	"Cerca la traduzione"
 				};
-			case "no": 	//norwegian
+			case "nl":		//dutch
 				return {
-					context_googletranslateoption_text: 	"Søk oversettelse"
+					context_googletranslateoption_text:	"Zoek vertaling"
 				};
-			case "pl": 	//polish
+			case "no":		//norwegian
 				return {
-					context_googletranslateoption_text: 	"Wyszukaj tłumaczenie"
+					context_googletranslateoption_text:	"Søk oversettelse"
 				};
-			case "pt": 	//portuguese (brazil)
+			case "pl":		//polish
 				return {
-					context_googletranslateoption_text: 	"Pesquisar tradução"
+					context_googletranslateoption_text:	"Wyszukaj tłumaczenie"
 				};
-			case "fi": 	//finnish
+			case "pt":		//portuguese (brazil)
 				return {
-					context_googletranslateoption_text: 	"Etsi käännös"
+					context_googletranslateoption_text:	"Pesquisar tradução"
 				};
-			case "sv": 	//swedish
+			case "fi":		//finnish
 				return {
-					context_googletranslateoption_text: 	"Sök översättning"
+					context_googletranslateoption_text:	"Etsi käännös"
 				};
-			case "tr": 	//turkish
+			case "sv":		//swedish
 				return {
-					context_googletranslateoption_text: 	"Arama tercümesi"
+					context_googletranslateoption_text:	"Sök översättning"
 				};
-			case "cs": 	//czech
+			case "tr":		//turkish
 				return {
-					context_googletranslateoption_text: 	"Hledat překlad"
+					context_googletranslateoption_text:	"Arama tercümesi"
 				};
-			case "bg": 	//bulgarian
+			case "cs":		//czech
 				return {
-					context_googletranslateoption_text: 	"Търсене на превод"
+					context_googletranslateoption_text:	"Hledat překlad"
 				};
-			case "ru": 	//russian
+			case "bg":		//bulgarian
 				return {
-					context_googletranslateoption_text: 	"Поиск перевода"
+					context_googletranslateoption_text:	"Търсене на превод"
 				};
-			case "uk": 	//ukrainian
+			case "ru":		//russian
 				return {
-					context_googletranslateoption_text: 	"Пошук перекладу"
+					context_googletranslateoption_text:	"Поиск перевода"
 				};
-			case "ja": 	//japanese
+			case "uk":		//ukrainian
 				return {
-					context_googletranslateoption_text: 	"翻訳の検索"
+					context_googletranslateoption_text:	"Пошук перекладу"
 				};
-			case "zh": 	//chinese (traditional)
+			case "ja":		//japanese
 				return {
-					context_googletranslateoption_text: 	"搜索翻譯"
+					context_googletranslateoption_text:	"翻訳の検索"
 				};
-			case "ko": 	//korean
+			case "zh":		//chinese (traditional)
 				return {
-					context_googletranslateoption_text: 	"검색 번역"
+					context_googletranslateoption_text:	"搜索翻譯"
 				};
-			default: 	//default: english
+			case "ko":		//korean
 				return {
-					context_googletranslateoption_text: 	"Search translation"
+					context_googletranslateoption_text:	"검색 번역"
+				};
+			default:		//default: english
+				return {
+					context_googletranslateoption_text:	"Search translation"
 				};
 		}
 	}
