@@ -29,7 +29,7 @@ class MessageUtilities {
 
 	getDescription () {return "Offers a number of useful message options. Remap the keybindings in the settings.";}
 
-	getVersion () {return "1.2.3";}
+	getVersion () {return "1.2.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -88,10 +88,10 @@ class MessageUtilities {
 			this.loadBindings();
 			
 			$(document)
-				.on("click." + this.getName(), ".markup, .system-message-content", (e) => {
+				.on("click." + this.getName(), ".message", (e) => {
 					this.onClick(e.currentTarget, 0, "onSglClick");
 				})
-				.on("dblclick." + this.getName(), ".markup, .system-message-content", (e) => {
+				.on("dblclick." + this.getName(), ".message", (e) => {
 					this.onClick(e.currentTarget, 1, "onDblClick");
 				})
 				.on("keydown." + this.getName(), ".channelTextArea-os01xC", (e) => {
@@ -109,8 +109,8 @@ class MessageUtilities {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.unloadMessage(this);
 			
-			$(document).off("click." + this.getName(), ".markup, .system-message-content");
-			$(document).off("dblclick." + this.getName(), ".markup, .system-message-content");
+			$(document).off("click." + this.getName(), ".message");
+			$(document).off("dblclick." + this.getName(), ".message");
 			$(document).off("keydown." + this.getName(), ".channelTextArea-os01xC");
 			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName());
@@ -278,7 +278,7 @@ class MessageUtilities {
 	doNote (message) {
 		if (BDfunctionsDevilBro.isPluginEnabled("PersonalPins") == true) {
 			var PersonalPins = window.bdplugins["PersonalPins"].plugin;
-			PersonalPins.getMessageData($(".message").has(message.div)[0]);
+			PersonalPins.getMessageData(message.div);
 			PersonalPins.addMessageToNotes();
 		}
 	}
@@ -301,10 +301,10 @@ class MessageUtilities {
 	getMessageData (div) {
 		if (div) {
 			var messagegroup = $(".message-group").has(div);
-			var pos = messagegroup.find(".markup, .system-message-content").index(div);
+			var pos = messagegroup.find(".message").index(div);
 			if (messagegroup[0] && pos > -1) {
 				var info = BDfunctionsDevilBro.getKeyInformation({"node":messagegroup[0],"key":"messages","time":1000});
-				if (info) return Object.assign(info[pos],{"div":div, "group":messagegroup[0], "pos":pos});
+				if (info) return Object.assign({},info[pos],{"div":div, "group":messagegroup[0], "pos":pos});
 			}
 		}
 		return null;
