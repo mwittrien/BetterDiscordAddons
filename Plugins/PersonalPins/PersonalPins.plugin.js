@@ -110,7 +110,7 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.3.1";}
+	getVersion () {return "1.3.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -147,6 +147,7 @@ class PersonalPins {
 			this.ChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getChannel"]);
 			this.UserStore = BDfunctionsDevilBro.WebModules.findByProperties(["getUser"]);
 			this.MemberStore = BDfunctionsDevilBro.WebModules.findByProperties(["getMember"]);
+			this.IconUtils = BDfunctionsDevilBro.WebModules.findByProperties(["getUserAvatarURL"]);
 			this.HistoryUtils = BDfunctionsDevilBro.WebModules.findByProperties(["transitionTo", "replaceWith", "getHistory"]);
 			this.MainDiscord = BDfunctionsDevilBro.WebModules.findByProperties(["ActionTypes"]);	
 			
@@ -292,7 +293,7 @@ class PersonalPins {
 			var pos = messagegroup.find(".message").index(div);
 			if (messagegroup[0] && pos > -1) {
 				var info = BDfunctionsDevilBro.getKeyInformation({"node":messagegroup[0],"key":"messages","time":1000});
-				if (info) this.message = Object.assign(info[pos],{"div":div, "group":messagegroup[0], "pos":pos});
+				if (info) this.message = Object.assign({},info[pos],{"div":div, "group":messagegroup[0], "pos":pos});
 			}
 		}
 		else {
@@ -433,7 +434,7 @@ class PersonalPins {
 				"color": this.message.colorString,
 				"authorID": author.id,
 				"authorName": author.username,
-				"avatar": author.avatar ? "url('https://cdn.discordapp.com/avatars/" + author.id + "/" + author.avatar + ".webp')" : "url('/assets/1cbd08c76f8af6dddce02c5138971129.png')",
+				"avatar": this.IconUtils.getUserAvatarURL(author),
 				"content": this.message.content,
 				"markup": this.message.div.querySelector(".markup").innerHTML,
 				"accessory": this.message.div.querySelector(".accessory").innerHTML
@@ -485,7 +486,7 @@ class PersonalPins {
 					let date = new Date(messageData.timestamp);
 					container.insertBefore(message, container.firstChild);
 					message.querySelector(".avatar-large").style.backgroundImage = 
-						user && user.avatar ? "url('https://cdn.discordapp.com/avatars/" + user.id + "/" + user.avatar + ".webp')" : messageData.avatar;
+						user ? "url(" + this.IconUtils.getUserAvatarURL(user) + ")" : "url(" + messageData.avatar + ")";
 					message.querySelector(".user-name").innerText = user ? user.username : messageData.authorName;
 					message.querySelector(".user-name").style.color = member ? member.colorString : messageData.color;
 					message.querySelector(".timestamp").innerText = date.toLocaleTimeString() + ", " + date.toLocaleDateString(language);
