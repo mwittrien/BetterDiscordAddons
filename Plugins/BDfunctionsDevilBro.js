@@ -1210,7 +1210,7 @@ BDfunctionsDevilBro.appendModal = function (modal) {
 			$(".tab.selected, .tab-bar-item.selected", modal)
 				.removeClass("selected");
 				
-			$(".tab-content." + $(e.currentTarget).attr("value") + ", .tab-content[tab='" + $(e.currentTarget).attr("tab") + "']", modal)
+			$(".tab-content[tab='" + $(e.currentTarget).attr("tab") + "']", modal)
 				.addClass("open");
 				
 			$(e.currentTarget)
