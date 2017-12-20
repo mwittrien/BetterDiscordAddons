@@ -748,15 +748,8 @@ class EditUsers {
 				username.style.color = color1;
 				username.style.background = color2;
 				
-				var messages = div.querySelectorAll(".markup");
-				for (var i = 0; i < messages.length; i++) {
-					var markup = messages[i];
-					if (settingsCookie["bda-gs-7"] && settingsCookie["bda-gs-7"] == true) {
-						markup.style.color = color1;
-					}
-					else {
-						markup.style.color = "";
-					}
+				for (let markup of div.querySelectorAll(".markup")) {
+					markup.style.color = settingsCookie["bda-gs-7"] && settingsCookie["bda-gs-7"] == true ? color1 : "";
 				}
 			}
 			
