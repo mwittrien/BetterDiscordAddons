@@ -10,7 +10,6 @@ class CharCounter {
 				display: block;
 				position: absolute;
 				right: 0; 
-				bottom: -1.3em;
 				opacity: .5;
 				z-index: 1000;
 			}
@@ -18,7 +17,7 @@ class CharCounter {
 				bottom: -1.3em;
 			}
 			.character-counter.edit {
-				bottom: 3.1em;
+				top: -1.3em;
 			}`;
 			
 		this.selectors = {
@@ -33,7 +32,7 @@ class CharCounter {
 
 	getDescription () {return "Adds a charcounter in the chat.";}
 
-	getVersion () {return "1.0.7";}
+	getVersion () {return "1.0.8";}
 
 	getAuthor () {return "DevilBro";}
 
