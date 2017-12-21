@@ -12,8 +12,6 @@ class CharCounter {
 				right: 0; 
 				opacity: .5;
 				z-index: 1000;
-			}
-			#charcounter.normal {
 				bottom: -1.3em;
 			}
 			#charcounter.edit {
@@ -32,7 +30,7 @@ class CharCounter {
 
 	getDescription () {return "Adds a charcounter in the chat.";}
 
-	getVersion () {return "1.0.9";}
+	getVersion () {return "1.1.0";}
 
 	getAuthor () {return "DevilBro";}
 
