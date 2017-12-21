@@ -64,7 +64,7 @@ class RepoControls {
 
 	getDescription () {return "Lets you sort and filter your list of downloaded Themes and Plugins.";}
 
-	getVersion () {return "1.0.1";}
+	getVersion () {return "1.0.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -180,10 +180,10 @@ class RepoControls {
 			let entry = {
 				div: 			li,
 				search:			(name + " " + version + " " + author + " " + description).toUpperCase(),
-				name: 			name,
-				version: 		version,
-				author: 		author,
-				description: 	description
+				name: 			(name).toUpperCase(),
+				version: 		(version).toUpperCase(),
+				author: 		(author).toUpperCase(),
+				description: 	(description).toUpperCase()
 			};
 			container.entries.push(entry);
 		}
