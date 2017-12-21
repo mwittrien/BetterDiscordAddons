@@ -29,18 +29,19 @@ class MessageUtilities {
 
 	getDescription () {return "Offers a number of useful message options. Remap the keybindings in the settings.";}
 
-	getVersion () {return "1.2.4";}
+	getVersion () {return "1.2.5";}
 
 	getAuthor () {return "DevilBro";}
 	
 	getSettingsPanel () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			var settingshtml = `<div class="${this.getName()}-settings marginTop20-3UscxH">`;
+			var settings = this.getSettings(); 
 			var clicks = ["click"];
 			var keys = ["key1","key2"];
 			for (var action in this.actions) {
 				var binding = BDfunctionsDevilBro.loadData(action, this.getName(), "bindings");
-				settingshtml += `<div class="${action}-key-settings"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">${this.actions[action].name}:</h3></div><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">`;
+				settingshtml += `<div class="${action}-key-settings"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.actions[action].name}:</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU ${settings[action] ? "valueChecked-3Bzkbm" : "valueUnchecked-XR6AOk"}" style="flex: 0 0 auto;"><input type="checkbox" value="${action}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[action] ? " checked" : ""}></div></div><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">`;
 				for (var click of clicks) {
 					settingshtml += `<div class="ui-form-item flexChild-1KGW5q" style="flex: 1 1 20%;"><h5 class="h5-3KssQU title-1pmpPr size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH defaultMarginh5-2UwwFY marginBottom4-_yArcI">${click}:</h5><div class="ui-select ${click}-select-wrapper"><div type="${action}" option="${click}" value="${binding[click]}" class="Select Select--single has-value"><div class="Select-control"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-value" style="flex: 1 1 auto;"><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm">${this.clickMap[binding[click]]}</div></div><span class="Select-arrow-zone"><span class="Select-arrow"></span></span></div></div></div></div>`;
 				}
@@ -55,6 +56,7 @@ class MessageUtilities {
 			
 			var settingspanel = $(settingshtml)[0];
 			$(settingspanel)
+				.on("click", ".checkbox-1KYsPm", () => {this.updateSettings(settingspanel);})
 				.on("click", ".Select-control", (e) => {this.openDropdownMenu(settingspanel, e);})
 				.on("click", ".ui-key-recorder", (e) => {this.startRecording(settingspanel, e);})
 				.on("click", ".reset-recorder", (e) => {this.resetRecorder(settingspanel, e);})
@@ -119,6 +121,31 @@ class MessageUtilities {
 
 	
 	//begin of own functions
+	
+	getSettings () {
+		var oldSettings = BDfunctionsDevilBro.loadAllData(this.getName(), "settings"), newSettings = {}, saveSettings = false;
+		for (let action in this.actions) {
+			if (oldSettings[action] == null) {
+				newSettings[action] = true;
+				saveSettings = true;
+			}
+			else {
+				newSettings[action] = oldSettings[action];
+			}
+		}
+		if (saveSettings) BDfunctionsDevilBro.saveAllData(newSettings, this.getName(), "settings");
+		return newSettings;
+	}
+
+	updateSettings (settingspanel) {
+		var settings = {};
+		for (var input of settingspanel.querySelectorAll(".checkbox-1KYsPm")) {
+			settings[input.value] = input.checked;
+			input.parentElement.classList.toggle("valueChecked-3Bzkbm", input.checked);
+			input.parentElement.classList.toggle("valueUnchecked-XR6AOk", !input.checked);
+		}
+		BDfunctionsDevilBro.saveAllData(settings, this.getName(), "settings");
+	}
 	
 	resetAll (settingspanel) {
 		if (confirm("Are you sure you want to delete all key bindings?")) {
@@ -237,9 +264,11 @@ class MessageUtilities {
 		if (!this.isEventFired(name)) {
 			this.fireEvent(name);
 			var bindings = BDfunctionsDevilBro.loadAllData(this.getName(), "bindings");
-			for (var action in bindings) {
+			var settings = this.getSettings();
+			for (let action in bindings) {
 				var binding = bindings[action];
-				if (binding.click == click && this.checkIfKeyPressed(binding.key1) && this.checkIfKeyPressed(binding.key2)) {
+				console.log();
+				if (settings[action] && binding.click == click && this.checkIfKeyPressed(binding.key1) && this.checkIfKeyPressed(binding.key2)) {
 					var message = this.getMessageData(div)
 					if (message) this.actions[action].func.bind(this)(message);
 					break;
