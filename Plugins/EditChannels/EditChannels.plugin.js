@@ -4,7 +4,6 @@ class EditChannels {
 	constructor () {
 		this.labels = {};
 		
-		this.channelObserver = new MutationObserver(() => {});
 		this.channelListObserver = new MutationObserver(() => {});
 		this.channelContextObserver = new MutationObserver(() => {});
 
@@ -88,7 +87,7 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "3.6.1";}
+	getVersion () {return "3.6.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -122,46 +121,31 @@ class EditChannels {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
-			this.channelObserver = new MutationObserver((changes, _) => {
+			this.channelListObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
-						if (change.attributeName == "class" && $(change.target).attr("class").indexOf("wrapper") > -1) {
-							var info = BDfunctionsDevilBro.getKeyInformation({"node":change.target, "key":"channel"});
-							if (info) this.loadChannel({div:change.target.parentElement,info});
+						if (change.attributeName == "class" && $(change.target).attr("class").indexOf("wrapper") > -1 && $("[custom-editchannels]").has(change.target)[0]) {
+							let info = BDfunctionsDevilBro.getKeyInformation({"node":change.target, "key":"channel"});
+							if (info) this.loadChannel(BDfunctionsDevilBro.getDivOfChannel(info.id));
 						}
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (node && node.classList && (node.classList.contains("containerDefault-7RImuF") || node.classList.contains("containerDefault-1bbItS"))) {
-									var info = BDfunctionsDevilBro.getKeyInformation({"node":node, "key":"channel"});
-									if (info) this.loadChannel({div:node,info});
+									let info = BDfunctionsDevilBro.getKeyInformation({"node":node, "key":"channel"});
+									if (info) this.loadChannel(BDfunctionsDevilBro.getDivOfChannel(info.id));
+								}
+								if (node && node.className && node.className.length > 0 && node.className.indexOf("container-") > -1) {
+									for (let channel of node.querySelectorAll(".containerDefault-7RImuF, .containerDefault-1bbItS")) {
+										let info = BDfunctionsDevilBro.getKeyInformation({"node":channel, "key":"channel"});
+										if (info) this.loadChannel(BDfunctionsDevilBro.getDivOfChannel(info.id));
+									}
 								}
 							});
 						}
 					}
 				);
 			});
-			
-			this.channelListObserver = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								 if (node && node.className && node.className.length > 0 && node.className.indexOf("container-") > -1) {
-									this.channelObserver.observe(node, {childList: true, attributes: true, subtree: true});
-									this.loadAllChannels();
-								} 
-							});
-						}
-					}
-				);
-			});
-			if (document.querySelector(".channels-3g2vYe")) this.channelListObserver.observe(document.querySelector(".channels-3g2vYe"), {childList: true, subtree: true});
-			
-			$(".channels-3g2vYe [class^='container-']").each(
-				(i,category) => {
-					this.channelObserver.observe(category, {childList: true, attributes: true, subtree: true});
-				}
-			);
+			if (document.querySelector(".channels-3g2vYe")) this.channelListObserver.observe(document.querySelector(".channels-3g2vYe"), {childList: true, attributes:true, subtree: true});
 			
 			this.channelContextObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -189,7 +173,6 @@ class EditChannels {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			this.channelObserver.disconnect();
 			this.channelListObserver.disconnect();
 			this.channelContextObserver.disconnect();
 			
@@ -201,6 +184,7 @@ class EditChannels {
 	
 	onSwitch () {
 		if (typeof BDfunctionsDevilBro === "object") {
+			this.loadAllChannels();
 			this.changeChannelHeader();
 		}
 	}
@@ -282,19 +266,19 @@ class EditChannels {
 	}
 	
 	createContextSubMenu (info, e) {
-		var id = info.id;
-		
 		var channelContextSubMenu = $(this.channelContextSubMenuMarkup);
 			
 		channelContextSubMenu
 			.on("click", ".channelsettings-item", () => {
+				$(".context-menu").hide();
 				this.showChannelSettings(info);
 			});
 			
 		if (BDfunctionsDevilBro.loadData(id, this.getName(), "channels")) {
 			channelContextSubMenu
 				.on("click", ".resetsettings-item", () => {
-					this.removeChannelData(info.id);
+					$(".context-menu").hide();
+					this.removeChannelData(info);
 				});
 		}
 		else {
@@ -305,13 +289,9 @@ class EditChannels {
 	}
 	
 	showChannelSettings (info) {
-		$(".context-menu").hide();
+		var channelObj = BDfunctionsDevilBro.getDivOfChannel(info.id);
 		
-		var id = info.id;
-		
-		var channelDiv = BDfunctionsDevilBro.getDivOfChannel(id).div;
-		
-		var data = BDfunctionsDevilBro.loadData(id, this.getName(), "channels");
+		var data = BDfunctionsDevilBro.loadData(info.id, this.getName(), "channels");
 		
 		var name = data ? data.name : null;
 		var color = data ? data.color : null;
@@ -343,8 +323,8 @@ class EditChannels {
 					this.removeChannelData(info.id);
 				}
 				else {
-					BDfunctionsDevilBro.saveData(id, {id,name,color}, this.getName(), "channels");
-					this.loadChannel({div:channelDiv,info});
+					BDfunctionsDevilBro.saveData(info.id, {name,color}, this.getName(), "channels");
+					this.loadChannel(channelObj);
 					this.changeChannelHeader();
 				}
 			});
@@ -352,12 +332,10 @@ class EditChannels {
 		channelSettingsModal.find("#input-channelname").focus();
 	}
 	
-	removeChannelData (id) {
-		$(".context-menu").hide();
+	removeChannelData (info) {
+		this.resetChannel(BDfunctionsDevilBro.getDivOfChannel(info.id));
 		
-		this.resetChannel(BDfunctionsDevilBro.getDivOfChannel(id));
-		
-		BDfunctionsDevilBro.removeData(id, this.getName(), "channels");
+		BDfunctionsDevilBro.removeData(info.id, this.getName(), "channels");
 		
 		this.changeChannelHeader();
 	}
@@ -395,9 +373,8 @@ class EditChannels {
 	}
 	
 	loadAllChannels () {
-		var channelObjs = BDfunctionsDevilBro.readChannelList();
-		for (var i = 0; i < channelObjs.length; i++) {
-			this.loadChannel(channelObjs[i]);
+		for (let channelObj of BDfunctionsDevilBro.readChannelList()) {
+			this.loadChannel(channelObj);
 		}
 	}
 	
