@@ -6,17 +6,17 @@ class CharCounter {
 		this.selecting = false;
 		
 		this.css = `
-			#char-counter {
+			#charcounter {
 				display: block;
 				position: absolute;
 				right: 0; 
 				opacity: .5;
 				z-index: 1000;
 			}
-			#char-counter.normal {
+			#charcounter.normal {
 				bottom: -1.3em;
 			}
-			#char-counter.edit {
+			#charcounter.edit {
 				top: -1.3em;
 			}`;
 			
@@ -25,7 +25,7 @@ class CharCounter {
 			edit: 		".edit-message .channelTextArea-1HTP3C",
 		};
 			
-		this.counterMarkup = `<div id="char-counter"></div>`;
+		this.counterMarkup = `<div id="charcounter"></div>`;
 	}
 
 	getName () {return "CharCounter";}
@@ -66,7 +66,7 @@ class CharCounter {
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			
-			$("#char-counter").remove();
+			$("#charcounter").remove();
 			var textinput = document.querySelector(".channelTextArea-os01xC textarea");
 			$(textinput).off("keydown." + this.getName()).off("click." + this.getName()).off("mousedown." + this.getName());
 			$(document).off("mouseup." + this.getName()).off("mousemove." + this.getName());
@@ -83,7 +83,7 @@ class CharCounter {
 	
 	appendCounter (type) {
 		var textarea = document.querySelector(this.selectors[type]);
-		if (textarea && !textarea.querySelector("#char-counter." + type)) {
+		if (textarea && !textarea.querySelector("#charcounter." + type)) {
 			var counter = $(this.counterMarkup);
 			counter.addClass(type);
 			var textinput = textarea.querySelector("textarea");
