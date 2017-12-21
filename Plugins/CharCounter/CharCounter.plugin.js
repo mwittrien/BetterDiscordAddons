@@ -56,7 +56,7 @@ class CharCounter {
 				if (e && e.thisObject && e.thisObject.props && e.thisObject.props.type) this.appendCounter(e.thisObject.props.type);
 			}});
 			
-			for (let type of this.selectors) this.appendCounter(type);
+			for (let type in this.selectors) this.appendCounter(type);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
