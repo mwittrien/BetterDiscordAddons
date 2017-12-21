@@ -6,17 +6,17 @@ class CharCounter {
 		this.selecting = false;
 		
 		this.css = `
-			.character-counter {
+			#char-counter {
 				display: block;
 				position: absolute;
 				right: 0; 
 				opacity: .5;
 				z-index: 1000;
 			}
-			.character-counter.normal {
+			#char-counter.normal {
 				bottom: -1.3em;
 			}
-			.character-counter.edit {
+			#char-counter.edit {
 				top: -1.3em;
 			}`;
 			
@@ -25,14 +25,14 @@ class CharCounter {
 			edit: 		".edit-message .channelTextArea-1HTP3C",
 		};
 			
-		this.counterMarkup = `<div class="character-counter"></div>`;
+		this.counterMarkup = `<div id="char-counter"></div>`;
 	}
 
 	getName () {return "CharCounter";}
 
 	getDescription () {return "Adds a charcounter in the chat.";}
 
-	getVersion () {return "1.0.8";}
+	getVersion () {return "1.0.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -66,7 +66,7 @@ class CharCounter {
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			
-			$(".character-counter").remove();
+			$("#char-counter").remove();
 			var textinput = document.querySelector(".channelTextArea-os01xC textarea");
 			$(textinput).off("keydown." + this.getName()).off("click." + this.getName()).off("mousedown." + this.getName());
 			$(document).off("mouseup." + this.getName()).off("mousemove." + this.getName());
@@ -83,7 +83,7 @@ class CharCounter {
 	
 	appendCounter (type) {
 		var textarea = document.querySelector(this.selectors[type]);
-		if (textarea && !textarea.querySelector(".character-counter." + type)) {
+		if (textarea && !textarea.querySelector("#char-counter." + type)) {
 			var counter = $(this.counterMarkup);
 			counter.addClass(type);
 			var textinput = textarea.querySelector("textarea");
