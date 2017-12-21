@@ -21,6 +21,11 @@ class CharCounter {
 				bottom: 3.1em;
 			}`;
 			
+		this.selectors = {
+			normal: 	"form .channelTextArea-os01xC",
+			edit: 		".edit-message .channelTextArea-1HTP3C",
+		};
+			
 		this.counterMarkup = `<div class="character-counter"></div>`;
 	}
 
@@ -48,20 +53,10 @@ class CharCounter {
 			
 			this.TextArea = BDfunctionsDevilBro.WebModules.findByPrototypes(["saveCurrentText"]);
 			this.patchCancel = BDfunctionsDevilBro.WebModules.monkeyPatch(this.TextArea.prototype, "componentDidMount", {after: (e) => {
-				if (e && e.thisObject && e.thisObject.props && e.thisObject.props.type) {
-					switch (e.thisObject.props.type) {
-						case "normal":
-							this.appendCounter("form .channelTextArea-os01xC", e.thisObject.props.type);
-							break;
-						case "edit":
-							this.appendCounter(".edit-message .channelTextArea-1HTP3C", e.thisObject.props.type);
-							break;
-					}
-				}
+				if (e && e.thisObject && e.thisObject.props && e.thisObject.props.type) this.appendCounter(e.thisObject.props.type);
 			}});
 			
-			this.appendCounter("form .channelTextArea-os01xC", "normal");
-			this.appendCounter(".edit-message .channelTextArea-1HTP3C", "edit");
+			for (let type of this.selectors) this.appendCounter(type);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -87,8 +82,8 @@ class CharCounter {
 	
 	// begin of own functions
 	
-	appendCounter (selector, type) {
-		var textarea = document.querySelector(selector);
+	appendCounter (type) {
+		var textarea = document.querySelector(this.selectors[type]);
 		if (textarea && !textarea.querySelector(".character-counter." + type)) {
 			var counter = $(this.counterMarkup);
 			counter.addClass(type);
