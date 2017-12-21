@@ -8,14 +8,14 @@ class RepoControls {
 		this.repoControlsMarkup = 
 			`<div class="repo-controls recent-mentions-popout">
 				<div class="header flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
-					<div class="inputWrapper-3xoRWR vertical-3X17r5 directionColumn-2h-LPR searchWrapper" style="flex: 1 1 auto;">
+					<div class="inputWrapper-3xoRWR vertical-3X17r5 directionColumn-2h-LPR searchWrapper" style="flex: 1 1 50%;">
 						<input type="text" class="input-2YozMi size16-3IvaX_" id="input-search" placeholder="Search for...">
 					</div>
-					<div class="mention-filter sort-filter" style="flex: 1 1 auto;">
+					<div class="mention-filter sort-filter" style="flex: 1 1 25%;">
 						<div class="label">Sort by:</div>
 						<div option="name" class="value" style="text-transform:none;">Name</div>
 					</div>
-					<div class="mention-filter order-filter" style="flex: 1 1 auto;">
+					<div class="mention-filter order-filter" style="flex: 1 1 25%;">
 						<div class="label">Order:</div>
 						<div option="asc" class="value" style="text-transform:none;">Ascending</div>
 					</div>
@@ -64,7 +64,7 @@ class RepoControls {
 
 	getDescription () {return "Lets you sort and filter your list of downloaded Themes and Plugins.";}
 
-	getVersion () {return "1.0.0";}
+	getVersion () {return "1.0.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -161,15 +161,28 @@ class RepoControls {
 			.insertBefore(container);
 			
 		container.entries = [];
+		var zacksFork = container.querySelector(".bda-author")
 		for (let li of container.querySelectorAll("li")) {
-			let namestring = li.querySelector(".bda-name").textContent;
-			let description = li.querySelector(".bda-description");
+			let name, version, author, description;
+			if (zacksFork) {
+				name = li.querySelector(".bda-name").textContent;
+				version = li.querySelector(".bda-version").textContent;
+				author = li.querySelector(".bda-author").textContent;
+				description = li.querySelector(".bda-description").textContent;
+			}
+			else {
+				let namestring = li.querySelector(".bda-name").textContent;
+				name = namestring.split(" v")[0];
+				version = namestring.split(" v")[1].split(" by ")[0];
+				author = namestring.split(" by ")[1];
+				description = li.querySelector(".bda-description").textContent;
+			}
 			let entry = {
 				div: 			li,
-				search:			(namestring + " " + description).toUpperCase(),
-				name: 			namestring.split(" v")[0],
-				version: 		namestring.split(" v")[1].split(" by ")[0],
-				author: 		namestring.split(" by ")[1],
+				search:			(name + " " + version + " " + author + " " + description).toUpperCase(),
+				name: 			name,
+				version: 		version,
+				author: 		author,
 				description: 	description
 			};
 			container.entries.push(entry);
