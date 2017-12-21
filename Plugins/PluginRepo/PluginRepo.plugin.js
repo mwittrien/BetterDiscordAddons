@@ -54,7 +54,7 @@ class PluginRepo {
 							<div class="header inner-tqJwAU">
 								<div class="header-tab-bar-wrapper">
 									<div class="tab-bar TOP">
-										<div tab="plugins" class="tab-bar-item selected">Plugins</div>
+										<div tab="plugins" class="tab-bar-item">Plugins</div>
 										<div tab="settings" class="tab-bar-item">Settings</div>
 									</div>
 									<div class="inputWrapper-3xoRWR vertical-3X17r5 directionColumn-2h-LPR searchWrapper">
@@ -118,7 +118,7 @@ class PluginRepo {
 							<div option="author" class="item">Author</div>
 							<div option="version" class="item">Version</div>
 							<div option="description" class="item">Description</div>
-							<div option="state" class="item">Update Status</div>
+							<div option="state" class="item">Update State</div>
 							<div option="fav" class="item">Favorites</div>
 						</div>
 					</div>
