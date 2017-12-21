@@ -87,7 +87,7 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "3.6.2";}
+	getVersion () {return "3.6.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -274,7 +274,7 @@ class EditChannels {
 				this.showChannelSettings(info);
 			});
 			
-		if (BDfunctionsDevilBro.loadData(id, this.getName(), "channels")) {
+		if (BDfunctionsDevilBro.loadData(info.id, this.getName(), "channels")) {
 			channelContextSubMenu
 				.on("click", ".resetsettings-item", () => {
 					$(".context-menu").hide();
