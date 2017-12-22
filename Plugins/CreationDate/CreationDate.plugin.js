@@ -10,7 +10,7 @@ class CreationDate {
 		this.creationDateMarkup = `<div class="creationDate nameNormal-1LgIgN textRow-1_JoJf"></div>`;
 		
 		this.languages = {
-			_Discord:		{name:"Discord",					id:BDfunctionsDevilBro.getDiscordLanguage().id},
+			_Discord:		{name:"Discord",					id:""},
 			Arabic:			{name:"Arabic",						id:"ar"},
 			Afrikaans:		{name:"Afrikaans",					id:"af"},
 			Amharic:		{name:"Amharic",					id:"am"},
@@ -122,7 +122,7 @@ class CreationDate {
 
 	getDescription () {return "Displays the Creation Date of an Account in the UserPopout and UserModal.";}
 
-	getVersion () {return "1.0.3";}
+	getVersion () {return "1.0.4";}
 
 	getAuthor () {return "DevilBro";}
 	
