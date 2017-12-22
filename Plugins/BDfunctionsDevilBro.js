@@ -469,14 +469,13 @@ BDfunctionsDevilBro.languages = {
 	Urdu:			{name:"Urdu",						id:"ur"},
 	Vietnamese:		{name:"Vietnamese",					id:"vi"},
 	Zulu:			{name:"Zulu",						id:"zu"}
-}
+};
 				
 (() => {
     var translateInterval = setInterval(() => {
 		if (document.querySelector("html").lang) {
 			clearInterval(translateInterval);
-				BDfunctionsDevilBro.languages["$Discord"] = {name:"Discord",id:BDfunctionsDevilBro.getDiscordLanguage.id()};
-			};
+			BDfunctionsDevilBro.languages["$Discord"] = {name:"Discord",id:BDfunctionsDevilBro.getDiscordLanguage.id()};
 		}
 	},100);
 })();
