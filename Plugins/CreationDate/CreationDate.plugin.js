@@ -39,8 +39,9 @@ class CreationDate {
 			
 			
 		this.defaultSettings = {
-			addInUserPopout:		{value:true, 	description:"User Popouts"},
-			addInUserProfil:		{value:true, 	description:"User Profil Modal"}
+			addInUserPopout:		{value:true, 	description:"Add in User Popouts"},
+			addInUserProfil:		{value:true, 	description:"Add in User Profil Modal"},
+			addCreationTime:		{value:true, 	description:"Display the Time of Creation"}
 		};
 	}
 
@@ -48,25 +49,28 @@ class CreationDate {
 
 	getDescription () {return "Displays the Creation Date of an Account in the UserPopout and UserModal.";}
 
-	getVersion () {return "1.0.5";}
+	getVersion () {return "1.0.6";}
 
 	getAuthor () {return "DevilBro";}
 	
 	getSettingsPanel () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			var settingshtml = `<div class="${this.getName()}-settings"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">Add Creation Date in:</h3></div><div class="inner-tqJwAU" style=" margin: 0;">`;
+			var settingshtml = `<div class="${this.getName()}-settings">`;
 			var settings = this.getSettings(); 
 			for (let key in settings) {
 				settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto; margin-top: 0;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaultSettings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU ${settings[key] ? "valueChecked-3Bzkbm" : "valueUnchecked-XR6AOk"}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
 			}
-			settingshtml += `</div>`;
 			var language = BDfunctionsDevilBro.loadData("language", this.getName(), "language");
-			settingshtml += `<div class="ui-form-item flexChild-1KGW5q" style="flex: 1 1 20%;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginBottom8-1mABJ4 weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Creation Date Format:</h3><div class="ui-select format-select-wrapper"><div value="${language}" class="Select Select--single has-value"><div class="Select-control"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-value" style="flex: 1 1 auto;"><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm languageName" style="flex: 1 1 50%;">${BDfunctionsDevilBro.languages[language].name}</div><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm languageTimestamp" style="flex: 1 1 50%;">${new Date().toLocaleString(BDfunctionsDevilBro.languages[language].id)}</div></div><span class="Select-arrow-zone"><span class="Select-arrow"></span></span></div></div></div></div>`;
+			settingshtml += `<div class="ui-form-item flexChild-1KGW5q" style="flex: 1 1 20%;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginBottom8-1mABJ4 weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Creation Date Format:</h3><div class="ui-select format-select-wrapper"><div value="${language}" class="Select Select--single has-value"><div class="Select-control"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-value" style="flex: 1 1 auto;"><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm languageName" style="flex: 1 1 50%;">${BDfunctionsDevilBro.languages[language].name}</div><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm languageTimestamp" style="flex: 1 1 50%;">${this.getCreationTime(BDfunctionsDevilBro.languages[language].id)}</div></div><span class="Select-arrow-zone"><span class="Select-arrow"></span></span></div></div></div></div>`;
 			settingshtml += `</div>`;
 			
 			var settingspanel = $(settingshtml)[0];
 			$(settingspanel)
-				.on("click", ".checkbox-1KYsPm", () => {this.updateSettings(settingspanel);})
+				.on("click", ".checkbox-1KYsPm", () => {
+					this.updateSettings(settingspanel);
+					var language = BDfunctionsDevilBro.loadData("language", this.getName(), "language");
+					settingspanel.querySelector(".languageTimestamp").innerText = this.getCreationTime(BDfunctionsDevilBro.languages[language].id);
+				})
 				.on("click", ".Select-control", (e) => {this.openDropdownMenu(settingspanel, e);});
 			return settingspanel;
 		}
@@ -196,7 +200,7 @@ class CreationDate {
 		var menuhtml = `<div class="Select-menu-outer"><div class="Select-menu">`;
 		for (var language in BDfunctionsDevilBro.languages) {
 			var isSelected = language == choice ? " is-selected" : "";
-			menuhtml += `<div value="${language}" class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-option ${isSelected}" style="flex: 1 1 auto; display:flex;"><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm languageName" style="flex: 1 1 50%;">${BDfunctionsDevilBro.languages[language].name}</div><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm languageTimestamp" style="flex: 1 1 50%;">${new Date().toLocaleString(BDfunctionsDevilBro.languages[language].id)}</div></div>`
+			menuhtml += `<div value="${language}" class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-option ${isSelected}" style="flex: 1 1 auto; display:flex;"><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm" style="flex: 1 1 50%;">${BDfunctionsDevilBro.languages[language].name}</div><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm" style="flex: 1 1 50%;">${this.getCreationTime(BDfunctionsDevilBro.languages[language].id)}</div></div>`
 		}
 		menuhtml += `</div></div>`;
 		return $(menuhtml)[0];
@@ -208,8 +212,12 @@ class CreationDate {
 		if (info) {
 			var creationDate = $(this.creationDateMarkup);
 			var language = BDfunctionsDevilBro.loadData("language", this.getName(), "language");
-			creationDate.text(this.labels.createdat_text + " " + info.createdAt.toLocaleString(BDfunctionsDevilBro.languages[language].id)).appendTo(container);
+			creationDate.text(this.labels.createdat_text + " " + this.getCreationTime(BDfunctionsDevilBro.languages[language].id, info.createdAt)).appendTo(container);
 		}
+	}
+	
+	getCreationTime (languageid, timestamp = new Date()) {
+		return this.getSettings().addCreationTime ? timestamp.toLocaleString(languageid) : timestamp.toLocaleDateString(languageid);
 	}
 	
 	setLabelsByLanguage () {
