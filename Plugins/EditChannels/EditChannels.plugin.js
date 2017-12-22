@@ -87,7 +87,7 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "3.6.3";}
+	getVersion () {return "3.6.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -223,24 +223,6 @@ class EditChannels {
 			this.resetAllChannels();
 		}
 	}
-	
-	resetAllChannels () {
-		document.querySelectorAll("[custom-editchannels]").forEach(channelDiv => {
-			var info = BDfunctionsDevilBro.getKeyInformation({"node":channelDiv, "key":"channel"});
-			if (info) this.resetChannel({div:channelDiv,info});
-		});
-			
-		var channelHeader = document.querySelector("[custom-editchannelsheader]");
-		if (channelHeader) {
-			var info = BDfunctionsDevilBro.getKeyInformation({"node":channelHeader, "key":"channel"});
-			if (info) {
-				var channel = channelHeader.querySelector(".channelName-1G03vu");
-				BDfunctionsDevilBro.setInnerText(channel, info.name);
-				$(channel).css("color", "");
-				$(channelHeader).removeAttr("custom-editchannelsheader");
-			}
-		}
-	}
 
 	changeLanguageStrings () {
 		this.channelContextEntryMarkup = 	this.channelContextEntryMarkup.replace("REPLACE_context_localchannelsettings_text", this.labels.context_localchannelsettings_text);
@@ -257,7 +239,7 @@ class EditChannels {
 	onContextMenu (context) {
 		if (context.querySelector(".localchannelsettings-item")) return;
 		var info = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"channel"});
-		if (info && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"ChannelMuteItem"})) {
+		if (info && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"ChannelInviteCreateGroup"})) {
 			$(context).append(this.channelContextEntryMarkup)
 				.on("mouseenter", ".localchannelsettings-item", (e) => {
 					this.createContextSubMenu(info, e);
@@ -397,6 +379,24 @@ class EditChannels {
 				else {
 					$(channelHeader).removeAttr("custom-editchannelsheader");
 				}
+			}
+		}
+	}
+	
+	resetAllChannels () {
+		document.querySelectorAll("[custom-editchannels]").forEach(channelDiv => {
+			var info = BDfunctionsDevilBro.getKeyInformation({"node":channelDiv, "key":"channel"});
+			if (info) this.resetChannel({div:channelDiv,info});
+		});
+			
+		var channelHeader = document.querySelector("[custom-editchannelsheader]");
+		if (channelHeader) {
+			var info = BDfunctionsDevilBro.getKeyInformation({"node":channelHeader, "key":"channel"});
+			if (info) {
+				var channel = channelHeader.querySelector(".channelName-1G03vu");
+				BDfunctionsDevilBro.setInnerText(channel, info.name);
+				$(channel).css("color", "");
+				$(channelHeader).removeAttr("custom-editchannelsheader");
 			}
 		}
 	}
