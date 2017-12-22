@@ -87,7 +87,7 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "3.6.4";}
+	getVersion () {return "3.6.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -239,7 +239,7 @@ class EditChannels {
 	onContextMenu (context) {
 		if (context.querySelector(".localchannelsettings-item")) return;
 		var info = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"channel"});
-		if (info && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"ChannelInviteCreateGroup"})) {
+		if (info && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"ChannelDeleteGroup"})) {
 			$(context).append(this.channelContextEntryMarkup)
 				.on("mouseenter", ".localchannelsettings-item", (e) => {
 					this.createContextSubMenu(info, e);
