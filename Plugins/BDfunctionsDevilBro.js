@@ -842,20 +842,13 @@ BDfunctionsDevilBro.onSwitchFix = function (plugin) {
 		changes.forEach((change) => { 
 			if (change.addedNodes) {
 				change.addedNodes.forEach((node) => {
-					if (node && node.id === "friends") BDfunctionsDevilBro.triggerOnSwitch(plugin);
-					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("noTopic-3Rq-dz")) 		BDfunctionsDevilBro.triggerOnSwitch(plugin); 
-					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("topic-1KFf6J")) 		BDfunctionsDevilBro.triggerOnSwitch(plugin); 
-					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("activityFeed-HeiGwL")) BDfunctionsDevilBro.triggerOnSwitch(plugin); 
-					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("lfg-3xoFkI")) 			BDfunctionsDevilBro.triggerOnSwitch(plugin);
-				});
-			}
-			if (change.removedNodes) {
-				change.removedNodes.forEach((node) => {
-					if (node && node.id === "friends") BDfunctionsDevilBro.triggerOnSwitch(plugin);
-					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("noTopic-3Rq-dz")) 		BDfunctionsDevilBro.triggerOnSwitch(plugin); 
-					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("topic-1KFf6J")) 		BDfunctionsDevilBro.triggerOnSwitch(plugin); 
-					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("activityFeed-HeiGwL")) BDfunctionsDevilBro.triggerOnSwitch(plugin); 
-					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("lfg-3xoFkI")) 			BDfunctionsDevilBro.triggerOnSwitch(plugin);
+					if (!node) return;
+					else if (node && node.id === "friends") 																BDfunctionsDevilBro.triggerOnSwitch(plugin);
+					else if (node.classList && node.classList.length > 0 && node.classList.contains("titleWrapper-3Vi_wz")) BDfunctionsDevilBro.triggerOnSwitch(plugin); 
+					else if (node.classList && node.classList.length > 0 && node.classList.contains("noTopic-3Rq-dz")) 		BDfunctionsDevilBro.triggerOnSwitch(plugin); 
+					else if (node.classList && node.classList.length > 0 && node.classList.contains("topic-1KFf6J")) 		BDfunctionsDevilBro.triggerOnSwitch(plugin); 
+					else if (node.classList && node.classList.length > 0 && node.classList.contains("activityFeed-HeiGwL")) BDfunctionsDevilBro.triggerOnSwitch(plugin); 
+					else if (node.classList && node.classList.length > 0 && node.classList.contains("lfg-3xoFkI")) 			BDfunctionsDevilBro.triggerOnSwitch(plugin);
 				});
 			}
 		});
@@ -870,7 +863,7 @@ BDfunctionsDevilBro.triggerOnSwitch = function (plugin) {
 	if (Array.isArray(BDfunctionsDevilBro.onSwitchTriggered) && BDfunctionsDevilBro.onSwitchTriggered.includes(identifier)) return;
 	BDfunctionsDevilBro.onSwitchTriggered.push(identifier);
 	plugin.onSwitch();
-	setTimeout(() => {BDfunctionsDevilBro.removeFromArray(BDfunctionsDevilBro.onSwitchTriggered, identifier);},1000);
+	setImmediate(() => {BDfunctionsDevilBro.removeFromArray(BDfunctionsDevilBro.onSwitchTriggered, identifier);});
 };
 
 
