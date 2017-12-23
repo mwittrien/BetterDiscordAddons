@@ -252,7 +252,7 @@ class PluginRepo {
 
 	getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
 
-	getVersion () {return "1.2.0";}
+	getVersion () {return "1.2.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -446,7 +446,7 @@ class PluginRepo {
 			}
 			else {
 				plugin.getState = 2;
-				div.addClass("download")
+				div.addClass("downloadable")
 					.find(".btn-download div").text("Download");
 			}
 			if (favorites[url]) {
@@ -550,7 +550,7 @@ class PluginRepo {
 				.on("click." + this.getName(), ".trashIcon", () => {
 					if (div.hasClass("outdated") || div.hasClass("updated")) {
 						entry.state = 2;
-						div.removeClass("outdated").removeClass("updated")
+						div.removeClass("outdated").removeClass("updated").addClass("downloadable")
 							.find(".btn-download div").text("Download");
 						this.deletePluginFile(entry);
 						if (!BDfunctionsDevilBro.isRestartNoMoreEnabled()) stopPlugin(entry);
