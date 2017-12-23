@@ -31,7 +31,7 @@ BDfunctionsDevilBro.loadMessage = function (plugin, oldVersionRemove) {
 		},7200000);
 	}
 	
-	if (typeof window.PluginUpdates.observer === "undefined" && document.querySelector(".app")) {
+	if (typeof window.PluginUpdates.observer === "undefined" && document.querySelector(".layers")) {
 		window.PluginUpdates.observer = new MutationObserver((changes, _) => {
 			changes.forEach(
 				(change, i) => {
@@ -58,7 +58,7 @@ BDfunctionsDevilBro.loadMessage = function (plugin, oldVersionRemove) {
 				}
 			);
 		});
-		window.PluginUpdates.observer.observe(document.querySelector(".app"), {childList:true, subtree:true});
+		window.PluginUpdates.observer.observe(document.querySelector(".layers"), {childList:true});
 	}
 	
 	var bdbutton = document.querySelector(".bd-pfbtn");
