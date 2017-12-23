@@ -703,7 +703,7 @@ class ThemeRepo {
 				.on("click." + this.getName(), ".btn-download", () => {
 					entry.state = 0;
 					this.downloadTheme(entry);
-					div.removeClass("outdated").addClass("updated")
+					div.removeClass("downloadable").removeClass("outdated").addClass("updated")
 						.find(".btn-download div").text("Updated");
 					if (modal.find("#input-rnmstart").prop("checked")) setTimeout(() => {this.applyTheme(entry);},3000);
 				});
