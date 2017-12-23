@@ -252,7 +252,7 @@ class PluginRepo {
 
 	getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
 
-	getVersion () {return "1.2.1";}
+	getVersion () {return "1.2.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -538,7 +538,9 @@ class PluginRepo {
 				.on("click." + this.getName(), ".gitIcon", (e) => {
 					var giturl = null;
 					if (entry.url.indexOf("https://raw.githubusercontent.com") == 0) {
-						giturl = entry.url.replace("//raw.githubusercontent", "//github").replace("/master/", "/blob/master/");
+						var temp = entry.url.replace("//raw.githubusercontent", "//github").split("/");
+						temp.splice(5, 0, "blob");
+						giturl = temp.join("/");
 					}
 					else if (entry.url.indexOf("https://gist.githubusercontent.com/") == 0) {
 						giturl = entry.url.replace("//gist.githubusercontent", "//gist.github").split("/raw/")[0];
