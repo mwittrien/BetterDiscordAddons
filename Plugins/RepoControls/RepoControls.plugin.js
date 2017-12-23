@@ -163,10 +163,9 @@ class RepoControls {
 			.insertBefore(container);
 			
 		container.entries = [];
-		var zacksFork = container.querySelector(".bda-author")
 		for (let li of container.querySelectorAll("li")) {
 			let name, version, author, description;
-			if (zacksFork) {
+			if (BDfunctionsDevilBro.zacksFork()) {
 				name = li.querySelector(".bda-name").textContent;
 				version = li.querySelector(".bda-version").textContent;
 				author = li.querySelector(".bda-author").textContent;
