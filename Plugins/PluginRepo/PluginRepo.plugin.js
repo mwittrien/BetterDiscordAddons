@@ -560,7 +560,7 @@ class PluginRepo {
 				})
 				.on("click." + this.getName(), ".btn-download", () => {
 					entry.state = 0;
-					div.removeClass("outdated").addClass("updated")
+					div.removeClass("downloadable").removeClass("outdated").addClass("updated")
 						.find(".btn-download div").text("Updated");
 					this.downloadPlugin(entry);
 					if (modal.find("#input-rnmstart").prop("checked")) setTimeout(() => {this.startPlugin(entry);},3000);
