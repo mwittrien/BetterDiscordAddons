@@ -2102,6 +2102,14 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		max-width: 400px;
 	}
 	
+	.DevilBro-settings div {
+		margin-top: 0px !important;
+	}
+	
+	.DevilBro-settings-inner {
+		padding-left: 15px !important;
+	}
+	
 	.DevilBro-modal [class^="swatches"].disabled {
 		cursor: no-drop;
 		filter: grayscale(70%) brightness(50%);
