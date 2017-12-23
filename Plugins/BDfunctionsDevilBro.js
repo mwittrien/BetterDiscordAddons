@@ -5,8 +5,8 @@ BDfunctionsDevilBro.isLibraryOutdated = function () {
 };
 
 BDfunctionsDevilBro.loadMessage = function (plugin, oldVersionRemove) {
-	var pluginName = plugin.getName();
-	var oldVersion = plugin.getVersion();
+	var pluginName = typeof plugin === "string" ? plugin : plugin.getName();
+	var oldVersion = typeof oldVersionRemove === "string" ? oldVersionRemove : plugin.getVersion();
 	var loadMessage = BDfunctionsDevilBro.getLibraryStrings().toast_plugin_started.replace("${pluginName}", pluginName).replace("${oldVersion}", oldVersion);
 	console.log(loadMessage);
 	BDfunctionsDevilBro.showToast(loadMessage);
@@ -69,9 +69,9 @@ BDfunctionsDevilBro.loadMessage = function (plugin, oldVersionRemove) {
 	}
 };
 
-BDfunctionsDevilBro.unloadMessage = function (plugin) { 
-	var pluginName = plugin.getName();
-	var oldVersion = plugin.getVersion();
+BDfunctionsDevilBro.unloadMessage = function (plugin, oldVersionRemove) { 
+	var pluginName = typeof plugin === "string" ? plugin : plugin.getName();
+	var oldVersion = typeof oldVersionRemove === "string" ? oldVersionRemove : plugin.getVersion();
 	var unloadMessage = BDfunctionsDevilBro.getLibraryStrings().toast_plugin_stopped.replace("${pluginName}", pluginName).replace("${oldVersion}", oldVersion);
 	console.log(unloadMessage);
 	BDfunctionsDevilBro.showToast(unloadMessage);
