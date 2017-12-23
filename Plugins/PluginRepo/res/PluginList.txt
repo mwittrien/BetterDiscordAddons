@@ -22,6 +22,7 @@ https://raw.githubusercontent.com/DeathStrikeV/EvenBetterDiscord/master/EvenBett
 https://raw.githubusercontent.com/Finicalmist/ChangingBackground/master/changingBackground.plugin.js
 https://raw.githubusercontent.com/Finicalmist/CopyCode/master/copyCode.plugin.js
 https://raw.githubusercontent.com/hammy13/BDPlugins/master/plugins/dateViewer/dateViewer.plugin.js
+https://raw.githubusercontent.com/HoLLy-HaCKeR/BetterDiscord-Themes-and-Plugins/master/Plugins/lazyload_patcher.plugin.js
 https://raw.githubusercontent.com/Hyperbot-one/hideServersChannels-plugin/master/hideServersChannels.plugin.js
 https://raw.githubusercontent.com/Hyperbot-one/showEmojiServer-plugin/master/showEmojiServer.plugin.js
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/autocompleteHoverFix.plugin.js
