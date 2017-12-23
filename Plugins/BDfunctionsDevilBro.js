@@ -2106,9 +2106,13 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		margin-top: 0px !important;
 	}
 	
-	.DevilBro-settings-inner {
-		padding-left: 15px !important;
-		padding-right: 5px !important;
+	.DevilBro-settings .DevilBro-settings-inner {
+		padding-left: 15px;
+		padding-right: 5px;
+	}
+	
+	.DevilBro-settings .DevilBro-settings-inner-list {
+		padding-left: 15px;
 	}
 	
 	.DevilBro-modal [class^="swatches"].disabled {
