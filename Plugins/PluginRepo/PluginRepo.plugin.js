@@ -224,7 +224,7 @@ class PluginRepo {
 			.pluginrepo-modal .pluginEntry.zack .trashIcon {
 				bottom: 14px;
 			}
-			.pluginrepo-modal .pluginrepo.downloadable .trashIcon {
+			.pluginrepo-modal .pluginEntry.downloadable .trashIcon {
 				display: none;
 			}
 			.pluginrepo-modal .pluginEntry .btn-download {
