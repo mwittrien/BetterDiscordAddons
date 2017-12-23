@@ -13,7 +13,7 @@ class OldTitleBar {
 				-webkit-app-region: no-drag;
 			}
 			
-			.settings-titlebar {
+			.settings-titlebar-OTB {
 				position: relative;
 				z-index: 1000;
 				text-align: right;
@@ -64,7 +64,7 @@ class OldTitleBar {
 
 	getDescription () {return "Reverts the title bar back to its former self.";}
 
-	getVersion () {return "1.2.6";}
+	getVersion () {return "1.2.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -102,10 +102,13 @@ class OldTitleBar {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.getAttribute("layer-id") || node.querySelector(".ui-standard-sidebar-view")) {
-									$(".divider-1GKkV3").parent().has(".iconInactive-WWHQEI").parent().css("-webkit-app-region", "initial");
-									if (this.getSettings().addToSettings) this.addSettingsTitleBar(node);
-								}
+								setImmediate(() => {
+									if (node && node.tagName && node.getAttribute("layer-id") || node.querySelector(".ui-standard-sidebar-view")) {
+										$(".divider-1GKkV3").parent().has(".iconInactive-WWHQEI").parent().css("-webkit-app-region", "initial");
+										console.log(node);
+										if (this.getSettings().addToSettings) this.addSettingsTitleBar(node);
+									}
+								});
 							});
 						}
 						if (change.removedNodes) {
@@ -119,7 +122,7 @@ class OldTitleBar {
 					}
 				);
 			});
-			this.settingsWindowObserver.observe(document.querySelector(".layers"), {childList:true});
+			if (document.querySelector(".layers")) this.settingsWindowObserver.observe(document.querySelector(".layers"), {childList:true});
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 			
