@@ -64,7 +64,7 @@ class RepoControls {
 
 	getDescription () {return "Lets you sort and filter your list of downloaded Themes and Plugins.";}
 
-	getVersion () {return "1.0.2";}
+	getVersion () {return "1.0.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -90,9 +90,11 @@ class RepoControls {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.getAttribute("layer-id") == "user-settings") {
-									this.innerSettingsWindowObserver.observe(node, {childList:true, subtree:true});
-								}
+								setImmediate(() => {
+									if (node && node.tagName && node.getAttribute("layer-id") == "user-settings") {
+										this.innerSettingsWindowObserver.observe(node, {childList:true, subtree:true});
+									}
+								});
 							});
 						}
 					}
