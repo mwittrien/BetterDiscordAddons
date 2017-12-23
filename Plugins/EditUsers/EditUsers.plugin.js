@@ -179,7 +179,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "2.0.7";}
+	getVersion () {return "2.0.8";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -315,7 +315,7 @@ class EditUsers {
 												this.loadUser(node, "chat", true);
 											}
 											else {
-												var markups = node.querySelectorAll("div.markup");
+												var markups = node.querySelectorAll(".markup");
 												for (var i = 0; i < markups.length; i++) {
 													this.loadUser(markups[i], "chat", true);
 												}
@@ -654,77 +654,66 @@ class EditUsers {
 		var settings = this.getSettings();
 		
 		if (settings.changeInMemberList) {
-			var membersList = document.querySelectorAll("div.member");
-			for (let i = 0; i < membersList.length; i++) {
-				this.loadUser(membersList[i], "list", false);
+			for (let user of document.querySelectorAll(".member")) {
+				this.loadUser(user, "list", false);
 			} 
 		}
 		if (settings.changeInChatWindow) {
-			var membersChat = document.querySelectorAll("div.message-group");
-			for (let j = 0; j < membersChat.length; j++) {
-				if ($(membersChat[j]).has(".avatar-large").length > 0) {
-					this.loadUser(membersChat[j], "chat", false);
+			for (let user of document.querySelectorAll(".message-group")) {
+				if (user.querySelector(".avatar-large")) {
+					this.loadUser(user, "chat", false);
 				}
 				else {
-					var markups = membersChat[j].querySelectorAll("div.markup");
-					for (let j2 = 0; j2 < markups.length; j2++) {
-						this.loadUser(markups[j2], "chat", true);
+					for (let markup of user.querySelectorAll(".markup")) {
+						this.loadUser(markup, "chat", true);
 					}
 				}
 			}
 		}
 		if (settings.changeInVoiceChat) {
-			var membersVoice = document.querySelectorAll("div.userDefault-2_cnT0");
-			for (let k = 0; k < membersVoice.length; k++) {
-				this.loadUser(membersVoice[k].parentElement, "voice", false);
+			for (let user of document.querySelectorAll(".userDefault-2_cnT0")) {
+				this.loadUser(user.parentElement, "voice", false);
 			}
 		}
 		if (settings.changeInRecentDms) {
-			var membersRecentDMS = document.querySelectorAll("span.dms div.guild");
-			for (let l = 0; l < membersRecentDMS.length; l++) {
-				this.loadUser(membersRecentDMS[l], "recentdms", false);
+			for (let user of document.querySelectorAll(".dms .guild")) {
+				this.loadUser(user, "recentdms", false);
 			}
 		}
 		if (settings.changeInDmsList) {
-			var membersDMS = document.querySelectorAll("div.channel.private");
-			for (let m = 0; m < membersDMS.length; m++) {
-				this.loadUser(membersDMS[m], "dms", false);
+			for (let user of document.querySelectorAll(".channel.private")) {
+				this.loadUser(user, "dms", false);
 			}
 		}
 		if (settings.changeInDmHeader && !BDfunctionsDevilBro.getSelectedServer()) {
-			var channelHeader = document.querySelector("div.titleText-2IfpkV");
-			if (channelHeader) {
-				this.loadUser(channelHeader, "dmheader", false);
+			for (let user of document.querySelectorAll(".titleText-2IfpkV")) {
+				this.loadUser(user, "dmheader", false);
 			}
 		}
 		if (settings.changeInFriendList) {
-			var membersFriends = document.querySelectorAll("div.friends-column");
-			for (let n = 0; n < membersFriends.length; n++) {
-				this.loadUser(membersFriends[n], "friends", false);
+			for (let user of document.querySelectorAll(".friends-column")) {
+				this.loadUser(user, "friends", false);
 			}
 		}
 		if (settings.changeInUserAccount) {
-			var account = document.querySelector("div.container-iksrDt");
-			if (account) {
-				this.loadUser(account, "info", false);
+			for (let user of document.querySelectorAll(".container-iksrDt")) {
+				this.loadUser(user, "info", false);
 			}
 		}
 		if (settings.changeInUserPopout) {
-			var popout = document.querySelector("[class*='userPopout']");
-			if (popout) {
-				this.loadUser(popout.parentElement, "popout", false);
+			for (let user of document.querySelectorAll(".userPopout-4pfA0d")) {
+				this.loadUser(user.parentElement, "popout", false);
 			}
 		}
 		if (settings.changeInUserProfil) {
-			var profil = document.querySelector("div#user-profile-modal");
-			if (profil) {
-				this.loadUser(profil, "profil", false);
+			for (let user of document.querySelectorAll(".topSectionPlaying-3jAH9b, .topSectionNormal-2LlRG1")) {
+				this.loadUser(user, "profil", false);
 			}
 		}
 	}
 	
 	loadUser (div, type, compact) {
-		if (!div || $(div).attr("custom-editusers") || !div.tagName || div.querySelector(".channel-activity")) return;
+		if (!div || $(div).attr("custom-editusers") || !div.tagName || (!div.querySelector(".channel-activity-text") && div.querySelector(".channel-activity"))) return;
 		
 		let {avatar, username, wrapper} = this.getAvatarNameWrapper(div);
 		if (!avatar && !username && !wrapper) return;
