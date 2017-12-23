@@ -2108,6 +2108,7 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 	
 	.DevilBro-settings-inner {
 		padding-left: 15px !important;
+		padding-right: 5px !important;
 	}
 	
 	.DevilBro-modal [class^="swatches"].disabled {
