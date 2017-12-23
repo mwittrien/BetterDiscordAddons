@@ -1756,6 +1756,10 @@ BDfunctionsDevilBro.isThemeEnabled = function (name) {
 	return window.bdthemes[name] && window.themeCookie[name];
 };
 
+BDfunctionsDevilBro.zacksFork = function () {
+	return (typeof bdpluginErrors === "object" && typeof bdthemeErrors === "object");
+};
+
 BDfunctionsDevilBro.getDiscordTheme = function () {
 	if ($(".theme-light").length > $(".theme-dark").length) return "theme-light";
 	else return "theme-dark";
