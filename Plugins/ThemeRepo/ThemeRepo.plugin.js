@@ -62,7 +62,7 @@ class ThemeRepo {
 							<div class="header inner-tqJwAU">
 								<div class="header-tab-bar-wrapper">
 									<div class="tab-bar TOP">
-										<div tab="themes" class="tab-bar-item selected">Themes</div>
+										<div tab="themes" class="tab-bar-item">Themes</div>
 										<div tab="settings" class="tab-bar-item">Settings</div>
 									</div>
 									<div class="inputWrapper-3xoRWR vertical-3X17r5 directionColumn-2h-LPR searchWrapper">
@@ -264,7 +264,7 @@ class ThemeRepo {
 
 	getDescription () {return "Allows you to preview all themes from the theme repo and download them on the fly. Repo button is in the theme settings.";}
 
-	getVersion () {return "1.1.8";}
+	getVersion () {return "1.1.9";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -290,15 +290,17 @@ class ThemeRepo {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.getAttribute("layer-id") == "user-settings") {
-									this.innerSettingsWindowObserver.observe(node, {childList:true, subtree:true});
-								}
+								setImmediate(() => {
+									if (node && node.tagName && node.getAttribute("layer-id") == "user-settings") {
+										this.innerSettingsWindowObserver.observe(node, {childList:true, subtree:true});
+									}
+								});
 							});
 						}
 					}
 				);
 			});
-			this.settingsWindowObserver.observe(document.querySelector(".layers"), {childList:true});
+			if (document.querySelector(".layers")) this.settingsWindowObserver.observe(document.querySelector(".layers"), {childList:true});
 			
 			this.innerSettingsWindowObserver = new MutationObserver((changes2, _) => {
 				changes2.forEach(
