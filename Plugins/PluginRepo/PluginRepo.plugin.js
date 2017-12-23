@@ -207,7 +207,7 @@ class PluginRepo {
 
 	getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
 
-	getVersion () {return "1.1.8";}
+	getVersion () {return "1.1.9";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -233,15 +233,18 @@ class PluginRepo {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.getAttribute("layer-id") == "user-settings") {
-									this.innerSettingsWindowObserver.observe(node, {childList:true, subtree:true});
-								}
+								setImmediate(() => {
+									if (node && node.tagName && node.getAttribute("layer-id") == "user-settings") {
+										this.innerSettingsWindowObserver.observe(node, {childList:true, subtree:true});
+									}
+								});
 							});
 						}
 					}
 				);
 			});
-			this.settingsWindowObserver.observe(document.querySelector(".layers"), {childList:true});
+			if (document.querySelector(".layers")) this.settingsWindowObserver.observe(document.querySelector(".layers"), {childList:true});
+			console.log(document.querySelector(".layers"));
 			
 			this.innerSettingsWindowObserver = new MutationObserver((changes2, _) => {
 				changes2.forEach(
