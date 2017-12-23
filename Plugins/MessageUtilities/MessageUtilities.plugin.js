@@ -21,8 +21,6 @@ class MessageUtilities {
 		];
 		
 		this.myID;
-		
-		this.css = `.MessageUtilities-settings div {margin-top:0 !important;}`;
 	}
 
 	getName () {return "MessageUtilities";}
@@ -35,10 +33,10 @@ class MessageUtilities {
 	
 	getSettingsPanel () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			var settingshtml = `<div class="${this.getName()}-settings marginTop20-3UscxH">`;
-			var settings = this.getSettings(); 
 			var clicks = ["click"];
 			var keys = ["key1","key2"];
+			var settings = this.getSettings(); 
+			var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="titleDefault-1CWM9y title-3i-5G_ size18-ZM4Qv- height24-2pMcnc weightNormal-3gw0Lm marginBottom8-1mABJ4">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 			for (var action in this.actions) {
 				var binding = BDfunctionsDevilBro.loadData(action, this.getName(), "bindings");
 				settingshtml += `<div class="${action}-key-settings"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.actions[action].name}:</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU ${settings[action] ? "valueChecked-3Bzkbm" : "valueUnchecked-XR6AOk"}" style="flex: 0 0 auto;"><input type="checkbox" value="${action}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[action] ? " checked" : ""}></div></div><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">`;
@@ -51,8 +49,7 @@ class MessageUtilities {
 				settingshtml += `</div></div>`;
 			}
 			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto; padding-top:8px;">Reset all key bindings.</h3><button type="button" class="flexChild-1KGW5q buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu reset-button" style="flex: 0 0 auto;"><div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx contents-4L4hQM">Reset</div></button></div>`;
-			settingshtml += `</div>`;
-			
+			settingshtml += `</div></div>`;
 			
 			var settingspanel = $(settingshtml)[0];
 			$(settingspanel)
@@ -99,8 +96,6 @@ class MessageUtilities {
 				.on("keydown." + this.getName(), ".channelTextArea-os01xC", (e) => {
 					this.onKeyDown(e.currentTarget, e.which, "onKeyDown");
 				});
-				
-			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -114,8 +109,6 @@ class MessageUtilities {
 			$(document).off("click." + this.getName(), ".message");
 			$(document).off("dblclick." + this.getName(), ".message");
 			$(document).off("keydown." + this.getName(), ".channelTextArea-os01xC");
-			
-			BDfunctionsDevilBro.removeLocalStyle(this.getName());
 		}
 	}
 
