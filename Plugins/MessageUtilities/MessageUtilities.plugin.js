@@ -183,6 +183,7 @@ class MessageUtilities {
 			BDfunctionsDevilBro.saveData(action, binding, this.getName(), "bindings");
 		});
 		$(document).on("mousedown.select" + this.getName(), () => {
+			if (e2.target.parentElement == selectMenu) return;
 			$(document).off("mousedown.select" + this.getName());
 			selectMenu.remove()
 			setTimeout(() => {selectWrap.classList.remove("is-open");},100);
