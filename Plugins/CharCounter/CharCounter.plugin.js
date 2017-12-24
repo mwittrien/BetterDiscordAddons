@@ -5,6 +5,10 @@ class CharCounter {
 		
 		this.selecting = false;
 		
+		this.textareaObserver = new MutationObserver(() => {});
+		
+		this.counterMarkup = `<div id="charcounter"></div>`;
+		
 		this.css = `
 			#charcounter {
 				display: block;
@@ -20,15 +24,13 @@ class CharCounter {
 			#charcounter.edit {
 				top: -1.3em;
 			}`;
-			
-		this.counterMarkup = `<div id="charcounter"></div>`;
 	}
 
 	getName () {return "CharCounter";}
 
 	getDescription () {return "Adds a charcounter in the chat.";}
 
-	getVersion () {return "1.1.3";}
+	getVersion () {return "1.1.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -46,14 +48,22 @@ class CharCounter {
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 			
-			this.TextArea = BDfunctionsDevilBro.WebModules.findByPrototypes(["saveCurrentText"]);
-			this.patchCancel = BDfunctionsDevilBro.WebModules.monkeyPatch(this.TextArea.prototype, "componentDidMount", {after: (e) => {
-				if (e && e.thisObject && e.thisObject._ref && e.thisObject._ref._textArea && e.thisObject.props && e.thisObject.props.type) {
-					this.appendCounter(e.thisObject._ref._textArea, e.thisObject.props.type);
-				}
-			}});
+			this.textareaObserver = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.addedNodes) {
+							change.addedNodes.forEach((node) => {
+								if (node && node.tagName && node.querySelector(".innerEnabled-gLHeOL")) {
+									this.appendCounter(node.querySelector("textarea"));
+								}
+							});
+						}
+					}
+				);
+			});
+			if (document.querySelector("#app-mount")) this.textareaObserver.observe(document.querySelector("#app-mount"), {childList: true, subtree:true});
 			
-			this.appendCounter(document.querySelector("form .channelTextArea-os01xC textarea"), "normal");
+			document.querySelectorAll("textarea").forEach(textarea => {this.appendCounter(textarea);});
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -63,7 +73,7 @@ class CharCounter {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			if (typeof this.patchCancel === "function") this.patchCancel();
+			this.textareaObserver.disconnect();
 			
 			$("#charcounter").remove();
 			$("textarea").off("keydown." + this.getName()).off("click." + this.getName()).off("mousedown." + this.getName());
@@ -77,44 +87,47 @@ class CharCounter {
 	
 	// begin of own functions
 	
-	appendCounter (textarea, type) {
-		if (!textarea || !type) return;
+	appendCounter (textarea) {
+		if (!textarea) return;
 		var textareaWrap = textarea.parentElement;
-		if (textareaWrap && !textareaWrap.querySelector("#charcounter." + type)) {
-			var counter = $(this.counterMarkup);
-			counter.addClass(type).appendTo(textareaWrap);
-			$(textarea)
-				.off("keydown." + this.getName() + " click." + this.getName())
-				.on("keydown." + this.getName() + " click." + this.getName(), e => {
-					setTimeout(() => {
-						updateCounter();
-					},10);
-				})
-				.off("mousedown." + this.getName())
-				.on("mousedown." + this.getName(), e => {
-					this.selecting = true;
-				});
-			$(document)
-				.off("mouseup." + this.getName())
-				.on("mouseup." + this.getName(), e => {
-					if (this.selecting) {
-						this.selecting = false;
-					}
-				})
-				.off("mousemove." + this.getName())
-				.on("mousemove." + this.getName(), e => {
-					if (this.selecting) {
+		if (textareaWrap && !textareaWrap.querySelector("#charcounter")) {
+			var textareaInstance = BDfunctionsDevilBro.getOwnerInstance({"node":textarea, "props":["handlePaste","saveCurrentText"], "up":true});
+			if (textareaInstance && textareaInstance.props && textareaInstance.props.type) {
+				var counter = $(this.counterMarkup);
+				counter.addClass(textareaInstance.props.type).appendTo(textareaWrap);
+				$(textarea)
+					.off("keydown." + this.getName() + " click." + this.getName())
+					.on("keydown." + this.getName() + " click." + this.getName(), e => {
 						setTimeout(() => {
 							updateCounter();
 						},10);
-					}
-				});
-			
-			updateCounter();
-			
-			function updateCounter () {
-				var selection = textarea.selectionEnd - textarea.selectionStart == 0 ? "" : " (" + (textarea.selectionEnd - textarea.selectionStart) + ")";
-				counter.text(textarea.value.length + "/2000" + selection);
+					})
+					.off("mousedown." + this.getName())
+					.on("mousedown." + this.getName(), e => {
+						this.selecting = true;
+					});
+				$(document)
+					.off("mouseup." + this.getName())
+					.on("mouseup." + this.getName(), e => {
+						if (this.selecting) {
+							this.selecting = false;
+						}
+					})
+					.off("mousemove." + this.getName())
+					.on("mousemove." + this.getName(), e => {
+						if (this.selecting) {
+							setTimeout(() => {
+								updateCounter();
+							},10);
+						}
+					});
+				
+				updateCounter();
+				
+				function updateCounter () {
+					var selection = textarea.selectionEnd - textarea.selectionStart == 0 ? "" : " (" + (textarea.selectionEnd - textarea.selectionStart) + ")";
+					counter.text(textarea.value.length + "/2000" + selection);
+				}
 			}
 		}
 	}
