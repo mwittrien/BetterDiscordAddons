@@ -2,13 +2,14 @@
 
 class WriteUpperCase {
 	constructor () {
+		this.textareaObserver = new MutationObserver(() => {});
 	}
 
 	getName () {return "WriteUpperCase";}
 
 	getDescription () {return "Change input to uppercase.";}
 
-	getVersion () {return "1.0.8";}
+	getVersion () {return "1.1.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -23,15 +24,22 @@ class WriteUpperCase {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
-			this.TextArea = BDfunctionsDevilBro.WebModules.findByPrototypes(["saveCurrentText"]);
-			this.patchCancel = BDfunctionsDevilBro.WebModules.monkeyPatch(this.TextArea.prototype, "componentDidMount", {after: (e) => {
-				if (e && e.thisObject && e.thisObject._ref && e.thisObject._ref._textArea && e.thisObject.props && e.thisObject.props.type) {
-					this.bindEventToTextArea(e.thisObject._ref._textArea, e.thisObject.props.type);
-				}
-			}});
+			this.textareaObserver = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.addedNodes) {
+							change.addedNodes.forEach((node) => {
+								if (node && node.tagName && node.querySelector(".innerEnabled-gLHeOL")) {
+									this.bindEventToTextArea(node.querySelector("textarea"));
+								}
+							});
+						}
+					}
+				);
+			});
+			if (document.querySelector("#app-mount")) this.textareaObserver.observe(document.querySelector("#app-mount"), {childList: true, subtree:true});
 			
-			
-			this.bindEventToTextArea(document.querySelector("form .channelTextArea-os01xC textarea"), "normal");
+			document.querySelectorAll("textarea").forEach(textarea => {this.bindEventToTextArea(textarea);});
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -40,7 +48,7 @@ class WriteUpperCase {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			if (typeof this.patchCancel === "function") this.patchCancel();
+			this.textareaObserver.disconnect();
 			
 			$("textarea").off("keyup." + this.getName());
 			
@@ -52,9 +60,9 @@ class WriteUpperCase {
 	// begin of own functions
 	
 	bindEventToTextArea (textarea, type) {
-		if (!textarea || !type) return;
+		if (!textarea) return;
 		var textareaInstance = BDfunctionsDevilBro.getOwnerInstance({"node":textarea, "props":["handlePaste","saveCurrentText"], "up":true});
-		if (textarea && textareaInstance) {
+		if (textareaInstance && textareaInstance.props && textareaInstance.props.type) {
 			$(textarea)
 				.off("keyup." + this.getName())
 				.on("keyup." + this.getName(), () => {
