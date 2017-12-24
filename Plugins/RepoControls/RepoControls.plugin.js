@@ -64,7 +64,7 @@ class RepoControls {
 
 	getDescription () {return "Lets you sort and filter your list of downloaded Themes and Plugins.";}
 
-	getVersion () {return "1.0.4";}
+	getVersion () {return "1.0.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -92,6 +92,7 @@ class RepoControls {
 							change.addedNodes.forEach((node) => {
 								setImmediate(() => {
 									if (node && node.tagName && node.getAttribute("layer-id") == "user-settings") {
+										this.checkIfPluginsOrThemesPage(node);
 										this.innerSettingsWindowObserver.observe(node, {childList:true, subtree:true});
 									}
 								});
@@ -102,23 +103,21 @@ class RepoControls {
 			});
 			if (document.querySelector(".layers")) this.settingsWindowObserver.observe(document.querySelector(".layers"), {childList:true});
 			
-			this.innerSettingsWindowObserver = new MutationObserver((changes2, _) => {
-				changes2.forEach(
-					(change2, j) => {
-						if (change2.addedNodes) {
-							change2.addedNodes.forEach((node2) => {
-								if (node2 && node2.tagName && node2.querySelector(".bd-pfbtn")) {
-									this.addControls(node2.querySelector(".bda-slist"));
-								}
+			this.innerSettingsWindowObserver = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, j) => {
+						if (change.addedNodes) {
+							change.addedNodes.forEach((node) => {
+								this.checkIfPluginsOrThemesPage(node);
 							});
 						}
 					}
 				);
 			});
-			if (document.querySelector(".layer[layer-id='user-settings']")) this.innerSettingsWindowObserver.observe(document.querySelector(".layer[layer-id='user-settings']"), {childList:true, subtree:true});
-			
-			if (document.querySelector(".bd-pfbtn")) {
-				this.addControls(document.querySelector(".bda-slist"));
+			var settingswindow = document.querySelector(".layer[layer-id='user-settings']");
+			if (settingswindow) {
+				this.innerSettingsWindowObserver.observe(settingswindow, {childList:true, subtree:true});
+				this.checkIfPluginsOrThemesPage(settingswindow);
 			}
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
@@ -144,6 +143,21 @@ class RepoControls {
 
 	
 	// begin of own functions
+	
+	checkIfPluginsOrThemesPage (container) {
+		if (container && container.tagName) {
+			var folderbutton = container.querySelector(".bd-pfbtn");
+			if (folderbutton) {
+				var buttonbar = folderbutton.parentElement;
+				if (buttonbar && buttonbar.tagName) {
+					var header = buttonbar.querySelector("h2");
+					if (header && (header.innerText.toUpperCase() === "PLUGINS" || header.innerText.toUpperCase() === "THEMES")) {
+						this.addControls(container.querySelector(".bda-slist"));
+					}
+				}
+			}
+		}
+	}
 	
 	addControls (container) {
 		if (document.querySelector(".repo-controls")) return;
