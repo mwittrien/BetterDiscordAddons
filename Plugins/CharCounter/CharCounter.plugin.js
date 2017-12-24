@@ -14,6 +14,7 @@ class CharCounter {
 				z-index: 1000;
 				bottom: -1.3em;
 			}
+			#charcounter.form,
 			#charcounter.edit {
 				top: -1.3em;
 				bottom: 0;
@@ -26,7 +27,7 @@ class CharCounter {
 
 	getDescription () {return "Adds a charcounter in the chat.";}
 
-	getVersion () {return "1.1.1";}
+	getVersion () {return "1.1.2";}
 
 	getAuthor () {return "DevilBro";}
 
