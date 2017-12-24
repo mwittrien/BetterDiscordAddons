@@ -321,6 +321,7 @@ class NotificationSounds {
 			this.saveChoice(type, choice, settingspanel.querySelector(".sound-preview"));
 		});
 		$(document).on("mousedown.select" + this.getName(), () => {
+			if (e2.target.parentElement == selectMenu) return;
 			$(document).off("mousedown.select" + this.getName());
 			selectMenu.remove()
 			setTimeout(() => {selectWrap.classList.remove("is-open");},100);
