@@ -59,7 +59,7 @@ class WriteUpperCase {
 	
 	// begin of own functions
 	
-	bindEventToTextArea (textarea, type) {
+	bindEventToTextArea (textarea) {
 		if (!textarea) return;
 		var textareaInstance = BDfunctionsDevilBro.getOwnerInstance({"node":textarea, "props":["handlePaste","saveCurrentText"], "up":true});
 		if (textareaInstance && textareaInstance.props && textareaInstance.props.type) {
