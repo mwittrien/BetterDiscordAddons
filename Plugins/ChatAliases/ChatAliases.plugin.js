@@ -180,7 +180,7 @@ class ChatAliases {
 
 	getDescription () {return "Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent.";}
 
-	getVersion () {return "1.5.5";}
+	getVersion () {return "1.5.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -258,7 +258,7 @@ class ChatAliases {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(".innerEnabled-gLHeOL")) {
+								if (node && node.tagName && node.querySelector(".innerEnabled-gLHeOL, .innerEnabledNoAttach-36PpAk")) {
 									this.bindEventToTextArea(node.querySelector("textarea"));
 								}
 							});
