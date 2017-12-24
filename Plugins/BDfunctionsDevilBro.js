@@ -2004,7 +2004,10 @@ $(window)
 	});
 
 BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
-	.bd-pfbtn {
+	#bd-settingspane-container .ui-form-title {
+		display: inline-block;
+	}
+	#bd-settingspane-container .bd-pfbtn {
 		position: static;
 		top: 0;
 		left: 0;
