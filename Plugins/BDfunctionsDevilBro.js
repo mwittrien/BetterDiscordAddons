@@ -39,20 +39,8 @@ BDfunctionsDevilBro.loadMessage = function (plugin, oldVersionRemove) {
 						change.addedNodes.forEach((node) => {
 							setImmediate(() => {
 								if (node && node.tagName && node.getAttribute("layer-id") == "user-settings") {
-									var settingsObserver = new MutationObserver((changes2, _) => {
-										changes2.forEach(
-											(change2, j) => {
-												if (change2.addedNodes) {
-													change2.addedNodes.forEach((node2) => {
-														if (node2 && node2.tagName && !node2.querySelector(".bd-pfbtn.bd-updatebtn") && node2.querySelector(".bd-pfbtn") && node2.querySelector("h2") && node2.querySelector("h2").innerText.toLowerCase() === "plugins") {
-															node2.querySelector(".bd-pfbtn").parentElement.insertBefore(BDfunctionsDevilBro.createUpdateButton(), node2.querySelector(".bd-pfbtn").nextSibling);
-														}
-													});
-												}
-											}
-										);
-									});
-									settingsObserver.observe(node, {childList:true, subtree:true});
+									checkIfPluginsPage(node);
+									innerSettingsWindowObserver.observe(node, {childList:true, subtree:true});
 								}
 							});
 						});
@@ -61,11 +49,38 @@ BDfunctionsDevilBro.loadMessage = function (plugin, oldVersionRemove) {
 			);
 		});
 		window.PluginUpdates.observer.observe(document.querySelector(".layers"), {childList:true});
+			
+		var innerSettingsWindowObserver = new MutationObserver((changes, _) => {
+			changes.forEach(
+				(change, j) => {
+					if (change.addedNodes) {
+						change.addedNodes.forEach((node) => {
+							checkIfPluginsPage(node);
+						});
+					}
+				}
+			);
+		});
+		var settingswindow = document.querySelector(".layer[layer-id='user-settings']");
+		if (settingswindow) {
+			innerSettingsWindowObserver.observe(settingswindow, {childList:true, subtree:true});
+			checkIfPluginsPage(settingswindow);
+		}
 	}
 	
-	var bdbutton = document.querySelector(".bd-pfbtn");
-	if (bdbutton && bdbutton.parentElement.querySelector("h2") && bdbutton.parentElement.querySelector("h2").innerText.toLowerCase() === "plugins") {
-		bdbutton.parentElement.insertBefore(BDfunctionsDevilBro.createUpdateButton(), bdbutton.nextSibling);
+	function checkIfPluginsPage (container) {
+		if (container && container.tagName && !container.querySelector(".bd-pfbtn.bd-updatebtn")) {
+			var folderbutton = container.querySelector(".bd-pfbtn");
+			if (folderbutton) {
+				var buttonbar = folderbutton.parentElement;
+				if (buttonbar && buttonbar.tagName) {
+					var header = buttonbar.querySelector("h2");
+					if (header && header.innerText.toUpperCase() === "PLUGINS") {
+						buttonbar.insertBefore(BDfunctionsDevilBro.createUpdateButton(), folderbutton.nextSibling);
+					}
+				}
+			}
+		}
 	}
 };
 
