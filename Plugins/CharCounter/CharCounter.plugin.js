@@ -12,12 +12,13 @@ class CharCounter {
 				right: 0; 
 				opacity: .5;
 				z-index: 1000;
+			}
+			#charcounter.normal {
 				bottom: -1.3em;
 			}
 			#charcounter.form,
 			#charcounter.edit {
 				top: -1.3em;
-				bottom: 0;
 			}`;
 			
 		this.counterMarkup = `<div id="charcounter"></div>`;
@@ -27,7 +28,7 @@ class CharCounter {
 
 	getDescription () {return "Adds a charcounter in the chat.";}
 
-	getVersion () {return "1.1.2";}
+	getVersion () {return "1.1.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -69,7 +70,6 @@ class CharCounter {
 			$(document).off("mouseup." + this.getName()).off("mousemove." + this.getName());
 			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName());
-			
 			
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
