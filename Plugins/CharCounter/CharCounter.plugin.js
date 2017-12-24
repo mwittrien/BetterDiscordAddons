@@ -30,7 +30,7 @@ class CharCounter {
 
 	getDescription () {return "Adds a charcounter in the chat.";}
 
-	getVersion () {return "1.1.4";}
+	getVersion () {return "1.1.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -53,7 +53,7 @@ class CharCounter {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(".innerEnabled-gLHeOL")) {
+								if (node && node.tagName && node.querySelector(".innerEnabled-gLHeOL, .innerEnabledNoAttach-36PpAk")) {
 									this.appendCounter(node.querySelector("textarea"));
 								}
 							});
