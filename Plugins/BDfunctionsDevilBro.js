@@ -529,7 +529,7 @@ BDfunctionsDevilBro.getOwnerInstance = function (config) {
 				var key = keys[i];
 				var value = ele[keys[i]];
 				
-				if (ele.type && ele.type.displayName === config.name) {
+				if (ele.type && (ele.type.displayName === config.name || ele.type.name === config.name)) {
 					result = ele.stateNode;
 				}
 				else if ((typeof value === "object" || typeof value === "function") && keyWhiteList[key]) {
