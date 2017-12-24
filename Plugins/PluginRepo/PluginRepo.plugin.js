@@ -13,11 +13,10 @@ class PluginRepo {
 		this.updateInterval;
 		
 		this.pluginRepoButtonMarkup = 
-			`<button class="bd-pfbtn bd-pluginrepobutton" style="left: 360px;">Plugin Repo</button>`;
+			`<button class="bd-pfbtn bd-pluginrepobutton">Plugin Repo</button>`;
 
 		this.pluginEntryMarkup =
 			`<li class="pluginEntry jiiks">
-				<div class="bda-left">
 					<span class="bda-name"></span>
 					<div class="scrollerWrap-2uBjct scrollerThemed-19vinI">
 						<div class="scroller-fzNley bda-description"></div>
