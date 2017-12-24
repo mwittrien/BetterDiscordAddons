@@ -2009,8 +2009,6 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 	}
 	#bd-settingspane-container .bd-pfbtn {
 		position: static;
-		top: 0;
-		left: 0;
 		margin-bottom: 0;
 		border-radius: 5px;
 		display: inline-block;
