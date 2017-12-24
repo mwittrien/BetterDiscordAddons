@@ -16,12 +16,8 @@ class CharCounter {
 			}
 			#charcounter.edit {
 				top: -1.3em;
+				bottom: 0;
 			}`;
-			
-		this.selectors = {
-			normal: 	"form .channelTextArea-os01xC",
-			edit: 		".edit-message .channelTextArea-1HTP3C",
-		};
 			
 		this.counterMarkup = `<div id="charcounter"></div>`;
 	}
@@ -30,7 +26,7 @@ class CharCounter {
 
 	getDescription () {return "Adds a charcounter in the chat.";}
 
-	getVersion () {return "1.1.0";}
+	getVersion () {return "1.1.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -50,10 +46,12 @@ class CharCounter {
 			
 			this.TextArea = BDfunctionsDevilBro.WebModules.findByPrototypes(["saveCurrentText"]);
 			this.patchCancel = BDfunctionsDevilBro.WebModules.monkeyPatch(this.TextArea.prototype, "componentDidMount", {after: (e) => {
-				if (e && e.thisObject && e.thisObject.props && e.thisObject.props.type) this.appendCounter(e.thisObject.props.type);
+				if (e && e.thisObject && e.thisObject._ref && e.thisObject._ref._textArea && e.thisObject.props && e.thisObject.props.type) {
+					this.appendCounter(e.thisObject._ref._textArea, e.thisObject.props.type);
+				}
 			}});
 			
-			for (let type in this.selectors) this.appendCounter(type);
+			this.appendCounter(document.querySelector("form .channelTextArea-os01xC textarea"), "normal");
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -63,15 +61,14 @@ class CharCounter {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
+			if (typeof this.patchCancel === "function") this.patchCancel();
 			
 			$("#charcounter").remove();
-			var textinput = document.querySelector(".channelTextArea-os01xC textarea");
-			$(textinput).off("keydown." + this.getName()).off("click." + this.getName()).off("mousedown." + this.getName());
+			$("textarea").off("keydown." + this.getName()).off("click." + this.getName()).off("mousedown." + this.getName());
 			$(document).off("mouseup." + this.getName()).off("mousemove." + this.getName());
 			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName());
 			
-			if (typeof this.patchCancel === "function") this.patchCancel();
 			
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
@@ -79,13 +76,13 @@ class CharCounter {
 	
 	// begin of own functions
 	
-	appendCounter (type) {
-		var textarea = document.querySelector(this.selectors[type]);
-		if (textarea && !textarea.querySelector("#charcounter." + type)) {
+	appendCounter (textarea, type) {
+		if (!textarea || !type) return;
+		var textareaWrap = textarea.parentElement;
+		if (textareaWrap && !textareaWrap.querySelector("#charcounter." + type)) {
 			var counter = $(this.counterMarkup);
-			counter.addClass(type);
-			var textinput = textarea.querySelector("textarea");
-			$(textinput)
+			counter.addClass(type).appendTo(textareaWrap);
+			$(textarea)
 				.off("keydown." + this.getName() + " click." + this.getName())
 				.on("keydown." + this.getName() + " click." + this.getName(), e => {
 					setTimeout(() => {
@@ -111,13 +108,12 @@ class CharCounter {
 						},10);
 					}
 				});
-			$(textarea).append(counter);
 			
 			updateCounter();
 			
 			function updateCounter () {
-				var selection = textinput.selectionEnd - textinput.selectionStart == 0 ? "" : " (" + (textinput.selectionEnd - textinput.selectionStart) + ")";
-				counter.text(textinput.value.length + "/2000" + selection);
+				var selection = textarea.selectionEnd - textarea.selectionStart == 0 ? "" : " (" + (textarea.selectionEnd - textarea.selectionStart) + ")";
+				counter.text(textarea.value.length + "/2000" + selection);
 			}
 		}
 	}
