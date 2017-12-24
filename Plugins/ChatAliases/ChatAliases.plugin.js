@@ -4,6 +4,7 @@ class ChatAliases {
 	constructor () {
 		
 		this.settingsWindowObserver = new MutationObserver(() => {});
+		this.textareaObserver = new MutationObserver(() => {});
 		
 		this.css = ` 
 			.chataliases-settings .title {
@@ -179,7 +180,7 @@ class ChatAliases {
 
 	getDescription () {return "Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent.";}
 
-	getVersion () {return "1.5.4";}
+	getVersion () {return "1.5.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -221,7 +222,7 @@ class ChatAliases {
 				.on("click", ".toggle-info", () => {this.toggleInfo(settingspanel);});
 			return settingspanel;
 		}
-    }
+	}
 
 	//legacy
 	load () {
@@ -242,7 +243,9 @@ class ChatAliases {
 					(change, i) => {
 						if (change.removedNodes) {
 							change.removedNodes.forEach((node) => {
-								if (node && node.tagName && node.getAttribute("layer-id") == "user-settings") this.bindEventToTextArea();
+								if (node && node.tagName && node.getAttribute("layer-id") == "user-settings") {
+									document.querySelectorAll("textarea").forEach(textarea => {this.bindEventToTextArea(textarea);});
+								}
 							});
 						}
 					}
@@ -250,9 +253,24 @@ class ChatAliases {
 			});
 			if (document.querySelector(".layers")) this.settingsWindowObserver.observe(document.querySelector(".layers"), {childList:true});
 			
-			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
+			this.textareaObserver = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.addedNodes) {
+							change.addedNodes.forEach((node) => {
+								if (node && node.tagName && node.querySelector(".innerEnabled-gLHeOL")) {
+									this.bindEventToTextArea(node.querySelector("textarea"));
+								}
+							});
+						}
+					}
+				);
+			});
+			if (document.querySelector("#app-mount")) this.textareaObserver.observe(document.querySelector("#app-mount"), {childList: true, subtree:true});
 			
-			this.bindEventToTextArea();
+			document.querySelectorAll("textarea").forEach(textarea => {this.bindEventToTextArea(textarea);});
+			
+			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -262,15 +280,10 @@ class ChatAliases {
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.settingsWindowObserver.disconnect();
-			$(".channelTextArea-1HTP3C").find("textarea").off("keydown." + this.getName()).off("input." + this.getName());
+			this.textareaObserver.disconnect();
+			$("textarea").off("keydown." + this.getName()).off("input." + this.getName());
 			
 			BDfunctionsDevilBro.unloadMessage(this);
-		}
-	}
-	
-	onSwitch () {
-		if (typeof BDfunctionsDevilBro === "object") {
-			this.bindEventToTextArea();
 		}
 	}
 	
@@ -350,43 +363,29 @@ class ChatAliases {
 		BDfunctionsDevilBro.saveData("hideInfo", visible, this.getName(), "settings");
 	}
 	
-	bindEventToTextArea () {
-		var textarea = document.querySelector(".channelTextArea-1HTP3C textarea");
-		if (textarea) {
-			$(textarea)
-				.off("input." + this.getName())
-				.on("input." + this.getName(), e => {
-					if (!this.format) return;
+	bindEventToTextArea (textarea) {
+		if (!textarea) return;
+		$(textarea)
+			.off("input." + this.getName())
+			.on("input." + this.getName(), () => {
+				if (this.format) {
 					this.format = false;
-					this.formatText(e.target);
-				})
-				.off("keydown." + this.getName())
-				.on("keydown." + this.getName(), e => {
-					if (!e.shiftKey && e.which == 13 && !this.stopLoop && !document.querySelector(".chat form .autocomplete-1TnWNR")) {
-						if (window.bdplugins["BetterFormattingRedux"] && window.pluginCookie["BetterFormattingRedux"]) {
-							this.format = true;
-						}
-						else {
-							this.stopLoop = true;
-							this.formatText(e.target);
-							var options = { key: "Enter", code: "Enter", which: 13, keyCode: 13, bubbles: true };
-							var down = new KeyboardEvent("keydown", options);
-							Object.defineProperty(down, "keyCode", {value: 13});
-							Object.defineProperty(down, "which", {value: 13});
-							var press = new KeyboardEvent("keypress", options);
-							Object.defineProperty(press, "keyCode", {value: 13});
-							Object.defineProperty(press, "which", {value: 13});
-							textarea.dispatchEvent(down);
-							textarea.dispatchEvent(press);
-							setTimeout(() => {this.stopLoop = false;},1);
-						}
-					}
-				});
-		}
+					textarea.focus();
+					textarea.selectionStart = 0;
+					textarea.selectionEnd = textarea.value.length;
+					document.execCommand("insertText", false, this.formatText(textarea.value));
+				}
+			})
+			.off("keydown." + this.getName())
+			.on("keydown." + this.getName(), e => {
+				if (!e.shiftKey && e.which == 13 && !document.querySelector(".chat form .autocomplete-1TnWNR")) {
+					this.format = true;
+					$(textarea).trigger("input");
+				}
+			});
 	}
 	
-	formatText (textarea) {
-		var text = textarea.value;
+	formatText (text) {
 		var words = text.trim().split(" ");
 		var aliases = BDfunctionsDevilBro.loadAllData(this.getName(), "words");
 		var newText = [];
@@ -407,7 +406,6 @@ class ChatAliases {
 			}
 			newText.push(word);
 		}
-		newText = newText.length == 1 ? newText[0] : newText.join(" ");
-		BDfunctionsDevilBro.getOwnerInstance({"node":textarea, "name":"ChannelTextAreaForm", "up":true}).setState({textValue:newText});
+		return  newText.length == 1 ? newText[0] : newText.join(" ");
 	}
 }
