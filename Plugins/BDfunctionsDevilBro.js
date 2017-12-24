@@ -377,7 +377,7 @@ BDfunctionsDevilBro.createUpdateButton = function () {
 		BDfunctionsDevilBro.checkAllUpdates();
 	};			
 	updateButton.onmouseenter = function () {
-		BDfunctionsDevilBro.createTooltip("Only checks for updates of plugins, which support the updatecheck. Rightclick for a list.", updateButton, {type:"right",selector:"update-button-tooltip"});
+		BDfunctionsDevilBro.createTooltip("Only checks for updates of plugins, which support the updatecheck. Rightclick for a list.", updateButton, {type:"top",selector:"update-button-tooltip"});
 		
 	};
 	updateButton.oncontextmenu = function () {
