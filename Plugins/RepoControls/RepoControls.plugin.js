@@ -160,7 +160,7 @@ class RepoControls {
 	}
 	
 	addControls (container) {
-		if (document.querySelector(".repo-controls")) return;
+		if (!container || document.querySelector(".repo-controls")) return;
 		
 		var repoControls = $(this.repoControlsMarkup);
 		repoControls
