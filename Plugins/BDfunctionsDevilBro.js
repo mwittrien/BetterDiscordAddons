@@ -503,7 +503,7 @@ BDfunctionsDevilBro.getReactInstance = function (node) {
 
 BDfunctionsDevilBro.getOwnerInstance = function (config) { 
 	if (config === undefined) return null;
-	if (!config.node || (!config.name && !config.props)) return null;
+	if (!config.node || (!config.name && (!config.props || !Array.isArray(config.props)))) return null;
 	var inst = BDfunctionsDevilBro.getReactInstance(config.node);
 	if (!inst) return null;
 	
@@ -532,7 +532,7 @@ BDfunctionsDevilBro.getOwnerInstance = function (config) {
 				if (config.name && ele.type && (ele.type.displayName === config.name || ele.type.name === config.name)) {
 					result = ele.stateNode;
 				}
-				else if (config.props && Array.isArray(config.props) && ele.stateNode && config.props.every(prop => ele.stateNode[prop] !== undefined)) {
+				else if (config.props && ele.stateNode && config.props.every(prop => ele.stateNode[prop] !== undefined)) {
 					result = ele.stateNode;
 				}
 				else if ((typeof value === "object" || typeof value === "function") && keyWhiteList[key]) {
