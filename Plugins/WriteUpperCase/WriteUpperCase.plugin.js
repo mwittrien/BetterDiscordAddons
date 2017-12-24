@@ -9,7 +9,7 @@ class WriteUpperCase {
 
 	getDescription () {return "Change input to uppercase.";}
 
-	getVersion () {return "1.1.1";}
+	getVersion () {return "1.1.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -29,7 +29,7 @@ class WriteUpperCase {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(".innerEnabled-gLHeOL")) {
+								if (node && node.tagName && node.querySelector(".innerEnabled-gLHeOL, .innerEnabledNoAttach-36PpAk")) {
 									this.bindEventToTextArea(node.querySelector("textarea"));
 								}
 							});
