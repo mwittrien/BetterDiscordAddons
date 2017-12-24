@@ -229,7 +229,7 @@ class ChatFilter {
 
 	getDescription () {return "Allows the user to censor words or block complete messages based on words in the chatwindow.";}
 
-	getVersion () {return "3.0.9";}
+	getVersion () {return "3.1.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -297,7 +297,7 @@ class ChatFilter {
 				.on("click", ".toggle-info", () => {this.toggleInfo(settingspanel);});
 			return settingspanel;
 		}
-    }
+	}
 
 	//legacy
 	load () {
@@ -536,10 +536,10 @@ class ChatFilter {
 					
 					var reg = new RegExp(bWord, modifier);
 					strings.forEach(string => {
-						if (string.indexOf("<img draggable") == 0) {
+						if (string.indexOf("<img ") == 0 && (string.indexOf('class="emote') > -1 || string.indexOf('class="emoji') > -1)) {
 							var emojiname = string.split('alt="').length > 0 ? string.split('alt="')[1] : null;
 							emojiname = emojiname ? emojiname.split('"')[0] : null;
-							emojiname = emojiname.replace(new RegExp(":", 'g'), "");
+							emojiname = emojiname ? emojiname.replace(new RegExp(":", 'g'), "") : null;
 							if (reg.test(emojiname)) blocked = true;
 						}
 						else if (string.indexOf('<a class="embed') == 0) {
@@ -580,10 +580,10 @@ class ChatFilter {
 						
 						var reg = new RegExp(cWord, modifier);
 						strings.forEach((string,i) => {
-							if (string.indexOf("<img draggable") == 0) {
+							if (string.indexOf("<img ") == 0 && (string.indexOf('class="emote') > -1 || string.indexOf('class="emoji') > -1)) {
 								var emojiname = string.split('alt="').length > 0 ? string.split('alt="')[1] : null;
 								emojiname = emojiname ? emojiname.split('" src')[0] : null;
-								emojiname = emojiname.replace(new RegExp(":", 'g'), "");
+								emojiname = emojiname ? emojiname.replace(new RegExp(":", 'g'), "") : null;
 								if (reg.test(emojiname)) {
 									strings[i] = BDfunctionsDevilBro.encodeToHTML(censoredReplace);
 									if (strings[i+1] && strings[i+1].indexOf("<input") == 0) {
