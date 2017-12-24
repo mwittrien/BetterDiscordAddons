@@ -188,7 +188,8 @@ class CreationDate {
 			selectControl.querySelector(".languageTimestamp").innerText = new Date().toLocaleString(BDfunctionsDevilBro.languages[language].id);
 			BDfunctionsDevilBro.saveData("language", language, this.getName(), "language");
 		});
-		$(document).on("mousedown.select" + this.getName(), () => {
+		$(document).on("mousedown.select" + this.getName(), (e2) => {
+			if (e2.target.parentElement == selectMenu) return;
 			$(document).off("mousedown.select" + this.getName());
 			selectMenu.remove();
 			$("li").has(settingspanel).css("overflow", "auto");
