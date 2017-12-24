@@ -146,7 +146,7 @@ class GoogleTranslateOption {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(".innerEnabled-gLHeOL")) {
+								if (node && node.tagName && node.querySelector(".innerEnabled-gLHeOL, .innerEnabledNoAttach-36PpAk")) {
 									this.addTranslationButton(node.querySelector("textarea"));
 								}
 							});
@@ -181,7 +181,7 @@ class GoogleTranslateOption {
 			this.messageContextObserver.disconnect();
 			
 			$(".translate-button").remove();
-			document.querySelectorAll(".innerEnabled-gLHeOL").forEach(textareaWrap => {textareaWrap.style.paddingRight = "0px";});
+			document.querySelectorAll(".innerEnabled-gLHeOL, .innerEnabledNoAttach-36PpAk").forEach(textareaWrap => {textareaWrap.style.paddingRight = "0px";});
 			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName());
 			
