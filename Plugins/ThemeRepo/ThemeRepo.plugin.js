@@ -317,7 +317,7 @@ class ThemeRepo {
 
 	getDescription () {return "Allows you to preview all themes from the theme repo and download them on the fly. Repo button is in the theme settings.";}
 
-	getVersion () {return "1.2.2";}
+	getVersion () {return "1.2.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -345,6 +345,7 @@ class ThemeRepo {
 							change.addedNodes.forEach((node) => {
 								setImmediate(() => {
 									if (node && node.tagName && node.getAttribute("layer-id") == "user-settings") {
+										this.checkIfThemesPage(node);
 										this.innerSettingsWindowObserver.observe(node, {childList:true, subtree:true});
 									}
 								});
@@ -355,24 +356,21 @@ class ThemeRepo {
 			});
 			if (document.querySelector(".layers")) this.settingsWindowObserver.observe(document.querySelector(".layers"), {childList:true});
 			
-			this.innerSettingsWindowObserver = new MutationObserver((changes2, _) => {
-				changes2.forEach(
-					(change2, j) => {
-						if (change2.addedNodes) {
-							change2.addedNodes.forEach((node2) => {
-								if (node2 && node2.tagName && node2.querySelector(".bd-pfbtn") && node2.querySelector("h2") && node2.querySelector("h2").innerText.toLowerCase() === "themes") {
-									this.addThemeRepoButton(node2);
-								}
+			this.innerSettingsWindowObserver = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, j) => {
+						if (change.addedNodes) {
+							change.addedNodes.forEach((node) => {
+								this.checkIfThemesPage(node);
 							});
 						}
 					}
 				);
 			});
-			if (document.querySelector(".layer[layer-id='user-settings']")) this.innerSettingsWindowObserver.observe(document.querySelector(".layer[layer-id='user-settings']"), {childList:true, subtree:true});
-			
-			var bdbutton = document.querySelector(".bd-pfbtn");
-			if (bdbutton && bdbutton.parentElement.querySelector("h2") && bdbutton.parentElement.querySelector("h2").innerText.toLowerCase() === "themes") {
-				this.addThemeRepoButton(bdbutton.parentElement);
+			var settingswindow = document.querySelector(".layer[layer-id='user-settings']");
+			if (settingswindow) {
+				this.innerSettingsWindowObserver.observe(settingswindow, {childList:true, subtree:true});
+				this.checkIfThemesPage(settingswindow);
 			}
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
@@ -404,6 +402,21 @@ class ThemeRepo {
 
 	
 	// begin of own functions
+	
+	checkIfThemesPage (container) {
+		if (container && container.tagName) {
+			var folderbutton = container.querySelector(".bd-pfbtn");
+			if (folderbutton) {
+				var buttonbar = folderbutton.parentElement;
+				if (buttonbar && buttonbar.tagName) {
+					var header = buttonbar.querySelector("h2");
+					if (header && header.innerText.toUpperCase() === "THEMES") {
+						this.addThemeRepoButton(buttonbar);
+					}
+				}
+			}
+		}
+	}
 	
 	addThemeRepoButton (container) {
 		if (container && !container.querySelector(".bd-themerepobutton")) {
