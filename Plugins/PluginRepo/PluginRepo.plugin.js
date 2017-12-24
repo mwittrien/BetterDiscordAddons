@@ -364,7 +364,7 @@ class PluginRepo {
 					else BDfunctionsDevilBro.showToast(`Plugins are still being fetched. Try again in some seconds.`, {type:"danger"});
 				})
 				.on("mouseenter", (e) => {
-					BDfunctionsDevilBro.createTooltip("Open Plugin Repo", e.currentTarget, {type:"right",selector:"pluginrepo-button-tooltip"});
+					BDfunctionsDevilBro.createTooltip("Open Plugin Repo", e.currentTarget, {type:"top",selector:"pluginrepo-button-tooltip"});
 				});
 		}
 	}
