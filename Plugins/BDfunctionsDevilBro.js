@@ -373,7 +373,6 @@ BDfunctionsDevilBro.createUpdateButton = function () {
 	var updateButton = document.createElement("button");
 	updateButton.className = "bd-pfbtn bd-updatebtn";
 	updateButton.innerText = "Check for Updates";
-	updateButton.style.left = "220px";
 	updateButton.onclick = function () {
 		BDfunctionsDevilBro.checkAllUpdates();
 	};			
@@ -2005,6 +2004,16 @@ $(window)
 	});
 
 BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
+	.bd-pfbtn {
+		position: static;
+		top: 0;
+		left: 0;
+		margin-bottom: 0;
+		border-radius: 5px;
+		display: inline-block;
+		margin-left: 10px;
+	}
+	
 	#pluginNotice, .DevilBro-notice {
 		-webkit-app-region: drag;
 	} 
