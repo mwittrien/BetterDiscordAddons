@@ -429,7 +429,7 @@ class ThemeRepo {
 					else BDfunctionsDevilBro.showToast(`Themes are still being fetched. Try again in some seconds.`, {type:"danger"});
 				})
 				.on("mouseenter", (e) => {
-					BDfunctionsDevilBro.createTooltip("Open Theme Repo", e.currentTarget, {type:"right",selector:"themerepo-button-tooltip"});
+					BDfunctionsDevilBro.createTooltip("Open Theme Repo", e.currentTarget, {type:"top",selector:"themerepo-button-tooltip"});
 				});
 		}
 	}
