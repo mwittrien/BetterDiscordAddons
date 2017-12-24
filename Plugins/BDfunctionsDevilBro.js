@@ -1765,7 +1765,7 @@ BDfunctionsDevilBro.isThemeEnabled = function (name) {
 };
 
 BDfunctionsDevilBro.zacksFork = function () {
-	return (typeof bdpluginErrors === "object" && typeof bdthemeErrors === "object");
+	return (bbdVersion && typeof bdpluginErrors === "object" && typeof bdthemeErrors === "object");
 };
 
 BDfunctionsDevilBro.getDiscordTheme = function () {
