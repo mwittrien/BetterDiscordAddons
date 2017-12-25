@@ -1,7 +1,3 @@
 # MessageUtilities - [Download](https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/MessageUtilities/MessageUtilities.plugin.js)
 
-Offers a number of useful message options. 
-For now:
-  - Double Click -> Edit
-  - Delete + Click -> Delete
-  - Escape in Textarea -> Clear Input
+Offers a number of useful message options. Remap the keybindings in the settings.
