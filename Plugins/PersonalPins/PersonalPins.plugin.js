@@ -272,9 +272,8 @@ class PersonalPins {
 	}
 	
 	onContextMenu (context) {
-		var groups = $(context).find(".item-group");
-		for (let i = 0; i < groups.length; i++) {
-			var group = groups[i];
+		if (!context || !context.tagName || !context.parentElement || context.querySelector(".personalpin-item")) return;
+		for (let group of context.querySelectorAll(".item-group")) {
 			if (BDfunctionsDevilBro.getKeyInformation({"node":group, "key":"displayName", "value":"MessagePinItem"})) {
 				$(this.messageContextEntryMarkup).insertAfter(group)
 					.on("click", ".personalpin-item", () => {
