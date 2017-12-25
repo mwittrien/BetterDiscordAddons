@@ -414,7 +414,7 @@ BDfunctionsDevilBro.translatePlugin = function (plugin) {
 };
 
 BDfunctionsDevilBro.languages = {
-	"$discord":	{name:"Discord",					id:"en",		integrated:false},
+	"$default":	{name:"Discord",					id:"en",		integrated:false},
 	"ar":		{name:"Arabic",						id:"ar",		integrated:false},
 	"af":		{name:"Afrikaans",					id:"af",		integrated:false},
 	"am":		{name:"Amharic",					id:"am",		integrated:false},
@@ -491,7 +491,7 @@ BDfunctionsDevilBro.languages = {
     var translateInterval = setInterval(() => {
 		if (document.querySelector("html").lang) {
 			clearInterval(translateInterval);
-			BDfunctionsDevilBro.languages.$Discord.id = BDfunctionsDevilBro.getDiscordLanguage().id;
+			BDfunctionsDevilBro.languages.$default.id = BDfunctionsDevilBro.getDiscordLanguage().id;
 		}
 	},100);
 })();
