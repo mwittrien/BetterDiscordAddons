@@ -467,7 +467,7 @@ class ServerFolders {
 	}
 	
 	onContextMenu (context) {
-		if (context.querySelector(".serverfolders-item")) return;
+		if (!context || !context.tagName || !context.parentElement || context.querySelector(".serverfolders-item")) return;
 		var info = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"guild"});
 		if (info && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"GuildLeaveGroup"})) {
 			$(context).append(this.serverContextEntryMarkup)
