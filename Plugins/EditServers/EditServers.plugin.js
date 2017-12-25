@@ -247,18 +247,17 @@ class EditServers {
 	}
 	
 	onContextMenu (context) {
-		if ($(context).find(".localserversettings-item").length == 0) {
-			var info = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"guild"});
-			if (info && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"GuildLeaveGroup"})) {
-				var serverDiv = BDfunctionsDevilBro.getDivOfServer(info.id).div;
-				var server = $(serverDiv).find(".avatar-small");
-				var shortName = $(serverDiv).attr("custom-editservers") ? $(server).attr("name") : $(server).text();
-				info = Object.assign({},info,{shortName});
-				$(context).append(this.serverContextEntryMarkup)
-					.on("mouseenter", ".localserversettings-item", (e) => {
-						this.createContextSubMenu(info, e);
-					});
-			}
+		if (!context || !context.tagName || !context.parentElement || context.querySelector(".localserversettings-item")) return;
+		var info = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"guild"});
+		if (info && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"GuildLeaveGroup"})) {
+			var serverDiv = BDfunctionsDevilBro.getDivOfServer(info.id).div;
+			var server = $(serverDiv).find(".avatar-small");
+			var shortName = $(serverDiv).attr("custom-editservers") ? $(server).attr("name") : $(server).text();
+			info = Object.assign({},info,{shortName});
+			$(context).append(this.serverContextEntryMarkup)
+				.on("mouseenter", ".localserversettings-item", (e) => {
+					this.createContextSubMenu(info, e);
+				});
 		}
 	}
 	
