@@ -284,7 +284,7 @@ class ServerHider {
 	}
 	
 	onContextMenu (context) {
-		if (context.querySelector(".serverhider-item")) return;
+		if (!context || !context.tagName || !context.parentElement || context.querySelector(".serverhider-item")) return;
 		var info = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"guild"});
 		var valid = false;
 		if (info && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"GuildLeaveGroup"})) {
