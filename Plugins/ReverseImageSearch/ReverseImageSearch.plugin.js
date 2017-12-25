@@ -140,8 +140,8 @@ class ReverseImageSearch {
 	}
 	
 	onContextMenu (context) {
+		if (!context || !context.tagName || !context.parentElement || context.querySelector(".reverseimagesearch-item")) return;
 		var url = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"src"});
-		
 		if (url) {
 			if (url.indexOf("discordapp.com/assets/") == -1) {
 				if (url.indexOf("https://images-ext-1.discordapp.net/external/") > -1) {
