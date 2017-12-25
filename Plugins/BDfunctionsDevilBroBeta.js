@@ -5,8 +5,8 @@ BDfunctionsDevilBro.isLibraryOutdated = function () {
 };
 
 BDfunctionsDevilBro.loadMessage = function (plugin, oldVersionRemove) {
-	var pluginName = plugin.getName();
-	var oldVersion = plugin.getVersion();
+	var pluginName = typeof plugin === "string" ? plugin : plugin.getName();
+	var oldVersion = typeof oldVersionRemove === "string" ? oldVersionRemove : plugin.getVersion();
 	var loadMessage = BDfunctionsDevilBro.getLibraryStrings().toast_plugin_started.replace("${pluginName}", pluginName).replace("${oldVersion}", oldVersion);
 	console.log(loadMessage);
 	BDfunctionsDevilBro.showToast(loadMessage);
@@ -19,6 +19,8 @@ BDfunctionsDevilBro.loadMessage = function (plugin, oldVersionRemove) {
 	
 	var downloadUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
 	BDfunctionsDevilBro.checkUpdate(pluginName, downloadUrl);
+	
+	BDfunctionsDevilBro.translatePlugin(plugin);
 	
 	if (typeof window.PluginUpdates !== "object" || !window.PluginUpdates) window.PluginUpdates = {plugins:{}};
 	window.PluginUpdates.plugins[downloadUrl] = {name:pluginName, raw:downloadUrl, version:oldVersion};
@@ -35,39 +37,56 @@ BDfunctionsDevilBro.loadMessage = function (plugin, oldVersionRemove) {
 				(change, i) => {
 					if (change.addedNodes) {
 						change.addedNodes.forEach((node) => {
-							if (node && node.tagName && node.getAttribute("layer-id") == "user-settings") {
-								var settingsObserver = new MutationObserver((changes2, _) => {
-									changes2.forEach(
-										(change2, j) => {
-											if (change2.addedNodes) {
-												change2.addedNodes.forEach((node2) => {
-													if (node2 && node2.tagName && !node2.querySelector(".bd-pfbtn.bd-updatebtn") && node2.querySelector(".bd-pfbtn") && node2.querySelector("h2") && node2.querySelector("h2").innerText.toLowerCase() === "plugins") {
-														node2.querySelector(".bd-pfbtn").parentElement.insertBefore(BDfunctionsDevilBro.createUpdateButton(), node2.querySelector(".bd-pfbtn").nextSibling);
-													}
-												});
-											}
-										}
-									);
-								});
-								settingsObserver.observe(node, {childList:true, subtree:true});
-							}
+							setImmediate(() => {
+								if (node && node.tagName && node.getAttribute("layer-id") == "user-settings") {
+									checkIfPluginsPage(node);
+									innerSettingsWindowObserver.observe(node, {childList:true, subtree:true});
+								}
+							});
 						});
 					}
 				}
 			);
 		});
 		window.PluginUpdates.observer.observe(document.querySelector(".layers"), {childList:true});
+			
+		var innerSettingsWindowObserver = new MutationObserver((changes, _) => {
+			changes.forEach(
+				(change, j) => {
+					if (change.addedNodes) {
+						change.addedNodes.forEach((node) => {
+							checkIfPluginsPage(node);
+						});
+					}
+				}
+			);
+		});
+		var settingswindow = document.querySelector(".layer[layer-id='user-settings']");
+		if (settingswindow) {
+			innerSettingsWindowObserver.observe(settingswindow, {childList:true, subtree:true});
+			checkIfPluginsPage(settingswindow);
+		}
 	}
 	
-	var bdbutton = document.querySelector(".bd-pfbtn");
-	if (bdbutton && bdbutton.parentElement.querySelector("h2") && bdbutton.parentElement.querySelector("h2").innerText.toLowerCase() === "plugins") {
-		bdbutton.parentElement.insertBefore(BDfunctionsDevilBro.createUpdateButton(), bdbutton.nextSibling);
+	function checkIfPluginsPage (container) {
+		if (container && container.tagName && !container.querySelector(".bd-pfbtn.bd-updatebtn")) {
+			var folderbutton = container.querySelector(".bd-pfbtn");
+			if (folderbutton) {
+				var buttonbar = folderbutton.parentElement;
+				if (buttonbar && buttonbar.tagName) {
+					var header = buttonbar.querySelector("h2");
+					if (header && header.innerText.toUpperCase() === "PLUGINS") {
+						buttonbar.insertBefore(BDfunctionsDevilBro.createUpdateButton(), folderbutton.nextSibling);
+					}
+				}
+			}
+		}
 	}
 };
 
-BDfunctionsDevilBro.unloadMessage = function (plugin) { 
-	var pluginName = plugin.getName();
-	var oldVersion = plugin.getVersion();
+BDfunctionsDevilBro.unloadMessage = function (plugin, oldVersionRemove) { 
+	var pluginName = typeof plugin === "string" ? plugin : plugin.getName();
+	var oldVersion = typeof oldVersionRemove === "string" ? oldVersionRemove : plugin.getVersion();
 	var unloadMessage = BDfunctionsDevilBro.getLibraryStrings().toast_plugin_stopped.replace("${pluginName}", pluginName).replace("${oldVersion}", oldVersion);
 	console.log(unloadMessage);
 	BDfunctionsDevilBro.showToast(unloadMessage);
@@ -196,8 +215,8 @@ BDfunctionsDevilBro.showToast = function (content, options = {}) {
 	if (!document.querySelector(".toasts")) {
 		let toastWrapper = document.createElement("div");
 		toastWrapper.classList.add("toasts");
-		toastWrapper.style.setProperty("left", document.querySelector(".chat form, #friends, .noChannel-2EQ0a9, .activityFeed-HeiGwL").getBoundingClientRect().left + "px");
-		toastWrapper.style.setProperty("width", document.querySelector(".chat form, #friends, .noChannel-2EQ0a9, .activityFeed-HeiGwL").offsetWidth + "px");
+		toastWrapper.style.setProperty("left", document.querySelector(".chat form, #friends, .noChannel-2EQ0a9, .activityFeed-HeiGwL, .lfg-3xoFkI").getBoundingClientRect().left + "px");
+		toastWrapper.style.setProperty("width", document.querySelector(".chat form, #friends, .noChannel-2EQ0a9, .activityFeed-HeiGwL, .lfg-3xoFkI").offsetWidth + "px");
 		toastWrapper.style.setProperty("bottom", (document.querySelector(".chat form") ? document.querySelector(".chat form").offsetHeight : 80) + "px");
 		document.querySelector(".app").appendChild(toastWrapper);
 	}
@@ -354,12 +373,11 @@ BDfunctionsDevilBro.createUpdateButton = function () {
 	var updateButton = document.createElement("button");
 	updateButton.className = "bd-pfbtn bd-updatebtn";
 	updateButton.innerText = "Check for Updates";
-	updateButton.style.left = "220px";
 	updateButton.onclick = function () {
 		BDfunctionsDevilBro.checkAllUpdates();
 	};			
 	updateButton.onmouseenter = function () {
-		BDfunctionsDevilBro.createTooltip("Only checks for updates of plugins, which support the updatecheck. Rightclick for a list.", updateButton, {type:"right",selector:"update-button-tooltip"});
+		BDfunctionsDevilBro.createTooltip("Only checks for updates of plugins, which support the updatecheck. Rightclick for a list.", updateButton, {type:"top",selector:"update-button-tooltip"});
 		
 	};
 	updateButton.oncontextmenu = function () {
@@ -382,18 +400,101 @@ BDfunctionsDevilBro.checkAllUpdates = function () {
 };
 
 BDfunctionsDevilBro.translatePlugin = function (plugin) {
-	if (typeof plugin.setLabelsByLanguage === "function" && typeof plugin.changeLanguageStrings === "function") {
+	if (typeof plugin.setLabelsByLanguage === "function" || typeof plugin.changeLanguageStrings === "function") {
 		var translateInterval = setInterval(() => {
 			if (document.querySelector("html").lang) {
 				clearInterval(translateInterval);
 				var language = BDfunctionsDevilBro.getDiscordLanguage();
-				plugin.labels = plugin.setLabelsByLanguage(language.id);
-				plugin.changeLanguageStrings();
+				if (typeof plugin.setLabelsByLanguage === "function") 		plugin.labels = plugin.setLabelsByLanguage(language.id);
+				if (typeof plugin.changeLanguageStrings === "function") 	plugin.changeLanguageStrings();
 				console.log(BDfunctionsDevilBro.getLibraryStrings().toast_plugin_translated.replace("${pluginName}", plugin.getName()).replace("${ownlang}", language.ownlang));
 			}
 		},100);
 	}
 };
+
+BDfunctionsDevilBro.languages = {
+	"$discord":	{name:"Discord",					id:"en",		integrated:false},
+	"ar":		{name:"Arabic",						id:"ar",		integrated:false},
+	"af":		{name:"Afrikaans",					id:"af",		integrated:false},
+	"am":		{name:"Amharic",					id:"am",		integrated:false},
+	"hy":		{name:"Armenian",					id:"hy",		integrated:false},
+	"az":		{name:"Azerbaijani",				id:"az",		integrated:false},
+	"eu":		{name:"Basque",						id:"eu",		integrated:false},
+	"bn":		{name:"Bengali",					id:"bn",		integrated:false},
+	"bg":		{name:"Bulgarian",					id:"bg",		integrated:true},
+	"ca":		{name:"Catalan",					id:"ca",		integrated:false},
+	"zh-HK":	{name:"Chinese (Hong Kong)",		id:"zh-HK",		integrated:false},
+	"zh-CN":	{name:"Chinese (Simplified)",		id:"zh-CN",		integrated:false},
+	"zh-TW":	{name:"Chinese (Traditional)",		id:"zh-TW",		integrated:true},
+	"hr":		{name:"Croatian",					id:"hr",		integrated:true},
+	"cs":		{name:"Czech",						id:"cs",		integrated:true},
+	"da":		{name:"Danish",						id:"da",		integrated:true},
+	"nl":		{name:"Dutch",						id:"nl",		integrated:true},
+	"en-GB":	{name:"English (UK)",				id:"en-GB",		integrated:true},
+	"en":		{name:"English (US)",				id:"en",		integrated:true},
+	"et":		{name:"Estonian",					id:"et",		integrated:false},
+	"fil":		{name:"Filipino",					id:"fil",		integrated:false},
+	"fi":		{name:"Finnish",					id:"fi",		integrated:true},
+	"fr":		{name:"French",						id:"fr",		integrated:true},
+	"fr-CA":	{name:"French (Canadian)",			id:"fr-CA",		integrated:false},
+	"gl":		{name:"Galician",					id:"gl",		integrated:false},
+	"ka":		{name:"Georgian",					id:"ka",		integrated:false},
+	"de":		{name:"German",						id:"de",		integrated:true},
+	"de-AT":	{name:"German (Austria)",			id:"de-AT",		integrated:false},
+	"de-CH":	{name:"German (Switzerland)",		id:"de-CH",		integrated:false},
+	"el":		{name:"Greek",						id:"el",		integrated:false},
+	"gu":		{name:"Gujarati",					id:"gu",		integrated:false},
+	"iw":		{name:"Hebrew",						id:"iw",		integrated:false},
+	"hi":		{name:"Hindi",						id:"hi",		integrated:false},
+	"hu":		{name:"Hungarain",					id:"hu",		integrated:false},
+	"is":		{name:"Icelandic",					id:"is",		integrated:false},
+	"id":		{name:"Indonesian",					id:"id",		integrated:false},
+	"it":		{name:"Italian",					id:"it",		integrated:true},
+	"ja":		{name:"Japanese",					id:"ja",		integrated:true},
+	"kn":		{name:"Kannada",					id:"kn",		integrated:false},
+	"ko":		{name:"Korean",						id:"ko",		integrated:true},
+	"lo":		{name:"Laothian",					id:"lo",		integrated:false},
+	"lv":		{name:"Latvian",					id:"lv",		integrated:false},
+	"lt":		{name:"Lithuanian",					id:"lt",		integrated:false},
+	"ms":		{name:"Malay",						id:"ms",		integrated:false},
+	"ml":		{name:"Malayalam",					id:"ml",		integrated:false},
+	"mr":		{name:"Marathi",					id:"mr",		integrated:false},
+	"mn":		{name:"Mongolian",					id:"mn",		integrated:false},
+	"no":		{name:"Norwegian",					id:"no",		integrated:true},
+	"fa":		{name:"Persian",					id:"fa",		integrated:false},
+	"pl":		{name:"Polish",						id:"pl",		integrated:true},
+	"pt":		{name:"Portuguese",					id:"pt",		integrated:false},
+	"pt-BR":	{name:"Portuguese (Brazil)",		id:"pt-BR",		integrated:true},
+	"pt-PT":	{name:"Portuguese (Portugal)",		id:"pt-PT",		integrated:false},
+	"ro":		{name:"Romanian",					id:"ro",		integrated:false},
+	"ru":		{name:"Russian",					id:"ru",		integrated:true},
+	"sr":		{name:"Serbian",					id:"sr",		integrated:false},
+	"si":		{name:"Sinhalese",					id:"si",		integrated:false},
+	"sk":		{name:"Slovak",						id:"sk",		integrated:false},
+	"sl":		{name:"Slovenian",					id:"sl",		integrated:false},
+	"es":		{name:"Spanish",					id:"es",		integrated:true},
+	"es-419":	{name:"Spanish (Latin America)",	id:"es-419",	integrated:false},
+	"sw":		{name:"Swahili",					id:"sw",		integrated:false},
+	"sv":		{name:"Swedish",					id:"sv",		integrated:true},
+	"ta":		{name:"Tamil",						id:"ta",		integrated:false},
+	"te":		{name:"Telugu",						id:"te",		integrated:false},
+	"th":		{name:"Thai",						id:"th",		integrated:false},
+	"tr":		{name:"Turkish",					id:"tr",		integrated:true},
+	"uk":		{name:"Ukrainian",					id:"uk",		integrated:true},
+	"ur":		{name:"Urdu",						id:"ur",		integrated:false},
+	"vi":		{name:"Vietnamese",					id:"vi",		integrated:false},
+	"zu":		{name:"Zulu",						id:"zu",		integrated:false}
+};
+				
+(() => {
+    var translateInterval = setInterval(() => {
+		if (document.querySelector("html").lang) {
+			clearInterval(translateInterval);
+			BDfunctionsDevilBro.languages.$Discord.id = BDfunctionsDevilBro.getDiscordLanguage().id;
+		}
+	},100);
+})();
 	
 BDfunctionsDevilBro.getReactInstance = function (node) { 
 	if (!node) return null;
@@ -402,7 +503,7 @@ BDfunctionsDevilBro.getReactInstance = function (node) {
 
 BDfunctionsDevilBro.getOwnerInstance = function (config) { 
 	if (config === undefined) return null;
-	if (!config.node || !config.name) return null;
+	if (!config.node || (!config.name && (!config.props || !Array.isArray(config.props)))) return null;
 	var inst = BDfunctionsDevilBro.getReactInstance(config.node);
 	if (!inst) return null;
 	
@@ -428,7 +529,10 @@ BDfunctionsDevilBro.getOwnerInstance = function (config) {
 				var key = keys[i];
 				var value = ele[keys[i]];
 				
-				if (ele.type && ele.type.displayName === config.name) {
+				if (config.name && ele.type && (ele.type.displayName === config.name || ele.type.name === config.name)) {
+					result = ele.stateNode;
+				}
+				else if (config.props && ele.stateNode && config.props.every(prop => ele.stateNode[prop] !== undefined)) {
 					result = ele.stateNode;
 				}
 				else if ((typeof value === "object" || typeof value === "function") && keyWhiteList[key]) {
@@ -755,21 +859,18 @@ BDfunctionsDevilBro.onSwitchFix = function (plugin) {
 		changes.forEach((change) => { 
 			if (change.addedNodes) {
 				change.addedNodes.forEach((node) => {
-					if (node && node.id === "friends") BDfunctionsDevilBro.triggerOnSwitch(plugin); 
-					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("noTopic-3Rq-dz")) 	BDfunctionsDevilBro.triggerOnSwitch(plugin); 
-					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("topic-1KFf6J")) 	BDfunctionsDevilBro.triggerOnSwitch(plugin); 
-				});
-			}
-			if (change.removedNodes) {
-				change.removedNodes.forEach((node) => {
-					if (node && node.id === "friends") BDfunctionsDevilBro.triggerOnSwitch(plugin);  
-					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("noTopic-3Rq-dz")) 	BDfunctionsDevilBro.triggerOnSwitch(plugin); 
-					else if (node && node.classList && node.classList.length > 0 && node.classList.contains("topic-1KFf6J")) 	BDfunctionsDevilBro.triggerOnSwitch(plugin); 
+					if (!node) return;
+					else if (node && node.id === "friends") 																BDfunctionsDevilBro.triggerOnSwitch(plugin);
+					else if (node.classList && node.classList.length > 0 && node.classList.contains("titleWrapper-3Vi_wz")) BDfunctionsDevilBro.triggerOnSwitch(plugin); 
+					else if (node.classList && node.classList.length > 0 && node.classList.contains("noTopic-3Rq-dz")) 		BDfunctionsDevilBro.triggerOnSwitch(plugin); 
+					else if (node.classList && node.classList.length > 0 && node.classList.contains("topic-1KFf6J")) 		BDfunctionsDevilBro.triggerOnSwitch(plugin); 
+					else if (node.classList && node.classList.length > 0 && node.classList.contains("activityFeed-HeiGwL")) BDfunctionsDevilBro.triggerOnSwitch(plugin); 
+					else if (node.classList && node.classList.length > 0 && node.classList.contains("lfg-3xoFkI")) 			BDfunctionsDevilBro.triggerOnSwitch(plugin);
 				});
 			}
 		});
 	});
-	plugin.switchFixObserver.observe(document.querySelector(":-webkit-any(.chat, #friends, .noChannel-2EQ0a9, .activityFeed-HeiGwL)").parentNode, {childList: true, subtree:true});
+	plugin.switchFixObserver.observe(document.querySelector(":-webkit-any(.chat, #friends, .noChannel-2EQ0a9, .activityFeed-HeiGwL, .lfg-3xoFkI)").parentNode, {childList: true, subtree:true});
 	return plugin.switchFixObserver;
 };
 
@@ -779,7 +880,7 @@ BDfunctionsDevilBro.triggerOnSwitch = function (plugin) {
 	if (Array.isArray(BDfunctionsDevilBro.onSwitchTriggered) && BDfunctionsDevilBro.onSwitchTriggered.includes(identifier)) return;
 	BDfunctionsDevilBro.onSwitchTriggered.push(identifier);
 	plugin.onSwitch();
-	setTimeout(() => {BDfunctionsDevilBro.removeFromArray(BDfunctionsDevilBro.onSwitchTriggered, identifier);},1000);
+	setImmediate(() => {BDfunctionsDevilBro.removeFromArray(BDfunctionsDevilBro.onSwitchTriggered, identifier);});
 };
 
 
@@ -800,7 +901,7 @@ BDfunctionsDevilBro.readServerList = function () {
 	for (server of document.querySelectorAll(".guild-separator ~ .guild")) {
 		info = BDfunctionsDevilBro.getKeyInformation({"node":server, "key":"guild"});
 		if (info) info = GuildStore.getGuild(info.id);
-		if (info) foundServers.push(Object.assign({div:server},info));
+		if (info) foundServers.push(Object.assign({},info,{div:server,data:info}));
 	}
 	return foundServers;
 };
@@ -818,7 +919,7 @@ BDfunctionsDevilBro.getSelectedServer = function () {
 	for (server of document.querySelectorAll(".guild-separator ~ .guild.selected")) {
 		info = BDfunctionsDevilBro.getKeyInformation({"node":server, "key":"guild"});
 		if (info) info = GuildStore.getGuild(info.id);
-		if (info) return Object.assign({div:server},info);
+		if (info) return Object.assign({},info,{div:server,data:info});
 	}
 	return null;
 };
@@ -835,12 +936,12 @@ BDfunctionsDevilBro.readChannelList = function () {
 	for (channel of document.querySelectorAll(".containerDefault-7RImuF, .containerDefault-1bbItS")) {
 		info = BDfunctionsDevilBro.getKeyInformation({"node":channel, "key":"channel"});
 		if (info) info = ChannelStore.getChannel(info.id);
-		if (info) foundChannels.push(Object.assign({div:channel},info));
+		if (info) foundChannels.push(Object.assign({},info,{div:channel,data:info}));
 	}
 	for (channel of document.querySelectorAll(".channel.private")) {
 		info = BDfunctionsDevilBro.getKeyInformation({"node":channel, "key":"user"}) || BDfunctionsDevilBro.getKeyInformation({"node":channel, "key":"channel"});
 		if (info) info = ChannelStore.getChannel(ChannelStore.getDMFromUserId(info.id)) || ChannelStore.getChannel(info.id)
-		if (info) foundChannels.push(Object.assign({div:channel},info));
+		if (info) foundChannels.push(Object.assign({},info,{div:channel,data:info}));
 	}
 	return foundChannels;
 };
@@ -850,13 +951,16 @@ BDfunctionsDevilBro.getSelectedChannel = function () {
 	for (channel of document.querySelectorAll(".wrapperSelectedText-31jJa8")) {
 		info = BDfunctionsDevilBro.getKeyInformation({"node":channel.parentElement, "key":"channel"});
 		if (info) info = ChannelStore.getChannel(info.id);
-		if (info) return Object.assign({div:channel},info);
+		if (info) return Object.assign({},info,{div:channel,data:info});
 	}
 	for (channel of document.querySelectorAll(".channel.private.selected")) {
 		info = BDfunctionsDevilBro.getKeyInformation({"node":channel, "key":"user"}) || BDfunctionsDevilBro.getKeyInformation({"node":channel, "key":"channel"});
 		if (info) info = ChannelStore.getChannel(ChannelStore.getDMFromUserId(info.id)) || ChannelStore.getChannel(info.id)
-		if (info) return Object.assign({div:channel},info);
+		if (info) return Object.assign({},info,{div:channel,data:info});
 	}
+	info = BDfunctionsDevilBro.getKeyInformation({"node":document.querySelector(".chat"), "key":"channel"});
+	if (info) info = ChannelStore.getChannel(info.id)
+	if (info) return Object.assign({},info,{div:null,data:info});
 	return null;
 };
 
@@ -872,7 +976,7 @@ BDfunctionsDevilBro.readDmList = function () {
 	for (dm of document.querySelectorAll(".dms .guild")) {
 		info = BDfunctionsDevilBro.getKeyInformation({"node":dm, "key":"channel"});
 		if (info) info = ChannelStore.getChannel(info.id);
-		if (info) foundDMs.push(Object.assign({div:dm},info));
+		if (info) foundDMs.push(Object.assign({},info,{div:dm,data:info}));
 	}
 	return foundDMs;
 };
@@ -1203,7 +1307,7 @@ BDfunctionsDevilBro.appendModal = function (modal) {
 			$(".tab.selected, .tab-bar-item.selected", modal)
 				.removeClass("selected");
 				
-			$(".tab-content." + $(e.currentTarget).attr("value") + ", .tab-content[tab='" + $(e.currentTarget).attr("tab") + "']", modal)
+			$(".tab-content[tab='" + $(e.currentTarget).attr("tab") + "']", modal)
 				.addClass("open");
 				
 			$(e.currentTarget)
@@ -1215,9 +1319,7 @@ BDfunctionsDevilBro.appendModal = function (modal) {
 			setTimeout(() => {modal.remove();}, 300);
 		});
 		
-	$(modal).find(".modalTabButton").addClass("tab");
 	$(modal).find(".tab, .tab-bar-item").first().addClass("selected");
-	$(modal).find(".modalTab").addClass("tab-content");
 	$(modal).find(".tab-content").first().addClass("open");
 	$(modal)
 		.find(".checkbox-1KYsPm").each((_, checkBox) => {
@@ -1231,6 +1333,22 @@ BDfunctionsDevilBro.appendModal = function (modal) {
 		.on("keydown.modalEscapeListenerDevilBro" + id, (e) => {
 			if (e.which == 27) $(modal).find(".backdrop-2ohBEd").click();
 		});
+};
+
+BDfunctionsDevilBro.appendContextMenu = function (menu, e) {
+	$(".app").append(menu);
+	var menuHeight = $(menu).outerHeight();
+	$(menu)
+		.addClass(BDfunctionsDevilBro.getDiscordTheme())
+		.css("left", e.pageX + "px")
+		.css("top", e.pageY + menuHeight > window.outerHeight ? (e.pageY - menuHeight) + "px" : e.pageY + "px");
+	
+	$(document).on("mousedown.BDfunctionsDevilBroContextMenu", (e2) => {
+		$(document).off("mousedown.BDfunctionsDevilBroContextMenu");
+		if ($(menu).has(e2.target).length == 0) {
+			menu.remove();
+		}
+	});
 };
 
 BDfunctionsDevilBro.appendSubMenu = function (target, menu) {
@@ -1636,8 +1754,20 @@ BDfunctionsDevilBro.getSwatchColor = function (swatch) {
 	return !$(".ui-color-picker-" + swatch + ".nocolor.selected")[0] ? BDfunctionsDevilBro.color2COMP($(".ui-color-picker-" + swatch + ".selected").css("background-color")) : null;
 };
 
+BDfunctionsDevilBro.isPluginEnabled = function (name) {
+	return window.bdplugins[name] && window.pluginCookie[name];
+};
+
 BDfunctionsDevilBro.isRestartNoMoreEnabled = function () {
-	return (window.bdplugins["Restart-No-More"] && window.pluginCookie["Restart-No-More"] || window.bdplugins["Restart No More"] && window.pluginCookie["Restart No More"]);
+	return BDfunctionsDevilBro.isPluginEnabled("Restart-No-More") || BDfunctionsDevilBro.isPluginEnabled("Restart No More");
+};
+
+BDfunctionsDevilBro.isThemeEnabled = function (name) {
+	return window.bdthemes[name] && window.themeCookie[name];
+};
+
+BDfunctionsDevilBro.zacksFork = function () {
+	return (window.bbdVersion && typeof bdpluginErrors === "object" && typeof bdthemeErrors === "object");
 };
 
 BDfunctionsDevilBro.getDiscordTheme = function () {
@@ -1648,6 +1778,8 @@ BDfunctionsDevilBro.getDiscordTheme = function () {
 BDfunctionsDevilBro.getDiscordLanguage = function () {
 	var lang = document.querySelector("html").lang ? document.querySelector("html").lang.split("-")[0] : "en";
 	switch (lang) {
+		case "hr": 		//croatian
+			return {"id":"hr","lang":"croatian","ownlang":"Hrvatski"};
 		case "da": 		//danish
 			return {"id":"da","lang":"danish","ownlang":"Dansk"};
 		case "de": 		//german
@@ -1693,6 +1825,14 @@ BDfunctionsDevilBro.getDiscordLanguage = function () {
 
 BDfunctionsDevilBro.getLibraryStrings = function () {
 	switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
+		case "hr": 		//croatian
+			return {
+				toast_plugin_started:			"${pluginName} ${oldVersion} je započeo.",
+				toast_plugin_stopped:			"${pluginName} ${oldVersion} zaustavljen.",
+				toast_plugin_translated:		"${pluginName} prijevod na ${ownlang}.",
+				colorpicker_modal_header_text:	"Birač boja",
+				btn_ok_text: 					"OK"
+			};
 		case "da": 		//danish
 			return {
 				toast_plugin_started:			"${pluginName} ${oldVersion} er startet.",
@@ -1867,6 +2007,17 @@ $(window)
 	});
 
 BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
+	#bd-settingspane-container .ui-form-title {
+		display: inline-block;
+	}
+	#bd-settingspane-container .bd-pfbtn {
+		position: static;
+		margin-bottom: 0;
+		border-radius: 5px;
+		display: inline-block;
+		margin-left: 10px;
+	}
+	
 	#pluginNotice, .DevilBro-notice {
 		-webkit-app-region: drag;
 	} 
@@ -1976,12 +2127,25 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		max-width: 400px;
 	}
 	
-	[class^="swatches"].disabled {
+	.DevilBro-settings div {
+		margin-top: 0px !important;
+	}
+	
+	.DevilBro-settings .DevilBro-settings-inner {
+		padding-left: 15px;
+		padding-right: 5px;
+	}
+	
+	.DevilBro-settings .DevilBro-settings-inner-list {
+		padding-left: 15px;
+	}
+	
+	.DevilBro-modal [class^="swatches"].disabled {
 		cursor: no-drop;
 		filter: grayscale(70%) brightness(50%);
 	}
 
-	[class^="ui-color-picker-swatch"] {
+	.DevilBro-modal [class^="ui-color-picker-swatch"] {
 		cursor: pointer;
 		width: 22px;
 		height: 22px;
@@ -1991,21 +2155,21 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		border-radius: 12px;
 	}
 	
-	[class^="swatches"].disabled [class^="ui-color-picker-swatch"] {
+	.DevilBro-modal [class^="swatches"].disabled [class^="ui-color-picker-swatch"] {
 		cursor: no-drop;
 	}
 
-	[class^="ui-color-picker-swatch"].large {
+	.DevilBro-modal [class^="ui-color-picker-swatch"].large {
 		min-width: 62px;
 		height: 62px;
 		border-radius: 25px;
 	}
 
-	[class^="ui-color-picker-swatch"].nocolor {
+	.DevilBro-modal [class^="ui-color-picker-swatch"].nocolor {
 		border: 4px solid red;
 	}
 	
-	[class^="color-picker-dropper"] {
+	.DevilBro-modal [class^="color-picker-dropper"] {
 		position: relative;
 		left: 40px;
 		top: 10px;
@@ -2214,23 +2378,5 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		font-weight: 600;
 		line-height: 16px;
 		font-size: 13px;
-	}
-	
-	.member .avatar-small[style*="278543574059057154"] ~ .member-inner .member-username-inner:after,
-	.message-group .avatar-large[style*="278543574059057154"] ~ .comment .timestamp:before,
-	.embed .embed-author-name[href*="278543574059057154"]:after {
-		background: #4271f4;
-		border-radius: 3px;
-		color: white;
-		content: "Plugin Creator";
-		font-size: 12px;
-		font-weight: 500;
-		margin: 0 0 0 5px;
-		padding: 0 3px 0 3px;
-		position: relative;
-		bottom: 1px;
-	}
-	.message-group .avatar-large[style*="278543574059057154"] ~ .comment .timestamp:before {
-		margin: 0 5px 0 0;
 	}`
 );
