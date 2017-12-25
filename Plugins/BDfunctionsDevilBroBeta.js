@@ -491,7 +491,7 @@ BDfunctionsDevilBro.languages = {
     var translateInterval = setInterval(() => {
 		if (document.querySelector("html").lang) {
 			clearInterval(translateInterval);
-			BDfunctionsDevilBro.languages.$default.id = BDfunctionsDevilBro.getDiscordLanguage().id;
+			BDfunctionsDevilBro.languages.$discord.id = BDfunctionsDevilBro.getDiscordLanguage().id;
 		}
 	},100);
 })();
