@@ -141,9 +141,8 @@ class GoogleSearchReplace {
 	}
 	
 	onContextMenu (context) {
-		var groups = $(context).find(".item-group");
-		for (let i = 0; i < groups.length; i++) {
-			var group = groups[i];
+		if (!context || !context.tagName || !context.parentElement || context.querySelector(".googlereplacesearch-item")) return;
+		for (let group of context.querySelectorAll(".item-group")) {
 			if (BDfunctionsDevilBro.getKeyInformation({"node":group, "key":"handleSearchWithGoogle"})) {
 				var text = BDfunctionsDevilBro.getKeyInformation({"node":group, "key":"value"});
 				if (text) {
