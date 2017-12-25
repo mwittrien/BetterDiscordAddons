@@ -237,7 +237,7 @@ class EditChannels {
 	}
 	
 	onContextMenu (context) {
-		if (context.querySelector(".localchannelsettings-item")) return;
+		if (!context || !context.tagName || !context.parentElement || context.querySelector(".localchannelsettings-item")) return;
 		var info = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"channel"});
 		if (info && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"ChannelDeleteGroup"})) {
 			$(context).append(this.channelContextEntryMarkup)
