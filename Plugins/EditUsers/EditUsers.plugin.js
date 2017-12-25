@@ -471,14 +471,13 @@ class EditUsers {
 	}
 	
 	onContextMenu (context) {
-		if ($(context).find(".localusersettings-item").length == 0) {
-			var info = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"user"});
-			if (info && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"UserNoteItem"})) {
-				$(context).append(this.userContextEntryMarkup)
-					.on("mouseenter", ".localusersettings-item", (e) => {
-						this.createContextSubMenu(info, e);
-					});
-			}
+		if (!context || !context.tagName || !context.parentElement || context.querySelector(".localusersettings-item")) return;
+		var info = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"user"});
+		if (info && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"UserNoteItem"})) {
+			$(context).append(this.userContextEntryMarkup)
+				.on("mouseenter", ".localusersettings-item", (e) => {
+					this.createContextSubMenu(info, e);
+				});
 		}
 	}
 	
