@@ -12,6 +12,13 @@ class GoogleTranslateOption {
 		
 		this.doTranslate = false;
 		this.translateMessage = false;
+			
+		this.defaultSettings = {
+			inputContext:		{value:"$Discord", 		place:"Context", 		direction:"Input", 			description:"Input Language in Context:"},
+			outputContext:		{value:"EnglishUS", 	place:"Context", 		direction:"Output", 		description:"Output Language in Context:"},
+			inputMessage:		{value:"$Discord", 		place:"Message", 		direction:"Input", 			description:"Input Language in Message:"},
+			outputMessage:		{value:"EnglishUS", 	place:"Message", 		direction:"Output", 		description:"Output Language in Message:"}
+		};
 
 		this.messageContextEntryMarkup =
 			`<div class="item-group">
@@ -26,14 +33,23 @@ class GoogleTranslateOption {
 				<path d="M 19.794, 3.299 H 9.765 L 8.797, 0 h -6.598 C 0.99, 0, 0, 0.99, 0, 2.199 V 16.495 c 0, 1.21, 0.99, 2.199, 2.199, 2.199 H 9.897 l 1.1, 3.299 H 19.794 c 1.21, 0, 2.199 -0.99, 2.199 -2.199 V 5.498 C 21.993, 4.289, 21.003, 3.299, 19.794, 3.299 z M 5.68, 13.839 c -2.48, 0 -4.492 -2.018 -4.492 -4.492 s 2.018 -4.492, 4.492 -4.492 c 1.144, 0, 2.183, 0.407, 3.008, 1.171 l 0.071, 0.071 l -1.342, 1.298 l -0.066 -0.06 c -0.313 -0.297 -0.858 -0.643 -1.671 -0.643 c -1.441, 0 -2.612, 1.193 -2.612, 2.661 c 0, 1.468, 1.171, 2.661, 2.612, 2.661 c 1.507, 0, 2.161 -0.962, 2.337 -1.606 h -2.43 v -1.704 h 4.344 l 0.016, 0.077 c 0.044, 0.231, 0.06, 0.434, 0.06, 0.665 C 10.001, 12.036, 8.225, 13.839, 5.68, 13.839 z M 11.739, 9.979 h 4.393 c 0, 0 -0.374, 1.446 -1.715, 3.008 c -0.588 -0.676 -0.995 -1.336 -1.254 -1.864 h -1.089 L 11.739, 9.979 z M 13.625, 13.839 l -0.588, 0.583 l -0.72 -2.452 C 12.685, 12.63, 13.13, 13.262, 13.625, 13.839 z M 20.893, 19.794 c 0, 0.605 -0.495, 1.1 -1.1, 1.1 H 12.096 l 2.199 -2.199 l -0.896 -3.041 l 1.012 -1.012 l 2.953, 2.953 l 0.803 -0.803 l -2.975 -2.953 c 0.99 -1.138, 1.759 -2.474, 2.106 -3.854 h 1.397 V 8.841 H 14.697 v -1.144 h -1.144 v 1.144 H 11.398 l -1.309 -4.443 H 19.794 c 0.605, 0, 1.1, 0.495, 1.1, 1.1 V 19.794 z"/>
 			</svg>`;
 			
+		this.reverseButtonMarkup = 
+			`<svg class="reverse-button flexChild-1KGW5q" version="1.1" xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="#FFFFFF" style="flex: 1 1 auto;">
+				 <path d="M 0, 10.515 c 0, 2.892, 1.183, 5.521, 3.155, 7.361 L 0, 21.031 h 7.887 V 13.144 l -2.892, 2.892 C 3.549, 14.722, 2.629, 12.75, 2.629, 10.515 c 0 -3.418, 2.235 -6.309, 5.258 -7.492 v -2.629 C 3.418, 1.577, 0, 5.652, 0, 10.515 z M 21.031, 0 H 13.144 v 7.887 l 2.892 -2.892 C 17.482, 6.309, 18.402, 8.281, 18.402, 10.515 c 0, 3.418 -2.235, 6.309 -5.258, 7.492 V 20.768 c 4.469 -1.183, 7.887 -5.258, 7.887 -10.121 c 0 -2.892 -1.183 -5.521 -3.155 -7.361 L 21.031, 0 z"/>
+			</svg>`;
+			
 			
 		this.translatePopoutMarkup = 
-			`<div class="popout popout-bottom-right no-arrow no-shadow popout-googletranslate DevilBro-modal" style="z-index: 1000; visibility: visible; transform: translateX(-100%) translateY(-100%) translateZ(0px);">
+			`<div class="popout popout-bottom-right no-arrow no-shadow popout-googletranslate DevilBro-modal" style="z-index: 1000; overflow: visible; visibility: visible; transform: translateX(-100%) translateY(-100%) translateZ(0px);">
 				<div class="themed-popout">
-					<h3 class="titleDefault-1CWM9y title-3i-5G_ weightMedium-13x9Y8 size16-3IvaX_ flexChild-1KGW5q marginBottom8-1mABJ4 marginTop8-2gOa2N" style="flex: 1 1 auto;">Input Language:</h3>
+					${Object.keys(this.defaultSettings).map((key, i) => this.defaultSettings[key].place == "Message" ?
+					`<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4 marginTop8-2gOa2N" style="flex: 1 1 auto;">
+						<h3 class="titleDefault-1CWM9y title-3i-5G_ weightMedium-13x9Y8 size16-3IvaX_ flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaultSettings[key].description}</h3>
+						${this.defaultSettings[key].direction == "Output" ? this.reverseButtonMarkup : ""}
+					</div>
 					<div class="ui-form-item flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
 						<div class="ui-select format-select-wrapper" style="flex: 1 1 auto;">
-							<div class="Select Select--single has-value" type="input">
+							<div class="Select Select--single has-value" type="${key}" value="${this.defaultSettings[key].value}">
 								<div class="Select-control">
 									<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-value" style="flex: 1 1 auto;">
 										<div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm" style="flex: 1 1 auto;"></div>
@@ -44,22 +60,8 @@ class GoogleTranslateOption {
 								</div>
 							</div>
 						</div>
-					</div>
-					<h3 class="titleDefault-1CWM9y title-3i-5G_ weightMedium-13x9Y8 size16-3IvaX_ flexChild-1KGW5q marginBottom8-1mABJ4" style="flex: 1 1 auto;">Output Language:</h3>
-					<div class="ui-form-item flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
-						<div class="ui-select format-select-wrapper" style="flex: 1 1 auto;">
-							<div class="Select Select--single has-value" type="output">
-								<div class="Select-control">
-									<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-value" style="flex: 1 1 auto;">
-										<div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm" style="flex: 1 1 auto;"></div>
-									</div>
-									<span class="Select-arrow-zone">
-										<span class="Select-arrow"></span>
-									</span>
-								</div>
-							</div>
-						</div>
-					</div>
+					</div>`
+					: ``).join("")}
 					<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
 						<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Translate</h3>
 						<div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU valueUnchecked-XR6AOk" style="flex: 0 0 auto;">
@@ -93,12 +95,23 @@ class GoogleTranslateOption {
 				transform:scale(1.1);
 			}
 			
+			.reverse-button {
+				margin-top: -5px;
+				opacity: 0.2;
+				transition: all 200ms ease;
+			}
+
+			.reverse-button:hover {
+				cursor: pointer;
+				opacity: 1;
+			}
+			
 			.popout.popout-googletranslate .themed-popout {
 				padding: 0 10px;
 				width: 300px;
 			}
 			
-			.Select-menu-outer.GoogleTranslate {
+			.Select-menu-outer.inChat {
 				top: 0%;
 				transform: translateY(-100%);
 				border-radius: 4px 4px 0 0;
@@ -110,9 +123,28 @@ class GoogleTranslateOption {
 
 	getDescription () {return "Adds a Google Translate option to your context menu, which shows a preview of the translated text and on click will open the selected text in Google Translate. Also adds a translation button to your textareas, which will automatically translate the text for you before it is being send.";}
 
-	getVersion () {return "1.1.0";}
+	getVersion () {return "1.1.1";}
 	
 	getAuthor () {return "DevilBro";}
+	
+	getSettingsPanel () {
+		if (typeof BDfunctionsDevilBro === "object") {
+			var settings = this.getSettings(); 
+			var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="titleDefault-1CWM9y title-3i-5G_ size18-ZM4Qv- height24-2pMcnc weightNormal-3gw0Lm marginBottom8-1mABJ4">${this.getName()}</div><div class="DevilBro-settings-inner">`;
+			for (var key in settings) {
+				settingshtml += `<h3 class="titleDefault-1CWM9y title-3i-5G_ weightMedium-13x9Y8 size16-3IvaX_ flexChild-1KGW5q marginBottom8-1mABJ4 marginTop8-2gOa2N" style="flex: 1 1 auto;">${this.defaultSettings[key].description}</h3><div class="ui-form-item flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><div class="ui-select format-select-wrapper" style="flex: 1 1 auto;"><div class="Select Select--single has-value" type="${key}" value="${settings[key]}"><div class="Select-control"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-value" style="flex: 1 1 auto;"><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm" style="flex: 1 1 auto;">${this.languages[settings[key]].name}</div></div><span class="Select-arrow-zone"><span class="Select-arrow"></span></span></div></div></div></div>`
+			}
+			settingshtml += `</div></div>`;
+			
+			var settingspanel = $(settingshtml)[0];
+			
+			var settingspanel = $(settingshtml)[0];
+			$(settingspanel)
+				.on("click", ".Select-control", (e) => {this.openDropdownMenu("inSettings", e);});
+				
+			return settingspanel;
+		}
+	}
 	
 	//legacy
 	load () {}
@@ -161,13 +193,6 @@ class GoogleTranslateOption {
 			this.languages = Object.assign({},BDfunctionsDevilBro.languages,{$Discord:{name:"Auto",id:"auto",integrated:false}});
 			this.languages.Binary = {name:"Binary",id:"binary",integrated:false};
 			
-			if (!BDfunctionsDevilBro.loadData("input", this.getName(), "language")) {
-				BDfunctionsDevilBro.saveData("input", Object.keys(this.languages)[0], this.getName(), "language");
-			}
-			if (!BDfunctionsDevilBro.loadData("output", this.getName(), "language")) {
-				BDfunctionsDevilBro.saveData("output", "EnglishUS", this.getName(), "language");
-			}
-			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 		}
 		else {
@@ -195,25 +220,47 @@ class GoogleTranslateOption {
 		this.messageContextEntryMarkup = this.messageContextEntryMarkup.replace("REPLACE_context_googletranslateoption_text", this.labels.context_googletranslateoption_text);
 	}
 	
+	getSettings () {
+		var oldSettings = BDfunctionsDevilBro.loadAllData(this.getName(), "languages"), newSettings = {}, saveSettings = false;
+		for (let key in this.defaultSettings) {
+			if (oldSettings[key] == null) {
+				newSettings[key] = this.defaultSettings[key].value;
+				saveSettings = true;
+			}
+			else {
+				newSettings[key] = oldSettings[key];
+			}
+		}
+		if (saveSettings) BDfunctionsDevilBro.saveAllData(newSettings, this.getName(), "languages");
+		return newSettings;
+	}
+	
 	onContextMenu (context) {
-		var groups = $(context).find(".item-group");
-		for (let i = 0; i < groups.length; i++) {
-			var group = groups[i];
+		if (!context || !context.tagName || !context.parentElement || context.querySelector(".googletranslateoption-item")) return;
+		for (let group of context.querySelectorAll(".item-group")) {
 			if (BDfunctionsDevilBro.getKeyInformation({"node":group, "key":"handleSearchWithGoogle"})) {
 				var text = BDfunctionsDevilBro.getKeyInformation({"node":group, "key":"value"});
 				if (text) {
-					var input = this.languages[BDfunctionsDevilBro.loadData("input", this.getName(), "language")];
-					var output = this.languages[BDfunctionsDevilBro.loadData("output", this.getName(), "language")];
+					var settings = this.getSettings();
+					var input = this.languages[settings.inputContext];
+					var output = this.languages[settings.outputContext];
 					var translation = "";
-					let request = require("request");
-					request(this.getGoogleTranslateApiURL(input.id, output.id, text), (error, response, result) => {
-						if (response) {
-							JSON.parse(result)[0].forEach((array) => {translation += array[0];});
-						}
-					});
+					if (input.id == "binary" || output.id == "binary") {
+						if (input.id == "binary" && output.id != "binary") 			translation = this.binary2string(text);
+						else if (input.id != "binary" && output.id == "binary") 	translation = this.string2binary(text);
+						else if (input.id == "binary" && output.id == "binary") 	translation = text;
+					}
+					else {
+						let request = require("request");
+						request(this.getGoogleTranslateApiURL(input.id, output.id, text), (error, response, result) => {
+							if (response) {
+								JSON.parse(result)[0].forEach((array) => {translation += array[0];});
+							}
+						});
+					}
 					$(this.messageContextEntryMarkup).insertAfter(group)
 						.on("mouseenter", ".googletranslateoption-item", (e) => {
-							var tooltiptext = `From ${input.name}: ${text}\nTo ${output.name}: ${translation}`;
+							var tooltiptext = `From ${input.name}: ${text}\nTo ${output.name}: ${translation ? translation : text}`;
 							BDfunctionsDevilBro.createTooltip(tooltiptext, e.currentTarget, {type: "right"});
 						})
 						.on("click", ".googletranslateoption-item", (e) => {
@@ -235,6 +282,10 @@ class GoogleTranslateOption {
 				$(button).appendTo(textareaWrap)
 					.on("click." + this.getName(), () => {
 						this.openTranslatePopout(button);
+					})
+					.on("contextmenu." + this.getName(), () => {
+						this.translateMessage = !this.translateMessage;
+						button.classList.toggle("active", this.translateMessage);
 					});
 				button.classList.add(textareaInstance.props.type);
 				button.classList.toggle("active", this.translateMessage);
@@ -247,8 +298,9 @@ class GoogleTranslateOption {
 						if (this.doTranslate) {
 							this.doTranslate = false;
 							var text = textarea.value;
-							var input = this.languages[BDfunctionsDevilBro.loadData("input", this.getName(), "language")].id;
-							var output = this.languages[BDfunctionsDevilBro.loadData("output", this.getName(), "language")].id;
+							var settings = this.getSettings();
+							var input = this.languages[settings.inputMessage].id;
+							var output = this.languages[settings.outputMessage].id;
 							var translation = "";
 							if (input == "binary" || output == "binary") {
 								if (input == "binary" && output != "binary") 		translation = this.binary2string(text);
@@ -288,12 +340,22 @@ class GoogleTranslateOption {
 		var popout = $(this.translatePopoutMarkup);
 		popout
 			.appendTo(".popouts")
-			.css("left", $(button).offset().left + $(button).outerWidth()/2 + popout.outerWidth()/2 + "px")
+			.css("left", $(button).offset().left + $(button).outerWidth() + "px")
 			.css("top", $(button).offset().top - $(button).outerHeight()/2 + "px")
-				.on("click", ".Select-control", (e) => {this.openDropdownMenu(popout, e);});
-				
+			.on("click", ".Select-control", (e) => {this.openDropdownMenu("inChat", e);})
+			.on("click", ".reverse-button", (e) => {
+				var settings = this.getSettings();
+				var input = settings.outputMessage;
+				var output = settings.inputMessage == "$Discord" ? "EnglishUS" : settings.inputMessage;
+				popout.find(".Select[type='inputMessage']").attr("value", input).find(".title-3I2bY1").text(this.languages[input].name);
+				popout.find(".Select[type='outputMessage']").attr("value", output).find(".title-3I2bY1").text(this.languages[output].name);
+				BDfunctionsDevilBro.saveData("inputMessage", input, this.getName(), "languages");
+				BDfunctionsDevilBro.saveData("outputMessage", output, this.getName(), "languages");
+			});
+			
+		var settings = this.getSettings();	
 		popout.find(".Select").each((_,selectWrap) => {
-			let language = BDfunctionsDevilBro.loadData(selectWrap.getAttribute("type"), this.getName(), "language");
+			let language = settings[selectWrap.getAttribute("type")];
 			selectWrap.setAttribute("value", language);
 			selectWrap.querySelector(".title-3I2bY1").innerText = this.languages[language].name;
 		});
@@ -318,38 +380,38 @@ class GoogleTranslateOption {
 		});
 	}
 	
-	openDropdownMenu (popout, e) {
+	openDropdownMenu (selector, e) {
 		var selectControl = e.currentTarget;
 		var selectWrap = selectControl.parentElement;
 		
 		if (selectWrap.classList.contains("is-open")) return;
 		
 		selectWrap.classList.add("is-open");
-		popout.css("overflow", "visible");
+		$("li").has(selectWrap).css("overflow", "visible");
 		
 		var type = selectWrap.getAttribute("type");
 		var selectMenu = this.createDropdownMenu(selectWrap.getAttribute("value"), type);
 		selectWrap.appendChild(selectMenu);
 		
-		$(selectMenu).on("mousedown." + this.getName(), ".Select-option", (e2) => {
+		$(selectMenu).addClass(selector).on("mousedown." + this.getName(), ".Select-option", (e2) => {
 			var language = e2.currentTarget.getAttribute("value");
 			selectWrap.setAttribute("value", language);
 			selectControl.querySelector(".title-3I2bY1").innerText = this.languages[language].name;
-			BDfunctionsDevilBro.saveData(type, language, this.getName(), "language");
+			BDfunctionsDevilBro.saveData(type, language, this.getName(), "languages");
 		});
 		$(document).on("mousedown.select" + this.getName(), (e2) => {
 			if (e2.target.parentElement == selectMenu) return;
 			$(document).off("mousedown.select" + this.getName());
 			selectMenu.remove();
-			popout.css("overflow", "auto");
+			$("li").has(selectWrap).css("overflow", "auto");
 			setTimeout(() => {selectWrap.classList.remove("is-open");},100);
 		});
 	}
 	
 	createDropdownMenu (choice, type) {
-		var menuhtml = `<div class="Select-menu-outer GoogleTranslate"><div class="Select-menu">`;
+		var menuhtml = `<div class="Select-menu-outer"><div class="Select-menu">`;
 		for (var language in this.languages) {
-			if (type == "output" && language == "$Discord") continue;
+			if (this.defaultSettings[type].direction == "Output" && language == "$Discord") continue;
 			var isSelected = language == choice ? " is-selected" : "";
 			menuhtml += `<div value="${language}" class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-option ${isSelected}" style="flex: 1 1 auto; display:flex;"><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm" style="flex: 1 1 42%;">${this.languages[language].name}</div></div>`
 		}
