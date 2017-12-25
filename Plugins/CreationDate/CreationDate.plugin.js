@@ -4,6 +4,8 @@ class CreationDate {
 	constructor () {
 		this.labels = {};
 		
+		this.languages;
+		
 		this.userPopoutObserver = new MutationObserver(() => {});
 		this.userProfilModalObserver = new MutationObserver(() => {});
 		
@@ -47,7 +49,7 @@ class CreationDate {
 
 	getDescription () {return "Displays the Creation Date of an Account in the UserPopout and UserModal.";}
 
-	getVersion () {return "1.0.6";}
+	getVersion () {return "1.0.7";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -58,16 +60,15 @@ class CreationDate {
 			for (let key in settings) {
 				settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaultSettings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU ${settings[key] ? "valueChecked-3Bzkbm" : "valueUnchecked-XR6AOk"}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
 			}
-			var language = BDfunctionsDevilBro.loadData("language", this.getName(), "language");
-			settingshtml += `<div class="ui-form-item flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ weightMedium-13x9Y8 size16-3IvaX_ flexChild-1KGW5q" style="flex: 0 0 30%; line-height: 38px;">Creation Date Format:</h3><div class="ui-select format-select-wrapper" style="flex: 1 1 70%;"><div value="${language}" class="Select Select--single has-value"><div class="Select-control"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-value" style="flex: 1 1 auto;"><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm languageName" style="flex: 1 1 42%;">${BDfunctionsDevilBro.languages[language].name}</div><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm languageTimestamp" style="flex: 1 1 58%;">${this.getCreationTime(BDfunctionsDevilBro.languages[language].id)}</div></div><span class="Select-arrow-zone"><span class="Select-arrow"></span></span></div></div></div></div>`;
+			var choice = this.getChoice();
+			settingshtml += `<div class="ui-form-item flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ weightMedium-13x9Y8 size16-3IvaX_ flexChild-1KGW5q" style="flex: 0 0 30%; line-height: 38px;">Creation Date Format:</h3><div class="ui-select format-select-wrapper" style="flex: 1 1 70%;"><div value="${choice}" class="Select Select--single has-value"><div class="Select-control"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-value" style="flex: 1 1 auto;"><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm languageName" style="flex: 1 1 42%;">${this.languages[choice].name}</div><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm languageTimestamp" style="flex: 1 1 58%;">${this.getCreationTime(this.languages[choice].id)}</div></div><span class="Select-arrow-zone"><span class="Select-arrow"></span></span></div></div></div></div>`;
 			settingshtml += `</div></div>`;
 			
 			var settingspanel = $(settingshtml)[0];
 			$(settingspanel)
 				.on("click", ".checkbox-1KYsPm", () => {
 					this.updateSettings(settingspanel);
-					var language = BDfunctionsDevilBro.loadData("language", this.getName(), "language");
-					settingspanel.querySelector(".languageTimestamp").innerText = this.getCreationTime(BDfunctionsDevilBro.languages[language].id);
+					settingspanel.querySelector(".languageTimestamp").innerText = this.getCreationTime(this.languages[this.getChoice()].id);
 				})
 				.on("click", ".Select-control", (e) => {this.openDropdownMenu(settingspanel, e);});
 			return settingspanel;
@@ -116,9 +117,7 @@ class CreationDate {
 			});
 			if (document.querySelector(".app ~ [class^='theme-']")) this.userProfilModalObserver.observe(document.querySelector(".app ~ [class^='theme-']"), {childList: true});
 			
-			if (!BDfunctionsDevilBro.loadData("language", this.getName(), "language")) {
-				BDfunctionsDevilBro.saveData("language", Object.keys(BDfunctionsDevilBro.languages)[0], this.getName(), "language");
-			}
+			this.languages = Object.assign({},BDfunctionsDevilBro.languages);
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 		}
@@ -169,6 +168,16 @@ class CreationDate {
 		BDfunctionsDevilBro.saveAllData(settings, this.getName(), "settings");
 	}
 	
+	getChoice () {
+		var choice = BDfunctionsDevilBro.loadData("language", this.getName(), "languages"), saveChoice = false;
+		if (choice == null || !this.languages[choice]) {
+			choice = "$discord";
+			saveChoice = true;
+		}
+		if (saveChoice) BDfunctionsDevilBro.saveData("language", choice, this.getName(), "languages");
+		return choice;
+	}
+	
 	openDropdownMenu (settingspanel, e) {
 		var selectControl = e.currentTarget;
 		var selectWrap = selectControl.parentElement;
@@ -212,8 +221,8 @@ class CreationDate {
 		var info = BDfunctionsDevilBro.getKeyInformation({"node":container,"key":"user"});
 		if (info) {
 			var creationDate = $(this.creationDateMarkup);
-			var language = BDfunctionsDevilBro.loadData("language", this.getName(), "language");
-			creationDate.text(this.labels.createdat_text + " " + this.getCreationTime(BDfunctionsDevilBro.languages[language].id, info.createdAt)).appendTo(container);
+			console.log(this.languages);
+			creationDate.text(this.labels.createdat_text + " " + this.getCreationTime(this.languages[this.getChoice()].id, info.createdAt)).appendTo(container);
 		}
 	}
 	
