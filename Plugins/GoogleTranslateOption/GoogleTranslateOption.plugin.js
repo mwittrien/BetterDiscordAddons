@@ -270,7 +270,6 @@ class GoogleTranslateOption {
 								.googletranslate-tooltip {
 									max-width: ${window.outerWidth - $(e.currentTarget).offset().left - $(e.currentTarget).outerWidth()}px !important;
 								}`;
-							console.log(customTooltipCSS);
 							if (translation) BDfunctionsDevilBro.createTooltip(tooltiptext, e.currentTarget, {type: "right",selector:"googletranslate-tooltip",css:customTooltipCSS});
 						})
 						.on("click", ".googletranslateoption-item", (e) => {
