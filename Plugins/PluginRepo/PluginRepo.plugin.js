@@ -263,7 +263,7 @@ class PluginRepo {
 			
 			var settingspanel = $(settingshtml)[0];
 			$(settingspanel)
-				.on("click", ".refresh-button", () => {this.loadThemes();});
+				.on("click", ".refresh-button", () => {this.();});
 			return settingspanel;
 		}
 	}
