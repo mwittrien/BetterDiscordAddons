@@ -251,7 +251,7 @@ class PluginRepo {
 
 	getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
 
-	getVersion () {return "1.2.4";}
+	getVersion () {return "1.2.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -263,7 +263,7 @@ class PluginRepo {
 			
 			var settingspanel = $(settingshtml)[0];
 			$(settingspanel)
-				.on("click", ".refresh-button", () => {this.();});
+				.on("click", ".refresh-button", () => {this.loadPlugins();});
 			return settingspanel;
 		}
 	}
