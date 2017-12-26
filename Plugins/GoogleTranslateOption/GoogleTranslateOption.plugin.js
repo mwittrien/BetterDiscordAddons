@@ -248,10 +248,10 @@ class GoogleTranslateOption {
 					var inputID = input.id;
 					var outputID = output.id;
 					var translation = "";
-					if (input == "binary" || output == "binary") {
-						if (input == "binary" && output != "binary") 		translation = this.binary2string(text);
-						else if (input != "binary" && output == "binary") 	translation = this.string2binary(text);
-						else if (input == "binary" && output == "binary") 	translation = text;
+					if (input.id == "binary" || output.id == "binary") {
+						if (input.id == "binary" && output.id != "binary") 			translation = this.binary2string(text);
+						else if (input.id != "binary" && output.id == "binary") 	translation = this.string2binary(text);
+						else if (input.id == "binary" && output.id == "binary") 	translation = text;
 					}
 					else {
 						let request = require("request");
@@ -312,10 +312,10 @@ class GoogleTranslateOption {
 							var input = this.languages[choices.inputMessage];
 							var output = this.languages[choices.outputMessage];
 							var translation = "";
-							if (input == "binary" || output == "binary") {
-								if (input == "binary" && output != "binary") 		translation = this.binary2string(text);
-								else if (input != "binary" && output == "binary") 	translation = this.string2binary(text);
-								else if (input == "binary" && output == "binary") 	translation = text;
+							if (input.id == "binary" || output.id == "binary") {
+								if (input.id == "binary" && output.id != "binary") 			translation = this.binary2string(text);
+								else if (input.id != "binary" && output.id == "binary") 	translation = this.string2binary(text);
+								else if (input.id == "binary" && output.id == "binary") 	translation = text;
 							}
 							else {
 								var request = new XMLHttpRequest();
@@ -325,6 +325,9 @@ class GoogleTranslateOption {
 									JSON.parse(request.response)[0].forEach((array) => {translation += array[0];});
 								}
 							}
+							console.log(input);
+							console.log(output);
+							console.log(translation);
 							if (translation) {
 								textarea.focus();
 								textarea.selectionStart = 0;
