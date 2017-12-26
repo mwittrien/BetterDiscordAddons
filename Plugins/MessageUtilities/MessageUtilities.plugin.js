@@ -2,7 +2,7 @@
 
 class MessageUtilities {
 	constructor () {
-		this.actions = {
+		this.defaultBindings = {
 			"Edit_Message":			{name:"Edit Message",					func:this.doEdit,		default:{click:1, 	key1:0, 	key2:0}},
 			"Delete_Message":		{name:"Delete Message",					func:this.doDelete,		default:{click:0, 	key1:46, 	key2:0}},
 			"Pin/Unpin_Message":	{name:"Pin/Unpin Message",				func:this.doPinUnPin,	default:{click:0, 	key1:17, 	key2:0}},
@@ -27,7 +27,7 @@ class MessageUtilities {
 
 	getDescription () {return "Offers a number of useful message options. Remap the keybindings in the settings.";}
 
-	getVersion () {return "1.2.5";}
+	getVersion () {return "1.2.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -36,15 +36,15 @@ class MessageUtilities {
 			var clicks = ["click"];
 			var keys = ["key1","key2"];
 			var settings = this.getSettings(); 
+			var bindings = this.getBindings();
 			var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="titleDefault-1CWM9y title-3i-5G_ size18-ZM4Qv- height24-2pMcnc weightNormal-3gw0Lm marginBottom8-1mABJ4">${this.getName()}</div><div class="DevilBro-settings-inner">`;
-			for (var action in this.actions) {
-				var binding = BDfunctionsDevilBro.loadData(action, this.getName(), "bindings");
-				settingshtml += `<div class="${action}-key-settings"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.actions[action].name}:</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU ${settings[action] ? "valueChecked-3Bzkbm" : "valueUnchecked-XR6AOk"}" style="flex: 0 0 auto;"><input type="checkbox" value="${action}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[action] ? " checked" : ""}></div></div><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">`;
+			for (var action in this.defaultBindings) {
+				settingshtml += `<div class="${action}-key-settings"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaultBindings[action].name}:</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU ${settings[action] ? "valueChecked-3Bzkbm" : "valueUnchecked-XR6AOk"}" style="flex: 0 0 auto;"><input type="checkbox" value="${action}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[action] ? " checked" : ""}></div></div><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">`;
 				for (var click of clicks) {
-					settingshtml += `<div class="ui-form-item flexChild-1KGW5q" style="flex: 1 1 20%;"><h5 class="h5-3KssQU title-1pmpPr size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH defaultMarginh5-2UwwFY marginBottom4-_yArcI">${click}:</h5><div class="ui-select ${click}-select-wrapper"><div type="${action}" option="${click}" value="${binding[click]}" class="Select Select--single has-value"><div class="Select-control"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-value" style="flex: 1 1 auto;"><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm">${this.clickMap[binding[click]]}</div></div><span class="Select-arrow-zone"><span class="Select-arrow"></span></span></div></div></div></div>`;
+					settingshtml += `<div class="ui-form-item flexChild-1KGW5q" style="flex: 1 1 20%;"><h5 class="h5-3KssQU title-1pmpPr size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH defaultMarginh5-2UwwFY marginBottom4-_yArcI">${click}:</h5><div class="ui-select ${click}-select-wrapper"><div type="${action}" option="${click}" value="${bindings[action][click]}" class="Select Select--single has-value"><div class="Select-control"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-value" style="flex: 1 1 auto;"><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm">${this.clickMap[bindings[action][click]]}</div></div><span class="Select-arrow-zone"><span class="Select-arrow"></span></span></div></div></div></div>`;
 				}
 				for (var key of keys) {
-					settingshtml += `<div class="ui-form-item flexChild-1KGW5q" style="flex: 1 1 40%;"><h5 class="h5-3KssQU title-1pmpPr size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH defaultMarginh5-2UwwFY marginBottom4-_yArcI">${key}:<label class="reset-recorder" style="float:right;padding-right:5px;cursor:pointer;">✖</label></h5><div type="${action}" option="${key}" value="${binding[key]}" class="ui-key-recorder ui-input-button default has-value"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO layout" style="flex: 1 1 auto;"><input type="text" placeholder="${this.keyboardMap[binding[key]]}" readonly="" value="${this.keyboardMap[binding[key]]}" class="input" style="flex: 1 1 auto;"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO" style="flex: 0 1 auto; margin: 0px;"><button type="button" class="buttonGreyGhostDefault-2h5dqi buttonGhostDefault-2NFSwJ buttonDefault-2OLW-v button-2t3of8 buttonGhost-2Y7zWJ buttonGreyGhost-SfY7zU minGrow-1W9N45 min-K7DTfI ui-input-button-ui-button key-recorder-button"><div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsGhost-2Yp1r8"><span class="key-recorder-button-text">Change Hotkey</span><span class="key-recorder-edit-icon"></span></div></button></div></div></div></div>`;
+					settingshtml += `<div class="ui-form-item flexChild-1KGW5q" style="flex: 1 1 40%;"><h5 class="h5-3KssQU title-1pmpPr size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH defaultMarginh5-2UwwFY marginBottom4-_yArcI">${key}:<label class="reset-recorder" style="float:right;padding-right:5px;cursor:pointer;">✖</label></h5><div type="${action}" option="${key}" value="${bindings[action][key]}" class="ui-key-recorder ui-input-button default has-value"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO layout" style="flex: 1 1 auto;"><input type="text" placeholder="${this.keyboardMap[bindings[action][key]]}" readonly="" value="${this.keyboardMap[bindings[action][key]]}" class="input" style="flex: 1 1 auto;"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO" style="flex: 0 1 auto; margin: 0px;"><button type="button" class="buttonGreyGhostDefault-2h5dqi buttonGhostDefault-2NFSwJ buttonDefault-2OLW-v button-2t3of8 buttonGhost-2Y7zWJ buttonGreyGhost-SfY7zU minGrow-1W9N45 min-K7DTfI ui-input-button-ui-button key-recorder-button"><div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsGhost-2Yp1r8"><span class="key-recorder-button-text">Change Hotkey</span><span class="key-recorder-edit-icon"></span></div></button></div></div></div></div>`;
 				}
 				settingshtml += `</div></div>`;
 			}
@@ -84,8 +84,6 @@ class MessageUtilities {
 			this.CurrentUserPerms = BDfunctionsDevilBro.WebModules.findByProperties(["getChannelPermissions", "can"]);
 			this.Permissions = BDfunctionsDevilBro.WebModules.findByProperties(["Permissions", "ActivityTypes"]).Permissions;
 			
-			this.loadBindings();
-			
 			$(document)
 				.on("click." + this.getName(), ".message", (e) => {
 					this.onClick(e.currentTarget, 0, "onSglClick");
@@ -117,7 +115,7 @@ class MessageUtilities {
 	
 	getSettings () {
 		var oldSettings = BDfunctionsDevilBro.loadAllData(this.getName(), "settings"), newSettings = {}, saveSettings = false;
-		for (let action in this.actions) {
+		for (let action in this.defaultBindings) {
 			if (oldSettings[action] == null) {
 				newSettings[action] = true;
 				saveSettings = true;
@@ -140,6 +138,21 @@ class MessageUtilities {
 		BDfunctionsDevilBro.saveAllData(settings, this.getName(), "settings");
 	}
 	
+	getBindings () {
+		var oldBindings = BDfunctionsDevilBro.loadAllData(this.getName(), "bindings"), newBindings = {}, saveBindings = false;
+		for (let key in this.defaultBindings) {
+			if (newBindings[key] == null) {
+				newBindings[key] = this.defaultBindings[key].default;
+				saveBindings = true;
+			}
+			else {
+				newBindings[key] = oldBindings[key];
+			}
+		}
+		if (saveBindings) BDfunctionsDevilBro.saveAllData(newBindings, this.getName(), "bindings");
+		return newBindings;
+	}
+	
 	resetAll (settingspanel) {
 		if (confirm("Are you sure you want to delete all key bindings?")) {
 			BDfunctionsDevilBro.removeAllData(this.getName(), "bindings");
@@ -147,14 +160,14 @@ class MessageUtilities {
 			settingspanel.querySelectorAll(".Select").forEach((wrap) => {
 				var action = wrap.getAttribute("type");
 				var option = wrap.getAttribute("option");
-				wrap.setAttribute("value", this.actions[action].default[option]);
-				wrap.querySelector(".title-3I2bY1").innerText = this.clickMap[this.actions[action].default[option]];
+				wrap.setAttribute("value", this.defaultBindings[action].default[option]);
+				wrap.querySelector(".title-3I2bY1").innerText = this.clickMap[this.defaultBindings[action].default[option]];
 			});
 			settingspanel.querySelectorAll(".ui-key-recorder").forEach((wrap) => {
 				var action = wrap.getAttribute("type");
 				var option = wrap.getAttribute("option");
-				wrap.setAttribute("value", this.actions[action].default[option]);
-				wrap.querySelector("input").setAttribute("value", this.keyboardMap[this.actions[action].default[option]]);
+				wrap.setAttribute("value", this.defaultBindings[action].default[option]);
+				wrap.querySelector("input").setAttribute("value", this.keyboardMap[this.defaultBindings[action].default[option]]);
 			});;
 		}
 	}
@@ -175,7 +188,7 @@ class MessageUtilities {
 		selectWrap.appendChild(selectMenu);
 		
 		$(selectMenu).on("mousedown." + this.getName(), ".Select-option", (e2) => {
-			var binding = BDfunctionsDevilBro.loadData(action, this.getName(), "bindings");
+			var binding = this.getBindings()[action];
 			var selection = e2.currentTarget.getAttribute("value");
 			selectWrap.setAttribute("value", selection);
 			selectControl.querySelector(".title-3I2bY1").innerText = e2.currentTarget.textContent;
@@ -222,7 +235,7 @@ class MessageUtilities {
 		$(document).on("mousedown.recorder" + this.getName(), () => {
 			$(document).off("mousedown.recorder" + this.getName());
 			$(document).off("keydown.recorder" + this.getName());
-			var binding = BDfunctionsDevilBro.loadData(action, this.getName(), "bindings");
+			var binding = this.getBindings()[action];
 			binding[option] = parseInt(recorderWrap.getAttribute("value"));
 			BDfunctionsDevilBro.saveData(action, binding, this.getName(), "bindings");
 			setTimeout(() => {
@@ -241,30 +254,20 @@ class MessageUtilities {
 		var option = recorderWrap.getAttribute("option");
 		recorderWrap.setAttribute("value", 0);
 		recorderInput.setAttribute("value", this.keyboardMap[0]);
-		var binding = BDfunctionsDevilBro.loadData(action, this.getName(), "bindings");
+		var binding = this.getBindings()[action];
 		binding[option] = parseInt(recorderWrap.getAttribute("value"));
 		BDfunctionsDevilBro.saveData(action, binding, this.getName(), "bindings");
-	}
-	
-	loadBindings () {
-		for (var action in this.actions) {
-			var binding = BDfunctionsDevilBro.loadData(action, this.getName(), "bindings");
-			if (!binding) binding = this.actions[action].default;
-			BDfunctionsDevilBro.saveData(action, binding, this.getName(), "bindings");
-		}
 	}
 	
 	onClick (div, click, name) {
 		if (!this.isEventFired(name)) {
 			this.fireEvent(name);
-			var bindings = BDfunctionsDevilBro.loadAllData(this.getName(), "bindings");
 			var settings = this.getSettings();
+			var bindings = this.getBindings();
 			for (let action in bindings) {
-				var binding = bindings[action];
-				console.log();
-				if (settings[action] && binding.click == click && this.checkIfKeyPressed(binding.key1) && this.checkIfKeyPressed(binding.key2)) {
+				if (settings[action] && bindings[action].click == click && this.checkIfKeyPressed(bindings[action].key1) && this.checkIfKeyPressed(bindings[action].key2)) {
 					var message = this.getMessageData(div)
-					if (message) this.actions[action].func.bind(this)(message);
+					if (message) this.defaultBindings[action].func.bind(this)(message);
 					break;
 				}
 			}
