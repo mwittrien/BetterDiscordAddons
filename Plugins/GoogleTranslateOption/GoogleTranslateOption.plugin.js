@@ -14,10 +14,10 @@ class GoogleTranslateOption {
 		this.translateMessage = false;
 			
 		this.defaultChoices = {
-			inputContext:		{value:"$auto", 		place:"Context", 		direction:"Input", 			description:"Input Language in Context:"},
-			outputContext:		{value:"$discord", 		place:"Context", 		direction:"Output", 		description:"Output Language in Context:"},
-			inputMessage:		{value:"$auto", 		place:"Message", 		direction:"Input", 			description:"Input Language in Message:"},
-			outputMessage:		{value:"$discord", 		place:"Message", 		direction:"Output", 		description:"Output Language in Message:"}
+			inputContext:		{value:"auto", 		place:"Context", 		direction:"Input", 			description:"Input Language in Context:"},
+			outputContext:		{value:"$discord", 	place:"Context", 		direction:"Output", 		description:"Output Language in Context:"},
+			inputMessage:		{value:"auto", 		place:"Message", 		direction:"Input", 			description:"Input Language in Message:"},
+			outputMessage:		{value:"$discord", 	place:"Message", 		direction:"Output", 		description:"Output Language in Message:"}
 		};
 
 		this.messageContextEntryMarkup =
@@ -123,7 +123,7 @@ class GoogleTranslateOption {
 
 	getDescription () {return "Adds a Google Translate option to your context menu, which shows a preview of the translated text and on click will open the selected text in Google Translate. Also adds a translation button to your textareas, which will automatically translate the text for you before it is being send.";}
 
-	getVersion () {return "1.1.2";}
+	getVersion () {return "1.1.3";}
 	
 	getAuthor () {return "DevilBro";}
 	
@@ -189,11 +189,10 @@ class GoogleTranslateOption {
 			document.querySelectorAll("textarea").forEach(textarea => {this.addTranslationButton(textarea);});
 			
 			this.languages = Object.assign({},
-				{"$auto":	{name:"Auto",	id:"auto",		integrated:false}},
+				{"auto":	{name:"Auto",	id:"auto",		integrated:false}},
 				BDfunctionsDevilBro.languages,
-				{"_binary":	{name:"Binary",	id:"binary",	integrated:false}}
+				{"binary":	{name:"Binary",	id:"binary",	integrated:false}}
 			);
-			console.log(this.languages);
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 		}
@@ -246,6 +245,8 @@ class GoogleTranslateOption {
 					var choices = this.getChoices();
 					var input = this.languages[choices.inputContext];
 					var output = this.languages[choices.outputContext];
+					var inputID = input.id;
+					var outputID = output.id;
 					var translation = "";
 					if (input == "binary" || output == "binary") {
 						if (input == "binary" && output != "binary") 		translation = this.binary2string(text);
@@ -256,14 +257,21 @@ class GoogleTranslateOption {
 						let request = require("request");
 						request(this.getGoogleTranslateApiURL(input.id, output.id, text), (error, response, result) => {
 							if (response) {
-								JSON.parse(result)[0].forEach((array) => {translation += array[0];});
+								result = JSON.parse(result);
+								result[0].forEach((array) => {translation += array[0];});
+								inputID = result[2];
 							}
 						});
 					}
 					$(this.messageContextEntryMarkup).insertAfter(group)
 						.on("mouseenter", ".googletranslateoption-item", (e) => {
-							var tooltiptext = `From ${input.name}: ${text}\nTo ${output.name}: ${translation ? translation : text}`;
-							BDfunctionsDevilBro.createTooltip(tooltiptext, e.currentTarget, {type: "right"});
+							var tooltiptext = `From ${this.languages[inputID].name}:\n${text}\n\nTo ${this.languages[outputID].name}:\n${translation}`;
+							var customTooltipCSS = `
+								.googletranslate-tooltip {
+									max-width: ${window.outerWidth - $(e.currentTarget).offset().left - $(e.currentTarget).outerWidth()}px !important;
+								}`;
+							console.log(customTooltipCSS);
+							if (translation) BDfunctionsDevilBro.createTooltip(tooltiptext, e.currentTarget, {type: "right",selector:"googletranslate-tooltip",css:customTooltipCSS});
 						})
 						.on("click", ".googletranslateoption-item", (e) => {
 							window.open(this.getGoogleTranslatePageURL(input.id, output.id, text), "_blank");
@@ -304,10 +312,10 @@ class GoogleTranslateOption {
 							var input = this.languages[choices.inputMessage];
 							var output = this.languages[choices.outputMessage];
 							var translation = "";
-							if (input == "_binary" || output == "_binary") {
-								if (input == "_binary" && output != "_binary") 			translation = this.binary2string(text);
-								else if (input != "_binary" && output == "_binary") 	translation = this.string2binary(text);
-								else if (input == "_binary" && output == "_binary") 	translation = text;
+							if (input == "binary" || output == "binary") {
+								if (input == "binary" && output != "binary") 		translation = this.binary2string(text);
+								else if (input != "binary" && output == "binary") 	translation = this.string2binary(text);
+								else if (input == "binary" && output == "binary") 	translation = text;
 							}
 							else {
 								var request = new XMLHttpRequest();
@@ -348,7 +356,7 @@ class GoogleTranslateOption {
 			.on("click", ".reverse-button", (e) => {
 				var choices = this.getChoices();
 				var input = choices.outputMessage;
-				var output = choices.inputMessage == "$auto" ? "en" : choices.inputMessage;
+				var output = choices.inputMessage == "auto" ? "en" : choices.inputMessage;
 				popout.find(".Select[type='inputMessage']").attr("value", input).find(".title-3I2bY1").text(this.languages[input].name);
 				popout.find(".Select[type='outputMessage']").attr("value", output).find(".title-3I2bY1").text(this.languages[output].name);
 				BDfunctionsDevilBro.saveData("inputMessage", input, this.getName(), "languages");
