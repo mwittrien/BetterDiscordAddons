@@ -234,75 +234,72 @@ class ChatFilter {
 	getAuthor () {return "DevilBro";}
 	
 	getSettingsPanel () {
-		if (typeof BDfunctionsDevilBro === "object") {
-			var replaceText = {
-				"blocked": "Default: Replace blocked messages with:",
-				"censored": "Default: Replace censored words with:"
-			};
-			var settingshtml = ``;
-			for (var i in this.types) {
-				var type = this.types[i];
-				var words = BDfunctionsDevilBro.loadData(type, this.getName(), "words");
-				settingshtml += `<div class="chatfilter-settings">`;
-				settingshtml += `<div class="title">${type}-Words:</div>`;
-				settingshtml += `<div class="input-bar" id="${type}-input-bar">`;
-				settingshtml += `<label class="word-value-label">Replace:</label><input name="inputadd" wordtype="${type}" class="word-value" id="${type}-word-value">`;
-				settingshtml += `<label class="replace-value-label">with:</label><input name="inputadd" wordtype="${type}" class="replace-value" id="${type}-replace-value">`;
-				settingshtml += `<button name="add" wordtype="${type}" class="word-add" id="${type}-word-add">Add</button>`;
-				settingshtml += `<button name="removeall" wordtype="${type}" class="remove-all" id="${type}-remove-all">Remove All</button></br>`;
-				settingshtml += `<label class="word-case-text"><input type="checkbox" wordtype="${type}" class="word-case" id="${type}-word-case">case-sensitive</label>`;
-				settingshtml += `<label class="word-exact-text"><input type="checkbox" wordtype="${type}" class="word-exact" id="${type}-word-exact" checked>exact word</label>`;
-				settingshtml += `</div>`;
-				settingshtml += `<div class="word-container" id="${type}-word-container">`;
-				for (let word in words) {
-					var replaceword = words[word].replace ? "(" + BDfunctionsDevilBro.encodeToHTML(words[word].replace) + ")" : "";
-					var wordcomparison = words[word].exact ? "exact" : "noexact";
-					var casesensivity = words[word].case ? "case" : "nocase";
-					settingshtml += `<div name="${word}" class="added-word ${wordcomparison} ${casesensivity} ${type}-word">${BDfunctionsDevilBro.encodeToHTML(word)} ${replaceword}<div name="remove" wordtype="${type}" class="word-delete">✖</div></div>`;
-				}		
-				settingshtml += `</div>`;
-				var showMessageOnClick = BDfunctionsDevilBro.loadData(type, this.getName(), "showMessageOnClick") ? " checked" : "";
-				var hideBlockedMessages = "";
-				var disabled = "";
-				if (type == "blocked") {
-					hideBlockedMessages = BDfunctionsDevilBro.loadData(type, this.getName(), "hideBlockedMessages") ? " checked" : "";
-					disabled = hideBlockedMessages ? " disabled" : "";
-				}
-				var replaceString = BDfunctionsDevilBro.loadData(type, this.getName(), "replaceString");
-				replaceString = (replaceString && replaceString.length > 0) ? replaceString : this.defaultReplace[type];
-				settingshtml += `<div class="replace-settings" id="${type}-replace-settings"><div class="replace-text" id="${type}-replace-text">${replaceText[type]}</div><input wordtype="${type}" class="default-replace-value" id="${type}-default-replace-value" value="${replaceString}" placeholder="${replaceString}"${disabled}>`;
-				settingshtml += `<div class="showmsg-settings"><label class="showmsg-check-text"><input type="checkbox" name="showmsg" wordtype="${type}" class="showmsg-check"${showMessageOnClick}>Show original message on click.</label></div>`;
-				if (type == "blocked") {
-					settingshtml += `<div class="blockhide-settings"><label class="blockhide-check-text"><input type="checkbox" wordtype="${type}" name="blockhide" class="blockhide-check"${hideBlockedMessages}>Completely hide blocked messages.</label></div>`;
-				}
-				settingshtml += `</div>`;
+		if (!this.started || typeof BDfunctionsDevilBro !== "object") return;
+		var replaceText = {
+			"blocked": "Default: Replace blocked messages with:",
+			"censored": "Default: Replace censored words with:"
+		};
+		var settingshtml = ``;
+		for (var i in this.types) {
+			var type = this.types[i];
+			var words = BDfunctionsDevilBro.loadData(type, this.getName(), "words");
+			settingshtml += `<div class="chatfilter-settings">`;
+			settingshtml += `<div class="title">${type}-Words:</div>`;
+			settingshtml += `<div class="input-bar" id="${type}-input-bar">`;
+			settingshtml += `<label class="word-value-label">Replace:</label><input name="inputadd" wordtype="${type}" class="word-value" id="${type}-word-value">`;
+			settingshtml += `<label class="replace-value-label">with:</label><input name="inputadd" wordtype="${type}" class="replace-value" id="${type}-replace-value">`;
+			settingshtml += `<button name="add" wordtype="${type}" class="word-add" id="${type}-word-add">Add</button>`;
+			settingshtml += `<button name="removeall" wordtype="${type}" class="remove-all" id="${type}-remove-all">Remove All</button></br>`;
+			settingshtml += `<label class="word-case-text"><input type="checkbox" wordtype="${type}" class="word-case" id="${type}-word-case">case-sensitive</label>`;
+			settingshtml += `<label class="word-exact-text"><input type="checkbox" wordtype="${type}" class="word-exact" id="${type}-word-exact" checked>exact word</label>`;
+			settingshtml += `</div>`;
+			settingshtml += `<div class="word-container" id="${type}-word-container">`;
+			for (let word in words) {
+				var replaceword = words[word].replace ? "(" + BDfunctionsDevilBro.encodeToHTML(words[word].replace) + ")" : "";
+				var wordcomparison = words[word].exact ? "exact" : "noexact";
+				var casesensivity = words[word].case ? "case" : "nocase";
+				settingshtml += `<div name="${word}" class="added-word ${wordcomparison} ${casesensivity} ${type}-word">${BDfunctionsDevilBro.encodeToHTML(word)} ${replaceword}<div name="remove" wordtype="${type}" class="word-delete">✖</div></div>`;
+			}		
+			settingshtml += `</div>`;
+			var showMessageOnClick = BDfunctionsDevilBro.loadData(type, this.getName(), "showMessageOnClick") ? " checked" : "";
+			var hideBlockedMessages = "";
+			var disabled = "";
+			if (type == "blocked") {
+				hideBlockedMessages = BDfunctionsDevilBro.loadData(type, this.getName(), "hideBlockedMessages") ? " checked" : "";
+				disabled = hideBlockedMessages ? " disabled" : "";
 			}
-			var infoHidden = BDfunctionsDevilBro.loadData("hideInfo", this.getName(), "settings") ? " style='display:none;'" : "";
-			settingshtml += `<button class="toggle-info">Toggle Information</button>`;
-			settingshtml += `<div class="wordtype-info"${infoHidden}>`;
-			settingshtml += `<div class="wordtype-category"><div class="added-word case fake">case<div class="word-delete fake">✖</div></div><div class="wordtype-description">Will censor/block words while comparing lowercase/uppercase. \napple => apple, not APPLE or AppLe</div></div>`;
-			settingshtml += `<div class="wordtype-category"><div class="added-word nocase fake">not case<div class="word-delete fake">✖</div></div><div class="wordtype-description">Will censor/block words while ignoring lowercase/uppercase. \napple => apple, APPLE and AppLe</div></div>`;
-			settingshtml += `<div class="wordtype-category"><div class="added-word exact fake">exact<div class="word-delete fake">✖</div></div><div class="wordtype-description">Will only censor/block words that are exactly the selected word. \napple => apple, not applepie or pineapple</div></div>`;
-			settingshtml += `<div class="wordtype-category"><div class="added-word noexact fake">not exact<div class="word-delete fake">✖</div></div><div class="wordtype-description">Will censor/block all words containing the selected word. \napple => apple, applepie and pineapple</div></div>`;
+			var replaceString = BDfunctionsDevilBro.loadData(type, this.getName(), "replaceString");
+			replaceString = (replaceString && replaceString.length > 0) ? replaceString : this.defaultReplace[type];
+			settingshtml += `<div class="replace-settings" id="${type}-replace-settings"><div class="replace-text" id="${type}-replace-text">${replaceText[type]}</div><input wordtype="${type}" class="default-replace-value" id="${type}-default-replace-value" value="${replaceString}" placeholder="${replaceString}"${disabled}>`;
+			settingshtml += `<div class="showmsg-settings"><label class="showmsg-check-text"><input type="checkbox" name="showmsg" wordtype="${type}" class="showmsg-check"${showMessageOnClick}>Show original message on click.</label></div>`;
+			if (type == "blocked") {
+				settingshtml += `<div class="blockhide-settings"><label class="blockhide-check-text"><input type="checkbox" wordtype="${type}" name="blockhide" class="blockhide-check"${hideBlockedMessages}>Completely hide blocked messages.</label></div>`;
+			}
 			settingshtml += `</div>`;
-			settingshtml += `<div class="blocked-censored-info"${infoHidden}>Blocked in this case means, that a message that contains one of the words will be completely blocked in your chat window. Censored means you will still be able to read the message but the censored words will be unreadable. Supports Regular Expressions.</div>`;
-			settingshtml += `</div>`;
-			
-			var settingspanel = $(settingshtml)[0];
-			$(settingspanel)
-				.on("keypress", ".word-value, .replace-value", (e) => {this.updateContainer(settingspanel, e);})
-				.on("click", ".word-add, .word-delete:not(.fake), .remove-all", (e) => {this.updateContainer(settingspanel, e);})
-				.on("change", ".default-replace-value", (e) => {this.saveReplace(e);})
-				.on("change", ".showmsg-check, .blockhide-check", (e) => {this.saveCheckbox(settingspanel, e);})
-				.on("click", ".toggle-info", () => {this.toggleInfo(settingspanel);});
-			return settingspanel;
 		}
+		var infoHidden = BDfunctionsDevilBro.loadData("hideInfo", this.getName(), "settings") ? " style='display:none;'" : "";
+		settingshtml += `<button class="toggle-info">Toggle Information</button>`;
+		settingshtml += `<div class="wordtype-info"${infoHidden}>`;
+		settingshtml += `<div class="wordtype-category"><div class="added-word case fake">case<div class="word-delete fake">✖</div></div><div class="wordtype-description">Will censor/block words while comparing lowercase/uppercase. \napple => apple, not APPLE or AppLe</div></div>`;
+		settingshtml += `<div class="wordtype-category"><div class="added-word nocase fake">not case<div class="word-delete fake">✖</div></div><div class="wordtype-description">Will censor/block words while ignoring lowercase/uppercase. \napple => apple, APPLE and AppLe</div></div>`;
+		settingshtml += `<div class="wordtype-category"><div class="added-word exact fake">exact<div class="word-delete fake">✖</div></div><div class="wordtype-description">Will only censor/block words that are exactly the selected word. \napple => apple, not applepie or pineapple</div></div>`;
+		settingshtml += `<div class="wordtype-category"><div class="added-word noexact fake">not exact<div class="word-delete fake">✖</div></div><div class="wordtype-description">Will censor/block all words containing the selected word. \napple => apple, applepie and pineapple</div></div>`;
+		settingshtml += `</div>`;
+		settingshtml += `<div class="blocked-censored-info"${infoHidden}>Blocked in this case means, that a message that contains one of the words will be completely blocked in your chat window. Censored means you will still be able to read the message but the censored words will be unreadable. Supports Regular Expressions.</div>`;
+		settingshtml += `</div>`;
+		
+		var settingspanel = $(settingshtml)[0];
+		$(settingspanel)
+			.on("keypress", ".word-value, .replace-value", (e) => {this.updateContainer(settingspanel, e);})
+			.on("click", ".word-add, .word-delete:not(.fake), .remove-all", (e) => {this.updateContainer(settingspanel, e);})
+			.on("change", ".default-replace-value", (e) => {this.saveReplace(e);})
+			.on("change", ".showmsg-check, .blockhide-check", (e) => {this.saveCheckbox(settingspanel, e);})
+			.on("click", ".toggle-info", () => {this.toggleInfo(settingspanel);});
+		return settingspanel;
 	}
 
 	//legacy
-	load () {
-		BdApi.injectCSS(this.getName() + "CSS", this.css);
-	}
+	load () {}
 
 	start () {
 		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
@@ -377,6 +374,8 @@ class ChatFilter {
 			document.querySelectorAll(".markup.blocked, .markup.censored").forEach(message => {
 				this.resetMessage(message);
 			});
+			
+			BDfunctionsDevilBro.removeLocalStyle(this.getName());
 			
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
