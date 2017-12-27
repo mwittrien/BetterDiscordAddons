@@ -544,9 +544,9 @@ BDfunctionsDevilBro.languages = {
 		var languageID = document.querySelector("html").lang;
 		if (languageID) {
 			clearInterval(translateInterval);
-			BDfunctionsDevilBro.languages.$discord.name = "Discord (" + this.languages[languageID].name + ")";
-			BDfunctionsDevilBro.languages.$discord.id = this.languages[languageID].id;
-			BDfunctionsDevilBro.languages.$discord.ownlang = this.languages[languageID].ownlang;
+			BDfunctionsDevilBro.languages.$discord.name = "Discord (" + BDfunctionsDevilBro.languages[languageID].name + ")";
+			BDfunctionsDevilBro.languages.$discord.id = BDfunctionsDevilBro.languages[languageID].id;
+			BDfunctionsDevilBro.languages.$discord.ownlang = BDfunctionsDevilBro.languages[languageID].ownlang;
 		}
 	},100);
 })();
