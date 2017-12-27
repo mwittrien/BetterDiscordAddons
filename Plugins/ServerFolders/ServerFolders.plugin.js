@@ -1407,7 +1407,7 @@ class ServerFolders {
 					btn_cancel_text:						"Anuluj",
 					btn_save_text:							"Zapisz"
 				};
-			case "pt":		//portuguese (brazil)
+			case "pt-BR":	//portuguese (brazil)
 				return {
 					toast_addserver_text:					"${servername} foi adicionado à pasta${foldername}.",
 					toast_removeserver_text:				"${servername} foi removido da pasta${foldername}.",
@@ -1614,7 +1614,7 @@ class ServerFolders {
 					btn_cancel_text:						"キャンセル",
 					btn_save_text:							"セーブ"
 				};
-			case "zh":		//chinese (traditional)
+			case "zh-TW":	//chinese (traditional)
 				return {
 					toast_addserver_text:					"${servername} 已被添加到文件夾${foldername}.",
 					toast_removeserver_text:				"${servername} 已從文件夾${foldername} 中刪除.",
