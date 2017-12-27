@@ -5,7 +5,7 @@ class GoogleTranslateOption {
 		
 		this.labels = {};
 		
-		this.languages;
+		this.languages = {};
 		
 		this.textareaObserver = new MutationObserver(() => {});
 		this.messageContextObserver = new MutationObserver(() => {});
@@ -123,7 +123,7 @@ class GoogleTranslateOption {
 
 	getDescription () {return "Adds a Google Translate option to your context menu, which shows a preview of the translated text and on click will open the selected text in Google Translate. Also adds a translation button to your textareas, which will automatically translate the text for you before it is being send.";}
 
-	getVersion () {return "1.1.4";}
+	getVersion () {return "1.1.5";}
 	
 	getAuthor () {return "DevilBro";}
 	
@@ -188,9 +188,9 @@ class GoogleTranslateOption {
 			document.querySelectorAll("textarea").forEach(textarea => {this.addTranslationButton(textarea);});
 			
 			this.languages = Object.assign({},
-				{"auto":	{name:"Auto",	id:"auto",		integrated:false}},
+				{"auto":	{name:"Auto",		id:"auto",		integrated:false}},
 				BDfunctionsDevilBro.languages,
-				{"binary":	{name:"Binary",	id:"binary",	integrated:false}}
+				{"binary":	{name:"Binary",		id:"binary",	integrated:false}}
 			);
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
@@ -419,7 +419,7 @@ class GoogleTranslateOption {
 	createDropdownMenu (choice, type) {
 		var menuhtml = `<div class="Select-menu-outer"><div class="Select-menu">`;
 		for (var key in this.languages) {
-			if (this.defaultChoices[type].direction == "Output" && key == "$auto") continue;
+			if (this.defaultChoices[type].direction == "Output" && key == "auto") continue;
 			var isSelected = key == choice ? " is-selected" : "";
 			menuhtml += `<div value="${key}" class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-option ${isSelected}" style="flex: 1 1 auto; display:flex;"><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm" style="flex: 1 1 42%;">${this.languages[key].name}</div></div>`
 		}
