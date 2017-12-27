@@ -220,7 +220,6 @@ class CreationDate {
 		var info = BDfunctionsDevilBro.getKeyInformation({"node":container,"key":"user"});
 		if (info) {
 			var creationDate = $(this.creationDateMarkup);
-			console.log(this.languages);
 			creationDate.text(this.labels.createdat_text + " " + this.getCreationTime(this.languages[this.getChoice()].id, info.createdAt)).appendTo(container);
 		}
 	}
