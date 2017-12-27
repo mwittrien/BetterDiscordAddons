@@ -425,7 +425,7 @@ BDfunctionsDevilBro.translatePlugin = function (plugin) {
 };
 
 BDfunctionsDevilBro.languages = {
-	"$discord":	{name:"Discord",					id:"en-US",		google:false,		integrated:false},
+	"$discord":	{name:"Discord",					id:"en-US",		google:true,		integrated:false},
 	"af":		{name:"Afrikaans",					id:"af",		google:true,		integrated:false},
 	"sq":		{name:"Albanian",					id:"sq",		google:true,		integrated:false},
 	"am":		{name:"Amharic",					id:"am",		google:true,		integrated:false},
@@ -905,6 +905,10 @@ BDfunctionsDevilBro.equals = function (check1, check2, compareOrder) {
 		depth--;
 		return result;
 	}
+};
+
+BDfunctionsDevilBro.filterObject = function (obj, predicate) {
+    return Object.keys(obj).filter(key => predicate(obj[key])).reduce((res, key) => (res[key] = obj[key], res), {});
 };
 
 BDfunctionsDevilBro.isObjectEmpty = function (obj) {
