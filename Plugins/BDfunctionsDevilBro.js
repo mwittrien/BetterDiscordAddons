@@ -444,6 +444,7 @@ BDfunctionsDevilBro.languages = {
 	"nl":		{name:"Dutch",						id:"nl",		ownlang:"Nederlands",				integrated:true},
 	"en-GB":	{name:"English (UK)",				id:"en-GB",		ownlang:"English (UK)",				integrated:true},
 	"en":		{name:"English (US)",				id:"en",		ownlang:"English (US)",				integrated:true},
+	"en-US":	{name:"English (US)",				id:"en-US",		ownlang:"English (US)",				integrated:true},
 	"et":		{name:"Estonian",					id:"et",		integrated:false},
 	"fil":		{name:"Filipino",					id:"fil",		integrated:false},
 	"fi":		{name:"Finnish",					id:"fi",		ownlang:"Suomi",					integrated:true},
