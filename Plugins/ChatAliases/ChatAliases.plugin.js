@@ -185,49 +185,46 @@ class ChatAliases {
 	getAuthor () {return "DevilBro";}
 	
 	getSettingsPanel () {
-		if (typeof BDfunctionsDevilBro === "object") {
-			var settingshtml = ``;
-			var words = BDfunctionsDevilBro.loadAllData(this.getName(), "words");
-			settingshtml += `<div class="chataliases-settings">`;
-			settingshtml += `<div class="title">Chat-Aliases:</div>`;
-			settingshtml += `<div class="input-bar" id="chataliases-input-bar">`;
-			settingshtml += `<label class="word-value-label">Replace:</label><input name="inputadd" class="word-value" id="chataliases-word-value">`;
-			settingshtml += `<label class="replace-value-label">with:</label><input name="inputadd" class="replace-value" id="chataliases-replace-value">`;
-			settingshtml += `<button name="add" class="word-add" id="chataliases-word-add">Add</button>`;
-			settingshtml += `<button name="removeall" class="remove-all" id="chataliases-remove-all">Remove All</button></br>`;
-			settingshtml += `<label class="word-case-text"><input type="checkbox" class="word-case" id="chataliases-word-case">case-sensitive</label>`;
-			settingshtml += `<label class="word-exact-text"><input type="checkbox" class="word-exact" id="chataliases-word-exact" checked>exact word</label>`;
-			settingshtml += `</div>`;
-			settingshtml += `<div class="word-container" id="chataliases-word-container">`;
-			for (let word in words) {
-				var wordcomparison = words[word].exact ? "exact" : "noexact";
-				var casesensivity = words[word].case ? "case" : "nocase";
-				settingshtml += `<div name="${word}" class="added-word ${wordcomparison} ${casesensivity} chataliases-word">${BDfunctionsDevilBro.encodeToHTML(word)} (${BDfunctionsDevilBro.encodeToHTML(words[word].replace)})<div name="remove" class="word-delete">✖</div></div>`;
-			}		
-			settingshtml += `</div>`;
-			var infoHidden = BDfunctionsDevilBro.loadData("hideInfo", this.getName(), "settings") ? " style='display:none;'" : "";
-			settingshtml += `<button class="toggle-info">Toggle Information</button>`;
-			settingshtml += `<div class="wordtype-info"${infoHidden}>`;
-			settingshtml += `<div class="wordtype-category"><div class="added-word case fake">case<div class="word-delete fake">✖</div></div><div class="wordtype-description">Will replace words while comparing lowercase/uppercase. \napple => apple, not APPLE or AppLe</div></div>`;
-			settingshtml += `<div class="wordtype-category"><div class="added-word nocase fake">not case<div class="word-delete fake">✖</div></div><div class="wordtype-description">Will replace words while ignoring lowercase/uppercase. \napple => apple, APPLE and AppLe</div></div>`;
-			settingshtml += `<div class="wordtype-category"><div class="added-word exact fake">exact<div class="word-delete fake">✖</div></div><div class="wordtype-description">Will only replace words that are exactly the selected word. \napple to pear => applepieapple stays applepieapple</div></div>`;
-			settingshtml += `<div class="wordtype-category"><div class="added-word noexact fake">not exact<div class="word-delete fake">✖</div></div><div class="wordtype-description">Will replace words anywhere they appear. \napple to pear => applepieapple to pearpiepear</div></div>`;
-			settingshtml += `</div>`;
-			settingshtml += `</div>`;
-			
-			var settingspanel = $(settingshtml)[0];
-			$(settingspanel)
-				.on("keypress", ".word-value, .replace-value", (e) => {this.updateContainer(settingspanel, e);})
-				.on("click", ".word-add, .word-delete:not(.fake), .remove-all", (e) => {this.updateContainer(settingspanel, e);})
-				.on("click", ".toggle-info", () => {this.toggleInfo(settingspanel);});
-			return settingspanel;
-		}
+		if (!this.started || typeof BDfunctionsDevilBro !== "object") return;
+		var settingshtml = ``;
+		var words = BDfunctionsDevilBro.loadAllData(this.getName(), "words");
+		settingshtml += `<div class="chataliases-settings">`;
+		settingshtml += `<div class="title">Chat-Aliases:</div>`;
+		settingshtml += `<div class="input-bar" id="chataliases-input-bar">`;
+		settingshtml += `<label class="word-value-label">Replace:</label><input name="inputadd" class="word-value" id="chataliases-word-value">`;
+		settingshtml += `<label class="replace-value-label">with:</label><input name="inputadd" class="replace-value" id="chataliases-replace-value">`;
+		settingshtml += `<button name="add" class="word-add" id="chataliases-word-add">Add</button>`;
+		settingshtml += `<button name="removeall" class="remove-all" id="chataliases-remove-all">Remove All</button></br>`;
+		settingshtml += `<label class="word-case-text"><input type="checkbox" class="word-case" id="chataliases-word-case">case-sensitive</label>`;
+		settingshtml += `<label class="word-exact-text"><input type="checkbox" class="word-exact" id="chataliases-word-exact" checked>exact word</label>`;
+		settingshtml += `</div>`;
+		settingshtml += `<div class="word-container" id="chataliases-word-container">`;
+		for (let word in words) {
+			var wordcomparison = words[word].exact ? "exact" : "noexact";
+			var casesensivity = words[word].case ? "case" : "nocase";
+			settingshtml += `<div name="${word}" class="added-word ${wordcomparison} ${casesensivity} chataliases-word">${BDfunctionsDevilBro.encodeToHTML(word)} (${BDfunctionsDevilBro.encodeToHTML(words[word].replace)})<div name="remove" class="word-delete">✖</div></div>`;
+		}		
+		settingshtml += `</div>`;
+		var infoHidden = BDfunctionsDevilBro.loadData("hideInfo", this.getName(), "settings") ? " style='display:none;'" : "";
+		settingshtml += `<button class="toggle-info">Toggle Information</button>`;
+		settingshtml += `<div class="wordtype-info"${infoHidden}>`;
+		settingshtml += `<div class="wordtype-category"><div class="added-word case fake">case<div class="word-delete fake">✖</div></div><div class="wordtype-description">Will replace words while comparing lowercase/uppercase. \napple => apple, not APPLE or AppLe</div></div>`;
+		settingshtml += `<div class="wordtype-category"><div class="added-word nocase fake">not case<div class="word-delete fake">✖</div></div><div class="wordtype-description">Will replace words while ignoring lowercase/uppercase. \napple => apple, APPLE and AppLe</div></div>`;
+		settingshtml += `<div class="wordtype-category"><div class="added-word exact fake">exact<div class="word-delete fake">✖</div></div><div class="wordtype-description">Will only replace words that are exactly the selected word. \napple to pear => applepieapple stays applepieapple</div></div>`;
+		settingshtml += `<div class="wordtype-category"><div class="added-word noexact fake">not exact<div class="word-delete fake">✖</div></div><div class="wordtype-description">Will replace words anywhere they appear. \napple to pear => applepieapple to pearpiepear</div></div>`;
+		settingshtml += `</div>`;
+		settingshtml += `</div>`;
+		
+		var settingspanel = $(settingshtml)[0];
+		$(settingspanel)
+			.on("keypress", ".word-value, .replace-value", (e) => {this.updateContainer(settingspanel, e);})
+			.on("click", ".word-add, .word-delete:not(.fake), .remove-all", (e) => {this.updateContainer(settingspanel, e);})
+			.on("click", ".toggle-info", () => {this.toggleInfo(settingspanel);});
+		return settingspanel;
 	}
 
 	//legacy
-	load () {
-		BdApi.injectCSS(this.getName() + "CSS", this.css);
-	}
+	load () {}
 
 	start () {
 		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
@@ -282,6 +279,8 @@ class ChatAliases {
 			this.settingsWindowObserver.disconnect();
 			this.textareaObserver.disconnect();
 			$("textarea").off("keydown." + this.getName()).off("input." + this.getName());
+			
+			BDfunctionsDevilBro.removeLocalStyle(this.getName());
 			
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
@@ -378,6 +377,7 @@ class ChatAliases {
 			})
 			.off("keydown." + this.getName())
 			.on("keydown." + this.getName(), e => {
+				console.log(!e.shiftKey && e.which == 13 && !document.querySelector(".chat form .autocomplete-1TnWNR"));
 				if (!e.shiftKey && e.which == 13 && !document.querySelector(".chat form .autocomplete-1TnWNR")) {
 					this.format = true;
 					$(textarea).trigger("input");
