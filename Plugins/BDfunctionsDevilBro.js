@@ -425,7 +425,7 @@ BDfunctionsDevilBro.translatePlugin = function (plugin) {
 };
 
 BDfunctionsDevilBro.languages = {
-	"$discord":	{name:"Discord",					id:"en-US",		integrated:false},
+	"$discord":	{name:"Discord (English (US))",		id:"en-US",		integrated:false},
 	"af":		{name:"Afrikaans",					id:"af",		integrated:false},
 	"sq":		{name:"Albanian",					id:"sq",		integrated:false},
 	"am":		{name:"Amharic",					id:"am",		integrated:false},
