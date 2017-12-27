@@ -453,7 +453,7 @@ BDfunctionsDevilBro.languages = {
 	"en":		{name:"English",					id:"en",		ownlang:"English",					google:true,		integrated:false},
 	"en-GB":	{name:"English (UK)",				id:"en-GB",		ownlang:"English (UK)",				google:false,		integrated:true},
 	"en-US":	{name:"English (US)",				id:"en-US",		ownlang:"English (US)",				google:false,		integrated:true},
-	"eo	":		{name:"Espernato",					id:"eo",		google:true,		integrated:false},
+	"eo":		{name:"Espernato",					id:"eo",		google:true,		integrated:false},
 	"et":		{name:"Estonian",					id:"et",		google:true,		integrated:false},
 	"fil":		{name:"Filipino",					id:"fil",		google:true,		integrated:false},
 	"fi":		{name:"Finnish",					id:"fi",		ownlang:"Suomi",					google:true,		integrated:true},
