@@ -217,11 +217,18 @@ BDfunctionsDevilBro.removeUpdateNotice = function (pluginName) {
 
 BDfunctionsDevilBro.showToast = function (content, options = {}) {
 	if (!document.querySelector(".toasts")) {
+		let container = document.querySelector(".channels-3g2vYe + div");
+		let memberlist = container.querySelector(".channel-members-wrap");
+		let form = container ? container.querySelector("form") : null;
+		let left = container ? container.getBoundingClientRect().left : 310;
+		let right = memberlist ? memberlist.getBoundingClientRect().left : 0;
+		let width = right ? right - container.getBoundingClientRect().left : container.offsetWidth;
+		let bottom = form ? form.offsetHeight : 80;
 		let toastWrapper = document.createElement("div");
 		toastWrapper.classList.add("toasts");
-		toastWrapper.style.setProperty("left", document.querySelector(".chat form, #friends, .noChannel-2EQ0a9, .activityFeed-HeiGwL, .lfg-3xoFkI").getBoundingClientRect().left + "px");
-		toastWrapper.style.setProperty("width", document.querySelector(".chat form, #friends, .noChannel-2EQ0a9, .activityFeed-HeiGwL, .lfg-3xoFkI").offsetWidth + "px");
-		toastWrapper.style.setProperty("bottom", (document.querySelector(".chat form") ? document.querySelector(".chat form").offsetHeight : 80) + "px");
+		toastWrapper.style.setProperty("left", container.getBoundingClientRect().left + "px");
+		toastWrapper.style.setProperty("width", width + "px");
+		toastWrapper.style.setProperty("bottom", bottom + "px");
 		document.querySelector(".app").appendChild(toastWrapper);
 	}
 	const {type = "", icon = true, timeout = 3000} = options;
@@ -883,7 +890,7 @@ BDfunctionsDevilBro.onSwitchFix = function (plugin) {
 			}
 		});
 	});
-	plugin.switchFixObserver.observe(document.querySelector(":-webkit-any(.chat, #friends, .noChannel-2EQ0a9, .activityFeed-HeiGwL, .lfg-3xoFkI)").parentNode, {childList: true, subtree:true});
+	plugin.switchFixObserver.observe(document.querySelector(".channels-3g2vYe + div").parentNode, {childList: true, subtree:true});
 	return plugin.switchFixObserver;
 };
 
