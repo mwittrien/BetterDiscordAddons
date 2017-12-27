@@ -377,7 +377,6 @@ class ChatAliases {
 			})
 			.off("keydown." + this.getName())
 			.on("keydown." + this.getName(), e => {
-				console.log(!e.shiftKey && e.which == 13 && !document.querySelector(".chat form .autocomplete-1TnWNR"));
 				if (!e.shiftKey && e.which == 13 && !document.querySelector(".chat form .autocomplete-1TnWNR")) {
 					this.format = true;
 					$(textarea).trigger("input");
