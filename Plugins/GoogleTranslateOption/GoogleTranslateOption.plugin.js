@@ -123,25 +123,24 @@ class GoogleTranslateOption {
 
 	getDescription () {return "Adds a Google Translate option to your context menu, which shows a preview of the translated text and on click will open the selected text in Google Translate. Also adds a translation button to your textareas, which will automatically translate the text for you before it is being send.";}
 
-	getVersion () {return "1.1.3";}
+	getVersion () {return "1.1.4";}
 	
 	getAuthor () {return "DevilBro";}
 	
 	getSettingsPanel () {
-		if (typeof BDfunctionsDevilBro === "object") {
-			var choices = this.getChoices(); 
-			var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="titleDefault-1CWM9y title-3i-5G_ size18-ZM4Qv- height24-2pMcnc weightNormal-3gw0Lm marginBottom8-1mABJ4">${this.getName()}</div><div class="DevilBro-settings-inner">`;
-			for (var key in choices) {
-				settingshtml += `<h3 class="titleDefault-1CWM9y title-3i-5G_ weightMedium-13x9Y8 size16-3IvaX_ flexChild-1KGW5q marginBottom8-1mABJ4 marginTop8-2gOa2N" style="flex: 1 1 auto;">${this.defaultChoices[key].description}</h3><div class="ui-form-item flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><div class="ui-select format-select-wrapper" style="flex: 1 1 auto;"><div class="Select Select--single has-value" type="${key}" value="${choices[key]}"><div class="Select-control"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-value" style="flex: 1 1 auto;"><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm" style="flex: 1 1 auto;">${this.languages[choices[key]].name}</div></div><span class="Select-arrow-zone"><span class="Select-arrow"></span></span></div></div></div></div>`
-			}
-			settingshtml += `</div></div>`;
-			
-			var settingspanel = $(settingshtml)[0];
-			$(settingspanel)
-				.on("click", ".Select-control", (e) => {this.openDropdownMenu("inSettings", e);});
-				
-			return settingspanel;
+		if (!this.started || typeof BDfunctionsDevilBro !== "object") return;
+		var choices = this.getChoices(); 
+		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="titleDefault-1CWM9y title-3i-5G_ size18-ZM4Qv- height24-2pMcnc weightNormal-3gw0Lm marginBottom8-1mABJ4">${this.getName()}</div><div class="DevilBro-settings-inner">`;
+		for (var key in choices) {
+			settingshtml += `<h3 class="titleDefault-1CWM9y title-3i-5G_ weightMedium-13x9Y8 size16-3IvaX_ flexChild-1KGW5q marginBottom8-1mABJ4 marginTop8-2gOa2N" style="flex: 1 1 auto;">${this.defaultChoices[key].description}</h3><div class="ui-form-item flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><div class="ui-select format-select-wrapper" style="flex: 1 1 auto;"><div class="Select Select--single has-value" type="${key}" value="${choices[key]}"><div class="Select-control"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-value" style="flex: 1 1 auto;"><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm" style="flex: 1 1 auto;">${this.languages[choices[key]].name}</div></div><span class="Select-arrow-zone"><span class="Select-arrow"></span></span></div></div></div></div>`
 		}
+		settingshtml += `</div></div>`;
+		
+		var settingspanel = $(settingshtml)[0];
+		$(settingspanel)
+			.on("click", ".Select-control", (e) => {this.openDropdownMenu("inSettings", e);});
+			
+		return settingspanel;
 	}
 	
 	//legacy
@@ -324,9 +323,6 @@ class GoogleTranslateOption {
 									JSON.parse(request.response)[0].forEach((array) => {translation += array[0];});
 								}
 							}
-							console.log(input);
-							console.log(output);
-							console.log(translation);
 							if (translation) {
 								textarea.focus();
 								textarea.selectionStart = 0;
@@ -505,7 +501,7 @@ class GoogleTranslateOption {
 				return {
 					context_googletranslateoption_text:	"Wyszukaj tłumaczenie"
 				};
-			case "pt":		//portuguese (brazil)
+			case "pt-BR":	//portuguese (brazil)
 				return {
 					context_googletranslateoption_text:	"Pesquisar tradução"
 				};
@@ -541,7 +537,7 @@ class GoogleTranslateOption {
 				return {
 					context_googletranslateoption_text:	"翻訳の検索"
 				};
-			case "zh":		//chinese (traditional)
+			case "zh-TW":	//chinese (traditional)
 				return {
 					context_googletranslateoption_text:	"搜索翻譯"
 				};
