@@ -339,7 +339,7 @@ class SendLargeMessages {
 					btn_cancel_text:					"Anuluj",
 					btn_send_text:						"Wyślij"
 				};
-			case "pt":		//portuguese (brazil)
+			case "pt-BR":	//portuguese (brazil)
 				return {
 					toast_allsent_text:					"Todas as mensagens enviadas.",
 					modal_messages_translation:			"Mensagens",
@@ -420,7 +420,7 @@ class SendLargeMessages {
 					btn_cancel_text:					"キャンセル",
 					btn_send_text:						"送信"
 				};
-			case "zh":		//chinese (traditional)
+			case "zh-TW":	//chinese (traditional)
 				return {
 					toast_allsent_text:					"發送的所有消息。",
 					modal_messages_translation:			"消息",
