@@ -5,7 +5,7 @@ class OldTitleBar {
 		this.settingsWindowObserver = new MutationObserver(() => {});
 		
 		this.css = `
-			.titleBar-3_fDwJ {
+			.titleBar-3_fDwJ.hidden-by-OTB {
 				display: none;
 			}
 			
@@ -64,7 +64,7 @@ class OldTitleBar {
 
 	getDescription () {return "Reverts the title bar back to its former self.";}
 
-	getVersion () {return "1.2.8";}
+	getVersion () {return "1.2.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -125,6 +125,8 @@ class OldTitleBar {
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 			
 			this.addTitleBar();
+		
+			$(".titleBar-3_fDwJ").addClass("hidden-by-OTB");
 			
 			if (this.getSettings().addToSettings && document.querySelector(".layer[layer-id]")) this.addSettingsTitleBar(document.querySelector(".layer[layer-id]"));
 		}
@@ -141,6 +143,8 @@ class OldTitleBar {
 			BDfunctionsDevilBro.removeLocalStyle(this.getName(), this.css);
 			
 			this.removeTitleBar();
+		
+			$(".titleBar-3_fDwJ").removeClass("hidden-by-OTB");
 			
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
