@@ -128,7 +128,7 @@ class EditServers {
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	getVersion () {return "1.6.9";}
+	getVersion () {return "1.7.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -347,7 +347,7 @@ class EditServers {
 				shortName = null;
 				if (serverSettingsModal.find("#input-servershortname").val()) {
 					if (serverSettingsModal.find("#input-servershortname").val().trim().length > 0) {
-						shortName = serverSettingsModal.find("#modal-servershortname").val().trim();
+						shortName = serverSettingsModal.find("#input-servershortname").val().trim();
 					}
 				}
 				
