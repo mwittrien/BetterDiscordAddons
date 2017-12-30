@@ -1835,7 +1835,7 @@ BDfunctionsDevilBro.isThemeEnabled = function (name) {
 };
 
 BDfunctionsDevilBro.zacksFork = function () {
-	return (typeof bdpluginErrors === "object" && typeof bdthemeErrors === "object" && window.bbdVersion);
+	return (typeof bdpluginErrors === "object" && typeof bdthemeErrors === "object" && typeof bbdVersion === "string");
 };
 
 BDfunctionsDevilBro.getLibraryStrings = function () {
