@@ -128,7 +128,7 @@ class EditServers {
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	getVersion () {return "1.7.0";}
+	getVersion () {return "1.7.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -435,16 +435,14 @@ class EditServers {
 	resetServer (serverDiv) {
 		var info = BDfunctionsDevilBro.getKeyInformation({"node":serverDiv, "key":"guild"});
 		if (info) {
-			var serverInner = serverDiv.querySelector(".guild-inner");
-			var server = serverDiv.querySelector(".avatar-small");
+			var avatar = serverDiv.querySelector(".avatar-small");
 			var bgImage = info.icon ? "url('https://cdn.discordapp.com/icons/" + info.id + "/" + info.icon + ".png')" : "";
 			
 			$(serverDiv)
+				.off("mouseenter." + this.getName())
 				.removeAttr("custom-editservers");
-			$(serverInner)
-				.off("mouseenter." + this.getName());
-			$(server)
-				.text($(server).attr("name"))
+			$(avatar)
+				.text($(avatar).attr("name"))
 				.removeAttr("name")
 				.css("background-image", bgImage)
 				.css("background-color", "")
@@ -456,27 +454,23 @@ class EditServers {
 		if (typeof serverObj !== "object") return;
 		var data = BDfunctionsDevilBro.loadData(serverObj.id, this.getName(), "servers");
 		if (data) {
-			var serverInner = serverObj.div.querySelector(".guild-inner");
-			var server = serverObj.div.querySelector(".avatar-small");
-			if ($(server).attr("name") === undefined) {
-				$(server).attr("name", $(server).text());
+			var avatar = serverObj.div.querySelector(".avatar-small");
+			if ($(avatar).attr("name") === undefined) {
+				$(avatar).attr("name", $(avatar).text());
 			}
 			
 			var name = data.name ? data.name : serverObj.name;
-			var shortName = data.shortName ? data.shortName : $(server).attr("name");
+			var shortName = data.shortName ? data.shortName : $(avatar).attr("name");
 			var bgImage = data.url ? "url(" + data.url + ")" : (serverObj.icon ? "url('https://cdn.discordapp.com/icons/" + serverObj.id + "/" + serverObj.icon + ".png')" : "");
 			var removeIcon = data.removeIcon;
 			var color1 = data.color1 ? BDfunctionsDevilBro.color2RGB(data.color1) : "";
 			var color2 = data.color2 ? BDfunctionsDevilBro.color2RGB(data.color2) : "";
 			
 			$(serverObj.div)
-				.attr("custom-editservers", true);
-			$(serverInner)
 				.off("mouseenter." + this.getName())
-				.on("mouseenter." + this.getName(), () => {
-					this.createServerToolTip(serverObj);
-				});
-			$(server)
+				.on("mouseenter." + this.getName(), () => {this.createServerToolTip(serverObj);})
+				.attr("custom-editservers", true);
+			$(avatar)
 				.text(shortName)
 				.css("background-image", removeIcon ? "" : bgImage)
 				.css("background-color", color1)
