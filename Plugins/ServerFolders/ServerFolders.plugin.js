@@ -249,7 +249,7 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.4.4";}
+	getVersion () {return "5.4.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -608,12 +608,12 @@ class ServerFolders {
 		var folderDiv = $(this.folderIconMarkup)[0];
 		$(folderDiv).insertBefore(document.querySelectorAll("div.guild-separator ~ div.guild")[data.position]);
 			
-		var folderInner = folderDiv.querySelector(".guild-inner");
-		var folder = folderDiv.querySelector(".avatar-small");
+		var avatar = folderDiv.querySelector(".avatar-small");
 		
 		$(folderDiv)
 			.addClass("closed")
 			.attr("id", data.folderID)
+			.on("mouseenter", () => {this.createFolderToolTip(folderDiv);})
 			.on("click", () => {
 				if (this.getSettings().closeOtherFolders) {
 					document.querySelectorAll(".folder.open").forEach(openFolder => {
@@ -668,9 +668,7 @@ class ServerFolders {
 						});
 				},100);
 			});
-		$(folderInner)
-			.on("mouseenter", () => {this.createFolderToolTip(folderDiv);});
-		$(folder)
+		$(avatar)
 			.css("background-image", "url(\"" + data.icons.closedicon + "\")");
 			
 		this.updateFolderNotifications(folderDiv);
@@ -973,9 +971,7 @@ class ServerFolders {
 			.addClass("copy")
 			.addClass("content_of_" + folderDiv.id)
 			.css("display", "")
-			.on("mouseenter." + this.getName(), (e) => {
-				this.createServerToolTip(serverObj, serverCopy, e);
-			})
+			.on("mouseenter." + this.getName(), (e) => {this.createServerToolTip(serverObj, serverCopy, e);})
 			.on("click." + this.getName(), (e) => {
 				e.preventDefault();
 				if (BDfunctionsDevilBro.pressedKeys.includes(46)) this.removeServerFromFolder(serverObj, folderDiv);
