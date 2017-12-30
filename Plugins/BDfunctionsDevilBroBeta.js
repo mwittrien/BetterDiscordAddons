@@ -834,7 +834,7 @@ BDfunctionsDevilBro.addOnSwitchListener = function (plugin) {
 	}
 };
 
-BDfunctionsDevilBro.removeOnSwitchListener = function (callback) {
+BDfunctionsDevilBro.removeOnSwitchListener = function (plugin) {
 	if (typeof plugin.onSwitch === "function") {
 		require("electron").remote.getCurrentWindow().webContents.removeListener("did-navigate-in-page", plugin.onSwitch);
 	}
