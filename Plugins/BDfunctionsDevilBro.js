@@ -826,14 +826,14 @@ BDfunctionsDevilBro.WebModules.patchFunction = function (newOutput, index) {
 };
 
 BDfunctionsDevilBro.addOnSwitchListener = function (plugin) {
-	if (!BDfunctionsDevilBro.zacksFork && typeof plugin.onSwitch === "function") {
+	if (!BDfunctionsDevilBro.zacksFork() && typeof plugin.onSwitch === "function") {
 		plugin.onSwitch = plugin.onSwitch.bind(plugin);
 		require("electron").remote.getCurrentWindow().webContents.addListener("did-navigate-in-page", plugin.onSwitch);
 	}
 };
 
 BDfunctionsDevilBro.removeOnSwitchListener = function (plugin) {
-	if (!BDfunctionsDevilBro.zacksFork && typeof plugin.onSwitch === "function") {
+	if (!BDfunctionsDevilBro.zacksFork() && typeof plugin.onSwitch === "function") {
 		require("electron").remote.getCurrentWindow().webContents.removeListener("did-navigate-in-page", plugin.onSwitch);
 	}
 };
@@ -1835,7 +1835,7 @@ BDfunctionsDevilBro.isThemeEnabled = function (name) {
 };
 
 BDfunctionsDevilBro.zacksFork = function () {
-	return (window.bbdVersion && typeof bdpluginErrors === "object" && typeof bdthemeErrors === "object");
+	return (typeof bdpluginErrors === "object" && typeof bdthemeErrors === "object" && window.bbdVersion);
 };
 
 BDfunctionsDevilBro.getLibraryStrings = function () {
