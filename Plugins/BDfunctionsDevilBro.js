@@ -425,7 +425,7 @@ BDfunctionsDevilBro.translatePlugin = function (plugin) {
 };
 
 BDfunctionsDevilBro.languages = {
-	"$discord":	{name:"Discord (English (US))",		id:"en-US",		integrated:false},
+	"$discord":	{name:"Discord (English (US))",		id:"en-US",		ownlang:"English (US)",				integrated:false},
 	"af":		{name:"Afrikaans",					id:"af",		integrated:false},
 	"sq":		{name:"Albanian",					id:"sq",		integrated:false},
 	"am":		{name:"Amharic",					id:"am",		integrated:false},
@@ -552,7 +552,12 @@ BDfunctionsDevilBro.languages = {
 })();
 
 BDfunctionsDevilBro.getDiscordLanguage = function () {
-	return BDfunctionsDevilBro.languages[document.querySelector("html").lang || "en-US"];
+	var languageCode = document.querySelector("html").lang || "en-US";
+	var codeParts = languageCode.split("-");
+	var prefix = codeParts[0];
+	var suffix = codeParts[1] ? codeParts[1] : "";
+	languageCode = suffix && prefix.toUpperCase() != suffix.toUpperCase() ? prefix + "-" + suffix : prefix;
+	return BDfunctionsDevilBro.languages[languageCode] || BDfunctionsDevilBro.languages["en-US"];
 };
 
 BDfunctionsDevilBro.getDiscordTheme = function () {
