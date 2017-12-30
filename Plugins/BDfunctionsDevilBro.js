@@ -226,7 +226,7 @@ BDfunctionsDevilBro.showToast = function (content, options = {}) {
 		let bottom = form ? form.offsetHeight : 80;
 		let toastWrapper = document.createElement("div");
 		toastWrapper.classList.add("toasts");
-		toastWrapper.style.setProperty("left", container.getBoundingClientRect().left + "px");
+		toastWrapper.style.setProperty("left", left + "px");
 		toastWrapper.style.setProperty("width", width + "px");
 		toastWrapper.style.setProperty("bottom", bottom + "px");
 		document.querySelector(".app").appendChild(toastWrapper);
