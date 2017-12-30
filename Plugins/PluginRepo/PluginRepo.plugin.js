@@ -705,6 +705,7 @@ class PluginRepo {
 				webview = document.createElement("webview");
 				webview.src = "non-existent.dummy";
 				webview.setAttribute("webview-PluginRepo", null);
+				webview.style.setProperty("display", "none");
 				webview.addEventListener("dom-ready", function() {
 					callback(webview);
 				});
