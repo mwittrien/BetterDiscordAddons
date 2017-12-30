@@ -429,7 +429,6 @@ BDfunctionsDevilBro.languages = {
 	"hy":		{name:"Armenian",					id:"hy",		integrated:false},
 	"az":		{name:"Azerbaijani",				id:"az",		integrated:false},
 	"eu":		{name:"Basque",						id:"eu",		integrated:false},
-	"bn":		{name:"Bengali",					id:"bn",		integrated:false},
 	"be":		{name:"Belarusian",					id:"be",		integrated:false},
 	"bn":		{name:"Bengali",					id:"bn",		integrated:false},
 	"bs":		{name:"Bosnian",					id:"bs",		integrated:false},
@@ -842,26 +841,28 @@ BDfunctionsDevilBro.removeOnSwitchListener = function (plugin) {
 
 BDfunctionsDevilBro.getLanguageTable = function (lang) {
 	var ti = {
-		bg: "холандски", //bulgarian
-		cs: "Nizozemština", //czech
-		da: "Hollandsk", //danish
-		de: "Niederländisch", //german
-		en: "Dutch", //english
-		es: "Holandés", //spanish
-		fi: "hollanti", //finnish
-		fr: "Néerlandais", //french
-		it: "Olandese", //italian
-		ja: "オランダ語", //japanese
-		ko: "네덜란드어", //korean
-		nl: "Nederlands", //dutch
-		no: "Nederlandsk", //norwegian
-		pl: "Holenderski", //polish
-		pt: "Holandês", //portuguese (brazil)
-		ru: "Голландский", //russian
-		sv: "Holländska", //swedish
-		tr: "Flemenkçe", //turkish
-		uk: "Нідерландська", //ukranian
-		zh: "荷蘭文" //chinese (traditional)
+		"hr":		"Nizozemski",		//croatian
+		"bg":		"холандски",		//bulgarian
+		"cs":		"Nizozemština",		//czech
+		"da":		"Hollandsk",		//danish
+		"de":		"Niederländisch",	//german
+		"en-GB":	"Dutch",			//english
+		"en-US":	"Dutch",			//english
+		"es":		"Holandés",			//spanish
+		"fi":		"hollanti",			//finnish
+		"fr":		"Néerlandais",		//french
+		"it":		"Olandese",			//italian
+		"ja":		"オランダ語",			//japanese
+		"ko":		"네덜란드어",			//korean
+		"nl":		"Nederlands",		//dutch
+		"no":		"Nederlandsk",		//norwegian
+		"pl":		"Holenderski",		//polish
+		"pt-BR":	"Holandês",			//portuguese(brazil)
+		"ru":		"Голландский",		//russian
+		"sv":		"Holländska",		//swedish
+		"tr":		"Flemenkçe",		//turkish
+		"uk":		"Нідерландська",	//ukranian
+		"zh-TW":	"荷蘭文"				//chinese(traditional)
 	};
 	lang = lang ? lang : BDfunctionsDevilBro.getDiscordLanguage().id;
 	return BDfunctionsDevilBro.WebModules.find(function (m) {
