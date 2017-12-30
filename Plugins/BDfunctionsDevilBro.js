@@ -11,11 +11,7 @@ BDfunctionsDevilBro.loadMessage = function (plugin, oldVersionRemove) {
 	console.log(loadMessage);
 	BDfunctionsDevilBro.showToast(loadMessage);
 	
-	if (typeof plugin.onSwitch == "function") {
-		BDfunctionsDevilBro.onSwitchFix(plugin);
-		//plugin.onSwitchImmediate = () => {setImmediate(plugin.onSwitch.bind(plugin));};
-		//BDfunctionsDevilBro.addOnSwitchListener(plugin.onSwitchImmediate);
-	}
+	BDfunctionsDevilBro.addOnSwitchListener(plugin);
 	
 	var downloadUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
 	BDfunctionsDevilBro.checkUpdate(pluginName, downloadUrl);
@@ -93,7 +89,7 @@ BDfunctionsDevilBro.unloadMessage = function (plugin, oldVersionRemove) {
 	console.log(unloadMessage);
 	BDfunctionsDevilBro.showToast(unloadMessage);
 	
-	if (plugin.switchFixObserver && typeof plugin.switchFixObserver.disconnect == "function") plugin.switchFixObserver.disconnect(); //BDfunctionsDevilBro.removeOnSwitchListener(plugin.onSwitchImmediate);
+	BDfunctionsDevilBro.removeOnSwitchListener(plugin);
 	
 	var downloadUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
 	
@@ -433,7 +429,6 @@ BDfunctionsDevilBro.languages = {
 	"hy":		{name:"Armenian",					id:"hy",		integrated:false},
 	"az":		{name:"Azerbaijani",				id:"az",		integrated:false},
 	"eu":		{name:"Basque",						id:"eu",		integrated:false},
-	"bn":		{name:"Bengali",					id:"bn",		integrated:false},
 	"be":		{name:"Belarusian",					id:"be",		integrated:false},
 	"bn":		{name:"Bengali",					id:"bn",		integrated:false},
 	"bs":		{name:"Bosnian",					id:"bs",		integrated:false},
@@ -831,42 +826,43 @@ BDfunctionsDevilBro.WebModules.patchFunction = function (newOutput, index) {
 	}
 };
 
-BDfunctionsDevilBro.addOnSwitchListener = function (callback) {
-	var SelectedChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getLastSelectedChannelId"]);
-	BDfunctionsDevilBro.WebModules.addListener(SelectedChannelStore._actionHandlers, "CHANNEL_SELECT", callback);
-	var GuildActions = BDfunctionsDevilBro.WebModules.findByProperties(["markGuildAsRead"]);
-	BDfunctionsDevilBro.WebModules.addListener(GuildActions, "nsfwAgree", callback);
+BDfunctionsDevilBro.addOnSwitchListener = function (plugin) {
+	if (typeof plugin.onSwitch === "function") {
+		plugin.onSwitch = plugin.onSwitch.bind(plugin);
+		require("electron").remote.getCurrentWindow().webContents.addListener("did-navigate-in-page", plugin.onSwitch);
+	}
 };
 
-BDfunctionsDevilBro.removeOnSwitchListener = function (callback) {
-	var SelectedChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getLastSelectedChannelId"]);
-	BDfunctionsDevilBro.WebModules.removeListener(SelectedChannelStore._actionHandlers, "CHANNEL_SELECT", callback);
-	var GuildActions = BDfunctionsDevilBro.WebModules.findByProperties(["markGuildAsRead"]);
-	BDfunctionsDevilBro.WebModules.removeListener(GuildActions, "nsfwAgree", callback);
+BDfunctionsDevilBro.removeOnSwitchListener = function (plugin) {
+	if (typeof plugin.onSwitch === "function") {
+		require("electron").remote.getCurrentWindow().webContents.removeListener("did-navigate-in-page", plugin.onSwitch);
+	}
 };
 
 BDfunctionsDevilBro.getLanguageTable = function (lang) {
 	var ti = {
-		bg: "холандски", //bulgarian
-		cs: "Nizozemština", //czech
-		da: "Hollandsk", //danish
-		de: "Niederländisch", //german
-		en: "Dutch", //english
-		es: "Holandés", //spanish
-		fi: "hollanti", //finnish
-		fr: "Néerlandais", //french
-		it: "Olandese", //italian
-		ja: "オランダ語", //japanese
-		ko: "네덜란드어", //korean
-		nl: "Nederlands", //dutch
-		no: "Nederlandsk", //norwegian
-		pl: "Holenderski", //polish
-		pt: "Holandês", //portuguese (brazil)
-		ru: "Голландский", //russian
-		sv: "Holländska", //swedish
-		tr: "Flemenkçe", //turkish
-		uk: "Нідерландська", //ukranian
-		zh: "荷蘭文" //chinese (traditional)
+		"hr":		"Nizozemski",		//croatian
+		"bg":		"холандски",		//bulgarian
+		"cs":		"Nizozemština",		//czech
+		"da":		"Hollandsk",		//danish
+		"de":		"Niederländisch",	//german
+		"en-GB":	"Dutch",			//english
+		"en-US":	"Dutch",			//english
+		"es":		"Holandés",			//spanish
+		"fi":		"hollanti",			//finnish
+		"fr":		"Néerlandais",		//french
+		"it":		"Olandese",			//italian
+		"ja":		"オランダ語",			//japanese
+		"ko":		"네덜란드어",			//korean
+		"nl":		"Nederlands",		//dutch
+		"no":		"Nederlandsk",		//norwegian
+		"pl":		"Holenderski",		//polish
+		"pt-BR":	"Holandês",			//portuguese(brazil)
+		"ru":		"Голландский",		//russian
+		"sv":		"Holländska",		//swedish
+		"tr":		"Flemenkçe",		//turkish
+		"uk":		"Нідерландська",	//ukranian
+		"zh-TW":	"荷蘭文"				//chinese(traditional)
 	};
 	lang = lang ? lang : BDfunctionsDevilBro.getDiscordLanguage().id;
 	return BDfunctionsDevilBro.WebModules.find(function (m) {
