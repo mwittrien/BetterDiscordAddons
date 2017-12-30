@@ -11,11 +11,7 @@ BDfunctionsDevilBro.loadMessage = function (plugin, oldVersionRemove) {
 	console.log(loadMessage);
 	BDfunctionsDevilBro.showToast(loadMessage);
 	
-	if (typeof plugin.onSwitch == "function") {
-		BDfunctionsDevilBro.onSwitchFix(plugin);
-		//plugin.onSwitchImmediate = () => {setImmediate(plugin.onSwitch.bind(plugin));};
-		//BDfunctionsDevilBro.addOnSwitchListener(plugin.onSwitchImmediate);
-	}
+	BDfunctionsDevilBro.addOnSwitchListener(plugin);
 	
 	var downloadUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
 	BDfunctionsDevilBro.checkUpdate(pluginName, downloadUrl);
@@ -68,6 +64,8 @@ BDfunctionsDevilBro.loadMessage = function (plugin, oldVersionRemove) {
 		}
 	}
 	
+	plugin.started = true;
+	
 	function checkIfPluginsPage (container) {
 		if (container && container.tagName && !container.querySelector(".bd-pfbtn.bd-updatebtn")) {
 			var folderbutton = container.querySelector(".bd-pfbtn");
@@ -91,7 +89,7 @@ BDfunctionsDevilBro.unloadMessage = function (plugin, oldVersionRemove) {
 	console.log(unloadMessage);
 	BDfunctionsDevilBro.showToast(unloadMessage);
 	
-	if (plugin.switchFixObserver && typeof plugin.switchFixObserver.disconnect == "function") plugin.switchFixObserver.disconnect(); //BDfunctionsDevilBro.removeOnSwitchListener(plugin.onSwitchImmediate);
+	BDfunctionsDevilBro.removeOnSwitchListener(plugin);
 	
 	var downloadUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
 	
@@ -102,6 +100,8 @@ BDfunctionsDevilBro.unloadMessage = function (plugin, oldVersionRemove) {
 		delete window.PluginUpdates.observer;
 		$("#bd-settingspane-container .bd-pfbtn.bd-updatebtn").remove();
 	}
+	
+	plugin.started = false;
 };
 
 
@@ -213,11 +213,18 @@ BDfunctionsDevilBro.removeUpdateNotice = function (pluginName) {
 
 BDfunctionsDevilBro.showToast = function (content, options = {}) {
 	if (!document.querySelector(".toasts")) {
+		let container = document.querySelector(".channels-3g2vYe + div");
+		let memberlist = container ? container.querySelector(".channel-members-wrap") : null;
+		let form = container ? container.querySelector("form") : null;
+		let left = container ? container.getBoundingClientRect().left : 310;
+		let right = memberlist ? memberlist.getBoundingClientRect().left : 0;
+		let width = right ? right - container.getBoundingClientRect().left : container.offsetWidth;
+		let bottom = form ? form.offsetHeight : 80;
 		let toastWrapper = document.createElement("div");
 		toastWrapper.classList.add("toasts");
-		toastWrapper.style.setProperty("left", document.querySelector(".chat form, #friends, .noChannel-2EQ0a9, .activityFeed-HeiGwL, .lfg-3xoFkI").getBoundingClientRect().left + "px");
-		toastWrapper.style.setProperty("width", document.querySelector(".chat form, #friends, .noChannel-2EQ0a9, .activityFeed-HeiGwL, .lfg-3xoFkI").offsetWidth + "px");
-		toastWrapper.style.setProperty("bottom", (document.querySelector(".chat form") ? document.querySelector(".chat form").offsetHeight : 80) + "px");
+		toastWrapper.style.setProperty("left", left + "px");
+		toastWrapper.style.setProperty("width", width + "px");
+		toastWrapper.style.setProperty("bottom", bottom + "px");
 		document.querySelector(".app").appendChild(toastWrapper);
 	}
 	const {type = "", icon = true, timeout = 3000} = options;
@@ -414,87 +421,145 @@ BDfunctionsDevilBro.translatePlugin = function (plugin) {
 };
 
 BDfunctionsDevilBro.languages = {
-	"$discord":	{name:"Discord",					id:"en",		integrated:false},
-	"ar":		{name:"Arabic",						id:"ar",		integrated:false},
+	"$discord":	{name:"Discord (English (US))",		id:"en-US",		ownlang:"English (US)",				integrated:false},
 	"af":		{name:"Afrikaans",					id:"af",		integrated:false},
+	"sq":		{name:"Albanian",					id:"sq",		integrated:false},
 	"am":		{name:"Amharic",					id:"am",		integrated:false},
+	"ar":		{name:"Arabic",						id:"ar",		integrated:false},
 	"hy":		{name:"Armenian",					id:"hy",		integrated:false},
 	"az":		{name:"Azerbaijani",				id:"az",		integrated:false},
 	"eu":		{name:"Basque",						id:"eu",		integrated:false},
 	"bn":		{name:"Bengali",					id:"bn",		integrated:false},
-	"bg":		{name:"Bulgarian",					id:"bg",		integrated:true},
+	"be":		{name:"Belarusian",					id:"be",		integrated:false},
+	"bn":		{name:"Bengali",					id:"bn",		integrated:false},
+	"bs":		{name:"Bosnian",					id:"bs",		integrated:false},
+	"bg":		{name:"Bulgarian",					id:"bg",		ownlang:"български",				integrated:true},
+	"my":		{name:"Burmese",					id:"my",		integrated:false},
 	"ca":		{name:"Catalan",					id:"ca",		integrated:false},
+	"ceb":		{name:"Cebuano",					id:"ceb",		integrated:false},
+	"ny":		{name:"Chichewa",					id:"ny",		integrated:false},
 	"zh-HK":	{name:"Chinese (Hong Kong)",		id:"zh-HK",		integrated:false},
 	"zh-CN":	{name:"Chinese (Simplified)",		id:"zh-CN",		integrated:false},
-	"zh-TW":	{name:"Chinese (Traditional)",		id:"zh-TW",		integrated:true},
-	"hr":		{name:"Croatian",					id:"hr",		integrated:true},
-	"cs":		{name:"Czech",						id:"cs",		integrated:true},
-	"da":		{name:"Danish",						id:"da",		integrated:true},
-	"nl":		{name:"Dutch",						id:"nl",		integrated:true},
-	"en-GB":	{name:"English (UK)",				id:"en-GB",		integrated:true},
-	"en":		{name:"English (US)",				id:"en",		integrated:true},
+	"zh-TW":	{name:"Chinese (Traditional)",		id:"zh-TW",		ownlang:"繁體中文",					integrated:true},
+	"co":		{name:"Corsician",					id:"co",		integrated:false},
+	"hr":		{name:"Croatian",					id:"hr",		ownlang:"Hrvatski",					integrated:true},
+	"cs":		{name:"Czech",						id:"cs",		ownlang:"Čeština",					integrated:true},
+	"da":		{name:"Danish",						id:"da",		ownlang:"Dansk",					integrated:true},
+	"nl":		{name:"Dutch",						id:"nl",		ownlang:"Nederlands",				integrated:true},
+	"en-GB":	{name:"English (UK)",				id:"en-GB",		ownlang:"English (UK)",				integrated:true},
+	"en-US":	{name:"English (US)",				id:"en-US",		ownlang:"English (US)",				integrated:true},
+	"eo":		{name:"Espernato",					id:"eo",		integrated:false},
 	"et":		{name:"Estonian",					id:"et",		integrated:false},
 	"fil":		{name:"Filipino",					id:"fil",		integrated:false},
-	"fi":		{name:"Finnish",					id:"fi",		integrated:true},
-	"fr":		{name:"French",						id:"fr",		integrated:true},
+	"fi":		{name:"Finnish",					id:"fi",		ownlang:"Suomi",					integrated:true},
+	"fr":		{name:"French",						id:"fr",		ownlang:"Français",					integrated:true},
 	"fr-CA":	{name:"French (Canadian)",			id:"fr-CA",		integrated:false},
+	"fy":		{name:"Frisian",					id:"fy",		integrated:false},
 	"gl":		{name:"Galician",					id:"gl",		integrated:false},
 	"ka":		{name:"Georgian",					id:"ka",		integrated:false},
-	"de":		{name:"German",						id:"de",		integrated:true},
+	"de":		{name:"German",						id:"de",		ownlang:"Deutsch",					integrated:true},
 	"de-AT":	{name:"German (Austria)",			id:"de-AT",		integrated:false},
 	"de-CH":	{name:"German (Switzerland)",		id:"de-CH",		integrated:false},
 	"el":		{name:"Greek",						id:"el",		integrated:false},
 	"gu":		{name:"Gujarati",					id:"gu",		integrated:false},
+	"ht":		{name:"Haitian Creole",				id:"ht",		integrated:false},
+	"ha":		{name:"Hausa",						id:"ha",		integrated:false},
+	"haw":		{name:"Hawaiian",					id:"haw",		integrated:false},
 	"iw":		{name:"Hebrew",						id:"iw",		integrated:false},
 	"hi":		{name:"Hindi",						id:"hi",		integrated:false},
+	"hmn":		{name:"Hmong",						id:"hmn",		integrated:false},
 	"hu":		{name:"Hungarain",					id:"hu",		integrated:false},
 	"is":		{name:"Icelandic",					id:"is",		integrated:false},
+	"ig":		{name:"Igbo",						id:"ig",		integrated:false},
 	"id":		{name:"Indonesian",					id:"id",		integrated:false},
-	"it":		{name:"Italian",					id:"it",		integrated:true},
-	"ja":		{name:"Japanese",					id:"ja",		integrated:true},
+	"ga":		{name:"Irish",						id:"ga",		integrated:false},
+	"it":		{name:"Italian",					id:"it",		ownlang:"Italiano",					integrated:true},
+	"ja":		{name:"Japanese",					id:"ja",		ownlang:"日本語",					integrated:true},
+	"jv":		{name:"Javanese",					id:"jv",		integrated:false},
 	"kn":		{name:"Kannada",					id:"kn",		integrated:false},
-	"ko":		{name:"Korean",						id:"ko",		integrated:true},
+	"kk":		{name:"Kazakh",						id:"kk",		integrated:false},
+	"km":		{name:"Khmer",						id:"km",		integrated:false},
+	"ko":		{name:"Korean",						id:"ko",		ownlang:"한국어",					integrated:true},
+	"ku":		{name:"Kurdish",					id:"ku",		integrated:false},
+	"ky":		{name:"Kyrgyz",						id:"ky",		integrated:false},
 	"lo":		{name:"Laothian",					id:"lo",		integrated:false},
+	"la":		{name:"Latin",						id:"la",		integrated:false},
 	"lv":		{name:"Latvian",					id:"lv",		integrated:false},
 	"lt":		{name:"Lithuanian",					id:"lt",		integrated:false},
+	"lb":		{name:"Luxembourgish",				id:"lb",		integrated:false},
+	"mk":		{name:"Macedonian",					id:"mk",		integrated:false},
+	"mg":		{name:"Malagasy",					id:"mg",		integrated:false},
 	"ms":		{name:"Malay",						id:"ms",		integrated:false},
 	"ml":		{name:"Malayalam",					id:"ml",		integrated:false},
+	"mt":		{name:"Maltese",					id:"mt",		integrated:false},
+	"mi":		{name:"Maori",						id:"mi",		integrated:false},
 	"mr":		{name:"Marathi",					id:"mr",		integrated:false},
 	"mn":		{name:"Mongolian",					id:"mn",		integrated:false},
-	"no":		{name:"Norwegian",					id:"no",		integrated:true},
+	"ne":		{name:"Nepali",						id:"ne",		integrated:false},
+	"no":		{name:"Norwegian",					id:"no",		ownlang:"Norsk",					integrated:true},
+	"ps":		{name:"Pashto",						id:"ps",		integrated:false},
 	"fa":		{name:"Persian",					id:"fa",		integrated:false},
-	"pl":		{name:"Polish",						id:"pl",		integrated:true},
+	"pl":		{name:"Polish",						id:"pl",		ownlang:"Polski",					integrated:true},
 	"pt":		{name:"Portuguese",					id:"pt",		integrated:false},
-	"pt-BR":	{name:"Portuguese (Brazil)",		id:"pt-BR",		integrated:true},
+	"pt-BR":	{name:"Portuguese (Brazil)",		id:"pt-BR",		ownlang:"Português do Brasil",		integrated:true},
 	"pt-PT":	{name:"Portuguese (Portugal)",		id:"pt-PT",		integrated:false},
+	"pa":		{name:"Punjabi",					id:"pa",		integrated:false},
 	"ro":		{name:"Romanian",					id:"ro",		integrated:false},
-	"ru":		{name:"Russian",					id:"ru",		integrated:true},
+	"ru":		{name:"Russian",					id:"ru",		ownlang:"Pусский",					integrated:true},
+	"sm":		{name:"Samoan",						id:"sm",		integrated:false},
+	"gd":		{name:"Scots Gaelic",				id:"gd",		integrated:false},
 	"sr":		{name:"Serbian",					id:"sr",		integrated:false},
-	"si":		{name:"Sinhalese",					id:"si",		integrated:false},
+	"st":		{name:"Sesotho",					id:"st",		integrated:false},
+	"sn":		{name:"Shona",						id:"sn",		integrated:false},
+	"sd":		{name:"Sindhi",						id:"sd",		integrated:false},
+	"si":		{name:"Sinhala",					id:"si",		integrated:false},
 	"sk":		{name:"Slovak",						id:"sk",		integrated:false},
 	"sl":		{name:"Slovenian",					id:"sl",		integrated:false},
-	"es":		{name:"Spanish",					id:"es",		integrated:true},
+	"es":		{name:"Spanish",					id:"es",		ownlang:"Español",					integrated:true},
 	"es-419":	{name:"Spanish (Latin America)",	id:"es-419",	integrated:false},
 	"sw":		{name:"Swahili",					id:"sw",		integrated:false},
-	"sv":		{name:"Swedish",					id:"sv",		integrated:true},
+	"sv":		{name:"Swedish",					id:"sv",		ownlang:"Svenska",					integrated:true},
+	"tg":		{name:"Tajik",						id:"tg",		integrated:false},
 	"ta":		{name:"Tamil",						id:"ta",		integrated:false},
 	"te":		{name:"Telugu",						id:"te",		integrated:false},
 	"th":		{name:"Thai",						id:"th",		integrated:false},
-	"tr":		{name:"Turkish",					id:"tr",		integrated:true},
-	"uk":		{name:"Ukrainian",					id:"uk",		integrated:true},
+	"tr":		{name:"Turkish",					id:"tr",		ownlang:"Türkçe",					integrated:true},
+	"uk":		{name:"Ukrainian",					id:"uk",		ownlang:"Yкраїнський",				integrated:true},
 	"ur":		{name:"Urdu",						id:"ur",		integrated:false},
+	"uz":		{name:"Uzbek",						id:"uz",		integrated:false},
 	"vi":		{name:"Vietnamese",					id:"vi",		integrated:false},
+	"cy":		{name:"Welsh",						id:"cy",		integrated:false},
+	"xh":		{name:"Xhosa",						id:"xh",		integrated:false},
+	"yi":		{name:"Yiddish",					id:"yi",		integrated:false},
+	"yo":		{name:"Yoruba",						id:"yo",		integrated:false},
 	"zu":		{name:"Zulu",						id:"zu",		integrated:false}
 };
 				
 (() => {
     var translateInterval = setInterval(() => {
-		if (document.querySelector("html").lang) {
+		var languageID = document.querySelector("html").lang;
+		if (languageID) {
 			clearInterval(translateInterval);
-			BDfunctionsDevilBro.languages.$discord.id = BDfunctionsDevilBro.getDiscordLanguage().id;
+			BDfunctionsDevilBro.languages.$discord.name = "Discord (" + BDfunctionsDevilBro.languages[languageID].name + ")";
+			BDfunctionsDevilBro.languages.$discord.id = BDfunctionsDevilBro.languages[languageID].id;
+			BDfunctionsDevilBro.languages.$discord.ownlang = BDfunctionsDevilBro.languages[languageID].ownlang;
 		}
 	},100);
 })();
+
+BDfunctionsDevilBro.getDiscordLanguage = function () {
+	var languageCode = document.querySelector("html").lang || "en-US";
+	var codeParts = languageCode.split("-");
+	var prefix = codeParts[0];
+	var suffix = codeParts[1] ? codeParts[1] : "";
+	languageCode = suffix && prefix.toUpperCase() != suffix.toUpperCase() ? prefix + "-" + suffix : prefix;
+	return BDfunctionsDevilBro.languages[languageCode] || BDfunctionsDevilBro.languages["en-US"];
+};
+
+BDfunctionsDevilBro.getDiscordTheme = function () {
+	if ($(".theme-light").length > $(".theme-dark").length) return "theme-light";
+	else return "theme-dark";
+};
 	
 BDfunctionsDevilBro.getReactInstance = function (node) { 
 	if (!node) return null;
@@ -762,18 +827,17 @@ BDfunctionsDevilBro.WebModules.patchFunction = function (newOutput, index) {
 	}
 };
 
-BDfunctionsDevilBro.addOnSwitchListener = function (callback) {
-	var SelectedChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getLastSelectedChannelId"]);
-	BDfunctionsDevilBro.WebModules.addListener(SelectedChannelStore._actionHandlers, "CHANNEL_SELECT", callback);
-	var GuildActions = BDfunctionsDevilBro.WebModules.findByProperties(["markGuildAsRead"]);
-	BDfunctionsDevilBro.WebModules.addListener(GuildActions, "nsfwAgree", callback);
+BDfunctionsDevilBro.addOnSwitchListener = function (plugin) {
+	if (typeof plugin.onSwitch === "function") {
+		plugin.onSwitch = plugin.onSwitch.bind(plugin);
+		require("electron").remote.getCurrentWindow().webContents.addListener("did-navigate-in-page", plugin.onSwitch);
+	}
 };
 
 BDfunctionsDevilBro.removeOnSwitchListener = function (callback) {
-	var SelectedChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getLastSelectedChannelId"]);
-	BDfunctionsDevilBro.WebModules.removeListener(SelectedChannelStore._actionHandlers, "CHANNEL_SELECT", callback);
-	var GuildActions = BDfunctionsDevilBro.WebModules.findByProperties(["markGuildAsRead"]);
-	BDfunctionsDevilBro.WebModules.removeListener(GuildActions, "nsfwAgree", callback);
+	if (typeof plugin.onSwitch === "function") {
+		require("electron").remote.getCurrentWindow().webContents.removeListener("did-navigate-in-page", plugin.onSwitch);
+	}
 };
 
 BDfunctionsDevilBro.getLanguageTable = function (lang) {
@@ -845,6 +909,10 @@ BDfunctionsDevilBro.equals = function (check1, check2, compareOrder) {
 	}
 };
 
+BDfunctionsDevilBro.filterObject = function (obj, predicate) {
+    return Object.keys(obj).filter(key => predicate(obj[key])).reduce((res, key) => (res[key] = obj[key], res), {});
+};
+
 BDfunctionsDevilBro.isObjectEmpty = function (obj) {
 	return typeof obj !== "object" || Object.getOwnPropertyNames(obj).length == 0;
 };
@@ -870,7 +938,7 @@ BDfunctionsDevilBro.onSwitchFix = function (plugin) {
 			}
 		});
 	});
-	plugin.switchFixObserver.observe(document.querySelector(":-webkit-any(.chat, #friends, .noChannel-2EQ0a9, .activityFeed-HeiGwL, .lfg-3xoFkI)").parentNode, {childList: true, subtree:true});
+	plugin.switchFixObserver.observe(document.querySelector(".channels-3g2vYe + div").parentNode, {childList: true, subtree:true});
 	return plugin.switchFixObserver;
 };
 
@@ -1770,59 +1838,6 @@ BDfunctionsDevilBro.zacksFork = function () {
 	return (window.bbdVersion && typeof bdpluginErrors === "object" && typeof bdthemeErrors === "object");
 };
 
-BDfunctionsDevilBro.getDiscordTheme = function () {
-	if ($(".theme-light").length > $(".theme-dark").length) return "theme-light";
-	else return "theme-dark";
-};
-
-BDfunctionsDevilBro.getDiscordLanguage = function () {
-	var lang = document.querySelector("html").lang ? document.querySelector("html").lang.split("-")[0] : "en";
-	switch (lang) {
-		case "hr": 		//croatian
-			return {"id":"hr","lang":"croatian","ownlang":"Hrvatski"};
-		case "da": 		//danish
-			return {"id":"da","lang":"danish","ownlang":"Dansk"};
-		case "de": 		//german
-			return {"id":"de","lang":"german","ownlang":"Deutsch"};
-		case "es": 		//spanish
-			return {"id":"es","lang":"spanish","ownlang":"Español"};
-		case "fr": 		//french
-			return {"id":"fr","lang":"french","ownlang":"Français"};
-		case "it": 		//italian
-			return {"id":"it","lang":"italian","ownlang":"Italiano"};
-		case "nl":		//dutch
-			return {"id":"nl","lang":"dutch","ownlang":"Nederlands"};
-		case "no":		//norwegian
-			return {"id":"no","lang":"norwegian","ownlang":"Norsk"};
-		case "pl":		//polish
-			return {"id":"pl","lang":"polish","ownlang":"Polskie"};
-		case "pt":		//portuguese (brazil)
-			return {"id":"pt","lang":"portuguese","ownlang":"Português"};
-		case "fi":		//finnish
-			return {"id":"fi","lang":"finnish","ownlang":"Suomalainen"};
-		case "sv":		//swedish
-			return {"id":"sv","lang":"turkish","ownlang":"Svenska"};
-		case "tr":		//turkish
-			return {"id":"tr","lang":"turkish","ownlang":"Türk"};
-		case "cs":		//czech
-			return {"id":"cs","lang":"czech","ownlang":"Čeština"};
-		case "bg":		//bulgarian
-			return {"id":"bg","lang":"bulgarian","ownlang":"български"};
-		case "ru":		//russian
-			return {"id":"ru","lang":"russian","ownlang":"Pусский"};
-		case "uk":		//ukrainian
-			return {"id":"uk","lang":"ukrainian","ownlang":"Yкраїнський"};
-		case "ja":		//japanese
-			return {"id":"ja","lang":"japanese","ownlang":"日本語"};
-		case "zh":		//chinese (traditional)
-			return {"id":"zh","lang":"chinese","ownlang":"中文","googleid":"zh-TW"};
-		case "ko":		//korean
-			return {"id":"ko","lang":"korean","ownlang":"한국어"};
-		default:		//default: english
-			return {"id":"en","lang":"english","ownlang":"English"};
-	}
-};
-
 BDfunctionsDevilBro.getLibraryStrings = function () {
 	switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
 		case "hr": 		//croatian
@@ -1897,7 +1912,7 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				colorpicker_modal_header_text:	"Narzędzie do wybierania kolorów",
 				btn_ok_text: 					"OK"
 			};
-		case "pt":		//portuguese (brazil)
+		case "pt-BR":		//portuguese (brazil)
 			return {
 				toast_plugin_started:			"${pluginName} ${oldVersion} foi iniciado.",
 				toast_plugin_stopped:			"${pluginName} ${oldVersion} foi interrompido.",
@@ -1969,7 +1984,7 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				colorpicker_modal_header_text:	"カラーピッカー",
 				btn_ok_text: 					"はい"
 			};
-		case "zh":		//chinese (traditional)
+		case "zh-TW":	//chinese (traditional)
 			return {
 				toast_plugin_started:			"${pluginName} ${oldVersion}已經啟動.",
 				toast_plugin_stopped:			"${pluginName} ${oldVersion}已停止.",
