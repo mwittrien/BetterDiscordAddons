@@ -218,7 +218,7 @@ BDfunctionsDevilBro.removeUpdateNotice = function (pluginName) {
 BDfunctionsDevilBro.showToast = function (content, options = {}) {
 	if (!document.querySelector(".toasts")) {
 		let container = document.querySelector(".channels-3g2vYe + div");
-		let memberlist = container.querySelector(".channel-members-wrap");
+		let memberlist = container ? container.querySelector(".channel-members-wrap") : null;
 		let form = container ? container.querySelector("form") : null;
 		let left = container ? container.getBoundingClientRect().left : 310;
 		let right = memberlist ? memberlist.getBoundingClientRect().left : 0;
