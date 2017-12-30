@@ -11,11 +11,10 @@ BDfunctionsDevilBro.loadMessage = function (plugin, oldVersionRemove) {
 	console.log(loadMessage);
 	BDfunctionsDevilBro.showToast(loadMessage);
 	
-	BDfunctionsDevilBro.addOnSwitchListener(plugin);
-	
 	var downloadUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
 	BDfunctionsDevilBro.checkUpdate(pluginName, downloadUrl);
 	
+	BDfunctionsDevilBro.addOnSwitchListener(plugin);
 	BDfunctionsDevilBro.translatePlugin(plugin);
 	
 	if (typeof window.PluginUpdates !== "object" || !window.PluginUpdates) window.PluginUpdates = {plugins:{}};
@@ -827,14 +826,14 @@ BDfunctionsDevilBro.WebModules.patchFunction = function (newOutput, index) {
 };
 
 BDfunctionsDevilBro.addOnSwitchListener = function (plugin) {
-	if (typeof plugin.onSwitch === "function") {
+	if (!BDfunctionsDevilBro.zacksFork && typeof plugin.onSwitch === "function") {
 		plugin.onSwitch = plugin.onSwitch.bind(plugin);
 		require("electron").remote.getCurrentWindow().webContents.addListener("did-navigate-in-page", plugin.onSwitch);
 	}
 };
 
 BDfunctionsDevilBro.removeOnSwitchListener = function (plugin) {
-	if (typeof plugin.onSwitch === "function") {
+	if (!BDfunctionsDevilBro.zacksFork && typeof plugin.onSwitch === "function") {
 		require("electron").remote.getCurrentWindow().webContents.removeListener("did-navigate-in-page", plugin.onSwitch);
 	}
 };
