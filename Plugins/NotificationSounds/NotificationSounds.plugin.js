@@ -71,7 +71,7 @@ class NotificationSounds {
 	
 	getDescription () {return "Allows you to replace the native sounds of Discord with your own";}
 
-	getVersion () {return "3.0.2";}
+	getVersion () {return "3.0.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -320,7 +320,7 @@ class NotificationSounds {
 			choice.volume = settingspanel.querySelector(`.${type}-volume`).value;
 			this.saveChoice(type, choice, settingspanel.querySelector(".sound-preview"));
 		});
-		$(document).on("mousedown.select" + this.getName(), () => {
+		$(document).on("mousedown.select" + this.getName(), (e2) => {
 			if (e2.target.parentElement == selectMenu) return;
 			$(document).off("mousedown.select" + this.getName());
 			selectMenu.remove()
