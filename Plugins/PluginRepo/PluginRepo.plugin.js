@@ -251,7 +251,7 @@ class PluginRepo {
 
 	getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
 
-	getVersion () {return "1.2.5";}
+	getVersion () {return "1.2.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -705,7 +705,7 @@ class PluginRepo {
 				webview = document.createElement("webview");
 				webview.src = "non-existent.dummy";
 				webview.setAttribute("webview-PluginRepo", null);
-				webview.style.setProperty("display", "none");
+				webview.style.setProperty("visibility", "hidden");
 				webview.addEventListener("dom-ready", function() {
 					callback(webview);
 				});
