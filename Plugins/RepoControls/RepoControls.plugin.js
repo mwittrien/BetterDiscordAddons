@@ -47,8 +47,35 @@ class RepoControls {
 					</div>
 				</div>
 			</div>`;
+			
+		this.deleteButtonMarkup = 
+			`<svg class="trashIcon" version="1.1" xmlns="http://www.w3.org/2000/svg" width="20px" height="20px">
+				<g fill="white">
+					<path d="M 18.012, 0.648 H 12.98 C 12.944, 0.284, 12.637, 0, 12.264, 0 H 8.136 c -0.373, 0 -0.68, 0.284 -0.716, 0.648 H 2.389 c -0.398, 0 -0.72, 0.322 -0.72, 0.72 v 1.368 c 0, 0.398, 0.322, 0.72, 0.72, 0.72 h 15.623 c 0.398, 0, 0.72 -0.322, 0.72 -0.72 V 1.368 C 18.731, 0.97, 18.409, 0.648, 18.012, 0.648 z"/><path d="M 3.178, 4.839 v 14.841 c 0, 0.397, 0.322, 0.72, 0.72, 0.72 h 12.604 c 0.398, 0, 0.72 -0.322, 0.72 -0.72 V 4.839 H 3.178 z M 8.449, 15.978 c 0, 0.438 -0.355, 0.794 -0.794, 0.794 c -0.438, 0 -0.794 -0.355 -0.794 -0.794 V 8.109 c 0 -0.438, 0.355 -0.794, 0.794 -0.794 c 0.438, 0, 0.794, 0.355, 0.794, 0.794 V 15.978 z M 13.538, 15.978 c 0, 0.438 -0.355, 0.794 -0.794, 0.794 s -0.794 -0.355 -0.794 -0.794 V 8.109 c 0 -0.438, 0.355 -0.794, 0.794 -0.794 c 0.438, 0, 0.794, 0.355, 0.794, 0.794 V 15.978 z"/>
+				</g>
+			</svg>`;
 		
 		this.css = `
+			#bd-settingspane-container .bda-description {
+				display: block;
+			}
+			#bd-settingspane-container .bda-right,
+			#bd-settingspane-container .bda-header {
+				position: relative;
+			}
+			#bd-settingspane-container .trashIcon {
+				display: none;
+			}
+			#bd-settingspane-container .bda-right .trashIcon,
+			#bd-settingspane-container .bda-header .trashIcon {
+				cursor: pointer;
+				display: block;
+				position: absolute;
+				right: 50px;
+			}
+			#bd-settingspane-container .bda-right .trashIcon {
+				top: 7px;
+			}
 			.repo-controls .header {
 				overflow: visible !important;
 			}
@@ -58,19 +85,38 @@ class RepoControls {
 			.repo-controls .searchWrapper #input-search {
 				padding: 1px 8px !important;
 			}`;
+			
+		this.defaults = {
+			settings: {
+				addDeleteButton:	{value:true, 	description:"Add a Delete Button to your Plugin and Theme List."},
+				confirmDelete:		{value:true, 	description:"Ask for your confirmation before deleting a File."},
+				enableHTML:			{value:true, 	description:"Correctly displays HTML descriptions for Plugins and Themes."}
+			}
+		};
 	}
 
 	getName () {return "RepoControls";}
 
 	getDescription () {return "Lets you sort and filter your list of downloaded Themes and Plugins.";}
 
-	getVersion () {return "1.0.5";}
+	getVersion () {return "1.0.7";}
 
 	getAuthor () {return "DevilBro";}
 	
     getSettingsPanel () {
-		if (typeof BDfunctionsDevilBro === "object") {
+		if (!this.started || typeof BDfunctionsDevilBro !== "object") return;
+		var settings = BDfunctionsDevilBro.getAllData(this, "settings");
+		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="titleDefault-1CWM9y title-3i-5G_ size18-ZM4Qv- height24-2pMcnc weightNormal-3gw0Lm marginBottom8-1mABJ4">${this.getName()}</div><div class="DevilBro-settings-inner">`;
+		for (let key in settings) {
+			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU ${settings[key] ? "valueChecked-3Bzkbm" : "valueUnchecked-XR6AOk"}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
 		}
+		settingshtml += `</div></div>`;
+		
+		var settingspanel = $(settingshtml)[0];
+		$(settingspanel)
+			.on("click", ".checkbox-1KYsPm", () => {this.updateSettings(settingspanel);});
+			
+		return settingspanel;
 	}
 
 	//legacy
@@ -92,7 +138,7 @@ class RepoControls {
 							change.addedNodes.forEach((node) => {
 								setImmediate(() => {
 									if (node && node.tagName && node.getAttribute("layer-id") == "user-settings") {
-										this.checkIfPluginsOrThemesPage(node);
+										if (this.getSettingsPageType(node)) this.addControls(node.querySelector(".bda-slist"));
 										this.innerSettingsWindowObserver.observe(node, {childList:true, subtree:true});
 									}
 								});
@@ -108,7 +154,15 @@ class RepoControls {
 					(change, j) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								this.checkIfPluginsOrThemesPage(node);
+								if (this.getSettingsPageType(node)) this.addControls(node.querySelector(".bda-slist"));
+								if (node && node.tagName && node.querySelector(".ui-switch") && this.getSettingsPageType()) {
+									var entry = this.getEntry($("li").has(node)[0]);
+									if (entry) {
+										var settings = BDfunctionsDevilBro.getAllData(this, "settings");
+										if (settings.addDeleteButton) 	this.addDeleteButton(entry);
+										if (settings.enableHTML) 		this.changeTextToHTML(entry.div);
+									}
+								}
 							});
 						}
 					}
@@ -117,7 +171,7 @@ class RepoControls {
 			var settingswindow = document.querySelector(".layer[layer-id='user-settings']");
 			if (settingswindow) {
 				this.innerSettingsWindowObserver.observe(settingswindow, {childList:true, subtree:true});
-				this.checkIfPluginsOrThemesPage(settingswindow);
+				if (this.getSettingsPageType(settingswindow)) this.addControls(settingswindow.querySelector(".bda-slist"));
 			}
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
@@ -135,7 +189,7 @@ class RepoControls {
 			this.settingsWindowObserver.disconnect();
 			this.innerSettingsWindowObserver.disconnect();
 			
-			$(".repo-controls").remove();
+			$(".repo-controls, #bd-settingspane-container .trashIcon").remove();
 			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName());
 		}
@@ -143,20 +197,35 @@ class RepoControls {
 
 	
 	// begin of own functions
+
+	updateSettings (settingspanel) {
+		var settings = {};
+		for (var input of settingspanel.querySelectorAll(".checkbox-1KYsPm")) {
+			settings[input.value] = input.checked;
+			input.parentElement.classList.toggle("valueChecked-3Bzkbm", input.checked);
+			input.parentElement.classList.toggle("valueUnchecked-XR6AOk", !input.checked);
+		}
+		BDfunctionsDevilBro.saveAllData(settings, this, "settings");
+	}
 	
-	checkIfPluginsOrThemesPage (container) {
+	getSettingsPageType (container) {
+		if (typeof container === "undefined") container = document.querySelector(".layer[layer-id='user-settings']");
 		if (container && container.tagName) {
 			var folderbutton = container.querySelector(".bd-pfbtn");
 			if (folderbutton) {
 				var buttonbar = folderbutton.parentElement;
 				if (buttonbar && buttonbar.tagName) {
 					var header = buttonbar.querySelector("h2");
-					if (header && (header.innerText.toUpperCase() === "PLUGINS" || header.innerText.toUpperCase() === "THEMES")) {
-						this.addControls(container.querySelector(".bda-slist"));
+					if (header) {
+						var headerText = header.innerText.toUpperCase();
+						if (headerText === "PLUGINS" || headerText === "THEMES") {
+							return headerText;
+						}
 					}
 				}
 			}
 		}
+		return null;
 	}
 	
 	addControls (container) {
@@ -178,32 +247,37 @@ class RepoControls {
 			
 		container.entries = [];
 		for (let li of container.querySelectorAll("li")) {
-			let name, version, author, description;
-			if (BDfunctionsDevilBro.zacksFork()) {
-				name = li.querySelector(".bda-name").textContent;
-				version = li.querySelector(".bda-version").textContent;
-				author = li.querySelector(".bda-author").textContent;
-				description = li.querySelector(".bda-description").textContent;
-			}
-			else {
-				let namestring = li.querySelector(".bda-name").textContent;
-				name = namestring.split(" v")[0];
-				version = namestring.split(" v")[1].split(" by ")[0];
-				author = namestring.split(" by ")[1];
-				description = li.querySelector(".bda-description").textContent;
-			}
-			let entry = {
-				div: 			li,
-				search:			(name + " " + version + " " + author + " " + description).toUpperCase(),
-				name: 			(name).toUpperCase(),
-				version: 		(version).toUpperCase(),
-				author: 		(author).toUpperCase(),
-				description: 	(description).toUpperCase()
-			};
-			container.entries.push(entry);
+			container.entries.push(this.getEntry(li));
 		}
 		
 		this.addEntries(container, repoControls);
+	}
+	
+	getEntry (li) {
+		if (!li || !li.tagName || !li.querySelector(".bda-name")) return null;
+		let name, version, author, description;
+		if (BDfunctionsDevilBro.zacksFork()) {
+			name = li.querySelector(".bda-name").textContent;
+			version = li.querySelector(".bda-version").textContent;
+			author = li.querySelector(".bda-author").textContent;
+			description = li.querySelector(".bda-description").textContent;
+		}
+		else {
+			let namestring = li.querySelector(".bda-name").textContent;
+			name = namestring.split(" v")[0];
+			version = namestring.split(" v")[1].split(" by ")[0];
+			author = namestring.split(" by ")[1];
+			description = li.querySelector(".bda-description").textContent;
+		}
+		return {
+			div: 			li,
+			search:			(name + " " + version + " " + author + " " + description).toUpperCase(),
+			origName: 		name,
+			name: 			(name).toUpperCase(),
+			version: 		(version).toUpperCase(),
+			author: 		(author).toUpperCase(),
+			description: 	(description).toUpperCase()
+		};
 	}
 	
 	addEntries (container, repoControls) {
@@ -216,7 +290,60 @@ class RepoControls {
 		entries = BDfunctionsDevilBro.sortArrayByKey(entries, repoControls.find(".sort-filter .value").attr("option"));
 		if (repoControls.find(".order-filter .value").attr("option") == "desc") entries.reverse();
 		
-		for (let entry of entries) $(container).append(entry.div);
+		var settings = BDfunctionsDevilBro.getAllData(this, "settings");
+		for (let entry of entries) {
+			container.appendChild(entry.div);
+			if (settings.addDeleteButton) 	this.addDeleteButton(entry);
+			if (settings.enableHTML) 		this.changeTextToHTML(entry.div);
+		}
+	}
+	
+	addDeleteButton (entry) {
+		if (!entry || !entry.div || !entry.div.tagName || entry.div.querySelector(".trashIcon")) return;
+		$(this.deleteButtonMarkup)
+			.on("click." + this.getName(), () => {
+				var container = document.querySelector(".bda-slist");
+				if (container && (!BDfunctionsDevilBro.getData("confirmDelete", this, "settings") || confirm("Are you sure you want to delete this File?"))) {
+					var name = BdApi.getPlugin(entry.origName) ? BdApi.getPlugin(entry.origName).constructor.name : entry.origName;
+					var type = null, folder = null, extension = null;
+					switch (this.getSettingsPageType()) {
+						case "PLUGINS":
+							type = "Plugin";
+							folder = BDfunctionsDevilBro.getPluginsFolder();
+							extension = ".plugin.js";
+							break;
+						case "THEMES": 
+							type = "Theme";
+							folder = BDfunctionsDevilBro.getThemesFolder();
+							extension = ".theme.css";
+							break;
+					}
+					if (type && folder && extension) {
+						let fileSystem = require("fs");
+						let path = require("path");
+						var file = path.join(folder, name + extension);
+						fileSystem.unlink(file, (error) => {
+							if (error) {
+								BDfunctionsDevilBro.showToast(`Unable to delete ${type} "${name}". Filename might not be the same as ${type}name.`, {type:"danger"});
+							}
+							else {
+								BDfunctionsDevilBro.showToast(`Successfully deleted ${type} "${name}".`, {type:"success"});
+								BDfunctionsDevilBro.removeFromArray(container.entries, entry);
+								entry.div.remove();
+							}
+						});
+					}
+				}
+			})
+			.on("mouseenter." + this.getName(), (e) => {
+				BDfunctionsDevilBro.createTooltip("Delete File", e.currentTarget, {type:"top",selector:"repocontrols-trashicon-tooltip"});
+			})
+			.insertAfter(entry.div.querySelector(".ui-switch-wrapper"));
+	}
+	
+	changeTextToHTML (container) {
+		if (!container || !container.tagName) return;
+		container.querySelectorAll(".bda-name, .bda-version, .bda-author, .bda-description").forEach(ele => {ele.innerHTML = ele.innerText;});
 	}
 	
 	openSortPopout (e, markup, container, repoControls) {
