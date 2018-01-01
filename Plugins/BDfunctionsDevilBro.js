@@ -1071,7 +1071,7 @@ BDfunctionsDevilBro.removeAllData = function (plugin, keyName) {
 };
 
 BDfunctionsDevilBro.getAllData = function (plugin, keyName) {
-	if (!plugin.defaults || !plugin.defaults.keyName) return {};
+	if (!plugin.defaults || !plugin.defaults[keyName]) return {};
 	var oldData = BDfunctionsDevilBro.loadAllData(plugin, keyName), newData = {}, saveData = false;
 	for (let key in plugin.defaults[keyName]) {
 		if (oldData[key] == null) {
