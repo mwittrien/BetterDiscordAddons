@@ -67,7 +67,7 @@ https://raw.githubusercontent.com/mrmaple240/betterdiscord-mini-themes/master/Mu
 https://raw.githubusercontent.com/mrmaple240/ChatTextBubbles/master/ChatTextBubbles.theme.css
 https://raw.githubusercontent.com/mrmaple240/ChatTextBubbles/master/ChatTextBubblesMinified.theme.css
 https://raw.githubusercontent.com/mrmaple240/Full-Light-Theme/master/FullLightTheme.theme.css
-https://raw.githubusercontent.com/Mylan719/Discord-light-theme/master/Discord%20Light-Blue.theme.css
+https://raw.githubusercontent.com/Mylan719/Discord-light-theme/master/Discord Light-Blue.theme.css
 https://raw.githubusercontent.com/Narugokyu/modern-n-cozy/master/modern-n-cozy.theme.css
 https://raw.githubusercontent.com/Narugokyu/nova-theme/master/space_nova.theme.css
 https://raw.githubusercontent.com/NFLD99/Better-Discord/master/Theme_File/Anti_Lag.theme.css
@@ -97,8 +97,9 @@ https://raw.githubusercontent.com/tehbasshunter/theme-fixes/master/Space_Nova.th
 https://raw.githubusercontent.com/TheBaconSpace/TMEMETheme/master/tmeme.theme.css
 https://raw.githubusercontent.com/TheWrestlingDiscordia/MiniTheme/master/MiniTheme.theme.css
 https://raw.githubusercontent.com/trueprominency/Shades-of-Red-Theme/master/shades-of-red.theme.css
-https://raw.githubusercontent.com/Wahrandz/NieR-Automata-/master/Theme%20css/Final%3B%20Nier_Automata%20By%20AbdelBouklech.theme.css
+https://raw.githubusercontent.com/Wahrandz/NieR-Automata-/master/Theme css/Final; Nier_Automata By AbdelBouklech.theme.css
 https://raw.githubusercontent.com/WhatDaPuck/NotAnotherAnimeTheme/master/NotAnotherAnimeTheme.theme.css
+https://raw.githubusercontent.com/xNightWulf/ThemesForBetterDiscord/master/BlueLine.theme.csss
 https://raw.githubusercontent.com/xNightWulf/ThemesForBetterDiscord/master/BlueNissanSkyline.theme.css
 https://raw.githubusercontent.com/xNightWulf/ThemesForBetterDiscord/master/Destiny_2_Hunter.theme.css
 https://raw.githubusercontent.com/xNightWulf/ThemesForBetterDiscord/master/Destiny_2_Titan.theme.css
