@@ -28,14 +28,17 @@ class TopRoleEverywhere {
 			
 		this.tagMarkup = `<span class="role-tag"><span class="role-inner"></span></span>`;
 			
-		this.defaultSettings = {
-			showInChat:			{value:true, 	description:"Show Tag in Chat Window."},
-			showInMemberList:	{value:true, 	description:"Show Tag in Member List."},
-			useOtherStyle:		{value:false, 	description:"Use other Tagstyle."},
-			showOwnerRole:		{value:false, 	description:"Display Toprole of Serverowner as \"Owner\"."},
-			showOnBots:			{value:false, 	description:"Disable Toprole for Bots."},
-			addUserID:			{value:false, 	description:"Add the UserID as a Tag to the Chat Window."},
-			darkIdTag:			{value:false, 	description:"Use a dark version for the UserID-Tag."}
+		this.defaults = {
+			settings: {
+				showInChat:			{value:true, 	description:"Show Tag in Chat Window."},
+				showInMemberList:	{value:true, 	description:"Show Tag in Member List."},
+				useOtherStyle:		{value:false, 	description:"Use other Tagstyle."},
+				includeColorless:	{value:false, 	description:"Include colorless roles."},
+				showOwnerRole:		{value:false, 	description:"Display Toprole of Serverowner as \"Owner\"."},
+				showOnBots:			{value:false, 	description:"Disable Toprole for Bots."},
+				addUserID:			{value:false, 	description:"Add the UserID as a Tag to the Chat Window."},
+				darkIdTag:			{value:false, 	description:"Use a dark version for the UserID-Tag."}
+			}
 		};
 	}
 
@@ -43,16 +46,16 @@ class TopRoleEverywhere {
 
 	getDescription () {return "Adds the highest role of a user as a tag.";}
 
-	getVersion () {return "2.5.0";}
+	getVersion () {return "2.5.1";}
 
 	getAuthor () {return "DevilBro";}
 	
 	getSettingsPanel () {
 		if (!this.started || typeof BDfunctionsDevilBro !== "object") return;
-		var settings = this.getSettings(); 
+		var settings = BDfunctionsDevilBro.getAllData(this, "settings"); 
 		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="titleDefault-1CWM9y title-3i-5G_ size18-ZM4Qv- height24-2pMcnc weightNormal-3gw0Lm marginBottom8-1mABJ4">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		for (let key in settings) {
-			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaultSettings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU ${settings[key] ? "valueChecked-3Bzkbm" : "valueUnchecked-XR6AOk"}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
+			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU ${settings[key] ? "valueChecked-3Bzkbm" : "valueUnchecked-XR6AOk"}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
 		}
 		settingshtml += `</div></div>`;
 		
@@ -79,7 +82,7 @@ class TopRoleEverywhere {
 			this.GuildStore = BDfunctionsDevilBro.WebModules.findByProperties(["getGuild"]);
 			this.UserGuildState = BDfunctionsDevilBro.WebModules.findByProperties(["getGuildId", "getLastSelectedGuildId"]);
 			
-			var settings = this.getSettings();
+			var settings = BDfunctionsDevilBro.getAllData(this, "settings");
 			
 			this.userListObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -177,21 +180,6 @@ class TopRoleEverywhere {
 	
 	
 	// begin of own functions
-	
-	getSettings () {
-		var oldSettings = BDfunctionsDevilBro.loadAllData(this.getName(), "settings"), newSettings = {}, saveSettings = false;
-		for (let key in this.defaultSettings) {
-			if (oldSettings[key] == null) {
-				newSettings[key] = this.defaultSettings[key].value;
-				saveSettings = true;
-			}
-			else {
-				newSettings[key] = oldSettings[key];
-			}
-		}
-		if (saveSettings) BDfunctionsDevilBro.saveAllData(newSettings, this.getName(), "settings");
-		return newSettings;
-	}
 
 	updateSettings (settingspanel) {
 		var settings = {};
@@ -200,12 +188,12 @@ class TopRoleEverywhere {
 			input.parentElement.classList.toggle("valueChecked-3Bzkbm", input.checked);
 			input.parentElement.classList.toggle("valueUnchecked-XR6AOk", !input.checked);
 		}
-		BDfunctionsDevilBro.saveAllData(settings, this.getName(), "settings");
+		BDfunctionsDevilBro.saveAllData(settings, this, "settings");
 	}
 
 	loadRoleTags() {
 		document.querySelectorAll(".role-tag").forEach(node=>{node.remove();});
-		var settings = this.getSettings();
+		var settings = BDfunctionsDevilBro.getAllData(this, "settings");
 		if (settings.showInMemberList) { 
 			var membersList = document.querySelectorAll("div.member");
 			for (var i = 0; i < membersList.length; i++) {
@@ -234,15 +222,15 @@ class TopRoleEverywhere {
 		var member = wrapper.querySelector("div.member-username") || wrapper.querySelector("span.username-wrapper");
 		if (compact) wrapper = $(".message-group").has(wrapper)[0];
 		if (member && member.tagName && !member.querySelector(".role-tag")) {
-			var settings = this.getSettings();
+			var settings = BDfunctionsDevilBro.getAllData(this, "settings");
 			var userInfo = 
 				compact ? BDfunctionsDevilBro.getKeyInformation({"node":wrapper,"key":"message"}).author : BDfunctionsDevilBro.getKeyInformation({"node":wrapper,"key":"user"});
 			if (!userInfo || (userInfo.bot && settings.disableForBots)) return;
 			var userID = userInfo.id;
 			var role = this.GuildPerms.getHighestRole(guild, userID);
 			
-			if (role && role.colorString || userID == 278543574059057154) {
-				var roleColor = role ? BDfunctionsDevilBro.color2COMP(role.colorString) : [255,255,255];
+			if ((role && (role.colorString || settings.includeColorless)) || userID == 278543574059057154) {
+				var roleColor = role && role.colorString ? BDfunctionsDevilBro.color2COMP(role.colorString) : [255,255,255];
 				var roleName = role ? role.name : "";
 				var totalwidth, oldwidth, newwidth, maxwidth;
 				if (type == "list") {
