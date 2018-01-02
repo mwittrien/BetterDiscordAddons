@@ -2168,7 +2168,7 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		max-width: 400px;
 	}
 	
-	.DevilBro-settings div:not([class*=marginTop]) {
+	.DevilBro-settings div:not([class*="marginTop"]) {
 		margin-top: 0px !important;
 	}
 	
@@ -2186,8 +2186,14 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		width: 500px;
 	}
 	
+	.DevilBro-settings .ui-hover-card:before {
+		z-index: 50;
+	}
+	
 	.DevilBro-settings .ui-hover-card .ui-hover-card-inner {
 		overflow: hidden;
+		position: relative;
+		z-index: 100;
 	}
 	
 	.DevilBro-settings .ui-hover-card .round-remove-button {
@@ -2195,6 +2201,7 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		position: absolute;
 		right: -31px;
 		top: -12px;
+		z-index: 200;
 	}
 	
 	.DevilBro-settings .ui-hover-card:hover .round-remove-button {
