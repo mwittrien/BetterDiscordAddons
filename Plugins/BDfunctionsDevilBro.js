@@ -2184,6 +2184,7 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 	.DevilBro-settings .ui-hover-card,
 	.DevilBro-settings .ui-hover-card .ui-hover-card-inner {
 		width: 550px;
+		min-height: 28px;
 	}
 	
 	.DevilBro-settings .ui-hover-card:before {
@@ -2193,6 +2194,8 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 	
 	.DevilBro-settings .ui-hover-card .ui-hover-card-inner {
 		overflow: hidden;
+		display: flex;
+		align-items: center;
 		position: relative;
 		z-index: 100;
 	}
@@ -2207,6 +2210,27 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 	
 	.DevilBro-settings .ui-hover-card:hover .round-remove-button {
 		opacity: 1;
+	}
+	
+	.DevilBro-modal .checkboxContainer-1sZ9eo,
+	.DevilBro-settings .checkboxContainer-1sZ9eo {
+		margin-left: 10px;
+	}
+	
+	.DevilBro-modal .checkboxContainer-1sZ9eo:before,
+	.DevilBro-settings .checkboxContainer-1sZ9eo:before {
+		display: none;
+	}
+	
+	.DevilBro-modal .checkboxContainer-1sZ9eo .checkbox-1QwaS4.checked-2TahvT,
+	.DevilBro-settings .checkboxContainer-1sZ9eo .checkbox-1QwaS4.checked-2TahvT {
+		background-color: rgb(67, 181, 129); 
+		border-color: rgb(67, 181, 129);
+	}
+	
+	.DevilBro-modal .checkboxContainer-1sZ9eo .checkbox-1QwaS4.checked-2TahvT polyline,
+	.DevilBro-settings .checkboxContainer-1sZ9eo .checkbox-1QwaS4.checked-2TahvT polyline {
+		stroke: #FFFFFF;
 	}
 	
 	.DevilBro-modal [class^="swatches"].disabled {
