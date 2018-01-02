@@ -2,12 +2,7 @@
 
 class ChatFilter {
 	constructor () {
-		this.types = ["blocked","censored"];
-		
-		this.defaultReplace = {
-			"blocked":"~~BLOCKED~~",
-			"censored":"$!%&%!&"
-		};
+		this.configs = ["case","exact"];
 		
 		this.chatWindowObserver = new MutationObserver(() => {});
 		this.messageChangeObserver = new MutationObserver(() => {});
@@ -23,278 +18,70 @@ class ChatFilter {
 			.message-group .comment .accessory.censored:not(.revealed),
 			.message-group .comment .markup.censored:not(.revealed) {
 				
-			}
-		
-			.chatfilter-settings .title {
-				color: #757C87;
-				font-size: 20px;
-				font-weight: bold;
-				text-transform: capitalize;
-				margin: 0 0 10px 0 !important;
-				padding: 0 !important;
-			}
-
-			.chatfilter-settings .input-bar {
-				margin: 0 !important;
-				padding: 0 !important;
-			}
-
-			.chatfilter-settings .replace-value-label,
-			.chatfilter-settings .word-value-label {
-				position: relative;
-				display: inline-block;
-				color: #757C87;
-				font-weight: bold;
-				margin: 0 5px 0 0 !important;
-				padding: 0 !important;
-			}
-
-			.chatfilter-settings input.default-replace-value,
-			.chatfilter-settings input.replace-value,
-			.chatfilter-settings input.word-value {
-				width: 150px;
-				height: 21px;
-				margin: 0 15px 0 0 !important;
-				padding: 0 !important;
-				border-radius: 5px;
-			}
-
-			.chatfilter-settings input:disabled {
-				color: #292B2F;
-				cursor: no-drop;
-				background-color: #36393F;
-				border-color: #292B2F;
-			}
-
-			.chatfilter-settings button.word-add,
-			.chatfilter-settings button.toggle-info,
-			.chatfilter-settings button.remove-all {
-				height: 21px;
-				font-weight: 500;
-				margin: 0 15px 0 0 !important;
-				padding: 0 7px 0 7px !important;
-				border-radius: 5px;
-			}
-
-			.chatfilter-settings button.remove-all {
-				color: red;
-				margin: 0 15px 0 15px !important;
-			}
-
-			.chatfilter-settings input.showmsg-check,
-			.chatfilter-settings input.blockhide-check,
-			.chatfilter-settings input.word-exact,
-			.chatfilter-settings input.word-case {
-				position: relative;
-				margin: 0 5px 0 0 !important;
-				padding: 0 !important;
-				top: 3px;
-				width: 15px;
-				height: 15px;
-				cursor: pointer;
-			}
-
-			.chatfilter-settings .replace-text,
-			.chatfilter-settings .showmsg-check-text,
-			.chatfilter-settings .blockhide-check-text,
-			.chatfilter-settings .word-exact-text,
-			.chatfilter-settings .word-case-text {
-				position: relative;
-				display: inline-block;
-				color: #757C87;
-				font-weight: bold;
-				margin: 0 15px 0 0 !important;
-				padding: 0 !important;
-			}
-
-			.chatfilter-settings .replace-text {
-				width: 300px;
-			}
-			
-			.chatfilter-settings .replace-text,
-			.chatfilter-settings .showmsg-check-text,
-			.chatfilter-settings .blockhide-check-text {
-				top: 1px;
-			}
-
-			.chatfilter-settings .showmsg-settings,
-			.chatfilter-settings .blockhide-settings {
-				margin: 10px 0 0 0 !important;
-				padding: 0 !important;
-			}
-			
-			.chatfilter-settings .word-container {
-				min-height: 30px;
-				background-color: #36393F;
-				margin: 10px 2px 20px 2px !important;
-				padding: 5px !important;
-				border-radius: 5px;
-			}
-
-			.chatfilter-settings .added-word {
-				color: black;
-				position: relative;
-				display: inline-block;
-				font-weight: 500;
-				margin: 2px !important;
-				padding: 1px 2px 0 2px !important;
-				border-radius: 5px;
-				background-color: #757C7E;
-				border: 2px solid #757C7E;
-				max-width: 600px;
-				overflow: hidden;
-			}
-
-			.chatfilter-settings .added-word.case {
-				background-color: #6699ff;
-			}
-
-			.chatfilter-settings .added-word.nocase {
-				background-color: #ff6666;
-			}
-
-			.chatfilter-settings .added-word.exact {
-				border: 2px solid #ffcc00;
-			}
-
-			.chatfilter-settings .added-word.noexact {
-				border: 2px solid #009933;
-			}
-
-			.chatfilter-settings .added-word.fake {
-				float: left;
-				text-align: center;
-				width: 90px;
-			}
-
-			.chatfilter-settings .word-delete {
-				color: black;
-				position: relative;
-				display: inline-block;
-				bottom: 1px;
-				width: 15px;
-				text-align: center;
-				font-size: 13px;
-				margin: 2px !important;
-				padding: 2px !important;
-				border-radius: 5px;
-			}
-
-			.chatfilter-settings .word-delete.fake {
-				bottom: 0px;
-			}
-
-			.chatfilter-settings .word-delete:hover {
-				color: #757C87;
-				background-color: #26272B;
-				cursor: pointer;
-			}
-
-			.chatfilter-settings .replace-word-text {
-				margin: 0 10px 0 0 !important;
-			}
-			
-			.chatfilter-settings .replace-settings,
-			.chatfilter-settings .wordtype-info,
-			.chatfilter-settings .blocked-censored-info {
-				color: #757C87;
-				font-weight: bold;
-				background-color: #36393F;
-				margin: 10px 2px 20px 2px !important;
-				padding: 10px !important;
-				border-radius: 5px;
-			}
-			
-			.chatfilter-settings .wordtype-category {
-				overflow: hidden;
-				color: #757C87;
-				font-weight: bold;
-				margin: 10px 2px 10px 2px !important;
-				padding: 0 !important;
-			}
-			
-			.chatfilter-settings .wordtype-description {
-				white-space: pre;
-				width: 500px;
-				float: left;
-				display: inline-block;
-				color: #757C87;
-				font-weight: bold;
-				margin: 0 0 0 10px !important;
-				padding: 0 !important;
 			}`;
+		
+		this.defaults = {
+			replaces: {
+				blocked: 	{value:"~~BLOCKED~~",	title:"Block:",		description:"Default Replace Word for blocked Messages:"},
+				censored:	{value:"$!%&%!&",		title:"Censor:",	description:"Default Replace Word for censored Messages:"}
+			},
+			settings: {
+				showMessageOnClick: 	{value:{blocked:true, censored:true},	enabled:{blocked:true, censored:true},		description:"Show original Message on Click:"},
+				hideMessage:			{value:{blocked:false, censored:false},	enabled:{blocked:true, censored:false},		description:"Completely hide targeted Messages:"}
+			}
+		};
 	}
 
 	getName () {return "ChatFilter";}
 
 	getDescription () {return "Allows the user to censor words or block complete messages based on words in the chatwindow.";}
 
-	getVersion () {return "3.1.0";}
+	getVersion () {return "3.1.1";}
 
 	getAuthor () {return "DevilBro";}
 	
 	getSettingsPanel () {
 		if (!this.started || typeof BDfunctionsDevilBro !== "object") return;
-		var replaceText = {
-			"blocked": "Default: Replace blocked messages with:",
-			"censored": "Default: Replace censored words with:"
-		};
-		var settingshtml = ``;
-		for (var i in this.types) {
-			var type = this.types[i];
-			var words = BDfunctionsDevilBro.loadData(type, this.getName(), "words");
-			settingshtml += `<div class="chatfilter-settings">`;
-			settingshtml += `<div class="title">${type}-Words:</div>`;
-			settingshtml += `<div class="input-bar" id="${type}-input-bar">`;
-			settingshtml += `<label class="word-value-label">Replace:</label><input name="inputadd" wordtype="${type}" class="word-value" id="${type}-word-value">`;
-			settingshtml += `<label class="replace-value-label">with:</label><input name="inputadd" wordtype="${type}" class="replace-value" id="${type}-replace-value">`;
-			settingshtml += `<button name="add" wordtype="${type}" class="word-add" id="${type}-word-add">Add</button>`;
-			settingshtml += `<button name="removeall" wordtype="${type}" class="remove-all" id="${type}-remove-all">Remove All</button></br>`;
-			settingshtml += `<label class="word-case-text"><input type="checkbox" wordtype="${type}" class="word-case" id="${type}-word-case">case-sensitive</label>`;
-			settingshtml += `<label class="word-exact-text"><input type="checkbox" wordtype="${type}" class="word-exact" id="${type}-word-exact" checked>exact word</label>`;
-			settingshtml += `</div>`;
-			settingshtml += `<div class="word-container" id="${type}-word-container">`;
+		var replaces = BDfunctionsDevilBro.getAllData(this, "replaces");
+		var settings = BDfunctionsDevilBro.getAllData(this, "settings");
+		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="titleDefault-1CWM9y title-3i-5G_ size18-ZM4Qv- height24-2pMcnc weightNormal-3gw0Lm marginBottom8-1mABJ4">${this.getName()}</div><div class="DevilBro-settings-inner">`;
+		for (let rtype in replaces) {
+			var words = BDfunctionsDevilBro.loadData(rtype, this, "words");
+			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto; padding-top:8px; min-width:55px;">${this.defaults.replaces[rtype].title}</h3><input rtype="${rtype}" action="add" type="text" placeholder="Wordvalue" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_ wordInputs" id="input-${rtype}-wordvalue" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto; padding-top:8px;">With:</h3><input rtype="${rtype}" action="add" type="text" placeholder="Replacevalue" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_ wordInputs" id="input-${rtype}-replacevalue" style="flex: 1 1 auto;"></div>`;
+			for (let key in settings) {
+				settingshtml += `<div rtype="${rtype}" value="${key}" class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU ${settings[key][rtype] ? "valueChecked-3Bzkbm" : "valueUnchecked-XR6AOk"}" style="flex: 0 0 auto;"><input type="checkbox" rtype="${rtype}" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key][rtype] ? " checked" : ""}></div></div>`;
+			}
+			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto; padding-top:8px; min-width: 320px;">${this.defaults.replaces[rtype].description}</h3><input rtype="${rtype}" type="text" placeholder="${this.defaults.replaces[rtype].value}" value="${replaces[rtype]}" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_ defaultInputs" id="input-${rtype}-defaultvalue" style="flex: 1 1 auto;"></div>`;
+			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto; max-width: 495px;">List of ${rtype} Words:</h3><div class="marginTop8-2gOa2N headerSize-22dv1R size10-1ZEdeK primary-2giqSn weightBold-2qbcng" style="flex: 1 1 auto; max-width: 32px;">CASE</div><div class="marginTop8-2gOa2N headerSize-22dv1R size10-1ZEdeK primary-2giqSn weightBold-2qbcng" style="flex: 0 0 auto;">EXACT</div></div><div class="DevilBro-settings-inner-list ${rtype}-list">`;			
 			for (let word in words) {
-				var replaceword = words[word].replace ? "(" + BDfunctionsDevilBro.encodeToHTML(words[word].replace) + ")" : "";
-				var wordcomparison = words[word].exact ? "exact" : "noexact";
-				var casesensivity = words[word].case ? "case" : "nocase";
-				settingshtml += `<div name="${word}" class="added-word ${wordcomparison} ${casesensivity} ${type}-word">${BDfunctionsDevilBro.encodeToHTML(word)} ${replaceword}<div name="remove" wordtype="${type}" class="word-delete">✖</div></div>`;
-			}		
-			settingshtml += `</div>`;
-			var showMessageOnClick = BDfunctionsDevilBro.loadData(type, this.getName(), "showMessageOnClick") ? " checked" : "";
-			var hideBlockedMessages = "";
-			var disabled = "";
-			if (type == "blocked") {
-				hideBlockedMessages = BDfunctionsDevilBro.loadData(type, this.getName(), "hideBlockedMessages") ? " checked" : "";
-				disabled = hideBlockedMessages ? " disabled" : "";
+				settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginTop4-2rEBfJ marginBottom4-_yArcI ui-hover-card"><div class="ui-hover-card-inner"><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn ellipsis-CYOqEr" style="flex: 1 1 auto;">${BDfunctionsDevilBro.encodeToHTML(word)} (${BDfunctionsDevilBro.encodeToHTML(words[word].replace)})</div>`
+				for (let config of this.configs) {
+					settingshtml += `<div class="checkboxContainer-1sZ9eo marginReset-2tTc4H" style="flex: 0 0 auto;"><label class="checkboxWrapper-2Yvr_Y"><input type="checkbox" class="inputDefault-2tiBIA input-oWyROL"><div word="${word}" rtype="${rtype}" config="${config}" class="checkbox-1QwaS4 center-1MLNrE flex-3B1Tl4 justifyCenter-29N31w alignCenter-3VxkQP round-30vw42 ${words[word][config] ? "checked-2TahvT" : ""}"><svg name="Checkmark" width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><polyline stroke="transparent" stroke-width="2" points="3.5 9.5 7 13 15 5"></polyline></g></svg></div></label></div>`;
+				}
+				settingshtml += `</div><div word="${word}" rtype="${rtype}" action="remove" class="round-remove-button remove-word"></div></div>`;
 			}
-			var replaceString = BDfunctionsDevilBro.loadData(type, this.getName(), "replaceString");
-			replaceString = (replaceString && replaceString.length > 0) ? replaceString : this.defaultReplace[type];
-			settingshtml += `<div class="replace-settings" id="${type}-replace-settings"><div class="replace-text" id="${type}-replace-text">${replaceText[type]}</div><input wordtype="${type}" class="default-replace-value" id="${type}-default-replace-value" value="${replaceString}" placeholder="${replaceString}"${disabled}>`;
-			settingshtml += `<div class="showmsg-settings"><label class="showmsg-check-text"><input type="checkbox" name="showmsg" wordtype="${type}" class="showmsg-check"${showMessageOnClick}>Show original message on click.</label></div>`;
-			if (type == "blocked") {
-				settingshtml += `<div class="blockhide-settings"><label class="blockhide-check-text"><input type="checkbox" wordtype="${type}" name="blockhide" class="blockhide-check"${hideBlockedMessages}>Completely hide blocked messages.</label></div>`;
-			}
-			settingshtml += `</div>`;
+			settingshtml += `</div><div class="divider-1G01Z9 dividerDefault-77PXsz marginBottom40-1zK7fE"></div>`;
 		}
-		var infoHidden = BDfunctionsDevilBro.loadData("hideInfo", this.getName(), "settings") ? " style='display:none;'" : "";
-		settingshtml += `<button class="toggle-info">Toggle Information</button>`;
-		settingshtml += `<div class="wordtype-info"${infoHidden}>`;
-		settingshtml += `<div class="wordtype-category"><div class="added-word case fake">case<div class="word-delete fake">✖</div></div><div class="wordtype-description">Will censor/block words while comparing lowercase/uppercase. \napple => apple, not APPLE or AppLe</div></div>`;
-		settingshtml += `<div class="wordtype-category"><div class="added-word nocase fake">not case<div class="word-delete fake">✖</div></div><div class="wordtype-description">Will censor/block words while ignoring lowercase/uppercase. \napple => apple, APPLE and AppLe</div></div>`;
-		settingshtml += `<div class="wordtype-category"><div class="added-word exact fake">exact<div class="word-delete fake">✖</div></div><div class="wordtype-description">Will only censor/block words that are exactly the selected word. \napple => apple, not applepie or pineapple</div></div>`;
-		settingshtml += `<div class="wordtype-category"><div class="added-word noexact fake">not exact<div class="word-delete fake">✖</div></div><div class="wordtype-description">Will censor/block all words containing the selected word. \napple => apple, applepie and pineapple</div></div>`;
-		settingshtml += `</div>`;
-		settingshtml += `<div class="blocked-censored-info"${infoHidden}>Blocked in this case means, that a message that contains one of the words will be completely blocked in your chat window. Censored means you will still be able to read the message but the censored words will be unreadable. Supports Regular Expressions.</div>`;
-		settingshtml += `</div>`;
+		var infoHidden = BDfunctionsDevilBro.loadData("hideInfo", this, "hideInfo");
+		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO cursorPointer-3oKATS ${infoHidden ? "wrapperCollapsed-18mf-c" : "wrapperDefault-1Dl4SS"} toggle-info" style="flex: 1 1 auto;"><svg class="iconTransition-VhWJ85 ${infoHidden ? "closed-2Hef-I iconCollapsed-1INdMX" : "iconDefault-xzclSQ"}" width="12" height="12" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 10L12 15 17 10"></path></svg><div class="colorTransition-2iZaYd overflowEllipsis-2ynGQq nameCollapsed-3_ChMu" style="flex: 1 1 auto;">Information</div></div>`;
+		settingshtml += `<div class="DevilBro-settings-inner-list info-container" ${infoHidden ? "style='display:none;'" : ""}>`;
+		settingshtml += `<div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">Case: Will block/censor words while comparing lowercase/uppercase. apple => apple, not APPLE or AppLe</div><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">Not Case: Will block/censor words while ignoring lowercase/uppercase. apple => apple, APPLE and AppLe</div><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">Exact: Will block/censor words that are exactly the selected word. apple => apple, not applepie or pineapple</div><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">Not Exact: Will block/censor all words containing the selected word. apple => apple, applepie and pineapple</div>`;
+		settingshtml += `</div></div>`;
 		
 		var settingspanel = $(settingshtml)[0];
 		$(settingspanel)
-			.on("keypress", ".word-value, .replace-value", (e) => {this.updateContainer(settingspanel, e);})
-			.on("click", ".word-add, .word-delete:not(.fake), .remove-all", (e) => {this.updateContainer(settingspanel, e);})
-			.on("change", ".default-replace-value", (e) => {this.saveReplace(e);})
-			.on("change", ".showmsg-check, .blockhide-check", (e) => {this.saveCheckbox(settingspanel, e);})
-			.on("click", ".toggle-info", () => {this.toggleInfo(settingspanel);});
+			.on("click", ".checkbox-1KYsPm", () => {this.updateSettings(settingspanel);})
+			.on("keypress", ".wordInputs", (e) => {if (e.which == 13) this.updateContainer(settingspanel, e.currentTarget);})
+			.on("keyup", ".defaultInputs", (e) => {this.saveReplace(e.currentTarget);})
+			.on("click", ".remove-word, .remove-all", (e) => {this.updateContainer(settingspanel, e.currentTarget);})
+			.on("click", ".checkboxWrapper-2Yvr_Y", (e) => {this.updateConfig(e.currentTarget);})
+			.on("click", ".toggle-info", (e) => {this.toggleInfo(settingspanel, e.currentTarget);});
+			
+		for (let key in settings) {
+			for (let rtype in this.defaults.settings[key].enabled) {
+				if (!this.defaults.settings[key].enabled[rtype]) $(settingspanel).find(".flex-lFgbSz[value='" + key + "'][rtype='" + rtype + "']").hide();
+			}
+		}
 		return settingspanel;
 	}
 
@@ -391,105 +178,104 @@ class ChatFilter {
 	
 	// begin of own functions
 	
-	updateContainer (settingspanel, e) {
-		var update = false;
-		var ele = e.target;
-		var type = $(ele).attr("wordtype");
-		var words = BDfunctionsDevilBro.loadData(type, this.getName(), "words");
-		words = words ? words : {};
-		var wordvalue = null;
-		var replacevalue = null;
-		var wordinput = settingspanel.querySelector("#" + type + "-word-value");
-		var replaceinput = settingspanel.querySelector("#" + type + "-replace-value");
-		if ($(ele).attr("name") == "add") {
+	
+	updateContainer (settingspanel, ele) {
+		var update = false, wordvalue = null, replacevalue = null;
+		var action = ele.getAttribute("action"), rtype = ele.getAttribute("rtype");
+		var words = BDfunctionsDevilBro.loadData(rtype, this, "words");
+		
+		if (action == "add") {
+			var wordinput = settingspanel.querySelector("#input-" + rtype + "-wordvalue");
+			var replaceinput = settingspanel.querySelector("#input-" + rtype + "-replacevalue");
 			wordvalue = wordinput.value;
 			replacevalue = replaceinput.value;
 			if (wordvalue && wordvalue.trim().length > 0) {
 				wordvalue = wordvalue.trim();
 				replacevalue = replacevalue.trim();
-				words[wordvalue] = {};
-				words[wordvalue].replace = replacevalue;
-				words[wordvalue].exact = $(settingspanel).find("#" + type + "-word-exact").prop("checked");
-				words[wordvalue].case = $(settingspanel).find("#" + type + "-word-case").prop("checked");
+				words[wordvalue] = {
+					replace: replacevalue,
+					exact: true,
+					case: false
+				};
 				wordinput.value = null;
 				replaceinput.value = null;
 				update = true;
 			}
 		}
-		else if ($(ele).attr("name") == "remove") {
-			wordvalue = $(ele.parentElement).attr("name");
+		else if (action == "remove") {
+			wordvalue = ele.getAttribute("word");
 			if (wordvalue) {
 				delete words[wordvalue];
 				update = true;
 			}
 		}
-		else if ($(ele).attr("name") == "removeall") {
+		else if (action == "removeall") {
 			words = {};
 			update = true;
 		}
-		else if ($(ele).attr("name") == "addinput") {
-			if (event.which == '13'){
-				wordvalue = wordinput.value;
-				replacevalue = replaceinput.value;
-				if (wordvalue && wordvalue.trim().length > 0) {
-					wordvalue = wordvalue.trim();
-					replacevalue = replacevalue.trim();
-					words[wordvalue] = {};
-					words[wordvalue].replace = replacevalue.length > 0 ? replacevalue : null;
-					words[wordvalue].exact = $(settingspanel).find("#" + type + "-word-exact").prop("checked");
-					words[wordvalue].case = $(settingspanel).find("#" + type + "-word-case").prop("checked");
-					wordinput.value = null;
-					replaceinput.value = null;
-					update = true;
-				}
-			}
-		}
-		
 		if (update) {
-			BDfunctionsDevilBro.saveData(type, words, this.getName(), "words");
-			words = BDfunctionsDevilBro.loadData(type, this.getName(), "words");
+			BDfunctionsDevilBro.saveData(rtype, words, this, "words");
+			words = BDfunctionsDevilBro.loadData(rtype, this, "words");
 			
 			var containerhtml = ``;
 			for (let word in words) {
-				var replaceword = words[word].replace ? "(" + BDfunctionsDevilBro.encodeToHTML(words[word].replace) + ")" : "";
-				var wordcomparison = words[word].exact ? "exact" : "noexact";
-				var casesensivity = words[word].case ? "case" : "nocase";
-				containerhtml += `<div name="${word}" class="added-word ${wordcomparison} ${casesensivity} ${type}-word">${BDfunctionsDevilBro.encodeToHTML(word)} ${replaceword}<div wordtype="${type}" name="remove" class="word-delete">✖</div></div>`;
+				containerhtml += `<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginTop4-2rEBfJ marginBottom4-_yArcI ui-hover-card"><div class="ui-hover-card-inner"><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn ellipsis-CYOqEr" style="flex: 1 1 auto;">${BDfunctionsDevilBro.encodeToHTML(word)} (${BDfunctionsDevilBro.encodeToHTML(words[word].replace)})</div>`
+				for (let config of this.configs) {
+					containerhtml += `<div class="checkboxContainer-1sZ9eo marginReset-2tTc4H" style="flex: 0 0 auto;"><label class="checkboxWrapper-2Yvr_Y"><input type="checkbox" class="inputDefault-2tiBIA input-oWyROL"><div word="${word}" rtype="${rtype}" config="${config}" class="checkbox-1QwaS4 center-1MLNrE flex-3B1Tl4 justifyCenter-29N31w alignCenter-3VxkQP round-30vw42 ${words[word][config] ? "checked-2TahvT" : ""}"><svg name="Checkmark" width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><polyline stroke="transparent" stroke-width="2" points="3.5 9.5 7 13 15 5"></polyline></g></svg></div></label></div>`;
+				}
+				containerhtml += `</div><div word="${word}" rtype="${rtype}" action="remove" class="round-remove-button remove-word"></div></div>`;
 			}
-			
-			$(settingspanel).find("#" + type + "-word-container").html(containerhtml);
+			containerhtml += `</div>`;
+			$(settingspanel).find("." + rtype + "-list").html(containerhtml);
 		}
 	}
 	
-	saveReplace (e) {
-		var input = e.target;
-		var type = $(input).attr("wordtype");
+	saveReplace (input) {
+		var rtype = input.getAttribute("rtype");
 		var wordvalue = input.value;
-		if (wordvalue && wordvalue.trim().length > 0) {
-			wordvalue = wordvalue.trim();
-			BDfunctionsDevilBro.saveData(type, wordvalue, this.getName(), "replaceString");
+		if (rtype && wordvalue && wordvalue.trim().length > 0) {
+			var replaces = BDfunctionsDevilBro.getData(rtype, this, "replaces");
+			BDfunctionsDevilBro.saveData(rtype, wordvalue.trim(), this, "replaces");
+		}
+	}
+
+	updateSettings (settingspanel) {
+		var settings = {};
+		for (var input of settingspanel.querySelectorAll(".checkbox-1KYsPm")) {
+			let key = input.getAttribute("value");
+			let rtype = input.getAttribute("rtype");
+			if (!settings[key]) settings[key] = {};
+			settings[key][rtype] = input.checked;
+			input.parentElement.classList.toggle("valueChecked-3Bzkbm", input.checked);
+			input.parentElement.classList.toggle("valueUnchecked-XR6AOk", !input.checked);
+		}
+		BDfunctionsDevilBro.saveAllData(settings, this, "settings");
+	}
+	
+	updateConfig (ele) {
+		ele = ele.querySelector(".checkbox-1QwaS4");
+		var wordvalue = ele.getAttribute("word");
+		var config = ele.getAttribute("config");
+		var rtype = ele.getAttribute("rtype");
+		var words = BDfunctionsDevilBro.loadData(rtype, this, "words");
+		if (wordvalue && words[wordvalue] && config) {
+			ele.classList.toggle("checked-2TahvT");
+			words[wordvalue][config] = ele.classList.contains("checked-2TahvT");
+			BDfunctionsDevilBro.saveData(rtype, words, this, "words");
 		}
 	}
 	
-	saveCheckbox (settingspanel, e) {
-		var input = e.target;
-		var type = $(input).attr("wordtype");
-		var checked = $(input).prop("checked");
-		if ($(input).attr("name") == "blockhide") {
-			$(settingspanel).find("#" + type + "-replace-value").prop("disabled", checked);
-			$(settingspanel).find("#" + type + "-default-replace-value").prop("disabled", checked);
-			BDfunctionsDevilBro.saveData(type, checked, this.getName(), "hideBlockedMessages");
-		}
-		else if ($(input).attr("name") == "showmsg") {
-			BDfunctionsDevilBro.saveData(type, checked, this.getName(), "showMessageOnClick");
-		}
-	}
-	
-	toggleInfo (settingspanel) {
-		var visible = $(settingspanel).find(".wordtype-info").is(":visible");
-		$(settingspanel).find(".wordtype-info").toggle(!visible);
-		$(settingspanel).find(".blocked-censored-info").toggle(!visible);
-		BDfunctionsDevilBro.saveData("hideInfo", visible, this.getName(), "settings");
+	toggleInfo (settingspanel, ele) {
+		ele.classList.toggle("wrapperCollapsed-18mf-c");
+		ele.classList.toggle("wrapperDefault-1Dl4SS");
+		var svg = ele.querySelector(".iconTransition-VhWJ85");
+		svg.classList.toggle("closed-2Hef-I");
+		svg.classList.toggle("iconCollapsed-1INdMX");
+		svg.classList.toggle("iconDefault-xzclSQ");
+		
+		var visible = $(settingspanel).find(".info-container").is(":visible");
+		$(settingspanel).find(".info-container").toggle(!visible);
+		BDfunctionsDevilBro.saveData("hideInfo", visible, this, "hideInfo");
 	}
 	
 	hideAllMessages () {
@@ -524,11 +310,12 @@ class ChatFilter {
 					}
 				});
 			
-				var blockedWords = BDfunctionsDevilBro.loadData("blocked", this.getName(), "words");
+				var settings = BDfunctionsDevilBro.getAllData(this, "settings");
+				var replaces = BDfunctionsDevilBro.getAllData(this, "replaces");
+				var blockedWords = BDfunctionsDevilBro.loadData("blocked", this, "words");
 				var blocked = false;
 				for (let bWord in blockedWords) {
-					var blockedReplace = blockedWords[bWord].replace ? blockedWords[bWord].replace : BDfunctionsDevilBro.loadData("blocked", this.getName(), "replaceString");
-					blockedReplace = (blockedReplace && blockedReplace.length > 0) ? blockedReplace : this.defaultReplace.blocked;
+					var blockedReplace = blockedWords[bWord].replace || replaces.blocked;
 					var modifier = blockedWords[bWord].case ? "" : "i";
 					bWord = blockedWords[bWord].exact ? "^" + BDfunctionsDevilBro.regEscape(bWord) + "$" : BDfunctionsDevilBro.regEscape(bWord);
 					bWord = BDfunctionsDevilBro.encodeToHTML(bWord);
@@ -555,10 +342,7 @@ class ChatFilter {
 					if (blocked) break;
 				}
 				if (blocked) {
-					var hideMessage = BDfunctionsDevilBro.loadData("blocked", this.getName(), "hideBlockedMessages");
-					if (hideMessage) {
-						$(message).hide();
-					}
+					if (settings.hideMessage.blocked) $(message).hide();
 					newhtml = BDfunctionsDevilBro.encodeToHTML(blockedReplace);
 					$(message)
 						.html(newhtml)
@@ -566,13 +350,12 @@ class ChatFilter {
 						.data("newhtml",newhtml)
 						.data("orightml",orightml);
 						
-					this.addClickListener(message, "blocked");
+					this.addClickListener(message, settings.showMessageOnClick.blocked);
 				}
 				else {
-					var censoredWords = BDfunctionsDevilBro.loadData("censored", this.getName(), "words");
+					var censoredWords = BDfunctionsDevilBro.loadData("censored", this, "words");
 					for (let cWord in censoredWords) {
-						var censoredReplace = censoredWords[cWord].replace ? censoredWords[cWord].replace : BDfunctionsDevilBro.loadData("censored", this.getName(), "replaceString");
-						censoredReplace = (censoredReplace && censoredReplace.length > 0) ? censoredReplace : this.defaultReplace.censored;
+						var censoredReplace = censoredWords[cWord].replace || replaces.censored;
 						var modifier = censoredWords[cWord].case ? "" : "i";
 						cWord = censoredWords[cWord].exact ? "^" + BDfunctionsDevilBro.regEscape(cWord) + "$" : BDfunctionsDevilBro.regEscape(cWord);
 						cWord = BDfunctionsDevilBro.encodeToHTML(cWord);
@@ -618,7 +401,7 @@ class ChatFilter {
 							.data("newhtml",newhtml)
 							.data("orightml",orightml);
 							
-						this.addClickListener(message, "censored");
+						this.addClickListener(message, settings.showMessageOnClick.censored);
 					}
 				}
 			}
@@ -629,20 +412,20 @@ class ChatFilter {
 		var orightml = $(message).data("orightml");
 		$(message)
 			.html(orightml)
-			.off("click")
+			.off("click." + this.getName())
 			.removeClass("blocked")
 			.removeClass("censored")
 			.removeClass("revealed");
 	}
 	
-	addClickListener (message, type) {
+	addClickListener (message, add) {
 		$(message)
-			.off("click");
-		if (BDfunctionsDevilBro.loadData(type, this.getName(), "showMessageOnClick")) {
+			.off("click." + this.getName());
+		if (add) {
 			var orightml = $(message).data("orightml");
 			var newhtml = $(message).data("newhtml");
 			$(message)
-				.on("click", () => {	
+				.on("click." + this.getName(), () => {	
 					if ($(message).hasClass("revealed")) {
 						$(message)
 							.html(newhtml)
