@@ -2,224 +2,45 @@
 
 class ChatAliases {
 	constructor () {
-		
 		this.settingsWindowObserver = new MutationObserver(() => {});
 		this.textareaObserver = new MutationObserver(() => {});
-		
-		this.css = ` 
-			.chataliases-settings .title {
-				color: #757C87;
-				font-size: 20px;
-				font-weight: bold;
-				text-transform: capitalize;
-				margin: 0 0 10px 0 !important;
-				padding: 0 !important;
-			}
-
-			.chataliases-settings .input-bar {
-				margin: 0 !important;
-				padding: 0 !important;
-			}
-
-			.chataliases-settings .replace-value-label,
-			.chataliases-settings .word-value-label {
-				position: relative;
-				display: inline-block;
-				color: #757C87;
-				font-weight: bold;
-				margin: 0 5px 0 0 !important;
-				padding: 0 !important;
-			}
-			
-			.chataliases-settings input.replace-value,
-			.chataliases-settings input.word-value {
-				width: 140px;
-				height: 21px;
-				margin: 0 15px 0 0 !important;
-				padding: 0 !important;
-				border-radius: 5px;
-			}
-
-			.chataliases-settings button.word-add,
-			.chataliases-settings button.toggle-info,
-			.chataliases-settings button.remove-all {
-				height: 21px;
-				font-weight: 500;
-				margin: 0 15px 0 0 !important;
-				padding: 0 7px 0 7px !important;
-				border-radius: 5px;
-			}
-
-			.chataliases-settings button.remove-all {
-				color: red;
-				margin: 0 15px 0 15px !important;
-			}
-			
-			.chataliases-settings .word-container {
-				min-height: 30px;
-				background-color: #36393F;
-				margin: 10px 2px 20px 2px !important;
-				padding: 5px !important;
-				border-radius: 5px;
-			}
-			
-			.chataliases-settings input.word-exact,
-			.chataliases-settings input.word-case {
-				position: relative;
-				margin: 0 5px 0 0 !important;
-				padding: 0 !important;
-				top: 3px;
-				width: 15px;
-				height: 15px;
-				cursor: pointer;
-			}
-			
-			.chataliases-settings .word-exact-text,
-			.chataliases-settings .word-case-text {
-				position: relative;
-				display: inline-block;
-				color: #757C87;
-				font-weight: bold;
-				margin: 0 15px 0 0 !important;
-				padding: 0 !important;
-			}
-
-			.chataliases-settings .added-word {
-				color: black;
-				position: relative;
-				display: inline-block;
-				font-weight: 500;
-				margin: 2px !important;
-				padding: 1px 2px 0 2px !important;
-				border-radius: 5px;
-				background-color: #757C7E;
-				border: 2px solid #757C7E;
-				max-width: 600px;
-				overflow: hidden;
-			}
-
-			.chataliases-settings .added-word.fake {
-				float: left;
-				text-align: center;
-				width: 90px;
-			}
-
-			.chataliases-settings .added-word.case {
-				background-color: #6699ff;
-			}
-
-			.chataliases-settings .added-word.nocase {
-				background-color: #ff6666;
-			}
-
-			.chataliases-settings .added-word.exact {
-				border: 2px solid #ffcc00;
-			}
-
-			.chataliases-settings .added-word.noexact {
-				border: 2px solid #009933;
-			}
-
-			.chataliases-settings .word-delete {
-				color: black;
-				position: relative;
-				display: inline-block;
-				width: 15px;
-				bottom: 1px;
-				text-align: center;
-				font-size: 13px;
-				margin: 2px !important;
-				padding: 2px !important;
-				border-radius: 5px;
-			}
-
-			.chataliases-settings .word-delete:hover {
-				color: #757C87;
-				background-color: #26272B;
-				cursor: pointer;
-			}
-
-			.chatfilter-settings .word-delete.fake {
-				bottom: 0px;
-			}
-
-			.chataliases-settings .replace-word-text {
-				margin: 0 10px 0 0 !important;
-			}
-			
-			.chataliases-settings .wordtype-info {
-				color: #757C87;
-				font-weight: bold;
-				background-color: #36393F;
-				margin: 10px 2px 20px 2px !important;
-				padding: 10px !important;
-				border-radius: 5px;
-			}
-			
-			.chataliases-settings .wordtype-category {
-				overflow: hidden;
-				color: #757C87;
-				font-weight: bold;
-				margin: 10px 2px 10px 2px !important;
-				padding: 0 !important;
-			}
-			
-			.chataliases-settings .wordtype-description {
-				white-space: pre;
-				width: 500px;
-				float: left;
-				display: inline-block;
-				color: #757C87;
-				font-weight: bold;
-				margin: 0 0 0 10px !important;
-				padding: 0 !important;
-			}`;
 	}
 
 	getName () {return "ChatAliases";}
 
 	getDescription () {return "Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent.";}
 
-	getVersion () {return "1.5.6";}
+	getVersion () {return "1.6.0";}
 
 	getAuthor () {return "DevilBro";}
 	
 	getSettingsPanel () {
 		if (!this.started || typeof BDfunctionsDevilBro !== "object") return;
-		var settingshtml = ``;
-		var words = BDfunctionsDevilBro.loadAllData(this.getName(), "words");
-		settingshtml += `<div class="chataliases-settings">`;
-		settingshtml += `<div class="title">Chat-Aliases:</div>`;
-		settingshtml += `<div class="input-bar" id="chataliases-input-bar">`;
-		settingshtml += `<label class="word-value-label">Replace:</label><input name="inputadd" class="word-value" id="chataliases-word-value">`;
-		settingshtml += `<label class="replace-value-label">with:</label><input name="inputadd" class="replace-value" id="chataliases-replace-value">`;
-		settingshtml += `<button name="add" class="word-add" id="chataliases-word-add">Add</button>`;
-		settingshtml += `<button name="removeall" class="remove-all" id="chataliases-remove-all">Remove All</button></br>`;
-		settingshtml += `<label class="word-case-text"><input type="checkbox" class="word-case" id="chataliases-word-case">case-sensitive</label>`;
-		settingshtml += `<label class="word-exact-text"><input type="checkbox" class="word-exact" id="chataliases-word-exact" checked>exact word</label>`;
-		settingshtml += `</div>`;
-		settingshtml += `<div class="word-container" id="chataliases-word-container">`;
+		var words = BDfunctionsDevilBro.loadAllData(this, "words");
+		var configs = ["case","exact"];
+		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="titleDefault-1CWM9y title-3i-5G_ size18-ZM4Qv- height24-2pMcnc weightNormal-3gw0Lm marginBottom8-1mABJ4">${this.getName()}</div><div class="DevilBro-settings-inner">`;
+		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto; padding-top:8px;">Replace:</h3><input name="add" type="text" placeholder="Wordvalue" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_ wordInputs" id="input-wordvalue" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto; padding-top:8px;">With:</h3><input name="add" type="text" placeholder="Replacevalue" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_ wordInputs" id="input-replacevalue" style="flex: 1 1 auto;"></div>`; 
+		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto; max-width: 495px;">List of Chataliases:</h3><div class="marginTop8-2gOa2N headerSize-22dv1R size10-1ZEdeK primary-2giqSn weightBold-2qbcng" style="flex: 1 1 auto; max-width: 32px;">CASE</div><div class="marginTop8-2gOa2N headerSize-22dv1R size10-1ZEdeK primary-2giqSn weightBold-2qbcng" style="flex: 0 0 auto;">EXACT</div></div><div class="DevilBro-settings-inner-list alias-list marginBottom8-1mABJ4">`;
 		for (let word in words) {
-			var wordcomparison = words[word].exact ? "exact" : "noexact";
-			var casesensivity = words[word].case ? "case" : "nocase";
-			settingshtml += `<div name="${word}" class="added-word ${wordcomparison} ${casesensivity} chataliases-word">${BDfunctionsDevilBro.encodeToHTML(word)} (${BDfunctionsDevilBro.encodeToHTML(words[word].replace)})<div name="remove" class="word-delete">✖</div></div>`;
-		}		
+			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginTop4-2rEBfJ marginBottom4-_yArcI ui-hover-card"><div class="ui-hover-card-inner"><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn ellipsis-CYOqEr" style="flex: 1 1 auto;">${BDfunctionsDevilBro.encodeToHTML(word)} (${BDfunctionsDevilBro.encodeToHTML(words[word].replace)})</div>`
+			for (let config of configs) {
+				settingshtml += `<div class="checkboxContainer-1sZ9eo marginReset-2tTc4H" style="flex: 0 0 auto;"><label class="checkboxWrapper-2Yvr_Y"><input type="checkbox" class="inputDefault-2tiBIA input-oWyROL"><div word="${word}" config="${config}" class="checkbox-1QwaS4 center-1MLNrE flex-3B1Tl4 justifyCenter-29N31w alignCenter-3VxkQP round-30vw42 ${words[word][config] ? "checked-2TahvT" : ""}"><svg name="Checkmark" width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><polyline stroke="transparent" stroke-width="2" points="3.5 9.5 7 13 15 5"></polyline></g></svg></div></label></div>`;
+			}
+			settingshtml += `</div><div word="${word}" name="remove" class="round-remove-button remove-word"></div></div>`;
+		}
 		settingshtml += `</div>`;
-		var infoHidden = BDfunctionsDevilBro.loadData("hideInfo", this.getName(), "settings") ? " style='display:none;'" : "";
-		settingshtml += `<button class="toggle-info">Toggle Information</button>`;
-		settingshtml += `<div class="wordtype-info"${infoHidden}>`;
-		settingshtml += `<div class="wordtype-category"><div class="added-word case fake">case<div class="word-delete fake">✖</div></div><div class="wordtype-description">Will replace words while comparing lowercase/uppercase. \napple => apple, not APPLE or AppLe</div></div>`;
-		settingshtml += `<div class="wordtype-category"><div class="added-word nocase fake">not case<div class="word-delete fake">✖</div></div><div class="wordtype-description">Will replace words while ignoring lowercase/uppercase. \napple => apple, APPLE and AppLe</div></div>`;
-		settingshtml += `<div class="wordtype-category"><div class="added-word exact fake">exact<div class="word-delete fake">✖</div></div><div class="wordtype-description">Will only replace words that are exactly the selected word. \napple to pear => applepieapple stays applepieapple</div></div>`;
-		settingshtml += `<div class="wordtype-category"><div class="added-word noexact fake">not exact<div class="word-delete fake">✖</div></div><div class="wordtype-description">Will replace words anywhere they appear. \napple to pear => applepieapple to pearpiepear</div></div>`;
-		settingshtml += `</div>`;
-		settingshtml += `</div>`;
+		var infoHidden = BDfunctionsDevilBro.loadData("hideInfo", this, "settings");
+		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO cursorPointer-3oKATS ${infoHidden ? "wrapperCollapsed-18mf-c" : "wrapperDefault-1Dl4SS"} toggle-info" style="flex: 1 1 auto;"><svg class="iconTransition-VhWJ85 ${infoHidden ? "closed-2Hef-I iconCollapsed-1INdMX" : "iconDefault-xzclSQ"}" width="12" height="12" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 10L12 15 17 10"></path></svg><div class="colorTransition-2iZaYd overflowEllipsis-2ynGQq nameCollapsed-3_ChMu" style="flex: 1 1 auto;">Information</div></div>`;
+		settingshtml += `<div class="DevilBro-settings-inner-list info-container" ${infoHidden ? "style='display:none;'" : ""}>`;
+		settingshtml += `<div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">Case: Will replace words while comparing lowercase/uppercase. apple => apple, not APPLE or AppLe</div><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">Not Case: Will replace words while ignoring lowercase/uppercase. apple => apple, APPLE and AppLe</div><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">Exact: Will replace words that are exactly the replaceword. apple to pear => applepie stays applepie</div><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">Not Exact: Will replace words anywhere they appear. apple to pear => applepieapple to pearpiepear</div>`;
+		settingshtml += `</div></div>`;
 		
 		var settingspanel = $(settingshtml)[0];
 		$(settingspanel)
-			.on("keypress", ".word-value, .replace-value", (e) => {this.updateContainer(settingspanel, e);})
-			.on("click", ".word-add, .word-delete:not(.fake), .remove-all", (e) => {this.updateContainer(settingspanel, e);})
-			.on("click", ".toggle-info", () => {this.toggleInfo(settingspanel);});
+			.on("keypress", ".wordInputs", (e) => {if (e.which == 13) this.updateContainer(settingspanel, e.currentTarget);})
+			.on("click", ".remove-word, .remove-all", (e) => {this.updateContainer(settingspanel, e.currentTarget);})
+			.on("click", ".checkboxWrapper-2Yvr_Y", (e) => {this.updateConfig(e.currentTarget);})
+			.on("click", ".toggle-info", (e) => {this.toggleInfo(settingspanel, e.currentTarget);});
 		return settingspanel;
 	}
 
@@ -266,8 +87,6 @@ class ChatAliases {
 			if (document.querySelector("#app-mount")) this.textareaObserver.observe(document.querySelector("#app-mount"), {childList: true, subtree:true});
 			
 			document.querySelectorAll("textarea").forEach(textarea => {this.bindEventToTextArea(textarea);});
-			
-			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -280,8 +99,6 @@ class ChatAliases {
 			this.textareaObserver.disconnect();
 			$("textarea").off("keydown." + this.getName()).off("input." + this.getName());
 			
-			BDfunctionsDevilBro.removeLocalStyle(this.getName());
-			
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
@@ -289,77 +106,79 @@ class ChatAliases {
 	
 	// begin of own functions
 	
-	updateContainer (settingspanel, e) {
-		var update = false;
-		var ele = e.target;
-		var words = BDfunctionsDevilBro.loadAllData(this.getName(), "words");
-		words = words ? words : {};
-		var wordvalue = null;
-		var replacevalue = null;
-		var wordinput = settingspanel.querySelector("#chataliases-word-value");
-		var replaceinput = settingspanel.querySelector("#chataliases-replace-value");
-		if ($(ele).attr("name") == "add") {
+	updateContainer (settingspanel, ele) {
+		var update = false, wordvalue = null, replacevalue = null;
+		var words = BDfunctionsDevilBro.loadAllData(this, "words");
+		
+		if (ele.getAttribute("name") == "add") {
+			var wordinput = settingspanel.querySelector("#input-wordvalue");
+			var replaceinput = settingspanel.querySelector("#input-replacevalue");
 			wordvalue = wordinput.value;
 			replacevalue = replaceinput.value;
 			if (wordvalue && wordvalue.trim().length > 0 && replacevalue && replacevalue.trim().length > 0) {
 				wordvalue = wordvalue.trim();
 				replacevalue = replacevalue.trim();
-				words[wordvalue] = {};
-				words[wordvalue].replace = replacevalue;
-				words[wordvalue].exact = $(settingspanel).find("#chataliases-word-exact").prop("checked");
-				words[wordvalue].case = $(settingspanel).find("#chataliases-word-case").prop("checked");
+				words[wordvalue] = {
+					replace: replacevalue,
+					exact: true,
+					case: false
+				};
 				wordinput.value = null;
 				replaceinput.value = null;
 				update = true;
 			}
 		}
-		else if ($(ele).attr("name") == "remove") {
-			wordvalue = $(ele.parentElement).attr("name");
+		else if (ele.getAttribute("name") == "remove") {
+			wordvalue = ele.getAttribute("word");
 			if (wordvalue) {
 				delete words[wordvalue];
 				update = true;
 			}
 		}
-		else if ($(ele).attr("name") == "removeall") {
+		else if (ele.getAttribute("name") == "removeall") {
 			words = {};
 			update = true;
 		}
-		else if ($(ele).attr("name") == "addinput") {
-			if (event.which == '13'){
-				wordvalue = wordinput.value;
-				replacevalue = replaceinput.value;
-				if (wordvalue && wordvalue.trim().length > 0 && replacevalue && replacevalue.trim().length > 0) {
-					wordvalue = wordvalue.trim();
-					replacevalue = replacevalue.trim();
-					words[wordvalue] = {};
-					words[wordvalue].replace = replacevalue;
-					words[wordvalue].exact = $(settingspanel).find("#chataliases-word-exact").prop("checked");
-					words[wordvalue].case = $(settingspanel).find("#chataliases-word-case").prop("checked");
-					wordinput.value = null;
-					replaceinput.value = null;
-					update = true;
-				}
-			}
-		}
 		if (update) {
-			BDfunctionsDevilBro.saveAllData(words, this.getName(), "words");
-			words = BDfunctionsDevilBro.loadAllData(this.getName(), "words");
+			BDfunctionsDevilBro.saveAllData(words, this, "words");
+			words = BDfunctionsDevilBro.loadAllData(this, "words");
+			var configs = ["case","exact"];
 			
 			var containerhtml = ``;
 			for (let word in words) {
-				var wordcomparison = words[word].exact ? "exact" : "noexact";
-				var casesensivity = words[word].case ? "case" : "nocase";
-				containerhtml += `<div name="${word}" class="added-word ${wordcomparison} ${casesensivity} chataliases-word">${BDfunctionsDevilBro.encodeToHTML(word)} (${BDfunctionsDevilBro.encodeToHTML(words[word].replace)})<div name="remove" class="word-delete">✖</div></div>`;
+				containerhtml += `<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginTop4-2rEBfJ marginBottom4-_yArcI ui-hover-card"><div class="ui-hover-card-inner"><div class="description-3MVziF formText-1L-zZB note-UEZmbY  modeDefault-389VjU primary-2giqSn ellipsis-CYOqEr" style="flex: 1 1 auto;">${BDfunctionsDevilBro.encodeToHTML(word)} (${BDfunctionsDevilBro.encodeToHTML(words[word].replace)})</div>`
+				for (let config of configs) {
+					containerhtml += `<div class="checkboxContainer-1sZ9eo marginReset-2tTc4H" style="flex: 0 0 auto;"><label class="checkboxWrapper-2Yvr_Y"><input type="checkbox" class="inputDefault-2tiBIA input-oWyROL"><div word="${word}" config="${config}" class="checkbox-1QwaS4 center-1MLNrE flex-3B1Tl4 justifyCenter-29N31w alignCenter-3VxkQP round-30vw42 ${words[word][config] ? "checked-2TahvT" : ""}"><svg name="Checkmark" width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><polyline stroke="transparent" stroke-width="2" points="3.5 9.5 7 13 15 5"></polyline></g></svg></div></label></div>`;
+				}
+				containerhtml += `</div><div word="${word}" name="remove" class="round-remove-button remove-word"></div></div>`;
 			}
-			$(settingspanel).find("#chataliases-word-container").html(containerhtml);
+			$(settingspanel).find(".alias-list").html(containerhtml);
 		}
 	}
 	
-	toggleInfo (settingspanel) {
-		var visible = $(settingspanel).find(".wordtype-info").is(":visible");
-		$(settingspanel).find(".wordtype-info").toggle(!visible);
-		$(settingspanel).find(".blocked-censored-info").toggle(!visible);
-		BDfunctionsDevilBro.saveData("hideInfo", visible, this.getName(), "settings");
+	updateConfig (ele) {
+		ele = ele.querySelector(".checkbox-1QwaS4");
+		var words = BDfunctionsDevilBro.loadAllData(this, "words");
+		var wordvalue = ele.getAttribute("word");
+		var config = ele.getAttribute("config");
+		if (wordvalue && words[wordvalue] && config) {
+			ele.classList.toggle("checked-2TahvT");
+			words[wordvalue][config] = ele.classList.contains("checked-2TahvT");
+			BDfunctionsDevilBro.saveAllData(words, this, "words");
+		}
+	}
+	
+	toggleInfo (settingspanel, ele) {
+		ele.classList.toggle("wrapperCollapsed-18mf-c");
+		ele.classList.toggle("wrapperDefault-1Dl4SS");
+		var svg = ele.querySelector(".iconTransition-VhWJ85");
+		svg.classList.toggle("closed-2Hef-I");
+		svg.classList.toggle("iconCollapsed-1INdMX");
+		svg.classList.toggle("iconDefault-xzclSQ");
+		
+		var visible = $(settingspanel).find(".info-container").is(":visible");
+		$(settingspanel).find(".info-container").toggle(!visible);
+		BDfunctionsDevilBro.saveData("hideInfo", visible, this, "settings");
 	}
 	
 	bindEventToTextArea (textarea) {
@@ -386,7 +205,7 @@ class ChatAliases {
 	
 	formatText (text) {
 		var words = text.trim().split(" ");
-		var aliases = BDfunctionsDevilBro.loadAllData(this.getName(), "words");
+		var aliases = BDfunctionsDevilBro.loadAllData(this, "words");
 		var newText = [];
 		for (var i = 0; i < words.length; i++) {
 			var word = words[i];
