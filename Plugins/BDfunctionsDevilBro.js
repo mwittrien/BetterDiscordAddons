@@ -2181,6 +2181,17 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		padding-left: 15px;
 	}
 	
+	.DevilBro-settings .ui-hover-card .round-remove-button {
+		opacity: 0;
+		position: absolute;
+		right: -31px;
+		top: -12px;
+	}
+	
+	.DevilBro-settings .ui-hover-card:hover .round-remove-button {
+		opacity: 1;
+	}
+	
 	.DevilBro-modal [class^="swatches"].disabled {
 		cursor: no-drop;
 		filter: grayscale(70%) brightness(50%);
