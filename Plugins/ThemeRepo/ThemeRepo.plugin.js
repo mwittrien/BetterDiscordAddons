@@ -289,27 +289,18 @@ class ThemeRepo {
 
 	getDescription () {return "Allows you to preview all themes from the theme repo and download them on the fly. Repo button is in the theme settings.";}
 
-	getVersion () {return "1.2.8";}
+	getVersion () {return "1.2.7";}
 
 	getAuthor () {return "DevilBro";}
 	
 	getSettingsPanel () {
 		if (!this.started || typeof BDfunctionsDevilBro !== "object") return;
 		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="titleDefault-1CWM9y title-3i-5G_ size18-ZM4Qv- height24-2pMcnc weightNormal-3gw0Lm marginBottom8-1mABJ4">${this.getName()}</div><div class="DevilBro-settings-inner">`;
-		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto; padding-top:8px;">Add Theme:</h3><input type="text" placeholder="Insert Raw Github Link of Theme" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_" id="input-themeurl" style="flex: 1 1 auto;"></div>`;
-		settingshtml += `<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Your additional Theme List:</h3><div class="DevilBro-settings-inner-list theme-list marginBottom8-1mABJ4">`;
-		var ownlist = BDfunctionsDevilBro.loadData("ownlist", this, "ownlist") || [];
-		if (ownlist) for (let url of ownlist) {
-			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginTop4-2rEBfJ marginBottom4-_yArcI ui-hover-card"><div class="ui-hover-card-inner"><div class="description-3MVziF formText-1L-zZB note-UEZmbY marginTop4-2rEBfJ modeDefault-389VjU primary-2giqSn ellipsis-CYOqEr entryurl">${url}</div></div><div class="round-remove-button remove-theme"></div></div>`;
-		}
-		settingshtml += `</div>`;
 		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto; padding-top:8px;">Force all Themes to be fetched again.</h3><button type="button" class="flexChild-1KGW5q buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu refresh-button" style="flex: 0 0 auto;"><div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx contents-4L4hQM">Refresh</div></button></div>`;
 		settingshtml += `</div></div>`;
 		
 		var settingspanel = $(settingshtml)[0];
 		$(settingspanel)
-			.on("keyup", "#input-themeurl", (e) => {if (e.which == 13) this.addThemeToOwnList(settingspanel, e);})
-			.on("click", ".remove-theme", (e) => {this.removeThemeFromOwnList(e);})
 			.on("click", ".refresh-button", () => {this.loadThemes();});
 		return settingspanel;
 	}
@@ -391,26 +382,6 @@ class ThemeRepo {
 	
 	// begin of own functions
 	
-	addThemeToOwnList (settingspanel, e) {
-		var url = e.currentTarget.value;
-		e.currentTarget.value = null;
-		var ownlist = BDfunctionsDevilBro.loadData("ownlist", this, "ownlist") || [];
-		if (!ownlist.includes(url)) {
-			ownlist.push(url);
-			BDfunctionsDevilBro.saveData("ownlist", ownlist, this, "ownlist");
-			$(`<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginTop4-2rEBfJ marginBottom4-_yArcI ui-hover-card"><div class="ui-hover-card-inner"><div class="description-3MVziF formText-1L-zZB note-UEZmbY marginTop4-2rEBfJ modeDefault-389VjU primary-2giqSn ellipsis-CYOqEr entryurl">${url}</div></div><div class="round-remove-button remove-theme"></div></div>`).appendTo(settingspanel.querySelector(".theme-list"));
-		}
-	}
-	
-	removeThemeFromOwnList (e) {
-		var entry = e.currentTarget.parentElement;
-		var url = entry.querySelector(".entryurl").textContent;
-		entry.remove();
-		var ownlist = BDfunctionsDevilBro.loadData("ownlist", this, "ownlist") || [];
-		BDfunctionsDevilBro.removeFromArray(ownlist, url);
-		BDfunctionsDevilBro.saveData("ownlist", ownlist, this, "ownlist");
-	}
-	
 	checkIfThemesPage (container) {
 		if (container && container.tagName) {
 			var folderbutton = container.querySelector(".bd-pfbtn");
@@ -429,6 +400,7 @@ class ThemeRepo {
 	addThemeRepoButton (container) {
 		if (container && !container.querySelector(".bd-themerepobutton")) {
 			$(container).find(".bda-description").css("display", "block");
+			container.querySelectorAll(".bda-name, .bda-version, .bda-author, .bda-description").forEach(ele => {ele.innerHTML = ele.innerText;});
 			$(this.themeRepoButtonMarkup)
 				.insertAfter(container.querySelector(".bd-pfbtn"))
 				.on("click", () => {
@@ -447,7 +419,7 @@ class ThemeRepo {
 		var themeRepoModal = $(this.themeRepoModalMarkup);
 		themeRepoModal.updateModal = true;
 		themeRepoModal.enableSearch = false;
-		var hiddenSettings = BDfunctionsDevilBro.loadAllData(this, "hidden");
+		var hiddenSettings = BDfunctionsDevilBro.loadAllData(this.getName(), "hidden");
 		themeRepoModal.find("#input-darklight").prop("checked", lightTheme);
 		themeRepoModal.find("#input-customcss").prop("checked", false);
 		themeRepoModal.find("#input-themefixer").prop("checked", false);
@@ -455,7 +427,7 @@ class ThemeRepo {
 		themeRepoModal.find("#input-hideoutdated").prop("checked", hiddenSettings.outdated && !showOnlyOutdated);
 		themeRepoModal.find("#input-hidedownloadable").prop("checked", hiddenSettings.downloadable || showOnlyOutdated);
 		if (!BDfunctionsDevilBro.isRestartNoMoreEnabled()) themeRepoModal.find("#RNMoption").remove();
-		else themeRepoModal.find("#input-rnmstart").prop("checked", BDfunctionsDevilBro.loadData("RNMstart", this, "settings"));
+		else themeRepoModal.find("#input-rnmstart").prop("checked", BDfunctionsDevilBro.loadData("RNMstart", this.getName(), "settings"));
 		themeRepoModal
 			.on("keyup." + this.getName(), "#input-search", (e) => {
 				clearTimeout(themeRepoModal.searchTimeout);
@@ -489,10 +461,10 @@ class ThemeRepo {
 			.on("change." + this.getName(), ".hide-checkbox", (e) => {
 				var hideButton = $(e.currentTarget);
 				hiddenSettings[hideButton.val()] = hideButton.prop("checked");
-				BDfunctionsDevilBro.saveAllData(hiddenSettings, this, "hidden");
+				BDfunctionsDevilBro.saveAllData(hiddenSettings, this.getName(), "hidden");
 			})
 			.on("change." + this.getName(), "#input-rnmstart", (e) => {
-				BDfunctionsDevilBro.saveData("RNMstart", $(e.currentTarget).prop("checked"), this, "settings");
+				BDfunctionsDevilBro.saveData("RNMstart", $(e.currentTarget).prop("checked"), this.getName(), "settings");
 			})
 			.on("click." + this.getName(), ".tab-bar-item[tab=themes]:not(.selected)", (e) => {
 				this.addThemeEntries(themeRepoModal, frame);
@@ -568,7 +540,7 @@ class ThemeRepo {
 	}
 	
 	createThemeEntries (modal, frame) {
-		var favorites = BDfunctionsDevilBro.loadAllData(this, "favorites");
+		var favorites = BDfunctionsDevilBro.loadAllData(this.getName(), "favorites");
 		modal.entries = [];
 		for (let url in this.loadedThemes) {
 			let theme = this.loadedThemes[url];
@@ -681,11 +653,11 @@ class ThemeRepo {
 					e.currentTarget.classList.toggle("favorized");
 					if (e.currentTarget.classList.contains("favorized")) {
 						entry.fav = 0;
-						BDfunctionsDevilBro.saveData(entry.url, true, this, "favorites");
+						BDfunctionsDevilBro.saveData(entry.url, true, this.getName(), "favorites");
 					}
 					else {
 						entry.fav = 1;
-						BDfunctionsDevilBro.removeData(entry.url, this, "favorites");
+						BDfunctionsDevilBro.removeData(entry.url, this.getName(), "favorites");
 					}
 				})
 				.on("click." + this.getName(), ".gitIcon", (e) => {
@@ -708,7 +680,7 @@ class ThemeRepo {
 						div.removeClass("outdated").removeClass("updated").addClass("downloadable")
 							.find(".btn-download").text("Download");
 						this.deleteThemeFile(entry);
-						if (!BDfunctionsDevilBro.isRestartNoMoreEnabled()) this.removeTheme(entry);
+						if (!BDfunctionsDevilBro.isRestartNoMoreEnabled()) removeTheme(entry);
 					}
 				})
 				.on("mouseenter." + this.getName(), ".favIcon", (e) => {
