@@ -924,36 +924,6 @@ BDfunctionsDevilBro.removeFromArray = function (array, value) {
 	array.splice(array.indexOf(value), 1);
 };
 
-BDfunctionsDevilBro.onSwitchFix = function (plugin) {
-	plugin.switchFixObserver = new MutationObserver((changes) => {
-		changes.forEach((change) => { 
-			if (change.addedNodes) {
-				change.addedNodes.forEach((node) => {
-					if (!node) return;
-					else if (node && node.id === "friends") 																BDfunctionsDevilBro.triggerOnSwitch(plugin);
-					else if (node.classList && node.classList.length > 0 && node.classList.contains("titleWrapper-3Vi_wz")) BDfunctionsDevilBro.triggerOnSwitch(plugin); 
-					else if (node.classList && node.classList.length > 0 && node.classList.contains("noTopic-3Rq-dz")) 		BDfunctionsDevilBro.triggerOnSwitch(plugin); 
-					else if (node.classList && node.classList.length > 0 && node.classList.contains("topic-1KFf6J")) 		BDfunctionsDevilBro.triggerOnSwitch(plugin); 
-					else if (node.classList && node.classList.length > 0 && node.classList.contains("activityFeed-HeiGwL")) BDfunctionsDevilBro.triggerOnSwitch(plugin); 
-					else if (node.classList && node.classList.length > 0 && node.classList.contains("lfg-3xoFkI")) 			BDfunctionsDevilBro.triggerOnSwitch(plugin);
-				});
-			}
-		});
-	});
-	plugin.switchFixObserver.observe(document.querySelector(".channels-3g2vYe + div").parentNode, {childList: true, subtree:true});
-	return plugin.switchFixObserver;
-};
-
-BDfunctionsDevilBro.triggerOnSwitch = function (plugin) {
-	if (!Array.isArray(BDfunctionsDevilBro.onSwitchTriggered)) BDfunctionsDevilBro.onSwitchTriggered = [];
-	var identifier = plugin.getName() + "_" + plugin.getAuthor();
-	if (Array.isArray(BDfunctionsDevilBro.onSwitchTriggered) && BDfunctionsDevilBro.onSwitchTriggered.includes(identifier)) return;
-	BDfunctionsDevilBro.onSwitchTriggered.push(identifier);
-	plugin.onSwitch();
-	setImmediate(() => {BDfunctionsDevilBro.removeFromArray(BDfunctionsDevilBro.onSwitchTriggered, identifier);});
-};
-
-
 BDfunctionsDevilBro.getMyUserData = function () {
 	var UserActions = BDfunctionsDevilBro.WebModules.findByProperties(["getCurrentUser"]);
 	return UserActions ? UserActions.getCurrentUser() : {};
