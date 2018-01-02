@@ -2168,7 +2168,7 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		max-width: 400px;
 	}
 	
-	.DevilBro-settings div {
+	.DevilBro-settings div:not([class*=marginTop]) {
 		margin-top: 0px !important;
 	}
 	
@@ -2185,6 +2185,7 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 	.DevilBro-settings .ui-hover-card .ui-hover-card-inner {
 		width: 500px;
 	}
+	
 	.DevilBro-settings .ui-hover-card .ui-hover-card-inner {
 		overflow: hidden;
 	}
