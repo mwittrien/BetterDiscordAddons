@@ -1385,6 +1385,16 @@ BDfunctionsDevilBro.clearReadNotifications = function (servers) {
 	}); 
 };
 
+BDfunctionsDevilBro.triggerSend = function (textarea) {
+	setImmediate(() => {
+		var options = { key: "Enter", code: "Enter", which: 13, keyCode: 13, bubbles: true };
+		var press = new KeyboardEvent("keypress", options);
+		Object.defineProperty(press, "keyCode", {value: 13});
+		Object.defineProperty(press, "which", {value: 13});
+		textarea.dispatchEvent(press);
+	});
+};
+
 BDfunctionsDevilBro.appendModal = function (modal) {
 	let id = Math.round(Math.random()*10000000000000000);
 	$(modal)
