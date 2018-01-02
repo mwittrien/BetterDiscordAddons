@@ -2171,6 +2171,21 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 	.DevilBro-settings div:not([class*="marginTop"]) {
 		margin-top: 0px !important;
 	}
+	.DevilBro-settings .marginTop4-2rEBfJ {
+		margin-top: 4px !important;
+	}
+	.DevilBro-settings .marginTop8-2gOa2N {
+		margin-top: 8px !important;
+	}
+	.DevilBro-settings .marginTop20-3UscxH {
+		margin-top: 20px !important;
+	}
+	.DevilBro-settings .marginTop40-1bNyG9 {
+		margin-top: 40px !important;
+	}
+	.DevilBro-settings .marginTop60-10QB5x {
+		margin-top: 60px !important;
+	}
 	
 	.DevilBro-settings .DevilBro-settings-inner {
 		padding-left: 15px;
