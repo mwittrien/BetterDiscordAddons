@@ -8,6 +8,7 @@ class PluginRepo {
 		this.loading = false;
 		
 		this.grabbedPlugins = [];
+		this.foundPlugins = [];
 		this.loadedPlugins = {};
 		
 		this.updateInterval;
