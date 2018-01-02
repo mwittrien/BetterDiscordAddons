@@ -2183,11 +2183,12 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 	
 	.DevilBro-settings .ui-hover-card,
 	.DevilBro-settings .ui-hover-card .ui-hover-card-inner {
-		width: 500px;
+		width: 550px;
 	}
 	
 	.DevilBro-settings .ui-hover-card:before {
 		z-index: 50;
+		left: -10px;
 	}
 	
 	.DevilBro-settings .ui-hover-card .ui-hover-card-inner {
