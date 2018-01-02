@@ -2181,6 +2181,14 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		padding-left: 15px;
 	}
 	
+	.DevilBro-settings .ui-hover-card,
+	.DevilBro-settings .ui-hover-card .ui-hover-card-inner {
+		width: 500px;
+	}
+	.DevilBro-settings .ui-hover-card .ui-hover-card-inner {
+		overflow: hidden;
+	}
+	
 	.DevilBro-settings .ui-hover-card .round-remove-button {
 		opacity: 0;
 		position: absolute;
