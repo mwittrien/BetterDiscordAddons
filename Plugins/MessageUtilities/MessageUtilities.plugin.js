@@ -18,18 +18,20 @@ class MessageUtilities {
 		this.keys = 	["key1","key2"];
 		this.defaults = {
 			settings: {
-				"Edit_Message":			{value:true},
-				"Delete_Message":		{value:true},
-				"Pin/Unpin_Message":	{value:true},
-				"React_to_Message":		{value:true},
-				"__Note_Message":		{value:true}
+				"Edit_Message":				{value:true},
+				"Delete_Message":			{value:true},
+				"Pin/Unpin_Message":		{value:true},
+				"React_to_Message":			{value:true},
+				"__Note_Message":			{value:false},
+				"__Translate_Message":		{value:false}
 			},
 			bindings: {
-				"Edit_Message":			{name:"Edit Message",					func:this.doEdit,		value:{click:1, 	key1:0, 	key2:0}},
-				"Delete_Message":		{name:"Delete Message",					func:this.doDelete,		value:{click:0, 	key1:46, 	key2:0}},
-				"Pin/Unpin_Message":	{name:"Pin/Unpin Message",				func:this.doPinUnPin,	value:{click:0, 	key1:17, 	key2:0}},
-				"React_to_Message":		{name:"React to Message",				func:this.doOpenReact,	value:{click:0, 	key1:9, 	key2:0}},
-				"__Note_Message":		{name:"Note Message (Pesonal Pins)",	func:this.doNote,		value:{click:0, 	key1:16, 	key2:0}}
+				"Edit_Message":				{name:"Edit Message",									func:this.doEdit,			value:{click:1, 	key1:0, 	key2:0}},
+				"Delete_Message":			{name:"Delete Message",									func:this.doDelete,			value:{click:0, 	key1:46, 	key2:0}},
+				"Pin/Unpin_Message":		{name:"Pin/Unpin Message",								func:this.doPinUnPin,		value:{click:0, 	key1:17, 	key2:0}},
+				"React_to_Message":			{name:"React to Message",								func:this.doOpenReact,		value:{click:0, 	key1:9, 	key2:0}},
+				"__Note_Message":			{name:"Note Message (Pesonal Pins)",					func:this.doNote,			value:{click:0, 	key1:16, 	key2:0}},
+				"__Translate_Message":		{name:"Translate Message (Google Translate Option)",	func:this.doTranslate,		value:{click:0, 	key1:20, 	key2:0}}
 			}
 		};
 	}
@@ -38,7 +40,7 @@ class MessageUtilities {
 
 	getDescription () {return "Offers a number of useful message options. Remap the keybindings in the settings.";}
 
-	getVersion () {return "1.2.8";}
+	getVersion () {return "1.2.9";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -66,8 +68,10 @@ class MessageUtilities {
 			.on("click", ".Select-control", (e) => {this.openDropdownMenu(settingspanel, e);})
 			.on("click", ".ui-key-recorder", (e) => {this.startRecording(settingspanel, e);})
 			.on("click", ".reset-recorder", (e) => {this.resetRecorder(settingspanel, e);})
-			.on("click", ".reset-button", () => {this.resetAll(settingspanel);})
-			.find(".__Note_Message-key-settings").toggle(BDfunctionsDevilBro.isPluginEnabled("PersonalPins"));
+			.on("click", ".reset-button", () => {this.resetAll(settingspanel);});
+			
+		$(settingspanel).find(".__Note_Message-key-settings").toggle(BDfunctionsDevilBro.isPluginEnabled("PersonalPins"));
+		$(settingspanel).find(".__Translate_Message-key-settings").toggle(BDfunctionsDevilBro.isPluginEnabled("GoogleTranslateOption"));
 			
 		return settingspanel;
 	}
@@ -244,7 +248,7 @@ class MessageUtilities {
 			var bindings = BDfunctionsDevilBro.getAllData(this, "bindings")
 			for (let action in bindings) {
 				if (settings[action] && this.checkIfBindingIsValid(bindings[action], click)) {
-					var message = this.getMessageData(div)
+					var message = this.getMessageData(div);
 					if (message) this.defaults.bindings[action].func.bind(this)(message);
 					break;
 				}
@@ -295,6 +299,14 @@ class MessageUtilities {
 			var PersonalPins = window.bdplugins["PersonalPins"].plugin;
 			PersonalPins.getMessageData(message.div);
 			PersonalPins.addMessageToNotes();
+		}
+	}
+	
+	doTranslate (message) {
+		if (BDfunctionsDevilBro.isPluginEnabled("GoogleTranslateOption") == true) {
+			var GoogleTranslateOption = window.bdplugins["GoogleTranslateOption"].plugin;
+			GoogleTranslateOption.getMessageData(message.div);
+			GoogleTranslateOption.translateMessage();
 		}
 	}
 	
