@@ -149,7 +149,7 @@ class GoogleTranslateOption {
 
 	getDescription () {return "Adds a Google Translate option to your context menu, which shows a preview of the translated text and on click will open the selected text in Google Translate. Also adds a translation button to your textareas, which will automatically translate the text for you before it is being send.";}
 
-	getVersion () {return "1.1.7";}
+	getVersion () {return "1.1.8";}
 	
 	getAuthor () {return "DevilBro";}
 	
@@ -466,8 +466,8 @@ class GoogleTranslateOption {
 			if (!message.classList.contains("translated")) {
 				var {translation, input, output} = this.translateText(this.message.content, "message");
 				if (translation) {
-					$(message).data("orightmlGoogleTranslate", $(message).html());
 					var markup = message.querySelector(".markup");
+					$(markup).data("orightmlGoogleTranslate", markup.innerHTML);
 					markup.innerText = translation;
 					$(`<span class="edited translated">(${this.labels.translated_watermark_text})</span>`).appendTo(markup);
 					message.classList.add("translated");
@@ -477,19 +477,23 @@ class GoogleTranslateOption {
 				this.resetMessage(message);
 			}
 		}
+		this.message = null;
 	}
 	
 	resetMessage (message) {
 		$(message)
-			.html($(message).data("orightmlGoogleTranslate"))
 			.removeClass("translated")
 			.find(".edited.translated").remove();
+			
+		var markup = message.querySelector(".markup");
+		markup.innerHTML = $(markup).data("orightmlGoogleTranslate");
 	}
 	
 	translateText (text, type) {
+		var [text, mentions] = this.removeMentions(text);
 		var choices = BDfunctionsDevilBro.getAllData(this, "choices");
-		var input = type == "context" ? this.languages[choices.inputContext] : this.languages[choices.inputMessage];
-		var output = type == "context" ? this.languages[choices.outputContext] : this.languages[choices.outputMessage];
+		var input = Object.assign({}, type == "context" ? this.languages[choices.inputContext] : this.languages[choices.inputMessage]);
+		var output = Object.assign({}, type == "context" ? this.languages[choices.outputContext] : this.languages[choices.outputMessage]);
 		var translation = "";
 		if (input.id == "binary" || output.id == "binary") {
 			if (input.id == "binary" && output.id != "binary") 			translation = this.binary2string(text);
@@ -506,7 +510,30 @@ class GoogleTranslateOption {
 				if (this.languages[result[2]]) input.name = this.languages[result[2]].name;
 			}
 		}
+		if (translation) translation = this.addMentions(translation, mentions);
 		return {translation, input, output};
+	}
+	
+	removeMentions (string) {
+		var mentions = {};
+		var newString = [];
+		string.split(" ").forEach((word, i) => {
+			if (word.indexOf("@") == 0 || word.indexOf("#") == 0) {
+				newString.push("______" + i + "______");
+				mentions[i] = word;
+			}
+			else {
+				newString.push(word);
+			}
+		});
+		return [newString.join(" "), mentions];
+	}
+	
+	addMentions (string, mentions) {
+		for (let i in mentions) {
+			string = string.replace("______" + i + "______", mentions[i]);
+		}
+		return string;
 	}
 	
 	openTranslatePopout (button) {
