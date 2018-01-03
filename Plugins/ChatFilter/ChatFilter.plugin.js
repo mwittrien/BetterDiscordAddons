@@ -36,7 +36,7 @@ class ChatFilter {
 
 	getDescription () {return "Allows the user to censor words or block complete messages based on words in the chatwindow.";}
 
-	getVersion () {return "3.1.1";}
+	getVersion () {return "3.1.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -233,7 +233,7 @@ class ChatFilter {
 	saveReplace (input) {
 		var rtype = input.getAttribute("rtype");
 		var wordvalue = input.value;
-		if (rtype && wordvalue && wordvalue.trim().length > 0) {
+		if (rtype) {
 			var replaces = BDfunctionsDevilBro.getData(rtype, this, "replaces");
 			BDfunctionsDevilBro.saveData(rtype, wordvalue.trim(), this, "replaces");
 		}
@@ -398,8 +398,8 @@ class ChatFilter {
 						$(message)
 							.html(newhtml)
 							.addClass("censored")
-							.data("newhtml",newhtml)
-							.data("orightml",orightml);
+							.data("newhtmlChatFilter",newhtml)
+							.data("orightmlChatFilter",orightml);
 							
 						this.addClickListener(message, settings.showMessageOnClick.censored);
 					}
@@ -409,7 +409,7 @@ class ChatFilter {
 	}
 	
 	resetMessage (message) {
-		var orightml = $(message).data("orightml");
+		var orightml = $(message).data("orightmlChatFilter");
 		$(message)
 			.html(orightml)
 			.off("click." + this.getName())
@@ -422,8 +422,8 @@ class ChatFilter {
 		$(message)
 			.off("click." + this.getName());
 		if (add) {
-			var orightml = $(message).data("orightml");
-			var newhtml = $(message).data("newhtml");
+			var orightml = $(message).data("orightmlChatFilter");
+			var newhtml = $(message).data("newhtmlChatFilter");
 			$(message)
 				.on("click." + this.getName(), () => {	
 					if ($(message).hasClass("revealed")) {
