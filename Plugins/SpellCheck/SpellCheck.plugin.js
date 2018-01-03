@@ -25,7 +25,7 @@ class SpellCheck {
 				z-index: 100 !important;
 			}
 			.spellcheck-overlay {
-				white-space: pre;
+				white-space: pre-wrap;
 				overflow: hidden;
 				position: absolute !important;
 				z-index: 50 !important;
