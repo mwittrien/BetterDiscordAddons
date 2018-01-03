@@ -9,28 +9,50 @@ class GoogleTranslateOption {
 		
 		this.textareaObserver = new MutationObserver(() => {});
 		this.messageContextObserver = new MutationObserver(() => {});
+		this.chatWindowObserver = new MutationObserver(() => {});
+		this.optionPopoutObserver = new MutationObserver(() => {});
 		
 		this.doTranslate = false;
-		this.translateMessage = false;
+		this.translating = false;
 			
-		this.defaultChoices = {
-			inputContext:		{value:"auto", 		place:"Context", 		direction:"Input", 			description:"Input Language in Context:"},
-			outputContext:		{value:"$discord", 	place:"Context", 		direction:"Output", 		description:"Output Language in Context:"},
-			inputMessage:		{value:"auto", 		place:"Message", 		direction:"Input", 			description:"Input Language in Message:"},
-			outputMessage:		{value:"$discord", 	place:"Message", 		direction:"Output", 		description:"Output Language in Message:"}
-		};
-			
-		this.defaultSettings = {
-			sendOriginalMessage:	{value:false, 	description:"Send the original message together with the translation."}
+		this.defaults = {
+			settings: {
+				sendOriginalMessage:	{value:false, 	description:"Send the original message together with the translation."}
+			},
+			choices: {
+				inputContext:			{value:"auto", 		place:"Context", 		direction:"Input", 			description:"Input Language in Context:"},
+				outputContext:			{value:"$discord", 	place:"Context", 		direction:"Output", 		description:"Output Language in Context:"},
+				inputMessage:			{value:"auto", 		place:"Message", 		direction:"Input", 			description:"Input Language in Message:"},
+				outputMessage:			{value:"$discord", 	place:"Message", 		direction:"Output", 		description:"Output Language in Message:"}
+			}
 		};
 
 		this.messageContextEntryMarkup =
+			`<div class="item-group">
+				<div class="item messagetranslateoption-item">
+					<span>REPLACE_context_messagetranslateoption_text</span>
+					<div class="hint"></div>
+				</div>
+			</div>`;
+
+		this.messageContextEntryMarkup2 =
 			`<div class="item-group">
 				<div class="item googletranslateoption-item">
 					<span>REPLACE_context_googletranslateoption_text</span>
 					<div class="hint"></div>
 				</div>
 			</div>`;
+		
+		this.optionButtonMarkup = 
+			`<div class="btn-option btn-googletranslateoption"></div>`;
+		
+		this.optionsPopoutMarkup = 
+			`<div class="popout popout-bottom no-arrow popout-googletranslateoption-options" style="z-index: 1000; visibility: visible;">
+				<div class="option-popout small-popout-box"></div
+			</div>`;
+			
+		this.popoutEntryMarkup = 
+			`<div class="btn-item btn-item-googletranslateoption">REPLACE_popout_translateoption_text</div>`;
 			
 		this.translateButtonMarkup = 
 			`<svg version="1.1" xmlns="http://www.w3.org/2000/svg" class="translate-button" width="22" height="30" fill="#FFFFFF">
@@ -46,14 +68,14 @@ class GoogleTranslateOption {
 		this.translatePopoutMarkup = 
 			`<div class="popout popout-bottom-right no-arrow no-shadow popout-googletranslate DevilBro-modal" style="z-index: 1000; overflow: visible; visibility: visible; transform: translateX(-100%) translateY(-100%) translateZ(0px);">
 				<div class="themed-popout">
-					${Object.keys(this.defaultChoices).map((key, i) => this.defaultChoices[key].place == "Message" ?
+					${Object.keys(this.defaults.choices).map((key, i) => this.defaults.choices[key].place == "Message" ?
 					`<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4 marginTop8-2gOa2N" style="flex: 1 1 auto;">
-						<h3 class="titleDefault-1CWM9y title-3i-5G_ weightMedium-13x9Y8 size16-3IvaX_ flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaultChoices[key].description}</h3>
-						${this.defaultChoices[key].direction == "Output" ? this.reverseButtonMarkup : ""}
+						<h3 class="titleDefault-1CWM9y title-3i-5G_ weightMedium-13x9Y8 size16-3IvaX_ flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.choices[key].description}</h3>
+						${this.defaults.choices[key].direction == "Output" ? this.reverseButtonMarkup : ""}
 					</div>
 					<div class="ui-form-item flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
 						<div class="ui-select format-select-wrapper" style="flex: 1 1 auto;">
-							<div class="Select Select--single has-value" type="${key}" value="${this.defaultChoices[key].value}">
+							<div class="Select Select--single has-value" type="${key}" value="${this.defaults.choices[key].value}">
 								<div class="Select-control">
 									<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-value" style="flex: 1 1 auto;">
 										<div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm" style="flex: 1 1 auto;"></div>
@@ -127,20 +149,20 @@ class GoogleTranslateOption {
 
 	getDescription () {return "Adds a Google Translate option to your context menu, which shows a preview of the translated text and on click will open the selected text in Google Translate. Also adds a translation button to your textareas, which will automatically translate the text for you before it is being send.";}
 
-	getVersion () {return "1.1.6";}
+	getVersion () {return "1.1.7";}
 	
 	getAuthor () {return "DevilBro";}
 	
 	getSettingsPanel () {
 		if (!this.started || typeof BDfunctionsDevilBro !== "object") return;
-		var choices = this.getChoices(); 
-		var settings = this.getSettings(); 
+		var choices = 	BDfunctionsDevilBro.getAllData(this, "choices"); 
+		var settings = 	BDfunctionsDevilBro.getAllData(this, "settings"); 
 		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="titleDefault-1CWM9y title-3i-5G_ size18-ZM4Qv- height24-2pMcnc weightNormal-3gw0Lm marginBottom8-1mABJ4">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		for (let key in choices) {
-			settingshtml += `<h3 class="titleDefault-1CWM9y title-3i-5G_ weightMedium-13x9Y8 size16-3IvaX_ flexChild-1KGW5q marginBottom8-1mABJ4 marginTop8-2gOa2N" style="flex: 1 1 auto;">${this.defaultChoices[key].description}</h3><div class="ui-form-item flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><div class="ui-select format-select-wrapper" style="flex: 1 1 auto;"><div class="Select Select--single has-value" type="${key}" value="${choices[key]}"><div class="Select-control"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-value" style="flex: 1 1 auto;"><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm" style="flex: 1 1 auto;">${this.languages[choices[key]].name}</div></div><span class="Select-arrow-zone"><span class="Select-arrow"></span></span></div></div></div></div>`
+			settingshtml += `<h3 class="titleDefault-1CWM9y title-3i-5G_ weightMedium-13x9Y8 size16-3IvaX_ flexChild-1KGW5q marginBottom8-1mABJ4 marginTop8-2gOa2N" style="flex: 1 1 auto;">${this.defaults.choices[key].description}</h3><div class="ui-form-item flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><div class="ui-select format-select-wrapper" style="flex: 1 1 auto;"><div class="Select Select--single has-value" type="${key}" value="${choices[key]}"><div class="Select-control"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-value" style="flex: 1 1 auto;"><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm" style="flex: 1 1 auto;">${this.languages[choices[key]].name}</div></div><span class="Select-arrow-zone"><span class="Select-arrow"></span></span></div></div></div></div>`
 		}
 		for (let key in settings) {
-			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaultSettings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU ${settings[key] ? "valueChecked-3Bzkbm" : "valueUnchecked-XR6AOk"}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
+			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU ${settings[key] ? "valueChecked-3Bzkbm" : "valueUnchecked-XR6AOk"}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
 		}
 		settingshtml += `</div></div>`;
 		
@@ -179,6 +201,50 @@ class GoogleTranslateOption {
 			});
 			if (document.querySelector(".app")) this.messageContextObserver.observe(document.querySelector(".app"), {childList: true});
 			
+			this.chatWindowObserver = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.addedNodes) {
+							change.addedNodes.forEach((node) => {
+								if (node && node.tagName && node.classList && node.classList.contains("message-group")) {
+									node.querySelectorAll(".message").forEach(message => {this.addOptionButton(message);});
+								}
+								else if (node && node.tagName && node.classList && node.classList.contains("message")) {
+									this.addOptionButton(node);
+								}
+							});
+						}
+					}
+				);
+			});
+			if (document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(document.querySelector(".messages.scroller"), {childList:true, subtree:true});
+			
+			this.optionPopoutObserver = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.addedNodes) {
+							change.addedNodes.forEach((node) => {
+								if (node && node.tagName && node.querySelector(".option-popout") && !node.querySelector(".btn-item-googletranslateoption")) {
+									$(node).find(".option-popout").append(this.popoutEntryMarkup);
+									this.addClickListener(node);
+								}
+							});
+						}
+					}
+				);
+			});
+			if (document.querySelector(".popouts")) this.optionPopoutObserver.observe(document.querySelector(".popouts"), {childList: true});
+			
+			$(document).off("click." + this.getName(), ".btn-option").off("contextmenu." + this.getName(), ".message")
+				.on("click." + this.getName(), ".btn-option", (e) => {
+					this.getMessageData($(".message").has(e.currentTarget)[0]);
+				})
+				.on("contextmenu." + this.getName(), ".message", (e) => {
+					this.getMessageData(e.currentTarget);
+				});
+			
+			document.querySelectorAll(".messages-group .message").forEach(message => {this.addOptionButton(message);});
+			
 			this.textareaObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
@@ -213,6 +279,14 @@ class GoogleTranslateOption {
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.textareaObserver.disconnect();
 			this.messageContextObserver.disconnect();
+			this.chatWindowObserver.disconnect();
+			this.optionPopoutObserver.disconnect();
+			
+			$(document).off("click." + this.getName(), ".btn-option").off("contextmenu." + this.getName(), ".message");
+			
+			document.querySelectorAll(".message.translated").forEach(message => {
+				this.resetMessage(message);
+			});
 			
 			$(".translate-button").remove();
 			document.querySelectorAll(".innerEnabled-gLHeOL, .innerEnabledNoAttach-36PpAk").forEach(textareaWrap => {textareaWrap.style.paddingRight = "0px";});
@@ -223,25 +297,21 @@ class GoogleTranslateOption {
 		}
 	}
 	
+	onSwitch () {
+		if (typeof BDfunctionsDevilBro === "object") {
+			if (document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(document.querySelector(".messages.scroller"), {childList:true, subtree:true});
+			document.querySelectorAll(".messages .message").forEach(message => {this.addOptionButton(message);});
+		}
+	}
+	
 	// begin of own functions
 	
 	changeLanguageStrings () {
-		this.messageContextEntryMarkup = this.messageContextEntryMarkup.replace("REPLACE_context_googletranslateoption_text", this.labels.context_googletranslateoption_text);
-	}
-	
-	getSettings () {
-		var oldSettings = BDfunctionsDevilBro.loadAllData(this.getName(), "settings"), newSettings = {}, saveSettings = false;
-		for (let key in this.defaultSettings) {
-			if (oldSettings[key] == null) {
-				newSettings[key] = this.defaultSettings[key].value;
-				saveSettings = true;
-			}
-			else {
-				newSettings[key] = oldSettings[key];
-			}
-		}
-		if (saveSettings) BDfunctionsDevilBro.saveAllData(newSettings, this.getName(), "settings");
-		return newSettings;
+		this.messageContextEntryMarkup = 	this.messageContextEntryMarkup.replace("REPLACE_context_messagetranslateoption_text", this.labels.context_messagetranslateoption_text);
+		
+		this.messageContextEntryMarkup2 = 	this.messageContextEntryMarkup2.replace("REPLACE_context_googletranslateoption_text", this.labels.context_googletranslateoption_text);
+		
+		this.popoutEntryMarkup = 			this.popoutEntryMarkup.replace("REPLACE_popout_translateoption_text", this.labels.popout_translateoption_text);
 	}
 
 	updateSettings (settingspanel) {
@@ -251,67 +321,94 @@ class GoogleTranslateOption {
 			input.parentElement.classList.toggle("valueChecked-3Bzkbm", input.checked);
 			input.parentElement.classList.toggle("valueUnchecked-XR6AOk", !input.checked);
 		}
-		BDfunctionsDevilBro.saveAllData(settings, this.getName(), "settings");
-	}
-	
-	getChoices () {
-		var oldChoices = BDfunctionsDevilBro.loadAllData(this.getName(), "languages"), newChoices = {}, saveChoices = false;
-		for (let key in this.defaultChoices) {
-			if (oldChoices[key] == null || !this.languages[oldChoices[key]]) {
-				newChoices[key] = this.defaultChoices[key].value;
-				saveChoices = true;
-			}
-			else {
-				newChoices[key] = oldChoices[key];
-			}
-		}
-		if (saveChoices) BDfunctionsDevilBro.saveAllData(newChoices, this.getName(), "languages");
-		return newChoices;
+		BDfunctionsDevilBro.saveAllData(settings, this, "settings");
 	}
 	
 	onContextMenu (context) {
-		if (!context || !context.tagName || !context.parentElement || context.querySelector(".googletranslateoption-item")) return;
+		if (!context || !context.tagName || !context.parentElement) return;
 		for (let group of context.querySelectorAll(".item-group")) {
-			if (BDfunctionsDevilBro.getKeyInformation({"node":group, "key":"handleSearchWithGoogle"})) {
+			if (!context.querySelector(".messagetranslateoption-item") && BDfunctionsDevilBro.getKeyInformation({"node":group, "key":"displayName", "value":"MessagePinItem"})) {
+				$(this.messageContextEntryMarkup).insertAfter(group)
+					.on("click", ".messagetranslateoption-item", () => {
+						$(".context-menu").hide();
+						this.translateMessage();
+					});
+			}
+			if (!context.querySelector(".googletranslateoption-item") && BDfunctionsDevilBro.getKeyInformation({"node":group, "key":"handleSearchWithGoogle"})) {
 				var text = BDfunctionsDevilBro.getKeyInformation({"node":group, "key":"value"});
 				if (text) {
-					var choices = this.getChoices();
-					var input = this.languages[choices.inputContext];
-					var output = this.languages[choices.outputContext];
-					var inputID = input.id;
-					var outputID = output.id;
-					var translation = "";
-					if (input.id == "binary" || output.id == "binary") {
-						if (input.id == "binary" && output.id != "binary") 			translation = this.binary2string(text);
-						else if (input.id != "binary" && output.id == "binary") 	translation = this.string2binary(text);
-						else if (input.id == "binary" && output.id == "binary") 	translation = text;
-					}
-					else {
-						let request = require("request");
-						request(this.getGoogleTranslateApiURL(input.id, output.id, text), (error, response, result) => {
-							if (response) {
-								result = JSON.parse(result);
-								result[0].forEach((array) => {translation += array[0];});
-								inputID = result[2];
-							}
-						});
-					}
-					$(this.messageContextEntryMarkup).insertAfter(group)
+					$(this.messageContextEntryMarkup2).insertAfter(group)
 						.on("mouseenter", ".googletranslateoption-item", (e) => {
-							console.log({inputID,outputID});
-							var tooltiptext = `From ${this.languages[inputID].name}:\n${text}\n\nTo ${this.languages[outputID].name}:\n${translation}`;
-							var customTooltipCSS = `
-								.googletranslate-tooltip {
-									max-width: ${window.outerWidth - $(e.currentTarget).offset().left - $(e.currentTarget).outerWidth()}px !important;
-								}`;
-							if (translation) BDfunctionsDevilBro.createTooltip(tooltiptext, e.currentTarget, {type: "right",selector:"googletranslate-tooltip",css:customTooltipCSS});
+							var {translation, input, output} = this.translateText(text, "context");
+							if (translation) {
+								var tooltiptext = `From ${input.name}:\n${text}\n\nTo ${output.name}:\n${translation}`;
+								var customTooltipCSS = `
+									.googletranslate-tooltip {
+										max-width: ${window.outerWidth - $(e.currentTarget).offset().left - $(e.currentTarget).outerWidth()}px !important;
+									}`;
+								BDfunctionsDevilBro.createTooltip(tooltiptext, e.currentTarget, {type: "right",selector:"googletranslate-tooltip",css:customTooltipCSS});
+							}
 						})
 						.on("click", ".googletranslateoption-item", (e) => {
 							window.open(this.getGoogleTranslatePageURL(input.id, output.id, text), "_blank");
 						});
 				}
-				break;
 			}
+		}
+	}
+	
+	addOptionButton (message) {
+		if (!message.querySelector(".btn-option")) {
+			$(this.optionButtonMarkup).insertBefore(message.querySelector(".message-text").firstChild);
+			$(message).off("click." + this.getName()).on("click." + this.getName(), ".btn-googletranslateoption", (e) => {
+				this.openOptionPopout(e);
+			});
+		}
+	}
+	
+	openOptionPopout (e) {
+		var wrapper = e.currentTarget;
+		if (wrapper.classList.contains("popout-open")) return;
+		wrapper.classList.add("popout-open");
+		var popout = $(this.optionsPopoutMarkup);
+		$(".popouts").append(popout);
+		$(popout).find(".option-popout").append(this.popoutEntryMarkup);
+		this.addClickListener(popout, wrapper);
+		
+		popout
+			.css("left", e.pageX - ($(popout).outerWidth() / 2) + "px")
+			.css("top", e.pageY + "px");
+			
+		$(document).on("mousedown.optionpopout" + this.getName(), (e2) => {
+			if (popout.has(e2.target).length == 0) {
+				$(document).off("mousedown.optionpopout" + this.getName());
+				popout.remove();
+				setTimeout(() => {wrapper.classList.remove("popout-open");},300);
+			}
+		});
+	}
+	
+	addClickListener (popout, wrapper) {
+		$(popout)
+			.off("click." + this.getName(), ".btn-item-googletranslateoption")
+			.on("click." + this.getName(), ".btn-item-googletranslateoption", (e) => {
+				$(".popout").has(".option-popout").hide();
+				this.translateMessage();
+				if (wrapper) setTimeout(() => {wrapper.classList.remove("popout-open");},300);
+			});
+	}
+	
+	getMessageData (div) {
+		if (div && !div.querySelector(".system-message")) {
+			var messagegroup = $(".message-group").has(div);
+			var pos = messagegroup.find(".message").index(div);
+			if (messagegroup[0] && pos > -1) {
+				var info = BDfunctionsDevilBro.getKeyInformation({"node":messagegroup[0],"key":"messages","time":1000});
+				if (info) this.message = Object.assign({},info[pos],{"div":div, "group":messagegroup[0], "pos":pos});
+			}
+		}
+		else {
+			this.message = null;
 		}
 	}
 	
@@ -327,11 +424,11 @@ class GoogleTranslateOption {
 						this.openTranslatePopout(button);
 					})
 					.on("contextmenu." + this.getName(), () => {
-						this.translateMessage = !this.translateMessage;
-						button.classList.toggle("active", this.translateMessage);
+						this.translating = !this.translating;
+						button.classList.toggle("active", this.translating);
 					});
 				button.classList.add(textareaInstance.props.type);
-				button.classList.toggle("active", this.translateMessage);
+				button.classList.toggle("active", this.translating);
 				var sendButtonEnabled = BDfunctionsDevilBro.isPluginEnabled("SendButton");
 				if (sendButtonEnabled) button.style.marginRight = "40px";
 				textareaWrap.style.paddingRight = sendButtonEnabled ? "110px" : "70px";
@@ -341,40 +438,75 @@ class GoogleTranslateOption {
 						if (this.doTranslate) {
 							this.doTranslate = false;
 							var text = textarea.value;
-							var choices = this.getChoices();
-							var input = this.languages[choices.inputMessage];
-							var output = this.languages[choices.outputMessage];
-							var translation = "";
-							if (input.id == "binary" || output.id == "binary") {
-								if (input.id == "binary" && output.id != "binary") 			translation = this.binary2string(text);
-								else if (input.id != "binary" && output.id == "binary") 	translation = this.string2binary(text);
-								else if (input.id == "binary" && output.id == "binary") 	translation = text;
-							}
-							else {
-								var request = new XMLHttpRequest();
-								request.open("GET", this.getGoogleTranslateApiURL(input.id, output.id, text), false);
-								request.send(null);
-								if (request.status === 200) {
-									JSON.parse(request.response)[0].forEach((array) => {translation += array[0];});
-								}
-							}
+							var {translation, input, output} = this.translateText(text, "message");
 							if (translation) {
 								textarea.focus();
 								textarea.selectionStart = 0;
 								textarea.selectionEnd = text.length;
-								document.execCommand("insertText", false, this.getSettings().sendOriginalMessage ? text + "\n\n" + translation : translation);
+								translation = BDfunctionsDevilBro.getData("sendOriginalMessage", this, "settings") ? text + "\n\n" + translation : translation;
+								document.execCommand("insertText", false, translation + " ");
+								BDfunctionsDevilBro.triggerSend(textarea);
 							}
 						}
 					})
 					.off("keydown." + this.getName())
 					.on("keydown." + this.getName(), e => {
-						if (this.translateMessage && !e.shiftKey && e.which == 13 && !document.querySelector(".chat form .autocomplete-1TnWNR")) {
+						if (this.translating && !e.shiftKey && e.which == 13 && !document.querySelector(".chat form .autocomplete-1TnWNR")) {
 							this.doTranslate = true;
 							$(textarea).trigger("input");
 						}
 					});
 			}
 		}
+	}
+	
+	translateMessage () {
+		if (this.message.content) {
+			var message = this.message.div;
+			if (!message.classList.contains("translated")) {
+				var {translation, input, output} = this.translateText(this.message.content, "message");
+				if (translation) {
+					$(message).data("orightmlGoogleTranslate", $(message).html());
+					var markup = message.querySelector(".markup");
+					markup.innerText = translation;
+					$(`<span class="edited translated">(${this.labels.translated_watermark_text})</span>`).appendTo(markup);
+					message.classList.add("translated");
+				}
+			}
+			else {
+				this.resetMessage(message);
+			}
+		}
+	}
+	
+	resetMessage (message) {
+		$(message)
+			.html($(message).data("orightmlGoogleTranslate"))
+			.removeClass("translated")
+			.find(".edited.translated").remove();
+	}
+	
+	translateText (text, type) {
+		var choices = BDfunctionsDevilBro.getAllData(this, "choices");
+		var input = type == "context" ? this.languages[choices.inputContext] : this.languages[choices.inputMessage];
+		var output = type == "context" ? this.languages[choices.outputContext] : this.languages[choices.outputMessage];
+		var translation = "";
+		if (input.id == "binary" || output.id == "binary") {
+			if (input.id == "binary" && output.id != "binary") 			translation = this.binary2string(text);
+			else if (input.id != "binary" && output.id == "binary") 	translation = this.string2binary(text);
+			else if (input.id == "binary" && output.id == "binary") 	translation = text;
+		}
+		else {
+			var request = new XMLHttpRequest();
+			request.open("GET", this.getGoogleTranslateApiURL(input.id, output.id, text), false);
+			request.send(null);
+			if (request.status === 200) {
+				var result = JSON.parse(request.response);
+				result[0].forEach((array) => {translation += array[0];});
+				if (this.languages[result[2]]) input.name = this.languages[result[2]].name;
+			}
+		}
+		return {translation, input, output};
 	}
 	
 	openTranslatePopout (button) {
@@ -387,16 +519,16 @@ class GoogleTranslateOption {
 			.css("top", $(button).offset().top - $(button).outerHeight()/2 + "px")
 			.on("click", ".Select-control", (e) => {this.openDropdownMenu("inChat", e);})
 			.on("click", ".reverse-button", (e) => {
-				var choices = this.getChoices();
+				var choices = BDfunctionsDevilBro.getAllData(this, "choices");
 				var input = choices.outputMessage;
 				var output = choices.inputMessage == "auto" ? "en" : choices.inputMessage;
 				popout.find(".Select[type='inputMessage']").attr("value", input).find(".title-3I2bY1").text(this.languages[input].name);
 				popout.find(".Select[type='outputMessage']").attr("value", output).find(".title-3I2bY1").text(this.languages[output].name);
-				BDfunctionsDevilBro.saveData("inputMessage", input, this.getName(), "languages");
-				BDfunctionsDevilBro.saveData("outputMessage", output, this.getName(), "languages");
+				BDfunctionsDevilBro.saveData("inputMessage", input, this, "choices");
+				BDfunctionsDevilBro.saveData("outputMessage", output, this, "choices");
 			});
 			
-		var choices = this.getChoices();	
+		var choices = BDfunctionsDevilBro.getAllData(this, "choices");	
 		popout.find(".Select").each((_,selectWrap) => {
 			let language = choices[selectWrap.getAttribute("type")];
 			selectWrap.setAttribute("value", language);
@@ -404,14 +536,14 @@ class GoogleTranslateOption {
 		});
 			
 		var checkbox = popout.find(".checkbox-1KYsPm")[0];
-		checkbox.checked = this.translateMessage;
+		checkbox.checked = this.translating;
 		checkbox.parentElement.classList.toggle("valueChecked-3Bzkbm", checkbox.checked);
 		checkbox.parentElement.classList.toggle("valueUnchecked-XR6AOk", !checkbox.checked);
 		$(checkbox).on("click." + this.getName(), () => {
 			checkbox.parentElement.classList.toggle("valueChecked-3Bzkbm", checkbox.checked);
 			checkbox.parentElement.classList.toggle("valueUnchecked-XR6AOk", !checkbox.checked);
 			button.classList.toggle("active", checkbox.checked);
-			this.translateMessage = checkbox.checked;
+			this.translating = checkbox.checked;
 		});
 			
 		$(document).on("mousedown.translatepopout" + this.getName(), (e) => {
@@ -440,7 +572,7 @@ class GoogleTranslateOption {
 			var language = e2.currentTarget.getAttribute("value");
 			selectWrap.setAttribute("value", language);
 			selectControl.querySelector(".title-3I2bY1").innerText = this.languages[language].name;
-			BDfunctionsDevilBro.saveData(type, language, this.getName(), "languages");
+			BDfunctionsDevilBro.saveData(type, language, this, "choices");
 		});
 		$(document).on("mousedown.select" + this.getName(), (e2) => {
 			if (e2.target.parentElement == selectMenu) return;
@@ -454,7 +586,7 @@ class GoogleTranslateOption {
 	createDropdownMenu (choice, type) {
 		var menuhtml = `<div class="Select-menu-outer"><div class="Select-menu">`;
 		for (var key in this.languages) {
-			if (this.defaultChoices[type].direction == "Output" && key == "auto") continue;
+			if (this.defaults.choices[type].direction == "Output" && key == "auto") continue;
 			var isSelected = key == choice ? " is-selected" : "";
 			menuhtml += `<div value="${key}" class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-option ${isSelected}" style="flex: 1 1 auto; display:flex;"><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm" style="flex: 1 1 42%;">${this.languages[key].name}</div></div>`
 		}
@@ -502,87 +634,150 @@ class GoogleTranslateOption {
 		switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
 			case "hr":		//croatian
 				return {
-					context_googletranslateoption_text:	"Traži prijevod"
+					context_messagetranslateoption_text:	"Prijevod poruke",
+					context_googletranslateoption_text:		"Traži prijevod",
+					popout_translateoption_text:			"Prevedi",
+					translated_watermark_text:				"preveo"
 				};
 			case "da":		//danish
 				return {
-					context_googletranslateoption_text:	"Søg oversættelse"
+					context_messagetranslateoption_text:	"Oversæt Besked",
+					context_googletranslateoption_text:		"Søg oversættelse",
+					popout_translateoption_text:			"Oversætte",
+					translated_watermark_text:				"oversat"
 				};
 			case "de":		//german
 				return {
-					context_googletranslateoption_text:	"Suche Übersetzung"
+					context_messagetranslateoption_text:	"Nachricht übersetzen",
+					context_googletranslateoption_text:		"Suche Übersetzung",
+					popout_translateoption_text:			"Übersetzen",
+					translated_watermark_text:				"übersetzt"
 				};
 			case "es":		//spanish
 				return {
-					context_googletranslateoption_text:	"Buscar traducción"
+					context_messagetranslateoption_text:	"Traducir mensaje",
+					context_googletranslateoption_text:		"Buscar traducción",
+					popout_translateoption_text:			"Traducir",
+					translated_watermark_text:				"traducido"
 				};
 			case "fr":		//french
 				return {
-					context_googletranslateoption_text:	"Rechercher une traduction"
+					context_messagetranslateoption_text:	"Traduire le message",
+					context_googletranslateoption_text:		"Rechercher une traduction",
+					popout_translateoption_text:			"Traduire",
+					translated_watermark_text:				"traduit"
 				};
 			case "it":		//italian
 				return {
-					context_googletranslateoption_text:	"Cerca la traduzione"
+					context_messagetranslateoption_text:	"Traduci messaggio",
+					context_googletranslateoption_text:		"Cerca la traduzione",
+					popout_translateoption_text:			"Tradurre",
+					translated_watermark_text:				"tradotto"
 				};
 			case "nl":		//dutch
 				return {
-					context_googletranslateoption_text:	"Zoek vertaling"
+					context_messagetranslateoption_text:	"Vertaal bericht",
+					context_googletranslateoption_text:		"Zoek vertaling",
+					popout_translateoption_text:			"Vertalen",
+					translated_watermark_text:				"vertaalde"
 				};
 			case "no":		//norwegian
 				return {
-					context_googletranslateoption_text:	"Søk oversettelse"
+					context_messagetranslateoption_text:	"Oversett melding",
+					context_googletranslateoption_text:		"Søk oversettelse",
+					popout_translateoption_text:			"Oversette",
+					translated_watermark_text:				"oversatt"
 				};
 			case "pl":		//polish
 				return {
-					context_googletranslateoption_text:	"Wyszukaj tłumaczenie"
+					context_messagetranslateoption_text:	"Przetłumacz wiadomość",
+					context_googletranslateoption_text:		"Wyszukaj tłumaczenie",
+					popout_translateoption_text:			"Tłumaczyć",
+					translated_watermark_text:				"przetłumaczony"
 				};
 			case "pt-BR":	//portuguese (brazil)
 				return {
-					context_googletranslateoption_text:	"Pesquisar tradução"
+					context_messagetranslateoption_text:	"Traduzir mensagem",
+					context_googletranslateoption_text:		"Pesquisar tradução",
+					popout_translateoption_text:			"Traduzir",
+					translated_watermark_text:				"traduzido"
 				};
 			case "fi":		//finnish
 				return {
-					context_googletranslateoption_text:	"Etsi käännös"
+					context_messagetranslateoption_text:	"Käännä viesti",
+					context_googletranslateoption_text:		"Etsi käännös",
+					popout_translateoption_text:			"Kääntää",
+					translated_watermark_text:				"käännetty"
 				};
 			case "sv":		//swedish
 				return {
-					context_googletranslateoption_text:	"Sök översättning"
+					context_messagetranslateoption_text:	"Översätt meddelande",
+					context_googletranslateoption_text:		"Sök översättning",
+					popout_translateoption_text:			"Översätt",
+					translated_watermark_text:				"översatt"
 				};
 			case "tr":		//turkish
 				return {
-					context_googletranslateoption_text:	"Arama tercümesi"
+					context_messagetranslateoption_text:	"Mesajı çevir",
+					context_googletranslateoption_text:		"Arama tercümesi",
+					popout_translateoption_text:			"Çevirmek",
+					translated_watermark_text:				"tercüme"
 				};
 			case "cs":		//czech
 				return {
-					context_googletranslateoption_text:	"Hledat překlad"
+					context_messagetranslateoption_text:	"Přeložit zprávu",
+					context_googletranslateoption_text:		"Hledat překlad",
+					popout_translateoption_text:			"Přeložit",
+					translated_watermark_text:				"přeloženo"
 				};
 			case "bg":		//bulgarian
 				return {
-					context_googletranslateoption_text:	"Търсене на превод"
+					context_messagetranslateoption_text:	"Превод на съобщението",
+					context_googletranslateoption_text:		"Търсене на превод",
+					popout_translateoption_text:			"Превеждам",
+					translated_watermark_text:				"преведена"
 				};
 			case "ru":		//russian
 				return {
-					context_googletranslateoption_text:	"Поиск перевода"
+					context_messagetranslateoption_text:	"Перевести сообщение",
+					context_googletranslateoption_text:		"Поиск перевода",
+					popout_translateoption_text:			"Переведите",
+					translated_watermark_text:				"переведенный"
 				};
 			case "uk":		//ukrainian
 				return {
-					context_googletranslateoption_text:	"Пошук перекладу"
+					context_messagetranslateoption_text:	"Перекласти повідомлення",
+					context_googletranslateoption_text:		"Пошук перекладу",
+					popout_translateoption_text:			"Перекласти",
+					translated_watermark_text:				"перекладений"
 				};
 			case "ja":		//japanese
 				return {
-					context_googletranslateoption_text:	"翻訳の検索"
+					context_messagetranslateoption_text:	"メッセージを翻訳する",
+					context_googletranslateoption_text:		"翻訳の検索",
+					popout_translateoption_text:			"翻訳",
+					translated_watermark_text:				"翻訳された"
 				};
 			case "zh-TW":	//chinese (traditional)
 				return {
-					context_googletranslateoption_text:	"搜索翻譯"
+					context_messagetranslateoption_text:	"翻譯消息",
+					context_googletranslateoption_text:		"搜索翻譯",
+					popout_translateoption_text:			"翻譯",
+					translated_watermark_text:				"翻譯"
 				};
 			case "ko":		//korean
 				return {
-					context_googletranslateoption_text:	"검색 번역"
+					context_messagetranslateoption_text:	"메시지 번역",
+					context_googletranslateoption_text:		"검색 번역",
+					popout_translateoption_text:			"옮기다",
+					translated_watermark_text:				"번역 된"
 				};
 			default:		//default: english
 				return {
-					context_googletranslateoption_text:	"Search translation"
+					context_messagetranslateoption_text:	"Translate Message",
+					context_googletranslateoption_text:		"Search translation",
+					popout_translateoption_text:			"Translate",
+					translated_watermark_text:				"translated"
 				};
 		}
 	}
