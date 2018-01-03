@@ -20,10 +20,10 @@ class GoogleTranslateOption {
 				sendOriginalMessage:	{value:false, 	description:"Send the original message together with the translation."}
 			},
 			choices: {
-				inputContext:			{value:"auto", 		place:"Context", 		direction:"Input", 			description:"Input Language in Context:"},
-				outputContext:			{value:"$discord", 	place:"Context", 		direction:"Output", 		description:"Output Language in Context:"},
-				inputMessage:			{value:"auto", 		place:"Message", 		direction:"Input", 			description:"Input Language in Message:"},
-				outputMessage:			{value:"$discord", 	place:"Message", 		direction:"Output", 		description:"Output Language in Message:"}
+				inputContext:			{value:"auto", 		place:"Context", 		direction:"Input", 			description:"Input Language in selected Messages:"},
+				outputContext:			{value:"$discord", 	place:"Context", 		direction:"Output", 		description:"Output Language in selected Messages:"},
+				inputMessage:			{value:"auto", 		place:"Message", 		direction:"Input", 			description:"Input Language in your Message:"},
+				outputMessage:			{value:"$discord", 	place:"Message", 		direction:"Output", 		description:"Output Language in your Message:"}
 			}
 		};
 
@@ -149,7 +149,7 @@ class GoogleTranslateOption {
 
 	getDescription () {return "Adds a Google Translate option to your context menu, which shows a preview of the translated text and on click will open the selected text in Google Translate. Also adds a translation button to your textareas, which will automatically translate the text for you before it is being send.";}
 
-	getVersion () {return "1.1.8";}
+	getVersion () {return "1.2.0";}
 	
 	getAuthor () {return "DevilBro";}
 	
@@ -373,7 +373,7 @@ class GoogleTranslateOption {
 		var popout = $(this.optionsPopoutMarkup);
 		$(".popouts").append(popout);
 		$(popout).find(".option-popout").append(this.popoutEntryMarkup);
-		this.addClickListener(popout, wrapper);
+		this.addClickListener(popout);
 		
 		popout
 			.css("left", e.pageX - ($(popout).outerWidth() / 2) + "px")
@@ -388,13 +388,16 @@ class GoogleTranslateOption {
 		});
 	}
 	
-	addClickListener (popout, wrapper) {
+	addClickListener (popout) {
 		$(popout)
 			.off("click." + this.getName(), ".btn-item-googletranslateoption")
 			.on("click." + this.getName(), ".btn-item-googletranslateoption", (e) => {
 				$(".popout").has(".option-popout").hide();
 				this.translateMessage();
-				if (wrapper) setTimeout(() => {wrapper.classList.remove("popout-open");},300);
+				setTimeout(() => {
+					var popoutbutton = document.querySelector(".btn-option.popout-open");
+					if (popoutbutton) popoutbutton.classList.remove("popout-open");
+				},300);
 			});
 	}
 	
@@ -464,7 +467,7 @@ class GoogleTranslateOption {
 		if (this.message.content) {
 			var message = this.message.div;
 			if (!message.classList.contains("translated")) {
-				var {translation, input, output} = this.translateText(this.message.content, "message");
+				var {translation, input, output} = this.translateText(this.message.content, "context");
 				if (translation) {
 					var markup = message.querySelector(".markup");
 					$(markup).data("orightmlGoogleTranslate", markup.innerHTML);
