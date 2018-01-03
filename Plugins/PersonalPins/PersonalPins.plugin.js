@@ -138,9 +138,9 @@ class PersonalPins {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
-			if (!BDfunctionsDevilBro.loadData("reset1", this.getName(), "resets")) {
-				BDfunctionsDevilBro.removeAllData(this.getName(), "servers");
-				BDfunctionsDevilBro.saveData("reset1", true, this.getName(), "resets");
+			if (!BDfunctionsDevilBro.loadData("reset1", this, "resets")) {
+				BDfunctionsDevilBro.removeAllData(this, "servers");
+				BDfunctionsDevilBro.saveData("reset1", true, this, "resets");
 			}
 			
 			this.GuildStore = BDfunctionsDevilBro.WebModules.findByProperties(["getGuild"]);
@@ -149,7 +149,7 @@ class PersonalPins {
 			this.MemberStore = BDfunctionsDevilBro.WebModules.findByProperties(["getMember"]);
 			this.IconUtils = BDfunctionsDevilBro.WebModules.findByProperties(["getUserAvatarURL"]);
 			this.HistoryUtils = BDfunctionsDevilBro.WebModules.findByProperties(["transitionTo", "replaceWith", "getHistory"]);
-			this.MainDiscord = BDfunctionsDevilBro.WebModules.findByProperties(["ActionTypes"]);	
+			this.MainDiscord = BDfunctionsDevilBro.WebModules.findByProperties(["ActionTypes"]);
 			
 			this.messageContextObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -247,7 +247,7 @@ class PersonalPins {
 
 	resetAll () {
 		if (confirm("Are you sure you want to delete all pinned notes?")) {
-			BDfunctionsDevilBro.removeAllData(this.getName(), "pins");
+			BDfunctionsDevilBro.removeAllData(this, "pins");
 		}
 	}
 	
@@ -312,7 +312,7 @@ class PersonalPins {
 	
 	addOptionButton (message) {
 		if (!message.querySelector(".btn-option")) {
-			$(message).find(".markup").before(this.optionButtonMarkup);
+			$(this.optionButtonMarkup).insertBefore(message.querySelector(".message-text").firstChild);
 			$(message).off("click." + this.getName()).on("click." + this.getName(), ".btn-personalpins", (e) => {
 				this.openOptionPopout(e);
 			});
@@ -380,29 +380,34 @@ class PersonalPins {
 	}
 	
 	openOptionPopout (e) {
+		var wrapper = e.currentTarget;
+		if (wrapper.classList.contains("popout-open")) return;
+		wrapper.classList.add("popout-open");
 		var popout = $(this.optionsPopoutMarkup);
 		$(".popouts").append(popout);
 		$(popout).find(".option-popout").append(this.popoutEntryMarkup);
-		this.addClickListener(popout);
+		this.addClickListener(popout, wrapper);
 		
 		popout
 			.css("left", e.pageX - ($(popout).outerWidth() / 2) + "px")
 			.css("top", e.pageY + "px");
 			
-		$(document).on("mousedown." + this.getName(), (e2) => {
+		$(document).on("mousedown.optionpopout" + this.getName(), (e2) => {
 			if (popout.has(e2.target).length == 0) {
-				$(document).off("mousedown." + this.getName());
+				$(document).off("mousedown.optionpopout" + this.getName());
 				popout.remove();
+				setTimeout(() => {wrapper.classList.remove("popout-open");},300);
 			}
 		});
 	}
 	
-	addClickListener (popout) {
+	addClickListener (popout, wrapper) {
 		$(popout)
 			.off("click." + this.getName(), ".btn-item-personalpins")
 			.on("click." + this.getName(), ".btn-item-personalpins", (e) => {
 				$(".popout").has(".option-popout").hide();
 				this.addMessageToNotes();
+				setTimeout(() => {wrapper.classList.remove("popout-open");},300);
 			});
 	}
 	
@@ -414,7 +419,7 @@ class PersonalPins {
 			var author = this.message.author;
 			var channelID = channelObj.id;
 			var serverID = serverObj.id ? serverObj.id : "@me";
-			var pins = BDfunctionsDevilBro.loadAllData(this.getName(), "pins");
+			var pins = BDfunctionsDevilBro.loadAllData(this, "pins");
 			pins[serverID] = pins[serverID] ? pins[serverID] : {}
 			pins[serverID][channelID] = pins[serverID][channelID] ? pins[serverID][channelID] : {}
 			var messageID = this.message.id;
@@ -437,7 +442,7 @@ class PersonalPins {
 				"accessory": this.message.div.querySelector(".accessory").innerHTML
 			};
 			pins[serverID][channelID][messageID + "_" + position] = message;
-			BDfunctionsDevilBro.saveAllData(pins, this.getName(), "pins");
+			BDfunctionsDevilBro.saveAllData(pins, this, "pins");
 			BDfunctionsDevilBro.showToast(this.labels.toast_noteadd_text, {type:"success"});
 		}
 		this.message = null;
@@ -451,7 +456,7 @@ class PersonalPins {
 		if (channelObj) {
 			var serverID = channelObj.guild_id ? channelObj.guild_id : "@me";
 			var channelID = channelObj.id;
-			var pins = BDfunctionsDevilBro.loadAllData(this.getName(), "pins");
+			var pins = BDfunctionsDevilBro.loadAllData(this, "pins");
 			if (!BDfunctionsDevilBro.isObjectEmpty(pins)) {
 				var language = BDfunctionsDevilBro.getDiscordLanguage().id;
 				var container = popout.querySelector(".messages-popout");
@@ -486,7 +491,7 @@ class PersonalPins {
 						user ? "url(" + this.IconUtils.getUserAvatarURL(user) + ")" : "url(" + messageData.avatar + ")";
 					message.querySelector(".user-name").innerText = user ? user.username : messageData.authorName;
 					message.querySelector(".user-name").style.color = member ? member.colorString : messageData.color;
-					message.querySelector(".timestamp").innerText = date.toLocaleTimeString(language) + ", " + date.toLocaleDateString(language);
+					message.querySelector(".timestamp").innerText = date.toLocaleString(language);
 					message.querySelector(".server-channel").innerText = 
 						(server && server.name ? server.name : messageData.serverName) + 
 						(messageData.serverID == "@me" ? " @" : " #") + 
@@ -496,7 +501,7 @@ class PersonalPins {
 					$(message).on("click." + this.getName(), ".close-button", (e) => {
 						message.remove();
 						delete pins[messageData.serverID][messageData.channelID][messageData.id + "_" + messageData.pos];
-						BDfunctionsDevilBro.saveAllData(pins, this.getName(), "pins");
+						BDfunctionsDevilBro.saveAllData(pins, this, "pins");
 						if (!container.querySelector(".message-group")) $(placeholder).show();
 						BDfunctionsDevilBro.showToast(this.labels.toast_noteremove_text, {type:"danger"});
 					})
