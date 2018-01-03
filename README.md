@@ -29,6 +29,7 @@ A series of plugins and themes for BetterDiscord. If you got any question write 
  - [Server Hider](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ServerHider) - Adds two options on your server context menu to hide servers in your server list.
  - [Server Folders](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ServerFolders) - Adds the option to create pseudo folders that, click the folder to hide/display all folders between two folders. Easily gets broken by moving server icons.
  - [Show Hidden Channels](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ShowHiddenChannels) - Displays all hidden channels that can't be accessed due to role restrictions in a new category.
+ - [Spell Check](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SpellCheck) - Adds a spellcheck to all textareas.
  - [Steam Profile Link](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SteamProfileLink) - Opens a steam profile in steam instead of a browser when clicking the steamlink in a userprofile. With the help of square.
  - [Theme Repo](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ThemeRepo) - Allows you to preview all themes from the theme repo and download them on the fly.
  - [Top Role Everywhere](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/TopRoleEverywhere) - Adds the highest role of a user as a tag.
