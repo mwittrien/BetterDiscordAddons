@@ -6,6 +6,7 @@ class SpellCheck {
 		this.textareaObserver = new MutationObserver(() => {});
 		
 		this.languages = {};
+		this.langDictionary = [];
 		this.dictionary = [];
 
 		this.spellCheckContextEntryMarkup =
@@ -59,7 +60,7 @@ class SpellCheck {
 
 	getDescription () {return "Adds a spellcheck to all textareas. Select a word and rightclick it to add it to your dictionary.";}
 
-	getVersion () {return "1.0.2";}
+	getVersion () {return "1.0.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -162,6 +163,7 @@ class SpellCheck {
 		if (word && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"handleCutItem"})) {
 			$(context).append(this.spellCheckContextEntryMarkup)
 				.on("click", ".spellcheck-item", (e) => {
+					$(context).hide();
 					this.addToOwnDictionary(word);
 				});
 		}
@@ -179,6 +181,7 @@ class SpellCheck {
 				var message = this.labels.toast_wordadd_text ? 
 							this.labels.toast_wordadd_text.replace("${word}", word).replace("${dicname}", this.languages[lang].name) : "";
 				BDfunctionsDevilBro.showToast(message, {type:"success"});
+				this.dictionary = this.langDictionary.concat(ownDictionary);
 			}
 		}
 	};
@@ -263,23 +266,22 @@ class SpellCheck {
 	}
 	
 	setDictionary (lang) {
-		this.dictionary = [];
+		this.dictionary = BDfunctionsDevilBro.loadData(lang, this, "owndics") || [];
 		let request = require("request");
 		request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/SpellCheck/dic/" + lang + ".dic", (error, response, result) => {
 			if (response) {
 				var temp = result.replace(new RegExp("[\\r|\\t]", "g"), "").split("\n");
-				this.dictionary = temp.map(word => word.toUpperCase());
+				this.langDictionary = temp.map(word => word.toUpperCase());
+				this.dictionary = this.langDictionary.concat(this.dictionary);
 			}
 		});
 	}
 	
 	spellCheckText (string) {
-		var lang = BDfunctionsDevilBro.getData("dictionaryLanguage", this, "choices");
-		var dictionary = this.dictionary.concat(BDfunctionsDevilBro.loadData(lang, this, "owndics") || []);
 		var htmlString = [];
 		string.replace(/[\n]/g, "\n ").split(" ").forEach((word, i) => {
 		var wordWithoutSymbols = word.replace(/[\>\<\|\,\;\.\:\_\#\+\*\~\?\\\´\`\}\=\]\)\[\(\{\/\&\%\$\§\"\!\^\°\n\t\r]/g, "");
-			if (wordWithoutSymbols && dictionary.length > 0 && !dictionary.includes(word.toUpperCase()) && !dictionary.includes(wordWithoutSymbols.toUpperCase())) {
+			if (wordWithoutSymbols && this.dictionary.length > 0 && !this.dictionary.includes(word.toUpperCase()) && !this.dictionary.includes(wordWithoutSymbols.toUpperCase())) {
 				htmlString.push(`<label class="spelling-error">${BDfunctionsDevilBro.encodeToHTML(word)}</label>`);
 			}
 			else {
