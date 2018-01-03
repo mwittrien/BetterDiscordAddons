@@ -36,7 +36,7 @@ class ChatFilter {
 
 	getDescription () {return "Allows the user to censor words or block complete messages based on words in the chatwindow.";}
 
-	getVersion () {return "3.1.2";}
+	getVersion () {return "3.1.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -301,7 +301,7 @@ class ChatFilter {
 				var strings = [];
 				var count = 0;
 				orightml.split("").forEach((chara) => { 
-					if(chara == "<") {
+					if (chara == "<") {
 						if (strings[count]) count++;
 					}
 					strings[count] = strings[count] ? strings[count] + chara : chara; 
@@ -328,8 +328,8 @@ class ChatFilter {
 							emojiname = emojiname ? emojiname.replace(new RegExp(":", 'g'), "") : null;
 							if (reg.test(emojiname)) blocked = true;
 						}
-						else if (string.indexOf('<a class="embed') == 0) {
-							var url = string.split('href="').length > 0 ? string.split('href="')[1] : null;
+						else if (string.indexOf('<img src="http') == 0) {
+							var url = string.split('src="').length > 0 ? string.split('src="')[1] : null;
 							url = url ? url.split('"')[0] : null;
 							if (reg.test(url)) blocked = true;
 						}
@@ -347,8 +347,8 @@ class ChatFilter {
 					$(message)
 						.html(newhtml)
 						.addClass("blocked")
-						.data("newhtml",newhtml)
-						.data("orightml",orightml);
+						.data("newhtmlChatFilter",newhtml)
+						.data("orightmlChatFilter",orightml);
 						
 					this.addClickListener(message, settings.showMessageOnClick.blocked);
 				}
@@ -375,8 +375,8 @@ class ChatFilter {
 									}
 								}
 							}
-							else if (string.indexOf('<a class="embed') == 0) {
-								var url = string.split('href="').length > 0 ? string.split('href="')[1] : null;
+							else if (string.indexOf('<img src="http') == 0) {
+								var url = string.split('src="').length > 0 ? string.split('src="')[1] : null;
 								url = url ? url.split('"')[0] : null;
 								if (reg.test(url)) {
 									strings = [BDfunctionsDevilBro.encodeToHTML(censoredReplace)];
@@ -409,9 +409,8 @@ class ChatFilter {
 	}
 	
 	resetMessage (message) {
-		var orightml = $(message).data("orightmlChatFilter");
 		$(message)
-			.html(orightml)
+			.html($(message).data("orightmlChatFilter"))
 			.off("click." + this.getName())
 			.removeClass("blocked")
 			.removeClass("censored")
