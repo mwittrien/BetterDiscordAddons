@@ -50,7 +50,7 @@ class SpellCheck {
 
 	getDescription () {return "Adds a spellcheck to all textareas. Select a word and rightclick it to add it to your dictionary.";}
 
-	getVersion () {return "1.0.1";}
+	getVersion () {return "1.0.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -270,7 +270,7 @@ class SpellCheck {
 		var htmlString = [];
 		string.replace(/[\n]/g, "\n ").split(" ").forEach((word, i) => {
 		var wordWithoutSymbols = word.replace(/[\>\<\|\,\;\.\:\_\#\+\*\~\?\\\´\`\}\=\]\)\[\(\{\/\&\%\$\§\"\!\^\°\n\t\r]/g, "");
-			if (wordWithoutSymbols && dictionary.length > 0 && !dictionary.includes(wordWithoutSymbols.toUpperCase())) {
+			if (wordWithoutSymbols && dictionary.length > 0 && !dictionary.includes(word.toUpperCase()) && !dictionary.includes(wordWithoutSymbols.toUpperCase())) {
 				htmlString.push(`<label class="spelling-error">${BDfunctionsDevilBro.encodeToHTML(word)}</label>`);
 			}
 			else {
