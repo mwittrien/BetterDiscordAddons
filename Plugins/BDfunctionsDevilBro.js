@@ -1357,8 +1357,7 @@ BDfunctionsDevilBro.clearReadNotifications = function (servers) {
 
 BDfunctionsDevilBro.triggerSend = function (textarea) {
 	setImmediate(() => {
-		var options = { key: "Enter", code: "Enter", which: 13, keyCode: 13, bubbles: true };
-		var press = new KeyboardEvent("keypress", options);
+		var press = new KeyboardEvent("keypress", {key: "Enter", code: "Enter", which: 13, keyCode: 13, bubbles: true});
 		Object.defineProperty(press, "keyCode", {value: 13});
 		Object.defineProperty(press, "which", {value: 13});
 		textarea.dispatchEvent(press);
