@@ -110,7 +110,7 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.3.5";}
+	getVersion () {return "1.3.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -512,7 +512,7 @@ class PersonalPins {
 						let clipboard = require("electron").clipboard;
 						if (messageData.content) clipboard.write({text: messageData.content});
 						else {
-							var image = message.querySelector(".attachment-image .image");
+							var image = message.querySelector(".imageWrapper-38T7d9 img");
 							if (image) {
 								// stolen from Image2Clipboard
 								require("request")({url: image.src, encoding: null}, (error, response, buffer) => {
