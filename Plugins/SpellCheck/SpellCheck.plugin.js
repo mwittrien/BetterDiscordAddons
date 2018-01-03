@@ -203,8 +203,8 @@ class SpellCheck {
 	
 	spellCheckText (string) {
 		var htmlString = [];
-		string.split(" ").forEach((word, i) => {
-		var wordWithoutSymbols = word.replace(/[\>\<\|\,\;\.\:\-\_\#\'\+\*\~\?\\\´\`\}\=\]\)\[\(\{\/\&\%\$\§\"\!\^\°]/g, "")
+		string.replace(/[\n]/g, "\n ").split(" ").forEach((word, i) => {
+		var wordWithoutSymbols = word.replace(/[\>\<\|\,\;\.\:\-\_\#\'\+\*\~\?\\\´\`\}\=\]\)\[\(\{\/\&\%\$\§\"\!\^\°\n\t\r]/g, "");
 			if (wordWithoutSymbols && this.dictionary.length > 0 && !this.dictionary.includes(wordWithoutSymbols.toUpperCase())) {
 				htmlString.push(`<label class="spelling-error">${BDfunctionsDevilBro.encodeToHTML(word)}</label>`);
 			}
