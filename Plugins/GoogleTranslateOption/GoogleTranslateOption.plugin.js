@@ -428,7 +428,7 @@ class GoogleTranslateOption {
 					})
 					.on("contextmenu." + this.getName(), () => {
 						this.translating = !this.translating;
-						button.classList.toggle("active", this.translating);
+						document.querySelectorAll(".channelTextArea-1HTP3C .translate-button").forEach(btn => {btn.classList.toggle("active", this.translating);});
 					});
 				button.classList.add(textareaInstance.props.type);
 				button.classList.toggle("active", this.translating);
