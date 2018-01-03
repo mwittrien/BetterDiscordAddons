@@ -6,46 +6,20 @@ class ImageGallery {
 		
 		this.eventFired = false;
 		
+		this.imageMarkup = `<div class="imageWrapper-38T7d9" style="width: 100px; height: 100px;"><img src="" style="width: 100px; height: 100px; display: inline;"></div>`;
+		
 		this.css = ` 
-			.modal-image .image.prev,
-			.modal-image .image.next {
+			.image-gallery .imageWrapper-38T7d9.prev,
+			.image-gallery .imageWrapper-38T7d9.next {
 				position: absolute;
-				top: 15%;
-				height: 66%;
 			} 
 			
-			.modal-image .image.prev {
+			.image-gallery .imageWrapper-38T7d9.prev {
 				right: 90%;
 			} 
 			
-			.modal-image .image.next {
+			.image-gallery .imageWrapper-38T7d9.next {
 				left: 90%;
-			}
-			
-			.modal-image .previewbar {
-				position: absolute;
-				top: 82%;
-				left: 10%;
-				height: 15%;
-				width: 80%;
-				background: red;
-				overflow-x: scroll;
-				overflow-y: hidden;
-				white-space: nowrap;
-			}
-			
-			.modal-image .previewbar [class^="preview-"] {
-				position: relative;
-				top: 0px;
-				bottom: 0px;
-				height: 100%;
-				display: inline-block;
-			}
-			
-			.modal-image .previewbar [class^="previewimage-"] {
-				position: relative;
-				top: 1px;
-				bottom: 0px;
 			}`;
 	}
 
@@ -53,7 +27,7 @@ class ImageGallery {
 
 	getDescription () {return "Allows the user to browse through images sent inside the same message.";}
 
-	getVersion () {return "1.4.2";}
+	getVersion () {return "1.5.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -74,14 +48,14 @@ class ImageGallery {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(".modal-image")) {
+								if (node && node.tagName && node.querySelector(".imageWrapper-38T7d9") && node.querySelector(".downloadLink-wANcd8")) {
 									this.loadImages(node);
 								}
 							});
 						}
 						if (change.removedNodes) {
 							change.removedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(".modal-image")) {
+								if (node && node.tagName && node.querySelector(".imageWrapper-38T7d9") && node.querySelector(".downloadLink-wANcd8")) {
 									$(document).off("keyup." + this.getName()).off("keydown." + this.getName());
 								}
 							});
@@ -89,7 +63,7 @@ class ImageGallery {
 					}
 				);
 			});
-			if (document.querySelector("#app-mount")) this.imageModalObserver.observe(document.querySelector("#app-mount"), {childList: true, subtree:true});
+			if (document.querySelector(".app ~ [class^='theme-']")) this.imageModalObserver.observe(document.querySelector(".app ~ [class^='theme-']"), {childList: true});
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 		}
@@ -113,22 +87,17 @@ class ImageGallery {
 	
 	// begin of own functions
 	
-	
 	loadImages (modal) {
 		var start = performance.now();
 		var waitForImg = setInterval(() => {
-			var img = $(modal).find(".image")[0];
+			var img = modal.querySelector(".imageWrapper-38T7d9 img");
 			if (img && img.src) {
 				clearInterval(waitForImg);
 				var message = this.getMessageGroupOfImage(img);
-				var imgs = $(message).find(".image");
-				
-				this.addImages(modal, imgs, img);
-				
-				/* $(modal).find(".modal-image").append($("<div/>", { 'class': 'previewbar' }))
-				imgs.each((index, preview) => {
-					this.addImagePreview(modal, preview, index);
-				}); */
+				if (message) {
+					modal.classList.add("image-gallery");
+					this.addImages(modal, message.querySelectorAll(".imageWrapper-38T7d9 img"), img);
+				}
 			}
 			else if (performance.now() - start > 10000) {
 				clearInterval(waitForImg);
@@ -136,14 +105,12 @@ class ImageGallery {
 		}, 100);
 	}
 	
-	getMessageGroupOfImage (img) {
-		if (img && img.src) {
-			var groups = $(".message-group");
-			for (var i = 0; i < groups.length; i++) {
-				var imgs = $(groups[i]).find(".image");
-				for (var j = 0; j < imgs.length; j++) {
-					if (imgs[j].src && this.getSrcOfImage(img) == this.getSrcOfImage(imgs[j])) {
-						return groups[i];
+	getMessageGroupOfImage (thisimg) {
+		if (thisimg && thisimg.src) {
+			for (let group of document.querySelectorAll(".message-group")) {
+				for (let img of group.querySelectorAll(".imageWrapper-38T7d9 img")) {
+					if (img.src && this.getSrcOfImage(img) == this.getSrcOfImage(thisimg)) {
+						return group;
 					}
 				}
 			}
@@ -151,12 +118,15 @@ class ImageGallery {
 		return null;
 	}
 	
+	getSrcOfImage (img) {
+		var src = img.src ? img.src : (img.querySelector("canvas") ? img.querySelector("canvas").src : "");
+		return src.split("?width=")[0];
+	}
+	
 	addImages (modal, imgs, img) {
-		$(modal).find(".image.prev").remove();
-		$(modal).find(".image.next").remove();
-		var prevImg;
-		var nextImg;
-		var index;
+		modal.querySelectorAll(".imageWrapper-38T7d9.prev, .imageWrapper-38T7d9.next").forEach(ele => {ele.remove();});
+		
+		var prevImg, nextImg, index;
 		for (index = 0; index < imgs.length; index++) {
 			if (this.getSrcOfImage(img) == this.getSrcOfImage(imgs[index])) {
 				prevImg = 	imgs[index-1];
@@ -166,47 +136,43 @@ class ImageGallery {
 			}
 		}
 		
-		$(modal).find(".image")
-			.attr("placeholder", this.getSrcOfImage(img))
-			.attr("src", this.getSrcOfImage(img));
+		$(modal).find(".imageWrapper-38T7d9")
+			.addClass("current")
+			.find("img").attr("src", this.getSrcOfImage(img));
 			
-		$(modal).find(".download-button").first()
+		$(modal).find(".downloadLink-wANcd8")
 			.attr("href", this.getSrcOfImage(img));
 		
-		this.resizeImage(modal, img, modal.querySelector(".image"));
+		this.resizeImage(modal, img, modal.querySelector(".imageWrapper-38T7d9.current img"));
 			
 		if (prevImg) {
-			$(modal).find(".modal-image").append($("<video/>", { 'class': 'image prev', 'poster': this.getSrcOfImage(prevImg)}));
-			this.resizeImage(modal, prevImg, modal.querySelector(".image.prev"));
+			$(this.imageMarkup)
+				.appendTo(modal.querySelector(".inner-1_1f7b"))
+				.addClass("prev")
+				.off("click." + this.getName()).on("click." + this.getName(), () => {
+					this.addImages(modal, imgs, prevImg);
+				})
+				.find("img").attr("src", this.getSrcOfImage(prevImg));
+			this.resizeImage(modal, prevImg, modal.querySelector(".imageWrapper-38T7d9.prev img"));
 		}
 		if (nextImg) {
-			$(modal).find(".modal-image").append($("<video/>", { 'class': 'image next', 'poster': this.getSrcOfImage(nextImg)}));
-			this.resizeImage(modal, nextImg, modal.querySelector(".image.next"));
+			$(this.imageMarkup)
+				.appendTo(modal.querySelector(".inner-1_1f7b"))
+				.addClass("next")
+				.off("click." + this.getName()).on("click." + this.getName(), () => {
+					this.addImages(modal, imgs, nextImg);
+				})
+				.find("img").attr("src", this.getSrcOfImage(nextImg));
+			this.resizeImage(modal, nextImg, modal.querySelector(".imageWrapper-38T7d9.next img"));
 		}
 		
-		$(modal).find(".image.prev").off("click").on("click", () => {
-			this.addImages(modal, imgs, prevImg);
-		});
-		$(modal).find(".image.next").off("click").on("click", () => {
-			this.addImages(modal, imgs, nextImg);
-		});
-		$(document).off("keydown." + this.getName()).on("keydown." + this.getName(), () => {
-			this.keyPressed({modal, imgs, prevImg, nextImg}, e);
-		});
-		$(document).off("keyup." + this.getName()).on("keyup." + this.getName(), () => {
-			this.eventFired = false;
-		});
-	}
-	
-	addImagePreview (modal, img, index) {
-		$(modal).find(".previewbar").append($("<div/>", { 'class': 'preview-' + index }));
-		$(modal).find(".preview-" + index).append($("<video/>", { 'class': 'previewimage-' + index, 'poster': this.getSrcOfImage(img)}));
-		this.resizePreview(modal.querySelector(".previewbar"), img, modal.querySelector(".previewimage-" + index));
-	}
-	
-	getSrcOfImage (img) {
-		var src = img.src ? img.src : (img.querySelector("canvas") ? img.querySelector("canvas").src : null);
-		return src.split("?width=")[0];
+		$(document).off("keydown." + this.getName()).off("keyup." + this.getName())
+			.on("keydown." + this.getName(), (e) => {
+				this.keyPressed({modal, imgs, prevImg, nextImg}, e);
+			})
+			.on("keyup." + this.getName(), () => {
+				this.eventFired = false;
+			});
 	}
 	
 	resizeImage (container, src, img) {
@@ -219,28 +185,20 @@ class ImageGallery {
 			var resize = resizeX < resizeY ? resizeX : resizeY;
 			var newWidth = src.clientWidth * resize;
 			var newHeight = src.clientHeight * resize;
+			newWidth = temp.width > newWidth ? newWidth : temp.width;
+			newHeight = temp.height > newHeight ? newHeight : temp.height;
 			
-			$(img)
-				.attr("width", temp.width > newWidth ? newWidth : temp.width)
-				.attr("height", temp.height > newHeight ? newHeight : temp.height)
-				.show();
-		};
-	}
-	
-	resizePreview (container, src, img) {
-		$(img).hide();
-		var temp = new Image();
-		temp.src = src.src.split("?width=")[0];
-		temp.onload = function () {
-			var resizeX = (container.clientWidth/src.clientWidth) * 0.1;
-			var resizeY = (container.clientHeight/src.clientHeight) * 0.9;
-			var resize = resizeX < resizeY ? resizeX : resizeY;
-			var newWidth = src.clientWidth * resize;
-			var newHeight = src.clientHeight * resize;
+			var wrapper = img.parentElement;
 			
+			
+			$(wrapper)
+				.css("top", !wrapper.classList.contains("current") ? (container.clientHeight - newHeight) / 2 : "")
+				.css("width", newWidth)
+				.css("height", newHeight);
+				
 			$(img)
-				.attr("width", temp.width > newWidth ? newWidth : temp.width)
-				.attr("height", temp.height > newHeight ? newHeight : temp.height)
+				.css("width", newWidth)
+				.css("height", newHeight)
 				.show();
 		};
 	}
@@ -249,10 +207,10 @@ class ImageGallery {
 		if (!this.eventFired) {
 			this.eventFired = true;
 			if (e.keyCode == 37 && data.prevImg) {
-				this.addImages(data.modal, data.imgs, data.prevImg)
+				this.addImages(data.modal, data.imgs, data.prevImg);
 			}
-			else if (e.keyCode == 39 && e.data.nextImg) {
-				this.addImages(data.modal, data.imgs, data.nextImg)
+			else if (e.keyCode == 39 && data.nextImg) {
+				this.addImages(data.modal, data.imgs, data.nextImg);
 			}
 		}
 	}
