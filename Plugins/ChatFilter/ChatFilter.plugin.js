@@ -158,7 +158,7 @@ class ChatFilter {
 			this.messageChangeObserver.disconnect();
 			this.settingsWindowObserver.disconnect();
 			
-			document.querySelectorAll(".markup.blocked, .markup.censored").forEach(message => {
+			document.querySelectorAll(".markup.blocked, .markup.censored, .accessory.blocked, .accessory.censored").forEach(message => {
 				this.resetMessage(message);
 			});
 			
