@@ -68,6 +68,9 @@ class GoogleTranslateOption {
 		this.translatePopoutMarkup = 
 			`<div class="popout popout-bottom-right no-arrow no-shadow popout-googletranslate DevilBro-modal" style="z-index: 1000; overflow: visible; visibility: visible; transform: translateX(-100%) translateY(-100%) translateZ(0px);">
 				<div class="themed-popout">
+					<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO  marginTop8-2gOa2N marginBottom8-1mABJ4" style="flex: 1 1 auto;">
+						<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Words starting with "!" will be ignored</h3>
+					</div>
 					${Object.keys(this.defaults.choices).map((key, i) => this.defaults.choices[key].place == "Message" ?
 					`<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4 marginTop8-2gOa2N" style="flex: 1 1 auto;">
 						<h3 class="titleDefault-1CWM9y title-3i-5G_ weightMedium-13x9Y8 size16-3IvaX_ flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.choices[key].description}</h3>
@@ -149,7 +152,7 @@ class GoogleTranslateOption {
 
 	getDescription () {return "Adds a Google Translate option to your context menu, which shows a preview of the translated text and on click will open the selected text in Google Translate. Also adds a translation button to your textareas, which will automatically translate the text for you before it is being send.";}
 
-	getVersion () {return "1.2.1";}
+	getVersion () {return "1.2.2";}
 	
 	getAuthor () {return "DevilBro";}
 	
@@ -523,7 +526,7 @@ class GoogleTranslateOption {
 		var mentions = {};
 		var newString = [];
 		string.split(" ").forEach((word, i) => {
-			if (word.indexOf("@") == 0 || word.indexOf("#") == 0) {
+			if (word.indexOf("@") == 0 || word.indexOf("#") == 0 || (word.indexOf("!") == 0 && word.length > 1)) {
 				newString.push("______" + i + "______");
 				mentions[i] = word;
 			}
@@ -536,7 +539,7 @@ class GoogleTranslateOption {
 	
 	addMentions (string, mentions) {
 		for (let i in mentions) {
-			string = string.replace("______" + i + "______", mentions[i]);
+			string = string.replace("______" + i + "______", mentions[i].indexOf("!") == 0 ? mentions[i].slice(1) : mentions[i]);
 		}
 		return string;
 	}
