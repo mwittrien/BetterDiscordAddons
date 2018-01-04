@@ -149,7 +149,7 @@ class GoogleTranslateOption {
 
 	getDescription () {return "Adds a Google Translate option to your context menu, which shows a preview of the translated text and on click will open the selected text in Google Translate. Also adds a translation button to your textareas, which will automatically translate the text for you before it is being send.";}
 
-	getVersion () {return "1.2.0";}
+	getVersion () {return "1.2.1";}
 	
 	getAuthor () {return "DevilBro";}
 	
@@ -415,7 +415,7 @@ class GoogleTranslateOption {
 		}
 	}
 	
-	addTranslationButton (textarea, type) {
+	addTranslationButton (textarea) {
 		if (!textarea) return;
 		var textareaWrap = textarea.parentElement;
 		if (textareaWrap && !textareaWrap.querySelector(".translate-button")) {
@@ -447,8 +447,10 @@ class GoogleTranslateOption {
 								textarea.selectionStart = 0;
 								textarea.selectionEnd = text.length;
 								translation = BDfunctionsDevilBro.getData("sendOriginalMessage", this, "settings") ? text + "\n\n" + translation : translation;
-								document.execCommand("insertText", false, translation + " ");
-								BDfunctionsDevilBro.triggerSend(textarea);
+								if (document.activeElement == textarea) {
+									document.execCommand("insertText", false, translation + " ");
+									BDfunctionsDevilBro.triggerSend(textarea);
+								}
 							}
 						}
 					})
