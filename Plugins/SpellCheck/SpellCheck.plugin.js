@@ -23,6 +23,8 @@ class SpellCheck {
 		this.css = 
 			`.textArea-20yzAH {
 				position: relative !important;
+			}
+			.channelTextArea-1HTP3C .inner-3if5cm > *:not(.spellcheck-overlay) {
 				z-index: 100 !important;
 			}
 			.spellcheck-overlay {
@@ -60,7 +62,7 @@ class SpellCheck {
 
 	getDescription () {return "Adds a spellcheck to all textareas. Select a word and rightclick it to add it to your dictionary.";}
 
-	getVersion () {return "1.0.3";}
+	getVersion () {return "1.0.4";}
 
 	getAuthor () {return "DevilBro";}
 	
