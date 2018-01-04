@@ -11,8 +11,20 @@ class SpellCheck {
 
 		this.spellCheckContextEntryMarkup =
 			`<div class="item-group">
+				<div class="item similarwords-item item-subMenu">
+					<span>REPLACE_context_similarwords_text</span>
+					<div class="hint"></div>
+				</div>
 				<div class="item spellcheck-item">
 					<span>REPLACE_context_spellcheck_text</span>
+					<div class="hint"></div>
+				</div>
+			</div>`;
+			
+		this.similarWordsContextSubMenuMarkup = 
+			`<div class="context-menu spellcheck-submenu">
+				<div class="item nosimilars-item">
+					<span>REPLACE_similarwordssubmenu_none_text</span>
 					<div class="hint"></div>
 				</div>
 			</div>`;
@@ -54,6 +66,9 @@ class SpellCheck {
 		this.defaults = {
 			choices: {
 				dictionaryLanguage:		{value:"en", 	description:"Dictionay Language:"}
+			},
+			amounts: {
+				maxSimilarAmount:		{value:6, 		description:"Maximal Amount of suggested Words:"}
 			}
 		};
 	}
@@ -62,22 +77,30 @@ class SpellCheck {
 
 	getDescription () {return "Adds a spellcheck to all textareas. Select a word and rightclick it to add it to your dictionary.";}
 
-	getVersion () {return "1.0.4";}
+	getVersion () {return "1.0.5";}
 
 	getAuthor () {return "DevilBro";}
 	
 	getSettingsPanel () {
 		if (!this.started || typeof BDfunctionsDevilBro !== "object") return;
 		var choices = BDfunctionsDevilBro.getAllData(this, "choices");
+		var amounts = BDfunctionsDevilBro.getAllData(this, "amounts");
 		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="titleDefault-1CWM9y title-3i-5G_ size18-ZM4Qv- height24-2pMcnc weightNormal-3gw0Lm marginBottom8-1mABJ4">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		for (let key in choices) {
-			settingshtml += `<h3 class="titleDefault-1CWM9y title-3i-5G_ weightMedium-13x9Y8 size16-3IvaX_ flexChild-1KGW5q marginBottom8-1mABJ4 marginTop8-2gOa2N" style="flex: 1 1 auto;">${this.defaults.choices[key].description}</h3><div class="ui-form-item flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><div class="ui-select format-select-wrapper" style="flex: 1 1 auto;"><div class="Select Select--single has-value" type="${key}" value="${choices[key]}"><div class="Select-control"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-value" style="flex: 1 1 auto;"><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm" style="flex: 1 1 auto;">${this.languages[choices[key]].name}</div></div><span class="Select-arrow-zone"><span class="Select-arrow"></span></span></div></div></div></div>`
+			settingshtml += `<div class="ui-form-item flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ weightMedium-13x9Y8 size16-3IvaX_ flexChild-1KGW5q" style="flex: 0 0 50%; line-height: 38px;">${this.defaults.choices[key].description}</h3><div class="ui-select format-select-wrapper" style="flex: 1 1 auto"><div class="Select Select--single has-value" type="${key}" value="${choices[key]}"><div class="Select-control"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-value" style="flex: 1 1 auto;"><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm" style="flex: 1 1 auto;">${this.languages[choices[key]].name}</div></div><span class="Select-arrow-zone"><span class="Select-arrow"></span></span></div></div></div></div>`;
+		}
+		for (let key in amounts) {
+			settingshtml += `<div class="ui-form-item flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ weightMedium-13x9Y8 size16-3IvaX_ flexChild-1KGW5q" style="flex: 0 0 50%; line-height: 38px;">${this.defaults.amounts[key].description}</h3><div class="inputWrapper-3xoRWR vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR" style="flex: 1 1 auto;"><input type="number" min="0" option="${key}" value="${amounts[key]}" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_ amountInput"></div></div>`;
 		}
 		settingshtml += `</div></div>`;
 		
 		var settingspanel = $(settingshtml)[0];
 		$(settingspanel)
-			.on("click", ".Select-control", (e) => {this.openDropdownMenu(e);});
+			.on("click", ".Select-control", (e) => {this.openDropdownMenu(e);})
+			.on("input", ".amountInput", (e) => {
+				var input = parseInt(e.currentTarget.value);
+				if (!isNaN(input) && input > -1) BDfunctionsDevilBro.saveData(e.currentTarget.getAttribute("option"), input, this, "amounts");
+			});
 		return settingspanel;
 	}
 
@@ -157,28 +180,90 @@ class SpellCheck {
 
 	changeLanguageStrings () {
 		this.spellCheckContextEntryMarkup = this.spellCheckContextEntryMarkup.replace("REPLACE_context_spellcheck_text", this.labels.context_spellcheck_text);
+		this.spellCheckContextEntryMarkup = this.spellCheckContextEntryMarkup.replace("REPLACE_context_similarwords_text", this.labels.context_similarwords_text);
+		
+		this.similarWordsContextSubMenuMarkup = this.similarWordsContextSubMenuMarkup.replace("REPLACE_similarwordssubmenu_none_text", this.labels.similarwordssubmenu_none_text);
 	}
 	
 	onContextMenu (context) {
 		if (!context || !context.tagName || !context.parentElement || context.querySelector(".spellcheck-item")) return;
 		var word = window.getSelection().toString();
 		if (word && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"handleCutItem"})) {
-			$(context).append(this.spellCheckContextEntryMarkup)
+			var group = $(this.spellCheckContextEntryMarkup);
+			$(context).append(group)
+				.css("top", (parseInt($(context).css("top").replace("px","")) - (context.classList.contains("invertY") ? group.outerHeight() : 0)) + "px")
 				.on("click", ".spellcheck-item", (e) => {
 					$(context).hide();
 					this.addToOwnDictionary(word);
+				})
+				.on("mouseenter", ".similarwords-item", (e) => {
+					this.createContextSubMenu(word.toLowerCase().trim(), e, context);
 				});
+		}
+	}
+	
+	createContextSubMenu (word, e, context) {
+		var similarWordsContextSubMenu = $(this.similarWordsContextSubMenuMarkup);
+		
+		var maxAmount = BDfunctionsDevilBro.getData("maxSimilarAmount", this, "amounts");
+		
+		if (maxAmount > 0) {
+			var sameLetterDic = this.dictionary.filter(string => string.indexOf(word.toLowerCase().charAt(0)) == 0 ? string : null);
+			var similarities = {};
+			for (let string of sameLetterDic) {
+				let value = this.wordSimilarity(word, string);
+				if (!similarities[value]) similarities[value] = [];
+				similarities[value].push(string);
+			}
+			var amount = 0;
+			var similarWords = [];
+			for (let value of Object.keys(similarities).sort().reverse()) {
+				for (let similarWord of similarities[value]) {
+					if (amount < maxAmount && !similarWords.includes(similarWord)) {
+						similarWords.push(similarWord);
+						amount++;
+					}
+					if (amount >= maxAmount) break;
+				}
+				if (amount >= maxAmount) break;
+			}
+			
+			if (similarWords.length > 0) {
+				similarWordsContextSubMenu.find(".nosimilars-item").remove();
+				for (let foundWord of similarWords.sort()) {
+					similarWordsContextSubMenu.append(`<div value="${foundWord}" class="item similarword-item"><span>${foundWord}</span><div class="hint"></div></div>`);
+				}
+			}
+		}
+		
+		var textarea = window.getSelection().getRangeAt(0).startContainer.querySelector("textarea");
+		similarWordsContextSubMenu
+			.on("click", ".similarword-item", (e) => {
+				$(context).hide();
+				this.replaceWord(textarea, word, e.currentTarget.getAttribute("value"));
+			});
+		
+		BDfunctionsDevilBro.appendSubMenu(e.currentTarget, similarWordsContextSubMenu);
+	}
+	
+	replaceWord (textarea, word, replacement) {
+		textarea.focus();
+		textarea.selectionStart = 0;
+		textarea.selectionEnd = textarea.value.length;
+		if (document.activeElement == textarea) {
+			document.execCommand("insertText", false, textarea.value.replace(new RegExp(word, "i"), replacement));
+			$(textarea).trigger("keyup");
 		}
 	}
 	
 	addToOwnDictionary (word) {
 		word = word.split(" ")[0].split("\n")[0].split("\r")[0].split("\t")[0];
 		if (word) {
-			var wordcaps = word.toUpperCase();
+			var wordlow = word.toLowerCase();
 			var lang = BDfunctionsDevilBro.getData("dictionaryLanguage", this, "choices");
 			var ownDictionary = BDfunctionsDevilBro.loadData(lang, this, "owndics") || [];
-			if (!ownDictionary.includes(wordcaps)) {
-				ownDictionary.push(wordcaps);
+			if (!ownDictionary.includes(wordlow)) {
+				ownDictionary.push(wordlow);
 				BDfunctionsDevilBro.saveData(lang, ownDictionary, this, "owndics");
 				var message = this.labels.toast_wordadd_text ? 
 							this.labels.toast_wordadd_text.replace("${word}", word).replace("${dicname}", this.languages[lang].name) : "";
@@ -272,9 +357,9 @@ class SpellCheck {
 		let request = require("request");
 		request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/SpellCheck/dic/" + lang + ".dic", (error, response, result) => {
 			if (response) {
-				var temp = result.replace(new RegExp("[\\r|\\t]", "g"), "").split("\n");
-				this.langDictionary = temp.map(word => word.toUpperCase());
+				this.langDictionary = result.replace(new RegExp("[\\r|\\t]", "g"), "").split("\n");
 				this.dictionary = this.langDictionary.concat(this.dictionary);
+				this.dictionary = this.dictionary.map(word => word.toLowerCase());
 			}
 		});
 	}
@@ -283,7 +368,7 @@ class SpellCheck {
 		var htmlString = [];
 		string.replace(/[\n]/g, "\n ").split(" ").forEach((word, i) => {
 		var wordWithoutSymbols = word.replace(/[\>\<\|\,\;\.\:\_\#\+\*\~\?\\\´\`\}\=\]\)\[\(\{\/\&\%\$\§\"\!\^\°\n\t\r]/g, "");
-			if (wordWithoutSymbols && this.dictionary.length > 0 && !this.dictionary.includes(word.toUpperCase()) && !this.dictionary.includes(wordWithoutSymbols.toUpperCase())) {
+			if (wordWithoutSymbols && this.dictionary.length > 0 && !this.dictionary.includes(word.toLowerCase()) && !this.dictionary.includes(wordWithoutSymbols.toLowerCase())) {
 				htmlString.push(`<label class="spelling-error">${BDfunctionsDevilBro.encodeToHTML(word)}</label>`);
 			}
 			else {
@@ -293,111 +378,174 @@ class SpellCheck {
 		return htmlString.join(" ");
 	}
 	
+	wordSimilarity (a, b) {
+		var temp;
+		if (a.length === 0 || b.length === 0 || a.length - b.length > 3 || b.length - a.length > 3) { return 0; }
+		if (a.length > b.length) {
+			temp = a;
+			a = b;
+			b = temp;
+		}
+		let result = 0;
+		let row = [...Array(a.length + 1).keys()];
+		for (let i = 1; i <= b.length; i++) {
+			result = i;
+			for (let j = 1; j <= a.length; j++) {
+				temp = row[j - 1];
+				row[j - 1] = result;
+				result = b[i - 1] === a[j - 1] ? temp : Math.min(temp + 1, Math.min(result + 1, row[j] + 1));
+			}
+		}
+		return (b.length - result) / b.length;
+	}
+	
 	setLabelsByLanguage () {
 		switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
 			case "hr":		//croatian
 				return {
 					context_spellcheck_text:				"Dodaj u rječnik",
+					context_similarwords_text:				"Pretraga sličnih riječi...",
+					similarwordssubmenu_none_text:			"Nema sličnih riječi",
 					toast_wordadd_text:						"Riječ ${word} dodana je u rječnik ${dicname}."
 				};
 			case "da":		//danish
 				return {
 					context_spellcheck_text:				"Tilføj til ordbog",
+					context_similarwords_text:				"Søg lignende ord...",
+					similarwordssubmenu_none_text:			"Ingen lignende ord",
 					toast_wordadd_text:						"Ord ${word} tilføjet til ordbog ${dicname}."
 				};
 			case "de":		//german
 				return {
 					context_spellcheck_text:				"Zum Wörterbuch hinzufügen",
+					context_similarwords_text:				"Ähnliche Wörter suchen...",
+					similarwordssubmenu_none_text:			"Keine ähnlichen Wörter",
 					toast_wordadd_text:						"Wort ${word} wurde zum Wörterbuch ${dicname} hinzugefügt."
 				};
 			case "es":		//spanish
 				return {
 					context_spellcheck_text:				"Agregar al diccionario",
+					context_similarwords_text:				"Buscar palabras similares...",
+					similarwordssubmenu_none_text:			"No hay palabras similares",
 					toast_wordadd_text:						"Se agregó la palabra ${word} al diccionario ${dicname}."
 				};
 			case "fr":		//french
 				return {
 					context_spellcheck_text:				"Ajouter au dictionnaire",
+					context_similarwords_text:				"Chercher des mots similaires...",
+					similarwordssubmenu_none_text:			"Pas de mots similaires",
 					toast_wordadd_text:						"Le mot ${word} a été ajouté au dictionnaire ${dicname}."
 				};
 			case "it":		//italian
 				return {
 					context_spellcheck_text:				"Aggiungi al dizionario",
+					context_similarwords_text:				"Cerca parole simili...",
+					similarwordssubmenu_none_text:			"Nessuna parola simile",
 					toast_wordadd_text:						"Parola ${word} aggiunta al dizionario ${dicname}."
 				};
 			case "nl":		//dutch
 				return {
 					context_spellcheck_text:				"Toevoegen aan woordenboek",
+					context_similarwords_text:				"Zoek vergelijkbare woorden...",
+					similarwordssubmenu_none_text:			"Geen vergelijkbare woorden",
 					toast_wordadd_text:						"Word ${word} toegevoegd aan woordenboek ${dicname}."
 				};
 			case "no":		//norwegian
 				return {
 					context_spellcheck_text:				"Legg til i ordbok",
+					context_similarwords_text:				"Søk lignende ord...",
+					similarwordssubmenu_none_text:			"Ingen lignende ord",
 					toast_wordadd_text:						"Ord ${word} legges til ordbok ${dicname}."
 				};
 			case "pl":		//polish
 				return {
 					context_spellcheck_text:				"Dodaj do słownika",
+					context_similarwords_text:				"Wyszukaj podobne słowa...",
+					similarwordssubmenu_none_text:			"Brak podobnych słów",
 					toast_wordadd_text:						"Słowo ${word} dodane do słownika ${dicname}."
 				};
 			case "pt-BR":	//portuguese (brazil)
 				return {
 					context_spellcheck_text:				"Adicionar ao dicionário",
+					context_similarwords_text:				"Pesquisar palavras similares...",
+					similarwordssubmenu_none_text:			"Sem palavras semelhantes",
 					toast_wordadd_text:						"Palavra ${word} adicionado ao dicionário ${dicname}."
 				};
 			case "fi":		//finnish
 				return {
 					context_spellcheck_text:				"Lisää sanakirjaan",
+					context_similarwords_text:				"Hae samankaltaisia sanoja...",
+					similarwordssubmenu_none_text:			"Ei vastaavia sanoja",
 					toast_wordadd_text:						"Sana ${word} lisättiin sanakirjaan ${dicname}."
 				};
 			case "sv":		//swedish
 				return {
 					context_spellcheck_text:				"Lägg till i ordbok",
+					context_similarwords_text:				"Sök liknande ord...",
+					similarwordssubmenu_none_text:			"Inga liknande ord",
 					toast_wordadd_text:						"Ord ${word} läggs till ordbok ${dicname}."
 				};
 			case "tr":		//turkish
 				return {
 					context_spellcheck_text:				"Sözlükye Ekle",
+					context_similarwords_text:				"Benzer Kelimeler Ara...",
+					similarwordssubmenu_none_text:			"Benzer kelime yoktur",
 					toast_wordadd_text:						"Sözcük ${word} sözlük ${dicname}'ye eklendi."
 				};
 			case "cs":		//czech
 				return {
 					context_spellcheck_text:				"Přidat do slovníku",
+					context_similarwords_text:				"Hledat podobné výrazy...",
+					similarwordssubmenu_none_text:			"Žádné podobné slova",
 					toast_wordadd_text:						"Slovo ${word} bylo přidáno do slovníku ${dicname}."
 				};
 			case "bg":		//bulgarian
 				return {
 					context_spellcheck_text:				"Добави в речника",
+					context_similarwords_text:				"Търсене на подобни думи...",
+					similarwordssubmenu_none_text:			"Няма подобни думи",
 					toast_wordadd_text:						"Думата ${word} е добавена към речника ${dicname}."
 				};
 			case "ru":		//russian
 				return {
 					context_spellcheck_text:				"Добавить в словарь",
+					context_similarwords_text:				"Поиск похожих слов...",
+					similarwordssubmenu_none_text:			"Нет похожих слов",
 					toast_wordadd_text:						"Слово ${word} добавлено в словарь ${dicname}."
 				};
 			case "uk":		//ukrainian
 				return {
 					context_spellcheck_text:				"Додати до словника",
+					context_similarwords_text:				"Шукати схожі слова...",
+					similarwordssubmenu_none_text:			"Немає подібних слів",
 					toast_wordadd_text:						"Словник ${word} додається до словника ${dicname}."
 				};
 			case "ja":		//japanese
 				return {
 					context_spellcheck_text:				"辞書に追加",
+					context_similarwords_text:				"類似のワードを検索...",
+					similarwordssubmenu_none_text:			"類似の単語はありません",
 					toast_wordadd_text:						"単語 ${word} が辞書 ${dicname} に追加されました。"
 				};
 			case "zh-TW":	//chinese (traditional)
 				return {
 					context_spellcheck_text:				"添加到詞典",
+					context_similarwords_text:				"搜索類似的單詞...",
+					similarwordssubmenu_none_text:			"沒有類似的詞",
 					toast_wordadd_text:						"單詞 ${word} 添加到字典 ${dicname}。"
 				};
 			case "ko":		//korean
 				return {
 					context_spellcheck_text:				"사전에 추가",
+					context_similarwords_text:				"비슷한 단어 검색...",
+					similarwordssubmenu_none_text:			"유사한 단어 없음",
 					toast_wordadd_text:						"단어 ${word} 사전 ${dicname} 에 추가되었습니다."
 				};
 			default:		//default: english
 				return {
 					context_spellcheck_text:				"Add to Dictionay",
+					context_similarwords_text:				"Search similar Words...",
+					similarwordssubmenu_none_text:			"No similar Words",
 					toast_wordadd_text:						"Word ${word} added to dictionary ${dicname}."
 				};
 		}
