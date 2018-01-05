@@ -58,10 +58,13 @@ class ShowHiddenChannels {
 				</div>
 			</div>`;
 			
-		this.defaultSettings = {
-			showText:		{value:true, 	description:"Show hidden Textchannels:"},
-			showVoice:		{value:true, 	description:"Show hidden Voicechannels:"},
-			showCategory:	{value:false, 	description:"Show hidden Categories:"}
+		this.defaults = {
+			settings: {
+				showAccesRoles:	{value:true,	description:"Show Roles with Access on hover:"},
+				showText:		{value:true, 	description:"Show hidden Textchannels:"},
+				showVoice:		{value:true, 	description:"Show hidden Voicechannels:"},
+				showCategory:	{value:false, 	description:"Show hidden Categories:"}
+			}
 		};
 	}
 
@@ -69,16 +72,16 @@ class ShowHiddenChannels {
 
 	getDescription () {return "Displays channels that are hidden from you by role restrictions.";}
 
-	getVersion () {return "2.0.7";}
+	getVersion () {return "2.0.8";}
 
 	getAuthor () {return "DevilBro";}
 	
 	getSettingsPanel () {
 		if (!this.started || typeof BDfunctionsDevilBro !== "object") return;
-		var settings = this.getSettings(); 
+		var settings = BDfunctionsDevilBro.getAllData(this, "settings"); 
 		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="titleDefault-1CWM9y title-3i-5G_ size18-ZM4Qv- height24-2pMcnc weightNormal-3gw0Lm marginBottom8-1mABJ4">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		for (let key in settings) {
-			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaultSettings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU ${settings[key] ? "valueChecked-3Bzkbm" : "valueUnchecked-XR6AOk"}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
+			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU ${settings[key] ? "valueChecked-3Bzkbm" : "valueUnchecked-XR6AOk"}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
 		}
 		settingshtml += `</div></div>`;
 		
@@ -102,7 +105,8 @@ class ShowHiddenChannels {
 			BDfunctionsDevilBro.loadMessage(this);
 			
 			this.ChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getChannels", "getDMFromUserId"]);
-			this.GuildChannels = BDfunctionsDevilBro.WebModules.findByProperties(["getChannels", "getDefaultChannel"])
+			this.GuildChannels = BDfunctionsDevilBro.WebModules.findByProperties(["getChannels", "getDefaultChannel"]);
+			this.Permissions = BDfunctionsDevilBro.WebModules.findByProperties(["Permissions", "ActivityTypes"]).Permissions;
 			
 			this.channelListObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -143,20 +147,6 @@ class ShowHiddenChannels {
 
 	
 	// begin of own functions
-	getSettings () {
-		var oldSettings = BDfunctionsDevilBro.loadAllData(this.getName(), "settings"), newSettings = {}, saveSettings = false;
-		for (let key in this.defaultSettings) {
-			if (oldSettings[key] == null) {
-				newSettings[key] = this.defaultSettings[key].value;
-				saveSettings = true;
-			}
-			else {
-				newSettings[key] = oldSettings[key];
-			}
-		}
-		if (saveSettings) BDfunctionsDevilBro.saveAllData(newSettings, this.getName(), "settings");
-		return newSettings;
-	}
 
 	updateSettings (settingspanel) {
 		var settings = {};
@@ -165,7 +155,7 @@ class ShowHiddenChannels {
 			input.parentElement.classList.toggle("valueChecked-3Bzkbm", input.checked);
 			input.parentElement.classList.toggle("valueUnchecked-XR6AOk", !input.checked);
 		}
-		BDfunctionsDevilBro.saveAllData(settings, this.getName(), "settings");
+		BDfunctionsDevilBro.saveAllData(settings, this, "settings");
 	}
 	
 	displayHiddenChannels () {
@@ -232,7 +222,7 @@ class ShowHiddenChannels {
 							name.classList.toggle("nameHovered-1YFSWq");
 							
 							$(category).find(".containerDefault-7RImuF").toggle(!icon.classList.contains("closed-2Hef-I"));
-							BDfunctionsDevilBro.saveData(serverID, !icon.classList.contains("closed-2Hef-I"), this.getName(), "categorystatus");
+							BDfunctionsDevilBro.saveData(serverID, !icon.classList.contains("closed-2Hef-I"), this, "categorystatus");
 						})
 						.on("mouseenter mouseleave", ".containerDefault-1bbItS > .flex-lFgbSz", () => {
 							if (!category.querySelector(".closed-2Hef-I")) {
@@ -253,7 +243,7 @@ class ShowHiddenChannels {
 							}
 						});
 						
-					var settings = this.getSettings(); 
+					var settings = BDfunctionsDevilBro.getAllData(this, "settings"); 
 					
 					if (settings.showText) for (let hiddenChannel of hiddenChannels[0]) {
 						let channel = $(this.channelTextMarkup)[0];
@@ -262,13 +252,14 @@ class ShowHiddenChannels {
 						let channelname = channel.querySelector(".name-2SL4ev");
 						channelname.innerText = hiddenChannel.name;
 						$(channel)
-							.on("mouseenter mouseleave", ".wrapper-fDmxzK", () => {
-								channelwrapper.classList.toggle("wrapperDefaultText-3M3F1R")
+							.on("mouseenter mouseleave", ".wrapper-fDmxzK", (e) => {
+								channelwrapper.classList.toggle("wrapperDefaultText-3M3F1R");
 								channelwrapper.classList.toggle("wrapperHoveredText-1PA_Uk");
-								channelicon.classList.toggle("contentDefaultText-2elG3R")
+								channelicon.classList.toggle("contentDefaultText-2elG3R");
 								channelicon.classList.toggle("contentHoveredText-2HYGIY");
-								channelname.classList.toggle("nameDefaultText-QoumjC")
+								channelname.classList.toggle("nameDefaultText-QoumjC");
 								channelname.classList.toggle("nameHoveredText-2FFqiz");
+								this.showAccesRoles(serverObj, hiddenChannel, e);
 							})
 							.on("click", () => {
 								BDfunctionsDevilBro.showToast(`You can not enter the hidden channel ${hiddenChannel.name}.`, {type:"error"});
@@ -283,13 +274,14 @@ class ShowHiddenChannels {
 						let channelname = channel.querySelector(".name-2SL4ev");
 						channelname.innerText = hiddenChannel.name;
 						$(channel)
-							.on("mouseenter mouseleave", ".wrapper-fDmxzK", () => {
-								channelwrapper.classList.toggle("wrapperDefaultVoice-2ud9mj")
+							.on("mouseenter mouseleave", ".wrapper-fDmxzK", (e) => {
+								channelwrapper.classList.toggle("wrapperDefaultVoice-2ud9mj");
 								channelwrapper.classList.toggle("wrapperHoveredVoice-3tbfNN");
-								channelicon.classList.toggle("contentDefaultVoice-311dxZ")
+								channelicon.classList.toggle("contentDefaultVoice-311dxZ");
 								channelicon.classList.toggle("contentHoveredVoice-3qGNKh");
-								channelname.classList.toggle("nameDefaultVoice-1swZoh")
+								channelname.classList.toggle("nameDefaultVoice-1swZoh");
 								channelname.classList.toggle("nameHoveredVoice-TIoHRJ");
+								this.showAccesRoles(serverObj, hiddenChannel, e);
 							})
 							.on("click", () => {
 								BDfunctionsDevilBro.showToast(`You can not enter the hidden channel ${hiddenChannel.name}.`, {type:"error"});
@@ -304,13 +296,14 @@ class ShowHiddenChannels {
 						let channelname = channel.querySelector(".nameCollapsed-3_ChMu");
 						channelname.innerText = hiddenChannel.name;
 						$(channel)
-							.on("mouseenter mouseleave", ".flex-lFgbSz", () => {
+							.on("mouseenter mouseleave", ".flex-lFgbSz", (e) => {
 								channelwrapper.classList.toggle("wrapperCollapsed-18mf-c");
-								channelwrapper.classList.toggle("wrapperHoveredCollapsed-25KVVp")
+								channelwrapper.classList.toggle("wrapperHoveredCollapsed-25KVVp");
 								channelicon.classList.toggle("iconCollapsed-1INdMX")
 								channelicon.classList.toggle("iconHoveredCollapsed-jNYgOD");
 								channelname.classList.toggle("nameCollapsed-3_ChMu");
-								channelname.classList.toggle("nameHoveredCollapsed-2c-EHI")
+								channelname.classList.toggle("nameHoveredCollapsed-2c-EHI");
+								this.showAccesRoles(serverObj, hiddenChannel, e);
 							})
 							.on("click", () => {
 								BDfunctionsDevilBro.showToast(`You can not enter the hidden channel ${hiddenChannel.name}.`, {type:"error"});
@@ -318,7 +311,7 @@ class ShowHiddenChannels {
 							.appendTo(category);
 					}
 					
-					var isOpen = BDfunctionsDevilBro.loadData(serverID, this.getName(), "categorystatus");
+					var isOpen = BDfunctionsDevilBro.loadData(serverID, this, "categorystatus");
 					isOpen = isOpen === null ? true : isOpen;
 					
 					if (!isOpen) {
@@ -336,6 +329,24 @@ class ShowHiddenChannels {
 					this.appendToChannelList(category);
 				}
 			}
+		}
+	}
+	
+	showAccesRoles (serverObj, channel, e) {
+		if (e.type != "mouseenter" && !BDfunctionsDevilBro.getData("showAllowedRoles", this, "settings")) return
+		var allowedRoles = [];
+		for (let id in channel.permissionOverwrites) {
+			if (channel.permissionOverwrites[id].type == "role" && (channel.permissionOverwrites[id].allow | this.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].allow) allowedRoles.push(serverObj.roles[id]);
+		}
+		var htmlString = `<div class="marginBottom4-_yArcI">Roles with Access:</div><div class="flex-3B1Tl4 wrap-1da0e3">`;
+		for (let role of allowedRoles) {
+			var color = role.colorString ? BDfunctionsDevilBro.color2COMP(role.colorString) : [255,255,255];
+			htmlString += `<li class="role-3rahR_ flex-3B1Tl4 alignCenter-3VxkQP size12-1IGJl9 weightMedium-13x9Y8" style="border-color: rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.6);"><div class="roleCircle-3-vPZq" style="background-color: rgb(${color[0]}, ${color[1]}, ${color[2]});"></div><div class="roleName-DUQZ9m">${BDfunctionsDevilBro.encodeToHTML(role.name)}</div></li>`;
+		}
+		htmlString += `</div>`;
+		if (allowedRoles.length > 0) {
+			var tooltip = BDfunctionsDevilBro.createTooltip(htmlString, e.currentTarget, {type:"right", selector:"showhiddenchannels-tooltip", html:true});
+			$(tooltip).css("max-width", window.outerHeight/2 + "px");
 		}
 	}
 	
