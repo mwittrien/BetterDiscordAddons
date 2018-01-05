@@ -62,11 +62,12 @@ class ShowHiddenChannels {
 			
 		this.defaults = {
 			settings: {
-				showAllowedRoles:	{value:true,	description:"Show allowed Roles on hover:"},
-				showDeniedRoles:	{value:true,	description:"Show denied Roles on hover:"},
-				showText:			{value:true, 	description:"Show hidden Textchannels:"},
-				showVoice:			{value:true, 	description:"Show hidden Voicechannels:"},
-				showCategory:		{value:false, 	description:"Show hidden Categories:"}
+				showAllowedRoles:		{value:true,	description:"Show allowed Roles on hover:"},
+				showOverWrittenRoles:	{value:true,	description:"Include overwritten Roles in allowed Roles:"},
+				showDeniedRoles:		{value:true,	description:"Show denied Roles on hover:"},
+				showText:				{value:true, 	description:"Show hidden Textchannels:"},
+				showVoice:				{value:true, 	description:"Show hidden Voicechannels:"},
+				showCategory:			{value:false, 	description:"Show hidden Categories:"}
 			}
 		};
 	}
@@ -75,7 +76,7 @@ class ShowHiddenChannels {
 
 	getDescription () {return "Displays channels that are hidden from you by role restrictions.";}
 
-	getVersion () {return "2.0.9";}
+	getVersion () {return "2.1.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -342,15 +343,18 @@ class ShowHiddenChannels {
 		var settings = BDfunctionsDevilBro.getAllData(this, "settings");
 		if (!settings.showAllowedRoles && !settings.showDeniedRoles) return;
 		var myMember = MemberStore.getMember(serverObj.id, this.myID);
-		var allowedRoles = [];
-		var deniedRoles = [];
+		var allowedRoles = [], overwrittenRoles = [], deniedRoles = [];
 		for (let id in channel.permissionOverwrites) {
 			if (settings.showAllowedRoles &&
-				!myMember.roles.includes(id) && 
 				channel.permissionOverwrites[id].type == "role" && 
 				serverObj.roles[id].name != "@everyone" &&
 				(channel.permissionOverwrites[id].allow | this.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].allow) {
-					allowedRoles.push(serverObj.roles[id]);
+					if (myMember.roles.includes(id)) {
+						if (settings.showOverWrittenRoles) overwrittenRoles.push(serverObj.roles[id]);
+					}
+					else {
+						allowedRoles.push(serverObj.roles[id]);
+					}
 			}
 			if (settings.showDeniedRoles &&
 				channel.permissionOverwrites[id].type == "role" && 
@@ -359,18 +363,22 @@ class ShowHiddenChannels {
 			}
 		}
 		var htmlString = ``;
-		if (allowedRoles.length > 0) {
+		if (allowedRoles.length > 0 || overwrittenRoles.length > 0) {
 			htmlString += `<div class="marginBottom4-_yArcI">Allowed Roles:</div><div class="flex-3B1Tl4 wrap-1da0e3">`;
 			for (let role of allowedRoles) {
-				var color = role.colorString ? BDfunctionsDevilBro.color2COMP(role.colorString) : [255,255,255];
+				let color = role.colorString ? BDfunctionsDevilBro.color2COMP(role.colorString) : [255,255,255];
 				htmlString += `<li class="role-3rahR_ flex-3B1Tl4 alignCenter-3VxkQP size12-1IGJl9 weightMedium-13x9Y8" style="border-color: rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.6);"><div class="roleCircle-3-vPZq" style="background-color: rgb(${color[0]}, ${color[1]}, ${color[2]});"></div><div class="roleName-DUQZ9m">${BDfunctionsDevilBro.encodeToHTML(role.name)}</div></li>`;
+			}
+			for (let role of overwrittenRoles) {
+				let color = role.colorString ? BDfunctionsDevilBro.color2COMP(role.colorString) : [255,255,255];
+				htmlString += `<li class="role-3rahR_ flex-3B1Tl4 alignCenter-3VxkQP size12-1IGJl9 weightMedium-13x9Y8" style="border-color: rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.6);"><div class="roleCircle-3-vPZq" style="background-color: rgb(${color[0]}, ${color[1]}, ${color[2]});"></div><div class="roleName-DUQZ9m" style="text-decoration: line-through !important;">${BDfunctionsDevilBro.encodeToHTML(role.name)}</div></li>`;
 			}
 			htmlString += `</div>`;
 		}
 		if (deniedRoles.length > 0) {
 			htmlString += `<div class="marginBottom4-_yArcI">Denied Roles:</div><div class="flex-3B1Tl4 wrap-1da0e3">`;
 			for (let role of deniedRoles) {
-				var color = role.colorString ? BDfunctionsDevilBro.color2COMP(role.colorString) : [255,255,255];
+				let color = role.colorString ? BDfunctionsDevilBro.color2COMP(role.colorString) : [255,255,255];
 				htmlString += `<li class="role-3rahR_ flex-3B1Tl4 alignCenter-3VxkQP size12-1IGJl9 weightMedium-13x9Y8" style="border-color: rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.6);"><div class="roleCircle-3-vPZq" style="background-color: rgb(${color[0]}, ${color[1]}, ${color[2]});"></div><div class="roleName-DUQZ9m">${BDfunctionsDevilBro.encodeToHTML(role.name)}</div></li>`;
 			}
 			htmlString += `</div>`;
