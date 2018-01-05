@@ -469,7 +469,7 @@ class GoogleTranslateOption {
 	}
 	
 	translateMessage () {
-		if (this.message.content) {
+		if (this.message && this.message.content) {
 			var message = this.message.div;
 			if (!message.classList.contains("translated")) {
 				var {translation, input, output} = this.translateText(this.message.content, "context");
