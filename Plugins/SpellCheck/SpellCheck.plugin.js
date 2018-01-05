@@ -77,7 +77,7 @@ class SpellCheck {
 
 	getDescription () {return "Adds a spellcheck to all textareas. Select a word and rightclick it to add it to your dictionary.";}
 
-	getVersion () {return "1.0.7";}
+	getVersion () {return "1.0.8";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -205,7 +205,7 @@ class SpellCheck {
 	createContextSubMenu (word, e, context) {
 		var similarWordsContextSubMenu = $(this.similarWordsContextSubMenuMarkup);
 		
-		var similarWord = getSimilarWords(word);
+		var similarWord = this.getSimilarWords(word);
 			
 		if (similarWords.length > 0) {
 			similarWordsContextSubMenu.find(".nosimilars-item").remove();
