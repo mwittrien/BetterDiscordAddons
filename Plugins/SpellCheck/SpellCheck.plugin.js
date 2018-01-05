@@ -205,7 +205,7 @@ class SpellCheck {
 	createContextSubMenu (word, e, context) {
 		var similarWordsContextSubMenu = $(this.similarWordsContextSubMenuMarkup);
 		
-		var similarWord = this.getSimilarWords(word);
+		var similarWords = this.getSimilarWords(word);
 			
 		if (similarWords.length > 0) {
 			similarWordsContextSubMenu.find(".nosimilars-item").remove();
