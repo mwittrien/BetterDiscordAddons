@@ -77,7 +77,7 @@ class SpellCheck {
 
 	getDescription () {return "Adds a spellcheck to all textareas. Select a word and rightclick it to add it to your dictionary.";}
 
-	getVersion () {return "1.0.5";}
+	getVersion () {return "1.0.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -367,9 +367,14 @@ class SpellCheck {
 	spellCheckText (string) {
 		var htmlString = [];
 		string.replace(/[\n]/g, "\n ").split(" ").forEach((word, i) => {
-		var wordWithoutSymbols = word.replace(/[\>\<\|\,\;\.\:\_\#\+\*\~\?\\\´\`\}\=\]\)\[\(\{\/\&\%\$\§\"\!\^\°\n\t\r]/g, "");
-			if (wordWithoutSymbols && this.dictionary.length > 0 && !this.dictionary.includes(word.toLowerCase()) && !this.dictionary.includes(wordWithoutSymbols.toLowerCase())) {
-				htmlString.push(`<label class="spelling-error">${BDfunctionsDevilBro.encodeToHTML(word)}</label>`);
+			var wordWithoutSymbols = word.replace(/[\>\<\|\,\;\.\:\_\#\+\*\~\?\\\´\`\}\=\]\)\[\(\{\/\&\%\$\§\"\!\^\°\n\t\r]/g, "");
+			if (wordWithoutSymbols && 
+				isNaN(parseInt(wordWithoutSymbols)) &&
+				Array.isArray(this.dictionary) &&
+				this.dictionary.length > 0 && 
+				!this.dictionary.includes(word.toLowerCase()) && 
+				!this.dictionary.includes(wordWithoutSymbols.toLowerCase())) {
+					htmlString.push(`<label class="spelling-error">${BDfunctionsDevilBro.encodeToHTML(word)}</label>`);
 			}
 			else {
 				htmlString.push(BDfunctionsDevilBro.encodeToHTML(word));
