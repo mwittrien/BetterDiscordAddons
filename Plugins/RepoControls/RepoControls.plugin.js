@@ -59,6 +59,14 @@ class RepoControls {
 			#bd-settingspane-container .bda-description {
 				display: block;
 			}
+			#bd-settingspane-container .bda-right .ui-switch-wrapper {
+				right: 0;
+			}
+			#bd-settingspane-container .bda-right button {
+				position: absolute;
+				right: 0;
+				top: 30px;
+			}
 			#bd-settingspane-container .bda-right,
 			#bd-settingspane-container .bda-header {
 				position: relative;
@@ -99,7 +107,7 @@ class RepoControls {
 
 	getDescription () {return "Lets you sort and filter your list of downloaded Themes and Plugins.";}
 
-	getVersion () {return "1.0.7";}
+	getVersion () {return "1.0.8";}
 
 	getAuthor () {return "DevilBro";}
 	
