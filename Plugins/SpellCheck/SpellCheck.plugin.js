@@ -77,7 +77,7 @@ class SpellCheck {
 
 	getDescription () {return "Adds a spellcheck to all textareas. Select a word and rightclick it to add it to your dictionary.";}
 
-	getVersion () {return "1.0.6";}
+	getVersion () {return "1.0.7";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -188,7 +188,7 @@ class SpellCheck {
 	onContextMenu (context) {
 		if (!context || !context.tagName || !context.parentElement || context.querySelector(".spellcheck-item")) return;
 		var word = window.getSelection().toString();
-		if (word && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"handleCutItem"})) {
+		if (word && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"handleCutItem"}) && this.isWordNotInDictionary(word)) {
 			var group = $(this.spellCheckContextEntryMarkup);
 			$(context).append(group)
 				.css("top", (parseInt($(context).css("top").replace("px","")) - (context.classList.contains("invertY") ? group.outerHeight() : 0)) + "px")
@@ -205,34 +205,12 @@ class SpellCheck {
 	createContextSubMenu (word, e, context) {
 		var similarWordsContextSubMenu = $(this.similarWordsContextSubMenuMarkup);
 		
-		var maxAmount = BDfunctionsDevilBro.getData("maxSimilarAmount", this, "amounts");
-		
-		if (maxAmount > 0) {
-			var sameLetterDic = this.dictionary.filter(string => string.indexOf(word.toLowerCase().charAt(0)) == 0 ? string : null);
-			var similarities = {};
-			for (let string of sameLetterDic) {
-				let value = this.wordSimilarity(word, string);
-				if (!similarities[value]) similarities[value] = [];
-				similarities[value].push(string);
-			}
-			var amount = 0;
-			var similarWords = [];
-			for (let value of Object.keys(similarities).sort().reverse()) {
-				for (let similarWord of similarities[value]) {
-					if (amount < maxAmount && !similarWords.includes(similarWord)) {
-						similarWords.push(similarWord);
-						amount++;
-					}
-					if (amount >= maxAmount) break;
-				}
-				if (amount >= maxAmount) break;
-			}
+		var similarWord = getSimilarWords(word);
 			
-			if (similarWords.length > 0) {
-				similarWordsContextSubMenu.find(".nosimilars-item").remove();
-				for (let foundWord of similarWords.sort()) {
-					similarWordsContextSubMenu.append(`<div value="${foundWord}" class="item similarword-item"><span>${foundWord}</span><div class="hint"></div></div>`);
-				}
+		if (similarWords.length > 0) {
+			similarWordsContextSubMenu.find(".nosimilars-item").remove();
+			for (let foundWord of similarWords.sort()) {
+				similarWordsContextSubMenu.append(`<div value="${foundWord}" class="item similarword-item"><span>${foundWord}</span><div class="hint"></div></div>`);
 			}
 		}
 		
@@ -367,13 +345,7 @@ class SpellCheck {
 	spellCheckText (string) {
 		var htmlString = [];
 		string.replace(/[\n]/g, "\n ").split(" ").forEach((word, i) => {
-			var wordWithoutSymbols = word.replace(/[\µ\@\$\£\€\¥\¢\²\³\>\<\|\,\;\.\:\_\#\+\*\~\?\¿\\\´\`\}\=\]\)\[\(\{\/\&\%\§\"\!\¡\^\°\n\t\r]/g, "");
-			if (wordWithoutSymbols && 
-				isNaN(parseInt(wordWithoutSymbols)) &&
-				Array.isArray(this.dictionary) &&
-				this.dictionary.length > 0 && 
-				!this.dictionary.includes(word.toLowerCase()) && 
-				!this.dictionary.includes(wordWithoutSymbols.toLowerCase())) {
+			if (this.isWordNotInDictionary(word)) {
 					htmlString.push(`<label class="spelling-error">${BDfunctionsDevilBro.encodeToHTML(word)}</label>`);
 			}
 			else {
@@ -381,6 +353,37 @@ class SpellCheck {
 			}
 		});
 		return htmlString.join(" ");
+	}
+	
+	isWordNotInDictionary (word) {
+		var wordWithoutSymbols = word.replace(/[0-9\µ\@\$\£\€\¥\¢\²\³\>\<\|\,\;\.\:\_\#\+\*\~\?\¿\\\´\`\}\=\]\)\[\(\{\/\&\%\§\"\!\¡\^\°\n\t\r]/g, "");
+		return (wordWithoutSymbols && Array.isArray(this.dictionary) && this.dictionary.length > 0 && !this.dictionary.includes(word.toLowerCase()) && !this.dictionary.includes(wordWithoutSymbols.toLowerCase()));
+	}
+	
+	
+	getSimilarWords (word) {
+		var maxAmount = BDfunctionsDevilBro.getData("maxSimilarAmount", this, "amounts"), similarWords = [];
+		if (maxAmount > 0) {
+			var sameLetterDic = this.dictionary.filter(string => string.indexOf(word.toLowerCase().charAt(0)) == 0 ? string : null);
+			var similarities = {};
+			for (let string of sameLetterDic) {
+				let value = this.wordSimilarity(word, string);
+				if (!similarities[value]) similarities[value] = [];
+				similarities[value].push(string);
+			}
+			var amount = 0;
+			for (let value of Object.keys(similarities).sort().reverse()) {
+				for (let similarWord of similarities[value]) {
+					if (amount < maxAmount && !similarWords.includes(similarWord)) {
+						similarWords.push(similarWord);
+						amount++;
+					}
+					if (amount >= maxAmount) break;
+				}
+				if (amount >= maxAmount) break;
+			}
+		}
+		return similarWords;
 	}
 	
 	wordSimilarity (a, b) {
