@@ -367,7 +367,7 @@ class SpellCheck {
 	spellCheckText (string) {
 		var htmlString = [];
 		string.replace(/[\n]/g, "\n ").split(" ").forEach((word, i) => {
-			var wordWithoutSymbols = word.replace(/[\>\<\|\,\;\.\:\_\#\+\*\~\?\¿\\\´\`\}\=\]\)\[\(\{\/\&\%\$\§\"\!\¡\^\°\n\t\r]/g, "");
+			var wordWithoutSymbols = word.replace(/[\µ\@\$\£\€\¥\¢\²\³\>\<\|\,\;\.\:\_\#\+\*\~\?\¿\\\´\`\}\=\]\)\[\(\{\/\&\%\§\"\!\¡\^\°\n\t\r]/g, "");
 			if (wordWithoutSymbols && 
 				isNaN(parseInt(wordWithoutSymbols)) &&
 				Array.isArray(this.dictionary) &&
