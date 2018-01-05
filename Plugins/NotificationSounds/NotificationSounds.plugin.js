@@ -63,15 +63,13 @@ class NotificationSounds {
 		this.mentionObserver = new MutationObserver(() => {});
 		this.mentionBadgeObserver = new MutationObserver(() => {});
 		this.channelListObserver = new MutationObserver(() => {});
-		 
-		this.css = `.NotificationSounds-settings div {margin-top:0 !important;} .NotificationSounds-settings .grabber-1TZCZi{margin-top:-13px !important;}`;
 	}
 
 	getName () {return "NotificationSounds";}
 	
 	getDescription () {return "Allows you to replace the native sounds of Discord with your own";}
 
-	getVersion () {return "3.0.3";}
+	getVersion () {return "3.0.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -90,13 +88,13 @@ class NotificationSounds {
 			settingshtml += `</div></div>`;
 			
 			for (var type in this.types) {
-				var choice = BDfunctionsDevilBro.loadData(type, this.getName(), "choices");
+				var choice = BDfunctionsDevilBro.loadData(type, this, "choices");
 				var unimplemented = this.types[type].implemented ? "" : " unimplemented";
 				settingshtml += `<div class="${type}-song-settings ${unimplemented}"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">${this.types[type].name}:</h3></div><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">`;
 				for (var key of fields) {
 					settingshtml += `<div class="ui-form-item flexChild-1KGW5q" style="flex: 1 1 33%;"><h5 class="h5-3KssQU title-1pmpPr size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH defaultMarginh5-2UwwFY marginBottom4-_yArcI">${key}:</h5><div class="ui-select ${key}-select-wrapper"><div type="${type}" option="${key}" value="${choice[key]}" class="Select Select--single has-value"><div class="Select-control"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-value" style="flex: 1 1 auto;"><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm">${choice[key]}</div></div><span class="Select-arrow-zone"><span class="Select-arrow"></span></span></div></div></div></div>`;
 				}
-				settingshtml += `<div class="ui-form-item flexChild-1KGW5q" style="flex: 1 1 33%;"><h5 class="h5-3KssQU title-1pmpPr size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH defaultMarginh5-2UwwFY marginBottom4-_yArcI">volume:</h5><div type="${type}" class="slider-2e2iXJ"><input type="number" class="${type}-volume input-27JrJm volumeInput" value="${choice.volume}" readonly=""><div class="bar-2cFRGz"><div class="barFill-18ABna" style="width: ${choice.volume}%;"></div></div><div class="track-1h2wOF"><div class="grabber-1TZCZi" style="left: ${choice.volume}%;"></div></div></div></div>`;
+				settingshtml += `<div class="ui-form-item flexChild-1KGW5q" style="flex: 1 1 33%;"><h5 class="h5-3KssQU title-1pmpPr size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH defaultMarginh5-2UwwFY marginBottom4-_yArcI">volume:</h5><div type="${type}" class="slider-2e2iXJ"><input type="number" class="${type}-volume input-27JrJm volumeInput" value="${choice.volume}" readonly=""><div class="bar-2cFRGz"><div class="barFill-18ABna" style="width: ${choice.volume}%;"></div></div><div class="track-1h2wOF"><div class="grabber-1TZCZi marginTop" style="left: ${choice.volume}%;"></div></div></div></div>`;
 				settingshtml += `</div></div>`;
 			}
 			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Show unimplemented Sounds</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;"><input type="checkbox" class="checkboxEnabled-4QfryV checkbox-1KYsPm" id="input-unimplemented"></div></div>`;
@@ -235,8 +233,6 @@ class NotificationSounds {
 						this.dmBadgeObserver.observe(badge, {characterData: true, subtree: true});
 					}
 				});
-				
-				BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 			}
 		}
 		else {
@@ -256,8 +252,6 @@ class NotificationSounds {
 			this.channelListObserver.disconnect();
 			
 			if (typeof this.patchCancel === "function") this.patchCancel();
-			
-			BDfunctionsDevilBro.removeLocalStyle(this.getName());
 		}
 	}
 
@@ -266,8 +260,8 @@ class NotificationSounds {
 	
 	resetAll (settingspanel) {
 		if (confirm("Are you sure you want to delete all added songs?")) {
-			BDfunctionsDevilBro.removeAllData(this.getName(), "choices");
-			BDfunctionsDevilBro.removeAllData(this.getName(), "audios");
+			BDfunctionsDevilBro.removeAllData(this, "choices");
+			BDfunctionsDevilBro.removeAllData(this, "audios");
 			this.loadAudios();
 			this.loadChoices();
 			settingspanel.querySelectorAll(".Select").forEach((wrap) => {
@@ -306,7 +300,7 @@ class NotificationSounds {
 		selectWrap.appendChild(selectMenu);
 		
 		$(selectMenu).on("mousedown." + this.getName(), ".Select-option", (e2) => {
-			var choice = BDfunctionsDevilBro.loadData(type, this.getName(), "choices");
+			var choice = BDfunctionsDevilBro.loadData(type, this, "choices");
 			var selection = e2.currentTarget.textContent;
 			selectWrap.setAttribute("value", selection);
 			selectControl.querySelector(".title-3I2bY1").innerText = selection;
@@ -329,7 +323,7 @@ class NotificationSounds {
 	}
 	
 	createDropdownMenu ({type, option, category, song} = data) {
-		var choice = BDfunctionsDevilBro.loadData(type, this.getName(), "choices");
+		var choice = BDfunctionsDevilBro.loadData(type, this, "choices");
 		var eles = option == "song" ? this.audios[category] : this.audios;
 		var menuhtml = `<div class="Select-menu-outer"><div class="Select-menu">`;
 		for (var ele in eles) {
@@ -380,9 +374,9 @@ class NotificationSounds {
 	}
 	
 	loadAudios () {
-		this.audios = BDfunctionsDevilBro.loadAllData(this.getName(), "audios");
+		this.audios = BDfunctionsDevilBro.loadAllData(this, "audios");
 		if (BDfunctionsDevilBro.isObjectEmpty(this.audios)) this.audios = this.defaults;
-		BDfunctionsDevilBro.saveAllData(this.audios, this.getName(), "audios");
+		BDfunctionsDevilBro.saveAllData(this.audios, this, "audios");
 	}
 	
 	saveAudio (settingspanel) {
@@ -403,7 +397,7 @@ class NotificationSounds {
 						BDfunctionsDevilBro.showToast(`Song ${song} was added to category ${category}.`, {type:"success"});
 						if (!this.audios[category]) this.audios[category] = {};
 						this.audios[category][song] = url;
-						BDfunctionsDevilBro.saveAllData(this.audios, this.getName(), "audios");
+						BDfunctionsDevilBro.saveAllData(this.audios, this, "audios");
 						inputs.forEach((input) => {
 							input.value = "";
 						});
@@ -420,7 +414,7 @@ class NotificationSounds {
 	
 	loadChoices () {
 		for (var type in this.types) {
-			var choice = BDfunctionsDevilBro.loadData(type, this.getName(), "choices");
+			var choice = BDfunctionsDevilBro.loadData(type, this, "choices");
 			choice = choice ? choice : {};
 			
 			var songFound = false;
@@ -440,7 +434,7 @@ class NotificationSounds {
 	}
 	
 	saveChoice (type, choice, audio) {
-		BDfunctionsDevilBro.saveData(type, choice, this.getName(), "choices");
+		BDfunctionsDevilBro.saveData(type, choice, this, "choices");
 		this.choices[type] = choice;
 		if (audio) {
 			audio.pause();
