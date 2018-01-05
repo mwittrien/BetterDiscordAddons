@@ -110,7 +110,7 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.3.7";}
+	getVersion () {return "1.3.8";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -276,7 +276,7 @@ class PersonalPins {
 			if (BDfunctionsDevilBro.getKeyInformation({"node":group, "key":"displayName", "value":"MessagePinItem"})) {
 				$(this.messageContextEntryMarkup).insertAfter(group)
 					.on("click", ".personalpin-item", () => {
-						$(".context-menu").hide();
+						$(context).hide();
 						this.addMessageToNotes();
 					});
 				break;
@@ -311,7 +311,8 @@ class PersonalPins {
 	}
 	
 	addOptionButton (message) {
-		if (!message.querySelector(".btn-option")) {
+		if (!message.querySelector(".btn-option") && !message.querySelector(".system-message")) {
+			console.log(message);
 			$(this.optionButtonMarkup).insertBefore(message.querySelector(".message-text").firstChild);
 			$(message).off("click." + this.getName()).on("click." + this.getName(), ".btn-personalpins", (e) => {
 				this.openOptionPopout(e);
