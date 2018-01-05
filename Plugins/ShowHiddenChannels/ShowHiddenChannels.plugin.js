@@ -76,7 +76,7 @@ class ShowHiddenChannels {
 
 	getDescription () {return "Displays channels that are hidden from you by role restrictions.";}
 
-	getVersion () {return "2.1.0";}
+	getVersion () {return "2.1.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -110,6 +110,7 @@ class ShowHiddenChannels {
 			
 			this.myID = BDfunctionsDevilBro.getMyUserData().id;
 			
+			this.MemberStore = BDfunctionsDevilBro.WebModules.findByProperties(["getMember", "getMembers"]);
 			this.ChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getChannels", "getDMFromUserId"]);
 			this.GuildChannels = BDfunctionsDevilBro.WebModules.findByProperties(["getChannels", "getDefaultChannel"]);
 			this.Permissions = BDfunctionsDevilBro.WebModules.findByProperties(["Permissions", "ActivityTypes"]).Permissions;
@@ -265,7 +266,7 @@ class ShowHiddenChannels {
 								channelicon.classList.toggle("contentHoveredText-2HYGIY");
 								channelname.classList.toggle("nameDefaultText-QoumjC");
 								channelname.classList.toggle("nameHoveredText-2FFqiz");
-								this.showAccesRoles(serverObj, hiddenChannel, e);
+								this.showAccessRoles(serverObj, hiddenChannel, e);
 							})
 							.on("click", () => {
 								BDfunctionsDevilBro.showToast(`You can not enter the hidden channel ${hiddenChannel.name}.`, {type:"error"});
@@ -287,7 +288,7 @@ class ShowHiddenChannels {
 								channelicon.classList.toggle("contentHoveredVoice-3qGNKh");
 								channelname.classList.toggle("nameDefaultVoice-1swZoh");
 								channelname.classList.toggle("nameHoveredVoice-TIoHRJ");
-								this.showAccesRoles(serverObj, hiddenChannel, e);
+								this.showAccessRoles(serverObj, hiddenChannel, e);
 							})
 							.on("click", () => {
 								BDfunctionsDevilBro.showToast(`You can not enter the hidden channel ${hiddenChannel.name}.`, {type:"error"});
@@ -309,7 +310,7 @@ class ShowHiddenChannels {
 								channelicon.classList.toggle("iconHoveredCollapsed-jNYgOD");
 								channelname.classList.toggle("nameCollapsed-3_ChMu");
 								channelname.classList.toggle("nameHoveredCollapsed-2c-EHI");
-								this.showAccesRoles(serverObj, hiddenChannel, e);
+								this.showAccessRoles(serverObj, hiddenChannel, e);
 							})
 							.on("click", () => {
 								BDfunctionsDevilBro.showToast(`You can not enter the hidden channel ${hiddenChannel.name}.`, {type:"error"});
@@ -338,11 +339,11 @@ class ShowHiddenChannels {
 		}
 	}
 	
-	showAccesRoles (serverObj, channel, e) {
+	showAccessRoles (serverObj, channel, e) {
 		if (e.type != "mouseenter") return;
 		var settings = BDfunctionsDevilBro.getAllData(this, "settings");
 		if (!settings.showAllowedRoles && !settings.showDeniedRoles) return;
-		var myMember = MemberStore.getMember(serverObj.id, this.myID);
+		var myMember = this.MemberStore.getMember(serverObj.id, this.myID);
 		var allowedRoles = [], overwrittenRoles = [], deniedRoles = [];
 		for (let id in channel.permissionOverwrites) {
 			if (settings.showAllowedRoles &&
