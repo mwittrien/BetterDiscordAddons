@@ -4,6 +4,8 @@ class ShowHiddenChannels {
 	constructor () {
 		this.channelListObserver = new MutationObserver(() => {});
 		
+		this.myID;
+		
 		this.categoryMarkup = 
 			`<div class="container-hidden">
 				<div class="containerDefault-1bbItS">
@@ -60,10 +62,11 @@ class ShowHiddenChannels {
 			
 		this.defaults = {
 			settings: {
-				showAccesRoles:	{value:true,	description:"Show Roles with Access on hover:"},
-				showText:		{value:true, 	description:"Show hidden Textchannels:"},
-				showVoice:		{value:true, 	description:"Show hidden Voicechannels:"},
-				showCategory:	{value:false, 	description:"Show hidden Categories:"}
+				showAllowedRoles:	{value:true,	description:"Show allowed Roles on hover:"},
+				showDeniedRoles:	{value:true,	description:"Show denied Roles on hover:"},
+				showText:			{value:true, 	description:"Show hidden Textchannels:"},
+				showVoice:			{value:true, 	description:"Show hidden Voicechannels:"},
+				showCategory:		{value:false, 	description:"Show hidden Categories:"}
 			}
 		};
 	}
@@ -72,7 +75,7 @@ class ShowHiddenChannels {
 
 	getDescription () {return "Displays channels that are hidden from you by role restrictions.";}
 
-	getVersion () {return "2.0.8";}
+	getVersion () {return "2.0.9";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -103,6 +106,8 @@ class ShowHiddenChannels {
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
+			
+			this.myID = BDfunctionsDevilBro.getMyUserData().id;
 			
 			this.ChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getChannels", "getDMFromUserId"]);
 			this.GuildChannels = BDfunctionsDevilBro.WebModules.findByProperties(["getChannels", "getDefaultChannel"]);
@@ -333,18 +338,44 @@ class ShowHiddenChannels {
 	}
 	
 	showAccesRoles (serverObj, channel, e) {
-		if (e.type != "mouseenter" && !BDfunctionsDevilBro.getData("showAllowedRoles", this, "settings")) return
+		if (e.type != "mouseenter") return;
+		var settings = BDfunctionsDevilBro.getAllData(this, "settings");
+		if (!settings.showAllowedRoles && !settings.showDeniedRoles) return;
+		var myMember = MemberStore.getMember(serverObj.id, this.myID);
 		var allowedRoles = [];
+		var deniedRoles = [];
 		for (let id in channel.permissionOverwrites) {
-			if (channel.permissionOverwrites[id].type == "role" && (channel.permissionOverwrites[id].allow | this.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].allow) allowedRoles.push(serverObj.roles[id]);
+			if (settings.showAllowedRoles &&
+				!myMember.roles.includes(id) && 
+				channel.permissionOverwrites[id].type == "role" && 
+				serverObj.roles[id].name != "@everyone" &&
+				(channel.permissionOverwrites[id].allow | this.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].allow) {
+					allowedRoles.push(serverObj.roles[id]);
+			}
+			if (settings.showDeniedRoles &&
+				channel.permissionOverwrites[id].type == "role" && 
+				(channel.permissionOverwrites[id].deny | this.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].deny) {
+					deniedRoles.push(serverObj.roles[id]);
+			}
 		}
-		var htmlString = `<div class="marginBottom4-_yArcI">Roles with Access:</div><div class="flex-3B1Tl4 wrap-1da0e3">`;
-		for (let role of allowedRoles) {
-			var color = role.colorString ? BDfunctionsDevilBro.color2COMP(role.colorString) : [255,255,255];
-			htmlString += `<li class="role-3rahR_ flex-3B1Tl4 alignCenter-3VxkQP size12-1IGJl9 weightMedium-13x9Y8" style="border-color: rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.6);"><div class="roleCircle-3-vPZq" style="background-color: rgb(${color[0]}, ${color[1]}, ${color[2]});"></div><div class="roleName-DUQZ9m">${BDfunctionsDevilBro.encodeToHTML(role.name)}</div></li>`;
-		}
-		htmlString += `</div>`;
+		var htmlString = ``;
 		if (allowedRoles.length > 0) {
+			htmlString += `<div class="marginBottom4-_yArcI">Allowed Roles:</div><div class="flex-3B1Tl4 wrap-1da0e3">`;
+			for (let role of allowedRoles) {
+				var color = role.colorString ? BDfunctionsDevilBro.color2COMP(role.colorString) : [255,255,255];
+				htmlString += `<li class="role-3rahR_ flex-3B1Tl4 alignCenter-3VxkQP size12-1IGJl9 weightMedium-13x9Y8" style="border-color: rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.6);"><div class="roleCircle-3-vPZq" style="background-color: rgb(${color[0]}, ${color[1]}, ${color[2]});"></div><div class="roleName-DUQZ9m">${BDfunctionsDevilBro.encodeToHTML(role.name)}</div></li>`;
+			}
+			htmlString += `</div>`;
+		}
+		if (deniedRoles.length > 0) {
+			htmlString += `<div class="marginBottom4-_yArcI">Denied Roles:</div><div class="flex-3B1Tl4 wrap-1da0e3">`;
+			for (let role of deniedRoles) {
+				var color = role.colorString ? BDfunctionsDevilBro.color2COMP(role.colorString) : [255,255,255];
+				htmlString += `<li class="role-3rahR_ flex-3B1Tl4 alignCenter-3VxkQP size12-1IGJl9 weightMedium-13x9Y8" style="border-color: rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.6);"><div class="roleCircle-3-vPZq" style="background-color: rgb(${color[0]}, ${color[1]}, ${color[2]});"></div><div class="roleName-DUQZ9m">${BDfunctionsDevilBro.encodeToHTML(role.name)}</div></li>`;
+			}
+			htmlString += `</div>`;
+		}
+		if (htmlString) {
 			var tooltip = BDfunctionsDevilBro.createTooltip(htmlString, e.currentTarget, {type:"right", selector:"showhiddenchannels-tooltip", html:true});
 			$(tooltip).css("max-width", window.outerHeight/2 + "px");
 		}
