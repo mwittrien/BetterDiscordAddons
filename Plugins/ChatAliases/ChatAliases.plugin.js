@@ -11,7 +11,7 @@ class ChatAliases {
 
 	getDescription () {return "Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent.";}
 
-	getVersion () {return "1.6.2";}
+	getVersion () {return "1.6.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -198,7 +198,7 @@ class ChatAliases {
 			})
 			.off("keydown." + this.getName())
 			.on("keydown." + this.getName(), e => {
-				if (!e.shiftKey && e.which == 13 && !document.querySelector(".chat form .autocomplete-1TnWNR")) {
+				if (textarea.value && !e.shiftKey && e.which == 13 && !document.querySelector(".chat form .autocomplete-1TnWNR")) {
 					this.format = true;
 					$(textarea).trigger("input");
 				}
