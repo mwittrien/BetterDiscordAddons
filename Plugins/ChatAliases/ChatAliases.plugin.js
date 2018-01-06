@@ -11,7 +11,7 @@ class ChatAliases {
 
 	getDescription () {return "Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent.";}
 
-	getVersion () {return "1.6.3";}
+	getVersion () {return "1.6.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -192,7 +192,6 @@ class ChatAliases {
 					textarea.selectionEnd = textarea.value.length;
 					if (document.activeElement == textarea) {
 						document.execCommand("insertText", false, this.formatText(textarea.value) + " ");
-						BDfunctionsDevilBro.triggerSend(textarea);
 					}
 				}
 			})
