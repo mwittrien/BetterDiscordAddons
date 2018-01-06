@@ -312,7 +312,6 @@ class PersonalPins {
 	
 	addOptionButton (message) {
 		if (!message.querySelector(".btn-option") && !message.querySelector(".system-message")) {
-			console.log(message);
 			$(this.optionButtonMarkup).insertBefore(message.querySelector(".message-text").firstChild);
 			$(message).off("click." + this.getName()).on("click." + this.getName(), ".btn-personalpins", (e) => {
 				this.openOptionPopout(e);
