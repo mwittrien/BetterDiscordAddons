@@ -30,7 +30,7 @@ class SpellCheck {
 			</div>`;
 		
 		this.spellCheckLayerMarkup = 
-			`<div class="spellcheck-overlay textAreaEnabled-2vOfh8 textArea-20yzAH scrollbarGhostHairline-D_btXm scrollbar-11WJwo" style="position:absolute !important; pointer-events:none !important; color:transparent !important;"></div>`;
+			`<div class="spellcheck-overlay textAreaEnabled-2vOfh8 textArea-20yzAH scrollbarGhostHairline-D_btXm scrollbar-11WJwo" style="position:absolute !important; pointer-events:none !important; background-color:transparent !important; color:transparent !important;"></div>`;
 			
 		this.css = 
 			`.spellcheck-overlay {
@@ -69,7 +69,7 @@ class SpellCheck {
 
 	getDescription () {return "Adds a spellcheck to all textareas. Select a word and rightclick it to add it to your dictionary.";}
 
-	getVersion () {return "1.0.9";}
+	getVersion () {return "1.1.0";}
 
 	getAuthor () {return "DevilBro";}
 	
