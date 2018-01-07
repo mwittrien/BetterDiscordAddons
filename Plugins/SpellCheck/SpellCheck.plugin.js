@@ -30,7 +30,7 @@ class SpellCheck {
 			</div>`;
 		
 		this.spellCheckLayerMarkup = 
-			`<div class="spellcheck-overlay textAreaEnabled-2vOfh8 textArea-20yzAH scrollbarGhostHairline-D_btXm scrollbar-11WJwo" style="position:absolute !important; pointer-events:none !important; background-color:transparent !important; color:transparent !important;"></div>`;
+			`<div class="spellcheck-overlay textAreaEnabled-2vOfh8 textArea-20yzAH scrollbarGhostHairline-D_btXm scrollbar-11WJwo" style="position:absolute !important; pointer-events:none !important; background:transparent !important; color:transparent !important;"></div>`;
 			
 		this.css = 
 			`.spellcheck-overlay {
