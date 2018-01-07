@@ -69,7 +69,7 @@ class SpellCheck {
 
 	getDescription () {return "Adds a spellcheck to all textareas. Select a word and rightclick it to add it to your dictionary.";}
 
-	getVersion () {return "1.1.0";}
+	getVersion () {return "1.1.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -189,7 +189,7 @@ class SpellCheck {
 					this.addToOwnDictionary(word);
 				})
 				.on("mouseenter", ".similarwords-item", (e) => {
-					this.createContextSubMenu(word.toLowerCase().trim(), e, context);
+					this.createContextSubMenu(word, e, context);
 				});
 		}
 	}
@@ -197,7 +197,7 @@ class SpellCheck {
 	createContextSubMenu (word, e, context) {
 		var similarWordsContextSubMenu = $(this.similarWordsContextSubMenuMarkup);
 		
-		var similarWords = this.getSimilarWords(word);
+		var similarWords = this.getSimilarWords(word.toLowerCase().trim());
 			
 		if (similarWords.length > 0) {
 			similarWordsContextSubMenu.find(".nosimilars-item").remove();
@@ -221,7 +221,10 @@ class SpellCheck {
 		textarea.selectionStart = 0;
 		textarea.selectionEnd = textarea.value.length;
 		if (document.activeElement == textarea) {
-			document.execCommand("insertText", false, textarea.value.replace(new RegExp(word, "i"), replacement));
+			var firstLetter = word.charAt(0);
+			var isCapitalised = firstLetter.toUpperCase() == firstLetter && firstLetter.toLowerCase() != firstLetter;
+			replacement = isCapitalised ? replacement.charAt(0).toUpperCase() + replacement.slice(1) : replacement;
+			document.execCommand("insertText", false, textarea.value.replace(new RegExp(word.trim(), "i"), replacement));
 			$(textarea).trigger("keyup");
 		}
 	}
