@@ -206,7 +206,7 @@ class RemoveNicknames {
 			if (!usernameWrapper) return;
 			
 			var info = this.getUserInfo($(div).data("compact") ? $(".message-group").has(div)[0] : div);
-			if (!info || (info.id == this.myID && !BDfunctionsDevilBro.getData("replaceOwn", this, "settings"))) return;
+			if (!info) return;
 			
 			var serverObj = BDfunctionsDevilBro.getSelectedServer();
 			if (!serverObj) return;
