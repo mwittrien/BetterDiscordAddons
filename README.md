@@ -23,6 +23,7 @@ A series of plugins and themes for BetterDiscord. If you got any question write 
  - [Personal Pins](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/PersonalPins) - Similar to normal pins. Lets you save messages as notes for yourself.
  - [Plugin Repo](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/PluginRepo) - Allows you to look at all plugins from the plugin repo and download them on the fly.
  - [Read All Notifications Button](https://github.com/mwittrien/BetterDiscordAddons/blob/master/Plugins/ReadAllNotificationsButton) - Adds a little button at the top of your serverlist that enables you to clear all mentions and messagesnotifications at once.
+ - [Remove Nicknames](https://github.com/mwittrien/BetterDiscordAddons/blob/master/Plugins/RemoveNicknames) - Replace all nicknames with the actual accountnames.
  - [Repo Controls](https://github.com/mwittrien/BetterDiscordAddons/blob/master/Plugins/RepoControls) - Lets you sort and filter your list of downloaded Themes and Plugins.
  - [Reverse Image Search](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ReverseImageSearch) - Adds the option to reverse image search images in discord via several engines.
  - [Send Large Messages](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SendLargeMessages) - Opens a popout when your message is too large, which allows you to automatically send the message in several smaller messages.
