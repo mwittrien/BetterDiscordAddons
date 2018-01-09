@@ -5,10 +5,12 @@ class RemoveNicknames {
 		this.channelListObserver = new MutationObserver(() => {});
 		this.userListObserver = new MutationObserver(() => {});
 		this.chatWindowObserver = new MutationObserver(() => {});
+		this.settingsWindowObserver = new MutationObserver(() => {});
 			
 		this.defaults = {
 			settings: {
-				replaceOwn:		{value:false, 	description:"Replace your own name:"}
+				replaceOwn:		{value:false, 	description:"Replace your own name:"},
+				addNickname:    {value:false, 	description:"Add nickname as parentheses:"}
 			}
 		};
 	}
@@ -17,7 +19,7 @@ class RemoveNicknames {
 
 	getDescription () {return "Replace all nicknames with the actual accountnames.";}
 
-	getVersion () {return "1.0.1";}
+	getVersion () {return "1.0.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -114,6 +116,22 @@ class RemoveNicknames {
 			});
 			if (document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(document.querySelector(".messages.scroller"), {childList:true, subtree:true});
 			
+			this.settingsWindowObserver = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.removedNodes) {
+							change.removedNodes.forEach((node) => {
+								if (node && node.tagName && node.getAttribute("layer-id") == "user-settings") {
+									this.resetAllUsers();
+									this.loadAllUsers();
+								}
+							});
+						}
+					}
+				);
+			});
+			if (document.querySelector(".layers")) this.settingsWindowObserver.observe(document.querySelector(".layers"), {childList:true});
+			
 			this.loadAllUsers();
 		}
 		else {
@@ -127,6 +145,7 @@ class RemoveNicknames {
 			this.userListObserver.disconnect();
 			this.chatWindowObserver.disconnect();
 			this.channelListObserver.disconnect();
+			this.settingsWindowObserver.disconnect();
 			
 			this.resetAllUsers();
 			
@@ -183,7 +202,10 @@ class RemoveNicknames {
 		$(div).data("compact", compact);
 		
 		var info = this.getUserInfo(compact ? $(".message-group").has(div)[0] : div);
-		if (!info || (info.id == BDfunctionsDevilBro.myData.id && !BDfunctionsDevilBro.getData("replaceOwn", this, "settings"))) return;
+		if (!info) return;
+		
+		var settings = BDfunctionsDevilBro.getAllData(this, "settings");
+		if (info.id == BDfunctionsDevilBro.myData.id && !settings.replaceOwn) return;
 		
 		var serverObj = BDfunctionsDevilBro.getSelectedServer();
 		if (!serverObj) return;
@@ -191,7 +213,7 @@ class RemoveNicknames {
 		var member = this.MemberPerms.getMember(serverObj.id, info.id);
 		if (!member || !member.nick) return;
 		
-		BDfunctionsDevilBro.setInnerText(usernameWrapper, info.username);
+		BDfunctionsDevilBro.setInnerText(usernameWrapper, settings.addNickname ? info.username + " (" + member.nick + ")" : info.username);
 			
 		$(div).attr("removed-nickname", true);
 	}
