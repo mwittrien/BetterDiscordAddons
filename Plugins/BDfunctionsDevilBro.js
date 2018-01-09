@@ -1411,9 +1411,13 @@ BDfunctionsDevilBro.updateContextPosition = function (context) {
 	var menuWidth = $(context).outerWidth();
 	var menuHeight = $(context).outerHeight();
 	var position = BDfunctionsDevilBro.mousePosition;
+	var newposition = {
+		x: position.x - menuWidth,
+		y: position.y - menuHeight
+	};
 	$(context)
-		.css("left", position.x + menuWidth > window.outerWidth ? (position.x - menuWidth) + "px" : position.x + "px")
-		.css("top", position.y + menuHeight > window.outerHeight ? (position.y - menuHeight) + "px" : position.y + "px")
+		.css("left", (position.x + menuWidth  > window.outerWidth  ? (newposition.x < 0 ? 10 : newposition.x) : position.x) + "px")
+		.css("top",  (position.y + menuHeight > window.outerHeight ? (newposition.y < 0 ? 10 : newposition.y) : position.y) + "px")
 };
 
 BDfunctionsDevilBro.appendContextMenu = function (context, e) {
