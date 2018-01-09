@@ -183,7 +183,6 @@ class SpellCheck {
 		if (word && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"handleCutItem"}) && this.isWordNotInDictionary(word)) {
 			var group = $(this.spellCheckContextEntryMarkup);
 			$(context).append(group)
-				.css("top", (parseInt($(context).css("top").replace("px","")) - (context.classList.contains("invertY") ? group.outerHeight() : 0)) + "px")
 				.on("click", ".spellcheck-item", (e) => {
 					$(context).hide();
 					this.addToOwnDictionary(word);
@@ -191,6 +190,8 @@ class SpellCheck {
 				.on("mouseenter", ".similarwords-item", (e) => {
 					this.createContextSubMenu(word, e, context);
 				});
+				
+			BDfunctionsDevilBro.updateContextPosition(context);
 		}
 	}
 	
