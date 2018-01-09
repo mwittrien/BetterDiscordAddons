@@ -161,17 +161,19 @@ class EditUsers {
 				</div>
 			</span>`;
 			
-		this.defaultSettings = {
-			changeInChatWindow:		{value:true, 	description:"Chat"},
-			changeInVoiceChat:		{value:true, 	description:"Voice Channels"},
-			changeInMemberList:		{value:true, 	description:"Member List"},
-			changeInDmHeader:		{value:true, 	description:"Direct Message Header"},
-			changeInRecentDms:		{value:true, 	description:"Direct Message Notifications"},
-			changeInDmsList:		{value:true, 	description:"Direct Message List"},
-			changeInFriendList:		{value:true, 	description:"Friend List"},
-			changeInUserPopout:		{value:true, 	description:"User Popouts"},
-			changeInUserProfil:		{value:true, 	description:"User Profil Modal"},
-			changeInUserAccount:	{value:true, 	description:"Your Account Information"}
+		this.defaults = {
+			settings: {
+				changeInChatWindow:		{value:true, 	description:"Chat"},
+				changeInVoiceChat:		{value:true, 	description:"Voice Channels"},
+				changeInMemberList:		{value:true, 	description:"Member List"},
+				changeInDmHeader:		{value:true, 	description:"Direct Message Header"},
+				changeInRecentDms:		{value:true, 	description:"Direct Message Notifications"},
+				changeInDmsList:		{value:true, 	description:"Direct Message List"},
+				changeInFriendList:		{value:true, 	description:"Friend List"},
+				changeInUserPopout:		{value:true, 	description:"User Popouts"},
+				changeInUserProfil:		{value:true, 	description:"User Profil Modal"},
+				changeInUserAccount:	{value:true, 	description:"Your Account Information"}
+			}
 		};
 	}
 
@@ -185,11 +187,11 @@ class EditUsers {
 	
 	getSettingsPanel () {
 		if (!this.started || typeof BDfunctionsDevilBro !== "object") return;
-		var settings = this.getSettings(); 
+		var settings = BDfunctionsDevilBro.getAllData(this, "settings"); 
 		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="titleDefault-1CWM9y title-3i-5G_ size18-ZM4Qv- height24-2pMcnc weightNormal-3gw0Lm marginBottom8-1mABJ4">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">Change User in:</h3></div><div class="DevilBro-settings-inner-list">`;
 		for (let key in settings) {
-			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaultSettings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU ${settings[key] ? "valueChecked-3Bzkbm" : "valueUnchecked-XR6AOk"}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
+			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU ${settings[key] ? "valueChecked-3Bzkbm" : "valueUnchecked-XR6AOk"}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
 		}
 		settingshtml += `</div>`;
 		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto; padding-top:8px;">Reset all Users.</h3><button type="button" class="flexChild-1KGW5q buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu reset-button" style="flex: 0 0 auto;"><div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx contents-4L4hQM">Reset</div></button></div>`;
@@ -238,7 +240,7 @@ class EditUsers {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (this.getSettings().changeInRecentDms) this.loadUser(node, "recentdms", false);
+								if (BDfunctionsDevilBro.getData("changeInRecentDms", this, "settings")) this.loadUser(node, "recentdms", false);
 							});
 						}
 					}
@@ -251,11 +253,11 @@ class EditUsers {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.classList && node.classList.length > 0 && node.classList.contains("channel") && node.classList.contains("private")) {
-									if (this.getSettings().changeInDmsList) this.loadUser(node, "dms", false);
+								if (node && node.tagName && node.classList && node.classList.length > 0 && node.classList.contains("channel") && node.classList.contains("private") && BDfunctionsDevilBro.getData("changeInDmsList", this, "settings")) {
+									this.loadUser(node, "dms", false);
 								}
-								if (node && node.tagName && node.querySelector(".userDefault-2_cnT0")) {
-									if (this.getSettings().changeInVoiceChat) this.loadUser(node.querySelector(".userDefault-2_cnT0").parentElement, "voice", false);
+								if (node && node.tagName && node.querySelector(".userDefault-2_cnT0") && BDfunctionsDevilBro.getData("changeInVoiceChat", this, "settings")) {
+									this.loadUser(node.querySelector(".userDefault-2_cnT0").parentElement, "voice", false);
 								}
 							});
 						}
@@ -269,8 +271,8 @@ class EditUsers {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(".friends-column")) {
-									if (this.getSettings().changeInFriendList) this.loadUser(node, "friends", false);
+								if (node && node.tagName && node.querySelector(".friends-column") && BDfunctionsDevilBro.getData("changeInFriendList", this, "settings")) {
+									this.loadUser(node, "friends", false);
 								}
 							});
 						}
@@ -284,8 +286,8 @@ class EditUsers {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(".member-username")) {
-									if (this.getSettings().changeInMemberList) this.loadUser(node, "list", false);
+								if (node && node.tagName && node.querySelector(".member-username") && BDfunctionsDevilBro.getData("changeInMemberList", this, "settings")) {
+									this.loadUser(node, "list", false);
 								}
 							});
 						}
@@ -299,7 +301,7 @@ class EditUsers {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (this.getSettings().changeInChatWindow) {
+								if (BDfunctionsDevilBro.getData("changeInChatWindow", this, "settings")) {
 									if ($(".message-group").has(".avatar-large").length > 0) {
 										if (node && node.tagName && node.querySelector(".username-wrapper")) {
 											this.loadUser(node, "chat", false);
@@ -334,8 +336,8 @@ class EditUsers {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(".userPopout-4pfA0d")) {
-									if (this.getSettings().changeInUserPopout) this.loadUser(node, "popout", false);
+								if (node && node.tagName && node.querySelector(".userPopout-4pfA0d") && BDfunctionsDevilBro.getData("changeInUserPopout", this, "settings")) {
+									this.loadUser(node, "popout", false);
 								}
 							});
 						}
@@ -349,8 +351,8 @@ class EditUsers {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(".topSectionPlaying-3jAH9b, .topSectionNormal-2LlRG1")) {
-									if (this.getSettings().changeInUserProfil) this.loadUser(node.querySelector(".topSectionPlaying-3jAH9b, .topSectionNormal-2LlRG1"), "profil", false);
+								if (node && node.tagName && node.querySelector(".topSectionPlaying-3jAH9b, .topSectionNormal-2LlRG1") && BDfunctionsDevilBro.getData("changeInUserProfil", this, "settings")) {
+									this.loadUser(node.querySelector(".topSectionPlaying-3jAH9b, .topSectionNormal-2LlRG1"), "profil", false);
 								}
 							});
 						}
@@ -413,21 +415,6 @@ class EditUsers {
 
 	
 	// begin of own functions
-	
-	getSettings () {
-		var oldSettings = BDfunctionsDevilBro.loadAllData(this.getName(), "settings"), newSettings = {}, saveSettings = false;
-		for (let key in this.defaultSettings) {
-			if (oldSettings[key] == null) {
-				newSettings[key] = this.defaultSettings[key].value;
-				saveSettings = true;
-			}
-			else {
-				newSettings[key] = oldSettings[key];
-			}
-		}
-		if (saveSettings) BDfunctionsDevilBro.saveAllData(newSettings, this.getName(), "settings");
-		return newSettings;
-	}
 
 	updateSettings (settingspanel) {
 		var settings = {};
@@ -436,12 +423,12 @@ class EditUsers {
 			input.parentElement.classList.toggle("valueChecked-3Bzkbm", input.checked);
 			input.parentElement.classList.toggle("valueUnchecked-XR6AOk", !input.checked);
 		}
-		BDfunctionsDevilBro.saveAllData(settings, this.getName(), "settings");
+		BDfunctionsDevilBro.saveAllData(settings, this, "settings");
 	}
 
 	resetAll () {
 		if (confirm("Are you sure you want to reset all users?")) {
-			BDfunctionsDevilBro.removeAllData(this.getName(), "users");
+			BDfunctionsDevilBro.removeAllData(this, "users");
 			this.resetAllUsers();
 		}
 	}
@@ -477,6 +464,8 @@ class EditUsers {
 				.on("mouseenter", ".localusersettings-item", (e) => {
 					this.createContextSubMenu(info, e);
 				});
+				
+			BDfunctionsDevilBro.updateContextPosition(context);
 		}
 	}
 	
@@ -489,11 +478,11 @@ class EditUsers {
 				this.showUserSettings(info);
 			});
 			
-		if (BDfunctionsDevilBro.loadData(info.id, this.getName(), "users")) {
+		if (BDfunctionsDevilBro.loadData(info.id, this, "users")) {
 			userContextSubMenu
 				.on("click", ".resetsettings-item", () => {
 					$(".context-menu").hide();
-					BDfunctionsDevilBro.removeData(info.id, this.getName(), "users");
+					BDfunctionsDevilBro.removeData(info.id, this, "users");
 					this.loadAllUsers();
 				});
 		}
@@ -505,7 +494,7 @@ class EditUsers {
 	}
 	
 	showUserSettings (info, e) {
-		var data = BDfunctionsDevilBro.loadData(info.id, this.getName(), "users");
+		var data = BDfunctionsDevilBro.loadData(info.id, this, "users");
 		
 		var name =				data ? data.name : null;
 		var tag =				data ? data.tag : null;
@@ -590,10 +579,10 @@ class EditUsers {
 				color4 = BDfunctionsDevilBro.getSwatchColor("swatch4");
 				
 				if (name == null && tag == null && url == null && !removeIcon && !ignoreTagColor && color1 == null && color2 == null && color3 == null && color4 == null) {
-					BDfunctionsDevilBro.removeData(info.id, this.getName(), "users")
+					BDfunctionsDevilBro.removeData(info.id, this, "users")
 				}
 				else {
-					BDfunctionsDevilBro.saveData(info.id, {name,tag,url,removeIcon,ignoreTagColor,color1,color2,color3,color4}, this.getName(), "users");
+					BDfunctionsDevilBro.saveData(info.id, {name,tag,url,removeIcon,ignoreTagColor,color1,color2,color3,color4}, this, "users");
 				}
 				this.loadAllUsers();
 			});
@@ -649,7 +638,7 @@ class EditUsers {
 	loadAllUsers () {
 		this.resetAllUsers();
 		
-		var settings = this.getSettings();
+		var settings = BDfunctionsDevilBro.getAllData(this, "settings");
 		
 		if (settings.changeInMemberList) {
 			for (let user of document.querySelectorAll(".member")) {
@@ -721,7 +710,7 @@ class EditUsers {
 		var info = this.getUserInfo(compact ? $(".message-group").has(div)[0] : div);
 		if (!info) return;
 		
-		var data = BDfunctionsDevilBro.loadData(info.id, this.getName(), "users");
+		var data = BDfunctionsDevilBro.loadData(info.id, this, "users");
 		
 		if (data) {
 			var serverObj = BDfunctionsDevilBro.getSelectedServer();
