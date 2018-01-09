@@ -1,4 +1,4 @@
-var BDfunctionsDevilBro = {creationTime:performance.now(), pressedKeys:[]};
+var BDfunctionsDevilBro = {creationTime:performance.now(), pressedKeys:[], mousePosition:{x:0,y:0}};
 
 BDfunctionsDevilBro.isLibraryOutdated = function () {
 	return performance.now() - BDfunctionsDevilBro.creationTime > 600000;
@@ -1407,18 +1407,31 @@ BDfunctionsDevilBro.appendModal = function (modal) {
 		});
 };
 
-BDfunctionsDevilBro.appendContextMenu = function (menu, e) {
-	$(".app").append(menu);
-	var menuHeight = $(menu).outerHeight();
-	$(menu)
-		.addClass(BDfunctionsDevilBro.getDiscordTheme())
-		.css("left", e.pageX + "px")
-		.css("top", e.pageY + menuHeight > window.outerHeight ? (e.pageY - menuHeight) + "px" : e.pageY + "px");
+BDfunctionsDevilBro.updateContextPosition = function (context) {
+	var menuWidth = $(context).outerWidth();
+	var menuHeight = $(context).outerHeight();
+	var position = BDfunctionsDevilBro.mousePosition;
+	$(context)
+		.css("left", position.x + menuWidth > window.outerWidth ? (position.x - menuWidth) + "px" : position.x + "px")
+		.css("top", position.y + menuHeight > window.outerHeight ? (position.y - menuHeight) + "px" : position.y + "px")
+};
+
+BDfunctionsDevilBro.appendContextMenu = function (context, e) {
+	$(".app").append(context);
+	var menuWidth = $(context).outerWidth();
+	var menuHeight = $(context).outerHeight();
+	$(context)
+		.toggleClass("invertX", e.pageX + menuWidth > window.outerWidth)
+		.toggleClass("invertChildX", e.pageX + menuWidth > window.outerWidth)
+		.toggleClass("invertY", e.pageY + menuHeight > window.outerHeight)
+		.addClass(BDfunctionsDevilBro.getDiscordTheme());
+		
+	BDfunctionsDevilBro.updateContextPosition(context);
 	
 	$(document).on("mousedown.BDfunctionsDevilBroContextMenu", (e2) => {
 		$(document).off("mousedown.BDfunctionsDevilBroContextMenu");
-		if ($(menu).has(e2.target).length == 0) {
-			menu.remove();
+		if ($(context).has(e2.target).length == 0) {
+			context.remove();
 		}
 	});
 };
@@ -2018,11 +2031,15 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 $(window)
 	.off("keydown.BDfunctionsDevilBroPressedKeys")
 	.off("keyup.BDfunctionsDevilBroPressedKeys")
+	.off("mousedown.BDfunctionsDevilBroMousePosition")
 	.on("keydown.BDfunctionsDevilBroPressedKeys", (e) => {
 		if (!BDfunctionsDevilBro.pressedKeys.includes(e.which)) BDfunctionsDevilBro.pressedKeys.push(e.which);
 	})
 	.on("keyup.BDfunctionsDevilBroPressedKeys", (e) => {
 		BDfunctionsDevilBro.removeFromArray(BDfunctionsDevilBro.pressedKeys, e.which);
+	})
+	.on("mousedown.BDfunctionsDevilBroMousePosition", (e) => {
+		BDfunctionsDevilBro.mousePosition = {x:e.pageX,y:e.pageY};
 	});
 
 BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
