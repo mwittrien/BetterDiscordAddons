@@ -4,8 +4,6 @@ class ShowHiddenChannels {
 	constructor () {
 		this.channelListObserver = new MutationObserver(() => {});
 		
-		this.myID;
-		
 		this.categoryMarkup = 
 			`<div class="container-hidden">
 				<div class="containerDefault-1bbItS">
@@ -76,7 +74,7 @@ class ShowHiddenChannels {
 
 	getDescription () {return "Displays channels that are hidden from you by role restrictions.";}
 
-	getVersion () {return "2.1.1";}
+	getVersion () {return "2.1.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -107,8 +105,6 @@ class ShowHiddenChannels {
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
-			
-			this.myID = BDfunctionsDevilBro.getMyUserData().id;
 			
 			this.MemberStore = BDfunctionsDevilBro.WebModules.findByProperties(["getMember", "getMembers"]);
 			this.ChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getChannels", "getDMFromUserId"]);
@@ -343,7 +339,7 @@ class ShowHiddenChannels {
 		if (e.type != "mouseenter") return;
 		var settings = BDfunctionsDevilBro.getAllData(this, "settings");
 		if (!settings.showAllowedRoles && !settings.showDeniedRoles) return;
-		var myMember = this.MemberStore.getMember(serverObj.id, this.myID);
+		var myMember = this.MemberStore.getMember(serverObj.id, BDfunctionsDevilBro.myData.id);
 		var allowedRoles = [], overwrittenRoles = [], deniedRoles = [];
 		for (let id in channel.permissionOverwrites) {
 			if (settings.showAllowedRoles &&
