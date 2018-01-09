@@ -217,12 +217,11 @@ BDfunctionsDevilBro.showToast = function (content, options = {}) {
 		let form = container ? container.querySelector("form") : null;
 		let left = container ? container.getBoundingClientRect().left : 310;
 		let right = memberlist ? memberlist.getBoundingClientRect().left : 0;
-		let width = right ? right - container.getBoundingClientRect().left : container.offsetWidth;
 		let bottom = form ? form.offsetHeight : 80;
 		let toastWrapper = document.createElement("div");
 		toastWrapper.classList.add("toasts");
 		toastWrapper.style.setProperty("left", left + "px");
-		toastWrapper.style.setProperty("width", width + "px");
+		toastWrapper.style.setProperty("width", right - left + "px");
 		toastWrapper.style.setProperty("bottom", bottom + "px");
 		document.querySelector(".app").appendChild(toastWrapper);
 	}
