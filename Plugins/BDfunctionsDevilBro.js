@@ -1,4 +1,4 @@
-var BDfunctionsDevilBro = {creationTime:performance.now(), pressedKeys:[], mousePosition:{x:0,y:0}};
+var BDfunctionsDevilBro = {creationTime:performance.now(), myData:{}, pressedKeys:[], mousePosition:{x:0,y:0}};
 
 BDfunctionsDevilBro.isLibraryOutdated = function () {
 	return performance.now() - BDfunctionsDevilBro.creationTime > 600000;
@@ -535,10 +535,10 @@ BDfunctionsDevilBro.languages = {
 };
 				
 (() => {
-    var translateInterval = setInterval(() => {
+    var pulling = setInterval(() => {
 		var languageID = document.querySelector("html").lang;
 		if (languageID) {
-			clearInterval(translateInterval);
+			clearInterval(pulling);
 			BDfunctionsDevilBro.languages.$discord.name = "Discord (" + BDfunctionsDevilBro.languages[languageID].name + ")";
 			BDfunctionsDevilBro.languages.$discord.id = BDfunctionsDevilBro.languages[languageID].id;
 			BDfunctionsDevilBro.languages.$discord.ownlang = BDfunctionsDevilBro.languages[languageID].ownlang;
@@ -923,11 +923,16 @@ BDfunctionsDevilBro.removeFromArray = function (array, value) {
 	array.splice(array.indexOf(value), 1);
 };
 
-BDfunctionsDevilBro.getMyUserData = function () {
-	var UserActions = BDfunctionsDevilBro.WebModules.findByProperties(["getCurrentUser"]);
-	var userData = UserActions && typeof UserActions.getCurrentUser == "function" ? UserActions.getCurrentUser() : {}
-	return userData && typeof userData == "object" ? userData : {};
-};
+(() => {
+    var pulling = setInterval(() => {
+		var UserActions = BDfunctionsDevilBro.WebModules.findByProperties(["getCurrentUser"]);
+		var userData = UserActions && typeof UserActions.getCurrentUser == "function" ? UserActions.getCurrentUser() : null;
+		if (userData && !BDfunctionsDevilBro.isObjectEmpty(userData)) {
+			clearInterval(pulling);
+			BDfunctionsDevilBro.myData = userData;
+		}
+	},100);
+})();
 
 BDfunctionsDevilBro.getMyUserStatus = function () {
 	var userStatus = "invisible";
