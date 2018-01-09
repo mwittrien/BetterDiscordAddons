@@ -4,18 +4,20 @@ class ReverseImageSearch {
 	constructor () {
 		this.messageContextObserver = new MutationObserver(() => {});
 		
-		this.imageUrlReplaceString = "DEVILBRO_BD_REVERSEIMAGESEARCH_REPLACE_IMAGEURL";
+		this.imgUrlReplaceString = "DEVILBRO_BD_REVERSEIMAGESEARCH_REPLACE_IMAGEURL";
 		
-		this.searchEngines = {
-			Baidu: 		{value:true, 	name:"Baidu", 		url:"http://image.baidu.com/pcdutu?queryImageUrl=" + this.imageUrlReplaceString},
-			Bing: 		{value:true, 	name:"Bing", 		url:"https://www.bing.com/images/search?q=imgurl:" + this.imageUrlReplaceString + "&view=detailv2&iss=sbi&FORM=IRSBIQ"},
-			Google:		{value:true, 	name:"Google", 		url:"https://images.google.com/searchbyimage?image_url=" + this.imageUrlReplaceString},
-			IQDB:		{value:true, 	name:"IQDB", 		url:"https://iqdb.org/?url=" + this.imageUrlReplaceString},
-			Reddit: 	{value:true, 	name:"Reddit", 		url:"http://karmadecay.com/search?q=" + this.imageUrlReplaceString},
-			SauceNAO: 	{value:true, 	name:"SauceNAO", 	url:"https://saucenao.com/search.php?db=999&url=" + this.imageUrlReplaceString},
-			Sogou: 		{value:true, 	name:"Sogou", 		url:"http://pic.sogou.com/ris?flag=1&drag=0&query=" + this.imageUrlReplaceString + "&flag=1"},
-			TinEye:		{value:true, 	name:"TinEye", 		url:"https://tineye.com/search?url=" + this.imageUrlReplaceString},
-			Yandex: 	{value:true, 	name:"Yandex", 		url:"https://yandex.com/images/search?url=" + this.imageUrlReplaceString + "&rpt=imageview"}
+		this.defaults = {
+			engines: {
+				Baidu: 		{value:true, 	name:"Baidu", 		url:"http://image.baidu.com/pcdutu?queryImageUrl=" + this.imgUrlReplaceString},
+				Bing: 		{value:true, 	name:"Bing", 		url:"https://www.bing.com/images/search?q=imgurl:" + this.imgUrlReplaceString + "&view=detailv2&iss=sbi&FORM=IRSBIQ"},
+				Google:		{value:true, 	name:"Google", 		url:"https://images.google.com/searchbyimage?image_url=" + this.imgUrlReplaceString},
+				IQDB:		{value:true, 	name:"IQDB", 		url:"https://iqdb.org/?url=" + this.imgUrlReplaceString},
+				Reddit: 	{value:true, 	name:"Reddit", 		url:"http://karmadecay.com/search?q=" + this.imgUrlReplaceString},
+				SauceNAO: 	{value:true, 	name:"SauceNAO", 	url:"https://saucenao.com/search.php?db=999&url=" + this.imgUrlReplaceString},
+				Sogou: 		{value:true, 	name:"Sogou", 		url:"http://pic.sogou.com/ris?flag=1&drag=0&query=" + this.imgUrlReplaceString + "&flag=1"},
+				TinEye:		{value:true, 	name:"TinEye", 		url:"https://tineye.com/search?url=" + this.imgUrlReplaceString},
+				Yandex: 	{value:true, 	name:"Yandex", 		url:"https://yandex.com/images/search?url=" + this.imgUrlReplaceString + "&rpt=imageview"}
+			}
 		};
 
 		this.messageContextEntryMarkup =
@@ -34,7 +36,7 @@ class ReverseImageSearch {
 						<span>REPLACE_submenu_disabled_text</span>
 						<div class="hint"></div>
 					</div>
-					${Object.keys(this.searchEngines).map((key, i) => `<div class="item ${key} RIS-item"><span>${this.searchEngines[key].name}</span><div class="hint"></div></div>`).join("")}
+					${Object.keys(this.defaults.engines).map((key, i) => `<div engine="${key}" class="item RIS-item"><span>${this.defaults.engines[key].name}</span><div class="hint"></div></div>`).join("")}
 				</div>
 			</div>`;
 	}
@@ -50,11 +52,11 @@ class ReverseImageSearch {
 
 	getSettingsPanel () {
 		if (!this.started || typeof BDfunctionsDevilBro !== "object") return;
-		var settings = this.getSettings();
+		var engines = BDfunctionsDevilBro.getAllData(this, "engines");
 		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="titleDefault-1CWM9y title-3i-5G_ size18-ZM4Qv- height24-2pMcnc weightNormal-3gw0Lm marginBottom8-1mABJ4">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">Search Engines:</h3></div><div class="DevilBro-settings-inner-list">`;
-		for (let key in settings) {
-			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.searchEngines[key].name}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU ${settings[key] ? "valueChecked-3Bzkbm" : "valueUnchecked-XR6AOk"}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
+		for (let key in engines) {
+			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.engines[key].name}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU ${engines[key] ? "valueChecked-3Bzkbm" : "valueUnchecked-XR6AOk"}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${engines[key] ? " checked" : ""}></div></div>`;
 		}
 		settingshtml += `</div>`;
 		settingshtml += `</div></div>`;
@@ -108,22 +110,10 @@ class ReverseImageSearch {
 	
 	// begin of own functions
 	
-	getSettings () {
-		var oldSettings = BDfunctionsDevilBro.loadAllData(this.getName(), "settings"), newSettings = {}, saveSettings = false;
-		for (let key in this.searchEngines) {
-			if (oldSettings[key] == null) {
-				newSettings[key] = this.searchEngines[key].value;
-				saveSettings = true;
-			}
-			else {
-				newSettings[key] = oldSettings[key];
-			}
-		}
-		if (saveSettings) BDfunctionsDevilBro.saveAllData(newSettings, this.getName(), "settings");
-		return newSettings;
+	changeLanguageStrings () {
+		this.messageContextSubMenuMarkup = 	this.messageContextSubMenuMarkup.replace("REPLACE_submenu_disabled_text", this.labels.submenu_disabled_text);
 	}
 	
-
 	updateSettings (settingspanel) {
 		var settings = {};
 		for (var input of settingspanel.querySelectorAll(".checkbox-1KYsPm")) {
@@ -131,11 +121,7 @@ class ReverseImageSearch {
 			input.parentElement.classList.toggle("valueChecked-3Bzkbm", input.checked);
 			input.parentElement.classList.toggle("valueUnchecked-XR6AOk", !input.checked);
 		}
-		BDfunctionsDevilBro.saveAllData(settings, this.getName(), "settings");
-	}
-	
-	changeLanguageStrings () {
-		this.messageContextSubMenuMarkup = 	this.messageContextSubMenuMarkup.replace("REPLACE_submenu_disabled_text", this.labels.submenu_disabled_text);
+		BDfunctionsDevilBro.saveAllData(settings, this, "engines");
 	}
 	
 	onContextMenu (context) {
@@ -156,6 +142,8 @@ class ReverseImageSearch {
 					.on("mouseenter", ".reverseimagesearch-item", (e) => {
 						this.createContextSubMenu(url, e);
 					});
+				
+				BDfunctionsDevilBro.updateContextPosition(context);
 			}
 		}
 	}
@@ -166,19 +154,13 @@ class ReverseImageSearch {
 		messageContextSubMenu
 			.on("click", ".RIS-item", (e2) => {
 				$(".context-menu").hide();
-				for (let key in this.searchEngines) {
-					if (e2.currentTarget.classList.contains(key)) {
-						var searchurl = this.searchEngines[key].url;
-						searchurl = searchurl.replace(this.imageUrlReplaceString, imageurl);
-						window.open(searchurl, "_blank");
-						break;
-					}
-				}
+				var engine = e2.currentTarget.getAttribute("engine");
+				window.open(this.defaults.engines[engine].url.replace(this.textUrlReplaceString, encodeURIComponent(text)), "_blank");
 			});
 		
-		var settings = this.getSettings();
-		for (let key in settings) {
-			if (!settings[key]) messageContextSubMenu.find("." + key).remove();
+		var engines = BDfunctionsDevilBro.getAllData(this, "engines");
+		for (let key in engines) {
+			if (!engines[key]) messageContextSubMenu.find("[engine='" + key + "']").remove();
 		}
 		if (messageContextSubMenu.find(".RIS-item").length > 0) {
 			messageContextSubMenu.find(".alldisabled-item").remove();
