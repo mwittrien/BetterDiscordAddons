@@ -5,8 +5,6 @@ class RemoveNicknames {
 		this.channelListObserver = new MutationObserver(() => {});
 		this.userListObserver = new MutationObserver(() => {});
 		this.chatWindowObserver = new MutationObserver(() => {});
-		
-		this.myID;
 			
 		this.defaults = {
 			settings: {
@@ -19,7 +17,7 @@ class RemoveNicknames {
 
 	getDescription () {return "Replace all nicknames with the actual accountnames.";}
 
-	getVersion () {return "1.0.0";}
+	getVersion () {return "1.0.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -49,8 +47,6 @@ class RemoveNicknames {
 		}
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
-			
-			this.myID = BDfunctionsDevilBro.getMyUserData().id;
 			
 			this.UserStore = BDfunctionsDevilBro.WebModules.findByProperties(["getUsers", "getUser"]);
 			this.MemberPerms = BDfunctionsDevilBro.WebModules.findByProperties(["getNicknames", "getNick"]);
@@ -187,7 +183,7 @@ class RemoveNicknames {
 		$(div).data("compact", compact);
 		
 		var info = this.getUserInfo(compact ? $(".message-group").has(div)[0] : div);
-		if (!info || (info.id == this.myID && !BDfunctionsDevilBro.getData("replaceOwn", this, "settings"))) return;
+		if (!info || (info.id == BDfunctionsDevilBro.myData.id && !BDfunctionsDevilBro.getData("replaceOwn", this, "settings"))) return;
 		
 		var serverObj = BDfunctionsDevilBro.getSelectedServer();
 		if (!serverObj) return;
