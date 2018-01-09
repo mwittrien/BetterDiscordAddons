@@ -925,7 +925,8 @@ BDfunctionsDevilBro.removeFromArray = function (array, value) {
 
 BDfunctionsDevilBro.getMyUserData = function () {
 	var UserActions = BDfunctionsDevilBro.WebModules.findByProperties(["getCurrentUser"]);
-	return UserActions ? UserActions.getCurrentUser() : {};
+	var userData = UserActions && typeof UserActions.getCurrentUser == "function" ? UserActions.getCurrentUser() : {}
+	return userData && typeof userData == "object" ? userData : {};
 };
 
 BDfunctionsDevilBro.getMyUserStatus = function () {
