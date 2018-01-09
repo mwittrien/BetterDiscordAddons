@@ -2202,17 +2202,21 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 	}
 	
 	.DevilBro-settings .ui-hover-card,
-	.DevilBro-settings .ui-hover-card .ui-hover-card-inner {
+	.DevilBro-settings .ui-hover-card .card-11ynQk-inner,
+	.DevilBro-settings .card-11ynQk,
+	.DevilBro-settings .card-11ynQk .card-11ynQk-inner {
 		width: 550px;
 		min-height: 28px;
 	}
 	
-	.DevilBro-settings .ui-hover-card:before {
+	.DevilBro-settings .ui-hover-card:before,
+	.DevilBro-settings .card-11ynQk:before {
 		z-index: 50;
 		left: -10px;
 	}
 	
-	.DevilBro-settings .ui-hover-card .ui-hover-card-inner {
+	.DevilBro-settings .ui-hover-card .card-11ynQk-inner,
+	.DevilBro-settings .card-11ynQk .card-11ynQk-inner {
 		overflow: hidden;
 		display: flex;
 		align-items: center;
@@ -2220,7 +2224,8 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		z-index: 100;
 	}
 	
-	.DevilBro-settings .ui-hover-card .round-remove-button {
+	.DevilBro-settings .ui-hover-card .round-remove-button,
+	.DevilBro-settings .card-11ynQk .button-1qrA-N {
 		opacity: 0;
 		position: absolute;
 		right: -31px;
@@ -2228,7 +2233,8 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		z-index: 200;
 	}
 	
-	.DevilBro-settings .ui-hover-card:hover .round-remove-button {
+	.DevilBro-settings .ui-hover-card:hover .round-remove-button,
+	.DevilBro-settings .card-11ynQk:hover .button-1qrA-N {
 		opacity: 1;
 	}
 	
