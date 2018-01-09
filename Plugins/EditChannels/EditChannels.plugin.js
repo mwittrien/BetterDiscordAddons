@@ -78,8 +78,10 @@ class EditChannels {
 				</div>
 			</span>`;
 			
-		this.defaultSettings = {
-			changeInChannelHeader:	{value:true, 	description:"Change in Channel Header."}
+		this.defaults = {
+			settings: {
+				changeInChannelHeader:	{value:true, 	description:"Change in Channel Header."}
+			}
 		};
 	}
 
@@ -93,10 +95,10 @@ class EditChannels {
 	
 	getSettingsPanel () {
 		if (!this.started || typeof BDfunctionsDevilBro !== "object") return;
-		var settings = this.getSettings(); 
+		var settings = BDfunctionsDevilBro.getAllData(this, "settings"); 
 		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="titleDefault-1CWM9y title-3i-5G_ size18-ZM4Qv- height24-2pMcnc weightNormal-3gw0Lm marginBottom8-1mABJ4">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		for (let key in settings) {
-			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaultSettings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU ${settings[key] ? "valueChecked-3Bzkbm" : "valueUnchecked-XR6AOk"}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
+			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU ${settings[key] ? "valueChecked-3Bzkbm" : "valueUnchecked-XR6AOk"}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
 		}
 		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto; padding-top:8px;">Reset all Channels.</h3><button type="button" class="flexChild-1KGW5q buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu reset-button" style="flex: 0 0 auto;"><div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx contents-4L4hQM">Reset</div></button></div>`;
 		settingshtml += `</div></div>`;
@@ -189,21 +191,6 @@ class EditChannels {
 	}
 	
 	// begin of own functions
-	
-	getSettings () {
-		var oldSettings = BDfunctionsDevilBro.loadAllData(this.getName(), "settings"), newSettings = {}, saveSettings = false;
-		for (let key in this.defaultSettings) {
-			if (oldSettings[key] == null) {
-				newSettings[key] = this.defaultSettings[key].value;
-				saveSettings = true;
-			}
-			else {
-				newSettings[key] = oldSettings[key];
-			}
-		}
-		if (saveSettings) BDfunctionsDevilBro.saveAllData(newSettings, this.getName(), "settings");
-		return newSettings;
-	}
 
 	updateSettings (settingspanel) {
 		var settings = {};
@@ -212,12 +199,12 @@ class EditChannels {
 			input.parentElement.classList.toggle("valueChecked-3Bzkbm", input.checked);
 			input.parentElement.classList.toggle("valueUnchecked-XR6AOk", !input.checked);
 		}
-		BDfunctionsDevilBro.saveAllData(settings, this.getName(), "settings");
+		BDfunctionsDevilBro.saveAllData(settings, this, "settings");
 	}
 
 	resetAll () {
 		if (confirm("Are you sure you want to reset all channels?")) {
-			BDfunctionsDevilBro.removeAllData(this.getName(), "channels");
+			BDfunctionsDevilBro.removeAllData(this, "channels");
 			
 			this.resetAllChannels();
 		}
@@ -243,6 +230,8 @@ class EditChannels {
 				.on("mouseenter", ".localchannelsettings-item", (e) => {
 					this.createContextSubMenu(info, e);
 				});
+				
+			BDfunctionsDevilBro.updateContextPosition(context);
 		}
 	}
 	
@@ -255,7 +244,7 @@ class EditChannels {
 				this.showChannelSettings(info);
 			});
 			
-		if (BDfunctionsDevilBro.loadData(info.id, this.getName(), "channels")) {
+		if (BDfunctionsDevilBro.loadData(info.id, this, "channels")) {
 			channelContextSubMenu
 				.on("click", ".resetsettings-item", () => {
 					$(".context-menu").hide();
@@ -272,7 +261,7 @@ class EditChannels {
 	showChannelSettings (info) {
 		var channelObj = BDfunctionsDevilBro.getDivOfChannel(info.id);
 		
-		var data = BDfunctionsDevilBro.loadData(info.id, this.getName(), "channels");
+		var data = BDfunctionsDevilBro.loadData(info.id, this, "channels");
 		
 		var name = data ? data.name : null;
 		var color = data ? data.color : null;
@@ -304,7 +293,7 @@ class EditChannels {
 					this.removeChannelData(info.id);
 				}
 				else {
-					BDfunctionsDevilBro.saveData(info.id, {name,color}, this.getName(), "channels");
+					BDfunctionsDevilBro.saveData(info.id, {name,color}, this, "channels");
 					this.loadChannel(channelObj);
 					this.changeChannelHeader();
 				}
@@ -316,7 +305,7 @@ class EditChannels {
 	removeChannelData (info) {
 		this.resetChannel(BDfunctionsDevilBro.getDivOfChannel(info.id));
 		
-		BDfunctionsDevilBro.removeData(info.id, this.getName(), "channels");
+		BDfunctionsDevilBro.removeData(info.id, this, "channels");
 		
 		this.changeChannelHeader();
 	}
@@ -339,7 +328,7 @@ class EditChannels {
 		
 		var channel = channelObj.div.querySelector(".name-2SL4ev, .colorTransition-2iZaYd");
 		
-		var data = BDfunctionsDevilBro.loadData(channelObj.id, this.getName(), "channels");
+		var data = BDfunctionsDevilBro.loadData(channelObj.id, this, "channels");
 		if (data) {
 			var name = data.name ? data.name : channelObj.name;
 			var color = data.color ? this.chooseColor(channel, data.color) : "";
@@ -360,12 +349,12 @@ class EditChannels {
 	}
 	
 	changeChannelHeader () {
-		if (this.getSettings().changeInChannelHeader && BDfunctionsDevilBro.getSelectedServer()) {
+		if (BDfunctionsDevilBro.getData("changeInChannelHeader", this, "settings") && BDfunctionsDevilBro.getSelectedServer()) {
 			var channelHeader = document.querySelector("div.titleText-2IfpkV");
 			if (!channelHeader) return;
 			var info = BDfunctionsDevilBro.getKeyInformation({"node":channelHeader,"key":"channel"});
 			if (info) {
-				var data = BDfunctionsDevilBro.loadData(info.id, this.getName(), "channels");
+				var data = BDfunctionsDevilBro.loadData(info.id, this, "channels");
 				var channel = channelHeader.querySelector(".channelName-1G03vu");
 				var name = data && data.name ? data.name : info.name;
 				var color = data && data.color ? BDfunctionsDevilBro.color2RGB(data.color) : "";
