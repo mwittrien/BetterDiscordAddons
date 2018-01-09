@@ -4,6 +4,8 @@ class CompleteTimestamps {
 	constructor () {
 		this.languages;
 		
+		this.updateTimestamps = false;
+		
 		this.messageObserver = new MutationObserver(() => {});
 		this.settingsWindowObserver = new MutationObserver(() => {});
 			
@@ -11,6 +13,7 @@ class CompleteTimestamps {
 			settings: {
 				displayTime:	{value:true, 	description:"Display the Time in the Timestamp:"},
 				displayDate:	{value:true, 	description:"Display the Date in the Timestamp:"},
+				cutSeconds:		{value:false, 	description:"Cut off Seconds of the Time:"},
 				forceZeros:		{value:false, 	description:"Force leading Zeros:"},
 				otherOrder:		{value:false, 	description:"Show the Time before the Date:"}
 			},
@@ -24,7 +27,7 @@ class CompleteTimestamps {
 
 	getDescription () {return "Replace all timestamps with complete timestamps.";}
 
-	getVersion () {return "1.0.2";}
+	getVersion () {return "1.0.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -71,10 +74,10 @@ class CompleteTimestamps {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node.tagName && node.querySelector(".message-group")) {
-									node.querySelectorAll(".message-group").forEach(message => {this.changeTimestamp(message);});
+								if (node.tagName && node.querySelector(".message-text")) {
+									node.querySelectorAll(".message-text").forEach(message => {this.changeTimestamp(message);});
 								}
-								else if (node.classList && node.classList.contains("message-group")) {
+								else if (node.classList && node.classList.contains("message-text")) {
 									this.changeTimestamp(node);
 								}
 							});
@@ -89,8 +92,9 @@ class CompleteTimestamps {
 					(change, i) => {
 						if (change.removedNodes) {
 							change.removedNodes.forEach((node) => {
-								if (node && node.tagName && node.getAttribute("layer-id") == "user-settings") {
-									document.querySelectorAll(".message-group").forEach(message => {this.changeTimestamp(message);});
+								if (this.updateTimestamps && node && node.tagName && node.getAttribute("layer-id") == "user-settings") {
+									document.querySelectorAll(".complete-timestamp").forEach(timestamp => {timestamp.classList.remove("complete-timestamp");});
+									document.querySelectorAll(".message-text").forEach(message => {this.changeTimestamp(message);});
 								}
 							});
 						}
@@ -101,7 +105,7 @@ class CompleteTimestamps {
 			
 			this.languages = Object.assign({},BDfunctionsDevilBro.languages);
 			
-			document.querySelectorAll(".message-group").forEach(message => {this.changeTimestamp(message);});
+			document.querySelectorAll(".message-text").forEach(message => {this.changeTimestamp(message);});
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -129,6 +133,7 @@ class CompleteTimestamps {
 			input.parentElement.classList.toggle("valueUnchecked-XR6AOk", !input.checked);
 		}
 		BDfunctionsDevilBro.saveAllData(settings, this, "settings");
+		this.updateTimestamps = true;
 	}
 	
 	openDropdownMenu (e) {
@@ -172,6 +177,8 @@ class CompleteTimestamps {
 	
 	changeTimestamp (message) {
 		if (!message || !message.tagName) return;
+		message = this.getMessageGroup(message);
+		if (!message || !message.tagName || message.querySelector(".complete-timestamp")) return;
 		var timestamp = message.querySelector(".timestamp");
 		if (!timestamp) return;
 		var info = BDfunctionsDevilBro.getKeyInformation({node:message, key:"message"});
@@ -181,15 +188,28 @@ class CompleteTimestamps {
 		BDfunctionsDevilBro.setInnerText(timestamp, this.getTimestamp (this.languages[choice].id, info.timestamp._i));
 	}
 	
+	getMessageGroup (message) {
+		var messagegroup = null;
+		while (messagegroup == null || message.parentElement) {
+			message = message.parentElement;
+			if (message.classList && message.classList.contains("message-group")) messagegroup = message;
+		}
+		return messagegroup;
+	}
+	
 	getTimestamp (languageid, time = new Date()) {
 		var settings = BDfunctionsDevilBro.getAllData(this, "settings");
 		var timestamp = [];
 		if (settings.displayDate) 	timestamp.push(time.toLocaleDateString(languageid));
-		if (settings.displayTime) 	timestamp.push(time.toLocaleTimeString(languageid));
+		if (settings.displayTime) 	timestamp.push(settings.cutSeconds ? this.cutOffSeconds(time.toLocaleTimeString(languageid)) : time.toLocaleTimeString(languageid));
 		if (settings.otherOrder)	timestamp.reverse();
 		var timestring = timestamp.length > 1 ? timestamp.join(", ") : (timestamp.length > 0 ? timestamp[0] : "");
 		if (timestring && settings.forceZeros) timestring = this.addLeadingZeros(timestring);
 		return timestring;
+	}
+	
+	cutOffSeconds (timestring) {
+		return timestring.replace(/(.*):(.*):(.{2})(.*)/, "$1:$2$4");
 	}
 	
 	addLeadingZeros (timestring) {
