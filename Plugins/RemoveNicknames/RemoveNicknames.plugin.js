@@ -8,7 +8,8 @@ class RemoveNicknames {
 			
 		this.defaults = {
 			settings: {
-				replaceOwn:		{value:false, 	description:"Replace your own name:"}
+				replaceOwn:		{value:false, 	description:"Replace your own name:"},
+				addNickname:    {value:false, 	description:"Add chosen nickname in parentheses:"}
 			}
 		};
 	}
@@ -17,7 +18,7 @@ class RemoveNicknames {
 
 	getDescription () {return "Replace all nicknames with the actual accountnames.";}
 
-	getVersion () {return "1.0.1";}
+	getVersion () {return "1.0.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -191,7 +192,8 @@ class RemoveNicknames {
 		var member = this.MemberPerms.getMember(serverObj.id, info.id);
 		if (!member || !member.nick) return;
 		
-		BDfunctionsDevilBro.setInnerText(usernameWrapper, info.username);
+		let username = BDfunctionsDevilBro.getData("addNickname", this, "settings") ? info.username + " (" + member.nick + ")" : info.username;
+		BDfunctionsDevilBro.setInnerText(usernameWrapper, username);
 			
 		$(div).attr("removed-nickname", true);
 	}
