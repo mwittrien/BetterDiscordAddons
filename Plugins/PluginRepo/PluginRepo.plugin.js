@@ -235,7 +235,7 @@ class PluginRepo {
 
 	getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
 
-	getVersion () {return "1.2.9";}
+	getVersion () {return "1.3.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -625,8 +625,6 @@ class PluginRepo {
 				createWebview().then((webview) => {
 					getPluginInfo(webview, () => {
 						this.loading = false;
-						webview.remove();
-						console.log("PluginRepo: Finished fetching Plugins.");
 						if (document.querySelector(".bd-pluginrepobutton")) BDfunctionsDevilBro.showToast(`Finished fetching Plugins.`, {type:"success"});
 						if (outdated > 0) {
 							var text = `${outdated} of your Plugins ${outdated == 1 ? "is" : "are"} outdated. Check:`;
@@ -636,6 +634,7 @@ class PluginRepo {
 								e.delegateTarget.querySelector(".notice-dismiss").click();
 							});
 						}
+						setTimeout(() => {webview.remove();},10000);
 					});
 				});
 			}
@@ -715,10 +714,10 @@ class PluginRepo {
 			return new Promise(function(callback) {
 				var webview;
 				webview = document.createElement("webview");
-				webview.src = "non-existent.dummy";
+				webview.src = "https://discordapp.com/";
 				webview.setAttribute("webview-PluginRepo", null);
 				webview.style.setProperty("visibility", "hidden");
-				webview.addEventListener("dom-ready", function() {
+				webview.addEventListener("dom-ready", () => {
 					callback(webview);
 				});
 				document.body.appendChild(webview);
