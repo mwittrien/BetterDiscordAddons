@@ -336,6 +336,8 @@ class GoogleTranslateOption {
 						$(".context-menu").hide();
 						this.translateMessage();
 					});
+				
+				BDfunctionsDevilBro.updateContextPosition(context);
 			}
 			if (!context.querySelector(".googletranslateoption-item") && BDfunctionsDevilBro.getKeyInformation({"node":group, "key":"handleSearchWithGoogle"})) {
 				var text = BDfunctionsDevilBro.getKeyInformation({"node":group, "key":"value"});
@@ -356,6 +358,8 @@ class GoogleTranslateOption {
 							window.open(this.getGoogleTranslatePageURL(input.id, output.id, text), "_blank");
 						});
 				}
+				
+				BDfunctionsDevilBro.updateContextPosition(context);
 			}
 		}
 	}
