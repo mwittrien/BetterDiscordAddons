@@ -242,7 +242,8 @@ class ServerFolders {
 		this.defaults = {
 			settings: {
 				closeOtherFolders:	{value:false, 	description:"Close other Folders when opening a Folder."},
-				closeAllFolders:	{value:false, 	description:"Close Folders when selecting a Server in a Folder."},
+				closeTheFolder:		{value:false, 	description:"Close the Folder when selecting a Server."},
+				closeAllFolders:	{value:false, 	description:"Close All Folders when selecting a Server in a Folder."},
 				showCountBadge:		{value:true, 	description:"Display Badge for Amount of Servers in a Folder."}
 			}
 		};
@@ -968,10 +969,14 @@ class ServerFolders {
 					this.removeServerFromFolder(serverObj, folderDiv);
 				}
 				else {
-					if (BDfunctionsDevilBro.getData("closeAllFolders", this, "settings")) {
+					var settings = BDfunctionsDevilBro.getAllData(this, "settings");
+					if (settings.closeAllFolders) {
 						document.querySelectorAll(".folder.open").forEach(openFolder => {
 							this.openCloseFolder(openFolder);
 						});
+					}
+					else if (settings.closeTheFolder) {
+						this.openCloseFolder(folderDiv);
 					}
 					serverDiv.querySelector("a").click();
 				}
