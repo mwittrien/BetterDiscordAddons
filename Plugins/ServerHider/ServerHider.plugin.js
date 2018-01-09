@@ -219,7 +219,7 @@ class ServerHider {
 								if (node && node.classList && node.classList.contains("guild") && !node.querySelector(".guilds-error")) {
 									var info = BDfunctionsDevilBro.getKeyInformation({"node":node, "key":"guild"});
 									if (info) {
-										var data = BDfunctionsDevilBro.loadData(info.id, this.getName(), "servers");
+										var data = BDfunctionsDevilBro.loadData(info.id, this, "servers");
 										if (data) {
 											$(node).toggle(data.visible);
 										}
@@ -263,7 +263,7 @@ class ServerHider {
 
 	resetAll () {
 		if (confirm("Are you sure you want to reset all servers?")) {
-			BDfunctionsDevilBro.removeAllData(this.getName(), "servers");
+			BDfunctionsDevilBro.removeAllData(this, "servers");
 			BDfunctionsDevilBro.readServerList().forEach(serverObj => $(serverObj.div).show());
 		}
 	}
@@ -298,6 +298,8 @@ class ServerHider {
 				.on("mouseenter", ".serverhider-item", (e) => {
 					this.createContextSubMenu(info, e);
 				});
+				
+			BDfunctionsDevilBro.updateContextPosition(context);
 		}
 	}
 	
@@ -331,7 +333,7 @@ class ServerHider {
 		
 		$(serverObj.div).hide();
 		
-		BDfunctionsDevilBro.saveData(id, {id, visible:false}, this.getName(), "servers");
+		BDfunctionsDevilBro.saveData(id, {id, visible:false}, this, "servers");
 	}
 	
 	showServerModal (e) {
@@ -348,7 +350,7 @@ class ServerHider {
 				var hideAll = $(serverObjs[0].div).is(":visible");
 				for (let serverObj of serverObjs) {
 					$(serverObj.div).toggle(!hideAll);
-					BDfunctionsDevilBro.saveData(serverObj.id, {id:serverObj.id, visible:!hideAll}, this.getName(), "servers");
+					BDfunctionsDevilBro.saveData(serverObj.id, {id:serverObj.id, visible:!hideAll}, this, "servers");
 				}
 				$(".serverhiderCheckbox").each((_, checkBox) => {if ($(checkBox).prop("checked") == hideAll) checkBox.click();});
 			});
@@ -390,7 +392,7 @@ class ServerHider {
 				.on("click", (event) => {
 					var visible = $(event.target).prop("checked");
 					$(serverObj.div).toggle(visible);
-					BDfunctionsDevilBro.saveData(serverObj.id, {id:serverObj.id, visible:visible}, this.getName(), "servers");
+					BDfunctionsDevilBro.saveData(serverObj.id, {id:serverObj.id, visible:visible}, this, "servers");
 				});
 		}
 		BDfunctionsDevilBro.appendModal(serverHiderModal);
@@ -399,7 +401,7 @@ class ServerHider {
 	updateAllServers (write) {
 		for (let serverObj of BDfunctionsDevilBro.readServerList()) {
 			var id, visible;
-			var data = BDfunctionsDevilBro.loadData(serverObj.id, this.getName(), "servers");
+			var data = BDfunctionsDevilBro.loadData(serverObj.id, this, "servers");
 			if (data && write) {
 				id = data.id;
 				visible = data.visible;
@@ -411,7 +413,7 @@ class ServerHider {
 			
 			$(serverObj.div).toggle(visible);
 			
-			BDfunctionsDevilBro.saveData(id, {id, visible}, this.getName(), "servers");
+			BDfunctionsDevilBro.saveData(id, {id, visible}, this, "servers");
 		}
 	}
 	
