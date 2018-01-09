@@ -238,10 +238,12 @@ class ServerFolders {
 			{"openicon":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEsAAABLCAYAAAA4TnrqAAABrklEQVR4Xu3ayZLCMAxFUfz/H50upnQanFjXdi8SXba8TAdJGBfl5issUMJJgzexQBGIJRYQAFErSywgAKJWllhAAEStLLGAAIhaWWIBARC1ssQCAiDaU1kLOH8t2nPNwUvOOZze+CjU+67pdec87eBZ6E3PwrrfNr324KOOH05veCbW6cCGsJZltt34p986QymFPvN6SnrgqnNGqHVgdoJ1YZ0Z6tH7YrUa8Pd9seJWj2QPWMo2fGHhb+PsWAhMLLA4Fkus9rTfrB7CBXMUPN/yvG0USeya7L2RFepwV6SGlR1qF0ys/cb8shFLrMgcb2asrCbR5vf2Z9Y2tA1B/Qxi3Q/Pvnyorj9dlNYrSyzQnGL9F1bmuYV/SItVKUO3aL5RrKzReRXZrM+23jrcNW1tqYq1KUmx/vanlTVjXkVmVqYlRKvLQv++yzK3xJrVgrYhGO5RrAxzq9mCYh3st9faNySaYOc05BAKifWssyjWledW2CAcvHB1hQ3CQbBeuWxULPDRiiUWEABRK0ssIACiVpZYQABErSyxgACIWlliAQEQtbLEAgIgamUBrB+JEUtMl61hQwAAAABJRU5ErkJggg==", 
 			"closedicon":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEsAAABLCAYAAAA4TnrqAAABhUlEQVR4Xu3YwQqDMBBF0eT/P9oiVAji4l1rIh1u1w8zHifTaG/+YoEeJw02sUATiCUWEABRO0ssIACidpZYQABE7SyxgACI2lliAQEQtbPEAgIgeqezNnD9q+idNa+us7wOWvivBR43Tdc9Y71SBy36qSL3m6drH2BP1oDqoAW/VuhX6un112Ft24zarydi7/S5xpM1vnAcPD/ZIlDzO6sQVB2siVtv3KPx7oqD4zZc0VmLoOZ3Vjw6/yMYN0wcnPjX/TZpbBAHW2vrzglr+WKDOCgWe+Wws0DHiyVW/kLvzAKjSCyxwHARSywkAMLxKIqDHkrBfhVLrGmfaDzBg0Eolli+7oAeEEssIgCy8VkzDnrO8pzlOQtsQbHEggIgHs/tOOiAd8A7s8AWFEssKADi8dyOgw54B7wzC2zBaVj7hat9LSVjKP/wNTytKmAICrUgbO2ScaxbUiG8KbFCKLchgBJLLCgA4s4ssYAAiNpZYgEBELWzxAICIGpniQUEQNTOAlgf/fBATBZ555AAAAAASUVORK5CYII="}
 		];
-			
-		this.defaultSettings = {
-			closeOtherFolders:	{value:false, 	description:"Close other Folders when opening a Folder."},
-			showCountBadge:		{value:true, 	description:"Display Badge for Amount of Servers in a Folder."}
+		
+		this.defaults = {
+			settings: {
+				closeOtherFolders:	{value:false, 	description:"Close other Folders when opening a Folder."},
+				showCountBadge:		{value:true, 	description:"Display Badge for Amount of Servers in a Folder."}
+			}
 		};
 	}
 		
@@ -255,10 +257,10 @@ class ServerFolders {
 	
 	getSettingsPanel () {
 		if (!this.started || typeof BDfunctionsDevilBro !== "object") return;
-		var settings = this.getSettings(); 
+		var settings = BDfunctionsDevilBro.getAllData(this, "settings"); 
 		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="titleDefault-1CWM9y title-3i-5G_ size18-ZM4Qv- height24-2pMcnc weightNormal-3gw0Lm marginBottom8-1mABJ4">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		for (let key in settings) {
-			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaultSettings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU ${settings[key] ? "valueChecked-3Bzkbm" : "valueUnchecked-XR6AOk"}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
+			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU ${settings[key] ? "valueChecked-3Bzkbm" : "valueUnchecked-XR6AOk"}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
 		}
 		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto; padding-top:8px;">Reset all Folders.</h3><button type="button" class="flexChild-1KGW5q buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu reset-button" style="flex: 0 0 auto;"><div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx contents-4L4hQM">Reset</div></button></div>`;
 		settingshtml += `</div></div>`;
@@ -398,21 +400,6 @@ class ServerFolders {
 	}
 	
 	// begin of own functions
-	
-	getSettings () {
-		var oldSettings = BDfunctionsDevilBro.loadAllData(this.getName(), "settings"), newSettings = {}, saveSettings = false;
-		for (let key in this.defaultSettings) {
-			if (oldSettings[key] == null) {
-				newSettings[key] = this.defaultSettings[key].value;
-				saveSettings = true;
-			}
-			else {
-				newSettings[key] = oldSettings[key];
-			}
-		}
-		if (saveSettings) BDfunctionsDevilBro.saveAllData(newSettings, this.getName(), "settings");
-		return newSettings;
-	}
 
 	updateSettings (settingspanel) {
 		var settings = {};
@@ -421,13 +408,13 @@ class ServerFolders {
 			input.parentElement.classList.toggle("valueChecked-3Bzkbm", input.checked);
 			input.parentElement.classList.toggle("valueUnchecked-XR6AOk", !input.checked);
 		}
-		BDfunctionsDevilBro.saveAllData(settings, this.getName(), "settings");
+		BDfunctionsDevilBro.saveAllData(settings, this, "settings");
 	}
 	
 	resetAll () {
 		if (confirm("Are you sure you want to delete all folders?")) {
-			BDfunctionsDevilBro.removeAllData(this.getName(), "folders");
-			BDfunctionsDevilBro.removeAllData(this.getName(), "folderIDs");
+			BDfunctionsDevilBro.removeAllData(this, "folders");
+			BDfunctionsDevilBro.removeAllData(this, "folderIDs");
 			
 			this.resetAllElements();
 		}
@@ -473,6 +460,8 @@ class ServerFolders {
 				.on("mouseenter", ".serverfolders-item", (e) => {
 					this.createContextSubMenu(info, e);
 				});
+				
+			BDfunctionsDevilBro.updateContextPosition(context);
 		}
 	}
 	
@@ -532,10 +521,10 @@ class ServerFolders {
 	}
 	
 	addServerToFolder (serverObj, folderDiv) {
-		var data = BDfunctionsDevilBro.loadData(folderDiv.id, this.getName(), "folders");
+		var data = BDfunctionsDevilBro.loadData(folderDiv.id, this, "folders");
 		if (serverObj && data && !data.servers.includes(serverObj.id)) {
 			data.servers.push(serverObj.id);
-			BDfunctionsDevilBro.saveData(folderDiv.id, data, this.getName(), "folders");
+			BDfunctionsDevilBro.saveData(folderDiv.id, data, this, "folders");
 			$(serverObj.div).attr("folder",folderDiv.id).hide();
 			var message = this.labels.toast_addserver_text ? 
 							this.labels.toast_addserver_text.replace("${servername}", serverObj.name).replace("${foldername}", data.folderName ? " " + data.folderName : "") : "";
@@ -547,10 +536,10 @@ class ServerFolders {
 	
 	removeServerFromFolder (serverObj, folderDiv) {
 		$(".context-menu").hide();
-		var data = BDfunctionsDevilBro.loadData(folderDiv.id, this.getName(), "folders");
+		var data = BDfunctionsDevilBro.loadData(folderDiv.id, this, "folders");
 		if (serverObj && data) {
 			BDfunctionsDevilBro.removeFromArray(data.servers, serverObj.id);
-			BDfunctionsDevilBro.saveData(folderDiv.id, data, this.getName(), "folders");
+			BDfunctionsDevilBro.saveData(folderDiv.id, data, this, "folders");
 			$(serverObj.div).removeAttr("folder").show();
 			var message = this.labels.toast_removeserver_text ? 
 				this.labels.toast_removeserver_text.replace("${servername}", serverObj.name).replace("${foldername}", data.folderName ? " " + data.folderName : "") : "";
@@ -580,7 +569,7 @@ class ServerFolders {
 		
 		var folderDiv = this.createFolderDiv(data);
 		
-		BDfunctionsDevilBro.saveData(folderID, data, this.getName(), "folders");
+		BDfunctionsDevilBro.saveData(folderID, data, this, "folders");
 		
 		this.showFolderSettings(folderDiv);
 		
@@ -588,7 +577,7 @@ class ServerFolders {
 	}
 	
 	loadAllFolders () {
-		var folders = BDfunctionsDevilBro.loadAllData(this.getName(), "folders");
+		var folders = BDfunctionsDevilBro.loadAllData(this, "folders");
 		var sortedFolders = [];
 		
 		for (var id in folders) {
@@ -615,7 +604,7 @@ class ServerFolders {
 			.attr("id", data.folderID)
 			.on("mouseenter", () => {this.createFolderToolTip(folderDiv);})
 			.on("click", () => {
-				if (this.getSettings().closeOtherFolders) {
+				if (BDfunctionsDevilBro.getData("closeOtherFolders", this, "settings")) {
 					document.querySelectorAll(".folder.open").forEach(openFolder => {
 						if (openFolder != folderDiv) this.openCloseFolder(openFolder);
 					});
@@ -677,14 +666,14 @@ class ServerFolders {
 	}
 	
 	generateFolderID () {
-		var folderIDs = BDfunctionsDevilBro.loadAllData(this.getName(), "folderIDs");
+		var folderIDs = BDfunctionsDevilBro.loadAllData(this, "folderIDs");
 		var folderID = "folder_" + Math.round(Math.random()*10000000000000000);
 		if (folderIDs[folderID]) {
 			return generateFolderID();
 		}
 		else {
 			folderIDs[folderID] = folderID;
-			BDfunctionsDevilBro.saveAllData(folderIDs, this.getName(), "folderIDs");
+			BDfunctionsDevilBro.saveAllData(folderIDs, this, "folderIDs");
 			return folderID;
 		}
 	}
@@ -716,7 +705,7 @@ class ServerFolders {
 	}
 	
 	createFolderToolTip (folderDiv) {
-		var data = BDfunctionsDevilBro.loadData(folderDiv.id, this.getName(), "folders");
+		var data = BDfunctionsDevilBro.loadData(folderDiv.id, this, "folders");
 		if (data) {
 			if (data.folderName) {
 				var bgColor = data.color3 ? BDfunctionsDevilBro.color2RGB(data.color3) : "";
@@ -753,7 +742,7 @@ class ServerFolders {
 	
 	showFolderSettings (folderDiv) {
 		var folderID = folderDiv.id;
-		var data = BDfunctionsDevilBro.loadData(folderID, this.getName(), "folders");
+		var data = BDfunctionsDevilBro.loadData(folderID, this, "folders");
 		if (data) {
 			var folderName = 	data.folderName;
 			var position = 		data.position;
@@ -798,12 +787,12 @@ class ServerFolders {
 								icons.closedicon = closedicon;
 								var isOpen = folderDiv.classList.contains("open");
 								$(folderDiv).find(".avatar-small").css("background-image", isOpen ? "url(\"" + icons.openicon + "\")" : "url(\"" + icons.closedicon + "\")");
-								BDfunctionsDevilBro.saveData(folderID, {folderID,folderName,position,iconID,icons,color1,color2,color3,color4,servers}, this.getName(), "folders");
+								BDfunctionsDevilBro.saveData(folderID, {folderID,folderName,position,iconID,icons,color1,color2,color3,color4,servers}, this, "folders");
 							});
 						});
 					}
 					else {
-						BDfunctionsDevilBro.saveData(folderID, {folderID,folderName,position,iconID,icons,color1,color2,color3,color4,servers}, this.getName(), "folders");
+						BDfunctionsDevilBro.saveData(folderID, {folderID,folderName,position,iconID,icons,color1,color2,color3,color4,servers}, this, "folders");
 					}
 					
 				});
@@ -854,8 +843,8 @@ class ServerFolders {
 	removeFolder (folderDiv) {
 		$(this.readIncludedServerList(folderDiv)).removeAttr("folder").show();
 		
-		BDfunctionsDevilBro.removeData(folderDiv.id, this.getName(), "folders");
-		BDfunctionsDevilBro.removeData(folderDiv.id, this.getName(), "folderIDs");
+		BDfunctionsDevilBro.removeData(folderDiv.id, this, "folders");
+		BDfunctionsDevilBro.removeData(folderDiv.id, this, "folderIDs");
 		
 		this.closeFolderContent(folderDiv);
 		
@@ -865,7 +854,7 @@ class ServerFolders {
 	}
 	
 	openCloseFolder (folderDiv) {
-		var data = BDfunctionsDevilBro.loadData(folderDiv.id, this.getName(), "folders");
+		var data = BDfunctionsDevilBro.loadData(folderDiv.id, this, "folders");
 		if (data) {
 			var isOpen = folderDiv.classList.contains("open");
 			if (!isOpen) {
@@ -1062,17 +1051,17 @@ class ServerFolders {
 			var folderDiv = this.getGuildParentDiv(serverAndFolders[i], "folder");
 			if (folderDiv) {
 				var folderID = folderDiv.id;
-				var data = BDfunctionsDevilBro.loadData(folderID, this.getName(), "folders");
+				var data = BDfunctionsDevilBro.loadData(folderID, this, "folders");
 				if (data) {
 					data.position = i;
-					BDfunctionsDevilBro.saveData(folderID, data, this.getName(), "folders");
+					BDfunctionsDevilBro.saveData(folderID, data, this, "folders");
 				}
 			}
 		}
 	}	
 	
 	updateServerPositions (folderDiv) {
-		var data = BDfunctionsDevilBro.loadData(folderDiv.id, this.getName(), "folders");
+		var data = BDfunctionsDevilBro.loadData(folderDiv.id, this, "folders");
 		if (data) {
 			var serversInData = data.servers;
 			var serversInFolder = Array.from(document.querySelectorAll(".content_of_" + folderDiv.id)).map(server => {return server.id.replace("copy_of_", "");});
@@ -1080,7 +1069,7 @@ class ServerFolders {
 				BDfunctionsDevilBro.removeFromArray(serversInData, serversInFolder[i]);
 			}
 			data.servers = serversInFolder.concat(serversInData);
-			BDfunctionsDevilBro.saveData(folderDiv.id, data, this.getName(), "folders");
+			BDfunctionsDevilBro.saveData(folderDiv.id, data, this, "folders");
 		}
 	}	
 	
@@ -1109,7 +1098,7 @@ class ServerFolders {
 				.text(badgeAmount);	
 		$(folderDiv)
 			.find(".folder.badge.count")
-				.toggle(includedServers.length > 0 && this.getSettings().showCountBadge)
+				.toggle(includedServers.length > 0 && BDfunctionsDevilBro.getData("showCountBadge", this, "settings"))
 				.text(includedServers.length);	
 	
 		if (folderDiv.classList.contains("open") && !document.querySelector(".content_of_" + folderDiv.id)) this.openCloseFolder(folderDiv);
@@ -1134,7 +1123,7 @@ class ServerFolders {
 	
 	getFolderOfServer (serverObj) {
 		if (!serverObj) return;
-		var folders = BDfunctionsDevilBro.loadAllData(this.getName(), "folders");
+		var folders = BDfunctionsDevilBro.loadAllData(this, "folders");
 		for (var id in folders) {
 			var serverIDs = folders[id].servers;
 			for (var i = 0; serverIDs.length > i; i++) {
@@ -1145,7 +1134,7 @@ class ServerFolders {
 	}
 	
 	readIncludedServerList (folderDiv) {
-		var data = BDfunctionsDevilBro.loadData(folderDiv.id, this.getName(), "folders");
+		var data = BDfunctionsDevilBro.loadData(folderDiv.id, this, "folders");
 		var includedServers = [];
 		if (data) {
 			var serverIDs = data.servers;
