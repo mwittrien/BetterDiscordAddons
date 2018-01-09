@@ -11,6 +11,7 @@ class CompleteTimestamps {
 			settings: {
 				displayTime:	{value:true, 	description:"Display the Time in the Timestamp:"},
 				displayDate:	{value:true, 	description:"Display the Date in the Timestamp:"},
+				forceZeros:		{value:false, 	description:"Force leading Zeros:"},
 				otherOrder:		{value:false, 	description:"Show the Time before the Date:"}
 			},
 			choices: {
@@ -23,7 +24,7 @@ class CompleteTimestamps {
 
 	getDescription () {return "Replace all timestamps with complete timestamps.";}
 
-	getVersion () {return "1.0.1";}
+	getVersion () {return "1.0.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -170,9 +171,7 @@ class CompleteTimestamps {
 	}
 	
 	changeTimestamp (message) {
-		var settings = BDfunctionsDevilBro.getAllData(this, "settings");
-		if (!settings.displayDate && !settings.displayTime) return;
-		if (!message || !message.tagName || message.querySelector(".complete-timestamp")) return;
+		if (!message || !message.tagName) return;
 		var timestamp = message.querySelector(".timestamp");
 		if (!timestamp) return;
 		var info = BDfunctionsDevilBro.getKeyInformation({node:message, key:"message"});
@@ -188,6 +187,18 @@ class CompleteTimestamps {
 		if (settings.displayDate) 	timestamp.push(time.toLocaleDateString(languageid));
 		if (settings.displayTime) 	timestamp.push(time.toLocaleTimeString(languageid));
 		if (settings.otherOrder)	timestamp.reverse();
-		return timestamp.length > 1 ? timestamp.join(", ") : (timestamp.length > 0 ? timestamp[0] : "none");
+		var timestring = timestamp.length > 1 ? timestamp.join(", ") : (timestamp.length > 0 ? timestamp[0] : "");
+		if (timestring && settings.forceZeros) timestring = this.addLeadingZeros(timestring);
+		return timestring;
+	}
+	
+	addLeadingZeros (timestring) {
+		var chararray = timestring.split("");
+		var numreg = /[0-9]/;
+		for (var i = 0; i < chararray.length; i++) {
+			if (!numreg.test(chararray[i-1]) && numreg.test(chararray[i]) && !numreg.test(chararray[i+1])) chararray[i] = "0" + chararray[i];
+		}
+		
+		return chararray.join("");
 	}
 }
