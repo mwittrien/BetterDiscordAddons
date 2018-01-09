@@ -150,9 +150,11 @@ class EmojiStatistics {
 			
 		this.emojiButtonMarkup = `<div class="emojistatistics-button"></div>`;
 			
-		this.defaultSettings = {
-			enableEmojiHovering:			{value:true, 	description:"Show Information about Emojis on hovver over an Emoji in the Emojipicker."},
-			enableEmojiStatisticsButton:	{value:true, 	description:"Add a Button in the Emojipicker to open the Statistics Overview."}
+		this.defaults = {
+			settings: {
+				enableEmojiHovering:			{value:true, 	description:"Show Information about Emojis on hover over an Emoji in the Emojipicker."},
+				enableEmojiStatisticsButton:	{value:true, 	description:"Add a Button in the Emojipicker to open the Statistics Overview."}
+			}
 		};
 	}
 
@@ -160,16 +162,16 @@ class EmojiStatistics {
 
 	getDescription () {return "Adds some helpful options to show you more information about emojis and emojiservers.";}
 
-	getVersion () {return "2.6.9";}
+	getVersion () {return "2.7.0";}
 
 	getAuthor () {return "DevilBro";}
 
 	getSettingsPanel () {
 		if (!this.started || typeof BDfunctionsDevilBro !== "object") return;
-		var settings = this.getSettings(); 
+		var settings = BDfunctionsDevilBro.getAllData(this, "settings"); 
 		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="titleDefault-1CWM9y title-3i-5G_ size18-ZM4Qv- height24-2pMcnc weightNormal-3gw0Lm marginBottom8-1mABJ4">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		for (let key in settings) {
-			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaultSettings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU ${settings[key] ? "valueChecked-3Bzkbm" : "valueUnchecked-XR6AOk"}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
+			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU ${settings[key] ? "valueChecked-3Bzkbm" : "valueUnchecked-XR6AOk"}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
 		}
 		settingshtml += `</div></div>`;
 		
@@ -197,12 +199,12 @@ class EmojiStatistics {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(".emoji-picker")) {
+								if (node && node.tagName && node.querySelector(".emoji-picker, .emojiPicker-3g68GS")) {
 									this.loadEmojiList();
-									if (!node.querySelector(".emojistatistics-button") && this.getSettings().enableEmojiStatisticsButton) {
+									if (!node.querySelector(".emojistatistics-button") && BDfunctionsDevilBro.getData("enableEmojiStatisticsButton", this, "settings")) {
 										this.addEmojiInformationButton(node);
 									}
-									if (this.getSettings().enableEmojiHovering) {
+									if (BDfunctionsDevilBro.getData("enableEmojiHovering", this, "settings")) {
 										this.hoverEmoji(node);
 									}
 								}
@@ -210,7 +212,7 @@ class EmojiStatistics {
 						}
 						if (change.removedNodes) {
 							change.removedNodes.forEach((node) => {
-								if (node.querySelector(".emoji-picker")) {
+								if (node.querySelector(".emoji-picker, .emojiPicker-3g68GS")) {
 									$(".tooltips").find(".emoji-tooltip").remove();
 								}
 							});
@@ -240,21 +242,6 @@ class EmojiStatistics {
 	}
 	
 	// begin of own functions
-	
-	getSettings () {
-		var oldSettings = BDfunctionsDevilBro.loadAllData(this.getName(), "settings"), newSettings = {}, saveSettings = false;
-		for (let key in this.defaultSettings) {
-			if (oldSettings[key] == null) {
-				newSettings[key] = this.defaultSettings[key].value;
-				saveSettings = true;
-			}
-			else {
-				newSettings[key] = oldSettings[key];
-			}
-		}
-		if (saveSettings) BDfunctionsDevilBro.saveAllData(newSettings, this.getName(), "settings");
-		return newSettings;
-	}
 
 	updateSettings (settingspanel) {
 		var settings = {};
@@ -263,7 +250,7 @@ class EmojiStatistics {
 			input.parentElement.classList.toggle("valueChecked-3Bzkbm", input.checked);
 			input.parentElement.classList.toggle("valueUnchecked-XR6AOk", !input.checked);
 		}
-		BDfunctionsDevilBro.saveAllData(settings, this.getName(), "settings");
+		BDfunctionsDevilBro.saveAllData(settings, this, "settings");
 	}
 	
 	changeLanguageStrings () {
@@ -300,7 +287,7 @@ class EmojiStatistics {
 	hoverEmoji (picker) {
 		$(picker)
 			.off("mouseenter." + this.getName())
-			.on("mouseenter." + this.getName(), ".emoji-item", (e) => {
+			.on("mouseenter." + this.getName(), ".emoji-item, .emojiItem-3l4Fa9", (e) => {
 				var data = this.emojiToServerList[$(e.target).css("background-image").replace("url(\"","").replace("\")","")];
 				if (data) {
 					var text = `${BDfunctionsDevilBro.encodeToHTML(data.emoji)}\n${BDfunctionsDevilBro.encodeToHTML(data.server)}`;
@@ -310,8 +297,9 @@ class EmojiStatistics {
 	}
 	
 	addEmojiInformationButton (node) {
-		$(node).find(".emoji-picker .header")
+		$(node).find(".header, .header-27dQ-e")
 			.append(this.emojiButtonMarkup)
+			.off("click." + this.getName())
 			.on("click." + this.getName(), ".emojistatistics-button", () => {
 				$(node).hide();
 				this.showEmojiInformationModal();
