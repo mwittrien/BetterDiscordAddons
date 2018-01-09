@@ -23,7 +23,7 @@ class CompleteTimestamps {
 
 	getDescription () {return "Replace all timestamps with complete timestamps.";}
 
-	getVersion () {return "1.0.0";}
+	getVersion () {return "1.0.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -172,11 +172,14 @@ class CompleteTimestamps {
 	changeTimestamp (message) {
 		var settings = BDfunctionsDevilBro.getAllData(this, "settings");
 		if (!settings.displayDate && !settings.displayTime) return;
-		if (!message || !message.tagName || message.querySelector(".complete-timestamp") || !message.querySelector(".timestamp")) return;
+		if (!message || !message.tagName || message.querySelector(".complete-timestamp")) return;
+		var timestamp = message.querySelector(".timestamp");
+		if (!timestamp) return;
 		var info = BDfunctionsDevilBro.getKeyInformation({node:message, key:"message"});
 		if (!info || !info.timestamp || !info.timestamp._i) return;
 		var choice = BDfunctionsDevilBro.getData("creationDateLang", this, "choices");
-		BDfunctionsDevilBro.setInnerText(message.querySelector(".timestamp"), this.getTimestamp (this.languages[choice].id, info.timestamp._i));
+		timestamp.classList.add("complete-timestamp");
+		BDfunctionsDevilBro.setInnerText(timestamp, this.getTimestamp (this.languages[choice].id, info.timestamp._i));
 	}
 	
 	getTimestamp (languageid, time = new Date()) {
