@@ -218,7 +218,7 @@ class EditServers {
 
 	resetAll () {
 		if (confirm("Are you sure you want to reset all servers?")) {
-			BDfunctionsDevilBro.removeAllData(this.getName(), "servers");
+			BDfunctionsDevilBro.removeAllData(this, "servers");
 			
 			document.querySelectorAll("[custom-editservers]").forEach(serverDiv => {this.resetServer(serverDiv);});
 		}
@@ -257,6 +257,8 @@ class EditServers {
 				.on("mouseenter", ".localserversettings-item", (e) => {
 					this.createContextSubMenu(info, e);
 				});
+				
+			BDfunctionsDevilBro.updateContextPosition(context);
 		}
 	}
 	
@@ -270,7 +272,7 @@ class EditServers {
 				this.showServerSettings(info);
 			});
 			
-		if (BDfunctionsDevilBro.loadData(id, this.getName(), "servers")) {
+		if (BDfunctionsDevilBro.loadData(id, this, "servers")) {
 			serverContextSubMenu
 				.on("click", ".resetsettings-item", () => {
 					this.removeServerData(info.id);
@@ -290,7 +292,7 @@ class EditServers {
 		
 		var serverDiv = BDfunctionsDevilBro.getDivOfServer(id).div;
 		
-		var data = BDfunctionsDevilBro.loadData(id, this.getName(), "servers");
+		var data = BDfunctionsDevilBro.loadData(id, this, "servers");
 		
 		var name = 			data ? data.name : null;
 		var shortName = 	data ? data.shortName : null;
@@ -371,7 +373,7 @@ class EditServers {
 					this.removeServerData(info.id);
 				}
 				else {
-					BDfunctionsDevilBro.saveData(id, {id,name,shortName,url,removeIcon,color1,color2,color3,color4}, this.getName(), "servers");
+					BDfunctionsDevilBro.saveData(id, {id,name,shortName,url,removeIcon,color1,color2,color3,color4}, this, "servers");
 					this.loadServer({div:serverDiv,info});
 				}
 			});
@@ -429,7 +431,7 @@ class EditServers {
 		
 		this.resetServer(BDfunctionsDevilBro.getDivOfServer(id));
 		
-		BDfunctionsDevilBro.removeData(id, this.getName(), "servers");
+		BDfunctionsDevilBro.removeData(id, this, "servers");
 	}
 	
 	resetServer (serverDiv) {
@@ -452,7 +454,7 @@ class EditServers {
 	
 	loadServer (serverObj) {
 		if (typeof serverObj !== "object") return;
-		var data = BDfunctionsDevilBro.loadData(serverObj.id, this.getName(), "servers");
+		var data = BDfunctionsDevilBro.loadData(serverObj.id, this, "servers");
 		if (data) {
 			var avatar = serverObj.div.querySelector(".avatar-small");
 			if ($(avatar).attr("name") === undefined) {
@@ -486,7 +488,7 @@ class EditServers {
 	}
 	
 	createServerToolTip (serverObj) {
-		var data = BDfunctionsDevilBro.loadData(serverObj.id, this.getName(), "servers");
+		var data = BDfunctionsDevilBro.loadData(serverObj.id, this, "servers");
 		if (data) {
 			var text = data.name ? data.name : serverObj.name;
 			var bgColor = data.color3 ? BDfunctionsDevilBro.color2RGB(data.color3) : "";
