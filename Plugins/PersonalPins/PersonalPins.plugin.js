@@ -279,6 +279,8 @@ class PersonalPins {
 						$(context).hide();
 						this.addMessageToNotes();
 					});
+				
+				BDfunctionsDevilBro.updateContextPosition(context);
 				break;
 			}
 		}
