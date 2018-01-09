@@ -242,6 +242,7 @@ class ServerFolders {
 		this.defaults = {
 			settings: {
 				closeOtherFolders:	{value:false, 	description:"Close other Folders when opening a Folder."},
+				closeAllFolders:	{value:false, 	description:"Close Folders when selecting a Server in a Folder."},
 				showCountBadge:		{value:true, 	description:"Display Badge for Amount of Servers in a Folder."}
 			}
 		};
@@ -251,7 +252,7 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.4.5";}
+	getVersion () {return "5.4.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -963,8 +964,17 @@ class ServerFolders {
 			.on("mouseenter." + this.getName(), (e) => {this.createServerToolTip(serverObj, serverCopy, e);})
 			.on("click." + this.getName(), (e) => {
 				e.preventDefault();
-				if (BDfunctionsDevilBro.pressedKeys.includes(46)) this.removeServerFromFolder(serverObj, folderDiv);
-				else serverDiv.querySelector("a").click();
+				if (BDfunctionsDevilBro.pressedKeys.includes(46)) {
+					this.removeServerFromFolder(serverObj, folderDiv);
+				}
+				else {
+					if (BDfunctionsDevilBro.getData("closeAllFolders", this, "settings")) {
+						document.querySelectorAll(".folder.open").forEach(openFolder => {
+							this.openCloseFolder(openFolder);
+						});
+					}
+					serverDiv.querySelector("a").click();
+				}
 			})
 			.on("contextmenu." + this.getName(), (e) => {
 				var handleContextMenu = BDfunctionsDevilBro.getKeyInformation({"node":serverDiv.firstElementChild, "key":"handleContextMenu"});
