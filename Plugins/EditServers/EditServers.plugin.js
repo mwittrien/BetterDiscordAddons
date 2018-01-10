@@ -11,21 +11,21 @@ class EditServers {
 		this.serverDragged = false;
 
 		this.serverContextEntryMarkup =
-			`<div class="item-group">
-				<div class="item localserversettings-item item-subMenu">
+			`<div class="item-group itemGroup-oViAgA">
+				<div class="item item-1XYaYf localserversettings-item item-subMenu itemSubMenu-3ZgIw-">
 					<span>REPLACE_context_localserversettings_text</span>
 					<div class="hint"></div>
 				</div>
 			</div>`;
 			
 		this.serverContextSubMenuMarkup = 
-			`<div class="context-menu editservers-submenu">
-				<div class="item-group">
-					<div class="item serversettings-item">
+			`<div class="context-menu contextMenu-uoJTbz editservers-submenu">
+				<div class="item-group itemGroup-oViAgA">
+					<div class="item item-1XYaYf serversettings-item">
 						<span>REPLACE_submenu_serversettings_text</span>
 						<div class="hint"></div>
 					</div>
-					<div class="item resetsettings-item">
+					<div class="item item-1XYaYf resetsettings-item disabled-dlOjhg disabled">
 						<span>REPLACE_submenu_resetsettings_text</span>
 						<div class="hint"></div>
 					</div>
@@ -128,7 +128,7 @@ class EditServers {
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	getVersion () {return "1.7.1";}
+	getVersion () {return "1.7.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -156,12 +156,14 @@ class EditServers {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
+			var observertarget = null;
+
 			this.serverContextObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node.nodeType == 1 && node.className.includes("context-menu")) {
+								if (node.nodeType == 1 && (node.className.includes("context-menu") || node.className.includes("contextMenu-uoJTbz"))) {
 									this.onContextMenu(node);
 								}
 							});
@@ -169,7 +171,7 @@ class EditServers {
 					}
 				);
 			});
-			if (document.querySelector(".app")) this.serverContextObserver.observe(document.querySelector(".app"), {childList: true});
+			if (observertarget = document.querySelector(".app")) this.serverContextObserver.observe(observertarget, {childList: true});
 			
 			this.serverListObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -183,7 +185,7 @@ class EditServers {
 					}
 				);
 			});
-			if (document.querySelector(".guilds.scroller")) this.serverListObserver.observe(document.querySelector(".guilds.scroller"), {childList: true});
+			if (observertarget = document.querySelector(".guilds.scroller")) this.serverListObserver.observe(observertarget, {childList: true});
 			
 			$(".guilds.scroller").on("drop" + this.getName(), () => {	
 				this.serverDragged = true;
@@ -255,39 +257,38 @@ class EditServers {
 			info = Object.assign({},info,{shortName});
 			$(context).append(this.serverContextEntryMarkup)
 				.on("mouseenter", ".localserversettings-item", (e) => {
-					this.createContextSubMenu(info, e);
+					this.createContextSubMenu(info, e, context);
 				});
 				
 			BDfunctionsDevilBro.updateContextPosition(context);
 		}
 	}
 	
-	createContextSubMenu (info, e) {
+	createContextSubMenu (info, e, context) {
 		var id = info.id;
 		
 		var serverContextSubMenu = $(this.serverContextSubMenuMarkup);
 		
 		serverContextSubMenu
 			.on("click", ".serversettings-item", () => {
+				$(context).hide();
 				this.showServerSettings(info);
 			});
 			
 		if (BDfunctionsDevilBro.loadData(id, this, "servers")) {
 			serverContextSubMenu
-				.on("click", ".resetsettings-item", () => {
+				.find(".resetsettings-item")
+				.removeClass("disabled").removeClass("disabled-dlOjhg")
+				.on("click", () => {
+					$(context).hide();
 					this.removeServerData(info.id);
 				});
-		}
-		else {
-			serverContextSubMenu.find(".resetsettings-item").addClass("disabled");
 		}
 		
 		BDfunctionsDevilBro.appendSubMenu(e.currentTarget, serverContextSubMenu);
 	}
 	
 	showServerSettings (info) {
-		$(".context-menu").hide();
-		
 		var id = info.id;
 		
 		var serverDiv = BDfunctionsDevilBro.getDivOfServer(id).div;
@@ -427,8 +428,6 @@ class EditServers {
 	}
 	
 	removeServerData (id) {
-		$(".context-menu").hide();
-		
 		this.resetServer(BDfunctionsDevilBro.getDivOfServer(id));
 		
 		BDfunctionsDevilBro.removeData(id, this, "servers");
