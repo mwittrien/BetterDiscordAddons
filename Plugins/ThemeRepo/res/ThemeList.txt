@@ -84,6 +84,7 @@ https://raw.githubusercontent.com/NFLD99/Better-Discord/master/Theme_File/X-Miss
 https://raw.githubusercontent.com/nirewen/Discordify/master/Discordify.theme.css
 https://raw.githubusercontent.com/Pierce01/Opacity/master/OpacityMaxBun.theme.css
 https://raw.githubusercontent.com/Quietess/Casual-Dark/master/Casual_Dark.theme.css
+https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Themes/FixEmoteModifiers/FixEmoteModifiers.theme.css
 https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Themes/RadialStatus/RadialStatus.theme.css
 https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Themes/SwitchFix/SwitchFix.theme.css
 https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Themes/TransientMaterial/TransientMaterial.theme.css
