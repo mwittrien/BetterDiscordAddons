@@ -13,7 +13,7 @@ class ThemeRepo {
 		
 		this.updateInterval;
 		
-		this.themeFixerCSS = `#voice-connection,#friends,.friends-header,.friends-table,.guilds-wrapper,.guild-headerheader,.channels-wrap,.private-channels.search-bar,.private-channels,.guild-channels,.account,.friend-table-add-header,.chat,.content,.layers,.title-wrap:not(.search-bar),.messages-wrapper,.messages.dividerspan,.messages.divider:before,.content,.message-group-blocked,.is-local-bot-message,.channel-members-loading,.channel-members-loading.heading,.channel-members-loading.member,.typing,.layer,.layers,.container-RYiLUQ,.theme-dark.ui-standard-sidebar-view,.theme-dark.ui-standard-sidebar-view.sidebar-region,.theme-dark.ui-standard-sidebar-view.content-region,.theme-dark.channel-members,.layer,.layers,.container-2OU7Cz,.theme-dark.title-qAcLxz,.theme-dark.chatform,.channels-3g2vYe,.theme-dark.friends-table,.theme-dark.messages-wrapper,.content.flex-spacer,.theme-dark.chat>.content,.theme-dark.chat,.container-2OU7Cz,.theme-dark.channel-members,.channel-members,.channels-3g2vYe,.guilds-wrapper,.search.search-bar,.theme-dark.chatform,.container-iksrDt,.container-3lnMWU,.theme-dark.title-qAcLxz{background:transparent!important;}.theme-dark.layer,.theme-dark.layers,.typeWindows-15E0Ys{background:rgba(0,0,0,0.18)!important;}`
+		this.themeFixerCSS = `#voice-connection, #friends, .friends-header, .friends-table, .guilds-wrapper, .guild-header header, .channels-wrap, .private-channels .search-bar, .private-channels, .guild-channels, .account, .friend-table-add-header, .chat, .content, .title-wrap:not(.search-bar), .messages-wrapper, .messages .divider span, .messages .divider:before, .message-group-blocked, .is-local-bot-message, .channel-members-loading, .channel-members-loading .heading, .channel-members-loading .member, .typing, .typing-3eiiL_, .container-RYiLUQ, .ui-standard-sidebar-view, .ui-standard-sidebar-view .sidebar-region, .ui-standard-sidebar-view .content-region, .channel-members, .container-2OU7Cz, .title-qAcLxz, .chat form, .channels-3g2vYe, .friends-table, .messages-wrapper, .content .flex-spacer, .container-2OU7Cz, .channel-members, .channels-3g2vYe, .guilds-wrapper, .search .search-bar, .chat form, .container-iksrDt, .container-3lnMWU, .title-qAcLxz {background:transparent!important;} .layer, .layer-kosS71, .layers, .layers-20RVFW, .typeWindows-15E0Ys {background:rgba(0,0,0,0.18)!important;}`;
 		
 		this.themeRepoButtonMarkup = 
 			`<button class="bd-pfbtn bd-themerepobutton">Theme Repo</button>`;
@@ -169,14 +169,14 @@ class ThemeRepo {
 		this.sortPopoutMarkup =
 			`<div class="popout popout-bottom-right no-shadow themerepo-sort-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
 				<div>
-					<div class="context-menu recent-mentions-filter-popout">
-						<div class="item-group">
-							<div option="name" class="item">Name</div>
-							<div option="author" class="item">Author</div>
-							<div option="version" class="item">Version</div>
-							<div option="description" class="item">Description</div>
-							<div option="state" class="item">Update State</div>
-							<div option="fav" class="item">Favorites</div>
+					<div class="context-menu contextMenu-uoJTbz recent-mentions-filter-popout">
+						<div class="item-group itemGroup-oViAgA">
+							<div option="name" class="item item-1XYaYf">Name</div>
+							<div option="author" class="item item-1XYaYf">Author</div>
+							<div option="version" class="item item-1XYaYf">Version</div>
+							<div option="description" class="item item-1XYaYf">Description</div>
+							<div option="state" class="item item-1XYaYf">Update State</div>
+							<div option="fav" class="item item-1XYaYf">Favorites</div>
 						</div>
 					</div>
 				</div>
@@ -185,10 +185,10 @@ class ThemeRepo {
 		this.orderPopoutMarkup =
 			`<div class="popout popout-bottom-right no-shadow themerepo-order-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
 				<div>
-					<div class="context-menu recent-mentions-filter-popout">
-						<div class="item-group">
-							<div option="asc" class="item">Ascending</div>
-							<div option="desc" class="item">Descending</div>
+					<div class="context-menu contextMenu-uoJTbz recent-mentions-filter-popout">
+						<div class="item-group itemGroup-oViAgA">
+							<div option="asc" class="item item-1XYaYf">Ascending</div>
+							<div option="desc" class="item item-1XYaYf">Descending</div>
 						</div>
 					</div>
 				</div>
@@ -290,7 +290,7 @@ class ThemeRepo {
 
 	getDescription () {return "Allows you to preview all themes from the theme repo and download them on the fly. Repo button is in the theme settings.";}
 
-	getVersion () {return "1.2.9";}
+	getVersion () {return "1.3.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -327,6 +327,8 @@ class ThemeRepo {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
+			var observertarget = null;
+
 			this.settingsWindowObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
@@ -343,7 +345,7 @@ class ThemeRepo {
 					}
 				);
 			});
-			if (document.querySelector(".layers")) this.settingsWindowObserver.observe(document.querySelector(".layers"), {childList:true});
+			if (observertarget = document.querySelector(".layers, .layers-20RVFW")) this.settingsWindowObserver.observe(observertarget, {childList:true});
 			
 			this.innerSettingsWindowObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -356,7 +358,8 @@ class ThemeRepo {
 					}
 				);
 			});
-			var settingswindow = document.querySelector(".layer[layer-id='user-settings']");
+			
+			var settingswindow = document.querySelector(".layer[layer-id='user-settings'], .layer-kosS71[layer-id='user-settings']");
 			if (settingswindow) {
 				this.innerSettingsWindowObserver.observe(settingswindow, {childList:true, subtree:true});
 				this.checkIfThemesPage(settingswindow);
