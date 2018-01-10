@@ -134,14 +134,14 @@ class PluginRepo {
 		this.sortPopoutMarkup =
 			`<div class="popout popout-bottom-right no-shadow pluginrepo-sort-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
 				<div>
-					<div class="context-menu recent-mentions-filter-popout">
-						<div class="item-group">
-							<div option="name" class="item">Name</div>
-							<div option="author" class="item">Author</div>
-							<div option="version" class="item">Version</div>
-							<div option="description" class="item">Description</div>
-							<div option="state" class="item">Update State</div>
-							<div option="fav" class="item">Favorites</div>
+					<div class="context-menu contextMenu-uoJTbz recent-mentions-filter-popout">
+						<div class="item-group itemGroup-oViAgA">
+							<div option="name" class="item item-1XYaYf">Name</div>
+							<div option="author" class="item item-1XYaYf">Author</div>
+							<div option="version" class="item item-1XYaYf">Version</div>
+							<div option="description" class="item item-1XYaYf">Description</div>
+							<div option="state" class="item item-1XYaYf">Update State</div>
+							<div option="fav" class="item item-1XYaYf">Favorites</div>
 						</div>
 					</div>
 				</div>
@@ -150,10 +150,10 @@ class PluginRepo {
 		this.orderPopoutMarkup =
 			`<div class="popout popout-bottom-right no-shadow pluginrepo-order-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
 				<div>
-					<div class="context-menu recent-mentions-filter-popout">
-						<div class="item-group">
-							<div option="asc" class="item">Ascending</div>
-							<div option="desc" class="item">Descending</div>
+					<div class="context-menu contextMenu-uoJTbz recent-mentions-filter-popout">
+						<div class="item-group itemGroup-oViAgA">
+							<div option="asc" class="item item-1XYaYf">Ascending</div>
+							<div option="desc" class="item item-1XYaYf">Descending</div>
 						</div>
 					</div>
 				</div>
@@ -235,7 +235,7 @@ class PluginRepo {
 
 	getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
 
-	getVersion () {return "1.3.0";}
+	getVersion () {return "1.3.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -272,6 +272,8 @@ class PluginRepo {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
+			var observertarget = null;
+
 			this.settingsWindowObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
@@ -288,7 +290,7 @@ class PluginRepo {
 					}
 				);
 			});
-			if (document.querySelector(".layers")) this.settingsWindowObserver.observe(document.querySelector(".layers"), {childList:true});
+			if (observertarget = document.querySelector(".layers, .layers-20RVFW")) this.settingsWindowObserver.observe(observertarget, {childList:true});
 			
 			this.innerSettingsWindowObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -301,7 +303,8 @@ class PluginRepo {
 					}
 				);
 			});
-			var settingswindow = document.querySelector(".layer[layer-id='user-settings']");
+			
+			var settingswindow = document.querySelector(".layer[layer-id='user-settings'], .layer-kosS71[layer-id='user-settings']");
 			if (settingswindow) {
 				this.innerSettingsWindowObserver.observe(settingswindow, {childList:true, subtree:true});
 				this.checkIfPluginsPage(settingswindow);
