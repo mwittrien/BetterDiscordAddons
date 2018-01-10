@@ -142,21 +142,21 @@ class ServerHider {
 		this.dividerMarkup = `<div class="divider-1G01Z9 dividerDefault-77PXsz"></div>`;
 
 		this.serverContextEntryMarkup =
-			`<div class="item-group">
-				<div class="item serverhider-item item-subMenu">
+			`<div class="item-group itemGroup-oViAgA">
+				<div class="item item-1XYaYf serverhider-item item-subMenu itemSubMenu-3ZgIw-">
 					<span>REPLACE_context_serverhider_text</span>
 					<div class="hint"></div>
 				</div>
 			</div>`;
 			
 		this.serverContextSubMenuMarkup = 
-			`<div class="context-menu serverhider-submenu">
-				<div class="item-group">
-					<div class="item hideserver-item">
+			`<div class="context-menu contextMenu-uoJTbz serverhider-submenu">
+				<div class="item-group itemGroup-oViAgA">
+					<div class="item item-1XYaYf hideserver-item disabled-dlOjhg disabled">
 						<span>REPLACE_submenu_hideserver_text</span>
 						<div class="hint"></div>
 					</div>
-					<div class="item openhidemenu-item">
+					<div class="item item-1XYaYf openhidemenu-item">
 						<span>REPLACE_submenu_openhidemenu_text</span>
 						<div class="hint"></div>
 					</div>
@@ -168,7 +168,7 @@ class ServerHider {
 
 	getDescription () {return "Hide Servers in your Serverlist";}
 
-	getVersion () {return "2.4.9";}
+	getVersion () {return "2.5.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -196,12 +196,14 @@ class ServerHider {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
+			var observertarget = null;
+
 			this.serverContextObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node.nodeType == 1 && node.className.includes("context-menu")) {
+								if (node.nodeType == 1 && (node.className.includes("context-menu") || node.className.includes("contextMenu-uoJTbz"))) {
 									this.onContextMenu(node);
 								}
 							});
@@ -209,7 +211,7 @@ class ServerHider {
 					}
 				);
 			});
-			if (document.querySelector(".app")) this.serverContextObserver.observe(document.querySelector(".app"), {childList: true});
+			if (observertarget = document.querySelector(".app")) this.serverContextObserver.observe(observertarget, {childList: true});
 			
 			this.serverListObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -230,7 +232,7 @@ class ServerHider {
 					}
 				);
 			});
-			if (document.querySelector(".guilds.scroller")) this.serverListObserver.observe(document.querySelector(".guilds.scroller"), {childList: true});
+			if (observertarget = document.querySelector(".guilds.scroller")) this.serverListObserver.observe(observertarget, {childList: true});
 			
 			$(".guilds.scroller").on("mouseleave." + this.getName(), () => {this.updateAllServers(false);});
 			
@@ -296,66 +298,63 @@ class ServerHider {
 		if (valid) {
 			$(context).append(this.serverContextEntryMarkup)
 				.on("mouseenter", ".serverhider-item", (e) => {
-					this.createContextSubMenu(info, e);
+					this.createContextSubMenu(info, e, context);
 				});
 				
 			BDfunctionsDevilBro.updateContextPosition(context);
 		}
 	}
 	
-	createContextSubMenu (info, e) {
+	createContextSubMenu (info, e, context) {
 		var serverContextSubMenu = $(this.serverContextSubMenuMarkup);
 			
 		serverContextSubMenu
-			.on("click", ".openhidemenu-item", (e2) => {
-				this.showServerModal(e2);
+			.on("click", ".openhidemenu-item", () => {
+				$(context).hide();
+				this.showServerModal();
 			});
 			
 		if (!info.guildCreate) {
 			serverContextSubMenu
-				.on("click", ".hideserver-item", () => {
+				.find(".hideserver-item")
+				.removeClass("disabled").removeClass("disabled-dlOjhg")
+				.on("click", () => {
+					$(context).hide();
 					this.hideServer(info);
 				});
-		}
-		else {
-			serverContextSubMenu.find(".hideserver-item").addClass("disabled");
 		}
 		
 		BDfunctionsDevilBro.appendSubMenu(e.currentTarget, serverContextSubMenu);
 	}
 
-	hideServer (info) {	
-		$(".context-menu").hide();
-		var id = info.id;
-		var serverObj = BDfunctionsDevilBro.getDivOfServer(id);
+	hideServer (info) {
+		var serverObj = BDfunctionsDevilBro.getDivOfServer(info.id);
 		
 		if (!serverObj) return;
 		
 		$(serverObj.div).hide();
 		
-		BDfunctionsDevilBro.saveData(id, {id, visible:false}, this, "servers");
+		BDfunctionsDevilBro.saveData(info.id, {visible:false}, this, "servers");
 	}
 	
-	showServerModal (e) {
-		$(".context-menu").hide();
-		
+	showServerModal () {
 		var serverObjs = BDfunctionsDevilBro.readServerList();
 		
 		var serverHiderModal = $(this.serverHiderModalMarkup);
 		serverHiderModal
-			.on("click", ".folderhideCheckbox", () => {
-				serverHiderModal.find(".hidefolder").toggle($(e.target).prop("checked"));
+			.on("click", ".folderhideCheckbox", (e) => {
+				serverHiderModal.find(".hidefolder").toggle(!$(e.target).prop("checked"));
 			})
-			.on("click", "button.btn-all", () => {
+			.on("click", ".btn-all", () => {
 				var hideAll = $(serverObjs[0].div).is(":visible");
 				for (let serverObj of serverObjs) {
 					$(serverObj.div).toggle(!hideAll);
-					BDfunctionsDevilBro.saveData(serverObj.id, {id:serverObj.id, visible:!hideAll}, this, "servers");
+					BDfunctionsDevilBro.saveData(serverObj.id, {visible:!hideAll}, this, "servers");
 				}
 				$(".serverhiderCheckbox").each((_, checkBox) => {if ($(checkBox).prop("checked") == hideAll) checkBox.click();});
 			});
 			
-		if (!(window.bdplugins["ServerFolders"] && window.pluginCookie["ServerFolders"])) serverHiderModal.find(".folderhideSettings").hide();
+		if (!BDfunctionsDevilBro.isPluginEnabled("ServerFolders")) serverHiderModal.find(".folderhideSettings").hide();
 		
 		for (let serverObj of serverObjs) {
 			
@@ -392,7 +391,7 @@ class ServerHider {
 				.on("click", (event) => {
 					var visible = $(event.target).prop("checked");
 					$(serverObj.div).toggle(visible);
-					BDfunctionsDevilBro.saveData(serverObj.id, {id:serverObj.id, visible:visible}, this, "servers");
+					BDfunctionsDevilBro.saveData(serverObj.id, {visible:visible}, this, "servers");
 				});
 		}
 		BDfunctionsDevilBro.appendModal(serverHiderModal);
@@ -400,20 +399,12 @@ class ServerHider {
 	
 	updateAllServers (write) {
 		for (let serverObj of BDfunctionsDevilBro.readServerList()) {
-			var id, visible;
 			var data = BDfunctionsDevilBro.loadData(serverObj.id, this, "servers");
-			if (data && write) {
-				id = data.id;
-				visible = data.visible;
-			}
-			else {
-				id = serverObj.id;
-				visible = $(serverObj.div).is(":visible");
-			}
 			
+			var visible = data && write ? data.visible : visible = $(serverObj.div).is(":visible");
 			$(serverObj.div).toggle(visible);
 			
-			BDfunctionsDevilBro.saveData(id, {id, visible}, this, "servers");
+			BDfunctionsDevilBro.saveData(serverObj.id, {visible}, this, "servers");
 		}
 	}
 	
