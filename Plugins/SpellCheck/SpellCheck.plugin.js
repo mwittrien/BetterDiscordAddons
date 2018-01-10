@@ -10,20 +10,20 @@ class SpellCheck {
 		this.dictionary = [];
 
 		this.spellCheckContextEntryMarkup =
-			`<div class="item-group">
-				<div class="item similarwords-item item-subMenu">
+			`<div class="item-group itemGroup-oViAgA">
+				<div class="item item-1XYaYf similarwords-item item-subMenu itemSubMenu-3ZgIw-">
 					<span>REPLACE_context_similarwords_text</span>
 					<div class="hint"></div>
 				</div>
-				<div class="item spellcheck-item">
+				<div class="item item-1XYaYf spellcheck-item">
 					<span>REPLACE_context_spellcheck_text</span>
 					<div class="hint"></div>
 				</div>
 			</div>`;
 			
 		this.similarWordsContextSubMenuMarkup = 
-			`<div class="context-menu spellcheck-submenu">
-				<div class="item nosimilars-item">
+			`<div class="context-menu contextMenu-uoJTbz spellcheck-submenu">
+				<div class="item item-1XYaYf nosimilars-item">
 					<span>REPLACE_similarwordssubmenu_none_text</span>
 					<div class="hint"></div>
 				</div>
@@ -69,7 +69,7 @@ class SpellCheck {
 
 	getDescription () {return "Adds a spellcheck to all textareas. Select a word and rightclick it to add it to your dictionary.";}
 
-	getVersion () {return "1.1.1";}
+	getVersion () {return "1.1.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -108,12 +108,14 @@ class SpellCheck {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
+			var observertarget = null;
+
 			this.messageContextObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node.nodeType == 1 && node.className.includes("context-menu")) {
+								if (node.nodeType == 1 && (node.className.includes("context-menu") || node.className.includes("contextMenu-uoJTbz"))) {
 									this.onContextMenu(node);
 								}
 							});
@@ -121,7 +123,7 @@ class SpellCheck {
 					}
 				);
 			});
-			if (document.querySelector(".app")) this.messageContextObserver.observe(document.querySelector(".app"), {childList: true});
+			if (observertarget = document.querySelector(".app")) this.messageContextObserver.observe(observertarget, {childList: true});
 			
 			this.textareaObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -136,7 +138,7 @@ class SpellCheck {
 					}
 				);
 			});
-			if (document.querySelector("#app-mount")) this.textareaObserver.observe(document.querySelector("#app-mount"), {childList: true, subtree:true});
+			if (observertarget = document.querySelector("#app-mount")) this.textareaObserver.observe(observertarget, {childList: true, subtree:true});
 			
 			document.querySelectorAll(".textArea-20yzAH").forEach(textarea => {this.addSpellCheck(textarea);});
 			
@@ -203,7 +205,7 @@ class SpellCheck {
 		if (similarWords.length > 0) {
 			similarWordsContextSubMenu.find(".nosimilars-item").remove();
 			for (let foundWord of similarWords.sort()) {
-				similarWordsContextSubMenu.append(`<div value="${foundWord}" class="item similarword-item"><span>${foundWord}</span><div class="hint"></div></div>`);
+				similarWordsContextSubMenu.append(`<div value="${foundWord}" class="item item-1XYaYf similarword-item"><span>${foundWord}</span><div class="hint"></div></div>`);
 			}
 		}
 		
