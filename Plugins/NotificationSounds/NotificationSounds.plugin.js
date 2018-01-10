@@ -69,7 +69,7 @@ class NotificationSounds {
 	
 	getDescription () {return "Allows you to replace the native sounds of Discord with your own";}
 
-	getVersion () {return "3.0.4";}
+	getVersion () {return "3.0.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -144,7 +144,8 @@ class NotificationSounds {
 				this.loadAudios();
 				this.loadChoices();
 				
-				
+				var observertarget = null;
+
 				this.dmBadgeObserver = new MutationObserver((changes, _) => {
 					this.fireEvent("dm");
 				});
@@ -161,7 +162,7 @@ class NotificationSounds {
 						}
 					);
 				});
-				if (document.querySelector(".dms")) this.dmObserver.observe(document.querySelector(".dms"), {childList: true});
+				if (observertarget = document.querySelector(".dms")) this.dmObserver.observe(observertarget, {childList: true});
 				
 				this.mentionObserver = new MutationObserver((changes, _) => {
 					changes.forEach(
@@ -183,14 +184,14 @@ class NotificationSounds {
 							if (change.removedNodes) {
 								change.removedNodes.forEach((node) => {
 									if (node && node.className === "badge") {
-										this.oldmentions = BDfunctionsDevilBro.getKeyInformation({"node":document.querySelector(".layers"),"key":"mentionCounts"});
+										this.oldmentions = BDfunctionsDevilBro.getKeyInformation({"node":document.querySelector(".layers, .layers-20RVFW"),"key":"mentionCounts"});
 									}
 								});
 							}
 						}
 					);
 				});
-				if (document.querySelector(".guilds.scroller")) this.mentionObserver.observe(document.querySelector(".guilds.scroller"), {childList: true, subtree:true});
+				if (observertarget = document.querySelector(".guilds.scroller")) this.mentionObserver.observe(observertarget, {childList: true, subtree:true});
 				
 				this.mentionBadgeObserver = new MutationObserver((changes, _) => {
 					this.fireEvent("mentioned");
@@ -218,7 +219,7 @@ class NotificationSounds {
 						}
 					);
 				});
-				if (document.querySelector(".channels-3g2vYe")) this.channelListObserver.observe(document.querySelector(".channels-3g2vYe"), {childList: true, subtree: true});
+				if (observertarget = document.querySelector(".channels-3g2vYe")) this.channelListObserver.observe(observertarget, {childList: true, subtree: true});
 				
 				BDfunctionsDevilBro.readServerList().forEach((serverObj) => {
 					var badge = serverObj.div.querySelector(".badge");
