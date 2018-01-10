@@ -216,7 +216,7 @@ BDfunctionsDevilBro.showToast = function (content, options = {}) {
 		let container = document.querySelector(".channels-3g2vYe + div");
 		let memberlist = container ? container.querySelector(".channel-members-wrap") : null;
 		let left = container ? container.getBoundingClientRect().left : 310;
-		let right = memberlist ? memberlist.getBoundingClientRect().left : 0;
+		let right = memberlist ? memberlist.getBoundingClientRect().left : window.outerWidth;
 		let form = container ? container.querySelector("form") : null;
 		let bottom = form ? form.offsetHeight : 80;
 		let toastWrapper = document.createElement("div");
