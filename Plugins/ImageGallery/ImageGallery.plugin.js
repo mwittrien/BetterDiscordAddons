@@ -43,6 +43,8 @@ class ImageGallery {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
+			var observertarget = null;
+
 			this.imageModalObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
@@ -63,7 +65,7 @@ class ImageGallery {
 					}
 				);
 			});
-			if (document.querySelector(".app ~ [class^='theme-']")) this.imageModalObserver.observe(document.querySelector(".app ~ [class^='theme-']"), {childList: true});
+			if (observertarget = document.querySelector(".app ~ [class^='theme-']")) this.imageModalObserver.observe(observertarget, {childList: true});
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 		}
