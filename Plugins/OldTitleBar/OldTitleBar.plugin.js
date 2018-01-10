@@ -54,9 +54,11 @@ class OldTitleBar {
 				</g>
 			</svg>`;
 			
-		this.defaultSettings = {
-			addToSettings:		{value:true, 	description:"Add a Title Bar to Settings Windows."},
-			reloadButton:		{value:false, 	description:"Add a Reload Button to the Title Bar."}
+		this.defaults = {
+			settings: {
+				addToSettings:		{value:true, 	description:"Add a Title Bar to Settings Windows."},
+				reloadButton:		{value:false, 	description:"Add a Reload Button to the Title Bar."}
+			}
 		};
 	}
 
@@ -64,16 +66,16 @@ class OldTitleBar {
 
 	getDescription () {return "Reverts the title bar back to its former self.";}
 
-	getVersion () {return "1.2.9";}
+	getVersion () {return "1.3.0";}
 
 	getAuthor () {return "DevilBro";}
 
 	getSettingsPanel () {
 		if (!this.started || typeof BDfunctionsDevilBro !== "object") return;
-		var settings = this.getSettings(); 
+		var settings = BDfunctionsDevilBro.getAllData(this, "settings"); 
 		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="titleDefault-1CWM9y title-3i-5G_ size18-ZM4Qv- height24-2pMcnc weightNormal-3gw0Lm marginBottom8-1mABJ4">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		for (let key in settings) {
-			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaultSettings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU ${settings[key] ? "valueChecked-3Bzkbm" : "valueUnchecked-XR6AOk"}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
+			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU ${settings[key] ? "valueChecked-3Bzkbm" : "valueUnchecked-XR6AOk"}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
 		}
 		settingshtml += `</div></div>`;
 		
@@ -96,6 +98,8 @@ class OldTitleBar {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
+			var observertarget = null;
+
 			this.settingsWindowObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
@@ -104,7 +108,7 @@ class OldTitleBar {
 								setImmediate(() => {
 									if (node && node.tagName && node.getAttribute("layer-id") || node.querySelector(".ui-standard-sidebar-view")) {
 										$(".divider-1GKkV3").parent().has(".iconInactive-WWHQEI").parent().css("-webkit-app-region", "initial");
-										if (this.getSettings().addToSettings) this.addSettingsTitleBar(node);
+										if (BDfunctionsDevilBro.getData("addToSettings", this, "settings")) this.addSettingsTitleBar(node);
 									}
 								});
 							});
@@ -120,7 +124,7 @@ class OldTitleBar {
 					}
 				);
 			});
-			if (document.querySelector(".layers")) this.settingsWindowObserver.observe(document.querySelector(".layers"), {childList:true});
+			if (observertarget = document.querySelector(".layers, .layers-20RVFW")) this.settingsWindowObserver.observe(observertarget, {childList:true});
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 			
@@ -128,7 +132,10 @@ class OldTitleBar {
 		
 			$(".titleBar-3_fDwJ").addClass("hidden-by-OTB");
 			
-			if (this.getSettings().addToSettings && document.querySelector(".layer[layer-id]")) this.addSettingsTitleBar(document.querySelector(".layer[layer-id]"));
+			var settingswindow = document.querySelector(".layer[layer-id], .layer-kosS71[layer-id]");
+			if (settingswindow && BDfunctionsDevilBro.getData("addToSettings", this, "settings")) {
+				this.addSettingsTitleBar(settingswindow);
+			}
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -158,21 +165,6 @@ class OldTitleBar {
 
 	
 	// begin of own functions
-	
-	getSettings () {
-		var oldSettings = BDfunctionsDevilBro.loadAllData(this.getName(), "settings"), newSettings = {}, saveSettings = false;
-		for (let key in this.defaultSettings) {
-			if (oldSettings[key] == null) {
-				newSettings[key] = this.defaultSettings[key].value;
-				saveSettings = true;
-			}
-			else {
-				newSettings[key] = oldSettings[key];
-			}
-		}
-		if (saveSettings) BDfunctionsDevilBro.saveAllData(newSettings, this.getName(), "settings");
-		return newSettings;
-	}
 
 	updateSettings (settingspanel) {
 		var settings = {};
@@ -181,12 +173,12 @@ class OldTitleBar {
 			input.parentElement.classList.toggle("valueChecked-3Bzkbm", input.checked);
 			input.parentElement.classList.toggle("valueUnchecked-XR6AOk", !input.checked);
 		}
-		BDfunctionsDevilBro.saveAllData(settings, this.getName(), "settings");
+		BDfunctionsDevilBro.saveAllData(settings, this, "settings");
 	}
 	
 	addTitleBar () {
 		this.removeTitleBar();
-		var settings = this.getSettings();
+		var settings = BDfunctionsDevilBro.getAllData(this, "settings");
 		if (settings.reloadButton) {
 			$(".divider-1GKkV3").parent().has(".iconInactive-WWHQEI")
 				.append(this.dividerMarkup)
@@ -218,7 +210,7 @@ class OldTitleBar {
 	addSettingsTitleBar (settingspane) {
 		if (!settingspane.querySelector(".dividerOTB, .reloadButtonOTB, .minButtonOTB, .maxButtonOTB, .closeButtonOTB")) {
 			var settingsbar = $(`<div class="settings-titlebar-OTB"></div>`);
-			var settings = this.getSettings();
+			var settings = BDfunctionsDevilBro.getAllData(this, "settings");
 			if (settings.reloadButton) {
 				settingsbar
 					.append(this.reloadButtonMarkup)
