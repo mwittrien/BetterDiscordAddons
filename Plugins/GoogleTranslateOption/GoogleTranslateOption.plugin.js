@@ -28,16 +28,16 @@ class GoogleTranslateOption {
 		};
 
 		this.messageContextEntryMarkup =
-			`<div class="item-group">
-				<div class="item messagetranslateoption-item">
+			`<div class="item-group itemGroup-oViAgA">
+				<div class="item item-1XYaYf messagetranslateoption-item">
 					<span>REPLACE_context_messagetranslateoption_text</span>
 					<div class="hint"></div>
 				</div>
 			</div>`;
 
 		this.messageContextEntryMarkup2 =
-			`<div class="item-group">
-				<div class="item googletranslateoption-item">
+			`<div class="item-group itemGroup-oViAgA">
+				<div class="item item-1XYaYf googletranslateoption-item">
 					<span>REPLACE_context_googletranslateoption_text</span>
 					<div class="hint"></div>
 				</div>
@@ -152,7 +152,7 @@ class GoogleTranslateOption {
 
 	getDescription () {return "Adds a Google Translate option to your context menu, which shows a preview of the translated text and on click will open the selected text in Google Translate. Also adds a translation button to your textareas, which will automatically translate the text for you before it is being send.";}
 
-	getVersion () {return "1.2.5";}
+	getVersion () {return "1.2.6";}
 	
 	getAuthor () {return "DevilBro";}
 	
@@ -189,12 +189,14 @@ class GoogleTranslateOption {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
+			var observertarget = null;
+
 			this.messageContextObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node.nodeType == 1 && node.className.includes("context-menu")) {
+								if (node.nodeType == 1 && (node.className.includes("context-menu") || node.className.includes("contextMenu-uoJTbz"))) {
 									this.onContextMenu(node);
 								}
 							});
@@ -202,7 +204,7 @@ class GoogleTranslateOption {
 					}
 				);
 			});
-			if (document.querySelector(".app")) this.messageContextObserver.observe(document.querySelector(".app"), {childList: true});
+			if (observertarget = document.querySelector(".app")) this.messageContextObserver.observe(observertarget, {childList: true});
 			
 			this.chatWindowObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -220,7 +222,7 @@ class GoogleTranslateOption {
 					}
 				);
 			});
-			if (document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(document.querySelector(".messages.scroller"), {childList:true, subtree:true});
+			if (observertarget = document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(observertarget, {childList:true, subtree:true});
 			
 			this.optionPopoutObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -236,7 +238,7 @@ class GoogleTranslateOption {
 					}
 				);
 			});
-			if (document.querySelector(".popouts")) this.optionPopoutObserver.observe(document.querySelector(".popouts"), {childList: true});
+			if (observertarget = document.querySelector(".popouts")) this.optionPopoutObserver.observe(observertarget, {childList: true});
 			
 			$(document).off("click." + this.getName(), ".btn-option").off("contextmenu." + this.getName(), ".message")
 				.on("click." + this.getName(), ".btn-option", (e) => {
@@ -261,7 +263,7 @@ class GoogleTranslateOption {
 					}
 				);
 			});
-			if (document.querySelector("#app-mount")) this.textareaObserver.observe(document.querySelector("#app-mount"), {childList: true, subtree:true});
+			if (observertarget = document.querySelector("#app-mount")) this.textareaObserver.observe(observertarget, {childList: true, subtree:true});
 			
 			document.querySelectorAll("textarea").forEach(textarea => {this.addTranslationButton(textarea);});
 			
@@ -302,7 +304,7 @@ class GoogleTranslateOption {
 	
 	onSwitch () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			if (document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(document.querySelector(".messages.scroller"), {childList:true, subtree:true});
+			if (observertarget = document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(observertarget, {childList:true, subtree:true});
 			document.querySelectorAll(".messages .message").forEach(message => {this.addOptionButton(message);});
 		}
 	}
@@ -329,11 +331,11 @@ class GoogleTranslateOption {
 	
 	onContextMenu (context) {
 		if (!context || !context.tagName || !context.parentElement) return;
-		for (let group of context.querySelectorAll(".item-group")) {
+		for (let group of context.querySelectorAll(".item-group, .itemGroup-oViAgA")) {
 			if (!context.querySelector(".messagetranslateoption-item") && BDfunctionsDevilBro.getKeyInformation({"node":group, "key":"displayName", "value":"MessagePinItem"})) {
 				$(this.messageContextEntryMarkup).insertAfter(group)
 					.on("click", ".messagetranslateoption-item", () => {
-						$(".context-menu").hide();
+						$(context).hide();
 						this.translateMessage();
 					});
 				
@@ -355,6 +357,7 @@ class GoogleTranslateOption {
 							}
 						})
 						.on("click", ".googletranslateoption-item", (e) => {
+							$(context).hide();
 							window.open(this.getGoogleTranslatePageURL(input.id, output.id, text), "_blank");
 						});
 				}
