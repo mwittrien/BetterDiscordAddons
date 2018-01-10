@@ -194,6 +194,8 @@ class EmojiStatistics {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
+			var observertarget = null;
+
 			this.emojiPickerObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
@@ -220,7 +222,7 @@ class EmojiStatistics {
 					}
 				);
 			});
-			if (document.querySelector(".popouts")) this.emojiPickerObserver.observe(document.querySelector(".popouts"), {childList: true});
+			if (observertarget = document.querySelector(".popouts")) this.emojiPickerObserver.observe(observertarget, {childList: true});
 			
 			this.GuildEmojis = BDfunctionsDevilBro.WebModules.findByProperties(["getGuildEmoji", "getDisambiguatedEmojiContext"]);
 			
