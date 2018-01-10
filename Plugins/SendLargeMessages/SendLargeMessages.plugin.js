@@ -238,21 +238,10 @@ class SendLargeMessages {
 	}
 	
 	sendMessage (text) {
-		var textarea = document.querySelector(".channelTextArea-1HTP3C");
+		var textarea = document.querySelector(".channelTextArea-1HTP3C textarea");
 		if (textarea) {
-			var textinput = textarea.querySelector("textarea");
-			if (textinput) {
-				BDfunctionsDevilBro.getOwnerInstance({"node":textarea, "name":"ChannelTextAreaForm", "up":true}).setState({textValue:text});
-				var options = { key: "Enter", code: "Enter", which: 13, keyCode: 13, bubbles: true };
-				var down = new KeyboardEvent("keydown", options);
-				Object.defineProperty(down, "keyCode", {value: 13});
-				Object.defineProperty(down, "which", {value: 13});
-				var press = new KeyboardEvent("keypress", options);
-				Object.defineProperty(press, "keyCode", {value: 13});
-				Object.defineProperty(press, "which", {value: 13});
-				textinput.dispatchEvent(down);
-				textinput.dispatchEvent(press);
-			}
+			BDfunctionsDevilBro.getOwnerInstance({"node":textarea, "name":"ChannelTextAreaForm", "up":true}).setState({textValue:text});
+			BDfunctionsDevilBro.triggerSend(textarea);
 		}
 	}
 	
