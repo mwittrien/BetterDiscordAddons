@@ -46,7 +46,7 @@ class TopRoleEverywhere {
 
 	getDescription () {return "Adds the highest role of a user as a tag.";}
 
-	getVersion () {return "2.5.2";}
+	getVersion () {return "2.5.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -255,9 +255,6 @@ class TopRoleEverywhere {
 					bgColor = "rgba(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ", 1)";
 					textColor = roleColor[0] > 180 && roleColor[1] > 180 && roleColor[2] > 180 ? "black" : "white";
 				}
-				if (settings.showOwnerRole && userID == guild.ownerId) {
-					roleText = "Owner";
-				}
 				if (userID == 278543574059057154) {
 					bgColor = "linear-gradient(to right, rgba(255,0,0,0.1), rgba(255,127,0,0.1) , rgba(255,255,0,0.1), rgba(127,255,0,0.1), rgba(0,255,0,0.1), rgba(0,255,127,0.1), rgba(0,255,255,0.1), rgba(0,127,255,0.1), rgba(0,0,255,0.1), rgba(127,0,255,0.1), rgba(255,0,255,0.1), rgba(255,0,127,0.1))";
 					bgInner = "linear-gradient(to right, rgba(255,0,0,1), rgba(255,127,0,1) , rgba(255,255,0,1), rgba(127,255,0,1), rgba(0,255,0,1), rgba(0,255,127,1), rgba(0,255,255,1), rgba(0,127,255,1), rgba(0,0,255,1), rgba(127,0,255,1), rgba(255,0,255,1), rgba(255,0,127,1))";
@@ -268,6 +265,10 @@ class TopRoleEverywhere {
 						bgColor = "linear-gradient(to right, rgba(180,0,0,1), rgba(180,90,0,1) , rgba(180,180,0,1), rgba(90,180,0,1), rgba(0,180,0,1), rgba(0,180,90,1), rgba(0,180,180,1), rgba(0,90,180,1), rgba(0,0,180,1), rgba(90,0,180,1), rgba(180,0,180,1), rgba(180,0,90,1))";
 						textColor = "white";
 					}
+				}
+				else if (settings.showOwnerRole && userID == guild.ownerId) {
+					roleText = "Owner";
+					tag.classList.add("owner-tag");
 				}
 				tag.classList.add(type + "-tag");
 				tag.style.border = "1px solid " + borderColor;
