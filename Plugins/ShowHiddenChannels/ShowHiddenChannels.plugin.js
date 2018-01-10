@@ -111,6 +111,8 @@ class ShowHiddenChannels {
 			this.GuildChannels = BDfunctionsDevilBro.WebModules.findByProperties(["getChannels", "getDefaultChannel"]);
 			this.Permissions = BDfunctionsDevilBro.WebModules.findByProperties(["Permissions", "ActivityTypes"]).Permissions;
 			
+			var observertarget = null;
+
 			this.channelListObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
@@ -124,7 +126,7 @@ class ShowHiddenChannels {
 					}
 				);
 			});
-			if (document.querySelector(".channels-3g2vYe")) this.channelListObserver.observe(document.querySelector(".channels-3g2vYe"), {childList: true, subtree: true});
+			if (observertarget = document.querySelector(".channels-3g2vYe")) this.channelListObserver.observe(observertarget, {childList: true, subtree: true});
 			
 			this.displayHiddenChannels();
 		}
