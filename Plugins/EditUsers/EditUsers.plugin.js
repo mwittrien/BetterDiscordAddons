@@ -43,21 +43,21 @@ class EditUsers {
 		this.tagMarkup = `<span class="user-tag"></span>`;
 
 		this.userContextEntryMarkup =
-			`<div class="item-group">
-				<div class="item localusersettings-item item-subMenu">
+			`<div class="item-group itemGroup-oViAgA">
+				<div class="item item-1XYaYf localusersettings-item item-subMenu itemSubMenu-3ZgIw-">
 					<span>REPLACE_context_localusersettings_text</span>
 					<div class="hint"></div>
 				</div>
 			</div>`;
 			
 		this.userContextSubMenuMarkup = 
-			`<div class="context-menu editusers-submenu">
-				<div class="item-group">
-					<div class="item usersettings-item">
+			`<div class="context-menu contextMenu-uoJTbz editusers-submenu">
+				<div class="item-group itemGroup-oViAgA">
+					<div class="item item-1XYaYf usersettings-item">
 						<span>REPLACE_submenu_usersettings_text</span>
 						<div class="hint"></div>
 					</div>
-					<div class="item resetsettings-item">
+					<div class="item item-1XYaYf resetsettings-item disabled-dlOjhg disabled">
 						<span>REPLACE_submenu_resetsettings_text</span>
 						<div class="hint"></div>
 					</div>
@@ -181,7 +181,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "2.0.8";}
+	getVersion () {return "2.0.9";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -220,12 +220,14 @@ class EditUsers {
 			this.IconUtils = BDfunctionsDevilBro.WebModules.findByProperties(["getUserAvatarURL"]);
 			this.MemberPerms = BDfunctionsDevilBro.WebModules.findByProperties(["getNicknames", "getNick"]);
 			
+			var observertarget = null;
+
 			this.userContextObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.nodeType == 1 && node.className.includes("context-menu")) {
+								if (node && node.nodeType == 1 && (node.className.includes("context-menu") || node.className.includes("contextMenu-uoJTbz"))) {
 									this.onContextMenu(node);
 								}
 							});
@@ -233,7 +235,7 @@ class EditUsers {
 					}
 				);
 			});
-			if (document.querySelector(".app")) this.userContextObserver.observe(document.querySelector(".app"), {childList: true});
+			if (observertarget = document.querySelector(".app")) this.userContextObserver.observe(observertarget, {childList: true});
 			
 			this.dmObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -246,7 +248,7 @@ class EditUsers {
 					}
 				);
 			});
-			if (document.querySelector(".dms")) this.dmObserver.observe(document.querySelector(".dms"), {childList: true});
+			if (observertarget = document.querySelector(".dms")) this.dmObserver.observe(observertarget, {childList: true});
 			
 			this.channelListObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -264,7 +266,7 @@ class EditUsers {
 					}
 				);
 			});
-			if (document.querySelector(".channels-3g2vYe")) this.channelListObserver.observe(document.querySelector(".channels-3g2vYe"), {childList: true, subtree: true});
+			if (observertarget = document.querySelector(".channels-3g2vYe")) this.channelListObserver.observe(observertarget, {childList: true, subtree: true});
 			
 			this.friendListObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -279,7 +281,7 @@ class EditUsers {
 					}
 				);
 			});
-			if (document.querySelector("#friends")) this.friendListObserver.observe(document.querySelector("#friends"), {childList:true, subtree:true});
+			if (observertarget = document.querySelector("#friends")) this.friendListObserver.observe(observertarget, {childList:true, subtree:true});
 			
 			this.userListObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -294,7 +296,7 @@ class EditUsers {
 					}
 				);
 			});
-			if (document.querySelector(".channel-members")) this.userListObserver.observe(document.querySelector(".channel-members"), {childList:true});
+			if (observertarget = document.querySelector(".channel-members")) this.userListObserver.observe(observertarget, {childList:true});
 			
 			this.chatWindowObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -329,7 +331,7 @@ class EditUsers {
 					}
 				);
 			});
-			if (document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(document.querySelector(".messages.scroller"), {childList:true, subtree:true});
+			if (observertarget = document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(observertarget, {childList:true, subtree:true});
 			
 			this.userPopoutObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -344,7 +346,7 @@ class EditUsers {
 					}
 				);
 			});
-			if (document.querySelector(".popouts")) this.userPopoutObserver.observe(document.querySelector(".popouts"), {childList: true});
+			if (observertarget = document.querySelector(".popouts")) this.userPopoutObserver.observe(observertarget, {childList: true});
 			
 			this.userProfilModalObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -359,7 +361,7 @@ class EditUsers {
 					}
 				);
 			});
-			if (document.querySelector(".app ~ [class^='theme-']")) this.userProfilModalObserver.observe(document.querySelector(".app ~ [class^='theme-']"), {childList: true});
+			if (observertarget = document.querySelector(".app ~ [class^='theme-']")) this.userProfilModalObserver.observe(observertarget, {childList: true});
 			
 			this.settingsWindowObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -372,7 +374,7 @@ class EditUsers {
 					}
 				);
 			});
-			if (document.querySelector(".layers")) this.settingsWindowObserver.observe(document.querySelector(".layers"), {childList:true});
+			if (observertarget = document.querySelector(".layers, .layers-20RVFW")) this.settingsWindowObserver.observe(observertarget, {childList:true});
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 			
@@ -407,9 +409,9 @@ class EditUsers {
 	onSwitch () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.loadAllUsers();
-			if (document.querySelector(".channel-members")) this.userListObserver.observe(document.querySelector(".channel-members"), {childList:true});
-			if (document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(document.querySelector(".messages.scroller"), {childList:true, subtree:true});
-			if (document.querySelector("#friends")) this.friendListObserver.observe(document.querySelector("#friends"), {childList:true, subtree:true});
+			if (observertarget = document.querySelector(".channel-members")) this.userListObserver.observe(observertarget, {childList:true});
+			if (observertarget = document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(observertarget, {childList:true, subtree:true});
+			if (observertarget = document.querySelector("#friends")) this.friendListObserver.observe(observertarget, {childList:true, subtree:true});
 		}
 	}
 
@@ -462,32 +464,31 @@ class EditUsers {
 		if (info && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"UserNoteItem"})) {
 			$(context).append(this.userContextEntryMarkup)
 				.on("mouseenter", ".localusersettings-item", (e) => {
-					this.createContextSubMenu(info, e);
+					this.createContextSubMenu(info, e, context);
 				});
 				
 			BDfunctionsDevilBro.updateContextPosition(context);
 		}
 	}
 	
-	createContextSubMenu (info, e) {
+	createContextSubMenu (info, e, context) {
 		var userContextSubMenu = $(this.userContextSubMenuMarkup);
 		
 		userContextSubMenu
 			.on("click", ".usersettings-item", () => {
-				$(".context-menu").hide();
+				$(context).hide();
 				this.showUserSettings(info);
 			});
 			
 		if (BDfunctionsDevilBro.loadData(info.id, this, "users")) {
 			userContextSubMenu
-				.on("click", ".resetsettings-item", () => {
-					$(".context-menu").hide();
+				.find(".resetsettings-item")
+				.removeClass("disabled").removeClass("disabled-dlOjhg")
+				.on("click", () => {
+					$(context).hide();
 					BDfunctionsDevilBro.removeData(info.id, this, "users");
 					this.loadAllUsers();
 				});
-		}
-		else {
-			userContextSubMenu.find(".resetsettings-item").addClass("disabled");
 		}
 		
 		BDfunctionsDevilBro.appendSubMenu(e.currentTarget, userContextSubMenu);
