@@ -28,19 +28,19 @@ class GoogleSearchReplace {
 		};
 
 		this.messageContextEntryMarkup =
-			`<div class="item googlereplacesearch-item item-subMenu">
+			`<div class="item item-1XYaYf googlereplacesearch-item item-subMenu itemSubMenu-3ZgIw-">
 				<span>REPLACE_context_googlesearchreplace_text</span>
 				<div class="hint"></div>
 			</div>`;
 			
 		this.messageContextSubMenuMarkup = 
-			`<div class="context-menu googleReplaceSearchSubMenu">
-				<div class="item-group">
-					<div class="item alldisabled-item disabled">
+			`<div class="context-menu contextMenu-uoJTbz googleReplaceSearchSubMenu">
+				<div class="item-group itemGroup-oViAgA itemGroup-oViAgA">
+					<div class="item item-1XYaYf alldisabled-item disabled-dlOjhg disabled">
 						<span>REPLACE_submenu_disabled_text</span>
 						<div class="hint"></div>
 					</div>
-					${Object.keys(this.defaults.engines).map((key, i) => `<div engine="${key}" class="item GRS-item"><span>${this.defaults.engines[key].name}</span><div class="hint"></div></div>`).join("")}
+					${Object.keys(this.defaults.engines).map((key, i) => `<div engine="${key}" class="item item-1XYaYf GRS-item"><span>${this.defaults.engines[key].name}</span><div class="hint"></div></div>`).join("")}
 				</div>
 			</div>`;
 	}
@@ -49,7 +49,7 @@ class GoogleSearchReplace {
 
 	getDescription () {return "Replaces the default Google Text Search with a selection menu of several search engines.";}
 
-	getVersion () {return "1.0.8";}
+	getVersion () {return "1.0.9";}
 	
 	getAuthor () {return "DevilBro";}
 
@@ -83,12 +83,14 @@ class GoogleSearchReplace {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
+			var observertarget = null;
+
 			this.messageContextObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node.nodeType == 1 && node.className.includes("context-menu")) {
+								if (node.nodeType == 1 && (node.className.includes("context-menu") || node.className.includes("contextMenu-uoJTbz"))) {
 									this.onContextMenu(node);
 								}
 							});
@@ -96,7 +98,7 @@ class GoogleSearchReplace {
 					}
 				);
 			});
-			if (document.querySelector(".app")) this.messageContextObserver.observe(document.querySelector(".app"), {childList: true});
+			if (observertarget = document.querySelector(".app")) this.messageContextObserver.observe(observertarget, {childList: true});
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -131,14 +133,14 @@ class GoogleSearchReplace {
 	
 	onContextMenu (context) {
 		if (!context || !context.tagName || !context.parentElement || context.querySelector(".googlereplacesearch-item")) return;
-		for (let group of context.querySelectorAll(".item-group")) {
+		for (let group of context.querySelectorAll(".item-group, .itemGroup-oViAgA")) {
 			if (BDfunctionsDevilBro.getKeyInformation({"node":group, "key":"handleSearchWithGoogle"})) {
 				var text = BDfunctionsDevilBro.getKeyInformation({"node":group, "key":"value"});
 				if (text) {
-					$(group).find(".item").hide();
+					$(group).find(".item, .item-1XYaYf").hide();
 					$(group).append(this.messageContextEntryMarkup)
 						.on("mouseenter", ".googlereplacesearch-item", (e) => {
-							this.createContextSubMenu(text, e);
+							this.createContextSubMenu(text, e, context);
 						});
 				
 					BDfunctionsDevilBro.updateContextPosition(context);
@@ -153,7 +155,7 @@ class GoogleSearchReplace {
 		
 		messageContextSubMenu
 			.on("click", ".GRS-item", (e2) => {
-				$(".context-menu").hide();
+				$(context).hide();
 				var engine = e2.currentTarget.getAttribute("engine");
 				window.open(this.defaults.engines[engine].url.replace(this.textUrlReplaceString, encodeURIComponent(text)), "_blank");
 			});
