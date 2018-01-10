@@ -25,12 +25,12 @@ class RepoControls {
 		this.sortPopoutMarkup =
 			`<div class="popout popout-bottom-right no-shadow repocontrols-sort-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
 				<div>
-					<div class="context-menu recent-mentions-filter-popout">
-						<div class="item-group">
-							<div option="name" class="item">Name</div>
-							<div option="author" class="item">Author</div>
-							<div option="version" class="item">Version</div>
-							<div option="description" class="item">Description</div>
+					<div class="context-menu contextMenu-uoJTbz recent-mentions-filter-popout">
+						<div class="item-group itemGroup-oViAgA">
+							<div option="name" class="item item-1XYaYf">Name</div>
+							<div option="author" class="item item-1XYaYf">Author</div>
+							<div option="version" class="item item-1XYaYf">Version</div>
+							<div option="description" class="item item-1XYaYf">Description</div>
 						</div>
 					</div>
 				</div>
@@ -39,10 +39,10 @@ class RepoControls {
 		this.orderPopoutMarkup =
 			`<div class="popout popout-bottom-right no-shadow repocontrols-order-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
 				<div>
-					<div class="context-menu recent-mentions-filter-popout">
-						<div class="item-group">
-							<div option="asc" class="item">Ascending</div>
-							<div option="desc" class="item">Descending</div>
+					<div class="context-menu contextMenu-uoJTbz recent-mentions-filter-popout">
+						<div class="item-group itemGroup-oViAgA">
+							<div option="asc" class="item item-1XYaYf">Ascending</div>
+							<div option="desc" class="item item-1XYaYf">Descending</div>
 						</div>
 					</div>
 				</div>
@@ -107,7 +107,7 @@ class RepoControls {
 
 	getDescription () {return "Lets you sort and filter your list of downloaded Themes and Plugins.";}
 
-	getVersion () {return "1.0.8";}
+	getVersion () {return "1.0.9";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -139,6 +139,8 @@ class RepoControls {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
+			var observertarget = null;
+
 			this.settingsWindowObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
@@ -155,7 +157,7 @@ class RepoControls {
 					}
 				);
 			});
-			if (document.querySelector(".layers")) this.settingsWindowObserver.observe(document.querySelector(".layers"), {childList:true});
+			if (observertarget = document.querySelector(".layers, .layers-20RVFW")) this.settingsWindowObserver.observe(observertarget, {childList:true});
 			
 			this.innerSettingsWindowObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -176,7 +178,8 @@ class RepoControls {
 					}
 				);
 			});
-			var settingswindow = document.querySelector(".layer[layer-id='user-settings']");
+			
+			var settingswindow = document.querySelector(".layer[layer-id='user-settings'], .layer-kosS71[layer-id='user-settings']");
 			if (settingswindow) {
 				this.innerSettingsWindowObserver.observe(settingswindow, {childList:true, subtree:true});
 				if (this.getSettingsPageType(settingswindow)) this.addControls(settingswindow.querySelector(".bda-slist"));
@@ -217,7 +220,7 @@ class RepoControls {
 	}
 	
 	getSettingsPageType (container) {
-		if (typeof container === "undefined") container = document.querySelector(".layer[layer-id='user-settings']");
+		if (typeof container === "undefined") container = document.querySelector(".layer[layer-id='user-settings'], .layer-kosS71[layer-id='user-settings']");
 		if (container && container.tagName) {
 			var folderbutton = container.querySelector(".bd-pfbtn");
 			if (folderbutton) {
@@ -289,7 +292,7 @@ class RepoControls {
 	}
 	
 	addEntries (container, repoControls) {
-		$(container).find("li").remove();
+		$(container).find(".trashIcon, li").remove();
 		
 		var searchstring = repoControls.find("#input-search").val().replace(/[<|>]/g, "").toUpperCase();
 		
@@ -301,8 +304,8 @@ class RepoControls {
 		var settings = BDfunctionsDevilBro.getAllData(this, "settings");
 		for (let entry of entries) {
 			container.appendChild(entry.div);
-			if (settings.addDeleteButton) 	this.addDeleteButton(entry);
 			if (settings.enableHTML) 		this.changeTextToHTML(entry.div);
+			if (settings.addDeleteButton) 	this.addDeleteButton(entry);
 		}
 	}
 	
