@@ -93,21 +93,21 @@ class ServerFolders {
 			}`;
 
 		this.serverContextEntryMarkup =
-			`<div class="item-group">
-				<div class="item serverfolders-item item-subMenu">
+			`<div class="item-group itemGroup-oViAgA">
+				<div class="item item-1XYaYf serverfolders-item item-subMenu itemSubMenu-3ZgIw-">
 					<span>REPLACE_servercontext_serverfolders_text</span>
 					<div class="hint"></div>
 				</div>
 			</div>`;
 			
 		this.serverContextSubMenuMarkup = 
-			`<div class="context-menu serverfolders-submenu">
-				<div class="item-group">
-					<div class="item createfolder-item">
+			`<div class="context-menu contextMenu-uoJTbz serverfolders-submenu">
+				<div class="item-group itemGroup-oViAgA">
+					<div class="item item-1XYaYf createfolder-item">
 						<span>REPLACE_serversubmenu_createfolder_text</span>
 						<div class="hint"></div>
 					</div>
-					<div class="item removefromfolder-item disabled">
+					<div class="item item-1XYaYf removefromfolder-item disabled-dlOjhg disabled">
 						<span>REPLACE_serversubmenu_removefromfolder_text</span>
 						<div class="hint"></div>
 					</div>
@@ -115,17 +115,17 @@ class ServerFolders {
 			</div>`;
 			
 		this.folderContextMarkup = 
-			`<div class="context-menu folderSettings invertY">
-				<div class="item-group">
-					<div class="item unreadfolder-item">
+			`<div class="context-menu contextMenu-uoJTbz folderSettings">
+				<div class="item-group itemGroup-oViAgA">
+					<div class="item item-1XYaYf unreadfolder-item">
 						<span>REPLACE_foldercontext_unreadfolder_text</span>
 						<div class="hint"></div>
 					</div>
-					<div class="item foldersettings-item">
+					<div class="item item-1XYaYf foldersettings-item">
 						<span>REPLACE_foldercontext_foldersettings_text</span>
 						<div class="hint"></div>
 					</div>
-					<div class="item removefolder-item">
+					<div class="item item-1XYaYf removefolder-item">
 						<span>REPLACE_foldercontext_removefolder_text</span>
 						<div class="hint"></div>
 					</div>
@@ -253,7 +253,7 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.4.6";}
+	getVersion () {return "5.4.7";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -286,12 +286,14 @@ class ServerFolders {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
+			var observertarget = null;
+
 			this.serverContextObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.nodeType == 1 && node.className.includes("context-menu")) {
+								if (node && node.nodeType == 1 && (node.className.includes("context-menu") || node.className.includes("contextMenu-uoJTbz"))) {
 									this.onContextMenu(node);
 								}
 							});
@@ -299,7 +301,7 @@ class ServerFolders {
 					}
 				);
 			});
-			if (document.querySelector(".app")) this.serverContextObserver.observe(document.querySelector(".app"), {childList: true});
+			if (observertarget = document.querySelector(".app")) this.serverContextObserver.observe(observertarget, {childList: true});
 			
 			this.serverListObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -339,7 +341,7 @@ class ServerFolders {
 					}
 				);
 			});
-			if (document.querySelector(".guilds.scroller")) this.serverListObserver.observe(document.querySelector(".guilds.scroller"), {childList: true, attributes: true, subtree: true});
+			if (observertarget = document.querySelector(".guilds.scroller")) this.serverListObserver.observe(observertarget, {childList: true, attributes: true, subtree: true});
 			
 			this.settingsWindowObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -352,7 +354,7 @@ class ServerFolders {
 					}
 				);
 			});
-			if (document.querySelector(".layers")) this.settingsWindowObserver.observe(document.querySelector(".layers"), {childList:true});
+			if (observertarget = document.querySelector(".layers, .layers-20RVFW")) this.settingsWindowObserver.observe(observertarget, {childList:true});
 			
 			this.badgeObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -460,28 +462,31 @@ class ServerFolders {
 		if (info && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"GuildLeaveGroup"})) {
 			$(context).append(this.serverContextEntryMarkup)
 				.on("mouseenter", ".serverfolders-item", (e) => {
-					this.createContextSubMenu(info, e);
+					this.createContextSubMenu(info, e, context);
 				});
 				
 			BDfunctionsDevilBro.updateContextPosition(context);
 		}
 	}
 	
-	createContextSubMenu (info, e) {
+	createContextSubMenu (info, e, context) {
 		var serverObj = BDfunctionsDevilBro.getDivOfServer(info.id);
 		
 		var serverContextSubMenu = $(this.serverContextSubMenuMarkup);
 		
 		serverContextSubMenu
 			.on("click", ".createfolder-item", () => {
+				$(context).hide();
 				this.createNewFolder(serverObj);
 			});
 		
 		var folderDiv = this.getFolderOfServer(serverObj);
 		if (folderDiv) {
-			serverContextSubMenu.find(".removefromfolder-item")
-				.removeClass("disabled")
+			serverContextSubMenu
+				.find(".removefromfolder-item")
+				.removeClass("disabled").removeClass("disabled-dlOjhg")
 				.on("click", () => {
+					$(context).hide();
 					this.removeServerFromFolder(serverObj, folderDiv);
 				});
 		}
@@ -537,7 +542,6 @@ class ServerFolders {
 	}
 	
 	removeServerFromFolder (serverObj, folderDiv) {
-		$(".context-menu").hide();
 		var data = BDfunctionsDevilBro.loadData(folderDiv.id, this, "folders");
 		if (serverObj && data) {
 			BDfunctionsDevilBro.removeFromArray(data.servers, serverObj.id);
@@ -552,8 +556,6 @@ class ServerFolders {
 	}
 	
 	createNewFolder (serverObj) {
-		$(".context-menu").hide();
-		
 		if (!serverObj) return;
 		
 		var folderID = 		this.generateFolderID();
