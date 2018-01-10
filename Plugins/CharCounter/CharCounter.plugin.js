@@ -48,6 +48,8 @@ class CharCounter {
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 			
+			var observertarget = null;
+
 			this.textareaObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
@@ -61,7 +63,7 @@ class CharCounter {
 					}
 				);
 			});
-			if (document.querySelector("#app-mount")) this.textareaObserver.observe(document.querySelector("#app-mount"), {childList: true, subtree:true});
+			if (observertarget = document.querySelector("#app-mount")) this.textareaObserver.observe(observertarget, {childList: true, subtree:true});
 			
 			document.querySelectorAll("textarea").forEach(textarea => {this.appendCounter(textarea);});
 		}
