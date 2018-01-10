@@ -27,7 +27,7 @@ class CompleteTimestamps {
 
 	getDescription () {return "Replace all timestamps with complete timestamps.";}
 
-	getVersion () {return "1.0.3";}
+	getVersion () {return "1.0.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -69,6 +69,8 @@ class CompleteTimestamps {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
+			var observertarget = null;
+
 			this.messageObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
@@ -85,7 +87,7 @@ class CompleteTimestamps {
 					}
 				);
 			});
-			if (document.querySelector("#app-mount")) this.messageObserver.observe(document.querySelector("#app-mount"), {childList: true, subtree: true});
+			if (observertarget = document.querySelector("#app-mount")) this.messageObserver.observe(observertarget, {childList: true, subtree: true});
 			
 			this.settingsWindowObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -101,7 +103,7 @@ class CompleteTimestamps {
 					}
 				);
 			});
-			if (document.querySelector(".layers")) this.settingsWindowObserver.observe(document.querySelector(".layers"), {childList:true});
+			if (observertarget = document.querySelector(".layers, .layers-20RVFW")) this.settingsWindowObserver.observe(observertarget, {childList:true});
 			
 			this.languages = Object.assign({},BDfunctionsDevilBro.languages);
 			
