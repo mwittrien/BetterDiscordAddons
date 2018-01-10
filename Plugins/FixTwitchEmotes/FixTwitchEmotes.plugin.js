@@ -9,7 +9,7 @@ class FixTwitchEmotes {
 
 	getDescription () {return "Fixes the problem with twitch emotes not being properly inserted in the textarea.";}
 
-	getVersion () {return "2.1.2";}
+	getVersion () {return "2.1.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -25,20 +25,22 @@ class FixTwitchEmotes {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
+			var observertarget = null;
+
 			this.emojiPickerObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(".emoji-picker")) {
-									$("img.emote-icon").each((_,emote) => {if ($._data(emote, 'events').click) delete $._data(emote, 'events').click;});
+								if (node && node.tagName && node.querySelector(".emoji-picker, .emojiPicker-3g68GS")) {
+									$(node).find(".emote-icon").each((_,emote) => {if ($._data(emote, 'events').click) delete $._data(emote, 'events').click;});
 									$(node).on("click." + this.getName(), "#bda-qem button", (e) => {
-										$("img.emote-icon").each((_,emote) => {if ($._data(emote, 'events').click) delete $._data(emote, 'events').click;});
+										$(node).find(".emote-icon").each((_,emote) => {if ($._data(emote, 'events').click) delete $._data(emote, 'events').click;});
 									});
 									var textarea = document.querySelector(".channelTextArea-1HTP3C textarea");
 									if (textarea) {
 										var textareaInstance = BDfunctionsDevilBro.getOwnerInstance({"node":textarea, "name":"ChannelTextAreaForm", "up":true});
-										$(node).on("click." + this.getName(), "img.emote-icon", (e) => {
+										$(node).on("click." + this.getName(), ".emote-icon", (e) => {
 											textareaInstance.setState({textValue:textarea.value.length > 0 ? textarea.value + " " + e.target.title : e.target.title});
 										});
 									}
@@ -48,7 +50,7 @@ class FixTwitchEmotes {
 					}
 				);
 			});
-			if (document.querySelector(".popouts")) this.emojiPickerObserver.observe(document.querySelector(".popouts"), {childList: true});
+			if (observertarget = document.querySelector(".popouts")) this.emojiPickerObserver.observe(observertarget, {childList: true});
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
