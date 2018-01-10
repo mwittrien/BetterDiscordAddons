@@ -5,6 +5,20 @@ class RepoControls {
 		this.settingsWindowObserver = new MutationObserver(() => {});
 		this.innerSettingsWindowObserver = new MutationObserver(() => {});
 		
+		this.sortings = {
+			sort: {
+				name:			"Name",
+				author:			"Author",
+				version:		"Version",
+				description:	"Description",
+				enabled:		"Enabled"
+			},
+			order: {
+				asc:			"Ascending",
+				desc:			"Descending"
+			}
+		};
+		
 		this.repoControlsMarkup = 
 			`<div class="repo-controls recent-mentions-popout">
 				<div class="header flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
@@ -23,26 +37,22 @@ class RepoControls {
 			</div>`;
 			
 		this.sortPopoutMarkup =
-			`<div class="popout popout-bottom-right no-shadow repocontrols-sort-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
+			`<div class="popout popout-bottom-right no-shadow repocontrols-sort-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);" option="sort">
 				<div>
 					<div class="context-menu contextMenu-uoJTbz recent-mentions-filter-popout">
 						<div class="item-group itemGroup-oViAgA">
-							<div option="name" class="item item-1XYaYf">Name</div>
-							<div option="author" class="item item-1XYaYf">Author</div>
-							<div option="version" class="item item-1XYaYf">Version</div>
-							<div option="description" class="item item-1XYaYf">Description</div>
+							${Object.keys(this.sortings.sort).map((key, i) => `<div option="${key}" class="item item-1XYaYf">${this.sortings.sort[key]}</div>`).join("")}
 						</div>
 					</div>
 				</div>
 			</div>`;
 			
 		this.orderPopoutMarkup =
-			`<div class="popout popout-bottom-right no-shadow repocontrols-order-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
+			`<div class="popout popout-bottom-right no-shadow repocontrols-order-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);" option="order">
 				<div>
 					<div class="context-menu contextMenu-uoJTbz recent-mentions-filter-popout">
 						<div class="item-group itemGroup-oViAgA">
-							<div option="asc" class="item item-1XYaYf">Ascending</div>
-							<div option="desc" class="item item-1XYaYf">Descending</div>
+							${Object.keys(this.sortings.order).map((key, i) => `<div option="${key}" class="item item-1XYaYf">${this.sortings.order[key]}</div>`).join("")}
 						</div>
 					</div>
 				</div>
@@ -99,6 +109,10 @@ class RepoControls {
 				addDeleteButton:	{value:true, 	description:"Add a Delete Button to your Plugin and Theme List."},
 				confirmDelete:		{value:true, 	description:"Ask for your confirmation before deleting a File."},
 				enableHTML:			{value:true, 	description:"Correctly displays HTML descriptions for Plugins and Themes."}
+			},
+			sortings: {
+				sort:		{value:"name"},
+				order:		{value:"asc"}
 			}
 		};
 	}
@@ -107,7 +121,7 @@ class RepoControls {
 
 	getDescription () {return "Lets you sort and filter your list of downloaded Themes and Plugins.";}
 
-	getVersion () {return "1.0.9";}
+	getVersion () {return "1.1.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -242,7 +256,11 @@ class RepoControls {
 	addControls (container) {
 		if (!container || document.querySelector(".repo-controls")) return;
 		
+		var sortings = BDfunctionsDevilBro.getAllData(this, "sortings");
+		
 		var repoControls = $(this.repoControlsMarkup);
+		repoControls.find(".sort-filter .value").attr("option", sortings.sort).text(this.sortings.sort[sortings.sort]);
+		repoControls.find(".order-filter .value").attr("option", sortings.order).text(this.sortings.order[sortings.order]);
 		repoControls
 			.on("keyup." + this.getName(), "#input-search", (e) => {
 				clearTimeout(repoControls.searchTimeout);
@@ -266,12 +284,13 @@ class RepoControls {
 	
 	getEntry (li) {
 		if (!li || !li.tagName || !li.querySelector(".bda-name")) return null;
-		let name, version, author, description;
+		let name, version, author, description, enabled;
 		if (BDfunctionsDevilBro.zacksFork()) {
 			name = li.querySelector(".bda-name").textContent;
 			version = li.querySelector(".bda-version").textContent;
 			author = li.querySelector(".bda-author").textContent;
 			description = li.querySelector(".bda-description").textContent;
+			enabled = li.querySelector(".ui-switch-checkbox").checked;
 		}
 		else {
 			let namestring = li.querySelector(".bda-name").textContent;
@@ -279,6 +298,7 @@ class RepoControls {
 			version = namestring.split(" v")[1].split(" by ")[0];
 			author = namestring.split(" by ")[1];
 			description = li.querySelector(".bda-description").textContent;
+			enabled = li.querySelector(".ui-switch-checkbox").checked;
 		}
 		return {
 			div: 			li,
@@ -287,7 +307,8 @@ class RepoControls {
 			name: 			(name).toUpperCase(),
 			version: 		(version).toUpperCase(),
 			author: 		(author).toUpperCase(),
-			description: 	(description).toUpperCase()
+			description: 	(description).toUpperCase(),
+			enabled:		enabled ? 0 : 1
 		};
 	}
 	
@@ -297,15 +318,21 @@ class RepoControls {
 		var searchstring = repoControls.find("#input-search").val().replace(/[<|>]/g, "").toUpperCase();
 		
 		var entries = container.entries;
+		var sortings = BDfunctionsDevilBro.getAllData(this, "sortings");
 		entries = entries.filter((entry) => {return entry.search.indexOf(searchstring) > -1 ? entry : null;});
-		entries = BDfunctionsDevilBro.sortArrayByKey(entries, repoControls.find(".sort-filter .value").attr("option"));
-		if (repoControls.find(".order-filter .value").attr("option") == "desc") entries.reverse();
+		entries = BDfunctionsDevilBro.sortArrayByKey(entries, sortings.sort);
+		if (sortings.order == "desc") entries.reverse();
 		
 		var settings = BDfunctionsDevilBro.getAllData(this, "settings");
 		for (let entry of entries) {
 			container.appendChild(entry.div);
 			if (settings.enableHTML) 		this.changeTextToHTML(entry.div);
 			if (settings.addDeleteButton) 	this.addDeleteButton(entry);
+			$(entry.div).find(".ui-switch-checkbox")
+				.off("change." + this.getName())
+				.on("change." + this.getName(), (e) => {
+					entry.enabled = e.checked ? 0 : 1
+				});
 		}
 	}
 	
@@ -366,10 +393,12 @@ class RepoControls {
 		$(".popouts").append(popout)
 			.off("click", ".item")
 			.on("click", ".item", (e2) => {
+				var option = $(e2.currentTarget).attr("option");
 				value.text($(e2.currentTarget).text());
-				value.attr("option", $(e2.currentTarget).attr("option"));
+				value.attr("option", option);
 				$(document).off("mousedown.sortpopout" + this.getName());
 				popout.remove();
+				BDfunctionsDevilBro.saveData(popout.attr("option"), option, this, "sortings");
 				this.addEntries(container, repoControls);
 				setTimeout(() => {wrapper.classList.remove("popout-open");},300);
 			});
