@@ -21,8 +21,8 @@ class ReverseImageSearch {
 		};
 
 		this.messageContextEntryMarkup =
-			`<div class="item-group">
-				<div class="item reverseimagesearch-item item-subMenu">
+			`<div class="item-group itemGroup-oViAgA">
+				<div class="item item-1XYaYf reverseimagesearch-item item-subMenu itemSubMenu-3ZgIw-">
 					<span>Reverse Image Search</span>
 					<div class="hint"></div>
 				</div>
@@ -30,13 +30,13 @@ class ReverseImageSearch {
 			
 			
 		this.messageContextSubMenuMarkup = 
-			`<div class="context-menu reverseImageSearchSubMenu">
-				<div class="item-group">
-					<div class="item alldisabled-item disabled">
+			`<div class="context-menu contextMenu-uoJTbz reverseImageSearchSubMenu">
+				<div class="item-group itemGroup-oViAgA">
+					<div class="item item-1XYaYf alldisabled-item disabled-dlOjhg disabled">
 						<span>REPLACE_submenu_disabled_text</span>
 						<div class="hint"></div>
 					</div>
-					${Object.keys(this.defaults.engines).map((key, i) => `<div engine="${key}" class="item RIS-item"><span>${this.defaults.engines[key].name}</span><div class="hint"></div></div>`).join("")}
+					${Object.keys(this.defaults.engines).map((key, i) => `<div engine="${key}" class="item item-1XYaYf RIS-item"><span>${this.defaults.engines[key].name}</span><div class="hint"></div></div>`).join("")}
 				</div>
 			</div>`;
 	}
@@ -46,7 +46,7 @@ class ReverseImageSearch {
 
 	getDescription () {return "Adds a reverse image search option to the context menu.";}
 
-	getVersion () {return "3.3.0";}
+	getVersion () {return "3.3.1";}
 	
 	getAuthor () {return "DevilBro";}
 
@@ -80,12 +80,14 @@ class ReverseImageSearch {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
+			var observertarget = null;
+
 			this.messageContextObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node.nodeType == 1 && node.className.includes("context-menu")) {
+								if (node.nodeType == 1 && (node.className.includes("context-menu") || node.className.includes("contextMenu-uoJTbz"))) {
 									this.onContextMenu(node);
 								}
 							});
@@ -93,7 +95,7 @@ class ReverseImageSearch {
 					}
 				);
 			});
-			if (document.querySelector(".app")) this.messageContextObserver.observe(document.querySelector(".app"), {childList: true});
+			if (observertarget = document.querySelector(".app")) this.messageContextObserver.observe(observertarget, {childList: true});
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -140,7 +142,7 @@ class ReverseImageSearch {
 					
 				$(context).append(this.messageContextEntryMarkup)
 					.on("mouseenter", ".reverseimagesearch-item", (e) => {
-						this.createContextSubMenu(url, e);
+						this.createContextSubMenu(url, e, context);
 					});
 				
 				BDfunctionsDevilBro.updateContextPosition(context);
@@ -148,12 +150,12 @@ class ReverseImageSearch {
 		}
 	}
 	
-	createContextSubMenu (imageurl, e) {
+	createContextSubMenu (imageurl, e, context) {
 		var messageContextSubMenu = $(this.messageContextSubMenuMarkup);
 		
 		messageContextSubMenu
 			.on("click", ".RIS-item", (e2) => {
-				$(".context-menu").hide();
+				$(context).hide();
 				var engine = e2.currentTarget.getAttribute("engine");
 				window.open(this.defaults.engines[engine].url.replace(this.textUrlReplaceString, encodeURIComponent(text)), "_blank");
 			});
