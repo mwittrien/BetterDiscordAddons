@@ -38,10 +38,15 @@ class CreationDate {
 			}`;
 			
 			
-		this.defaultSettings = {
-			addInUserPopout:		{value:true, 	description:"Add in User Popouts."},
-			addInUserProfil:		{value:true, 	description:"Add in User Profil Modal."},
-			addCreationTime:		{value:true, 	description:"Display the Time of Creation."}
+		this.defaults = {
+			settings: {
+				addInUserPopout:		{value:true, 		description:"Add in User Popouts."},
+				addInUserProfil:		{value:true, 		description:"Add in User Profil Modal."},
+				addCreationTime:		{value:true, 		description:"Display the Time of Creation."}
+			},
+			choices: {
+				creationDateLang:		{value:"$discord", 	description:"Creation Date Format:"}
+			}
 		};
 	}
 
@@ -55,22 +60,27 @@ class CreationDate {
 	
 	getSettingsPanel () {
 		if (!this.started || typeof BDfunctionsDevilBro !== "object") return;
-		var settings = this.getSettings(); 
+		var settings = BDfunctionsDevilBro.getAllData(this, "settings");
+		var choices = BDfunctionsDevilBro.getAllData(this, "choices");
 		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="titleDefault-1CWM9y title-3i-5G_ size18-ZM4Qv- height24-2pMcnc weightNormal-3gw0Lm marginBottom8-1mABJ4">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		for (let key in settings) {
-			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaultSettings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU ${settings[key] ? "valueChecked-3Bzkbm" : "valueUnchecked-XR6AOk"}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
+			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU ${settings[key] ? "valueChecked-3Bzkbm" : "valueUnchecked-XR6AOk"}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
 		}
-		var choice = this.getChoice();
-		settingshtml += `<div class="ui-form-item flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ weightMedium-13x9Y8 size16-3IvaX_ flexChild-1KGW5q" style="flex: 0 0 30%; line-height: 38px;">Creation Date Format:</h3><div class="ui-select format-select-wrapper" style="flex: 1 1 70%;"><div value="${choice}" class="Select Select--single has-value"><div class="Select-control"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-value" style="flex: 1 1 auto;"><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm languageName" style="flex: 1 1 42%;">${this.languages[choice].name}</div><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm languageTimestamp" style="flex: 1 1 58%;">${this.getCreationTime(this.languages[choice].id)}</div></div><span class="Select-arrow-zone"><span class="Select-arrow"></span></span></div></div></div></div>`;
+		for (let key in choices) {
+			settingshtml += `<div class="ui-form-item flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ weightMedium-13x9Y8 size16-3IvaX_ flexChild-1KGW5q" style="flex: 0 0 30%; line-height: 38px;">${this.defaults.choices[key].description}</h3><div class="ui-select format-select-wrapper" style="flex: 1 1 70%;"><div class="Select Select--single has-value" type="${key}" value="${choices[key]}"><div class="Select-control"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-value" style="flex: 1 1 auto;"><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm languageName" style="flex: 1 1 42%;">${this.languages[choices[key]].name}</div><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm languageTimestamp" style="flex: 1 1 58%;">${this.getCreationTime(this.languages[choices[key]].id)}</div></div><span class="Select-arrow-zone"><span class="Select-arrow"></span></span></div></div></div></div>`;
+		}
 		settingshtml += `</div></div>`;
 		
 		var settingspanel = $(settingshtml)[0];
 		$(settingspanel)
 			.on("click", ".checkbox-1KYsPm", () => {
 				this.updateSettings(settingspanel);
-				settingspanel.querySelector(".languageTimestamp").innerText = this.getCreationTime(this.languages[this.getChoice()].id);
+				var choices = BDfunctionsDevilBro.getAllData(this, "choices");
+				for (let key in choices) {
+					settingspanel.querySelector(".Select[type='" + key + "'] .languageTimestamp").innerText = this.getCreationTime(this.languages[choices[key]].id);
+				}
 			})
-			.on("click", ".Select-control", (e) => {this.openDropdownMenu(settingspanel, e);});
+			.on("click", ".Select-control", (e) => {this.openDropdownMenu(e);});
 		return settingspanel;
 	}
 
@@ -86,20 +96,22 @@ class CreationDate {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
+			var observertarget = null;
+
 			this.userPopoutObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (node && node.tagName && node.querySelector(".userPopout-4pfA0d")) {
-									if (this.getSettings().addInUserPopout) this.addCreationDate(node.querySelector(".headerText-3tKBWq"));
+									if (BDfunctionsDevilBro.getData("addInUserPopout", this, "settings")) this.addCreationDate(node.querySelector(".headerText-3tKBWq"));
 								}
 							});
 						}
 					}
 				);
 			});
-			if (document.querySelector(".popouts")) this.userPopoutObserver.observe(document.querySelector(".popouts"), {childList: true});
+			if (observertarget = document.querySelector(".popouts")) this.userPopoutObserver.observe(observertarget, {childList: true});
 			
 			this.userProfilModalObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -107,14 +119,14 @@ class CreationDate {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (node && node.tagName && node.querySelector(".topSectionPlaying-3jAH9b, .topSectionNormal-2LlRG1")) {
-									if (this.getSettings().addInUserProfil) this.addCreationDate(node.querySelector(".headerInfo-Gkqcz9"));
+									if (BDfunctionsDevilBro.getData("addInUserProfil", this, "settings")) this.addCreationDate(node.querySelector(".headerInfo-Gkqcz9"));
 								}
 							});
 						}
 					}
 				);
 			});
-			if (document.querySelector(".app ~ [class^='theme-']")) this.userProfilModalObserver.observe(document.querySelector(".app ~ [class^='theme-']"), {childList: true});
+			if (observertarget = document.querySelector(".app ~ [class^='theme-']")) this.userProfilModalObserver.observe(observertarget, {childList: true});
 			
 			this.languages = Object.assign({},BDfunctionsDevilBro.languages);
 			
@@ -141,21 +153,6 @@ class CreationDate {
 
 	
 	// begin of own functions
-	
-	getSettings () {
-		var oldSettings = BDfunctionsDevilBro.loadAllData(this.getName(), "settings"), newSettings = {}, saveSettings = false;
-		for (let key in this.defaultSettings) {
-			if (oldSettings[key] == null) {
-				newSettings[key] = this.defaultSettings[key].value;
-				saveSettings = true;
-			}
-			else {
-				newSettings[key] = oldSettings[key];
-			}
-		}
-		if (saveSettings) BDfunctionsDevilBro.saveAllData(newSettings, this.getName(), "settings");
-		return newSettings;
-	}
 
 	updateSettings (settingspanel) {
 		var settings = {};
@@ -164,52 +161,43 @@ class CreationDate {
 			input.parentElement.classList.toggle("valueChecked-3Bzkbm", input.checked);
 			input.parentElement.classList.toggle("valueUnchecked-XR6AOk", !input.checked);
 		}
-		BDfunctionsDevilBro.saveAllData(settings, this.getName(), "settings");
+		BDfunctionsDevilBro.saveAllData(settings, this, "settings");
 	}
 	
-	getChoice () {
-		var choice = BDfunctionsDevilBro.loadData("language", this.getName(), "languages"), saveChoice = false;
-		if (choice == null || !this.languages[choice]) {
-			choice = "$discord";
-			saveChoice = true;
-		}
-		if (saveChoice) BDfunctionsDevilBro.saveData("language", choice, this.getName(), "languages");
-		return choice;
-	}
-	
-	openDropdownMenu (settingspanel, e) {
+	openDropdownMenu (e) {
 		var selectControl = e.currentTarget;
 		var selectWrap = selectControl.parentElement;
 		
 		if (selectWrap.classList.contains("is-open")) return;
 		
 		selectWrap.classList.add("is-open");
-		$("li").has(settingspanel).css("overflow", "visible");
+		$("li").has(selectWrap).css("overflow", "visible");
 		
-		var selectMenu = this.createDropdownMenu(selectWrap.getAttribute("value"));
+		var type = selectWrap.getAttribute("type");
+		var selectMenu = this.createDropdownMenu(selectWrap.getAttribute("value"), type);
 		selectWrap.appendChild(selectMenu);
 		
 		$(selectMenu).on("mousedown." + this.getName(), ".Select-option", (e2) => {
 			var language = e2.currentTarget.getAttribute("value");
 			selectWrap.setAttribute("value", language);
-			selectControl.querySelector(".languageName").innerText = BDfunctionsDevilBro.languages[language].name;
-			selectControl.querySelector(".languageTimestamp").innerText = new Date().toLocaleString(BDfunctionsDevilBro.languages[language].id);
-			BDfunctionsDevilBro.saveData("language", language, this.getName(), "language");
+			selectControl.querySelector(".languageName").innerText = this.languages[language].name;
+			selectControl.querySelector(".languageTimestamp").innerText = new Date().toLocaleString(this.languages[language].id);
+			BDfunctionsDevilBro.saveData(type, language, this, "choices");
 		});
 		$(document).on("mousedown.select" + this.getName(), (e2) => {
 			if (e2.target.parentElement == selectMenu) return;
 			$(document).off("mousedown.select" + this.getName());
 			selectMenu.remove();
-			$("li").has(settingspanel).css("overflow", "auto");
+			$("li").has(selectWrap).css("overflow", "auto");
 			setTimeout(() => {selectWrap.classList.remove("is-open");},100);
 		});
 	}
 	
-	createDropdownMenu (choice) {
+	createDropdownMenu (choice, type) {
 		var menuhtml = `<div class="Select-menu-outer"><div class="Select-menu">`;
-		for (var language in BDfunctionsDevilBro.languages) {
-			var isSelected = language == choice ? " is-selected" : "";
-			menuhtml += `<div value="${language}" class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-option ${isSelected}" style="flex: 1 1 auto; display:flex;"><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm" style="flex: 1 1 42%;">${BDfunctionsDevilBro.languages[language].name}</div><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm" style="flex: 1 1 58%;">${this.getCreationTime(BDfunctionsDevilBro.languages[language].id)}</div></div>`
+		for (var key in this.languages) {
+			var isSelected = key == choice ? " is-selected" : "";
+			menuhtml += `<div value="${key}" class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-option ${isSelected}" style="flex: 1 1 auto; display:flex;"><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm" style="flex: 1 1 42%;">${this.languages[key].name}</div><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm" style="flex: 1 1 58%;">${this.getCreationTime(this.languages[key].id)}</div></div>`
 		}
 		menuhtml += `</div></div>`;
 		return $(menuhtml)[0];
@@ -220,12 +208,13 @@ class CreationDate {
 		var info = BDfunctionsDevilBro.getKeyInformation({"node":container,"key":"user"});
 		if (info) {
 			var creationDate = $(this.creationDateMarkup);
-			creationDate.text(this.labels.createdat_text + " " + this.getCreationTime(this.languages[this.getChoice()].id, info.createdAt)).appendTo(container);
+			var choice = BDfunctionsDevilBro.getData("creationDateLang", this, "choices");
+			creationDate.text(this.labels.createdat_text + " " + this.getCreationTime(this.languages[choice].id, info.createdAt)).appendTo(container);
 		}
 	}
 	
 	getCreationTime (languageid, timestamp = new Date()) {
-		return this.getSettings().addCreationTime ? timestamp.toLocaleString(languageid) : timestamp.toLocaleDateString(languageid);
+		return BDfunctionsDevilBro.getData("addCreationTime", this, "settings") ? timestamp.toLocaleString(languageid) : timestamp.toLocaleDateString(languageid);
 	}
 	
 	setLabelsByLanguage () {
