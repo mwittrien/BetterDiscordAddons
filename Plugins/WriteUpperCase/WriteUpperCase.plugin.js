@@ -24,22 +24,24 @@ class WriteUpperCase {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
+			var observertarget = null;
+
 			this.textareaObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (node && node.tagName && node.querySelector(".innerEnabled-gLHeOL, .innerEnabledNoAttach-36PpAk")) {
-									this.bindEventToTextArea(node.querySelector("textarea"));
+									this.bindEventToTextArea(node.querySelector(".textArea-20yzAH"));
 								}
 							});
 						}
 					}
 				);
 			});
-			if (document.querySelector("#app-mount")) this.textareaObserver.observe(document.querySelector("#app-mount"), {childList: true, subtree:true});
+			if (observertarget = document.querySelector("#app-mount")) this.textareaObserver.observe(observertarget, {childList: true, subtree:true});
 			
-			document.querySelectorAll("textarea").forEach(textarea => {this.bindEventToTextArea(textarea);});
+			document.querySelectorAll(".textArea-20yzAH").forEach(textarea => {this.bindEventToTextArea(textarea);});
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -50,7 +52,7 @@ class WriteUpperCase {
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.textareaObserver.disconnect();
 			
-			$("textarea").off("keyup." + this.getName());
+			$(".textArea-20yzAH").off("keyup." + this.getName());
 			
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
