@@ -173,6 +173,7 @@ class ChatFilter {
 	onSwitch () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.hideAllMessages();
+			var observertarget = null;
 			if (observertarget = document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(observertarget, {childList:true});
 		}
 	}
