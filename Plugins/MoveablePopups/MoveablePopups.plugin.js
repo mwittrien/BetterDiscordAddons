@@ -10,7 +10,7 @@ class MoveablePopups {
 
 	getDescription () {return "Adds the feature to move all popups and modals around like on a normal desktop. Ctrl + drag with your left mousebutton to drag element.";}
 
-	getVersion () {return "1.0.3";}
+	getVersion () {return "1.0.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -26,6 +26,8 @@ class MoveablePopups {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
+			var observertarget = null;
+
 			this.popoutObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
@@ -39,25 +41,25 @@ class MoveablePopups {
 					}
 				);
 			});
-			if (document.querySelector(".popouts")) this.popoutObserver.observe(document.querySelector(".popouts"), {childList: true});
+			if (observertarget = document.querySelector(".popouts")) this.popoutObserver.observe(observertarget, {childList: true});
 			
 			this.modalObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.className && node.className.length > 0 && node.className.indexOf("modal") > -1 && !node.querySelector(".modal-image")) {
-									this.makeMoveable(node.querySelector("[class*='inner']"));
+								if (node && node.classList && node.classList.contains("modal-2LIEKY") && !node.querySelector(".downloadLink-wANcd8")) {
+									this.makeMoveable(node.querySelector(".inner-1_1f7b"));
 								}
-								else if (node && node.tagName && node.querySelector("[class*='modal']") && !node.querySelector(".modal-image")) {
-									this.makeMoveable(node.querySelector("[class*='inner']"));
+								else if (node && node.tagName && node.querySelector(".modal-2LIEKY") && !node.querySelector(".downloadLink-wANcd8")) {
+									this.makeMoveable(node.querySelector(".inner-1_1f7b"));
 								}
 							});
 						}
 					}
 				);
 			});
-			if (document.querySelector("#app-mount")) this.modalObserver.observe(document.querySelector("#app-mount"), {childList: true, subtree:true});
+			if (observertarget = document.querySelector(".app ~ [class^='theme-'], .app-XZYfmp ~ [class^='theme-']:not([class*='popouts'])")) this.modalObserver.observe(observertarget, {childList: true});
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
