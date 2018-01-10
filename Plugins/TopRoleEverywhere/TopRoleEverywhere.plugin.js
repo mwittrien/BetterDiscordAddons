@@ -46,7 +46,7 @@ class TopRoleEverywhere {
 
 	getDescription () {return "Adds the highest role of a user as a tag.";}
 
-	getVersion () {return "2.5.1";}
+	getVersion () {return "2.5.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -82,14 +82,14 @@ class TopRoleEverywhere {
 			this.GuildStore = BDfunctionsDevilBro.WebModules.findByProperties(["getGuild"]);
 			this.UserGuildState = BDfunctionsDevilBro.WebModules.findByProperties(["getGuildId", "getLastSelectedGuildId"]);
 			
-			var settings = BDfunctionsDevilBro.getAllData(this, "settings");
-			
+			var observertarget = null;
+
 			this.userListObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.querySelector(".member-username") && settings.showInMemberList) {
+								if (node && node.querySelector(".member-username") && BDfunctionsDevilBro.getData("showInMemberList", this, "settings")) {
 									this.addRoleTag(node, "list", false);
 								}
 							});
@@ -97,14 +97,14 @@ class TopRoleEverywhere {
 					}
 				);
 			});
-			if (document.querySelector(".channel-members")) this.userListObserver.observe(document.querySelector(".channel-members"), {childList:true});
+			if (observertarget = document.querySelector(".channel-members")) this.userListObserver.observe(observertarget, {childList:true});
 			
 			this.chatWindowObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (settings.showInChat) {
+								if (BDfunctionsDevilBro.getData("showInChat", this, "settings")) {
 									if ($(".message-group").has(".avatar-large").length > 0) {
 										if (node && node.tagName && node.querySelector(".username-wrapper")) {
 											this.addRoleTag(node, "chat", false);
@@ -132,7 +132,7 @@ class TopRoleEverywhere {
 					}
 				);
 			});
-			if (document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(document.querySelector(".messages.scroller"), {childList:true, subtree:true});
+			if (observertarget = document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(observertarget, {childList:true, subtree:true});
 			
 			this.settingsWindowObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -145,7 +145,7 @@ class TopRoleEverywhere {
 					}
 				);
 			});
-			if (document.querySelector(".layers")) this.settingsWindowObserver.observe(document.querySelector(".layers"), {childList:true});
+			if (observertarget = document.querySelector(".layers, .layers-20RVFW")) this.settingsWindowObserver.observe(observertarget, {childList:true});
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 			
@@ -172,8 +172,8 @@ class TopRoleEverywhere {
 	
 	onSwitch () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			if (document.querySelector(".channel-members")) this.userListObserver.observe(document.querySelector(".channel-members"), {childList:true});
-			if (document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(document.querySelector(".messages.scroller"), {childList:true, subtree:true});
+			if (observertarget = document.querySelector(".channel-members")) this.userListObserver.observe(observertarget, {childList:true});
+			if (observertarget = document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(observertarget, {childList:true, subtree:true});
 			this.loadRoleTags();
 		}
 	}
