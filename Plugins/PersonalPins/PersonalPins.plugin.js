@@ -9,8 +9,8 @@ class PersonalPins {
 		this.optionPopoutObserver = new MutationObserver(() => {});
 
 		this.messageContextEntryMarkup =
-			`<div class="item-group">
-				<div class="item personalpin-item">
+			`<div class="item-group itemGroup-oViAgA">
+				<div class="item item-1XYaYf personalpin-item">
 					<span>REPLACE_context_noteoption_text</span>
 					<div class="hint"></div>
 				</div>
@@ -58,10 +58,10 @@ class PersonalPins {
 		this.sortPopoutMarkup =
 			`<div class="popout popout-bottom-right no-shadow personalpins-sort-popout" style="z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
 				<div>
-					<div class="context-menu recent-mentions-filter-popout">
-						<div class="item-group">
-							<div option="timestamp" class="item">REPLACE_popout_messagesort_text</div>
-							<div option="addedat" class="item">REPLACE_popout_datesort_text</div>
+					<div class="context-menu contextMenu-uoJTbz recent-mentions-filter-popout">
+						<div class="item-group itemGroup-oViAgA">
+							<div option="timestamp" class="item item-1XYaYf">REPLACE_popout_messagesort_text</div>
+							<div option="addedat" class="item item-1XYaYf">REPLACE_popout_datesort_text</div>
 						</div>
 					</div>
 				</div>
@@ -110,7 +110,7 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.3.8";}
+	getVersion () {return "1.3.9";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -151,12 +151,14 @@ class PersonalPins {
 			this.HistoryUtils = BDfunctionsDevilBro.WebModules.findByProperties(["transitionTo", "replaceWith", "getHistory"]);
 			this.MainDiscord = BDfunctionsDevilBro.WebModules.findByProperties(["ActionTypes"]);
 			
+			var observertarget = null;
+
 			this.messageContextObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node.nodeType == 1 && node.className.includes("context-menu")) {
+								if (node.nodeType == 1 && (node.className.includes("context-menu") || node.className.includes("contextMenu-uoJTbz"))) {
 									this.onContextMenu(node);
 								}
 							});
@@ -164,7 +166,7 @@ class PersonalPins {
 					}
 				);
 			});
-			if (document.querySelector(".app")) this.messageContextObserver.observe(document.querySelector(".app"), {childList: true});
+			if (observertarget = document.querySelector(".app")) this.messageContextObserver.observe(observertarget, {childList: true});
 			
 			this.chatWindowObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -182,7 +184,7 @@ class PersonalPins {
 					}
 				);
 			});
-			if (document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(document.querySelector(".messages.scroller"), {childList:true, subtree:true});
+			if (observertarget = document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(observertarget, {childList:true, subtree:true});
 			
 			this.optionPopoutObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -198,7 +200,7 @@ class PersonalPins {
 					}
 				);
 			});
-			if (document.querySelector(".popouts")) this.optionPopoutObserver.observe(document.querySelector(".popouts"), {childList: true});
+			if (observertarget = document.querySelector(".popouts")) this.optionPopoutObserver.observe(observertarget, {childList: true});
 			
 			$(document).off("click." + this.getName(), ".btn-option").off("contextmenu." + this.getName(), ".message")
 				.on("click." + this.getName(), ".btn-option", (e) => {
@@ -234,7 +236,7 @@ class PersonalPins {
 	
 	onSwitch () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			if (document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(document.querySelector(".messages.scroller"), {childList:true, subtree:true});
+			if (observertarget = document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(observertarget, {childList:true, subtree:true});
 			document.querySelectorAll(".messages .message").forEach(message => {this.addOptionButton(message);});
 			setTimeout(() => {
 				this.addNotesButton();
@@ -272,7 +274,7 @@ class PersonalPins {
 	
 	onContextMenu (context) {
 		if (!context || !context.tagName || !context.parentElement || context.querySelector(".personalpin-item")) return;
-		for (let group of context.querySelectorAll(".item-group")) {
+		for (let group of context.querySelectorAll(".item-group, .itemGroup-oViAgA")) {
 			if (BDfunctionsDevilBro.getKeyInformation({"node":group, "key":"displayName", "value":"MessagePinItem"})) {
 				$(this.messageContextEntryMarkup).insertAfter(group)
 					.on("click", ".personalpin-item", () => {
