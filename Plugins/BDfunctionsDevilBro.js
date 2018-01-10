@@ -125,7 +125,7 @@ BDfunctionsDevilBro.checkUpdate = function (pluginName, downloadUrl) {
 };
 
 BDfunctionsDevilBro.showUpdateNotice = function (pluginName, downloadUrl) {
-	let noticeElement = `<div class="notice notice-info DevilBro-notice" id="pluginNotice"><div class="notice-dismiss" id="pluginNoticeDismiss"></div><span class="notice-message">The following plugins have updates:</span>&nbsp;&nbsp;<strong id="outdatedPlugins"></strong></div>`;
+	let noticeElement = `<div class="notice notice-3I4-y_ size14-1wjlWP weightMedium-13x9Y8 height36-13sPn7 notice-info DevilBro-notice" id="pluginNotice"><div class="notice-dismiss dismiss-1QjyJW" id="pluginNoticeDismiss"></div><span class="notice-message">The following plugins have updates:</span>&nbsp;&nbsp;<strong id="outdatedPlugins"></strong></div>`;
 	if (!$("#pluginNotice").length)  {
 		$(".app .guilds-wrapper + div > div:first > div:first").append(noticeElement);
 		$(".win-buttons").addClass("win-buttons-notice");
@@ -214,9 +214,9 @@ BDfunctionsDevilBro.showToast = function (content, options = {}) {
 	if (!document.querySelector(".toasts")) {
 		let container = document.querySelector(".channels-3g2vYe + div");
 		let memberlist = container ? container.querySelector(".channel-members-wrap") : null;
-		let form = container ? container.querySelector("form") : null;
 		let left = container ? container.getBoundingClientRect().left : 310;
 		let right = memberlist ? memberlist.getBoundingClientRect().left : 0;
+		let form = container ? container.querySelector("form") : null;
 		let bottom = form ? form.offsetHeight : 80;
 		let toastWrapper = document.createElement("div");
 		toastWrapper.classList.add("toasts");
@@ -306,11 +306,11 @@ BDfunctionsDevilBro.createNotificationsBar = function (content, options = {}) {
 	if (!content) return;
 	let id = Math.round(Math.random()*10000000000000000);
 	let notifiybar = document.createElement("div");
-	notifiybar.classList.add("notice", "DevilBro-notice", "notice-" + id);
-	notifiybar.innerHTML = `<div class="notice-dismiss"></div><span class="notice-message">${content}</span></strong>`;
+	notifiybar.className = "notice notice-3I4-y_ size14-1wjlWP weightMedium-13x9Y8 height36-13sPn7 DevilBro-notice notice-" + id;
+	notifiybar.innerHTML = `<div class="notice-dismiss dismiss-1QjyJW "></div><span class="notice-message">${content}</span></strong>`;
 	$(".app .guilds-wrapper + div > div:first > div:first").append(notifiybar);
 	if (options.btn) {
-		$(`<button class="btn">${options.btn}</button>`).insertAfter(notifiybar.querySelector(".notice-message"));
+		$(`<button class="btn button-2TvR03 size14-1wjlWP weightMedium-13x9Y8">${options.btn}</button>`).insertAfter(notifiybar.querySelector(".notice-message"));
 	}
 	if (options.selector) options.selector.split(" ").forEach(selector => {if(selector) notifiybar.classList.add(selector);});
 	if (options.css) BDfunctionsDevilBro.appendLocalStyle("customNotificationsBarDevilBro" + id, options.css);
@@ -325,18 +325,18 @@ BDfunctionsDevilBro.createNotificationsBar = function (content, options = {}) {
 		.DevilBro-notice.notice-${id} .notice-message {
 			color: ${color};
 		}
-		.DevilBro-notice.notice-${id} .btn {
+		.DevilBro-notice.notice-${id} .button-2TvR03 {
 			color: ${color};
 			border-color: ${color};
 		}
-		.DevilBro-notice.notice-${id} .btn:hover {
+		.DevilBro-notice.notice-${id} .button-2TvR03:hover {
 			color: ${bgColor};
 			background-color: ${color};
 		}
-		.DevilBro-notice.notice-${id} .notice-dismiss {
+		.DevilBro-notice.notice-${id} .dismiss-1QjyJW {
 			filter: ${dismissFilter};
 		}`);
-	$(notifiybar).on("click", ".notice-dismiss", () => {
+	$(notifiybar).on("click", ".dismiss-1QjyJW", () => {
 		$(notifiybar).slideUp({complete: () => {
 			BDfunctionsDevilBro.removeLocalStyle("customNotificationsBarDevilBro" + id);
 			BDfunctionsDevilBro.removeLocalStyle("customNotificationsBarColorCorrectionDevilBro" + id);
@@ -2063,7 +2063,7 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		margin-left: 10px;
 	}
 	
-	#pluginNotice, .DevilBro-notice {
+	.DevilBro-notice {
 		-webkit-app-region: drag;
 	} 
 	
