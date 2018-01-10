@@ -8,21 +8,21 @@ class EditChannels {
 		this.channelContextObserver = new MutationObserver(() => {});
 
 		this.channelContextEntryMarkup =
-			`<div class="item-group">
-				<div class="item localchannelsettings-item item-subMenu">
+			`<div class="item-group itemGroup-oViAgA">
+				<div class="item item-1XYaYf localchannelsettings-item item-subMenu itemSubMenu-3ZgIw-">
 					<span>REPLACE_context_localchannelsettings_text</span>
 					<div class="hint"></div>
 				</div>
 			</div>`;
 			
 		this.channelContextSubMenuMarkup = 
-			`<div class="context-menu editchannels-submenu">
-				<div class="item-group">
-					<div class="item channelsettings-item">
+			`<div class="context-menu contextMenu-uoJTbz editchannels-submenu">
+				<div class="item-group itemGroup-oViAgA">
+					<div class="item item-1XYaYf channelsettings-item">
 						<span>REPLACE_submenu_channelsettings_text</span>
 						<div class="hint"></div>
 					</div>
-					<div class="item resetsettings-item">
+					<div class="item item-1XYaYf resetsettings-item disabled-dlOjhg disabled">
 						<span>REPLACE_submenu_resetsettings_text</span>
 						<div class="hint"></div>
 					</div>
@@ -89,7 +89,7 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "3.6.5";}
+	getVersion () {return "3.6.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -122,6 +122,8 @@ class EditChannels {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
+			var observertarget = null;
+
 			this.channelListObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
@@ -146,14 +148,14 @@ class EditChannels {
 					}
 				);
 			});
-			if (document.querySelector(".channels-3g2vYe")) this.channelListObserver.observe(document.querySelector(".channels-3g2vYe"), {childList: true, attributes:true, subtree: true});
+			if (observertarget = document.querySelector(".channels-3g2vYe")) this.channelListObserver.observe(observertarget, {childList: true, attributes:true, subtree: true});
 			
 			this.channelContextObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.nodeType == 1 && node.className.includes("context-menu")) {
+								if (node && node.nodeType == 1 && (node.className.includes("context-menu") || node.className.includes("contextMenu-uoJTbz"))) {
 									this.onContextMenu(node);
 								}
 							});
@@ -161,7 +163,7 @@ class EditChannels {
 					}
 				);
 			});
-			if (document.querySelector(".app")) this.channelContextObserver.observe(document.querySelector(".app"), {childList: true});
+			if (observertarget = document.querySelector(".app")) this.channelContextObserver.observe(observertarget, {childList: true});
 			
 			this.loadAllChannels();
 			
@@ -228,31 +230,30 @@ class EditChannels {
 		if (info && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"ChannelDeleteGroup"})) {
 			$(context).append(this.channelContextEntryMarkup)
 				.on("mouseenter", ".localchannelsettings-item", (e) => {
-					this.createContextSubMenu(info, e);
+					this.createContextSubMenu(info, e, context);
 				});
 				
 			BDfunctionsDevilBro.updateContextPosition(context);
 		}
 	}
 	
-	createContextSubMenu (info, e) {
+	createContextSubMenu (info, e, context) {
 		var channelContextSubMenu = $(this.channelContextSubMenuMarkup);
 			
 		channelContextSubMenu
 			.on("click", ".channelsettings-item", () => {
-				$(".context-menu").hide();
+				$(context).hide();
 				this.showChannelSettings(info);
 			});
 			
 		if (BDfunctionsDevilBro.loadData(info.id, this, "channels")) {
 			channelContextSubMenu
-				.on("click", ".resetsettings-item", () => {
-					$(".context-menu").hide();
+				.find(".resetsettings-item")
+				.removeClass("disabled").removeClass("disabled-dlOjhg")
+				.on("click", () => {
+					$(context).hide();
 					this.removeChannelData(info);
 				});
-		}
-		else {
-			channelContextSubMenu.find(".resetsettings-item").addClass("disabled");
 		}
 		
 		BDfunctionsDevilBro.appendSubMenu(e.currentTarget, channelContextSubMenu);
