@@ -11,7 +11,7 @@ class ChatAliases {
 
 	getDescription () {return "Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent.";}
 
-	getVersion () {return "1.6.5";}
+	getVersion () {return "1.6.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -56,6 +56,8 @@ class ChatAliases {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
+			var observertarget = null;
+
 			this.settingsWindowObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
@@ -69,7 +71,7 @@ class ChatAliases {
 					}
 				);
 			});
-			if (document.querySelector(".layers")) this.settingsWindowObserver.observe(document.querySelector(".layers"), {childList:true});
+			if (observertarget = document.querySelector(".layers, .layers-20RVFW")) this.settingsWindowObserver.observe(observertarget, {childList:true});
 			
 			this.textareaObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -84,7 +86,7 @@ class ChatAliases {
 					}
 				);
 			});
-			if (document.querySelector("#app-mount")) this.textareaObserver.observe(document.querySelector("#app-mount"), {childList: true, subtree:true});
+			if (observertarget = document.querySelector("#app-mount")) this.textareaObserver.observe(observertarget, {childList: true, subtree:true});
 			
 			document.querySelectorAll("textarea").forEach(textarea => {this.bindEventToTextArea(textarea);});
 		}
