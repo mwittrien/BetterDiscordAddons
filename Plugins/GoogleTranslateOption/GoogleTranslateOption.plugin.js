@@ -304,6 +304,7 @@ class GoogleTranslateOption {
 	
 	onSwitch () {
 		if (typeof BDfunctionsDevilBro === "object") {
+			var observertarget = null;
 			if (observertarget = document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(observertarget, {childList:true, subtree:true});
 			document.querySelectorAll(".messages .message").forEach(message => {this.addOptionButton(message);});
 		}
