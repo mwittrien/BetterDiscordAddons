@@ -25,8 +25,8 @@ BDfunctionsDevilBro.loadMessage = function (plugin, oldVersionRemove) {
 			BDfunctionsDevilBro.checkAllUpdates();
 		},7200000);
 	}
-	
-	if (typeof window.PluginUpdates.observer === "undefined" && document.querySelector(".layers")) {
+	var layers = document.querySelector(".layers, .layers-20RVFW");
+	if (typeof window.PluginUpdates.observer === "undefined" && layers) {
 		window.PluginUpdates.observer = new MutationObserver((changes, _) => {
 			changes.forEach(
 				(change, i) => {
@@ -43,7 +43,7 @@ BDfunctionsDevilBro.loadMessage = function (plugin, oldVersionRemove) {
 				}
 			);
 		});
-		window.PluginUpdates.observer.observe(document.querySelector(".layers"), {childList:true});
+		window.PluginUpdates.observer.observe(layers, {childList:true});
 			
 		var innerSettingsWindowObserver = new MutationObserver((changes, _) => {
 			changes.forEach(
@@ -56,7 +56,8 @@ BDfunctionsDevilBro.loadMessage = function (plugin, oldVersionRemove) {
 				}
 			);
 		});
-		var settingswindow = document.querySelector(".layer[layer-id='user-settings']");
+		
+		var settingswindow = document.querySelector(".layer[layer-id='user-settings'], .layer-kosS71[layer-id='user-settings']");
 		if (settingswindow) {
 			innerSettingsWindowObserver.observe(settingswindow, {childList:true, subtree:true});
 			checkIfPluginsPage(settingswindow);
