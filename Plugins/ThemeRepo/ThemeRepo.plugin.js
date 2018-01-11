@@ -752,7 +752,7 @@ class ThemeRepo {
 					if (document.querySelector(".bd-themerepobutton")) BDfunctionsDevilBro.showToast(`Finished fetching Themes.`, {type:"success"});
 					if (outdated > 0) {
 						var text = `${outdated} of your Themes ${outdated == 1 ? "is" : "are"} outdated. Check:`;
-						var bar = BDfunctionsDevilBro.createNotificationsBar(text,{color:"#F04747",btn:"ThemeRepo",selector:"themerepo-notice"});
+						var bar = BDfunctionsDevilBro.createNotificationsBar(text,{type:"danger",btn:"ThemeRepo",selector:"themerepo-notice"});
 						$(bar).on("click." + this.getName(), ".btn", (e) => {
 							this.openThemeRepoModal(true);
 							e.delegateTarget.querySelector(".notice-dismiss").click();
