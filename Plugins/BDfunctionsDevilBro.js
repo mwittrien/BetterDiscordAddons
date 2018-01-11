@@ -315,6 +315,7 @@ BDfunctionsDevilBro.createNotificationsBar = function (content, options = {}) {
 	if (options.selector) options.selector.split(" ").forEach(selector => {if(selector) notifiybar.classList.add(selector);});
 	if (options.css) BDfunctionsDevilBro.appendLocalStyle("customNotificationsBarDevilBro" + id, options.css);
 	
+	var type = null;
 	if (options.type) {
 		var types = {
 			"brand":		"noticeBrand-3o3fQA notice-brand",
@@ -327,10 +328,9 @@ BDfunctionsDevilBro.createNotificationsBar = function (content, options = {}) {
 			"streamer":		"noticeStreamerMode-1OlfKV notice-streamer",
 			"success":		"noticeSuccess-P1EnBb notice-success"
 		};
-		var type = types[options.type];
-		if (type) type.split(" ").forEach(selector => {if(selector) notifiybar.classList.add(selector);});
+		if (type = types[options.type]) type.split(" ").forEach(selector => {if(selector) notifiybar.classList.add(selector);});
 	}
-	else {
+	if (!type) {
 		var comp = BDfunctionsDevilBro.color2COMP(options.color);
 		var color = comp && comp[0] > 180 && comp[1] > 180 && comp[2] > 180 ? "#000" : "#FFF";
 		var bgColor = comp ? BDfunctionsDevilBro.color2HEX(comp) : "#F26522";
