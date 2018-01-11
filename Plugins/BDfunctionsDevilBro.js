@@ -310,15 +310,32 @@ BDfunctionsDevilBro.createNotificationsBar = function (content, options = {}) {
 	notifiybar.className = "notice notice-3I4-y_ size14-1wjlWP weightMedium-13x9Y8 height36-13sPn7 DevilBro-notice notice-" + id;
 	notifiybar.innerHTML = `<div class="notice-dismiss dismiss-1QjyJW "></div><span class="notice-message">${content}</span></strong>`;
 	$(".app .guilds-wrapper + div > div:first > div:first").append(notifiybar);
-	if (options.btn) {
-		$(`<button class="btn button-2TvR03 size14-1wjlWP weightMedium-13x9Y8">${options.btn}</button>`).insertAfter(notifiybar.querySelector(".notice-message"));
-	}
+	
+	if (options.btn) $(`<button class="btn button-2TvR03 size14-1wjlWP weightMedium-13x9Y8">${options.btn}</button>`).insertAfter(notifiybar.querySelector(".notice-message"));
 	if (options.selector) options.selector.split(" ").forEach(selector => {if(selector) notifiybar.classList.add(selector);});
 	if (options.css) BDfunctionsDevilBro.appendLocalStyle("customNotificationsBarDevilBro" + id, options.css);
-	var comp = BDfunctionsDevilBro.color2COMP(options.color);
-	var color = comp && comp[0] > 180 && comp[1] > 180 && comp[2] > 180 ? "#000" : "#FFF";
-	var bgColor = comp ? BDfunctionsDevilBro.color2HEX(comp) : "#F26522";
-	var dismissFilter = comp && comp[0] > 180 && comp[1] > 180 && comp[2] > 180 ? "brightness(0%)" : "brightness(100%)";
+	
+	if (options.type) {
+		var types = {
+			"brand":		"noticeBrand-3o3fQA notice-brand",
+			"danger":		"noticeDanger-1SIxaf notice-danger",
+			"default":		"noticeDefault-16Om2m notice-default",
+			"facebook":		"noticeFacebook-1eAoSW notice-facebook",
+			"info":			"noticeInfo-3v29SJ notice-info",
+			"premium":		"noticePremium-2x9Tv2 notice-premium",
+			"spotify":		"noticeSpotify-27AKmv notice-spotify",
+			"streamer":		"noticeStreamerMode-1OlfKV notice-streamer",
+			"success":		"noticeSuccess-P1EnBb notice-success"
+		};
+		var type = types[options.type];
+		if (type) type.split(" ").forEach(selector => {if(selector) notifiybar.classList.add(selector);});
+	}
+	else {
+		var comp = BDfunctionsDevilBro.color2COMP(options.color);
+		var color = comp && comp[0] > 180 && comp[1] > 180 && comp[2] > 180 ? "#000" : "#FFF";
+		var bgColor = comp ? BDfunctionsDevilBro.color2HEX(comp) : "#F26522";
+		var dismissFilter = comp && comp[0] > 180 && comp[1] > 180 && comp[2] > 180 ? "brightness(0%)" : "brightness(100%)";
+	}
 	BDfunctionsDevilBro.appendLocalStyle("customNotificationsBarColorCorrectionDevilBro" + id, 
 		`.DevilBro-notice.notice-${id} {
 			background-color: ${bgColor};
