@@ -180,15 +180,12 @@ BDfunctionsDevilBro.downloadPlugin = function (pluginName, downloadUrl, updateNo
 };
 
 BDfunctionsDevilBro.removeUpdateNotice = function (pluginName, updateNoticeBar) {
-	console.log(pluginName);
-	console.log(updateNoticeBar);
 	if (typeof updateNoticeBar === "undefined") updateNoticeBar = document.querySelector("#pluginNotice");
 	if (updateNoticeBar) {
 		let outdatedContainer = updateNoticeBar.querySelector("#outdatedPlugins");
 		if (outdatedContainer) {
 			let noticeEntry = outdatedContainer.querySelector("#" + pluginName + "-notice");
 			if (noticeEntry) {
-				console.log(noticeEntry);
 				var nextSibling = noticeEntry.nextSibling;
 				var prevSibling = noticeEntry.prevSibling;
 				if (nextSibling && nextSibling.classList && nextSibling.classList.contains("separator")) nextSibling.remove();
