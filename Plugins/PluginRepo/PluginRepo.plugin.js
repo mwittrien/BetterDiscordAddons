@@ -631,7 +631,7 @@ class PluginRepo {
 						if (document.querySelector(".bd-pluginrepobutton")) BDfunctionsDevilBro.showToast(`Finished fetching Plugins.`, {type:"success"});
 						if (outdated > 0) {
 							var text = `${outdated} of your Plugins ${outdated == 1 ? "is" : "are"} outdated. Check:`;
-							var bar = BDfunctionsDevilBro.createNotificationsBar(text,{color:"#F04747",btn:"PluginRepo",selector:"pluginrepo-notice"});
+							var bar = BDfunctionsDevilBro.createNotificationsBar(text,{type:"danger",btn:"PluginRepo",selector:"pluginrepo-notice"});
 							$(bar).on("click." + this.getName(), ".btn", (e) => {
 								this.openPluginRepoModal(true);
 								e.delegateTarget.querySelector(".notice-dismiss").click();
