@@ -13,7 +13,7 @@ class ThemeRepo {
 		
 		this.updateInterval;
 		
-		this.themeFixerCSS = `#voice-connection, #friends, .friends-header, .friends-table, .guilds-wrapper, .guild-header header, .channels-wrap, .private-channels .search-bar, .private-channels, .guild-channels, .account, .friend-table-add-header, .chat, .content, .title-wrap:not(.search-bar), .messages-wrapper, .messages .divider span, .messages .divider:before, .message-group-blocked, .is-local-bot-message, .channel-members-loading, .channel-members-loading .heading, .channel-members-loading .member, .typing, .typing-3eiiL_, .container-RYiLUQ, .ui-standard-sidebar-view, .ui-standard-sidebar-view .sidebar-region, .ui-standard-sidebar-view .content-region, .channel-members, .container-2OU7Cz, .title-qAcLxz, .chat form, .channels-3g2vYe, .friends-table, .messages-wrapper, .content .flex-spacer, .container-2OU7Cz, .channel-members, .channels-3g2vYe, .guilds-wrapper, .search .search-bar, .chat form, .container-iksrDt, .container-3lnMWU, .title-qAcLxz {background:transparent!important;} .layer, .layer-kosS71, .layers, .layers-20RVFW, .typeWindows-15E0Ys {background:rgba(0,0,0,0.18)!important;}`;
+		this.themeFixerCSS = `#friends, .noChannel-2EQ0a9, .activityFeed-HeiGwL, .lfg-3xoFkI, .app, .layers, .layer, .layers-20RVFW, .layer-kosS71, .container-2OU7Cz, .content-region, .guilds-wrapper, .search-2--6aU .search-bar, .chat form .inner-3if5cm, .search-results-wrap, .search-results-wrap .search-header, .search-results-wrap .search-result-message.hit, .sidebar-region, .ui-standard-sidebar-view, .channels-3g2vYe {background: rgba(0,0,0,0.15) !important;}  .search-results-wrap .search-result-message.hit {box-shadow:none !important;}  .titleBar-3_fDwJ::after {content:""; position:absolute; z-index:-1; top:0; left:0; right:0; width:100%; height:22px; background: rgba(0,0,0,0.8) !important;}  #friends .friends-table, .channel-members, .channel-members-loading, .chat .content, .chat form, .chat, .content .flex-spacer, .messages-wrapper, .typing-3eiiL_, .container-RYiLUQ, .headerBar-cxbhPD, .titleBar-3_fDwJ, .titleWrapper-3Vi_wz .title-qAcLxz, .search-results-wrap .search-result::before, .search-results-wrap .search-result::after, .search-results-wrap .channel-name {background: transparent !important;}  ::-webkit-scrollbar-thumb {border-color: transparent !important; background: rgba(0,0,0,0.3) !important;} ::-webkit-scrollbar, ::-webkit-scrollbar-track-piece {border-color: transparent !important; background: transparent !important;} ::-webkit-scrollbar-corner {display: none !important;}`;
 		
 		this.themeRepoButtonMarkup = 
 			`<button class="bd-pfbtn bd-themerepobutton">Theme Repo</button>`;
@@ -488,7 +488,7 @@ class ThemeRepo {
 				frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"ThemeFixer",checked:$(e.target).prop("checked"),css:this.themeFixerCSS},"*");
 			})
 			.on("click." + this.getName(), "#download-themefixer", (e) => {
-				this.createThemeFile("ThemeFixer.theme.css", `//META{"name":"ThemeFixer","description":"ThemeFixerCSS for transparent themes","author":"xNightWulf","version":"1.0.0"}*//\n\n` + this.themeFixerCSS);
+				this.createThemeFile("ThemeFixer.theme.css", `//META{"name":"ThemeFixer","description":"ThemeFixerCSS for transparent themes","author":"DevilBro","version":"1.0.1"}*//\n\n` + this.themeFixerCSS);
 			})
 			.on("change." + this.getName(), ".hide-checkbox", (e) => {
 				var hideButton = $(e.currentTarget);
