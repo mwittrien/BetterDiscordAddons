@@ -69,7 +69,7 @@ class SpellCheck {
 
 	getDescription () {return "Adds a spellcheck to all textareas. Select a word and rightclick it to add it to your dictionary.";}
 
-	getVersion () {return "1.1.2";}
+	getVersion () {return "1.1.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -84,11 +84,18 @@ class SpellCheck {
 		for (let key in amounts) {
 			settingshtml += `<div class="ui-form-item flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ weightMedium-13x9Y8 size16-3IvaX_ flexChild-1KGW5q" style="flex: 0 0 50%; line-height: 38px;">${this.defaults.amounts[key].description}</h3><div class="inputWrapper-3xoRWR vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR" style="flex: 1 1 auto;"><input type="number" min="0" option="${key}" value="${amounts[key]}" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_ amountInput"></div></div>`;
 		}
+		var ownDictionary = BDfunctionsDevilBro.loadData(choices.dictionaryLanguage, this, "owndics") || [];
+		settingshtml += `<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Your own Dictionary:</h3><div class="DevilBro-settings-inner-list word-list marginBottom8-1mABJ4">`;
+		for (let word of ownDictionary) {
+			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginTop4-2rEBfJ marginBottom4-_yArcI ui-hover-card card-11ynQk"><div class="card-11ynQk-inner"><div class="description-3MVziF formText-1L-zZB note-UEZmbY marginTop4-2rEBfJ modeDefault-389VjU primary-2giqSn ellipsis-CYOqEr entryword">${word}</div></div><div class="round-remove-button button-1qrA-N remove-word"></div></div>`;
+		}
+		settingshtml += `</div>`;
 		settingshtml += `</div></div>`;
 		
 		var settingspanel = $(settingshtml)[0];
 		$(settingspanel)
-			.on("click", ".Select-control", (e) => {this.openDropdownMenu(e);})
+			.on("click", ".Select-control", (e) => {this.openDropdownMenu(settingspanel, e);})
+			.on("click", ".remove-word", (e) => {this.removeFromOwnDictionary(e);})
 			.on("input", ".amountInput", (e) => {
 				var input = parseInt(e.currentTarget.value);
 				if (!isNaN(input) && input > -1) BDfunctionsDevilBro.saveData(e.currentTarget.getAttribute("option"), input, this, "amounts");
@@ -249,7 +256,18 @@ class SpellCheck {
 		}
 	};
 	
-	openDropdownMenu (e) {
+	removeFromOwnDictionary (e) {
+		var entry = e.currentTarget.parentElement;
+		var word = entry.querySelector(".entryword").textContent;
+		entry.remove();
+		var lang = BDfunctionsDevilBro.getData("dictionaryLanguage", this, "choices");
+		var ownDictionary = BDfunctionsDevilBro.loadData(lang, this, "owndics") || [];
+		BDfunctionsDevilBro.removeFromArray(ownDictionary, word);
+		BDfunctionsDevilBro.saveData(lang, ownDictionary, this, "owndics");
+		this.dictionary = this.langDictionary.concat(ownDictionary);
+	}
+	
+	openDropdownMenu (settingspanel, e) {
 		var selectControl = e.currentTarget;
 		var selectWrap = selectControl.parentElement;
 		
@@ -268,6 +286,16 @@ class SpellCheck {
 			selectControl.querySelector(".title-3I2bY1").innerText = this.languages[language].name;
 			this.setDictionary(language);
 			BDfunctionsDevilBro.saveData(type, language, this, "choices");
+			
+			var listcontainer = settingspanel.querySelector(".word-list");
+			if (listcontainer) {
+				var ownDictionary = BDfunctionsDevilBro.loadData(language, this, "owndics") || [];
+				var containerhtml = ``;
+				for (let word of ownDictionary) {
+					containerhtml += `<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginTop4-2rEBfJ marginBottom4-_yArcI ui-hover-card card-11ynQk"><div class="card-11ynQk-inner"><div class="description-3MVziF formText-1L-zZB note-UEZmbY marginTop4-2rEBfJ modeDefault-389VjU primary-2giqSn ellipsis-CYOqEr entryword">${word}</div></div><div class="round-remove-button button-1qrA-N remove-word"></div></div>`;
+				}
+				listcontainer.innerHTML = containerhtml;
+			}
 		});
 		$(document).on("mousedown.select" + this.getName(), (e2) => {
 			if (e2.target.parentElement == selectMenu) return;
