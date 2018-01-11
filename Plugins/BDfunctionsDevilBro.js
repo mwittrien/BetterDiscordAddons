@@ -126,7 +126,7 @@ BDfunctionsDevilBro.checkUpdate = function (pluginName, downloadUrl) {
 };
 
 BDfunctionsDevilBro.showUpdateNotice = function (pluginName, downloadUrl) {
-	let noticeElement = `<div class="notice notice-3I4-y_ size14-1wjlWP weightMedium-13x9Y8 height36-13sPn7 notice-info DevilBro-notice" id="pluginNotice"><div class="notice-dismiss dismiss-1QjyJW" id="pluginNoticeDismiss"></div><span class="notice-message">The following plugins have updates:</span>&nbsp;&nbsp;<strong id="outdatedPlugins"></strong></div>`;
+	let noticeElement = `<div class="notice-info noticeInfo-3v29SJ notice notice-3I4-y_ size14-1wjlWP weightMedium-13x9Y8 height36-13sPn7 DevilBro-notice" id="pluginNotice"><div class="notice-dismiss dismiss-1QjyJW" id="pluginNoticeDismiss"></div><span class="notice-message">The following plugins have updates:</span>&nbsp;&nbsp;<strong id="outdatedPlugins"></strong></div>`;
 	if (!$("#pluginNotice").length)  {
 		$(".app .guilds-wrapper + div > div:first > div:first").append(noticeElement);
 		$(".win-buttons").addClass("win-buttons-notice");
