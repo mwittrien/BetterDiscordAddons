@@ -2190,7 +2190,7 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 	
 	.update-button-tooltip,
 	.update-list-tooltip {
-		max-width: 400px;
+		max-width: 420px !important;
 	}
 	
 	.DevilBro-settings div:not([class*="marginTop"]) {
