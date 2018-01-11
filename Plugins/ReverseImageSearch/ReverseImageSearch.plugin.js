@@ -46,7 +46,7 @@ class ReverseImageSearch {
 
 	getDescription () {return "Adds a reverse image search option to the context menu.";}
 
-	getVersion () {return "3.3.1";}
+	getVersion () {return "3.3.2";}
 	
 	getAuthor () {return "DevilBro";}
 
@@ -157,7 +157,7 @@ class ReverseImageSearch {
 			.on("click", ".RIS-item", (e2) => {
 				$(context).hide();
 				var engine = e2.currentTarget.getAttribute("engine");
-				window.open(this.defaults.engines[engine].url.replace(this.textUrlReplaceString, encodeURIComponent(text)), "_blank");
+				window.open(this.defaults.engines[engine].url.replace(this.imgUrlReplaceString, encodeURIComponent(imageurl)), "_blank");
 			});
 		
 		var engines = BDfunctionsDevilBro.getAllData(this, "engines");
