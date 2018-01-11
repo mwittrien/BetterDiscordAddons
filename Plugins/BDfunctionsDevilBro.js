@@ -128,12 +128,20 @@ BDfunctionsDevilBro.checkUpdate = function (pluginName, downloadUrl) {
 BDfunctionsDevilBro.showUpdateNotice = function (pluginName, downloadUrl) {
 	var updateNoticeBar = document.querySelector("#pluginNotice");
 	if (!updateNoticeBar) {
-		updateNoticeBar = BDfunctionsDevilBro.createNotificationsBar(`The following plugins have updates:&emsp;<strong id="outdatedPlugins"></strong>`, {html:true, id:"pluginNotice", type:"info"});
-		$(updateNoticeBar).on("click", ".dismiss-1QjyJW", () => {
-			$(updateNoticeBar).slideUp({complete: () => {
-				updateNoticeBar.remove();
-			}});
-		});
+		updateNoticeBar = BDfunctionsDevilBro.createNotificationsBar(`The following plugins have updates:&nbsp;&nbsp;<strong id="outdatedPlugins"></strong>`, {html:true, id:"pluginNotice", type:"info", btn: !BDfunctionsDevilBro.isRestartNoMoreEnabled() ? "Reload" : ""});
+		$(updateNoticeBar)
+			.on("click", ".dismiss-1QjyJW", () => {
+				$(updateNoticeBar).slideUp({complete: () => {
+					updateNoticeBar.remove();
+				}});
+			})
+			.on("click", ".button-2TvR03", (e) => {
+				e.preventDefault();
+				window.location.reload(false);
+			})
+			.on("mouseenter", ".button-2TvR03", (e) => {
+				if (window.PluginUpdates.downloaded) BDfunctionsDevilBro.createTooltip(window.PluginUpdates.downloaded.join(", "), e.currentTarget, {type:"bottom", selector:"update-notice-tooltip"});
+			});
 	}
 	if (updateNoticeBar) {
 		let outdatedContainer = updateNoticeBar.querySelector("#outdatedPlugins");
@@ -141,7 +149,7 @@ BDfunctionsDevilBro.showUpdateNotice = function (pluginName, downloadUrl) {
 		if (outdatedContainer && !outdatedContainer.querySelector("#" + pluginNoticeID)) {
 			let pluginNoticeElement = $(`<span id="${pluginNoticeID}">${pluginName}</span>`);
 			pluginNoticeElement.on("click", () => {
-				BDfunctionsDevilBro.downloadPlugin(pluginName, downloadUrl);
+				BDfunctionsDevilBro.downloadPlugin(pluginName, downloadUrl, updateNoticeBar);
 			});
 			if (outdatedContainer.querySelector("span")) $(outdatedContainer).append(`<span class="separator">, </span>`);
 			$(outdatedContainer).append(pluginNoticeElement);
@@ -149,7 +157,7 @@ BDfunctionsDevilBro.showUpdateNotice = function (pluginName, downloadUrl) {
 	}
 };
 
-BDfunctionsDevilBro.downloadPlugin = function (pluginName, downloadUrl) {
+BDfunctionsDevilBro.downloadPlugin = function (pluginName, downloadUrl, updateNoticeBar) {
 	let request = require("request");
 	let fileSystem = require("fs");
 	let path = require("path");
@@ -162,50 +170,41 @@ BDfunctionsDevilBro.downloadPlugin = function (pluginName, downloadUrl) {
 		var file = path.join(BDfunctionsDevilBro.getPluginsFolder(), filename);
 		fileSystem.writeFileSync(file, body);
 		BDfunctionsDevilBro.showToast(`${pluginName} ${window.PluginUpdates.plugins[downloadUrl].version} has been replaced by ${pluginName} ${remoteVersion}`);
-		if (!BDfunctionsDevilBro.isRestartNoMoreEnabled()) {
-			if (!window.PluginUpdates.downloaded) {
-				window.PluginUpdates.downloaded = [];
-				let button = $(`<button class="btn btn-reload">Reload</button>`);
-				button.on("click", (e) => {
-					e.preventDefault();
-					window.location.reload(false);
-				});
-				var tooltip = document.createElement("div");
-				tooltip.className = "tooltip tooltip-bottom tooltip-black";
-				tooltip.style.maxWidth = "400px";
-				button.on("mouseenter", () => {
-					document.querySelector(".tooltips").appendChild(tooltip);
-					tooltip.innerText = window.PluginUpdates.downloaded.join(", ");
-					tooltip.style.left = button.offset().left + (button.outerWidth() / 2) - ($(tooltip).outerWidth() / 2) + "px";
-					tooltip.style.top = button.offset().top + button.outerHeight() + "px";
-				});
-	
-				button.on("mouseleave", () => {
-					tooltip.remove();
-				});
-	
-				button.appendTo($("#pluginNotice"));
-			}
+		if (updateNoticeBar.querySelector(".button-2TvR03")) {
 			window.PluginUpdates.plugins[downloadUrl].version = remoteVersion;
-			window.PluginUpdates.downloaded.push(pluginName);
-			BDfunctionsDevilBro.removeUpdateNotice(pluginName);
+			if (!window.PluginUpdates.downloaded) window.PluginUpdates.downloaded = [];
+			if (!window.PluginUpdates.downloaded.includes(pluginName)) window.PluginUpdates.downloaded.push(pluginName);
 		}
+		BDfunctionsDevilBro.removeUpdateNotice(pluginName, updateNoticeBar);
 	});
 };
 
-BDfunctionsDevilBro.removeUpdateNotice = function (pluginName) {
-	let notice = $("#" + pluginName + "-notice");
-	if (notice.length) {
-		if (notice.next(".separator").length) notice.next().remove();
-		else if (notice.prev(".separator").length) notice.prev().remove();
-		notice.remove();
-	}
+BDfunctionsDevilBro.removeUpdateNotice = function (pluginName, updateNoticeBar) {
+	console.log(pluginName);
+	console.log(updateNoticeBar);
+	if (typeof updateNoticeBar === "undefined") updateNoticeBar = document.querySelector("#pluginNotice");
+	if (updateNoticeBar) {
+		let outdatedContainer = updateNoticeBar.querySelector("#outdatedPlugins");
+		if (outdatedContainer) {
+			let noticeEntry = outdatedContainer.querySelector("#" + pluginName + "-notice");
+			if (noticeEntry) {
+				console.log(noticeEntry);
+				var nextSibling = noticeEntry.nextSibling;
+				var prevSibling = noticeEntry.prevSibling;
+				if (nextSibling && nextSibling.classList && nextSibling.classList.contains("separator")) nextSibling.remove();
+				else if (prevSibling && prevSibling.classList && prevSibling.classList.contains("separator")) prevSibling.remove();
+				noticeEntry.remove();
+			}
 
-	if (!$("#outdatedPlugins").children("span").length && !$("#pluginNotice .btn-reload").length) {
-		$("#pluginNoticeDismiss").click();
-	} 
-	else if (!$("#outdatedPlugins").children("span").length && $("#pluginNotice .btn-reload").length) {
-		$("#pluginNotice .notice-message").text("To finish updating you need to reload.");
+			if (!outdatedContainer.querySelector("span")) {
+				if (!updateNoticeBar.querySelector(".button-2TvR03")) {
+					updateNoticeBar.querySelector(".dismiss-1QjyJW").click();
+				}
+				else {
+					updateNoticeBar.querySelector(".notice-message").innerText = "To finish updating you need to reload.";
+				}
+			} 
+		}
 	}
 };
 
@@ -2190,6 +2189,7 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		background-image: url(data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjRkZGRkZGIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4gICAgPHBhdGggZD0iTTAgMGgyNHYyNEgweiIgZmlsbD0ibm9uZSIvPiAgICA8cGF0aCBkPSJNMSAyMWgyMkwxMiAyIDEgMjF6bTEyLTNoLTJ2LTJoMnYyem0wLTRoLTJ2LTRoMnY0eiIvPjwvc3ZnPg==);
 	}
 	
+	.update-notice-tooltip,
 	.update-button-tooltip,
 	.update-list-tooltip {
 		max-width: 420px !important;
