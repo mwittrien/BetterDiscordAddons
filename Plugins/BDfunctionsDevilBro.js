@@ -126,28 +126,26 @@ BDfunctionsDevilBro.checkUpdate = function (pluginName, downloadUrl) {
 };
 
 BDfunctionsDevilBro.showUpdateNotice = function (pluginName, downloadUrl) {
-	let noticeElement = `<div class="notice-info noticeInfo-3v29SJ notice notice-3I4-y_ size14-1wjlWP weightMedium-13x9Y8 height36-13sPn7 DevilBro-notice" id="pluginNotice"><div class="notice-dismiss dismiss-1QjyJW" id="pluginNoticeDismiss"></div><span class="notice-message">The following plugins have updates:</span>&nbsp;&nbsp;<strong id="outdatedPlugins"></strong></div>`;
-	if (!$("#pluginNotice").length)  {
-		$(".app .guilds-wrapper + div > div:first > div:first").append(noticeElement);
-		$(".win-buttons").addClass("win-buttons-notice");
-		$("#pluginNoticeDismiss").on("click", () => {
-			$(".win-buttons").animate({top: 0}, 400, "swing", () => {
-				$(".win-buttons").css("top","").removeClass("win-buttons-notice");
-			});
-			$("#pluginNotice").slideUp({complete: () => {
-				$("#pluginNotice").remove();
+	var updateNoticeBar = document.querySelector("#pluginNotice");
+	if (!updateNoticeBar) {
+		updateNoticeBar = BDfunctionsDevilBro.createNotificationsBar(`The following plugins have updates:&emsp;<strong id="outdatedPlugins"></strong>`, {html:true, id:"pluginNotice", type:"info"});
+		$(updateNoticeBar).on("click", ".dismiss-1QjyJW", () => {
+			$(updateNoticeBar).slideUp({complete: () => {
+				updateNoticeBar.remove();
 			}});
 		});
 	}
-	let pluginNoticeID = pluginName + "-notice";
-	if (!$("#" + pluginNoticeID).length) {
-		let pluginNoticeElement = $(`<span id="${pluginNoticeID}">`);
-		pluginNoticeElement.text(pluginName);
-		pluginNoticeElement.on("click", () => {
-			BDfunctionsDevilBro.downloadPlugin(pluginName, downloadUrl);
-		});
-		if ($("#outdatedPlugins").children("span").length) $("#outdatedPlugins").append(`<span class="separator">, </span>`);
-		$("#outdatedPlugins").append(pluginNoticeElement);
+	if (updateNoticeBar) {
+		let outdatedContainer = updateNoticeBar.querySelector("#outdatedPlugins");
+		let pluginNoticeID = pluginName + "-notice";
+		if (outdatedContainer && !outdatedContainer.querySelector("#" + pluginNoticeID)) {
+			let pluginNoticeElement = $(`<span id="${pluginNoticeID}">${pluginName}</span>`);
+			pluginNoticeElement.on("click", () => {
+				BDfunctionsDevilBro.downloadPlugin(pluginName, downloadUrl);
+			});
+			if (outdatedContainer.querySelector("span")) $(outdatedContainer).append(`<span class="separator">, </span>`);
+			$(outdatedContainer).append(pluginNoticeElement);
+		}
 	}
 };
 
@@ -246,8 +244,9 @@ BDfunctionsDevilBro.createTooltip = function (content, container, options = {}) 
 	if (!document.querySelector(".tooltips") || !content || !container) return null;
 	let id = Math.round(Math.random()*10000000000000000);
 	let tooltip = document.createElement("div");
-	tooltip.classList.add("tooltip", "tooltip-black", "DevilBro-tooltip");
+	tooltip.className = "tooltip tooltip-black DevilBro-tooltip";
 	if (options.type) tooltip.classList.add("tooltip-" + options.type);
+	if (options.id) tooltip.id = options.id.split(" ")[0];
 	if (options.selector) options.selector.split(" ").forEach(selector => {if(selector) tooltip.classList.add(selector);});
 	if (options.css) BDfunctionsDevilBro.appendLocalStyle("customTooltipDevilBro" + id, options.css);
 	if (options.html === true) tooltip.innerHTML = content;
@@ -308,12 +307,15 @@ BDfunctionsDevilBro.createNotificationsBar = function (content, options = {}) {
 	let id = Math.round(Math.random()*10000000000000000);
 	let notifiybar = document.createElement("div");
 	notifiybar.className = "notice notice-3I4-y_ size14-1wjlWP weightMedium-13x9Y8 height36-13sPn7 DevilBro-notice notice-" + id;
-	notifiybar.innerHTML = `<div class="notice-dismiss dismiss-1QjyJW "></div><span class="notice-message">${content}</span></strong>`;
+	notifiybar.innerHTML = `<div class="notice-dismiss dismiss-1QjyJW "></div><span class="notice-message"></span></strong>`;
 	$(".app .guilds-wrapper + div > div:first > div:first").append(notifiybar);
-	
-	if (options.btn) $(`<button class="btn button-2TvR03 size14-1wjlWP weightMedium-13x9Y8">${options.btn}</button>`).insertAfter(notifiybar.querySelector(".notice-message"));
+	var notifiybarinner = notifiybar.querySelector(".notice-message");
+	if (options.btn) $(`<button class="btn button-2TvR03 size14-1wjlWP weightMedium-13x9Y8">${options.btn}</button>`).insertAfter(notifiybarinner);
+	if (options.id) notifiybar.id = options.id.split(" ")[0];
 	if (options.selector) options.selector.split(" ").forEach(selector => {if(selector) notifiybar.classList.add(selector);});
 	if (options.css) BDfunctionsDevilBro.appendLocalStyle("customNotificationsBarDevilBro" + id, options.css);
+	if (options.html === true) notifiybarinner.innerHTML = content;
+	else notifiybarinner.innerText = content;
 	
 	var type = null;
 	if (options.type) {
@@ -335,25 +337,25 @@ BDfunctionsDevilBro.createNotificationsBar = function (content, options = {}) {
 		var color = comp && comp[0] > 180 && comp[1] > 180 && comp[2] > 180 ? "#000" : "#FFF";
 		var bgColor = comp ? BDfunctionsDevilBro.color2HEX(comp) : "#F26522";
 		var dismissFilter = comp && comp[0] > 180 && comp[1] > 180 && comp[2] > 180 ? "brightness(0%)" : "brightness(100%)";
+		BDfunctionsDevilBro.appendLocalStyle("customNotificationsBarColorCorrectionDevilBro" + id, 
+			`.DevilBro-notice.notice-${id} {
+				background-color: ${bgColor} !important;
+			}
+			.DevilBro-notice.notice-${id} .notice-message {
+				color: ${color} !important;
+			}
+			.DevilBro-notice.notice-${id} .button-2TvR03 {
+				color: ${color} !important;
+				border-color: ${color} !important;
+			}
+			.DevilBro-notice.notice-${id} .button-2TvR03:hover {
+				color: ${bgColor} !important;
+				background-color: ${color} !important;
+			}
+			.DevilBro-notice.notice-${id} .dismiss-1QjyJW {
+				filter: ${dismissFilter} !important;
+			}`);
 	}
-	BDfunctionsDevilBro.appendLocalStyle("customNotificationsBarColorCorrectionDevilBro" + id, 
-		`.DevilBro-notice.notice-${id} {
-			background-color: ${bgColor};
-		}
-		.DevilBro-notice.notice-${id} .notice-message {
-			color: ${color};
-		}
-		.DevilBro-notice.notice-${id} .button-2TvR03 {
-			color: ${color};
-			border-color: ${color};
-		}
-		.DevilBro-notice.notice-${id} .button-2TvR03:hover {
-			color: ${bgColor};
-			background-color: ${color};
-		}
-		.DevilBro-notice.notice-${id} .dismiss-1QjyJW {
-			filter: ${dismissFilter};
-		}`);
 	$(notifiybar).on("click", ".dismiss-1QjyJW", () => {
 		$(notifiybar).slideUp({complete: () => {
 			BDfunctionsDevilBro.removeLocalStyle("customNotificationsBarDevilBro" + id);
