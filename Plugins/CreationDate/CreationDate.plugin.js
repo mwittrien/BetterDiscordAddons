@@ -40,9 +40,10 @@ class CreationDate {
 			
 		this.defaults = {
 			settings: {
-				addInUserPopout:		{value:true, 		description:"Add in User Popouts."},
-				addInUserProfil:		{value:true, 		description:"Add in User Profil Modal."},
-				addCreationTime:		{value:true, 		description:"Display the Time of Creation."}
+				addInUserPopout:		{value:true, 		description:"Add in User Popouts:"},
+				addInUserProfil:		{value:true, 		description:"Add in User Profil Modal:"},
+				addCreationTime:		{value:true, 		description:"Display the Time of Creation:"},
+				forceZeros:				{value:false, 		description:"Force leading Zeros:"}
 			},
 			choices: {
 				creationDateLang:		{value:"$discord", 	description:"Creation Date Format:"}
@@ -54,7 +55,7 @@ class CreationDate {
 
 	getDescription () {return "Displays the Creation Date of an Account in the UserPopout and UserModal.";}
 
-	getVersion () {return "1.0.8";}
+	getVersion () {return "1.0.9";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -143,8 +144,6 @@ class CreationDate {
 			this.userPopoutObserver.disconnect();
 			this.userProfilModalObserver.disconnect();
 			
-			if (typeof this.patchCancel === "function") this.patchCancel();
-			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName());
 			
 			BDfunctionsDevilBro.unloadMessage(this);
@@ -214,7 +213,20 @@ class CreationDate {
 	}
 	
 	getCreationTime (languageid, timestamp = new Date()) {
-		return BDfunctionsDevilBro.getData("addCreationTime", this, "settings") ? timestamp.toLocaleString(languageid) : timestamp.toLocaleDateString(languageid);
+		var settings = BDfunctionsDevilBro.getAllData(this, "settings");
+		var timestring = settings.addCreationTime ? timestamp.toLocaleString(languageid) : timestamp.toLocaleDateString(languageid);
+		if (timestring && settings.forceZeros) timestring = this.addLeadingZeros(timestring);
+		return timestring;
+	}
+	
+	addLeadingZeros (timestring) {
+		var chararray = timestring.split("");
+		var numreg = /[0-9]/;
+		for (var i = 0; i < chararray.length; i++) {
+			if (!numreg.test(chararray[i-1]) && numreg.test(chararray[i]) && !numreg.test(chararray[i+1])) chararray[i] = "0" + chararray[i];
+		}
+		
+		return chararray.join("");
 	}
 	
 	setLabelsByLanguage () {
