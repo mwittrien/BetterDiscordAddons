@@ -180,7 +180,7 @@ class CreationDate {
 			var language = e2.currentTarget.getAttribute("value");
 			selectWrap.setAttribute("value", language);
 			selectControl.querySelector(".languageName").innerText = this.languages[language].name;
-			selectControl.querySelector(".languageTimestamp").innerText = new Date().toLocaleString(this.languages[language].id);
+			selectControl.querySelector(".languageTimestamp").innerText = this.getCreationTime(language);
 			BDfunctionsDevilBro.saveData(type, language, this, "choices");
 		});
 		$(document).on("mousedown.select" + this.getName(), (e2) => {
