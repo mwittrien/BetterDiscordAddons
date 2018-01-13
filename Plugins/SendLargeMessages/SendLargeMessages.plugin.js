@@ -65,7 +65,7 @@ class SendLargeMessages {
 
 	getDescription () {return "Opens a popout when your message is too large, which allows you to automatically send the message in several smaller messages.";}
 
-	getVersion () {return "1.3.6";}
+	getVersion () {return "1.3.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -221,7 +221,6 @@ class SendLargeMessages {
 		
 		var insertCodeBlock = null, insertCodeLine = null;
 		for (var j = 0; j < messages.length; j++) {
-			messages[j] = " " + messages[j];
 			if (insertCodeBlock) {
 				messages[j] = insertCodeBlock + messages[j];
 				insertCodeBlock = null;
@@ -232,7 +231,7 @@ class SendLargeMessages {
 			}
 			
 			var codeBlocks = messages[j].match(/`{3,}[\S]*\n|`{3,}/gm);
-			var codeLines = messages[j].match(/[^`]{0,1}`[^`]/gm);
+			var codeLines = messages[j].match(/[^`]{0,1}`{1,2}[^`]|[^`]`{1,2}[^`]{0,1}/gm);
 			
 			if (codeBlocks && codeBlocks.length % 2 == 1) {
 				messages[j] = messages[j] + "```";
@@ -240,7 +239,7 @@ class SendLargeMessages {
 			}
 			else if (codeLines && codeLines.length % 2 == 1) {
 				messages[j] = messages[j] + "`";
-				insertCodeLine = "`";
+				insertCodeLine = codeLines[codeLines.length-1].replace(/[^`]/g, "");
 			}
 		}
 		
