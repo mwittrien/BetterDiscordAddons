@@ -38,7 +38,7 @@ class MessageUtilities {
 
 	getDescription () {return "Offers a number of useful message options. Remap the keybindings in the settings.";}
 
-	getVersion () {return "1.3.0";}
+	getVersion () {return "1.3.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -50,10 +50,10 @@ class MessageUtilities {
 		for (let action in bindings) {
 			settingshtml += `<div class="${action}-key-settings"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.bindings[action].name}:</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU ${settings[action] ? "valueChecked-3Bzkbm" : "valueUnchecked-XR6AOk"}" style="flex: 0 0 auto;"><input type="checkbox" value="${action}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[action] ? " checked" : ""}></div></div><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">`;
 			for (let click of this.clicks) {
-				settingshtml += `<div class="ui-form-item flexChild-1KGW5q" style="flex: 1 1 20%;"><h5 class="h5-3KssQU title-1pmpPr size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH defaultMarginh5-2UwwFY marginBottom4-_yArcI">${click}:</h5><div class="ui-select ${click}-select-wrapper"><div type="${action}" option="${click}" value="${bindings[action][click]}" class="Select Select--single has-value"><div class="Select-control"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-value" style="flex: 1 1 auto;"><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm">${this.clickMap[bindings[action][click]]}</div></div><span class="Select-arrow-zone"><span class="Select-arrow"></span></span></div></div></div></div>`;
+				settingshtml += `<div class="ui-form-item flexChild-1KGW5q" style="flex: 1 1 20%;"><h5 class="h5-3KssQU title-1pmpPr size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH defaultMarginh5-2UwwFY marginBottom4-_yArcI">${click}:</h5><div class="ui-select select-3JqNgs"><div type="${action}" option="${click}" value="${bindings[action][click]}" class="Select Select--single has-value"><div class="Select-control"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-value" style="flex: 1 1 auto;"><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm">${this.clickMap[bindings[action][click]]}</div></div><span class="Select-arrow-zone"><span class="Select-arrow"></span></span></div></div></div></div>`;
 			}
 			for (let key of this.keys) {
-				settingshtml += `<div class="ui-form-item flexChild-1KGW5q" style="flex: 1 1 40%;"><h5 class="h5-3KssQU title-1pmpPr size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH defaultMarginh5-2UwwFY marginBottom4-_yArcI">${key}:<label class="reset-recorder" style="float:right;padding-right:5px;cursor:pointer;">✖</label></h5><div type="${action}" option="${key}" value="${bindings[action][key]}" class="ui-key-recorder ui-input-button default has-value"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO layout" style="flex: 1 1 auto;"><input type="text" placeholder="${this.keyboardMap[bindings[action][key]]}" readonly="" value="${this.keyboardMap[bindings[action][key]]}" class="input" style="flex: 1 1 auto;"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO" style="flex: 0 1 auto; margin: 0px;"><button type="button" class="buttonGreyGhostDefault-2h5dqi buttonGhostDefault-2NFSwJ buttonDefault-2OLW-v button-2t3of8 buttonGhost-2Y7zWJ buttonGreyGhost-SfY7zU minGrow-1W9N45 min-K7DTfI ui-input-button-ui-button key-recorder-button"><div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsGhost-2Yp1r8"><span class="key-recorder-button-text">Change Hotkey</span><span class="key-recorder-edit-icon"></span></div></button></div></div></div></div>`;
+				settingshtml += `<div class="ui-form-item flexChild-1KGW5q" style="flex: 1 1 40%;"><h5 class="h5-3KssQU title-1pmpPr size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH defaultMarginh5-2UwwFY marginBottom4-_yArcI">${key}:<label class="reset-recorder" style="float:right;padding-right:5px;cursor:pointer;">✖</label></h5><div type="${action}" option="${key}" value="${bindings[action][key]}" class="ui-key-recorder ui-input-button default has-value container-3mpa-y container-2YgzWd hasValue-3eeIe5"><div class="layout flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO layout-2M2IoV layout-1qlGFe" style="flex: 1 1 auto;"><input type="text" placeholder="${this.keyboardMap[bindings[action][key]]}" readonly="" value="${this.keyboardMap[bindings[action][key]]}" class="input input-2ZbpUR input-1aITJk base-2IToIx" style="flex: 1 1 auto;"></input><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO" style="flex: 0 1 auto; margin: 0px;"><button type="button" class="ui-input-button-ui-button key-recorder-button buttonGreyGhostDefault-2h5dqi buttonGhostDefault-2NFSwJ buttonDefault-2OLW-v button-2t3of8 buttonGhost-2Y7zWJ buttonGreyGhost-SfY7zU minGrow-1W9N45 min-K7DTfI button-2jURHM button-2FUBCE"><div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsGhost-2Yp1r8"><span class="key-recorder-button-text text-2RnTnf">Change Hotkey</span><span class="key-recorder-edit-icon editIcon-1MI9mZ"/></div></button></div></div></div></div>`;
 			}
 			settingshtml += `</div></div>`;
 		}
@@ -64,7 +64,7 @@ class MessageUtilities {
 		$(settingspanel)
 			.on("click", ".checkbox-1KYsPm", () => {this.updateSettings(settingspanel);})
 			.on("click", ".Select-control", (e) => {this.openDropdownMenu(settingspanel, e);})
-			.on("click", ".ui-key-recorder", (e) => {this.startRecording(settingspanel, e);})
+			.on("click", ".container-3mpa-y", (e) => {this.startRecording(settingspanel, e);})
 			.on("click", ".reset-recorder", (e) => {this.resetRecorder(settingspanel, e);})
 			.on("click", ".reset-button", () => {this.resetAll(settingspanel);});
 			
@@ -141,7 +141,7 @@ class MessageUtilities {
 				wrap.setAttribute("value", bindings[action][option]);
 				wrap.querySelector(".title-3I2bY1").innerText = this.clickMap[bindings[action][option]];
 			});
-			settingspanel.querySelectorAll(".ui-key-recorder").forEach((wrap) => {
+			settingspanel.querySelectorAll(".container-3mpa-y").forEach((wrap) => {
 				var action = wrap.getAttribute("type");
 				var option = wrap.getAttribute("option");
 				wrap.setAttribute("value", bindings[action][option]);
@@ -152,7 +152,7 @@ class MessageUtilities {
 	
 	openDropdownMenu (settingspanel, e) {
 		var selectControl = e.currentTarget;
-		var selectWrap = selectControl.parentElement;
+		var selectWrap = e.currentTarget.parentElement;
 		
 		if (selectWrap.classList.contains("is-open")) return;
 		
@@ -173,7 +173,7 @@ class MessageUtilities {
 			binding[option] = parseInt(selection);
 			BDfunctionsDevilBro.saveData(action, binding, this, "bindings");
 		});
-		$(document).on("mousedown.select" + this.getName(), () => {
+		$(document).on("mousedown.select" + this.getName(), (e2) => {
 			if (e2.target.parentElement == selectMenu) return;
 			$(document).off("mousedown.select" + this.getName());
 			selectMenu.remove()
@@ -194,15 +194,17 @@ class MessageUtilities {
 	startRecording (settingspanel, e) {
 		var recorderWrap = e.currentTarget;
 		
-		if (recorderWrap.classList.contains("recording")) return;
+		if (recorderWrap.classList.contains("recording-1Ne76k")) return;
 		
 		var recorderInput = recorderWrap.querySelector("input");
-		var recorderText = recorderWrap.querySelector(".key-recorder-button-text");
+		var recorderText = recorderWrap.querySelector(".text-2RnTnf");
 		var action = recorderWrap.getAttribute("type");
 		var option = recorderWrap.getAttribute("option");
 		
 		recorderWrap.classList.add("recording");
+		recorderWrap.classList.add("recording-1Ne76k");
 		recorderWrap.classList.remove("has-value");
+		recorderWrap.classList.remove("hasValue-3eeIe5");
 		recorderText.innerText = "Stop Recording";
 		
 		$(document).on("keydown.recorder" + this.getName(), (e) => {
@@ -218,7 +220,9 @@ class MessageUtilities {
 			BDfunctionsDevilBro.saveData(action, binding, this, "bindings");
 			setTimeout(() => {
 				recorderWrap.classList.remove("recording");
+				recorderWrap.classList.remove("recording-1Ne76k");
 				recorderWrap.classList.add("has-value");
+				recorderWrap.classList.add("hasValue-3eeIe5");
 				recorderText.innerText = "Change Hotkey";
 			},100);
 		});
@@ -226,7 +230,7 @@ class MessageUtilities {
 	
 	resetRecorder (settingspanel, e) {
 		var resetButton = e.currentTarget;
-		var recorderWrap = e.currentTarget.parentElement.parentElement.querySelector(".ui-key-recorder");
+		var recorderWrap = e.currentTarget.parentElement.parentElement.querySelector(".container-3mpa-y");
 		var recorderInput = recorderWrap.querySelector("input");
 		var action = recorderWrap.getAttribute("type");
 		var option = recorderWrap.getAttribute("option");
