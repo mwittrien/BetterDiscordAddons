@@ -9,7 +9,7 @@ class CreationDate {
 		this.userPopoutObserver = new MutationObserver(() => {});
 		this.userProfilModalObserver = new MutationObserver(() => {});
 		
-		this.creationDateMarkup = `<div class="creationDate nameNormal-1LgIgN textRow-1_JoJf"></div>`;
+		this.creationDateMarkup = `<div class="creationDate textRow-1_JoJf"></div>`;
 		
 		this.css = `
 			.theme-light .headerNormal-1cioxU .creationDate {
