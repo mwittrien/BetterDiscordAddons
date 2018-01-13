@@ -65,7 +65,7 @@ class SendLargeMessages {
 
 	getDescription () {return "Opens a popout when your message is too large, which allows you to automatically send the message in several smaller messages.";}
 
-	getVersion () {return "1.3.7";}
+	getVersion () {return "1.3.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -238,8 +238,8 @@ class SendLargeMessages {
 				insertCodeBlock = codeBlocks[codeBlocks.length-1] + "\n";
 			}
 			else if (codeLines && codeLines.length % 2 == 1) {
-				messages[j] = messages[j] + "`";
 				insertCodeLine = codeLines[codeLines.length-1].replace(/[^`]/g, "");
+				messages[j] = messages[j] + insertCodeLine;
 			}
 		}
 		
