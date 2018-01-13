@@ -2,9 +2,7 @@
 
 class SendLargeMessages {
 	constructor () {
-		
 		this.labels = {};
-		
 		
 		this.messageDelay = 1000; //changing at own risk, might result in bans or mutes
 		
@@ -67,7 +65,7 @@ class SendLargeMessages {
 
 	getDescription () {return "Opens a popout when your message is too large, which allows you to automatically send the message in several smaller messages.";}
 
-	getVersion () {return "1.3.5";}
+	getVersion () {return "1.3.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -221,16 +219,28 @@ class SendLargeMessages {
 			messages[count2] = messages[count2] ? messages[count2] + " " + word : word;
 		});
 		
-		var insertCodeBlock = null;
+		var insertCodeBlock = null, insertCodeLine = null;
 		for (var j = 0; j < messages.length; j++) {
+			messages[j] = " " + messages[j];
 			if (insertCodeBlock) {
 				messages[j] = insertCodeBlock + messages[j];
 				insertCodeBlock = null;
 			}
+			else if (insertCodeLine) {
+				messages[j] = insertCodeLine + messages[j];
+				insertCodeLine = null;
+			}
+			
 			var codeBlocks = messages[j].match(/`{3,}[\S]*\n|`{3,}/gm);
+			var codeLines = messages[j].match(/[^`]{0,1}`[^`]/gm);
+			
 			if (codeBlocks && codeBlocks.length % 2 == 1) {
 				messages[j] = messages[j] + "```";
 				insertCodeBlock = codeBlocks[codeBlocks.length-1] + "\n";
+			}
+			else if (codeLines && codeLines.length % 2 == 1) {
+				messages[j] = messages[j] + "`";
+				insertCodeLine = "`";
 			}
 		}
 		
