@@ -69,7 +69,7 @@ class NotificationSounds {
 	
 	getDescription () {return "Allows you to replace the native sounds of Discord with your own";}
 
-	getVersion () {return "3.0.6";}
+	getVersion () {return "3.0.7";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -81,11 +81,16 @@ class NotificationSounds {
 			
 			var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="titleDefault-1CWM9y title-3i-5G_ size18-ZM4Qv- height24-2pMcnc weightNormal-3gw0Lm marginBottom8-1mABJ4">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 			
-			settingshtml += `<div class="add-new-song-settings"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">Add New Song:</h3></div><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">`;
-			settingshtml += `<div class="ui-form-item flexChild-1KGW5q" style="flex: 1 1 33%;"><h5 class="h5-3KssQU title-1pmpPr size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH defaultMarginh5-2UwwFY marginBottom4-_yArcI">Categoryname:</h5><div class="inputWrapper-3xoRWR vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR flexChild-1KGW5q" style="flex: 1 1 auto;"><input type="text" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_ songInput" id="input-category"></div></div>`
-			settingshtml += `<div class="ui-form-item flexChild-1KGW5q" style="flex: 1 1 33%;"><h5 class="h5-3KssQU title-1pmpPr size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH defaultMarginh5-2UwwFY marginBottom4-_yArcI">Songname:</h5><div class="inputWrapper-3xoRWR vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR flexChild-1KGW5q" style="flex: 1 1 auto;"><input type="text" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_ songInput" id="input-song"></div></div>`
-			settingshtml += `<div class="ui-form-item flexChild-1KGW5q" style="flex: 1 1 33%;"><h5 class="h5-3KssQU title-1pmpPr size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH defaultMarginh5-2UwwFY marginBottom4-_yArcI">Songurl:</h5><div class="inputWrapper-3xoRWR vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR flexChild-1KGW5q" style="flex: 1 1 auto;"><input type="text" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_ songInput" id="input-url"></div></div>`
-			settingshtml += `</div></div>`;
+			settingshtml += `<div class="add-new-song-settings"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">Add New Song:</h3></div>`;
+			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">`;
+			settingshtml += `<div class="ui-form-item flexChild-1KGW5q" style="flex: 1 1 50%;"><h5 class="h5-3KssQU title-1pmpPr size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH defaultMarginh5-2UwwFY marginBottom4-_yArcI">Categoryname:</h5><div class="inputWrapper-3xoRWR vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR flexChild-1KGW5q" style="flex: 1 1 auto;"><input type="text" placeholder="Category" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_ songInput" id="input-category"></div></div>`;
+			settingshtml += `<div class="ui-form-item flexChild-1KGW5q" style="flex: 1 1 50%;"><h5 class="h5-3KssQU title-1pmpPr size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH defaultMarginh5-2UwwFY marginBottom4-_yArcI">Songname:</h5><div class="inputWrapper-3xoRWR vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR flexChild-1KGW5q" style="flex: 1 1 auto;"><input type="text" placeholder="Name" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_ songInput" id="input-song"></div></div>`;
+			settingshtml += `</div>`;
+			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">`;
+			settingshtml += `<div class="ui-form-item flexChild-1KGW5q" style="flex: 1 1 75%;"><h5 class="h5-3KssQU title-1pmpPr size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH defaultMarginh5-2UwwFY marginBottom4-_yArcI">File:</h5><div class="inputWrapper-3xoRWR vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR flexChild-1KGW5q" style="flex: 1 1 auto;"><input type="text" placeholder="Url or Filepath" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_ songInput" id="input-url"></div></div>`;
+			settingshtml += `<div class="ui-form-item flexChild-1KGW5q" style="flex: 1 1 25%;"><h5 class="h5-3KssQU title-1pmpPr size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH defaultMarginh5-2UwwFY marginBottom4-_yArcI">&nbsp;</h5><div class="inputWrapper-3xoRWR vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR flexChild-1KGW5q" style="flex: 1 1 auto;"><button type="button" class="flexChild-1KGW5q buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu" id="input-file" style="flex: 0 0 auto;"><div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx contents-4L4hQM">Browse File</div><input type="file" accept="audio/*,video/*" class="file-navigator" style="display:none!important;"></button></div></div>`;
+			settingshtml += `</div>`;
+			settingshtml += `</div>`;
 			
 			for (var type in this.types) {
 				var choice = BDfunctionsDevilBro.loadData(type, this, "choices");
@@ -108,6 +113,11 @@ class NotificationSounds {
 				.on("keyup", ".songInput", (e) => {if (e.which == 13) this.saveAudio(settingspanel);})
 				.on("click", ".reset-button", () => {this.resetAll(settingspanel);})
 				.on("click", "#input-unimplemented", (e) => {this.toggleUnimplemented(settingspanel,e);})
+				.on("click", "#input-file", (e) => {e.currentTarget.querySelector(".file-navigator").click();})
+				.on("change", ".file-navigator", (e) => {
+					var file = e.currentTarget.files[0];
+					if (file) settingspanel.querySelector("#input-url").value = file.path;
+				})
 				.on("mousedown", ".grabber-1TZCZi", (e) => {this.dragSlider(settingspanel,e);})
 				.find(".unimplemented").hide();
 				
@@ -387,26 +397,46 @@ class NotificationSounds {
 			if (!input.value || input.value.length == 0 || input.value.trim().length == 0) valid = false;
 		});
 		if (valid) {
-			let request = require("request");
+			var successSavedAudio;
 			var category = settingspanel.querySelector("#input-category").value;
 			var song = settingspanel.querySelector("#input-song").value;
 			var url = settingspanel.querySelector("#input-url").value;
-			request(url, (error, response, result) => {
-				if (response) {
-					var type = response.headers["content-type"];
-					if (type && (type.indexOf("octet-stream") > -1 || type.indexOf("audio") > -1 || type.indexOf("viodeo") > -1)) {
-						BDfunctionsDevilBro.showToast(`Song ${song} was added to category ${category}.`, {type:"success"});
-						if (!this.audios[category]) this.audios[category] = {};
-						this.audios[category][song] = url;
-						BDfunctionsDevilBro.saveAllData(this.audios, this, "audios");
-						inputs.forEach((input) => {
-							input.value = "";
-						});
-						return;
+			if (url.indexOf("http") == 0) {
+				let request = require("request");
+				request(url, (error, response, result) => {
+					if (response) {
+						var type = response.headers["content-type"];
+						if (type && (type.indexOf("octet-stream") > -1 || type.indexOf("audio") > -1 || type.indexOf("video") > -1)) {
+							successSavedAudio();
+							return;
+						}
 					}
-				}
-				BDfunctionsDevilBro.showToast("Use a valid direct link to a video or audio source. They usually end on something like .mp3, .mp4 or .wav.", {type:"danger"});
-			});
+					BDfunctionsDevilBro.showToast("Use a valid direct link to a video or audio source. They usually end on something like .mp3, .mp4 or .wav.", {type:"danger"});
+				});
+			}
+			else {
+				let fs = require("fs");
+				var file = fs.readFileSync(url);
+				fs.readFile(url, (error, response) => {
+					if (error) {
+						BDfunctionsDevilBro.showToast("Could not fetch file. Please make sure the file exists.", {type:"danger"});
+					}
+					else {
+						url = `data:audio/mpeg;base64,${response.toString("base64")}`;
+						successSavedAudio();
+					}
+				});
+			}
+			
+			successSavedAudio = () => {
+				BDfunctionsDevilBro.showToast(`Song ${song} was added to category ${category}.`, {type:"success"});
+				if (!this.audios[category]) this.audios[category] = {};
+				this.audios[category][song] = url;
+				BDfunctionsDevilBro.saveAllData(this.audios, this, "audios");
+				inputs.forEach((input) => {
+					input.value = "";
+				});
+			};
 		}
 		else {
 			BDfunctionsDevilBro.showToast("Fill out all fields to add a new song.", {type:"danger"});
