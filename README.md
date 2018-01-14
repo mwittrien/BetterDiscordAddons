@@ -1,5 +1,5 @@
 # BetterDiscordAddons
-A series of plugins and themes for BetterDiscord. If you got any question write me an email.
+A series of plugins and themes for BetterDiscord. If you got any question hit me up on Discord DevilBro#4401
 
 ## Plugins
  - [Better NSFW Tag](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/BetterNsfwTag) - Adds a more noticeable tag to NSFW channels.
