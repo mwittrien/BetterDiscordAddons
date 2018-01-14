@@ -36,3 +36,6 @@ A series of plugins and themes for BetterDiscord. If you got any question write 
  - [Theme Repo](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ThemeRepo) - Allows you to preview all themes from the theme repo and download them on the fly.
  - [Top Role Everywhere](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/TopRoleEverywhere) - Adds the highest role of a user as a tag.
  - [Write UpperCase](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/WriteUpperCase) - Changes the input in the textarea to uppercase.
+
+## Themes
+ - [Basic Background](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/BasicBackground) - Allows you to use a background image in Discord without greatly altering the basic look of Discord.
