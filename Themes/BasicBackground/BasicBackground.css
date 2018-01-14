@@ -59,16 +59,18 @@ button.guild,
 }
 
 .base-3AoPqv {
-	border-radius: 0;
+	border-radius: 0 !important;
 }
 
 .channels-3g2vYe > div:nth-child(2) {
-	border-radius: 5px 5px 0 0;
+	border-radius: 5px 5px 0 0 !important;
 }
 
+.member,
+.channel, 
 .channels-3g2vYe .wrapperHoveredCollapsed-25KVVp,
 .channels-3g2vYe .wrapperHovered-1KDCyZ {
-	border-radius: 3px;
+	border-radius: 3px !important;
 }
 
 .search-results-wrap .search-result-message.hit {
@@ -177,4 +179,3 @@ html, span:not(.spinner-item) {
 .citar-btn:active {
 	background-color: rgba(0,0,0,0.8)!important
 }
-
