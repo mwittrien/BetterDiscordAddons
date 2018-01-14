@@ -6,6 +6,8 @@ class CompleteTimestamps {
 		
 		this.updateTimestamps = false;
 		
+		this.compactWidth = null;
+		
 		this.messageObserver = new MutationObserver(() => {});
 		this.settingsWindowObserver = new MutationObserver(() => {});
 			
@@ -27,7 +29,7 @@ class CompleteTimestamps {
 
 	getDescription () {return "Replace all timestamps with complete timestamps.";}
 
-	getVersion () {return "1.0.5";}
+	getVersion () {return "1.0.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -95,6 +97,7 @@ class CompleteTimestamps {
 						if (change.removedNodes) {
 							change.removedNodes.forEach((node) => {
 								if (this.updateTimestamps && node && node.tagName && node.getAttribute("layer-id") == "user-settings") {
+									this.setMaxWidth();
 									document.querySelectorAll(".complete-timestamp").forEach(timestamp => {timestamp.classList.remove("complete-timestamp");});
 									document.querySelectorAll(".message-text").forEach(message => {this.changeTimestamp(message);});
 								}
@@ -106,6 +109,8 @@ class CompleteTimestamps {
 			if (observertarget = document.querySelector(".layers, .layers-20RVFW")) this.settingsWindowObserver.observe(observertarget, {childList:true});
 			
 			this.languages = Object.assign({},BDfunctionsDevilBro.languages);
+			
+			this.setMaxWidth();
 			
 			document.querySelectorAll(".message-text").forEach(message => {this.changeTimestamp(message);});
 		}
@@ -119,6 +124,8 @@ class CompleteTimestamps {
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.messageObserver.disconnect();
 			this.settingsWindowObserver.disconnect();
+			
+			document.querySelectorAll(".complete-timestamp").forEach(timestamp => {timestamp.classList.remove("complete-timestamp");});
 			
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
@@ -179,15 +186,17 @@ class CompleteTimestamps {
 	
 	changeTimestamp (message) {
 		if (!message || !message.tagName) return;
-		message = this.getMessageGroup(message);
-		if (!message || !message.tagName || message.querySelector(".complete-timestamp")) return;
-		var timestamp = message.querySelector(".timestamp");
-		if (!timestamp) return;
-		var info = BDfunctionsDevilBro.getKeyInformation({node:message, key:"message"});
+		var messagegroup = this.getMessageGroup(message);
+		if (!messagegroup || !messagegroup.tagName) return;
+		var compact = messagegroup.classList.contains("compact");
+		var timestamp = compact ? message.querySelector(".timestamp") : messagegroup.querySelector(".timestamp");
+		if (!timestamp || !timestamp.tagName || timestamp.classList.contains("complete-timestamp")) return;
+		var info = BDfunctionsDevilBro.getKeyInformation({node:messagegroup, key:"message"});
 		if (!info || !info.timestamp || !info.timestamp._i) return;
 		var choice = BDfunctionsDevilBro.getData("creationDateLang", this, "choices");
 		timestamp.classList.add("complete-timestamp");
-		BDfunctionsDevilBro.setInnerText(timestamp, this.getTimestamp (this.languages[choice].id, info.timestamp._i));
+		BDfunctionsDevilBro.setInnerText(timestamp, this.getTimestamp(this.languages[choice].id, info.timestamp._i));
+		if (compact && this.compactWidth) timestamp.style.width = this.compactWidth + "px";
 	}
 	
 	getMessageGroup (message) {
@@ -222,5 +231,14 @@ class CompleteTimestamps {
 		}
 		
 		return chararray.join("");
+	}
+	
+	setMaxWidth () {
+		var wrapper = $(`<div class="message-group compact"><div class="timestamp"></div></div>`);
+		var timestamp = wrapper.find(".timestamp");
+		var choice = BDfunctionsDevilBro.getData("creationDateLang", this, "choices");
+		$(wrapper).appendTo(document.body);
+		this.compactWidth = timestamp.css("width", "auto").text(this.getTimestamp(this.languages[choice].id, new Date(253402124399995))).outerWidth();
+		wrapper.remove();
 	}
 }
