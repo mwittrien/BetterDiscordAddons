@@ -3,7 +3,7 @@
 @import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/BasicBackground/BasicBackground.css);
 
 :root {
-	--transparencycolor: 0,0,0;
-	--transparencyalpha: 0.1;
-	--backgroundimage: url(https://wallpapertag.com/wallpaper/full/b/9/b/405960-nice-background-1920x1080-full-hd.jpg);
+	--transparencycolor: 33,33,33;
+	--transparencyalpha: 0.2;
+	--backgroundimage: url(https://i.imgur.com/lRmfvw0.jpg);
 }
