@@ -1,3 +1,5 @@
+
+
 #app-mount {
 	background-image: var(--backgroundimage);
 	background-size: cover;
@@ -16,6 +18,14 @@
 .container-2OU7Cz,
 .content-region,
 .guilds-wrapper,
+.itemDefault-3NDwnY:hover,
+.ui-tab-bar-item:hover,
+.member:hover,
+.channels-3g2vYe .wrapperHoveredCollapsed-25KVVp,
+.channels-3g2vYe .wrapperHovered-1KDCyZ,
+.channels-3g2vYe .wrapperLockedVoice-1XZJmE:hover .content-2mSKOj,
+.channels-3g2vYe .wrapperHoveredVoice-3tbfNN .content-2mSKOj,
+.channels-3g2vYe .wrapperHoveredText-1PA_Uk .content-2mSKOj,
 .search-2--6aU .search-bar,
 .search-results-wrap,
 .search-results-wrap .search-header,
@@ -30,6 +40,12 @@
 .divider.divider-red span,
 .chat .inner-3if5cm,
 .guild-inner,
+.itemSelected-3XxAMf,
+.ui-tab-bar-item.selected,
+.member.popout-open,
+.channels-3g2vYe .wrapperSelectedVoice-1Q1ocJ .content-2mSKOj,
+.channels-3g2vYe .wrapperSelectedText-31jJa8 .content-2mSKOj,
+.guild-separator::after,
 button.guild,
 ::-webkit-scrollbar-thumb {
 	border-color: transparent !important;
@@ -84,4 +100,9 @@ button.guild,
 .divider.divider-red:before,
 ::-webkit-scrollbar-corner {
 	display: none !important;
+}
+
+/* fix span flickering */
+html, span:not(.spinner-item) {
+	backface-visibility: hidden;
 }
