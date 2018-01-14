@@ -29,7 +29,7 @@ class CompleteTimestamps {
 
 	getDescription () {return "Replace all timestamps with complete timestamps.";}
 
-	getVersion () {return "1.0.6";}
+	getVersion () {return "1.0.7";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -196,7 +196,15 @@ class CompleteTimestamps {
 		var choice = BDfunctionsDevilBro.getData("creationDateLang", this, "choices");
 		timestamp.classList.add("complete-timestamp");
 		BDfunctionsDevilBro.setInnerText(timestamp, this.getTimestamp(this.languages[choice].id, info.timestamp._i));
-		if (compact && this.compactWidth) timestamp.style.width = this.compactWidth + "px";
+		if (compact && this.compactWidth) {
+			var markup = message.querySelector(".markup");
+			if (markup) {
+				var newpadding = 100 + (this.compactWidth - 65);
+				markup.style.paddingLeft =	newpadding + "px"; 
+				markup.style.textIndent =	"-" + newpadding + "px"; 
+				timestamp.style.width = 	this.compactWidth + "px";
+			}
+		}
 	}
 	
 	getMessageGroup (message) {
