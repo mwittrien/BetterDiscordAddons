@@ -1,12 +1,9 @@
-
-
 #app-mount {
 	background-image: var(--backgroundimage);
 	background-size: cover;
 	background-position: center;
 }
 
-#friends,
 .noChannel-2EQ0a9,
 .activityFeed-HeiGwL,
 .lfg-3xoFkI,
@@ -20,12 +17,16 @@
 .guilds-wrapper,
 .itemDefault-3NDwnY:hover,
 .ui-tab-bar-item:hover,
+.tab-bar-item:hover,
+.friends-row:hover,
+.channel:hover a,
 .member:hover,
 .channels-3g2vYe .wrapperHoveredCollapsed-25KVVp,
 .channels-3g2vYe .wrapperHovered-1KDCyZ,
 .channels-3g2vYe .wrapperLockedVoice-1XZJmE:hover .content-2mSKOj,
 .channels-3g2vYe .wrapperHoveredVoice-3tbfNN .content-2mSKOj,
 .channels-3g2vYe .wrapperHoveredText-1PA_Uk .content-2mSKOj,
+.chat .inner-3if5cm,
 .search-2--6aU .search-bar,
 .search-results-wrap,
 .search-results-wrap .search-header,
@@ -38,10 +39,10 @@
 }
 
 .divider.divider-red span,
-.chat .inner-3if5cm,
 .guild-inner,
 .itemSelected-3XxAMf,
 .ui-tab-bar-item.selected,
+.channel.selected a,
 .member.popout-open,
 .channels-3g2vYe .wrapperSelectedVoice-1Q1ocJ .content-2mSKOj,
 .channels-3g2vYe .wrapperSelectedText-31jJa8 .content-2mSKOj,
@@ -56,28 +57,54 @@ button.guild,
 	background: rgba(120,0,0,calc(var(--transparencyalpha) * 3)) !important;
 }
 
+.base-3AoPqv {
+	border-radius: 0;
+}
+
+.channels-3g2vYe > div:nth-child(2) {
+	border-radius: 5px 5px 0 0;
+}
+
+.channels-3g2vYe .wrapperHoveredCollapsed-25KVVp,
+.channels-3g2vYe .wrapperHovered-1KDCyZ {
+	border-radius: 3px;
+}
+
 .search-results-wrap .search-result-message.hit {
 	box-shadow:none !important;
 }
 
 .titleBar-3_fDwJ::after {
-	content:"";
-	position:absolute;
-	z-index:-1;
-	top:0;
-	left:0;
-	right:0;
-	width:100%;
-	height:22px;
+	content: "";
+	pointer-events: none !important;
+	position: absolute;
+	z-index: -1;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 22px;
 	background: rgba(var(--transparencycolor),calc(var(--transparencyalpha) * 4)) !important;
 }
 
+.chat form::after {
+	content: "";
+	pointer-events: none !important;
+	position: absolute;
+	border-radius: 0 10px 0 0;
+	top: 0;
+	left: -20px;
+	width: calc(100% + 40px);
+	height: 100%;
+	background: rgba(var(--transparencycolor),calc(var(--transparencyalpha))) !important;
+}
+
+#friends,
 #friends .friends-table,
 .channel-members,
 .channel-members-loading,
 .chat .content,
-.chat form,
 .chat,
+.chat form,
 .content .flex-spacer,
 .messages-wrapper,
 .typing-3eiiL_,
