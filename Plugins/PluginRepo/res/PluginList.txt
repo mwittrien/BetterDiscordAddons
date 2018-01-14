@@ -93,6 +93,7 @@ https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/T
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/WriteUpperCase/WriteUpperCase.plugin.js
 https://raw.githubusercontent.com/ngrst183/SuppressMentions/master/suppressmentions.plugin.js
 https://raw.githubusercontent.com/nirewen/BotsMutualGuilds/master/BotsMutualGuilds.plugin.js
+https://raw.githubusercontent.com/nirewen/Citador/master/Citador.plugin.js
 https://raw.githubusercontent.com/nirewen/Quicksave/master/Quicksave.plugin.js
 https://raw.githubusercontent.com/noodlebox/betterdiscord-plugins/master/AutoPlayGifs.plugin.js
 https://raw.githubusercontent.com/noodlebox/betterdiscord-plugins/master/KawaiiEmotes.plugin.js
