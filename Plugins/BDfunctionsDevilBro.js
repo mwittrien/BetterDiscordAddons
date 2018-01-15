@@ -306,12 +306,39 @@ BDfunctionsDevilBro.createNotificationsBar = function (content, options = {}) {
 	notifiybar.innerHTML = `<div class="notice-dismiss dismiss-1QjyJW "></div><span class="notice-message"></span></strong>`;
 	$(".app .guilds-wrapper + div > div:first > div:first").append(notifiybar);
 	var notifiybarinner = notifiybar.querySelector(".notice-message");
+	if (options.icon) {
+		var icons = {
+			"android":			{name:"icon icon-android iconAndroid-cnqiCY icon-4jKckW",			size:"small"},
+			"apple":			{name:"icon icon-apple iconApple-2ZQIid icon-4jKckW",				size:"small"},
+			"windows":			{name:"icon icon-windows iconWindows-11s3sD icon-4jKckW",			size:"small"},
+			"androidBig":		{name:"icon icon-android iconAndroid-cnqiCY platformIcon-1JFXvA",	size:"big"},
+			"appleBig":			{name:"icon icon-apple iconApple-2ZQIid platformIcon-1JFXvA",		size:"big"},
+			"windowsBig":		{name:"icon icon-windows iconWindows-11s3sD platformIcon-1JFXvA",	size:"big"}
+		};
+		for (let icon of options.icon.split(" ")) {
+			icon = icons[icon];
+			if (icon) {
+				if (icon.size == "small") 		$(`<i class="${icon.name}"></i>`).insertAfter(notifiybarinner);
+				else if (icon.size == "big") 	$(`<i class="${icon.name}"></i>`).insertBefore(notifiybarinner);
+			}
+		}
+		
+	}
 	if (options.btn) $(`<button class="btn button-2TvR03 size14-1wjlWP weightMedium-13x9Y8">${options.btn}</button>`).insertAfter(notifiybarinner);
 	if (options.id) notifiybar.id = options.id.split(" ")[0];
 	if (options.selector) options.selector.split(" ").forEach(selector => {if(selector) notifiybar.classList.add(selector);});
 	if (options.css) BDfunctionsDevilBro.appendLocalStyle("customNotificationsBarDevilBro" + id, options.css);
 	if (options.html === true) notifiybarinner.innerHTML = content;
-	else notifiybarinner.innerText = content;
+	else {
+		var urltest = document.createElement("a");
+		var newcontent = [];
+		for (let word of content.split(" ")) {
+			let encodedword = BDfunctionsDevilBro.encodeToHTML(word);
+			urltest.href = word;
+			newcontent.push((urltest.host && urltest.host != window.location.host) ? `<label class="textLink-3eOiS-">${encodedword}</label>` : encodedword);
+		}
+		notifiybarinner.innerHTML = newcontent.join(" ");
+	}
 	
 	var type = null;
 	if (options.type) {
@@ -327,6 +354,12 @@ BDfunctionsDevilBro.createNotificationsBar = function (content, options = {}) {
 			"success":		"noticeSuccess-P1EnBb notice-success"
 		};
 		if (type = types[options.type]) type.split(" ").forEach(selector => {if(selector) notifiybar.classList.add(selector);});
+		if (options.type == "premium") {
+			var button = notifiybar.querySelector(".button-2TvR03");
+			if (button) button.classList.add("premiumAction-2lj9ha");
+			notifiybarinner.classList.add("premiumText-2gecpf");
+			$(`<i class="premiumLogo-2PV9qw"></i>`).insertBefore(notifiybarinner);
+		}
 	}
 	if (!type) {
 		var comp = BDfunctionsDevilBro.color2COMP(options.color);
@@ -550,7 +583,7 @@ BDfunctionsDevilBro.languages = {
 };
 				
 (() => {
-    var pulling = setInterval(() => {
+var pulling = setInterval(() => {
 		var languageID = document.querySelector("html").lang;
 		if (languageID) {
 			clearInterval(pulling);
@@ -926,7 +959,7 @@ BDfunctionsDevilBro.equals = function (check1, check2, compareOrder) {
 };
 
 BDfunctionsDevilBro.filterObject = function (obj, predicate) {
-    return Object.keys(obj).filter(key => predicate(obj[key])).reduce((res, key) => (res[key] = obj[key], res), {});
+return Object.keys(obj).filter(key => predicate(obj[key])).reduce((res, key) => (res[key] = obj[key], res), {});
 };
 
 BDfunctionsDevilBro.isObjectEmpty = function (obj) {
@@ -939,7 +972,7 @@ BDfunctionsDevilBro.removeFromArray = function (array, value) {
 };
 
 (() => {
-    var pulling = setInterval(() => {
+var pulling = setInterval(() => {
 		var UserActions = BDfunctionsDevilBro.WebModules.findByProperties(["getCurrentUser"]);
 		var userData = UserActions && typeof UserActions.getCurrentUser == "function" ? UserActions.getCurrentUser() : null;
 		if (userData && !BDfunctionsDevilBro.isObjectEmpty(userData)) {
@@ -1439,8 +1472,8 @@ BDfunctionsDevilBro.updateContextPosition = function (context) {
 		y: position.y - menuHeight
 	};
 	$(context)
-		.css("left", (position.x + menuWidth  > window.outerWidth  ? (newposition.x < 0 ? 10 : newposition.x) : position.x) + "px")
-		.css("top",  (position.y + menuHeight > window.outerHeight ? (newposition.y < 0 ? 10 : newposition.y) : position.y) + "px")
+		.css("left", (position.x + menuWidth> window.outerWidth? (newposition.x < 0 ? 10 : newposition.x) : position.x) + "px")
+		.css("top",(position.y + menuHeight > window.outerHeight ? (newposition.y < 0 ? 10 : newposition.y) : position.y) + "px")
 };
 
 BDfunctionsDevilBro.appendContextMenu = function (context, e) {
@@ -1492,7 +1525,7 @@ BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
 					<path class="color-picker-dropper-fg-${swatch}" fill="#ffffff" d="M14.994 1.006C13.858-.257 11.904-.3 10.72.89L8.637 2.975l-.696-.697-1.387 1.388 5.557 5.557 1.387-1.388-.697-.697 1.964-1.964c1.13-1.13 1.3-2.985.23-4.168zm-13.25 10.25c-.225.224-.408.48-.55.764L.02 14.37l1.39 1.39 2.35-1.174c.283-.14.54-.33.765-.55l4.808-4.808-2.776-2.776-4.813 4.803z"></path>
 				</svg>
 			</div>
-			<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa wrap-1da0e3  ui-color-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;">
+			<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa wrap-1da0e3ui-color-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;">
 				<div class="ui-color-picker-${swatch} nocolor" style="background-color: null;">
 					<svg class="nocolor-cross" height="22" width="22">
 						<path d="m 3 2 l 17 18 m 0 -18 l -17 18" stroke="red" stroke-width="3" fill="none"/>
@@ -1581,7 +1614,7 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 									<div class="colorpicker-black" style="background: linear-gradient(to top, #000, rgba(0,0,0,0))">
 										<div class="colorpicker-pickercursor">
 											<svg xmlns="http://www.w3.org/2000/svg" version="1.1">
-											   <circle cx="7" cy="7" r="6" stroke="black" stroke-width="2" fill="none" />
+											<circle cx="7" cy="7" r="6" stroke="black" stroke-width="2" fill="none" />
 											</svg>
 										</div>
 										<div class="colorpicker-pickerpane"></div>
@@ -2314,7 +2347,7 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 	}
 	
 	@keyframes animation-backdrop {
-		to { opacity: 0.7; }
+		to { opacity: 0.85; }
 	}
 
 	@keyframes animation-backdrop-closing {
@@ -2380,7 +2413,7 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		flex-shrink: 0;
 		margin-right: 12px;
 		padding: 0px 5px 15px 5px;
-		text-align: center;   
+		text-align: center;
 		border-bottom: 2px solid transparent;
 		color: #fff;
 	}
