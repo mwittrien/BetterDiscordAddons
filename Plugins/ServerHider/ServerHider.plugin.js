@@ -8,14 +8,8 @@ class ServerHider {
 		this.serverListObserver = new MutationObserver(() => {});
 		
 		this.css = `
-			.serverhider-modal .btn-all {
-				background-color: transparent;
-			}
-
 			.serverhider-modal .serverhiderEntry {
-				height: 50px;
-				padding-top: 5px;
-				padding-bottom: 5px;
+				align-items: center;
 			}
 			
 			.serverhider-modal .serverhiderEntry .serverhiderGuild {
@@ -55,33 +49,9 @@ class ServerHider {
 				text-shadow: 0 1px 0 rgba(0,0,0,.25);
 				vertical-align: middle;
 			}
-			
-			.serverhider-modal .serverhiderEntry .serverhiderName {
-				color: #b9bbbe;
-				cursor: default;
-				display: inline-block;
-				flex: 1;
-				font-size: 12px;
-				font-weight: 600;
-				height: 50px;
-				letter-spacing: .5px;
-				margin-left: 10px;
-				margin-top: -38px;
-				overflow: hidden;
-				text-transform: uppercase;
-				vertical-align: middle;
-				width: 250px;
-			}
 
 			.serverhider-modal .folderhideCheckboxWrapper {
-				right: 20px;
-			}
-
-			.serverhider-modal .serverhiderEntry .serverhiderCheckboxWrapper {
-				right: 0px;
-				margin: 12px 12px 0 0;
-				display: inline-block;
-				float: right;
+				right: 8px;
 			}`;
 		
 			
@@ -118,8 +88,8 @@ class ServerHider {
 								<button type="button" class="btn-save buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu">
 									<div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx contents-4L4hQM">REPLACE_btn_ok_text</div>
 								</button>
-								<button type="button" class="btn-all buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu">
-									<div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx contents-4L4hQM">REPLACE_btn_all_text</div>
+								<button type="button" class="btn-all buttonPrimaryLinkDefault-1PQflF buttonLinkDefault-3J8pja buttonDefault-2OLW-v button-2t3of8 mediumGrow-uovsMu">
+									<div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsLink-2ScJ_P contents-4L4hQM">REPLACE_btn_all_text</div>
 								</button>
 							</div>
 						</div>
@@ -128,13 +98,13 @@ class ServerHider {
 			</span>`;
 
 		this.serverEntryMarkup =
-			`<div class="serverhiderEntry">
-				<div class="serverhiderGuild">
+			`<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginTop4-2rEBfJ marginBottom4-_yArcI serverhiderEntry" style="flex: 1 1 auto;">
+				<div class="flexChild-1KGW5q serverhiderGuild" style="flex: 0 0 auto;">
 					<div class="serverhiderIcon"></div>
 					<div class="serverhiderBadge"></div>
 				</div>
-				<label class="serverhiderName"></label>
-				<div class="switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU serverhiderCheckboxWrapper">
+				<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q overflowEllipsis-3Rxxjf serverhiderName" style="flex: 1 1 auto;"></h3>
+				<div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU valueChecked-3Bzkbm" style="flex: 0 0 auto;">
 					<input type="checkbox" class="checkboxEnabled-4QfryV checkbox-1KYsPm serverhiderCheckbox">
 				</div>
 			</div>`;
@@ -168,7 +138,7 @@ class ServerHider {
 
 	getDescription () {return "Hide Servers in your Serverlist";}
 
-	getVersion () {return "2.5.0";}
+	getVersion () {return "2.5.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -252,7 +222,9 @@ class ServerHider {
 			
 			$(".guilds.scroller").off("mouseleave." + this.getName());
 			
-			BDfunctionsDevilBro.readServerList().forEach(serverObj => $(serverObj.div).show());
+			BDfunctionsDevilBro.readServerList().forEach(serverObj => {
+				if (!serverObj.div.getAttribute("folder")) $(serverObj.div).show();
+			});
 			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName());
 			
@@ -266,7 +238,9 @@ class ServerHider {
 	resetAll () {
 		if (confirm("Are you sure you want to reset all servers?")) {
 			BDfunctionsDevilBro.removeAllData(this, "servers");
-			BDfunctionsDevilBro.readServerList().forEach(serverObj => $(serverObj.div).show());
+			BDfunctionsDevilBro.readServerList().forEach(serverObj => {
+				if (!serverObj.div.getAttribute("folder")) $(serverObj.div).show();
+			});
 		}
 	}
 
@@ -401,7 +375,7 @@ class ServerHider {
 		for (let serverObj of BDfunctionsDevilBro.readServerList()) {
 			var data = BDfunctionsDevilBro.loadData(serverObj.id, this, "servers");
 			
-			var visible = data && write ? data.visible : visible = $(serverObj.div).is(":visible");
+			var visible = data && write ? data.visible : $(serverObj.div).is(":visible");
 			$(serverObj.div).toggle(visible);
 			
 			BDfunctionsDevilBro.saveData(serverObj.id, {visible}, this, "servers");
