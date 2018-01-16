@@ -1,9 +1,11 @@
-//META{"name":"BasicBackground","description":"Allows you to use a background image in Discord without greatly altering the basic look of Discord.","author":"DevilBro","version":"1.0.0"}*//
+//META{"name":"BasicBackground","description":"Allows you to use a background image in Discord without greatly altering the basic look of Discord.","author":"DevilBro","version":"1.0.1"}*//
 
 @import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/BasicBackground/BasicBackground.css);
 
 :root {
-	--transparencycolor: 33,33,33;
-	--transparencyalpha: 0.2;
-	--backgroundimage: url(https://i.imgur.com/lRmfvw0.jpg);
+	--transparencycolor: 0,0,0;		/* default: 33,33,33 */
+	--transparencyalpha: 0.15;		/* default: 0.2 */
+	--messagetransparency: 0.5;		/* default: 0.5 */
+	--accentcolor: 114,137,218; 	/* default: 0.5 discord: 114,137,218 bd-blue: 58,113,193*/
+	--background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/BasicBackground/background.jpg);
 }
