@@ -462,13 +462,13 @@ input:disabled {
 	background: rgba(var(--accentcolor), calc(var(--transparencyalpha) * 3)) !important;
 }
 
+.button-1aU9q1:hover,
 .friends-action-video-call:hover,
 .friends-action-voice-call:hover,
 .friends-column-guilds .avatar-small {
 	background-color: rgb(var(--accentcolor)) !important;
 }
 
-.button-1aU9q1:hover,
 .ui-standard-sidebar-view .btn-close:hover {
 	background-color: rgba(var(--accentcolor), calc(var(--transparencyalpha) * 3)) !important;
 }
