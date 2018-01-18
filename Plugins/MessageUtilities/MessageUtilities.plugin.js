@@ -38,7 +38,7 @@ class MessageUtilities {
 
 	getDescription () {return "Offers a number of useful message options. Remap the keybindings in the settings.";}
 
-	getVersion () {return "1.3.1";}
+	getVersion () {return "1.3.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -282,7 +282,8 @@ class MessageUtilities {
 	}
 	
 	doOpenReact (message) {
-		var reactButton = message.div.parentElement.querySelector(".btn-reaction");
+		console.log(message.div);
+		var reactButton = message.div.querySelector(".btn-reaction");
 		if (reactButton) reactButton.click();
 	}
 	
