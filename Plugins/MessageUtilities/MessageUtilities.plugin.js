@@ -282,7 +282,6 @@ class MessageUtilities {
 	}
 	
 	doOpenReact (message) {
-		console.log(message.div);
 		var reactButton = message.div.querySelector(".btn-reaction");
 		if (reactButton) reactButton.click();
 	}
