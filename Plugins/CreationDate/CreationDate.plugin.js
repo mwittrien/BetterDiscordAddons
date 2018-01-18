@@ -55,7 +55,7 @@ class CreationDate {
 
 	getDescription () {return "Displays the Creation Date of an Account in the UserPopout and UserModal.";}
 
-	getVersion () {return "1.1.0";}
+	getVersion () {return "1.1.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -127,7 +127,7 @@ class CreationDate {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".app ~ [class^='theme-']")) this.userProfilModalObserver.observe(observertarget, {childList: true});
+			if (observertarget = document.querySelector(".app-XZYfmp ~ [class^='theme-']:not([class*='popouts'])")) this.userProfilModalObserver.observe(observertarget, {childList: true});
 			
 			this.languages = Object.assign({},BDfunctionsDevilBro.languages);
 			
@@ -208,7 +208,8 @@ class CreationDate {
 		if (info) {
 			var creationDate = $(this.creationDateMarkup);
 			var choice = BDfunctionsDevilBro.getData("creationDateLang", this, "choices");
-			creationDate.text(this.labels.createdat_text + " " + this.getCreationTime(this.languages[choice].id, info.createdAt)).appendTo(container);
+			creationDate.text(this.labels.createdat_text + " " + this.getCreationTime(this.languages[choice].id, info.createdAt));
+			container.insertBefore(creationDate[0], container.querySelector(".nameTag-2n-N0D") ? container.querySelector(".nameTag-2n-N0D").nextSibling : null);
 		}
 	}
 	
