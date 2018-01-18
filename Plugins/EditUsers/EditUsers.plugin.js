@@ -181,7 +181,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "2.0.9";}
+	getVersion () {return "2.1.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -304,24 +304,22 @@ class EditUsers {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (BDfunctionsDevilBro.getData("changeInChatWindow", this, "settings")) {
-									if ($(".message-group").has(".avatar-large").length > 0) {
+									var compact = document.querySelector(".message-group.compact");
+									if (!compact) {
 										if (node && node.tagName && node.querySelector(".username-wrapper")) {
-											this.loadUser(node, "chat", false);
+											this.loadUser(node, "chat", compact);
 										}
 										else if (node && node.classList && node.classList.contains("message-text")) {
-											this.loadUser($(".message-group").has(node)[0], "chat", false);
+											this.loadUser($(".message-group").has(node)[0], "chat", compact);
 										}
 									}
 									else {
 										if (node && node.tagName && node.querySelector(".username-wrapper")) {
 											if (node.classList.contains("markup")) {
-												this.loadUser(node, "chat", true);
+												this.loadUser(node, "chat", compact);
 											}
 											else {
-												var markups = node.querySelectorAll(".markup");
-												for (var i = 0; i < markups.length; i++) {
-													this.loadUser(markups[i], "chat", true);
-												}
+												for (let markup of node.querySelectorAll(".markup")) this.loadUser(markup, "chat", compact);
 											}
 										}
 									}
@@ -361,7 +359,7 @@ class EditUsers {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".app ~ [class^='theme-']")) this.userProfilModalObserver.observe(observertarget, {childList: true});
+			if (observertarget = document.querySelector(".app-XZYfmp ~ [class^='theme-']:not([class*='popouts'])")) this.userProfilModalObserver.observe(observertarget, {childList: true});
 			
 			this.settingsWindowObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
