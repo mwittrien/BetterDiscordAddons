@@ -56,7 +56,6 @@ https://raw.githubusercontent.com/mashirochan/Mashiro-chan/master/Plugins/CheckA
 https://raw.githubusercontent.com/mashirochan/Mashiro-chan/master/Plugins/EmoteBlacklistRedux/EmoteBlacklistRedux.plugin.js
 https://raw.githubusercontent.com/mashirochan/Mashiro-chan/master/Plugins/HorizontalCodeScroll/HorizontalCodeScroll.plugin.js
 https://raw.githubusercontent.com/mashirochan/Mashiro-chan/master/Plugins/PasteSend/PasteSend.plugin.js
-https://raw.githubusercontent.com/mashirochan/Mashiro-chan/master/Plugins/TransparencyPatcher/TransparencyPatcher.plugin.js
 https://raw.githubusercontent.com/megamit/repository/gh-pages/renamer/1.5.4/renamer.plugin.js
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/BetterNsfwTag/BetterNsfwTag.plugin.js
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/CharCounter/CharCounter.plugin.js
@@ -116,6 +115,7 @@ https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Plugins/Res
 https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Plugins/SendButton/SendButton.plugin.js
 https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Plugins/ServerSorter/ServerSorter.plugin.js
 https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Plugins/StatusEverywhere/StatusEverywhere.plugin.js
+https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Plugins/TransparencyPatcher/TransparencyPatcher.plugin.js
 https://raw.githubusercontent.com/samfun123/script-storage/master/betterdiscord/plugins/directMedia.plugin.js
 https://raw.githubusercontent.com/samfun123/script-storage/master/betterdiscord/plugins/unshortenLinks.plugin.js
 https://raw.githubusercontent.com/samogot/betterdiscord-plugins/master/v1/1lib_discord_internals.plugin.js
