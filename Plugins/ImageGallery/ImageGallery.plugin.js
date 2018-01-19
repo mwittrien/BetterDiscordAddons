@@ -27,7 +27,7 @@ class ImageGallery {
 
 	getDescription () {return "Allows the user to browse through images sent inside the same message.";}
 
-	getVersion () {return "1.5.1";}
+	getVersion () {return "1.5.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -142,7 +142,7 @@ class ImageGallery {
 			.addClass("current")
 			.find("img").attr("src", this.getSrcOfImage(img));
 			
-		$(modal).find(".downloadLink-wANcd8")
+		$(modal.querySelector(".downloadLink-wANcd8"))
 			.attr("href", this.getSrcOfImage(img));
 		
 		this.resizeImage(modal, img, modal.querySelector(".imageWrapper-38T7d9.current img"));
