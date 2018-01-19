@@ -1147,6 +1147,7 @@ input:disabled {
 	display: none !important;
 }
 .search-popout .results-group .option.selected:before {
+	background-image: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"><g fill="none" fill-rule="evenodd"><path d="M0 0h18v18H0z"/><path fill="#FFFFFF" d="M10 8V4H8v4H4v2h4v4h2v-4h4V8h-4z"/></g></svg>') !important;
 	background-color: rgb(var(--accentcolor)) !important;
 	background-position: center !important;
 	border-radius: 3px !important;
