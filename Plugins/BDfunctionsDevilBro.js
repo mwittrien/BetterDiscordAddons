@@ -198,7 +198,7 @@ BDfunctionsDevilBro.removeUpdateNotice = function (pluginName, updateNoticeBar) 
 				var reloadbutton = updateNoticeBar.querySelector(".button-2TvR03");
 				if (reloadbutton) {
 					updateNoticeBar.querySelector(".notice-message").innerText = "To finish updating you need to reload.";
-					reloadbutton.removeAttribute("style");
+					reloadbutton.style.display = "inline-block";
 				}
 				else {
 					updateNoticeBar.querySelector(".dismiss-1QjyJW").click();
