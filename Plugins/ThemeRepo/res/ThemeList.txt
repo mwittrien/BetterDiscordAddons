@@ -43,7 +43,6 @@ https://raw.githubusercontent.com/HansAnonymous/BD-Themes-and-Plugins/master/The
 https://raw.githubusercontent.com/HansAnonymous/BD-Themes-and-Plugins/master/Themes/HansAnonymousAdditions/HAA.theme.css
 https://raw.githubusercontent.com/HansAnonymous/BD-Themes-and-Plugins/master/Themes/Patriotic/Patriotic.theme.css
 https://raw.githubusercontent.com/ImBastion/BD-Themes/master/No2ABase.theme.css
-https://raw.githubusercontent.com/intrnl/discordAdditions/master/darkDiscord/darkDiscord.theme.css
 https://raw.githubusercontent.com/intrnl/discordAdditions/master/discordNotoEmojis/discordNotoEmojis.theme.css
 https://raw.githubusercontent.com/intrnl/discordAdditions/master/macTitlebar/macTitlebar.theme.css
 https://raw.githubusercontent.com/intrnl/discordAdditions/master/nativeTitlebar/nativeTitlebar.theme.css
