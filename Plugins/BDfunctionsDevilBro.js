@@ -141,7 +141,8 @@ BDfunctionsDevilBro.showUpdateNotice = function (pluginName, downloadUrl) {
 			})
 			.on("mouseenter", ".button-2TvR03", (e) => {
 				if (window.PluginUpdates.downloaded) BDfunctionsDevilBro.createTooltip(window.PluginUpdates.downloaded.join(", "), e.currentTarget, {type:"bottom", selector:"update-notice-tooltip"});
-			});
+			})
+			.find(".button-2TvR03").hide();
 	}
 	if (updateNoticeBar) {
 		let outdatedContainer = updateNoticeBar.querySelector("#outdatedPlugins");
@@ -194,11 +195,13 @@ BDfunctionsDevilBro.removeUpdateNotice = function (pluginName, updateNoticeBar) 
 			}
 
 			if (!outdatedContainer.querySelector("span")) {
-				if (!updateNoticeBar.querySelector(".button-2TvR03")) {
-					updateNoticeBar.querySelector(".dismiss-1QjyJW").click();
+				var reloadbutton = updateNoticeBar.querySelector(".button-2TvR03");
+				if (reloadbutton) {
+					updateNoticeBar.querySelector(".notice-message").innerText = "To finish updating you need to reload.";
+					reloadbutton.removeAttribute("style");
 				}
 				else {
-					updateNoticeBar.querySelector(".notice-message").innerText = "To finish updating you need to reload.";
+					updateNoticeBar.querySelector(".dismiss-1QjyJW").click();
 				}
 			} 
 		}
@@ -1419,7 +1422,7 @@ BDfunctionsDevilBro.triggerSend = function (textarea) {
 
 BDfunctionsDevilBro.appendModal = function (modal) {
 	let id = Math.round(Math.random()*10000000000000000);
-	var container = document.querySelector(".app ~ [class^='theme-'], .app-XZYfmp ~ [class^='theme-']:not([class*='popouts'])");
+	var container = document.querySelector(".app-XZYfmp ~ [class^='theme-']:not([class*='popouts'])");
 	if (!container) return;
 	$(modal)
 		.appendTo(container)
@@ -1904,7 +1907,8 @@ BDfunctionsDevilBro.isPluginEnabled = function (name) {
 };
 
 BDfunctionsDevilBro.isRestartNoMoreEnabled = function () {
-	return BDfunctionsDevilBro.isPluginEnabled("Restart-No-More") || BDfunctionsDevilBro.isPluginEnabled("Restart No More");
+	//return BDfunctionsDevilBro.isPluginEnabled("Restart-No-More") || BDfunctionsDevilBro.isPluginEnabled("Restart No More");
+	return false;
 };
 
 BDfunctionsDevilBro.isThemeEnabled = function (name) {
@@ -2116,6 +2120,7 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 	
 	.DevilBro-notice {
 		-webkit-app-region: drag;
+		border-radius: 0 5px 0 0 !important;
 	} 
 	
 	#pluginNotice #outdatedPlugins span {
