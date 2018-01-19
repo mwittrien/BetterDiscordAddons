@@ -79,6 +79,7 @@
 .bda-slist li,
 .cardPrimary-ZVL9Jr,
 .cardPrimaryOutline-2YyAz2,
+.selectorSelected-2M0IGv,
 .game-name-input:hover,
 .game-name-input:focus,
 .not-detected,
@@ -362,8 +363,6 @@ input:disabled {
 #friends,
 #friends .friends-table,
 .tab-content > .ui-standard-sidebar-view,
-.channel-members,
-.channel-members-loading,
 .chat .content,
 .chat,
 .chat form,
@@ -387,6 +386,11 @@ input:disabled {
 .search-results-wrap .search-result:after,
 .search-results-wrap .channel-name {
 	background: transparent !important;
+}
+
+.channel-members,
+.channel-members-loading {
+	background: rgba(var(--transparencycolor), var(--memberlistransparency)) !important;
 }
 
 .action-buttons,
@@ -739,6 +743,7 @@ input:disabled {
 .modal-3HOjGZ,
 .regionSelectModal-QBpi1R,
 .root-2sNHUF,
+.autocomplete-1TnWNR,
 .quickswitcher-2NdiGJ,
 .uploadModal-2KN6Mm,
 .popout:not(.popout-googletranslate) > *:not(.add-game-popout),
@@ -752,6 +757,7 @@ input:disabled {
 .modal-3HOjGZ:before,
 .regionSelectModal-QBpi1R:before,
 .root-2sNHUF:before,
+.autocomplete-1TnWNR:before,
 .quickswitcher-2NdiGJ:before,
 .uploadModal-2KN6Mm:before,
 .popout:not(.popout-googletranslate) > *:not(.add-game-popout):before,
@@ -772,6 +778,7 @@ input:disabled {
 .modal-3HOjGZ:after,
 .regionSelectModal-QBpi1R:after,
 .root-2sNHUF:after,
+.autocomplete-1TnWNR:after,
 .quickswitcher-2NdiGJ:after,
 .uploadModal-2KN6Mm:after,
 .popout:not(.popout-googletranslate) > *:not(.add-game-popout):after,
@@ -785,6 +792,9 @@ input:disabled {
 	right: 0;
 	z-index: -1;
 	pointer-events: none;
+}
+.autocomplete-1TnWNR:before {
+	background: rgba(var(--transparencycolor),calc(var(--transparencyalpha) * 4));
 }
 
 .create-guild-container,
@@ -932,6 +942,7 @@ input:disabled {
 .popout > :first-child > div,
 .modal-3HOjGZ > *,
 .root-2sNHUF > *,
+.autocomplete-1TnWNR > *,
 .regionSelectModal-QBpi1R > *,
 .Select-option {
 	position: relative !important;
