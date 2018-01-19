@@ -138,7 +138,7 @@ class ServerHider {
 
 	getDescription () {return "Hide Servers in your Serverlist";}
 
-	getVersion () {return "2.5.2";}
+	getVersion () {return "2.5.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -206,9 +206,11 @@ class ServerHider {
 			
 			$(".guilds.scroller").on("mouseleave." + this.getName(), () => {this.updateAllServers(false);});
 			
-			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
+			setTimeout(() => {
+				this.updateAllServers(true);
+			},5000);
 			
-			this.updateAllServers(true);
+			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
