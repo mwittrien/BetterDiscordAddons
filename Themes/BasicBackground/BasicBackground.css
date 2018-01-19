@@ -128,6 +128,14 @@ input:disabled {
 	filter: brightness(50%) !important;
 }
 
+.nameSelectedText-32NDX5 {
+	color: #FFF;
+}
+.colorSelectedText-3YhFC6 path {
+	color: #FFF;
+	opacity: 1 !important;
+}
+
 .messages-popout-wrap {
 	width: 500px !important;
 }
