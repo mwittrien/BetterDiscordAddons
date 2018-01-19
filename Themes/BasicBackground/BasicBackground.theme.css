@@ -1,4 +1,4 @@
-//META{"name":"BasicBackground","description":"Allows you to use a background image in Discord without greatly altering the basic look of Discord.","author":"DevilBro","version":"1.0.2"}*//
+//META{"name":"BasicBackground","description":"Allows you to use a background image in Discord without greatly altering the basic look of Discord.","author":"DevilBro","version":"1.0.3"}*//
 
 @import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/BasicBackground/BasicBackground.css);
 
@@ -6,6 +6,7 @@
 	--transparencycolor: 0,0,0;		/* default: 0,0,0 */
 	--transparencyalpha: 0.15;		/* default: 0.15 */
 	--messagetransparency: 0.5;		/* default: 0.5 */
+	--memberlistransparency: 0;		/* default: 0 (additional darkness for member list can be changed in case a bright background makes the list hard to read)*/
 	--accentcolor: 190,78,180; 		/* default: 190,78,180 discord: 114,137,218 bd-blue: 58,113,193*/
 	--background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/BasicBackground/background.jpg);
 	--backdrop: rgba(0,0,0,0.4);	/* default: rgba(0,0,0,0.4) can also be changed to an image like --background */
