@@ -1907,8 +1907,7 @@ BDfunctionsDevilBro.isPluginEnabled = function (name) {
 };
 
 BDfunctionsDevilBro.isRestartNoMoreEnabled = function () {
-	//return BDfunctionsDevilBro.isPluginEnabled("Restart-No-More") || BDfunctionsDevilBro.isPluginEnabled("Restart No More");
-	return false;
+	return BDfunctionsDevilBro.isPluginEnabled("Restart-No-More") || BDfunctionsDevilBro.isPluginEnabled("Restart No More");
 };
 
 BDfunctionsDevilBro.isThemeEnabled = function (name) {
