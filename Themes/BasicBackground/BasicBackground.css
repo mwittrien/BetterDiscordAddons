@@ -27,6 +27,7 @@
 .item-2zi_5J:not([style*="rgb(114, 137, 218)"]) .checked-2TahvT,
 .containerUserOver-2YhVL6:after,
 .chat .inner-3if5cm,
+.message-group-blocked,
 .embedInner-t4ag7g,
 .contextMenu-uoJTbz,
 .changeDetails-zbf-61,
@@ -76,6 +77,7 @@
 .userHovered-3tfm93,
 .message-group .inline,
 .message-group pre,
+.message-group-blocked-btn,
 .bda-slist li,
 .cardPrimary-ZVL9Jr,
 .cardPrimaryOutline-2YyAz2,
@@ -100,6 +102,7 @@ button.guild {
 }
 
 .Select-control,
+.message-group-blocked,
 .input-2YozMi:not(:focus),
 .container-3lnMWU,
 .cardPrimaryEditable-2IQ7-V,
