@@ -613,31 +613,30 @@ input:disabled {
 	opacity: 0.2 !important;
 }
 
-.message-group .reaction-me {
+.reaction-me {
 	background: rgba(var(--accentcolor),0.1) !important;
 }
-.message-group .reaction-me .reaction-count {
+.reaction-me .reaction-count {
 	color: rgba(var(--accentcolor),1) !important;
 }
-
-.message-group .reaction-me,
-.message-group .mention:not([style]) {
+.reaction-me,
+.mention:not([style]) {
 	color: rgba(var(--accentcolor),1) !important;
 	background: rgba(var(--accentcolor),0.1) !important;
 }
-.message-group .mention:not([style]):hover {
+.mention:not([style]):hover {
 	color: white !important;
 	background: rgba(var(--accentcolor),1) !important;
 }
-.message-group .mention:hover {
+.mention:hover {
 	text-decoration: underline !important;
 }
 
-.message.mentioned .message-text:after {
+.mentioned .message-text:after {
 	background: rgba(var(--accentcolor),0.2) !important;
 	border-left-color: rgba(var(--accentcolor),0.8) !important;
 }
-.message.mentioned .message-text {
+.mentioned .message-text {
 	background: rgba(var(--accentcolor),0.2) !important;
 }
 
