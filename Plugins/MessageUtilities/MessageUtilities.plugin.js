@@ -21,7 +21,9 @@ class MessageUtilities {
 				"Pin/Unpin_Message":		{value:true},
 				"React_to_Message":			{value:true},
 				"__Note_Message":			{value:false},
-				"__Translate_Message":		{value:false}
+				"__Translate_Message":		{value:false},
+				"__Quote_Message":			{value:false},
+				"__Citate_Message":			{value:false}
 			},
 			bindings: {
 				"Edit_Message":				{name:"Edit Message",									func:this.doEdit,			value:{click:1, 	key1:0, 	key2:0}},
@@ -29,7 +31,9 @@ class MessageUtilities {
 				"Pin/Unpin_Message":		{name:"Pin/Unpin Message",								func:this.doPinUnPin,		value:{click:0, 	key1:17, 	key2:0}},
 				"React_to_Message":			{name:"React to Message",								func:this.doOpenReact,		value:{click:0, 	key1:9, 	key2:0}},
 				"__Note_Message":			{name:"Note Message (Pesonal Pins)",					func:this.doNote,			value:{click:0, 	key1:16, 	key2:0}},
-				"__Translate_Message":		{name:"Translate Message (Google Translate Option)",	func:this.doTranslate,		value:{click:0, 	key1:20, 	key2:0}}
+				"__Translate_Message":		{name:"Translate Message (Google Translate Option)",	func:this.doTranslate,		value:{click:0, 	key1:20, 	key2:0}},
+				"__Quote_Message":			{name:"Quote Message (Quoter)",							func:this.doQuote,			value:{click:0, 	key1:113, 	key2:0}},
+				"__Citate_Message":			{name:"Quote Message (Citador)",						func:this.doCitate,			value:{click:0, 	key1:114, 	key2:0}}
 			}
 		};
 	}
@@ -38,7 +42,7 @@ class MessageUtilities {
 
 	getDescription () {return "Offers a number of useful message options. Remap the keybindings in the settings.";}
 
-	getVersion () {return "1.3.2";}
+	getVersion () {return "1.3.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -70,6 +74,8 @@ class MessageUtilities {
 			
 		$(settingspanel).find(".__Note_Message-key-settings").toggle(BDfunctionsDevilBro.isPluginEnabled("PersonalPins"));
 		$(settingspanel).find(".__Translate_Message-key-settings").toggle(BDfunctionsDevilBro.isPluginEnabled("GoogleTranslateOption"));
+		$(settingspanel).find(".__Quote_Message-key-settings").toggle(BDfunctionsDevilBro.isPluginEnabled("Quoter"));
+		$(settingspanel).find(".__Citate_Message-key-settings").toggle(BDfunctionsDevilBro.isPluginEnabled("Citador"));
 			
 		return settingspanel;
 	}
@@ -307,6 +313,20 @@ class MessageUtilities {
 			var GoogleTranslateOption = window.bdplugins["GoogleTranslateOption"].plugin;
 			GoogleTranslateOption.getMessageData(message.div);
 			GoogleTranslateOption.translateMessage();
+		}
+	}
+	
+	doQuote (message) {
+		if (BDfunctionsDevilBro.isPluginEnabled("Quoter") == true) {
+			var quoteButton = message.div.querySelector(".btn-quote");
+			if (quoteButton) quoteButton.click();
+		}
+	}
+	
+	doCitate (message) {
+		if (BDfunctionsDevilBro.isPluginEnabled("Citador") == true) {
+			var citarButton = message.div.parentElement.querySelector(".citar-btn");
+			if (citarButton) citarButton.click();
 		}
 	}
 	
