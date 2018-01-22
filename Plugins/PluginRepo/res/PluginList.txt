@@ -39,6 +39,7 @@ https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/ena
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/linkProfilePicture.plugin.js
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/localFileServer.plugin.js
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/minimizeShortcut.plugin.js
+https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/QuickDeleteMessages.plugin.js
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/restartNoMore.plugin.js
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/scrollToLast.plugin.js
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/Snowfall.plugin.js
