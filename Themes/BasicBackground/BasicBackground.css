@@ -468,7 +468,7 @@ input:disabled {
 .guild-inner[style*="background-color:"]:hover,
 #RANbutton:hover,
 .embedPill-3sYS1X:not([style]),
-.tooltip,
+.tooltip-black,
 .searchFilter-1fJ0cd,
 .searchAnswer-yD90ey,
 .DevilBro-settings .checkbox-1QwaS4.checked-2TahvT,
@@ -640,16 +640,16 @@ input:disabled {
 	background: rgba(var(--accentcolor),0.2) !important;
 }
 
-.tooltip-right:after {
+.tooltip-black.tooltip-right:after {
 	border-right-color: rgb(var(--accentcolor)) !important;
 }
-.tooltip-top:after {
+.tooltip-black.tooltip-top:after {
 	border-top-color: rgb(var(--accentcolor)) !important;
 }
-.tooltip-left:after {
+.tooltip-black.tooltip-left:after {
 	border-left-color: rgb(var(--accentcolor)) !important;
 }
-.tooltip-bottom:after {
+.tooltip-black.tooltip-bottom:after {
 	border-bottom-color: rgb(var(--accentcolor)) !important;
 }
 	
