@@ -8,48 +8,53 @@ class ServerHider {
 		this.serverListObserver = new MutationObserver(() => {});
 		
 		this.css = `
-			.serverhider-modal .serverhiderEntry {
+			.serverhider-modal .entry {
 				align-items: center;
 			}
 			
-			.serverhider-modal .serverhiderEntry .serverhiderGuild {
-				display: inline-block;
+			.serverhider-modal .entry .guild {
+				height: 50px;
+				position: relative;
+				width: 50px;
+				z-index: 1;
+			}
+			.serverhider-modal .entry .guild-inner {
+				background: #2f3136;
+				border-radius: 25px !important;
+				cursor: pointer;
+				font-size: 18px;
+				line-height: 50px;
+				overflow: hidden;
+				text-align: center;
+			}
+			.serverhider-modal .entry .guild .avatar-small {
+				background-repeat: no-repeat;
+				background-size: 50px 50px;
+				border-radius: 0;
+				color: #fff;
+				display: block;
+				float: left;
+				margin: 0;
 				height: 50px;
 				width: 50px;
 			}
-			
-			.serverhider-modal .serverhiderEntry .serverhiderGuild .serverhiderIcon {
-				background-color: #484B51;
-				background-size: cover;
-				border-radius: 25px;
-				color: #b9bbbe;
-				display: inline-block;
-				font-size: 16px;
-				font-weight: 600;
-				height: 35px;
-				letter-spacing: .5px;
-				padding-top: 15px;
-				text-align: center;
-				width: 50px;
-			}
-			
-			.serverhider-modal .serverhiderEntry .serverhiderGuild .serverhiderBadge {
+			.serverhider-modal .entry .guild .badge {
+				background-clip: padding-box;
 				background-color: #f04747;
 				border-radius: 3px;
+				bottom: -2px;
 				box-shadow: 0 1px 0 rgba(0,0,0,.25), inset 0 1px 0 hsla(0,0%,100%,.15);
 				color: #fff;
 				display: inline-block;
 				font-size: 12px;
-				font-weight 500;
+				font-weight: 500;
 				line-height: 12px;
-				margin-left: 33px;
-				margin-top: -33px;
-				padding: 2px 6px;
-				text-align: center;
+				padding: 3px 6px;
+				pointer-events: none;
+				position: absolute;
+				right: -2px;
 				text-shadow: 0 1px 0 rgba(0,0,0,.25);
-				vertical-align: middle;
 			}
-
 			.serverhider-modal .folderhideCheckboxWrapper {
 				right: 8px;
 			}`;
@@ -98,11 +103,7 @@ class ServerHider {
 			</span>`;
 
 		this.serverEntryMarkup =
-			`<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginTop4-2rEBfJ marginBottom4-_yArcI serverhiderEntry" style="flex: 1 1 auto;">
-				<div class="flexChild-1KGW5q serverhiderGuild" style="flex: 0 0 auto;">
-					<div class="serverhiderIcon"></div>
-					<div class="serverhiderBadge"></div>
-				</div>
+			`<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginTop4-2rEBfJ marginBottom4-_yArcI entry" style="flex: 1 1 auto;">
 				<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q overflowEllipsis-3Rxxjf serverhiderName" style="flex: 1 1 auto;"></h3>
 				<div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU valueChecked-3Bzkbm" style="flex: 0 0 auto;">
 					<input type="checkbox" class="checkboxEnabled-4QfryV checkbox-1KYsPm serverhiderCheckbox">
@@ -138,7 +139,7 @@ class ServerHider {
 
 	getDescription () {return "Hide Servers in your Serverlist";}
 
-	getVersion () {return "2.5.3";}
+	getVersion () {return "2.5.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -261,7 +262,7 @@ class ServerHider {
 	}
 	
 	onContextMenu (context) {
-		if (!context || !context.tagName || !context.parentElement || context.querySelector(".serverhider-item")) return;
+		if (document.querySelector(".serverhider-modal") || !context || !context.tagName || !context.parentElement || context.querySelector(".serverhider-item")) return;
 		var info = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"guild"});
 		var valid = false;
 		if (info && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"GuildLeaveGroup"})) {
@@ -340,28 +341,11 @@ class ServerHider {
 			let divider = $(this.dividerMarkup);
 			let isHiddenByFolder = $(serverObj.div).attr("folder") ? true : false;
 			entry.toggleClass("hidefolder", isHiddenByFolder);
-			serverHiderModal.find(".entries").append(entry);
 			divider.toggleClass("hidefolder", isHiddenByFolder);
-			serverHiderModal.find(".entries").append(divider);
-			if (serverObj.icon) {
-				entry.find(".serverhiderIcon")
-					.css("background-image", "url('https://cdn.discordapp.com/icons/" + serverObj.id + "/" + serverObj.icon + ".png')");
-			}
-			else {
-				entry.find(".serverhiderIcon")
-					.text(serverObj.div.querySelector("a").innerText);
-			}
-			if (badge) {
-				entry.find(".serverhiderBadge")
-					.text(badge.innerText);
-			}
-			else {
-				entry.find(".serverhiderBadge")
-					.css("padding", "0px");
-			}
+			serverHiderModal.find(".entries").append(entry).append(divider);
 			entry.find(".serverhiderName")
-				.text(serverObj.name)
-				.attr("id", serverObj.id);
+				.before(this.createCopyOfServer(serverObj))
+				.text(serverObj.name);
 			entry.find(".serverhiderCheckbox")
 				.prop("checked", $(serverObj.div).is(":visible"))
 				.on("click", (event) => {
@@ -371,6 +355,31 @@ class ServerHider {
 				});
 		}
 		BDfunctionsDevilBro.appendModal(serverHiderModal);
+	}
+	
+	createCopyOfServer (serverObj) {
+		var serverDiv = serverObj.div;
+		var serverCopy = serverDiv.cloneNode(true);
+		$(serverCopy)
+			.css("display", "")
+			.on("click." + this.getName(), (e) => {
+				e.preventDefault();
+				serverDiv.querySelector("a").click();
+			})
+			.on("contextmenu." + this.getName(), (e) => {
+				var handleContextMenu = BDfunctionsDevilBro.getKeyInformation({"node":serverDiv.firstElementChild, "key":"handleContextMenu"});
+				if (handleContextMenu) {
+					var data = {
+						preventDefault: a=>a,
+						stopPropagation: a=>a,
+						pageX: e.pageX,
+						pageY: e.pageY,
+					};
+					
+					handleContextMenu(data);
+				}
+			});
+		return serverCopy;
 	}
 	
 	updateAllServers (write) {
