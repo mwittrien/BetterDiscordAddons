@@ -1,3 +1,4 @@
+.container-2oOGIt,
 #app-mount {
 	background: var(--background) center/cover !important;
 	opacity: 1 !important;
@@ -314,6 +315,7 @@ input:disabled {
 	border-radius: 3px !important;
 }
 
+.container-2oOGIt:after,
 .backdrop-2ohBEd:after {
 	content: "";
 	pointer-events: none !important;
@@ -324,7 +326,14 @@ input:disabled {
 	height: 100%;
 	background: rgba(var(--transparencycolor),calc(var(--transparencyalpha) * 2)) !important;
 }
-
+.container-2oOGIt .content-3dsgDG {
+	position: relative !important;
+}
+.container-2oOGIt .content-3dsgDG ,
+.container-2oOGIt .problems-2jwWfL {
+	z-index: 100 !important;
+}
+.hidden-by-OTB ~ * .container-2oOGIt:after,
 .hidden-by-OTB ~ * .backdrop-2ohBEd:after {
 	top: 0 !important;
 }
