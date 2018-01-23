@@ -93,21 +93,21 @@ class ServerFolders {
 			}`;
 
 		this.serverContextEntryMarkup =
-			`<div class="item-group itemGroup-oViAgA">
-				<div class="item item-1XYaYf serverfolders-item item-subMenu itemSubMenu-3ZgIw-">
+			`<div class="itemGroup-oViAgA">
+				<div class="item-1XYaYf serverfolders-item itemSubMenu-3ZgIw-">
 					<span>REPLACE_servercontext_serverfolders_text</span>
 					<div class="hint"></div>
 				</div>
 			</div>`;
 			
 		this.serverContextSubMenuMarkup = 
-			`<div class="context-menu contextMenu-uoJTbz serverfolders-submenu">
-				<div class="item-group itemGroup-oViAgA">
-					<div class="item item-1XYaYf createfolder-item">
+			`<div class="contextMenu-uoJTbz serverfolders-submenu">
+				<div class="itemGroup-oViAgA">
+					<div class="item-1XYaYf createfolder-item">
 						<span>REPLACE_serversubmenu_createfolder_text</span>
 						<div class="hint"></div>
 					</div>
-					<div class="item item-1XYaYf removefromfolder-item disabled-dlOjhg disabled">
+					<div class="item-1XYaYf removefromfolder-item disabled-dlOjhg">
 						<span>REPLACE_serversubmenu_removefromfolder_text</span>
 						<div class="hint"></div>
 					</div>
@@ -115,17 +115,17 @@ class ServerFolders {
 			</div>`;
 			
 		this.folderContextMarkup = 
-			`<div class="context-menu contextMenu-uoJTbz folderSettings">
-				<div class="item-group itemGroup-oViAgA">
-					<div class="item item-1XYaYf unreadfolder-item">
+			`<div class="contextMenu-uoJTbz folderSettings">
+				<div class="itemGroup-oViAgA">
+					<div class="item-1XYaYf unreadfolder-item disabled-dlOjhg">
 						<span>REPLACE_foldercontext_unreadfolder_text</span>
 						<div class="hint"></div>
 					</div>
-					<div class="item item-1XYaYf foldersettings-item">
+					<div class="item-1XYaYf foldersettings-item">
 						<span>REPLACE_foldercontext_foldersettings_text</span>
 						<div class="hint"></div>
 					</div>
-					<div class="item item-1XYaYf removefolder-item">
+					<div class="item-1XYaYf removefolder-item">
 						<span>REPLACE_foldercontext_removefolder_text</span>
 						<div class="hint"></div>
 					</div>
@@ -253,7 +253,7 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.4.9";}
+	getVersion () {return "5.5.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -354,7 +354,7 @@ class ServerFolders {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".layers, .layers-20RVFW")) this.settingsWindowObserver.observe(observertarget, {childList:true});
+			if (observertarget = document.querySelector(".layers-20RVFW")) this.settingsWindowObserver.observe(observertarget, {childList:true});
 			
 			this.badgeObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -485,7 +485,7 @@ class ServerFolders {
 		if (folderDiv) {
 			serverContextSubMenu
 				.find(".removefromfolder-item")
-				.removeClass("disabled").removeClass("disabled-dlOjhg")
+				.removeClass("disabled-dlOjhg")
 				.on("click", () => {
 					$(context).hide();
 					this.removeServerFromFolder(serverObj, folderDiv);
@@ -696,13 +696,12 @@ class ServerFolders {
 		var unreadServers = BDfunctionsDevilBro.readUnreadServerList(this.readIncludedServerList(folderDiv));
 		if (unreadServers.length > 0) {
 			folderContext
-				.on("click." + this.getName(), ".unreadfolder-item", () => {
+				.find(".unreadfolder-item")
+				.removeClass("disabled-dlOjhg")
+				.on("click." + this.getName(), () => {
 					folderContext.remove();
 					BDfunctionsDevilBro.clearReadNotifications(unreadServers);
 				});
-		}
-		else {
-			folderContext.find(".unreadfolder-item").addClass("disabled");
 		}
 		
 		BDfunctionsDevilBro.appendContextMenu(folderContext, e);
