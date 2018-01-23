@@ -20,18 +20,22 @@ class RepoControls {
 		};
 		
 		this.repoControlsMarkup = 
-			`<div class="repo-controls recent-mentions-popout">
-				<div class="header flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
-					<div class="inputWrapper-3xoRWR vertical-3X17r5 directionColumn-2h-LPR searchWrapper" style="flex: 1 1 50%;">
-						<input type="text" class="input-2YozMi size16-3IvaX_" id="input-search" placeholder="Search for...">
+			`<div class="repo-controls flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
+				<div class="inputWrapper-3xoRWR vertical-3X17r5 directionColumn-2h-LPR searchWrapper" style="flex: 1 1 50%; margin-right:50px;">
+					<input type="text" class="input-2YozMi size16-3IvaX_" id="input-search" placeholder="Search for...">
+				</div>
+				<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelect-2sgeoi" style="flex: 1 1 25%;">
+					<div class="quickSelectLabel-2MM1ZS">Sort by:</div>
+					<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelectClick-36aPV0 sort-filter" style="flex: 0 0 auto;">
+						<div option="name" class="quickSelectValue-23jNHW">Name</div>
+						<div class="quickSelectArrow-1lyLly"></div>
 					</div>
-					<div class="mention-filter sort-filter" style="flex: 1 1 25%;">
-						<div class="label">Sort by:</div>
-						<div option="name" class="value" style="text-transform:none;">Name</div>
-					</div>
-					<div class="mention-filter order-filter" style="flex: 1 1 25%;">
-						<div class="label">Order:</div>
-						<div option="asc" class="value" style="text-transform:none;">Ascending</div>
+				</div>
+				<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelect-2sgeoi" style="flex: 1 1 25%;">
+					<div class="quickSelectLabel-2MM1ZS">Order:</div>
+					<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelectClick-36aPV0 order-filter" style="flex: 0 0 auto;">
+						<div option="asc" class="quickSelectValue-23jNHW">Ascending</div>
+						<div class="quickSelectArrow-1lyLly"></div>
 					</div>
 				</div>
 			</div>`;
@@ -39,9 +43,9 @@ class RepoControls {
 		this.sortPopoutMarkup =
 			`<div class="popout popout-bottom-right no-shadow repocontrols-sort-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);" option="sort">
 				<div>
-					<div class="context-menu contextMenu-uoJTbz recent-mentions-filter-popout">
-						<div class="item-group itemGroup-oViAgA">
-							${Object.keys(this.sortings.sort).map((key, i) => `<div option="${key}" class="item item-1XYaYf">${this.sortings.sort[key]}</div>`).join("")}
+					<div class="contextMenu-uoJTbz quickSelectPopout">
+						<div class="itemGroup-oViAgA">
+							${Object.keys(this.sortings.sort).map((key, i) => `<div option="${key}" class="item-1XYaYf">${this.sortings.sort[key]}</div>`).join("")}
 						</div>
 					</div>
 				</div>
@@ -50,9 +54,9 @@ class RepoControls {
 		this.orderPopoutMarkup =
 			`<div class="popout popout-bottom-right no-shadow repocontrols-order-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);" option="order">
 				<div>
-					<div class="context-menu contextMenu-uoJTbz recent-mentions-filter-popout">
-						<div class="item-group itemGroup-oViAgA">
-							${Object.keys(this.sortings.order).map((key, i) => `<div option="${key}" class="item item-1XYaYf">${this.sortings.order[key]}</div>`).join("")}
+					<div class="contextMenu-uoJTbz quickSelectPopout">
+						<div class="itemGroup-oViAgA">
+							${Object.keys(this.sortings.order).map((key, i) => `<div option="${key}" class="item-1XYaYf">${this.sortings.order[key]}</div>`).join("")}
 						</div>
 					</div>
 				</div>
@@ -121,7 +125,7 @@ class RepoControls {
 
 	getDescription () {return "Lets you sort and filter your list of downloaded Themes and Plugins.";}
 
-	getVersion () {return "1.1.0";}
+	getVersion () {return "1.1.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -171,7 +175,7 @@ class RepoControls {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".layers, .layers-20RVFW")) this.settingsWindowObserver.observe(observertarget, {childList:true});
+			if (observertarget = document.querySelector(".layers-20RVFW")) this.settingsWindowObserver.observe(observertarget, {childList:true});
 			
 			this.innerSettingsWindowObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -193,7 +197,7 @@ class RepoControls {
 				);
 			});
 			
-			var settingswindow = document.querySelector(".layer[layer-id='user-settings'], .layer-kosS71[layer-id='user-settings']");
+			var settingswindow = document.querySelector(".layer-kosS71[layer-id='user-settings']");
 			if (settingswindow) {
 				this.innerSettingsWindowObserver.observe(settingswindow, {childList:true, subtree:true});
 				if (this.getSettingsPageType(settingswindow)) this.addControls(settingswindow.querySelector(".bda-slist"));
@@ -234,7 +238,7 @@ class RepoControls {
 	}
 	
 	getSettingsPageType (container) {
-		if (typeof container === "undefined") container = document.querySelector(".layer[layer-id='user-settings'], .layer-kosS71[layer-id='user-settings']");
+		if (typeof container === "undefined") container = document.querySelector(".layer-kosS71[layer-id='user-settings']");
 		if (container && container.tagName) {
 			var folderbutton = container.querySelector(".bd-pfbtn");
 			if (folderbutton) {
@@ -259,8 +263,8 @@ class RepoControls {
 		var sortings = BDfunctionsDevilBro.getAllData(this, "sortings");
 		
 		var repoControls = $(this.repoControlsMarkup);
-		repoControls.find(".sort-filter .value").attr("option", sortings.sort).text(this.sortings.sort[sortings.sort]);
-		repoControls.find(".order-filter .value").attr("option", sortings.order).text(this.sortings.order[sortings.order]);
+		repoControls.find(".sort-filter .quickSelectValue-23jNHW").attr("option", sortings.sort).text(this.sortings.sort[sortings.sort]);
+		repoControls.find(".order-filter .quickSelectValue-23jNHW").attr("option", sortings.order).text(this.sortings.order[sortings.order]);
 		repoControls
 			.on("keyup." + this.getName(), "#input-search", (e) => {
 				clearTimeout(repoControls.searchTimeout);
@@ -388,11 +392,11 @@ class RepoControls {
 		var wrapper = e.currentTarget;
 		if (wrapper.classList.contains("popout-open")) return;
 		wrapper.classList.add("popout-open");
-		var value = $(wrapper).find(".value");
+		var value = $(wrapper).find(".quickSelectValue-23jNHW");
 		var popout = $(markup);
 		$(".popouts").append(popout)
-			.off("click", ".item")
-			.on("click", ".item", (e2) => {
+			.off("click", ".item-1XYaYf")
+			.on("click", ".item-1XYaYf", (e2) => {
 				var option = $(e2.currentTarget).attr("option");
 				value.text($(e2.currentTarget).text());
 				value.attr("option", option);
