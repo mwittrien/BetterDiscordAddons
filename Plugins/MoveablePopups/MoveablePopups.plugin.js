@@ -10,7 +10,7 @@ class MoveablePopups {
 
 	getDescription () {return "Adds the feature to move all popups and modals around like on a normal desktop. Ctrl + drag with your left mousebutton to drag element.";}
 
-	getVersion () {return "1.0.4";}
+	getVersion () {return "1.0.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -59,7 +59,7 @@ class MoveablePopups {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".app ~ [class^='theme-'], .app-XZYfmp ~ [class^='theme-']:not([class*='popouts'])")) this.modalObserver.observe(observertarget, {childList: true});
+			if (observertarget = document.querySelector(".app-XZYfmp ~ [class^='theme-']:not([class*='popouts'])")) this.modalObserver.observe(observertarget, {childList: true});
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -91,6 +91,8 @@ class MoveablePopups {
 			.on("mousedown." + this.getName(), (e) => {
 				if (e.ctrlKey) {
 					this.dragging = true;
+					
+					if (div.classList.contains("popout")) $(div.firstChild).css("position", "absolute");
 					
 					var disableTextSelectionCSS = `
 						* {
