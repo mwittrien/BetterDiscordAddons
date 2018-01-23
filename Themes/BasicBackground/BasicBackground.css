@@ -505,6 +505,7 @@ input:disabled {
 .buttonBrandFilledDefault-2Rs6u5,
 .buttonGreenFilledDefault-_lLQaz,
 .buttonBrandInvertedDefault-uUmgsD,
+.popout .btn,
 .btn-primary {
 	background: rgb(var(--accentcolor)) !important;
 }
