@@ -375,6 +375,7 @@ input:disabled {
 .userSettingsSecurityImage-3BuJq-,
 .emptyIconFriends-2q_v-C,
 .empty-state-image,
+.error-state .icon,
 .empty-placeholder .image {
 	opacity: 0.5 !important;
 	pointer-events: none !important;
