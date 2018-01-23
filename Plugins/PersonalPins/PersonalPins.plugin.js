@@ -9,8 +9,8 @@ class PersonalPins {
 		this.optionPopoutObserver = new MutationObserver(() => {});
 
 		this.messageContextEntryMarkup =
-			`<div class="item-group itemGroup-oViAgA">
-				<div class="item item-1XYaYf personalpin-item">
+			`<div class="itemGroup-oViAgA">
+				<div class="item-1XYaYf personalpin-item">
 					<span>REPLACE_context_noteoption_text</span>
 					<div class="hint"></div>
 				</div>
@@ -29,18 +29,19 @@ class PersonalPins {
 			
 		this.notesPopoutMarkup = 
 			`<div class="popout popout-bottom-right no-arrow no-shadow popout-personalpins-notes DevilBro-modal" style="z-index: 1000; visibility: visible; left: 544.844px; top: 35.9896px; transform: translateX(-100%) translateY(0%) translateZ(0px);">
-				<div class="messages-popout-wrap themed-popout recent-mentions-popout" style="max-height: 740px; width: 500px;">
-					<div class="header">
+				<div class="messages-popout-wrap themed-popout" style="max-height: 740px; width: 500px;">
+					<div class="header" style="padding-bottom: 0;">
 						<div class="title">REPLACE_popout_note_text</div>
-						<div class="header-tab-bar-wrapper">
-							<div class="tab-bar TOP">
-								<div tab="channel" class="tab-bar-item selected">REPLACE_popout_channel_text</div>
-								<div tab="server" class="tab-bar-item">REPLACE_popout_server_text</div>
-								<div tab="allservers" class="tab-bar-item">REPLACE_popout_allservers_text</div>
-							</div>
-							<div class="mention-filter">
-								<div class="label">REPLACE_popout_sort_text:</div>
-								<div option="timestamp" class="value" style="text-transform:none;">REPLACE_popout_messagesort_text</div>
+						<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginTop8-2gOa2N" style="flex: 0 0 auto;">
+							<div tab="channel" class="tab selected">REPLACE_popout_channel_text</div>
+							<div tab="server" class="tab">REPLACE_popout_server_text</div>
+							<div tab="allservers" class="tab">REPLACE_popout_allservers_text</div>
+							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelect-2sgeoi" style="padding-bottom: 15px; float:right;">
+								<div class="quickSelectLabel-2MM1ZS">REPLACE_popout_sort_text:</div>
+								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelectClick-36aPV0" style="flex: 0 0 auto;">
+									<div option="timestamp" class="quickSelectValue-23jNHW">REPLACE_popout_messagesort_text</div>
+									<div class="quickSelectArrow-1lyLly"></div>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -58,10 +59,10 @@ class PersonalPins {
 		this.sortPopoutMarkup =
 			`<div class="popout popout-bottom-right no-shadow personalpins-sort-popout" style="z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
 				<div>
-					<div class="context-menu contextMenu-uoJTbz recent-mentions-filter-popout">
-						<div class="item-group itemGroup-oViAgA">
-							<div option="timestamp" class="item item-1XYaYf">REPLACE_popout_messagesort_text</div>
-							<div option="addedat" class="item item-1XYaYf">REPLACE_popout_datesort_text</div>
+					<div class="contextMenu-uoJTbz quickSelectPopout">
+						<div class="itemGroup-oViAgA">
+							<div option="timestamp" class="item-1XYaYf">REPLACE_popout_messagesort_text</div>
+							<div option="addedat" class="item-1XYaYf">REPLACE_popout_datesort_text</div>
 						</div>
 					</div>
 				</div>
@@ -110,7 +111,7 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.3.9";}
+	getVersion () {return "1.4.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -275,7 +276,7 @@ class PersonalPins {
 	
 	onContextMenu (context) {
 		if (!context || !context.tagName || !context.parentElement || context.querySelector(".personalpin-item")) return;
-		for (let group of context.querySelectorAll(".item-group, .itemGroup-oViAgA")) {
+		for (let group of context.querySelectorAll(".itemGroup-oViAgA")) {
 			if (BDfunctionsDevilBro.getKeyInformation({"node":group, "key":"displayName", "value":"MessagePinItem"})) {
 				$(this.messageContextEntryMarkup).insertAfter(group)
 					.on("click", ".personalpin-item", () => {
@@ -333,12 +334,12 @@ class PersonalPins {
 			.appendTo(".popouts")
 			.css("left", $(wrapper).outerWidth()/2 + $(wrapper).offset().left + "px")
 			.css("top", $(wrapper).outerHeight() + $(wrapper).offset().top + "px")
-			.on("click", ".tab-bar-item", (e2) => {
-				$(".tab-bar-item.selected", popout).removeClass("selected");
+			.on("click", ".tab", (e2) => {
+				$(".tab.selected", popout).removeClass("selected");
 				$(e2.currentTarget).addClass("selected");
 				this.addNotes();
 			})
-			.on("click", ".mention-filter", (e2) => {
+			.on("click", ".quickSelectClick-36aPV0", (e2) => {
 				this.openSortPopout(e2);
 			});
 			
@@ -357,11 +358,11 @@ class PersonalPins {
 		var wrapper = e.currentTarget;
 		if (wrapper.classList.contains("popout-open")) return;
 		wrapper.classList.add("popout-open");
-		var value = $(wrapper).find(".value");
+		var value = $(wrapper).find(".quickSelectValue-23jNHW");
 		var popout = $(this.sortPopoutMarkup);
 		$(".popouts").append(popout)
-			.off("click", ".item")
-			.on("click", ".item", (e2) => {
+			.off("click", ".item-1XYaYf")
+			.on("click", ".item-1XYaYf", (e2) => {
 				value.text($(e2.currentTarget).text());
 				value.attr("option", $(e2.currentTarget).attr("option"));
 				$(document).off("mousedown.sortpopout" + this.getName());
@@ -468,7 +469,7 @@ class PersonalPins {
 				var container = popout.querySelector(".messages-popout");
 				var placeholder = popout.querySelector(".empty-placeholder");
 				var messages = {};
-				switch ($(".tab-bar-item.selected", popout).attr("tab")) {
+				switch (popout.querySelector(".tab.selected").getAttribute("tab")) {
 					case "channel":
 						messages = pins[serverID] && pins[serverID][channelID] ? pins[serverID][channelID] : {};
 						break;
@@ -483,7 +484,7 @@ class PersonalPins {
 				for (var id in messages) {
 					messageArray.push(messages[id]);
 				}
-				messageArray = BDfunctionsDevilBro.sortArrayByKey(messageArray, $(".value", popout).attr("option"));
+				messageArray = BDfunctionsDevilBro.sortArrayByKey(messageArray, popout.querySelector(".quickSelectValue-23jNHW").getAttribute("option"));
 				$(placeholder).toggle(messageArray.length == 0);
 				for (let messageData of messageArray) {
 					let message = $(this.messageMarkup)[0];
