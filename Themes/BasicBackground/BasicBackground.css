@@ -477,7 +477,6 @@ input:disabled {
 .guild-inner[style*="background-color:"]:hover,
 #RANbutton:hover,
 .embedPill-3sYS1X:not([style]),
-.tooltip-black,
 .searchFilter-1fJ0cd,
 .searchAnswer-yD90ey,
 .DevilBro-settings .checkbox-1QwaS4.checked-2TahvT,
@@ -588,7 +587,6 @@ input:disabled {
 	border-color: rgb(var(--accentcolor)) !important;
 }
 
-.tooltip,
 .Select-control,
 .Select-value-label,
 .Select-option,
@@ -649,17 +647,37 @@ input:disabled {
 	background: rgba(var(--accentcolor),0.2) !important;
 }
 
-.tooltip-black.tooltip-right:after {
+.tooltip {
+	color: #FFF !important;
+	background-color: rgb(var(--accentcolor)) !important;
+}
+.tooltip-right:after {
 	border-right-color: rgb(var(--accentcolor)) !important;
 }
-.tooltip-black.tooltip-top:after {
+.tooltip-top:after {
 	border-top-color: rgb(var(--accentcolor)) !important;
 }
-.tooltip-black.tooltip-left:after {
+.tooltip-left:after {
 	border-left-color: rgb(var(--accentcolor)) !important;
 }
-.tooltip-black.tooltip-bottom:after {
+.tooltip-bottom:after {
 	border-bottom-color: rgb(var(--accentcolor)) !important;
+}
+.tooltip-red.tooltip {
+	color: #FFF !important;
+	background-color: rgb(240,71,71) !important;
+}
+.tooltip-red.tooltip-right:after {
+	border-right-color: rgb(240,71,71) !important;
+}
+.tooltip-red.tooltip-top:after {
+	border-top-color: rgb(240,71,71) !important;
+}
+.tooltip-red.tooltip-left:after {
+	border-left-color: rgb(240,71,71) !important;
+}
+.tooltip-red.tooltip-bottom:after {
+	border-bottom-color: rgb(240,71,71) !important;
 }
 	
 .buttonLinkLinkDefault-3EZi6x:active .contents-4L4hQM, 
@@ -743,6 +761,11 @@ input:disabled {
 }
 .popout:not(.popout-googletranslate)[style*="translateX(-100%)"] > * {
 	right: 100% !important;
+}
+.popout[style*="translateY(-100%)"] > .userPopout-4pfA0d {
+	position: absolute !important;
+	bottom: -20px !important;
+	left: -120px !important;
 }
 .popout .menu-3BZuDT.alt-2vq4VR {
 	top: -235px !important;
