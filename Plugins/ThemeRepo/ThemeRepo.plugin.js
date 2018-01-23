@@ -13,7 +13,7 @@ class ThemeRepo {
 		
 		this.updateInterval;
 		
-		this.themeFixerCSS = `#friends, .noChannel-2EQ0a9, .activityFeed-HeiGwL, .lfg-3xoFkI, .app, .layers, .layer, .layers-20RVFW, .layer-kosS71, .container-2OU7Cz, .content-region, .guilds-wrapper, .search-2--6aU .search-bar, .chat .inner-3if5cm, .search-results-wrap, .search-results-wrap .search-header, .search-results-wrap .search-result-message.hit, .sidebar-region, .ui-standard-sidebar-view, .channels-3g2vYe, .container-iksrDt {background: rgba(0,0,0,0.3) !important;}  .search-results-wrap .search-result-message.hit {box-shadow:none !important;}  .titleBar-3_fDwJ::after {content:""; position:absolute; z-index:-1; top:0; left:0; right:0; width:100%; height:22px; background: rgba(0,0,0,0.8) !important;}  #friends .friends-table, .channel-members, .channel-members-loading, .chat .content, .chat form, .chat, .content .flex-spacer, .messages-wrapper, .typing-3eiiL_, .container-RYiLUQ, .headerBar-cxbhPD, .titleBar-3_fDwJ, .titleWrapper-3Vi_wz .title-qAcLxz, .search-results-wrap .search-result::before, .search-results-wrap .search-result::after, .search-results-wrap .channel-name {background: transparent !important;}  ::-webkit-scrollbar-thumb {border-color: transparent !important; background: rgba(0,0,0,0.8) !important;} ::-webkit-scrollbar, ::-webkit-scrollbar-track-piece {border-color: transparent !important; background: transparent !important;} ::-webkit-scrollbar-corner {display: none !important;}`;
+		this.themeFixerCSS = `#friends, .noChannel-2EQ0a9, .activityFeed-HeiGwL, .lfg-3xoFkI, .app, .layers-20RVFW, .layer-kosS71, .container-2OU7Cz, .content-region, .guilds-wrapper, .search-2--6aU .search-bar, .chat .inner-3if5cm, .search-results-wrap, .search-results-wrap .search-header, .search-results-wrap .search-result-message.hit, .sidebar-region, .ui-standard-sidebar-view, .channels-3g2vYe, .container-iksrDt {background: rgba(0,0,0,0.3) !important;}  .search-results-wrap .search-result-message.hit {box-shadow:none !important;}  .titleBar-3_fDwJ::after {content:""; position:absolute; z-index:-1; top:0; left:0; right:0; width:100%; height:22px; background: rgba(0,0,0,0.8) !important;}  #friends .friends-table, .channel-members, .channel-members-loading, .chat .content, .chat form, .chat, .content .flex-spacer, .messages-wrapper, .typing-3eiiL_, .container-RYiLUQ, .headerBar-cxbhPD, .titleBar-3_fDwJ, .titleWrapper-3Vi_wz .title-qAcLxz, .search-results-wrap .search-result::before, .search-results-wrap .search-result::after, .search-results-wrap .channel-name {background: transparent !important;}  ::-webkit-scrollbar-thumb {border-color: transparent !important; background: rgba(0,0,0,0.8) !important;} ::-webkit-scrollbar, ::-webkit-scrollbar-track-piece {border-color: transparent !important; background: transparent !important;} ::-webkit-scrollbar-corner {display: none !important;}`;
 		
 		this.themeRepoButtonMarkup = 
 			`<button class="bd-pfbtn bd-themerepobutton">Theme Repo</button>`;
@@ -67,12 +67,12 @@ class ThemeRepo {
 			</li>`;
 			
 		this.themeRepoModalMarkup =
-			`<span class="themerepo-modal recent-mentions-popout DevilBro-modal">
+			`<span class="themerepo-modal DevilBro-modal">
 				<div class="backdrop-2ohBEd"></div>
 				<div class="modal-2LIEKY">
 					<div class="inner-1_1f7b">
 						<div class="modal-3HOjGZ sizeMedium-1-2BNS">
-							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO header-3sp3cE" style="flex: 0 0 auto;">
+							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO header-3sp3cE" style="flex: 0 0 auto; padding: 20px 20px 0 20px;">
 								<div class="flexChild-1KGW5q" style="flex: 1 1 auto;">
 									<h4 class="h4-2IXpeI title-1pmpPr size16-3IvaX_ height20-165WbF weightSemiBold-T8sxWH defaultColor-v22dK1 defaultMarginh4-jAopYe marginReset-3hwONl themeAmount">Theme Repository</h4>
 									<div class="guildName-1u0hy7 small-3-03j1 size12-1IGJl9 height16-1qXrGy primary-2giqSn"></div>
@@ -84,22 +84,24 @@ class ThemeRepo {
 									</g>
 								</svg>
 							</div>
-							<div class="header inner-tqJwAU">
-								<div class="header-tab-bar-wrapper">
-									<div class="tab-bar TOP">
-										<div tab="themes" class="tab-bar-item">Themes</div>
-										<div tab="settings" class="tab-bar-item">Settings</div>
+							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO header-3sp3cE marginBottom20-2Ifj-2" style="flex: 0 0 auto; padding: 10px 20px 0px 20px;">
+								<div tab="themes" class="tab selected">Themes</div>
+								<div tab="settings" class="tab">Settings</div>
+								<div class="inputWrapper-3xoRWR vertical-3X17r5 directionColumn-2h-LPR" style="margin-top: -15px;">
+									<input type="text" class="input-2YozMi size16-3IvaX_" id="input-search" placeholder="Search for..." style="padding: 1px 8px;">
+								</div>
+								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelect-2sgeoi" style="padding-bottom: 15px;">
+									<div class="quickSelectLabel-2MM1ZS">Sort by:</div>
+									<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelectClick-36aPV0 sort-filter" style="flex: 0 0 auto;">
+										<div option="name" class="quickSelectValue-23jNHW">Name</div>
+										<div class="quickSelectArrow-1lyLly"></div>
 									</div>
-									<div class="inputWrapper-3xoRWR vertical-3X17r5 directionColumn-2h-LPR searchWrapper">
-										<input type="text" class="input-2YozMi size16-3IvaX_" id="input-search" placeholder="Search for...">
-									</div>
-									<div class="mention-filter sort-filter">
-										<div class="label">Sort by:</div>
-										<div option="name" class="value" style="text-transform:none;">Name</div>
-									</div>
-									<div class="mention-filter order-filter">
-										<div class="label">Order:</div>
-										<div option="asc" class="value" style="text-transform:none;">Ascending</div>
+								</div>
+								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelect-2sgeoi" style="padding-bottom: 15px;">
+									<div class="quickSelectLabel-2MM1ZS">Order:</div>
+									<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelectClick-36aPV0 order-filter" style="flex: 0 0 auto;">
+										<div option="asc" class="quickSelectValue-23jNHW">Ascending</div>
+										<div class="quickSelectArrow-1lyLly"></div>
 									</div>
 								</div>
 							</div>
@@ -169,14 +171,14 @@ class ThemeRepo {
 		this.sortPopoutMarkup =
 			`<div class="popout popout-bottom-right no-shadow themerepo-sort-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
 				<div>
-					<div class="context-menu contextMenu-uoJTbz recent-mentions-filter-popout">
-						<div class="item-group itemGroup-oViAgA">
-							<div option="name" class="item item-1XYaYf">Name</div>
-							<div option="author" class="item item-1XYaYf">Author</div>
-							<div option="version" class="item item-1XYaYf">Version</div>
-							<div option="description" class="item item-1XYaYf">Description</div>
-							<div option="state" class="item item-1XYaYf">Update State</div>
-							<div option="fav" class="item item-1XYaYf">Favorites</div>
+					<div class="contextMenu-uoJTbz quickSelectPopout">
+						<div class="itemGroup-oViAgA">
+							<div option="name" class="item-1XYaYf">Name</div>
+							<div option="author" class="item-1XYaYf">Author</div>
+							<div option="version" class="item-1XYaYf">Version</div>
+							<div option="description" class="item-1XYaYf">Description</div>
+							<div option="state" class="item-1XYaYf">Update State</div>
+							<div option="fav" class="item-1XYaYf">Favorites</div>
 						</div>
 					</div>
 				</div>
@@ -185,10 +187,10 @@ class ThemeRepo {
 		this.orderPopoutMarkup =
 			`<div class="popout popout-bottom-right no-shadow themerepo-order-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
 				<div>
-					<div class="context-menu contextMenu-uoJTbz recent-mentions-filter-popout">
-						<div class="item-group itemGroup-oViAgA">
-							<div option="asc" class="item item-1XYaYf">Ascending</div>
-							<div option="desc" class="item item-1XYaYf">Descending</div>
+					<div class="contextMenu-uoJTbz quickSelectPopout">
+						<div class="itemGroup-oViAgA">
+							<div option="asc" class="item-1XYaYf">Ascending</div>
+							<div option="desc" class="item-1XYaYf">Descending</div>
 						</div>
 					</div>
 				</div>
@@ -290,7 +292,7 @@ class ThemeRepo {
 
 	getDescription () {return "Allows you to preview all themes from the theme repo and download them on the fly. Repo button is in the theme settings.";}
 
-	getVersion () {return "1.3.1";}
+	getVersion () {return "1.3.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -301,7 +303,7 @@ class ThemeRepo {
 		settingshtml += `<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Your additional Theme List:</h3><div class="DevilBro-settings-inner-list theme-list marginBottom8-1mABJ4">`;
 		var ownlist = BDfunctionsDevilBro.loadData("ownlist", this, "ownlist") || [];
 		if (ownlist) for (let url of ownlist) {
-			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginTop4-2rEBfJ marginBottom4-_yArcI ui-hover-card card-11ynQk"><div class="card-11ynQk-inner"><div class="description-3MVziF formText-1L-zZB note-UEZmbY marginTop4-2rEBfJ modeDefault-389VjU primary-2giqSn ellipsis-CYOqEr entryurl">${url}</div></div><div class="round-remove-button button-1qrA-N remove-theme"></div></div>`;
+			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginTop4-2rEBfJ marginBottom4-_yArcI card-11ynQk"><div class="card-11ynQk-inner"><div class="description-3MVziF formText-1L-zZB note-UEZmbY marginTop4-2rEBfJ modeDefault-389VjU primary-2giqSn ellipsis-CYOqEr entryurl">${url}</div></div><div class="button-1qrA-N remove-theme"></div></div>`;
 		}
 		settingshtml += `</div>`;
 		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto; padding-top:8px;">Force all Themes to be fetched again.</h3><button type="button" class="flexChild-1KGW5q buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu refresh-button" style="flex: 0 0 auto;"><div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx contents-4L4hQM">Refresh</div></button></div>`;
@@ -345,7 +347,7 @@ class ThemeRepo {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".layers, .layers-20RVFW")) this.settingsWindowObserver.observe(observertarget, {childList:true});
+			if (observertarget = document.querySelector(".layers-20RVFW")) this.settingsWindowObserver.observe(observertarget, {childList:true});
 			
 			this.innerSettingsWindowObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -359,7 +361,7 @@ class ThemeRepo {
 				);
 			});
 			
-			var settingswindow = document.querySelector(".layer[layer-id='user-settings'], .layer-kosS71[layer-id='user-settings']");
+			var settingswindow = document.querySelector(".layer-kosS71[layer-id='user-settings']");
 			if (settingswindow) {
 				this.innerSettingsWindowObserver.observe(settingswindow, {childList:true, subtree:true});
 				this.checkIfThemesPage(settingswindow);
@@ -402,7 +404,7 @@ class ThemeRepo {
 		if (!ownlist.includes(url)) {
 			ownlist.push(url);
 			BDfunctionsDevilBro.saveData("ownlist", ownlist, this, "ownlist");
-			$(`<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginTop4-2rEBfJ marginBottom4-_yArcI ui-hover-card card-11ynQk"><div class="card-11ynQk-inner"><div class="description-3MVziF formText-1L-zZB note-UEZmbY marginTop4-2rEBfJ modeDefault-389VjU primary-2giqSn ellipsis-CYOqEr entryurl">${url}</div></div><div class="round-remove-button button-1qrA-N remove-theme"></div></div>`).appendTo(settingspanel.querySelector(".theme-list"));
+			$(`<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginTop4-2rEBfJ marginBottom4-_yArcI card-11ynQk"><div class="card-11ynQk-inner"><div class="description-3MVziF formText-1L-zZB note-UEZmbY marginTop4-2rEBfJ modeDefault-389VjU primary-2giqSn ellipsis-CYOqEr entryurl">${url}</div></div><div class="button-1qrA-N remove-theme"></div></div>`).appendTo(settingspanel.querySelector(".theme-list"));
 		}
 	}
 	
@@ -498,7 +500,7 @@ class ThemeRepo {
 			.on("change." + this.getName(), "#input-rnmstart", (e) => {
 				BDfunctionsDevilBro.saveData("RNMstart", $(e.currentTarget).prop("checked"), this, "settings");
 			})
-			.on("click." + this.getName(), ".tab-bar-item[tab=themes]:not(.selected)", (e) => {
+			.on("click." + this.getName(), ".tab[tab=themes]:not(.selected)", (e) => {
 				this.addThemeEntries(themeRepoModal, frame);
 			});
 			
@@ -544,11 +546,11 @@ class ThemeRepo {
 		var wrapper = e.currentTarget;
 		if (wrapper.classList.contains("popout-open")) return;
 		wrapper.classList.add("popout-open");
-		var value = $(wrapper).find(".value");
+		var value = $(wrapper).find(".quickSelectValue-23jNHW");
 		var popout = $(markup);
 		$(".popouts").append(popout)
-			.off("click", ".item")
-			.on("click", ".item", (e2) => {
+			.off("click", ".item-1XYaYf")
+			.on("click", ".item-1XYaYf", (e2) => {
 				value.text($(e2.currentTarget).text());
 				value.attr("option", $(e2.currentTarget).attr("option"));
 				$(document).off("mousedown.sortpopout" + this.getName());
@@ -632,8 +634,8 @@ class ThemeRepo {
 		if (modal.find("#input-hideoutdated").prop("checked")) 		entries = entries.filter((entry) => {return entry.state != 1 ? entry : null;});
 		if (modal.find("#input-hidedownloadable").prop("checked")) 	entries = entries.filter((entry) => {return entry.state != 2 ? entry : null;});
 		entries = entries.filter((entry) => {return entry.search.indexOf(modal.find("#input-search").val().toUpperCase()) > -1 ? entry : null;});
-		entries = BDfunctionsDevilBro.sortArrayByKey(entries, modal.find(".sort-filter .value").attr("option"));
-		if (modal.find(".order-filter .value").attr("option") == "desc") entries.reverse();
+		entries = BDfunctionsDevilBro.sortArrayByKey(entries, modal.find(".sort-filter .quickSelectValue-23jNHW").attr("option"));
+		if (modal.find(".order-filter .quickSelectValue-23jNHW").attr("option") == "desc") entries.reverse();
 		
 		modal.find(".themeAmount").text("Theme Repository " + entries.length + "/" + Object.keys(this.loadedThemes).length + " Themes");
 		
