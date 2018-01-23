@@ -95,7 +95,6 @@ https://raw.githubusercontent.com/ngrst183/SuppressMentions/master/suppressmenti
 https://raw.githubusercontent.com/nirewen/BotsMutualGuilds/master/BotsMutualGuilds.plugin.js
 https://raw.githubusercontent.com/nirewen/Citador/master/Citador.plugin.js
 https://raw.githubusercontent.com/nirewen/Quicksave/master/Quicksave.plugin.js
-https://raw.githubusercontent.com/noodlebox/betterdiscord-plugins/master/AutoPlayGifs.plugin.js
 https://raw.githubusercontent.com/noodlebox/betterdiscord-plugins/master/KawaiiEmotes.plugin.js
 https://raw.githubusercontent.com/noodlebox/betterdiscord-plugins/master/LineNumbers.plugin.js
 https://raw.githubusercontent.com/noodlebox/betterdiscord-plugins/master/OwnerTag.plugin.js
@@ -104,6 +103,7 @@ https://raw.githubusercontent.com/noodlebox/betterdiscord-plugins/master/StaticA
 https://raw.githubusercontent.com/Orrielel/BetterDiscordAddons/master/Plugins/BetterImagePopups/BetterImagePopups.plugin.js
 https://raw.githubusercontent.com/Orrielel/BetterDiscordAddons/master/Plugins/TwitchStreamPanel/TwitchStreamPanel.plugin.js
 https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Plugins/AccountDetailsPlus/AccountDetailsPlus.plugin.js
+https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Plugins/AutoPlayGifs/AutoPlayGifs.plugin.js
 https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Plugins/BDContextMenu/BDContextMenu.plugin.js
 https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Plugins/BetterFormattingRedux/BetterFormattingRedux.plugin.js
 https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Plugins/BetterRoleColors/BetterRoleColors.plugin.js
