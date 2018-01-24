@@ -1871,3 +1871,34 @@ html, span:not(.spinner-item) {
 #files_directDownload .file .progress-bar {
 	background-color: rgb(var(--accentcolor)) !important
 }
+
+#dv-container {
+	border-radius: 5px !important;
+	background: transparent !important;
+	border: none !important;
+	-webkit-mask-image: -webkit-radial-gradient(circle, white, black);
+}
+#dv-container:before {
+	content: "";
+	background: rgba(var(--transparencycolor),var(--memberlistransparency));
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	border-radius: 3px;
+	border: 1px solid rgba(22,22,22,calc(var(--transparencyalpha) * 3));
+	box-sizing: border-box;
+	pointer-events: none;
+}
+#dv-container:after {
+	content: "";
+	background: var(--background) center/cover !important;
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: -1;
+	pointer-events: none;
+}
