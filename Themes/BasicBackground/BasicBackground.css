@@ -1919,7 +1919,7 @@ html, span:not(.spinner-item) {
 /* ----------------------- PLUGINSUPPORT ----------------------- */
 
 .bf-toolbar:before {
-	background: rgba(var(--transparencycolor), 0.7);
+	background: rgba(var(--transparencycolor), 0.7) !important;
 }
 .bf-toolbar .format:hover {
 	background-color: rgb(var(--accentcolor)) !important
