@@ -11,21 +11,21 @@ class EditServers {
 		this.serverDragged = false;
 
 		this.serverContextEntryMarkup =
-			`<div class="item-group itemGroup-oViAgA">
-				<div class="item item-1XYaYf localserversettings-item item-subMenu itemSubMenu-3ZgIw-">
+			`<div class="itemGroup-oViAgA">
+				<div class="item-1XYaYf localserversettings-item itemSubMenu-3ZgIw-">
 					<span>REPLACE_context_localserversettings_text</span>
 					<div class="hint"></div>
 				</div>
 			</div>`;
 			
 		this.serverContextSubMenuMarkup = 
-			`<div class="context-menu contextMenu-uoJTbz editservers-submenu">
-				<div class="item-group itemGroup-oViAgA">
-					<div class="item item-1XYaYf serversettings-item">
+			`<div class="contextMenu-uoJTbz editservers-submenu">
+				<div class="itemGroup-oViAgA">
+					<div class="item-1XYaYf serversettings-item">
 						<span>REPLACE_submenu_serversettings_text</span>
 						<div class="hint"></div>
 					</div>
-					<div class="item item-1XYaYf resetsettings-item disabled-dlOjhg disabled">
+					<div class="item-1XYaYf resetsettings-item disabled-dlOjhg">
 						<span>REPLACE_submenu_resetsettings_text</span>
 						<div class="hint"></div>
 					</div>
@@ -128,7 +128,7 @@ class EditServers {
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	getVersion () {return "1.7.2";}
+	getVersion () {return "1.7.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -278,7 +278,7 @@ class EditServers {
 		if (BDfunctionsDevilBro.loadData(id, this, "servers")) {
 			serverContextSubMenu
 				.find(".resetsettings-item")
-				.removeClass("disabled").removeClass("disabled-dlOjhg")
+				.removeClass("disabled-dlOjhg")
 				.on("click", () => {
 					$(context).hide();
 					this.removeServerData(info.id);
@@ -375,7 +375,7 @@ class EditServers {
 				}
 				else {
 					BDfunctionsDevilBro.saveData(id, {id,name,shortName,url,removeIcon,color1,color2,color3,color4}, this, "servers");
-					this.loadServer({div:serverDiv,info});
+					this.loadServer(Object.assign({"div":serverDiv},info));
 				}
 			});
 		serverSettingsModal.find("#input-servername").focus();
@@ -466,7 +466,6 @@ class EditServers {
 			var removeIcon = data.removeIcon;
 			var color1 = data.color1 ? BDfunctionsDevilBro.color2RGB(data.color1) : "";
 			var color2 = data.color2 ? BDfunctionsDevilBro.color2RGB(data.color2) : "";
-			
 			$(serverObj.div)
 				.off("mouseenter." + this.getName())
 				.on("mouseenter." + this.getName(), () => {this.createServerToolTip(serverObj);})
