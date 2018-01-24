@@ -113,21 +113,21 @@ class ServerHider {
 		this.dividerMarkup = `<div class="divider-1G01Z9 dividerDefault-77PXsz"></div>`;
 
 		this.serverContextEntryMarkup =
-			`<div class="item-group itemGroup-oViAgA">
-				<div class="item item-1XYaYf serverhider-item item-subMenu itemSubMenu-3ZgIw-">
+			`<div class="itemGroup-oViAgA">
+				<div class="item-1XYaYf serverhider-item itemSubMenu-3ZgIw-">
 					<span>REPLACE_context_serverhider_text</span>
 					<div class="hint"></div>
 				</div>
 			</div>`;
 			
 		this.serverContextSubMenuMarkup = 
-			`<div class="context-menu contextMenu-uoJTbz serverhider-submenu">
-				<div class="item-group itemGroup-oViAgA">
-					<div class="item item-1XYaYf hideserver-item disabled-dlOjhg disabled">
+			`<div class="contextMenu-uoJTbz serverhider-submenu">
+				<div class="itemGroup-oViAgA">
+					<div class="item-1XYaYf hideserver-item disabled-dlOjhg">
 						<span>REPLACE_submenu_hideserver_text</span>
 						<div class="hint"></div>
 					</div>
-					<div class="item item-1XYaYf openhidemenu-item">
+					<div class="item-1XYaYf openhidemenu-item">
 						<span>REPLACE_submenu_openhidemenu_text</span>
 						<div class="hint"></div>
 					</div>
@@ -139,7 +139,7 @@ class ServerHider {
 
 	getDescription () {return "Hide Servers in your Serverlist";}
 
-	getVersion () {return "2.5.4";}
+	getVersion () {return "2.5.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -207,9 +207,7 @@ class ServerHider {
 			
 			$(".guilds.scroller").on("mouseleave." + this.getName(), () => {this.updateAllServers(false);});
 			
-			setTimeout(() => {
-				this.updateAllServers(true);
-			},5000);
+			this.updateAllServers(true);
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 		}
@@ -294,7 +292,7 @@ class ServerHider {
 		if (!info.guildCreate) {
 			serverContextSubMenu
 				.find(".hideserver-item")
-				.removeClass("disabled").removeClass("disabled-dlOjhg")
+				.removeClass("disabled-dlOjhg")
 				.on("click", () => {
 					$(context).hide();
 					this.hideServer(info);
