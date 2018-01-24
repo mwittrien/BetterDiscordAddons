@@ -1,3 +1,5 @@
+.auth-tiling-bg,
+.auth-background,
 .container-2oOGIt,
 #app-mount {
 	background: var(--background) center/cover !important;
@@ -16,12 +18,14 @@
 .activityFeed-HeiGwL,
 .lfg-3xoFkI,
 .app,
+.auth-center,
+.auth-form,
 .layers-20RVFW,
 .layer-kosS71,
 .container-2OU7Cz,
 .content-region,
 .guilds-wrapper,
-#friends .tab-bar-item:not(.tab-bar-item-primary):hover,
+#friends .tab-bar-item:hover,
 .input-2YozMi,
 .item-2zi_5J:not([style*="rgb(114, 137, 218)"]) .checked-2TahvT,
 .containerUserOver-2YhVL6:after,
@@ -47,11 +51,13 @@
 	background: rgba(var(--transparencycolor),var(--transparencyalpha)) !important;
 }
 
+.tutorial-popout .title-content,
 .modal-2LIEKY .header,
 .modal-2LIEKY .footer,
 .wrapper-1XTKlU,
 .popout .header,
 .popout .footer,
+.auth-brand,
 .date-picker-hint,
 .modal-3HOjGZ,
 .modal-3HOjGZ .header-3sp3cE,
@@ -255,6 +261,7 @@ input:disabled {
 	background: rgba(var(--transparencycolor),var(--messagetransparency));
 }
 
+.wrapper-11sL4k button,
 .accountBtnInner-3zsU2z,
 .button-1qrA-N {
 	background-color: rgba(var(--transparencycolor),var(--transparencyalpha)) !important;
@@ -368,13 +375,16 @@ input:disabled {
 .emptyIconFriends-2q_v-C,
 .empty-state-image,
 .error-state .icon,
+.image-2XJctU,
+img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .empty-placeholder .image {
 	opacity: 0.5 !important;
 	pointer-events: none !important;
 }
 
 #friends,
-#friends .friends-table,
+.friends-table,
+.friend-table-add-header,
 .tab-content > .ui-standard-sidebar-view,
 .chat .content,
 .chat,
@@ -390,7 +400,9 @@ input:disabled {
 .typing-3eiiL_,
 .action-buttons,
 .bd-modal-body,
+.tutorial-popout section,
 .friend:not(:hover),
+#friends .tab-bar-item,
 .category-3rCtoh,
 .react-datepicker,
 .container-RYiLUQ,
@@ -418,6 +430,7 @@ input:disabled {
 
 .item-2zi_5J[style*="border-color: rgb(114, 137, 218)"],
 .auditLog-1XsYCj,
+.friend-table-add-header,
 .changeDetails-zbf-61,
 .date-picker,
 .date-picker-hint,
@@ -425,6 +438,8 @@ input:disabled {
 .search-popout .search-query,
 .accountBtnInner-3zsU2z,
 .message-group,
+.wrapper-11sL4k button,
+.accountBtnInner-3zsU2z,
 .status,
 .iconBadge-1FYlQB {
 	border-color: transparent !important;
@@ -442,7 +457,6 @@ input:disabled {
 .tab.selected,
 .h1-DagER3,
 .improved-2HhjlK,
-.premium-free-months,
 .userSettingsSecurity-1hjwAn .isEnabled-3JekTu,
 .bd-modal-body .tab-bar-item.selected,
 .header-tab-bar-wrapper .tab-bar-item.selected,
@@ -462,11 +476,12 @@ input:disabled {
 .channels-3g2vYe [class*="containerDrag"]:after,
 .noticeInfo-3v29SJ,
 .improved-2HhjlK:after,
-.tab-bar-item-primary,
+.auth-name:after,
 .botTagRegular-288-ZL:not([style]),
 .jump-to-present-bar,
 .new-messages-bar,
 .has-more button,
+#friends .tab-bar-item.selected,
 .guild.active .guild-inner,
 .guild.selected .guild-inner[style*="background-color:"],
 .guild-inner[style*="background-color:"]:hover,
@@ -499,10 +514,11 @@ input:disabled {
 .regionSelect-1lpijo:hover button,
 .buttonBrandFilled-3Mv0Ra,
 .buttonBrandFilledDefault-2Rs6u5,
-.buttonGreenFilledDefault-_lLQaz,
 .buttonBrandInvertedDefault-uUmgsD,
 .popout .btn,
+.friends-empty .btn,
 .bd-modal button,
+.tutorial-popout .button,
 .private-channel-recipients-invite button,
 .btn-primary {
 	background: rgb(var(--accentcolor)) !important;
@@ -526,6 +542,8 @@ input:disabled {
 .guildIcon-KMiSsu.noIcon-1WB-Um,
 .button-1aU9q1:hover,
 .button-3WJ5FX:hover,
+.wrapper-11sL4k button:hover,
+.accountBtnInner-3zsU2z:hover,
 .friends-action-video-call:hover,
 .friends-action-voice-call:hover,
 .friends-column-guilds .avatar-small {
@@ -589,8 +607,10 @@ input:disabled {
 .Select-control,
 .Select-value-label,
 .Select-option,
+.tutorial-popout .content p,
 .buttonBrandInvertedDefault-uUmgsD,
 .input-2YozMi,
+#friends .tab-bar-item.selected,
 .react-datepicker__current-month,
 .react-datepicker__day-name,
 .date-picker-hint .hint,
@@ -710,23 +730,35 @@ input:disabled {
 	background-color: rgb(240,71,71) !important;
 }
 
+.popout .btn,
+.friends-empty .btn,
+.bd-modal button,
+.private-channel-recipients-invite button,
 .item-2zi_5J,
 .valueChecked-3Bzkbm,
 .bda-settings-button,
-.tab-bar-item-primary,
+.tab-bar-item,
 .friends-action,
 .unread-2TDDFN,
 .mention-RlZ5F3,
 .jump-to-present-bar,
 .new-messages-bar,
 .has-more button,
+.wrapper-11sL4k button,
+.accountBtnInner-3zsU2z,
+.button-1aU9q1,
+.button-3WJ5FX,
+.button-1qrA-N,
 .button-2t3of8 {
 	transition: all 100ms linear !important;
 }
-
+.popout .btn:hover,
+.friends-empty .btn:hover,
+.bd-modal button:hover,
+.private-channel-recipients-invite button:hover,
 .valueChecked-3Bzkbm:hover,
 .bda-settings-button:hover,
-.tab-bar-item-primary:hover,
+.tab-bar-item:hover,
 .unread-2TDDFN:hover,
 .mention-RlZ5F3:hover,
 .jump-to-present-bar:hover,
@@ -745,7 +777,6 @@ input:disabled {
 	box-shadow: none !important;
 	pointer-events: none !important;
 }
-
 @keyframes popout-fadein {
 	to {opacity: 1;}
 }
@@ -761,6 +792,10 @@ input:disabled {
 }
 .popout:not(.popout-googletranslate)[style*="translateX(-100%)"] > * {
 	right: 100% !important;
+}
+.popout[style*="translateY(-100%)"] > .tutorial-popout {
+	position: relative !important;
+	bottom: 280px !important;
 }
 .popout[style*="translateY(-100%)"] > .userPopout-4pfA0d {
 	position: absolute !important;
@@ -781,6 +816,7 @@ input:disabled {
 	top: -12px !important;
 }
 
+.auth-inner,
 .create-guild-container,
 .modal-3HOjGZ,
 .bd-modal-inner,
@@ -796,6 +832,7 @@ input:disabled {
 	border: none !important;
 	-webkit-mask-image: -webkit-radial-gradient(circle, white, black);
 }
+.auth-inner:before,
 .create-guild-container:before,
 .modal-3HOjGZ:before,
 .bd-modal-inner:before,
@@ -818,6 +855,7 @@ input:disabled {
 	box-sizing: border-box;
 	pointer-events: none;
 }
+.auth-inner:after,
 .create-guild-container:after,
 .modal-3HOjGZ:after,
 .bd-modal-inner:after,
@@ -837,6 +875,15 @@ input:disabled {
 	right: 0;
 	z-index: -1;
 	pointer-events: none;
+}
+.popout > :first-child > *,
+.auth-inner > *,
+.modal-3HOjGZ > *,
+.root-2sNHUF > *,
+.autocomplete-1TnWNR > *,
+.regionSelectModal-QBpi1R > *,
+.Select-option {
+	position: relative !important;
 }
 
 .autocomplete-1TnWNR:before {
@@ -983,15 +1030,6 @@ input:disabled {
 	z-index: -1;
 	left: 0;
 	pointer-events: none;
-}
-
-.popout > :first-child > div,
-.modal-3HOjGZ > *,
-.root-2sNHUF > *,
-.autocomplete-1TnWNR > *,
-.regionSelectModal-QBpi1R > *,
-.Select-option {
-	position: relative !important;
 }
 
 #bda-qem {
@@ -1547,6 +1585,33 @@ input:disabled {
 
 
 /* ----------------------- ICONS ----------------------- */
+.auth-logo {
+	background: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" viewBox="0 0 168 190" enable-background="new 0 0 168 190" xml:space="preserve"><g><rect x="14" y="42" fill="#FFFFFF" width="139.2" height="97.7"/></g></svg>') center/contain no-repeat !important;
+}
+.auth-logo:before {
+	content: "";
+	position: absolute;
+	left: 30px;
+	height: 168px;
+	width: 168px;
+	-webkit-mask-size: cover;
+	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" viewBox="0 0 168 190" enable-background="new 0 0 168 190" xml:space="preserve"><g><g><linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="66.6616" y1="79.7119" x2="66.6616" y2="100.7434"><stop offset="0" style="stop-color:#7491D5"/><stop offset="1" style="stop-color:#4E68A0"/></linearGradient><path fill="url(#SVGID_1_)" d="M66.7,79.7c-5.4,0-9.8,4.7-9.8,10.5c0,5.8,4.4,10.5,9.8,10.5c5.4,0,9.8-4.7,9.8-10.5 C76.5,84.4,72.1,79.7,66.7,79.7z"/><linearGradient id="SVGID_2_" gradientUnits="userSpaceOnUse" x1="101.661" y1="79.7119" x2="101.661" y2="100.7434"><stop offset="0" style="stop-color:#7491D5"/><stop offset="1" style="stop-color:#4E68A0"/></linearGradient><path fill="url(#SVGID_2_)" d="M101.7,79.7c-5.4,0-9.8,4.7-9.8,10.5c0,5.8,4.4,10.5,9.8,10.5c5.4,0,9.8-4.7,9.8-10.5 C111.5,84.4,107.1,79.7,101.7,79.7z"/><linearGradient id="SVGID_3_" gradientUnits="userSpaceOnUse" x1="84" y1="-4.545736e-07" x2="84" y2="190"><stop offset="0" style="stop-color:#7491D5"/><stop offset="1" style="stop-color:#4E68A0"/></linearGradient><path fill="url(#SVGID_3_)" d="M148.4,0H19.6C8.8,0,0,8.8,0,19.6v128.4c0,10.8,8.8,19.6,19.6,19.6h108.9l-5.1-17.5l12.3,11.3 l11.6,10.7L168,190v-41.9v-9.5V19.6C168,8.8,159.2,0,148.4,0z M111.3,124.1c0,0-3.4-4.1-6.3-7.7c12.6-3.5,17.4-11.3,17.4-11.3 c-4,2.6-7.7,4.4-11.1,5.6c-4.8,2-9.5,3.3-14,4.1c-9.2,1.7-17.6,1.3-24.9-0.1c-5.5-1-10.2-2.5-14.1-4.1c-2.2-0.8-4.6-1.9-7.1-3.3 c-0.3-0.2-0.6-0.3-0.9-0.5c-0.1-0.1-0.3-0.2-0.4-0.2c-1.7-1-2.6-1.6-2.6-1.6s4.6,7.6,16.8,11.2c-2.9,3.6-6.4,7.9-6.4,7.9 c-21.2-0.6-29.3-14.5-29.3-14.5c0-30.6,13.8-55.4,13.8-55.4c13.8-10.3,26.9-10,26.9-10l1,1.1C52.8,50.3,45,57.9,45,57.9 s2.1-1.2,5.7-2.7c10.3-4.5,18.4-5.7,21.8-6c0.5-0.1,1.1-0.2,1.6-0.2c5.9-0.7,12.5-0.9,19.4-0.2c9.1,1,18.9,3.7,28.9,9.1 c0,0-7.5-7.2-23.9-12.1l1.3-1.5c0,0,13.1-0.3,26.9,10c0,0,13.8,24.8,13.8,55.4C140.6,109.6,132.5,123.5,111.3,124.1z"/></g></g></svg>') center/contain no-repeat !important;
+	background: rgb(var(--accentcolor)) !important;
+}
+.auth-name {
+	background: transparent !important;
+}
+.auth-name:before {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	width: 168px;
+	-webkit-mask-size: cover;
+	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 492 91.3" enable-background="new 0 0 492 91.3" xml:space="preserve"><path fill="#738BD7" d="M33.2,1.3H0v37.3l22.1,19.9V22.2H34c7.5,0,11.2,3.6,11.2,9.4v27.7c0,5.8-3.5,9.7-11.2,9.7H0V90h33.2  c17.8,0.1,34.5-8.8,34.5-29.2V31C67.7,10.3,51,1.3,33.2,1.3z M207.3,60.9V30.3c0-11,19.8-13.5,25.8-2.5l18.3-7.4  C244.3,4.6,231.1,0,220.2,0c-17.8,0-35.4,10.3-35.4,30.3v30.6c0,20.2,17.6,30.3,35,30.3c11.2,0,24.6-5.5,32-19.9l-19.6-9  C227.4,74.6,207.3,71.6,207.3,60.9z M146.7,34.5c-6.9-1.5-11.5-4-11.8-8.3c0.4-10.3,16.3-10.7,25.6-0.8l14.7-11.3  C166,3,155.6,0,144.8,0c-16.3,0-32.1,9.2-32.1,26.6c0,16.9,13,26,27.3,28.2c7.3,1,15.4,3.9,15.2,8.9c-0.6,9.5-20.2,9-29.1-1.8  L112,75.2c8.3,10.7,19.6,16.1,30.2,16.1c16.3,0,34.4-9.4,35.1-26.6C178.3,42.9,162.5,37.4,146.7,34.5z M79.8,90h22.4V1.3H79.8V90z   M457.5,1.3h-33.2v37.3l22.1,19.9V22.2h11.8c7.5,0,11.2,3.6,11.2,9.4v27.7c0,5.8-3.5,9.7-11.2,9.7h-34V90h33.2  c17.8,0.1,34.5-8.8,34.5-29.2V31C492,10.3,475.3,1.3,457.5,1.3z M294.6,0c-18.4,0-36.7,10-36.7,30.5v30.3  c0,20.3,18.4,30.5,36.9,30.5s36.7-10.2,36.7-30.5V30.5C331.4,10.2,313,0,294.6,0z M309,60.8c0,6.4-7.2,9.7-14.3,9.7  c-7.2,0-14.4-3.1-14.4-9.7V30.5c0-6.5,7-10,14-10c7.3,0,14.7,3.1,14.7,10V60.8z M411.8,30.5c-0.5-20.8-14.7-29.2-33-29.2h-35.5V90  H366V61.8h4L390.6,90h28l-24.2-30.5C405.2,56.2,411.8,46.9,411.8,30.5z M379.2,42.5H366V22.2h13.2C393.4,22.2,393.4,42.5,379.2,42.5  z"/></svg>') center/contain no-repeat !important;
+	background: rgb(var(--accentcolor)) !important;
+}
 
 .system-message-icon[style*="/assets/b8029fe196b8f1382e90bbe81dab50dc.svg"] {
 	-webkit-mask-size: cover;
@@ -1557,25 +1622,25 @@ input:disabled {
 
 .icon-1LRvbH.exclamation-yQYZAc {
 	-webkit-mask-size: cover;
-	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Group_1_1_" x="0px" y="0px" viewBox="0 0 50 50" enable-background="new 0 0 50 50" xml:space="preserve"><g id="Ellipse_2_copy" opacity="0.102"><g><path fill="#738BD7" d="M25,15c8.8,0,16,7.2,16,16.1s-7.2,16.1-16,16.1S9,40,9,31.1S16.2,15,25,15 M25,13c-9.9,0-18,8.1-18,18.1s8.1,18.1,18,18.1s18-8.1,18-18.1S34.9,13,25,13L25,13z"/></g></g><g id="Ellipse_2" opacity="0.2"><g><path fill="#738BD7" d="M25,19.7c6.2,0,11.3,5.1,11.3,11.4S31.2,42.4,25,42.4S13.7,37.3,13.7,31S18.8,19.7,25,19.7 M25,16.7c-7.9,0-14.3,6.4-14.3,14.4S17.1,45.4,25,45.4S39.3,39,39.3,31.1S32.9,16.7,25,16.7L25,16.7z"/></g></g><path fill-rule="evenodd" clip-rule="evenodd" fill="none" stroke="#738BD7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="M34.4,7.8c1-3.7-0.4-5.6-2.5-6.2C29.7,1,27.6,2,26.6,5.7c-1,3.7-0.5,17.3-0.5,17.3S33.4,11.4,34.4,7.8z"/><circle fill-rule="evenodd" clip-rule="evenodd" fill="none" stroke="#738BD7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" cx="25" cy="31" r="5"/></svg>') center/cover no-repeat !important;
+	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Group_1_1_" x="0px" y="0px" viewBox="0 0 50 50" enable-background="new 0 0 50 50" xml:space="preserve"><g id="Ellipse_2_copy" opacity="0.102"><g><path fill="#738BD7" d="M25,15c8.8,0,16,7.2,16,16.1s-7.2,16.1-16,16.1S9,40,9,31.1S16.2,15,25,15 M25,13c-9.9,0-18,8.1-18,18.1s8.1,18.1,18,18.1s18-8.1,18-18.1S34.9,13,25,13L25,13z"/></g></g><g id="Ellipse_2" opacity="0.2"><g><path fill="#738BD7" d="M25,19.7c6.2,0,11.3,5.1,11.3,11.4S31.2,42.4,25,42.4S13.7,37.3,13.7,31S18.8,19.7,25,19.7 M25,16.7c-7.9,0-14.3,6.4-14.3,14.4S17.1,45.4,25,45.4S39.3,39,39.3,31.1S32.9,16.7,25,16.7L25,16.7z"/></g></g><path fill-rule="evenodd" clip-rule="evenodd" fill="none" stroke="#738BD7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="M34.4,7.8c1-3.7-0.4-5.6-2.5-6.2C29.7,1,27.6,2,26.6,5.7c-1,3.7-0.5,17.3-0.5,17.3S33.4,11.4,34.4,7.8z"/><circle fill-rule="evenodd" clip-rule="evenodd" fill="none" stroke="#738BD7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" cx="25" cy="31" r="5"/></svg>') center no-repeat !important;
 	background: rgb(var(--accentcolor)) !important;
 }
 
 .icon-1LRvbH.share-8x5Ppc {
 	-webkit-mask-size: cover;
-	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><g fill="none" fill-rule="evenodd"><path fill="#7289DA" fill-rule="nonzero" d="M24,10 C27.3142857,10 30,12.6857143 30,16 C30,19.3142857 27.3142857,22 24,22 C20.6857143,22 18,19.3142857 18,16 C18,12.6857143 20.6857143,10 24,10 L24,10 Z M38,34 L38,38 L10,38 L10,34 C10,32 17.1836066,28 24,28 C30.8163934,28 38,32 38,34 Z M24,8 C19.58,8 16,11.58 16,16 C16,20.42 19.58,24 24,24 C28.42,24 32,20.42 32,16 C32,11.58 28.42,8 24,8 Z M24,26 C18.66,26 8,28.68 8,34 L8,40 L40,40 L40,34 C40,28.68 29.34,26 24,26 Z"/><polygon fill="#7289DA" points="42 20 47 20 47 22 42 22 42 27 40 27 40 22 35 22 35 20 40 20 40 15 42 15"/><polygon points="0 0 48 0 48 48 0 48"/></g></svg>') center/cover no-repeat !important;
+	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><g fill="none" fill-rule="evenodd"><path fill="#7289DA" fill-rule="nonzero" d="M24,10 C27.3142857,10 30,12.6857143 30,16 C30,19.3142857 27.3142857,22 24,22 C20.6857143,22 18,19.3142857 18,16 C18,12.6857143 20.6857143,10 24,10 L24,10 Z M38,34 L38,38 L10,38 L10,34 C10,32 17.1836066,28 24,28 C30.8163934,28 38,32 38,34 Z M24,8 C19.58,8 16,11.58 16,16 C16,20.42 19.58,24 24,24 C28.42,24 32,20.42 32,16 C32,11.58 28.42,8 24,8 Z M24,26 C18.66,26 8,28.68 8,34 L8,40 L40,40 L40,34 C40,28.68 29.34,26 24,26 Z"/><polygon fill="#7289DA" points="42 20 47 20 47 22 42 22 42 27 40 27 40 22 35 22 35 20 40 20 40 15 42 15"/><polygon points="0 0 48 0 48 48 0 48"/></g></svg>') center no-repeat !important;
 	background: rgb(var(--accentcolor)) !important;
 }
 
 .icon-1LRvbH.mobile-3o7N-v {
 	-webkit-mask-size: cover;
-	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" viewBox="17 -17 50 50" style="enable-background:new 17 -17 50 50;" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;fill:#738BD7;}</style><g><g><path class="st0" d="M42,16c-1.1,0-2,0.9-2,2c0,1.1,0.9,2,2,2c1.1,0,2-0.9,2-2C44,16.9,43.1,16,42,16z M48-8H36c-3.3,0-6,2.7-6,6v20c0,3.3,2.7,6,6,6h12c3.3,0,6-2.7,6-6V-2C54-5.3,51.3-8,48-8z M52,19c0,1.7-1.3,3-3,3H35c-1.7,0-3-1.3-3-3V-3c0-1.7,1.3-3,3-3h14c1.7,0,3,1.3,3,3V19z M45-4h-6c-0.6,0-1,0.4-1,1c0,0.6,0.4,1,1,1h6c0.6,0,1-0.4,1-1C46-3.6,45.6-4,45-4z"/></g></g></svg>') center/cover no-repeat !important;
+	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" viewBox="17 -17 50 50" style="enable-background:new 17 -17 50 50;" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;fill:#738BD7;}</style><g><g><path class="st0" d="M42,16c-1.1,0-2,0.9-2,2c0,1.1,0.9,2,2,2c1.1,0,2-0.9,2-2C44,16.9,43.1,16,42,16z M48-8H36c-3.3,0-6,2.7-6,6v20c0,3.3,2.7,6,6,6h12c3.3,0,6-2.7,6-6V-2C54-5.3,51.3-8,48-8z M52,19c0,1.7-1.3,3-3,3H35c-1.7,0-3-1.3-3-3V-3c0-1.7,1.3-3,3-3h14c1.7,0,3,1.3,3,3V19z M45-4h-6c-0.6,0-1,0.4-1,1c0,0.6,0.4,1,1,1h6c0.6,0,1-0.4,1-1C46-3.6,45.6-4,45-4z"/></g></g></svg>') center no-repeat !important;
 	background: rgb(var(--accentcolor)) !important;
 }
 
 .icon-1LRvbH.twitter-3sMg1m {
 	-webkit-mask-size: cover;
-	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" width="36px" height="30px" viewBox="0 0 36 30" version="1.1"><g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage"><g fill="#738BD7"><g><path d="M33,2 L31,6 L34,5 L31,8 L31,8.5 C31,9 30.9,9.6 30.8,10.1 C30.7,14.2 29.4,19.7 24,24 C20.2,27.1 16.2,28 12.8,28 C6.7,28 2,25 2,25 C11,25 11,22 11,22 C9,22 5,18 5,18 C5.3,18.3 5.8,18.4 6.2,18.4 C7.1,18.4 8,18 8,18 C3,15 3,12 3,12 C3.3,12.3 3.8,12.4 4.2,12.4 C5.1,12.4 6,12 6,12 C1,8 4,3 4,3 C5,8 18,10 18,10 L18.2,9.9 C18.1,9.4 18,8.5 18,8 C18,4.4 20.9,2 24.5,2 C26.5,2 28.2,2.9 29.4,4.3 L30,4 L33,2 L33,2 Z M33,0 C32.6,0 32.2,0.1 31.9,0.3 L29.7,1.8 C28.2,0.6 26.4,0 24.5,0 C19.8,0 16.2,3.2 16,7.6 C11.5,6.6 6.4,4.6 6,2.6 C5.8,1.8 5.2,1.2 4.4,1 L4.1,1 C3.4,1 2.8,1.4 2.4,2 C1.4,3.7 0.5,7 2.1,10.3 C1.5,10.7 1.1,11.3 1.1,12 C1.1,12.3 1.2,14.4 3.5,16.8 C3,17.6 3,18.7 3.7,19.4 C4.4,20.1 5.8,21.4 7.3,22.4 C6.2,22.7 4.6,22.9 2.1,22.9 C1.2,22.9 0.4,23.5 0.2,24.3 C-0.1,25.1 0.3,26.1 1,26.5 C1.2,26.6 6.2,29.9 12.8,29.9 C17.4,29.9 21.6,28.4 25.3,25.4 C31.3,20.6 32.7,14.5 32.8,10.2 C32.9,9.7 33,9.2 33,8.7 L35.4,6.3 C35.8,5.9 36,5.4 36,4.8 C36,3.9 35.4,3.2 34.7,2.9 L34.8,2.7 C35.2,1.9 35,0.9 34.3,0.3 C33.9,0.2 33.5,0 33,0 L33,0 L33,0 Z"/></g></g></g></svg>') center/cover no-repeat !important;
+	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" width="36px" height="30px" viewBox="0 0 36 30" version="1.1"><g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage"><g fill="#738BD7"><g><path d="M33,2 L31,6 L34,5 L31,8 L31,8.5 C31,9 30.9,9.6 30.8,10.1 C30.7,14.2 29.4,19.7 24,24 C20.2,27.1 16.2,28 12.8,28 C6.7,28 2,25 2,25 C11,25 11,22 11,22 C9,22 5,18 5,18 C5.3,18.3 5.8,18.4 6.2,18.4 C7.1,18.4 8,18 8,18 C3,15 3,12 3,12 C3.3,12.3 3.8,12.4 4.2,12.4 C5.1,12.4 6,12 6,12 C1,8 4,3 4,3 C5,8 18,10 18,10 L18.2,9.9 C18.1,9.4 18,8.5 18,8 C18,4.4 20.9,2 24.5,2 C26.5,2 28.2,2.9 29.4,4.3 L30,4 L33,2 L33,2 Z M33,0 C32.6,0 32.2,0.1 31.9,0.3 L29.7,1.8 C28.2,0.6 26.4,0 24.5,0 C19.8,0 16.2,3.2 16,7.6 C11.5,6.6 6.4,4.6 6,2.6 C5.8,1.8 5.2,1.2 4.4,1 L4.1,1 C3.4,1 2.8,1.4 2.4,2 C1.4,3.7 0.5,7 2.1,10.3 C1.5,10.7 1.1,11.3 1.1,12 C1.1,12.3 1.2,14.4 3.5,16.8 C3,17.6 3,18.7 3.7,19.4 C4.4,20.1 5.8,21.4 7.3,22.4 C6.2,22.7 4.6,22.9 2.1,22.9 C1.2,22.9 0.4,23.5 0.2,24.3 C-0.1,25.1 0.3,26.1 1,26.5 C1.2,26.6 6.2,29.9 12.8,29.9 C17.4,29.9 21.6,28.4 25.3,25.4 C31.3,20.6 32.7,14.5 32.8,10.2 C32.9,9.7 33,9.2 33,8.7 L35.4,6.3 C35.8,5.9 36,5.4 36,4.8 C36,3.9 35.4,3.2 34.7,2.9 L34.8,2.7 C35.2,1.9 35,0.9 34.3,0.3 C33.9,0.2 33.5,0 33,0 L33,0 L33,0 Z"/></g></g></g></svg>') center no-repeat !important;
 	background: rgb(var(--accentcolor)) !important;
 }
 
@@ -1781,6 +1846,38 @@ html, span:not(.spinner-item) {
 	backface-visibility: hidden;
 }
 
+/* friendsadd input */
+.wrapper-FOHcde {
+	border: none !important;
+	background: transparent !important;
+}
+.addFriendHint-3YUuew {
+	font-size: 16px !important;
+	height: 40px !important;
+	outline: none !important;
+	padding: 0 10px !important;
+}
+.addFriendInput-wjMghP {
+	background: rgba(var(--transparencycolor),var(--transparencyalpha)) !important;
+	border-radius: 3px !important;
+	border-style: solid !important;
+	border-width: 1px !important;
+	box-shadow: none !important;
+	box-sizing: border-box !important;
+	color: #FFF !important;
+	font-size: 16px !important;
+	height: 40px !important;
+	outline: none !important;
+	padding: 10px !important;
+	transition: background-color .15s ease,border .15s ease !important;
+}
+.addFriendInput-wjMghP:not(:focus) {
+	border-color: rgba(var(--transparencycolor),calc(var(--transparencyalpha) * 3)) !important;
+}
+.addFriendInput-wjMghP:focus {
+	border-color: rgb(var(--accentcolor)) !important;
+}
+
 /* fix help modal */ 
 .modal-content {
 	border-radius: 5px !important;
@@ -1817,6 +1914,7 @@ html, span:not(.spinner-item) {
 #help-query:focus {
 	border-color: rgb(var(--accentcolor)) !important;
 }
+
 
 /* ----------------------- PLUGINSUPPORT ----------------------- */
 
@@ -1886,9 +1984,6 @@ html, span:not(.spinner-item) {
 	height: 100%;
 	top: 0;
 	left: 0;
-	border-radius: 3px;
-	border: 1px solid rgba(22,22,22,calc(var(--transparencyalpha) * 3));
-	box-sizing: border-box;
 	pointer-events: none;
 }
 #dv-container:after {
@@ -1901,4 +1996,7 @@ html, span:not(.spinner-item) {
 	right: 0;
 	z-index: -1;
 	pointer-events: none;
+}
+#dv-date {
+	opacity: 0.6 !important;
 }
