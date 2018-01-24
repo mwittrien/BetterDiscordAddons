@@ -403,8 +403,7 @@ input:disabled {
 	background: transparent !important;
 }
 
-.channel-members,
-.channel-members-loading {
+.channel-members {
 	background: rgba(var(--transparencycolor), var(--memberlistransparency)) !important;
 }
 
@@ -839,6 +838,7 @@ input:disabled {
 	z-index: -1;
 	pointer-events: none;
 }
+
 .autocomplete-1TnWNR:before {
 	background: rgba(var(--transparencycolor),calc(var(--transparencyalpha) * 4));
 }
@@ -1707,26 +1707,54 @@ input:disabled {
 	visibility: hidden !important;
 }
 
-/* change member loadings screen */ 
-.channel-members-wrap > :not(:only-child) > .channel-members {
-	visibility: hidden !important;
+/* change member loadings screen */
+.channel-members-loading {
+	background: transparent !important;
+	-webkit-mask-image: -webkit-radial-gradient(circle, white, black);
 }
-.channel-members-loading > * {
+.channel-members-loading:before {
+	content: "";
+	background: rgba(var(--transparencycolor),calc(var(--transparencyalpha) * 3));
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	pointer-events: none;
+}
+.channel-members-loading:after {
+	content: "";
+	background: var(--background) center/cover !important;
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: -1;
+	pointer-events: none;
+} 
+.channel-members-loading > .background ~ * {
 	display: none !important;
 }
-.channel-members-loading,
-.channel-members-loading:before {
+.channel-members-loading > .background {
+	position: relative !important;
+	margin-top: calc(50vh - 100px);
+	margin-left: 50px;
+}
+.channel-members-loading > .background,
+.channel-members-loading > .background:before {
 	opacity: 1 !important;
-	margin: auto !important;
 	width: 150px !important;
 	height: 150px !important;
 	border-radius: 50% !important;
 	box-shadow: inset 0 0 0 1em !important;
+	animation: none !important;
+	background: transparent !important;
 }
-.channel-members-loading {
+.channel-members-loading > .background {
 	color: rgba(var(--transparencycolor),0.2) !important;
 }
-.channel-members-loading:before {
+.channel-members-loading > .background:before {
 	content: "";
 	position: absolute !important;
 	color: rgba(var(--accentcolor),1) !important;
