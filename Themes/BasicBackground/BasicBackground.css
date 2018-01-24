@@ -1918,6 +1918,13 @@ html, span:not(.spinner-item) {
 
 /* ----------------------- PLUGINSUPPORT ----------------------- */
 
+.bf-toolbar:before {
+	background: rgba(var(--transparencycolor), 0.7);
+}
+.bf-toolbar .format:hover {
+	background-color: rgb(var(--accentcolor)) !important
+}
+
 .citar-btn {
 	background-color: transparent!important;
 	background-size: contain !important;
@@ -1948,7 +1955,7 @@ html, span:not(.spinner-item) {
 
 .citar-btn:active,
 .replyer:active {
-	background-color: rgba(var(--accentcolor),1) !important
+	background-color: rgb(var(--accentcolor)) !important
 }
 
 #files_directDownload .file {
