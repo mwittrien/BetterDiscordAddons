@@ -1977,15 +1977,15 @@ html, span:not(.spinner-item) {
 	background-color: rgb(var(--accentcolor)) !important
 }
 
-#dv-container {
-	border-radius: 5px !important;
+#dv-container,
+#dv-container #dv-settings-panel {
 	background: transparent !important;
 	border: none !important;
 	-webkit-mask-image: -webkit-radial-gradient(circle, white, black);
 }
-#dv-container:before {
+#dv-container:before,
+#dv-container #dv-settings-panel:before {
 	content: "";
-	background: rgba(var(--transparencycolor),var(--memberlistransparency));
 	position: absolute;
 	width: 100%;
 	height: 100%;
@@ -1993,7 +1993,14 @@ html, span:not(.spinner-item) {
 	left: 0;
 	pointer-events: none;
 }
-#dv-container:after {
+#dv-container:before {
+	background: rgba(var(--transparencycolor),var(--memberlistransparency));
+}
+#dv-container #dv-settings-panel:before {
+	background: rgba(var(--transparencycolor),calc((var(--transparencyalpha) * 3) + var(--memberlistransparency)));
+}
+#dv-container:after,
+#dv-container #dv-settings-panel:after {
 	content: "";
 	background: var(--background) center/cover !important;
 	position: fixed;
@@ -2004,6 +2011,28 @@ html, span:not(.spinner-item) {
 	z-index: -1;
 	pointer-events: none;
 }
-#dv-date {
+#dv-container #dv-btn-settings-panel {
+	background-color: rgba(var(--transparencycolor),var(--transparencyalpha)) !important;
+	z-index: 1 !important;
+	top: 8px !important;
+	right: 8px !important;
+}
+#dv-container #dv-btn-settings-panel:hover {
+	background-color: rgb(var(--accentcolor)) !important;
+}
+#dv-container .dv-flash {
+	animation: none !important;
+	display: none !important;
+}
+#dv-container #dv-date {
 	opacity: 0.6 !important;
+}
+#dv-container #dv-settings-panel .dv-title {
+	color: hsla(0,0%,100%,.8) !important;
+}
+#dv-container input[type="radio"] + label span {
+	background: #AFAFAF !important;
+}
+#dv-container input[type="radio"]:checked + label span {
+	background: rgb(var(--accentcolor)) !important;
 }
