@@ -60,12 +60,13 @@ class ShowHiddenChannels {
 			
 		this.defaults = {
 			settings: {
+				showText:				{value:true, 	description:"Show hidden Textchannels:"},
+				showVoice:				{value:true, 	description:"Show hidden Voicechannels:"},
+				showCategory:			{value:false, 	description:"Show hidden Categories:"},
 				showAllowedRoles:		{value:true,	description:"Show allowed Roles on hover:"},
 				showOverWrittenRoles:	{value:true,	description:"Include overwritten Roles in allowed Roles:"},
 				showDeniedRoles:		{value:true,	description:"Show denied Roles on hover:"},
-				showText:				{value:true, 	description:"Show hidden Textchannels:"},
-				showVoice:				{value:true, 	description:"Show hidden Voicechannels:"},
-				showCategory:			{value:false, 	description:"Show hidden Categories:"}
+				showForNormal:			{value:false,	description:"Also show Roles for allowed channels:"}
 			}
 		};
 	}
@@ -74,7 +75,7 @@ class ShowHiddenChannels {
 
 	getDescription () {return "Displays channels that are hidden from you by role restrictions.";}
 
-	getVersion () {return "2.1.2";}
+	getVersion () {return "2.1.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -264,7 +265,7 @@ class ShowHiddenChannels {
 								channelicon.classList.toggle("contentHoveredText-2HYGIY");
 								channelname.classList.toggle("nameDefaultText-QoumjC");
 								channelname.classList.toggle("nameHoveredText-2FFqiz");
-								this.showAccessRoles(serverObj, hiddenChannel, e);
+								this.showAccessRoles(serverObj, hiddenChannel, e, false);
 							})
 							.on("click", () => {
 								BDfunctionsDevilBro.showToast(`You can not enter the hidden channel ${hiddenChannel.name}.`, {type:"error"});
@@ -286,7 +287,7 @@ class ShowHiddenChannels {
 								channelicon.classList.toggle("contentHoveredVoice-3qGNKh");
 								channelname.classList.toggle("nameDefaultVoice-1swZoh");
 								channelname.classList.toggle("nameHoveredVoice-TIoHRJ");
-								this.showAccessRoles(serverObj, hiddenChannel, e);
+								this.showAccessRoles(serverObj, hiddenChannel, e, false);
 							})
 							.on("click", () => {
 								BDfunctionsDevilBro.showToast(`You can not enter the hidden channel ${hiddenChannel.name}.`, {type:"error"});
@@ -308,7 +309,7 @@ class ShowHiddenChannels {
 								channelicon.classList.toggle("iconHoveredCollapsed-jNYgOD");
 								channelname.classList.toggle("nameCollapsed-3_ChMu");
 								channelname.classList.toggle("nameHoveredCollapsed-2c-EHI");
-								this.showAccessRoles(serverObj, hiddenChannel, e);
+								this.showAccessRoles(serverObj, hiddenChannel, e, false);
 							})
 							.on("click", () => {
 								BDfunctionsDevilBro.showToast(`You can not enter the hidden channel ${hiddenChannel.name}.`, {type:"error"});
@@ -337,7 +338,7 @@ class ShowHiddenChannels {
 		}
 	}
 	
-	showAccessRoles (serverObj, channel, e) {
+	showAccessRoles (serverObj, channel, e, allowed) {
 		if (e.type != "mouseenter") return;
 		var settings = BDfunctionsDevilBro.getAllData(this, "settings");
 		if (!settings.showAllowedRoles && !settings.showDeniedRoles) return;
@@ -346,9 +347,9 @@ class ShowHiddenChannels {
 		for (let id in channel.permissionOverwrites) {
 			if (settings.showAllowedRoles &&
 				channel.permissionOverwrites[id].type == "role" && 
-				serverObj.roles[id].name != "@everyone" &&
+				(serverObj.roles[id].name != "@everyone" || allowed) &&
 				(channel.permissionOverwrites[id].allow | this.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].allow) {
-					if (myMember.roles.includes(id)) {
+					if (myMember.roles.includes(id) && !allowed) {
 						if (settings.showOverWrittenRoles) overwrittenRoles.push(serverObj.roles[id]);
 					}
 					else {
@@ -383,13 +384,29 @@ class ShowHiddenChannels {
 			htmlString += `</div>`;
 		}
 		if (htmlString) {
-			var tooltip = BDfunctionsDevilBro.createTooltip(htmlString, e.currentTarget, {type:"right", selector:"showhiddenchannels-tooltip", html:true});
-			$(tooltip).css("max-width", window.outerHeight/2 + "px");
+			var customTooltipCSS = `
+				.showhiddenchannels-tooltip {
+					max-width: ${window.outerHeight/2}px !important;
+				}`;
+			var tooltip = BDfunctionsDevilBro.createTooltip(htmlString, e.currentTarget, {type:"right", selector:"showhiddenchannels-tooltip", html:true, css:customTooltipCSS});
 		}
 	}
 	
-	appendToChannelList(category) {
-		var channelList = document.querySelector(".scroller-fzNley.scroller-NXV0-d");
-		if (channelList && category) channelList.insertBefore(category,channelList.lastChild);
+	appendToChannelList (category) {
+		var channelList = document.querySelector(".channels-3g2vYe .scroller-fzNley.scroller-NXV0-d");
+		if (channelList) {
+			if (category) channelList.insertBefore(category,channelList.lastChild);
+			if (BDfunctionsDevilBro.getData("showForNormal", this, "settings")) {
+				var serverObj = BDfunctionsDevilBro.getSelectedServer();
+				if (serverObj) {
+					$(channelList)
+						.off("mouseenter." + this.getName())
+						.on("mouseenter." + this.getName(), ".containerDefault-7RImuF", (e) => {
+							var channel = BDfunctionsDevilBro.getKeyInformation({"node":e.currentTarget,"key":"channel"});
+							if (channel) this.showAccessRoles(serverObj, channel, e, true);
+						});
+				}
+			}
+		}
 	}
 }
