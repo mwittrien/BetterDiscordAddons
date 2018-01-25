@@ -463,7 +463,6 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .tabBarContainer-3RVZc- .tab-bar-item.selected,
 .buttonLinkLink-PqcWoA,
 .buttonBrandLink-3csEAP,
-.noticeInfo-3v29SJ .button-2TvR03:hover,
 .regionSelect-1lpijo:not(:hover) button,
 .divider-red span,
 .itemDefault-3NDwnY[style*="rgb(114, 137, 218)"] {
@@ -474,7 +473,6 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .wanderingCubesItem-35kyMu,
 .channels-3g2vYe [class*="containerDrag"]:before,
 .channels-3g2vYe [class*="containerDrag"]:after,
-.noticeInfo-3v29SJ,
 .improved-2HhjlK:after,
 .auth-name:after,
 .botTagRegular-288-ZL:not([style]),
@@ -768,6 +766,56 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .button-2t3of8:hover {
 	filter: brightness(150%) !important;
 }
+
+.toast {
+	background-color: rgba(var(--transparencycolor), 0.9) !important;
+	box-shadow: 0 0 0 1px rgba(var(--transparencycolor), 0.6), 0 2px 10px 0 rgba(0,0,0,.2) !important;
+}
+.toast-brand,
+.noticeBrand-3o3fQA {
+	background-color: rgba(var(--accentcolor), 0.9) !important;
+}
+.noticeBrand-3o3fQA .button-2TvR03:hover {
+	color: rgb(var(--accentcolor)) !important;
+}
+.toast-danger, 
+.toast-error,
+.noticeDanger-1SIxaf {
+	background-color: rgba(240, 71, 71, 0.9) !important;
+}
+.toast-default,
+.noticeDefault-16Om2m {
+	background-color: rgba(242, 101, 34, 0.9) !important;
+}
+.toast-facebook,
+.noticeFacebook-1eAoSW {
+	background-color: rgba(53, 80, 137, 0.9) !important;
+}
+.toast-info,
+.noticeInfo-3v29SJ {
+	background-color: rgba(74, 144, 226, 0.9) !important;
+}
+.toast-premium,
+.noticePremium-2x9Tv2 {
+	background-color: rgba(32, 34, 37, 0.9) !important;
+}
+.toast-spotify,
+.noticeSpotify-27AKmv {
+	background-color: rgba(29, 185, 84, 0.9) !important;
+}
+.toast-streamermode,
+.noticeStreamerMode-1OlfKV {
+	background-color: rgba(89, 54, 149, 0.9) !important;
+}
+.toast-success,
+.noticeSuccess-P1EnBb {
+	background-color: rgba(67, 181, 129, 0.9) !important;
+}
+.toast-warning,
+.toast-warn {
+	background-color: rgba(255, 166, 0, 0.9) !important;
+}
+
 
 /* ----------------------- POPOUTS ------------------------ */
 
