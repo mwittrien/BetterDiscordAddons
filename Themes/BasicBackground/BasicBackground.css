@@ -1268,6 +1268,10 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	display: none;
 }
 
+#bd-pub-li {
+	display: none !important;
+}
+
 .Select-option {
 	top: 0 !important;
 }
@@ -1966,10 +1970,13 @@ html, span:not(.spinner-item) {
 
 /* ----------------------- PLUGINSUPPORT ----------------------- */
 
-.bf-toolbar:before {
+#bfredux {
+	top: 4px !important;
+}
+#bfredux:before {
 	background: rgba(var(--transparencycolor), 0.7) !important;
 }
-.bf-toolbar .format:hover {
+#bfredux .format:hover {
 	background-color: rgb(var(--accentcolor)) !important
 }
 
