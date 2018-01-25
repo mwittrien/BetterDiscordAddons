@@ -869,6 +869,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .modal-3HOjGZ,
 .bd-modal-inner,
 .regionSelectModal-QBpi1R,
+.instantInviteModal-5L33Qh,
 .root-2sNHUF,
 .autocomplete-1TnWNR,
 .quickswitcher-2NdiGJ,
@@ -885,6 +886,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .modal-3HOjGZ:before,
 .bd-modal-inner:before,
 .regionSelectModal-QBpi1R:before,
+.instantInviteModal-5L33Qh:before,
 .root-2sNHUF:before,
 .autocomplete-1TnWNR:before,
 .quickswitcher-2NdiGJ:before,
@@ -908,6 +910,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .modal-3HOjGZ:after,
 .bd-modal-inner:after,
 .regionSelectModal-QBpi1R:after,
+.instantInviteModal-5L33Qh:after,
 .root-2sNHUF:after,
 .autocomplete-1TnWNR:after,
 .quickswitcher-2NdiGJ:after,
@@ -927,9 +930,14 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .popout > :first-child > *,
 .auth-inner > *,
 .modal-3HOjGZ > *,
+.bd-modal-inner > *,
+.regionSelectModal-QBpi1R > *,
+.instantInviteModal-5L33Qh > *,
+.instantInviteModalAdvanced-38f2M0 > *,
 .root-2sNHUF > *,
 .autocomplete-1TnWNR > *,
-.regionSelectModal-QBpi1R > *,
+.quickswitcher-2NdiGJ > *,
+.uploadModal-2KN6Mm > *,
 .Select-option {
 	position: relative !important;
 }
@@ -1575,10 +1583,6 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	background: transparent !important;
 }
 .instantInviteModal-5L33Qh,
-.instantInviteModalAdvanced-38f2M0 {
-	border-radius: 5px !important;
-}
-.instantInviteModal-5L33Qh,
 .instantInviteModalAdvanced-38f2M0,
 .instantInviteModal-5L33Qh .form-header,
 .instantInviteModalAdvanced-38f2M0 .form-actions,
@@ -1633,6 +1637,23 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .instantInviteModal-5L33Qh .form-actions,
 .instantInviteModalAdvanced-38f2M0 .form-actions {
 	box-shadow: inset 0 1px 0 rgba(var(--transparencycolor),.1) !important;
+}
+.wrapper-VSYYTS,
+.instantInviteModalAdvanced-38f2M0,
+.instantInviteModalAdvanced-38f2M0 > * {
+	border-radius: 0 !important;
+}
+.instantInviteModalAdvanced-38f2M0:after {
+	content: "";
+	background: var(--background) center/cover !important;
+	position: fixed;
+	clip-path: polygon(calc((100vw - 440px)/2) calc((100vh - 246px)/2), calc((100vw + 440px)/2) calc((100vh - 246px)/2), calc((100vw + 440px)/2) calc((100vh + 251px)/2), calc((100vw - 440px)/2) calc((100vh + 251px)/2));
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: -1;
+	pointer-events: none;
 }
 
 
