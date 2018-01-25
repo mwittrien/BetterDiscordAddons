@@ -395,16 +395,15 @@ class ShowHiddenChannels {
 	appendToChannelList (category) {
 		var channelList = document.querySelector(".channels-3g2vYe .scroller-fzNley.scroller-NXV0-d");
 		if (channelList) {
+			$(channelList).off("mouseenter." + this.getName())
 			if (category) channelList.insertBefore(category,channelList.lastChild);
 			if (BDfunctionsDevilBro.getData("showForNormal", this, "settings")) {
 				var serverObj = BDfunctionsDevilBro.getSelectedServer();
 				if (serverObj) {
-					$(channelList)
-						.off("mouseenter." + this.getName())
-						.on("mouseenter." + this.getName(), ".containerDefault-7RImuF", (e) => {
-							var channel = BDfunctionsDevilBro.getKeyInformation({"node":e.currentTarget,"key":"channel"});
-							if (channel) this.showAccessRoles(serverObj, channel, e, true);
-						});
+					$(channelList).on("mouseenter." + this.getName(), ".containerDefault-7RImuF", (e) => {
+						var channel = BDfunctionsDevilBro.getKeyInformation({"node":e.currentTarget,"key":"channel"});
+						if (channel) this.showAccessRoles(serverObj, channel, e, true);
+					});
 				}
 			}
 		}
