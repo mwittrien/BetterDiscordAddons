@@ -292,7 +292,7 @@ class ThemeRepo {
 
 	getDescription () {return "Allows you to preview all themes from the theme repo and download them on the fly. Repo button is in the theme settings.";}
 
-	getVersion () {return "1.3.2";}
+	getVersion () {return "1.3.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -755,9 +755,9 @@ class ThemeRepo {
 					if (outdated > 0) {
 						var text = `${outdated} of your Themes ${outdated == 1 ? "is" : "are"} outdated. Check:`;
 						var bar = BDfunctionsDevilBro.createNotificationsBar(text,{type:"danger",btn:"ThemeRepo",selector:"themerepo-notice"});
-						$(bar).on("click." + this.getName(), ".btn", (e) => {
+						$(bar).on("click." + this.getName(), ".button-2TvR03", (e) => {
 							this.openThemeRepoModal(true);
-							e.delegateTarget.querySelector(".notice-dismiss").click();
+							e.delegateTarget.querySelector(".dismiss-1QjyJW").click();
 						});
 					}
 				});
