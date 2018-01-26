@@ -75,7 +75,7 @@ class ShowHiddenChannels {
 
 	getDescription () {return "Displays channels that are hidden from you by role restrictions.";}
 
-	getVersion () {return "2.1.3";}
+	getVersion () {return "2.1.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -98,7 +98,7 @@ class ShowHiddenChannels {
 	//legacy
 	load () {}
 
-	start () {
+	start () { 
 		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
 			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
 			$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
@@ -147,7 +147,7 @@ class ShowHiddenChannels {
 	
 	onSwitch () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			setTimeout(() => {this.displayHiddenChannels()},100);
+			this.displayHiddenChannels();
 		}
 	}
 
