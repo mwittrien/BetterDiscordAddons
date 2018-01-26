@@ -292,7 +292,7 @@ class ThemeRepo {
 
 	getDescription () {return "Allows you to preview all themes from the theme repo and download them on the fly. Repo button is in the theme settings.";}
 
-	getVersion () {return "1.3.3";}
+	getVersion () {return "1.3.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -839,7 +839,8 @@ class ThemeRepo {
 		if (BDfunctionsDevilBro.isThemeEnabled(name) == false) {
 			$(`style#${name}`).remove();
 			$("head").append(`<style id=${name}>${entry.css}</style>`);
-			window.themeCookie[name] = true;
+			themeCookie[name] = true;
+			themeModule.saveThemeData();
 			console.log("ThemeRepo: applied Theme " + name);
 		}
 	}
@@ -864,8 +865,9 @@ class ThemeRepo {
 		var name = entry.name;
 		if (BDfunctionsDevilBro.isThemeEnabled(name) == true) {
 			$(`style#${name}`).remove();
-			window.themeCookie[name] = false;
-			delete window.bdthemes[name];
+			themeCookie[name] = false;
+			delete bdthemes[name];
+			themeModule.saveThemeData();
 			console.log("ThemeRepo: removed Theme " + name);
 		}
 	}
