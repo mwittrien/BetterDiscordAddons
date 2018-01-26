@@ -225,7 +225,7 @@ class PluginRepo {
 
 	getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
 
-	getVersion () {return "1.3.3";}
+	getVersion () {return "1.3.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -254,11 +254,11 @@ class PluginRepo {
 	load () {}
 
 	start () {
-		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
+		/* if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
 			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
 			$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
 			$('head').append('<script src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"></script>');
-		}
+		} */
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
@@ -755,8 +755,9 @@ class PluginRepo {
 	startPlugin (entry) {
 		var name = entry.name;
 		if (BDfunctionsDevilBro.isPluginEnabled(name) == false) {
-			window.bdplugins[name].plugin.start();
-			window.pluginCookie[name] = true;
+			bdplugins[name].plugin.start();
+			pluginCookie[name] = true;
+			pluginModule.savePluginData();
 			console.log("PluginRepo: started Plugin " + name);
 		}
 	}
@@ -780,9 +781,10 @@ class PluginRepo {
 	stopPlugin (entry) {
 		var name = entry.name;
 		if (BDfunctionsDevilBro.isPluginEnabled(name) == true) {
-			window.bdplugins[name].plugin.stop();
-			window.pluginCookie[name] = false;
-			delete window.bdplugins[name];
+			bdplugins[name].plugin.stop();
+			pluginCookie[name] = false;
+			delete bdplugins[name];
+			pluginModule.savePluginData();
 			console.log("PluginRepo: stopped Plugin " + name);
 		}
 	}
