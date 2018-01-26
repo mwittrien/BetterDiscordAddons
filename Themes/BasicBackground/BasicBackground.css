@@ -419,6 +419,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	background: rgba(var(--transparencycolor), var(--memberlistransparency)) !important;
 }
 
+.is-local-bot-message,
 .action-buttons,
 .auditLog-1XsYCj,
 .row-3ZE8bQ,
