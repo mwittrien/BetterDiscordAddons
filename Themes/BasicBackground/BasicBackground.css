@@ -1992,6 +1992,7 @@ html, span:not(.spinner-item) {
 
 /* ----------------------- PLUGINSUPPORT ----------------------- */
 
+/* betterformattingredux */
 #bfredux {
 	top: 4px !important;
 }
@@ -2002,6 +2003,8 @@ html, span:not(.spinner-item) {
 	background-color: rgb(var(--accentcolor)) !important
 }
 
+
+/* citador & replyer */
 .citar-btn {
 	background-color: transparent!important;
 	background-size: contain !important;
@@ -2012,7 +2015,6 @@ html, span:not(.spinner-item) {
 	filter: drop-shadow(0 0 2px black);
 	opacity: 0.7 !important;
 }
-
 .replyer {
 	background: url(data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjRkZGRkZGIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4gICAgPHBhdGggZD0iTTEwIDlWNWwtNyA3IDcgN3YtNC4xYzUgMCA4LjUgMS42IDExIDUuMS0xLTUtNC0xMC0xMS0xMXoiLz4gICAgPHBhdGggZD0iTTAgMGgyNHYyNEgweiIgZmlsbD0ibm9uZSIvPjwvc3ZnPg==) no-repeat center center !important;
 	background-size: contain !important;
@@ -2023,18 +2025,17 @@ html, span:not(.spinner-item) {
 	filter: drop-shadow(0 0 2px rgb(var(--transparencycolor)));
 	opacity: 0.7 !important;
 }
-
 .citar-btn:hover,
 .replyer:hover {
 	opacity: 1 !important; 
 	background-color: rgba(var(--transparencycolor),calc(var(--transparencyalpha) * 2)) !important
 }
-
 .citar-btn:active,
 .replyer:active {
 	background-color: rgb(var(--accentcolor)) !important
 }
 
+/* direct download */
 #files_directDownload .file {
 	background-color: rgba(var(--transparencycolor),0.4) !important;
 	border-color: rgba(var(--accentcolor),0.2) !important;
@@ -2054,6 +2055,7 @@ html, span:not(.spinner-item) {
 	background-color: rgb(var(--accentcolor)) !important
 }
 
+/* dateviewer */
 #dv-container,
 #dv-container #dv-settings-panel {
 	background: transparent !important;
@@ -2093,6 +2095,7 @@ html, span:not(.spinner-item) {
 	z-index: 1 !important;
 	top: 8px !important;
 	right: 8px !important;
+	transition: all 100ms linear !important;
 }
 #dv-container #dv-btn-settings-panel:hover {
 	background-color: rgb(var(--accentcolor)) !important;
