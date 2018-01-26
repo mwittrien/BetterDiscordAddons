@@ -904,15 +904,47 @@ BDfunctionsDevilBro.WebModules.patchFunction = function (newOutput, index) {
 };
 
 BDfunctionsDevilBro.addOnSwitchListener = function (plugin) {
-	if (!BDfunctionsDevilBro.zacksFork() && typeof plugin.onSwitch === "function") {
-		plugin.onSwitch = plugin.onSwitch.bind(plugin);
-		require("electron").remote.getCurrentWindow().webContents.addListener("did-navigate-in-page", plugin.onSwitch);
+	if (typeof plugin.onSwitch === "function") {
+		if (!BDfunctionsDevilBro.zacksFork()) {
+			plugin.onSwitch = plugin.onSwitch.bind(plugin);
+			require("electron").remote.getCurrentWindow().webContents.addListener("did-navigate-in-page", plugin.onSwitch);
+		}
+		var chatspacer = document.querySelector(".guilds-wrapper + * > .spacer-3Dkonz");
+		if (chatspacer) {
+			plugin.onSwitchFix = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.addedNodes) {
+							change.addedNodes.forEach((node) => {
+								if (node && node.classList && (node.classList.contains("chat") || node.classList.contains("noChannel-2EQ0a9"))) {
+									attributeObserver.observe(node, {attributes:true});
+								}
+							});
+						}
+					}
+				);
+			});
+			plugin.onSwitchFix.observe(chatspacer, {childList:true});
+			
+			var attributeObserver = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.target && change.target.classList && change.target.classList.contains("noChannel-2EQ0a9")) plugin.onSwitch();
+					}
+				);
+			});
+			var chat = chatspacer.querySelector(".chat, .noChannel-2EQ0a9");
+			if (chat) attributeObserver.observe(chat, {attributes:true});
+		}
 	}
 };
 
 BDfunctionsDevilBro.removeOnSwitchListener = function (plugin) {
-	if (!BDfunctionsDevilBro.zacksFork() && typeof plugin.onSwitch === "function") {
-		require("electron").remote.getCurrentWindow().webContents.removeListener("did-navigate-in-page", plugin.onSwitch);
+	if (typeof plugin.onSwitch === "function") {
+		if (!BDfunctionsDevilBro.zacksFork()) {
+			require("electron").remote.getCurrentWindow().webContents.removeListener("did-navigate-in-page", plugin.onSwitch);
+		}
+		if (typeof plugin.onSwitchFix === "object") plugin.onSwitchFix.disconnect();
 	}
 };
 
