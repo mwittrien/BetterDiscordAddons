@@ -33,24 +33,28 @@ class OldTitleBar {
 		this.minButtonMarkup = 
 			`<svg class="minButtonOTB iconInactive-WWHQEI icon-mr9wAc iconMargin-2Js7V9" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
 				<g fill="none" class="iconForeground-2c7s3m" fill-rule="evenodd">
-					<path fill="currentColor" d="M19 19v-2H7v2h12z"/>
-					<path d="M1 25h24V1H1v24z"/>
+					<path stroke-width="2" stroke="currentColor" d="M6 18 l13 0"/>
 				</g>
 			</svg>`;
 			
-		this.maxButtonMarkup = 
+		this.maxButtonIsMaxMarkup = 
 			`<svg class="maxButtonOTB iconInactive-WWHQEI icon-mr9wAc iconMargin-2Js7V9" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
 				<g fill="none" class="iconForeground-2c7s3m" fill-rule="evenodd">
-					<path d="M1 1h24v24H1V1z"/>
-					<path fill="currentColor" d="M8 13H6v7h7v-2H8v-5zm-2 0h2V8h5V6H6v7zm7 5v2h7v-7h-2v5h-5zm0-12v2h5v5h2V6h-7z"/>
+					<path stroke-width="2" stroke="currentColor" d="M6 9 l10 0 l0 10 l-10 0 l0 -10 m3 -3 l10 0 l0 10"/>
+				</g>
+			</svg>`;
+			
+		this.maxButtonIsMinMarkup = 
+			`<svg class="maxButtonOTB iconInactive-WWHQEI icon-mr9wAc iconMargin-2Js7V9" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
+				<g fill="none" class="iconForeground-2c7s3m" fill-rule="evenodd">
+					<path stroke-width="2" stroke="currentColor" d="M6 6 l13 0 l0 13 l-13 0 l0 -13"/>
 				</g>
 			</svg>`;
 			
 		this.closeButtonMarkup = 
 			`<svg class="closeButtonOTB iconInactive-WWHQEI icon-mr9wAc iconMargin-2Js7V9" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
 				<g fill="none" class="iconForeground-2c7s3m" fill-rule="evenodd">
-					<path d="M1 1h24v24H1V1z"/>
-					<path fill="currentColor" d="M20 7.41L18.59 6 13 11.59 7.41 6 6 7.41 11.59 13 6 18.59 7.41 20 13 14.41 18.59 20 20 18.59 14.41 13 20 7.41z"/>
+					<path stroke-width="2" stroke="currentColor" d="M6 6 l13 13 m0 -13 l-13 13"/>
 				</g>
 			</svg>`;
 			
@@ -66,7 +70,7 @@ class OldTitleBar {
 
 	getDescription () {return "Reverts the title bar back to its former self.";}
 
-	getVersion () {return "1.3.0";}
+	getVersion () {return "1.3.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -124,7 +128,11 @@ class OldTitleBar {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".layers, .layers-20RVFW")) this.settingsWindowObserver.observe(observertarget, {childList:true});
+			if (observertarget = document.querySelector(".layers-20RVFW")) this.settingsWindowObserver.observe(observertarget, {childList:true});
+			
+			$(window).on("resize." + this.getName(), (e) => {
+				this.changeMaximizeButton();
+			});
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 			
@@ -132,7 +140,7 @@ class OldTitleBar {
 		
 			$(".titleBar-3_fDwJ").addClass("hidden-by-OTB");
 			
-			var settingswindow = document.querySelector(".layer[layer-id], .layer-kosS71[layer-id]");
+			var settingswindow = document.querySelector(".layer-kosS71[layer-id]");
 			if (settingswindow && BDfunctionsDevilBro.getData("addToSettings", this, "settings")) {
 				this.addSettingsTitleBar(settingswindow);
 			}
@@ -149,6 +157,7 @@ class OldTitleBar {
 			
 			BDfunctionsDevilBro.removeLocalStyle(this.getName(), this.css);
 			
+			$(window).off("resize." + this.getName());
 			this.removeTitleBar();
 		
 			$(".titleBar-3_fDwJ").removeClass("hidden-by-OTB");
@@ -193,7 +202,7 @@ class OldTitleBar {
 		$(".divider-1GKkV3").parent().has(".iconInactive-WWHQEI")
 			.append(this.dividerMarkup)
 			.append(this.minButtonMarkup)
-			.append(this.maxButtonMarkup)
+			.append(require("electron").remote.getCurrentWindow().isMaximized() ? this.maxButtonIsMaxMarkup : this.maxButtonIsMinMarkup)
 			.append(this.closeButtonMarkup)
 			.on("click." + this.getName(), ".minButtonOTB", () => {
 				this.doMinimize();
@@ -223,7 +232,7 @@ class OldTitleBar {
 			}
 			settingsbar
 				.append(this.minButtonMarkup)
-				.append(this.maxButtonMarkup)
+				.append(require("electron").remote.getCurrentWindow().isMaximized() ? this.maxButtonIsMaxMarkup : this.maxButtonIsMinMarkup)
 				.append(this.closeButtonMarkup)
 				.on("click." + this.getName(), ".minButtonOTB", () => {
 					this.doMinimize();
@@ -268,6 +277,13 @@ class OldTitleBar {
 	
 	doClose () {
 		require("electron").remote.getCurrentWindow().close();
+	}
+	
+	changeMaximizeButton () {
+		var maxButtonHTML = require("electron").remote.getCurrentWindow().isMaximized() ? this.maxButtonIsMaxMarkup : this.maxButtonIsMinMarkup;
+		document.querySelectorAll(".maxButtonOTB").forEach(maxButton => {
+			maxButton.outerHTML = maxButtonHTML;
+		});
 	}
 	
 	removeTitleBar () {
