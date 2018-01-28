@@ -678,6 +678,9 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .mention:hover {
 	text-decoration: underline !important;
 }
+.mentioned .mention {
+	background: transparent !important;
+}
 
 .mentioned .message-text:after {
 	background: rgba(var(--accentcolor),0.2) !important;
