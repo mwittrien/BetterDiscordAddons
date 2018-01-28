@@ -75,7 +75,7 @@ class ShowHiddenChannels {
 
 	getDescription () {return "Displays channels that are hidden from you by role restrictions.";}
 
-	getVersion () {return "2.1.4";}
+	getVersion () {return "2.1.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -214,36 +214,36 @@ class ShowHiddenChannels {
 				if (count > 0) {
 					var category = $(this.categoryMarkup)[0]
 					var wrapper = category.querySelector(".cursorPointer-3oKATS");
-					var icon = category.querySelector(".iconTransition-VhWJ85");
+					var svg = category.querySelector(".iconTransition-VhWJ85");
 					var name = category.querySelector(".colorTransition-2iZaYd");
 					$(category)
 						.addClass("server" + serverID)
 						.on("click", ".containerDefault-1bbItS > .flex-lFgbSz", () => {
 							wrapper.classList.toggle("wrapperHovered-1KDCyZ");
 							wrapper.classList.toggle("wrapperHoveredCollapsed-25KVVp");
-							icon.classList.toggle("iconHovered-3PRzOR");
-							icon.classList.toggle("iconHoveredCollapsed-jNYgOD");
-							icon.classList.toggle("closed-2Hef-I");
+							svg.classList.toggle("iconHovered-3PRzOR");
+							svg.classList.toggle("iconHoveredCollapsed-jNYgOD");
+							svg.classList.toggle("closed-2Hef-I");
 							name.classList.toggle("nameHoveredCollapsed-2c-EHI");
 							name.classList.toggle("nameHovered-1YFSWq");
 							
-							$(category).find(".containerDefault-7RImuF").toggle(!icon.classList.contains("closed-2Hef-I"));
-							BDfunctionsDevilBro.saveData(serverID, !icon.classList.contains("closed-2Hef-I"), this, "categorystatus");
+							$(category).find(".containerDefault-7RImuF").toggle(!svg.classList.contains("closed-2Hef-I"));
+							BDfunctionsDevilBro.saveData(serverID, !svg.classList.contains("closed-2Hef-I"), this, "categorystatus");
 						})
 						.on("mouseenter mouseleave", ".containerDefault-1bbItS > .flex-lFgbSz", () => {
 							if (!category.querySelector(".closed-2Hef-I")) {
 								wrapper.classList.toggle("wrapperDefault-1Dl4SS");
 								wrapper.classList.toggle("wrapperHovered-1KDCyZ");
-								icon.classList.toggle("iconDefault-xzclSQ");
-								icon.classList.toggle("iconHovered-3PRzOR");
+								svg.classList.toggle("iconDefault-xzclSQ");
+								svg.classList.toggle("iconHovered-3PRzOR");
 								name.classList.toggle("nameDefault-Lnjrwm");
 								name.classList.toggle("nameHovered-1YFSWq");
 							}
 							else {
 								wrapper.classList.toggle("wrapperCollapsed-18mf-c");
 								wrapper.classList.toggle("wrapperHoveredCollapsed-25KVVp")
-								icon.classList.toggle("iconCollapsed-1INdMX")
-								icon.classList.toggle("iconHoveredCollapsed-jNYgOD");
+								svg.classList.toggle("iconCollapsed-1INdMX")
+								svg.classList.toggle("iconHoveredCollapsed-jNYgOD");
 								name.classList.toggle("nameCollapsed-3_ChMu");
 								name.classList.toggle("nameHoveredCollapsed-2c-EHI")
 							}
@@ -255,6 +255,7 @@ class ShowHiddenChannels {
 						let channel = $(this.channelTextMarkup)[0];
 						let channelwrapper = channel.querySelector(".wrapper-fDmxzK");
 						let channelicon = channel.querySelector(".content-2mSKOj");
+						let channelsvg = channel.querySelector(".icon-3tVJnl");
 						let channelname = channel.querySelector(".name-2SL4ev");
 						channelname.innerText = hiddenChannel.name;
 						$(channel)
@@ -263,6 +264,8 @@ class ShowHiddenChannels {
 								channelwrapper.classList.toggle("wrapperHoveredText-1PA_Uk");
 								channelicon.classList.toggle("contentDefaultText-2elG3R");
 								channelicon.classList.toggle("contentHoveredText-2HYGIY");
+								channelsvg.classList.toggle("colorDefaultText-2v6rRX");
+								channelsvg.classList.toggle("colorHoveredText-1CsxK1");
 								channelname.classList.toggle("nameDefaultText-QoumjC");
 								channelname.classList.toggle("nameHoveredText-2FFqiz");
 								this.showAccessRoles(serverObj, hiddenChannel, e, false);
@@ -277,6 +280,7 @@ class ShowHiddenChannels {
 						let channel = $(this.channelVoiceMarkup)[0];
 						let channelwrapper = channel.querySelector(".wrapper-fDmxzK");
 						let channelicon = channel.querySelector(".content-2mSKOj");
+						let channelsvg = channel.querySelector(".icon-3tVJnl");
 						let channelname = channel.querySelector(".name-2SL4ev");
 						channelname.innerText = hiddenChannel.name;
 						$(channel)
@@ -285,6 +289,8 @@ class ShowHiddenChannels {
 								channelwrapper.classList.toggle("wrapperHoveredVoice-3tbfNN");
 								channelicon.classList.toggle("contentDefaultVoice-311dxZ");
 								channelicon.classList.toggle("contentHoveredVoice-3qGNKh");
+								channelsvg.classList.toggle("colorDefaultVoice-1x4dEl");
+								channelsvg.classList.toggle("colorHoveredVoice-1P3kui");
 								channelname.classList.toggle("nameDefaultVoice-1swZoh");
 								channelname.classList.toggle("nameHoveredVoice-TIoHRJ");
 								this.showAccessRoles(serverObj, hiddenChannel, e, false);
@@ -298,15 +304,15 @@ class ShowHiddenChannels {
 					if (settings.showCategory) for (let hiddenChannel of hiddenChannels[4]) {
 						let channel = $(this.channelCategoryMarkup)[0];
 						let channelwrapper = channel.querySelector(".wrapperCollapsed-18mf-c");
-						let channelicon = channel.querySelector(".iconCollapsed-1INdMX");
+						let channelsvg = channel.querySelector(".iconCollapsed-1INdMX");
 						let channelname = channel.querySelector(".nameCollapsed-3_ChMu");
 						channelname.innerText = hiddenChannel.name;
 						$(channel)
 							.on("mouseenter mouseleave", ".flex-lFgbSz", (e) => {
 								channelwrapper.classList.toggle("wrapperCollapsed-18mf-c");
 								channelwrapper.classList.toggle("wrapperHoveredCollapsed-25KVVp");
-								channelicon.classList.toggle("iconCollapsed-1INdMX")
-								channelicon.classList.toggle("iconHoveredCollapsed-jNYgOD");
+								channelsvg.classList.toggle("iconCollapsed-1INdMX")
+								channelsvg.classList.toggle("iconHoveredCollapsed-jNYgOD");
 								channelname.classList.toggle("nameCollapsed-3_ChMu");
 								channelname.classList.toggle("nameHoveredCollapsed-2c-EHI");
 								this.showAccessRoles(serverObj, hiddenChannel, e, false);
@@ -323,9 +329,9 @@ class ShowHiddenChannels {
 					if (!isOpen) {
 						wrapper.classList.toggle("wrapperDefault-1Dl4SS");
 						wrapper.classList.toggle("wrapperCollapsed-18mf-c");
-						icon.classList.toggle("iconDefault-xzclSQ");
-						icon.classList.toggle("iconCollapsed-1INdMX")
-						icon.classList.toggle("closed-2Hef-I");
+						svg.classList.toggle("iconDefault-xzclSQ");
+						svg.classList.toggle("iconCollapsed-1INdMX")
+						svg.classList.toggle("closed-2Hef-I");
 						name.classList.toggle("nameDefault-Lnjrwm");
 						name.classList.toggle("nameCollapsed-3_ChMu");
 						
