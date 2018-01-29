@@ -87,8 +87,8 @@ class ThemeRepo {
 							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO header-3sp3cE marginBottom20-2Ifj-2" style="flex: 0 0 auto; padding: 10px 20px 0px 20px;">
 								<div tab="themes" class="tab selected">Themes</div>
 								<div tab="settings" class="tab">Settings</div>
-								<div class="inputWrapper-3xoRWR vertical-3X17r5 directionColumn-2h-LPR" style="margin-top: -15px;">
-									<input type="text" class="input-2YozMi size16-3IvaX_" id="input-search" placeholder="Search for..." style="padding: 1px 8px;">
+								<div class="inputWrapper-3xoRWR vertical-3X17r5 directionColumn-2h-LPR" style="flex: 1 1 50%; margin: -15px 5px 0 0;">
+									<input type="text" class="inputMini-3MyfLa input-2YozMi size16-3IvaX_ height16-1qXrGy" id="input-search" placeholder="Search for...">
 								</div>
 								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelect-2sgeoi" style="padding-bottom: 15px;">
 									<div class="quickSelectLabel-2MM1ZS">Sort by:</div>
@@ -220,18 +220,6 @@ class ThemeRepo {
 			.themerepo-modal .inner-1_1f7b {
 				min-height: 100%;
 			}
-			.themerepo-modal .header {
-				overflow: visible !important;
-			}
-			.themerepo-modal .header-tab-bar-wrapper {
-				margin-top: 0 !important;
-			}
-			.themerepo-modal .searchWrapper {
-				margin-top: -5px !important;
-			}
-			.themerepo-modal .searchWrapper #input-search {
-				padding: 1px 8px !important;
-			}
 			.themerepo-modal .themeEntry.zack {
 				overflow: visible !important;
 			}
@@ -310,6 +298,9 @@ class ThemeRepo {
 		settingshtml += `</div></div>`;
 		
 		var settingspanel = $(settingshtml)[0];
+
+		BDfunctionsDevilBro.initElements(settingspanel);
+
 		$(settingspanel)
 			.on("keyup", "#input-themeurl", (e) => {if (e.which == 13) this.addThemeToOwnList(settingspanel, e);})
 			.on("click", ".remove-theme", (e) => {this.removeThemeFromOwnList(e);})
