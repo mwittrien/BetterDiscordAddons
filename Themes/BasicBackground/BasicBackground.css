@@ -162,16 +162,16 @@ input:disabled {
 	width: 500px !important;
 }
 
-.keybind-shortcut span {
+.keybindShortcut-tTramc span {
 	color: hsla(0,0%,100%,.8) !important;
 	background: rgba(var(--accentcolor),0.3) !important;
 	border-color: rgba(var(--accentcolor),1) !important;
 	box-shadow: inset 0 -4px 0 rgba(var(--accentcolor),0.5) !important;
 }
-.keybind-shortcut [fill]:not([fill="none"]) {
+.keybindShortcut-tTramc [fill]:not([fill="none"]) {
 	fill: hsla(0,0%,100%,.8) !important;
 }
-.keybind-shortcut [stroke]:not([stroke="none"]) {
+.keybindShortcut-tTramc [stroke]:not([stroke="none"]) {
 	stroke: hsla(0,0%,100%,.8) !important;
 }
 
@@ -1929,8 +1929,8 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .guild-settings-widget .flex-lFgbSz:last-of-type {
 	position: relative !important;
 }
-.guild-settings-widget .flex-lFgbSz:last-of-type .ui-form-item::after,
-.guild-settings-widget .flex-lFgbSz:last-of-type .ui-form-item::before,
+.guild-settings-widget .flex-lFgbSz:last-of-type .flexChild-1KGW5q::after,
+.guild-settings-widget .flex-lFgbSz:last-of-type .flexChild-1KGW5q::before,
 .guild-settings-widget img[src="/assets/5fb477ca84edd15d9a2888ac28365acd.svg"] {
 	width: 320px !important;
 	height: 310px !important;
