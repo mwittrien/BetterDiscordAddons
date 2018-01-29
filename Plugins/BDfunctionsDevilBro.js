@@ -1481,9 +1481,20 @@ BDfunctionsDevilBro.triggerSend = function (textarea) {
 BDfunctionsDevilBro.initElements = function (container) {
 	$(container)
 		.on("click", ".checkbox-1KYsPm", (e) => {
+			var checked = e.currentTarget.checked;
 			$(e.currentTarget.parentElement)
-				.toggleClass("valueChecked-3Bzkbm", $(e.currentTarget).prop("checked"))
-				.toggleClass("valueUnchecked-XR6AOk", $(e.currentTarget).prop("checked"));
+				.toggleClass("valueChecked-3Bzkbm", checked)
+				.toggleClass("valueUnchecked-XR6AOk", !checked);
+		})
+		.on("click", ".checkboxWrapper-2Yvr_Y .input-oWyROL", (e) => {
+			var checked = e.currentTarget.checked;
+			var checkBoxStyle = e.currentTarget.parentElement.querySelector(".checkbox-1QwaS4");
+			$(checkBoxStyle)
+				.toggleClass("checked-2TahvT", checked)
+				.css("background-color", checked ? "rgb(67, 181, 129)" : "")
+				.css("border-color", checked ? "rgb(67, 181, 129)" : "")
+				.find("polyline")
+					.attr("stroke", checked ? "#ffffff" : "transparent");
 		})
 		.on("click", ".numberinput-button-up", (e) => {
 			var input = e.currentTarget.parentElement.parentElement.querySelector("input");
@@ -1517,8 +1528,21 @@ BDfunctionsDevilBro.initElements = function (container) {
 	$(container)
 		.find(".checkbox-1KYsPm").each((_, checkBox) => {
 			$(checkBox.parentElement)
-				.toggleClass("valueChecked-3Bzkbm", $(checkBox).prop("checked"))
-				.toggleClass("valueUnchecked-XR6AOk", !$(checkBox).prop("checked"));
+				.toggleClass("valueChecked-3Bzkbm", checkBox.checked)
+				.toggleClass("valueUnchecked-XR6AOk", !checkBox.checked);
+		});
+		
+	$(container)
+		.find(".checkboxWrapper-2Yvr_Y .input-oWyROL").each((_, checkBox) => {
+			if (checkBox.checked) {
+				var checkBoxStyle = checkBox.parentElement.querySelector(".checkbox-1QwaS4");
+				$(checkBoxStyle)
+					.addClass("checked-2TahvT")
+					.css("background-color", "rgb(67, 181, 129)")
+					.css("border-color", "rgb(67, 181, 129)")
+					.find("polyline")
+						.attr("stroke", "#ffffff");
+			}
 		});
 };
 
@@ -2402,28 +2426,28 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		padding-left: 15px;
 	}
 	
-	.DevilBro-modal .inputNumberWrapper .numberinput-buttons-zone:hover + input,
-	.DevilBro-settings .inputNumberWrapper .numberinput-buttons-zone:hover + input {
+	.DevilBro-modal .inputNumberWrapper .numberinput-buttons-zone:hover + .input-2YozMi,
+	.DevilBro-settings .inputNumberWrapper .numberinput-buttons-zone:hover + .input-2YozMi {
 		border-color: black;
 	}
-	.DevilBro-modal .inputNumberWrapper .numberinput-buttons-zone:hover + input:focus,
-	.DevilBro-settings .inputNumberWrapper .numberinput-buttons-zone:hover + input:focus,
-	.DevilBro-modal .inputNumberWrapper .numberinput-buttons-zone.pressed + input,
-	.DevilBro-settings .inputNumberWrapper .numberinput-buttons-zone.pressed + input {
+	.DevilBro-modal .inputNumberWrapper .numberinput-buttons-zone:hover + .input-2YozMi:focus,
+	.DevilBro-settings .inputNumberWrapper .numberinput-buttons-zone:hover + .input-2YozMi:focus,
+	.DevilBro-modal .inputNumberWrapper .numberinput-buttons-zone.pressed + .input-2YozMi,
+	.DevilBro-settings .inputNumberWrapper .numberinput-buttons-zone.pressed + .input-2YozMi {
 		border-color: #7289da;
 	}
 	.DevilBro-modal .inputNumberWrapper,
 	.DevilBro-settings .inputNumberWrapper {
 		position: relative !important;
 	}
-	.DevilBro-modal .inputNumberWrapper input[type=number],
-	.DevilBro-settings .inputNumberWrapper input[type=number] {
+	.DevilBro-modal .inputNumberWrapper .input-2YozMi[type=number],
+	.DevilBro-settings .inputNumberWrapper .input-2YozMi[type=number] {
 		padding-right: 25px;
 	}
-	.DevilBro-modal .inputNumberWrapper input[type=number]::-webkit-inner-spin-button, 
-	.DevilBro-modal .inputNumberWrapper input[type=number]::-webkit-outer-spin-button,
-	.DevilBro-settings .inputNumberWrapper input[type=number]::-webkit-inner-spin-button, 
-	.DevilBro-settings .inputNumberWrapper input[type=number]::-webkit-outer-spin-button {
+	.DevilBro-modal .inputNumberWrapper .input-2YozMi[type=number]::-webkit-inner-spin-button, 
+	.DevilBro-modal .inputNumberWrapper .input-2YozMi[type=number]::-webkit-outer-spin-button,
+	.DevilBro-settings .inputNumberWrapper .input-2YozMi[type=number]::-webkit-inner-spin-button, 
+	.DevilBro-settings .inputNumberWrapper .input-2YozMi[type=number]::-webkit-outer-spin-button {
 		-webkit-appearance: none;
 	}
 	.DevilBro-modal .inputNumberWrapper .numberinput-buttons-zone,
@@ -2530,17 +2554,6 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 	.DevilBro-modal .checkboxContainer-1sZ9eo:before,
 	.DevilBro-settings .checkboxContainer-1sZ9eo:before {
 		display: none;
-	}
-	
-	.DevilBro-modal .checkboxContainer-1sZ9eo .checkbox-1QwaS4.checked-2TahvT,
-	.DevilBro-settings .checkboxContainer-1sZ9eo .checkbox-1QwaS4.checked-2TahvT {
-		background-color: rgb(67, 181, 129); 
-		border-color: rgb(67, 181, 129);
-	}
-	
-	.DevilBro-modal .checkboxContainer-1sZ9eo .checkbox-1QwaS4.checked-2TahvT polyline,
-	.DevilBro-settings .checkboxContainer-1sZ9eo .checkbox-1QwaS4.checked-2TahvT polyline {
-		stroke: #FFFFFF;
 	}
 	
 	.DevilBro-modal [class^="swatches"].disabled {
