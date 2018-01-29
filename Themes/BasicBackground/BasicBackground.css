@@ -300,11 +300,8 @@ input:disabled {
 	box-shadow: inset 0 1px 0 rgba(var(--transparencycolor),.1) !important;
 }
 
-.modal-3HOjGZ .header-3sp3cE + *  {
-	padding-top: 1px;
-}
-
-.modal-3HOjGZ .header-3sp3cE + * > .scroller-fzNley {
+.modal-3HOjGZ .header-3sp3cE + .inner-tqJwAU,
+.modal-3HOjGZ .header-3sp3cE + .scrollerWrap-2uBjct > .scroller-fzNley {
 	padding-top: 10px;
 }
 
@@ -506,7 +503,6 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .searchFilter-1fJ0cd,
 .searchAnswer-yD90ey,
 .search-bar-tag,
-.DevilBro-settings .checkbox-1QwaS4.checked-2TahvT,
 .checked-2TahvT[style*="background-color: rgb(114, 137, 218)"],
 .barFill-18ABna:not(.fill),
 .progressBar-mI5LOq,
@@ -585,13 +581,21 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .tab-bar-item.selected,
 .containerUserOver-2YhVL6::after,
 .checkbox-inner input[type=checkbox]:checked + span,
-.DevilBro-settings .checkbox-1QwaS4.checked-2TahvT,
 .item-2zi_5J[style*="border-color: rgb(114, 137, 218)"] .checked-2TahvT,
 .checked-2TahvT[style*="border-color: rgb(114, 137, 218)"],
 .round-30vw42.checked-2TahvT[style*="border-color: rgb(67, 181, 129)"] {
 	border-color: rgb(var(--accentcolor)) !important;
 }
 
+.round-30vw42.checked-2TahvT[style*="background-color: rgba(67, 181, 129, 0.14902)"] {
+	background-color: rgba(var(--accentcolor), 0.14902) !important;
+}
+.round-30vw42.checked-2TahvT[style*="border-color: rgba(67, 181, 129, 0.14902)"] {
+	border-color: rgba(var(--accentcolor), 0.14902) !important;
+}
+.round-30vw42.checked-2TahvT polyline[stroke="#43b581"] {
+	stroke: rgb(var(--accentcolor)) !important;
+}
 .checked-2TahvT[style*="background-color: rgba(114, 137, 218, 0.14902)"] {
 	background-color: rgba(var(--accentcolor), 0.14902) !important;
 }
