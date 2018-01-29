@@ -1538,7 +1538,7 @@ BDfunctionsDevilBro.updateContextPosition = function (context) {
 };
 
 BDfunctionsDevilBro.appendContextMenu = function (context, e) {
-	$(".app").append(context);
+	$(".container-R8e4H4").before(context);
 	var menuWidth = $(context).outerWidth();
 	var menuHeight = $(context).outerHeight();
 	$(context)
@@ -1550,9 +1550,17 @@ BDfunctionsDevilBro.appendContextMenu = function (context, e) {
 	BDfunctionsDevilBro.updateContextPosition(context);
 	
 	$(document).on("mousedown.BDfunctionsDevilBroContextMenu", (e2) => {
-		$(document).off("mousedown.BDfunctionsDevilBroContextMenu");
+		console.log(e2.target);
+		console.log(!$(e2.target).hasClass("disabled-dlOjhg") && !$(e2.target).hasClass("itemSubMenu-3ZgIw-") && !$(e2.target).hasClass("itemToggle-e7vkml"));
 		if ($(context).has(e2.target).length == 0) {
+			$(document).off("mousedown.BDfunctionsDevilBroContextMenu");
 			context.remove();
+		}
+		else {
+			var item = $(".item-1XYaYf").has(e2.target)[0];
+			if (item && !$(item).hasClass("disabled-dlOjhg") && !$(item).hasClass("itemSubMenu-3ZgIw-") && !$(item).hasClass("itemToggle-e7vkml")) {
+				$(document).off("mousedown.BDfunctionsDevilBroContextMenu");
+			}
 		}
 	});
 };
