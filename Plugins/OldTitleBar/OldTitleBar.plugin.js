@@ -84,6 +84,9 @@ class OldTitleBar {
 		settingshtml += `</div></div>`;
 		
 		var settingspanel = $(settingshtml)[0];
+
+		BDfunctionsDevilBro.initElements(settingspanel);
+
 		$(settingspanel)
 			.on("click", ".checkbox-1KYsPm", () => {this.updateSettings(settingspanel);});
 			
@@ -179,8 +182,6 @@ class OldTitleBar {
 		var settings = {};
 		for (var input of settingspanel.querySelectorAll(".checkbox-1KYsPm")) {
 			settings[input.value] = input.checked;
-			input.parentElement.classList.toggle("valueChecked-3Bzkbm", input.checked);
-			input.parentElement.classList.toggle("valueUnchecked-XR6AOk", !input.checked);
 		}
 		BDfunctionsDevilBro.saveAllData(settings, this, "settings");
 	}
