@@ -14,7 +14,7 @@ class EditServers {
 			`<div class="itemGroup-oViAgA">
 				<div class="item-1XYaYf localserversettings-item itemSubMenu-3ZgIw-">
 					<span>REPLACE_context_localserversettings_text</span>
-					<div class="hint"></div>
+					<div class="hint-3TJykr"></div>
 				</div>
 			</div>`;
 			
@@ -23,11 +23,11 @@ class EditServers {
 				<div class="itemGroup-oViAgA">
 					<div class="item-1XYaYf serversettings-item">
 						<span>REPLACE_submenu_serversettings_text</span>
-						<div class="hint"></div>
+						<div class="hint-3TJykr"></div>
 					</div>
 					<div class="item-1XYaYf resetsettings-item disabled-dlOjhg">
 						<span>REPLACE_submenu_resetsettings_text</span>
-						<div class="hint"></div>
+						<div class="hint-3TJykr"></div>
 					</div>
 				</div>
 			</div>`;
@@ -139,6 +139,9 @@ class EditServers {
 		settingshtml += `</div></div>`;
 		
 		var settingspanel = $(settingshtml)[0];
+
+		BDfunctionsDevilBro.initElements(settingspanel);
+
 		$(settingspanel)
 			.on("click", ".reset-button", () => {this.resetAll();});
 		return settingspanel;
