@@ -28,18 +28,18 @@ class GoogleTranslateOption {
 		};
 
 		this.messageContextEntryMarkup =
-			`<div class="item-group itemGroup-oViAgA">
-				<div class="item item-1XYaYf messagetranslateoption-item">
+			`<div class="itemGroup-oViAgA">
+				<div class="item-1XYaYf messagetranslateoption-item">
 					<span>REPLACE_context_messagetranslateoption_text</span>
-					<div class="hint"></div>
+					<div class="hint-3TJykr"></div>
 				</div>
 			</div>`;
 
 		this.messageContextEntryMarkup2 =
-			`<div class="item-group itemGroup-oViAgA">
-				<div class="item item-1XYaYf googletranslateoption-item">
+			`<div class="itemGroup-oViAgA">
+				<div class="item-1XYaYf googletranslateoption-item">
 					<span>REPLACE_context_googletranslateoption_text</span>
-					<div class="hint"></div>
+					<div class="hint-3TJykr"></div>
 				</div>
 			</div>`;
 		
@@ -76,8 +76,8 @@ class GoogleTranslateOption {
 						<h3 class="titleDefault-1CWM9y title-3i-5G_ weightMedium-13x9Y8 size16-3IvaX_ flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.choices[key].description}</h3>
 						${this.defaults.choices[key].direction == "Output" ? this.reverseButtonMarkup : ""}
 					</div>
-					<div class="ui-form-item flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
-						<div class="ui-select select-3JqNgs" style="flex: 1 1 auto;">
+					<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
+						<div class="select-3JqNgs" style="flex: 1 1 auto;">
 							<div class="Select Select--single has-value" type="${key}" value="${this.defaults.choices[key].value}">
 								<div class="Select-control">
 									<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-value" style="flex: 1 1 auto;">
@@ -162,7 +162,7 @@ class GoogleTranslateOption {
 		var settings = 	BDfunctionsDevilBro.getAllData(this, "settings"); 
 		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="titleDefault-1CWM9y title-3i-5G_ size18-ZM4Qv- height24-2pMcnc weightNormal-3gw0Lm marginBottom8-1mABJ4">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		for (let key in choices) {
-			settingshtml += `<h3 class="titleDefault-1CWM9y title-3i-5G_ weightMedium-13x9Y8 size16-3IvaX_ flexChild-1KGW5q marginBottom8-1mABJ4 marginTop8-2gOa2N" style="flex: 1 1 auto;">${this.defaults.choices[key].description}</h3><div class="ui-form-item flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><div class="ui-select select-3JqNgs" style="flex: 1 1 auto;"><div class="Select Select--single has-value" type="${key}" value="${choices[key]}"><div class="Select-control"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-value" style="flex: 1 1 auto;"><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm" style="flex: 1 1 auto;">${this.languages[choices[key]].name}</div></div><span class="Select-arrow-zone"><span class="Select-arrow"></span></span></div></div></div></div>`
+			settingshtml += `<h3 class="titleDefault-1CWM9y title-3i-5G_ weightMedium-13x9Y8 size16-3IvaX_ flexChild-1KGW5q marginBottom8-1mABJ4 marginTop8-2gOa2N" style="flex: 1 1 auto;">${this.defaults.choices[key].description}</h3><div class="ui-form-item flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><div class="select-3JqNgs" style="flex: 1 1 auto;"><div class="Select Select--single has-value" type="${key}" value="${choices[key]}"><div class="Select-control"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-value" style="flex: 1 1 auto;"><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm" style="padding:0;">${this.languages[choices[key]].name}</div></div><span class="Select-arrow-zone"><span class="Select-arrow"></span></span></div></div></div></div>`
 		}
 		for (let key in settings) {
 			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU ${settings[key] ? "valueChecked-3Bzkbm" : "valueUnchecked-XR6AOk"}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
@@ -170,6 +170,9 @@ class GoogleTranslateOption {
 		settingshtml += `</div></div>`;
 		
 		var settingspanel = $(settingshtml)[0];
+
+		BDfunctionsDevilBro.initElements(settingspanel);
+
 		$(settingspanel)
 			.on("click", ".Select-control", (e) => {this.openDropdownMenu("inSettings", e);})
 			.on("click", ".checkbox-1KYsPm", () => {this.updateSettings(settingspanel);});
@@ -324,15 +327,13 @@ class GoogleTranslateOption {
 		var settings = {};
 		for (var input of settingspanel.querySelectorAll(".checkbox-1KYsPm")) {
 			settings[input.value] = input.checked;
-			input.parentElement.classList.toggle("valueChecked-3Bzkbm", input.checked);
-			input.parentElement.classList.toggle("valueUnchecked-XR6AOk", !input.checked);
 		}
 		BDfunctionsDevilBro.saveAllData(settings, this, "settings");
 	}
 	
 	onContextMenu (context) {
 		if (!context || !context.tagName || !context.parentElement) return;
-		for (let group of context.querySelectorAll(".item-group, .itemGroup-oViAgA")) {
+		for (let group of context.querySelectorAll(".itemGroup-oViAgA")) {
 			if (!context.querySelector(".messagetranslateoption-item") && BDfunctionsDevilBro.getKeyInformation({"node":group, "key":"displayName", "value":"MessagePinItem"})) {
 				$(this.messageContextEntryMarkup).insertAfter(group)
 					.on("click", ".messagetranslateoption-item", () => {
@@ -482,10 +483,12 @@ class GoogleTranslateOption {
 				var {translation, input, output} = this.translateText(this.message.content, "context");
 				if (translation) {
 					var markup = message.querySelector(".markup");
-					$(markup).data("orightmlGoogleTranslate", markup.innerHTML);
-					markup.innerText = translation;
-					$(`<span class="edited translated">(${this.labels.translated_watermark_text})</span>`).appendTo(markup);
-					message.classList.add("translated");
+					if (markup) {
+						$(markup).data("orightmlGoogleTranslate", markup.innerHTML);
+						markup.innerText = translation;
+						$(`<span class="edited translated">(${this.labels.translated_watermark_text})</span>`).appendTo(markup);
+						message.classList.add("translated");
+					}
 				}
 			}
 			else {
