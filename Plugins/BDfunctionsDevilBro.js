@@ -1478,17 +1478,46 @@ BDfunctionsDevilBro.triggerSend = function (textarea) {
 	});
 };
 
+BDfunctionsDevilBro.initElements = function (container) {
+	$(container)
+		.on("click", ".checkbox-1KYsPm", (e) => {
+			$(e.currentTarget.parentElement)
+				.toggleClass("valueChecked-3Bzkbm", $(e.currentTarget).prop("checked"))
+				.toggleClass("valueUnchecked-XR6AOk", $(e.currentTarget).prop("checked"));
+		})
+		.on("click", ".numberinput-button-up", (e) => {
+			var input = e.currentTarget.parentElement.parentElement.querySelector("input");
+			var max = parseInt(input.getAttribute("max"));
+			var newvalue = parseInt(input.value) + 1;
+			if (isNaN(max) || (!isNaN(max) && newvalue <= max)) {
+				input.value = newvalue;
+				$(input).trigger("input");
+			}
+		})
+		.on("click", ".numberinput-button-down", (e) => {
+			var input = e.currentTarget.parentElement.parentElement.querySelector("input");
+			var min = parseInt(input.getAttribute("min"));
+			var newvalue = parseInt(input.value) - 1;
+			if (isNaN(min) || (!isNaN(min) && newvalue >= min)) {
+				input.value = newvalue;
+				$(input).trigger("input");
+			}
+		});
+		
+	$(container)
+		.find(".checkbox-1KYsPm").each((_, checkBox) => {
+			$(checkBox.parentElement)
+				.toggleClass("valueChecked-3Bzkbm", $(checkBox).prop("checked"))
+				.toggleClass("valueUnchecked-XR6AOk", !$(checkBox).prop("checked"));
+		});
+};
+
 BDfunctionsDevilBro.appendModal = function (modal) {
 	let id = Math.round(Math.random()*10000000000000000);
 	var container = document.querySelector(".app-XZYfmp ~ [class^='theme-']:not([class*='popouts'])");
 	if (!container) return;
 	$(modal)
 		.appendTo(container)
-		.on("click", ".checkbox-1KYsPm", (e) => {
-			$(e.target.parentElement)
-				.toggleClass("valueChecked-3Bzkbm", $(e.target).prop("checked"))
-				.toggleClass("valueUnchecked-XR6AOk", $(e.target).prop("checked"));
-		})
 		.on("click", ".tab", (e) => {
 			$(".tab-content.open", modal)
 				.removeClass("open");
@@ -1510,12 +1539,8 @@ BDfunctionsDevilBro.appendModal = function (modal) {
 		
 	$(modal).find(".tab").first().addClass("selected");
 	$(modal).find(".tab-content").first().addClass("open");
-	$(modal)
-		.find(".checkbox-1KYsPm").each((_, checkBox) => {
-			$(checkBox.parentElement)
-				.toggleClass("valueChecked-3Bzkbm", $(checkBox).prop("checked"))
-				.toggleClass("valueUnchecked-XR6AOk", $(checkBox).prop("checked"));
-		});
+	
+	BDfunctionsDevilBro.initElements(modal);
 		
 	$(document)
 		.off("keydown.modalEscapeListenerDevilBro" + id)
@@ -2367,21 +2392,96 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		padding-left: 15px;
 	}
 	
-	.DevilBro-settings .ui-hover-card,
-	.DevilBro-settings .ui-hover-card .card-11ynQk-inner,
+	.DevilBro-modal .inputNumberWrapper,
+	.DevilBro-settings .inputNumberWrapper {
+		position: relative !important;
+	}
+	.DevilBro-modal .inputNumberWrapper input[type=number],
+	.DevilBro-settings .inputNumberWrapper input[type=number] {
+		padding-right: 25px;
+	}
+	.DevilBro-modal .inputNumberWrapper input[type=number]::-webkit-inner-spin-button, 
+	.DevilBro-modal .inputNumberWrapper input[type=number]::-webkit-outer-spin-button,
+	.DevilBro-settings .inputNumberWrapper input[type=number]::-webkit-inner-spin-button, 
+	.DevilBro-settings .inputNumberWrapper input[type=number]::-webkit-outer-spin-button {
+		-webkit-appearance: none;
+	}
+	.DevilBro-modal .inputNumberWrapper .numberinput-buttons-zone,
+	.DevilBro-settings .inputNumberWrapper .numberinput-buttons-zone {
+		cursor: pointer;
+		position: absolute;
+		top: 2px;
+		right: 8px;
+		text-align: center;
+		vertical-align: middle;
+		width: 15px;
+	}
+	.DevilBro-modal .inputNumberWrapper .numberinput-button-up,
+	.DevilBro-settings .inputNumberWrapper .numberinput-button-up {
+		border-color: transparent transparent #999 transparent;
+		border-style: solid;
+		border-width: 2.5px 5px 5px 5px;
+		display: inline-block;
+	}
+	.DevilBro-modal .inputNumberWrapper .numberinput-button-up:hover,
+	.DevilBro-settings .inputNumberWrapper .numberinput-button-up:hover {
+		border-bottom-color: #666;
+	}
+	.theme-light .DevilBro-modal .inputNumberWrapper .numberinput-button-up,
+	.theme-light .DevilBro-settings .inputNumberWrapper .numberinput-button-up {
+		border-bottom-color: #dcddde;
+	}
+	.theme-light .DevilBro-modal .inputNumberWrapper .numberinput-button-up:hover,
+	.theme-light .DevilBro-settings .inputNumberWrapper .numberinput-button-up:hover {
+		border-bottom-color: #4f545c;
+	}
+	.theme-dark .DevilBro-modal .inputNumberWrapper .numberinput-button-up,
+	.theme-dark .DevilBro-settings .inputNumberWrapper .numberinput-button-up {
+		border-bottom-color: #72767d;
+	}
+	.theme-dark .DevilBro-modal .inputNumberWrapper .numberinput-button-up:hover,
+	.theme-dark .DevilBro-settings .inputNumberWrapper .numberinput-button-up:hover {
+		border-bottom-color: #f6f6f7;
+	}
+	.DevilBro-modal .inputNumberWrapper .numberinput-button-down,
+	.DevilBro-settings .inputNumberWrapper .numberinput-button-down {
+		border-color: #999 transparent transparent transparent;
+		border-style: solid;
+		border-width: 5px 5px 2.5px 5px;
+		display: inline-block;
+	}
+	.DevilBro-modal .inputNumberWrapper .numberinput-button-down:hover,
+	.DevilBro-settings .inputNumberWrapper .numberinput-button-down:hover {
+		border-top-color: #666;
+	}
+	.theme-light .DevilBro-modal .inputNumberWrapper .numberinput-button-down,
+	.theme-light .DevilBro-settings .inputNumberWrapper .numberinput-button-down {
+		border-top-color: #dcddde;
+	}
+	.theme-light .DevilBro-modal .inputNumberWrapper .numberinput-button-down:hover,
+	.theme-light .DevilBro-settings .inputNumberWrapper .numberinput-button-down:hover {
+		border-top-color: #4f545c;
+	}
+	.theme-dark .DevilBro-modal .inputNumberWrapper .numberinput-button-down,
+	.theme-dark .DevilBro-settings .inputNumberWrapper .numberinput-button-down {
+		border-top-color: #72767d;
+	}
+	.theme-dark .DevilBro-modal .inputNumberWrapper .numberinput-button-down:hover,
+	.theme-dark .DevilBro-settings .inputNumberWrapper .numberinput-button-down:hover {
+		border-top-color: #f6f6f7;
+	}
+	
 	.DevilBro-settings .card-11ynQk,
 	.DevilBro-settings .card-11ynQk .card-11ynQk-inner {
 		width: 550px;
 		min-height: 28px;
 	}
 	
-	.DevilBro-settings .ui-hover-card:before,
 	.DevilBro-settings .card-11ynQk:before {
 		z-index: 50;
 		left: -10px;
 	}
 	
-	.DevilBro-settings .ui-hover-card .card-11ynQk-inner,
 	.DevilBro-settings .card-11ynQk .card-11ynQk-inner {
 		overflow: hidden;
 		display: flex;
@@ -2390,7 +2490,6 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		z-index: 100;
 	}
 	
-	.DevilBro-settings .ui-hover-card .round-remove-button,
 	.DevilBro-settings .card-11ynQk .button-1qrA-N {
 		opacity: 0;
 		position: absolute;
@@ -2399,7 +2498,6 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		z-index: 200;
 	}
 	
-	.DevilBro-settings .ui-hover-card:hover .round-remove-button,
 	.DevilBro-settings .card-11ynQk:hover .button-1qrA-N {
 		opacity: 1;
 	}
