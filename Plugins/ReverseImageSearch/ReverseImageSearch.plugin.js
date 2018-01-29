@@ -21,22 +21,22 @@ class ReverseImageSearch {
 		};
 
 		this.messageContextEntryMarkup =
-			`<div class="item-group itemGroup-oViAgA">
-				<div class="item item-1XYaYf reverseimagesearch-item item-subMenu itemSubMenu-3ZgIw-">
+			`<div class="itemGroup-oViAgA">
+				<div class="item-1XYaYf reverseimagesearch-item itemSubMenu-3ZgIw-">
 					<span>Reverse Image Search</span>
-					<div class="hint"></div>
+					<div class="hint-3TJykr"></div>
 				</div>
 			</div>`;
 			
 			
 		this.messageContextSubMenuMarkup = 
-			`<div class="context-menu contextMenu-uoJTbz reverseImageSearchSubMenu">
-				<div class="item-group itemGroup-oViAgA">
-					<div class="item item-1XYaYf alldisabled-item disabled-dlOjhg disabled">
+			`<div class="contextMenu-uoJTbz reverseImageSearchSubMenu">
+				<div class="itemGroup-oViAgA">
+					<div class="item-1XYaYf alldisabled-item disabled-dlOjhg">
 						<span>REPLACE_submenu_disabled_text</span>
-						<div class="hint"></div>
+						<div class="hint-3TJykr"></div>
 					</div>
-					${Object.keys(this.defaults.engines).map((key, i) => `<div engine="${key}" class="item item-1XYaYf RIS-item"><span>${this.defaults.engines[key].name}</span><div class="hint"></div></div>`).join("")}
+					${Object.keys(this.defaults.engines).map((key, i) => `<div engine="${key}" class="item-1XYaYf RIS-item"><span>${this.defaults.engines[key].name}</span><div class="hint-3TJykr"></div></div>`).join("")}
 				</div>
 			</div>`;
 	}
@@ -62,6 +62,9 @@ class ReverseImageSearch {
 		settingshtml += `</div></div>`;
 		
 		var settingspanel = $(settingshtml)[0];
+
+		BDfunctionsDevilBro.initElements(settingspanel);
+
 		$(settingspanel)
 			.on("click", ".checkbox-1KYsPm", () => {this.updateSettings(settingspanel);});
 			
@@ -120,8 +123,6 @@ class ReverseImageSearch {
 		var settings = {};
 		for (var input of settingspanel.querySelectorAll(".checkbox-1KYsPm")) {
 			settings[input.value] = input.checked;
-			input.parentElement.classList.toggle("valueChecked-3Bzkbm", input.checked);
-			input.parentElement.classList.toggle("valueUnchecked-XR6AOk", !input.checked);
 		}
 		BDfunctionsDevilBro.saveAllData(settings, this, "engines");
 	}
