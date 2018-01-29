@@ -46,7 +46,7 @@ class EditUsers {
 			`<div class="item-group itemGroup-oViAgA">
 				<div class="item item-1XYaYf localusersettings-item item-subMenu itemSubMenu-3ZgIw-">
 					<span>REPLACE_context_localusersettings_text</span>
-					<div class="hint"></div>
+					<div class="hint-3TJykr"></div>
 				</div>
 			</div>`;
 			
@@ -55,11 +55,11 @@ class EditUsers {
 				<div class="item-group itemGroup-oViAgA">
 					<div class="item item-1XYaYf usersettings-item">
 						<span>REPLACE_submenu_usersettings_text</span>
-						<div class="hint"></div>
+						<div class="hint-3TJykr"></div>
 					</div>
 					<div class="item item-1XYaYf resetsettings-item disabled-dlOjhg disabled">
 						<span>REPLACE_submenu_resetsettings_text</span>
-						<div class="hint"></div>
+						<div class="hint-3TJykr"></div>
 					</div>
 				</div>
 			</div>`;
@@ -198,6 +198,9 @@ class EditUsers {
 		settingshtml += `</div></div>`;
 		
 		var settingspanel = $(settingshtml)[0];
+
+		BDfunctionsDevilBro.initElements(settingspanel);
+
 		$(settingspanel)
 			.on("click", ".checkbox-1KYsPm", () => {this.updateSettings(settingspanel);})
 			.on("click", ".reset-button", () => {this.resetAll();});
@@ -421,8 +424,6 @@ class EditUsers {
 		var settings = {};
 		for (var input of settingspanel.querySelectorAll(".checkbox-1KYsPm")) {
 			settings[input.value] = input.checked;
-			input.parentElement.classList.toggle("valueChecked-3Bzkbm", input.checked);
-			input.parentElement.classList.toggle("valueUnchecked-XR6AOk", !input.checked);
 		}
 		BDfunctionsDevilBro.saveAllData(settings, this, "settings");
 	}
