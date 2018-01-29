@@ -1718,16 +1718,24 @@ BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
 		if (wrapperDiv.hasClass("disabled")) return;
 		BDfunctionsDevilBro.openColorPicker(e.currentTarget.style.backgroundColor, swatch);
 	});
-};
-
-BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
+};BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 	var strings = BDfunctionsDevilBro.getLibraryStrings();
+	var inputs = {
+		HEX: 	{type:"text", 		name:"hex",				group:"hex", 	min:null,	max:null,	length:7,		default:"#000000"},
+		R: 		{type:"number", 	name:"red",				group:"rgb", 	min:0,		max:255,	length:null,	default:0},
+		G:		{type:"number", 	name:"green",			group:"rgb", 	min:0,		max:255,	length:null,	default:0},
+		B:		{type:"number", 	name:"blue",			group:"rgb", 	min:0,		max:255,	length:null,	default:0},
+		H: 		{type:"number", 	name:"hue",				group:"hsl", 	min:0,		max:360,	length:null,	default:0},
+		S: 		{type:"number", 	name:"saturation",		group:"hsl", 	min:0,		max:100,	length:null,	default:0},
+		L: 		{type:"number", 	name:"lightness",		group:"hsl", 	min:0,		max:100,	length:null,	default:0}
+	};
+	
 	var colorPickerModalMarkup = 
 		`<span class="colorpicker-modal DevilBro-modal">
 			<div class="backdrop-2ohBEd"></div>
 			<div class="modal-2LIEKY">
 				<div class="inner-1_1f7b">
-					<div class="modal-3HOjGZ sizeMedium-1-2BNS">
+					<div class="modal-3HOjGZ">
 						<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO header-3sp3cE" style="flex: 0 0 auto;">
 							<div class="flexChild-1KGW5q" style="flex: 1 1 auto;">
 								<h4 class="h4-2IXpeI title-1pmpPr size16-3IvaX_ height20-165WbF weightSemiBold-T8sxWH defaultColor-v22dK1 defaultMarginh4-jAopYe marginReset-3hwONl">${strings.colorpicker_modal_header_text}</h4>
@@ -1746,7 +1754,7 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 									<div class="colorpicker-black" style="background: linear-gradient(to top, #000, rgba(0,0,0,0))">
 										<div class="colorpicker-pickercursor">
 											<svg xmlns="http://www.w3.org/2000/svg" version="1.1">
-											<circle cx="7" cy="7" r="6" stroke="black" stroke-width="2" fill="none" />
+												<circle cx="7" cy="7" r="6" stroke="black" stroke-width="2" fill="none" />
 											</svg>
 										</div>
 										<div class="colorpicker-pickerpane"></div>
@@ -1766,14 +1774,17 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 									<div class="colorpicker-preview-0 selected" style="background-color:#808080;"></div>
 									<div class="colorpicker-preview-2" style="background-color:#808080;"></div>
 								</div>
-								<div class="colorpicker-inputs">
-									<div class="colorpicker-input"><label>Hex:</label><input class="colorpicker-hex" name="hex" value="#000000" maxlength="7"></div>
-									<div class="colorpicker-input"><label>R:</label><input class="colorpicker-red" name="rgb" value="0" type="number" min="0" max="255"></div>
-									<div class="colorpicker-input"><label>G:</label><input class="colorpicker-green" name="rgb" value="0" type="number" min="0" max="255"></div>
-									<div class="colorpicker-input"><label>B:</label><input class="colorpicker-blue" name="rgb" value="0" type="number" min="0" max="255"></div>
-									<div class="colorpicker-input"><label>H:</label><input class="colorpicker-hue" name="hsl" value="0" type="number" min="0" max="360"></div>
-									<div class="colorpicker-input"><label>S:</label><input class="colorpicker-saturation" name="hsl" value="0" type="number" min="0" max="100"></div>
-									<div class="colorpicker-input"><label>L:</label><input class="colorpicker-lightness" name="hsl" value="0" type="number" min="0" max="100"></div>
+								<div class="colorpicker-inputs card-3DrRmC cardPrimaryEditable-2IQ7-V">
+									${Object.keys(inputs).map((key, i) => 
+									`<div class="colorpicker-input flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyCenter-29N31w alignCenter-3VxkQP noWrap-v6g9vO marginTop4-2rEBfJ marginBottom4-_yArcI">
+										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJnoWrap-v6g9vO"style="flex: 1 1 20%">
+											<h5 class="h5-3KssQU size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH">${key}:</h5>
+										</div>
+										<div class="inputWrapper-3xoRWR${inputs[key].type == 'number' ? ' inputNumberWrapper inputNumberWrapperMini' : ''} vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR" style="flex: 1 1 80%;">
+											${inputs[key].type == 'number' ? '<span class="numberinput-buttons-zone"><span class="numberinput-button-up"></span><span class="numberinput-button-down"></span></span>' : ''}
+											<input type="${inputs[key].type}"${inputs[key].min ? ' min="' + inputs[key].min + '"' : ''}${inputs[key].max ? ' max="' + inputs[key].max + '"' : ''}${inputs[key].length ? ' maxlength="' + inputs[key].length + '"' : ''} name="${inputs[key].group}" class="inputMini-3MyfLa input-2YozMi size16-3IvaX_ colorpicker-${inputs[key].name}">
+										</div>
+									</div>`).join("")}
 								</div>
 							</div>
 						</div>
@@ -2466,6 +2477,11 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		vertical-align: middle;
 		width: 15px;
 	}
+	.DevilBro-modal .inputNumberWrapper.inputNumberWrapperMini .numberinput-buttons-zone,
+	.DevilBro-settings .inputNumberWrapper.inputNumberWrapperMini .numberinput-buttons-zone {
+		top: -4px;
+		right: 4px;
+	}
 	.DevilBro-modal .inputNumberWrapper .numberinput-button-up,
 	.DevilBro-settings .inputNumberWrapper .numberinput-button-up {
 		border-color: transparent transparent #999 transparent;
@@ -2687,28 +2703,26 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 	}
 	
 	.colorpicker-modal .colorpicker-container {
-		padding: 15px;
+		padding: 10px 10px 10px 30px;
 		overflow: hidden;
 		display: initial;
 		margin: auto;
 	}
-	
+	.colorpicker-modal .modal-3HOjGZ {
+		width: 600px;
+	}
 	.colorpicker-modal .colorpicker-color,
 	.colorpicker-modal .colorpicker-slider,
 	.colorpicker-modal .colorpicker-controls {
 		float: left;
 		margin-right: 20px;
 	}
-	
 	.colorpicker-modal .colorpicker-inputs {
 		text-align: center;
-		background-color: #7E8084;
-		border-radius: 5px;
-		width: 115px;
-		padding: 3px;
+		width: 150px;
+		padding: 3px 3px 3px 10px;
 		margin-top: 87px;
 	}
-	
 	.colorpicker-modal .colorpicker-pickerpane, 
 	.colorpicker-modal .colorpicker-black, 
 	.colorpicker-modal .colorpicker-white, 
@@ -2716,10 +2730,9 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		position: relative;
 		top: 0px;
 		left: 0px;
-		height: 256px;
-		width: 256px;
+		height: 308px;
+		width: 308px;
 	}
-	
 	.colorpicker-modal .colorpicker-pickercursor {
 		position: absolute;
 		height: 14px;
@@ -2727,22 +2740,19 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		top: -7px;
 		left: -7px;
 	}
-	
 	.colorpicker-modal .colorpicker-pickercursor svg {
 		position: relative;
 		height: 14px;
 		width: 14px;
 	}
-	
 	.colorpicker-modal .colorpicker-sliderpane, 
 	.colorpicker-modal .colorpicker-slider {
 		position: relative;
 		top: 0px;
 		left: 0px;
-		height: 256px;
+		height: 308px;
 		width: 20px;
 	}
-	
 	.colorpicker-modal .colorpicker-slidercursor {
 		position: absolute;
 		top: -4px;
@@ -2754,51 +2764,20 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		position: relative;
 		height: 12px;
 		width: 32px;
-	}
-		
+	}	
 	.colorpicker-modal [class^="colorpicker-preview-"] {
 		background-color: #808080;
 		border: 3px solid transparent;
-		height: 54px;
-		width: 58px;
+		height: 65px;
+		width: 80px;
 		float: left;
 	}
-	
 	.colorpicker-modal .colorpicker-preview-0 {
 		border-radius: 5px 0 0 5px;
 		border-right: none;
 	}
-	
 	.colorpicker-modal .colorpicker-preview-2 {
 		border-radius: 0 5px 5px 0;
 		border-left: none;
-	}
-	
-	.colorpicker-modal .colorpicker-inputs label {
-		display: inline-block;
-		width: 30px;
-		color: #36393E;
-		letter-spacing: .5px;
-		text-transform: uppercase;
-		text-align: right;
-		flex: 1;
-		cursor: default;
-		font-weight: 600;
-		line-height: 16px;
-		font-size: 14px;
-		position: relative;
-		top: 2px;
-	}
-	
-	.colorpicker-modal .colorpicker-inputs input {
-		border: 3px solid #36393E;
-		width: 65px;
-		margin: 1px 0 1px 6px;
-		padding: 0 2px 0 2px;
-		line-height: 16px;
-		color: #36393E;
-		font-weight: 600;
-		line-height: 16px;
-		font-size: 13px;
 	}`
 );
