@@ -198,7 +198,6 @@ BDfunctionsDevilBro.downloadPlugin = function (pluginName, downloadUrl, updateNo
 		fileSystem.writeFileSync(file, body);
 		// REMOVE IN SOME TIME (29.01.2018)
 		if (pluginName == "CompleteTimestamps") {
-			console.log("test");
 			let path = require("path");
 			var pluginfile = path.join(BDfunctionsDevilBro.getPluginsFolder(), "CompleteTimestamp.plugin.js");
 			fileSystem.unlink(pluginfile, (error) => {});
