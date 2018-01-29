@@ -115,7 +115,9 @@ class NotificationSounds {
 				.on("click", ".Select-control", (e) => {this.openDropdownMenu(settingspanel, e);})
 				.on("keyup", ".songInput", (e) => {if (e.which == 13) this.saveAudio(settingspanel);})
 				.on("click", ".reset-button", () => {this.resetAll(settingspanel);})
-				.on("click", "#input-unimplemented", (e) => {this.toggleUnimplemented(settingspanel,e);})
+				.on("click", "#input-unimplemented", (e) => {
+					$(settingspanel).find(".unimplemented").toggle(e.currentTarget.checked);
+				})
 				.on("click", "#input-file", (e) => {e.currentTarget.querySelector(".file-navigator").click();})
 				.on("change", ".file-navigator", (e) => {
 					var file = e.currentTarget.files[0];
@@ -376,15 +378,6 @@ class NotificationSounds {
 				bar.style.width = volume + "%";
 				input.value = volume;
 			});
-	}
-	
-	toggleUnimplemented (settingspanel, e) {
-		var checked = $(e.target).prop("checked");
-		$(e.target.parentElement)
-			.toggleClass("valueChecked-3Bzkbm", checked)
-			.toggleClass("valueUnchecked-XR6AOk", !checked);
-			
-		$(settingspanel).find(".unimplemented").toggle(checked);
 	}
 	
 	loadAudios () {
