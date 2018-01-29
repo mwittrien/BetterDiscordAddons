@@ -36,6 +36,9 @@ class ChatAliases {
 		settingshtml += `</div></div>`;
 		
 		var settingspanel = $(settingshtml)[0];
+
+		BDfunctionsDevilBro.initElements(settingspanel);
+
 		$(settingspanel)
 			.on("keypress", ".wordInputs", (e) => {if (e.which == 13) this.updateContainer(settingspanel, e.currentTarget);})
 			.on("click", ".remove-word, .remove-all", (e) => {this.updateContainer(settingspanel, e.currentTarget);})
