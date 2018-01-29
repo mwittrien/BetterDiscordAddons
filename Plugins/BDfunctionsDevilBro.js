@@ -27,7 +27,7 @@ BDfunctionsDevilBro.loadMessage = function (plugin, oldVersionRemove) {
 			BDfunctionsDevilBro.checkAllUpdates();
 		},7200000);
 	}
-	var layers = document.querySelector(".layers, .layers-20RVFW");
+	var layers = document.querySelector(".layers-20RVFW");
 	if (typeof window.PluginUpdates.observer === "undefined" && layers) {
 		window.PluginUpdates.observer = new MutationObserver((changes, _) => {
 			changes.forEach(
@@ -1977,7 +1977,6 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 				}
 				break;
 			case "hsl":
-				console.log("test");
 				hue = colorPickerModal.querySelector(".colorpicker-hue").value;
 				saturation = colorPickerModal.querySelector(".colorpicker-saturation").value;
 				lightness = colorPickerModal.querySelector(".colorpicker-lightness").value;
