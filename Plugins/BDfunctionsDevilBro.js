@@ -2402,6 +2402,16 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		padding-left: 15px;
 	}
 	
+	.DevilBro-modal .inputNumberWrapper .numberinput-buttons-zone:hover + input,
+	.DevilBro-settings .inputNumberWrapper .numberinput-buttons-zone:hover + input {
+		border-color: black;
+	}
+	.DevilBro-modal .inputNumberWrapper .numberinput-buttons-zone:hover + input:focus,
+	.DevilBro-settings .inputNumberWrapper .numberinput-buttons-zone:hover + input:focus,
+	.DevilBro-modal .inputNumberWrapper .numberinput-buttons-zone.pressed + input,
+	.DevilBro-settings .inputNumberWrapper .numberinput-buttons-zone.pressed + input {
+		border-color: #7289da;
+	}
 	.DevilBro-modal .inputNumberWrapper,
 	.DevilBro-settings .inputNumberWrapper {
 		position: relative !important;
