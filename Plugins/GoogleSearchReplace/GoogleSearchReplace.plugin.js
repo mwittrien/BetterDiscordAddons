@@ -28,19 +28,19 @@ class GoogleSearchReplace {
 		};
 
 		this.messageContextEntryMarkup =
-			`<div class="item item-1XYaYf googlereplacesearch-item item-subMenu itemSubMenu-3ZgIw-">
+			`<div class="item-1XYaYf googlereplacesearch-item itemSubMenu-3ZgIw-">
 				<span>REPLACE_context_googlesearchreplace_text</span>
-				<div class="hint"></div>
+				<div class="hint-3TJykr"></div>
 			</div>`;
 			
 		this.messageContextSubMenuMarkup = 
-			`<div class="context-menu contextMenu-uoJTbz googleReplaceSearchSubMenu">
-				<div class="item-group itemGroup-oViAgA itemGroup-oViAgA">
-					<div class="item item-1XYaYf alldisabled-item disabled-dlOjhg disabled">
+			`<div class="contextMenu-uoJTbz googleReplaceSearchSubMenu">
+				<div class="itemGroup-oViAgA itemGroup-oViAgA">
+					<div class="item-1XYaYf alldisabled-item disabled-dlOjhg">
 						<span>REPLACE_submenu_disabled_text</span>
-						<div class="hint"></div>
+						<div class="hint-3TJykr"></div>
 					</div>
-					${Object.keys(this.defaults.engines).map((key, i) => `<div engine="${key}" class="item item-1XYaYf GRS-item"><span>${this.defaults.engines[key].name}</span><div class="hint"></div></div>`).join("")}
+					${Object.keys(this.defaults.engines).map((key, i) => `<div engine="${key}" class="item-1XYaYf GRS-item"><span>${this.defaults.engines[key].name}</span><div class="hint-3TJykr"></div></div>`).join("")}
 				</div>
 			</div>`;
 	}
@@ -65,6 +65,9 @@ class GoogleSearchReplace {
 		settingshtml += `</div></div>`;
 		
 		var settingspanel = $(settingshtml)[0];
+
+		BDfunctionsDevilBro.initElements(settingspanel);
+
 		$(settingspanel)
 			.on("click", ".checkbox-1KYsPm", () => {this.updateSettings(settingspanel);});
 			
@@ -119,8 +122,6 @@ class GoogleSearchReplace {
 		var settings = {};
 		for (var input of settingspanel.querySelectorAll(".checkbox-1KYsPm")) {
 			settings[input.value] = input.checked;
-			input.parentElement.classList.toggle("valueChecked-3Bzkbm", input.checked);
-			input.parentElement.classList.toggle("valueUnchecked-XR6AOk", !input.checked);
 		}
 		BDfunctionsDevilBro.saveAllData(settings, this, "engines");
 	}
@@ -133,11 +134,11 @@ class GoogleSearchReplace {
 	
 	onContextMenu (context) {
 		if (!context || !context.tagName || !context.parentElement || context.querySelector(".googlereplacesearch-item")) return;
-		for (let group of context.querySelectorAll(".item-group, .itemGroup-oViAgA")) {
+		for (let group of context.querySelectorAll(".itemGroup-oViAgA")) {
 			if (BDfunctionsDevilBro.getKeyInformation({"node":group, "key":"handleSearchWithGoogle"})) {
 				var text = BDfunctionsDevilBro.getKeyInformation({"node":group, "key":"value"});
 				if (text) {
-					$(group).find(".item, .item-1XYaYf").hide();
+					$(group).find(".item-1XYaYf").hide();
 					$(group).append(this.messageContextEntryMarkup)
 						.on("mouseenter", ".googlereplacesearch-item", (e) => {
 							this.createContextSubMenu(text, e, context);
