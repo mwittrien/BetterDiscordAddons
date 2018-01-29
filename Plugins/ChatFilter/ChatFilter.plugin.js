@@ -69,6 +69,9 @@ class ChatFilter {
 		settingshtml += `</div></div>`;
 		
 		var settingspanel = $(settingshtml)[0];
+
+		BDfunctionsDevilBro.initElements(settingspanel);
+
 		$(settingspanel)
 			.on("click", ".checkbox-1KYsPm", () => {this.updateSettings(settingspanel);})
 			.on("keypress", ".wordInputs", (e) => {if (e.which == 13) this.updateContainer(settingspanel, e.currentTarget);})
@@ -249,8 +252,6 @@ class ChatFilter {
 			let rtype = input.getAttribute("rtype");
 			if (!settings[key]) settings[key] = {};
 			settings[key][rtype] = input.checked;
-			input.parentElement.classList.toggle("valueChecked-3Bzkbm", input.checked);
-			input.parentElement.classList.toggle("valueUnchecked-XR6AOk", !input.checked);
 		}
 		BDfunctionsDevilBro.saveAllData(settings, this, "settings");
 	}
