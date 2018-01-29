@@ -93,7 +93,7 @@ class SpellCheck {
 		settingshtml += `</div></div>`;
 		
 		var settingspanel = $(settingshtml)[0];
-		
+
 		BDfunctionsDevilBro.initElements(settingspanel);
 		
 		$(settingspanel)
