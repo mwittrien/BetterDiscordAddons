@@ -1718,7 +1718,9 @@ BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
 		if (wrapperDiv.hasClass("disabled")) return;
 		BDfunctionsDevilBro.openColorPicker(e.currentTarget.style.backgroundColor, swatch);
 	});
-};BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
+};
+
+BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 	var strings = BDfunctionsDevilBro.getLibraryStrings();
 	var inputs = {
 		HEX: 	{type:"text", 		name:"hex",				group:"hex", 	min:null,	max:null,	length:7,		default:"#000000"},
@@ -1782,7 +1784,7 @@ BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
 										</div>
 										<div class="inputWrapper-3xoRWR${inputs[key].type == 'number' ? ' inputNumberWrapper inputNumberWrapperMini' : ''} vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR" style="flex: 1 1 80%;">
 											${inputs[key].type == 'number' ? '<span class="numberinput-buttons-zone"><span class="numberinput-button-up"></span><span class="numberinput-button-down"></span></span>' : ''}
-											<input type="${inputs[key].type}"${inputs[key].min ? ' min="' + inputs[key].min + '"' : ''}${inputs[key].max ? ' max="' + inputs[key].max + '"' : ''}${inputs[key].length ? ' maxlength="' + inputs[key].length + '"' : ''} name="${inputs[key].group}" class="inputMini-3MyfLa input-2YozMi size16-3IvaX_ colorpicker-${inputs[key].name}">
+											<input type="${inputs[key].type}"${inputs[key].min ? ' min="' + inputs[key].min + '"' : ''}${inputs[key].max ? ' max="' + inputs[key].max + '"' : ''}${inputs[key].length ? ' maxlength="' + inputs[key].length + '"' : ''} name="${inputs[key].group}" placeholder="${inputs[key].default}" class="inputMini-3MyfLa input-2YozMi size16-3IvaX_ colorpicker-${inputs[key].name}">
 										</div>
 									</div>`).join("")}
 								</div>
@@ -1801,7 +1803,7 @@ BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
 	var colorPickerModal = $(colorPickerModalMarkup)[0];
 	BDfunctionsDevilBro.appendModal(colorPickerModal);
 	$(colorPickerModal)
-		.on("click", ".btn-save", (event) => {
+		.on("click", ".btn-save", () => {
 			var newRGB = colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").style.backgroundColor;
 			var newCOMP = BDfunctionsDevilBro.color2COMP(newRGB);
 			var newInvRGB = BDfunctionsDevilBro.colorINV(newRGB);
@@ -1852,11 +1854,10 @@ BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
 	updateCursors();
 	
 	$(ppane)
-		.off("mousedown")
-		.on("mousedown", (event) => {
+		.on("mousedown", (e) => {
 			BDfunctionsDevilBro.appendLocalStyle("crossHairColorPicker", `* {cursor: crosshair !important;}`);
 			
-			switchPreviews(event.button);
+			switchPreviews(e.button);
 			
 			pHalfW = pcursor.offsetWidth/2;
 			pHalfH = pcursor.offsetHeight/2;
@@ -1864,8 +1865,8 @@ BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
 			pMaxX = pMinX + ppane.offsetWidth;
 			pMinY = $(ppane).offset().top;
 			pMaxY = pMinY + ppane.offsetHeight;
-			pX = event.clientX - pHalfW;
-			pY = event.clientY - pHalfH;
+			pX = e.clientX - pHalfW;
+			pY = e.clientY - pHalfH;
 			
 			$(pcursor).offset({"left":pX,"top":pY});
 			
@@ -1879,9 +1880,9 @@ BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
 					BDfunctionsDevilBro.removeLocalStyle("crossHairColorPicker");
 					$(document).off("mouseup.ColorPicker").off("mousemove.ColorPicker");
 				})
-				.on("mousemove.ColorPicker", (event2) => {
-					pX = event2.clientX > pMaxX ? pMaxX - pHalfW : (event2.clientX < pMinX ? pMinX - pHalfW : event2.clientX - pHalfW);
-					pY = event2.clientY > pMaxY ? pMaxY - pHalfH : (event2.clientY < pMinY ? pMinY - pHalfH : event2.clientY - pHalfH);
+				.on("mousemove.ColorPicker", (e2) => {
+					pX = e2.clientX > pMaxX ? pMaxX - pHalfW : (e2.clientX < pMinX ? pMinX - pHalfW : e2.clientX - pHalfW);
+					pY = e2.clientY > pMaxY ? pMaxY - pHalfH : (e2.clientY < pMinY ? pMinY - pHalfH : e2.clientY - pHalfH);
 					$(pcursor).offset({"left":pX,"top":pY});
 					
 					saturation = BDfunctionsDevilBro.mapRange([pMinX - pHalfW, pMaxX - pHalfW], [0, 100], pX);
@@ -1891,16 +1892,15 @@ BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
 		});
 	
 	$(spane)
-		.off("mousedown")
-		.on("mousedown", (event) => {
+		.on("mousedown", (e) => {
 			BDfunctionsDevilBro.appendLocalStyle("crossHairColorPicker", `* {cursor: crosshair !important;}`);
 			
-			switchPreviews(event.button);
+			switchPreviews(e.button);
 			
 			sHalfH = scursor.offsetHeight/2;
 			sMinY = $(spane).offset().top;
 			sMaxY = sMinY + spane.offsetHeight;
-			sY = event.clientY - sHalfH;
+			sY = e.clientY - sHalfH;
 			
 			$(scursor).offset({"top":sY});
 			
@@ -1913,8 +1913,8 @@ BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
 					BDfunctionsDevilBro.removeLocalStyle("crossHairColorPicker");
 					$(document).off("mouseup.ColorPicker").off("mousemove.ColorPicker");
 				})
-				.on("mousemove.ColorPicker", (event2) => {
-					sY = event2.clientY > sMaxY ? sMaxY - sHalfH : (event2.clientY < sMinY ? sMinY - sHalfH : event2.clientY - sHalfH);
+				.on("mousemove.ColorPicker", (e2) => {
+					sY = e2.clientY > sMaxY ? sMaxY - sHalfH : (e2.clientY < sMinY ? sMinY - sHalfH : e2.clientY - sHalfH);
 					$(scursor).offset({"top":sY});
 					
 					hue = BDfunctionsDevilBro.mapRange([sMinY - sHalfH, sMaxY - sHalfH], [360, 0], sY);
@@ -1922,19 +1922,17 @@ BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
 				});
 		});
 		
-	$(".colorpicker-modal .colorpicker-inputs input")
-		.off("input")
-		.on("input", (event) => {
-			updateValues(event.target.name);
+	$(colorPickerModal)
+		.on("input", ".inputMini-3MyfLa", (e) => {
+			updateValues(e.currentTarget.name);
 		});
 		
-	$(".colorpicker-modal [class^='colorpicker-preview-']")
-		.off("click")
-		.on("click", (event) => {
+	$(colorPickerModal)
+		.on("click", "[class^='colorpicker-preview-']", (e) => {
 			colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").style.borderColor = "transparent";
 			colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").classList.remove("selected");
-			event.target.classList.add("selected");
-			[hue, saturation, lightness] = BDfunctionsDevilBro.color2HSL(event.target.style.backgroundColor).replace(new RegExp(" ", "g"), "").slice(4, -1).split(",");
+			e.currentTarget.classList.add("selected");
+			[hue, saturation, lightness] = BDfunctionsDevilBro.color2HSL(e.currentTarget.style.backgroundColor).replace(new RegExp(" ", "g"), "").slice(4, -1).split(",");
 			saturation *= 100;
 			lightness *= 100;
 			updateAllValues();
@@ -1968,23 +1966,28 @@ BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
 				red = colorPickerModal.querySelector(".colorpicker-red").value;
 				green = colorPickerModal.querySelector(".colorpicker-green").value;
 				blue = colorPickerModal.querySelector(".colorpicker-blue").value;
-				[hue, saturation, lightness] = BDfunctionsDevilBro.color2HSL([red, green, blue]).replace(new RegExp(" ", "g"), "").slice(4, -1).split(",");
-				saturation *= 100;
-				lightness *= 100;
-				colorPickerModal.querySelector(".colorpicker-hex").value = BDfunctionsDevilBro.color2HEX([red, green, blue]);
-				colorPickerModal.querySelector(".colorpicker-hue").value = Math.round(hue);
-				colorPickerModal.querySelector(".colorpicker-saturation").value = Math.round(saturation);
-				colorPickerModal.querySelector(".colorpicker-lightness").value = Math.round(lightness);
+				if (red && red >= 0 && red <= 255 && green && green >= 0 && green <= 255 && blue && blue >= 0 && blue <= 255) {
+					[hue, saturation, lightness] = BDfunctionsDevilBro.color2HSL([red, green, blue]).replace(new RegExp(" ", "g"), "").slice(4, -1).split(",");
+					saturation *= 100;
+					lightness *= 100;
+					colorPickerModal.querySelector(".colorpicker-hex").value = BDfunctionsDevilBro.color2HEX([red, green, blue]);
+					colorPickerModal.querySelector(".colorpicker-hue").value = Math.round(hue);
+					colorPickerModal.querySelector(".colorpicker-saturation").value = Math.round(saturation);
+					colorPickerModal.querySelector(".colorpicker-lightness").value = Math.round(lightness);
+				}
 				break;
 			case "hsl":
+				console.log("test");
 				hue = colorPickerModal.querySelector(".colorpicker-hue").value;
 				saturation = colorPickerModal.querySelector(".colorpicker-saturation").value;
 				lightness = colorPickerModal.querySelector(".colorpicker-lightness").value;
-				[red, green, blue] = BDfunctionsDevilBro.color2COMP("hsl(" + hue + ", " + saturation/100 + ", " + lightness/100 + ")");
-				colorPickerModal.querySelector(".colorpicker-hex").value = BDfunctionsDevilBro.color2HEX([red, green, blue]);
-				colorPickerModal.querySelector(".colorpicker-red").value = red;
-				colorPickerModal.querySelector(".colorpicker-green").value = green;
-				colorPickerModal.querySelector(".colorpicker-blue").value = blue;
+				if (hue && hue >= 0 && hue <= 360 && saturation && saturation >= 0 && saturation <= 100 && lightness && lightness >= 0 && lightness <= 100) {
+					[red, green, blue] = BDfunctionsDevilBro.color2COMP("hsl(" + hue + ", " + saturation/100 + ", " + lightness/100 + ")");
+					colorPickerModal.querySelector(".colorpicker-hex").value = BDfunctionsDevilBro.color2HEX([red, green, blue]);
+					colorPickerModal.querySelector(".colorpicker-red").value = red;
+					colorPickerModal.querySelector(".colorpicker-green").value = green;
+					colorPickerModal.querySelector(".colorpicker-blue").value = blue;
+				}
 				break; 
 		}
 		updateColors();
