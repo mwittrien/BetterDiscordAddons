@@ -1490,8 +1490,13 @@ BDfunctionsDevilBro.initElements = function (container) {
 			var max = parseInt(input.getAttribute("max"));
 			var newvalue = parseInt(input.value) + 1;
 			if (isNaN(max) || (!isNaN(max) && newvalue <= max)) {
+				e.currentTarget.parentElement.classList.add("pressed");
+				clearTimeout(e.currentTarget.parentElement.pressedTimeout);
 				input.value = newvalue;
 				$(input).trigger("input");
+				e.currentTarget.parentElement.pressedTimeout = setTimeout(() => {
+					e.currentTarget.parentElement.classList.remove("pressed");
+				},3000);
 			}
 		})
 		.on("click", ".numberinput-button-down", (e) => {
@@ -1499,8 +1504,13 @@ BDfunctionsDevilBro.initElements = function (container) {
 			var min = parseInt(input.getAttribute("min"));
 			var newvalue = parseInt(input.value) - 1;
 			if (isNaN(min) || (!isNaN(min) && newvalue >= min)) {
+				e.currentTarget.parentElement.classList.add("pressed");
+				clearTimeout(e.currentTarget.parentElement.pressedTimeout);
 				input.value = newvalue;
 				$(input).trigger("input");
+				e.currentTarget.parentElement.pressedTimeout = setTimeout(() => {
+					e.currentTarget.parentElement.classList.remove("pressed");
+				},3000);
 			}
 		});
 		
