@@ -30,7 +30,7 @@ class SpellCheck {
 			</div>`;
 		
 		this.spellCheckLayerMarkup = 
-			`<div class="spellcheck-overlay textAreaEnabled-2vOfh8 textArea-20yzAH scrollbarGhostHairline-D_btXm scrollbar-11WJwo" style="position:absolute !important; pointer-events:none !important; background:transparent !important; color:transparent !important;"></div>`;
+			`<div class="spellcheck-overlay" style="position:absolute !important; pointer-events:none !important; background:transparent !important; color:transparent !important;"></div>`;
 			
 		this.css = 
 			`.spellcheck-overlay {
@@ -69,7 +69,7 @@ class SpellCheck {
 
 	getDescription () {return "Adds a spellcheck to all textareas. Select a word and rightclick it to add it to your dictionary.";}
 
-	getVersion () {return "1.1.7";}
+	getVersion () {return "1.1.8";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -324,7 +324,7 @@ class SpellCheck {
 		var textareaWrap = textarea.parentElement;
 		if (textareaWrap && !textareaWrap.querySelector(".spellcheck-overlay")) {
 			var textareaInstance = BDfunctionsDevilBro.getOwnerInstance({"node":textarea, "props":["handlePaste","saveCurrentText"], "up":true});
-			if (textareaInstance && textareaInstance.props && textareaInstance.props.type) {
+			if (textareaInstance) {
 				var wrapper = $(".channelTextArea-1HTP3C").has(textarea)[0];
 				
 				var updateSpellcheck = () => {
@@ -339,11 +339,8 @@ class SpellCheck {
 				}
 						
 				var spellcheck = $(this.spellCheckLayerMarkup)[0];
-
-				$(spellcheck)
-					.addClass(textareaInstance.props.type == "edit" ? "textAreaEdit-1qc9VQ" : "")
-					.addClass(textareaInstance.props.type == "form" ? "textAreaForm-2NWGTp" : "")
-					.appendTo(textareaWrap)
+				textarea.classList.forEach(classname => {spellcheck.classList.add(classname);});
+				$(spellcheck).appendTo(textareaWrap)
 					
 				updateSpellcheck();
 					
