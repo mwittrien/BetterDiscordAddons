@@ -1540,6 +1540,14 @@ BDfunctionsDevilBro.initElements = function (container) {
 				},3000);
 			}
 		});
+	
+	var libraryStrings = BDfunctionsDevilBro.getLibraryStrings();
+	$(container).find(".btn-save .contents-4L4hQM").text(libraryStrings.btn_save_text);
+	$(container).find(".btn-cancel .contents-4L4hQM").text(libraryStrings.btn_cancel_text);
+	$(container).find(".btn-all .contents-4L4hQM").text(libraryStrings.btn_all_text);
+	$(container).find(".btn-add .contents-4L4hQM").text(libraryStrings.btn_add_text);
+	$(container).find(".btn-ok .contents-4L4hQM").text(libraryStrings.btn_ok_text);
+	$(container).find(".file-navigator .contents-4L4hQM").text(libraryStrings.file_navigator_text);
 		
 	$(container)
 		.find(".checkbox-1KYsPm").each((_, checkBox) => {
@@ -1581,7 +1589,7 @@ BDfunctionsDevilBro.appendModal = function (modal) {
 			$(e.currentTarget)
 				.addClass("selected");
 		})
-		.on("click", ".backdrop-2ohBEd, .btn-cancel, .btn-save", () => {
+		.on("click", ".backdrop-2ohBEd, .btn-cancel, .btn-save, .btn-cancel, .btn-ok", () => {
 			$(document).off("keydown.modalEscapeListenerDevilBro" + id);
 			$(modal).addClass("closing");
 			setTimeout(() => {modal.remove();}, 300);
@@ -1731,7 +1739,7 @@ BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
 };
 
 BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
-	var strings = BDfunctionsDevilBro.getLibraryStrings();
+	var libraryStrings = BDfunctionsDevilBro.getLibraryStrings();
 	var inputs = {
 		HEX: 	{type:"text", 		name:"hex",				group:"hex", 	min:null,	max:null,	length:7,		default:"#000000"},
 		R: 		{type:"number", 	name:"red",				group:"rgb", 	min:0,		max:255,	length:null,	default:0},
@@ -1750,7 +1758,7 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 					<div class="modal-3HOjGZ">
 						<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO header-3sp3cE" style="flex: 0 0 auto;">
 							<div class="flexChild-1KGW5q" style="flex: 1 1 auto;">
-								<h4 class="h4-2IXpeI title-1pmpPr size16-3IvaX_ height20-165WbF weightSemiBold-T8sxWH defaultColor-v22dK1 defaultMarginh4-jAopYe marginReset-3hwONl">${strings.colorpicker_modal_header_text}</h4>
+								<h4 class="h4-2IXpeI title-1pmpPr size16-3IvaX_ height20-165WbF weightSemiBold-T8sxWH defaultColor-v22dK1 defaultMarginh4-jAopYe marginReset-3hwONl">${libraryStrings.colorpicker_modal_header_text}</h4>
 								<div class="guildName-1u0hy7 small-3-03j1 size12-1IGJl9 height16-1qXrGy primary-2giqSn"></div>
 							</div>
 							<svg class="btn-cancel close-3ejNTg flexChild-1KGW5q" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12">
@@ -1801,8 +1809,8 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 							</div>
 						</div>
 						<div class="flex-lFgbSz flex-3B1Tl4 horizontalReverse-2LanvO horizontalReverse-k5PqxT flex-3B1Tl4 directionRowReverse-2eZTxP justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO footer-1PYmcw">
-							<button type="button" class="btn-save buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu">
-								<div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx contents-4L4hQM">${strings.btn_ok_text}</div>
+							<button type="button" class="btn-ok buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu">
+								<div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx"></div>
 							</button>
 						</div>
 					</div>
@@ -1813,7 +1821,7 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 	var colorPickerModal = $(colorPickerModalMarkup)[0];
 	BDfunctionsDevilBro.appendModal(colorPickerModal);
 	$(colorPickerModal)
-		.on("click", ".btn-save", () => {
+		.on("click", ".btn-ok", () => {
 			var newRGB = colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").style.backgroundColor;
 			var newCOMP = BDfunctionsDevilBro.color2COMP(newRGB);
 			var newInvRGB = BDfunctionsDevilBro.colorINV(newRGB);
@@ -2078,6 +2086,11 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				toast_plugin_stopped:			"${pluginName} ${oldVersion} zaustavljen.",
 				toast_plugin_translated:		"${pluginName} prijevod na ${ownlang}.",
 				colorpicker_modal_header_text:	"Birač boja",
+				file_navigator_text:			"Pregledajte datoteku",
+				btn_add_text:					"Dodati",
+				btn_cancel_text:				"Prekid",
+				btn_all_text:					"Sve",
+				btn_save_text:					"Uštedjeti",
 				btn_ok_text: 					"OK"
 			};
 		case "da": 		//danish
@@ -2086,6 +2099,11 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				toast_plugin_stopped:			"${pluginName} ${oldVersion} er stoppet.",
 				toast_plugin_translated:		"${pluginName} oversat til ${ownlang}.",
 				colorpicker_modal_header_text:	"Farvevælger",
+				file_navigator_text:			"Gennemse fil",
+				btn_add_text:					"Tilføje",
+				btn_cancel_text:				"Afbryde",
+				btn_all_text:					"Alle",
+				btn_save_text:					"Spare",
 				btn_ok_text: 					"OK"
 			};
 		case "de": 		//german
@@ -2094,6 +2112,11 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				toast_plugin_stopped:			"${pluginName} ${oldVersion} wurde gestoppt.",
 				toast_plugin_translated:		"${pluginName} auf ${ownlang} übersetzt.",
 				colorpicker_modal_header_text:	"Farbauswahl",
+				file_navigator_text:			"Datei durchsuchen",
+				btn_add_text:					"Hinzufügen",
+				btn_cancel_text:				"Abbrechen",
+				btn_all_text:					"Alle",
+				btn_save_text:					"Speichern",
 				btn_ok_text: 					"OK"
 			};
 		case "es": 		//spanish
@@ -2102,6 +2125,11 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				toast_plugin_stopped:			"${pluginName} ${oldVersion} se ha detenido.",
 				toast_plugin_translated:		"${pluginName} traducido a ${ownlang}.",
 				colorpicker_modal_header_text:	"Selector de color",
+				file_navigator_text:			"Buscar archivo",
+				btn_add_text:					"Añadir",
+				btn_cancel_text:				"Cancelar",
+				btn_all_text:					"Todo",
+				btn_save_text:					"Guardar",
 				btn_ok_text: 					"OK"
 			};
 		case "fr": 		//french
@@ -2110,6 +2138,11 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				toast_plugin_stopped:			"${pluginName} ${oldVersion} a été arrêté.",
 				toast_plugin_translated:		"${pluginName} traduit en ${ownlang}.",
 				colorpicker_modal_header_text:	"Pipette à couleurs",
+				file_navigator_text:			"Parcourir le fichier",
+				btn_add_text:					"Ajouter",
+				btn_cancel_text:				"Abandonner",
+				btn_all_text:					"Tout",
+				btn_save_text:					"Enregistrer",
 				btn_ok_text: 					"OK"
 			};
 		case "it": 		//italian
@@ -2118,6 +2151,11 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				toast_plugin_stopped:			"${pluginName} ${oldVersion} è stato interrotto.",
 				toast_plugin_translated:		"${pluginName} tradotto in ${ownlang}.",
 				colorpicker_modal_header_text:	"Raccoglitore di colore",
+				file_navigator_text:			"Sfoglia file",
+				btn_add_text:					"Inserisci",
+				btn_cancel_text:				"Cancellare",
+				btn_all_text:					"Tutto",
+				btn_save_text:					"Salvare",
 				btn_ok_text: 					"OK"
 			};
 		case "nl":		//dutch
@@ -2126,6 +2164,11 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				toast_plugin_stopped:			"${pluginName} ${oldVersion} is gestopt.",
 				toast_plugin_translated:		"${pluginName} vertaald naar ${ownlang}.",
 				colorpicker_modal_header_text:	"Kleur kiezer",
+				file_navigator_text:			"Bestand zoeken",
+				btn_add_text:					"Toevoegen",
+				btn_cancel_text:				"Afbreken",
+				btn_all_text:					"Alle",
+				btn_save_text:					"Opslaan",
 				btn_ok_text: 					"OK"
 			};
 		case "no":		//norwegian
@@ -2134,6 +2177,11 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				toast_plugin_stopped:			"${pluginName} ${oldVersion} er stoppet.",
 				toast_plugin_translated:		"${pluginName} oversatt til ${ownlang}.",
 				colorpicker_modal_header_text:	"Fargevelger",
+				file_navigator_text:			"Bla gjennom fil",
+				btn_add_text:					"Legg til",
+				btn_cancel_text:				"Avbryte",
+				btn_all_text:					"Alle",
+				btn_save_text:					"Lagre",
 				btn_ok_text: 					"OK"
 			};
 		case "pl":		//polish
@@ -2142,6 +2190,11 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				toast_plugin_stopped:			"${pluginName} ${oldVersion} został zatrzymany.",
 				toast_plugin_translated:		"${pluginName} przetłumaczono na ${ownlang}.",
 				colorpicker_modal_header_text:	"Narzędzie do wybierania kolorów",
+				file_navigator_text:			"Przeglądać plik",
+				btn_add_text:					"Dodaj",
+				btn_cancel_text:				"Anuluj",
+				btn_all_text:					"Wszystkie",
+				btn_save_text:					"Zapisz",
 				btn_ok_text: 					"OK"
 			};
 		case "pt-BR":		//portuguese (brazil)
@@ -2150,6 +2203,11 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				toast_plugin_stopped:			"${pluginName} ${oldVersion} foi interrompido.",
 				toast_plugin_translated:		"${pluginName} traduzido para ${ownlang}.",
 				colorpicker_modal_header_text:	"Seletor de cores",
+				file_navigator_text:			"Procurar arquivo",
+				btn_add_text:					"Adicionar",
+				btn_cancel_text:				"Cancelar",
+				btn_all_text:					"Todo",
+				btn_save_text:					"Salvar",
 				btn_ok_text: 					"OK"
 			};
 		case "fi":		//finnish
@@ -2158,6 +2216,11 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				toast_plugin_stopped:			"${pluginName} ${oldVersion} on pysäytetty.",
 				toast_plugin_translated:		"${pluginName} käännetty osoitteeseen ${ownlang}.",
 				colorpicker_modal_header_text:	"Värinvalitsija",
+				file_navigator_text:			"Selaa tiedostoa",
+				btn_add_text:					"Lisätä",
+				btn_cancel_text:				"Peruuttaa",
+				btn_all_text:					"Kaikki",
+				btn_save_text:					"Tallentaa",
 				btn_ok_text: 					"OK"
 			};
 		case "sv":		//swedish
@@ -2166,6 +2229,11 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				toast_plugin_stopped:			"${pluginName} ${oldVersion} har blivit stoppad.",
 				toast_plugin_translated:		"${pluginName} översatt till ${ownlang}.",
 				colorpicker_modal_header_text:	"Färgväljare",
+				file_navigator_text:			"Bläddra i fil",
+				btn_add_text:					"Lägg till",
+				btn_cancel_text:				"Avbryta",
+				btn_all_text:					"All",
+				btn_save_text:					"Spara",
 				btn_ok_text: 					"OK"
 			};
 		case "tr":		//turkish
@@ -2174,6 +2242,11 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				toast_plugin_stopped:			"${pluginName} ${oldVersion} durduruldu.",
 				toast_plugin_translated:		"${pluginName} ${ownlang} olarak çevrildi.",
 				colorpicker_modal_header_text:	"Renk seçici",
+				file_navigator_text:			"Dosyaya gözat",
+				btn_add_text:					"Eklemek",
+				btn_cancel_text:				"Iptal",
+				btn_all_text:					"Her",
+				btn_save_text:					"Kayıt",
 				btn_ok_text: 					"Okey"
 			};
 		case "cs":		//czech
@@ -2182,6 +2255,11 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				toast_plugin_stopped:			"${pluginName} ${oldVersion} byl zastaven.",
 				toast_plugin_translated:		"${pluginName} přeložen do ${ownlang}.",
 				colorpicker_modal_header_text:	"Výběr barev",
+				file_navigator_text:			"Procházet soubor",
+				btn_add_text:					"Přidat",
+				btn_cancel_text:				"Zrušení",
+				btn_all_text:					"Vše",
+				btn_save_text:					"Uložit",
 				btn_ok_text: 					"OK"
 			};
 		case "bg":		//bulgarian
@@ -2190,6 +2268,11 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				toast_plugin_stopped:			"${pluginName} ${oldVersion} е спрян.",
 				toast_plugin_translated:		"${pluginName} преведена на ${ownlang}.",
 				colorpicker_modal_header_text:	"Избор на цвят",
+				file_navigator_text:			"Прегледайте файла",
+				btn_add_text:					"Добави",
+				btn_cancel_text:				"Зъбести",
+				btn_all_text:					"Bсичко",
+				btn_save_text:					"Cпасяване",
 				btn_ok_text: 					"Добре"
 			};
 		case "ru":		//russian
@@ -2198,6 +2281,11 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				toast_plugin_stopped:			"${pluginName} ${oldVersion} остановлен.",
 				toast_plugin_translated:		"${pluginName} переведен на ${ownlang}.",
 				colorpicker_modal_header_text:	"Выбор цвета",
+				file_navigator_text:			"Просмотр файла",
+				btn_add_text:					"Добавить",
+				btn_cancel_text:				"Отмена",
+				btn_all_text:					"Все",
+				btn_save_text:					"Cпасти",
 				btn_ok_text: 					"ОК"
 			};
 		case "uk":		//ukranian
@@ -2206,6 +2294,11 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				toast_plugin_stopped:			"${pluginName} ${oldVersion} було зупинено.",
 				toast_plugin_translated:		"${pluginName} перекладено ${ownlang}.",
 				colorpicker_modal_header_text:	"Колір обкладинки",
+				file_navigator_text:			"Перегляньте файл",
+				btn_add_text:					"Додати",
+				btn_cancel_text:				"Скасувати",
+				btn_all_text:					"Все",
+				btn_save_text:					"Зберегти",
 				btn_ok_text: 					"Добре"
 			};
 		case "ja":		//japanese
@@ -2214,6 +2307,11 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				toast_plugin_stopped:			"${pluginName} ${oldVersion}が停止しました.",
 				toast_plugin_translated:		"${pluginName} は${ownlang}に翻訳されました.",
 				colorpicker_modal_header_text:	"カラーピッカー",
+				file_navigator_text:			"ファイルを参照",
+				btn_add_text:					"追加",
+				btn_cancel_text:				"キャンセル",
+				btn_all_text:					"すべて",
+				btn_save_text:					"セーブ",
 				btn_ok_text: 					"はい"
 			};
 		case "zh-TW":	//chinese (traditional)
@@ -2222,6 +2320,11 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				toast_plugin_stopped:			"${pluginName} ${oldVersion}已停止.",
 				toast_plugin_translated:		"${pluginName} 翻譯為${ownlang}.",
 				colorpicker_modal_header_text:	"選色器",
+				file_navigator_text:			"瀏覽文件",
+				btn_add_text:					"加",
+				btn_cancel_text:				"取消",
+				btn_all_text:					"所有",
+				btn_save_text:					"保存",
 				btn_ok_text: 					"好"
 			};
 		case "ko":		//korean
@@ -2230,6 +2333,11 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				toast_plugin_stopped:			"${pluginName} ${oldVersion} 중지되었습니다.",
 				toast_plugin_translated:		"${pluginName} ${ownlang} 로 번역되었습니다.",
 				colorpicker_modal_header_text:	"색상 선택 도구",
+				file_navigator_text:			"파일 찾아보기",
+				btn_add_text:					"더하다",
+				btn_cancel_text:				"취소",
+				btn_all_text:					"모든",
+				btn_save_text:					"저장",
 				btn_ok_text: 					"승인"
 			};
 		default:		//default: english
@@ -2238,6 +2346,11 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				toast_plugin_stopped:			"${pluginName} ${oldVersion} has been stopped.",
 				toast_plugin_translated:		"${pluginName} translated to ${ownlang}.",
 				colorpicker_modal_header_text:	"Color Picker",
+				file_navigator_text:			"Browser File",
+				btn_add_text:					"Add",
+				btn_cancel_text:				"Cancel",
+				btn_all_text:					"All",
+				btn_save_text:					"Save",
 				btn_ok_text: 					"OK"
 			};
 	}
