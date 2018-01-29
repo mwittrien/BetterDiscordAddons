@@ -1550,9 +1550,7 @@ BDfunctionsDevilBro.appendContextMenu = function (context, e) {
 	BDfunctionsDevilBro.updateContextPosition(context);
 	
 	$(document).on("mousedown.BDfunctionsDevilBroContextMenu", (e2) => {
-		console.log(e2.target);
-		console.log(!$(e2.target).hasClass("disabled-dlOjhg") && !$(e2.target).hasClass("itemSubMenu-3ZgIw-") && !$(e2.target).hasClass("itemToggle-e7vkml"));
-		if ($(context).has(e2.target).length == 0) {
+		if ($(context).has(e2.target).length == 0 && context != e2.target) {
 			$(document).off("mousedown.BDfunctionsDevilBroContextMenu");
 			context.remove();
 		}
