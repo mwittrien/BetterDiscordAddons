@@ -196,6 +196,13 @@ BDfunctionsDevilBro.downloadPlugin = function (pluginName, downloadUrl, updateNo
 		filename = filename[filename.length - 1];
 		var file = path.join(BDfunctionsDevilBro.getPluginsFolder(), filename);
 		fileSystem.writeFileSync(file, body);
+		// REMOVE IN SOME TIME (29.01.2018)
+		if (pluginName == "CompleteTimestamps") {
+			console.log("test");
+			let path = require("path");
+			var pluginfile = path.join(BDfunctionsDevilBro.getPluginsFolder(), "CompleteTimestamp.plugin.js");
+			fileSystem.unlink(pluginfile, (error) => {});
+		}
 		BDfunctionsDevilBro.showToast(`${pluginName} ${window.PluginUpdates.plugins[downloadUrl].version} has been replaced by ${pluginName} ${remoteVersion}`);
 		if (updateNoticeBar.querySelector(".button-2TvR03")) {
 			window.PluginUpdates.plugins[downloadUrl].version = remoteVersion;
