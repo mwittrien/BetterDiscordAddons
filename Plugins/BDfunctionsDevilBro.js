@@ -1502,6 +1502,16 @@ BDfunctionsDevilBro.initElements = function (container) {
 				.find("polyline")
 					.attr("stroke", checked ? "#ffffff" : "transparent");
 		})
+		.on("click", ".file-navigator", (e) => {
+			var filenavigator = e.currentTarget.querySelector("input[type='file']");
+			if (filenavigator) filenavigator.click();
+		})
+		.on("change", "input[type='file']", (e) => {
+			var filenavigator = e.currentTarget;
+			var fileoutput = e.currentTarget.parentElement.parentElement.querySelector("input[type='text']");
+			var file = e.currentTarget.files[0];
+			if (file && fileoutput) fileoutput.value = file.path;
+		})
 		.on("click", ".numberinput-button-up", (e) => {
 			var input = e.currentTarget.parentElement.parentElement.querySelector("input");
 			var max = parseInt(input.getAttribute("max"));
