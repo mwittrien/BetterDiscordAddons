@@ -96,7 +96,7 @@ class ServerFolders {
 			`<div class="itemGroup-oViAgA">
 				<div class="item-1XYaYf serverfolders-item itemSubMenu-3ZgIw-">
 					<span>REPLACE_servercontext_serverfolders_text</span>
-					<div class="hint"></div>
+					<div class="hint-3TJykr"></div>
 				</div>
 			</div>`;
 			
@@ -105,11 +105,11 @@ class ServerFolders {
 				<div class="itemGroup-oViAgA">
 					<div class="item-1XYaYf createfolder-item">
 						<span>REPLACE_serversubmenu_createfolder_text</span>
-						<div class="hint"></div>
+						<div class="hint-3TJykr"></div>
 					</div>
 					<div class="item-1XYaYf removefromfolder-item disabled-dlOjhg">
 						<span>REPLACE_serversubmenu_removefromfolder_text</span>
-						<div class="hint"></div>
+						<div class="hint-3TJykr"></div>
 					</div>
 				</div>
 			</div>`;
@@ -119,15 +119,15 @@ class ServerFolders {
 				<div class="itemGroup-oViAgA">
 					<div class="item-1XYaYf unreadfolder-item disabled-dlOjhg">
 						<span>REPLACE_foldercontext_unreadfolder_text</span>
-						<div class="hint"></div>
+						<div class="hint-3TJykr"></div>
 					</div>
 					<div class="item-1XYaYf foldersettings-item">
 						<span>REPLACE_foldercontext_foldersettings_text</span>
-						<div class="hint"></div>
+						<div class="hint-3TJykr"></div>
 					</div>
 					<div class="item-1XYaYf removefolder-item">
 						<span>REPLACE_foldercontext_removefolder_text</span>
-						<div class="hint"></div>
+						<div class="hint-3TJykr"></div>
 					</div>
 				</div>
 			</div>`;
@@ -268,6 +268,9 @@ class ServerFolders {
 		settingshtml += `</div></div>`;
 		
 		var settingspanel = $(settingshtml)[0];
+
+		BDfunctionsDevilBro.initElements(settingspanel);
+
 		$(settingspanel)
 			.on("click", ".checkbox-1KYsPm", () => {this.updateSettings(settingspanel);})
 			.on("click", ".reset-button", () => {this.resetAll();});
@@ -410,8 +413,6 @@ class ServerFolders {
 		var settings = {};
 		for (var input of settingspanel.querySelectorAll(".checkbox-1KYsPm")) {
 			settings[input.value] = input.checked;
-			input.parentElement.classList.toggle("valueChecked-3Bzkbm", input.checked);
-			input.parentElement.classList.toggle("valueUnchecked-XR6AOk", !input.checked);
 		}
 		BDfunctionsDevilBro.saveAllData(settings, this, "settings");
 	}
