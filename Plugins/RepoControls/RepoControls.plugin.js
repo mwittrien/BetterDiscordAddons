@@ -21,8 +21,8 @@ class RepoControls {
 		
 		this.repoControlsMarkup = 
 			`<div class="repo-controls flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
-				<div class="inputWrapper-3xoRWR vertical-3X17r5 directionColumn-2h-LPR searchWrapper" style="flex: 1 1 50%; margin-right:50px;">
-					<input type="text" class="input-2YozMi size16-3IvaX_" id="input-search" placeholder="Search for...">
+				<div class="inputWrapper-3xoRWR vertical-3X17r5 directionColumn-2h-LPR" style="flex: 1 1 50%; margin: -6px 50px 0 0;">
+					<input type="text" class="inputMini-3MyfLa input-2YozMi size16-3IvaX_ height16-1qXrGy" id="input-search" placeholder="Search for...">
 				</div>
 				<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelect-2sgeoi" style="flex: 1 1 25%;">
 					<div class="quickSelectLabel-2MM1ZS">Sort by:</div>
@@ -97,15 +97,6 @@ class RepoControls {
 			}
 			#bd-settingspane-container .bda-right .trashIcon {
 				top: 7px;
-			}
-			.repo-controls .header {
-				overflow: visible !important;
-			}
-			.repo-controls .searchWrapper {
-				margin-top: -5px !important;
-			}
-			.repo-controls .searchWrapper #input-search {
-				padding: 1px 8px !important;
 			}`;
 			
 		this.defaults = {
@@ -139,6 +130,9 @@ class RepoControls {
 		settingshtml += `</div></div>`;
 		
 		var settingspanel = $(settingshtml)[0];
+
+		BDfunctionsDevilBro.initElements(settingspanel);
+
 		$(settingspanel)
 			.on("click", ".checkbox-1KYsPm", () => {this.updateSettings(settingspanel);});
 			
@@ -231,8 +225,6 @@ class RepoControls {
 		var settings = {};
 		for (var input of settingspanel.querySelectorAll(".checkbox-1KYsPm")) {
 			settings[input.value] = input.checked;
-			input.parentElement.classList.toggle("valueChecked-3Bzkbm", input.checked);
-			input.parentElement.classList.toggle("valueUnchecked-XR6AOk", !input.checked);
 		}
 		BDfunctionsDevilBro.saveAllData(settings, this, "settings");
 	}
