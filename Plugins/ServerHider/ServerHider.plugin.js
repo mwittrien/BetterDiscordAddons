@@ -116,7 +116,7 @@ class ServerHider {
 			`<div class="itemGroup-oViAgA">
 				<div class="item-1XYaYf serverhider-item itemSubMenu-3ZgIw-">
 					<span>REPLACE_context_serverhider_text</span>
-					<div class="hint"></div>
+					<div class="hint-3TJykr"></div>
 				</div>
 			</div>`;
 			
@@ -125,11 +125,11 @@ class ServerHider {
 				<div class="itemGroup-oViAgA">
 					<div class="item-1XYaYf hideserver-item disabled-dlOjhg">
 						<span>REPLACE_submenu_hideserver_text</span>
-						<div class="hint"></div>
+						<div class="hint-3TJykr"></div>
 					</div>
 					<div class="item-1XYaYf openhidemenu-item">
 						<span>REPLACE_submenu_openhidemenu_text</span>
-						<div class="hint"></div>
+						<div class="hint-3TJykr"></div>
 					</div>
 				</div>
 			</div>`;
@@ -150,6 +150,9 @@ class ServerHider {
 		settingshtml += `</div></div>`;
 		
 		var settingspanel = $(settingshtml)[0];
+
+		BDfunctionsDevilBro.initElements(settingspanel);
+
 		$(settingspanel)
 			.on("click", ".reset-button", () => {this.resetAll();});
 		return settingspanel;
