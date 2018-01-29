@@ -2321,3 +2321,11 @@ html, span:not(.spinner-item) {
 #dv-container input[type="radio"]:checked + label span {
 	background: rgb(var(--accentcolor)) !important;
 }
+
+/* DevilBro Modals and Settings */ 
+.DevilBro-modal .inputNumberWrapper .numberinput-buttons-zone:hover + .input-2YozMi:focus,
+.DevilBro-settings .inputNumberWrapper .numberinput-buttons-zone:hover + .input-2YozMi:focus,
+.DevilBro-modal .inputNumberWrapper .numberinput-buttons-zone.pressed + .input-2YozMi,
+.DevilBro-settings .inputNumberWrapper .numberinput-buttons-zone.pressed + .input-2YozMi {
+	border-color: rgb(var(--accentcolor)) !important;
+}
