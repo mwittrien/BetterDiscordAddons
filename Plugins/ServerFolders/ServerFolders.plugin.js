@@ -1460,7 +1460,7 @@ class ServerFolders {
 					modal_tabheader1_text:					"Ordner",
 					modal_tabheader2_text:					"Ordnerfarbe",
 					modal_tabheader3_text:					"Tooltipfarbe",
-					modal_tabheader4_text:					"",
+					modal_tabheader4_text:					"Eigene Icons",
 					modal_iconpicker_text:					"Ordnerauswahl",
 					modal_colorpicker1_text:				"Primäre Ordnerfarbe",
 					modal_colorpicker2_text:				"Sekundäre Ordnerfarbe",
