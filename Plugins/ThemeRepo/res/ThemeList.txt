@@ -45,6 +45,7 @@ https://raw.githubusercontent.com/HansAnonymous/BD-Themes-and-Plugins/master/The
 https://raw.githubusercontent.com/ImBastion/BD-Themes/master/No2ABase.theme.css
 https://raw.githubusercontent.com/intrnl/discordcustomizations/master/codeblockLangIdentifier/codeblockLangIdentifier.theme.css
 https://raw.githubusercontent.com/intrnl/discordcustomizations/master/emojiNotoBlobs/emojiNotoBlobs.theme.css
+https://raw.githubusercontent.com/intrnl/discordcustomizations/master/roleRevert/roleRevert.theme.css
 https://raw.githubusercontent.com/intrnl/discordcustomizations/master/titlebarMacOS/titlebarMacOS.theme.css
 https://raw.githubusercontent.com/intrnl/discordcustomizations/master/titlebarRevert/titlebarRevert.theme.css
 https://raw.githubusercontent.com/intrnl/discordcustomizations/master/titlebarWindows/titlebarWindows.theme.css
