@@ -1802,7 +1802,7 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 										</div>
 										<div class="inputWrapper-3xoRWR${inputs[key].type == 'number' ? ' inputNumberWrapper inputNumberWrapperMini' : ''} vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR" style="flex: 1 1 80%;">
 											${inputs[key].type == 'number' ? '<span class="numberinput-buttons-zone"><span class="numberinput-button-up"></span><span class="numberinput-button-down"></span></span>' : ''}
-											<input type="${inputs[key].type}"${inputs[key].min ? ' min="' + inputs[key].min + '"' : ''}${inputs[key].max ? ' max="' + inputs[key].max + '"' : ''}${inputs[key].length ? ' maxlength="' + inputs[key].length + '"' : ''} name="${inputs[key].group}" placeholder="${inputs[key].default}" class="inputMini-3MyfLa input-2YozMi size16-3IvaX_ colorpicker-${inputs[key].name}">
+											<input type="${inputs[key].type}"${!isNaN(inputs[key].min) && inputs[key].min != null ? ' min="' + inputs[key].min + '"' : ''}${!isNaN(inputs[key].max) && inputs[key].max != null ? ' max="' + inputs[key].max + '"' : ''}${!isNaN(inputs[key].length) && inputs[key].length != null ? ' maxlength="' + inputs[key].length + '"' : ''} name="${inputs[key].group}" placeholder="${inputs[key].default}" class="inputMini-3MyfLa input-2YozMi size16-3IvaX_ colorpicker-${inputs[key].name}">
 										</div>
 									</div>`).join("")}
 								</div>
