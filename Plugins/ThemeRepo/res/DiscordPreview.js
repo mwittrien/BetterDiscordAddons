@@ -19,6 +19,7 @@ window.onmessage = function (e) {
 					theme.href = e.data.nativecss;
 					head.appendChild(theme);
 				}
+				document.querySelector("#app-mount").style.display = "flex";
 				break;
 			case "NewTheme":
 			case "CustomCSS":
