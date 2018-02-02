@@ -227,7 +227,7 @@ class TopRoleEverywhere {
 			var settings = BDfunctionsDevilBro.getAllData(this, "settings");
 			var userInfo = 
 				compact ? BDfunctionsDevilBro.getKeyInformation({"node":wrapper,"key":"message"}).author : BDfunctionsDevilBro.getKeyInformation({"node":wrapper,"key":"user"});
-			if (!userInfo || (userInfo.bot && settings.disableForBots)) return;
+			if (!userInfo || (userInfo.bot && settings.showOnBots)) return;
 			var userID = userInfo.id;
 			var role = this.GuildPerms.getHighestRole(guild, userID);
 			
