@@ -2428,6 +2428,53 @@ html, span:not(.spinner-item) {
 	background-color: rgb(var(--accentcolor)) !important
 }
 
+/* membercount */
+.channel-members {
+	margin: 0 !important;
+	padding: 0 !important;
+}
+#memberCount {
+	display: flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	height: 3vh !important;
+	padding: 0 !important;
+	position: absolute !important;
+	color: hsla(0,0%,100%,.8) !important;
+	background: transparent !important;
+	border: none !important;
+	-webkit-mask-image: -webkit-radial-gradient(circle, white, black);
+}
+#memberCount > * {
+	position: relative !important;
+}
+#memberCount,
+#memberCount::before,
+#memberCount::after {
+	margin: 0 10px 0 0 !important;
+}
+#memberCount::before {
+	background: rgba(var(--transparencycolor),calc((var(--transparencyalpha) * 3) + var(--memberlistransparency)));
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	pointer-events: none;
+}
+#memberCount::after {
+	content: "";
+	background: var(--background) center/cover !important;
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: -1;
+	pointer-events: none;
+}
+
 /* dateviewer */
 #dv-container,
 #dv-container #dv-settings-panel {
