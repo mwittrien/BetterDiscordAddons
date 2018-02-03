@@ -1,3 +1,5 @@
+//META{"name":"BasicBackground","description":"Allows you to use a background image in Discord without greatly altering the basic look of Discord.","author":"DevilBro","version":"1.0.3"}*//
+
 .auth-tiling-bg,
 .auth-background,
 .container-2oOGIt,
@@ -541,7 +543,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .questionMark-1R8WLs,
 .buttonBrandFilled-3Mv0Ra,
 .buttonBrandFilledDefault-2Rs6u5,
-.buttonBrandInvertedDefault-uUmgsD,
+.root-2sNHUF .buttonInvertedDefault-1UdvTn,
 .popout .btn,
 .friends-empty .btn,
 .bd-modal button,
@@ -654,7 +656,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .Select-value-label,
 .Select-option,
 .tutorial-popout .content p,
-.buttonBrandInvertedDefault-uUmgsD,
+.root-2sNHUF .buttonInvertedDefault-1UdvTn,
 .input-2YozMi,
 #friends .tab-bar-item.selected,
 .react-datepicker__current-month,
@@ -2599,12 +2601,4 @@ html, span:not(.spinner-item) {
 }
 #permissions-modal .role-item::hover {
 	background: rgba(var(--transparencycolor),var(--transparencyalpha)) !important;
-}
-
-/* DevilBro Modals and Settings */ 
-.DevilBro-modal .inputNumberWrapper .numberinput-buttons-zone:hover + .input-2YozMi:focus,
-.DevilBro-settings .inputNumberWrapper .numberinput-buttons-zone:hover + .input-2YozMi:focus,
-.DevilBro-modal .inputNumberWrapper .numberinput-buttons-zone.pressed + .input-2YozMi,
-.DevilBro-settings .inputNumberWrapper .numberinput-buttons-zone.pressed + .input-2YozMi {
-	border-color: rgb(var(--accentcolor)) !important;
 }
