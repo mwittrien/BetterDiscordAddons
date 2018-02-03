@@ -104,6 +104,7 @@
 .react-datepicker__day--outside-month,
 .embed-2diOCQ,
 .wrapper-uAa07y,
+.invite-CTGItT,
 .close-3ejNTg:hover,
 .guild-separator::after,
 button.guild {
@@ -395,6 +396,7 @@ input:disabled {
 .error-state .icon,
 .imageError-11mA4M,
 .image-2XJctU,
+.artwork-LJqOaz,
 img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .empty-placeholder .image {
 	opacity: 0.5 !important;
@@ -478,7 +480,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 
 /* ----------------------- COLORING ----------------------- */
 
-:not(.guild):not(.guild-inner):not(.channel) > a:not(.bodyLink-rRVoAA):not(.search-bar-tag):not(.channel-3YGMy1):not(.downloadLink-wANcd8):not(.embedAuthorName-29phCh):not([style]),
+:not(.guild):not(.guild-inner):not(.channel) > a:not(.textLink-3OYObV):not(.bodyLink-rRVoAA):not(.search-bar-tag):not(.channel-3YGMy1):not(.downloadLink-wANcd8):not(.embedAuthorName-29phCh):not([style]),
 .tab.selected,
 .h1-DagER3,
 .improved-2HhjlK,
@@ -596,6 +598,13 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .checked-2TahvT[style*="border-color: rgb(114, 137, 218)"],
 .round-30vw42.checked-2TahvT[style*="border-color: rgb(67, 181, 129)"] {
 	border-color: rgb(var(--accentcolor)) !important;
+}
+
+.helpIcon-WaXXVy {
+	background: rgb(var(--accentcolor)) !important;
+}
+.helpIcon-WaXXVy g {
+	fill: #FFF !important;
 }
 
 .round-30vw42.checked-2TahvT[style*="background-color: rgba(67, 181, 129, 0.14902)"] {
