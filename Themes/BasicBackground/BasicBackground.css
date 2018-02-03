@@ -2446,7 +2446,6 @@ html, span:not(.spinner-item) {
 	display: flex !important;
 	align-items: center !important;
 	justify-content: center !important;
-	height: 3vh !important;
 	padding: 0 !important;
 	position: absolute !important;
 	color: hsla(0,0%,100%,.8) !important;
@@ -2458,9 +2457,9 @@ html, span:not(.spinner-item) {
 	position: relative !important;
 }
 #memberCount,
-#memberCount::before,
-#memberCount::after {
-	margin: 0 10px 0 0 !important;
+#memberCount::before {
+	height: 3vh !important;
+	width: 220px !important;
 }
 #memberCount::before {
 	background: rgba(var(--transparencycolor),calc((var(--transparencyalpha) * 3) + var(--memberlistransparency)));
