@@ -420,6 +420,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .userPopout-4pfA0d .activity-AFBUEw,
 .typing-3eiiL_,
 .action-buttons,
+.wrapper-2ldvyE,
 .bd-modal-body,
 .tutorial-popout section,
 .friend:not(:hover),
@@ -650,6 +651,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	border-color: rgb(var(--accentcolor)) !important;
 }
 
+.wrapperSelectedVoice-1Q1ocJ .wrapper-2ldvyE,
 .Select-control,
 .Select-value-label,
 .Select-option,
