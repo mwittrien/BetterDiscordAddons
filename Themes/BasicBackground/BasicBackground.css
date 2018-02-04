@@ -2485,12 +2485,19 @@ html, span:not(.spinner-item) {
 }
 
 /* dateviewer */
+#dv-mount,
 #dv-container,
 #dv-container #dv-settings-panel {
 	background: transparent !important;
 	border: none !important;
 	-webkit-mask-image: -webkit-radial-gradient(circle, white, black);
 }
+#dv-mount > *,
+#dv-container > *,
+#dv-container #dv-settings-panel > * {
+	position: absolute !important;
+}
+#dv-mount::before,
 #dv-container::before,
 #dv-container #dv-settings-panel::before {
 	content: "";
@@ -2504,9 +2511,11 @@ html, span:not(.spinner-item) {
 #dv-container::before {
 	background: rgba(var(--transparencycolor),var(--memberlistransparency));
 }
+#dv-mount::before,
 #dv-container #dv-settings-panel::before {
 	background: rgba(var(--transparencycolor),calc((var(--transparencyalpha) * 3) + var(--memberlistransparency)));
 }
+#dv-mount::after,
 #dv-container::after,
 #dv-container #dv-settings-panel::after {
 	content: "";
