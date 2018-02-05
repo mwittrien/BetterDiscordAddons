@@ -21,6 +21,9 @@ class CompleteTimestamps {
 			},
 			choices: {
 				creationDateLang:		{value:"$discord", 	description:"Timestamp Format:"}
+			},
+			formats: {
+				ownFormat:				{value:"$hour:$minute:$second, $day.$month.$year", 	description:"Own Format:"}
 			}
 		};
 	}
@@ -29,7 +32,7 @@ class CompleteTimestamps {
 
 	getDescription () {return "Replace all timestamps with complete timestamps.";}
 
-	getVersion () {return "1.0.7";}
+	getVersion () {return "1.0.8";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -37,12 +40,16 @@ class CompleteTimestamps {
 		if (!this.started || typeof BDfunctionsDevilBro !== "object") return;
 		var settings = BDfunctionsDevilBro.getAllData(this, "settings");
 		var choices = BDfunctionsDevilBro.getAllData(this, "choices");
+		var formats = BDfunctionsDevilBro.getAllData(this, "formats");
 		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="titleDefault-1CWM9y title-3i-5G_ size18-ZM4Qv- height24-2pMcnc weightNormal-3gw0Lm marginBottom8-1mABJ4">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		for (let key in settings) {
-			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
+			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
 		}
 		for (let key in choices) {
-			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ weightMedium-13x9Y8 size16-3IvaX_ flexChild-1KGW5q" style="flex: 0 0 30%; line-height: 38px;">${this.defaults.choices[key].description}</h3><div class="select-3JqNgs" style="flex: 1 1 70%;"><div class="Select Select--single has-value" type="${key}" value="${choices[key]}"><div class="Select-control"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-value" style="flex: 1 1 auto;"><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm languageName" style="flex: 1 1 42%; padding:0;">${this.languages[choices[key]].name}</div><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm languageTimestamp" style="flex: 1 1 58%; padding:0;">${this.getTimestamp(this.languages[choices[key]].id)}</div></div><span class="Select-arrow-zone"><span class="Select-arrow"></span></span></div></div></div></div>`;
+			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ weightMedium-13x9Y8 size16-3IvaX_ flexChild-1KGW5q" style="flex: 0 0 30%; line-height: 38px;">${this.defaults.choices[key].description}</h3><div class="select-3JqNgs" style="flex: 1 1 70%;"><div class="Select Select--single has-value" option="${key}" value="${choices[key]}"><div class="Select-control"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-value" style="flex: 1 1 auto;"><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm languageName" style="flex: 1 1 42%; padding:0;">${this.languages[choices[key]].name}</div><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm languageTimestamp" style="flex: 1 1 58%; padding:0;">${this.getTimestamp(this.languages[choices[key]].id)}</div></div><span class="Select-arrow-zone"><span class="Select-arrow"></span></span></div></div></div></div>`;
+		}
+		for (let key in formats) {
+			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ weightMedium-13x9Y8 size16-3IvaX_ flexChild-1KGW5q" style="flex: 0 0 30%; line-height: 38px;">${this.defaults.formats[key].description}</h3><div class="inputWrapper-3xoRWR vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR" style="flex: 1 1 auto;"><input type="text" option="${key}" value="${formats[key]}" placeholder="${this.defaults.formats[key].value}" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_"></div></div>`;
 		}
 		settingshtml += `</div></div>`;
 		
@@ -51,13 +58,8 @@ class CompleteTimestamps {
 		BDfunctionsDevilBro.initElements(settingspanel);
 
 		$(settingspanel)
-			.on("click", ".checkbox-1KYsPm", () => {
-				this.updateSettings(settingspanel);
-				var choices = BDfunctionsDevilBro.getAllData(this, "choices");
-				for (let key in choices) {
-					settingspanel.querySelector(".Select[type='" + key + "'] .languageTimestamp").innerText = this.getTimestamp(this.languages[choices[key]].id);
-				}
-			})
+			.on("click", ".checkbox-1KYsPm", () => {this.updateSettings(settingspanel);})
+			.on("keyup", ".input-2YozMi", () => {this.saveInputs(settingspanel);})
 			.on("click", ".Select-control", (e) => {this.openDropdownMenu(e);});
 		return settingspanel;
 	}
@@ -111,7 +113,10 @@ class CompleteTimestamps {
 			});
 			if (observertarget = document.querySelector(".layers-20RVFW")) this.settingsWindowObserver.observe(observertarget, {childList:true});
 			
-			this.languages = Object.assign({},BDfunctionsDevilBro.languages);
+			this.languages = Object.assign({},
+				{"own":	{name:"Own",		id:"own",		integrated:false,	dic:false}},
+				BDfunctionsDevilBro.languages
+			);
 			
 			this.setMaxWidth();
 			
@@ -143,6 +148,23 @@ class CompleteTimestamps {
 			settings[input.value] = input.checked;
 		}
 		BDfunctionsDevilBro.saveAllData(settings, this, "settings");
+		this.updateSettingsPanel(settingspanel);
+	}
+
+	saveInputs (settingspanel) {
+		var formats = {};
+		for (var input of settingspanel.querySelectorAll(".input-2YozMi")) {
+			formats[input.getAttribute("option")] = input.value;
+		}
+		BDfunctionsDevilBro.saveAllData(formats, this, "formats");
+		this.updateSettingsPanel(settingspanel);
+	}
+
+	updateSettingsPanel (settingspanel) {
+		var choices = BDfunctionsDevilBro.getAllData(this, "choices");
+		for (let key in choices) {
+			settingspanel.querySelector(".Select[option='" + key + "'] .languageTimestamp").innerText = this.getTimestamp(this.languages[choices[key]].id);
+		}
 		this.updateTimestamps = true;
 	}
 	
@@ -155,16 +177,15 @@ class CompleteTimestamps {
 		selectWrap.classList.add("is-open");
 		$("li").has(selectWrap).css("overflow", "visible");
 		
-		var type = selectWrap.getAttribute("type");
-		var selectMenu = this.createDropdownMenu(selectWrap.getAttribute("value"), type);
+		var selectMenu = this.createDropdownMenu(selectWrap.getAttribute("value"));
 		selectWrap.appendChild(selectMenu);
 		
 		$(selectMenu).on("mousedown." + this.getName(), ".Select-option", (e2) => {
 			var language = e2.currentTarget.getAttribute("value");
 			selectWrap.setAttribute("value", language);
 			selectControl.querySelector(".languageName").innerText = this.languages[language].name;
-			selectControl.querySelector(".languageTimestamp").innerText = new Date().toLocaleString(this.languages[language].id);
-			BDfunctionsDevilBro.saveData(type, language, this, "choices");
+			selectControl.querySelector(".languageTimestamp").innerText = this.getTimestamp(this.languages[language].id);
+			BDfunctionsDevilBro.saveData(selectWrap.getAttribute("option"), language, this, "choices");
 		});
 		$(document).on("mousedown.select" + this.getName(), (e2) => {
 			if (e2.target.parentElement == selectMenu) return;
@@ -175,7 +196,7 @@ class CompleteTimestamps {
 		});
 	}
 	
-	createDropdownMenu (choice, type) {
+	createDropdownMenu (choice) {
 		var menuhtml = `<div class="Select-menu-outer"><div class="Select-menu">`;
 		for (var key in this.languages) {
 			var isSelected = key == choice ? " is-selected" : "";
@@ -218,13 +239,26 @@ class CompleteTimestamps {
 	}
 	
 	getTimestamp (languageid, time = new Date()) {
-		var settings = BDfunctionsDevilBro.getAllData(this, "settings");
-		var timestamp = [];
-		if (settings.displayDate) 	timestamp.push(time.toLocaleDateString(languageid));
-		if (settings.displayTime) 	timestamp.push(settings.cutSeconds ? this.cutOffSeconds(time.toLocaleTimeString(languageid)) : time.toLocaleTimeString(languageid));
-		if (settings.otherOrder)	timestamp.reverse();
-		var timestring = timestamp.length > 1 ? timestamp.join(", ") : (timestamp.length > 0 ? timestamp[0] : "");
-		if (timestring && settings.forceZeros) timestring = this.addLeadingZeros(timestring);
+		var settings = BDfunctionsDevilBro.getAllData(this, "settings"), timestring = "";
+		if (languageid != "own") {
+			var timestamp = [];
+			if (settings.displayDate) 	timestamp.push(time.toLocaleDateString(languageid));
+			if (settings.displayTime) 	timestamp.push(settings.cutSeconds ? this.cutOffSeconds(time.toLocaleTimeString(languageid)) : time.toLocaleTimeString(languageid));
+			if (settings.otherOrder)	timestamp.reverse();
+			timestring = timestamp.length > 1 ? timestamp.join(", ") : (timestamp.length > 0 ? timestamp[0] : "");
+			if (timestring && settings.forceZeros) timestring = this.addLeadingZeros(timestring);
+		}
+		else {
+			var ownformat = BDfunctionsDevilBro.getData("ownFormat", this, "formats");
+			var hour = time.getHours(), minute = time.getMinutes(), second = time.getSeconds(), day = time.getDate(), month = time.getMonth()+1, year = time.getFullYear();
+			timestring = ownformat
+				.replace("$hour", settings.forceZeros && hour < 10 ? "0" + hour : hour)
+				.replace("$minute", settings.forceZeros && minute < 10 ? "0" + minute : minute)
+				.replace("$second", settings.forceZeros && second < 10 ? "0" + second : second)
+				.replace("$day", settings.forceZeros && day < 10 ? "0" + day : day)
+				.replace("$month", settings.forceZeros && month < 10 ? "0" + month : month)
+				.replace("$year", year);
+		}
 		return timestring;
 	}
 	
