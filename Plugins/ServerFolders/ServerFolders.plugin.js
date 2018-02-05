@@ -103,10 +103,10 @@ class ServerFolders {
 				transition: border-radius 1s;
 			}
 
-			.foldercontainer .guild:not(.selected) .guild-inner a[style*=font] {
+			.foldercontainer .guild:not(.selected) .guild-inner[style*="background-color:"] {
 				background-color: rgb(47, 49, 54);
 			}
-			.foldercontainer .guild.selected .guild-inner a[style*=font] {
+			.foldercontainer .guild.selected .guild-inner[style*="background-color:"] {
 				background-color: rgb(114, 137, 218);
 			}`;
 
@@ -143,7 +143,11 @@ class ServerFolders {
 						<span>REPLACE_foldercontext_foldersettings_text</span>
 						<div class="hint-3TJykr"></div>
 					</div>
-					<div class="item-1XYaYf removefolder-item">
+					<div class="item-1XYaYf createfolder-item">
+						<span>REPLACE_foldercontext_createfolder_text</span>
+						<div class="hint-3TJykr"></div>
+					</div>
+					<div class="item-1XYaYf removefolder-item danger-1oUOCl">
 						<span>REPLACE_foldercontext_removefolder_text</span>
 						<div class="hint-3TJykr"></div>
 					</div>
@@ -317,7 +321,7 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.5.1";}
+	getVersion () {return "5.5.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -515,6 +519,7 @@ class ServerFolders {
 		
 		this.folderContextMarkup = 			this.folderContextMarkup.replace("REPLACE_foldercontext_unreadfolder_text", this.labels.foldercontext_unreadfolder_text);
 		this.folderContextMarkup = 			this.folderContextMarkup.replace("REPLACE_foldercontext_foldersettings_text", this.labels.foldercontext_foldersettings_text);
+		this.folderContextMarkup = 			this.folderContextMarkup.replace("REPLACE_foldercontext_createfolder_text", this.labels.serversubmenu_createfolder_text);
 		this.folderContextMarkup = 			this.folderContextMarkup.replace("REPLACE_foldercontext_removefolder_text", this.labels.foldercontext_removefolder_text);
 		
 		this.folderSettingsModalMarkup = 	this.folderSettingsModalMarkup.replace("REPLACE_modal_header_text", this.labels.modal_header_text);
@@ -539,7 +544,7 @@ class ServerFolders {
 		var info = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"guild"});
 		if (info && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"GuildLeaveGroup"})) {
 			$(context).append(this.serverContextEntryMarkup)
-				.on("mouseenter", ".serverfolders-item", (e) => {
+				.on("mouseenter." + this.getName(), ".serverfolders-item", (e) => {
 					this.createContextSubMenu(info, e, context);
 				});
 				
@@ -553,9 +558,9 @@ class ServerFolders {
 		var serverContextSubMenu = $(this.serverContextSubMenuMarkup);
 		
 		serverContextSubMenu
-			.on("click", ".createfolder-item", () => {
+			.on("click." + this.getName(), ".createfolder-item", () => {
 				$(context).hide();
-				this.createNewFolder(serverObj);
+				this.createNewFolder(serverObj.div);
 			});
 		
 		var folderDiv = this.getFolderOfServer(serverObj);
@@ -563,7 +568,7 @@ class ServerFolders {
 			serverContextSubMenu
 				.find(".removefromfolder-item")
 				.removeClass("disabled-dlOjhg")
-				.on("click", () => {
+				.on("click." + this.getName(), () => {
 					$(context).hide();
 					this.removeServerFromFolder(serverObj, folderDiv);
 				});
@@ -631,12 +636,12 @@ class ServerFolders {
 		}
 	}
 	
-	createNewFolder (serverObj) {
-		if (!serverObj) return;
+	createNewFolder (ankerDiv) {
+		if (!ankerDiv) return;
 		
 		var folderID = 		this.generateFolderID();
 		var folderName = 	"";
-		var position = 		Array.from(document.querySelectorAll("div.guild-separator ~ div.guild")).indexOf(serverObj.div);
+		var position = 		Array.from(document.querySelectorAll("div.guild-separator ~ div.guild")).indexOf(ankerDiv);
 		var iconID = 		0;
 		var icons = 		this.folderIcons[0];
 		var color1 = 		["0","0","0"];
@@ -766,6 +771,10 @@ class ServerFolders {
 				folderContext.remove();
 				this.showFolderSettings(folderDiv);
 			})
+			.on("click." + this.getName(), ".createfolder-item", () => {
+				folderContext.remove();
+				this.createNewFolder(folderDiv);
+			})
 			.on("click." + this.getName(), ".removefolder-item", () => {
 				folderContext.remove();
 				this.removeFolder(folderDiv);
@@ -873,12 +882,12 @@ class ServerFolders {
 					color4 = BDfunctionsDevilBro.getSwatchColor("swatch4");
 					
 					if (iconID != data.iconID || !BDfunctionsDevilBro.equals(color1, data.color1) || !BDfunctionsDevilBro.equals(color2, data.color2)) {
+						var isOpen = folderDiv.classList.contains("open");
 						if (!folderSettingsModal.find(".ui-icon-picker-icon.selected").hasClass("custom")) {
 							this.changeImgColor(color1, color2, folderIcons[iconID].openicon, (openicon) => {
 								icons.openicon = openicon;
 								this.changeImgColor(color1, color2, folderIcons[iconID].closedicon, (closedicon) => {
 									icons.closedicon = closedicon;
-									var isOpen = folderDiv.classList.contains("open");
 									$(folderDiv).find(".avatar-small").css("background-image", isOpen ? "url(\"" + icons.openicon + "\")" : "url(\"" + icons.closedicon + "\")");
 									BDfunctionsDevilBro.saveData(folderID, {folderID,folderName,position,iconID,icons,color1,color2,color3,color4,servers}, this, "folders");
 								});
@@ -887,7 +896,6 @@ class ServerFolders {
 						else {
 							icons.openicon = folderIcons[iconID].openicon;
 							icons.closedicon = folderIcons[iconID].closedicon;
-							var isOpen = folderDiv.classList.contains("open");
 							$(folderDiv).find(".avatar-small").css("background-image", isOpen ? "url(\"" + icons.openicon + "\")" : "url(\"" + icons.closedicon + "\")");
 							BDfunctionsDevilBro.saveData(folderID, {folderID,folderName,position,iconID,icons,color1,color2,color3,color4,servers}, this, "folders");
 						}
