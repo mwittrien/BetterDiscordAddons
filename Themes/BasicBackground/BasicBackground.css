@@ -549,6 +549,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .questionMark-1R8WLs,
 .buttonBrandFilled-3Mv0Ra,
 .buttonBrandFilledDefault-2Rs6u5,
+.buttonBrandFilledSubmitting-IkviWC,
 .root-2sNHUF .buttonInvertedDefault-1UdvTn,
 .popout .btn,
 .friends-empty .btn,
@@ -558,15 +559,38 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .btn-primary {
 	background: rgb(var(--accentcolor)) !important;
 }
-
 .buttonBrandGhost-1-Lmhc {
 	color: rgb(var(--accentcolor)) !important;
 	background: rgba(var(--accentcolor),0.1) !important;
 }
-
 .buttonBrandLinkDefault-1bjP4F:active .contents-4L4hQM, 
 .buttonBrandLinkDefault-1bjP4F:hover .contents-4L4hQM {
 	background-image: linear-gradient(0deg,transparent,transparent 1px,rgb(var(--accentcolor)) 0,rgb(var(--accentcolor)) 2px,transparent 0);
+}
+.buttonPrimaryOutlinedDefault--H0hhk,
+.buttonPrimaryOutlinedSubmitting-3m3eFx {
+	color: rgb(255,255,255) !important;
+	border-color: rgba(255,255,255,.3) !important;
+}
+.buttonPrimaryOutlinedDefault--H0hhk:hover,
+.buttonPrimaryOutlinedSubmitting-3m3eFx:hover {
+	border-color: rgba(255,255,255,.6) !important;
+}
+.buttonPrimaryFilledDefault-ekmMaT, 
+.buttonPrimaryFilledDisabled-YU7uC3, 
+.buttonPrimaryFilledSubmitting-1zavhH {
+	background: transparent !important;
+}
+.buttonPrimaryGhostDefault-1oEYPz,
+.buttonPrimaryGhostDisabled-3mOfm_,
+.buttonPrimaryGhostSubmitting-1u2Jwg {
+	color: rgb(255,255,255) !important;
+	background: rgba(255,255,255,.1) !important;
+}
+.buttonPrimaryInvertedDefault-1XlpVq, 
+.buttonPrimaryInvertedDisabled-pTWgC9, 
+.buttonPrimaryInvertedSubmitting-3j1QEG {
+	color: rgb(var(--transparencycolor)) !important;
 }
 
 .now-playing {
