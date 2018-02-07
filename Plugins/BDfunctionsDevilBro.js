@@ -4,9 +4,12 @@ BDfunctionsDevilBro.isLibraryOutdated = function () {
 	return performance.now() - BDfunctionsDevilBro.creationTime > 600000;
 };
 
-BDfunctionsDevilBro.loadMessage = function (plugin, oldVersionRemove) {
+BDfunctionsDevilBro.loadMessage = function (plugin) {
 	var pluginName = plugin.getName();
 	var oldVersion = plugin.getVersion();
+	var oldDescription = plugin.getDescription();
+	plugin.getDescription = function () {return `My Support Server: http://bit.ly/DevilBrosHaus https://discordapp.com/invite/Jx3TjNS
+	` + oldDescription;}
 	var loadMessage = BDfunctionsDevilBro.getLibraryStrings().toast_plugin_started.replace("${pluginName}", pluginName).replace("${oldVersion}", oldVersion);
 	console.log(loadMessage);
 	BDfunctionsDevilBro.showToast(loadMessage);
@@ -84,9 +87,9 @@ BDfunctionsDevilBro.loadMessage = function (plugin, oldVersionRemove) {
 	}
 };
 
-BDfunctionsDevilBro.unloadMessage = function (plugin, oldVersionRemove) { 
-	var pluginName = typeof plugin === "string" ? plugin : plugin.getName();
-	var oldVersion = typeof oldVersionRemove === "string" ? oldVersionRemove : plugin.getVersion();
+BDfunctionsDevilBro.unloadMessage = function (plugin) { 
+	var pluginName = plugin.getName();
+	var oldVersion = plugin.getVersion();
 	var unloadMessage = BDfunctionsDevilBro.getLibraryStrings().toast_plugin_stopped.replace("${pluginName}", pluginName).replace("${oldVersion}", oldVersion);
 	console.log(unloadMessage);
 	BDfunctionsDevilBro.showToast(unloadMessage);
@@ -2380,6 +2383,9 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		border-radius: 5px;
 		display: inline-block;
 		margin-left: 10px;
+	}
+	#bd-settingspane-container .bda-description {
+		white-space: pre-line !important;
 	}
 	
 	.DevilBro-notice {
