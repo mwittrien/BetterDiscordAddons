@@ -93,6 +93,7 @@
 .cardPrimary-ZVL9Jr,
 .cardPrimaryOutline-2YyAz2,
 .selectorSelected-2M0IGv,
+#autocomplete-popout .row.selected,
 .game-name-input:hover,
 .game-name-input:focus,
 .not-detected,
@@ -477,6 +478,10 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .divider + .divider,
 .divider::before {
 	visibility: hidden !important;
+}
+
+.autocomplete-arrow-wrapper {
+	display: none !important;
 }
 
 
