@@ -152,7 +152,7 @@ class GoogleTranslateOption {
 
 	getDescription () {return "Adds a Google Translate option to your context menu, which shows a preview of the translated text and on click will open the selected text in Google Translate. Also adds a translation button to your textareas, which will automatically translate the text for you before it is being send.";}
 
-	getVersion () {return "1.2.9";}
+	getVersion () {return "1.3.0";}
 	
 	getAuthor () {return "DevilBro";}
 	
@@ -271,9 +271,9 @@ class GoogleTranslateOption {
 			document.querySelectorAll("textarea").forEach(textarea => {this.addTranslationButton(textarea);});
 			
 			this.languages = Object.assign({},
-				{"auto":	{name:"Auto",		id:"auto",		integrated:false}},
+				{"auto":	{name:"Auto",		id:"auto",		integrated:false,	dic:false}},
 				BDfunctionsDevilBro.languages,
-				{"binary":	{name:"Binary",		id:"binary",	integrated:false}}
+				{"binary":	{name:"Binary",		id:"binary",	integrated:false,	dic:false}}
 			);
 			
 			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
@@ -536,7 +536,7 @@ class GoogleTranslateOption {
 		var mentions = {};
 		var newString = [];
 		string.split(" ").forEach((word, i) => {
-			if (word.indexOf("@") == 0 || word.indexOf("#") == 0 || (word.indexOf("!") == 0 && word.length > 1)) {
+			if (word.indexOf("<@!") == 0 || word.indexOf("@") == 0 || word.indexOf("#") == 0 || (word.indexOf("!") == 0 && word.length > 1)) {
 				newString.push("a" + i + "__________________________");
 				mentions[i] = word;
 			}
