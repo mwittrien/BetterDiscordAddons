@@ -8,7 +8,8 @@ BDfunctionsDevilBro.loadMessage = function (plugin) {
 	var pluginName = plugin.getName();
 	var oldVersion = plugin.getVersion();
 	var oldDescription = plugin.getDescription();
-	plugin.getDescription = function () {return `My Support Server: http://bit.ly/DevilBrosHaus https://discordapp.com/invite/Jx3TjNS
+	plugin.getDescription = function () {return `My Support Server: http://bit.ly/DevilBrosHaus or https://discordapp.com/invite/Jx3TjNS
+	
 	` + oldDescription;}
 	var loadMessage = BDfunctionsDevilBro.getLibraryStrings().toast_plugin_started.replace("${pluginName}", pluginName).replace("${oldVersion}", oldVersion);
 	console.log(loadMessage);
