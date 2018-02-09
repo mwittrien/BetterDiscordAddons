@@ -152,7 +152,7 @@ class GoogleTranslateOption {
 
 	getDescription () {return "Adds a Google Translate option to your context menu, which shows a preview of the translated text and on click will open the selected text in Google Translate. Also adds a translation button to your textareas, which will automatically translate the text for you before it is being send.";}
 
-	getVersion () {return "1.3.1";}
+	getVersion () {return "1.3.2";}
 	
 	getAuthor () {return "DevilBro";}
 	
@@ -508,43 +508,49 @@ class GoogleTranslateOption {
 	}
 	
 	translateText (text, type) {
-		var [text, mentions] = this.removeMentions(text);
+		var [newtext, mentions, translate] = this.removeMentions(text.trim());
+		console.log([text, newtext, mentions, translate]);
 		var choices = BDfunctionsDevilBro.getAllData(this, "choices");
 		var input = Object.assign({}, type == "context" ? this.languages[choices.inputContext] : this.languages[choices.inputMessage]);
 		var output = Object.assign({}, type == "context" ? this.languages[choices.outputContext] : this.languages[choices.outputMessage]);
 		var translation = "";
-		if (input.id == "binary" || output.id == "binary") {
-			if (input.id == "binary" && output.id != "binary") 			translation = this.binary2string(text);
-			else if (input.id != "binary" && output.id == "binary") 	translation = this.string2binary(text);
-			else if (input.id == "binary" && output.id == "binary") 	translation = text;
+		if (translate) {
+			if (input.id == "binary" || output.id == "binary") {
+				if (input.id == "binary" && output.id != "binary") 			translation = this.binary2string(newtext);
+				else if (input.id != "binary" && output.id == "binary") 	translation = this.string2binary(newtext);
+				else if (input.id == "binary" && output.id == "binary") 	translation = newtext;
+			}
+			else {
+				var request = new XMLHttpRequest();
+				request.open("GET", this.getGoogleTranslateApiURL(input.id, output.id, newtext), false);
+				request.send(null);
+				if (request.status === 200) {
+					var result = JSON.parse(request.response);
+					result[0].forEach((array) => {translation += array[0];});
+					if (this.languages[result[2]]) input.name = this.languages[result[2]].name;
+				}
+			}
+			if (translation) translation = this.addMentions(translation, mentions);
 		}
 		else {
-			var request = new XMLHttpRequest();
-			request.open("GET", this.getGoogleTranslateApiURL(input.id, output.id, text), false);
-			request.send(null);
-			if (request.status === 200) {
-				var result = JSON.parse(request.response);
-				result[0].forEach((array) => {translation += array[0];});
-				if (this.languages[result[2]]) input.name = this.languages[result[2]].name;
-			}
+			translation = text;
 		}
-		if (translation) translation = this.addMentions(translation, mentions);
 		return {translation, input, output};
 	}
 	
 	removeMentions (string) {
-		var mentions = {};
-		var newString = [];
-		string.split(" ").forEach((word, i) => {
+		var mentions = {}, newString = [], count = 0;
+		string.split(" ").forEach((word) => {
 			if (word.indexOf("<@!") == 0 || word.indexOf(":") == 0 || word.indexOf("@") == 0 || word.indexOf("#") == 0 || (word.indexOf("!") == 0 && word.length > 1)) {
-				newString.push("a" + i + "__________________________");
-				mentions[i] = word;
+				newString.push("a" + count + "__________________________");
+				mentions[count] = word;
+				count++;
 			}
 			else {
 				newString.push(word);
 			}
 		});
-		return [newString.join(" "), mentions];
+		return [newString.join(" "), mentions, newString.length-count != 0];
 	}
 	
 	addMentions (string, mentions) {
