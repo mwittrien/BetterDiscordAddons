@@ -32,7 +32,7 @@ class CompleteTimestamps {
 
 	getDescription () {return "Replace all timestamps with complete timestamps.";}
 
-	getVersion () {return "1.0.8";}
+	getVersion () {return "1.0.9";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -51,6 +51,10 @@ class CompleteTimestamps {
 		for (let key in formats) {
 			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ weightMedium-13x9Y8 size16-3IvaX_ flexChild-1KGW5q" style="flex: 0 0 30%; line-height: 38px;">${this.defaults.formats[key].description}</h3><div class="inputWrapper-3xoRWR vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR" style="flex: 1 1 auto;"><input type="text" option="${key}" value="${formats[key]}" placeholder="${this.defaults.formats[key].value}" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_"></div></div>`;
 		}
+		var infoHidden = BDfunctionsDevilBro.loadData("hideInfo", this, "hideInfo");
+		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO cursorPointer-3oKATS ${infoHidden ? "wrapperCollapsed-18mf-c" : "wrapperDefault-1Dl4SS"} toggle-info" style="flex: 1 1 auto;"><svg class="iconTransition-VhWJ85 ${infoHidden ? "closed-2Hef-I iconCollapsed-1INdMX" : "iconDefault-xzclSQ"}" width="12" height="12" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 10L12 15 17 10"></path></svg><div class="colorTransition-2iZaYd overflowEllipsis-2ynGQq nameCollapsed-3_ChMu" style="flex: 1 1 auto;">Information</div></div>`;
+		settingshtml += `<div class="DevilBro-settings-inner-list info-container" ${infoHidden ? "style='display:none;'" : ""}>`;
+		settingshtml += `<div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">$hour will be replaced with the current hour</div><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">$minute will be replaced with the current minutes</div><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">$second will be replaced with the current seconds</div><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">$timemode will change $hour to a 12h format and will be replaced with AM/PM</div><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">$year will be replaced with the current year</div><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">$month will be replaced with the current month</div><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">$day will be replaced with the current day</div><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">$weekday will be replaced with the current weekday based on the Discord Language</div>`;
 		settingshtml += `</div></div>`;
 		
 		var settingspanel = $(settingshtml)[0];
@@ -60,13 +64,17 @@ class CompleteTimestamps {
 		$(settingspanel)
 			.on("click", ".checkbox-1KYsPm", () => {this.updateSettings(settingspanel);})
 			.on("keyup", ".input-2YozMi", () => {this.saveInputs(settingspanel);})
-			.on("click", ".Select-control", (e) => {this.openDropdownMenu(e);});
+			.on("click", ".Select-control", (e) => {this.openDropdownMenu(e);})
+			.on("click", ".toggle-info", (e) => {this.toggleInfo(settingspanel, e.currentTarget);});
 		return settingspanel;
 	}
 
+	
+	
 	//legacy
 	load () {}
 
+	
 	start () {
 		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
 			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
@@ -168,6 +176,19 @@ class CompleteTimestamps {
 		this.updateTimestamps = true;
 	}
 	
+	toggleInfo (settingspanel, ele) {
+		ele.classList.toggle("wrapperCollapsed-18mf-c");
+		ele.classList.toggle("wrapperDefault-1Dl4SS");
+		var svg = ele.querySelector(".iconTransition-VhWJ85");
+		svg.classList.toggle("closed-2Hef-I");
+		svg.classList.toggle("iconCollapsed-1INdMX");
+		svg.classList.toggle("iconDefault-xzclSQ");
+		
+		var visible = $(settingspanel).find(".info-container").is(":visible");
+		$(settingspanel).find(".info-container").toggle(!visible);
+		BDfunctionsDevilBro.saveData("hideInfo", visible, this, "hideInfo");
+	}
+	
 	openDropdownMenu (e) {
 		var selectControl = e.currentTarget;
 		var selectWrap = selectControl.parentElement;
@@ -250,14 +271,21 @@ class CompleteTimestamps {
 		}
 		else {
 			var ownformat = BDfunctionsDevilBro.getData("ownFormat", this, "formats");
-			var hour = time.getHours(), minute = time.getMinutes(), second = time.getSeconds(), day = time.getDate(), month = time.getMonth()+1, year = time.getFullYear();
+			languageid = BDfunctionsDevilBro.getDiscordLanguage().id;
+			var hour = time.getHours(), minute = time.getMinutes(), second = time.getSeconds(), day = time.getDate(), month = time.getMonth()+1, timemode = "";
+			if (ownformat.indexOf("$timemode") > -1) {
+				timemode = hour > 12 ? "PM" : "AM";
+				hour = hour > 12 ? hour - 12 : hour;
+			}
 			timestring = ownformat
 				.replace("$hour", settings.forceZeros && hour < 10 ? "0" + hour : hour)
 				.replace("$minute", settings.forceZeros && minute < 10 ? "0" + minute : minute)
 				.replace("$second", settings.forceZeros && second < 10 ? "0" + second : second)
+				.replace("$timemode", timemode)
+				.replace("$weekday", time.toLocaleDateString(languageid,{weekday: "long"}))
 				.replace("$day", settings.forceZeros && day < 10 ? "0" + day : day)
 				.replace("$month", settings.forceZeros && month < 10 ? "0" + month : month)
-				.replace("$year", year);
+				.replace("$year", time.getFullYear());
 		}
 		return timestring;
 	}
