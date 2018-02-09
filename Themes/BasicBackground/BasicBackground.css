@@ -49,8 +49,13 @@
 .card-3DrRmC,
 .channels-3g2vYe,
 .container-3lnMWU,
-.container-iksrDt {
+.container-iksrDt,
+.reactors-2PjMP0 {
 	background: rgba(var(--transparencycolor),var(--transparencyalpha)) !important;
+}
+
+.sidebar-32BRdp {
+	background: rgba(var(--transparencycolor),calc(var(--transparencyalpha) * 2)) !important;
 }
 
 .tutorial-popout .title-content,
