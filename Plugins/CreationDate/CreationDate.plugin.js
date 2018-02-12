@@ -15,27 +15,15 @@ class CreationDate {
 			.theme-light .headerNormal-1cioxU .creationDate {
 				color: #b9bbbe; 
 			}
-			.theme-light .headerPlaying-2eYqm9 .creationDate {
-				color: hsla(0,0%,100%,.6);
-			}
-			.theme-dark .headerNormal-1cioxU .creationDate {
-				color: hsla(0,0%,100%,.6);
-			}
-			.theme-dark .headerPlaying-2eYqm9 .creationDate {
+			.theme-light .header-3mZJcV:not(.headerNormal-1cioxU) .creationDate,
+			.theme-dark .header-3mZJcV .creationDate {
 				color: hsla(0,0%,100%,.6);
 			}
 			.theme-light .topSectionNormal-2LlRG1 .creationDate {
 				color: hsla(216,4%,74%,.6); 
 			}
-			.theme-light .topSectionSpotify-3744IX .creationDate,
-			.theme-light .topSectionPlaying-3jAH9b .creationDate {
-				color: hsla(0,0%,100%,.6);
-			}
-			.theme-dark .topSectionNormal-2LlRG1 .creationDate {
-				color: hsla(0,0%,100%,.6);
-			}
-			.theme-dark .topSectionSpotify-3744IX .creationDate,
-			.theme-dark .topSectionPlaying-3jAH9b .creationDate {
+			.theme-light [class*='topSection']:not(.topSectionNormal-2LlRG1) .creationDate,
+			.theme-dark [class*='topSection'] .creationDate {
 				color: hsla(0,0%,100%,.6);
 			}`;
 			
@@ -57,7 +45,7 @@ class CreationDate {
 
 	getDescription () {return "Displays the Creation Date of an Account in the UserPopout and UserModal.";}
 
-	getVersion () {return "1.1.2";}
+	getVersion () {return "1.1.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -124,7 +112,7 @@ class CreationDate {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(".topSectionPlaying-3jAH9b, .topSectionNormal-2LlRG1, .topSectionSpotify-3744IX")) {
+								if (node && node.tagName && node.querySelector("[class*='topSection']")) {
 									if (BDfunctionsDevilBro.getData("addInUserProfil", this, "settings")) this.addCreationDate(node.querySelector(".headerInfo-Gkqcz9"));
 								}
 							});
