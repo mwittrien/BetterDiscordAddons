@@ -19,10 +19,10 @@ class NotificationSounds {
 			"call_calling":			{implemented:true,	name:"Outgoing Call",					src:"/assets/c6e92752668dde4eee5923d70441579f.mp3"},
 			"call_ringing":			{implemented:true,	name:"Incoming Call",					src:"/assets/84a1b4e11d634dbfa1e5dd97a96de3ad.mp3"},
 			"call_ringing_beat":	{implemented:false,	name:"Incoming Call Beat",				src:"/assets/b9411af07f154a6fef543e7e442e4da9.mp3"},
-			"ddr-down":				{implemented:false,	name:"Dance Dance Revolution Down",		src:"/assets/71f048f8aa7d4b24bf4268a87cbbb192.mp3"},
-			"ddr-left":				{implemented:false,	name:"Dance Dance Revolution Left",		src:"/assets/1de04408e62b5d52ae3ebbb91e9e1978.mp3"},
-			"ddr-right":			{implemented:false,	name:"Dance Dance Revolution Right",	src:"/assets/2c0433f93db8449e4a82b76dc520cb29.mp3"},
-			"ddr-up":				{implemented:false,	name:"Dance Dance Revolution Up",		src:"/assets/68472713f7a62c7c37e0a6a5d5a1faeb.mp3"},
+			"ddr-down":				{implemented:true,	name:"HotKeys Window Down",				src:"/assets/71f048f8aa7d4b24bf4268a87cbbb192.mp3"},
+			"ddr-left":				{implemented:true,	name:"HotKeys Window Left",				src:"/assets/1de04408e62b5d52ae3ebbb91e9e1978.mp3"},
+			"ddr-right":			{implemented:true,	name:"HotKeys Window Right",			src:"/assets/2c0433f93db8449e4a82b76dc520cb29.mp3"},
+			"ddr-up":				{implemented:true,	name:"HotKeys Window Up",				src:"/assets/68472713f7a62c7c37e0a6a5d5a1faeb.mp3"},
 			"human_man":			{implemented:false,	name:"Human Man Voice",					src:"/assets/fa4d62c3cbc80733bf1f01b9c6f181de.mp3"},
 			"mention1":				{implemented:false,	name:"Mention Ping1",					src:"/assets/fa4d62c3cbc80733bf1f01b9c6f181de.mp3"},
 			"mention2":				{implemented:false,	name:"Mention Ping2",					src:"/assets/a5f42064e8120e381528b14fd3188b72.mp3"},
@@ -69,7 +69,7 @@ class NotificationSounds {
 	
 	getDescription () {return "Allows you to replace the native sounds of Discord with your own";}
 
-	getVersion () {return "3.0.8";}
+	getVersion () {return "3.0.9";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -87,7 +87,7 @@ class NotificationSounds {
 			settingshtml += `<div class="flexChild-1KGW5q" style="flex: 1 1 50%;"><h5 class="h5-3KssQU title-1pmpPr size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH defaultMarginh5-2UwwFY marginBottom4-_yArcI">Songname:</h5><div class="inputWrapper-3xoRWR vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR flexChild-1KGW5q" style="flex: 1 1 auto;"><input type="text" placeholder="Name" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_ songInput" id="input-song"></div></div>`;
 			settingshtml += `</div>`;
 			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">`;
-			settingshtml += `<div class="flexChild-1KGW5q" style="flex: 1 1 auto;"><h5 class="h5-3KssQU title-1pmpPr size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH defaultMarginh5-2UwwFY marginBottom4-_yArcI">File:</h5><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO" style="flex: 1 1 auto;"><div class="inputWrapper-3xoRWR vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR flexChild-1KGW5q"  style="flex: 1 1 auto;"><input type="text" placeholder="Url or Filepath" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_ songInput" id="input-url"></div><button type="button" class="flexChild-1KGW5q buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu file-navigator" id="input-file" style="flex: 0 0 auto;"><div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx"></div><input type="file" accept="audio/*,video/*" style="display:none!important;"></button></div></div>`;
+			settingshtml += `<div class="flexChild-1KGW5q" style="flex: 1 1 auto;"><h5 class="h5-3KssQU title-1pmpPr size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH defaultMarginh5-2UwwFY marginBottom4-_yArcI">File:</h5><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO" style="flex: 1 1 auto;"><div class="inputWrapper-3xoRWR vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR flexChild-1KGW5q"  style="flex: 1 1 auto;"><input type="text" placeholder="Url or Filepath" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_ songInput" id="input-url"></div><button type="button" class="flexChild-1KGW5q buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu file-navigator" id="input-file" style="flex: 0 0 auto;"><div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx"></div><input type="file" accept="audio/*,video/*" style="display:none!important;"></button><button type="button" class="flexChild-1KGW5q buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu btn-add btn-addsong" style="flex: 0 0 auto;"><div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx"></div></button></div></div>`;
 			settingshtml += `</div>`;
 			settingshtml += `</div>`;
 			
@@ -112,6 +112,7 @@ class NotificationSounds {
 
 			$(settingspanel)
 				.on("click", ".Select-control", (e) => {this.openDropdownMenu(settingspanel, e);})
+				.on("click", ".btn-addsong", (e) => {this.saveAudio(settingspanel);})
 				.on("keyup", ".songInput", (e) => {if (e.which == 13) this.saveAudio(settingspanel);})
 				.on("click", ".reset-button", () => {this.resetAll(settingspanel);})
 				.on("click", "#input-unimplemented", (e) => {
