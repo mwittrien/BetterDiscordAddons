@@ -32,7 +32,7 @@ class CompleteTimestamps {
 
 	getDescription () {return "Replace all timestamps with complete timestamps.";}
 
-	getVersion () {return "1.0.9";}
+	getVersion () {return "1.1.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -279,8 +279,8 @@ class CompleteTimestamps {
 			}
 			timestring = ownformat
 				.replace("$hour", settings.forceZeros && hour < 10 ? "0" + hour : hour)
-				.replace("$minute", settings.forceZeros && minute < 10 ? "0" + minute : minute)
-				.replace("$second", settings.forceZeros && second < 10 ? "0" + second : second)
+				.replace("$minute", minute < 10 ? "0" + minute : minute)
+				.replace("$second", second < 10 ? "0" + second : second)
 				.replace("$timemode", timemode)
 				.replace("$weekdayL", time.toLocaleDateString(languageid,{weekday: "long"}))
 				.replace("$weekdayS", time.toLocaleDateString(languageid,{weekday: "short"}))
