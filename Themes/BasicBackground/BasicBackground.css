@@ -1342,9 +1342,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	border-color: rgb(var(--accentcolor)) !important;
 }
 
-.root-2sNHUF .topSectionNormal-2LlRG1,
-.root-2sNHUF .topSectionSpotify-3744IX,
-.root-2sNHUF .topSectionPlaying-3jAH9b {
+.root-2sNHUF > [class*="topSection"] {
 	background: rgba(var(--transparencycolor),calc(var(--transparencyalpha) * 3)) !important;
 }
 .root-2sNHUF .userInfoSection-2WJxMm,
