@@ -257,7 +257,7 @@ class CreationDate {
 				};
 			case "it":		//italian
 				return {
-					createdat_text:				"Creata il"
+					createdat_text:				"Creato il"
 				};
 			case "nl":		//dutch
 				return {
