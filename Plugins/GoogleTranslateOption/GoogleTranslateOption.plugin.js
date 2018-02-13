@@ -152,7 +152,7 @@ class GoogleTranslateOption {
 
 	getDescription () {return "Adds a Google Translate option to your context menu, which shows a preview of the translated text and on click will open the selected text in Google Translate. Also adds a translation button to your textareas, which will automatically translate the text for you before it is being send.";}
 
-	getVersion () {return "1.3.2";}
+	getVersion () {return "1.3.3";}
 	
 	getAuthor () {return "DevilBro";}
 	
@@ -467,7 +467,7 @@ class GoogleTranslateOption {
 					})
 					.off("keydown." + this.getName())
 					.on("keydown." + this.getName(), e => {
-						if (textarea.value && this.translating && !e.shiftKey && e.which == 13 && !document.querySelector(".chat form .autocomplete-1TnWNR")) {
+						if (textarea.value && this.translating && !e.shiftKey && e.which == 13 && !textareaWrap.querySelector(".autocomplete-1TnWNR")) {
 							this.doTranslate = true;
 							$(textarea).trigger("input");
 						}
