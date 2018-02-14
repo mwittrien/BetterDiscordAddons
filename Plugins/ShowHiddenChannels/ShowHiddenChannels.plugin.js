@@ -7,7 +7,7 @@ class ShowHiddenChannels {
 		this.categoryMarkup = 
 			`<div class="container-hidden">
 				<div class="containerDefault-1bbItS">
-					<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO wrapperDefault-1Dl4SS cursorPointer-3oKATS" style="flex: 1 1 auto;">
+					<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO wrapperDefault-1Dl4SS cursorPointer-3oKATS" style="flex: 1 1 auto;">
 						<svg class="iconDefault-xzclSQ iconTransition-VhWJ85" width="12" height="12" viewBox="0 0 24 24">
 							<path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 10L12 15 17 10"></path>
 						</svg>
@@ -50,7 +50,7 @@ class ShowHiddenChannels {
 			
 		this.channelCategoryMarkup = 
 			`<div class="containerDefault-7RImuF">
-				<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO cursorPointer-3oKATS wrapperCollapsed-18mf-c content-2mSKOj" style="flex: 1 1 auto;">
+				<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO cursorPointer-3oKATS wrapperCollapsed-18mf-c content-2mSKOj" style="flex: 1 1 auto;">
 					<svg class="iconTransition-VhWJ85 closed-2Hef-I iconCollapsed-1INdMX" width="12" height="12" viewBox="0 0 24 24">
 						<path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 10L12 15 17 10"></path>
 					</svg>
@@ -75,7 +75,7 @@ class ShowHiddenChannels {
 
 	getDescription () {return "Displays channels that are hidden from you by role restrictions.";}
 
-	getVersion () {return "2.1.5";}
+	getVersion () {return "2.1.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -84,7 +84,7 @@ class ShowHiddenChannels {
 		var settings = BDfunctionsDevilBro.getAllData(this, "settings"); 
 		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="titleDefault-1CWM9y title-3i-5G_ size18-ZM4Qv- height24-2pMcnc weightNormal-3gw0Lm marginBottom8-1mABJ4">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		for (let key in settings) {
-			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
+			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
 		}
 		settingshtml += `</div></div>`;
 		
@@ -351,10 +351,11 @@ class ShowHiddenChannels {
 		if (!settings.showAllowedRoles && !settings.showDeniedRoles) return;
 		var myMember = this.MemberStore.getMember(serverObj.id, BDfunctionsDevilBro.myData.id);
 		var allowedRoles = [], overwrittenRoles = [], deniedRoles = [];
+		var everyoneDenied = false;
 		for (let id in channel.permissionOverwrites) {
 			if (settings.showAllowedRoles &&
 				channel.permissionOverwrites[id].type == "role" && 
-				(serverObj.roles[id].name != "@everyone" || allowed) &&
+				(serverObj.roles[id].name != "@everyone") &&
 				(channel.permissionOverwrites[id].allow | this.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].allow) {
 					if (myMember.roles.includes(id) && !allowed) {
 						if (settings.showOverWrittenRoles) overwrittenRoles.push(serverObj.roles[id]);
@@ -367,7 +368,11 @@ class ShowHiddenChannels {
 				channel.permissionOverwrites[id].type == "role" && 
 				(channel.permissionOverwrites[id].deny | this.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].deny) {
 					deniedRoles.push(serverObj.roles[id]);
+					if (serverObj.roles[id].name == "@everyone") everyoneDenied = true;
 			}
+		}
+		if (settings.showAllowedRoles && allowed && !everyoneDenied) {
+			allowedRoles.push({"name":"@everyone"});
 		}
 		var htmlString = ``;
 		if (allowedRoles.length > 0 || overwrittenRoles.length > 0) {
@@ -396,6 +401,7 @@ class ShowHiddenChannels {
 					max-width: ${window.outerHeight/2}px !important;
 				}`;
 			var tooltip = BDfunctionsDevilBro.createTooltip(htmlString, e.currentTarget, {type:"right", selector:"showhiddenchannels-tooltip", html:true, css:customTooltipCSS});
+			tooltip.style.top = tooltip.style.top.replace("px","") - $(e.currentTarget).css("padding-bottom").replace("px","")/2 + $(e.currentTarget).css("padding-top").replace("px","")/2 + "px";
 		}
 	}
 	
@@ -407,7 +413,7 @@ class ShowHiddenChannels {
 			if (BDfunctionsDevilBro.getData("showForNormal", this, "settings")) {
 				var serverObj = BDfunctionsDevilBro.getSelectedServer();
 				if (serverObj) {
-					$(channelList).on("mouseenter." + this.getName(), ".containerDefault-7RImuF", (e) => {
+					$(channelList).on("mouseenter." + this.getName(), ".containerDefault-7RImuF, .containerDefault-1bbItS", (e) => {
 						var channel = BDfunctionsDevilBro.getKeyInformation({"node":e.currentTarget,"key":"channel"});
 						if (channel) this.showAccessRoles(serverObj, channel, e, true);
 					});
