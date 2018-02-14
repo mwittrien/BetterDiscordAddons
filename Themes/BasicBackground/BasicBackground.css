@@ -726,6 +726,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	color: rgba(var(--accentcolor),1) !important;
 }
 .reaction-me,
+.message-3gHzqQ strong,
 .mention:not([style]) {
 	color: rgba(var(--accentcolor),1) !important;
 	background: rgba(var(--accentcolor),0.1) !important;
