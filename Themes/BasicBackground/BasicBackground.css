@@ -2163,6 +2163,31 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 
 /* ----------------------- EXTRAS ----------------------- */
 
+/* custom css container */
+#bd-customcss-editor {
+	background-color: rgba(var(--transparencycolor),.5) !important;
+}
+#bd-customcss-attach-controls {
+	background-color: rgba(var(--transparencycolor),.8) !important;
+    box-shadow: none !important;
+}
+#bd-customcss-editor .ace_selection {
+	background-color: rgb(var(--accentcolor)) !important;
+}
+#bd-customcss-editor .ace_selected-word {
+	border-color: rgb(var(--accentcolor)) !important;
+}
+#bd-customcss-editor .ace_gutter {
+	color: #DDD !important;
+	background-color: rgba(var(--transparencycolor),.3) !important;
+}
+#bd-customcss-editor .ace_active-line {
+	background-color: rgba(var(--accentcolor),.5) !important;
+}
+#bd-customcss-editor .ace_gutter-active-line {
+	background-color: rgba(var(--accentcolor),.7) !important;
+}
+
 /* ownertag */
 .member-owner-icon {
 	margin: 3px 5px 0 7px !important;
