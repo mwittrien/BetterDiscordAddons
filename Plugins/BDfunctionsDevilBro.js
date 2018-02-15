@@ -1591,7 +1591,7 @@ BDfunctionsDevilBro.appendModal = function (modal) {
 			$(e.currentTarget)
 				.addClass("selected");
 		})
-		.on("click", ".backdrop-2ohBEd, .btn-cancel, .btn-save, .btn-cancel, .btn-ok", () => {
+		.on("click", ".backdrop-2ohBEd, .btn-cancel, .btn-save, .btn-send, .btn-cancel, .btn-ok", () => {
 			$(document).off("keydown.modalEscapeListenerDevilBro" + id);
 			$(modal).addClass("closing");
 			setTimeout(() => {modal.remove();}, 300);
