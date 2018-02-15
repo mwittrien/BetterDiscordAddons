@@ -354,7 +354,6 @@ class ShowHiddenChannels {
 		var myMember = this.MemberStore.getMember(serverObj.id, BDfunctionsDevilBro.myData.id);
 		var allowedRoles = [], overwrittenRoles = [], deniedRoles = [], deniedUsers = [];
 		var everyoneDenied = false;
-		console.log(channel);
 		for (let id in channel.permissionOverwrites) {
 			if (settings.showAllowedRoles &&
 				channel.permissionOverwrites[id].type == "role" && 
