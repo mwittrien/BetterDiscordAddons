@@ -66,7 +66,8 @@ class ShowHiddenChannels {
 				showAllowedRoles:		{value:true,	description:"Show allowed Roles on hover:"},
 				showOverWrittenRoles:	{value:true,	description:"Include overwritten Roles in allowed Roles:"},
 				showDeniedRoles:		{value:true,	description:"Show denied Roles on hover:"},
-				showForNormal:			{value:false,	description:"Also show Roles for allowed channels:"}
+				showDeniedUsers:		{value:true,	description:"Show denied Users on hover:"},
+				showForNormal:			{value:false,	description:"Also show Roles/Users for allowed channels:"}
 			}
 		};
 	}
@@ -75,7 +76,7 @@ class ShowHiddenChannels {
 
 	getDescription () {return "Displays channels that are hidden from you by role restrictions.";}
 
-	getVersion () {return "2.1.6";}
+	getVersion () {return "2.1.7";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -110,6 +111,7 @@ class ShowHiddenChannels {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
+			this.UserStore = BDfunctionsDevilBro.WebModules.findByProperties(["getUsers", "getUser"]);
 			this.MemberStore = BDfunctionsDevilBro.WebModules.findByProperties(["getMember", "getMembers"]);
 			this.ChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getChannels", "getDMFromUserId"]);
 			this.GuildChannels = BDfunctionsDevilBro.WebModules.findByProperties(["getChannels", "getDefaultChannel"]);
@@ -350,8 +352,9 @@ class ShowHiddenChannels {
 		var settings = BDfunctionsDevilBro.getAllData(this, "settings");
 		if (!settings.showAllowedRoles && !settings.showDeniedRoles) return;
 		var myMember = this.MemberStore.getMember(serverObj.id, BDfunctionsDevilBro.myData.id);
-		var allowedRoles = [], overwrittenRoles = [], deniedRoles = [];
+		var allowedRoles = [], overwrittenRoles = [], deniedRoles = [], deniedUsers = [];
 		var everyoneDenied = false;
+		console.log(channel);
 		for (let id in channel.permissionOverwrites) {
 			if (settings.showAllowedRoles &&
 				channel.permissionOverwrites[id].type == "role" && 
@@ -369,6 +372,13 @@ class ShowHiddenChannels {
 				(channel.permissionOverwrites[id].deny | this.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].deny) {
 					deniedRoles.push(serverObj.roles[id]);
 					if (serverObj.roles[id].name == "@everyone") everyoneDenied = true;
+			}
+			else if (settings.showDeniedUsers &&
+				channel.permissionOverwrites[id].type == "member" && 
+				(channel.permissionOverwrites[id].deny | this.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].deny) {
+					let user = this.UserStore.getUser(id);
+					let member = this.MemberStore.getMember(serverObj.id,id);
+					if (user && member) deniedUsers.push(Object.assign({name:user.username},member));
 			}
 		}
 		if (settings.showAllowedRoles && allowed && !everyoneDenied) {
@@ -392,6 +402,14 @@ class ShowHiddenChannels {
 			for (let role of deniedRoles) {
 				let color = role.colorString ? BDfunctionsDevilBro.color2COMP(role.colorString) : [255,255,255];
 				htmlString += `<li class="role-3rahR_ flex-3B1Tl4 alignCenter-3VxkQP size12-1IGJl9 weightMedium-13x9Y8" style="border-color: rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.6);"><div class="roleCircle-3-vPZq" style="background-color: rgb(${color[0]}, ${color[1]}, ${color[2]});"></div><div class="roleName-DUQZ9m">${BDfunctionsDevilBro.encodeToHTML(role.name)}</div></li>`;
+			}
+			htmlString += `</div>`;
+		}
+		if (deniedUsers.length > 0) {
+			htmlString += `<div class="marginBottom4-_yArcI">Denied Users:</div><div class="flex-3B1Tl4 wrap-1da0e3">`;
+			for (let user of deniedUsers) {
+				let color = user.colorString ? BDfunctionsDevilBro.color2COMP(user.colorString) : [255,255,255];
+				htmlString += `<li class="role-3rahR_ flex-3B1Tl4 alignCenter-3VxkQP size12-1IGJl9 weightMedium-13x9Y8" style="border-color: rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.6);"><div class="roleCircle-3-vPZq" style="background-color: rgb(${color[0]}, ${color[1]}, ${color[2]});"></div><div class="roleName-DUQZ9m">${BDfunctionsDevilBro.encodeToHTML(user.nick ? user.nick : user.name)}</div></li>`;
 			}
 			htmlString += `</div>`;
 		}
