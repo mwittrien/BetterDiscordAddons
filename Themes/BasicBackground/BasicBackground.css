@@ -425,7 +425,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .messages-wrapper,
 .message-group,
 .message-group code,
-.userPopout-4pfA0d .activity-AFBUEw,
+.userPopout-11hFKo .activity-3NviKQ,
 .typing-3eiiL_,
 .action-buttons,
 .wrapper-2ldvyE,
@@ -937,7 +937,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	position: relative !important;
 	bottom: 280px !important;
 }
-.popout[style*="translateY(-100%)"] > .userPopout-4pfA0d {
+.popout[style*="translateY(-100%)"] > .userPopout-11hFKo {
 	position: absolute !important;
 	bottom: -20px !important;
 	left: -120px !important;
@@ -1306,22 +1306,22 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	border-color:  rgba(var(--accentcolor),calc(var(--transparencyalpha) * 6)) !important;
 }
 
-.userPopout-4pfA0d .header-3mZJcV,
-.userPopout-4pfA0d .footer-2J5zqP {
+.userPopout-11hFKo .header-3budic,
+.userPopout-11hFKo .footer-2wFs91 {
 	background: rgba(var(--transparencycolor),calc(var(--transparencyalpha) * 3)) !important;
 }
-.userPopout-4pfA0d .body-3rkFrF {
+.userPopout-11hFKo .body-3ljq11 {
 	background: rgba(var(--transparencycolor),calc(var(--transparencyalpha) * 2)) !important;
 	margin: 10px !important;
 	border-radius: 5px !important;
 }
-.userPopout-4pfA0d .body-3rkFrF textarea:focus {
+.userPopout-11hFKo .body-3ljq11 textarea:focus {
 	background: rgba(var(--transparencycolor),calc(var(--transparencyalpha) * 3)) !important;
 }
-.userPopout-4pfA0d .body-3rkFrF .bodyTitle-yehI7c {
+.userPopout-11hFKo .body-3ljq11 .bodyTitle-18hsd9 {
 	color: hsla(0,0%,100%,.8) !important;
 } 
-.userPopout-4pfA0d .quickMessage-28pD5Y {
+.userPopout-11hFKo .quickMessage-OCo-Q0 {
 	background: rgba(var(--transparencycolor),var(--transparencyalpha)) !important;
 	border-radius: 3px !important;
 	border-style: solid !important;
@@ -1330,10 +1330,10 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	margin-right: 15px !important;
 	transition: background-color .15s ease,border .15s ease !important;
 }
-.userPopout-4pfA0d .quickMessage-28pD5Y:not(:focus) {
+.userPopout-11hFKo .quickMessage-OCo-Q0:not(:focus) {
 	border-color: rgba(var(--transparencycolor),calc(var(--transparencyalpha) * 3)) !important;
 }
-.userPopout-4pfA0d .quickMessage-28pD5Y:focus {
+.userPopout-11hFKo .quickMessage-OCo-Q0:focus {
 	border-color: rgb(var(--accentcolor)) !important;
 }
 
