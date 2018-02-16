@@ -45,7 +45,7 @@ class CreationDate {
 
 	getDescription () {return "Displays the Creation Date of an Account in the UserPopout and UserModal.";}
 
-	getVersion () {return "1.1.3";}
+	getVersion () {return "1.1.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -107,8 +107,8 @@ class CreationDate {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(".userPopout-4pfA0d")) {
-									if (BDfunctionsDevilBro.getData("addInUserPopout", this, "settings")) this.addCreationDate(node.querySelector(".headerText-3tKBWq"));
+								if (node && node.tagName && node.querySelector(".userPopout-11hFKo")) {
+									if (BDfunctionsDevilBro.getData("addInUserPopout", this, "settings")) this.addCreationDate(node.querySelector(".headerText-3ptbeX"));
 								}
 							});
 						}
