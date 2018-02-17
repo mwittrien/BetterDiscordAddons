@@ -1584,6 +1584,9 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .uploadModalIn-14sS7w .error-8xpJV5 .icon-19bbE_:not(.image-sUU6Oh)::after {
 	background-color: rgb(240, 71, 71) !important;
 }
+.uploadModalIn-14sS7w .error-8xpJV5 a {
+	color: #FFF !important;
+}
 .uploadModal-2KN6Mm .icon-19bbE_:not(.image-sUU6Oh)::before,
 .uploadModal-2KN6Mm .icon-19bbE_:not(.image-sUU6Oh)::after,
 .uploadModalIn-14sS7w .icon-19bbE_:not(.image-sUU6Oh)::before,
