@@ -2,9 +2,6 @@
 
 class PluginRepo {
 	constructor () {
-		this.settingsWindowObserver = new MutationObserver(() => {});
-		this.innerSettingsWindowObserver = new MutationObserver(() => {});
-		
 		this.loading = false;
 		
 		this.grabbedPlugins = [];
@@ -278,27 +275,9 @@ class PluginRepo {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
-			var observertarget = null;
+			var observer = null;
 
-			this.settingsWindowObserver = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								setImmediate(() => {
-									if (node && node.tagName && node.getAttribute("layer-id") == "user-settings") {
-										this.checkIfPluginsPage(node);
-										this.innerSettingsWindowObserver.observe(node, {childList:true, subtree:true});
-									}
-								});
-							});
-						}
-					}
-				);
-			});
-			if (observertarget = document.querySelector(".layers-20RVFW")) this.settingsWindowObserver.observe(observertarget, {childList:true});
-			
-			this.innerSettingsWindowObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, j) => {
 						if (change.addedNodes) {
@@ -309,16 +288,29 @@ class PluginRepo {
 					}
 				);
 			});
+			BDfunctionsDevilBro.addObserver(this, ".layer-kosS71[layer-id='user-settings']", {name:"innerSettingsWindowObserver",instance:observer}, {childList:true,subtree:true});
+			
+			observer = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.addedNodes) {
+							change.addedNodes.forEach((node) => {
+								setImmediate(() => {
+									if (node && node.tagName && node.getAttribute("layer-id") == "user-settings") {
+										BDfunctionsDevilBro.addObserver(this, node, {name:"innerSettingsWindowObserver"}, {childList:true,subtree:true});
+										this.checkIfPluginsPage(node);
+									}
+								});
+							});
+						}
+					}
+				);
+			});
+			BDfunctionsDevilBro.addObserver(this, ".layers-20RVFW", {name:"settingsWindowObserver",instance:observer}, {childList:true});
 			
 			var settingswindow = document.querySelector(".layer-kosS71[layer-id='user-settings']");
-			if (settingswindow) {
-				this.innerSettingsWindowObserver.observe(settingswindow, {childList:true, subtree:true});
-				this.checkIfPluginsPage(settingswindow);
-			}
-			
-			
-			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
-			
+			if (settingswindow) this.checkIfPluginsPage(settingswindow);
+						
 			this.loadPlugins();
 			
 			this.updateInterval = setInterval(() => {this.checkForNewPlugins();},1000*60*30);
@@ -331,16 +323,11 @@ class PluginRepo {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.unloadMessage(this);
-			
-			this.settingsWindowObserver.disconnect();
-			this.innerSettingsWindowObserver.disconnect();
-			
 			clearInterval(this.updateInterval);
-			
-			BDfunctionsDevilBro.removeLocalStyle(this.getName());
-			
+						
 			$(".pluginrepo-modal, .bd-pluginrepobutton, webview[webview-PluginRepo]").remove();
+			
+			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
 
