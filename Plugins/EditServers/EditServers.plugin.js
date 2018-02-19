@@ -2,11 +2,7 @@
 
 class EditServers {
 	constructor () {
-		
 		this.labels = {};
-	
-		this.serverContextObserver = new MutationObserver(() => {});
-		this.serverListObserver = new MutationObserver(() => {});
 		
 		this.serverDragged = false;
 
@@ -169,9 +165,9 @@ class EditServers {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
-			var observertarget = null;
+			var observer = null;
 
-			this.serverContextObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -184,9 +180,9 @@ class EditServers {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".app")) this.serverContextObserver.observe(observertarget, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, ".app", {name:"serverContextObserver",instance:observer}, {childList: true});
 			
-			this.serverListObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -198,7 +194,7 @@ class EditServers {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".guilds.scroller")) this.serverListObserver.observe(observertarget, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, ".guilds.scroller", {name:"serverListObserver",instance:observer}, {childList: true});
 			
 			$(".guilds.scroller").on("drop" + this.getName(), () => {	
 				this.serverDragged = true;
@@ -217,8 +213,6 @@ class EditServers {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			this.serverContextObserver.disconnect();
-			this.serverListObserver.disconnect();
 			$(".guilds.scroller").off("drop" + this.getName());
 			$(".guilds.scroller").off("mouseleave" + this.getName());
 			
