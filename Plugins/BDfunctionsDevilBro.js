@@ -145,10 +145,7 @@ BDfunctionsDevilBro.checkUser = function (plugin) {
 BDfunctionsDevilBro.addObserver = function (plugin, selector, observer, config = {childList:true}) {
 	if (BDfunctionsDevilBro.isObjectEmpty(plugin.observers)) plugin.observers = {};
 	if (!Array.isArray(plugin.observers[observer.name])) plugin.observers[observer.name] = [];
-	if (!observer.multi) {
-		for (var subinstance of plugin.observers[observer.name]) subinstance.disconnect()
-		plugin.observers[observer.name] = [];
-	}
+	if (!observer.multi) for (var subinstance of plugin.observers[observer.name]) subinstance.disconnect();
 	if (observer.instance) plugin.observers[observer.name].push(observer.instance);
 	var instance = plugin.observers[observer.name][plugin.observers[observer.name].length-1];
 	if (instance) {
