@@ -4,11 +4,6 @@ class ServerFolders {
 	constructor () {
 		this.labels = {};
 		
-		this.serverContextObserver = new MutationObserver(() => {});
-		this.serverListObserver = new MutationObserver(() => {});
-		this.settingsWindowObserver = new MutationObserver(() => {});
-		this.badgeObserver = new MutationObserver(() => {});
-		
 		this.css = `
 			.guild.folder .avatar-small {
 				background-clip: padding-box;
@@ -369,9 +364,23 @@ class ServerFolders {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
-			var observertarget = null;
+			var observer = null;
 
-			this.serverContextObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						var serverObj = this.getParentObject(change.target, "guild");
+						var folderDiv = this.getFolderOfServer(serverObj);
+						if (folderDiv) {
+							this.updateCopyInFolderContent(serverObj, folderDiv);
+							this.updateFolderNotifications(folderDiv);
+						}
+					}
+				);
+			});
+			BDfunctionsDevilBro.addObserver(this, null, {name:"badgeObserver",instance:observer,multi:true}, {characterData:true,subtree:true});
+			
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -384,9 +393,9 @@ class ServerFolders {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".app")) this.serverContextObserver.observe(observertarget, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, ".app", {name:"serverContextObserver",instance:observer}, {childList: true});
 			
-			this.serverListObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.type == "attributes" && change.attributeName == "class") {
@@ -404,7 +413,9 @@ class ServerFolders {
 								if (folderDiv) {
 									this.updateCopyInFolderContent(serverObj, folderDiv);
 									this.updateFolderNotifications(folderDiv);
-									if (node.tagName && node.classList.contains("badge")) this.badgeObserver.observe(node, {characterData: true, subtree: true});
+									if (node.tagName && node.classList.contains("badge")) {
+										BDfunctionsDevilBro.addObserver(this, node, {name:"badgeObserver",multi:true}, {characterData:true,subtree:true});
+									}
 									$(serverObj.div).attr("folder",folderDiv.id).hide();
 								}
 							});
@@ -424,9 +435,9 @@ class ServerFolders {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".guilds.scroller")) this.serverListObserver.observe(observertarget, {childList: true, attributes: true, subtree: true});
+			BDfunctionsDevilBro.addObserver(this, ".guilds.scroller", {name:"serverListObserver",instance:observer}, {childList: true, attributes: true, subtree: true});
 			
-			this.settingsWindowObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.removedNodes) {
@@ -437,34 +448,17 @@ class ServerFolders {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".layers-20RVFW")) this.settingsWindowObserver.observe(observertarget, {childList:true});
+			BDfunctionsDevilBro.addObserver(this, ".layers-20RVFW", {name:"settingsWindowObserver",instance:observer}, {childList:true});
 			
-			this.badgeObserver = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						var serverObj = this.getParentObject(change.target, "guild");
-						var folderDiv = this.getFolderOfServer(serverObj);
-						if (folderDiv) {
-							this.updateCopyInFolderContent(serverObj, folderDiv);
-							this.updateFolderNotifications(folderDiv);
-						}
-					}
-				);
+			document.querySelectorAll(".badge:not(.folder):not(.copy)").forEach((badge) => {
+				BDfunctionsDevilBro.addObserver(this, badge, {name:"badgeObserver",multi:true}, {characterData:true,subtree:true});
 			});
-			
-			document.querySelectorAll(".badge:not(.folder):not(.copy)").forEach( 
-				(badge) => {
-					this.badgeObserver.observe(badge, {characterData: true, subtree: true});
-				}
-			);
 				
 			setTimeout(() => {
 				this.addDragListener();
 				this.loadAllFolders();
 			},5000);
-			
-			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
-		}
+					}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
 		}
@@ -472,17 +466,10 @@ class ServerFolders {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			this.serverContextObserver.disconnect();
-			this.serverListObserver.disconnect();
-			this.settingsWindowObserver.disconnect();
-			this.badgeObserver.disconnect();
-			
 			this.resetAllElements();
 			
 			$(".guilds.scroller").off("mousedown." + this.getName());
-			
-			BDfunctionsDevilBro.removeLocalStyle(this.getName());
-			
+						
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
