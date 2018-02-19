@@ -4,9 +4,6 @@ class ServerHider {
 	constructor () {
 		this.labels = {};
 		
-		this.serverContextObserver = new MutationObserver(() => {});
-		this.serverListObserver = new MutationObserver(() => {});
-		
 		this.css = `
 			.serverhider-modal .entry {
 				align-items: center;
@@ -180,9 +177,9 @@ class ServerHider {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
-			var observertarget = null;
+			var observer = null;
 
-			this.serverContextObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -195,9 +192,9 @@ class ServerHider {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".app")) this.serverContextObserver.observe(observertarget, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, ".app", {name:"serverContextObserver",instance:observer}, {childList: true});
 			
-			this.serverListObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -216,13 +213,11 @@ class ServerHider {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".guilds.scroller")) this.serverListObserver.observe(observertarget, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, ".guilds.scroller", {name:"serverListObserver",instance:observer}, {childList: true});
 			
 			$(".guilds.scroller").on("mouseleave." + this.getName(), () => {this.updateAllServers(false);});
 			
 			this.updateAllServers(true);
-			
-			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -231,16 +226,11 @@ class ServerHider {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			this.serverContextObserver.disconnect();
-			this.serverListObserver.disconnect();
-			
 			$(".guilds.scroller").off("mouseleave." + this.getName());
 			
 			BDfunctionsDevilBro.readServerList().forEach(serverObj => {
 				if (!serverObj.div.getAttribute("folder")) $(serverObj.div).show();
 			});
-			
-			BDfunctionsDevilBro.removeLocalStyle(this.getName());
 			
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
