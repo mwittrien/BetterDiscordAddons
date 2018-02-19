@@ -1,9 +1,7 @@
 //META{"name":"BetterNsfwTag"}*//
 
 class BetterNsfwTag {
-	constructor () {
-		this.channelListObserver = new MutationObserver(() => {});
-		
+	constructor () {		
 		this.css = ` 
 			.nsfw-tag {
 				position: relative;
@@ -55,9 +53,9 @@ class BetterNsfwTag {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
-			var observertarget = null;
+			var observer = null;
 
-			this.channelListObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -73,10 +71,8 @@ class BetterNsfwTag {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".channels-3g2vYe")) this.channelListObserver.observe(observertarget, {childList: true, subtree: true});
-			
-			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
-			
+			BDfunctionsDevilBro.addObserver(this, ".channels-3g2vYe", {name:"channelListObserver",instance:observer}, {childList: true, subtree: true});
+						
 			this.checkAllContainers();
 		}
 		else {
@@ -87,11 +83,7 @@ class BetterNsfwTag {
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			$(".nsfw-tag").remove();
-			
-			this.channelListObserver.disconnect();
-			
-			BDfunctionsDevilBro.removeLocalStyle(this.getName());
-			
+						
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
