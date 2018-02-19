@@ -2,9 +2,6 @@
 
 class SpellCheck {
 	constructor () {
-		this.messageContextObserver = new MutationObserver(() => {});
-		this.textareaObserver = new MutationObserver(() => {});
-		
 		this.languages = {};
 		this.langDictionary = [];
 		this.dictionary = [];
@@ -136,9 +133,9 @@ class SpellCheck {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
-			var observertarget = null;
+			var observer = null;
 
-			this.messageContextObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -151,9 +148,9 @@ class SpellCheck {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".app")) this.messageContextObserver.observe(observertarget, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, ".app", {name:"messageContextObserver",instance:observer}, {childList: true});
 			
-			this.textareaObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -166,11 +163,9 @@ class SpellCheck {
 					}
 				);
 			});
-			if (observertarget = document.querySelector("#app-mount")) this.textareaObserver.observe(observertarget, {childList: true, subtree:true});
+			BDfunctionsDevilBro.addObserver(this, "#app-mount", {name:"textareaObserver",instance:observer}, {childList: true, subtree:true});
 			
 			document.querySelectorAll(".textArea-20yzAH").forEach(textarea => {this.addSpellCheck(textarea);});
-			
-			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
 			
 			this.languages = Object.assign({},BDfunctionsDevilBro.languages);
 			this.languages = BDfunctionsDevilBro.filterObject(this.languages , (lang) => {return lang.dic == true ? lang : null});
@@ -184,15 +179,10 @@ class SpellCheck {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.unloadMessage(this);
-			
 			$(".spellcheck-overlay").remove();
 			$(".textArea-20yzAH").off("keyup." + this.getName()).off("scroll." + this.getName());
 			
-			this.messageContextObserver.disconnect();
-			this.textareaObserver.disconnect();
-			
-			BDfunctionsDevilBro.removeLocalStyle(this.getName());
+			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
 
