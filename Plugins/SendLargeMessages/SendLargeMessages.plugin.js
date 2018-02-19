@@ -90,9 +90,7 @@ class SendLargeMessages {
 	initialize () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
-			
-			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
-			
+						
 			this.bindEventToTextArea();
 		}
 		else {
@@ -103,9 +101,6 @@ class SendLargeMessages {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			
-			BDfunctionsDevilBro.removeLocalStyle(this.getName());
-			
 			$(".channelTextArea-1HTP3C textarea").off("input." + this.getName()).off("paste." + this.getName());
 			$(document).off("mouseup." + this.getName()).off("mousemove." + this.getName());
 			
