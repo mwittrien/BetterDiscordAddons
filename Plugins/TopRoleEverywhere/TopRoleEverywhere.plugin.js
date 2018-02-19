@@ -2,12 +2,8 @@
 
 class TopRoleEverywhere {
 	constructor () {
-		this.userListObserver = new MutationObserver(() => {});
-		this.chatWindowObserver = new MutationObserver(() => {});
-		this.settingsWindowObserver = new MutationObserver(() => {});
-		
 		this.css = ` 
-			.role-tag {
+			.TRE-tag {
 				position: relative;
 				overflow: hidden; 
 				padding: 2px 3px 1px 3px; 
@@ -21,12 +17,12 @@ class TopRoleEverywhere {
 				white-space: nowrap;
 			}
 			
-			.role-tag.chat-tag, .role-tag.id-tag {
+			.TRE-tag.chat-tag, .TRE-tag.id-tag {
 				bottom: 1px;
 				margin-right: 5px;
 			}`;
 			
-		this.tagMarkup = `<span class="role-tag"><span class="role-inner"></span></span>`;
+		this.tagMarkup = `<span class="TRE-tag"><span class="role-inner"></span></span>`;
 			
 		this.defaults = {
 			settings: {
@@ -95,9 +91,9 @@ class TopRoleEverywhere {
 			this.GuildStore = BDfunctionsDevilBro.WebModules.findByProperties(["getGuild"]);
 			this.UserGuildState = BDfunctionsDevilBro.WebModules.findByProperties(["getGuildId", "getLastSelectedGuildId"]);
 			
-			var observertarget = null;
+			var observer = null;
 
-			this.userListObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -110,9 +106,9 @@ class TopRoleEverywhere {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".channel-members")) this.userListObserver.observe(observertarget, {childList:true});
+			BDfunctionsDevilBro.addObserver(this, ".channel-members", {name:"userListObserver",instance:observer}, {childList:true});
 			
-			this.chatWindowObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -145,9 +141,9 @@ class TopRoleEverywhere {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(observertarget, {childList:true, subtree:true});
+			BDfunctionsDevilBro.addObserver(this, ".messages.scroller", {name:"chatWindowObserver",instance:observer}, {childList:true, subtree:true});
 			
-			this.settingsWindowObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.removedNodes) {
@@ -158,10 +154,8 @@ class TopRoleEverywhere {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".layers-20RVFW")) this.settingsWindowObserver.observe(observertarget, {childList:true});
-			
-			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
-			
+			BDfunctionsDevilBro.addObserver(this, ".layers-20RVFW", {name:"settingsWindowObserver",instance:observer}, {childList:true});
+						
 			this.loadRoleTags();
 		}
 		else {
@@ -171,13 +165,7 @@ class TopRoleEverywhere {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			document.querySelectorAll(".role-tag").forEach(node=>{node.parentElement.removeChild(node)});
-			
-			this.userListObserver.disconnect();
-			this.chatWindowObserver.disconnect();
-			this.settingsWindowObserver.disconnect();
-			
-			BDfunctionsDevilBro.removeLocalStyle(this.getName());
+			document.querySelectorAll(".TRE-tag").forEach(node=>{node.remove();});
 			
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
@@ -185,9 +173,8 @@ class TopRoleEverywhere {
 	
 	onSwitch () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			var observertarget = null;
-			if (observertarget = document.querySelector(".channel-members")) this.userListObserver.observe(observertarget, {childList:true});
-			if (observertarget = document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(observertarget, {childList:true, subtree:true});
+			BDfunctionsDevilBro.addObserver(this, ".channel-members", {name:"userListObserver"}, {childList:true});
+			BDfunctionsDevilBro.addObserver(this, ".messages.scroller", {name:"chatWindowObserver"}, {childList:true, subtree:true});
 			this.loadRoleTags();
 		}
 	}
@@ -204,7 +191,7 @@ class TopRoleEverywhere {
 	}
 
 	loadRoleTags() {
-		document.querySelectorAll(".role-tag").forEach(node=>{node.remove();});
+		document.querySelectorAll(".TRE-tag").forEach(node=>{node.remove();});
 		var settings = BDfunctionsDevilBro.getAllData(this, "settings");
 		if (settings.showInMemberList) { 
 			var membersList = document.querySelectorAll("div.member");
@@ -233,7 +220,7 @@ class TopRoleEverywhere {
 		var guild = this.GuildStore.getGuild(this.UserGuildState.getGuildId());
 		var member = wrapper.querySelector("div.member-username") || wrapper.querySelector("span.username-wrapper");
 		if (compact) wrapper = $(".message-group").has(wrapper)[0];
-		if (member && member.tagName && !member.querySelector(".role-tag")) {
+		if (member && member.tagName && !member.querySelector(".TRE-tag")) {
 			var settings = BDfunctionsDevilBro.getAllData(this, "settings");
 			var userInfo = 
 				compact ? BDfunctionsDevilBro.getKeyInformation({"node":wrapper,"key":"message"}).author : BDfunctionsDevilBro.getKeyInformation({"node":wrapper,"key":"user"});
