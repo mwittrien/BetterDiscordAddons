@@ -2,7 +2,6 @@
 
 class FixTwitchEmotes {
 	constructor () {
-		this.emojiPickerObserver = new MutationObserver(() => {});
 	}
 
 	getName () {return "FixTwitchEmotes";}
@@ -35,9 +34,9 @@ class FixTwitchEmotes {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
-			var observertarget = null;
+			var observer = null;
 
-			this.emojiPickerObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -60,7 +59,7 @@ class FixTwitchEmotes {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".popouts")) this.emojiPickerObserver.observe(observertarget, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, ".popouts", {name:"emojiPickerObserver",instance:observer}, {childList: true});
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -70,8 +69,6 @@ class FixTwitchEmotes {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			this.emojiPickerObserver.disconnect();
-			
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
