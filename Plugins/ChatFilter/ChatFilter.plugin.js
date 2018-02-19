@@ -4,10 +4,6 @@ class ChatFilter {
 	constructor () {
 		this.configs = ["case","exact"];
 		
-		this.chatWindowObserver = new MutationObserver(() => {});
-		this.messageChangeObserver = new MutationObserver(() => {});
-		this.settingsWindowObserver = new MutationObserver(() => {});
-		
 		this.css = ` 
 			.message-group .comment .accessory.blocked:not(.revealed),
 			.message-group .comment .markup.blocked:not(.revealed) {
@@ -110,40 +106,9 @@ class ChatFilter {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
-			var observertarget = null;
+			var observer = null;
 
-			this.chatWindowObserver = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(".message")) {
-									this.messageChangeObserver.observe(node, {childList:true, characterData:true, subtree:true});
-									node.querySelectorAll(".markup, .accessory").forEach(message => {
-										this.hideMessage(message);
-									});
-								}
-							});
-						}
-					}
-				);
-			});
-			if (observertarget = document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(observertarget, {childList:true});
-			
-			this.settingsWindowObserver = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.removedNodes) {
-							change.removedNodes.forEach((node) => {
-								if (node && $(node).attr("layer-id") == "user-settings") this.hideAllMessages();
-							});
-						}
-					}
-				);
-			});
-			if (observertarget = document.querySelector(".layers-20RVFW")) this.settingsWindowObserver.observe(observertarget, {childList:true});
-			
-			this.messageChangeObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.type == "characterData") {
@@ -157,11 +122,41 @@ class ChatFilter {
 					}
 				);
 			});
+			BDfunctionsDevilBro.addObserver(this, null, {name:"messageChangeObserver",instance:observer,multi:true}, {childList:true, characterData:true, subtree:true});
+			
+			observer = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.addedNodes) {
+							change.addedNodes.forEach((node) => {
+								if (node && node.tagName && node.querySelector(".message")) {
+									BDfunctionsDevilBro.addObserver(this, node, {name:"messageChangeObserver",multi:true}, {childList:true, characterData:true, subtree:true});
+									node.querySelectorAll(".markup, .accessory").forEach(message => {
+										this.hideMessage(message);
+									});
+								}
+							});
+						}
+					}
+				);
+			});
+			BDfunctionsDevilBro.addObserver(this, ".messages.scroller", {name:"chatWindowObserver",instance:observer}, {childList:true});
+			
+			observer = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.removedNodes) {
+							change.removedNodes.forEach((node) => {
+								if (node && $(node).attr("layer-id") == "user-settings") this.hideAllMessages();
+							});
+						}
+					}
+				);
+			});
+			BDfunctionsDevilBro.addObserver(this, ".layers-20RVFW", {name:"settingsWindowObserver",instance:observer}, {childList:true});
 			
 			this.hideAllMessages();
-			
-			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
-		}
+					}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
 		}
@@ -169,16 +164,11 @@ class ChatFilter {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			this.chatWindowObserver.disconnect();
-			this.messageChangeObserver.disconnect();
-			this.settingsWindowObserver.disconnect();
 			
 			document.querySelectorAll(".markup.blocked, .markup.censored, .accessory.blocked, .accessory.censored").forEach(message => {
 				this.resetMessage(message);
 			});
-			
-			BDfunctionsDevilBro.removeLocalStyle(this.getName());
-			
+						
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
@@ -186,8 +176,7 @@ class ChatFilter {
 	onSwitch () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.hideAllMessages();
-			var observertarget = null;
-			if (observertarget = document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(observertarget, {childList:true});
+			BDfunctionsDevilBro.addObserver(this, ".messages.scroller", {name:"chatWindowObserver"}, {childList:true, subtree:true});
 		}
 	}
 	
@@ -297,7 +286,7 @@ class ChatFilter {
 			this.resetMessage(message);
 		});
 		document.querySelectorAll(".message-group").forEach(messageContainer => {
-			this.messageChangeObserver.observe(messageContainer, {childList:true, characterData:true, subtree:true});
+			BDfunctionsDevilBro.addObserver(this, messageContainer, {name:"messageChangeObserver",multi:true}, {childList:true, characterData:true, subtree:true});
 			messageContainer.querySelectorAll(".markup, .accessory").forEach(message => {
 				this.hideMessage(message);
 			});
