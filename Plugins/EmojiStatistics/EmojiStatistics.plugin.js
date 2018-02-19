@@ -4,8 +4,6 @@ class EmojiStatistics {
 	constructor () {
 		this.labels = {};
 		
-		this.emojiPickerObserver = new MutationObserver(() => {});
-		
 		this.css = `
 			.emojistatistics-modal .titles {
 				height: 20px;
@@ -207,9 +205,9 @@ class EmojiStatistics {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
-			var observertarget = null;
+			var observer = null;
 
-			this.emojiPickerObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -235,23 +233,17 @@ class EmojiStatistics {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".popouts")) this.emojiPickerObserver.observe(observertarget, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, ".popouts", {name:"emojiPickerObserver",instance:observer}, {childList: true});
 			
 			this.GuildEmojis = BDfunctionsDevilBro.WebModules.findByProperties(["getGuildEmoji", "getDisambiguatedEmojiContext"]);
-			
-			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
-		}
+					}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
 		}
 	}
 
 	stop () {
-		if (typeof BDfunctionsDevilBro === "object") {
-			this.emojiPickerObserver.disconnect();
-			
-			BDfunctionsDevilBro.removeLocalStyle(this.getName());
-			
+		if (typeof BDfunctionsDevilBro === "object") {			
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
