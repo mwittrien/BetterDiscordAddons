@@ -98,7 +98,9 @@ BDfunctionsDevilBro.unloadMessage = function (plugin) {
 	BDfunctionsDevilBro.removeOnSwitchListener(plugin);
 	
 	if (!BDfunctionsDevilBro.isObjectEmpty(plugin.observers)) {
-		for (var name in plugin.observers) plugin.observers[name].disconnect();
+		for (var name in plugin.observers) {
+			for (var subinstance of plugin.observers[name]) subinstance.disconnect();
+		}
 		delete plugin.observers;
 	}
 	
@@ -142,10 +144,14 @@ BDfunctionsDevilBro.checkUser = function (plugin) {
 
 BDfunctionsDevilBro.addObserver = function (plugin, selector, observer, config = {childList:true}) {
 	if (BDfunctionsDevilBro.isObjectEmpty(plugin.observers)) plugin.observers = {};
-	if (!observer.multi && plugin.observers[observer.name]) plugin.observers[observer.name].disconnect();
-	if (observer.instance) plugin.observers[observer.name] = observer.instance;
-	var element = selector ? document.querySelector(selector) : null;
-	if (element && plugin.observers[observer.name]) plugin.observers[observer.name].observe(element, config);
+	if (!Array.isArray(plugin.observers[observer.name])) plugin.observers[observer.name] = [];
+	if (!observer.multi) {
+		for (var subinstance of plugin.observers[observer.name]) subinstance.disconnect()
+		plugin.observers[observer.name] = [];
+	}
+	if (observer.instance) plugin.observers[observer.name].push(observer.instance);
+	var element = typeof selector === "object" ? selector : (typeof selector === "string" ? document.querySelector(selector) : null);
+	if (element && observer.instance) observer.instance.observe(element, config);
 };
 
 // plugin update notifications created in cooperation with Zerebos https://github.com/rauenzi/BetterDiscordAddons/blob/master/Plugins/PluginLibrary.js
