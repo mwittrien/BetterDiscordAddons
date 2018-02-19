@@ -2,11 +2,6 @@
 
 class RemoveNicknames {
 	constructor () {
-		this.channelListObserver = new MutationObserver(() => {});
-		this.userListObserver = new MutationObserver(() => {});
-		this.chatWindowObserver = new MutationObserver(() => {});
-		this.settingsWindowObserver = new MutationObserver(() => {});
-			
 		this.defaults = {
 			settings: {
 				replaceOwn:		{value:false, 	description:"Replace your own name:"},
@@ -66,9 +61,9 @@ class RemoveNicknames {
 			this.UserStore = BDfunctionsDevilBro.WebModules.findByProperties(["getUsers", "getUser"]);
 			this.MemberPerms = BDfunctionsDevilBro.WebModules.findByProperties(["getNicknames", "getNick"]);
 			
-			var observertarget = null;
+			var observer = null;
 
-			this.channelListObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -81,9 +76,9 @@ class RemoveNicknames {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".channels-3g2vYe")) this.channelListObserver.observe(observertarget, {childList: true, subtree: true});
+			BDfunctionsDevilBro.addObserver(this, ".channels-3g2vYe", {name:"channelListObserver",instance:observer}, {childList: true, subtree: true});
 			
-			this.userListObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -96,9 +91,9 @@ class RemoveNicknames {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".channel-members")) this.userListObserver.observe(observertarget, {childList:true});
+			BDfunctionsDevilBro.addObserver(this, ".channel-members", {name:"userListObserver",instance:observer}, {childList:true});
 			
-			this.chatWindowObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -129,9 +124,9 @@ class RemoveNicknames {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(observertarget, {childList:true, subtree:true});
+			BDfunctionsDevilBro.addObserver(this, ".messages.scroller", {name:"chatWindowObserver",instance:observer}, {childList:true, subtree:true});
 			
-			this.settingsWindowObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.removedNodes) {
@@ -145,7 +140,7 @@ class RemoveNicknames {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".layers-20RVFW")) this.settingsWindowObserver.observe(observertarget, {childList:true});
+			BDfunctionsDevilBro.addObserver(this, ".layers-20RVFW", {name:"settingsWindowObserver",instance:observer}, {childList:true});
 			
 			this.loadAllUsers();
 		}
@@ -157,11 +152,6 @@ class RemoveNicknames {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			this.userListObserver.disconnect();
-			this.chatWindowObserver.disconnect();
-			this.channelListObserver.disconnect();
-			this.settingsWindowObserver.disconnect();
-			
 			this.resetAllUsers();
 			
 			BDfunctionsDevilBro.unloadMessage(this);
@@ -171,9 +161,8 @@ class RemoveNicknames {
 	onSwitch () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.loadAllUsers();
-			var observertarget = null;
-			if (observertarget = document.querySelector(".channel-members")) this.userListObserver.observe(observertarget, {childList:true});
-			if (observertarget = document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(observertarget, {childList:true, subtree:true});
+			BDfunctionsDevilBro.addObserver(this, ".channel-members", {name:"userListObserver"}, {childList:true});
+			BDfunctionsDevilBro.addObserver(this, ".messages.scroller", {name:"chatWindowObserver"}, {childList:true, subtree:true});
 		}
 	}
 
