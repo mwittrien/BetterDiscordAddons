@@ -2,19 +2,8 @@
 
 class EditUsers {
 	constructor () {
-		
 		this.labels = {};
 
-		this.userContextObserver = new MutationObserver(() => {});
-		this.dmObserver = new MutationObserver(() => {});
-		this.friendListObserver = new MutationObserver(() => {});
-		this.userListObserver = new MutationObserver(() => {});
-		this.chatWindowObserver = new MutationObserver(() => {});
-		this.channelListObserver = new MutationObserver(() => {});
-		this.userPopoutObserver = new MutationObserver(() => {});
-		this.userProfilModalObserver = new MutationObserver(() => {});
-		this.settingsWindowObserver = new MutationObserver(() => {});
-		
 		this.css = `
 			.user-tag {
 				position: relative;
@@ -233,9 +222,9 @@ class EditUsers {
 			this.IconUtils = BDfunctionsDevilBro.WebModules.findByProperties(["getUserAvatarURL"]);
 			this.MemberPerms = BDfunctionsDevilBro.WebModules.findByProperties(["getNicknames", "getNick"]);
 			
-			var observertarget = null;
+			var observer = null;
 
-			this.userContextObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -248,9 +237,9 @@ class EditUsers {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".app")) this.userContextObserver.observe(observertarget, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, ".app", {name:"userContextObserver",instance:observer}, {childList: true});
 			
-			this.dmObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -261,9 +250,9 @@ class EditUsers {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".dms")) this.dmObserver.observe(observertarget, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, ".dms", {name:"dmObserver",instance:observer}, {childList: true});
 			
-			this.channelListObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -279,9 +268,9 @@ class EditUsers {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".channels-3g2vYe")) this.channelListObserver.observe(observertarget, {childList: true, subtree: true});
+			BDfunctionsDevilBro.addObserver(this, ".channels-3g2vYe", {name:"channelListObserver",instance:observer}, {childList: true, subtree: true});
 			
-			this.friendListObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -294,9 +283,9 @@ class EditUsers {
 					}
 				);
 			});
-			if (observertarget = document.querySelector("#friends")) this.friendListObserver.observe(observertarget, {childList:true, subtree:true});
+			BDfunctionsDevilBro.addObserver(this, "#friends", {name:"friendListObserver",instance:observer}, {childList:true, subtree:true});
 			
-			this.userListObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -309,9 +298,9 @@ class EditUsers {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".channel-members")) this.userListObserver.observe(observertarget, {childList:true});
+			BDfunctionsDevilBro.addObserver(this, ".channel-members", {name:"userListObserver",instance:observer}, {childList:true});
 			
-			this.chatWindowObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -342,9 +331,9 @@ class EditUsers {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(observertarget, {childList:true, subtree:true});
+			BDfunctionsDevilBro.addObserver(this, ".messages.scroller", {name:"chatWindowObserver",instance:observer}, {childList:true, subtree:true});
 			
-			this.userPopoutObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -357,9 +346,9 @@ class EditUsers {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".popouts")) this.userPopoutObserver.observe(observertarget, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, ".popouts", {name:"userPopoutObserver",instance:observer}, {childList: true});
 			
-			this.userProfilModalObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -372,9 +361,9 @@ class EditUsers {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".app-XZYfmp ~ [class^='theme-']:not([class*='popouts'])")) this.userProfilModalObserver.observe(observertarget, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, ".app-XZYfmp ~ [class^='theme-']:not([class*='popouts'])", {name:"userProfilModalObserver",instance:observer}, {childList: true});
 			
-			this.settingsWindowObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.removedNodes) {
@@ -385,10 +374,8 @@ class EditUsers {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".layers, .layers-20RVFW")) this.settingsWindowObserver.observe(observertarget, {childList:true});
-			
-			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
-			
+			BDfunctionsDevilBro.addObserver(this, ".layers, .layers-20RVFW", {name:"settingsWindowObserver",instance:observer}, {childList:true});
+						
 			this.loadAllUsers();
 		}
 		else {
@@ -399,20 +386,8 @@ class EditUsers {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			this.dmObserver.disconnect();
-			this.userContextObserver.disconnect();
-			this.friendListObserver.disconnect();
-			this.userListObserver.disconnect();
-			this.chatWindowObserver.disconnect();
-			this.channelListObserver.disconnect();
-			this.userPopoutObserver.disconnect();
-			this.userProfilModalObserver.disconnect();
-			this.settingsWindowObserver.disconnect();
-			
 			this.resetAllUsers();
-			
-			BDfunctionsDevilBro.removeLocalStyle(this.getName());
-			
+						
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
@@ -420,10 +395,9 @@ class EditUsers {
 	onSwitch () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.loadAllUsers();
-			var observertarget = null;
-			if (observertarget = document.querySelector(".channel-members")) this.userListObserver.observe(observertarget, {childList:true});
-			if (observertarget = document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(observertarget, {childList:true, subtree:true});
-			if (observertarget = document.querySelector("#friends")) this.friendListObserver.observe(observertarget, {childList:true, subtree:true});
+			BDfunctionsDevilBro.addObserver(this, ".channel-members", {name:"userListObserver"}, {childList:true});
+			BDfunctionsDevilBro.addObserver(this, ".messages.scroller", {name:"chatWindowObserver"}, {childList:true, subtree:true});
+			BDfunctionsDevilBro.addObserver(this, "#friends", {name:"friendListObserver"}, {childList:true, subtree:true});
 		}
 	}
 
