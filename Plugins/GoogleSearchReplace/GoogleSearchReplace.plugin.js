@@ -2,10 +2,7 @@
 
 class GoogleSearchReplace {
 	constructor () {
-		
 		this.labels = {};
-		
-		this.messageContextObserver = new MutationObserver(() => {});
 		
 		this.textUrlReplaceString = "DEVILBRO_BD_GOOGLESEARCHREPLACE_REPLACE_TEXTURL";
 		
@@ -96,9 +93,9 @@ class GoogleSearchReplace {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
-			var observertarget = null;
+			var observer = null;
 
-			this.messageContextObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -111,7 +108,7 @@ class GoogleSearchReplace {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".app")) this.messageContextObserver.observe(observertarget, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, ".app", {name:"messageContextObserver",instance:observer}, {childList: true});
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -120,8 +117,6 @@ class GoogleSearchReplace {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			this.messageContextObserver.disconnect();
-			
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
