@@ -4,9 +4,6 @@ class EditChannels {
 	constructor () {
 		this.labels = {};
 		
-		this.channelListObserver = new MutationObserver(() => {});
-		this.channelContextObserver = new MutationObserver(() => {});
-
 		this.channelContextEntryMarkup =
 			`<div class="item-group itemGroup-oViAgA">
 				<div class="item item-1XYaYf localchannelsettings-item item-subMenu itemSubMenu-3ZgIw-">
@@ -135,9 +132,9 @@ class EditChannels {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
-			var observertarget = null;
+			var observer = null;
 
-			this.channelListObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.attributeName == "class" && $(change.target).attr("class").indexOf("wrapper") > -1 && $("[custom-editchannels]").has(change.target)[0]) {
@@ -161,9 +158,9 @@ class EditChannels {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".channels-3g2vYe")) this.channelListObserver.observe(observertarget, {childList: true, attributes:true, subtree: true});
+			BDfunctionsDevilBro.addObserver(this, ".channels-3g2vYe", {name:"channelListObserver",instance:observer}, {childList: true, attributes:true, subtree: true});
 			
-			this.channelContextObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -176,7 +173,7 @@ class EditChannels {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".app")) this.channelContextObserver.observe(observertarget, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, ".app", {name:"channelContextObserver",instance:observer}, {childList: true});
 			
 			this.loadAllChannels();
 			
@@ -189,9 +186,6 @@ class EditChannels {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			this.channelListObserver.disconnect();
-			this.channelContextObserver.disconnect();
-			
 			this.resetAllChannels();
 			
 			BDfunctionsDevilBro.unloadMessage(this);
