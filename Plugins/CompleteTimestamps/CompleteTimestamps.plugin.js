@@ -94,9 +94,9 @@ class CompleteTimestamps {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
-			var observertarget = null;
+			var observer = null;
 
-			this.messageObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -112,9 +112,9 @@ class CompleteTimestamps {
 					}
 				);
 			});
-			if (observertarget = document.querySelector("#app-mount")) this.messageObserver.observe(observertarget, {childList: true, subtree: true});
+			BDfunctionsDevilBro.addObserver(this, "#app-mount", {name:"messageObserver",instance:observer}, {childList: true, subtree: true});
 			
-			this.settingsWindowObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.removedNodes) {
@@ -129,7 +129,7 @@ class CompleteTimestamps {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".layers-20RVFW")) this.settingsWindowObserver.observe(observertarget, {childList:true});
+			BDfunctionsDevilBro.addObserver(this, ".layers-20RVFW", {name:"settingsWindowObserver",instance:observer}, {childList:true});
 			
 			this.languages = Object.assign({},
 				{"own":	{name:"Own",		id:"own",		integrated:false,	dic:false}},
@@ -148,9 +148,6 @@ class CompleteTimestamps {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			this.messageObserver.disconnect();
-			this.settingsWindowObserver.disconnect();
-			
 			document.querySelectorAll(".complete-timestamp").forEach(timestamp => {timestamp.classList.remove("complete-timestamp");});
 			
 			BDfunctionsDevilBro.unloadMessage(this);
