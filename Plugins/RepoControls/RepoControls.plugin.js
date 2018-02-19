@@ -2,9 +2,6 @@
 
 class RepoControls {
 	constructor () {
-		this.settingsWindowObserver = new MutationObserver(() => {});
-		this.innerSettingsWindowObserver = new MutationObserver(() => {});
-		
 		this.sortings = {
 			sort: {
 				name:			"Name",
@@ -24,14 +21,14 @@ class RepoControls {
 				<div class="inputWrapper-3xoRWR vertical-3X17r5 directionColumn-2h-LPR" style="flex: 1 1 50%; margin: -6px 50px 0 0;">
 					<input type="text" class="inputMini-3MyfLa input-2YozMi size16-3IvaX_ height16-1qXrGy" id="input-search" placeholder="Search for...">
 				</div>
-				<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelect-2sgeoi" style="flex: 1 1 25%;">
+				<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4 quickSelect-2sgeoi" style="flex: 1 1 25%;">
 					<div class="quickSelectLabel-2MM1ZS">Sort by:</div>
 					<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelectClick-36aPV0 sort-filter" style="flex: 0 0 auto;">
 						<div option="name" class="quickSelectValue-23jNHW">Name</div>
 						<div class="quickSelectArrow-1lyLly"></div>
 					</div>
 				</div>
-				<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelect-2sgeoi" style="flex: 1 1 25%;">
+				<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4 quickSelect-2sgeoi" style="flex: 1 1 25%;">
 					<div class="quickSelectLabel-2MM1ZS">Order:</div>
 					<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelectClick-36aPV0 order-filter" style="flex: 0 0 auto;">
 						<div option="asc" class="quickSelectValue-23jNHW">Ascending</div>
@@ -161,38 +158,21 @@ class RepoControls {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
-			var observertarget = null;
-
-			this.settingsWindowObserver = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								setImmediate(() => {
-									if (node && node.tagName && node.getAttribute("layer-id") == "user-settings") {
-										if (this.getSettingsPageType(node)) this.addControls(node.querySelector(".bda-slist"));
-										this.innerSettingsWindowObserver.observe(node, {childList:true, subtree:true});
-									}
-								});
-							});
-						}
-					}
-				);
-			});
-			if (observertarget = document.querySelector(".layers-20RVFW")) this.settingsWindowObserver.observe(observertarget, {childList:true});
-			
-			this.innerSettingsWindowObserver = new MutationObserver((changes, _) => {
+			var observer = null;
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, j) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (this.getSettingsPageType(node)) this.addControls(node.querySelector(".bda-slist"));
-								if (node && node.tagName && node.querySelector(".ui-switch") && this.getSettingsPageType()) {
-									var entry = this.getEntry($("li").has(node)[0]);
-									if (entry) {
-										var settings = BDfunctionsDevilBro.getAllData(this, "settings");
-										if (settings.addDeleteButton) 	this.addDeleteButton(entry);
-										if (settings.enableHTML) 		this.changeTextToHTML(entry.div);
+								if (this.getSettingsPageType(node)) {
+									this.addControls(node.querySelector(".bda-slist"));
+									if (node && node.tagName && node.querySelector(".ui-switch")) {
+										var entry = this.getEntry($("li").has(node)[0]);
+										if (entry) {
+											var settings = BDfunctionsDevilBro.getAllData(this, "settings");
+											if (settings.addDeleteButton) 	this.addDeleteButton(entry);
+											if (settings.enableHTML) 		this.changeTextToHTML(entry.div);
+										}
 									}
 								}
 							});
@@ -200,14 +180,28 @@ class RepoControls {
 					}
 				);
 			});
+			BDfunctionsDevilBro.addObserver(this, ".layer-kosS71[layer-id='user-settings']", {name:"innerSettingsWindowObserver",instance:observer}, {childList:true,subtree:true});
+			
+			observer = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.addedNodes) {
+							change.addedNodes.forEach((node) => {
+								setImmediate(() => {
+									if (node && node.tagName && node.getAttribute("layer-id") == "user-settings") {
+										BDfunctionsDevilBro.addObserver(this, node, {name:"innerSettingsWindowObserver"}, {childList:true,subtree:true});
+										if (this.getSettingsPageType(node)) this.addControls(node.querySelector(".bda-slist"));
+									}
+								});
+							});
+						}
+					}
+				);
+			});
+			BDfunctionsDevilBro.addObserver(this, ".layers-20RVFW", {name:"settingsWindowObserver",instance:observer}, {childList:true});
 			
 			var settingswindow = document.querySelector(".layer-kosS71[layer-id='user-settings']");
-			if (settingswindow) {
-				this.innerSettingsWindowObserver.observe(settingswindow, {childList:true, subtree:true});
-				if (this.getSettingsPageType(settingswindow)) this.addControls(settingswindow.querySelector(".bda-slist"));
-			}
-			
-			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
+			if (settingswindow && this.getSettingsPageType(settingswindow)) this.addControls(settingswindow.querySelector(".bda-slist"));
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -217,14 +211,9 @@ class RepoControls {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.unloadMessage(this);
-			
-			this.settingsWindowObserver.disconnect();
-			this.innerSettingsWindowObserver.disconnect();
-			
 			$(".repo-controls, #bd-settingspane-container .trashIcon").remove();
 			
-			BDfunctionsDevilBro.removeLocalStyle(this.getName());
+			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
 
