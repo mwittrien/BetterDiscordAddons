@@ -95,6 +95,10 @@ BDfunctionsDevilBro.unloadMessage = function (plugin) {
 	
 	BDfunctionsDevilBro.removeOnSwitchListener(plugin);
 	
+	if (!Array.isArray(plugin.observers)) {
+		plugin.observers = [];
+	}
+	
 	var downloadUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
 	
 	delete window.PluginUpdates.plugins[downloadUrl];
@@ -131,6 +135,16 @@ BDfunctionsDevilBro.checkUser = function (plugin) {
 		if (i > 6000) clearInterval(pulling);
 		i++;
 	},100);
+};
+
+BDfunctionsDevilBro.addObserver = function (plugin, selector, observer, config = {childList:true}) {
+	var element = document.querySelector(selector);
+	if (element) {
+		if (BDfunctionsDevilBro.isObjectEmpty(plugin.observers)) plugin.observers = {};
+		if (plugin.observers[observer.name]) plugin.observers[observer.name].disconnect();
+		if (observer.instance) plugin.observers[observer.name] = observer.instance;
+		if (plugin.observers[observer.name]) plugin.observers[observer.name].observe(element, config);
+	}
 };
 
 // plugin update notifications created in cooperation with Zerebos https://github.com/rauenzi/BetterDiscordAddons/blob/master/Plugins/PluginLibrary.js
@@ -708,20 +722,17 @@ BDfunctionsDevilBro.getKeyInformation = function (config) {
 	var maxTime = config.time === undefined ? 30 : config.time;
 		
 	var keyWhiteList = {
-		"_currentElement":true,
-		"_renderedChildren":true,
-		"_instance":true,
-		"_owner":true,
 		"props":true,
 		"state":true,
 		"stateNode":true,
 		"refs":true,
 		"updater":true,
-		"children":true,
+		"children": config.up ? false : true,
 		"type":true,
 		"memoizedProps":true,
 		"memoizedState":true,
-		"child":true,
+		"child": config.up ? false : true,
+		"return": config.up ? true : false,
 		"sibling":true,
 		"firstEffect":true
 	};
