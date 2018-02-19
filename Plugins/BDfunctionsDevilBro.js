@@ -1243,18 +1243,18 @@ BDfunctionsDevilBro.appendWebStyle = function (filepath) {
 	$("head").append(ele);
 };
 
-BDfunctionsDevilBro.appendLocalStyle = function (pluginName, css) {
-	$('head style[id="' + pluginName + 'CSS"]').remove();
+BDfunctionsDevilBro.appendLocalStyle = function (cssname, css) {
+	$('head style[id="' + cssname + 'CSS"]').remove();
 
 	var ele = document.createElement("style");
 	$(ele)
-		.attr("id", pluginName + "CSS")
+		.attr("id", cssname + "CSS")
 		.text(css);
 	$("head").append(ele);
 };
 
-BDfunctionsDevilBro.removeLocalStyle = function (pluginName) {
-	$('head style[id="' + pluginName + 'CSS"]').remove();
+BDfunctionsDevilBro.removeLocalStyle = function (cssname) {
+	$('head style[id="' + cssname + 'CSS"]').remove();
 };
 
 BDfunctionsDevilBro.sortArrayByKey = function (array, key, except) {
