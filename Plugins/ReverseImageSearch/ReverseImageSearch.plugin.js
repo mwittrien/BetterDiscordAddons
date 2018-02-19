@@ -2,8 +2,6 @@
 
 class ReverseImageSearch {
 	constructor () {
-		this.messageContextObserver = new MutationObserver(() => {});
-		
 		this.imgUrlReplaceString = "DEVILBRO_BD_REVERSEIMAGESEARCH_REPLACE_IMAGEURL";
 		
 		this.defaults = {
@@ -93,9 +91,9 @@ class ReverseImageSearch {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
-			var observertarget = null;
+			var observer = null;
 
-			this.messageContextObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -108,7 +106,7 @@ class ReverseImageSearch {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".app")) this.messageContextObserver.observe(observertarget, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, ".app", {name:"messageContextObserver",instance:observer}, {childList: true});
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -117,8 +115,6 @@ class ReverseImageSearch {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			this.messageContextObserver.disconnect();
-			
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
