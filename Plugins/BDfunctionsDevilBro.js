@@ -18,6 +18,7 @@ BDfunctionsDevilBro.loadMessage = function (plugin) {
 	var downloadUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
 	BDfunctionsDevilBro.checkUpdate(pluginName, downloadUrl);
 	
+	if (typeof plugin.css === "string") BDfunctionsDevilBro.appendLocalStyle(plugin.getName(), plugin.css);
 	BDfunctionsDevilBro.addOnSwitchListener(plugin);
 	BDfunctionsDevilBro.translatePlugin(plugin);
 	
@@ -93,6 +94,7 @@ BDfunctionsDevilBro.unloadMessage = function (plugin) {
 	console.log(unloadMessage);
 	BDfunctionsDevilBro.showToast(unloadMessage);
 	
+	if (typeof plugin.css === "string") BDfunctionsDevilBro.appendLocalStyle(plugin.getName(), plugin.css);
 	BDfunctionsDevilBro.removeOnSwitchListener(plugin);
 	
 	if (!Array.isArray(plugin.observers)) {
