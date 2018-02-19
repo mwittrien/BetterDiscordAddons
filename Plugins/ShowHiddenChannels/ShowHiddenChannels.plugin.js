@@ -75,7 +75,7 @@ class ShowHiddenChannels {
 
 	getDescription () {return "Displays channels that are hidden from you by role restrictions.";}
 
-	getVersion () {return "2.1.8";}
+	getVersion () {return "2.1.9";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -382,8 +382,8 @@ class ShowHiddenChannels {
 			allowedRoles.push({"name":"@everyone"});
 		}
 		var htmlString = ``;
-		if (settings.showTopic && !allowed) {
-			htmlString += `<div class="marginBottom4-_yArcI">Topic:</div><div class="flex-3B1Tl4 wrap-1da0e3"><li class="role-3rahR_ flex-3B1Tl4 alignCenter-3VxkQP size12-1IGJl9 weightMedium-13x9Y8" style="border-color: rgba(255, 255, 255, 0.6); height: unset !important; padding-top: 5px; padding-bottom: 5px; max-width: ${window.outerWidth/3}px">${channel.topic ? channel.topic : "none"}</li></div>`;
+		if (settings.showTopic && !allowed && channel.topic) {
+			htmlString += `<div class="marginBottom4-_yArcI">Topic:</div><div class="flex-3B1Tl4 wrap-1da0e3"><li class="role-3rahR_ flex-3B1Tl4 alignCenter-3VxkQP size12-1IGJl9 weightMedium-13x9Y8" style="border-color: rgba(255, 255, 255, 0.6); height: unset !important; padding-top: 5px; padding-bottom: 5px; max-width: ${window.outerWidth/3}px">${channel.topic}</li></div>`;
 		}
 		if (allowedRoles.length > 0 || overwrittenRoles.length > 0) {
 			htmlString += `<div class="marginBottom4-_yArcI">Allowed Roles:</div><div class="flex-3B1Tl4 wrap-1da0e3">`;
