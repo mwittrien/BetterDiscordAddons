@@ -97,8 +97,9 @@ BDfunctionsDevilBro.unloadMessage = function (plugin) {
 	if (typeof plugin.css === "string") BDfunctionsDevilBro.appendLocalStyle(plugin.getName(), plugin.css);
 	BDfunctionsDevilBro.removeOnSwitchListener(plugin);
 	
-	if (!Array.isArray(plugin.observers)) {
-		plugin.observers = [];
+	if (!BDfunctionsDevilBro.isObjectEmpty(plugin.observers)) {
+		for (var name in plugin.observers) plugin.observers[name].disconnect();
+		delete plugin.observers;
 	}
 	
 	var downloadUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
