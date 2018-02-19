@@ -2,8 +2,6 @@
 
 class ReadAllNotificationsButton {
 	constructor () {
-		this.mentionsPopoutObserver = new MutationObserver(() => {});
-		
 		this.RANbuttonMarkup = 
 			`<div class="guild" id="RANbutton-frame" style="height: 20px; margin-bottom: 10px;">
 				<div class="guild-inner" style="height: 20px; border-radius: 4px;">
@@ -49,9 +47,9 @@ class ReadAllNotificationsButton {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
-			var observertarget = null;
+			var observer = null;
 			
-			this.mentionsPopoutObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -69,7 +67,7 @@ class ReadAllNotificationsButton {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".popouts")) this.mentionsPopoutObserver.observe(observertarget, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, ".popouts", {name:"mentionsPopoutObserver",instance:observer}, {childList: true});
 			
 			$(this.RANbuttonMarkup).insertBefore(".guild-separator")
 				.on("click", "#RANbutton", () => {
@@ -85,8 +83,6 @@ class ReadAllNotificationsButton {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			this.mentionsPopoutObserver.disconnect();
-			
 			$("#RANbutton-frame, #RAMbutton").remove();
 			
 			$(".guilds.scroller").removeClass("RAN-added");
