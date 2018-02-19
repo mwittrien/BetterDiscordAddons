@@ -149,10 +149,11 @@ BDfunctionsDevilBro.addObserver = function (plugin, selector, observer, config =
 		for (var subinstance of plugin.observers[observer.name]) subinstance.disconnect()
 		plugin.observers[observer.name] = [];
 	}
-	if (observer.instance) {
-		plugin.observers[observer.name].push(observer.instance);
+	if (observer.instance) plugin.observers[observer.name].push(observer.instance);
+	var instance = plugin.observers[observer.name][plugin.observers[observer.name].length-1];
+	if (instance) {
 		var element = typeof selector === "object" ? selector : (typeof selector === "string" ? document.querySelector(selector) : null);
-		if (element) observer.instance.observe(element, config);
+		if (element) instance.observe(element, config);
 	}
 };
 
