@@ -141,13 +141,11 @@ BDfunctionsDevilBro.checkUser = function (plugin) {
 };
 
 BDfunctionsDevilBro.addObserver = function (plugin, selector, observer, config = {childList:true}) {
-	var element = document.querySelector(selector);
-	if (element) {
-		if (BDfunctionsDevilBro.isObjectEmpty(plugin.observers)) plugin.observers = {};
-		if (plugin.observers[observer.name]) plugin.observers[observer.name].disconnect();
-		if (observer.instance) plugin.observers[observer.name] = observer.instance;
-		if (plugin.observers[observer.name]) plugin.observers[observer.name].observe(element, config);
-	}
+	if (BDfunctionsDevilBro.isObjectEmpty(plugin.observers)) plugin.observers = {};
+	if (!observer.multi && plugin.observers[observer.name]) plugin.observers[observer.name].disconnect();
+	if (observer.instance) plugin.observers[observer.name] = observer.instance;
+	var element = selector ? document.querySelector(selector) : null;
+	if (element && plugin.observers[observer.name]) plugin.observers[observer.name].observe(element, config);
 };
 
 // plugin update notifications created in cooperation with Zerebos https://github.com/rauenzi/BetterDiscordAddons/blob/master/Plugins/PluginLibrary.js
