@@ -58,11 +58,6 @@ class NotificationSounds {
 		
 		this.firedEvents = {};
 		
-		this.dmObserver = new MutationObserver(() => {});
-		this.dmBadgeObserver = new MutationObserver(() => {});
-		this.mentionObserver = new MutationObserver(() => {});
-		this.mentionBadgeObserver = new MutationObserver(() => {});
-		this.channelListObserver = new MutationObserver(() => {});
 	}
 
 	getName () {return "NotificationSounds";}
@@ -164,27 +159,33 @@ class NotificationSounds {
 				this.loadAudios();
 				this.loadChoices();
 				
-				var observertarget = null;
+				var observer = null;
 
-				this.dmBadgeObserver = new MutationObserver((changes, _) => {
+				observer = new MutationObserver((changes, _) => {
 					this.fireEvent("dm");
 				});
+				BDfunctionsDevilBro.addObserver(this, null, {name:"dmBadgeObserver",instance:observer,multi:true}, {characterData: true, subtree: true});
 				
-				this.dmObserver = new MutationObserver((changes, _) => {
+				observer = new MutationObserver((changes, _) => {
+					this.fireEvent("mentioned");
+				});
+				BDfunctionsDevilBro.addObserver(this, null, {name:"mentionBadgeObserver",instance:observer,multi:true}, {characterData: true, subtree: true});
+				
+				observer = new MutationObserver((changes, _) => {
 					changes.forEach(
 						(change, i) => {
 							if (change.addedNodes) {
 								change.addedNodes.forEach((node) => {
-									this.dmBadgeObserver.observe(node, {characterData: true, subtree: true });
+									BDfunctionsDevilBro.addObserver(this, node, {name:"dmBadgeObserver",multi:true}, {characterData: true, subtree: true});
 									this.fireEvent("dm");
 								});
 							}
 						}
 					);
 				});
-				if (observertarget = document.querySelector(".dms")) this.dmObserver.observe(observertarget, {childList: true});
+				BDfunctionsDevilBro.addObserver(this, ".dms", {name:"dmObserver",instance:observer}, {childList: true});
 				
-				this.mentionObserver = new MutationObserver((changes, _) => {
+				observer = new MutationObserver((changes, _) => {
 					changes.forEach(
 						(change, i) => {
 							if (change.addedNodes) {
@@ -192,12 +193,12 @@ class NotificationSounds {
 									if (node && node.className === "badge") {
 										var data = BDfunctionsDevilBro.getKeyInformation({"node":node.parentElement,"key":"guild"});
 										if (data) {
-											this.mentionBadgeObserver.observe(node, {characterData: true, subtree: true });
+											BDfunctionsDevilBro.addObserver(this, node, {name:"mentionBadgeObserver",multi:true}, {characterData: true, subtree: true});
 											if (this.oldmentions && this.oldmentions[data.id] == 0) this.fireEvent("mentioned");
 										}
 									}
 									if (node && node.classList && node.classList.contains("guild") && !node.classList.contains("guilds-add") && !document.querySelector(".dms").contains(node)) {
-										this.mentionBadgeObserver.observe(node, {characterData: true, subtree: true });
+										BDfunctionsDevilBro.addObserver(this, node, {name:"mentionBadgeObserver",multi:true}, {characterData: true, subtree: true});
 									}
 								});
 							}
@@ -211,19 +212,15 @@ class NotificationSounds {
 						}
 					);
 				});
-				if (observertarget = document.querySelector(".guilds.scroller")) this.mentionObserver.observe(observertarget, {childList: true, subtree:true});
+				BDfunctionsDevilBro.addObserver(this, ".guilds.scroller", {name:"mentionObserver",instance:observer}, {childList: true, subtree:true});
 				
-				this.mentionBadgeObserver = new MutationObserver((changes, _) => {
-					this.fireEvent("mentioned");
-				});
-				
-				this.channelListObserver = new MutationObserver((changes, _) => {
+				observer = new MutationObserver((changes, _) => {
 					changes.forEach(
 						(change, i) => {
 							if (change.addedNodes) {
 								change.addedNodes.forEach((node) => {
 									if (node.classList && node.classList.contains("iconSpacing-5GIHkT") && $(node).find(".wrapper-2xO9RX").length > 0) {
-										this.mentionBadgeObserver.observe(node, {characterData: true, subtree: true });
+										BDfunctionsDevilBro.addObserver(this, node, {name:"mentionBadgeObserver",multi:true}, {characterData: true, subtree: true});
 										this.fireEvent("mentioned");
 										this.oldmentions = BDfunctionsDevilBro.getKeyInformation({"node":$(".flex-vertical.channels-wrap").parent()[0],"key":"mentionCounts"});
 									}
@@ -239,19 +236,19 @@ class NotificationSounds {
 						}
 					);
 				});
-				if (observertarget = document.querySelector(".channels-3g2vYe")) this.channelListObserver.observe(observertarget, {childList: true, subtree: true});
+				BDfunctionsDevilBro.addObserver(this, ".channels-3g2vYe", {name:"channelListObserver",instance:observer}, {childList: true, subtree: true});
 				
 				BDfunctionsDevilBro.readServerList().forEach((serverObj) => {
 					var badge = serverObj.div.querySelector(".badge");
 					if (badge) {
-						this.mentionBadgeObserver.observe(badge, {characterData: true, subtree: true});
+						BDfunctionsDevilBro.addObserver(this, badge, {name:"mentionBadgeObserver",multi:true}, {characterData: true, subtree: true});
 					}
 				});
 				
 				BDfunctionsDevilBro.readDmList().forEach((dmObj) => {
 					var badge = dmObj.div.querySelector(".badge");
 					if (badge) {
-						this.dmBadgeObserver.observe(badge, {characterData: true, subtree: true});
+						BDfunctionsDevilBro.addObserver(this, badge, {name:"dmBadgeObserver",multi:true}, {characterData: true, subtree: true});
 					}
 				});
 			}
@@ -265,12 +262,6 @@ class NotificationSounds {
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.unloadMessage(this);
-			
-			this.dmObserver.disconnect();
-			this.dmBadgeObserver.disconnect();
-			this.mentionObserver.disconnect();
-			this.mentionBadgeObserver.disconnect();
-			this.channelListObserver.disconnect();
 			
 			if (typeof this.patchCancel === "function") this.patchCancel();
 		}
