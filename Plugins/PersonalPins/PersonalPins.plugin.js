@@ -4,10 +4,6 @@ class PersonalPins {
 	constructor () {
 		this.labels = {};
 		
-		this.messageContextObserver = new MutationObserver(() => {});
-		this.chatWindowObserver = new MutationObserver(() => {});
-		this.optionPopoutObserver = new MutationObserver(() => {});
-
 		this.messageContextEntryMarkup =
 			`<div class="itemGroup-oViAgA">
 				<div class="item-1XYaYf personalpin-item">
@@ -111,7 +107,7 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.4.1";}
+	getVersion () {return "1.4.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -165,9 +161,9 @@ class PersonalPins {
 			this.HistoryUtils = BDfunctionsDevilBro.WebModules.findByProperties(["transitionTo", "replaceWith", "getHistory"]);
 			this.MainDiscord = BDfunctionsDevilBro.WebModules.findByProperties(["ActionTypes"]);
 			
-			var observertarget = null;
+			var observer = null;
 
-			this.messageContextObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -180,9 +176,9 @@ class PersonalPins {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".app")) this.messageContextObserver.observe(observertarget, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, ".app", {name:"messageContextObserver",instance:observer}, {childList: true});
 			
-			this.chatWindowObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -198,9 +194,9 @@ class PersonalPins {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(observertarget, {childList:true, subtree:true});
+			BDfunctionsDevilBro.addObserver(this, ".messages.scroller", {name:"chatWindowObserver",instance:observer}, {childList:true, subtree:true});
 			
-			this.optionPopoutObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -214,7 +210,7 @@ class PersonalPins {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".popouts")) this.optionPopoutObserver.observe(observertarget, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, ".popouts", {name:"optionPopoutObserver",instance:observer}, {childList: true});
 			
 			$(document).off("click." + this.getName(), ".btn-option").off("contextmenu." + this.getName(), ".message")
 				.on("click." + this.getName(), ".btn-option", (e) => {
@@ -236,10 +232,6 @@ class PersonalPins {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			this.messageContextObserver.disconnect();
-			this.chatWindowObserver.disconnect();
-			this.optionPopoutObserver.disconnect();
-			
 			$(document).off("click." + this.getName(), ".btn-option").off("contextmenu." + this.getName(), ".message");
 			
 			$(".btn-personalpins, .notesButton").remove();
@@ -250,8 +242,7 @@ class PersonalPins {
 	
 	onSwitch () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			var observertarget = null;
-			if (observertarget = document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(observertarget, {childList:true, subtree:true});
+			BDfunctionsDevilBro.addObserver(this, ".messages.scroller", {name:"chatWindowObserver"}, {childList:true, subtree:true});
 			document.querySelectorAll(".messages .message").forEach(message => {this.addOptionButton(message);});
 			setTimeout(() => {
 				this.addNotesButton();
@@ -308,7 +299,7 @@ class PersonalPins {
 			var messagegroup = $(".message-group").has(div);
 			var pos = messagegroup.find(".message").index(div);
 			if (messagegroup[0] && pos > -1) {
-				var info = BDfunctionsDevilBro.getKeyInformation({"node":messagegroup[0],"key":"messages","time":1000});
+				var info = BDfunctionsDevilBro.getKeyInformation({"node":div,"key":"messages","up":true,"time":1000});
 				if (info) this.message = Object.assign({},info[pos],{"div":div, "group":messagegroup[0], "pos":pos});
 			}
 		}
