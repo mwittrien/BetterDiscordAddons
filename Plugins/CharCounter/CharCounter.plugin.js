@@ -2,10 +2,7 @@
 
 class CharCounter {
 	constructor () {
-		
 		this.selecting = false;
-		
-		this.textareaObserver = new MutationObserver(() => {});
 		
 		this.counterMarkup = `<div id="charcounter"></div>`;
 		
@@ -13,16 +10,21 @@ class CharCounter {
 			#charcounter {
 				display: block;
 				position: absolute;
-				right: 0; 
 				opacity: .5;
 				z-index: 1000;
+				pointer-events: none;
 			}
 			#charcounter.normal {
+				right: 0; 
 				bottom: -1.3em;
 			}
-			#charcounter.form,
 			#charcounter.edit {
-				top: -1.3em;
+				left: 0;
+				bottom: -1.3em;
+			}
+			#charcounter.form {
+				right: 0; 
+				bottom: -1.0em;
 			}`;
 	}
 
@@ -30,7 +32,7 @@ class CharCounter {
 
 	getDescription () {return "Adds a charcounter in the chat.";}
 
-	getVersion () {return "1.1.5";}
+	getVersion () {return "1.1.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -55,12 +57,10 @@ class CharCounter {
 	initialize () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
-			
-			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
-			
-			var observertarget = null;
+						
+			var observer = null;
 
-			this.textareaObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -73,7 +73,7 @@ class CharCounter {
 					}
 				);
 			});
-			if (observertarget = document.querySelector("#app-mount")) this.textareaObserver.observe(observertarget, {childList: true, subtree:true});
+			BDfunctionsDevilBro.addObserver(this, "#app-mount", {name:"textareaObserver",instance:observer}, {childList: true, subtree: true});
 			
 			document.querySelectorAll("textarea").forEach(textarea => {this.appendCounter(textarea);});
 		}
@@ -85,14 +85,11 @@ class CharCounter {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			this.textareaObserver.disconnect();
-			
 			$("#charcounter").remove();
+			$(".charcounter-added").removeClass("charcounter-added");
 			$("textarea").off("keydown." + this.getName()).off("click." + this.getName()).off("mousedown." + this.getName());
 			$(document).off("mouseup." + this.getName()).off("mousemove." + this.getName());
-			
-			BDfunctionsDevilBro.removeLocalStyle(this.getName());
-			
+						
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
@@ -107,6 +104,7 @@ class CharCounter {
 			if (textareaInstance && textareaInstance.props && textareaInstance.props.type) {
 				var counter = $(this.counterMarkup);
 				counter.addClass(textareaInstance.props.type).appendTo(textareaWrap);
+				textareaWrap.parentElement.classList.add("charcounter-added");
 				$(textarea)
 					.off("keydown." + this.getName() + " click." + this.getName())
 					.on("keydown." + this.getName() + " click." + this.getName(), e => {
