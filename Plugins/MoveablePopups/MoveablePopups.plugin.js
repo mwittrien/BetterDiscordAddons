@@ -2,8 +2,6 @@
 
 class MoveablePopups {
 	constructor () {
-		this.popoutObserver = new MutationObserver(() => {});
-		this.modalObserver = new MutationObserver(() => {});
 	}
 
 	getName () {return "MoveablePopups";}
@@ -36,9 +34,9 @@ class MoveablePopups {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
-			var observertarget = null;
+			var observer = null;
 
-			this.popoutObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -51,9 +49,9 @@ class MoveablePopups {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".popouts")) this.popoutObserver.observe(observertarget, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, ".popouts", {name:"popoutObserver",instance:observer}, {childList: true});
 			
-			this.modalObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -69,7 +67,7 @@ class MoveablePopups {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".app-XZYfmp ~ [class^='theme-']:not([class*='popouts'])")) this.modalObserver.observe(observertarget, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, ".app-XZYfmp ~ [class^='theme-']:not([class*='popouts'])", {name:"modalObserver",instance:observer}, {childList: true});
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -79,9 +77,6 @@ class MoveablePopups {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			this.popoutObserver.disconnect();
-			this.modalObserver.disconnect();
-			
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
