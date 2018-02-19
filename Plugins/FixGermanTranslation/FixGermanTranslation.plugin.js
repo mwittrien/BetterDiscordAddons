@@ -244,11 +244,11 @@ class FixGermanTranslation {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.unloadMessage(this);
-			
 			for (var key in this.oldStrings) {
 				this.LanguageUtils.Messages[key] = this.oldStrings[key];
 			}
+			
+			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
 }
