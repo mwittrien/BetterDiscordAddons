@@ -42,7 +42,7 @@ class MessageUtilities {
 
 	getDescription () {return "Offers a number of useful message options. Remap the keybindings in the settings.";}
 
-	getVersion () {return "1.3.5";}
+	getVersion () {return "1.3.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -132,11 +132,11 @@ class MessageUtilities {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.unloadMessage(this);
-			
 			$(document).off("click." + this.getName(), ".message");
 			$(document).off("dblclick." + this.getName(), ".message");
 			$(document).off("keydown." + this.getName(), ".channelTextArea-os01xC");
+			
+			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
 
@@ -356,7 +356,7 @@ class MessageUtilities {
 			var messagegroup = $(".message-group").has(div);
 			var pos = messagegroup.find(".message").index(div);
 			if (messagegroup[0] && pos > -1) {
-				var info = BDfunctionsDevilBro.getKeyInformation({"node":messagegroup[0],"key":"messages","time":1000});
+				var info = BDfunctionsDevilBro.getKeyInformation({"node":div,"key":"messages","up":true,"time":1000});
 				if (info) return Object.assign({},info[pos],{"div":div, "group":messagegroup[0], "pos":pos});
 			}
 		}
