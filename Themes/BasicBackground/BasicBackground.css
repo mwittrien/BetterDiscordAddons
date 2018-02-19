@@ -1532,13 +1532,16 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	background: transparent !important;
 	-webkit-perspective: none !important;
 }
+.uploadModal-2KN6Mm .textAreaForm-2NWGTp {
+	height: 144px !important;
+}
 .uploadModal-2KN6Mm > * {
 	position: relative !important;
 }
 .uploadModal-2KN6Mm::before,
 .uploadModal-2KN6Mm::after {
 	content: "";
-	clip-path: inset(calc((100vh - 262px)/2) calc((100vw - 520px)/2) calc((100vh - 262px)/2) calc((100vw - 520px)/2) round 11px 11px 11px 11px);
+	clip-path: inset(calc((100vh - 386px)/2) calc((100vw - 520px)/2) calc((100vh - 386px)/2) calc((100vw - 520px)/2) round 11px 11px 11px 11px);
 	position: fixed;
 	top: 0;
 	bottom: 0;
