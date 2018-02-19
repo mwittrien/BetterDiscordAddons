@@ -3,8 +3,6 @@
 class ChatAliases {
 	constructor () {
 		this.configs = ["case","exact"];
-		this.settingsWindowObserver = new MutationObserver(() => {});
-		this.textareaObserver = new MutationObserver(() => {});
 	}
 
 	getName () {return "ChatAliases";}
@@ -69,9 +67,9 @@ class ChatAliases {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
-			var observertarget = null;
+			var observer = null;
 
-			this.settingsWindowObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.removedNodes) {
@@ -84,9 +82,9 @@ class ChatAliases {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".layers, .layers-20RVFW")) this.settingsWindowObserver.observe(observertarget, {childList:true});
+			BDfunctionsDevilBro.addObserver(this, ".layers-20RVFW", {name:"settingsWindowObserver",instance:observer}, {childList:true});
 			
-			this.textareaObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -99,7 +97,7 @@ class ChatAliases {
 					}
 				);
 			});
-			if (observertarget = document.querySelector("#app-mount")) this.textareaObserver.observe(observertarget, {childList: true, subtree:true});
+			BDfunctionsDevilBro.addObserver(this, "#app-mount", {name:"textareaObserver",instance:observer}, {childList: true, subtree:true});
 			
 			document.querySelectorAll("textarea").forEach(textarea => {this.bindEventToTextArea(textarea);});
 		}
@@ -110,8 +108,6 @@ class ChatAliases {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			this.settingsWindowObserver.disconnect();
-			this.textareaObserver.disconnect();
 			$("textarea").off("keydown." + this.getName()).off("input." + this.getName());
 			
 			BDfunctionsDevilBro.unloadMessage(this);
