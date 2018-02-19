@@ -6,9 +6,6 @@ class CreationDate {
 		
 		this.languages;
 		
-		this.userPopoutObserver = new MutationObserver(() => {});
-		this.userProfilModalObserver = new MutationObserver(() => {});
-		
 		this.creationDateMarkup = `<div class="creationDate textRow-1_JoJf"></div>`;
 		
 		this.css = `
@@ -100,9 +97,9 @@ class CreationDate {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
-			var observertarget = null;
+			var observer = null;
 
-			this.userPopoutObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -115,9 +112,9 @@ class CreationDate {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".popouts")) this.userPopoutObserver.observe(observertarget, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, ".popouts", {name:"userPopoutObserver",instance:observer}, {childList: true});
 			
-			this.userProfilModalObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -130,12 +127,10 @@ class CreationDate {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".app-XZYfmp ~ [class^='theme-']:not([class*='popouts'])")) this.userProfilModalObserver.observe(observertarget, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, ".app-XZYfmp ~ [class^='theme-']:not([class*='popouts'])", {name:"userProfilModalObserver",instance:observer}, {childList: true});
 			
 			this.languages = Object.assign({},BDfunctionsDevilBro.languages);
-			
-			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
-		}
+					}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
 		}
@@ -143,12 +138,7 @@ class CreationDate {
 
 
 	stop () {
-		if (typeof BDfunctionsDevilBro === "object") {
-			this.userPopoutObserver.disconnect();
-			this.userProfilModalObserver.disconnect();
-			
-			BDfunctionsDevilBro.removeLocalStyle(this.getName());
-			
+		if (typeof BDfunctionsDevilBro === "object") {		
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
