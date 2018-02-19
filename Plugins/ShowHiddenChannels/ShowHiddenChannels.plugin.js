@@ -65,7 +65,8 @@ class ShowHiddenChannels {
 				showOverWrittenRoles:	{value:true,	description:"Include overwritten Roles in allowed Roles:"},
 				showDeniedRoles:		{value:true,	description:"Show denied Roles on hover:"},
 				showDeniedUsers:		{value:true,	description:"Show denied Users on hover:"},
-				showForNormal:			{value:false,	description:"Also show Roles/Users for allowed channels:"}
+				showForNormal:			{value:false,	description:"Also show Roles/Users for allowed channels:"},
+				showTopic:				{value:false, 	description:"Show the topic of hidden channels:"}
 			}
 		};
 	}
@@ -74,7 +75,7 @@ class ShowHiddenChannels {
 
 	getDescription () {return "Displays channels that are hidden from you by role restrictions.";}
 
-	getVersion () {return "2.1.7";}
+	getVersion () {return "2.1.8";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -381,6 +382,9 @@ class ShowHiddenChannels {
 			allowedRoles.push({"name":"@everyone"});
 		}
 		var htmlString = ``;
+		if (settings.showTopic && !allowed) {
+			htmlString += `<div class="marginBottom4-_yArcI">Topic:</div><div class="flex-3B1Tl4 wrap-1da0e3"><li class="role-3rahR_ flex-3B1Tl4 alignCenter-3VxkQP size12-1IGJl9 weightMedium-13x9Y8" style="border-color: rgba(255, 255, 255, 0.6); height: unset !important; padding-top: 5px; padding-bottom: 5px; max-width: ${window.outerWidth/3}px">${channel.topic ? channel.topic : "none"}</li></div>`;
+		}
 		if (allowedRoles.length > 0 || overwrittenRoles.length > 0) {
 			htmlString += `<div class="marginBottom4-_yArcI">Allowed Roles:</div><div class="flex-3B1Tl4 wrap-1da0e3">`;
 			for (let role of allowedRoles) {
@@ -412,7 +416,7 @@ class ShowHiddenChannels {
 		if (htmlString) {
 			var customTooltipCSS = `
 				.showhiddenchannels-tooltip {
-					max-width: ${window.outerHeight/2}px !important;
+					max-width: ${window.outerWidth/2}px !important;
 				}`;
 			var tooltip = BDfunctionsDevilBro.createTooltip(htmlString, e.currentTarget, {type:"right", selector:"showhiddenchannels-tooltip", html:true, css:customTooltipCSS});
 			tooltip.style.top = tooltip.style.top.replace("px","") - $(e.currentTarget).css("padding-bottom").replace("px","")/2 + $(e.currentTarget).css("padding-top").replace("px","")/2 + "px";
