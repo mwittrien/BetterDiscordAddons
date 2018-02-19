@@ -2,8 +2,6 @@
 
 class ImageGallery {
 	constructor () {
-		this.imageModalObserver = new MutationObserver(() => {});
-		
 		this.eventFired = false;
 		
 		this.imageMarkup = `<div class="imageWrapper-38T7d9" style="width: 100px; height: 100px;"><img src="" style="width: 100px; height: 100px; display: inline;"></div>`;
@@ -53,9 +51,9 @@ class ImageGallery {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
-			var observertarget = null;
+			var observer = null;
 
-			this.imageModalObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -75,10 +73,8 @@ class ImageGallery {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".app-XZYfmp ~ [class^='theme-']:not([class*='popouts'])")) this.imageModalObserver.observe(observertarget, {childList: true});
-			
-			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
-		}
+			BDfunctionsDevilBro.addObserver(this, ".app-XZYfmp ~ [class^='theme-']:not([class*='popouts'])", {name:"imageModalObserver",instance:observer}, {childList: true});
+					}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
 		}
@@ -86,12 +82,8 @@ class ImageGallery {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			this.imageModalObserver.disconnect();
-			
 			$(document).off("keyup." + this.getName()).off("keydown." + this.getName());
-			
-			BDfunctionsDevilBro.removeLocalStyle(this.getName());
-			
+						
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
