@@ -2,7 +2,6 @@
 
 class WriteUpperCase {
 	constructor () {
-		this.textareaObserver = new MutationObserver(() => {});
 	}
 
 	getName () {return "WriteUpperCase";}
@@ -34,9 +33,9 @@ class WriteUpperCase {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
-			var observertarget = null;
+			var observer = null;
 
-			this.textareaObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -49,7 +48,7 @@ class WriteUpperCase {
 					}
 				);
 			});
-			if (observertarget = document.querySelector("#app-mount")) this.textareaObserver.observe(observertarget, {childList: true, subtree:true});
+			BDfunctionsDevilBro.addObserver(this, "#app-mount", {name:"textareaObserver",instance:observer}, {childList: true, subtree:true});
 			
 			document.querySelectorAll(".textArea-20yzAH").forEach(textarea => {this.bindEventToTextArea(textarea);});
 		}
@@ -60,8 +59,6 @@ class WriteUpperCase {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			this.textareaObserver.disconnect();
-			
 			$(".textArea-20yzAH").off("keyup." + this.getName());
 			
 			BDfunctionsDevilBro.unloadMessage(this);
