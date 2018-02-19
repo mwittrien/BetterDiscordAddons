@@ -2,8 +2,6 @@
 
 class ShowHiddenChannels {
 	constructor () {
-		this.channelListObserver = new MutationObserver(() => {});
-		
 		this.categoryMarkup = 
 			`<div class="container-hidden">
 				<div class="containerDefault-1bbItS">
@@ -117,9 +115,9 @@ class ShowHiddenChannels {
 			this.GuildChannels = BDfunctionsDevilBro.WebModules.findByProperties(["getChannels", "getDefaultChannel"]);
 			this.Permissions = BDfunctionsDevilBro.WebModules.findByProperties(["Permissions", "ActivityTypes"]).Permissions;
 			
-			var observertarget = null;
+			var observer = null;
 
-			this.channelListObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -132,7 +130,7 @@ class ShowHiddenChannels {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".channels-3g2vYe")) this.channelListObserver.observe(observertarget, {childList: true, subtree: true});
+			BDfunctionsDevilBro.addObserver(this, ".channels-3g2vYe", {name:"channelListObserver",instance:observer}, {childList: true, subtree: true});
 			
 			this.displayHiddenChannels();
 		}
@@ -144,7 +142,6 @@ class ShowHiddenChannels {
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			$(".container-hidden").remove();
-			this.channelListObserver.disconnect();
 			
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
