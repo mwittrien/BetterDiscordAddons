@@ -49,8 +49,9 @@ class SteamProfileLink {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.unloadMessage(this);
 			$(document).off("click." + this.getName(), "a[href^='https://steamcommunity.com/profiles/']");
+			
+			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
 
