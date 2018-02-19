@@ -2,8 +2,6 @@
 
 class OldTitleBar {
 	constructor () {
-		this.settingsWindowObserver = new MutationObserver(() => {});
-		
 		this.css = `
 			.titleBar-3_fDwJ.hidden-by-OTB {
 				display: none;
@@ -115,9 +113,9 @@ class OldTitleBar {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
-			var observertarget = null;
+			var observer = null;
 
-			this.settingsWindowObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -141,14 +139,12 @@ class OldTitleBar {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".layers-20RVFW")) this.settingsWindowObserver.observe(observertarget, {childList:true});
+			BDfunctionsDevilBro.addObserver(this, ".layers-20RVFW", {name:"settingsWindowObserver",instance:observer}, {childList:true});
 			
 			$(window).on("resize." + this.getName(), (e) => {
 				this.changeMaximizeButton();
 			});
-			
-			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
-			
+						
 			this.addTitleBar();
 		
 			$(".titleBar-3_fDwJ").addClass("hidden-by-OTB");
@@ -166,10 +162,6 @@ class OldTitleBar {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			this.settingsWindowObserver.disconnect();
-			
-			BDfunctionsDevilBro.removeLocalStyle(this.getName(), this.css);
-			
 			$(window).off("resize." + this.getName());
 			this.removeTitleBar();
 		
