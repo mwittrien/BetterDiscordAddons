@@ -13,6 +13,7 @@ class CompleteTimestamps {
 			
 		this.defaults = {
 			settings: {
+				showOnHover:	{value:false, 	description:"Also show Timestamp when you hover over a message:"},
 				displayTime:	{value:true, 	description:"Display the Time in the Timestamp:"},
 				displayDate:	{value:true, 	description:"Display the Date in the Timestamp:"},
 				cutSeconds:		{value:false, 	description:"Cut off Seconds of the Time:"},
@@ -32,7 +33,7 @@ class CompleteTimestamps {
 
 	getDescription () {return "Replace all timestamps with complete timestamps.";}
 
-	getVersion () {return "1.1.1";}
+	getVersion () {return "1.1.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -73,7 +74,6 @@ class CompleteTimestamps {
 	
 	//legacy
 	load () {}
-
 	
 	start () {
 		var libraryScript = null;
@@ -138,6 +138,18 @@ class CompleteTimestamps {
 			
 			this.setMaxWidth();
 			
+			$(document).on("mouseenter." + this.getName(), ".message-text", (e) => {
+				if (BDfunctionsDevilBro.getData("showOnHover", this, "settings")) {
+					var message = e.currentTarget;
+					var messagegroup = this.getMessageGroup(message);
+					if (!messagegroup || !messagegroup.tagName) return;
+					var info = this.getMessageData(message, messagegroup);
+					if (!info || !info.timestamp || !info.timestamp._i) return
+					var choice = BDfunctionsDevilBro.getData("creationDateLang", this, "choices");
+					BDfunctionsDevilBro.createTooltip(this.getTimestamp(this.languages[choice].id, info.timestamp._i), message, {type:"left",selector:"completetimestamp-tooltip"});
+				}
+			});
+			
 			document.querySelectorAll(".message-text").forEach(message => {this.changeTimestamp(message);});
 		}
 		else {
@@ -148,6 +160,8 @@ class CompleteTimestamps {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
+			$(document).off("mouseenter." + this.getName());
+				
 			document.querySelectorAll(".complete-timestamp").forEach(timestamp => {timestamp.classList.remove("complete-timestamp");});
 			
 			BDfunctionsDevilBro.unloadMessage(this);
@@ -241,9 +255,7 @@ class CompleteTimestamps {
 		var compact = messagegroup.classList.contains("compact");
 		var timestamp = compact ? message.querySelector(".timestamp") : messagegroup.querySelector(".timestamp");
 		if (!timestamp || !timestamp.tagName || timestamp.classList.contains("complete-timestamp")) return;
-		var pos = $(messagegroup).find(".message-text").index(message);
-		var info = BDfunctionsDevilBro.getKeyInformation({"node":message,"key":"messages","up":true,"time":1000});
-		if (info && pos > -1) info = info[pos];
+		var info = this.getMessageData(message, messagegroup);
 		if (!info || !info.timestamp || !info.timestamp._i) return;
 		var choice = BDfunctionsDevilBro.getData("creationDateLang", this, "choices");
 		timestamp.classList.add("complete-timestamp");
@@ -266,6 +278,13 @@ class CompleteTimestamps {
 			if (message.classList && message.classList.contains("message-group")) messagegroup = message;
 		}
 		return messagegroup;
+	}
+	
+	getMessageData (message, messagegroup) {
+		var pos = $(messagegroup).find(".message-text").index(message);
+		var info = BDfunctionsDevilBro.getKeyInformation({"node":message,"key":"messages","up":true,"time":1000});
+		if (info && pos > -1) info = info[pos];
+		return info;
 	}
 	
 	getTimestamp (languageid, time = new Date()) {
