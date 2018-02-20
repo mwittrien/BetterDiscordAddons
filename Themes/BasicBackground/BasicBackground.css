@@ -84,6 +84,7 @@
 .channel:hover a,
 .member:hover,
 .member.popout-open,
+.input-3_iTLI,
 .attachment-1Vom9D,
 .wrapperHoveredCollapsed-25KVVp,
 .wrapperHovered-1KDCyZ,
@@ -1147,6 +1148,9 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	background: #3ca374 !important;
 }
 
+.phoneVerificationModal-9lrF8A {
+	height: 252px !important;
+}
 .phoneVerificationModal-9lrF8A > *:not(.animationContainer-1bagwZ) {
 	position: relative !important;
 }
