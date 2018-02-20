@@ -1273,6 +1273,7 @@ BDfunctionsDevilBro.sortArrayByKey = function (array, key, except) {
 };
 
 BDfunctionsDevilBro.highlightText = function (string, searchstring) {
+	if (!(searchstring.length > 0)) return string;
 	var added = 0, copy = string, wrapperopen = `<span class="highlight">`, wrapperclose = `</span>`;
 	BDfunctionsDevilBro.getAllIndexes(string.toUpperCase(), searchstring.toUpperCase()).forEach((start) => {
 		let offset = added*(wrapperopen.length + wrapperclose.length);
