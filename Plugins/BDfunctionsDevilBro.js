@@ -1272,6 +1272,21 @@ BDfunctionsDevilBro.sortArrayByKey = function (array, key, except) {
 	});
 };
 
+BDfunctionsDevilBro.highlightText = function (string, searchstring) {
+	var added = 0, copy = string, wrapperopen = `<span class="highlight">`, wrapperclose = `</span>`;
+	BDfunctionsDevilBro.getAllIndexes(string.toUpperCase(), searchstring.toUpperCase()).forEach((start) => {
+		let offset = added*(wrapperopen.length + wrapperclose.length);
+		start = start + offset;
+		let end = start + searchstring.length;
+		let openIndexes = [-1].concat(BDfunctionsDevilBro.getAllIndexes(string.substring(0, start), "<"));
+		let closedIndexes = [-1].concat(BDfunctionsDevilBro.getAllIndexes(string.substring(0, start), ">"));
+		if (openIndexes[openIndexes.length-1] > closedIndexes[closedIndexes.length-1]) return;
+		string = string.substring(0, start) + wrapperopen + string.substring(start, end) + wrapperclose + string.substring(end);
+		added++;
+	});
+	return string ? string : copy;
+};
+
 BDfunctionsDevilBro.getAllIndexes = function (array, val) {
 	var indexes = [], i = -1;
 	while ((i = array.indexOf(val, i+1)) != -1){
