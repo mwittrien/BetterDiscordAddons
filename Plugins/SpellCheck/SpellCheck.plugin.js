@@ -34,7 +34,8 @@ class SpellCheck {
 				font-family: Whitney,Helvetica Neue,Helvetica,Arial,sans-serif;
 				white-space: pre-wrap !important;
 				word-wrap: break-word !important;
-				overflow: hidden !important;
+				overflow-x: hidden !important;
+				overflow-y: scroll !important;
 			}
 			.spellcheck-overlay::-webkit-scrollbar,
 			.spellcheck-overlay::-webkit-scrollbar-button,
@@ -69,7 +70,7 @@ class SpellCheck {
 
 	getDescription () {return "Adds a spellcheck to all textareas. Select a word and rightclick it to add it to your dictionary.";}
 
-	getVersion () {return "1.1.9";}
+	getVersion () {return "1.2.0";}
 
 	getAuthor () {return "DevilBro";}
 	
