@@ -32,7 +32,7 @@ class CompleteTimestamps {
 
 	getDescription () {return "Replace all timestamps with complete timestamps.";}
 
-	getVersion () {return "1.1.0";}
+	getVersion () {return "1.1.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -241,7 +241,9 @@ class CompleteTimestamps {
 		var compact = messagegroup.classList.contains("compact");
 		var timestamp = compact ? message.querySelector(".timestamp") : messagegroup.querySelector(".timestamp");
 		if (!timestamp || !timestamp.tagName || timestamp.classList.contains("complete-timestamp")) return;
-		var info = BDfunctionsDevilBro.getKeyInformation({node:messagegroup, key:"message"});
+		var pos = $(messagegroup).find(".message-text").index(message);
+		var info = BDfunctionsDevilBro.getKeyInformation({"node":message,"key":"messages","up":true,"time":1000});
+		if (info && pos > -1) info = info[pos];
 		if (!info || !info.timestamp || !info.timestamp._i) return;
 		var choice = BDfunctionsDevilBro.getData("creationDateLang", this, "choices");
 		timestamp.classList.add("complete-timestamp");
