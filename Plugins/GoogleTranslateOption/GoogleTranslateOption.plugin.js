@@ -203,7 +203,7 @@ class GoogleTranslateOption {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node.nodeType == 1 && (node.className.includes("context-menu") || node.className.includes("contextMenu-uoJTbz"))) {
+								if (node.nodeType == 1 && node.className.includes("contextMenu-uoJTbz")) {
 									this.onContextMenu(node);
 								}
 							});
@@ -503,7 +503,6 @@ class GoogleTranslateOption {
 	
 	translateText (text, type) {
 		var [newtext, mentions, translate] = this.removeMentions(text.trim());
-		console.log([text, newtext, mentions, translate]);
 		var choices = BDfunctionsDevilBro.getAllData(this, "choices");
 		var input = Object.assign({}, type == "context" ? this.languages[choices.inputContext] : this.languages[choices.inputMessage]);
 		var output = Object.assign({}, type == "context" ? this.languages[choices.outputContext] : this.languages[choices.outputMessage]);
