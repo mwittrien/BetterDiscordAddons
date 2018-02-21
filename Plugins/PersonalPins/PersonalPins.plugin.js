@@ -27,9 +27,18 @@ class PersonalPins {
 			`<div class="popout popout-bottom-right no-arrow no-shadow popout-personalpins-notes DevilBro-modal" style="z-index: 1000; visibility: visible; left: 544.844px; top: 35.9896px; transform: translateX(-100%) translateY(0%) translateZ(0px);">
 				<div class="messages-popout-wrap themed-popout" style="max-height: 740px; width: 500px;">
 					<div class="header" style="padding-bottom: 0;">
-						<div class="title">REPLACE_popout_note_text</div>
 						<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginTop8-2gOa2N" style="flex: 0 0 auto;">
-							<div tab="channel" class="tab selected">REPLACE_popout_channel_text</div>
+							<div class="title">REPLACE_popout_note_text</div>
+							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO searchBar-YMJBu9 size14-1wjlWP" style="flex: 1 1 auto;">
+								<input class="input-yt44Uw flexChild-1KGW5q" value="" placeholder="Search for ..." style="flex: 1 1 auto;">
+								<div class="searchBarIcon-vCfmUl flexChild-1KGW5q">
+									<i class="icon-11Zny- eyeGlass-6rahZf visible-4lw4vs"/>
+									<i class="icon-11Zny- clear-4pSDsx"/>
+								</div>
+							</div>
+						</div>
+						<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginTop8-2gOa2N" style="flex: 0 0 auto;">
+							<div tab="channel" class="tab">REPLACE_popout_channel_text</div>
 							<div tab="server" class="tab">REPLACE_popout_server_text</div>
 							<div tab="allservers" class="tab">REPLACE_popout_allservers_text</div>
 							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelect-2sgeoi" style="padding-bottom: 15px; float:right;">
@@ -107,7 +116,7 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.4.2";}
+	getVersion () {return "1.4.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -334,17 +343,24 @@ class PersonalPins {
 		if (wrapper.classList.contains("popout-open")) return;
 		wrapper.classList.add("popout-open");
 		var popout = $(this.notesPopoutMarkup);
+		BDfunctionsDevilBro.initElements(popout);
 		popout
 			.appendTo(".popouts")
 			.css("left", $(wrapper).outerWidth()/2 + $(wrapper).offset().left + "px")
 			.css("top", $(wrapper).outerHeight() + $(wrapper).offset().top + "px")
-			.on("click", ".tab", (e2) => {
-				$(".tab.selected", popout).removeClass("selected");
-				$(e2.currentTarget).addClass("selected");
-				this.addNotes();
+			.on("click", ".tab", () => {
+				this.addNotes(popout[0]);
+			})
+			.on("keyup." + this.getName(), ".input-yt44Uw", () => {
+				clearTimeout(popout.searchTimeout);
+				popout.searchTimeout = setTimeout(() => {this.addNotes(popout[0]);},1000);
+			})
+			.on("click." + this.getName(), ".clear-4pSDsx.visible-4lw4vs", () => {
+				clearTimeout(popout.searchTimeout);
+				popout.searchTimeout = setTimeout(() => {this.addNotes(popout[0]);},1000);
 			})
 			.on("click", ".quickSelectClick-36aPV0", (e2) => {
-				this.openSortPopout(e2);
+				this.openSortPopout(e2, popout[0]);
 			});
 			
 		$(document).on("mousedown.notepopout" + this.getName(), (e2) => {
@@ -355,10 +371,10 @@ class PersonalPins {
 			}
 		});
 		
-		this.addNotes();
+		this.addNotes(popout[0]);
 	}
 	
-	openSortPopout (e) {
+	openSortPopout (e, notespopout) {
 		var wrapper = e.currentTarget;
 		if (wrapper.classList.contains("popout-open")) return;
 		wrapper.classList.add("popout-open");
@@ -372,7 +388,7 @@ class PersonalPins {
 				$(document).off("mousedown.sortpopout" + this.getName());
 				popout.remove();
 				setTimeout(() => {wrapper.classList.remove("popout-open");},300);
-				this.addNotes();
+				this.addNotes(notespopout);
 			});
 			
 		popout
@@ -459,10 +475,8 @@ class PersonalPins {
 		this.message = null;
 	}
 	
-	addNotes () {
-		var popout = document.querySelector(".popout-personalpins-notes");
-		if (!popout) return;
-		$(popout).find(".message-group").remove();
+	addNotes (notespopout) {
+		notespopout.querySelectorAll(".message-group").forEach(message => {message.remove();});
 		var channelObj = BDfunctionsDevilBro.getSelectedChannel();
 		if (channelObj) {
 			var serverID = channelObj.guild_id ? channelObj.guild_id : "@me";
@@ -470,10 +484,10 @@ class PersonalPins {
 			var pins = BDfunctionsDevilBro.loadAllData(this, "pins");
 			if (!BDfunctionsDevilBro.isObjectEmpty(pins)) {
 				var language = BDfunctionsDevilBro.getDiscordLanguage().id;
-				var container = popout.querySelector(".messages-popout");
-				var placeholder = popout.querySelector(".empty-placeholder");
+				var container = notespopout.querySelector(".messages-popout");
+				var placeholder = notespopout.querySelector(".empty-placeholder");
 				var messages = {};
-				switch (popout.querySelector(".tab.selected").getAttribute("tab")) {
+				switch (notespopout.querySelector(".tab.selected").getAttribute("tab")) {
 					case "channel":
 						messages = pins[serverID] && pins[serverID][channelID] ? pins[serverID][channelID] : {};
 						break;
@@ -488,8 +502,7 @@ class PersonalPins {
 				for (var id in messages) {
 					messageArray.push(messages[id]);
 				}
-				messageArray = BDfunctionsDevilBro.sortArrayByKey(messageArray, popout.querySelector(".quickSelectValue-23jNHW").getAttribute("option"));
-				$(placeholder).toggle(messageArray.length == 0);
+				messageArray = BDfunctionsDevilBro.sortArrayByKey(messageArray, notespopout.querySelector(".quickSelectValue-23jNHW").getAttribute("option"));
 				for (let messageData of messageArray) {
 					let message = $(this.messageMarkup)[0];
 					let server = this.GuildStore.getGuild(messageData.serverID);
@@ -544,6 +557,12 @@ class PersonalPins {
 						}
 					});
 				}
+				var searchstring = notespopout.querySelector(".input-yt44Uw").value.replace(/[<|>]/g, "");
+				if (searchstring) for (let note of notespopout.querySelectorAll(".message-group")) {
+					note.innerHTML = BDfunctionsDevilBro.highlightText(note.innerHTML, searchstring);
+					if (!note.querySelector(".highlight")) note.remove();
+				}
+				$(placeholder).toggle(notespopout.querySelectorAll(".message-group").length == 0);
 			}
 		}
 	}
