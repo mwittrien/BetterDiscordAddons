@@ -33,7 +33,7 @@ class CompleteTimestamps {
 
 	getDescription () {return "Replace all timestamps with complete timestamps.";}
 
-	getVersion () {return "1.1.2";}
+	getVersion () {return "1.1.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -123,6 +123,7 @@ class CompleteTimestamps {
 									this.setMaxWidth();
 									document.querySelectorAll(".complete-timestamp").forEach(timestamp => {timestamp.classList.remove("complete-timestamp");});
 									document.querySelectorAll(".message-text").forEach(message => {this.changeTimestamp(message);});
+									this.updateTimestamps = false;
 								}
 							});
 						}
