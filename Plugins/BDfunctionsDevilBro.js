@@ -1586,7 +1586,23 @@ BDfunctionsDevilBro.initElements = function (container) {
 					e.currentTarget.parentElement.classList.remove("pressed");
 				},3000);
 			}
+		})
+		.on("click", ".tab", (e) => {
+			$(".tab-content.open", modal)
+				.removeClass("open");
+				
+			$(".tab.selected", modal)
+				.removeClass("selected");
+				
+			$(".tab-content[tab='" + $(e.currentTarget).attr("tab") + "']", modal)
+				.addClass("open");
+				
+			$(e.currentTarget)
+				.addClass("selected");
 		});
+		
+	$(container).find(".tab").first().addClass("selected");
+	$(container).find(".tab-content").first().addClass("open");
 	
 	var libraryStrings = BDfunctionsDevilBro.getLibraryStrings();
 	$(container).find(".btn-save .contents-4L4hQM").text(libraryStrings.btn_save_text);
@@ -1621,29 +1637,15 @@ BDfunctionsDevilBro.appendModal = function (modal) {
 	let id = Math.round(Math.random()*10000000000000000);
 	var container = document.querySelector(".app-XZYfmp ~ [class^='theme-']:not([class*='popouts'])");
 	if (!container) return;
+	
 	$(modal)
 		.appendTo(container)
-		.on("click", ".tab", (e) => {
-			$(".tab-content.open", modal)
-				.removeClass("open");
-				
-			$(".tab.selected", modal)
-				.removeClass("selected");
-				
-			$(".tab-content[tab='" + $(e.currentTarget).attr("tab") + "']", modal)
-				.addClass("open");
-				
-			$(e.currentTarget)
-				.addClass("selected");
-		})
 		.on("click", ".backdrop-2ohBEd, .btn-cancel, .btn-save, .btn-send, .btn-cancel, .btn-ok", () => {
 			$(document).off("keydown.modalEscapeListenerDevilBro" + id);
 			$(modal).addClass("closing");
 			setTimeout(() => {modal.remove();}, 300);
 		});
 		
-	$(modal).find(".tab").first().addClass("selected");
-	$(modal).find(".tab-content").first().addClass("open");
 	
 	BDfunctionsDevilBro.initElements(modal);
 		
