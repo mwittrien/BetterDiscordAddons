@@ -2,6 +2,8 @@
 
 class ShowHiddenChannels {
 	constructor () {
+		this.updateHiddenCategory = false;
+		
 		this.categoryMarkup = 
 			`<div class="container-hidden">
 				<div class="containerDefault-1bbItS">
@@ -75,7 +77,7 @@ class ShowHiddenChannels {
 
 	getDescription () {return "Displays channels that are hidden from you by role restrictions.";}
 
-	getVersion () {return "2.1.9";}
+	getVersion () {return "2.2.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -133,6 +135,23 @@ class ShowHiddenChannels {
 			});
 			BDfunctionsDevilBro.addObserver(this, ".channels-3g2vYe", {name:"channelListObserver",instance:observer}, {childList: true, subtree: true});
 			
+			observer = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.removedNodes) {
+							change.removedNodes.forEach((node) => {
+								if (this.updateHiddenCategory && node && node.tagName && node.getAttribute("layer-id") == "user-settings") {
+									document.querySelectorAll(".container-hidden").forEach(category => {category.remove();});
+									this.displayHiddenChannels();
+									this.updateHiddenCategory = false;
+								}
+							});
+						}
+					}
+				);
+			});
+			BDfunctionsDevilBro.addObserver(this, ".layers-20RVFW", {name:"settingsWindowObserver",instance:observer}, {childList:true});
+			
 			this.displayHiddenChannels();
 		}
 		else {
@@ -163,6 +182,7 @@ class ShowHiddenChannels {
 			settings[input.value] = input.checked;
 		}
 		BDfunctionsDevilBro.saveAllData(settings, this, "settings");
+		this.updateHiddenCategory = true;
 	}
 	
 	displayHiddenChannels () {
@@ -171,19 +191,24 @@ class ShowHiddenChannels {
 			var serverID = serverObj.id;
 			if (!document.querySelector(".container-hidden.server" + serverID)) {
 				$(".container-hidden").remove();
-				var types = [0,2,4];
+				var types = {
+					"text":0,
+					"voice":2,
+					"category":4
+				};
 				var allChannels = this.ChannelStore.getChannels();
 				var shownChannels = this.GuildChannels.getChannels(serverID);
 				var hiddenChannels = {};
-				for (let type of types) hiddenChannels[type] = [];
+				
+				for (let type in types) hiddenChannels[types[type]] = [];
 				
 				for (let channelID in allChannels) {
 					var channel = allChannels[channelID];
 					if (channel.guild_id == serverID) {
                         var isHidden = true;
-						if (channel.type == 4) {
-							for (let type of types) {
-								for (let shownChannel of shownChannels[type]) {
+						if (channel.type == types.category) {
+							for (let type in types) {
+								for (let shownChannel of shownChannels[types[type]]) {
 									if (!channel.id || shownChannel.channel.parent_id == channel.id) {
 										isHidden = false;
 										break;
@@ -205,10 +230,15 @@ class ShowHiddenChannels {
 					}
 				}
 				
+						
+				var settings = BDfunctionsDevilBro.getAllData(this, "settings"); 
 				var count = 0;
-				for (let type of types) {
-					BDfunctionsDevilBro.sortArrayByKey(hiddenChannels[type], "name");
-					count += hiddenChannels[type].length;
+				for (let type in types) {
+					if (!settings.showText && type == "text" || !settings.showVoice && type == "voice" || !settings.showCategory && type == "category") {
+						hiddenChannels[types[type]] = [];
+					}
+					BDfunctionsDevilBro.sortArrayByKey(hiddenChannels[types[type]], "name");
+					count += hiddenChannels[types[type]].length;
 				}
 				hiddenChannels.count = count;
 				
@@ -249,10 +279,8 @@ class ShowHiddenChannels {
 								name.classList.toggle("nameHoveredCollapsed-2c-EHI")
 							}
 						});
-						
-					var settings = BDfunctionsDevilBro.getAllData(this, "settings"); 
 					
-					if (settings.showText) for (let hiddenChannel of hiddenChannels[0]) {
+					for (let hiddenChannel of hiddenChannels[0]) {
 						let channel = $(this.channelTextMarkup)[0];
 						let channelwrapper = channel.querySelector(".wrapper-fDmxzK");
 						let channelicon = channel.querySelector(".content-2mSKOj");
@@ -277,7 +305,7 @@ class ShowHiddenChannels {
 							.appendTo(category);
 					}
 					
-					if (settings.showVoice) for (let hiddenChannel of hiddenChannels[2]) {
+					for (let hiddenChannel of hiddenChannels[2]) {
 						let channel = $(this.channelVoiceMarkup)[0];
 						let channelwrapper = channel.querySelector(".wrapper-fDmxzK");
 						let channelicon = channel.querySelector(".content-2mSKOj");
@@ -302,7 +330,7 @@ class ShowHiddenChannels {
 							.appendTo(category);
 					}
 					
-					if (settings.showCategory) for (let hiddenChannel of hiddenChannels[4]) {
+					for (let hiddenChannel of hiddenChannels[4]) {
 						let channel = $(this.channelCategoryMarkup)[0];
 						let channelwrapper = channel.querySelector(".wrapperCollapsed-18mf-c");
 						let channelsvg = channel.querySelector(".iconCollapsed-1INdMX");
