@@ -27,6 +27,12 @@ class PluginRepo {
 		
 		this.pluginRepoButtonMarkup = 
 			`<button class="bd-pfbtn bd-pluginrepobutton">Plugin Repo</button>`;
+		
+		this.settingsContextEntryMarkup =
+			`<div class="item-1XYaYf pluginrepo-item">
+				<span>Plugin Repo</span>
+				<div class="hint-3TJykr"></div>
+			</div>`;
 
 		this.pluginEntryMarkup =
 			`<li class="pluginEntry jiiks">
@@ -235,7 +241,7 @@ class PluginRepo {
 
 	getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
 
-	getVersion () {return "1.3.8";}
+	getVersion () {return "1.3.9";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -321,6 +327,21 @@ class PluginRepo {
 			});
 			BDfunctionsDevilBro.addObserver(this, ".layers-20RVFW", {name:"settingsWindowObserver",instance:observer}, {childList:true});
 			
+			observer = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.addedNodes) {
+							change.addedNodes.forEach((node) => {
+								if (node && node.nodeType == 1 && node.className.includes("contextMenu-uoJTbz")) {
+									this.onContextMenu(node);
+								}
+							});
+						}
+					}
+				);
+			});
+			BDfunctionsDevilBro.addObserver(this, ".app", {name:"settingsContextObserver",instance:observer}, {childList: true});
+			
 			var settingswindow = document.querySelector(".layer-kosS71[layer-id='user-settings']");
 			if (settingswindow) this.checkIfPluginsPage(settingswindow);
 						
@@ -346,6 +367,40 @@ class PluginRepo {
 
 	
 	// begin of own functions
+	
+	onContextMenu (context) {
+		if (!context || !context.tagName || !context.parentElement) return;
+		for (let entry of context.querySelectorAll(".item-1XYaYf")) {
+			if (entry.textContent == "BetterDiscord") {
+				let innerObserver = new MutationObserver((changes, _) => {
+					changes.forEach(
+						(change, i) => {
+							if (change.addedNodes) {
+								change.addedNodes.forEach((node) => {
+									if (node && node.nodeType == 1 && node.className.includes("contextMenu-uoJTbz") && !node.querySelector(".pluginrepo-item")) {
+										for (let innerEntry of node.querySelectorAll(".item-1XYaYf")) {
+											if (innerEntry.textContent == "Plugins") {
+												$(this.settingsContextEntryMarkup)
+													.on("click", () => {
+														if (!this.loading) $(context).hide();
+														this.openPluginRepoModal();
+													})
+													.insertAfter(innerEntry);
+												$(node).css("top", $(context).css("top").replace("px","") - $(node).outerHeight() + $(context).outerHeight());
+												break;
+											}
+										}
+									}
+								});
+							}
+						}
+					);
+				});
+				innerObserver.observe(entry, {childList: true});
+				break;
+			}
+		}
+	}
 	
 	addPluginToOwnList (settingspanel) {
 		var pluginUrlInput = settingspanel.querySelector("#input-pluginurl");
@@ -399,8 +454,7 @@ class PluginRepo {
 			$(this.pluginRepoButtonMarkup)
 				.insertAfter(container.querySelector(".bd-pfbtn"))
 				.on("click", () => {
-					if (!this.loading) this.openPluginRepoModal(); 
-					else BDfunctionsDevilBro.showToast(`Plugins are still being fetched. Try again in some seconds.`, {type:"danger"});
+					this.openPluginRepoModal()
 				})
 				.on("mouseenter", (e) => {
 					BDfunctionsDevilBro.createTooltip("Open Plugin Repo", e.currentTarget, {type:"top",selector:"pluginrepo-button-tooltip"});
@@ -409,6 +463,10 @@ class PluginRepo {
 	}
 	
 	openPluginRepoModal (showOnlyOutdated = false) {
+		if (this.loading) {
+			BDfunctionsDevilBro.showToast(`Plugins are still being fetched. Try again in some seconds.`, {type:"danger"});
+			return;
+		}
 		var pluginRepoModal = $(this.pluginRepoModalMarkup);
 		pluginRepoModal.updateModal = true;
 		pluginRepoModal.enableSearch = false;
