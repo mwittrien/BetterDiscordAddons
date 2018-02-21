@@ -1590,7 +1590,7 @@ BDfunctionsDevilBro.initElements = function (container) {
 		.on("click", ".tab", (e) => {
 			$(container).find(".tab-content.open").removeClass("open");
 			$(container).find(".tab.selected").removeClass("selected");
-			$(container).find(".tab-content[tab='" + $(e.currentTarget).attr("tab") + "']", modal).addClass("open");	
+			$(container).find(".tab-content[tab='" + $(e.currentTarget).attr("tab") + "']").addClass("open");	
 			$(e.currentTarget).addClass("selected");
 		});
 		
