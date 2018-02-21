@@ -18,17 +18,21 @@ class RepoControls {
 		
 		this.repoControlsMarkup = 
 			`<div class="repo-controls flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
-				<div class="inputWrapper-3xoRWR vertical-3X17r5 directionColumn-2h-LPR" style="flex: 1 1 50%; margin: -6px 50px 0 0;">
-					<input type="text" class="inputMini-3MyfLa input-2YozMi size16-3IvaX_ height16-1qXrGy" id="input-search" placeholder="Search for...">
+				<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO searchBar-YMJBu9 popoutListInput-3v5O8b size14-1wjlWP" style="flex: 1 1 auto;">
+					<input class="input-yt44Uw flexChild-1KGW5q" value="" placeholder="Search for ..." style="flex: 1 1 50%;">
+					<div class="searchBarIcon-vCfmUl flexChild-1KGW5q">
+						<i class="icon-11Zny- eyeGlass-6rahZf visible-4lw4vs"/>
+						<i class="icon-11Zny- clear-4pSDsx"/>
+					</div>
 				</div>
-				<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4 quickSelect-2sgeoi" style="flex: 1 1 25%;">
+				<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelect-2sgeoi" style="flex: 1 1 25%;">
 					<div class="quickSelectLabel-2MM1ZS">Sort by:</div>
 					<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelectClick-36aPV0 sort-filter" style="flex: 0 0 auto;">
 						<div option="name" class="quickSelectValue-23jNHW">Name</div>
 						<div class="quickSelectArrow-1lyLly"></div>
 					</div>
 				</div>
-				<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4 quickSelect-2sgeoi" style="flex: 1 1 25%;">
+				<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelect-2sgeoi" style="flex: 1 1 25%;">
 					<div class="quickSelectLabel-2MM1ZS">Order:</div>
 					<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelectClick-36aPV0 order-filter" style="flex: 0 0 auto;">
 						<div option="asc" class="quickSelectValue-23jNHW">Ascending</div>
@@ -113,7 +117,7 @@ class RepoControls {
 
 	getDescription () {return "Lets you sort and filter your list of downloaded Themes and Plugins.";}
 
-	getVersion () {return "1.1.1";}
+	getVersion () {return "1.1.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -254,12 +258,18 @@ class RepoControls {
 		var sortings = BDfunctionsDevilBro.getAllData(this, "sortings");
 		
 		var repoControls = $(this.repoControlsMarkup);
+		BDfunctionsDevilBro.initElements(repoControls);
 		repoControls.find(".sort-filter .quickSelectValue-23jNHW").attr("option", sortings.sort).text(this.sortings.sort[sortings.sort]);
 		repoControls.find(".order-filter .quickSelectValue-23jNHW").attr("option", sortings.order).text(this.sortings.order[sortings.order]);
 		repoControls
-			.on("keyup." + this.getName(), "#input-search", (e) => {
+			.on("keyup." + this.getName(), ".input-yt44Uw", () => {
 				clearTimeout(repoControls.searchTimeout);
-				repoControls.searchTimeout = setTimeout(() => {this.addEntries(container, repoControls);},1000);
+				repoControls.searchTimeout = setTimeout(() => {
+					this.addEntries(container, repoControls);
+				},1000);
+			})
+			.on("click." + this.getName(), ".clear-4pSDsx.visible-4lw4vs", () => {
+				this.addEntries(container, repoControls);
 			})
 			.on("click." + this.getName(), ".sort-filter", (e) => {
 				this.openSortPopout(e, this.sortPopoutMarkup, container, repoControls);
@@ -310,7 +320,7 @@ class RepoControls {
 	addEntries (container, repoControls) {
 		$(container).find(".trashIcon, li").remove();
 		
-		var searchstring = repoControls.find("#input-search").val().replace(/[<|>]/g, "").toUpperCase();
+		var searchstring = repoControls.find(".input-yt44Uw").val().replace(/[<|>]/g, "").toUpperCase();
 		
 		var entries = container.entries;
 		var sortings = BDfunctionsDevilBro.getAllData(this, "sortings");
