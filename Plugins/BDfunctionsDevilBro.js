@@ -1548,12 +1548,12 @@ BDfunctionsDevilBro.initElements = function (container) {
 			var file = e.currentTarget.files[0];
 			if (file && fileoutput) fileoutput.value = file.path;
 		})
-		.on("keyup", ".input-yt44Uw", (e) => {
+		.on("keyup", ".searchBar-YMJBu9 .input-yt44Uw", (e) => {
 			var input = e.currentTarget;
 			input.parentElement.querySelector(".eyeGlass-6rahZf").classList.toggle("visible-4lw4vs", !input.value);
 			input.parentElement.querySelector(".clear-4pSDsx").classList.toggle("visible-4lw4vs", input.value);
 		})
-		.on("click", ".clear-4pSDsx.visible-4lw4vs", (e) => {
+		.on("click", ".searchBar-YMJBu9 .clear-4pSDsx.visible-4lw4vs", (e) => {
 			var clear = e.currentTarget;
 			clear.parentElement.parentElement.querySelector(".input-yt44Uw").value = "";
 			clear.parentElement.querySelector(".eyeGlass-6rahZf").classList.add("visible-4lw4vs");
@@ -1604,6 +1604,7 @@ BDfunctionsDevilBro.initElements = function (container) {
 	$(container).find(".btn-add .contents-4L4hQM").text(libraryStrings.btn_add_text);
 	$(container).find(".btn-ok .contents-4L4hQM").text(libraryStrings.btn_ok_text);
 	$(container).find(".file-navigator .contents-4L4hQM").text(libraryStrings.file_navigator_text);
+	$(container).find(".searchBar-YMJBu9 .input-yt44Uw").attr("placeholder", libraryStrings.search_placeholder);
 		
 	$(container)
 		.find(".checkbox-1KYsPm").each((_, checkBox) => {
@@ -2133,7 +2134,8 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				btn_cancel_text:				"Prekid",
 				btn_all_text:					"Sve",
 				btn_save_text:					"Uštedjeti",
-				btn_ok_text: 					"OK"
+				btn_ok_text: 					"OK",
+				search_placerholder: 			"Traziti ..." 
 			};
 		case "da": 		//danish
 			return {
@@ -2146,7 +2148,8 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				btn_cancel_text:				"Afbryde",
 				btn_all_text:					"Alle",
 				btn_save_text:					"Spare",
-				btn_ok_text: 					"OK"
+				btn_ok_text: 					"OK",
+				search_placerholder: 			"Søge efter ..." 
 			};
 		case "de": 		//german
 			return {
@@ -2159,7 +2162,8 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				btn_cancel_text:				"Abbrechen",
 				btn_all_text:					"Alle",
 				btn_save_text:					"Speichern",
-				btn_ok_text: 					"OK"
+				btn_ok_text: 					"OK",
+				search_placerholder: 			"Suchen nach ..." 
 			};
 		case "es": 		//spanish
 			return {
@@ -2172,7 +2176,8 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				btn_cancel_text:				"Cancelar",
 				btn_all_text:					"Todo",
 				btn_save_text:					"Guardar",
-				btn_ok_text: 					"OK"
+				btn_ok_text: 					"OK",
+				search_placerholder: 			"Buscar ..." 
 			};
 		case "fr": 		//french
 			return {
@@ -2185,7 +2190,8 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				btn_cancel_text:				"Abandonner",
 				btn_all_text:					"Tout",
 				btn_save_text:					"Enregistrer",
-				btn_ok_text: 					"OK"
+				btn_ok_text: 					"OK",
+				search_placerholder: 			"Rechercher ..." 
 			};
 		case "it": 		//italian
 			return {
@@ -2198,7 +2204,8 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				btn_cancel_text:				"Cancellare",
 				btn_all_text:					"Tutto",
 				btn_save_text:					"Salvare",
-				btn_ok_text: 					"OK"
+				btn_ok_text: 					"OK",
+				search_placerholder: 			"Cercare ..." 
 			};
 		case "nl":		//dutch
 			return {
@@ -2211,7 +2218,8 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				btn_cancel_text:				"Afbreken",
 				btn_all_text:					"Alle",
 				btn_save_text:					"Opslaan",
-				btn_ok_text: 					"OK"
+				btn_ok_text: 					"OK",
+				search_placerholder: 			"Zoeken ..." 
 			};
 		case "no":		//norwegian
 			return {
@@ -2224,7 +2232,8 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				btn_cancel_text:				"Avbryte",
 				btn_all_text:					"Alle",
 				btn_save_text:					"Lagre",
-				btn_ok_text: 					"OK"
+				btn_ok_text: 					"OK",
+				search_placerholder: 			"Søk etter ..." 
 			};
 		case "pl":		//polish
 			return {
@@ -2237,7 +2246,8 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				btn_cancel_text:				"Anuluj",
 				btn_all_text:					"Wszystkie",
 				btn_save_text:					"Zapisz",
-				btn_ok_text: 					"OK"
+				btn_ok_text: 					"OK",
+				search_placerholder: 			"Szukać ..." 
 			};
 		case "pt-BR":		//portuguese (brazil)
 			return {
@@ -2250,7 +2260,8 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				btn_cancel_text:				"Cancelar",
 				btn_all_text:					"Todo",
 				btn_save_text:					"Salvar",
-				btn_ok_text: 					"OK"
+				btn_ok_text: 					"OK",
+				search_placerholder: 			"Procurar por ..." 
 			};
 		case "fi":		//finnish
 			return {
@@ -2263,7 +2274,8 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				btn_cancel_text:				"Peruuttaa",
 				btn_all_text:					"Kaikki",
 				btn_save_text:					"Tallentaa",
-				btn_ok_text: 					"OK"
+				btn_ok_text: 					"OK",
+				search_placerholder: 			"Etsiä ..." 
 			};
 		case "sv":		//swedish
 			return {
@@ -2276,7 +2288,8 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				btn_cancel_text:				"Avbryta",
 				btn_all_text:					"All",
 				btn_save_text:					"Spara",
-				btn_ok_text: 					"OK"
+				btn_ok_text: 					"OK",
+				search_placerholder: 			"Söka efter ..." 
 			};
 		case "tr":		//turkish
 			return {
@@ -2289,7 +2302,8 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				btn_cancel_text:				"Iptal",
 				btn_all_text:					"Her",
 				btn_save_text:					"Kayıt",
-				btn_ok_text: 					"Okey"
+				btn_ok_text: 					"Okey",
+				search_placerholder: 			"Aramak ..." 
 			};
 		case "cs":		//czech
 			return {
@@ -2302,7 +2316,8 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				btn_cancel_text:				"Zrušení",
 				btn_all_text:					"Vše",
 				btn_save_text:					"Uložit",
-				btn_ok_text: 					"OK"
+				btn_ok_text: 					"OK",
+				search_placerholder: 			"Hledat ..." 
 			};
 		case "bg":		//bulgarian
 			return {
@@ -2315,7 +2330,8 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				btn_cancel_text:				"Зъбести",
 				btn_all_text:					"Bсичко",
 				btn_save_text:					"Cпасяване",
-				btn_ok_text: 					"Добре"
+				btn_ok_text: 					"Добре",
+				search_placerholder: 			"Търся ..." 
 			};
 		case "ru":		//russian
 			return {
@@ -2328,7 +2344,8 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				btn_cancel_text:				"Отмена",
 				btn_all_text:					"Все",
 				btn_save_text:					"Cпасти",
-				btn_ok_text: 					"ОК"
+				btn_ok_text: 					"ОК",
+				search_placerholder: 			"Искать ..." 
 			};
 		case "uk":		//ukranian
 			return {
@@ -2341,7 +2358,8 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				btn_cancel_text:				"Скасувати",
 				btn_all_text:					"Все",
 				btn_save_text:					"Зберегти",
-				btn_ok_text: 					"Добре"
+				btn_ok_text: 					"Добре",
+				search_placerholder: 			"Шукати ..." 
 			};
 		case "ja":		//japanese
 			return {
@@ -2354,7 +2372,8 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				btn_cancel_text:				"キャンセル",
 				btn_all_text:					"すべて",
 				btn_save_text:					"セーブ",
-				btn_ok_text: 					"はい"
+				btn_ok_text: 					"はい",
+				search_placerholder: 			"検索する ..." 
 			};
 		case "zh-TW":	//chinese (traditional)
 			return {
@@ -2367,7 +2386,8 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				btn_cancel_text:				"取消",
 				btn_all_text:					"所有",
 				btn_save_text:					"保存",
-				btn_ok_text: 					"好"
+				btn_ok_text: 					"好",
+				search_placerholder: 			"搜索 ..." 
 			};
 		case "ko":		//korean
 			return {
@@ -2380,7 +2400,8 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				btn_cancel_text:				"취소",
 				btn_all_text:					"모든",
 				btn_save_text:					"저장",
-				btn_ok_text: 					"승인"
+				btn_ok_text: 					"승인",
+				search_placerholder: 			"검색 ..." 
 			};
 		default:		//default: english
 			return {
@@ -2393,7 +2414,8 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				btn_cancel_text:				"Cancel",
 				btn_all_text:					"All",
 				btn_save_text:					"Save",
-				btn_ok_text: 					"OK"
+				btn_ok_text: 					"OK",
+				search_placerholder: 			"Search for ..."
 			};
 	}
 };
