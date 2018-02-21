@@ -1588,17 +1588,10 @@ BDfunctionsDevilBro.initElements = function (container) {
 			}
 		})
 		.on("click", ".tab", (e) => {
-			$(".tab-content.open", modal)
-				.removeClass("open");
-				
-			$(".tab.selected", modal)
-				.removeClass("selected");
-				
-			$(".tab-content[tab='" + $(e.currentTarget).attr("tab") + "']", modal)
-				.addClass("open");
-				
-			$(e.currentTarget)
-				.addClass("selected");
+			$(container).find(".tab-content.open").removeClass("open");
+			$(container).find(".tab.selected").removeClass("selected");
+			$(container).find(".tab-content[tab='" + $(e.currentTarget).attr("tab") + "']", modal).addClass("open");	
+			$(e.currentTarget).addClass("selected");
 		});
 		
 	$(container).find(".tab").first().addClass("selected");
