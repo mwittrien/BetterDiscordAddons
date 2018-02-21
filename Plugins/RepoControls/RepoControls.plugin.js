@@ -18,8 +18,8 @@ class RepoControls {
 		
 		this.repoControlsMarkup = 
 			`<div class="repo-controls flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
-				<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO searchBar-YMJBu9 popoutListInput-3v5O8b size14-1wjlWP" style="flex: 1 1 auto;">
-					<input class="input-yt44Uw flexChild-1KGW5q" value="" placeholder="Search for ..." style="flex: 1 1 50%;">
+				<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO searchBar-YMJBu9 size14-1wjlWP" style="flex: 1 1 50%;">
+					<input class="input-yt44Uw flexChild-1KGW5q" value="" placeholder="Search for ..." style="flex: 1 1 auto;">
 					<div class="searchBarIcon-vCfmUl flexChild-1KGW5q">
 						<i class="icon-11Zny- eyeGlass-6rahZf visible-4lw4vs"/>
 						<i class="icon-11Zny- clear-4pSDsx"/>
@@ -264,9 +264,7 @@ class RepoControls {
 		repoControls
 			.on("keyup." + this.getName(), ".input-yt44Uw", () => {
 				clearTimeout(repoControls.searchTimeout);
-				repoControls.searchTimeout = setTimeout(() => {
-					this.addEntries(container, repoControls);
-				},1000);
+				repoControls.searchTimeout = setTimeout(() => {this.addEntries(container, repoControls);},1000);
 			})
 			.on("click." + this.getName(), ".clear-4pSDsx.visible-4lw4vs", () => {
 				this.addEntries(container, repoControls);
