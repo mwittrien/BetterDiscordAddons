@@ -8,6 +8,7 @@ A series of plugins and themes for BetterDiscord. If you got any question hit me
  - [Chat Filter](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ChatFilter) - Allows the user to censor words or block complete messages based on words in the chatwindow.
  - [Complete Timestamps](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CompleteTimestamps) - Replace all timestamps with complete timestamps.
  - [Creation Date](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CreationDate) - Displays the Creation Date of an Account in the UserPopout and UserModal.
+ - [Display Servers As Channels](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/DisplayServersAsChannels) - Display servers in a similar way as channels.
  - [Edit Channels](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditChannels) - Allows the user to locally change the name and color of channels.
  - [Edit Servers](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditServers) - Allows the user to locally change the name, initials, icon and color of servers.
  - [Edit Users](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditUsers) - Allows you to change the icon, name, tag and color of users.
