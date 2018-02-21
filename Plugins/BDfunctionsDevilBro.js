@@ -94,7 +94,7 @@ BDfunctionsDevilBro.unloadMessage = function (plugin) {
 	console.log(unloadMessage);
 	BDfunctionsDevilBro.showToast(unloadMessage);
 	
-	if (typeof plugin.css === "string") BDfunctionsDevilBro.appendLocalStyle(plugin.getName(), plugin.css);
+	if (typeof plugin.css === "string") BDfunctionsDevilBro.removeLocalStyle(plugin.getName());
 	BDfunctionsDevilBro.removeOnSwitchListener(plugin);
 	
 	if (!BDfunctionsDevilBro.isObjectEmpty(plugin.observers)) {
@@ -976,27 +976,32 @@ BDfunctionsDevilBro.removeOnSwitchListener = function (plugin) {
 
 BDfunctionsDevilBro.getLanguageTable = function (lang) {
 	var ti = {
-		"hr":		"Nizozemski",		//croatian
 		"bg":		"холандски",		//bulgarian
 		"cs":		"Nizozemština",		//czech
 		"da":		"Hollandsk",		//danish
 		"de":		"Niederländisch",	//german
+		"el":		"Ολλανδικά",		//greek
 		"en-GB":	"Dutch",			//english
 		"en-US":	"Dutch",			//english
 		"es":		"Holandés",			//spanish
 		"fi":		"hollanti",			//finnish
 		"fr":		"Néerlandais",		//french
+		"hr":		"Nizozemski",		//croatian
+		"hu":		"Holland",			//hungarian
 		"it":		"Olandese",			//italian
 		"ja":		"オランダ語",			//japanese
 		"ko":		"네덜란드어",			//korean
+		"lt":		"Olandų",			//lithuanian
 		"nl":		"Nederlands",		//dutch
 		"no":		"Nederlandsk",		//norwegian
 		"pl":		"Holenderski",		//polish
 		"pt-BR":	"Holandês",			//portuguese(brazil)
+		"ro":		"Olandeză",			//romanian
 		"ru":		"Голландский",		//russian
 		"sv":		"Holländska",		//swedish
 		"tr":		"Flemenkçe",		//turkish
 		"uk":		"Нідерландська",	//ukranian
+		"zh-CN":	"荷兰语",			//chinese(china)
 		"zh-TW":	"荷蘭文"				//chinese(traditional)
 	};
 	lang = lang ? lang : BDfunctionsDevilBro.getDiscordLanguage().id;
