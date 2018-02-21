@@ -2215,6 +2215,18 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 
 /* ----------------------- EXTRAS ----------------------- */
 
+/* fix flashing whe nopening and closing settings */
+.layer-kosS71:first-child {
+	will-change: unset !important;
+	opacity: unset !important;
+	transform: unset !important;
+	transition: unset !important;
+	animation: unset !important;
+}
+.layer-kosS71.stop-animations:first-child[style*="opacity"] {
+	opacity: 0 !important;
+}
+
 /* custom css container */
 #bd-customcss-editor {
 	background-color: rgba(var(--transparencycolor),.5) !important;
