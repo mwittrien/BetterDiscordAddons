@@ -1548,6 +1548,17 @@ BDfunctionsDevilBro.initElements = function (container) {
 			var file = e.currentTarget.files[0];
 			if (file && fileoutput) fileoutput.value = file.path;
 		})
+		.on("keyup", ".input-yt44Uw", (e) => {
+			var input = e.currentTarget;
+			input.parentElement.querySelector(".eyeGlass-6rahZf").classList.toggle("visible-4lw4vs", !input.value);
+			input.parentElement.querySelector(".clear-4pSDsx").classList.toggle("visible-4lw4vs", input.value);
+		})
+		.on("click", ".clear-4pSDsx.visible-4lw4vs", (e) => {
+			var clear = e.currentTarget;
+			clear.parentElement.parentElement.querySelector(".input-yt44Uw").value = "";
+			clear.parentElement.querySelector(".eyeGlass-6rahZf").classList.add("visible-4lw4vs");
+			clear.classList.remove("visible-4lw4vs");
+		})
 		.on("click", ".numberinput-button-up", (e) => {
 			var input = e.currentTarget.parentElement.parentElement.querySelector("input");
 			var max = parseInt(input.getAttribute("max"));
