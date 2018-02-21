@@ -21,7 +21,7 @@ class ReadAllNotificationsButton {
 
 	getDescription () {return "Adds a button to clear all notifications.";}
 
-	getVersion () {return "1.2.7";}
+	getVersion () {return "1.2.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -58,7 +58,19 @@ class ReadAllNotificationsButton {
 								if (node && node.tagName && (mentionspopout = node.querySelector(".recent-mentions-popout")) != null) {
 									$(this.RAMbuttonMarkup).insertBefore(".mention-filter", mentionspopout)
 										.on("click", () => {
-											mentionspopout.querySelectorAll(".close-button").forEach(btn => {btn.click();});
+											var loadinterval = setInterval(() => {
+												if (!mentionspopout || !mentionspopout.parentElement) clearInterval(loadinterval);
+												var loadbutton = mentionspopout.querySelector(".has-more button");
+												var closebuttons = mentionspopout.querySelectorAll(".close-button");
+												if (!loadbutton) {
+													closebuttons.forEach((btn) => {btn.click();});
+													clearInterval(loadinterval);
+												}
+												else {
+													closebuttons.forEach((btn,i) => {if (closebuttons.length-1 > i) btn.click();});
+													loadbutton.click();
+												}
+											},2000);
 										});
 									mentionspopout.classList.add("RAM-added");
 								}
