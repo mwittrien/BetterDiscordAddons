@@ -68,7 +68,7 @@ class OldTitleBar {
 
 	getDescription () {return "Reverts the title bar back to its former self.";}
 
-	getVersion () {return "1.3.1";}
+	getVersion () {return "1.3.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -173,7 +173,7 @@ class OldTitleBar {
 	
 	onSwitch () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			this.addTitleBar();
+			setImmediate(() => {this.addTitleBar();});
 		}
 	}
 
