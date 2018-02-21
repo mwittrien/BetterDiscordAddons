@@ -2135,7 +2135,7 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				btn_all_text:					"Sve",
 				btn_save_text:					"Uštedjeti",
 				btn_ok_text: 					"OK",
-				search_placerholder: 			"Traziti ..." 
+				search_placeholder: 			"Traziti ..." 
 			};
 		case "da": 		//danish
 			return {
@@ -2149,7 +2149,7 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				btn_all_text:					"Alle",
 				btn_save_text:					"Spare",
 				btn_ok_text: 					"OK",
-				search_placerholder: 			"Søge efter ..." 
+				search_placeholder: 			"Søge efter ..." 
 			};
 		case "de": 		//german
 			return {
@@ -2163,7 +2163,7 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				btn_all_text:					"Alle",
 				btn_save_text:					"Speichern",
 				btn_ok_text: 					"OK",
-				search_placerholder: 			"Suchen nach ..." 
+				search_placeholder: 			"Suchen nach ..." 
 			};
 		case "es": 		//spanish
 			return {
@@ -2177,7 +2177,7 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				btn_all_text:					"Todo",
 				btn_save_text:					"Guardar",
 				btn_ok_text: 					"OK",
-				search_placerholder: 			"Buscar ..." 
+				search_placeholder: 			"Buscar ..." 
 			};
 		case "fr": 		//french
 			return {
@@ -2191,7 +2191,7 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				btn_all_text:					"Tout",
 				btn_save_text:					"Enregistrer",
 				btn_ok_text: 					"OK",
-				search_placerholder: 			"Rechercher ..." 
+				search_placeholder: 			"Rechercher ..." 
 			};
 		case "it": 		//italian
 			return {
@@ -2205,7 +2205,7 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				btn_all_text:					"Tutto",
 				btn_save_text:					"Salvare",
 				btn_ok_text: 					"OK",
-				search_placerholder: 			"Cercare ..." 
+				search_placeholder: 			"Cercare ..." 
 			};
 		case "nl":		//dutch
 			return {
@@ -2219,7 +2219,7 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				btn_all_text:					"Alle",
 				btn_save_text:					"Opslaan",
 				btn_ok_text: 					"OK",
-				search_placerholder: 			"Zoeken ..." 
+				search_placeholder: 			"Zoeken ..." 
 			};
 		case "no":		//norwegian
 			return {
@@ -2233,7 +2233,7 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				btn_all_text:					"Alle",
 				btn_save_text:					"Lagre",
 				btn_ok_text: 					"OK",
-				search_placerholder: 			"Søk etter ..." 
+				search_placeholder: 			"Søk etter ..." 
 			};
 		case "pl":		//polish
 			return {
@@ -2247,7 +2247,7 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				btn_all_text:					"Wszystkie",
 				btn_save_text:					"Zapisz",
 				btn_ok_text: 					"OK",
-				search_placerholder: 			"Szukać ..." 
+				search_placeholder: 			"Szukać ..." 
 			};
 		case "pt-BR":		//portuguese (brazil)
 			return {
@@ -2261,7 +2261,7 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				btn_all_text:					"Todo",
 				btn_save_text:					"Salvar",
 				btn_ok_text: 					"OK",
-				search_placerholder: 			"Procurar por ..." 
+				search_placeholder: 			"Procurar por ..." 
 			};
 		case "fi":		//finnish
 			return {
@@ -2275,7 +2275,7 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				btn_all_text:					"Kaikki",
 				btn_save_text:					"Tallentaa",
 				btn_ok_text: 					"OK",
-				search_placerholder: 			"Etsiä ..." 
+				search_placeholder: 			"Etsiä ..." 
 			};
 		case "sv":		//swedish
 			return {
@@ -2289,7 +2289,7 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				btn_all_text:					"All",
 				btn_save_text:					"Spara",
 				btn_ok_text: 					"OK",
-				search_placerholder: 			"Söka efter ..." 
+				search_placeholder: 			"Söka efter ..." 
 			};
 		case "tr":		//turkish
 			return {
@@ -2303,7 +2303,7 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				btn_all_text:					"Her",
 				btn_save_text:					"Kayıt",
 				btn_ok_text: 					"Okey",
-				search_placerholder: 			"Aramak ..." 
+				search_placeholder: 			"Aramak ..." 
 			};
 		case "cs":		//czech
 			return {
@@ -2317,7 +2317,7 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				btn_all_text:					"Vše",
 				btn_save_text:					"Uložit",
 				btn_ok_text: 					"OK",
-				search_placerholder: 			"Hledat ..." 
+				search_placeholder: 			"Hledat ..." 
 			};
 		case "bg":		//bulgarian
 			return {
@@ -2331,7 +2331,7 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				btn_all_text:					"Bсичко",
 				btn_save_text:					"Cпасяване",
 				btn_ok_text: 					"Добре",
-				search_placerholder: 			"Търся ..." 
+				search_placeholder: 			"Търся ..." 
 			};
 		case "ru":		//russian
 			return {
@@ -2345,7 +2345,7 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				btn_all_text:					"Все",
 				btn_save_text:					"Cпасти",
 				btn_ok_text: 					"ОК",
-				search_placerholder: 			"Искать ..." 
+				search_placeholder: 			"Искать ..." 
 			};
 		case "uk":		//ukranian
 			return {
@@ -2359,7 +2359,7 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				btn_all_text:					"Все",
 				btn_save_text:					"Зберегти",
 				btn_ok_text: 					"Добре",
-				search_placerholder: 			"Шукати ..." 
+				search_placeholder: 			"Шукати ..." 
 			};
 		case "ja":		//japanese
 			return {
@@ -2373,7 +2373,7 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				btn_all_text:					"すべて",
 				btn_save_text:					"セーブ",
 				btn_ok_text: 					"はい",
-				search_placerholder: 			"検索する ..." 
+				search_placeholder: 			"検索する ..." 
 			};
 		case "zh-TW":	//chinese (traditional)
 			return {
@@ -2387,7 +2387,7 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				btn_all_text:					"所有",
 				btn_save_text:					"保存",
 				btn_ok_text: 					"好",
-				search_placerholder: 			"搜索 ..." 
+				search_placeholder: 			"搜索 ..." 
 			};
 		case "ko":		//korean
 			return {
@@ -2401,7 +2401,7 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				btn_all_text:					"모든",
 				btn_save_text:					"저장",
 				btn_ok_text: 					"승인",
-				search_placerholder: 			"검색 ..." 
+				search_placeholder: 			"검색 ..." 
 			};
 		default:		//default: english
 			return {
@@ -2415,7 +2415,7 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				btn_all_text:					"All",
 				btn_save_text:					"Save",
 				btn_ok_text: 					"OK",
-				search_placerholder: 			"Search for ..."
+				search_placeholder: 			"Search for ..."
 			};
 	}
 };
