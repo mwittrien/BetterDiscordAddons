@@ -2,6 +2,21 @@
 
 class PluginRepo {
 	constructor () {
+		this.sortings = {
+			sort: {
+				name:			"Name",
+				author:			"Author",
+				version:		"Version",
+				description:	"Description",
+				state:			"Update State",
+				fav:			"Favorites"
+			},
+			order: {
+				asc:			"Ascending",
+				desc:			"Descending"
+			}
+		};
+		
 		this.loading = false;
 		
 		this.grabbedPlugins = [];
@@ -57,7 +72,7 @@ class PluginRepo {
 				<div class="backdrop-2ohBEd"></div>
 				<div class="modal-2LIEKY">
 					<div class="inner-1_1f7b">
-						<div class="modal-3HOjGZ sizeMedium-1-2BNS">
+						<div class="modal-3HOjGZ sizeLarge-1AHXtx">
 							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO header-3sp3cE" style="flex: 0 0 auto; padding: 20px 20px 0 20px;">
 								<div class="flexChild-1KGW5q" style="flex: 1 1 auto;">
 									<h4 class="h4-2IXpeI title-1pmpPr size16-3IvaX_ height20-165WbF weightSemiBold-T8sxWH defaultColor-v22dK1 defaultMarginh4-jAopYe marginReset-3hwONl pluginAmount">Plugin Repository</h4>
@@ -73,20 +88,24 @@ class PluginRepo {
 							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO header-3sp3cE marginBottom20-2Ifj-2" style="flex: 0 0 auto; padding: 10px 20px 0px 20px;">
 								<div tab="plugins" class="tab selected">Plugins</div>
 								<div tab="settings" class="tab">Settings</div>
-								<div class="inputWrapper-3xoRWR vertical-3X17r5 directionColumn-2h-LPR" style="flex: 1 1 50%; margin: -15px 5px 0 0;">
-									<input type="text" class="inputMini-3MyfLa input-2YozMi size16-3IvaX_ height16-1qXrGy" id="input-search" placeholder="Search for...">
+								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO searchBar-YMJBu9 size14-1wjlWP" style="flex: 1 1 auto; margin: -15px 5px 0 0;">
+									<input class="input-yt44Uw flexChild-1KGW5q" value="" placeholder="Search for ..." style="flex: 1 1 auto;">
+									<div class="searchBarIcon-vCfmUl flexChild-1KGW5q">
+										<i class="icon-11Zny- eyeGlass-6rahZf visible-4lw4vs"/>
+										<i class="icon-11Zny- clear-4pSDsx"/>
+									</div>
 								</div>
 								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelect-2sgeoi" style="padding-bottom: 15px;">
 									<div class="quickSelectLabel-2MM1ZS">Sort by:</div>
 									<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelectClick-36aPV0 sort-filter" style="flex: 0 0 auto;">
-										<div option="name" class="quickSelectValue-23jNHW">Name</div>
+										<div option="${Object.keys(this.sortings.sort)[0]}" class="quickSelectValue-23jNHW">${this.sortings.sort[Object.keys(this.sortings.sort)[0]]}</div>
 										<div class="quickSelectArrow-1lyLly"></div>
 									</div>
 								</div>
 								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelect-2sgeoi" style="padding-bottom: 15px;">
 									<div class="quickSelectLabel-2MM1ZS">Order:</div>
 									<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelectClick-36aPV0 order-filter" style="flex: 0 0 auto;">
-										<div option="asc" class="quickSelectValue-23jNHW">Ascending</div>
+										<div option="${Object.keys(this.sortings.order)[0]}" class="quickSelectValue-23jNHW">${this.sortings.order[Object.keys(this.sortings.order)[0]]}</div>
 										<div class="quickSelectArrow-1lyLly"></div>
 									</div>
 								</div>
@@ -98,7 +117,7 @@ class PluginRepo {
 							</div>
 							<div tab="settings" class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO inner-tqJwAU tab-content" style="flex: 1 1 auto;">
 								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;">
-									<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">To expierence PluginRepo in the best way. I would recommend you to download Restart-No-More, which automatically loads newly downloaded Plugins into your BetterDiscord, so you won't have to reload after downloading a Plugin.</h3>
+									<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto; width: 800px;">To expierence PluginRepo in the best way. I would recommend you to download Restart-No-More, which automatically loads newly downloaded Plugins into your BetterDiscord, so you won't have to reload after downloading a Plugin.</h3>
 								</div>
 								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;">
 									<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Hide updated Plugins.</h3>
@@ -135,12 +154,7 @@ class PluginRepo {
 				<div>
 					<div class="contextMenu-uoJTbz quickSelectPopout">
 						<div class="itemGroup-oViAgA">
-							<div option="name" class="item-1XYaYf">Name</div>
-							<div option="author" class="item-1XYaYf">Author</div>
-							<div option="version" class="item-1XYaYf">Version</div>
-							<div option="description" class="item-1XYaYf">Description</div>
-							<div option="state" class="item-1XYaYf">Update State</div>
-							<div option="fav" class="item-1XYaYf">Favorites</div>
+							${Object.keys(this.sortings.sort).map((key, i) => `<div option="${key}" class="item-1XYaYf">${this.sortings.sort[key]}</div>`).join("")}
 						</div>
 					</div>
 				</div>
@@ -151,8 +165,7 @@ class PluginRepo {
 				<div>
 					<div class="contextMenu-uoJTbz quickSelectPopout">
 						<div class="itemGroup-oViAgA">
-							<div option="asc" class="item-1XYaYf">Ascending</div>
-							<div option="desc" class="item-1XYaYf">Descending</div>
+							${Object.keys(this.sortings.order).map((key, i) => `<div option="${key}" class="item-1XYaYf">${this.sortings.order[key]}</div>`).join("")}
 						</div>
 					</div>
 				</div>
@@ -222,7 +235,7 @@ class PluginRepo {
 
 	getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
 
-	getVersion () {return "1.3.7";}
+	getVersion () {return "1.3.8";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -406,7 +419,11 @@ class PluginRepo {
 		if (!BDfunctionsDevilBro.isRestartNoMoreEnabled()) pluginRepoModal.find("#RNMoption").remove();
 		else pluginRepoModal.find("#input-rnmstart").prop("checked", BDfunctionsDevilBro.loadData("RNMstart", this, "settings"));
 		pluginRepoModal
-			.on("keyup." + this.getName(), "#input-search", (e) => {
+			.on("keyup." + this.getName(), ".input-yt44Uw", () => {
+				clearTimeout(pluginRepoModal.searchTimeout);
+				pluginRepoModal.searchTimeout = setTimeout(() => {this.addPluginEntries(pluginRepoModal);},1000);
+			})
+			.on("click." + this.getName(), ".clear-4pSDsx.visible-4lw4vs", () => {
 				clearTimeout(pluginRepoModal.searchTimeout);
 				pluginRepoModal.searchTimeout = setTimeout(() => {this.addPluginEntries(pluginRepoModal);},1000);
 			})
@@ -516,7 +533,7 @@ class PluginRepo {
 		if (typeof modal.entries != "object") return;
 		modal.find(".pluginEntry").remove();
 		
-		var searchstring = modal.find("#input-search").val().replace(/[<|>]/g, "").toUpperCase();
+		var searchstring = modal.find(".input-yt44Uw").val().replace(/[<|>]/g, "").toUpperCase();
 		
 		var entries = modal.entries;
 		if (modal.find("#input-hideupdated").prop("checked")) 		entries = entries.filter((entry) => {return entry.state != 0 ? entry : null;});
@@ -534,23 +551,7 @@ class PluginRepo {
 			
 			var values = [entry.name, entry.version, entry.author, entry.description];
 			if (searchstring.length > 0) {
-				for (let i in values) {
-					let value = values[i];
-					let added = 0;
-					BDfunctionsDevilBro.getAllIndexes(value.toUpperCase(), searchstring).forEach((start) => {
-						let wrapperopen = "<span class='highlight'>";
-						let wrapperclose = "</span>";
-						let offset = added*(wrapperopen.length + wrapperclose.length);
-						start = start + offset;
-						let end = start + searchstring.length;
-						var openIndexes = [-1].concat(BDfunctionsDevilBro.getAllIndexes(value.substring(0, start), "<"));
-						var closedIndexes = [-1].concat(BDfunctionsDevilBro.getAllIndexes(value.substring(0, start), ">"));
-						if (openIndexes[openIndexes.length-1] > closedIndexes[closedIndexes.length-1]) return;
-						value = value.substring(0, start) + wrapperopen + value.substring(start, end) + wrapperclose + value.substring(end);
-						added++;
-					});
-					values[i] = value ? value : values[i];
-				}
+				for (let i in values) values[i] = BDfunctionsDevilBro.highlightText(values[i], searchstring);
 			}
 			if (BDfunctionsDevilBro.zacksFork()) {
 				div.find(".bda-name").html(values[0]);
