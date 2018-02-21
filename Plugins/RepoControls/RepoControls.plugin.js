@@ -28,14 +28,14 @@ class RepoControls {
 				<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelect-2sgeoi" style="flex: 1 1 25%;">
 					<div class="quickSelectLabel-2MM1ZS">Sort by:</div>
 					<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelectClick-36aPV0 sort-filter" style="flex: 0 0 auto;">
-						<div option="name" class="quickSelectValue-23jNHW">Name</div>
+						<div option="${Object.keys(this.sortings.sort)[0]}" class="quickSelectValue-23jNHW">${this.sortings.sort[Object.keys(this.sortings.sort)[0]]}</div>
 						<div class="quickSelectArrow-1lyLly"></div>
 					</div>
 				</div>
 				<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelect-2sgeoi" style="flex: 1 1 25%;">
 					<div class="quickSelectLabel-2MM1ZS">Order:</div>
 					<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelectClick-36aPV0 order-filter" style="flex: 0 0 auto;">
-						<div option="asc" class="quickSelectValue-23jNHW">Ascending</div>
+						<div option="${Object.keys(this.sortings.order)[0]}" class="quickSelectValue-23jNHW">${this.sortings.order[Object.keys(this.sortings.order)[0]]}</div>
 						<div class="quickSelectArrow-1lyLly"></div>
 					</div>
 				</div>
