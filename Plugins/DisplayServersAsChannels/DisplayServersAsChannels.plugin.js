@@ -4,83 +4,94 @@ class DisplayServersAsChannels {
 	constructor () {
 		
 		this.css = `
-			.guilds-wrapper,
-			.guilds-wrapper .scroller-wrap,
-			.guilds-wrapper .guilds {
-				width: 240px !important;
+			.guilds-wrapper.DSAC-styled,
+			.guilds-wrapper.DSAC-styled .scroller-wrap,
+			.guilds-wrapper.DSAC-styled .guilds {
+				width: 240px;
 			}
-			.bd-minimal .guilds-wrapper,
-			.bd-minimal .guilds-wrapper .scroller-wrap,
-			.bd-minimal .guilds-wrapper .guilds {
-				width: 160px !important;
+			.bd-minimal .guilds-wrapper.DSAC-styled,
+			.bd-minimal .guilds-wrapper.DSAC-styled .scroller-wrap,
+			.bd-minimal .guilds-wrapper.DSAC-styled .guilds {
+				width: 160px;
 			}
-			.guilds-wrapper .guilds::-webkit-scrollbar-track-piece {
+			.guilds-wrapper.DSAC-styled .guilds::-webkit-scrollbar-track-piece {
 				background-color: rgb(27, 29, 32);
 				border-color: rgb(32, 34, 37);
 			}
-			.guilds-wrapper .guilds::-webkit-scrollbar-thumb {
+			.guilds-wrapper.DSAC-styled .guilds::-webkit-scrollbar-thumb {
 				background-color: rgb(17, 19, 22);
 				border-color: rgb(32, 34, 37);
 			}
-			.bd-minimal .guilds-wrapper .guild-separator, 
-			.bd-minimal .guilds-wrapper .guild-separator ~ .guild,
-			.bd-minimal .guilds-wrapper .guild-separator ~ .guild .guild-inner,
-			.bd-minimal .guilds-wrapper .guild-separator ~ .guild .guild-inner a {
-				width: 130px !important;
+			.bd-minimal .guilds-wrapper.DSAC-styled .guild-separator, 
+			.bd-minimal .guilds-wrapper.DSAC-styled .guild-separator ~ .guild,
+			.bd-minimal .guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guild-inner,
+			.bd-minimal .guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guild-inner a,
+			.bd-minimal .guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guilds-error {
+				width: 130px;
 			}
-			.bd-minimal .guilds-wrapper .guild {
-				margin-left: 55px !important;
+			.guilds-wrapper.DSAC-styled .guild-separator, 
+			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild,
+			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guild-inner,
+			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guild-inner a,
+			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guilds-error	{
+				margin-left: 0px;
+				width: 215px;
+				height: 32px;
 			}
-			.bd-minimal .guilds-wrapper .friends-online,
-			.bd-minimal .guilds-wrapper #RANbutton-frame {
-				margin-left: 40px !important;
+			.bd-minimal .guilds-wrapper.DSAC-styled .guild {
+				margin-left: 55px;
 			}
-			.guilds-wrapper .guild,
-			.guilds-wrapper .friends-online {
-				margin-left: 80px !important;
+			.bd-minimal .guilds-wrapper.DSAC-styled .friends-online,
+			.bd-minimal .guilds-wrapper.DSAC-styled #RANbutton-frame {
+				margin-left: 40px;
 			}
-			.bd-minimal .guilds-wrapper .guild-separator ~ .guild,
-			.bd-minimal .guilds-wrapper .guild-separator ~ .guild .guild-inner,
-			.bd-minimal .guilds-wrapper .guild-separator ~ .guild .guild-inner a {
+			.guilds-wrapper.DSAC-styled .guild,
+			.guilds-wrapper.DSAC-styled .friends-online {
+				margin-left: 80px;
+			}
+			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild {
+				box-sizing: border-box;
+				opacity: 0.4;
+				padding-left: 5px;
+				border-radius: 3px;
+			}
+			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild.unread {
+				opacity: 0.7;
+			}
+			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild:not(.selected):hover {
+				opacity: 0.9;
+				background-color: rgba(79,84,92,.3);
+			}
+			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild.selected {
+				opacity: 1;
+				background-color: rgba(79,84,92,.6);
+			}
+			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guild-inner {
+				background: transparent !important;
+				border-radius: 0px !important;
+			}
+			.bd-minimal .guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guild-inner a {
 				font-size: 14px !important;
 			}
-			.guilds-wrapper .guild-separator, 
-			.guilds-wrapper .guild-separator ~ .guild,
-			.guilds-wrapper .guild-separator ~ .guild .guild-inner,
-			.guilds-wrapper .guild-separator ~ .guild .guild-inner a {
-				margin-left: 0px !important;
-				width: 210px !important;
-			}
-			.guilds-wrapper .guild-separator ~ .guild,
-			.guilds-wrapper .guild-separator ~ .guild .guild-inner,
-			.guilds-wrapper .guild-separator ~ .guild .guild-inner a {
-				height: 32px !important;
-				font-size: 16px !important;
-				line-height: 32px !important;
+			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guild-inner a {
 				background: transparent !important;
-				border-radius: 3px !important;
-				text-align: left !important;
+				font-size: 16px !important;
+				line-height: 32px;
+				text-align: left;
 			}
-			.guilds-wrapper .guild-separator ~ .guild {
-				padding-left: 5px !important;
+			.bd-minimal .guilds-wrapper.DSAC-styled .guild-separator ~ .guild .badge {
+				bottom: 8px;
 			}
-			.guilds-wrapper .guild-separator ~ .guild {
-				opacity: 0.4 !important;
+			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild .badge {
+				right: 3px;
+				bottom: 7px;
 			}
-			.guilds-wrapper .guild-separator ~ .guild.unread {
-				opacity: 0.7 !important;
+			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guilds-error	{
+				border-radius: 3px;
+				margin-left: -5px;
 			}
-			.guilds-wrapper .guild-separator ~ .guild.selected,
-			.guilds-wrapper .guild-separator ~ .guild:hover {
-				opacity: 1 !important;
-				background-color: rgba(79,84,92,.6) !important;
-			}
-			.bd-minimal .guilds-wrapper .guild-separator ~ .guild .badge {
-				bottom: 8px !important;
-			}
-			.guilds-wrapper .guild-separator ~ .guild .badge {
-				right: 3px !important;
-				bottom: 7px !important;
+			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild.guilds-add .guilds-add-inner {
+				top: -5px;
 			}`;
 	}
 
@@ -88,7 +99,7 @@ class DisplayServersAsChannels {
 
 	getDescription () {return "Display servers in a similar way as channels.";}
 
-	getVersion () {return "1.0.1";}
+	getVersion () {return "1.0.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -140,6 +151,8 @@ class DisplayServersAsChannels {
 			BDfunctionsDevilBro.readServerList().forEach(serverObj => {
 				this.changeServer(serverObj);
 			});
+			
+			$(".guilds-wrapper").addClass("DSAC-styled");
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -151,6 +164,8 @@ class DisplayServersAsChannels {
 			BDfunctionsDevilBro.readServerList().forEach(serverObj => {
 				this.resetServer(serverObj);
 			});
+			
+			$(".DSAC-styled").removeClass("DSAC-styled");
 			
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
