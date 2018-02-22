@@ -1527,7 +1527,7 @@ BDfunctionsDevilBro.triggerSend = function (textarea) {
 
 BDfunctionsDevilBro.initElements = function (container) {
 	$(container)
-		.off(".BDFDBinitElements")
+		.off("*.BDFDBinitElements")
 		.on("click.BDFDBinitElements", ".checkbox-1KYsPm", (e) => {
 			var checked = e.currentTarget.checked;
 			$(e.currentTarget.parentElement)
