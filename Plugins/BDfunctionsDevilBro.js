@@ -1527,13 +1527,14 @@ BDfunctionsDevilBro.triggerSend = function (textarea) {
 
 BDfunctionsDevilBro.initElements = function (container) {
 	$(container)
-		.on("click", ".checkbox-1KYsPm", (e) => {
+		.off(".BDFDBinitElements")
+		.on("click.BDFDBinitElements", ".checkbox-1KYsPm", (e) => {
 			var checked = e.currentTarget.checked;
 			$(e.currentTarget.parentElement)
 				.toggleClass("valueChecked-3Bzkbm", checked)
 				.toggleClass("valueUnchecked-XR6AOk", !checked);
 		})
-		.on("click", ".checkboxWrapper-2Yvr_Y .input-oWyROL", (e) => {
+		.on("click.BDFDBinitElements", ".checkboxWrapper-2Yvr_Y .input-oWyROL", (e) => {
 			var checked = e.currentTarget.checked;
 			var checkBoxStyle = e.currentTarget.parentElement.querySelector(".checkbox-1QwaS4");
 			$(checkBoxStyle)
@@ -1543,28 +1544,28 @@ BDfunctionsDevilBro.initElements = function (container) {
 				.find("polyline")
 					.attr("stroke", checked ? "#ffffff" : "transparent");
 		})
-		.on("click", ".file-navigator", (e) => {
+		.on("click.BDFDBinitElements", ".file-navigator", (e) => {
 			var filenavigator = e.currentTarget.querySelector("input[type='file']");
 			if (filenavigator) filenavigator.click();
 		})
-		.on("change", "input[type='file']", (e) => {
+		.on("change.BDFDBinitElements", "input[type='file']", (e) => {
 			var filenavigator = e.currentTarget;
 			var fileoutput = e.currentTarget.parentElement.parentElement.querySelector("input[type='text']");
 			var file = e.currentTarget.files[0];
 			if (file && fileoutput) fileoutput.value = file.path;
 		})
-		.on("keyup", ".searchBar-YMJBu9 .input-yt44Uw", (e) => {
+		.on("keyup.BDFDBinitElements", ".searchBar-YMJBu9 .input-yt44Uw", (e) => {
 			var input = e.currentTarget;
 			input.parentElement.querySelector(".eyeGlass-6rahZf").classList.toggle("visible-4lw4vs", !input.value);
 			input.parentElement.querySelector(".clear-4pSDsx").classList.toggle("visible-4lw4vs", input.value);
 		})
-		.on("click", ".searchBar-YMJBu9 .clear-4pSDsx.visible-4lw4vs", (e) => {
+		.on("click.BDFDBinitElements", ".searchBar-YMJBu9 .clear-4pSDsx.visible-4lw4vs", (e) => {
 			var clear = e.currentTarget;
 			clear.parentElement.parentElement.querySelector(".input-yt44Uw").value = "";
 			clear.parentElement.querySelector(".eyeGlass-6rahZf").classList.add("visible-4lw4vs");
 			clear.classList.remove("visible-4lw4vs");
 		})
-		.on("click", ".numberinput-button-up", (e) => {
+		.on("click.BDFDBinitElements", ".numberinput-button-up", (e) => {
 			var input = e.currentTarget.parentElement.parentElement.querySelector("input");
 			var max = parseInt(input.getAttribute("max"));
 			var newvalue = parseInt(input.value) + 1;
@@ -1578,7 +1579,7 @@ BDfunctionsDevilBro.initElements = function (container) {
 				},3000);
 			}
 		})
-		.on("click", ".numberinput-button-down", (e) => {
+		.on("click.BDFDBinitElements", ".numberinput-button-down", (e) => {
 			var input = e.currentTarget.parentElement.parentElement.querySelector("input");
 			var min = parseInt(input.getAttribute("min"));
 			var newvalue = parseInt(input.value) - 1;
@@ -1592,7 +1593,7 @@ BDfunctionsDevilBro.initElements = function (container) {
 				},3000);
 			}
 		})
-		.on("click", ".tab", (e) => {
+		.on("click.BDFDBinitElements", ".tab", (e) => {
 			$(container).find(".tab-content.open").removeClass("open");
 			$(container).find(".tab.selected").removeClass("selected");
 			$(container).find(".tab-content[tab='" + $(e.currentTarget).attr("tab") + "']").addClass("open");	
