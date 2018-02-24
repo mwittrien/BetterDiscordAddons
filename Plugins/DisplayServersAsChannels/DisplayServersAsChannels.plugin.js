@@ -2,7 +2,6 @@
 
 class DisplayServersAsChannels {
 	constructor () {
-		
 		this.css = `
 			.guilds-wrapper.DSAC-styled,
 			.guilds-wrapper.DSAC-styled .scroller-wrap,
@@ -99,7 +98,7 @@ class DisplayServersAsChannels {
 
 	getDescription () {return "Display servers in a similar way as channels.";}
 
-	getVersion () {return "1.0.2";}
+	getVersion () {return "1.0.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -138,12 +137,8 @@ class DisplayServersAsChannels {
 						if (addedNodes) {
 							addedNodes.forEach((node) => {
 								if (node && node.classList && node.classList.contains("guild") && !node.querySelector(".guilds-error")) {
-									var switchlink = node.querySelector("a");
-									var id = switchlink && switchlink.href ? switchlink.href.split("/") : null;
-									id = id && id.length > 3 ? id[4] : null;
-									if (!isNaN(parseInt(id))) {
-										this.changeServer(BDfunctionsDevilBro.getDivOfServer(id));
-									}
+									var id = BDfunctionsDevilBro.getIdOfServer(node);
+									if (id) this.changeServer(BDfunctionsDevilBro.getDivOfServer(id));
 								}
 							});
 						}
