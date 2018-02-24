@@ -1082,10 +1082,12 @@ BDfunctionsDevilBro.getMyUserStatus = function () {
 };
 
 BDfunctionsDevilBro.readServerList = function () {
-	var server, info, foundServers = [], GuildStore = BDfunctionsDevilBro.WebModules.findByProperties(["getGuilds"]);
+	var server, switchlink, id, info, foundServers = [], GuildStore = BDfunctionsDevilBro.WebModules.findByProperties(["getGuilds"]);
 	for (server of document.querySelectorAll(".guild-separator ~ .guild")) {
-		info = BDfunctionsDevilBro.getKeyInformation({"node":server, "key":"guild"});
-		if (info) info = GuildStore.getGuild(info.id);
+		switchlink = server.querySelector("a");
+		id = switchlink && switchlink.href ? switchlink.href.split("/") : null;
+		id = id && id.length > 3 ? id[4] : null;
+		if (!isNaN(parseInt(id))) info = GuildStore.getGuild(id);
 		if (info) foundServers.push(Object.assign({},info,{div:server,data:info}));
 	}
 	return foundServers;
