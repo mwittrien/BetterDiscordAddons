@@ -133,12 +133,16 @@ class DisplayServersAsChannels {
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
+						var addedNodes = change.addedNodes;
+						if (change.oldValue && change.oldValue.indexOf("guild-placeholder") > -1)  addedNodes = [change.target];
+						if (addedNodes) {
+							addedNodes.forEach((node) => {
 								if (node && node.classList && node.classList.contains("guild") && !node.querySelector(".guilds-error")) {
-									var info = BDfunctionsDevilBro.getKeyInformation({"node":node, "key":"guild"});
-									if (info) {
-										this.changeServer(Object.assign({},info,{div:node,data:info}));
+									var switchlink = node.querySelector("a");
+									var id = switchlink && switchlink.href ? switchlink.href.split("/") : null;
+									id = id && id.length > 3 ? id[4] : null;
+									if (!isNaN(parseInt(id))) {
+										this.changeServer(BDfunctionsDevilBro.getDivOfServer(id));
 									}
 								}
 							});
@@ -146,13 +150,17 @@ class DisplayServersAsChannels {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, ".guilds.scroller", {name:"serverListObserver",instance:observer}, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, ".guilds.scroller", {name:"serverListObserver",instance:observer}, {childList: true, subtree:true, attributes:true, attributeFilter: ['class'], attributeOldValue: true});
 			
 			BDfunctionsDevilBro.readServerList().forEach(serverObj => {
 				this.changeServer(serverObj);
 			});
 			
-			$(".guilds-wrapper").addClass("DSAC-styled");
+			this.dragging = false;
+			$(".guilds-wrapper").addClass("DSAC-styled")
+				.on("mousemove." + this.getName(), ".guild-placeholder", (e) => {
+					console.log(e);
+				});
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -165,7 +173,8 @@ class DisplayServersAsChannels {
 				this.resetServer(serverObj);
 			});
 			
-			$(".DSAC-styled").removeClass("DSAC-styled");
+			$("*").off("." + this.getName());
+			$(".DSAC-styled").removeClass("DSAC-styled")
 			
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
@@ -177,13 +186,17 @@ class DisplayServersAsChannels {
 	changeServer (serverObj) {
 		if (!serverObj) return;
 		var avatar = serverObj.div.querySelector("a");
-		avatar.DSAColdName = avatar.textContent;
-		avatar.textContent = serverObj.name;
+		if (avatar) {
+			avatar.DSAColdName = avatar.textContent;
+			avatar.textContent = serverObj.name;
+		}
 	}
 
 	resetServer (serverObj) {
 		if (!serverObj) return;
 		var avatar = serverObj.div.querySelector("a");
-		avatar.textContent = avatar.DSAColdName;
+		if (avatar) {
+			avatar.textContent = avatar.DSAColdName;
+		}
 	}
 }
