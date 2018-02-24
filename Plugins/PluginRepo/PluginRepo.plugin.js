@@ -241,7 +241,7 @@ class PluginRepo {
 
 	getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
 
-	getVersion () {return "1.3.9";}
+	getVersion () {return "1.4.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -379,7 +379,7 @@ class PluginRepo {
 								change.addedNodes.forEach((node) => {
 									if (node && node.nodeType == 1 && node.className.includes("contextMenu-uoJTbz") && !node.querySelector(".pluginrepo-item")) {
 										for (let innerEntry of node.querySelectorAll(".item-1XYaYf")) {
-											if (innerEntry.textContent == "Plugins") {
+											if (innerEntry.textContent == "Themes") {
 												$(this.settingsContextEntryMarkup)
 													.on("click", () => {
 														if (!this.loading) $(context).hide();
