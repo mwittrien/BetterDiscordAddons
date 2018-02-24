@@ -433,18 +433,14 @@ class ThemeRepo {
 							if (change.addedNodes) {
 								change.addedNodes.forEach((node) => {
 									if (node && node.nodeType == 1 && node.className.includes("contextMenu-uoJTbz") && !node.querySelector(".themerepo-item")) {
-										for (let innerEntry of node.querySelectorAll(".item-1XYaYf")) {
-											if (innerEntry.textContent == "Themes") {
-												$(this.settingsContextEntryMarkup)
-													.on("click", () => {
-														if (!this.loading) $(context).hide();
-														this.openThemeRepoModal();
-													})
-													.insertAfter(innerEntry);
-												$(node).css("top", $(context).css("top").replace("px","") - $(node).outerHeight() + $(context).outerHeight());
-												break;
-											}
-										}
+										var innerEntries = node.querySelectorAll(".item-1XYaYf");
+										$(this.settingsContextEntryMarkup)
+											.on("click", () => {
+												if (!this.loading) $(context).hide();
+												this.openThemeRepoModal();
+											})
+											.insertAfter(innerEntries[innerEntries.length-1]);
+										$(node).css("top", $(context).css("top").replace("px","") - $(node).outerHeight() + $(context).outerHeight());
 									}
 								});
 							}
