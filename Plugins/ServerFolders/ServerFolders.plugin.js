@@ -238,7 +238,7 @@ class ServerFolders {
 											</div>
 											<button type="button" class="flexChild-1KGW5q buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu button-2t3of8 lookFilled-luDKDo colorBrand-3PmwCE sizeMedium-2VGNaF grow-25YQ8u file-navigator" style="flex: 0 0 auto;">
 												<div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx"></div>
-												<input type="file" option="open" accept="image/*" id="input-customopen" style="display:none!important;">
+												<input type="file" option="open" accept="image/*" style="display:none!important;">
 											</button>
 										</div>
 										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
@@ -316,7 +316,7 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.5.3";}
+	getVersion () {return "5.5.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -385,7 +385,7 @@ class ServerFolders {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.nodeType == 1 && (node.className.includes("context-menu") || node.className.includes("contextMenu-uoJTbz"))) {
+								if (node && node.nodeType == 1 && node.className.includes("contextMenu-uoJTbz")) {
 									this.onContextMenu(node);
 								}
 							});
@@ -973,17 +973,18 @@ class ServerFolders {
 			});
 		}
 		else {
-			let fs = require("fs");
-			var file = fs.readFileSync(url);
-			fs.readFile(url, (error, response) => {
-				if (error) {
-					BDfunctionsDevilBro.showToast("Could not fetch file. Please make sure the file exists.", {type:"danger"});
-				}
-				else {
-					url = `data:image/png;base64,${response.toString("base64")}`;
-					successFetchIcon();
-				}
-			});
+			let fs = require("fs")
+			if (fs.existsSync(url)) {
+				fs.readFile(url, (error, response) => {
+					if (!error) {
+						url = `data:image/png;base64,${response.toString("base64")}`;
+						successFetchIcon();
+					}
+				});
+			}
+			else {
+				BDfunctionsDevilBro.showToast("Could not fetch file. Please make sure the file exists.", {type:"danger"});
+			}
 		}
 		
 		successFetchIcon = () => {
@@ -1324,7 +1325,7 @@ class ServerFolders {
 		if (div.classList && div.classList.length > 0 && div.classList.contains("guild") && div.classList.contains(type) && div.querySelector(".avatar-small")) {
 			if (type == "guild") {
 				var info = BDfunctionsDevilBro.getKeyInformation({"node":div, "key":"guild"});
-				if (info) return BDfunctionsDevilBro.getDivOfServer(info.id);
+				if (info) return Object.assign({},info,{div:div,data:info});
 			}
 			else {
 				return {div};
