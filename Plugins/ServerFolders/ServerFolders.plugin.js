@@ -134,6 +134,16 @@ class ServerFolders {
 						<span>REPLACE_foldercontext_unreadfolder_text</span>
 						<div class="hint-3TJykr"></div>
 					</div>
+					<div class="item-1XYaYf autounreadfolder-item itemToggle-e7vkml">
+						<div class="label-2CGfN3">REPLACE_foldercontext_autounreadfolder_text</div>
+						<div class="checkbox">
+							<div class="checkbox-inner">
+								<input type="checkbox" value="on">
+								<span></span>
+							</div>
+							<span></span>
+						</div>
+					</div>
 					<div class="item-1XYaYf foldersettings-item">
 						<span>REPLACE_foldercontext_foldersettings_text</span>
 						<div class="hint-3TJykr"></div>
@@ -316,7 +326,7 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.5.4";}
+	getVersion () {return "5.5.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -515,6 +525,7 @@ class ServerFolders {
 		this.serverContextSubMenuMarkup = 	this.serverContextSubMenuMarkup.replace("REPLACE_serversubmenu_removefromfolder_text", this.labels.serversubmenu_removefromfolder_text);
 		
 		this.folderContextMarkup = 			this.folderContextMarkup.replace("REPLACE_foldercontext_unreadfolder_text", this.labels.foldercontext_unreadfolder_text);
+		this.folderContextMarkup = 			this.folderContextMarkup.replace("REPLACE_foldercontext_autounreadfolder_text", this.labels.foldercontext_autounreadfolder_text);
 		this.folderContextMarkup = 			this.folderContextMarkup.replace("REPLACE_foldercontext_foldersettings_text", this.labels.foldercontext_foldersettings_text);
 		this.folderContextMarkup = 			this.folderContextMarkup.replace("REPLACE_foldercontext_createfolder_text", this.labels.serversubmenu_createfolder_text);
 		this.folderContextMarkup = 			this.folderContextMarkup.replace("REPLACE_foldercontext_removefolder_text", this.labels.foldercontext_removefolder_text);
@@ -641,13 +652,14 @@ class ServerFolders {
 		var position = 		Array.from(document.querySelectorAll("div.guild-separator ~ div.guild")).indexOf(ankerDiv);
 		var iconID = 		0;
 		var icons = 		this.folderIcons[0];
+		var autounread = 	false;
 		var color1 = 		["0","0","0"];
 		var color2 = 		["255","255","255"];
 		var color3 = 		null;
 		var color4 = 		null;
 		var servers = 		[];
 		
-		var data = {folderID,folderName,position,iconID,icons,color1,color2,color3,color4,servers};
+		var data = {folderID,folderName,position,iconID,icons,autounread,color1,color2,color3,color4,servers};
 		
 		var folderDiv = this.createFolderDiv(data);
 		
@@ -762,32 +774,45 @@ class ServerFolders {
 	}
 	
 	createFolderContextMenu (folderDiv, e) {
-		var folderContext = $(this.folderContextMarkup);
-		folderContext
-			.on("click." + this.getName(), ".foldersettings-item", () => {
-				folderContext.remove();
-				this.showFolderSettings(folderDiv);
-			})
-			.on("click." + this.getName(), ".createfolder-item", () => {
-				folderContext.remove();
-				this.createNewFolder(folderDiv);
-			})
-			.on("click." + this.getName(), ".removefolder-item", () => {
-				folderContext.remove();
-				this.removeFolder(folderDiv);
-			});
-		var unreadServers = BDfunctionsDevilBro.readUnreadServerList(this.readIncludedServerList(folderDiv));
-		if (unreadServers.length > 0) {
+		var folderID = folderDiv.id;
+		var data = BDfunctionsDevilBro.loadData(folderID, this, "folders");
+		if (data) {
+			var folderContext = $(this.folderContextMarkup);
 			folderContext
-				.find(".unreadfolder-item")
-				.removeClass("disabled-dlOjhg")
-				.on("click." + this.getName(), () => {
+				.on("click." + this.getName(), ".autounreadfolder-item", (e2) => {
+					var checkbox = $(e2.currentTarget).find("input");
+					var isChecked = checkbox.prop("checked");
+					checkbox.prop("checked", !isChecked)
+					data.autounread = !isChecked;
+					BDfunctionsDevilBro.saveData(folderID, data, this, "folders");
+				})
+				.on("click." + this.getName(), ".foldersettings-item", () => {
 					folderContext.remove();
-					BDfunctionsDevilBro.clearReadNotifications(unreadServers);
-				});
+					this.showFolderSettings(folderDiv);
+				})
+				.on("click." + this.getName(), ".createfolder-item", () => {
+					folderContext.remove();
+					this.createNewFolder(folderDiv);
+				})
+				.on("click." + this.getName(), ".removefolder-item", () => {
+					folderContext.remove();
+					this.removeFolder(folderDiv);
+				})
+				.find(".autounreadfolder-item input").prop("checked", data.autounread);
+				
+			var unreadServers = BDfunctionsDevilBro.readUnreadServerList(this.readIncludedServerList(folderDiv));
+			if (unreadServers.length > 0) {
+				folderContext
+					.find(".unreadfolder-item")
+					.removeClass("disabled-dlOjhg")
+					.on("click." + this.getName(), () => {
+						folderContext.remove();
+						BDfunctionsDevilBro.clearReadNotifications(unreadServers);
+					});
+			}
+			
+			BDfunctionsDevilBro.appendContextMenu(folderContext, e);
 		}
-		
-		BDfunctionsDevilBro.appendContextMenu(folderContext, e);
 	}
 	
 	createFolderToolTip (folderDiv) {
@@ -1287,34 +1312,42 @@ class ServerFolders {
 	}	
 	
 	updateFolderNotifications (folderDiv) {
-		var includedServers = this.readIncludedServerList(folderDiv);
-		
-		var badgeAmount = 0;
-		var audioEnabled = false;
-		var videoEnabled = false;
-		
-		includedServers.forEach((serverObj) => {
-			let serverDiv = serverObj.div;
-			let badge = serverDiv.querySelector(".badge");
-			if (badge) badgeAmount += parseInt(badge.innerText);
-			if (serverDiv.classList.contains("audio")) audioEnabled = true;
-			if (serverDiv.classList.contains("video")) videoEnabled = true;
-		});
-		
-		$(folderDiv)
-			.toggleClass("unread", BDfunctionsDevilBro.readUnreadServerList(includedServers).length > 0)
-			.toggleClass("audio", audioEnabled)
-			.toggleClass("video", videoEnabled);
-		$(folderDiv)
-			.find(".folder.badge.notifications")
-				.toggle(badgeAmount > 0)
-				.text(badgeAmount);	
-		$(folderDiv)
-			.find(".folder.badge.count")
-				.toggle(includedServers.length > 0 && BDfunctionsDevilBro.getData("showCountBadge", this, "settings"))
-				.text(includedServers.length);	
-	
-		if (folderDiv.classList.contains("open") && !document.querySelector(".content_of_" + folderDiv.id)) this.openCloseFolder(folderDiv);
+		var data = BDfunctionsDevilBro.loadData(folderDiv.id, this, "folders");
+		if (data) {
+			var includedServers = this.readIncludedServerList(folderDiv);
+			var unreadServers = BDfunctionsDevilBro.readUnreadServerList(includedServers);
+			if (unreadServers.length > 0 && data.autounread) {
+				BDfunctionsDevilBro.clearReadNotifications(unreadServers);
+			}
+			else {
+				var badgeAmount = 0;
+				var audioEnabled = false;
+				var videoEnabled = false;
+				
+				includedServers.forEach((serverObj) => {
+					let serverDiv = serverObj.div;
+					let badge = serverDiv.querySelector(".badge");
+					if (badge) badgeAmount += parseInt(badge.innerText);
+					if (serverDiv.classList.contains("audio")) audioEnabled = true;
+					if (serverDiv.classList.contains("video")) videoEnabled = true;
+				});
+				
+				$(folderDiv)
+					.toggleClass("unread", unreadServers.length > 0)
+					.toggleClass("audio", audioEnabled)
+					.toggleClass("video", videoEnabled);
+				$(folderDiv)
+					.find(".folder.badge.notifications")
+						.toggle(badgeAmount > 0)
+						.text(badgeAmount);	
+				$(folderDiv)
+					.find(".folder.badge.count")
+						.toggle(includedServers.length > 0 && BDfunctionsDevilBro.getData("showCountBadge", this, "settings"))
+						.text(includedServers.length);	
+			
+				if (folderDiv.classList.contains("open") && !document.querySelector(".content_of_" + folderDiv.id)) this.openCloseFolder(folderDiv);
+			}
+		}
 	}
 	
 	getParentObject (div, type) {
@@ -1405,6 +1438,7 @@ class ServerFolders {
 					serversubmenu_createfolder_text:		"Izradi mapu",
 					serversubmenu_removefromfolder_text:	"Ukloni poslužitelj iz mape",
 					foldercontext_unreadfolder_text:		"Označi sve kao pročitano",
+					foldercontext_autounreadfolder_text:	"Auto: Označite kao pročitano",
 					foldercontext_foldersettings_text:		"Postavke map",
 					foldercontext_removefolder_text:		"Izbriši mapu",
 					modal_header_text:						"Postavke mapa",
@@ -1432,6 +1466,7 @@ class ServerFolders {
 					serversubmenu_createfolder_text:		"Opret mappe",
 					serversubmenu_removefromfolder_text:	"Fjern server fra mappe",
 					foldercontext_unreadfolder_text:		"Markér alle som læst",
+					foldercontext_autounreadfolder_text:	"Auto: Markér som læst",
 					foldercontext_foldersettings_text:		"Mappeindstillinger",
 					foldercontext_removefolder_text:		"Slet mappe",
 					modal_header_text:						"Mappindstillinger",
@@ -1459,6 +1494,7 @@ class ServerFolders {
 					serversubmenu_createfolder_text:		"Ordner erzeugen",
 					serversubmenu_removefromfolder_text:	"Server aus Ordner entfernen",
 					foldercontext_unreadfolder_text:		"Alle als gelesen markieren",
+					foldercontext_autounreadfolder_text:	"Auto: Als gelesen markieren",
 					foldercontext_foldersettings_text:		"Ordnereinstellungen",
 					foldercontext_removefolder_text:		"Ordner löschen",
 					modal_header_text:						"Ordnereinstellungen",
@@ -1486,6 +1522,7 @@ class ServerFolders {
 					serversubmenu_createfolder_text:		"Crear carpeta",
 					serversubmenu_removefromfolder_text:	"Eliminar servidor de la carpeta",
 					foldercontext_unreadfolder_text:		"Marcar todo como leido",
+					foldercontext_autounreadfolder_text:	"Auto: Marcar como leído",
 					foldercontext_foldersettings_text:		"Ajustes de carpeta",
 					foldercontext_removefolder_text:		"Eliminar carpeta",
 					modal_header_text:						"Ajustes de carpeta",
@@ -1513,6 +1550,7 @@ class ServerFolders {
 					serversubmenu_createfolder_text:		"Créer le dossier",
 					serversubmenu_removefromfolder_text:	"Supprimer le serveur du dossier",
 					foldercontext_unreadfolder_text:		"Tout marquer comme lu",
+					foldercontext_autounreadfolder_text:	"Auto: Marquer comme lu",
 					foldercontext_foldersettings_text:		"Paramètres du dossier",
 					foldercontext_removefolder_text:		"Supprimer le dossier",
 					modal_header_text:						"Paramètres du dossier",
@@ -1540,6 +1578,7 @@ class ServerFolders {
 					serversubmenu_createfolder_text:		"Creare una cartella",
 					serversubmenu_removefromfolder_text:	"Rimuovere il server dalla cartella",
 					foldercontext_unreadfolder_text:		"Segna tutti come letti",
+					foldercontext_autounreadfolder_text:	"Auto: Contrassegna come letto",
 					foldercontext_foldersettings_text:		"Impostazioni cartella",
 					foldercontext_removefolder_text:		"Elimina cartella",
 					modal_header_text:						"Impostazioni cartella",
@@ -1567,6 +1606,7 @@ class ServerFolders {
 					serversubmenu_createfolder_text:		"Map aanmaken",
 					serversubmenu_removefromfolder_text:	"Server uit map verwijderen",
 					foldercontext_unreadfolder_text:		"Alles als gelezen markeren",
+					foldercontext_autounreadfolder_text:	"Auto: Markeren als gelezen",
 					foldercontext_foldersettings_text:		"Mapinstellingen",
 					foldercontext_removefolder_text:		"Verwijder map",
 					modal_header_text:						"Mapinstellingen",
@@ -1594,6 +1634,7 @@ class ServerFolders {
 					serversubmenu_createfolder_text:		"Lag mappe",
 					serversubmenu_removefromfolder_text:	"Fjern server fra mappe",
 					foldercontext_unreadfolder_text:		"Marker alle som lest",
+					foldercontext_autounreadfolder_text:	"Auto: Merk som les",
 					foldercontext_foldersettings_text:		"Mappinnstillinger",
 					foldercontext_removefolder_text:		"Slett mappe",
 					modal_header_text:						"Mappinnstillinger",
@@ -1621,6 +1662,7 @@ class ServerFolders {
 					serversubmenu_createfolder_text:		"Utwórz folder",
 					serversubmenu_removefromfolder_text:	"Usuń serwer z folderu",
 					foldercontext_unreadfolder_text:		"Oznacz wszystkie jako przeczytane",
+					foldercontext_autounreadfolder_text:	"Auto: Oznacz jako przeczytane",
 					foldercontext_foldersettings_text:		"Ustawienia folderu",
 					foldercontext_removefolder_text:		"Usuń folder",
 					modal_header_text:						"Ustawienia folderu",
@@ -1648,6 +1690,7 @@ class ServerFolders {
 					serversubmenu_createfolder_text:		"Criar pasta",
 					serversubmenu_removefromfolder_text:	"Remover servidor da pasta",
 					foldercontext_unreadfolder_text:		"Marcar tudo como lido",
+					foldercontext_autounreadfolder_text:	"Auto: Marcar como lido",
 					foldercontext_foldersettings_text:		"Configurações da pasta",
 					foldercontext_removefolder_text:		"Excluir pasta",
 					modal_header_text:						"Configurações da pasta",
@@ -1675,6 +1718,7 @@ class ServerFolders {
 					serversubmenu_createfolder_text:		"Luo kansio",
 					serversubmenu_removefromfolder_text:	"Poista palvelin kansioista",
 					foldercontext_unreadfolder_text:		"Merkitse kaikki luetuksi",
+					foldercontext_autounreadfolder_text:	"Auto: merkitse luettavaksi",
 					foldercontext_foldersettings_text:		"Kansion kansio",
 					foldercontext_removefolder_text:		"Poista kansio",
 					modal_header_text:						"Kansion kansio",
@@ -1702,6 +1746,7 @@ class ServerFolders {
 					serversubmenu_createfolder_text:		"Skapa mapp",
 					serversubmenu_removefromfolder_text:	"Ta bort servern från mappen",
 					foldercontext_unreadfolder_text:		"Markera allt som läst",
+					foldercontext_autounreadfolder_text:	"Auto: Markera som Läs",
 					foldercontext_foldersettings_text:		"Mappinställningar",
 					foldercontext_removefolder_text:		"Ta bort mapp",
 					modal_header_text:						"Mappinställningar",
@@ -1729,6 +1774,7 @@ class ServerFolders {
 					serversubmenu_createfolder_text:		"Klasör oluşturun",
 					serversubmenu_removefromfolder_text:	"Sunucuyu klasörden kaldır",
 					foldercontext_unreadfolder_text:		"Tümünü Oku olarak işaretle",
+					foldercontext_autounreadfolder_text:	"Oto: Okundu Olarak İşaretle",
 					foldercontext_foldersettings_text:		"Klasör Ayarları",
 					foldercontext_removefolder_text:		"Klasörü sil",
 					modal_header_text:						"Klasör Ayarları",
@@ -1756,6 +1802,7 @@ class ServerFolders {
 					serversubmenu_createfolder_text:		"Vytvořit složky",
 					serversubmenu_removefromfolder_text:	"Odstranit server ze složky",
 					foldercontext_unreadfolder_text:		"Označit vše jako přečtené",
+					foldercontext_autounreadfolder_text:	"Auto: Označit jako přečtené",
 					foldercontext_foldersettings_text:		"Nastavení složky",
 					foldercontext_removefolder_text:		"Smazat složky",
 					modal_header_text:						"Nastavení složky",
@@ -1783,6 +1830,7 @@ class ServerFolders {
 					serversubmenu_createfolder_text:		"Създай папка",
 					serversubmenu_removefromfolder_text:	"Премахване на сървър от папка",
 					foldercontext_unreadfolder_text:		"Маркирай всички като прочетени",
+					foldercontext_autounreadfolder_text:	"Авто: Маркиране като четене",
 					foldercontext_foldersettings_text:		"Настройки папка",
 					foldercontext_removefolder_text:		"Изтриване на папка",
 					modal_header_text:						"Настройки папка",
@@ -1810,6 +1858,7 @@ class ServerFolders {
 					serversubmenu_createfolder_text:		"Создать папки",
 					serversubmenu_removefromfolder_text:	"Удаление сервера из папки",
 					foldercontext_unreadfolder_text:		"Отметить все как прочитанное",
+					foldercontext_autounreadfolder_text:	"Авто: Отметить как прочитанное",
 					foldercontext_foldersettings_text:		"Настройки папки",
 					foldercontext_removefolder_text:		"Удалить папки",
 					modal_header_text:						"Настройки папки",
@@ -1837,6 +1886,7 @@ class ServerFolders {
 					serversubmenu_createfolder_text:		"Створити папки",
 					serversubmenu_removefromfolder_text:	"Видалити сервер із папки",
 					foldercontext_unreadfolder_text:		"Позначити як прочитане",
+					foldercontext_autounreadfolder_text:	"Авто: Позначити як прочитане",
 					foldercontext_foldersettings_text:		"Параметри папки",
 					foldercontext_removefolder_text:		"Видалити папки",
 					modal_header_text:						"Параметри папки",
@@ -1864,6 +1914,7 @@ class ServerFolders {
 					serversubmenu_createfolder_text:		"フォルダーを作る",
 					serversubmenu_removefromfolder_text:	"フォルダからサーバーを削除する",
 					foldercontext_unreadfolder_text:		"すべてを読むようにマークする",
+					foldercontext_autounreadfolder_text:	"自動： 読み取りとしてマークする",
 					foldercontext_foldersettings_text:		"フォルダ設定",
 					foldercontext_removefolder_text:		"フォルダを削除する",
 					modal_header_text:						"フォルダ設定",
@@ -1891,6 +1942,7 @@ class ServerFolders {
 					serversubmenu_createfolder_text:		"創建文件夾",
 					serversubmenu_removefromfolder_text:	"從服務器中刪除服務器",
 					foldercontext_unreadfolder_text:		"標記為已讀",
+					foldercontext_autounreadfolder_text:	"自動： 標記為已讀",
 					foldercontext_foldersettings_text:		"文件夾設置",
 					foldercontext_removefolder_text:		"刪除文件夾",
 					modal_header_text:						"文件夾設置",
@@ -1918,6 +1970,7 @@ class ServerFolders {
 					serversubmenu_createfolder_text:		"폴더 만들기",
 					serversubmenu_removefromfolder_text:	"폴더에서 서버 제거",
 					foldercontext_unreadfolder_text:		"모두 읽은 상태로 표시",
+					foldercontext_autounreadfolder_text:	"자동: 읽은 상태로 표시",
 					foldercontext_foldersettings_text:		"폴더 설정",
 					foldercontext_removefolder_text:		"폴더 삭제",
 					modal_header_text:						"폴더 설정",
@@ -1945,6 +1998,7 @@ class ServerFolders {
 					serversubmenu_createfolder_text:		"Create Folder",
 					serversubmenu_removefromfolder_text:	"Remove Server From Folder",
 					foldercontext_unreadfolder_text:		"Mark All As Read",
+					foldercontext_autounreadfolder_text:	"Auto: Mark As Read",
 					foldercontext_foldersettings_text:		"Foldersettings",
 					foldercontext_removefolder_text:		"Delete Folder",
 					modal_header_text:						"Foldersettings",
