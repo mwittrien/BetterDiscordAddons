@@ -54,6 +54,8 @@ https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/themes/comp
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/themes/horizontalServerlist.theme.css
 https://raw.githubusercontent.com/ivanivamar/Discord/master/MinimalCord.theme.css
 https://raw.githubusercontent.com/jadeonking/WitcherCord/master/Themes/Witcher3.theme.css
+https://raw.githubusercontent.com/Juicysteak117/MinimalImprovement/master/MinimalImprovement.theme.css
+https://raw.githubusercontent.com/Juicysteak117/MinimalImprovement/master/MinimalImprovementBorderless.theme.css
 https://raw.githubusercontent.com/KaminariKillua/Themes/master/GlacialPrison/GlacialPrison.theme.css
 https://raw.githubusercontent.com/KaminariKillua/Themes/master/InfernalPrison/InfernalPrison.theme.css
 https://raw.githubusercontent.com/KaminariKillua/Themes/master/SakuraPrison/SakuraPrison.theme.css
