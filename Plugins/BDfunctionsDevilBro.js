@@ -303,8 +303,6 @@ BDfunctionsDevilBro.showToast = function (content, options = {}) {
 };
 
 BDfunctionsDevilBro.createTooltip = function (content, container, options = {}) {
-	console.log($(container).offset().left);
-	console.log($(container).offset().top);
 	if (!document.querySelector(".tooltips") || !content || !container || ($(container).offset().left == 0 && $(container).offset().top == 0)) return null;
 	let id = Math.round(Math.random()*10000000000000000);
 	let tooltip = document.createElement("div");
