@@ -303,7 +303,9 @@ BDfunctionsDevilBro.showToast = function (content, options = {}) {
 };
 
 BDfunctionsDevilBro.createTooltip = function (content, container, options = {}) {
-	if (!document.querySelector(".tooltips") || !content || !container) return null;
+	console.log($(container).offset().left);
+	console.log($(container).offset().top);
+	if (!document.querySelector(".tooltips") || !content || !container || ($(container).offset().left == 0 && $(container).offset().top == 0)) return null;
 	let id = Math.round(Math.random()*10000000000000000);
 	let tooltip = document.createElement("div");
 	tooltip.className = "tooltip tooltip-black DevilBro-tooltip";
@@ -1200,7 +1202,7 @@ BDfunctionsDevilBro.removeAllData = function (plugin, keyName) {
 	BDfunctionsDevilBro.saveAllData({}, plugin, keyName);
 };
 
-BDfunctionsDevilBro.getAllData = function (plugin, keyName) {
+BDfunctionsDevilBro.getAllData = function (plugin, keyName, compareObject) {
 	if (!plugin.defaults || !plugin.defaults[keyName]) return {};
 	var oldData = BDfunctionsDevilBro.loadAllData(plugin, keyName), newData = {}, saveData = false;
 	for (let key in plugin.defaults[keyName]) {
@@ -1210,6 +1212,10 @@ BDfunctionsDevilBro.getAllData = function (plugin, keyName) {
 		}
 		else {
 			newData[key] = oldData[key];
+		}
+		if (typeof compareObject === "object" && compareObject && typeof compareObject[newData[key]] === "undefined") {
+			newData[key] = Object.keys(compareObject)[0];
+			saveData = true;
 		}
 	}
 	if (saveData) BDfunctionsDevilBro.saveAllData(newData, plugin, keyName);
@@ -1240,8 +1246,8 @@ BDfunctionsDevilBro.removeData = function (id, plugin, keyName) {
 	BDfunctionsDevilBro.saveAllData(data, plugin, keyName);
 };
 
-BDfunctionsDevilBro.getData = function (id, plugin, keyName) {
-	var data = BDfunctionsDevilBro.getAllData(plugin, keyName);
+BDfunctionsDevilBro.getData = function (id, plugin, keyName, compareObject) {
+	var data = BDfunctionsDevilBro.getAllData(plugin, keyName, compareObject);
 	
 	var value = data[id];
 	
