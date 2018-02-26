@@ -299,6 +299,11 @@ BDfunctionsDevilBro.showToast = function (content, options = {}) {
 			toastElem.close();
 		}, timeout);
 	}
+	else {
+		setTimeout(() => {
+			toastElem.close();
+		}, 60000);
+	}
 	return toastElem;
 };
 
