@@ -285,13 +285,21 @@ BDfunctionsDevilBro.showToast = function (content, options = {}) {
 	if (type && icon) toastElem.classList.add("icon");
 	toastElem.innerText = content;
 	document.querySelector(".toasts").appendChild(toastElem);
-	setTimeout(() => {
-		toastElem.classList.add("closing");
+	toastElem.close = () => {
+		if (toastElem.parentElement) {
+			toastElem.classList.add("closing");
+			setTimeout(() => {
+				toastElem.remove();
+				if (!document.querySelectorAll(".toasts .toast").length) document.querySelector(".toasts").remove();
+			}, 300);
+		}
+	}
+	if (timeout > 0) {
 		setTimeout(() => {
-			toastElem.remove();
-			if (!document.querySelectorAll(".toasts .toast").length) document.querySelector(".toasts").remove();
-		}, 300);
-	}, timeout);
+			toastElem.close();
+		}, timeout);
+	}
+	return toastElem;
 };
 
 BDfunctionsDevilBro.createTooltip = function (content, container, options = {}) {
