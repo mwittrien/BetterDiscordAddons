@@ -1193,7 +1193,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 
 .popout-googletranslate .themed-popout {
 	position: fixed !important;
-	margin: calc((100vh - 232px)/2) calc((100vw - 280px)/2) !important;
+	margin: calc((100vh - 420px)/2) calc((100vw - 400px)/2) !important;
 	transform: none !important;
 	top: 0 !important;
 	bottom: 0 !important;
@@ -1215,7 +1215,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	content: "";
 	background: var(--background) center/cover !important;
 	position: fixed;
-	clip-path: inset(calc((100vh - 232px)/2) calc((100vw - 322px)/2) calc((100vh - 232px)/2) calc((100vw - 280px)/2) round 5px 5px 5px 5px);
+	clip-path: inset(calc((100vh - 420px)/2) calc((100vw - 400px)/2) calc((100vh - 420px)/2) calc((100vw - 400px)/2) round 5px 5px 5px 5px);
 	top: 0;
 	bottom: 0;
 	left: 0;
