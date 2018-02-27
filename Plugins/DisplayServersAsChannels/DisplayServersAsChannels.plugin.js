@@ -37,33 +37,34 @@ class DisplayServersAsChannels {
 			.bd-minimal .guilds-wrapper.DSAC-styled #RANbutton-frame {
 				margin-left: 40px;
 			}
-			.bd-minimal .guilds-wrapper.DSAC-styled .guild-separator, 
-			.bd-minimal .guilds-wrapper.DSAC-styled .guild-separator ~ .guild,
-			.bd-minimal .guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guild-inner,
-			.bd-minimal .guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guild-inner a,
-			.bd-minimal .guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guilds-error {
-				margin-left: 0px;
-				width: 130px;
-				height: 32px;
-			}
 			.guilds-wrapper.DSAC-styled .guild-separator, 
 			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild,
 			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guild-inner,
 			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guild-inner a,
 			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guilds-error	{
 				margin-left: 0px;
-				width: 215px;
 				height: 32px;
 			}
 			.guilds-wrapper.DSAC-styled .guild,
 			.guilds-wrapper.DSAC-styled .friends-online {
 				margin-left: 80px;
 			}
-			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild {
+			.bd-minimal .guilds-wrapper.DSAC-styled .guild-separator, 
+			.bd-minimal .guilds-wrapper.DSAC-styled .guild-separator ~ .guild,
+			.bd-minimal .guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guilds-error {
+				width: 130px;
+			}
+			.guilds-wrapper.DSAC-styled .guild-separator, 
+			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild,
+			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guilds-error {
+				width: 215px;
 				box-sizing: border-box;
 				opacity: 0.4;
 				padding-left: 5px;
 				border-radius: 3px;
+				display: flex !important;
+				align-items: center;
+				justify-content: flex-start;
 			}
 			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild.unread {
 				opacity: 0.7;
@@ -76,45 +77,63 @@ class DisplayServersAsChannels {
 				opacity: 1;
 				background-color: rgba(79,84,92,.6);
 			}
+			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild > div[draggable] {
+				flex: 1 1 auto;
+			}
+			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild.audio > div[draggable],
+			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild.video > div[draggable] {
+				padding-right: 20px;
+				margin-right: 5px;
+			}
+			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild.audio > div[draggable] {
+				background: url(/assets/382ca83d9dc390c4be715248bb4864f4.svg) right no-repeat !important;
+			}
+			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild.video > div[draggable] {
+				background: url(/assets/c46f51f425c824899b6138ea2b61b41d.svg) right no-repeat !important;
+			}
+			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild .badge {
+				position: static;
+				margin-right: 5px;
+			}
+			.bd-minimal .guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guild-inner {
+				width: unset;
+			}
 			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guild-inner {
 				background: transparent !important;
 				border-radius: 0px !important;
 			}
 			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild.audio .guild-inner:after,
 			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild.video .guild-inner:after {
-				right: 22px;
-				top: 4px;
+				display: none !important;
 			}
 			.bd-minimal .guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guild-inner a {
 				font-size: 14px !important;
-				width: 102px;
 			}
 			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guild-inner a {
 				background: transparent !important;
 				font-size: 16px !important;
 				line-height: 32px;
-				display: flex;
-				width: 188px;
-				overflow: hidden;
 				white-space: nowrap;
-				align-items: center;
-				justify-content: flex-start;
 			}
-			.bd-minimal .guilds-wrapper.DSAC-styled .guild-separator ~ .guild.audio .guild-inner a,
-			.bd-minimal .guilds-wrapper.DSAC-styled .guild-separator ~ .guild.video .guild-inner a {
-				width: 78px;
+			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guild-inner .DSAC-verification-badge {
+				position: absolute;
+				left: 4px;
+				top: 4px;
 			}
-			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild.audio .guild-inner a,
-			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild.video .guild-inner a {
-				width: 162px;
-			}
-			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild .badge {
-				right: 3px;
-				bottom: 8px;
+			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guild-inner .DSAC-verification-badge + a {
+				margin-left: 25px;
 			}
 			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guilds-error	{
 				border-radius: 3px;
 				margin-left: -5px;
+				line-height: 32px;
+			}
+			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guilds-error,
+			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild.guilds-add {
+				display: block !important;
+			}
+			.bd-minimal .guilds-wrapper.DSAC-styled .guild-separator ~ .guild.guilds-add .guilds-add-inner {
+				top: 0;
 			}
 			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild.guilds-add .guilds-add-inner {
 				top: -5px;
@@ -125,7 +144,7 @@ class DisplayServersAsChannels {
 
 	getDescription () {return "Display servers in a similar way as channels.";}
 
-	getVersion () {return "1.0.5";}
+	getVersion () {return "1.0.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -211,8 +230,9 @@ class DisplayServersAsChannels {
 		var avatar = serverObj.div.querySelector("a");
 		if (avatar) {
 			avatar.DSAColdName = avatar.textContent;
-			avatar.innerHTML = `${serverObj.features.has("VERIFIED") ? this.verificationBadgeMarkup : ``}${BDfunctionsDevilBro.encodeToHTML(serverObj.name)}`;
-			$(avatar)
+			avatar.textContent = serverObj.name;
+			if (serverObj.features.has("VERIFIED")) $(this.verificationBadgeMarkup).insertBefore(avatar);
+			$(serverObj.div)
 				.off("." + this.getName())
 				.on("mouseenter." + this.getName(), () => {
 					BDfunctionsDevilBro.appendLocalStyle("HideAllToolTips" + this.getName(), `.tooltip {display: none !important;}`);
@@ -227,8 +247,8 @@ class DisplayServersAsChannels {
 		if (!serverObj) return;
 		var avatar = serverObj.div.querySelector("a");
 		if (avatar) {
-			avatar.innerHTML = `${avatar.DSAColdName}`;
-			$(avatar).off("." + this.getName());
+			avatar.textContent = avatar.DSAColdName;
+			$(serverObj.div).off("." + this.getName()).find(".DSAC-verification-badge").remove();
 		}
 	}
 }
