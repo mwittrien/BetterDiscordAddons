@@ -354,7 +354,7 @@ class GoogleTranslateOption {
 
 	getDescription () {return "Adds a Google Translate option to your context menu, which shows a preview of the translated text and on click will open the selected text in Google Translate. Also adds a translation button to your textareas, which will automatically translate the text for you before it is being send. DeepLApi written by square. Thanks ;)";}
 
-	getVersion () {return "1.3.5";}
+	getVersion () {return "1.3.6";}
 	
 	getAuthor () {return "DevilBro, square";}
 	
@@ -784,6 +784,7 @@ class GoogleTranslateOption {
 					this.DeepLTranslate.setInputLanguage(input.id);
 					this.DeepLTranslate.setOutputLanguage(output.id);
 					this.DeepLTranslate.translate(newtext).then((translation) => {
+						if (newtext.lastIndexOf(".") != newtext.length-1 && translation.lastIndexOf(".") == translation.length-1) translation = translation.slice(0,-1);
 						finishTranslation(translation, mentions, input, output, toast);
 					});
 					
