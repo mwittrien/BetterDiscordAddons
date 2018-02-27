@@ -12,15 +12,15 @@ class DisplayServersAsChannels {
 			</svg>`;
 		
 		this.css = `
-			.guilds-wrapper.DSAC-styled,
-			.guilds-wrapper.DSAC-styled .scroller-wrap,
-			.guilds-wrapper.DSAC-styled .guilds {
-				width: 240px;
-			}
 			.bd-minimal .guilds-wrapper.DSAC-styled,
 			.bd-minimal .guilds-wrapper.DSAC-styled .scroller-wrap,
 			.bd-minimal .guilds-wrapper.DSAC-styled .guilds {
 				width: 160px;
+			}
+			.guilds-wrapper.DSAC-styled,
+			.guilds-wrapper.DSAC-styled .scroller-wrap,
+			.guilds-wrapper.DSAC-styled .guilds {
+				width: 240px;
 			}
 			.guilds-wrapper.DSAC-styled .guilds::-webkit-scrollbar-track-piece {
 				background-color: rgb(27, 29, 32);
@@ -30,12 +30,21 @@ class DisplayServersAsChannels {
 				background-color: rgb(17, 19, 22);
 				border-color: rgb(32, 34, 37);
 			}
+			.bd-minimal .guilds-wrapper.DSAC-styled .guild {
+				margin-left: 55px;
+			}
+			.bd-minimal .guilds-wrapper.DSAC-styled .friends-online,
+			.bd-minimal .guilds-wrapper.DSAC-styled #RANbutton-frame {
+				margin-left: 40px;
+			}
 			.bd-minimal .guilds-wrapper.DSAC-styled .guild-separator, 
 			.bd-minimal .guilds-wrapper.DSAC-styled .guild-separator ~ .guild,
 			.bd-minimal .guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guild-inner,
 			.bd-minimal .guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guild-inner a,
 			.bd-minimal .guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guilds-error {
+				margin-left: 0px;
 				width: 130px;
+				height: 32px;
 			}
 			.guilds-wrapper.DSAC-styled .guild-separator, 
 			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild,
@@ -45,14 +54,6 @@ class DisplayServersAsChannels {
 				margin-left: 0px;
 				width: 215px;
 				height: 32px;
-				overflow: hidden;
-			}
-			.bd-minimal .guilds-wrapper.DSAC-styled .guild {
-				margin-left: 55px;
-			}
-			.bd-minimal .guilds-wrapper.DSAC-styled .friends-online,
-			.bd-minimal .guilds-wrapper.DSAC-styled #RANbutton-frame {
-				margin-left: 40px;
 			}
 			.guilds-wrapper.DSAC-styled .guild,
 			.guilds-wrapper.DSAC-styled .friends-online {
@@ -79,16 +80,33 @@ class DisplayServersAsChannels {
 				background: transparent !important;
 				border-radius: 0px !important;
 			}
+			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild.audio .guild-inner:after,
+			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild.video .guild-inner:after {
+				right: 22px;
+				top: 4px;
+			}
 			.bd-minimal .guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guild-inner a {
 				font-size: 14px !important;
+				width: 102px;
 			}
 			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guild-inner a {
 				background: transparent !important;
 				font-size: 16px !important;
 				line-height: 32px;
 				display: flex;
+				width: 188px;
+				overflow: hidden;
+				white-space: nowrap;
 				align-items: center;
 				justify-content: flex-start;
+			}
+			.bd-minimal .guilds-wrapper.DSAC-styled .guild-separator ~ .guild.audio .guild-inner a,
+			.bd-minimal .guilds-wrapper.DSAC-styled .guild-separator ~ .guild.video .guild-inner a {
+				width: 78px;
+			}
+			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild.audio .guild-inner a,
+			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild.video .guild-inner a {
+				width: 162px;
 			}
 			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild .badge {
 				right: 3px;
@@ -107,7 +125,7 @@ class DisplayServersAsChannels {
 
 	getDescription () {return "Display servers in a similar way as channels.";}
 
-	getVersion () {return "1.0.4";}
+	getVersion () {return "1.0.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -142,7 +160,8 @@ class DisplayServersAsChannels {
 				changes.forEach(
 					(change, i) => {
 						var addedNodes = change.addedNodes;
-						if (change.oldValue && change.oldValue.indexOf("guild-placeholder") > -1)  addedNodes = [change.target];
+						if (change.attributeName == "class" && change.oldValue && change.oldValue.indexOf("guild-placeholder") > -1)  addedNodes = [change.target];
+						if (change.attributeName == "draggable" && change.oldValue && change.oldValue == "false")  addedNodes = [change.target.parentElement];
 						if (addedNodes) {
 							addedNodes.forEach((node) => {
 								if (node && node.classList && node.classList.contains("guild") && !node.querySelector(".guilds-error")) {
@@ -154,7 +173,7 @@ class DisplayServersAsChannels {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, ".guilds.scroller", {name:"serverListObserver",instance:observer}, {childList: true, subtree:true, attributes:true, attributeFilter: ['class'], attributeOldValue: true});
+			BDfunctionsDevilBro.addObserver(this, ".guilds.scroller", {name:"serverListObserver",instance:observer}, {childList: true, subtree:true, attributes:true, attributeFilte: ["class", "draggable"], attributeOldValue: true});
 			
 			BDfunctionsDevilBro.readServerList().forEach(serverObj => {
 				this.changeServer(serverObj);
@@ -193,6 +212,14 @@ class DisplayServersAsChannels {
 		if (avatar) {
 			avatar.DSAColdName = avatar.textContent;
 			avatar.innerHTML = `${serverObj.features.has("VERIFIED") ? this.verificationBadgeMarkup : ``}${BDfunctionsDevilBro.encodeToHTML(serverObj.name)}`;
+			$(avatar)
+				.off("." + this.getName())
+				.on("mouseenter." + this.getName(), () => {
+					BDfunctionsDevilBro.appendLocalStyle("HideAllToolTips" + this.getName(), `.tooltip {display: none !important;}`);
+				})
+				.on("mouseleave." + this.getName(), () => {
+					BDfunctionsDevilBro.removeLocalStyle("HideAllToolTips" + this.getName());
+				});
 		}
 	}
 
@@ -201,6 +228,7 @@ class DisplayServersAsChannels {
 		var avatar = serverObj.div.querySelector("a");
 		if (avatar) {
 			avatar.innerHTML = `${avatar.DSAColdName}`;
+			$(avatar).off("." + this.getName());
 		}
 	}
 }
