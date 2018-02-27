@@ -23,6 +23,7 @@ https://raw.githubusercontent.com/cosmicsalad/Discord-Themes-and-Plugins/master/
 https://raw.githubusercontent.com/DeathStrikeV/EvenBetterDiscord/master/EvenBetterDiscord.plugin.js
 https://raw.githubusercontent.com/Finicalmist/ChangingBackground/master/changingBackground.plugin.js
 https://raw.githubusercontent.com/Finicalmist/CopyCode/master/copyCode.plugin.js
+https://raw.githubusercontent.com/Greentwilight/PinnedMessagesPlugin/master/PinnedMessagesPage.plugin.js
 https://raw.githubusercontent.com/hammy13/BDPlugins/master/plugins/dateViewer/dateViewer.plugin.js
 https://raw.githubusercontent.com/HoLLy-HaCKeR/BetterDiscord-Themes-and-Plugins/master/Plugins/lazyload_patcher.plugin.js
 https://raw.githubusercontent.com/Hyperbot-one/hideServersChannels-plugin/master/hideServersChannels.plugin.js
