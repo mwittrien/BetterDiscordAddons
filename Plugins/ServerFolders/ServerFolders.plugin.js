@@ -1059,7 +1059,7 @@ class ServerFolders {
 			this.setIcons($(modal).find(".ui-icon-picker-icon.selected").attr("value"), $(modal).find(".icons"));
 		}
 		else {
-			BDfunctionsDevilBro.showToast(`Add an image for the open adn the closed icon.`, {type:"danger"});
+			BDfunctionsDevilBro.showToast(`Add an image for the open and the closed icon.`, {type:"danger"});
 		}
 	};
 	
