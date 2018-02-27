@@ -2554,10 +2554,10 @@ html, span:not(.spinner-item) {
 /* ----------------------- PLUGINSUPPORT ----------------------- */
 
 /* displayserveraschannels */
-.DSAC-styled .guild.selected {
+.DSAC-styled .guild-separator ~ .guild.selected {
 	background-color: rgb(var(--accentcolor)) !important;
 }
-.DSAC-styled .guild:not(.selected):hover {
+.DSAC-styled .guild-separator ~ .guild:not(.selected):hover {
 	opacity: 1 !important;
 	background-color: rgba(var(--transparencycolor),calc(var(--transparencyalpha) * 3)) !important;
 }
