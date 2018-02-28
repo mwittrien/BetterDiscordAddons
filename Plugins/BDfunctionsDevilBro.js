@@ -1325,6 +1325,13 @@ BDfunctionsDevilBro.getAllIndexes = function (array, val) {
 	return indexes;
 };
 
+BDfunctionsDevilBro.formatBytes = function (a, b) {
+	if (a == 0) return "0 Bytes";
+	if (a == 1) return "1 Byte";
+	var c = 1024, d = b < 1 ? 0 : b > 20 ? 20: b || 2, e = ["Bytes","KB","MB","GB","TB","PB","EB","ZB","YB"], f = Math.floor(Math.log(a)/Math.log(c));
+	return parseFloat((a/Math.pow(c,f)).toFixed(d)) + " " + e[f];
+};
+
 BDfunctionsDevilBro.color2COMP = function (color) {
 	if (color) {
 		switch (BDfunctionsDevilBro.checkColorType(color)) {
