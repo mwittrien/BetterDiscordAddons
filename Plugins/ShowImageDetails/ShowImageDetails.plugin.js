@@ -27,7 +27,7 @@ class ShowImageDetails {
 
 	getDescription () {return "Display the name, size and dimensions of uploaded images (does not include embed images) in the chat as an header or as a tooltip.";}
 
-	getVersion () {return "1.0.0";}
+	getVersion () {return "1.0.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -95,7 +95,6 @@ class ShowImageDetails {
 							change.removedNodes.forEach((node) => {
 								if (node && $(node).attr("layer-id") == "user-settings" && this.updateDetails) {
 									this.updateDetails = false;
-									console.log("update");
 									this.addDetails(document);
 								}
 							});
@@ -143,9 +142,7 @@ class ShowImageDetails {
 		var settings = BDfunctionsDevilBro.getAllData(this, "settings");
 		container.querySelectorAll(".accessory > .imageWrapper-38T7d9").forEach(image => {
 			this.resetImage(image);
-			console.log(image);
 			var data = BDfunctionsDevilBro.getKeyInformation({node:image, key:"attachment", up:true, time:200});
-			console.log(BDfunctionsDevilBro.getReactInstance(image));
 			if (data) {
 				image.classList.add("image-details-added");
 				if (!settings.showOnHover) {
