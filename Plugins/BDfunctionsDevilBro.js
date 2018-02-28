@@ -753,7 +753,7 @@ BDfunctionsDevilBro.getKeyInformation = function (config) {
 		"memoizedState":true,
 		"child": config.up ? false : true,
 		"return": config.up ? true : false,
-		"sibling":true,
+		"sibling": config.up ? false : true,
 		"firstEffect":true
 	};
 	
