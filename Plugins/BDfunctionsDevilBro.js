@@ -20,6 +20,7 @@ BDfunctionsDevilBro.loadMessage = function (plugin) {
 	
 	if (typeof plugin.css === "string") BDfunctionsDevilBro.appendLocalStyle(plugin.getName(), plugin.css);
 	BDfunctionsDevilBro.addOnSwitchListener(plugin);
+	BDfunctionsDevilBro.addReloadListener(plugin);
 	BDfunctionsDevilBro.translatePlugin(plugin);
 	
 	if (typeof window.PluginUpdates !== "object" || !window.PluginUpdates) window.PluginUpdates = {plugins:{}};
@@ -96,6 +97,7 @@ BDfunctionsDevilBro.unloadMessage = function (plugin) {
 	
 	if (typeof plugin.css === "string") BDfunctionsDevilBro.removeLocalStyle(plugin.getName());
 	BDfunctionsDevilBro.removeOnSwitchListener(plugin);
+	BDfunctionsDevilBro.removeReloadListener(plugin);
 	
 	if (!BDfunctionsDevilBro.isObjectEmpty(plugin.observers)) {
 		for (var name in plugin.observers) {
@@ -944,6 +946,7 @@ BDfunctionsDevilBro.WebModules.patchFunction = function (newOutput, index) {
 
 BDfunctionsDevilBro.addOnSwitchListener = function (plugin) {
 	if (typeof plugin.onSwitch === "function") {
+		BDfunctionsDevilBro.removeOnSwitchListener(plugin);
 		if (!BDfunctionsDevilBro.zacksFork()) {
 			plugin.onSwitch = plugin.onSwitch.bind(plugin);
 			require("electron").remote.getCurrentWindow().webContents.addListener("did-navigate-in-page", plugin.onSwitch);
@@ -985,6 +988,34 @@ BDfunctionsDevilBro.removeOnSwitchListener = function (plugin) {
 		}
 		if (typeof plugin.onSwitchFix === "object") plugin.onSwitchFix.disconnect();
 	}
+};
+
+BDfunctionsDevilBro.addReloadListener = function (plugin) {
+	BDfunctionsDevilBro.removeReloadListener(plugin);
+	var appwindow = document.querySelector(".app-XZYfmp");
+	if (appwindow) {
+		plugin.reloadFix = new MutationObserver((changes, _) => {
+			changes.forEach(
+				(change, i) => {
+					if (change.addedNodes) {
+						change.addedNodes.forEach((node) => {
+							if (node && node.classList && node.classList.contains("app")) {
+								if (!document.querySelector(".DevilBro-notice.reload-notice")) {
+									BDfunctionsDevilBro.createNotificationsBar("Discord Error: .app reappended. Reloading plugins.",{type:"danger",selector:"reload-notice"});
+								}
+								plugin.initialize();
+							}
+						});
+					}
+				}
+			);
+		});
+		plugin.reloadFix.observe(appwindow, {childList:true});
+	}
+};
+
+BDfunctionsDevilBro.removeReloadListener = function (plugin) {
+	if (typeof plugin.reloadFix === "object") plugin.reloadFix.disconnect();
 };
 
 BDfunctionsDevilBro.getLanguageTable = function (lang) {
@@ -1115,8 +1146,8 @@ BDfunctionsDevilBro.readUnreadServerList = function (servers) {
 BDfunctionsDevilBro.getSelectedServer = function () {
 	var server, info, GuildStore = BDfunctionsDevilBro.WebModules.findByProperties(["getGuilds"]);
 	for (server of document.querySelectorAll(".guild-separator ~ .guild.selected")) {
-		info = BDfunctionsDevilBro.getKeyInformation({"node":server, "key":"guild"});
-		if (info) info = GuildStore.getGuild(info.id);
+		id = BDfunctionsDevilBro.getIdOfServer(server);
+		if (id) info = GuildStore.getGuild(id);
 		if (info) return Object.assign({},info,{div:server,data:info});
 	}
 	return null;
@@ -1179,11 +1210,18 @@ BDfunctionsDevilBro.getDivOfChannel = function (id) {
 BDfunctionsDevilBro.readDmList = function () {
 	var dm, info, foundDMs = [], ChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getChannels"]);
 	for (dm of document.querySelectorAll(".dms .guild")) {
-		info = BDfunctionsDevilBro.getKeyInformation({"node":dm, "key":"channel"});
-		if (info) info = ChannelStore.getChannel(info.id);
+		id = BDfunctionsDevilBro.getIdOfDM(dm);
+		if (id) info = ChannelStore.getChannel(id);
 		if (info) foundDMs.push(Object.assign({},info,{div:dm,data:info}));
 	}
 	return foundDMs;
+};
+
+BDfunctionsDevilBro.getIdOfDM = function (dm) {
+	var switchlink, id;
+	switchlink = dm.querySelector("a");
+	id = switchlink && switchlink.href ? switchlink.href.split("/") : null;
+	return id && id.length > 3 && !isNaN(parseInt(id[5])) ? id[5] : null;
 };
 
 BDfunctionsDevilBro.getDivOfDM = function (id) {
