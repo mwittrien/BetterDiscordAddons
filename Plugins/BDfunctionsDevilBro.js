@@ -1002,7 +1002,7 @@ BDfunctionsDevilBro.addReloadListener = function (plugin) {
 							change.addedNodes.forEach((node) => {
 								if (node && node.classList && node.classList.contains("app")) {
 									if (!document.querySelector(".DevilBro-notice.reload-notice")) {
-										BDfunctionsDevilBro.createNotificationsBar("Discord Error: .app reappended. Reloading plugins.",{type:"danger",selector:"reload-notice"});
+										BDfunctionsDevilBro.createNotificationsBar("Don't panic: .app was reappended. Reloading plugins.",{type:"danger",selector:"reload-notice"});
 									}
 									plugin.initialize();
 								}
