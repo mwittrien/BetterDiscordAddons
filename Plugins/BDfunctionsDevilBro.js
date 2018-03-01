@@ -991,32 +991,35 @@ BDfunctionsDevilBro.removeOnSwitchListener = function (plugin) {
 };
 
 BDfunctionsDevilBro.addReloadListener = function (plugin) {
-	BDfunctionsDevilBro.removeReloadListener(plugin);
-	var appwindow = document.querySelector(".app-XZYfmp");
-	if (appwindow) {
-		plugin.reloadFix = new MutationObserver((changes, _) => {
-			changes.forEach(
-				(change, i) => {
-					if (change.addedNodes) {
-						change.addedNodes.forEach((node) => {
-							if (node && node.classList && node.classList.contains("app")) {
-								if (!document.querySelector(".DevilBro-notice.reload-notice")) {
-									BDfunctionsDevilBro.createNotificationsBar("Discord Error: .app reappended. Reloading plugins.",{type:"danger",selector:"reload-notice"});
+	if (typeof plugin.initialize === "function") {
+		BDfunctionsDevilBro.removeReloadListener(plugin);
+		var appwindow = document.querySelector(".app-XZYfmp");
+		if (appwindow) {
+			plugin.reloadFix = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.addedNodes) {
+							change.addedNodes.forEach((node) => {
+								if (node && node.classList && node.classList.contains("app")) {
+									if (!document.querySelector(".DevilBro-notice.reload-notice")) {
+										BDfunctionsDevilBro.createNotificationsBar("Discord Error: .app reappended. Reloading plugins.",{type:"danger",selector:"reload-notice"});
+									}
+									plugin.initialize();
 								}
-								console.log(plugin);
-								plugin.initialize();
-							}
-						});
+							});
+						}
 					}
-				}
-			);
-		});
-		plugin.reloadFix.observe(appwindow, {childList:true});
+				);
+			});
+			plugin.reloadFix.observe(appwindow, {childList:true});
+		}
 	}
 };
 
 BDfunctionsDevilBro.removeReloadListener = function (plugin) {
-	if (typeof plugin.reloadFix === "object") plugin.reloadFix.disconnect();
+	if (typeof plugin.initialize === "function") {
+		if (typeof plugin.reloadFix === "object") plugin.reloadFix.disconnect();
+	}
 };
 
 BDfunctionsDevilBro.getLanguageTable = function (lang) {
