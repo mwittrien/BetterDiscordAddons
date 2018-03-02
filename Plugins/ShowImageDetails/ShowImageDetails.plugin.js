@@ -27,7 +27,7 @@ class ShowImageDetails {
 
 	getDescription () {return "Display the name, size and dimensions of uploaded images (does not include embed images) in the chat as an header or as a tooltip.";}
 
-	getVersion () {return "1.0.1";}
+	getVersion () {return "1.0.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -146,7 +146,7 @@ class ShowImageDetails {
 			if (data) {
 				image.classList.add("image-details-added");
 				if (!settings.showOnHover) {
-					$(`<div class="image-details"><a class="image-details-link" title="${data.url}" href="${data.url}" target="_blank" rel="noreferrer noopener">${data.filename}</a><label class="image-details-size description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">${BDfunctionsDevilBro.formatBytes(data.size)}</label><label class="image-details-dimensions description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">${data.width}x${data.height}px</label></div>`).insertBefore(image); 
+					$(`<div class="image-details-wrapper"><div class="image-details"><a class="image-details-link" title="${data.url}" href="${data.url}" target="_blank" rel="noreferrer noopener">${data.filename}</a><label class="image-details-size description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">${BDfunctionsDevilBro.formatBytes(data.size)}</label><label class="image-details-dimensions description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">${data.width}x${data.height}px</label></div></div>`).insertBefore(image).append(image);
 				}
 				else {
 					$(image).on("mouseenter." + this.getName(), () => {
@@ -159,6 +159,11 @@ class ShowImageDetails {
 	
 	resetImage (image) {
 		image.classList.remove("image-details-added");
-		$(image).off("." + this.getName()).parent().find(".image-details").remove();
+		$(image).off("." + this.getName());
+		var wrapper = image.parentElement;
+		if (wrapper.classList.contains("image-details-wrapper")) {
+			wrapper.parentElement.insertBefore(image, wrapper);
+			wrapper.remove();
+		}
 	}
 }
