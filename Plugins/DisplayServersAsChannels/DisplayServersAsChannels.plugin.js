@@ -101,6 +101,7 @@ class DisplayServersAsChannels {
 			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guild-inner {
 				background: transparent !important;
 				border-radius: 0px !important;
+				position: relative;
 			}
 			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild.audio .guild-inner:after,
 			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild.video .guild-inner:after {
@@ -114,14 +115,19 @@ class DisplayServersAsChannels {
 				font-size: 16px !important;
 				line-height: 32px;
 				white-space: nowrap;
+				text-align: left;
+				position: absolute;
+				left: 0;
+				right: 0;
+				width: unset;
 			}
 			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guild-inner .DSAC-verification-badge {
 				position: absolute;
-				left: 4px;
+				left: 0;
 				top: 4px;
 			}
 			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guild-inner .DSAC-verification-badge + a {
-				margin-left: 25px;
+				left: 25px;
 			}
 			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guilds-error	{
 				border-radius: 3px;
@@ -144,7 +150,7 @@ class DisplayServersAsChannels {
 
 	getDescription () {return "Display servers in a similar way as channels.";}
 
-	getVersion () {return "1.0.6";}
+	getVersion () {return "1.0.7";}
 
 	getAuthor () {return "DevilBro";}
 	
