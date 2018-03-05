@@ -47,6 +47,7 @@ https://raw.githubusercontent.com/intrnl/discordcustomizations/master/codeblockL
 https://raw.githubusercontent.com/intrnl/discordcustomizations/master/emojiFacebook/emojiFacebook.theme.css
 https://raw.githubusercontent.com/intrnl/discordcustomizations/master/emojiNotoBlobs/emojiNotoBlobs.theme.css
 https://raw.githubusercontent.com/intrnl/discordcustomizations/master/emojiNotoColor/emojiNotoColor.theme.css
+https://raw.githubusercontent.com/intrnl/discordcustomizations/master/emojiOne3/emojiOne3.theme.css
 https://raw.githubusercontent.com/intrnl/discordcustomizations/master/emojiSamsung/emojiSamsung.theme.css
 https://raw.githubusercontent.com/intrnl/discordcustomizations/master/memberlistOverview/memberlistOverview.theme.css
 https://raw.githubusercontent.com/intrnl/discordcustomizations/master/roleRevert/roleRevert.theme.css
