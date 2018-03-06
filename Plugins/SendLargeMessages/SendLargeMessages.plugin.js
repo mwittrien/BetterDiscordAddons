@@ -31,7 +31,7 @@ class SendLargeMessages {
 				<div class="modal-2LIEKY">
 					<div class="inner-1_1f7b">
 						<div class="modal-3HOjGZ sizeLarge-1AHXtx">
-							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO header-3sp3cE" style="flex: 0 0 auto;">
+							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO header-3sp3cE" style="flex: 0 0 auto;">
 								<div class="flexChild-1KGW5q" style="flex: 1 1 auto;">
 									<h4 class="h4-2IXpeI title-1pmpPr size16-3IvaX_ height20-165WbF weightSemiBold-T8sxWH defaultColor-v22dK1 defaultMarginh4-jAopYe marginReset-3hwONl">REPLACE_modal_header_text</h4>
 									<div class="guildName-1u0hy7 small-3-03j1 size12-1IGJl9 height16-1qXrGy primary-2giqSn"></div>
@@ -46,13 +46,13 @@ class SendLargeMessages {
 							<div class="scrollerWrap-2uBjct content-1Cut5s scrollerThemed-19vinI themeGhostHairline-2H8SiW inputWrapper-3xoRWR vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR flexChild-1KGW5q inner-tqJwAU" style="flex: 1 1 auto;">
 								<textarea class="scroller-fzNley inputDefault-Y_U37D input-2YozMi" id="modal-inputtext"></textarea>
 							</div>
-							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 noWrap-v6g9vO inner-tqJwAU marginBottom8-1mABJ4" style="flex: 0 0 auto;">
+							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 noWrap-v6g9vO inner-tqJwAU marginBottom8-1mABJ4" style="flex: 0 0 auto;">
 								<h5 id="warning-message" class="flexChild-1KGW5q h5-3KssQU title-1pmpPr size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH defaultMarginh5-2UwwFY" style="flex: 1 1 auto;"></h5>
 								<h5 id="character-counter" class="flexChild-1KGW5q h5-3KssQU title-1pmpPr size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH defaultMarginh5-2UwwFY" style="flex: 0 0 auto;"></h5>
 							</div>
 							<div class="flex-lFgbSz flex-3B1Tl4 horizontalReverse-2LanvO horizontalReverse-k5PqxT flex-3B1Tl4 directionRowReverse-2eZTxP justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO footer-1PYmcw">
-								<button type="button" class="btn-send buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu button-2t3of8 lookFilled-luDKDo colorBrand-3PmwCE sizeMedium-2VGNaF grow-25YQ8u">
-									<div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx">REPLACE_btn_send_text</div>
+								<button type="button" class="btn-send button-2t3of8 lookFilled-luDKDo colorBrand-3PmwCE sizeMedium-2VGNaF grow-25YQ8u">
+									<div class="contents-4L4hQM">REPLACE_btn_send_text</div>
 								</button>
 							</div>
 						</div>
