@@ -27,9 +27,9 @@ class PersonalPins {
 			`<div class="popout popout-bottom-right no-arrow no-shadow popout-personalpins-notes DevilBro-modal" style="z-index: 1000; visibility: visible; left: 544.844px; top: 35.9896px; transform: translateX(-100%) translateY(0%) translateZ(0px);">
 				<div class="messages-popout-wrap themed-popout" style="max-height: 740px; width: 500px;">
 					<div class="header" style="padding-bottom: 0;">
-						<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginTop8-2gOa2N" style="flex: 0 0 auto;">
+						<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginTop8-2gOa2N" style="flex: 0 0 auto;">
 							<div class="title">REPLACE_popout_note_text</div>
-							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO searchBar-YMJBu9 size14-1wjlWP" style="flex: 1 1 auto;">
+							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO searchBar-YMJBu9 size14-1wjlWP" style="flex: 1 1 auto;">
 								<input class="input-yt44Uw flexChild-1KGW5q" value="" placeholder="Search for ..." style="flex: 1 1 auto;">
 								<div class="searchBarIcon-vCfmUl flexChild-1KGW5q">
 									<i class="icon-11Zny- eyeGlass-6rahZf visible-4lw4vs"/>
@@ -37,13 +37,13 @@ class PersonalPins {
 								</div>
 							</div>
 						</div>
-						<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginTop8-2gOa2N" style="flex: 0 0 auto;">
+						<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginTop8-2gOa2N" style="flex: 0 0 auto;">
 							<div tab="channel" class="tab">REPLACE_popout_channel_text</div>
 							<div tab="server" class="tab">REPLACE_popout_server_text</div>
 							<div tab="allservers" class="tab">REPLACE_popout_allservers_text</div>
-							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelect-2sgeoi" style="padding-bottom: 15px; float:right;">
+							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelect-2sgeoi" style="padding-bottom: 15px; float:right;">
 								<div class="quickSelectLabel-2MM1ZS">REPLACE_popout_sort_text:</div>
-								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelectClick-36aPV0" style="flex: 0 0 auto;">
+								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelectClick-36aPV0" style="flex: 0 0 auto;">
 									<div option="timestamp" class="quickSelectValue-23jNHW">REPLACE_popout_messagesort_text</div>
 									<div class="quickSelectArrow-1lyLly"></div>
 								</div>
@@ -123,7 +123,7 @@ class PersonalPins {
 	getSettingsPanel () {
 		if (!this.started || typeof BDfunctionsDevilBro !== "object") return;
 		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="titleDefault-1CWM9y title-3i-5G_ size18-ZM4Qv- height24-2pMcnc weightNormal-3gw0Lm marginBottom8-1mABJ4">${this.getName()}</div><div class="DevilBro-settings-inner">`;
-		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Delete all Notes.</h3><button type="button" class="flexChild-1KGW5q buttonRedFilledDefault-1TrZ9q buttonFilledDefault-AELjWf buttonDefault-2OLW-v buttonFilled-29g7b5 buttonRedFilled-1NjJNj mediumGrow-uovsMu button-2t3of8 lookFilled-luDKDo colorRed-3HTNPV sizeMedium-2VGNaF grow-25YQ8u reset-button" style="flex: 0 0 auto;"><div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx">Reset</div></button></div>`;
+		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Delete all Notes.</h3><button type="button" class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorRed-3HTNPV sizeMedium-2VGNaF grow-25YQ8u reset-button" style="flex: 0 0 auto;"><div class="contents-4L4hQM">Reset</div></button></div>`;
 		settingshtml += `</div></div>`;
 		
 		var settingspanel = $(settingshtml)[0];
@@ -177,7 +177,7 @@ class PersonalPins {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node.nodeType == 1 && (node.className.includes("context-menu") || node.className.includes("contextMenu-uoJTbz"))) {
+								if (node.nodeType == 1 && node.className.includes("contextMenu-uoJTbz")) {
 									this.onContextMenu(node);
 								}
 							});
