@@ -1158,6 +1158,7 @@ BDfunctionsDevilBro.getSelectedServer = function () {
 };
 
 BDfunctionsDevilBro.getIdOfServer = function (server) {
+	if (!server || !server.classList || !server.classList.contains("guild") || server.classList.contains("copy") || server.classList.contains("folder")) return;
 	var switchlink, id;
 	switchlink = server.querySelector("a");
 	id = switchlink && switchlink.href ? switchlink.href.split("/") : null;
@@ -1222,6 +1223,8 @@ BDfunctionsDevilBro.readDmList = function () {
 };
 
 BDfunctionsDevilBro.getIdOfDM = function (dm) {
+	if (!dm || !dm.classList || !dm.classList.contains("guild") || dm.classList.contains("copy") || dm.classList.contains("folder")) return;
+	if (!dm.parentElement || !dm.parentElement.classList || !dm.parentElement.classList("dms")) return;
 	var switchlink, id;
 	switchlink = dm.querySelector("a");
 	id = switchlink && switchlink.href ? switchlink.href.split("/") : null;
