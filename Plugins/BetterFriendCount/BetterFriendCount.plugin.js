@@ -8,7 +8,7 @@ class BetterFriendCount {
 
 	getDescription () {return "Shows the amount of total and online friends and blocked users in the friends tab.";}
 
-	getVersion () {return "1.0.0";}
+	getVersion () {return "1.0.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -99,8 +99,8 @@ class BetterFriendCount {
 			if (relationships[id] == 2) blockedCount++;
 		}
 		var tabitems = friendstabbar.querySelectorAll(".tab-bar-item");
-		$(`<label class="betterfriendcount-number friendcount"> ${friendCount}</label>`).appendTo(tabitems[1]);
-		$(`<label class="betterfriendcount-number onlinefriendcount"> ${onlineFriendCount}</label>`).appendTo(tabitems[2]);
-		$(`<label class="betterfriendcount-number blockedcount"> ${blockedCount}</label>`).appendTo(tabitems[4]);
+		$(`<div class="badge betterfriendcount-number friendcount">${friendCount}</div>`).appendTo(tabitems[1]);
+		$(`<div class="badge betterfriendcount-number onlinefriendcount">${onlineFriendCount}</div>`).appendTo(tabitems[2]);
+		$(`<div class="badge betterfriendcount-number blockedcount">${blockedCount}</div>`).appendTo(tabitems[4]);
 	}
 }
