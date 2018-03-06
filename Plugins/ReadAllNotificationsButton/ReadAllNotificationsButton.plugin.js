@@ -3,8 +3,8 @@
 class ReadAllNotificationsButton {
 	constructor () {
 		this.RANbuttonMarkup = 
-			`<div class="guild" id="RANbutton-frame" style="height: 20px; margin-bottom: 10px;">
-				<div class="guild-inner" style="height: 20px; border-radius: 4px;">
+			`<div class="guild" id="RANbutton-frame" style="height: 20px; width: 50px; margin-bottom: 10px;">
+				<div class="guild-inner" style="height: 20px; width: 50px; border-radius: 4px;">
 					<a>
 						<div id="RANbutton" style="line-height: 20px; font-size: 12px;">read all</div>
 					</a>
@@ -12,8 +12,8 @@ class ReadAllNotificationsButton {
 			</div>`;
 			
 		this.RAMbuttonMarkup = 
-			`<button type="button" id="RAMbutton" class="flexChild-1KGW5q buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu button-2t3of8 lookFilled-luDKDo colorBrand-3PmwCE sizeMin-1Wh1KC grow-25YQ8u" style="flex: 0 0 auto; margin-top: -5px; height: 25px;">
-				<div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx">Clear all Mentions</div>
+			`<button type="button" id="RAMbutton" class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorBrand-3PmwCE sizeMin-1Wh1KC grow-25YQ8u" style="flex: 0 0 auto; margin-top: -5px; height: 25px;">
+				<div class="contents-4L4hQM">Clear all Mentions</div>
 			</button>`;
 	}
 
@@ -97,8 +97,8 @@ class ReadAllNotificationsButton {
 		if (typeof BDfunctionsDevilBro === "object") {
 			$("#RANbutton-frame, #RAMbutton").remove();
 			
-			$(".guilds.scroller").removeClass("RAN-added");
-			$(".recent-mentions-popout").removeClass("RAM-added");
+			$(".RAN-added").removeClass("RAN-added");
+			$(".RAM-added").removeClass("RAM-added");
 			
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
