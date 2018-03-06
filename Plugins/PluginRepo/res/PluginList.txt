@@ -62,6 +62,7 @@ https://raw.githubusercontent.com/mashirochan/Mashiro-chan/master/Plugins/EmoteB
 https://raw.githubusercontent.com/mashirochan/Mashiro-chan/master/Plugins/HorizontalCodeScroll/HorizontalCodeScroll.plugin.js
 https://raw.githubusercontent.com/mashirochan/Mashiro-chan/master/Plugins/PasteSend/PasteSend.plugin.js
 https://raw.githubusercontent.com/megamit/repository/gh-pages/renamer/1.5.4/renamer.plugin.js
+https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/AvatarIconViewer.plugin.js
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/BetterNsfwTag/BetterNsfwTag.plugin.js
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/CharCounter/CharCounter.plugin.js
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ChatAliases/ChatAliases.plugin.js
