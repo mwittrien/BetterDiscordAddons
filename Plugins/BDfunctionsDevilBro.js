@@ -1133,7 +1133,7 @@ BDfunctionsDevilBro.readServerList = function () {
 	var server, id, info, foundServers = [], GuildStore = BDfunctionsDevilBro.WebModules.findByProperties(["getGuilds"]);
 	for (server of document.querySelectorAll(".guild-separator ~ .guild")) {
 		id = BDfunctionsDevilBro.getIdOfServer(server);
-		if (id) info = GuildStore.getGuild(id);
+		info = id ? GuildStore.getGuild(id) : null;
 		if (info) foundServers.push(Object.assign({},info,{div:server,data:info}));
 	}
 	return foundServers;
@@ -1151,7 +1151,7 @@ BDfunctionsDevilBro.getSelectedServer = function () {
 	var server, info, GuildStore = BDfunctionsDevilBro.WebModules.findByProperties(["getGuilds"]);
 	for (server of document.querySelectorAll(".guild-separator ~ .guild.selected")) {
 		id = BDfunctionsDevilBro.getIdOfServer(server);
-		if (id) info = GuildStore.getGuild(id);
+		info = id ? GuildStore.getGuild(id) : null;
 		if (info) return Object.assign({},info,{div:server,data:info});
 	}
 	return null;
@@ -1215,7 +1215,7 @@ BDfunctionsDevilBro.readDmList = function () {
 	var dm, info, foundDMs = [], ChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getChannels"]);
 	for (dm of document.querySelectorAll(".dms .guild")) {
 		id = BDfunctionsDevilBro.getIdOfDM(dm);
-		if (id) info = ChannelStore.getChannel(id);
+		info = id ? ChannelStore.getChannel(id) : null;
 		if (info) foundDMs.push(Object.assign({},info,{div:dm,data:info}));
 	}
 	return foundDMs;
