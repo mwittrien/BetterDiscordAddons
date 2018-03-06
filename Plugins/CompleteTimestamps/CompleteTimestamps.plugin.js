@@ -33,7 +33,7 @@ class CompleteTimestamps {
 
 	getDescription () {return "Replace all timestamps with complete timestamps.";}
 
-	getVersion () {return "1.1.4";}
+	getVersion () {return "1.1.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -139,7 +139,7 @@ class CompleteTimestamps {
 			
 			this.setMaxWidth();
 			
-			$(document).on("mouseenter." + this.getName(), ".message-text", (e) => {
+			$(document).on("mouseenter." + this.getName(), ".message.first .message-text, .message:not(.first)", (e) => {
 				if (BDfunctionsDevilBro.getData("showOnHover", this, "settings")) {
 					var message = e.currentTarget;
 					var messagegroup = this.getMessageGroup(message);
@@ -283,6 +283,7 @@ class CompleteTimestamps {
 	
 	getMessageData (message, messagegroup) {
 		var pos = $(messagegroup).find(".message-text").index(message);
+		pos = pos < 0 ? $(messagegroup).find(".message").index(message) : pos;
 		var info = BDfunctionsDevilBro.getKeyInformation({"node":message,"key":"messages","up":true,"time":1000});
 		if (info && pos > -1) info = info[pos];
 		return info;
