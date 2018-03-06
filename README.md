@@ -2,6 +2,7 @@
 A series of plugins and themes for BetterDiscord. If you got any question hit me up on Discord DevilBro#4401
 
 ## Plugins
+ - [Better Friend Count](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/BetterFriendCount) - Shows the amount of total and online friends and blocked users in the friends tab.
  - [Better NSFW Tag](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/BetterNsfwTag) - Adds a more noticeable tag to NSFW channels.
  - [Char Counter](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CharCounter) - Adds a character counter to the chat.
  - [Chat Aliases](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ChatAliases) - Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent.
