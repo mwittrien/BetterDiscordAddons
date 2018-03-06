@@ -124,7 +124,7 @@ class EditServers {
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	getVersion () {return "1.7.4";}
+	getVersion () {return "1.7.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -185,24 +185,21 @@ class EditServers {
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								var info = BDfunctionsDevilBro.getKeyInformation({"node":node, "key":"guild"});
-								if (info) this.loadServer({div:node,info});
+						var addedNodes = change.addedNodes;
+						if (change.attributeName == "class" && change.oldValue && change.oldValue.indexOf("guild-placeholder") > -1)  addedNodes = [change.target];
+						if (change.attributeName == "draggable" && change.oldValue && change.oldValue == "false")  addedNodes = [change.target.parentElement];
+						if (addedNodes) {
+							addedNodes.forEach((node) => {
+								if (node && node.classList && node.classList.contains("guild") && !node.querySelector(".guilds-error")) {
+									var id = BDfunctionsDevilBro.getIdOfServer(node);
+									if (id) this.loadServer(BDfunctionsDevilBro.getDivOfServer(id));
+								}
 							});
 						}
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, ".guilds.scroller", {name:"serverListObserver",instance:observer}, {childList: true});
-			
-			$(".guilds.scroller").on("drop" + this.getName(), () => {	
-				this.serverDragged = true;
-			});
-			$(".guilds.scroller").on("mouseleave" + this.getName(), () => {	
-				if (this.serverDragged) this.loadAllServers();
-				this.serverDragged = false;
-			});
+			BDfunctionsDevilBro.addObserver(this, ".guilds.scroller", {name:"serverListObserver",instance:observer}, {childList: true, subtree:true, attributes:true, attributeFilte: ["class", "draggable"], attributeOldValue: true});
 				
 			setTimeout(() => {
 				this.loadAllServers();
@@ -215,9 +212,6 @@ class EditServers {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			$(".guilds.scroller").off("drop" + this.getName());
-			$(".guilds.scroller").off("mouseleave" + this.getName());
-			
 			document.querySelectorAll("[custom-editservers]").forEach(serverDiv => {this.resetServer(serverDiv);});
 			
 			BDfunctionsDevilBro.unloadMessage(this);
