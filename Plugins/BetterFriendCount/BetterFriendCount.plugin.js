@@ -8,7 +8,7 @@ class BetterFriendCount {
 
 	getDescription () {return "Shows the amount of total and online friends and blocked users in the friends tab.";}
 
-	getVersion () {return "1.0.1";}
+	getVersion () {return "1.0.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -63,7 +63,7 @@ class BetterFriendCount {
 			BDfunctionsDevilBro.addObserver(this, "#friends", {name:"friendListObserver",instance:observer}, {childList:true, subtree:true});
 			
 			this.FriendUtils = BDfunctionsDevilBro.WebModules.findByProperties(["getFriendIDs", "getRelationships"]);
-			this.UserMetaStore = PluginUtilities.WebpackModules.findByUniqueProperties(["getStatuses", "getOnlineFriendCount"]);
+			this.UserMetaStore = BDfunctionsDevilBro.WebModules.findByProperties(["getStatuses", "getOnlineFriendCount"]);
 			
 			this.addCountNumbers();
 		}
