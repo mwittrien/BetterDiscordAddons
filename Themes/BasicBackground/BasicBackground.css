@@ -940,7 +940,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	position: relative !important;
 	bottom: 280px !important;
 }
-.popout[style*="translateX(-12"] > div[channel] {
+.popout[style*="translateX(-"] > div[channel] {
 	position: absolute !important;
 	right: 0px !important;
 }
