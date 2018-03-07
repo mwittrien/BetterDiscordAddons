@@ -8,7 +8,9 @@ BDfunctionsDevilBro.loadMessage = function (plugin) {
 	var pluginName = plugin.getName();
 	var oldVersion = plugin.getVersion();
 	var oldDescription = plugin.getDescription();
-	plugin.getDescription = function () {return oldDescription + "\n\nMy Support Server: http://bit.ly/DevilBrosHaus or https://discordapp.com/invite/Jx3TjNS";}
+	if (oldDescription.indexOf("http://bit.ly/DevilBrosHaus") == -1) {
+		plugin.getDescription = function () {return oldDescription + "\n\nMy Support Server: http://bit.ly/DevilBrosHaus or https://discordapp.com/invite/Jx3TjNS";}
+	}
 	var loadMessage = BDfunctionsDevilBro.getLibraryStrings().toast_plugin_started.replace("${pluginName}", pluginName).replace("${oldVersion}", oldVersion);
 	console.log(loadMessage);
 	BDfunctionsDevilBro.showToast(loadMessage);
@@ -1004,8 +1006,7 @@ BDfunctionsDevilBro.addReloadListener = function (plugin) {
 									if (!document.querySelector(".DevilBro-notice.reload-notice")) {
 										BDfunctionsDevilBro.createNotificationsBar("Don't panic: .app was reappended. Reloading plugins.",{type:"danger",selector:"reload-notice"});
 									}
-									plugin.stop();
-									plugin.start();
+									plugin.initialize();
 								}
 							});
 						}
