@@ -21,6 +21,7 @@ https://raw.githubusercontent.com/denBot/Simplistic-CSS/master/Simplified-Blue.t
 https://raw.githubusercontent.com/denBot/Simplistic-CSS/master/Simplified-Green.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Avatar-No-More.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Bowser.theme.css
+https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/BrownMaterial.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/ChocolaTheme.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/DoritosTheme.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/EpicBubbleTheme.theme.css
