@@ -1004,7 +1004,8 @@ BDfunctionsDevilBro.addReloadListener = function (plugin) {
 									if (!document.querySelector(".DevilBro-notice.reload-notice")) {
 										BDfunctionsDevilBro.createNotificationsBar("Don't panic: .app was reappended. Reloading plugins.",{type:"danger",selector:"reload-notice"});
 									}
-									plugin.initialize();
+									plugin.stop();
+									plugin.start();
 								}
 							});
 						}
