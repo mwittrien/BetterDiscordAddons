@@ -87,6 +87,7 @@ class GoogleSearchReplace {
 		}
 		if (typeof BDfunctionsDevilBro === "object") this.initialize();
 		else libraryScript.addEventListener("load", () => {this.initialize();});
+		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
 	}
 
 	initialize () {
