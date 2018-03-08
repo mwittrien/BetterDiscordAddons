@@ -47,7 +47,6 @@ BDfunctionsDevilBro.loadMessage = function (plugin) {
 							setImmediate(() => {
 								if (node && node.tagName && node.getAttribute("layer-id") == "user-settings") {
 									console.log(plugin);
-									console.log(node);
 									addCheckButton(node);
 									innerSettingsWindowObserver.observe(node, {childList:true, subtree:true});
 								}
@@ -1017,7 +1016,10 @@ BDfunctionsDevilBro.addReloadListener = function (plugin) {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (node && node.classList && node.classList.contains("app")) {
-									if (window.PluginUpdates) delete window.PluginUpdates.observer;
+									if (window.PluginUpdates && window.PluginUpdates.observer) {
+										window.PluginUpdates.observer.disconnect();
+										delete window.PluginUpdates.observer;
+									}
 									plugin.appReload = true;
 									plugin.initialize();
 								}
