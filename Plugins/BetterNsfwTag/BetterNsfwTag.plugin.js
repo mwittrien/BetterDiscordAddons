@@ -15,9 +15,9 @@ class BetterNsfwTag {
 				font-weight: 500;
 				line-height: 14px;
 				white-space: nowrap;
-				color: rgb(255, 0, 0);
-				background-color: rgba(255, 0, 0, 0.0980392);
-				border: 1px solid rgba(255, 0, 0, 0.498039);
+				color: rgb(240, 71, 71);
+				background-color: rgba(240, 71, 71, 0.0980392);
+				border: 1px solid rgba(240, 71, 71, 0.498039);
 			}`;
 			
 		this.tagMarkup = `<span class="nsfw-tag">NSFW</span>`;
@@ -45,9 +45,9 @@ class BetterNsfwTag {
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js");
 			document.head.appendChild(libraryScript);
 		}
+		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
 		if (typeof BDfunctionsDevilBro === "object") this.initialize();
 		else libraryScript.addEventListener("load", () => {this.initialize();});
-		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
 	}
 
 	initialize () {
