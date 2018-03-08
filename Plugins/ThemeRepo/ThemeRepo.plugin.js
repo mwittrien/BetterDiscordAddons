@@ -296,7 +296,7 @@ class ThemeRepo {
 
 	getDescription () {return "Allows you to preview all themes from the theme repo and download them on the fly. Repo button is in the theme settings.";}
 
-	getVersion () {return "1.3.9";}
+	getVersion () {return "1.4.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -836,10 +836,10 @@ class ThemeRepo {
 					let text = body;
 					if (text.split("*//").length > 1 && text.split("\n").length > 1) {
 						for (let tag of tags) {
-							let temp = text.replace(new RegExp("\\s*\:\\s*", "g"), ":").replace(new RegExp("\\s*\}\\s*", "g"), "}").split('"' + tag + '":"');
-							temp = temp.length > 1 ? temp[1].split('",')[0].split('"}')[0] : null;
-							temp = temp && tag != "version" ? temp.charAt(0).toUpperCase() + temp.slice(1) : temp;
-							theme[tag] = temp;
+							let result = text.replace(new RegExp("\\s*\:\\s*", "g"), ":").replace(new RegExp("\\s*\}\\s*", "g"), "}").split('"' + tag + '":"');
+							result = result.length > 1 ? result[1].split('",')[0].split('"}')[0] : null;
+							result = result && tag != "version" ? result.charAt(0).toUpperCase() + result.slice(1) : result;
+							theme[tag] = result;
 						}
 						let valid = true;
 						for (let tag of tags) {
