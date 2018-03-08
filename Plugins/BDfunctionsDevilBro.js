@@ -5,6 +5,7 @@ BDfunctionsDevilBro.isLibraryOutdated = function () {
 };
 
 BDfunctionsDevilBro.loadMessage = function (plugin) {
+	BDfunctionsDevilBro.clearStarttimout(plugin);
 	var pluginName = plugin.getName();
 	var oldVersion = plugin.getVersion();
 	var oldDescription = plugin.getDescription();
@@ -21,7 +22,6 @@ BDfunctionsDevilBro.loadMessage = function (plugin) {
 	BDfunctionsDevilBro.checkUpdate(pluginName, downloadUrl);
 	
 	if (typeof plugin.css === "string") BDfunctionsDevilBro.appendLocalStyle(plugin.getName(), plugin.css);
-	BDfunctionsDevilBro.clearStarttimout(plugin);
 	BDfunctionsDevilBro.addOnSwitchListener(plugin);
 	BDfunctionsDevilBro.addReloadListener(plugin);
 	BDfunctionsDevilBro.translatePlugin(plugin);
@@ -92,6 +92,7 @@ BDfunctionsDevilBro.loadMessage = function (plugin) {
 };
 
 BDfunctionsDevilBro.unloadMessage = function (plugin) { 
+	BDfunctionsDevilBro.clearStarttimout(plugin);
 	var pluginName = plugin.getName();
 	var oldVersion = plugin.getVersion();
 	var unloadMessage = BDfunctionsDevilBro.getLibraryStrings().toast_plugin_stopped.replace("${pluginName}", pluginName).replace("${oldVersion}", oldVersion);
@@ -99,7 +100,6 @@ BDfunctionsDevilBro.unloadMessage = function (plugin) {
 	BDfunctionsDevilBro.showToast(unloadMessage);
 	
 	if (typeof plugin.css === "string") BDfunctionsDevilBro.removeLocalStyle(plugin.getName());
-	BDfunctionsDevilBro.clearStarttimout(plugin);
 	BDfunctionsDevilBro.removeOnSwitchListener(plugin);
 	BDfunctionsDevilBro.removeReloadListener(plugin);
 	
