@@ -17,7 +17,6 @@ BDfunctionsDevilBro.loadMessage = function (plugin) {
 		console.log(loadMessage);
 		BDfunctionsDevilBro.showToast(loadMessage);
 	}
-	else delete plugin.appReload;
 	
 	BDfunctionsDevilBro.checkUser(plugin);
 	
@@ -46,7 +45,6 @@ BDfunctionsDevilBro.loadMessage = function (plugin) {
 						change.addedNodes.forEach((node) => {
 							setImmediate(() => {
 								if (node && node.tagName && node.getAttribute("layer-id") == "user-settings") {
-									console.log(plugin);
 									addCheckButton(node);
 									innerSettingsWindowObserver.observe(node, {childList:true, subtree:true});
 								}
@@ -77,6 +75,7 @@ BDfunctionsDevilBro.loadMessage = function (plugin) {
 		}
 	}
 	
+	delete plugin.appReload;
 	plugin.started = true;
 	
 	function addCheckButton (container) {
@@ -99,9 +98,11 @@ BDfunctionsDevilBro.unloadMessage = function (plugin) {
 	BDfunctionsDevilBro.clearStarttimout(plugin);
 	var pluginName = plugin.getName();
 	var oldVersion = plugin.getVersion();
-	var unloadMessage = BDfunctionsDevilBro.getLibraryStrings().toast_plugin_stopped.replace("${pluginName}", pluginName).replace("${oldVersion}", oldVersion);
-	console.log(unloadMessage);
-	BDfunctionsDevilBro.showToast(unloadMessage);
+	if (!plugin.appReload) {
+		var unloadMessage = BDfunctionsDevilBro.getLibraryStrings().toast_plugin_stopped.replace("${pluginName}", pluginName).replace("${oldVersion}", oldVersion);
+		console.log(unloadMessage);
+		BDfunctionsDevilBro.showToast(unloadMessage);
+	}
 	
 	if (typeof plugin.css === "string") BDfunctionsDevilBro.removeLocalStyle(plugin.getName());
 	BDfunctionsDevilBro.removeOnSwitchListener(plugin);
@@ -549,7 +550,9 @@ BDfunctionsDevilBro.translatePlugin = function (plugin) {
 				var language = BDfunctionsDevilBro.getDiscordLanguage();
 				if (typeof plugin.setLabelsByLanguage === "function") 		plugin.labels = plugin.setLabelsByLanguage(language.id);
 				if (typeof plugin.changeLanguageStrings === "function") 	plugin.changeLanguageStrings();
-				console.log(BDfunctionsDevilBro.getLibraryStrings().toast_plugin_translated.replace("${pluginName}", plugin.getName()).replace("${ownlang}", language.ownlang));
+				if (!plugin.appReload) {
+					console.log(BDfunctionsDevilBro.getLibraryStrings().toast_plugin_translated.replace("${pluginName}", plugin.getName()).replace("${ownlang}", language.ownlang));
+				}
 			}
 		},100);
 	}
