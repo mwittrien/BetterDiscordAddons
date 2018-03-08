@@ -17,6 +17,7 @@ BDfunctionsDevilBro.loadMessage = function (plugin) {
 		console.log(loadMessage);
 		BDfunctionsDevilBro.showToast(loadMessage);
 	}
+	else delete plugin.appReload;
 	
 	BDfunctionsDevilBro.checkUser(plugin);
 	
@@ -77,7 +78,6 @@ BDfunctionsDevilBro.loadMessage = function (plugin) {
 		}
 	}
 	
-	delete plugin.appReload;
 	plugin.started = true;
 	
 	function checkIfPluginsPage (container) {
