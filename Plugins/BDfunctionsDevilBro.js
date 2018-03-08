@@ -21,6 +21,7 @@ BDfunctionsDevilBro.loadMessage = function (plugin) {
 	BDfunctionsDevilBro.checkUpdate(pluginName, downloadUrl);
 	
 	if (typeof plugin.css === "string") BDfunctionsDevilBro.appendLocalStyle(plugin.getName(), plugin.css);
+	BDfunctionsDevilBro.clearStarttimout(plugin);
 	BDfunctionsDevilBro.addOnSwitchListener(plugin);
 	BDfunctionsDevilBro.addReloadListener(plugin);
 	BDfunctionsDevilBro.translatePlugin(plugin);
@@ -98,6 +99,7 @@ BDfunctionsDevilBro.unloadMessage = function (plugin) {
 	BDfunctionsDevilBro.showToast(unloadMessage);
 	
 	if (typeof plugin.css === "string") BDfunctionsDevilBro.removeLocalStyle(plugin.getName());
+	BDfunctionsDevilBro.clearStarttimout(plugin);
 	BDfunctionsDevilBro.removeOnSwitchListener(plugin);
 	BDfunctionsDevilBro.removeReloadListener(plugin);
 	
@@ -119,6 +121,13 @@ BDfunctionsDevilBro.unloadMessage = function (plugin) {
 	}
 	
 	plugin.started = false;
+};
+
+BDfunctionsDevilBro.clearStarttimout = function (plugin) {
+	if (plugin.startTimeout) {
+		clearTimeout(plugin.startTimeout);
+		delete plugin.startTimeout;
+	}
 };
 
 BDfunctionsDevilBro.checkUser = function (plugin) {
