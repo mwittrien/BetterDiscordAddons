@@ -164,6 +164,7 @@ class NotificationSounds {
 		}
 		if (typeof BDfunctionsDevilBro === "object") this.initialize();
 		else libraryScript.addEventListener("load", () => {this.initialize();});
+		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
 	}
 
 	initialize () {
@@ -289,9 +290,9 @@ class NotificationSounds {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.unloadMessage(this);
-			
 			if (typeof this.patchCancel === "function") this.patchCancel();
+			
+			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
 
