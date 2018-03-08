@@ -17,9 +17,6 @@ BDfunctionsDevilBro.loadMessage = function (plugin) {
 		console.log(loadMessage);
 		BDfunctionsDevilBro.showToast(loadMessage);
 	}
-	else {
-		delete plugin.appReload;
-	}
 	
 	BDfunctionsDevilBro.checkUser(plugin);
 	
@@ -39,8 +36,8 @@ BDfunctionsDevilBro.loadMessage = function (plugin) {
 			BDfunctionsDevilBro.checkAllUpdates();
 		},7200000);
 	}
-	var layers = document.querySelector(".layers-20RVFW");
-	if (typeof window.PluginUpdates.observer === "undefined" && layers) {
+	var layers = null;
+	if ((plugin.appReload || typeof window.PluginUpdates.observer === "undefined") && (layers = document.querySelector(".layers-20RVFW")) != null) {
 		window.PluginUpdates.observer = new MutationObserver((changes, _) => {
 			changes.forEach(
 				(change, i) => {
@@ -48,6 +45,8 @@ BDfunctionsDevilBro.loadMessage = function (plugin) {
 						change.addedNodes.forEach((node) => {
 							setImmediate(() => {
 								if (node && node.tagName && node.getAttribute("layer-id") == "user-settings") {
+									console.log(plugin);
+									console.log(node);
 									checkIfPluginsPage(node);
 									innerSettingsWindowObserver.observe(node, {childList:true, subtree:true});
 								}
@@ -78,6 +77,7 @@ BDfunctionsDevilBro.loadMessage = function (plugin) {
 		}
 	}
 	
+	delete plugin.appReload;
 	plugin.started = true;
 	
 	function checkIfPluginsPage (container) {
