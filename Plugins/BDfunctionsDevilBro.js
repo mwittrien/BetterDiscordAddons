@@ -37,7 +37,7 @@ BDfunctionsDevilBro.loadMessage = function (plugin) {
 		},7200000);
 	}
 	var layers = null;
-	if ((plugin.appReload || typeof window.PluginUpdates.observer === "undefined") && (layers = document.querySelector(".layers-20RVFW")) != null) {
+	if (typeof window.PluginUpdates.observer === "undefined" && (layers = document.querySelector(".layers-20RVFW")) != null) {
 		window.PluginUpdates.observer = new MutationObserver((changes, _) => {
 			changes.forEach(
 				(change, i) => {
@@ -1017,6 +1017,7 @@ BDfunctionsDevilBro.addReloadListener = function (plugin) {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (node && node.classList && node.classList.contains("app")) {
+									if (window.PluginUpdates) delete window.PluginUpdates.observer;
 									plugin.appReload = true;
 									plugin.initialize();
 								}
