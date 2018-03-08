@@ -48,7 +48,7 @@ BDfunctionsDevilBro.loadMessage = function (plugin) {
 								if (node && node.tagName && node.getAttribute("layer-id") == "user-settings") {
 									console.log(plugin);
 									console.log(node);
-									checkIfPluginsPage(node);
+									addCheckButton(node);
 									innerSettingsWindowObserver.observe(node, {childList:true, subtree:true});
 								}
 							});
@@ -64,7 +64,7 @@ BDfunctionsDevilBro.loadMessage = function (plugin) {
 				(change, j) => {
 					if (change.addedNodes) {
 						change.addedNodes.forEach((node) => {
-							checkIfPluginsPage(node);
+							addCheckButton(node);
 						});
 					}
 				}
@@ -74,13 +74,13 @@ BDfunctionsDevilBro.loadMessage = function (plugin) {
 		var settingswindow = document.querySelector(".layer[layer-id='user-settings'], .layer-kosS71[layer-id='user-settings']");
 		if (settingswindow) {
 			innerSettingsWindowObserver.observe(settingswindow, {childList:true, subtree:true});
-			checkIfPluginsPage(settingswindow);
+			addCheckButton(settingswindow);
 		}
 	}
 	
 	plugin.started = true;
 	
-	function checkIfPluginsPage (container) {
+	function addCheckButton (container) {
 		if (container && container.tagName && !container.querySelector(".bd-pfbtn.bd-updatebtn")) {
 			var folderbutton = container.querySelector(".bd-pfbtn");
 			if (folderbutton) {
