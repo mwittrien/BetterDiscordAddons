@@ -241,7 +241,7 @@ class PluginRepo {
 
 	getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
 
-	getVersion () {return "1.4.0";}
+	getVersion () {return "1.4.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -718,24 +718,13 @@ class PluginRepo {
 				if (response) {
 					let plugin = {};
 					for (let tag of tags) {
-						let reg = new RegExp(tag + "[\\s|\\t|\\n|\\r|=|>|function|\(|\)|\{|return]*([\"|\'|\`]).*?\\1","gi");
-						let temp = reg.exec(body);
-						if (temp) {
-							temp = temp[0];
-							let foundIndex = temp.length;
-							let foundSep = null;
-							for (let sep of seps) {
-								let index = temp.indexOf(sep);
-								if (index > -1 && index < foundIndex) {
-									foundIndex = index;
-									foundSep = sep;
-								}
-							}
-							if (foundSep) {
-								temp = temp.split(foundSep);
-								if (temp.length > 2) {
-									plugin[tag] = tag != "getVersion" ? temp[1].charAt(0).toUpperCase() + temp[1].slice(1) : temp[1];
-								}
+						let result = new RegExp(tag + "[\\s|\\t|\\n|\\r|=|>|function|\(|\)|\{|return]*([\"|\'|\`]).*\\1","gi").exec(body);
+						if (result) {
+							let separator = result[1];
+							result = result[0].replace(new RegExp("\\\\" + separator, "g"), separator).split(separator);
+							if (result.length > 2) {
+								result = result.slice(1, -1).join(separator).replace(new RegExp("\\\\n", "g"), "<br>").replace(new RegExp("\\\\", "g"), "");
+								plugin[tag] = tag != "getVersion" ? result.charAt(0).toUpperCase() + result.slice(1) : result;
 							}
 						}
 					}
