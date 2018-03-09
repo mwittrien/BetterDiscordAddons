@@ -1602,6 +1602,14 @@ BDfunctionsDevilBro.regEscape = function (string) {
 	return string.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
 };
 
+BDfunctionsDevilBro.insertNRST = function (string) {
+	return string
+		.replace(new RegExp(BDfunctionsDevilBro.regEscape("\\n"),"g"),"\n")
+		.replace(new RegExp(BDfunctionsDevilBro.regEscape("\\r"),"g"),"\r")
+		.replace(new RegExp(BDfunctionsDevilBro.regEscape("\\s"),"g")," ")
+		.replace(new RegExp(BDfunctionsDevilBro.regEscape("\\t"),"g"),"\t");
+};
+
 BDfunctionsDevilBro.clearReadNotifications = function (servers) {
 	var GuildActions = BDfunctionsDevilBro.WebModules.findByProperties(["markGuildAsRead"]);
 	if (!servers || !GuildActions) return;
