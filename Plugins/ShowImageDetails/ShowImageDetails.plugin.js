@@ -27,7 +27,7 @@ class ShowImageDetails {
 
 	getDescription () {return "Display the name, size and dimensions of uploaded images (does not include embed images) in the chat as an header or as a tooltip.";}
 
-	getVersion () {return "1.0.3";}
+	getVersion () {return "1.0.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -54,7 +54,7 @@ class ShowImageDetails {
 
 	start () {
 		var libraryScript = null;
-		/* if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
+		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
 			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
 			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]');
 			if (libraryScript) libraryScript.remove();
@@ -62,7 +62,7 @@ class ShowImageDetails {
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js");
 			document.head.appendChild(libraryScript);
-		} */
+		}
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
 		if (typeof BDfunctionsDevilBro === "object") this.initialize();
 		else libraryScript.addEventListener("load", () => {this.initialize();});
