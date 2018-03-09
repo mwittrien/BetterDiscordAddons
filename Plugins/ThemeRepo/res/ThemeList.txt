@@ -67,6 +67,7 @@ https://raw.githubusercontent.com/KaminariKillua/Themes/master/GlacialPrison/Gla
 https://raw.githubusercontent.com/KaminariKillua/Themes/master/InfernalPrison/InfernalPrison.theme.css
 https://raw.githubusercontent.com/KaminariKillua/Themes/master/SakuraPrison/SakuraPrison.theme.css
 https://raw.githubusercontent.com/kettui/BetterDiscord-extensions/master/themes/clean-compact/clean-compact.theme.css
+https://raw.githubusercontent.com/kirayoru/PlayfulPandaTheme/master/PlayfulPanda.theme.css
 https://raw.githubusercontent.com/llcoll/Discord-Themes/master/Themes/Akame/Akame.theme.css
 https://raw.githubusercontent.com/llcoll/Discord-Themes/master/Themes/Esdeath/Esdeath.theme.css
 https://raw.githubusercontent.com/motoenduroboy/BetterDiscord-Themes/master/release/master/Deku.theme.css
