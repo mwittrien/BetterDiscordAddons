@@ -27,7 +27,7 @@ class ShowImageDetails {
 
 	getDescription () {return "Display the name, size and dimensions of uploaded images (does not include embed images) in the chat as an header or as a tooltip.";}
 
-	getVersion () {return "1.0.2";}
+	getVersion () {return "1.0.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -54,7 +54,7 @@ class ShowImageDetails {
 
 	start () {
 		var libraryScript = null;
-		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
+		/* if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
 			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
 			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]');
 			if (libraryScript) libraryScript.remove();
@@ -62,7 +62,7 @@ class ShowImageDetails {
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js");
 			document.head.appendChild(libraryScript);
-		}
+		} */
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
 		if (typeof BDfunctionsDevilBro === "object") this.initialize();
 		else libraryScript.addEventListener("load", () => {this.initialize();});
@@ -139,11 +139,11 @@ class ShowImageDetails {
 	}
 	
 	addDetails (container) {
-		if (!container || typeof container.querySelectorAll != "function") return;
+		if (!container || typeof container.querySelectorAll != "function") return; 
 		var settings = BDfunctionsDevilBro.getAllData(this, "settings");
 		container.querySelectorAll(".accessory > .imageWrapper-38T7d9").forEach(image => {
 			this.resetImage(image);
-			var data = BDfunctionsDevilBro.getKeyInformation({node:image, key:"attachment", up:true, time:200});
+			var data = this.getImageData(image);
 			if (data) {
 				image.classList.add("image-details-added");
 				if (!settings.showOnHover) {
@@ -165,6 +165,23 @@ class ShowImageDetails {
 		if (wrapper.classList.contains("image-details-wrapper")) {
 			wrapper.parentElement.insertBefore(image, wrapper);
 			wrapper.remove();
+		}
+	}
+	
+	getImageData (attachment) {
+		var messageInfo = BDfunctionsDevilBro.getKeyInformation({"node":attachment,"key":"message","up":true,"time":1000});
+		if (messageInfo) {
+			var message = null, temp = attachment;
+			while (message == null || temp.parentElement) {
+				temp = temp.parentElement;
+				if (temp.classList && temp.classList.contains("message")) message = temp;
+			}
+			if (message) {
+				var pos = $(message).find(".imageWrapper-38T7d9").index(attachment);
+				var info = messageInfo.attachments;
+				if (info && pos > -1) info = info[pos];
+				return info;
+			}
 		}
 	}
 }
