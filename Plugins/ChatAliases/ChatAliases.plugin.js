@@ -236,7 +236,7 @@ class ChatAliases {
 					let escpAlias = aliases[alias].regex ? alias : BDfunctionsDevilBro.regEscape(alias);
 					let result = new RegExp(aliases[alias].exact ? "^" + escpAlias + "$" : escpAlias, casemod + exactmod).exec(word);
 					if (result) {
-						let replace = aliases[alias].file ? "" : BDfunctionsDevilBro.insertNRST(aliases[alias].replace);
+						let replace = BDfunctionsDevilBro.insertNRST(aliases[alias].replace);
 						if (result.length > 1) for (var i = 1; i < result.length; i++) replace = replace.replace("\\" + i, result[i]);
 						word = word.replace(result[0], replace);
 						break;
@@ -253,7 +253,7 @@ class ChatAliases {
 				let escpAlias = aliases[alias].regex ? alias : BDfunctionsDevilBro.regEscape(alias);
 				let result = new RegExp(aliases[alias].exact ? "^" + escpAlias + "$" : escpAlias, casemod + exactmod).exec(newText);
 				if (result) {
-					let replace = aliases[alias].replace.replace(new RegExp(BDfunctionsDevilBro.regEscape("\\n"),"g"),"\n");
+					let replace = BDfunctionsDevilBro.insertNRST(aliases[alias].replace);
 					if (result.length > 1) for (var i = 1; i < result.length; i++) replace = replace.replace("\\" + i, result[i]);
 					newText = newText.replace(result[0], replace);
 				}
