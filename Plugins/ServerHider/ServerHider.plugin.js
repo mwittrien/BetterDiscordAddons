@@ -136,7 +136,7 @@ class ServerHider {
 
 	getDescription () {return "Hide Servers in your Serverlist";}
 
-	getVersion () {return "2.5.6";}
+	getVersion () {return "2.5.7";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -193,7 +193,7 @@ class ServerHider {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, ".app", {name:"serverContextObserver",instance:observer}, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, BDfunctionsDevilBro.getDiscordBuilt() == "stable" ? ".app" : "#app-mount", {name:"serverContextObserver",instance:observer}, {childList: true});
 			
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
