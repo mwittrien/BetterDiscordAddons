@@ -9,7 +9,7 @@ class ChatAliases {
 
 	getDescription () {return "Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent.";}
 
-	getVersion () {return "1.7.2";}
+	getVersion () {return "1.7.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -18,9 +18,9 @@ class ChatAliases {
 		var words = BDfunctionsDevilBro.loadAllData(this, "words");
 		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="titleDefault-1CWM9y title-3i-5G_ size18-ZM4Qv- height24-2pMcnc weightNormal-3gw0Lm marginBottom8-1mABJ4">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">Replace:</h3><input action="add" type="text" placeholder="Wordvalue" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_ wordInputs" id="input-wordvalue" style="flex: 1 1 auto;"><button action="add" type="button" class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorBrand-3PmwCE sizeMedium-2VGNaF grow-25YQ8u btn-add btn-addword" style="flex: 0 0 auto;"><div class="contents-4L4hQM"></div></button></div><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">With:</h3><input action="add" type="text" placeholder="Replacevalue" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_ wordInputs" id="input-replacevalue" style="flex: 1 1 auto;"></div>`; 
-		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto; max-width: ${558 - (this.configs.length * 33)}px;">List of Chataliases:</h3><div class="flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyCenter-29N31w alignCenter-3VxkQP noWrap-v6g9vO" style="flex: 1 1 auto; max-width: ${this.configs.length * 33}px;">`;
+		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto; max-width: ${556 - (this.configs.length * 33)}px;">List of Chataliases:</h3><div class="flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyCenter-29N31w alignCenter-3VxkQP noWrap-v6g9vO" style="flex: 1 1 auto; max-width: ${this.configs.length * 34}px;">`;
 		for (let config of this.configs) {
-			settingshtml += `<div class="marginTop8-2gOa2N headerSize-22dv1R size10-1ZEdeK primary-2giqSn weightBold-2qbcng" style="flex: 1 1 auto; width: 33px; text-align: center;">${config.toUpperCase()}</div>`;
+			settingshtml += `<div class="marginTop8-2gOa2N headerSize-22dv1R size10-1ZEdeK primary-2giqSn weightBold-2qbcng" style="flex: 1 1 auto; width: 34px; text-align: center;">${config.toUpperCase()}</div>`;
 		}
 		settingshtml += `</div></div><div class="DevilBro-settings-inner-list alias-list marginBottom8-1mABJ4">`;
 		for (let word in words) {
@@ -63,6 +63,7 @@ class ChatAliases {
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js");
 			document.head.appendChild(libraryScript);
 		}
+		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
 		if (typeof BDfunctionsDevilBro === "object") this.initialize();
 		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
@@ -71,7 +72,7 @@ class ChatAliases {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
-			this.uploadModule = BDfunctionsDevilBro.WebModules.findByProperties(["promptToUpload"]);
+			this.UploadModule = BDfunctionsDevilBro.WebModules.findByProperties(["promptToUpload"]);
 			
 			var observer = null;
 
@@ -226,39 +227,32 @@ class ChatAliases {
 	}
 	
 	formatText (text) {
-		var aliases = BDfunctionsDevilBro.loadAllData(this, "words");
-		var newText = [];
+		var newText = [], files = [], wordAliases = {}, multiAliases = {}, aliases = BDfunctionsDevilBro.loadAllData(this, "words");
+		for (let alias in aliases) {
+			if (!aliases[alias].regex && alias.indexOf(" ") == -1) wordAliases[alias] = aliases[alias];
+			else multiAliases[alias] = aliases[alias];
+		}
 		for (let word of text.trim().split(" ")) {
-			for (let alias in aliases) {
-				if (alias.indexOf(" ") == -1) {
-					let casemod = aliases[alias].case ? "" : "i";
-					let exactmod = aliases[alias].exact ? "" : "g";
-					let escpAlias = aliases[alias].regex ? alias : BDfunctionsDevilBro.regEscape(alias);
-					let result = new RegExp(aliases[alias].exact ? "^" + escpAlias + "$" : escpAlias, casemod + exactmod).exec(word);
-					if (result) {
-						let replace = BDfunctionsDevilBro.insertNRST(aliases[alias].replace);
-						if (result.length > 1) for (var i = 1; i < result.length; i++) replace = replace.replace("\\" + i, result[i]);
-						word = word.replace(result[0], replace);
-						break;
-					}
-				}
-			}
-			newText.push(word);
+			newText.push(this.useAliases(word, wordAliases, files, true));
 		}
 		newText = newText.length == 1 ? newText[0] : newText.join(" ");
+		newText = this.useAliases(newText, multiAliases, files, false);
+		return {text:newText, files};
+	}
+	
+	useAliases (string, aliases, files, quitonfound) {
 		for (let alias in aliases) {
-			if (alias.indexOf(" ") > -1) {
-				let casemod = aliases[alias].case ? "" : "i";
-				let exactmod = aliases[alias].exact ? "" : "g";
-				let escpAlias = aliases[alias].regex ? alias : BDfunctionsDevilBro.regEscape(alias);
-				let result = new RegExp(aliases[alias].exact ? "^" + escpAlias + "$" : escpAlias, casemod + exactmod).exec(newText);
-				if (result) {
-					let replace = BDfunctionsDevilBro.insertNRST(aliases[alias].replace);
-					if (result.length > 1) for (var i = 1; i < result.length; i++) replace = replace.replace("\\" + i, result[i]);
-					newText = newText.replace(result[0], replace);
-				}
+			let casemod = aliases[alias].case ? "" : "i";
+			let exactmod = aliases[alias].exact ? "" : "g";
+			let escpAlias = aliases[alias].regex ? alias : BDfunctionsDevilBro.regEscape(alias);
+			let result = new RegExp(aliases[alias].exact ? "^" + escpAlias + "$" : escpAlias, casemod + exactmod).exec(string);
+			if (result) {
+				let replace = BDfunctionsDevilBro.insertNRST(aliases[alias].replace);
+				if (result.length > 1) for (var i = 1; i < result.length; i++) replace = replace.replace("\\" + i, result[i]);
+				string = string.replace(result[0], replace);
+				if (quitonfound) break;
 			}
 		}
-		return {text:newText};
+		return string;
 	}
 }
