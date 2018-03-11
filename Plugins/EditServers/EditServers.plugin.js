@@ -124,7 +124,7 @@ class EditServers {
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	getVersion () {return "1.7.5";}
+	getVersion () {return "1.7.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -181,7 +181,7 @@ class EditServers {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, ".app", {name:"serverContextObserver",instance:observer}, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, BDfunctionsDevilBro.getDiscordBuilt() == "stable" ? ".app" : "#app-mount", {name:"serverContextObserver",instance:observer}, {childList: true});
 			
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
