@@ -86,7 +86,7 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "3.6.7";}
+	getVersion () {return "3.6.8";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -174,7 +174,7 @@ class EditChannels {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, ".app", {name:"channelContextObserver",instance:observer}, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, BDfunctionsDevilBro.getDiscordBuilt() == "stable" ? ".app" : "#app-mount", {name:"channelContextObserver",instance:observer}, {childList: true});
 			
 			this.loadAllChannels();
 			
