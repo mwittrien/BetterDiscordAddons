@@ -685,6 +685,14 @@ var pulling = setInterval(() => {
 	},100);
 })();
 
+BDfunctionsDevilBro.getDiscordBuilt = function () {
+	return require(require('electron').remote.app.getAppPath() + "/build_info.json").releaseChannel.toLowerCase();
+};
+
+BDfunctionsDevilBro.getDiscordVersion = function () {
+	return require(require('electron').remote.app.getAppPath() + "/build_info.json").version.toLowerCase();
+};
+
 BDfunctionsDevilBro.getDiscordLanguage = function () {
 	var languageCode = document.querySelector("html").lang || "en-US";
 	var codeParts = languageCode.split("-");
