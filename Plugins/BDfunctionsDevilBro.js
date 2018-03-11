@@ -1782,7 +1782,7 @@ BDfunctionsDevilBro.updateContextPosition = function (context) {
 };
 
 BDfunctionsDevilBro.appendContextMenu = function (context, e) {
-	$(".container-R8e4H4").before(context);
+	$(BDfunctionsDevilBro.getDiscordBuilt() == "stable" ? ".container-R8e4H4" : ".tooltips").before(context);
 	var menuWidth = $(context).outerWidth();
 	var menuHeight = $(context).outerHeight();
 	$(context)
