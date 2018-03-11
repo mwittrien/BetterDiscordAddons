@@ -9,7 +9,7 @@ class ChatAliases {
 
 	getDescription () {return "Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent.";}
 
-	getVersion () {return "1.7.3";}
+	getVersion () {return "1.7.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -227,32 +227,49 @@ class ChatAliases {
 	}
 	
 	formatText (text) {
-		var newText = [], files = [], wordAliases = {}, multiAliases = {}, aliases = BDfunctionsDevilBro.loadAllData(this, "words");
+		var newText = [], wordAliases = {}, multiAliases = {}, aliases = BDfunctionsDevilBro.loadAllData(this, "words");
 		for (let alias in aliases) {
 			if (!aliases[alias].regex && alias.indexOf(" ") == -1) wordAliases[alias] = aliases[alias];
 			else multiAliases[alias] = aliases[alias];
 		}
 		for (let word of text.trim().split(" ")) {
-			newText.push(this.useAliases(word, wordAliases, files, true));
+			newText.push(this.useAliases(word, wordAliases, true));
 		}
 		newText = newText.length == 1 ? newText[0] : newText.join(" ");
-		newText = this.useAliases(newText, multiAliases, files, false);
-		return {text:newText, files};
+		newText = this.useAliases(newText, multiAliases, false);
+		return {text:newText};
 	}
 	
-	useAliases (string, aliases, files, quitonfound) {
+	useAliases (string, aliases, singleword) {
 		for (let alias in aliases) {
-			let casemod = aliases[alias].case ? "" : "i";
-			let exactmod = aliases[alias].exact ? "" : "g";
-			let escpAlias = aliases[alias].regex ? alias : BDfunctionsDevilBro.regEscape(alias);
-			let result = new RegExp(aliases[alias].exact ? "^" + escpAlias + "$" : escpAlias, casemod + exactmod).exec(string);
-			if (result) {
-				let replace = BDfunctionsDevilBro.insertNRST(aliases[alias].replace);
-				if (result.length > 1) for (var i = 1; i < result.length; i++) replace = replace.replace("\\" + i, result[i]);
-				string = string.replace(result[0], replace);
-				if (quitonfound) break;
+			let aliasdata = aliases[alias];
+			let escpAlias = aliasdata.regex ? alias : BDfunctionsDevilBro.regEscape(alias);
+			let result = true, replaced = false, tempstring1 = string, tempstring2 = "";
+			while (result != null) {
+				result = new RegExp(aliasdata.exact ? "^" + escpAlias + "$" : escpAlias, (aliasdata.case ? "" : "i") + (aliasdata.exact ? "" : "g")).exec(tempstring1);
+				if (result) {
+					replaced = true;
+					let replace = BDfunctionsDevilBro.insertNRST(aliasdata.replace);
+					if (result.length > 1) for (var i = 1; i < result.length; i++) replace = replace.replace("\\" + i, result[i]);
+					tempstring2 += tempstring1.slice(0, result.index + result[0].length).replace(result[0], replace);
+					tempstring1 = tempstring1.slice(result.index + result[0].length);
+				}
+				else {
+					tempstring2 += tempstring1;
+				}
+			}
+			if (replaced) {
+				string = tempstring2;
+				if (singleword) break;
 			}
 		}
 		return string;
+	}
+	
+	replaceWord (string, regex) {
+		let result = regex.exec(string), rest = "";
+		if (result) {
+			rest = string.slice(a.indexOf(b)+b.length);
+		}
 	}
 }
