@@ -1435,7 +1435,8 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 }
 
 .option-popout {
-	padding: 0 5px !important;
+	padding: 0 !important;
+	width: 72px !important;
 }
 
 .btn-item {
