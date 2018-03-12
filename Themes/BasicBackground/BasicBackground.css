@@ -269,11 +269,23 @@ input:disabled {
 	padding: 12px 0 10px 0 !important;
 	border-radius: 5px !important;
 }
-
-.message-group .inline {
-	padding: 0.6px 5px !important;
+.message-group.compact {
+	padding: 3px 0 !important;
 }
-
+.message-group.compact.has-divider {
+	padding-bottom: 8px !important;
+}
+.divider + .message-group.compact {
+	padding-top: 8px !important;
+}
+.message-group .comment {
+	padding: 10px !important;
+	border-radius: 5px !important;
+	background: rgba(var(--transparencycolor),var(--messagetransparency));
+}
+.message-group.compact .comment {
+	padding: 0 !important;
+}
 .message-group .avatar-large::after {
 	content: "";
 	position: relative;
@@ -285,11 +297,8 @@ input:disabled {
 	border: 10px solid transparent;
 	border-right: 15px solid rgba(var(--transparencycolor),var(--messagetransparency));
 }
-
-.message-group .comment {
-	padding: 10px !important;
-	border-radius: 5px !important;
-	background: rgba(var(--transparencycolor),var(--messagetransparency));
+.message-group .inline {
+	padding: 0.6px 5px !important;
 }
 
 .wrapper-11sL4k button,
