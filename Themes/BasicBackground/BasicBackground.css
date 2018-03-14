@@ -599,25 +599,25 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	background-image: linear-gradient(0deg,transparent,transparent 1px,rgb(var(--accentcolor)) 0,rgb(var(--accentcolor)) 2px,transparent 0) !important;
 }
 .lookFilled-luDKDo.colorPrimary-2KuK5O {
-	background: rgb(var(--transparencycolor)) !important;
+	background: rgb(200,200,200) !important;
 }
 .lookGhost-GyT-k0.colorPrimary-2KuK5O {
-	color: rgb(var(--transparencycolor)) !important;
-	background: rgba(var(--transparencycolor),0.1) !important;
+	color: rgb(200,200,200) !important;
+	background: rgba(200,200,200,0.1) !important;
 }
 .lookOutlined-1c5nhl.colorPrimary-2KuK5O {
-	color: rgb(var(--transparencycolor)) !important;
-	border-color: rgb(var(--transparencycolor)) !important;
+	color: rgb(200,200,200) !important;
+	border-color: rgb(200,200,200) !important;
 }
 .lookInverted-2lPGe7.colorPrimary-2KuK5O {
-	color: rgb(var(--transparencycolor)) !important;
+	color: rgb(200,200,200) !important;
 }
 .lookLink-3VWONr.colorPrimary-2KuK5O .contents-4L4hQM {
-	color: rgb(var(--transparencycolor)) !important;
+	color: rgb(200,200,200) !important;
 }
 .lookLink-3VWONr.colorPrimary-2KuK5O:active .contents-4L4hQM, 
 .lookLink-3VWONr.colorPrimary-2KuK5O:hover .contents-4L4hQM {
-	background-image: linear-gradient(0deg,transparent,transparent 1px,rgb(var(--transparencycolor)) 0,rgb(var(--transparencycolor)) 2px,transparent 0) !important;
+	background-image: linear-gradient(0deg,transparent,transparent 1px,rgb(200,200,200) 0,rgb(200,200,200) 2px,transparent 0) !important;
 }
 .lookOutlined-1c5nhl.colorRed-3HTNPV {
 	color: #fff;
