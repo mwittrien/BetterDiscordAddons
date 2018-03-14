@@ -7,13 +7,15 @@ class BetterFriendCount {
 				 display: none !important;
 			 }
 		`;
+		
+		this.relationshipTypes = {};
 	}
 
 	getName () {return "BetterFriendCount";}
 
 	getDescription () {return "Shows the amount of total and online friends and blocked users in the friends tab.";}
 
-	getVersion () {return "1.0.3";}
+	getVersion () {return "1.0.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -70,7 +72,10 @@ class BetterFriendCount {
 			
 			this.FriendUtils = BDfunctionsDevilBro.WebModules.findByProperties(["getFriendIDs", "getRelationships"]);
 			this.UserMetaStore = BDfunctionsDevilBro.WebModules.findByProperties(["getStatuses", "getOnlineFriendCount"]);
-			
+			var RelationshipTypes = BDfunctionsDevilBro.WebModules.findByProperties(["RelationshipTypes"]).RelationshipTypes;
+			for (let type in RelationshipTypes) {
+				this.relationshipTypes[RelationshipTypes[type]] = type;
+			}
 			this.addCountNumbers();
 		}
 		else {
@@ -98,14 +103,16 @@ class BetterFriendCount {
 		var friendstabbar = document.querySelector("#friends .tab-bar");
 		if (!friendstabbar) return;
 		friendstabbar.querySelectorAll(".betterfriendcount-badge").forEach(counter => {counter.remove();});
-		var relationships = this.FriendUtils.getRelationships();
-		var relationshipCount = {0:0,1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0};
-		for (let id in relationships) {relationshipCount[relationships[id]]++;}
+		
+		var relationships = this.FriendUtils.getRelationships(), relationshipCount = {};
+		for (let type in this.relationshipTypes) {relationshipCount[this.relationshipTypes[type]] = 0;}
+		for (let id in relationships) {relationshipCount[this.relationshipTypes[relationships[id]]]++;}
+		
 		var tabitems = friendstabbar.querySelectorAll(".tab-bar-item");
-		$(`<div class="badge betterfriendcount-badge friendcount">${relationshipCount[1]}</div>`).appendTo(tabitems[1]);
+		$(`<div class="badge betterfriendcount-badge friendcount">${relationshipCount.FRIEND}</div>`).appendTo(tabitems[1]);
 		$(`<div class="badge betterfriendcount-badge onlinefriendcount">${this.UserMetaStore.getOnlineFriendCount()}</div>`).appendTo(tabitems[2]);
-		$(`<div class="badge betterfriendcount-badge requestincount">${relationshipCount[3]}</div>`).appendTo(tabitems[3]);
-		$(`<div class="badge betterfriendcount-badge requestoutcount">${relationshipCount[4]}</div>`).appendTo(tabitems[3]);
-		$(`<div class="badge betterfriendcount-badge blockedcount">${relationshipCount[2]}</div>`).appendTo(tabitems[4]);
+		$(`<div class="badge betterfriendcount-badge requestincount">${relationshipCount.PENDING_INCOMING}</div>`).appendTo(tabitems[3]);
+		$(`<div class="badge betterfriendcount-badge requestoutcount">${relationshipCount.PENDING_OUTGOING}</div>`).appendTo(tabitems[3]);
+		$(`<div class="badge betterfriendcount-badge blockedcount">${relationshipCount.BLOCKED}</div>`).appendTo(tabitems[4]);
 	}
 }
