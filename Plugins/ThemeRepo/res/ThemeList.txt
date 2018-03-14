@@ -35,6 +35,7 @@ https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/RemTh
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/ShadeofGreenTheme.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/TheGreenChristmas.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/TheQuestionMark.theme.css
+https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Twitch.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/WindowsTheme.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Winter.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Yoshi.theme.css
@@ -78,6 +79,8 @@ https://raw.githubusercontent.com/motoenduroboy/BetterDiscord-Themes/master/rele
 https://raw.githubusercontent.com/motoenduroboy/BetterDiscord-Themes/master/release/master/Waifu.theme.css
 https://raw.githubusercontent.com/motoenduroboy/BetterDiscord-Themes/master/release/master/yourabloodyweeb.theme.css
 https://raw.githubusercontent.com/mrmaple240/betterdiscord-mini-themes/master/Mutual_Servers_Server_Count.theme.css
+https://raw.githubusercontent.com/mrmaple240/betterdiscord-mini-themes/master/SeperateTextareaButtons.theme.css
+https://raw.githubusercontent.com/mrmaple240/betterdiscord-mini-themes/master/TempBDSettingsPublicServersFix.theme.css
 https://raw.githubusercontent.com/mrmaple240/ChatTextBubbles/master/ChatTextBubbles.theme.css
 https://raw.githubusercontent.com/mrmaple240/ChatTextBubbles/master/ChatTextBubblesMinified.theme.css
 https://raw.githubusercontent.com/mrmaple240/Full-Light-Theme/master/FullLightTheme.theme.css
