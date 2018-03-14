@@ -9,7 +9,7 @@ class ChatAliases {
 
 	getDescription () {return "Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent.";}
 
-	getVersion () {return "1.7.4";}
+	getVersion () {return "1.7.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -22,13 +22,13 @@ class ChatAliases {
 		for (let config of this.configs) {
 			settingshtml += `<div class="marginTop8-2gOa2N headerSize-22dv1R size10-1ZEdeK primary-2giqSn weightBold-2qbcng" style="flex: 1 1 auto; width: 34px; text-align: center;">${config.toUpperCase()}</div>`;
 		}
-		settingshtml += `</div></div><div class="DevilBro-settings-inner-list alias-list marginBottom8-1mABJ4">`;
+		settingshtml += `</div></div><div class="DevilBro-settings-inner-list alias-list user-settings-games marginBottom8-1mABJ4">`;
 		for (let word in words) {
-			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginTop4-2rEBfJ marginBottom4-_yArcI ui-hover-card card-11ynQk"><div class="card-11ynQk-inner"><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn ellipsis-CYOqEr" style="flex: 1 1 auto;">${BDfunctionsDevilBro.encodeToHTML(word)} (${BDfunctionsDevilBro.encodeToHTML(words[word].replace)})</div>`;
+			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginTop4-2rEBfJ marginBottom4-_yArcI card-11ynQk"><div class="card-11ynQk-inner"><input type="text" word="${word}" action="edit" class="game-name game-name-input word-name" value="${BDfunctionsDevilBro.encodeToHTML(word)}"><input type="text" word="${word}" action="edit" class="game-name game-name-input replace-name" value="${BDfunctionsDevilBro.encodeToHTML(words[word].replace)}">`;
 			for (let config of this.configs) {
 				settingshtml += `<div class="checkboxContainer-1sZ9eo marginReset-2tTc4H" style="flex: 0 0 auto;"><label class="checkboxWrapper-2Yvr_Y"><input word="${word}" config="${config}" type="checkbox" class="inputDefault-2tiBIA input-oWyROL"${words[word][config] ? " checked" : ""}><div class="checkbox-1QwaS4 center-1MLNrE flex-3B1Tl4 justifyStart-2yIZo0 alignCenter-3VxkQP round-30vw42"><svg name="Checkmark" width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><polyline stroke="transparent" stroke-width="2" points="3.5 9.5 7 13 15 5"></polyline></g></svg></div></label></div>`;
 			}
-			settingshtml += `</div><div word="${word}" action="remove" class="round-remove-button button-1qrA-N remove-word"></div></div>`;
+			settingshtml += `</div><div word="${word}" action="remove" class="button-1qrA-N remove-word"></div></div>`;
 		}
 		settingshtml += `</div>`;
 		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Remove all added words.</h3><button action="removeall" type="button" class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorRed-3HTNPV sizeMedium-2VGNaF grow-25YQ8u remove-all" style="flex: 0 0 auto;"><div class="contents-4L4hQM">Reset</div></button></div>`;
@@ -43,6 +43,7 @@ class ChatAliases {
 
 		$(settingspanel)
 			.on("keypress", ".wordInputs", (e) => {if (e.which == 13) this.updateContainer(settingspanel, e.currentTarget);})
+			.on("keyup", ".game-name-input", (e) => {this.updateWord(e.currentTarget);})
 			.on("click", ".btn-addword, .remove-word, .remove-all", (e) => {this.updateContainer(settingspanel, e.currentTarget);})
 			.on("click", ".input-oWyROL", (e) => {this.updateConfig(e.currentTarget);})
 			.on("click", ".toggle-info", (e) => {this.toggleInfo(settingspanel, e.currentTarget);});
@@ -167,15 +168,40 @@ class ChatAliases {
 			
 			var containerhtml = ``;
 			for (let word in words) {
-				containerhtml += `<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginTop4-2rEBfJ marginBottom4-_yArcI ui-hover-card card-11ynQk"><div class="card-11ynQk-inner"><div class="description-3MVziF formText-1L-zZB note-UEZmbY  modeDefault-389VjU primary-2giqSn ellipsis-CYOqEr" style="flex: 1 1 auto;">${BDfunctionsDevilBro.encodeToHTML(word)} (${BDfunctionsDevilBro.encodeToHTML(words[word].replace)})</div>`
+				containerhtml += `<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginTop4-2rEBfJ marginBottom4-_yArcI card-11ynQk"><div class="card-11ynQk-inner"><input type="text" word="${word}" action="edit" class="game-name game-name-input word-name" value="${BDfunctionsDevilBro.encodeToHTML(word)}"><input type="text" word="${word}" action="edit" class="game-name game-name-input replace-name" value="${BDfunctionsDevilBro.encodeToHTML(words[word].replace)}">`;
 				for (let config of this.configs) {
 					containerhtml += `<div class="checkboxContainer-1sZ9eo marginReset-2tTc4H" style="flex: 0 0 auto;"><label class="checkboxWrapper-2Yvr_Y"><input word="${word}" config="${config}" type="checkbox" class="inputDefault-2tiBIA input-oWyROL"${words[word][config] ? " checked" : ""}><div class="checkbox-1QwaS4 center-1MLNrE flex-3B1Tl4 justifyStart-2yIZo0 alignCenter-3VxkQP round-30vw42"><svg name="Checkmark" width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><polyline stroke="transparent" stroke-width="2" points="3.5 9.5 7 13 15 5"></polyline></g></svg></div></label></div>`;
 				}
-				containerhtml += `</div><div word="${word}" action="remove" class="round-remove-button button-1qrA-N remove-word"></div></div>`;
+				containerhtml += `</div><div word="${word}" action="remove" class="button-1qrA-N remove-word"></div></div>`;
 			}
 			$(settingspanel).find(".alias-list").html(containerhtml);
 			BDfunctionsDevilBro.initElements(settingspanel);
 		}
+	}
+	
+	updateWord (ele) {
+		clearTimeout(ele.updateTimeout);
+		ele.updateTimeout = setTimeout(() => {
+			var card = ele.parentElement.parentElement;
+			var words = BDfunctionsDevilBro.loadAllData(this, "words");
+			var oldwordvalue = ele.getAttribute("word");
+			if (oldwordvalue && words[oldwordvalue]) {
+				var wordinput = card.querySelector(".word-name");
+				var replaceinput = card.querySelector(".replace-name");
+				var removebutton = card.querySelector(".remove-word");
+				var newwordvalue = wordinput.value;
+				var newreplacevalue = replaceinput.value;
+				wordinput.setAttribute("word", newwordvalue);
+				wordinput.setAttribute("value", newwordvalue);
+				replaceinput.setAttribute("word", newwordvalue);
+				replaceinput.setAttribute("value", newreplacevalue);
+				removebutton.setAttribute("word", newwordvalue);
+				words[newwordvalue] = words[oldwordvalue];
+				words[newwordvalue].replace = newreplacevalue;
+				if (newwordvalue != oldwordvalue) delete words[oldwordvalue];
+				BDfunctionsDevilBro.saveAllData(words, this, "words");
+			}
+		},500);
 	}
 	
 	updateConfig (ele) {
