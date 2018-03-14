@@ -2650,6 +2650,11 @@ html, span:not(.spinner-item) {
 #dv-container,
 #dv-container #dv-settings-panel {
 	background: transparent !important;
+}
+#dv-mount,
+#dv-mount *,
+#dv-container,
+#dv-container * {
 	border: none !important;
 }
 #dv-mount::after,
