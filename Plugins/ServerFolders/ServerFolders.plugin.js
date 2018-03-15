@@ -2008,7 +2008,7 @@ class ServerFolders {
 					modal_tabheader4_text:					"Custom Icons",
 					modal_iconpicker_text:					"Folder Choice",
 					modal_colorpicker1_text:				"Primary Color",
-					modal_colorpicker2_text:				"Secondary color",
+					modal_colorpicker2_text:				"Secondary Color",
 					modal_colorpicker3_text:				"Tooltip Color",
 					modal_colorpicker4_text:				"Font Color",
 					modal_customopen_text:					"Open Icon",
