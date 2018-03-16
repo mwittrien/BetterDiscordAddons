@@ -9,7 +9,7 @@ class ChatAliases {
 
 	getDescription () {return "Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent.";}
 
-	getVersion () {return "1.7.5";}
+	getVersion () {return "1.7.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -276,7 +276,7 @@ class ChatAliases {
 				if (result) {
 					replaced = true;
 					let replace = BDfunctionsDevilBro.insertNRST(aliasdata.replace);
-					if (result.length > 1) for (var i = 1; i < result.length; i++) replace = replace.replace("\\" + i, result[i]);
+					if (result.length > 1) for (var i = 1; i < result.length; i++) replace = replace.replace(new RegExp("\\\\" + i, "g"), result[i]);
 					tempstring2 += tempstring1.slice(0, result.index + result[0].length).replace(result[0], replace);
 					tempstring1 = tempstring1.slice(result.index + result[0].length);
 				}
