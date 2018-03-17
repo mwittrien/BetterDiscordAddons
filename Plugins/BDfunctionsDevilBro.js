@@ -686,7 +686,7 @@ var pulling = setInterval(() => {
 })();
 
 BDfunctionsDevilBro.getDiscordBuilt = function () {
-	return require(require('electron').remote.app.getAppPath() + "/build_info.json").releaseChannel.toLowerCase();
+	return "canary";//return require(require('electron').remote.app.getAppPath() + "/build_info.json").releaseChannel.toLowerCase();
 };
 
 BDfunctionsDevilBro.getDiscordVersion = function () {
