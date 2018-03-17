@@ -116,7 +116,7 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.4.4";}
+	getVersion () {return "1.4.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -186,7 +186,7 @@ class PersonalPins {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, BDfunctionsDevilBro.getDiscordBuilt() == "stable" ? ".app" : "#app-mount", {name:"messageContextObserver",instance:observer}, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, "#app-mount", {name:"messageContextObserver",instance:observer}, {childList: true});
 			
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
