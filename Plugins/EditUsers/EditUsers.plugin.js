@@ -170,7 +170,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "2.1.6";}
+	getVersion () {return "2.1.7";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -796,9 +796,9 @@ class EditUsers {
 	getAvatarNameWrapper (div) {
 		var avatar = div.querySelector(".avatar-small, .avatar-large, .avatarDefault-3jtQoc, .avatar-profile, .avatar-1BXaQj .image-EVRGPw");
 						
-		var username = div.querySelector(".user-name, .member-username-inner, .channel-name, .username, .headerName-2N8Pdz, .nameDefault-1I0lx8, .headerUsernameNoNickname-1iGxNP, .channelName-1G03vu");
+		var username = div.querySelector(".user-name, .member-username-inner, .channel-name, .username, .headerName-2N8Pdz, .nameDefault-1I0lx8, .headerUsernameNoNickname-1iGxNP, .channelName-1G03vu.private-38vo6h");
 						
-		var wrapper = div.querySelector(".member-username, .username-wrapper, .channel-name, .discord-tag, .accountDetails-15i-_e, .headerName-2N8Pdz, .nameDefault-1I0lx8, .headerTag-3zin_i, .channelName-1G03vu");
+		var wrapper = div.querySelector(".member-username, .username-wrapper, .channel-name, .discord-tag, .accountDetails-15i-_e, .headerName-2N8Pdz, .nameDefault-1I0lx8, .headerTag-3zin_i, .channelName-1G03vu.private-38vo6h");
 						
 		return {avatar, username, wrapper};
 	}
