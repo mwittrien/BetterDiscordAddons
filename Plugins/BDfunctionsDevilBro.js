@@ -686,7 +686,7 @@ var pulling = setInterval(() => {
 })();
 
 BDfunctionsDevilBro.getDiscordBuilt = function () {
-	return "canary";//return require(require('electron').remote.app.getAppPath() + "/build_info.json").releaseChannel.toLowerCase();
+	return require(require('electron').remote.app.getAppPath() + "/build_info.json").releaseChannel.toLowerCase();
 };
 
 BDfunctionsDevilBro.getDiscordVersion = function () {
@@ -1782,7 +1782,7 @@ BDfunctionsDevilBro.updateContextPosition = function (context) {
 };
 
 BDfunctionsDevilBro.appendContextMenu = function (context, e) {
-	$(BDfunctionsDevilBro.getDiscordBuilt() == "stable" ? ".container-R8e4H4" : ".tooltips").before(context);
+	$(".tooltips").before(context);
 	var menuWidth = $(context).outerWidth();
 	var menuHeight = $(context).outerHeight();
 	$(context)
