@@ -170,7 +170,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "2.1.5";}
+	getVersion () {return "2.1.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -238,7 +238,7 @@ class EditUsers {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, BDfunctionsDevilBro.getDiscordBuilt() == "stable" ? ".app" : "#app-mount", {name:"userContextObserver",instance:observer}, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, "#app-mount", {name:"userContextObserver",instance:observer}, {childList: true});
 			
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
