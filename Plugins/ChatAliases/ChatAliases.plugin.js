@@ -9,7 +9,7 @@ class ChatAliases {
 
 	getDescription () {return "Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent.";}
 
-	getVersion () {return "1.7.6";}
+	getVersion () {return "1.7.7";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -271,16 +271,18 @@ class ChatAliases {
 			let aliasdata = aliases[alias];
 			let escpAlias = aliasdata.regex ? alias : BDfunctionsDevilBro.regEscape(alias);
 			let result = true, replaced = false, tempstring1 = string, tempstring2 = "";
+			let regstring = aliasdata.exact ? "^" + escpAlias + "$" : escpAlias;
 			while (result != null) {
-				result = new RegExp(aliasdata.exact ? "^" + escpAlias + "$" : escpAlias, (aliasdata.case ? "" : "i") + (aliasdata.exact ? "" : "g")).exec(tempstring1);
+				result = new RegExp(regstring, (aliasdata.case ? "" : "i") + (aliasdata.exact ? "" : "g")).exec(tempstring1);
 				if (result) {
 					replaced = true;
 					let replace = BDfunctionsDevilBro.insertNRST(aliasdata.replace);
 					if (result.length > 1) for (var i = 1; i < result.length; i++) replace = replace.replace(new RegExp("\\\\" + i, "g"), result[i]);
 					tempstring2 += tempstring1.slice(0, result.index + result[0].length).replace(result[0], replace);
 					tempstring1 = tempstring1.slice(result.index + result[0].length);
+					if (aliasdata.regex && regstring.indexOf("^") == 0) result = null;
 				}
-				else {
+				if (!result) {
 					tempstring2 += tempstring1;
 				}
 			}
