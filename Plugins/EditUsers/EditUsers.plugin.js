@@ -170,7 +170,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "2.1.7";}
+	getVersion () {return "2.1.8";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -751,6 +751,9 @@ class EditUsers {
 	
 	resetAllUsers () {
 		document.querySelectorAll(".user-tag").forEach(node=>{node.remove();});
+		document.querySelectorAll(".titleText-2IfpkV:not(.private-38vo6h)[custom-editusers]").forEach((channelHeader) => {
+			$(channelHeader).removeAttr("custom-editusers").find(".channelName-1G03vu").css("color", "");
+		});
 		document.querySelectorAll("[custom-editusers]").forEach((div) => {
 			var {avatar, username, wrapper} = this.getAvatarNameWrapper(div);
 			if (!avatar && !username && !wrapper) return;
