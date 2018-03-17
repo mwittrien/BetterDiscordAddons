@@ -44,7 +44,7 @@ class ReverseImageSearch {
 
 	getDescription () {return "Adds a reverse image search option to the context menu.";}
 
-	getVersion () {return "3.3.3";}
+	getVersion () {return "3.3.4";}
 	
 	getAuthor () {return "DevilBro";}
 
@@ -107,7 +107,7 @@ class ReverseImageSearch {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, BDfunctionsDevilBro.getDiscordBuilt() == "stable" ? ".app" : "#app-mount", {name:"messageContextObserver",instance:observer}, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, "#app-mount", {name:"messageContextObserver",instance:observer}, {childList: true});
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
