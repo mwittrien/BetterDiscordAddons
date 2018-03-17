@@ -86,7 +86,7 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "3.6.9";}
+	getVersion () {return "3.7.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -356,13 +356,14 @@ class EditChannels {
 	}
 	
 	changeChannelHeader () {
-		if (BDfunctionsDevilBro.getData("changeInChannelHeader", this, "settings") && BDfunctionsDevilBro.getSelectedServer()) {
-			var channelHeader = document.querySelector("div.titleText-2IfpkV");
+		if (BDfunctionsDevilBro.getData("changeInChannelHeader", this, "settings")) {
+			var channelHeader = document.querySelector(".title-qAcLxz .titleText-2IfpkV");
 			if (!channelHeader) return;
+			var channel = channelHeader.querySelector(".channelName-1G03vu:not(private-38vo6h)");
+			if (!channel) return;
 			var info = BDfunctionsDevilBro.getKeyInformation({"node":channelHeader,"key":"channel"});
 			if (info) {
 				var data = BDfunctionsDevilBro.loadData(info.id, this, "channels");
-				var channel = channelHeader.querySelector(".channelName-1G03vu");
 				var name = data && data.name ? data.name : info.name;
 				var color = data && data.color ? BDfunctionsDevilBro.color2RGB(data.color) : "";
 				BDfunctionsDevilBro.setInnerText(channel, name);
