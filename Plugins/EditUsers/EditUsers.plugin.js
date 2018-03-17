@@ -152,7 +152,8 @@ class EditUsers {
 			
 		this.defaults = {
 			settings: {
-				changeInChatWindow:		{value:true, 	description:"Chat"},
+				changeInChatWindow:		{value:true, 	description:"Server Chat"},
+				changeInDMChatWindow:	{value:true, 	description:"DM Chat"},
 				changeInVoiceChat:		{value:true, 	description:"Voice Channels"},
 				changeInMemberList:		{value:true, 	description:"Member List"},
 				changeInDmHeader:		{value:true, 	description:"Direct Message Header"},
@@ -170,7 +171,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "2.1.8";}
+	getVersion () {return "2.2.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -302,11 +303,13 @@ class EditUsers {
 			BDfunctionsDevilBro.addObserver(this, ".channel-members", {name:"userListObserver",instance:observer}, {childList:true});
 			
 			observer = new MutationObserver((changes, _) => {
+				const isDMChat = $(".titleText-2IfpkV").find(".channelName-1G03vu:not(.private-38vo6h)").length === 0;
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (BDfunctionsDevilBro.getData("changeInChatWindow", this, "settings")) {
+								if ((BDfunctionsDevilBro.getData("changeInChatWindow", this, "settings") && !isDMChat) ||
+                                    (BDfunctionsDevilBro.getData("changeInDmChatWindow", this, "settings") && isDMChat)) {
 									var compact = document.querySelector(".message-group.compact");
 									if (!compact) {
 										if (node && node.tagName && node.querySelector(".username-wrapper")) {
@@ -632,7 +635,9 @@ class EditUsers {
 				this.loadUser(user, "list", false);
 			} 
 		}
-		if (settings.changeInChatWindow) {
+        const isDMChat = $(".titleText-2IfpkV").find(".channelName-1G03vu:not(.private-38vo6h)").length === 0;
+		if ((settings.changeInChatWindow && !isDMChat) ||
+			(settings.changeInDMChatWindow && isDMChat)) {
 			for (let user of document.querySelectorAll(".message-group")) {
 				if (user.querySelector(".avatar-large")) {
 					this.loadUser(user, "chat", false);
