@@ -241,7 +241,7 @@ class PluginRepo {
 
 	getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
 
-	getVersion () {return "1.4.3";}
+	getVersion () {return "1.4.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -341,7 +341,7 @@ class PluginRepo {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, BDfunctionsDevilBro.getDiscordBuilt() == "stable" ? ".app" : "#app-mount", {name:"settingsContextObserver",instance:observer}, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, "#app-mount", {name:"settingsContextObserver",instance:observer}, {childList: true});
 			
 			var settingswindow = document.querySelector(".layer-kosS71[layer-id='user-settings']");
 			if (settingswindow) this.checkIfPluginsPage(settingswindow);
