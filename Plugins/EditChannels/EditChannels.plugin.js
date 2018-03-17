@@ -86,7 +86,7 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "3.7.1";}
+	getVersion () {return "3.7.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -195,8 +195,9 @@ class EditChannels {
 	
 	onSwitch () {
 		if (typeof BDfunctionsDevilBro === "object") {
+			$(".titleText-2IfpkV[custom-editchannelsheader]").find(".channelName-1G03vu.private-38vo6h").css("color", "").parent().removeAttr("custom-editchannelsheader");
 			this.loadAllChannels();
-			this.changeChannelHeader();
+			setImmediate(() => {this.changeChannelHeader();}); //setImmediate so EditChannels sets the color after EditUsers set it back to white
 		}
 	}
 	
