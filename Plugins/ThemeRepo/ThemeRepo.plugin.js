@@ -296,7 +296,7 @@ class ThemeRepo {
 
 	getDescription () {return "Allows you to preview all themes from the theme repo and download them on the fly. Repo button is in the theme settings.";}
 
-	getVersion () {return "1.4.2";}
+	getVersion () {return "1.4.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -396,7 +396,7 @@ class ThemeRepo {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, BDfunctionsDevilBro.getDiscordBuilt() == "stable" ? ".app" : "#app-mount", {name:"settingsContextObserver",instance:observer}, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, "#app-mount", {name:"settingsContextObserver",instance:observer}, {childList: true});
 			
 			var settingswindow = document.querySelector(".layer-kosS71[layer-id='user-settings']");
 			if (settingswindow) this.checkIfThemesPage(settingswindow);
