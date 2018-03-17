@@ -164,13 +164,13 @@ input:disabled {
 .nameHoveredText-2FFqiz,
 .nameSelectedVoice-XpjYTw,
 .nameHoveredVoice-TIoHRJ {
-	color: #FFF !important;
+	color: #FFF;
 }
 .colorSelectedText-3YhFC6 path,
 .colorHoveredText-1CsxK1 path,
 .colorSelectedVoice-ieXC3Z path,
 .colorHoveredVoice-1P3kui path {
-	color: #FFF !important;
+	color: #FFF;
 	opacity: 1 !important;
 }
 .messages-popout-wrap {
