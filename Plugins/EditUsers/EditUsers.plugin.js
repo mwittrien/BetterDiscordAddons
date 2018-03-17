@@ -395,7 +395,7 @@ class EditUsers {
 	
 	onSwitch () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			$(".titleText-2IfpkV:not(.private-38vo6h)[custom-editusers]").removeAttr("custom-editusers").find(".channelName-1G03vu").css("color", "");
+			$(".titleText-2IfpkV[custom-editusers]").find(".channelName-1G03vu:not(.private-38vo6h)").css("color", "").parent().removeAttr("custom-editusers");
 			this.loadAllUsers();
 			BDfunctionsDevilBro.addObserver(this, ".channel-members", {name:"userListObserver"}, {childList:true});
 			BDfunctionsDevilBro.addObserver(this, ".messages.scroller", {name:"chatWindowObserver"}, {childList:true, subtree:true});
