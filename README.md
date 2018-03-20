@@ -16,6 +16,7 @@ A series of plugins and themes for BetterDiscord. If you got any question hit me
  - [Emoji Statistics](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EmojiStatistics) - Displays emojiinformation when hovering over an emoji in the emojipicker and adds a button to the emojipicker to open a statistics overview.
  - [Fix German Translation](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/FixGermanTranslation) - Fixes some minor translation errors in the german version of Discord.
  - [Fix Twitch Emotes](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/FixTwitchEmotes) - Fixes the problem with twitch emotes not being properly inserted in the textarea.
+ - [Friend Notifications](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/FriendNotifications) - Notifies you when a friend either logs in or out.
  - [Google Search Replace](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/GoogleSearchReplace) - Replaces the default Google Text Search with a selection menu of several search engines.
  - [Google Translate Option](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/GoogleTranslateOption) - Adds a Google Translate option to your context menu, which will open the selected text in Google Translate.
  - [Image Gallery](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ImageGallery) - Allows the user to browse through images sent inside the same message.
