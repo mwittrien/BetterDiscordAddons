@@ -296,12 +296,15 @@ BDfunctionsDevilBro.showToast = function (content, options = {}) {
 		toastWrapper.style.setProperty("bottom", bottom + "px");
 		document.querySelector(".app").appendChild(toastWrapper);
 	}
-	const {type = "", icon = true, timeout = 3000} = options;
+	const {type = "", icon = true, timeout = 3000, html = false} = options;
 	let toastElem = document.createElement("div");
 	toastElem.classList.add("toast");
-	if (type) toastElem.classList.add("toast-" + type);
-	if (type && icon) toastElem.classList.add("icon");
-	toastElem.innerText = content;
+	if (type) {
+		toastElem.classList.add("toast-" + type);
+		if (icon) toastElem.classList.add("icon");
+	}
+	if (html === true) toastElem.innerHTML = content;
+	else toastElem.innerText = content;
 	document.querySelector(".toasts").appendChild(toastElem);
 	toastElem.close = () => {
 		if (toastElem.parentElement) {
