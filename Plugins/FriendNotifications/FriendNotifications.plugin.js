@@ -27,7 +27,7 @@ class FriendNotifications {
 			
 		this.defaults = {
 			settings: {
-				onlyOnOnline:		{value:false, 	description:"Only notify me when a user comes online:"}
+				onlyOnOnline:		{value:false, 	description:"Only notify me when a user logs in:"}
 			}
 		};
 	}
