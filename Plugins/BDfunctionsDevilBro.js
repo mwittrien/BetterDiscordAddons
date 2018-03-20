@@ -315,16 +315,9 @@ BDfunctionsDevilBro.showToast = function (content, options = {}) {
 			}, 300);
 		}
 	}
-	if (timeout > 0) {
-		setTimeout(() => {
-			toastElem.close();
-		}, timeout);
-	}
-	else {
-		setTimeout(() => {
-			toastElem.close();
-		}, 60000);
-	}
+	setTimeout(() => {
+		toastElem.close();
+	}, timeout > 0 ? timeout : 60000);
 	return toastElem;
 };
 
@@ -2631,6 +2624,20 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		animation-fill-mode: forwards;
 		opacity: 1;
 		transform: translateY(-10px);
+	}
+	
+	.toast .toast-inner {
+		display: flex;
+		align-items: center;
+	}
+	
+	.toast .toast-avatar {
+		margin-right: 5px;
+		width: 25px;
+		height: 25px;
+		background-size: cover;
+		background-position: center;
+		border-radius: 50%;
 	}
 	
 	.toast.icon {
