@@ -114,7 +114,7 @@ class FriendNotifications {
 
 	getDescription () {return "Notifies you when a friend either logs in or out. Click the Online Friend-Counter to display a timelog of the current session.";}
 
-	getVersion () {return "1.0.4";}
+	getVersion () {return "1.0.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -293,7 +293,8 @@ class FriendNotifications {
 	
 	showTimeLog () {		
 		var timeLogModal = $(this.timeLogModalMarkup);
-		for (let log of this.timeLog.reverse()) {
+		let logs = this.timeLog.slice(0).reverse();
+		for (let log of logs) {
 			let entry = $(this.logEntryMarkup);
 			let divider = $(this.dividerMarkup);
 			entry.find(".log-time").text(`[${log.time.toLocaleTimeString()}]`);
