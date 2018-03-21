@@ -885,6 +885,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	filter: brightness(150%) !important;
 }
 
+.bd-toast,
 .toast {
 	background-color: rgba(var(--transparencycolor), 0.9) !important;
 	box-shadow: 0 0 0 1px rgba(var(--transparencycolor), 0.6), 0 2px 10px 0 rgba(0,0,0,.2) !important;
