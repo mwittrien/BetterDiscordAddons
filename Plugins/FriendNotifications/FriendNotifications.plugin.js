@@ -36,10 +36,14 @@ class FriendNotifications {
 			}
 			.DevilBro-settings .settings-avatar.desktop {
 				border-color: #43B581;
-			}
+			} 
 			.DevilBro-settings .settings-avatar.disabled {
 				border-color: #36393F;
 				filter: grayscale(100%) brightness(50%);
+			}
+			.DevilBro-settings .disable-all {
+				color: white;
+				background-color: #36393F;
 			}
 		`;
 			
@@ -54,7 +58,7 @@ class FriendNotifications {
 
 	getDescription () {return "Notifies you when a friend either logs in or out.";}
 
-	getVersion () {return "1.0.1";}
+	getVersion () {return "1.0.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -70,13 +74,13 @@ class FriendNotifications {
 		}
 		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">Click on a Icon to toggle <label class="type-toast">Toast</label> Notifications for that User:</h3></div>`;
 		if ("Notification" in window) settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">Rightclick on a Icon to toggle <label class="type-desktop">Desktop</label> Notifications for that User:</h3></div>`;
-		settingshtml += `<div class="avatar-list">`;
+		settingshtml += `<div class="avatar-list marginBottom8-1mABJ4">`;
 		for (let id of this.FriendUtils.getFriendIDs()) {
 			let user = this.UserUtils.getUser(id);
 			settingshtml += `<div class="settings-avatar${desktop[id] ? " desktop" : ""}${disabled[id] ? " disabled" : ""}" user-id="${id}" style="background-image: url(${this.getUserAvatar(user)});"></div>`;
 		}
 		settingshtml += `</div>`;
-		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Reset Notification Settings.</h3><button type="button" class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorRed-3HTNPV sizeMedium-2VGNaF grow-25YQ8u reset-button" style="flex: 0 0 auto;"><div class="contents-4L4hQM">Reset</div></button></div>`;
+		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Batch set users:</h3><button type="button" do-disable=true class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo sizeMedium-2VGNaF grow-25YQ8u disable-all" style="flex: 0 0 auto;"><div class="contents-4L4hQM">Disable</div></button><button type="button" do-toast=true class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorBrand-3PmwCE sizeMedium-2VGNaF grow-25YQ8u toast-all" style="flex: 0 0 auto;"><div class="contents-4L4hQM">Toast</div></button>${"Notification" in window ? '<button type="button" do-desktop=true class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorGreen-22At8E sizeMedium-2VGNaF grow-25YQ8u desktop-all" style="flex: 0 0 auto;"><div class="contents-4L4hQM">Desktop</div></button>' : ''}</div>`;
 		settingshtml += `</div></div>`;
 			
 		var settingspanel = $(settingshtml)[0];
@@ -106,13 +110,22 @@ class FriendNotifications {
 				BDfunctionsDevilBro.saveData(id, disableoff, this, "disabled");
 				BDfunctionsDevilBro.removeData(id, this, "desktop");
 			})
-			.on("click", ".reset-button", () => {
+			.on("click", ".disable-all, .toast-all, .desktop-all", (e) => {
+				let button = e.currentTarget;
+				let disableon = button.getAttribute("do-disable");
+				let desktopon = button.getAttribute("do-desktop");
+				let disabledata = BDfunctionsDevilBro.loadAllData(this, "disabled");
+				let desktopdata = BDfunctionsDevilBro.loadAllData(this, "desktop");
+				BDfunctionsDevilBro.saveData(id, desktopon, this, "desktop");
 				settingspanel.querySelectorAll(".settings-avatar").forEach(avatar => {
-					avatar.classList.remove("desktop");
-					avatar.classList.remove("disabled");
+					let id = avatar.getAttribute("user-id");
+					avatar.classList.toggle("disabled", disableon);
+					avatar.classList.toggle("desktop", desktopon);
+					disableon ? disabledata[id] = true : delete disabledata[id];
+					desktopon ? desktopdata[id] = true : delete desktopdata[id];
 				});
-				BDfunctionsDevilBro.removeAllData(this, "desktop");
-				BDfunctionsDevilBro.removeAllData(this, "disabled");
+				BDfunctionsDevilBro.saveAllData(disabledata, this, "disabled");
+				BDfunctionsDevilBro.saveAllData(desktopdata, this, "desktop");
 			});
 			
 		return settingspanel;
