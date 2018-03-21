@@ -321,6 +321,26 @@ BDfunctionsDevilBro.showToast = function (content, options = {}) {
 	return toastElem;
 };
 
+BDfunctionsDevilBro.showDesktopNotification = function (content, options = {}) {
+	var notify = () => {
+		let notificationEle = new Notification(content, options);
+		setTimeout(notificationEle.close.bind(notificationEle), options.timeout ? options.timeout : 3000);
+	}
+	if (!("Notification" in window)) {
+		// do nothing
+	}
+	else if (Notification.permission === "granted") {
+		notify();
+	}
+	else if (Notification.permission !== "denied") {
+		Notification.requestPermission(function (permission) {
+			if (permission === "granted") {
+				notify();
+			}
+		});
+	}
+};
+
 BDfunctionsDevilBro.createTooltip = function (content, container, options = {}) {
 	if (!document.querySelector(".tooltips") || !content || !container || ($(container).offset().left == 0 && $(container).offset().top == 0)) return null;
 	let id = Math.round(Math.random()*10000000000000000);
