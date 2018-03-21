@@ -2722,10 +2722,10 @@ html, span:not(.spinner-item) {
 }
 
 /* friendnotifications */ 
-.DevilBro-settings .type-desktop {
+.DevilBro-settings .type-toast {
 	background-color: rgb(var(--accentcolor));
 }
-.DevilBro-settings .settings-avatar.desktop {
+.DevilBro-settings .settings-avatar {
 	border-color: rgb(var(--accentcolor));
 }
 
