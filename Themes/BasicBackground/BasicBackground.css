@@ -2500,10 +2500,10 @@ html, span:not(.spinner-item) {
 	transform: translate(0,0);
 }
 .bf-toolbar::before {
-	border-radius: 4px;
-	z-index: 100;
-	background: var(--background) center/cover;
-    background-attachment: fixed;
+	border-radius: 4px !important;
+	z-index: 100 !important;
+	background: var(--background) center/cover !important;
+    background-attachment: fixed !important;
 }
 .bf-toolbar > * {
 	z-index: 300;
