@@ -63,8 +63,10 @@ https://raw.githubusercontent.com/mashirochan/Mashiro-chan/master/Plugins/Horizo
 https://raw.githubusercontent.com/mashirochan/Mashiro-chan/master/Plugins/PasteSend/PasteSend.plugin.js
 https://raw.githubusercontent.com/megamit/repository/gh-pages/renamer/1.5.4/renamer.plugin.js
 https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/AvatarIconViewer.plugin.js
+https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/BetterEmoteSizes.plugin.js
 https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/DiscordLogger.plugin.js
 https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/IdleGuildlistScroller.plugin.js
+https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/MentionAliases.plugin.js
 https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/VCMuteSounds.plugin.js
 https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/UserBirthdays.plugin.js
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/BetterFriendCount/BetterFriendCount.plugin.js
@@ -89,6 +91,7 @@ https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/M
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/NotificationSounds/NotificationSounds.plugin.js
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/OldTitleBar/OldTitleBar.plugin.js
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/PersonalPins/PersonalPins.plugin.js
+https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/PinDMs/PinDMs.plugin.js
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/PluginRepo/PluginRepo.plugin.js
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ReadAllNotificationsButton/ReadAllNotificationsButton.plugin.js
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/RemoveNicknames/RemoveNicknames.plugin.js
