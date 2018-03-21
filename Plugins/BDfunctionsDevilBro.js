@@ -108,6 +108,9 @@ BDfunctionsDevilBro.unloadMessage = function (plugin) {
 	BDfunctionsDevilBro.removeOnSwitchListener(plugin);
 	BDfunctionsDevilBro.removeReloadListener(plugin);
 	
+	$(document).off("." + pluginName);
+	$("*").off("." + pluginName);
+	
 	if (!BDfunctionsDevilBro.isObjectEmpty(plugin.observers)) {
 		for (var name in plugin.observers) {
 			for (var subinstance of plugin.observers[name]) subinstance.disconnect();
