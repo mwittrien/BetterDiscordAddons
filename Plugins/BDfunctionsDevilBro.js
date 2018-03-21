@@ -324,7 +324,7 @@ BDfunctionsDevilBro.showToast = function (content, options = {}) {
 BDfunctionsDevilBro.showDesktopNotification = function (content, options = {}) {
 	var notify = () => {
 		let notificationEle = new Notification(content, options);
-		if (options.timeout) setTimeout(notificationEle.close.bind(notificationEle), options.timeout);
+		setTimeout(notificationEle.close.bind(notificationEle), options.timeout ? options.timeout : 3000);
 	}
 	if (!("Notification" in window)) {
 		// do nothing
