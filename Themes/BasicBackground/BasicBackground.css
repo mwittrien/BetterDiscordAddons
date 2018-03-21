@@ -2721,6 +2721,14 @@ html, span:not(.spinner-item) {
 	background: rgb(var(--accentcolor)) !important;
 }
 
+/* friendnotifications */ 
+.DevilBro-settings .type-desktop {
+	background-color: rgb(var(--accentcolor));
+}
+.DevilBro-settings .settings-avatar.desktop {
+	border-color: rgb(var(--accentcolor));
+}
+
 /* permissionviewer */
 #permissions-modal {
 	position: absolute !important;
