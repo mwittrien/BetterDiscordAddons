@@ -2651,74 +2651,8 @@ html, span:not(.spinner-item) {
 }
 
 /* dateviewer */
-#dv-mount,
-#dv-container,
-#dv-container #dv-settings-panel {
+#dv-mount {
 	background: transparent !important;
-}
-#dv-mount,
-#dv-mount *,
-#dv-container,
-#dv-container * {
-	border: none !important;
-}
-#dv-mount::after,
-#dv-mount::before,
-#dv-container::after,
-#dv-container::before,
-#dv-container #dv-settings-panel::after,
-#dv-container #dv-settings-panel::before {
-	content: "";
-	position: absolute;
-	pointer-events: none;
-	top: 0;
-	bottom: 0;
-	right: 0;
-	left: 0;
-}
-#dv-container::after {
-	background: rgba(var(--transparencycolor),var(--memberlistransparency));
-}
-#dv-mount::after,
-#dv-container #dv-settings-panel::after {
-	background: rgba(var(--transparencycolor),calc((var(--transparencyalpha) * 3) + var(--memberlistransparency)));
-}
-#dv-mount::before,
-#dv-container::before,
-#dv-container #dv-settings-panel::before {
-	background: var(--background) center/cover;
-    background-attachment: fixed;
-}
-#dv-mount > *,
-#dv-container > *,
-#dv-container #dv-settings-panel > * {
-	position: absolute !important;
-}
-#dv-container #dv-btn-settings-panel {
-	background-color: rgba(var(--transparencycolor),var(--transparencyalpha)) !important;
-	z-index: 1 !important;
-	top: 8px !important;
-	right: 8px !important;
-	transition: all 100ms linear !important;
-}
-#dv-container #dv-btn-settings-panel:hover {
-	background-color: rgb(var(--accentcolor)) !important;
-}
-#dv-container .dv-flash {
-	animation: none !important;
-	display: none !important;
-}
-#dv-container #dv-date {
-	opacity: 0.6 !important;
-}
-#dv-container #dv-settings-panel .dv-title {
-	color: hsla(0,0%,100%,.8) !important;
-}
-#dv-container input[type="radio"] + label span {
-	background: #AFAFAF !important;
-}
-#dv-container input[type="radio"]:checked + label span {
-	background: rgb(var(--accentcolor)) !important;
 }
 
 /* friendnotifications */ 
