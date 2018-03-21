@@ -114,7 +114,7 @@ class FriendNotifications {
 
 	getDescription () {return "Notifies you when a friend either logs in or out. Click the Online Friend-Counter to display a timelog of the current session.";}
 
-	getVersion () {return "1.0.4";}
+	getVersion () {return "1.0.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -233,10 +233,7 @@ class FriendNotifications {
 									let openChannel = () => {
 										if (settings.openOnClick){
 											let DMid = this.ChannelUtils.getDMFromUserId(user.id);
-											if (DMid) {
-												require("electron").remote.getCurrentWindow().maximize();
-												this.ChannelSwitchUtils.selectPrivateChannel(DMid);
-											}
+											if (DMid) this.ChannelSwitchUtils.selectPrivateChannel(DMid);
 										}
 									};
 									if (!BDfunctionsDevilBro.loadData(id, this, "desktop")) {
