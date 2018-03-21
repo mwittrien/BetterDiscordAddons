@@ -112,7 +112,7 @@ class FriendNotifications {
 
 	getName () {return "FriendNotifications";}
 
-	getDescription () {return "Notifies you when a friend either logs in or out. Click the Online Friend-Counter to display a timelog of the current season.";}
+	getDescription () {return "Notifies you when a friend either logs in or out. Click the Online Friend-Counter to display a timelog of the current session.";}
 
 	getVersion () {return "1.0.3";}
 
