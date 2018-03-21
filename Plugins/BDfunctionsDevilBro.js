@@ -1785,6 +1785,7 @@ BDfunctionsDevilBro.appendModal = function (modal) {
 };
 
 BDfunctionsDevilBro.updateContextPosition = function (context) {
+	var app = document.querySelector(".appMount-14L89u");
 	var menuWidth = $(context).outerWidth();
 	var menuHeight = $(context).outerHeight();
 	var position = BDfunctionsDevilBro.mousePosition;
@@ -1793,18 +1794,19 @@ BDfunctionsDevilBro.updateContextPosition = function (context) {
 		y: position.y - menuHeight
 	};
 	$(context)
-		.css("left", (position.x + menuWidth> window.outerWidth? (newposition.x < 0 ? 10 : newposition.x) : position.x) + "px")
-		.css("top",(position.y + menuHeight > window.outerHeight ? (newposition.y < 0 ? 10 : newposition.y) : position.y) + "px")
+		.css("left", (position.x + menuWidth > app.offsetWidth ? (newposition.x < 0 ? 10 : newposition.x) : position.x) + "px")
+		.css("top", (position.y + menuHeight > app.offsetHeight ? (newposition.y < 0 ? 10 : newposition.y) : position.y) + "px");
 };
 
 BDfunctionsDevilBro.appendContextMenu = function (context, e) {
 	$(".tooltips").before(context);
+	var app = document.querySelector(".appMount-14L89u");
 	var menuWidth = $(context).outerWidth();
 	var menuHeight = $(context).outerHeight();
 	$(context)
-		.toggleClass("invertX", e.pageX + menuWidth > window.outerWidth)
-		.toggleClass("invertChildX", e.pageX + menuWidth > window.outerWidth)
-		.toggleClass("invertY", e.pageY + menuHeight > window.outerHeight)
+		.toggleClass("invertX", e.pageX + menuWidth > app.offsetWidth)
+		.toggleClass("invertChildX", e.pageX + menuWidth > app.offsetWidth)
+		.toggleClass("invertY", e.pageY + menuHeight > app.offsetHeight)
 		.addClass(BDfunctionsDevilBro.getDiscordTheme());
 		
 	BDfunctionsDevilBro.updateContextPosition(context);
