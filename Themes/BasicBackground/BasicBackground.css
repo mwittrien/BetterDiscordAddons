@@ -2723,10 +2723,10 @@ html, span:not(.spinner-item) {
 
 /* friendnotifications */ 
 .DevilBro-settings .type-toast {
-	background-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor)) !important;
 }
-.DevilBro-settings .settings-avatar {
-	border-color: rgb(var(--accentcolor));
+.DevilBro-settings .settings-avatar:not(.disabled):not(.desktop) {
+	border-color: rgb(var(--accentcolor)) !important;
 }
 
 /* permissionviewer */
