@@ -51,7 +51,7 @@ class FriendNotifications {
 				cursor: pointer;
 			}
 			.friendnotifications-modal .log-time {
-				width: 80px;
+				width: 100px;
 			}
 			.friendnotifications-modal .log-avatar {
 				width: 35px;
