@@ -15,7 +15,7 @@ BDfunctionsDevilBro.loadMessage = function (plugin) {
 		}
 		var loadMessage = BDfunctionsDevilBro.getLibraryStrings().toast_plugin_started.replace("${pluginName}", pluginName).replace("${oldVersion}", oldVersion);
 		console.log(loadMessage);
-		BDfunctionsDevilBro.showToast(loadMessage);
+		if (!(BDfunctionsDevilBro.zacksFork() && settingsCookie["fork-ps-2"] && settingsCookie["fork-ps-2"] == true)) BDfunctionsDevilBro.showToast(loadMessage);
 	}
 	
 	BDfunctionsDevilBro.checkUser(plugin);
@@ -101,7 +101,7 @@ BDfunctionsDevilBro.unloadMessage = function (plugin) {
 	if (!plugin.appReload) {
 		var unloadMessage = BDfunctionsDevilBro.getLibraryStrings().toast_plugin_stopped.replace("${pluginName}", pluginName).replace("${oldVersion}", oldVersion);
 		console.log(unloadMessage);
-		BDfunctionsDevilBro.showToast(unloadMessage);
+		if (!(BDfunctionsDevilBro.zacksFork() && settingsCookie["fork-ps-2"] && settingsCookie["fork-ps-2"] == true)) BDfunctionsDevilBro.showToast(unloadMessage);
 	}
 	
 	if (typeof plugin.css === "string") BDfunctionsDevilBro.removeLocalStyle(plugin.getName());
