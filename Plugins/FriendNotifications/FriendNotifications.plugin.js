@@ -4,26 +4,81 @@ class FriendNotifications {
 	constructor () {
 		this.friendsOnlineList = {};
 		
+		this.timeLog = [];
+
+		this.timeLogModalMarkup =
+			`<span class="friendnotifications-modal DevilBro-modal">
+				<div class="backdrop-2ohBEd"></div>
+				<div class="modal-2LIEKY">
+					<div class="inner-1_1f7b">
+						<div class="modal-3HOjGZ sizeMedium-1-2BNS">
+							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO header-3sp3cE" style="flex: 0 0 auto;">
+								<div class="flexChild-1KGW5q" style="flex: 1 1 auto;">
+									<h4 class="h4-2IXpeI title-1pmpPr size16-3IvaX_ height20-165WbF weightSemiBold-T8sxWH defaultColor-v22dK1 defaultMarginh4-jAopYe marginReset-3hwONl">Friends LogIn/-Out Timelog</h4>
+								</div>
+								<svg class="btn-cancel close-3ejNTg flexChild-1KGW5q" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12">
+									<g fill="none" fill-rule="evenodd">
+										<path d="M0 0h12v12H0"></path>
+										<path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path>
+									</g>
+								</svg>
+							</div>
+							<div class="scrollerWrap-2uBjct content-1Cut5s scrollerThemed-19vinI themeGhostHairline-2H8SiW">
+								<div class="scroller-fzNley inner-tqJwAU entries">
+								</div>
+							</div>
+							<div class="flex-lFgbSz flex-3B1Tl4 horizontalReverse-2LanvO horizontalReverse-k5PqxT flex-3B1Tl4 directionRowReverse-2eZTxP justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO footer-1PYmcw">
+								<button type="button" class="btn-ok button-2t3of8 lookFilled-luDKDo colorBrand-3PmwCE sizeMedium-2VGNaF grow-25YQ8u">
+									<div class="contents-4L4hQM"></div>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</span>`;
+
+		this.logEntryMarkup =
+			`<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginTop4-2rEBfJ marginBottom4-_yArcI entry" style="flex: 1 1 auto;">
+				<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q overflowEllipsis-3Rxxjf log-time" style="flex: 0 0 auto;"></h3>
+				<div class="log-avatar"></div>
+				<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q overflowEllipsis-3Rxxjf log-description" style="flex: 1 1 auto;"></h3>
+			</div>`;
+			
+		this.dividerMarkup = `<div class="divider-1G01Z9 dividerDefault-77PXsz"></div>`;
+		
 		this.css = `
-			.DevilBro-settings .avatar-list {
+			.guilds > .friends-online {
+				cursor: pointer;
+			}
+			.friendnotifications-modal .log-time {
+				width: 80px;
+			}
+			.friendnotifications-modal .log-avatar {
+				width: 35px;
+				height: 35px;
+				background-size: cover;
+				background-position: center;
+				border-radius: 50%;
+			}
+			.FriendNotifications-settings .avatar-list {
 				display: flex;
 				align-items: center;
 				flex-wrap: wrap;
 			}
-			.DevilBro-settings .type-toast, .DevilBro-settings .type-desktop {
+			.FriendNotifications-settings .type-toast, .FriendNotifications-settings .type-desktop {
 				border-radius: 3px;
 				padding: 0 3px;
 			}
-			.DevilBro-settings .type-toast {
+			.FriendNotifications-settings .type-toast {
 				background-color: #7289DA;
 			}
-			.DevilBro-settings .type-desktop {
+			.FriendNotifications-settings .type-desktop {
 				background-color: #43B581;
 			}
-			.DevilBro-settings .settings-avatar.desktop {
+			.FriendNotifications-settings .settings-avatar.desktop {
 				border-color: #43B581;
 			}
-			.DevilBro-settings .settings-avatar {
+			.FriendNotifications-settings .settings-avatar {
 				margin: 5px;
 				width: 50px;
 				height: 50px;
@@ -34,14 +89,14 @@ class FriendNotifications {
 				box-sizing: border-box;
 				cursor: pointer;
 			}
-			.DevilBro-settings .settings-avatar.desktop {
+			.FriendNotifications-settings .settings-avatar.desktop {
 				border-color: #43B581;
 			} 
-			.DevilBro-settings .settings-avatar.disabled {
+			.FriendNotifications-settings .settings-avatar.disabled {
 				border-color: #36393F;
 				filter: grayscale(100%) brightness(50%);
 			}
-			.DevilBro-settings .disable-all {
+			.FriendNotifications-settings .disable-all {
 				color: white;
 				background-color: #36393F;
 			}
@@ -49,16 +104,17 @@ class FriendNotifications {
 			
 		this.defaults = {
 			settings: {
-				onlyOnOnline:		{value:false, 	description:"Only notify me when a user logs in:"}
+				onlyOnOnline:		{value:false, 	description:"Only notify me when a User logs in:"},
+				openOnClick:		{value:false, 	description:"Open the DM when you click a Notification:"}
 			}
 		};
 	}
 
 	getName () {return "FriendNotifications";}
 
-	getDescription () {return "Notifies you when a friend either logs in or out.";}
+	getDescription () {return "Notifies you when a friend either logs in or out. Click the Online Friend-Counter to display a timelog of the current season.";}
 
-	getVersion () {return "1.0.2";}
+	getVersion () {return "1.0.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -155,6 +211,8 @@ class FriendNotifications {
 			BDfunctionsDevilBro.loadMessage(this);
 			
 			this.FriendUtils = BDfunctionsDevilBro.WebModules.findByProperties(["getFriendIDs", "getRelationships"]);
+			this.ChannelUtils = BDfunctionsDevilBro.WebModules.findByProperties(["getDMFromUserId"]);
+			this.ChannelSwitchUtils = BDfunctionsDevilBro.WebModules.findByProperties(["selectPrivateChannel"]);
 			this.UserMetaStore = BDfunctionsDevilBro.WebModules.findByProperties(["getStatuses", "getOnlineFriendCount"]);
 			this.UserUtils = BDfunctionsDevilBro.WebModules.findByProperties(["getUsers"]);
 			this.IconUtils = BDfunctionsDevilBro.WebModules.findByProperties(["getUserAvatarURL"]);
@@ -164,17 +222,26 @@ class FriendNotifications {
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
+						let settings = BDfunctionsDevilBro.getAllData( this, "settings");
 						for (let id of this.FriendUtils.getFriendIDs()) {
 							let online = this.UserMetaStore.getStatus(id) != "offline";
 							let user = this.UserUtils.getUser(id);
 							if (this.friendsOnlineList[id] != online && !BDfunctionsDevilBro.loadData(id, this, "disabled")) {
-								if (!(BDfunctionsDevilBro.getData("onlyOnOnline", this, "settings") && !online)) {
+								this.timeLog.push({user, online, time: new Date()});
+								if (!(settings.onlyOnOnline && !online)) {
 									let string = `${BDfunctionsDevilBro.encodeToHTML(user.username)} is ${online ? "online" : "offline"}.`;
+									let openChannel = () => {
+										if (settings.openOnClick){
+											let DMid = this.ChannelUtils.getDMFromUserId(user.id);
+											if (DMid) this.ChannelSwitchUtils.selectPrivateChannel(DMid);
+										}
+									};
 									if (!BDfunctionsDevilBro.loadData(id, this, "desktop")) {
-										BDfunctionsDevilBro.showToast(`<div class="toast-inner"><div class="toast-avatar" style="background-image:url(${this.getUserAvatar(user)});"></div><div>${string}</div></div>`, {html:true, type:(online ? "success" : null), icon:false});
+										let toast = BDfunctionsDevilBro.showToast(`<div class="toast-inner"><div class="toast-avatar" style="background-image:url(${this.getUserAvatar(user)});"></div><div>${string}</div></div>`, {html:true, timeout:5000, type:(online ? "success" : null), icon:false});
+										$(toast).on("click." + this.getName(), openChannel);
 									}
 									else {
-										BDfunctionsDevilBro.showDesktopNotification(string, {icon:this.getUserAvatar(user),timeout:5000});
+										BDfunctionsDevilBro.showDesktopNotification(string, {icon:this.getUserAvatar(user),timeout:5000, click:openChannel});
 									}
 								}
 							}
@@ -183,11 +250,18 @@ class FriendNotifications {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, ".friends-online", {name:"friendCountObserver",instance:observer}, {childList:true, subtree:true, characterData:true});
+			BDfunctionsDevilBro.addObserver(this, ".guilds > .friends-online", {name:"friendCountObserver",instance:observer}, {childList:true, subtree:true, characterData:true});
 			
 			for (let id of this.FriendUtils.getFriendIDs()) {
 				this.friendsOnlineList[id] = this.UserMetaStore.getStatus(id) != "offline";
 			}
+			$(".guilds > .friends-online")
+				.on("mouseenter." + this.getName(), (e) => {
+					BDfunctionsDevilBro.createTooltip("Timelog", e.currentTarget, {type:"right"});
+				})
+				.on("click." + this.getName(), (e) => {
+					this.showTimeLog();
+				});
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -212,5 +286,19 @@ class FriendNotifications {
 	
 	getUserAvatar (user) {
 		return ((user.avatar ? "" : "https://discordapp.com") + this.IconUtils.getUserAvatarURL(user)).split("?size")[0];
+	}
+	
+	showTimeLog () {		
+		var timeLogModal = $(this.timeLogModalMarkup);
+		for (let log of this.timeLog.reverse()) {
+			let entry = $(this.logEntryMarkup);
+			let divider = $(this.dividerMarkup);
+			entry.find(".log-time").text(`[${log.time.toLocaleTimeString()}]`);
+			entry.find(".log-avatar").css("background-image", `url(${this.getUserAvatar(log.user)})`);
+			entry.find(".log-description").text(`${log.user.username} is ${log.online ? "online" : "offline"}.`);
+			timeLogModal.find(".entries").append(entry).append(divider);
+		}
+		timeLogModal.find(".divider-1G01Z9:last-of-type").remove();
+		BDfunctionsDevilBro.appendModal(timeLogModal);
 	}
 }
