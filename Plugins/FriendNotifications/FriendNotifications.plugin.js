@@ -114,7 +114,7 @@ class FriendNotifications {
 
 	getDescription () {return "Notifies you when a friend either logs in or out. Click the Online Friend-Counter to display a timelog of the current session.";}
 
-	getVersion () {return "1.0.5";}
+	getVersion () {return "1.0.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -122,12 +122,14 @@ class FriendNotifications {
 		if (!this.started || typeof BDfunctionsDevilBro !== "object") return;
 		
 		var settings = BDfunctionsDevilBro.getAllData(this, "settings");
+		var notificationsound = BDfunctionsDevilBro.loadAllData(this, "notificationsound");
 		var desktop = BDfunctionsDevilBro.loadAllData(this, "desktop");
 		var disabled = BDfunctionsDevilBro.loadAllData(this, "disabled");
 		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="titleDefault-1CWM9y title-3i-5G_ size18-ZM4Qv- height24-2pMcnc weightNormal-3gw0Lm marginBottom8-1mABJ4">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		for (let key in settings) {
-			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
+			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm settings-checkbox"${settings[key] ? " checked" : ""}></div></div>`;
 		}
+		if ("Notification" in window) settingshtml += `<div class="flexChild-1KGW5q marginBottom8-1mABJ4" style="flex: 1 1 auto;"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h5 class="flexChild-1KGW5q h5-3KssQU title-1pmpPr size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH defaultMarginh5-2UwwFY" style="flex: 1 1 auto;">Desktop Notification Sound:</h5><h5 class="flexChild-1KGW5q h5-3KssQU title-1pmpPr size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH defaultMarginh5-2UwwFY" style="flex: 0 0 auto;">Mute:</h5><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;"><input type="checkbox" class="checkboxEnabled-4QfryV checkbox-1KYsPm mute-checkbox"${notificationsound.mute ? " checked" : ""}></div></div><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO" style="flex: 1 1 auto;"><div class="inputWrapper-3xoRWR vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR flexChild-1KGW5q" style="flex: 1 1 auto;"><input type="text" value="${notificationsound.url}" placeholder="Url or Filepath" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_ songInput"></div><button type="button" class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorBrand-3PmwCE sizeMedium-2VGNaF grow-25YQ8u file-navigator" style="flex: 0 0 auto;"><div class="contents-4L4hQM"></div><input type="file" accept="audio/*,video/*" style="display:none!important;"></button><button type="button" class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorBrand-3PmwCE sizeMedium-2VGNaF grow-25YQ8u btn-save btn-savesong" style="flex: 0 0 auto;"><div class="contents-4L4hQM"></div></button></div></div>`;
 		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">Click on a Icon to toggle <label class="type-toast">Toast</label> Notifications for that User:</h3></div>`;
 		if ("Notification" in window) settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">Rightclick on a Icon to toggle <label class="type-desktop">Desktop</label> Notifications for that User:</h3></div>`;
 		settingshtml += `<div class="avatar-list marginBottom8-1mABJ4">`;
@@ -144,7 +146,13 @@ class FriendNotifications {
 		BDfunctionsDevilBro.initElements(settingspanel);
 
 		$(settingspanel)
-			.on("click", ".checkbox-1KYsPm", () => {this.updateSettings(settingspanel);})
+			.on("click", ".settings-checkbox", () => {this.updateSettings(settingspanel);})
+			.on("click", ".btn-savesong", () => {this.saveAudio(settingspanel);})
+			.on("click", ".mute-checkbox", (e) => {
+				var notificationsound = BDfunctionsDevilBro.loadAllData(this, "notificationsound");
+				notificationsound.mute = e.currentTarget.checked;
+				BDfunctionsDevilBro.saveAllData(notificationsound, this, "notificationsound");
+			})
 			.on("mouseenter", ".settings-avatar", (e) => {
 				let user = this.UserUtils.getUser(e.currentTarget.getAttribute("user-id"));
 				BDfunctionsDevilBro.createTooltip(user.username, e.currentTarget, {type:"top"});
@@ -222,7 +230,8 @@ class FriendNotifications {
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
-						let settings = BDfunctionsDevilBro.getAllData( this, "settings");
+						let settings = BDfunctionsDevilBro.getAllData(this, "settings");
+						let notificationsound = BDfunctionsDevilBro.loadAllData(this, "notificationsound");
 						for (let id of this.FriendUtils.getFriendIDs()) {
 							let online = this.UserMetaStore.getStatus(id) != "offline";
 							let user = this.UserUtils.getUser(id);
@@ -244,7 +253,7 @@ class FriendNotifications {
 										$(toast).on("click." + this.getName(), openChannel);
 									}
 									else {
-										BDfunctionsDevilBro.showDesktopNotification(string, {icon:this.getUserAvatar(user),timeout:5000, click:openChannel});
+										BDfunctionsDevilBro.showDesktopNotification(string, {icon:this.getUserAvatar(user), timeout:5000, click:openChannel, silent:notificationsound.mute, sound:notificationsound.song});
 									}
 								}
 							}
@@ -285,6 +294,44 @@ class FriendNotifications {
 			settings[input.value] = input.checked;
 		}
 		BDfunctionsDevilBro.saveAllData(settings, this, "settings");
+	}
+	
+	saveAudio (settingspanel) {
+		var successSavedAudio = (parsedurl, parseddata) => {
+			if (parsedurl && parseddata) BDfunctionsDevilBro.showToast(`Sound was saved successfully.`, {type:"success"});
+			let notificationsound = BDfunctionsDevilBro.loadAllData(this, "notificationsound");
+			notificationsound.url = parsedurl;
+			notificationsound.song = parseddata;
+			BDfunctionsDevilBro.saveAllData(notificationsound, this, "notificationsound");
+		};
+		
+		var url = settingspanel.querySelector(".songInput").value;
+		if (url.length == 0) {
+			BDfunctionsDevilBro.showToast(`Sound was set to the default sound.`, {type:"warn"});
+			successSavedAudio(url, url);
+		}
+		else if (url.indexOf("http") == 0) {
+			require("request")(url, (error, response, result) => {
+				if (response) {
+					var type = response.headers["content-type"];
+					if (type && (type.indexOf("octet-stream") > -1 || type.indexOf("audio") > -1 || type.indexOf("video") > -1)) {
+						successSavedAudio(url, url);
+						return;
+					}
+				}
+				BDfunctionsDevilBro.showToast("Use a valid direct link to a video or audio source. They usually end on something like .mp3, .mp4 or .wav.", {type:"danger"});
+			});
+		}
+		else {
+			require("fs").readFile(url, (error, response) => {
+				if (error) {
+					BDfunctionsDevilBro.showToast("Could not fetch file. Please make sure the file exists.", {type:"danger"});
+				}
+				else {
+					successSavedAudio(url, `data:audio/mpeg;base64,${response.toString("base64")}`);
+				}
+			});
+		}
 	}
 	
 	getUserAvatar (user) {
