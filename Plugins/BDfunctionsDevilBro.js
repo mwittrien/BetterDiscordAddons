@@ -324,26 +324,51 @@ BDfunctionsDevilBro.showToast = function (content, options = {}) {
 	return toastElem;
 };
 
-BDfunctionsDevilBro.showDesktopNotification = function (content, options = {}) {
-	var notify = () => {
+BDfunctionsDevilBro.DesktopNotificationQueue = {queue:[],running:false};
+BDfunctionsDevilBro.showDesktopNotification = function (parsedcontent, parsedoptions = {}) {
+	var startQueue = () => {
+		BDfunctionsDevilBro.DesktopNotificationQueue.queue.push({parsedcontent,parsedoptions});
+		runQueue();
+	}
+	var runQueue = () => {
+		if (!BDfunctionsDevilBro.DesktopNotificationQueue.running) {
+			let notifyconfig = BDfunctionsDevilBro.DesktopNotificationQueue.queue.shift();
+			if (notifyconfig) notify(notifyconfig.parsedcontent, notifyconfig.parsedoptions);
+		}
+	}
+	var notify = (content, options) => {
+		BDfunctionsDevilBro.DesktopNotificationQueue.running = true;
+		let mute = options.silent;
+		options.silent = options.silent || options.sound ? true : false;
 		let notificationEle = new Notification(content, options);
-		let closeTimeout = setTimeout(notificationEle.close.bind(notificationEle), options.timeout ? options.timeout : 3000);
+		let audio = new Audio();
+		let closeTimeout = setTimeout(() => {close();}, options.timeout ? options.timeout : 3000);
 		if (typeof options.click == "function") notificationEle.onclick = () => {
 			clearTimeout(closeTimeout);
+			close();
 			options.click();
+		}
+		if (!mute && options.sound) {
+			audio.src = options.sound;
+			audio.play()
+		}
+		var close = () => {
+			audio.pause();
 			notificationEle.close();
+			BDfunctionsDevilBro.DesktopNotificationQueue.running = false;
+			setTimeout(() => {runQueue();},1000);
 		}
 	}
 	if (!("Notification" in window)) {
 		// do nothing
 	}
 	else if (Notification.permission === "granted") {
-		notify();
+		startQueue();
 	}
 	else if (Notification.permission !== "denied") {
 		Notification.requestPermission(function (permission) {
 			if (permission === "granted") {
-				notify();
+				startQueue();
 			}
 		});
 	}
