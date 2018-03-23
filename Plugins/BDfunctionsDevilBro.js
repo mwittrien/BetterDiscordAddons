@@ -142,7 +142,7 @@ BDfunctionsDevilBro.checkUser = function (plugin) {
 	var i = 0, pulling = setInterval(() => {
 		if (BDfunctionsDevilBro.myData && !BDfunctionsDevilBro.isObjectEmpty(BDfunctionsDevilBro.myData)) {
 			clearInterval(pulling);
-			if (["113308553774702592","196970957385105408","350414531098312715"].includes(BDfunctionsDevilBro.myData.id)) {
+			if (["113308553774702592","196970957385105408","350414531098312715","81357110733975552"].includes(BDfunctionsDevilBro.myData.id)) {
 				var pluginName = plugin.getName();
 				let fileSystem = require("fs");
 				let path = require("path");
