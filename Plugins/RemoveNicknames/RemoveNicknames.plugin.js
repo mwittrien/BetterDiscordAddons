@@ -14,7 +14,7 @@ class RemoveNicknames {
 
 	getDescription () {return "Replace all nicknames with the actual accountnames.";}
 
-	getVersion () {return "1.0.3";}
+	getVersion () {return "1.0.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -84,7 +84,7 @@ class RemoveNicknames {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(".member-username")) {
+								if (node && node.tagName && node.querySelector(".username-MwOsla, .member-username")) {
 									this.loadUser(node, "list", false);
 								}
 							});
@@ -179,7 +179,7 @@ class RemoveNicknames {
 	}
 
 	loadAllUsers () {
-		for (let user of document.querySelectorAll(".member")) {
+		for (let user of document.querySelectorAll(".member-2FrNV0, .member")) {
 			this.loadUser(user, "list", false);
 		} 
 		for (let user of document.querySelectorAll(".message-group")) {
@@ -243,7 +243,7 @@ class RemoveNicknames {
 	}
 	
 	getNameWrapper (div) {		
-		return div.querySelector(".user-name, .member-username-inner, .nameDefault-1I0lx8");
+		return div.querySelector(".user-name, .memberInner-3XUq9K, .member-username-inner, .nameDefault-1I0lx8");
 	}
 	
 	getUserInfo (div) {
