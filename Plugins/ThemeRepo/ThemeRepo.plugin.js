@@ -219,7 +219,7 @@ class ThemeRepo {
 				position: absolute !important;
 				z-index: 3400 !important;
 			}
-			.discordPreview ~ #app-mount{
+			.discordPreview ~ .appMount-14L89u{
 				position: absolute !important;
 				top: 0 !important;
 			}
@@ -296,7 +296,7 @@ class ThemeRepo {
 
 	getDescription () {return "Allows you to preview all themes from the theme repo and download them on the fly. Repo button is in the theme settings.";}
 
-	getVersion () {return "1.4.4";}
+	getVersion () {return "1.4.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -350,6 +350,9 @@ class ThemeRepo {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
+			this.UserUtils = BDfunctionsDevilBro.WebModules.findByProperties(["getUsers"]);
+			this.IconUtils = BDfunctionsDevilBro.WebModules.findByProperties(["getUserAvatarURL"]);
+			
 			var observer = null;
 
 			observer = new MutationObserver((changes, _) => {
@@ -396,7 +399,7 @@ class ThemeRepo {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, "#app-mount", {name:"settingsContextObserver",instance:observer}, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, ".appMount-14L89u", {name:"settingsContextObserver",instance:observer}, {childList: true});
 			
 			var settingswindow = document.querySelector(".layer-kosS71[layer-id='user-settings']");
 			if (settingswindow) this.checkIfThemesPage(settingswindow);
@@ -590,14 +593,15 @@ class ThemeRepo {
 				if (typeof e.data === "object" && e.data.origin == "DiscordPreview") {
 					switch (e.data.reason) {
 						case "OnLoad":
-							var container = document.querySelector(".container-iksrDt");
-							if (!container) return;
-							var username = container.querySelector(".username").innerText;
-							var avatar = container.querySelector(".avatar-small").style.backgroundImage;
-							var discriminator = container.querySelector(".discriminator").innerText;
+							var user = this.UserUtils.getCurrentUser();
+							if (!user) return;
+							var username = user.username;
+							var id = user.id;
+							var avatar = "url(" + (((user.avatar ? "" : "https://discordapp.com") + this.IconUtils.getUserAvatarURL(user)).split("?size")[0]) + ");";
+							var discriminator = user.discriminator;
 							var nativecss = document.querySelector("head link[rel='stylesheet'][integrity]");
 							nativecss = nativecss && nativecss.href ? nativecss.href : null;
-							frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"OnLoad",username,avatar,discriminator,nativecss},"*");
+							frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"OnLoad",username,id,avatar,discriminator,nativecss},"*");
 							frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"DarkLight",checked:lightTheme},"*");
 							break;
 						case "KeyUp":
@@ -610,7 +614,7 @@ class ThemeRepo {
 		this.createThemeEntries(themeRepoModal, frame);
 			
 		BDfunctionsDevilBro.appendModal(themeRepoModal);
-		$(frame).insertBefore("#app-mount");
+		$(frame).insertBefore(".appMount-14L89u");
 			
 		function keyPressed (key) {
 			if (key == 17 && !themeRepoModal.find(".input-yt44Uw").is(":focus")) themeRepoModal.toggle();
