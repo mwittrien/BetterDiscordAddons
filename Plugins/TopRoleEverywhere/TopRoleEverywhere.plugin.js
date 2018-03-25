@@ -42,7 +42,7 @@ class TopRoleEverywhere {
 
 	getDescription () {return "Adds the highest role of a user as a tag.";}
 
-	getVersion () {return "2.5.4";}
+	getVersion () {return "2.5.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -99,7 +99,7 @@ class TopRoleEverywhere {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.querySelector(".member-username") && BDfunctionsDevilBro.getData("showInMemberList", this, "settings")) {
+								if (node && node.querySelector(".username-MwOsla, .member-username") && BDfunctionsDevilBro.getData("showInMemberList", this, "settings")) {
 									this.addRoleTag(node, "list", false);
 								}
 							});
@@ -195,19 +195,19 @@ class TopRoleEverywhere {
 		document.querySelectorAll(".TRE-tag").forEach(node=>{node.remove();});
 		var settings = BDfunctionsDevilBro.getAllData(this, "settings");
 		if (settings.showInMemberList) { 
-			var membersList = document.querySelectorAll("div.member");
+			var membersList = document.querySelectorAll(".member-2FrNV0, .member");
 			for (var i = 0; i < membersList.length; i++) {
 				this.addRoleTag(membersList[i], "list", false);
 			}
 		}
 		if (settings.showInChat) { 
-			var membersChat = document.querySelectorAll("div.message-group");
+			var membersChat = document.querySelectorAll(".message-group");
 			for (var j = 0; j < membersChat.length; j++) {
 				if ($(membersChat[j]).has(".avatar-large").length > 0) {
 					this.addRoleTag(membersChat[j], "chat", false);
 				}
 				else {
-					var markups = membersChat[j].querySelectorAll("div.markup");
+					var markups = membersChat[j].querySelectorAll(".markup");
 					for (var j2 = 0; j2 < markups.length; j2++) {
 						this.addRoleTag(markups[j2], "chat", true);
 					}
@@ -219,7 +219,7 @@ class TopRoleEverywhere {
 	addRoleTag (wrapper, type, compact) {
 		if (!wrapper || !BDfunctionsDevilBro.getSelectedServer()) return;
 		var guild = this.GuildStore.getGuild(this.UserGuildState.getGuildId());
-		var member = wrapper.querySelector("div.member-username") || wrapper.querySelector("span.username-wrapper");
+		var member = wrapper.querySelector(".username-MwOsla, .member-username") || wrapper.querySelector(".username-wrapper");
 		if (compact) wrapper = $(".message-group").has(wrapper)[0];
 		if (member && member.tagName && !member.querySelector(".TRE-tag")) {
 			var settings = BDfunctionsDevilBro.getAllData(this, "settings");
@@ -235,7 +235,7 @@ class TopRoleEverywhere {
 				var totalwidth, oldwidth, newwidth, maxwidth;
 				if (type == "list") {
 					totalwidth = member.style.width
-					oldwidth = member.querySelector("span.member-username-inner").style.width;
+					oldwidth = member.querySelector(".memberInner-3XUq9K, .member-username-inner").style.width;
 					if (oldwidth && totalwidth) {
 						totalwidth = parseInt(totalwidth.replace("px",""));
 						oldwidth = parseInt(oldwidth.replace("px",""));
@@ -279,7 +279,7 @@ class TopRoleEverywhere {
 				inner.textContent = roleText;
 				
 				if (oldwidth && totalwidth) {
-					newwidth = member.querySelector("span.member-username-inner").style.width;
+					newwidth = member.querySelector(".memberInner-3XUq9K, .member-username-inner").style.width;
 					if (newwidth) {
 						newwidth = parseInt(newwidth.replace("px",""));
 						if (newwidth < 100 && oldwidth < 100) {
