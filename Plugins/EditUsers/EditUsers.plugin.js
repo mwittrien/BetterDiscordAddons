@@ -170,7 +170,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "2.1.8";}
+	getVersion () {return "2.1.9";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -238,7 +238,7 @@ class EditUsers {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, "#app-mount", {name:"userContextObserver",instance:observer}, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, ".appMount-14L89u", {name:"userContextObserver",instance:observer}, {childList: true});
 			
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -291,7 +291,7 @@ class EditUsers {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(".member-username") && BDfunctionsDevilBro.getData("changeInMemberList", this, "settings")) {
+								if (node && node.tagName && node.querySelector(".username-MwOsla, .member-username") && BDfunctionsDevilBro.getData("changeInMemberList", this, "settings")) {
 									this.loadUser(node, "list", false);
 								}
 							});
@@ -628,7 +628,7 @@ class EditUsers {
 		var settings = BDfunctionsDevilBro.getAllData(this, "settings");
 		
 		if (settings.changeInMemberList) {
-			for (let user of document.querySelectorAll(".member")) {
+			for (let user of document.querySelectorAll(".member-2FrNV0, .member")) {
 				this.loadUser(user, "list", false);
 			} 
 		}
@@ -795,26 +795,35 @@ class EditUsers {
 	}
 	
 	getAvatarNameWrapper (div) {
-		var avatar = div.querySelector(".avatar-small, .avatar-large, .avatarDefault-3jtQoc, .avatar-profile, .avatar-1BXaQj .image-EVRGPw");
+		var avatar = div.querySelector(".avatar-small, .avatar-large, .avatarDefault-3jtQoc, .avatar-profile, .image-EVRGPw");
 						
-		var username = div.querySelector(".user-name, .member-username-inner, .channel-name, .username, .headerName-2N8Pdz, .nameDefault-1I0lx8, .headerUsernameNoNickname-1iGxNP, .channelName-1G03vu.private-38vo6h");
+		var username = div.querySelector(".username-MwOsla, .user-name, .member-username-inner, .channel-name, .username, .headerName-2N8Pdz, .nameDefault-1I0lx8, .headerUsernameNoNickname-1iGxNP, .channelName-1G03vu.private-38vo6h");
 						
-		var wrapper = div.querySelector(".member-username, .username-wrapper, .channel-name, .discord-tag, .accountDetails-15i-_e, .headerName-2N8Pdz, .nameDefault-1I0lx8, .headerTag-3zin_i, .channelName-1G03vu.private-38vo6h");
+		var wrapper = div.querySelector(".memberInner-3XUq9K, .member-username-inner, .username-wrapper, .channel-name, .discord-tag, .accountDetails-15i-_e, .headerName-2N8Pdz, .nameDefault-1I0lx8, .headerTag-3zin_i, .channelName-1G03vu.private-38vo6h");
 						
 		return {avatar, username, wrapper};
 	}
 	
 	getUserInfo (div) {
-		var info = BDfunctionsDevilBro.getKeyInformation({"node":div,"key":"user"});
-		if (!info) {
-			info = BDfunctionsDevilBro.getKeyInformation({"node":div,"key":"message"});
-			if (info) info = info.author;
-			else {
-				info = BDfunctionsDevilBro.getKeyInformation({"node":div,"key":"channel"});
-				if (info) info = {"id":info.recipients[0]};
+		var info = null, comparator = div.getAttribute("comparator");
+		if (comparator) {
+			comparator = comparator.split("\0");
+			comparator = comparator[comparator.length-1];
+			comparator = !isNaN(parseInt(comparator)) ? comparator : null;
+		}
+		if (comparator) info = {"id":comparator};
+		else {
+			info = BDfunctionsDevilBro.getKeyInformation({"node":div,"key":"user"});
+			if (!info) {
+				info = BDfunctionsDevilBro.getKeyInformation({"node":div,"key":"message"});
+				if (info) info = info.author;
 				else {
-					info = BDfunctionsDevilBro.getKeyInformation({"node":$(".message-group").has(div)[0],"key":"message"});
-					if (info) info = info.author;
+					info = BDfunctionsDevilBro.getKeyInformation({"node":div,"key":"channel"});
+					if (info) info = {"id":info.recipients[0]};
+					else {
+						info = BDfunctionsDevilBro.getKeyInformation({"node":$(".message-group").has(div)[0],"key":"message"});
+						if (info) info = info.author;
+					}
 				}
 			}
 		}
