@@ -7,26 +7,23 @@ class EditUsers {
 		this.css = `
 			.user-tag {
 				position: relative;
-				overflow: hidden; 
-				padding: 2px 3px 1px 3px; 
-				margin-left: 5px; 
 				border-radius: 3px;
-				text-transform: uppercase;
+				flex-shrink: 0;
 				font-size: 10px;
-				font-weight: 600;
-				height: 13px;
-				line-height: 13px;
+				font-weight: 500;
+				line-height: 16px;
+				margin-left: 6px;
+				padding: 1px 2px;
+				text-transform: uppercase;
+				vertical-align: bottom;
 				white-space: nowrap;
 			}
 			
-			.user-tag.dmheader-tag,
-			.user-tag.popout-tag,
 			.user-tag.profil-tag {
-				bottom: 2px;
-			}
-			
-			.user-tag.chat-tag {
 				bottom: 1px;
+			}
+			.user-tag.popout-tag {
+				bottom: 2px;
 			}`;
 			
 		this.tagMarkup = `<span class="user-tag"></span>`;
@@ -170,7 +167,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "2.1.9";}
+	getVersion () {return "2.2.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -395,7 +392,7 @@ class EditUsers {
 	
 	onSwitch () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			$(".titleText-2IfpkV[custom-editusers]").find(".channelName-1G03vu:not(.private-38vo6h)").css("color", "").parent().removeAttr("custom-editusers");
+			$(".titleText-2IfpkV[custom-editusers]").find(".channelName-1G03vu:not(.private-38vo6h)").css("color", "").css("background-color", "").parent().removeAttr("custom-editusers");
 			this.loadAllUsers();
 			BDfunctionsDevilBro.addObserver(this, ".channel-members", {name:"userListObserver"}, {childList:true});
 			BDfunctionsDevilBro.addObserver(this, ".messages.scroller", {name:"chatWindowObserver"}, {childList:true, subtree:true});
@@ -797,9 +794,9 @@ class EditUsers {
 	getAvatarNameWrapper (div) {
 		var avatar = div.querySelector(".avatar-small, .avatar-large, .avatarDefault-3jtQoc, .avatar-profile, .image-EVRGPw");
 						
-		var username = div.querySelector(".username-MwOsla, .user-name, .member-username-inner, .channel-name, .username, .headerName-2N8Pdz, .nameDefault-1I0lx8, .headerUsernameNoNickname-1iGxNP, .channelName-1G03vu.private-38vo6h");
+		var username = div.querySelector(".headerName-3U6eDn, .headerTagUsernameNoNickname-22Y2PV, .username-24t9uh, .username-MwOsla, .member-username-inner, .nameDefault-1I0lx8, .user-name, .channel-name, .channelName-1G03vu.private-38vo6h, .friends-column-name .username, .accountDetails-15i-_e .username");
 						
-		var wrapper = div.querySelector(".memberInner-3XUq9K, .member-username-inner, .username-wrapper, .channel-name, .discord-tag, .accountDetails-15i-_e, .headerName-2N8Pdz, .nameDefault-1I0lx8, .headerTag-3zin_i, .channelName-1G03vu.private-38vo6h");
+		var wrapper = div.querySelector(".headerName-3U6eDn, .headerTagNoNickname-36rgb9, .nameTag-2n-N0D, .nameTag-3F0z_i, .member-username-inner, .nameDefault-1I0lx8, .username-wrapper, .channel-name, .channelName-1G03vu.private-38vo6h .friends-column-name .nameTag-26T3kW, .accountDetails-15i-_e .username");
 						
 		return {avatar, username, wrapper};
 	}
