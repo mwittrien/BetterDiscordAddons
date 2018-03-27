@@ -354,7 +354,7 @@ class GoogleTranslateOption {
 
 	getDescription () {return "Adds a Google Translate option to your context menu, which shows a preview of the translated text and on click will open the selected text in Google Translate. Also adds a translation button to your textareas, which will automatically translate the text for you before it is being send. DeepLApi written by square. Thanks ;)";}
 
-	getVersion () {return "1.3.8";}
+	getVersion () {return "1.3.9";}
 	
 	getAuthor () {return "DevilBro, square";}
 	
@@ -425,7 +425,7 @@ class GoogleTranslateOption {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, "#app-mount", {name:"messageContextObserver",instance:observer}, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, ".appMount-14L89u", {name:"messageContextObserver",instance:observer}, {childList: true});
 			
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -664,7 +664,7 @@ class GoogleTranslateOption {
 	addTranslationButton (textarea) {
 		if (!textarea) return;
 		var textareaWrap = textarea.parentElement;
-		if (textareaWrap && !textareaWrap.querySelector(".translate-button")) {
+		if (textareaWrap && !textareaWrap.classList.contains("innerDisabled-1hSPu_") &&  !textareaWrap.querySelector(".translate-button")) {
 			var textareaInstance = BDfunctionsDevilBro.getOwnerInstance({"node":textarea, "props":["handlePaste","saveCurrentText"], "up":true});
 			if (textareaInstance && textareaInstance.props && textareaInstance.props.type) {
 				var button = $(this.translateButtonMarkup)[0];
