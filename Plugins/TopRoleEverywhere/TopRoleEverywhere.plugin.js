@@ -5,21 +5,16 @@ class TopRoleEverywhere {
 		this.css = ` 
 			.TRE-tag {
 				position: relative;
-				overflow: hidden; 
-				padding: 2px 3px 1px 3px; 
-				margin-left: 5px; 
 				border-radius: 3px;
-				text-transform: uppercase;
+				display: inline-block;
+				flex-shrink: 0;
 				font-size: 10px;
-				font-weight: 600;
-				height: 12px;
-				line-height: 12px;
-				white-space: nowrap;
-			}
-			
-			.TRE-tag.chat-tag, .TRE-tag.id-tag {
-				bottom: 1px;
-				margin-right: 5px;
+				font-weight: 500;
+				line-height: 13px;
+				margin-left: 6px;
+				padding: 1px 2px;
+				text-transform: uppercase;
+				vertical-align: top;
 			}`;
 			
 		this.tagMarkup = `<span class="TRE-tag"><span class="role-inner"></span></span>`;
@@ -42,7 +37,7 @@ class TopRoleEverywhere {
 
 	getDescription () {return "Adds the highest role of a user as a tag.";}
 
-	getVersion () {return "2.5.5";}
+	getVersion () {return "2.5.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -235,7 +230,7 @@ class TopRoleEverywhere {
 				var totalwidth, oldwidth, newwidth, maxwidth;
 				if (type == "list") {
 					totalwidth = member.style.width
-					oldwidth = member.querySelector(".memberInner-3XUq9K, .member-username-inner").style.width;
+					oldwidth = wrapper.querySelector(".memberInner-3XUq9K, .member-username-inner").style.width;
 					if (oldwidth && totalwidth) {
 						totalwidth = parseInt(totalwidth.replace("px",""));
 						oldwidth = parseInt(oldwidth.replace("px",""));
