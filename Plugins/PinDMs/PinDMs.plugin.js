@@ -4,12 +4,12 @@ class PinDMs {
 	constructor () {
 		this.pinDMEntryMarkup =
 			`<div class="item-1XYaYf pindm-item">
-				<span>Pin DM</span>
+				<span>REPLACE_context_pindm_text</span>
 				<div class="hint-3TJykr"></div>
 			</div>`;
 			
 		this.pinDMsHeaderMarkup =
-			`<header class="pinneddms-header">Pinned DMs</header>`;
+			`<header class="pinneddms-header">REPLACE_header_pinneddms_text</header>`;
 			
 		this.pinnedDMMarkup =
 			`<div class="channel private pinned" style="height: 42px; opacity: 1;">
@@ -37,7 +37,7 @@ class PinDMs {
 
 	getDescription () {return "Allows you to pin DMs, making them appear at the top of your DM-list.";}
 
-	getVersion () {return "1.0.1";}
+	getVersion () {return "1.0.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -111,7 +111,7 @@ class PinDMs {
 			});
 			BDfunctionsDevilBro.addObserver(this, ".private-channels .scroller-fzNley", {name:"friendButtonObserver",instance:observer}, {childList: true});
 			
-			this.onSwitch();
+			setTimeout(() => {this.onSwitch();},1000);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -129,7 +129,7 @@ class PinDMs {
 	}
 	
 	onSwitch () {
-		if (!document.querySelector(".channel.btn-friends") || document.querySelector(".channel.private.pinned")) return;
+		if (!document.querySelector(".active .friends-icon") || document.querySelector(".channel.private.pinned")) return;
 		
 		this.addAllPinnedDMs();
 		
@@ -138,11 +138,26 @@ class PinDMs {
 	
 	// begin of own functions
 	
+	changeLanguageStrings () {
+		this.pinDMsHeaderMarkup = 	this.pinDMsHeaderMarkup.replace("REPLACE_header_pinneddms_text", this.labels.header_pinneddms_text);
+		
+		this.pinDMEntryMarkup = 	this.pinDMEntryMarkup.replace("REPLACE_context_pindm_text", this.labels.context_pindm_text);
+	}
+	
 	onContextMenu (context) {
-		if (!document.querySelector(".channel.btn-friends") || !context || !context.tagName || !context.parentElement || context.querySelector(".pindm-item")) return;
-		var info = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"user"});
+		if (!document.querySelector(".active .friends-icon") || !context || !context.tagName || !context.parentElement || context.querySelector(".pindm-item")) return;
+		var info = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"user"}), ele = null;
 		if (info && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"handleClose"})) {
-			$(this.pinDMEntryMarkup).insertBefore(context.querySelectorAll(".item-1XYaYf")[3])
+			ele = context.querySelectorAll(".item-1XYaYf")[3];
+		}
+		/* else {
+			info = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"channel"});
+			if (info && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"handleChangeIcon"})) {
+				ele = context.querySelectorAll(".item-1XYaYf")[1];
+			}
+		} */
+		if (ele) {
+			$(this.pinDMEntryMarkup).insertBefore(ele)
 				.on("click", (e) => {
 					$(context).hide();
 					var pinnedDMs = BDfunctionsDevilBro.loadAllData(this, "pinnedDMs");
@@ -255,5 +270,115 @@ class PinDMs {
 		}
 		if (pinnedDMEles.length == 0) $(".channel.btn-friends + header.pinneddms-header").remove();
 		BDfunctionsDevilBro.saveAllData(pinnedDMs, this, "pinnedDMs")
+	}
+	
+	setLabelsByLanguage () {
+		switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
+			case "hr":		//croatian
+				return {
+					context_pindm_text:				"Prikljucite Izravnu Dopisivanje",
+					header_pinneddms_text:			"Prikvačene izravne poruke"
+				};
+			case "da":		//danish
+				return {
+					context_pindm_text:				"Pin DB",
+					header_pinneddms_text:			"Pinned Privat Beskeder"
+				};
+			case "de":		//german
+				return {
+					context_pindm_text:				"Direktnachricht anpinnen",
+					header_pinneddms_text:			"Gepinnte Direktnachrichten"
+				};
+			case "es":		//spanish
+				return {
+					context_pindm_text:				"Pin MD",
+					header_pinneddms_text:			"Mensajes Directos Fijados"
+				};
+			case "fr":		//french
+				return {
+					context_pindm_text:				"Épingler MP",
+					header_pinneddms_text:			"Messages Prives Épinglés"
+				};
+			case "it":		//italian
+				return {
+					context_pindm_text:				"Appuntare il messaggio diretto",
+					header_pinneddms_text:			"Messaggi Diretti Aggiunti"
+				};
+			case "nl":		//dutch
+				return {
+					context_pindm_text:				"PB vastpinnen",
+					header_pinneddms_text:			"Vastgezette Persoonluke Berichten"
+				};
+			case "no":		//norwegian
+				return {
+					context_pindm_text:				"Pinne DM",
+					header_pinneddms_text:			"Pinned Direktemeldinger"
+				};
+			case "pl":		//polish
+				return {
+					context_pindm_text:				"Przypnij PW",
+					header_pinneddms_text:			"Prywatne Wiadomości Bezpośrednie"
+				};
+			case "pt-BR":	//portuguese (brazil)
+				return {
+					context_pindm_text:				"Fixar MD",
+					header_pinneddms_text:			"Mensagens diretas fixadas"
+				};
+			case "fi":		//finnish
+				return {
+					context_pindm_text:				"Kiinnitä yksityisviestit",
+					header_pinneddms_text:			"Liitetyt yksityisviestit"
+				};
+			case "sv":		//swedish
+				return {
+					context_pindm_text:				"Peka DM",
+					header_pinneddms_text:			"Inlagda Direktmeddelanden"
+				};
+			case "tr":		//turkish
+				return {
+					context_pindm_text:				"DM'yi Sabitle",
+					header_pinneddms_text:			"Direkt Mesajlar Sabitleyin"
+				};
+			case "cs":		//czech
+				return {
+					context_pindm_text:				"Připojte PZ",
+					header_pinneddms_text:			"Připojené přímá zpráva"
+				};
+			case "bg":		//bulgarian
+				return {
+					context_pindm_text:				"Закачете",
+					header_pinneddms_text:			"Свързани директни съобщения"
+				};
+			case "ru":		//russian
+				return {
+					context_pindm_text:				"Подключить ЛС",
+					header_pinneddms_text:			"Прикрепленные Личные сообщения"
+				};
+			case "uk":		//ukrainian
+				return {
+					context_pindm_text:				"Прикріпити ОП",
+					header_pinneddms_text:			"Прикріплені oсобисті повідомлення"
+				};
+			case "ja":		//japanese
+				return {
+					context_pindm_text:				"DMをピン留めする",
+					header_pinneddms_text:			"固定された直接メッセージ"
+				};
+			case "zh-TW":	//chinese (traditional)
+				return {
+					context_pindm_text:				"引用私人信息",
+					header_pinneddms_text:			"固定私人信息"
+				};
+			case "ko":		//korean
+				return {
+					context_pindm_text:				"개인 메시지 비공개",
+					header_pinneddms_text:			"고정 된 비공개 메시지"
+				};
+			default:		//default: english
+				return {
+					context_pindm_text:				"Pin DM",
+					header_pinneddms_text:			"Pinned Direct Messages"
+				};
+		}
 	}
 }
