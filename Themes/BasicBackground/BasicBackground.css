@@ -2622,7 +2622,6 @@ html, span:not(.spinner-item) {
 /* membercount */
 #memberCount {
 	height: 20px !important;
-	width: 220px !important;
 	display: flex !important;
 	align-items: center !important;
 	justify-content: center !important;
