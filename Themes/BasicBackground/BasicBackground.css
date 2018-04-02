@@ -2620,12 +2620,8 @@ html, span:not(.spinner-item) {
 }
 
 /* membercount */
-.channel-members {
-	margin: 0 !important;
-	padding: 0 !important;
-}
 #memberCount {
-	height: 3vh !important;
+	height: 20px !important;
 	width: 220px !important;
 	display: flex !important;
 	align-items: center !important;
@@ -2634,27 +2630,6 @@ html, span:not(.spinner-item) {
 	position: absolute !important;
 	color: hsla(0,0%,100%,.8) !important;
 	background: transparent !important;
-}
-#memberCount > * {
-	position: relative !important;
-	z-index: 100 !important;
-}
-#memberCount::after,
-#memberCount::before {
-	content: "";
-	position: absolute;
-	pointer-events: none;
-	top: 0;
-	bottom: 0;
-	right: 0;
-	left: 0;
-}
-#memberCount::after {
-	background: rgba(var(--transparencycolor),calc(var(--transparencyalpha) * 3));
-}
-#memberCount::before {
-	background: var(--background) center/cover;
-    background-attachment: fixed;
 }
 
 /* dateviewer */
