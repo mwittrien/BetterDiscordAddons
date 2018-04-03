@@ -2566,7 +2566,7 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				toast_plugin_stopped:			"${pluginName} ${oldVersion} has been stopped.",
 				toast_plugin_translated:		"${pluginName} translated to ${ownlang}.",
 				colorpicker_modal_header_text:	"Color Picker",
-				file_navigator_text:			"Browser File",
+				file_navigator_text:			"Browse File",
 				btn_add_text:					"Add",
 				btn_cancel_text:				"Cancel",
 				btn_all_text:					"All",
