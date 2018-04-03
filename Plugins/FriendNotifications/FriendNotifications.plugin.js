@@ -114,7 +114,7 @@ class FriendNotifications {
 
 	getDescription () {return "Notifies you when a friend either logs in or out. Click the Online Friend-Counter to display a timelog of the current session.";}
 
-	getVersion () {return "1.0.6";}
+	getVersion () {return "1.0.7";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -180,7 +180,6 @@ class FriendNotifications {
 				let desktopon = button.getAttribute("do-desktop");
 				let disabledata = BDfunctionsDevilBro.loadAllData(this, "disabled");
 				let desktopdata = BDfunctionsDevilBro.loadAllData(this, "desktop");
-				BDfunctionsDevilBro.saveData(id, desktopon, this, "desktop");
 				settingspanel.querySelectorAll(".settings-avatar").forEach(avatar => {
 					let id = avatar.getAttribute("user-id");
 					avatar.classList.toggle("disabled", disableon);
