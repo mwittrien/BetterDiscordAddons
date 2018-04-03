@@ -984,6 +984,10 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	position: absolute !important;
 	right: 0px !important;
 }
+.popout[style*="translateX(-"] > .option-popout {
+	position: absolute !important;
+	right: 0px !important;
+}
 .popout[style*="translateX(-11"] > .userPopout-11hFKo {
 	position: absolute !important;
 	right: 20px !important;
