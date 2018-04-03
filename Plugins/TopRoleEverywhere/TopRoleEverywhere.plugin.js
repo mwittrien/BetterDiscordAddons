@@ -37,7 +37,7 @@ class TopRoleEverywhere {
 
 	getDescription () {return "Adds the highest role of a user as a tag.";}
 
-	getVersion () {return "2.5.6";}
+	getVersion () {return "2.5.7";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -102,7 +102,7 @@ class TopRoleEverywhere {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, ".channel-members", {name:"userListObserver",instance:observer}, {childList:true});
+			BDfunctionsDevilBro.addObserver(this, ".channel-members, .members-1bid1J", {name:"userListObserver",instance:observer}, {childList:true});
 			
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -169,7 +169,7 @@ class TopRoleEverywhere {
 	
 	onSwitch () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.addObserver(this, ".channel-members", {name:"userListObserver"}, {childList:true});
+			BDfunctionsDevilBro.addObserver(this, ".channel-members, .members-1bid1J", {name:"userListObserver"}, {childList:true});
 			BDfunctionsDevilBro.addObserver(this, ".messages.scroller", {name:"chatWindowObserver"}, {childList:true, subtree:true});
 			this.loadRoleTags();
 		}
