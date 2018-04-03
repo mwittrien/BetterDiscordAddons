@@ -14,7 +14,7 @@ class RemoveNicknames {
 
 	getDescription () {return "Replace all nicknames with the actual accountnames.";}
 
-	getVersion () {return "1.0.4";}
+	getVersion () {return "1.0.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -92,7 +92,7 @@ class RemoveNicknames {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, ".channel-members", {name:"userListObserver",instance:observer}, {childList:true});
+			BDfunctionsDevilBro.addObserver(this, ".channel-members, .members-1bid1J", {name:"userListObserver",instance:observer}, {childList:true});
 			
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -162,7 +162,7 @@ class RemoveNicknames {
 	onSwitch () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.loadAllUsers();
-			BDfunctionsDevilBro.addObserver(this, ".channel-members", {name:"userListObserver"}, {childList:true});
+			BDfunctionsDevilBro.addObserver(this, ".channel-members, .members-1bid1J", {name:"userListObserver"}, {childList:true});
 			BDfunctionsDevilBro.addObserver(this, ".messages.scroller", {name:"chatWindowObserver"}, {childList:true, subtree:true});
 		}
 	}
