@@ -461,7 +461,9 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 
 .channel-members,
 .members-1bid1J {
+	box-sizing: content-box !important;
 	background: rgba(var(--transparencycolor), var(--memberlistransparency)) !important;
+	padding: 0 !important;
 }
 
 .is-local-bot-message,
@@ -2630,19 +2632,23 @@ html, span:not(.spinner-item) {
 
 /* membercount */
 #memberCount {
-	height: 20px !important;
+	height: 16px !important;
 	display: flex !important;
 	align-items: center !important;
 	justify-content: center !important;
 	padding: 0 !important;
 	position: absolute !important;
 	color: hsla(0,0%,100%,.8) !important;
-	background: transparent !important;
+	background: rgba(var(--transparencycolor), var(--memberlistransparency)) !important;
 }
 
 /* dateviewer */
+
+#memberCount ~ #dv-mount {
+	height: 80px !important;
+}
 #dv-mount {
-	background: transparent !important;
+	background: rgba(var(--transparencycolor), var(--memberlistransparency)) !important;
 }
 
 /* friendnotifications */ 
