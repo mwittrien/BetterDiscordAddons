@@ -2280,6 +2280,11 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 }
 
 /* change member loadings screen */
+.memberGroupsPlaceholder-1M417G, .placeholderAvatar-2trNnW, .placeholderUsername-5-KmQU {
+	background-color: rgb(var(--accentcolor)) !important;
+}
+
+/* old */
 .channel-members-loading, 
 .loading-316uYQ {
 	background: transparent !important;
