@@ -393,20 +393,20 @@ BDfunctionsDevilBro.createTooltip = function (content, container, options = {}) 
 	if (!options.position) options.position = options.type;
 	switch (options.position) {
 		case "top": 
-			left = $(container).offset().left + ($(container).outerWidth() - $(tooltip).outerWidth())/2;
-			top = $(container).offset().top - $(tooltip).outerHeight();
+			left = container.getBoundingClientRect().left + (container.offsetWidth - tooltip.offsetWidth)/2;
+			top = container.getBoundingClientRect().top - tooltip.offsetHeight;
 			break;
 		case "bottom": 
-			left = $(container).offset().left + ($(container).outerWidth() - $(tooltip).outerWidth())/2;
-			top = $(container).offset().top + $(container).outerHeight();
+			left = container.getBoundingClientRect().left + (container.offsetWidth - tooltip.offsetWidth)/2;
+			top = container.getBoundingClientRect().top + container.offsetHeight;
 			break;
 		case "left": 
-			left = $(container).offset().left - $(tooltip).outerWidth();
-			top = $(container).offset().top + ($(container).outerHeight() - $(tooltip).outerHeight())/2;
+			left = container.getBoundingClientRect().left - tooltip.offsetWidth;
+			top = container.getBoundingClientRect().top + (container.offsetHeight - tooltip.offsetHeight)/2;
 			break;
 		default: 
-			left = $(container).offset().left + $(container).outerWidth();
-			top = $(container).offset().top + ($(container).outerHeight() - $(tooltip).outerHeight())/2;
+			left = container.getBoundingClientRect().left + container.offsetWidth;
+			top = container.getBoundingClientRect().top + (container.offsetHeight - tooltip.offsetHeight)/2;
 			break;
 	}
 	
