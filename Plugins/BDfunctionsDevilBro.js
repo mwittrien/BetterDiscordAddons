@@ -393,20 +393,20 @@ BDfunctionsDevilBro.createTooltip = function (content, container, options = {}) 
 	if (!options.position) options.position = options.type;
 	switch (options.position) {
 		case "top": 
-			left = container.getBoundingClientRect().left + (container.offsetWidth - tooltip.offsetWidth)/2;
-			top = container.getBoundingClientRect().top - tooltip.offsetHeight;
+			left = container.getBoundingClientRect().left + (container.clientWidth - tooltip.clientWidth)/2;
+			top = container.getBoundingClientRect().top - tooltip.clientHeight;
 			break;
 		case "bottom": 
-			left = container.getBoundingClientRect().left + (container.offsetWidth - tooltip.offsetWidth)/2;
-			top = container.getBoundingClientRect().top + container.offsetHeight;
+			left = container.getBoundingClientRect().left + (container.clientWidth - tooltip.clientWidth)/2;
+			top = container.getBoundingClientRect().top + container.clientHeight;
 			break;
 		case "left": 
-			left = container.getBoundingClientRect().left - tooltip.offsetWidth;
-			top = container.getBoundingClientRect().top + (container.offsetHeight - tooltip.offsetHeight)/2;
+			left = container.getBoundingClientRect().left - tooltip.clientWidth;
+			top = container.getBoundingClientRect().top + (container.clientHeight - tooltip.clientHeight)/2;
 			break;
 		default: 
-			left = container.getBoundingClientRect().left + container.offsetWidth;
-			top = container.getBoundingClientRect().top + (container.offsetHeight - tooltip.offsetHeight)/2;
+			left = container.getBoundingClientRect().left + container.clientWidth;
+			top = container.getBoundingClientRect().top + (container.clientHeight - tooltip.clientHeight)/2;
 			break;
 	}
 	
