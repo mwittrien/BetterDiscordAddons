@@ -1199,11 +1199,11 @@ var pulling = setInterval(() => {
 	},100);
 })();
 
-BDfunctionsDevilBro.getMyUserStatus = function () {
-	var userStatus = "invisible";
-	var status = document.querySelector(".container-iksrDt .status");
-	if (status) userStatus = status.classList[1].split("-")[1];
-	return userStatus;
+BDfunctionsDevilBro.getUserStatus = function (id = BDfunctionsDevilBro.myData.id) {
+	id = typeof id == "number" ? id.toFixed() : id;
+	var ActivityModule = BDfunctionsDevilBro.WebModules.findByProperties(["getActivity","getStatuses"]);
+	var StreamModule = BDfunctionsDevilBro.WebModules.findByProperties(["isStreaming"]);
+	return StreamModule.isStreaming(ActivityModule.getActivity(id)) ? "streaming" : ActivityModule.getStatus(id);
 };
 
 BDfunctionsDevilBro.readServerList = function () {
