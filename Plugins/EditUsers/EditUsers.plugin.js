@@ -217,7 +217,6 @@ class EditUsers {
 			BDfunctionsDevilBro.loadMessage(this);
 			
 			this.UserStore = BDfunctionsDevilBro.WebModules.findByProperties(["getUsers", "getUser"]);
-			this.IconUtils = BDfunctionsDevilBro.WebModules.findByProperties(["getUserAvatarURL"]);
 			this.MemberPerms = BDfunctionsDevilBro.WebModules.findByProperties(["getNicknames", "getNick"]);
 			
 			var observer = null;
@@ -499,7 +498,7 @@ class EditUsers {
 		userSettingsModal.find("#input-username").attr("placeholder", member && member.nick ? member.nick : info.username);
 		userSettingsModal.find("#input-usertag").val(tag);
 		userSettingsModal.find("#input-userurl").val(url);
-		userSettingsModal.find("#input-userurl").attr("placeholder", this.IconUtils.getUserAvatarURL(info));
+		userSettingsModal.find("#input-userurl").attr("placeholder", BDfunctionsDevilBro.getUserAvatar(info.id));
 		userSettingsModal.find("#input-userurl").addClass(url ? "valid" : "");
 		userSettingsModal.find("#input-userurl").prop("disabled", removeIcon);
 		userSettingsModal.find("#input-removeicon").prop("checked", removeIcon);
@@ -713,7 +712,7 @@ class EditUsers {
 			}
 			
 			if (avatar) {
-				avatar.style.background = data.removeIcon ? "" : (data.url ? "url(" + data.url + ")" : "url(" + this.IconUtils.getUserAvatarURL(info) + ")");
+				avatar.style.background = data.removeIcon ? "" : (data.url ? "url(" + data.url + ")" : "url(" + BDfunctionsDevilBro.getUserAvatar(info.id) + ")");
 				avatar.style.backgroundSize = "cover";
 				avatar.style.backgroundPosition = "center";
 			}
@@ -773,7 +772,7 @@ class EditUsers {
 			}
 			
 			if (avatar) {
-				avatar.style.background = "url(" + this.IconUtils.getUserAvatarURL(info) + ")";
+				avatar.style.background = "url(" + BDfunctionsDevilBro.getUserAvatar(info.id) + ")";
 				avatar.style.backgroundSize = "cover";
 			}
 			
