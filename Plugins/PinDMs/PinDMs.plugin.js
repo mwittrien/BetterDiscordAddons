@@ -37,7 +37,7 @@ class PinDMs {
 
 	getDescription () {return "Allows you to pin DMs, making them appear at the top of your DM-list.";}
 
-	getVersion () {return "1.0.2";}
+	getVersion () {return "1.0.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -73,7 +73,6 @@ class PinDMs {
 			
 			this.UserStore = BDfunctionsDevilBro.WebModules.findByProperties(["getUsers", "getUser"]);
 			this.ActivityStore = BDfunctionsDevilBro.WebModules.findByProperties(["getStatuses", "getActivities"]);
-			this.IconUtils = BDfunctionsDevilBro.WebModules.findByProperties(["getUserAvatarURL"]);
 			this.ChannelUtils = BDfunctionsDevilBro.WebModules.findByProperties(["getDMFromUserId"]);
 			this.ChannelSwitchUtils = BDfunctionsDevilBro.WebModules.findByProperties(["selectPrivateChannel"]);
 			this.UserContextMenuUtils = BDfunctionsDevilBro.WebModules.findByProperties(["openUserContextMenu"]);
@@ -216,10 +215,13 @@ class PinDMs {
 		if (pinnedDM && pinnedDM.parentElement) {
 			let user = this.UserStore.getUser(pinnedDM.getAttribute("user-id"));
 			if (user) {
+				let data = BDfunctionsDevilBro.loadData(user.id, "EditUsers", "users") || {};
 				let activity = this.ActivityStore.getActivity(user.id);
-				pinnedDM.querySelector(".avatar-small").style.backgroundImage = `url(${this.getUserAvatar(user)})`;
-				pinnedDM.querySelector(".status").className = `status status-${this.ActivityStore.getStatus(user.id)}`;
-				pinnedDM.querySelector(".channel-name > label").textContent = user.username;
+				pinnedDM.querySelector(".avatar-small").style.backgroundImage = `${data.removeIcon ? `` : (data.url ? `url(${data.url})` : `url(${BDfunctionsDevilBro.getUserAvatar(user.id)})`)}`;
+				pinnedDM.querySelector(".status").className = `status status-${BDfunctionsDevilBro.getUserStatus(user.id)}`;
+				pinnedDM.querySelector(".channel-name > label").textContent = data.name ? data.name : user.username;
+				pinnedDM.querySelector(".channel-name").style.color = data.color1 ? BDfunctionsDevilBro.color2RGB(data.color1) : "";
+				pinnedDM.querySelector(".channel-name").style.background = data.color2 ? BDfunctionsDevilBro.color2RGB(data.color2) : "";
 				pinnedDM.querySelector(".channel-activity-text").innerHTML = activity ? this.getActivityString(activity.type, activity.name) : "";
 				if (activity && activity.application_id && activity.session_id) {
 					if (!pinnedDM.querySelector(".channel-activity-icon")) $(".channel-activity", pinnedDM).append(this.richActivityMarkup);
@@ -234,10 +236,6 @@ class PinDMs {
 			for (let pinnedDM of document.querySelectorAll(".channel.private.pinned")) this.setPinnedDM(pinnedDM);
 			if (!document.querySelector(".channel.btn-friends + header.pinneddms-header")) clearInterval(this.statusInterval); 
 		},10000);
-	}
-	
-	getUserAvatar (user) {
-		return (user.avatar ? "" : "https://discordapp.com") + this.IconUtils.getUserAvatarURL(user);
 	}
 	
 	getActivityString (type, name) {
