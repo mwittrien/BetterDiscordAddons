@@ -127,7 +127,7 @@ class StalkerNotifications {
 
 	getDescription () {return "Lets you observe the status of people that aren't your friends.";}
 
-	getVersion () {return "1.0.0";}
+	getVersion () {return "1.0.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -152,7 +152,7 @@ class StalkerNotifications {
 		settingshtml += `<div class="avatar-list marginBottom8-1mABJ4">`;
 		for (let id in users) {
 			let user = this.UserUtils.getUser(id);
-			if (user) settingshtml += `<div class="settings-avatar${users[id].desktop ? " desktop" : ""}${users[id].disabled ? " disabled" : ""}" user-id="${id}" style="background-image: url(${this.getUserAvatar(user)});"><div class="button-1qrA-N remove-user"></div></div>`;
+			if (user) settingshtml += this.createSettingsAvatarHtml(user, users[id]);
 		}
 		settingshtml += `</div>`;
 		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Batch set Users:</h3><button type="button" do-disable=true class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo sizeMedium-2VGNaF grow-25YQ8u disable-all" style="flex: 0 0 auto;"><div class="contents-4L4hQM">Disable</div></button><button type="button" do-toast=true class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorBrand-3PmwCE sizeMedium-2VGNaF grow-25YQ8u toast-all" style="flex: 0 0 auto;"><div class="contents-4L4hQM">Toast</div></button>${"Notification" in window ? '<button type="button" do-desktop=true class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorGreen-22At8E sizeMedium-2VGNaF grow-25YQ8u desktop-all" style="flex: 0 0 auto;"><div class="contents-4L4hQM">Desktop</div></button>' : ''}</div>`;
@@ -173,7 +173,8 @@ class StalkerNotifications {
 			})
 			.on("mouseenter", ".settings-avatar", (e) => {
 				let user = this.UserUtils.getUser(e.currentTarget.getAttribute("user-id"));
-				BDfunctionsDevilBro.createTooltip(user.username, e.currentTarget, {type:"top"});
+				let data = BDfunctionsDevilBro.loadData(user.id, "EditUsers", "users") || {};
+				BDfunctionsDevilBro.createTooltip(data.name ? data.name : user.username, e.currentTarget, {type:"top"});
 			})
 			.on("contextmenu", ".settings-avatar", (e) => {
 				if (!("Notification" in window)) return;
@@ -216,7 +217,7 @@ class StalkerNotifications {
 					let users = BDfunctionsDevilBro.loadAllData(this, "users");
 					for (let id in users) {
 						let user = this.UserUtils.getUser(id);
-						if (user) listhtml += `<div class="settings-avatar${users[id].desktop ? " desktop" : ""}${users[id].disabled ? " disabled" : ""}" user-id="${id}" style="background-image: url(${this.getUserAvatar(user)});"><div class="button-1qrA-N remove-user"></div></div>`;
+						if (user) listhtml += this.createSettingsAvatarHtml(user, users[id]);
 					}
 					listhtml += `</div>`;
 					settingspanel.querySelector(".avatar-list").innerHTML = listhtml;
@@ -230,7 +231,7 @@ class StalkerNotifications {
 				let users = BDfunctionsDevilBro.loadAllData(this, "users");
 				for (let id in users) {
 					let user = this.UserUtils.getUser(id);
-					if (user) listhtml += `<div class="settings-avatar${users[id].desktop ? " desktop" : ""}${users[id].disabled ? " disabled" : ""}" user-id="${id}" style="background-image: url(${this.getUserAvatar(user)});"><div class="button-1qrA-N remove-user"></div></div>`;
+					if (user) listhtml += this.createSettingsAvatarHtml(user, users[id]);
 				}
 				listhtml += `</div>`;
 				settingspanel.querySelector(".avatar-list").innerHTML = listhtml;
@@ -277,7 +278,6 @@ class StalkerNotifications {
 			this.ChannelSwitchUtils = BDfunctionsDevilBro.WebModules.findByProperties(["selectPrivateChannel"]);
 			this.UserMetaStore = BDfunctionsDevilBro.WebModules.findByProperties(["getStatuses", "getOnlineFriendCount"]);
 			this.UserUtils = BDfunctionsDevilBro.WebModules.findByProperties(["getUsers"]);
-			this.IconUtils = BDfunctionsDevilBro.WebModules.findByProperties(["getUserAvatarURL"]);
 			
 			for (let id in BDfunctionsDevilBro.loadAllData(this, "users")) {
 				this.stalkerOnlineList[id] = this.UserMetaStore.getStatus(id) != "offline";
@@ -307,6 +307,11 @@ class StalkerNotifications {
 		BDfunctionsDevilBro.saveAllData(settings, this, "settings");
 	}
 	
+	createSettingsAvatarHtml (user, settings) {
+		let data = BDfunctionsDevilBro.loadData(user.id, "EditUsers", "users") || {};
+		return `<div class="settings-avatar${settings.desktop ? " desktop" : ""}${settings.disabled ? " disabled" : ""}" user-id="${user.id}" style="background-image: url(${data.removeIcon ? "" : (data.url ? data.url : BDfunctionsDevilBro.getUserAvatar(user.id))});"><div class="button-1qrA-N remove-user"></div></div>`;
+	}
+	
 	startInterval () {
 		clearInterval(this.checkInterval);
 		this.checkInterval = setInterval(() => {
@@ -319,7 +324,9 @@ class StalkerNotifications {
 				if (user && this.stalkerOnlineList[id] != online && !users[id].disabled) {
 					this.timeLog.push({user, online, time: new Date()});
 					if (!(settings.onlyOnOnline && !online)) {
-						let string = `${BDfunctionsDevilBro.encodeToHTML(user.username)} is ${online ? "online" : "offline"}.`;
+						let data = BDfunctionsDevilBro.loadData(user.id, "EditUsers", "users") || {};
+						let string = `${BDfunctionsDevilBro.encodeToHTML(data.name ? data.name : user.username)} is ${online ? "online" : "offline"}.`;
+						let avatar = data.removeIcon ? "" : (data.url ? data.url : BDfunctionsDevilBro.getUserAvatar(user.id));
 						let openChannel = () => {
 							if (settings.openOnClick){
 								let DMid = this.ChannelUtils.getDMFromUserId(user.id);
@@ -330,12 +337,12 @@ class StalkerNotifications {
 							}
 						};
 						if (!users[id].desktop) {
-							let toast = BDfunctionsDevilBro.showToast(`<div class="toast-inner"><div class="toast-avatar" style="background-image:url(${this.getUserAvatar(user)});"></div><div>${string}</div></div>`, {html:true, timeout:5000, type:(online ? "success" : null), icon:false});
+							let toast = BDfunctionsDevilBro.showToast(`<div class="toast-inner"><div class="toast-avatar" style="background-image:url(${avatar});"></div><div>${string}</div></div>`, {html:true, timeout:5000, type:(online ? "success" : null), icon:false});
 							$(toast).on("click." + this.getName(), openChannel);
 						}
 						else {
 							let notificationsound = BDfunctionsDevilBro.loadAllData(this, "notificationsound");
-							BDfunctionsDevilBro.showDesktopNotification(string, {icon:this.getUserAvatar(user), timeout:5000, click:openChannel, silent:notificationsound.mute, sound:notificationsound.song});
+							BDfunctionsDevilBro.showDesktopNotification(string, {icon:avatar, timeout:5000, click:openChannel, silent:notificationsound.mute, sound:notificationsound.song});
 						}
 					}
 				}
@@ -382,19 +389,16 @@ class StalkerNotifications {
 		}
 	}
 	
-	getUserAvatar (user) {
-		return ((user.avatar ? "" : "https://discordapp.com") + this.IconUtils.getUserAvatarURL(user)).split("?size")[0];
-	}
-	
 	showTimeLog () {		
 		var timeLogModal = $(this.timeLogModalMarkup);
 		let logs = this.timeLog.slice(0).reverse();
 		for (let log of logs) {
 			let entry = $(this.logEntryMarkup);
 			let divider = $(this.dividerMarkup);
+			let data = BDfunctionsDevilBro.loadData(log.user.id, "EditUsers", "users") || {};
 			entry.find(".log-time").text(`[${log.time.toLocaleTimeString()}]`);
-			entry.find(".log-avatar").css("background-image", `url(${this.getUserAvatar(log.user)})`);
-			entry.find(".log-description").text(`${log.user.username} is ${log.online ? "online" : "offline"}.`);
+			entry.find(".log-avatar").css("background-image", `url(${data.removeIcon ? "" : (data.url ? data.url : BDfunctionsDevilBro.getUserAvatar(log.user.id))})`);
+			entry.find(".log-description").text(`${data.name ? data.name : log.user.username} is ${log.online ? "online" : "offline"}.`);
 			timeLogModal.find(".entries").append(entry).append(divider);
 		}
 		timeLogModal.find(".divider-1G01Z9:last-of-type").remove();
