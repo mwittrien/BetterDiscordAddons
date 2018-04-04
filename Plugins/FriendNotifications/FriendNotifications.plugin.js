@@ -114,7 +114,7 @@ class FriendNotifications {
 
 	getDescription () {return "Notifies you when a friend either logs in or out. Click the Online Friend-Counter to display a timelog of the current session.";}
 
-	getVersion () {return "1.0.7";}
+	getVersion () {return "1.0.8";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -129,13 +129,16 @@ class FriendNotifications {
 		for (let key in settings) {
 			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm settings-checkbox"${settings[key] ? " checked" : ""}></div></div>`;
 		}
-		if ("Notification" in window) settingshtml += `<div class="flexChild-1KGW5q marginBottom8-1mABJ4" style="flex: 1 1 auto;"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h5 class="flexChild-1KGW5q h5-3KssQU title-1pmpPr size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH defaultMarginh5-2UwwFY" style="flex: 1 1 auto;">Desktop Notification Sound:</h5><h5 class="flexChild-1KGW5q h5-3KssQU title-1pmpPr size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH defaultMarginh5-2UwwFY" style="flex: 0 0 auto;">Mute:</h5><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;"><input type="checkbox" class="checkboxEnabled-4QfryV checkbox-1KYsPm mute-checkbox"${notificationsound.mute ? " checked" : ""}></div></div><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO" style="flex: 1 1 auto;"><div class="inputWrapper-3xoRWR vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR flexChild-1KGW5q" style="flex: 1 1 auto;"><input type="text" value="${notificationsound.url}" placeholder="Url or Filepath" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_ songInput"></div><button type="button" class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorBrand-3PmwCE sizeMedium-2VGNaF grow-25YQ8u file-navigator" style="flex: 0 0 auto;"><div class="contents-4L4hQM"></div><input type="file" accept="audio/*,video/*" style="display:none!important;"></button><button type="button" class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorBrand-3PmwCE sizeMedium-2VGNaF grow-25YQ8u btn-save btn-savesong" style="flex: 0 0 auto;"><div class="contents-4L4hQM"></div></button></div></div>`;
+		if ("Notification" in window) settingshtml += `<div class="flexChild-1KGW5q marginBottom8-1mABJ4" style="flex: 1 1 auto;"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h5 class="flexChild-1KGW5q h5-3KssQU title-1pmpPr size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH defaultMarginh5-2UwwFY" style="flex: 1 1 auto;">Desktop Notification Sound:</h5><h5 class="flexChild-1KGW5q h5-3KssQU title-1pmpPr size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH defaultMarginh5-2UwwFY" style="flex: 0 0 auto;">Mute:</h5><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;"><input type="checkbox" class="checkboxEnabled-4QfryV checkbox-1KYsPm mute-checkbox"${notificationsound.mute ? " checked" : ""}></div></div><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO" style="flex: 1 1 auto;"><div class="inputWrapper-3xoRWR vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR flexChild-1KGW5q" style="flex: 1 1 auto;"><input type="text" value="${notificationsound.url ? notificationsound.url : ""}" placeholder="Url or Filepath" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_ songInput"></div><button type="button" class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorBrand-3PmwCE sizeMedium-2VGNaF grow-25YQ8u file-navigator" style="flex: 0 0 auto;"><div class="contents-4L4hQM"></div><input type="file" accept="audio/*,video/*" style="display:none!important;"></button><button type="button" class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorBrand-3PmwCE sizeMedium-2VGNaF grow-25YQ8u btn-save btn-savesong" style="flex: 0 0 auto;"><div class="contents-4L4hQM"></div></button></div></div>`;
 		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">Click on a Icon to toggle <label class="type-toast">Toast</label> Notifications for that User:</h3></div>`;
 		if ("Notification" in window) settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">Rightclick on a Icon to toggle <label class="type-desktop">Desktop</label> Notifications for that User:</h3></div>`;
 		settingshtml += `<div class="avatar-list marginBottom8-1mABJ4">`;
 		for (let id of this.FriendUtils.getFriendIDs()) {
 			let user = this.UserUtils.getUser(id);
-			settingshtml += `<div class="settings-avatar${desktop[id] ? " desktop" : ""}${disabled[id] ? " disabled" : ""}" user-id="${id}" style="background-image: url(${this.getUserAvatar(user)});"></div>`;
+			if (user) {
+				let data = BDfunctionsDevilBro.loadData(user.id, "EditUsers", "users") || {};
+				settingshtml += `<div class="settings-avatar${desktop[id] ? " desktop" : ""}${disabled[id] ? " disabled" : ""}" user-id="${id}" style="background-image: url(${data.removeIcon ? "" : (data.url ? data.url : BDfunctionsDevilBro.getUserAvatar(user.id))});"></div>`;
+			}
 		}
 		settingshtml += `</div>`;
 		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Batch set Users:</h3><button type="button" do-disable=true class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo sizeMedium-2VGNaF grow-25YQ8u disable-all" style="flex: 0 0 auto;"><div class="contents-4L4hQM">Disable</div></button><button type="button" do-toast=true class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorBrand-3PmwCE sizeMedium-2VGNaF grow-25YQ8u toast-all" style="flex: 0 0 auto;"><div class="contents-4L4hQM">Toast</div></button>${"Notification" in window ? '<button type="button" do-desktop=true class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorGreen-22At8E sizeMedium-2VGNaF grow-25YQ8u desktop-all" style="flex: 0 0 auto;"><div class="contents-4L4hQM">Desktop</div></button>' : ''}</div>`;
@@ -155,7 +158,8 @@ class FriendNotifications {
 			})
 			.on("mouseenter", ".settings-avatar", (e) => {
 				let user = this.UserUtils.getUser(e.currentTarget.getAttribute("user-id"));
-				BDfunctionsDevilBro.createTooltip(user.username, e.currentTarget, {type:"top"});
+				let data = BDfunctionsDevilBro.loadData(user.id, "EditUsers", "users") || {};
+				BDfunctionsDevilBro.createTooltip(data.name ? data.name : user.username, e.currentTarget, {type:"top"});
 			})
 			.on("contextmenu", ".settings-avatar", (e) => {
 				if (!("Notification" in window)) return;
@@ -222,7 +226,6 @@ class FriendNotifications {
 			this.ChannelSwitchUtils = BDfunctionsDevilBro.WebModules.findByProperties(["selectPrivateChannel"]);
 			this.UserMetaStore = BDfunctionsDevilBro.WebModules.findByProperties(["getStatuses", "getOnlineFriendCount"]);
 			this.UserUtils = BDfunctionsDevilBro.WebModules.findByProperties(["getUsers"]);
-			this.IconUtils = BDfunctionsDevilBro.WebModules.findByProperties(["getUserAvatarURL"]);
 			
 			var observer = null;
 			
@@ -234,10 +237,12 @@ class FriendNotifications {
 						for (let id of this.FriendUtils.getFriendIDs()) {
 							let online = this.UserMetaStore.getStatus(id) != "offline";
 							let user = this.UserUtils.getUser(id);
-							if (this.friendsOnlineList[id] != online && !BDfunctionsDevilBro.loadData(id, this, "disabled")) {
+							if (user && this.friendsOnlineList[id] != online && !BDfunctionsDevilBro.loadData(id, this, "disabled")) {
 								this.timeLog.push({user, online, time: new Date()});
 								if (!(settings.onlyOnOnline && !online)) {
-									let string = `${BDfunctionsDevilBro.encodeToHTML(user.username)} is ${online ? "online" : "offline"}.`;
+									let data = BDfunctionsDevilBro.loadData(user.id, "EditUsers", "users") || {};
+									let string = `${BDfunctionsDevilBro.encodeToHTML(data.name ? data.name : user.username)} is ${online ? "online" : "offline"}.`;
+									let avatar = data.removeIcon ? "" : (data.url ? data.url : BDfunctionsDevilBro.getUserAvatar(user.id));
 									let openChannel = () => {
 										if (settings.openOnClick){
 											let DMid = this.ChannelUtils.getDMFromUserId(user.id);
@@ -248,11 +253,11 @@ class FriendNotifications {
 										}
 									};
 									if (!BDfunctionsDevilBro.loadData(id, this, "desktop")) {
-										let toast = BDfunctionsDevilBro.showToast(`<div class="toast-inner"><div class="toast-avatar" style="background-image:url(${this.getUserAvatar(user)});"></div><div>${string}</div></div>`, {html:true, timeout:5000, type:(online ? "success" : null), icon:false});
+										let toast = BDfunctionsDevilBro.showToast(`<div class="toast-inner"><div class="toast-avatar" style="background-image:url(${avatar});"></div><div>${string}</div></div>`, {html:true, timeout:5000, type:(online ? "success" : null), icon:false});
 										$(toast).on("click." + this.getName(), openChannel);
 									}
 									else {
-										BDfunctionsDevilBro.showDesktopNotification(string, {icon:this.getUserAvatar(user), timeout:5000, click:openChannel, silent:notificationsound.mute, sound:notificationsound.song});
+										BDfunctionsDevilBro.showDesktopNotification(string, {icon:avatar, timeout:5000, click:openChannel, silent:notificationsound.mute, sound:notificationsound.song});
 									}
 								}
 							}
@@ -333,19 +338,16 @@ class FriendNotifications {
 		}
 	}
 	
-	getUserAvatar (user) {
-		return ((user.avatar ? "" : "https://discordapp.com") + this.IconUtils.getUserAvatarURL(user)).split("?size")[0];
-	}
-	
 	showTimeLog () {		
 		var timeLogModal = $(this.timeLogModalMarkup);
 		let logs = this.timeLog.slice(0).reverse();
 		for (let log of logs) {
 			let entry = $(this.logEntryMarkup);
 			let divider = $(this.dividerMarkup);
+			let data = BDfunctionsDevilBro.loadData(log.user.id, "EditUsers", "users") || {};
 			entry.find(".log-time").text(`[${log.time.toLocaleTimeString()}]`);
-			entry.find(".log-avatar").css("background-image", `url(${this.getUserAvatar(log.user)})`);
-			entry.find(".log-description").text(`${log.user.username} is ${log.online ? "online" : "offline"}.`);
+			entry.find(".log-avatar").css("background-image", `url(${data.removeIcon ? "" : (data.url ? data.url : BDfunctionsDevilBro.getUserAvatar(log.user.id))})`);
+			entry.find(".log-description").text(`${data.name ? data.name : log.user.username} is ${log.online ? "online" : "offline"}.`);
 			timeLogModal.find(".entries").append(entry).append(divider);
 		}
 		timeLogModal.find(".divider-1G01Z9:last-of-type").remove();
