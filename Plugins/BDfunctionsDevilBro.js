@@ -1206,6 +1206,14 @@ BDfunctionsDevilBro.getUserStatus = function (id = BDfunctionsDevilBro.myData.id
 	return StreamModule.isStreaming(ActivityModule.getActivity(id)) ? "streaming" : ActivityModule.getStatus(id);
 };
 
+BDfunctionsDevilBro.getUserAvatar = function (id = BDfunctionsDevilBro.myData.id) {
+	id = typeof id == "number" ? id.toFixed() : id;
+	var UserStore = BDfunctionsDevilBro.WebModules.findByProperties(["getUser","getUsers"]);
+	var IconUtils = BDfunctionsDevilBro.WebModules.findByProperties(["getUserAvatarURL"]);
+	var user = UserStore.getUser(id);
+	return ((user.avatar ? "" : "https://discordapp.com") + IconUtils.getUserAvatarURL(user)).split("?size")[0];
+};
+
 BDfunctionsDevilBro.readServerList = function () {
 	var server, id, info, foundServers = [], GuildStore = BDfunctionsDevilBro.WebModules.findByProperties(["getGuilds"]);
 	for (server of document.querySelectorAll(".guild-separator ~ .guild")) {
