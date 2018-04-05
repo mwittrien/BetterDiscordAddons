@@ -1025,7 +1025,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	padding: 0 !important;
 }
 
-.inner-1_1f7b {
+*:not(.image-gallery) > .inner-1_1f7b {
 	position: absolute !important;
 }
 
