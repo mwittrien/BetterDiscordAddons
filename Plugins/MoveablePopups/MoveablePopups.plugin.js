@@ -8,7 +8,7 @@ class MoveablePopups {
 
 	getDescription () {return "Adds the feature to move all popups and modals around like on a normal desktop. Ctrl + drag with your left mousebutton to drag element.";}
 
-	getVersion () {return "1.0.5";}
+	getVersion () {return "1.0.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -98,16 +98,14 @@ class MoveablePopups {
 				if (e.ctrlKey) {
 					this.dragging = true;
 					
-					if (div.classList.contains("popout")) $(div.firstChild).css("position", "absolute");
-					
 					var disableTextSelectionCSS = `
 						* {
 							user-select: none !important;
 						}`;
 						
 					BDfunctionsDevilBro.appendLocalStyle("disableTextSelection", disableTextSelectionCSS);
-					var left = $(div).offset().left;
-					var top = $(div).offset().top;
+					var left = div.getBoundingClientRect().left;
+					var top = div.getBoundingClientRect().top;
 					var oldX = e.pageX;
 					var oldY = e.pageY;
 					$(document)
