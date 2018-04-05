@@ -2,6 +2,7 @@
 
 class ForceImagePreviews {
 	constructor () {
+		this.waitTime = 3000;
 	}
 
 	getName () {return "ForceImagePreviews";}
@@ -45,11 +46,11 @@ class ForceImagePreviews {
 				changes.forEach(
 					(change, i) => {
 						if (change.type == "characterData") {
-							setTimeout(() => {this.addPreviews(change.target.parentElement);},1000);
+							setTimeout(() => {this.addPreviews(change.target.parentElement);},this.waitTime);
 						}
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if ($(node).attr("class") == "message") setTimeout(() => {this.addPreviews($(node).find(".markup")[0]);},1000);
+								if ($(node).attr("class") == "message") setTimeout(() => {this.addPreviews($(node).find(".markup")[0]);},this.waitTime);
 							});
 						}
 					}
@@ -65,7 +66,7 @@ class ForceImagePreviews {
 								if (node && node.tagName && node.querySelector(".message")) {
 									BDfunctionsDevilBro.addObserver(this, node, {name:"messageChangeObserver",multi:true}, {childList:true, characterData:true, subtree:true});
 									node.querySelectorAll(".markup").forEach(message => {
-										setTimeout(() => {this.addPreviews(message);},1000);
+										setTimeout(() => {this.addPreviews(message);},this.waitTime);
 									});
 								}
 							});
@@ -142,7 +143,9 @@ class ForceImagePreviews {
 					let embed = $(`<div class="FIP-embed embed-2diOCQ flex-3B1Tl4 embed"><a class="imageWrapper-38T7d9 imageZoom-2suFUV embedImage-1JnXMa" href="${image.src}" rel="noreferrer noopener" target="_blank" style="width: ${width}px; height: ${height}px;"><img src="${image.src}" style="width: ${width}px; height: ${height}px;"></a></div>`)[0];
 					let prevembed = accessory.querySelector(`.embedImage-1JnXMa[href="${previmage ? previmage.src : void 0}"]`);
 					let nextembed = accessory.querySelector(`.embedImage-1JnXMa[href="${links[0] ? links[0].src : void 0}"]`);
-					accessory.insertBefore(embed, prevembed ? prevembed.parentElement.nextSibling : (nextembed ? nextembed.parentElement : null));
+					if (!accessory.querySelector(`.embedImage-1JnXMa[href="${image.src}"]`)) {
+						accessory.insertBefore(embed, prevembed ? prevembed.parentElement.nextSibling : (nextembed ? nextembed.parentElement : null));
+					}
 					this.addImageToAccessory(image, links, accessory);
 				}
 				else this.addImageToAccessory(image, links, accessory);
