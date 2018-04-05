@@ -1026,10 +1026,10 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	padding: 0 !important;
 }
 
-*:not(.image-gallery) > .inner-1_1f7b {
+.bd-modal-inner,
+#permissions-modal {
 	position: absolute !important;
 }
-
 .modal-2LIEKY .inner-1_1f7b > *:not(.premiumPaymentModal-w4sE7z):not(.container-3uJcWB):only-child {
 	position: relative !important;
 }
@@ -2387,6 +2387,38 @@ html, span:not(.spinner-item) {
 	border-color: rgba(var(--transparencycolor),calc(var(--transparencyalpha) * 3)) !important;
 }
 .addFriendInput-wjMghP:focus {
+	border-color: rgb(var(--accentcolor)) !important;
+}
+
+/* fix public servers page */
+#pubslayer {
+	background: var(--background) center/cover !important;
+	opacity: 1 !important;
+	animation: none !important;
+} 
+#pubslayer {
+	z-index: 1000 !important;
+}
+#pubslayer > .ui-standard-sidebar-view {
+	background: rgba(var(--transparencycolor),calc(var(--transparencyalpha) * 3)) !important;
+}
+#pubslayer button,
+.bd-server-card.bd-server-card-pinned:after {
+	background: rgb(var(--accentcolor)) !important;
+}
+#pubslayer input {
+	background: rgba(var(--transparencycolor),var(--transparencyalpha)) !important;
+	border-radius: 3px !important;
+	border-style: solid !important;
+	border-width: 1px !important;
+	box-shadow: none !important;
+	box-sizing: border-box !important;
+	transition: background-color .15s ease,border .15s ease !important;
+}
+#pubslayer input:not(:focus) {
+	border-color: rgba(var(--transparencycolor),calc(var(--transparencyalpha) * 3)) !important;
+}
+#pubslayer input:focus {
 	border-color: rgb(var(--accentcolor)) !important;
 }
 
