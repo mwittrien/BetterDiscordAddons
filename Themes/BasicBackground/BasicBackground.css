@@ -441,6 +441,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .typing-3eiiL_,
 .action-buttons,
 .wrapper-2ldvyE,
+.autocomplete-header-background,
 .bd-modal-body,
 .tutorial-popout section,
 .friend:not(:hover),
@@ -1453,10 +1454,6 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 }
 .private-channel-recipients-invite .search-bar input:focus {
 	border-color: rgb(var(--accentcolor)) !important;
-}
-
-#bd-pub-li {
-	display: none !important;
 }
 
 .Select-option {
