@@ -540,6 +540,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .guild.selected .guild-inner[style*="background-color:"],
 .guild-inner[style*="background-color:"]:hover,
 #RANbutton:hover,
+#bd-pub-button:hover,
 .embedPill-3sYS1X:not([style]),
 .searchFilter-1fJ0cd,
 .searchAnswer-yD90ey,
@@ -749,6 +750,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 }
 
 #RANbutton,
+#bd-pub-button,
 .guild-inner {
 	transition: background 500ms ease !important;
 }
