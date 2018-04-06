@@ -1022,10 +1022,10 @@ BDfunctionsDevilBro.WebModules.patchFunction = function (newOutput, index) {
 BDfunctionsDevilBro.addOnSwitchListener = function (plugin) {
 	if (typeof plugin.onSwitch === "function") {
 		BDfunctionsDevilBro.removeOnSwitchListener(plugin);
-		if (!BDfunctionsDevilBro.zacksFork()) {
+		//if (!BDfunctionsDevilBro.zacksFork()) {
 			plugin.onSwitch = plugin.onSwitch.bind(plugin);
 			require("electron").remote.getCurrentWindow().webContents.addListener("did-navigate-in-page", plugin.onSwitch);
-		}
+		//}
 		var chatspacer = document.querySelector(".guilds-wrapper + * > .spacer-3Dkonz");
 		if (chatspacer) {
 			plugin.onSwitchFix = new MutationObserver((changes, _) => {
