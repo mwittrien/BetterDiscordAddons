@@ -9,11 +9,11 @@ class ForceImagePreviews {
 
 	getDescription () {return "Forces embedded Image Previews, if Discord doesn't do it itself.";}
 
-	getVersion () {return "1.0.0";}
+	getVersion () {return "1.0.1";}
 
 	getAuthor () {return "DevilBro";}
 	
-    getSettingsPanel () {
+	getSettingsPanel () {
 		if (!this.started || typeof BDfunctionsDevilBro !== "object") return;
 	}
 
