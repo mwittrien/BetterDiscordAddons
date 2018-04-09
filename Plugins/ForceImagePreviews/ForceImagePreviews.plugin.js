@@ -9,7 +9,7 @@ class ForceImagePreviews {
 
 	getDescription () {return "Forces embedded Image Previews, if Discord doesn't do it itself.";}
 
-	getVersion () {return "1.0.1";}
+	getVersion () {return "1.0.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -121,7 +121,7 @@ class ForceImagePreviews {
 			for (let word of messageData.content.split(new RegExp("\\n|\\s|\\r|\\t|\\0"))) {
 				if (word.indexOf("https://") > -1 || word.indexOf("http://") > -1) {
 					if (word.indexOf("<") == 0 && word.indexOf(">") == word.length-1) links.push({src:word.slice(1,-1),embedded:false});
-					else if (!accessory.querySelector(`.embedImage-1JnXMa[href="${word}"]`)) links.push({src:word,embedded:false});
+					else if (!accessory.querySelector(`.embedImage-1JnXMa[href="${this.parseSrc(word)}"]`)) links.push({src:word,embedded:false});
 					else links.push({src:word,embedded:true});
 				}
 			}
@@ -134,20 +134,21 @@ class ForceImagePreviews {
 		if (!image) return;
 		else if (image.embedded) this.addImageToAccessory(image, links, accessory); 
 		else {
-			require("request")(image.src, (error, response, result) => {
+			let imagesrc = this.parseSrc(image.src);
+			require("request")(imagesrc, (error, response, result) => {
 				if (response && response.headers["content-type"] && response.headers["content-type"].indexOf("image") > -1) {
 					let imagethrowaway = document.createElement("img");
-					imagethrowaway.src = image.src;
+					imagethrowaway.src = imagesrc;
 					let width = 400;
 					let height = Math.round(width*(imagethrowaway.naturalHeight/imagethrowaway.naturalWidth));
-					let embed = $(`<div class="FIP-embed embed-2diOCQ flex-3B1Tl4 embed"><a class="imageWrapper-38T7d9 imageZoom-2suFUV embedImage-1JnXMa" href="${image.src}" rel="noreferrer noopener" target="_blank" style="width: ${width}px; height: ${height}px;"><img src="${image.src}" style="width: ${width}px; height: ${height}px;"></a></div>`)[0];
-					let prevembed = accessory.querySelector(`.embedImage-1JnXMa[href="${previmage ? previmage.src : void 0}"]`);
-					let nextembed = accessory.querySelector(`.embedImage-1JnXMa[href="${links[0] ? links[0].src : void 0}"]`);
-					if (!accessory.querySelector(`.embedImage-1JnXMa[href="${image.src}"]`)) {
+					let embed = $(`<div class="FIP-embed embed-2diOCQ flex-3B1Tl4 embed"><a class="imageWrapper-38T7d9 imageZoom-2suFUV embedImage-1JnXMa" href="${imagesrc}" rel="noreferrer noopener" target="_blank" style="width: ${width}px; height: ${height}px;"><img src="${imagesrc}" style="width: ${width}px; height: ${height}px;"></a></div>`)[0];
+					let prevembed = accessory.querySelector(`.embedImage-1JnXMa[href="${previmage ? this.parseSrc(previmage.src) : void 0}"]`);
+					let nextembed = accessory.querySelector(`.embedImage-1JnXMa[href="${links[0] ? this.parseSrc(links[0].src) : void 0}"]`);
+					if (!accessory.querySelector(`.embedImage-1JnXMa[href="${imagesrc}"]`)) {
 						accessory.insertBefore(embed, prevembed ? prevembed.parentElement.nextSibling : (nextembed ? nextembed.parentElement : null));
 					}
 					this.addImageToAccessory(image, links, accessory);
-				}
+				} 
 				else this.addImageToAccessory(image, links, accessory);
 			});
 		}
@@ -160,5 +161,9 @@ class ForceImagePreviews {
 			message = message.parentElement;
 		}
 		return accessory;
+	}
+	
+	parseSrc (src) {
+		return src.replace(/"/g, "");
 	}
 }
