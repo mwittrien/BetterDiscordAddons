@@ -6,6 +6,8 @@ class SendLargeMessages {
 		
 		this.messageDelay = 1000; //changing at own risk, might result in bans or mutes
 		
+		this.channel = null;
+		
 		this.css = `
 			.sendlargemessages-modal textarea {
 				rows: 0;
@@ -65,7 +67,7 @@ class SendLargeMessages {
 
 	getDescription () {return "Opens a popout when your message is too large, which allows you to automatically send the message in several smaller messages.";}
 
-	getVersion () {return "1.4.0";}
+	getVersion () {return "1.4.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -91,6 +93,8 @@ class SendLargeMessages {
 	initialize () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
+			
+			this.MessageUtils = BDfunctionsDevilBro.WebModules.findByProperties(["parse","isMentioned"]);
 						
 			this.bindEventToTextArea();
 		}
@@ -101,10 +105,7 @@ class SendLargeMessages {
 
 
 	stop () {
-		if (typeof BDfunctionsDevilBro === "object") {
-			$(".channelTextArea-1HTP3C textarea").off("input." + this.getName()).off("paste." + this.getName());
-			$(document).off("mouseup." + this.getName()).off("mousemove." + this.getName());
-			
+		if (typeof BDfunctionsDevilBro === "object") {			
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
@@ -124,42 +125,53 @@ class SendLargeMessages {
 		this.sendMessageModalMarkup = 		this.sendMessageModalMarkup.replace("REPLACE_btn_send_text", this.labels.btn_send_text);
 	}
 	
+	getParsedLength (string, channel) {
+		return this.MessageUtils.parse(channel, string).content.length;
+	}
+	
 	bindEventToTextArea () {
+		var channelObj = BDfunctionsDevilBro.getSelectedChannel();
+		var channel = channelObj ? channelObj.data : null;
+		if (!channel) return;
+		var checkTextarea = (textarea, text) => {
+			if (this.getParsedLength(text, channel) > 1950) {
+				textarea.selectionStart = 0;
+				textarea.selectionEnd = textarea.value.length;
+				document.execCommand("insertText", false, "");
+				this.showSendModal(text, channel);
+			}
+		};
 		$(".channelTextArea-1HTP3C textarea")
 			.off("input." + this.getName())
 			.on("input." + this.getName(), e => {
-				var text = e.target.value;
-				if (text.length > 1950) {
-					e.target.selectionStart = 0;
-					e.target.selectionEnd = e.target.value.length;
-					document.execCommand("insertText", false, "");
-					this.showSendModal(text);
-				}
+				checkTextarea(e.currentTarget, e.currentTarget.value);
 			})
 			.off("paste." + this.getName())
 			.on("paste." + this.getName(), e => {
-				e = e.originalEvent ? e.originalEvent : e;
-				var clipboardData = e.clipboardData;
-				if (!clipboardData) return;
-				var pastedData = clipboardData.getData('Text');
-				var text = e.target.value;
-				if (text.length > 1950) {
-					e.target.selectionStart = 0;
-					e.target.selectionEnd = e.target.value.length;
-					document.execCommand("insertText", false, "");
-					this.showSendModal(text);
-				}
+				setImmediate(() => {
+					checkTextarea(e.currentTarget, e.currentTarget.value);
+				});
 			});
 	}
 	
-	showSendModal (text) {
+	showSendModal (text, channel) {
 		var sendMessageModal = $(this.sendMessageModalMarkup);
 		var textinput = sendMessageModal.find("#modal-inputtext");
+		var warning = sendMessageModal.find("#warning-message");
+		var counter = sendMessageModal.find("#character-counter");
+		
+		var updateCounter = () => {
+			var parsedlength = this.getParsedLength(textinput.val(), channel);
+			var messageAmount = Math.ceil(parsedlength/1900);
+			warning.text(messageAmount > 15 ? this.labels.modal_messages_warning : "");
+			counter.text(parsedlength + " (" + (textinput[0].selectionEnd - textinput[0].selectionStart) + ") => " + this.labels.modal_messages_translation + ": " + messageAmount);
+		};
+		
 		BDfunctionsDevilBro.appendModal(sendMessageModal);
 		sendMessageModal
 			.on("click", "button.btn-send", (e) => {
 				e.preventDefault();
-				var messages = this.formatText(textinput.val());
+				var messages = this.formatText(textinput.val(), channel);
 				messages.forEach((message,i) => {
 					setTimeout(() => {
 						this.sendMessage(message);
@@ -174,7 +186,7 @@ class SendLargeMessages {
 			.off("keydown." + this.getName() + " click." + this.getName())
 			.on("keydown." + this.getName() + " click." + this.getName(), () => {
 				setTimeout(() => {
-					this.updateCounter(sendMessageModal);
+					updateCounter();
 				},10);
 			})
 			.off("mousedown." + this.getName())
@@ -189,23 +201,14 @@ class SendLargeMessages {
 					.off("mousemove." + this.getName())
 					.on("mousemove." + this.getName(), () => {
 						setTimeout(() => {
-							this.updateCounter(sendMessageModal);
+							updateCounter();
 						},10);
 					});
 			});
-		this.updateCounter(sendMessageModal);
+		updateCounter();
 	}
 	
-	updateCounter (modal) {
-		var warning = modal.find("#warning-message");
-		var counter = modal.find("#character-counter");
-		var textinput = modal.find("#modal-inputtext")[0];
-		var messageAmmount = Math.ceil(textinput.value.length/1900);
-		warning.text(messageAmmount > 15 ? this.labels.modal_messages_warning : "");
-		counter.text(textinput.value.length + " (" + (textinput.selectionEnd - textinput.selectionStart) + ") => " + this.labels.modal_messages_translation + ": " + messageAmmount);
-	}
-	
-	formatText (text) {
+	formatText (text, channel) {
 		text = text.replace(new RegExp("\t", 'g'), "	");
 		var longwords = text.match(/[\S]{1800,}/gm);
 		for (var i in longwords) {
@@ -213,7 +216,7 @@ class SendLargeMessages {
 			let count1 = 0;
 			let shortwords = [];
 			longword.split("").forEach((char) => {
-				if (shortwords[count1] && shortwords[count1].length >= 1800) count1++;
+				if (shortwords[count1] && this.getParsedLength(shortwords[count1], channel) >= 1800) count1++;
 				shortwords[count1] = shortwords[count1] ? shortwords[count1] + char : char;
 			});
 			text = text.replace(longword, shortwords.join(" "));
@@ -221,7 +224,7 @@ class SendLargeMessages {
 		var messages = [];
 		var count2 = 0;
 		text.split(" ").forEach((word) => {
-			if (messages[count2] && (messages[count2].length + word.length) > 1900) count2++;
+			if (messages[count2] && this.getParsedLength(messages[count2] + "" + word, channel) > 1900) count2++;
 			messages[count2] = messages[count2] ? messages[count2] + " " + word : word;
 		});
 		
