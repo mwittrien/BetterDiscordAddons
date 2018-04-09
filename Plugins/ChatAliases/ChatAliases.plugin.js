@@ -143,7 +143,7 @@ class ChatAliases {
 				var fs = require("fs");
 				if (fileselection.files && fileselection.files[0] && fs.existsSync(replacevalue)) {
 					filedata = JSON.stringify({
-						data: fs.readFileSync(replacevalue).toString("base64"), //require("electron").remote.nativeImage.createFromPath(replacevalue).toDataURL(),
+						data: fs.readFileSync(replacevalue).toString("base64"),
 						name: fileselection.files[0].name,
 						type: fileselection.files[0].type
 					});
