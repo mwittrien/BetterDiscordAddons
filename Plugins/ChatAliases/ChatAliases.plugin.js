@@ -2,22 +2,22 @@
 
 class ChatAliases {
 	constructor () {
-		this.configs = ["case","exact","regex"];
+		this.configs = ["case","exact","regex","file"];
 	}
 
 	getName () {return "ChatAliases";}
 
 	getDescription () {return "Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent.";}
 
-	getVersion () {return "1.7.7";}
+	getVersion () {return "1.7.8";}
 
 	getAuthor () {return "DevilBro";}
-	
+
 	getSettingsPanel () {
 		if (!this.started || typeof BDfunctionsDevilBro !== "object") return;
 		var words = BDfunctionsDevilBro.loadAllData(this, "words");
 		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="titleDefault-1CWM9y title-3i-5G_ size18-ZM4Qv- height24-2pMcnc weightNormal-3gw0Lm marginBottom8-1mABJ4">${this.getName()}</div><div class="DevilBro-settings-inner">`;
-		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">Replace:</h3><input action="add" type="text" placeholder="Wordvalue" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_ wordInputs" id="input-wordvalue" style="flex: 1 1 auto;"><button action="add" type="button" class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorBrand-3PmwCE sizeMedium-2VGNaF grow-25YQ8u btn-add btn-addword" style="flex: 0 0 auto;"><div class="contents-4L4hQM"></div></button></div><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">With:</h3><input action="add" type="text" placeholder="Replacevalue" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_ wordInputs" id="input-replacevalue" style="flex: 1 1 auto;"></div>`; 
+		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">Replace:</h3><input action="add" type="text" placeholder="Wordvalue" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_ wordInputs" id="input-wordvalue" style="flex: 1 1 auto;"><button action="add" type="button" class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorBrand-3PmwCE sizeMedium-2VGNaF grow-25YQ8u btn-add btn-addword" style="flex: 0 0 auto;"><div class="contents-4L4hQM"></div></button></div><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">With:</h3><input action="add" type="text" placeholder="Replacevalue" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_ wordInputs" id="input-replacevalue" style="flex: 1 1 auto;"><button type="button" class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorBrand-3PmwCE sizeMedium-2VGNaF grow-25YQ8u file-navigator" style="flex: 0 0 auto;"><div class="contents-4L4hQM"></div><input id="input-file" type="file" style="display:none!important;"></button></div>`;
 		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto; max-width: ${556 - (this.configs.length * 33)}px;">List of Chataliases:</h3><div class="flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyCenter-29N31w alignCenter-3VxkQP noWrap-v6g9vO" style="flex: 1 1 auto; max-width: ${this.configs.length * 34}px;">`;
 		for (let config of this.configs) {
 			settingshtml += `<div class="marginTop8-2gOa2N headerSize-22dv1R size10-1ZEdeK primary-2giqSn weightBold-2qbcng" style="flex: 1 1 auto; width: 34px; text-align: center;">${config.toUpperCase()}</div>`;
@@ -34,9 +34,9 @@ class ChatAliases {
 		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Remove all added words.</h3><button action="removeall" type="button" class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorRed-3HTNPV sizeMedium-2VGNaF grow-25YQ8u remove-all" style="flex: 0 0 auto;"><div class="contents-4L4hQM">Reset</div></button></div>`;
 		var infoHidden = BDfunctionsDevilBro.loadData("hideInfo", this, "hideInfo");
 		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO cursorPointer-3oKATS ${infoHidden ? "wrapperCollapsed-18mf-c" : "wrapperDefault-1Dl4SS"} toggle-info" style="flex: 1 1 auto;"><svg class="iconTransition-VhWJ85 ${infoHidden ? "closed-2Hef-I iconCollapsed-1INdMX" : "iconDefault-xzclSQ"}" width="12" height="12" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 10L12 15 17 10"></path></svg><div class="colorTransition-2iZaYd overflowEllipsis-2ynGQq nameCollapsed-3_ChMu" style="flex: 1 1 auto;">Information</div></div>`;
-		settingshtml += `<div class="DevilBro-settings-inner-list info-container" ${infoHidden ? "style='display:none;'" : ""}><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">Case: Will replace words while comparing lowercase/uppercase. apple => apple, not APPLE or AppLe</div><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">Not Case: Will replace words while ignoring lowercase/uppercase. apple => apple, APPLE and AppLe</div><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">Exact: Will replace words that are exactly the replaceword. apple to pear => applepie stays applepie</div><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">Not Exact: Will replace words anywhere they appear. apple to pear => applepieapple to pearpiepear</div><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">Regex: Will treat the entered wordvalue as a regular expression. <a target="_blank" href="https://regexr.com/">Help</a></div></div>`;
+		settingshtml += `<div class="DevilBro-settings-inner-list info-container" ${infoHidden ? "style='display:none;'" : ""}><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">Case: Will replace words while comparing lowercase/uppercase. apple => apple, not APPLE or AppLe</div><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">Not Case: Will replace words while ignoring lowercase/uppercase. apple => apple, APPLE and AppLe</div><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">Exact: Will replace words that are exactly the replaceword. apple to pear => applepie stays applepie</div><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">Not Exact: Will replace words anywhere they appear. apple to pear => applepieapple to pearpiepear</div><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">Regex: Will treat the entered wordvalue as a regular expression. <a target="_blank" href="https://regexr.com/">Help</a></div><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">File: If the replacevalue is a filepath it will try to upload the file located at the filepath.</div></div>`;
 		settingshtml += `</div>`;
-		
+
 		var settingspanel = $(settingshtml)[0];
 
 		BDfunctionsDevilBro.initElements(settingspanel);
@@ -72,9 +72,11 @@ class ChatAliases {
 	initialize () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
-			
-			this.UploadModule = BDfunctionsDevilBro.WebModules.findByProperties(["promptToUpload"]);
-			
+
+			this.UploadModule = BDfunctionsDevilBro.WebModules.findByProperties(["instantBatchUpload"]);
+			this.CurrentUserPerms = BDfunctionsDevilBro.WebModules.findByProperties(["getChannelPermissions", "can"]);
+			this.Permissions = BDfunctionsDevilBro.WebModules.findByProperties(["Permissions", "ActivityTypes"]).Permissions;
+
 			var observer = null;
 
 			observer = new MutationObserver((changes, _) => {
@@ -91,7 +93,7 @@ class ChatAliases {
 				);
 			});
 			BDfunctionsDevilBro.addObserver(this, ".layers-20RVFW", {name:"settingsWindowObserver",instance:observer}, {childList:true});
-			
+
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
@@ -105,8 +107,8 @@ class ChatAliases {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, "#app-mount", {name:"textareaObserver",instance:observer}, {childList: true, subtree:true});
-			
+			BDfunctionsDevilBro.addObserver(this, ".appMount-14L89u", {name:"textareaObserver",instance:observer}, {childList: true, subtree:true});
+
 			document.querySelectorAll("textarea").forEach(textarea => {this.bindEventToTextArea(textarea);});
 		}
 		else {
@@ -116,33 +118,43 @@ class ChatAliases {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			$("textarea").off("keydown." + this.getName()).off("input." + this.getName());
-			
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
-	
-	
+
+
 	// begin of own functions
-	
+
 	updateContainer (settingspanel, ele) {
 		var update = false, wordvalue = null, replacevalue = null;
 		var action = ele.getAttribute("action");
 		var words = BDfunctionsDevilBro.loadAllData(this, "words");
-		
+
 		if (action == "add") {
 			var wordinput = settingspanel.querySelector("#input-wordvalue");
 			var replaceinput = settingspanel.querySelector("#input-replacevalue");
+			var fileselection = settingspanel.querySelector("#input-file");
 			wordvalue = wordinput.value;
 			replacevalue = replaceinput.value;
 			if (wordvalue && wordvalue.trim().length > 0 && replacevalue && replacevalue.trim().length > 0) {
 				wordvalue = wordvalue.trim();
 				replacevalue = replacevalue.trim();
+				var filedata = null;
+				var fs = require("fs");
+				if (fileselection.files && fileselection.files[0] && fs.existsSync(replacevalue)) {
+					filedata = JSON.stringify({
+						data: fs.readFileSync(replacevalue).toString("base64"), //require("electron").remote.nativeImage.createFromPath(replacevalue).toDataURL(),
+						name: fileselection.files[0].name,
+						type: fileselection.files[0].type
+					});
+				}
 				words[wordvalue] = {
 					replace: replacevalue,
+					filedata: filedata,
 					case: false,
 					exact: wordvalue.indexOf(" ") == -1,
-					regex: false
+					regex: false,
+					file: filedata != null
 				};
 				wordinput.value = null;
 				replaceinput.value = null;
@@ -165,7 +177,7 @@ class ChatAliases {
 		if (update) {
 			BDfunctionsDevilBro.saveAllData(words, this, "words");
 			words = BDfunctionsDevilBro.loadAllData(this, "words");
-			
+
 			var containerhtml = ``;
 			for (let word in words) {
 				containerhtml += `<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginTop4-2rEBfJ marginBottom4-_yArcI card-11ynQk"><div class="card-11ynQk-inner"><input type="text" word="${word}" action="edit" class="game-name game-name-input word-name" value="${BDfunctionsDevilBro.encodeToHTML(word)}"><input type="text" word="${word}" action="edit" class="game-name game-name-input replace-name" value="${BDfunctionsDevilBro.encodeToHTML(words[word].replace)}">`;
@@ -178,7 +190,7 @@ class ChatAliases {
 			BDfunctionsDevilBro.initElements(settingspanel);
 		}
 	}
-	
+
 	updateWord (ele) {
 		clearTimeout(ele.updateTimeout);
 		ele.updateTimeout = setTimeout(() => {
@@ -203,7 +215,7 @@ class ChatAliases {
 			}
 		},500);
 	}
-	
+
 	updateConfig (ele) {
 		var words = BDfunctionsDevilBro.loadAllData(this, "words");
 		var wordvalue = ele.getAttribute("word");
@@ -213,7 +225,7 @@ class ChatAliases {
 			BDfunctionsDevilBro.saveAllData(words, this, "words");
 		}
 	}
-	
+
 	toggleInfo (settingspanel, ele) {
 		ele.classList.toggle("wrapperCollapsed-18mf-c");
 		ele.classList.toggle("wrapperDefault-1Dl4SS");
@@ -221,14 +233,17 @@ class ChatAliases {
 		svg.classList.toggle("closed-2Hef-I");
 		svg.classList.toggle("iconCollapsed-1INdMX");
 		svg.classList.toggle("iconDefault-xzclSQ");
-		
+
 		var visible = $(settingspanel).find(".info-container").is(":visible");
 		$(settingspanel).find(".info-container").toggle(!visible);
 		BDfunctionsDevilBro.saveData("hideInfo", visible, this, "hideInfo");
 	}
-	
+
 	bindEventToTextArea (textarea) {
 		if (!textarea) return;
+		var channelObj = BDfunctionsDevilBro.getSelectedChannel();
+		var channel = channelObj ? channelObj.data : null;
+		if (!channel) return;
 		$(textarea)
 			.off("input." + this.getName())
 			.on("input." + this.getName(), () => {
@@ -239,7 +254,9 @@ class ChatAliases {
 					textarea.selectionEnd = textarea.value.length;
 					if (document.activeElement == textarea) {
 						var messageInput = this.formatText(textarea.value);
-						if (messageInput.text) document.execCommand("insertText", false, messageInput.text + " ");
+						if (messageInput && messageInput.text != null) document.execCommand("insertText", false, messageInput.text + " ");
+						if (messageInput && messageInput.files.length > 0 && this.CurrentUserPerms.can(this.Permissions.ATTACH_FILES, channel))
+							this.UploadModule.instantBatchUpload(channel.id, messageInput.files);
 					}
 				}
 			})
@@ -251,22 +268,22 @@ class ChatAliases {
 				}
 			});
 	}
-	
+
 	formatText (text) {
-		var newText = [], wordAliases = {}, multiAliases = {}, aliases = BDfunctionsDevilBro.loadAllData(this, "words");
+		var newText = [], files = [], wordAliases = {}, multiAliases = {}, aliases = BDfunctionsDevilBro.loadAllData(this, "words");
 		for (let alias in aliases) {
 			if (!aliases[alias].regex && alias.indexOf(" ") == -1) wordAliases[alias] = aliases[alias];
 			else multiAliases[alias] = aliases[alias];
 		}
 		for (let word of text.trim().split(" ")) {
-			newText.push(this.useAliases(word, wordAliases, true));
+			newText.push(this.useAliases(word, wordAliases, files, true));
 		}
 		newText = newText.length == 1 ? newText[0] : newText.join(" ");
-		newText = this.useAliases(newText, multiAliases, false);
-		return {text:newText};
+		newText = this.useAliases(newText, multiAliases, files, false);
+		return {text:newText, files};
 	}
-	
-	useAliases (string, aliases, singleword) {
+
+	useAliases (string, aliases, files, singleword) {
 		for (let alias in aliases) {
 			let aliasdata = aliases[alias];
 			let escpAlias = aliasdata.regex ? alias : BDfunctionsDevilBro.regEscape(alias);
@@ -276,10 +293,14 @@ class ChatAliases {
 				result = new RegExp(regstring, (aliasdata.case ? "" : "i") + (aliasdata.exact ? "" : "g")).exec(tempstring1);
 				if (result) {
 					replaced = true;
-					let replace = BDfunctionsDevilBro.insertNRST(aliasdata.replace);
+					let replace = aliasdata.file ? "" : BDfunctionsDevilBro.insertNRST(aliasdata.replace);
 					if (result.length > 1) for (var i = 1; i < result.length; i++) replace = replace.replace(new RegExp("\\\\" + i, "g"), result[i]);
 					tempstring2 += tempstring1.slice(0, result.index + result[0].length).replace(result[0], replace);
 					tempstring1 = tempstring1.slice(result.index + result[0].length);
+					if (aliasdata.file && typeof aliasdata.filedata == "string") {
+						var filedata = JSON.parse(aliasdata.filedata);
+						files.push(new File([Buffer.from(filedata.data, "base64")], filedata.name, {type:filedata.type}));
+					}
 					if (aliasdata.regex && regstring.indexOf("^") == 0) result = null;
 				}
 				if (!result) {
@@ -293,7 +314,7 @@ class ChatAliases {
 		}
 		return string;
 	}
-	
+
 	replaceWord (string, regex) {
 		let result = regex.exec(string), rest = "";
 		if (result) {
