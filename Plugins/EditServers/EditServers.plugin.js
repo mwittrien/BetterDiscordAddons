@@ -124,7 +124,7 @@ class EditServers {
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	getVersion () {return "1.7.7";}
+	getVersion () {return "1.7.8";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -181,7 +181,7 @@ class EditServers {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, "#app-mount", {name:"serverContextObserver",instance:observer}, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, ".appMount-14L89u", {name:"serverContextObserver",instance:observer}, {childList: true});
 			
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -255,10 +255,6 @@ class EditServers {
 		if (!context || !context.tagName || !context.parentElement || context.querySelector(".localserversettings-item")) return;
 		var info = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"guild"});
 		if (info && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"GuildLeaveGroup"})) {
-			var serverDiv = BDfunctionsDevilBro.getDivOfServer(info.id).div;
-			var server = $(serverDiv).find(".avatar-small");
-			var shortName = $(serverDiv).attr("custom-editservers") ? $(server).attr("name") : $(server).text();
-			info = Object.assign({},info,{shortName});
 			$(context).append(this.serverContextEntryMarkup)
 				.on("mouseenter", ".localserversettings-item", (e) => {
 					this.createContextSubMenu(info, e, context);
@@ -293,11 +289,7 @@ class EditServers {
 	}
 	
 	showServerSettings (info) {
-		var id = info.id;
-		
-		var serverDiv = BDfunctionsDevilBro.getDivOfServer(id).div;
-		
-		var data = BDfunctionsDevilBro.loadData(id, this, "servers");
+		var data = BDfunctionsDevilBro.loadData(info.id, this, "servers");
 		
 		var name = 			data ? data.name : null;
 		var shortName = 	data ? data.shortName : null;
@@ -307,15 +299,13 @@ class EditServers {
 		var color2 = 		data ? data.color2 : null;
 		var color3 = 		data ? data.color3 : null;
 		var color4 = 		data ? data.color4 : null;
-	
-		var server = $(serverDiv).find(".avatar-small");
 		
 		var serverSettingsModal = $(this.serverSettingsModalMarkup);
 		serverSettingsModal.find(".guildName-1u0hy7").text(info.name);
 		serverSettingsModal.find("#input-servername").val(name);
 		serverSettingsModal.find("#input-servername").attr("placeholder", info.name);
-		serverSettingsModal.find("#input-servershortname").val(shortName);
-		serverSettingsModal.find("#input-servershortname").attr("placeholder", info.shortName);
+		serverSettingsModal.find("#input-servershortname").val(shortName ? shortName : (info.icon ? "" : info.acronym));
+		serverSettingsModal.find("#input-servershortname").attr("placeholder", info.acronym);
 		serverSettingsModal.find("#input-serverurl").val(url);
 		serverSettingsModal.find("#input-serverurl").attr("placeholder", info.icon ? "https://cdn.discordapp.com/icons/" + info.id + "/" + info.icon + ".png" : null);
 		serverSettingsModal.find("#input-serverurl").addClass(url ? "valid" : "");
@@ -355,6 +345,7 @@ class EditServers {
 				if (serverSettingsModal.find("#input-servershortname").val()) {
 					if (serverSettingsModal.find("#input-servershortname").val().trim().length > 0) {
 						shortName = serverSettingsModal.find("#input-servershortname").val().trim();
+						shortName = shortName == info.acronym ? null : shortName;
 					}
 				}
 				
@@ -378,8 +369,8 @@ class EditServers {
 					this.removeServerData(info.id);
 				}
 				else {
-					BDfunctionsDevilBro.saveData(id, {id,name,shortName,url,removeIcon,color1,color2,color3,color4}, this, "servers");
-					this.loadServer(Object.assign({"div":serverDiv},info));
+					BDfunctionsDevilBro.saveData(info.id, {name,shortName,url,removeIcon,color1,color2,color3,color4}, this, "servers");
+					this.loadServer(BDfunctionsDevilBro.getDivOfServer(info.id));
 				}
 			});
 		serverSettingsModal.find("#input-servername").focus();
@@ -437,35 +428,24 @@ class EditServers {
 		BDfunctionsDevilBro.removeData(id, this, "servers");
 	}
 	
-	resetServer (serverDiv) {
-		var info = BDfunctionsDevilBro.getKeyInformation({"node":serverDiv, "key":"guild"});
-		if (info) {
-			var avatar = serverDiv.querySelector(".avatar-small");
-			var bgImage = info.icon ? "url('https://cdn.discordapp.com/icons/" + info.id + "/" + info.icon + ".png')" : "";
-			
-			$(serverDiv)
-				.off("mouseenter." + this.getName())
-				.removeAttr("custom-editservers");
-			$(avatar)
-				.text($(avatar).attr("name"))
-				.removeAttr("name")
-				.css("background-image", bgImage)
+	resetServer (serverObj) {
+		if (typeof serverObj !== "object") return;
+		$(serverObj.div)
+			.off("mouseenter." + this.getName())
+			.removeAttr("custom-editservers")
+			.find(".avatar-small")
+				.text(serverObj.icon ? "" : serverObj.data.acronym)
+				.css("background-image", serverObj.icon ? "url('https://cdn.discordapp.com/icons/" + serverObj.id + "/" + serverObj.icon + ".png')" : "")
 				.css("background-color", "")
 				.css("color", "");
-		}
 	}
 	
 	loadServer (serverObj) {
 		if (typeof serverObj !== "object") return;
 		var data = BDfunctionsDevilBro.loadData(serverObj.id, this, "servers");
 		if (data) {
-			var avatar = serverObj.div.querySelector(".avatar-small");
-			if ($(avatar).attr("name") === undefined) {
-				$(avatar).attr("name", $(avatar).text());
-			}
-			
 			var name = data.name ? data.name : serverObj.name;
-			var shortName = data.shortName ? data.shortName : $(avatar).attr("name");
+			var shortName = data.shortName ? data.shortName : (serverObj.icon ? "" : serverObj.data.acronym);
 			var bgImage = data.url ? "url(" + data.url + ")" : (serverObj.icon ? "url('https://cdn.discordapp.com/icons/" + serverObj.id + "/" + serverObj.icon + ".png')" : "");
 			var removeIcon = data.removeIcon;
 			var color1 = data.color1 ? BDfunctionsDevilBro.color2RGB(data.color1) : "";
@@ -473,12 +453,12 @@ class EditServers {
 			$(serverObj.div)
 				.off("mouseenter." + this.getName())
 				.on("mouseenter." + this.getName(), () => {this.createServerToolTip(serverObj);})
-				.attr("custom-editservers", true);
-			$(avatar)
-				.text(shortName)
-				.css("background-image", removeIcon ? "" : bgImage)
-				.css("background-color", color1)
-				.css("color", color2);
+				.attr("custom-editservers", true)
+				.find(".avatar-small")
+					.text(data.shortName ? shortName : (removeIcon ? "" : shortName))
+					.css("background-image", removeIcon ? "" : bgImage)
+					.css("background-color", color1)
+					.css("color", color2);
 		}
 	}
 	
