@@ -67,7 +67,7 @@ class SendLargeMessages {
 
 	getDescription () {return "Opens a popout when your message is too large, which allows you to automatically send the message in several smaller messages.";}
 
-	getVersion () {return "1.4.2";}
+	getVersion () {return "1.4.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -126,7 +126,7 @@ class SendLargeMessages {
 	}
 	
 	getParsedLength (string, channel) {
-		let length = this.MessageUtils.parse(channel, string).content.length
+		let length = string.indexOf("/") == 0 ? string.length : this.MessageUtils.parse(channel, string).content.length
 		return length > string.length ? length : string.length;
 	}
 	
