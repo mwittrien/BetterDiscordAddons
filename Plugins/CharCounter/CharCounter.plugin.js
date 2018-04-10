@@ -32,7 +32,7 @@ class CharCounter {
 
 	getDescription () {return "Adds a charcounter in the chat.";}
 
-	getVersion () {return "1.1.7";}
+	getVersion () {return "1.1.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -98,7 +98,8 @@ class CharCounter {
 	// begin of own functions
 	
 	getParsedLength (string, channel) {
-		return this.MessageUtils.parse(channel, string).content.length;
+		let length = this.MessageUtils.parse(channel, string).content.length
+		return length > string.length ? length : string.length;
 	}
 	
 	appendCounter (textarea) {
