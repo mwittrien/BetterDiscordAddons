@@ -124,7 +124,7 @@ class EditServers {
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	getVersion () {return "1.7.8";}
+	getVersion () {return "1.7.9";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -429,7 +429,7 @@ class EditServers {
 	}
 	
 	resetServer (serverObj) {
-		if (typeof serverObj !== "object") return;
+		if (typeof serverObj !== "object" || !serverObj) return;
 		$(serverObj.div)
 			.off("mouseenter." + this.getName())
 			.removeAttr("custom-editservers")
@@ -441,7 +441,7 @@ class EditServers {
 	}
 	
 	loadServer (serverObj) {
-		if (typeof serverObj !== "object") return;
+		if (typeof serverObj !== "object" || !serverObj) return;
 		var data = BDfunctionsDevilBro.loadData(serverObj.id, this, "servers");
 		if (data) {
 			var name = data.name ? data.name : serverObj.name;
