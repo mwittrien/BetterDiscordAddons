@@ -116,7 +116,7 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.4.5";}
+	getVersion () {return "1.4.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -186,7 +186,7 @@ class PersonalPins {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, "#app-mount", {name:"messageContextObserver",instance:observer}, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, ".appMount-14L89u", {name:"messageContextObserver",instance:observer}, {childList: true});
 			
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -452,11 +452,18 @@ class PersonalPins {
 			pins[serverID][channelID] = pins[serverID][channelID] ? pins[serverID][channelID] : {}
 			var messageID = this.message.id;
 			var position = this.message.pos;
+			var channelname = channelObj.name;
+			if (!channelname && channelObj.recipients.length > 0) {
+				for (let dmmemberID of channelObj.recipients) {
+					channelname = channelname ? channelname + ", @" : channelname;
+					channelname = channelname + this.UserStore.getUser(dmmemberID).username;
+				}
+			}
 			var message = {
 				"serverID": serverID,
 				"serverName": serverObj.name ? serverObj.name : "Direct Messages",
 				"channelID": channelID,
-				"channelName": channelObj.name ? channelObj.name : BDfunctionsDevilBro.getInnerText(channelObj.div.querySelector(".channel-name")),
+				"channelName": channelname,
 				"id": messageID,
 				"pos": position,
 				"timestamp": this.message.timestamp._i.getTime(),
