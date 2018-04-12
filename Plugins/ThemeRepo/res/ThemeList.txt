@@ -125,6 +125,9 @@ https://raw.githubusercontent.com/TheBaconSpace/TMEMETheme/master/tmeme.theme.cs
 https://raw.githubusercontent.com/TheWrestlingDiscordia/MiniTheme/master/MiniTheme.theme.css
 https://raw.githubusercontent.com/trueprominency/Shades-of-Red-Theme/master/shades-of-red.theme.css
 https://raw.githubusercontent.com/Wahrandz/NieR-Automata-/master/Theme css/Final; Nier_Automata By AbdelBouklech.theme.css
+https://raw.githubusercontent.com/Waterin/Coloured-Discord-Themes/1.0/Source/Darker-than-Red.theme.css
+https://raw.githubusercontent.com/Waterin/Coloured-Discord-Themes/1.0/Source/Lighter-than-Blue.theme.css
+https://raw.githubusercontent.com/Waterin/Coloured-Discord-Themes/1.0/Source/Neutralized-Green.theme.css
 https://raw.githubusercontent.com/WhatDaPuck/NotAnotherAnimeTheme/master/NotAnotherAnimeTheme.theme.css
 https://raw.githubusercontent.com/xNightWulf/ThemesForBetterDiscord/master/BlueLine.theme.csss
 https://raw.githubusercontent.com/xNightWulf/ThemesForBetterDiscord/master/BlueNissanSkyline.theme.css
