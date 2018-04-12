@@ -374,8 +374,11 @@ BDfunctionsDevilBro.showDesktopNotification = function (parsedcontent, parsedopt
 	}
 };
 
-BDfunctionsDevilBro.createTooltip = function (content, container, options = {}) {
-	if (!document.querySelector(".tooltips") || !content || !container || ($(container).offset().left == 0 && $(container).offset().top == 0)) return null;
+BDfunctionsDevilBro.createTooltip = function (content, anker, options = {}) {
+	if (!content || !anker) return null;
+	let tooltipcontainer = document.querySelector(".tooltips");
+	if (!tooltipcontainer) return null;
+	
 	let id = Math.round(Math.random()*10000000000000000);
 	let tooltip = document.createElement("div");
 	tooltip.className = "tooltip tooltip-black DevilBro-tooltip";
@@ -386,27 +389,26 @@ BDfunctionsDevilBro.createTooltip = function (content, container, options = {}) 
 	if (options.html === true) tooltip.innerHTML = content;
 	else tooltip.innerText = content;
 	
-	document.querySelector(".tooltips").appendChild(tooltip);
+	tooltipcontainer.appendChild(tooltip);
 	
-	var left, top;
-	
+	let left, top, ankersize = anker.getBoundingClientRect(), tooltipsize = tooltip.getBoundingClientRect();
 	if (!options.position) options.position = options.type;
 	switch (options.position) {
 		case "top": 
-			left = container.getBoundingClientRect().left + (container.clientWidth - tooltip.clientWidth)/2;
-			top = container.getBoundingClientRect().top - tooltip.clientHeight;
+			left = ankersize.left + (ankersize.width - tooltipsize.width)/2;
+			top = ankersize.top - tooltipsize.height;
 			break;
 		case "bottom": 
-			left = container.getBoundingClientRect().left + (container.clientWidth - tooltip.clientWidth)/2;
-			top = container.getBoundingClientRect().top + container.clientHeight;
+			left = ankersize.left + (ankersize.width - tooltipsize.width)/2;
+			top = ankersize.top + ankersize.height;
 			break;
 		case "left": 
-			left = container.getBoundingClientRect().left - tooltip.clientWidth;
-			top = container.getBoundingClientRect().top + (container.clientHeight - tooltip.clientHeight)/2;
+			left = ankersize.left - tooltipsize.width;
+			top = ankersize.top + (ankersize.height - tooltipsize.height)/2;
 			break;
 		default: 
-			left = container.getBoundingClientRect().left + container.clientWidth;
-			top = container.getBoundingClientRect().top + (container.clientHeight - tooltip.clientHeight)/2;
+			left = ankersize.left + ankersize.width;
+			top = ankersize.top + (ankersize.height - tooltipsize.height)/2;
 			break;
 	}
 	
@@ -417,19 +419,19 @@ BDfunctionsDevilBro.createTooltip = function (content, container, options = {}) 
 		mutations.forEach((mutation) => {
 			var nodes = Array.from(mutation.removedNodes);
 			var ownMatch = nodes.indexOf(tooltip) > -1;
-			var directMatch = nodes.indexOf(container) > -1;
-			var parentMatch = nodes.some(parent => parent.contains(container));
+			var directMatch = nodes.indexOf(anker) > -1;
+			var parentMatch = nodes.some(parent => parent.contains(anker));
 			if (ownMatch || directMatch || parentMatch) {
 				tooltipObserver.disconnect();
 				tooltip.remove();
-				$(container).off("mouseleave.BDfunctionsDevilBroTooltip" + id);
+				$(anker).off("mouseleave.BDfunctionsDevilBroTooltip" + id);
 				BDfunctionsDevilBro.removeLocalStyle("customTooltipDevilBro" + id);
 			}
 		});
 	});
 	tooltipObserver.observe(document.body, {subtree: true, childList: true});
 	
-	$(container).on("mouseleave.BDfunctionsDevilBroTooltip" + id, () => {
+	$(anker).on("mouseleave.BDfunctionsDevilBroTooltip" + id, () => {
 		tooltip.remove();
 	});
 	
