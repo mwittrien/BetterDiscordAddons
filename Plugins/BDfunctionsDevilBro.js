@@ -1235,11 +1235,14 @@ BDfunctionsDevilBro.readUnreadServerList = function (servers) {
 };
 
 BDfunctionsDevilBro.getSelectedServer = function () {
-	var server, id, info, GuildStore = BDfunctionsDevilBro.WebModules.findByProperties(["getGuilds"]), SelectedGuildStore = BDfunctionsDevilBro.WebModules.findByProperties(["getLastSelectedGuildId"]);
-	id = SelectedGuildStore.getGuildId();
-	info = id ? GuildStore.getGuild(id) : null;
-	if (info) return Object.assign({},info,{div:BDfunctionsDevilBro.getDivOfServer(id),data:info});
-	return null;
+	var serverObj, id, info;
+	id = BDfunctionsDevilBro.WebModules.findByProperties(["getLastSelectedGuildId"]).getGuildId();
+	info = id ? BDfunctionsDevilBro.WebModules.findByProperties(["getGuilds"]).getGuild(id) : null;
+	if (info) {
+		serverObj = BDfunctionsDevilBro.getDivOfServer(id);
+		return serverObj ? serverObj : Object.assign({},info,{div:null,data:info});
+	}
+	else return null;
 };
 
 BDfunctionsDevilBro.getIdOfServer = function (server) {
@@ -1273,11 +1276,14 @@ BDfunctionsDevilBro.readChannelList = function () {
 };
 
 BDfunctionsDevilBro.getSelectedChannel = function () {
-	var server, id, info, ChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getChannels"]), SelectedChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getLastSelectedChannelId"]);
-	id = SelectedChannelStore.getChannelId();
-	info = id ? ChannelStore.getChannel(id) : null;
-	if (info) return Object.assign({},info,{div:BDfunctionsDevilBro.getDivOfChannel(id),data:info});
-	return null;
+	var channelObj, id, info;
+	id = BDfunctionsDevilBro.WebModules.findByProperties(["getLastSelectedChannelId"]).getChannelId();
+	info = id ? BDfunctionsDevilBro.WebModules.findByProperties(["getChannels"]).getChannel(id) : null;
+	if (info) {
+		channelObj = BDfunctionsDevilBro.getDivOfChannel(id);
+		return channelObj ? channelObj : Object.assign({},info,{div:null,data:info});
+	}
+	else return null;
 };
 
 BDfunctionsDevilBro.getDivOfChannel = function (id) {
