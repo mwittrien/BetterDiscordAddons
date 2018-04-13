@@ -1372,7 +1372,7 @@ BDfunctionsDevilBro.getDivOfDM = function (id) {
 
 BDfunctionsDevilBro.saveAllData = function (settings, plugin, keyName) {
 	if (!BDfunctionsDevilBro.isBDv2()) {
-		bdPluginStorage.set(plugin.getName(), keyName, settings);
+		bdPluginStorage.set(typeof plugin === "string" ? plugin : plugin.getName(), keyName, settings);
 	}
 	else {
 		let fs = require("fs");
@@ -1385,7 +1385,8 @@ BDfunctionsDevilBro.saveAllData = function (settings, plugin, keyName) {
 
 BDfunctionsDevilBro.loadAllData = function (plugin, keyName) {
 	if (!BDfunctionsDevilBro.isBDv2()) {
-		return bdPluginStorage.get(plugin.getName(), keyName) || {};
+		console.log(plugin);
+		return bdPluginStorage.get(typeof plugin === "string" ? plugin : plugin.getName(), keyName) || {};
 	}
 	else {
 		let fs = require("fs");
