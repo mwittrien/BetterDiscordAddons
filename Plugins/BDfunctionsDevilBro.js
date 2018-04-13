@@ -27,6 +27,7 @@ BDfunctionsDevilBro.loadMessage = function (plugin) {
 	if (typeof plugin.css === "string") BDfunctionsDevilBro.appendLocalStyle(pluginName, plugin.css);
 	BDfunctionsDevilBro.addOnSwitchListener(plugin);
 	BDfunctionsDevilBro.addReloadListener(plugin);
+	BDfunctionsDevilBro.addSettingsButtonListener(plugin);
 	BDfunctionsDevilBro.translatePlugin(plugin);
 	
 	if (typeof window.PluginUpdates !== "object" || !window.PluginUpdates) window.PluginUpdates = {plugins:{}};
@@ -108,6 +109,7 @@ BDfunctionsDevilBro.unloadMessage = function (plugin) {
 	if (typeof plugin.css === "string") BDfunctionsDevilBro.removeLocalStyle(pluginName);
 	BDfunctionsDevilBro.removeOnSwitchListener(plugin);
 	BDfunctionsDevilBro.removeReloadListener(plugin);
+	BDfunctionsDevilBro.removeSettingsButtonListener(plugin);
 	
 	BDfunctionsDevilBro.$(document).off("." + pluginName);
 	BDfunctionsDevilBro.$("*").off("." + pluginName);
@@ -1100,6 +1102,36 @@ BDfunctionsDevilBro.addReloadListener = function (plugin) {
 BDfunctionsDevilBro.removeReloadListener = function (plugin) {
 	if (typeof plugin.initialize === "function") {
 		if (typeof plugin.reloadFix === "object") plugin.reloadFix.disconnect();
+	}
+};
+
+BDfunctionsDevilBro.addSettingsButtonListener = function (plugin) {
+	if (BDfunctionsDevilBro.isBDv2()) {
+		BDfunctionsDevilBro.removeSettingsButtonListener(plugin);
+		var bdsettings = document.querySelector(".bd-content-region > .bd-content");
+		if (bdsettings) {
+			plugin.settingsButtonObserver = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.addedNodes) {
+							change.addedNodes.forEach((node) => {
+								if (node.tagName && node.classList.contains("active")) {
+									let plugincard = node.querySelector(`[data-plugin-id=${this.id}]`);
+									console.log(plugincard);
+								}
+							});
+						}
+					}
+				);
+			});
+			plugin.settingsButtonObserver.observe(bdsettings, {childList:true});
+		}
+	}
+};
+
+BDfunctionsDevilBro.removeSettingsButtonListener = function (plugin) {
+	if (BDfunctionsDevilBro.isBDv2()) {
+		if (typeof plugin.settingsButtonObserver === "object") plugin.settingsButtonObserver.disconnect();
 	}
 };
 
