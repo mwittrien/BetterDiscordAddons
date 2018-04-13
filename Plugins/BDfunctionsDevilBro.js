@@ -1100,14 +1100,16 @@ BDfunctionsDevilBro.addReloadListener = function (plugin) {
 };
 
 BDfunctionsDevilBro.removeReloadListener = function (plugin) {
-	if (typeof plugin.initialize === "function") {
-		if (typeof plugin.reloadFix === "object") plugin.reloadFix.disconnect();
+	if (typeof plugin.initialize === "function" && typeof plugin.reloadFix === "object") {
+		plugin.reloadFix.disconnect();
 	}
 };
 
 BDfunctionsDevilBro.addSettingsButtonListener = function (plugin) {
-	if (BDfunctionsDevilBro.isBDv2()) {
+	console.log(plugin);
+	if (BDfunctionsDevilBro.isBDv2() && typeof plugin.getSettingsPanel === "function") {
 		BDfunctionsDevilBro.removeSettingsButtonListener(plugin);
+		BDfunctionsDevilBro.appendSettingsButton(plugin);
 		var bdsettings = document.querySelector(".bd-content-region > .bd-content");
 		if (bdsettings) {
 			plugin.settingsButtonObserver = new MutationObserver((changes, _) => {
@@ -1116,8 +1118,7 @@ BDfunctionsDevilBro.addSettingsButtonListener = function (plugin) {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (node.tagName && node.classList.contains("active")) {
-									let plugincard = node.querySelector(`[data-plugin-id=${this.id}]`);
-									console.log(plugincard);
+									BDfunctionsDevilBro.appendSettingsButton(plugin);
 								}
 							});
 						}
@@ -1129,9 +1130,26 @@ BDfunctionsDevilBro.addSettingsButtonListener = function (plugin) {
 	}
 };
 
+BDfunctionsDevilBro.appendSettingsButton = function (plugin) {
+	let plugincard = document.querySelector(`.bd-card[data-plugin-id=${plugin.id}]`);
+	if (plugincard) {
+		let settingsbutton = BDfunctionsDevilBro.$(`<div class="DevilBro-settingsbutton bd-button"><span class="bd-material-design-icon"><svg width="18" height="18" viewBox="0 0 24 24"><path d="M12,15.5C10.07,15.5 8.5,13.93 8.5,12C8.5,10.07 10.07,8.5 12,8.5C13.93,8.5 15.5,10.07 15.5,12C15.5,13.93 13.93,15.5 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.67 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z"></path></svg></span></div>`);
+		BDfunctionsDevilBro.$(settingsbutton)
+			.on("mouseenter.BDfunctionsDevilBroSettingsButtonListener", (e) => {BDfunctionsDevilBro.createTooltip("Settings", e.currentTarget, {type:"top"});})
+			.on("click.BDfunctionsDevilBroSettingsButtonListener", (e) => {
+				var settingsmodal = BDfunctionsDevilBro.$(`<span class="DevilBro-modal DevilBro-settingsmodal ${plugin.id}-settingsmodal"><div class="backdrop-2ohBEd"></div><div class="modal-2LIEKY"><div class="inner-1_1f7b"><div class="modal-3HOjGZ sizeMedium-1-2BNS"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO header-3sp3cE" style="flex: 0 0 auto;"><div class="flexChild-1KGW5q" style="flex: 1 1 auto;"><h4 class="h4-2IXpeI title-1pmpPr size16-3IvaX_ height20-165WbF weightSemiBold-T8sxWH defaultColor-v22dK1 defaultMarginh4-jAopYe marginReset-3hwONl">REPLACE_modal_header_text</h4></div><svg class="btn-cancel close-3ejNTg flexChild-1KGW5q" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12"><g fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div><div class="scrollerWrap-2uBjct content-1Cut5s scrollerThemed-19vinI themeGhostHairline-2H8SiW"><div class="scroller-fzNley inner-tqJwAU"></div></div><div class="flex-lFgbSz flex-3B1Tl4 horizontalReverse-2LanvO horizontalReverse-k5PqxT flex-3B1Tl4 directionRowReverse-2eZTxP justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO footer-1PYmcw"><button type="button" class="btn-save button-2t3of8 lookFilled-luDKDo colorBrand-3PmwCE sizeMedium-2VGNaF grow-25YQ8u"><div class="contents-4L4hQM">REPLACE_btn_save_text</div></button></div></div></div></div></span>`);
+				settingsmodal.find(".title-1pmpPr").text(plugin.name + " Settings");
+				settingsmodal.find(".inner-tqJwAU").append(plugin.getSettingsPanel());
+				BDfunctionsDevilBro.appendModal(settingsmodal);
+			})
+			.insertBefore(plugincard.querySelector(".bd-button"));
+	}
+};
+
 BDfunctionsDevilBro.removeSettingsButtonListener = function (plugin) {
-	if (BDfunctionsDevilBro.isBDv2()) {
-		if (typeof plugin.settingsButtonObserver === "object") plugin.settingsButtonObserver.disconnect();
+	if (BDfunctionsDevilBro.isBDv2() && typeof plugin.settingsButtonObserver === "object") {
+		BDfunctionsDevilBro.$(`.bd-card[data-plugin-id=${plugin.id}] .DevilBro-settingsbutton`).remove();
+		plugin.settingsButtonObserver.disconnect();
 	}
 };
 
@@ -3156,6 +3174,10 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 
 	.DevilBro-modal .tab-content.open {
 		display: initial;
+	}
+	
+	.DevilBro-tooltip {
+		z-index: 9999;
 	}
 	
 	.colorpicker-modal .colorpicker-container {
