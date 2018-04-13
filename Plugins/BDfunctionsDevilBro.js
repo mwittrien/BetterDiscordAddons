@@ -3183,6 +3183,8 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		z-index: 4005;
 	}
 	
+	.DevilBro-modal .Select-menu-outer,
+	.DevilBro-settings .Select-menu-outer,
 	.DevilBro-tooltip {
 		z-index: 4015;
 	}
