@@ -78,8 +78,6 @@
 .ui-tab-bar-item:hover,
 .friends-row:hover,
 .channel:hover a,
-.member:hover,
-.member.popout-open,
 .member-2FrNV0:hover .content-3JzEqq,
 .member-2FrNV0.popout-open .content-3JzEqq,
 .input-3_iTLI,
@@ -309,7 +307,6 @@ input:disabled {
 
 .header-1UnvfG,
 .changeDetails-zbf-61,
-.member,
 .member-2FrNV0 .content-3JzEqq,
 .channel, 
 .wrapperHoveredCollapsed-25KVVp,
@@ -426,7 +423,6 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	background: transparent !important;
 }
 
-.channel-members,
 .members-1bid1J {
 	box-sizing: content-box !important;
 	background: rgba(var(--transparencycolor), var(--memberlistransparency)) !important;
@@ -2339,12 +2335,9 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 }
 
 /* old */
-.channel-members-loading, 
 .loading-316uYQ {
 	background: transparent !important;
 }
-.channel-members-loading::after,
-.channel-members-loading::before,
 .loading-316uYQ::after,
 .loading-316uYQ::before {
 	content: "";
@@ -2355,21 +2348,16 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	right: 0;
 	left: 0;
 }
-.channel-members-loading::after,
 .loading-316uYQ::after {
 	background: rgba(var(--transparencycolor),calc(var(--transparencyalpha) * 3));
 }
-.channel-members-loading::before,
 .loading-316uYQ::before {
 	background: var(--background) center/cover;
     background-attachment: fixed;
 }
-.channel-members-loading > .background ~ *,
 .loadingBackground-2SSKv7 ~ * {
 	display: none !important;
 }
-.channel-members-loading > .background,
-.channel-members-loading > .background::before,
 .loadingBackground-2SSKv7,
 .loadingBackground-2SSKv7::before {
 	opacity: 1 !important;
@@ -2380,14 +2368,12 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	animation: none !important;
 	background: transparent !important;
 }
-.channel-members-loading > .background,
 .loadingBackground-2SSKv7 {
 	position: relative !important;
 	margin-top: calc(50vh - 100px);
 	margin-left: 50px;
 	color: rgba(var(--transparencycolor),0.2) !important;
 }
-.channel-members-loading > .background::before,
 .loadingBackground-2SSKv7::before {
 	content: "";
 	position: absolute !important;
