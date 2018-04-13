@@ -2794,6 +2794,9 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		width: auto !important;
 	}
 	
+	.DevilBro-settings {
+		all: unset !important;
+	}
 	.DevilBro-settings div:not([class*="marginTop"]) {
 		margin-top: 0px !important;
 	}
