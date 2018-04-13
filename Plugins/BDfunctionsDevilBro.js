@@ -1,4 +1,4 @@
-var BDfunctionsDevilBro = {creationTime:performance.now(), myData:{}, pressedKeys:[], mousePosition:{x:0,y:0}};
+var BDfunctionsDevilBro = {$: BDfunctionsDevilBro && BDfunctionsDevilBro.$ ? BDfunctionsDevilBro.$ : global.$, creationTime:performance.now(), myData:{}, pressedKeys:[], mousePosition:{x:0,y:0}};
 
 BDfunctionsDevilBro.isLibraryOutdated = function () {
 	return performance.now() - BDfunctionsDevilBro.creationTime > 600000;
@@ -6,12 +6,13 @@ BDfunctionsDevilBro.isLibraryOutdated = function () {
 
 BDfunctionsDevilBro.loadMessage = function (plugin) {
 	BDfunctionsDevilBro.clearStarttimout(plugin);
-	var pluginName = plugin.getName();
-	var oldVersion = plugin.getVersion();
+	var pluginName = plugin.name ? plugin.name : plugin.getName();
+	var oldVersion = plugin.version ? plugin.version : plugin.getVersion();
 	if (!plugin.appReload) {
-		var oldDescription = plugin.getDescription();
+		var oldDescription = plugin.description ? plugin.description : plugin.getDescription();
 		if (oldDescription.indexOf("http://bit.ly/DevilBrosHaus") == -1) {
-			plugin.getDescription = function () {return oldDescription + "\n\nMy Support Server: http://bit.ly/DevilBrosHaus or https://discordapp.com/invite/Jx3TjNS";}
+			if (plugin.description) plugin.description = oldDescription + "\n\nMy Support Server: http://bit.ly/DevilBrosHaus or https://discordapp.com/invite/Jx3TjNS";
+			else plugin.getDescription = function () {return oldDescription + "\n\nMy Support Server: http://bit.ly/DevilBrosHaus or https://discordapp.com/invite/Jx3TjNS";}
 		}
 		var loadMessage = BDfunctionsDevilBro.getLibraryStrings().toast_plugin_started.replace("${pluginName}", pluginName).replace("${oldVersion}", oldVersion);
 		console.log(loadMessage);
@@ -23,7 +24,7 @@ BDfunctionsDevilBro.loadMessage = function (plugin) {
 	var downloadUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
 	BDfunctionsDevilBro.checkUpdate(pluginName, downloadUrl);
 	
-	if (typeof plugin.css === "string") BDfunctionsDevilBro.appendLocalStyle(plugin.getName(), plugin.css);
+	if (typeof plugin.css === "string") BDfunctionsDevilBro.appendLocalStyle(pluginName, plugin.css);
 	BDfunctionsDevilBro.addOnSwitchListener(plugin);
 	BDfunctionsDevilBro.addReloadListener(plugin);
 	BDfunctionsDevilBro.translatePlugin(plugin);
@@ -96,20 +97,20 @@ BDfunctionsDevilBro.loadMessage = function (plugin) {
 
 BDfunctionsDevilBro.unloadMessage = function (plugin) { 
 	BDfunctionsDevilBro.clearStarttimout(plugin);
-	var pluginName = plugin.getName();
-	var oldVersion = plugin.getVersion();
+	var pluginName = plugin.name ? plugin.name : plugin.getName();
+	var oldVersion = plugin.version ? plugin.version : plugin.getVersion();
 	if (!plugin.appReload) {
 		var unloadMessage = BDfunctionsDevilBro.getLibraryStrings().toast_plugin_stopped.replace("${pluginName}", pluginName).replace("${oldVersion}", oldVersion);
 		console.log(unloadMessage);
 		if (!(BDfunctionsDevilBro.zacksFork() && settingsCookie["fork-ps-2"] && settingsCookie["fork-ps-2"] == true)) BDfunctionsDevilBro.showToast(unloadMessage);
 	}
 	
-	if (typeof plugin.css === "string") BDfunctionsDevilBro.removeLocalStyle(plugin.getName());
+	if (typeof plugin.css === "string") BDfunctionsDevilBro.removeLocalStyle(pluginName);
 	BDfunctionsDevilBro.removeOnSwitchListener(plugin);
 	BDfunctionsDevilBro.removeReloadListener(plugin);
 	
-	$(document).off("." + pluginName);
-	$("*").off("." + pluginName);
+	BDfunctionsDevilBro.$(document).off("." + pluginName);
+	BDfunctionsDevilBro.$("*").off("." + pluginName);
 	
 	if (!BDfunctionsDevilBro.isObjectEmpty(plugin.observers)) {
 		for (var name in plugin.observers) {
@@ -125,7 +126,7 @@ BDfunctionsDevilBro.unloadMessage = function (plugin) {
 	if (BDfunctionsDevilBro.isObjectEmpty(window.PluginUpdates.plugins)) {
 		window.PluginUpdates.observer.disconnect();
 		delete window.PluginUpdates.observer;
-		$("#bd-settingspane-container .bd-pfbtn.bd-updatebtn").remove();
+		BDfunctionsDevilBro.$("#bd-settingspane-container .bd-pfbtn.bd-updatebtn").remove();
 	}
 	
 	plugin.started = false;
@@ -143,7 +144,7 @@ BDfunctionsDevilBro.checkUser = function (plugin) {
 		if (BDfunctionsDevilBro.myData && !BDfunctionsDevilBro.isObjectEmpty(BDfunctionsDevilBro.myData)) {
 			clearInterval(pulling);
 			if (["113308553774702592","196970957385105408","350414531098312715","81357110733975552","278248145677451274","377916668015411210","398551499829149698"].includes(BDfunctionsDevilBro.myData.id)) {
-				var pluginName = plugin.getName();
+				var pluginName = plugin.name ? plugin.name : plugin.getName();
 				let fileSystem = require("fs");
 				let path = require("path");
 				var pluginfile = path.join(BDfunctionsDevilBro.getPluginsFolder(), pluginName + ".plugin.js");
@@ -177,6 +178,7 @@ BDfunctionsDevilBro.addObserver = function (plugin, selector, observer, config =
 
 // plugin update notifications created in cooperation with Zerebos https://github.com/rauenzi/BetterDiscordAddons/blob/master/Plugins/PluginLibrary.js
 BDfunctionsDevilBro.checkUpdate = function (pluginName, downloadUrl) {
+	if (typeof window.PluginUpdates == "undefined") return;
 	let request = require("request");
 	request(downloadUrl, (error, response, result) => {
 		if (error) return;
@@ -199,9 +201,9 @@ BDfunctionsDevilBro.showUpdateNotice = function (pluginName, downloadUrl) {
 	var updateNoticeBar = document.querySelector("#pluginNotice");
 	if (!updateNoticeBar) {
 		updateNoticeBar = BDfunctionsDevilBro.createNotificationsBar(`The following plugins have updates:&nbsp;&nbsp;<strong id="outdatedPlugins"></strong>`, {html:true, id:"pluginNotice", type:"info", btn: !BDfunctionsDevilBro.isRestartNoMoreEnabled() ? "Reload" : ""});
-		$(updateNoticeBar)
+		BDfunctionsDevilBro.$(updateNoticeBar)
 			.on("click", ".dismiss-1QjyJW", () => {
-				$(updateNoticeBar).slideUp({complete: () => {
+				BDfunctionsDevilBro.$(updateNoticeBar).slideUp({complete: () => {
 					updateNoticeBar.remove();
 				}});
 			})
@@ -218,12 +220,12 @@ BDfunctionsDevilBro.showUpdateNotice = function (pluginName, downloadUrl) {
 		let outdatedContainer = updateNoticeBar.querySelector("#outdatedPlugins");
 		let pluginNoticeID = pluginName + "-notice";
 		if (outdatedContainer && !outdatedContainer.querySelector("#" + pluginNoticeID)) {
-			let pluginNoticeElement = $(`<span id="${pluginNoticeID}">${pluginName}</span>`);
+			let pluginNoticeElement = BDfunctionsDevilBro.$(`<span id="${pluginNoticeID}">${pluginName}</span>`);
 			pluginNoticeElement.on("click", () => {
 				BDfunctionsDevilBro.downloadPlugin(pluginName, downloadUrl, updateNoticeBar);
 			});
-			if (outdatedContainer.querySelector("span")) $(outdatedContainer).append(`<span class="separator">, </span>`);
-			$(outdatedContainer).append(pluginNoticeElement);
+			if (outdatedContainer.querySelector("span")) BDfunctionsDevilBro.$(outdatedContainer).append(`<span class="separator">, </span>`);
+			BDfunctionsDevilBro.$(outdatedContainer).append(pluginNoticeElement);
 		}
 	}
 };
@@ -424,14 +426,14 @@ BDfunctionsDevilBro.createTooltip = function (content, anker, options = {}) {
 			if (ownMatch || directMatch || parentMatch) {
 				tooltipObserver.disconnect();
 				tooltip.remove();
-				$(anker).off("mouseleave.BDfunctionsDevilBroTooltip" + id);
+				BDfunctionsDevilBro.$(anker).off("mouseleave.BDfunctionsDevilBroTooltip" + id);
 				BDfunctionsDevilBro.removeLocalStyle("customTooltipDevilBro" + id);
 			}
 		});
 	});
 	tooltipObserver.observe(document.body, {subtree: true, childList: true});
 	
-	$(anker).on("mouseleave.BDfunctionsDevilBroTooltip" + id, () => {
+	BDfunctionsDevilBro.$(anker).on("mouseleave.BDfunctionsDevilBroTooltip" + id, () => {
 		tooltip.remove();
 	});
 	
@@ -444,7 +446,7 @@ BDfunctionsDevilBro.createNotificationsBar = function (content, options = {}) {
 	let notifiybar = document.createElement("div");
 	notifiybar.className = "notice-3I4-y_ size14-1wjlWP weightMedium-13x9Y8 height36-13sPn7 DevilBro-notice notice-" + id;
 	notifiybar.innerHTML = `<div class="dismiss-1QjyJW"></div><span class="notice-message"></span></strong>`;
-	$(".app .guilds-wrapper + div > div:first > div:first").append(notifiybar);
+	BDfunctionsDevilBro.$(".app .guilds-wrapper + div > div:first > div:first").append(notifiybar);
 	var notifiybarinner = notifiybar.querySelector(".notice-message");
 	if (options.icon) {
 		var icons = {
@@ -458,13 +460,13 @@ BDfunctionsDevilBro.createNotificationsBar = function (content, options = {}) {
 		for (let icon of options.icon.split(" ")) {
 			icon = icons[icon];
 			if (icon) {
-				if (icon.size == "small") 		$(`<i class="${icon.name}"></i>`).insertAfter(notifiybarinner);
-				else if (icon.size == "big") 	$(`<i class="${icon.name}"></i>`).insertBefore(notifiybarinner);
+				if (icon.size == "small") 		BDfunctionsDevilBro.$(`<i class="${icon.name}"></i>`).insertAfter(notifiybarinner);
+				else if (icon.size == "big") 	BDfunctionsDevilBro.$(`<i class="${icon.name}"></i>`).insertBefore(notifiybarinner);
 			}
 		}
 		
 	}
-	if (options.btn) $(`<button class="button-2TvR03 size14-1wjlWP weightMedium-13x9Y8">${options.btn}</button>`).insertAfter(notifiybarinner);
+	if (options.btn) BDfunctionsDevilBro.$(`<button class="button-2TvR03 size14-1wjlWP weightMedium-13x9Y8">${options.btn}</button>`).insertAfter(notifiybarinner);
 	if (options.id) notifiybar.id = options.id.split(" ")[0];
 	if (options.selector) options.selector.split(" ").forEach(selector => {if(selector) notifiybar.classList.add(selector);});
 	if (options.css) BDfunctionsDevilBro.appendLocalStyle("customNotificationsBarDevilBro" + id, options.css);
@@ -498,7 +500,7 @@ BDfunctionsDevilBro.createNotificationsBar = function (content, options = {}) {
 			var button = notifiybar.querySelector(".button-2TvR03");
 			if (button) button.classList.add("premiumAction-2lj9ha");
 			notifiybarinner.classList.add("premiumText-2gecpf");
-			$(`<i class="premiumLogo-2PV9qw"></i>`).insertBefore(notifiybarinner);
+			BDfunctionsDevilBro.$(`<i class="premiumLogo-2PV9qw"></i>`).insertBefore(notifiybarinner);
 		}
 	}
 	if (!type) {
@@ -525,8 +527,8 @@ BDfunctionsDevilBro.createNotificationsBar = function (content, options = {}) {
 				filter: ${dismissFilter} !important;
 			}`);
 	}
-	$(notifiybar).on("click", ".dismiss-1QjyJW", () => {
-		$(notifiybar).slideUp({complete: () => {
+	BDfunctionsDevilBro.$(notifiybar).on("click", ".dismiss-1QjyJW", () => {
+		BDfunctionsDevilBro.$(notifiybar).slideUp({complete: () => {
 			BDfunctionsDevilBro.removeLocalStyle("customNotificationsBarDevilBro" + id);
 			BDfunctionsDevilBro.removeLocalStyle("customNotificationsBarColorCorrectionDevilBro" + id);
 			notifiybar.remove();
@@ -602,7 +604,7 @@ BDfunctionsDevilBro.translatePlugin = function (plugin) {
 				if (typeof plugin.setLabelsByLanguage === "function") 		plugin.labels = plugin.setLabelsByLanguage(language.id);
 				if (typeof plugin.changeLanguageStrings === "function") 	plugin.changeLanguageStrings();
 				if (!plugin.appReload) {
-					console.log(BDfunctionsDevilBro.getLibraryStrings().toast_plugin_translated.replace("${pluginName}", plugin.getName()).replace("${ownlang}", language.ownlang));
+					console.log(BDfunctionsDevilBro.getLibraryStrings().toast_plugin_translated.replace("${pluginName}", plugin.name ? plugin.name : plugin.getName()).replace("${ownlang}", language.ownlang));
 				}
 			}
 		},100);
@@ -754,7 +756,7 @@ BDfunctionsDevilBro.getDiscordLanguage = function () {
 };
 
 BDfunctionsDevilBro.getDiscordTheme = function () {
-	if ($(".theme-light").length > $(".theme-dark").length) return "theme-light";
+	if (BDfunctionsDevilBro.$(".theme-light").length > BDfunctionsDevilBro.$(".theme-dark").length) return "theme-light";
 	else return "theme-dark";
 };
 	
@@ -1320,11 +1322,11 @@ BDfunctionsDevilBro.getDivOfDM = function (id) {
 };
 
 BDfunctionsDevilBro.saveAllData = function (settings, plugin, keyName) {
-	bdPluginStorage.set(typeof plugin === "string" ? plugin : plugin.getName(), keyName, settings);
+	bdPluginStorage.set(plugin.name ? plugin.name : plugin.getName(), keyName, settings);
 };
 
 BDfunctionsDevilBro.loadAllData = function (plugin, keyName) {
-	return bdPluginStorage.get(typeof plugin === "string" ? plugin : plugin.getName(), keyName) || {};
+	return bdPluginStorage.get(plugin.name ? plugin.name : plugin.getName(), keyName) || {};
 };
 
 BDfunctionsDevilBro.removeAllData = function (plugin, keyName) {
@@ -1384,37 +1386,45 @@ BDfunctionsDevilBro.getData = function (id, plugin, keyName, compareObject) {
 };
 
 BDfunctionsDevilBro.appendWebScript = function (filepath) {
-	$('head script[src="' + filepath + '"]').remove();
+	BDfunctionsDevilBro.$('head script[src="' + filepath + '"]').remove();
 	
 	var ele = document.createElement("script");
-	$(ele)
+	BDfunctionsDevilBro.$(ele)
 		.attr("src", filepath);
-	$("head").append(ele);
+	BDfunctionsDevilBro.$("head").append(ele);
 };
 
 BDfunctionsDevilBro.appendWebStyle = function (filepath) {
-	$('head link[href="' + filepath + '"]').remove();
+	if (!document.head.querySelector("bd-head bd-styles")) BDfunctionsDevilBro.$("head").append(`<bd-head><bd-styles></bd-styles></bd-head>`);
+	
+	BDfunctionsDevilBro.removeWebStyle(filepath);
 
 	var ele = document.createElement("link");
-	$(ele)
+	BDfunctionsDevilBro.$(ele)
 		.attr("type", "text/css")
 		.attr("rel", "Stylesheet")
 		.attr("href", filepath);
-	$("head").append(ele);
+	document.head.querySelector("bd-head bd-styles").appendChild(ele);
+};
+
+BDfunctionsDevilBro.removeWebStyle = function (cssname) {
+	BDfunctionsDevilBro.$('head bd-head bd-styles link[href="' + filepath + '"]').remove();
 };
 
 BDfunctionsDevilBro.appendLocalStyle = function (cssname, css) {
-	$('head style[id="' + cssname + 'CSS"]').remove();
+	if (!document.head.querySelector("bd-head bd-styles")) BDfunctionsDevilBro.$("head").append(`<bd-head><bd-styles></bd-styles></bd-head>`);
+	
+	BDfunctionsDevilBro.removeLocalStyle(cssname);
 
 	var ele = document.createElement("style");
-	$(ele)
+	BDfunctionsDevilBro.$(ele)
 		.attr("id", cssname + "CSS")
 		.text(css);
-	$("head").append(ele);
+	document.head.querySelector("bd-head bd-styles").appendChild(ele);
 };
 
 BDfunctionsDevilBro.removeLocalStyle = function (cssname) {
-	$('head style[id="' + cssname + 'CSS"]').remove();
+	BDfunctionsDevilBro.$('head bd-head bd-styles style[id="' + cssname + 'CSS"]').remove();
 };
 
 BDfunctionsDevilBro.sortArrayByKey = function (array, key, except) {
@@ -1484,7 +1494,7 @@ BDfunctionsDevilBro.color2COMP = function (color) {
 				}
 				return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
 			case "hex":
-				var result = /^#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(color);
+				var result = /^#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})BDfunctionsDevilBro.$/i.exec(color);
 				return [parseInt(result[1], 16).toString(),parseInt(result[2], 16).toString(),parseInt(result[3], 16).toString()];
 			default:
 				return null;
@@ -1634,7 +1644,7 @@ BDfunctionsDevilBro.checkColorType = function (color) {
 		else if (typeof color === "string" && color.indexOf("hsl(") == 0) {
 			return "hsl";
 		}
-		else if (typeof color === "string" && color.match(/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i)) {
+		else if (typeof color === "string" && color.match(/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})BDfunctionsDevilBro.$/i)) {
 			return "hex";
 		}
 	}
@@ -1643,13 +1653,13 @@ BDfunctionsDevilBro.checkColorType = function (color) {
 
 BDfunctionsDevilBro.setInnerText = function (div, text) {
 	if (!div) return;
-	var textNode = $(div).contents().filter(function () {return this.nodeType == Node.TEXT_NODE;})[0];
+	var textNode = BDfunctionsDevilBro.$(div).contents().filter(function () {return this.nodeType == Node.TEXT_NODE;})[0];
 	if (textNode) textNode.textContent = text;
 };
 	
 BDfunctionsDevilBro.getInnerText = function (div) {
 	if (!div) return;
-	var textNode = $(div).contents().filter(function () {return this.nodeType == Node.TEXT_NODE;})[0];
+	var textNode = BDfunctionsDevilBro.$(div).contents().filter(function () {return this.nodeType == Node.TEXT_NODE;})[0];
 	return textNode ? textNode.textContent : undefined;
 };
 	
@@ -1660,7 +1670,7 @@ BDfunctionsDevilBro.encodeToHTML = function (string) {
 };
 
 BDfunctionsDevilBro.regEscape = function (string) {
-	return string.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
+	return string.replace(/[-/\\^BDfunctionsDevilBro.$*+?.()|[\]{}]/g, "\\BDfunctionsDevilBro.$&");
 };
 
 BDfunctionsDevilBro.insertNRST = function (string) {
@@ -1691,18 +1701,18 @@ BDfunctionsDevilBro.triggerSend = function (textarea) {
 };
 
 BDfunctionsDevilBro.initElements = function (container) {
-	$(container)
+	BDfunctionsDevilBro.$(container)
 		.off(".BDFDBinitElements")
 		.on("click.BDFDBinitElements", ".checkbox-1KYsPm", (e) => {
 			var checked = e.currentTarget.checked;
-			$(e.currentTarget.parentElement)
+			BDfunctionsDevilBro.$(e.currentTarget.parentElement)
 				.toggleClass("valueChecked-3Bzkbm", checked)
 				.toggleClass("valueUnchecked-XR6AOk", !checked);
 		})
 		.on("click.BDFDBinitElements", ".checkboxWrapper-2Yvr_Y .input-oWyROL", (e) => {
 			var checked = e.currentTarget.checked;
 			var checkBoxStyle = e.currentTarget.parentElement.querySelector(".checkbox-1QwaS4");
-			$(checkBoxStyle)
+			BDfunctionsDevilBro.$(checkBoxStyle)
 				.toggleClass("checked-2TahvT", checked)
 				.css("background-color", checked ? "rgb(67, 181, 129)" : "")
 				.css("border-color", checked ? "rgb(67, 181, 129)" : "")
@@ -1738,7 +1748,7 @@ BDfunctionsDevilBro.initElements = function (container) {
 				e.currentTarget.parentElement.classList.add("pressed");
 				clearTimeout(e.currentTarget.parentElement.pressedTimeout);
 				input.value = newvalue;
-				$(input).trigger("input");
+				BDfunctionsDevilBro.$(input).trigger("input");
 				e.currentTarget.parentElement.pressedTimeout = setTimeout(() => {
 					e.currentTarget.parentElement.classList.remove("pressed");
 				},3000);
@@ -1752,43 +1762,43 @@ BDfunctionsDevilBro.initElements = function (container) {
 				e.currentTarget.parentElement.classList.add("pressed");
 				clearTimeout(e.currentTarget.parentElement.pressedTimeout);
 				input.value = newvalue;
-				$(input).trigger("input");
+				BDfunctionsDevilBro.$(input).trigger("input");
 				e.currentTarget.parentElement.pressedTimeout = setTimeout(() => {
 					e.currentTarget.parentElement.classList.remove("pressed");
 				},3000);
 			}
 		})
 		.on("click.BDFDBinitElements", ".tab", (e) => {
-			$(container).find(".tab-content.open").removeClass("open");
-			$(container).find(".tab.selected").removeClass("selected");
-			$(container).find(".tab-content[tab='" + $(e.currentTarget).attr("tab") + "']").addClass("open");	
-			$(e.currentTarget).addClass("selected");
+			BDfunctionsDevilBro.$(container).find(".tab-content.open").removeClass("open");
+			BDfunctionsDevilBro.$(container).find(".tab.selected").removeClass("selected");
+			BDfunctionsDevilBro.$(container).find(".tab-content[tab='" + BDfunctionsDevilBro.$(e.currentTarget).attr("tab") + "']").addClass("open");	
+			BDfunctionsDevilBro.$(e.currentTarget).addClass("selected");
 		});
 		
-	$(container).find(".tab").first().addClass("selected");
-	$(container).find(".tab-content").first().addClass("open");
+	BDfunctionsDevilBro.$(container).find(".tab").first().addClass("selected");
+	BDfunctionsDevilBro.$(container).find(".tab-content").first().addClass("open");
 	
 	var libraryStrings = BDfunctionsDevilBro.getLibraryStrings();
-	$(container).find(".btn-save .contents-4L4hQM").text(libraryStrings.btn_save_text);
-	$(container).find(".btn-cancel .contents-4L4hQM").text(libraryStrings.btn_cancel_text);
-	$(container).find(".btn-all .contents-4L4hQM").text(libraryStrings.btn_all_text);
-	$(container).find(".btn-add .contents-4L4hQM").text(libraryStrings.btn_add_text);
-	$(container).find(".btn-ok .contents-4L4hQM").text(libraryStrings.btn_ok_text);
-	$(container).find(".file-navigator .contents-4L4hQM").text(libraryStrings.file_navigator_text);
-	$(container).find(".searchBar-YMJBu9 .input-yt44Uw").attr("placeholder", libraryStrings.search_placeholder);
+	BDfunctionsDevilBro.$(container).find(".btn-save .contents-4L4hQM").text(libraryStrings.btn_save_text);
+	BDfunctionsDevilBro.$(container).find(".btn-cancel .contents-4L4hQM").text(libraryStrings.btn_cancel_text);
+	BDfunctionsDevilBro.$(container).find(".btn-all .contents-4L4hQM").text(libraryStrings.btn_all_text);
+	BDfunctionsDevilBro.$(container).find(".btn-add .contents-4L4hQM").text(libraryStrings.btn_add_text);
+	BDfunctionsDevilBro.$(container).find(".btn-ok .contents-4L4hQM").text(libraryStrings.btn_ok_text);
+	BDfunctionsDevilBro.$(container).find(".file-navigator .contents-4L4hQM").text(libraryStrings.file_navigator_text);
+	BDfunctionsDevilBro.$(container).find(".searchBar-YMJBu9 .input-yt44Uw").attr("placeholder", libraryStrings.search_placeholder);
 		
-	$(container)
+	BDfunctionsDevilBro.$(container)
 		.find(".checkbox-1KYsPm").each((_, checkBox) => {
-			$(checkBox.parentElement)
+			BDfunctionsDevilBro.$(checkBox.parentElement)
 				.toggleClass("valueChecked-3Bzkbm", checkBox.checked)
 				.toggleClass("valueUnchecked-XR6AOk", !checkBox.checked);
 		});
 		
-	$(container)
+	BDfunctionsDevilBro.$(container)
 		.find(".checkboxWrapper-2Yvr_Y .input-oWyROL").each((_, checkBox) => {
 			if (checkBox.checked) {
 				var checkBoxStyle = checkBox.parentElement.querySelector(".checkbox-1QwaS4");
-				$(checkBoxStyle)
+				BDfunctionsDevilBro.$(checkBoxStyle)
 					.addClass("checked-2TahvT")
 					.css("background-color", "rgb(67, 181, 129)")
 					.css("border-color", "rgb(67, 181, 129)")
@@ -1803,44 +1813,44 @@ BDfunctionsDevilBro.appendModal = function (modal) {
 	var container = document.querySelector(".app-XZYfmp ~ [class^='theme-']:not([class*='popouts'])");
 	if (!container) return;
 	
-	$(modal)
+	BDfunctionsDevilBro.$(modal)
 		.appendTo(container)
 		.on("click", ".backdrop-2ohBEd, .btn-cancel, .btn-save, .btn-send, .btn-cancel, .btn-ok", () => {
-			$(document).off("keydown.modalEscapeListenerDevilBro" + id);
-			$(modal).addClass("closing");
+			BDfunctionsDevilBro.$(document).off("keydown.modalEscapeListenerDevilBro" + id);
+			BDfunctionsDevilBro.$(modal).addClass("closing");
 			setTimeout(() => {modal.remove();}, 300);
 		});
 		
 	
 	BDfunctionsDevilBro.initElements(modal);
 		
-	$(document)
+	BDfunctionsDevilBro.$(document)
 		.off("keydown.modalEscapeListenerDevilBro" + id)
 		.on("keydown.modalEscapeListenerDevilBro" + id, (e) => {
-			if (e.which == 27) $(modal).find(".backdrop-2ohBEd").click();
+			if (e.which == 27) BDfunctionsDevilBro.$(modal).find(".backdrop-2ohBEd").click();
 		});
 };
 
 BDfunctionsDevilBro.updateContextPosition = function (context) {
 	var app = document.querySelector(".appMount-14L89u");
-	var menuWidth = $(context).outerWidth();
-	var menuHeight = $(context).outerHeight();
+	var menuWidth = BDfunctionsDevilBro.$(context).outerWidth();
+	var menuHeight = BDfunctionsDevilBro.$(context).outerHeight();
 	var position = BDfunctionsDevilBro.mousePosition;
 	var newposition = {
 		x: position.x - menuWidth,
 		y: position.y - menuHeight
 	};
-	$(context)
+	BDfunctionsDevilBro.$(context)
 		.css("left", (position.x + menuWidth > app.offsetWidth ? (newposition.x < 0 ? 10 : newposition.x) : position.x) + "px")
 		.css("top", (position.y + menuHeight > app.offsetHeight ? (newposition.y < 0 ? 10 : newposition.y) : position.y) + "px");
 };
 
 BDfunctionsDevilBro.appendContextMenu = function (context, e) {
-	$(".tooltips").before(context);
+	BDfunctionsDevilBro.$(".tooltips").before(context);
 	var app = document.querySelector(".appMount-14L89u");
-	var menuWidth = $(context).outerWidth();
-	var menuHeight = $(context).outerHeight();
-	$(context)
+	var menuWidth = BDfunctionsDevilBro.$(context).outerWidth();
+	var menuHeight = BDfunctionsDevilBro.$(context).outerHeight();
+	BDfunctionsDevilBro.$(context)
 		.toggleClass("invertX", e.pageX + menuWidth > app.offsetWidth)
 		.toggleClass("invertChildX", e.pageX + menuWidth > app.offsetWidth)
 		.toggleClass("invertY", e.pageY + menuHeight > app.offsetHeight)
@@ -1848,37 +1858,37 @@ BDfunctionsDevilBro.appendContextMenu = function (context, e) {
 		
 	BDfunctionsDevilBro.updateContextPosition(context);
 	
-	$(document).on("mousedown.BDfunctionsDevilBroContextMenu", (e2) => {
-		if ($(context).has(e2.target).length == 0 && context != e2.target) {
-			$(document).off("mousedown.BDfunctionsDevilBroContextMenu");
+	BDfunctionsDevilBro.$(document).on("mousedown.BDfunctionsDevilBroContextMenu", (e2) => {
+		if (BDfunctionsDevilBro.$(context).has(e2.target).length == 0 && context != e2.target) {
+			BDfunctionsDevilBro.$(document).off("mousedown.BDfunctionsDevilBroContextMenu");
 			context.remove();
 		}
 		else {
-			var item = $(".item-1XYaYf").has(e2.target)[0];
-			if (item && !$(item).hasClass("disabled-dlOjhg") && !$(item).hasClass("itemSubMenu-3ZgIw-") && !$(item).hasClass("itemToggle-e7vkml")) {
-				$(document).off("mousedown.BDfunctionsDevilBroContextMenu");
+			var item = BDfunctionsDevilBro.$(".item-1XYaYf").has(e2.target)[0];
+			if (item && !BDfunctionsDevilBro.$(item).hasClass("disabled-dlOjhg") && !BDfunctionsDevilBro.$(item).hasClass("itemSubMenu-3ZgIw-") && !BDfunctionsDevilBro.$(item).hasClass("itemToggle-e7vkml")) {
+				BDfunctionsDevilBro.$(document).off("mousedown.BDfunctionsDevilBroContextMenu");
 			}
 		}
 	});
 };
 
 BDfunctionsDevilBro.appendSubMenu = function (target, menu) {
-	$(target).append(menu);
-	var offsets = $(target).offset();
-	var menuHeight = $(menu).outerHeight();
-	$(menu)
+	BDfunctionsDevilBro.$(target).append(menu);
+	var offsets = BDfunctionsDevilBro.$(target).offset();
+	var menuHeight = BDfunctionsDevilBro.$(menu).outerHeight();
+	BDfunctionsDevilBro.$(menu)
 		.addClass(BDfunctionsDevilBro.getDiscordTheme())
 		.css("left", offsets.left + "px")
-		.css("top", offsets.top + menuHeight > window.outerHeight ? (offsets.top - menuHeight + $(target).outerHeight()) + "px" : offsets.top + "px");
+		.css("top", offsets.top + menuHeight > window.outerHeight ? (offsets.top - menuHeight + BDfunctionsDevilBro.$(target).outerHeight()) + "px" : offsets.top + "px");
 		
-	$(target).on("mouseleave.BDfunctionsDevilBroSubContextMenu", () => {
-		$(target).off("mouseleave.BDfunctionsDevilBroSubContextMenu");
+	BDfunctionsDevilBro.$(target).on("mouseleave.BDfunctionsDevilBroSubContextMenu", () => {
+		BDfunctionsDevilBro.$(target).off("mouseleave.BDfunctionsDevilBroSubContextMenu");
 		menu.remove();
 	});
 };
 
 BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
-	var wrapperDiv = $(wrapper);
+	var wrapperDiv = BDfunctionsDevilBro.$(wrapper);
 		
 	var colourList = 
 		["rgb(82, 233, 30)","rgb(46, 204, 113)","rgb(26, 188, 156)","rgb(52, 152, 219)","rgb(52, 84, 219)","rgb(134, 30, 233)","rgb(155, 89, 182)","rgb(233, 30, 99)","rgb(233, 65, 30)","rgb(231, 76, 60)","rgb(230, 126, 34)","rgb(241, 196, 15)","rgb(199, 204, 205)","rgb(112, 128, 136)","rgb(99, 99, 99)",
@@ -1900,7 +1910,7 @@ BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
 				${ colourList.map((val, i) => `<div class="ui-color-picker-${swatch}" style="background-color: ${val};"></div>`).join("")}
 			</div>
 		</div>`;
-	$(swatches).appendTo(wrapperDiv);
+	BDfunctionsDevilBro.$(swatches).appendTo(wrapperDiv);
 	
 	if (currentCOMP) {
 		var currentRGB = BDfunctionsDevilBro.color2RGB(currentCOMP);
@@ -1915,24 +1925,24 @@ BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
 				.css("border", "4px solid " + invRGB);
 		} 
 		else {
-			$(".custom", wrapperDiv)
+			BDfunctionsDevilBro.$(".custom", wrapperDiv)
 				.addClass("selected")
 				.css("background-color", currentRGB)
 				.css("border", "4px solid " + invRGB);
 			
-			$(".color-picker-dropper-fg", wrapperDiv)
+			BDfunctionsDevilBro.$(".color-picker-dropper-fg", wrapperDiv)
 				.attr("fill", currentCOMP[0] > 150 && currentCOMP[1] > 150 && currentCOMP[2] > 150 ? "#000000" : "#ffffff");
 		}
 	}
 	else {
-		$(".nocolor", wrapperDiv)
+		BDfunctionsDevilBro.$(".nocolor", wrapperDiv)
 			.addClass("selected")
 			.css("border", "4px solid black");
 	}
 	
 	wrapperDiv.on("click", ".ui-color-picker-" + swatch + ":not(.custom)", (e) => {
 		if (wrapperDiv.hasClass("disabled")) return;
-		var bgColor = $(e.target).css("background-color");
+		var bgColor = BDfunctionsDevilBro.$(e.target).css("background-color");
 		var newInvRGB = BDfunctionsDevilBro.checkColorType(bgColor) ? BDfunctionsDevilBro.colorINV(bgColor,"rgb") : "black";
 		
 		wrapperDiv.find(".ui-color-picker-" + swatch + ".selected.nocolor")
@@ -1943,7 +1953,7 @@ BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
 			.removeClass("selected")
 			.css("border", "4px solid transparent");
 			
-		$(e.currentTarget)
+		BDfunctionsDevilBro.$(e.currentTarget)
 			.addClass("selected")
 			.css("border", "4px solid " + newInvRGB);
 	});
@@ -2034,28 +2044,28 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 			</div>
 		</span>`;
 		
-	var colorPickerModal = $(colorPickerModalMarkup)[0];
+	var colorPickerModal = BDfunctionsDevilBro.$(colorPickerModalMarkup)[0];
 	BDfunctionsDevilBro.appendModal(colorPickerModal);
-	$(colorPickerModal)
+	BDfunctionsDevilBro.$(colorPickerModal)
 		.on("click", ".btn-ok", () => {
 			var newRGB = colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").style.backgroundColor;
 			var newCOMP = BDfunctionsDevilBro.color2COMP(newRGB);
 			var newInvRGB = BDfunctionsDevilBro.colorINV(newRGB);
 			
-			$(".ui-color-picker-" + swatch + ".selected.nocolor")
+			BDfunctionsDevilBro.$(".ui-color-picker-" + swatch + ".selected.nocolor")
 				.removeClass("selected")
 				.css("border", "4px solid red");
 				
-			$(".ui-color-picker-" + swatch + ".selected")
+			BDfunctionsDevilBro.$(".ui-color-picker-" + swatch + ".selected")
 				.removeClass("selected")
 				.css("border", "4px solid transparent");
 			
-			$(".ui-color-picker-" + swatch + ".custom")
+			BDfunctionsDevilBro.$(".ui-color-picker-" + swatch + ".custom")
 				.addClass("selected")
 				.css("background-color", newRGB)
 				.css("border", "4px solid " + newInvRGB);
 				
-			$(".color-picker-dropper-fg-" + swatch)
+			BDfunctionsDevilBro.$(".color-picker-dropper-fg-" + swatch)
 				.attr("fill", newCOMP[0] > 150 && newCOMP[1] > 150 && newCOMP[2] > 150 ? "#000000" : "#ffffff");
 		});
 	
@@ -2068,9 +2078,9 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 	var pY = 0;
 	var pHalfW = pcursor.offsetWidth/2;
 	var pHalfH = pcursor.offsetHeight/2;
-	var pMinX = $(ppane).offset().left;
+	var pMinX = BDfunctionsDevilBro.$(ppane).offset().left;
 	var pMaxX = pMinX + ppane.offsetWidth;
-	var pMinY = $(ppane).offset().top;
+	var pMinY = BDfunctionsDevilBro.$(ppane).offset().top;
 	var pMaxY = pMinY + ppane.offsetHeight;
 	
 	var spane = colorPickerModal.querySelector(".colorpicker-sliderpane");
@@ -2078,7 +2088,7 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 	
 	var sY = 0;
 	var sHalfH = scursor.offsetHeight/2;
-	var sMinY = $(spane).offset().top;
+	var sMinY = BDfunctionsDevilBro.$(spane).offset().top;
 	var sMaxY = sMinY + spane.offsetHeight;
 	
 	[hue, saturation, lightness] = BDfunctionsDevilBro.color2HSL(currentColor).replace(new RegExp(" ", "g"), "").slice(4, -1).split(",");
@@ -2087,7 +2097,7 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 	updateAllValues();
 	updateCursors();
 	
-	$(ppane)
+	BDfunctionsDevilBro.$(ppane)
 		.on("mousedown", (e) => {
 			BDfunctionsDevilBro.appendLocalStyle("crossHairColorPicker", `* {cursor: crosshair !important;}`);
 			
@@ -2095,29 +2105,29 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 			
 			pHalfW = pcursor.offsetWidth/2;
 			pHalfH = pcursor.offsetHeight/2;
-			pMinX = $(ppane).offset().left;
+			pMinX = BDfunctionsDevilBro.$(ppane).offset().left;
 			pMaxX = pMinX + ppane.offsetWidth;
-			pMinY = $(ppane).offset().top;
+			pMinY = BDfunctionsDevilBro.$(ppane).offset().top;
 			pMaxY = pMinY + ppane.offsetHeight;
 			pX = e.clientX - pHalfW;
 			pY = e.clientY - pHalfH;
 			
-			$(pcursor).offset({"left":pX,"top":pY});
+			BDfunctionsDevilBro.$(pcursor).offset({"left":pX,"top":pY});
 			
 			saturation = BDfunctionsDevilBro.mapRange([pMinX - pHalfW, pMaxX - pHalfW], [0, 100], pX);
 			lightness = BDfunctionsDevilBro.mapRange([pMinY - pHalfH, pMaxY - pHalfH], [100, 0], pY);
 			updateAllValues();
 			
-			$(document)
+			BDfunctionsDevilBro.$(document)
 				.off("mouseup.ColorPicker").off("mousemove.ColorPicker")
 				.on("mouseup.ColorPicker", () => {
 					BDfunctionsDevilBro.removeLocalStyle("crossHairColorPicker");
-					$(document).off("mouseup.ColorPicker").off("mousemove.ColorPicker");
+					BDfunctionsDevilBro.$(document).off("mouseup.ColorPicker").off("mousemove.ColorPicker");
 				})
 				.on("mousemove.ColorPicker", (e2) => {
 					pX = e2.clientX > pMaxX ? pMaxX - pHalfW : (e2.clientX < pMinX ? pMinX - pHalfW : e2.clientX - pHalfW);
 					pY = e2.clientY > pMaxY ? pMaxY - pHalfH : (e2.clientY < pMinY ? pMinY - pHalfH : e2.clientY - pHalfH);
-					$(pcursor).offset({"left":pX,"top":pY});
+					BDfunctionsDevilBro.$(pcursor).offset({"left":pX,"top":pY});
 					
 					saturation = BDfunctionsDevilBro.mapRange([pMinX - pHalfW, pMaxX - pHalfW], [0, 100], pX);
 					lightness = BDfunctionsDevilBro.mapRange([pMinY - pHalfH, pMaxY - pHalfH], [100, 0], pY);
@@ -2125,43 +2135,43 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 				});
 		});
 	
-	$(spane)
+	BDfunctionsDevilBro.$(spane)
 		.on("mousedown", (e) => {
 			BDfunctionsDevilBro.appendLocalStyle("crossHairColorPicker", `* {cursor: crosshair !important;}`);
 			
 			switchPreviews(e.button);
 			
 			sHalfH = scursor.offsetHeight/2;
-			sMinY = $(spane).offset().top;
+			sMinY = BDfunctionsDevilBro.$(spane).offset().top;
 			sMaxY = sMinY + spane.offsetHeight;
 			sY = e.clientY - sHalfH;
 			
-			$(scursor).offset({"top":sY});
+			BDfunctionsDevilBro.$(scursor).offset({"top":sY});
 			
 			hue = BDfunctionsDevilBro.mapRange([sMinY - sHalfH, sMaxY - sHalfH], [360, 0], sY);
 			updateAllValues();
 			
-			$(document)
+			BDfunctionsDevilBro.$(document)
 				.off("mouseup.ColorPicker").off("mousemove.ColorPicker")
 				.on("mouseup.ColorPicker", () => {
 					BDfunctionsDevilBro.removeLocalStyle("crossHairColorPicker");
-					$(document).off("mouseup.ColorPicker").off("mousemove.ColorPicker");
+					BDfunctionsDevilBro.$(document).off("mouseup.ColorPicker").off("mousemove.ColorPicker");
 				})
 				.on("mousemove.ColorPicker", (e2) => {
 					sY = e2.clientY > sMaxY ? sMaxY - sHalfH : (e2.clientY < sMinY ? sMinY - sHalfH : e2.clientY - sHalfH);
-					$(scursor).offset({"top":sY});
+					BDfunctionsDevilBro.$(scursor).offset({"top":sY});
 					
 					hue = BDfunctionsDevilBro.mapRange([sMinY - sHalfH, sMaxY - sHalfH], [360, 0], sY);
 					updateAllValues();
 				});
 		});
 		
-	$(colorPickerModal)
+	BDfunctionsDevilBro.$(colorPickerModal)
 		.on("input", ".inputMini-3MyfLa", (e) => {
 			updateValues(e.currentTarget.name);
 		});
 		
-	$(colorPickerModal)
+	BDfunctionsDevilBro.$(colorPickerModal)
 		.on("click", "[class^='colorpicker-preview-']", (e) => {
 			colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").style.borderColor = "transparent";
 			colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").classList.remove("selected");
@@ -2183,7 +2193,7 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 		switch (type) {
 			case "hex":
 				hex = colorPickerModal.querySelector(".colorpicker-hex").value;
-				if (/^#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.test(hex)) {
+				if (/^#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})BDfunctionsDevilBro.$/i.test(hex)) {
 					[red, green, blue] = BDfunctionsDevilBro.color2COMP(hex);
 					[hue, saturation, lightness] = BDfunctionsDevilBro.color2HSL(hex).replace(new RegExp(" ", "g"), "").slice(4, -1).split(",");
 					saturation *= 100;
@@ -2229,22 +2239,22 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 	
 	function updateCursors () {
 		sHalfH = scursor.offsetHeight/2;
-		sMinY = $(spane).offset().top;
+		sMinY = BDfunctionsDevilBro.$(spane).offset().top;
 		sY = BDfunctionsDevilBro.mapRange([360, 0], [sMinY - sHalfH, sMaxY - sHalfH], hue);
 		
 		pHalfW = pcursor.offsetWidth/2;
 		pHalfH = pcursor.offsetHeight/2;
-		pMinX = $(ppane).offset().left;
+		pMinX = BDfunctionsDevilBro.$(ppane).offset().left;
 		pMaxX = pMinX + ppane.offsetWidth;
-		pMinY = $(ppane).offset().top;
+		pMinY = BDfunctionsDevilBro.$(ppane).offset().top;
 		pMaxY = pMinY + ppane.offsetHeight;
 		pX = BDfunctionsDevilBro.mapRange([0, 100], [pMinX - pHalfW, pMaxX - pHalfW], saturation);
 		pY = BDfunctionsDevilBro.mapRange([100, 0], [pMinY - pHalfH, pMaxY - pHalfH], lightness);
 		
-		$(scursor).offset({"top":sY});
-		$(pcursor).offset({"left":pX,"top":pY});
-		$(pcursor).find("circle").attr("stroke", BDfunctionsDevilBro.colorINV([red, green, blue], "rgb"));
-		$(scursor).find("path").attr("stroke", BDfunctionsDevilBro.color2RGB("hsl(" + hue + ", 1, 1)"));
+		BDfunctionsDevilBro.$(scursor).offset({"top":sY});
+		BDfunctionsDevilBro.$(pcursor).offset({"left":pX,"top":pY});
+		BDfunctionsDevilBro.$(pcursor).find("circle").attr("stroke", BDfunctionsDevilBro.colorINV([red, green, blue], "rgb"));
+		BDfunctionsDevilBro.$(scursor).find("path").attr("stroke", BDfunctionsDevilBro.color2RGB("hsl(" + hue + ", 1, 1)"));
 	}
 	
 	function updateAllValues () {
@@ -2259,8 +2269,8 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 		
 		updateColors();
 		
-		$(pcursor).find("circle").attr("stroke", BDfunctionsDevilBro.colorINV([red, green, blue], "rgb"));
-		$(scursor).find("path").attr("stroke", BDfunctionsDevilBro.color2RGB("hsl(" + hue + ", 1, 1)"));
+		BDfunctionsDevilBro.$(pcursor).find("circle").attr("stroke", BDfunctionsDevilBro.colorINV([red, green, blue], "rgb"));
+		BDfunctionsDevilBro.$(scursor).find("path").attr("stroke", BDfunctionsDevilBro.color2RGB("hsl(" + hue + ", 1, 1)"));
 	}
 	
 	function updateColors () {
@@ -2275,7 +2285,7 @@ BDfunctionsDevilBro.mapRange = function (from, to, number) {
 };
 
 BDfunctionsDevilBro.getSwatchColor = function (swatch) {
-	return !$(".ui-color-picker-" + swatch + ".nocolor.selected")[0] ? BDfunctionsDevilBro.color2COMP($(".ui-color-picker-" + swatch + ".selected").css("background-color")) : null;
+	return !BDfunctionsDevilBro.$(".ui-color-picker-" + swatch + ".nocolor.selected")[0] ? BDfunctionsDevilBro.color2COMP(BDfunctionsDevilBro.$(".ui-color-picker-" + swatch + ".selected").css("background-color")) : null;
 };
 
 BDfunctionsDevilBro.isPluginEnabled = function (name) {
@@ -2593,7 +2603,7 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 	}
 };
 
-$(window)
+BDfunctionsDevilBro.$(window)
 	.off("keydown.BDfunctionsDevilBroPressedKeys")
 	.off("keyup.BDfunctionsDevilBroPressedKeys")
 	.off("mousedown.BDfunctionsDevilBroMousePosition")
