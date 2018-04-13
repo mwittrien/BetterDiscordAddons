@@ -3017,6 +3017,11 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		min-height: 28px;
 	}
 	
+	.DevilBro-settingsmodal .DevilBro-settings .card-11ynQk,
+	.DevilBro-settingsmodal .DevilBro-settings .card-11ynQk .card-11ynQk-inner {
+		width: 520px;
+	}
+	
 	.DevilBro-settings .card-11ynQk:before {
 		z-index: 50;
 		left: -10px;
