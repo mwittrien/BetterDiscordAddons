@@ -1377,7 +1377,8 @@ BDfunctionsDevilBro.saveAllData = function (settings, plugin, keyName) {
 	else {
 		let fs = require("fs");
 		let filepath = require("path").join(plugin.contentPath, "settings.json");
-		let data = BDfunctionsDevilBro.loadAllData(plugin, keyName);
+		if (!fs.existsSync(filepath)) return;
+		let data = JSON.parse(require("fs").readFileSync(filepath));
 		data[keyName] = settings;
 		fs.writeFileSync(filepath, JSON.stringify(data, null, "\t"));
 	}
