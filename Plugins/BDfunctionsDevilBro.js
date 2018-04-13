@@ -1106,7 +1106,6 @@ BDfunctionsDevilBro.removeReloadListener = function (plugin) {
 };
 
 BDfunctionsDevilBro.addSettingsButtonListener = function (plugin) {
-	console.log(plugin);
 	if (BDfunctionsDevilBro.isBDv2() && typeof plugin.getSettingsPanel === "function") {
 		BDfunctionsDevilBro.removeSettingsButtonListener(plugin);
 		BDfunctionsDevilBro.appendSettingsButton(plugin);
@@ -1137,7 +1136,7 @@ BDfunctionsDevilBro.appendSettingsButton = function (plugin) {
 		BDfunctionsDevilBro.$(settingsbutton)
 			.on("mouseenter.BDfunctionsDevilBroSettingsButtonListener", (e) => {BDfunctionsDevilBro.createTooltip("Settings", e.currentTarget, {type:"top"});})
 			.on("click.BDfunctionsDevilBroSettingsButtonListener", (e) => {
-				var settingsmodal = BDfunctionsDevilBro.$(`<span class="DevilBro-modal DevilBro-settingsmodal ${plugin.id}-settingsmodal"><div class="backdrop-2ohBEd"></div><div class="modal-2LIEKY"><div class="inner-1_1f7b"><div class="modal-3HOjGZ sizeMedium-1-2BNS"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO header-3sp3cE" style="flex: 0 0 auto;"><div class="flexChild-1KGW5q" style="flex: 1 1 auto;"><h4 class="h4-2IXpeI title-1pmpPr size16-3IvaX_ height20-165WbF weightSemiBold-T8sxWH defaultColor-v22dK1 defaultMarginh4-jAopYe marginReset-3hwONl">REPLACE_modal_header_text</h4></div><svg class="btn-cancel close-3ejNTg flexChild-1KGW5q" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12"><g fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div><div class="scrollerWrap-2uBjct content-1Cut5s scrollerThemed-19vinI themeGhostHairline-2H8SiW"><div class="scroller-fzNley inner-tqJwAU"></div></div><div class="flex-lFgbSz flex-3B1Tl4 horizontalReverse-2LanvO horizontalReverse-k5PqxT flex-3B1Tl4 directionRowReverse-2eZTxP justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO footer-1PYmcw"><button type="button" class="btn-save button-2t3of8 lookFilled-luDKDo colorBrand-3PmwCE sizeMedium-2VGNaF grow-25YQ8u"><div class="contents-4L4hQM">REPLACE_btn_save_text</div></button></div></div></div></div></span>`);
+				var settingsmodal = BDfunctionsDevilBro.$(`<span class="DevilBro-modal DevilBro-settingsmodal ${plugin.id}-settingsmodal"><div class="backdrop-2ohBEd"></div><div class="modal-2LIEKY"><div class="inner-1_1f7b"><div class="modal-3HOjGZ sizeMedium-1-2BNS"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO header-3sp3cE" style="flex: 0 0 auto;"><div class="flexChild-1KGW5q" style="flex: 1 1 auto;"><h4 class="h4-2IXpeI title-1pmpPr size16-3IvaX_ height20-165WbF weightSemiBold-T8sxWH defaultColor-v22dK1 defaultMarginh4-jAopYe marginReset-3hwONl">REPLACE_modal_header_text</h4></div><svg class="btn-cancel close-3ejNTg flexChild-1KGW5q" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12"><g fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div><div class="scrollerWrap-2uBjct content-1Cut5s scrollerThemed-19vinI themeGhostHairline-2H8SiW"><div class="scroller-fzNley inner-tqJwAU"></div></div></div></div></div></span>`);
 				settingsmodal.find(".title-1pmpPr").text(plugin.name + " Settings");
 				settingsmodal.find(".inner-tqJwAU").append(plugin.getSettingsPanel());
 				BDfunctionsDevilBro.appendModal(settingsmodal);
@@ -3176,8 +3175,16 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		display: initial;
 	}
 	
+	.DevilBro-settingsmodal .modal-2LIEKY {
+		z-index: 4010;
+	}
+	
+	.DevilBro-settingsmodal .backdrop-2ohBEd {
+		z-index: 4005;
+	}
+	
 	.DevilBro-tooltip {
-		z-index: 9999;
+		z-index: 4015;
 	}
 	
 	.colorpicker-modal .colorpicker-container {
