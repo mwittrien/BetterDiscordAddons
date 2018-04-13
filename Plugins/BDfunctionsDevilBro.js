@@ -178,7 +178,7 @@ BDfunctionsDevilBro.addObserver = function (plugin, selector, observer, config =
 
 // plugin update notifications created in cooperation with Zerebos https://github.com/rauenzi/BetterDiscordAddons/blob/master/Plugins/PluginLibrary.js
 BDfunctionsDevilBro.checkUpdate = function (pluginName, downloadUrl) {
-	if (typeof window.PluginUpdates == "undefined") return;
+	if (BDfunctionsDevilBro.isBDv2()) return;
 	let request = require("request");
 	request(downloadUrl, (error, response, result) => {
 		if (error) return;
@@ -2302,6 +2302,10 @@ BDfunctionsDevilBro.isThemeEnabled = function (name) {
 
 BDfunctionsDevilBro.zacksFork = function () {
 	return (typeof bdpluginErrors === "object" && typeof bdthemeErrors === "object" && typeof bbdVersion === "string");
+};
+
+BDfunctionsDevilBro.isBDv2 = function () {
+	return (typeof bdmenu === "object");
 };
 
 BDfunctionsDevilBro.getLibraryStrings = function () {
