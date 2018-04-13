@@ -1747,7 +1747,7 @@ BDfunctionsDevilBro.encodeToHTML = function (string) {
 };
 
 BDfunctionsDevilBro.regEscape = function (string) {
-	return string.replace(/[-/\\^BDfunctionsDevilBro.$*+?.()|[\]{}]/g, "\\BDfunctionsDevilBro.$&");
+	return string.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
 };
 
 BDfunctionsDevilBro.insertNRST = function (string) {
