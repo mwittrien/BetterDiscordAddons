@@ -1322,20 +1322,48 @@ BDfunctionsDevilBro.getDivOfDM = function (id) {
 };
 
 BDfunctionsDevilBro.saveAllData = function (settings, plugin, keyName) {
-	bdPluginStorage.set(plugin.name ? plugin.name : plugin.getName(), keyName, settings);
+	if (!BDfunctionsDevilBro.isBDv2()) {
+		bdPluginStorage.set(plugin.getName(), keyName, settings);
+	}
+	else {
+		let fs = require("fs");
+		let filepath = require("path").join(plugin.contentPath, "settings.json");
+		let data = BDfunctionsDevilBro.loadAllData(plugin, keyName);
+		data[keyName] = settings;
+		fs.writeFileSync(filepath, JSON.stringify(data, null, "\t"));
+	}
 };
 
 BDfunctionsDevilBro.loadAllData = function (plugin, keyName) {
-	return bdPluginStorage.get(plugin.name ? plugin.name : plugin.getName(), keyName) || {};
+	if (!BDfunctionsDevilBro.isBDv2()) {
+		return bdPluginStorage.get(plugin.getName(), keyName) || {};
+	}
+	else {
+		let fs = require("fs");
+		let filepath = require("path").join(plugin.contentPath, "settings.json");
+		if (!fs.existsSync(filepath)) return {};
+		let data = JSON.parse(require("fs").readFileSync(filepath));
+		return data && typeof data[keyName] !== "undefined" ? data[keyName] : {};
+	}
 };
 
 BDfunctionsDevilBro.removeAllData = function (plugin, keyName) {
-	BDfunctionsDevilBro.saveAllData({}, plugin, keyName);
+	if (!BDfunctionsDevilBro.isBDv2()) {
+		BDfunctionsDevilBro.saveAllData({}, plugin, keyName);
+	}
+	else {
+		let fs = require("fs");
+		let filepath = require("path").join(plugin.contentPath, "settings.json");
+		if (!fs.existsSync(filepath)) return;
+		let data = JSON.parse(require("fs").readFileSync(filepath));
+		delete data[keyName];
+		fs.writeFileSync(filepath, JSON.stringify(data, null, "\t"));
+	}
 };
 
 BDfunctionsDevilBro.getAllData = function (plugin, keyName, compareObject) {
 	if (!plugin.defaults || !plugin.defaults[keyName]) return {};
-	var oldData = BDfunctionsDevilBro.loadAllData(plugin, keyName), newData = {}, saveData = false;
+	let oldData = BDfunctionsDevilBro.loadAllData(plugin, keyName), newData = {}, saveData = false;
 	for (let key in plugin.defaults[keyName]) {
 		if (oldData[key] == null) {
 			newData[key] = plugin.defaults[keyName][key].value;
@@ -1354,7 +1382,7 @@ BDfunctionsDevilBro.getAllData = function (plugin, keyName, compareObject) {
 };
 
 BDfunctionsDevilBro.saveData = function (id, value, plugin, keyName) {
-	var data = BDfunctionsDevilBro.loadAllData(plugin, keyName);
+	let data = BDfunctionsDevilBro.loadAllData(plugin, keyName);
 	
 	data[id] = value;
 	
@@ -1362,15 +1390,15 @@ BDfunctionsDevilBro.saveData = function (id, value, plugin, keyName) {
 };
 
 BDfunctionsDevilBro.loadData = function (id, plugin, keyName) {
-	var data = BDfunctionsDevilBro.loadAllData(plugin, keyName);
+	let data = BDfunctionsDevilBro.loadAllData(plugin, keyName);
 	
-	var value = data[id];
+	let value = data[id];
 	
 	return value === undefined ? null : value;
 };
 	
 BDfunctionsDevilBro.removeData = function (id, plugin, keyName) {
-	var data = BDfunctionsDevilBro.loadAllData(plugin, keyName);
+	let data = BDfunctionsDevilBro.loadAllData(plugin, keyName);
 	
 	delete data[id];
 	
@@ -1378,9 +1406,9 @@ BDfunctionsDevilBro.removeData = function (id, plugin, keyName) {
 };
 
 BDfunctionsDevilBro.getData = function (id, plugin, keyName, compareObject) {
-	var data = BDfunctionsDevilBro.getAllData(plugin, keyName, compareObject);
+	let data = BDfunctionsDevilBro.getAllData(plugin, keyName, compareObject);
 	
-	var value = data[id];
+	let value = data[id];
 	
 	return value === undefined ? null : value;
 };
