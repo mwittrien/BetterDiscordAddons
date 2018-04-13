@@ -37,9 +37,6 @@
 .Select-control,
 .form-inner,
 .private-channel-call,
-.react-datepicker__header,
-.react-datepicker__month-container,
-.react-datepicker__day--disabled:not(.react-datepicker__day--outside-month),
 .search-2--6aU .search-bar,
 .search-results-wrap,
 .search-results-wrap .search-header,
@@ -109,7 +106,6 @@
 .previewOverlay-2vHj3H,
 .private-channel-call-actions .center,
 .search-results-wrap .search-result-message.hit,
-.react-datepicker__day--outside-month,
 .embed-2diOCQ,
 .wrapper-uAa07y,
 .invite-CTGItT,
@@ -137,8 +133,7 @@ button.guild {
 .message-group-blocked,
 .input-2YozMi:not(:focus),
 .container-3lnMWU,
-.cardPrimaryEditable-2IQ7-V,
-.react-datepicker__day:not(.react-datepicker__day--outside-month) {
+.cardPrimaryEditable-2IQ7-V {
 	border-color: rgba(var(--transparencycolor),calc(var(--transparencyalpha) * 3)) !important;
 }
 
@@ -194,36 +189,6 @@ input:disabled {
 }
 .keybindShortcut-tTramc [stroke]:not([stroke="none"]) {
 	stroke: hsla(0,0%,100%,.8) !important;
-}
-
-.react-datepicker__header {
-	padding-bottom: 5px !important;
-}
-.date-picker-hint {
-	margin: 0 !important;
-	padding: 20px !important;
-}
-.react-datepicker__navigation {
-	top: 30px !important;
-}
-.react-datepicker__navigation--previous {
-	left: 30px !important;
-}
-.react-datepicker__navigation--next {
-	right: 30px !important;
-}
-.react-datepicker__current-month {
-	padding: 10px 0 !important;
-}
-.react-datepicker__day:not(.react-datepicker__day--disabled):hover,
-.react-datepicker__day:not(.react-datepicker__day--disabled):not(.react-datepicker__day--outside-month) {
-	color: #FFF !important;
-}
-.react-datepicker__day--disabled:not(.react-datepicker__day--outside-month) {
-	color: #888 !important;
-}
-.react-datepicker__day--outside-month {
-	color: #333 !important;
 }
 
 .action-buttons {
@@ -486,7 +451,6 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .date-picker,
 .date-picker-hint,
 .embedInner-t4ag7g,
-.search-popout .search-query,
 .accountBtnInner-3zsU2z,
 .callAvatarStatus-2ybelh,
 .message-group,
@@ -555,9 +519,6 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .bd-pfbtn,
 .bda-right button,
 .bda-settings-button,
-.date-picker-hint .hint-value,
-.react-datepicker__day:not(.react-datepicker__day--disabled):hover,
-.react-datepicker__day--today::after,
 .ui-tab-bar-item.selected,
 .channel.selected a,
 .wrapperSelectedVoice-1Q1ocJ .content-2mSKOj,
@@ -731,10 +692,6 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .tutorial-popout .content p,
 .input-2YozMi,
 #friends .tab-bar-item.selected,
-.react-datepicker__current-month,
-.react-datepicker__day-name,
-.date-picker-hint .hint,
-.date-picker-hint .hint-value,
 .new-messages-bar button,
 .has-more button {
 	color: #FFF !important;
@@ -1473,19 +1430,15 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	width: 72px;
 }
 
-.search-popout .results-group,
 .Select-option {
 	background: rgba(var(--transparencycolor),var(--transparencyalpha)) !important;
 }
-.search-popout .search-query,
-.search-popout .results-group .option.selected,
 .btn-item,
 .attachPopoutRow-elxASe,
 .item-rK1j5B,
 .Select-option:hover {
 	background: rgba(var(--transparencycolor),calc(var(--transparencyalpha) * 2)) !important;
 }
-.search-popout .search-query.selected,
 .btn-item:hover,
 .attachPopoutRow-elxASe:hover,
 .item-rK1j5B:hover,
@@ -1493,39 +1446,107 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	background: rgba(var(--transparencycolor),calc(var(--transparencyalpha) * 4)) !important;
 }
 
-.search-popout .results-group {
+.searchPopout-38pRYh .searchQuery-3o17HL {
+	border: none !important;
+	background: rgba(var(--transparencycolor),calc(var(--transparencyalpha) * 2)) !important;
+}
+.searchPopout-38pRYh .searchQuery-3o17HL.selected-_bTXUG {
+	background: rgba(var(--transparencycolor),calc(var(--transparencyalpha) * 2)) !important;
+}
+.searchPopout-38pRYh .resultsGroup-2qzvNj {
+	background: rgba(var(--transparencycolor),var(--transparencyalpha)) !important;
 	padding-top: 0 !important;
 }
-.search-popout .results-group .header {
-	padding: 8px 20px !important;
-}
-.search-popout .results-group .search-clear-history, 
-.search-popout .results-group .search-learn-more {
-	top: 4px !important;
-}
-.search-popout .results-group::before {
+.searchPopout-38pRYh .resultsGroup-2qzvNj::before {
 	display: none !important;
 }
-.search-popout .results-group .option::after {
+.searchPopout-38pRYh .resultsGroup-2qzvNj .option-1MvVr1.selected-_bTXUG {
+	background: rgba(var(--transparencycolor),calc(var(--transparencyalpha) * 2)) !important;
+}
+.searchPopout-38pRYh .resultsGroup-2qzvNj .option-1MvVr1::after {
 	display: none !important;
 }
-.search-popout .results-group .option.selected::before {
+.searchPopout-38pRYh .resultsGroup-2qzvNj .option-1MvVr1.selected-_bTXUG::before {
 	background-image: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"><g fill="none" fill-rule="evenodd"><path d="M0 0h18v18H0z"/><path fill="#FFFFFF" d="M10 8V4H8v4H4v2h4v4h2v-4h4V8h-4z"/></g></svg>') !important;
 	background-color: rgb(var(--accentcolor)) !important;
 	background-position: center !important;
 	border-radius: 3px !important;
 	width: 34px !important;
 }
-
-.search-popout .option .answer {
+.searchPopout-38pRYh .resultsGroup-2qzvNj .header-1pJ5N1 {
+	padding: 8px 20px !important;
+}
+.searchPopout-38pRYh .resultsGroup-2qzvNj .searchClearHistory-nsGTND, 
+.searchPopout-38pRYh .resultsGroup-2qzvNj .searchLearnMore-2Y3VGL {
+	top: 4px !important;
+}
+.searchPopout-38pRYh .option-1MvVr1 strong,
+.searchPopout-38pRYh .option-1MvVr1 .answer-9L5NhD,
+.searchPopout-38pRYh .option-1MvVr1 .displayedNick-1487Dr {
 	color: #caccce !important;
 }
+.searchPopout-38pRYh .option-1MvVr1 .searchResultChannelIcon-3WC6xU,
+.searchPopout-38pRYh .option-1MvVr1 .searchResultChannelCategory-CTQNMT,
+.searchPopout-38pRYh .option-1MvVr1 .filter-3kZ3tT,
+.searchPopout-38pRYh .option-1MvVr1 .displayUsername-3PmTeH,
+.searchPopout-38pRYh .option-1MvVr1 .nonText-1oayCI {
+	color: #a0a0a0 !important;
+}
 
-.search-popout .option strong,
-.search-popout .option .filter,
-.search-popout .option .displayed-nick,
-.search-popout .option .non-text {
-	color: #808080 !important;
+.datePicker-1RD4eT .react-datepicker__day:not(.react-datepicker__day--outside-month) {
+	border-color: rgba(var(--transparencycolor),calc(var(--transparencyalpha) * 3)) !important;
+}
+.datePicker-1RD4eT .react-datepicker__day--outside-month {
+	border-color: transparent !important;
+	background: rgba(var(--transparencycolor),calc(var(--transparencyalpha) * 3)) !important;
+}
+.datePicker-1RD4eT .react-datepicker__header,
+.datePicker-1RD4eT .react-datepicker__month-container,
+.datePicker-1RD4eT .react-datepicker__day--disabled:not(.react-datepicker__day--outside-month) {
+	background: rgba(var(--transparencycolor),var(--transparencyalpha)) !important;
+}
+.datePicker-1RD4eT .datePickerHint-1iW7Wz .hintValue-45YyWZ,
+.datePicker-1RD4eT .react-datepicker__day:not(.react-datepicker__day--disabled):hover,
+.datePicker-1RD4eT .react-datepicker__day--today::after {
+	background: rgb(var(--accentcolor)) !important;
+}
+.datePicker-1RD4eT .react-datepicker__header {
+	padding-bottom: 5px !important;
+}
+.datePicker-1RD4eT .react-datepicker__navigation {
+	top: 30px !important;
+}
+.datePicker-1RD4eT .react-datepicker__navigation--previous {
+	left: 30px !important;
+}
+.datePicker-1RD4eT .react-datepicker__navigation--next {
+	right: 30px !important;
+}
+.datePicker-1RD4eT .react-datepicker__current-month {
+	padding: 10px 0 !important;
+}
+.datePicker-1RD4eT .react-datepicker__current-month,
+.datePicker-1RD4eT .react-datepicker__day-name,
+.datePicker-1RD4eT .react-datepicker__day:not(.react-datepicker__day--disabled):hover,
+.datePicker-1RD4eT .react-datepicker__day:not(.react-datepicker__day--disabled):not(.react-datepicker__day--outside-month),
+.datePicker-1RD4eT .datePickerHint-1iW7Wz .hint-21tC6F,
+.datePicker-1RD4eT .datePickerHint-1iW7Wz .hintValue-45YyWZ {
+	color: #FFF !important;
+}
+.datePicker-1RD4eT .react-datepicker__day--disabled:not(.react-datepicker__day--outside-month) {
+	color: #888 !important;
+}
+.datePicker-1RD4eT .react-datepicker__day--outside-month {
+	color: #333 !important;
+}
+.datePicker-1RD4eT .datePickerHint-1iW7Wz {
+	margin: 0 !important;
+	padding: 20px !important;
+	display: flex !important;
+	justify-content: center !important;
+}
+.datePicker-1RD4eT .datePickerHint-1iW7Wz .hintValue-45YyWZ {
+	background: rgb(var(--accentcolor)) !important;
 }
 
 .itemGroup-oViAgA {
