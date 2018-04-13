@@ -1385,7 +1385,6 @@ BDfunctionsDevilBro.saveAllData = function (settings, plugin, keyName) {
 
 BDfunctionsDevilBro.loadAllData = function (plugin, keyName) {
 	if (!BDfunctionsDevilBro.isBDv2()) {
-		console.log(plugin);
 		return bdPluginStorage.get(typeof plugin === "string" ? plugin : plugin.getName(), keyName) || {};
 	}
 	else {
