@@ -1375,6 +1375,7 @@ BDfunctionsDevilBro.saveAllData = function (settings, plugin, keyName) {
 		bdPluginStorage.set(typeof plugin === "string" ? plugin : plugin.getName(), keyName, settings);
 	}
 	else {
+		if (typeof plugin.contentPath !== "string") return;
 		let fs = require("fs");
 		let filepath = require("path").join(plugin.contentPath, "settings.json");
 		let data = fs.existsSync(filepath) ? JSON.parse(require("fs").readFileSync(filepath)) : {};
@@ -1388,6 +1389,7 @@ BDfunctionsDevilBro.loadAllData = function (plugin, keyName) {
 		return bdPluginStorage.get(typeof plugin === "string" ? plugin : plugin.getName(), keyName) || {};
 	}
 	else {
+		if (typeof plugin.contentPath !== "string") return {};
 		let fs = require("fs");
 		let filepath = require("path").join(plugin.contentPath, "settings.json");
 		if (!fs.existsSync(filepath)) return {};
@@ -1401,6 +1403,7 @@ BDfunctionsDevilBro.removeAllData = function (plugin, keyName) {
 		BDfunctionsDevilBro.saveAllData({}, plugin, keyName);
 	}
 	else {
+		if (typeof plugin.contentPath !== "string") return;
 		let fs = require("fs");
 		let filepath = require("path").join(plugin.contentPath, "settings.json");
 		if (!fs.existsSync(filepath)) return;
