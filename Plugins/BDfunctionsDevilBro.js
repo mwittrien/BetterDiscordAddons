@@ -1724,7 +1724,7 @@ BDfunctionsDevilBro.checkColorType = function (color) {
 		else if (typeof color === "string" && color.indexOf("hsl(") == 0) {
 			return "hsl";
 		}
-		else if (typeof color === "string" && color.match(/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})BDfunctionsDevilBro.$/i)) {
+		else if (typeof color === "string" && color.match(/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i)) {
 			return "hex";
 		}
 	}
