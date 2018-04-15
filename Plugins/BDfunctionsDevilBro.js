@@ -2368,18 +2368,6 @@ BDfunctionsDevilBro.getSwatchColor = function (swatch) {
 	return !BDfunctionsDevilBro.$(".ui-color-picker-" + swatch + ".nocolor.selected")[0] ? BDfunctionsDevilBro.color2COMP(BDfunctionsDevilBro.$(".ui-color-picker-" + swatch + ".selected").css("background-color")) : null;
 };
 
-BDfunctionsDevilBro.isPluginEnabled = function (name) {
-	return window.bdplugins[name] && window.pluginCookie[name];
-};
-
-BDfunctionsDevilBro.isRestartNoMoreEnabled = function () {
-	return BDfunctionsDevilBro.isPluginEnabled("Restart-No-More") || BDfunctionsDevilBro.isPluginEnabled("Restart No More");
-};
-
-BDfunctionsDevilBro.isThemeEnabled = function (name) {
-	return window.bdthemes[name] && window.themeCookie[name];
-};
-
 BDfunctionsDevilBro.zacksFork = function () {
 	return (typeof bdpluginErrors === "object" && typeof bdthemeErrors === "object" && typeof bbdVersion === "string");
 };
@@ -2694,6 +2682,7 @@ BDfunctionsDevilBro.$(document)
 	.off("mousedown.BDfunctionsDevilBroMousePosition")
 	.on("click.BDfunctionsDevilBroPluginClick", ".bd-settingswrap .bd-refresh-button, .bd-settingswrap .bd-switch-checkbox", () => {
 		BDfunctionsDevilBro.setPluginCache();
+		BDfunctionsDevilBro.setThemeCache();
 	})
 	.on("keydown.BDfunctionsDevilBroPressedKeys", (e) => {
 		if (!BDfunctionsDevilBro.pressedKeys.includes(e.which)) BDfunctionsDevilBro.pressedKeys.push(e.which);
@@ -2704,10 +2693,36 @@ BDfunctionsDevilBro.$(document)
 	.on("mousedown.BDfunctionsDevilBroMousePosition", (e) => {
 		BDfunctionsDevilBro.mousePosition = {x:e.pageX,y:e.pageY};
 	});
-	
+
+
+BDfunctionsDevilBro.isPluginEnabled = function (name) {
+	if (!BDfunctionsDevilBro.isBDv2()) window.bdplugins[name] && window.pluginCookie[name];
+	else return BDfunctionsDevilBro.Plugins[name.toLocaleString()].enabled;
+};
+
+BDfunctionsDevilBro.isRestartNoMoreEnabled = function () {
+	return BDfunctionsDevilBro.isPluginEnabled("Restart-No-More") || BDfunctionsDevilBro.isPluginEnabled("Restart No More");
+};
+
+BDfunctionsDevilBro.isThemeEnabled = function (name) {
+	if (!BDfunctionsDevilBro.isBDv2()) window.bdthemes[name] && window.themeCookie[name];
+	else return BDfunctionsDevilBro.Themes[name.toLocaleString()].enabled;
+};
+
 (BDfunctionsDevilBro.setPluginCache = function () {
 	if (!BDfunctionsDevilBro.isBDv2()) return;
-	console.log("test");
+	BDfunctionsDevilBro.Plugins = {};
+	for (let id of BDfunctionsDevilBro.BDv2Api.Plugins.listPlugins()) {
+		BDfunctionsDevilBro.BDv2Api.Plugins.getPlugin(id).then(plugin => {BDfunctionsDevilBro.Plugins[id] = plugin;});
+	}
+})();
+
+(BDfunctionsDevilBro.setThemeCache = function () {
+	if (!BDfunctionsDevilBro.isBDv2()) return;
+	BDfunctionsDevilBro.Themes = {};
+	for (let id of BDfunctionsDevilBro.BDv2Api.Themes.listThemes()) {
+		BDfunctionsDevilBro.BDv2Api.Themes.getTheme(id).then(theme => {BDfunctionsDevilBro.Themes[id] = theme;});
+	}
 })();
 
 BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
