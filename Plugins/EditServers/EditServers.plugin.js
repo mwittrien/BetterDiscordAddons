@@ -124,7 +124,7 @@ class EditServers {
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	getVersion () {return "1.7.9";}
+	getVersion () {return "1.8.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -213,7 +213,7 @@ class EditServers {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			document.querySelectorAll("[custom-editservers]").forEach(serverDiv => {this.resetServer(serverDiv);});
+			document.querySelectorAll("[custom-editservers]").forEach(serverDiv => {this.resetServer(BDfunctionsDevilBro.getIdOfServer(serverDiv));});
 			
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
@@ -226,7 +226,7 @@ class EditServers {
 		if (confirm("Are you sure you want to reset all servers?")) {
 			BDfunctionsDevilBro.removeAllData(this, "servers");
 			
-			document.querySelectorAll("[custom-editservers]").forEach(serverDiv => {this.resetServer(serverDiv);});
+			document.querySelectorAll("[custom-editservers]").forEach(serverDiv => {this.resetServer(BDfunctionsDevilBro.getIdOfServer(serverDiv));});
 		}
 	}
 
@@ -423,12 +423,13 @@ class EditServers {
 	}
 	
 	removeServerData (id) {
-		this.resetServer(BDfunctionsDevilBro.getDivOfServer(id));
+		this.resetServer(id);
 		
 		BDfunctionsDevilBro.removeData(id, this, "servers");
 	}
 	
-	resetServer (serverObj) {
+	resetServer (id) {
+		let serverObj = BDfunctionsDevilBro.getDivOfServer(id);
 		if (typeof serverObj !== "object" || !serverObj) return;
 		$(serverObj.div)
 			.off("mouseenter." + this.getName())
