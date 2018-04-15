@@ -1375,9 +1375,10 @@ BDfunctionsDevilBro.saveAllData = function (settings, plugin, keyName) {
 		bdPluginStorage.set(typeof plugin === "string" ? plugin : plugin.getName(), keyName, settings);
 	}
 	else {
-		if (typeof plugin.contentPath !== "string") return;
+		let directory = typeof plugin === "string" ? (BDfunctionsDevilBro.Plugins[plugin.toLowerCase()] ? BDfunctionsDevilBro.Plugins[plugin.toLowerCase()].contentPath : null) : plugin.contentPath;
+		if (!directory) return;
 		let fs = require("fs");
-		let filepath = require("path").join(plugin.contentPath, "settings.json");
+		let filepath = require("path").join(directory, "settings.json");
 		let data = fs.existsSync(filepath) ? JSON.parse(require("fs").readFileSync(filepath)) : {};
 		data[keyName] = settings;
 		fs.writeFileSync(filepath, JSON.stringify(data, null, "\t"));
@@ -1389,9 +1390,10 @@ BDfunctionsDevilBro.loadAllData = function (plugin, keyName) {
 		return bdPluginStorage.get(typeof plugin === "string" ? plugin : plugin.getName(), keyName) || {};
 	}
 	else {
-		if (typeof plugin.contentPath !== "string") return {};
+		let directory = typeof plugin === "string" ? (BDfunctionsDevilBro.Plugins[plugin.toLowerCase()] ? BDfunctionsDevilBro.Plugins[plugin.toLowerCase()].contentPath : null) : plugin.contentPath;
+		if (!directory) return {};
 		let fs = require("fs");
-		let filepath = require("path").join(plugin.contentPath, "settings.json");
+		let filepath = require("path").join(directory, "settings.json");
 		if (!fs.existsSync(filepath)) return {};
 		let data = JSON.parse(require("fs").readFileSync(filepath));
 		return data && typeof data[keyName] !== "undefined" ? data[keyName] : {};
@@ -1403,9 +1405,10 @@ BDfunctionsDevilBro.removeAllData = function (plugin, keyName) {
 		BDfunctionsDevilBro.saveAllData({}, plugin, keyName);
 	}
 	else {
-		if (typeof plugin.contentPath !== "string") return;
+		let directory = typeof plugin === "string" ? (BDfunctionsDevilBro.Plugins[plugin.toLowerCase()] ? BDfunctionsDevilBro.Plugins[plugin.toLowerCase()].contentPath : null) : plugin.contentPath;
+		if (!directory) return;
 		let fs = require("fs");
-		let filepath = require("path").join(plugin.contentPath, "settings.json");
+		let filepath = require("path").join(directory, "settings.json");
 		if (!fs.existsSync(filepath)) return;
 		let data = JSON.parse(require("fs").readFileSync(filepath));
 		delete data[keyName];
