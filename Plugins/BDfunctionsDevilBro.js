@@ -1,4 +1,4 @@
-var BDfunctionsDevilBro = {$: BDfunctionsDevilBro && BDfunctionsDevilBro.$ ? BDfunctionsDevilBro.$ : global.$, creationTime:performance.now(), myData:{}, pressedKeys:[], mousePosition:{x:0,y:0}};
+var BDfunctionsDevilBro = {$: BDfunctionsDevilBro && BDfunctionsDevilBro.$ ? BDfunctionsDevilBro.$ : global.$, BDv2Api: BDfunctionsDevilBro && BDfunctionsDevilBro.BDv2Api ? BDfunctionsDevilBro.BDv2Api : undefined, creationTime:performance.now(), myData:{}, pressedKeys:[], mousePosition:{x:0,y:0}};
 
 BDfunctionsDevilBro.isLibraryOutdated = function () {
 	return performance.now() - BDfunctionsDevilBro.creationTime > 600000;
@@ -2385,7 +2385,7 @@ BDfunctionsDevilBro.zacksFork = function () {
 };
 
 BDfunctionsDevilBro.isBDv2 = function () {
-	return (typeof bdmenu === "object");
+	return (typeof BDfunctionsDevilBro.BDv2Api !== "undefined");
 };
 
 BDfunctionsDevilBro.getLibraryStrings = function () {
@@ -2687,10 +2687,14 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 	}
 };
 
-BDfunctionsDevilBro.$(window)
+BDfunctionsDevilBro.$(document)
+	.off("click.BDfunctionsDevilBroPluginClick")
 	.off("keydown.BDfunctionsDevilBroPressedKeys")
 	.off("keyup.BDfunctionsDevilBroPressedKeys")
 	.off("mousedown.BDfunctionsDevilBroMousePosition")
+	.on("click.BDfunctionsDevilBroPluginClick", ".bd-settingswrap .bd-refresh-button, .bd-settingswrap .bd-switch-checkbox", () => {
+		BDfunctionsDevilBro.setPluginCache();
+	})
 	.on("keydown.BDfunctionsDevilBroPressedKeys", (e) => {
 		if (!BDfunctionsDevilBro.pressedKeys.includes(e.which)) BDfunctionsDevilBro.pressedKeys.push(e.which);
 	})
@@ -2700,6 +2704,11 @@ BDfunctionsDevilBro.$(window)
 	.on("mousedown.BDfunctionsDevilBroMousePosition", (e) => {
 		BDfunctionsDevilBro.mousePosition = {x:e.pageX,y:e.pageY};
 	});
+	
+(BDfunctionsDevilBro.setPluginCache = function () {
+	if (!BDfunctionsDevilBro.isBDv2()) return;
+	console.log("test");
+})();
 
 BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 	#bd-settingspane-container .ui-form-title {
