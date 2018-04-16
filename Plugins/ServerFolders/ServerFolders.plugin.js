@@ -65,6 +65,7 @@ class ServerFolders {
 				line-height: 50px;
 				text-align: center;
 			}
+			.
 			
 			.guilds-wrapper.folderopen .scroller {
 				position: static !important;
@@ -316,7 +317,7 @@ class ServerFolders {
 			settings: {
 				closeOtherFolders:	{value:false, 	description:"Close other Folders when opening a Folder."},
 				closeTheFolder:		{value:false, 	description:"Close the Folder when selecting a Server."},
-				closeAllFolders:	{value:false, 	description:"Close All Folders when selecting a Server in a Folder."},
+				closeAllFolders:	{value:false, 	description:"Close All Folders when selecting a Server."},
 				showCountBadge:		{value:true, 	description:"Display Badge for Amount of Servers in a Folder."}
 			}
 		};
@@ -326,7 +327,7 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.5.8";}
+	getVersion () {return "5.5.9";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -404,7 +405,7 @@ class ServerFolders {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, "#app-mount", {name:"serverContextObserver",instance:observer}, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, ".appMount-14L89u", {name:"serverContextObserver",instance:observer}, {childList: true});
 			
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -464,12 +465,18 @@ class ServerFolders {
 			document.querySelectorAll(".badge:not(.folder):not(.copy)").forEach((badge) => {
 				BDfunctionsDevilBro.addObserver(this, badge, {name:"badgeObserver",multi:true}, {characterData:true,subtree:true});
 			});
-				
+			
+			$(".guilds").on("click." + this.name, ".guild-separator ~ div.guild:not(.folder)", () => {
+				if (BDfunctionsDevilBro.getData("closeAllFolders", this, "settings")) {
+					document.querySelectorAll(".folder.open").forEach(openFolder => {this.openCloseFolder(openFolder);});
+				}
+			});
+			
 			setTimeout(() => {
 				this.addDragListener();
 				this.loadAllFolders();
 			},5000);
-					}
+		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
 		}
@@ -478,8 +485,6 @@ class ServerFolders {
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.resetAllElements();
-			
-			$(".guilds.scroller").off("mousedown." + this.getName());
 						
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
@@ -515,7 +520,7 @@ class ServerFolders {
 		$(".guild.folder").remove();
 		$(".serverFoldersPreview").remove();
 		BDfunctionsDevilBro.readServerList().forEach(serverObj => $(serverObj.div).removeAttr("folder").show());
-		$(".guilds-wrapper").removeClass("folderopen");
+		$(".folderopen").removeClass("folderopen");
 		BDfunctionsDevilBro.removeLocalStyle("ChannelSizeCorrection");
 	}
 
@@ -597,7 +602,7 @@ class ServerFolders {
 					if (serverObj) {
 						var serverPreview = serverObj.div.cloneNode(true);
 						$(serverPreview)
-							.appendTo("#app-mount")
+							.appendTo(".appMount-14L89u")
 							.addClass("serverFoldersPreview")
 							.offset({"left":e.clientX + 5,"top":e.clientY + 5});
 						
@@ -713,7 +718,7 @@ class ServerFolders {
 				var guildswrap = document.querySelector(".guilds.scroller");
 				$(folderPreview)
 					.hide()
-					.appendTo("#app-mount")
+					.appendTo(".appMount-14L89u")
 					.addClass("serverFoldersPreview")
 					.offset({"left":e.clientX + 5,"top":e.clientY + 5});
 				
@@ -1092,6 +1097,7 @@ class ServerFolders {
 					var alreadyOpen = document.querySelector(".foldercontainer");
 						
 					if (!alreadyOpen) {
+						document.body.classList.add("folderopen");
 						$(".guilds-wrapper").addClass("folderopen");
 						$(`<div class="foldercontainer"></div>`).insertBefore(".guild:first");
 					}
@@ -1222,7 +1228,7 @@ class ServerFolders {
 				var hoveredCopy = null;
 				var placeholder = $(`<div class="guild guild-placeholder copy copy-placeholder"></div>`)[0];
 				$(serverPreview)
-					.appendTo("#app-mount")
+					.appendTo(".appMount-14L89u")
 					.addClass("serverFoldersPreview")
 					.offset({"left":e.clientX + 5,"top":e.clientY + 5});
 				
@@ -1277,7 +1283,7 @@ class ServerFolders {
 		var foldercontainer = document.querySelector(".foldercontainer");
 		if (foldercontainer && !foldercontainer.firstChild) {
 			foldercontainer.remove();
-			$(".guilds-wrapper").removeClass("folderopen");
+			$(".folderopen").removeClass("folderopen");
 			BDfunctionsDevilBro.removeLocalStyle("ChannelSizeCorrection");
 		}
 	}

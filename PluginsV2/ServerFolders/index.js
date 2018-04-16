@@ -336,7 +336,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					settings: {
 						closeOtherFolders:	{value:false, 	description:"Close other Folders when opening a Folder."},
 						closeTheFolder:		{value:false, 	description:"Close the Folder when selecting a Server."},
-						closeAllFolders:	{value:false, 	description:"Close All Folders when selecting a Server in a Folder."},
+						closeAllFolders:	{value:false, 	description:"Close All Folders when selecting a Server."},
 						showCountBadge:		{value:true, 	description:"Display Badge for Amount of Servers in a Folder."}
 					}
 				};
@@ -431,6 +431,12 @@ module.exports = (Plugin, Api, Vendor) => {
 				
 				document.querySelectorAll(".badge:not(.folder):not(.copy)").forEach((badge) => {
 					BDfunctionsDevilBro.addObserver(this, badge, {name:"badgeObserver",multi:true}, {characterData:true,subtree:true});
+				});
+				
+				$(".guilds").on("click." + this.name, ".guild-separator ~ div.guild:not(.folder)", () => {
+					if (BDfunctionsDevilBro.getData("closeAllFolders", this, "settings")) {
+						document.querySelectorAll(".folder.open").forEach(openFolder => {this.openCloseFolder(openFolder);});
+					}
 				});
 					
 				setTimeout(() => {
