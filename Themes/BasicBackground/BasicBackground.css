@@ -2884,6 +2884,12 @@ html, span:not(.spinner-item) {
 .bd-button {
 	transition: all 100ms linear !important;
 }
+.bd-button-group .bd-button {
+    border: none !important;
+}
+.bd-button-group .bd-button:not(:last-of-type) {
+    margin: 0 1px 0 0 !important;
+}
 .bd-dropdown-current,
 .bd-dropdown-text,
 .bd-dropdown-option {
