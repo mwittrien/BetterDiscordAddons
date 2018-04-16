@@ -718,7 +718,7 @@ class PluginRepo {
 				if (response) {
 					let plugin = {};
 					for (let tag of tags) {
-						let result = new RegExp(tag + "[\\s|\\t|\\n|\\r|=|>|function|\(|\)|\{|return]*([\"|\'|\`]).*\\1","gi").exec(body);
+						let result = new RegExp(tag + "[\\s|\\t|\\n|\\r|=|>|_|:|function|\(|\)|\{|return]*([\"|\'|\`]).*\\1","gi").exec(body);
 						if (result) {
 							let separator = result[1];
 							result = result[0].replace(new RegExp("\\\\" + separator, "g"), separator).split(separator);
