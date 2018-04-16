@@ -1,0 +1,21 @@
+{
+	"language": {
+		"input": "$Discord",
+		"output": "German"
+	},
+	"languages": {
+		"useGoogle": true
+	},
+	"settings": {
+		"sendOriginalMessage": false
+	},
+	"choices": {
+		"inputContext": "auto",
+		"inputMessage": "auto",
+		"outputContext": "de",
+		"outputMessage": "en"
+	},
+	"translators": {
+		"useGoogle": true
+	}
+}

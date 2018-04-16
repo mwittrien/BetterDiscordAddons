@@ -1,0 +1,54 @@
+{
+	"settings": {
+		"Delete_Message": true,
+		"Edit_Message": true,
+		"Pin/Unpin_Message": true,
+		"React_to_Message": true,
+		"__Citate_Message": true,
+		"__Note_Message": true,
+		"__Quote_Message": true,
+		"__Translate_Message": true
+	},
+	"bindings": {
+		"Delete_Message": {
+			"click": 0,
+			"key1": 46,
+			"key2": 0
+		},
+		"Edit_Message": {
+			"click": 1,
+			"key1": 0,
+			"key2": 0
+		},
+		"Pin/Unpin_Message": {
+			"click": 0,
+			"key1": 17,
+			"key2": 0
+		},
+		"React_to_Message": {
+			"click": 0,
+			"key1": 9,
+			"key2": 0
+		},
+		"__Citate_Message": {
+			"click": 0,
+			"key1": 114,
+			"key2": 0
+		},
+		"__Note_Message": {
+			"click": 0,
+			"key1": 16,
+			"key2": 0
+		},
+		"__Quote_Message": {
+			"click": 0,
+			"key1": 113,
+			"key2": 0
+		},
+		"__Translate_Message": {
+			"click": 0,
+			"key1": 20,
+			"key2": 0
+		}
+	}
+}

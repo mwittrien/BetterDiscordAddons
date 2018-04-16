@@ -1,0 +1,24 @@
+{
+	"choices": {
+		"dictionaryLanguage": "en-US"
+	},
+	"owndics": {
+		"en-US": [
+			"GOOGLE",
+			"DEVILBRO",
+			"AIN'T",
+			"SCREENSHOT",
+			"PLUGINS",
+			"plugin",
+			"online",
+			"transpile",
+			"textarea"
+		]
+	},
+	"amounts": {
+		"maxSimilarAmount": 13
+	},
+	"settings": {
+		"disableDiscordSpellcheck": true
+	}
+}

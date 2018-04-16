@@ -1,0 +1,13 @@
+{
+	"engines": {
+		"Baidu": false,
+		"Bing": true,
+		"Google": true,
+		"IQDB": false,
+		"Reddit": true,
+		"SauceNAO": false,
+		"Sogou": false,
+		"TinEye": true,
+		"Yandex": false
+	}
+}

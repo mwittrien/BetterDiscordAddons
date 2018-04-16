@@ -1,0 +1,11 @@
+{
+	"settings": {
+		"addCreationTime": true,
+		"addInUserPopout": true,
+		"addInUserProfil": true,
+		"forceZeros": true
+	},
+	"choices": {
+		"creationDateLang": "et"
+	}
+}

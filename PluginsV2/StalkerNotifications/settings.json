@@ -1,0 +1,9 @@
+{
+	"amounts": {
+		"checkInterval": 10
+	},
+	"settings": {
+		"onlyOnOnline": false,
+		"openOnClick": false
+	}
+}

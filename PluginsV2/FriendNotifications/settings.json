@@ -1,0 +1,18 @@
+{
+	"disabled": {
+		"272444491447926784": false
+	},
+	"settings": {
+		"on": false,
+		"onlyOnOnline": true,
+		"openOnClick": true
+	},
+	"desktop": {
+		"405691517559242764": true
+	},
+	"notificationsound": {
+		"mute": true,
+		"song": "",
+		"url": ""
+	}
+}
