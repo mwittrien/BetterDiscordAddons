@@ -2767,6 +2767,8 @@ html, span:not(.spinner-item) {
 
 /* ----------------------- BDv2 MENU ----------------------- */
 
+.bd-badge-outer {display: none !important;}
+
 .bd-sidebar-region,
 .bd-content-region {
 	background: var(--background) center/cover !important;
