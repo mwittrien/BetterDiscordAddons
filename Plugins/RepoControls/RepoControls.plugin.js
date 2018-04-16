@@ -8,7 +8,9 @@ class RepoControls {
 				author:			"Author",
 				version:		"Version",
 				description:	"Description",
-				enabled:		"Enabled"
+				enabled:		"Enabled",
+				adddate:		"Added Date",
+				moddate:		"Last Modified Date"
 			},
 			order: {
 				asc:			"Ascending",
@@ -116,11 +118,11 @@ class RepoControls {
 
 	getDescription () {return "Lets you sort and filter your list of downloaded Themes and Plugins.";}
 
-	getVersion () {return "1.1.3";}
+	getVersion () {return "1.1.5";}
 
 	getAuthor () {return "DevilBro";}
 	
-    getSettingsPanel () {
+	getSettingsPanel () {
 		if (!this.started || typeof BDfunctionsDevilBro !== "object") return;
 		var settings = BDfunctionsDevilBro.getAllData(this, "settings");
 		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="titleDefault-1CWM9y title-3i-5G_ size18-ZM4Qv- height24-2pMcnc weightNormal-3gw0Lm marginBottom8-1mABJ4">${this.getName()}</div><div class="DevilBro-settings-inner">`;
@@ -171,10 +173,9 @@ class RepoControls {
 								if (this.getSettingsPageType(node)) {
 									this.addControls(node.querySelector(".bda-slist"));
 									if (node && node.tagName && node.querySelector(".ui-switch")) {
-										var entry = this.getEntry($("li").has(node)[0]);
+										var entry = this.getEntry($(".repo-controls"), $("li").has(node)[0]);
 										if (entry) {
-											var settings = BDfunctionsDevilBro.getAllData(this, "settings");
-											if (settings.addDeleteButton) 	this.addDeleteButton(entry);
+											if (BDfunctionsDevilBro.getData("addDeleteButton", this, "settings")) this.addDeleteButton(entry);
 											this.changeTextToHTML(entry.div);
 										}
 									}
@@ -216,7 +217,7 @@ class RepoControls {
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			$(".repo-controls, #bd-settingspane-container .trashIcon").remove();
-			$(".repocontrols-added").removeClass(".repocontrols-added").off("click." + this.getName());
+			$(".repocontrols-added").removeClass(".repocontrols-added");
 			
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
@@ -244,7 +245,7 @@ class RepoControls {
 					if (header) {
 						var headerText = header.innerText.toUpperCase();
 						if (headerText === "PLUGINS" || headerText === "THEMES") {
-							return headerText;
+							return headerText[0] + headerText.slice(1).toLowerCase();
 						}
 					}
 				}
@@ -259,6 +260,33 @@ class RepoControls {
 		var sortings = BDfunctionsDevilBro.getAllData(this, "sortings");
 		
 		var repoControls = $(this.repoControlsMarkup);
+		repoControls.Plugins = {}; 
+		repoControls.Themes = {};
+		var fs = require("fs"), folder = BDfunctionsDevilBro.getPluginsFolder(), ending = ".plugin.js";
+		for (var plugin of fs.readdirSync(folder)) {
+			if (plugin.indexOf(ending) == plugin.length - ending.length) {
+				let path = folder + "/" + plugin;
+				let body = fs.readFileSync(path).toString();
+				let result = new RegExp("getName[\\s|\\t|\\n|\\r|=|>|_|:|function|\(|\)|\{|return]*([\"|\'|\`]).*\\1","gi").exec(body);
+				if (result) {
+					repoControls.Plugins[result[0].split(result[1])[1]] = {path, stats: fs.statSync(path)};
+				}
+			}
+		}
+		folder = BDfunctionsDevilBro.getThemesFolder(), ending = ".theme.css";
+		for (var theme of fs.readdirSync(folder)) {
+			if (theme.indexOf(ending) == theme.length - ending.length) {
+				let path = folder + "/" + theme;
+				let body = fs.readFileSync(path).toString();
+				if (body.split("*//").length > 1 && body.split("\n").length > 1) {
+					let result = body.replace(new RegExp("\\s*\:\\s*", "g"), ":").replace(new RegExp("\\s*\}\\s*", "g"), "}").split('"name":"');
+					result = result.length > 1 ? result[1].split('",')[0].split('"}')[0] : null;
+					if (result) {
+						repoControls.Themes[result] = {path, stats: fs.statSync(path)};;
+					}
+				}
+			}
+		}
 		BDfunctionsDevilBro.initElements(repoControls);
 		repoControls.find(".sort-filter .quickSelectValue-23jNHW").attr("option", sortings.sort).text(this.sortings.sort[sortings.sort]);
 		repoControls.find(".order-filter .quickSelectValue-23jNHW").attr("option", sortings.order).text(this.sortings.order[sortings.order]);
@@ -280,10 +308,9 @@ class RepoControls {
 		
 		$(container).addClass("repocontrols-added").on("click." + this.getName(), "div[style='float: right; cursor: pointer;']", (e) => {
 			setImmediate(() => {
-				var entry = this.getEntry($("li").has(e.currentTarget)[0]);
+				var entry = this.getEntry(repoControls, $("li").has(e.currentTarget)[0]);
 				if (entry) {
-					var settings = BDfunctionsDevilBro.getAllData(this, "settings");
-					if (settings.addDeleteButton) 	this.addDeleteButton(entry);
+					if (BDfunctionsDevilBro.getData("addDeleteButton", this, "settings")) this.addDeleteButton(entry);
 					this.changeTextToHTML(entry.div);
 				}
 			});
@@ -291,14 +318,14 @@ class RepoControls {
 			
 		container.entries = [];
 		for (let li of container.querySelectorAll("li")) {
-			container.entries.push(this.getEntry(li));
+			container.entries.push(this.getEntry(repoControls, li));
 		}
 		
 		this.addEntries(container, repoControls);
 	}
 	
-	getEntry (li) {
-		if (!li || !li.tagName || !li.querySelector(".bda-name")) return null;
+	getEntry (repoControls, li) {
+		if (!repoControls || !li || !li.tagName || !li.querySelector(".bda-name")) return null;
 		let name, version, author, description, enabled;
 		if (BDfunctionsDevilBro.zacksFork()) {
 			name = li.querySelector(".bda-name").textContent;
@@ -315,6 +342,8 @@ class RepoControls {
 			description = li.querySelector(".bda-description").textContent;
 			enabled = li.querySelector(".ui-switch-checkbox").checked;
 		}
+		let type = this.getSettingsPageType();
+		let pathstatscache = type ? repoControls[type][name] : null;
 		return {
 			div: 			li,
 			search:			(name + " " + version + " " + author + " " + description).toUpperCase(),
@@ -323,6 +352,10 @@ class RepoControls {
 			version: 		(version).toUpperCase(),
 			author: 		(author).toUpperCase(),
 			description: 	(description).toUpperCase(),
+			type:			type,
+			path:			pathstatscache ? pathstatscache.path : null,
+			adddate:		pathstatscache ? pathstatscache.stats.atime.getTime() : null,
+			moddate:		pathstatscache ? pathstatscache.stats.mtime.getTime() : null,
 			enabled:		enabled ? 0 : 1
 		};
 	}
@@ -341,7 +374,7 @@ class RepoControls {
 		var settings = BDfunctionsDevilBro.getAllData(this, "settings");
 		for (let entry of entries) {
 			container.appendChild(entry.div);
-			if (settings.addDeleteButton) 	this.addDeleteButton(entry);
+			if (settings.addDeleteButton) this.addDeleteButton(entry);
 			this.changeTextToHTML(entry.div, searchstring);
 			$(entry.div).find(".ui-switch-checkbox")
 				.off("change." + this.getName())
@@ -356,36 +389,18 @@ class RepoControls {
 		$(this.deleteButtonMarkup)
 			.on("click." + this.getName(), () => {
 				var container = document.querySelector(".bda-slist");
-				if (container && (!BDfunctionsDevilBro.getData("confirmDelete", this, "settings") || confirm("Are you sure you want to delete this File?"))) {
-					var name = BdApi.getPlugin(entry.origName) ? BdApi.getPlugin(entry.origName).constructor.name : entry.origName;
-					var type = null, folder = null, extension = null;
-					switch (this.getSettingsPageType()) {
-						case "PLUGINS":
-							type = "Plugin";
-							folder = BDfunctionsDevilBro.getPluginsFolder();
-							extension = ".plugin.js";
-							break;
-						case "THEMES": 
-							type = "Theme";
-							folder = BDfunctionsDevilBro.getThemesFolder();
-							extension = ".theme.css";
-							break;
-					}
-					if (type && folder && extension) {
-						let fileSystem = require("fs");
-						let path = require("path");
-						var file = path.join(folder, name + extension);
-						fileSystem.unlink(file, (error) => {
-							if (error) {
-								BDfunctionsDevilBro.showToast(`Unable to delete ${type} "${name}". Filename might not be the same as ${type}name.`, {type:"danger"});
-							}
-							else {
-								BDfunctionsDevilBro.showToast(`Successfully deleted ${type} "${name}".`, {type:"success"});
-								BDfunctionsDevilBro.removeFromArray(container.entries, entry);
-								entry.div.remove();
-							}
-						});
-					}
+				let type = entry.type ? entry.type.slice(0, -1) : "File";
+				if (container && (!BDfunctionsDevilBro.getData("confirmDelete", this, "settings") || confirm(`Are you sure you want to delete this ${type}?`))) {
+					require("fs").unlink(entry.path, (error) => {
+						if (error) {
+							BDfunctionsDevilBro.showToast(`Unable to delete ${type} "${entry.origName}". Filename might not be the same as ${type}name.`, {type:"danger"});
+						}
+						else {
+							BDfunctionsDevilBro.showToast(`Successfully deleted ${type} "${entry.origName}".`, {type:"success"});
+							BDfunctionsDevilBro.removeFromArray(container.entries, entry);
+							entry.div.remove();
+						}
+					});
 				}
 			})
 			.on("mouseenter." + this.getName(), (e) => {
@@ -428,7 +443,7 @@ class RepoControls {
 		popout
 			.css("left", $(wrapper).offset().left + $(wrapper).outerWidth() + "px")
 			.css("top", $(wrapper).offset().top + value.outerHeight() + "px")
-			.find(".context-menu").addClass(BDfunctionsDevilBro.getDiscordTheme());
+			.find(".contextMenu-uoJTbz").addClass(BDfunctionsDevilBro.getDiscordTheme());
 			
 		$(document).on("mousedown.sortpopout" + this.getName(), (e2) => {
 			if (popout.has(e2.target).length == 0) {
