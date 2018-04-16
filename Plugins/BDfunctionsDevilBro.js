@@ -2698,7 +2698,7 @@ BDfunctionsDevilBro.$(document)
 	});
 
 BDfunctionsDevilBro.isPluginEnabled = function (name) {
-	if (!BDfunctionsDevilBro.isBDv2()) window.bdplugins[name] && window.pluginCookie[name];
+	if (!BDfunctionsDevilBro.isBDv2()) return window.bdplugins[name] && window.pluginCookie[name];
 	else return BDfunctionsDevilBro.Plugins[name.toLocaleString()] ? BDfunctionsDevilBro.Plugins[name.toLocaleString()].enabled : null;
 };
 
@@ -2707,7 +2707,7 @@ BDfunctionsDevilBro.isRestartNoMoreEnabled = function () {
 };
 
 BDfunctionsDevilBro.isThemeEnabled = function (name) {
-	if (!BDfunctionsDevilBro.isBDv2()) window.bdthemes[name] && window.themeCookie[name];
+	if (!BDfunctionsDevilBro.isBDv2()) return window.bdthemes[name] && window.themeCookie[name];
 	else return BDfunctionsDevilBro.Themes[name.toLocaleString()] ? BDfunctionsDevilBro.Themes[name.toLocaleString()].enabled : null;
 };
 
