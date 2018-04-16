@@ -2258,6 +2258,33 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	background-color: rgba(var(--accentcolor),.7) !important;
 }
 
+/* roles */
+.role-3rahR_ {
+	border-radius: 5px;
+	padding: 0 5px;
+	position: relative;
+}
+.role-3rahR_ .roleName-DUQZ9m {
+	margin: 0;
+	font-weight: normal;
+	position: relative;
+	height: 20px;
+	line-height: 20px;
+}
+.role-3rahR_ .roleCircle-3-vPZq {
+	position: absolute;
+	border-radius: 3px;
+	opacity: 0.2;
+	height: 100%;
+	width: 100%;
+	left: 0;
+	top: 0;
+	z-index: 1000;
+}
+.role-3rahR_ .roleCircleButton-sMOdib:hover {
+	opacity: 1;
+}
+
 /* ownertag */
 .ownerIcon-2RBgEv {
 	margin: 0px 5px 0 7px !important;
