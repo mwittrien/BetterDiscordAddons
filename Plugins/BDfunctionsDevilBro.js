@@ -1271,6 +1271,14 @@ BDfunctionsDevilBro.getUserAvatar = function (id = BDfunctionsDevilBro.myData.id
 	return ((user.avatar ? "" : "https://discordapp.com") + IconUtils.getUserAvatarURL(user)).split("?size")[0];
 };
 
+BDfunctionsDevilBro.getChannelAvatar = function (id) {
+	id = typeof id == "number" ? id.toFixed() : id;
+	var ChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getChannel","getChannels"]);
+	var IconUtils = BDfunctionsDevilBro.WebModules.findByProperties(["getChannelIconURL"]);
+	var channel = ChannelStore.getChannel(id);
+	return ((channel.icon ? "" : "https://discordapp.com") + IconUtils.getChannelIconURL(channel)).split("?size")[0];
+};
+
 BDfunctionsDevilBro.readServerList = function () {
 	var server, id, info, foundServers = [], GuildStore = BDfunctionsDevilBro.WebModules.findByProperties(["getGuilds"]);
 	for (server of document.querySelectorAll(".guild-separator ~ .guild")) {
