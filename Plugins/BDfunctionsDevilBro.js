@@ -9,10 +9,11 @@ BDfunctionsDevilBro.loadMessage = function (plugin) {
 	var pluginName = plugin.name ? plugin.name : plugin.getName();
 	var oldVersion = plugin.version ? plugin.version : plugin.getVersion();
 	if (!plugin.appReload) {
-		var oldDescription = plugin.description ? plugin.description : plugin.getDescription();
-		if (oldDescription.indexOf("http://bit.ly/DevilBrosHaus") == -1) {
-			if (plugin.description) plugin.description = oldDescription + "\n\nMy Support Server: http://bit.ly/DevilBrosHaus or https://discordapp.com/invite/Jx3TjNS";
-			else plugin.getDescription = function () {return oldDescription + "\n\nMy Support Server: http://bit.ly/DevilBrosHaus or https://discordapp.com/invite/Jx3TjNS";}
+		if (typeof plugin.getDescription === "function") {
+			var oldDescription = plugin.getDescription();
+			if (oldDescription.indexOf("http://bit.ly/DevilBrosHaus") == -1) {
+				plugin.getDescription = function () {return oldDescription + "\n\nMy Support Server: http://bit.ly/DevilBrosHaus or https://discordapp.com/invite/Jx3TjNS";}
+			}
 		}
 		var loadMessage = BDfunctionsDevilBro.getLibraryStrings().toast_plugin_started.replace("${pluginName}", pluginName).replace("${oldVersion}", oldVersion);
 		console.log(loadMessage);
