@@ -116,7 +116,7 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.4.6";}
+	getVersion () {return "1.4.7";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -156,12 +156,7 @@ class PersonalPins {
 
 	initialize () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.loadMessage(this);
-			
-			if (!BDfunctionsDevilBro.loadData("reset1", this, "resets")) {
-				BDfunctionsDevilBro.removeAllData(this, "servers");
-				BDfunctionsDevilBro.saveData("reset1", true, this, "resets");
-			}
+			BDfunctionsDevilBro.loadMessage(this); 
 			
 			this.GuildStore = BDfunctionsDevilBro.WebModules.findByProperties(["getGuild"]);
 			this.ChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getChannel"]);
@@ -345,10 +340,11 @@ class PersonalPins {
 		wrapper.classList.add("popout-open");
 		var popout = $(this.notesPopoutMarkup);
 		BDfunctionsDevilBro.initElements(popout);
+		var wrappersize = wrapper.getBoundingClientRect(); 
 		popout
 			.appendTo(".popouts")
-			.css("left", $(wrapper).outerWidth()/2 + $(wrapper).offset().left + "px")
-			.css("top", $(wrapper).outerHeight() + $(wrapper).offset().top + "px")
+			.css("left", wrappersize.width/2 + wrappersize.left + "px")
+			.css("top", wrappersize.height + wrappersize.top + "px")
 			.on("click", ".tab", () => {
 				this.addNotes(popout[0]);
 			})
@@ -395,7 +391,7 @@ class PersonalPins {
 		popout
 			.css("left", $(e.currentTarget).offset().left + $(e.currentTarget).outerWidth() + "px")
 			.css("top", $(e.currentTarget).offset().top + value.outerHeight() + "px")
-			.find(".context-menu").addClass(BDfunctionsDevilBro.getDiscordTheme());
+			.find(".contextMenu-uoJTbz").addClass(BDfunctionsDevilBro.getDiscordTheme());
 			
 		$(document).on("mousedown.sortpopout" + this.getName(), (e2) => {
 			if (popout.has(e2.target).length == 0) {

@@ -372,7 +372,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			popout
 				.css("left", $(e.currentTarget).offset().left + $(e.currentTarget).outerWidth() + "px")
 				.css("top", $(e.currentTarget).offset().top + value.outerHeight() + "px")
-				.find(".context-menu").addClass(BDfunctionsDevilBro.getDiscordTheme());
+				.find(".contextMenu-uoJTbz").addClass(BDfunctionsDevilBro.getDiscordTheme());
 				
 			$(document).on("mousedown.sortpopout" + this.name, (e2) => {
 				if (popout.has(e2.target).length == 0) {

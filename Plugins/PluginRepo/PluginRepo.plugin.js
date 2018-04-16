@@ -241,7 +241,7 @@ class PluginRepo {
 
 	getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
 
-	getVersion () {return "1.4.5";}
+	getVersion () {return "1.4.7";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -341,7 +341,7 @@ class PluginRepo {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, "#app-mount", {name:"settingsContextObserver",instance:observer}, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, ".appMount-14L89u", {name:"settingsContextObserver",instance:observer}, {childList: true});
 			
 			var settingswindow = document.querySelector(".layer-kosS71[layer-id='user-settings']");
 			if (settingswindow) this.checkIfPluginsPage(settingswindow);
@@ -529,7 +529,7 @@ class PluginRepo {
 		popout
 			.css("left", $(wrapper).offset().left + $(wrapper).outerWidth() + "px")
 			.css("top", $(wrapper).offset().top + value.outerHeight() + "px")
-			.find(".context-menu").addClass(BDfunctionsDevilBro.getDiscordTheme());
+			.find(".contextMenu-uoJTbz").addClass(BDfunctionsDevilBro.getDiscordTheme());
 			
 		$(document).on("mousedown.sortpopout" + this.getName(), (e2) => {
 			if (popout.has(e2.target).length == 0) {
