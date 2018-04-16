@@ -26,24 +26,22 @@ module.exports = (Plugin, Api, Vendor) => {
 
 				this.css = `
 					.user-tag {
-						position: relative;
 						border-radius: 3px;
+						box-sizing: border-box;
+						display: inline-block;
 						flex-shrink: 0;
 						font-size: 10px;
 						font-weight: 500;
-						line-height: 16px;
+						line-height: 13px;
 						margin-left: 6px;
 						padding: 1px 2px;
 						text-transform: uppercase;
-						vertical-align: bottom;
-						white-space: nowrap;
+						vertical-align: top;
 					}
-					
+					.user-tag.popout-tag,
 					.user-tag.profil-tag {
-						bottom: 1px;
-					}
-					.user-tag.popout-tag {
-						bottom: 2px;
+						position: relative;
+						top: 2px;
 					}`;
 					
 				this.updateUsers = false;

@@ -24,12 +24,13 @@ module.exports = (Plugin, Api, Vendor) => {
 			if (typeof BDfunctionsDevilBro === "object") {
 				this.css = ` 
 					.TRE-tag {
-						position: relative;
 						border-radius: 3px;
+						box-sizing: border-box;
 						display: inline-block;
 						flex-shrink: 0;
 						font-size: 10px;
 						font-weight: 500;
+						height: 15px;
 						line-height: 13px;
 						margin-left: 6px;
 						padding: 1px 2px;
