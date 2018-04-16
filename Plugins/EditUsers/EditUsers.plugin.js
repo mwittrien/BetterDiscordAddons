@@ -6,24 +6,22 @@ class EditUsers {
 
 		this.css = `
 			.user-tag {
-				position: relative;
 				border-radius: 3px;
+				box-sizing: border-box;
+				display: inline-block;
 				flex-shrink: 0;
 				font-size: 10px;
 				font-weight: 500;
-				line-height: 16px;
+				line-height: 13px;
 				margin-left: 6px;
 				padding: 1px 2px;
 				text-transform: uppercase;
-				vertical-align: bottom;
-				white-space: nowrap;
+				vertical-align: top;
 			}
-			
+			.user-tag.popout-tag,
 			.user-tag.profil-tag {
-				bottom: 1px;
-			}
-			.user-tag.popout-tag {
-				bottom: 2px;
+				position: relative;
+				top: 2px;
 			}`;
 			
 		this.tagMarkup = `<span class="user-tag"></span>`;
@@ -287,7 +285,7 @@ class EditUsers {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(".username-MwOsla, .member-username") && BDfunctionsDevilBro.getData("changeInMemberList", this, "settings")) {
+								if (node && node.tagName && node.querySelector(".username-MwOsla") && BDfunctionsDevilBro.getData("changeInMemberList", this, "settings")) {
 									this.loadUser(node, "list", false);
 								}
 							});
@@ -295,7 +293,7 @@ class EditUsers {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, ".channel-members, .members-1bid1J", {name:"userListObserver",instance:observer}, {childList:true});
+			BDfunctionsDevilBro.addObserver(this, ".members-1bid1J", {name:"userListObserver",instance:observer}, {childList:true});
 			
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -393,7 +391,7 @@ class EditUsers {
 		if (typeof BDfunctionsDevilBro === "object") {
 			$(".titleText-2IfpkV[custom-editusers]").find(".channelName-1G03vu:not(.private-38vo6h)").css("color", "").css("background-color", "").parent().removeAttr("custom-editusers");
 			this.loadAllUsers();
-			BDfunctionsDevilBro.addObserver(this, ".channel-members, .members-1bid1J", {name:"userListObserver"}, {childList:true});
+			BDfunctionsDevilBro.addObserver(this, ".members-1bid1J", {name:"userListObserver"}, {childList:true});
 			BDfunctionsDevilBro.addObserver(this, ".messages.scroller", {name:"chatWindowObserver"}, {childList:true, subtree:true});
 			BDfunctionsDevilBro.addObserver(this, "#friends", {name:"friendListObserver"}, {childList:true, subtree:true});
 		}
@@ -624,7 +622,7 @@ class EditUsers {
 		var settings = BDfunctionsDevilBro.getAllData(this, "settings");
 		
 		if (settings.changeInMemberList) {
-			for (let user of document.querySelectorAll(".member-2FrNV0, .member")) {
+			for (let user of document.querySelectorAll(".member-2FrNV0")) {
 				this.loadUser(user, "list", false);
 			} 
 		}
@@ -793,9 +791,9 @@ class EditUsers {
 	getAvatarNameWrapper (div) {
 		var avatar = div.querySelector(".avatar-small, .avatar-large, .avatarDefault-3jtQoc, .avatar-profile, .image-EVRGPw");
 						
-		var username = div.querySelector(".headerName-3U6eDn, .headerTagUsernameNoNickname-22Y2PV, .username-24t9uh, .username-MwOsla, .member-username-inner, .nameDefault-1I0lx8, .user-name, .channel-name, .channelName-1G03vu.private-38vo6h, .friends-column-name .username, .accountDetails-15i-_e .username");
+		var username = div.querySelector(".headerName-3U6eDn, .headerTagUsernameNoNickname-22Y2PV, .username-24t9uh, .username-MwOsla, .nameDefault-1I0lx8, .user-name, .channel-name, .channelName-1G03vu.private-38vo6h, .friends-column-name .username, .accountDetails-15i-_e .username");
 						
-		var wrapper = div.querySelector(".headerName-3U6eDn, .headerTagNoNickname-36rgb9, .nameTag-2n-N0D, .nameTag-3F0z_i, .member-username-inner, .nameDefault-1I0lx8, .username-wrapper, .channel-name, .channelName-1G03vu.private-38vo6h .friends-column-name .nameTag-26T3kW, .accountDetails-15i-_e .username");
+		var wrapper = div.querySelector(".headerName-3U6eDn, .headerTagNoNickname-36rgb9, .nameTag-2n-N0D, .nameTag-3F0z_i, .nameDefault-1I0lx8, .username-wrapper, .channel-name, .channelName-1G03vu.private-38vo6h .friends-column-name .nameTag-26T3kW, .accountDetails-15i-_e .username");
 						
 		return {avatar, username, wrapper};
 	}
