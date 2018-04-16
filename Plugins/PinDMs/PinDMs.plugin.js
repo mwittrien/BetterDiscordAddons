@@ -18,7 +18,7 @@ class PinDMs {
 						<div class="status"></div>
 					</div>
 					<div class="channel-name">
-						<label></label>
+						<label style="cursor: pointer;"></label>
 						<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO channel-activity" style="flex: 1 1 auto;">
 							<div class="channel-activity-text"></div>
 						</div>
@@ -37,11 +37,11 @@ class PinDMs {
 
 	getDescription () {return "Allows you to pin DMs, making them appear at the top of your DM-list.";}
 
-	getVersion () {return "1.0.3";}
+	getVersion () {return "1.0.4";}
 
 	getAuthor () {return "DevilBro";}
 	
-    getSettingsPanel () {
+	getSettingsPanel () {
 		if (!this.started || typeof BDfunctionsDevilBro !== "object") return;
 	}
 
@@ -73,7 +73,7 @@ class PinDMs {
 			
 			this.UserStore = BDfunctionsDevilBro.WebModules.findByProperties(["getUsers", "getUser"]);
 			this.ActivityStore = BDfunctionsDevilBro.WebModules.findByProperties(["getStatuses", "getActivities"]);
-			this.ChannelUtils = BDfunctionsDevilBro.WebModules.findByProperties(["getDMFromUserId"]);
+			this.ChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getDMFromUserId"]);
 			this.ChannelSwitchUtils = BDfunctionsDevilBro.WebModules.findByProperties(["selectPrivateChannel"]);
 			this.UserContextMenuUtils = BDfunctionsDevilBro.WebModules.findByProperties(["openUserContextMenu"]);
 			
@@ -135,6 +135,7 @@ class PinDMs {
 		BDfunctionsDevilBro.addObserver(this, ".private-channels .scroller-fzNley", {name:"friendButtonObserver"}, {childList: true});
 	}
 	
+	
 	// begin of own functions
 	
 	changeLanguageStrings () {
@@ -149,12 +150,12 @@ class PinDMs {
 		if (info && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"handleClose"})) {
 			ele = context.querySelectorAll(".item-1XYaYf")[3];
 		}
-		/* else {
+		else {
 			info = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"channel"});
 			if (info && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"handleChangeIcon"})) {
 				ele = context.querySelectorAll(".item-1XYaYf")[1];
 			}
-		} */
+		}
 		if (ele) {
 			$(this.pinDMEntryMarkup).insertBefore(ele)
 				.on("click", (e) => {
@@ -187,23 +188,27 @@ class PinDMs {
 			this.startUpdateInterval();
 		}
 		let user = this.UserStore.getUser(id);
-		if (user) {
+		let channel = this.ChannelStore.getChannel(id);
+		if (user || channel) {
+			let DMid = user ? this.ChannelStore.getDMFromUserId(user.id) : channel.id;
 			let pinnedDM = $(this.pinnedDMMarkup);
-			pinnedDM.attr("user-id", user.id).insertAfter(".channel.btn-friends + header.pinneddms-header")
+			pinnedDM.attr("user-id", user ? user.id : null).attr("channel-id", DMid).insertAfter(".channel.btn-friends + header.pinneddms-header")
 				.on("contextmenu." + this.getName(), (e) => {
-					let DMid = this.ChannelUtils.getDMFromUserId(user.id);
-					if (DMid) this.UserContextMenuUtils.openUserContextMenu(e, user, this.ChannelUtils.getChannel(DMid));
-					else BDfunctionsDevilBro.showToast("Could not open ContextMenu, make sure the DM exists.", {type:"error"});
+					if (user && DMid) this.UserContextMenuUtils.openUserContextMenu(e, user, this.ChannelStore.getChannel(DMid));
+					else {
+						var channelObj = BDfunctionsDevilBro.getDivOfChannel(channel.id);
+						if (channelObj && channelObj.div) BDfunctionsDevilBro.getKeyInformation({"node":channelObj.div,"key":"onContextMenu"})(e);
+						else BDfunctionsDevilBro.showToast("Could not open ContextMenu, make sure the DM exists, Group DMs habe to be loaded in the list.", {type:"error"});
+					}
 				})
 				.on("click." + this.getName(), (e) => {
 					if (e.target.classList && e.target.classList.contains("close")) return;
-					let DMid = this.ChannelUtils.getDMFromUserId(user.id);
 					if (DMid) this.ChannelSwitchUtils.selectPrivateChannel(DMid);
 					else BDfunctionsDevilBro.showToast("Could not open DM, make sure it exists.", {type:"error"});
 				})
 				.on("click." + this.getName(), ".close", () => {
 					pinnedDM.remove();
-					BDfunctionsDevilBro.removeData(user.id, this, "pinnedDMs");
+					BDfunctionsDevilBro.removeData(user ? user.id : DMid, this, "pinnedDMs");
 					this.updatePinnedDMPositions();
 				});
 				
@@ -213,11 +218,12 @@ class PinDMs {
 	
 	setPinnedDM (pinnedDM) {
 		if (pinnedDM && pinnedDM.parentElement) {
-			let user = this.UserStore.getUser(pinnedDM.getAttribute("user-id"));
+			let id = pinnedDM.getAttribute("user-id");
+			let user = this.UserStore.getUser(id);
 			if (user) {
 				let data = BDfunctionsDevilBro.loadData(user.id, "EditUsers", "users") || {};
 				let activity = this.ActivityStore.getActivity(user.id);
-				pinnedDM.querySelector(".avatar-small").style.backgroundImage = `${data.removeIcon ? `` : (data.url ? `url(${data.url})` : `url(${BDfunctionsDevilBro.getUserAvatar(user.id)})`)}`;
+				pinnedDM.querySelector(".avatar-small").style.backgroundImage = `url(${data.removeIcon ? "" : (data.url ? data.url : BDfunctionsDevilBro.getUserAvatar(user.id))})`;
 				pinnedDM.querySelector(".status").className = `status status-${BDfunctionsDevilBro.getUserStatus(user.id)}`;
 				pinnedDM.querySelector(".channel-name > label").textContent = data.name ? data.name : user.username;
 				pinnedDM.querySelector(".channel-name").style.color = data.color1 ? BDfunctionsDevilBro.color2RGB(data.color1) : "";
@@ -227,6 +233,23 @@ class PinDMs {
 					if (!pinnedDM.querySelector(".channel-activity-icon")) $(".channel-activity", pinnedDM).append(this.richActivityMarkup);
 				}
 				else $(".channel-activity-icon", pinnedDM).remove();
+			}
+			else {
+				id = pinnedDM.getAttribute("channel-id")
+				let channel = this.ChannelStore.getChannel(id);
+				if (channel) {
+					pinnedDM.querySelector(".avatar-small").style.backgroundImage = `url(${BDfunctionsDevilBro.getChannelAvatar(channel.id)})`;
+					var channelname = channel.name;
+					if (!channelname && channel.recipients.length > 0) {
+						for (let dmmemberID of channel.recipients) {
+							channelname = channelname ? channelname + ", " : channelname;
+							channelname = channelname + this.UserStore.getUser(dmmemberID).username;
+						}
+					}
+					pinnedDM.querySelector(".channel-name > label").textContent = channelname ? channelname : this.languageStrings.UNNAMED;
+					pinnedDM.querySelectorAll(".status, .channel-activity-text").forEach(ele => {ele.remove();});
+					pinnedDM.querySelector(".channel-activity").innerHTML = channel.recipients.length+1 + " " + (channel.recipients.length+1 == 1 ? this.languageStrings.MEMBER : this.languageStrings.MEMBERS);
+				}
 			}
 		}
 	}
