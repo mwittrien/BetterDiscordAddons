@@ -1387,7 +1387,8 @@ BDfunctionsDevilBro.saveAllData = function (settings, plugin, keyName) {
 		bdPluginStorage.set(typeof plugin === "string" ? plugin : plugin.getName(), keyName, settings);
 	}
 	else {
-		let directory = typeof plugin === "string" ? (BDfunctionsDevilBro.Plugins[plugin.toLowerCase()] ? BDfunctionsDevilBro.Plugins[plugin.toLowerCase()].contentPath : null) : plugin.contentPath;
+		let pluginid = plugin.toLowerCase();
+		let directory = typeof plugin === "string" ? (BDfunctionsDevilBro.Plugins[pluginid] ? BDfunctionsDevilBro.Plugins[pluginid].contentPath : null) : plugin.contentPath;
 		if (!directory) return;
 		let fs = require("fs");
 		let filepath = require("path").join(directory, "settings.json");
@@ -1402,7 +1403,8 @@ BDfunctionsDevilBro.loadAllData = function (plugin, keyName) {
 		return bdPluginStorage.get(typeof plugin === "string" ? plugin : plugin.getName(), keyName) || {};
 	}
 	else {
-		let directory = typeof plugin === "string" ? (BDfunctionsDevilBro.Plugins[plugin.toLowerCase()] ? BDfunctionsDevilBro.Plugins[plugin.toLowerCase()].contentPath : null) : plugin.contentPath;
+		let pluginid = plugin.toLowerCase();
+		let directory = typeof plugin === "string" ? (BDfunctionsDevilBro.Plugins[pluginid] ? BDfunctionsDevilBro.Plugins[pluginid].contentPath : null) : plugin.contentPath;
 		if (!directory) return {};
 		let fs = require("fs");
 		let filepath = require("path").join(directory, "settings.json");
@@ -1417,7 +1419,8 @@ BDfunctionsDevilBro.removeAllData = function (plugin, keyName) {
 		BDfunctionsDevilBro.saveAllData({}, plugin, keyName);
 	}
 	else {
-		let directory = typeof plugin === "string" ? (BDfunctionsDevilBro.Plugins[plugin.toLowerCase()] ? BDfunctionsDevilBro.Plugins[plugin.toLowerCase()].contentPath : null) : plugin.contentPath;
+		let pluginid = plugin.toLowerCase();
+		let directory = typeof plugin === "string" ? (BDfunctionsDevilBro.Plugins[pluginid] ? BDfunctionsDevilBro.Plugins[pluginid].contentPath : null) : plugin.contentPath;
 		if (!directory) return;
 		let fs = require("fs");
 		let filepath = require("path").join(directory, "settings.json");
