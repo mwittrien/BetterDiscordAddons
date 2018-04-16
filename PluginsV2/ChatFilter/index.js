@@ -255,18 +255,10 @@ module.exports = (Plugin, Api, Vendor) => {
 					var blocked = false;
 					for (let bWord in blockedWords) {
 						var blockedReplace = blockedWords[bWord].replace || replaces.blocked;
-						var modifier = blockedWords[bWord].case ? "" : "i";
-						bWord = blockedWords[bWord].exact ? "^" + BDfunctionsDevilBro.regEscape(bWord) + "$" : BDfunctionsDevilBro.regEscape(bWord);
-						bWord = BDfunctionsDevilBro.encodeToHTML(bWord);
-						
-						var reg = new RegExp(bWord, modifier);
+						var reg = this.createReg(bWord, blockedWords[bWord]);
 						strings.forEach(string => {
-							if (string.indexOf("<img ") == 0 && (string.indexOf('class="emote') > -1 || string.indexOf('class="emoji') > -1)) {
-								var emojiname = string.split('alt="').length > 0 ? string.split('alt="')[1] : null;
-								emojiname = emojiname ? emojiname.split('"')[0] : null;
-								emojiname = emojiname ? emojiname.replace(new RegExp(":", 'g'), "") : null;
-								if (reg.test(emojiname)) blocked = true;
-							}
+							let emojiname = this.getEmojiName(string);
+							if (emojiname && reg.test(emojiname)) blocked = true;
 							else if (string.indexOf('<img src="http') == 0) {
 								var url = string.split('src="').length > 0 ? string.split('src="')[1] : null;
 								url = url ? url.split('"')[0] : null;
@@ -295,23 +287,15 @@ module.exports = (Plugin, Api, Vendor) => {
 						var censoredWords = BDfunctionsDevilBro.loadData("censored", this, "words");
 						for (let cWord in censoredWords) {
 							var censoredReplace = censoredWords[cWord].replace || replaces.censored;
-							var modifier = censoredWords[cWord].case ? "" : "i";
-							cWord = censoredWords[cWord].exact ? "^" + BDfunctionsDevilBro.regEscape(cWord) + "$" : BDfunctionsDevilBro.regEscape(cWord);
-							cWord = BDfunctionsDevilBro.encodeToHTML(cWord);
-							
-							var reg = new RegExp(cWord, modifier);
+							var reg = this.createReg(cWord, censoredWords[cWord]);
 							strings.forEach((string,i) => {
-								if (string.indexOf("<img ") == 0 && (string.indexOf('class="emote') > -1 || string.indexOf('class="emoji') > -1)) {
-									var emojiname = string.split('alt="').length > 0 ? string.split('alt="')[1] : null;
-									emojiname = emojiname ? emojiname.split('" src')[0] : null;
-									emojiname = emojiname ? emojiname.replace(new RegExp(":", 'g'), "") : null;
-									if (reg.test(emojiname)) {
-										strings[i] = BDfunctionsDevilBro.encodeToHTML(censoredReplace);
-										if (strings[i+1] && strings[i+1].indexOf("<input") == 0) {
-											strings[i+1] = "";
-											if (strings[i-1] && strings[i-1].indexOf("<span") == 0) strings[i-1] = "";
-											if (strings[i+2] && strings[i+2].indexOf("</span") == 0) strings[i+2] = "";
-										}
+								let emojiname = this.getEmojiName(string);
+								if (emojiname && reg.test(emojiname)) {
+									strings[i] = BDfunctionsDevilBro.encodeToHTML(censoredReplace);
+									if (strings[i+1] && strings[i+1].indexOf("<input") == 0) {
+										strings[i+1] = "";
+										if (strings[i-1] && strings[i-1].indexOf("<span") == 0) strings[i-1] = "";
+										if (strings[i+2] && strings[i+2].indexOf("</span") == 0) strings[i+2] = "";
 									}
 								}
 								else if (string.indexOf('<img src="http') == 0) {
@@ -344,6 +328,18 @@ module.exports = (Plugin, Api, Vendor) => {
 						}
 					}
 				}
+			}
+		}
+		
+		createReg (word, config) {
+			return new RegExp(BDfunctionsDevilBro.encodeToHTML(config.exact ? "^" + BDfunctionsDevilBro.regEscape(word) + "$" : BDfunctionsDevilBro.regEscape(word)), config.case ? "" : "i");
+		}
+		
+		getEmojiName (string) {
+			if (string.indexOf("<img ") == 0 && (string.indexOf('class="emote') > -1 || string.indexOf('class="emoji') > -1)) {
+				var emojiname = string.split('alt="').length > 0 ? string.split('alt="')[1] : null;
+				emojiname = emojiname ? emojiname.split('" src')[0] : null;
+				return emojiname = emojiname ? emojiname.replace(new RegExp(":", 'g'), "") : null;
 			}
 		}
 		

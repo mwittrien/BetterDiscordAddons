@@ -32,7 +32,7 @@ class ChatFilter {
 
 	getDescription () {return "Allows the user to censor words or block complete messages based on words in the chatwindow.";}
 
-	getVersion () {return "3.1.9";}
+	getVersion () {return "3.2.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -61,6 +61,7 @@ class ChatFilter {
 			settingshtml += `<div class="divider-1G01Z9 dividerDefault-77PXsz marginBottom40-1zK7fE"></div>`;
 		}
 		var infoHidden = BDfunctionsDevilBro.loadData("hideInfo", this, "hideInfo");
+		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO cursorPointer-3oKATS ${infoHidden ? "wrapperCollapsed-18mf-c" : "wrapperDefault-1Dl4SS"} toggle-info" style="flex: 1 1 auto;"><svg class="iconTransition-VhWJ85 ${infoHidden ? "closed-2Hef-I iconCollapsed-1INdMX" : "iconDefault-xzclSQ"}" width="12" height="12" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 10L12 15 17 10"></path></svg><div class="colorTransition-2iZaYd overflowEllipsis-2ynGQq nameCollapsed-3_ChMu" style="flex: 1 1 auto;">Information</div></div>`;
 		settingshtml += `<div class="DevilBro-settings-inner-list info-container" ${infoHidden ? "style='display:none;'" : ""}><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">Case: Will block/censor words while comparing lowercase/uppercase. apple => apple, not APPLE or AppLe</div><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">Not Case: Will block/censor words while ignoring lowercase/uppercase. apple => apple, APPLE and AppLe</div><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">Exact: Will block/censor words that are exactly the selected word. apple => apple, not applepie or pineapple</div><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">Not Exact: Will block/censor all words containing the selected word. apple => apple, applepie and pineapple</div></div>`;
 		settingshtml += `</div>`;
 		
@@ -165,7 +166,6 @@ class ChatFilter {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			
 			document.querySelectorAll(".markup.blocked, .markup.censored, .accessory.blocked, .accessory.censored").forEach(message => {
 				this.resetMessage(message);
 			});
@@ -184,7 +184,6 @@ class ChatFilter {
 	
 	// begin of own functions
 	
-	
 	updateContainer (settingspanel, ele) {
 		var update = false, wordvalue = null, replacevalue = null;
 		var action = ele.getAttribute("action"), rtype = ele.getAttribute("rtype");
@@ -200,8 +199,9 @@ class ChatFilter {
 				replacevalue = replacevalue.trim();
 				words[wordvalue] = {
 					replace: replacevalue,
+					case: false,
 					exact: true,
-					case: false
+					regex: false,
 				};
 				wordinput.value = null;
 				replaceinput.value = null;
@@ -321,18 +321,10 @@ class ChatFilter {
 				var blocked = false;
 				for (let bWord in blockedWords) {
 					var blockedReplace = blockedWords[bWord].replace || replaces.blocked;
-					var modifier = blockedWords[bWord].case ? "" : "i";
-					bWord = blockedWords[bWord].exact ? "^" + BDfunctionsDevilBro.regEscape(bWord) + "$" : BDfunctionsDevilBro.regEscape(bWord);
-					bWord = BDfunctionsDevilBro.encodeToHTML(bWord);
-					
-					var reg = new RegExp(bWord, modifier);
+					var reg = this.createReg(bWord, blockedWords[bWord]);
 					strings.forEach(string => {
-						if (string.indexOf("<img ") == 0 && (string.indexOf('class="emote') > -1 || string.indexOf('class="emoji') > -1)) {
-							var emojiname = string.split('alt="').length > 0 ? string.split('alt="')[1] : null;
-							emojiname = emojiname ? emojiname.split('"')[0] : null;
-							emojiname = emojiname ? emojiname.replace(new RegExp(":", 'g'), "") : null;
-							if (reg.test(emojiname)) blocked = true;
-						}
+						let emojiname = this.getEmojiName(string);
+						if (emojiname && reg.test(emojiname)) blocked = true;
 						else if (string.indexOf('<img src="http') == 0) {
 							var url = string.split('src="').length > 0 ? string.split('src="')[1] : null;
 							url = url ? url.split('"')[0] : null;
@@ -361,23 +353,15 @@ class ChatFilter {
 					var censoredWords = BDfunctionsDevilBro.loadData("censored", this, "words");
 					for (let cWord in censoredWords) {
 						var censoredReplace = censoredWords[cWord].replace || replaces.censored;
-						var modifier = censoredWords[cWord].case ? "" : "i";
-						cWord = censoredWords[cWord].exact ? "^" + BDfunctionsDevilBro.regEscape(cWord) + "$" : BDfunctionsDevilBro.regEscape(cWord);
-						cWord = BDfunctionsDevilBro.encodeToHTML(cWord);
-						
-						var reg = new RegExp(cWord, modifier);
+						var reg = this.createReg(cWord, censoredWords[cWord]);
 						strings.forEach((string,i) => {
-							if (string.indexOf("<img ") == 0 && (string.indexOf('class="emote') > -1 || string.indexOf('class="emoji') > -1)) {
-								var emojiname = string.split('alt="').length > 0 ? string.split('alt="')[1] : null;
-								emojiname = emojiname ? emojiname.split('" src')[0] : null;
-								emojiname = emojiname ? emojiname.replace(new RegExp(":", 'g'), "") : null;
-								if (reg.test(emojiname)) {
-									strings[i] = BDfunctionsDevilBro.encodeToHTML(censoredReplace);
-									if (strings[i+1] && strings[i+1].indexOf("<input") == 0) {
-										strings[i+1] = "";
-										if (strings[i-1] && strings[i-1].indexOf("<span") == 0) strings[i-1] = "";
-										if (strings[i+2] && strings[i+2].indexOf("</span") == 0) strings[i+2] = "";
-									}
+							let emojiname = this.getEmojiName(string);
+							if (emojiname && reg.test(emojiname)) {
+								strings[i] = BDfunctionsDevilBro.encodeToHTML(censoredReplace);
+								if (strings[i+1] && strings[i+1].indexOf("<input") == 0) {
+									strings[i+1] = "";
+									if (strings[i-1] && strings[i-1].indexOf("<span") == 0) strings[i-1] = "";
+									if (strings[i+2] && strings[i+2].indexOf("</span") == 0) strings[i+2] = "";
 								}
 							}
 							else if (string.indexOf('<img src="http') == 0) {
@@ -410,6 +394,18 @@ class ChatFilter {
 					}
 				}
 			}
+		}
+	}
+	
+	createReg (word, config) {
+		return new RegExp(BDfunctionsDevilBro.encodeToHTML(config.exact ? "^" + BDfunctionsDevilBro.regEscape(word) + "$" : BDfunctionsDevilBro.regEscape(word)), config.case ? "" : "i");
+	}
+	
+	getEmojiName (string) {
+		if (string.indexOf("<img ") == 0 && (string.indexOf('class="emote') > -1 || string.indexOf('class="emoji') > -1)) {
+			var emojiname = string.split('alt="').length > 0 ? string.split('alt="')[1] : null;
+			emojiname = emojiname ? emojiname.split('" src')[0] : null;
+			return emojiname = emojiname ? emojiname.replace(new RegExp(":", 'g'), "") : null;
 		}
 	}
 	
