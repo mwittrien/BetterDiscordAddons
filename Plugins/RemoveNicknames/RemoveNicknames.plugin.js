@@ -14,7 +14,7 @@ class RemoveNicknames {
 
 	getDescription () {return "Replace all nicknames with the actual accountnames.";}
 
-	getVersion () {return "1.0.5";}
+	getVersion () {return "1.0.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -84,7 +84,7 @@ class RemoveNicknames {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(".username-MwOsla, .member-username")) {
+								if (node && node.tagName && node.querySelector(".username-MwOsla")) {
 									this.loadUser(node, "list", false);
 								}
 							});
@@ -92,7 +92,7 @@ class RemoveNicknames {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, ".channel-members, .members-1bid1J", {name:"userListObserver",instance:observer}, {childList:true});
+			BDfunctionsDevilBro.addObserver(this, ".members-1bid1J", {name:"userListObserver",instance:observer}, {childList:true});
 			
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -162,7 +162,7 @@ class RemoveNicknames {
 	onSwitch () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.loadAllUsers();
-			BDfunctionsDevilBro.addObserver(this, ".channel-members, .members-1bid1J", {name:"userListObserver"}, {childList:true});
+			BDfunctionsDevilBro.addObserver(this, ".members-1bid1J", {name:"userListObserver"}, {childList:true});
 			BDfunctionsDevilBro.addObserver(this, ".messages.scroller", {name:"chatWindowObserver"}, {childList:true, subtree:true});
 		}
 	}
@@ -179,7 +179,7 @@ class RemoveNicknames {
 	}
 
 	loadAllUsers () {
-		for (let user of document.querySelectorAll(".member-2FrNV0, .member")) {
+		for (let user of document.querySelectorAll(".member-2FrNV0")) {
 			this.loadUser(user, "list", false);
 		} 
 		for (let user of document.querySelectorAll(".message-group")) {
@@ -243,7 +243,7 @@ class RemoveNicknames {
 	}
 	
 	getNameWrapper (div) {		
-		return div.querySelector(".user-name, .memberInner-3XUq9K, .member-username-inner, .nameDefault-1I0lx8");
+		return div.querySelector(".nameDefault-1I0lx8, .username-MwOsla, .user-name");
 	}
 	
 	getUserInfo (div) {
