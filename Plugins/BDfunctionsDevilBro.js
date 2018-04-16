@@ -1358,7 +1358,7 @@ BDfunctionsDevilBro.readDmList = function () {
 
 BDfunctionsDevilBro.getIdOfDM = function (dm) {
 	if (!dm || !dm.classList || !dm.classList.contains("guild") || dm.classList.contains("copy") || dm.classList.contains("folder")) return;
-	if (!dm.parentElement || !dm.parentElement.classList || !dm.parentElement.classList("dms")) return;
+	if (!dm.parentElement || !dm.parentElement.classList || !dm.parentElement.classList.contains("dms")) return;
 	var switchlink, id;
 	switchlink = dm.querySelector("a");
 	id = switchlink && switchlink.href ? switchlink.href.split("/") : null;
