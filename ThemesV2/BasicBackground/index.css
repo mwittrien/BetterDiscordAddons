@@ -6,6 +6,6 @@
 	--messagetransparency: 0.5;		/* default: 0.5 */
 	--memberlistransparency: 0;		/* default: 0 (additional darkness for member list can be changed in case a bright background makes the list hard to read)*/
 	--accentcolor: 190,78,180; 		/* default: 190,78,180 discord: 114,137,218 bd-blue: 58,113,193*/
-	--background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/BasicBackground/background.jpg); /* replace the link in url() with your own direct image link to change the background */
+	--background: url(https://mwittrien.github.io/BetterDiscordAddons/ThemesV2/BasicBackground/background.jpg); /* replace the link in url() with your own direct image link to change the background */
 	--backdrop: rgba(0,0,0,0.4);	/* default: rgba(0,0,0,0.4) can also be changed to an image like --background */
 }
