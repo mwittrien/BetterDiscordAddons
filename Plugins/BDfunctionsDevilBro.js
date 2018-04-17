@@ -17,7 +17,9 @@ BDfunctionsDevilBro.loadMessage = function (plugin) {
 		}
 		var loadMessage = BDfunctionsDevilBro.getLibraryStrings().toast_plugin_started.replace("${pluginName}", pluginName).replace("${oldVersion}", oldVersion);
 		console.log(loadMessage);
-		if (!(BDfunctionsDevilBro.zacksFork() && settingsCookie["fork-ps-2"] && settingsCookie["fork-ps-2"] == true)) BDfunctionsDevilBro.showToast(loadMessage);
+		if (!(BDfunctionsDevilBro.zacksFork() && settingsCookie["fork-ps-2"] && settingsCookie["fork-ps-2"] == true)) {
+			BDfunctionsDevilBro.showToast(loadMessage, {selector:"plugin-started-toast"});
+		}
 	}
 	
 	BDfunctionsDevilBro.checkUser(plugin);
@@ -104,7 +106,9 @@ BDfunctionsDevilBro.unloadMessage = function (plugin) {
 	if (!plugin.appReload) {
 		var unloadMessage = BDfunctionsDevilBro.getLibraryStrings().toast_plugin_stopped.replace("${pluginName}", pluginName).replace("${oldVersion}", oldVersion);
 		console.log(unloadMessage);
-		if (!(BDfunctionsDevilBro.zacksFork() && settingsCookie["fork-ps-2"] && settingsCookie["fork-ps-2"] == true)) BDfunctionsDevilBro.showToast(unloadMessage);
+		if (!(BDfunctionsDevilBro.zacksFork() && settingsCookie["fork-ps-2"] && settingsCookie["fork-ps-2"] == true)) {
+			BDfunctionsDevilBro.showToast(unloadMessage, {selector:"plugin-stopped-toast"});
+		}
 	}
 	
 	if (typeof plugin.css === "string") BDfunctionsDevilBro.removeLocalStyle(pluginName);
@@ -251,7 +255,7 @@ BDfunctionsDevilBro.downloadPlugin = function (pluginName, downloadUrl, updateNo
 			var pluginfile = path.join(BDfunctionsDevilBro.getPluginsFolder(), "CompleteTimestamp.plugin.js");
 			fileSystem.unlink(pluginfile, (error) => {});
 		}
-		BDfunctionsDevilBro.showToast(`${pluginName} ${window.PluginUpdates.plugins[downloadUrl].version} has been replaced by ${pluginName} ${remoteVersion}`);
+		BDfunctionsDevilBro.showToast(`${pluginName} ${window.PluginUpdates.plugins[downloadUrl].version} has been replaced by ${pluginName} ${remoteVersion}`, {selector:"plugin-updated-toast"});
 		if (updateNoticeBar.querySelector(".button-2TvR03")) {
 			window.PluginUpdates.plugins[downloadUrl].version = remoteVersion;
 			if (!window.PluginUpdates.downloaded) window.PluginUpdates.downloaded = [];
@@ -304,13 +308,14 @@ BDfunctionsDevilBro.showToast = function (content, options = {}) {
 		toastWrapper.style.setProperty("bottom", bottom + "px");
 		document.querySelector(".app").appendChild(toastWrapper);
 	}
-	const {type = "", icon = true, timeout = 3000, html = false} = options;
+	const {type = "", icon = true, timeout = 3000, html = false, selector = ""} = options;
 	let toastElem = document.createElement("div");
 	toastElem.classList.add("toast");
 	if (type) {
 		toastElem.classList.add("toast-" + type);
 		if (icon) toastElem.classList.add("icon");
 	}
+	if (selector) selector.split(" ").forEach(classname => {if(classname) toastElem.classList.add(classname);});
 	if (html === true) toastElem.innerHTML = content;
 	else toastElem.innerText = content;
 	document.querySelector(".toasts").appendChild(toastElem);
