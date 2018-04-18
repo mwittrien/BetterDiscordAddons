@@ -82,14 +82,14 @@ module.exports = (Plugin, Api, Vendor) => {
 		
 		makeMoveable (div) {
 			$(div)
-				.off("mousedown." + this.getName()).off("click." + this.getName())
-				.on("click." + this.getName(), (e) => {
+				.off("mousedown." + this.name).off("click." + this.name)
+				.on("click." + this.name, (e) => {
 					if (this.dragging) {
 						e.stopPropagation();
 						e.preventDefault();
 					}
 				})
-				.on("mousedown." + this.getName(), (e) => {
+				.on("mousedown." + this.name, (e) => {
 					if (e.ctrlKey) {
 						this.dragging = true;
 						
@@ -104,13 +104,13 @@ module.exports = (Plugin, Api, Vendor) => {
 						var oldX = e.pageX;
 						var oldY = e.pageY;
 						$(document)
-							.off("mouseup." + this.getName()).off("mousemove." + this.getName())
-							.on("mouseup." + this.getName(), () => {
+							.off("mouseup." + this.name).off("mousemove." + this.name)
+							.on("mouseup." + this.name, () => {
 								BDfunctionsDevilBro.removeLocalStyle("disableTextSelection");
-								$(document).off("mouseup." + this.getName()).off("mousemove." + this.getName());
+								$(document).off("mouseup." + this.name).off("mousemove." + this.name);
 								setTimeout(() => {this.dragging = false},1);
 							})
-							.on("mousemove." + this.getName(), (e2) => {
+							.on("mousemove." + this.name, (e2) => {
 								var newX = e2.pageX;
 								var newY = e2.pageY;
 								left = left - (oldX - newX);
