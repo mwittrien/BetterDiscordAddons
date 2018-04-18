@@ -2814,6 +2814,7 @@ html, span:not(.spinner-item) {
     border-radius: 10px !important;
     padding: 5px !important;
 }
+.bd-modal-titlelink,
 .bd-content-author-link:hover,
 .bd-settingswrap-header-text {
 	color: rgb(var(--accentcolor)) !important;

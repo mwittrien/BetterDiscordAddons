@@ -328,6 +328,7 @@ class ServerFolders {
 				closeOtherFolders:	{value:false, 	description:"Close other Folders when opening a Folder."},
 				closeTheFolder:		{value:false, 	description:"Close the Folder when selecting a Server."},
 				closeAllFolders:	{value:false, 	description:"Close All Folders when selecting a Server."},
+				forceOpenFolder:	{value:false, 	description:"Force a Folder to open when switching to a Server of that Folder."},
 				showCountBadge:		{value:true, 	description:"Display Badge for Amount of Servers in a Folder."}
 			}
 		};
@@ -337,7 +338,7 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.6.2";}
+	getVersion () {return "5.6.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -523,6 +524,19 @@ class ServerFolders {
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
+
+	onSwitch() {
+		if (typeof BDfunctionsDevilBro === "object") {
+			if (BDfunctionsDevilBro.getData("forceOpenFolder", this, "settings")) {
+				var serverObj = BDfunctionsDevilBro.getSelectedServer();
+				if (!serverObj) return;
+				var folderDiv = this.getFolderOfServer(serverObj);
+				if (!folderDiv || folderDiv.classList.contains("open")) return;
+				this.openCloseFolder(folderDiv);
+			}
+		}
+	}
+	
 	
 	// begin of own functions
 
@@ -865,7 +879,7 @@ class ServerFolders {
 	}
 	
 	createServerToolTip (serverObj, target, e) {
-		var data = (window.bdplugins["EditServers"] && window.pluginCookie["EditServers"]) ? BDfunctionsDevilBro.loadData(serverObj.id, "EditServers", "servers") : null;
+		var data = BDfunctionsDevilBro.loadData(serverObj.id, "EditServers", "servers");
 		var text = data ? (data.name ? data.name : serverObj.name) : serverObj.name;
 		var bgColor = data ? (data.color3 ? BDfunctionsDevilBro.color2RGB(data.color3) : "") : "";
 		var fontColor = data ? (data.color4 ? BDfunctionsDevilBro.color2RGB(data.color4) : "") : "";

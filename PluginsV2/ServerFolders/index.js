@@ -346,7 +346,8 @@ module.exports = (Plugin, Api, Vendor) => {
 					settings: {
 						closeOtherFolders:	{value:false, 	description:"Close other Folders when opening a Folder."},
 						closeTheFolder:		{value:false, 	description:"Close the Folder when selecting a Server."},
-						closeAllFolders:	{value:false, 	description:"Close All Folders when selecting a Server."},
+						closeAllFolders:	{value:false, 	description:"Close all Folders when selecting a Server."},
+						forceOpenFolder:	{value:false, 	description:"Force a Folder to open when switching to a Server of that Folder."},
 						showCountBadge:		{value:true, 	description:"Display Badge for Amount of Servers in a Folder."}
 					}
 				};
@@ -495,6 +496,18 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 			else {
 				return false;
+			}
+		}
+
+		onSwitch() {
+			if (typeof BDfunctionsDevilBro === "object") {
+				if (BDfunctionsDevilBro.getData("forceOpenFolder", this, "settings")) {
+					var serverObj = BDfunctionsDevilBro.getSelectedServer();
+					if (!serverObj) return;
+					var folderDiv = this.getFolderOfServer(serverObj);
+					if (!folderDiv || folderDiv.classList.contains("open")) return;
+					this.openCloseFolder(folderDiv);
+				}
 			}
 		}
 		
