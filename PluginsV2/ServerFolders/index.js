@@ -801,11 +801,11 @@ module.exports = (Plugin, Api, Vendor) => {
 					var bgColor = data.color3 ? BDfunctionsDevilBro.color2RGB(data.color3) : "";
 					var fontColor = data.color4 ? BDfunctionsDevilBro.color2RGB(data.color4) : "";
 					var customTooltipCSS = `
-						.guild-folder-tooltip {
+						body .guild-folder-tooltip {
 							color: ${fontColor} !important;
 							background-color: ${bgColor} !important;
 						}
-						.guild-folder-tooltip:after {
+						body .guild-folder-tooltip:after {
 							border-right-color: ${bgColor} !important;
 						}`;
 					BDfunctionsDevilBro.createTooltip(data.folderName, folderDiv, {type:"right",selector:"guild-folder-tooltip",css:customTooltipCSS});
@@ -819,11 +819,11 @@ module.exports = (Plugin, Api, Vendor) => {
 			var bgColor = data ? (data.color3 ? BDfunctionsDevilBro.color2RGB(data.color3) : "") : "";
 			var fontColor = data ? (data.color4 ? BDfunctionsDevilBro.color2RGB(data.color4) : "") : "";
 			var customTooltipCSS = `
-				.guild-custom-tooltip {
+				body .guild-custom-tooltip {
 					color: ${fontColor} !important;
 					background-color: ${bgColor} !important;
 				}
-				.guild-custom-tooltip:after {
+				body .guild-custom-tooltip:after {
 					border-right-color: ${bgColor} !important;
 				}`;
 				
