@@ -840,7 +840,7 @@ module.exports = (Plugin, Api, Vendor) => {
 		}
 		
 		createServerToolTip (serverObj, target, e) {
-			var data = (window.bdplugins["EditServers"] && window.pluginCookie["EditServers"]) ? BDfunctionsDevilBro.loadData(serverObj.id, "EditServers", "servers") : null;
+			var data = BDfunctionsDevilBro.loadData(serverObj.id, "EditServers", "servers");
 			var text = data ? (data.name ? data.name : serverObj.name) : serverObj.name;
 			var bgColor = data ? (data.color3 ? BDfunctionsDevilBro.color2RGB(data.color3) : "") : "";
 			var fontColor = data ? (data.color4 ? BDfunctionsDevilBro.color2RGB(data.color4) : "") : "";
@@ -1130,6 +1130,10 @@ module.exports = (Plugin, Api, Vendor) => {
 									
 									.guilds-wrapper.folderopen {
 										overflow: visible !important;
+										width: ${guildswrapper.outerWidth() + (guildswrapper.outerWidth() / columnamount)}px !important;
+									}
+									
+									body.folderopen .bd-settings-button {
 										width: ${guildswrapper.outerWidth() + (guildswrapper.outerWidth() / columnamount)}px !important;
 									}`;
 							}
