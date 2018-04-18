@@ -191,7 +191,7 @@ class ThemeRepo {
 			</span>`;
 			
 		this.sortPopoutMarkup =
-			`<div class="popout popout-bottom-right no-shadow themerepo-sort-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
+			`<div class="popout-2RRwAO popoutBottomRight-3JmvG2 noShadow-31NiLA themerepo-sort-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
 				<div>
 					<div class="contextMenu-uoJTbz quickSelectPopout">
 						<div class="itemGroup-oViAgA">
@@ -202,7 +202,7 @@ class ThemeRepo {
 			</div>`;
 			
 		this.orderPopoutMarkup =
-			`<div class="popout popout-bottom-right no-shadow themerepo-order-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
+			`<div class="popout-2RRwAO popoutBottomRight-3JmvG2 noShadow-31NiLA themerepo-order-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
 				<div>
 					<div class="contextMenu-uoJTbz quickSelectPopout">
 						<div class="itemGroup-oViAgA">
@@ -296,7 +296,7 @@ class ThemeRepo {
 
 	getDescription () {return "Allows you to preview all themes from the theme repo and download them on the fly. Repo button is in the theme settings.";}
 
-	getVersion () {return "1.4.7";}
+	getVersion () {return "1.4.8";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -628,7 +628,7 @@ class ThemeRepo {
 		wrapper.classList.add("popout-open");
 		var value = $(wrapper).find(".quickSelectValue-23jNHW");
 		var popout = $(markup);
-		$(".popouts").append(popout)
+		$(".popouts-1TN9u9").append(popout)
 			.off("click", ".item-1XYaYf")
 			.on("click", ".item-1XYaYf", (e2) => {
 				value.text($(e2.currentTarget).text());

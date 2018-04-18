@@ -1392,8 +1392,8 @@ BDfunctionsDevilBro.saveAllData = function (settings, plugin, keyName) {
 		bdPluginStorage.set(typeof plugin === "string" ? plugin : plugin.getName(), keyName, settings);
 	}
 	else {
-		let pluginid = plugin.toLowerCase();
-		let directory = typeof plugin === "string" ? (BDfunctionsDevilBro.Plugins[pluginid] ? BDfunctionsDevilBro.Plugins[pluginid].contentPath : null) : plugin.contentPath;
+		let pluginid = typeof plugin === "string" ? plugin.toLowerCase() : null;
+		let directory = pluginid ? (BDfunctionsDevilBro.Plugins[pluginid] ? BDfunctionsDevilBro.Plugins[pluginid].contentPath : null) : plugin.contentPath;
 		if (!directory) return;
 		let fs = require("fs");
 		let filepath = require("path").join(directory, "settings.json");
@@ -1408,8 +1408,8 @@ BDfunctionsDevilBro.loadAllData = function (plugin, keyName) {
 		return bdPluginStorage.get(typeof plugin === "string" ? plugin : plugin.getName(), keyName) || {};
 	}
 	else {
-		let pluginid = plugin.toLowerCase();
-		let directory = typeof plugin === "string" ? (BDfunctionsDevilBro.Plugins[pluginid] ? BDfunctionsDevilBro.Plugins[pluginid].contentPath : null) : plugin.contentPath;
+		let pluginid = typeof plugin === "string" ? plugin.toLowerCase() : null;
+		let directory = pluginid ? (BDfunctionsDevilBro.Plugins[pluginid] ? BDfunctionsDevilBro.Plugins[pluginid].contentPath : null) : plugin.contentPath;
 		if (!directory) return {};
 		let fs = require("fs");
 		let filepath = require("path").join(directory, "settings.json");
@@ -1424,8 +1424,8 @@ BDfunctionsDevilBro.removeAllData = function (plugin, keyName) {
 		BDfunctionsDevilBro.saveAllData({}, plugin, keyName);
 	}
 	else {
-		let pluginid = plugin.toLowerCase();
-		let directory = typeof plugin === "string" ? (BDfunctionsDevilBro.Plugins[pluginid] ? BDfunctionsDevilBro.Plugins[pluginid].contentPath : null) : plugin.contentPath;
+		let pluginid = typeof plugin === "string" ? plugin.toLowerCase() : null;
+		let directory = pluginid ? (BDfunctionsDevilBro.Plugins[pluginid] ? BDfunctionsDevilBro.Plugins[pluginid].contentPath : null) : plugin.contentPath;
 		if (!directory) return;
 		let fs = require("fs");
 		let filepath = require("path").join(directory, "settings.json");
@@ -1913,7 +1913,7 @@ BDfunctionsDevilBro.initElements = function (container) {
 
 BDfunctionsDevilBro.appendModal = function (modal) {
 	let id = Math.round(Math.random()*10000000000000000);
-	var container = document.querySelector(".app-XZYfmp ~ [class^='theme-']:not([class*='popouts'])");
+	var container = document.querySelector(".app-XZYfmp ~ [class^='theme-']:not([class*='popouts-1TN9u9'])");
 	if (!container) return;
 	
 	BDfunctionsDevilBro.$(modal)

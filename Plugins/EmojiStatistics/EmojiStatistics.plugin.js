@@ -160,7 +160,7 @@ class EmojiStatistics {
 
 	getDescription () {return "Adds some helpful options to show you more information about emojis and emojiservers.";}
 
-	getVersion () {return "2.7.1";}
+	getVersion () {return "2.7.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -234,10 +234,10 @@ class EmojiStatistics {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, ".popouts", {name:"emojiPickerObserver",instance:observer}, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, ".popouts-1TN9u9", {name:"emojiPickerObserver",instance:observer}, {childList: true});
 			
 			this.GuildEmojis = BDfunctionsDevilBro.WebModules.findByProperties(["getGuildEmoji", "getDisambiguatedEmojiContext"]);
-					}
+		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
 		}
@@ -248,6 +248,7 @@ class EmojiStatistics {
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
+	
 	
 	// begin of own functions
 

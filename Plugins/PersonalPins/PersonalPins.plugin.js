@@ -24,11 +24,11 @@ class PersonalPins {
 			</svg>`;
 			
 		this.notesPopoutMarkup = 
-			`<div class="popout popout-bottom-right no-arrow no-shadow popout-personalpins-notes DevilBro-modal" style="z-index: 1000; visibility: visible; left: 544.844px; top: 35.9896px; transform: translateX(-100%) translateY(0%) translateZ(0px);">
-				<div class="messages-popout-wrap themed-popout" style="max-height: 740px; width: 500px;">
-					<div class="header" style="padding-bottom: 0;">
+			`<div class="popout-2RRwAO popoutBottomRight-3JmvG2 noArrow-2iqI6w noShadow-31NiLA popout-personalpins-notes DevilBro-modal" style="z-index: 1000; visibility: visible; left: 544.844px; top: 35.9896px; transform: translateX(-100%) translateY(0%) translateZ(0px);">
+				<div class="messages-popout-wrap themed-popout themedPopout-1uUNjn" style="max-height: 740px; width: 500px;">
+					<div class="header header-2Z2FaH" style="padding-bottom: 0;">
 						<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginTop8-2gOa2N" style="flex: 0 0 auto;">
-							<div class="title">REPLACE_popout_note_text</div>
+							<div class="title title-2ySl2y">REPLACE_popout_note_text</div>
 							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO searchBar-YMJBu9 size14-1wjlWP" style="flex: 1 1 auto;">
 								<input class="input-yt44Uw flexChild-1KGW5q" value="" placeholder="Search for ..." style="flex: 1 1 auto;">
 								<div class="searchBarIcon-vCfmUl flexChild-1KGW5q">
@@ -62,7 +62,7 @@ class PersonalPins {
 			</div>`;
 			
 		this.sortPopoutMarkup =
-			`<div class="popout popout-bottom-right no-shadow personalpins-sort-popout" style="z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
+			`<div class="popout-2RRwAO popoutBottomRight-3JmvG2 noShadow-31NiLA personalpins-sort-popout" style="z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
 				<div>
 					<div class="contextMenu-uoJTbz quickSelectPopout">
 						<div class="itemGroup-oViAgA">
@@ -77,7 +77,7 @@ class PersonalPins {
 			`<div class="btn-option btn-personalpins"></div>`;
 		
 		this.optionsPopoutMarkup = 
-			`<div class="popout popout-bottom no-arrow popout-personalpins-options" style="z-index: 1000; visibility: visible;">
+			`<div class="popout-2RRwAO popoutBottom-U6AdMj noArrow-2iqI6w popout-personalpins-options" style="z-index: 1000; visibility: visible;">
 				<div class="option-popout small-popout-box"></div
 			</div>`;
 			
@@ -116,7 +116,7 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.4.7";}
+	getVersion () {return "1.4.8";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -215,7 +215,7 @@ class PersonalPins {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, ".popouts", {name:"optionPopoutObserver",instance:observer}, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, ".popouts-1TN9u9", {name:"optionPopoutObserver",instance:observer}, {childList: true});
 			
 			$(document).off("click." + this.getName(), ".btn-option").off("contextmenu." + this.getName(), ".message")
 				.on("click." + this.getName(), ".btn-option", (e) => {
@@ -342,7 +342,7 @@ class PersonalPins {
 		BDfunctionsDevilBro.initElements(popout);
 		var wrappersize = wrapper.getBoundingClientRect(); 
 		popout
-			.appendTo(".popouts")
+			.appendTo(".popouts-1TN9u9")
 			.css("left", wrappersize.width/2 + wrappersize.left + "px")
 			.css("top", wrappersize.height + wrappersize.top + "px")
 			.on("click", ".tab", () => {
@@ -377,7 +377,7 @@ class PersonalPins {
 		wrapper.classList.add("popout-open");
 		var value = $(wrapper).find(".quickSelectValue-23jNHW");
 		var popout = $(this.sortPopoutMarkup);
-		$(".popouts").append(popout)
+		$(".popouts-1TN9u9").append(popout)
 			.off("click", ".item-1XYaYf")
 			.on("click", ".item-1XYaYf", (e2) => {
 				value.text($(e2.currentTarget).text());
@@ -407,7 +407,7 @@ class PersonalPins {
 		if (wrapper.classList.contains("popout-open")) return;
 		wrapper.classList.add("popout-open");
 		var popout = $(this.optionsPopoutMarkup);
-		$(".popouts").append(popout);
+		$(".popouts-1TN9u9").append(popout);
 		$(popout).find(".option-popout").append(this.popoutEntryMarkup);
 		this.addClickListener(popout);
 		

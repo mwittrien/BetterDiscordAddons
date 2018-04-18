@@ -42,7 +42,7 @@ class CreationDate {
 
 	getDescription () {return "Displays the Creation Date of an Account in the UserPopout and UserModal.";}
 
-	getVersion () {return "1.1.5";}
+	getVersion () {return "1.1.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -113,7 +113,7 @@ class CreationDate {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, ".popouts", {name:"userPopoutObserver",instance:observer}, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, ".popouts-1TN9u9", {name:"userPopoutObserver",instance:observer}, {childList: true});
 			
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -131,7 +131,7 @@ class CreationDate {
 			BDfunctionsDevilBro.addObserver(this, ".app-XZYfmp ~ [class^='theme-']:not([class*='popouts'])", {name:"userProfilModalObserver",instance:observer}, {childList: true});
 			
 			this.languages = Object.assign({},BDfunctionsDevilBro.languages);
-					}
+		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
 		}

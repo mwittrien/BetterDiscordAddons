@@ -60,7 +60,7 @@ class FixTwitchEmotes {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, ".popouts", {name:"emojiPickerObserver",instance:observer}, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, ".popouts-1TN9u9", {name:"emojiPickerObserver",instance:observer}, {childList: true});
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");

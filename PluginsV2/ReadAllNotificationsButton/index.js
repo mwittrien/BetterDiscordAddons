@@ -70,7 +70,7 @@ module.exports = (Plugin, Api, Vendor) => {
 						}
 					);
 				});
-				BDfunctionsDevilBro.addObserver(this, ".popouts", {name:"mentionsPopoutObserver",instance:observer}, {childList: true});
+				BDfunctionsDevilBro.addObserver(this, ".popouts-1TN9u9", {name:"mentionsPopoutObserver",instance:observer}, {childList: true});
 				
 				$(this.RANbuttonMarkup).insertBefore(".guild-separator")
 					.on("click", "#RANbutton", () => {

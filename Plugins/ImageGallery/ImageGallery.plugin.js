@@ -74,8 +74,8 @@ class ImageGallery {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, ".app-XZYfmp ~ [class^='theme-']:not([class*='popouts'])", {name:"imageModalObserver",instance:observer}, {childList: true});
-					}
+			BDfunctionsDevilBro.addObserver(this, ".app-XZYfmp ~ [class^='theme-']:not([class*='popouts-1TN9u9'])", {name:"imageModalObserver",instance:observer}, {childList: true});
+		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
 		}
@@ -83,8 +83,6 @@ class ImageGallery {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			$(document).off("keyup." + this.getName()).off("keydown." + this.getName());
-						
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}

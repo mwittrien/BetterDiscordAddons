@@ -21,7 +21,7 @@ class ReadAllNotificationsButton {
 
 	getDescription () {return "Adds a button to clear all notifications.";}
 
-	getVersion () {return "1.2.8";}
+	getVersion () {return "1.2.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -80,7 +80,7 @@ class ReadAllNotificationsButton {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, ".popouts", {name:"mentionsPopoutObserver",instance:observer}, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, ".popouts-1TN9u9", {name:"mentionsPopoutObserver",instance:observer}, {childList: true});
 			
 			$(this.RANbuttonMarkup).insertBefore(".guild-separator")
 				.on("click", "#RANbutton", () => {
@@ -99,7 +99,6 @@ class ReadAllNotificationsButton {
 			$("#RANbutton-frame, #RAMbutton").remove();
 			
 			$(".RAN-added").removeClass("RAN-added");
-			$(".RAM-added").removeClass("RAM-added");
 			
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
