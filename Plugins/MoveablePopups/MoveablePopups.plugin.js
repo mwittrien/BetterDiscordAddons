@@ -8,7 +8,7 @@ class MoveablePopups {
 
 	getDescription () {return "Adds the feature to move all popups and modals around like on a normal desktop. Ctrl + drag with your left mousebutton to drag element.";}
 
-	getVersion () {return "1.0.7";}
+	getVersion () {return "1.0.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -42,7 +42,7 @@ class MoveablePopups {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.classList && node.classList.length > 0 && node.classList.contains("popout")) {
+								if (node && node.classList && node.classList.length > 0 && node.classList.contains("popout-2RRwAO")) {
 									this.makeMoveable(node);
 								}
 							});

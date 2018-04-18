@@ -31,7 +31,7 @@ module.exports = (Plugin, Api, Vendor) => {
 						(change, i) => {
 							if (change.addedNodes) {
 								change.addedNodes.forEach((node) => {
-									if (node && node.classList && node.classList.length > 0 && node.classList.contains("popout")) {
+									if (node && node.classList && node.classList.length > 0 && node.classList.contains("popout-2RRwAO")) {
 										this.makeMoveable(node);
 									}
 								});
