@@ -165,7 +165,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "2.2.2";}
+	getVersion () {return "2.2.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -606,10 +606,10 @@ class EditUsers {
 			var text = disabled ? this.labels.modal_ignoreurl_text : valid ? this.labels.modal_validurl_text : this.labels.modal_invalidurl_text;
 			var bgColor = disabled ? "#282524" : valid ? "#297828" : "#8C2528";
 			var customTooltipCSS = `
-				.notice-tooltip {
+				body .notice-tooltip {
 					background-color: ${bgColor} !important;
 				}
-				.notice-tooltip:after {
+				body .notice-tooltip:after {
 					border-right-color: ${bgColor} !important;
 				}`;
 			BDfunctionsDevilBro.createTooltip(text, input, {type:"right",selector:"notice-tooltip",css:customTooltipCSS});

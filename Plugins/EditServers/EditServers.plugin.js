@@ -124,7 +124,7 @@ class EditServers {
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	getVersion () {return "1.8.0";}
+	getVersion () {return "1.8.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -412,10 +412,10 @@ class EditServers {
 			var text = disabled ? this.labels.modal_ignoreurl_text : valid ? this.labels.modal_validurl_text : this.labels.modal_invalidurl_text;
 			var bgColor = disabled ? "#282524" : valid ? "#297828" : "#8C2528";
 			var customTooltipCSS = `
-				.notice-tooltip {
+				body .notice-tooltip {
 					background-color: ${bgColor} !important;
 				}
-				.notice-tooltip:after {
+				body .notice-tooltip:after {
 					border-right-color: ${bgColor} !important;
 				}`;
 			BDfunctionsDevilBro.createTooltip(text, input, {type:"right",selector:"notice-tooltip",css:customTooltipCSS});
@@ -477,14 +477,14 @@ class EditServers {
 			var bgColor = data.color3 ? BDfunctionsDevilBro.color2RGB(data.color3) : "";
 			var fontColor = data.color4 ? BDfunctionsDevilBro.color2RGB(data.color4) : "";
 			var customTooltipCSS = `
-				.tooltip:not(.guild-custom-tooltip) {
+				body .tooltip:not(.guild-custom-tooltip) {
 					display: none !important;
 				}
-				.guild-custom-tooltip {
+				body .guild-custom-tooltip {
 					color: ${fontColor} !important;
 					background-color: ${bgColor} !important;
 				}
-				.guild-custom-tooltip:after {
+				body .guild-custom-tooltip:after {
 					border-right-color: ${bgColor} !important;
 				}`;
 				

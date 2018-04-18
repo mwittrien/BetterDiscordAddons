@@ -326,7 +326,7 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.6.0";}
+	getVersion () {return "5.6.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -825,11 +825,11 @@ class ServerFolders {
 				var bgColor = data.color3 ? BDfunctionsDevilBro.color2RGB(data.color3) : "";
 				var fontColor = data.color4 ? BDfunctionsDevilBro.color2RGB(data.color4) : "";
 				var customTooltipCSS = `
-					.guild-folder-tooltip {
+					body .tooltip.guild-folder-tooltip {
 						color: ${fontColor} !important;
 						background-color: ${bgColor} !important;
 					}
-					.guild-folder-tooltip:after {
+					body .guild-folder-tooltip:after {
 						border-right-color: ${bgColor} !important;
 					}`;
 				BDfunctionsDevilBro.createTooltip(data.folderName, folderDiv, {type:"right",selector:"guild-folder-tooltip",css:customTooltipCSS});
@@ -843,11 +843,11 @@ class ServerFolders {
 		var bgColor = data ? (data.color3 ? BDfunctionsDevilBro.color2RGB(data.color3) : "") : "";
 		var fontColor = data ? (data.color4 ? BDfunctionsDevilBro.color2RGB(data.color4) : "") : "";
 		var customTooltipCSS = `
-			.guild-custom-tooltip {
+			body .tooltip.guild-custom-tooltip {
 				color: ${fontColor} !important;
 				background-color: ${bgColor} !important;
 			}
-			.guild-custom-tooltip:after {
+			body .tooltip.guild-custom-tooltip:after {
 				border-right-color: ${bgColor} !important;
 			}`;
 			
