@@ -12,6 +12,7 @@ class ServerFolders {
 			}
 			
 			.serverfolders-modal .ui-icon-picker-icon {
+				position: relative;
 				width: 70px;
 				height: 70px;
 				border: 4px solid transparent;
@@ -28,6 +29,16 @@ class ServerFolders {
 				background-position: 50%;
 				background-size: cover;
 				border-radius: 12px;
+			}
+			
+			.serverfolders-modal .ui-icon-picker-icon.selected .button-1qrA-N {
+				display: none !important;
+			}
+			
+			.serverfolders-modal .ui-icon-picker-icon .button-1qrA-N {
+				position: absolute;
+				top: -10px;
+				right: -10px;
 			}
 			
 			.serverfolders-modal .ui-icon-picker-icon.preview.nopic .ui-picker-inner {
@@ -326,7 +337,7 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.6.1";}
+	getVersion () {return "5.6.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -471,6 +482,30 @@ class ServerFolders {
 				}
 			});
 			
+			// PATCH OLD DATA REMOVE AFTER SOME TIME
+			var customIcons = BDfunctionsDevilBro.loadData("customicons", this, "customicons") || [];
+			if (customIcons.length > 0) {
+				BDfunctionsDevilBro.showToast("Patching old ServerFolders data. This may take a minute. Do not close Discord.", {type:"warn"});
+				let folders = BDfunctionsDevilBro.loadAllData(this, "folders");
+				this.folderIcons.forEach(pair => {
+					pair.custom = false;
+				});
+				customIcons.forEach(pair => {
+					pair.custom = true;
+					pair.customID = this.generateID("customicon", "customicons");
+					BDfunctionsDevilBro.saveData(pair.customID, {"openicon":pair.openicon,"closedicon":pair.closedicon,"customID":pair.customID}, this, "customicons");
+				});
+				var icons = this.folderIcons.concat(customIcons);
+				for (var id in folders) {
+					var folder = folders[id];
+					if (icons[folder.iconID].custom) {
+						folder.iconID = icons[folder.iconID].customID;
+						BDfunctionsDevilBro.saveData(id, folder, this, "folders");
+					}
+				}
+				BDfunctionsDevilBro.removeData("customicons", this, "customicons");
+			}
+			
 			setTimeout(() => {
 				this.addDragListener();
 				this.loadAllFolders();
@@ -484,7 +519,7 @@ class ServerFolders {
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			this.resetAllElements();
-						
+			
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
@@ -502,7 +537,6 @@ class ServerFolders {
 	resetAll () {
 		if (confirm("Are you sure you want to delete all folders?")) {
 			BDfunctionsDevilBro.removeAllData(this, "folders");
-			BDfunctionsDevilBro.removeAllData(this, "folderIDs");
 			
 			this.resetAllElements();
 		}
@@ -652,7 +686,7 @@ class ServerFolders {
 	createNewFolder (ankerDiv) {
 		if (!ankerDiv) return;
 		
-		var folderID = 		this.generateFolderID();
+		var folderID = 		this.generateID("folder", "folders");
 		var folderName = 	"";
 		var position = 		Array.from(document.querySelectorAll("div.guild-separator ~ div.guild")).indexOf(ankerDiv);
 		var iconID = 		0;
@@ -763,17 +797,10 @@ class ServerFolders {
 		return folderDiv;
 	}
 	
-	generateFolderID () {
-		var folderIDs = BDfunctionsDevilBro.loadAllData(this, "folderIDs");
-		var folderID = "folder_" + Math.round(Math.random()*10000000000000000);
-		if (folderIDs[folderID]) {
-			return generateFolderID();
-		}
-		else {
-			folderIDs[folderID] = folderID;
-			BDfunctionsDevilBro.saveAllData(folderIDs, this, "folderIDs");
-			return folderID;
-		}
+	generateID (prefix, dataname) {
+		var data = BDfunctionsDevilBro.loadAllData(this, dataname);
+		var id = prefix + "_" + Math.round(Math.random()*10000000000000000);
+		return data[id] ? this.generateID(prefix, dataname) : id;
 	}
 	
 	createFolderContextMenu (folderDiv, e) {
@@ -868,8 +895,6 @@ class ServerFolders {
 			var color4 = 		data.color4;
 			var servers = 		data.servers;
 			
-			var folderIcons = this.loadAllIcons();
-			
 			var folderSettingsModal = $(this.folderSettingsModalMarkup);
 			folderSettingsModal.find(".guildName-1u0hy7").text(folderName ? folderName : "");
 			folderSettingsModal.find("#input-foldername").val(folderName);
@@ -907,6 +932,7 @@ class ServerFolders {
 					color4 = BDfunctionsDevilBro.getSwatchColor("swatch4");
 					
 					if (iconID != data.iconID || !BDfunctionsDevilBro.equals(color1, data.color1) || !BDfunctionsDevilBro.equals(color2, data.color2)) {
+						var folderIcons = this.loadAllIcons();
 						var isOpen = folderDiv.classList.contains("open");
 						if (!folderSettingsModal.find(".ui-icon-picker-icon.selected").hasClass("custom")) {
 							this.changeImgColor(color1, color2, folderIcons[iconID].openicon, (openicon) => {
@@ -942,46 +968,50 @@ class ServerFolders {
 		var icons = 
 			`<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO" style="flex: 1 1 auto; margin-top: 5px;">
 				<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa wrap-1da0e3 ui-icon-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;">
-					${ folderIcons.map((val, i) => `<div class="ui-icon-picker-icon${val.custom ? ' custom' : ''}" value="${i}"><div class="ui-picker-inner" style="background-image: url(${val.closedicon});"></div></div>`).join("")}
+					${Object.getOwnPropertyNames(folderIcons).map(id => `<div class="ui-icon-picker-icon${folderIcons[id].customID ? ' custom' : ''}" value="${id}"><div class="ui-picker-inner" style="background-image: url(${folderIcons[id].closedicon});"></div>${folderIcons[id].customID ? '<div value="' + id + '" class="button-1qrA-N"></div>' : ''}</div>`).join("")}
 				</div>
 			</div>`;
 		$(icons).appendTo(wrapper);
 		
-		if (!(selection < folderIcons.length && selection > -1)) {
+		if (!folderIcons[selection]) {
 			selection = 0;
 		}
-		wrapper.find(".ui-icon-picker-icon").eq(selection)
+		wrapper.find(`.ui-icon-picker-icon[value="${selection}"]`)
 			.addClass("selected")
 			.css("background-color", "grey");
 		
-		wrapper.on("click", ".ui-icon-picker-icon", (e) => {
-			wrapper.find(".ui-icon-picker-icon.selected")
-				.removeClass("selected")
-				.css("background-color", "transparent");
-			
-			$(e.currentTarget)
-				.addClass("selected")
-				.css("background-color", "grey");
-		});
-		
 		wrapper
+			.off("click").off("mouseenter").off("mouseleave")
+			.on("click", ".ui-icon-picker-icon", (e) => {
+				if (e.target.classList.contains("button-1qrA-N")) return 
+				wrapper.find(".ui-icon-picker-icon.selected")
+					.removeClass("selected")
+					.css("background-color", "transparent");
+				
+				$(e.currentTarget)
+					.addClass("selected")
+					.css("background-color", "grey");
+			})
+			.on("click", ".button-1qrA-N", (e) => {
+				BDfunctionsDevilBro.removeData(e.currentTarget.getAttribute("value"), this, "customicons");
+				e.currentTarget.parentElement.remove();
+				BDfunctionsDevilBro.showToast(`Custom Icon was deleted.`, {type:"success"});
+			})
 			.on("mouseenter", ".ui-icon-picker-icon", (e) => {
-				$(e.currentTarget).find(".ui-picker-inner").css("background-image", "url(" + folderIcons[$(e.currentTarget).attr("value")].openicon + ")");
+				$(e.currentTarget).find(".ui-picker-inner").css("background-image", "url(" + folderIcons[e.currentTarget.getAttribute("value")].openicon + ")");
 			})
 			.on("mouseleave", ".ui-icon-picker-icon", (e) => {
-				$(e.currentTarget).find(".ui-picker-inner").css("background-image", "url(" + folderIcons[$(e.currentTarget).attr("value")].closedicon + ")");
+				$(e.currentTarget).find(".ui-picker-inner").css("background-image", "url(" + folderIcons[e.currentTarget.getAttribute("value")].closedicon + ")");
 			});
 	}
 	
 	loadAllIcons () {
-		this.folderIcons.forEach(pair => {
-			pair.custom = false;
+		var icons = {};
+		this.folderIcons.forEach((array,i) => {
+			icons[i] = {"openicon":array.openicon,"closedicon":array.closedicon,"customID":null};
 		});
-		var customIcons = BDfunctionsDevilBro.loadData("customicons", this, "customicons") || [];
-		customIcons.forEach(pair => {
-			pair.custom = true;
-		});
-		return this.folderIcons.concat(customIcons);
+		Object.assign(icons, BDfunctionsDevilBro.loadAllData(this, "customicons"));
+		return icons;
 	}
 	
 	fetchCustomIcon (modal, type) {
@@ -1047,9 +1077,8 @@ class ServerFolders {
 		var iconpreviewclosed = modal.querySelector(".ui-icon-picker-icon.preview.closed");
 		var iconpreviewswitching = modal.querySelector(".ui-icon-picker-icon.preview.switching");
 		if (!iconpreviewopen.classList.contains("nopic") && !iconpreviewclosed.classList.contains("nopic") && !iconpreviewswitching.classList.contains("nopic")) {
-			var customIcons = BDfunctionsDevilBro.loadData("customicons", this, "customicons") || [];
-			customIcons.push({"openicon":iconpreviewopen.url,"closedicon":iconpreviewclosed.url,});
-			BDfunctionsDevilBro.saveData("customicons", customIcons, this, "customicons");
+			var customID = this.generateID("customicon", "customicons");
+			BDfunctionsDevilBro.saveData(customID, {"openicon":iconpreviewopen.url,"closedicon":iconpreviewclosed.url,customID}, this, "customicons");
 			modal.querySelectorAll("input[type='text'][option]").forEach((input) => {
 				input.value = "";
 			});
@@ -1061,7 +1090,7 @@ class ServerFolders {
 			iconpreviewswitching.style.backgroundImage = "";
 			clearInterval(iconpreviewswitching.switchInterval);
 			BDfunctionsDevilBro.showToast(`Custom Icon was added to selection.`, {type:"success"});
-			this.setIcons($(modal).find(".ui-icon-picker-icon.selected").attr("value"), $(modal).find(".icons"));
+			this.setIcons(modal.querySelector(".ui-icon-picker-icon.selected").getAttribute("value"), $(modal).find(".icons"));
 		}
 		else {
 			BDfunctionsDevilBro.showToast(`Add an image for the open and the closed icon.`, {type:"danger"});
@@ -1072,7 +1101,6 @@ class ServerFolders {
 		$(this.readIncludedServerList(folderDiv)).removeAttr("folder").show();
 		
 		BDfunctionsDevilBro.removeData(folderDiv.id, this, "folders");
-		BDfunctionsDevilBro.removeData(folderDiv.id, this, "folderIDs");
 		
 		this.closeFolderContent(folderDiv);
 		
