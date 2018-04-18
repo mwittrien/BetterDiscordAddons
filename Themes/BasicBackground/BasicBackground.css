@@ -23,7 +23,7 @@
 .layers-20RVFW,
 .layer-kosS71,
 .container-2OU7Cz,
-.popout section,
+.popout-2RRwAO section,
 .content-region,
 .guilds-wrapper,
 #friends .tab-bar-item:hover,
@@ -58,9 +58,9 @@
 .modal-2LIEKY .header,
 .modal-2LIEKY .footer,
 .wrapper-1XTKlU,
-.popout header,
-.popout .header,
-.popout .footer,
+.popout-2RRwAO header,
+.popout-2RRwAO .header,
+.popout-2RRwAO .footer,
 .auth-brand,
 .date-picker-hint,
 .modal-3HOjGZ,
@@ -527,7 +527,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .regionSelect-1lpijo:hover button,
 .questionMark-1R8WLs,
 .root-2sNHUF .buttonInvertedDefault-1UdvTn,
-.popout .btn,
+.popout-2RRwAO .btn,
 .friends-empty .btn,
 .tutorial-popout .button,
 .private-channel-recipients-invite button,
@@ -805,7 +805,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	background-color: rgb(240,71,71) !important;
 }
 
-.popout .btn,
+.popout-2RRwAO .btn,
 .friends-empty .btn,
 .bd-modal button,
 .private-channel-recipients-invite button,
@@ -829,7 +829,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .button-2t3of8 {
 	transition: all 100ms linear !important;
 }
-.popout .btn:hover,
+.popout-2RRwAO .btn:hover,
 .friends-empty .btn:hover,
 .private-channel-recipients-invite button:hover,
 .valueChecked-3Bzkbm:hover,
@@ -900,7 +900,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 
 /* ----------------------- POPOUTS & MODALS ------------------------ */
 
-.popout {
+.popout-2RRwAO {
 	animation: none !important;
 	overflow: visible !important;
 	transform: none !important;
@@ -910,69 +910,69 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 @keyframes popout-fadein {
 	to {opacity: 1;}
 }
-.popout > * {
+.popout-2RRwAO > * {
 	position: relative;
 	opacity: 0 !important;
 	animation: popout-fadein 100ms ease 200ms !important;
 	animation-fill-mode: forwards !important;
 	pointer-events: all !important;
 }
-.popout[style*="translateX(-50%)"] > * {
+.popout-2RRwAO[style*="translateX(-50%)"] > * {
 	right: 50% !important;
 }
-.popout[style*="translateX(-100%)"] > * {
+.popout-2RRwAO[style*="translateX(-100%)"] > * {
 	right: 100% !important;
 }
-.popout.popout-googletranslate[style*="translateY(-100%)"] > .themed-popout {
+.popout-2RRwAO.popout-googletranslate[style*="translateY(-100%)"] > .themed-popout {
 	position: relative !important;
 	bottom: 422px !important;
 }
-.popout[style*="translateY(-100%)"] > .container-1WaXoH {
+.popout-2RRwAO[style*="translateY(-100%)"] > .container-1WaXoH {
 	position: relative !important;
 	bottom: 300px !important;
 }
-.popout[style*="translateY(-100%)"] > .tutorial-popout {
+.popout-2RRwAO[style*="translateY(-100%)"] > .tutorial-popout {
 	position: relative !important;
 	bottom: 280px !important;
 }
-.popout[style*="translateX(-"] > div[channel] {
+.popout-2RRwAO[style*="translateX(-"] > div[channel] {
 	position: absolute !important;
 	right: 0px !important;
 }
-.popout[style*="translateX(-"] > .option-popout {
+.popout-2RRwAO[style*="translateX(-"] > .option-popout {
 	position: absolute !important;
 	right: 0px !important;
 }
-.popout[style*="translateX(-11"] > .userPopout-11hFKo {
+.popout-2RRwAO[style*="translateX(-11"] > .userPopout-11hFKo {
 	position: absolute !important;
 	right: 20px !important;
 }
-.popout[style*="translateY(-100%)"] > .userPopout-11hFKo {
+.popout-2RRwAO[style*="translateY(-100%)"] > .userPopout-11hFKo {
 	position: absolute !important;
 	bottom: -20px !important;
 	left: -120px !important;
 }
-.popout[style*="translateY(-100%)"] > .attachPopout-gjwHsr {
+.popout-2RRwAO[style*="translateY(-100%)"] > .attachPopout-gjwHsr {
 	position: absolute !important;
 	bottom: -15px !important;
 	left: 3px !important;
 }
-.popout .menu-3BZuDT.alt-2vq4VR {
+.popout-2RRwAO .menu-3BZuDT.alt-2vq4VR {
 	top: -235px !important;
 }
-.popout[style*="translateX(-1"]:not([style*="translateX(-100%)"]) > #bda-qem,
-.popout[style*="translateX(-1"]:not([style*="translateX(-100%)"]) > .emojiPicker-3g68GS,
-.popout[style*="translateX(-1"]:not([style*="translateX(-100%)"]) > #bda-qem-twitch-container,
-.popout[style*="translateX(-1"]:not([style*="translateX(-100%)"]) > #bda-qem-favourite-container {
+.popout-2RRwAO[style*="translateX(-1"]:not([style*="translateX(-100%)"]) > #bda-qem,
+.popout-2RRwAO[style*="translateX(-1"]:not([style*="translateX(-100%)"]) > .emojiPicker-3g68GS,
+.popout-2RRwAO[style*="translateX(-1"]:not([style*="translateX(-100%)"]) > #bda-qem-twitch-container,
+.popout-2RRwAO[style*="translateX(-1"]:not([style*="translateX(-100%)"]) > #bda-qem-favourite-container {
 	right: 340px !important;
 }
-.popout[style*="translateY(-100%)"] > #bda-qem,
-.popout[style*="translateY(-100%)"] > .emojiPicker-3g68GS,
-.popout[style*="translateY(-100%)"] > #bda-qem-twitch-container,
-.popout[style*="translateY(-100%)"] > #bda-qem-favourite-container {
+.popout-2RRwAO[style*="translateY(-100%)"] > #bda-qem,
+.popout-2RRwAO[style*="translateY(-100%)"] > .emojiPicker-3g68GS,
+.popout-2RRwAO[style*="translateY(-100%)"] > #bda-qem-twitch-container,
+.popout-2RRwAO[style*="translateY(-100%)"] > #bda-qem-favourite-container {
 	top: -350px !important;
 }
-.popout[style*="transform: translateY(0%) translateX(-50%) translateZ(0px)"] > :first-child:not(#bda-qem) {
+.popout-2RRwAO[style*="transform: translateY(0%) translateX(-50%) translateZ(0px)"] > :first-child:not(#bda-qem) {
 	right: 46% !important;
 	top: -12px !important;
 }
@@ -995,8 +995,8 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .keyboard-shortcuts-modal,
 .modal-2LIEKY .inner-1_1f7b > [class]:not(.premiumPaymentModal-w4sE7z):not(.container-3uJcWB):only-child,
 #permissions-modal,
-.popout > [class],
-.popout > [id],
+.popout-2RRwAO > [class],
+.popout-2RRwAO > [id],
 .popoutList-2NT_IY,
 .quickswitcher-2NdiGJ,
 .Select-menu-outer {
@@ -1023,10 +1023,10 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .modal-2LIEKY .inner-1_1f7b > [class]:not(.premiumPaymentModal-w4sE7z):not(.container-3uJcWB):only-child::before,
 #permissions-modal::after,
 #permissions-modal::before,
-.popout > [class]::after,
-.popout > [class]::before,
-.popout > [id]::after,
-.popout > [id]::before,
+.popout-2RRwAO > [class]::after,
+.popout-2RRwAO > [class]::before,
+.popout-2RRwAO > [id]::after,
+.popout-2RRwAO > [id]::before,
 .popoutList-2NT_IY::after,
 .popoutList-2NT_IY::before,
 .quickswitcher-2NdiGJ::after,
@@ -1047,8 +1047,8 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .keyboard-shortcuts-modal::after,
 .modal-2LIEKY .inner-1_1f7b > [class]:not(.premiumPaymentModal-w4sE7z):not(.container-3uJcWB):only-child::after,
 #permissions-modal::after,
-.popout > [class]::after,
-.popout > [id]::after,
+.popout-2RRwAO > [class]::after,
+.popout-2RRwAO > [id]::after,
 .popoutList-2NT_IY::after,
 .quickswitcher-2NdiGJ::after,
 .Select-menu-outer::after{
@@ -1066,8 +1066,8 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .keyboard-shortcuts-modal::before,
 .modal-2LIEKY .inner-1_1f7b > [class]:not(.premiumPaymentModal-w4sE7z):not(.container-3uJcWB):only-child::before,
 #permissions-modal::before,
-.popout > [class]::before,
-.popout > [id]::before,
+.popout-2RRwAO > [class]::before,
+.popout-2RRwAO > [id]::before,
 .popoutList-2NT_IY::before,
 .quickswitcher-2NdiGJ::before,
 .Select-menu-outer::before {
