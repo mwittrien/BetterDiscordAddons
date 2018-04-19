@@ -46,13 +46,13 @@ module.exports = (Plugin, Api, Vendor) => {
 							if (change.addedNodes) {
 								change.addedNodes.forEach((node) => {
 									var mentionspopout = null;
-									if (node && node.tagName && (mentionspopout = node.querySelector(".recent-mentions-popout")) != null) {
-										$(this.RAMbuttonMarkup).insertBefore(".mention-filter", mentionspopout)
+									if (node && node.tagName && (mentionspopout = node.querySelector(".recent-mentions-popout, .recentMentionsPopout-3QkZEg")) != null) {
+										$(this.RAMbuttonMarkup).insertBefore(".mention-filter, .mentionFilter-wE0FR9", mentionspopout)
 											.on("click", () => {
 												var loadinterval = setInterval(() => {
 													if (!mentionspopout || !mentionspopout.parentElement) clearInterval(loadinterval);
-													var loadbutton = mentionspopout.querySelector(".has-more button");
-													var closebuttons = mentionspopout.querySelectorAll(".close-button");
+													var loadbutton = mentionspopout.querySelector(".has-more button, .hasMore-17LQIb button");
+													var closebuttons = mentionspopout.querySelectorAll(".close-button, .closeButton-2Rx3ov");
 													if (!loadbutton) {
 														closebuttons.forEach((btn) => {btn.click();});
 														clearInterval(loadinterval);

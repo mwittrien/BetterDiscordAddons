@@ -64,7 +64,9 @@
 .popout .footer,
 .popout-2RRwAO header,
 .popout-2RRwAO .header,
+.popout-2RRwAO .header-y_zptc,
 .popout-2RRwAO .footer,
+.popout-2RRwAO .footer-dHccYB,
 .auth-brand,
 .date-picker-hint,
 .modal-3HOjGZ,
@@ -193,7 +195,8 @@ input:disabled {
 	stroke: hsla(0,0%,100%,.8) !important;
 }
 
-.action-buttons {
+.action-buttons,
+.actionButtons-LKmOj2 {
 	top: 15px !important;
 	right: 0px !important;
 }
@@ -201,7 +204,9 @@ input:disabled {
 	right: 20px !important;
 }
 .action-buttons .jump-button,
-.action-buttons .close-button {
+.actionButtons-LKmOj2 .jumpButton-1CVJpO,
+.action-buttons .close-button,
+.actionButtons-LKmOj2 .closeButton-2Rx3ov {
 	border-radius: 3px !important;
 	height: 14px  !important;
 	margin: 0 3px !important;
@@ -209,14 +214,19 @@ input:disabled {
 	background-color: rgba(var(--transparencycolor),calc(var(--transparencyalpha) * 3)) !important;
 }
 .message-group:hover .jump-button,
-.message-group:hover .close-button {
+.message-group:hover .close-button,
+.message-group:hover .jumpButton-1CVJpO,
+.message-group:hover .closeButton-2Rx3ov {
 	opacity: 0.5 !important;
 }
 .message-group .jump-button:hover,
-.message-group .close-button:hover {
+.message-group .close-button:hover,
+.message-group .jumpButton-1CVJpO:hover,
+.message-group .closeButton-2Rx3ov:hover {
 	opacity: 1 !important;
 }
-.action-buttons .text {
+.action-buttons .text,
+.actionButtons-LKmOj2 .text-W1x7LP {
 	color: #FFF !important;
 }
 

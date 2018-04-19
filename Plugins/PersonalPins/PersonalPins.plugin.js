@@ -25,10 +25,10 @@ class PersonalPins {
 			
 		this.notesPopoutMarkup = 
 			`<div class="popout popout-bottom-right no-arrow no-shadow popout-2RRwAO popoutBottomRight-3JmvG2 noArrow-2iqI6w noShadow-31NiLA popout-personalpins-notes DevilBro-modal" style="z-index: 1000; visibility: visible; left: 544.844px; top: 35.9896px; transform: translateX(-100%) translateY(0%) translateZ(0px);">
-				<div class="messages-popout-wrap themed-popout themedPopout-1uUNjn" style="max-height: 740px; width: 500px;">
-					<div class="header header-2Z2FaH" style="padding-bottom: 0;">
+				<div class="messages-popout-wrap messagesPopoutWrap-1VBR-j themed-popout themedPopout-1uUNjn" style="max-height: 740px; width: 500px;">
+					<div class="header header-y_zptc header-2Z2FaH header-20NMVw" style="padding-bottom: 0;">
 						<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginTop8-2gOa2N" style="flex: 0 0 auto;">
-							<div class="title title-2ySl2y">REPLACE_popout_note_text</div>
+							<div class="title title-1SAkRa title-2ySl2y">REPLACE_popout_note_text</div>
 							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO searchBar-YMJBu9 size14-1wjlWP" style="flex: 1 1 auto;">
 								<input class="input-yt44Uw flexChild-1KGW5q" value="" placeholder="Search for ..." style="flex: 1 1 auto;">
 								<div class="searchBarIcon-vCfmUl flexChild-1KGW5q">
@@ -51,10 +51,10 @@ class PersonalPins {
 						</div>
 					</div>
 					<div class="scroller-wrap dark">
-						<div class="messages-popout scroller">
-							<div class="empty-placeholder">
-								<div class="image" style="background-image: url(&quot;/assets/6793e022dc1b065b21f12d6df02f91bd.svg&quot;);"></div>
-								<div class="body"></div>
+						<div class="messages-popout messagesPopout-MzE43I scroller">
+							<div class="empty-placeholder emptyPlaceholder-2T_EMT">
+								<div class="image image-1drLpb" style="background-image: url(/assets/6793e022dc1b065b21f12d6df02f91bd.svg);"></div>
+								<div class="body body-1fAJW-"></div>
 							</div>
 						</div>
 					</div>
@@ -104,10 +104,10 @@ class PersonalPins {
 					</div>
 				</div>
 				<div class="sink-interactions clickable"></div>
-				<div class="action-buttons">
-					<div class="jump-button jump"><div class="text">REPLACE_popout_jump_text</div></div>
-					<div class="jump-button copy"><div class="text">REPLACE_popout_copy_text</div></div>
-					<div class="close-button"></div>
+				<div class="action-buttons actionButtons-LKmOj2">
+					<div class="jump-button jumpButton-1CVJpO jump"><div class="text text-W1x7LP">REPLACE_popout_jump_text</div></div>
+					<div class="jump-button jumpButton-1CVJpO copy"><div class="text text-W1x7LP">REPLACE_popout_copy_text</div></div>
+					<div class="close-button closeButton-2Rx3ov"></div>
 				</div>
 			</div>`;
 	}
@@ -116,7 +116,7 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.4.9";}
+	getVersion () {return "1.5.1";}
 
 	getAuthor () {return "DevilBro";}
 	
