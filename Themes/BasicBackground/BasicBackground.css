@@ -395,7 +395,8 @@ input:disabled {
 .sad-discord,
 .artwork-LJqOaz,
 img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
-.empty-placeholder .image {
+.empty-placeholder .image,
+.emptyPlaceholder-2T_EMT .image-1drLpb {
 	opacity: 0.5 !important;
 	pointer-events: none !important;
 }
