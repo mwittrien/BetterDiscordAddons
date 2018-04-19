@@ -160,7 +160,7 @@ class EmojiStatistics {
 
 	getDescription () {return "Adds some helpful options to show you more information about emojis and emojiservers.";}
 
-	getVersion () {return "2.7.2";}
+	getVersion () {return "2.7.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -234,7 +234,7 @@ class EmojiStatistics {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, ".popouts-1TN9u9", {name:"emojiPickerObserver",instance:observer}, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, ".popouts, .popouts-1TN9u9", {name:"emojiPickerObserver",instance:observer}, {childList: true});
 			
 			this.GuildEmojis = BDfunctionsDevilBro.WebModules.findByProperties(["getGuildEmoji", "getDisambiguatedEmojiContext"]);
 		}

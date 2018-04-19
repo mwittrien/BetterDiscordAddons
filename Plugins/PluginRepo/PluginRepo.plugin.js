@@ -156,7 +156,7 @@ class PluginRepo {
 			</span>`;
 			
 		this.sortPopoutMarkup =
-			`<div class="popout-2RRwAO popoutBottomRight-3JmvG2 noShadow-31NiLA pluginrepo-sort-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
+			`<div class="popout popout-bottom-right no-shadow popout-2RRwAO popoutBottomRight-3JmvG2 noShadow-31NiLA pluginrepo-sort-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
 				<div>
 					<div class="contextMenu-uoJTbz quickSelectPopout">
 						<div class="itemGroup-oViAgA">
@@ -167,7 +167,7 @@ class PluginRepo {
 			</div>`;
 			
 		this.orderPopoutMarkup =
-			`<div class="popout-2RRwAO popoutBottomRight-3JmvG2 noShadow-31NiLA pluginrepo-order-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
+			`<div class="popout popout-bottom-right no-shadow popout-2RRwAO popoutBottomRight-3JmvG2 noShadow-31NiLA pluginrepo-order-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
 				<div>
 					<div class="contextMenu-uoJTbz quickSelectPopout">
 						<div class="itemGroup-oViAgA">
@@ -241,7 +241,7 @@ class PluginRepo {
 
 	getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
 
-	getVersion () {return "1.4.8";}
+	getVersion () {return "1.4.9";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -515,7 +515,7 @@ class PluginRepo {
 		wrapper.classList.add("popout-open");
 		var value = $(wrapper).find(".quickSelectValue-23jNHW");
 		var popout = $(markup);
-		$(".popouts-1TN9u9").append(popout)
+		$(".popouts, .popouts-1TN9u9").append(popout)
 			.off("click", ".item-1XYaYf")
 			.on("click", ".item-1XYaYf", (e2) => {
 				value.text($(e2.currentTarget).text());

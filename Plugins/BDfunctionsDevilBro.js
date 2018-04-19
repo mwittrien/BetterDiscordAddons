@@ -1913,7 +1913,7 @@ BDfunctionsDevilBro.initElements = function (container) {
 
 BDfunctionsDevilBro.appendModal = function (modal) {
 	let id = Math.round(Math.random()*10000000000000000);
-	var container = document.querySelector(".app-XZYfmp ~ [class^='theme-']:not([class*='popouts-1TN9u9'])");
+	var container = document.querySelector(".app-XZYfmp ~ [class^='theme-']:not([class*='popouts'])");
 	if (!container) return;
 	
 	BDfunctionsDevilBro.$(modal)

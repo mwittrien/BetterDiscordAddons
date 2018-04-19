@@ -42,7 +42,7 @@ class CreationDate {
 
 	getDescription () {return "Displays the Creation Date of an Account in the UserPopout and UserModal.";}
 
-	getVersion () {return "1.1.6";}
+	getVersion () {return "1.1.7";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -113,7 +113,7 @@ class CreationDate {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, ".popouts-1TN9u9", {name:"userPopoutObserver",instance:observer}, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, ".popouts, .popouts-1TN9u9", {name:"userPopoutObserver",instance:observer}, {childList: true});
 			
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(

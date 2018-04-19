@@ -44,7 +44,7 @@ class GoogleTranslateOption {
 			`<div class="btn-option btn-googletranslateoption"></div>`;
 		
 		this.optionsPopoutMarkup = 
-			`<div class="popout-2RRwAO popoutBottom-U6AdMj noArrow-2iqI6w popout-googletranslateoption-options" style="z-index: 1000; visibility: visible;">
+			`<div class="popout popout-bottom no-arrow popout-2RRwAO popoutBottom-U6AdMj noArrow-2iqI6w popout-googletranslateoption-options" style="z-index: 1000; visibility: visible;">
 				<div class="option-popout small-popout-box"></div
 			</div>`;
 			
@@ -63,7 +63,7 @@ class GoogleTranslateOption {
 			
 			
 		this.translatePopoutMarkup = 
-			`<div class="popout-2RRwAO popoutBottomRight-3JmvG2 noArrow-2iqI6w noShadow-31NiLA popout-googletranslate DevilBro-modal" style="z-index: 2000; overflow: visible; visibility: visible; transform: translateX(-100%) translateY(-100%) translateZ(0px);">
+			`<div class="popout popout-bottom-right no-arrow no-shadow popout-2RRwAO popoutBottomRight-3JmvG2 noArrow-2iqI6w noShadow-31NiLA popout-googletranslate DevilBro-modal" style="z-index: 2000; overflow: visible; visibility: visible; transform: translateX(-100%) translateY(-100%) translateZ(0px);">
 				<div class="themed-popout themedPopout-1uUNjn">
 					<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO  marginTop8-2gOa2N marginBottom8-1mABJ4" style="flex: 1 1 auto;">
 						<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Words starting with "!" will be ignored</h3>
@@ -354,7 +354,7 @@ class GoogleTranslateOption {
 
 	getDescription () {return "Adds a Google Translate option to your context menu, which shows a preview of the translated text and on click will open the selected text in Google Translate. Also adds a translation button to your textareas, which will automatically translate the text for you before it is being send. DeepLApi written by square. Thanks ;)";}
 
-	getVersion () {return "1.4.0";}
+	getVersion () {return "1.4.1";}
 	
 	getAuthor () {return "DevilBro, square";}
 	
@@ -459,7 +459,7 @@ class GoogleTranslateOption {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, ".popouts-1TN9u9", {name:"optionPopoutObserver",instance:observer}, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, ".popouts, .popouts-1TN9u9", {name:"optionPopoutObserver",instance:observer}, {childList: true});
 			
 			$(document).off("click." + this.getName(), ".btn-option").off("contextmenu." + this.getName(), ".message")
 				.on("click." + this.getName(), ".btn-option", (e) => {
@@ -618,7 +618,7 @@ class GoogleTranslateOption {
 		if (wrapper.classList.contains("popout-open")) return;
 		wrapper.classList.add("popout-open");
 		var popout = $(this.optionsPopoutMarkup);
-		$(".popouts-1TN9u9").append(popout);
+		$(".popouts, .popouts-1TN9u9").append(popout);
 		$(popout).find(".option-popout").append(this.popoutEntryMarkup);
 		this.addClickListener(popout);
 		

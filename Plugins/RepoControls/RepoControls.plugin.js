@@ -44,7 +44,7 @@ class RepoControls {
 			</div>`;
 			
 		this.sortPopoutMarkup =
-			`<div class="popout-2RRwAO popoutBottomRight-3JmvG2 noShadow-31NiLA repocontrols-sort-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);" option="sort">
+			`<div class="popout popout-bottom-right no-shadow popout-2RRwAO popoutBottomRight-3JmvG2 noShadow-31NiLA repocontrols-sort-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);" option="sort">
 				<div>
 					<div class="contextMenu-uoJTbz quickSelectPopout">
 						<div class="itemGroup-oViAgA">
@@ -55,7 +55,7 @@ class RepoControls {
 			</div>`;
 			
 		this.orderPopoutMarkup =
-			`<div class="popout-2RRwAO popoutBottomRight-3JmvG2 noShadow-31NiLA repocontrols-order-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);" option="order">
+			`<div class="popout popout-bottom-right no-shadow popout-2RRwAO popoutBottomRight-3JmvG2 noShadow-31NiLA repocontrols-order-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);" option="order">
 				<div>
 					<div class="contextMenu-uoJTbz quickSelectPopout">
 						<div class="itemGroup-oViAgA">
@@ -118,7 +118,7 @@ class RepoControls {
 
 	getDescription () {return "Lets you sort and filter your list of downloaded Themes and Plugins.";}
 
-	getVersion () {return "1.1.6";}
+	getVersion () {return "1.1.7";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -427,7 +427,7 @@ class RepoControls {
 		wrapper.classList.add("popout-open");
 		var value = $(wrapper).find(".quickSelectValue-23jNHW");
 		var popout = $(markup);
-		$(".popouts-1TN9u9").append(popout)
+		$(".popouts, .popouts-1TN9u9").append(popout)
 			.off("click", ".item-1XYaYf")
 			.on("click", ".item-1XYaYf", (e2) => {
 				var option = $(e2.currentTarget).attr("option");
