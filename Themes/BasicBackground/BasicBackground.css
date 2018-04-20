@@ -3085,7 +3085,6 @@ html, span:not(.spinner-item) {
 	background: var(--background) center/cover;
     background-attachment: fixed;
 }
-
 .vc-input__input {
 	background: rgba(var(--transparencycolor),var(--transparencyalpha)) !important;
 	border-radius: 3px !important;
