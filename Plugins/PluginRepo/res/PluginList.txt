@@ -21,6 +21,7 @@ https://raw.githubusercontent.com/ciaran/bd-switcher/master/switcher.plugin.js
 https://raw.githubusercontent.com/cosmicsalad/Discord-Themes-and-Plugins/master/plugins/emoteSorter.plugin.js
 https://raw.githubusercontent.com/cosmicsalad/Discord-Themes-and-Plugins/master/plugins/replyer.plugin.js
 https://raw.githubusercontent.com/cosmicsalad/Discord-Themes-and-Plugins/master/plugins/sorter.plugin.js
+https://raw.githubusercontent.com/Credskiz/BetterDiscord-LazyLoad-Patcher/master/Code/LazyLoad_Patcher.plugin.js
 https://raw.githubusercontent.com/DeathStrikeV/EvenBetterDiscord/master/EvenBetterDiscord.plugin.js
 https://raw.githubusercontent.com/Finicalmist/ChangingBackground/master/changingBackground.plugin.js
 https://raw.githubusercontent.com/Finicalmist/CopyCode/master/copyCode.plugin.js
