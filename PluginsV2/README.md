@@ -1,0 +1,38 @@
+## Plugins
+ - [Better Friend Count](https://github.com/mwittrien/BetterDiscordAddons/tree/master/PluginsV2/BetterFriendCount) - Shows the amount of total and online friends and blocked users in the friends tab.
+ - [Better NSFW Tag](https://github.com/mwittrien/BetterDiscordAddons/tree/master/PluginsV2/BetterNsfwTag) - Adds a more noticeable tag to NSFW channels.
+ - [Char Counter](https://github.com/mwittrien/BetterDiscordAddons/tree/master/PluginsV2/CharCounter) - Adds a character counter to the chat.
+ - [Chat Aliases](https://github.com/mwittrien/BetterDiscordAddons/tree/master/PluginsV2/ChatAliases) - Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent.
+ - [Chat Filter](https://github.com/mwittrien/BetterDiscordAddons/tree/master/PluginsV2/ChatFilter) - Allows the user to censor words or block complete messages based on words in the chatwindow.
+ - [Complete Timestamps](https://github.com/mwittrien/BetterDiscordAddons/tree/master/PluginsV2/CompleteTimestamps) - Replace all timestamps with complete timestamps.
+ - [Creation Date](https://github.com/mwittrien/BetterDiscordAddons/tree/master/PluginsV2/CreationDate) - Displays the Creation Date of an Account in the UserPopout and UserModal.
+ - [Display Servers As Channels](https://github.com/mwittrien/BetterDiscordAddons/tree/master/PluginsV2/DisplayServersAsChannels) - Display servers in a similar way as channels.
+ - [Edit Channels](https://github.com/mwittrien/BetterDiscordAddons/tree/master/PluginsV2/EditChannels) - Allows the user to locally change the name and color of channels.
+ - [Edit Servers](https://github.com/mwittrien/BetterDiscordAddons/tree/master/PluginsV2/EditServers) - Allows the user to locally change the name, initials, icon and color of servers.
+ - [Edit Users](https://github.com/mwittrien/BetterDiscordAddons/tree/master/PluginsV2/EditUsers) - Allows you to change the icon, name, tag and color of users.
+ - [Emoji Statistics](https://github.com/mwittrien/BetterDiscordAddons/tree/master/PluginsV2/EmojiStatistics) - Displays emojiinformation when hovering over an emoji in the emojipicker and adds a button to the emojipicker to open a statistics overview.
+ - [Fix German Translation](https://github.com/mwittrien/BetterDiscordAddons/tree/master/PluginsV2/FixGermanTranslation) - Fixes some minor translation errors in the german version of Discord.
+ - [Force Image Previews](https://github.com/mwittrien/BetterDiscordAddons/tree/master/PluginsV2/ForceImagePreviews) - Forces embedded Image Previews, if Discord doesn't do it itself.
+ - [Friend Notifications](https://github.com/mwittrien/BetterDiscordAddons/tree/master/PluginsV2/FriendNotifications) - Notifies you when a friend either logs in or out. Click the Online Friend-Counter to display a timelog of the current session.
+ - [Google Search Replace](https://github.com/mwittrien/BetterDiscordAddons/tree/master/PluginsV2/GoogleSearchReplace) - Replaces the default Google Text Search with a selection menu of several search engines.
+ - [Google Translate Option](https://github.com/mwittrien/BetterDiscordAddons/tree/master/PluginsV2/GoogleTranslateOption) - Adds a Google Translate option to your context menu, which will open the selected text in Google Translate.
+ - [Image Gallery](https://github.com/mwittrien/BetterDiscordAddons/tree/master/PluginsV2/ImageGallery) - Allows the user to browse through images sent inside the same message.
+ - [Message Utilities](https://github.com/mwittrien/BetterDiscordAddons/tree/master/PluginsV2/MessageUtilities) - Offers a number of useful message options.
+ - [Moveable Popups](https://github.com/mwittrien/BetterDiscordAddons/tree/master/PluginsV2/MoveablePopups) - Adds the feature to move all popups and modals around like on a normal desktop. Ctrl + drag with your left mousebutton to drag element.
+ - [Notification Sounds](https://github.com/mwittrien/BetterDiscordAddons/tree/master/PluginsV2/NotificationSounds) - Allows you to replace the native sounds of Discord with your own.
+ - [Old Title Bar](https://github.com/mwittrien/BetterDiscordAddons/tree/master/PluginsV2/OldTitleBar) - Reverts the title bar back to its former self.
+ - [Personal Pins](https://github.com/mwittrien/BetterDiscordAddons/tree/master/PluginsV2/PersonalPins) - Similar to normal pins. Lets you save messages as notes for yourself.
+ - [Pin DMs](https://github.com/mwittrien/BetterDiscordAddons/tree/master/PluginsV2/PinDMs) - Allows you to pin DMs, making them appear at the top of your DM-list.
+ - [Read All Notifications Button](https://github.com/mwittrien/BetterDiscordAddons/tree/master/PluginsV2/ReadAllNotificationsButton) - Adds a little button at the top of your serverlist that enables you to clear all mentions and messagesnotifications at once.
+ - [Remove Nicknames](https://github.com/mwittrien/BetterDiscordAddons/tree/master/PluginsV2/RemoveNicknames) - Replace all nicknames with the actual accountnames.
+ - [Reverse Image Search](https://github.com/mwittrien/BetterDiscordAddons/tree/master/PluginsV2/ReverseImageSearch) - Adds the option to reverse image search images in discord via several engines.
+ - [Send Large Messages](https://github.com/mwittrien/BetterDiscordAddons/tree/master/PluginsV2/SendLargeMessages) - Opens a popout when your message is too large, which allows you to automatically send the message in several smaller messages.
+ - [Server Hider](https://github.com/mwittrien/BetterDiscordAddons/tree/master/PluginsV2/ServerHider) - Adds two options on your server context menu to hide servers in your server list.
+ - [Server Folders](https://github.com/mwittrien/BetterDiscordAddons/tree/master/PluginsV2/ServerFolders) - Adds the option to create pseudo folders that, click the folder to hide/display all folders between two folders. Easily gets broken by moving server icons.
+ - [Show Hidden Channels](https://github.com/mwittrien/BetterDiscordAddons/tree/master/PluginsV2/ShowHiddenChannels) - Displays all hidden channels that can't be accessed due to role restrictions in a new category.
+ - [Show Image Details](https://github.com/mwittrien/BetterDiscordAddons/tree/master/PluginsV2/ShowImageDetails) - Display the name, size and dimensions of uploaded images (does not include embed images) in the chat as an header or as a tooltip.
+ - [Spell Check](https://github.com/mwittrien/BetterDiscordAddons/tree/master/PluginsV2/SpellCheck) - Adds a spellcheck to all textareas.
+ - [Stalker Notifications](https://github.com/mwittrien/BetterDiscordAddons/tree/master/PluginsV2/StalkerNotifications) - Lets you observe the status of people that aren't your friends.
+ - [Steam Profile Link](https://github.com/mwittrien/BetterDiscordAddons/tree/master/PluginsV2/SteamProfileLink) - Opens a steam profile in steam instead of a browser when clicking the steamlink in a userprofile. With the help of square.
+ - [Top Role Everywhere](https://github.com/mwittrien/BetterDiscordAddons/tree/master/PluginsV2/TopRoleEverywhere) - Adds the highest role of a user as a tag.
+ - [Write UpperCase](https://github.com/mwittrien/BetterDiscordAddons/tree/master/PluginsV2/WriteUpperCase) - Changes the input in the textarea to uppercase.

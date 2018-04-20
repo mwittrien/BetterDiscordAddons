@@ -2,8 +2,20 @@
 
 class ThemeRepo {
 	constructor () {
-		this.settingsWindowObserver = new MutationObserver(() => {});
-		this.innerSettingsWindowObserver = new MutationObserver(() => {});
+		this.sortings = {
+			sort: {
+				name:			"Name",
+				author:			"Author",
+				version:		"Version",
+				description:	"Description",
+				state:			"Update State",
+				fav:			"Favorites"
+			},
+			order: {
+				asc:			"Ascending",
+				desc:			"Descending"
+			}
+		};
 		
 		this.loading = false;
 		
@@ -13,10 +25,16 @@ class ThemeRepo {
 		
 		this.updateInterval;
 		
-		this.themeFixerCSS = `#friends, .noChannel-2EQ0a9, .activityFeed-HeiGwL, .lfg-3xoFkI, .app, .layers-20RVFW, .layer-kosS71, .container-2OU7Cz, .content-region, .guilds-wrapper, .search-2--6aU .search-bar, .chat .inner-3if5cm, .search-results-wrap, .search-results-wrap .search-header, .search-results-wrap .search-result-message.hit, .sidebar-region, .ui-standard-sidebar-view, .channels-3g2vYe, .container-iksrDt {background: rgba(0,0,0,0.3) !important;}  .search-results-wrap .search-result-message.hit {box-shadow:none !important;}  .titleBar-3_fDwJ::after {content:""; position:absolute; z-index:-1; top:0; left:0; right:0; width:100%; height:22px; background: rgba(0,0,0,0.8) !important;}  #friends .friends-table, .channel-members, .channel-members-loading, .chat .content, .chat form, .chat, .content .flex-spacer, .messages-wrapper, .typing-3eiiL_, .container-RYiLUQ, .headerBar-cxbhPD, .titleBar-3_fDwJ, .titleWrapper-3Vi_wz .title-qAcLxz, .search-results-wrap .search-result::before, .search-results-wrap .search-result::after, .search-results-wrap .channel-name {background: transparent !important;}  ::-webkit-scrollbar-thumb {border-color: transparent !important; background: rgba(0,0,0,0.8) !important;} ::-webkit-scrollbar, ::-webkit-scrollbar-track-piece {border-color: transparent !important; background: transparent !important;} ::-webkit-scrollbar-corner {display: none !important;}`;
+		this.themeFixerCSS = `#friends, .noChannel-2EQ0a9, .activityFeed-HeiGwL, .lfg-3xoFkI, .app, .layers-20RVFW, .layer-kosS71, .container-2OU7Cz, .content-region, .guilds-wrapper, .search-2--6aU .search-bar, .chat .inner-3if5cm, .search-results-wrap, .search-results-wrap .search-header, .search-results-wrap .search-result-message.hit, .sidebar-region, .ui-standard-sidebar-view, .channels-3g2vYe, .container-iksrDt {background: rgba(0,0,0,0.3) !important;}  .search-results-wrap .search-result-message.hit {box-shadow:none !important;}  .titleBar-3_fDwJ::after {content:""; position:absolute; z-index:-1; top:0; left:0; right:0; width:100%; height:22px; background: rgba(0,0,0,0.8) !important;}  #friends .friends-table, .members-1bid1J, .loading-316uYQ, .chat .content, .chat form, .chat, .content .flex-spacer, .messages-wrapper, .typing-3eiiL_, .container-RYiLUQ, .headerBar-cxbhPD, .titleBar-3_fDwJ, .titleWrapper-3Vi_wz .title-qAcLxz, .search-results-wrap .search-result::before, .search-results-wrap .search-result::after, .search-results-wrap .channel-name {background: transparent !important;}  ::-webkit-scrollbar-thumb {border-color: transparent !important; background: rgba(0,0,0,0.8) !important;} ::-webkit-scrollbar, ::-webkit-scrollbar-track-piece {border-color: transparent !important; background: transparent !important;} ::-webkit-scrollbar-corner {display: none !important;}`;
 		
 		this.themeRepoButtonMarkup = 
 			`<button class="bd-pfbtn bd-themerepobutton">Theme Repo</button>`;
+		
+		this.settingsContextEntryMarkup =
+			`<div class="item-1XYaYf themerepo-item">
+				<span>Theme Repo</span>
+				<div class="hint-3TJykr"></div>
+			</div>`;
 		
 		this.frameMarkup = 
 			`<iframe class="discordPreview" src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/DiscordPreview.html"></iframe>`;
@@ -71,8 +89,8 @@ class ThemeRepo {
 				<div class="backdrop-2ohBEd"></div>
 				<div class="modal-2LIEKY">
 					<div class="inner-1_1f7b">
-						<div class="modal-3HOjGZ sizeMedium-1-2BNS">
-							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO header-3sp3cE" style="flex: 0 0 auto; padding: 20px 20px 0 20px;">
+						<div class="modal-3HOjGZ sizeLarge-1AHXtx">
+							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO header-3sp3cE" style="flex: 0 0 auto; padding: 20px 20px 0 20px;">
 								<div class="flexChild-1KGW5q" style="flex: 1 1 auto;">
 									<h4 class="h4-2IXpeI title-1pmpPr size16-3IvaX_ height20-165WbF weightSemiBold-T8sxWH defaultColor-v22dK1 defaultMarginh4-jAopYe marginReset-3hwONl themeAmount">Theme Repository</h4>
 									<div class="guildName-1u0hy7 small-3-03j1 size12-1IGJl9 height16-1qXrGy primary-2giqSn"></div>
@@ -84,23 +102,27 @@ class ThemeRepo {
 									</g>
 								</svg>
 							</div>
-							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO header-3sp3cE marginBottom20-2Ifj-2" style="flex: 0 0 auto; padding: 10px 20px 0px 20px;">
+							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO header-3sp3cE marginBottom20-2Ifj-2" style="flex: 0 0 auto; padding: 10px 20px 0px 20px;">
 								<div tab="themes" class="tab selected">Themes</div>
 								<div tab="settings" class="tab">Settings</div>
-								<div class="inputWrapper-3xoRWR vertical-3X17r5 directionColumn-2h-LPR" style="margin-top: -15px;">
-									<input type="text" class="input-2YozMi size16-3IvaX_" id="input-search" placeholder="Search for..." style="padding: 1px 8px;">
+								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO searchBar-YMJBu9 size14-1wjlWP" style="flex: 1 1 auto; margin: -15px 5px 0 0;">
+									<input class="input-yt44Uw flexChild-1KGW5q" value="" placeholder="Search for ..." style="flex: 1 1 auto;">
+									<div class="searchBarIcon-vCfmUl flexChild-1KGW5q">
+										<i class="icon-11Zny- eyeGlass-6rahZf visible-4lw4vs"/>
+										<i class="icon-11Zny- clear-4pSDsx"/>
+									</div>
 								</div>
-								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelect-2sgeoi" style="padding-bottom: 15px;">
+								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelect-2sgeoi" style="padding-bottom: 15px;">
 									<div class="quickSelectLabel-2MM1ZS">Sort by:</div>
-									<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelectClick-36aPV0 sort-filter" style="flex: 0 0 auto;">
-										<div option="name" class="quickSelectValue-23jNHW">Name</div>
+									<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelectClick-36aPV0 sort-filter" style="flex: 0 0 auto;">
+										<div option="${Object.keys(this.sortings.sort)[0]}" class="quickSelectValue-23jNHW">${this.sortings.sort[Object.keys(this.sortings.sort)[0]]}</div>
 										<div class="quickSelectArrow-1lyLly"></div>
 									</div>
 								</div>
-								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelect-2sgeoi" style="padding-bottom: 15px;">
+								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelect-2sgeoi" style="padding-bottom: 15px;">
 									<div class="quickSelectLabel-2MM1ZS">Order:</div>
-									<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelectClick-36aPV0 order-filter" style="flex: 0 0 auto;">
-										<div option="asc" class="quickSelectValue-23jNHW">Ascending</div>
+									<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelectClick-36aPV0 order-filter" style="flex: 0 0 auto;">
+										<div option="${Object.keys(this.sortings.order)[0]}" class="quickSelectValue-23jNHW">${this.sortings.order[Object.keys(this.sortings.order)[0]]}</div>
 										<div class="quickSelectArrow-1lyLly"></div>
 									</div>
 								</div>
@@ -111,52 +133,52 @@ class ThemeRepo {
 								</div>
 							</div>
 							<div tab="settings" class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO inner-tqJwAU tab-content" style="flex: 1 1 auto;">
-								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;">
+								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;">
 									<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">You can toggle this menu with the "Ctrl" key to take a better look at the preview.</h3>
 								</div>
-								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;">
+								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;">
 									<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Preview in light mode</h3>
 									<div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;">
 										<input type="checkbox" class="checkboxEnabled-4QfryV checkbox-1KYsPm" id="input-darklight">
 									</div>
 								</div>
-								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;">
+								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;">
 									<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Include Custom CSS in Preview</h3>
 									<div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;">
 										<input type="checkbox" class="checkboxEnabled-4QfryV checkbox-1KYsPm" id="input-customcss">
 									</div>
 								</div>
-								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;">
+								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;">
 									<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Include ThemeFixer CSS in Preview</h3>
 									<div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;">
 										<input type="checkbox" class="checkboxEnabled-4QfryV checkbox-1KYsPm" id="input-themefixer">
 									</div>
 								</div>
-								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;">
-									<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto; padding-top:8px;">Download ThemeFixer</h3>
-									<button type="button" id="download-themefixer" class="flexChild-1KGW5q buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu" style="flex: 0 0 auto;">
-										<div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx contents-4L4hQM">Download</div>
+								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;">
+									<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Download ThemeFixer</h3>
+									<button type="button" id="download-themefixer" class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorBrand-3PmwCE sizeMedium-2VGNaF grow-25YQ8u" style="flex: 0 0 auto;">
+										<div class="contents-4L4hQM">Download</div>
 									</button>
 								</div>
-								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;">
+								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;">
 									<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Hide updated Themes.</h3>
 									<div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;">
 										<input type="checkbox" value="updated" class="checkboxEnabled-4QfryV checkbox-1KYsPm hide-checkbox" id="input-hideupdated">
 									</div>
 								</div>
-								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;">
+								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;">
 									<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Hide outdated Themes.</h3>
 									<div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;">
 										<input type="checkbox" value="outdated" class="checkboxEnabled-4QfryV checkbox-1KYsPm hide-checkbox" id="input-hideoutdated">
 									</div>
 								</div>
-								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;">
+								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;">
 									<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Hide downloadable Themes.</h3>
 									<div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;">
 										<input type="checkbox" value="downloadable" class="checkboxEnabled-4QfryV checkbox-1KYsPm hide-checkbox" id="input-hidedownloadable">
 									</div>
 								</div>
-								<div id="RNMoption" class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;">
+								<div id="RNMoption" class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;">
 									<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Apply Theme after Download (Restart-No-More needed)</h3>
 									<div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;">
 										<input type="checkbox" class="checkboxEnabled-4QfryV checkbox-1KYsPm" id="input-rnmstart">
@@ -169,28 +191,22 @@ class ThemeRepo {
 			</span>`;
 			
 		this.sortPopoutMarkup =
-			`<div class="popout popout-bottom-right no-shadow themerepo-sort-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
+			`<div class="popout popout-bottom-right no-shadow popout-2RRwAO popoutBottomRight-3JmvG2 noShadow-31NiLA themerepo-sort-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
 				<div>
 					<div class="contextMenu-uoJTbz quickSelectPopout">
 						<div class="itemGroup-oViAgA">
-							<div option="name" class="item-1XYaYf">Name</div>
-							<div option="author" class="item-1XYaYf">Author</div>
-							<div option="version" class="item-1XYaYf">Version</div>
-							<div option="description" class="item-1XYaYf">Description</div>
-							<div option="state" class="item-1XYaYf">Update State</div>
-							<div option="fav" class="item-1XYaYf">Favorites</div>
+							${Object.keys(this.sortings.sort).map((key, i) => `<div option="${key}" class="item-1XYaYf">${this.sortings.sort[key]}</div>`).join("")}
 						</div>
 					</div>
 				</div>
 			</div>`;
 			
 		this.orderPopoutMarkup =
-			`<div class="popout popout-bottom-right no-shadow themerepo-order-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
+			`<div class="popout popout-bottom-right no-shadow popout-2RRwAO popoutBottomRight-3JmvG2 noShadow-31NiLA themerepo-order-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
 				<div>
 					<div class="contextMenu-uoJTbz quickSelectPopout">
 						<div class="itemGroup-oViAgA">
-							<div option="asc" class="item-1XYaYf">Ascending</div>
-							<div option="desc" class="item-1XYaYf">Descending</div>
+							${Object.keys(this.sortings.order).map((key, i) => `<div option="${key}" class="item-1XYaYf">${this.sortings.order[key]}</div>`).join("")}
 						</div>
 					</div>
 				</div>
@@ -203,7 +219,7 @@ class ThemeRepo {
 				position: absolute !important;
 				z-index: 3400 !important;
 			}
-			.discordPreview ~ #app-mount{
+			.discordPreview ~ .appMount-14L89u {
 				position: absolute !important;
 				top: 0 !important;
 			}
@@ -219,18 +235,6 @@ class ThemeRepo {
 			}
 			.themerepo-modal .inner-1_1f7b {
 				min-height: 100%;
-			}
-			.themerepo-modal .header {
-				overflow: visible !important;
-			}
-			.themerepo-modal .header-tab-bar-wrapper {
-				margin-top: 0 !important;
-			}
-			.themerepo-modal .searchWrapper {
-				margin-top: -5px !important;
-			}
-			.themerepo-modal .searchWrapper #input-search {
-				padding: 1px 8px !important;
 			}
 			.themerepo-modal .themeEntry.zack {
 				overflow: visible !important;
@@ -292,27 +296,33 @@ class ThemeRepo {
 
 	getDescription () {return "Allows you to preview all themes from the theme repo and download them on the fly. Repo button is in the theme settings.";}
 
-	getVersion () {return "1.3.4";}
+	getVersion () {return "1.4.9";}
 
 	getAuthor () {return "DevilBro";}
 	
 	getSettingsPanel () {
 		if (!this.started || typeof BDfunctionsDevilBro !== "object") return;
 		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="titleDefault-1CWM9y title-3i-5G_ size18-ZM4Qv- height24-2pMcnc weightNormal-3gw0Lm marginBottom8-1mABJ4">${this.getName()}</div><div class="DevilBro-settings-inner">`;
-		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto; padding-top:8px;">Add Theme:</h3><input type="text" placeholder="Insert Raw Github Link of Theme (https://raw.githubusercontent.com/...)" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_" id="input-themeurl" style="flex: 1 1 auto;"></div>`;
+		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">Add Theme:</h3><input type="text" placeholder="Insert Raw Github Link of Theme (https://raw.githubusercontent.com/...)" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_" id="input-themeurl" style="flex: 1 1 auto;"><button type="button" class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorBrand-3PmwCE sizeMedium-2VGNaF grow-25YQ8u btn-add btn-addtheme" style="flex: 0 0 auto;"><div class="contents-4L4hQM"></div></button></div>`;
 		settingshtml += `<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Your additional Theme List:</h3><div class="DevilBro-settings-inner-list theme-list marginBottom8-1mABJ4">`;
 		var ownlist = BDfunctionsDevilBro.loadData("ownlist", this, "ownlist") || [];
 		if (ownlist) for (let url of ownlist) {
 			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginTop4-2rEBfJ marginBottom4-_yArcI card-11ynQk"><div class="card-11ynQk-inner"><div class="description-3MVziF formText-1L-zZB note-UEZmbY marginTop4-2rEBfJ modeDefault-389VjU primary-2giqSn ellipsis-CYOqEr entryurl">${url}</div></div><div class="button-1qrA-N remove-theme"></div></div>`;
 		}
 		settingshtml += `</div>`;
-		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto; padding-top:8px;">Force all Themes to be fetched again.</h3><button type="button" class="flexChild-1KGW5q buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu refresh-button" style="flex: 0 0 auto;"><div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx contents-4L4hQM">Refresh</div></button></div>`;
+		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Force all Themes to be fetched again.</h3><button type="button" class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorBrand-3PmwCE sizeMedium-2VGNaF grow-25YQ8u refresh-button" style="flex: 0 0 auto;"><div class="contents-4L4hQM">Refresh</div></button></div>`;
+		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Remove all added Themes from your own list.</h3><button type="button" class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorRed-3HTNPV sizeMedium-2VGNaF grow-25YQ8u remove-all" style="flex: 0 0 auto;"><div class="contents-4L4hQM">Reset</div></button></div>`;
 		settingshtml += `</div></div>`;
 		
 		var settingspanel = $(settingshtml)[0];
+
+		BDfunctionsDevilBro.initElements(settingspanel);
+
 		$(settingspanel)
-			.on("keyup", "#input-themeurl", (e) => {if (e.which == 13) this.addThemeToOwnList(settingspanel, e);})
+			.on("click", ".btn-addtheme", () => {this.addThemeToOwnList(settingspanel);})
+			.on("keyup", "#input-themeurl", (e) => {if (e.which == 13) this.addThemeToOwnList(settingspanel);})
 			.on("click", ".remove-theme", (e) => {this.removeThemeFromOwnList(e);})
+			.on("click", ".remove-all", () => {this.removeAllFromOwnList(settingspanel);})
 			.on("click", ".refresh-button", () => {this.loadThemes();});
 		return settingspanel;
 	}
@@ -321,35 +331,31 @@ class ThemeRepo {
 	load () {}
 
 	start () {
+		var libraryScript = null;
 		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
 			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
-			$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-			$('head').append('<script src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"></script>');
+			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]');
+			if (libraryScript) libraryScript.remove();
+			libraryScript = document.createElement("script");
+			libraryScript.setAttribute("type", "text/javascript");
+			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js");
+			document.head.appendChild(libraryScript);
 		}
+		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
+		if (typeof BDfunctionsDevilBro === "object") this.initialize();
+		else libraryScript.addEventListener("load", () => {this.initialize();});
+	}
+
+	initialize () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
-			var observertarget = null;
-
-			this.settingsWindowObserver = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								setImmediate(() => {
-									if (node && node.tagName && node.getAttribute("layer-id") == "user-settings") {
-										this.checkIfThemesPage(node);
-										this.innerSettingsWindowObserver.observe(node, {childList:true, subtree:true});
-									}
-								});
-							});
-						}
-					}
-				);
-			});
-			if (observertarget = document.querySelector(".layers-20RVFW")) this.settingsWindowObserver.observe(observertarget, {childList:true});
+			this.UserUtils = BDfunctionsDevilBro.WebModules.findByProperties(["getUsers"]);
+			this.IconUtils = BDfunctionsDevilBro.WebModules.findByProperties(["getUserAvatarURL"]);
 			
-			this.innerSettingsWindowObserver = new MutationObserver((changes, _) => {
+			var observer = null;
+
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, j) => {
 						if (change.addedNodes) {
@@ -360,14 +366,43 @@ class ThemeRepo {
 					}
 				);
 			});
+			BDfunctionsDevilBro.addObserver(this, ".layer-kosS71[layer-id='user-settings']", {name:"innerSettingsWindowObserver",instance:observer}, {childList:true,subtree:true});
+			
+			observer = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.addedNodes) {
+							change.addedNodes.forEach((node) => {
+								setImmediate(() => {
+									if (node && node.tagName && node.getAttribute("layer-id") == "user-settings") {
+										BDfunctionsDevilBro.addObserver(this, node, {name:"innerSettingsWindowObserver"}, {childList:true,subtree:true});
+										this.checkIfThemesPage(node);
+									}
+								});
+							});
+						}
+					}
+				);
+			});
+			BDfunctionsDevilBro.addObserver(this, ".layers-20RVFW", {name:"settingsWindowObserver",instance:observer}, {childList:true});
+			
+			observer = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.addedNodes) {
+							change.addedNodes.forEach((node) => {
+								if (node && node.nodeType == 1 && node.className.includes("contextMenu-uoJTbz")) {
+									this.onContextMenu(node);
+								}
+							});
+						}
+					}
+				);
+			});
+			BDfunctionsDevilBro.addObserver(this, ".appMount-14L89u", {name:"settingsContextObserver",instance:observer}, {childList: true});
 			
 			var settingswindow = document.querySelector(".layer-kosS71[layer-id='user-settings']");
-			if (settingswindow) {
-				this.innerSettingsWindowObserver.observe(settingswindow, {childList:true, subtree:true});
-				this.checkIfThemesPage(settingswindow);
-			}
-			
-			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
+			if (settingswindow) this.checkIfThemesPage(settingswindow);
 			
 			this.loadThemes();
 			
@@ -381,30 +416,59 @@ class ThemeRepo {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.unloadMessage(this);
-			
-			this.settingsWindowObserver.disconnect();
-			this.innerSettingsWindowObserver.disconnect();
-			
 			clearInterval(this.updateInterval);
-			
-			BDfunctionsDevilBro.removeLocalStyle(this.getName());
-			
+						
 			$(".discordPreview, .themerepo-modal, .bd-themerepobutton").remove();
+			
+			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
 
 	
 	// begin of own functions
 	
-	addThemeToOwnList (settingspanel, e) {
-		var url = e.currentTarget.value;
-		e.currentTarget.value = null;
-		var ownlist = BDfunctionsDevilBro.loadData("ownlist", this, "ownlist") || [];
-		if (!ownlist.includes(url)) {
-			ownlist.push(url);
-			BDfunctionsDevilBro.saveData("ownlist", ownlist, this, "ownlist");
-			$(`<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginTop4-2rEBfJ marginBottom4-_yArcI card-11ynQk"><div class="card-11ynQk-inner"><div class="description-3MVziF formText-1L-zZB note-UEZmbY marginTop4-2rEBfJ modeDefault-389VjU primary-2giqSn ellipsis-CYOqEr entryurl">${url}</div></div><div class="button-1qrA-N remove-theme"></div></div>`).appendTo(settingspanel.querySelector(".theme-list"));
+	onContextMenu (context) {
+		if (!context || !context.tagName || !context.parentElement) return;
+		for (let entry of context.querySelectorAll(".item-1XYaYf")) {
+			if (entry.textContent == "BetterDiscord") {
+				let innerObserver = new MutationObserver((changes, _) => {
+					changes.forEach(
+						(change, i) => {
+							if (change.addedNodes) {
+								change.addedNodes.forEach((node) => {
+									if (node && node.nodeType == 1 && node.className.includes("contextMenu-uoJTbz") && !node.querySelector(".themerepo-item")) {
+										var innerEntries = node.querySelectorAll(".item-1XYaYf");
+										$(this.settingsContextEntryMarkup)
+											.on("click", () => {
+												if (!this.loading) $(context).hide();
+												this.openThemeRepoModal();
+											})
+											.insertAfter(innerEntries[innerEntries.length-1]);
+										$(node).css("top", $(context).css("top").replace("px","") - $(node).outerHeight() + $(context).outerHeight());
+									}
+								});
+							}
+						}
+					);
+				});
+				innerObserver.observe(entry, {childList: true});
+				break;
+			}
+		}
+	}
+	
+	addThemeToOwnList (settingspanel) {
+		var themeUrlInput = settingspanel.querySelector("#input-themeurl");
+		var themeList = settingspanel.querySelector(".theme-list");
+		if (themeUrlInput && themeList) {
+			var url = themeUrlInput.value;
+			themeUrlInput.value = null;
+			var ownlist = BDfunctionsDevilBro.loadData("ownlist", this, "ownlist") || [];
+			if (!ownlist.includes(url)) {
+				ownlist.push(url);
+				BDfunctionsDevilBro.saveData("ownlist", ownlist, this, "ownlist");
+				$(`<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginTop4-2rEBfJ marginBottom4-_yArcI card-11ynQk"><div class="card-11ynQk-inner"><div class="description-3MVziF formText-1L-zZB note-UEZmbY marginTop4-2rEBfJ modeDefault-389VjU primary-2giqSn ellipsis-CYOqEr entryurl">${url}</div></div><div class="button-1qrA-N remove-theme"></div></div>`).appendTo(themeList);
+			}
 		}
 	}
 	
@@ -415,6 +479,13 @@ class ThemeRepo {
 		var ownlist = BDfunctionsDevilBro.loadData("ownlist", this, "ownlist") || [];
 		BDfunctionsDevilBro.removeFromArray(ownlist, url);
 		BDfunctionsDevilBro.saveData("ownlist", ownlist, this, "ownlist");
+	}
+	
+	removeAllFromOwnList (settingspanel) {
+		if (confirm("Are you sure you want to remove all added Themes from your own list?")) {
+			BDfunctionsDevilBro.saveData("ownlist", [], this, "ownlist");
+			settingspanel.querySelectorAll(".card-11ynQk").forEach(ele => {ele.remove();});
+		}
 	}
 	
 	checkIfThemesPage (container) {
@@ -438,8 +509,7 @@ class ThemeRepo {
 			$(this.themeRepoButtonMarkup)
 				.insertAfter(container.querySelector(".bd-pfbtn"))
 				.on("click", () => {
-					if (!this.loading) this.openThemeRepoModal(); 
-					else BDfunctionsDevilBro.showToast(`Themes are still being fetched. Try again in some seconds.`, {type:"danger"});
+					this.openThemeRepoModal();
 				})
 				.on("mouseenter", (e) => {
 					BDfunctionsDevilBro.createTooltip("Open Theme Repo", e.currentTarget, {type:"top",selector:"themerepo-button-tooltip"});
@@ -448,6 +518,10 @@ class ThemeRepo {
 	}
 	
 	openThemeRepoModal (showOnlyOutdated = false) {
+		if (this.loading) {
+			BDfunctionsDevilBro.showToast(`Themes are still being fetched. Try again in some seconds.`, {type:"danger"});
+			return;
+		}
 		var frame = $(this.frameMarkup)[0];
 		var lightTheme = BDfunctionsDevilBro.getDiscordTheme() == "theme-light";
 		var themeRepoModal = $(this.themeRepoModalMarkup);
@@ -463,7 +537,11 @@ class ThemeRepo {
 		if (!BDfunctionsDevilBro.isRestartNoMoreEnabled()) themeRepoModal.find("#RNMoption").remove();
 		else themeRepoModal.find("#input-rnmstart").prop("checked", BDfunctionsDevilBro.loadData("RNMstart", this, "settings"));
 		themeRepoModal
-			.on("keyup." + this.getName(), "#input-search", (e) => {
+			.on("keyup." + this.getName(), ".input-yt44Uw", () => {
+				clearTimeout(themeRepoModal.searchTimeout);
+				themeRepoModal.searchTimeout = setTimeout(() => {this.addThemeEntries(themeRepoModal, frame);},1000);
+			})
+			.on("click." + this.getName(), ".clear-4pSDsx.visible-4lw4vs", () => {
 				clearTimeout(themeRepoModal.searchTimeout);
 				themeRepoModal.searchTimeout = setTimeout(() => {this.addThemeEntries(themeRepoModal, frame);},1000);
 			})
@@ -515,13 +593,15 @@ class ThemeRepo {
 				if (typeof e.data === "object" && e.data.origin == "DiscordPreview") {
 					switch (e.data.reason) {
 						case "OnLoad":
-							var container = document.querySelector(".container-iksrDt");
-							if (!container) return;
-							var username = container.querySelector(".username").innerText;
-							var avatar = container.querySelector(".avatar-small").style.backgroundImage;
-							var discriminator = container.querySelector(".discriminator").innerText;
-							
-							frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"OnLoad",username,avatar,discriminator},"*");
+							var user = this.UserUtils.getCurrentUser();
+							if (!user) return;
+							var username = user.username;
+							var id = user.id;
+							var avatar = "url(" + (((user.avatar ? "" : "https://discordapp.com") + this.IconUtils.getUserAvatarURL(user)).split("?size")[0]) + ");";
+							var discriminator = user.discriminator;
+							var nativecss = document.querySelector("head link[rel='stylesheet'][integrity]");
+							nativecss = nativecss && nativecss.href ? nativecss.href : null;
+							frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"OnLoad",username,id,avatar,discriminator,nativecss},"*");
 							frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"DarkLight",checked:lightTheme},"*");
 							break;
 						case "KeyUp":
@@ -534,10 +614,10 @@ class ThemeRepo {
 		this.createThemeEntries(themeRepoModal, frame);
 			
 		BDfunctionsDevilBro.appendModal(themeRepoModal);
-		$(frame).insertBefore("#app-mount");
+		$(frame).insertBefore(".appMount-14L89u");
 			
 		function keyPressed (key) {
-			if (key == 17 && !themeRepoModal.find("#input-search").is(":focus")) themeRepoModal.toggle();
+			if (key == 17 && !themeRepoModal.find(".input-yt44Uw").is(":focus")) themeRepoModal.toggle();
 			if (key == 27) frame.remove();
 		}
 	}
@@ -548,7 +628,7 @@ class ThemeRepo {
 		wrapper.classList.add("popout-open");
 		var value = $(wrapper).find(".quickSelectValue-23jNHW");
 		var popout = $(markup);
-		$(".popouts").append(popout)
+		$(".popouts, .popouts-1TN9u9").append(popout)
 			.off("click", ".item-1XYaYf")
 			.on("click", ".item-1XYaYf", (e2) => {
 				value.text($(e2.currentTarget).text());
@@ -562,7 +642,7 @@ class ThemeRepo {
 		popout
 			.css("left", $(wrapper).offset().left + $(wrapper).outerWidth() + "px")
 			.css("top", $(wrapper).offset().top + value.outerHeight() + "px")
-			.find(".context-menu").addClass(BDfunctionsDevilBro.getDiscordTheme());
+			.find(".contextMenu-uoJTbz").addClass(BDfunctionsDevilBro.getDiscordTheme());
 			
 		$(document).on("mousedown.sortpopout" + this.getName(), (e2) => {
 			if (popout.has(e2.target).length == 0) {
@@ -627,13 +707,13 @@ class ThemeRepo {
 		if (typeof modal.entries != "object") return;
 		modal.find(".themeEntry").remove();
 		
-		var searchstring = modal.find("#input-search").val().replace(/[<|>]/g, "").toUpperCase();
+		var searchstring = modal.find(".input-yt44Uw").val().replace(/[<|>]/g, "").toUpperCase();
 		
 		var entries = modal.entries;
 		if (modal.find("#input-hideupdated").prop("checked")) 		entries = entries.filter((entry) => {return entry.state != 0 ? entry : null;});
 		if (modal.find("#input-hideoutdated").prop("checked")) 		entries = entries.filter((entry) => {return entry.state != 1 ? entry : null;});
 		if (modal.find("#input-hidedownloadable").prop("checked")) 	entries = entries.filter((entry) => {return entry.state != 2 ? entry : null;});
-		entries = entries.filter((entry) => {return entry.search.indexOf(modal.find("#input-search").val().toUpperCase()) > -1 ? entry : null;});
+		entries = entries.filter((entry) => {return entry.search.indexOf(searchstring) > -1 ? entry : null;});
 		entries = BDfunctionsDevilBro.sortArrayByKey(entries, modal.find(".sort-filter .quickSelectValue-23jNHW").attr("option"));
 		if (modal.find(".order-filter .quickSelectValue-23jNHW").attr("option") == "desc") entries.reverse();
 		
@@ -645,23 +725,7 @@ class ThemeRepo {
 			
 			var values = [entry.name, entry.version, entry.author, entry.description];
 			if (searchstring.length > 0) {
-				for (let i in values) {
-					let value = values[i];
-					let added = 0;
-					BDfunctionsDevilBro.getAllIndexes(value.toUpperCase(), searchstring).forEach((start) => {
-						let wrapperopen = "<span class='highlight'>";
-						let wrapperclose = "</span>";
-						let offset = added*(wrapperopen.length + wrapperclose.length);
-						start = start + offset;
-						let end = start + searchstring.length;
-						var openIndexes = [-1].concat(BDfunctionsDevilBro.getAllIndexes(value.substring(0, start), "<"));
-						var closedIndexes = [-1].concat(BDfunctionsDevilBro.getAllIndexes(value.substring(0, start), ">"));
-						if (openIndexes[openIndexes.length-1] > closedIndexes[closedIndexes.length-1]) return;
-						value = value.substring(0, start) + wrapperopen + value.substring(start, end) + wrapperclose + value.substring(end);
-						added++;
-					});
-					values[i] = value ? value : values[i];
-				}
+				for (let i in values) values[i] = BDfunctionsDevilBro.highlightText(values[i], searchstring);
 			}
 			if (BDfunctionsDevilBro.zacksFork()) {
 				div.find(".bda-name").html(values[0]);
@@ -776,10 +840,10 @@ class ThemeRepo {
 					let text = body;
 					if (text.split("*//").length > 1 && text.split("\n").length > 1) {
 						for (let tag of tags) {
-							let temp = text.replace(new RegExp("\\s*\:\\s*", "g"), ":").replace(new RegExp("\\s*\}\\s*", "g"), "}").split('"' + tag + '":"');
-							temp = temp.length > 1 ? temp[1].split('",')[0].split('"}')[0] : null;
-							temp = temp && tag != "version" ? temp.charAt(0).toUpperCase() + temp.slice(1) : temp;
-							theme[tag] = temp;
+							let result = text.replace(new RegExp("\\s*\:\\s*", "g"), ":").replace(new RegExp("\\s*\}\\s*", "g"), "}").split('"' + tag + '":"');
+							result = result.length > 1 ? result[1].split('",')[0].split('"}')[0] : null;
+							result = result && tag != "version" ? result.charAt(0).toUpperCase() + result.slice(1) : result;
+							theme[tag] = result;
 						}
 						let valid = true;
 						for (let tag of tags) {

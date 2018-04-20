@@ -2,8 +2,6 @@
 
 class ReverseImageSearch {
 	constructor () {
-		this.messageContextObserver = new MutationObserver(() => {});
-		
 		this.imgUrlReplaceString = "DEVILBRO_BD_REVERSEIMAGESEARCH_REPLACE_IMAGEURL";
 		
 		this.defaults = {
@@ -21,22 +19,22 @@ class ReverseImageSearch {
 		};
 
 		this.messageContextEntryMarkup =
-			`<div class="item-group itemGroup-oViAgA">
-				<div class="item item-1XYaYf reverseimagesearch-item item-subMenu itemSubMenu-3ZgIw-">
+			`<div class="itemGroup-oViAgA">
+				<div class="item-1XYaYf reverseimagesearch-item itemSubMenu-3ZgIw-">
 					<span>Reverse Image Search</span>
-					<div class="hint"></div>
+					<div class="hint-3TJykr"></div>
 				</div>
 			</div>`;
 			
 			
 		this.messageContextSubMenuMarkup = 
-			`<div class="context-menu contextMenu-uoJTbz reverseImageSearchSubMenu">
-				<div class="item-group itemGroup-oViAgA">
-					<div class="item item-1XYaYf alldisabled-item disabled-dlOjhg disabled">
+			`<div class="contextMenu-uoJTbz reverseImageSearchSubMenu">
+				<div class="itemGroup-oViAgA">
+					<div class="item-1XYaYf alldisabled-item disabled-dlOjhg">
 						<span>REPLACE_submenu_disabled_text</span>
-						<div class="hint"></div>
+						<div class="hint-3TJykr"></div>
 					</div>
-					${Object.keys(this.defaults.engines).map((key, i) => `<div engine="${key}" class="item item-1XYaYf RIS-item"><span>${this.defaults.engines[key].name}</span><div class="hint"></div></div>`).join("")}
+					${Object.keys(this.defaults.engines).map((key, i) => `<div engine="${key}" class="item-1XYaYf RIS-item"><span>${this.defaults.engines[key].name}</span><div class="hint-3TJykr"></div></div>`).join("")}
 				</div>
 			</div>`;
 	}
@@ -46,7 +44,7 @@ class ReverseImageSearch {
 
 	getDescription () {return "Adds a reverse image search option to the context menu.";}
 
-	getVersion () {return "3.3.2";}
+	getVersion () {return "3.3.4";}
 	
 	getAuthor () {return "DevilBro";}
 
@@ -54,14 +52,17 @@ class ReverseImageSearch {
 		if (!this.started || typeof BDfunctionsDevilBro !== "object") return;
 		var engines = BDfunctionsDevilBro.getAllData(this, "engines");
 		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="titleDefault-1CWM9y title-3i-5G_ size18-ZM4Qv- height24-2pMcnc weightNormal-3gw0Lm marginBottom8-1mABJ4">${this.getName()}</div><div class="DevilBro-settings-inner">`;
-		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">Search Engines:</h3></div><div class="DevilBro-settings-inner-list">`;
+		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">Search Engines:</h3></div><div class="DevilBro-settings-inner-list">`;
 		for (let key in engines) {
-			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.engines[key].name}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU ${engines[key] ? "valueChecked-3Bzkbm" : "valueUnchecked-XR6AOk"}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${engines[key] ? " checked" : ""}></div></div>`;
+			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.engines[key].name}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${engines[key] ? " checked" : ""}></div></div>`;
 		}
 		settingshtml += `</div>`;
 		settingshtml += `</div></div>`;
 		
 		var settingspanel = $(settingshtml)[0];
+
+		BDfunctionsDevilBro.initElements(settingspanel);
+
 		$(settingspanel)
 			.on("click", ".checkbox-1KYsPm", () => {this.updateSettings(settingspanel);});
 			
@@ -72,22 +73,33 @@ class ReverseImageSearch {
 	load () {}
 
 	start () {
+		var libraryScript = null;
 		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
 			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
-			$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-			$('head').append('<script src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"></script>');
+			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]');
+			if (libraryScript) libraryScript.remove();
+			libraryScript = document.createElement("script");
+			libraryScript.setAttribute("type", "text/javascript");
+			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js");
+			document.head.appendChild(libraryScript);
 		}
+		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
+		if (typeof BDfunctionsDevilBro === "object") this.initialize();
+		else libraryScript.addEventListener("load", () => {this.initialize();});
+	}
+
+	initialize () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
-			var observertarget = null;
+			var observer = null;
 
-			this.messageContextObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node.nodeType == 1 && (node.className.includes("context-menu") || node.className.includes("contextMenu-uoJTbz"))) {
+								if (node.nodeType == 1 && node.className.includes("contextMenu-uoJTbz")) {
 									this.onContextMenu(node);
 								}
 							});
@@ -95,7 +107,7 @@ class ReverseImageSearch {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".app")) this.messageContextObserver.observe(observertarget, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, "#app-mount", {name:"messageContextObserver",instance:observer}, {childList: true});
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -104,8 +116,6 @@ class ReverseImageSearch {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			this.messageContextObserver.disconnect();
-			
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
@@ -120,8 +130,6 @@ class ReverseImageSearch {
 		var settings = {};
 		for (var input of settingspanel.querySelectorAll(".checkbox-1KYsPm")) {
 			settings[input.value] = input.checked;
-			input.parentElement.classList.toggle("valueChecked-3Bzkbm", input.checked);
-			input.parentElement.classList.toggle("valueUnchecked-XR6AOk", !input.checked);
 		}
 		BDfunctionsDevilBro.saveAllData(settings, this, "engines");
 	}

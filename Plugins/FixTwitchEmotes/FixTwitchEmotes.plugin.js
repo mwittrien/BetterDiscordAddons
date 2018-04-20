@@ -2,7 +2,6 @@
 
 class FixTwitchEmotes {
 	constructor () {
-		this.emojiPickerObserver = new MutationObserver(() => {});
 	}
 
 	getName () {return "FixTwitchEmotes";}
@@ -17,17 +16,28 @@ class FixTwitchEmotes {
 	load () {}
 
 	start () {
+		var libraryScript = null;
 		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
 			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
-			$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-			$('head').append('<script src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"></script>');
+			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]');
+			if (libraryScript) libraryScript.remove();
+			libraryScript = document.createElement("script");
+			libraryScript.setAttribute("type", "text/javascript");
+			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js");
+			document.head.appendChild(libraryScript);
 		}
+		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
+		if (typeof BDfunctionsDevilBro === "object") this.initialize();
+		else libraryScript.addEventListener("load", () => {this.initialize();});
+	}
+
+	initialize () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
-			var observertarget = null;
+			var observer = null;
 
-			this.emojiPickerObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -50,7 +60,7 @@ class FixTwitchEmotes {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".popouts")) this.emojiPickerObserver.observe(observertarget, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, ".popouts, .popouts-1TN9u9", {name:"emojiPickerObserver",instance:observer}, {childList: true});
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -60,8 +70,6 @@ class FixTwitchEmotes {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			this.emojiPickerObserver.disconnect();
-			
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}

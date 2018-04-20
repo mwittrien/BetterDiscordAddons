@@ -1,9 +1,7 @@
 //META{"name":"BetterNsfwTag"}*//
 
 class BetterNsfwTag {
-	constructor () {
-		this.channelListObserver = new MutationObserver(() => {});
-		
+	constructor () {		
 		this.css = ` 
 			.nsfw-tag {
 				position: relative;
@@ -17,9 +15,9 @@ class BetterNsfwTag {
 				font-weight: 500;
 				line-height: 14px;
 				white-space: nowrap;
-				color: rgb(255, 0, 0);
-				background-color: rgba(255, 0, 0, 0.0980392);
-				border: 1px solid rgba(255, 0, 0, 0.498039);
+				color: rgb(240, 71, 71);
+				background-color: rgba(240, 71, 71, 0.0980392);
+				border: 1px solid rgba(240, 71, 71, 0.498039);
 			}`;
 			
 		this.tagMarkup = `<span class="nsfw-tag">NSFW</span>`;
@@ -37,17 +35,28 @@ class BetterNsfwTag {
 	load () {}
 
 	start () {
+		var libraryScript = null;
 		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
 			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
-			$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-			$('head').append('<script src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"></script>');
+			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]');
+			if (libraryScript) libraryScript.remove();
+			libraryScript = document.createElement("script");
+			libraryScript.setAttribute("type", "text/javascript");
+			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js");
+			document.head.appendChild(libraryScript);
 		}
+		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
+		if (typeof BDfunctionsDevilBro === "object") this.initialize();
+		else libraryScript.addEventListener("load", () => {this.initialize();});
+	}
+
+	initialize () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
-			var observertarget = null;
+			var observer = null;
 
-			this.channelListObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -63,10 +72,8 @@ class BetterNsfwTag {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".channels-3g2vYe")) this.channelListObserver.observe(observertarget, {childList: true, subtree: true});
-			
-			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
-			
+			BDfunctionsDevilBro.addObserver(this, ".channels-3g2vYe", {name:"channelListObserver",instance:observer}, {childList: true, subtree: true});
+						
 			this.checkAllContainers();
 		}
 		else {
@@ -77,11 +84,7 @@ class BetterNsfwTag {
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			$(".nsfw-tag").remove();
-			
-			this.channelListObserver.disconnect();
-			
-			BDfunctionsDevilBro.removeLocalStyle(this.getName());
-			
+						
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}

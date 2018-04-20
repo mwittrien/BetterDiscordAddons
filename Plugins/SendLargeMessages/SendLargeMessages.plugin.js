@@ -6,6 +6,8 @@ class SendLargeMessages {
 		
 		this.messageDelay = 1000; //changing at own risk, might result in bans or mutes
 		
+		this.channel = null;
+		
 		this.css = `
 			.sendlargemessages-modal textarea {
 				rows: 0;
@@ -31,7 +33,7 @@ class SendLargeMessages {
 				<div class="modal-2LIEKY">
 					<div class="inner-1_1f7b">
 						<div class="modal-3HOjGZ sizeLarge-1AHXtx">
-							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO header-3sp3cE" style="flex: 0 0 auto;">
+							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO header-3sp3cE" style="flex: 0 0 auto;">
 								<div class="flexChild-1KGW5q" style="flex: 1 1 auto;">
 									<h4 class="h4-2IXpeI title-1pmpPr size16-3IvaX_ height20-165WbF weightSemiBold-T8sxWH defaultColor-v22dK1 defaultMarginh4-jAopYe marginReset-3hwONl">REPLACE_modal_header_text</h4>
 									<div class="guildName-1u0hy7 small-3-03j1 size12-1IGJl9 height16-1qXrGy primary-2giqSn"></div>
@@ -46,13 +48,13 @@ class SendLargeMessages {
 							<div class="scrollerWrap-2uBjct content-1Cut5s scrollerThemed-19vinI themeGhostHairline-2H8SiW inputWrapper-3xoRWR vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR flexChild-1KGW5q inner-tqJwAU" style="flex: 1 1 auto;">
 								<textarea class="scroller-fzNley inputDefault-Y_U37D input-2YozMi" id="modal-inputtext"></textarea>
 							</div>
-							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 noWrap-v6g9vO inner-tqJwAU marginBottom8-1mABJ4" style="flex: 0 0 auto;">
+							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 noWrap-v6g9vO inner-tqJwAU marginBottom8-1mABJ4" style="flex: 0 0 auto;">
 								<h5 id="warning-message" class="flexChild-1KGW5q h5-3KssQU title-1pmpPr size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH defaultMarginh5-2UwwFY" style="flex: 1 1 auto;"></h5>
 								<h5 id="character-counter" class="flexChild-1KGW5q h5-3KssQU title-1pmpPr size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH defaultMarginh5-2UwwFY" style="flex: 0 0 auto;"></h5>
 							</div>
 							<div class="flex-lFgbSz flex-3B1Tl4 horizontalReverse-2LanvO horizontalReverse-k5PqxT flex-3B1Tl4 directionRowReverse-2eZTxP justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO footer-1PYmcw">
-								<button type="button" class="btn-save buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu">
-									<div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx contents-4L4hQM">REPLACE_btn_send_text</div>
+								<button type="button" class="btn-send button-2t3of8 lookFilled-luDKDo colorBrand-3PmwCE sizeMedium-2VGNaF grow-25YQ8u">
+									<div class="contents-4L4hQM">REPLACE_btn_send_text</div>
 								</button>
 							</div>
 						</div>
@@ -65,7 +67,7 @@ class SendLargeMessages {
 
 	getDescription () {return "Opens a popout when your message is too large, which allows you to automatically send the message in several smaller messages.";}
 
-	getVersion () {return "1.3.8";}
+	getVersion () {return "1.4.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -73,16 +75,27 @@ class SendLargeMessages {
 	load () {}
 
 	start () {
+		var libraryScript = null;
 		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
 			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
-			$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-			$('head').append('<script src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"></script>');
+			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]');
+			if (libraryScript) libraryScript.remove();
+			libraryScript = document.createElement("script");
+			libraryScript.setAttribute("type", "text/javascript");
+			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js");
+			document.head.appendChild(libraryScript);
 		}
+		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
+		if (typeof BDfunctionsDevilBro === "object") this.initialize();
+		else libraryScript.addEventListener("load", () => {this.initialize();});
+	}
+
+	initialize () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
-			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
-			
+			this.MessageUtils = BDfunctionsDevilBro.WebModules.findByProperties(["parse","isMentioned"]);
+						
 			this.bindEventToTextArea();
 		}
 		else {
@@ -92,13 +105,7 @@ class SendLargeMessages {
 
 
 	stop () {
-		if (typeof BDfunctionsDevilBro === "object") {
-			
-			BDfunctionsDevilBro.removeLocalStyle(this.getName());
-			
-			$(".channelTextArea-1HTP3C textarea").off("input." + this.getName()).off("paste." + this.getName());
-			$(document).off("mouseup." + this.getName()).off("mousemove." + this.getName());
-			
+		if (typeof BDfunctionsDevilBro === "object") {			
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
@@ -118,42 +125,54 @@ class SendLargeMessages {
 		this.sendMessageModalMarkup = 		this.sendMessageModalMarkup.replace("REPLACE_btn_send_text", this.labels.btn_send_text);
 	}
 	
+	getParsedLength (string, channel) {
+		let length = string.indexOf("/") == 0 ? string.length : this.MessageUtils.parse(channel, string).content.length
+		return length > string.length ? length : string.length;
+	}
+	
 	bindEventToTextArea () {
+		var channelObj = BDfunctionsDevilBro.getSelectedChannel();
+		var channel = channelObj ? channelObj.data : null;
+		if (!channel) return;
+		var checkTextarea = (textarea, text) => {
+			if (this.getParsedLength(text, channel) > 1950) {
+				textarea.selectionStart = 0;
+				textarea.selectionEnd = textarea.value.length;
+				document.execCommand("insertText", false, "");
+				this.showSendModal(text, channel);
+			}
+		};
 		$(".channelTextArea-1HTP3C textarea")
 			.off("input." + this.getName())
 			.on("input." + this.getName(), e => {
-				var text = e.target.value;
-				if (text.length > 1950) {
-					e.target.selectionStart = 0;
-					e.target.selectionEnd = e.target.value.length;
-					document.execCommand("insertText", false, "");
-					this.showSendModal(text);
-				}
+				checkTextarea(e.currentTarget, e.currentTarget.value);
 			})
 			.off("paste." + this.getName())
 			.on("paste." + this.getName(), e => {
-				e = e.originalEvent ? e.originalEvent : e;
-				var clipboardData = e.clipboardData;
-				if (!clipboardData) return;
-				var pastedData = clipboardData.getData('Text');
-				var text = e.target.value;
-				if (text.length > 1950) {
-					e.target.selectionStart = 0;
-					e.target.selectionEnd = e.target.value.length;
-					document.execCommand("insertText", false, "");
-					this.showSendModal(text);
-				}
+				setImmediate(() => {
+					checkTextarea(e.currentTarget, e.currentTarget.value);
+				});
 			});
 	}
 	
-	showSendModal (text) {
+	showSendModal (text, channel) {
 		var sendMessageModal = $(this.sendMessageModalMarkup);
 		var textinput = sendMessageModal.find("#modal-inputtext");
+		var warning = sendMessageModal.find("#warning-message");
+		var counter = sendMessageModal.find("#character-counter");
+		
+		var updateCounter = () => {
+			var parsedlength = this.getParsedLength(textinput.val(), channel);
+			var messageAmount = Math.ceil(parsedlength/1900);
+			warning.text(messageAmount > 15 ? this.labels.modal_messages_warning : "");
+			counter.text(parsedlength + " (" + (textinput[0].selectionEnd - textinput[0].selectionStart) + ") => " + this.labels.modal_messages_translation + ": " + messageAmount);
+		};
+		
 		BDfunctionsDevilBro.appendModal(sendMessageModal);
 		sendMessageModal
-			.on("click", "button.btn-save", (e) => {
+			.on("click", "button.btn-send", (e) => {
 				e.preventDefault();
-				var messages = this.formatText(textinput.val());
+				var messages = this.formatText(textinput.val(), channel);
 				messages.forEach((message,i) => {
 					setTimeout(() => {
 						this.sendMessage(message);
@@ -168,7 +187,7 @@ class SendLargeMessages {
 			.off("keydown." + this.getName() + " click." + this.getName())
 			.on("keydown." + this.getName() + " click." + this.getName(), () => {
 				setTimeout(() => {
-					this.updateCounter(sendMessageModal);
+					updateCounter();
 				},10);
 			})
 			.off("mousedown." + this.getName())
@@ -183,23 +202,14 @@ class SendLargeMessages {
 					.off("mousemove." + this.getName())
 					.on("mousemove." + this.getName(), () => {
 						setTimeout(() => {
-							this.updateCounter(sendMessageModal);
+							updateCounter();
 						},10);
 					});
 			});
-		this.updateCounter(sendMessageModal);
+		updateCounter();
 	}
 	
-	updateCounter (modal) {
-		var warning = modal.find("#warning-message");
-		var counter = modal.find("#character-counter");
-		var textinput = modal.find("#modal-inputtext")[0];
-		var messageAmmount = Math.ceil(textinput.value.length/1900);
-		warning.text(messageAmmount > 15 ? this.labels.modal_messages_warning : "");
-		counter.text(textinput.value.length + " (" + (textinput.selectionEnd - textinput.selectionStart) + ") => " + this.labels.modal_messages_translation + ": " + messageAmmount);
-	}
-	
-	formatText (text) {
+	formatText (text, channel) {
 		text = text.replace(new RegExp("\t", 'g'), "	");
 		var longwords = text.match(/[\S]{1800,}/gm);
 		for (var i in longwords) {
@@ -207,7 +217,7 @@ class SendLargeMessages {
 			let count1 = 0;
 			let shortwords = [];
 			longword.split("").forEach((char) => {
-				if (shortwords[count1] && shortwords[count1].length >= 1800) count1++;
+				if (shortwords[count1] && this.getParsedLength(shortwords[count1], channel) >= 1800) count1++;
 				shortwords[count1] = shortwords[count1] ? shortwords[count1] + char : char;
 			});
 			text = text.replace(longword, shortwords.join(" "));
@@ -215,7 +225,7 @@ class SendLargeMessages {
 		var messages = [];
 		var count2 = 0;
 		text.split(" ").forEach((word) => {
-			if (messages[count2] && (messages[count2].length + word.length) > 1900) count2++;
+			if (messages[count2] && this.getParsedLength(messages[count2] + "" + word, channel) > 1900) count2++;
 			messages[count2] = messages[count2] ? messages[count2] + " " + word : word;
 		});
 		

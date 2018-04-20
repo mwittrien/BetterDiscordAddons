@@ -2,8 +2,20 @@
 
 class PluginRepo {
 	constructor () {
-		this.settingsWindowObserver = new MutationObserver(() => {});
-		this.innerSettingsWindowObserver = new MutationObserver(() => {});
+		this.sortings = {
+			sort: {
+				name:			"Name",
+				author:			"Author",
+				version:		"Version",
+				description:	"Description",
+				state:			"Update State",
+				fav:			"Favorites"
+			},
+			order: {
+				asc:			"Ascending",
+				desc:			"Descending"
+			}
+		};
 		
 		this.loading = false;
 		
@@ -15,6 +27,12 @@ class PluginRepo {
 		
 		this.pluginRepoButtonMarkup = 
 			`<button class="bd-pfbtn bd-pluginrepobutton">Plugin Repo</button>`;
+		
+		this.settingsContextEntryMarkup =
+			`<div class="item-1XYaYf pluginrepo-item">
+				<span>Plugin Repo</span>
+				<div class="hint-3TJykr"></div>
+			</div>`;
 
 		this.pluginEntryMarkup =
 			`<li class="pluginEntry jiiks">
@@ -60,8 +78,8 @@ class PluginRepo {
 				<div class="backdrop-2ohBEd"></div>
 				<div class="modal-2LIEKY">
 					<div class="inner-1_1f7b">
-						<div class="modal-3HOjGZ sizeMedium-1-2BNS">
-							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO header-3sp3cE" style="flex: 0 0 auto; padding: 20px 20px 0 20px;">
+						<div class="modal-3HOjGZ sizeLarge-1AHXtx">
+							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO header-3sp3cE" style="flex: 0 0 auto; padding: 20px 20px 0 20px;">
 								<div class="flexChild-1KGW5q" style="flex: 1 1 auto;">
 									<h4 class="h4-2IXpeI title-1pmpPr size16-3IvaX_ height20-165WbF weightSemiBold-T8sxWH defaultColor-v22dK1 defaultMarginh4-jAopYe marginReset-3hwONl pluginAmount">Plugin Repository</h4>
 									<div class="guildName-1u0hy7 small-3-03j1 size12-1IGJl9 height16-1qXrGy primary-2giqSn"></div>
@@ -73,23 +91,27 @@ class PluginRepo {
 									</g>
 								</svg>
 							</div>
-							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO header-3sp3cE marginBottom20-2Ifj-2" style="flex: 0 0 auto; padding: 10px 20px 0px 20px;">
+							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO header-3sp3cE marginBottom20-2Ifj-2" style="flex: 0 0 auto; padding: 10px 20px 0px 20px;">
 								<div tab="plugins" class="tab selected">Plugins</div>
 								<div tab="settings" class="tab">Settings</div>
-								<div class="inputWrapper-3xoRWR vertical-3X17r5 directionColumn-2h-LPR" style="margin-top: -15px;">
-									<input type="text" class="input-2YozMi size16-3IvaX_" id="input-search" placeholder="Search for..." style="padding: 1px 8px;">
+								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO searchBar-YMJBu9 size14-1wjlWP" style="flex: 1 1 auto; margin: -15px 5px 0 0;">
+									<input class="input-yt44Uw flexChild-1KGW5q" value="" placeholder="Search for ..." style="flex: 1 1 auto;">
+									<div class="searchBarIcon-vCfmUl flexChild-1KGW5q">
+										<i class="icon-11Zny- eyeGlass-6rahZf visible-4lw4vs"/>
+										<i class="icon-11Zny- clear-4pSDsx"/>
+									</div>
 								</div>
-								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelect-2sgeoi" style="padding-bottom: 15px;">
+								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelect-2sgeoi" style="padding-bottom: 15px;">
 									<div class="quickSelectLabel-2MM1ZS">Sort by:</div>
-									<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelectClick-36aPV0 sort-filter" style="flex: 0 0 auto;">
-										<div option="name" class="quickSelectValue-23jNHW">Name</div>
+									<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelectClick-36aPV0 sort-filter" style="flex: 0 0 auto;">
+										<div option="${Object.keys(this.sortings.sort)[0]}" class="quickSelectValue-23jNHW">${this.sortings.sort[Object.keys(this.sortings.sort)[0]]}</div>
 										<div class="quickSelectArrow-1lyLly"></div>
 									</div>
 								</div>
-								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelect-2sgeoi" style="padding-bottom: 15px;">
+								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelect-2sgeoi" style="padding-bottom: 15px;">
 									<div class="quickSelectLabel-2MM1ZS">Order:</div>
-									<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelectClick-36aPV0 order-filter" style="flex: 0 0 auto;">
-										<div option="asc" class="quickSelectValue-23jNHW">Ascending</div>
+									<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelectClick-36aPV0 order-filter" style="flex: 0 0 auto;">
+										<div option="${Object.keys(this.sortings.order)[0]}" class="quickSelectValue-23jNHW">${this.sortings.order[Object.keys(this.sortings.order)[0]]}</div>
 										<div class="quickSelectArrow-1lyLly"></div>
 									</div>
 								</div>
@@ -100,28 +122,28 @@ class PluginRepo {
 								</div>
 							</div>
 							<div tab="settings" class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO inner-tqJwAU tab-content" style="flex: 1 1 auto;">
-								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;">
-									<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">To expierence PluginRepo in the best way. I would recommend you to download Restart-No-More, which automatically loads newly downloaded Plugins into your BetterDiscord, so you won't have to reload after downloading a Plugin.</h3>
+								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;">
+									<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto; width: 800px;">To expierence PluginRepo in the best way. I would recommend you to download Restart-No-More, which automatically loads newly downloaded Plugins into your BetterDiscord, so you won't have to reload after downloading a Plugin.</h3>
 								</div>
-								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;">
+								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;">
 									<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Hide updated Plugins.</h3>
 									<div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;">
 										<input type="checkbox" value="updated" class="checkboxEnabled-4QfryV checkbox-1KYsPm hide-checkbox" id="input-hideupdated">
 									</div>
 								</div>
-								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;">
+								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;">
 									<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Hide outdated Plugins.</h3>
 									<div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;">
 										<input type="checkbox" value="outdated" class="checkboxEnabled-4QfryV checkbox-1KYsPm hide-checkbox" id="input-hideoutdated">
 									</div>
 								</div>
-								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;">
+								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;">
 									<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Hide downloadable Plugins.</h3>
 									<div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;">
 										<input type="checkbox" value="downloadable" class="checkboxEnabled-4QfryV checkbox-1KYsPm hide-checkbox" id="input-hidedownloadable">
 									</div>
 								</div>
-								<div id="RNMoption" class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;">
+								<div id="RNMoption" class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;">
 									<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Start Plugin after Download (Restart-No-More needed)</h3>
 									<div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;">
 										<input type="checkbox" class="checkboxEnabled-4QfryV checkbox-1KYsPm" id="input-rnmstart">
@@ -134,28 +156,22 @@ class PluginRepo {
 			</span>`;
 			
 		this.sortPopoutMarkup =
-			`<div class="popout popout-bottom-right no-shadow pluginrepo-sort-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
+			`<div class="popout popout-bottom-right no-shadow popout-2RRwAO popoutBottomRight-3JmvG2 noShadow-31NiLA pluginrepo-sort-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
 				<div>
 					<div class="contextMenu-uoJTbz quickSelectPopout">
 						<div class="itemGroup-oViAgA">
-							<div option="name" class="item-1XYaYf">Name</div>
-							<div option="author" class="item-1XYaYf">Author</div>
-							<div option="version" class="item-1XYaYf">Version</div>
-							<div option="description" class="item-1XYaYf">Description</div>
-							<div option="state" class="item-1XYaYf">Update State</div>
-							<div option="fav" class="item-1XYaYf">Favorites</div>
+							${Object.keys(this.sortings.sort).map((key, i) => `<div option="${key}" class="item-1XYaYf">${this.sortings.sort[key]}</div>`).join("")}
 						</div>
 					</div>
 				</div>
 			</div>`;
 			
 		this.orderPopoutMarkup =
-			`<div class="popout popout-bottom-right no-shadow pluginrepo-order-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
+			`<div class="popout popout-bottom-right no-shadow popout-2RRwAO popoutBottomRight-3JmvG2 noShadow-31NiLA pluginrepo-order-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
 				<div>
 					<div class="contextMenu-uoJTbz quickSelectPopout">
 						<div class="itemGroup-oViAgA">
-							<div option="asc" class="item-1XYaYf">Ascending</div>
-							<div option="desc" class="item-1XYaYf">Descending</div>
+							${Object.keys(this.sortings.order).map((key, i) => `<div option="${key}" class="item-1XYaYf">${this.sortings.order[key]}</div>`).join("")}
 						</div>
 					</div>
 				</div>
@@ -225,27 +241,33 @@ class PluginRepo {
 
 	getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
 
-	getVersion () {return "1.3.4";}
+	getVersion () {return "1.4.9";}
 
 	getAuthor () {return "DevilBro";}
 	
 	getSettingsPanel () {
 		if (!this.started || typeof BDfunctionsDevilBro !== "object") return;
 		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="titleDefault-1CWM9y title-3i-5G_ size18-ZM4Qv- height24-2pMcnc weightNormal-3gw0Lm marginBottom8-1mABJ4">${this.getName()}</div><div class="DevilBro-settings-inner">`;
-		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto; padding-top:8px;">Add Plugin:</h3><input type="text" placeholder="Insert Raw Github Link of Plugin (https://raw.githubusercontent.com/...)" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_" id="input-pluginurl" style="flex: 1 1 auto;"></div>`;
+		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">Add Plugin:</h3><input type="text" placeholder="Insert Raw Github Link of Plugin (https://raw.githubusercontent.com/...)" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_" id="input-pluginurl" style="flex: 1 1 auto;"><button type="button" class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorBrand-3PmwCE sizeMedium-2VGNaF grow-25YQ8u btn-add btn-addplugin" style="flex: 0 0 auto;"><div class="contents-4L4hQM"></div></button></div>`;
 		settingshtml += `<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Your additional Plugin List:</h3><div class="DevilBro-settings-inner-list plugin-list marginBottom8-1mABJ4">`;
 		var ownlist = BDfunctionsDevilBro.loadData("ownlist", this, "ownlist") || [];
 		for (let url of ownlist) {
 			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginTop4-2rEBfJ marginBottom4-_yArcI card-11ynQk"><div class="card-11ynQk-inner"><div class="description-3MVziF formText-1L-zZB note-UEZmbY marginTop4-2rEBfJ modeDefault-389VjU primary-2giqSn ellipsis-CYOqEr entryurl">${url}</div></div><div class="button-1qrA-N remove-plugin"></div></div>`;
 		}
 		settingshtml += `</div>`;
-		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto; padding-top:8px;">Force all Plugins to be fetched again.</h3><button type="button" class="flexChild-1KGW5q buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu refresh-button" style="flex: 0 0 auto;"><div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx contents-4L4hQM">Refresh</div></button></div>`;
+		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Force all Plugins to be fetched again.</h3><button type="button" class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorBrand-3PmwCE sizeMedium-2VGNaF grow-25YQ8u refresh-button" style="flex: 0 0 auto;"><div class="contents-4L4hQM">Refresh</div></button></div>`;
+		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Remove all added Plugins from your own list.</h3><button type="button" class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorRed-3HTNPV sizeMedium-2VGNaF grow-25YQ8u remove-all" style="flex: 0 0 auto;"><div class="contents-4L4hQM">Reset</div></button></div>`;
 		settingshtml += `</div></div>`;
 		
 		var settingspanel = $(settingshtml)[0];
+
+		BDfunctionsDevilBro.initElements(settingspanel);
+
 		$(settingspanel)
-			.on("keyup", "#input-pluginurl", (e) => {if (e.which == 13) this.addPluginToOwnList(settingspanel, e);})
+			.on("click", ".btn-addplugin", () => {this.addPluginToOwnList(settingspanel);})
+			.on("keyup", "#input-pluginurl", (e) => {if (e.which == 13) this.addPluginToOwnList(settingspanel);})
 			.on("click", ".remove-plugin", (e) => {this.removePluginFromOwnList(e);})
+			.on("click", ".remove-all", () => {this.removeAllFromOwnList(settingspanel);})
 			.on("click", ".refresh-button", () => {this.loadPlugins();});
 		return settingspanel;
 	}
@@ -254,35 +276,28 @@ class PluginRepo {
 	load () {}
 
 	start () {
+		var libraryScript = null;
 		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
 			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
-			$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-			$('head').append('<script src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"></script>');
+			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]');
+			if (libraryScript) libraryScript.remove();
+			libraryScript = document.createElement("script");
+			libraryScript.setAttribute("type", "text/javascript");
+			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js");
+			document.head.appendChild(libraryScript);
 		}
+		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
+		if (typeof BDfunctionsDevilBro === "object") this.initialize();
+		else libraryScript.addEventListener("load", () => {this.initialize();});
+	}
+
+	initialize () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
-			var observertarget = null;
+			var observer = null;
 
-			this.settingsWindowObserver = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								setImmediate(() => {
-									if (node && node.tagName && node.getAttribute("layer-id") == "user-settings") {
-										this.checkIfPluginsPage(node);
-										this.innerSettingsWindowObserver.observe(node, {childList:true, subtree:true});
-									}
-								});
-							});
-						}
-					}
-				);
-			});
-			if (observertarget = document.querySelector(".layers-20RVFW")) this.settingsWindowObserver.observe(observertarget, {childList:true});
-			
-			this.innerSettingsWindowObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, j) => {
 						if (change.addedNodes) {
@@ -293,16 +308,44 @@ class PluginRepo {
 					}
 				);
 			});
+			BDfunctionsDevilBro.addObserver(this, ".layer-kosS71[layer-id='user-settings']", {name:"innerSettingsWindowObserver",instance:observer}, {childList:true,subtree:true});
+			
+			observer = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.addedNodes) {
+							change.addedNodes.forEach((node) => {
+								setImmediate(() => {
+									if (node && node.tagName && node.getAttribute("layer-id") == "user-settings") {
+										BDfunctionsDevilBro.addObserver(this, node, {name:"innerSettingsWindowObserver"}, {childList:true,subtree:true});
+										this.checkIfPluginsPage(node);
+									}
+								});
+							});
+						}
+					}
+				);
+			});
+			BDfunctionsDevilBro.addObserver(this, ".layers-20RVFW", {name:"settingsWindowObserver",instance:observer}, {childList:true});
+			
+			observer = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.addedNodes) {
+							change.addedNodes.forEach((node) => {
+								if (node && node.nodeType == 1 && node.className.includes("contextMenu-uoJTbz")) {
+									this.onContextMenu(node);
+								}
+							});
+						}
+					}
+				);
+			});
+			BDfunctionsDevilBro.addObserver(this, ".appMount-14L89u", {name:"settingsContextObserver",instance:observer}, {childList: true});
 			
 			var settingswindow = document.querySelector(".layer-kosS71[layer-id='user-settings']");
-			if (settingswindow) {
-				this.innerSettingsWindowObserver.observe(settingswindow, {childList:true, subtree:true});
-				this.checkIfPluginsPage(settingswindow);
-			}
-			
-			
-			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
-			
+			if (settingswindow) this.checkIfPluginsPage(settingswindow);
+						
 			this.loadPlugins();
 			
 			this.updateInterval = setInterval(() => {this.checkForNewPlugins();},1000*60*30);
@@ -315,30 +358,63 @@ class PluginRepo {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.unloadMessage(this);
-			
-			this.settingsWindowObserver.disconnect();
-			this.innerSettingsWindowObserver.disconnect();
-			
 			clearInterval(this.updateInterval);
-			
-			BDfunctionsDevilBro.removeLocalStyle(this.getName());
-			
+						
 			$(".pluginrepo-modal, .bd-pluginrepobutton, webview[webview-PluginRepo]").remove();
+			
+			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
 
 	
 	// begin of own functions
 	
-	addPluginToOwnList (settingspanel, e) {
-		var url = e.currentTarget.value;
-		e.currentTarget.value = null;
-		var ownlist = BDfunctionsDevilBro.loadData("ownlist", this, "ownlist") || [];
-		if (!ownlist.includes(url)) {
-			ownlist.push(url);
-			BDfunctionsDevilBro.saveData("ownlist", ownlist, this, "ownlist");
-			$(`<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginTop4-2rEBfJ marginBottom4-_yArcI card-11ynQk"><div class="card-11ynQk-inner"><div class="description-3MVziF formText-1L-zZB note-UEZmbY marginTop4-2rEBfJ modeDefault-389VjU primary-2giqSn ellipsis-CYOqEr entryurl">${url}</div></div><div class="button-1qrA-N remove-plugin"></div></div>`).appendTo(settingspanel.querySelector(".plugin-list"));
+	onContextMenu (context) {
+		if (!context || !context.tagName || !context.parentElement) return;
+		for (let entry of context.querySelectorAll(".item-1XYaYf")) {
+			if (entry.textContent == "BetterDiscord") {
+				let innerObserver = new MutationObserver((changes, _) => {
+					changes.forEach(
+						(change, i) => {
+							if (change.addedNodes) {
+								change.addedNodes.forEach((node) => {
+									if (node && node.nodeType == 1 && node.className.includes("contextMenu-uoJTbz") && !node.querySelector(".pluginrepo-item")) {
+										for (let innerEntry of node.querySelectorAll(".item-1XYaYf")) {
+											if (innerEntry.textContent == "Themes") {
+												$(this.settingsContextEntryMarkup)
+													.on("click", () => {
+														if (!this.loading) $(context).hide();
+														this.openPluginRepoModal();
+													})
+													.insertAfter(innerEntry);
+												$(node).css("top", $(context).css("top").replace("px","") - $(node).outerHeight() + $(context).outerHeight());
+												break;
+											}
+										}
+									}
+								});
+							}
+						}
+					);
+				});
+				innerObserver.observe(entry, {childList: true});
+				break;
+			}
+		}
+	}
+	
+	addPluginToOwnList (settingspanel) {
+		var pluginUrlInput = settingspanel.querySelector("#input-pluginurl");
+		var pluginList = settingspanel.querySelector(".plugin-list");
+		if (pluginUrlInput && pluginList) {
+			var url = pluginUrlInput.value;
+			pluginUrlInput.value = null;
+			var ownlist = BDfunctionsDevilBro.loadData("ownlist", this, "ownlist") || [];
+			if (!ownlist.includes(url)) {
+				ownlist.push(url);
+				BDfunctionsDevilBro.saveData("ownlist", ownlist, this, "ownlist");
+				$(`<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginTop4-2rEBfJ marginBottom4-_yArcI card-11ynQk"><div class="card-11ynQk-inner"><div class="description-3MVziF formText-1L-zZB note-UEZmbY marginTop4-2rEBfJ modeDefault-389VjU primary-2giqSn ellipsis-CYOqEr entryurl">${url}</div></div><div class="button-1qrA-N remove-plugin"></div></div>`).appendTo(pluginList);
+			}
 		}
 	}
 	
@@ -349,6 +425,13 @@ class PluginRepo {
 		var ownlist = BDfunctionsDevilBro.loadData("ownlist", this, "ownlist") || [];
 		BDfunctionsDevilBro.removeFromArray(ownlist, url);
 		BDfunctionsDevilBro.saveData("ownlist", ownlist, this, "ownlist");
+	}
+	
+	removeAllFromOwnList (settingspanel) {
+		if (confirm("Are you sure you want to remove all added Plugins from your own list?")) {
+			BDfunctionsDevilBro.saveData("ownlist", [], this, "ownlist");
+			settingspanel.querySelectorAll(".card-11ynQk").forEach(ele => {ele.remove();});
+		}
 	}
 	
 	checkIfPluginsPage (container) {
@@ -372,8 +455,7 @@ class PluginRepo {
 			$(this.pluginRepoButtonMarkup)
 				.insertAfter(container.querySelector(".bd-pfbtn"))
 				.on("click", () => {
-					if (!this.loading) this.openPluginRepoModal(); 
-					else BDfunctionsDevilBro.showToast(`Plugins are still being fetched. Try again in some seconds.`, {type:"danger"});
+					this.openPluginRepoModal()
 				})
 				.on("mouseenter", (e) => {
 					BDfunctionsDevilBro.createTooltip("Open Plugin Repo", e.currentTarget, {type:"top",selector:"pluginrepo-button-tooltip"});
@@ -382,6 +464,10 @@ class PluginRepo {
 	}
 	
 	openPluginRepoModal (showOnlyOutdated = false) {
+		if (this.loading) {
+			BDfunctionsDevilBro.showToast(`Plugins are still being fetched. Try again in some seconds.`, {type:"danger"});
+			return;
+		}
 		var pluginRepoModal = $(this.pluginRepoModalMarkup);
 		pluginRepoModal.updateModal = true;
 		pluginRepoModal.enableSearch = false;
@@ -392,7 +478,11 @@ class PluginRepo {
 		if (!BDfunctionsDevilBro.isRestartNoMoreEnabled()) pluginRepoModal.find("#RNMoption").remove();
 		else pluginRepoModal.find("#input-rnmstart").prop("checked", BDfunctionsDevilBro.loadData("RNMstart", this, "settings"));
 		pluginRepoModal
-			.on("keyup." + this.getName(), "#input-search", (e) => {
+			.on("keyup." + this.getName(), ".input-yt44Uw", () => {
+				clearTimeout(pluginRepoModal.searchTimeout);
+				pluginRepoModal.searchTimeout = setTimeout(() => {this.addPluginEntries(pluginRepoModal);},1000);
+			})
+			.on("click." + this.getName(), ".clear-4pSDsx.visible-4lw4vs", () => {
 				clearTimeout(pluginRepoModal.searchTimeout);
 				pluginRepoModal.searchTimeout = setTimeout(() => {this.addPluginEntries(pluginRepoModal);},1000);
 			})
@@ -425,7 +515,7 @@ class PluginRepo {
 		wrapper.classList.add("popout-open");
 		var value = $(wrapper).find(".quickSelectValue-23jNHW");
 		var popout = $(markup);
-		$(".popouts").append(popout)
+		$(".popouts, .popouts-1TN9u9").append(popout)
 			.off("click", ".item-1XYaYf")
 			.on("click", ".item-1XYaYf", (e2) => {
 				value.text($(e2.currentTarget).text());
@@ -439,7 +529,7 @@ class PluginRepo {
 		popout
 			.css("left", $(wrapper).offset().left + $(wrapper).outerWidth() + "px")
 			.css("top", $(wrapper).offset().top + value.outerHeight() + "px")
-			.find(".context-menu").addClass(BDfunctionsDevilBro.getDiscordTheme());
+			.find(".contextMenu-uoJTbz").addClass(BDfunctionsDevilBro.getDiscordTheme());
 			
 		$(document).on("mousedown.sortpopout" + this.getName(), (e2) => {
 			if (popout.has(e2.target).length == 0) {
@@ -502,7 +592,7 @@ class PluginRepo {
 		if (typeof modal.entries != "object") return;
 		modal.find(".pluginEntry").remove();
 		
-		var searchstring = modal.find("#input-search").val().replace(/[<|>]/g, "").toUpperCase();
+		var searchstring = modal.find(".input-yt44Uw").val().replace(/[<|>]/g, "").toUpperCase();
 		
 		var entries = modal.entries;
 		if (modal.find("#input-hideupdated").prop("checked")) 		entries = entries.filter((entry) => {return entry.state != 0 ? entry : null;});
@@ -520,23 +610,7 @@ class PluginRepo {
 			
 			var values = [entry.name, entry.version, entry.author, entry.description];
 			if (searchstring.length > 0) {
-				for (let i in values) {
-					let value = values[i];
-					let added = 0;
-					BDfunctionsDevilBro.getAllIndexes(value.toUpperCase(), searchstring).forEach((start) => {
-						let wrapperopen = "<span class='highlight'>";
-						let wrapperclose = "</span>";
-						let offset = added*(wrapperopen.length + wrapperclose.length);
-						start = start + offset;
-						let end = start + searchstring.length;
-						var openIndexes = [-1].concat(BDfunctionsDevilBro.getAllIndexes(value.substring(0, start), "<"));
-						var closedIndexes = [-1].concat(BDfunctionsDevilBro.getAllIndexes(value.substring(0, start), ">"));
-						if (openIndexes[openIndexes.length-1] > closedIndexes[closedIndexes.length-1]) return;
-						value = value.substring(0, start) + wrapperopen + value.substring(start, end) + wrapperclose + value.substring(end);
-						added++;
-					});
-					values[i] = value ? value : values[i];
-				}
+				for (let i in values) values[i] = BDfunctionsDevilBro.highlightText(values[i], searchstring);
 			}
 			if (BDfunctionsDevilBro.zacksFork()) {
 				div.find(".bda-name").html(values[0]);
@@ -618,6 +692,7 @@ class PluginRepo {
 				createWebview().then((webview) => {
 					getPluginInfo(webview, () => {
 						this.loading = false;
+						console.log("PluginRepo: Finished fetching Plugins.");
 						if (document.querySelector(".bd-pluginrepobutton")) BDfunctionsDevilBro.showToast(`Finished fetching Plugins.`, {type:"success"});
 						if (outdated > 0) {
 							var text = `${outdated} of your Plugins ${outdated == 1 ? "is" : "are"} outdated. Check:`;
@@ -643,24 +718,13 @@ class PluginRepo {
 				if (response) {
 					let plugin = {};
 					for (let tag of tags) {
-						let reg = new RegExp(tag + "[\\s|\\t|\\n|\\r|=|>|function|\(|\)|\{|return]*([\"|\'|\`]).*?\\1","gi");
-						let temp = reg.exec(body);
-						if (temp) {
-							temp = temp[0];
-							let foundIndex = temp.length;
-							let foundSep = null;
-							for (let sep of seps) {
-								let index = temp.indexOf(sep);
-								if (index > -1 && index < foundIndex) {
-									foundIndex = index;
-									foundSep = sep;
-								}
-							}
-							if (foundSep) {
-								temp = temp.split(foundSep);
-								if (temp.length > 2) {
-									plugin[tag] = tag != "getVersion" ? temp[1].charAt(0).toUpperCase() + temp[1].slice(1) : temp[1];
-								}
+						let result = new RegExp(tag + "[\\s|\\t|\\n|\\r|=|>|_|:|function|\(|\)|\{|return]*([\"|\'|\`]).*\\1","gi").exec(body);
+						if (result) {
+							let separator = result[1];
+							result = result[0].replace(new RegExp("\\\\" + separator, "g"), separator).split(separator);
+							if (result.length > 2) {
+								result = result.slice(1, -1).join(separator).replace(new RegExp("\\\\n", "g"), "<br>").replace(new RegExp("\\\\", "g"), "");
+								plugin[tag] = tag != "getVersion" ? result.charAt(0).toUpperCase() + result.slice(1) : result;
 							}
 						}
 					}
@@ -672,7 +736,9 @@ class PluginRepo {
 						plugin.url = url;
 						this.loadedPlugins[url] = plugin;
 						var installedPlugin = window.bdplugins[plugin.getName] ? window.bdplugins[plugin.getName].plugin : null;
-						if (installedPlugin && installedPlugin.getAuthor().toUpperCase() == plugin.getAuthor.toUpperCase() && installedPlugin.getVersion() != plugin.getVersion) outdated++;
+						if (installedPlugin && installedPlugin.getAuthor().toUpperCase() == plugin.getAuthor.toUpperCase() && installedPlugin.getVersion() != plugin.getVersion) {
+							if (PluginUpdates && PluginUpdates.plugins && !PluginUpdates.plugins[url]) outdated++;
+						}
 					}
 					else {
 						let name = body.replace(new RegExp("\\s*\:\\s*", "g"), ":").split('"name":"');

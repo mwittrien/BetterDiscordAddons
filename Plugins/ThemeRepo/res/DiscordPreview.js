@@ -9,9 +9,19 @@ window.onmessage = function (e) {
 		var body = document.querySelector("body"), head = document.querySelector("head"), theme;
 		switch (e.data.reason) {
 			case "OnLoad":
+				body.innerHTML = body.innerHTML.replace(new RegExp("REPLACE_USERNAMESMALL", "g"), e.data.username.toLowerCase());
 				body.innerHTML = body.innerHTML.replace(new RegExp("REPLACE_USERNAME", "g"), e.data.username);
+				body.innerHTML = body.innerHTML.replace(new RegExp("REPLACE_USERID", "g"), e.data.id);
 				body.innerHTML = body.innerHTML.replace(new RegExp("REPLACE_AVATAR", "g"), e.data.avatar.split('"').join(''));
 				body.innerHTML = body.innerHTML.replace(new RegExp("REPLACE_DISCRIMINATOR", "g"), e.data.discriminator);
+				if (e.data.nativecss) {
+					theme = document.createElement("link");
+					theme.classList.add(e.data.reason);
+					theme.rel = "stylesheet";
+					theme.href = e.data.nativecss;
+					head.appendChild(theme);
+				}
+				document.querySelector(".appMount-14L89u").style.display = "flex";
 				break;
 			case "NewTheme":
 			case "CustomCSS":

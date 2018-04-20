@@ -4,15 +4,11 @@ class PersonalPins {
 	constructor () {
 		this.labels = {};
 		
-		this.messageContextObserver = new MutationObserver(() => {});
-		this.chatWindowObserver = new MutationObserver(() => {});
-		this.optionPopoutObserver = new MutationObserver(() => {});
-
 		this.messageContextEntryMarkup =
 			`<div class="itemGroup-oViAgA">
 				<div class="item-1XYaYf personalpin-item">
 					<span>REPLACE_context_noteoption_text</span>
-					<div class="hint"></div>
+					<div class="hint-3TJykr"></div>
 				</div>
 			</div>`;
 		
@@ -28,17 +24,26 @@ class PersonalPins {
 			</svg>`;
 			
 		this.notesPopoutMarkup = 
-			`<div class="popout popout-bottom-right no-arrow no-shadow popout-personalpins-notes DevilBro-modal" style="z-index: 1000; visibility: visible; left: 544.844px; top: 35.9896px; transform: translateX(-100%) translateY(0%) translateZ(0px);">
-				<div class="messages-popout-wrap themed-popout" style="max-height: 740px; width: 500px;">
-					<div class="header" style="padding-bottom: 0;">
-						<div class="title">REPLACE_popout_note_text</div>
-						<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginTop8-2gOa2N" style="flex: 0 0 auto;">
-							<div tab="channel" class="tab selected">REPLACE_popout_channel_text</div>
+			`<div class="popout popout-bottom-right no-arrow no-shadow popout-2RRwAO popoutBottomRight-3JmvG2 noArrow-2iqI6w noShadow-31NiLA popout-personalpins-notes DevilBro-modal" style="z-index: 1000; visibility: visible; left: 544.844px; top: 35.9896px; transform: translateX(-100%) translateY(0%) translateZ(0px);">
+				<div class="messages-popout-wrap messagesPopoutWrap-1VBR-j themed-popout themedPopout-1uUNjn" style="max-height: 740px; width: 500px;">
+					<div class="header header-y_zptc header-2Z2FaH header-20NMVw" style="padding-bottom: 0;">
+						<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginTop8-2gOa2N" style="flex: 0 0 auto;">
+							<div class="title title-1SAkRa title-2ySl2y">REPLACE_popout_note_text</div>
+							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO searchBar-YMJBu9 size14-1wjlWP" style="flex: 1 1 auto;">
+								<input class="input-yt44Uw flexChild-1KGW5q" value="" placeholder="Search for ..." style="flex: 1 1 auto;">
+								<div class="searchBarIcon-vCfmUl flexChild-1KGW5q">
+									<i class="icon-11Zny- eyeGlass-6rahZf visible-4lw4vs"/>
+									<i class="icon-11Zny- clear-4pSDsx"/>
+								</div>
+							</div>
+						</div>
+						<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginTop8-2gOa2N" style="flex: 0 0 auto;">
+							<div tab="channel" class="tab">REPLACE_popout_channel_text</div>
 							<div tab="server" class="tab">REPLACE_popout_server_text</div>
 							<div tab="allservers" class="tab">REPLACE_popout_allservers_text</div>
-							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelect-2sgeoi" style="padding-bottom: 15px; float:right;">
+							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelect-2sgeoi" style="padding-bottom: 15px; float:right;">
 								<div class="quickSelectLabel-2MM1ZS">REPLACE_popout_sort_text:</div>
-								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelectClick-36aPV0" style="flex: 0 0 auto;">
+								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO quickSelectClick-36aPV0" style="flex: 0 0 auto;">
 									<div option="timestamp" class="quickSelectValue-23jNHW">REPLACE_popout_messagesort_text</div>
 									<div class="quickSelectArrow-1lyLly"></div>
 								</div>
@@ -46,10 +51,10 @@ class PersonalPins {
 						</div>
 					</div>
 					<div class="scroller-wrap dark">
-						<div class="messages-popout scroller">
-							<div class="empty-placeholder">
-								<div class="image" style="background-image: url(&quot;/assets/6793e022dc1b065b21f12d6df02f91bd.svg&quot;);"></div>
-								<div class="body"></div>
+						<div class="messages-popout messagesPopout-MzE43I scroller">
+							<div class="empty-placeholder emptyPlaceholder-2T_EMT">
+								<div class="image image-1drLpb" style="background-image: url(/assets/6793e022dc1b065b21f12d6df02f91bd.svg);"></div>
+								<div class="body body-1fAJW-"></div>
 							</div>
 						</div>
 					</div>
@@ -57,7 +62,7 @@ class PersonalPins {
 			</div>`;
 			
 		this.sortPopoutMarkup =
-			`<div class="popout popout-bottom-right no-shadow personalpins-sort-popout" style="z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
+			`<div class="popout popout-bottom-right no-shadow popout-2RRwAO popoutBottomRight-3JmvG2 noShadow-31NiLA personalpins-sort-popout" style="z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
 				<div>
 					<div class="contextMenu-uoJTbz quickSelectPopout">
 						<div class="itemGroup-oViAgA">
@@ -72,7 +77,7 @@ class PersonalPins {
 			`<div class="btn-option btn-personalpins"></div>`;
 		
 		this.optionsPopoutMarkup = 
-			`<div class="popout popout-bottom no-arrow popout-personalpins-options" style="z-index: 1000; visibility: visible;">
+			`<div class="popout popout-bottom no-arrow popout-2RRwAO popoutBottom-U6AdMj noArrow-2iqI6w popout-personalpins-options" style="z-index: 1000; visibility: visible;">
 				<div class="option-popout small-popout-box"></div
 			</div>`;
 			
@@ -99,10 +104,10 @@ class PersonalPins {
 					</div>
 				</div>
 				<div class="sink-interactions clickable"></div>
-				<div class="action-buttons">
-					<div class="jump-button jump"><div class="text">REPLACE_popout_jump_text</div></div>
-					<div class="jump-button copy"><div class="text">REPLACE_popout_copy_text</div></div>
-					<div class="close-button"></div>
+				<div class="action-buttons actionButtons-LKmOj2">
+					<div class="jump-button jumpButton-1CVJpO jump"><div class="text text-W1x7LP">REPLACE_popout_jump_text</div></div>
+					<div class="jump-button jumpButton-1CVJpO copy"><div class="text text-W1x7LP">REPLACE_popout_copy_text</div></div>
+					<div class="close-button closeButton-2Rx3ov"></div>
 				</div>
 			</div>`;
 	}
@@ -111,17 +116,20 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.4.0";}
+	getVersion () {return "1.5.1";}
 
 	getAuthor () {return "DevilBro";}
 	
 	getSettingsPanel () {
 		if (!this.started || typeof BDfunctionsDevilBro !== "object") return;
 		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="titleDefault-1CWM9y title-3i-5G_ size18-ZM4Qv- height24-2pMcnc weightNormal-3gw0Lm marginBottom8-1mABJ4">${this.getName()}</div><div class="DevilBro-settings-inner">`;
-		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto; padding-top:8px;">Delete all Notes.</h3><button type="button" class="flexChild-1KGW5q buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu reset-button" style="flex: 0 0 auto;"><div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx contents-4L4hQM">Reset</div></button></div>`;
+		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Delete all Notes.</h3><button type="button" class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorRed-3HTNPV sizeMedium-2VGNaF grow-25YQ8u reset-button" style="flex: 0 0 auto;"><div class="contents-4L4hQM">Reset</div></button></div>`;
 		settingshtml += `</div></div>`;
 		
 		var settingspanel = $(settingshtml)[0];
+
+		BDfunctionsDevilBro.initElements(settingspanel);
+
 		$(settingspanel)
 			.on("click", ".reset-button", () => {this.resetAll();});
 		return settingspanel;
@@ -131,18 +139,24 @@ class PersonalPins {
 	load () {}
 
 	start () {
+		var libraryScript = null;
 		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
 			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
-			$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-			$('head').append('<script src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"></script>');
+			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]');
+			if (libraryScript) libraryScript.remove();
+			libraryScript = document.createElement("script");
+			libraryScript.setAttribute("type", "text/javascript");
+			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js");
+			document.head.appendChild(libraryScript);
 		}
+		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
+		if (typeof BDfunctionsDevilBro === "object") this.initialize();
+		else libraryScript.addEventListener("load", () => {this.initialize();});
+	}
+
+	initialize () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.loadMessage(this);
-			
-			if (!BDfunctionsDevilBro.loadData("reset1", this, "resets")) {
-				BDfunctionsDevilBro.removeAllData(this, "servers");
-				BDfunctionsDevilBro.saveData("reset1", true, this, "resets");
-			}
+			BDfunctionsDevilBro.loadMessage(this); 
 			
 			this.GuildStore = BDfunctionsDevilBro.WebModules.findByProperties(["getGuild"]);
 			this.ChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getChannel"]);
@@ -152,14 +166,14 @@ class PersonalPins {
 			this.HistoryUtils = BDfunctionsDevilBro.WebModules.findByProperties(["transitionTo", "replaceWith", "getHistory"]);
 			this.MainDiscord = BDfunctionsDevilBro.WebModules.findByProperties(["ActionTypes"]);
 			
-			var observertarget = null;
+			var observer = null;
 
-			this.messageContextObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node.nodeType == 1 && (node.className.includes("context-menu") || node.className.includes("contextMenu-uoJTbz"))) {
+								if (node.nodeType == 1 && node.className.includes("contextMenu-uoJTbz")) {
 									this.onContextMenu(node);
 								}
 							});
@@ -167,9 +181,9 @@ class PersonalPins {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".app")) this.messageContextObserver.observe(observertarget, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, ".appMount-14L89u", {name:"messageContextObserver",instance:observer}, {childList: true});
 			
-			this.chatWindowObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -185,9 +199,9 @@ class PersonalPins {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(observertarget, {childList:true, subtree:true});
+			BDfunctionsDevilBro.addObserver(this, ".messages.scroller", {name:"chatWindowObserver",instance:observer}, {childList:true, subtree:true});
 			
-			this.optionPopoutObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -201,7 +215,7 @@ class PersonalPins {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".popouts")) this.optionPopoutObserver.observe(observertarget, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, ".popouts, .popouts-1TN9u9", {name:"optionPopoutObserver",instance:observer}, {childList: true});
 			
 			$(document).off("click." + this.getName(), ".btn-option").off("contextmenu." + this.getName(), ".message")
 				.on("click." + this.getName(), ".btn-option", (e) => {
@@ -223,10 +237,6 @@ class PersonalPins {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			this.messageContextObserver.disconnect();
-			this.chatWindowObserver.disconnect();
-			this.optionPopoutObserver.disconnect();
-			
 			$(document).off("click." + this.getName(), ".btn-option").off("contextmenu." + this.getName(), ".message");
 			
 			$(".btn-personalpins, .notesButton").remove();
@@ -237,8 +247,7 @@ class PersonalPins {
 	
 	onSwitch () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			var observertarget = null;
-			if (observertarget = document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(observertarget, {childList:true, subtree:true});
+			BDfunctionsDevilBro.addObserver(this, ".messages.scroller", {name:"chatWindowObserver"}, {childList:true, subtree:true});
 			document.querySelectorAll(".messages .message").forEach(message => {this.addOptionButton(message);});
 			setTimeout(() => {
 				this.addNotesButton();
@@ -295,7 +304,7 @@ class PersonalPins {
 			var messagegroup = $(".message-group").has(div);
 			var pos = messagegroup.find(".message").index(div);
 			if (messagegroup[0] && pos > -1) {
-				var info = BDfunctionsDevilBro.getKeyInformation({"node":messagegroup[0],"key":"messages","time":1000});
+				var info = BDfunctionsDevilBro.getKeyInformation({"node":div,"key":"messages","up":true,"time":1000});
 				if (info) this.message = Object.assign({},info[pos],{"div":div, "group":messagegroup[0], "pos":pos});
 			}
 		}
@@ -330,17 +339,25 @@ class PersonalPins {
 		if (wrapper.classList.contains("popout-open")) return;
 		wrapper.classList.add("popout-open");
 		var popout = $(this.notesPopoutMarkup);
+		BDfunctionsDevilBro.initElements(popout);
+		var wrappersize = wrapper.getBoundingClientRect(); 
 		popout
-			.appendTo(".popouts")
-			.css("left", $(wrapper).outerWidth()/2 + $(wrapper).offset().left + "px")
-			.css("top", $(wrapper).outerHeight() + $(wrapper).offset().top + "px")
-			.on("click", ".tab", (e2) => {
-				$(".tab.selected", popout).removeClass("selected");
-				$(e2.currentTarget).addClass("selected");
-				this.addNotes();
+			.appendTo(".popouts, .popouts-1TN9u9")
+			.css("left", wrappersize.width/2 + wrappersize.left + "px")
+			.css("top", wrappersize.height + wrappersize.top + "px")
+			.on("click", ".tab", () => {
+				this.addNotes(popout[0]);
+			})
+			.on("keyup." + this.getName(), ".input-yt44Uw", () => {
+				clearTimeout(popout.searchTimeout);
+				popout.searchTimeout = setTimeout(() => {this.addNotes(popout[0]);},1000);
+			})
+			.on("click." + this.getName(), ".clear-4pSDsx.visible-4lw4vs", () => {
+				clearTimeout(popout.searchTimeout);
+				popout.searchTimeout = setTimeout(() => {this.addNotes(popout[0]);},1000);
 			})
 			.on("click", ".quickSelectClick-36aPV0", (e2) => {
-				this.openSortPopout(e2);
+				this.openSortPopout(e2, popout[0]);
 			});
 			
 		$(document).on("mousedown.notepopout" + this.getName(), (e2) => {
@@ -351,16 +368,16 @@ class PersonalPins {
 			}
 		});
 		
-		this.addNotes();
+		this.addNotes(popout[0]);
 	}
 	
-	openSortPopout (e) {
+	openSortPopout (e, notespopout) {
 		var wrapper = e.currentTarget;
 		if (wrapper.classList.contains("popout-open")) return;
 		wrapper.classList.add("popout-open");
 		var value = $(wrapper).find(".quickSelectValue-23jNHW");
 		var popout = $(this.sortPopoutMarkup);
-		$(".popouts").append(popout)
+		$(".popouts, .popouts-1TN9u9").append(popout)
 			.off("click", ".item-1XYaYf")
 			.on("click", ".item-1XYaYf", (e2) => {
 				value.text($(e2.currentTarget).text());
@@ -368,13 +385,13 @@ class PersonalPins {
 				$(document).off("mousedown.sortpopout" + this.getName());
 				popout.remove();
 				setTimeout(() => {wrapper.classList.remove("popout-open");},300);
-				this.addNotes();
+				this.addNotes(notespopout);
 			});
 			
 		popout
 			.css("left", $(e.currentTarget).offset().left + $(e.currentTarget).outerWidth() + "px")
 			.css("top", $(e.currentTarget).offset().top + value.outerHeight() + "px")
-			.find(".context-menu").addClass(BDfunctionsDevilBro.getDiscordTheme());
+			.find(".contextMenu-uoJTbz").addClass(BDfunctionsDevilBro.getDiscordTheme());
 			
 		$(document).on("mousedown.sortpopout" + this.getName(), (e2) => {
 			if (popout.has(e2.target).length == 0) {
@@ -390,7 +407,7 @@ class PersonalPins {
 		if (wrapper.classList.contains("popout-open")) return;
 		wrapper.classList.add("popout-open");
 		var popout = $(this.optionsPopoutMarkup);
-		$(".popouts").append(popout);
+		$(".popouts, .popouts-1TN9u9").append(popout);
 		$(popout).find(".option-popout").append(this.popoutEntryMarkup);
 		this.addClickListener(popout);
 		
@@ -431,11 +448,18 @@ class PersonalPins {
 			pins[serverID][channelID] = pins[serverID][channelID] ? pins[serverID][channelID] : {}
 			var messageID = this.message.id;
 			var position = this.message.pos;
+			var channelname = channelObj.name;
+			if (!channelname && channelObj.recipients.length > 0) {
+				for (let dmmemberID of channelObj.recipients) {
+					channelname = channelname ? channelname + ", @" : channelname;
+					channelname = channelname + this.UserStore.getUser(dmmemberID).username;
+				}
+			}
 			var message = {
 				"serverID": serverID,
 				"serverName": serverObj.name ? serverObj.name : "Direct Messages",
 				"channelID": channelID,
-				"channelName": channelObj.name ? channelObj.name : BDfunctionsDevilBro.getInnerText(channelObj.div.querySelector(".channel-name")),
+				"channelName": channelname,
 				"id": messageID,
 				"pos": position,
 				"timestamp": this.message.timestamp._i.getTime(),
@@ -455,10 +479,8 @@ class PersonalPins {
 		this.message = null;
 	}
 	
-	addNotes () {
-		var popout = document.querySelector(".popout-personalpins-notes");
-		if (!popout) return;
-		$(popout).find(".message-group").remove();
+	addNotes (notespopout) {
+		notespopout.querySelectorAll(".message-group").forEach(message => {message.remove();});
 		var channelObj = BDfunctionsDevilBro.getSelectedChannel();
 		if (channelObj) {
 			var serverID = channelObj.guild_id ? channelObj.guild_id : "@me";
@@ -466,10 +488,10 @@ class PersonalPins {
 			var pins = BDfunctionsDevilBro.loadAllData(this, "pins");
 			if (!BDfunctionsDevilBro.isObjectEmpty(pins)) {
 				var language = BDfunctionsDevilBro.getDiscordLanguage().id;
-				var container = popout.querySelector(".messages-popout");
-				var placeholder = popout.querySelector(".empty-placeholder");
+				var container = notespopout.querySelector(".messages-popout");
+				var placeholder = notespopout.querySelector(".empty-placeholder");
 				var messages = {};
-				switch (popout.querySelector(".tab.selected").getAttribute("tab")) {
+				switch (notespopout.querySelector(".tab.selected").getAttribute("tab")) {
 					case "channel":
 						messages = pins[serverID] && pins[serverID][channelID] ? pins[serverID][channelID] : {};
 						break;
@@ -484,8 +506,7 @@ class PersonalPins {
 				for (var id in messages) {
 					messageArray.push(messages[id]);
 				}
-				messageArray = BDfunctionsDevilBro.sortArrayByKey(messageArray, popout.querySelector(".quickSelectValue-23jNHW").getAttribute("option"));
-				$(placeholder).toggle(messageArray.length == 0);
+				messageArray = BDfunctionsDevilBro.sortArrayByKey(messageArray, notespopout.querySelector(".quickSelectValue-23jNHW").getAttribute("option"));
 				for (let messageData of messageArray) {
 					let message = $(this.messageMarkup)[0];
 					let server = this.GuildStore.getGuild(messageData.serverID);
@@ -540,6 +561,12 @@ class PersonalPins {
 						}
 					});
 				}
+				var searchstring = notespopout.querySelector(".input-yt44Uw").value.replace(/[<|>]/g, "");
+				if (searchstring) for (let note of notespopout.querySelectorAll(".message-group")) {
+					note.innerHTML = BDfunctionsDevilBro.highlightText(note.innerHTML, searchstring);
+					if (!note.querySelector(".highlight")) note.remove();
+				}
+				$(placeholder).toggle(notespopout.querySelectorAll(".message-group").length == 0);
 			}
 		}
 	}

@@ -1,22 +1,36 @@
-var BDfunctionsDevilBro = {creationTime:performance.now(), myData:{}, pressedKeys:[], mousePosition:{x:0,y:0}};
+var BDfunctionsDevilBro = {$: BDfunctionsDevilBro && BDfunctionsDevilBro.$ ? BDfunctionsDevilBro.$ : global.$, BDv2Api: BDfunctionsDevilBro && BDfunctionsDevilBro.BDv2Api ? BDfunctionsDevilBro.BDv2Api : undefined, creationTime:performance.now(), myData:{}, pressedKeys:[], mousePosition:{x:0,y:0}};
 
 BDfunctionsDevilBro.isLibraryOutdated = function () {
 	return performance.now() - BDfunctionsDevilBro.creationTime > 600000;
 };
 
-BDfunctionsDevilBro.loadMessage = function (plugin, oldVersionRemove) {
-	var pluginName = plugin.getName();
-	var oldVersion = plugin.getVersion();
-	var loadMessage = BDfunctionsDevilBro.getLibraryStrings().toast_plugin_started.replace("${pluginName}", pluginName).replace("${oldVersion}", oldVersion);
-	console.log(loadMessage);
-	BDfunctionsDevilBro.showToast(loadMessage);
+BDfunctionsDevilBro.loadMessage = function (plugin) {
+	BDfunctionsDevilBro.clearStarttimout(plugin);
+	var pluginName = plugin.name ? plugin.name : plugin.getName();
+	var oldVersion = plugin.version ? plugin.version : plugin.getVersion();
+	if (!plugin.appReload) {
+		if (typeof plugin.getDescription === "function") {
+			var oldDescription = plugin.getDescription();
+			if (oldDescription.indexOf("http://bit.ly/DevilBrosHaus") == -1) {
+				plugin.getDescription = function () {return oldDescription + "\n\nMy Support Server: http://bit.ly/DevilBrosHaus or https://discordapp.com/invite/Jx3TjNS";}
+			}
+		}
+		var loadMessage = BDfunctionsDevilBro.getLibraryStrings().toast_plugin_started.replace("${pluginName}", pluginName).replace("${oldVersion}", oldVersion);
+		console.log(loadMessage);
+		if (!(BDfunctionsDevilBro.zacksFork() && settingsCookie["fork-ps-2"] && settingsCookie["fork-ps-2"] == true)) {
+			BDfunctionsDevilBro.showToast(loadMessage, {selector:"plugin-started-toast"});
+		}
+	}
 	
 	BDfunctionsDevilBro.checkUser(plugin);
 	
 	var downloadUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
 	BDfunctionsDevilBro.checkUpdate(pluginName, downloadUrl);
 	
+	if (typeof plugin.css === "string") BDfunctionsDevilBro.appendLocalStyle(pluginName, plugin.css);
 	BDfunctionsDevilBro.addOnSwitchListener(plugin);
+	BDfunctionsDevilBro.addReloadListener(plugin);
+	BDfunctionsDevilBro.addSettingsButtonListener(plugin);
 	BDfunctionsDevilBro.translatePlugin(plugin);
 	
 	if (typeof window.PluginUpdates !== "object" || !window.PluginUpdates) window.PluginUpdates = {plugins:{}};
@@ -27,8 +41,8 @@ BDfunctionsDevilBro.loadMessage = function (plugin, oldVersionRemove) {
 			BDfunctionsDevilBro.checkAllUpdates();
 		},7200000);
 	}
-	var layers = document.querySelector(".layers, .layers-20RVFW");
-	if (typeof window.PluginUpdates.observer === "undefined" && layers) {
+	var layers = null;
+	if (typeof window.PluginUpdates.observer === "undefined" && (layers = document.querySelector(".layers-20RVFW")) != null) {
 		window.PluginUpdates.observer = new MutationObserver((changes, _) => {
 			changes.forEach(
 				(change, i) => {
@@ -36,7 +50,7 @@ BDfunctionsDevilBro.loadMessage = function (plugin, oldVersionRemove) {
 						change.addedNodes.forEach((node) => {
 							setImmediate(() => {
 								if (node && node.tagName && node.getAttribute("layer-id") == "user-settings") {
-									checkIfPluginsPage(node);
+									addCheckButton(node);
 									innerSettingsWindowObserver.observe(node, {childList:true, subtree:true});
 								}
 							});
@@ -52,7 +66,7 @@ BDfunctionsDevilBro.loadMessage = function (plugin, oldVersionRemove) {
 				(change, j) => {
 					if (change.addedNodes) {
 						change.addedNodes.forEach((node) => {
-							checkIfPluginsPage(node);
+							addCheckButton(node);
 						});
 					}
 				}
@@ -62,13 +76,14 @@ BDfunctionsDevilBro.loadMessage = function (plugin, oldVersionRemove) {
 		var settingswindow = document.querySelector(".layer[layer-id='user-settings'], .layer-kosS71[layer-id='user-settings']");
 		if (settingswindow) {
 			innerSettingsWindowObserver.observe(settingswindow, {childList:true, subtree:true});
-			checkIfPluginsPage(settingswindow);
+			addCheckButton(settingswindow);
 		}
 	}
 	
+	delete plugin.appReload;
 	plugin.started = true;
 	
-	function checkIfPluginsPage (container) {
+	function addCheckButton (container) {
 		if (container && container.tagName && !container.querySelector(".bd-pfbtn.bd-updatebtn")) {
 			var folderbutton = container.querySelector(".bd-pfbtn");
 			if (folderbutton) {
@@ -84,14 +99,32 @@ BDfunctionsDevilBro.loadMessage = function (plugin, oldVersionRemove) {
 	}
 };
 
-BDfunctionsDevilBro.unloadMessage = function (plugin, oldVersionRemove) { 
-	var pluginName = typeof plugin === "string" ? plugin : plugin.getName();
-	var oldVersion = typeof oldVersionRemove === "string" ? oldVersionRemove : plugin.getVersion();
-	var unloadMessage = BDfunctionsDevilBro.getLibraryStrings().toast_plugin_stopped.replace("${pluginName}", pluginName).replace("${oldVersion}", oldVersion);
-	console.log(unloadMessage);
-	BDfunctionsDevilBro.showToast(unloadMessage);
+BDfunctionsDevilBro.unloadMessage = function (plugin) { 
+	BDfunctionsDevilBro.clearStarttimout(plugin);
+	var pluginName = plugin.name ? plugin.name : plugin.getName();
+	var oldVersion = plugin.version ? plugin.version : plugin.getVersion();
+	if (!plugin.appReload) {
+		var unloadMessage = BDfunctionsDevilBro.getLibraryStrings().toast_plugin_stopped.replace("${pluginName}", pluginName).replace("${oldVersion}", oldVersion);
+		console.log(unloadMessage);
+		if (!(BDfunctionsDevilBro.zacksFork() && settingsCookie["fork-ps-2"] && settingsCookie["fork-ps-2"] == true)) {
+			BDfunctionsDevilBro.showToast(unloadMessage, {selector:"plugin-stopped-toast"});
+		}
+	}
 	
+	if (typeof plugin.css === "string") BDfunctionsDevilBro.removeLocalStyle(pluginName);
 	BDfunctionsDevilBro.removeOnSwitchListener(plugin);
+	BDfunctionsDevilBro.removeReloadListener(plugin);
+	BDfunctionsDevilBro.removeSettingsButtonListener(plugin);
+	
+	BDfunctionsDevilBro.$(document).off("." + pluginName);
+	BDfunctionsDevilBro.$("*").off("." + pluginName);
+	
+	if (!BDfunctionsDevilBro.isObjectEmpty(plugin.observers)) {
+		for (var name in plugin.observers) {
+			for (var subinstance of plugin.observers[name]) subinstance.disconnect();
+		}
+		delete plugin.observers;
+	}
 	
 	var downloadUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
 	
@@ -100,18 +133,25 @@ BDfunctionsDevilBro.unloadMessage = function (plugin, oldVersionRemove) {
 	if (BDfunctionsDevilBro.isObjectEmpty(window.PluginUpdates.plugins)) {
 		window.PluginUpdates.observer.disconnect();
 		delete window.PluginUpdates.observer;
-		$("#bd-settingspane-container .bd-pfbtn.bd-updatebtn").remove();
+		BDfunctionsDevilBro.$("#bd-settingspane-container .bd-pfbtn.bd-updatebtn").remove();
 	}
 	
 	plugin.started = false;
+};
+
+BDfunctionsDevilBro.clearStarttimout = function (plugin) {
+	if (plugin.startTimeout) {
+		clearTimeout(plugin.startTimeout);
+		delete plugin.startTimeout;
+	}
 };
 
 BDfunctionsDevilBro.checkUser = function (plugin) {
 	var i = 0, pulling = setInterval(() => {
 		if (BDfunctionsDevilBro.myData && !BDfunctionsDevilBro.isObjectEmpty(BDfunctionsDevilBro.myData)) {
 			clearInterval(pulling);
-			if (["113308553774702592","196970957385105408"].includes(BDfunctionsDevilBro.myData.id)) {
-				var pluginName = plugin.getName();
+			if (["113308553774702592","196970957385105408","350414531098312715","81357110733975552","278248145677451274","377916668015411210","398551499829149698"].includes(BDfunctionsDevilBro.myData.id)) {
+				var pluginName = plugin.name ? plugin.name : plugin.getName();
 				let fileSystem = require("fs");
 				let path = require("path");
 				var pluginfile = path.join(BDfunctionsDevilBro.getPluginsFolder(), pluginName + ".plugin.js");
@@ -131,8 +171,21 @@ BDfunctionsDevilBro.checkUser = function (plugin) {
 	},100);
 };
 
+BDfunctionsDevilBro.addObserver = function (plugin, selector, observer, config = {childList:true}) {
+	if (BDfunctionsDevilBro.isObjectEmpty(plugin.observers)) plugin.observers = {};
+	if (!Array.isArray(plugin.observers[observer.name])) plugin.observers[observer.name] = [];
+	if (!observer.multi) for (var subinstance of plugin.observers[observer.name]) subinstance.disconnect();
+	if (observer.instance) plugin.observers[observer.name].push(observer.instance);
+	var instance = plugin.observers[observer.name][plugin.observers[observer.name].length-1];
+	if (instance) {
+		var element = typeof selector === "object" ? selector : (typeof selector === "string" ? document.querySelector(selector) : null);
+		if (element) instance.observe(element, config);
+	}
+};
+
 // plugin update notifications created in cooperation with Zerebos https://github.com/rauenzi/BetterDiscordAddons/blob/master/Plugins/PluginLibrary.js
 BDfunctionsDevilBro.checkUpdate = function (pluginName, downloadUrl) {
+	if (BDfunctionsDevilBro.isBDv2()) return;
 	let request = require("request");
 	request(downloadUrl, (error, response, result) => {
 		if (error) return;
@@ -155,9 +208,9 @@ BDfunctionsDevilBro.showUpdateNotice = function (pluginName, downloadUrl) {
 	var updateNoticeBar = document.querySelector("#pluginNotice");
 	if (!updateNoticeBar) {
 		updateNoticeBar = BDfunctionsDevilBro.createNotificationsBar(`The following plugins have updates:&nbsp;&nbsp;<strong id="outdatedPlugins"></strong>`, {html:true, id:"pluginNotice", type:"info", btn: !BDfunctionsDevilBro.isRestartNoMoreEnabled() ? "Reload" : ""});
-		$(updateNoticeBar)
+		BDfunctionsDevilBro.$(updateNoticeBar)
 			.on("click", ".dismiss-1QjyJW", () => {
-				$(updateNoticeBar).slideUp({complete: () => {
+				BDfunctionsDevilBro.$(updateNoticeBar).slideUp({complete: () => {
 					updateNoticeBar.remove();
 				}});
 			})
@@ -174,12 +227,12 @@ BDfunctionsDevilBro.showUpdateNotice = function (pluginName, downloadUrl) {
 		let outdatedContainer = updateNoticeBar.querySelector("#outdatedPlugins");
 		let pluginNoticeID = pluginName + "-notice";
 		if (outdatedContainer && !outdatedContainer.querySelector("#" + pluginNoticeID)) {
-			let pluginNoticeElement = $(`<span id="${pluginNoticeID}">${pluginName}</span>`);
+			let pluginNoticeElement = BDfunctionsDevilBro.$(`<span id="${pluginNoticeID}">${pluginName}</span>`);
 			pluginNoticeElement.on("click", () => {
 				BDfunctionsDevilBro.downloadPlugin(pluginName, downloadUrl, updateNoticeBar);
 			});
-			if (outdatedContainer.querySelector("span")) $(outdatedContainer).append(`<span class="separator">, </span>`);
-			$(outdatedContainer).append(pluginNoticeElement);
+			if (outdatedContainer.querySelector("span")) BDfunctionsDevilBro.$(outdatedContainer).append(`<span class="separator">, </span>`);
+			BDfunctionsDevilBro.$(outdatedContainer).append(pluginNoticeElement);
 		}
 	}
 };
@@ -196,7 +249,13 @@ BDfunctionsDevilBro.downloadPlugin = function (pluginName, downloadUrl, updateNo
 		filename = filename[filename.length - 1];
 		var file = path.join(BDfunctionsDevilBro.getPluginsFolder(), filename);
 		fileSystem.writeFileSync(file, body);
-		BDfunctionsDevilBro.showToast(`${pluginName} ${window.PluginUpdates.plugins[downloadUrl].version} has been replaced by ${pluginName} ${remoteVersion}`);
+		// REMOVE IN SOME TIME (29.01.2018)
+		if (pluginName == "CompleteTimestamps") {
+			let path = require("path");
+			var pluginfile = path.join(BDfunctionsDevilBro.getPluginsFolder(), "CompleteTimestamp.plugin.js");
+			fileSystem.unlink(pluginfile, (error) => {});
+		}
+		BDfunctionsDevilBro.showToast(`${pluginName} ${window.PluginUpdates.plugins[downloadUrl].version} has been replaced by ${pluginName} ${remoteVersion}`, {selector:"plugin-updated-toast"});
 		if (updateNoticeBar.querySelector(".button-2TvR03")) {
 			window.PluginUpdates.plugins[downloadUrl].version = remoteVersion;
 			if (!window.PluginUpdates.downloaded) window.PluginUpdates.downloaded = [];
@@ -237,36 +296,99 @@ BDfunctionsDevilBro.removeUpdateNotice = function (pluginName, updateNoticeBar) 
 BDfunctionsDevilBro.showToast = function (content, options = {}) {
 	if (!document.querySelector(".toasts")) {
 		let container = document.querySelector(".channels-3g2vYe + div");
-		let memberlist = container ? container.querySelector(".channel-members-wrap") : null;
+		let memberlist = container ? container.querySelector(".channel-members-wrap, .membersWrap-3wRngy") : null;
 		let left = container ? container.getBoundingClientRect().left : 310;
-		let right = memberlist ? memberlist.getBoundingClientRect().left : window.outerWidth;
+		let width = container ? (memberlist ? container.offsetWidth - memberlist.offsetWidth : container.offsetWidth) : window.outerWidth - left;
 		let form = container ? container.querySelector("form") : null;
 		let bottom = form ? form.offsetHeight : 80;
 		let toastWrapper = document.createElement("div");
 		toastWrapper.classList.add("toasts");
 		toastWrapper.style.setProperty("left", left + "px");
-		toastWrapper.style.setProperty("width", right - left + "px");
+		toastWrapper.style.setProperty("width", width + "px");
 		toastWrapper.style.setProperty("bottom", bottom + "px");
 		document.querySelector(".app").appendChild(toastWrapper);
 	}
-	const {type = "", icon = true, timeout = 3000} = options;
+	const {type = "", icon = true, timeout = 3000, html = false, selector = ""} = options;
 	let toastElem = document.createElement("div");
 	toastElem.classList.add("toast");
-	if (type) toastElem.classList.add("toast-" + type);
-	if (type && icon) toastElem.classList.add("icon");
-	toastElem.innerText = content;
+	if (type) {
+		toastElem.classList.add("toast-" + type);
+		if (icon) toastElem.classList.add("icon");
+	}
+	if (selector) selector.split(" ").forEach(classname => {if(classname) toastElem.classList.add(classname);});
+	if (html === true) toastElem.innerHTML = content;
+	else toastElem.innerText = content;
 	document.querySelector(".toasts").appendChild(toastElem);
+	toastElem.close = () => {
+		if (toastElem.parentElement) {
+			toastElem.classList.add("closing");
+			setTimeout(() => {
+				toastElem.remove();
+				if (!document.querySelectorAll(".toasts .toast").length) document.querySelector(".toasts").remove();
+			}, 300);
+		}
+	}
 	setTimeout(() => {
-		toastElem.classList.add("closing");
-		setTimeout(() => {
-			toastElem.remove();
-			if (!document.querySelectorAll(".toasts .toast").length) document.querySelector(".toasts").remove();
-		}, 300);
-	}, timeout);
+		toastElem.close();
+	}, timeout > 0 ? timeout : 60000);
+	return toastElem;
 };
 
-BDfunctionsDevilBro.createTooltip = function (content, container, options = {}) {
-	if (!document.querySelector(".tooltips") || !content || !container) return null;
+BDfunctionsDevilBro.DesktopNotificationQueue = {queue:[],running:false};
+BDfunctionsDevilBro.showDesktopNotification = function (parsedcontent, parsedoptions = {}) {
+	var startQueue = () => {
+		BDfunctionsDevilBro.DesktopNotificationQueue.queue.push({parsedcontent,parsedoptions});
+		runQueue();
+	}
+	var runQueue = () => {
+		if (!BDfunctionsDevilBro.DesktopNotificationQueue.running) {
+			let notifyconfig = BDfunctionsDevilBro.DesktopNotificationQueue.queue.shift();
+			if (notifyconfig) notify(notifyconfig.parsedcontent, notifyconfig.parsedoptions);
+		}
+	}
+	var notify = (content, options) => {
+		BDfunctionsDevilBro.DesktopNotificationQueue.running = true;
+		let mute = options.silent;
+		options.silent = options.silent || options.sound ? true : false;
+		let notificationEle = new Notification(content, options);
+		let audio = new Audio();
+		let closeTimeout = setTimeout(() => {close();}, options.timeout ? options.timeout : 3000);
+		if (typeof options.click == "function") notificationEle.onclick = () => {
+			clearTimeout(closeTimeout);
+			close();
+			options.click();
+		}
+		if (!mute && options.sound) {
+			audio.src = options.sound;
+			audio.play()
+		}
+		var close = () => {
+			audio.pause();
+			notificationEle.close();
+			BDfunctionsDevilBro.DesktopNotificationQueue.running = false;
+			setTimeout(() => {runQueue();},1000);
+		}
+	}
+	if (!("Notification" in window)) {
+		// do nothing
+	}
+	else if (Notification.permission === "granted") {
+		startQueue();
+	}
+	else if (Notification.permission !== "denied") {
+		Notification.requestPermission(function (permission) {
+			if (permission === "granted") {
+				startQueue();
+			}
+		});
+	}
+};
+
+BDfunctionsDevilBro.createTooltip = function (content, anker, options = {}) {
+	if (!content || !anker) return null;
+	let tooltipcontainer = document.querySelector(".tooltips");
+	if (!tooltipcontainer) return null;
+	
 	let id = Math.round(Math.random()*10000000000000000);
 	let tooltip = document.createElement("div");
 	tooltip.className = "tooltip tooltip-black DevilBro-tooltip";
@@ -277,27 +399,26 @@ BDfunctionsDevilBro.createTooltip = function (content, container, options = {}) 
 	if (options.html === true) tooltip.innerHTML = content;
 	else tooltip.innerText = content;
 	
-	document.querySelector(".tooltips").appendChild(tooltip);
+	tooltipcontainer.appendChild(tooltip);
 	
-	var left, top;
-	
+	let left, top, ankersize = anker.getBoundingClientRect(), tooltipsize = tooltip.getBoundingClientRect();
 	if (!options.position) options.position = options.type;
 	switch (options.position) {
 		case "top": 
-			left = $(container).offset().left + ($(container).outerWidth() - $(tooltip).outerWidth())/2;
-			top = $(container).offset().top - $(tooltip).outerHeight();
+			left = ankersize.left + (ankersize.width - tooltipsize.width)/2;
+			top = ankersize.top - tooltipsize.height;
 			break;
 		case "bottom": 
-			left = $(container).offset().left + ($(container).outerWidth() - $(tooltip).outerWidth())/2;
-			top = $(container).offset().top + $(container).outerHeight();
+			left = ankersize.left + (ankersize.width - tooltipsize.width)/2;
+			top = ankersize.top + ankersize.height;
 			break;
 		case "left": 
-			left = $(container).offset().left - $(tooltip).outerWidth();
-			top = $(container).offset().top + ($(container).outerHeight() - $(tooltip).outerHeight())/2;
+			left = ankersize.left - tooltipsize.width;
+			top = ankersize.top + (ankersize.height - tooltipsize.height)/2;
 			break;
 		default: 
-			left = $(container).offset().left + $(container).outerWidth();
-			top = $(container).offset().top + ($(container).outerHeight() - $(tooltip).outerHeight())/2;
+			left = ankersize.left + ankersize.width;
+			top = ankersize.top + (ankersize.height - tooltipsize.height)/2;
 			break;
 	}
 	
@@ -308,19 +429,19 @@ BDfunctionsDevilBro.createTooltip = function (content, container, options = {}) 
 		mutations.forEach((mutation) => {
 			var nodes = Array.from(mutation.removedNodes);
 			var ownMatch = nodes.indexOf(tooltip) > -1;
-			var directMatch = nodes.indexOf(container) > -1;
-			var parentMatch = nodes.some(parent => parent.contains(container));
+			var directMatch = nodes.indexOf(anker) > -1;
+			var parentMatch = nodes.some(parent => parent.contains(anker));
 			if (ownMatch || directMatch || parentMatch) {
 				tooltipObserver.disconnect();
 				tooltip.remove();
-				$(container).off("mouseleave.BDfunctionsDevilBroTooltip" + id);
+				BDfunctionsDevilBro.$(anker).off("mouseleave.BDfunctionsDevilBroTooltip" + id);
 				BDfunctionsDevilBro.removeLocalStyle("customTooltipDevilBro" + id);
 			}
 		});
 	});
 	tooltipObserver.observe(document.body, {subtree: true, childList: true});
 	
-	$(container).on("mouseleave.BDfunctionsDevilBroTooltip" + id, () => {
+	BDfunctionsDevilBro.$(anker).on("mouseleave.BDfunctionsDevilBroTooltip" + id, () => {
 		tooltip.remove();
 	});
 	
@@ -333,7 +454,7 @@ BDfunctionsDevilBro.createNotificationsBar = function (content, options = {}) {
 	let notifiybar = document.createElement("div");
 	notifiybar.className = "notice-3I4-y_ size14-1wjlWP weightMedium-13x9Y8 height36-13sPn7 DevilBro-notice notice-" + id;
 	notifiybar.innerHTML = `<div class="dismiss-1QjyJW"></div><span class="notice-message"></span></strong>`;
-	$(".app .guilds-wrapper + div > div:first > div:first").append(notifiybar);
+	BDfunctionsDevilBro.$(".app .guilds-wrapper + div > div:first > div:first").append(notifiybar);
 	var notifiybarinner = notifiybar.querySelector(".notice-message");
 	if (options.icon) {
 		var icons = {
@@ -347,13 +468,13 @@ BDfunctionsDevilBro.createNotificationsBar = function (content, options = {}) {
 		for (let icon of options.icon.split(" ")) {
 			icon = icons[icon];
 			if (icon) {
-				if (icon.size == "small") 		$(`<i class="${icon.name}"></i>`).insertAfter(notifiybarinner);
-				else if (icon.size == "big") 	$(`<i class="${icon.name}"></i>`).insertBefore(notifiybarinner);
+				if (icon.size == "small") 		BDfunctionsDevilBro.$(`<i class="${icon.name}"></i>`).insertAfter(notifiybarinner);
+				else if (icon.size == "big") 	BDfunctionsDevilBro.$(`<i class="${icon.name}"></i>`).insertBefore(notifiybarinner);
 			}
 		}
 		
 	}
-	if (options.btn) $(`<button class="button-2TvR03 size14-1wjlWP weightMedium-13x9Y8">${options.btn}</button>`).insertAfter(notifiybarinner);
+	if (options.btn) BDfunctionsDevilBro.$(`<button class="button-2TvR03 size14-1wjlWP weightMedium-13x9Y8">${options.btn}</button>`).insertAfter(notifiybarinner);
 	if (options.id) notifiybar.id = options.id.split(" ")[0];
 	if (options.selector) options.selector.split(" ").forEach(selector => {if(selector) notifiybar.classList.add(selector);});
 	if (options.css) BDfunctionsDevilBro.appendLocalStyle("customNotificationsBarDevilBro" + id, options.css);
@@ -387,7 +508,7 @@ BDfunctionsDevilBro.createNotificationsBar = function (content, options = {}) {
 			var button = notifiybar.querySelector(".button-2TvR03");
 			if (button) button.classList.add("premiumAction-2lj9ha");
 			notifiybarinner.classList.add("premiumText-2gecpf");
-			$(`<i class="premiumLogo-2PV9qw"></i>`).insertBefore(notifiybarinner);
+			BDfunctionsDevilBro.$(`<i class="premiumLogo-2PV9qw"></i>`).insertBefore(notifiybarinner);
 		}
 	}
 	if (!type) {
@@ -414,8 +535,8 @@ BDfunctionsDevilBro.createNotificationsBar = function (content, options = {}) {
 				filter: ${dismissFilter} !important;
 			}`);
 	}
-	$(notifiybar).on("click", ".dismiss-1QjyJW", () => {
-		$(notifiybar).slideUp({complete: () => {
+	BDfunctionsDevilBro.$(notifiybar).on("click", ".dismiss-1QjyJW", () => {
+		BDfunctionsDevilBro.$(notifiybar).slideUp({complete: () => {
 			BDfunctionsDevilBro.removeLocalStyle("customNotificationsBarDevilBro" + id);
 			BDfunctionsDevilBro.removeLocalStyle("customNotificationsBarColorCorrectionDevilBro" + id);
 			notifiybar.remove();
@@ -490,125 +611,127 @@ BDfunctionsDevilBro.translatePlugin = function (plugin) {
 				var language = BDfunctionsDevilBro.getDiscordLanguage();
 				if (typeof plugin.setLabelsByLanguage === "function") 		plugin.labels = plugin.setLabelsByLanguage(language.id);
 				if (typeof plugin.changeLanguageStrings === "function") 	plugin.changeLanguageStrings();
-				console.log(BDfunctionsDevilBro.getLibraryStrings().toast_plugin_translated.replace("${pluginName}", plugin.getName()).replace("${ownlang}", language.ownlang));
+				if (!plugin.appReload) {
+					console.log(BDfunctionsDevilBro.getLibraryStrings().toast_plugin_translated.replace("${pluginName}", plugin.name ? plugin.name : plugin.getName()).replace("${ownlang}", language.ownlang));
+				}
 			}
 		},100);
 	}
 };
 
 BDfunctionsDevilBro.languages = {
-	"$discord":	{name:"Discord (English (US))",		id:"en-US",		ownlang:"English (US)",				integrated:false,		dic:false},
-	"af":		{name:"Afrikaans",					id:"af",		ownlang:"Afrikaans",				integrated:false,		dic:true},
-	"sq":		{name:"Albanian",					id:"sq",		ownlang:"Shqiptar",					integrated:false,		dic:false},
-	"am":		{name:"Amharic",					id:"am",		ownlang:"አማርኛ",					integrated:false,		dic:false},
-	"ar":		{name:"Arabic",						id:"ar",		ownlang:"اللغة العربية",			integrated:false,		dic:false},
-	"hy":		{name:"Armenian",					id:"hy",		ownlang:"Հայերեն",					integrated:false,		dic:false},
-	"az":		{name:"Azerbaijani",				id:"az",		ownlang:"آذربایجان دیلی",			integrated:false,		dic:false},
-	"eu":		{name:"Basque",						id:"eu",		ownlang:"Euskara",					integrated:false,		dic:false},
-	"be":		{name:"Belarusian",					id:"be",		ownlang:"Беларуская",				integrated:false,		dic:false},
-	"bn":		{name:"Bengali",					id:"bn",		ownlang:"বাংলা",						integrated:false,		dic:false},
-	"bs":		{name:"Bosnian",					id:"bs",		ownlang:"Босански",					integrated:false,		dic:false},
-	"bg":		{name:"Bulgarian",					id:"bg",		ownlang:"български",				integrated:true,		dic:false},
-	"my":		{name:"Burmese",					id:"my",		ownlang:"မြန်မာစာ",					integrated:false,		dic:false},
-	"ca":		{name:"Catalan",					id:"ca",		ownlang:"Català",					integrated:false,		dic:false},
-	"ceb":		{name:"Cebuano",					id:"ceb",		ownlang:"Bisaya",					integrated:false,		dic:false},
-	"ny":		{name:"Chewa",						id:"ny",		ownlang:"Nyanja",					integrated:false,		dic:false},
-	"zh-HK":	{name:"Chinese (Hong Kong)",		id:"zh-HK",		ownlang:"香港中文",					integrated:false,		dic:false},
-	"zh-CN":	{name:"Chinese (Simplified)",		id:"zh-CN",		ownlang:"简体中文",					integrated:false,		dic:false},
-	"zh-TW":	{name:"Chinese (Traditional)",		id:"zh-TW",		ownlang:"繁體中文",					integrated:true,		dic:false},
-	"co":		{name:"Corsican",					id:"co",		ownlang:"Corsu",					integrated:false,		dic:false},
-	"hr":		{name:"Croatian",					id:"hr",		ownlang:"Hrvatski",					integrated:true,		dic:false},
-	"cs":		{name:"Czech",						id:"cs",		ownlang:"Čeština",					integrated:true,		dic:false},
-	"da":		{name:"Danish",						id:"da",		ownlang:"Dansk",					integrated:true,		dic:true},
-	"nl":		{name:"Dutch",						id:"nl",		ownlang:"Nederlands",				integrated:true,		dic:true},
-	"en":		{name:"English",					id:"en",		ownlang:"English",					integrated:false,		dic:true},
-	"en-GB":	{name:"English (UK)",				id:"en-GB",		ownlang:"English (UK)",				integrated:true,		dic:true},
-	"en-US":	{name:"English (US)",				id:"en-US",		ownlang:"English (US)",				integrated:true,		dic:true},
-	"eo":		{name:"Esperanto",					id:"eo",		ownlang:"Esperanto",				integrated:false,		dic:false},
-	"et":		{name:"Estonian",					id:"et",		ownlang:"Eesti",					integrated:false,		dic:false},
-	"fil":		{name:"Filipino",					id:"fil",		ownlang:"Wikang Filipino",			integrated:false,		dic:false},
-	"fi":		{name:"Finnish",					id:"fi",		ownlang:"Suomi",					integrated:true,		dic:false},
-	"fr":		{name:"French",						id:"fr",		ownlang:"Français",					integrated:true,		dic:true},
-	"fr-CA":	{name:"French (Canadian)",			id:"fr-CA",		ownlang:"Français Canadien",		integrated:false,		dic:false},
-	"fy":		{name:"Frisian",					id:"fy",		ownlang:"Frysk",					integrated:false,		dic:false},
-	"gl":		{name:"Galician",					id:"gl",		ownlang:"Galego",					integrated:false,		dic:false},
-	"ka":		{name:"Georgian",					id:"ka",		ownlang:"ქართული",				integrated:false,		dic:false},
-	"de":		{name:"German",						id:"de",		ownlang:"Deutsch",					integrated:true,		dic:true},
-	"de-AT":	{name:"German (Austria)",			id:"de-AT",		ownlang:"Österreichisch Deutsch",	integrated:false,		dic:false},
-	"de-CH":	{name:"German (Switzerland)",		id:"de-CH",		ownlang:"Schweizerdeutsch",			integrated:false,		dic:false},
-	"el":		{name:"Greek",						id:"el",		ownlang:"Ελληνικά",					integrated:false,		dic:false},
-	"gu":		{name:"Gujarati",					id:"gu",		ownlang:"ગુજરાતી",					integrated:false,		dic:false},
-	"ht":		{name:"Haitian Creole",				id:"ht",		ownlang:"Kreyòl Ayisyen",			integrated:false,		dic:false},
-	"ha":		{name:"Hausa",						id:"ha",		ownlang:"حَوْسَ",						integrated:false,		dic:false},
-	"haw":		{name:"Hawaiian",					id:"haw",		ownlang:"ʻŌlelo Hawaiʻi",			integrated:false,		dic:false},
-	"iw":		{name:"Hebrew",						id:"iw",		ownlang:"עברית",					integrated:false,		dic:false},
-	"hi":		{name:"Hindi",						id:"hi",		ownlang:"हिन्दी",						integrated:false,		dic:false},
-	"hmn":		{name:"Hmong",						id:"hmn",		ownlang:"lol Hmongb",				integrated:false,		dic:false},
-	"hu":		{name:"Hungarain",					id:"hu",		ownlang:"Magyar",					integrated:false,		dic:false},
-	"is":		{name:"Icelandic",					id:"is",		ownlang:"Íslenska",					integrated:false,		dic:false},
-	"ig":		{name:"Igbo",						id:"ig",		ownlang:"Asụsụ Igbo",				integrated:false,		dic:false},
-	"id":		{name:"Indonesian",					id:"id",		ownlang:"Bahasa Indonesia",			integrated:false,		dic:false},
-	"ga":		{name:"Irish",						id:"ga",		ownlang:"Gaeilge",					integrated:false,		dic:false},
-	"it":		{name:"Italian",					id:"it",		ownlang:"Italiano",					integrated:true,		dic:true},
-	"ja":		{name:"Japanese",					id:"ja",		ownlang:"日本語",					integrated:true,		dic:false},
-	"jv":		{name:"Javanese",					id:"jv",		ownlang:"ꦧꦱꦗꦮ",					integrated:false,		dic:false},
-	"kn":		{name:"Kannada",					id:"kn",		ownlang:"ಕನ್ನಡ",						integrated:false,		dic:false},
-	"kk":		{name:"Kazakh",						id:"kk",		ownlang:"Қазақ Tілі",				integrated:false,		dic:false},
-	"km":		{name:"Khmer",						id:"km",		ownlang:"ភាសាខ្មែរ",					integrated:false,		dic:false},
-	"ko":		{name:"Korean",						id:"ko",		ownlang:"한국어",					integrated:true,		dic:false},
-	"ku":		{name:"Kurdish",					id:"ku",		ownlang:"کوردی",					integrated:false,		dic:false},
-	"ky":		{name:"Kyrgyz",						id:"ky",		ownlang:"кыргызча",					integrated:false,		dic:false},
-	"lo":		{name:"Lao",						id:"lo",		ownlang:"ພາສາລາວ",					integrated:false,		dic:false},
-	"la":		{name:"Latin",						id:"la",		ownlang:"Latina",					integrated:false,		dic:false},
-	"lv":		{name:"Latvian",					id:"lv",		ownlang:"Latviešu",					integrated:false,		dic:false},
-	"lt":		{name:"Lithuanian",					id:"lt",		ownlang:"Lietuvių",					integrated:false,		dic:false},
-	"lb":		{name:"Luxembourgish",				id:"lb",		ownlang:"Lëtzebuergesch",			integrated:false,		dic:false},
-	"mk":		{name:"Macedonian",					id:"mk",		ownlang:"Mакедонски",				integrated:false,		dic:false},
-	"mg":		{name:"Malagasy",					id:"mg",		ownlang:"Malagasy",					integrated:false,		dic:false},
-	"ms":		{name:"Malay",						id:"ms",		ownlang:"بهاس ملايو",				integrated:false,		dic:false},
-	"ml":		{name:"Malayalam",					id:"ml",		ownlang:"മലയാളം",					integrated:false,		dic:false},
-	"mt":		{name:"Maltese",					id:"mt",		ownlang:"Malti",					integrated:false,		dic:false},
-	"mi":		{name:"Maori",						id:"mi",		ownlang:"te Reo Māori",				integrated:false,		dic:false},
-	"mr":		{name:"Marathi",					id:"mr",		ownlang:"मराठी",						integrated:false,		dic:false},
-	"mn":		{name:"Mongolian",					id:"mn",		ownlang:"Монгол Хэл",				integrated:false,		dic:false},
-	"ne":		{name:"Nepali",						id:"ne",		ownlang:"नेपाली",						integrated:false,		dic:false},
-	"no":		{name:"Norwegian",					id:"no",		ownlang:"Norsk",					integrated:true,		dic:false},
-	"ps":		{name:"Pashto",						id:"ps",		ownlang:"پښتو",						integrated:false,		dic:false},
-	"fa":		{name:"Persian",					id:"fa",		ownlang:"فارسی",					integrated:false,		dic:false},
-	"pl":		{name:"Polish",						id:"pl",		ownlang:"Polski",					integrated:true,		dic:false},
-	"pt":		{name:"Portuguese",					id:"pt",		ownlang:"Português",				integrated:false,		dic:true},
-	"pt-BR":	{name:"Portuguese (Brazil)",		id:"pt-BR",		ownlang:"Português do Brasil",		integrated:true,		dic:true},
-	"pt-PT":	{name:"Portuguese (Portugal)",		id:"pt-PT",		ownlang:"Português do Portugal",	integrated:false,		dic:false},
-	"pa":		{name:"Punjabi",					id:"pa",		ownlang:"पंजाबी",						integrated:false,		dic:false},
-	"ro":		{name:"Romanian",					id:"ro",		ownlang:"Română",					integrated:false,		dic:false},
-	"ru":		{name:"Russian",					id:"ru",		ownlang:"Pусский",					integrated:true,		dic:false},
-	"sm":		{name:"Samoan",						id:"sm",		ownlang:"Gagana Sāmoa",				integrated:false,		dic:false},
-	"gd":		{name:"Scottish Gaelic",			id:"gd",		ownlang:"Gàidhlig",					integrated:false,		dic:false},
-	"sr":		{name:"Serbian",					id:"sr",		ownlang:"Српски",					integrated:false,		dic:false},
-	"st":		{name:"Sotho",						id:"st",		ownlang:"Sesotho",					integrated:false,		dic:false},
-	"sn":		{name:"Shona",						id:"sn",		ownlang:"Shona",					integrated:false,		dic:false},
-	"sd":		{name:"Sindhi",						id:"sd",		ownlang:"سنڌي",						integrated:false,		dic:false},
-	"si":		{name:"Sinhala",					id:"si",		ownlang:"සිංහල",					integrated:false,		dic:false},
-	"sk":		{name:"Slovak",						id:"sk",		ownlang:"Slovenčina",				integrated:false,		dic:false},
-	"sl":		{name:"Slovenian",					id:"sl",		ownlang:"Slovenščina",				integrated:false,		dic:false},
-	"es":		{name:"Spanish",					id:"es",		ownlang:"Español",					integrated:true,		dic:true},
-	"es-419":	{name:"Spanish (Latin America)",	id:"es-419",	ownlang:"Español latinoamericano",	integrated:false,		dic:false},
-	"sw":		{name:"Swahili",					id:"sw",		ownlang:"Kiswahili",				integrated:false,		dic:false},
-	"sv":		{name:"Swedish",					id:"sv",		ownlang:"Svenska",					integrated:true,		dic:true},
-	"tg":		{name:"Tajik",						id:"tg",		ownlang:"тоҷикӣ",					integrated:false,		dic:false},
-	"ta":		{name:"Tamil",						id:"ta",		ownlang:"தமிழ்",						integrated:false,		dic:false},
-	"te":		{name:"Telugu",						id:"te",		ownlang:"తెలుగు",					integrated:false,		dic:false},
-	"th":		{name:"Thai",						id:"th",		ownlang:"ภาษาไทย",					integrated:false,		dic:false},
-	"tr":		{name:"Turkish",					id:"tr",		ownlang:"Türkçe",					integrated:true,		dic:false},
-	"uk":		{name:"Ukrainian",					id:"uk",		ownlang:"Yкраїнський",				integrated:true,		dic:false},
-	"ur":		{name:"Urdu",						id:"ur",		ownlang:"اُردُو",						integrated:false,		dic:false},
-	"uz":		{name:"Uzbek",						id:"uz",		ownlang:"اوزبیک",					integrated:false,		dic:false},
-	"vi":		{name:"Vietnamese",					id:"vi",		ownlang:"Tiếng Việt Nam",			integrated:false,		dic:false},
-	"cy":		{name:"Welsh",						id:"cy",		ownlang:"Cymraeg",					integrated:false,		dic:false},
-	"xh":		{name:"Xhosa",						id:"xh",		ownlang:"Xhosa",					integrated:false,		dic:false},
-	"yi":		{name:"Yiddish",					id:"yi",		ownlang:"ייִדיש ייִדיש‬",				integrated:false,		dic:false},
-	"yo":		{name:"Yoruba",						id:"yo",		ownlang:"Èdè Yorùbá",				integrated:false,		dic:false},
-	"zu":		{name:"Zulu",						id:"zu",		ownlang:"Zulu",						integrated:false,		dic:false}
+	"$discord":	{name:"Discord (English (US))",		id:"en-US",		ownlang:"English (US)",				integrated:false,		dic:false,		deepl:false},
+	"af":		{name:"Afrikaans",					id:"af",		ownlang:"Afrikaans",				integrated:false,		dic:true,		deepl:false},
+	"sq":		{name:"Albanian",					id:"sq",		ownlang:"Shqiptar",					integrated:false,		dic:false,		deepl:false},
+	"am":		{name:"Amharic",					id:"am",		ownlang:"አማርኛ",					integrated:false,		dic:false,		deepl:false},
+	"ar":		{name:"Arabic",						id:"ar",		ownlang:"اللغة العربية",			integrated:false,		dic:false,		deepl:false},
+	"hy":		{name:"Armenian",					id:"hy",		ownlang:"Հայերեն",					integrated:false,		dic:false,		deepl:false},
+	"az":		{name:"Azerbaijani",				id:"az",		ownlang:"آذربایجان دیلی",			integrated:false,		dic:false,		deepl:false},
+	"eu":		{name:"Basque",						id:"eu",		ownlang:"Euskara",					integrated:false,		dic:false,		deepl:false},
+	"be":		{name:"Belarusian",					id:"be",		ownlang:"Беларуская",				integrated:false,		dic:false,		deepl:false},
+	"bn":		{name:"Bengali",					id:"bn",		ownlang:"বাংলা",						integrated:false,		dic:false,		deepl:false},
+	"bs":		{name:"Bosnian",					id:"bs",		ownlang:"Босански",					integrated:false,		dic:false,		deepl:false},
+	"bg":		{name:"Bulgarian",					id:"bg",		ownlang:"български",				integrated:true,		dic:false,		deepl:false},
+	"my":		{name:"Burmese",					id:"my",		ownlang:"မြန်မာစာ",					integrated:false,		dic:false,		deepl:false},
+	"ca":		{name:"Catalan",					id:"ca",		ownlang:"Català",					integrated:false,		dic:false,		deepl:false},
+	"ceb":		{name:"Cebuano",					id:"ceb",		ownlang:"Bisaya",					integrated:false,		dic:false,		deepl:false},
+	"ny":		{name:"Chewa",						id:"ny",		ownlang:"Nyanja",					integrated:false,		dic:false,		deepl:false},
+	"zh-HK":	{name:"Chinese (Hong Kong)",		id:"zh-HK",		ownlang:"香港中文",					integrated:false,		dic:false,		deepl:false},
+	"zh-CN":	{name:"Chinese (Simplified)",		id:"zh-CN",		ownlang:"简体中文",					integrated:false,		dic:false,		deepl:false},
+	"zh-TW":	{name:"Chinese (Traditional)",		id:"zh-TW",		ownlang:"繁體中文",					integrated:true,		dic:false,		deepl:false},
+	"co":		{name:"Corsican",					id:"co",		ownlang:"Corsu",					integrated:false,		dic:false,		deepl:false},
+	"hr":		{name:"Croatian",					id:"hr",		ownlang:"Hrvatski",					integrated:true,		dic:false,		deepl:false},
+	"cs":		{name:"Czech",						id:"cs",		ownlang:"Čeština",					integrated:true,		dic:false,		deepl:false},
+	"da":		{name:"Danish",						id:"da",		ownlang:"Dansk",					integrated:true,		dic:true,		deepl:false},
+	"nl":		{name:"Dutch",						id:"nl",		ownlang:"Nederlands",				integrated:true,		dic:true,		deepl:true},
+	"en":		{name:"English",					id:"en",		ownlang:"English",					integrated:false,		dic:true,		deepl:true},
+	"en-GB":	{name:"English (UK)",				id:"en-GB",		ownlang:"English (UK)",				integrated:true,		dic:true,		deepl:false},
+	"en-US":	{name:"English (US)",				id:"en-US",		ownlang:"English (US)",				integrated:true,		dic:true,		deepl:false},
+	"eo":		{name:"Esperanto",					id:"eo",		ownlang:"Esperanto",				integrated:false,		dic:false,		deepl:false},
+	"et":		{name:"Estonian",					id:"et",		ownlang:"Eesti",					integrated:false,		dic:false,		deepl:false},
+	"fil":		{name:"Filipino",					id:"fil",		ownlang:"Wikang Filipino",			integrated:false,		dic:false,		deepl:false},
+	"fi":		{name:"Finnish",					id:"fi",		ownlang:"Suomi",					integrated:true,		dic:false,		deepl:false},
+	"fr":		{name:"French",						id:"fr",		ownlang:"Français",					integrated:true,		dic:true,		deepl:true},
+	"fr-CA":	{name:"French (Canadian)",			id:"fr-CA",		ownlang:"Français Canadien",		integrated:false,		dic:false,		deepl:false},
+	"fy":		{name:"Frisian",					id:"fy",		ownlang:"Frysk",					integrated:false,		dic:false,		deepl:false},
+	"gl":		{name:"Galician",					id:"gl",		ownlang:"Galego",					integrated:false,		dic:false,		deepl:false},
+	"ka":		{name:"Georgian",					id:"ka",		ownlang:"ქართული",				integrated:false,		dic:false,		deepl:false},
+	"de":		{name:"German",						id:"de",		ownlang:"Deutsch",					integrated:true,		dic:true,		deepl:true},
+	"de-AT":	{name:"German (Austria)",			id:"de-AT",		ownlang:"Österreichisch Deutsch",	integrated:false,		dic:false,		deepl:false},
+	"de-CH":	{name:"German (Switzerland)",		id:"de-CH",		ownlang:"Schweizerdeutsch",			integrated:false,		dic:false,		deepl:false},
+	"el":		{name:"Greek",						id:"el",		ownlang:"Ελληνικά",					integrated:false,		dic:false,		deepl:false},
+	"gu":		{name:"Gujarati",					id:"gu",		ownlang:"ગુજરાતી",					integrated:false,		dic:false,		deepl:false},
+	"ht":		{name:"Haitian Creole",				id:"ht",		ownlang:"Kreyòl Ayisyen",			integrated:false,		dic:false,		deepl:false},
+	"ha":		{name:"Hausa",						id:"ha",		ownlang:"حَوْسَ",						integrated:false,		dic:false,		deepl:false},
+	"haw":		{name:"Hawaiian",					id:"haw",		ownlang:"ʻŌlelo Hawaiʻi",			integrated:false,		dic:false,		deepl:false},
+	"iw":		{name:"Hebrew",						id:"iw",		ownlang:"עברית",					integrated:false,		dic:false,		deepl:false},
+	"hi":		{name:"Hindi",						id:"hi",		ownlang:"हिन्दी",						integrated:false,		dic:false,		deepl:false},
+	"hmn":		{name:"Hmong",						id:"hmn",		ownlang:"lol Hmongb",				integrated:false,		dic:false,		deepl:false},
+	"hu":		{name:"Hungarain",					id:"hu",		ownlang:"Magyar",					integrated:false,		dic:false,		deepl:false},
+	"is":		{name:"Icelandic",					id:"is",		ownlang:"Íslenska",					integrated:false,		dic:false,		deepl:false},
+	"ig":		{name:"Igbo",						id:"ig",		ownlang:"Asụsụ Igbo",				integrated:false,		dic:false,		deepl:false},
+	"id":		{name:"Indonesian",					id:"id",		ownlang:"Bahasa Indonesia",			integrated:false,		dic:false,		deepl:false},
+	"ga":		{name:"Irish",						id:"ga",		ownlang:"Gaeilge",					integrated:false,		dic:false,		deepl:false},
+	"it":		{name:"Italian",					id:"it",		ownlang:"Italiano",					integrated:true,		dic:true,		deepl:true},
+	"ja":		{name:"Japanese",					id:"ja",		ownlang:"日本語",					integrated:true,		dic:false,		deepl:false},
+	"jv":		{name:"Javanese",					id:"jv",		ownlang:"ꦧꦱꦗꦮ",					integrated:false,		dic:false,		deepl:false},
+	"kn":		{name:"Kannada",					id:"kn",		ownlang:"ಕನ್ನಡ",						integrated:false,		dic:false,		deepl:false},
+	"kk":		{name:"Kazakh",						id:"kk",		ownlang:"Қазақ Tілі",				integrated:false,		dic:false,		deepl:false},
+	"km":		{name:"Khmer",						id:"km",		ownlang:"ភាសាខ្មែរ",					integrated:false,		dic:false,		deepl:false},
+	"ko":		{name:"Korean",						id:"ko",		ownlang:"한국어",					integrated:true,		dic:false,		deepl:false},
+	"ku":		{name:"Kurdish",					id:"ku",		ownlang:"کوردی",					integrated:false,		dic:false,		deepl:false},
+	"ky":		{name:"Kyrgyz",						id:"ky",		ownlang:"кыргызча",					integrated:false,		dic:false,		deepl:false},
+	"lo":		{name:"Lao",						id:"lo",		ownlang:"ພາສາລາວ",					integrated:false,		dic:false,		deepl:false},
+	"la":		{name:"Latin",						id:"la",		ownlang:"Latina",					integrated:false,		dic:false,		deepl:false},
+	"lv":		{name:"Latvian",					id:"lv",		ownlang:"Latviešu",					integrated:false,		dic:false,		deepl:false},
+	"lt":		{name:"Lithuanian",					id:"lt",		ownlang:"Lietuvių",					integrated:false,		dic:false,		deepl:false},
+	"lb":		{name:"Luxembourgish",				id:"lb",		ownlang:"Lëtzebuergesch",			integrated:false,		dic:false,		deepl:false},
+	"mk":		{name:"Macedonian",					id:"mk",		ownlang:"Mакедонски",				integrated:false,		dic:false,		deepl:false},
+	"mg":		{name:"Malagasy",					id:"mg",		ownlang:"Malagasy",					integrated:false,		dic:false,		deepl:false},
+	"ms":		{name:"Malay",						id:"ms",		ownlang:"بهاس ملايو",				integrated:false,		dic:false,		deepl:false},
+	"ml":		{name:"Malayalam",					id:"ml",		ownlang:"മലയാളം",					integrated:false,		dic:false,		deepl:false},
+	"mt":		{name:"Maltese",					id:"mt",		ownlang:"Malti",					integrated:false,		dic:false,		deepl:false},
+	"mi":		{name:"Maori",						id:"mi",		ownlang:"te Reo Māori",				integrated:false,		dic:false,		deepl:false},
+	"mr":		{name:"Marathi",					id:"mr",		ownlang:"मराठी",						integrated:false,		dic:false,		deepl:false},
+	"mn":		{name:"Mongolian",					id:"mn",		ownlang:"Монгол Хэл",				integrated:false,		dic:false,		deepl:false},
+	"ne":		{name:"Nepali",						id:"ne",		ownlang:"नेपाली",						integrated:false,		dic:false,		deepl:false},
+	"no":		{name:"Norwegian",					id:"no",		ownlang:"Norsk",					integrated:true,		dic:false,		deepl:false},
+	"ps":		{name:"Pashto",						id:"ps",		ownlang:"پښتو",						integrated:false,		dic:false,		deepl:false},
+	"fa":		{name:"Persian",					id:"fa",		ownlang:"فارسی",					integrated:false,		dic:false,		deepl:false},
+	"pl":		{name:"Polish",						id:"pl",		ownlang:"Polski",					integrated:true,		dic:false,		deepl:true},
+	"pt":		{name:"Portuguese",					id:"pt",		ownlang:"Português",				integrated:false,		dic:true,		deepl:false},
+	"pt-BR":	{name:"Portuguese (Brazil)",		id:"pt-BR",		ownlang:"Português do Brasil",		integrated:true,		dic:true,		deepl:false},
+	"pt-PT":	{name:"Portuguese (Portugal)",		id:"pt-PT",		ownlang:"Português do Portugal",	integrated:false,		dic:false,		deepl:false},
+	"pa":		{name:"Punjabi",					id:"pa",		ownlang:"पंजाबी",						integrated:false,		dic:false,		deepl:false},
+	"ro":		{name:"Romanian",					id:"ro",		ownlang:"Română",					integrated:false,		dic:false,		deepl:false},
+	"ru":		{name:"Russian",					id:"ru",		ownlang:"Pусский",					integrated:true,		dic:false,		deepl:false},
+	"sm":		{name:"Samoan",						id:"sm",		ownlang:"Gagana Sāmoa",				integrated:false,		dic:false,		deepl:false},
+	"gd":		{name:"Scottish Gaelic",			id:"gd",		ownlang:"Gàidhlig",					integrated:false,		dic:false,		deepl:false},
+	"sr":		{name:"Serbian",					id:"sr",		ownlang:"Српски",					integrated:false,		dic:false,		deepl:false},
+	"st":		{name:"Sotho",						id:"st",		ownlang:"Sesotho",					integrated:false,		dic:false,		deepl:false},
+	"sn":		{name:"Shona",						id:"sn",		ownlang:"Shona",					integrated:false,		dic:false,		deepl:false},
+	"sd":		{name:"Sindhi",						id:"sd",		ownlang:"سنڌي",						integrated:false,		dic:false,		deepl:false},
+	"si":		{name:"Sinhala",					id:"si",		ownlang:"සිංහල",					integrated:false,		dic:false,		deepl:false},
+	"sk":		{name:"Slovak",						id:"sk",		ownlang:"Slovenčina",				integrated:false,		dic:false,		deepl:false},
+	"sl":		{name:"Slovenian",					id:"sl",		ownlang:"Slovenščina",				integrated:false,		dic:false,		deepl:false},
+	"es":		{name:"Spanish",					id:"es",		ownlang:"Español",					integrated:true,		dic:true,		deepl:true},
+	"es-419":	{name:"Spanish (Latin America)",	id:"es-419",	ownlang:"Español latinoamericano",	integrated:false,		dic:false,		deepl:false},
+	"sw":		{name:"Swahili",					id:"sw",		ownlang:"Kiswahili",				integrated:false,		dic:false,		deepl:false},
+	"sv":		{name:"Swedish",					id:"sv",		ownlang:"Svenska",					integrated:true,		dic:true,		deepl:false},
+	"tg":		{name:"Tajik",						id:"tg",		ownlang:"тоҷикӣ",					integrated:false,		dic:false,		deepl:false},
+	"ta":		{name:"Tamil",						id:"ta",		ownlang:"தமிழ்",						integrated:false,		dic:false,		deepl:false},
+	"te":		{name:"Telugu",						id:"te",		ownlang:"తెలుగు",					integrated:false,		dic:false,		deepl:false},
+	"th":		{name:"Thai",						id:"th",		ownlang:"ภาษาไทย",					integrated:false,		dic:false,		deepl:false},
+	"tr":		{name:"Turkish",					id:"tr",		ownlang:"Türkçe",					integrated:true,		dic:false,		deepl:false},
+	"uk":		{name:"Ukrainian",					id:"uk",		ownlang:"Yкраїнський",				integrated:true,		dic:false,		deepl:false},
+	"ur":		{name:"Urdu",						id:"ur",		ownlang:"اُردُو",						integrated:false,		dic:false,		deepl:false},
+	"uz":		{name:"Uzbek",						id:"uz",		ownlang:"اوزبیک",					integrated:false,		dic:false,		deepl:false},
+	"vi":		{name:"Vietnamese",					id:"vi",		ownlang:"Tiếng Việt Nam",			integrated:false,		dic:false,		deepl:false},
+	"cy":		{name:"Welsh",						id:"cy",		ownlang:"Cymraeg",					integrated:false,		dic:false,		deepl:false},
+	"xh":		{name:"Xhosa",						id:"xh",		ownlang:"Xhosa",					integrated:false,		dic:false,		deepl:false},
+	"yi":		{name:"Yiddish",					id:"yi",		ownlang:"ייִדיש ייִדיש‬",				integrated:false,		dic:false,		deepl:false},
+	"yo":		{name:"Yoruba",						id:"yo",		ownlang:"Èdè Yorùbá",				integrated:false,		dic:false,		deepl:false},
+	"zu":		{name:"Zulu",						id:"zu",		ownlang:"Zulu",						integrated:false,		dic:false,		deepl:false}
 };
 				
 (() => {
@@ -623,6 +746,14 @@ var pulling = setInterval(() => {
 	},100);
 })();
 
+BDfunctionsDevilBro.getDiscordBuilt = function () {
+	return require(require('electron').remote.app.getAppPath() + "/build_info.json").releaseChannel.toLowerCase();
+};
+
+BDfunctionsDevilBro.getDiscordVersion = function () {
+	return require(require('electron').remote.app.getAppPath() + "/build_info.json").version.toLowerCase();
+};
+
 BDfunctionsDevilBro.getDiscordLanguage = function () {
 	var languageCode = document.querySelector("html").lang || "en-US";
 	var codeParts = languageCode.split("-");
@@ -633,7 +764,7 @@ BDfunctionsDevilBro.getDiscordLanguage = function () {
 };
 
 BDfunctionsDevilBro.getDiscordTheme = function () {
-	if ($(".theme-light").length > $(".theme-dark").length) return "theme-light";
+	if (BDfunctionsDevilBro.$(".theme-light").length > BDfunctionsDevilBro.$(".theme-dark").length) return "theme-light";
 	else return "theme-dark";
 };
 	
@@ -700,21 +831,18 @@ BDfunctionsDevilBro.getKeyInformation = function (config) {
 	var maxTime = config.time === undefined ? 30 : config.time;
 		
 	var keyWhiteList = {
-		"_currentElement":true,
-		"_renderedChildren":true,
-		"_instance":true,
-		"_owner":true,
 		"props":true,
 		"state":true,
 		"stateNode":true,
 		"refs":true,
 		"updater":true,
-		"children":true,
+		"children": config.up ? false : true,
 		"type":true,
 		"memoizedProps":true,
 		"memoizedState":true,
-		"child":true,
-		"sibling":true,
+		"child": config.up ? false : true,
+		"return": config.up ? true : false,
+		"sibling": config.up ? false : true,
 		"firstEffect":true
 	};
 	
@@ -905,6 +1033,7 @@ BDfunctionsDevilBro.WebModules.patchFunction = function (newOutput, index) {
 
 BDfunctionsDevilBro.addOnSwitchListener = function (plugin) {
 	if (typeof plugin.onSwitch === "function") {
+		BDfunctionsDevilBro.removeOnSwitchListener(plugin);
 		if (!BDfunctionsDevilBro.zacksFork()) {
 			plugin.onSwitch = plugin.onSwitch.bind(plugin);
 			require("electron").remote.getCurrentWindow().webContents.addListener("did-navigate-in-page", plugin.onSwitch);
@@ -948,29 +1077,118 @@ BDfunctionsDevilBro.removeOnSwitchListener = function (plugin) {
 	}
 };
 
+BDfunctionsDevilBro.addReloadListener = function (plugin) {
+	if (typeof plugin.initialize === "function") {
+		BDfunctionsDevilBro.removeReloadListener(plugin);
+		var appwindow = document.querySelector(".app-XZYfmp");
+		if (appwindow) {
+			plugin.reloadFix = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.addedNodes) {
+							change.addedNodes.forEach((node) => {
+								if (node && node.classList && node.classList.contains("app")) {
+									if (window.PluginUpdates && window.PluginUpdates.observer) {
+										window.PluginUpdates.observer.disconnect();
+										delete window.PluginUpdates.observer;
+									}
+									plugin.appReload = true;
+									plugin.initialize();
+								}
+							});
+						}
+					}
+				);
+			});
+			plugin.reloadFix.observe(appwindow, {childList:true});
+		}
+	}
+};
+
+BDfunctionsDevilBro.removeReloadListener = function (plugin) {
+	if (typeof plugin.initialize === "function" && typeof plugin.reloadFix === "object") {
+		plugin.reloadFix.disconnect();
+	}
+};
+
+BDfunctionsDevilBro.addSettingsButtonListener = function (plugin) {
+	if (BDfunctionsDevilBro.isBDv2() && typeof plugin.getSettingsPanel === "function") {
+		BDfunctionsDevilBro.removeSettingsButtonListener(plugin);
+		BDfunctionsDevilBro.appendSettingsButton(plugin);
+		var bdsettings = document.querySelector(".bd-content-region > .bd-content");
+		if (bdsettings) {
+			plugin.settingsButtonObserver = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.addedNodes) {
+							change.addedNodes.forEach((node) => {
+								if (node.tagName && node.classList.contains("active")) {
+									BDfunctionsDevilBro.appendSettingsButton(plugin);
+								}
+							});
+						}
+					}
+				);
+			});
+			plugin.settingsButtonObserver.observe(bdsettings, {childList:true});
+		}
+	}
+};
+
+BDfunctionsDevilBro.appendSettingsButton = function (plugin) {
+	let plugincard = document.querySelector(`.bd-card[data-plugin-id=${plugin.id}]`);
+	if (plugincard) {
+		let settingsbutton = BDfunctionsDevilBro.$(`<div class="DevilBro-settingsbutton bd-button"><span class="bd-material-design-icon"><svg width="18" height="18" viewBox="0 0 24 24"><path d="M12,15.5C10.07,15.5 8.5,13.93 8.5,12C8.5,10.07 10.07,8.5 12,8.5C13.93,8.5 15.5,10.07 15.5,12C15.5,13.93 13.93,15.5 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.67 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z"></path></svg></span></div>`);
+		BDfunctionsDevilBro.$(settingsbutton)
+			.on("mouseenter.BDfunctionsDevilBroSettingsButtonListener", (e) => {BDfunctionsDevilBro.createTooltip("Settings", e.currentTarget, {type:"top"});})
+			.on("click.BDfunctionsDevilBroSettingsButtonListener", (e) => {
+				var settingsmodal = BDfunctionsDevilBro.$(`<span class="DevilBro-modal DevilBro-settingsmodal ${plugin.id}-settingsmodal"><div class="backdrop-2ohBEd"></div><div class="modal-2LIEKY"><div class="inner-1_1f7b"><div class="modal-3HOjGZ sizeMedium-1-2BNS"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO header-3sp3cE" style="flex: 0 0 auto;"><div class="flexChild-1KGW5q" style="flex: 1 1 auto;"><h4 class="h4-2IXpeI title-1pmpPr size16-3IvaX_ height20-165WbF weightSemiBold-T8sxWH defaultColor-v22dK1 defaultMarginh4-jAopYe marginReset-3hwONl">REPLACE_modal_header_text</h4></div><svg class="btn-cancel close-3ejNTg flexChild-1KGW5q" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12"><g fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div><div class="scrollerWrap-2uBjct content-1Cut5s scrollerThemed-19vinI themeGhostHairline-2H8SiW"><div class="scroller-fzNley inner-tqJwAU"></div></div></div></div></div></span>`);
+				settingsmodal.find(".title-1pmpPr").text(plugin.name + " Settings");
+				settingsmodal.find(".inner-tqJwAU").append(plugin.getSettingsPanel());
+				if (typeof plugin.onSettingsClosed === "function") {
+					settingsmodal.on("click.BDfunctionsDevilBroCloseListener", ".close-3ejNTg, .backdrop-2ohBEd", () => {plugin.onSettingsClosed();});
+				}
+				BDfunctionsDevilBro.appendModal(settingsmodal);
+			})
+			.insertBefore(plugincard.querySelector(".bd-button"));
+	}
+};
+
+BDfunctionsDevilBro.removeSettingsButtonListener = function (plugin) {
+	if (BDfunctionsDevilBro.isBDv2() && typeof plugin.settingsButtonObserver === "object") {
+		BDfunctionsDevilBro.$(`.bd-card[data-plugin-id=${plugin.id}] .DevilBro-settingsbutton`).remove();
+		plugin.settingsButtonObserver.disconnect();
+	}
+};
+
 BDfunctionsDevilBro.getLanguageTable = function (lang) {
 	var ti = {
-		"hr":		"Nizozemski",		//croatian
 		"bg":		"холандски",		//bulgarian
 		"cs":		"Nizozemština",		//czech
 		"da":		"Hollandsk",		//danish
 		"de":		"Niederländisch",	//german
+		"el":		"Ολλανδικά",		//greek
 		"en-GB":	"Dutch",			//english
 		"en-US":	"Dutch",			//english
 		"es":		"Holandés",			//spanish
 		"fi":		"hollanti",			//finnish
 		"fr":		"Néerlandais",		//french
+		"hr":		"Nizozemski",		//croatian
+		"hu":		"Holland",			//hungarian
 		"it":		"Olandese",			//italian
 		"ja":		"オランダ語",			//japanese
 		"ko":		"네덜란드어",			//korean
+		"lt":		"Olandų",			//lithuanian
 		"nl":		"Nederlands",		//dutch
 		"no":		"Nederlandsk",		//norwegian
 		"pl":		"Holenderski",		//polish
 		"pt-BR":	"Holandês",			//portuguese(brazil)
+		"ro":		"Olandeză",			//romanian
 		"ru":		"Голландский",		//russian
 		"sv":		"Holländska",		//swedish
 		"tr":		"Flemenkçe",		//turkish
 		"uk":		"Нідерландська",	//ukranian
+		"zh-CN":	"荷兰语",			//chinese(china)
 		"zh-TW":	"荷蘭文"				//chinese(traditional)
 	};
 	lang = lang ? lang : BDfunctionsDevilBro.getDiscordLanguage().id;
@@ -1043,18 +1261,34 @@ var pulling = setInterval(() => {
 	},100);
 })();
 
-BDfunctionsDevilBro.getMyUserStatus = function () {
-	var userStatus = "invisible";
-	var status = document.querySelector(".container-iksrDt .status");
-	if (status) userStatus = status.classList[1].split("-")[1];
-	return userStatus;
+BDfunctionsDevilBro.getUserStatus = function (id = BDfunctionsDevilBro.myData.id) {
+	id = typeof id == "number" ? id.toFixed() : id;
+	var ActivityModule = BDfunctionsDevilBro.WebModules.findByProperties(["getActivity","getStatuses"]);
+	var StreamModule = BDfunctionsDevilBro.WebModules.findByProperties(["isStreaming"]);
+	return StreamModule.isStreaming(ActivityModule.getActivity(id)) ? "streaming" : ActivityModule.getStatus(id);
+};
+
+BDfunctionsDevilBro.getUserAvatar = function (id = BDfunctionsDevilBro.myData.id) {
+	id = typeof id == "number" ? id.toFixed() : id;
+	var UserStore = BDfunctionsDevilBro.WebModules.findByProperties(["getUser","getUsers"]);
+	var IconUtils = BDfunctionsDevilBro.WebModules.findByProperties(["getUserAvatarURL"]);
+	var user = UserStore.getUser(id);
+	return ((user.avatar ? "" : "https://discordapp.com") + IconUtils.getUserAvatarURL(user)).split("?size")[0];
+};
+
+BDfunctionsDevilBro.getChannelAvatar = function (id) {
+	id = typeof id == "number" ? id.toFixed() : id;
+	var ChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getChannel","getChannels"]);
+	var IconUtils = BDfunctionsDevilBro.WebModules.findByProperties(["getChannelIconURL"]);
+	var channel = ChannelStore.getChannel(id);
+	return ((channel.icon ? "" : "https://discordapp.com") + IconUtils.getChannelIconURL(channel)).split("?size")[0];
 };
 
 BDfunctionsDevilBro.readServerList = function () {
-	var server, info, foundServers = [], GuildStore = BDfunctionsDevilBro.WebModules.findByProperties(["getGuilds"]);
+	var server, id, info, foundServers = [], GuildStore = BDfunctionsDevilBro.WebModules.findByProperties(["getGuilds"]);
 	for (server of document.querySelectorAll(".guild-separator ~ .guild")) {
-		info = BDfunctionsDevilBro.getKeyInformation({"node":server, "key":"guild"});
-		if (info) info = GuildStore.getGuild(info.id);
+		id = BDfunctionsDevilBro.getIdOfServer(server);
+		info = id ? GuildStore.getGuild(id) : null;
 		if (info) foundServers.push(Object.assign({},info,{div:server,data:info}));
 	}
 	return foundServers;
@@ -1069,13 +1303,22 @@ BDfunctionsDevilBro.readUnreadServerList = function (servers) {
 };
 
 BDfunctionsDevilBro.getSelectedServer = function () {
-	var server, info, GuildStore = BDfunctionsDevilBro.WebModules.findByProperties(["getGuilds"]);
-	for (server of document.querySelectorAll(".guild-separator ~ .guild.selected")) {
-		info = BDfunctionsDevilBro.getKeyInformation({"node":server, "key":"guild"});
-		if (info) info = GuildStore.getGuild(info.id);
-		if (info) return Object.assign({},info,{div:server,data:info});
+	var serverObj, id, info;
+	id = BDfunctionsDevilBro.WebModules.findByProperties(["getLastSelectedGuildId"]).getGuildId();
+	info = id ? BDfunctionsDevilBro.WebModules.findByProperties(["getGuilds"]).getGuild(id) : null;
+	if (info) {
+		serverObj = BDfunctionsDevilBro.getDivOfServer(id);
+		return serverObj ? serverObj : Object.assign({},info,{div:null,data:info});
 	}
-	return null;
+	else return null;
+};
+
+BDfunctionsDevilBro.getIdOfServer = function (server) {
+	if (!server || !server.classList || !server.classList.contains("guild") || server.classList.contains("copy") || server.classList.contains("folder")) return;
+	var switchlink, id;
+	switchlink = server.querySelector("a");
+	id = switchlink && switchlink.href ? switchlink.href.split("/") : null;
+	return id && id.length > 3 && !isNaN(parseInt(id[4])) ? id[4] : null;
 };
 
 BDfunctionsDevilBro.getDivOfServer = function (id) {
@@ -1101,21 +1344,14 @@ BDfunctionsDevilBro.readChannelList = function () {
 };
 
 BDfunctionsDevilBro.getSelectedChannel = function () {
-	var channel, info, ChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getChannels"]);
-	for (channel of document.querySelectorAll(".wrapperSelectedText-31jJa8")) {
-		info = BDfunctionsDevilBro.getKeyInformation({"node":channel.parentElement, "key":"channel"});
-		if (info) info = ChannelStore.getChannel(info.id);
-		if (info) return Object.assign({},info,{div:channel,data:info});
+	var channelObj, id, info;
+	id = BDfunctionsDevilBro.WebModules.findByProperties(["getLastSelectedChannelId"]).getChannelId();
+	info = id ? BDfunctionsDevilBro.WebModules.findByProperties(["getChannels"]).getChannel(id) : null;
+	if (info) {
+		channelObj = BDfunctionsDevilBro.getDivOfChannel(id);
+		return channelObj ? channelObj : Object.assign({},info,{div:null,data:info});
 	}
-	for (channel of document.querySelectorAll(".channel.private.selected")) {
-		info = BDfunctionsDevilBro.getKeyInformation({"node":channel, "key":"user"}) || BDfunctionsDevilBro.getKeyInformation({"node":channel, "key":"channel"});
-		if (info) info = ChannelStore.getChannel(ChannelStore.getDMFromUserId(info.id)) || ChannelStore.getChannel(info.id)
-		if (info) return Object.assign({},info,{div:channel,data:info});
-	}
-	info = BDfunctionsDevilBro.getKeyInformation({"node":document.querySelector(".chat"), "key":"channel"});
-	if (info) info = ChannelStore.getChannel(info.id)
-	if (info) return Object.assign({},info,{div:null,data:info});
-	return null;
+	else return null;
 };
 
 BDfunctionsDevilBro.getDivOfChannel = function (id) {
@@ -1127,12 +1363,21 @@ BDfunctionsDevilBro.getDivOfChannel = function (id) {
 
 BDfunctionsDevilBro.readDmList = function () {
 	var dm, info, foundDMs = [], ChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getChannels"]);
-	for (dm of document.querySelectorAll(".dms .guild")) {
-		info = BDfunctionsDevilBro.getKeyInformation({"node":dm, "key":"channel"});
-		if (info) info = ChannelStore.getChannel(info.id);
+	for (dm of document.querySelectorAll(".dms > .guild")) {
+		id = BDfunctionsDevilBro.getIdOfDM(dm);
+		info = id ? ChannelStore.getChannel(id) : null;
 		if (info) foundDMs.push(Object.assign({},info,{div:dm,data:info}));
 	}
 	return foundDMs;
+};
+
+BDfunctionsDevilBro.getIdOfDM = function (dm) {
+	if (!dm || !dm.classList || !dm.classList.contains("guild") || dm.classList.contains("copy") || dm.classList.contains("folder")) return;
+	if (!dm.parentElement || !dm.parentElement.classList || !dm.parentElement.classList.contains("dms")) return;
+	var switchlink, id;
+	switchlink = dm.querySelector("a");
+	id = switchlink && switchlink.href ? switchlink.href.split("/") : null;
+	return id && id.length > 3 && !isNaN(parseInt(id[5])) ? id[5] : null;
 };
 
 BDfunctionsDevilBro.getDivOfDM = function (id) {
@@ -1143,20 +1388,57 @@ BDfunctionsDevilBro.getDivOfDM = function (id) {
 };
 
 BDfunctionsDevilBro.saveAllData = function (settings, plugin, keyName) {
-	bdPluginStorage.set(typeof plugin === "string" ? plugin : plugin.getName(), keyName, settings);
+	if (!BDfunctionsDevilBro.isBDv2()) {
+		bdPluginStorage.set(typeof plugin === "string" ? plugin : plugin.getName(), keyName, settings);
+	}
+	else {
+		let pluginid = typeof plugin === "string" ? plugin.toLowerCase() : null;
+		let directory = pluginid ? (BDfunctionsDevilBro.Plugins[pluginid] ? BDfunctionsDevilBro.Plugins[pluginid].contentPath : null) : plugin.contentPath;
+		if (!directory) return;
+		let fs = require("fs");
+		let filepath = require("path").join(directory, "settings.json");
+		let data = fs.existsSync(filepath) ? JSON.parse(require("fs").readFileSync(filepath)) : {};
+		data[keyName] = settings;
+		fs.writeFileSync(filepath, JSON.stringify(data, null, "\t"));
+	}
 };
 
 BDfunctionsDevilBro.loadAllData = function (plugin, keyName) {
-	return bdPluginStorage.get(typeof plugin === "string" ? plugin : plugin.getName(), keyName) || {};
+	if (!BDfunctionsDevilBro.isBDv2()) {
+		return bdPluginStorage.get(typeof plugin === "string" ? plugin : plugin.getName(), keyName) || {};
+	}
+	else {
+		let pluginid = typeof plugin === "string" ? plugin.toLowerCase() : null;
+		let directory = pluginid ? (BDfunctionsDevilBro.Plugins[pluginid] ? BDfunctionsDevilBro.Plugins[pluginid].contentPath : null) : plugin.contentPath;
+		if (!directory) return {};
+		let fs = require("fs");
+		let filepath = require("path").join(directory, "settings.json");
+		if (!fs.existsSync(filepath)) return {};
+		let data = JSON.parse(require("fs").readFileSync(filepath));
+		return data && typeof data[keyName] !== "undefined" ? data[keyName] : {};
+	}
 };
 
 BDfunctionsDevilBro.removeAllData = function (plugin, keyName) {
-	BDfunctionsDevilBro.saveAllData({}, plugin, keyName);
+	if (!BDfunctionsDevilBro.isBDv2()) {
+		BDfunctionsDevilBro.saveAllData({}, plugin, keyName);
+	}
+	else {
+		let pluginid = typeof plugin === "string" ? plugin.toLowerCase() : null;
+		let directory = pluginid ? (BDfunctionsDevilBro.Plugins[pluginid] ? BDfunctionsDevilBro.Plugins[pluginid].contentPath : null) : plugin.contentPath;
+		if (!directory) return;
+		let fs = require("fs");
+		let filepath = require("path").join(directory, "settings.json");
+		if (!fs.existsSync(filepath)) return;
+		let data = JSON.parse(require("fs").readFileSync(filepath));
+		delete data[keyName];
+		fs.writeFileSync(filepath, JSON.stringify(data, null, "\t"));
+	}
 };
 
-BDfunctionsDevilBro.getAllData = function (plugin, keyName) {
+BDfunctionsDevilBro.getAllData = function (plugin, keyName, compareObject) {
 	if (!plugin.defaults || !plugin.defaults[keyName]) return {};
-	var oldData = BDfunctionsDevilBro.loadAllData(plugin, keyName), newData = {}, saveData = false;
+	let oldData = BDfunctionsDevilBro.loadAllData(plugin, keyName), newData = {}, saveData = false;
 	for (let key in plugin.defaults[keyName]) {
 		if (oldData[key] == null) {
 			newData[key] = plugin.defaults[keyName][key].value;
@@ -1165,13 +1447,17 @@ BDfunctionsDevilBro.getAllData = function (plugin, keyName) {
 		else {
 			newData[key] = oldData[key];
 		}
+		if (typeof compareObject === "object" && compareObject && typeof compareObject[newData[key]] === "undefined") {
+			newData[key] = Object.keys(compareObject)[0];
+			saveData = true;
+		}
 	}
 	if (saveData) BDfunctionsDevilBro.saveAllData(newData, plugin, keyName);
 	return newData;
 };
 
 BDfunctionsDevilBro.saveData = function (id, value, plugin, keyName) {
-	var data = BDfunctionsDevilBro.loadAllData(plugin, keyName);
+	let data = BDfunctionsDevilBro.loadAllData(plugin, keyName);
 	
 	data[id] = value;
 	
@@ -1179,61 +1465,69 @@ BDfunctionsDevilBro.saveData = function (id, value, plugin, keyName) {
 };
 
 BDfunctionsDevilBro.loadData = function (id, plugin, keyName) {
-	var data = BDfunctionsDevilBro.loadAllData(plugin, keyName);
+	let data = BDfunctionsDevilBro.loadAllData(plugin, keyName);
 	
-	var value = data[id];
+	let value = data[id];
 	
 	return value === undefined ? null : value;
 };
 	
 BDfunctionsDevilBro.removeData = function (id, plugin, keyName) {
-	var data = BDfunctionsDevilBro.loadAllData(plugin, keyName);
+	let data = BDfunctionsDevilBro.loadAllData(plugin, keyName);
 	
 	delete data[id];
 	
 	BDfunctionsDevilBro.saveAllData(data, plugin, keyName);
 };
 
-BDfunctionsDevilBro.getData = function (id, plugin, keyName) {
-	var data = BDfunctionsDevilBro.getAllData(plugin, keyName);
+BDfunctionsDevilBro.getData = function (id, plugin, keyName, compareObject) {
+	let data = BDfunctionsDevilBro.getAllData(plugin, keyName, compareObject);
 	
-	var value = data[id];
+	let value = data[id];
 	
 	return value === undefined ? null : value;
 };
 
 BDfunctionsDevilBro.appendWebScript = function (filepath) {
-	$('head script[src="' + filepath + '"]').remove();
+	BDfunctionsDevilBro.$('head script[src="' + filepath + '"]').remove();
 	
 	var ele = document.createElement("script");
-	$(ele)
+	BDfunctionsDevilBro.$(ele)
 		.attr("src", filepath);
-	$("head").append(ele);
+	BDfunctionsDevilBro.$("head").append(ele);
 };
 
 BDfunctionsDevilBro.appendWebStyle = function (filepath) {
-	$('head link[href="' + filepath + '"]').remove();
+	if (!document.head.querySelector("bd-head bd-styles")) BDfunctionsDevilBro.$("head").append(`<bd-head><bd-styles></bd-styles></bd-head>`);
+	
+	BDfunctionsDevilBro.removeWebStyle(filepath);
 
 	var ele = document.createElement("link");
-	$(ele)
+	BDfunctionsDevilBro.$(ele)
 		.attr("type", "text/css")
 		.attr("rel", "Stylesheet")
 		.attr("href", filepath);
-	$("head").append(ele);
+	document.head.querySelector("bd-head bd-styles").appendChild(ele);
 };
 
-BDfunctionsDevilBro.appendLocalStyle = function (pluginName, css) {
-	$('head style[id="' + pluginName + 'CSS"]').remove();
+BDfunctionsDevilBro.removeWebStyle = function (cssname) {
+	BDfunctionsDevilBro.$('head bd-head bd-styles link[href="' + filepath + '"]').remove();
+};
+
+BDfunctionsDevilBro.appendLocalStyle = function (cssname, css) {
+	if (!document.head.querySelector("bd-head bd-styles")) BDfunctionsDevilBro.$("head").append(`<bd-head><bd-styles></bd-styles></bd-head>`);
+	
+	BDfunctionsDevilBro.removeLocalStyle(cssname);
 
 	var ele = document.createElement("style");
-	$(ele)
-		.attr("id", pluginName + "CSS")
+	BDfunctionsDevilBro.$(ele)
+		.attr("id", cssname + "CSS")
 		.text(css);
-	$("head").append(ele);
+	document.head.querySelector("bd-head bd-styles").appendChild(ele);
 };
 
-BDfunctionsDevilBro.removeLocalStyle = function (pluginName) {
-	$('head style[id="' + pluginName + 'CSS"]').remove();
+BDfunctionsDevilBro.removeLocalStyle = function (cssname) {
+	BDfunctionsDevilBro.$('head bd-head bd-styles style[id="' + cssname + 'CSS"]').remove();
 };
 
 BDfunctionsDevilBro.sortArrayByKey = function (array, key, except) {
@@ -1246,12 +1540,35 @@ BDfunctionsDevilBro.sortArrayByKey = function (array, key, except) {
 	});
 };
 
+BDfunctionsDevilBro.highlightText = function (string, searchstring) {
+	if (!(searchstring.length > 0)) return string;
+	var added = 0, copy = string, wrapperopen = `<span class="highlight">`, wrapperclose = `</span>`;
+	BDfunctionsDevilBro.getAllIndexes(string.toUpperCase(), searchstring.toUpperCase()).forEach((start) => {
+		let offset = added*(wrapperopen.length + wrapperclose.length);
+		start = start + offset;
+		let end = start + searchstring.length;
+		let openIndexes = [-1].concat(BDfunctionsDevilBro.getAllIndexes(string.substring(0, start), "<"));
+		let closedIndexes = [-1].concat(BDfunctionsDevilBro.getAllIndexes(string.substring(0, start), ">"));
+		if (openIndexes[openIndexes.length-1] > closedIndexes[closedIndexes.length-1]) return;
+		string = string.substring(0, start) + wrapperopen + string.substring(start, end) + wrapperclose + string.substring(end);
+		added++;
+	});
+	return string ? string : copy;
+};
+
 BDfunctionsDevilBro.getAllIndexes = function (array, val) {
 	var indexes = [], i = -1;
 	while ((i = array.indexOf(val, i+1)) != -1){
 		indexes.push(i);
 	}
 	return indexes;
+};
+
+BDfunctionsDevilBro.formatBytes = function (a, b) {
+	if (a == 0) return "0 Bytes";
+	if (a == 1) return "1 Byte";
+	var c = 1024, d = b < 1 ? 0 : b > 20 ? 20: b || 2, e = ["Bytes","KB","MB","GB","TB","PB","EB","ZB","YB"], f = Math.floor(Math.log(a)/Math.log(c));
+	return parseFloat((a/Math.pow(c,f)).toFixed(d)) + " " + e[f];
 };
 
 BDfunctionsDevilBro.color2COMP = function (color) {
@@ -1439,13 +1756,13 @@ BDfunctionsDevilBro.checkColorType = function (color) {
 
 BDfunctionsDevilBro.setInnerText = function (div, text) {
 	if (!div) return;
-	var textNode = $(div).contents().filter(function () {return this.nodeType == Node.TEXT_NODE;})[0];
+	var textNode = BDfunctionsDevilBro.$(div).contents().filter(function () {return this.nodeType == Node.TEXT_NODE;})[0];
 	if (textNode) textNode.textContent = text;
 };
 	
 BDfunctionsDevilBro.getInnerText = function (div) {
 	if (!div) return;
-	var textNode = $(div).contents().filter(function () {return this.nodeType == Node.TEXT_NODE;})[0];
+	var textNode = BDfunctionsDevilBro.$(div).contents().filter(function () {return this.nodeType == Node.TEXT_NODE;})[0];
 	return textNode ? textNode.textContent : undefined;
 };
 	
@@ -1457,6 +1774,14 @@ BDfunctionsDevilBro.encodeToHTML = function (string) {
 
 BDfunctionsDevilBro.regEscape = function (string) {
 	return string.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
+};
+
+BDfunctionsDevilBro.insertNRST = function (string) {
+	return string
+		.replace(new RegExp(BDfunctionsDevilBro.regEscape("\\n"),"g"),"\n")
+		.replace(new RegExp(BDfunctionsDevilBro.regEscape("\\r"),"g"),"\r")
+		.replace(new RegExp(BDfunctionsDevilBro.regEscape("\\s"),"g")," ")
+		.replace(new RegExp(BDfunctionsDevilBro.regEscape("\\t"),"g"),"\t");
 };
 
 BDfunctionsDevilBro.clearReadNotifications = function (servers) {
@@ -1478,102 +1803,195 @@ BDfunctionsDevilBro.triggerSend = function (textarea) {
 	});
 };
 
+BDfunctionsDevilBro.initElements = function (container) {
+	BDfunctionsDevilBro.$(container)
+		.off(".BDFDBinitElements")
+		.on("click.BDFDBinitElements", ".checkbox-1KYsPm", (e) => {
+			var checked = e.currentTarget.checked;
+			BDfunctionsDevilBro.$(e.currentTarget.parentElement)
+				.toggleClass("valueChecked-3Bzkbm", checked)
+				.toggleClass("valueUnchecked-XR6AOk", !checked);
+		})
+		.on("click.BDFDBinitElements", ".checkboxWrapper-2Yvr_Y .input-oWyROL", (e) => {
+			var checked = e.currentTarget.checked;
+			var checkBoxStyle = e.currentTarget.parentElement.querySelector(".checkbox-1QwaS4");
+			BDfunctionsDevilBro.$(checkBoxStyle)
+				.toggleClass("checked-2TahvT", checked)
+				.css("background-color", checked ? "rgb(67, 181, 129)" : "")
+				.css("border-color", checked ? "rgb(67, 181, 129)" : "")
+				.find("polyline")
+					.attr("stroke", checked ? "#ffffff" : "transparent");
+		})
+		.on("click.BDFDBinitElements", ".file-navigator", (e) => {
+			var filenavigator = e.currentTarget.querySelector("input[type='file']");
+			if (filenavigator) filenavigator.click();
+		})
+		.on("change.BDFDBinitElements", "input[type='file']", (e) => {
+			var filenavigator = e.currentTarget;
+			var fileoutput = e.currentTarget.parentElement.parentElement.querySelector("input[type='text']");
+			var file = e.currentTarget.files[0];
+			if (file && fileoutput) fileoutput.value = file.path;
+		})
+		.on("keyup.BDFDBinitElements", ".searchBar-YMJBu9 .input-yt44Uw", (e) => {
+			var input = e.currentTarget;
+			input.parentElement.querySelector(".eyeGlass-6rahZf").classList.toggle("visible-4lw4vs", !input.value);
+			input.parentElement.querySelector(".clear-4pSDsx").classList.toggle("visible-4lw4vs", input.value);
+		})
+		.on("click.BDFDBinitElements", ".searchBar-YMJBu9 .clear-4pSDsx.visible-4lw4vs", (e) => {
+			var clear = e.currentTarget;
+			clear.parentElement.parentElement.querySelector(".input-yt44Uw").value = "";
+			clear.parentElement.querySelector(".eyeGlass-6rahZf").classList.add("visible-4lw4vs");
+			clear.classList.remove("visible-4lw4vs");
+		})
+		.on("click.BDFDBinitElements", ".numberinput-button-up", (e) => {
+			var input = e.currentTarget.parentElement.parentElement.querySelector("input");
+			var max = parseInt(input.getAttribute("max"));
+			var newvalue = parseInt(input.value) + 1;
+			if (isNaN(max) || (!isNaN(max) && newvalue <= max)) {
+				e.currentTarget.parentElement.classList.add("pressed");
+				clearTimeout(e.currentTarget.parentElement.pressedTimeout);
+				input.value = newvalue;
+				BDfunctionsDevilBro.$(input).trigger("input");
+				e.currentTarget.parentElement.pressedTimeout = setTimeout(() => {
+					e.currentTarget.parentElement.classList.remove("pressed");
+				},3000);
+			}
+		})
+		.on("click.BDFDBinitElements", ".numberinput-button-down", (e) => {
+			var input = e.currentTarget.parentElement.parentElement.querySelector("input");
+			var min = parseInt(input.getAttribute("min"));
+			var newvalue = parseInt(input.value) - 1;
+			if (isNaN(min) || (!isNaN(min) && newvalue >= min)) {
+				e.currentTarget.parentElement.classList.add("pressed");
+				clearTimeout(e.currentTarget.parentElement.pressedTimeout);
+				input.value = newvalue;
+				BDfunctionsDevilBro.$(input).trigger("input");
+				e.currentTarget.parentElement.pressedTimeout = setTimeout(() => {
+					e.currentTarget.parentElement.classList.remove("pressed");
+				},3000);
+			}
+		})
+		.on("click.BDFDBinitElements", ".tab", (e) => {
+			BDfunctionsDevilBro.$(container).find(".tab-content.open").removeClass("open");
+			BDfunctionsDevilBro.$(container).find(".tab.selected").removeClass("selected");
+			BDfunctionsDevilBro.$(container).find(".tab-content[tab='" + BDfunctionsDevilBro.$(e.currentTarget).attr("tab") + "']").addClass("open");	
+			BDfunctionsDevilBro.$(e.currentTarget).addClass("selected");
+		});
+		
+	BDfunctionsDevilBro.$(container).find(".tab").first().addClass("selected");
+	BDfunctionsDevilBro.$(container).find(".tab-content").first().addClass("open");
+	
+	var libraryStrings = BDfunctionsDevilBro.getLibraryStrings();
+	BDfunctionsDevilBro.$(container).find(".btn-save .contents-4L4hQM").text(libraryStrings.btn_save_text);
+	BDfunctionsDevilBro.$(container).find(".btn-cancel .contents-4L4hQM").text(libraryStrings.btn_cancel_text);
+	BDfunctionsDevilBro.$(container).find(".btn-all .contents-4L4hQM").text(libraryStrings.btn_all_text);
+	BDfunctionsDevilBro.$(container).find(".btn-add .contents-4L4hQM").text(libraryStrings.btn_add_text);
+	BDfunctionsDevilBro.$(container).find(".btn-ok .contents-4L4hQM").text(libraryStrings.btn_ok_text);
+	BDfunctionsDevilBro.$(container).find(".file-navigator .contents-4L4hQM").text(libraryStrings.file_navigator_text);
+	BDfunctionsDevilBro.$(container).find(".searchBar-YMJBu9 .input-yt44Uw").attr("placeholder", libraryStrings.search_placeholder);
+		
+	BDfunctionsDevilBro.$(container)
+		.find(".checkbox-1KYsPm").each((_, checkBox) => {
+			BDfunctionsDevilBro.$(checkBox.parentElement)
+				.toggleClass("valueChecked-3Bzkbm", checkBox.checked)
+				.toggleClass("valueUnchecked-XR6AOk", !checkBox.checked);
+		});
+		
+	BDfunctionsDevilBro.$(container)
+		.find(".checkboxWrapper-2Yvr_Y .input-oWyROL").each((_, checkBox) => {
+			if (checkBox.checked) {
+				var checkBoxStyle = checkBox.parentElement.querySelector(".checkbox-1QwaS4");
+				BDfunctionsDevilBro.$(checkBoxStyle)
+					.addClass("checked-2TahvT")
+					.css("background-color", "rgb(67, 181, 129)")
+					.css("border-color", "rgb(67, 181, 129)")
+					.find("polyline")
+						.attr("stroke", "#ffffff");
+			}
+		});
+};
+
 BDfunctionsDevilBro.appendModal = function (modal) {
 	let id = Math.round(Math.random()*10000000000000000);
 	var container = document.querySelector(".app-XZYfmp ~ [class^='theme-']:not([class*='popouts'])");
 	if (!container) return;
-	$(modal)
+	
+	BDfunctionsDevilBro.$(modal)
 		.appendTo(container)
-		.on("click", ".checkbox-1KYsPm", (e) => {
-			$(e.target.parentElement)
-				.toggleClass("valueChecked-3Bzkbm", $(e.target).prop("checked"))
-				.toggleClass("valueUnchecked-XR6AOk", $(e.target).prop("checked"));
-		})
-		.on("click", ".tab", (e) => {
-			$(".tab-content.open", modal)
-				.removeClass("open");
-				
-			$(".tab.selected", modal)
-				.removeClass("selected");
-				
-			$(".tab-content[tab='" + $(e.currentTarget).attr("tab") + "']", modal)
-				.addClass("open");
-				
-			$(e.currentTarget)
-				.addClass("selected");
-		})
-		.on("click", ".backdrop-2ohBEd, .btn-cancel, .btn-save", () => {
-			$(document).off("keydown.modalEscapeListenerDevilBro" + id);
-			$(modal).addClass("closing");
+		.on("click", ".backdrop-2ohBEd, .btn-cancel, .btn-save, .btn-send, .btn-cancel, .btn-ok", () => {
+			BDfunctionsDevilBro.$(document).off("keydown.modalEscapeListenerDevilBro" + id);
+			BDfunctionsDevilBro.$(modal).addClass("closing");
 			setTimeout(() => {modal.remove();}, 300);
 		});
 		
-	$(modal).find(".tab").first().addClass("selected");
-	$(modal).find(".tab-content").first().addClass("open");
-	$(modal)
-		.find(".checkbox-1KYsPm").each((_, checkBox) => {
-			$(checkBox.parentElement)
-				.toggleClass("valueChecked-3Bzkbm", $(checkBox).prop("checked"))
-				.toggleClass("valueUnchecked-XR6AOk", $(checkBox).prop("checked"));
-		});
+	
+	BDfunctionsDevilBro.initElements(modal);
 		
-	$(document)
+	BDfunctionsDevilBro.$(document)
 		.off("keydown.modalEscapeListenerDevilBro" + id)
 		.on("keydown.modalEscapeListenerDevilBro" + id, (e) => {
-			if (e.which == 27) $(modal).find(".backdrop-2ohBEd").click();
+			if (e.which == 27) BDfunctionsDevilBro.$(modal).find(".backdrop-2ohBEd").click();
 		});
 };
 
 BDfunctionsDevilBro.updateContextPosition = function (context) {
-	var menuWidth = $(context).outerWidth();
-	var menuHeight = $(context).outerHeight();
+	var app = document.querySelector(".appMount-14L89u");
+	var menuWidth = BDfunctionsDevilBro.$(context).outerWidth();
+	var menuHeight = BDfunctionsDevilBro.$(context).outerHeight();
 	var position = BDfunctionsDevilBro.mousePosition;
 	var newposition = {
 		x: position.x - menuWidth,
 		y: position.y - menuHeight
 	};
-	$(context)
-		.css("left", (position.x + menuWidth> window.outerWidth? (newposition.x < 0 ? 10 : newposition.x) : position.x) + "px")
-		.css("top",(position.y + menuHeight > window.outerHeight ? (newposition.y < 0 ? 10 : newposition.y) : position.y) + "px")
+	BDfunctionsDevilBro.$(context)
+		.css("left", (position.x + menuWidth > app.offsetWidth ? (newposition.x < 0 ? 10 : newposition.x) : position.x) + "px")
+		.css("top", (position.y + menuHeight > app.offsetHeight ? (newposition.y < 0 ? 10 : newposition.y) : position.y) + "px");
 };
 
 BDfunctionsDevilBro.appendContextMenu = function (context, e) {
-	$(".app").append(context);
-	var menuWidth = $(context).outerWidth();
-	var menuHeight = $(context).outerHeight();
-	$(context)
-		.toggleClass("invertX", e.pageX + menuWidth > window.outerWidth)
-		.toggleClass("invertChildX", e.pageX + menuWidth > window.outerWidth)
-		.toggleClass("invertY", e.pageY + menuHeight > window.outerHeight)
+	BDfunctionsDevilBro.$(".tooltips").before(context);
+	var app = document.querySelector(".appMount-14L89u");
+	var menuWidth = BDfunctionsDevilBro.$(context).outerWidth();
+	var menuHeight = BDfunctionsDevilBro.$(context).outerHeight();
+	BDfunctionsDevilBro.$(context)
+		.toggleClass("invertX", e.pageX + menuWidth > app.offsetWidth)
+		.toggleClass("invertChildX", e.pageX + menuWidth > app.offsetWidth)
+		.toggleClass("invertY", e.pageY + menuHeight > app.offsetHeight)
 		.addClass(BDfunctionsDevilBro.getDiscordTheme());
 		
 	BDfunctionsDevilBro.updateContextPosition(context);
 	
-	$(document).on("mousedown.BDfunctionsDevilBroContextMenu", (e2) => {
-		$(document).off("mousedown.BDfunctionsDevilBroContextMenu");
-		if ($(context).has(e2.target).length == 0) {
+	BDfunctionsDevilBro.$(document).on("mousedown.BDfunctionsDevilBroContextMenu", (e2) => {
+		if (BDfunctionsDevilBro.$(context).has(e2.target).length == 0 && context != e2.target) {
+			BDfunctionsDevilBro.$(document).off("mousedown.BDfunctionsDevilBroContextMenu");
 			context.remove();
+		}
+		else {
+			var item = BDfunctionsDevilBro.$(".item-1XYaYf").has(e2.target)[0];
+			if (item && !BDfunctionsDevilBro.$(item).hasClass("disabled-dlOjhg") && !BDfunctionsDevilBro.$(item).hasClass("itemSubMenu-3ZgIw-") && !BDfunctionsDevilBro.$(item).hasClass("itemToggle-e7vkml")) {
+				BDfunctionsDevilBro.$(document).off("mousedown.BDfunctionsDevilBroContextMenu");
+			}
 		}
 	});
 };
 
 BDfunctionsDevilBro.appendSubMenu = function (target, menu) {
-	$(target).append(menu);
-	var offsets = $(target).offset();
-	var menuHeight = $(menu).outerHeight();
-	$(menu)
+	BDfunctionsDevilBro.$(target).append(menu);
+	var offsets = BDfunctionsDevilBro.$(target).offset();
+	var menuHeight = BDfunctionsDevilBro.$(menu).outerHeight();
+	BDfunctionsDevilBro.$(menu)
 		.addClass(BDfunctionsDevilBro.getDiscordTheme())
 		.css("left", offsets.left + "px")
-		.css("top", offsets.top + menuHeight > window.outerHeight ? (offsets.top - menuHeight + $(target).outerHeight()) + "px" : offsets.top + "px");
+		.css("top", offsets.top + menuHeight > window.outerHeight ? (offsets.top - menuHeight + BDfunctionsDevilBro.$(target).outerHeight()) + "px" : offsets.top + "px");
 		
-	$(target).on("mouseleave.BDfunctionsDevilBroSubContextMenu", () => {
-		$(target).off("mouseleave.BDfunctionsDevilBroSubContextMenu");
+	BDfunctionsDevilBro.$(target).on("mouseleave.BDfunctionsDevilBroSubContextMenu", () => {
+		BDfunctionsDevilBro.$(target).off("mouseleave.BDfunctionsDevilBroSubContextMenu");
 		menu.remove();
 	});
 };
 
 BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
-	var wrapperDiv = $(wrapper);
+	var wrapperDiv = BDfunctionsDevilBro.$(wrapper);
 		
 	var colourList = 
 		["rgb(82, 233, 30)","rgb(46, 204, 113)","rgb(26, 188, 156)","rgb(52, 152, 219)","rgb(52, 84, 219)","rgb(134, 30, 233)","rgb(155, 89, 182)","rgb(233, 30, 99)","rgb(233, 65, 30)","rgb(231, 76, 60)","rgb(230, 126, 34)","rgb(241, 196, 15)","rgb(199, 204, 205)","rgb(112, 128, 136)","rgb(99, 99, 99)",
@@ -1595,7 +2013,7 @@ BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
 				${ colourList.map((val, i) => `<div class="ui-color-picker-${swatch}" style="background-color: ${val};"></div>`).join("")}
 			</div>
 		</div>`;
-	$(swatches).appendTo(wrapperDiv);
+	BDfunctionsDevilBro.$(swatches).appendTo(wrapperDiv);
 	
 	if (currentCOMP) {
 		var currentRGB = BDfunctionsDevilBro.color2RGB(currentCOMP);
@@ -1610,24 +2028,24 @@ BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
 				.css("border", "4px solid " + invRGB);
 		} 
 		else {
-			$(".custom", wrapperDiv)
+			BDfunctionsDevilBro.$(".custom", wrapperDiv)
 				.addClass("selected")
 				.css("background-color", currentRGB)
 				.css("border", "4px solid " + invRGB);
 			
-			$(".color-picker-dropper-fg", wrapperDiv)
+			BDfunctionsDevilBro.$(".color-picker-dropper-fg", wrapperDiv)
 				.attr("fill", currentCOMP[0] > 150 && currentCOMP[1] > 150 && currentCOMP[2] > 150 ? "#000000" : "#ffffff");
 		}
 	}
 	else {
-		$(".nocolor", wrapperDiv)
+		BDfunctionsDevilBro.$(".nocolor", wrapperDiv)
 			.addClass("selected")
 			.css("border", "4px solid black");
 	}
 	
 	wrapperDiv.on("click", ".ui-color-picker-" + swatch + ":not(.custom)", (e) => {
 		if (wrapperDiv.hasClass("disabled")) return;
-		var bgColor = $(e.target).css("background-color");
+		var bgColor = BDfunctionsDevilBro.$(e.target).css("background-color");
 		var newInvRGB = BDfunctionsDevilBro.checkColorType(bgColor) ? BDfunctionsDevilBro.colorINV(bgColor,"rgb") : "black";
 		
 		wrapperDiv.find(".ui-color-picker-" + swatch + ".selected.nocolor")
@@ -1638,7 +2056,7 @@ BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
 			.removeClass("selected")
 			.css("border", "4px solid transparent");
 			
-		$(e.currentTarget)
+		BDfunctionsDevilBro.$(e.currentTarget)
 			.addClass("selected")
 			.css("border", "4px solid " + newInvRGB);
 	});
@@ -1650,16 +2068,26 @@ BDfunctionsDevilBro.setColorSwatches = function (currentCOMP, wrapper, swatch) {
 };
 
 BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
-	var strings = BDfunctionsDevilBro.getLibraryStrings();
+	var libraryStrings = BDfunctionsDevilBro.getLibraryStrings();
+	var inputs = {
+		HEX: 	{type:"text", 		name:"hex",				group:"hex", 	min:null,	max:null,	length:7,		default:"#000000"},
+		R: 		{type:"number", 	name:"red",				group:"rgb", 	min:0,		max:255,	length:null,	default:0},
+		G:		{type:"number", 	name:"green",			group:"rgb", 	min:0,		max:255,	length:null,	default:0},
+		B:		{type:"number", 	name:"blue",			group:"rgb", 	min:0,		max:255,	length:null,	default:0},
+		H: 		{type:"number", 	name:"hue",				group:"hsl", 	min:0,		max:360,	length:null,	default:0},
+		S: 		{type:"number", 	name:"saturation",		group:"hsl", 	min:0,		max:100,	length:null,	default:0},
+		L: 		{type:"number", 	name:"lightness",		group:"hsl", 	min:0,		max:100,	length:null,	default:0}
+	};
+	
 	var colorPickerModalMarkup = 
 		`<span class="colorpicker-modal DevilBro-modal">
 			<div class="backdrop-2ohBEd"></div>
 			<div class="modal-2LIEKY">
 				<div class="inner-1_1f7b">
-					<div class="modal-3HOjGZ sizeMedium-1-2BNS">
+					<div class="modal-3HOjGZ">
 						<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO header-3sp3cE" style="flex: 0 0 auto;">
 							<div class="flexChild-1KGW5q" style="flex: 1 1 auto;">
-								<h4 class="h4-2IXpeI title-1pmpPr size16-3IvaX_ height20-165WbF weightSemiBold-T8sxWH defaultColor-v22dK1 defaultMarginh4-jAopYe marginReset-3hwONl">${strings.colorpicker_modal_header_text}</h4>
+								<h4 class="h4-2IXpeI title-1pmpPr size16-3IvaX_ height20-165WbF weightSemiBold-T8sxWH defaultColor-v22dK1 defaultMarginh4-jAopYe marginReset-3hwONl">${libraryStrings.colorpicker_modal_header_text}</h4>
 								<div class="guildName-1u0hy7 small-3-03j1 size12-1IGJl9 height16-1qXrGy primary-2giqSn"></div>
 							</div>
 							<svg class="btn-cancel close-3ejNTg flexChild-1KGW5q" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12">
@@ -1675,7 +2103,7 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 									<div class="colorpicker-black" style="background: linear-gradient(to top, #000, rgba(0,0,0,0))">
 										<div class="colorpicker-pickercursor">
 											<svg xmlns="http://www.w3.org/2000/svg" version="1.1">
-											<circle cx="7" cy="7" r="6" stroke="black" stroke-width="2" fill="none" />
+												<circle cx="7" cy="7" r="6" stroke="black" stroke-width="2" fill="none" />
 											</svg>
 										</div>
 										<div class="colorpicker-pickerpane"></div>
@@ -1695,20 +2123,23 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 									<div class="colorpicker-preview-0 selected" style="background-color:#808080;"></div>
 									<div class="colorpicker-preview-2" style="background-color:#808080;"></div>
 								</div>
-								<div class="colorpicker-inputs">
-									<div class="colorpicker-input"><label>Hex:</label><input class="colorpicker-hex" name="hex" value="#000000" maxlength="7"></div>
-									<div class="colorpicker-input"><label>R:</label><input class="colorpicker-red" name="rgb" value="0" type="number" min="0" max="255"></div>
-									<div class="colorpicker-input"><label>G:</label><input class="colorpicker-green" name="rgb" value="0" type="number" min="0" max="255"></div>
-									<div class="colorpicker-input"><label>B:</label><input class="colorpicker-blue" name="rgb" value="0" type="number" min="0" max="255"></div>
-									<div class="colorpicker-input"><label>H:</label><input class="colorpicker-hue" name="hsl" value="0" type="number" min="0" max="360"></div>
-									<div class="colorpicker-input"><label>S:</label><input class="colorpicker-saturation" name="hsl" value="0" type="number" min="0" max="100"></div>
-									<div class="colorpicker-input"><label>L:</label><input class="colorpicker-lightness" name="hsl" value="0" type="number" min="0" max="100"></div>
+								<div class="colorpicker-inputs card-3DrRmC cardPrimaryEditable-2IQ7-V">
+									${Object.keys(inputs).map((key, i) => 
+									`<div class="colorpicker-input flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyCenter-29N31w alignCenter-3VxkQP noWrap-v6g9vO marginTop4-2rEBfJ marginBottom4-_yArcI">
+										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJnoWrap-v6g9vO"style="flex: 1 1 20%">
+											<h5 class="h5-3KssQU size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH">${key}:</h5>
+										</div>
+										<div class="inputWrapper-3xoRWR${inputs[key].type == 'number' ? ' inputNumberWrapper inputNumberWrapperMini' : ''} vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR" style="flex: 1 1 80%;">
+											${inputs[key].type == 'number' ? '<span class="numberinput-buttons-zone"><span class="numberinput-button-up"></span><span class="numberinput-button-down"></span></span>' : ''}
+											<input type="${inputs[key].type}"${!isNaN(inputs[key].min) && inputs[key].min != null ? ' min="' + inputs[key].min + '"' : ''}${!isNaN(inputs[key].max) && inputs[key].max != null ? ' max="' + inputs[key].max + '"' : ''}${!isNaN(inputs[key].length) && inputs[key].length != null ? ' maxlength="' + inputs[key].length + '"' : ''} name="${inputs[key].group}" placeholder="${inputs[key].default}" class="inputMini-3MyfLa input-2YozMi size16-3IvaX_ colorpicker-${inputs[key].name}">
+										</div>
+									</div>`).join("")}
 								</div>
 							</div>
 						</div>
 						<div class="flex-lFgbSz flex-3B1Tl4 horizontalReverse-2LanvO horizontalReverse-k5PqxT flex-3B1Tl4 directionRowReverse-2eZTxP justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO footer-1PYmcw">
-							<button type="button" class="btn-save buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v button-2t3of8 buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu">
-								<div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx contents-4L4hQM">${strings.btn_ok_text}</div>
+							<button type="button" class="btn-ok buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu button-2t3of8 lookFilled-luDKDo colorBrand-3PmwCE sizeMedium-2VGNaF grow-25YQ8u">
+								<div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx"></div>
 							</button>
 						</div>
 					</div>
@@ -1716,28 +2147,28 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 			</div>
 		</span>`;
 		
-	var colorPickerModal = $(colorPickerModalMarkup)[0];
+	var colorPickerModal = BDfunctionsDevilBro.$(colorPickerModalMarkup)[0];
 	BDfunctionsDevilBro.appendModal(colorPickerModal);
-	$(colorPickerModal)
-		.on("click", ".btn-save", (event) => {
+	BDfunctionsDevilBro.$(colorPickerModal)
+		.on("click", ".btn-ok", () => {
 			var newRGB = colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").style.backgroundColor;
 			var newCOMP = BDfunctionsDevilBro.color2COMP(newRGB);
 			var newInvRGB = BDfunctionsDevilBro.colorINV(newRGB);
 			
-			$(".ui-color-picker-" + swatch + ".selected.nocolor")
+			BDfunctionsDevilBro.$(".ui-color-picker-" + swatch + ".selected.nocolor")
 				.removeClass("selected")
 				.css("border", "4px solid red");
 				
-			$(".ui-color-picker-" + swatch + ".selected")
+			BDfunctionsDevilBro.$(".ui-color-picker-" + swatch + ".selected")
 				.removeClass("selected")
 				.css("border", "4px solid transparent");
 			
-			$(".ui-color-picker-" + swatch + ".custom")
+			BDfunctionsDevilBro.$(".ui-color-picker-" + swatch + ".custom")
 				.addClass("selected")
 				.css("background-color", newRGB)
 				.css("border", "4px solid " + newInvRGB);
 				
-			$(".color-picker-dropper-fg-" + swatch)
+			BDfunctionsDevilBro.$(".color-picker-dropper-fg-" + swatch)
 				.attr("fill", newCOMP[0] > 150 && newCOMP[1] > 150 && newCOMP[2] > 150 ? "#000000" : "#ffffff");
 		});
 	
@@ -1750,9 +2181,9 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 	var pY = 0;
 	var pHalfW = pcursor.offsetWidth/2;
 	var pHalfH = pcursor.offsetHeight/2;
-	var pMinX = $(ppane).offset().left;
+	var pMinX = BDfunctionsDevilBro.$(ppane).offset().left;
 	var pMaxX = pMinX + ppane.offsetWidth;
-	var pMinY = $(ppane).offset().top;
+	var pMinY = BDfunctionsDevilBro.$(ppane).offset().top;
 	var pMaxY = pMinY + ppane.offsetHeight;
 	
 	var spane = colorPickerModal.querySelector(".colorpicker-sliderpane");
@@ -1760,7 +2191,7 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 	
 	var sY = 0;
 	var sHalfH = scursor.offsetHeight/2;
-	var sMinY = $(spane).offset().top;
+	var sMinY = BDfunctionsDevilBro.$(spane).offset().top;
 	var sMaxY = sMinY + spane.offsetHeight;
 	
 	[hue, saturation, lightness] = BDfunctionsDevilBro.color2HSL(currentColor).replace(new RegExp(" ", "g"), "").slice(4, -1).split(",");
@@ -1769,38 +2200,37 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 	updateAllValues();
 	updateCursors();
 	
-	$(ppane)
-		.off("mousedown")
-		.on("mousedown", (event) => {
+	BDfunctionsDevilBro.$(ppane)
+		.on("mousedown", (e) => {
 			BDfunctionsDevilBro.appendLocalStyle("crossHairColorPicker", `* {cursor: crosshair !important;}`);
 			
-			switchPreviews(event.button);
+			switchPreviews(e.button);
 			
 			pHalfW = pcursor.offsetWidth/2;
 			pHalfH = pcursor.offsetHeight/2;
-			pMinX = $(ppane).offset().left;
+			pMinX = BDfunctionsDevilBro.$(ppane).offset().left;
 			pMaxX = pMinX + ppane.offsetWidth;
-			pMinY = $(ppane).offset().top;
+			pMinY = BDfunctionsDevilBro.$(ppane).offset().top;
 			pMaxY = pMinY + ppane.offsetHeight;
-			pX = event.clientX - pHalfW;
-			pY = event.clientY - pHalfH;
+			pX = e.clientX - pHalfW;
+			pY = e.clientY - pHalfH;
 			
-			$(pcursor).offset({"left":pX,"top":pY});
+			BDfunctionsDevilBro.$(pcursor).offset({"left":pX,"top":pY});
 			
 			saturation = BDfunctionsDevilBro.mapRange([pMinX - pHalfW, pMaxX - pHalfW], [0, 100], pX);
 			lightness = BDfunctionsDevilBro.mapRange([pMinY - pHalfH, pMaxY - pHalfH], [100, 0], pY);
 			updateAllValues();
 			
-			$(document)
+			BDfunctionsDevilBro.$(document)
 				.off("mouseup.ColorPicker").off("mousemove.ColorPicker")
 				.on("mouseup.ColorPicker", () => {
 					BDfunctionsDevilBro.removeLocalStyle("crossHairColorPicker");
-					$(document).off("mouseup.ColorPicker").off("mousemove.ColorPicker");
+					BDfunctionsDevilBro.$(document).off("mouseup.ColorPicker").off("mousemove.ColorPicker");
 				})
-				.on("mousemove.ColorPicker", (event2) => {
-					pX = event2.clientX > pMaxX ? pMaxX - pHalfW : (event2.clientX < pMinX ? pMinX - pHalfW : event2.clientX - pHalfW);
-					pY = event2.clientY > pMaxY ? pMaxY - pHalfH : (event2.clientY < pMinY ? pMinY - pHalfH : event2.clientY - pHalfH);
-					$(pcursor).offset({"left":pX,"top":pY});
+				.on("mousemove.ColorPicker", (e2) => {
+					pX = e2.clientX > pMaxX ? pMaxX - pHalfW : (e2.clientX < pMinX ? pMinX - pHalfW : e2.clientX - pHalfW);
+					pY = e2.clientY > pMaxY ? pMaxY - pHalfH : (e2.clientY < pMinY ? pMinY - pHalfH : e2.clientY - pHalfH);
+					BDfunctionsDevilBro.$(pcursor).offset({"left":pX,"top":pY});
 					
 					saturation = BDfunctionsDevilBro.mapRange([pMinX - pHalfW, pMaxX - pHalfW], [0, 100], pX);
 					lightness = BDfunctionsDevilBro.mapRange([pMinY - pHalfH, pMaxY - pHalfH], [100, 0], pY);
@@ -1808,51 +2238,48 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 				});
 		});
 	
-	$(spane)
-		.off("mousedown")
-		.on("mousedown", (event) => {
+	BDfunctionsDevilBro.$(spane)
+		.on("mousedown", (e) => {
 			BDfunctionsDevilBro.appendLocalStyle("crossHairColorPicker", `* {cursor: crosshair !important;}`);
 			
-			switchPreviews(event.button);
+			switchPreviews(e.button);
 			
 			sHalfH = scursor.offsetHeight/2;
-			sMinY = $(spane).offset().top;
+			sMinY = BDfunctionsDevilBro.$(spane).offset().top;
 			sMaxY = sMinY + spane.offsetHeight;
-			sY = event.clientY - sHalfH;
+			sY = e.clientY - sHalfH;
 			
-			$(scursor).offset({"top":sY});
+			BDfunctionsDevilBro.$(scursor).offset({"top":sY});
 			
 			hue = BDfunctionsDevilBro.mapRange([sMinY - sHalfH, sMaxY - sHalfH], [360, 0], sY);
 			updateAllValues();
 			
-			$(document)
+			BDfunctionsDevilBro.$(document)
 				.off("mouseup.ColorPicker").off("mousemove.ColorPicker")
 				.on("mouseup.ColorPicker", () => {
 					BDfunctionsDevilBro.removeLocalStyle("crossHairColorPicker");
-					$(document).off("mouseup.ColorPicker").off("mousemove.ColorPicker");
+					BDfunctionsDevilBro.$(document).off("mouseup.ColorPicker").off("mousemove.ColorPicker");
 				})
-				.on("mousemove.ColorPicker", (event2) => {
-					sY = event2.clientY > sMaxY ? sMaxY - sHalfH : (event2.clientY < sMinY ? sMinY - sHalfH : event2.clientY - sHalfH);
-					$(scursor).offset({"top":sY});
+				.on("mousemove.ColorPicker", (e2) => {
+					sY = e2.clientY > sMaxY ? sMaxY - sHalfH : (e2.clientY < sMinY ? sMinY - sHalfH : e2.clientY - sHalfH);
+					BDfunctionsDevilBro.$(scursor).offset({"top":sY});
 					
 					hue = BDfunctionsDevilBro.mapRange([sMinY - sHalfH, sMaxY - sHalfH], [360, 0], sY);
 					updateAllValues();
 				});
 		});
 		
-	$(".colorpicker-modal .colorpicker-inputs input")
-		.off("input")
-		.on("input", (event) => {
-			updateValues(event.target.name);
+	BDfunctionsDevilBro.$(colorPickerModal)
+		.on("input", ".inputMini-3MyfLa", (e) => {
+			updateValues(e.currentTarget.name);
 		});
 		
-	$(".colorpicker-modal [class^='colorpicker-preview-']")
-		.off("click")
-		.on("click", (event) => {
+	BDfunctionsDevilBro.$(colorPickerModal)
+		.on("click", "[class^='colorpicker-preview-']", (e) => {
 			colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").style.borderColor = "transparent";
 			colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").classList.remove("selected");
-			event.target.classList.add("selected");
-			[hue, saturation, lightness] = BDfunctionsDevilBro.color2HSL(event.target.style.backgroundColor).replace(new RegExp(" ", "g"), "").slice(4, -1).split(",");
+			e.currentTarget.classList.add("selected");
+			[hue, saturation, lightness] = BDfunctionsDevilBro.color2HSL(e.currentTarget.style.backgroundColor).replace(new RegExp(" ", "g"), "").slice(4, -1).split(",");
 			saturation *= 100;
 			lightness *= 100;
 			updateAllValues();
@@ -1869,7 +2296,7 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 		switch (type) {
 			case "hex":
 				hex = colorPickerModal.querySelector(".colorpicker-hex").value;
-				if (/^#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.test(hex)) {
+				if (/^#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})BDfunctionsDevilBro.$/i.test(hex)) {
 					[red, green, blue] = BDfunctionsDevilBro.color2COMP(hex);
 					[hue, saturation, lightness] = BDfunctionsDevilBro.color2HSL(hex).replace(new RegExp(" ", "g"), "").slice(4, -1).split(",");
 					saturation *= 100;
@@ -1886,23 +2313,27 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 				red = colorPickerModal.querySelector(".colorpicker-red").value;
 				green = colorPickerModal.querySelector(".colorpicker-green").value;
 				blue = colorPickerModal.querySelector(".colorpicker-blue").value;
-				[hue, saturation, lightness] = BDfunctionsDevilBro.color2HSL([red, green, blue]).replace(new RegExp(" ", "g"), "").slice(4, -1).split(",");
-				saturation *= 100;
-				lightness *= 100;
-				colorPickerModal.querySelector(".colorpicker-hex").value = BDfunctionsDevilBro.color2HEX([red, green, blue]);
-				colorPickerModal.querySelector(".colorpicker-hue").value = Math.round(hue);
-				colorPickerModal.querySelector(".colorpicker-saturation").value = Math.round(saturation);
-				colorPickerModal.querySelector(".colorpicker-lightness").value = Math.round(lightness);
+				if (red && red >= 0 && red <= 255 && green && green >= 0 && green <= 255 && blue && blue >= 0 && blue <= 255) {
+					[hue, saturation, lightness] = BDfunctionsDevilBro.color2HSL([red, green, blue]).replace(new RegExp(" ", "g"), "").slice(4, -1).split(",");
+					saturation *= 100;
+					lightness *= 100;
+					colorPickerModal.querySelector(".colorpicker-hex").value = BDfunctionsDevilBro.color2HEX([red, green, blue]);
+					colorPickerModal.querySelector(".colorpicker-hue").value = Math.round(hue);
+					colorPickerModal.querySelector(".colorpicker-saturation").value = Math.round(saturation);
+					colorPickerModal.querySelector(".colorpicker-lightness").value = Math.round(lightness);
+				}
 				break;
 			case "hsl":
 				hue = colorPickerModal.querySelector(".colorpicker-hue").value;
 				saturation = colorPickerModal.querySelector(".colorpicker-saturation").value;
 				lightness = colorPickerModal.querySelector(".colorpicker-lightness").value;
-				[red, green, blue] = BDfunctionsDevilBro.color2COMP("hsl(" + hue + ", " + saturation/100 + ", " + lightness/100 + ")");
-				colorPickerModal.querySelector(".colorpicker-hex").value = BDfunctionsDevilBro.color2HEX([red, green, blue]);
-				colorPickerModal.querySelector(".colorpicker-red").value = red;
-				colorPickerModal.querySelector(".colorpicker-green").value = green;
-				colorPickerModal.querySelector(".colorpicker-blue").value = blue;
+				if (hue && hue >= 0 && hue <= 360 && saturation && saturation >= 0 && saturation <= 100 && lightness && lightness >= 0 && lightness <= 100) {
+					[red, green, blue] = BDfunctionsDevilBro.color2COMP("hsl(" + hue + ", " + saturation/100 + ", " + lightness/100 + ")");
+					colorPickerModal.querySelector(".colorpicker-hex").value = BDfunctionsDevilBro.color2HEX([red, green, blue]);
+					colorPickerModal.querySelector(".colorpicker-red").value = red;
+					colorPickerModal.querySelector(".colorpicker-green").value = green;
+					colorPickerModal.querySelector(".colorpicker-blue").value = blue;
+				}
 				break; 
 		}
 		updateColors();
@@ -1911,22 +2342,22 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 	
 	function updateCursors () {
 		sHalfH = scursor.offsetHeight/2;
-		sMinY = $(spane).offset().top;
+		sMinY = BDfunctionsDevilBro.$(spane).offset().top;
 		sY = BDfunctionsDevilBro.mapRange([360, 0], [sMinY - sHalfH, sMaxY - sHalfH], hue);
 		
 		pHalfW = pcursor.offsetWidth/2;
 		pHalfH = pcursor.offsetHeight/2;
-		pMinX = $(ppane).offset().left;
+		pMinX = BDfunctionsDevilBro.$(ppane).offset().left;
 		pMaxX = pMinX + ppane.offsetWidth;
-		pMinY = $(ppane).offset().top;
+		pMinY = BDfunctionsDevilBro.$(ppane).offset().top;
 		pMaxY = pMinY + ppane.offsetHeight;
 		pX = BDfunctionsDevilBro.mapRange([0, 100], [pMinX - pHalfW, pMaxX - pHalfW], saturation);
 		pY = BDfunctionsDevilBro.mapRange([100, 0], [pMinY - pHalfH, pMaxY - pHalfH], lightness);
 		
-		$(scursor).offset({"top":sY});
-		$(pcursor).offset({"left":pX,"top":pY});
-		$(pcursor).find("circle").attr("stroke", BDfunctionsDevilBro.colorINV([red, green, blue], "rgb"));
-		$(scursor).find("path").attr("stroke", BDfunctionsDevilBro.color2RGB("hsl(" + hue + ", 1, 1)"));
+		BDfunctionsDevilBro.$(scursor).offset({"top":sY});
+		BDfunctionsDevilBro.$(pcursor).offset({"left":pX,"top":pY});
+		BDfunctionsDevilBro.$(pcursor).find("circle").attr("stroke", BDfunctionsDevilBro.colorINV([red, green, blue], "rgb"));
+		BDfunctionsDevilBro.$(scursor).find("path").attr("stroke", BDfunctionsDevilBro.color2RGB("hsl(" + hue + ", 1, 1)"));
 	}
 	
 	function updateAllValues () {
@@ -1941,8 +2372,8 @@ BDfunctionsDevilBro.openColorPicker = function (currentColor, swatch) {
 		
 		updateColors();
 		
-		$(pcursor).find("circle").attr("stroke", BDfunctionsDevilBro.colorINV([red, green, blue], "rgb"));
-		$(scursor).find("path").attr("stroke", BDfunctionsDevilBro.color2RGB("hsl(" + hue + ", 1, 1)"));
+		BDfunctionsDevilBro.$(pcursor).find("circle").attr("stroke", BDfunctionsDevilBro.colorINV([red, green, blue], "rgb"));
+		BDfunctionsDevilBro.$(scursor).find("path").attr("stroke", BDfunctionsDevilBro.color2RGB("hsl(" + hue + ", 1, 1)"));
 	}
 	
 	function updateColors () {
@@ -1957,23 +2388,15 @@ BDfunctionsDevilBro.mapRange = function (from, to, number) {
 };
 
 BDfunctionsDevilBro.getSwatchColor = function (swatch) {
-	return !$(".ui-color-picker-" + swatch + ".nocolor.selected")[0] ? BDfunctionsDevilBro.color2COMP($(".ui-color-picker-" + swatch + ".selected").css("background-color")) : null;
-};
-
-BDfunctionsDevilBro.isPluginEnabled = function (name) {
-	return window.bdplugins[name] && window.pluginCookie[name];
-};
-
-BDfunctionsDevilBro.isRestartNoMoreEnabled = function () {
-	return BDfunctionsDevilBro.isPluginEnabled("Restart-No-More") || BDfunctionsDevilBro.isPluginEnabled("Restart No More");
-};
-
-BDfunctionsDevilBro.isThemeEnabled = function (name) {
-	return window.bdthemes[name] && window.themeCookie[name];
+	return !BDfunctionsDevilBro.$(".ui-color-picker-" + swatch + ".nocolor.selected")[0] ? BDfunctionsDevilBro.color2COMP(BDfunctionsDevilBro.$(".ui-color-picker-" + swatch + ".selected").css("background-color")) : null;
 };
 
 BDfunctionsDevilBro.zacksFork = function () {
 	return (typeof bdpluginErrors === "object" && typeof bdthemeErrors === "object" && typeof bbdVersion === "string");
+};
+
+BDfunctionsDevilBro.isBDv2 = function () {
+	return (typeof BDfunctionsDevilBro.BDv2Api !== "undefined");
 };
 
 BDfunctionsDevilBro.getLibraryStrings = function () {
@@ -1984,7 +2407,13 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				toast_plugin_stopped:			"${pluginName} ${oldVersion} zaustavljen.",
 				toast_plugin_translated:		"${pluginName} prijevod na ${ownlang}.",
 				colorpicker_modal_header_text:	"Birač boja",
-				btn_ok_text: 					"OK"
+				file_navigator_text:			"Pregledajte datoteku",
+				btn_add_text:					"Dodati",
+				btn_cancel_text:				"Prekid",
+				btn_all_text:					"Sve",
+				btn_save_text:					"Uštedjeti",
+				btn_ok_text: 					"OK",
+				search_placeholder: 			"Traziti ..." 
 			};
 		case "da": 		//danish
 			return {
@@ -1992,7 +2421,13 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				toast_plugin_stopped:			"${pluginName} ${oldVersion} er stoppet.",
 				toast_plugin_translated:		"${pluginName} oversat til ${ownlang}.",
 				colorpicker_modal_header_text:	"Farvevælger",
-				btn_ok_text: 					"OK"
+				file_navigator_text:			"Gennemse fil",
+				btn_add_text:					"Tilføje",
+				btn_cancel_text:				"Afbryde",
+				btn_all_text:					"Alle",
+				btn_save_text:					"Spare",
+				btn_ok_text: 					"OK",
+				search_placeholder: 			"Søge efter ..." 
 			};
 		case "de": 		//german
 			return {
@@ -2000,7 +2435,13 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				toast_plugin_stopped:			"${pluginName} ${oldVersion} wurde gestoppt.",
 				toast_plugin_translated:		"${pluginName} auf ${ownlang} übersetzt.",
 				colorpicker_modal_header_text:	"Farbauswahl",
-				btn_ok_text: 					"OK"
+				file_navigator_text:			"Datei durchsuchen",
+				btn_add_text:					"Hinzufügen",
+				btn_cancel_text:				"Abbrechen",
+				btn_all_text:					"Alle",
+				btn_save_text:					"Speichern",
+				btn_ok_text: 					"OK",
+				search_placeholder: 			"Suchen nach ..." 
 			};
 		case "es": 		//spanish
 			return {
@@ -2008,7 +2449,13 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				toast_plugin_stopped:			"${pluginName} ${oldVersion} se ha detenido.",
 				toast_plugin_translated:		"${pluginName} traducido a ${ownlang}.",
 				colorpicker_modal_header_text:	"Selector de color",
-				btn_ok_text: 					"OK"
+				file_navigator_text:			"Buscar archivo",
+				btn_add_text:					"Añadir",
+				btn_cancel_text:				"Cancelar",
+				btn_all_text:					"Todo",
+				btn_save_text:					"Guardar",
+				btn_ok_text: 					"OK",
+				search_placeholder: 			"Buscar ..." 
 			};
 		case "fr": 		//french
 			return {
@@ -2016,7 +2463,13 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				toast_plugin_stopped:			"${pluginName} ${oldVersion} a été arrêté.",
 				toast_plugin_translated:		"${pluginName} traduit en ${ownlang}.",
 				colorpicker_modal_header_text:	"Pipette à couleurs",
-				btn_ok_text: 					"OK"
+				file_navigator_text:			"Parcourir le fichier",
+				btn_add_text:					"Ajouter",
+				btn_cancel_text:				"Abandonner",
+				btn_all_text:					"Tout",
+				btn_save_text:					"Enregistrer",
+				btn_ok_text: 					"OK",
+				search_placeholder: 			"Rechercher ..." 
 			};
 		case "it": 		//italian
 			return {
@@ -2024,7 +2477,13 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				toast_plugin_stopped:			"${pluginName} ${oldVersion} è stato interrotto.",
 				toast_plugin_translated:		"${pluginName} tradotto in ${ownlang}.",
 				colorpicker_modal_header_text:	"Raccoglitore di colore",
-				btn_ok_text: 					"OK"
+				file_navigator_text:			"Sfoglia file",
+				btn_add_text:					"Inserisci",
+				btn_cancel_text:				"Cancellare",
+				btn_all_text:					"Tutto",
+				btn_save_text:					"Salvare",
+				btn_ok_text: 					"OK",
+				search_placeholder: 			"Cercare ..." 
 			};
 		case "nl":		//dutch
 			return {
@@ -2032,7 +2491,13 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				toast_plugin_stopped:			"${pluginName} ${oldVersion} is gestopt.",
 				toast_plugin_translated:		"${pluginName} vertaald naar ${ownlang}.",
 				colorpicker_modal_header_text:	"Kleur kiezer",
-				btn_ok_text: 					"OK"
+				file_navigator_text:			"Bestand zoeken",
+				btn_add_text:					"Toevoegen",
+				btn_cancel_text:				"Afbreken",
+				btn_all_text:					"Alle",
+				btn_save_text:					"Opslaan",
+				btn_ok_text: 					"OK",
+				search_placeholder: 			"Zoeken ..." 
 			};
 		case "no":		//norwegian
 			return {
@@ -2040,7 +2505,13 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				toast_plugin_stopped:			"${pluginName} ${oldVersion} er stoppet.",
 				toast_plugin_translated:		"${pluginName} oversatt til ${ownlang}.",
 				colorpicker_modal_header_text:	"Fargevelger",
-				btn_ok_text: 					"OK"
+				file_navigator_text:			"Bla gjennom fil",
+				btn_add_text:					"Legg til",
+				btn_cancel_text:				"Avbryte",
+				btn_all_text:					"Alle",
+				btn_save_text:					"Lagre",
+				btn_ok_text: 					"OK",
+				search_placeholder: 			"Søk etter ..." 
 			};
 		case "pl":		//polish
 			return {
@@ -2048,7 +2519,13 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				toast_plugin_stopped:			"${pluginName} ${oldVersion} został zatrzymany.",
 				toast_plugin_translated:		"${pluginName} przetłumaczono na ${ownlang}.",
 				colorpicker_modal_header_text:	"Narzędzie do wybierania kolorów",
-				btn_ok_text: 					"OK"
+				file_navigator_text:			"Przeglądać plik",
+				btn_add_text:					"Dodaj",
+				btn_cancel_text:				"Anuluj",
+				btn_all_text:					"Wszystkie",
+				btn_save_text:					"Zapisz",
+				btn_ok_text: 					"OK",
+				search_placeholder: 			"Szukać ..." 
 			};
 		case "pt-BR":		//portuguese (brazil)
 			return {
@@ -2056,7 +2533,13 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				toast_plugin_stopped:			"${pluginName} ${oldVersion} foi interrompido.",
 				toast_plugin_translated:		"${pluginName} traduzido para ${ownlang}.",
 				colorpicker_modal_header_text:	"Seletor de cores",
-				btn_ok_text: 					"OK"
+				file_navigator_text:			"Procurar arquivo",
+				btn_add_text:					"Adicionar",
+				btn_cancel_text:				"Cancelar",
+				btn_all_text:					"Todo",
+				btn_save_text:					"Salvar",
+				btn_ok_text: 					"OK",
+				search_placeholder: 			"Procurar por ..." 
 			};
 		case "fi":		//finnish
 			return {
@@ -2064,7 +2547,13 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				toast_plugin_stopped:			"${pluginName} ${oldVersion} on pysäytetty.",
 				toast_plugin_translated:		"${pluginName} käännetty osoitteeseen ${ownlang}.",
 				colorpicker_modal_header_text:	"Värinvalitsija",
-				btn_ok_text: 					"OK"
+				file_navigator_text:			"Selaa tiedostoa",
+				btn_add_text:					"Lisätä",
+				btn_cancel_text:				"Peruuttaa",
+				btn_all_text:					"Kaikki",
+				btn_save_text:					"Tallentaa",
+				btn_ok_text: 					"OK",
+				search_placeholder: 			"Etsiä ..." 
 			};
 		case "sv":		//swedish
 			return {
@@ -2072,7 +2561,13 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				toast_plugin_stopped:			"${pluginName} ${oldVersion} har blivit stoppad.",
 				toast_plugin_translated:		"${pluginName} översatt till ${ownlang}.",
 				colorpicker_modal_header_text:	"Färgväljare",
-				btn_ok_text: 					"OK"
+				file_navigator_text:			"Bläddra i fil",
+				btn_add_text:					"Lägg till",
+				btn_cancel_text:				"Avbryta",
+				btn_all_text:					"All",
+				btn_save_text:					"Spara",
+				btn_ok_text: 					"OK",
+				search_placeholder: 			"Söka efter ..." 
 			};
 		case "tr":		//turkish
 			return {
@@ -2080,7 +2575,13 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				toast_plugin_stopped:			"${pluginName} ${oldVersion} durduruldu.",
 				toast_plugin_translated:		"${pluginName} ${ownlang} olarak çevrildi.",
 				colorpicker_modal_header_text:	"Renk seçici",
-				btn_ok_text: 					"Okey"
+				file_navigator_text:			"Dosyaya gözat",
+				btn_add_text:					"Eklemek",
+				btn_cancel_text:				"Iptal",
+				btn_all_text:					"Her",
+				btn_save_text:					"Kayıt",
+				btn_ok_text: 					"Okey",
+				search_placeholder: 			"Aramak ..." 
 			};
 		case "cs":		//czech
 			return {
@@ -2088,7 +2589,13 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				toast_plugin_stopped:			"${pluginName} ${oldVersion} byl zastaven.",
 				toast_plugin_translated:		"${pluginName} přeložen do ${ownlang}.",
 				colorpicker_modal_header_text:	"Výběr barev",
-				btn_ok_text: 					"OK"
+				file_navigator_text:			"Procházet soubor",
+				btn_add_text:					"Přidat",
+				btn_cancel_text:				"Zrušení",
+				btn_all_text:					"Vše",
+				btn_save_text:					"Uložit",
+				btn_ok_text: 					"OK",
+				search_placeholder: 			"Hledat ..." 
 			};
 		case "bg":		//bulgarian
 			return {
@@ -2096,7 +2603,13 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				toast_plugin_stopped:			"${pluginName} ${oldVersion} е спрян.",
 				toast_plugin_translated:		"${pluginName} преведена на ${ownlang}.",
 				colorpicker_modal_header_text:	"Избор на цвят",
-				btn_ok_text: 					"Добре"
+				file_navigator_text:			"Прегледайте файла",
+				btn_add_text:					"Добави",
+				btn_cancel_text:				"Зъбести",
+				btn_all_text:					"Bсичко",
+				btn_save_text:					"Cпасяване",
+				btn_ok_text: 					"Добре",
+				search_placeholder: 			"Търся ..." 
 			};
 		case "ru":		//russian
 			return {
@@ -2104,7 +2617,13 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				toast_plugin_stopped:			"${pluginName} ${oldVersion} остановлен.",
 				toast_plugin_translated:		"${pluginName} переведен на ${ownlang}.",
 				colorpicker_modal_header_text:	"Выбор цвета",
-				btn_ok_text: 					"ОК"
+				file_navigator_text:			"Просмотр файла",
+				btn_add_text:					"Добавить",
+				btn_cancel_text:				"Отмена",
+				btn_all_text:					"Все",
+				btn_save_text:					"Cпасти",
+				btn_ok_text: 					"ОК",
+				search_placeholder: 			"Искать ..." 
 			};
 		case "uk":		//ukranian
 			return {
@@ -2112,7 +2631,13 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				toast_plugin_stopped:			"${pluginName} ${oldVersion} було зупинено.",
 				toast_plugin_translated:		"${pluginName} перекладено ${ownlang}.",
 				colorpicker_modal_header_text:	"Колір обкладинки",
-				btn_ok_text: 					"Добре"
+				file_navigator_text:			"Перегляньте файл",
+				btn_add_text:					"Додати",
+				btn_cancel_text:				"Скасувати",
+				btn_all_text:					"Все",
+				btn_save_text:					"Зберегти",
+				btn_ok_text: 					"Добре",
+				search_placeholder: 			"Шукати ..." 
 			};
 		case "ja":		//japanese
 			return {
@@ -2120,7 +2645,13 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				toast_plugin_stopped:			"${pluginName} ${oldVersion}が停止しました.",
 				toast_plugin_translated:		"${pluginName} は${ownlang}に翻訳されました.",
 				colorpicker_modal_header_text:	"カラーピッカー",
-				btn_ok_text: 					"はい"
+				file_navigator_text:			"ファイルを参照",
+				btn_add_text:					"追加",
+				btn_cancel_text:				"キャンセル",
+				btn_all_text:					"すべて",
+				btn_save_text:					"セーブ",
+				btn_ok_text: 					"はい",
+				search_placeholder: 			"検索する ..." 
 			};
 		case "zh-TW":	//chinese (traditional)
 			return {
@@ -2128,7 +2659,13 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				toast_plugin_stopped:			"${pluginName} ${oldVersion}已停止.",
 				toast_plugin_translated:		"${pluginName} 翻譯為${ownlang}.",
 				colorpicker_modal_header_text:	"選色器",
-				btn_ok_text: 					"好"
+				file_navigator_text:			"瀏覽文件",
+				btn_add_text:					"加",
+				btn_cancel_text:				"取消",
+				btn_all_text:					"所有",
+				btn_save_text:					"保存",
+				btn_ok_text: 					"好",
+				search_placeholder: 			"搜索 ..." 
 			};
 		case "ko":		//korean
 			return {
@@ -2136,7 +2673,13 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				toast_plugin_stopped:			"${pluginName} ${oldVersion} 중지되었습니다.",
 				toast_plugin_translated:		"${pluginName} ${ownlang} 로 번역되었습니다.",
 				colorpicker_modal_header_text:	"색상 선택 도구",
-				btn_ok_text: 					"승인"
+				file_navigator_text:			"파일 찾아보기",
+				btn_add_text:					"더하다",
+				btn_cancel_text:				"취소",
+				btn_all_text:					"모든",
+				btn_save_text:					"저장",
+				btn_ok_text: 					"승인",
+				search_placeholder: 			"검색 ..." 
 			};
 		default:		//default: english
 			return {
@@ -2144,15 +2687,26 @@ BDfunctionsDevilBro.getLibraryStrings = function () {
 				toast_plugin_stopped:			"${pluginName} ${oldVersion} has been stopped.",
 				toast_plugin_translated:		"${pluginName} translated to ${ownlang}.",
 				colorpicker_modal_header_text:	"Color Picker",
-				btn_ok_text: 					"OK"
+				file_navigator_text:			"Browse File",
+				btn_add_text:					"Add",
+				btn_cancel_text:				"Cancel",
+				btn_all_text:					"All",
+				btn_save_text:					"Save",
+				btn_ok_text: 					"OK",
+				search_placeholder: 			"Search for ..."
 			};
 	}
 };
 
-$(window)
+BDfunctionsDevilBro.$(document)
+	.off("click.BDfunctionsDevilBroPluginClick")
 	.off("keydown.BDfunctionsDevilBroPressedKeys")
 	.off("keyup.BDfunctionsDevilBroPressedKeys")
 	.off("mousedown.BDfunctionsDevilBroMousePosition")
+	.on("click.BDfunctionsDevilBroPluginClick", ".bd-settingswrap .bd-refresh-button, .bd-settingswrap .bd-switch-checkbox", () => {
+		BDfunctionsDevilBro.setPluginCache();
+		BDfunctionsDevilBro.setThemeCache();
+	})
 	.on("keydown.BDfunctionsDevilBroPressedKeys", (e) => {
 		if (!BDfunctionsDevilBro.pressedKeys.includes(e.which)) BDfunctionsDevilBro.pressedKeys.push(e.which);
 	})
@@ -2162,6 +2716,36 @@ $(window)
 	.on("mousedown.BDfunctionsDevilBroMousePosition", (e) => {
 		BDfunctionsDevilBro.mousePosition = {x:e.pageX,y:e.pageY};
 	});
+
+BDfunctionsDevilBro.isPluginEnabled = function (name) {
+	if (!BDfunctionsDevilBro.isBDv2()) return window.bdplugins[name] && window.pluginCookie[name];
+	else return BDfunctionsDevilBro.Plugins[name.toLowerCase()] ? BDfunctionsDevilBro.Plugins[name.toLowerCase()].enabled : null;
+};
+
+BDfunctionsDevilBro.isRestartNoMoreEnabled = function () {
+	return BDfunctionsDevilBro.isPluginEnabled("Restart-No-More") || BDfunctionsDevilBro.isPluginEnabled("Restart No More");
+};
+
+BDfunctionsDevilBro.isThemeEnabled = function (name) {
+	if (!BDfunctionsDevilBro.isBDv2()) return window.bdthemes[name] && window.themeCookie[name];
+	else return BDfunctionsDevilBro.Themes[name.toLowerCase()] ? BDfunctionsDevilBro.Themes[name.toLowerCase()].enabled : null;
+};
+
+(BDfunctionsDevilBro.setPluginCache = function () {
+	if (!BDfunctionsDevilBro.isBDv2()) return;
+	BDfunctionsDevilBro.Plugins = {};
+	for (let id of BDfunctionsDevilBro.BDv2Api.Plugins.listPlugins()) {
+		BDfunctionsDevilBro.BDv2Api.Plugins.getPlugin(id).then(plugin => {BDfunctionsDevilBro.Plugins[id] = plugin;});
+	}
+})();
+
+(BDfunctionsDevilBro.setThemeCache = function () {
+	if (!BDfunctionsDevilBro.isBDv2()) return;
+	BDfunctionsDevilBro.Themes = {};
+	for (let id of BDfunctionsDevilBro.BDv2Api.Themes.listThemes()) {
+		BDfunctionsDevilBro.BDv2Api.Themes.getTheme(id).then(theme => {BDfunctionsDevilBro.Themes[id] = theme;});
+	}
+})();
 
 BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 	#bd-settingspane-container .ui-form-title {
@@ -2173,6 +2757,9 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		border-radius: 5px;
 		display: inline-block;
 		margin-left: 10px;
+	}
+	#bd-settingspane-container .bda-description {
+		white-space: pre-line !important;
 	}
 	
 	.DevilBro-notice {
@@ -2236,6 +2823,20 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		animation-fill-mode: forwards;
 		opacity: 1;
 		transform: translateY(-10px);
+	}
+	
+	.toast .toast-inner {
+		display: flex;
+		align-items: center;
+	}
+	
+	.toast .toast-avatar {
+		margin-right: 5px;
+		width: 25px;
+		height: 25px;
+		background-size: cover;
+		background-position: center;
+		border-radius: 50%;
 	}
 	
 	.toast.icon {
@@ -2333,6 +2934,9 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		width: auto !important;
 	}
 	
+	li .DevilBro-settings {
+		all: unset !important;
+	}
 	.DevilBro-settings div:not([class*="marginTop"]) {
 		margin-top: 0px !important;
 	}
@@ -2361,21 +2965,120 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		padding-left: 15px;
 	}
 	
-	.DevilBro-settings .ui-hover-card,
-	.DevilBro-settings .ui-hover-card .card-11ynQk-inner,
+	.DevilBro-modal .inputNumberWrapper .numberinput-buttons-zone:hover + .input-2YozMi,
+	.DevilBro-settings .inputNumberWrapper .numberinput-buttons-zone:hover + .input-2YozMi {
+		border-color: black;
+	}
+	.DevilBro-modal .inputNumberWrapper .numberinput-buttons-zone:hover + .input-2YozMi:focus,
+	.DevilBro-settings .inputNumberWrapper .numberinput-buttons-zone:hover + .input-2YozMi:focus,
+	.DevilBro-modal .inputNumberWrapper .numberinput-buttons-zone.pressed + .input-2YozMi,
+	.DevilBro-settings .inputNumberWrapper .numberinput-buttons-zone.pressed + .input-2YozMi {
+		border-color: #7289da;
+	}
+	.DevilBro-modal .inputNumberWrapper,
+	.DevilBro-settings .inputNumberWrapper {
+		position: relative !important;
+	}
+	.DevilBro-modal .inputNumberWrapper .input-2YozMi[type=number],
+	.DevilBro-settings .inputNumberWrapper .input-2YozMi[type=number] {
+		padding-right: 25px;
+	}
+	.DevilBro-modal .inputNumberWrapper .input-2YozMi[type=number]::-webkit-inner-spin-button, 
+	.DevilBro-modal .inputNumberWrapper .input-2YozMi[type=number]::-webkit-outer-spin-button,
+	.DevilBro-settings .inputNumberWrapper .input-2YozMi[type=number]::-webkit-inner-spin-button, 
+	.DevilBro-settings .inputNumberWrapper .input-2YozMi[type=number]::-webkit-outer-spin-button {
+		-webkit-appearance: none;
+	}
+	.DevilBro-modal .inputNumberWrapper .numberinput-buttons-zone,
+	.DevilBro-settings .inputNumberWrapper .numberinput-buttons-zone {
+		cursor: pointer;
+		position: absolute;
+		top: 2px;
+		right: 8px;
+		text-align: center;
+		vertical-align: middle;
+		width: 15px;
+	}
+	.DevilBro-modal .inputNumberWrapper.inputNumberWrapperMini .numberinput-buttons-zone,
+	.DevilBro-settings .inputNumberWrapper.inputNumberWrapperMini .numberinput-buttons-zone {
+		top: -4px;
+		right: 4px;
+	}
+	.DevilBro-modal .inputNumberWrapper .numberinput-button-up,
+	.DevilBro-settings .inputNumberWrapper .numberinput-button-up {
+		border-color: transparent transparent #999 transparent;
+		border-style: solid;
+		border-width: 2.5px 5px 5px 5px;
+		display: inline-block;
+	}
+	.DevilBro-modal .inputNumberWrapper .numberinput-button-up:hover,
+	.DevilBro-settings .inputNumberWrapper .numberinput-button-up:hover {
+		border-bottom-color: #666;
+	}
+	.theme-light .DevilBro-modal .inputNumberWrapper .numberinput-button-up,
+	.theme-light .DevilBro-settings .inputNumberWrapper .numberinput-button-up {
+		border-bottom-color: #dcddde;
+	}
+	.theme-light .DevilBro-modal .inputNumberWrapper .numberinput-button-up:hover,
+	.theme-light .DevilBro-settings .inputNumberWrapper .numberinput-button-up:hover {
+		border-bottom-color: #4f545c;
+	}
+	.theme-dark .DevilBro-modal .inputNumberWrapper .numberinput-button-up,
+	.theme-dark .DevilBro-settings .inputNumberWrapper .numberinput-button-up {
+		border-bottom-color: #72767d;
+	}
+	.theme-dark .DevilBro-modal .inputNumberWrapper .numberinput-button-up:hover,
+	.theme-dark .DevilBro-settings .inputNumberWrapper .numberinput-button-up:hover {
+		border-bottom-color: #f6f6f7;
+	}
+	.DevilBro-modal .inputNumberWrapper .numberinput-button-down,
+	.DevilBro-settings .inputNumberWrapper .numberinput-button-down {
+		border-color: #999 transparent transparent transparent;
+		border-style: solid;
+		border-width: 5px 5px 2.5px 5px;
+		display: inline-block;
+	}
+	.DevilBro-modal .inputNumberWrapper .numberinput-button-down:hover,
+	.DevilBro-settings .inputNumberWrapper .numberinput-button-down:hover {
+		border-top-color: #666;
+	}
+	.theme-light .DevilBro-modal .inputNumberWrapper .numberinput-button-down,
+	.theme-light .DevilBro-settings .inputNumberWrapper .numberinput-button-down {
+		border-top-color: #dcddde;
+	}
+	.theme-light .DevilBro-modal .inputNumberWrapper .numberinput-button-down:hover,
+	.theme-light .DevilBro-settings .inputNumberWrapper .numberinput-button-down:hover {
+		border-top-color: #4f545c;
+	}
+	.theme-dark .DevilBro-modal .inputNumberWrapper .numberinput-button-down,
+	.theme-dark .DevilBro-settings .inputNumberWrapper .numberinput-button-down {
+		border-top-color: #72767d;
+	}
+	.theme-dark .DevilBro-modal .inputNumberWrapper .numberinput-button-down:hover,
+	.theme-dark .DevilBro-settings .inputNumberWrapper .numberinput-button-down:hover {
+		border-top-color: #f6f6f7;
+	}
+	
 	.DevilBro-settings .card-11ynQk,
 	.DevilBro-settings .card-11ynQk .card-11ynQk-inner {
 		width: 550px;
 		min-height: 28px;
 	}
 	
-	.DevilBro-settings .ui-hover-card:before,
+	.DevilBro-settingsmodal .DevilBro-settings {
+		margin-bottom: 20px;
+	}
+	
+	.DevilBro-settingsmodal .DevilBro-settings .card-11ynQk,
+	.DevilBro-settingsmodal .DevilBro-settings .card-11ynQk .card-11ynQk-inner {
+		width: 520px;
+	}
+	
 	.DevilBro-settings .card-11ynQk:before {
 		z-index: 50;
 		left: -10px;
 	}
 	
-	.DevilBro-settings .ui-hover-card .card-11ynQk-inner,
 	.DevilBro-settings .card-11ynQk .card-11ynQk-inner {
 		overflow: hidden;
 		display: flex;
@@ -2384,7 +3087,6 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		z-index: 100;
 	}
 	
-	.DevilBro-settings .ui-hover-card .round-remove-button,
 	.DevilBro-settings .card-11ynQk .button-1qrA-N {
 		opacity: 0;
 		position: absolute;
@@ -2393,7 +3095,6 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		z-index: 200;
 	}
 	
-	.DevilBro-settings .ui-hover-card:hover .round-remove-button,
 	.DevilBro-settings .card-11ynQk:hover .button-1qrA-N {
 		opacity: 1;
 	}
@@ -2406,17 +3107,6 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 	.DevilBro-modal .checkboxContainer-1sZ9eo:before,
 	.DevilBro-settings .checkboxContainer-1sZ9eo:before {
 		display: none;
-	}
-	
-	.DevilBro-modal .checkboxContainer-1sZ9eo .checkbox-1QwaS4.checked-2TahvT,
-	.DevilBro-settings .checkboxContainer-1sZ9eo .checkbox-1QwaS4.checked-2TahvT {
-		background-color: rgb(67, 181, 129); 
-		border-color: rgb(67, 181, 129);
-	}
-	
-	.DevilBro-modal .checkboxContainer-1sZ9eo .checkbox-1QwaS4.checked-2TahvT polyline,
-	.DevilBro-settings .checkboxContainer-1sZ9eo .checkbox-1QwaS4.checked-2TahvT polyline {
-		stroke: #FFFFFF;
 	}
 	
 	.DevilBro-modal [class^="swatches"].disabled {
@@ -2543,29 +3233,41 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		display: initial;
 	}
 	
+	.DevilBro-settingsmodal .modal-2LIEKY {
+		z-index: 4010;
+	}
+	
+	.DevilBro-settingsmodal .backdrop-2ohBEd {
+		z-index: 4005;
+	}
+	
+	.DevilBro-modal .Select-menu-outer,
+	.DevilBro-settings .Select-menu-outer,
+	.DevilBro-tooltip {
+		z-index: 4015;
+	}
+	
 	.colorpicker-modal .colorpicker-container {
-		padding: 15px;
+		padding: 10px 10px 10px 30px;
 		overflow: hidden;
 		display: initial;
 		margin: auto;
 	}
-	
+	.colorpicker-modal .modal-3HOjGZ {
+		width: 600px;
+	}
 	.colorpicker-modal .colorpicker-color,
 	.colorpicker-modal .colorpicker-slider,
 	.colorpicker-modal .colorpicker-controls {
 		float: left;
 		margin-right: 20px;
 	}
-	
 	.colorpicker-modal .colorpicker-inputs {
 		text-align: center;
-		background-color: #7E8084;
-		border-radius: 5px;
-		width: 115px;
-		padding: 3px;
+		width: 150px;
+		padding: 3px 3px 3px 10px;
 		margin-top: 87px;
 	}
-	
 	.colorpicker-modal .colorpicker-pickerpane, 
 	.colorpicker-modal .colorpicker-black, 
 	.colorpicker-modal .colorpicker-white, 
@@ -2573,10 +3275,9 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		position: relative;
 		top: 0px;
 		left: 0px;
-		height: 256px;
-		width: 256px;
+		height: 308px;
+		width: 308px;
 	}
-	
 	.colorpicker-modal .colorpicker-pickercursor {
 		position: absolute;
 		height: 14px;
@@ -2584,22 +3285,19 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		top: -7px;
 		left: -7px;
 	}
-	
 	.colorpicker-modal .colorpicker-pickercursor svg {
 		position: relative;
 		height: 14px;
 		width: 14px;
 	}
-	
 	.colorpicker-modal .colorpicker-sliderpane, 
 	.colorpicker-modal .colorpicker-slider {
 		position: relative;
 		top: 0px;
 		left: 0px;
-		height: 256px;
+		height: 308px;
 		width: 20px;
 	}
-	
 	.colorpicker-modal .colorpicker-slidercursor {
 		position: absolute;
 		top: -4px;
@@ -2611,51 +3309,20 @@ BDfunctionsDevilBro.appendLocalStyle("BDfunctionsDevilBro", `
 		position: relative;
 		height: 12px;
 		width: 32px;
-	}
-		
+	}	
 	.colorpicker-modal [class^="colorpicker-preview-"] {
 		background-color: #808080;
 		border: 3px solid transparent;
-		height: 54px;
-		width: 58px;
+		height: 65px;
+		width: 80px;
 		float: left;
 	}
-	
 	.colorpicker-modal .colorpicker-preview-0 {
 		border-radius: 5px 0 0 5px;
 		border-right: none;
 	}
-	
 	.colorpicker-modal .colorpicker-preview-2 {
 		border-radius: 0 5px 5px 0;
 		border-left: none;
-	}
-	
-	.colorpicker-modal .colorpicker-inputs label {
-		display: inline-block;
-		width: 30px;
-		color: #36393E;
-		letter-spacing: .5px;
-		text-transform: uppercase;
-		text-align: right;
-		flex: 1;
-		cursor: default;
-		font-weight: 600;
-		line-height: 16px;
-		font-size: 14px;
-		position: relative;
-		top: 2px;
-	}
-	
-	.colorpicker-modal .colorpicker-inputs input {
-		border: 3px solid #36393E;
-		width: 65px;
-		margin: 1px 0 1px 6px;
-		padding: 0 2px 0 2px;
-		line-height: 16px;
-		color: #36393E;
-		font-weight: 600;
-		line-height: 16px;
-		font-size: 13px;
 	}`
 );

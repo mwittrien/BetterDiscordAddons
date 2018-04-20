@@ -2,15 +2,13 @@
 
 class MoveablePopups {
 	constructor () {
-		this.popoutObserver = new MutationObserver(() => {});
-		this.modalObserver = new MutationObserver(() => {});
 	}
 
 	getName () {return "MoveablePopups";}
 
 	getDescription () {return "Adds the feature to move all popups and modals around like on a normal desktop. Ctrl + drag with your left mousebutton to drag element.";}
 
-	getVersion () {return "1.0.5";}
+	getVersion () {return "1.0.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -18,22 +16,33 @@ class MoveablePopups {
 	load () {}
 
 	start () {
+		var libraryScript = null;
 		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
 			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
-			$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-			$('head').append('<script src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"></script>');
+			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]');
+			if (libraryScript) libraryScript.remove();
+			libraryScript = document.createElement("script");
+			libraryScript.setAttribute("type", "text/javascript");
+			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js");
+			document.head.appendChild(libraryScript);
 		}
+		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
+		if (typeof BDfunctionsDevilBro === "object") this.initialize();
+		else libraryScript.addEventListener("load", () => {this.initialize();});
+	}
+
+	initialize () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
-			var observertarget = null;
+			var observer = null;
 
-			this.popoutObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.classList && node.classList.length > 0 && node.classList.contains("popout")) {
+								if (node && node.classList && node.classList.length > 0 && node.classList.contains("popout-2RRwAO")) {
 									this.makeMoveable(node);
 								}
 							});
@@ -41,9 +50,9 @@ class MoveablePopups {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".popouts")) this.popoutObserver.observe(observertarget, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, ".popouts, .popouts-1TN9u9", {name:"popoutObserver",instance:observer}, {childList: true});
 			
-			this.modalObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -59,7 +68,7 @@ class MoveablePopups {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".app-XZYfmp ~ [class^='theme-']:not([class*='popouts'])")) this.modalObserver.observe(observertarget, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, ".app-XZYfmp ~ [class^='theme-']:not([class*='popouts'])", {name:"modalObserver",instance:observer}, {childList: true});
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -69,9 +78,6 @@ class MoveablePopups {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			this.popoutObserver.disconnect();
-			this.modalObserver.disconnect();
-			
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
@@ -92,16 +98,14 @@ class MoveablePopups {
 				if (e.ctrlKey) {
 					this.dragging = true;
 					
-					if (div.classList.contains("popout")) $(div.firstChild).css("position", "absolute");
-					
 					var disableTextSelectionCSS = `
 						* {
 							user-select: none !important;
 						}`;
 						
 					BDfunctionsDevilBro.appendLocalStyle("disableTextSelection", disableTextSelectionCSS);
-					var left = $(div).offset().left;
-					var top = $(div).offset().top;
+					var left = div.getBoundingClientRect().left;
+					var top = div.getBoundingClientRect().top;
 					var oldX = e.pageX;
 					var oldY = e.pageY;
 					$(document)

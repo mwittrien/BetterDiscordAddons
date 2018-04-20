@@ -2,10 +2,7 @@
 
 class CharCounter {
 	constructor () {
-		
 		this.selecting = false;
-		
-		this.textareaObserver = new MutationObserver(() => {});
 		
 		this.counterMarkup = `<div id="charcounter"></div>`;
 		
@@ -13,16 +10,21 @@ class CharCounter {
 			#charcounter {
 				display: block;
 				position: absolute;
-				right: 0; 
 				opacity: .5;
 				z-index: 1000;
+				pointer-events: none;
 			}
 			#charcounter.normal {
+				right: 0; 
 				bottom: -1.3em;
 			}
-			#charcounter.form,
 			#charcounter.edit {
-				top: -1.3em;
+				left: 0;
+				bottom: -1.3em;
+			}
+			#charcounter.form {
+				right: 0; 
+				bottom: -1.0em;
 			}`;
 	}
 
@@ -30,7 +32,7 @@ class CharCounter {
 
 	getDescription () {return "Adds a charcounter in the chat.";}
 
-	getVersion () {return "1.1.5";}
+	getVersion () {return "1.1.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -38,19 +40,30 @@ class CharCounter {
 	load () {}
 
 	start () {
+		var libraryScript = null;
 		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
 			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
-			$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-			$('head').append('<script src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"></script>');
+			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]');
+			if (libraryScript) libraryScript.remove();
+			libraryScript = document.createElement("script");
+			libraryScript.setAttribute("type", "text/javascript");
+			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js");
+			document.head.appendChild(libraryScript);
 		}
+		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
+		if (typeof BDfunctionsDevilBro === "object") this.initialize();
+		else libraryScript.addEventListener("load", () => {this.initialize();});
+	}
+
+	initialize () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
-			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
-			
-			var observertarget = null;
+			this.MessageUtils = BDfunctionsDevilBro.WebModules.findByProperties(["parse","isMentioned"]);
+						
+			var observer = null;
 
-			this.textareaObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -63,7 +76,7 @@ class CharCounter {
 					}
 				);
 			});
-			if (observertarget = document.querySelector("#app-mount")) this.textareaObserver.observe(observertarget, {childList: true, subtree:true});
+			BDfunctionsDevilBro.addObserver(this, ".appMount-14L89u", {name:"textareaObserver",instance:observer}, {childList: true, subtree: true});
 			
 			document.querySelectorAll("textarea").forEach(textarea => {this.appendCounter(textarea);});
 		}
@@ -75,28 +88,38 @@ class CharCounter {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			this.textareaObserver.disconnect();
-			
 			$("#charcounter").remove();
-			$("textarea").off("keydown." + this.getName()).off("click." + this.getName()).off("mousedown." + this.getName());
-			$(document).off("mouseup." + this.getName()).off("mousemove." + this.getName());
-			
-			BDfunctionsDevilBro.removeLocalStyle(this.getName());
-			
+			$(".charcounter-added").removeClass("charcounter-added");
+						
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
 	
 	// begin of own functions
 	
+	getParsedLength (string, channel) {
+		let length = string.indexOf("/") == 0 ? string.length : this.MessageUtils.parse(channel, string).content.length
+		return length > string.length ? length : string.length;
+	}
+	
 	appendCounter (textarea) {
 		if (!textarea) return;
+		var channelObj = BDfunctionsDevilBro.getSelectedChannel();
+		var channel = channelObj ? channelObj.data : null;
+		if (!channel) return;
 		var textareaWrap = textarea.parentElement;
 		if (textareaWrap && !textareaWrap.querySelector("#charcounter")) {
 			var textareaInstance = BDfunctionsDevilBro.getOwnerInstance({"node":textarea, "props":["handlePaste","saveCurrentText"], "up":true});
 			if (textareaInstance && textareaInstance.props && textareaInstance.props.type) {
 				var counter = $(this.counterMarkup);
 				counter.addClass(textareaInstance.props.type).appendTo(textareaWrap);
+				
+				var updateCounter = () => {
+					var selection = textarea.selectionEnd - textarea.selectionStart == 0 ? "" : " (" + (textarea.selectionEnd - textarea.selectionStart) + ")";
+					counter.text(this.getParsedLength(textarea.value, channel) + "/2000" + selection);
+				}
+				
+				textareaWrap.parentElement.classList.add("charcounter-added");
 				$(textarea)
 					.off("keydown." + this.getName() + " click." + this.getName())
 					.on("keydown." + this.getName() + " click." + this.getName(), e => {
@@ -125,11 +148,6 @@ class CharCounter {
 					});
 				
 				updateCounter();
-				
-				function updateCounter () {
-					var selection = textarea.selectionEnd - textarea.selectionStart == 0 ? "" : " (" + (textarea.selectionEnd - textarea.selectionStart) + ")";
-					counter.text(textarea.value.length + "/2000" + selection);
-				}
 			}
 		}
 	}

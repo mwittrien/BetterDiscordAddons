@@ -2,15 +2,9 @@
 
 class GoogleTranslateOption {
 	constructor () {
-		
 		this.labels = {};
 		
 		this.languages = {};
-		
-		this.textareaObserver = new MutationObserver(() => {});
-		this.messageContextObserver = new MutationObserver(() => {});
-		this.chatWindowObserver = new MutationObserver(() => {});
-		this.optionPopoutObserver = new MutationObserver(() => {});
 		
 		this.doTranslate = false;
 		this.translating = false;
@@ -19,27 +13,30 @@ class GoogleTranslateOption {
 			settings: {
 				sendOriginalMessage:	{value:false, 	description:"Send the original message together with the translation."}
 			},
+			translators: {
+				useGoogle:				{value:true, 	choice1:"DeepL", 	choice2:"Google",		popout:true}
+			},
 			choices: {
-				inputContext:			{value:"auto", 		place:"Context", 		direction:"Input", 			description:"Input Language in selected Messages:"},
-				outputContext:			{value:"$discord", 	place:"Context", 		direction:"Output", 		description:"Output Language in selected Messages:"},
-				inputMessage:			{value:"auto", 		place:"Message", 		direction:"Input", 			description:"Input Language in your Message:"},
-				outputMessage:			{value:"$discord", 	place:"Message", 		direction:"Output", 		description:"Output Language in your Message:"}
+				inputContext:			{value:"auto", 		place:"Context", 		direction:"Input",		popout:false, 		description:"Input Language in selected Messages:"},
+				outputContext:			{value:"$discord", 	place:"Context", 		direction:"Output",		popout:false, 		description:"Output Language in selected Messages:"},
+				inputMessage:			{value:"auto", 		place:"Message", 		direction:"Input",		popout:true, 		description:"Input Language in your Message:"},
+				outputMessage:			{value:"$discord", 	place:"Message", 		direction:"Output",		popout:true, 		description:"Output Language in your Message:"}
 			}
 		};
 
 		this.messageContextEntryMarkup =
-			`<div class="item-group itemGroup-oViAgA">
-				<div class="item item-1XYaYf messagetranslateoption-item">
+			`<div class="itemGroup-oViAgA">
+				<div class="item-1XYaYf messagetranslateoption-item">
 					<span>REPLACE_context_messagetranslateoption_text</span>
-					<div class="hint"></div>
+					<div class="hint-3TJykr"></div>
 				</div>
 			</div>`;
 
 		this.messageContextEntryMarkup2 =
-			`<div class="item-group itemGroup-oViAgA">
-				<div class="item item-1XYaYf googletranslateoption-item">
+			`<div class="itemGroup-oViAgA">
+				<div class="item-1XYaYf googletranslateoption-item">
 					<span>REPLACE_context_googletranslateoption_text</span>
-					<div class="hint"></div>
+					<div class="hint-3TJykr"></div>
 				</div>
 			</div>`;
 		
@@ -47,7 +44,7 @@ class GoogleTranslateOption {
 			`<div class="btn-option btn-googletranslateoption"></div>`;
 		
 		this.optionsPopoutMarkup = 
-			`<div class="popout popout-bottom no-arrow popout-googletranslateoption-options" style="z-index: 1000; visibility: visible;">
+			`<div class="popout popout-bottom no-arrow popout-2RRwAO popoutBottom-U6AdMj noArrow-2iqI6w popout-googletranslateoption-options" style="z-index: 1000; visibility: visible;">
 				<div class="option-popout small-popout-box"></div
 			</div>`;
 			
@@ -60,27 +57,27 @@ class GoogleTranslateOption {
 			</svg>`;
 			
 		this.reverseButtonMarkup = 
-			`<svg class="reverse-button flexChild-1KGW5q" version="1.1" xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="#FFFFFF" style="flex: 1 1 auto;">
+			`<svg class="reverse-button flexChild-1KGW5q" type="REPLACETYPE" version="1.1" xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="#FFFFFF" style="flex: 0 0 auto;">
 				 <path d="M 0, 10.515 c 0, 2.892, 1.183, 5.521, 3.155, 7.361 L 0, 21.031 h 7.887 V 13.144 l -2.892, 2.892 C 3.549, 14.722, 2.629, 12.75, 2.629, 10.515 c 0 -3.418, 2.235 -6.309, 5.258 -7.492 v -2.629 C 3.418, 1.577, 0, 5.652, 0, 10.515 z M 21.031, 0 H 13.144 v 7.887 l 2.892 -2.892 C 17.482, 6.309, 18.402, 8.281, 18.402, 10.515 c 0, 3.418 -2.235, 6.309 -5.258, 7.492 V 20.768 c 4.469 -1.183, 7.887 -5.258, 7.887 -10.121 c 0 -2.892 -1.183 -5.521 -3.155 -7.361 L 21.031, 0 z"/>
 			</svg>`;
 			
 			
 		this.translatePopoutMarkup = 
-			`<div class="popout popout-bottom-right no-arrow no-shadow popout-googletranslate DevilBro-modal" style="z-index: 2000; overflow: visible; visibility: visible; transform: translateX(-100%) translateY(-100%) translateZ(0px);">
-				<div class="themed-popout">
-					<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO  marginTop8-2gOa2N marginBottom8-1mABJ4" style="flex: 1 1 auto;">
+			`<div class="popout popout-bottom-right no-arrow no-shadow popout-2RRwAO popoutBottomRight-3JmvG2 noArrow-2iqI6w noShadow-31NiLA popout-googletranslate DevilBro-modal" style="z-index: 2000; overflow: visible; visibility: visible; transform: translateX(-100%) translateY(-100%) translateZ(0px);">
+				<div class="themed-popout themedPopout-1uUNjn">
+					<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO  marginTop8-2gOa2N marginBottom8-1mABJ4" style="flex: 1 1 auto;">
 						<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Words starting with "!" will be ignored</h3>
 					</div>
-					${Object.keys(this.defaults.choices).map((key, i) => this.defaults.choices[key].place == "Message" ?
-					`<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4 marginTop8-2gOa2N" style="flex: 1 1 auto;">
+					${Object.keys(this.defaults.choices).map((key, i) =>
+					`<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4 marginTop8-2gOa2N" style="flex: 1 1 auto;">
 						<h3 class="titleDefault-1CWM9y title-3i-5G_ weightMedium-13x9Y8 size16-3IvaX_ flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.choices[key].description}</h3>
-						${this.defaults.choices[key].direction == "Output" ? this.reverseButtonMarkup : ""}
+						${this.defaults.choices[key].direction == "Output" ? this.reverseButtonMarkup.replace("REPLACETYPE",key) : ""}
 					</div>
-					<div class="ui-form-item flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
-						<div class="ui-select select-3JqNgs" style="flex: 1 1 auto;">
+					<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
+						<div class="select-3JqNgs" style="flex: 1 1 auto;">
 							<div class="Select Select--single has-value" type="${key}" value="${this.defaults.choices[key].value}">
 								<div class="Select-control">
-									<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-value" style="flex: 1 1 auto;">
+									<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-value" style="flex: 1 1 auto;">
 										<div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm" style="flex: 1 1 auto;"></div>
 									</div>
 									<span class="Select-arrow-zone">
@@ -89,19 +86,224 @@ class GoogleTranslateOption {
 								</div>
 							</div>
 						</div>
-					</div>`
-					: ``).join("")}
-					<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
-						<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Translate</h3>
+					</div>`).join("")}
+					<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
+						<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Translate:</h3>
 						<div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU valueUnchecked-XR6AOk" style="flex: 0 0 auto;">
-							<input type="checkbox" class="checkboxEnabled-4QfryV checkbox-1KYsPm">
+							<input type="checkbox" class="checkboxEnabled-4QfryV checkbox-1KYsPm" id="translating-checkbox">
 						</div>
 					</div>
+					${Object.keys(this.defaults.translators).map((key, i) =>
+					`<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
+						<h3 class="flex-3B1Tl4 justifyStart-2yIZo0 titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Translator:</h3>
+						<h3 class="flex-3B1Tl4 justifyStart-2yIZo0 titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.translators[key].choice1}</h3>
+						<div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU valueUnchecked-XR6AOk" style="flex: 0 0 auto;">
+							<input type="checkbox" option="translators" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm">
+						</div>
+						<h3 class="flex-3B1Tl4 justifyEnd-1ceqOU titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.translators[key].choice2}</h3>
+					</div>`).join("")}
 				</div>
 			</div>`;
 			
+	
+		this.DeepLTranslateAPI = function () {
+			var INPUT, OUTPUT, clearInput, current, domReady, enabled, executeScript, getLanguage, getOutput, langI, langO, setInput, setLanguage, timer, wc, webview;
+			var _extends = Object.assign || function (target) {
+				for (var i = 1; i < arguments.length; i++) {
+					var source = arguments[i];for (var key in source) {
+						if (Object.prototype.hasOwnProperty.call(source, key)) {
+							target[key] = source[key];
+						}
+					}
+				}return target;
+			}
+			class DeepLTranslateAPI {
+				start() {
+					enabled = true;
+					webview = document.createElement("webview");
+					webview.style.visibility = "hidden";
+					webview.id = "wvDeepLTranslateAPI";
+					webview.partition = "persist:DeepLTranslateAPI";
+					webview.addEventListener("dom-ready", async function () {
+						wc = webview.getWebContents();
+						webview.setAudioMuted(true);
+						domReady = await executeScript(function () {
+							var tas = document.querySelectorAll("textarea");
+							window["INPUT"] = tas[0];
+							window["OUTPUT"] = tas[1];
+							return Promise.resolve(true);
+						});
+					});
+					webview.src = "https://www.deepl.com/translator";
+					document.body.appendChild(webview);
+				}
+
+				stop() {
+					enabled = domReady = false;
+					// webview.terminate()
+					webview.remove();
+					if (timer) {
+						cancelAnimationFrame(timer);
+					}
+					if (current != null) {
+						current.reject(new Error("DeepLTranslateAPI was stopped."));
+					}
+					webview = wc = langI = langO = current = timer = null;
+				}
+
+				isReady() {
+					return domReady;
+				}
+
+				translate(text) {
+					return new Promise(function (resolve, reject) {
+						if (langI === langO) {
+							return resolve(text);
+						}
+						if (!enabled) {
+							return reject(new Error("DeepLTranslateAPI is disabled!"));
+						}
+						if (!domReady) {
+							return reject(new Error("DeepL didn't load (yet?)!"));
+						}
+						if (current != null) {
+							current.reject(new Error("Can only translate so much."));
+						}
+						current = { resolve, reject };
+						(async function () {
+							var __unchanged__, valueNew, valueOld;
+							valueOld = await getOutput();
+							({ __unchanged__ } = await setInput(text));
+							if (true === __unchanged__) {
+								valueOld = void 0;
+							}
+							if (timer) {
+								return;
+							}
+							// todo: figgure out event based change on output
+							while (enabled && valueOld === (valueNew = await getOutput())) {
+								await new Promise(function (c) {
+									return timer = requestAnimationFrame(c);
+								});
+							}
+							current.resolve(valueNew);
+							timer = current = null;
+						})();
+					});
+				}
+
+				setInputLanguage(lang) {
+					return setLanguage(true, lang);
+				}
+
+				setOutputLanguage(lang) {
+					return setLanguage(false, lang);
+				}
+
+				getInputLanguage(lang) {
+					return getLanguage(true);
+				}
+
+				getOutputLanguage(lang) {
+					return getLanguage(false);
+				}
+
+				clearInput() {
+					return clearInput();
+				}
+
+			};
+
+			webview = wc = current = timer = null;
+
+			enabled = domReady = false;
+
+			langI = langO = "auto";
+
+			INPUT = "#_ta0#input#DeepLTranslateAPI#";
+
+			OUTPUT = "#_ta1#output#DeepLTranslateAPI#";
+
+			executeScript = function (replace, func) {
+				var code, k, v;
+				if (!func) {
+					func = replace;
+					replace = { INPUT, OUTPUT };
+				} else {
+					replace = _extends({ INPUT, OUTPUT }, replace);
+				}
+				code = "(" + func.toString() + ")()";
+				for (k in replace) {
+					v = replace[k];
+					if ("string" === typeof v) {
+						v = v.split("\n").join("\\n");
+						v = v.replace(/[^\w\d\s]/g, "\\$&");
+					}
+					code = code.split(k).join(v);
+				}
+				return wc.executeJavaScript(code);
+			};
+
+			setInput = function (text) {
+				return executeScript({ text }, function () {
+					return Promise.resolve(window["INPUT"].value === "text" ? {
+						__unchanged__: true
+					} : (window["INPUT"].value = "text", window["INPUT"].dispatchEvent(new Event("change")), window["INPUT"].value));
+				});
+			};
+
+			getOutput = function () {
+				return executeScript(function () {
+					return Promise.resolve(window["OUTPUT"].value);
+				});
+			};
+
+			setLanguage = async function (inputOrOutput, lang) {
+				if (!domReady) {
+					throw new Error("DeepL didn't load (yet?)!");
+				}
+				lang = !lang || lang === "auto" ? lang : lang.toUpperCase();
+				if (!(lang === "DE" || lang === "EN" || lang === "FR" || lang === "ES" || lang === "IT" || lang === "NL" || lang === "PL" || inputOrOutput && "auto" === lang)) {
+					throw new Error(`${lang} is not a supported language!`);
+				}
+				if (inputOrOutput) {
+					langI = lang;
+				} else {
+					if (langI === (langO = lang)) {
+						return;
+					}
+				}
+				await executeScript({
+					inputOrOutput,
+					__lang____: lang
+				}, function () {
+					document.querySelector(`.lmt__language_select--${inputOrOutput ? "source" : "target"} li[dl-value=__lang____]`).click();
+				});
+			};
+
+			getLanguage = async function (inputOrOutput) {
+				if (!domReady) {
+					throw new Error("DeepL didn't load (yet?)!");
+				}
+				return await executeScript({ inputOrOutput }, function () {
+					return Promise.resolve(document.querySelector(`.lmt__language_select--${inputOrOutput ? "source" : "target"}`).getAttribute("dl-value"));
+				});
+			};
+
+			clearInput = async function () {
+				if (!domReady) {
+					throw new Error("DeepL didn't load (yet?)!");
+				}
+				await executeScript(function () {
+					document.querySelector(".lmt__clear_text_button").click();
+				});
+			};
+
+			return DeepLTranslateAPI;
+		}.call(this);
+			
 		this.css = `
-			textarea {
+			.chat form textarea {
 				padding-right: 0 !important;
 			}
 			
@@ -135,9 +337,9 @@ class GoogleTranslateOption {
 				opacity: 1;
 			}
 			
-			.popout.popout-googletranslate .themed-popout {
+			.popout-2RRwAO.popout-googletranslate .themedPopout-1uUNjn {
 				padding: 0 10px;
-				width: 300px;
+				width: 400px;
 			}
 			
 			.Select-menu-outer.inChat {
@@ -150,26 +352,34 @@ class GoogleTranslateOption {
 		
 	getName () {return "GoogleTranslateOption";}
 
-	getDescription () {return "Adds a Google Translate option to your context menu, which shows a preview of the translated text and on click will open the selected text in Google Translate. Also adds a translation button to your textareas, which will automatically translate the text for you before it is being send.";}
+	getDescription () {return "Adds a Google Translate option to your context menu, which shows a preview of the translated text and on click will open the selected text in Google Translate. Also adds a translation button to your textareas, which will automatically translate the text for you before it is being send. DeepLApi written by square. Thanks ;)";}
 
-	getVersion () {return "1.2.8";}
+	getVersion () {return "1.4.1";}
 	
-	getAuthor () {return "DevilBro";}
+	getAuthor () {return "DevilBro, square";}
 	
 	getSettingsPanel () {
 		if (!this.started || typeof BDfunctionsDevilBro !== "object") return;
 		var choices = 	BDfunctionsDevilBro.getAllData(this, "choices"); 
 		var settings = 	BDfunctionsDevilBro.getAllData(this, "settings"); 
+		var translators = 	BDfunctionsDevilBro.getAllData(this, "translators"); 
 		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="titleDefault-1CWM9y title-3i-5G_ size18-ZM4Qv- height24-2pMcnc weightNormal-3gw0Lm marginBottom8-1mABJ4">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		for (let key in choices) {
-			settingshtml += `<h3 class="titleDefault-1CWM9y title-3i-5G_ weightMedium-13x9Y8 size16-3IvaX_ flexChild-1KGW5q marginBottom8-1mABJ4 marginTop8-2gOa2N" style="flex: 1 1 auto;">${this.defaults.choices[key].description}</h3><div class="ui-form-item flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><div class="ui-select select-3JqNgs" style="flex: 1 1 auto;"><div class="Select Select--single has-value" type="${key}" value="${choices[key]}"><div class="Select-control"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-value" style="flex: 1 1 auto;"><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm" style="flex: 1 1 auto;">${this.languages[choices[key]].name}</div></div><span class="Select-arrow-zone"><span class="Select-arrow"></span></span></div></div></div></div>`
+			let choice = this.getLanguageChoice(key);
+			settingshtml += `<h3 class="titleDefault-1CWM9y title-3i-5G_ weightMedium-13x9Y8 size16-3IvaX_ flexChild-1KGW5q marginBottom8-1mABJ4 marginTop8-2gOa2N" style="flex: 1 1 auto;">${this.defaults.choices[key].description}</h3><div class="ui-form-item flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><div class="select-3JqNgs" style="flex: 1 1 auto;"><div class="Select Select--single has-value" type="${key}" value="${choice}"><div class="Select-control"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-value" style="flex: 1 1 auto;"><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm" style="padding:0;">${this.languages[choice].name}</div></div><span class="Select-arrow-zone"><span class="Select-arrow"></span></span></div></div></div></div>`
 		}
 		for (let key in settings) {
-			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU ${settings[key] ? "valueChecked-3Bzkbm" : "valueUnchecked-XR6AOk"}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
+			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" option="settings" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
+		}
+		for (let key in translators) {
+			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="flex-3B1Tl4 justifyStart-2yIZo0 titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Translator:</h3><h3 class="flex-3B1Tl4 justifyStart-2yIZo0 titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.translators[key].choice1}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" option="translators" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${translators[key] ? " checked" : ""}></div><h3 class="flex-3B1Tl4 justifyEnd-1ceqOU titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.translators[key].choice2}</h3></div>`;
 		}
 		settingshtml += `</div></div>`;
 		
 		var settingspanel = $(settingshtml)[0];
+
+		BDfunctionsDevilBro.initElements(settingspanel);
+
 		$(settingspanel)
 			.on("click", ".Select-control", (e) => {this.openDropdownMenu("inSettings", e);})
 			.on("click", ".checkbox-1KYsPm", () => {this.updateSettings(settingspanel);});
@@ -181,22 +391,33 @@ class GoogleTranslateOption {
 	load () {}
 
 	start () {
+		var libraryScript = null;
 		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
 			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
-			$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-			$('head').append('<script src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"></script>');
+			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]');
+			if (libraryScript) libraryScript.remove();
+			libraryScript = document.createElement("script");
+			libraryScript.setAttribute("type", "text/javascript");
+			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js");
+			document.head.appendChild(libraryScript);
 		}
+		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
+		if (typeof BDfunctionsDevilBro === "object") this.initialize();
+		else libraryScript.addEventListener("load", () => {this.initialize();});
+	}
+
+	initialize () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
-			var observertarget = null;
+			var observer = null;
 
-			this.messageContextObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node.nodeType == 1 && (node.className.includes("context-menu") || node.className.includes("contextMenu-uoJTbz"))) {
+								if (node.nodeType == 1 && node.className.includes("contextMenu-uoJTbz")) {
 									this.onContextMenu(node);
 								}
 							});
@@ -204,9 +425,9 @@ class GoogleTranslateOption {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".app")) this.messageContextObserver.observe(observertarget, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, ".appMount-14L89u", {name:"messageContextObserver",instance:observer}, {childList: true});
 			
-			this.chatWindowObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -222,9 +443,9 @@ class GoogleTranslateOption {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(observertarget, {childList:true, subtree:true});
+			BDfunctionsDevilBro.addObserver(this, ".messages.scroller", {name:"chatWindowObserver",instance:observer}, {childList:true, subtree:true});
 			
-			this.optionPopoutObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -238,7 +459,7 @@ class GoogleTranslateOption {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".popouts")) this.optionPopoutObserver.observe(observertarget, {childList: true});
+			BDfunctionsDevilBro.addObserver(this, ".popouts, .popouts-1TN9u9", {name:"optionPopoutObserver",instance:observer}, {childList: true});
 			
 			$(document).off("click." + this.getName(), ".btn-option").off("contextmenu." + this.getName(), ".message")
 				.on("click." + this.getName(), ".btn-option", (e) => {
@@ -250,30 +471,9 @@ class GoogleTranslateOption {
 			
 			document.querySelectorAll(".messages-group .message").forEach(message => {this.addOptionButton(message);});
 			
-			this.textareaObserver = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(".innerEnabled-gLHeOL, .innerEnabledNoAttach-36PpAk")) {
-									this.addTranslationButton(node.querySelector("textarea"));
-								}
-							});
-						}
-					}
-				);
-			});
-			if (observertarget = document.querySelector("#app-mount")) this.textareaObserver.observe(observertarget, {childList: true, subtree:true});
+			document.querySelectorAll(".chat form textarea").forEach(textarea => {this.addTranslationButton(textarea);});
 			
-			document.querySelectorAll("textarea").forEach(textarea => {this.addTranslationButton(textarea);});
-			
-			this.languages = Object.assign({},
-				{"auto":	{name:"Auto",		id:"auto",		integrated:false}},
-				BDfunctionsDevilBro.languages,
-				{"binary":	{name:"Binary",		id:"binary",	integrated:false}}
-			);
-			
-			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
+			this.setLanguage();
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -282,33 +482,27 @@ class GoogleTranslateOption {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			this.textareaObserver.disconnect();
-			this.messageContextObserver.disconnect();
-			this.chatWindowObserver.disconnect();
-			this.optionPopoutObserver.disconnect();
-			
+			this.stopDeepL();
 			$(document).off("click." + this.getName(), ".btn-option").off("contextmenu." + this.getName(), ".message");
 			
 			document.querySelectorAll(".message.translated").forEach(message => {
 				this.resetMessage(message);
 			});
 			
-			$(".translate-button").remove();
-			document.querySelectorAll(".innerEnabled-gLHeOL, .innerEnabledNoAttach-36PpAk").forEach(textareaWrap => {textareaWrap.style.paddingRight = "0px";});
-			
-			BDfunctionsDevilBro.removeLocalStyle(this.getName());
-			
+			document.querySelectorAll(".translate-button").forEach(button => {button.remove();});
+			document.querySelectorAll(".chat form textarea").forEach(textarea => {textarea.parentElement.style.paddingRight = "0px";});
+						
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
 	
 	onSwitch () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			var observertarget = null;
-			if (observertarget = document.querySelector(".messages.scroller")) this.chatWindowObserver.observe(observertarget, {childList:true, subtree:true});
+			document.querySelectorAll(".chat form textarea").forEach(textarea => {this.addTranslationButton(textarea);});
 			document.querySelectorAll(".messages .message").forEach(message => {this.addOptionButton(message);});
 		}
 	}
+	
 	
 	// begin of own functions
 	
@@ -321,18 +515,24 @@ class GoogleTranslateOption {
 	}
 
 	updateSettings (settingspanel) {
-		var settings = {};
-		for (var input of settingspanel.querySelectorAll(".checkbox-1KYsPm")) {
-			settings[input.value] = input.checked;
-			input.parentElement.classList.toggle("valueChecked-3Bzkbm", input.checked);
-			input.parentElement.classList.toggle("valueUnchecked-XR6AOk", !input.checked);
+		var data = {};
+		for (let input of settingspanel.querySelectorAll(".checkbox-1KYsPm")) {
+			let option = input.getAttribute("option");
+			let value = input.value;
+			if (option && value) {
+				if (!data[option]) data[option] = {};
+				data[option][input.value] = input.checked;
+			}
 		}
-		BDfunctionsDevilBro.saveAllData(settings, this, "settings");
+		for (let option in data) {
+			BDfunctionsDevilBro.saveAllData(data[option], this, option);
+		}
+		this.setLanguage();
 	}
 	
 	onContextMenu (context) {
 		if (!context || !context.tagName || !context.parentElement) return;
-		for (let group of context.querySelectorAll(".item-group, .itemGroup-oViAgA")) {
+		for (let group of context.querySelectorAll(".itemGroup-oViAgA")) {
 			if (!context.querySelector(".messagetranslateoption-item") && BDfunctionsDevilBro.getKeyInformation({"node":group, "key":"displayName", "value":"MessagePinItem"})) {
 				$(this.messageContextEntryMarkup).insertAfter(group)
 					.on("click", ".messagetranslateoption-item", () => {
@@ -347,15 +547,16 @@ class GoogleTranslateOption {
 				if (text) {
 					$(this.messageContextEntryMarkup2).insertAfter(group)
 						.on("mouseenter", ".googletranslateoption-item", (e) => {
-							var {translation, input, output} = this.translateText(text, "context");
-							if (translation) {
-								var tooltiptext = `From ${input.name}:\n${text}\n\nTo ${output.name}:\n${translation}`;
-								var customTooltipCSS = `
-									.googletranslate-tooltip {
-										max-width: ${window.outerWidth - $(e.currentTarget).offset().left - $(e.currentTarget).outerWidth()}px !important;
-									}`;
-								BDfunctionsDevilBro.createTooltip(tooltiptext, e.currentTarget, {type: "right",selector:"googletranslate-tooltip",css:customTooltipCSS});
-							}
+							this.translateText(text, "context", (translation, input, output) => {
+								if (translation) {
+									var tooltiptext = `From ${input.name}:\n${text}\n\nTo ${output.name}:\n${translation}`;
+									var customTooltipCSS = `
+										.googletranslate-tooltip {
+											max-width: ${window.outerWidth - $(e.currentTarget).offset().left - $(e.currentTarget).outerWidth()}px !important;
+										}`;
+									BDfunctionsDevilBro.createTooltip(tooltiptext, e.currentTarget, {type: "right",selector:"googletranslate-tooltip",css:customTooltipCSS});
+								}
+							});
 						})
 						.on("click", ".googletranslateoption-item", (e) => {
 							$(context).hide();
@@ -366,6 +567,41 @@ class GoogleTranslateOption {
 				BDfunctionsDevilBro.updateContextPosition(context);
 			}
 		}
+		
+	}
+	
+	startDeepL () {
+		this.stopDeepL();
+		this.DeepLTranslate = new this.DeepLTranslateAPI();
+		this.DeepLTranslate.start();
+	}
+	
+	stopDeepL () {
+		if (this.DeepLTranslate && typeof this.DeepLTranslate.stop === "function") this.DeepLTranslate.stop();
+		this.DeepLTranslate = undefined;
+	}
+	
+	setLanguage () {
+		this.languages = Object.assign({},
+			{"auto":	{name:"Auto",		id:"auto",		integrated:false,	dic:false,	deepl:true}},
+			BDfunctionsDevilBro.languages,
+			{"binary":	{name:"Binary",		id:"binary",	integrated:false,	dic:false,	deepl:true}}
+		);
+		if (!BDfunctionsDevilBro.getData("useGoogle", this, "translators")) {
+			this.languages = BDfunctionsDevilBro.filterObject(this.languages, (lang) => {return lang.deepl == true ? lang : null});
+			this.startDeepL();
+		}
+		else {
+			this.stopDeepL();
+		}
+	}
+	
+	getLanguageChoice (direction, place) {
+		var type = typeof place === "undefined" ? direction : direction.toLowerCase() + place.charAt(0).toUpperCase() + place.slice(1).toLowerCase();
+		var choice = BDfunctionsDevilBro.getData(type, this, "choices");
+		choice = this.languages[choice] ? choice : Object.keys(this.languages)[0];
+		choice = type.indexOf("output") > -1 && choice == "auto" ? "en" : choice;
+		return choice;
 	}
 	
 	addOptionButton (message) {
@@ -382,7 +618,7 @@ class GoogleTranslateOption {
 		if (wrapper.classList.contains("popout-open")) return;
 		wrapper.classList.add("popout-open");
 		var popout = $(this.optionsPopoutMarkup);
-		$(".popouts").append(popout);
+		$(".popouts, .popouts-1TN9u9").append(popout);
 		$(popout).find(".option-popout").append(this.popoutEntryMarkup);
 		this.addClickListener(popout);
 		
@@ -417,7 +653,7 @@ class GoogleTranslateOption {
 			var messagegroup = $(".message-group").has(div);
 			var pos = messagegroup.find(".message").index(div);
 			if (messagegroup[0] && pos > -1) {
-				var info = BDfunctionsDevilBro.getKeyInformation({"node":messagegroup[0],"key":"messages","time":1000});
+				var info = BDfunctionsDevilBro.getKeyInformation({"node":div,"key":"messages","up":true,"time":1000});
 				if (info) this.message = Object.assign({},info[pos],{"div":div, "group":messagegroup[0], "pos":pos});
 			}
 		}
@@ -429,7 +665,7 @@ class GoogleTranslateOption {
 	addTranslationButton (textarea) {
 		if (!textarea) return;
 		var textareaWrap = textarea.parentElement;
-		if (textareaWrap && !textareaWrap.querySelector(".translate-button")) {
+		if (textareaWrap && !textareaWrap.classList.contains("innerDisabled-1hSPu_") &&  !textareaWrap.querySelector(".translate-button")) {
 			var textareaInstance = BDfunctionsDevilBro.getOwnerInstance({"node":textarea, "props":["handlePaste","saveCurrentText"], "up":true});
 			if (textareaInstance && textareaInstance.props && textareaInstance.props.type) {
 				var button = $(this.translateButtonMarkup)[0];
@@ -451,22 +687,24 @@ class GoogleTranslateOption {
 					.on("input." + this.getName(), () => {
 						if (this.doTranslate) {
 							this.doTranslate = false;
-							var text = textarea.value;
-							var {translation, input, output} = this.translateText(text, "message");
-							if (translation) {
+							if (document.activeElement == textarea) {
+								var text = textarea.value;
 								textarea.focus();
 								textarea.selectionStart = 0;
 								textarea.selectionEnd = text.length;
-								translation = BDfunctionsDevilBro.getData("sendOriginalMessage", this, "settings") ? text + "\n\n" + translation : translation;
-								if (document.activeElement == textarea) {
+								document.execCommand("insertText", false, "");
+								this.translateText(text, "message", (translation, input, output) => {
+									translation = !translation ? text : (BDfunctionsDevilBro.getData("sendOriginalMessage", this, "settings") ? text + "\n\n" + translation : translation);
+									textarea.focus();
 									document.execCommand("insertText", false, translation + " ");
-								}
+									BDfunctionsDevilBro.triggerSend(textarea);
+								});
 							}
 						}
 					})
 					.off("keydown." + this.getName())
 					.on("keydown." + this.getName(), e => {
-						if (textarea.value && this.translating && !e.shiftKey && e.which == 13 && !document.querySelector(".chat form .autocomplete-1TnWNR")) {
+						if (textarea.value && this.translating && !e.shiftKey && e.which == 13 && !textareaWrap.querySelector(".autocomplete-1TnWNR")) {
 							this.doTranslate = true;
 							$(textarea).trigger("input");
 						}
@@ -479,14 +717,21 @@ class GoogleTranslateOption {
 		if (this.message && this.message.content) {
 			var message = this.message.div;
 			if (!message.classList.contains("translated")) {
-				var {translation, input, output} = this.translateText(this.message.content, "context");
-				if (translation) {
-					var markup = message.querySelector(".markup");
-					$(markup).data("orightmlGoogleTranslate", markup.innerHTML);
-					markup.innerText = translation;
-					$(`<span class="edited translated">(${this.labels.translated_watermark_text})</span>`).appendTo(markup);
-					message.classList.add("translated");
-				}
+				this.translateText(this.message.content, "context", (translation, input, output) => {
+					if (translation) {
+						var markup = message.querySelector(".markup");
+						if (markup) {
+							$(markup).data("orightmlGoogleTranslate", markup.innerHTML);
+							markup.innerText = translation;
+							$(`<span class="edited translated">(${this.labels.translated_watermark_text})</span>`)
+								.on("mouseenter." + this.getName(), (e) => {
+									BDfunctionsDevilBro.createTooltip(`<div>From: ${input.name}</div><div>To: ${output.name}</div>`, e.currentTarget, {html:true, type:"top", selector:"translation-tooltip"});
+								})
+								.appendTo(markup);
+							message.classList.add("translated");
+						}
+					}
+				});
 			}
 			else {
 				this.resetMessage(message);
@@ -504,51 +749,76 @@ class GoogleTranslateOption {
 		markup.innerHTML = $(markup).data("orightmlGoogleTranslate");
 	}
 	
-	translateText (text, type) {
-		var [text, mentions] = this.removeMentions(text);
-		var choices = BDfunctionsDevilBro.getAllData(this, "choices");
-		var input = Object.assign({}, type == "context" ? this.languages[choices.inputContext] : this.languages[choices.inputMessage]);
-		var output = Object.assign({}, type == "context" ? this.languages[choices.outputContext] : this.languages[choices.outputMessage]);
+	translateText (text, type, callback) {
+		var finishTranslation = (translation, mentions, input, output, toast) => {
+			if (translation) translation = this.addMentions(translation, mentions);
+			clearInterval(toast.interval);
+			toast.close();
+			callback(translation, input, output);
+		};
+		var [newtext, mentions, translate] = this.removeMentions(text.trim());
+		var input = Object.assign({}, this.languages[this.getLanguageChoice("input", type)]);
+		var output = Object.assign({}, this.languages[this.getLanguageChoice("output", type)]);
 		var translation = "";
-		if (input.id == "binary" || output.id == "binary") {
-			if (input.id == "binary" && output.id != "binary") 			translation = this.binary2string(text);
-			else if (input.id != "binary" && output.id == "binary") 	translation = this.string2binary(text);
-			else if (input.id == "binary" && output.id == "binary") 	translation = text;
-		}
-		else {
-			var request = new XMLHttpRequest();
-			request.open("GET", this.getGoogleTranslateApiURL(input.id, output.id, text), false);
-			request.send(null);
-			if (request.status === 200) {
-				var result = JSON.parse(request.response);
-				result[0].forEach((array) => {translation += array[0];});
-				if (this.languages[result[2]]) input.name = this.languages[result[2]].name;
+		if (translate) {
+			var toast = BDfunctionsDevilBro.showToast("Translating. Please wait", {timeout:0});
+			toast.interval = setInterval(() => {
+				toast.textContent = toast.textContent.indexOf(".....") > -1 ? "Translating. Please wait" : toast.textContent + ".";
+			},500);
+			if (input.id == "binary" || output.id == "binary") {
+				if (input.id == "binary" && output.id != "binary") 			translation = this.binary2string(newtext);
+				else if (input.id != "binary" && output.id == "binary") 	translation = this.string2binary(newtext);
+				else if (input.id == "binary" && output.id == "binary") 	translation = newtext;
+				finishTranslation(translation, mentions, input, output, toast);
+			}
+			else {
+				if (BDfunctionsDevilBro.getData("useGoogle", this, "translators")) {
+					require("request")(this.getGoogleTranslateApiURL(input.id, output.id, newtext), (error, response, result) => {
+						if (!error && result) {
+							result = JSON.parse(result);
+							result[0].forEach((array) => {translation += array[0];});
+							if (this.languages[result[2]]) input.name = this.languages[result[2]].name;
+							finishTranslation(translation, mentions, input, output, toast);
+						}
+					});
+				}
+				else {
+					this.DeepLTranslate.setInputLanguage(input.id);
+					this.DeepLTranslate.setOutputLanguage(output.id);
+					this.DeepLTranslate.translate(newtext).then((translation) => {
+						if (newtext.lastIndexOf(".") != newtext.length-1 && translation.lastIndexOf(".") == translation.length-1) translation = translation.slice(0,-1);
+						finishTranslation(translation, mentions, input, output, toast);
+					});
+					
+				}
 			}
 		}
-		if (translation) translation = this.addMentions(translation, mentions);
-		return {translation, input, output};
+		else {
+			translation = text;
+			finishTranslation(translation, mentions, input, output, toast);
+		}
+	}
+	
+	addMentions (string, mentions) {
+		for (let i in mentions) {
+			string = string.replace("a" + i + "_______", mentions[i].indexOf("!") == 0 ? mentions[i].slice(1) : mentions[i]);
+		}
+		return string;
 	}
 	
 	removeMentions (string) {
-		var mentions = {};
-		var newString = [];
-		string.split(" ").forEach((word, i) => {
-			if (word.indexOf("@") == 0 || word.indexOf("#") == 0 || (word.indexOf("!") == 0 && word.length > 1)) {
-				newString.push("a" + i + "__________________________");
-				mentions[i] = word;
+		var mentions = {}, newString = [], count = 0;
+		string.split(" ").forEach((word) => {
+			if (word.indexOf("<@!") == 0 || word.indexOf(":") == 0 || word.indexOf("@") == 0 || word.indexOf("#") == 0 || (word.indexOf("!") == 0 && word.length > 1)) {
+				newString.push("a" + count + "_______");
+				mentions[count] = word;
+				count++;
 			}
 			else {
 				newString.push(word);
 			}
 		});
-		return [newString.join(" "), mentions];
-	}
-	
-	addMentions (string, mentions) {
-		for (let i in mentions) {
-			string = string.replace("a" + i + "__________________________", mentions[i].indexOf("!") == 0 ? mentions[i].slice(1) : mentions[i]);
-		}
-		return string;
+		return [newString.join(" "), mentions, newString.length-count != 0];
 	}
 	
 	openTranslatePopout (button) {
@@ -556,36 +826,43 @@ class GoogleTranslateOption {
 		button.classList.add("popout-open");
 		var popout = $(this.translatePopoutMarkup);
 		popout
-			.appendTo(".popouts")
+			.appendTo(".popouts-1TN9u9")
 			.css("left", $(button).offset().left + $(button).outerWidth() + "px")
 			.css("top", $(button).offset().top - $(button).outerHeight()/2 + "px")
 			.on("click", ".Select-control", (e) => {this.openDropdownMenu("inChat", e);})
 			.on("click", ".reverse-button", (e) => {
-				var choices = BDfunctionsDevilBro.getAllData(this, "choices");
-				var input = choices.outputMessage;
-				var output = choices.inputMessage == "auto" ? "en" : choices.inputMessage;
-				popout.find(".Select[type='inputMessage']").attr("value", input).find(".title-3I2bY1").text(this.languages[input].name);
-				popout.find(".Select[type='outputMessage']").attr("value", output).find(".title-3I2bY1").text(this.languages[output].name);
-				BDfunctionsDevilBro.saveData("inputMessage", input, this, "choices");
-				BDfunctionsDevilBro.saveData("outputMessage", output, this, "choices");
+				var place = e.currentTarget.getAttribute("type").replace("output","");
+				var input = this.getLanguageChoice("output", place);
+				var output = this.getLanguageChoice("input", place);
+				output = output == "auto" ? "en" : output;
+				popout.find(".Select[type='input" + place + "']").attr("value", input).find(".title-3I2bY1").text(this.languages[input].name);
+				popout.find(".Select[type='output" + place + "']").attr("value", output).find(".title-3I2bY1").text(this.languages[output].name);
+				BDfunctionsDevilBro.saveData("input" + place, input, this, "choices");
+				BDfunctionsDevilBro.saveData("output" + place, output, this, "choices");
 			});
-			
-		var choices = BDfunctionsDevilBro.getAllData(this, "choices");	
+		
 		popout.find(".Select").each((_,selectWrap) => {
-			let language = choices[selectWrap.getAttribute("type")];
+			let language = this.getLanguageChoice(selectWrap.getAttribute("type"));
 			selectWrap.setAttribute("value", language);
 			selectWrap.querySelector(".title-3I2bY1").innerText = this.languages[language].name;
 		});
 			
-		var checkbox = popout.find(".checkbox-1KYsPm")[0];
+		var checkbox = popout[0].querySelector("#translating-checkbox");
 		checkbox.checked = this.translating;
-		checkbox.parentElement.classList.toggle("valueChecked-3Bzkbm", checkbox.checked);
-		checkbox.parentElement.classList.toggle("valueUnchecked-XR6AOk", !checkbox.checked);
 		$(checkbox).on("click." + this.getName(), () => {
-			checkbox.parentElement.classList.toggle("valueChecked-3Bzkbm", checkbox.checked);
-			checkbox.parentElement.classList.toggle("valueUnchecked-XR6AOk", !checkbox.checked);
 			button.classList.toggle("active", checkbox.checked);
 			this.translating = checkbox.checked;
+		});
+			
+		var translators = BDfunctionsDevilBro.getAllData(this, "translators");
+		popout[0].querySelectorAll(".checkbox-1KYsPm[option=translators]").forEach((checkbox) => {
+			checkbox.checked = translators[checkbox.value];
+			$(checkbox).on("click." + this.getName(), () => {
+				this.updateSettings(popout[0]);
+				popout.remove();
+				button.classList.remove("popout-open");
+				this.openTranslatePopout(button);
+			});
 		});
 			
 		$(document).on("mousedown.translatepopout" + this.getName(), (e) => {
@@ -595,6 +872,8 @@ class GoogleTranslateOption {
 				setTimeout(() => {button.classList.remove("popout-open");},300);
 			}
 		});
+		
+		BDfunctionsDevilBro.initElements(popout[0]);
 	}
 	
 	openDropdownMenu (selector, e) {
@@ -630,7 +909,7 @@ class GoogleTranslateOption {
 		for (var key in this.languages) {
 			if (this.defaults.choices[type].direction == "Output" && key == "auto") continue;
 			var isSelected = key == choice ? " is-selected" : "";
-			menuhtml += `<div value="${key}" class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-option ${isSelected}" style="flex: 1 1 auto; display:flex;"><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm" style="flex: 1 1 42%;">${this.languages[key].name}</div></div>`
+			menuhtml += `<div value="${key}" class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-option ${isSelected}" style="flex: 1 1 auto; display:flex;"><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm" style="flex: 1 1 42%;">${this.languages[key].name}</div></div>`
 		}
 		menuhtml += `</div></div>`;
 		return $(menuhtml)[0];

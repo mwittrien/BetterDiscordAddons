@@ -2,8 +2,6 @@
 
 class OldTitleBar {
 	constructor () {
-		this.settingsWindowObserver = new MutationObserver(() => {});
-		
 		this.css = `
 			.titleBar-3_fDwJ.hidden-by-OTB {
 				display: none;
@@ -33,24 +31,28 @@ class OldTitleBar {
 		this.minButtonMarkup = 
 			`<svg class="minButtonOTB iconInactive-WWHQEI icon-mr9wAc iconMargin-2Js7V9" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
 				<g fill="none" class="iconForeground-2c7s3m" fill-rule="evenodd">
-					<path fill="currentColor" d="M19 19v-2H7v2h12z"/>
-					<path d="M1 25h24V1H1v24z"/>
+					<path stroke-width="2" stroke="currentColor" d="M6 18 l13 0"/>
 				</g>
 			</svg>`;
 			
-		this.maxButtonMarkup = 
+		this.maxButtonIsMaxMarkup = 
 			`<svg class="maxButtonOTB iconInactive-WWHQEI icon-mr9wAc iconMargin-2Js7V9" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
 				<g fill="none" class="iconForeground-2c7s3m" fill-rule="evenodd">
-					<path d="M1 1h24v24H1V1z"/>
-					<path fill="currentColor" d="M8 13H6v7h7v-2H8v-5zm-2 0h2V8h5V6H6v7zm7 5v2h7v-7h-2v5h-5zm0-12v2h5v5h2V6h-7z"/>
+					<path stroke-width="2" stroke="currentColor" d="M6 9 l10 0 l0 10 l-10 0 l0 -10 m3 -3 l10 0 l0 10"/>
+				</g>
+			</svg>`;
+			
+		this.maxButtonIsMinMarkup = 
+			`<svg class="maxButtonOTB iconInactive-WWHQEI icon-mr9wAc iconMargin-2Js7V9" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
+				<g fill="none" class="iconForeground-2c7s3m" fill-rule="evenodd">
+					<path stroke-width="2" stroke="currentColor" d="M6 6 l13 0 l0 13 l-13 0 l0 -13"/>
 				</g>
 			</svg>`;
 			
 		this.closeButtonMarkup = 
 			`<svg class="closeButtonOTB iconInactive-WWHQEI icon-mr9wAc iconMargin-2Js7V9" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
 				<g fill="none" class="iconForeground-2c7s3m" fill-rule="evenodd">
-					<path d="M1 1h24v24H1V1z"/>
-					<path fill="currentColor" d="M20 7.41L18.59 6 13 11.59 7.41 6 6 7.41 11.59 13 6 18.59 7.41 20 13 14.41 18.59 20 20 18.59 14.41 13 20 7.41z"/>
+					<path stroke-width="2" stroke="currentColor" d="M6 6 l13 13 m0 -13 l-13 13"/>
 				</g>
 			</svg>`;
 			
@@ -66,7 +68,7 @@ class OldTitleBar {
 
 	getDescription () {return "Reverts the title bar back to its former self.";}
 
-	getVersion () {return "1.3.0";}
+	getVersion () {return "1.3.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -75,11 +77,14 @@ class OldTitleBar {
 		var settings = BDfunctionsDevilBro.getAllData(this, "settings"); 
 		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="titleDefault-1CWM9y title-3i-5G_ size18-ZM4Qv- height24-2pMcnc weightNormal-3gw0Lm marginBottom8-1mABJ4">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		for (let key in settings) {
-			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStart-pnSyE6 noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU ${settings[key] ? "valueChecked-3Bzkbm" : "valueUnchecked-XR6AOk"}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
+			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
 		}
 		settingshtml += `</div></div>`;
 		
 		var settingspanel = $(settingshtml)[0];
+
+		BDfunctionsDevilBro.initElements(settingspanel);
+
 		$(settingspanel)
 			.on("click", ".checkbox-1KYsPm", () => {this.updateSettings(settingspanel);});
 			
@@ -90,17 +95,28 @@ class OldTitleBar {
 	load () {}
 
 	start () {
+		var libraryScript = null;
 		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
 			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
-			$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-			$('head').append('<script src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"></script>');
+			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]');
+			if (libraryScript) libraryScript.remove();
+			libraryScript = document.createElement("script");
+			libraryScript.setAttribute("type", "text/javascript");
+			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js");
+			document.head.appendChild(libraryScript);
 		}
+		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
+		if (typeof BDfunctionsDevilBro === "object") this.initialize();
+		else libraryScript.addEventListener("load", () => {this.initialize();});
+	}
+
+	initialize () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
 			
-			var observertarget = null;
+			var observer = null;
 
-			this.settingsWindowObserver = new MutationObserver((changes, _) => {
+			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
@@ -124,15 +140,17 @@ class OldTitleBar {
 					}
 				);
 			});
-			if (observertarget = document.querySelector(".layers, .layers-20RVFW")) this.settingsWindowObserver.observe(observertarget, {childList:true});
+			BDfunctionsDevilBro.addObserver(this, ".layers-20RVFW", {name:"settingsWindowObserver",instance:observer}, {childList:true});
 			
-			BDfunctionsDevilBro.appendLocalStyle(this.getName(), this.css);
-			
+			$(window).on("resize." + this.getName(), (e) => {
+				this.changeMaximizeButton();
+			});
+						
 			this.addTitleBar();
 		
 			$(".titleBar-3_fDwJ").addClass("hidden-by-OTB");
 			
-			var settingswindow = document.querySelector(".layer[layer-id], .layer-kosS71[layer-id]");
+			var settingswindow = document.querySelector(".layer-kosS71[layer-id]");
 			if (settingswindow && BDfunctionsDevilBro.getData("addToSettings", this, "settings")) {
 				this.addSettingsTitleBar(settingswindow);
 			}
@@ -145,10 +163,7 @@ class OldTitleBar {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			this.settingsWindowObserver.disconnect();
-			
-			BDfunctionsDevilBro.removeLocalStyle(this.getName(), this.css);
-			
+			$(window).off("resize." + this.getName());
 			this.removeTitleBar();
 		
 			$(".titleBar-3_fDwJ").removeClass("hidden-by-OTB");
@@ -159,7 +174,7 @@ class OldTitleBar {
 	
 	onSwitch () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			this.addTitleBar();
+			setImmediate(() => {this.addTitleBar();});
 		}
 	}
 
@@ -170,8 +185,6 @@ class OldTitleBar {
 		var settings = {};
 		for (var input of settingspanel.querySelectorAll(".checkbox-1KYsPm")) {
 			settings[input.value] = input.checked;
-			input.parentElement.classList.toggle("valueChecked-3Bzkbm", input.checked);
-			input.parentElement.classList.toggle("valueUnchecked-XR6AOk", !input.checked);
 		}
 		BDfunctionsDevilBro.saveAllData(settings, this, "settings");
 	}
@@ -193,7 +206,7 @@ class OldTitleBar {
 		$(".divider-1GKkV3").parent().has(".iconInactive-WWHQEI")
 			.append(this.dividerMarkup)
 			.append(this.minButtonMarkup)
-			.append(this.maxButtonMarkup)
+			.append(require("electron").remote.getCurrentWindow().isMaximized() ? this.maxButtonIsMaxMarkup : this.maxButtonIsMinMarkup)
 			.append(this.closeButtonMarkup)
 			.on("click." + this.getName(), ".minButtonOTB", () => {
 				this.doMinimize();
@@ -223,7 +236,7 @@ class OldTitleBar {
 			}
 			settingsbar
 				.append(this.minButtonMarkup)
-				.append(this.maxButtonMarkup)
+				.append(require("electron").remote.getCurrentWindow().isMaximized() ? this.maxButtonIsMaxMarkup : this.maxButtonIsMinMarkup)
 				.append(this.closeButtonMarkup)
 				.on("click." + this.getName(), ".minButtonOTB", () => {
 					this.doMinimize();
@@ -268,6 +281,13 @@ class OldTitleBar {
 	
 	doClose () {
 		require("electron").remote.getCurrentWindow().close();
+	}
+	
+	changeMaximizeButton () {
+		var maxButtonHTML = require("electron").remote.getCurrentWindow().isMaximized() ? this.maxButtonIsMaxMarkup : this.maxButtonIsMinMarkup;
+		document.querySelectorAll(".maxButtonOTB").forEach(maxButton => {
+			maxButton.outerHTML = maxButtonHTML;
+		});
 	}
 	
 	removeTitleBar () {

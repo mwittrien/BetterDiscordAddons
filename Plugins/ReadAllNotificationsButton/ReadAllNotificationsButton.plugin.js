@@ -3,20 +3,25 @@
 class ReadAllNotificationsButton {
 	constructor () {
 		this.RANbuttonMarkup = 
-			`<div class="guild" id="RANbutton-frame" style="height: 20px; margin-bottom: 10px;">
-				<div class="guild-inner" style="height: 20px; border-radius: 4px;">
+			`<div class="guild" id="RANbutton-frame" style="height: 20px; width: 50px; margin-bottom: 10px;">
+				<div class="guild-inner" style="height: 20px; width: 50px; border-radius: 4px;">
 					<a>
 						<div id="RANbutton" style="line-height: 20px; font-size: 12px;">read all</div>
 					</a>
 				</div>
 			</div>`;
+			
+		this.RAMbuttonMarkup = 
+			`<button type="button" id="RAMbutton" class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorBrand-3PmwCE sizeMin-1Wh1KC grow-25YQ8u" style="flex: 0 0 auto; margin-top: -5px; height: 25px;">
+				<div class="contents-4L4hQM">Clear all Mentions</div>
+			</button>`;
 	}
 
 	getName () {return "ReadAllNotificationsButton";}
 
 	getDescription () {return "Adds a button to clear all notifications.";}
 
-	getVersion () {return "1.2.6";}
+	getVersion () {return "1.3.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -24,13 +29,58 @@ class ReadAllNotificationsButton {
 	load () {}
 
 	start () {
+		var libraryScript = null;
 		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
 			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
-			$('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]').remove();
-			$('head').append('<script src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"></script>');
+			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]');
+			if (libraryScript) libraryScript.remove();
+			libraryScript = document.createElement("script");
+			libraryScript.setAttribute("type", "text/javascript");
+			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js");
+			document.head.appendChild(libraryScript);
 		}
+		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
+		if (typeof BDfunctionsDevilBro === "object") this.initialize();
+		else libraryScript.addEventListener("load", () => {this.initialize();});
+	}
+
+	initialize () {
 		if (typeof BDfunctionsDevilBro === "object") {
 			BDfunctionsDevilBro.loadMessage(this);
+			
+			var observer = null;
+			
+			observer = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.addedNodes) {
+							change.addedNodes.forEach((node) => {
+								var mentionspopout = null;
+								if (node && node.tagName && (mentionspopout = node.querySelector(".recent-mentions-popout, .recentMentionsPopout-3QkZEg")) != null) {
+									$(this.RAMbuttonMarkup).insertBefore(".mention-filter, .mentionFilter-wE0FR9", mentionspopout)
+										.on("click", () => {
+											var loadinterval = setInterval(() => {
+												if (!mentionspopout || !mentionspopout.parentElement) clearInterval(loadinterval);
+												var loadbutton = mentionspopout.querySelector(".has-more button, .hasMore-17LQIb button");
+												var closebuttons = mentionspopout.querySelectorAll(".close-button, .closeButton-2Rx3ov");
+												if (!loadbutton) {
+													closebuttons.forEach((btn) => {btn.click();});
+													clearInterval(loadinterval);
+												}
+												else {
+													closebuttons.forEach((btn,i) => {if (closebuttons.length-1 > i) btn.click();});
+													loadbutton.click();
+												}
+											},2000);
+										});
+									mentionspopout.classList.add("RAM-added");
+								}
+							});
+						}
+					}
+				);
+			});
+			BDfunctionsDevilBro.addObserver(this, ".popouts, .popouts-1TN9u9", {name:"mentionsPopoutObserver",instance:observer}, {childList: true});
 			
 			$(this.RANbuttonMarkup).insertBefore(".guild-separator")
 				.on("click", "#RANbutton", () => {
@@ -46,9 +96,9 @@ class ReadAllNotificationsButton {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			$("#RANbutton-frame").remove();
+			$("#RANbutton-frame, #RAMbutton").remove();
 			
-			$(".guilds.scroller").removeClass("RAN-added");
+			$(".RAN-added").removeClass("RAN-added");
 			
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
