@@ -2849,8 +2849,27 @@ html, span:not(.spinner-item) {
 
 /* ----------------------- BDv2 MENU ----------------------- */
 
-.bd-badge-outer {display: none !important;}
-
+.bd-badge-outer {
+	display: none !important;
+}
+.bd-modal-close-area {
+	background: var(--backdrop) center/cover !important;
+	opacity: 1 !important;
+	animation: none !important;
+}
+.bd-modal-close-area::after {
+	content: "";
+	pointer-events: none !important;
+	position: absolute;
+	top: 22px;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(var(--transparencycolor),calc(var(--transparencyalpha) * 2)) !important;
+}
+.hidden-by-OTB ~ * .bd-modal-close-area::after {
+	top: 0 !important;
+}
 .bd-sidebar-region,
 .bd-content-region {
 	background: var(--background) center/cover !important;
@@ -2876,6 +2895,9 @@ html, span:not(.spinner-item) {
 .bd-content-author-link:hover,
 .bd-settingswrap-header-text {
 	color: rgb(var(--accentcolor)) !important;
+}
+.bd-tooltip {
+    color: rgb(255,255,255) !important;
 }
 .bd-header,
 .bd-vtext,

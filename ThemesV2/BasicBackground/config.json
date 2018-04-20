@@ -64,5 +64,45 @@
 				}
 			]
 		}
+	],
+	"configSchemes": [
+		{
+			"id": "default-scheme",
+			"name": "Reset to default",
+			"icon_url": "https://mwittrien.github.io/BetterDiscordAddons/ThemesV2/BasicBackground/background.jpg",
+			"settings": [
+				{
+					"category": "default",
+					"settings": [
+						{
+							"id": "var-background",
+							"value": [
+								"background.jpg"
+							]
+						},
+						{
+							"id": "var-accentcolor",
+							"value": "rgb(190, 78, 180)"
+						},
+						{
+							"id": "var-backdropcolor",
+							"value": "rgba(0, 0, 0, 0.4)"
+						},
+						{
+							"id": "var-transparency-color",
+							"value": "rgba(0, 0, 0, 0.15)"
+						},
+						{
+							"id": "var-transparency-message",
+							"value": 0.5
+						},
+						{
+							"id": "var-transparency-memberlist",
+							"value": 0
+						}
+					]
+				}
+			]
+		}
 	]
 }
