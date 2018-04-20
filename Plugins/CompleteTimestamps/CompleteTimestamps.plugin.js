@@ -13,6 +13,7 @@ class CompleteTimestamps {
 			
 		this.defaults = {
 			settings: {
+				showInChat:		{value:true, 	description:"Replace Chat Timestamp with Complete Timestamp:"},
 				showOnHover:	{value:false, 	description:"Also show Timestamp when you hover over a message:"},
 				displayTime:	{value:true, 	description:"Display the Time in the Timestamp:"},
 				displayDate:	{value:true, 	description:"Display the Date in the Timestamp:"},
@@ -33,7 +34,7 @@ class CompleteTimestamps {
 
 	getDescription () {return "Replace all timestamps with complete timestamps.";}
 
-	getVersion () {return "1.1.6";}
+	getVersion () {return "1.1.7";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -113,7 +114,7 @@ class CompleteTimestamps {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, "#app-mount", {name:"messageObserver",instance:observer}, {childList: true, subtree: true});
+			BDfunctionsDevilBro.addObserver(this, ".appMount-14L89u", {name:"messageObserver",instance:observer}, {childList: true, subtree: true});
 			
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -162,8 +163,6 @@ class CompleteTimestamps {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
-			$(document).off("mouseenter." + this.getName());
-				
 			document.querySelectorAll(".complete-timestamp").forEach(timestamp => {timestamp.classList.remove("complete-timestamp");});
 			
 			BDfunctionsDevilBro.unloadMessage(this);
@@ -251,7 +250,7 @@ class CompleteTimestamps {
 	}
 	
 	changeTimestamp (message) {
-		if (!message || !message.tagName) return;
+		if (!message || !message.tagName || !BDfunctionsDevilBro.getData("showInChat", this, "settings")) return;
 		var messagegroup = this.getMessageGroup(message);
 		if (!messagegroup || !messagegroup.tagName) return;
 		var compact = messagegroup.classList.contains("compact");

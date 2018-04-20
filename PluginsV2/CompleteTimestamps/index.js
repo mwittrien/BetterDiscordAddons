@@ -33,6 +33,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					
 				this.defaults = {
 					settings: {
+						showInChat:		{value:true, 	description:"Replace Chat Timestamp with Complete Timestamp:"},
 						showOnHover:	{value:false, 	description:"Also show Timestamp when you hover over a message:"},
 						displayTime:	{value:true, 	description:"Display the Time in the Timestamp:"},
 						displayDate:	{value:true, 	description:"Display the Date in the Timestamp:"},
@@ -190,7 +191,7 @@ module.exports = (Plugin, Api, Vendor) => {
 		}
 		
 		changeTimestamp (message) {
-			if (!message || !message.tagName) return;
+			if (!message || !message.tagName || !BDfunctionsDevilBro.getData("showInChat", this, "settings")) return;
 			var messagegroup = this.getMessageGroup(message);
 			if (!messagegroup || !messagegroup.tagName) return;
 			var compact = messagegroup.classList.contains("compact");
