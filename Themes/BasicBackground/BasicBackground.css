@@ -2847,16 +2847,18 @@ html, span:not(.spinner-item) {
 .bd-badge-outer {
 	display: none !important;
 }
+.bd-autocomplete,
 .bd-modal-inner {
 	transform: none !important;
 	background: transparent !important;
 	border-radius: 5px !important;
 	border: none !important;
 	box-shadow: none !important;
-	max-height: 80% !important;
 	overflow: visible !important;
 	position: absolute !important
 }
+.bd-autocomplete::after,
+.bd-autocomplete::before,
 .bd-modal-inner::after,
 .bd-modal-inner::before {
 	border-radius: 5px;
@@ -2865,6 +2867,7 @@ html, span:not(.spinner-item) {
 	z-index: -1;
 	pointer-events: none;
 }
+.bd-autocomplete::after,
 .bd-modal-inner::after {
 	top: 0;
 	bottom: 0;
@@ -2872,6 +2875,7 @@ html, span:not(.spinner-item) {
 	left: 0;
 	background: rgba(var(--transparencycolor),calc(var(--transparencyalpha) * 3));
 }
+.bd-autocomplete::before,
 .bd-modal-inner::before {
 	top: -1px;
 	bottom: -1px;
@@ -2879,6 +2883,15 @@ html, span:not(.spinner-item) {
 	left: -1px;
 	background: var(--background) center/cover;
     background-attachment: fixed;
+}
+.bd-modal-inner {
+	max-height: 80% !important;
+}
+.bd-autocomplete-selector {
+    background: transparent !important;
+}
+.bd-autocomplete-selector:hover {
+	background: rgba(var(--transparencycolor),calc(var(--transparencyalpha) * 3));
 }
 .bd-modal-close-area {
 	background: var(--backdrop) center/cover !important;
