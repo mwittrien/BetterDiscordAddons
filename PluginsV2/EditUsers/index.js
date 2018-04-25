@@ -673,8 +673,8 @@ module.exports = (Plugin, Api, Vendor) => {
 					} */
 				}
 				
-				if (avatar) {
-					avatar.style.background = data.removeIcon ? "" : (data.url ? "url(" + data.url + ")" : "url(" + BDfunctionsDevilBro.getUserAvatar(info.id) + ")");
+				if (avatar && (data.removeIcon || data.url)) {
+					avatar.style.background = data.removeIcon ? "" : "url(" + data.url + ")";
 					avatar.style.backgroundSize = "cover";
 					avatar.style.backgroundPosition = "center";
 				}

@@ -165,7 +165,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "2.2.4";}
+	getVersion () {return "2.2.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -709,8 +709,8 @@ class EditUsers {
 				}
 			}
 			
-			if (avatar) {
-				avatar.style.background = data.removeIcon ? "" : (data.url ? "url(" + data.url + ")" : "url(" + BDfunctionsDevilBro.getUserAvatar(info.id) + ")");
+			if (avatar && (data.removeIcon || data.url)) {
+				avatar.style.background = data.removeIcon ? "" : "url(" + data.url + ")";
 				avatar.style.backgroundSize = "cover";
 				avatar.style.backgroundPosition = "center";
 			}
