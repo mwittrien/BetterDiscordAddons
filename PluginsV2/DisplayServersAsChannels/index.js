@@ -194,10 +194,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				});
 				
 				this.dragging = false;
-				$(".guilds-wrapper").addClass("DSAC-styled")
-					.on("mousemove." + this.name, ".guild-placeholder", (e) => {
-						console.log(e);
-					});
+				$(".guilds-wrapper").addClass("DSAC-styled");
 				
 				return true;
 			}

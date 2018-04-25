@@ -150,7 +150,7 @@ class DisplayServersAsChannels {
 
 	getDescription () {return "Display servers in a similar way as channels.";}
 
-	getVersion () {return "1.0.7";}
+	getVersion () {return "1.0.8";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -206,10 +206,7 @@ class DisplayServersAsChannels {
 			});
 			
 			this.dragging = false;
-			$(".guilds-wrapper").addClass("DSAC-styled")
-				.on("mousemove." + this.getName(), ".guild-placeholder", (e) => {
-					console.log(e);
-				});
+			$(".guilds-wrapper").addClass("DSAC-styled");
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
