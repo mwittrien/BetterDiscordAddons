@@ -385,7 +385,9 @@ BDfunctionsDevilBro.showDesktopNotification = function (parsedcontent, parsedopt
 };
 
 BDfunctionsDevilBro.createTooltip = function (content, anker, options = {}) {
-	if (!content || !anker) return null;
+	if (!content || !anker || !document.contains(anker)) return null;
+	console.log(anker);
+	console.log(anker.parentElement);
 	let tooltipcontainer = document.querySelector(".tooltips");
 	if (!tooltipcontainer) return null;
 	
@@ -1918,7 +1920,7 @@ BDfunctionsDevilBro.appendModal = function (modal) {
 	
 	BDfunctionsDevilBro.$(modal)
 		.appendTo(container)
-		.on("click", ".backdrop-2ohBEd, .btn-cancel, .btn-save, .btn-send, .btn-cancel, .btn-ok", () => {
+		.on("click", ".backdrop-2ohBEd, .btn-save, .btn-send, .btn-cancel, .btn-ok", () => {
 			BDfunctionsDevilBro.$(document).off("keydown.modalEscapeListenerDevilBro" + id);
 			BDfunctionsDevilBro.$(modal).addClass("closing");
 			setTimeout(() => {modal.remove();}, 300);
