@@ -409,7 +409,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			$(popout)
 				.off("click." + this.name, ".btn-item-personalpins")
 				.on("click." + this.name, ".btn-item-personalpins", (e) => {
-					$(".popout").has(".option-popout").hide();
+					$(".popout, .popout-2RRwAO").has(".option-popout").hide();
 					this.addMessageToNotes();
 					var popoutbutton = document.querySelector(".btn-option.popout-open");
 					if (popoutbutton) popoutbutton.classList.remove("popout-open");

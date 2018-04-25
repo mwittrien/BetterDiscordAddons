@@ -611,7 +611,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			$(popout)
 				.off("click." + this.name, ".btn-item-googletranslateoption")
 				.on("click." + this.name, ".btn-item-googletranslateoption", (e) => {
-					$(".popout").has(".option-popout").hide();
+					$(".popout, .popout-2RRwAO").has(".option-popout").hide();
 					this.translateMessage();
 					setTimeout(() => {
 						var popoutbutton = document.querySelector(".btn-option.popout-open");

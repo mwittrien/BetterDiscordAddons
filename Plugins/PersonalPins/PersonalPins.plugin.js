@@ -116,7 +116,7 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.5.1";}
+	getVersion () {return "1.5.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -428,7 +428,7 @@ class PersonalPins {
 		$(popout)
 			.off("click." + this.getName(), ".btn-item-personalpins")
 			.on("click." + this.getName(), ".btn-item-personalpins", (e) => {
-				$(".popout").has(".option-popout").hide();
+				$(".popout, .popout-2RRwAO").has(".option-popout").hide();
 				this.addMessageToNotes();
 				var popoutbutton = document.querySelector(".btn-option.popout-open");
 				if (popoutbutton) popoutbutton.classList.remove("popout-open");
