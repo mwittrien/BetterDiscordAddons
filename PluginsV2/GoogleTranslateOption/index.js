@@ -520,7 +520,7 @@ module.exports = (Plugin, Api, Vendor) => {
 						$(this.messageContextEntryMarkup2).insertAfter(group)
 							.on("mouseenter", ".googletranslateoption-item", (e) => {
 								this.translateText(text, "context", (translation, input, output) => {
-									if (translation) {
+									if (e.currentTarget && e.currentTarget.parentElement && translation) {
 										var tooltiptext = `From ${input.name}:\n${text}\n\nTo ${output.name}:\n${translation}`;
 										var customTooltipCSS = `
 											.googletranslate-tooltip {

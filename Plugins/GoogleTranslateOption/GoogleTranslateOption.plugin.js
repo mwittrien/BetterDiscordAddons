@@ -354,7 +354,7 @@ class GoogleTranslateOption {
 
 	getDescription () {return "Adds a Google Translate option to your context menu, which shows a preview of the translated text and on click will open the selected text in Google Translate. Also adds a translation button to your textareas, which will automatically translate the text for you before it is being send. DeepLApi written by square. Thanks ;)";}
 
-	getVersion () {return "1.4.2";}
+	getVersion () {return "1.4.3";}
 	
 	getAuthor () {return "DevilBro, square";}
 	
@@ -548,7 +548,7 @@ class GoogleTranslateOption {
 					$(this.messageContextEntryMarkup2).insertAfter(group)
 						.on("mouseenter", ".googletranslateoption-item", (e) => {
 							this.translateText(text, "context", (translation, input, output) => {
-								if (translation) {
+								if (e.currentTarget && e.currentTarget.parentElement && translation) {
 									var tooltiptext = `From ${input.name}:\n${text}\n\nTo ${output.name}:\n${translation}`;
 									var customTooltipCSS = `
 										.googletranslate-tooltip {
