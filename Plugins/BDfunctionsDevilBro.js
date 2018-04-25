@@ -386,8 +386,6 @@ BDfunctionsDevilBro.showDesktopNotification = function (parsedcontent, parsedopt
 
 BDfunctionsDevilBro.createTooltip = function (content, anker, options = {}) {
 	if (!content || !anker || !document.contains(anker)) return null;
-	console.log(anker);
-	console.log(anker.parentElement);
 	let tooltipcontainer = document.querySelector(".tooltips");
 	if (!tooltipcontainer) return null;
 	
