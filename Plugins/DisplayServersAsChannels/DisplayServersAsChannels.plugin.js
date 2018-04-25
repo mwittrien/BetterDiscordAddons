@@ -205,7 +205,6 @@ class DisplayServersAsChannels {
 				this.changeServer(serverObj);
 			});
 			
-			this.dragging = false;
 			$(".guilds-wrapper").addClass("DSAC-styled");
 		}
 		else {
