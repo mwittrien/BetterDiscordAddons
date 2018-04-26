@@ -15,15 +15,39 @@ class ReadAllNotificationsButton {
 			`<button type="button" id="RAMbutton" class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorBrand-3PmwCE sizeMin-1Wh1KC grow-25YQ8u" style="flex: 0 0 auto; margin-top: -5px; height: 25px;">
 				<div class="contents-4L4hQM">Clear all Mentions</div>
 			</button>`;
+		
+		this.defaults = {
+			settings: {
+				includeMuted:	{value:false, 	description:"Include muted Servers (means more API-Requests):"}
+			}
+		};
 	}
 
 	getName () {return "ReadAllNotificationsButton";}
 
 	getDescription () {return "Adds a button to clear all notifications.";}
 
-	getVersion () {return "1.3.1";}
+	getVersion () {return "1.3.2";}
 
 	getAuthor () {return "DevilBro";}
+	
+	getSettingsPanel () {
+		if (!this.started || typeof BDfunctionsDevilBro !== "object") return;
+		var settings = BDfunctionsDevilBro.getAllData(this, "settings"); 
+		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="titleDefault-1CWM9y title-3i-5G_ size18-ZM4Qv- height24-2pMcnc weightNormal-3gw0Lm marginBottom8-1mABJ4">${this.getName()}</div><div class="DevilBro-settings-inner">`;
+		for (let key in settings) {
+			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
+		}
+		settingshtml += `</div></div>`;
+		
+		var settingspanel = $(settingshtml)[0];
+
+		BDfunctionsDevilBro.initElements(settingspanel);
+
+		$(settingspanel)
+			.on("click", ".checkbox-1KYsPm", () => {this.updateSettings(settingspanel);});
+		return settingspanel;
+	}
 
 	//legacy
 	load () {}
@@ -84,7 +108,8 @@ class ReadAllNotificationsButton {
 			
 			$(this.RANbuttonMarkup).insertBefore(".guild-separator")
 				.on("click", "#RANbutton", () => {
-					BDfunctionsDevilBro.clearReadNotifications(BDfunctionsDevilBro.readUnreadServerList());
+					let servers = BDfunctionsDevilBro.getData("includeMuted", this, "settings") ? BDfunctionsDevilBro.readServerList() : BDfunctionsDevilBro.readUnreadServerList();
+					BDfunctionsDevilBro.clearReadNotifications(servers);
 				});
 				
 			$(".guilds.scroller").addClass("RAN-added");
@@ -102,5 +127,16 @@ class ReadAllNotificationsButton {
 			
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
+	}
+	
+	
+	// begin of own functions
+
+	updateSettings (settingspanel) {
+		var settings = {};
+		for (var input of settingspanel.querySelectorAll(".checkbox-1KYsPm")) {
+			settings[input.value] = input.checked;
+		}
+		BDfunctionsDevilBro.saveAllData(settings, this, "settings");
 	}
 }
