@@ -2,7 +2,7 @@
 
 class ChatAliases {
 	constructor () {
-		this.configs = ["case","exact","regex","file"];
+		this.configs = ["case","exact","autoc","regex","file"];
 		
 		this.defaults = {
 			settings: {
@@ -15,7 +15,7 @@ class ChatAliases {
 
 	getDescription () {return "Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent.";}
 
-	getVersion () {return "1.7.9";}
+	getVersion () {return "1.8.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -44,7 +44,7 @@ class ChatAliases {
 		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Remove all added words.</h3><button action="removeall" type="button" class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorRed-3HTNPV sizeMedium-2VGNaF grow-25YQ8u remove-all" style="flex: 0 0 auto;"><div class="contents-4L4hQM">Reset</div></button></div>`;
 		var infoHidden = BDfunctionsDevilBro.loadData("hideInfo", this, "hideInfo");
 		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO cursorPointer-3oKATS ${infoHidden ? "wrapperCollapsed-18mf-c" : "wrapperDefault-1Dl4SS"} toggle-info" style="flex: 1 1 auto;"><svg class="iconTransition-VhWJ85 ${infoHidden ? "closed-2Hef-I iconCollapsed-1INdMX" : "iconDefault-xzclSQ"}" width="12" height="12" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 10L12 15 17 10"></path></svg><div class="colorTransition-2iZaYd overflowEllipsis-2ynGQq nameCollapsed-3_ChMu" style="flex: 1 1 auto;">Information</div></div>`;
-		settingshtml += `<div class="DevilBro-settings-inner-list info-container" ${infoHidden ? "style='display:none;'" : ""}><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">Case: Will replace words while comparing lowercase/uppercase. apple => apple, not APPLE or AppLe</div><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">Not Case: Will replace words while ignoring lowercase/uppercase. apple => apple, APPLE and AppLe</div><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">Exact: Will replace words that are exactly the replaceword. apple to pear => applepie stays applepie</div><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">Not Exact: Will replace words anywhere they appear. apple to pear => applepieapple to pearpiepear</div><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">Regex: Will treat the entered wordvalue as a regular expression. <a target="_blank" href="https://regexr.com/">Help</a></div><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">File: If the replacevalue is a filepath it will try to upload the file located at the filepath.</div></div>`;
+		settingshtml += `<div class="DevilBro-settings-inner-list info-container" ${infoHidden ? "style='display:none;'" : ""}><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">Case: Will replace words while comparing lowercase/uppercase. apple => apple, not APPLE or AppLe</div><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">Not Case: Will replace words while ignoring lowercase/uppercase. apple => apple, APPLE and AppLe</div><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">Exact: Will replace words that are exactly the replaceword. apple to pear => applepie stays applepie</div><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">Not Exact: Will replace words anywhere they appear. apple to pear => applepieapple to pearpiepear</div><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">Autoc: Will appear in the Autocomplete Menu (if enabled).</div><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">Regex: Will treat the entered wordvalue as a regular expression. <a target="_blank" href="https://regexr.com/">Help</a></div><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">File: If the replacevalue is a filepath it will try to upload the file located at the filepath.</div></div>`;
 		settingshtml += `</div>`;
 
 		var settingspanel = $(settingshtml)[0];
@@ -120,6 +120,13 @@ class ChatAliases {
 			});
 			BDfunctionsDevilBro.addObserver(this, ".appMount-14L89u", {name:"textareaObserver",instance:observer}, {childList: true, subtree:true});
 
+			// PATCH OLD DATA REMOVE SOON
+			let aliases = BDfunctionsDevilBro.loadAllData(this, "words");
+			for (let alias in aliases) {
+				aliases[alias].autoc = aliases[alias].autoc == undefined ? !aliases[alias].regex : aliases[alias].autoc;
+			}
+			BDfunctionsDevilBro.saveAllData(aliases, this, "words");
+			
 			document.querySelectorAll("textarea").forEach(textarea => {this.bindEventToTextArea(textarea);});
 			
 			$(document).off("click." + this.getName()).on("click." + this.getName(), (e) => {
@@ -180,6 +187,7 @@ class ChatAliases {
 					filedata: filedata,
 					case: false,
 					exact: wordvalue.indexOf(" ") == -1,
+					autoc: true,
 					regex: false,
 					file: filedata != null
 				};
@@ -282,15 +290,31 @@ class ChatAliases {
 					textarea.selectionEnd = textarea.value.length;
 					if (document.activeElement == textarea) {
 						var messageInput = this.formatText(textarea.value);
-						if (messageInput && messageInput.text != null) document.execCommand("insertText", false, messageInput.text + " ");
-						if (messageInput && messageInput.files.length > 0 && this.CurrentUserPerms.can(this.Permissions.ATTACH_FILES, channel))
+						if (messageInput && messageInput.text != null) {
+							document.execCommand("insertText", false, messageInput.text ? messageInput.text + " " : "");
+						}
+						if (messageInput && messageInput.files.length > 0 && (channel.type == 1 || this.CurrentUserPerms.can(this.Permissions.ATTACH_FILES, channel))) {
 							this.UploadModule.instantBatchUpload(channel.id, messageInput.files);
+						}
 					}
 				}
 			})
 			.off("keydown." + this.getName())
 			.on("keydown." + this.getName(), e => {
-				if (!e.ctrlKey) $(".autocompleteAliases, .autocompleteAliasesRow").remove();
+				if (e.which == 9) {
+					let selectedChatAlias = textarea.parentElement.querySelector(".autocompleteAliasesRow .selectorSelected-2M0IGv")
+					if (selectedChatAlias) {
+						e.preventDefault();
+						e.stopPropagation();
+						this.swapWordWithAlias(textarea);
+					}
+				}
+				else if (!e.ctrlKey && e.which != 38 && e.which != 40) {
+					if (!(e.which == 39 && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length)) {
+						$(".autocompleteAliases, .autocompleteAliasesRow").remove();
+					}
+				}
+				
 				if (textarea.value && !e.shiftKey && e.which == 13 && !textarea.parentElement.querySelector(".autocomplete-1TnWNR")) {
 					this.format = true;
 					$(textarea).trigger("input");
@@ -324,7 +348,7 @@ class ChatAliases {
 			let aliases = BDfunctionsDevilBro.loadAllData(this, "words"), matchedaliases = {};
 			for (let alias in aliases) {
 				let aliasdata = aliases[alias];
-				if (!aliasdata.regex) {
+				if (!aliasdata.regex && aliasdata.autoc) {
 					if (aliasdata.exact) {
 						if (aliasdata.case && alias.indexOf(lastword) == 0) matchedaliases[alias] = aliasdata;
 						else if (!aliasdata.case && alias.toLowerCase().indexOf(lastword.toLowerCase()) == 0) matchedaliases[alias] = aliasdata;
@@ -347,7 +371,7 @@ class ChatAliases {
 				}
 				
 				$(autocompletemenu)
-					.append(`<div class="autocompleteRowVertical-3_UxVA autocompleteRow-31UJBI autocompleteAliasesRow"><div class="selector-nbyEfM"><div class="contentTitle-sL6DrN small-3-03j1 size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH">Aliases: <strong>${lastword}</strong></div></div></div>`)
+					.append(`<div class="autocompleteRowVertical-3_UxVA autocompleteRow-31UJBI autocompleteAliasesRow"><div class="selector-nbyEfM"><div class="contentTitle-sL6DrN small-3-03j1 size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH">Aliases: <strong class="lastword">${BDfunctionsDevilBro.encodeToHTML(lastword)}</strong></div></div></div>`)
 					.off("mouseenter." + this.getName()).on("mouseenter." + this.getName(), ".selectable-3iSmAf", (e) => {
 						autocompletemenu.querySelectorAll(".selectorSelected-2M0IGv").forEach(selected => {selected.classList.remove("selectorSelected-2M0IGv");});
 						e.currentTarget.classList.add("selectorSelected-2M0IGv");
@@ -355,19 +379,30 @@ class ChatAliases {
 					
 				for (let alias in matchedaliases) {
 					if (amount-- < 1) break;
-					$(`<div class="autocompleteRowVertical-3_UxVA autocompleteRow-31UJBI autocompleteAliasesRow"><div class="selector-nbyEfM selectable-3iSmAf"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO content-249Pr9" style="flex: 1 1 auto;"><div class="flexChild-1KGW5q" style="flex: 1 1 auto;">${BDfunctionsDevilBro.encodeToHTML(alias)}</div><div class="description-YnaVYa flexChild-1KGW5q">${BDfunctionsDevilBro.encodeToHTML(matchedaliases[alias].replace)}</div></div></div></div>`)
+					$(`<div class="autocompleteRowVertical-3_UxVA autocompleteRow-31UJBI autocompleteAliasesRow"><div class="selector-nbyEfM selectable-3iSmAf"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO content-249Pr9" style="flex: 1 1 auto;"><div class="flexChild-1KGW5q aliasword" style="flex: 1 1 auto;">${BDfunctionsDevilBro.encodeToHTML(alias)}</div><div class="description-YnaVYa flexChild-1KGW5q">${BDfunctionsDevilBro.encodeToHTML(matchedaliases[alias].replace)}</div></div></div></div>`)
 						.appendTo(autocompletemenu)
 						.off("click." + this.getName()).on("click." + this.getName(), ".selectable-3iSmAf", (e) => {
-							$(".autocompleteAliases, .autocompleteAliasesRow").remove();
-							textarea.focus();
-							textarea.selectionStart = textarea.value.length - lastword.length;
-							textarea.selectionEnd = textarea.value.length;
-							document.execCommand("insertText", false, alias);
-							textarea.selectionStart = textarea.value.length;
-							textarea.selectionEnd = textarea.value.length;
+							this.swapWordWithAlias(textarea);
 						});
 				}
+				if (!autocompletemenu.querySelector(".selectorSelected-2M0IGv")) {
+					autocompletemenu.querySelector(".autocompleteAliasesRow .selectable-3iSmAf").classList.add("selectorSelected-2M0IGv")
+				}
 			}
+		}
+	}
+	
+	swapWordWithAlias (textarea) {
+		let aliasword = textarea.parentElement.querySelector(".autocompleteAliasesRow .selectorSelected-2M0IGv .aliasword").innerText;
+		let lastword = textarea.parentElement.querySelector(".autocompleteAliasesRow .lastword").innerText;
+		if (aliasword && lastword) {
+			$(".autocompleteAliases, .autocompleteAliasesRow").remove();
+			textarea.focus();
+			textarea.selectionStart = textarea.value.length - lastword.length;
+			textarea.selectionEnd = textarea.value.length;
+			document.execCommand("insertText", false, aliasword);
+			textarea.selectionStart = textarea.value.length;
+			textarea.selectionEnd = textarea.value.length;
 		}
 	}
 
