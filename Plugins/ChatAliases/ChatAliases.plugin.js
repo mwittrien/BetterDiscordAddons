@@ -3,20 +3,30 @@
 class ChatAliases {
 	constructor () {
 		this.configs = ["case","exact","regex","file"];
+		
+		this.defaults = {
+			settings: {
+				addAutoComplete:	{value:true, 	description:"Add an Autocomplete-Menu for Non-Regex Aliases:"}
+			}
+		};
 	}
 
 	getName () {return "ChatAliases";}
 
 	getDescription () {return "Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent.";}
 
-	getVersion () {return "1.7.8";}
+	getVersion () {return "1.7.9";}
 
 	getAuthor () {return "DevilBro";}
 
 	getSettingsPanel () {
 		if (!this.started || typeof BDfunctionsDevilBro !== "object") return;
+		var settings = BDfunctionsDevilBro.getAllData(this, "settings"); 
 		var words = BDfunctionsDevilBro.loadAllData(this, "words");
 		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="titleDefault-1CWM9y title-3i-5G_ size18-ZM4Qv- height24-2pMcnc weightNormal-3gw0Lm marginBottom8-1mABJ4">${this.getName()}</div><div class="DevilBro-settings-inner">`;
+		for (let key in settings) {
+			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
+		}
 		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">Replace:</h3><input action="add" type="text" placeholder="Wordvalue" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_ wordInputs" id="input-wordvalue" style="flex: 1 1 auto;"><button action="add" type="button" class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorBrand-3PmwCE sizeMedium-2VGNaF grow-25YQ8u btn-add btn-addword" style="flex: 0 0 auto;"><div class="contents-4L4hQM"></div></button></div><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">With:</h3><input action="add" type="text" placeholder="Replacevalue" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_ wordInputs" id="input-replacevalue" style="flex: 1 1 auto;"><button type="button" class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorBrand-3PmwCE sizeMedium-2VGNaF grow-25YQ8u file-navigator" style="flex: 0 0 auto;"><div class="contents-4L4hQM"></div><input id="input-file" type="file" style="display:none!important;"></button></div>`;
 		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto; max-width: ${556 - (this.configs.length * 33)}px;">List of Chataliases:</h3><div class="flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyCenter-29N31w alignCenter-3VxkQP noWrap-v6g9vO" style="flex: 1 1 auto; max-width: ${this.configs.length * 34}px;">`;
 		for (let config of this.configs) {
@@ -42,6 +52,7 @@ class ChatAliases {
 		BDfunctionsDevilBro.initElements(settingspanel);
 
 		$(settingspanel)
+			.on("click", ".checkbox-1KYsPm", () => {this.updateSettings(settingspanel);})
 			.on("keypress", ".wordInputs", (e) => {if (e.which == 13) this.updateContainer(settingspanel, e.currentTarget);})
 			.on("keyup", ".game-name-input", (e) => {this.updateWord(e.currentTarget);})
 			.on("click", ".btn-addword, .remove-word, .remove-all", (e) => {this.updateContainer(settingspanel, e.currentTarget);})
@@ -110,6 +121,10 @@ class ChatAliases {
 			BDfunctionsDevilBro.addObserver(this, ".appMount-14L89u", {name:"textareaObserver",instance:observer}, {childList: true, subtree:true});
 
 			document.querySelectorAll("textarea").forEach(textarea => {this.bindEventToTextArea(textarea);});
+			
+			$(document).off("click." + this.getName()).on("click." + this.getName(), (e) => {
+				if (!e.target.tagName === "TEXTAREA") $(".autocompleteAliases, .autocompleteAliasesRow").remove();
+			});
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -118,12 +133,24 @@ class ChatAliases {
 
 	stop () {
 		if (typeof BDfunctionsDevilBro === "object") {
+			$(".autocompleteAliases, .autocompleteAliasesRow").remove();
+			
 			BDfunctionsDevilBro.unloadMessage(this);
 		}
 	}
 
 
 	// begin of own functions
+
+	updateSettings (settingspanel) {
+		var settings = {};
+		for (var input of settingspanel.querySelectorAll(".checkbox-1KYsPm")) {
+			settings[input.value] = input.checked;
+		}
+		BDfunctionsDevilBro.saveAllData(settings, this, "settings");
+		
+		document.querySelectorAll("textarea").forEach(textarea => {this.bindEventToTextArea(textarea);});
+	}
 
 	updateContainer (settingspanel, ele) {
 		var update = false, wordvalue = null, replacevalue = null;
@@ -244,6 +271,7 @@ class ChatAliases {
 		var channelObj = BDfunctionsDevilBro.getSelectedChannel();
 		var channel = channelObj ? channelObj.data : null;
 		if (!channel) return;
+		var settings = BDfunctionsDevilBro.getAllData(this, "settings"); 
 		$(textarea)
 			.off("input." + this.getName())
 			.on("input." + this.getName(), () => {
@@ -262,11 +290,85 @@ class ChatAliases {
 			})
 			.off("keydown." + this.getName())
 			.on("keydown." + this.getName(), e => {
+				if (!e.ctrlKey) $(".autocompleteAliases, .autocompleteAliasesRow").remove();
 				if (textarea.value && !e.shiftKey && e.which == 13 && !textarea.parentElement.querySelector(".autocomplete-1TnWNR")) {
 					this.format = true;
 					$(textarea).trigger("input");
 				}
+				else if (!e.ctrlKey && settings.addAutoComplete && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length) {
+					setImmediate(() => {this.addAutoCompleteMenu(textarea);});
+				}
+			})
+			.off("click." + this.getName())
+			.on("click." + this.getName(), e => {
+				if (settings.addAutoComplete && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length) {
+					setImmediate(() => {this.addAutoCompleteMenu(textarea);});
+				}
 			});
+	}
+	
+	addAutoCompleteMenu (textarea) {
+		if (textarea.parentElement.querySelector(".autocompleteAliasesRow")) return;
+		let words = textarea.value.split(" ");
+		let lastword = words[words.length-1].trim();
+		if (words.length == 1 && BDfunctionsDevilBro.isPluginEnabled("WriteUpperCase")) {
+			let first = lastword.charAt(0);
+			if (first === first.toUpperCase() && lastword.toLowerCase().indexOf("http") == 0) {
+				lastword = lastword.charAt(0).toLowerCase() + lastword.slice(1);
+			}
+			else if (first === first.toLowerCase() && first !== first.toUpperCase() && lastword.toLowerCase().indexOf("http") != 0) {
+				lastword = lastword.charAt(0).toUpperCase() + lastword.slice(1);
+			}
+		}
+		if (lastword) {
+			let aliases = BDfunctionsDevilBro.loadAllData(this, "words"), matchedaliases = {};
+			for (let alias in aliases) {
+				let aliasdata = aliases[alias];
+				if (!aliasdata.regex) {
+					if (aliasdata.exact) {
+						if (aliasdata.case && alias.indexOf(lastword) == 0) matchedaliases[alias] = aliasdata;
+						else if (!aliasdata.case && alias.toLowerCase().indexOf(lastword.toLowerCase()) == 0) matchedaliases[alias] = aliasdata;
+					}
+					else {
+						if (aliasdata.case && alias.indexOf(lastword) > -1) matchedaliases[alias] = aliasdata;
+						else if (!aliasdata.case && alias.toLowerCase().indexOf(lastword.toLowerCase()) > -1) matchedaliases[alias] = aliasdata;
+					}
+				}
+			}
+			if (!BDfunctionsDevilBro.isObjectEmpty(matchedaliases)) {
+				let autocompletemenu = textarea.parentElement.querySelector(".autocomplete-1TnWNR .autocompleteInner-N7OQf1"), amount = 15;
+				if (!autocompletemenu) {
+					autocompletemenu = $(`<div class="autocomplete-1TnWNR autocomplete-1LLKUa autocompleteAliases"><div class="autocompleteInner-N7OQf1"></div></div>`)[0];
+					textarea.parentElement.appendChild(autocompletemenu);
+					autocompletemenu = autocompletemenu.firstElementChild;
+				}
+				else {
+					amount -= autocompletemenu.querySelectorAll(".selectable-3iSmAf").length;
+				}
+				
+				$(autocompletemenu)
+					.append(`<div class="autocompleteRowVertical-3_UxVA autocompleteRow-31UJBI autocompleteAliasesRow"><div class="selector-nbyEfM"><div class="contentTitle-sL6DrN small-3-03j1 size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH">Aliases: <strong>${lastword}</strong></div></div></div>`)
+					.off("mouseenter." + this.getName()).on("mouseenter." + this.getName(), ".selectable-3iSmAf", (e) => {
+						autocompletemenu.querySelectorAll(".selectorSelected-2M0IGv").forEach(selected => {selected.classList.remove("selectorSelected-2M0IGv");});
+						e.currentTarget.classList.add("selectorSelected-2M0IGv");
+					});
+					
+				for (let alias in matchedaliases) {
+					if (amount-- < 1) break;
+					$(`<div class="autocompleteRowVertical-3_UxVA autocompleteRow-31UJBI autocompleteAliasesRow"><div class="selector-nbyEfM selectable-3iSmAf"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO content-249Pr9" style="flex: 1 1 auto;"><div class="flexChild-1KGW5q" style="flex: 1 1 auto;">${BDfunctionsDevilBro.encodeToHTML(alias)}</div><div class="description-YnaVYa flexChild-1KGW5q">${BDfunctionsDevilBro.encodeToHTML(matchedaliases[alias].replace)}</div></div></div></div>`)
+						.appendTo(autocompletemenu)
+						.off("click." + this.getName()).on("click." + this.getName(), ".selectable-3iSmAf", (e) => {
+							$(".autocompleteAliases, .autocompleteAliasesRow").remove();
+							textarea.focus();
+							textarea.selectionStart = textarea.value.length - lastword.length;
+							textarea.selectionEnd = textarea.value.length;
+							document.execCommand("insertText", false, alias);
+							textarea.selectionStart = textarea.value.length;
+							textarea.selectionEnd = textarea.value.length;
+						});
+				}
+			}
+		}
 	}
 
 	formatText (text) {
