@@ -35,7 +35,12 @@ module.exports = (Plugin, Api, Vendor) => {
 						margin-left: 6px;
 						padding: 1px 2px;
 						text-transform: uppercase;
+						text-indent: 0px !important;
 						vertical-align: top;
+					}
+					.compact .TRE-tag {
+						margin-left: 2px;
+						margin-right: 6px;
 					}`;
 				
 				this.updateTags = false;

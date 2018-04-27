@@ -36,7 +36,12 @@ module.exports = (Plugin, Api, Vendor) => {
 						margin-left: 6px;
 						padding: 1px 2px;
 						text-transform: uppercase;
+						text-indent: 0px !important;
 						vertical-align: top;
+					}
+					.compact .user-tag {
+						margin-left: 2px;
+						margin-right: 6px;
 					}
 					.user-tag.popout-tag,
 					.user-tag.profil-tag {

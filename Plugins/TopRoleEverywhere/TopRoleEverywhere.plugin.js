@@ -2,7 +2,7 @@
 
 class TopRoleEverywhere {
 	constructor () {
-		this.css = ` 
+		this.css = `
 			.TRE-tag {
 				border-radius: 3px;
 				box-sizing: border-box;
@@ -15,7 +15,12 @@ class TopRoleEverywhere {
 				margin-left: 6px;
 				padding: 1px 2px;
 				text-transform: uppercase;
+				text-indent: 0px !important;
 				vertical-align: top;
+			}
+			.compact .TRE-tag {
+				margin-left: 2px;
+				margin-right: 6px;
 			}`;
 			
 		this.updateTags = false;
@@ -40,7 +45,7 @@ class TopRoleEverywhere {
 
 	getDescription () {return "Adds the highest role of a user as a tag.";}
 
-	getVersion () {return "2.5.7";}
+	getVersion () {return "2.5.8";}
 
 	getAuthor () {return "DevilBro";}
 	

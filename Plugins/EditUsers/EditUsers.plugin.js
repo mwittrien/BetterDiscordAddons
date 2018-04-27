@@ -16,7 +16,12 @@ class EditUsers {
 				margin-left: 6px;
 				padding: 1px 2px;
 				text-transform: uppercase;
+				text-indent: 0px !important;
 				vertical-align: top;
+			}
+			.compact .user-tag {
+				margin-left: 2px;
+				margin-right: 6px;
 			}
 			.user-tag.popout-tag,
 			.user-tag.profil-tag {
@@ -165,7 +170,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "2.2.5";}
+	getVersion () {return "2.2.6";}
 
 	getAuthor () {return "DevilBro";}
 	
