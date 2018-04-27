@@ -282,8 +282,11 @@ class ChatAliases {
 					textarea.selectionEnd = textarea.value.length;
 					if (document.activeElement == textarea) {
 						var messageInput = this.formatText(textarea.value);
-						if (messageInput && messageInput.text != null) document.execCommand("insertText", false, messageInput.text + " ");
-						if (messageInput && messageInput.files.length > 0 && this.CurrentUserPerms.can(this.Permissions.ATTACH_FILES, channel))
+						if (messageInput && messageInput.text != null) {
+							if(messageInput.text == "") document.execCommand("insertText", false, "");
+							else document.execCommand("insertText", false, messageInput.text + " ");
+						}
+						if (messageInput && messageInput.files.length > 0 && (channel.type == 1 || this.CurrentUserPerms.can(this.Permissions.ATTACH_FILES, channel)))
 							this.UploadModule.instantBatchUpload(channel.id, messageInput.files);
 					}
 				}
