@@ -2141,7 +2141,7 @@ BDFDB.openColorPicker = function (currentColor, swatch) {
 									<div class="colorpicker-preview-0 selected" style="background-color:#808080;"></div>
 									<div class="colorpicker-preview-2" style="background-color:#808080;"></div>
 								</div>
-								<div class="colorpicker-inputs card-3DrRmC cardPrimaryEditable-2IQ7-V">
+								<div class="colorpicker-inputs ${BDFDB.disCNS.card + BDFDB.disCN.cardprimaryeditable}">
 									${Object.keys(inputs).map((key, i) => 
 									`<div class="colorpicker-input ${BDFDB.disCNS.flex1 + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal1 + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.aligncenter + BDFDB.disCNS.justifycenter + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.nowrap}">
 										<div class="${BDFDB.disCNS.flex1 + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal1 + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCN.nowrap}" style="flex: 1 1 20%">
@@ -2817,6 +2817,19 @@ BDFDB.DiscordClasses = {
 	buttonspinner: "spinner-3a9zLT",
 	buttonspinneritem: "spinnerItem-3GlVyU",
 	buttonsubmitting: "submitting-3qlO9O"
+	card: "card-3Qj_Yx",
+	cardbrand: "cardBrand-39zmMQ",
+	cardbrandoutline: "cardBrandOutline-3jvFfo",
+	carddanger: "cardDanger-ZurOv3",
+	carddangeroutline: "cardDangerOutline-3t0Do9",
+	cardprimary: "cardPrimary-1Hv-to",
+	cardprimaryeditable: "cardPrimaryEditable-3KtE4g",
+	cardprimaryoutline: "cardPrimaryOutline-29Ujqw",
+	cardprimaryoutlineeditable: "cardPrimaryOutlineEditable-PEnpzz",
+	cardsuccess: "cardSuccess-3uEYjj",
+	cardsuccessoutline: "cardSuccessOutline-1Su_ab",
+	cardwarning: "cardWarning-2yPNAa",
+	cardwarningoutline: "cardWarningOutline-1cs56O",
 	categorycontainerdefault: "containerDefault-3GGEv_",
 	channelcontainerdefault: "containerDefault-1ZnADq",
 	channelname: "name-3M0b8v",
@@ -2873,6 +2886,9 @@ BDFDB.DiscordClasses = {
 	horizontal2: "horizontal-2EEEnY",
 	horizontalreverse1: "horizontalReverse-2eTKWD",
 	horizontalreverse2: "horizontalReverse-3tRjY7",
+	hovercard: "card-2j1p1_",
+	hovercardinner: "card-inner",
+	hovercardbutton: "button-1dUBJq",
 	input: "input-cIJ7To",
 	inputdefault: "inputDefault-_djjkz",
 	inputdisabled: "disabled-2BKQFm",
@@ -2979,6 +2995,7 @@ BDFDB.DiscordClasses = {
 	tooltips: "tooltips",
 	tooltiptop: "tooltip-top",
 	vertical: "vertical-V37hAW",
+	weightlight: "weightLight-3heiur",
 	weightmedium: "weightMedium-2iZe9B",
 	weightsemibold: "weightSemiBold-NJexzi",
 	wrap: "wrap-ZIn9Iy",
@@ -3378,8 +3395,8 @@ BDFDB.appendLocalStyle("BDFDB", `
 		border-top-color: #f6f6f7;
 	}
 	
-	.DevilBro-settings .card-11ynQk,
-	.DevilBro-settings .card-11ynQk .card-11ynQk-inner {
+	.DevilBro-settings ${BDFDB.dotCN.hovercard},
+	.DevilBro-settings ${BDFDB.dotCNS.hovercard + BDFDB.dotCN.hovercardinner} {
 		width: 550px;
 		min-height: 28px;
 	}
@@ -3388,17 +3405,17 @@ BDFDB.appendLocalStyle("BDFDB", `
 		margin-bottom: 20px;
 	}
 	
-	.DevilBro-settingsmodal .DevilBro-settings .card-11ynQk,
-	.DevilBro-settingsmodal .DevilBro-settings .card-11ynQk .card-11ynQk-inner {
+	.DevilBro-settingsmodal .DevilBro-settings ${BDFDB.dotCN.hovercard},
+	.DevilBro-settingsmodal .DevilBro-settings ${BDFDB.dotCNS.hovercard + BDFDB.dotCN.hovercardinner} {
 		width: 520px;
 	}
 	
-	.DevilBro-settings .card-11ynQk:before {
+	.DevilBro-settings ${BDFDB.dotCN.hovercard}:before {
 		z-index: 50;
 		left: -10px;
 	}
 	
-	.DevilBro-settings .card-11ynQk .card-11ynQk-inner {
+	.DevilBro-settings ${BDFDB.dotCNS.hovercard + BDFDB.dotCN.hovercardinner} {
 		overflow: hidden;
 		display: flex;
 		align-items: center;
@@ -3406,7 +3423,7 @@ BDFDB.appendLocalStyle("BDFDB", `
 		z-index: 100;
 	}
 	
-	.DevilBro-settings .card-11ynQk .button-1qrA-N {
+	.DevilBro-settings ${BDFDB.dotCNS.hovercard + BDFDB.dotCNS.hovercardbutton} {
 		opacity: 0;
 		position: absolute;
 		right: -31px;
@@ -3414,7 +3431,7 @@ BDFDB.appendLocalStyle("BDFDB", `
 		z-index: 200;
 	}
 	
-	.DevilBro-settings .card-11ynQk:hover .button-1qrA-N {
+	.DevilBro-settings ${BDFDB.dotCN.hovercard}:hover ${BDFDB.dotCNS.hovercard} {
 		opacity: 1;
 	}
 	
