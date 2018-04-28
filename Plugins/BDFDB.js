@@ -27,6 +27,7 @@ BDFDB.loadMessage = function (plugin) {
 	var downloadUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
 	BDFDB.checkUpdate(pluginName, downloadUrl);
 	
+	if (typeof plugin.initConstructor === "function") plugin.initConstructor();
 	if (typeof plugin.css === "string") BDFDB.appendLocalStyle(pluginName, plugin.css);
 	BDFDB.addOnSwitchListener(plugin);
 	BDFDB.addReloadListener(plugin);
