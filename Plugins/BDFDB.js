@@ -43,7 +43,7 @@ BDFDB.loadMessage = function (plugin) {
 		},7200000);
 	}
 	var layers = null;
-	if (typeof window.PluginUpdates.observer === "undefined" && (layers = document.querySelector(".layers-20RVFW")) != null) {
+	if (typeof window.PluginUpdates.observer === "undefined" && (layers = document.querySelector(BDFDB.dotCN.layers)) != null) {
 		window.PluginUpdates.observer = new MutationObserver((changes, _) => {
 			changes.forEach(
 				(change, i) => {
@@ -210,19 +210,19 @@ BDFDB.showUpdateNotice = function (pluginName, downloadUrl) {
 	if (!updateNoticeBar) {
 		updateNoticeBar = BDFDB.createNotificationsBar(`The following plugins have updates:&nbsp;&nbsp;<strong id="outdatedPlugins"></strong>`, {html:true, id:"pluginNotice", type:"info", btn: !BDFDB.isRestartNoMoreEnabled() ? "Reload" : ""});
 		BDFDB.$(updateNoticeBar)
-			.on("click", ".dismiss-1QjyJW", () => {
+			.on("click", BDFDB.dotCN.noticedismiss, () => {
 				BDFDB.$(updateNoticeBar).slideUp({complete: () => {
 					updateNoticeBar.remove();
 				}});
 			})
-			.on("click", ".button-2TvR03", (e) => {
+			.on("click", BDFDB.dotCN.noticebutton, (e) => {
 				e.preventDefault();
 				window.location.reload(false);
 			})
-			.on("mouseenter", ".button-2TvR03", (e) => {
+			.on("mouseenter", BDFDB.dotCN.noticebutton, (e) => {
 				if (window.PluginUpdates.downloaded) BDFDB.createTooltip(window.PluginUpdates.downloaded.join(", "), e.currentTarget, {type:"bottom", selector:"update-notice-tooltip"});
 			})
-			.find(".button-2TvR03").hide();
+			.find(BDFDB.dotCN.noticebutton).hide();
 	}
 	if (updateNoticeBar) {
 		let outdatedContainer = updateNoticeBar.querySelector("#outdatedPlugins");
@@ -250,14 +250,8 @@ BDFDB.downloadPlugin = function (pluginName, downloadUrl, updateNoticeBar) {
 		filename = filename[filename.length - 1];
 		var file = path.join(BDFDB.getPluginsFolder(), filename);
 		fileSystem.writeFileSync(file, body);
-		// REMOVE IN SOME TIME (29.01.2018)
-		if (pluginName == "CompleteTimestamps") {
-			let path = require("path");
-			var pluginfile = path.join(BDFDB.getPluginsFolder(), "CompleteTimestamp.plugin.js");
-			fileSystem.unlink(pluginfile, (error) => {});
-		}
 		BDFDB.showToast(`${pluginName} ${window.PluginUpdates.plugins[downloadUrl].version} has been replaced by ${pluginName} ${remoteVersion}`, {selector:"plugin-updated-toast"});
-		if (updateNoticeBar.querySelector(".button-2TvR03")) {
+		if (updateNoticeBar.querySelector(BDFDB.dotCN.noticebutton)) {
 			window.PluginUpdates.plugins[downloadUrl].version = remoteVersion;
 			if (!window.PluginUpdates.downloaded) window.PluginUpdates.downloaded = [];
 			if (!window.PluginUpdates.downloaded.includes(pluginName)) window.PluginUpdates.downloaded.push(pluginName);
@@ -281,13 +275,13 @@ BDFDB.removeUpdateNotice = function (pluginName, updateNoticeBar) {
 			}
 
 			if (!outdatedContainer.querySelector("span")) {
-				var reloadbutton = updateNoticeBar.querySelector(".button-2TvR03");
+				var reloadbutton = updateNoticeBar.querySelector(BDFDB.dotCN.noticebutton);
 				if (reloadbutton) {
 					updateNoticeBar.querySelector(".notice-message").innerText = "To finish updating you need to reload.";
 					reloadbutton.style.display = "inline-block";
 				}
 				else {
-					updateNoticeBar.querySelector(".dismiss-1QjyJW").click();
+					updateNoticeBar.querySelector(BDFDB.dotCN.noticedismiss).click();
 				}
 			} 
 		}
@@ -296,8 +290,8 @@ BDFDB.removeUpdateNotice = function (pluginName, updateNoticeBar) {
 
 BDFDB.showToast = function (content, options = {}) {
 	if (!document.querySelector(".toasts")) {
-		let container = document.querySelector(".channels-3g2vYe + div");
-		let memberlist = container ? container.querySelector(".channel-members-wrap, .membersWrap-3wRngy") : null;
+		let container = document.querySelector(BDFDB.dotCNS.channels + "+ div");
+		let memberlist = container ? container.querySelector(BDFDB.dotCNS.memberswrap) : null;
 		let left = container ? container.getBoundingClientRect().left : 310;
 		let width = container ? (memberlist ? container.offsetWidth - memberlist.offsetWidth : container.offsetWidth) : window.outerWidth - left;
 		let form = container ? container.querySelector("form") : null;
@@ -307,7 +301,7 @@ BDFDB.showToast = function (content, options = {}) {
 		toastWrapper.style.setProperty("left", left + "px");
 		toastWrapper.style.setProperty("width", width + "px");
 		toastWrapper.style.setProperty("bottom", bottom + "px");
-		document.querySelector(".app").appendChild(toastWrapper);
+		document.querySelector(BDFDB.dotCN.appold).appendChild(toastWrapper);
 	}
 	const {type = "", icon = true, timeout = 3000, html = false, selector = ""} = options;
 	let toastElem = document.createElement("div");
@@ -387,16 +381,16 @@ BDFDB.showDesktopNotification = function (parsedcontent, parsedoptions = {}) {
 
 BDFDB.createTooltip = function (content, anker, options = {}) {
 	if (!content || !anker || !document.contains(anker)) return null;
-	let tooltipcontainer = document.querySelector(".tooltips");
+	let tooltipcontainer = document.querySelector(BDFDB.dotCN.tooltips);
 	if (!tooltipcontainer) return null;
 	
 	let id = Math.round(Math.random()*10000000000000000);
 	let tooltip = document.createElement("div");
-	tooltip.className = "tooltip tooltip-black DevilBro-tooltip";
-	if (options.type) tooltip.classList.add("tooltip-" + options.type);
+	tooltip.className = BDFDB.disCNS.toast + BDFDB.disCNS.toastblack + "DevilBro-tooltip";
+	if (options.type) tooltip.classList.add(BDFDB.disCN["tooltip" + options.type]);
 	if (options.id) tooltip.id = options.id.split(" ")[0];
 	if (options.selector) options.selector.split(" ").forEach(selector => {if(selector) tooltip.classList.add(selector);});
-	if (options.css) BDFDB.appendLocalStyle("customTooltipDevilBro" + id, options.css);
+	if (options.css) BDFDB.appendLocalStyle("BDFDBcustomTooltip" + id, options.css);
 	if (options.html === true) tooltip.innerHTML = content;
 	else tooltip.innerText = content;
 	
@@ -437,7 +431,7 @@ BDFDB.createTooltip = function (content, anker, options = {}) {
 				tooltipObserver.disconnect();
 				tooltip.remove();
 				BDFDB.$(anker).off("mouseleave.BDFDBTooltip" + id);
-				BDFDB.removeLocalStyle("customTooltipDevilBro" + id);
+				BDFDB.removeLocalStyle("BDFDBcustomTooltip" + id);
 			}
 		});
 	});
@@ -454,18 +448,18 @@ BDFDB.createNotificationsBar = function (content, options = {}) {
 	if (!content) return;
 	let id = Math.round(Math.random()*10000000000000000);
 	let notifiybar = document.createElement("div");
-	notifiybar.className = BDFDB.disCN.notice + " " + "notice-3I4-y_ size14-1wjlWP weightMedium-13x9Y8 height36-13sPn7" + " DevilBro-notice notice-" + id;
-	notifiybar.innerHTML = `<div class="dismiss-1QjyJW"></div><span class="notice-message"></span></strong>`;
-	BDFDB.$(".app .guilds-wrapper + div > div:first > div:first").append(notifiybar);
+	notifiybar.className = BDFDB.disCNS.notice + BDFDB.disCNS.size14 + BDFDB.disCNS.weightmedium + BDFDB.disCNS.height36 + "DevilBro-notice notice-" + id;
+	notifiybar.innerHTML = `<div class="${BDFDB.disCNS.noticedismiss}"></div><span class="notice-message"></span></strong>`;
+	BDFDB.$(BDFDB.dotCNS.app + BDFDB.dotCNS.guildswrapper + " + div > div:first > div:first").append(notifiybar);
 	var notifiybarinner = notifiybar.querySelector(".notice-message");
 	if (options.icon) {
 		var icons = {
-			"android":			{name:"iconAndroid-cnqiCY icon-4jKckW",				size:"small"},
-			"apple":			{name:"iconApple-2ZQIid icon-4jKckW",				size:"small"},
-			"windows":			{name:"iconWindows-11s3sD icon-4jKckW",				size:"small"},
-			"androidBig":		{name:"iconAndroid-cnqiCY platformIcon-1JFXvA",		size:"big"},
-			"appleBig":			{name:"iconApple-2ZQIid platformIcon-1JFXvA",		size:"big"},
-			"windowsBig":		{name:"iconWindows-11s3sD platformIcon-1JFXvA",		size:"big"}
+			"android":			{name:BDFDB.disCNS.noticeiconandroid + BDFDB.disCN.noticeicon,			size:"small"},
+			"apple":			{name:BDFDB.disCNS.noticeiconapple + BDFDB.disCN.noticeicon,			size:"small"},
+			"windows":			{name:BDFDB.disCNS.noticeiconwindows + BDFDB.disCN.noticeicon,			size:"small"},
+			"androidBig":		{name:BDFDB.disCNS.noticeiconandroid + BDFDB.disCN.noticeplatformicon,	size:"big"},
+			"appleBig":			{name:BDFDB.disCNS.noticeiconapple + BDFDB.disCN.noticeplatformicon,	size:"big"},
+			"windowsBig":		{name:BDFDB.disCNS.noticeiconwindows + BDFDB.disCN.noticeplatformicon,	size:"big"}
 		};
 		for (let icon of options.icon.split(" ")) {
 			icon = icons[icon];
@@ -476,10 +470,10 @@ BDFDB.createNotificationsBar = function (content, options = {}) {
 		}
 		
 	}
-	if (options.btn) BDFDB.$(`<button class="button-2TvR03 size14-1wjlWP weightMedium-13x9Y8">${options.btn}</button>`).insertAfter(notifiybarinner);
+	if (options.btn) BDFDB.$(`<button class="${BDFDB.disCNS.noticebutton + BDFDB.disCNS.size14 + BDFDB.disCN.weightmedium}">${options.btn}</button>`).insertAfter(notifiybarinner);
 	if (options.id) notifiybar.id = options.id.split(" ")[0];
 	if (options.selector) options.selector.split(" ").forEach(selector => {if(selector) notifiybar.classList.add(selector);});
-	if (options.css) BDFDB.appendLocalStyle("customNotificationsBarDevilBro" + id, options.css);
+	if (options.css) BDFDB.appendLocalStyle("BDFDBcustomNotificationsBar" + id, options.css);
 	if (options.html === true) notifiybarinner.innerHTML = content;
 	else {
 		var urltest = document.createElement("a");
@@ -487,7 +481,7 @@ BDFDB.createNotificationsBar = function (content, options = {}) {
 		for (let word of content.split(" ")) {
 			let encodedword = BDFDB.encodeToHTML(word);
 			urltest.href = word;
-			newcontent.push((urltest.host && urltest.host != window.location.host) ? `<label class="textLink-3eOiS-">${encodedword}</label>` : encodedword);
+			newcontent.push((urltest.host && urltest.host != window.location.host) ? `<label class="${BDFDB.disCN.textlink}">${encodedword}</label>` : encodedword);
 		}
 		notifiybarinner.innerHTML = newcontent.join(" ");
 	}
@@ -495,22 +489,22 @@ BDFDB.createNotificationsBar = function (content, options = {}) {
 	var type = null;
 	if (options.type) {
 		var types = {
-			"brand":		"noticeBrand-3o3fQA",
-			"danger":		"noticeDanger-1SIxaf",
-			"default":		"noticeDefault-16Om2m",
-			"facebook":		"noticeFacebook-1eAoSW",
-			"info":			"noticeInfo-3v29SJ",
-			"premium":		"noticePremium-2x9Tv2",
-			"spotify":		"noticeSpotify-27AKmv flex-3B1Tl4 alignCenter-3VxkQP justifyCenter-29N31w",
-			"streamer":		"noticeStreamerMode-1OlfKV",
-			"success":		"noticeSuccess-P1EnBb"
+			"brand":		BDFDB.disCN.noticebrand,
+			"danger":		BDFDB.disCN.noticedanger,
+			"default":		BDFDB.disCN.noticedefault,
+			"facebook":		BDFDB.disCN.noticefacebook,
+			"info":			BDFDB.disCN.noticeinfo,
+			"premium":		BDFDB.disCN.noticepremium,
+			"spotify":		BDFDB.disCNS.noticespotify + BDFDB.disCNS.flex2 + BDFDB.disCNS.aligncenter + BDFDB.disCN.justifycenter,
+			"streamer":		BDFDB.disCN.noticestreamer,
+			"success":		BDFDB.disCN.noticesuccess
 		};
 		if (type = types[options.type]) type.split(" ").forEach(selector => {if(selector) notifiybar.classList.add(selector);});
 		if (options.type == "premium") {
-			var button = notifiybar.querySelector(".button-2TvR03");
-			if (button) button.classList.add("premiumAction-2lj9ha");
-			notifiybarinner.classList.add("premiumText-2gecpf");
-			BDFDB.$(`<i class="premiumLogo-2PV9qw"></i>`).insertBefore(notifiybarinner);
+			var button = notifiybar.querySelector(BDFDB.dotCN.noticebutton);
+			if (button) button.classList.add(BDFDB.disCN.noticepremiumaction);
+			notifiybarinner.classList.add(BDFDB.disCN.noticepremiumtext);
+			BDFDB.$(`<i class="${BDFDB.disCN.noticepremiumlogo}"></i>`).insertBefore(notifiybarinner);
 		}
 	}
 	if (!type) {
@@ -518,29 +512,29 @@ BDFDB.createNotificationsBar = function (content, options = {}) {
 		var color = comp && comp[0] > 180 && comp[1] > 180 && comp[2] > 180 ? "#000" : "#FFF";
 		var bgColor = comp ? BDFDB.color2HEX(comp) : "#F26522";
 		var dismissFilter = comp && comp[0] > 180 && comp[1] > 180 && comp[2] > 180 ? "brightness(0%)" : "brightness(100%)";
-		BDFDB.appendLocalStyle("customNotificationsBarColorCorrectionDevilBro" + id, 
+		BDFDB.appendLocalStyle("BDFDBcustomNotificationsBarColorCorrection" + id, 
 			`.DevilBro-notice.notice-${id} {
 				background-color: ${bgColor} !important;
 			}
 			.DevilBro-notice.notice-${id} .notice-message {
 				color: ${color} !important;
 			}
-			.DevilBro-notice.notice-${id} .button-2TvR03 {
+			.DevilBro-notice.notice-${id} ${BDFDB.dotCN.noticebutton} {
 				color: ${color} !important;
 				border-color: ${color} !important;
 			}
-			.DevilBro-notice.notice-${id} .button-2TvR03:hover {
+			.DevilBro-notice.notice-${id} ${BDFDB.dotCN.noticebutton}:hover {
 				color: ${bgColor} !important;
 				background-color: ${color} !important;
 			}
-			.DevilBro-notice.notice-${id} .dismiss-1QjyJW {
+			.DevilBro-notice.notice-${id} ${BDFDB.dotCN.noticedismiss} {
 				filter: ${dismissFilter} !important;
 			}`);
 	}
-	BDFDB.$(notifiybar).on("click", ".dismiss-1QjyJW", () => {
+	BDFDB.$(notifiybar).on("click", BDFDB.dotCN.noticedismiss, () => {
 		BDFDB.$(notifiybar).slideUp({complete: () => {
-			BDFDB.removeLocalStyle("customNotificationsBarDevilBro" + id);
-			BDFDB.removeLocalStyle("customNotificationsBarColorCorrectionDevilBro" + id);
+			BDFDB.removeLocalStyle("BDFDBcustomNotificationsBar" + id);
+			BDFDB.removeLocalStyle("BDFDBcustomNotificationsBarColorCorrection" + id);
 			notifiybar.remove();
 		}});
 	});
@@ -766,8 +760,7 @@ BDFDB.getDiscordLanguage = function () {
 };
 
 BDFDB.getDiscordTheme = function () {
-	if (BDFDB.$(".theme-light").length > BDFDB.$(".theme-dark").length) return "theme-light";
-	else return "theme-dark";
+	return document.querySelectorAll(BDFDB.dotCN.themelight).length > document.querySelectorAll(BDFDB.dotCN.themedark).length ? BDFDB.disCN.themelight : BDFDB.disCN.themedark;
 };
 	
 BDFDB.getReactInstance = function (node) { 
@@ -1040,14 +1033,14 @@ BDFDB.addOnSwitchListener = function (plugin) {
 			plugin.onSwitch = plugin.onSwitch.bind(plugin);
 			require("electron").remote.getCurrentWindow().webContents.addListener("did-navigate-in-page", plugin.onSwitch);
 		}
-		var chatspacer = document.querySelector(".guilds-wrapper + * > .spacer-3Dkonz");
+		var chatspacer = document.querySelector(BDFDB.dotCN.guildswrapper + " + * > " + BDFDB.dotCN.chatspacer);
 		if (chatspacer) {
 			plugin.onSwitchFix = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.classList && (node.classList.contains("chat") || node.classList.contains("noChannel-2EQ0a9"))) {
+								if (node && node.classList && (node.classList.contains(BDFDB.disCN.chat) || node.classList.contains(BDFDB.disCN.nochannel))) {
 									attributeObserver.observe(node, {attributes:true});
 								}
 							});
@@ -1060,11 +1053,11 @@ BDFDB.addOnSwitchListener = function (plugin) {
 			var attributeObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
-						if (change.target && change.target.classList && change.target.classList.contains("noChannel-2EQ0a9")) plugin.onSwitch();
+						if (change.target && change.target.classList && change.target.classList.contains(BDFDB.disCN.nochannel)) plugin.onSwitch();
 					}
 				);
 			});
-			var chat = chatspacer.querySelector(".chat, .noChannel-2EQ0a9");
+			var chat = chatspacer.querySelector(BDFDB.dotCNC.chat + BDFDB.dotCN.nochannel);
 			if (chat) attributeObserver.observe(chat, {attributes:true});
 		}
 	}
@@ -1082,14 +1075,14 @@ BDFDB.removeOnSwitchListener = function (plugin) {
 BDFDB.addReloadListener = function (plugin) {
 	if (typeof plugin.initialize === "function") {
 		BDFDB.removeReloadListener(plugin);
-		var appwindow = document.querySelector(".app-19_DXt");
+		var appwindow = document.querySelector(BDFDB.dotCN.app);
 		if (appwindow) {
 			plugin.reloadFix = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.classList && node.classList.contains("app")) {
+								if (node && node.classList && node.classList.contains(BDFDB.disCN.appold)) {
 									if (window.PluginUpdates && window.PluginUpdates.observer) {
 										window.PluginUpdates.observer.disconnect();
 										delete window.PluginUpdates.observer;
@@ -1144,13 +1137,36 @@ BDFDB.appendSettingsButton = function (plugin) {
 		BDFDB.$(settingsbutton)
 			.on("mouseenter.BDFDBSettingsButtonListener", (e) => {BDFDB.createTooltip("Settings", e.currentTarget, {type:"top"});})
 			.on("click.BDFDBSettingsButtonListener", (e) => {
-				var settingsmodal = BDFDB.$(`<span class="DevilBro-modal DevilBro-settingsmodal ${plugin.id}-settingsmodal"><div class="backdrop-2ohBEd"></div><div class="modal-2LIEKY"><div class="inner-1_1f7b"><div class="modal-3HOjGZ sizeMedium-1-2BNS"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO header-3sp3cE" style="flex: 0 0 auto;"><div class="flexChild-1KGW5q" style="flex: 1 1 auto;"><h4 class="h4-2IXpeI title-1pmpPr size16-3IvaX_ height20-165WbF weightSemiBold-T8sxWH defaultColor-v22dK1 defaultMarginh4-jAopYe marginReset-3hwONl">REPLACE_modal_header_text</h4></div><svg class="btn-cancel close-3ejNTg flexChild-1KGW5q" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12"><g fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div><div class="scrollerWrap-2uBjct content-1Cut5s scrollerThemed-19vinI themeGhostHairline-2H8SiW"><div class="scroller-fzNley inner-tqJwAU"></div></div></div></div></div></span>`);
-				settingsmodal.find(".title-1pmpPr").text(plugin.name + " Settings");
-				settingsmodal.find(".inner-tqJwAU").append(plugin.getSettingsPanel());
+				var settingsModalMarkup = 
+					`<span class="DevilBro-modal DevilBro-settingsmodal ${plugin.id}-settingsmodal">
+						<div class="${BDFDB.disCN.backdrop}"></div>
+							<div class="${BDFDB.disCN.modal}">
+								<div class="${BDFDB.disCN.modalinner}">
+									<div class="${BDFDB.disCNS.modalsub + BDFDB.disCN.modalsizemedium}">
+										<div class="${BDFDB.disCNS.flex1 + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal1 + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex: 0 0 auto;">
+											<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">
+												<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.headertitle. + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.weigthsemibold + BDFDB.disCNS.defaultcolor + BDFDB.disCNS.h4defaultmargin + BDFDB.disCN.marginreset}">${plugin.name} Settings</h4>
+											</div>
+											<svg class="${BDFDB.disCNS.modalclose + BDFDB.disCN.flexchild}" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12">
+												<g fill="none" fill-rule="evenodd">
+													<path d="M0 0h12v12H0"></path>
+													<path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path>
+												</g>
+											</svg>
+										</div>
+									<div class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.modalcontent + BDFDB.disCNS.scrollerthemed + BDFDB.disCN.themeghosthairline}">
+										<div class="${BDFDB.disCNS.scroller + BDFDB.disCN.modalsubinner}"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</span>`;
+				var settingsModal = BDFDB.$(settingsModalMarkup);
+				settingsModal.find(BDFDB.dotCN.modalsubinner).append(plugin.getSettingsPanel());
 				if (typeof plugin.onSettingsClosed === "function") {
-					settingsmodal.on("click.BDFDBCloseListener", ".close-3ejNTg, .backdrop-2ohBEd", () => {plugin.onSettingsClosed();});
+					settingsModal.on("click.BDFDBCloseListener", BDFDB.dotCNC.modalclose + BDFDB.dotCN.backdrop, () => {plugin.onSettingsClosed();});
 				}
-				BDFDB.appendModal(settingsmodal);
+				BDFDB.appendModal(settingsModal);
 			})
 			.insertBefore(plugincard.querySelector(".bd-button"));
 	}
@@ -1288,7 +1304,7 @@ BDFDB.getChannelAvatar = function (id) {
 
 BDFDB.readServerList = function () {
 	var server, id, info, foundServers = [], GuildStore = BDFDB.WebModules.findByProperties(["getGuilds"]);
-	for (server of document.querySelectorAll(".guild-separator ~ .guild")) {
+	for (server of document.querySelectorAll(BDFDB.dotCN.guildseparator + " ~ " + BDFDB.dotCN.guild)) {
 		id = BDFDB.getIdOfServer(server);
 		info = id ? GuildStore.getGuild(id) : null;
 		if (info) foundServers.push(Object.assign({},info,{div:server,data:info}));
@@ -1299,7 +1315,7 @@ BDFDB.readServerList = function () {
 BDFDB.readUnreadServerList = function (servers) {
 	var serverObj, foundServers = [];
 	for (serverObj of (servers === undefined || !Array.isArray(servers) ? BDFDB.readServerList() : servers)) {
-		if (serverObj && serverObj.div && (serverObj.div.classList.contains("unread") || serverObj.div.querySelector(".badge"))) foundServers.push(serverObj);
+		if (serverObj && serverObj.div && (serverObj.div.classList.contains(BDFDB.disCN.guildunread) || serverObj.div.querySelector(BDFDB.dotCN.badge))) foundServers.push(serverObj);
 	}
 	return foundServers;
 };
@@ -1316,7 +1332,7 @@ BDFDB.getSelectedServer = function () {
 };
 
 BDFDB.getIdOfServer = function (server) {
-	if (!server || !server.classList || !server.classList.contains("guild") || server.classList.contains("copy") || server.classList.contains("folder")) return;
+	if (!server || !server.classList || !server.classList.contains(BDFDB.disCN.guild) || server.classList.contains("copy") || server.classList.contains("folder")) return;
 	var switchlink, id;
 	switchlink = server.querySelector("a");
 	id = switchlink && switchlink.href ? switchlink.href.split("/") : null;
@@ -1332,12 +1348,12 @@ BDFDB.getDivOfServer = function (id) {
 
 BDFDB.readChannelList = function () {
 	var channel, info, foundChannels = [], ChannelStore = BDFDB.WebModules.findByProperties(["getChannels"]);
-	for (channel of document.querySelectorAll(".containerDefault-7RImuF, .containerDefault-1bbItS")) {
+	for (channel of document.querySelectorAll(BDFDB.dotCNC.channelcontainerdefault + BDFDB.dotCN.categorycontainerdefault)) {
 		info = BDFDB.getKeyInformation({"node":channel, "key":"channel"});
 		if (info) info = ChannelStore.getChannel(info.id);
 		if (info) foundChannels.push(Object.assign({},info,{div:channel,data:info}));
 	}
-	for (channel of document.querySelectorAll(".channel.private")) {
+	for (channel of document.querySelectorAll(BDFDB.dotCN.dmchannel + BDFDB.dotCN.dmchannelprivate)) {
 		info = BDFDB.getKeyInformation({"node":channel, "key":"user"}) || BDFDB.getKeyInformation({"node":channel, "key":"channel"});
 		if (info) info = ChannelStore.getChannel(ChannelStore.getDMFromUserId(info.id)) || ChannelStore.getChannel(info.id)
 		if (info) foundChannels.push(Object.assign({},info,{div:channel,data:info}));
@@ -1365,7 +1381,7 @@ BDFDB.getDivOfChannel = function (id) {
 
 BDFDB.readDmList = function () {
 	var dm, info, foundDMs = [], ChannelStore = BDFDB.WebModules.findByProperties(["getChannels"]);
-	for (dm of document.querySelectorAll(".dms > .guild")) {
+	for (dm of document.querySelectorAll(BDFDB.dotCN.dms + " > " + BDFDB.dotCN.guild)) {
 		id = BDFDB.getIdOfDM(dm);
 		info = id ? ChannelStore.getChannel(id) : null;
 		if (info) foundDMs.push(Object.assign({},info,{div:dm,data:info}));
@@ -1374,8 +1390,8 @@ BDFDB.readDmList = function () {
 };
 
 BDFDB.getIdOfDM = function (dm) {
-	if (!dm || !dm.classList || !dm.classList.contains("guild") || dm.classList.contains("copy") || dm.classList.contains("folder")) return;
-	if (!dm.parentElement || !dm.parentElement.classList || !dm.parentElement.classList.contains("dms")) return;
+	if (!dm || !dm.classList || !dm.classList.contains(BDFDB.disCN.guild) || dm.classList.contains("copy") || dm.classList.contains("folder")) return;
+	if (!dm.parentElement || !dm.parentElement.classList || !dm.parentElement.classList.contains(BDFDB.disCN.dms)) return;
 	var switchlink, id;
 	switchlink = dm.querySelector("a");
 	id = switchlink && switchlink.href ? switchlink.href.split("/") : null;
@@ -1812,17 +1828,17 @@ BDFDB.triggerSend = function (textarea) {
 BDFDB.initElements = function (container) {
 	BDFDB.$(container)
 		.off(".BDFDBinitElements")
-		.on("click.BDFDBinitElements", ".checkbox-1KYsPm", (e) => {
+		.on("click.BDFDBinitElements", BDFDB.dotCN.switchinner, (e) => {
 			var checked = e.currentTarget.checked;
 			BDFDB.$(e.currentTarget.parentElement)
-				.toggleClass("valueChecked-3Bzkbm", checked)
-				.toggleClass("valueUnchecked-XR6AOk", !checked);
+				.toggleClass(BDFDB.disCN.switchvaluechecked, checked)
+				.toggleClass(BDFDB.disCN.switchvalueunchecked, !checked);
 		})
-		.on("click.BDFDBinitElements", ".checkboxWrapper-2Yvr_Y .input-oWyROL", (e) => {
+		.on("click.BDFDBinitElements", BDFDB.dotCNS.checkboxwrapper + BDFDB.dotCN.checkboxinput, (e) => {
 			var checked = e.currentTarget.checked;
-			var checkBoxStyle = e.currentTarget.parentElement.querySelector(".checkbox-1QwaS4");
+			var checkBoxStyle = e.currentTarget.parentElement.querySelector(BDFDB.dotCN.checkbox);
 			BDFDB.$(checkBoxStyle)
-				.toggleClass("checked-2TahvT", checked)
+				.toggleClass(BDFDB.disCN.checked, checked)
 				.css("background-color", checked ? "rgb(67, 181, 129)" : "")
 				.css("border-color", checked ? "rgb(67, 181, 129)" : "")
 				.find("polyline")
@@ -1838,16 +1854,16 @@ BDFDB.initElements = function (container) {
 			var file = e.currentTarget.files[0];
 			if (file && fileoutput) fileoutput.value = file.path;
 		})
-		.on("keyup.BDFDBinitElements", ".searchBar-YMJBu9 .input-yt44Uw", (e) => {
+		.on("keyup.BDFDBinitElements", BDFDB.dotCNS.searchbar + BDFDB.dotCN.searchbarinput, (e) => {
 			var input = e.currentTarget;
-			input.parentElement.querySelector(".eyeGlass-6rahZf").classList.toggle("visible-4lw4vs", !input.value);
-			input.parentElement.querySelector(".clear-4pSDsx").classList.toggle("visible-4lw4vs", input.value);
+			input.parentElement.querySelector(BDFDB.dotCN.searchbareyeglass).classList.toggle(BDFDB.disCN.searchbarvisible, !input.value);
+			input.parentElement.querySelector(BDFDB.dotCN.searchbarclear).classList.toggle(BDFDB.disCN.searchbarvisible, input.value);
 		})
-		.on("click.BDFDBinitElements", ".searchBar-YMJBu9 .clear-4pSDsx.visible-4lw4vs", (e) => {
+		.on("click.BDFDBinitElements", BDFDB.dotCNS.searchbar + BDFDB.dotCN.searchbarclear + BDFDB.dotCN.searchbarvisible, (e) => {
 			var clear = e.currentTarget;
-			clear.parentElement.parentElement.querySelector(".input-yt44Uw").value = "";
-			clear.parentElement.querySelector(".eyeGlass-6rahZf").classList.add("visible-4lw4vs");
-			clear.classList.remove("visible-4lw4vs");
+			clear.parentElement.parentElement.querySelector(BDFDB.dotCN.searchbarinput).value = "";
+			clear.parentElement.querySelector(BDFDB.dotCN.searchbareyeglass).classList.add(BDFDB.disCN.searchbarvisible);
+			clear.classList.remove(BDFDB.disCN.searchbarvisible);
 		})
 		.on("click.BDFDBinitElements", ".numberinput-button-up", (e) => {
 			var input = e.currentTarget.parentElement.parentElement.querySelector("input");
@@ -1888,27 +1904,26 @@ BDFDB.initElements = function (container) {
 	BDFDB.$(container).find(".tab-content").first().addClass("open");
 	
 	var libraryStrings = BDFDB.getLibraryStrings();
-	BDFDB.$(container).find(".btn-save .contents-4L4hQM").text(libraryStrings.btn_save_text);
-	BDFDB.$(container).find(".btn-cancel .contents-4L4hQM").text(libraryStrings.btn_cancel_text);
-	BDFDB.$(container).find(".btn-all .contents-4L4hQM").text(libraryStrings.btn_all_text);
-	BDFDB.$(container).find(".btn-add .contents-4L4hQM").text(libraryStrings.btn_add_text);
-	BDFDB.$(container).find(".btn-ok .contents-4L4hQM").text(libraryStrings.btn_ok_text);
-	BDFDB.$(container).find(".file-navigator .contents-4L4hQM").text(libraryStrings.file_navigator_text);
-	BDFDB.$(container).find(".searchBar-YMJBu9 .input-yt44Uw").attr("placeholder", libraryStrings.search_placeholder);
+	BDFDB.$(container).find(".btn-save " + BDFDB.disCN.buttoncontents).text(libraryStrings.btn_save_text);
+	BDFDB.$(container).find(".btn-cancel " + BDFDB.disCN.buttoncontents).text(libraryStrings.btn_cancel_text);
+	BDFDB.$(container).find(".btn-all " + BDFDB.disCN.buttoncontents).text(libraryStrings.btn_all_text);
+	BDFDB.$(container).find(".btn-add " + BDFDB.disCN.buttoncontents).text(libraryStrings.btn_add_text);
+	BDFDB.$(container).find(".btn-ok " + BDFDB.disCN.buttoncontents).text(libraryStrings.btn_ok_text);
+	BDFDB.$(container).find(".file-navigator" + BDFDB.disCN.buttoncontents).text(libraryStrings.file_navigator_text);
+	BDFDB.$(container).find(BDFDB.dotCNS.searchbar + BDFDB.dotCN.searchbarinput).attr("placeholder", libraryStrings.search_placeholder);
 		
 	BDFDB.$(container)
-		.find(".checkbox-1KYsPm").each((_, checkBox) => {
-			BDFDB.$(checkBox.parentElement)
-				.toggleClass("valueChecked-3Bzkbm", checkBox.checked)
-				.toggleClass("valueUnchecked-XR6AOk", !checkBox.checked);
+		.find(BDFDB.dotCN.switchinner).each((_, switchinner) => {
+			BDFDB.$(switchinner.parentElement)
+				.toggleClass(BDFDB.disCN.switchenabled, switchinner.checked)
+				.toggleClass(BDFDB.disCN.switchdisabled, !switchinner.checked);
 		});
 		
 	BDFDB.$(container)
-		.find(".checkboxWrapper-2Yvr_Y .input-oWyROL").each((_, checkBox) => {
+		.find(BDFDB.dotCNS.checkboxwrapper + BDFDB.dotCN.checkboxinput).each((_, checkBox) => {
 			if (checkBox.checked) {
-				var checkBoxStyle = checkBox.parentElement.querySelector(".checkbox-1QwaS4");
-				BDFDB.$(checkBoxStyle)
-					.addClass("checked-2TahvT")
+				BDFDB.$(checkBox.parentElement.querySelector(BDFDB.checkbox))
+					.addClass(BDFDB.disCN.checkboxchecked)
 					.css("background-color", "rgb(67, 181, 129)")
 					.css("border-color", "rgb(67, 181, 129)")
 					.find("polyline")
@@ -1919,13 +1934,13 @@ BDFDB.initElements = function (container) {
 
 BDFDB.appendModal = function (modal) {
 	let id = Math.round(Math.random()*10000000000000000);
-	var container = document.querySelector(".app-19_DXt ~ [class^='theme-']:not([class*='popouts'])");
+	var container = document.querySelector(BDFDB.dotCN.app + " ~ [class^='theme']:not([class*='popouts'])");
 	if (!container) return;
 	
 	BDFDB.$(modal)
 		.appendTo(container)
-		.on("click", ".backdrop-2ohBEd, .btn-save, .btn-send, .btn-cancel, .btn-ok", () => {
-			BDFDB.$(document).off("keydown.modalEscapeListenerDevilBro" + id);
+		.on("click", BDFDB.dotCNC.backdrop + ".btn-save, .btn-send, .btn-cancel, .btn-ok", () => {
+			BDFDB.$(document).off("keydown.BDFDBmodalEscapeListener" + id);
 			BDFDB.$(modal).addClass("closing");
 			setTimeout(() => {modal.remove();}, 300);
 		});
@@ -1934,9 +1949,9 @@ BDFDB.appendModal = function (modal) {
 	BDFDB.initElements(modal);
 		
 	BDFDB.$(document)
-		.off("keydown.modalEscapeListenerDevilBro" + id)
-		.on("keydown.modalEscapeListenerDevilBro" + id, (e) => {
-			if (e.which == 27) BDFDB.$(modal).find(".backdrop-2ohBEd").click();
+		.off("keydown.BDFDBmodalEscapeListener" + id)
+		.on("keydown.BDFDBmodalEscapeListener" + id, (e) => {
+			if (e.which == 27) BDFDB.$(modal).find(BDFDB.dotCN.backdrop).click();
 		});
 };
 
@@ -1955,14 +1970,12 @@ BDFDB.updateContextPosition = function (context) {
 };
 
 BDFDB.appendContextMenu = function (context, e) {
-	BDFDB.$(".tooltips").before(context);
-	var app = document.querySelector(BDFDB.dotCN.appmount);
-	var menuWidth = BDFDB.$(context).outerWidth();
-	var menuHeight = BDFDB.$(context).outerHeight();
+	BDFDB.$(BDFDB.dotCN.tooltips).before(context);
+	var menusizes = context.getBoundingClientRect();
 	BDFDB.$(context)
-		.toggleClass("invertX", e.pageX + menuWidth > app.offsetWidth)
-		.toggleClass("invertChildX", e.pageX + menuWidth > app.offsetWidth)
-		.toggleClass("invertY", e.pageY + menuHeight > app.offsetHeight)
+		.toggleClass("invertX", e.pageX + menusizes.width > document.body.firstElementChild.offsetWidth)
+		.toggleClass(BDFDB.disCN.contextmenuinvertchildx, e.pageX + menusizes.width > document.body.firstElementChild.offsetWidth)
+		.toggleClass("invertY", e.pageY + menusizes.height > document.body.firstElementChild.offsetHeight)
 		.addClass(BDFDB.getDiscordTheme());
 		
 	BDFDB.updateContextPosition(context);
@@ -1973,8 +1986,8 @@ BDFDB.appendContextMenu = function (context, e) {
 			context.remove();
 		}
 		else {
-			var item = BDFDB.$(".item-1XYaYf").has(e2.target)[0];
-			if (item && !BDFDB.$(item).hasClass("disabled-dlOjhg") && !BDFDB.$(item).hasClass("itemSubMenu-3ZgIw-") && !BDFDB.$(item).hasClass("itemToggle-e7vkml")) {
+			var item = BDFDB.$(BDFDB.dotCN.contextmenuitem).has(e2.target)[0];
+			if (item && !item.classList.contains(BDFDB.disCN.contextmenuitemdisabled) && !item.classList.contains(BDFDB.disCN.contextmenusubmenu) && !item.classList.contains(BDFDB.disCN.contextmenuitemtoggle)) {
 				BDFDB.$(document).off("mousedown.BDFDBContextMenu");
 			}
 		}
@@ -2004,13 +2017,13 @@ BDFDB.setColorSwatches = function (currentCOMP, wrapper, swatch) {
 		"rgb(255, 255, 255)","rgb(59, 173, 20)","rgb(31, 139, 76)","rgb(17, 128, 106)","rgb(32, 102, 148)","rgb(32, 57, 148)","rgb(109, 20, 173)","rgb(113, 54, 138)","rgb(173, 20, 87)","rgb(173, 32, 20)","rgb(153, 45, 34)","rgb(168, 67, 0)","rgb(194, 124, 14)","rgb(151, 156, 159)","rgb(93, 104, 109)","rgb(44, 44, 44)"];
 		
 	var swatches = 
-		`<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO" style="flex: 1 1 auto; margin-top: 5px;">
+		`<div class="${BDFDB.disCNS.flex1 + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal1 + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCN.nowrap}" style="flex: 1 1 auto; margin-top: 5px;">
 			<div class="ui-color-picker-${swatch} large custom" style="background-color: rgb(0, 0, 0);">
 				<svg class="color-picker-dropper-${swatch}" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 16 16">
 					<path class="color-picker-dropper-fg-${swatch}" fill="#ffffff" d="M14.994 1.006C13.858-.257 11.904-.3 10.72.89L8.637 2.975l-.696-.697-1.387 1.388 5.557 5.557 1.387-1.388-.697-.697 1.964-1.964c1.13-1.13 1.3-2.985.23-4.168zm-13.25 10.25c-.225.224-.408.48-.55.764L.02 14.37l1.39 1.39 2.35-1.174c.283-.14.54-.33.765-.55l4.808-4.808-2.776-2.776-4.813 4.803z"></path>
 				</svg>
 			</div>
-			<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa wrap-1da0e3ui-color-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;">
+			<div class="${BDFDB.disCNS.flex1 + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal1 + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCN.wrap} ui-color-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;">
 				<div class="ui-color-picker-${swatch} nocolor" style="background-color: null;">
 					<svg class="nocolor-cross" height="22" width="22">
 						<path d="m 3 2 l 17 18 m 0 -18 l -17 18" stroke="red" stroke-width="3" fill="none"/>
@@ -2087,23 +2100,22 @@ BDFDB.openColorPicker = function (currentColor, swatch) {
 	
 	var colorPickerModalMarkup = 
 		`<span class="colorpicker-modal DevilBro-modal">
-			<div class="backdrop-2ohBEd"></div>
-			<div class="modal-2LIEKY">
-				<div class="inner-1_1f7b">
-					<div class="modal-3HOjGZ">
-						<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO header-3sp3cE" style="flex: 0 0 auto;">
-							<div class="flexChild-1KGW5q" style="flex: 1 1 auto;">
-								<h4 class="h4-2IXpeI title-1pmpPr size16-3IvaX_ height20-165WbF weightSemiBold-T8sxWH defaultColor-v22dK1 defaultMarginh4-jAopYe marginReset-3hwONl">${libraryStrings.colorpicker_modal_header_text}</h4>
-								<div class="guildName-1u0hy7 small-3-03j1 size12-1IGJl9 height16-1qXrGy primary-2giqSn"></div>
+			<div class="${BDFDB.disCN.backdrop}"></div>
+			<div class="${BDFDB.disCN.modal}">
+				<div class="${BDFDB.disCN.modalinner}">
+					<div class="${BDFDB.disCNS.modalsub + BDFDB.disCN.modalsizemedium}">
+						<div class="${BDFDB.disCNS.flex1 + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal1 + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex: 0 0 auto;">
+							<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">
+								<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.headertitle. + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.weigthsemibold + BDFDB.disCNS.defaultcolor + BDFDB.disCNS.h4defaultmargin + BDFDB.disCN.marginreset}">${libraryStrings.colorpicker_modal_header_text}</h4>
 							</div>
-							<svg class="btn-cancel close-3ejNTg flexChild-1KGW5q" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12">
+							<svg class="${BDFDB.disCNS.modalclose + BDFDB.disCN.flexchild}" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12">
 								<g fill="none" fill-rule="evenodd">
 									<path d="M0 0h12v12H0"></path>
 									<path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path>
 								</g>
 							</svg>
 						</div>
-						<div class="flex-lFgbSz flex-3B1Tl4 inner-tqJwAU vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO colorpicker-container" style="flex: 1 1 auto;">
+						<div class="${BDFDB.disCNS.flex1 + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.modalsubinner + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCN.nowrap} colorpicker-container" style="flex: 1 1 auto;">
 							<div class="colorpicker-color">
 								<div class="colorpicker-white" style="background: linear-gradient(to right, #fff, rgba(255,255,255,0))">
 									<div class="colorpicker-black" style="background: linear-gradient(to top, #000, rgba(0,0,0,0))">
@@ -2131,21 +2143,21 @@ BDFDB.openColorPicker = function (currentColor, swatch) {
 								</div>
 								<div class="colorpicker-inputs card-3DrRmC cardPrimaryEditable-2IQ7-V">
 									${Object.keys(inputs).map((key, i) => 
-									`<div class="colorpicker-input flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyCenter-29N31w alignCenter-3VxkQP noWrap-v6g9vO marginTop4-2rEBfJ marginBottom4-_yArcI">
-										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJnoWrap-v6g9vO"style="flex: 1 1 20%">
-											<h5 class="h5-3KssQU size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH">${key}:</h5>
+									`<div class="colorpicker-input ${BDFDB.disCNS.flex1 + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal1 + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.aligncenter + BDFDB.disCNS.justifycenter + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.nowrap}">
+										<div class="${BDFDB.disCNS.flex1 + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal1 + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCN.nowrap}" style="flex: 1 1 20%">
+											<h5 class="${BDFDB.disCNS.h5 + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCN.weightsemibold}">${key}:</h5>
 										</div>
-										<div class="inputWrapper-3xoRWR${inputs[key].type == 'number' ? ' inputNumberWrapper inputNumberWrapperMini' : ''} vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR" style="flex: 1 1 80%;">
+										<div class="${inputs[key].type == 'number' ? 'inputNumberWrapper inputNumberWrapperMini ' : ''}${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex2 + BDFDB.disCN.directioncolumn}" style="flex: 1 1 80%;">
 											${inputs[key].type == 'number' ? '<span class="numberinput-buttons-zone"><span class="numberinput-button-up"></span><span class="numberinput-button-down"></span></span>' : ''}
-											<input type="${inputs[key].type}"${!isNaN(inputs[key].min) && inputs[key].min != null ? ' min="' + inputs[key].min + '"' : ''}${!isNaN(inputs[key].max) && inputs[key].max != null ? ' max="' + inputs[key].max + '"' : ''}${!isNaN(inputs[key].length) && inputs[key].length != null ? ' maxlength="' + inputs[key].length + '"' : ''} name="${inputs[key].group}" placeholder="${inputs[key].default}" class="inputMini-3MyfLa input-2YozMi size16-3IvaX_ colorpicker-${inputs[key].name}">
+											<input type="${inputs[key].type}"${!isNaN(inputs[key].min) && inputs[key].min != null ? ' min="' + inputs[key].min + '"' : ''}${!isNaN(inputs[key].max) && inputs[key].max != null ? ' max="' + inputs[key].max + '"' : ''}${!isNaN(inputs[key].length) && inputs[key].length != null ? ' maxlength="' + inputs[key].length + '"' : ''} name="${inputs[key].group}" placeholder="${inputs[key].default}" class="${BDFDB.disCNS.inputmini + BDFDB.disCNS.input + BDFDB.disCN.size16} colorpicker-${inputs[key].name}">
 										</div>
 									</div>`).join("")}
 								</div>
 							</div>
 						</div>
-						<div class="flex-lFgbSz flex-3B1Tl4 horizontalReverse-2LanvO horizontalReverse-k5PqxT flex-3B1Tl4 directionRowReverse-2eZTxP justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO footer-1PYmcw">
-							<button type="button" class="btn-ok buttonBrandFilledDefault-2Rs6u5 buttonFilledDefault-AELjWf buttonDefault-2OLW-v buttonFilled-29g7b5 buttonBrandFilled-3Mv0Ra mediumGrow-uovsMu button-2t3of8 lookFilled-luDKDo colorBrand-3PmwCE sizeMedium-2VGNaF grow-25YQ8u">
-								<div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsFilled-3M8HCx"></div>
+						<div class="${BDFDB.disCNS.flex1 + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontalreverse1 + BDFDB.disCNS.horizontalreverse2 + BDFDB.disCNS.directionrowreverse + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.modalfooter}">
+							<button type="button" class="${BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}">
+								<div class="${BDFDB.disCN.buttoncontents}"></div>
 							</button>
 						</div>
 					</div>
@@ -2753,6 +2765,307 @@ BDFDB.isThemeEnabled = function (name) {
 	}
 })();
 
+BDFDB.DiscordClasses = {
+	aligncenter: "alignCenter-1dQNNs",
+	alignend: "alignEnd-1D6PQi",
+	alignstart: "alignStart-H-X2h-",
+	alignstretch: "alignStretch-DpGPf3",
+	app: "app-19_DXt",
+	appmount: "appMount-3VJmYg",
+	appold: "app",
+	backdrop: "backdrop-1ocfXc",
+	badge: "badge",
+	button: "button-38aScr",
+	buttoncolorblack: "colorBlack-1jwPVL",
+	buttoncolorbrand: "colorBrand-3pXr91",
+	buttoncolorgreen: "colorGreen-29iAKY",
+	buttoncolorgrey: "colorGrey-2DXtkV",
+	buttoncolorlink: "colorLink-35jkBc",
+	buttoncolorprimary: "colorPrimary-3b3xI6",
+	buttoncolorred: "colorRed-1TFJan",
+	buttoncolortransparent: "colorTransparent-1ewNp9",
+	buttoncolorwhite: "colorWhite-rEQuAQ",
+	buttoncoloryellow: "colorYellow-2JqYwt",
+	buttoncontents: "contents-18-Yxp",
+	buttondisabled: "disabled-9aF2ug",
+	buttondisabledwrapper: "disabledWrapper-33zVVX",
+	buttonfullwidth: "fullWidth-1orjjo",
+	buttongrow: "grow-q77ONN",
+	buttonhashover: "hasHover-3X1-zV",
+	buttonhoverblack: "hoverBlack-3jULb8",
+	buttonhoverbrand: "hoverBrand-1_Fxlk",
+	buttonhovergreen: "hoverGreen-1gjdJc",
+	buttonhovergrey: "hoverGrey-2CBXu0",
+	buttonhoverlink: "hoverLink-i1fEKS",
+	buttonhoverprimary: "hoverPrimary-2D1j2r",
+	buttonhoverred: "hoverRed-2NoOXI",
+	buttonhovertransparent: "hoverTransparent-2Lz5CN",
+	buttonhoverwhite: "hoverWhite-2uUmXw",
+	buttonhoveryellow: "hoverYellow-171chs",
+	buttonlookfilled: "lookFilled-1Gx00P",
+	buttonlookghost: "lookGhost-2Fn_0-",
+	buttonlookinverted: "lookInverted-2D7oAl",
+	buttonlooklink: "lookLink-9FtZy-",
+	buttonlookoutlined: "lookOutlined-3sRXeN",
+	buttonsizeicon: "sizeIcon-1-kvKI",
+	buttonsizelarge: "sizeLarge-1vSeWK",
+	buttonsizemax: "sizeMax-1Mj0eU",
+	buttonsizemedium: "sizeMedium-1AC_Sl",
+	buttonsizemin: "sizeMin-1mJd1x",
+	buttonsizesmall: "sizeSmall-2cSMqn",
+	buttonsizexlarge: "sizeXlarge-2yFAlZ",
+	buttonspinner: "spinner-3a9zLT",
+	buttonspinneritem: "spinnerItem-3GlVyU",
+	buttonsubmitting: "submitting-3qlO9O"
+	categorycontainerdefault: "containerDefault-3GGEv_",
+	channelcontainerdefault: "containerDefault-1ZnADq",
+	channelname: "name-3M0b8v",
+	channels: "channels-Ie2l6A",
+	chat: "chat",
+	chatspacer: "spacer-29U_x8",
+	checkbox: "checkbox-1ix_J3",
+	checkboxchecked: "checked-3_4uQ9",
+	checkboxinput: "input-3ITkQf",
+	checkboxinputdefault: "inputDefault-3JxKJ2",
+	checkboxinputdisabled: "inputDisabled-110Jqx",
+	checkboxround: "round-2jCFai",
+	checkboxwrapper: "checkboxWrapper-SkhIWG",
+	contentmenulabel: "label-JWQiNe",
+	contextmenu: "contextMenu-HLZMGh",
+	contextmenuhint: "hint-22uc-R",
+	contextmenuinvertchildx: "invertChildX-2fq7sY",
+	contextmenuitem: "item-1Yvehc",
+	contextmenuitembrand: "brand-3igrJY",
+	contextmenuitemdanger: "danger-2dXSTE",
+	contextmenuitemdisabled: "disabled-2xniQf",
+	contextmenuitemgroup: "itemGroup-1tL0uz",
+	contextmenuitemtoggle: "itemToggle-S7XGOQ",
+	contextmenusubmenu: "itemSubMenu-1vN_Yn",
+	defaultcolor: "defaultColor-1_ajX0",
+	directioncolumn: "directionColumn-35P_nr",
+	directionrow: "directionRow-3v3tfG",
+	directionrowreverse: "directionRowReverse-m8IjIq",
+	dms: "dms",
+	flex1: "flex-1xMQg5",
+	flex2: "flex-1O1GKY",
+	flexcenter: "flexCenter-3_1bcw",
+	flexchild: "flexChild-faoVW3",
+	friends: "friends",
+	friendscolumn: "friends-column",
+	friendsonline: "friends-online",
+	friendstabbar: "tab-bar",
+	friendstabbaritem: "tab-bar-item",
+	guild: "guild",
+	guildaudio: "audio",
+	guildselected: "selected",
+	guildseparator: "guild-separator",
+	guildswrapper: "guilds-wrapper",
+	guildunread: "unread",
+	guildvideo: "video",
+	h4: "h4-AQvcAz",
+	h5: "h5-18_1nd",
+	h4defaultmargin: "defaultMarginh4-2vWMG5",
+	headertitle: "title-3sZWYQ",
+	height16: "height16-2Lv3qA",
+	height20: "height20-mO2eIN",
+	height36: "height36-36OHCc",
+	horizontal1: "horizontal-1ae9ci",
+	horizontal2: "horizontal-2EEEnY",
+	horizontalreverse1: "horizontalReverse-2eTKWD",
+	horizontalreverse2: "horizontalReverse-3tRjY7",
+	input: "input-cIJ7To",
+	inputdefault: "inputDefault-_djjkz",
+	inputdisabled: "disabled-2BKQFm",
+	inputeditable: "editable-2UkCu4",
+	inputerror: "error-2O5WFJ",
+	inputfocused: "focused-1mmYsC",
+	inputmini: "inputMini-2xQV9",
+	inputsuccess: "success-2-F980",
+	inputwrapper: "inputWrapper-31_8H8",
+	justifycenter: "justifyCenter-3D2jY",
+	justifyend: "justifyEnd-2E6vba",
+	justifystart: "justifyStart-2NDFzi",
+	layer: "layer-3QrUeG",
+	layers: "layers-3iHuyZ",
+	marginbottom4: "marginBottom4-2qk4Hy"
+	marginbottom8: "marginBottom8-AtZOdT",
+	marginbottom20: "marginBottom20-32qID7",
+	marginbottom40: "marginBottom40-2vIwTv",
+	marginbottom60: "marginBottom60-Gs8NBA",
+	margincentergorz: "marginCenterHorz-1s41rg",
+	marginreset: "marginReset-236NPn",
+	margintop4: "marginTop4-2BNfKC",
+	margintop8: "marginTop8-1DLZ1n",
+	margintop20: "marginTop20-3TxNs6",
+	margintop40: "marginTop40-i-78cZ",
+	margintop60: "marginTop60-3PGbtK",
+	member: "member-3W1lQa",
+	members: "member-3W1lQa",
+	membersgroup: "membersGroup-v9BXpm",
+	memberswrap: "membersWrap-2h-GB4",
+	modal: "modal-1UGdnR",
+	modalclose: "close-18n9bP",
+	modalcontent: "content-2BXhLs",
+	modalfooter: "footer-2yfCgX",
+	modalheader: "header-1R_AjF",
+	modalinner: "inner-1JeGVc",
+	modalseparator: "separator-6YbWrc",
+	modalsizelarge: "sizeLarge-3clvAM",
+	modalsizemedium: "sizeMedium-1fwIF2",
+	modalsizesmall: "sizeSmall-Sf4iOi",
+	modalsub: "modal-3HD5ck",
+	modalsubinner: "inner-3wn6Q5",
+	nochannel: "noChannel-Z1DQK7",
+	notice: "notice-2FJMB4",
+	noticebrand: "noticeBrand-3nQBC_",
+	noticebutton: "button-1MICoQ",
+	noticedanger: "noticeDanger-7u-yT9",
+	noticedefault: "noticeDefault-362Ko2",
+	noticedismiss: "dismiss-SCAH9H",
+	noticefacebook: "noticeFacebook-3equ5g",
+	noticeicon: "icon-KgjVwm",
+	noticeiconandroid: "iconApple-1hp9Sq",
+	noticeiconapple: "iconAndroid-3HTSwF",
+	noticeiconwindows: "iconWindows-1KG_XN",
+	noticeinfo: "noticeInfo-3_iTE1",
+	noticeplatformicon: "platformIcon-2NdO9F",
+	noticepremium: "noticePremium-12Zvj9",
+	noticepremiumaction: "premiumAction-3Tcani",
+	noticepremiumlogo: "premiumLogo-30dge3",
+	noticepremiumtext: "premiumText-C5NcRe",
+	noticespotify: "noticeSpotify-27dhr0",
+	noticestreamer: "noticeStreamerMode-2TSQpg",
+	noticesuccess: "noticeSuccess-3Y62ob",
+	nowrap: "noWrap-3jynv6",
+	scroller: "scroller-2FKFPG",
+	scrollerthemed: "scrollerThemed-2oenus",
+	scrollerwrap: "scrollerWrap-2lJEkd",
+	searchbar: "searchBar-1MOL6S",
+	searchbarclear: "clear--Eywng",
+	searchbareyeglass: "eyeGlass-2cMHx7",
+	searchbaricon: "icon-1S6UIr",
+	searchbarinput: "input-3Xdcic",
+	searchbarionwrap: "searchBarIcon-18QaPq",
+	searchbarvisible: "visible-3bFCH-",
+	size12: "size12-3R0845",
+	size14: "size14-3iUx6q",
+	size16: "size16-14cGz5",
+	size24: "size24-1ONE4K",
+	switch: "switch-3wwwcV",
+	switchdisabled: "switchDisabled-3HsXAJ",
+	switchenabled: "switchEnabled-V2WDBB",
+	switchinner: "checkbox-2tyjJg",
+	switchinnerdisabled: "checkboxDisabled-1MA81A",
+	switchinnerenabled: "checkboxEnabled-CtinEn",
+	switchsize: "size-3rFEHg",
+	switchsizedefault: "sizeDefault-2YlOZr",
+	switchsizemini: "sizeMini-1ii40f",
+	switchthemeclear: "themeClear-1EjkE4",
+	switchthemedefault: "themeDefault-24hCdX",
+	switchvalue: "value-2hFrkk",
+	switchvaluechecked: "valueChecked-m-4IJZ",
+	switchvalueunchecked: "valueUnchecked-2lU_20",
+	textareainnerenabled: "innerEnabled-3g80kR",
+	textareainnerenablednoattach: "innerEnabledNoAttach-NE9K7P",
+	textlink: "textLink-27KAGV",
+	themedark: "theme-dark",
+	themeghosthairline: "themeGhostHairline-DBD-2d",
+	themelight: "theme-light",
+	tooltip: "tooltip",
+	tooltipblack: "tooltip-black",
+	tooltipbottom: "tooltip-bottom",
+	tooltipleft: "tooltip-left",
+	tooltipright: "tooltip-right",
+	tooltips: "tooltips",
+	tooltiptop: "tooltip-top",
+	vertical: "vertical-V37hAW",
+	weightmedium: "weightMedium-2iZe9B",
+	weightsemibold: "weightSemiBold-NJexzi",
+	wrap: "wrap-ZIn9Iy",
+	wrapreverse: "wrapReverse-3ssEE3"
+};
+
+// stolen from square :-*
+BDFDB.disCN = new Proxy(Object.create(null), {
+	get: function() {
+		if (BDFDB.DiscordClasses[arguments[1]] == null) {
+			throw new Error(arguments[1] + " not found in BDFDB.DiscordClasses");
+		}
+		return BDFDB.DiscordClasses[arguments[1]];
+	}
+});
+BDFDB.disCNS = new Proxy(Object.create(null), {
+	get: function() {
+		if (BDFDB.DiscordClasses[arguments[1]] == null) {
+			throw new Error(arguments[1] + " not found in BDFDB.DiscordClasses");
+		}
+		return BDFDB.DiscordClasses[arguments[1]] + " ";
+	}
+});
+
+BDFDB.disCNC = new Proxy(Object.create(null), {
+	get: function() {
+		if (BDFDB.DiscordClasses[arguments[1]] == null) {
+			throw new Error(arguments[1] + " not found in BDFDB.DiscordClasses");
+		}
+		return BDFDB.DiscordClasses[arguments[1]] + ",";
+	}
+});
+
+BDFDB.dotCN = new Proxy(Object.create(null), {
+	get: function() {
+		if (BDFDB.DiscordClasses[arguments[1]] == null) {
+			throw new Error(arguments[1] + " not found in BDFDB.DiscordClasses");
+		}
+		return "." + BDFDB.DiscordClasses[arguments[1]];
+	}
+});
+
+BDFDB.dotCNS = new Proxy(Object.create(null), {
+	get: function() {
+		if (BDFDB.DiscordClasses[arguments[1]] == null) {
+			throw new Error(arguments[1] + " not found in BDFDB.DiscordClasses");
+		}
+		return "." + BDFDB.DiscordClasses[arguments[1]] + " ";
+	}
+});
+
+BDFDB.dotCNC = new Proxy(Object.create(null), {
+	get: function() {
+		if (BDFDB.DiscordClasses[arguments[1]] == null) {
+			throw new Error(arguments[1] + " not found in BDFDB.DiscordClasses");
+		}
+		return "." + BDFDB.DiscordClasses[arguments[1]] + ",";
+	}
+});
+
+BDFDB.idCN = new Proxy(Object.create(null), {
+	get: function() {
+		if (BDFDB.DiscordClasses[arguments[1]] == null) {
+			throw new Error(arguments[1] + " not found in BDFDB.DiscordClasses");
+		}
+		return "#" + BDFDB.DiscordClasses[arguments[1]];
+	}
+});
+
+BDFDB.idCNS = new Proxy(Object.create(null), {
+	get: function() {
+		if (BDFDB.DiscordClasses[arguments[1]] == null) {
+			throw new Error(arguments[1] + " not found in BDFDB.DiscordClasses");
+		}
+		return "#" + BDFDB.DiscordClasses[arguments[1]] + " ";
+	}
+});
+
+BDFDB.idCNC = new Proxy(Object.create(null), {
+	get: function() {
+		if (BDFDB.DiscordClasses[arguments[1]] == null) {
+			throw new Error(arguments[1] + " not found in BDFDB.DiscordClasses");
+		}
+		return "#" + BDFDB.DiscordClasses[arguments[1]] + ",";
+	}
+});
+
 BDFDB.appendLocalStyle("BDFDB", `
 	#bd-settingspane-container .ui-form-title {
 		display: inline-block;
@@ -2946,19 +3259,19 @@ BDFDB.appendLocalStyle("BDFDB", `
 	.DevilBro-settings div:not([class*="marginTop"]) {
 		margin-top: 0px !important;
 	}
-	.DevilBro-settings .marginTop4-2rEBfJ {
+	.DevilBro-settings ${BDFDB.dotCN.margintop4} {
 		margin-top: 4px !important;
 	}
-	.DevilBro-settings .marginTop8-2gOa2N {
+	.DevilBro-settings ${BDFDB.dotCN.margintop8} {
 		margin-top: 8px !important;
 	}
-	.DevilBro-settings .marginTop20-3UscxH {
+	.DevilBro-settings ${BDFDB.dotCN.margintop20}{
 		margin-top: 20px !important;
 	}
-	.DevilBro-settings .marginTop40-1bNyG9 {
+	.DevilBro-settings ${BDFDB.dotCN.margintop40} {
 		margin-top: 40px !important;
 	}
-	.DevilBro-settings .marginTop60-10QB5x {
+	.DevilBro-settings ${BDFDB.dotCN.margintop60} {
 		margin-top: 60px !important;
 	}
 	
@@ -2971,28 +3284,28 @@ BDFDB.appendLocalStyle("BDFDB", `
 		padding-left: 15px;
 	}
 	
-	.DevilBro-modal .inputNumberWrapper .numberinput-buttons-zone:hover + .input-2YozMi,
-	.DevilBro-settings .inputNumberWrapper .numberinput-buttons-zone:hover + .input-2YozMi {
+	.DevilBro-modal .inputNumberWrapper .numberinput-buttons-zone:hover + ${BDFDB.dotCN.input},
+	.DevilBro-settings .inputNumberWrapper .numberinput-buttons-zone:hover + ${BDFDB.dotCN.input} {
 		border-color: black;
 	}
-	.DevilBro-modal .inputNumberWrapper .numberinput-buttons-zone:hover + .input-2YozMi:focus,
-	.DevilBro-settings .inputNumberWrapper .numberinput-buttons-zone:hover + .input-2YozMi:focus,
-	.DevilBro-modal .inputNumberWrapper .numberinput-buttons-zone.pressed + .input-2YozMi,
-	.DevilBro-settings .inputNumberWrapper .numberinput-buttons-zone.pressed + .input-2YozMi {
+	.DevilBro-modal .inputNumberWrapper .numberinput-buttons-zone:hover + ${BDFDB.dotCN.input}:focus,
+	.DevilBro-settings .inputNumberWrapper .numberinput-buttons-zone:hover + ${BDFDB.dotCN.input}:focus,
+	.DevilBro-modal .inputNumberWrapper .numberinput-buttons-zone.pressed + ${BDFDB.dotCN.input},
+	.DevilBro-settings .inputNumberWrapper .numberinput-buttons-zone.pressed + ${BDFDB.dotCN.input} {
 		border-color: #7289da;
 	}
 	.DevilBro-modal .inputNumberWrapper,
 	.DevilBro-settings .inputNumberWrapper {
 		position: relative !important;
 	}
-	.DevilBro-modal .inputNumberWrapper .input-2YozMi[type=number],
-	.DevilBro-settings .inputNumberWrapper .input-2YozMi[type=number] {
+	.DevilBro-modal .inputNumberWrapper ${BDFDB.dotCN.input}[type=number],
+	.DevilBro-settings .inputNumberWrapper ${BDFDB.dotCN.input}[type=number] {
 		padding-right: 25px;
 	}
-	.DevilBro-modal .inputNumberWrapper .input-2YozMi[type=number]::-webkit-inner-spin-button, 
-	.DevilBro-modal .inputNumberWrapper .input-2YozMi[type=number]::-webkit-outer-spin-button,
-	.DevilBro-settings .inputNumberWrapper .input-2YozMi[type=number]::-webkit-inner-spin-button, 
-	.DevilBro-settings .inputNumberWrapper .input-2YozMi[type=number]::-webkit-outer-spin-button {
+	.DevilBro-modal .inputNumberWrapper ${BDFDB.dotCN.input}[type=number]::-webkit-inner-spin-button, 
+	.DevilBro-modal .inputNumberWrapper ${BDFDB.dotCN.input}[type=number]::-webkit-outer-spin-button,
+	.DevilBro-settings .inputNumberWrapper ${BDFDB.dotCN.input}[type=number]::-webkit-inner-spin-button, 
+	.DevilBro-settings .inputNumberWrapper ${BDFDB.dotCN.input}[type=number]::-webkit-outer-spin-button {
 		-webkit-appearance: none;
 	}
 	.DevilBro-modal .inputNumberWrapper .numberinput-buttons-zone,
@@ -3166,7 +3479,7 @@ BDFDB.appendLocalStyle("BDFDB", `
 		to { transform: scale(0.7); opacity: 0; }
 	}
 
-	.DevilBro-modal .backdrop-2ohBEd {
+	.DevilBro-modal ${BDFDB.dotCN.backdrop} {
 		animation: animation-backdrop 250ms ease;
 		animation-fill-mode: forwards;
 		opacity: 0;
@@ -3174,21 +3487,21 @@ BDFDB.appendLocalStyle("BDFDB", `
 		transform: translateZ(0px);
 	}
 
-	.DevilBro-modal.closing .backdrop-2ohBEd {
+	.DevilBro-modal.closing ${BDFDB.dotCN.backdrop} {
 		animation: animation-backdrop-closing 200ms linear;
 		animation-fill-mode: forwards;
 		animation-delay: 50ms;
 		opacity: 0.2;
 	}
 	
-	.DevilBro-modal .modal-2LIEKY {
+	.DevilBro-modal ${BDFDB.dotCN.modal} {
 		animation: animation-modal 250ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
 		animation-fill-mode: forwards;
 		transform: scale(0.7);
 		transform-origin: 50% 50%;
 	}
 
-	.DevilBro-modal.closing .modal-2LIEKY {
+	.DevilBro-modal.closing ${BDFDB.dotCN.modal} {
 		animation: animation-modal-closing 250ms cubic-bezier(0.19, 1, 0.22, 1);
 		animation-fill-mode: forwards;
 		opacity: 1;
@@ -3239,11 +3552,11 @@ BDFDB.appendLocalStyle("BDFDB", `
 		display: initial;
 	}
 	
-	.DevilBro-settingsmodal .modal-2LIEKY {
+	.DevilBro-settingsmodal ${BDFDB.dotCN.modal} {
 		z-index: 4010;
 	}
 	
-	.DevilBro-settingsmodal .backdrop-2ohBEd {
+	.DevilBro-settingsmodal ${BDFDB.dotCN.backdrop} {
 		z-index: 4005;
 	}
 	
@@ -3259,7 +3572,7 @@ BDFDB.appendLocalStyle("BDFDB", `
 		display: initial;
 		margin: auto;
 	}
-	.colorpicker-modal .modal-3HOjGZ {
+	.colorpicker-modal ${BDFDB.dotCN.modalsub} {
 		width: 600px;
 	}
 	.colorpicker-modal .colorpicker-color,
@@ -3332,101 +3645,3 @@ BDFDB.appendLocalStyle("BDFDB", `
 		border-left: none;
 	}`
 );
-
-BDFDB.disCN = {
-	appmount: "appMount-3VJmYg",
-	app: "app-19_DXt",
-	layers: "layers-3iHuyZ",
-	layer: "layer-3QrUeG",
-	friends: "friends",
-	friendscolumn: "friends-column",
-	friendstabbar: "tab-bar",
-	friendstabbaritem: "tab-bar-item",
-	friendsonline: "friends-online",
-	badge: "badge",
-	channels: "channels-Ie2l6A",
-	channelname: "name-3M0b8v",
-	channelcontainerdefault: "containerDefault-1ZnADq",
-	textareainnerenabled: "innerEnabled-3g80kR",
-	textareainnerenablednoattach: "innerEnabledNoAttach-NE9K7P",
-	notice: "notice-2FJMB4",
-	noticebutton: "button-1MICoQ",
-	noticedismiss: "dismiss-SCAH9H",
-	flexchild: "flexChild-faoVW3",
-	flex1: "flex-1xMQg5",
-	flex2: "flex-1O1GKY"
-	
-};
-
-// stolen from square :-*
-BDFDB.disCNS = new Proxy(Object.create(null), {
-	get: function() {
-		if (BDFDB.disCN[arguments[1]] == null) {
-			throw new Error(arguments[1] + " not found in BDFDB.disCN");
-		}
-		return BDFDB.disCN[arguments[1]] + " ";
-	}
-});
-
-BDFDB.disCNC = new Proxy(Object.create(null), {
-	get: function() {
-		if (BDFDB.disCN[arguments[1]] == null) {
-			throw new Error(arguments[1] + " not found in BDFDB.disCN");
-		}
-		return BDFDB.disCN[arguments[1]] + ",";
-	}
-});
-
-BDFDB.dotCN = new Proxy(Object.create(null), {
-	get: function() {
-		if (BDFDB.disCN[arguments[1]] == null) {
-			throw new Error(arguments[1] + " not found in BDFDB.disCN");
-		}
-		return "." + BDFDB.disCN[arguments[1]];
-	}
-});
-
-BDFDB.dotCNS = new Proxy(Object.create(null), {
-	get: function() {
-		if (BDFDB.disCN[arguments[1]] == null) {
-			throw new Error(arguments[1] + " not found in BDFDB.disCN");
-		}
-		return "." + BDFDB.disCN[arguments[1]] + " ";
-	}
-});
-
-BDFDB.dotCNC = new Proxy(Object.create(null), {
-	get: function() {
-		if (BDFDB.disCN[arguments[1]] == null) {
-			throw new Error(arguments[1] + " not found in BDFDB.disCN");
-		}
-		return "." + BDFDB.disCN[arguments[1]] + ",";
-	}
-});
-
-BDFDB.idCN = new Proxy(Object.create(null), {
-	get: function() {
-		if (BDFDB.disCN[arguments[1]] == null) {
-			throw new Error(arguments[1] + " not found in BDFDB.disCN");
-		}
-		return "#" + BDFDB.disCN[arguments[1]];
-	}
-});
-
-BDFDB.idCNS = new Proxy(Object.create(null), {
-	get: function() {
-		if (BDFDB.disCN[arguments[1]] == null) {
-			throw new Error(arguments[1] + " not found in BDFDB.disCN");
-		}
-		return "#" + BDFDB.disCN[arguments[1]] + " ";
-	}
-});
-
-BDFDB.idCNC = new Proxy(Object.create(null), {
-	get: function() {
-		if (BDFDB.disCN[arguments[1]] == null) {
-			throw new Error(arguments[1] + " not found in BDFDB.disCN");
-		}
-		return "#" + BDFDB.disCN[arguments[1]] + ",";
-	}
-});
