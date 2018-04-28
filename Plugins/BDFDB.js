@@ -74,7 +74,7 @@ BDFDB.loadMessage = function (plugin) {
 			);
 		});
 		
-		var settingswindow = document.querySelector(".layer[layer-id='user-settings'], .layer-kosS71[layer-id='user-settings']");
+		var settingswindow = document.querySelector(BDFDB.dotCN.layer + "[layer-id='user-settings']");
 		if (settingswindow) {
 			innerSettingsWindowObserver.observe(settingswindow, {childList:true, subtree:true});
 			addCheckButton(settingswindow);
@@ -454,7 +454,7 @@ BDFDB.createNotificationsBar = function (content, options = {}) {
 	if (!content) return;
 	let id = Math.round(Math.random()*10000000000000000);
 	let notifiybar = document.createElement("div");
-	notifiybar.className = "notice-3I4-y_ size14-1wjlWP weightMedium-13x9Y8 height36-13sPn7 DevilBro-notice notice-" + id;
+	notifiybar.className = BDFDB.disCN.notice + " " + "notice-3I4-y_ size14-1wjlWP weightMedium-13x9Y8 height36-13sPn7" + " DevilBro-notice notice-" + id;
 	notifiybar.innerHTML = `<div class="dismiss-1QjyJW"></div><span class="notice-message"></span></strong>`;
 	BDFDB.$(".app .guilds-wrapper + div > div:first > div:first").append(notifiybar);
 	var notifiybarinner = notifiybar.querySelector(".notice-message");
@@ -1941,7 +1941,7 @@ BDFDB.appendModal = function (modal) {
 };
 
 BDFDB.updateContextPosition = function (context) {
-	var app = document.querySelector(".appMount-3VJmYg");
+	var app = document.querySelector(BDFDB.dotCN.appmount);
 	var menuWidth = BDFDB.$(context).outerWidth();
 	var menuHeight = BDFDB.$(context).outerHeight();
 	var position = BDFDB.mousePosition;
@@ -1956,7 +1956,7 @@ BDFDB.updateContextPosition = function (context) {
 
 BDFDB.appendContextMenu = function (context, e) {
 	BDFDB.$(".tooltips").before(context);
-	var app = document.querySelector(".appMount-3VJmYg");
+	var app = document.querySelector(BDFDB.dotCN.appmount);
 	var menuWidth = BDFDB.$(context).outerWidth();
 	var menuHeight = BDFDB.$(context).outerHeight();
 	BDFDB.$(context)
@@ -3344,9 +3344,39 @@ BDFDB.disCN = {
 	friendstabbaritem: "tab-bar-item",
 	friendsonline: "friends-online",
 	badge: "badge",
+	channels: "channels-Ie2l6A",
+	channelname: "name-3M0b8v",
+	channelcontainerdefault: "containerDefault-1ZnADq",
+	textareainnerenabled: "innerEnabled-3g80kR",
+	textareainnerenablednoattach: "innerEnabledNoAttach-NE9K7P",
+	notice: "notice-2FJMB4",
+	noticebutton: "button-1MICoQ",
+	noticedismiss: "dismiss-SCAH9H",
+	flexchild: "flexChild-faoVW3",
+	flex1: "flex-1xMQg5",
+	flex2: "flex-1O1GKY"
+	
 };
 
 // stolen from square :-*
+BDFDB.disCNS = new Proxy(Object.create(null), {
+	get: function() {
+		if (BDFDB.disCN[arguments[1]] == null) {
+			throw new Error(arguments[1] + " not found in BDFDB.disCN");
+		}
+		return BDFDB.disCN[arguments[1]] + " ";
+	}
+});
+
+BDFDB.disCNC = new Proxy(Object.create(null), {
+	get: function() {
+		if (BDFDB.disCN[arguments[1]] == null) {
+			throw new Error(arguments[1] + " not found in BDFDB.disCN");
+		}
+		return BDFDB.disCN[arguments[1]] + ",";
+	}
+});
+
 BDFDB.dotCN = new Proxy(Object.create(null), {
 	get: function() {
 		if (BDFDB.disCN[arguments[1]] == null) {
@@ -3356,11 +3386,47 @@ BDFDB.dotCN = new Proxy(Object.create(null), {
 	}
 });
 
+BDFDB.dotCNS = new Proxy(Object.create(null), {
+	get: function() {
+		if (BDFDB.disCN[arguments[1]] == null) {
+			throw new Error(arguments[1] + " not found in BDFDB.disCN");
+		}
+		return "." + BDFDB.disCN[arguments[1]] + " ";
+	}
+});
+
+BDFDB.dotCNC = new Proxy(Object.create(null), {
+	get: function() {
+		if (BDFDB.disCN[arguments[1]] == null) {
+			throw new Error(arguments[1] + " not found in BDFDB.disCN");
+		}
+		return "." + BDFDB.disCN[arguments[1]] + ",";
+	}
+});
+
 BDFDB.idCN = new Proxy(Object.create(null), {
 	get: function() {
 		if (BDFDB.disCN[arguments[1]] == null) {
 			throw new Error(arguments[1] + " not found in BDFDB.disCN");
 		}
 		return "#" + BDFDB.disCN[arguments[1]];
+	}
+});
+
+BDFDB.idCNS = new Proxy(Object.create(null), {
+	get: function() {
+		if (BDFDB.disCN[arguments[1]] == null) {
+			throw new Error(arguments[1] + " not found in BDFDB.disCN");
+		}
+		return "#" + BDFDB.disCN[arguments[1]] + " ";
+	}
+});
+
+BDFDB.idCNC = new Proxy(Object.create(null), {
+	get: function() {
+		if (BDFDB.disCN[arguments[1]] == null) {
+			throw new Error(arguments[1] + " not found in BDFDB.disCN");
+		}
+		return "#" + BDFDB.disCN[arguments[1]] + ",";
 	}
 });
