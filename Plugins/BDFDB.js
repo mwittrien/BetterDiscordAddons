@@ -2149,7 +2149,7 @@ BDFDB.openColorPicker = function (currentColor, swatch) {
 										</div>
 										<div class="${inputs[key].type == 'number' ? 'inputNumberWrapper inputNumberWrapperMini ' : ''}${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex + BDFDB.disCN.directioncolumn}" style="flex: 1 1 80%;">
 											${inputs[key].type == 'number' ? '<span class="numberinput-buttons-zone"><span class="numberinput-button-up"></span><span class="numberinput-button-down"></span></span>' : ''}
-											<input type="${inputs[key].type}"${!isNaN(inputs[key].min) && inputs[key].min != null ? ' min="' + inputs[key].min + '"' : ''}${!isNaN(inputs[key].max) && inputs[key].max !== null ? ' max="' + inputs[key].max + '"' : ''}${!isNaN(inputs[key].length) && inputs[key].length != null ? ' maxlength="' + inputs[key].length + '"' : ''} name="${inputs[key].group}" placeholder="${inputs[key].default}" class="${BDFDB.disCNS.inputmini + BDFDB.disCNS.input + BDFDB.disCN.size16} colorpicker-${inputs[key].name}">
+											<input type="${inputs[key].type}"${!isNaN(inputs[key].min) && inputs[key].min !== null ? ' min="' + inputs[key].min + '"' : ''}${!isNaN(inputs[key].max) && inputs[key].max !== null ? ' max="' + inputs[key].max + '"' : ''}${!isNaN(inputs[key].length) && inputs[key].length !== null ? ' maxlength="' + inputs[key].length + '"' : ''} name="${inputs[key].group}" placeholder="${inputs[key].default}" class="${BDFDB.disCNS.inputmini + BDFDB.disCNS.input + BDFDB.disCN.size16} colorpicker-${inputs[key].name}">
 										</div>
 									</div>`).join("")}
 								</div>
@@ -2896,6 +2896,8 @@ BDFDB.DiscordClasses = {
 	directionrow: "directionRow-3v3tfG",
 	directionrowreverse: "directionRowReverse-m8IjIq",
 	dms: "dms",
+	dmchannel: "channel",
+	dmprivate: "private",
 	flex: "flex-1O1GKY",
 	flex2: "flex-1xMQg5",
 	flexcenter: "flexCenter-3_1bcw",
@@ -2922,6 +2924,7 @@ BDFDB.DiscordClasses = {
 	headertitle: "title-3sZWYQ",
 	height16: "height16-2Lv3qA",
 	height20: "height20-mO2eIN",
+	height24: "height24-3XzeJx",
 	height28: "height28-3tox65",
 	height36: "height36-36OHCc",
 	horizontal: "horizontal-1ae9ci",
@@ -3069,7 +3072,7 @@ BDFDB.DiscordClasses = {
 // stolen from square :-*
 BDFDB.disCN = new Proxy(Object.create(null), {
 	get: function() {
-		if (BDFDB.DiscordClasses[arguments[1]] == null) {
+		if (BDFDB.DiscordClasses[arguments[1]] === null) {
 			throw new Error(arguments[1] + " not found in BDFDB.DiscordClasses");
 		}
 		return BDFDB.DiscordClasses[arguments[1]];
@@ -3077,7 +3080,7 @@ BDFDB.disCN = new Proxy(Object.create(null), {
 });
 BDFDB.disCNS = new Proxy(Object.create(null), {
 	get: function() {
-		if (BDFDB.DiscordClasses[arguments[1]] == null) {
+		if (BDFDB.DiscordClasses[arguments[1]] === null) {
 			throw new Error(arguments[1] + " not found in BDFDB.DiscordClasses");
 		}
 		return BDFDB.DiscordClasses[arguments[1]] + " ";
@@ -3086,7 +3089,7 @@ BDFDB.disCNS = new Proxy(Object.create(null), {
 
 BDFDB.disCNC = new Proxy(Object.create(null), {
 	get: function() {
-		if (BDFDB.DiscordClasses[arguments[1]] == null) {
+		if (BDFDB.DiscordClasses[arguments[1]] === null) {
 			throw new Error(arguments[1] + " not found in BDFDB.DiscordClasses");
 		}
 		return BDFDB.DiscordClasses[arguments[1]] + ",";
@@ -3095,7 +3098,7 @@ BDFDB.disCNC = new Proxy(Object.create(null), {
 
 BDFDB.dotCN = new Proxy(Object.create(null), {
 	get: function() {
-		if (BDFDB.DiscordClasses[arguments[1]] == null) {
+		if (BDFDB.DiscordClasses[arguments[1]] === null) {
 			throw new Error(arguments[1] + " not found in BDFDB.DiscordClasses");
 		}
 		return "." + BDFDB.DiscordClasses[arguments[1]];
@@ -3104,7 +3107,7 @@ BDFDB.dotCN = new Proxy(Object.create(null), {
 
 BDFDB.dotCNS = new Proxy(Object.create(null), {
 	get: function() {
-		if (BDFDB.DiscordClasses[arguments[1]] == null) {
+		if (BDFDB.DiscordClasses[arguments[1]] === null) {
 			throw new Error(arguments[1] + " not found in BDFDB.DiscordClasses");
 		}
 		return "." + BDFDB.DiscordClasses[arguments[1]] + " ";
@@ -3113,7 +3116,7 @@ BDFDB.dotCNS = new Proxy(Object.create(null), {
 
 BDFDB.dotCNC = new Proxy(Object.create(null), {
 	get: function() {
-		if (BDFDB.DiscordClasses[arguments[1]] == null) {
+		if (BDFDB.DiscordClasses[arguments[1]] === null) {
 			throw new Error(arguments[1] + " not found in BDFDB.DiscordClasses");
 		}
 		return "." + BDFDB.DiscordClasses[arguments[1]] + ",";
@@ -3122,7 +3125,7 @@ BDFDB.dotCNC = new Proxy(Object.create(null), {
 
 BDFDB.idCN = new Proxy(Object.create(null), {
 	get: function() {
-		if (BDFDB.DiscordClasses[arguments[1]] == null) {
+		if (BDFDB.DiscordClasses[arguments[1]] === null) {
 			throw new Error(arguments[1] + " not found in BDFDB.DiscordClasses");
 		}
 		return "#" + BDFDB.DiscordClasses[arguments[1]];
@@ -3131,7 +3134,7 @@ BDFDB.idCN = new Proxy(Object.create(null), {
 
 BDFDB.idCNS = new Proxy(Object.create(null), {
 	get: function() {
-		if (BDFDB.DiscordClasses[arguments[1]] == null) {
+		if (BDFDB.DiscordClasses[arguments[1]] === null) {
 			throw new Error(arguments[1] + " not found in BDFDB.DiscordClasses");
 		}
 		return "#" + BDFDB.DiscordClasses[arguments[1]] + " ";
@@ -3140,7 +3143,7 @@ BDFDB.idCNS = new Proxy(Object.create(null), {
 
 BDFDB.idCNC = new Proxy(Object.create(null), {
 	get: function() {
-		if (BDFDB.DiscordClasses[arguments[1]] == null) {
+		if (BDFDB.DiscordClasses[arguments[1]] === null) {
 			throw new Error(arguments[1] + " not found in BDFDB.DiscordClasses");
 		}
 		return "#" + BDFDB.DiscordClasses[arguments[1]] + ",";
