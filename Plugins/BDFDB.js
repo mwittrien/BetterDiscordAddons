@@ -1939,7 +1939,7 @@ BDFDB.appendModal = function (modal) {
 	
 	BDFDB.$(modal)
 		.appendTo(container)
-		.on("click", BDFDB.dotCNC.backdrop + ".btn-save, .btn-send, .btn-cancel, .btn-ok", () => {
+		.on("click", BDFDB.dotCNC.backdrop + BDFDB.dotCNC.modalclose + ".btn-save, .btn-send, .btn-cancel, .btn-ok", () => {
 			BDFDB.$(document).off("keydown.BDFDBmodalEscapeListener" + id);
 			BDFDB.$(modal).addClass("closing");
 			setTimeout(() => {modal.remove();}, 300);
@@ -2156,7 +2156,7 @@ BDFDB.openColorPicker = function (currentColor, swatch) {
 							</div>
 						</div>
 						<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontalreverse + BDFDB.disCNS.horizontalreverse2 + BDFDB.disCNS.directionrowreverse + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.modalfooter}">
-							<button type="button" class="${BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}">
+							<button type="button" class="btn-ok ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}">
 								<div class="${BDFDB.disCN.buttoncontents}"></div>
 							</button>
 						</div>
