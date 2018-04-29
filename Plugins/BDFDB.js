@@ -1145,7 +1145,7 @@ BDFDB.appendSettingsButton = function (plugin) {
 									<div class="${BDFDB.disCNS.modalsub + BDFDB.disCN.modalsizemedium}">
 										<div class="${BDFDB.disCNS.flex1 + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal1 + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex: 0 0 auto;">
 											<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">
-												<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.headertitle. + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.weigthsemibold + BDFDB.disCNS.defaultcolor + BDFDB.disCNS.h4defaultmargin + BDFDB.disCN.marginreset}">${plugin.name} Settings</h4>
+												<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.headertitle + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.weigthsemibold + BDFDB.disCNS.defaultcolor + BDFDB.disCNS.h4defaultmargin + BDFDB.disCN.marginreset}">${plugin.name} Settings</h4>
 											</div>
 											<svg class="${BDFDB.disCNS.modalclose + BDFDB.disCN.flexchild}" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12">
 												<g fill="none" fill-rule="evenodd">
@@ -2106,7 +2106,7 @@ BDFDB.openColorPicker = function (currentColor, swatch) {
 					<div class="${BDFDB.disCNS.modalsub + BDFDB.disCN.modalsizemedium}">
 						<div class="${BDFDB.disCNS.flex1 + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal1 + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex: 0 0 auto;">
 							<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">
-								<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.headertitle. + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.weigthsemibold + BDFDB.disCNS.defaultcolor + BDFDB.disCNS.h4defaultmargin + BDFDB.disCN.marginreset}">${libraryStrings.colorpicker_modal_header_text}</h4>
+								<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.headertitle + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.weigthsemibold + BDFDB.disCNS.defaultcolor + BDFDB.disCNS.h4defaultmargin + BDFDB.disCN.marginreset}">${libraryStrings.colorpicker_modal_header_text}</h4>
 							</div>
 							<svg class="${BDFDB.disCNS.modalclose + BDFDB.disCN.flexchild}" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12">
 								<g fill="none" fill-rule="evenodd">
@@ -2816,7 +2816,7 @@ BDFDB.DiscordClasses = {
 	buttonsizexlarge: "sizeXlarge-2yFAlZ",
 	buttonspinner: "spinner-3a9zLT",
 	buttonspinneritem: "spinnerItem-3GlVyU",
-	buttonsubmitting: "submitting-3qlO9O"
+	buttonsubmitting: "submitting-3qlO9O",
 	card: "card-3Qj_Yx",
 	cardbrand: "cardBrand-39zmMQ",
 	cardbrandoutline: "cardBrandOutline-3jvFfo",
@@ -2838,6 +2838,7 @@ BDFDB.DiscordClasses = {
 	chatspacer: "spacer-29U_x8",
 	checkbox: "checkbox-1ix_J3",
 	checkboxchecked: "checked-3_4uQ9",
+	checkboxcontainer: "checkboxContainer-2vV9zd",
 	checkboxinput: "input-3ITkQf",
 	checkboxinputdefault: "inputDefault-3JxKJ2",
 	checkboxinputdisabled: "inputDisabled-110Jqx",
@@ -2903,7 +2904,7 @@ BDFDB.DiscordClasses = {
 	justifystart: "justifyStart-2NDFzi",
 	layer: "layer-3QrUeG",
 	layers: "layers-3iHuyZ",
-	marginbottom4: "marginBottom4-2qk4Hy"
+	marginbottom4: "marginBottom4-2qk4Hy",
 	marginbottom8: "marginBottom8-AtZOdT",
 	marginbottom20: "marginBottom20-32qID7",
 	marginbottom40: "marginBottom40-2vIwTv",
