@@ -1909,7 +1909,7 @@ BDFDB.initElements = function (container) {
 	BDFDB.$(container).find(".btn-all " + BDFDB.dotCN.buttoncontents).text(libraryStrings.btn_all_text);
 	BDFDB.$(container).find(".btn-add " + BDFDB.dotCN.buttoncontents).text(libraryStrings.btn_add_text);
 	BDFDB.$(container).find(".btn-ok " + BDFDB.dotCN.buttoncontents).text(libraryStrings.btn_ok_text);
-	BDFDB.$(container).find(".file-navigator" + BDFDB.disCN.buttoncontents).text(libraryStrings.file_navigator_text);
+	BDFDB.$(container).find(".file-navigator " + BDFDB.dotCN.buttoncontents).text(libraryStrings.file_navigator_text);
 	BDFDB.$(container).find(BDFDB.dotCNS.searchbar + BDFDB.dotCN.searchbarinput).attr("placeholder", libraryStrings.search_placeholder);
 		
 	BDFDB.$(container)
