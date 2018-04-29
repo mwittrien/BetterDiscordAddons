@@ -12,12 +12,12 @@ BDFDB.loadMessage = function (plugin) {
 		if (typeof plugin.getDescription === "function") {
 			var oldDescription = plugin.getDescription();
 			if (oldDescription.indexOf("http://bit.ly/DevilBrosHaus") == -1) {
-				plugin.getDescription = function () {return oldDescription + "\n\nMy Support Server: http://bit.ly/DevilBrosHaus or https://discordapp.com/invite/Jx3TjNS";}
+				plugin.getDescription = function () {return oldDescription + "\n\nMy Support Server: http://bit.ly/DevilBrosHaus or https://discordapp.com/invite/Jx3TjNS";};
 			}
 		}
 		var loadMessage = BDFDB.getLibraryStrings().toast_plugin_started.replace("${pluginName}", pluginName).replace("${oldVersion}", oldVersion);
 		console.log(loadMessage);
-		if (!(BDFDB.zacksFork() && settingsCookie["fork-ps-2"] && settingsCookie["fork-ps-2"] == true)) {
+		if (!(BDFDB.zacksFork() && settingsCookie["fork-ps-2"] && settingsCookie["fork-ps-2"] === true)) {
 			BDFDB.showToast(loadMessage, {selector:"plugin-started-toast"});
 		}
 	}
@@ -43,7 +43,7 @@ BDFDB.loadMessage = function (plugin) {
 		},7200000);
 	}
 	var layers = null;
-	if (typeof window.PluginUpdates.observer === "undefined" && (layers = document.querySelector(BDFDB.dotCN.layers)) != null) {
+	if (typeof window.PluginUpdates.observer === "undefined" && (layers = document.querySelector(BDFDB.dotCN.layers)) !== null) {
 		window.PluginUpdates.observer = new MutationObserver((changes, _) => {
 			changes.forEach(
 				(change, i) => {
@@ -107,7 +107,7 @@ BDFDB.unloadMessage = function (plugin) {
 	if (!plugin.appReload) {
 		var unloadMessage = BDFDB.getLibraryStrings().toast_plugin_stopped.replace("${pluginName}", pluginName).replace("${oldVersion}", oldVersion);
 		console.log(unloadMessage);
-		if (!(BDFDB.zacksFork() && settingsCookie["fork-ps-2"] && settingsCookie["fork-ps-2"] == true)) {
+		if (!(BDFDB.zacksFork() && settingsCookie["fork-ps-2"] && settingsCookie["fork-ps-2"] === true)) {
 			BDFDB.showToast(unloadMessage, {selector:"plugin-stopped-toast"});
 		}
 	}
@@ -322,7 +322,7 @@ BDFDB.showToast = function (content, options = {}) {
 				if (!document.querySelectorAll(".toasts .toast").length) document.querySelector(".toasts").remove();
 			}, 300);
 		}
-	}
+	};
 	setTimeout(() => {
 		toastElem.close();
 	}, timeout > 0 ? timeout : 60000);
@@ -334,13 +334,13 @@ BDFDB.showDesktopNotification = function (parsedcontent, parsedoptions = {}) {
 	var startQueue = () => {
 		BDFDB.DesktopNotificationQueue.queue.push({parsedcontent,parsedoptions});
 		runQueue();
-	}
+	};
 	var runQueue = () => {
 		if (!BDFDB.DesktopNotificationQueue.running) {
 			let notifyconfig = BDFDB.DesktopNotificationQueue.queue.shift();
 			if (notifyconfig) notify(notifyconfig.parsedcontent, notifyconfig.parsedoptions);
 		}
-	}
+	};
 	var notify = (content, options) => {
 		BDFDB.DesktopNotificationQueue.running = true;
 		let mute = options.silent;
@@ -352,18 +352,18 @@ BDFDB.showDesktopNotification = function (parsedcontent, parsedoptions = {}) {
 			clearTimeout(closeTimeout);
 			close();
 			options.click();
-		}
+		};
 		if (!mute && options.sound) {
 			audio.src = options.sound;
-			audio.play()
+			audio.play();
 		}
 		var close = () => {
 			audio.pause();
 			notificationEle.close();
 			BDFDB.DesktopNotificationQueue.running = false;
 			setTimeout(() => {runQueue();},1000);
-		}
-	}
+		};
+	};
 	if (!("Notification" in window)) {
 		// do nothing
 	}
@@ -1458,7 +1458,7 @@ BDFDB.getAllData = function (plugin, keyName, compareObject) {
 	if (!plugin.defaults || !plugin.defaults[keyName]) return {};
 	let oldData = BDFDB.loadAllData(plugin, keyName), newData = {}, saveData = false;
 	for (let key in plugin.defaults[keyName]) {
-		if (oldData[key] == null) {
+		if (oldData[key] === null) {
 			newData[key] = plugin.defaults[keyName][key].value;
 			saveData = true;
 		}
@@ -1563,7 +1563,7 @@ BDFDB.sortArrayByKey = function (array, key, except) {
 };
 
 BDFDB.highlightText = function (string, searchstring) {
-	if (!(searchstring.length > 0)) return string;
+	if (searchstring.length < 1) return string;
 	var added = 0, copy = string, wrapperopen = `<span class="highlight">`, wrapperclose = `</span>`;
 	BDFDB.getAllIndexes(string.toUpperCase(), searchstring.toUpperCase()).forEach((start) => {
 		let offset = added*(wrapperopen.length + wrapperclose.length);
@@ -2149,7 +2149,7 @@ BDFDB.openColorPicker = function (currentColor, swatch) {
 										</div>
 										<div class="${inputs[key].type == 'number' ? 'inputNumberWrapper inputNumberWrapperMini ' : ''}${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex + BDFDB.disCN.directioncolumn}" style="flex: 1 1 80%;">
 											${inputs[key].type == 'number' ? '<span class="numberinput-buttons-zone"><span class="numberinput-button-up"></span><span class="numberinput-button-down"></span></span>' : ''}
-											<input type="${inputs[key].type}"${!isNaN(inputs[key].min) && inputs[key].min != null ? ' min="' + inputs[key].min + '"' : ''}${!isNaN(inputs[key].max) && inputs[key].max != null ? ' max="' + inputs[key].max + '"' : ''}${!isNaN(inputs[key].length) && inputs[key].length != null ? ' maxlength="' + inputs[key].length + '"' : ''} name="${inputs[key].group}" placeholder="${inputs[key].default}" class="${BDFDB.disCNS.inputmini + BDFDB.disCNS.input + BDFDB.disCN.size16} colorpicker-${inputs[key].name}">
+											<input type="${inputs[key].type}"${!isNaN(inputs[key].min) && inputs[key].min != null ? ' min="' + inputs[key].min + '"' : ''}${!isNaN(inputs[key].max) && inputs[key].max !== null ? ' max="' + inputs[key].max + '"' : ''}${!isNaN(inputs[key].length) && inputs[key].length != null ? ' maxlength="' + inputs[key].length + '"' : ''} name="${inputs[key].group}" placeholder="${inputs[key].default}" class="${BDFDB.disCNS.inputmini + BDFDB.disCNS.input + BDFDB.disCN.size16} colorpicker-${inputs[key].name}">
 										</div>
 									</div>`).join("")}
 								</div>
@@ -2922,7 +2922,7 @@ BDFDB.DiscordClasses = {
 	headertitle: "title-3sZWYQ",
 	height16: "height16-2Lv3qA",
 	height20: "height20-mO2eIN",
-	height28: "height28-3tox65"
+	height28: "height28-3tox65",
 	height36: "height36-36OHCc",
 	horizontal: "horizontal-1ae9ci",
 	horizontal2: "horizontal-2EEEnY",
