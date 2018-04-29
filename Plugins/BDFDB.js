@@ -386,7 +386,7 @@ BDFDB.createTooltip = function (content, anker, options = {}) {
 	
 	let id = Math.round(Math.random()*10000000000000000);
 	let tooltip = document.createElement("div");
-	tooltip.className = BDFDB.disCNS.toast + BDFDB.disCNS.toastblack + "DevilBro-tooltip";
+	tooltip.className = BDFDB.disCNS.tooltip + BDFDB.disCNS.tooltipblack + "DevilBro-tooltip";
 	if (options.type) tooltip.classList.add(BDFDB.disCN["tooltip" + options.type]);
 	if (options.id) tooltip.id = options.id.split(" ")[0];
 	if (options.selector) options.selector.split(" ").forEach(selector => {if(selector) tooltip.classList.add(selector);});
@@ -1915,8 +1915,8 @@ BDFDB.initElements = function (container) {
 	BDFDB.$(container)
 		.find(BDFDB.dotCN.switchinner).each((_, switchinner) => {
 			BDFDB.$(switchinner.parentElement)
-				.toggleClass(BDFDB.disCN.switchenabled, switchinner.checked)
-				.toggleClass(BDFDB.disCN.switchdisabled, !switchinner.checked);
+				.toggleClass(BDFDB.disCN.switchvaluechecked, switchinner.checked)
+				.toggleClass(BDFDB.disCN.switchvalueunchecked, !switchinner.checked);
 		});
 		
 	BDFDB.$(container)
