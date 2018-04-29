@@ -495,7 +495,7 @@ BDFDB.createNotificationsBar = function (content, options = {}) {
 			"facebook":		BDFDB.disCN.noticefacebook,
 			"info":			BDFDB.disCN.noticeinfo,
 			"premium":		BDFDB.disCN.noticepremium,
-			"spotify":		BDFDB.disCNS.noticespotify + BDFDB.disCNS.flex2 + BDFDB.disCNS.aligncenter + BDFDB.disCN.justifycenter,
+			"spotify":		BDFDB.disCNS.noticespotify + BDFDB.disCNS.flex + BDFDB.disCNS.aligncenter + BDFDB.disCN.justifycenter,
 			"streamer":		BDFDB.disCN.noticestreamer,
 			"success":		BDFDB.disCN.noticesuccess
 		};
@@ -1143,7 +1143,7 @@ BDFDB.appendSettingsButton = function (plugin) {
 							<div class="${BDFDB.disCN.modal}">
 								<div class="${BDFDB.disCN.modalinner}">
 									<div class="${BDFDB.disCNS.modalsub + BDFDB.disCN.modalsizemedium}">
-										<div class="${BDFDB.disCNS.flex1 + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal1 + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex: 0 0 auto;">
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex: 0 0 auto;">
 											<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">
 												<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.headertitle + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.weigthsemibold + BDFDB.disCNS.defaultcolor + BDFDB.disCNS.h4defaultmargin + BDFDB.disCN.marginreset}">${plugin.name} Settings</h4>
 											</div>
@@ -2017,13 +2017,13 @@ BDFDB.setColorSwatches = function (currentCOMP, wrapper, swatch) {
 		"rgb(255, 255, 255)","rgb(59, 173, 20)","rgb(31, 139, 76)","rgb(17, 128, 106)","rgb(32, 102, 148)","rgb(32, 57, 148)","rgb(109, 20, 173)","rgb(113, 54, 138)","rgb(173, 20, 87)","rgb(173, 32, 20)","rgb(153, 45, 34)","rgb(168, 67, 0)","rgb(194, 124, 14)","rgb(151, 156, 159)","rgb(93, 104, 109)","rgb(44, 44, 44)"];
 		
 	var swatches = 
-		`<div class="${BDFDB.disCNS.flex1 + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal1 + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCN.nowrap}" style="flex: 1 1 auto; margin-top: 5px;">
+		`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCN.nowrap}" style="flex: 1 1 auto; margin-top: 5px;">
 			<div class="ui-color-picker-${swatch} large custom" style="background-color: rgb(0, 0, 0);">
 				<svg class="color-picker-dropper-${swatch}" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 16 16">
 					<path class="color-picker-dropper-fg-${swatch}" fill="#ffffff" d="M14.994 1.006C13.858-.257 11.904-.3 10.72.89L8.637 2.975l-.696-.697-1.387 1.388 5.557 5.557 1.387-1.388-.697-.697 1.964-1.964c1.13-1.13 1.3-2.985.23-4.168zm-13.25 10.25c-.225.224-.408.48-.55.764L.02 14.37l1.39 1.39 2.35-1.174c.283-.14.54-.33.765-.55l4.808-4.808-2.776-2.776-4.813 4.803z"></path>
 				</svg>
 			</div>
-			<div class="${BDFDB.disCNS.flex1 + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal1 + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCN.wrap} ui-color-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;">
+			<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCN.wrap} ui-color-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;">
 				<div class="ui-color-picker-${swatch} nocolor" style="background-color: null;">
 					<svg class="nocolor-cross" height="22" width="22">
 						<path d="m 3 2 l 17 18 m 0 -18 l -17 18" stroke="red" stroke-width="3" fill="none"/>
@@ -2104,7 +2104,7 @@ BDFDB.openColorPicker = function (currentColor, swatch) {
 			<div class="${BDFDB.disCN.modal}">
 				<div class="${BDFDB.disCN.modalinner}">
 					<div class="${BDFDB.disCNS.modalsub + BDFDB.disCN.modalsizemedium}">
-						<div class="${BDFDB.disCNS.flex1 + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal1 + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex: 0 0 auto;">
+						<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex: 0 0 auto;">
 							<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">
 								<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.headertitle + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.weigthsemibold + BDFDB.disCNS.defaultcolor + BDFDB.disCNS.h4defaultmargin + BDFDB.disCN.marginreset}">${libraryStrings.colorpicker_modal_header_text}</h4>
 							</div>
@@ -2115,7 +2115,7 @@ BDFDB.openColorPicker = function (currentColor, swatch) {
 								</g>
 							</svg>
 						</div>
-						<div class="${BDFDB.disCNS.flex1 + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.modalsubinner + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCN.nowrap} colorpicker-container" style="flex: 1 1 auto;">
+						<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.modalsubinner + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCN.nowrap} colorpicker-container" style="flex: 1 1 auto;">
 							<div class="colorpicker-color">
 								<div class="colorpicker-white" style="background: linear-gradient(to right, #fff, rgba(255,255,255,0))">
 									<div class="colorpicker-black" style="background: linear-gradient(to top, #000, rgba(0,0,0,0))">
@@ -2143,11 +2143,11 @@ BDFDB.openColorPicker = function (currentColor, swatch) {
 								</div>
 								<div class="colorpicker-inputs ${BDFDB.disCNS.card + BDFDB.disCN.cardprimaryeditable}">
 									${Object.keys(inputs).map((key, i) => 
-									`<div class="colorpicker-input ${BDFDB.disCNS.flex1 + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal1 + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.aligncenter + BDFDB.disCNS.justifycenter + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.nowrap}">
-										<div class="${BDFDB.disCNS.flex1 + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal1 + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCN.nowrap}" style="flex: 1 1 20%">
+									`<div class="colorpicker-input ${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.aligncenter + BDFDB.disCNS.justifycenter + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.nowrap}">
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCN.nowrap}" style="flex: 1 1 20%">
 											<h5 class="${BDFDB.disCNS.h5 + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCN.weightsemibold}">${key}:</h5>
 										</div>
-										<div class="${inputs[key].type == 'number' ? 'inputNumberWrapper inputNumberWrapperMini ' : ''}${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex2 + BDFDB.disCN.directioncolumn}" style="flex: 1 1 80%;">
+										<div class="${inputs[key].type == 'number' ? 'inputNumberWrapper inputNumberWrapperMini ' : ''}${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex + BDFDB.disCN.directioncolumn}" style="flex: 1 1 80%;">
 											${inputs[key].type == 'number' ? '<span class="numberinput-buttons-zone"><span class="numberinput-button-up"></span><span class="numberinput-button-down"></span></span>' : ''}
 											<input type="${inputs[key].type}"${!isNaN(inputs[key].min) && inputs[key].min != null ? ' min="' + inputs[key].min + '"' : ''}${!isNaN(inputs[key].max) && inputs[key].max != null ? ' max="' + inputs[key].max + '"' : ''}${!isNaN(inputs[key].length) && inputs[key].length != null ? ' maxlength="' + inputs[key].length + '"' : ''} name="${inputs[key].group}" placeholder="${inputs[key].default}" class="${BDFDB.disCNS.inputmini + BDFDB.disCNS.input + BDFDB.disCN.size16} colorpicker-${inputs[key].name}">
 										</div>
@@ -2155,7 +2155,7 @@ BDFDB.openColorPicker = function (currentColor, swatch) {
 								</div>
 							</div>
 						</div>
-						<div class="${BDFDB.disCNS.flex1 + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontalreverse1 + BDFDB.disCNS.horizontalreverse2 + BDFDB.disCNS.directionrowreverse + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.modalfooter}">
+						<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontalreverse + BDFDB.disCNS.horizontalreverse2 + BDFDB.disCNS.directionrowreverse + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.modalfooter}">
 							<button type="button" class="${BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}">
 								<div class="${BDFDB.disCN.buttoncontents}"></div>
 							</button>
@@ -2773,6 +2773,18 @@ BDFDB.DiscordClasses = {
 	app: "app-19_DXt",
 	appmount: "appMount-3VJmYg",
 	appold: "app",
+	autocomplete: "autocomplete-1vrmpx",
+	autocomplete2: "autocomplete-i9yVHs",
+	autocompletecontent: "content-Qb0rXO",
+	autocompletecontenttitle: "contentTitle-2tG_sM",
+	autocompletedescription: "description-11DmNu",
+	autocompleteinner: "autocompleteInner-zh20B_",
+	autocompleterow: "autocompleteRow-2OthDa",
+	autocompleterowhorizontal: "autocompleteRowHorizontal-32jwnH",
+	autocompleterowvertical: "autocompleteRowVertical-q1K4ky",
+	autocompleteselectable: "selectable-3dP3y-",
+	autocompleteselected: "selectorSelected-1_M1WV",
+	autocompleteselector: "selector-2IcQBU",
 	backdrop: "backdrop-1ocfXc",
 	badge: "badge",
 	button: "button-38aScr",
@@ -2830,7 +2842,27 @@ BDFDB.DiscordClasses = {
 	cardsuccessoutline: "cardSuccessOutline-1Su_ab",
 	cardwarning: "cardWarning-2yPNAa",
 	cardwarningoutline: "cardWarningOutline-1cs56O",
+	categorycolortransition: "colorTransition-2-M2tg",
 	categorycontainerdefault: "containerDefault-3GGEv_",
+	categoryiconcollapsed: "iconCollapsed-3hFp_8",
+	categoryicondefault: "iconDefault-3Gr8d2",
+	categoryiconhovered: "iconHovered-2L3-fB",
+	categoryiconhoveredcollapsed: "iconHoveredCollapsed-3caIIZ",
+	categoryiconmuted: "iconMuted-1HVBGH",
+	categoryicontransition: "iconTransition-2pOJ7l",
+	categoryiconunread: "iconUnread-2eGkvX",
+	categorynamecollapsed: "nameCollapsed-34uFWo",
+	categorynamedefault: "nameDefault-2DI02H",
+	categorynamehovered: "nameHovered-1gxhWH",
+	categorynamehoveredcollapsed: "nameHoveredCollapsed-2orEWB",
+	categorynamemuted: "nameMuted-1MCOt4",
+	categorynameunread: "nameUnread-njOjIS",
+	categorywrappercollapsed: "wrapperCollapsed-3Fbxl6",
+	categorywrapperdefault: "wrapperDefault-10Jfvz",
+	categorywrapperhovered: "wrapperHovered-28fu1D",
+	categorywrapperhoveredcollapsed: "wrapperHoveredCollapsed-1PADEo",
+	categorywrappermuted: "wrapperMuted-3KeA2M",
+	categorywrapperunread: "wrapperUnread-1JPWj3",
 	channelcontainerdefault: "containerDefault-1ZnADq",
 	channelname: "name-3M0b8v",
 	channels: "channels-Ie2l6A",
@@ -2844,6 +2876,7 @@ BDFDB.DiscordClasses = {
 	checkboxinputdisabled: "inputDisabled-110Jqx",
 	checkboxround: "round-2jCFai",
 	checkboxwrapper: "checkboxWrapper-SkhIWG",
+	closed: "closed-1D6IW8",
 	contentmenulabel: "label-JWQiNe",
 	contextmenu: "contextMenu-HLZMGh",
 	contextmenuhint: "hint-22uc-R",
@@ -2855,20 +2888,27 @@ BDFDB.DiscordClasses = {
 	contextmenuitemgroup: "itemGroup-1tL0uz",
 	contextmenuitemtoggle: "itemToggle-S7XGOQ",
 	contextmenusubmenu: "itemSubMenu-1vN_Yn",
+	cursordefault: "cursorDefault-3pPSRV",
+	cursorpointer: "cursorPointer-1ajlYk",
 	defaultcolor: "defaultColor-1_ajX0",
+	description: "description-3_Ncsb",
 	directioncolumn: "directionColumn-35P_nr",
 	directionrow: "directionRow-3v3tfG",
 	directionrowreverse: "directionRowReverse-m8IjIq",
 	dms: "dms",
-	flex1: "flex-1xMQg5",
-	flex2: "flex-1O1GKY",
+	flex: "flex-1O1GKY",
+	flex2: "flex-1xMQg5",
 	flexcenter: "flexCenter-3_1bcw",
 	flexchild: "flexChild-faoVW3",
+	formtext: "formText-3fs7AJ",
 	friends: "friends",
 	friendscolumn: "friends-column",
 	friendsonline: "friends-online",
 	friendstabbar: "tab-bar",
 	friendstabbaritem: "tab-bar-item",
+	gamename: "game-name",
+	gamenameinput: "game-name-input",
+	gamesettings: "user-settings-games",
 	guild: "guild",
 	guildaudio: "audio",
 	guildselected: "selected",
@@ -2882,10 +2922,11 @@ BDFDB.DiscordClasses = {
 	headertitle: "title-3sZWYQ",
 	height16: "height16-2Lv3qA",
 	height20: "height20-mO2eIN",
+	height28: "height28-3tox65"
 	height36: "height36-36OHCc",
-	horizontal1: "horizontal-1ae9ci",
+	horizontal: "horizontal-1ae9ci",
 	horizontal2: "horizontal-2EEEnY",
-	horizontalreverse1: "horizontalReverse-2eTKWD",
+	horizontalreverse: "horizontalReverse-2eTKWD",
 	horizontalreverse2: "horizontalReverse-3tRjY7",
 	hovercard: "card-2j1p1_",
 	hovercardinner: "card-inner",
@@ -2902,6 +2943,7 @@ BDFDB.DiscordClasses = {
 	justifycenter: "justifyCenter-3D2jY",
 	justifyend: "justifyEnd-2E6vba",
 	justifystart: "justifyStart-2NDFzi",
+	large: "large-3Q-_XB",
 	layer: "layer-3QrUeG",
 	layers: "layers-3iHuyZ",
 	marginbottom4: "marginBottom4-2qk4Hy",
@@ -2916,6 +2958,7 @@ BDFDB.DiscordClasses = {
 	margintop20: "marginTop20-3TxNs6",
 	margintop40: "marginTop40-i-78cZ",
 	margintop60: "marginTop60-3PGbtK",
+	medium: "medium-zmzTW-",
 	member: "member-3W1lQa",
 	members: "member-3W1lQa",
 	membersgroup: "membersGroup-v9BXpm",
@@ -2932,6 +2975,9 @@ BDFDB.DiscordClasses = {
 	modalsizesmall: "sizeSmall-Sf4iOi",
 	modalsub: "modal-3HD5ck",
 	modalsubinner: "inner-3wn6Q5",
+	modedefault: "modeDefault-3a2Ph1",
+	modedisabled: "modeDisabled-33Av8D",
+	modeselectable: "modeSelectable-k2b2pa",
 	nochannel: "noChannel-Z1DQK7",
 	notice: "notice-2FJMB4",
 	noticebrand: "noticeBrand-3nQBC_",
@@ -2953,7 +2999,10 @@ BDFDB.DiscordClasses = {
 	noticespotify: "noticeSpotify-27dhr0",
 	noticestreamer: "noticeStreamerMode-2TSQpg",
 	noticesuccess: "noticeSuccess-3Y62ob",
+	note: "note-1V3kyJ",
 	nowrap: "noWrap-3jynv6",
+	overflowellipsis: "overflowEllipsis-2JOaZ6",
+	primary: "primary-jw0I4K",
 	scroller: "scroller-2FKFPG",
 	scrollerthemed: "scrollerThemed-2oenus",
 	scrollerwrap: "scrollerWrap-2lJEkd",
@@ -2964,10 +3013,14 @@ BDFDB.DiscordClasses = {
 	searchbarinput: "input-3Xdcic",
 	searchbarionwrap: "searchBarIcon-18QaPq",
 	searchbarvisible: "visible-3bFCH-",
+	size10: "size10-39i14u",
 	size12: "size12-3R0845",
 	size14: "size14-3iUx6q",
 	size16: "size16-14cGz5",
+	size18: "size18-3EXdSj",
+	size20: "size20-2QkeeC",
 	size24: "size24-1ONE4K",
+	small: "small-29zrCQ",
 	switch: "switch-3wwwcV",
 	switchdisabled: "switchDisabled-3HsXAJ",
 	switchenabled: "switchEnabled-V2WDBB",
@@ -2982,12 +3035,19 @@ BDFDB.DiscordClasses = {
 	switchvalue: "value-2hFrkk",
 	switchvaluechecked: "valueChecked-m-4IJZ",
 	switchvalueunchecked: "valueUnchecked-2lU_20",
+	tableheader: "header-3Uqp87",
+	tableheadername: "headerName-2n9eUZ",
+	tableheaderoption: "headerOption-3qo9Ph",
+	tableheadersize: "headerSize-1-W6wd",
 	textareainnerenabled: "innerEnabled-3g80kR",
 	textareainnerenablednoattach: "innerEnabledNoAttach-NE9K7P",
 	textlink: "textLink-27KAGV",
 	themedark: "theme-dark",
 	themeghosthairline: "themeGhostHairline-DBD-2d",
 	themelight: "theme-light",
+	title: "title-31JmR4",
+	titledefault: "titleDefault-a8-ZSr",
+	titlemini: "titleMini-pBwj_L title-31JmR4 marginReset-236NPn weightMedium-2iZe9B size12-3R0845",
 	tooltip: "tooltip",
 	tooltipblack: "tooltip-black",
 	tooltipbottom: "tooltip-bottom",
@@ -2995,9 +3055,12 @@ BDFDB.DiscordClasses = {
 	tooltipright: "tooltip-right",
 	tooltips: "tooltips",
 	tooltiptop: "tooltip-top",
+	transition: "transition-2IHyE9",
 	vertical: "vertical-V37hAW",
+	weightbold: "weightBold-2yjlgw",
 	weightlight: "weightLight-3heiur",
 	weightmedium: "weightMedium-2iZe9B",
+	weightnormal: "weightNormal-WI4TcG",
 	weightsemibold: "weightSemiBold-NJexzi",
 	wrap: "wrap-ZIn9Iy",
 	wrapreverse: "wrapReverse-3ssEE3"
