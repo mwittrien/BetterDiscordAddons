@@ -1838,7 +1838,7 @@ BDFDB.initElements = function (container) {
 			var checked = e.currentTarget.checked;
 			var checkBoxStyle = e.currentTarget.parentElement.querySelector(BDFDB.dotCN.checkbox);
 			BDFDB.$(checkBoxStyle)
-				.toggleClass(BDFDB.disCN.checked, checked)
+				.toggleClass(BDFDB.disCN.checkboxchecked, checked)
 				.css("background-color", checked ? "rgb(67, 181, 129)" : "")
 				.css("border-color", checked ? "rgb(67, 181, 129)" : "")
 				.find("polyline")
@@ -1922,7 +1922,7 @@ BDFDB.initElements = function (container) {
 	BDFDB.$(container)
 		.find(BDFDB.dotCNS.checkboxwrapper + BDFDB.dotCN.checkboxinput).each((_, checkBox) => {
 			if (checkBox.checked) {
-				BDFDB.$(checkBox.parentElement.querySelector(BDFDB.checkbox))
+				BDFDB.$(checkBox.parentElement.querySelector(BDFDB.dotCN.checkbox))
 					.addClass(BDFDB.disCN.checkboxchecked)
 					.css("background-color", "rgb(67, 181, 129)")
 					.css("border-color", "rgb(67, 181, 129)")
@@ -3502,13 +3502,13 @@ BDFDB.appendLocalStyle("BDFDB", `
 		opacity: 1;
 	}
 	
-	.DevilBro-modal .checkboxContainer-1sZ9eo,
-	.DevilBro-settings .checkboxContainer-1sZ9eo {
+	.DevilBro-modal ${BDFDB.dotCN.checkboxcontainer},
+	.DevilBro-settings ${BDFDB.dotCN.checkboxcontainer} {
 		margin-left: 10px;
 	}
 	
-	.DevilBro-modal .checkboxContainer-1sZ9eo:before,
-	.DevilBro-settings .checkboxContainer-1sZ9eo:before {
+	.DevilBro-modal ${BDFDB.dotCN.checkboxcontainer}:before,
+	.DevilBro-settings ${BDFDB.dotCN.checkboxcontainer}:before {
 		display: none;
 	}
 	
