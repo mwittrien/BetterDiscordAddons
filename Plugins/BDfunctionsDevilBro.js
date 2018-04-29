@@ -452,18 +452,18 @@ BDfunctionsDevilBro.createNotificationsBar = function (content, options = {}) {
 	if (!content) return;
 	let id = Math.round(Math.random()*10000000000000000);
 	let notifiybar = document.createElement("div");
-	notifiybar.className = "notice-3I4-y_ size14-1wjlWP weightMedium-13x9Y8 height36-13sPn7 DevilBro-notice notice-" + id;
-	notifiybar.innerHTML = `<div class="dismiss-1QjyJW"></div><span class="notice-message"></span></strong>`;
+	notifiybar.className = "notice-3I4-y_ notice-2FJMB4 size14-1wjlWP size14-3iUx6q weightMedium-13x9Y8 weightMedium-2iZe9B height36-13sPn7 height36-36OHCc DevilBro-notice notice-" + id;
+	notifiybar.innerHTML = `<div class="dismiss-1QjyJW dismiss-SCAH9H"></div><span class="notice-message"></span></strong>`;
 	BDfunctionsDevilBro.$(".app .guilds-wrapper + div > div:first > div:first").append(notifiybar);
 	var notifiybarinner = notifiybar.querySelector(".notice-message");
 	if (options.icon) {
 		var icons = {
-			"android":			{name:"iconAndroid-cnqiCY icon-4jKckW",				size:"small"},
-			"apple":			{name:"iconApple-2ZQIid icon-4jKckW",				size:"small"},
-			"windows":			{name:"iconWindows-11s3sD icon-4jKckW",				size:"small"},
-			"androidBig":		{name:"iconAndroid-cnqiCY platformIcon-1JFXvA",		size:"big"},
-			"appleBig":			{name:"iconApple-2ZQIid platformIcon-1JFXvA",		size:"big"},
-			"windowsBig":		{name:"iconWindows-11s3sD platformIcon-1JFXvA",		size:"big"}
+			"android":			{name:"iconAndroid-cnqiCY iconAndroid-3HTSwF icon-4jKckW icon-KgjVwm",						size:"small"},
+			"apple":			{name:"iconApple-2ZQIid iconApple-1hp9Sq icon-4jKckW icon-KgjVwm",							size:"small"},
+			"windows":			{name:"iconWindows-11s3sD iconWindows-1KG_XN icon-4jKckW icon-KgjVwm",						size:"small"},
+			"androidBig":		{name:"iconAndroid-cnqiCY iconAndroid-3HTSwF platformIcon-1JFXvA platformIcon-2NdO9F",		size:"big"},
+			"appleBig":			{name:"iconApple-2ZQIid iconApple-1hp9Sq platformIcon-1JFXvA platformIcon-2NdO9F",			size:"big"},
+			"windowsBig":		{name:"iconWindows-11s3sD iconWindows-1KG_XN platformIcon-1JFXvA platformIcon-2NdO9F",		size:"big"}
 		};
 		for (let icon of options.icon.split(" ")) {
 			icon = icons[icon];
@@ -474,7 +474,7 @@ BDfunctionsDevilBro.createNotificationsBar = function (content, options = {}) {
 		}
 		
 	}
-	if (options.btn) BDfunctionsDevilBro.$(`<button class="button-2TvR03 size14-1wjlWP weightMedium-13x9Y8">${options.btn}</button>`).insertAfter(notifiybarinner);
+	if (options.btn) BDfunctionsDevilBro.$(`<button class="button-2TvR03 button-1MICoQ size14-1wjlWP size14-3iUx6q weightMedium-13x9Y8 weightMedium-2iZe9B">${options.btn}</button>`).insertAfter(notifiybarinner);
 	if (options.id) notifiybar.id = options.id.split(" ")[0];
 	if (options.selector) options.selector.split(" ").forEach(selector => {if(selector) notifiybar.classList.add(selector);});
 	if (options.css) BDfunctionsDevilBro.appendLocalStyle("customNotificationsBarDevilBro" + id, options.css);
@@ -485,7 +485,7 @@ BDfunctionsDevilBro.createNotificationsBar = function (content, options = {}) {
 		for (let word of content.split(" ")) {
 			let encodedword = BDfunctionsDevilBro.encodeToHTML(word);
 			urltest.href = word;
-			newcontent.push((urltest.host && urltest.host != window.location.host) ? `<label class="textLink-3eOiS-">${encodedword}</label>` : encodedword);
+			newcontent.push((urltest.host && urltest.host != window.location.host) ? `<label class="textLink-3eOiS- textLink-27KAGV">${encodedword}</label>` : encodedword);
 		}
 		notifiybarinner.innerHTML = newcontent.join(" ");
 	}
@@ -493,22 +493,26 @@ BDfunctionsDevilBro.createNotificationsBar = function (content, options = {}) {
 	var type = null;
 	if (options.type) {
 		var types = {
-			"brand":		"noticeBrand-3o3fQA",
-			"danger":		"noticeDanger-1SIxaf",
-			"default":		"noticeDefault-16Om2m",
-			"facebook":		"noticeFacebook-1eAoSW",
-			"info":			"noticeInfo-3v29SJ",
-			"premium":		"noticePremium-2x9Tv2",
-			"spotify":		"noticeSpotify-27AKmv flex-3B1Tl4 alignCenter-3VxkQP justifyCenter-29N31w",
-			"streamer":		"noticeStreamerMode-1OlfKV",
-			"success":		"noticeSuccess-P1EnBb"
+			"brand":		"noticeBrand-3o3fQA noticeBrand-3nQBC_",
+			"danger":		"noticeDanger-1SIxaf noticeDanger-7u-yT9",
+			"default":		"noticeDefault-16Om2m noticeDefault-362Ko2",
+			"facebook":		"noticeFacebook-1eAoSW noticeFacebook-3equ5g",
+			"info":			"noticeInfo-3v29SJ noticeInfo-3_iTE1",
+			"premium":		"noticePremium-2x9Tv2 noticePremium-12Zvj9",
+			"spotify":		"noticeSpotify-27AKmv noticeSpotify-27dhr0 flex-3B1Tl4 flex-1O1GKY alignCenter-3VxkQP alignCenter-1dQNNs justifyCenter-29N31w justifyCenter-3D2jY",
+			"streamer":		"noticeStreamerMode-1OlfKV noticeStreamerMode-2TSQpg",
+			"success":		"noticeSuccess-P1EnBb noticeSuccess-3Y62ob"
 		};
 		if (type = types[options.type]) type.split(" ").forEach(selector => {if(selector) notifiybar.classList.add(selector);});
 		if (options.type == "premium") {
 			var button = notifiybar.querySelector(".button-2TvR03");
-			if (button) button.classList.add("premiumAction-2lj9ha");
+			if (button) {
+				button.classList.add("premiumAction-2lj9ha");
+				button.classList.add("premiumAction-3Tcani");
+			}
 			notifiybarinner.classList.add("premiumText-2gecpf");
-			BDfunctionsDevilBro.$(`<i class="premiumLogo-2PV9qw"></i>`).insertBefore(notifiybarinner);
+			notifiybarinner.classList.add("premiumText-C5NcRe");
+			BDfunctionsDevilBro.$(`<i class="premiumLogo-2PV9qw premiumLogo-30dge3"></i>`).insertBefore(notifiybarinner);
 		}
 	}
 	if (!type) {

@@ -3050,7 +3050,7 @@ BDFDB.DiscordClasses = {
 	themelight: "theme-light",
 	title: "title-31JmR4",
 	titledefault: "titleDefault-a8-ZSr",
-	titlemini: "titleMini-pBwj_L title-31JmR4 marginReset-236NPn weightMedium-2iZe9B size12-3R0845",
+	titlemini: "titleMini-pBwj_L",
 	tooltip: "tooltip",
 	tooltipblack: "tooltip-black",
 	tooltipbottom: "tooltip-bottom",
