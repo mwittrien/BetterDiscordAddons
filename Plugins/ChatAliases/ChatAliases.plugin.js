@@ -10,12 +10,12 @@ class ChatAliases {
 			}
 		};
 	}
-
+	
 	getName () {return "ChatAliases";}
 
 	getDescription () {return "Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent.";}
 
-	getVersion () {return "1.8.2";}
+	getVersion () {return "1.8.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -372,7 +372,7 @@ class ChatAliases {
 				}
 				
 				$(autocompletemenu)
-					.append(`<div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteAliasesRow"><div class="${BDFDB.disCN.autocompleteselector}"><div class="${BDFDB.disCNS.autocompletecontenttitle + BDFDB.disCNS.small + BDFDB.disCNS.size12 + BDFDB.disCNS.heigt16 + BDFDB.disCN.weightsemibold}">Aliases: <strong class="lastword">${BDFDB.encodeToHTML(lastword)}</strong></div></div></div>`)
+					.append(`<div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteAliasesRow"><div class="${BDFDB.disCN.autocompleteselector}"><div class="${BDFDB.disCNS.autocompletecontenttitle + BDFDB.disCNS.small + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCN.weightsemibold}">Aliases: <strong class="lastword">${BDFDB.encodeToHTML(lastword)}</strong></div></div></div>`)
 					.off("mouseenter." + this.getName()).on("mouseenter." + this.getName(), BDFDB.dotCN.autocompleteselectable, (e) => {
 						autocompletemenu.querySelectorAll(BDFDB.dotCN.autocompleteselected).forEach(selected => {selected.classList.remove(BDFDB.disCN.autocompleteselected);});
 						e.currentTarget.classList.add(BDFDB.disCN.autocompleteselected);
