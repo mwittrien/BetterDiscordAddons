@@ -303,7 +303,7 @@ class ChatAliases {
 			.off("keydown." + this.getName())
 			.on("keydown." + this.getName(), e => {
 				if (e.which == 9) {
-					let selectedChatAlias = textarea.parentElement.querySelector(".autocompleteAliasesRow " + BDFDB.dotCN.autcompleteselected)
+					let selectedChatAlias = textarea.parentElement.querySelector(".autocompleteAliasesRow " + BDFDB.dotCN.autocompleteselected)
 					if (selectedChatAlias) {
 						e.preventDefault();
 						e.stopPropagation();
@@ -380,7 +380,7 @@ class ChatAliases {
 					
 				for (let alias in matchedaliases) {
 					if (amount-- < 1) break;
-					$(`<div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteAliasesRow"><div class="${BDFDB.disCNS.autocompleteselector + BDFDB.disCN.autocompleteselectable}"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.autocompletecontent}" style="flex: 1 1 auto;"><div class="${BDFDB.disCN.flexchild} aliasword" style="flex: 1 1 auto;">${BDFDB.encodeToHTML(alias)}</div><div class="${BDFDB.disCNS.autcompletedescription + BDFDB.disCN.flexchild}">${BDFDB.encodeToHTML(matchedaliases[alias].replace)}</div></div></div></div>`)
+					$(`<div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteAliasesRow"><div class="${BDFDB.disCNS.autocompleteselector + BDFDB.disCN.autocompleteselectable}"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.autocompletecontent}" style="flex: 1 1 auto;"><div class="${BDFDB.disCN.flexchild} aliasword" style="flex: 1 1 auto;">${BDFDB.encodeToHTML(alias)}</div><div class="${BDFDB.disCNS.autocompletedescription + BDFDB.disCN.flexchild}">${BDFDB.encodeToHTML(matchedaliases[alias].replace)}</div></div></div></div>`)
 						.appendTo(autocompletemenu)
 						.off("click." + this.getName()).on("click." + this.getName(), BDFDB.dotCN.autocompleteselectable, (e) => {
 							this.swapWordWithAlias(textarea);
