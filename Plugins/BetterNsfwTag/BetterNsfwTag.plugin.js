@@ -1,7 +1,7 @@
 //META{"name":"BetterNsfwTag"}*//
 
 class BetterNsfwTag {
-	constructor () {		
+	initConstructor () {
 		this.css = ` 
 			.nsfw-tag {
 				position: relative;
@@ -27,7 +27,7 @@ class BetterNsfwTag {
 
 	getDescription () {return "Adds a more noticeable tag to NSFW channels.";}
 
-	getVersion () {return "1.1.4";}
+	getVersion () {return "1.1.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -36,23 +36,23 @@ class BetterNsfwTag {
 
 	start () {
 		var libraryScript = null;
-		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
-			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
-			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]');
+		if (typeof BDFDB !== "object" || BDFDB.isLibraryOutdated()) {
+			if (typeof BDFDB === "object") BDFDB = "";
+			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
 			libraryScript.setAttribute("type", "text/javascript");
-			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js");
+			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
 			document.head.appendChild(libraryScript);
 		}
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDfunctionsDevilBro === "object") this.initialize();
+		if (typeof BDFDB === "object") this.initialize();
 		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
 	initialize () {
-		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.loadMessage(this);
+		if (typeof BDFDB === "object") {
+			BDFDB.loadMessage(this);
 			
 			var observer = null;
 
@@ -61,7 +61,7 @@ class BetterNsfwTag {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.classList && node.classList.contains("containerDefault-7RImuF")) {
+								if (node && node.classList && node.classList.contains(BDFDB.disCN.channelcontainerdefault)) {
 									this.checkChannel(node);
 								} 
 								if (node && node.className && node.className.length > 0 && node.className.indexOf("container-") > -1) {
@@ -72,7 +72,7 @@ class BetterNsfwTag {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, ".channels-3g2vYe", {name:"channelListObserver",instance:observer}, {childList: true, subtree: true});
+			BDFDB.addObserver(this, BDFDB.dotCN.channels, {name:"channelListObserver",instance:observer}, {childList: true, subtree: true});
 						
 			this.checkAllContainers();
 		}
@@ -82,15 +82,15 @@ class BetterNsfwTag {
 	}
 
 	stop () {
-		if (typeof BDfunctionsDevilBro === "object") {
+		if (typeof BDFDB === "object") {
 			$(".nsfw-tag").remove();
 						
-			BDfunctionsDevilBro.unloadMessage(this);
+			BDFDB.unloadMessage(this);
 		}
 	}
 	
 	onSwitch () {
-		if (typeof BDfunctionsDevilBro === "object") {
+		if (typeof BDFDB === "object") {
 			this.checkAllContainers();
 		}
 	}
@@ -99,23 +99,22 @@ class BetterNsfwTag {
 	// begin of own functions
 	
 	checkAllContainers () {
-		$(".channels-wrap").find("[class*=container-]").each((_,container) => {
+		document.querySelectorAll(BDFDB.dotCNS.channels + "[class*=container-]").forEach(container => {
 			this.checkContainerForNsfwChannel(container);
 		});
 	}
 	
 	checkContainerForNsfwChannel (container) {
-		$(container).find(".containerDefault-7RImuF").each((_,channel) => {
+		container.querySelectorAll(BDFDB.dotCN.channelcontainerdefault).forEach(channel => {
 			this.checkChannel(channel);
 		});
 	}
 	
 	checkChannel (channel) {
-		let channelData = BDfunctionsDevilBro.getKeyInformation({"node":channel,"key":"channel"});
+		let channelData = BDFDB.getKeyInformation({"node":channel,"key":"channel"});
 		if (channelData && channelData.nsfw == true) {
-			if ($(channel).find(".nsfw-tag").length == 0) {
-				var tag = $(this.tagMarkup);
-				$(channel).find(".name-2SL4ev").append(tag);
+			if (!channel.querySelector(".nsfw-tag")) {
+				$(this.tagMarkup).appendTo(channel.querySelector(BDFDB.dotCN.channelname));
 			}
 		}
 	}

@@ -1,7 +1,7 @@
 //META{"name":"CharCounter"}*//
 
 class CharCounter {
-	constructor () {
+	initConstructor () {
 		this.selecting = false;
 		
 		this.counterMarkup = `<div id="charcounter"></div>`;
@@ -32,7 +32,7 @@ class CharCounter {
 
 	getDescription () {return "Adds a charcounter in the chat.";}
 
-	getVersion () {return "1.1.9";}
+	getVersion () {return "1.2.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -41,25 +41,25 @@ class CharCounter {
 
 	start () {
 		var libraryScript = null;
-		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
-			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
-			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]');
+		if (typeof BDFDB !== "object" || BDFDB.isLibraryOutdated()) {
+			if (typeof BDFDB === "object") BDFDB = "";
+			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
 			libraryScript.setAttribute("type", "text/javascript");
-			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js");
+			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
 			document.head.appendChild(libraryScript);
 		}
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDfunctionsDevilBro === "object") this.initialize();
+		if (typeof BDFDB === "object") this.initialize();
 		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
 	initialize () {
-		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.loadMessage(this);
+		if (typeof BDFDB === "object") {
+			BDFDB.loadMessage(this);
 			
-			this.MessageUtils = BDfunctionsDevilBro.WebModules.findByProperties(["parse","isMentioned"]);
+			this.MessageUtils = BDFDB.WebModules.findByProperties(["parse","isMentioned"]);
 						
 			var observer = null;
 
@@ -68,7 +68,7 @@ class CharCounter {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(".innerEnabled-gLHeOL, .innerEnabledNoAttach-36PpAk")) {
+								if (node && node.tagName && node.querySelector(BDFDB.dotCNC.textareainnerenabled + BDFDB.dotCN.textareainnerenablednoattach)) {
 									this.appendCounter(node.querySelector("textarea"));
 								}
 							});
@@ -76,7 +76,7 @@ class CharCounter {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, ".appMount-14L89u", {name:"textareaObserver",instance:observer}, {childList: true, subtree: true});
+			BDFDB.addObserver(this, BDFDB.dotCN.appmount, {name:"textareaObserver",instance:observer}, {childList: true, subtree: true});
 			
 			document.querySelectorAll("textarea").forEach(textarea => {this.appendCounter(textarea);});
 		}
@@ -87,11 +87,11 @@ class CharCounter {
 
 
 	stop () {
-		if (typeof BDfunctionsDevilBro === "object") {
+		if (typeof BDFDB === "object") {
 			$("#charcounter").remove();
 			$(".charcounter-added").removeClass("charcounter-added");
 						
-			BDfunctionsDevilBro.unloadMessage(this);
+			BDFDB.unloadMessage(this);
 		}
 	}
 	
@@ -104,12 +104,12 @@ class CharCounter {
 	
 	appendCounter (textarea) {
 		if (!textarea) return;
-		var channelObj = BDfunctionsDevilBro.getSelectedChannel();
+		var channelObj = BDFDB.getSelectedChannel();
 		var channel = channelObj ? channelObj.data : null;
 		if (!channel) return;
 		var textareaWrap = textarea.parentElement;
 		if (textareaWrap && !textareaWrap.querySelector("#charcounter")) {
-			var textareaInstance = BDfunctionsDevilBro.getOwnerInstance({"node":textarea, "props":["handlePaste","saveCurrentText"], "up":true});
+			var textareaInstance = BDFDB.getOwnerInstance({"node":textarea, "props":["handlePaste","saveCurrentText"], "up":true});
 			if (textareaInstance && textareaInstance.props && textareaInstance.props.type) {
 				var counter = $(this.counterMarkup);
 				counter.addClass(textareaInstance.props.type).appendTo(textareaWrap);
