@@ -2897,7 +2897,7 @@ BDFDB.DiscordClasses = {
 	directionrowreverse: "directionRowReverse-m8IjIq",
 	dms: "dms",
 	dmchannel: "channel",
-	dmprivate: "private",
+	dmchannelprivate: "private",
 	flex: "flex-1O1GKY",
 	flex2: "flex-1xMQg5",
 	flexcenter: "flexCenter-3_1bcw",
@@ -3072,15 +3072,16 @@ BDFDB.DiscordClasses = {
 // stolen from square :-*
 BDFDB.disCN = new Proxy(Object.create(null), {
 	get: function() {
-		if (BDFDB.DiscordClasses[arguments[1]] === null) {
+		if (BDFDB.DiscordClasses[arguments[1]] === undefined) {
 			throw new Error(arguments[1] + " not found in BDFDB.DiscordClasses");
 		}
 		return BDFDB.DiscordClasses[arguments[1]];
 	}
 });
+
 BDFDB.disCNS = new Proxy(Object.create(null), {
 	get: function() {
-		if (BDFDB.DiscordClasses[arguments[1]] === null) {
+		if (BDFDB.DiscordClasses[arguments[1]] === undefined) {
 			throw new Error(arguments[1] + " not found in BDFDB.DiscordClasses");
 		}
 		return BDFDB.DiscordClasses[arguments[1]] + " ";
@@ -3089,7 +3090,7 @@ BDFDB.disCNS = new Proxy(Object.create(null), {
 
 BDFDB.disCNC = new Proxy(Object.create(null), {
 	get: function() {
-		if (BDFDB.DiscordClasses[arguments[1]] === null) {
+		if (BDFDB.DiscordClasses[arguments[1]] === undefined) {
 			throw new Error(arguments[1] + " not found in BDFDB.DiscordClasses");
 		}
 		return BDFDB.DiscordClasses[arguments[1]] + ",";
@@ -3098,7 +3099,7 @@ BDFDB.disCNC = new Proxy(Object.create(null), {
 
 BDFDB.dotCN = new Proxy(Object.create(null), {
 	get: function() {
-		if (BDFDB.DiscordClasses[arguments[1]] === null) {
+		if (BDFDB.DiscordClasses[arguments[1]] === undefined) {
 			throw new Error(arguments[1] + " not found in BDFDB.DiscordClasses");
 		}
 		return "." + BDFDB.DiscordClasses[arguments[1]];
@@ -3107,7 +3108,7 @@ BDFDB.dotCN = new Proxy(Object.create(null), {
 
 BDFDB.dotCNS = new Proxy(Object.create(null), {
 	get: function() {
-		if (BDFDB.DiscordClasses[arguments[1]] === null) {
+		if (BDFDB.DiscordClasses[arguments[1]] === undefined) {
 			throw new Error(arguments[1] + " not found in BDFDB.DiscordClasses");
 		}
 		return "." + BDFDB.DiscordClasses[arguments[1]] + " ";
@@ -3116,7 +3117,7 @@ BDFDB.dotCNS = new Proxy(Object.create(null), {
 
 BDFDB.dotCNC = new Proxy(Object.create(null), {
 	get: function() {
-		if (BDFDB.DiscordClasses[arguments[1]] === null) {
+		if (BDFDB.DiscordClasses[arguments[1]] === undefined) {
 			throw new Error(arguments[1] + " not found in BDFDB.DiscordClasses");
 		}
 		return "." + BDFDB.DiscordClasses[arguments[1]] + ",";
@@ -3125,7 +3126,7 @@ BDFDB.dotCNC = new Proxy(Object.create(null), {
 
 BDFDB.idCN = new Proxy(Object.create(null), {
 	get: function() {
-		if (BDFDB.DiscordClasses[arguments[1]] === null) {
+		if (BDFDB.DiscordClasses[arguments[1]] === undefined) {
 			throw new Error(arguments[1] + " not found in BDFDB.DiscordClasses");
 		}
 		return "#" + BDFDB.DiscordClasses[arguments[1]];
@@ -3134,7 +3135,7 @@ BDFDB.idCN = new Proxy(Object.create(null), {
 
 BDFDB.idCNS = new Proxy(Object.create(null), {
 	get: function() {
-		if (BDFDB.DiscordClasses[arguments[1]] === null) {
+		if (BDFDB.DiscordClasses[arguments[1]] === undefined) {
 			throw new Error(arguments[1] + " not found in BDFDB.DiscordClasses");
 		}
 		return "#" + BDFDB.DiscordClasses[arguments[1]] + " ";
@@ -3143,7 +3144,7 @@ BDFDB.idCNS = new Proxy(Object.create(null), {
 
 BDFDB.idCNC = new Proxy(Object.create(null), {
 	get: function() {
-		if (BDFDB.DiscordClasses[arguments[1]] === null) {
+		if (BDFDB.DiscordClasses[arguments[1]] === undefined) {
 			throw new Error(arguments[1] + " not found in BDFDB.DiscordClasses");
 		}
 		return "#" + BDFDB.DiscordClasses[arguments[1]] + ",";
