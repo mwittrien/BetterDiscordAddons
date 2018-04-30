@@ -2915,6 +2915,7 @@ BDFDB.DiscordClasses = {
 	gamesettings: "user-settings-games",
 	guild: "guild",
 	guildaudio: "audio",
+	guilds: "guilds",
 	guildselected: "selected",
 	guildseparator: "guild-separator",
 	guildswrapper: "guilds-wrapper",
