@@ -1578,7 +1578,7 @@ BDFDB.sortArrayByKey = function (array, key, except) {
 
 BDFDB.highlightText = function (string, searchstring) {
 	if (searchstring.length < 1) return string;
-	var added = 0, copy = string, wrapperopen = `<span class="highlight">`, wrapperclose = `</span>`;
+	var added = 0, copy = string, wrapperopen = `<span class="${BDFDB.disCN.highlight}">`, wrapperclose = `</span>`;
 	BDFDB.getAllIndexes(string.toUpperCase(), searchstring.toUpperCase()).forEach((start) => {
 		let offset = added*(wrapperopen.length + wrapperclose.length);
 		start = start + offset;
@@ -3086,6 +3086,7 @@ BDFDB.DiscordClasses = {
 	height24: "height24-3XzeJx",
 	height28: "height28-3tox65",
 	height36: "height36-36OHCc",
+	highlight: "highlight",
 	horizontal: "horizontal-1ae9ci",
 	horizontal2: "horizontal-2EEEnY",
 	horizontalreverse: "horizontalReverse-2eTKWD",
@@ -3165,6 +3166,8 @@ BDFDB.DiscordClasses = {
 	messagefirst: "first",
 	messagegroup: "message-group",
 	messagemarkup: "markup",
+	messagespopout: "messagesPopout-24nkyi",
+	messagespopoutwrap: "messagesPopoutWrap-1MQ1bW",
 	messagesystem: "system-message",
 	messagetext: "message-text",
 	messagetimestamp: "timestamp",
@@ -3251,6 +3254,12 @@ BDFDB.DiscordClasses = {
 	quickselectscroller: "quickSelectScroller-2SmdH_",
 	quickselectselected: "selected-3RZo5I",
 	quickselectvalue: "quickSelectValue-lImyM6",
+	recentmentionsheader: "header-ykumBX",
+	recentmentionsheader2: "header-SsaQ8X",
+	recentmentionsheader3: "header-3LXPrb",
+	recentmentionspopout: "recentMentionsPopout-2fmau1",
+	recentmentionstitle: "title-3pkaKd",
+	recentmentionstitle2: "title-23FrqZ",
 	scroller: "scroller-2FKFPG",
 	scrollerold: "scroller",
 	scrollerthemed: "scrollerThemed-2oenus",
