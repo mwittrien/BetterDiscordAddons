@@ -3314,6 +3314,7 @@ BDFDB.DiscordClasses = {
 	themeghosthairline: "themeGhostHairline-DBD-2d",
 	themelight: "theme-light",
 	title: "title-31JmR4",
+	titlebar: "titleBar-AC4pGV",
 	titledefault: "titleDefault-a8-ZSr",
 	titlemini: "titleMini-pBwj_L",
 	tooltip: "tooltip",
