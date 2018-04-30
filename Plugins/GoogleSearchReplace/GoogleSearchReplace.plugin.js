@@ -1,7 +1,7 @@
 //META{"name":"GoogleSearchReplace"}*//
 
 class GoogleSearchReplace {
-	constructor () {
+	initConstructor () {
 		this.labels = {};
 		
 		this.textUrlReplaceString = "DEVILBRO_BD_GOOGLESEARCHREPLACE_REPLACE_TEXTURL";
@@ -25,19 +25,19 @@ class GoogleSearchReplace {
 		};
 
 		this.messageContextEntryMarkup =
-			`<div class="item-1XYaYf googlereplacesearch-item itemSubMenu-3ZgIw-">
+			`<div class="${BDFDB.disCN.contextmenuitem} googlereplacesearch-item ${BDFDB.disCN.contextmenuitemsubmenu}">
 				<span>REPLACE_context_googlesearchreplace_text</span>
-				<div class="hint-3TJykr"></div>
+				<div class="${BDFDB.disCN.contextmenuhint}"></div>
 			</div>`;
 			
 		this.messageContextSubMenuMarkup = 
-			`<div class="contextMenu-uoJTbz googleReplaceSearchSubMenu">
-				<div class="itemGroup-oViAgA itemGroup-oViAgA">
-					<div class="item-1XYaYf alldisabled-item disabled-dlOjhg">
+			`<div class="${BDFDB.disCN.contextmenu} googleReplaceSearchSubMenu">
+				<div class="${BDFDB.disCN.contextmenuitemgroup}">
+					<div class="${BDFDB.disCN.contextmenuitem} alldisabled-item ${BDFDB.disCN.contextmenuitemdisabled}">
 						<span>REPLACE_submenu_disabled_text</span>
-						<div class="hint-3TJykr"></div>
+						<div class="${BDFDB.disCN.contextmenuhint}"></div>
 					</div>
-					${Object.keys(this.defaults.engines).map((key, i) => `<div engine="${key}" class="item-1XYaYf GRS-item"><span>${this.defaults.engines[key].name}</span><div class="hint-3TJykr"></div></div>`).join("")}
+					${Object.keys(this.defaults.engines).map((key, i) => `<div engine="${key}" class="${BDFDB.disCN.contextmenuitem} GRS-item"><span>${this.defaults.engines[key].name}</span><div class="${BDFDB.disCN.contextmenuhint}"></div></div>`).join("")}
 				</div>
 			</div>`;
 	}
@@ -46,27 +46,27 @@ class GoogleSearchReplace {
 
 	getDescription () {return "Replaces the default Google Text Search with a selection menu of several search engines.";}
 
-	getVersion () {return "1.1.2";}
+	getVersion () {return "1.1.3";}
 	
 	getAuthor () {return "DevilBro";}
 
 	getSettingsPanel () {
-		if (!this.started || typeof BDfunctionsDevilBro !== "object") return;
-		var engines = BDfunctionsDevilBro.getAllData(this, "engines");
-		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="titleDefault-1CWM9y title-3i-5G_ size18-ZM4Qv- height24-2pMcnc weightNormal-3gw0Lm marginBottom8-1mABJ4">${this.getName()}</div><div class="DevilBro-settings-inner">`;
-		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">Search Engines:</h3></div><div class="DevilBro-settings-inner-list">`;
+		if (!this.started || typeof BDFDB !== "object") return;
+		var engines = BDFDB.getAllData(this, "engines");
+		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.getName()}</div><div class="DevilBro-settings-inner">`;
+		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">Search Engines:</h3></div><div class="DevilBro-settings-inner-list">`;
 		for (let key in engines) {
-			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.engines[key].name}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${engines[key] ? " checked" : ""}></div></div>`;
+			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.engines[key].name}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}"${engines[key] ? " checked" : ""}></div></div>`;
 		}
 		settingshtml += `</div>`;
 		settingshtml += `</div></div>`;
 		
 		var settingspanel = $(settingshtml)[0];
 
-		BDfunctionsDevilBro.initElements(settingspanel);
+		BDFDB.initElements(settingspanel);
 
 		$(settingspanel)
-			.on("click", ".checkbox-1KYsPm", () => {this.updateSettings(settingspanel);});
+			.on("click", BDFDB.dotCN.switchinner, () => {this.updateSettings(settingspanel);});
 			
 		return settingspanel;
 	}
@@ -76,23 +76,23 @@ class GoogleSearchReplace {
 
 	start () {
 		var libraryScript = null;
-		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
-			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
-			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]');
+		if (typeof BDFDB !== "object" || BDFDB.isLibraryOutdated()) {
+			if (typeof BDFDB === "object") BDFDB = "";
+			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
 			libraryScript.setAttribute("type", "text/javascript");
-			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js");
+			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
 			document.head.appendChild(libraryScript);
 		}
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDfunctionsDevilBro === "object") this.initialize();
+		if (typeof BDFDB === "object") this.initialize();
 		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
 	initialize () {
-		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.loadMessage(this);
+		if (typeof BDFDB === "object") {
+			BDFDB.loadMessage(this);
 			
 			var observer = null;
 
@@ -101,7 +101,7 @@ class GoogleSearchReplace {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node.nodeType == 1 && node.className.includes("contextMenu-uoJTbz")) {
+								if (node.nodeType == 1 && node.className.includes(BDFDB.disCN.contextmenu)) {
 									this.onContextMenu(node);
 								}
 							});
@@ -109,7 +109,7 @@ class GoogleSearchReplace {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, "#app-mount", {name:"messageContextObserver",instance:observer}, {childList: true});
+			BDFDB.addObserver(this, BDFDB.dotCN.appmount, {name:"messageContextObserver",instance:observer}, {childList: true});
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -117,8 +117,8 @@ class GoogleSearchReplace {
 	}
 
 	stop () {
-		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.unloadMessage(this);
+		if (typeof BDFDB === "object") {
+			BDFDB.unloadMessage(this);
 		}
 	}
 	
@@ -126,10 +126,10 @@ class GoogleSearchReplace {
 
 	updateSettings (settingspanel) {
 		var settings = {};
-		for (var input of settingspanel.querySelectorAll(".checkbox-1KYsPm")) {
+		for (var input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner)) {
 			settings[input.value] = input.checked;
 		}
-		BDfunctionsDevilBro.saveAllData(settings, this, "engines");
+		BDFDB.saveAllData(settings, this, "engines");
 	}
 	
 	changeLanguageStrings () {
@@ -140,17 +140,17 @@ class GoogleSearchReplace {
 	
 	onContextMenu (context) {
 		if (!context || !context.tagName || !context.parentElement || context.querySelector(".googlereplacesearch-item")) return;
-		for (let group of context.querySelectorAll(".itemGroup-oViAgA")) {
-			if (BDfunctionsDevilBro.getKeyInformation({"node":group, "key":"handleSearchWithGoogle"})) {
-				var text = BDfunctionsDevilBro.getKeyInformation({"node":group, "key":"value"});
+		for (let group of context.querySelectorAll(BDFDB.dotCN.contextmenuitemgroup)) {
+			if (BDFDB.getKeyInformation({"node":group, "key":"handleSearchWithGoogle"})) {
+				var text = BDFDB.getKeyInformation({"node":group, "key":"value"});
 				if (text) {
-					$(group).find(".item-1XYaYf").hide();
+					$(group).find(BDFDB.dotCN.contextmenuitem).hide();
 					$(group).append(this.messageContextEntryMarkup)
 						.on("mouseenter", ".googlereplacesearch-item", (e) => {
 							this.createContextSubMenu(text, e, context);
 						});
 				
-					BDfunctionsDevilBro.updateContextPosition(context);
+					BDFDB.updateContextPosition(context);
 				}
 				break;
 			}
@@ -167,7 +167,7 @@ class GoogleSearchReplace {
 				window.open(this.defaults.engines[engine].url.replace(this.textUrlReplaceString, encodeURIComponent(text)), "_blank");
 			});
 		
-		var engines = BDfunctionsDevilBro.getAllData(this, "engines");
+		var engines = BDFDB.getAllData(this, "engines");
 		for (let key in engines) {
 			if (!engines[key]) messageContextSubMenu.find("[engine='" + key + "']").remove();
 		}
@@ -175,11 +175,11 @@ class GoogleSearchReplace {
 			messageContextSubMenu.find(".alldisabled-item").remove();
 		}
 		
-		BDfunctionsDevilBro.appendSubMenu(e.currentTarget, messageContextSubMenu);
+		BDFDB.appendSubMenu(e.currentTarget, messageContextSubMenu);
 	}
 	
 	setLabelsByLanguage () {
-		switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
+		switch (BDFDB.getDiscordLanguage().id) {
 			case "hr":		//croatian
 				return {
 					context_googlesearchreplace_text:	"Pretražujte s ...",
