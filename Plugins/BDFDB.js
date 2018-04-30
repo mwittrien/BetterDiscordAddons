@@ -2974,6 +2974,7 @@ BDFDB.DiscordClasses = {
 	messagecomment: "comment",
 	messagegroup: "message-group",
 	messagemarkup: "markup",
+	messagetext: "message-text",
 	messages: "messages",
 	modal: "modal-1UGdnR",
 	modalclose: "close-18n9bP",
