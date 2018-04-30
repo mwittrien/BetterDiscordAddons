@@ -15,7 +15,7 @@ class ChatAliases {
 
 	getDescription () {return "Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent.";}
 
-	getVersion () {return "1.8.3";}
+	getVersion () {return "1.8.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -267,7 +267,7 @@ class ChatAliases {
 		ele.classList.toggle(BDFDB.disCN.categorywrapperdefault);
 		var svg = ele.querySelector(BDFDB.dotCN.categoryicontransition);
 		svg.classList.toggle(BDFDB.disCN.closed);
-		svg.classList.toggle(BDFDB.disCN.categoryiconclosed);
+		svg.classList.toggle(BDFDB.disCN.categoryiconcollapsed);
 		svg.classList.toggle(BDFDB.disCN.categoryicondefault);
 
 		var visible = $(settingspanel).find(".info-container").is(":visible");
