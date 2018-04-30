@@ -3064,6 +3064,7 @@ BDFDB.DiscordClasses = {
 	selectarrowzone: "Select-arrow-zone",
 	selectcontrol: "Select-control",
 	selecthasvalue: "has-value",
+	selectisopen: "is-open",
 	selectmenu: "Select-menu",
 	selectmenuouter: "Select-menu-outer",
 	selectoption: "Select-option",
