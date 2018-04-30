@@ -2766,6 +2766,7 @@ BDFDB.isThemeEnabled = function (name) {
 })();
 
 BDFDB.DiscordClasses = {
+	alignbaseline: "alignBaseline-LAQbso",
 	aligncenter: "alignCenter-1dQNNs",
 	alignend: "alignEnd-1D6PQi",
 	alignstart: "alignStart-H-X2h-",
@@ -3057,6 +3058,17 @@ BDFDB.DiscordClasses = {
 	searchbarinput: "input-3Xdcic",
 	searchbariconwrap: "searchBarIcon-18QaPq",
 	searchbarvisible: "visible-3bFCH-",
+	select: "Select",
+	selectarrow: "Select-arrow",
+	selectarrowzone: "Select-arrow-zone",
+	selectcontrol: "Select-control",
+	selecthasvalue: "has-value",
+	selectmenu: "Select-menu",
+	selectmenuouter: "Select-menu-outer",
+	selectoption: "Select-option",
+	selectsingle: "Select--single",
+	selectvalue: "Select-value",
+	selectwrap: "select-1FC5nQ",
 	size10: "size10-39i14u",
 	size12: "size12-3R0845",
 	size14: "size14-3iUx6q",
