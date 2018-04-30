@@ -2981,6 +2981,7 @@ BDFDB.DiscordClasses = {
 	embedold: "embed",
 	emojipicker: "emojiPicker-3m1S-j",
 	emojipickeractivity: "activity-2oLAbd",
+	emojipickerbutton: "btn-reaction",
 	emojipickercategories: "categories-1feg4n",
 	emojipickercategory: "category-2U57w6",
 	emojipickercustom: "custom-2TY7UZ",
