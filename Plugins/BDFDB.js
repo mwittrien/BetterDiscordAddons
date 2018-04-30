@@ -2898,7 +2898,7 @@ BDFDB.DiscordClasses = {
 	dms: "dms",
 	dmchannel: "channel",
 	dmchannelprivate: "private",
-	ellipsis: "ellipsis-3JqXfv",
+	ellipsis: "ellipsis-1XUmPN",
 	flex: "flex-1O1GKY",
 	flex2: "flex-1xMQg5",
 	flexcenter: "flexCenter-3_1bcw",
