@@ -2918,6 +2918,8 @@ BDFDB.DiscordClasses = {
 	guildinner: "guild-inner",
 	guildplaceholder: "guild-placeholder",
 	guilds: "guilds",
+	guildsadd: "guilds-add",
+	guildsaddinner: "guilds-add-inner",
 	guildselected: "selected",
 	guildseparator: "guild-separator",
 	guildserror: "guilds-error",
