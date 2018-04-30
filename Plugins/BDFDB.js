@@ -2928,6 +2928,7 @@ BDFDB.DiscordClasses = {
 	channelheadericoninactive: "iconInactive-g2AXfB",
 	channelheadericonmargin: "iconMargin-2YXk4F",
 	channelheaderprivate: "private-26pLvW",
+	channelheadersearch: "search-l1Wz-Q",
 	channelheadertitle: "title-3qD0b-",
 	channelheadertitlecall: "titleCall-_b9o8P",
 	channelheadertitletext: "titleText-3X-zRE",
