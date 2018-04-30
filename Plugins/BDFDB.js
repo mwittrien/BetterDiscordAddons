@@ -3054,6 +3054,7 @@ BDFDB.DiscordClasses = {
 	flexchild: "flexChild-faoVW3",
 	formtext: "formText-3fs7AJ",
 	friends: "friends",
+	friendsbutton: "btn-friends",
 	friendscolumn: "friends-column",
 	friendscolumnnamewrap: "friends-column-name",
 	friendscolumnusername: "username",
