@@ -1215,6 +1215,20 @@ BDFDB.getLanguageTable = function (lang) {
 	});
 };
 
+BDFDB.LanguageStrings = new Proxy(Object.create(null), {
+	get: function() {
+		var languageStrings = BDFDB.getLanguageTable();
+		if (!languageStrings[arguments[1]]) {
+			var englishStrings = BDFDB.getLanguageTable("en-US");
+			if (!englishStrings[arguments[1]]) {
+				throw new Error(arguments[1] + " not found in BDFDB.getLanguageTable");
+			}
+			return englishStrings[arguments[1]];
+		}
+		return languageStrings[arguments[1]];
+	}
+});
+
 BDFDB.equals = function (check1, check2, compareOrder) {
 	var depth = -1;
 	
