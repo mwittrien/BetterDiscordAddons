@@ -1,7 +1,7 @@
 //META{"name":"FixGermanTranslation"}*//
 
 class FixGermanTranslation {
-	constructor () {
+	initConstructor () {
 		this.newStrings = {
 			NO_THANKS: "Nein Danke",
 			VAD_PERMISSION_SMALL: "Dieser Kanal erfordert Push-to-Talk um zu sprechen.",
@@ -210,27 +210,27 @@ class FixGermanTranslation {
 
 	start () {
 		var libraryScript = null;
-		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
-			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
-			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]');
+		if (typeof BDFDB !== "object" || BDFDB.isLibraryOutdated()) {
+			if (typeof BDFDB === "object") BDFDB = "";
+			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
 			libraryScript.setAttribute("type", "text/javascript");
-			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js");
+			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
 			document.head.appendChild(libraryScript);
 		}
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDfunctionsDevilBro === "object") this.initialize();
+		if (typeof BDFDB === "object") this.initialize();
 		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
 	initialize () {
-		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.loadMessage(this);
-			this.LanguageUtils = BDfunctionsDevilBro.WebModules.findByProperties(["getLanguages"]);
-			var translateInterval = setInterval(() => {
+		if (typeof BDFDB === "object") {
+			BDFDB.loadMessage(this);
+			this.LanguageUtils = BDFDB.WebModules.findByProperties(["getLanguages"]);
+			this.translateInterval = setInterval(() => {
 				if (document.querySelector("html").lang && document.querySelector("html").lang == "de") {
-					clearInterval(translateInterval);
+					clearInterval(this.translateInterval);
 					for (var key in this.newStrings) {
 						this.oldStrings[key] = this.LanguageUtils.Messages[key];
 						this.LanguageUtils.Messages[key] = this.newStrings[key];
@@ -244,12 +244,13 @@ class FixGermanTranslation {
 	}
 
 	stop () {
-		if (typeof BDfunctionsDevilBro === "object") {
+		if (typeof BDFDB === "object") {
+			clearInterval(this.translateInterval);
 			for (var key in this.oldStrings) {
 				this.LanguageUtils.Messages[key] = this.oldStrings[key];
 			}
 			
-			BDfunctionsDevilBro.unloadMessage(this);
+			BDFDB.unloadMessage(this);
 		}
 	}
 }
