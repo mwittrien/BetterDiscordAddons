@@ -3259,7 +3259,7 @@ BDFDB.DiscordClasses = {
 	selectselected: "is-selected",
 	selectsingle: "Select--single",
 	selectvalue: "Select-value",
-	selectwrap: "select-1FC5nQ",
+	selectwrap: "select-2TCrqx",
 	size10: "size10-39i14u",
 	size12: "size12-3R0845",
 	size14: "size14-3iUx6q",
