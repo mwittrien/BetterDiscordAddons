@@ -1,14 +1,14 @@
 //META{"name":"MoveablePopups"}*//
 
 class MoveablePopups {
-	constructor () {
+	initConstructor () {
 	}
 
 	getName () {return "MoveablePopups";}
 
 	getDescription () {return "Adds the feature to move all popups and modals around like on a normal desktop. Ctrl + drag with your left mousebutton to drag element.";}
 
-	getVersion () {return "1.0.9";}
+	getVersion () {return "1.1.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -17,23 +17,23 @@ class MoveablePopups {
 
 	start () {
 		var libraryScript = null;
-		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
-			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
-			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]');
+		if (typeof BDFDB !== "object" || BDFDB.isLibraryOutdated()) {
+			if (typeof BDFDB === "object") BDFDB = "";
+			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
 			libraryScript.setAttribute("type", "text/javascript");
-			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js");
+			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
 			document.head.appendChild(libraryScript);
 		}
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDfunctionsDevilBro === "object") this.initialize();
+		if (typeof BDFDB === "object") this.initialize();
 		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
 	initialize () {
-		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.loadMessage(this);
+		if (typeof BDFDB === "object") {
+			BDFDB.loadMessage(this);
 			
 			var observer = null;
 
@@ -42,7 +42,7 @@ class MoveablePopups {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.classList && node.classList.length > 0 && node.classList.contains("popout-2RRwAO")) {
+								if (node && node.classList && node.classList.length > 0 && node.classList.contains(BDFDB.disCN.popout)) {
 									this.makeMoveable(node);
 								}
 							});
@@ -50,25 +50,25 @@ class MoveablePopups {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, ".popouts, .popouts-1TN9u9", {name:"popoutObserver",instance:observer}, {childList: true});
+			BDFDB.addObserver(this, BDFDB.dotCN.popouts, {name:"popoutObserver",instance:observer}, {childList: true});
 			
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.classList && node.classList.contains("modal-2LIEKY") && !node.querySelector(".downloadLink-wANcd8")) {
-									this.makeMoveable(node.querySelector(".inner-1_1f7b"));
+								if (node && node.classList && node.classList.contains(BDFDB.disCN.modal) && !node.querySelector(BDFDB.dotCN.downloadlink)) {
+									this.makeMoveable(node.querySelector(BDFDB.dotCN.modalinner));
 								}
-								else if (node && node.tagName && node.querySelector(".modal-2LIEKY") && !node.querySelector(".downloadLink-wANcd8")) {
-									this.makeMoveable(node.querySelector(".inner-1_1f7b"));
+								else if (node && node.tagName && node.querySelector(BDFDB.dotCN.modal) && !node.querySelector(BDFDB.dotCN.downloadlink)) {
+									this.makeMoveable(node.querySelector(BDFDB.dotCN.modalinner));
 								}
 							});
 						}
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, ".app-XZYfmp ~ [class^='theme-']:not([class*='popouts'])", {name:"modalObserver",instance:observer}, {childList: true});
+			BDFDB.addObserver(this, BDFDB.dotCN.app + " ~ [class^='theme-']:not([class*='popouts'])", {name:"modalObserver",instance:observer}, {childList: true});
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -77,8 +77,8 @@ class MoveablePopups {
 
 
 	stop () {
-		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.unloadMessage(this);
+		if (typeof BDFDB === "object") {
+			BDFDB.unloadMessage(this);
 		}
 	}
 
@@ -103,7 +103,7 @@ class MoveablePopups {
 							user-select: none !important;
 						}`;
 						
-					BDfunctionsDevilBro.appendLocalStyle("disableTextSelection", disableTextSelectionCSS);
+					BDFDB.appendLocalStyle("disableTextSelection", disableTextSelectionCSS);
 					var left = div.getBoundingClientRect().left;
 					var top = div.getBoundingClientRect().top;
 					var oldX = e.pageX;
@@ -111,7 +111,7 @@ class MoveablePopups {
 					$(document)
 						.off("mouseup." + this.getName()).off("mousemove." + this.getName())
 						.on("mouseup." + this.getName(), () => {
-							BDfunctionsDevilBro.removeLocalStyle("disableTextSelection");
+							BDFDB.removeLocalStyle("disableTextSelection");
 							$(document).off("mouseup." + this.getName()).off("mousemove." + this.getName());
 							setTimeout(() => {this.dragging = false},1);
 						})
