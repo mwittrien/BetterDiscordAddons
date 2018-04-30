@@ -3055,6 +3055,7 @@ BDFDB.DiscordClasses = {
 	scrollerold: "scroller",
 	scrollerthemed: "scrollerThemed-2oenus",
 	scrollerwrap: "scrollerWrap-2lJEkd",
+	scrollerwrapold: "scroller-wrap",
 	searchbar: "searchBar-1MOL6S",
 	searchbarclear: "clear--Eywng",
 	searchbareyeglass: "eyeGlass-2cMHx7",
