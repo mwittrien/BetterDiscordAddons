@@ -1,7 +1,7 @@
 //META{"name":"MessageUtilities"}*//
 
 class MessageUtilities {
-	constructor () {		
+	initConstructor () {		
 		this.bindings = {};
 		
 		this.firedEvents = [];
@@ -43,46 +43,46 @@ class MessageUtilities {
 
 	getDescription () {return "Offers a number of useful message options. Remap the keybindings in the settings.";}
 
-	getVersion () {return "1.3.7";}
+	getVersion () {return "1.3.9";}
 
 	getAuthor () {return "DevilBro";}
 	
 	getSettingsPanel () {
-		if (!this.started || typeof BDfunctionsDevilBro !== "object") return;
-		var settings = BDfunctionsDevilBro.getAllData(this, "settings"); 
-		var bindings = BDfunctionsDevilBro.getAllData(this, "bindings");
-		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="titleDefault-1CWM9y title-3i-5G_ size18-ZM4Qv- height24-2pMcnc weightNormal-3gw0Lm marginBottom8-1mABJ4">${this.getName()}</div><div class="DevilBro-settings-inner">`;
+		if (!this.started || typeof BDFDB !== "object") return;
+		var settings = BDFDB.getAllData(this, "settings"); 
+		var bindings = BDFDB.getAllData(this, "bindings");
+		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		for (let key in settings) {
-			if (this.defaults.settings[key].description) settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
+			if (this.defaults.settings[key].description) settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}"${settings[key] ? " checked" : ""}></div></div>`;
 		}
 		for (let action in bindings) {
-			settingshtml += `<div class="${action}-key-settings"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.bindings[action].name}:</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;"><input type="checkbox" value="${action}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[action] ? " checked" : ""}></div></div><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">`;
+			settingshtml += `<div class="${action}-key-settings"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.bindings[action].name}:</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="${action}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}"${settings[action] ? " checked" : ""}></div></div><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">`;
 			for (let click of this.clicks) {
-				settingshtml += `<div class="flexChild-1KGW5q" style="flex: 1 1 20%;"><h5 class="h5-3KssQU title-1pmpPr size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH defaultMarginh5-2UwwFY marginBottom4-_yArcI">${click}:</h5><div class="select-3JqNgs"><div type="${action}" option="${click}" value="${bindings[action][click]}" class="Select Select--single has-value"><div class="Select-control"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-value" style="flex: 1 1 auto;"><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm" style="padding:0;">${this.clickMap[bindings[action][click]]}</div></div><span class="Select-arrow-zone"><span class="Select-arrow"></span></span></div></div></div></div>`;
+				settingshtml += `<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 20%;"><h5 class="${BDFDB.disCNS.h5 + BDFDB.disCNS.title + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.h5defaultmargin + BDFDB.disCN.marginbottom4}">${click}:</h5><div class="${BDFDB.disCN.selectwrap}"><div type="${action}" option="${click}" value="${bindings[action][click]}" class="${BDFDB.disCNS.select + BDFDB.disCNS.selectsingle + BDFDB.disCN.selecthasvalue}"><div class="${BDFDB.disCN.selectcontrol}"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignbaseline + BDFDB.disCNS.nowrap + BDFDB.disCN.selectvalue}" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.primary + BDFDB.disCN.weightnormal}" style="padding:0;">${this.clickMap[bindings[action][click]]}</div></div><span class="${BDFDB.disCN.selectarrowzone}"><span class="${BDFDB.disCN.selectarrow}"></span></span></div></div></div></div>`;
 			}
 			for (let key of this.keys) {
-				settingshtml += `<div class="flexChild-1KGW5q" style="flex: 1 1 40%;"><h5 class="h5-3KssQU title-1pmpPr size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH defaultMarginh5-2UwwFY marginBottom4-_yArcI">${key}:<label class="reset-recorder" style="float:right;padding-right:5px;cursor:pointer;">✖</label></h5><div type="${action}" option="${key}" value="${bindings[action][key]}" class="container-3mpa-y container-2YgzWd hasValue-3eeIe5"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO layout-2M2IoV layout-1qlGFe" style="flex: 1 1 auto;"><input type="text" placeholder="${this.keyboardMap[bindings[action][key]]}" readonly="" value="${this.keyboardMap[bindings[action][key]]}" class="input-2ZbpUR input-1aITJk base-2IToIx" style="flex: 1 1 auto;"></input><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO" style="flex: 0 1 auto; margin: 0px;"><button type="button" class="button-2jURHM button-2FUBCE button-2t3of8 lookGhost-GyT-k0 colorGrey-4JijJ1 sizeMin-1Wh1KC grow-25YQ8u"><div class="contentsDefault-nt2Ym5 contents-4L4hQM contentsGhost-2Yp1r8"><span class="text-2RnTnf">Change Hotkey</span><span class="editIcon-1MI9mZ"/></div></button></div></div></div></div>`;
+				settingshtml += `<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 40%;"><h5 class="${BDFDB.disCNS.h5 + BDFDB.disCNS.title + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.h5defaultmargin + BDFDB.disCN.marginbottom4}">${key}:<label class="reset-recorder" style="float:right;padding-right:5px;cursor:pointer;">✖</label></h5><div type="${action}" option="${key}" value="${bindings[action][key]}" class="${BDFDB.disCNS.hotkeycontainer + BDFDB.disCNS.hotkeycontainer2 + BDFDB.disCN.hotkeyhasvalue}"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCNS.hotkeylayout + BDFDB.disCN.hotkeylayout2}" style="flex: 1 1 auto;"><input type="text" placeholder="${this.keyboardMap[bindings[action][key]]}" readonly="" value="${this.keyboardMap[bindings[action][key]]}" class="${BDFDB.disCNS.hotkeyinput + BDFDB.disCNS.hotkeyinput2 + BDFDB.disCN.hotkeybase}" style="flex: 1 1 auto;"></input><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCN.nowrap}" style="flex: 0 1 auto; margin: 0px;"><button type="button" class="${BDFDB.disCNS.hotkeybutton + BDFDB.disCNS.hotkeybutton2 + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookghost + BDFDB.disCNS.buttoncolorgrey + BDFDB.disCNS.buttonsizemin + BDFDB.disCN.buttongrow}"><div class="${BDFDB.disCN.buttoncontents}"><span class="${BDFDB.disCN.hotkeytext}">${BDFDB.LanguageStrings.SHORTCUT_RECORDER_BUTTON_EDIT}</span><span class="${BDFDB.disCN.hotkeyediticon}"/></div></button></div></div></div></div>`;
 			}
 			settingshtml += `</div></div>`;
 		}
-		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Reset all key bindings.</h3><button type="button" class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorRed-3HTNPV sizeMedium-2VGNaF grow-25YQ8u reset-button" style="flex: 0 0 auto;"><div class="contents-4L4hQM">Reset</div></button></div>`;
+		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Reset all key bindings.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} reset-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Reset</div></button></div>`;
 		settingshtml += `</div></div>`;
 		
 		var settingspanel = $(settingshtml)[0];
 
-		BDfunctionsDevilBro.initElements(settingspanel);
+		BDFDB.initElements(settingspanel);
 		
 		$(settingspanel)
-			.on("click", ".checkbox-1KYsPm", () => {this.updateSettings(settingspanel);})
-			.on("click", ".Select-control", (e) => {this.openDropdownMenu(settingspanel, e);})
-			.on("click", ".container-3mpa-y", (e) => {this.startRecording(settingspanel, e);})
+			.on("click", BDFDB.dotCN.switchinner, () => {this.updateSettings(settingspanel);})
+			.on("click", BDFDB.dotCN.selectcontrol, (e) => {this.openDropdownMenu(settingspanel, e);})
+			.on("click", BDFDB.dotCN.hotkeycontainer, (e) => {this.startRecording(settingspanel, e);})
 			.on("click", ".reset-recorder", (e) => {this.resetRecorder(settingspanel, e);})
 			.on("click", ".reset-button", () => {this.resetAll(settingspanel);});
 			
-		$(settingspanel).find(".__Note_Message-key-settings").toggle(BDfunctionsDevilBro.isPluginEnabled("PersonalPins") == true);
-		$(settingspanel).find(".__Translate_Message-key-settings").toggle(BDfunctionsDevilBro.isPluginEnabled("GoogleTranslateOption") == true);
-		$(settingspanel).find(".__Quote_Message-key-settings").toggle(BDfunctionsDevilBro.isPluginEnabled("Quoter") == true);
-		$(settingspanel).find(".__Citate_Message-key-settings").toggle(BDfunctionsDevilBro.isPluginEnabled("Citador") == true);
+		$(settingspanel).find(".__Note_Message-key-settings").toggle(BDFDB.isPluginEnabled("PersonalPins") == true);
+		$(settingspanel).find(".__Translate_Message-key-settings").toggle(BDFDB.isPluginEnabled("GoogleTranslateOption") == true);
+		$(settingspanel).find(".__Quote_Message-key-settings").toggle(BDFDB.isPluginEnabled("Quoter") == true);
+		$(settingspanel).find(".__Citate_Message-key-settings").toggle(BDFDB.isPluginEnabled("Citador") == true);
 			
 		return settingspanel;
 	}
@@ -92,38 +92,38 @@ class MessageUtilities {
 
 	start () {
 		var libraryScript = null;
-		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
-			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
-			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]');
+		if (typeof BDFDB !== "object" || BDFDB.isLibraryOutdated()) {
+			if (typeof BDFDB === "object") BDFDB = "";
+			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
 			libraryScript.setAttribute("type", "text/javascript");
-			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js");
+			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
 			document.head.appendChild(libraryScript);
 		}
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDfunctionsDevilBro === "object") this.initialize();
+		if (typeof BDFDB === "object") this.initialize();
 		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
 	initialize () {
-		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.loadMessage(this);
+		if (typeof BDFDB === "object") {
+			BDFDB.loadMessage(this);
 			
-			this.ChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getChannel", "getChannels"]);
-			this.MessageActions = BDfunctionsDevilBro.WebModules.findByProperties(["startEditMessage", "endEditMessage"]);
-			this.PinActions = BDfunctionsDevilBro.WebModules.findByProperties(["pinMessage", "unpinMessage"]);
-			this.CurrentUserPerms = BDfunctionsDevilBro.WebModules.findByProperties(["getChannelPermissions", "can"]);
-			this.Permissions = BDfunctionsDevilBro.WebModules.findByProperties(["Permissions", "ActivityTypes"]).Permissions;
+			this.ChannelStore = BDFDB.WebModules.findByProperties(["getChannel", "getChannels"]);
+			this.MessageActions = BDFDB.WebModules.findByProperties(["startEditMessage", "endEditMessage"]);
+			this.PinActions = BDFDB.WebModules.findByProperties(["pinMessage", "unpinMessage"]);
+			this.CurrentUserPerms = BDFDB.WebModules.findByProperties(["getChannelPermissions", "can"]);
+			this.Permissions = BDFDB.WebModules.findByProperties(["Permissions", "ActivityTypes"]).Permissions
 			
 			$(document)
-				.on("click." + this.getName(), ".message", (e) => {
+				.on("click." + this.getName(), BDFDB.dotCN.message, (e) => {
 					this.onClick(e.currentTarget, 0, "onSglClick");
 				})
-				.on("dblclick." + this.getName(), ".message", (e) => {
+				.on("dblclick." + this.getName(), BDFDB.dotCN.message, (e) => {
 					this.onClick(e.currentTarget, 1, "onDblClick");
 				})
-				.on("keydown." + this.getName(), ".channelTextArea-os01xC", (e) => {
+				.on("keydown." + this.getName(), BDFDB.dotCN.textareawrapchat, (e) => {
 					this.onKeyDown(e.currentTarget, e.which, "onKeyDown");
 				});
 		}
@@ -133,12 +133,12 @@ class MessageUtilities {
 	}
 
 	stop () {
-		if (typeof BDfunctionsDevilBro === "object") {
-			$(document).off("click." + this.getName(), ".message");
-			$(document).off("dblclick." + this.getName(), ".message");
-			$(document).off("keydown." + this.getName(), ".channelTextArea-os01xC");
+		if (typeof BDFDB === "object") {
+			$(document).off("click." + this.getName(), BDFDB.dotCN.message);
+			$(document).off("dblclick." + this.getName(), BDFDB.dotCN.message);
+			$(document).off("keydown." + this.getName(), BDFDB.dotCN.textareawrapchat);
 			
-			BDfunctionsDevilBro.unloadMessage(this);
+			BDFDB.unloadMessage(this);
 		}
 	}
 
@@ -147,23 +147,23 @@ class MessageUtilities {
 
 	updateSettings (settingspanel) {
 		var settings = {};
-		for (var input of settingspanel.querySelectorAll(".checkbox-1KYsPm")) {
+		for (var input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner)) {
 			settings[input.value] = input.checked;
 		}
-		BDfunctionsDevilBro.saveAllData(settings, this, "settings");
+		BDFDB.saveAllData(settings, this, "settings");
 	}
 	
 	resetAll (settingspanel) {
 		if (confirm("Are you sure you want to delete all key bindings?")) {
-			BDfunctionsDevilBro.removeAllData(this, "bindings");
-			var bindings = BDfunctionsDevilBro.getAllData(this, "bindings");
-			settingspanel.querySelectorAll(".Select").forEach((wrap) => {
+			BDFDB.removeAllData(this, "bindings");
+			var bindings = BDFDB.getAllData(this, "bindings");
+			settingspanel.querySelectorAll(BDFDB.dotCN.select).forEach((wrap) => {
 				var action = wrap.getAttribute("type");
 				var option = wrap.getAttribute("option");
 				wrap.setAttribute("value", bindings[action][option]);
-				wrap.querySelector(".title-3I2bY1").innerText = this.clickMap[bindings[action][option]];
+				wrap.querySelector(BDFDB.dotCN.title).innerText = this.clickMap[bindings[action][option]];
 			});
-			settingspanel.querySelectorAll(".container-3mpa-y").forEach((wrap) => {
+			settingspanel.querySelectorAll(BDFDB.dotCN.hotkeycontainer).forEach((wrap) => {
 				var action = wrap.getAttribute("type");
 				var option = wrap.getAttribute("option");
 				wrap.setAttribute("value", bindings[action][option]);
@@ -176,9 +176,9 @@ class MessageUtilities {
 		var selectControl = e.currentTarget;
 		var selectWrap = e.currentTarget.parentElement;
 		
-		if (selectWrap.classList.contains("is-open")) return;
+		if (selectWrap.classList.contains(BDFDB.disCN.selectisopen)) return;
 		
-		selectWrap.classList.add("is-open");
+		selectWrap.classList.add(BDFDB.disCN.selectisopen);
 		
 		var action = selectWrap.getAttribute("type");
 		var option = selectWrap.getAttribute("option");
@@ -187,27 +187,27 @@ class MessageUtilities {
 		var selectMenu = this.createDropdownMenu(action, value);
 		selectWrap.appendChild(selectMenu);
 		
-		$(selectMenu).on("mousedown." + this.getName(), ".Select-option", (e2) => {
-			var binding = BDfunctionsDevilBro.getData(action, this, "bindings");
+		$(selectMenu).on("mousedown." + this.getName(), BDFDB.dotCN.selectoption, (e2) => {
+			var binding = BDFDB.getData(action, this, "bindings");
 			var selection = e2.currentTarget.getAttribute("value");
 			selectWrap.setAttribute("value", selection);
-			selectControl.querySelector(".title-3I2bY1").innerText = e2.currentTarget.textContent;
+			selectControl.querySelector(BDFDB.dotCN.title).innerText = e2.currentTarget.textContent;
 			binding[option] = parseInt(selection);
-			BDfunctionsDevilBro.saveData(action, binding, this, "bindings");
+			BDFDB.saveData(action, binding, this, "bindings");
 		});
 		$(document).on("mousedown.select" + this.getName(), (e2) => {
 			if (e2.target.parentElement == selectMenu) return;
 			$(document).off("mousedown.select" + this.getName());
 			selectMenu.remove()
-			setTimeout(() => {selectWrap.classList.remove("is-open");},100);
+			setTimeout(() => {selectWrap.classList.remove(BDFDB.disCN.selectisopen);},100);
 		});
 	}
 	
 	createDropdownMenu (action, value) {
-		var menuhtml = `<div class="Select-menu-outer"><div class="Select-menu">`;
+		var menuhtml = `<div class="${BDFDB.disCN.selectmenuouter}"><div class="${BDFDB.disCN.selectmenu}">`;
 		for (var i in this.clickMap) {
-			var isSelected = i == value ? " is-selected" : "";
-			menuhtml += `<div value="${i}" class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-option ${isSelected}" style="flex: 1 1 auto;"><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm">${this.clickMap[i]}</div></div>`
+			var isSelected = i == value ? ` ${BDFDB.disCN.selectselected}` : ``;
+			menuhtml += `<div value="${i}" class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignbaseline + BDFDB.disCNS.nowrap + BDFDB.disCN.selectoption + isSelected}" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.primary + BDFDB.disCN.weightnormal}">${this.clickMap[i]}</div></div>`
 		}
 		menuhtml += `</div></div>`;
 		return $(menuhtml)[0];
@@ -216,16 +216,16 @@ class MessageUtilities {
 	startRecording (settingspanel, e) {
 		var recorderWrap = e.currentTarget;
 		
-		if (recorderWrap.classList.contains("recording-1Ne76k")) return;
+		if (recorderWrap.classList.contains(BDFDB.disCN.hotkeyrecording)) return;
 		
 		var recorderInput = recorderWrap.querySelector("input");
-		var recorderText = recorderWrap.querySelector(".text-2RnTnf");
+		var recorderText = recorderWrap.querySelector(BDFDB.dotCN.hotkeytext);
 		var action = recorderWrap.getAttribute("type");
 		var option = recorderWrap.getAttribute("option");
 		
-		recorderWrap.classList.add("recording-1Ne76k");
-		recorderWrap.classList.remove("hasValue-3eeIe5");
-		recorderText.innerText = "Stop Recording";
+		recorderWrap.classList.add(BDFDB.disCN.hotkeyrecording);
+		recorderWrap.classList.remove(BDFDB.disCN.hotkeyhasvalue);
+		recorderText.innerText = BDFDB.LanguageStrings.SHORTCUT_RECORDER_BUTTON_RECORDING;
 		
 		$(document).on("keydown.recorder" + this.getName(), (e) => {
 			recorderWrap.setAttribute("value", e.which);
@@ -235,35 +235,35 @@ class MessageUtilities {
 		$(document).on("mousedown.recorder" + this.getName(), () => {
 			$(document).off("mousedown.recorder" + this.getName());
 			$(document).off("keydown.recorder" + this.getName());
-			var binding = BDfunctionsDevilBro.getData(action, this, "bindings");
+			var binding = BDFDB.getData(action, this, "bindings");
 			binding[option] = parseInt(recorderWrap.getAttribute("value"));
-			BDfunctionsDevilBro.saveData(action, binding, this, "bindings");
+			BDFDB.saveData(action, binding, this, "bindings");
 			setTimeout(() => {
-				recorderWrap.classList.remove("recording-1Ne76k");
-				recorderWrap.classList.add("hasValue-3eeIe5");
-				recorderText.innerText = "Change Hotkey";
+				recorderWrap.classList.remove(BDFDB.disCN.hotkeyrecording);
+				recorderWrap.classList.add(BDFDB.disCN.hotkeyhasvalue);
+				recorderText.innerText = BDFDB.LanguageStrings.SHORTCUT_RECORDER_BUTTON_EDIT;
 			},100);
 		});
 	}
 	
 	resetRecorder (settingspanel, e) {
 		var resetButton = e.currentTarget;
-		var recorderWrap = e.currentTarget.parentElement.parentElement.querySelector(".container-3mpa-y");
+		var recorderWrap = e.currentTarget.parentElement.parentElement.querySelector(BDFDB.dotCN.hotkeycontainer);
 		var recorderInput = recorderWrap.querySelector("input");
 		var action = recorderWrap.getAttribute("type");
 		var option = recorderWrap.getAttribute("option");
 		recorderWrap.setAttribute("value", 0);
 		recorderInput.setAttribute("value", this.keyboardMap[0]);
-		var binding = BDfunctionsDevilBro.getData(action, this, "bindings");
+		var binding = BDFDB.getData(action, this, "bindings");
 		binding[option] = parseInt(recorderWrap.getAttribute("value"));
-		BDfunctionsDevilBro.saveData(action, binding, this, "bindings");
+		BDFDB.saveData(action, binding, this, "bindings");
 	}
 	
 	onClick (div, click, name) {
 		if (!this.isEventFired(name)) {
 			this.fireEvent(name);
-			var settings = BDfunctionsDevilBro.getAllData(this, "settings");
-			var bindings = BDfunctionsDevilBro.getAllData(this, "bindings")
+			var settings = BDFDB.getAllData(this, "settings");
+			var bindings = BDFDB.getAllData(this, "bindings")
 			for (let action in bindings) {
 				if (settings[action] && this.checkIfBindingIsValid(bindings[action], click)) {
 					var message = this.getMessageData(div);
@@ -281,26 +281,26 @@ class MessageUtilities {
 			if (binding[click] != doneclick) valid = false;
 		}
 		for (let key of this.keys) {
-			if (!BDfunctionsDevilBro.pressedKeys.includes(binding[key]) && binding[key] != 0) valid = false;
+			if (!BDFDB.pressedKeys.includes(binding[key]) && binding[key] != 0) valid = false;
 		}
 		return valid;
 	}
 	
 	doDelete (message) {
 		var channel = this.ChannelStore.getChannel(message.channel_id);
-		if ((channel && this.CurrentUserPerms.can(this.Permissions.MANAGE_MESSAGES, channel)) || message.author.id == BDfunctionsDevilBro.myData.id) {
+		if ((channel && this.CurrentUserPerms.can(this.Permissions.MANAGE_MESSAGES, channel)) || message.author.id == BDFDB.myData.id) {
 			this.MessageActions.deleteMessage(message.channel_id, message.id);
 		}
 	}
 	
 	doEdit (message) {
-		if (message.author.id == BDfunctionsDevilBro.myData.id) {
+		if (message.author.id == BDFDB.myData.id) {
 			this.MessageActions.startEditMessage(message.channel_id, message.id, message.content);
 		}
 	}
 	
 	doOpenReact (message) {
-		var reactButton = message.div.querySelector(".btn-reaction");
+		var reactButton = message.div.querySelector(BDFDB.dotCN.emojipickerbutton);
 		if (reactButton) reactButton.click();
 	}
 	
@@ -313,7 +313,7 @@ class MessageUtilities {
 	}
 	
 	doNote (message) {
-		if (BDfunctionsDevilBro.isPluginEnabled("PersonalPins") == true) {
+		if (BDFDB.isPluginEnabled("PersonalPins") == true) {
 			var PersonalPins = window.bdplugins["PersonalPins"].plugin;
 			PersonalPins.getMessageData(message.div);
 			PersonalPins.addMessageToNotes();
@@ -321,7 +321,7 @@ class MessageUtilities {
 	}
 	
 	doTranslate (message) {
-		if (BDfunctionsDevilBro.isPluginEnabled("GoogleTranslateOption") == true) {
+		if (BDFDB.isPluginEnabled("GoogleTranslateOption") == true) {
 			var GoogleTranslateOption = window.bdplugins["GoogleTranslateOption"].plugin;
 			GoogleTranslateOption.getMessageData(message.div);
 			GoogleTranslateOption.translateMessage();
@@ -329,14 +329,14 @@ class MessageUtilities {
 	}
 	
 	doQuote (message) {
-		if (BDfunctionsDevilBro.isPluginEnabled("Quoter") == true) {
+		if (BDFDB.isPluginEnabled("Quoter") == true) {
 			var quoteButton = message.div.querySelector(".btn-quote");
 			if (quoteButton) quoteButton.click();
 		}
 	}
 	
 	doCitate (message) {
-		if (BDfunctionsDevilBro.isPluginEnabled("Citador") == true) {
+		if (BDFDB.isPluginEnabled("Citador") == true) {
 			var citarButton = message.div.parentElement.querySelector(".citar-btn");
 			if (citarButton) citarButton.click();
 		}
@@ -345,8 +345,8 @@ class MessageUtilities {
 	onKeyDown (div, key, name) {
 		if (!this.isEventFired(name)) {
 			this.fireEvent(name);
-			if (key == 27 && BDfunctionsDevilBro.getData("clearOnEscape", this, "settings")) {
-				var instance = BDfunctionsDevilBro.getOwnerInstance({"node":div, "name":"ChannelTextAreaForm", "up":true});
+			if (key == 27 && BDFDB.getData("clearOnEscape", this, "settings")) {
+				var instance = BDFDB.getOwnerInstance({"node":div, "name":"ChannelTextAreaForm", "up":true});
 				if (instance) instance.setState({textValue:""});
 			}
 			this.cancelEvent(name);
@@ -355,10 +355,10 @@ class MessageUtilities {
 	
 	getMessageData (div) {
 		if (div) {
-			var messagegroup = $(".message-group").has(div);
-			var pos = messagegroup.find(".message").index(div);
+			var messagegroup = $(BDFDB.dotCN.messagegroup).has(div);
+			var pos = messagegroup.find(BDFDB.dotCN.message).index(div);
 			if (messagegroup[0] && pos > -1) {
-				var info = BDfunctionsDevilBro.getKeyInformation({"node":div,"key":"messages","up":true,"time":1000});
+				var info = BDFDB.getKeyInformation({"node":div,"key":"messages","up":true,"time":1000});
 				if (info) return Object.assign({},info[pos],{"div":div, "group":messagegroup[0], "pos":pos});
 			}
 		}
@@ -374,6 +374,6 @@ class MessageUtilities {
 	}
 	
 	cancelEvent (name) {
-		BDfunctionsDevilBro.removeFromArray(this.firedEvents, name);
+		BDFDB.removeFromArray(this.firedEvents, name);
 	}
 }

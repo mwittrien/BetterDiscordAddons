@@ -1,22 +1,22 @@
 //META{"name":"ImageGallery"}*//
 
 class ImageGallery {
-	constructor () {
+	initConstructor () {
 		this.eventFired = false;
 		
-		this.imageMarkup = `<div class="imageWrapper-38T7d9" style="width: 100px; height: 100px;"><img src="" style="width: 100px; height: 100px; display: inline;"></div>`;
+		this.imageMarkup = `<div class="${BDFDB.disCN.imagewrapper}" style="width: 100px; height: 100px;"><img src="" style="width: 100px; height: 100px; display: inline;"></div>`;
 		
 		this.css = ` 
-			.image-gallery .imageWrapper-38T7d9.prev,
-			.image-gallery .imageWrapper-38T7d9.next {
+			.image-gallery ${BDFDB.dotCN.imagewrapper}.prev,
+			.image-gallery ${BDFDB.dotCN.imagewrapper}.next {
 				position: absolute;
 			} 
 			
-			.image-gallery .imageWrapper-38T7d9.prev {
+			.image-gallery ${BDFDB.dotCN.imagewrapper}.prev {
 				right: 90%;
 			} 
 			
-			.image-gallery .imageWrapper-38T7d9.next {
+			.image-gallery ${BDFDB.dotCN.imagewrapper}.next {
 				left: 90%;
 			}`;
 	}
@@ -25,7 +25,7 @@ class ImageGallery {
 
 	getDescription () {return "Allows the user to browse through images sent inside the same message.";}
 
-	getVersion () {return "1.5.3";}
+	getVersion () {return "1.5.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -34,23 +34,23 @@ class ImageGallery {
 
 	start () {
 		var libraryScript = null;
-		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
-			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
-			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]');
+		if (typeof BDFDB !== "object" || BDFDB.isLibraryOutdated()) {
+			if (typeof BDFDB === "object") BDFDB = "";
+			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
 			libraryScript.setAttribute("type", "text/javascript");
-			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js");
+			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
 			document.head.appendChild(libraryScript);
 		}
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDfunctionsDevilBro === "object") this.initialize();
+		if (typeof BDFDB === "object") this.initialize();
 		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
 	initialize () {
-		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.loadMessage(this);
+		if (typeof BDFDB === "object") {
+			BDFDB.loadMessage(this);
 			
 			var observer = null;
 
@@ -59,14 +59,14 @@ class ImageGallery {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(".imageWrapper-38T7d9") && node.querySelector(".downloadLink-wANcd8")) {
+								if (node && node.tagName && node.querySelector(BDFDB.dotCN.imagewrapper) && node.querySelector(BDFDB.dotCN.downloadlink)) {
 									this.loadImages(node);
 								}
 							});
 						}
 						if (change.removedNodes) {
 							change.removedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(".imageWrapper-38T7d9") && node.querySelector(".downloadLink-wANcd8")) {
+								if (node && node.tagName && node.querySelector(BDFDB.dotCN.imagewrapper) && node.querySelector(BDFDB.dotCN.downloadlink)) {
 									$(document).off("keyup." + this.getName()).off("keydown." + this.getName());
 								}
 							});
@@ -74,7 +74,7 @@ class ImageGallery {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, ".app-XZYfmp ~ [class^='theme-']:not([class*='popouts'])", {name:"imageModalObserver",instance:observer}, {childList: true});
+			BDFDB.addObserver(this, BDFDB.dotCN.app + " ~ [class^='theme-']:not([class*='popouts'])", {name:"imageModalObserver",instance:observer}, {childList: true});
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -82,8 +82,8 @@ class ImageGallery {
 	}
 
 	stop () {
-		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.unloadMessage(this);
+		if (typeof BDFDB === "object") {
+			BDFDB.unloadMessage(this);
 		}
 	}
 
@@ -93,13 +93,13 @@ class ImageGallery {
 	loadImages (modal) {
 		var start = performance.now();
 		var waitForImg = setInterval(() => {
-			var img = modal.querySelector(".imageWrapper-38T7d9 img");
+			var img = modal.querySelector(BDFDB.dotCNS.imagewrapper + "img");
 			if (img && img.src) {
 				clearInterval(waitForImg);
 				var message = this.getMessageGroupOfImage(img);
 				if (message) {
 					modal.classList.add("image-gallery");
-					this.addImages(modal, message.querySelectorAll(".imageWrapper-38T7d9 img"), img);
+					this.addImages(modal, message.querySelectorAll(BDFDB.dotCNS.imagewrapper + "img"), img);
 				}
 			}
 			else if (performance.now() - start > 10000) {
@@ -110,8 +110,8 @@ class ImageGallery {
 	
 	getMessageGroupOfImage (thisimg) {
 		if (thisimg && thisimg.src) {
-			for (let group of document.querySelectorAll(".message-group")) {
-				for (let img of group.querySelectorAll(".imageWrapper-38T7d9 img")) {
+			for (let group of document.querySelectorAll(BDFDB.dotCN.messagegroup)) {
+				for (let img of group.querySelectorAll(BDFDB.dotCNS.imagewrapper + "img")) {
 					if (img.src && this.getSrcOfImage(img) == this.getSrcOfImage(thisimg)) {
 						return group;
 					}
@@ -127,7 +127,7 @@ class ImageGallery {
 	}
 	
 	addImages (modal, imgs, img) {
-		modal.querySelectorAll(".imageWrapper-38T7d9.prev, .imageWrapper-38T7d9.next").forEach(ele => {ele.remove();});
+		modal.querySelectorAll(`${BDFDB.dotCN.imagewrapper}.prev, ${BDFDB.dotCN.imagewrapper}.next`).forEach(ele => {ele.remove();});
 		
 		var prevImg, nextImg, index;
 		for (index = 0; index < imgs.length; index++) {
@@ -139,34 +139,33 @@ class ImageGallery {
 			}
 		}
 		
-		$(modal).find(".imageWrapper-38T7d9")
+		$(modal).find(BDFDB.dotCN.imagewrapper)
 			.addClass("current")
 			.find("img").attr("src", this.getSrcOfImage(img));
 			
-		$(modal.querySelector(".downloadLink-wANcd8"))
+		$(modal.querySelector(BDFDB.dotCN.downloadlink))
 			.attr("href", this.getSrcOfImage(img));
-		
-		this.resizeImage(modal, img, modal.querySelector(".imageWrapper-38T7d9.current img"));
 			
+		this.resizeImage(modal, img, modal.querySelector(BDFDB.dotCN.imagewrapper + ".current img"));
 		if (prevImg) {
 			$(this.imageMarkup)
-				.appendTo(modal.querySelector(".inner-1_1f7b"))
+				.appendTo(modal.querySelector(BDFDB.dotCN.modalinner))
 				.addClass("prev")
 				.off("click." + this.getName()).on("click." + this.getName(), () => {
 					this.addImages(modal, imgs, prevImg);
 				})
 				.find("img").attr("src", this.getSrcOfImage(prevImg));
-			this.resizeImage(modal, prevImg, modal.querySelector(".imageWrapper-38T7d9.prev img"));
+			this.resizeImage(modal, prevImg, modal.querySelector(BDFDB.dotCN.imagewrapper + ".prev img"));
 		}
 		if (nextImg) {
 			$(this.imageMarkup)
-				.appendTo(modal.querySelector(".inner-1_1f7b"))
+				.appendTo(modal.querySelector(BDFDB.dotCN.modalinner))
 				.addClass("next")
 				.off("click." + this.getName()).on("click." + this.getName(), () => {
 					this.addImages(modal, imgs, nextImg);
 				})
 				.find("img").attr("src", this.getSrcOfImage(nextImg));
-			this.resizeImage(modal, nextImg, modal.querySelector(".imageWrapper-38T7d9.next img"));
+			this.resizeImage(modal, nextImg, modal.querySelector(BDFDB.dotCN.imagewrapper + ".next img"));
 		}
 		
 		$(document).off("keydown." + this.getName()).off("keyup." + this.getName())
