@@ -2767,6 +2767,7 @@ BDFDB.isThemeEnabled = function (name) {
 
 BDFDB.DiscordClasses = {
 	accountinfo: "container-2Thooq",
+	accountinfodetails: "accountDetails-3k9g4n",
 	accountinfousername: "username",
 	alignbaseline: "alignBaseline-LAQbso",
 	aligncenter: "alignCenter-1dQNNs",
