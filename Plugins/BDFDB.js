@@ -2766,6 +2766,8 @@ BDFDB.isThemeEnabled = function (name) {
 })();
 
 BDFDB.DiscordClasses = {
+	accountinfo: "container-2Thooq",
+	accountinfousername: "username",
 	alignbaseline: "alignBaseline-LAQbso",
 	aligncenter: "alignCenter-1dQNNs",
 	alignend: "alignEnd-1D6PQi",
@@ -2965,6 +2967,8 @@ BDFDB.DiscordClasses = {
 	directionrowreverse: "directionRowReverse-m8IjIq",
 	dms: "dms",
 	dmchannel: "channel",
+	dmchannelactivity: "channel-activity",
+	dmchannelactivitytext: "channel-activity-text",
 	dmchannelprivate: "private",
 	ellipsis: "ellipsis-1XUmPN",
 	flex: "flex-1O1GKY",
