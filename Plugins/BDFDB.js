@@ -2786,6 +2786,8 @@ BDFDB.DiscordClasses = {
 	autocompleteselectable: "selectable-3dP3y-",
 	autocompleteselected: "selectorSelected-1_M1WV",
 	autocompleteselector: "selector-2IcQBU",
+	avatarlargeold: "avatar-large",
+	avatarsmallold: "avatar-small",
 	backdrop: "backdrop-1ocfXc",
 	badge: "badge",
 	button: "button-38aScr",
