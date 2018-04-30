@@ -1,26 +1,26 @@
 //META{"name":"CreationDate"}*//
 
 class CreationDate {
-	constructor () {
+	initConstructor () {
 		this.labels = {};
 		
 		this.languages;
 		
-		this.creationDateMarkup = `<div class="creationDate textRow-1_JoJf"></div>`;
+		this.creationDateMarkup = `<div class="creationDate ${BDFDB.disCN.textrow}"></div>`;
 		
 		this.css = `
-			.theme-light .headerNormal-3Vn9nT .creationDate {
+			${BDFDB.dotCNS.themelight + BDFDB.dotCN.userpopoutheadernormal} .creationDate {
 				color: #b9bbbe; 
 			}
-			.theme-light .header-3budic:not(.headerNormal-3Vn9nT) .creationDate,
-			.theme-dark .header-3budic .creationDate {
+			${BDFDB.dotCNS.themelight + BDFDB.dotCN.userpopoutheader}:not(${BDFDB.dotCN.userpopoutheadernormal}) .creationDate,
+			${BDFDB.dotCNS.themedark + BDFDB.dotCN.userpopoutheader} .creationDate {
 				color: hsla(0,0%,100%,.6);
 			}
-			.theme-light .topSectionNormal-2LlRG1 .creationDate {
+			${BDFDB.dotCNS.themelight + BDFDB.dotCN.userprofiletopsectionnormal} .creationDate {
 				color: hsla(216,4%,74%,.6); 
 			}
-			.theme-light [class*='topSection']:not(.topSectionNormal-2LlRG1) .creationDate,
-			.theme-dark [class*='topSection'] .creationDate {
+			${BDFDB.dotCN.themelight} [class*='topSection']:not(${BDFDB.dotCN.userprofiletopsectionnormal}) .creationDate,
+			${BDFDB.dotCN.themedark} [class*='topSection'] .creationDate {
 				color: hsla(0,0%,100%,.6);
 			}`;
 			
@@ -42,36 +42,36 @@ class CreationDate {
 
 	getDescription () {return "Displays the Creation Date of an Account in the UserPopout and UserModal.";}
 
-	getVersion () {return "1.1.7";}
+	getVersion () {return "1.1.8";}
 
 	getAuthor () {return "DevilBro";}
 	
 	getSettingsPanel () {
-		if (!this.started || typeof BDfunctionsDevilBro !== "object") return;
-		var settings = BDfunctionsDevilBro.getAllData(this, "settings");
-		var choices = BDfunctionsDevilBro.getAllData(this, "choices");
-		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="titleDefault-1CWM9y title-3i-5G_ size18-ZM4Qv- height24-2pMcnc weightNormal-3gw0Lm marginBottom8-1mABJ4">${this.getName()}</div><div class="DevilBro-settings-inner">`;
+		if (!this.started || typeof BDFDB !== "object") return;
+		var settings = BDFDB.getAllData(this, "settings");
+		var choices = BDFDB.getAllData(this, "choices");
+		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		for (let key in settings) {
-			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
+			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}"${settings[key] ? " checked" : ""}></div></div>`;
 		}
 		for (let key in choices) {
-			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ weightMedium-13x9Y8 size16-3IvaX_ flexChild-1KGW5q" style="flex: 0 0 30%; line-height: 38px;">${this.defaults.choices[key].description}</h3><div class="ui-select select-3JqNgs" style="flex: 1 1 70%;"><div class="Select Select--single has-value" type="${key}" value="${choices[key]}"><div class="Select-control"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-value" style="flex: 1 1 auto;"><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm languageName" style="flex: 1 1 42%; padding:0;">${this.languages[choices[key]].name}</div><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm languageTimestamp" style="flex: 1 1 58%; padding:0;">${this.getCreationTime(this.languages[choices[key]].id)}</div></div><span class="Select-arrow-zone"><span class="Select-arrow"></span></span></div></div></div></div>`;
+			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCN.flexchild}" style="flex: 0 0 30%; line-height: 38px;">${this.defaults.choices[key].description}</h3><div class="${BDFDB.disCN.selectwrap}" style="flex: 1 1 70%;"><div class="${BDFDB.disCNS.select + BDFDB.disCNS.selectsingle + BDFDB.disCN.selecthasvalue}" type="${key}" value="${choices[key]}"><div class="${BDFDB.disCN.selectcontrol}"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignbaseline + BDFDB.disCNS.nowrap + BDFDB.disCN.selectvalue}" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.primary + BDFDB.disCN.weightnormal} languageName" style="flex: 1 1 42%; padding:0;">${this.languages[choices[key]].name}</div><div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.primary + BDFDB.disCN.weightnormal} languageTimestamp" style="flex: 1 1 58%; padding:0;">${this.getCreationTime(this.languages[choices[key]].id)}</div></div><span class="${BDFDB.disCN.selectarrowzone}"><span class="${BDFDB.disCN.selectarrow}"></span></span></div></div></div></div>`;
 		}
 		settingshtml += `</div></div>`;
 		
 		var settingspanel = $(settingshtml)[0];
 
-		BDfunctionsDevilBro.initElements(settingspanel);
+		BDFDB.initElements(settingspanel);
 
 		$(settingspanel)
-			.on("click", ".checkbox-1KYsPm", () => {
+			.on("click", BDFDB.dotCN.switchinner, () => {
 				this.updateSettings(settingspanel);
-				var choices = BDfunctionsDevilBro.getAllData(this, "choices");
+				var choices = BDFDB.getAllData(this, "choices");
 				for (let key in choices) {
-					settingspanel.querySelector(".Select[type='" + key + "'] .languageTimestamp").innerText = this.getCreationTime(this.languages[choices[key]].id);
+					settingspanel.querySelector(`${BDFDB.dotCN.select}[type='${key}'] .languageTimestamp`).innerText = this.getCreationTime(this.languages[choices[key]].id);
 				}
 			})
-			.on("click", ".Select-control", (e) => {this.openDropdownMenu(e);});
+			.on("click", BDFDB.dotCN.selectcontrol, (e) => {this.openDropdownMenu(e);});
 		return settingspanel;
 	}
 
@@ -80,23 +80,23 @@ class CreationDate {
 
 	start () {
 		var libraryScript = null;
-		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
-			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
-			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]');
+		if (typeof BDFDB !== "object" || BDFDB.isLibraryOutdated()) {
+			if (typeof BDFDB === "object") BDFDB = "";
+			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
 			libraryScript.setAttribute("type", "text/javascript");
-			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js");
+			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
 			document.head.appendChild(libraryScript);
 		}
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDfunctionsDevilBro === "object") this.initialize();
+		if (typeof BDFDB === "object") this.initialize();
 		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
 	initialize () {
-		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.loadMessage(this);
+		if (typeof BDFDB === "object") {
+			BDFDB.loadMessage(this);
 			
 			var observer = null;
 
@@ -105,15 +105,15 @@ class CreationDate {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(".userPopout-11hFKo")) {
-									if (BDfunctionsDevilBro.getData("addInUserPopout", this, "settings")) this.addCreationDate(node.querySelector(".headerText-3ptbeX"));
+								if (node && node.tagName && node.querySelector(BDFDB.dotCN.userpopout)) {
+									if (BDFDB.getData("addInUserPopout", this, "settings")) this.addCreationDate(node.querySelector(BDFDB.dotCN.userpopoutheadertext));
 								}
 							});
 						}
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, ".popouts, .popouts-1TN9u9", {name:"userPopoutObserver",instance:observer}, {childList: true});
+			BDFDB.addObserver(this, BDFDB.dotCN.popouts, {name:"userPopoutObserver",instance:observer}, {childList: true});
 			
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -121,16 +121,16 @@ class CreationDate {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (node && node.tagName && node.querySelector("[class*='topSection']")) {
-									if (BDfunctionsDevilBro.getData("addInUserProfil", this, "settings")) this.addCreationDate(node.querySelector(".headerInfo-Gkqcz9"));
+									if (BDFDB.getData("addInUserProfil", this, "settings")) this.addCreationDate(node.querySelector(BDFDB.dotCN.userprofileheaderinfo));
 								}
 							});
 						}
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, ".app-XZYfmp ~ [class^='theme-']:not([class*='popouts'])", {name:"userProfilModalObserver",instance:observer}, {childList: true});
+			BDFDB.addObserver(this, BDFDB.dotCN.app + " ~ [class^='theme-']:not([class*='popouts'])", {name:"userProfilModalObserver",instance:observer}, {childList: true});
 			
-			this.languages = Object.assign({},BDfunctionsDevilBro.languages);
+			this.languages = Object.assign({},BDFDB.languages);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -139,8 +139,8 @@ class CreationDate {
 
 
 	stop () {
-		if (typeof BDfunctionsDevilBro === "object") {		
-			BDfunctionsDevilBro.unloadMessage(this);
+		if (typeof BDFDB === "object") {		
+			BDFDB.unloadMessage(this);
 		}
 	}
 
@@ -149,46 +149,46 @@ class CreationDate {
 
 	updateSettings (settingspanel) {
 		var settings = {};
-		for (var input of settingspanel.querySelectorAll(".checkbox-1KYsPm")) {
+		for (var input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner)) {
 			settings[input.value] = input.checked;
 		}
-		BDfunctionsDevilBro.saveAllData(settings, this, "settings");
+		BDFDB.saveAllData(settings, this, "settings");
 	}
 	
 	openDropdownMenu (e) {
 		var selectControl = e.currentTarget;
 		var selectWrap = selectControl.parentElement;
 		
-		if (selectWrap.classList.contains("is-open")) return;
+		if (selectWrap.classList.contains(BDFDB.disCN.selectisopen)) return;
 		
-		selectWrap.classList.add("is-open");
+		selectWrap.classList.add(BDFDB.disCN.selectisopen);
 		$("li").has(selectWrap).css("overflow", "visible");
 		
 		var type = selectWrap.getAttribute("type");
 		var selectMenu = this.createDropdownMenu(selectWrap.getAttribute("value"), type);
 		selectWrap.appendChild(selectMenu);
 		
-		$(selectMenu).on("mousedown." + this.getName(), ".Select-option", (e2) => {
+		$(selectMenu).on("mousedown." + this.getName(), BDFDB.dotCN.selectoption, (e2) => {
 			var language = e2.currentTarget.getAttribute("value");
 			selectWrap.setAttribute("value", language);
 			selectControl.querySelector(".languageName").innerText = this.languages[language].name;
 			selectControl.querySelector(".languageTimestamp").innerText = this.getCreationTime(language);
-			BDfunctionsDevilBro.saveData(type, language, this, "choices");
+			BDFDB.saveData(type, language, this, "choices");
 		});
 		$(document).on("mousedown.select" + this.getName(), (e2) => {
 			if (e2.target.parentElement == selectMenu) return;
 			$(document).off("mousedown.select" + this.getName());
 			selectMenu.remove();
 			$("li").has(selectWrap).css("overflow", "auto");
-			setTimeout(() => {selectWrap.classList.remove("is-open");},100);
+			setTimeout(() => {selectWrap.classList.remove(BDFDB.disCN.selectisopen);},100);
 		});
 	}
 	
 	createDropdownMenu (choice, type) {
-		var menuhtml = `<div class="Select-menu-outer"><div class="Select-menu">`;
+		var menuhtml = `<div class="${BDFDB.disCN.selectmenuouter}"><div class="${BDFDB.disCN.selectmenu}">`;
 		for (var key in this.languages) {
-			var isSelected = key == choice ? " is-selected" : "";
-			menuhtml += `<div value="${key}" class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-option ${isSelected}" style="flex: 1 1 auto; display:flex;"><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm" style="flex: 1 1 42%;">${this.languages[key].name}</div><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm" style="flex: 1 1 58%;">${this.getCreationTime(this.languages[key].id)}</div></div>`
+			var isSelected = key == choice ? ` ${BDFDB.disCN.selectselected}` : ``;
+			menuhtml += `<div value="${key}" class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignbaseline + BDFDB.disCNS.nowrap + BDFDB.disCN.selectoption + isSelected}" style="flex: 1 1 auto; display:flex;"><div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.primary + BDFDB.disCN.weightnormal}" style="flex: 1 1 42%;">${this.languages[key].name}</div><div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.primary + BDFDB.disCN.weightnormal}" style="flex: 1 1 58%;">${this.getCreationTime(this.languages[key].id)}</div></div>`
 		}
 		menuhtml += `</div></div>`;
 		return $(menuhtml)[0];
@@ -196,17 +196,18 @@ class CreationDate {
 	
 	addCreationDate (container) {
 		if (!container) return;
-		var info = BDfunctionsDevilBro.getKeyInformation({"node":container,"key":"user"});
+		var info = BDFDB.getKeyInformation({"node":container,"key":"user"});
 		if (info) {
 			var creationDate = $(this.creationDateMarkup);
-			var choice = BDfunctionsDevilBro.getData("creationDateLang", this, "choices");
+			var choice = BDFDB.getData("creationDateLang", this, "choices");
 			creationDate.text(this.labels.createdat_text + " " + this.getCreationTime(this.languages[choice].id, info.createdAt));
-			container.insertBefore(creationDate[0], container.querySelector(".nameTag-2n-N0D") ? container.querySelector(".nameTag-2n-N0D").nextSibling : null);
+			var nametag = container.querySelector(BDFDB.dotCN.nametag);
+			container.insertBefore(creationDate[0], nametag ? nametag.nextSibling : null);
 		}
 	}
 	
 	getCreationTime (languageid, timestamp = new Date()) {
-		var settings = BDfunctionsDevilBro.getAllData(this, "settings");
+		var settings = BDFDB.getAllData(this, "settings");
 		var timestring = settings.addCreationTime ? timestamp.toLocaleString(languageid) : timestamp.toLocaleDateString(languageid);
 		if (timestring && settings.forceZeros) timestring = this.addLeadingZeros(timestring);
 		return timestring;
@@ -223,7 +224,7 @@ class CreationDate {
 	}
 	
 	setLabelsByLanguage () {
-		switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
+		switch (BDFDB.getDiscordLanguage().id) {
 			case "hr":		//croatian
 				return {
 					createdat_text:				"Izrađen"

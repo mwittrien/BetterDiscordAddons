@@ -1,73 +1,73 @@
 //META{"name":"EditChannels"}*//
 
 class EditChannels {
-	constructor () {
+	initConstructor () {
 		this.labels = {};
 		
 		this.channelContextEntryMarkup =
-			`<div class="itemGroup-oViAgA">
-				<div class="item-1XYaYf localchannelsettings-item itemSubMenu-3ZgIw-">
+			`<div class="${BDFDB.disCN.contextmenuitemgroup}">
+				<div class="${BDFDB.disCN.contextmenuitem} localchannelsettings-item ${BDFDB.disCN.contextmenuitemsubmenu}">
 					<span>REPLACE_context_localchannelsettings_text</span>
-					<div class="hint-3TJykr"></div>
+					<div class="${BDFDB.disCN.contextmenuhint}"></div>
 				</div>
 			</div>`;
 			
 		this.channelContextSubMenuMarkup = 
-			`<div class="contextMenu-uoJTbz editchannels-submenu">
-				<div class="itemGroup-oViAgA">
-					<div class="item-1XYaYf channelsettings-item">
+			`<div class="${BDFDB.disCN.contextmenu} editchannels-submenu">
+				<div class="${BDFDB.disCN.contextmenuitemgroup}">
+					<div class="${BDFDB.disCN.contextmenuitem} channelsettings-item">
 						<span>REPLACE_submenu_channelsettings_text</span>
-						<div class="hint-3TJykr"></div>
+						<div class="${BDFDB.disCN.contextmenuhint}"></div>
 					</div>
-					<div class="item-1XYaYf resetsettings-item disabled-dlOjhg">
+					<div class="${BDFDB.disCN.contextmenuitem} resetsettings-item ${BDFDB.disCN.contextmenuitemdisabled}">
 						<span>REPLACE_submenu_resetsettings_text</span>
-						<div class="hint-3TJykr"></div>
+						<div class="${BDFDB.disCN.contextmenuhint}"></div>
 					</div>
 				</div>
 			</div>`;
 
 		this.channelSettingsModalMarkup =
 			`<span class="editchannels-modal DevilBro-modal">
-				<div class="backdrop-2ohBEd"></div>
-				<div class="modal-2LIEKY">
-					<div class="inner-1_1f7b">
-						<div class="modal-3HOjGZ sizeMedium-1-2BNS">
-							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO header-3sp3cE" style="flex: 0 0 auto;">
-								<div class="flexChild-1KGW5q" style="flex: 1 1 auto;">
-									<h4 class="h4-2IXpeI title-1pmpPr size16-3IvaX_ height20-165WbF weightSemiBold-T8sxWH defaultColor-v22dK1 defaultMarginh4-jAopYe marginReset-3hwONl">REPLACE_modal_header_text</h4>
-									<div class="guildName-1u0hy7 small-3-03j1 size12-1IGJl9 height16-1qXrGy primary-2giqSn"></div>
+				<div class="${BDFDB.disCN.backdrop}"></div>
+				<div class="${BDFDB.disCN.modal}">
+					<div class="${BDFDB.disCN.modalinner}">
+						<div class="${BDFDB.disCNS.modalsub + BDFDB.disCN.modalsizemedium}">
+							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex: 0 0 auto;">
+								<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">
+									<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.headertitle + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.defaultcolor + BDFDB.disCNS.h4defaultmargin + BDFDB.disCN.marginreset}">REPLACE_modal_header_text</h4>
+									<div class="${BDFDB.disCNS.modalguildname + BDFDB.disCNS.small + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCN.primary}"></div>
 								</div>
-								<svg class="btn-cancel close-3ejNTg flexChild-1KGW5q" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12">
+								<svg class="${BDFDB.disCNS.modalclose + BDFDB.disCN.flexchild}" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12">
 									<g fill="none" fill-rule="evenodd">
 										<path d="M0 0h12v12H0"></path>
 										<path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path>
 									</g>
 								</svg>
 							</div>
-							<div class="scrollerWrap-2uBjct content-1Cut5s scrollerThemed-19vinI themeGhostHairline-2H8SiW">
-								<div class="scroller-fzNley inner-tqJwAU">
-									<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 1 1 auto;">
-										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
-											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_channelname_text</h3>
+							<div class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.modalcontent + BDFDB.disCNS.scrollerthemed + BDFDB.disCN.themeghosthairline}">
+								<div class="${BDFDB.disCNS.scroller + BDFDB.disCN.modalsubinner}">
+									<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 1 1 auto;">
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
+											<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">REPLACE_modal_channelname_text</h3>
 										</div>
-										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
-											<div class="inputWrapper-3xoRWR vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR flexChild-1KGW5q" style="flex: 1 1 auto;"><input type="text" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_" id="input-channelname"></div>
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
+											<div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex + BDFDB.disCNS.directioncolumn + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;"><input type="text" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16}" id="input-channelname"></div>
 										</div>
-										<div class="divider-1G01Z9 dividerDefault-77PXsz marginTop20-3UscxH"></div>
+										<div class="${BDFDB.disCNS.modaldivider + BDFDB.disCNS.modaldividerdefault + BDFDB.disCN.margintop20}"></div>
 									</div>
-									<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 1 1 auto;">
-										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO" style="flex: 1 1 auto;">
-											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_colorpicker1_text</h3>
+									<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 1 1 auto;">
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstart + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;">
+											<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">REPLACE_modal_colorpicker1_text</h3>
 										</div>
-										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
 											<div class="swatches1"></div>
 										</div>
 									</div>
 								</div>
 							</div>
-							<div class="flex-lFgbSz flex-3B1Tl4 horizontalReverse-2LanvO horizontalReverse-k5PqxT flex-3B1Tl4 directionRowReverse-2eZTxP justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO footer-1PYmcw">
-								<button type="button" class="btn-save button-2t3of8 lookFilled-luDKDo colorBrand-3PmwCE sizeMedium-2VGNaF grow-25YQ8u">
-									<div class="contents-4L4hQM">REPLACE_btn_save_text</div>
+							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontalreverse + BDFDB.disCNS.horizontalreverse2 + BDFDB.disCNS.directionrowreverse + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.modalfooter}">
+								<button type="button" class="btn-save ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}">
+									<div class= "${BDFDB.disCN.buttoncontents}">REPLACE_btn_save_text</div>
 								</button>
 							</div>
 						</div>
@@ -86,26 +86,26 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "3.7.3";}
+	getVersion () {return "3.7.4";}
 
 	getAuthor () {return "DevilBro";}
 	
 	getSettingsPanel () {
-		if (!this.started || typeof BDfunctionsDevilBro !== "object") return;
-		var settings = BDfunctionsDevilBro.getAllData(this, "settings"); 
-		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="titleDefault-1CWM9y title-3i-5G_ size18-ZM4Qv- height24-2pMcnc weightNormal-3gw0Lm marginBottom8-1mABJ4">${this.getName()}</div><div class="DevilBro-settings-inner">`;
+		if (!this.started || typeof BDFDB !== "object") return;
+		var settings = BDFDB.getAllData(this, "settings"); 
+		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		for (let key in settings) {
-			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
+			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}"${settings[key] ? " checked" : ""}></div></div>`;
 		}
-		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Reset all Channels.</h3><button type="button" class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorRed-3HTNPV sizeMedium-2VGNaF grow-25YQ8u reset-button" style="flex: 0 0 auto;"><div class="contents-4L4hQM">Reset</div></button></div>`;
+		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Reset all Channels.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} reset-button" style="flex: 0 0 auto;"><div class= "${BDFDB.disCN.buttoncontents}">Reset</div></button></div>`;
 		settingshtml += `</div></div>`;
 		
 		var settingspanel = $(settingshtml)[0];
 
-		BDfunctionsDevilBro.initElements(settingspanel);
+		BDFDB.initElements(settingspanel);
 
 		$(settingspanel)
-			.on("click", ".checkbox-1KYsPm", () => {this.updateSettings(settingspanel);})
+			.on("click", BDFDB.dotCN.switchinner, () => {this.updateSettings(settingspanel);})
 			.on("click", ".reset-button", () => {this.resetAll();});
 		return settingspanel;
 	}
@@ -115,23 +115,23 @@ class EditChannels {
 
 	start () {
 		var libraryScript = null;
-		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
-			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
-			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]');
+		if (typeof BDFDB !== "object" || BDFDB.isLibraryOutdated()) {
+			if (typeof BDFDB === "object") BDFDB = "";
+			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
 			libraryScript.setAttribute("type", "text/javascript");
-			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js");
+			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
 			document.head.appendChild(libraryScript);
 		}
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDfunctionsDevilBro === "object") this.initialize();
+		if (typeof BDFDB === "object") this.initialize();
 		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
 	initialize () {
-		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.loadMessage(this);
+		if (typeof BDFDB === "object") {
+			BDFDB.loadMessage(this);
 			
 			var observer = null;
 
@@ -139,19 +139,19 @@ class EditChannels {
 				changes.forEach(
 					(change, i) => {
 						if (change.attributeName == "class" && $(change.target).attr("class").indexOf("wrapper") > -1 && $("[custom-editchannels]").has(change.target)[0]) {
-							let info = BDfunctionsDevilBro.getKeyInformation({"node":change.target, "key":"channel"});
-							if (info) this.loadChannel(BDfunctionsDevilBro.getDivOfChannel(info.id));
+							let info = BDFDB.getKeyInformation({"node":change.target, "key":"channel"});
+							if (info) this.loadChannel(BDFDB.getDivOfChannel(info.id));
 						}
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.classList && (node.classList.contains("containerDefault-7RImuF") || node.classList.contains("containerDefault-1bbItS"))) {
-									let info = BDfunctionsDevilBro.getKeyInformation({"node":node, "key":"channel"});
-									if (info) this.loadChannel(BDfunctionsDevilBro.getDivOfChannel(info.id));
+								if (node && node.classList && (node.classList.contains(BDFDB.disCN.channelcontainerdefault) || node.classList.contains(BDFDB.disCN.categorycontainerdefault))) {
+									let info = BDFDB.getKeyInformation({"node":node, "key":"channel"});
+									if (info) this.loadChannel(BDFDB.getDivOfChannel(info.id));
 								}
 								if (node && node.className && node.className.length > 0 && node.className.indexOf("container-") > -1) {
-									for (let channel of node.querySelectorAll(".containerDefault-7RImuF, .containerDefault-1bbItS")) {
-										let info = BDfunctionsDevilBro.getKeyInformation({"node":channel, "key":"channel"});
-										if (info) this.loadChannel(BDfunctionsDevilBro.getDivOfChannel(info.id));
+									for (let channel of node.querySelectorAll(BDFDB.dotCNC.channelcontainerdefault + BDFDB.dotCN.categorycontainerdefault)) {
+										let info = BDFDB.getKeyInformation({"node":channel, "key":"channel"});
+										if (info) this.loadChannel(BDFDB.getDivOfChannel(info.id));
 									}
 								}
 							});
@@ -159,14 +159,14 @@ class EditChannels {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, ".channels-3g2vYe", {name:"channelListObserver",instance:observer}, {childList: true, attributes:true, subtree: true});
+			BDFDB.addObserver(this, BDFDB.dotCN.channels, {name:"channelListObserver",instance:observer}, {childList: true, attributes:true, subtree: true});
 			
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.nodeType == 1 && node.className.includes("contextMenu-uoJTbz")) {
+								if (node && node.nodeType == 1 && node.className.includes(BDFDB.disCN.contextmenu)) {
 									this.onContextMenu(node);
 								}
 							});
@@ -174,7 +174,7 @@ class EditChannels {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, ".appMount-14L89u", {name:"channelContextObserver",instance:observer}, {childList: true});
+			BDFDB.addObserver(this, BDFDB.dotCN.appmount, {name:"channelContextObserver",instance:observer}, {childList: true});
 			
 			this.loadAllChannels();
 			
@@ -186,34 +186,35 @@ class EditChannels {
 	}
 
 	stop () {
-		if (typeof BDfunctionsDevilBro === "object") {
+		if (typeof BDFDB === "object") {
 			this.resetAllChannels();
 			
-			BDfunctionsDevilBro.unloadMessage(this);
+			BDFDB.unloadMessage(this);
 		}
 	}
 	
 	onSwitch () {
-		if (typeof BDfunctionsDevilBro === "object") {
-			$(".titleText-2IfpkV[custom-editchannelsheader]").find(".channelName-1G03vu.private-38vo6h").css("color", "").css("background-color", "").parent().removeAttr("custom-editchannelsheader");
+		if (typeof BDFDB === "object") {
+			$(`${BDFDB.dotCN.channelheadertitletext}[custom-editchannelsheader]`).find(BDFDB.dotCN.channelheaderchannelname + BDFDB.dotCN.channelheaderprivate).css("color", "").css("background-color", "").parent().removeAttr("custom-editchannelsheader");
 			this.loadAllChannels();
 			setImmediate(() => {this.changeChannelHeader();}); //setImmediate so EditChannels sets the color after EditUsers set it back to white
 		}
 	}
 	
+	
 	// begin of own functions
 
 	updateSettings (settingspanel) {
 		var settings = {};
-		for (var input of settingspanel.querySelectorAll(".checkbox-1KYsPm")) {
+		for (var input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner)) {
 			settings[input.value] = input.checked;
 		}
-		BDfunctionsDevilBro.saveAllData(settings, this, "settings");
+		BDFDB.saveAllData(settings, this, "settings");
 	}
 
 	resetAll () {
 		if (confirm("Are you sure you want to reset all channels?")) {
-			BDfunctionsDevilBro.removeAllData(this, "channels");
+			BDFDB.removeAllData(this, "channels");
 			
 			this.resetAllChannels();
 		}
@@ -233,14 +234,14 @@ class EditChannels {
 	
 	onContextMenu (context) {
 		if (!context || !context.tagName || !context.parentElement || context.querySelector(".localchannelsettings-item")) return;
-		var info = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"channel"});
-		if (info && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"ChannelDeleteGroup"})) {
+		var info = BDFDB.getKeyInformation({"node":context, "key":"channel"});
+		if (info && BDFDB.getKeyInformation({"node":context, "key":"displayName", "value":"ChannelDeleteGroup"})) {
 			$(context).append(this.channelContextEntryMarkup)
 				.on("mouseenter", ".localchannelsettings-item", (e) => {
 					this.createContextSubMenu(info, e, context);
 				});
 				
-			BDfunctionsDevilBro.updateContextPosition(context);
+			BDFDB.updateContextPosition(context);
 		}
 	}
 	
@@ -253,33 +254,33 @@ class EditChannels {
 				this.showChannelSettings(info);
 			});
 			
-		if (BDfunctionsDevilBro.loadData(info.id, this, "channels")) {
+		if (BDFDB.loadData(info.id, this, "channels")) {
 			channelContextSubMenu
 				.find(".resetsettings-item")
-				.removeClass("disabled").removeClass("disabled-dlOjhg")
+				.removeClass(BDFDB.disCN.contextmenuitemdisabled)
 				.on("click", () => {
 					$(context).hide();
 					this.removeChannelData(info);
 				});
 		}
 		
-		BDfunctionsDevilBro.appendSubMenu(e.currentTarget, channelContextSubMenu);
+		BDFDB.appendSubMenu(e.currentTarget, channelContextSubMenu);
 	}
 	
 	showChannelSettings (info) {
-		var channelObj = BDfunctionsDevilBro.getDivOfChannel(info.id);
+		var channelObj = BDFDB.getDivOfChannel(info.id);
 		
-		var data = BDfunctionsDevilBro.loadData(info.id, this, "channels");
+		var data = BDFDB.loadData(info.id, this, "channels");
 		
 		var name = data ? data.name : null;
 		var color = data ? data.color : null;
 		
 		var channelSettingsModal = $(this.channelSettingsModalMarkup);
-		channelSettingsModal.find(".guildName-1u0hy7").text(info.name);
+		channelSettingsModal.find(BDFDB.dotCN.modalguildname).text(info.name);
 		channelSettingsModal.find("#input-channelname").val(name);
 		channelSettingsModal.find("#input-channelname").attr("placeholder", info.name);
-		BDfunctionsDevilBro.setColorSwatches(color, channelSettingsModal.find(".swatches1"), "swatch1");
-		BDfunctionsDevilBro.appendModal(channelSettingsModal);
+		BDFDB.setColorSwatches(color, channelSettingsModal.find(".swatches1"), "swatch1");
+		BDFDB.appendModal(channelSettingsModal);
 		channelSettingsModal
 			.on("click", ".btn-save", (event) => {
 				event.preventDefault();
@@ -291,17 +292,17 @@ class EditChannels {
 					}
 				}
 				
-				color = BDfunctionsDevilBro.getSwatchColor("swatch1");
+				color = BDFDB.getSwatchColor("swatch1");
 				if (color) {
-					if (color[0] < 30 && color[1] < 30 && color[2] < 30) BDfunctionsDevilBro.colorCHANGE(color, 30);
-					else if (color[0] > 225 && color[1] > 225 && color[2] > 225) BDfunctionsDevilBro.colorCHANGE(color, -30);
+					if (color[0] < 30 && color[1] < 30 && color[2] < 30) BDFDB.colorCHANGE(color, 30);
+					else if (color[0] > 225 && color[1] > 225 && color[2] > 225) BDFDB.colorCHANGE(color, -30);
 				}
 				
 				if (name == null && color == null) {
 					this.removeChannelData(info.id);
 				}
 				else {
-					BDfunctionsDevilBro.saveData(info.id, {name,color}, this, "channels");
+					BDFDB.saveData(info.id, {name,color}, this, "channels");
 					this.loadChannel(channelObj);
 					this.changeChannelHeader();
 				}
@@ -311,9 +312,9 @@ class EditChannels {
 	}
 	
 	removeChannelData (info) {
-		this.resetChannel(BDfunctionsDevilBro.getDivOfChannel(info.id));
+		this.resetChannel(BDFDB.getDivOfChannel(info.id));
 		
-		BDfunctionsDevilBro.removeData(info.id, this, "channels");
+		BDFDB.removeData(info.id, this, "channels");
 		
 		this.changeChannelHeader();
 	}
@@ -321,22 +322,22 @@ class EditChannels {
 	resetChannel (channelObj) {
 		if (!channelObj || !channelObj.div) return;
 		
-		var channel = channelObj.div.querySelector(".name-2SL4ev, .colorTransition-2iZaYd");
+		var channel = channelObj.div.querySelector(BDFDB.dotCNC.channelname + BDFDB.dotCN.categorycolortransition);
 	
 		$(channelObj.div)
 			.removeAttr("custom-editchannels");
 		$(channel)
 			.css("color", "");
 			
-		BDfunctionsDevilBro.setInnerText(channel, channelObj.name);
+		BDFDB.setInnerText(channel, channelObj.name);
 	}
 	
 	loadChannel (channelObj) {
 		if (!channelObj || !channelObj.div) return;
 		
-		var channel = channelObj.div.querySelector(".name-2SL4ev, .colorTransition-2iZaYd");
+		var channel = channelObj.div.querySelector(BDFDB.dotCNC.channelname + BDFDB.dotCN.categorycolortransition);
 		
-		var data = BDfunctionsDevilBro.loadData(channelObj.id, this, "channels");
+		var data = BDFDB.loadData(channelObj.id, this, "channels");
 		if (data) {
 			var name = data.name ? data.name : channelObj.name;
 			var color = data.color ? this.chooseColor(channel, data.color) : "";
@@ -346,28 +347,28 @@ class EditChannels {
 			$(channel)
 				.css("color", color);
 				
-			BDfunctionsDevilBro.setInnerText(channel, name);
+			BDFDB.setInnerText(channel, name);
 		}
 	}
 	
 	loadAllChannels () {
-		for (let channelObj of BDfunctionsDevilBro.readChannelList()) {
+		for (let channelObj of BDFDB.readChannelList()) {
 			this.loadChannel(channelObj);
 		}
 	}
 	
 	changeChannelHeader () {
-		if (BDfunctionsDevilBro.getData("changeInChannelHeader", this, "settings")) {
-			var channelHeader = document.querySelector(".title-qAcLxz .titleText-2IfpkV");
+		if (BDFDB.getData("changeInChannelHeader", this, "settings")) {
+			var channelHeader = document.querySelector(BDFDB.dotCNS.channelheadertitle + BDFDB.dotCN.channelheadertitletext);
 			if (!channelHeader) return;
-			var channel = channelHeader.querySelector(".channelName-1G03vu:not(.private-38vo6h)");
+			var channel = channelHeader.querySelector(`${BDFDB.dotCN.channelheaderchannelname}:not(${BDFDB.dotCN.channelheaderprivate})`);
 			if (!channel) return;
-			var info = BDfunctionsDevilBro.getKeyInformation({"node":channelHeader,"key":"channel"});
+			var info = BDFDB.getKeyInformation({"node":channelHeader,"key":"channel"});
 			if (info) {
-				var data = BDfunctionsDevilBro.loadData(info.id, this, "channels");
+				var data = BDFDB.loadData(info.id, this, "channels");
 				var name = data && data.name ? data.name : info.name;
-				var color = data && data.color ? BDfunctionsDevilBro.color2RGB(data.color) : "";
-				BDfunctionsDevilBro.setInnerText(channel, name);
+				var color = data && data.color ? BDFDB.color2RGB(data.color) : "";
+				BDFDB.setInnerText(channel, name);
 				$(channel).css("color", color);
 				
 				if (data && (data.name || data.color)) {
@@ -382,16 +383,16 @@ class EditChannels {
 	
 	resetAllChannels () {
 		document.querySelectorAll("[custom-editchannels]").forEach(channelDiv => {
-			var info = BDfunctionsDevilBro.getKeyInformation({"node":channelDiv, "key":"channel"});
+			var info = BDFDB.getKeyInformation({"node":channelDiv, "key":"channel"});
 			if (info) this.resetChannel({div:channelDiv,info});
 		});
 			
 		var channelHeader = document.querySelector("[custom-editchannelsheader]");
 		if (channelHeader) {
-			var info = BDfunctionsDevilBro.getKeyInformation({"node":channelHeader, "key":"channel"});
+			var info = BDFDB.getKeyInformation({"node":channelHeader, "key":"channel"});
 			if (info) {
-				var channel = channelHeader.querySelector(".channelName-1G03vu");
-				BDfunctionsDevilBro.setInnerText(channel, info.name);
+				var channel = channelHeader.querySelector(BDFDB.dotCN.channelheaderchannelname);
+				BDFDB.setInnerText(channel, info.name);
 				$(channel).css("color", "");
 				$(channelHeader).removeAttr("custom-editchannelsheader");
 			}
@@ -401,21 +402,21 @@ class EditChannels {
 	chooseColor (channel, color) {
 		if (color && channel && channel.className) {
 			if (channel.className.indexOf("nameMuted") > -1 || channel.className.indexOf("nameLocked") > -1) {
-				color = BDfunctionsDevilBro.colorCHANGE(color, -50);
+				color = BDFDB.colorCHANGE(color, -50);
 			}
 			if (channel.className.indexOf("nameDefault") > -1) {
 				color = color;
 			}
 			if (channel.className.indexOf("nameSelected") > -1 || channel.className.indexOf("nameHovered") > -1 || channel.className.indexOf("nameUnread") > -1) {
-				color = BDfunctionsDevilBro.colorCHANGE(color, 50);
+				color = BDFDB.colorCHANGE(color, 50);
 			}
-			return BDfunctionsDevilBro.color2RGB(color);
+			return BDFDB.color2RGB(color);
 		}
 		return null;
 	}
 	
 	setLabelsByLanguage () {
-		switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
+		switch (BDFDB.getDiscordLanguage().id) {
 			case "hr":		//croatian
 				return {
 					context_localchannelsettings_text:		"Postavke lokalnih kanala",

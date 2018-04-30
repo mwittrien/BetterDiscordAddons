@@ -46,8 +46,8 @@ class RepoControls {
 		this.sortPopoutMarkup =
 			`<div class="${BDFDB.disCNS.popout + BDFDB.disCNS.popoutbottomright + BDFDB.disCN.popoutnoshadow} repocontrols-sort-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);" option="sort">
 				<div>
-					<div class="${BDFDB.disCN.contextmenu} quickSelectPopout">
-						<div class="itemGroup-oViAgA">
+					<div class="${BDFDB.disCN.contextmenu}  quickSelectPopout">
+						<div class="${BDFDB.disCN.contextmenuitemgroup}">
 							${Object.keys(this.sortings.sort).map((key, i) => `<div option="${key}" class="${BDFDB.disCN.contextmenuitem}">${this.sortings.sort[key]}</div>`).join("")}
 						</div>
 					</div>
@@ -57,8 +57,8 @@ class RepoControls {
 		this.orderPopoutMarkup =
 			`<div class="${BDFDB.disCNS.popout + BDFDB.disCNS.popoutbottomright + BDFDB.disCN.popoutnoshadow} repocontrols-order-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);" option="order">
 				<div>
-					<div class="${BDFDB.disCN.contextmenu} quickSelectPopout">
-						<div class="itemGroup-oViAgA">
+					<div class="${BDFDB.disCN.contextmenu}  quickSelectPopout">
+						<div class="${BDFDB.disCN.contextmenuitemgroup}">
 							${Object.keys(this.sortings.order).map((key, i) => `<div option="${key}" class="${BDFDB.disCN.contextmenuitem}">${this.sortings.order[key]}</div>`).join("")}
 						</div>
 					</div>

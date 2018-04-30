@@ -1,7 +1,7 @@
 //META{"name":"EditUsers"}*//
 
 class EditUsers {
-	constructor () {
+	initConstructor () {
 		this.labels = {};
 
 		this.css = `
@@ -19,7 +19,7 @@ class EditUsers {
 				text-indent: 0px !important;
 				vertical-align: top;
 			}
-			.compact .user-tag {
+			${BDFDB.dotCN.messagecompact} .user-tag {
 				margin-left: 2px;
 				margin-right: 6px;
 			}
@@ -32,117 +32,117 @@ class EditUsers {
 		this.tagMarkup = `<span class="user-tag"></span>`;
 
 		this.userContextEntryMarkup =
-			`<div class="itemGroup-oViAgA">
-				<div class="item-1XYaYf localusersettings-item itemSubMenu-3ZgIw-">
+			`<div class="${BDFDB.disCN.contextmenuitemgroup}">
+				<div class="${BDFDB.disCN.contextmenuitem} localusersettings-item ${BDFDB.disCN.contextmenuitemsubmenu}">
 					<span>REPLACE_context_localusersettings_text</span>
-					<div class="hint-3TJykr"></div>
+					<div class="${BDFDB.disCN.contextmenuhint}"></div>
 				</div>
 			</div>`;
 			
 		this.userContextSubMenuMarkup = 
-			`<div class="contextMenu-uoJTbz editusers-submenu">
-				<div class="itemGroup-oViAgA">
-					<div class="item-1XYaYf usersettings-item">
+			`<div class="${BDFDB.disCN.contextmenu} editusers-submenu">
+				<div class="${BDFDB.disCN.contextmenuitemgroup}">
+					<div class="${BDFDB.disCN.contextmenuitem} usersettings-item">
 						<span>REPLACE_submenu_usersettings_text</span>
-						<div class="hint-3TJykr"></div>
+						<div class="${BDFDB.disCN.contextmenuhint}"></div>
 					</div>
-					<div class="item-1XYaYf resetsettings-item disabled-dlOjhg">
+					<div class="${BDFDB.disCN.contextmenuitem} resetsettings-item ${BDFDB.disCN.contextmenuitemdisabled}">
 						<span>REPLACE_submenu_resetsettings_text</span>
-						<div class="hint-3TJykr"></div>
+						<div class="${BDFDB.disCN.contextmenuhint}"></div>
 					</div>
 				</div>
 			</div>`;
 			
 		this.userSettingsModalMarkup =
 			`<span class="editusers-modal DevilBro-modal">
-				<div class="backdrop-2ohBEd"></div>
-				<div class="modal-2LIEKY">
-					<div class="inner-1_1f7b">
-						<div class="modal-3HOjGZ sizeMedium-1-2BNS">
-							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO header-3sp3cE" style="flex: 0 0 auto;">
-								<div class="flexChild-1KGW5q" style="flex: 1 1 auto;">
-									<h4 class="h4-2IXpeI title-1pmpPr size16-3IvaX_ height20-165WbF weightSemiBold-T8sxWH defaultColor-v22dK1 defaultMarginh4-jAopYe marginReset-3hwONl">REPLACE_modal_header_text</h4>
-									<div class="guildName-1u0hy7 small-3-03j1 size12-1IGJl9 height16-1qXrGy primary-2giqSn"></div>
+				<div class="${BDFDB.disCN.backdrop}"></div>
+				<div class="${BDFDB.disCN.modal}">
+					<div class="${BDFDB.disCN.modalinner}">
+						<div class="${BDFDB.disCNS.modalsub + BDFDB.disCN.modalsizemedium}">
+							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex: 0 0 auto;">
+								<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">
+									<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.headertitle + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.defaultcolor + BDFDB.disCNS.h4defaultmargin + BDFDB.disCN.marginreset}">REPLACE_modal_header_text</h4>
+									<div class="${BDFDB.disCNS.modalguildname + BDFDB.disCNS.small + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCN.primary}"></div>
 								</div>
-								<svg class="btn-cancel close-3ejNTg flexChild-1KGW5q" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12">
+								<svg class="${BDFDB.disCNS.modalclose + BDFDB.disCN.flexchild}" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12">
 									<g fill="none" fill-rule="evenodd">
 										<path d="M0 0h12v12H0"></path>
 										<path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path>
 									</g>
 								</svg>
 							</div>
-							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4 inner-tqJwAU" style="flex: 0 0 auto;">
+							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCNS.marginbottom8 + BDFDB.disCN.modalsubinner}" style="flex: 0 0 auto;">
 								<div tab="user" class="tab">REPLACE_modal_tabheader1_text</div>
 								<div tab="name" class="tab">REPLACE_modal_tabheader2_text</div>
 								<div tab="tag" class="tab">REPLACE_modal_tabheader3_text</div>
 							</div>
-							<div class="scrollerWrap-2uBjct content-1Cut5s scrollerThemed-19vinI themeGhostHairline-2H8SiW">
-								<div class="scroller-fzNley inner-tqJwAU">
-									<div tab="user" class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginBottom20-2Ifj-2 tab-content" style="flex: 1 1 auto;">
-										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
-											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_username_text</h3>
+							<div class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.modalcontent + BDFDB.disCNS.scrollerthemed + BDFDB.disCN.themeghosthairline}">
+								<div class="${BDFDB.disCNS.scroller + BDFDB.disCN.modalsubinner}">
+									<div tab="user" class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20} tab-content" style="flex: 1 1 auto;">
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
+											<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">REPLACE_modal_username_text</h3>
 										</div>
-										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
-											<div class="inputWrapper-3xoRWR vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR flexChild-1KGW5q" style="flex: 1 1 auto;"><input type="text" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_" id="input-username"></div>
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
+											<div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex + BDFDB.disCNS.directioncolumn + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;"><input type="text" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16}" id="input-username"></div>
 										</div>
-										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
-											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_usertag_text</h3>
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
+											<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">REPLACE_modal_usertag_text</h3>
 										</div>
-										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
-											<div class="inputWrapper-3xoRWR vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR flexChild-1KGW5q" style="flex: 1 1 auto;"><input type="text" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_" id="input-usertag"></div>
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
+											<div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex + BDFDB.disCNS.directioncolumn + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;"><input type="text" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16}" id="input-usertag"></div>
 										</div>
-										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
-											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_userurl_text</h3>
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
+											<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">REPLACE_modal_userurl_text</h3>
 										</div>
-										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
-											<div class="inputWrapper-3xoRWR vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR flexChild-1KGW5q" style="flex: 1 1 auto;"><input type="text" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_" id="input-userurl"></div>
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
+											<div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex + BDFDB.disCNS.directioncolumn + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;"><input type="text" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16}" id="input-userurl"></div>
 										</div>
-										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
-											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">REPLACE_modal_removeicon_text</h3>
-											<div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;">
-												<input type="checkbox" class="checkboxEnabled-4QfryV checkbox-1KYsPm" id="input-removeicon">
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
+											<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">REPLACE_modal_removeicon_text</h3>
+											<div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;">
+												<input type="checkbox" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}" id="input-removeicon">
 											</div>
 										</div>
 									</div>
-									<div tab="name" class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginBottom20-2Ifj-2 tab-content" style="flex: 1 1 auto;">
-										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO" style="flex: 1 1 auto;">
-											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_colorpicker1_text</h3>
+									<div tab="name" class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20} tab-content" style="flex: 1 1 auto;">
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstart + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;">
+											<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">REPLACE_modal_colorpicker1_text</h3>
 										</div>
-										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
 											<div class="swatches1"></div>
 										</div>
-										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO" style="flex: 1 1 auto;">
-											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_colorpicker2_text</h3>
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstart + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;">
+											<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">REPLACE_modal_colorpicker2_text</h3>
 										</div>
-										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
 											<div class="swatches2"></div>
 										</div>
 									</div>
-									<div tab="tag" class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginBottom20-2Ifj-2 tab-content" style="flex: 1 1 auto;">
-										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO" style="flex: 1 1 auto;">
-											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_colorpicker3_text</h3>
+									<div tab="tag" class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20} tab-content" style="flex: 1 1 auto;">
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstart + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;">
+											<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">REPLACE_modal_colorpicker3_text</h3>
 										</div>
-										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
 											<div class="swatches3"></div>
 										</div>
-										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO" style="flex: 1 1 auto;">
-											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_colorpicker4_text</h3>
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstart + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;">
+											<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">REPLACE_modal_colorpicker4_text</h3>
 										</div>
-										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
 											<div class="swatches4"></div>
 										</div>
-										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
-											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">REPLACE_modal_ignoretagcolor_text</h3>
-											<div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;">
-												<input type="checkbox" class="checkboxEnabled-4QfryV checkbox-1KYsPm" id="input-ignoretagcolor">
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
+											<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">REPLACE_modal_ignoretagcolor_text</h3>
+											<div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;">
+												<input type="checkbox" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}" id="input-ignoretagcolor">
 											</div>
 										</div>
 									</div>
 								</div>
 							</div>
-							<div class="flex-lFgbSz flex-3B1Tl4 horizontalReverse-2LanvO horizontalReverse-k5PqxT flex-3B1Tl4 directionRowReverse-2eZTxP justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO footer-1PYmcw">
-								<button type="button" class="btn-save button-2t3of8 lookFilled-luDKDo colorBrand-3PmwCE sizeMedium-2VGNaF grow-25YQ8u">
-									<div class="contents-4L4hQM">REPLACE_btn_save_text</div>
+							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontalreverse + BDFDB.disCNS.horizontalreverse2 + BDFDB.disCNS.directionrowreverse + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.modalfooter}">
+								<button type="button" class="btn-save ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}">
+									<div class= "${BDFDB.disCN.buttoncontents}">REPLACE_btn_save_text</div>
 								</button>
 							</div>
 						</div>
@@ -170,28 +170,28 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "2.2.6";}
+	getVersion () {return "2.2.7";}
 
 	getAuthor () {return "DevilBro";}
 	
 	getSettingsPanel () {
-		if (!this.started || typeof BDfunctionsDevilBro !== "object") return;
-		var settings = BDfunctionsDevilBro.getAllData(this, "settings"); 
-		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="titleDefault-1CWM9y title-3i-5G_ size18-ZM4Qv- height24-2pMcnc weightNormal-3gw0Lm marginBottom8-1mABJ4">${this.getName()}</div><div class="DevilBro-settings-inner">`;
-		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">Change User in:</h3></div><div class="DevilBro-settings-inner-list">`;
+		if (!this.started || typeof BDFDB !== "object") return;
+		var settings = BDFDB.getAllData(this, "settings"); 
+		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.getName()}</div><div class="DevilBro-settings-inner">`;
+		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">Change User in:</h3></div><div class="DevilBro-settings-inner-list">`;
 		for (let key in settings) {
-			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
+			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}"${settings[key] ? " checked" : ""}></div></div>`;
 		}
 		settingshtml += `</div>`;
-		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Reset all Users.</h3><button type="button" class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorRed-3HTNPV sizeMedium-2VGNaF grow-25YQ8u reset-button" style="flex: 0 0 auto;"><div class="contents-4L4hQM">Reset</div></button></div>`;
+		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Reset all Users.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} reset-button" style="flex: 0 0 auto;"><div class= "${BDFDB.disCN.buttoncontents}">Reset</div></button></div>`;
 		settingshtml += `</div></div>`;
 		
 		var settingspanel = $(settingshtml)[0];
 
-		BDfunctionsDevilBro.initElements(settingspanel);
+		BDFDB.initElements(settingspanel);
 
 		$(settingspanel)
-			.on("click", ".checkbox-1KYsPm", () => {this.updateSettings(settingspanel);})
+			.on("click", BDFDB.dotCN.switchinner, () => {this.updateSettings(settingspanel);})
 			.on("click", ".reset-button", () => {this.resetAll();});
 		return settingspanel;
 	}
@@ -201,26 +201,26 @@ class EditUsers {
 
 	start () {
 		var libraryScript = null;
-		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
-			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
-			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]');
+		if (typeof BDFDB !== "object" || BDFDB.isLibraryOutdated()) {
+			if (typeof BDFDB === "object") BDFDB = "";
+			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
 			libraryScript.setAttribute("type", "text/javascript");
-			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js");
+			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
 			document.head.appendChild(libraryScript);
 		}
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDfunctionsDevilBro === "object") this.initialize();
+		if (typeof BDFDB === "object") this.initialize();
 		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
 	initialize () {
-		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.loadMessage(this);
+		if (typeof BDFDB === "object") {
+			BDFDB.loadMessage(this);
 			
-			this.UserStore = BDfunctionsDevilBro.WebModules.findByProperties(["getUsers", "getUser"]);
-			this.MemberPerms = BDfunctionsDevilBro.WebModules.findByProperties(["getNicknames", "getNick"]);
+			this.UserStore = BDFDB.WebModules.findByProperties(["getUsers", "getUser"]);
+			this.MemberPerms = BDFDB.WebModules.findByProperties(["getNicknames", "getNick"]);
 			
 			var observer = null;
 
@@ -229,7 +229,7 @@ class EditUsers {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.nodeType == 1 && node.className.includes("contextMenu-uoJTbz")) {
+								if (node && node.nodeType == 1 && node.className.includes(BDFDB.disCN.contextmenu)) {
 									this.onContextMenu(node);
 								}
 							});
@@ -237,45 +237,45 @@ class EditUsers {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, ".appMount-14L89u", {name:"userContextObserver",instance:observer}, {childList: true});
+			BDFDB.addObserver(this, BDFDB.dotCN.appmount, {name:"userContextObserver",instance:observer}, {childList: true});
 			
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (BDfunctionsDevilBro.getData("changeInRecentDms", this, "settings")) this.loadUser(node, "recentdms", false);
+								if (BDFDB.getData("changeInRecentDms", this, "settings")) this.loadUser(node, "recentdms", false);
 							});
 						}
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, ".dms", {name:"dmObserver",instance:observer}, {childList: true});
+			BDFDB.addObserver(this, BDFDB.dotCN.dms, {name:"dmObserver",instance:observer}, {childList: true});
 			
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.classList && node.classList.length > 0 && node.classList.contains("channel") && node.classList.contains("private") && BDfunctionsDevilBro.getData("changeInDmsList", this, "settings")) {
+								if (node && node.tagName && node.classList && node.classList.length > 0 && node.classList.contains(BDFDB.disCN.dmchannel) && node.classList.contains(BDFDB.disCN.dmchannelprivate) && BDFDB.getData("changeInDmsList", this, "settings")) {
 									this.loadUser(node, "dms", false);
 								}
-								if (node && node.tagName && node.querySelector(".userDefault-2_cnT0") && BDfunctionsDevilBro.getData("changeInVoiceChat", this, "settings")) {
-									this.loadUser(node.querySelector(".userDefault-2_cnT0").parentElement, "voice", false);
+								if (node && node.tagName && node.querySelector(BDFDB.dotCN.voiceuserdefault) && BDFDB.getData("changeInVoiceChat", this, "settings")) {
+									this.loadUser(node.querySelector(BDFDB.dotCN.voiceuserdefault).parentElement, "voice", false);
 								}
 							});
 						}
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, ".channels-3g2vYe", {name:"channelListObserver",instance:observer}, {childList: true, subtree: true});
+			BDFDB.addObserver(this, BDFDB.dotCN.channels, {name:"channelListObserver",instance:observer}, {childList: true, subtree: true});
 			
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(".friends-column") && BDfunctionsDevilBro.getData("changeInFriendList", this, "settings")) {
+								if (node && node.tagName && node.querySelector(BDFDB.dotCN.friendscolumn) && BDFDB.getData("changeInFriendList", this, "settings")) {
 									this.loadUser(node, "friends", false);
 								}
 							});
@@ -283,14 +283,14 @@ class EditUsers {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, "#friends", {name:"friendListObserver",instance:observer}, {childList:true, subtree:true});
+			BDFDB.addObserver(this, BDFDB.idCN.friends, {name:"friendListObserver",instance:observer}, {childList:true, subtree:true});
 			
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(".username-MwOsla") && BDfunctionsDevilBro.getData("changeInMemberList", this, "settings")) {
+								if (node && node.tagName && node.querySelector(BDFDB.dotCN.memberusername) && BDFDB.getData("changeInMemberList", this, "settings")) {
 									this.loadUser(node, "list", false);
 								}
 							});
@@ -298,30 +298,30 @@ class EditUsers {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, ".members-1bid1J", {name:"userListObserver",instance:observer}, {childList:true});
+			BDFDB.addObserver(this, BDFDB.dotCN.members, {name:"userListObserver",instance:observer}, {childList:true});
 			
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (BDfunctionsDevilBro.getData("changeInChatWindow", this, "settings")) {
-									var compact = document.querySelector(".message-group.compact");
+								if (BDFDB.getData("changeInChatWindow", this, "settings")) {
+									var compact = document.querySelector(BDFDB.dotCN.messagegroup + BDFDB.dotCN.messagecompact);
 									if (!compact) {
-										if (node && node.tagName && node.querySelector(".username-wrapper")) {
+										if (node && node.tagName && node.querySelector(BDFDB.dotCN.messageusernamewrapper)) {
 											this.loadUser(node, "chat", compact);
 										}
-										else if (node && node.classList && node.classList.contains("message-text")) {
-											this.loadUser($(".message-group").has(node)[0], "chat", compact);
+										else if (node && node.classList && node.classList.contains(BDFDB.disCN.messagetext)) {
+											this.loadUser($(BDFDB.dotCN.messagegroup).has(node)[0], "chat", compact);
 										}
 									}
 									else {
-										if (node && node.tagName && node.querySelector(".username-wrapper")) {
-											if (node.classList.contains("markup")) {
+										if (node && node.tagName && node.querySelector(BDFDB.dotCN.messageusernamewrapper)) {
+											if (node.classList.contains(BDFDB.disCN.messagemarkup)) {
 												this.loadUser(node, "chat", compact);
 											}
 											else {
-												for (let markup of node.querySelectorAll(".markup")) this.loadUser(markup, "chat", compact);
+												for (let markup of node.querySelectorAll(BDFDB.dotCN.messagemarkup)) this.loadUser(markup, "chat", compact);
 											}
 										}
 									}
@@ -331,14 +331,14 @@ class EditUsers {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, ".messages.scroller", {name:"chatWindowObserver",instance:observer}, {childList:true, subtree:true});
+			BDFDB.addObserver(this, BDFDB.dotCN.messages, {name:"chatWindowObserver",instance:observer}, {childList:true, subtree:true});
 			
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(".userPopout-11hFKo") && BDfunctionsDevilBro.getData("changeInUserPopout", this, "settings")) {
+								if (node && node.tagName && node.querySelector(BDFDB.dotCN.userpopout) && BDFDB.getData("changeInUserPopout", this, "settings")) {
 									this.loadUser(node, "popout", false);
 								}
 							});
@@ -346,14 +346,14 @@ class EditUsers {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, ".popouts, .popouts-1TN9u9", {name:"userPopoutObserver",instance:observer}, {childList: true});
+			BDFDB.addObserver(this, BDFDB.dotCN.popouts, {name:"userPopoutObserver",instance:observer}, {childList: true});
 			
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector("[class*='topSection']") && BDfunctionsDevilBro.getData("changeInUserProfil", this, "settings")) {
+								if (node && node.tagName && node.querySelector("[class*='topSection']") && BDFDB.getData("changeInUserProfil", this, "settings")) {
 									this.loadUser(node.querySelector("[class*='topSection']"), "profil", false);
 								}
 							});
@@ -361,7 +361,7 @@ class EditUsers {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, ".app-XZYfmp ~ [class^='theme-']:not([class*='popouts'])", {name:"userProfilModalObserver",instance:observer}, {childList: true});
+			BDFDB.addObserver(this, BDFDB.dotCN.app + " ~ [class^='theme-']:not([class*='popouts'])", {name:"userProfilModalObserver",instance:observer}, {childList: true});
 			
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -374,7 +374,7 @@ class EditUsers {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, ".layers, .layers-20RVFW", {name:"settingsWindowObserver",instance:observer}, {childList:true});
+			BDFDB.addObserver(this, BDFDB.dotCN.layers, {name:"settingsWindowObserver",instance:observer}, {childList:true});
 						
 			this.loadAllUsers();
 		}
@@ -385,20 +385,20 @@ class EditUsers {
 
 
 	stop () {
-		if (typeof BDfunctionsDevilBro === "object") {
+		if (typeof BDFDB === "object") {
 			this.resetAllUsers();
 						
-			BDfunctionsDevilBro.unloadMessage(this);
+			BDFDB.unloadMessage(this);
 		}
 	}
 	
 	onSwitch () {
-		if (typeof BDfunctionsDevilBro === "object") {
-			$(".titleText-2IfpkV[custom-editusers]").find(".channelName-1G03vu:not(.private-38vo6h)").css("color", "").css("background-color", "").parent().removeAttr("custom-editusers");
+		if (typeof BDFDB === "object") {
+			$(`${BDFDB.dotCN.channelheadertitletext}[custom-editusers]`).find(`${BDFDB.dotCN.channelheaderchannelname}:not(${BDFDB.dotCN.channelheaderprivate})`).css("color", "").css("background-color", "").parent().removeAttr("custom-editusers");
 			this.loadAllUsers();
-			BDfunctionsDevilBro.addObserver(this, ".members-1bid1J", {name:"userListObserver"}, {childList:true});
-			BDfunctionsDevilBro.addObserver(this, ".messages.scroller", {name:"chatWindowObserver"}, {childList:true, subtree:true});
-			BDfunctionsDevilBro.addObserver(this, "#friends", {name:"friendListObserver"}, {childList:true, subtree:true});
+			BDFDB.addObserver(this, BDFDB.dotCN.members, {name:"userListObserver"}, {childList:true});
+			BDFDB.addObserver(this, BDFDB.dotCN.messages, {name:"chatWindowObserver"}, {childList:true, subtree:true});
+			BDFDB.addObserver(this, BDFDB.idCN.friends, {name:"friendListObserver"}, {childList:true, subtree:true});
 		}
 	}
 
@@ -407,15 +407,15 @@ class EditUsers {
 
 	updateSettings (settingspanel) {
 		var settings = {};
-		for (var input of settingspanel.querySelectorAll(".checkbox-1KYsPm")) {
+		for (var input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner)) {
 			settings[input.value] = input.checked;
 		}
-		BDfunctionsDevilBro.saveAllData(settings, this, "settings");
+		BDFDB.saveAllData(settings, this, "settings");
 	}
 
 	resetAll () {
 		if (confirm("Are you sure you want to reset all users?")) {
-			BDfunctionsDevilBro.removeAllData(this, "users");
+			BDFDB.removeAllData(this, "users");
 			this.resetAllUsers();
 		}
 	}
@@ -445,14 +445,14 @@ class EditUsers {
 	
 	onContextMenu (context) {
 		if (!context || !context.tagName || !context.parentElement || context.querySelector(".localusersettings-item")) return;
-		var info = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"user"});
-		if (info && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"UserNoteItem"})) {
+		var info = BDFDB.getKeyInformation({"node":context, "key":"user"});
+		if (info && BDFDB.getKeyInformation({"node":context, "key":"displayName", "value":"UserNoteItem"})) {
 			$(context).append(this.userContextEntryMarkup)
 				.on("mouseenter", ".localusersettings-item", (e) => {
 					this.createContextSubMenu(info, e, context);
 				});
 				
-			BDfunctionsDevilBro.updateContextPosition(context);
+			BDFDB.updateContextPosition(context);
 		}
 	}
 	
@@ -465,22 +465,22 @@ class EditUsers {
 				this.showUserSettings(info);
 			});
 			
-		if (BDfunctionsDevilBro.loadData(info.id, this, "users")) {
+		if (BDFDB.loadData(info.id, this, "users")) {
 			userContextSubMenu
 				.find(".resetsettings-item")
-				.removeClass("disabled").removeClass("disabled-dlOjhg")
+				.removeClass(BDFDB.disCN.contextmenuitemdisabled)
 				.on("click", () => {
 					$(context).hide();
-					BDfunctionsDevilBro.removeData(info.id, this, "users");
+					BDFDB.removeData(info.id, this, "users");
 					this.loadAllUsers();
 				});
 		}
 		
-		BDfunctionsDevilBro.appendSubMenu(e.currentTarget, userContextSubMenu);
+		BDFDB.appendSubMenu(e.currentTarget, userContextSubMenu);
 	}
 	
 	showUserSettings (info, e) {
-		var data = BDfunctionsDevilBro.loadData(info.id, this, "users");
+		var data = BDFDB.loadData(info.id, this, "users");
 		
 		var name =				data ? data.name : null;
 		var tag =				data ? data.tag : null;
@@ -492,26 +492,26 @@ class EditUsers {
 		var color3 =			data ? data.color3 : null;
 		var color4 =			data ? data.color4 : null;
 		
-		var serverObj = BDfunctionsDevilBro.getSelectedServer();
+		var serverObj = BDFDB.getSelectedServer();
 		var member = serverObj ? this.MemberPerms.getMember(serverObj.id, info.id) : null;
 		
 		var userSettingsModal = $(this.userSettingsModalMarkup);
-		userSettingsModal.find(".guildName-1u0hy7").text(member && member.nick ? member.nick : info.username);
+		userSettingsModal.find(BDFDB.dotCN.modalguildname).text(member && member.nick ? member.nick : info.username);
 		userSettingsModal.find("#input-username").val(name);
 		userSettingsModal.find("#input-username").attr("placeholder", member && member.nick ? member.nick : info.username);
 		userSettingsModal.find("#input-usertag").val(tag);
 		userSettingsModal.find("#input-userurl").val(url);
-		userSettingsModal.find("#input-userurl").attr("placeholder", BDfunctionsDevilBro.getUserAvatar(info.id));
+		userSettingsModal.find("#input-userurl").attr("placeholder", BDFDB.getUserAvatar(info.id));
 		userSettingsModal.find("#input-userurl").addClass(url ? "valid" : "");
 		userSettingsModal.find("#input-userurl").prop("disabled", removeIcon);
 		userSettingsModal.find("#input-removeicon").prop("checked", removeIcon);
 		userSettingsModal.find(".swatches3, .swatches4").toggleClass("disabled", ignoreTagColor);
 		userSettingsModal.find("#input-ignoretagcolor").prop("checked", ignoreTagColor);
-		BDfunctionsDevilBro.setColorSwatches(color1, userSettingsModal.find(".swatches1"), "swatch1");
-		BDfunctionsDevilBro.setColorSwatches(color2, userSettingsModal.find(".swatches2"), "swatch2");
-		BDfunctionsDevilBro.setColorSwatches(color3, userSettingsModal.find(".swatches3"), "swatch3");
-		BDfunctionsDevilBro.setColorSwatches(color4, userSettingsModal.find(".swatches4"), "swatch4");
-		BDfunctionsDevilBro.appendModal(userSettingsModal);
+		BDFDB.setColorSwatches(color1, userSettingsModal.find(".swatches1"), "swatch1");
+		BDFDB.setColorSwatches(color2, userSettingsModal.find(".swatches2"), "swatch2");
+		BDFDB.setColorSwatches(color3, userSettingsModal.find(".swatches3"), "swatch3");
+		BDFDB.setColorSwatches(color4, userSettingsModal.find(".swatches4"), "swatch4");
+		BDFDB.appendModal(userSettingsModal);
 		userSettingsModal
 			.on("click", "#input-removeicon", (event) => {
 				userSettingsModal.find("#input-userurl").prop("disabled", event.target.checked);
@@ -527,10 +527,10 @@ class EditUsers {
 				this.createNoticeTooltip(event);
 			})
 			.on("mouseleave", "#input-userurl", (event) => {
-				$(".tooltips").find(".notice-tooltip").remove();
+				$(BDFDB.dotCN.tooltips).find(".notice-tooltip").remove();
 				$(event.target).removeClass("hovering");
 			})
-			.on("click", "button.btn-save", (event) => {
+			.on("click", ".btn-save", (event) => {
 				event.preventDefault();
 				
 				removeIcon = userSettingsModal.find("#input-removeicon").prop("checked");
@@ -559,16 +559,16 @@ class EditUsers {
 					}
 				}
 				
-				color1 = BDfunctionsDevilBro.getSwatchColor("swatch1");
-				color2 = BDfunctionsDevilBro.getSwatchColor("swatch2");
-				color3 = BDfunctionsDevilBro.getSwatchColor("swatch3");
-				color4 = BDfunctionsDevilBro.getSwatchColor("swatch4");
+				color1 = BDFDB.getSwatchColor("swatch1");
+				color2 = BDFDB.getSwatchColor("swatch2");
+				color3 = BDFDB.getSwatchColor("swatch3");
+				color4 = BDFDB.getSwatchColor("swatch4");
 				
 				if (name == null && tag == null && url == null && !removeIcon && !ignoreTagColor && color1 == null && color2 == null && color3 == null && color4 == null) {
-					BDfunctionsDevilBro.removeData(info.id, this, "users")
+					BDFDB.removeData(info.id, this, "users")
 				}
 				else {
-					BDfunctionsDevilBro.saveData(info.id, {name,tag,url,removeIcon,ignoreTagColor,color1,color2,color3,color4}, this, "users");
+					BDFDB.saveData(info.id, {name,tag,url,removeIcon,ignoreTagColor,color1,color2,color3,color4}, this, "users");
 				}
 				this.loadAllUsers();
 			});
@@ -580,7 +580,7 @@ class EditUsers {
 			$(e.target)
 				.removeClass("valid")
 				.removeClass("invalid");
-			if ($(e.target).hasClass("hovering")) $(".tooltips .notice-tooltip").remove();
+			if ($(e.target).hasClass("hovering")) $(BDFDB.dotCNS.tooltips + ".notice-tooltip").remove();
 		}
 		else {
 			let request = require("request");
@@ -601,7 +601,7 @@ class EditUsers {
 	}
 	
 	createNoticeTooltip (e) {
-		$(".tooltips").find(".notice-tooltip").remove();
+		$(BDFDB.dotCN.tooltips).find(".notice-tooltip").remove();
 		
 		var input = e.target;
 		var disabled = $(input).prop("disabled");
@@ -617,99 +617,99 @@ class EditUsers {
 				body .notice-tooltip:after {
 					border-right-color: ${bgColor} !important;
 				}`;
-			BDfunctionsDevilBro.createTooltip(text, input, {type:"right",selector:"notice-tooltip",css:customTooltipCSS});
+			BDFDB.createTooltip(text, input, {type:"right",selector:"notice-tooltip",css:customTooltipCSS});
 		}
 	}
 
 	loadAllUsers () {
 		this.resetAllUsers();
 		
-		var settings = BDfunctionsDevilBro.getAllData(this, "settings");
+		var settings = BDFDB.getAllData(this, "settings");
 		
 		if (settings.changeInMemberList) {
-			for (let user of document.querySelectorAll(".member-2FrNV0")) {
+			for (let user of document.querySelectorAll(BDFDB.dotCN.member)) {
 				this.loadUser(user, "list", false);
 			} 
 		}
 		if (settings.changeInChatWindow) {
-			for (let user of document.querySelectorAll(".message-group")) {
-				if (user.querySelector(".avatar-large")) {
+			for (let user of document.querySelectorAll(BDFDB.dotCN.messagegroup)) {
+				if (user.querySelector(BDFDB.dotCN.avatarlargeold)) {
 					this.loadUser(user, "chat", false);
 				}
 				else {
-					for (let markup of user.querySelectorAll(".markup")) {
+					for (let markup of user.querySelectorAll(BDFDB.dotCN.messagemarkup)) {
 						this.loadUser(markup, "chat", true);
 					}
 				}
 			}
 		}
 		if (settings.changeInVoiceChat) {
-			for (let user of document.querySelectorAll(".userDefault-2_cnT0")) {
+			for (let user of document.querySelectorAll(BDFDB.dotCN.voiceuserdefault)) {
 				this.loadUser(user.parentElement, "voice", false);
 			}
 		}
 		if (settings.changeInRecentDms) {
-			for (let user of document.querySelectorAll(".dms .guild")) {
+			for (let user of document.querySelectorAll(BDFDB.dotCNS.dms + BDFDB.dotCN.guild)) {
 				this.loadUser(user, "recentdms", false);
 			}
 		}
 		if (settings.changeInDmsList) {
-			for (let user of document.querySelectorAll(".channel.private")) {
+			for (let user of document.querySelectorAll(BDFDB.dotCN.dmchannel + BDFDB.dotCN.dmchannelprivate)) {
 				this.loadUser(user, "dms", false);
 			}
 		}
-		if (settings.changeInDmHeader && !BDfunctionsDevilBro.getSelectedServer()) {
-			for (let user of document.querySelectorAll(".titleText-2IfpkV")) {
+		if (settings.changeInDmHeader && !BDFDB.getSelectedServer()) {
+			for (let user of document.querySelectorAll(BDFDB.dotCN.channelheadertitletext)) {
 				this.loadUser(user, "dmheader", false);
 			}
 		}
 		if (settings.changeInFriendList) {
-			for (let user of document.querySelectorAll(".friends-column")) {
+			for (let user of document.querySelectorAll(BDFDB.dotCN.friendscolumn)) {
 				this.loadUser(user, "friends", false);
 			}
 		}
 		if (settings.changeInUserAccount) {
-			for (let user of document.querySelectorAll(".container-iksrDt")) {
+			for (let user of document.querySelectorAll(BDFDB.dotCN.accountinfo)) {
 				this.loadUser(user, "info", false);
 			}
 		}
 		if (settings.changeInUserPopout) {
-			for (let user of document.querySelectorAll(".userPopout-11hFKo")) {
+			for (let user of document.querySelectorAll(BDFDB.dotCN.userpopout)) {
 				this.loadUser(user.parentElement, "popout", false);
 			}
 		}
 		if (settings.changeInUserProfil) {
-			for (let user of document.querySelectorAll(".topSectionPlaying-3jAH9b, .topSectionNormal-2LlRG1")) {
+			for (let user of document.querySelectorAll(`${BDFDB.dotCN.userprofile} [class*='topSection']`)) {
 				this.loadUser(user, "profil", false);
 			}
 		}
 	}
 	
 	loadUser (div, type, compact) {
-		if (!div || $(div).attr("custom-editusers") || !div.tagName || (!div.querySelector(".channel-activity-text") && div.querySelector(".channel-activity"))) return;
+		if (!div || $(div).attr("custom-editusers") || !div.tagName || (!div.querySelector(BDFDB.dotCN.dmchannelactivitytext) && div.querySelector(BDFDB.dotCN.dmchannelactivity))) return;
 		
 		let {avatar, username, wrapper} = this.getAvatarNameWrapper(div);
 		if (!avatar && !username && !wrapper) return;
 		
 		$(div).data("compact", compact);
 		
-		var info = this.getUserInfo(compact ? $(".message-group").has(div)[0] : div);
+		var info = this.getUserInfo(compact ? $(BDFDB.dotCN.messagegroup).has(div)[0] : div);
 		if (!info) return;
 		
-		var data = BDfunctionsDevilBro.loadData(info.id, this, "users");
+		var data = BDFDB.loadData(info.id, this, "users");
 		
 		if (data) {
-			var serverObj = BDfunctionsDevilBro.getSelectedServer();
+			var serverObj = BDFDB.getSelectedServer();
 			var member = serverObj ? this.MemberPerms.getMember(serverObj.id, info.id) : null;
 			if (username) {
 				var name = data.name ? data.name : (type == "info" || type == "profil" || !member || !member.nick ? info.username : member.nick);
-				var color1 = data.color1 ? BDfunctionsDevilBro.color2RGB(data.color1) : (member && member.colorString ? BDfunctionsDevilBro.color2RGB(member.colorString) : "");
-				var color2 = data.color2 ? BDfunctionsDevilBro.color2RGB(data.color2) : "";
-				BDfunctionsDevilBro.setInnerText(username, name);
+				var color1 = data.color1 ? BDFDB.color2RGB(data.color1) : (member && member.colorString ? BDFDB.color2RGB(member.colorString) : "");
+				var color2 = data.color2 ? BDFDB.color2RGB(data.color2) : "";
+				BDFDB.setInnerText(username, name);
 				username.style.color = color1;
 				username.style.background = color2;
 				
-				for (let markup of div.querySelectorAll(".markup")) {
+				for (let markup of div.querySelectorAll(BDFDB.dotCN.messagemarkup)) {
 					markup.style.color = settingsCookie["bda-gs-7"] && settingsCookie["bda-gs-7"] == true ? color1 : "";
 				}
 			}
@@ -723,11 +723,11 @@ class EditUsers {
 			var tag = data.tag ? data.tag : null;
 			if (tag && wrapper && !wrapper.querySelector(".user-tag") && (type == "list" || type == "chat" || type == "popout" || type == "profil" || type == "dmheader")) {
 				var color3 = data.ignoreTagColor ? 
-								(member && member.colorString ? BDfunctionsDevilBro.color2RGB(member.colorString) : "") :
-								(data.color3 ? BDfunctionsDevilBro.color2RGB(data.color3) : "");
-				var color3COMP = color3 ? BDfunctionsDevilBro.color2COMP(color3) : [0,0,0];
+								(member && member.colorString ? BDFDB.color2RGB(member.colorString) : "") :
+								(data.color3 ? BDFDB.color2RGB(data.color3) : "");
+				var color3COMP = color3 ? BDFDB.color2COMP(color3) : [0,0,0];
 				var color4 = !data.ignoreTagColor && data.color4 ? 
-								BDfunctionsDevilBro.color2RGB(data.color4) : 
+								BDFDB.color2RGB(data.color4) : 
 								(color3COMP[0] > 180 && color3COMP[1] > 180 && color3COMP[2] > 180 ? "black" : "white");
 				var thisTag = $(this.tagMarkup)[0];
 				thisTag.classList.add(type + "-tag");
@@ -738,7 +738,7 @@ class EditUsers {
 			}
 			
 			if (type == "recentdms") {
-				$(div).find(".guild-inner")
+				$(div).find(BDFDB.dotCN.guildinner)
 					.off("mouseenter." + this.getName())
 					.on("mouseenter." + this.getName(), () => {
 						this.createDmToolTip({"div":div,"nick":data.name,"name":info.username});
@@ -755,74 +755,65 @@ class EditUsers {
 			var {avatar, username, wrapper} = this.getAvatarNameWrapper(div);
 			if (!avatar && !username && !wrapper) return;
 			
-			var info = this.getUserInfo($(div).data("compact") ? $(".message-group").has(div)[0] : div);
+			var info = this.getUserInfo($(div).data(BDFDB.disCN.messagecompact) ? $(BDFDB.dotCN.messagegroup).has(div)[0] : div);
 			if (!info) return;
 			
 			if (username) {
-				var serverObj = BDfunctionsDevilBro.getSelectedServer();
+				var serverObj = BDFDB.getSelectedServer();
 				var member = serverObj ? this.MemberPerms.getMember(serverObj.id, info.id) : null;
-				var name = div.classList.contains("container-iksrDt") || !member || !member.nick ? info.username : member.nick;
-				var color1 = member && member.colorString ? BDfunctionsDevilBro.color2RGB(member.colorString) : "";
+				var name = div.classList.contains(BDFDB.disCN.accountinfo) || !member || !member.nick ? info.username : member.nick;
+				var color1 = member && member.colorString ? BDFDB.color2RGB(member.colorString) : "";
 				var color2 = "";
 				
-				BDfunctionsDevilBro.setInnerText(username, name);
+				BDFDB.setInnerText(username, name);
 				username.style.color = color1;
 				username.style.background = color2;
 				
-				for (let markup of div.querySelectorAll(".markup")) {
+				for (let markup of div.querySelectorAll(BDFDB.dotCN.messagemarkup)) {
 					markup.style.color = settingsCookie["bda-gs-7"] && settingsCookie["bda-gs-7"] == true ? color1 : "";
 				}
 			}
 			
 			if (avatar) {
-				avatar.style.background = "url(" + BDfunctionsDevilBro.getUserAvatar(info.id) + ")";
+				avatar.style.background = "url(" + BDFDB.getUserAvatar(info.id) + ")";
 				avatar.style.backgroundSize = "cover";
 			}
 			
 			$(div).removeAttr("custom-editusers")
-				.find(".guild-inner").off("mouseenter." + this.getName());
+				.find(BDFDB.dotCN.guildinner).off("mouseenter." + this.getName());
 		});
 	}
 	
 	createDmToolTip (userObj) {
 		var text = userObj.nick ? userObj.nick : userObj.name;
 		var customTooltipCSS = `
-			.tooltip:not(.dm-custom-tooltip) {
+			${BDFDB.dotCN.tooltip}:not(.dm-custom-tooltip) {
 				display: none !important;
 			}`;
-		BDfunctionsDevilBro.createTooltip(text, userObj.div, {type:"right",selector:"dm-custom-tooltip",css:customTooltipCSS});
+		BDFDB.createTooltip(text, userObj.div, {type:"right",selector:"dm-custom-tooltip",css:customTooltipCSS});
 	}
 	
 	getAvatarNameWrapper (div) {
-		var avatar = div.querySelector(".avatar-small, .avatar-large, .avatarDefault-3jtQoc, .avatar-profile, .image-EVRGPw");
+		var avatar = div.querySelector(BDFDB.dotCNC.avatarsmallold + BDFDB.dotCNC.avatarlargeold + BDFDB.dotCNC.avatarprofileold + BDFDB.dotCNC.voiceavatardefault + BDFDB.dotCN.avatarimage);
 						
-		var username = div.querySelector(".headerName-3U6eDn, .headerTagUsernameNoNickname-22Y2PV, .username-24t9uh, .username-MwOsla, .nameDefault-1I0lx8, .user-name, .channel-name, .channelName-1G03vu.private-38vo6h, .friends-column-name .username, .accountDetails-15i-_e .username");
+		var username = div.querySelector(BDFDB.dotCNC.userpopoutheadernickname + BDFDB.dotCNC.userpopoutheadernonickname + BDFDB.dotCNC.userprofileusername + BDFDB.dotCNC.memberusername + BDFDB.dotCNC.voicenamedefault + BDFDB.dotCNC.messageusername + BDFDB.dotCNC.dmchannelname + BDFDB.dotCN.channelheaderchannelname + BDFDB.dotCNC.channelheaderprivate + BDFDB.dotCNS.friendscolumnnamewrap + BDFDB.dotCNC.friendscolumnusername + BDFDB.dotCNS.accountinfodetails + BDFDB.dotCN.accountinfousername);
 						
-		var wrapper = div.querySelector(".headerName-3U6eDn, .headerTagNoNickname-36rgb9, .nameTag-2n-N0D, .nameTag-3F0z_i, .nameDefault-1I0lx8, .username-wrapper, .channel-name, .channelName-1G03vu.private-38vo6h .friends-column-name .nameTag-26T3kW, .accountDetails-15i-_e .username");
+		var wrapper = div.querySelector(BDFDB.dotCNC.userpopoutheadernickname + BDFDB.dotCNC.userpopoutheadernonickname + BDFDB.dotCNC.userprofileusername + BDFDB.dotCNC.memberusername + BDFDB.dotCNC.voicenamedefault + BDFDB.dotCNC.messageusernamewrapper + BDFDB.dotCNC.dmchannelname + BDFDB.dotCN.channelheaderchannelname + BDFDB.dotCNC.channelheaderprivate + BDFDB.dotCNS.friendscolumnnamewrap + BDFDB.dotCNC.nametag + BDFDB.dotCNS.accountinfodetails + BDFDB.dotCN.accountinfousername);
 						
 		return {avatar, username, wrapper};
 	}
 	
 	getUserInfo (div) {
-		var info = null, comparator = div.getAttribute("comparator");
-		if (comparator) {
-			comparator = comparator.split("\0");
-			comparator = comparator[comparator.length-1];
-			comparator = !isNaN(parseInt(comparator)) ? comparator : null;
-		}
-		if (comparator) info = {"id":comparator};
-		else {
-			info = BDfunctionsDevilBro.getKeyInformation({"node":div,"key":"user"});
-			if (!info) {
-				info = BDfunctionsDevilBro.getKeyInformation({"node":div,"key":"message"});
-				if (info) info = info.author;
+		var info = BDFDB.getKeyInformation({"node":div,"key":"user"});
+		if (!info) {
+			info = BDFDB.getKeyInformation({"node":div,"key":"message"});
+			if (info) info = info.author;
+			else {
+				info = BDFDB.getKeyInformation({"node":div,"key":"channel"});
+				if (info) info = {"id":info.recipients[0]};
 				else {
-					info = BDfunctionsDevilBro.getKeyInformation({"node":div,"key":"channel"});
-					if (info) info = {"id":info.recipients[0]};
-					else {
-						info = BDfunctionsDevilBro.getKeyInformation({"node":$(".message-group").has(div)[0],"key":"message"});
-						if (info) info = info.author;
-					}
+					info = BDFDB.getKeyInformation({"node":$(BDFDB.dotCN.messagegroup).has(div)[0],"key":"message"});
+					if (info) info = info.author;
 				}
 			}
 		}
@@ -830,7 +821,7 @@ class EditUsers {
 	}
 	
 	setLabelsByLanguage () {
-		switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
+		switch (BDFDB.getDiscordLanguage().id) {
 			case "hr":		//croatian
 				return {
 					context_localusersettings_text:		"Lokalne korisničke postavke",

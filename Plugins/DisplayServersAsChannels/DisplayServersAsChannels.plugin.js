@@ -1,7 +1,7 @@
 //META{"name":"DisplayServersAsChannels"}*//
 
 class DisplayServersAsChannels {
-	constructor () {
+	initConstructor () {
 		this.verificationBadgeMarkup =
 			`<svg class="DSAC-verification-badge" name="Verified" width="24" height="24" viewBox="0 0 20 20">
 				<g fill="none" fill-rule="evenodd">
@@ -12,51 +12,51 @@ class DisplayServersAsChannels {
 			</svg>`;
 		
 		this.css = `
-			.bd-minimal .guilds-wrapper.DSAC-styled,
-			.bd-minimal .guilds-wrapper.DSAC-styled .scroller-wrap,
-			.bd-minimal .guilds-wrapper.DSAC-styled .guilds {
+			.bd-minimal ${BDFDB.dotCN.guildswrapper}.DSAC-styled,
+			.bd-minimal ${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.scrollerwrapold},
+			.bd-minimal ${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guilds} {
 				width: 160px;
 			}
-			.guilds-wrapper.DSAC-styled,
-			.guilds-wrapper.DSAC-styled .scroller-wrap,
-			.guilds-wrapper.DSAC-styled .guilds {
+			${BDFDB.dotCN.guildswrapper}.DSAC-styled,
+			${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.scrollerwrapold},
+			${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guilds} {
 				width: 240px;
 			}
-			.guilds-wrapper.DSAC-styled .guilds::-webkit-scrollbar-track-piece {
+			${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guilds}::-webkit-scrollbar-track-piece {
 				background-color: rgb(27, 29, 32);
 				border-color: rgb(32, 34, 37);
 			}
-			.guilds-wrapper.DSAC-styled .guilds::-webkit-scrollbar-thumb {
+			${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guilds}::-webkit-scrollbar-thumb {
 				background-color: rgb(17, 19, 22);
 				border-color: rgb(32, 34, 37);
 			}
-			.bd-minimal .guilds-wrapper.DSAC-styled .guild {
+			.bd-minimal ${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guild} {
 				margin-left: 55px;
 			}
-			.bd-minimal .guilds-wrapper.DSAC-styled .friends-online,
-			.bd-minimal .guilds-wrapper.DSAC-styled #RANbutton-frame {
+			.bd-minimal ${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.friendsonline},
+			.bd-minimal ${BDFDB.dotCN.guildswrapper}.DSAC-styled #RANbutton-frame {
 				margin-left: 40px;
 			}
-			.guilds-wrapper.DSAC-styled .guild-separator, 
-			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild,
-			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guild-inner,
-			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guild-inner a,
-			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guilds-error	{
+			${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator}, 
+			${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild},
+			${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildinner},
+			${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildinner} a,
+			${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildserror}	{
 				margin-left: 0px;
 				height: 32px;
 			}
-			.guilds-wrapper.DSAC-styled .guild,
-			.guilds-wrapper.DSAC-styled .friends-online {
+			${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guild},
+			${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.friendsonline} {
 				margin-left: 80px;
 			}
-			.bd-minimal .guilds-wrapper.DSAC-styled .guild-separator, 
-			.bd-minimal .guilds-wrapper.DSAC-styled .guild-separator ~ .guild,
-			.bd-minimal .guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guilds-error {
+			.bd-minimal ${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator}, 
+			.bd-minimal ${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild},
+			.bd-minimal ${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildserror} {
 				width: 130px;
 			}
-			.guilds-wrapper.DSAC-styled .guild-separator, 
-			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild,
-			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guilds-error {
+			${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator}, 
+			${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild},
+			${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildserror} {
 				width: 215px;
 				box-sizing: border-box;
 				opacity: 0.4;
@@ -66,51 +66,51 @@ class DisplayServersAsChannels {
 				align-items: center;
 				justify-content: flex-start;
 			}
-			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild.unread {
+			${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild + BDFDB.dotCN.guildunread} {
 				opacity: 0.7;
 			}
-			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild:not(.selected):hover {
+			${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild}:not(${BDFDB.dotCN.guildselected}):hover {
 				opacity: 0.9;
 				background-color: rgba(79,84,92,.3);
 			}
-			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild.selected {
+			${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild + BDFDB.dotCN.guildselected} {
 				opacity: 1;
 				background-color: rgba(79,84,92,.6);
 			}
-			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild > div[draggable] {
+			${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild} > div[draggable] {
 				flex: 1 1 auto;
 			}
-			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild.audio > div[draggable],
-			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild.video > div[draggable] {
+			${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild + BDFDB.dotCN.guildaudio} > div[draggable],
+			${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild + BDFDB.dotCN.guildvideo} > div[draggable] {
 				padding-right: 20px;
 				margin-right: 5px;
 			}
-			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild.audio > div[draggable] {
+			${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild + BDFDB.dotCN.guildaudio} > div[draggable] {
 				background: url(/assets/382ca83d9dc390c4be715248bb4864f4.svg) right no-repeat !important;
 			}
-			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild.video > div[draggable] {
+			${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild + BDFDB.dotCN.guildvideo} > div[draggable] {
 				background: url(/assets/c46f51f425c824899b6138ea2b61b41d.svg) right no-repeat !important;
 			}
-			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild .badge {
+			${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.badge} {
 				position: static;
 				margin-right: 5px;
 			}
-			.bd-minimal .guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guild-inner {
+			.bd-minimal ${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildinner} {
 				width: unset;
 			}
-			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guild-inner {
+			${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildinner} {
 				background: transparent !important;
 				border-radius: 0px !important;
 				position: relative;
 			}
-			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild.audio .guild-inner:after,
-			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild.video .guild-inner:after {
+			${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild + BDFDB.dotCNS.guildaudio + BDFDB.dotCN.guildinner}:after,
+			${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild + BDFDB.dotCNS.guildvideo + BDFDB.dotCN.guildinner}:after {
 				display: none !important;
 			}
-			.bd-minimal .guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guild-inner a {
+			.bd-minimal ${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildinner} a {
 				font-size: 14px !important;
 			}
-			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guild-inner a {
+			${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildinner} a {
 				background: transparent !important;
 				font-size: 16px !important;
 				line-height: 32px;
@@ -121,27 +121,27 @@ class DisplayServersAsChannels {
 				right: 0;
 				width: unset;
 			}
-			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guild-inner .DSAC-verification-badge {
+			${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildinner} .DSAC-verification-badge {
 				position: absolute;
 				left: 0;
 				top: 4px;
 			}
-			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guild-inner .DSAC-verification-badge + a {
+			${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildinner} .DSAC-verification-badge + a {
 				left: 25px;
 			}
-			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guilds-error	{
+			${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildserror} {
 				border-radius: 3px;
 				margin-left: -5px;
 				line-height: 32px;
 			}
-			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild .guilds-error,
-			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild.guilds-add {
+			${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildserror},
+			${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild + BDFDB.dotCN.guildsadd} {
 				display: block !important;
 			}
-			.bd-minimal .guilds-wrapper.DSAC-styled .guild-separator ~ .guild.guilds-add .guilds-add-inner {
+			.bd-minimal ${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild + BDFDB.dotCNS.guildsadd + BDFDB.dotCN.guildsaddinner} {
 				top: 0;
 			}
-			.guilds-wrapper.DSAC-styled .guild-separator ~ .guild.guilds-add .guilds-add-inner {
+			${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild + BDFDB.dotCNS.guildsadd + BDFDB.dotCN.guildsaddinner} {
 				top: -5px;
 			}`;
 	}
@@ -150,35 +150,32 @@ class DisplayServersAsChannels {
 
 	getDescription () {return "Display servers in a similar way as channels.";}
 
-	getVersion () {return "1.0.8";}
+	getVersion () {return "1.0.9";}
 
 	getAuthor () {return "DevilBro";}
-	
-	getSettingsPanel () {
-	}
 
 	//legacy
 	load () {}
 
 	start () {
 		var libraryScript = null;
-		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
-			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
-			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]');
+		if (typeof BDFDB !== "object" || BDFDB.isLibraryOutdated()) {
+			if (typeof BDFDB === "object") BDFDB = "";
+			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
 			libraryScript.setAttribute("type", "text/javascript");
-			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js");
+			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
 			document.head.appendChild(libraryScript);
 		}
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDfunctionsDevilBro === "object") this.initialize();
+		if (typeof BDFDB === "object") this.initialize();
 		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
 	initialize () {
-		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.loadMessage(this);
+		if (typeof BDFDB === "object") {
+			BDFDB.loadMessage(this);
 			
 			var observer = null;
 			
@@ -186,26 +183,26 @@ class DisplayServersAsChannels {
 				changes.forEach(
 					(change, i) => {
 						var addedNodes = change.addedNodes;
-						if (change.attributeName == "class" && change.oldValue && change.oldValue.indexOf("guild-placeholder") > -1)  addedNodes = [change.target];
+						if (change.attributeName == "class" && change.oldValue && change.oldValue.indexOf(BDFDB.disCN.guildplaceholder) > -1)  addedNodes = [change.target];
 						if (change.attributeName == "draggable" && change.oldValue && change.oldValue == "false")  addedNodes = [change.target.parentElement];
 						if (addedNodes) {
 							addedNodes.forEach((node) => {
-								if (node && node.classList && node.classList.contains("guild") && !node.querySelector(".guilds-error")) {
-									var id = BDfunctionsDevilBro.getIdOfServer(node);
-									if (id) this.changeServer(BDfunctionsDevilBro.getDivOfServer(id));
+								if (node && node.classList && node.classList.contains(BDFDB.disCN.guild) && !node.querySelector(BDFDB.dotCN.guildserror)) {
+									var id = BDFDB.getIdOfServer(node);
+									if (id) this.changeServer(BDFDB.getDivOfServer(id));
 								}
 							});
 						}
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, ".guilds.scroller", {name:"serverListObserver",instance:observer}, {childList: true, subtree:true, attributes:true, attributeFilte: ["class", "draggable"], attributeOldValue: true});
+			BDFDB.addObserver(this, BDFDB.dotCN.guilds, {name:"serverListObserver",instance:observer}, {childList: true, subtree:true, attributes:true, attributeFilte: ["class", "draggable"], attributeOldValue: true});
 			
-			BDfunctionsDevilBro.readServerList().forEach(serverObj => {
+			BDFDB.readServerList().forEach(serverObj => {
 				this.changeServer(serverObj);
 			});
 			
-			$(".guilds-wrapper").addClass("DSAC-styled");
+			$(BDFDB.dotCN.guildswrapper).addClass("DSAC-styled");
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -213,15 +210,13 @@ class DisplayServersAsChannels {
 	}
 
 	stop () {
-		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.readServerList().forEach(serverObj => {
+		if (typeof BDFDB === "object") {
+			BDFDB.readServerList().forEach(serverObj => {
 				this.resetServer(serverObj);
 			});
+			$(".DSAC-styled").removeClass("DSAC-styled");
 			
-			$("*").off("." + this.getName());
-			$(".DSAC-styled").removeClass("DSAC-styled")
-			
-			BDfunctionsDevilBro.unloadMessage(this);
+			BDFDB.unloadMessage(this);
 		}
 	}
 
@@ -238,10 +233,10 @@ class DisplayServersAsChannels {
 			$(serverObj.div)
 				.off("." + this.getName())
 				.on("mouseenter." + this.getName(), () => {
-					BDfunctionsDevilBro.appendLocalStyle("HideAllToolTips" + this.getName(), `.tooltip {display: none !important;}`);
+					BDFDB.appendLocalStyle("HideAllToolTips" + this.getName(), `${BDFDB.dotCN.tooltip} {display: none !important;}`);
 				})
 				.on("mouseleave." + this.getName(), () => {
-					BDfunctionsDevilBro.removeLocalStyle("HideAllToolTips" + this.getName());
+					BDFDB.removeLocalStyle("HideAllToolTips" + this.getName());
 				});
 		}
 	}
