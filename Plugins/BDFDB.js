@@ -3194,6 +3194,7 @@ BDFDB.DiscordClasses = {
 	tableheadersize: "headerSize-1-W6wd",
 	textareainnerenabled: "innerEnabled-3g80kR",
 	textareainnerenablednoattach: "innerEnabledNoAttach-NE9K7P",
+	textarea: "textArea-2Spzkt",
 	textlink: "textLink-27KAGV",
 	textrow: "textRow-19NEd_",
 	themedark: "theme-dark",
