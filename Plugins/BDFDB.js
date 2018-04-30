@@ -2992,6 +2992,7 @@ BDFDB.DiscordClasses = {
 	contextmenuitemsubmenu: "itemSubMenu-1vN_Yn",
 	cursordefault: "cursorDefault-3pPSRV",
 	cursorpointer: "cursorPointer-1ajlYk",
+	dark: "dark",
 	defaultcolor: "defaultColor-1_ajX0",
 	description: "description-3_Ncsb",
 	directioncolumn: "directionColumn-35P_nr",
