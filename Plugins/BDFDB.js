@@ -3397,6 +3397,7 @@ BDFDB.DiscordClasses = {
 	userpopoutheaderspotify: "headerSpotify-zpWxgT",
 	userpopoutheaderstreaming: "headerStreaming-2FjmGz",
 	userpopoutheadertext: "headerText-2sdzFM",
+	userpopoutrole: "role-2irmRk",
 	userpopoutrolelist: "rolesList-22qj2L",
 	userpopoutusername: "username",
 	userprofile: "root-SR8cQa",
