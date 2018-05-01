@@ -1,11 +1,11 @@
 //META{"name":"ServerFolders"}*//
 
 class ServerFolders {
-	constructor () {
+	initConstructor () {
 		this.labels = {};
 		
 		this.css = `
-			.guild.folder .avatar-small {
+			${BDFDB.dotCN.guild}.folder ${BDFDB.dotCN.avatarsmallold} {
 				background-clip: padding-box;
 				background-position: 50%;
 				background-size: cover !important;
@@ -31,11 +31,11 @@ class ServerFolders {
 				border-radius: 12px;
 			}
 			
-			.serverfolders-modal .ui-icon-picker-icon.selected .button-1qrA-N {
+			.serverfolders-modal .ui-icon-picker-icon.selected ${BDFDB.dotCN.hovercardbutton} {
 				display: none !important;
 			}
 			
-			.serverfolders-modal .ui-icon-picker-icon .button-1qrA-N {
+			.serverfolders-modal .ui-icon-picker-icon ${BDFDB.dotCN.hovercardbutton} {
 				position: absolute;
 				top: -10px;
 				right: -10px;
@@ -45,14 +45,14 @@ class ServerFolders {
 				background-image: url(data:image/png;base64,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);
 			}
 			
-			.guild.folder .badge.folder.count {
+			${BDFDB.dotCN.guild}.folder ${BDFDB.dotCN.badge}.folder.count {
 				background: grey;
 				height: 12px;
 				top: -3px;
 				right: 30px;
 			}
 			
-			.guild.serverFoldersPreview {
+			${BDFDB.dotCN.guild}.serverFoldersPreview {
 				position: absolute;
 				opacity: 0.5;
 				width: 50px;
@@ -60,11 +60,11 @@ class ServerFolders {
 				z-index: 1000;
 			}
 			
-			.guild.serverFoldersPreview .badge {
+			${BDFDB.dotCN.guild}.serverFoldersPreview ${BDFDB.dotCN.badge} {
 				display: none;
 			}
 			
-			.guild.serverFoldersPreview a {
+			${BDFDB.dotCN.guild}.serverFoldersPreview a {
 				color: white;
 				width: 50px;
 				height: 50px;
@@ -77,11 +77,11 @@ class ServerFolders {
 				text-align: center;
 			}
 			
-			.guilds-wrapper.folderopen .scroller {
+			${BDFDB.dotCN.guildswrapper}.folderopen ${BDFDB.dotCN.guilds} {
 				position: static !important;
 			}
 			
-			.guilds-wrapper.folderopen .scroller::-webkit-scrollbar {
+			${BDFDB.dotCN.guildswrapper}.folderopen ${BDFDB.dotCN.guilds}::-webkit-scrollbar {
 				display: none !important;
 			}
 			
@@ -98,55 +98,55 @@ class ServerFolders {
 				display: none;
 			}
 
-			.foldercontainer .guild:not(.selected) .guild-inner {
+			.foldercontainer ${BDFDB.dotCN.guild}:not(${BDFDB.dotCN.guildselected}) ${BDFDB.dotCN.guildinner} {
 				border-radius: 25px !important;
 				transition: border-radius 1s;
 			}
 
-			.foldercontainer .guild.selected .guild-inner,
-			.foldercontainer .guild:not(.selected) .guild-inner:hover {
+			.foldercontainer ${BDFDB.dotCN.guild + BDFDB.dotCN.guildselected} ${BDFDB.dotCN.guildinner},
+			.foldercontainer ${BDFDB.dotCN.guild}:not(${BDFDB.dotCN.guildselected}) ${BDFDB.dotCN.guildinner}:hover {
 				border-radius: 15px !important;
 				transition: border-radius 1s;
 			}
 
-			.foldercontainer .guild:not(.selected) .guild-inner[style*="background-color:"] {
+			.foldercontainer ${BDFDB.dotCN.guild}:not(.selected) .guild-inner[style*="background-color:"] {
 				background-color: rgb(47, 49, 54);
 			}
-			.foldercontainer .guild.selected .guild-inner[style*="background-color:"] {
+			.foldercontainer ${BDFDB.dotCN.guild + BDFDB.dotCN.guildselected} ${BDFDB.dotCN.guildinner}[style*="background-color:"] {
 				background-color: rgb(114, 137, 218);
 			}`;
 
 		this.serverContextEntryMarkup =
-			`<div class="itemGroup-oViAgA">
-				<div class="item-1XYaYf serverfolders-item itemSubMenu-3ZgIw-">
+			`<div class="${BDFDB.disCN.contextmenuitemgroup}">
+				<div class="${BDFDB.disCN.contextmenuitem} serverfolders-item ${BDFDB.disCN.contextmenuitemsubmenu}">
 					<span>REPLACE_servercontext_serverfolders_text</span>
-					<div class="hint-3TJykr"></div>
+					<div class="${BDFDB.disCN.contextmenuhint}"></div>
 				</div>
 			</div>`;
 			
 		this.serverContextSubMenuMarkup = 
-			`<div class="contextMenu-uoJTbz serverfolders-submenu">
-				<div class="itemGroup-oViAgA">
-					<div class="item-1XYaYf createfolder-item">
+			`<div class="${BDFDB.disCN.contextmenu} serverfolders-submenu">
+				<div class="${BDFDB.disCN.contextmenuitemgroup}">
+					<div class="${BDFDB.disCN.contextmenuitem} createfolder-item">
 						<span>REPLACE_serversubmenu_createfolder_text</span>
-						<div class="hint-3TJykr"></div>
+						<div class="${BDFDB.disCN.contextmenuhint}"></div>
 					</div>
-					<div class="item-1XYaYf removefromfolder-item disabled-dlOjhg">
+					<div class="${BDFDB.disCN.contextmenuitem} removefromfolder-item ${BDFDB.disCN.contextmenuitemdisabled}">
 						<span>REPLACE_serversubmenu_removefromfolder_text</span>
-						<div class="hint-3TJykr"></div>
+						<div class="${BDFDB.disCN.contextmenuhint}"></div>
 					</div>
 				</div>
 			</div>`;
 			
 		this.folderContextMarkup = 
-			`<div class="contextMenu-uoJTbz folderSettings">
-				<div class="itemGroup-oViAgA">
-					<div class="item-1XYaYf unreadfolder-item disabled-dlOjhg">
+			`<div class="${BDFDB.disCN.contextmenu} folderSettings">
+				<div class="${BDFDB.disCN.contextmenuitemgroup}">
+					<div class="${BDFDB.disCN.contextmenuitem} unreadfolder-item ${BDFDB.disCN.contextmenuitemdisabled}">
 						<span>REPLACE_foldercontext_unreadfolder_text</span>
-						<div class="hint-3TJykr"></div>
+						<div class="${BDFDB.disCN.contextmenuhint}"></div>
 					</div>
-					<div class="item-1XYaYf autounreadfolder-item itemToggle-e7vkml">
-						<div class="label-2CGfN3">REPLACE_foldercontext_autounreadfolder_text</div>
+					<div class="${BDFDB.disCN.contextmenuitem} autounreadfolder-item ${BDFDB.disCN.contextmenuitemtoggle}">
+						<div class="${BDFDB.disCN.contextmenulabel}">REPLACE_foldercontext_autounreadfolder_text</div>
 						<div class="checkbox">
 							<div class="checkbox-inner">
 								<input type="checkbox" value="on">
@@ -155,130 +155,130 @@ class ServerFolders {
 							<span></span>
 						</div>
 					</div>
-					<div class="item-1XYaYf foldersettings-item">
+					<div class="${BDFDB.disCN.contextmenuitem} foldersettings-item">
 						<span>REPLACE_foldercontext_foldersettings_text</span>
-						<div class="hint-3TJykr"></div>
+						<div class="${BDFDB.disCN.contextmenuhint}"></div>
 					</div>
-					<div class="item-1XYaYf createfolder-item">
+					<div class="${BDFDB.disCN.contextmenuitem} createfolder-item">
 						<span>REPLACE_foldercontext_createfolder_text</span>
-						<div class="hint-3TJykr"></div>
+						<div class="${BDFDB.disCN.contextmenuhint}"></div>
 					</div>
-					<div class="item-1XYaYf removefolder-item danger-1oUOCl">
+					<div class="${BDFDB.disCN.contextmenuitem} removefolder-item danger-1oUOCl">
 						<span>REPLACE_foldercontext_removefolder_text</span>
-						<div class="hint-3TJykr"></div>
+						<div class="${BDFDB.disCN.contextmenuhint}"></div>
 					</div>
 				</div>
 			</div>`;
 			
 		this.folderIconMarkup = 
-			`<div class="guild folder">
+			`<div class="${BDFDB.disCN.guild} folder">
 				<div draggable="true">
-					<div class="guild-inner" draggable="false" style="border-radius: 25px;">
-						<a draggable="false" class="avatar-small"></a>
+					<div class="${BDFDB.disCN.guildinner}" draggable="false" style="border-radius: 25px;">
+						<a draggable="false" class="${BDFDB.disCN.avatarsmallold}"></a>
 					</div>
 				</div>
-				<div class="badge folder notifications"></div>
-				<div class="badge folder count"></div>
+				<div class="${BDFDB.disCN.badge} folder notifications"></div>
+				<div class="${BDFDB.disCN.badge} folder count"></div>
 			</div>`;
 
 		this.folderSettingsModalMarkup =
 			`<span class="serverfolders-modal DevilBro-modal">
-				<div class="backdrop-2ohBEd"></div>
-				<div class="modal-2LIEKY">
-					<div class="inner-1_1f7b">
-						<div class="modal-3HOjGZ sizeMedium-1-2BNS">
-							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO header-3sp3cE" style="flex: 0 0 auto;">
-								<div class="flexChild-1KGW5q" style="flex: 1 1 auto;">
-									<h4 class="h4-2IXpeI title-1pmpPr size16-3IvaX_ height20-165WbF weightSemiBold-T8sxWH defaultColor-v22dK1 defaultMarginh4-jAopYe marginReset-3hwONl">REPLACE_modal_header_text</h4>
-									<div class="guildName-1u0hy7 small-3-03j1 size12-1IGJl9 height16-1qXrGy primary-2giqSn"></div>
+				<div class="${BDFDB.disCN.backdrop}"></div>
+				<div class="${BDFDB.disCN.modal}">
+					<div class="${BDFDB.disCN.modalinner}">
+						<div class="${BDFDB.disCNS.modalsub + BDFDB.disCN.modalsizemedium}">
+							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex: 0 0 auto;">
+								<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">
+									<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.headertitle + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.defaultcolor + BDFDB.disCNS.h4defaultmargin + BDFDB.disCN.marginreset}">REPLACE_modal_header_text</h4>
+									<div class="${BDFDB.disCNS.modalguildname + BDFDB.disCNS.small + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCN.primary}"></div>
 								</div>
-								<svg class="btn-cancel close-3ejNTg flexChild-1KGW5q" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12">
+								<svg class="${BDFDB.disCNS.modalclose + BDFDB.disCN.flexchild}" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12">
 									<g fill="none" fill-rule="evenodd">
 										<path d="M0 0h12v12H0"></path>
 										<path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path>
 									</g>
 								</svg>
 							</div>
-							<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4 inner-tqJwAU" style="flex: 0 0 auto;">
+							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCNS.marginbottom8 + BDFDB.disCN.modalsubinner}" style="flex: 0 0 auto;">
 								<div tab="folder" class="tab">REPLACE_modal_tabheader1_text</div>
 								<div tab="icon" class="tab">REPLACE_modal_tabheader2_text</div>
 								<div tab="tooltip" class="tab">REPLACE_modal_tabheader3_text</div>
 								<div tab="custom" class="tab">REPLACE_modal_tabheader4_text</div>
 							</div>
-							<div class="scrollerWrap-2uBjct content-1Cut5s scrollerThemed-19vinI themeGhostHairline-2H8SiW">
-								<div class="scroller-fzNley inner-tqJwAU">
-									<div tab="folder" class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginBottom20-2Ifj-2 tab-content" style="flex: 1 1 auto;">
-										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
-											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_foldername_text</h3>
+							<div class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.modalcontent + BDFDB.disCNS.scrollerthemed + BDFDB.disCN.themeghosthairline}">
+								<div class="${BDFDB.disCNS.scroller + BDFDB.disCN.modalsubinner}">
+									<div tab="folder" class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20} tab-content" style="flex: 1 1 auto;">
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
+											<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">REPLACE_modal_foldername_text</h3>
 										</div>
-										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
-											<div class="inputWrapper-3xoRWR vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR flexChild-1KGW5q" style="flex: 1 1 auto;"><input type="text" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_" id="input-foldername"></div>
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
+											<div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex + BDFDB.disCNS.directioncolumn + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;"><input type="text" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16}" id="input-foldername"></div>
 										</div>
-										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO" style="flex: 1 1 auto;">
-											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_iconpicker_text</h3>
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstart + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;">
+											<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">REPLACE_modal_iconpicker_text</h3>
 										</div>
-										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
 											<div class="icons"></div>
 										</div>
 									</div>
-									<div tab="icon" class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginBottom20-2Ifj-2 tab-content" style="flex: 1 1 auto;">
-										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO" style="flex: 1 1 auto;">
-											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_colorpicker1_text</h3>
+									<div tab="icon" class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20} tab-content" style="flex: 1 1 auto;">
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstart + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;">
+											<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">REPLACE_modal_colorpicker1_text</h3>
 										</div>
-										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
 											<div class="swatches1"></div>
 										</div>
-										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO" style="flex: 1 1 auto;">
-											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_colorpicker2_text</h3>
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstart + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;">
+											<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">REPLACE_modal_colorpicker2_text</h3>
 										</div>
-										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
 											<div class="swatches2"></div>
 										</div>
 									</div>
-									<div tab="tooltip" class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginBottom20-2Ifj-2 tab-content" style="flex: 1 1 auto;">
-										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO" style="flex: 1 1 auto;">
-											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_colorpicker3_text</h3>
+									<div tab="tooltip" class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20} tab-content" style="flex: 1 1 auto;">
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstart + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;">
+											<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">REPLACE_modal_colorpicker3_text</h3>
 										</div>
-										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
 											<div class="swatches3"></div>
 										</div>
-										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO" style="flex: 1 1 auto;">
-											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_colorpicker4_text</h3>
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstart + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;">
+											<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">REPLACE_modal_colorpicker4_text</h3>
 										</div>
-										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
 											<div class="swatches4"></div>
 										</div>
 									</div>
-									<div tab="custom" class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginBottom20-2Ifj-2 tab-content" style="flex: 1 1 auto;">
-										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
-											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_customopen_text</h3>
+									<div tab="custom" class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20} tab-content" style="flex: 1 1 auto;">
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
+											<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">REPLACE_modal_customopen_text</h3>
 										</div>
-										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
-											<div class="inputWrapper-3xoRWR vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR flexChild-1KGW5q" style="flex: 1 1 auto;">
-												<input type="text" option="open" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_" placeholder="Url or Filepath">
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
+											<div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex + BDFDB.disCNS.directioncolumn + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">
+												<input type="text" option="open" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16}" placeholder="Url or Filepath">
 											</div>
-											<button type="button" class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorBrand-3PmwCE sizeMedium-2VGNaF grow-25YQ8u file-navigator" style="flex: 0 0 auto;">
-												<div class="contents-4L4hQM"></div>
+											<button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} file-navigator" style="flex: 0 0 auto;">
+												<div class="${BDFDB.disCN.buttoncontents}"></div>
 												<input type="file" option="open" accept="image/*" style="display:none!important;">
 											</button>
 										</div>
-										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
-											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_customclosed_text</h3>
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
+											<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">REPLACE_modal_customclosed_text</h3>
 										</div>
-										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
-											<div class="inputWrapper-3xoRWR vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR flexChild-1KGW5q" style="flex: 1 1 auto;">
-												<input type="text" option="closed" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_" placeholder="Url or Filepath">
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
+											<div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex + BDFDB.disCNS.directioncolumn + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">
+												<input type="text" option="closed" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16}" placeholder="Url or Filepath">
 											</div>
-											<button type="button" class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorBrand-3PmwCE sizeMedium-2VGNaF grow-25YQ8u file-navigator" style="flex: 0 0 auto;">
-												<div class="contents-4L4hQM"></div>
+											<button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} file-navigator" style="flex: 0 0 auto;">
+												<div class="${BDFDB.disCN.buttoncontents}"></div>
 												<input type="file" option="closed" accept="image/*" style="display:none!important;">
 											</button>
 										</div>
-										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO" style="flex: 1 1 auto;">
-											<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_custompreview_text</h3>
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;">
+											<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">REPLACE_modal_custompreview_text</h3>
 										</div>
-										<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
-											<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyCenter-29N31w alignCenter-3VxkQP noWrap-v6g9vO" style="flex: 1 1 auto;">
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
+											<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifycenter + BDFDB.disCN.aligncenter + BDFDB.disCNS.nowrap}" style="flex: 1 1 auto;">
 												<div class="ui-icon-picker-icon preview nopic open">
 													<div class="ui-picker-inner"></div>
 												</div>
@@ -289,16 +289,16 @@ class ServerFolders {
 													<div class="ui-picker-inner"></div>
 												</div>
 											</div>
-											<button type="button" class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorBrand-3PmwCE sizeMedium-2VGNaF grow-25YQ8u btn-add btn-addcustom" style="flex: 0 0 auto;">
-												<div class="contents-4L4hQM"></div>
+											<button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} btn-add btn-addcustom" style="flex: 0 0 auto;">
+												<div class="${BDFDB.disCN.buttoncontents}"></div>
 											</button>
 										</div>
 									</div>
 								</div>
 							</div>
-							<div class="flex-lFgbSz flex-3B1Tl4 horizontalReverse-2LanvO horizontalReverse-k5PqxT flex-3B1Tl4 directionRowReverse-2eZTxP justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO footer-1PYmcw">
-								<button type="button" class="btn-save button-2t3of8 lookFilled-luDKDo colorBrand-3PmwCE sizeMedium-2VGNaF grow-25YQ8u">
-									<div class="contents-4L4hQM">REPLACE_btn_save_text</div>
+							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontalreverse + BDFDB.disCNS.horizontalreverse2 + BDFDB.disCNS.directionrowreverse + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.modalfooter}">
+								<button type="button" class="btn-save ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}">
+									<div class="${BDFDB.disCN.buttoncontents}">REPLACE_btn_save_text</div>
 								</button>
 							</div>
 						</div>
@@ -343,22 +343,22 @@ class ServerFolders {
 	getAuthor () {return "DevilBro";}
 	
 	getSettingsPanel () {
-		if (!this.started || typeof BDfunctionsDevilBro !== "object") return;
-		var settings = BDfunctionsDevilBro.getAllData(this, "settings"); 
-		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="titleDefault-1CWM9y title-3i-5G_ size18-ZM4Qv- height24-2pMcnc weightNormal-3gw0Lm marginBottom8-1mABJ4">${this.getName()}</div><div class="DevilBro-settings-inner">`;
+		if (!this.started || typeof BDFDB !== "object") return;
+		var settings = BDFDB.getAllData(this, "settings"); 
+		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		for (let key in settings) {
-			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
+			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}"${settings[key] ? " checked" : ""}></div></div>`;
 		}
-		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Reset all Folders.</h3><button type="button" class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorRed-3HTNPV sizeMedium-2VGNaF grow-25YQ8u reset-button" style="flex: 0 0 auto;"><div class="contents-4L4hQM">Reset</div></button></div>`;
-		settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Remove all custom Icons.</h3><button type="button" class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorRed-3HTNPV sizeMedium-2VGNaF grow-25YQ8u removecustom-button" style="flex: 0 0 auto;"><div class="contents-4L4hQM">Remove</div></button></div>`;
+		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Reset all Folders.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} reset-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Reset</div></button></div>`;
+		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Remove all custom Icons.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} removecustom-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Remove</div></button></div>`;
 		settingshtml += `</div></div>`;
 		
 		var settingspanel = $(settingshtml)[0];
 
-		BDfunctionsDevilBro.initElements(settingspanel);
+		BDFDB.initElements(settingspanel);
 
 		$(settingspanel)
-			.on("click", ".checkbox-1KYsPm", () => {this.updateSettings(settingspanel);})
+			.on("click", BDFDB.dotCN.switchinner, () => {this.updateSettings(settingspanel);})
 			.on("click", ".reset-button", () => {this.resetAll();})
 			.on("click", ".removecustom-button", () => {this.removeAllIcons()});
 		return settingspanel;
@@ -369,23 +369,23 @@ class ServerFolders {
 
 	start () {
 		var libraryScript = null;
-		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
-			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
-			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]');
+		if (typeof BDFDB !== "object" || BDFDB.isLibraryOutdated()) {
+			if (typeof BDFDB === "object") BDFDB = "";
+			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
 			libraryScript.setAttribute("type", "text/javascript");
-			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js");
+			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
 			document.head.appendChild(libraryScript);
 		}
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDfunctionsDevilBro === "object") this.initialize();
+		if (typeof BDFDB === "object") this.initialize();
 		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
 	initialize () {
-		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.loadMessage(this);
+		if (typeof BDFDB === "object") {
+			BDFDB.loadMessage(this);
 			
 			var observer = null;
 
@@ -401,14 +401,14 @@ class ServerFolders {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, null, {name:"badgeObserver",instance:observer,multi:true}, {characterData:true,subtree:true});
+			BDFDB.addObserver(this, null, {name:"badgeObserver",instance:observer,multi:true}, {characterData:true,subtree:true});
 			
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.nodeType == 1 && node.className.includes("contextMenu-uoJTbz")) {
+								if (node && node.nodeType == 1 && node.className.includes(BDFDB.disCN.contextmenu)) {
 									this.onContextMenu(node);
 								}
 							});
@@ -416,7 +416,7 @@ class ServerFolders {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, ".appMount-14L89u", {name:"serverContextObserver",instance:observer}, {childList: true});
+			BDFDB.addObserver(this, BDFDB.dotCN.appmount, {name:"serverContextObserver",instance:observer}, {childList: true});
 			
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -436,8 +436,8 @@ class ServerFolders {
 								if (folderDiv) {
 									this.updateCopyInFolderContent(serverObj, folderDiv);
 									this.updateFolderNotifications(folderDiv);
-									if (node.tagName && node.classList.contains("badge")) {
-										BDfunctionsDevilBro.addObserver(this, node, {name:"badgeObserver",multi:true}, {characterData:true,subtree:true});
+									if (node.tagName && node.classList.contains(BDFDB.disCN.badge)) {
+										BDFDB.addObserver(this, node, {name:"badgeObserver",multi:true}, {characterData:true,subtree:true});
 									}
 									$(serverObj.div).attr("folder",folderDiv.id).hide();
 								}
@@ -445,7 +445,7 @@ class ServerFolders {
 						}
 						if (change.removedNodes) {
 							change.removedNodes.forEach((node) => {
-								var isBadge = $(node).hasClass("badge");
+								var isBadge = $(node).hasClass(BDFDB.disCN.badge);
 								var serverObj = this.getParentObject(isBadge ? change.target : node, "guild");
 								var folderDiv = this.getFolderOfServer(serverObj);
 								if (folderDiv) {
@@ -458,7 +458,7 @@ class ServerFolders {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, ".guilds.scroller", {name:"serverListObserver",instance:observer}, {childList: true, attributes: true, subtree: true});
+			BDFDB.addObserver(this, BDFDB.dotCN.guilds, {name:"serverListObserver",instance:observer}, {childList: true, attributes: true, subtree: true});
 			
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -471,40 +471,40 @@ class ServerFolders {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, ".layers-20RVFW", {name:"settingsWindowObserver",instance:observer}, {childList:true});
+			BDFDB.addObserver(this, BDFDB.dotCN.layers, {name:"settingsWindowObserver",instance:observer}, {childList:true});
 			
-			document.querySelectorAll(".badge:not(.folder):not(.copy)").forEach((badge) => {
-				BDfunctionsDevilBro.addObserver(this, badge, {name:"badgeObserver",multi:true}, {characterData:true,subtree:true});
+			document.querySelectorAll(BDFDB.dotCN.badge + ":not(.folder):not(.copy)").forEach((badge) => {
+				BDFDB.addObserver(this, badge, {name:"badgeObserver",multi:true}, {characterData:true,subtree:true});
 			});
 			
-			$(".guilds").on("click." + this.getName(), ".guild-separator ~ div.guild:not(.folder)", () => {
-				if (BDfunctionsDevilBro.getData("closeAllFolders", this, "settings")) {
+			$(".guilds").on("click." + this.getName(), BDFDB.dotCN.guildseparator + " ~ div" + BDFDB.dotCN.guild + ":not(.folder)", () => {
+				if (BDFDB.getData("closeAllFolders", this, "settings")) {
 					document.querySelectorAll(".folder.open").forEach(openFolder => {this.openCloseFolder(openFolder);});
 				}
 			});
 			
 			// PATCH OLD DATA REMOVE AFTER SOME TIME
-			var customIcons = BDfunctionsDevilBro.loadData("customicons", this, "customicons") || [];
+			var customIcons = BDFDB.loadData("customicons", this, "customicons") || [];
 			if (customIcons.length > 0) {
-				BDfunctionsDevilBro.showToast("Patching old ServerFolders data. This may take a minute. Do not close Discord.", {type:"warn"});
-				let folders = BDfunctionsDevilBro.loadAllData(this, "folders");
+				BDFDB.showToast("Patching old ServerFolders data. This may take a minute. Do not close Discord.", {type:"warn"});
+				let folders = BDFDB.loadAllData(this, "folders");
 				this.folderIcons.forEach(pair => {
 					pair.custom = false;
 				});
 				customIcons.forEach(pair => {
 					pair.custom = true;
 					pair.customID = this.generateID("customicon", "customicons");
-					BDfunctionsDevilBro.saveData(pair.customID, {"openicon":pair.openicon,"closedicon":pair.closedicon,"customID":pair.customID}, this, "customicons");
+					BDFDB.saveData(pair.customID, {"openicon":pair.openicon,"closedicon":pair.closedicon,"customID":pair.customID}, this, "customicons");
 				});
 				var icons = this.folderIcons.concat(customIcons);
 				for (var id in folders) {
 					var folder = folders[id];
 					if (icons[folder.iconID].custom) {
 						folder.iconID = icons[folder.iconID].customID;
-						BDfunctionsDevilBro.saveData(id, folder, this, "folders");
+						BDFDB.saveData(id, folder, this, "folders");
 					}
 				}
-				BDfunctionsDevilBro.removeData("customicons", this, "customicons");
+				BDFDB.removeData("customicons", this, "customicons");
 			}
 			
 			setTimeout(() => {
@@ -518,17 +518,17 @@ class ServerFolders {
 	}
 
 	stop () {
-		if (typeof BDfunctionsDevilBro === "object") {
+		if (typeof BDFDB === "object") {
 			this.resetAllElements();
 			
-			BDfunctionsDevilBro.unloadMessage(this);
+			BDFDB.unloadMessage(this);
 		}
 	}
 
 	onSwitch() {
-		if (typeof BDfunctionsDevilBro === "object") {
-			if (BDfunctionsDevilBro.getData("forceOpenFolder", this, "settings")) {
-				var serverObj = BDfunctionsDevilBro.getSelectedServer();
+		if (typeof BDFDB === "object") {
+			if (BDFDB.getData("forceOpenFolder", this, "settings")) {
+				var serverObj = BDFDB.getSelectedServer();
 				if (!serverObj) return;
 				var folderDiv = this.getFolderOfServer(serverObj);
 				if (!folderDiv || folderDiv.classList.contains("open")) return;
@@ -542,15 +542,15 @@ class ServerFolders {
 
 	updateSettings (settingspanel) {
 		var settings = {};
-		for (var input of settingspanel.querySelectorAll(".checkbox-1KYsPm")) {
+		for (var input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner)) {
 			settings[input.value] = input.checked;
 		}
-		BDfunctionsDevilBro.saveAllData(settings, this, "settings");
+		BDFDB.saveAllData(settings, this, "settings");
 	}
 	
 	resetAll () {
 		if (confirm("Are you sure you want to delete all folders?")) {
-			BDfunctionsDevilBro.removeAllData(this, "folders");
+			BDFDB.removeAllData(this, "folders");
 			
 			this.resetAllElements();
 		}
@@ -558,17 +558,17 @@ class ServerFolders {
 	
 	removeAllIcons () {
 		if (confirm("Are you sure you want to remove all custom icons?")) {
-			BDfunctionsDevilBro.removeAllData(this, "customicons");
+			BDFDB.removeAllData(this, "customicons");
 		}
 	}
 	
 	resetAllElements () {
 		$(".foldercontainer").remove();
-		$(".guild.folder").remove();
+		$(BDFDB.dotCN.guild + ".folder").remove();
 		$(".serverFoldersPreview").remove();
-		BDfunctionsDevilBro.readServerList().forEach(serverObj => $(serverObj.div).removeAttr("folder").show());
+		BDFDB.readServerList().forEach(serverObj => $(serverObj.div).removeAttr("folder").show());
 		$(".folderopen").removeClass("folderopen");
-		BDfunctionsDevilBro.removeLocalStyle("ChannelSizeCorrection");
+		BDFDB.removeLocalStyle("ChannelSizeCorrection");
 	}
 
 	changeLanguageStrings () {
@@ -602,19 +602,19 @@ class ServerFolders {
 	
 	onContextMenu (context) {
 		if (!context || !context.tagName || !context.parentElement || context.querySelector(".serverfolders-item")) return;
-		var info = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"guild"});
-		if (info && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"GuildLeaveGroup"})) {
+		var info = BDFDB.getKeyInformation({"node":context, "key":"guild"});
+		if (info && BDFDB.getKeyInformation({"node":context, "key":"displayName", "value":"GuildLeaveGroup"})) {
 			$(context).append(this.serverContextEntryMarkup)
 				.on("mouseenter." + this.getName(), ".serverfolders-item", (e) => {
 					this.createContextSubMenu(info, e, context);
 				});
 				
-			BDfunctionsDevilBro.updateContextPosition(context);
+			BDFDB.updateContextPosition(context);
 		}
 	}
 	
 	createContextSubMenu (info, e, context) {
-		var serverObj = BDfunctionsDevilBro.getDivOfServer(info.id);
+		var serverObj = BDFDB.getDivOfServer(info.id);
 		
 		var serverContextSubMenu = $(this.serverContextSubMenuMarkup);
 		
@@ -628,28 +628,28 @@ class ServerFolders {
 		if (folderDiv) {
 			serverContextSubMenu
 				.find(".removefromfolder-item")
-				.removeClass("disabled-dlOjhg")
+				.removeClass(BDFDB.disCN.contextmenuitemdisabled)
 				.on("click." + this.getName(), () => {
 					$(context).hide();
 					this.removeServerFromFolder(serverObj, folderDiv);
 				});
 		}
 		
-		BDfunctionsDevilBro.appendSubMenu(e.currentTarget, serverContextSubMenu);
+		BDFDB.appendSubMenu(e.currentTarget, serverContextSubMenu);
 	}
 	
 	addDragListener () {
-		$(".guilds.scroller")
+		$(BDFDB.dotCN.guilds)
 			.off("mousedown." + this.getName())
-			.on("mousedown." + this.getName(), "div.guild:not(.folder):not(.copy)", (e) => {
-				if (BDfunctionsDevilBro.pressedKeys.includes(17)) {
+			.on("mousedown." + this.getName(), "div" + BDFDB.dotCN.guild + ":not(.folder):not(.copy)", (e) => {
+				if (BDFDB.pressedKeys.includes(17)) {
 					e.stopPropagation();
 					e.preventDefault();
 					var serverObj = this.getParentObject(e.target, "guild");
 					if (serverObj) {
 						var serverPreview = serverObj.div.cloneNode(true);
 						$(serverPreview)
-							.appendTo(".appMount-14L89u")
+							.appendTo(BDFDB.dotCN.appmount)
 							.addClass("serverFoldersPreview")
 							.offset({"left":e.clientX + 5,"top":e.clientY + 5});
 						
@@ -670,28 +670,28 @@ class ServerFolders {
 	}
 	
 	addServerToFolder (serverObj, folderDiv) {
-		var data = BDfunctionsDevilBro.loadData(folderDiv.id, this, "folders");
+		var data = BDFDB.loadData(folderDiv.id, this, "folders");
 		if (serverObj && data && !data.servers.includes(serverObj.id)) {
 			data.servers.push(serverObj.id);
-			BDfunctionsDevilBro.saveData(folderDiv.id, data, this, "folders");
+			BDFDB.saveData(folderDiv.id, data, this, "folders");
 			$(serverObj.div).attr("folder",folderDiv.id).hide();
 			var message = this.labels.toast_addserver_text ? 
 							this.labels.toast_addserver_text.replace("${servername}", serverObj.name).replace("${foldername}", data.folderName ? " " + data.folderName : "") : "";
-			BDfunctionsDevilBro.showToast(message, {type:"success"});
+			BDFDB.showToast(message, {type:"success"});
 			this.updateCopyInFolderContent(serverObj, folderDiv);
 			this.updateFolderNotifications(folderDiv);
 		}
 	}
 	
 	removeServerFromFolder (serverObj, folderDiv) {
-		var data = BDfunctionsDevilBro.loadData(folderDiv.id, this, "folders");
+		var data = BDFDB.loadData(folderDiv.id, this, "folders");
 		if (serverObj && data) {
-			BDfunctionsDevilBro.removeFromArray(data.servers, serverObj.id);
-			BDfunctionsDevilBro.saveData(folderDiv.id, data, this, "folders");
+			BDFDB.removeFromArray(data.servers, serverObj.id);
+			BDFDB.saveData(folderDiv.id, data, this, "folders");
 			$(serverObj.div).removeAttr("folder").show();
 			var message = this.labels.toast_removeserver_text ? 
 				this.labels.toast_removeserver_text.replace("${servername}", serverObj.name).replace("${foldername}", data.folderName ? " " + data.folderName : "") : "";
-			BDfunctionsDevilBro.showToast(message, {type:"danger"});
+			BDFDB.showToast(message, {type:"danger"});
 			$("#copy_of_" + serverObj.id).remove();
 			this.updateFolderNotifications(folderDiv);
 		}
@@ -702,7 +702,7 @@ class ServerFolders {
 		
 		var folderID = 		this.generateID("folder", "folders");
 		var folderName = 	"";
-		var position = 		Array.from(document.querySelectorAll("div.guild-separator ~ div.guild")).indexOf(ankerDiv);
+		var position = 		Array.from(document.querySelectorAll("div" + BDFDB.dotCN.guildseparator + " ~ div" + BDFDB.dotCN.guild)).indexOf(ankerDiv);
 		var iconID = 		0;
 		var icons = 		this.folderIcons[0];
 		var autounread = 	false;
@@ -720,7 +720,7 @@ class ServerFolders {
 	}
 	
 	loadAllFolders () {
-		var folders = BDfunctionsDevilBro.loadAllData(this, "folders");
+		var folders = BDFDB.loadAllData(this, "folders");
 		var sortedFolders = [];
 		
 		for (var id in folders) {
@@ -738,16 +738,16 @@ class ServerFolders {
 	
 	createFolderDiv (data) {
 		var folderDiv = $(this.folderIconMarkup)[0];
-		$(folderDiv).insertBefore(document.querySelectorAll("div.guild-separator ~ div.guild")[data.position]);
+		$(folderDiv).insertBefore(document.querySelectorAll("div" + BDFDB.dotCN.guildseparator + " ~ div" + BDFDB.dotCN.guild)[data.position]);
 			
-		var avatar = folderDiv.querySelector(".avatar-small");
+		var avatar = folderDiv.querySelector(BDFDB.dotCN.avatarsmallold);
 		
 		$(folderDiv)
 			.addClass("closed")
 			.attr("id", data.folderID)
 			.on("mouseenter", () => {this.createFolderToolTip(folderDiv);})
 			.on("click", () => {
-				if (BDfunctionsDevilBro.getData("closeOtherFolders", this, "settings")) {
+				if (BDFDB.getData("closeOtherFolders", this, "settings")) {
 					document.querySelectorAll(".folder.open").forEach(openFolder => {
 						if (openFolder != folderDiv) this.openCloseFolder(openFolder);
 					});
@@ -762,10 +762,10 @@ class ServerFolders {
 				var folderPreview = folderDiv.cloneNode(true);
 				var hoveredElement = null;
 				var placeholder = $(`<div class="guild guild-placeholder folder folder-placeholder"></div>`)[0];
-				var guildswrap = document.querySelector(".guilds.scroller");
+				var guildswrap = document.querySelector(BDFDB.dotCN.guilds);
 				$(folderPreview)
 					.hide()
-					.appendTo(".appMount-14L89u")
+					.appendTo(BDFDB.dotCN.appmount)
 					.addClass("serverFoldersPreview")
 					.offset({"left":e.clientX + 5,"top":e.clientY + 5});
 				
@@ -804,7 +804,7 @@ class ServerFolders {
 		$(avatar)
 			.css("background-image", "url(\"" + data.icons.closedicon + "\")");
 		
-		BDfunctionsDevilBro.saveData(data.folderID, data, this, "folders");
+		BDFDB.saveData(data.folderID, data, this, "folders");
 			
 		this.updateFolderNotifications(folderDiv);
 			
@@ -812,14 +812,14 @@ class ServerFolders {
 	}
 	
 	generateID (prefix, dataname) {
-		var data = BDfunctionsDevilBro.loadAllData(this, dataname);
+		var data = BDFDB.loadAllData(this, dataname);
 		var id = prefix + "_" + Math.round(Math.random()*10000000000000000);
 		return data[id] ? this.generateID(prefix, dataname) : id;
 	}
 	
 	createFolderContextMenu (folderDiv, e) {
 		var folderID = folderDiv.id;
-		var data = BDfunctionsDevilBro.loadData(folderID, this, "folders");
+		var data = BDFDB.loadData(folderID, this, "folders");
 		if (data) {
 			var folderContext = $(this.folderContextMarkup);
 			folderContext
@@ -828,7 +828,7 @@ class ServerFolders {
 					var isChecked = checkbox.prop("checked");
 					checkbox.prop("checked", !isChecked)
 					data.autounread = !isChecked;
-					BDfunctionsDevilBro.saveData(folderID, data, this, "folders");
+					BDFDB.saveData(folderID, data, this, "folders");
 				})
 				.on("click." + this.getName(), ".foldersettings-item", () => {
 					folderContext.remove();
@@ -844,27 +844,27 @@ class ServerFolders {
 				})
 				.find(".autounreadfolder-item input").prop("checked", data.autounread);
 				
-			var unreadServers = BDfunctionsDevilBro.readUnreadServerList(this.readIncludedServerList(folderDiv));
+			var unreadServers = BDFDB.readUnreadServerList(this.readIncludedServerList(folderDiv));
 			if (unreadServers.length > 0) {
 				folderContext
 					.find(".unreadfolder-item")
-					.removeClass("disabled-dlOjhg")
+					.removeClass(BDFDB.disCN.contextmenuitemdisabled)
 					.on("click." + this.getName(), () => {
 						folderContext.remove();
-						BDfunctionsDevilBro.clearReadNotifications(unreadServers);
+						BDFDB.clearReadNotifications(unreadServers);
 					});
 			}
 			
-			BDfunctionsDevilBro.appendContextMenu(folderContext, e);
+			BDFDB.appendContextMenu(folderContext[0], e);
 		}
 	}
 	
 	createFolderToolTip (folderDiv) {
-		var data = BDfunctionsDevilBro.loadData(folderDiv.id, this, "folders");
+		var data = BDFDB.loadData(folderDiv.id, this, "folders");
 		if (data) {
 			if (data.folderName) {
-				var bgColor = data.color3 ? BDfunctionsDevilBro.color2RGB(data.color3) : "";
-				var fontColor = data.color4 ? BDfunctionsDevilBro.color2RGB(data.color4) : "";
+				var bgColor = data.color3 ? BDFDB.color2RGB(data.color3) : "";
+				var fontColor = data.color4 ? BDFDB.color2RGB(data.color4) : "";
 				var customTooltipCSS = `
 					body .tooltip.guild-folder-tooltip {
 						color: ${fontColor} !important;
@@ -873,16 +873,16 @@ class ServerFolders {
 					body .guild-folder-tooltip:after {
 						border-right-color: ${bgColor} !important;
 					}`;
-				BDfunctionsDevilBro.createTooltip(data.folderName, folderDiv, {type:"right",selector:"guild-folder-tooltip",css:customTooltipCSS});
+				BDFDB.createTooltip(data.folderName, folderDiv, {type:"right",selector:"guild-folder-tooltip",css:customTooltipCSS});
 			}
 		}
 	}
 	
 	createServerToolTip (serverObj, target, e) {
-		var data = BDfunctionsDevilBro.loadData(serverObj.id, "EditServers", "servers");
+		var data = BDFDB.loadData(serverObj.id, "EditServers", "servers");
 		var text = data ? (data.name ? data.name : serverObj.name) : serverObj.name;
-		var bgColor = data ? (data.color3 ? BDfunctionsDevilBro.color2RGB(data.color3) : "") : "";
-		var fontColor = data ? (data.color4 ? BDfunctionsDevilBro.color2RGB(data.color4) : "") : "";
+		var bgColor = data ? (data.color3 ? BDFDB.color2RGB(data.color3) : "") : "";
+		var fontColor = data ? (data.color4 ? BDFDB.color2RGB(data.color4) : "") : "";
 		var customTooltipCSS = `
 			body .tooltip.guild-custom-tooltip {
 				color: ${fontColor} !important;
@@ -892,12 +892,12 @@ class ServerFolders {
 				border-right-color: ${bgColor} !important;
 			}`;
 			
-		BDfunctionsDevilBro.createTooltip(text, target, {type:"right",selector:"guild-custom-tooltip",css:customTooltipCSS});
+		BDFDB.createTooltip(text, target, {type:"right",selector:"guild-custom-tooltip",css:customTooltipCSS});
 	}
 	
 	showFolderSettings (folderDiv) {
 		var folderID = folderDiv.id;
-		var data = BDfunctionsDevilBro.loadData(folderID, this, "folders");
+		var data = BDFDB.loadData(folderID, this, "folders");
 		if (data) {
 			var folderName = 	data.folderName;
 			var position = 		data.position;
@@ -910,15 +910,15 @@ class ServerFolders {
 			var servers = 		data.servers;
 			
 			var folderSettingsModal = $(this.folderSettingsModalMarkup);
-			folderSettingsModal.find(".guildName-1u0hy7").text(folderName ? folderName : "");
+			folderSettingsModal.find(BDFDB.dotCN.modalguildname).text(folderName ? folderName : "");
 			folderSettingsModal.find("#input-foldername").val(folderName);
 			folderSettingsModal.find("#input-foldername").attr("placeholder", folderName);
 			this.setIcons(iconID, folderSettingsModal.find(".icons"));
-			BDfunctionsDevilBro.setColorSwatches(color1, folderSettingsModal.find(".swatches1"), "swatch1");
-			BDfunctionsDevilBro.setColorSwatches(color2, folderSettingsModal.find(".swatches2"), "swatch2");
-			BDfunctionsDevilBro.setColorSwatches(color3, folderSettingsModal.find(".swatches3"), "swatch3");
-			BDfunctionsDevilBro.setColorSwatches(color4, folderSettingsModal.find(".swatches4"), "swatch4");
-			BDfunctionsDevilBro.appendModal(folderSettingsModal);
+			BDFDB.setColorSwatches(color1, folderSettingsModal.find(".swatches1"), "swatch1");
+			BDFDB.setColorSwatches(color2, folderSettingsModal.find(".swatches2"), "swatch2");
+			BDFDB.setColorSwatches(color3, folderSettingsModal.find(".swatches3"), "swatch3");
+			BDFDB.setColorSwatches(color4, folderSettingsModal.find(".swatches4"), "swatch4");
+			BDFDB.appendModal(folderSettingsModal);
 			folderSettingsModal
 				.on("change", "input[type='file'][option]", (e) => {
 					var file = e.currentTarget.files[0];
@@ -940,12 +940,12 @@ class ServerFolders {
 					
 					iconID = folderSettingsModal.find(".ui-icon-picker-icon.selected").attr("value");
 			
-					color1 = BDfunctionsDevilBro.getSwatchColor("swatch1");
-					color2 = BDfunctionsDevilBro.getSwatchColor("swatch2");
-					color3 = BDfunctionsDevilBro.getSwatchColor("swatch3");
-					color4 = BDfunctionsDevilBro.getSwatchColor("swatch4");
+					color1 = BDFDB.getSwatchColor("swatch1");
+					color2 = BDFDB.getSwatchColor("swatch2");
+					color3 = BDFDB.getSwatchColor("swatch3");
+					color4 = BDFDB.getSwatchColor("swatch4");
 					
-					if (iconID != data.iconID || !BDfunctionsDevilBro.equals(color1, data.color1) || !BDfunctionsDevilBro.equals(color2, data.color2)) {
+					if (iconID != data.iconID || !BDFDB.equals(color1, data.color1) || !BDFDB.equals(color2, data.color2)) {
 						var folderIcons = this.loadAllIcons();
 						var isOpen = folderDiv.classList.contains("open");
 						if (!folderSettingsModal.find(".ui-icon-picker-icon.selected").hasClass("custom")) {
@@ -953,20 +953,20 @@ class ServerFolders {
 								icons.openicon = openicon;
 								this.changeImgColor(color1, color2, folderIcons[iconID].closedicon, (closedicon) => {
 									icons.closedicon = closedicon;
-									$(folderDiv).find(".avatar-small").css("background-image", isOpen ? "url(\"" + icons.openicon + "\")" : "url(\"" + icons.closedicon + "\")");
-									BDfunctionsDevilBro.saveData(folderID, {folderID,folderName,position,iconID,icons,color1,color2,color3,color4,servers}, this, "folders");
+									$(folderDiv).find(BDFDB.dotCN.avatarsmallold).css("background-image", isOpen ? "url(\"" + icons.openicon + "\")" : "url(\"" + icons.closedicon + "\")");
+									BDFDB.saveData(folderID, {folderID,folderName,position,iconID,icons,color1,color2,color3,color4,servers}, this, "folders");
 								});
 							});
 						}
 						else {
 							icons.openicon = folderIcons[iconID].openicon;
 							icons.closedicon = folderIcons[iconID].closedicon;
-							$(folderDiv).find(".avatar-small").css("background-image", isOpen ? "url(\"" + icons.openicon + "\")" : "url(\"" + icons.closedicon + "\")");
-							BDfunctionsDevilBro.saveData(folderID, {folderID,folderName,position,iconID,icons,color1,color2,color3,color4,servers}, this, "folders");
+							$(folderDiv).find(BDFDB.dotCN.avatarsmallold).css("background-image", isOpen ? "url(\"" + icons.openicon + "\")" : "url(\"" + icons.closedicon + "\")");
+							BDFDB.saveData(folderID, {folderID,folderName,position,iconID,icons,color1,color2,color3,color4,servers}, this, "folders");
 						}
 					}
 					else {
-						BDfunctionsDevilBro.saveData(folderID, {folderID,folderName,position,iconID,icons,color1,color2,color3,color4,servers}, this, "folders");
+						BDFDB.saveData(folderID, {folderID,folderName,position,iconID,icons,color1,color2,color3,color4,servers}, this, "folders");
 					}
 					
 				});
@@ -980,9 +980,9 @@ class ServerFolders {
 		var folderIcons = this.loadAllIcons();
 		
 		var icons = 
-			`<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO" style="flex: 1 1 auto; margin-top: 5px;">
+			`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCN.nowrap}" style="flex: 1 1 auto; margin-top: 5px;">
 				<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa wrap-1da0e3 ui-icon-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;">
-					${Object.getOwnPropertyNames(folderIcons).map(id => `<div class="ui-icon-picker-icon${folderIcons[id].customID ? ' custom' : ''}" value="${id}"><div class="ui-picker-inner" style="background-image: url(${folderIcons[id].closedicon});"></div>${folderIcons[id].customID ? '<div value="' + id + '" class="button-1qrA-N"></div>' : ''}</div>`).join("")}
+					${Object.getOwnPropertyNames(folderIcons).map(id => `<div class="ui-icon-picker-icon${folderIcons[id].customID ? ' custom' : ''}" value="${id}"><div class="ui-picker-inner" style="background-image: url(${folderIcons[id].closedicon});"></div>${folderIcons[id].customID ? '<div value="' + id + '" class=BDFDB.disCN.hovercardbutton></div>' : ''}</div>`).join("")}
 				</div>
 			</div>`;
 		$(icons).appendTo(wrapper);
@@ -997,7 +997,7 @@ class ServerFolders {
 		wrapper
 			.off("click").off("mouseenter").off("mouseleave")
 			.on("click", ".ui-icon-picker-icon", (e) => {
-				if (e.target.classList.contains("button-1qrA-N")) return 
+				if (e.target.classList.contains(BDFDB.disCN.hovercardbutton)) return 
 				wrapper.find(".ui-icon-picker-icon.selected")
 					.removeClass("selected")
 					.css("background-color", "transparent");
@@ -1006,10 +1006,10 @@ class ServerFolders {
 					.addClass("selected")
 					.css("background-color", "grey");
 			})
-			.on("click", ".button-1qrA-N", (e) => {
-				BDfunctionsDevilBro.removeData(e.currentTarget.getAttribute("value"), this, "customicons");
+			.on("click", BDFDB.dotCN.hovercardbutton, (e) => {
+				BDFDB.removeData(e.currentTarget.getAttribute("value"), this, "customicons");
 				e.currentTarget.parentElement.remove();
-				BDfunctionsDevilBro.showToast(`Custom Icon was deleted.`, {type:"success"});
+				BDFDB.showToast(`Custom Icon was deleted.`, {type:"success"});
 			})
 			.on("mouseenter", ".ui-icon-picker-icon", (e) => {
 				$(e.currentTarget).find(".ui-picker-inner").css("background-image", "url(" + folderIcons[e.currentTarget.getAttribute("value")].openicon + ")");
@@ -1024,7 +1024,7 @@ class ServerFolders {
 		this.folderIcons.forEach((array,i) => {
 			icons[i] = {"openicon":array.openicon,"closedicon":array.closedicon,"customID":null};
 		});
-		Object.assign(icons, BDfunctionsDevilBro.loadAllData(this, "customicons"));
+		Object.assign(icons, BDFDB.loadAllData(this, "customicons"));
 		return icons;
 	}
 	
@@ -1041,7 +1041,7 @@ class ServerFolders {
 						return;
 					}
 				}
-				BDfunctionsDevilBro.showToast("Use a valid direct link to an image source. They usually end on something like .png, .jpg or .gif.", {type:"danger"});
+				BDFDB.showToast("Use a valid direct link to an image source. They usually end on something like .png, .jpg or .gif.", {type:"danger"});
 			});
 		}
 		else {
@@ -1055,7 +1055,7 @@ class ServerFolders {
 				});
 			}
 			else {
-				BDfunctionsDevilBro.showToast("Could not fetch file. Please make sure the file exists.", {type:"danger"});
+				BDFDB.showToast("Could not fetch file. Please make sure the file exists.", {type:"danger"});
 			}
 		}
 		
@@ -1092,7 +1092,7 @@ class ServerFolders {
 		var iconpreviewswitching = modal.querySelector(".ui-icon-picker-icon.preview.switching");
 		if (!iconpreviewopen.classList.contains("nopic") && !iconpreviewclosed.classList.contains("nopic") && !iconpreviewswitching.classList.contains("nopic")) {
 			var customID = this.generateID("customicon", "customicons");
-			BDfunctionsDevilBro.saveData(customID, {"openicon":iconpreviewopen.url,"closedicon":iconpreviewclosed.url,customID}, this, "customicons");
+			BDFDB.saveData(customID, {"openicon":iconpreviewopen.url,"closedicon":iconpreviewclosed.url,customID}, this, "customicons");
 			modal.querySelectorAll("input[type='text'][option]").forEach((input) => {
 				input.value = "";
 			});
@@ -1103,18 +1103,18 @@ class ServerFolders {
 			iconpreviewswitching.classList.add("nopic");
 			iconpreviewswitching.style.backgroundImage = "";
 			clearInterval(iconpreviewswitching.switchInterval);
-			BDfunctionsDevilBro.showToast(`Custom Icon was added to selection.`, {type:"success"});
+			BDFDB.showToast(`Custom Icon was added to selection.`, {type:"success"});
 			this.setIcons(modal.querySelector(".ui-icon-picker-icon.selected").getAttribute("value"), $(modal).find(".icons"));
 		}
 		else {
-			BDfunctionsDevilBro.showToast(`Add an image for the open and the closed icon.`, {type:"danger"});
+			BDFDB.showToast(`Add an image for the open and the closed icon.`, {type:"danger"});
 		}
 	};
 	
 	removeFolder (folderDiv) {
 		$(this.readIncludedServerList(folderDiv)).removeAttr("folder").show();
 		
-		BDfunctionsDevilBro.removeData(folderDiv.id, this, "folders");
+		BDFDB.removeData(folderDiv.id, this, "folders");
 		
 		this.closeFolderContent(folderDiv);
 		
@@ -1124,7 +1124,7 @@ class ServerFolders {
 	}
 	
 	openCloseFolder (folderDiv) {
-		var data = BDfunctionsDevilBro.loadData(folderDiv.id, this, "folders");
+		var data = BDFDB.loadData(folderDiv.id, this, "folders");
 		if (data) {
 			var isOpen = folderDiv.classList.contains("open");
 			if (!isOpen) {
@@ -1149,7 +1149,7 @@ class ServerFolders {
 					
 					if (!alreadyOpen) {
 						var guildswrapper = $(".guilds-wrapper");
-						var guildsscroller = guildswrapper.find(".guilds.scroller");
+						var guildsscroller = guildswrapper.find(BDFDB.dotCN.guilds);
 						
 						var ChannelSizeCorrectionCSS = `
 							.foldercontainer {
@@ -1192,7 +1192,7 @@ class ServerFolders {
 								}`;
 						}
 						
-						BDfunctionsDevilBro.appendLocalStyle("ChannelSizeCorrection", ChannelSizeCorrectionCSS);
+						BDFDB.appendLocalStyle("ChannelSizeCorrection", ChannelSizeCorrectionCSS);
 					}
 				}
 				else return; // nothing to do when closed and empty
@@ -1201,7 +1201,7 @@ class ServerFolders {
 				this.closeFolderContent(folderDiv);
 			}
 			
-			$(folderDiv).find(".avatar-small").css("background-image", !isOpen ? "url(\"" + data.icons.openicon + "\")" : "url(\"" + data.icons.closedicon + "\")");
+			$(folderDiv).find(BDFDB.dotCN.avatarsmallold).css("background-image", !isOpen ? "url(\"" + data.icons.openicon + "\")" : "url(\"" + data.icons.closedicon + "\")");
 		}
 	}
 	
@@ -1234,11 +1234,11 @@ class ServerFolders {
 			.on("mouseenter." + this.getName(), (e) => {this.createServerToolTip(serverObj, serverCopy, e);})
 			.on("click." + this.getName(), (e) => {
 				e.preventDefault();
-				if (BDfunctionsDevilBro.pressedKeys.includes(46)) {
+				if (BDFDB.pressedKeys.includes(46)) {
 					this.removeServerFromFolder(serverObj, folderDiv);
 				}
 				else {
-					var settings = BDfunctionsDevilBro.getAllData(this, "settings");
+					var settings = BDFDB.getAllData(this, "settings");
 					if (settings.closeAllFolders) {
 						document.querySelectorAll(".folder.open").forEach(openFolder => {
 							this.openCloseFolder(openFolder);
@@ -1251,7 +1251,7 @@ class ServerFolders {
 				}
 			})
 			.on("contextmenu." + this.getName(), (e) => {
-				var handleContextMenu = BDfunctionsDevilBro.getKeyInformation({"node":serverDiv.firstElementChild, "key":"handleContextMenu"});
+				var handleContextMenu = BDFDB.getKeyInformation({"node":serverDiv.firstElementChild, "key":"handleContextMenu"});
 				if (handleContextMenu) {
 					var data = {
 						preventDefault: a=>a,
@@ -1269,7 +1269,7 @@ class ServerFolders {
 				var hoveredCopy = null;
 				var placeholder = $(`<div class="guild guild-placeholder copy copy-placeholder"></div>`)[0];
 				$(serverPreview)
-					.appendTo(".appMount-14L89u")
+					.appendTo(BDFDB.dotCN.appmount)
 					.addClass("serverFoldersPreview")
 					.offset({"left":e.clientX + 5,"top":e.clientY + 5});
 				
@@ -1325,45 +1325,45 @@ class ServerFolders {
 		if (foldercontainer && !foldercontainer.firstChild) {
 			foldercontainer.remove();
 			$(".folderopen").removeClass("folderopen");
-			BDfunctionsDevilBro.removeLocalStyle("ChannelSizeCorrection");
+			BDFDB.removeLocalStyle("ChannelSizeCorrection");
 		}
 	}
 	
 	updateFolderPositions () {
-		var serverAndFolders = document.querySelectorAll("div.guild-separator ~ div.guild");
+		var serverAndFolders = document.querySelectorAll("div" + BDFDB.dotCN.guildseparator + " ~ div" + BDFDB.dotCN.guild);
 		for (let i = 0; i < serverAndFolders.length; i++) {
 			var folderDiv = this.getParentObject(serverAndFolders[i], "folder").div;
 			if (folderDiv) {
 				var folderID = folderDiv.id;
-				var data = BDfunctionsDevilBro.loadData(folderID, this, "folders");
+				var data = BDFDB.loadData(folderID, this, "folders");
 				if (data) {
 					data.position = i;
-					BDfunctionsDevilBro.saveData(folderID, data, this, "folders");
+					BDFDB.saveData(folderID, data, this, "folders");
 				}
 			}
 		}
 	}	
 	
 	updateServerPositions (folderDiv) {
-		var data = BDfunctionsDevilBro.loadData(folderDiv.id, this, "folders");
+		var data = BDFDB.loadData(folderDiv.id, this, "folders");
 		if (data) {
 			var serversInData = data.servers;
 			var serversInFolder = Array.from(document.querySelectorAll(".content_of_" + folderDiv.id)).map(server => {return server.id.replace("copy_of_", "");});
 			for (var i = 0; i < serversInFolder.length; i++) {
-				BDfunctionsDevilBro.removeFromArray(serversInData, serversInFolder[i]);
+				BDFDB.removeFromArray(serversInData, serversInFolder[i]);
 			}
 			data.servers = serversInFolder.concat(serversInData);
-			BDfunctionsDevilBro.saveData(folderDiv.id, data, this, "folders");
+			BDFDB.saveData(folderDiv.id, data, this, "folders");
 		}
 	}	
 	
 	updateFolderNotifications (folderDiv) {
-		var data = BDfunctionsDevilBro.loadData(folderDiv.id, this, "folders");
+		var data = BDFDB.loadData(folderDiv.id, this, "folders");
 		if (data) {
 			var includedServers = this.readIncludedServerList(folderDiv);
-			var unreadServers = BDfunctionsDevilBro.readUnreadServerList(includedServers);
+			var unreadServers = BDFDB.readUnreadServerList(includedServers);
 			if (unreadServers.length > 0 && data.autounread) {
-				BDfunctionsDevilBro.clearReadNotifications(unreadServers);
+				BDFDB.clearReadNotifications(unreadServers);
 			}
 			else {
 				var badgeAmount = 0;
@@ -1372,23 +1372,23 @@ class ServerFolders {
 				
 				includedServers.forEach((serverObj) => {
 					let serverDiv = serverObj.div;
-					let badge = serverDiv.querySelector(".badge");
+					let badge = serverDiv.querySelector(BDFDB.dotCN.badge);
 					if (badge) badgeAmount += parseInt(badge.innerText);
-					if (serverDiv.classList.contains("audio")) audioEnabled = true;
-					if (serverDiv.classList.contains("video")) videoEnabled = true;
+					if (serverDiv.classList.contains(BDFDB.disCN.guildaudio)) audioEnabled = true;
+					if (serverDiv.classList.contains(BDFDB.disCN.guildvideo)) videoEnabled = true;
 				});
 				
 				$(folderDiv)
-					.toggleClass("unread", unreadServers.length > 0)
-					.toggleClass("audio", audioEnabled)
-					.toggleClass("video", videoEnabled);
+					.toggleClass(BDFDB.disCN.guildunread, unreadServers.length > 0)
+					.toggleClass(BDFDB.disCN.guildaudio, audioEnabled)
+					.toggleClass(BDFDB.disCN.guildvideo, videoEnabled);
 				$(folderDiv)
-					.find(".folder.badge.notifications")
+					.find(".folder" + BDFDB.dotCN.badge + ".notifications")
 						.toggle(badgeAmount > 0)
 						.text(badgeAmount);	
 				$(folderDiv)
-					.find(".folder.badge.count")
-						.toggle(includedServers.length > 0 && BDfunctionsDevilBro.getData("showCountBadge", this, "settings"))
+					.find(".folder" + BDFDB.dotCN.badge + ".count")
+						.toggle(includedServers.length > 0 && BDFDB.getData("showCountBadge", this, "settings"))
 						.text(includedServers.length);	
 			
 				if (folderDiv.classList.contains("open") && !document.querySelector(".content_of_" + folderDiv.id)) this.openCloseFolder(folderDiv);
@@ -1398,12 +1398,12 @@ class ServerFolders {
 	
 	getParentObject (div, type) {
 		if (!div) return {div:null};
-		if (document.querySelector(".dms") && document.querySelector(".dms").contains(div)) return {div:null};
-		if (div.tagName && div.querySelector(".guilds-error")) return {div:null};
-		if (div.classList && div.classList.length > 0 && (div.classList.contains("guilds") || div.classList.contains("serverFoldersPreview"))) return {div:null};
-		if (div.classList && div.classList.length > 0 && div.classList.contains("guild") && div.classList.contains(type) && div.querySelector(".avatar-small")) {
+		if (document.querySelector(BDFDB.dotCN.dms) && document.querySelector(BDFDB.dotCN.dms).contains(div)) return {div:null};
+		if (div.tagName && div.querySelector(BDFDB.dotCN.guildserror)) return {div:null};
+		if (div.classList && div.classList.length > 0 && (div.classList.contains(BDFDB.disCN.guilds) || div.classList.contains("serverFoldersPreview"))) return {div:null};
+		if (div.classList && div.classList.length > 0 && div.classList.contains(BDFDB.disCN.guild) && div.classList.contains(type) && div.querySelector(BDFDB.dotCN.avatarsmallold)) {
 			if (type == "guild") {
-				var info = BDfunctionsDevilBro.getKeyInformation({"node":div, "key":"guild"});
+				var info = BDFDB.getKeyInformation({"node":div, "key":"guild"});
 				if (info) return Object.assign({},info,{div:div,data:info});
 			}
 			else {
@@ -1415,7 +1415,7 @@ class ServerFolders {
 	
 	getFolderOfServer (serverObj) {
 		if (!serverObj) return;
-		var folders = BDfunctionsDevilBro.loadAllData(this, "folders");
+		var folders = BDFDB.loadAllData(this, "folders");
 		for (var id in folders) {
 			var serverIDs = folders[id].servers;
 			for (var i = 0; serverIDs.length > i; i++) {
@@ -1426,12 +1426,12 @@ class ServerFolders {
 	}
 	
 	readIncludedServerList (folderDiv) {
-		var data = BDfunctionsDevilBro.loadData(folderDiv.id, this, "folders");
+		var data = BDFDB.loadData(folderDiv.id, this, "folders");
 		var includedServers = [];
 		if (data) {
 			var serverIDs = data.servers;
 			for (var i = 0; serverIDs.length > i; i++) {
-				var serverObj = BDfunctionsDevilBro.getDivOfServer(serverIDs[i]);
+				var serverObj = BDFDB.getDivOfServer(serverIDs[i]);
 				if (serverObj) includedServers.push(serverObj);
 			}
 		}
@@ -1439,8 +1439,8 @@ class ServerFolders {
 	}
 	
 	changeImgColor (color1, color2, icon, callback) {
-		color1 = BDfunctionsDevilBro.color2COMP(color1);
-		color2 = BDfunctionsDevilBro.color2COMP(color2);
+		color1 = BDFDB.color2COMP(color1);
+		color2 = BDFDB.color2COMP(color2);
 		if (!color1 || !color2 || !icon) return;
 		var img = new Image();
 		img.src = icon;
@@ -1475,7 +1475,7 @@ class ServerFolders {
 	}
 	
 	setLabelsByLanguage () {
-		switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
+		switch (BDFDB.getDiscordLanguage().id) {
 			case "hr":		//croatian
 				return {
 					toast_addserver_text:					"${servername} je dodan u mapu${foldername}.",
