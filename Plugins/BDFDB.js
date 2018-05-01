@@ -3295,6 +3295,8 @@ BDFDB.DiscordClasses = {
 	quickselectvalue: "quickSelectValue-lImyM6",
 	recentmentionsheader: "header-SsaQ8X",
 	recentmentionsheader2: "header-3LXPrb",
+	recentmentionsloadingmore: "loadingMore-mVRVL3",
+	recentmentionsmentionfilter: "mentionFilter-1PQ6ey",
 	recentmentionspopout: "recentMentionsPopout-2fmau1",
 	recentmentionstitle: "title-23FrqZ",
 	scroller: "scroller-2FKFPG",
