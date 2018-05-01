@@ -2302,7 +2302,7 @@ BDFDB.openColorPicker = function (currentColor, swatch) {
 		});
 		
 	BDFDB.$(colorPickerModal)
-		.on("input", ".inputMini-3MyfLa", (e) => {
+		.on("input", BDFDB.dotCN.inputmini, (e) => {
 			updateValues(e.currentTarget.name);
 		});
 		
@@ -2991,6 +2991,7 @@ BDFDB.DiscordClasses = {
 	contextmenuitemgroup: "itemGroup-1tL0uz",
 	contextmenuitemtoggle: "itemToggle-S7XGOQ",
 	contextmenuitemsubmenu: "itemSubMenu-1vN_Yn",
+	contextmenulabel: "label-JWQiNe",
 	cursordefault: "cursorDefault-3pPSRV",
 	cursorpointer: "cursorPointer-1ajlYk",
 	dark: "dark",
