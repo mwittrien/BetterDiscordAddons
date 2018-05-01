@@ -1,3 +1,3 @@
-# Complete Timestamp - [Download Script](https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/PluginsV2/CompleteTimestamp/index.js) [Download Config](https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/PluginsV2/CompleteTimestamp/config.json)
+# Complete Timestamp - [Download Script](https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/PluginsV2/CompleteTimestamps/index.js) [Download Config](https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/PluginsV2/CompleteTimestamps/config.json)
 
 Replace all timestamps with complete timestamps.
