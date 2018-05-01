@@ -1,28 +1,28 @@
 //META{"name":"SpellCheck"}*//
 
 class SpellCheck {
-	constructor () {
+	initConstructor () {
 		this.languages = {};
 		this.langDictionary = [];
 		this.dictionary = [];
 
 		this.spellCheckContextEntryMarkup =
-			`<div class="itemGroup-oViAgA">
-				<div class="item-1XYaYf similarwords-item itemSubMenu-3ZgIw-">
+			`<div class="${BDFDB.disCN.contextmenuitemgroup}">
+				<div class="${BDFDB.disCN.contextmenuitem} similarwords-item ${BDFDB.disCN.contextmenuitemsubmenu}">
 					<span>REPLACE_context_similarwords_text</span>
-					<div class="hint-3TJykr"></div>
+					<div class="${BDFDB.disCN.contextmenuhint}"></div>
 				</div>
-				<div class="item-1XYaYf spellcheck-item">
+				<div class="${BDFDB.disCN.contextmenuitem} spellcheck-item">
 					<span>REPLACE_context_spellcheck_text</span>
-					<div class="hint-3TJykr"></div>
+					<div class="${BDFDB.disCN.contextmenuhint}"></div>
 				</div>
 			</div>`;
 			
 		this.similarWordsContextSubMenuMarkup = 
-			`<div class="contextMenu-uoJTbz spellcheck-submenu">
-				<div class="item-1XYaYf nosimilars-item">
+			`<div class="${BDFDB.disCN.contextmenu} spellcheck-submenu">
+				<div class="${BDFDB.disCN.contextmenuitem} nosimilars-item">
 					<span>REPLACE_similarwordssubmenu_none_text</span>
-					<div class="hint-3TJykr"></div>
+					<div class="${BDFDB.disCN.contextmenuhint}"></div>
 				</div>
 			</div>`;
 		
@@ -76,39 +76,39 @@ class SpellCheck {
 	getAuthor () {return "DevilBro";}
 	
 	getSettingsPanel () {
-		if (!this.started || typeof BDfunctionsDevilBro !== "object") return;
-		var settings = BDfunctionsDevilBro.getAllData(this, "settings");
-		var choices = BDfunctionsDevilBro.getAllData(this, "choices");
-		var amounts = BDfunctionsDevilBro.getAllData(this, "amounts");
-		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="titleDefault-1CWM9y title-3i-5G_ size18-ZM4Qv- height24-2pMcnc weightNormal-3gw0Lm marginBottom8-1mABJ4">${this.getName()}</div><div class="DevilBro-settings-inner">`;
+		if (!this.started || typeof BDFDB !== "object") return;
+		var settings = BDFDB.getAllData(this, "settings");
+		var choices = BDFDB.getAllData(this, "choices");
+		var amounts = BDFDB.getAllData(this, "amounts");
+		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		for (let key in settings) {
-			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
+			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}"${settings[key] ? " checked" : ""}></div></div>`;
 		}
 		for (let key in choices) {
-			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ weightMedium-13x9Y8 size16-3IvaX_ flexChild-1KGW5q" style="flex: 0 0 50%; line-height: 38px;">${this.defaults.choices[key].description}</h3><div class="select-3JqNgs" style="flex: 1 1 auto"><div class="Select Select--single has-value" type="${key}" value="${choices[key]}"><div class="Select-control"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-value" style="flex: 1 1 auto;"><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm" style="padding:0;">${this.languages[choices[key]].name}</div></div><span class="Select-arrow-zone"><span class="Select-arrow"></span></span></div></div></div></div>`;
+			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCN.flexchild}" style="flex: 0 0 50%;">${this.defaults.choices[key].description}</h3><div class="${BDFDB.disCN.selectwrap}" style="flex: 1 1 auto"><div class="${BDFDB.disCNS.select + BDFDB.disCNS.selectsingle + BDFDB.disCN.selecthasvalue}" type="${key}" value="${choices[key]}"><div class="${BDFDB.disCN.selectcontrol}"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignbaseline + BDFDB.disCNS.nowrap + BDFDB.disCN.selectvalue}" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.primary + BDFDB.disCN.weightnormal}" style="padding:0;">${this.languages[choices[key]].name}</div></div><span class="${BDFDB.disCN.selectarrowzone}"><span class="${BDFDB.disCN.selectarrow}"></span></span></div></div></div></div>`;
 		}
 		for (let key in amounts) {
-			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ weightMedium-13x9Y8 size16-3IvaX_ flexChild-1KGW5q" style="flex: 0 0 50%; line-height: 38px;">${this.defaults.amounts[key].description}</h3><div class="inputWrapper-3xoRWR inputNumberWrapper vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR" style="flex: 1 1 auto;"><span class="numberinput-buttons-zone"><span class="numberinput-button-up"></span><span class="numberinput-button-down"></span></span><input type="number" min="0" option="${key}" value="${amounts[key]}" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_ amountInput"></div></div>`;
+			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCN.flexchild}" style="flex: 0 0 50%; line-height: 38px;">${this.defaults.amounts[key].description}</h3><div class="${BDFDB.disCN.inputwrapper} inputNumberWrapper ${BDFDB.disCNS.vertical +  BDFDB.disCNS.flexr + BDFDB.disCNS.directioncolumn}" style="flex: 1 1 auto;"><span class="numberinput-buttons-zone"><span class="numberinput-button-up"></span><span class="numberinput-button-down"></span></span><input type="number" min="0" option="${key}" value="${amounts[key]}" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16} amountInput"></div></div>`;
 		}
-		var ownDictionary = BDfunctionsDevilBro.loadData(choices.dictionaryLanguage, this, "owndics") || [];
-		settingshtml += `<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Your own Dictionary:</h3><div class="DevilBro-settings-inner-list word-list marginBottom8-1mABJ4">`;
+		var ownDictionary = BDFDB.loadData(choices.dictionaryLanguage, this, "owndics") || [];
+		settingshtml += `<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Your own Dictionary:</h3><div class="DevilBro-settings-inner-list word-list ${BDFDB.disCN.marginbottom8}">`;
 		for (let word of ownDictionary) {
-			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginTop4-2rEBfJ marginBottom4-_yArcI card-11ynQk"><div class="card-11ynQk-inner"><div class="description-3MVziF formText-1L-zZB note-UEZmbY marginTop4-2rEBfJ modeDefault-389VjU primary-2giqSn ellipsis-CYOqEr entryword">${word}</div></div><div class="button-1qrA-N remove-word"></div></div>`;
+			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.hovercard}"><div class=${BDFDB.disCN.hovercardinner}"><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.margintop4 + BDFDB.disCNS.modedefault + BDFDB.disCNS.primary + BDFDB.disCN.ellipsis} entryword">${word}</div></div><div class="${BDFDB.disCN.hovercardbutton} remove-word"></div></div>`;
 		}
 		settingshtml += `</div>`;
 		settingshtml += `</div></div>`;
 		
 		var settingspanel = $(settingshtml)[0];
 
-		BDfunctionsDevilBro.initElements(settingspanel);
+		BDFDB.initElements(settingspanel);
 		
 		$(settingspanel)
-			.on("click", ".checkbox-1KYsPm", () => {this.updateSettings(settingspanel);})
-			.on("click", ".Select-control", (e) => {this.openDropdownMenu(settingspanel, e);})
+			.on("click", BDFDB.dotCN.switchinner, () => {this.updateSettings(settingspanel);})
+			.on("click", BDFDB.dotCN.selectcontrol, (e) => {this.openDropdownMenu(settingspanel, e);})
 			.on("click", ".remove-word", (e) => {this.removeFromOwnDictionary(e);})
 			.on("input", ".amountInput", (e) => {
 				var input = parseInt(e.currentTarget.value);
-				if (!isNaN(input) && input > -1) BDfunctionsDevilBro.saveData(e.currentTarget.getAttribute("option"), input, this, "amounts");
+				if (!isNaN(input) && input > -1) BDFDB.saveData(e.currentTarget.getAttribute("option"), input, this, "amounts");
 			});
 		return settingspanel;
 	}
@@ -118,23 +118,23 @@ class SpellCheck {
 
 	start () {
 		var libraryScript = null;
-		if (typeof BDfunctionsDevilBro !== "object" || BDfunctionsDevilBro.isLibraryOutdated()) {
-			if (typeof BDfunctionsDevilBro === "object") BDfunctionsDevilBro = "";
-			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]');
+		if (typeof BDFDB !== "object" || BDFDB.isLibraryOutdated()) {
+			if (typeof BDFDB === "object") BDFDB = "";
+			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
 			libraryScript.setAttribute("type", "text/javascript");
-			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js");
+			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
 			document.head.appendChild(libraryScript);
 		}
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDfunctionsDevilBro === "object") this.initialize();
+		if (typeof BDFDB === "object") this.initialize();
 		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
 	initialize () {
-		if (typeof BDfunctionsDevilBro === "object") {
-			BDfunctionsDevilBro.loadMessage(this);
+		if (typeof BDFDB === "object") {
+			BDFDB.loadMessage(this);
 			
 			var observer = null;
 
@@ -143,7 +143,7 @@ class SpellCheck {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node.nodeType == 1 && node.className.includes("contextMenu-uoJTbz")) {
+								if (node.nodeType == 1 && node.className.includes(BDFDB.disCN.contextmenu)) {
 									this.onContextMenu(node);
 								}
 							});
@@ -151,29 +151,29 @@ class SpellCheck {
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, "#app-mount", {name:"messageContextObserver",instance:observer}, {childList: true});
+			BDFDB.addObserver(this, BDFDB.dotCN.appmount, {name:"messageContextObserver",instance:observer}, {childList: true});
 			
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(".innerEnabled-gLHeOL, .innerEnabledNoAttach-36PpAk")) {
-									this.addSpellCheck(node.querySelector(".textArea-20yzAH"));
+								if (node && node.tagName && node.querySelector(BDFDB.dotCNC.textareainnerenabled + BDFDB.dotCN.textareainnerenablednoattach)) {
+									this.addSpellCheck(node.querySelector(BDFDB.dotCN.textarea));
 								}
 							});
 						}
 					}
 				);
 			});
-			BDfunctionsDevilBro.addObserver(this, "#app-mount", {name:"textareaObserver",instance:observer}, {childList: true, subtree:true});
+			BDFDB.addObserver(this, BDFDB.dotCN.appmount, {name:"textareaObserver",instance:observer}, {childList: true, subtree:true});
 			
-			document.querySelectorAll(".textArea-20yzAH").forEach(textarea => {this.addSpellCheck(textarea);});
+			document.querySelectorAll(BDFDB.dotCN.textarea).forEach(textarea => {this.addSpellCheck(textarea);});
 			
-			this.languages = Object.assign({},BDfunctionsDevilBro.languages);
-			this.languages = BDfunctionsDevilBro.filterObject(this.languages , (lang) => {return lang.dic == true ? lang : null});
+			this.languages = Object.assign({},BDFDB.languages);
+			this.languages = BDFDB.filterObject(this.languages , (lang) => {return lang.dic == true ? lang : null});
 			
-			this.setDictionary(BDfunctionsDevilBro.getData("dictionaryLanguage", this, "choices"));
+			this.setDictionary(BDFDB.getData("dictionaryLanguage", this, "choices"));
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -181,11 +181,10 @@ class SpellCheck {
 	}
 
 	stop () {
-		if (typeof BDfunctionsDevilBro === "object") {
+		if (typeof BDFDB === "object") {
 			$(".spellcheck-overlay").remove();
-			$(".textArea-20yzAH").off("keyup." + this.getName()).off("scroll." + this.getName());
 			
-			BDfunctionsDevilBro.unloadMessage(this);
+			BDFDB.unloadMessage(this);
 		}
 	}
 
@@ -201,16 +200,16 @@ class SpellCheck {
 
 	updateSettings (settingspanel) {
 		var settings = {};
-		for (var input of settingspanel.querySelectorAll(".checkbox-1KYsPm")) {
+		for (var input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner)) {
 			settings[input.value] = input.checked;
 		}
-		BDfunctionsDevilBro.saveAllData(settings, this, "settings");
+		BDFDB.saveAllData(settings, this, "settings");
 	}
 	
 	onContextMenu (context) {
 		if (!context || !context.tagName || !context.parentElement || context.querySelector(".spellcheck-item")) return;
 		var word = window.getSelection().toString();
-		if (word && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"handleCutItem"}) && this.isWordNotInDictionary(word)) {
+		if (word && BDFDB.getKeyInformation({"node":context, "key":"handleCutItem"}) && this.isWordNotInDictionary(word)) {
 			var group = $(this.spellCheckContextEntryMarkup);
 			$(context).append(group)
 				.on("click", ".spellcheck-item", (e) => {
@@ -221,7 +220,7 @@ class SpellCheck {
 					this.createContextSubMenu(word, e, context);
 				});
 				
-			BDfunctionsDevilBro.updateContextPosition(context);
+			BDFDB.updateContextPosition(context);
 		}
 	}
 	
@@ -233,7 +232,7 @@ class SpellCheck {
 		if (similarWords.length > 0) {
 			similarWordsContextSubMenu.find(".nosimilars-item").remove();
 			for (let foundWord of similarWords.sort()) {
-				similarWordsContextSubMenu.append(`<div value="${foundWord}" class="item-1XYaYf similarword-item"><span>${foundWord}</span><div class="hint-3TJykr"></div></div>`);
+				similarWordsContextSubMenu.append(`<div value="${foundWord}" class="${BDFDB.disCN.contextmenuitem} similarword-item"><span>${foundWord}</span><div class="${BDFDB.disCN.contextmenuhint}"></div></div>`);
 			}
 		}
 		
@@ -244,7 +243,7 @@ class SpellCheck {
 				this.replaceWord(textarea, word, e.currentTarget.getAttribute("value"));
 			});
 		
-		BDfunctionsDevilBro.appendSubMenu(e.currentTarget, similarWordsContextSubMenu);
+		BDFDB.appendSubMenu(e.currentTarget, similarWordsContextSubMenu);
 	}
 	
 	replaceWord (textarea, word, replacement) {
@@ -264,14 +263,14 @@ class SpellCheck {
 		word = word.split(" ")[0].split("\n")[0].split("\r")[0].split("\t")[0];
 		if (word) {
 			var wordlow = word.toLowerCase();
-			var lang = BDfunctionsDevilBro.getData("dictionaryLanguage", this, "choices");
-			var ownDictionary = BDfunctionsDevilBro.loadData(lang, this, "owndics") || [];
+			var lang = BDFDB.getData("dictionaryLanguage", this, "choices");
+			var ownDictionary = BDFDB.loadData(lang, this, "owndics") || [];
 			if (!ownDictionary.includes(wordlow)) {
 				ownDictionary.push(wordlow);
-				BDfunctionsDevilBro.saveData(lang, ownDictionary, this, "owndics");
+				BDFDB.saveData(lang, ownDictionary, this, "owndics");
 				var message = this.labels.toast_wordadd_text ? 
 							this.labels.toast_wordadd_text.replace("${word}", word).replace("${dicname}", this.languages[lang].name) : "";
-				BDfunctionsDevilBro.showToast(message, {type:"success"});
+				BDFDB.showToast(message, {type:"success"});
 				this.dictionary = this.langDictionary.concat(ownDictionary);
 			}
 		}
@@ -281,10 +280,10 @@ class SpellCheck {
 		var entry = e.currentTarget.parentElement;
 		var word = entry.querySelector(".entryword").textContent;
 		entry.remove();
-		var lang = BDfunctionsDevilBro.getData("dictionaryLanguage", this, "choices");
-		var ownDictionary = BDfunctionsDevilBro.loadData(lang, this, "owndics") || [];
-		BDfunctionsDevilBro.removeFromArray(ownDictionary, word);
-		BDfunctionsDevilBro.saveData(lang, ownDictionary, this, "owndics");
+		var lang = BDFDB.getData("dictionaryLanguage", this, "choices");
+		var ownDictionary = BDFDB.loadData(lang, this, "owndics") || [];
+		BDFDB.removeFromArray(ownDictionary, word);
+		BDFDB.saveData(lang, ownDictionary, this, "owndics");
 		this.dictionary = this.langDictionary.concat(ownDictionary);
 	}
 	
@@ -292,28 +291,28 @@ class SpellCheck {
 		var selectControl = e.currentTarget;
 		var selectWrap = selectControl.parentElement;
 		
-		if (selectWrap.classList.contains("is-open")) return;
+		if (selectWrap.classList.contains(BDFDB.disCN.selectisopen)) return;
 		
-		selectWrap.classList.add("is-open");
+		selectWrap.classList.add(BDFDB.disCN.selectisopen);
 		$("li").has(selectWrap).css("overflow", "visible");
 		
 		var type = selectWrap.getAttribute("type");
 		var selectMenu = this.createDropdownMenu(selectWrap.getAttribute("value"), type);
 		selectWrap.appendChild(selectMenu);
 		
-		$(selectMenu).on("mousedown." + this.getName(), ".Select-option", (e2) => {
+		$(selectMenu).on("mousedown." + this.getName(), BDFDB.dotCN.selectoption, (e2) => {
 			var language = e2.currentTarget.getAttribute("value");
 			selectWrap.setAttribute("value", language);
-			selectControl.querySelector(".title-3I2bY1").innerText = this.languages[language].name;
+			selectControl.querySelector(BDFDB.dotCN.title).innerText = this.languages[language].name;
 			this.setDictionary(language);
-			BDfunctionsDevilBro.saveData(type, language, this, "choices");
+			BDFDB.saveData(type, language, this, "choices");
 			
 			var listcontainer = settingspanel.querySelector(".word-list");
 			if (listcontainer) {
-				var ownDictionary = BDfunctionsDevilBro.loadData(language, this, "owndics") || [];
+				var ownDictionary = BDFDB.loadData(language, this, "owndics") || [];
 				var containerhtml = ``;
 				for (let word of ownDictionary) {
-					containerhtml += `<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginTop4-2rEBfJ marginBottom4-_yArcI card-11ynQk"><div class="card-11ynQk-inner"><div class="description-3MVziF formText-1L-zZB note-UEZmbY marginTop4-2rEBfJ modeDefault-389VjU primary-2giqSn ellipsis-CYOqEr entryword">${word}</div></div><div class="button-1qrA-N remove-word"></div></div>`;
+					containerhtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.hovercard}"><div class=${BDFDB.disCN.hovercardinner}"><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.margintop4 + BDFDB.disCNS.modedefault + BDFDB.disCNS.primary + BDFDB.disCN.ellipsis} entryword">${word}</div></div><div class="${BDFDB.disCN.hovercardbutton} remove-word"></div></div>`;
 				}
 				listcontainer.innerHTML = containerhtml;
 			}
@@ -323,15 +322,15 @@ class SpellCheck {
 			$(document).off("mousedown.select" + this.getName());
 			selectMenu.remove();
 			$("li").has(selectWrap).css("overflow", "auto");
-			setTimeout(() => {selectWrap.classList.remove("is-open");},100);
+			setTimeout(() => {selectWrap.classList.remove(BDFDB.disCN.selectisopen);},100);
 		});
 	}
 	
 	createDropdownMenu (choice, type) {
-		var menuhtml = `<div class="Select-menu-outer"><div class="Select-menu">`;
+		var menuhtml = `<div class="${BDFDB.disCN.selectmenuouter}"><div class="${BDFDB.disCN.selectmenu}">`;
 		for (var key in this.languages) {
-			var isSelected = key == choice ? " is-selected" : "";
-			menuhtml += `<div value="${key}" class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignBaseline-4enZzv noWrap-v6g9vO wrapper-1v8p8a Select-option ${isSelected}" style="flex: 1 1 auto; display:flex;"><div class="title-3I2bY1 medium-2KnC-N size16-3IvaX_ height20-165WbF primary-2giqSn weightNormal-3gw0Lm" style="flex: 1 1 42%;">${this.languages[key].name}</div></div>`
+			var isSelected = key == choice ? ` ${BDFDB.disCN.selectselected}` : ``;
+			menuhtml += `<div value="${key}" class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignbaseline + BDFDB.disCNS.nowrap + BDFDB.disCN.selectoption + isSelected}" style="flex: 1 1 auto; display:flex;"><div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.primary + BDFDB.disCN.weightnormal}" style="flex: 1 1 42%;">${this.languages[key].name}</div></div>`
 		}
 		menuhtml += `</div></div>`;
 		return $(menuhtml)[0];
@@ -341,9 +340,9 @@ class SpellCheck {
 		if (!textarea) return;
 		var textareaWrap = textarea.parentElement;
 		if (textareaWrap && !textareaWrap.querySelector(".spellcheck-overlay")) {
-			var textareaInstance = BDfunctionsDevilBro.getOwnerInstance({"node":textarea, "props":["handlePaste","saveCurrentText"], "up":true});
+			var textareaInstance = BDFDB.getOwnerInstance({"node":textarea, "props":["handlePaste","saveCurrentText"], "up":true});
 			if (textareaInstance) {
-				var wrapper = $(".channelTextArea-1HTP3C").has(textarea)[0];
+				var wrapper = $(BDFDB.dotCN.textareawrapall).has(textarea)[0];
 				
 				var updateSpellcheck = () => {
 					$(spellcheck)
@@ -360,7 +359,7 @@ class SpellCheck {
 						
 				var spellcheck = $(this.spellCheckLayerMarkup)[0];
 				textarea.classList.forEach(classname => {spellcheck.classList.add(classname);});
-				textarea.setAttribute("spellcheck", !BDfunctionsDevilBro.getData("disableDiscordSpellcheck", this, "settings"));
+				textarea.setAttribute("spellcheck", !BDFDB.getData("disableDiscordSpellcheck", this, "settings"));
 				$(spellcheck).appendTo(textareaWrap)
 					
 				updateSpellcheck();
@@ -378,7 +377,7 @@ class SpellCheck {
 	}
 	
 	setDictionary (lang) {
-		this.dictionary = BDfunctionsDevilBro.loadData(lang, this, "owndics") || [];
+		this.dictionary = BDFDB.loadData(lang, this, "owndics") || [];
 		let request = require("request");
 		request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/SpellCheck/dic/" + lang + ".dic", (error, response, result) => {
 			if (response) {
@@ -392,7 +391,7 @@ class SpellCheck {
 	spellCheckText (string) {
 		var htmlString = [];
 		string.replace(/[\n]/g, "\n ").split(" ").forEach((word, i) => {
-			htmlString.push(`<label class="${this.isWordNotInDictionary(word) ? "spelling-error" : "nospelling-error"}">${BDfunctionsDevilBro.encodeToHTML(word)}</label>`);
+			htmlString.push(`<label class="${this.isWordNotInDictionary(word) ? "spelling-error" : "nospelling-error"}">${BDFDB.encodeToHTML(word)}</label>`);
 		});
 		return htmlString.join(" ");
 	}
@@ -405,7 +404,7 @@ class SpellCheck {
 	
 	
 	getSimilarWords (word) {
-		var maxAmount = BDfunctionsDevilBro.getData("maxSimilarAmount", this, "amounts"), similarWords = [];
+		var maxAmount = BDFDB.getData("maxSimilarAmount", this, "amounts"), similarWords = [];
 		if (maxAmount > 0) {
 			var sameLetterDic = this.dictionary.filter(string => string.indexOf(word.toLowerCase().charAt(0)) == 0 ? string : null);
 			var similarities = {};
@@ -451,7 +450,7 @@ class SpellCheck {
 	}
 	
 	setLabelsByLanguage () {
-		switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
+		switch (BDFDB.getDiscordLanguage().id) {
 			case "hr":		//croatian
 				return {
 					context_spellcheck_text:				"Dodaj u rječnik",
