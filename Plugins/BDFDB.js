@@ -43,7 +43,7 @@ BDFDB.loadMessage = function (plugin) {
 		},7200000);
 	}
 	var layers = null;
-	if (typeof window.PluginUpdates.observer === "undefined" && (layers = document.querySelector(BDFDB.dotCN.layers)) !== null) {
+	if (typeof window.PluginUpdates.observer === "undefined" && (layers = document.querySelector(BDFDB.dotCN.layers)) != null) {
 		window.PluginUpdates.observer = new MutationObserver((changes, _) => {
 			changes.forEach(
 				(change, i) => {
@@ -792,7 +792,7 @@ BDFDB.getOwnerInstance = function (config) {
 		else {
 			var keys = Object.getOwnPropertyNames(ele);
 			var result = null;
-			for (var i = 0; result === null && i < keys.length; i++) {
+			for (var i = 0; result == null && i < keys.length; i++) {
 				var key = keys[i];
 				var value = ele[keys[i]];
 				
@@ -858,7 +858,7 @@ BDFDB.getKeyInformation = function (config) {
 		else {
 			var keys = Object.getOwnPropertyNames(ele);
 			var result = null;
-			for (var i = 0; result === null && i < keys.length; i++) {
+			for (var i = 0; result == null && i < keys.length; i++) {
 				var key = keys[i];
 				var value = ele[keys[i]];
 				
@@ -1472,7 +1472,7 @@ BDFDB.getAllData = function (plugin, keyName, compareObject) {
 	if (!plugin.defaults || !plugin.defaults[keyName]) return {};
 	let oldData = BDFDB.loadAllData(plugin, keyName), newData = {}, saveData = false;
 	for (let key in plugin.defaults[keyName]) {
-		if (oldData[key] === null) {
+		if (oldData[key] == null) {
 			newData[key] = plugin.defaults[keyName][key].value;
 			saveData = true;
 		}
@@ -2163,7 +2163,7 @@ BDFDB.openColorPicker = function (currentColor, swatch) {
 										</div>
 										<div class="${inputs[key].type == 'number' ? 'inputNumberWrapper inputNumberWrapperMini ' : ''}${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex + BDFDB.disCN.directioncolumn}" style="flex: 1 1 80%;">
 											${inputs[key].type == 'number' ? '<span class="numberinput-buttons-zone"><span class="numberinput-button-up"></span><span class="numberinput-button-down"></span></span>' : ''}
-											<input type="${inputs[key].type}"${!isNaN(inputs[key].min) && inputs[key].min !== null ? ' min="' + inputs[key].min + '"' : ''}${!isNaN(inputs[key].max) && inputs[key].max !== null ? ' max="' + inputs[key].max + '"' : ''}${!isNaN(inputs[key].length) && inputs[key].length !== null ? ' maxlength="' + inputs[key].length + '"' : ''} name="${inputs[key].group}" placeholder="${inputs[key].default}" class="${BDFDB.disCNS.inputmini + BDFDB.disCNS.input + BDFDB.disCN.size16} colorpicker-${inputs[key].name}">
+											<input type="${inputs[key].type}"${!isNaN(inputs[key].min) && inputs[key].min != null ? ' min="' + inputs[key].min + '"' : ''}${!isNaN(inputs[key].max) && inputs[key].max != null ? ' max="' + inputs[key].max + '"' : ''}${!isNaN(inputs[key].length) && inputs[key].length != null ? ' maxlength="' + inputs[key].length + '"' : ''} name="${inputs[key].group}" placeholder="${inputs[key].default}" class="${BDFDB.disCNS.inputmini + BDFDB.disCNS.input + BDFDB.disCN.size16} colorpicker-${inputs[key].name}">
 										</div>
 									</div>`).join("")}
 								</div>
