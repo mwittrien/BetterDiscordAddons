@@ -6,40 +6,39 @@ window.onkeyup = function (e) {
 };
 window.onmessage = function (e) {
 	if (typeof e.data === "object" && e.data.origin == "ThemeRepo") {
-		var body = document.querySelector("body"), head = document.querySelector("head"), theme;
 		switch (e.data.reason) {
 			case "OnLoad":
-				body.innerHTML = body.innerHTML.replace(new RegExp("REPLACE_USERNAMESMALL", "g"), e.data.username.toLowerCase());
-				body.innerHTML = body.innerHTML.replace(new RegExp("REPLACE_USERNAME", "g"), e.data.username);
-				body.innerHTML = body.innerHTML.replace(new RegExp("REPLACE_USERID", "g"), e.data.id);
-				body.innerHTML = body.innerHTML.replace(new RegExp("REPLACE_AVATAR", "g"), e.data.avatar.split('"').join(''));
-				body.innerHTML = body.innerHTML.replace(new RegExp("REPLACE_DISCRIMINATOR", "g"), e.data.discriminator);
+				document.body.innerHTML = document.body.innerHTML.replace(new RegExp("REPLACE_USERNAMESMALL", "g"), e.data.username.toLowerCase());
+				document.body.innerHTML = document.body.innerHTML.replace(new RegExp("REPLACE_USERNAME", "g"), e.data.username);
+				document.body.innerHTML = document.body.innerHTML.replace(new RegExp("REPLACE_USERID", "g"), e.data.id);
+				document.body.innerHTML = document.body.innerHTML.replace(new RegExp("REPLACE_AVATAR", "g"), e.data.avatar.split('"').join(''));
+				document.body.innerHTML = document.body.innerHTML.replace(new RegExp("REPLACE_DISCRIMINATOR", "g"), e.data.discriminator);
 				if (e.data.nativecss) {
-					theme = document.createElement("link");
+					var theme = document.createElement("link");
 					theme.classList.add(e.data.reason);
 					theme.rel = "stylesheet";
 					theme.href = e.data.nativecss;
-					head.appendChild(theme);
+					document.head.appendChild(theme);
 				}
-				document.querySelector(".appMount-14L89u").style.display = "flex";
+				document.body.firstChild.style.display = "flex";
 				break;
 			case "NewTheme":
 			case "CustomCSS":
 			case "ThemeFixer":
 				document.querySelectorAll("style." + e.data.reason).forEach(theme => theme.remove());
 				if (e.data.checked) {
-					theme = document.createElement("style");
+					var theme = document.createElement("style");
 					theme.classList.add(e.data.reason);
 					theme.innerText = e.data.css;
-					head.appendChild(theme);
+					document.head.appendChild(theme);
 				}
 				break;
 			case "DarkLight":
 				if (e.data.checked) {
-					body.innerHTML = body.innerHTML.replace(new RegExp("theme-dark", "g"), "theme-light");
+					document.body.innerHTML = document.body.innerHTML.replace(new RegExp("theme-dark", "g"), "theme-light");
 				}
 				else {
-					body.innerHTML = body.innerHTML.replace(new RegExp("theme-light", "g"), "theme-dark");
+					document.body.innerHTML = document.body.innerHTML.replace(new RegExp("theme-light", "g"), "theme-dark");
 				}
 				break;
 		}
