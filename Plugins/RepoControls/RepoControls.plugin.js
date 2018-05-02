@@ -28,10 +28,10 @@ class RepoControls {
 					</div>
 				</div>
 				<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}" style="flex: 0 1 auto;">
-					<button action="add" type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizeicon + BDFDB.disCN.buttongrow} btn-enableall" style="flex: 0 0 auto;">
+					<button action="add" type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorgreen + BDFDB.disCNS.buttonsizeicon + BDFDB.disCN.buttongrow} btn-enableall" style="flex: 0 0 auto;">
 						<div class="${BDFDB.disCN.buttoncontents}">Enable All</div>
 					</button>
-					<button action="add" type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizeicon + BDFDB.disCN.buttongrow} btn-disableall" style="flex: 0 0 auto;">
+					<button action="add" type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizeicon + BDFDB.disCN.buttongrow} btn-disableall" style="flex: 0 0 auto;">
 						<div class="${BDFDB.disCN.buttoncontents}">Disable All</div>
 					</button>
 				</div>
