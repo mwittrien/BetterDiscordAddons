@@ -77,7 +77,7 @@ class ShowHiddenChannels {
 
 	getDescription () {return "Displays channels that are hidden from you by role restrictions.";}
 
-	getVersion () {return "2.2.2";}
+	getVersion () {return "2.2.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -470,7 +470,7 @@ class ShowHiddenChannels {
 			if (BDFDB.getData("showForNormal", this, "settings")) {
 				var serverObj = BDFDB.getSelectedServer();
 				if (serverObj) {
-					$(channelList).on("mouseenter." + this.getName(), ".containerDefault-7RImuF, .containerDefault-1bbItS", (e) => {
+					$(channelList).on("mouseenter." + this.getName(), BDFDB.dotCNC.channelcontainerdefault + BDFDB.dotCN.categorycontainerdefault, (e) => {
 						var channel = BDFDB.getKeyInformation({"node":e.currentTarget,"key":"channel"});
 						if (channel) this.showAccessRoles(serverObj, channel, e, true);
 					});
