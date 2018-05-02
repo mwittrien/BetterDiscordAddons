@@ -25,7 +25,7 @@ class ThemeRepo {
 		
 		this.updateInterval;
 		
-		this.themeFixerCSS = `#friends, .noChannel-2EQ0a9, .activityFeed-HeiGwL, .lfg-3xoFkI, .app, .layers-20RVFW, .layer-kosS71, .container-2OU7Cz, .content-region, .guilds-wrapper, .search-2--6aU .search-bar, .chat .inner-3if5cm, .search-results-wrap, .search-results-wrap .search-header, .search-results-wrap .search-result-message.hit, .sidebar-region, .ui-standard-sidebar-view, .channels-3g2vYe, .container-iksrDt {background: rgba(0,0,0,0.3) !important;}  .search-results-wrap .search-result-message.hit {box-shadow:none !important;}  .titleBar-AC4pGV::after {content:""; position:absolute; z-index:-1; top:0; left:0; right:0; width:100%; height:22px; background: rgba(0,0,0,0.8) !important;}  #friends .friends-table, .members-1bid1J, .loading-316uYQ, .chat .content, .chat form, .chat, .content .flex-spacer, .messages-wrapper, .typing-3eiiL_, .container-RYiLUQ, .headerBar-cxbhPD, .titleBar-AC4pGV, .titleWrapper-3Vi_wz .title-qAcLxz, .search-results-wrap .search-result::before, .search-results-wrap .search-result::after, .search-results-wrap .channel-name {background: transparent !important;}  ::-webkit-scrollbar-thumb {border-color: transparent !important; background: rgba(0,0,0,0.8) !important;} ::-webkit-scrollbar, ::-webkit-scrollbar-track-piece {border-color: transparent !important; background: transparent !important;} ::-webkit-scrollbar-corner {display: none !important;}`;
+		this.themeFixerCSS = `#friends, .noChannel-Z1DQK7, .activityFeed-HeiGwL, .lfg-3xoFkI, .app, .layers-3iHuyZ, .layer-3QrUeG, .container-2lgZY8, .content-region, .guilds-wrapper, .search-l1Wz-Q .search-bar, .chat .inner-zqa7da, .search-results-wrap, .search-results-wrap .search-header, .search-results-wrap .search-result-message.hit, .sidebar-region, .ui-standard-sidebar-view, .channels-Ie2l6A, .container-2Thooq {background: rgba(0,0,0,0.3) !important;}  .search-results-wrap .search-result-message.hit {box-shadow:none !important;} .titleBar-AC4pGV::after {content:""; position:absolute; z-index:-1; top:0; left:0; right:0; width:100%; height:22px; background: rgba(0,0,0,0.8) !important;} #friends .friends-table, .members-1998pB, .loading-316uYQ, .chat .content, .chat form, .chat, .content .flex-spacer, .messages-wrapper, .typing-2GQL18, .container-PNkimc, .headerBar-UHpsPw, .titleBar-AC4pGV, .titleWrapper-1l0xT9 .title-3qD0b-, .search-results-wrap .search-result::before, .search-results-wrap .search-result::after, .search-results-wrap .channel-name {background: transparent !important;}  ::-webkit-scrollbar-thumb {border-color: transparent !important; background: rgba(0,0,0,0.8) !important;} ::-webkit-scrollbar, ::-webkit-scrollbar-track-piece {border-color: transparent !important; background: transparent !important;} ::-webkit-scrollbar-corner {display: none !important;}`;
 		
 		this.themeRepoButtonMarkup = 
 			`<button class="bd-pfbtn bd-themerepobutton">Theme Repo</button>`;
@@ -296,7 +296,7 @@ class ThemeRepo {
 
 	getDescription () {return "Allows you to preview all themes from the theme repo and download them on the fly. Repo button is in the theme settings.";}
 
-	getVersion () {return "1.5.0";}
+	getVersion () {return "1.5.1";}
 
 	getAuthor () {return "DevilBro";}
 	
