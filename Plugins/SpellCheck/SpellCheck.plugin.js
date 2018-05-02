@@ -71,7 +71,7 @@ class SpellCheck {
 
 	getDescription () {return "Adds a spellcheck to all textareas. Select a word and rightclick it to add it to your dictionary.";}
 
-	getVersion () {return "1.2.2";}
+	getVersion () {return "1.2.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -367,7 +367,8 @@ class SpellCheck {
 				$(textarea)
 					.off("keyup." + this.getName()).off("scroll." + this.getName())
 					.on("keyup." + this.getName(), (e) => {
-						updateSpellcheck();
+						clearTimeout(textarea.spellchecktimeout);
+						textarea.spellchecktimeout = setTimeout(() => {updateSpellcheck();},100);
 					})
 					.on("scroll." + this.getName(), (e) => {
 						$(spellcheck).scrollTop(textarea.scrollTop);
