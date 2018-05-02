@@ -9,8 +9,8 @@ class RepoControls {
 				version:		"Version",
 				description:	"Description",
 				enabled:		"Enabled",
-				adddate:		"Added Date",
-				moddate:		"Last Modified Date"
+				adddate:		"Added",
+				moddate:		"Modified"
 			},
 			order: {
 				asc:			"Ascending",
@@ -20,22 +20,30 @@ class RepoControls {
 		
 		this.repoControlsMarkup = 
 			`<div class="repo-controls ${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
-				<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCNS.searchbar + BDFDB.disCN.size14}" style="flex: 1 1 40%;">
+				<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCNS.searchbar + BDFDB.disCN.size14}" style="flex: 1 1 auto;">
 					<input class="${BDFDB.disCNS.searchbarinput + BDFDB.disCN.flexchild}" value="" placeholder="Search for ..." style="flex: 1 1 auto;">
 					<div class="${BDFDB.disCNS.searchbariconwrap + BDFDB.disCN.flexchild}">
 						<i class="${BDFDB.disCNS.searchbaricon + BDFDB.disCNS.searchbareyeglass + BDFDB.disCN.searchbarvisible}"/>
 						<i class="${BDFDB.disCNS.searchbaricon + BDFDB.disCN.searchbarclear}"/>
 					</div>
 				</div>
-				<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.quickselect}" style="flex: 1 1 30%;">
-					<div class="${BDFDB.disCN.quickselectlabel}">Sort by:</div>
+				<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}" style="flex: 0 1 auto;">
+					<button action="add" type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizeicon + BDFDB.disCN.buttongrow} btn-enableall" style="flex: 0 0 auto;">
+						<div class="${BDFDB.disCN.buttoncontents}">Enable All</div>
+					</button>
+					<button action="add" type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizeicon + BDFDB.disCN.buttongrow} btn-disableall" style="flex: 0 0 auto;">
+						<div class="${BDFDB.disCN.buttoncontents}">Disable All</div>
+					</button>
+				</div>
+				<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.quickselect}" style="flex: 0 1 auto;">
+					<div class="${BDFDB.disCNS.flex + BDFDB.disCN.quickselectlabel} style="flex: 0 0 auto;"">Sort by:</div>
 					<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.quickselectclick} sort-filter" style="flex: 0 0 auto;">
 						<div option="${Object.keys(this.sortings.sort)[0]}" class="${BDFDB.disCN.quickselectvalue}">${this.sortings.sort[Object.keys(this.sortings.sort)[0]]}</div>
 						<div class="${BDFDB.disCN.quickselectarrow}"></div>
 					</div>
 				</div>
-				<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.quickselect}" style="flex: 1 1 30%;">
-					<div class="${BDFDB.disCN.quickselectlabel}">Order:</div>
+				<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.quickselect}" style="flex: 0 1 auto;">
+					<div class="${BDFDB.disCNS.flex + BDFDB.disCN.quickselectlabel} style="flex: 0 0 auto;"">Order:</div>
 					<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.quickselectclick} order-filter" style="flex: 0 0 auto;">
 						<div option="${Object.keys(this.sortings.order)[0]}" class="${BDFDB.disCN.quickselectvalue}">${this.sortings.order[Object.keys(this.sortings.order)[0]]}</div>
 						<div class="${BDFDB.disCN.quickselectarrow}"></div>
@@ -46,7 +54,7 @@ class RepoControls {
 		this.sortPopoutMarkup =
 			`<div class="${BDFDB.disCNS.popout + BDFDB.disCNS.popoutbottomright + BDFDB.disCN.popoutnoshadow} repocontrols-sort-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);" option="sort">
 				<div>
-					<div class="${BDFDB.disCN.contextmenu}  quickSelectPopout">
+					<div class="${BDFDB.disCN.contextmenu} quickSelectPopout">
 						<div class="${BDFDB.disCN.contextmenuitemgroup}">
 							${Object.keys(this.sortings.sort).map((key, i) => `<div option="${key}" class="${BDFDB.disCN.contextmenuitem}">${this.sortings.sort[key]}</div>`).join("")}
 						</div>
@@ -57,7 +65,7 @@ class RepoControls {
 		this.orderPopoutMarkup =
 			`<div class="${BDFDB.disCNS.popout + BDFDB.disCNS.popoutbottomright + BDFDB.disCN.popoutnoshadow} repocontrols-order-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);" option="order">
 				<div>
-					<div class="${BDFDB.disCN.contextmenu}  quickSelectPopout">
+					<div class="${BDFDB.disCN.contextmenu} quickSelectPopout">
 						<div class="${BDFDB.disCN.contextmenuitemgroup}">
 							${Object.keys(this.sortings.order).map((key, i) => `<div option="${key}" class="${BDFDB.disCN.contextmenuitem}">${this.sortings.order[key]}</div>`).join("")}
 						</div>
@@ -298,6 +306,12 @@ class RepoControls {
 			.on("click." + this.getName(), BDFDB.dotCN.searchbarclear + BDFDB.dotCN.searchbarvisible, () => {
 				this.addEntries(container, repoControls);
 			})
+			.on("click." + this.getName(), ".btn-enableall", (e) => {
+				this.toggleAll(container, true);
+			})
+			.on("click." + this.getName(), ".btn-disableall", (e) => {
+				this.toggleAll(container, false);
+			})
 			.on("click." + this.getName(), ".sort-filter", (e) => {
 				this.openSortPopout(e, this.sortPopoutMarkup, container, repoControls);
 			})
@@ -407,6 +421,28 @@ class RepoControls {
 				BDFDB.createTooltip("Delete File", e.currentTarget, {type:"top",selector:"repocontrols-trashicon-tooltip"});
 			})
 			.insertAfter(entry.div.querySelector(".ui-switch-wrapper"));
+	}
+	
+	toggleAll (container, enable) {
+		if (confirm(`Are you sure you want to ${enable ? "enable" : "disable"} everything?`)) {
+			for (let header of container.querySelectorAll(".bda-header")) {
+				if (header.querySelector(".bda-name").textContent.toLowerCase().indexOf(this.getName().toLowerCase()) != 0) {
+					let switchwrap = header.querySelector(".ui-switch-wrapper");
+					if (switchwrap) {
+						let switchinner = switchwrap.querySelector(".ui-switch");
+						let switchinput = switchwrap.querySelector(".ui-switch-checkbox");
+						if (switchinner && switchinput) {
+							if (switchinner.classList.contains("checked") && !enable) {
+								switchinput.click();
+							}
+							else if (!switchinner.classList.contains("checked") && enable) {
+								switchinput.click();
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 	
 	changeTextToHTML (container, searchstring) {
