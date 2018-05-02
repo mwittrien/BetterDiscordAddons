@@ -126,7 +126,7 @@ class RepoControls {
 
 	getDescription () {return "Lets you sort and filter your list of downloaded Themes and Plugins.";}
 
-	getVersion () {return "1.1.8";}
+	getVersion () {return "1.1.9";}
 
 	getAuthor () {return "DevilBro";}
 	
