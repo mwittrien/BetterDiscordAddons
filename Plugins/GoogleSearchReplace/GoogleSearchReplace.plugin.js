@@ -8,6 +8,7 @@ class GoogleSearchReplace {
 		
 		this.defaults = {
 			engines: {
+				_all: 			{value:true, 	name:BDFDB.getLibraryStrings().btn_all_text, 	url:null},
 				Ask: 			{value:true, 	name:"Ask", 			url:"https://ask.com/web?q=" + this.textUrlReplaceString},
 				Bing: 			{value:true, 	name:"Bing", 			url:"https://www.bing.com/search?q=" + this.textUrlReplaceString},
 				DogPile:		{value:true, 	name:"DogPile", 		url:"http://www.dogpile.com/search/web?q=" + this.textUrlReplaceString},
@@ -46,7 +47,7 @@ class GoogleSearchReplace {
 
 	getDescription () {return "Replaces the default Google Text Search with a selection menu of several search engines.";}
 
-	getVersion () {return "1.1.3";}
+	getVersion () {return "1.1.4";}
 	
 	getAuthor () {return "DevilBro";}
 
@@ -164,7 +165,15 @@ class GoogleSearchReplace {
 			.on("click", ".GRS-item", (e2) => {
 				$(context).hide();
 				var engine = e2.currentTarget.getAttribute("engine");
-				window.open(this.defaults.engines[engine].url.replace(this.textUrlReplaceString, encodeURIComponent(text)), "_blank");
+				if (engine == "_all") {
+					var engines = BDFDB.getAllData(this, "engines");
+					for (let key in engines) {
+						if (key != "_all" && engines[key]) window.open(this.defaults.engines[key].url.replace(this.textUrlReplaceString, encodeURIComponent(text)), "_blank");
+					}
+				}
+				else {
+					window.open(this.defaults.engines[engine].url.replace(this.textUrlReplaceString, encodeURIComponent(text)), "_blank");
+				}
 			});
 		
 		var engines = BDFDB.getAllData(this, "engines");
