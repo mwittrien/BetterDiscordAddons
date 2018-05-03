@@ -8,7 +8,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			this.waitTime = 3000;
 		}
 		
-		onstart () {
+		onStart () {
 			var libraryScript = null;
 			if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
 				libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
