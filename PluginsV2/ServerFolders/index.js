@@ -447,7 +447,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					BDFDB.addObserver(this, badge, {name:"badgeObserver",multi:true}, {characterData:true,subtree:true});
 				});
 				
-				$(".guilds").on("click." + this.name, BDFDB.dotCN.guildseparator + " ~ div" + BDFDB.dotCN.guild + ":not(.folder)", () => {
+				$(BDFDB.dotCN.guilds).on("click." + this.name, BDFDB.dotCN.guildseparator + " ~ div" + BDFDB.dotCN.guild + ":not(.folder)", () => {
 					if (BDFDB.getData("closeAllFolders", this, "settings")) {
 						document.querySelectorAll(".folder.open").forEach(openFolder => {this.openCloseFolder(openFolder);});
 					}
@@ -1116,8 +1116,8 @@ module.exports = (Plugin, Api, Vendor) => {
 							
 						if (!alreadyOpen) {
 							document.body.classList.add("folderopen");
-							$(".guilds-wrapper").addClass("folderopen");
-							$(`<div class="foldercontainer"></div>`).insertBefore(".guild:first");
+							$(BDFDB.dotCN.guildswrapper).addClass("folderopen");
+							$(`<div class="foldercontainer"></div>`).insertBefore(BDFDB.dotCN.guild + ":first");
 						}
 						
 						for (var i = 0; i < includedServers.length; i++) {
@@ -1125,7 +1125,7 @@ module.exports = (Plugin, Api, Vendor) => {
 						}
 						
 						if (!alreadyOpen) {
-							var guildswrapper = $(".guilds-wrapper");
+							var guildswrapper = $(BDFDB.dotCN.guildswrapper);
 							var guildsscroller = guildswrapper.find(BDFDB.dotCN.guilds);
 							
 							var ChannelSizeCorrectionCSS = `
@@ -1135,7 +1135,7 @@ module.exports = (Plugin, Api, Vendor) => {
 								}`;
 								
 							if (guildswrapper.outerHeight() > guildswrapper.outerWidth()) {
-								var columnamount = Math.floor(guildswrapper.outerWidth() / $(".guild").outerWidth());
+								var columnamount = Math.floor(guildswrapper.outerWidth() / $(BDFDB.dotCN.guild).outerWidth());
 								ChannelSizeCorrectionCSS +=	`
 									.foldercontainer {
 										width: ${guildswrapper.outerWidth() / columnamount}px;
@@ -1144,15 +1144,19 @@ module.exports = (Plugin, Api, Vendor) => {
 										overflow-y: scroll !important;
 									}
 									
-									.guilds-wrapper.folderopen {
+									body.folderopen .bd-settings-button {
+										width: ${guildswrapper.outerWidth() + (guildswrapper.outerWidth() / columnamount)}px !important;
+									}
+									
+									${BDFDB.dotCN.guildswrapper}.folderopen {
 										overflow: visible !important;
 										width: ${guildswrapper.outerWidth() + (guildswrapper.outerWidth() / columnamount)}px !important;
 									}`;
 							}
 							else {
-								var rowamount = Math.floor(guildswrapper.outerHeight() / $(".guild").outerHeight());
+								var rowamount = Math.floor(guildswrapper.outerHeight() / $(BDFDB.dotCN.guild).outerHeight());
 								ChannelSizeCorrectionCSS +=	`
-									.foldercontainer .guild {
+									.foldercontainer ${BDFDB.dotCN.guild} {
 										display: inline-block !important;
 									}
 									
@@ -1163,7 +1167,7 @@ module.exports = (Plugin, Api, Vendor) => {
 										overflow-y: hidden !important;
 									}
 									
-									.guilds-wrapper.folderopen {
+									${BDFDB.dotCN.guildswrapper}.folderopen {
 										overflow: visible !important;
 										height: ${guildswrapper.outerouterHeightWidth() + (guildswrapper.outerHeight() / rowamount)}px !important;
 									}`;

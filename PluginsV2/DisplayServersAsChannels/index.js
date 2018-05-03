@@ -20,6 +20,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				.bd-minimal ${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guilds} {
 					width: 160px;
 				}
+				body.DSAC-styled .bd-settings-button,
 				${BDFDB.dotCN.guildswrapper}.DSAC-styled,
 				${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.scrollerwrapold},
 				${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guilds} {
@@ -194,6 +195,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					this.changeServer(serverObj);
 				});
 				
+				document.body.classList.add("DSAC-styled");
 				$(BDFDB.dotCN.guildswrapper).addClass("DSAC-styled");
 
 				return true;

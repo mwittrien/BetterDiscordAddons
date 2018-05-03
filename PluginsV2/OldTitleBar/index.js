@@ -6,6 +6,9 @@ module.exports = (Plugin, Api, Vendor) => {
 	return class extends Plugin {
 		initConstructor () {
 			this.css = `
+				body.titlebar-hidden-by-OTB .bd-settings-button, body.titlebar-hidden-by-OTB .bd-settings {
+					top: 0 !important;
+				}
 				${BDFDB.dotCN.titlebar}.hidden-by-OTB {
 					display: none;
 				}
@@ -120,7 +123,8 @@ module.exports = (Plugin, Api, Vendor) => {
 				});
 							
 				this.addTitleBar();
-			
+				
+				document.body.classList.add("titlebar-hidden-by-OTB");
 				$(BDFDB.dotCN.titlebar).addClass("hidden-by-OTB");
 				
 				var settingswindow = document.querySelector(BDFDB.dotCN.layers + "[layer-id]");
@@ -141,7 +145,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			if (typeof BDFDB === "object") {
 				this.removeTitleBar();
 			
-				$(".hidden-by-OTB").removeClass("hidden-by-OTB");
+				$(".titlebar-hidden-by-OTB, .hidden-by-OTB").removeClass("hidden-by-OTB");
 				
 				BDFDB.unloadMessage(this);
 				return true;
