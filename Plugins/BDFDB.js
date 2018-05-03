@@ -3864,7 +3864,7 @@ BDFDB.appendLocalStyle("BDFDB", `
 		z-index: 200;
 	}
 	
-	.DevilBro-settings ${BDFDB.dotCN.hovercard}:hover ${BDFDB.dotCNS.hovercardbutton} {
+	.DevilBro-settings ${BDFDB.dotCN.hovercard}:hover ${BDFDB.dotCN.hovercardbutton} {
 		opacity: 1;
 	}
 	
