@@ -77,7 +77,7 @@ class ShowHiddenChannels {
 
 	getDescription () {return "Displays channels that are hidden from you by role restrictions.";}
 
-	getVersion () {return "2.2.3";}
+	getVersion () {return "2.2.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -260,7 +260,7 @@ class ShowHiddenChannels {
 					var name = category.querySelector(BDFDB.dotCN.categorycolortransition);
 					$(category)
 						.addClass("server" + serverID)
-						.on("click", BDFDB.dotCN.categorycontainerdefault + " > " + BDFDB.dotCN.flex, () => {
+						.on("click", BDFDB.dotCN.categorycontainerdefault + " > " + BDFDB.dotCN.flex, (e) => {
 							wrapper.classList.toggle(BDFDB.disCN.categorywrapperhovered);
 							wrapper.classList.toggle(BDFDB.disCN.categorywrapperhoveredcollapsed);
 							svg.classList.toggle(BDFDB.disCN.categoryiconhovered);
@@ -269,7 +269,7 @@ class ShowHiddenChannels {
 							name.classList.toggle(BDFDB.disCN.categorynamehovered);
 							name.classList.toggle(BDFDB.disCN.categorynamehoveredcollapsed);
 							
-							$(category).find(BDFDB.dotCN.categorycontainerdefault).toggle(!svg.classList.contains(BDFDB.disCN.closed));
+							$(category).find(BDFDB.dotCN.channelcontainerdefault).toggle(!svg.classList.contains(BDFDB.disCN.closed));
 							BDFDB.saveData(serverID, !svg.classList.contains(BDFDB.disCN.closed), this, "categorystatus");
 						})
 						.on("mouseenter mouseleave", BDFDB.dotCN.categorycontainerdefault + " > " + BDFDB.dotCN.flex, () => {
@@ -385,7 +385,7 @@ class ShowHiddenChannels {
 	}
 	
 	showAccessRoles (serverObj, channel, e, allowed) {
-		if (e.type != "mouseenter") return;
+		if (e.type != "mouseenter" || !serverObj || !channel) return;
 		var settings = BDFDB.getAllData(this, "settings");
 		if (!settings.showAllowedRoles && !settings.showDeniedRoles) return;
 		var myMember = this.MemberStore.getMember(serverObj.id, BDFDB.myData.id);
