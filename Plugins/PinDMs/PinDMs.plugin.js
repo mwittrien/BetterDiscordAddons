@@ -37,7 +37,7 @@ class PinDMs {
 
 	getDescription () {return "Allows you to pin DMs, making them appear at the top of your DM-list.";}
 
-	getVersion () {return "1.0.5";}
+	getVersion () {return "1.0.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -243,9 +243,9 @@ class PinDMs {
 							channelname = channelname + this.UserStore.getUser(dmmemberID).username;
 						}
 					}
-					pinnedDM.querySelector(".channel-name > label").textContent = channelname ? channelname : this.languageStrings.UNNAMED;
+					pinnedDM.querySelector(".channel-name > label").textContent = channelname ? channelname : BDFDB.LanguageStrings.UNNAMED;
 					pinnedDM.querySelectorAll(".status, .channel-activity-text").forEach(ele => {ele.remove();});
-					pinnedDM.querySelector(BDFDB.dotCN.dmchannelactivity).innerHTML = channel.recipients.length+1 + " " + (channel.recipients.length+1 == 1 ? this.languageStrings.MEMBER : this.languageStrings.MEMBERS);
+					pinnedDM.querySelector(BDFDB.dotCN.dmchannelactivity).innerHTML = channel.recipients.length+1 + " " + (channel.recipients.length+1 == 1 ? BDFDB.LanguageStrings.MEMBER : BDFDB.LanguageStrings.MEMBERS);
 				}
 			}
 		}
