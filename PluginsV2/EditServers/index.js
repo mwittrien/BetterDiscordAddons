@@ -1,145 +1,147 @@
 module.exports = (Plugin, Api, Vendor) => {
-	if (typeof BDfunctionsDevilBro !== "object") global.BDfunctionsDevilBro = {$: Vendor.$, BDv2Api: Api};
+	if (typeof BDFDB !== "object") global.BDFDB = {$: Vendor.$, BDv2Api: Api};
 	
 	const {$} = Vendor;
 
 	return class extends Plugin {
-		onStart() {
-			var libraryScript = null;
-			if (typeof BDfunctionsDevilBro !== "object" || typeof BDfunctionsDevilBro.isLibraryOutdated !== "function" || BDfunctionsDevilBro.isLibraryOutdated()) {
-				libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]');
-				if (libraryScript) libraryScript.remove();
-				libraryScript = document.createElement("script");
-				libraryScript.setAttribute("type", "text/javascript");
-				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js");
-				document.head.appendChild(libraryScript);
-			}
-			this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-			if (typeof BDfunctionsDevilBro === "object" && typeof BDfunctionsDevilBro.isLibraryOutdated === "function") this.initialize();
-			else libraryScript.addEventListener("load", () => {this.initialize();});
-			return true;
-		}
-		
-		initialize() {
-			if (typeof BDfunctionsDevilBro === "object") {
-				this.labels = {};
+		initConstructor () {
+			this.labels = {};
+			
+			this.serverDragged = false;
+
+			this.serverContextEntryMarkup =
+				`<div class="${BDFDB.disCN.contextmenuitemgroup}">
+					<div class="${BDFDB.disCN.contextmenuitem} localserversettings-item ${BDFDB.disCN.contextmenuitemsubmenu}">
+						<span>REPLACE_context_localserversettings_text</span>
+						<div class="${BDFDB.disCN.contextmenuhint}"></div>
+					</div>
+				</div>`;
 				
-				this.serverDragged = false;
-
-				this.serverContextEntryMarkup =
-					`<div class="itemGroup-oViAgA">
-						<div class="item-1XYaYf localserversettings-item itemSubMenu-3ZgIw-">
-							<span>REPLACE_context_localserversettings_text</span>
-							<div class="hint-3TJykr"></div>
+			this.serverContextSubMenuMarkup = 
+				`<div class="${BDFDB.disCN.contextmenu} editservers-submenu">
+					<div class="${BDFDB.disCN.contextmenuitemgroup}">
+						<div class="${BDFDB.disCN.contextmenuitem} serversettings-item">
+							<span>REPLACE_submenu_serversettings_text</span>
+							<div class="${BDFDB.disCN.contextmenuhint}"></div>
 						</div>
-					</div>`;
-					
-				this.serverContextSubMenuMarkup = 
-					`<div class="contextMenu-uoJTbz editservers-submenu">
-						<div class="itemGroup-oViAgA">
-							<div class="item-1XYaYf serversettings-item">
-								<span>REPLACE_submenu_serversettings_text</span>
-								<div class="hint-3TJykr"></div>
-							</div>
-							<div class="item-1XYaYf resetsettings-item disabled-dlOjhg">
-								<span>REPLACE_submenu_resetsettings_text</span>
-								<div class="hint-3TJykr"></div>
-							</div>
+						<div class="${BDFDB.disCN.contextmenuitem} resetsettings-item ${BDFDB.disCN.contextmenuitemdisabled}">
+							<span>REPLACE_submenu_resetsettings_text</span>
+							<div class="${BDFDB.disCN.contextmenuhint}"></div>
 						</div>
-					</div>`;
+					</div>
+				</div>`;
 
-				this.serverSettingsModalMarkup =
-					`<span class="${this.id}-modal DevilBro-modal">
-						<div class="backdrop-2ohBEd"></div>
-						<div class="modal-2LIEKY">
-							<div class="inner-1_1f7b">
-								<div class="modal-3HOjGZ sizeMedium-1-2BNS">
-									<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO header-3sp3cE" style="flex: 0 0 auto;">
-										<div class="flexChild-1KGW5q" style="flex: 1 1 auto;">
-											<h4 class="h4-2IXpeI title-1pmpPr size16-3IvaX_ height20-165WbF weightSemiBold-T8sxWH defaultColor-v22dK1 defaultMarginh4-jAopYe marginReset-3hwONl">REPLACE_modal_header_text</h4>
-											<div class="guildName-1u0hy7 small-3-03j1 size12-1IGJl9 height16-1qXrGy primary-2giqSn"></div>
-										</div>
-										<svg class="btn-cancel close-3ejNTg flexChild-1KGW5q" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12">
-											<g fill="none" fill-rule="evenodd">
-												<path d="M0 0h12v12H0"></path>
-												<path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path>
-											</g>
-										</svg>
+			this.serverSettingsModalMarkup =
+				`<span class="editservers-modal DevilBro-modal">
+					<div class="${BDFDB.disCN.backdrop}"></div>
+					<div class="${BDFDB.disCN.modal}">
+						<div class="${BDFDB.disCN.modalinner}">
+							<div class="${BDFDB.disCNS.modalsub + BDFDB.disCN.modalsizemedium}">
+								<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex: 0 0 auto;">
+									<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">
+										<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.headertitle + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.defaultcolor + BDFDB.disCNS.h4defaultmargin + BDFDB.disCN.marginreset}">REPLACE_modal_header_text</h4>
+										<div class="${BDFDB.disCNS.modalguildname + BDFDB.disCNS.small + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCN.primary}"></div>
 									</div>
-									<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4 inner-tqJwAU" style="flex: 0 0 auto;">
-										<div tab="server" class="tab">REPLACE_modal_tabheader1_text</div>
-										<div tab="icon" class="tab">REPLACE_modal_tabheader2_text</div>
-										<div tab="tooltip" class="tab">REPLACE_modal_tabheader3_text</div>
-									</div>
-									<div class="scrollerWrap-2uBjct content-1Cut5s scrollerThemed-19vinI themeGhostHairline-2H8SiW">
-										<div class="scroller-fzNley inner-tqJwAU">
-											<div tab="server" class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginBottom20-2Ifj-2 tab-content" style="flex: 1 1 auto;">
-												<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
-													<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_servername_text</h3>
-												</div>
-												<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
-													<div class="inputWrapper-3xoRWR vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR flexChild-1KGW5q" style="flex: 1 1 auto;"><input type="text" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_" id="input-servername"></div>
-												</div>
-												<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
-													<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_servershortname_text</h3>
-												</div>
-												<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
-													<div class="inputWrapper-3xoRWR vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR flexChild-1KGW5q" style="flex: 1 1 auto;"><input type="text" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_" id="input-servershortname"></div>
-												</div>
-												<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
-													<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_serverurl_text</h3>
-												</div>
-												<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
-													<div class="inputWrapper-3xoRWR vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR flexChild-1KGW5q" style="flex: 1 1 auto;"><input type="text" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_" id="input-serverurl"></div>
-												</div>
-												<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
-													<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">REPLACE_modal_removeicon_text</h3>
-													<div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;">
-														<input type="checkbox" class="checkboxEnabled-4QfryV checkbox-1KYsPm" id="input-removeicon">
-													</div>
-												</div>
+									<svg class="${BDFDB.disCNS.modalclose + BDFDB.disCN.flexchild}" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12">
+										<g fill="none" fill-rule="evenodd">
+											<path d="M0 0h12v12H0"></path>
+											<path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path>
+										</g>
+									</svg>
+								</div>
+								<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCNS.marginbottom8 + BDFDB.disCN.modalsubinner}" style="flex: 0 0 auto;">
+									<div tab="server" class="tab">REPLACE_modal_tabheader1_text</div>
+									<div tab="icon" class="tab">REPLACE_modal_tabheader2_text</div>
+									<div tab="tooltip" class="tab">REPLACE_modal_tabheader3_text</div>
+								</div>
+								<div class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.modalcontent + BDFDB.disCNS.scrollerthemed + BDFDB.disCN.themeghosthairline}">
+									<div class="${BDFDB.disCNS.scroller + BDFDB.disCN.modalsubinner}">
+										<div tab="server" class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20} tab-content" style="flex: 1 1 auto;">
+											<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
+												<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">REPLACE_modal_servername_text</h3>
 											</div>
-											<div tab="icon" class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginBottom20-2Ifj-2 tab-content" style="flex: 1 1 auto;">
-												<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO" style="flex: 1 1 auto;">
-													<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_colorpicker1_text</h3>
-												</div>
-												<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
-													<div class="swatches1"></div>
-												</div>
-												<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO" style="flex: 1 1 auto;">
-													<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_colorpicker2_text</h3>
-												</div>
-												<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
-													<div class="swatches2"></div>
-												</div>
+											<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
+												<div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex + BDFDB.disCNS.directioncolumn + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;"><input type="text" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16}" id="input-servername"></div>
 											</div>
-											<div tab="tooltip" class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO marginBottom20-2Ifj-2 tab-content" style="flex: 1 1 auto;">
-												<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO" style="flex: 1 1 auto;">
-													<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_colorpicker3_text</h3>
-												</div>
-												<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
-													<div class="swatches3"></div>
-												</div>
-												<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO" style="flex: 1 1 auto;">
-													<h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">REPLACE_modal_colorpicker4_text</h3>
-												</div>
-												<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;">
-													<div class="swatches4"></div>
+											<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
+												<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">REPLACE_modal_servershortname_text</h3>
+											</div>
+											<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
+												<div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex + BDFDB.disCNS.directioncolumn + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;"><input type="text" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16}" id="input-servershortname"></div>
+											</div>
+											<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
+												<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">REPLACE_modal_serverurl_text</h3>
+											</div>
+											<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
+												<div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex + BDFDB.disCNS.directioncolumn + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;"><input type="text" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16}" id="input-serverurl"></div>
+											</div>
+											<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
+												<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">REPLACE_modal_removeicon_text</h3>
+												<div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;">
+													<input type="checkbox" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}" id="input-removeicon">
 												</div>
 											</div>
 										</div>
+										<div tab="icon" class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20} tab-content" style="flex: 1 1 auto;">
+											<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstart + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;">
+												<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">REPLACE_modal_colorpicker1_text</h3>
+											</div>
+											<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
+												<div class="swatches1"></div>
+											</div>
+											<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstart + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;">
+												<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">REPLACE_modal_colorpicker2_text</h3>
+											</div>
+											<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
+												<div class="swatches2"></div>
+											</div>
+										</div>
+										<div tab="tooltip" class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20} tab-content" style="flex: 1 1 auto;">
+											<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstart + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;">
+												<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">REPLACE_modal_colorpicker3_text</h3>
+											</div>
+											<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
+												<div class="swatches3"></div>
+											</div>
+											<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstart + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;">
+												<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">REPLACE_modal_colorpicker4_text</h3>
+											</div>
+											<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
+												<div class="swatches4"></div>
+											</div>
+										</div>
 									</div>
-									<div class="flex-lFgbSz flex-3B1Tl4 horizontalReverse-2LanvO horizontalReverse-k5PqxT flex-3B1Tl4 directionRowReverse-2eZTxP justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO footer-1PYmcw">
-										<button type="button" class="btn-save button-2t3of8 lookFilled-luDKDo colorBrand-3PmwCE sizeMedium-2VGNaF grow-25YQ8u">
-											<div class="contents-4L4hQM">REPLACE_btn_save_text</div>
-										</button>
-									</div>
+								</div>
+								<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontalreverse + BDFDB.disCNS.horizontalreverse2 + BDFDB.disCNS.directionrowreverse + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.modalfooter}">
+									<button type="button" class="btn-save ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}">
+										<div class="${BDFDB.disCN.buttoncontents}">REPLACE_btn_save_text</div>
+									</button>
 								</div>
 							</div>
 						</div>
-					</span>`;
-					
-				BDfunctionsDevilBro.loadMessage(this);
+					</div>
+				</span>`;
+		}
+
+		onstart () {
+			var libraryScript = null;
+			if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
+				libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+				if (libraryScript) libraryScript.remove();
+				libraryScript = document.createElement("script");
+				libraryScript.setAttribute("type", "text/javascript");
+				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+				document.head.appendChild(libraryScript);
+			}
+			this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
+			if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
+			else libraryScript.addEventListener("load", () => {this.initialize();});
+			return true;
+		}
+
+		initialize () {
+			if (typeof BDFDB === "object") {
+				BDFDB.loadMessage(this);
 				
 				var observer = null;
 
@@ -148,7 +150,7 @@ module.exports = (Plugin, Api, Vendor) => {
 						(change, i) => {
 							if (change.addedNodes) {
 								change.addedNodes.forEach((node) => {
-									if (node.nodeType == 1 && node.className.includes("contextMenu-uoJTbz")) {
+									if (node.nodeType == 1 && node.className.includes(BDFDB.disCN.contextmenu)) {
 										this.onContextMenu(node);
 									}
 								});
@@ -156,31 +158,31 @@ module.exports = (Plugin, Api, Vendor) => {
 						}
 					);
 				});
-				BDfunctionsDevilBro.addObserver(this, ".appMount-14L89u", {name:"serverContextObserver",instance:observer}, {childList: true});
+				BDFDB.addObserver(this, BDFDB.dotCN.appmount, {name:"serverContextObserver",instance:observer}, {childList: true});
 				
 				observer = new MutationObserver((changes, _) => {
 					changes.forEach(
 						(change, i) => {
 							var addedNodes = change.addedNodes;
-							if (change.attributeName == "class" && change.oldValue && change.oldValue.indexOf("guild-placeholder") > -1)  addedNodes = [change.target];
+							if (change.attributeName == "class" && change.oldValue && change.oldValue.indexOf(BDFDB.disCN.guildplaceholder) > -1)  addedNodes = [change.target];
 							if (change.attributeName == "draggable" && change.oldValue && change.oldValue == "false")  addedNodes = [change.target.parentElement];
 							if (addedNodes) {
 								addedNodes.forEach((node) => {
-									if (node && node.classList && node.classList.contains("guild") && !node.querySelector(".guilds-error")) {
-										var id = BDfunctionsDevilBro.getIdOfServer(node);
-										if (id) this.loadServer(BDfunctionsDevilBro.getDivOfServer(id));
+									if (node && node.classList && node.classList.contains(BDFDB.disCN.guild) && !node.querySelector(BDFDB.dotCN.guildserror)) {
+										var id = BDFDB.getIdOfServer(node);
+										if (id) this.loadServer(BDFDB.getDivOfServer(id));
 									}
 								});
 							}
 						}
 					);
 				});
-				BDfunctionsDevilBro.addObserver(this, ".guilds.scroller", {name:"serverListObserver",instance:observer}, {childList: true, subtree:true, attributes:true, attributeFilte: ["class", "draggable"], attributeOldValue: true});
+				BDFDB.addObserver(this, BDFDB.dotCN.guilds, {name:"serverListObserver",instance:observer}, {childList: true, subtree:true, attributes:true, attributeFilte: ["class", "draggable"], attributeOldValue: true});
 					
 				setTimeout(() => {
 					this.loadAllServers();
 				},3000);
-				
+
 				return true;
 			}
 			else {
@@ -189,11 +191,11 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 		}
 
-		onStop() {
-			if (typeof BDfunctionsDevilBro === "object") {	
-				document.querySelectorAll("[custom-editservers]").forEach(serverDiv => {this.resetServer(BDfunctionsDevilBro.getIdOfServer(serverDiv));});	
+		onStop () {
+			if (typeof BDFDB === "object") {
+				document.querySelectorAll("[custom-editservers]").forEach(serverDiv => {this.resetServer(BDFDB.getIdOfServer(serverDiv));});
 				
-				BDfunctionsDevilBro.unloadMessage(this);
+				BDFDB.unloadMessage(this);
 				return true;
 			}
 			else {
@@ -206,9 +208,9 @@ module.exports = (Plugin, Api, Vendor) => {
 
 		resetAll () {
 			if (confirm("Are you sure you want to reset all servers?")) {
-				BDfunctionsDevilBro.removeAllData(this, "servers");
+				BDFDB.removeAllData(this, "servers");
 				
-				document.querySelectorAll("[custom-editservers]").forEach(serverDiv => {this.resetServer(BDfunctionsDevilBro.getIdOfServer(serverDiv));});
+				document.querySelectorAll("[custom-editservers]").forEach(serverDiv => {this.resetServer(BDFDB.getIdOfServer(serverDiv));});
 			}
 		}
 
@@ -235,14 +237,14 @@ module.exports = (Plugin, Api, Vendor) => {
 		
 		onContextMenu (context) {
 			if (!context || !context.tagName || !context.parentElement || context.querySelector(".localserversettings-item")) return;
-			var info = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"guild"});
-			if (info && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"displayName", "value":"GuildLeaveGroup"})) {
+			var info = BDFDB.getKeyInformation({"node":context, "key":"guild"});
+			if (info && BDFDB.getKeyInformation({"node":context, "key":"displayName", "value":"GuildLeaveGroup"})) {
 				$(context).append(this.serverContextEntryMarkup)
 					.on("mouseenter", ".localserversettings-item", (e) => {
 						this.createContextSubMenu(info, e, context);
 					});
 					
-				BDfunctionsDevilBro.updateContextPosition(context);
+				BDFDB.updateContextPosition(context);
 			}
 		}
 		
@@ -257,21 +259,21 @@ module.exports = (Plugin, Api, Vendor) => {
 					this.showServerSettings(info);
 				});
 				
-			if (BDfunctionsDevilBro.loadData(id, this, "servers")) {
+			if (BDFDB.loadData(id, this, "servers")) {
 				serverContextSubMenu
 					.find(".resetsettings-item")
-					.removeClass("disabled-dlOjhg")
+					.removeClass(BDFDB.disCN.contextmenuitemdisabled)
 					.on("click", () => {
 						$(context).hide();
 						this.removeServerData(info.id);
 					});
 			}
 			
-			BDfunctionsDevilBro.appendSubMenu(e.currentTarget, serverContextSubMenu);
+			BDFDB.appendSubMenu(e.currentTarget, serverContextSubMenu);
 		}
 		
 		showServerSettings (info) {
-			var data = BDfunctionsDevilBro.loadData(info.id, this, "servers");
+			var data = BDFDB.loadData(info.id, this, "servers");
 			
 			var name = 			data ? data.name : null;
 			var shortName = 	data ? data.shortName : null;
@@ -283,7 +285,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			var color4 = 		data ? data.color4 : null;
 			
 			var serverSettingsModal = $(this.serverSettingsModalMarkup);
-			serverSettingsModal.find(".guildName-1u0hy7").text(info.name);
+			serverSettingsModal.find(BDFDB.dotCN.modalguildname).text(info.name);
 			serverSettingsModal.find("#input-servername").val(name);
 			serverSettingsModal.find("#input-servername").attr("placeholder", info.name);
 			serverSettingsModal.find("#input-servershortname").val(shortName ? shortName : (info.icon ? "" : info.acronym));
@@ -293,11 +295,11 @@ module.exports = (Plugin, Api, Vendor) => {
 			serverSettingsModal.find("#input-serverurl").addClass(url ? "valid" : "");
 			serverSettingsModal.find("#input-serverurl").prop("disabled", removeIcon);
 			serverSettingsModal.find("#input-removeicon").prop("checked", removeIcon);
-			BDfunctionsDevilBro.setColorSwatches(color1, serverSettingsModal.find(".swatches1"), "swatch1");
-			BDfunctionsDevilBro.setColorSwatches(color2, serverSettingsModal.find(".swatches2"), "swatch2");
-			BDfunctionsDevilBro.setColorSwatches(color3, serverSettingsModal.find(".swatches3"), "swatch3");
-			BDfunctionsDevilBro.setColorSwatches(color4, serverSettingsModal.find(".swatches4"), "swatch4");
-			BDfunctionsDevilBro.appendModal(serverSettingsModal);
+			BDFDB.setColorSwatches(color1, serverSettingsModal.find(".swatches1"), "swatch1");
+			BDFDB.setColorSwatches(color2, serverSettingsModal.find(".swatches2"), "swatch2");
+			BDFDB.setColorSwatches(color3, serverSettingsModal.find(".swatches3"), "swatch3");
+			BDFDB.setColorSwatches(color4, serverSettingsModal.find(".swatches4"), "swatch4");
+			BDFDB.appendModal(serverSettingsModal);
 			serverSettingsModal
 				.on("click", "#input-removeicon", (event) => {
 					serverSettingsModal.find("#input-serverurl").prop("disabled", event.target.checked);
@@ -310,10 +312,10 @@ module.exports = (Plugin, Api, Vendor) => {
 					this.createNoticeTooltip(event);
 				})
 				.on("mouseleave", "#input-serverurl", (event) => {
-					$(".tooltips").find(".notice-tooltip").remove();
+					$(BDFDB.dotCN.tooltips).find(".notice-tooltip").remove();
 					$(event.target).removeClass("hovering");
 				})
-				.on("click", "button.btn-save", (event) => {
+				.on("click", ".btn-save", (event) => {
 					event.preventDefault();
 					
 					name = null;
@@ -342,16 +344,17 @@ module.exports = (Plugin, Api, Vendor) => {
 					
 					removeIcon = serverSettingsModal.find("#input-removeicon").prop("checked");
 					
-					color1 = BDfunctionsDevilBro.getSwatchColor("swatch1");
-					color2 = BDfunctionsDevilBro.getSwatchColor("swatch2");
-					color3 = BDfunctionsDevilBro.getSwatchColor("swatch3");
-					color4 = BDfunctionsDevilBro.getSwatchColor("swatch4");
+					color1 = BDFDB.getSwatchColor("swatch1");
+					color2 = BDFDB.getSwatchColor("swatch2");
+					color3 = BDFDB.getSwatchColor("swatch3");
+					color4 = BDFDB.getSwatchColor("swatch4");
+					
 					if (name == null && shortName == null && url == null && !removeIcon && color1 == null && color2 == null && color3 == null && color4 == null) {
 						this.removeServerData(info.id);
 					}
 					else {
-						BDfunctionsDevilBro.saveData(info.id, {name,shortName,url,removeIcon,color1,color2,color3,color4}, this, "servers");
-						this.loadServer(BDfunctionsDevilBro.getDivOfServer(info.id));
+						BDFDB.saveData(info.id, {name,shortName,url,removeIcon,color1,color2,color3,color4}, this, "servers");
+						this.loadServer(BDFDB.getDivOfServer(info.id));
 					}
 				});
 			serverSettingsModal.find("#input-servername").focus();
@@ -362,7 +365,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				$(e.target)
 					.removeClass("valid")
 					.removeClass("invalid");
-				if ($(e.target).hasClass("hovering")) $(".tooltips").find(".notice-tooltip").remove();
+				if ($(e.target).hasClass("hovering")) $(BDFDB.dotCN.tooltips).find(".notice-tooltip").remove();
 			}
 			else {
 				let request = require("request");
@@ -383,7 +386,7 @@ module.exports = (Plugin, Api, Vendor) => {
 		}
 		
 		createNoticeTooltip (e) {
-			$(".tooltips").find(".notice-tooltip").remove();
+			$(BDFDB.dotCN.tooltips).find(".notice-tooltip").remove();
 			
 			var input = e.target;
 			var disabled = $(input).prop("disabled");
@@ -399,23 +402,23 @@ module.exports = (Plugin, Api, Vendor) => {
 					body .notice-tooltip:after {
 						border-right-color: ${bgColor} !important;
 					}`;
-				BDfunctionsDevilBro.createTooltip(text, input, {type:"right",selector:"notice-tooltip",css:customTooltipCSS});
+				BDFDB.createTooltip(text, input, {type:"right",selector:"notice-tooltip",css:customTooltipCSS});
 			}
 		}
 		
 		removeServerData (id) {
 			this.resetServer(id);
 			
-			BDfunctionsDevilBro.removeData(id, this, "servers");
+			BDFDB.removeData(id, this, "servers");
 		}
 		
 		resetServer (id) {
-			let serverObj = BDfunctionsDevilBro.getDivOfServer(id);
+			let serverObj = BDFDB.getDivOfServer(id);
 			if (typeof serverObj !== "object" || !serverObj) return;
 			$(serverObj.div)
 				.off("mouseenter." + this.name)
 				.removeAttr("custom-editservers")
-				.find(".avatar-small")
+				.find(BDFDB.dotCN.avatarsmallold)
 					.text(serverObj.icon ? "" : serverObj.data.acronym)
 					.css("background-image", serverObj.icon ? "url('https://cdn.discordapp.com/icons/" + serverObj.id + "/" + serverObj.icon + ".png')" : "")
 					.css("background-color", "")
@@ -424,19 +427,19 @@ module.exports = (Plugin, Api, Vendor) => {
 		
 		loadServer (serverObj) {
 			if (typeof serverObj !== "object" || !serverObj) return;
-			var data = BDfunctionsDevilBro.loadData(serverObj.id, this, "servers");
+			var data = BDFDB.loadData(serverObj.id, this, "servers");
 			if (data) {
 				var name = data.name ? data.name : serverObj.name;
 				var shortName = data.shortName ? data.shortName : (serverObj.icon ? "" : serverObj.data.acronym);
 				var bgImage = data.url ? "url(" + data.url + ")" : (serverObj.icon ? "url('https://cdn.discordapp.com/icons/" + serverObj.id + "/" + serverObj.icon + ".png')" : "");
 				var removeIcon = data.removeIcon;
-				var color1 = data.color1 ? BDfunctionsDevilBro.color2RGB(data.color1) : "";
-				var color2 = data.color2 ? BDfunctionsDevilBro.color2RGB(data.color2) : "";
+				var color1 = data.color1 ? BDFDB.color2RGB(data.color1) : "";
+				var color2 = data.color2 ? BDFDB.color2RGB(data.color2) : "";
 				$(serverObj.div)
 					.off("mouseenter." + this.name)
 					.on("mouseenter." + this.name, () => {this.createServerToolTip(serverObj);})
 					.attr("custom-editservers", true)
-					.find(".avatar-small")
+					.find(BDFDB.dotCN.avatarsmallold)
 						.text(data.shortName ? shortName : (removeIcon ? "" : shortName))
 						.css("background-image", removeIcon ? "" : bgImage)
 						.css("background-color", color1)
@@ -445,20 +448,20 @@ module.exports = (Plugin, Api, Vendor) => {
 		}
 		
 		loadAllServers () {
-			var serverObjs = BDfunctionsDevilBro.readServerList();
+			var serverObjs = BDFDB.readServerList();
 			for (var i = 0; i < serverObjs.length; i++) {
 				this.loadServer(serverObjs[i]);
 			}
 		}
 		
 		createServerToolTip (serverObj) {
-			var data = BDfunctionsDevilBro.loadData(serverObj.id, this, "servers");
+			var data = BDFDB.loadData(serverObj.id, this, "servers");
 			if (data) {
 				var text = data.name ? data.name : serverObj.name;
-				var bgColor = data.color3 ? BDfunctionsDevilBro.color2RGB(data.color3) : "";
-				var fontColor = data.color4 ? BDfunctionsDevilBro.color2RGB(data.color4) : "";
+				var bgColor = data.color3 ? BDFDB.color2RGB(data.color3) : "";
+				var fontColor = data.color4 ? BDFDB.color2RGB(data.color4) : "";
 				var customTooltipCSS = `
-					body .tooltip:not(.guild-custom-tooltip) {
+					body ${BDFDB.dotCN.tooltip}:not(.guild-custom-tooltip) {
 						display: none !important;
 					}
 					body .guild-custom-tooltip {
@@ -469,13 +472,13 @@ module.exports = (Plugin, Api, Vendor) => {
 						border-right-color: ${bgColor} !important;
 					}`;
 					
-				BDfunctionsDevilBro.createTooltip(text, serverObj.div, {type:"right",selector:"guild-custom-tooltip",css:customTooltipCSS});
+				BDFDB.createTooltip(text, serverObj.div, {type:"right",selector:"guild-custom-tooltip",css:customTooltipCSS});
 			}
 		}
 	
 		getSettingsPanel () {
-			var settingshtml = `<div class="DevilBro-settings">`;
-			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Reset all Servers.</h3><button type="button" class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorRed-3HTNPV sizeMedium-2VGNaF grow-25YQ8u reset-button" style="flex: 0 0 auto;"><div class="contents-4L4hQM">Reset</div></button></div>`;
+			var settingshtml = `<div class="DevilBro-settings ${this.name}-settings">`;
+			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Reset all Servers.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} reset-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Reset</div></button></div>`;
 			settingshtml += `</div>`;
 			
 			var settingspanel = $(settingshtml)[0];
@@ -486,7 +489,7 @@ module.exports = (Plugin, Api, Vendor) => {
 		}
 		
 		setLabelsByLanguage () {
-			switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
+			switch (BDFDB.getDiscordLanguage().id) {
 				case "hr":		//croatian
 					return {
 						context_localserversettings_text:	"Lokalne postavke poslužitelja",

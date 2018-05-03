@@ -1,67 +1,66 @@
 module.exports = (Plugin, Api, Vendor) => {
-	if (typeof BDfunctionsDevilBro !== "object") global.BDfunctionsDevilBro = {$: Vendor.$, BDv2Api: Api};
+	if (typeof BDFDB !== "object") global.BDFDB = {$: Vendor.$, BDv2Api: Api};
 	
 	const {$} = Vendor;
 
 	return class extends Plugin {
-		onStart() {
+		initConstructor () {
+			this.pinDMEntryMarkup =
+				`<div class="${BDFDB.disCN.contextmenuitem} pindm-item">
+					<span>REPLACE_context_pindm_text</span>
+					<div class="${BDFDB.disCN.contextmenuhint}"></div>
+				</div>`;
+				
+			this.pinDMsHeaderMarkup =
+				`<header class="pinneddms-header">REPLACE_header_pinneddms_text</header>`;
+				
+			this.pinnedDMMarkup =
+				`<div class="${BDFDB.disCNS.dmchannel + BDFDB.disCN.dmchannelprivate} pinned" style="height: 42px; opacity: 1;">
+					<a>
+						<div class="${BDFDB.disCN.avatarsmallold}">
+							<div class="${BDFDB.disCN.status}"></div>
+						</div>
+						<div class="${BDFDB.disCN.dmchannelname}">
+							<label style="cursor: pointer;"></label>
+							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.dmchannelactivity}" style="flex: 1 1 auto;">
+								<div class="${BDFDB.disCN.dmchannelactivitytext}"></div>
+							</div>
+						</div>
+						<button class="${BDFDB.disCN.dmchannelclose}"></button>
+					</a>
+				</div>`;
+			
+			this.richActivityMarkup = 
+				`<svg name="RichActivity" class="${BDFDB.disCN.dmchannelactivityicon}" width="16" height="16" viewBox="0 0 16 16">
+					<path class="${BDFDB.disCN.dmchannelactivityiconforeground}" fill="currentColor" d="M6,7 L2,7 L2,6 L6,6 L6,7 Z M8,5 L2,5 L2,4 L8,4 L8,5 Z M8,3 L2,3 L2,2 L8,2 L8,3 Z M8.88888889,0 L1.11111111,0 C0.494444444,0 0,0.494444444 0,1.11111111 L0,8.88888889 C0,9.50253861 0.497461389,10 1.11111111,10 L8.88888889,10 C9.50253861,10 10,9.50253861 10,8.88888889 L10,1.11111111 C10,0.494444444 9.5,0 8.88888889,0 Z" transform="translate(3 3)"></path>
+				</svg>`;
+		}
+
+		onStart () {
 			var libraryScript = null;
-			if (typeof BDfunctionsDevilBro !== "object" || typeof BDfunctionsDevilBro.isLibraryOutdated !== "function" || BDfunctionsDevilBro.isLibraryOutdated()) {
-				libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]');
+			if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
+				libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 				if (libraryScript) libraryScript.remove();
 				libraryScript = document.createElement("script");
 				libraryScript.setAttribute("type", "text/javascript");
-				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js");
+				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
 				document.head.appendChild(libraryScript);
 			}
 			this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-			if (typeof BDfunctionsDevilBro === "object" && typeof BDfunctionsDevilBro.isLibraryOutdated === "function") this.initialize();
+			if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
 			else libraryScript.addEventListener("load", () => {this.initialize();});
 			return true;
 		}
-		
-		initialize() {
-			if (typeof BDfunctionsDevilBro === "object") {
-				this.pinDMEntryMarkup =
-					`<div class="item-1XYaYf pindm-item">
-						<span>REPLACE_context_pindm_text</span>
-						<div class="hint-3TJykr"></div>
-					</div>`;
-					
-				this.pinDMsHeaderMarkup =
-					`<header class="pinneddms-header">REPLACE_header_pinneddms_text</header>`;
-					
-				this.pinnedDMMarkup =
-					`<div class="channel private pinned" style="height: 42px; opacity: 1;">
-						<a>
-							<div class="avatar-small stop-animation">
-								<div class="status"></div>
-							</div>
-							<div class="channel-name">
-								<label></label>
-								<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO channel-activity" style="flex: 1 1 auto;">
-									<div class="channel-activity-text"></div>
-								</div>
-							</div>
-							<button class="close"></button>
-						</a>
-					</div>`;
-				
-				this.richActivityMarkup = 
-					`<svg name="RichActivity" class="channel-activity-icon" width="16" height="16" viewBox="0 0 16 16">
-						<path class="channel-activity-icon-foreground" fill="currentColor" d="M6,7 L2,7 L2,6 L6,6 L6,7 Z M8,5 L2,5 L2,4 L8,4 L8,5 Z M8,3 L2,3 L2,2 L8,2 L8,3 Z M8.88888889,0 L1.11111111,0 C0.494444444,0 0,0.494444444 0,1.11111111 L0,8.88888889 C0,9.50253861 0.497461389,10 1.11111111,10 L8.88888889,10 C9.50253861,10 10,9.50253861 10,8.88888889 L10,1.11111111 C10,0.494444444 9.5,0 8.88888889,0 Z" transform="translate(3 3)"></path>
-					</svg>`;
 
-				BDfunctionsDevilBro.loadMessage(this);
+		initialize () {
+			if (typeof BDFDB === "object") {
+				BDFDB.loadMessage(this);
 				
-				this.languageStrings = BDfunctionsDevilBro.getLanguageTable();
-				this.englishStrings = BDfunctionsDevilBro.getLanguageTable("en-US");
-				
-				this.UserStore = BDfunctionsDevilBro.WebModules.findByProperties(["getUsers", "getUser"]);
-				this.ActivityStore = BDfunctionsDevilBro.WebModules.findByProperties(["getStatuses", "getActivities"]);
-				this.ChannelStore = BDfunctionsDevilBro.WebModules.findByProperties(["getDMFromUserId"]);
-				this.ChannelSwitchUtils = BDfunctionsDevilBro.WebModules.findByProperties(["selectPrivateChannel"]);
-				this.UserContextMenuUtils = BDfunctionsDevilBro.WebModules.findByProperties(["openUserContextMenu"]);
+				this.UserStore = BDFDB.WebModules.findByProperties(["getUsers", "getUser"]);
+				this.ActivityStore = BDFDB.WebModules.findByProperties(["getStatuses", "getActivities"]);
+				this.ChannelStore = BDFDB.WebModules.findByProperties(["getDMFromUserId"]);
+				this.ChannelSwitchUtils = BDFDB.WebModules.findByProperties(["selectPrivateChannel"]);
+				this.UserContextMenuUtils = BDFDB.WebModules.findByProperties(["openUserContextMenu"]);
 				
 				var observer = null;
 				
@@ -70,7 +69,7 @@ module.exports = (Plugin, Api, Vendor) => {
 						(change, i) => {
 							if (change.addedNodes) {
 								change.addedNodes.forEach((node) => {
-									if (node && node.nodeType == 1 && node.className.includes("contextMenu-uoJTbz")) {
+									if (node && node.nodeType == 1 && node.className.includes(BDFDB.disCN.contextmenu)) {
 										this.onContextMenu(node);
 									}
 								});
@@ -78,7 +77,7 @@ module.exports = (Plugin, Api, Vendor) => {
 						}
 					);
 				});
-				BDfunctionsDevilBro.addObserver(this, ".appMount-14L89u", {name:"dmContextObserver",instance:observer}, {childList: true});
+				BDFDB.addObserver(this, BDFDB.dotCN.appmount, {name:"dmContextObserver",instance:observer}, {childList: true});
 				
 				observer = new MutationObserver((changes, _) => {
 					changes.forEach(
@@ -86,7 +85,7 @@ module.exports = (Plugin, Api, Vendor) => {
 							if (change.addedNodes) {
 								change.addedNodes.forEach((node) => {
 									if (node && node.classList && node.classList.contains("btn-friends")) {
-										$(".channel.private.pinned, header.pinneddms-header").remove();
+										$(BDFDB.dotCN.dmchannel + BDFDB.dotCN.dmchannelprivate + ".pinned, header.pinneddms-header").remove();
 										this.addAllPinnedDMs();
 									}
 								});
@@ -94,10 +93,10 @@ module.exports = (Plugin, Api, Vendor) => {
 						}
 					);
 				});
-				BDfunctionsDevilBro.addObserver(this, ".private-channels .scroller-fzNley", {name:"friendButtonObserver",instance:observer}, {childList: true});
+				BDFDB.addObserver(this, BDFDB.dotCNS.dmchannels + BDFDB.dotCN.scroller, {name:"friendButtonObserver",instance:observer}, {childList: true});
 				
 				setTimeout(() => {this.onSwitch();},1000);
-			
+
 				return true;
 			}
 			else {
@@ -106,31 +105,31 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 		}
 
-		onStop() {
-			if (typeof BDfunctionsDevilBro === "object") {		
-				$(".channel.private.pinned, header.pinneddms-header").remove();
+		onStop () {
+			if (typeof BDFDB === "object") {
+				$(BDFDB.dotCN.dmchannel + BDFDB.dotCN.dmchannelprivate + ".pinned, header.pinneddms-header").remove();
 				
 				clearInterval(this.statusInterval);
 				
-				BDfunctionsDevilBro.unloadMessage(this);
+				BDFDB.unloadMessage(this);
 				return true;
 			}
 			else {
 				return false;
 			}
 		}
-	
+		
 		onSwitch () {
-			if (!document.querySelector(".active .friends-icon") || document.querySelector(".channel.private.pinned")) return;
+			if (!document.querySelector(BDFDB.dotCNS.guildactive + BDFDB.dotCN.friendsicon) || document.querySelector(BDFDB.dotCN.dmchannel + BDFDB.dotCN.dmchannelprivate + ".pinned")) return;
 			
 			this.addAllPinnedDMs();
 			
-			BDfunctionsDevilBro.addObserver(this, ".private-channels .scroller-fzNley", {name:"friendButtonObserver"}, {childList: true});
+			BDFDB.addObserver(this, BDFDB.dotCNS.dmchannels + BDFDB.dotCN.scroller, {name:"friendButtonObserver"}, {childList: true});
 		}
-
-	
+		
+		
 		// begin of own functions
-	
+		
 		changeLanguageStrings () {
 			this.pinDMsHeaderMarkup = 	this.pinDMsHeaderMarkup.replace("REPLACE_header_pinneddms_text", this.labels.header_pinneddms_text);
 			
@@ -138,36 +137,36 @@ module.exports = (Plugin, Api, Vendor) => {
 		}
 		
 		onContextMenu (context) {
-			if (!document.querySelector(".active .friends-icon") || !context || !context.tagName || !context.parentElement || context.querySelector(".pindm-item")) return;
-			var info = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"user"}), ele = null;
-			if (info && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"handleClose"})) {
-				ele = context.querySelectorAll(".item-1XYaYf")[3];
+			if (!document.querySelector(BDFDB.dotCNS.guildactive + BDFDB.dotCN.friendsicon) || !context || !context.tagName || !context.parentElement || context.querySelector(".pindm-item")) return;
+			var info = BDFDB.getKeyInformation({"node":context, "key":"user"}), ele = null;
+			if (info && BDFDB.getKeyInformation({"node":context, "key":"handleClose"})) {
+				ele = context.querySelectorAll(BDFDB.dotCN.contextmenuitem)[3];
 			}
 			else {
-				info = BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"channel"});
-				if (info && BDfunctionsDevilBro.getKeyInformation({"node":context, "key":"handleChangeIcon"})) {
-					ele = context.querySelectorAll(".item-1XYaYf")[1];
+				info = BDFDB.getKeyInformation({"node":context, "key":"channel"});
+				if (info && BDFDB.getKeyInformation({"node":context, "key":"handleChangeIcon"})) {
+					ele = context.querySelectorAll(BDFDB.dotCN.contextmenuitem)[1];
 				}
 			}
 			if (ele) {
 				$(this.pinDMEntryMarkup).insertBefore(ele)
 					.on("click", (e) => {
 						$(context).hide();
-						var pinnedDMs = BDfunctionsDevilBro.loadAllData(this, "pinnedDMs");
+						var pinnedDMs = BDFDB.loadAllData(this, "pinnedDMs");
 						if (typeof pinnedDMs[info.id] == "undefined") {
 							var pos = Object.keys(pinnedDMs).length;
 							pinnedDMs[info.id] = pos;
-							BDfunctionsDevilBro.saveAllData(pinnedDMs, this, "pinnedDMs")
+							BDFDB.saveAllData(pinnedDMs, this, "pinnedDMs")
 							this.addPinnedDM(info.id, pos); 
 						}
 					});
 					
-				BDfunctionsDevilBro.updateContextPosition(context);
+				BDFDB.updateContextPosition(context);
 			}
 		}
 		
 		addAllPinnedDMs () {
-			var pinnedDMs = BDfunctionsDevilBro.loadAllData(this, "pinnedDMs");
+			var pinnedDMs = BDFDB.loadAllData(this, "pinnedDMs");
 			var sortedDMs = [];
 			for (let id in pinnedDMs) sortedDMs[pinnedDMs[id]] = id;
 			for (let pos in sortedDMs.reverse()) {
@@ -176,8 +175,8 @@ module.exports = (Plugin, Api, Vendor) => {
 		}
 		
 		addPinnedDM (id, pos) {
-			if (!document.querySelector(".channel.btn-friends + header.pinneddms-header")) {
-				$(this.pinDMsHeaderMarkup).insertBefore(".channel.btn-friends + header");
+			if (!document.querySelector(BDFDB.dotCN.dmchannel + BDFDB.dotCN.friendsbutton + " + header.pinneddms-header")) {
+				$(this.pinDMsHeaderMarkup).insertBefore(BDFDB.dotCN.dmchannel + BDFDB.dotCN.friendsbutton + " + header");
 				this.startUpdateInterval();
 			}
 			let user = this.UserStore.getUser(id);
@@ -185,23 +184,23 @@ module.exports = (Plugin, Api, Vendor) => {
 			if (user || channel) {
 				let DMid = user ? this.ChannelStore.getDMFromUserId(user.id) : channel.id;
 				let pinnedDM = $(this.pinnedDMMarkup);
-				pinnedDM.attr("user-id", user ? user.id : null).attr("channel-id", DMid).insertAfter(".channel.btn-friends + header.pinneddms-header")
+				pinnedDM.attr("user-id", user ? user.id : null).attr("channel-id", DMid).insertAfter(BDFDB.dotCN.dmchannel + BDFDB.dotCN.friendsbutton + " + header.pinneddms-header")
 					.on("contextmenu." + this.name, (e) => {
 						if (user && DMid) this.UserContextMenuUtils.openUserContextMenu(e, user, this.ChannelStore.getChannel(DMid));
 						else {
-							var channelObj = BDfunctionsDevilBro.getDivOfChannel(channel.id);
-							if (channelObj && channelObj.div) BDfunctionsDevilBro.getKeyInformation({"node":channelObj.div,"key":"onContextMenu"})(e);
-							else BDfunctionsDevilBro.showToast("Could not open ContextMenu, make sure the DM exists, Group DMs habe to be loaded in the list.", {type:"error"});
+							var channelObj = BDFDB.getDivOfChannel(channel.id);
+							if (channelObj && channelObj.div) BDFDB.getKeyInformation({"node":channelObj.div,"key":"onContextMenu"})(e);
+							else BDFDB.showToast("Could not open ContextMenu, make sure the DM exists, Group DMs habe to be loaded in the list.", {type:"error"});
 						}
 					})
 					.on("click." + this.name, (e) => {
-						if (e.target.classList && e.target.classList.contains("close")) return;
+						if (e.target.classList && e.target.classList.contains(BDFDB.disCN.dmchannelclose)) return;
 						if (DMid) this.ChannelSwitchUtils.selectPrivateChannel(DMid);
-						else BDfunctionsDevilBro.showToast("Could not open DM, make sure it exists.", {type:"error"});
+						else BDFDB.showToast("Could not open DM, make sure it exists.", {type:"error"});
 					})
-					.on("click." + this.name, ".close", () => {
+					.on("click." + this.name, BDFDB.dotCN.dmchannelclose, () => {
 						pinnedDM.remove();
-						BDfunctionsDevilBro.removeData(user ? user.id : DMid, this, "pinnedDMs");
+						BDFDB.removeData(user ? user.id : DMid, this, "pinnedDMs");
 						this.updatePinnedDMPositions();
 					});
 					
@@ -214,24 +213,24 @@ module.exports = (Plugin, Api, Vendor) => {
 				let id = pinnedDM.getAttribute("user-id");
 				let user = this.UserStore.getUser(id);
 				if (user) {
-					let data = BDfunctionsDevilBro.loadData(user.id, "EditUsers", "users") || {};
+					let data = BDFDB.loadData(user.id, "EditUsers", "users") || {};
 					let activity = this.ActivityStore.getActivity(user.id);
-					pinnedDM.querySelector(".avatar-small").style.backgroundImage = `url(${data.removeIcon ? "" : (data.url ? data.url : BDfunctionsDevilBro.getUserAvatar(user.id))})`;
-					pinnedDM.querySelector(".status").className = `status status-${BDfunctionsDevilBro.getUserStatus(user.id)}`;
-					pinnedDM.querySelector(".channel-name > label").textContent = data.name ? data.name : user.username;
-					pinnedDM.querySelector(".channel-name").style.color = data.color1 ? BDfunctionsDevilBro.color2RGB(data.color1) : "";
-					pinnedDM.querySelector(".channel-name").style.background = data.color2 ? BDfunctionsDevilBro.color2RGB(data.color2) : "";
-					pinnedDM.querySelector(".channel-activity-text").innerHTML = activity ? this.getActivityString(activity.type, activity.name) : "";
+					pinnedDM.querySelector(BDFDB.dotCN.avatarsmallold).style.backgroundImage = `url(${data.removeIcon ? "" : (data.url ? data.url : BDFDB.getUserAvatar(user.id))})`;
+					pinnedDM.querySelector(BDFDB.dotCN.status).className = `status status-${BDFDB.getUserStatus(user.id)}`;
+					pinnedDM.querySelector(BDFDB.dotCN.dmchannelname + " > label").textContent = data.name ? data.name : user.username;
+					pinnedDM.querySelector(BDFDB.dotCN.dmchannelname).style.color = data.color1 ? BDFDB.color2RGB(data.color1) : "";
+					pinnedDM.querySelector(BDFDB.dotCN.dmchannelname).style.background = data.color2 ? BDFDB.color2RGB(data.color2) : "";
+					pinnedDM.querySelector(BDFDB.dotCN.dmchannelactivitytext).innerHTML = activity ? this.getActivityString(activity.type, activity.name) : "";
 					if (activity && activity.application_id && activity.session_id) {
-						if (!pinnedDM.querySelector(".channel-activity-icon")) $(".channel-activity", pinnedDM).append(this.richActivityMarkup);
+						if (!pinnedDM.querySelector(BDFDB.dotCN.dmchannelactivityicon)) $(BDFDB.dotCN.dmchannelactivity, pinnedDM).append(this.richActivityMarkup);
 					}
-					else $(".channel-activity-icon", pinnedDM).remove();
+					else $(BDFDB.dotCN.dmchannelactivityicon, pinnedDM).remove();
 				}
 				else {
 					id = pinnedDM.getAttribute("channel-id")
 					let channel = this.ChannelStore.getChannel(id);
 					if (channel) {
-						pinnedDM.querySelector(".avatar-small").style.backgroundImage = `url(${BDfunctionsDevilBro.getChannelAvatar(channel.id)})`;
+						pinnedDM.querySelector(BDFDB.dotCN.avatarsmallold).style.backgroundImage = `url(${BDFDB.getChannelAvatar(channel.id)})`;
 						var channelname = channel.name;
 						if (!channelname && channel.recipients.length > 0) {
 							for (let dmmemberID of channel.recipients) {
@@ -239,9 +238,9 @@ module.exports = (Plugin, Api, Vendor) => {
 								channelname = channelname + this.UserStore.getUser(dmmemberID).username;
 							}
 						}
-						pinnedDM.querySelector(".channel-name > label").textContent = channelname ? channelname : this.languageStrings.UNNAMED;
-						pinnedDM.querySelectorAll(".status, .channel-activity-text").forEach(ele => {ele.remove();});
-						pinnedDM.querySelector(".channel-activity").innerHTML = channel.recipients.length+1 + " " + (channel.recipients.length+1 == 1 ? this.languageStrings.MEMBER : this.languageStrings.MEMBERS);
+						pinnedDM.querySelector(BDFDB.dotCN.dmchannelname + " > label").textContent = channelname ? channelname : BDFDB.LanguageStrings.UNNAMED;
+						pinnedDM.querySelectorAll(BDFDB.dotCNC.status + BDFDB.dotCN.dmchannelactivitytext).forEach(ele => {ele.remove();});
+						pinnedDM.querySelector(BDFDB.dotCN.dmchannelactivity).innerHTML = channel.recipients.length+1 + " " + (channel.recipients.length+1 == 1 ? BDFDB.LanguageStrings.MEMBER : BDFDB.LanguageStrings.MEMBERS);
 					}
 				}
 			}
@@ -249,8 +248,8 @@ module.exports = (Plugin, Api, Vendor) => {
 		
 		startUpdateInterval () {
 			this.statusInterval = setInterval(() => {
-				for (let pinnedDM of document.querySelectorAll(".channel.private.pinned")) this.setPinnedDM(pinnedDM);
-				if (!document.querySelector(".channel.btn-friends + header.pinneddms-header")) clearInterval(this.statusInterval); 
+				for (let pinnedDM of document.querySelectorAll(BDFDB.dotCN.dmchannel + BDFDB.dotCN.dmchannelprivate + ".pinned")) this.setPinnedDM(pinnedDM);
+				if (!document.querySelector(BDFDB.dotCN.dmchannel + BDFDB.dotCN.friendsbutton + " + header.pinneddms-header")) clearInterval(this.statusInterval); 
 			},10000);
 		}
 		
@@ -271,23 +270,23 @@ module.exports = (Plugin, Api, Vendor) => {
 					break;
 			}
 			
-			let string = stringname ? (this.languageStrings[stringname] ? this.languageStrings[stringname] : this.englishStrings[stringname]) : "";
+			let string = BDFDB.LanguageStrings[stringname] || "";
 			
 			return string.replace("**!!{name}!!**", `<strong>${name}</strong>`).replace("**!!{game}!!**", `<strong>${name}</strong>`);
 		}
 		
 		updatePinnedDMPositions () {
-			let pinnedDMs = BDfunctionsDevilBro.loadAllData(this, "pinnedDMs");
-			let pinnedDMEles = document.querySelectorAll(".channel.private.pinned");
+			let pinnedDMs = BDFDB.loadAllData(this, "pinnedDMs");
+			let pinnedDMEles = document.querySelectorAll(BDFDB.dotCN.dmchannel + BDFDB.dotCN.dmchannelprivate + ".pinned");
 			for (let i = 0; i < pinnedDMEles.length; i++) {
 				pinnedDMs[pinnedDMEles[i].id] = i;
 			}
-			if (pinnedDMEles.length == 0) $(".channel.btn-friends + header.pinneddms-header").remove();
-			BDfunctionsDevilBro.saveAllData(pinnedDMs, this, "pinnedDMs")
+			if (pinnedDMEles.length == 0) $(BDFDB.dotCN.dmchannel + BDFDB.dotCN.friendsbutton + " + header.pinneddms-header").remove();
+			BDFDB.saveAllData(pinnedDMs, this, "pinnedDMs")
 		}
 		
 		setLabelsByLanguage () {
-			switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
+			switch (BDFDB.getDiscordLanguage().id) {
 				case "hr":		//croatian
 					return {
 						context_pindm_text:				"Prikljucite Izravnu Dopisivanje",

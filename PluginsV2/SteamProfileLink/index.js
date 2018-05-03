@@ -1,36 +1,36 @@
 module.exports = (Plugin, Api, Vendor) => {
-	if (typeof BDfunctionsDevilBro !== "object") global.BDfunctionsDevilBro = {$: Vendor.$, BDv2Api: Api};
+	if (typeof BDFDB !== "object") global.BDFDB = {$: Vendor.$, BDv2Api: Api};
 	
 	const {$} = Vendor;
 
 	return class extends Plugin {
-		onStart() {
+		onStart () {
 			var libraryScript = null;
-			if (typeof BDfunctionsDevilBro !== "object" || typeof BDfunctionsDevilBro.isLibraryOutdated !== "function" || BDfunctionsDevilBro.isLibraryOutdated()) {
-				libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]');
+			if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
+				libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 				if (libraryScript) libraryScript.remove();
 				libraryScript = document.createElement("script");
 				libraryScript.setAttribute("type", "text/javascript");
-				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js");
+				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
 				document.head.appendChild(libraryScript);
 			}
 			this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-			if (typeof BDfunctionsDevilBro === "object" && typeof BDfunctionsDevilBro.isLibraryOutdated === "function") this.initialize();
+			if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
 			else libraryScript.addEventListener("load", () => {this.initialize();});
 			return true;
 		}
-		
-		initialize() {
-			if (typeof BDfunctionsDevilBro === "object") {
-				BDfunctionsDevilBro.loadMessage(this);
-			
+
+		initialize () {
+			if (typeof BDFDB === "object") {
+				BDFDB.loadMessage(this);
+				
 				$(document).on("click." + this.name, "a[href^='https://steamcommunity.com/profiles/']", (e) => {
 					if (require("electron").shell.openExternal("steam://openurl/" + e.currentTarget.href)) {
 						e.preventDefault();
 						e.stopImmediatePropagation();
 					}
 				});
-				
+
 				return true;
 			}
 			else {
@@ -39,19 +39,17 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 		}
 
-		onStop() {
-			if (typeof BDfunctionsDevilBro === "object") {
+
+		onStop () {
+			if (typeof BDFDB === "object") {
 				$(document).off("click." + this.name, "a[href^='https://steamcommunity.com/profiles/']");
-						
-				BDfunctionsDevilBro.unloadMessage(this);
+				
+				BDFDB.unloadMessage(this);
 				return true;
 			}
 			else {
 				return false;
 			}
 		}
-
-	
-		// begin of own functions
 	}
 };

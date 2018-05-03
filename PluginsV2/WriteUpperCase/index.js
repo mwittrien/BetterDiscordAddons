@@ -1,28 +1,28 @@
 module.exports = (Plugin, Api, Vendor) => {
-	if (typeof BDfunctionsDevilBro !== "object") global.BDfunctionsDevilBro = {$: Vendor.$, BDv2Api: Api};
+	if (typeof BDFDB !== "object") global.BDFDB = {$: Vendor.$, BDv2Api: Api};
 	
 	const {$} = Vendor;
 
 	return class extends Plugin {
-		onStart() {
+		onStart () {
 			var libraryScript = null;
-			if (typeof BDfunctionsDevilBro !== "object" || typeof BDfunctionsDevilBro.isLibraryOutdated !== "function" || BDfunctionsDevilBro.isLibraryOutdated()) {
-				libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]');
+			if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
+				libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 				if (libraryScript) libraryScript.remove();
 				libraryScript = document.createElement("script");
 				libraryScript.setAttribute("type", "text/javascript");
-				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js");
+				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
 				document.head.appendChild(libraryScript);
 			}
 			this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-			if (typeof BDfunctionsDevilBro === "object" && typeof BDfunctionsDevilBro.isLibraryOutdated === "function") this.initialize();
+			if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
 			else libraryScript.addEventListener("load", () => {this.initialize();});
 			return true;
 		}
-		
-		initialize() {
-			if (typeof BDfunctionsDevilBro === "object") {
-				BDfunctionsDevilBro.loadMessage(this);
+
+		initialize () {
+			if (typeof BDFDB === "object") {
+				BDFDB.loadMessage(this);
 				
 				var observer = null;
 
@@ -31,17 +31,18 @@ module.exports = (Plugin, Api, Vendor) => {
 						(change, i) => {
 							if (change.addedNodes) {
 								change.addedNodes.forEach((node) => {
-									if (node && node.tagName && node.querySelector(".innerEnabled-gLHeOL, .innerEnabledNoAttach-36PpAk")) {
-										this.bindEventToTextArea(node.querySelector(".textArea-20yzAH"));
+									if (node && node.tagName && node.querySelector(BDFDB.dotCNC.textareainnerenabled + BDFDB.dotCN.textareainnerenablednoattach)) {
+										this.bindEventToTextArea(node.querySelector(BDFDB.dotCN.textarea));
 									}
 								});
 							}
 						}
 					);
 				});
-				BDfunctionsDevilBro.addObserver(this, ".appMount-14L89u", {name:"textareaObserver",instance:observer}, {childList: true, subtree:true});
+				BDFDB.addObserver(this, BDFDB.dotCN.appmount, {name:"textareaObserver",instance:observer}, {childList: true, subtree:true});
 				
-				document.querySelectorAll(".textArea-20yzAH").forEach(textarea => {this.bindEventToTextArea(textarea);});
+				document.querySelectorAll(BDFDB.dotCN.textarea).forEach(textarea => {this.bindEventToTextArea(textarea);});
+
 				return true;
 			}
 			else {
@@ -50,9 +51,9 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 		}
 
-		onStop() {
-			if (typeof BDfunctionsDevilBro === "object") {				
-				BDfunctionsDevilBro.unloadMessage(this);
+		onStop () {
+			if (typeof BDFDB === "object") {			
+				BDFDB.unloadMessage(this);
 				return true;
 			}
 			else {
@@ -60,7 +61,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 		}
 
-	
+		
 		// begin of own functions
 		
 		bindEventToTextArea (textarea) {
@@ -68,27 +69,32 @@ module.exports = (Plugin, Api, Vendor) => {
 			$(textarea)
 				.off("keyup." + this.name)
 				.on("keyup." + this.name, () => {
-					var string = textarea.value;
-					if (string.length > 0) {
-						var newstring = string;
-						var first = string.charAt(0);
-						var position = textarea.selectionStart;
-						if (first === first.toUpperCase() && string.toLowerCase().indexOf("http") == 0) {
-							newstring = string.charAt(0).toLowerCase() + string.slice(1);
-						}
-						else if (first === first.toLowerCase() && first !== first.toUpperCase() && string.toLowerCase().indexOf("http") != 0) {
-							newstring = string.charAt(0).toUpperCase() + string.slice(1);
-						}
-						if (string != newstring) {
-							textarea.focus();
-							textarea.selectionStart = 0;
-							textarea.selectionEnd = textarea.value.length;
-							document.execCommand("insertText", false, newstring);
-							textarea.selectionStart = position;
-							textarea.selectionEnd = position;
-						}
-					}
+					clearTimeout(textarea.writeuppercasetimeout);
+					textarea.writeuppercasetimeout = setTimeout(() => {this.formatText(textarea);},1);
 				});
+		}
+		
+		formatText (textarea) {
+			var string = textarea.value;
+			if (string.length > 0) {
+				var newstring = string;
+				var first = string.charAt(0);
+				var position = textarea.selectionStart;
+				if (first === first.toUpperCase() && string.toLowerCase().indexOf("http") == 0) {
+					newstring = string.charAt(0).toLowerCase() + string.slice(1);
+				}
+				else if (first === first.toLowerCase() && first !== first.toUpperCase() && string.toLowerCase().indexOf("http") != 0) {
+					newstring = string.charAt(0).toUpperCase() + string.slice(1);
+				}
+				if (string != newstring) {
+					textarea.focus();
+					textarea.selectionStart = 0;
+					textarea.selectionEnd = textarea.value.length;
+					document.execCommand("insertText", false, newstring);
+					textarea.selectionStart = position;
+					textarea.selectionEnd = position;
+				}
+			}
 		}
 	}
 };

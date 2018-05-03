@@ -1,93 +1,95 @@
 module.exports = (Plugin, Api, Vendor) => {
-	if (typeof BDfunctionsDevilBro !== "object") global.BDfunctionsDevilBro = {$: Vendor.$, BDv2Api: Api};
+	if (typeof BDFDB !== "object") global.BDFDB = {$: Vendor.$, BDv2Api: Api};
 	
 	const {$} = Vendor;
 
 	return class extends Plugin {
-		onStart() {
-			var libraryScript = null;
-			if (typeof BDfunctionsDevilBro !== "object" || typeof BDfunctionsDevilBro.isLibraryOutdated !== "function" || BDfunctionsDevilBro.isLibraryOutdated()) {
-				libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]');
-				if (libraryScript) libraryScript.remove();
-				libraryScript = document.createElement("script");
-				libraryScript.setAttribute("type", "text/javascript");
-				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js");
-				document.head.appendChild(libraryScript);
-			}
-			this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-			if (typeof BDfunctionsDevilBro === "object" && typeof BDfunctionsDevilBro.isLibraryOutdated === "function") this.initialize();
-			else libraryScript.addEventListener("load", () => {this.initialize();});
-			return true;
-		}
-		
-		initialize() {
-			if (typeof BDfunctionsDevilBro === "object") {
-				this.labels = {};
+		initConstructor () {
+			this.labels = {};
+			
+			this.messageDelay = 1000; //changing at own risk, might result in bans or mutes
+			
+			this.channel = null;
+			
+			this.css = `
+				.sendlargemessages-modal textarea {
+					rows: 0;
+					cols: 0;
+					height: 100vw;
+					resize: none;
+				}
+				.sendlargemessages-modal #warning-message {
+					font-weight: bold;
+					color: red;
+					opacity: 1;
+				}
 				
-				this.messageDelay = 1000; //changing at own risk, might result in bans or mutes
-				
-				this.channel = null;
-				
-				this.css = `
-					.${this.id}-modal textarea {
-						rows: 0;
-						cols: 0;
-						height: 100vw;
-						resize: none;
-					}
-					.${this.id}-modal #warning-message {
-						font-weight: bold;
-						color: red;
-						opacity: 1;
-					}
-					
-					.${this.id}-modal #character-counter {
-						float: right;
-						color: white;
-						opacity: .5;
-					}`;
+				.sendlargemessages-modal #character-counter {
+					float: right;
+					color: white;
+					opacity: .5;
+				}`;
 
-				this.sendMessageModalMarkup =
-					`<span class="${this.id}-modal DevilBro-modal">
-						<div class="backdrop-2ohBEd"></div>
-						<div class="modal-2LIEKY">
-							<div class="inner-1_1f7b">
-								<div class="modal-3HOjGZ sizeLarge-1AHXtx">
-									<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO header-3sp3cE" style="flex: 0 0 auto;">
-										<div class="flexChild-1KGW5q" style="flex: 1 1 auto;">
-											<h4 class="h4-2IXpeI title-1pmpPr size16-3IvaX_ height20-165WbF weightSemiBold-T8sxWH defaultColor-v22dK1 defaultMarginh4-jAopYe marginReset-3hwONl">REPLACE_modal_header_text</h4>
-											<div class="guildName-1u0hy7 small-3-03j1 size12-1IGJl9 height16-1qXrGy primary-2giqSn"></div>
-										</div>
-										<svg class="btn-cancel close-3ejNTg flexChild-1KGW5q" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12">
-											<g fill="none" fill-rule="evenodd">
-												<path d="M0 0h12v12H0"></path>
-												<path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path>
-											</g>
-										</svg>
+			this.sendMessageModalMarkup =
+				`<span class="sendlargemessages-modal DevilBro-modal">
+					<div class="${BDFDB.disCN.backdrop}"></div>
+					<div class="${BDFDB.disCN.modal}">
+						<div class="${BDFDB.disCN.modalinner}">
+							<div class="${BDFDB.disCNS.modalsub + BDFDB.disCN.modalsizelarge}">
+								<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex: 0 0 auto;">
+									<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">
+										<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.headertitle + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.defaultcolor + BDFDB.disCNS.h4defaultmargin + BDFDB.disCN.marginreset}">REPLACE_modal_header_text</h4>
+										<div class="${BDFDB.disCNS.modalguildname + BDFDB.disCNS.small + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCN.primary}"></div>
 									</div>
-									<div class="scrollerWrap-2uBjct content-1Cut5s scrollerThemed-19vinI themeGhostHairline-2H8SiW inputWrapper-3xoRWR vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR flexChild-1KGW5q inner-tqJwAU" style="flex: 1 1 auto;">
-										<textarea class="scroller-fzNley inputDefault-Y_U37D input-2YozMi" id="modal-inputtext"></textarea>
-									</div>
-									<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 noWrap-v6g9vO inner-tqJwAU marginBottom8-1mABJ4" style="flex: 0 0 auto;">
-										<h5 id="warning-message" class="flexChild-1KGW5q h5-3KssQU title-1pmpPr size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH defaultMarginh5-2UwwFY" style="flex: 1 1 auto;"></h5>
-										<h5 id="character-counter" class="flexChild-1KGW5q h5-3KssQU title-1pmpPr size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH defaultMarginh5-2UwwFY" style="flex: 0 0 auto;"></h5>
-									</div>
-									<div class="flex-lFgbSz flex-3B1Tl4 horizontalReverse-2LanvO horizontalReverse-k5PqxT flex-3B1Tl4 directionRowReverse-2eZTxP justifyStart-2yIZo0 alignStretch-1hwxMa noWrap-v6g9vO footer-1PYmcw">
-										<button type="button" class="btn-send button-2t3of8 lookFilled-luDKDo colorBrand-3PmwCE sizeMedium-2VGNaF grow-25YQ8u">
-											<div class="contents-4L4hQM">REPLACE_btn_send_text</div>
-										</button>
-									</div>
+									<svg class="${BDFDB.disCNS.modalclose + BDFDB.disCN.flexchild}" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12">
+										<g fill="none" fill-rule="evenodd">
+											<path d="M0 0h12v12H0"></path>
+											<path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path>
+										</g>
+									</svg>
+								</div>
+								<div class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.modalcontent + BDFDB.disCNS.scrollerthemed + BDFDB.disCN.themeghosthairline} ${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.flexchild + BDFDB.disCN.modalsubinner}" style="flex: 1 1 auto;">
+									<textarea class="${BDFDB.disCNS.scroller + BDFDB.disCNS.inputdefault + BDFDB.disCN.input}" id="modal-inputtext"></textarea>
+								</div>
+								<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstart + BDFDB.disCNS.nowrap + BDFDB.disCNS.modalsubinner + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;">
+									<h5 id="warning-message" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.h5 + BDFDB.disCNS.title + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.h5defaultmargin}" style="flex: 1 1 auto;"></h5>
+									<h5 id="character-counter" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.h5 + BDFDB.disCNS.title + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.h5defaultmargin}" style="flex: 0 0 auto;"></h5>
+								</div>
+								<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontalreverse + BDFDB.disCNS.horizontalreverse2 + BDFDB.disCNS.directionrowreverse + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.modalfooter}">
+									<button type="button" class="btn-send ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}">
+										<div class="${BDFDB.disCN.buttoncontents}">REPLACE_btn_send_text</div>
+									</button>
 								</div>
 							</div>
 						</div>
-					</span>`;
+					</div>
+				</span>`;
+		}
 
-				BDfunctionsDevilBro.loadMessage(this);
+		onStart () {
+			var libraryScript = null;
+			if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
+				libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+				if (libraryScript) libraryScript.remove();
+				libraryScript = document.createElement("script");
+				libraryScript.setAttribute("type", "text/javascript");
+				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+				document.head.appendChild(libraryScript);
+			}
+			this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
+			if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
+			else libraryScript.addEventListener("load", () => {this.initialize();});
+			return true;
+		}
+
+		initialize () {
+			if (typeof BDFDB === "object") {
+				BDFDB.loadMessage(this);
 				
-				this.MessageUtils = BDfunctionsDevilBro.WebModules.findByProperties(["parse","isMentioned"]);
+				this.MessageUtils = BDFDB.WebModules.findByProperties(["parse","isMentioned"]);
 							
 				this.bindEventToTextArea();
-				
+
 				return true;
 			}
 			else {
@@ -96,18 +98,19 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 		}
 
-		onStop() {
-			if (typeof BDfunctionsDevilBro === "object") {				
-				BDfunctionsDevilBro.unloadMessage(this);
+
+		onStop () {
+			if (typeof BDFDB === "object") {			
+				BDFDB.unloadMessage(this);
 				return true;
 			}
 			else {
 				return false;
 			}
 		}
-	
+		
 		onSwitch () {
-			if (typeof BDfunctionsDevilBro === "object") {
+			if (typeof BDFDB === "object") {
 				this.bindEventToTextArea();
 			}
 		}
@@ -127,7 +130,7 @@ module.exports = (Plugin, Api, Vendor) => {
 		}
 		
 		bindEventToTextArea () {
-			var channelObj = BDfunctionsDevilBro.getSelectedChannel();
+			var channelObj = BDFDB.getSelectedChannel();
 			var channel = channelObj ? channelObj.data : null;
 			if (!channel) return;
 			var checkTextarea = (textarea, text) => {
@@ -138,7 +141,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					this.showSendModal(text, channel);
 				}
 			};
-			$(".channelTextArea-1HTP3C textarea")
+			$(BDFDB.dotCNS.textareawrapchat + "textarea")
 				.off("input." + this.name)
 				.on("input." + this.name, e => {
 					checkTextarea(e.currentTarget, e.currentTarget.value);
@@ -164,15 +167,15 @@ module.exports = (Plugin, Api, Vendor) => {
 				counter.text(parsedlength + " (" + (textinput[0].selectionEnd - textinput[0].selectionStart) + ") => " + this.labels.modal_messages_translation + ": " + messageAmount);
 			};
 			
-			BDfunctionsDevilBro.appendModal(sendMessageModal);
+			BDFDB.appendModal(sendMessageModal);
 			sendMessageModal
-				.on("click", "button.btn-send", (e) => {
+				.on("click", ".btn-send", (e) => {
 					e.preventDefault();
 					var messages = this.formatText(textinput.val(), channel);
 					messages.forEach((message,i) => {
 						setTimeout(() => {
 							this.sendMessage(message);
-							if (i == messages.length-1) BDfunctionsDevilBro.showToast(this.labels.toast_allsent_text, {type:"success"});
+							if (i == messages.length-1) BDFDB.showToast(this.labels.toast_allsent_text, {type:"success"});
 						},this.messageDelay * i);
 					});
 				});
@@ -253,15 +256,15 @@ module.exports = (Plugin, Api, Vendor) => {
 		}
 		
 		sendMessage (text) {
-			var textarea = document.querySelector(".channelTextArea-1HTP3C textarea");
+			var textarea = document.querySelector(BDFDB.dotCNS.textareawrapchat + "textarea");
 			if (textarea) {
-				BDfunctionsDevilBro.getOwnerInstance({"node":textarea, "name":"ChannelTextAreaForm", "up":true}).setState({textValue:text});
-				BDfunctionsDevilBro.triggerSend(textarea);
+				BDFDB.getOwnerInstance({"node":textarea, "name":"ChannelTextAreaForm", "up":true}).setState({textValue:text});
+				BDFDB.triggerSend(textarea);
 			}
 		}
 		
 		setLabelsByLanguage () {
-			switch (BDfunctionsDevilBro.getDiscordLanguage().id) {
+			switch (BDFDB.getDiscordLanguage().id) {
 				case "hr":		//croatian
 					return {
 						toast_allsent_text:					"Sve veliku poslane.",

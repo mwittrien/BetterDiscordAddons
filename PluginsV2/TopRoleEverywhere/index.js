@@ -1,71 +1,72 @@
 module.exports = (Plugin, Api, Vendor) => {
-	if (typeof BDfunctionsDevilBro !== "object") global.BDfunctionsDevilBro = {$: Vendor.$, BDv2Api: Api};
+	if (typeof BDFDB !== "object") global.BDFDB = {$: Vendor.$, BDv2Api: Api};
 	
 	const {$} = Vendor;
 
 	return class extends Plugin {
-		onStart() {
+				initConstructor () {
+			this.css = `
+				.TRE-tag {
+					border-radius: 3px;
+					box-sizing: border-box;
+					display: inline-block;
+					flex-shrink: 0;
+					font-size: 10px;
+					font-weight: 500;
+					height: 15px;
+					line-height: 13px;
+					margin-left: 6px;
+					padding: 1px 2px;
+					text-transform: uppercase;
+					text-indent: 0px !important;
+					vertical-align: top;
+				}
+				%{BDFDB.dotCN.messagecompact} .TRE-tag {
+					margin-left: 2px;
+					margin-right: 6px;
+				}`;
+				
+			this.updateTags = false;
+				
+			this.tagMarkup = `<span class="TRE-tag"><span class="role-inner"></span></span>`;
+				
+			this.defaults = {
+				settings: {
+					showInChat:			{value:true, 	description:"Show Tag in Chat Window."},
+					showInMemberList:	{value:true, 	description:"Show Tag in Member List."},
+					useOtherStyle:		{value:false, 	description:"Use other Tagstyle."},
+					includeColorless:	{value:false, 	description:"Include colorless roles."},
+					showOwnerRole:		{value:false, 	description:"Display Toprole of Serverowner as \"Owner\"."},
+					disableForBots:		{value:false, 	description:"Disable Toprole for Bots."},
+					addUserID:			{value:false, 	description:"Add the UserID as a Tag to the Chat Window."},
+					darkIdTag:			{value:false, 	description:"Use a dark version for the UserID-Tag."}
+				}
+			};
+		}
+
+		onStart () {
 			var libraryScript = null;
-			if (typeof BDfunctionsDevilBro !== "object" || typeof BDfunctionsDevilBro.isLibraryOutdated !== "function" || BDfunctionsDevilBro.isLibraryOutdated()) {
-				libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]');
+			if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
+				libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 				if (libraryScript) libraryScript.remove();
 				libraryScript = document.createElement("script");
 				libraryScript.setAttribute("type", "text/javascript");
-				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js");
+				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
 				document.head.appendChild(libraryScript);
 			}
 			this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-			if (typeof BDfunctionsDevilBro === "object" && typeof BDfunctionsDevilBro.isLibraryOutdated === "function") this.initialize();
+			if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
 			else libraryScript.addEventListener("load", () => {this.initialize();});
 			return true;
 		}
-		
-		initialize() {
-			if (typeof BDfunctionsDevilBro === "object") {
-				this.css = ` 
-					.TRE-tag {
-						border-radius: 3px;
-						box-sizing: border-box;
-						display: inline-block;
-						flex-shrink: 0;
-						font-size: 10px;
-						font-weight: 500;
-						height: 15px;
-						line-height: 13px;
-						margin-left: 6px;
-						padding: 1px 2px;
-						text-transform: uppercase;
-						text-indent: 0px !important;
-						vertical-align: top;
-					}
-					.compact .TRE-tag {
-						margin-left: 2px;
-						margin-right: 6px;
-					}`;
-				
-				this.updateTags = false;
-					
-				this.tagMarkup = `<span class="TRE-tag"><span class="role-inner"></span></span>`;
-					
-				this.defaults = {
-					settings: {
-						showInChat:			{value:true, 	description:"Show Tag in Chat Window."},
-						showInMemberList:	{value:true, 	description:"Show Tag in Member List."},
-						useOtherStyle:		{value:false, 	description:"Use other Tagstyle."},
-						includeColorless:	{value:false, 	description:"Include colorless roles."},
-						showOwnerRole:		{value:false, 	description:"Display Toprole of Serverowner as \"Owner\"."},
-						disableForBots:		{value:false, 	description:"Disable Toprole for Bots."},
-						addUserID:			{value:false, 	description:"Add the UserID as a Tag to the Chat Window."},
-						darkIdTag:			{value:false, 	description:"Use a dark version for the UserID-Tag."}
-					}
-				};
 
-				BDfunctionsDevilBro.loadMessage(this);
-			
-				this.UserStore = BDfunctionsDevilBro.WebModules.findByProperties(["getUsers", "getUser"]);
-				this.GuildPerms = BDfunctionsDevilBro.WebModules.findByProperties(["getHighestRole"]);
-				this.GuildStore = BDfunctionsDevilBro.WebModules.findByProperties(["getGuild"]);
-				this.UserGuildState = BDfunctionsDevilBro.WebModules.findByProperties(["getGuildId", "getLastSelectedGuildId"]);
+		initialize () {
+			if (typeof BDFDB === "object") {			
+				BDFDB.loadMessage(this);
+				
+				this.GuildPerms = BDFDB.WebModules.findByProperties(["getHighestRole"]);
+				this.GuildStore = BDFDB.WebModules.findByProperties(["getGuild"]);
+				this.UserGuildState = BDFDB.WebModules.findByProperties(["getGuildId", "getLastSelectedGuildId"]);
 				
 				var observer = null;
 
@@ -74,7 +75,7 @@ module.exports = (Plugin, Api, Vendor) => {
 						(change, i) => {
 							if (change.addedNodes) {
 								change.addedNodes.forEach((node) => {
-									if (node && node.querySelector(".username-MwOsla") && BDfunctionsDevilBro.getData("showInMemberList", this, "settings")) {
+									if (node && node.querySelector(BDFDB.dotCN.memberusername) && BDFDB.getData("showInMemberList", this, "settings")) {
 										this.addRoleTag(node, "list", false);
 									}
 								});
@@ -82,29 +83,29 @@ module.exports = (Plugin, Api, Vendor) => {
 						}
 					);
 				});
-				BDfunctionsDevilBro.addObserver(this, ".members-1bid1J", {name:"userListObserver",instance:observer}, {childList:true});
+				BDFDB.addObserver(this, BDFDB.dotCN.members, {name:"userListObserver",instance:observer}, {childList:true});
 				
 				observer = new MutationObserver((changes, _) => {
 					changes.forEach(
 						(change, i) => {
 							if (change.addedNodes) {
 								change.addedNodes.forEach((node) => {
-									if (BDfunctionsDevilBro.getData("showInChat", this, "settings")) {
-										if ($(".message-group").has(".avatar-large").length > 0) {
-											if (node && node.tagName && node.querySelector(".username-wrapper")) {
+									if (BDFDB.getData("showInChat", this, "settings")) {
+										if ($(BDFDB.dotCN.messagegroup).has(BDFDB.dotCN.avatarlargeold).length > 0) {
+											if (node && node.tagName && node.querySelector(BDFDB.dotCN.messageusernamewrapper)) {
 												this.addRoleTag(node, "chat", false);
 											}
-											else if (node && node.classList && node.classList.contains("message-text")) {
-												this.addRoleTag($(".message-group").has(node)[0], "chat", false);
+											else if (node && node.classList && node.classList.contains(BDFDB.disCN.messagetext)) {
+												this.addRoleTag($(BDFDB.dotCN.messagegroup).has(node)[0], "chat", false);
 											}
 										}
 										else {
-											if (node && node.tagName && node.querySelector(".username-wrapper")) {
-												if (node.classList.contains("markup")) {
+											if (node && node.tagName && node.querySelector(BDFDB.dotCN.messageusernamewrapper)) {
+												if (node.classList.contains(BDFDB.disCN.messagemarkup)) {
 													this.addRoleTag(node, "chat", true);
 												}
 												else {
-													var markups = node.querySelectorAll("div.markup");
+													var markups = node.querySelectorAll(BDFDB.dotCN.messagemarkup);
 													for (var i = 0; i < markups.length; i++) {
 														this.addRoleTag(markups[i], "chat", true);
 													}
@@ -117,10 +118,26 @@ module.exports = (Plugin, Api, Vendor) => {
 						}
 					);
 				});
-				BDfunctionsDevilBro.addObserver(this, ".messages.scroller", {name:"chatWindowObserver",instance:observer}, {childList:true, subtree:true});
+				BDFDB.addObserver(this, BDFDB.dotCN.messages, {name:"chatWindowObserver",instance:observer}, {childList:true, subtree:true});
+				
+				observer = new MutationObserver((changes, _) => {
+					changes.forEach(
+						(change, i) => {
+							if (change.removedNodes) {
+								change.removedNodes.forEach((node) => {
+									if (node && $(node).attr("layer-id") == "user-settings" && this.updateTags) {
+										this.updateDetails = false;
+										this.addDetails(document);
+									}
+								});
+							}
+						}
+					);
+				});
+				BDFDB.addObserver(this, BDFDB.dotCN.layers, {name:"settingsWindowObserver",instance:observer}, {childList:true});
 							
 				this.loadRoleTags();
-			
+
 				return true;
 			}
 			else {
@@ -129,53 +146,53 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 		}
 
-		onStop() {
-			if (typeof BDfunctionsDevilBro === "object") {
+		onStop () {
+			if (typeof BDFDB === "object") {
 				document.querySelectorAll(".TRE-tag").forEach(node=>{node.remove();});
-			
-				BDfunctionsDevilBro.unloadMessage(this);
+				
+				BDFDB.unloadMessage(this);
 				return true;
 			}
 			else {
 				return false;
 			}
 		}
-	
+		
 		onSwitch () {
-			if (typeof BDfunctionsDevilBro === "object") {
-				BDfunctionsDevilBro.addObserver(this, ".members-1bid1J", {name:"userListObserver"}, {childList:true});
-				BDfunctionsDevilBro.addObserver(this, ".messages.scroller", {name:"chatWindowObserver"}, {childList:true, subtree:true});
+			if (typeof BDFDB === "object") {
+				BDFDB.addObserver(this, BDFDB.dotCN.members, {name:"userListObserver"}, {childList:true});
+				BDFDB.addObserver(this, BDFDB.dotCN.messages, {name:"chatWindowObserver"}, {childList:true, subtree:true});
 				this.loadRoleTags();
 			}
 		}
-
-	
+		
+		
 		// begin of own functions
 
 		updateSettings (settingspanel) {
 			var settings = {};
-			for (var input of settingspanel.querySelectorAll(".checkbox-1KYsPm")) {
+			for (var input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner)) {
 				settings[input.value] = input.checked;
 			}
 			this.updateTags = true;
-			BDfunctionsDevilBro.saveAllData(settings, this, "settings");
+			BDFDB.saveAllData(settings, this, "settings");
 		}
 
 		loadRoleTags() {
 			document.querySelectorAll(".TRE-tag").forEach(node=>{node.remove();});
-			var settings = BDfunctionsDevilBro.getAllData(this, "settings");
+			var settings = BDFDB.getAllData(this, "settings");
 			if (settings.showInMemberList) { 
-				for (let user of document.querySelectorAll(".member-2FrNV0")) {
+				for (let user of document.querySelectorAll(BDFDB.dotCN.member)) {
 					this.addRoleTag(user, "list", false);
 				}
 			}
 			if (settings.showInChat) { 
-				for (let user of document.querySelectorAll(".message-group")) {
-					if (user.querySelector(".avatar-large")) {
+				for (let user of document.querySelectorAll(BDFDB.dotCN.messagegroup)) {
+					if (user.querySelector(BDFDB.dotCN.avatarlargeold)) {
 						this.addRoleTag(user, "chat", false);
 					}
 					else {
-						for (let message of document.querySelectorAll(".markup")) {
+						for (let message of document.querySelectorAll(BDFDB.dotCN.messagemarkup)) {
 							this.addRoleTag(message, "chat", true);
 						}
 					}
@@ -184,24 +201,25 @@ module.exports = (Plugin, Api, Vendor) => {
 		}
 		
 		addRoleTag (wrapper, type, compact) {
-			if (!wrapper || !BDfunctionsDevilBro.getSelectedServer()) return;
+			if (!wrapper || !BDFDB.getSelectedServer()) return;
 			var guild = this.GuildStore.getGuild(this.UserGuildState.getGuildId());
-			var member = wrapper.querySelector(".username-MwOsla") || wrapper.querySelector(".username-wrapper");
-			if (compact) wrapper = $(".message-group").has(wrapper)[0];
+			var member = wrapper.querySelector(BDFDB.dotCN.memberusername) || wrapper.querySelector(BDFDB.dotCN.messageusernamewrapper);
+			if (compact) wrapper = $(BDFDB.dotCN.messagegroup).has(wrapper)[0];
 			if (member && member.tagName && !member.querySelector(".TRE-tag")) {
-				var settings = BDfunctionsDevilBro.getAllData(this, "settings");
-				var userInfo = this.getUserInfo(wrapper);
+				var settings = BDFDB.getAllData(this, "settings");
+				var userInfo = 
+					compact ? BDFDB.getKeyInformation({"node":wrapper,"key":"message"}).author : BDFDB.getKeyInformation({"node":wrapper,"key":"user"});
 				if (!userInfo || (userInfo.bot && settings.disableForBots)) return;
 				var userID = userInfo.id;
 				var role = this.GuildPerms.getHighestRole(guild, userID);
 				
 				if ((role && (role.colorString || settings.includeColorless)) || userID == 278543574059057154) {
-					var roleColor = role && role.colorString ? BDfunctionsDevilBro.color2COMP(role.colorString) : [255,255,255];
+					var roleColor = role && role.colorString ? BDFDB.color2COMP(role.colorString) : [255,255,255];
 					var roleName = role ? role.name : "";
 					var totalwidth, oldwidth, newwidth, maxwidth;
 					if (type == "list") {
 						totalwidth = member.style.width
-						oldwidth = wrapper.querySelector(".memberInner-3XUq9K").style.width;
+						oldwidth = wrapper.querySelector(BDFDB.dotCN.memberinner).style.width;
 						if (oldwidth && totalwidth) {
 							totalwidth = parseInt(totalwidth.replace("px",""));
 							oldwidth = parseInt(oldwidth.replace("px",""));
@@ -245,7 +263,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					inner.textContent = roleText;
 					
 					if (oldwidth && totalwidth) {
-						newwidth = member.querySelector(".memberInner-3XUq9K").style.width;
+						newwidth = member.querySelector(BDFDB.dotCN.memberinner).style.width;
 						if (newwidth) {
 							newwidth = parseInt(newwidth.replace("px",""));
 							if (newwidth < 100 && oldwidth < 100) {
@@ -280,38 +298,18 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 		}
 		
-		getUserInfo (div) {
-			var info = {id:div.getAttribute("data-user-id") || div.getAttribute("data-author-id")};
-			if (!info.id) {
-				info = BDfunctionsDevilBro.getKeyInformation({"node":div,"key":"user"});
-				if (!info) {
-					info = BDfunctionsDevilBro.getKeyInformation({"node":div,"key":"message"});
-					if (info) info = info.author;
-					else {
-						info = BDfunctionsDevilBro.getKeyInformation({"node":div,"key":"channel"});
-						if (info) info = {"id":info.recipients[0]};
-						else {
-							info = BDfunctionsDevilBro.getKeyInformation({"node":$(".message-group").has(div)[0],"key":"message"});
-							if (info) info = info.author;
-						}
-					}
-				}
-			}
-			return info && info.id ? this.UserStore.getUser(info.id) : null;
-		}
-		
 		getSettingsPanel () {
-			var settings = BDfunctionsDevilBro.getAllData(this, "settings"); 
-			var settingshtml = `<div class="${this.name}-settings DevilBro-settings"><div class="titleDefault-1CWM9y title-3i-5G_ size18-ZM4Qv- height24-2pMcnc weightNormal-3gw0Lm marginBottom8-1mABJ4">${this.name}</div><div class="DevilBro-settings-inner">`;
+			var settings = BDFDB.getAllData(this, "settings"); 
+			var settingshtml = `<div class="DevilBro-settings ${this.name}-settings">`;
 			for (let key in settings) {
-				settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
+				settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}"${settings[key] ? " checked" : ""}></div></div>`;
 			}
 			settingshtml += `</div>`;
 			
 			var settingspanel = $(settingshtml)[0];
 
 			$(settingspanel)
-				.on("click", ".checkbox-1KYsPm", () => {this.updateSettings(settingspanel);});
+				.on("click", BDFDB.dotCN.switchinner, () => {this.updateSettings(settingspanel);});
 				
 			return settingspanel;
 		}

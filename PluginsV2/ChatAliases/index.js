@@ -1,40 +1,42 @@
 module.exports = (Plugin, Api, Vendor) => {
-	if (typeof BDfunctionsDevilBro !== "object") global.BDfunctionsDevilBro = {$: Vendor.$, BDv2Api: Api};
+	if (typeof BDFDB !== "object") global.BDFDB = {$: Vendor.$, BDv2Api: Api};
 	
 	const {$} = Vendor;
 
 	return class extends Plugin {
-		onStart() {
+		initConstructor () {
+			this.configstypes = ["case","exact","autoc","regex","file"];
+			
+			this.defaults = {
+				settings: {
+					addAutoComplete:	{value:true, 	description:"Add an Autocomplete-Menu for Non-Regex Aliases:"}
+				}
+			};
+		}
+		
+		onstart () {
 			var libraryScript = null;
-			if (typeof BDfunctionsDevilBro !== "object" || typeof BDfunctionsDevilBro.isLibraryOutdated !== "function" || BDfunctionsDevilBro.isLibraryOutdated()) {
-				libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]');
+			if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
+				libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 				if (libraryScript) libraryScript.remove();
 				libraryScript = document.createElement("script");
 				libraryScript.setAttribute("type", "text/javascript");
-				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js");
+				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
 				document.head.appendChild(libraryScript);
 			}
 			this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-			if (typeof BDfunctionsDevilBro === "object" && typeof BDfunctionsDevilBro.isLibraryOutdated === "function") this.initialize();
+			if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
 			else libraryScript.addEventListener("load", () => {this.initialize();});
 			return true;
 		}
-		
-		initialize() {
-			if (typeof BDfunctionsDevilBro === "object") {
-				this.configtypes = ["case","exact","autoc","regex","file"];
-		
-				this.defaults = {
-					settings: {
-						addAutoComplete:	{value:true, 	description:"Add an Autocomplete-Menu for Non-Regex Aliases:"}
-					}
-				};
-				
-				BDfunctionsDevilBro.loadMessage(this);
-				
-				this.UploadModule = BDfunctionsDevilBro.WebModules.findByProperties(["instantBatchUpload"]);
-				this.CurrentUserPerms = BDfunctionsDevilBro.WebModules.findByProperties(["getChannelPermissions", "can"]);
-				this.Permissions = BDfunctionsDevilBro.WebModules.findByProperties(["Permissions", "ActivityTypes"]).Permissions;
+
+		initialize () {
+			if (typeof BDFDB === "object") {
+				BDFDB.loadMessage(this);
+
+				this.UploadModule = BDFDB.WebModules.findByProperties(["instantBatchUpload"]);
+				this.CurrentUserPerms = BDFDB.WebModules.findByProperties(["getChannelPermissions", "can"]);
+				this.Permissions = BDFDB.WebModules.findByProperties(["Permissions", "ActivityTypes"]).Permissions;
 
 				var observer = null;
 
@@ -43,7 +45,7 @@ module.exports = (Plugin, Api, Vendor) => {
 						(change, i) => {
 							if (change.addedNodes) {
 								change.addedNodes.forEach((node) => {
-									if (node && node.tagName && node.querySelector(".innerEnabled-gLHeOL, .innerEnabledNoAttach-36PpAk")) {
+									if (node && node.tagName && node.querySelector(BDFDB.dotCNC.textareainnerenabled + BDFDB.dotCN.textareainnerenablednoattach)) {
 										this.bindEventToTextArea(node.querySelector("textarea"));
 									}
 								});
@@ -51,21 +53,21 @@ module.exports = (Plugin, Api, Vendor) => {
 						}
 					);
 				});
-				BDfunctionsDevilBro.addObserver(this, ".appMount-14L89u", {name:"textareaObserver",instance:observer}, {childList: true, subtree:true});
-				
+				BDFDB.addObserver(this, BDFDB.dotCN.appmount, {name:"textareaObserver",instance:observer}, {childList: true, subtree:true});
+
 				// PATCH OLD DATA REMOVE SOON
-				let aliases = BDfunctionsDevilBro.loadAllData(this, "words");
+				let aliases = BDFDB.loadAllData(this, "words");
 				for (let alias in aliases) {
 					aliases[alias].autoc = aliases[alias].autoc == undefined ? !aliases[alias].regex : aliases[alias].autoc;
 				}
-				BDfunctionsDevilBro.saveAllData(aliases, this, "words");
+				BDFDB.saveAllData(aliases, this, "words");
 				
 				document.querySelectorAll("textarea").forEach(textarea => {this.bindEventToTextArea(textarea);});
-			
+				
 				$(document).off("click." + this.name).on("click." + this.name, (e) => {
 					if (!e.target.tagName === "TEXTAREA") $(".autocompleteAliases, .autocompleteAliasesRow").remove();
 				});
-			
+
 				return true;
 			}
 			else {
@@ -74,9 +76,11 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 		}
 
-		onStop() {
-			if (typeof BDfunctionsDevilBro === "object") {				
-				BDfunctionsDevilBro.unloadMessage(this);
+		onStop () {
+			if (typeof BDFDB === "object") {
+				$(".autocompleteAliases, .autocompleteAliasesRow").remove();
+				
+				BDFDB.unloadMessage(this);
 				return true;
 			}
 			else {
@@ -89,10 +93,10 @@ module.exports = (Plugin, Api, Vendor) => {
 
 		updateSettings (settingspanel) {
 			var settings = {};
-			for (var input of settingspanel.querySelectorAll(".checkbox-1KYsPm")) {
+			for (var input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner)) {
 				settings[input.value] = input.checked;
 			}
-			BDfunctionsDevilBro.saveAllData(settings, this, "settings");
+			BDFDB.saveAllData(settings, this, "settings");
 			
 			document.querySelectorAll("textarea").forEach(textarea => {this.bindEventToTextArea(textarea);});
 		}
@@ -100,7 +104,7 @@ module.exports = (Plugin, Api, Vendor) => {
 		updateContainer (settingspanel, ele) {
 			var update = false, wordvalue = null, replacevalue = null;
 			var action = ele.getAttribute("action");
-			var words = BDfunctionsDevilBro.loadAllData(this, "words");
+			var words = BDFDB.loadAllData(this, "words");
 
 			if (action == "add") {
 				var wordinput = settingspanel.querySelector("#input-wordvalue");
@@ -148,19 +152,19 @@ module.exports = (Plugin, Api, Vendor) => {
 				}
 			}
 			if (update) {
-				BDfunctionsDevilBro.saveAllData(words, this, "words");
-				words = BDfunctionsDevilBro.loadAllData(this, "words");
+				BDFDB.saveAllData(words, this, "words");
+				words = BDFDB.loadAllData(this, "words");
 
 				var containerhtml = ``;
 				for (let word in words) {
-					containerhtml += `<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginTop4-2rEBfJ marginBottom4-_yArcI card-11ynQk"><div class="card-11ynQk-inner"><input type="text" word="${word}" action="edit" class="game-name game-name-input word-name" value="${BDfunctionsDevilBro.encodeToHTML(word)}"><input type="text" word="${word}" action="edit" class="game-name game-name-input replace-name" value="${BDfunctionsDevilBro.encodeToHTML(words[word].replace)}">`;
-					for (let config of this.configtypes) {
-						containerhtml += `<div class="checkboxContainer-1sZ9eo marginReset-2tTc4H" style="flex: 0 0 auto;"><label class="checkboxWrapper-2Yvr_Y"><input word="${word}" config="${config}" type="checkbox" class="inputDefault-2tiBIA input-oWyROL"${words[word][config] ? " checked" : ""}><div class="checkbox-1QwaS4 center-1MLNrE flex-3B1Tl4 justifyStart-2yIZo0 alignCenter-3VxkQP round-30vw42"><svg name="Checkmark" width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><polyline stroke="transparent" stroke-width="2" points="3.5 9.5 7 13 15 5"></polyline></g></svg></div></label></div>`;
+					containerhtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.hovercard}"><div class=${BDFDB.disCN.hovercardinner}><input type="text" word="${word}" action="edit" class="${BDFDB.disCNS.gamename + BDFDB.disCN.gamenameinput} word-name" value="${BDFDB.encodeToHTML(word)}"><input type="text" word="${word}" action="edit" class="${BDFDB.disCNS.gamename + BDFDB.disCN.gamenameinput} replace-name" value="${BDFDB.encodeToHTML(words[word].replace)}">`;
+					for (let config of this.configstypes) {
+						containerhtml += `<div class="${BDFDB.disCNS.checkboxcontainer + BDFDB.disCN.marginreset}" style="flex: 0 0 auto;"><label class="${BDFDB.disCN.checkboxwrapper}"><input word="${word}" config="${config}" type="checkbox" class="${BDFDB.disCNS.checkboxinputdefault + BDFDB.disCN.checkboxinput}"${words[word][config] ? " checked" : ""}><div class="${BDFDB.disCNS.checkbox + BDFDB.disCNS.flexcenter + BDFDB.disCNS.flex + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.checkboxround}"><svg name="Checkmark" width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><polyline stroke="transparent" stroke-width="2" points="3.5 9.5 7 13 15 5"></polyline></g></svg></div></label></div>`;
 					}
-					containerhtml += `</div><div word="${word}" action="remove" class="button-1qrA-N remove-word"></div></div>`;
+					containerhtml += `</div><div word="${word}" action="remove" class="${BDFDB.disCN.hovercardbutton} remove-word"></div></div>`;
 				}
 				$(settingspanel).find(".alias-list").html(containerhtml);
-				BDfunctionsDevilBro.initElements(settingspanel);
+				BDFDB.initElements(settingspanel);
 			}
 		}
 
@@ -168,7 +172,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			clearTimeout(ele.updateTimeout);
 			ele.updateTimeout = setTimeout(() => {
 				var card = ele.parentElement.parentElement;
-				var words = BDfunctionsDevilBro.loadAllData(this, "words");
+				var words = BDFDB.loadAllData(this, "words");
 				var oldwordvalue = ele.getAttribute("word");
 				if (oldwordvalue && words[oldwordvalue]) {
 					var wordinput = card.querySelector(".word-name");
@@ -184,40 +188,40 @@ module.exports = (Plugin, Api, Vendor) => {
 					words[newwordvalue] = words[oldwordvalue];
 					words[newwordvalue].replace = newreplacevalue;
 					if (newwordvalue != oldwordvalue) delete words[oldwordvalue];
-					BDfunctionsDevilBro.saveAllData(words, this, "words");
+					BDFDB.saveAllData(words, this, "words");
 				}
 			},500);
 		}
 
 		updateConfig (ele) {
-			var words = BDfunctionsDevilBro.loadAllData(this, "words");
+			var words = BDFDB.loadAllData(this, "words");
 			var wordvalue = ele.getAttribute("word");
 			var config = ele.getAttribute("config");
 			if (wordvalue && words[wordvalue] && config) {
 				words[wordvalue][config] = ele.checked;
-				BDfunctionsDevilBro.saveAllData(words, this, "words");
+				BDFDB.saveAllData(words, this, "words");
 			}
 		}
 
 		toggleInfo (settingspanel, ele) {
-			ele.classList.toggle("wrapperCollapsed-18mf-c");
-			ele.classList.toggle("wrapperDefault-1Dl4SS");
-			var svg = ele.querySelector(".iconTransition-VhWJ85");
-			svg.classList.toggle("closed-2Hef-I");
-			svg.classList.toggle("iconCollapsed-1INdMX");
-			svg.classList.toggle("iconDefault-xzclSQ");
+			ele.classList.toggle(BDFDB.disCN.categorywrappercollapsed);
+			ele.classList.toggle(BDFDB.disCN.categorywrapperdefault);
+			var svg = ele.querySelector(BDFDB.dotCN.categoryicontransition);
+			svg.classList.toggle(BDFDB.disCN.closed);
+			svg.classList.toggle(BDFDB.disCN.categoryiconcollapsed);
+			svg.classList.toggle(BDFDB.disCN.categoryicondefault);
 
 			var visible = $(settingspanel).find(".info-container").is(":visible");
 			$(settingspanel).find(".info-container").toggle(!visible);
-			BDfunctionsDevilBro.saveData("hideInfo", visible, this, "hideInfo");
+			BDFDB.saveData("hideInfo", visible, this, "hideInfo");
 		}
 
 		bindEventToTextArea (textarea) {
 			if (!textarea) return;
-			var channelObj = BDfunctionsDevilBro.getSelectedChannel();
+			var channelObj = BDFDB.getSelectedChannel();
 			var channel = channelObj ? channelObj.data : null;
 			if (!channel) return;
-			var settings = BDfunctionsDevilBro.getAllData(this, "settings"); 
+			var settings = BDFDB.getAllData(this, "settings"); 
 			$(textarea)
 				.off("input." + this.name)
 				.on("input." + this.name, () => {
@@ -240,7 +244,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				.off("keydown." + this.name)
 				.on("keydown." + this.name, e => {
 					if (e.which == 9) {
-						let selectedChatAlias = textarea.parentElement.querySelector(".autocompleteAliasesRow .selectorSelected-2M0IGv")
+						let selectedChatAlias = textarea.parentElement.querySelector(".autocompleteAliasesRow " + BDFDB.dotCN.autocompleteselected)
 						if (selectedChatAlias) {
 							e.preventDefault();
 							e.stopPropagation();
@@ -253,12 +257,13 @@ module.exports = (Plugin, Api, Vendor) => {
 						}
 					}
 					
-					if (textarea.value && !e.shiftKey && e.which == 13 && !textarea.parentElement.querySelector(".autocomplete-1TnWNR")) {
+					if (textarea.value && !e.shiftKey && e.which == 13 && !textarea.parentElement.querySelector(BDFDB.dotCN.autocomplete)) {
 						this.format = true;
 						$(textarea).trigger("input");
 					}
 					else if (!e.ctrlKey && settings.addAutoComplete && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length) {
-						setImmediate(() => {this.addAutoCompleteMenu(textarea);});
+						clearTimeout(textarea.chataliastimeout);
+						textarea.chataliastimeout = setTimeout(() => {this.addAutoCompleteMenu(textarea);},100);
 					}
 				})
 				.off("click." + this.name)
@@ -268,12 +273,12 @@ module.exports = (Plugin, Api, Vendor) => {
 					}
 				});
 		}
-
+		
 		addAutoCompleteMenu (textarea) {
 			if (textarea.parentElement.querySelector(".autocompleteAliasesRow")) return;
 			let words = textarea.value.split(" ");
 			let lastword = words[words.length-1].trim();
-			if (words.length == 1 && BDfunctionsDevilBro.isPluginEnabled("WriteUpperCase")) {
+			if (words.length == 1 && BDFDB.isPluginEnabled("WriteUpperCase")) {
 				let first = lastword.charAt(0);
 				if (first === first.toUpperCase() && lastword.toLowerCase().indexOf("http") == 0) {
 					lastword = lastword.charAt(0).toLowerCase() + lastword.slice(1);
@@ -283,7 +288,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				}
 			}
 			if (lastword) {
-				let aliases = BDfunctionsDevilBro.loadAllData(this, "words"), matchedaliases = {};
+				let aliases = BDFDB.loadAllData(this, "words"), matchedaliases = {};
 				for (let alias in aliases) {
 					let aliasdata = aliases[alias];
 					if (!aliasdata.regex && aliasdata.autoc) {
@@ -297,41 +302,41 @@ module.exports = (Plugin, Api, Vendor) => {
 						}
 					}
 				}
-				if (!BDfunctionsDevilBro.isObjectEmpty(matchedaliases)) {
-					let autocompletemenu = textarea.parentElement.querySelector(".autocomplete-1TnWNR .autocompleteInner-N7OQf1"), amount = 15;
+				if (!BDFDB.isObjectEmpty(matchedaliases)) {
+					let autocompletemenu = textarea.parentElement.querySelector(BDFDB.dotCNS.autocomplete + BDFDB.dotCN.autocompleteinner), amount = 15;
 					if (!autocompletemenu) {
-						autocompletemenu = $(`<div class="autocomplete-1TnWNR autocomplete-1LLKUa autocompleteAliases"><div class="autocompleteInner-N7OQf1"></div></div>`)[0];
+						autocompletemenu = $(`<div class="${BDFDB.disCNS.autocomplete + BDFDB.disCN.autocomplete2} autocompleteAliases"><div class="${BDFDB.disCN.autocompleteinner}"></div></div>`)[0];
 						textarea.parentElement.appendChild(autocompletemenu);
 						autocompletemenu = autocompletemenu.firstElementChild;
 					}
 					else {
-						amount -= autocompletemenu.querySelectorAll(".selectable-3iSmAf").length;
+						amount -= autocompletemenu.querySelectorAll(BDFDB.dotCN.autocompleteselectable).length;
 					}
 					
 					$(autocompletemenu)
-						.append(`<div class="autocompleteRowVertical-3_UxVA autocompleteRow-31UJBI autocompleteAliasesRow"><div class="selector-nbyEfM"><div class="contentTitle-sL6DrN small-3-03j1 size12-1IGJl9 height16-1qXrGy weightSemiBold-T8sxWH">Aliases: <strong class="lastword">${BDfunctionsDevilBro.encodeToHTML(lastword)}</strong></div></div></div>`)
-						.off("mouseenter." + this.name).on("mouseenter." + this.name, ".selectable-3iSmAf", (e) => {
-							autocompletemenu.querySelectorAll(".selectorSelected-2M0IGv").forEach(selected => {selected.classList.remove("selectorSelected-2M0IGv");});
-							e.currentTarget.classList.add("selectorSelected-2M0IGv");
+						.append(`<div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteAliasesRow"><div class="${BDFDB.disCN.autocompleteselector}"><div class="${BDFDB.disCNS.autocompletecontenttitle + BDFDB.disCNS.small + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCN.weightsemibold}">Aliases: <strong class="lastword">${BDFDB.encodeToHTML(lastword)}</strong></div></div></div>`)
+						.off("mouseenter." + this.name).on("mouseenter." + this.name, BDFDB.dotCN.autocompleteselectable, (e) => {
+							autocompletemenu.querySelectorAll(BDFDB.dotCN.autocompleteselected).forEach(selected => {selected.classList.remove(BDFDB.disCN.autocompleteselected);});
+							e.currentTarget.classList.add(BDFDB.disCN.autocompleteselected);
 						});
 						
 					for (let alias in matchedaliases) {
 						if (amount-- < 1) break;
-						$(`<div class="autocompleteRowVertical-3_UxVA autocompleteRow-31UJBI autocompleteAliasesRow"><div class="selector-nbyEfM selectable-3iSmAf"><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO content-249Pr9" style="flex: 1 1 auto;"><div class="flexChild-1KGW5q aliasword" style="flex: 1 1 auto;">${BDfunctionsDevilBro.encodeToHTML(alias)}</div><div class="description-YnaVYa flexChild-1KGW5q">${BDfunctionsDevilBro.encodeToHTML(matchedaliases[alias].replace)}</div></div></div></div>`)
+						$(`<div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteAliasesRow"><div class="${BDFDB.disCNS.autocompleteselector + BDFDB.disCN.autocompleteselectable}"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.autocompletecontent}" style="flex: 1 1 auto;"><div class="${BDFDB.disCN.flexchild} aliasword" style="flex: 1 1 auto;">${BDFDB.encodeToHTML(alias)}</div><div class="${BDFDB.disCNS.autocompletedescription + BDFDB.disCN.flexchild}">${BDFDB.encodeToHTML(matchedaliases[alias].replace)}</div></div></div></div>`)
 							.appendTo(autocompletemenu)
-							.off("click." + this.name).on("click." + this.name, ".selectable-3iSmAf", (e) => {
+							.off("click." + this.name).on("click." + this.name, BDFDB.dotCN.autocompleteselectable, (e) => {
 								this.swapWordWithAlias(textarea);
 							});
 					}
-					if (!autocompletemenu.querySelector(".selectorSelected-2M0IGv")) {
-						autocompletemenu.querySelector(".autocompleteAliasesRow .selectable-3iSmAf").classList.add("selectorSelected-2M0IGv")
+					if (!autocompletemenu.querySelector(BDFDB.dotCN.autocompleteselected)) {
+						autocompletemenu.querySelector(".autocompleteAliasesRow " + BDFDB.dotCN.autocompleteselectable).classList.add(BDFDB.disCN.autocompleteselected);
 					}
 				}
 			}
 		}
-
+		
 		swapWordWithAlias (textarea) {
-			let aliasword = textarea.parentElement.querySelector(".autocompleteAliasesRow .selectorSelected-2M0IGv .aliasword").innerText;
+			let aliasword = textarea.parentElement.querySelector(".autocompleteAliasesRow " + BDFDB.dotCN.autocompleteselected + " .aliasword").innerText;
 			let lastword = textarea.parentElement.querySelector(".autocompleteAliasesRow .lastword").innerText;
 			if (aliasword && lastword) {
 				$(".autocompleteAliases, .autocompleteAliasesRow").remove();
@@ -345,7 +350,7 @@ module.exports = (Plugin, Api, Vendor) => {
 		}
 
 		formatText (text) {
-			var newText = [], files = [], wordAliases = {}, multiAliases = {}, aliases = BDfunctionsDevilBro.loadAllData(this, "words");
+			var newText = [], files = [], wordAliases = {}, multiAliases = {}, aliases = BDFDB.loadAllData(this, "words");
 			for (let alias in aliases) {
 				if (!aliases[alias].regex && alias.indexOf(" ") == -1) wordAliases[alias] = aliases[alias];
 				else multiAliases[alias] = aliases[alias];
@@ -361,14 +366,14 @@ module.exports = (Plugin, Api, Vendor) => {
 		useAliases (string, aliases, files, singleword) {
 			for (let alias in aliases) {
 				let aliasdata = aliases[alias];
-				let escpAlias = aliasdata.regex ? alias : BDfunctionsDevilBro.regEscape(alias);
+				let escpAlias = aliasdata.regex ? alias : BDFDB.regEscape(alias);
 				let result = true, replaced = false, tempstring1 = string, tempstring2 = "";
 				let regstring = aliasdata.exact ? "^" + escpAlias + "$" : escpAlias;
 				while (result != null) {
 					result = new RegExp(regstring, (aliasdata.case ? "" : "i") + (aliasdata.exact ? "" : "g")).exec(tempstring1);
 					if (result) {
 						replaced = true;
-						let replace = aliasdata.file ? "" : BDfunctionsDevilBro.insertNRST(aliasdata.replace);
+						let replace = aliasdata.file ? "" : BDFDB.insertNRST(aliasdata.replace);
 						if (result.length > 1) for (var i = 1; i < result.length; i++) replace = replace.replace(new RegExp("\\\\" + i, "g"), result[i]);
 						tempstring2 += tempstring1.slice(0, result.index + result[0].length).replace(result[0], replace);
 						tempstring1 = tempstring1.slice(result.index + result[0].length);
@@ -396,46 +401,49 @@ module.exports = (Plugin, Api, Vendor) => {
 				rest = string.slice(a.indexOf(b)+b.length);
 			}
 		}
-
+		
 		getSettingsPanel () {
-			var settings = BDfunctionsDevilBro.getAllData(this, "settings"); 
-			var words = BDfunctionsDevilBro.loadAllData(this, "words");
-			var settingshtml = `<div class="DevilBro-settings">`;
+			var settings = BDFDB.getAllData(this, "settings"); 
+			var words = BDFDB.loadAllData(this, "words");
+			var settingshtml = `<div class="DevilBro-settings ${this.name}-settings">`;
 			for (let key in settings) {
-				settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
+				settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}"${settings[key] ? " checked" : ""}></div></div>`;
 			}
-			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">Replace:</h3><input action="add" type="text" placeholder="Wordvalue" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_ wordInputs" id="input-wordvalue" style="flex: 1 1 auto;"><button action="add" type="button" class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorBrand-3PmwCE sizeMedium-2VGNaF grow-25YQ8u btn-add btn-addword" style="flex: 0 0 auto;"><div class="contents-4L4hQM"></div></button></div><div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto;">With:</h3><input action="add" type="text" placeholder="Replacevalue" class="inputDefault-Y_U37D input-2YozMi size16-3IvaX_ wordInputs" id="input-replacevalue" style="flex: 1 1 auto;"><button type="button" class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorBrand-3PmwCE sizeMedium-2VGNaF grow-25YQ8u file-navigator" style="flex: 0 0 auto;"><div class="contents-4L4hQM"></div><input id="input-file" type="file" style="display:none!important;"></button></div>`;
-			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 0 0 auto; width: ${525 - (this.configtypes.length * 33)}px;">List of Chataliases:</h3><div class="flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw flex-3B1Tl4 directionRow-yNbSvJ justifyCenter-29N31w alignCenter-3VxkQP noWrap-v6g9vO" style="flex: 1 1 auto; max-width: ${this.configtypes.length * 34}px;">`;
-			for (let config of this.configtypes) {
-				settingshtml += `<div class="marginTop8-2gOa2N headerSize-22dv1R size10-1ZEdeK primary-2giqSn weightBold-2qbcng" style="flex: 1 1 auto; width: 34px; text-align: center;">${config.toUpperCase()}</div>`;
+			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">Replace:</h3><input action="add" type="text" placeholder="Wordvalue" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16} wordInputs" id="input-wordvalue" style="flex: 1 1 auto;"><button action="add" type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} btn-add btn-addword" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}"></div></button></div><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">With:</h3><input action="add" type="text" placeholder="Replacevalue" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16} wordInputs" id="input-replacevalue" style="flex: 1 1 auto;"><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} file-navigator" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}"></div><input id="input-file" type="file" style="display:none!important;"></button></div>`;
+			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto; max-width: ${556 - (this.configstypes.length * 33)}px;">List of Chataliases:</h3><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifycenter + BDFDB.disCNS.alignend + BDFDB.disCN.nowrap}" style="flex: 1 1 auto; max-width: ${this.configstypes.length * 34}px;">`;
+			for (let config of this.configstypes) {
+				settingshtml += `<div class="${BDFDB.disCNS.margintop8 +  BDFDB.disCNS.tableheadersize + BDFDB.disCNS.size10 + BDFDB.disCNS.primary + BDFDB.disCN.weightbold}" style="flex: 1 1 auto; width: 34px !important; text-align: center;">${config.toUpperCase()}</div>`;
 			}
-			settingshtml += `</div></div><div class="DevilBro-settings-inner alias-list user-settings-games marginBottom8-1mABJ4">`;
+			settingshtml += `</div></div><div class="DevilBro-settings-inner-list alias-list ${BDFDB.disCNS.gamesettings + BDFDB.disCN.marginbottom8}">`;
 			for (let word in words) {
-				settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 vertical-3X17r5 flex-3B1Tl4 directionColumn-2h-LPR justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginTop4-2rEBfJ marginBottom4-_yArcI card-11ynQk"><div class="card-11ynQk-inner"><input type="text" word="${word}" action="edit" class="game-name game-name-input word-name" value="${BDfunctionsDevilBro.encodeToHTML(word)}"><input type="text" word="${word}" action="edit" class="game-name game-name-input replace-name" value="${BDfunctionsDevilBro.encodeToHTML(words[word].replace)}">`;
-				for (let config of this.configtypes) {
-					settingshtml += `<div class="checkboxContainer-1sZ9eo marginReset-2tTc4H" style="flex: 0 0 auto;"><label class="checkboxWrapper-2Yvr_Y"><input word="${word}" config="${config}" type="checkbox" class="inputDefault-2tiBIA input-oWyROL"${words[word][config] ? " checked" : ""}><div class="checkbox-1QwaS4 center-1MLNrE flex-3B1Tl4 justifyStart-2yIZo0 alignCenter-3VxkQP round-30vw42"><svg name="Checkmark" width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><polyline stroke="transparent" stroke-width="2" points="3.5 9.5 7 13 15 5"></polyline></g></svg></div></label></div>`;
+				settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.hovercard}"><div class=${BDFDB.disCN.hovercardinner}><input type="text" word="${word}" action="edit" class="${BDFDB.disCNS.gamename + BDFDB.disCN.gamenameinput} word-name" value="${BDFDB.encodeToHTML(word)}"><input type="text" word="${word}" action="edit" class="${BDFDB.disCNS.gamename + BDFDB.disCN.gamenameinput} replace-name" value="${BDFDB.encodeToHTML(words[word].replace)}">`;
+				for (let config of this.configstypes) {
+					settingshtml += `<div class="${BDFDB.disCNS.checkboxcontainer + BDFDB.disCN.marginreset}" style="flex: 0 0 auto;"><label class="${BDFDB.disCN.checkboxwrapper}"><input word="${word}" config="${config}" type="checkbox" class="${BDFDB.disCNS.checkboxinputdefault + BDFDB.disCN.checkboxinput}"${words[word][config] ? " checked" : ""}><div class="${BDFDB.disCNS.checkbox + BDFDB.disCNS.flexcenter + BDFDB.disCNS.flex + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.checkboxround}"><svg name="Checkmark" width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><polyline stroke="transparent" stroke-width="2" points="3.5 9.5 7 13 15 5"></polyline></g></svg></div></label></div>`;
+					console.log();
 				}
-				settingshtml += `</div><div word="${word}" action="remove" class="button-1qrA-N remove-word"></div></div>`;
+				settingshtml += `</div><div word="${word}" action="remove" class="${BDFDB.disCN.hovercardbutton} remove-word"></div></div>`;
 			}
 			settingshtml += `</div>`;
-			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom20-2Ifj-2" style="flex: 0 0 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">Remove all added words.</h3><button action="removeall" type="button" class="flexChild-1KGW5q button-2t3of8 lookFilled-luDKDo colorRed-3HTNPV sizeMedium-2VGNaF grow-25YQ8u remove-all" style="flex: 0 0 auto;"><div class="contents-4L4hQM">Reset</div></button></div>`;
-			var infoHidden = BDfunctionsDevilBro.loadData("hideInfo", this, "hideInfo");
-			settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO cursorPointer-3oKATS ${infoHidden ? "wrapperCollapsed-18mf-c" : "wrapperDefault-1Dl4SS"} toggle-info" style="flex: 1 1 auto;"><svg class="iconTransition-VhWJ85 ${infoHidden ? "closed-2Hef-I iconCollapsed-1INdMX" : "iconDefault-xzclSQ"}" width="12" height="12" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 10L12 15 17 10"></path></svg><div class="colorTransition-2iZaYd overflowEllipsis-2ynGQq nameCollapsed-3_ChMu" style="flex: 1 1 auto;">Information</div></div>`;
-			settingshtml += `<div class="DevilBro-settings-inner info-container" ${infoHidden ? "style='display:none;'" : ""}><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">Case: Will replace words while comparing lowercase/uppercase. apple => apple, not APPLE or AppLe</div><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">Not Case: Will replace words while ignoring lowercase/uppercase. apple => apple, APPLE and AppLe</div><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">Exact: Will replace words that are exactly the replaceword. apple to pear => applepie stays applepie</div><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">Not Exact: Will replace words anywhere they appear. apple to pear => applepieapple to pearpiepear</div><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">Autoc: Will appear in the Autocomplete Menu (if enabled).</div><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">Regex: Will treat the entered wordvalue as a regular expression. <a target="_blank" href="https://regexr.com/">Help</a></div><div class="description-3MVziF formText-1L-zZB note-UEZmbY modeDefault-389VjU primary-2giqSn">File: If the replacevalue is a filepath it will try to upload the file located at the filepath.</div>`;
+			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Remove all added words.</h3><button action="removeall" type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} remove-all" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Reset</div></button></div>`;
+			var infoHidden = BDFDB.loadData("hideInfo", this, "hideInfo");
+			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.cursorpointer} ${infoHidden ? BDFDB.disCN.categorywrappercollapsed : BDFDB.disCN.categorywrapperdefault} toggle-info" style="flex: 1 1 auto;"><svg class="${BDFDB.disCNS.categoryicontransition + (infoHidden ? BDFDB.disCNS.closed + BDFDB.disCN.categoryiconcollapsed : BDFDB.disCN.categoryicondefault)}" width="12" height="12" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 10L12 15 17 10"></path></svg><div class="${BDFDB.disCNS.categorycolortransition + BDFDB.disCNS.overflowellipsis + BDFDB.disCN.categorynamecollapsed}" style="flex: 1 1 auto;">Information</div></div>`;
+			settingshtml += `<div class="DevilBro-settings-inner-list info-container" ${infoHidden ? "style='display:none;'" : ""}><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Case: Will replace words while comparing lowercase/uppercase. apple => apple, not APPLE or AppLe</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Not Case: Will replace words while ignoring lowercase/uppercase. apple => apple, APPLE and AppLe</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Exact: Will replace words that are exactly the replaceword. apple to pear => applepie stays applepie</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Not Exact: Will replace words anywhere they appear. apple to pear => applepieapple to pearpiepear</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Autoc: Will appear in the Autocomplete Menu (if enabled).</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Regex: Will treat the entered wordvalue as a regular expression. <a target="_blank" href="https://regexr.com/">Help</a></div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">File: If the replacevalue is a filepath it will try to upload the file located at the filepath.</div></div>`;
 			settingshtml += `</div>`;
 
 			var settingspanel = $(settingshtml)[0];
 
-			BDfunctionsDevilBro.initElements(settingspanel);
-
 			$(settingspanel)
-				.on("click", ".checkbox-1KYsPm", () => {this.updateSettings(settingspanel);})
+				.on("click", BDFDB.dotCN.switchinner, () => {this.updateSettings(settingspanel);})
 				.on("keypress", ".wordInputs", (e) => {if (e.which == 13) this.updateContainer(settingspanel, e.currentTarget);})
-				.on("keyup", ".game-name-input", (e) => {this.updateWord(e.currentTarget);})
+				.on("keyup", BDFDB.dotCN.gamenameinput, (e) => {this.updateWord(e.currentTarget);})
 				.on("click", ".btn-addword, .remove-word, .remove-all", (e) => {this.updateContainer(settingspanel, e.currentTarget);})
-				.on("click", ".input-oWyROL", (e) => {this.updateConfig(e.currentTarget);})
+				.on("click", BDFDB.dotCN.checkboxinput, (e) => {this.updateConfig(e.currentTarget);})
 				.on("click", ".toggle-info", (e) => {this.toggleInfo(settingspanel, e.currentTarget);});
 			return settingspanel;
+		}
+		
+		onSettingsClosed () {
+			document.querySelectorAll("textarea").forEach(textarea => {this.bindEventToTextArea(textarea);});
 		}
 	}
 };

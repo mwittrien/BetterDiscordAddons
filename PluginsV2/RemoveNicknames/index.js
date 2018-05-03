@@ -1,40 +1,42 @@
 module.exports = (Plugin, Api, Vendor) => {
-	if (typeof BDfunctionsDevilBro !== "object") global.BDfunctionsDevilBro = {$: Vendor.$, BDv2Api: Api};
+	if (typeof BDFDB !== "object") global.BDFDB = {$: Vendor.$, BDv2Api: Api};
 	
 	const {$} = Vendor;
 
 	return class extends Plugin {
-		onStart() {
+		initConstructor () {
+			this.updateUsers = false;
+			
+			this.defaults = {
+				settings: {
+					replaceOwn:		{value:false, 	description:"Replace your own name:"},
+					addNickname:    {value:false, 	description:"Add nickname as parentheses:"}
+				}
+			};
+		}
+
+		onStart () {
 			var libraryScript = null;
-			if (typeof BDfunctionsDevilBro !== "object" || typeof BDfunctionsDevilBro.isLibraryOutdated !== "function" || BDfunctionsDevilBro.isLibraryOutdated()) {
-				libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]');
+			if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
+				libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 				if (libraryScript) libraryScript.remove();
 				libraryScript = document.createElement("script");
 				libraryScript.setAttribute("type", "text/javascript");
-				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js");
+				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
 				document.head.appendChild(libraryScript);
 			}
 			this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-			if (typeof BDfunctionsDevilBro === "object" && typeof BDfunctionsDevilBro.isLibraryOutdated === "function") this.initialize();
+			if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
 			else libraryScript.addEventListener("load", () => {this.initialize();});
 			return true;
 		}
-		
-		initialize() {
-			if (typeof BDfunctionsDevilBro === "object") {
-				this.updateUsers = false;
+
+		initialize () {
+			if (typeof BDFDB === "object") {
+				BDFDB.loadMessage(this);
 				
-				this.defaults = {
-					settings: {
-						replaceOwn:		{value:false, 	description:"Replace your own name:"},
-						addNickname:	{value:false, 	description:"Add nickname as parentheses:"}
-					}
-				};
-				
-				BDfunctionsDevilBro.loadMessage(this);
-			
-				this.UserStore = BDfunctionsDevilBro.WebModules.findByProperties(["getUsers", "getUser"]);
-				this.MemberPerms = BDfunctionsDevilBro.WebModules.findByProperties(["getNicknames", "getNick"]);
+				this.UserStore = BDFDB.WebModules.findByProperties(["getUsers", "getUser"]);
+				this.MemberPerms = BDFDB.WebModules.findByProperties(["getNicknames", "getNick"]);
 				
 				var observer = null;
 
@@ -43,22 +45,22 @@ module.exports = (Plugin, Api, Vendor) => {
 						(change, i) => {
 							if (change.addedNodes) {
 								change.addedNodes.forEach((node) => {
-									if (node && node.tagName && node.querySelector(".userDefault-2_cnT0")) {
-										this.loadUser(node.querySelector(".userDefault-2_cnT0").parentElement, "voice", false);
+									if (node && node.tagName && node.querySelector(BDFDB.dotCN.voiceuserdefault)) {
+										this.loadUser(node.querySelector(BDFDB.dotCN.voiceuserdefault).parentElement, "voice", false);
 									}
 								});
 							}
 						}
 					);
 				});
-				BDfunctionsDevilBro.addObserver(this, ".channels-3g2vYe", {name:"channelListObserver",instance:observer}, {childList: true, subtree: true});
+				BDFDB.addObserver(this, BDFDB.dotCN.channels, {name:"channelListObserver",instance:observer}, {childList: true, subtree: true});
 				
 				observer = new MutationObserver((changes, _) => {
 					changes.forEach(
 						(change, i) => {
 							if (change.addedNodes) {
 								change.addedNodes.forEach((node) => {
-									if (node && node.tagName && node.querySelector(".username-MwOsla")) {
+									if (node && node.tagName && node.querySelector(BDFDB.dotCN.memberusername)) {
 										this.loadUser(node, "list", false);
 									}
 								});
@@ -66,28 +68,28 @@ module.exports = (Plugin, Api, Vendor) => {
 						}
 					);
 				});
-				BDfunctionsDevilBro.addObserver(this, ".members-1bid1J", {name:"userListObserver",instance:observer}, {childList:true});
+				BDFDB.addObserver(this, BDFDB.dotCN.members, {name:"userListObserver",instance:observer}, {childList:true});
 				
 				observer = new MutationObserver((changes, _) => {
 					changes.forEach(
 						(change, i) => {
 							if (change.addedNodes) {
 								change.addedNodes.forEach((node) => {
-									if ($(".message-group").has(".avatar-large").length > 0) {
-										if (node && node.tagName && node.querySelector(".username-wrapper")) {
+									if ($(BDFDB.dotCN.messagegroup).has(BDFDB.dotCN.avatarlargeold).length > 0) {
+										if (node && node.tagName && node.querySelector(BDFDB.dotCN.messageusernamewrapper)) {
 											this.loadUser(node, "chat", false);
 										}
-										else if (node && node.classList && node.classList.contains("message-text")) {
-											this.loadUser($(".message-group").has(node)[0], "chat", false);
+										else if (node && node.classList && node.classList.contains(BDFDB.disCN.messagetext)) {
+											this.loadUser($(BDFDB.dotCN.messagegroup).has(node)[0], "chat", false);
 										}
 									}
 									else {
-										if (node && node.tagName && node.querySelector(".username-wrapper")) {
-											if (node.classList.contains("markup")) {
+										if (node && node.tagName && node.querySelector(BDFDB.dotCN.messageusernamewrapper)) {
+											if (node.classList.contains(BDFDB.disCN.messagemarkup)) {
 												this.loadUser(node, "chat", true);
 											}
 											else {
-												var markups = node.querySelectorAll(".markup");
+												var markups = node.querySelectorAll(BDFDB.dotCN.messagemarkup);
 												for (var i = 0; i < markups.length; i++) {
 													this.loadUser(markups[i], "chat", true);
 												}
@@ -99,10 +101,10 @@ module.exports = (Plugin, Api, Vendor) => {
 						}
 					);
 				});
-				BDfunctionsDevilBro.addObserver(this, ".messages.scroller", {name:"chatWindowObserver",instance:observer}, {childList:true, subtree:true});
+				BDFDB.addObserver(this, BDFDB.dotCN.messages, {name:"chatWindowObserver",instance:observer}, {childList:true, subtree:true});
 				
 				this.loadAllUsers();
-			
+
 				return true;
 			}
 			else {
@@ -111,80 +113,81 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 		}
 
-		onStop() {
-			if (typeof BDfunctionsDevilBro === "object") {
+
+		onStop () {
+			if (typeof BDFDB === "object") {
 				this.resetAllUsers();
-							
-				BDfunctionsDevilBro.unloadMessage(this);
+				
+				BDFDB.unloadMessage(this);
 				return true;
 			}
 			else {
 				return false;
 			}
 		}
-	
+		
 		onSwitch () {
-			if (typeof BDfunctionsDevilBro === "object") {
+			if (typeof BDFDB === "object") {
 				this.loadAllUsers();
-				BDfunctionsDevilBro.addObserver(this, ".members-1bid1J", {name:"userListObserver"}, {childList:true});
-				BDfunctionsDevilBro.addObserver(this, ".messages.scroller", {name:"chatWindowObserver"}, {childList:true, subtree:true});
+				BDFDB.addObserver(this, BDFDB.dotCN.members, {name:"userListObserver"}, {childList:true});
+				BDFDB.addObserver(this, BDFDB.dotCN.messages, {name:"chatWindowObserver"}, {childList:true, subtree:true});
 			}
 		}
 
-	
+		
 		// begin of own functions
 
 		updateSettings (settingspanel) {
 			var settings = {};
-			for (var input of settingspanel.querySelectorAll(".checkbox-1KYsPm")) {
+			for (var input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner)) {
 				settings[input.value] = input.checked;
 			}
+			BDFDB.saveAllData(settings, this, "settings");
 			this.updateUsers = true;
-			BDfunctionsDevilBro.saveAllData(settings, this, "settings");
 		}
 
 		loadAllUsers () {
-			for (let user of document.querySelectorAll(".member-2FrNV0")) {
+			for (let user of document.querySelectorAll(BDFDB.dotCN.member)) {
 				this.loadUser(user, "list", false);
 			} 
-			for (let user of document.querySelectorAll(".message-group")) {
-				if (user.querySelector(".avatar-large")) {
+			for (let user of document.querySelectorAll(BDFDB.dotCN.messagegroup)) {
+				if (user.querySelector(BDFDB.dotCN.avatarlargeold)) {
 					this.loadUser(user, "chat", false);
 				}
 				else {
-					for (let markup of user.querySelectorAll(".markup")) {
+					for (let markup of user.querySelectorAll(BDFDB.dotCN.messagemarkup)) {
 						this.loadUser(markup, "chat", true);
 					}
 				}
 			}
-			for (let user of document.querySelectorAll(".userDefault-2_cnT0")) {
+			for (let user of document.querySelectorAll(BDFDB.dotCN.voiceuserdefault)) {
 				this.loadUser(user.parentElement, "voice", false);
 			}
 		}
 		
 		loadUser (div, type, compact) {
-			if (!div || div.getAttribute("removed-nickname") || !div.tagName) return;
+			if (!div || $(div).attr("removed-nickname") || !div.tagName) return;
 			
 			let usernameWrapper = this.getNameWrapper(div);
 			if (!usernameWrapper) return;
 			
 			$(div).data("compact", compact);
 			
-			var info = this.getUserInfo(compact ? $(".message-group").has(div)[0] : div);
+			var info = this.getUserInfo(compact ? $(BDFDB.dotCN.messagegroup).has(div)[0] : div);
 			if (!info) return;
 			
-			var settings = BDfunctionsDevilBro.getAllData(this, "settings");
-			if (info.id == BDfunctionsDevilBro.myData.id && !settings.replaceOwn) return;
+			var settings = BDFDB.getAllData(this, "settings");
+			if (info.id == BDFDB.myData.id && !settings.replaceOwn) return;
 			
-			var serverObj = BDfunctionsDevilBro.getSelectedServer();
+			var serverObj = BDFDB.getSelectedServer();
 			if (!serverObj) return;
 			
 			var member = this.MemberPerms.getMember(serverObj.id, info.id);
 			if (!member || !member.nick) return;
 			
-			BDfunctionsDevilBro.setInnerText(usernameWrapper, settings.addNickname ? info.username + " (" + member.nick + ")" : info.username);
+			BDFDB.setInnerText(usernameWrapper, settings.addNickname ? info.username + " (" + member.nick + ")" : info.username);
 				
-			div.setAttribute("removed-nickname", true);
+			$(div).attr("removed-nickname", true);
 		}
 		
 		resetAllUsers () {
@@ -192,39 +195,36 @@ module.exports = (Plugin, Api, Vendor) => {
 				let usernameWrapper = this.getNameWrapper(div);
 				if (!usernameWrapper) return;
 				
-				var info = this.getUserInfo($(div).data("compact") ? $(".message-group").has(div)[0] : div);
+				var info = this.getUserInfo($(div).data(BDFDB.disCN.messagecompact) ? $(BDFDB.dotCN.messagegroup).has(div)[0] : div);
 				if (!info) return;
 				
-				var serverObj = BDfunctionsDevilBro.getSelectedServer();
+				var serverObj = BDFDB.getSelectedServer();
 				if (!serverObj) return;
 				
 				var member = this.MemberPerms.getMember(serverObj.id, info.id);
 				if (!member || !member.nick) return;
 				
-				BDfunctionsDevilBro.setInnerText(usernameWrapper, member.nick);
+				BDFDB.setInnerText(usernameWrapper, member.nick);
 					
-				div.removeAttribute("removed-nickname");
+				$(div).removeAttr("removed-nickname");
 			});
 		}
 		
-		getNameWrapper (div) {
-			return div.querySelector(".nameDefault-1I0lx8, .username-MwOsla, .user-name");
+		getNameWrapper (div) {		
+			return div.querySelector(BDFDB.dotCNC.memberusername + BDFDB.dotCNC.voicenamedefault + BDFDB.dotCN.messageusername);
 		}
 		
 		getUserInfo (div) {
-			var info = {id:div.getAttribute("data-user-id") || div.getAttribute("data-author-id")};
-			if (!info.id) {
-				info = BDfunctionsDevilBro.getKeyInformation({"node":div,"key":"user"});
-				if (!info) {
-					info = BDfunctionsDevilBro.getKeyInformation({"node":div,"key":"message"});
-					if (info) info = info.author;
+			var info = BDFDB.getKeyInformation({"node":div,"key":"user"});
+			if (!info) {
+				info = BDFDB.getKeyInformation({"node":div,"key":"message"});
+				if (info) info = info.author;
+				else {
+					info = BDFDB.getKeyInformation({"node":div,"key":"channel"});
+					if (info) info = {"id":info.recipients[0]};
 					else {
-						info = BDfunctionsDevilBro.getKeyInformation({"node":div,"key":"channel"});
-						if (info) info = {"id":info.recipients[0]};
-						else {
-							info = BDfunctionsDevilBro.getKeyInformation({"node":$(".message-group").has(div)[0],"key":"message"});
-							if (info) info = info.author;
-						}
+						info = BDFDB.getKeyInformation({"node":$(BDFDB.dotCN.messagegroup).has(div)[0],"key":"message"});
+						if (info) info = info.author;
 					}
 				}
 			}
@@ -232,17 +232,17 @@ module.exports = (Plugin, Api, Vendor) => {
 		}
 		
 		getSettingsPanel () {
-			var settings = BDfunctionsDevilBro.getAllData(this, "settings"); 
-			var settingshtml = `<div class="DevilBro-settings">`;
+			var settings = BDFDB.getAllData(this, "settings"); 
+			var settingshtml = `<div class="DevilBro-settings ${this.name}-settings">`;
 			for (let key in settings) {
-				settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
+				settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}"${settings[key] ? " checked" : ""}></div></div>`;
 			}
 			settingshtml += `</div>`;
 			
 			var settingspanel = $(settingshtml)[0];
 
 			$(settingspanel)
-				.on("click", ".checkbox-1KYsPm", () => {this.updateSettings(settingspanel);});
+				.on("click", BDFDB.dotCN.switchinner, () => {this.updateSettings(settingspanel);});
 			return settingspanel;
 		}
 		

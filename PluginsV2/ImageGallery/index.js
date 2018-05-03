@@ -1,46 +1,48 @@
 module.exports = (Plugin, Api, Vendor) => {
-	if (typeof BDfunctionsDevilBro !== "object") global.BDfunctionsDevilBro = {$: Vendor.$, BDv2Api: Api};
+	if (typeof BDFDB !== "object") global.BDFDB = {$: Vendor.$, BDv2Api: Api};
 	
 	const {$} = Vendor;
 
 	return class extends Plugin {
-		onStart() {
+		initConstructor () {
+			this.eventFired = false;
+			
+			this.imageMarkup = `<div class="${BDFDB.disCN.imagewrapper}" style="width: 100px; height: 100px;"><img src="" style="width: 100px; height: 100px; display: inline;"></div>`;
+			
+			this.css = ` 
+				.image-gallery ${BDFDB.dotCN.imagewrapper}.prev,
+				.image-gallery ${BDFDB.dotCN.imagewrapper}.next {
+					position: absolute;
+				} 
+				
+				.image-gallery ${BDFDB.dotCN.imagewrapper}.prev {
+					right: 90%;
+				} 
+				
+				.image-gallery ${BDFDB.dotCN.imagewrapper}.next {
+					left: 90%;
+				}`;
+		}
+		
+		onstart () {
 			var libraryScript = null;
-			if (typeof BDfunctionsDevilBro !== "object" || typeof BDfunctionsDevilBro.isLibraryOutdated !== "function" || BDfunctionsDevilBro.isLibraryOutdated()) {
-				libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]');
+			if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
+				libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 				if (libraryScript) libraryScript.remove();
 				libraryScript = document.createElement("script");
 				libraryScript.setAttribute("type", "text/javascript");
-				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js");
+				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
 				document.head.appendChild(libraryScript);
 			}
 			this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-			if (typeof BDfunctionsDevilBro === "object" && typeof BDfunctionsDevilBro.isLibraryOutdated === "function") this.initialize();
+			if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
 			else libraryScript.addEventListener("load", () => {this.initialize();});
 			return true;
 		}
-		
-		initialize() {
-			if (typeof BDfunctionsDevilBro === "object") {
-				this.eventFired = false;
-		
-				this.imageMarkup = `<div class="imageWrapper-38T7d9" style="width: 100px; height: 100px;"><img src="" style="width: 100px; height: 100px; display: inline;"></div>`;
-				
-				this.css = ` 
-					.image-gallery .imageWrapper-38T7d9.prev,
-					.image-gallery .imageWrapper-38T7d9.next {
-						position: absolute;
-					} 
-					
-					.image-gallery .imageWrapper-38T7d9.prev {
-						right: 90%;
-					} 
-					
-					.image-gallery .imageWrapper-38T7d9.next {
-						left: 90%;
-					}`;
-					
-				BDfunctionsDevilBro.loadMessage(this);
+
+		initialize () {
+			if (typeof BDFDB === "object") {
+				BDFDB.loadMessage(this);
 				
 				var observer = null;
 
@@ -49,14 +51,14 @@ module.exports = (Plugin, Api, Vendor) => {
 						(change, i) => {
 							if (change.addedNodes) {
 								change.addedNodes.forEach((node) => {
-									if (node && node.tagName && node.querySelector(".imageWrapper-38T7d9") && node.querySelector(".downloadLink-wANcd8")) {
+									if (node && node.tagName && node.querySelector(BDFDB.dotCN.imagewrapper) && node.querySelector(BDFDB.dotCN.downloadlink)) {
 										this.loadImages(node);
 									}
 								});
 							}
 							if (change.removedNodes) {
 								change.removedNodes.forEach((node) => {
-									if (node && node.tagName && node.querySelector(".imageWrapper-38T7d9") && node.querySelector(".downloadLink-wANcd8")) {
+									if (node && node.tagName && node.querySelector(BDFDB.dotCN.imagewrapper) && node.querySelector(BDFDB.dotCN.downloadlink)) {
 										$(document).off("keyup." + this.name).off("keydown." + this.name);
 									}
 								});
@@ -64,8 +66,8 @@ module.exports = (Plugin, Api, Vendor) => {
 						}
 					);
 				});
-				BDfunctionsDevilBro.addObserver(this, ".app-XZYfmp ~ [class^='theme-']:not([class*='popouts'])", {name:"imageModalObserver",instance:observer}, {childList: true});
-			
+				BDFDB.addObserver(this, BDFDB.dotCN.app + " ~ [class^='theme-']:not([class*='popouts'])", {name:"imageModalObserver",instance:observer}, {childList: true});
+
 				return true;
 			}
 			else {
@@ -74,29 +76,29 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 		}
 
-		onStop() {
-			if (typeof BDfunctionsDevilBro === "object") {				
-				BDfunctionsDevilBro.unloadMessage(this);
+		onStop () {
+			if (typeof BDFDB === "object") {
+				BDFDB.unloadMessage(this);
 				return true;
 			}
 			else {
 				return false;
 			}
 		}
-			
+
 		
 		// begin of own functions
 		
 		loadImages (modal) {
 			var start = performance.now();
 			var waitForImg = setInterval(() => {
-				var img = modal.querySelector(".imageWrapper-38T7d9 img");
+				var img = modal.querySelector(BDFDB.dotCNS.imagewrapper + "img");
 				if (img && img.src) {
 					clearInterval(waitForImg);
 					var message = this.getMessageGroupOfImage(img);
 					if (message) {
 						modal.classList.add("image-gallery");
-						this.addImages(modal, message.querySelectorAll(".imageWrapper-38T7d9 img"), img);
+						this.addImages(modal, message.querySelectorAll(BDFDB.dotCNS.imagewrapper + "img"), img);
 					}
 				}
 				else if (performance.now() - start > 10000) {
@@ -107,8 +109,8 @@ module.exports = (Plugin, Api, Vendor) => {
 		
 		getMessageGroupOfImage (thisimg) {
 			if (thisimg && thisimg.src) {
-				for (let group of document.querySelectorAll(".message-group")) {
-					for (let img of group.querySelectorAll(".imageWrapper-38T7d9 img")) {
+				for (let group of document.querySelectorAll(BDFDB.dotCN.messagegroup)) {
+					for (let img of group.querySelectorAll(BDFDB.dotCNS.imagewrapper + "img")) {
 						if (img.src && this.getSrcOfImage(img) == this.getSrcOfImage(thisimg)) {
 							return group;
 						}
@@ -124,7 +126,7 @@ module.exports = (Plugin, Api, Vendor) => {
 		}
 		
 		addImages (modal, imgs, img) {
-			modal.querySelectorAll(".imageWrapper-38T7d9.prev, .imageWrapper-38T7d9.next").forEach(ele => {ele.remove();});
+			modal.querySelectorAll(`${BDFDB.dotCN.imagewrapper}.prev, ${BDFDB.dotCN.imagewrapper}.next`).forEach(ele => {ele.remove();});
 			
 			var prevImg, nextImg, index;
 			for (index = 0; index < imgs.length; index++) {
@@ -136,34 +138,33 @@ module.exports = (Plugin, Api, Vendor) => {
 				}
 			}
 			
-			$(modal).find(".imageWrapper-38T7d9")
+			$(modal).find(BDFDB.dotCN.imagewrapper)
 				.addClass("current")
 				.find("img").attr("src", this.getSrcOfImage(img));
 				
-			$(modal.querySelector(".downloadLink-wANcd8"))
+			$(modal.querySelector(BDFDB.dotCN.downloadlink))
 				.attr("href", this.getSrcOfImage(img));
-			
-			this.resizeImage(modal, img, modal.querySelector(".imageWrapper-38T7d9.current img"));
 				
+			this.resizeImage(modal, img, modal.querySelector(BDFDB.dotCN.imagewrapper + ".current img"));
 			if (prevImg) {
 				$(this.imageMarkup)
-					.appendTo(modal.querySelector(".inner-1_1f7b"))
+					.appendTo(modal.querySelector(BDFDB.dotCN.modalinner))
 					.addClass("prev")
 					.off("click." + this.name).on("click." + this.name, () => {
 						this.addImages(modal, imgs, prevImg);
 					})
 					.find("img").attr("src", this.getSrcOfImage(prevImg));
-				this.resizeImage(modal, prevImg, modal.querySelector(".imageWrapper-38T7d9.prev img"));
+				this.resizeImage(modal, prevImg, modal.querySelector(BDFDB.dotCN.imagewrapper + ".prev img"));
 			}
 			if (nextImg) {
 				$(this.imageMarkup)
-					.appendTo(modal.querySelector(".inner-1_1f7b"))
+					.appendTo(modal.querySelector(BDFDB.dotCN.modalinner))
 					.addClass("next")
 					.off("click." + this.name).on("click." + this.name, () => {
 						this.addImages(modal, imgs, nextImg);
 					})
 					.find("img").attr("src", this.getSrcOfImage(nextImg));
-				this.resizeImage(modal, nextImg, modal.querySelector(".imageWrapper-38T7d9.next img"));
+				this.resizeImage(modal, nextImg, modal.querySelector(BDFDB.dotCN.imagewrapper + ".next img"));
 			}
 			
 			$(document).off("keydown." + this.name).off("keyup." + this.name)

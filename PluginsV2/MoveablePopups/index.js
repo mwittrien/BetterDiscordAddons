@@ -1,29 +1,29 @@
 module.exports = (Plugin, Api, Vendor) => {
-	if (typeof BDfunctionsDevilBro !== "object") global.BDfunctionsDevilBro = {$: Vendor.$, BDv2Api: Api};
+	if (typeof BDFDB !== "object") global.BDFDB = {$: Vendor.$, BDv2Api: Api};
 	
 	const {$} = Vendor;
 
 	return class extends Plugin {
-		onStart() {
+		onstart () {
 			var libraryScript = null;
-			if (typeof BDfunctionsDevilBro !== "object" || typeof BDfunctionsDevilBro.isLibraryOutdated !== "function" || BDfunctionsDevilBro.isLibraryOutdated()) {
-				libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]');
+			if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
+				libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 				if (libraryScript) libraryScript.remove();
 				libraryScript = document.createElement("script");
 				libraryScript.setAttribute("type", "text/javascript");
-				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js");
+				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
 				document.head.appendChild(libraryScript);
 			}
 			this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-			if (typeof BDfunctionsDevilBro === "object" && typeof BDfunctionsDevilBro.isLibraryOutdated === "function") this.initialize();
+			if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
 			else libraryScript.addEventListener("load", () => {this.initialize();});
 			return true;
 		}
-		
-		initialize() {
-			if (typeof BDfunctionsDevilBro === "object") {
-				BDfunctionsDevilBro.loadMessage(this);
-			
+
+		initialize () {
+			if (typeof BDFDB === "object") {
+				BDFDB.loadMessage(this);
+				
 				var observer = null;
 
 				observer = new MutationObserver((changes, _) => {
@@ -31,7 +31,7 @@ module.exports = (Plugin, Api, Vendor) => {
 						(change, i) => {
 							if (change.addedNodes) {
 								change.addedNodes.forEach((node) => {
-									if (node && node.classList && node.classList.length > 0 && node.classList.contains("popout-2RRwAO")) {
+									if (node && node.classList && node.classList.length > 0 && node.classList.contains(BDFDB.disCN.popout)) {
 										this.makeMoveable(node);
 									}
 								});
@@ -39,26 +39,26 @@ module.exports = (Plugin, Api, Vendor) => {
 						}
 					);
 				});
-				BDfunctionsDevilBro.addObserver(this, ".popouts, .popouts-1TN9u9", {name:"popoutObserver",instance:observer}, {childList: true});
+				BDFDB.addObserver(this, BDFDB.dotCN.popouts, {name:"popoutObserver",instance:observer}, {childList: true});
 				
 				observer = new MutationObserver((changes, _) => {
 					changes.forEach(
 						(change, i) => {
 							if (change.addedNodes) {
 								change.addedNodes.forEach((node) => {
-									if (node && node.classList && node.classList.contains("modal-2LIEKY") && !node.querySelector(".downloadLink-wANcd8")) {
-										this.makeMoveable(node.querySelector(".inner-1_1f7b"));
+									if (node && node.classList && node.classList.contains(BDFDB.disCN.modal) && !node.querySelector(BDFDB.dotCN.downloadlink)) {
+										this.makeMoveable(node.querySelector(BDFDB.dotCN.modalinner));
 									}
-									else if (node && node.tagName && node.querySelector(".modal-2LIEKY") && !node.querySelector(".downloadLink-wANcd8")) {
-										this.makeMoveable(node.querySelector(".inner-1_1f7b"));
+									else if (node && node.tagName && node.querySelector(BDFDB.dotCN.modal) && !node.querySelector(BDFDB.dotCN.downloadlink)) {
+										this.makeMoveable(node.querySelector(BDFDB.dotCN.modalinner));
 									}
 								});
 							}
 						}
 					);
 				});
-				BDfunctionsDevilBro.addObserver(this, ".app-XZYfmp ~ [class^='theme-']:not([class*='popouts'])", {name:"modalObserver",instance:observer}, {childList: true});
-				
+				BDFDB.addObserver(this, BDFDB.dotCN.app + " ~ [class^='theme-']:not([class*='popouts'])", {name:"modalObserver",instance:observer}, {childList: true});
+
 				return true;
 			}
 			else {
@@ -67,9 +67,10 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 		}
 
-		onStop() {
-			if (typeof BDfunctionsDevilBro === "object") {				
-				BDfunctionsDevilBro.unloadMessage(this);
+
+		onStop () {
+			if (typeof BDFDB === "object") {
+				BDFDB.unloadMessage(this);
 				return true;
 			}
 			else {
@@ -77,7 +78,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 		}
 
-	
+		
 		// begin of own functions
 		
 		makeMoveable (div) {
@@ -98,7 +99,7 @@ module.exports = (Plugin, Api, Vendor) => {
 								user-select: none !important;
 							}`;
 							
-						BDfunctionsDevilBro.appendLocalStyle("disableTextSelection", disableTextSelectionCSS);
+						BDFDB.appendLocalStyle("disableTextSelection", disableTextSelectionCSS);
 						var left = div.getBoundingClientRect().left;
 						var top = div.getBoundingClientRect().top;
 						var oldX = e.pageX;
@@ -106,7 +107,7 @@ module.exports = (Plugin, Api, Vendor) => {
 						$(document)
 							.off("mouseup." + this.name).off("mousemove." + this.name)
 							.on("mouseup." + this.name, () => {
-								BDfunctionsDevilBro.removeLocalStyle("disableTextSelection");
+								BDFDB.removeLocalStyle("disableTextSelection");
 								$(document).off("mouseup." + this.name).off("mousemove." + this.name);
 								setTimeout(() => {this.dragging = false},1);
 							})

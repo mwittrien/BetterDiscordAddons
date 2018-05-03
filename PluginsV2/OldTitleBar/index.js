@@ -1,94 +1,91 @@
 module.exports = (Plugin, Api, Vendor) => {
-	if (typeof BDfunctionsDevilBro !== "object") global.BDfunctionsDevilBro = {$: Vendor.$, BDv2Api: Api};
+	if (typeof BDFDB !== "object") global.BDFDB = {$: Vendor.$, BDv2Api: Api};
 	
 	const {$} = Vendor;
 
 	return class extends Plugin {
-		onStart() {
+		initConstructor () {
+			this.css = `
+				${BDFDB.dotCN.titlebar}.hidden-by-OTB {
+					display: none;
+				}
+				
+				${BDFDB.dotCN.channelheadertopic} {
+					-webkit-app-region: no-drag;
+				}
+				
+				.settings-titlebar-OTB {
+					position: relative;
+					z-index: 1000;
+					text-align: right;
+					padding: 10px;
+					-webkit-app-region: drag;
+				}`;
+				
+			this.dividerMarkup = `<div class="dividerOTB ${BDFDB.disCN.channelheaderdivider}"></div>`;
+				
+			this.reloadButtonMarkup = 
+				`<svg class="reloadButtonOTB ${BDFDB.disCNS.channelheadericoninactive + BDFDB.disCNS.channelheadericon + BDFDB.disCN.channelheadericonmargin}" xmlns="http://www.w3.org/2000/svg">
+					<g fill="none" class="${BDFDB.disCN.channelheadericonforeground}" fill-rule="evenodd">
+						<path fill="currentColor" transform="translate(4,4)" d="M17.061,7.467V0l-2.507,2.507C13.013,0.96,10.885,0,8.528,0C3.813,0,0.005,3.819,0.005,8.533s3.808,8.533,8.523,8.533c3.973,0,7.301-2.72,8.245-6.4h-2.219c-0.88,2.485-3.237,4.267-6.027,4.267c-3.536,0-6.4-2.864-6.4-6.4s2.864-6.4,6.4-6.4c1.765,0,3.349,0.736,4.507,1.893l-3.44,3.44H17.061z"/>
+					</g>
+				</svg>`;
+				
+			this.minButtonMarkup = 
+				`<svg class="minButtonOTB ${BDFDB.disCNS.channelheadericoninactive + BDFDB.disCNS.channelheadericon + BDFDB.disCN.channelheadericonmargin}" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
+					<g fill="none" class="${BDFDB.disCN.channelheadericonforeground}" fill-rule="evenodd">
+						<path stroke-width="2" stroke="currentColor" d="M6 18 l13 0"/>
+					</g>
+				</svg>`;
+				
+			this.maxButtonIsMaxMarkup = 
+				`<svg class="maxButtonOTB ${BDFDB.disCNS.channelheadericoninactive + BDFDB.disCNS.channelheadericon + BDFDB.disCN.channelheadericonmargin}" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
+					<g fill="none" class="${BDFDB.disCN.channelheadericonforeground}" fill-rule="evenodd">
+						<path stroke-width="2" stroke="currentColor" d="M6 9 l10 0 l0 10 l-10 0 l0 -10 m3 -3 l10 0 l0 10"/>
+					</g>
+				</svg>`;
+				
+			this.maxButtonIsMinMarkup = 
+				`<svg class="maxButtonOTB ${BDFDB.disCNS.channelheadericoninactive + BDFDB.disCNS.channelheadericon + BDFDB.disCN.channelheadericonmargin}" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
+					<g fill="none" class="${BDFDB.disCN.channelheadericonforeground}" fill-rule="evenodd">
+						<path stroke-width="2" stroke="currentColor" d="M6 6 l13 0 l0 13 l-13 0 l0 -13"/>
+					</g>
+				</svg>`;
+				
+			this.closeButtonMarkup = 
+				`<svg class="closeButtonOTB ${BDFDB.disCNS.channelheadericoninactive + BDFDB.disCNS.channelheadericon + BDFDB.disCN.channelheadericonmargin}" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
+					<g fill="none" class="${BDFDB.disCN.channelheadericonforeground}" fill-rule="evenodd">
+						<path stroke-width="2" stroke="currentColor" d="M6 6 l13 13 m0 -13 l-13 13"/>
+					</g>
+				</svg>`;
+				
+			this.defaults = {
+				settings: {
+					addToSettings:		{value:true, 	description:"Add a Title Bar to Settings Windows."},
+					reloadButton:		{value:false, 	description:"Add a Reload Button to the Title Bar."}
+				}
+			};
+		}
+
+		onStart () {
 			var libraryScript = null;
-			if (typeof BDfunctionsDevilBro !== "object" || typeof BDfunctionsDevilBro.isLibraryOutdated !== "function" || BDfunctionsDevilBro.isLibraryOutdated()) {
-				libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js"]');
+			if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
+				libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 				if (libraryScript) libraryScript.remove();
 				libraryScript = document.createElement("script");
 				libraryScript.setAttribute("type", "text/javascript");
-				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDfunctionsDevilBro.js");
+				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
 				document.head.appendChild(libraryScript);
 			}
 			this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-			if (typeof BDfunctionsDevilBro === "object" && typeof BDfunctionsDevilBro.isLibraryOutdated === "function") this.initialize();
+			if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
 			else libraryScript.addEventListener("load", () => {this.initialize();});
 			return true;
 		}
-		
-		initialize() {
-			if (typeof BDfunctionsDevilBro === "object") {
-				this.css = `
-					body.hidden-by-OTB .bd-settings-button,
-					body.hidden-by-OTB .bd-settings {
-						top: 0px !important;
-						-webkit-app-region: no-drag;
-					}
-					.titleBar-3_fDwJ.hidden-by-OTB {
-						display: none !important;
-					}
-					
-					.topic-1KFf6J {
-						-webkit-app-region: no-drag;
-					}
-					
-					.settings-titlebar-OTB {
-						position: relative;
-						z-index: 1000;
-						text-align: right;
-						padding: 10px;
-						-webkit-app-region: drag;
-					}`;
-					
-				this.dividerMarkup = `<div class="dividerOTB divider-1GKkV3"></div>`;
-					
-				this.reloadButtonMarkup = 
-					`<svg class="reloadButtonOTB iconInactive-WWHQEI icon-mr9wAc iconMargin-2Js7V9" xmlns="http://www.w3.org/2000/svg">
-						<g fill="none" class="iconForeground-2c7s3m" fill-rule="evenodd">
-							<path fill="currentColor" transform="translate(4,4)" d="M17.061,7.467V0l-2.507,2.507C13.013,0.96,10.885,0,8.528,0C3.813,0,0.005,3.819,0.005,8.533s3.808,8.533,8.523,8.533c3.973,0,7.301-2.72,8.245-6.4h-2.219c-0.88,2.485-3.237,4.267-6.027,4.267c-3.536,0-6.4-2.864-6.4-6.4s2.864-6.4,6.4-6.4c1.765,0,3.349,0.736,4.507,1.893l-3.44,3.44H17.061z"/>
-						</g>
-					</svg>`;
-					
-				this.minButtonMarkup = 
-					`<svg class="minButtonOTB iconInactive-WWHQEI icon-mr9wAc iconMargin-2Js7V9" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
-						<g fill="none" class="iconForeground-2c7s3m" fill-rule="evenodd">
-							<path stroke-width="2" stroke="currentColor" d="M6 18 l13 0"/>
-						</g>
-					</svg>`;
-					
-				this.maxButtonIsMaxMarkup = 
-					`<svg class="maxButtonOTB iconInactive-WWHQEI icon-mr9wAc iconMargin-2Js7V9" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
-						<g fill="none" class="iconForeground-2c7s3m" fill-rule="evenodd">
-							<path stroke-width="2" stroke="currentColor" d="M6 9 l10 0 l0 10 l-10 0 l0 -10 m3 -3 l10 0 l0 10"/>
-						</g>
-					</svg>`;
-					
-				this.maxButtonIsMinMarkup = 
-					`<svg class="maxButtonOTB iconInactive-WWHQEI icon-mr9wAc iconMargin-2Js7V9" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
-						<g fill="none" class="iconForeground-2c7s3m" fill-rule="evenodd">
-							<path stroke-width="2" stroke="currentColor" d="M6 6 l13 0 l0 13 l-13 0 l0 -13"/>
-						</g>
-					</svg>`;
-					
-				this.closeButtonMarkup = 
-					`<svg class="closeButtonOTB iconInactive-WWHQEI icon-mr9wAc iconMargin-2Js7V9" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
-						<g fill="none" class="iconForeground-2c7s3m" fill-rule="evenodd">
-							<path stroke-width="2" stroke="currentColor" d="M6 6 l13 13 m0 -13 l-13 13"/>
-						</g>
-					</svg>`;
-					
-				this.defaults = {
-					settings: {
-						addToSettings:		{value:true, 	description:"Add a Title Bar to Settings Windows."},
-						reloadButton:		{value:false, 	description:"Add a Reload Button to the Title Bar."}
-					}
-				};
-				
-				BDfunctionsDevilBro.loadMessage(this);
+
+		initialize () {
+			if (typeof BDFDB === "object") {
+				BDFDB.loadMessage(this);
 				
 				var observer = null;
 
@@ -99,8 +96,8 @@ module.exports = (Plugin, Api, Vendor) => {
 								change.addedNodes.forEach((node) => {
 									setImmediate(() => {
 										if (node && node.tagName && node.getAttribute("layer-id") || node.querySelector(".ui-standard-sidebar-view")) {
-											$(".divider-1GKkV3").parent().has(".iconInactive-WWHQEI").parent().css("-webkit-app-region", "initial");
-											if (BDfunctionsDevilBro.getData("addToSettings", this, "settings")) this.addSettingsTitleBar(node);
+											$(BDFDB.dotCN.channelheaderdivider).parent().has(BDFDB.dotCN.channelheadericoninactive).parent().css("-webkit-app-region", "initial");
+											if (BDFDB.getData("addToSettings", this, "settings")) this.addSettingsTitleBar(node);
 										}
 									});
 								});
@@ -116,7 +113,7 @@ module.exports = (Plugin, Api, Vendor) => {
 						}
 					);
 				});
-				BDfunctionsDevilBro.addObserver(this, ".layers-20RVFW", {name:"settingsWindowObserver",instance:observer}, {childList:true});
+				BDFDB.addObserver(this, BDFDB.dotCN.layers, {name:"settingsWindowObserver",instance:observer}, {childList:true});
 				
 				$(window).on("resize." + this.name, (e) => {
 					this.changeMaximizeButton();
@@ -124,11 +121,10 @@ module.exports = (Plugin, Api, Vendor) => {
 							
 				this.addTitleBar();
 			
-				document.body.classList.add("hidden-by-OTB");
-				$(".titleBar-3_fDwJ").addClass("hidden-by-OTB");
+				$(BDFDB.dotCN.titlebar).addClass("hidden-by-OTB");
 				
-				var settingswindow = document.querySelector(".layer-kosS71[layer-id]");
-				if (settingswindow && BDfunctionsDevilBro.getData("addToSettings", this, "settings")) {
+				var settingswindow = document.querySelector(BDFDB.dotCN.layers + "[layer-id]");
+				if (settingswindow && BDFDB.getData("addToSettings", this, "settings")) {
 					this.addSettingsTitleBar(settingswindow);
 				}
 
@@ -140,42 +136,43 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 		}
 
-		onStop() {
-			if (typeof BDfunctionsDevilBro === "object") {
+
+		onStop () {
+			if (typeof BDFDB === "object") {
 				this.removeTitleBar();
 			
-				$(".hidden-by-OTB").removeClass("hidden-by-OTB");	
-			
-				BDfunctionsDevilBro.unloadMessage(this);
+				$(".hidden-by-OTB").removeClass("hidden-by-OTB");
+				
+				BDFDB.unloadMessage(this);
 				return true;
 			}
 			else {
 				return false;
 			}
 		}
-	
+		
 		onSwitch () {
-			if (typeof BDfunctionsDevilBro === "object") {
+			if (typeof BDFDB === "object") {
 				setImmediate(() => {this.addTitleBar();});
 			}
 		}
 
-	
+		
 		// begin of own functions
 
 		updateSettings (settingspanel) {
 			var settings = {};
-			for (var input of settingspanel.querySelectorAll(".checkbox-1KYsPm")) {
+			for (var input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner)) {
 				settings[input.value] = input.checked;
 			}
-			BDfunctionsDevilBro.saveAllData(settings, this, "settings");
+			BDFDB.saveAllData(settings, this, "settings");
 		}
 		
 		addTitleBar () {
 			this.removeTitleBar();
-			var settings = BDfunctionsDevilBro.getAllData(this, "settings");
+			var settings = BDFDB.getAllData(this, "settings");
 			if (settings.reloadButton) {
-				$(".divider-1GKkV3").parent().has(".iconInactive-WWHQEI")
+				$(BDFDB.dotCN.channelheaderdivider).parent().has(BDFDB.dotCN.channelheadericoninactive)
 					.append(this.dividerMarkup)
 					.append(this.reloadButtonMarkup)
 					.on("click." + this.name, ".reloadButtonOTB", () => {
@@ -185,7 +182,7 @@ module.exports = (Plugin, Api, Vendor) => {
 						this.createReloadToolTip(e);
 					});
 			}
-			$(".divider-1GKkV3").parent().has(".iconInactive-WWHQEI")
+			$(BDFDB.dotCN.channelheaderdivider).parent().has(BDFDB.dotCN.channelheadericoninactive)
 				.append(this.dividerMarkup)
 				.append(this.minButtonMarkup)
 				.append(require("electron").remote.getCurrentWindow().isMaximized() ? this.maxButtonIsMaxMarkup : this.maxButtonIsMinMarkup)
@@ -205,7 +202,7 @@ module.exports = (Plugin, Api, Vendor) => {
 		addSettingsTitleBar (settingspane) {
 			if (!settingspane.querySelector(".dividerOTB, .reloadButtonOTB, .minButtonOTB, .maxButtonOTB, .closeButtonOTB")) {
 				var settingsbar = $(`<div class="settings-titlebar-OTB"></div>`);
-				var settings = BDfunctionsDevilBro.getAllData(this, "settings");
+				var settings = BDFDB.getAllData(this, "settings");
 				if (settings.reloadButton) {
 					settingsbar
 						.append(this.reloadButtonMarkup)
@@ -275,30 +272,30 @@ module.exports = (Plugin, Api, Vendor) => {
 		removeTitleBar () {
 			$(".settings-titlebar").remove();
 			
-			$(".divider-1GKkV3").parent().has(".iconInactive-WWHQEI")
+			$(BDFDB.dotCN.channelheaderdivider).parent().has(BDFDB.dotCN.channelheadericoninactive)
 				.off("click." + this.name)
 				.off("mouseenter." + this.name)
 				.find(".dividerOTB, .reloadButtonOTB, .minButtonOTB, .maxButtonOTB, .closeButtonOTB").remove();
 				
-			$(".divider-1GKkV3").parent().has(".iconInactive-WWHQEI").parent().css("-webkit-app-region", "initial");
+			$(BDFDB.dotCN.channelheaderdivider).parent().has(BDFDB.dotCN.channelheadericoninactive).parent().css("-webkit-app-region", "initial");
 		}
 		
 		createReloadToolTip (e) {
-			BDfunctionsDevilBro.createTooltip("Reload", e.currentTarget, {type:"bottom",selector:"reload-button-tooltip"});
+			BDFDB.createTooltip("Reload", e.currentTarget, {type:"bottom",selector:"reload-button-tooltip"});
 		}
-		
+
 		getSettingsPanel () {
-			var settings = BDfunctionsDevilBro.getAllData(this, "settings"); 
-			var settingshtml = `<div class="DevilBro-settings">`;
+			var settings = BDFDB.getAllData(this, "settings"); 
+			var settingshtml = `<div class="DevilBro-settings ${this.name}-settings">`;
 			for (let key in settings) {
-				settingshtml += `<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignCenter-3VxkQP noWrap-v6g9vO marginBottom8-1mABJ4" style="flex: 1 1 auto;"><h3 class="titleDefault-1CWM9y title-3i-5G_ marginReset-3hwONl weightMedium-13x9Y8 size16-3IvaX_ height24-2pMcnc flexChild-1KGW5q" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="flexChild-1KGW5q switchEnabled-3CPlLV switch-3lyafC value-kmHGfs sizeDefault-rZbSBU size-yI1KRe themeDefault-3M0dJU" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="checkboxEnabled-4QfryV checkbox-1KYsPm"${settings[key] ? " checked" : ""}></div></div>`;
+				settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}"${settings[key] ? " checked" : ""}></div></div>`;
 			}
 			settingshtml += `</div>`;
 			
 			var settingspanel = $(settingshtml)[0];
 
 			$(settingspanel)
-				.on("click", ".checkbox-1KYsPm", () => {this.updateSettings(settingspanel);});
+				.on("click", BDFDB.dotCN.switchinner, () => {this.updateSettings(settingspanel);});
 				
 			return settingspanel;
 		}
