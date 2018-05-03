@@ -421,7 +421,6 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .actionButtons-1sUUug,
 .wrapper-2NJDcI,
 .autocomplete-header-background,
-.bd-modal-body,
 .tutorial-popout section,
 .friend:not(:hover),
 #friends .tab-bar-item,
@@ -494,7 +493,6 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .h1-1IDj26,
 .improved-1F5LIN,
 .userSettingsSecurity-3IYeMF .isEnabled-24g9qA,
-.bd-modal-body .tab-bar-item.selected,
 .header-tab-bar-wrapper .tab-bar-item.selected,
 .tabBarContainer-1s1u-z .tab-bar-item.selected,
 .regionSelect-3lf4eE:not(:hover) button,
@@ -830,7 +828,6 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .popout .btn,
 .popout-3sVMXz .btn,
 .friends-empty .btn,
-.bd-modal button,
 .private-channel-recipients-invite button,
 .item-26Dhrx,
 .valueChecked-m-4IJZ,
@@ -2886,6 +2883,20 @@ html, span:not(.spinner-item) {
 }
 .bd-modal-inner {
 	max-height: 80% !important;
+}
+.bd-modal-body .tab-bar-item.selected {
+	color: rgb(var(--accentcolor)) !important;
+}
+.bd-modal header {
+	border-color: transparent !important;
+	background: rgba(var(--transparencycolor),calc(var(--transparencyalpha) * 3)) !important;
+}
+.bd-modal-body {
+	background: transparent !important;
+}
+.bd-modal .footer button {
+	background: rgb(var(--accentcolor)) !important;
+	transition: all 100ms linear !important;
 }
 .bd-autocomplete-selector {
     background: transparent !important;
