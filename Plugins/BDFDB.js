@@ -3754,9 +3754,9 @@ BDFDB.appendLocalStyle("BDFDB", `
 	.inputNumberWrapper ${BDFDB.dotCN.input}[type=number] {
 		padding-right: 25px;
 	}
-	.inputNumberWrapper ${BDFDB.dotCN.input}[type=number]::-webkit-outer-spin-button,
-	.inputNumberWrapper ${BDFDB.dotCN.input}[type=number]::-webkit-outer-spin-button {
-		-webkit-appearance: none !important;
+	.inputNumberWrapper ${BDFDB.dotCN.input}[type=number]::-webkit-inner-spin-button, 
+	.inputNumberWrapper ${BDFDB.dotCN.input}[type=number]::-webkit-outer-spin-button{
+		-webkit-appearance: none;
 	}
 	.inputNumberWrapper .numberinput-buttons-zone {
 		cursor: pointer;
