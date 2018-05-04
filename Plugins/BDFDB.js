@@ -3315,6 +3315,8 @@ BDFDB.DiscordClasses = {
 	searchbarvisible: "visible-3bFCH-",
 	searchresults: "search-results",
 	searchresultspagination: "pagination",
+	searchresultspaginationnext: "pagination-next",
+	searchresultspaginationprevious: "pagination-previous",
 	searchresultswrap: "search-results-wrap",
 	select: "Select",
 	selectarrow: "Select-arrow",
