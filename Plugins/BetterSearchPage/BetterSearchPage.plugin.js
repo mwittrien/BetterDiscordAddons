@@ -49,7 +49,7 @@ class BetterSearchPage {
 
 	getDescription () {return "Adds some extra controls to the search results page.";}
 
-	getVersion () {return "1.0.0";}
+	getVersion () {return "1.0.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -171,7 +171,7 @@ class BetterSearchPage {
 		if (!searchResults || !searchID) return;
 		let currentpage, maxpage;
 		for (let word of pagination.textContent.split(" ")) {
-			let number = parseInt(word);
+			let number = parseInt(word.replace(/\./g,""));
 			if (!isNaN(number) && !currentpage) {
 				currentpage = number;
 			}
@@ -184,6 +184,11 @@ class BetterSearchPage {
 		let temppage = currentpage;
 		currentpage = currentpage < maxpage ? currentpage : maxpage;
 		maxpage = temppage < maxpage ? maxpage : temppage;
+		if (maxpage > 201) {
+			if (currentpage == 201) BDFDB.showToast("Discord doesn't allow you to go further than page 201.",{type:"error"});
+			maxpage = 201;
+		}
+		if (currentpage == maxpage && maxpage == 201) pagination.querySelector(BDFDB.dotCN.searchresultspaginationnext).classList.add(BDFDB.disCN.searchresultspaginationdisabled);
 		let settings = BDFDB.getAllData(this, "settings");
 		if (settings.addFirstLast) {
 			let BSPpaginatonFirst = document.createElement("div");
@@ -215,6 +220,14 @@ class BetterSearchPage {
 		}
 		$(searchResults.parentElement) 
 			.off("click." + this.getName()).off("keyup." + this.getName())
+			.on("click." + this.getName(), BDFDB.dotCN.searchresultspaginationprevious + BDFDB.dotCN.searchresultspaginationdisabled, (e) => {
+				e.preventDefault();
+				e.stopPropagation();
+			})
+			.on("click." + this.getName(), BDFDB.dotCN.searchresultspaginationnext + BDFDB.dotCN.searchresultspaginationdisabled, (e) => {
+				e.preventDefault();
+				e.stopPropagation();
+			})
 			.on("click." + this.getName(), ".BSP-pagination " + BDFDB.dotCN.searchresultspaginationprevious + ":not(" + BDFDB.dotCN.searchresultspaginationdisabled + ")", () => {
 				this.SearchNavigation.searchPreviousPage(searchID);
 			})
@@ -234,7 +247,10 @@ class BetterSearchPage {
 			.on("keyup." + this.getName(), ".BSP-pagination-jumpinput " + BDFDB.dotCN.inputmini, (e) => {
 				if (e.which == 13) {
 					let value = e.target.value;
-					if (value < 1 || value > maxpage) e.target.value = currentpage;
+					if (value < 1 || value > maxpage) {
+						e.target.value = currentpage;
+						if (maxpage == 201 && value > maxpage) BDFDB.showToast("Discord doesn't allow you to go further than page 201.",{type:"error"});
+					}
 					else if (value < currentpage) {
 						for (; currentpage - value > 0; value++) {
 							this.SearchNavigation.searchPreviousPage(searchID);
