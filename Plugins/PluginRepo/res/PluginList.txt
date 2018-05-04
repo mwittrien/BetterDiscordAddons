@@ -75,8 +75,11 @@ https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/TheCla
 https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/UserBirthdays.plugin.js
 https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/VCMuteSounds.plugin.js
 https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/ViewGuildRelationships.plugin.js
+https://raw.githubusercontent.com/Modder4869/LazyStuff/master/LazyPlugins/CSSCode.plugin.js
+https://raw.githubusercontent.com/Modder4869/LazyStuff/master/LazyPlugins/DeveloperUtils.plugin.js
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/BetterFriendCount/BetterFriendCount.plugin.js
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/BetterNsfwTag/BetterNsfwTag.plugin.js
+https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/BetterSearchPage/BetterSearchPage.plugin.js
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/CharCounter/CharCounter.plugin.js
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ChatAliases/ChatAliases.plugin.js
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ChatFilter/ChatFilter.plugin.js
