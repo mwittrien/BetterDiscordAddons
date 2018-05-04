@@ -2001,7 +2001,7 @@ BDFDB.appendContextMenu = function (context, e) {
 		}
 		else {
 			var item = BDFDB.$(BDFDB.dotCN.contextmenuitem).has(e2.target)[0];
-			if (item && !item.classList.contains(BDFDB.disCN.contextmenuitemdisabled) && !item.classList.contains(BDFDB.disCN.contextmenusubmenu) && !item.classList.contains(BDFDB.disCN.contextmenuitemtoggle)) {
+			if (item && !item.classList.contains(BDFDB.disCN.contextmenuitemdisabled) && !item.classList.contains(BDFDB.disCN.contextmenuitemsubmenu) && !item.classList.contains(BDFDB.disCN.contextmenuitemtoggle)) {
 				BDFDB.$(document).off("mousedown.BDFDBContextMenu");
 			}
 		}
