@@ -1881,12 +1881,13 @@ BDFDB.initElements = function (container) {
 		})
 		.on("click.BDFDBinitElements", ".numberinput-button-up", (e) => {
 			var input = e.currentTarget.parentElement.parentElement.querySelector("input");
+			var min = parseInt(input.getAttribute("min"));
 			var max = parseInt(input.getAttribute("max"));
 			var newvalue = parseInt(input.value) + 1;
 			if (isNaN(max) || (!isNaN(max) && newvalue <= max)) {
 				e.currentTarget.parentElement.classList.add("pressed");
 				clearTimeout(e.currentTarget.parentElement.pressedTimeout);
-				input.value = newvalue;
+				input.value = (isNaN(min) || (!isNaN(min) && newvalue >= min)) ? newvalue : min;
 				BDFDB.$(input).trigger("input");
 				e.currentTarget.parentElement.pressedTimeout = setTimeout(() => {
 					e.currentTarget.parentElement.classList.remove("pressed");
@@ -1896,11 +1897,12 @@ BDFDB.initElements = function (container) {
 		.on("click.BDFDBinitElements", ".numberinput-button-down", (e) => {
 			var input = e.currentTarget.parentElement.parentElement.querySelector("input");
 			var min = parseInt(input.getAttribute("min"));
+			var max = parseInt(input.getAttribute("max"));
 			var newvalue = parseInt(input.value) - 1;
 			if (isNaN(min) || (!isNaN(min) && newvalue >= min)) {
 				e.currentTarget.parentElement.classList.add("pressed");
 				clearTimeout(e.currentTarget.parentElement.pressedTimeout);
-				input.value = newvalue;
+				input.value = (isNaN(max) || (!isNaN(max) && newvalue <= max)) ? newvalue : max;
 				BDFDB.$(input).trigger("input");
 				e.currentTarget.parentElement.pressedTimeout = setTimeout(() => {
 					e.currentTarget.parentElement.classList.remove("pressed");
