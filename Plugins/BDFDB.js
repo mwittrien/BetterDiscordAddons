@@ -3741,32 +3741,24 @@ BDFDB.appendLocalStyle("BDFDB", `
 		padding-left: 15px;
 	}
 	
-	.DevilBro-modal .inputNumberWrapper .numberinput-buttons-zone:hover + ${BDFDB.dotCN.input},
-	.DevilBro-settings .inputNumberWrapper .numberinput-buttons-zone:hover + ${BDFDB.dotCN.input} {
+	.inputNumberWrapper .numberinput-buttons-zone:hover + ${BDFDB.dotCN.input} {
 		border-color: black;
 	}
-	.DevilBro-modal .inputNumberWrapper .numberinput-buttons-zone:hover + ${BDFDB.dotCN.input}:focus,
-	.DevilBro-settings .inputNumberWrapper .numberinput-buttons-zone:hover + ${BDFDB.dotCN.input}:focus,
-	.DevilBro-modal .inputNumberWrapper .numberinput-buttons-zone.pressed + ${BDFDB.dotCN.input},
-	.DevilBro-settings .inputNumberWrapper .numberinput-buttons-zone.pressed + ${BDFDB.dotCN.input} {
+	.inputNumberWrapper .numberinput-buttons-zone:hover + ${BDFDB.dotCN.input}:focus,
+	.inputNumberWrapper .numberinput-buttons-zone.pressed + ${BDFDB.dotCN.input} {
 		border-color: #7289da;
 	}
-	.DevilBro-modal .inputNumberWrapper,
-	.DevilBro-settings .inputNumberWrapper {
+	.inputNumberWrapper {
 		position: relative !important;
 	}
-	.DevilBro-modal .inputNumberWrapper ${BDFDB.dotCN.input}[type=number],
-	.DevilBro-settings .inputNumberWrapper ${BDFDB.dotCN.input}[type=number] {
+	.inputNumberWrapper ${BDFDB.dotCN.input}[type=number] {
 		padding-right: 25px;
 	}
-	.DevilBro-modal .inputNumberWrapper ${BDFDB.dotCN.input}[type=number]::-webkit-inner-spin-button, 
-	.DevilBro-modal .inputNumberWrapper ${BDFDB.dotCN.input}[type=number]::-webkit-outer-spin-button,
-	.DevilBro-settings .inputNumberWrapper ${BDFDB.dotCN.input}[type=number]::-webkit-inner-spin-button, 
-	.DevilBro-settings .inputNumberWrapper ${BDFDB.dotCN.input}[type=number]::-webkit-outer-spin-button {
+	.inputNumberWrapper ${BDFDB.dotCN.input}[type=number]::-webkit-outer-spin-button,
+	.inputNumberWrapper ${BDFDB.dotCN.input}[type=number]::-webkit-outer-spin-button {
 		-webkit-appearance: none;
 	}
-	.DevilBro-modal .inputNumberWrapper .numberinput-buttons-zone,
-	.DevilBro-settings .inputNumberWrapper .numberinput-buttons-zone {
+	.inputNumberWrapper .numberinput-buttons-zone {
 		cursor: pointer;
 		position: absolute;
 		top: 2px;
@@ -3775,63 +3767,50 @@ BDFDB.appendLocalStyle("BDFDB", `
 		vertical-align: middle;
 		width: 15px;
 	}
-	.DevilBro-modal .inputNumberWrapper.inputNumberWrapperMini .numberinput-buttons-zone,
-	.DevilBro-settings .inputNumberWrapper.inputNumberWrapperMini .numberinput-buttons-zone {
+	.inputNumberWrapper.inputNumberWrapperMini .numberinput-buttons-zone {
 		top: -4px;
 		right: 4px;
 	}
-	.DevilBro-modal .inputNumberWrapper .numberinput-button-up,
-	.DevilBro-settings .inputNumberWrapper .numberinput-button-up {
+	.inputNumberWrapper .numberinput-button-up {
 		border-color: transparent transparent #999 transparent;
 		border-style: solid;
 		border-width: 2.5px 5px 5px 5px;
 		display: inline-block;
 	}
-	.DevilBro-modal .inputNumberWrapper .numberinput-button-up:hover,
-	.DevilBro-settings .inputNumberWrapper .numberinput-button-up:hover {
+	.inputNumberWrapper .numberinput-button-up:hover {
 		border-bottom-color: #666;
 	}
-	.theme-light .DevilBro-modal .inputNumberWrapper .numberinput-button-up,
-	.theme-light .DevilBro-settings .inputNumberWrapper .numberinput-button-up {
+	.theme-light .inputNumberWrapper .numberinput-button-up {
 		border-bottom-color: #dcddde;
 	}
-	.theme-light .DevilBro-modal .inputNumberWrapper .numberinput-button-up:hover,
-	.theme-light .DevilBro-settings .inputNumberWrapper .numberinput-button-up:hover {
+	.theme-light .inputNumberWrapper .numberinput-button-up:hover {
 		border-bottom-color: #4f545c;
 	}
-	.theme-dark .DevilBro-modal .inputNumberWrapper .numberinput-button-up,
-	.theme-dark .DevilBro-settings .inputNumberWrapper .numberinput-button-up {
+	.theme-dark .inputNumberWrapper .numberinput-button-up {
 		border-bottom-color: #72767d;
 	}
-	.theme-dark .DevilBro-modal .inputNumberWrapper .numberinput-button-up:hover,
-	.theme-dark .DevilBro-settings .inputNumberWrapper .numberinput-button-up:hover {
+	.theme-dark .inputNumberWrapper .numberinput-button-up:hover {
 		border-bottom-color: #f6f6f7;
 	}
-	.DevilBro-modal .inputNumberWrapper .numberinput-button-down,
-	.DevilBro-settings .inputNumberWrapper .numberinput-button-down {
+	.inputNumberWrapper .numberinput-button-down {
 		border-color: #999 transparent transparent transparent;
 		border-style: solid;
 		border-width: 5px 5px 2.5px 5px;
 		display: inline-block;
 	}
-	.DevilBro-modal .inputNumberWrapper .numberinput-button-down:hover,
-	.DevilBro-settings .inputNumberWrapper .numberinput-button-down:hover {
+	.inputNumberWrapper .numberinput-button-down:hover {
 		border-top-color: #666;
 	}
-	.theme-light .DevilBro-modal .inputNumberWrapper .numberinput-button-down,
-	.theme-light .DevilBro-settings .inputNumberWrapper .numberinput-button-down {
+	.theme-light .inputNumberWrapper .numberinput-button-down {
 		border-top-color: #dcddde;
 	}
-	.theme-light .DevilBro-modal .inputNumberWrapper .numberinput-button-down:hover,
-	.theme-light .DevilBro-settings .inputNumberWrapper .numberinput-button-down:hover {
+	.theme-light .inputNumberWrapper .numberinput-button-down:hover {
 		border-top-color: #4f545c;
 	}
-	.theme-dark .DevilBro-modal .inputNumberWrapper .numberinput-button-down,
-	.theme-dark .DevilBro-settings .inputNumberWrapper .numberinput-button-down {
+	.theme-dark .inputNumberWrapper .numberinput-button-down {
 		border-top-color: #72767d;
 	}
-	.theme-dark .DevilBro-modal .inputNumberWrapper .numberinput-button-down:hover,
-	.theme-dark .DevilBro-settings .inputNumberWrapper .numberinput-button-down:hover {
+	.theme-dark .inputNumberWrapper .numberinput-button-down:hover {
 		border-top-color: #f6f6f7;
 	}
 	
