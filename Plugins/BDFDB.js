@@ -3754,6 +3754,10 @@ BDFDB.appendLocalStyle("BDFDB", `
 	.inputNumberWrapper ${BDFDB.dotCN.input}[type=number] {
 		padding-right: 25px;
 	}
+	.inputNumberWrapper.inputNumberWrapperMini ${BDFDB.dotCN.input}[type=number] {
+		padding-left: 3px;
+		padding-right: 17px;
+	}
 	.inputNumberWrapper ${BDFDB.dotCN.input}[type=number]::-webkit-inner-spin-button, 
 	.inputNumberWrapper ${BDFDB.dotCN.input}[type=number]::-webkit-outer-spin-button{
 		-webkit-appearance: none;
