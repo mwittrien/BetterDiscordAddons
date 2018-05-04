@@ -3756,19 +3756,20 @@ BDFDB.appendLocalStyle("BDFDB", `
 	}
 	.inputNumberWrapper ${BDFDB.dotCN.input}[type=number]::-webkit-outer-spin-button,
 	.inputNumberWrapper ${BDFDB.dotCN.input}[type=number]::-webkit-outer-spin-button {
-		-webkit-appearance: none;
+		-webkit-appearance: none !important;
 	}
 	.inputNumberWrapper .numberinput-buttons-zone {
 		cursor: pointer;
 		position: absolute;
-		top: 2px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: space-around;
+		height: 110%;
 		right: 8px;
-		text-align: center;
-		vertical-align: middle;
-		width: 15px;
+		top: -5%;
 	}
 	.inputNumberWrapper.inputNumberWrapperMini .numberinput-buttons-zone {
-		top: -4px;
 		right: 4px;
 	}
 	.inputNumberWrapper .numberinput-button-up {
