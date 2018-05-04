@@ -3757,7 +3757,7 @@ BDFDB.appendLocalStyle("BDFDB", `
 		padding-right: 25px;
 	}
 	.inputNumberWrapper.inputNumberWrapperMini ${BDFDB.dotCN.input}[type=number] {
-		padding-left: 3px;
+		padding-left: 6px;
 		padding-right: 17px;
 	}
 	.inputNumberWrapper ${BDFDB.dotCN.input}[type=number]::-webkit-inner-spin-button, 
