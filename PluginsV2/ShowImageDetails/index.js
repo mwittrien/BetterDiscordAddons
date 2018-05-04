@@ -63,22 +63,6 @@ module.exports = (Plugin, Api, Vendor) => {
 				});
 				BDFDB.addObserver(this, BDFDB.dotCN.messages, {name:"chatWindowObserver",instance:observer}, {childList:true});
 				
-				observer = new MutationObserver((changes, _) => {
-					changes.forEach(
-						(change, i) => {
-							if (change.removedNodes) {
-								change.removedNodes.forEach((node) => {
-									if (node && $(node).attr("layer-id") == "user-settings" && this.updateDetails) {
-										this.updateDetails = false;
-										this.addDetails(document);
-									}
-								});
-							}
-						}
-					);
-				});
-				BDFDB.addObserver(this, BDFDB.dotCN.layers, {name:"settingsWindowObserver",instance:observer}, {childList:true});
-				
 				this.addDetails(document);
 
 				return true;
@@ -180,6 +164,13 @@ module.exports = (Plugin, Api, Vendor) => {
 			$(settingspanel)
 				.on("click", BDFDB.dotCN.switchinner, () => {this.updateSettings(settingspanel);})
 			return settingspanel;
+		}
+		
+		onSettingsClosed () {
+			if (this.updateDetails) {
+				this.addDetails(document);
+				this.updateDetails = false;
+			}
 		}
 	}
 };

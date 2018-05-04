@@ -119,22 +119,6 @@ module.exports = (Plugin, Api, Vendor) => {
 					);
 				});
 				BDFDB.addObserver(this, BDFDB.dotCN.messages, {name:"chatWindowObserver",instance:observer}, {childList:true, subtree:true});
-				
-				observer = new MutationObserver((changes, _) => {
-					changes.forEach(
-						(change, i) => {
-							if (change.removedNodes) {
-								change.removedNodes.forEach((node) => {
-									if (node && $(node).attr("layer-id") == "user-settings" && this.updateTags) {
-										this.updateDetails = false;
-										this.addDetails(document);
-									}
-								});
-							}
-						}
-					);
-				});
-				BDFDB.addObserver(this, BDFDB.dotCN.layers, {name:"settingsWindowObserver",instance:observer}, {childList:true});
 							
 				this.loadRoleTags();
 

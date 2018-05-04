@@ -119,23 +119,6 @@ module.exports = (Plugin, Api, Vendor) => {
 				});
 				BDFDB.addObserver(this, BDFDB.dotCN.channels, {name:"channelListObserver",instance:observer}, {childList: true, subtree: true});
 				
-				observer = new MutationObserver((changes, _) => {
-					changes.forEach(
-						(change, i) => {
-							if (change.removedNodes) {
-								change.removedNodes.forEach((node) => {
-									if (this.updateHiddenCategory && node && node.tagName && node.getAttribute("layer-id") == "user-settings") {
-										document.querySelectorAll(".container-hidden").forEach(category => {category.remove();});
-										this.displayHiddenChannels();
-										this.updateHiddenCategory = false;
-									}
-								});
-							}
-						}
-					);
-				});
-				BDFDB.addObserver(this, BDFDB.dotCN.layers, {name:"settingsWindowObserver",instance:observer}, {childList:true});
-				
 				this.displayHiddenChannels();
 
 				return true;
@@ -473,6 +456,14 @@ module.exports = (Plugin, Api, Vendor) => {
 				.on("click", BDFDB.dotCN.switchinner, () => {this.updateSettings(settingspanel);});
 				
 			return settingspanel;
+		}
+		
+		onSettingsClosed () {
+			if (this.updateHiddenCategory) {
+				document.querySelectorAll(".container-hidden").forEach(category => {category.remove();});
+				this.displayHiddenChannels();
+				this.updateHiddenCategory = false;
+			}
 		}
 	}
 };

@@ -7,6 +7,8 @@ module.exports = (Plugin, Api, Vendor) => {
 		initConstructor () {
 			this.labels = {};
 			
+			this.updateFolders = false;
+			
 			this.css = `
 				${BDFDB.dotCN.guild}.folder ${BDFDB.dotCN.avatarsmallold} {
 					background-clip: padding-box;
@@ -430,19 +432,6 @@ module.exports = (Plugin, Api, Vendor) => {
 				});
 				BDFDB.addObserver(this, BDFDB.dotCN.guilds, {name:"serverListObserver",instance:observer}, {childList: true, attributes: true, subtree: true});
 				
-				observer = new MutationObserver((changes, _) => {
-					changes.forEach(
-						(change, i) => {
-							if (change.removedNodes) {
-								change.removedNodes.forEach((node) => {
-									document.querySelectorAll(".folder").forEach(folderDiv => {this.updateFolderNotifications(folderDiv);});
-								});
-							}
-						}
-					);
-				});
-				BDFDB.addObserver(this, BDFDB.dotCN.layers, {name:"settingsWindowObserver",instance:observer}, {childList:true});
-				
 				document.querySelectorAll(BDFDB.dotCN.badge + ":not(.folder):not(.copy)").forEach((badge) => {
 					BDFDB.addObserver(this, badge, {name:"badgeObserver",multi:true}, {characterData:true,subtree:true});
 				});
@@ -523,6 +512,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				settings[input.value] = input.checked;
 			}
 			BDFDB.saveAllData(settings, this, "settings");
+			this.updateFolders = true;
 		}
 		
 		resetAll () {
@@ -1472,6 +1462,13 @@ module.exports = (Plugin, Api, Vendor) => {
 				.on("click", ".reset-button", () => {this.resetAll();})
 				.on("click", ".removecustom-button", () => {this.removeAllIcons()});
 			return settingspanel;
+		}
+		
+		onSettingsClosed () {
+			if (this.updateFolders) {
+				document.querySelectorAll(".folder").forEach(folderDiv => {this.updateFolderNotifications(folderDiv);});
+				this.updateFolders = false;
+			}
 		}
 		
 		setLabelsByLanguage () {
