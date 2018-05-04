@@ -2,8 +2,6 @@ module.exports = (Plugin, Api, Vendor) => {
 	if (typeof BDFDB !== "object") global.BDFDB = {$: Vendor.$, BDv2Api: Api};
 	
 	const {$} = Vendor;
-		
-	var relationshipTypes = {};
 
 	return class extends Plugin {
 		initConstructor () {
