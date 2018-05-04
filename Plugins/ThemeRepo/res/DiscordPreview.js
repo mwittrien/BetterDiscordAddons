@@ -20,7 +20,7 @@ window.onmessage = function (e) {
 					theme.href = e.data.nativecss;
 					document.head.appendChild(theme);
 				}
-				document.body.firstChild.style.display = "flex";
+				document.body.firstElementChild.style.display = "flex";
 				break;
 			case "NewTheme":
 			case "CustomCSS":
