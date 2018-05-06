@@ -354,7 +354,7 @@ class GoogleTranslateOption {
 
 	getDescription () {return "Adds a Google Translate option to your context menu, which shows a preview of the translated text and on click will open the selected text in Google Translate. Also adds a translation button to your textareas, which will automatically translate the text for you before it is being send. DeepLApi written by square. Thanks ;)";}
 
-	getVersion () {return "1.4.3";}
+	getVersion () {return "1.4.4";}
 	
 	getAuthor () {return "DevilBro, square";}
 	
@@ -605,7 +605,7 @@ class GoogleTranslateOption {
 	}
 	
 	addOptionButton (message) {
-		if (!message.querySelector(BDFDB.dotCN.optionpopoutbutton) && !message.querySelector(BDFDB.dotCN.messagesystem)) {
+		if (!message.querySelector(BDFDB.dotCN.optionpopoutbutton) && !message.querySelector(BDFDB.dotCN.messagesystem) && !message.querySelector(BDFDB.dotCN.messageuploadcancel)) {
 			$(this.optionButtonMarkup).insertBefore(message.querySelector(BDFDB.dotCN.messagetext).firstChild);
 			$(message).off("click." + this.getName()).on("click." + this.getName(), ".btn-googletranslateoption", (e) => {
 				this.openOptionPopout(e);

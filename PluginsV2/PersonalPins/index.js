@@ -310,7 +310,7 @@ module.exports = (Plugin, Api, Vendor) => {
 		}
 
 		addOptionButton (message) {
-			if (!message.querySelector(BDFDB.dotCN.optionpopoutbutton) && !message.querySelector(BDFDB.dotCN.messagesystem)) {
+			if (!message.querySelector(BDFDB.dotCN.optionpopoutbutton) && !message.querySelector(BDFDB.dotCN.messagesystem) && !message.querySelector(BDFDB.dotCN.messageuploadcancel)) {
 				$(this.optionButtonMarkup).insertBefore(message.querySelector(BDFDB.dotCN.messagetext).firstChild);
 				$(message).off("click." + this.name).on("click." + this.name, ".btn-personalpins", (e) => {
 					this.openOptionPopout(e);
