@@ -27,7 +27,7 @@ class ShowImageDetails {
 
 	getDescription () {return "Display the name, size and dimensions of uploaded images (does not include embed images) in the chat as an header or as a tooltip.";}
 
-	getVersion () {return "1.0.4";}
+	getVersion () {return "1.0.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -45,7 +45,7 @@ class ShowImageDetails {
 		BDFDB.initElements(settingspanel);
 
 		$(settingspanel)
-			.on("click", BDFDB.dotCN.switchinner, () => {this.updateSettings(settingspanel);})
+			.on("click", BDFDB.dotCN.switchinner, () => {this.updateSettings(settingspanel);});
 		return settingspanel;
 	}
 
@@ -54,8 +54,7 @@ class ShowImageDetails {
 
 	start () {
 		var libraryScript = null;
-		if (typeof BDFDB !== "object" || BDFDB.isLibraryOutdated()) {
-			if (typeof BDFDB === "object") BDFDB = "";
+		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
 			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
@@ -64,7 +63,7 @@ class ShowImageDetails {
 			document.head.appendChild(libraryScript);
 		}
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object") this.initialize();
+		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
 		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
@@ -95,8 +94,9 @@ class ShowImageDetails {
 						if (change.removedNodes) {
 							change.removedNodes.forEach((node) => {
 								if (node && $(node).attr("layer-id") == "user-settings" && this.updateDetails) {
-									this.updateDetails = false;
+									document.querySelectorAll(".image-details-added").forEach(image => {this.resetImage(image);});
 									this.addDetails(document);
+									this.updateDetails = false;
 								}
 							});
 						}
@@ -143,7 +143,6 @@ class ShowImageDetails {
 		if (!container || typeof container.querySelectorAll != "function") return; 
 		var settings = BDFDB.getAllData(this, "settings");
 		container.querySelectorAll(BDFDB.dotCN.messageaccessory + " > " + BDFDB.dotCN.imagewrapper).forEach(image => {
-			this.resetImage(image);
 			var data = this.getImageData(image);
 			if (data) {
 				image.classList.add("image-details-added");

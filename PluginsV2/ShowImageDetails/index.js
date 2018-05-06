@@ -108,7 +108,6 @@ module.exports = (Plugin, Api, Vendor) => {
 			if (!container || typeof container.querySelectorAll != "function") return; 
 			var settings = BDFDB.getAllData(this, "settings");
 			container.querySelectorAll(BDFDB.dotCN.messageaccessory + " > " + BDFDB.dotCN.imagewrapper).forEach(image => {
-				this.resetImage(image);
 				var data = this.getImageData(image);
 				if (data) {
 					image.classList.add("image-details-added");
@@ -168,6 +167,7 @@ module.exports = (Plugin, Api, Vendor) => {
 		
 		onSettingsClosed () {
 			if (this.updateDetails) {
+				document.querySelectorAll(".image-details-added").forEach(image => {this.resetImage(image);});
 				this.addDetails(document);
 				this.updateDetails = false;
 			}
