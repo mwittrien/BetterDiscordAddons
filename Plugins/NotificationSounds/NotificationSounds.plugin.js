@@ -87,13 +87,15 @@ class NotificationSounds {
 		this.oldmentions = {};
 		
 		this.firedEvents = {};
+
+		this.hasPatchedOutgoing = false;
 	}
 
 	getName () {return "NotificationSounds";}
 	
 	getDescription () {return "Allows you to replace the native sounds of Discord with your own";}
 
-	getVersion () {return "3.1.4";}
+	getVersion () {return "3.1.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -295,26 +297,28 @@ class NotificationSounds {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (node && node.tagName && node.classList.contains(BDFDB.disCN.callcurrentcontainer)) {
-									var outgoingCallAudio = new Audio();
-									var outgoingCallOwnerInstance = BDFDB.getOwnerInstance({"node":node, "props":["startRinging"], "up":true});
-									var checkNormalInternval = setInterval(() => {
-										if (outgoingCallOwnerInstance._ringingSound._audio) {
-											clearInterval(checkNormalInternval);
-											outgoingCallOwnerInstance._ringingSound._audio.then((oldaudio) => {oldaudio.pause();});
-										}
-									},10);
-									outgoingCallOwnerInstance._ringingSound.loop = () => {
-										if (outgoingCallAudio.paused) {
+									if (!this.hasPatchedOutgoing) {
+										var outgoingCallAudio = new Audio();
+										let play = () => {
 											outgoingCallAudio.loop = true;
 											outgoingCallAudio.src = this.choices["call_calling"].src;
-											outgoingCallAudio.volume = this.choices["call_ringing"].volume/100;
+											outgoingCallAudio.volume = this.choices["call_calling"].volume/100;
 											outgoingCallAudio.play();
-										}
-									};
-									BDFDB.WebModules.addListener(outgoingCallOwnerInstance._ringingSound, "stop", () => {
-										outgoingCallAudio.pause();
-										clearInterval(checkNormalInternval);
-									});
+										};
+
+										let stop = () => {outgoingCallAudio.pause();}
+
+										var outgoingCallOwnerInstance = BDFDB.getOwnerInstance({"node":node, "props":["startRinging"], "up":true});
+										outgoingCallOwnerInstance.stopRinging();
+										outgoingCallOwnerInstance.startRinging = play;
+										outgoingCallOwnerInstance.stopRinging = stop;
+
+										let CallingWrap = outgoingCallOwnerInstance._reactInternalFiber.type;
+										this.cancelOutgoingStart = BDFDB.WebModules.monkeyPatch(CallingWrap.prototype, "startRinging", {instead: play});
+										this.cancelOutgoingStop = BDFDB.WebModules.monkeyPatch(CallingWrap.prototype, "stopRinging", {instead: stop});
+
+										this.hasPatchedOutgoing = true;
+									}
 								}
 							});
 						}
@@ -346,6 +350,8 @@ class NotificationSounds {
 	stop () {
 		if (typeof BDFDB === "object") {
 			if (typeof this.patchCancel === "function") this.patchCancel();
+			if (typeof this.cancelOutgoingStart === "function") this.cancelOutgoingStart();
+			if (typeof this.cancelOutgoingStop === "function") this.cancelOutgoingStop();
 			
 			this.incomingCallOwnerInstance.startRinging = this.oldStartRining;
 			this.incomingCallOwnerInstance.stopRinging = this.oldStopRining;
@@ -356,7 +362,7 @@ class NotificationSounds {
 
 	onSwitch () {
 		if (typeof BDFDB === "object") {
-			BDFDB.addObserver(this, BDFDB.dotCNS.chat, {name:"chatObserver"}, {childList:true});
+			if (!this.hasPatchedOutgoing) BDFDB.addObserver(this, BDFDB.dotCNS.chat, {name:"chatObserver"}, {childList:true});
 		}
 	}
 
