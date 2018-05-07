@@ -270,7 +270,7 @@ class FriendNotifications {
 			for (let id of this.FriendUtils.getFriendIDs()) {
 				this.friendsOnlineList[id] = this.UserMetaStore.getStatus(id) != "offline";
 			}
-			$(`${BDFDB.dotCN.guilds} > ${BDFDB.dotCN.friendsonline}:first-of-type`).first()
+			$(`${BDFDB.dotCN.guilds} > ${BDFDB.dotCN.friendsonline}`).first()
 				.on("mouseenter." + this.getName(), (e) => {
 					BDFDB.createTooltip("Timelog", e.currentTarget, {type:"right"});
 				})
