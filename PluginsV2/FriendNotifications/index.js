@@ -183,7 +183,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				for (let id of this.FriendUtils.getFriendIDs()) {
 					this.friendsOnlineList[id] = this.UserMetaStore.getStatus(id) != "offline";
 				}
-				$(`${BDFDB.dotCN.guilds} > ${BDFDB.dotCN.friendsonline}`)
+				$(`${BDFDB.dotCN.guilds} > ${BDFDB.dotCN.friendsonline}`).first()
 					.on("mouseenter." + this.name, (e) => {
 						BDFDB.createTooltip("Timelog", e.currentTarget, {type:"right"});
 					})
