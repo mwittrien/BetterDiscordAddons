@@ -19,8 +19,8 @@ module.exports = (Plugin, Api, Vendor) => {
 				"user_moved":			{implemented:true,	name:"Voicechat User Moved",			src:"/assets/e81d11590762728c1b811eadfa5be766.mp3"},
 				"ptt_start":			{implemented:true,	name:"Push2Talk Start",					src:"/assets/8b63833c8d252fedba6b9c4f2517c705.mp3"},
 				"ptt_stop":				{implemented:true,	name:"Push2Talk Stop",					src:"/assets/74ab980d6890a0fa6aa0336182f9f620.mp3"},
-				"call_calling":			{implemented:false,	name:"Outgoing Call",					src:"/assets/c6e92752668dde4eee5923d70441579f.mp3"},
-				"call_ringing":			{implemented:false,	name:"Incoming Call",					src:"/assets/84a1b4e11d634dbfa1e5dd97a96de3ad.mp3"},
+				"call_calling":			{implemented:true,	name:"Outgoing Call",					src:"/assets/c6e92752668dde4eee5923d70441579f.mp3"},
+				"call_ringing":			{implemented:true,	name:"Incoming Call",					src:"/assets/84a1b4e11d634dbfa1e5dd97a96de3ad.mp3"},
 				"call_ringing_beat":	{implemented:false,	name:"Incoming Call Beat",				src:"/assets/b9411af07f154a6fef543e7e442e4da9.mp3"},
 				"ddr-down":				{implemented:true,	name:"HotKeys Window Down",				src:"/assets/71f048f8aa7d4b24bf4268a87cbbb192.mp3"},
 				"ddr-left":				{implemented:true,	name:"HotKeys Window Left",				src:"/assets/1de04408e62b5d52ae3ebbb91e9e1978.mp3"},
@@ -112,124 +112,166 @@ module.exports = (Plugin, Api, Vendor) => {
 				
 				this.SoundUtils = BDFDB.WebModules.findByProperties(["playSound"]);
 				
-				if (this.SoundUtils) {
-					this.patchCancel = BDFDB.WebModules.monkeyPatch(this.SoundUtils, "playSound", {instead: (e) => {
-						setImmediate(() => {
-							var type = e.methodArguments[0];
-							if (type == "message1") {
-								if (this.firedEvents["dm"]) {
-									type = "dm";
-									this.firedEvents["dm"] = false;
-								}
-								else if (this.firedEvents["mentioned"]) {
-									type = "mentioned";
-									this.firedEvents["mentioned"] = false;
-								}
+				this.patchCancel = BDFDB.WebModules.monkeyPatch(this.SoundUtils, "playSound", {instead: (e) => {
+					setImmediate(() => {
+						var type = e.methodArguments[0];
+						if (type == "message1") {
+							if (this.firedEvents["dm"]) {
+								type = "dm";
+								this.firedEvents["dm"] = false;
 							}
-							var audio = new Audio();
-							audio.src = this.choices[type].src;
-							audio.volume = this.choices[type].volume/100;
-							audio.play();
-						});
-					}});
-					
-					this.loadAudios();
-					this.loadChoices();
-					
-					var observer = null;
+							else if (this.firedEvents["mentioned"]) {
+								type = "mentioned";
+								this.firedEvents["mentioned"] = false;
+							}
+						}
+						this.playAudio(type);
+					});
+				}});
+			
+				var incomingCallAudio = new Audio();
+				this.incomingCallOwnerInstance = BDFDB.getOwnerInstance({"node":document.querySelector(BDFDB.dotCN.callcontainer), "props":["startRinging","stopRinging"], "up":true});
+				this.oldStartRining = this.incomingCallOwnerInstance.startRinging;
+				this.oldStopRining = this.incomingCallOwnerInstance.stopRinging;
+				this.incomingCallOwnerInstance.startRinging = () => {
+					incomingCallAudio.pause();
+					incomingCallAudio.loop = true;
+					incomingCallAudio.src = this.choices["call_ringing"].src;
+					incomingCallAudio.volume = this.choices["call_ringing"].volume/100;
+					incomingCallAudio.play();
+				};
+				this.incomingCallOwnerInstance.stopRinging = () => {incomingCallAudio.pause();};
+				
+				this.loadAudios();
+				this.loadChoices();
+				
+				var observer = null;
 
-					observer = new MutationObserver((changes, _) => {
-						this.fireEvent("dm");
-					});
-					BDFDB.addObserver(this, null, {name:"dmBadgeObserver",instance:observer,multi:true}, {characterData: true, subtree: true});
-					
-					observer = new MutationObserver((changes, _) => {
-						this.fireEvent("mentioned");
-					});
-					BDFDB.addObserver(this, null, {name:"mentionBadgeObserver",instance:observer,multi:true}, {characterData: true, subtree: true});
-					
-					observer = new MutationObserver((changes, _) => {
-						changes.forEach(
-							(change, i) => {
-								if (change.addedNodes) {
-									change.addedNodes.forEach((node) => {
-										BDFDB.addObserver(this, node, {name:"dmBadgeObserver",multi:true}, {characterData: true, subtree: true});
-										this.fireEvent("dm");
-									});
-								}
+				observer = new MutationObserver((changes, _) => {
+					this.fireEvent("dm");
+				});
+				BDFDB.addObserver(this, null, {name:"dmBadgeObserver",instance:observer,multi:true}, {characterData: true, subtree: true});
+				
+				observer = new MutationObserver((changes, _) => {
+					this.fireEvent("mentioned");
+				});
+				BDFDB.addObserver(this, null, {name:"mentionBadgeObserver",instance:observer,multi:true}, {characterData: true, subtree: true});
+				
+				observer = new MutationObserver((changes, _) => {
+					changes.forEach(
+						(change, i) => {
+							if (change.addedNodes) {
+								change.addedNodes.forEach((node) => {
+									BDFDB.addObserver(this, node, {name:"dmBadgeObserver",multi:true}, {characterData: true, subtree: true});
+									this.fireEvent("dm");
+								});
 							}
-						);
-					});
-					BDFDB.addObserver(this, BDFDB.dotCN.dms, {name:"dmObserver",instance:observer}, {childList: true});
-					
-					observer = new MutationObserver((changes, _) => {
-						changes.forEach(
-							(change, i) => {
-								if (change.addedNodes) {
-									change.addedNodes.forEach((node) => {
-										if (node && node.className === BDFDB.disCN.badge) {
-											var data = BDFDB.getKeyInformation({"node":node.parentElement,"key":"guild"});
-											if (data) {
-												BDFDB.addObserver(this, node, {name:"mentionBadgeObserver",multi:true}, {characterData: true, subtree: true});
-												if (this.oldmentions && this.oldmentions[data.id] == 0) this.fireEvent("mentioned");
+						}
+					);
+				});
+				BDFDB.addObserver(this, BDFDB.dotCN.dms, {name:"dmObserver",instance:observer}, {childList: true});
+				
+				observer = new MutationObserver((changes, _) => {
+					changes.forEach(
+						(change, i) => {
+							if (change.addedNodes) {
+								change.addedNodes.forEach((node) => {
+									if (node && node.className === BDFDB.disCN.badge) {
+										var data = BDFDB.getKeyInformation({"node":node.parentElement,"key":"guild"});
+										if (data) {
+											BDFDB.addObserver(this, node, {name:"mentionBadgeObserver",multi:true}, {characterData: true, subtree: true});
+											if (this.oldmentions && this.oldmentions[data.id] == 0) this.fireEvent("mentioned");
+										}
+									}
+									if (node && node.classList && node.classList.contains(BDFDB.disCN.guild) && !node.classList.contains(BDFDB.disCN.guildsadd) && !document.querySelector(BDFDB.dotCN.dms).contains(node)) {
+										BDFDB.addObserver(this, node, {name:"mentionBadgeObserver",multi:true}, {characterData: true, subtree: true});
+									}
+								});
+							}
+							if (change.removedNodes) {
+								change.removedNodes.forEach((node) => {
+									if (node && node.className === BDFDB.disCN.badge) {
+										this.oldmentions = BDFDB.getKeyInformation({"node":document.querySelector(BDFDB.dotCN.layers),"key":"mentionCounts"});
+									}
+								});
+							}
+						}
+					);
+				});
+				BDFDB.addObserver(this, BDFDB.dotCN.guilds, {name:"mentionObserver",instance:observer}, {childList: true, subtree:true});
+				
+				observer = new MutationObserver((changes, _) => {
+					changes.forEach(
+						(change, i) => {
+							if (change.addedNodes) {
+								change.addedNodes.forEach((node) => {
+									if (node.classList && node.classList.contains(BDFDB.dotCN.channeliconspacing) && $(node).find(BDFDB.dotCN.channelbadge).length > 0) {
+										BDFDB.addObserver(this, node, {name:"mentionBadgeObserver",multi:true}, {characterData: true, subtree: true});
+										this.fireEvent("mentioned");
+										this.oldmentions = BDFDB.getKeyInformation({"node":$(BDFDB.dotCN.channelswrap).parent()[0],"key":"mentionCounts"});
+									}
+								});
+							}
+							if (change.removedNodes) {
+								change.removedNodes.forEach((node) => {
+									if (node.classList && node.classList.contains(BDFDB.dotCN.channeliconspacing) && $(node).find(BDFDB.dotCN.channelbadge).length > 0) {
+										this.oldmentions = BDFDB.getKeyInformation({"node":$(BDFDB.dotCN.channelswrap).parent()[0],"key":"mentionCounts"});
+									}
+								});
+							}
+						}
+					);
+				});
+				BDFDB.addObserver(this, BDFDB.dotCN.channels, {name:"channelListObserver",instance:observer}, {childList: true, subtree: true});
+				
+				observer = new MutationObserver((changes, _) => {
+					changes.forEach(
+						(change, i) => {
+							if (change.addedNodes) {
+								change.addedNodes.forEach((node) => {
+									if (node && node.tagName && node.classList.contains(BDFDB.disCN.callcurrentcontainer)) {
+										var outgoingCallAudio = new Audio();
+										var outgoingCallOwnerInstance = BDFDB.getOwnerInstance({"node":node, "props":["startRinging"], "up":true});
+										var checkNormalInternval = setInterval(() => {
+											if (outgoingCallOwnerInstance._ringingSound._audio) {
+												clearInterval(checkNormalInternval);
+												outgoingCallOwnerInstance._ringingSound._audio.then((oldaudio) => {oldaudio.pause();});
 											}
-										}
-										if (node && node.classList && node.classList.contains(BDFDB.disCN.guild) && !node.classList.contains(BDFDB.disCN.guildsadd) && !document.querySelector(BDFDB.dotCN.dms).contains(node)) {
-											BDFDB.addObserver(this, node, {name:"mentionBadgeObserver",multi:true}, {characterData: true, subtree: true});
-										}
-									});
-								}
-								if (change.removedNodes) {
-									change.removedNodes.forEach((node) => {
-										if (node && node.className === BDFDB.disCN.badge) {
-											this.oldmentions = BDFDB.getKeyInformation({"node":document.querySelector(BDFDB.dotCN.layers),"key":"mentionCounts"});
-										}
-									});
-								}
+										},10);
+										outgoingCallOwnerInstance._ringingSound.loop = () => {
+											if (outgoingCallAudio.paused) {
+												outgoingCallAudio.loop = true;
+												outgoingCallAudio.src = this.choices["call_calling"].src;
+												outgoingCallAudio.volume = this.choices["call_ringing"].volume/100;
+												outgoingCallAudio.play();
+											}
+										};
+										BDFDB.WebModules.addListener(outgoingCallOwnerInstance._ringingSound, "stop", () => {
+											outgoingCallAudio.pause();
+											clearInterval(checkNormalInternval);
+										});
+									}
+								});
 							}
-						);
-					});
-					BDFDB.addObserver(this, BDFDB.dotCN.guilds, {name:"mentionObserver",instance:observer}, {childList: true, subtree:true});
-					
-					observer = new MutationObserver((changes, _) => {
-						changes.forEach(
-							(change, i) => {
-								if (change.addedNodes) {
-									change.addedNodes.forEach((node) => {
-										if (node.classList && node.classList.contains(BDFDB.dotCN.channeliconspacing) && $(node).find(BDFDB.dotCN.channelbadge).length > 0) {
-											BDFDB.addObserver(this, node, {name:"mentionBadgeObserver",multi:true}, {characterData: true, subtree: true});
-											this.fireEvent("mentioned");
-											this.oldmentions = BDFDB.getKeyInformation({"node":$(BDFDB.dotCN.channelswrap).parent()[0],"key":"mentionCounts"});
-										}
-									});
-								}
-								if (change.removedNodes) {
-									change.removedNodes.forEach((node) => {
-										if (node.classList && node.classList.contains(BDFDB.dotCN.channeliconspacing) && $(node).find(BDFDB.dotCN.channelbadge).length > 0) {
-											this.oldmentions = BDFDB.getKeyInformation({"node":$(BDFDB.dotCN.channelswrap).parent()[0],"key":"mentionCounts"});
-										}
-									});
-								}
-							}
-						);
-					});
-					BDFDB.addObserver(this, BDFDB.dotCN.channels, {name:"channelListObserver",instance:observer}, {childList: true, subtree: true});
-					
-					BDFDB.readServerList().forEach((serverObj) => {
-						var badge = serverObj.div.querySelector(BDFDB.dotCN.badge);
-						if (badge) {
-							BDFDB.addObserver(this, badge, {name:"mentionBadgeObserver",multi:true}, {characterData: true, subtree: true});
 						}
-					});
-					
-					BDFDB.readDmList().forEach((dmObj) => {
-						var badge = dmObj.div.querySelector(BDFDB.dotCN.badge);
-						if (badge) {
-							BDFDB.addObserver(this, badge, {name:"dmBadgeObserver",multi:true}, {characterData: true, subtree: true});
-						}
-					});
-				}
-
+					);
+				});
+				BDFDB.addObserver(this, BDFDB.dotCNS.chat, {name:"chatObserver",instance:observer}, {childList:true});
+				
+				BDFDB.readServerList().forEach((serverObj) => {
+					var badge = serverObj.div.querySelector(BDFDB.dotCN.badge);
+					if (badge) {
+						BDFDB.addObserver(this, badge, {name:"mentionBadgeObserver",multi:true}, {characterData: true, subtree: true});
+					}
+				});
+				
+				BDFDB.readDmList().forEach((dmObj) => {
+					var badge = dmObj.div.querySelector(BDFDB.dotCN.badge);
+					if (badge) {
+						BDFDB.addObserver(this, badge, {name:"dmBadgeObserver",multi:true}, {characterData: true, subtree: true});
+					}
+				});
+				
 				return true;
 			}
 			else {
@@ -242,12 +284,21 @@ module.exports = (Plugin, Api, Vendor) => {
 		onStop () {
 			if (typeof BDFDB === "object") {
 				if (typeof this.patchCancel === "function") this.patchCancel();
+			
+				this.incomingCallOwnerInstance.startRinging = this.oldStartRining;
+				this.incomingCallOwnerInstance.stopRinging = this.oldStopRining;
 				
 				BDFDB.unloadMessage(this);
 				return true;
 			}
 			else {
 				return false;
+			}
+		}
+
+		onSwitch () {
+			if (typeof BDFDB === "object") {
+				BDFDB.addObserver(this, BDFDB.dotCNS.chat, {name:"chatObserver"}, {childList:true});
 			}
 		}
 
@@ -308,7 +359,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				choice.src = this.audios[choice.category][choice.song];
 				choice.src = choice.src ? choice.src : this.types[type].src;
 				choice.volume = settingspanel.querySelector(`.${type}-volume`).value;
-				this.saveChoice(type, choice, settingspanel.querySelector(".sound-preview"));
+				this.saveChoice(type, choice, true);
 			});
 			$(document).on("mousedown.select" + this.name, (e2) => {
 				if (e2.target.parentElement == selectMenu) return;
@@ -337,6 +388,13 @@ module.exports = (Plugin, Api, Vendor) => {
 			var input = slider.querySelector(".volumeInput");
 			var bar = slider.querySelector(BDFDB.dotCN.sliderbarfill);
 			
+			var disableTextSelectionCSS = `
+				* {
+					user-select: none !important;
+				}`;
+				
+			BDFDB.appendLocalStyle("disableTextSelection", disableTextSelectionCSS);
+			
 			var volume = 0;
 			var sY = 0;
 			var sHalfW = grabber.offsetWidth/2;
@@ -346,10 +404,11 @@ module.exports = (Plugin, Api, Vendor) => {
 				.off("mouseup.slider" + this.name).off("mousemove.slider" + this.name)
 				.on("mouseup.slider" + this.name, () => {
 					$(document).off("mouseup.slider" + this.name).off("mousemove.slider" + this.name);
+					BDFDB.removeLocalStyle("disableTextSelection");
 					var type = slider.getAttribute("type");
 					var choice = this.choices[type];
 					choice.volume = volume;
-					this.saveChoice(type, choice, settingspanel.querySelector(".sound-preview"));
+					this.saveChoice(type, choice, true);
 				})
 				.on("mousemove.slider" + this.name, (e2) => {
 					sY = e2.clientX > sMaxX ? sMaxX - sHalfW : (e2.clientX < sMinX ? sMinX - sHalfW : e2.clientX - sHalfW);
@@ -433,19 +492,21 @@ module.exports = (Plugin, Api, Vendor) => {
 					}
 				}
 				if (!songFound) choice = {"category":"---","song":"---","volume":100,"src":this.types[type].src};
-				this.saveChoice(type, choice, null);
+				this.saveChoice(type, choice, false);
 			}
 		}
 		
-		saveChoice (type, choice, audio) {
+		saveChoice (type, choice, play) {
 			BDFDB.saveData(type, choice, this, "choices");
 			this.choices[type] = choice;
-			if (audio) {
-				audio.pause();
-				audio.volume = choice.volume/100;
-				audio.src = choice.src;
-				audio.play();
-			}
+			if (play) this.playAudio(type);
+		}
+		
+		playAudio (type) {
+			this.audio.pause();
+			this.audio.src = this.choices[type].src;
+			this.audio.volume = this.choices[type].volume/100;
+			this.audio.play();
 		}
 		
 		fireEvent (type) {
@@ -480,7 +541,6 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Show unimplemented Sounds</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}" id="input-unimplemented"></div></div>`;
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Remove all added songs.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} reset-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Reset</div></button></div>`;
-			settingshtml += `<audio class="sound-preview"></audio>`;
 			settingshtml += `</div>`;
 			
 			var settingspanel = $(settingshtml)[0];
