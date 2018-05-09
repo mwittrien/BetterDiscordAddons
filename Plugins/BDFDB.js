@@ -2854,6 +2854,8 @@ BDFDB.DiscordClasses = {
 	buttonspinner: "spinner-3a9zLT",
 	buttonspinneritem: "spinnerItem-3GlVyU",
 	buttonsubmitting: "submitting-3qlO9O",
+	callavatar: "callAvatar-v-u4BM",
+	callavatarwrapper: "callAvatarWrapper-TICyxO",
 	callcontainer: "container-wrYOxa",
 	callcurrentcontainer: "private-channel-call",
 	card: "card-3Qj_Yx",
