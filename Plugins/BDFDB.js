@@ -3402,6 +3402,7 @@ BDFDB.DiscordClasses = {
 	tooltips: "tooltips",
 	tooltiptop: "tooltip-top",
 	transition: "transition-2IHyE9",
+	typing: "typing-2GQL18",
 	userpopout: "userPopout-3XzG_A",
 	userpopoutheader: "header-2BwW8b",
 	userpopoutheadernickname: "headerName-fajvi9",
