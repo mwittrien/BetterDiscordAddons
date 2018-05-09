@@ -160,9 +160,11 @@ module.exports = (Plugin, Api, Vendor) => {
 					changeInChatWindow:		{value:true, 	description:"Chat"},
 					changeInVoiceChat:		{value:true, 	description:"Voice Channels"},
 					changeInMemberList:		{value:true, 	description:"Member List"},
-					changeInDmHeader:		{value:true, 	description:"Direct Message Header"},
 					changeInRecentDms:		{value:true, 	description:"Direct Message Notifications"},
 					changeInDmsList:		{value:true, 	description:"Direct Message List"},
+					changeInDmHeader:		{value:true, 	description:"Direct Message Header"},
+					changeInDmCalls:		{value:true, 	description:"Direct Message Calls"},
+					changeInTyping:			{value:true, 	description:"Typing List"},
 					changeInFriendList:		{value:true, 	description:"Friend List"},
 					changeInUserPopout:		{value:true, 	description:"User Popouts"},
 					changeInUserProfil:		{value:true, 	description:"User Profil Modal"},
@@ -193,6 +195,9 @@ module.exports = (Plugin, Api, Vendor) => {
 				
 				this.UserStore = BDFDB.WebModules.findByProperties(["getUsers", "getUser"]);
 				this.MemberPerms = BDFDB.WebModules.findByProperties(["getNicknames", "getNick"]);
+				this.TypingUtils = BDFDB.WebModules.findByProperties(["getTypingUsers"]);
+				this.LastGuildStore = BDFDB.WebModules.findByProperties(["getLastSelectedGuildId"]);
+				this.LastChannelStore = BDFDB.WebModules.findByProperties(["getLastSelectedChannelId"]);
 				
 				var observer = null;
 
@@ -201,7 +206,7 @@ module.exports = (Plugin, Api, Vendor) => {
 						(change, i) => {
 							if (change.addedNodes) {
 								change.addedNodes.forEach((node) => {
-									if (node && node.nodeType == 1 && node.className.includes(BDFDB.disCN.contextmenu)) {
+									if (node.nodeType == 1 && node.className.includes(BDFDB.disCN.contextmenu)) {
 										this.onContextMenu(node);
 									}
 								});
@@ -229,10 +234,10 @@ module.exports = (Plugin, Api, Vendor) => {
 						(change, i) => {
 							if (change.addedNodes) {
 								change.addedNodes.forEach((node) => {
-									if (node && node.tagName && node.classList && node.classList.length > 0 && node.classList.contains(BDFDB.disCN.dmchannel) && node.classList.contains(BDFDB.disCN.dmchannelprivate) && BDFDB.getData("changeInDmsList", this, "settings")) {
+									if (node.tagName && node.classList && node.classList.length > 0 && node.classList.contains(BDFDB.disCN.dmchannel) && node.classList.contains(BDFDB.disCN.dmchannelprivate) && BDFDB.getData("changeInDmsList", this, "settings")) {
 										this.loadUser(node, "dms", false);
 									}
-									if (node && node.tagName && node.querySelector(BDFDB.dotCN.voiceuserdefault) && BDFDB.getData("changeInVoiceChat", this, "settings")) {
+									if (node.tagName && node.querySelector(BDFDB.dotCN.voiceuserdefault) && BDFDB.getData("changeInVoiceChat", this, "settings")) {
 										this.loadUser(node.querySelector(BDFDB.dotCN.voiceuserdefault).parentElement, "voice", false);
 									}
 								});
@@ -247,7 +252,7 @@ module.exports = (Plugin, Api, Vendor) => {
 						(change, i) => {
 							if (change.addedNodes) {
 								change.addedNodes.forEach((node) => {
-									if (node && node.tagName && node.querySelector(BDFDB.dotCN.friendscolumn) && BDFDB.getData("changeInFriendList", this, "settings")) {
+									if (node.tagName && node.querySelector(BDFDB.dotCN.friendscolumn) && BDFDB.getData("changeInFriendList", this, "settings")) {
 										this.loadUser(node, "friends", false);
 									}
 								});
@@ -262,7 +267,7 @@ module.exports = (Plugin, Api, Vendor) => {
 						(change, i) => {
 							if (change.addedNodes) {
 								change.addedNodes.forEach((node) => {
-									if (node && node.tagName && node.querySelector(BDFDB.dotCN.memberusername) && BDFDB.getData("changeInMemberList", this, "settings")) {
+									if (node.tagName && node.querySelector(BDFDB.dotCN.memberusername) && BDFDB.getData("changeInMemberList", this, "settings")) {
 										this.loadUser(node, "list", false);
 									}
 								});
@@ -270,7 +275,7 @@ module.exports = (Plugin, Api, Vendor) => {
 						}
 					);
 				});
-				BDFDB.addObserver(this, BDFDB.dotCN.members, {name:"userListObserver",instance:observer}, {childList:true});
+				BDFDB.addObserver(this, BDFDB.dotCN.memberswrap, {name:"userListObserver",instance:observer}, {childList:true, subtree:true});
 				
 				observer = new MutationObserver((changes, _) => {
 					changes.forEach(
@@ -280,15 +285,15 @@ module.exports = (Plugin, Api, Vendor) => {
 									if (BDFDB.getData("changeInChatWindow", this, "settings")) {
 										var compact = document.querySelector(BDFDB.dotCN.messagegroup + BDFDB.dotCN.messagecompact);
 										if (!compact) {
-											if (node && node.tagName && node.querySelector(BDFDB.dotCN.messageusernamewrapper)) {
+											if (node.tagName && node.querySelector(BDFDB.dotCN.messageusernamewrapper)) {
 												this.loadUser(node, "chat", compact);
 											}
-											else if (node && node.classList && node.classList.contains(BDFDB.disCN.messagetext)) {
+											else if (node.classList && node.classList.contains(BDFDB.disCN.messagetext)) {
 												this.loadUser($(BDFDB.dotCN.messagegroup).has(node)[0], "chat", compact);
 											}
 										}
 										else {
-											if (node && node.tagName && node.querySelector(BDFDB.dotCN.messageusernamewrapper)) {
+											if (node.tagName && node.querySelector(BDFDB.dotCN.messageusernamewrapper)) {
 												if (node.classList.contains(BDFDB.disCN.messagemarkup)) {
 													this.loadUser(node, "chat", compact);
 												}
@@ -303,14 +308,72 @@ module.exports = (Plugin, Api, Vendor) => {
 						}
 					);
 				});
-				BDFDB.addObserver(this, BDFDB.dotCN.messages, {name:"chatWindowObserver",instance:observer}, {childList:true, subtree:true});
+				BDFDB.addObserver(this, BDFDB.dotCN.messages, {name:"messagesObserver",instance:observer}, {childList:true, subtree:true});
+
+				observer = new MutationObserver((changes, _) => {
+					changes.forEach(
+						(change, i) => {
+							if (change.addedNodes) {
+								change.addedNodes.forEach((node) => {
+									if (node.tagName && node.classList.contains(BDFDB.disCN.typing) && BDFDB.getData("changeInTyping", this, "settings")) {
+										let innerobserver = new MutationObserver((changes2, _) => {
+											changes2.forEach(
+												(change2, i) => {
+													if (change2.addedNodes) {
+														change2.addedNodes.forEach((node2) => {
+															if (node2.tagName && node2.tagName == "STRONG") this.changeTyping(node);
+														});
+													}
+												}
+											);
+										});
+										innerobserver.observe(node, {childList:true, subtree:true});
+									}
+									this.changeTyping(node);
+								});
+							}
+						}
+					);
+				});
+				BDFDB.addObserver(this, BDFDB.dotCNS.chat + "form", {name:"chatFormObserver",instance:observer}, {childList:true});
+
+				observer = new MutationObserver((changes, _) => {
+					changes.forEach(
+						(change, i) => {
+							if (change.addedNodes) {
+								change.addedNodes.forEach((node) => {
+									if (node.tagName && node.classList.contains(BDFDB.disCN.callcurrentcontainer) && BDFDB.getData("changeInDmCalls", this, "settings")) {
+										for (let user of node.querySelectorAll(BDFDB.dotCN.callavatarwrapper)) this.loadUser(user, "call", false);
+									}
+								});
+							}
+						}
+					);
+				});
+				BDFDB.addObserver(this, BDFDB.dotCN.chat, {name:"chatObserver",instance:observer}, {childList:true});
+
+				observer = new MutationObserver((changes, _) => {
+					changes.forEach(
+						(change, i) => {
+							if (change.addedNodes) {
+								change.addedNodes.forEach((node) => {
+									let user;
+									if (node.tagName && (user = node.querySelector(BDFDB.dotCN.callavatarwrapper)) != null && BDFDB.getData("changeInDmCalls", this, "settings")) {
+										this.loadUser(user, "call", false);
+									}
+								});
+							}
+						}
+					);
+				});
+				BDFDB.addObserver(this, BDFDB.dotCN.callcurrentcontainer, {name:"callObserver",instance:observer}, {childList:true, subtree:true});
 				
 				observer = new MutationObserver((changes, _) => {
 					changes.forEach(
 						(change, i) => {
 							if (change.addedNodes) {
 								change.addedNodes.forEach((node) => {
-									if (node && node.tagName && node.querySelector(BDFDB.dotCN.userpopout) && BDFDB.getData("changeInUserPopout", this, "settings")) {
+									if (node.tagName && node.querySelector(BDFDB.dotCN.userpopout) && BDFDB.getData("changeInUserPopout", this, "settings")) {
 										this.loadUser(node, "popout", false);
 									}
 								});
@@ -325,7 +388,7 @@ module.exports = (Plugin, Api, Vendor) => {
 						(change, i) => {
 							if (change.addedNodes) {
 								change.addedNodes.forEach((node) => {
-									if (node && node.tagName && node.querySelector("[class*='topSection']") && BDFDB.getData("changeInUserProfil", this, "settings")) {
+									if (node.tagName && node.querySelector("[class*='topSection']") && BDFDB.getData("changeInUserProfil", this, "settings")) {
 										this.loadUser(node.querySelector("[class*='topSection']"), "profil", false);
 									}
 								});
@@ -334,6 +397,19 @@ module.exports = (Plugin, Api, Vendor) => {
 					);
 				});
 				BDFDB.addObserver(this, BDFDB.dotCN.app + " ~ [class^='theme-']:not([class*='popouts'])", {name:"userProfilModalObserver",instance:observer}, {childList: true});
+				
+				observer = new MutationObserver((changes, _) => {
+					changes.forEach(
+						(change, i) => {
+							if (change.removedNodes) {
+								change.removedNodes.forEach((node) => {
+									if (node.tagName && node.getAttribute("layer-id") == "user-settings") this.loadAllUsers();
+								});
+							}
+						}
+					);
+				});
+				BDFDB.addObserver(this, BDFDB.dotCN.layers, {name:"settingsWindowObserver",instance:observer}, {childList:true});
 							
 				this.loadAllUsers();
 
@@ -360,10 +436,13 @@ module.exports = (Plugin, Api, Vendor) => {
 		onSwitch () {
 			if (typeof BDFDB === "object") {
 				$(`${BDFDB.dotCN.channelheadertitletext}[custom-editusers]`).find(`${BDFDB.dotCN.channelheaderchannelname}:not(${BDFDB.dotCN.channelheaderprivate})`).css("color", "").css("background-color", "").parent().removeAttr("custom-editusers");
-				this.loadAllUsers();
-				BDFDB.addObserver(this, BDFDB.dotCN.members, {name:"userListObserver"}, {childList:true});
-				BDFDB.addObserver(this, BDFDB.dotCN.messages, {name:"chatWindowObserver"}, {childList:true, subtree:true});
+				BDFDB.addObserver(this, BDFDB.dotCN.memberswrap, {name:"userListObserver"}, {childList:true, subtree:true});
+				BDFDB.addObserver(this, BDFDB.dotCN.messages, {name:"messagesObserver"}, {childList:true, subtree:true});
+				BDFDB.addObserver(this, BDFDB.dotCNS.chat + "form", {name:"chatFormObserver"}, {childList:true});
+				BDFDB.addObserver(this, BDFDB.dotCN.chat, {name:"chatObserver"}, {childList:true});
+				BDFDB.addObserver(this, BDFDB.dotCN.callcurrentcontainer, {name:"callObserver"}, {childList:true, subtree:true});
 				BDFDB.addObserver(this, BDFDB.idCN.friends, {name:"friendListObserver"}, {childList:true, subtree:true});
+				this.loadAllUsers();
 			}
 		}
 
@@ -376,7 +455,6 @@ module.exports = (Plugin, Api, Vendor) => {
 				settings[input.value] = input.checked;
 			}
 			BDFDB.saveAllData(settings, this, "settings");
-			this.updateUsers = true;
 		}
 
 		resetAll () {
@@ -458,8 +536,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			var color3 =			data ? data.color3 : null;
 			var color4 =			data ? data.color4 : null;
 			
-			var serverObj = BDFDB.getSelectedServer();
-			var member = serverObj ? this.MemberPerms.getMember(serverObj.id, info.id) : null;
+			var member = this.MemberPerms.getMember(this.LastGuildStore.getGuildId(), info.id) ;
 			
 			var userSettingsModal = $(this.userSettingsModalMarkup);
 			userSettingsModal.find(BDFDB.dotCN.modalguildname).text(member && member.nick ? member.nick : info.username);
@@ -624,9 +701,14 @@ module.exports = (Plugin, Api, Vendor) => {
 					this.loadUser(user, "dms", false);
 				}
 			}
-			if (settings.changeInDmHeader && !BDFDB.getSelectedServer()) {
+			if (settings.changeInDmHeader && !this.LastGuildStore.getGuildId()) {
 				for (let user of document.querySelectorAll(BDFDB.dotCN.channelheadertitletext)) {
 					this.loadUser(user, "dmheader", false);
+				}
+			}
+			if (settings.changeInDmCalls) {
+				for (let user of document.querySelectorAll(BDFDB.dotCN.callavatarwrapper)) {
+					this.loadUser(user, "call", false);
 				}
 			}
 			if (settings.changeInFriendList) {
@@ -665,8 +747,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			var data = BDFDB.loadData(info.id, this, "users");
 			
 			if (data) {
-				var serverObj = BDFDB.getSelectedServer();
-				var member = serverObj ? this.MemberPerms.getMember(serverObj.id, info.id) : null;
+				var member = this.MemberPerms.getMember(this.LastGuildStore.getGuildId(), info.id);
 				if (username) {
 					var name = data.name ? data.name : (type == "info" || type == "profil" || !member || !member.nick ? info.username : member.nick);
 					var color1 = data.color1 ? BDFDB.color2RGB(data.color1) : (member && member.colorString ? BDFDB.color2RGB(member.colorString) : "");
@@ -674,16 +755,19 @@ module.exports = (Plugin, Api, Vendor) => {
 					BDFDB.setInnerText(username, name);
 					username.style.color = color1;
 					username.style.background = color2;
-					
-					/* for (let markup of div.querySelectorAll(BDFDB.dotCN.messagemarkup)) {
-						markup.style.color = settingsCookie["bda-gs-7"] && settingsCookie["bda-gs-7"] == true ? color1 : "";
-					} */
 				}
 				
 				if (avatar && (data.removeIcon || data.url)) {
 					avatar.style.background = data.removeIcon ? "" : "url(" + data.url + ")";
 					avatar.style.backgroundSize = "cover";
 					avatar.style.backgroundPosition = "center";
+					if (type == "call") {
+						$(avatar)
+							.off("mouseenter." + this.name)
+							.on("mouseenter." + this.name, () => {
+								this.createCallToolTip({"div":div,"nick":data.name,"name":info.username});
+							});
+					}
 				}
 					
 				var tag = data.tag ? data.tag : null;
@@ -734,15 +818,12 @@ module.exports = (Plugin, Api, Vendor) => {
 					BDFDB.setInnerText(username, name);
 					username.style.color = color1;
 					username.style.background = color2;
-					
-					/* for (let markup of div.querySelectorAll(BDFDB.dotCN.messagemarkup)) {
-						markup.style.color = settingsCookie["bda-gs-7"] && settingsCookie["bda-gs-7"] == true ? color1 : "";
-					} */
 				}
 				
 				if (avatar) {
 					avatar.style.background = "url(" + BDFDB.getUserAvatar(info.id) + ")";
 					avatar.style.backgroundSize = "cover";
+					$(avatar).off("mouseenter." + this.name);
 				}
 				
 				$(div).removeAttr("custom-editusers")
@@ -759,8 +840,17 @@ module.exports = (Plugin, Api, Vendor) => {
 			BDFDB.createTooltip(text, userObj.div, {type:"right",selector:"dm-custom-tooltip",css:customTooltipCSS});
 		}
 		
+		createCallToolTip (userObj) {
+			var text = userObj.nick ? userObj.nick : userObj.name;
+			var customTooltipCSS = `
+				${BDFDB.dotCN.tooltip}:not(.call-custom-tooltip) {
+					display: none !important;
+				}`;
+			BDFDB.createTooltip(text, userObj.div, {type:"left",selector:"call-custom-tooltip",css:customTooltipCSS});
+		}
+		
 		getAvatarNameWrapper (div) {
-			var avatar = div.querySelector(BDFDB.dotCNC.avatarsmallold + BDFDB.dotCNC.avatarlargeold + BDFDB.dotCNC.avatarprofileold + BDFDB.dotCNC.voiceavatardefault + BDFDB.dotCN.avatarimage);
+			var avatar = div.querySelector(BDFDB.dotCNC.avatarsmallold + BDFDB.dotCNC.avatarlargeold + BDFDB.dotCNC.avatarprofileold + BDFDB.dotCNC.voiceavatardefault + BDFDB.dotCNC.avatarimage + BDFDB.dotCN.callavatar);
 							
 			var username = div.querySelector(BDFDB.dotCNC.userpopoutheadernickname + BDFDB.dotCNC.userpopoutheadernonickname + BDFDB.dotCNC.userprofileusername + BDFDB.dotCNC.memberusername + BDFDB.dotCNC.voicenamedefault + BDFDB.dotCNC.messageusername + BDFDB.dotCNC.dmchannelname + BDFDB.dotCN.channelheaderchannelname + BDFDB.dotCNC.channelheaderprivate + BDFDB.dotCNS.friendscolumnnamewrap + BDFDB.dotCNC.friendscolumnusername + BDFDB.dotCNS.accountinfodetails + BDFDB.dotCN.accountinfousername);
 							
@@ -770,20 +860,50 @@ module.exports = (Plugin, Api, Vendor) => {
 		}
 		
 		getUserInfo (div) {
-			var info = BDFDB.getKeyInformation({"node":div,"key":"user"});
-			if (!info) {
-				info = BDFDB.getKeyInformation({"node":div,"key":"message"});
-				if (info) info = info.author;
-				else {
-					info = BDFDB.getKeyInformation({"node":div,"key":"channel"});
-					if (info) info = {"id":info.recipients[0]};
-					else {
-						info = BDFDB.getKeyInformation({"node":$(BDFDB.dotCN.messagegroup).has(div)[0],"key":"message"});
+			let info, avatar = div.querySelector("[style*='/avatars/']");
+			if (avatar) info = this.UserStore.getUser(avatar.style.backgroundImage.split("/avatars/")[1].split("/")[0]);
+			else {
+				info = BDFDB.getKeyInformation({"node":div,"key":"user"});
+				if (!info) {
+					info = this.UserStore.getUser(BDFDB.getKeyInformation({"node":div,"key":"id","up":true}));  
+					if (!info) {
+						info = BDFDB.getKeyInformation({"node":div,"key":"message"});
 						if (info) info = info.author;
+						else {
+							info = BDFDB.getKeyInformation({"node":div,"key":"channel"});
+							if (info) info = {"id":info.recipients[0]};
+							else {
+								info = BDFDB.getKeyInformation({"node":$(BDFDB.dotCN.messagegroup).has(div)[0],"key":"message"});
+								if (info) info = info.author;
+							}
+						}
 					}
 				}
 			}
 			return info && info.id ? this.UserStore.getUser(info.id) : null;
+		}
+		
+		changeTyping (div) {
+			for (let id in this.typingIntervals) clearInterval(this.typingIntervals[id]);
+			let i = 0, ids = this.TypingUtils.getTypingUsers(this.LastChannelStore.getChannelId()), sortedids = [], alldata = BDFDB.loadAllData(this, "users");
+			for (let id in ids) sortedids.push({id:id,time:ids[id]});
+			sortedids.sort(function(x,y) {
+				return x.time - y.time;
+			});
+			for (let strong of div.querySelectorAll("strong")) {
+				let data = alldata[sortedids[i].id];
+				if (data) {
+					let user = this.UserStore.getUser(sortedids[i].id);
+					let member = this.MemberPerms.getMember(this.LastGuildStore.getGuildId(), sortedids[i].id);
+					if (user) {
+						var name = data.name ? data.name : (member && member.nick ? member.nick : info.username);
+						var color1 = data.color1 ? BDFDB.color2RGB(data.color1) : (member && member.colorString ? BDFDB.color2RGB(member.colorString) : "");
+						var color2 = data.color2 ? BDFDB.color2RGB(data.color2) : "";
+						strong.innerHTML = `<label style="color:${color1};background-color:${color2};">${name}</label>`;
+					}
+				}
+				i++;
+			}
 		}
 		
 		getSettingsPanel () {
