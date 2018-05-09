@@ -2630,6 +2630,11 @@ html, span:not(.spinner-item) {
 
 /* ----------------------- PLUGINSUPPORT ----------------------- */
 
+/* statuseverywhere */
+.status-typing {
+    border-radius: 999px !important;
+}
+
 /* displayserveraschannels */
 .DSAC-styled .guild-separator ~ .guild.selected {
 	background-color: rgb(var(--accentcolor)) !important;
