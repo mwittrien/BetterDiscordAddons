@@ -15,7 +15,7 @@ class ChatAliases {
 
 	getDescription () {return "Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent.";}
 
-	getVersion () {return "1.8.5";}
+	getVersion () {return "1.8.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -34,7 +34,7 @@ class ChatAliases {
 		}
 		settingshtml += `</div></div><div class="DevilBro-settings-inner-list alias-list ${BDFDB.disCNS.gamesettings + BDFDB.disCN.marginbottom8}">`;
 		for (let word in words) {
-			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.hovercard}"><div class=${BDFDB.disCN.hovercardinner}><input type="text" word="${word}" action="edit" class="${BDFDB.disCNS.gamename + BDFDB.disCN.gamenameinput} word-name" value="${BDFDB.encodeToHTML(word)}"><input type="text" word="${word}" action="edit" class="${BDFDB.disCNS.gamename + BDFDB.disCN.gamenameinput} replace-name" value="${BDFDB.encodeToHTML(words[word].replace)}">`;
+			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.hovercard}"><div class="${BDFDB.disCN.hovercardinner}"><input type="text" word="${word}" action="edit" class="${BDFDB.disCNS.gamename + BDFDB.disCN.gamenameinput} word-name" value="${BDFDB.encodeToHTML(word)}"><input type="text" word="${word}" action="edit" class="${BDFDB.disCNS.gamename + BDFDB.disCN.gamenameinput} replace-name" value="${BDFDB.encodeToHTML(words[word].replace)}">`;
 			for (let config of this.configs) {
 				settingshtml += `<div class="${BDFDB.disCNS.checkboxcontainer + BDFDB.disCN.marginreset}" style="flex: 0 0 auto;"><label class="${BDFDB.disCN.checkboxwrapper}"><input word="${word}" config="${config}" type="checkbox" class="${BDFDB.disCNS.checkboxinputdefault + BDFDB.disCN.checkboxinput}"${words[word][config] ? " checked" : ""}><div class="${BDFDB.disCNS.checkbox + BDFDB.disCNS.flexcenter + BDFDB.disCNS.flex + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.checkboxround}"><svg name="Checkmark" width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><polyline stroke="transparent" stroke-width="2" points="3.5 9.5 7 13 15 5"></polyline></g></svg></div></label></div>`;
 				console.log();
@@ -216,7 +216,7 @@ class ChatAliases {
 
 			var containerhtml = ``;
 			for (let word in words) {
-				containerhtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.hovercard}"><div class=${BDFDB.disCN.hovercardinner}><input type="text" word="${word}" action="edit" class="${BDFDB.disCNS.gamename + BDFDB.disCN.gamenameinput} word-name" value="${BDFDB.encodeToHTML(word)}"><input type="text" word="${word}" action="edit" class="${BDFDB.disCNS.gamename + BDFDB.disCN.gamenameinput} replace-name" value="${BDFDB.encodeToHTML(words[word].replace)}">`;
+				containerhtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.hovercard}"><div class="${BDFDB.disCN.hovercardinner}"><input type="text" word="${word}" action="edit" class="${BDFDB.disCNS.gamename + BDFDB.disCN.gamenameinput} word-name" value="${BDFDB.encodeToHTML(word)}"><input type="text" word="${word}" action="edit" class="${BDFDB.disCNS.gamename + BDFDB.disCN.gamenameinput} replace-name" value="${BDFDB.encodeToHTML(words[word].replace)}">`;
 				for (let config of this.configs) {
 					containerhtml += `<div class="${BDFDB.disCNS.checkboxcontainer + BDFDB.disCN.marginreset}" style="flex: 0 0 auto;"><label class="${BDFDB.disCN.checkboxwrapper}"><input word="${word}" config="${config}" type="checkbox" class="${BDFDB.disCNS.checkboxinputdefault + BDFDB.disCN.checkboxinput}"${words[word][config] ? " checked" : ""}><div class="${BDFDB.disCNS.checkbox + BDFDB.disCNS.flexcenter + BDFDB.disCNS.flex + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.checkboxround}"><svg name="Checkmark" width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><polyline stroke="transparent" stroke-width="2" points="3.5 9.5 7 13 15 5"></polyline></g></svg></div></label></div>`;
 				}
