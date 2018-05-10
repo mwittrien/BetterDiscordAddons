@@ -324,6 +324,11 @@ module.exports = (Plugin, Api, Vendor) => {
 															if (node2.tagName && node2.tagName == "STRONG") this.changeTyping(node);
 														});
 													}
+													if (change2.removedNodes) {
+														change2.removedNodes.forEach((node2) => {
+															if (node2.tagName && node2.tagName == "STRONG") this.changeTyping(node);
+														});
+													}
 												}
 											);
 										});
@@ -884,12 +889,9 @@ module.exports = (Plugin, Api, Vendor) => {
 		}
 		
 		changeTyping (div) {
-			for (let id in this.typingIntervals) clearInterval(this.typingIntervals[id]);
 			let i = 0, ids = this.TypingUtils.getTypingUsers(this.LastChannelStore.getChannelId()), sortedids = [], alldata = BDFDB.loadAllData(this, "users");
 			for (let id in ids) sortedids.push({id:id,time:ids[id]});
-			sortedids.sort(function(x,y) {
-				return x.time - y.time;
-			});
+			BDFDB.sortArrayByKey(sortedids, "time");
 			for (let strong of div.querySelectorAll("strong")) {
 				let data = alldata[sortedids[i].id];
 				if (data) {

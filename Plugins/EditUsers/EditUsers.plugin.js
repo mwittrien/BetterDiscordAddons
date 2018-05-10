@@ -3,8 +3,6 @@
 class EditUsers {
 	initConstructor () {
 		this.labels = {};
-		
-		this.typingIntervals = {};
 
 		this.css = `
 			.user-tag {
@@ -174,7 +172,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "2.2.8";}
+	getVersion () {return "2.2.9";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -350,6 +348,11 @@ class EditUsers {
 											(change2, i) => {
 												if (change2.addedNodes) {
 													change2.addedNodes.forEach((node2) => {
+														if (node2.tagName && node2.tagName == "STRONG") this.changeTyping(node);
+													});
+												}
+												if (change2.removedNodes) {
+													change2.removedNodes.forEach((node2) => {
 														if (node2.tagName && node2.tagName == "STRONG") this.changeTyping(node);
 													});
 												}
@@ -915,12 +918,9 @@ class EditUsers {
 	}
 	
 	changeTyping (div) {
-		for (let id in this.typingIntervals) clearInterval(this.typingIntervals[id]);
 		let i = 0, ids = this.TypingUtils.getTypingUsers(this.LastChannelStore.getChannelId()), sortedids = [], alldata = BDFDB.loadAllData(this, "users");
 		for (let id in ids) sortedids.push({id:id,time:ids[id]});
-		sortedids.sort(function(x,y) {
-			return x.time - y.time;
-		});
+		BDFDB.sortArrayByKey(sortedids, "time");
 		for (let strong of div.querySelectorAll("strong")) {
 			let data = alldata[sortedids[i].id];
 			if (data) {
