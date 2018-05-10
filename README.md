@@ -1,7 +1,7 @@
 # BetterDiscordAddons
 A series of plugins and themes for BetterDiscord. If you got any question hit me up on Discord DevilBro#4401
 
-## BDv1
+## BDv1/BBD
 ### [Plugins](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/)
 ### [Themes](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/)
 
