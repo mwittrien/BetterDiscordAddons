@@ -506,7 +506,7 @@ class PersonalPins {
 				for (var id in messages) {
 					messageArray.push(messages[id]);
 				}
-				messageArray = BDFDB.sortArrayByKey(messageArray, notespopout.querySelector(BDFDB.dotCN.quickselectvalue).getAttribute("option"));
+				BDFDB.sortArrayByKey(messageArray, notespopout.querySelector(BDFDB.dotCN.quickselectvalue).getAttribute("option"));
 				for (let messageData of messageArray) {
 					let message = $(this.messageMarkup)[0];
 					let server = this.GuildStore.getGuild(messageData.serverID);

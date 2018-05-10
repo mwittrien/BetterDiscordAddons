@@ -382,7 +382,7 @@ class RepoControls {
 		var entries = container.entries;
 		var sortings = BDFDB.getAllData(this, "sortings");
 		entries = entries.filter((entry) => {return entry.search.indexOf(searchstring) > -1 ? entry : null;});
-		entries = BDFDB.sortArrayByKey(entries, sortings.sort);
+		BDFDB.sortArrayByKey(entries, sortings.sort);
 		if (sortings.order == "desc") entries.reverse();
 		
 		var settings = BDFDB.getAllData(this, "settings");

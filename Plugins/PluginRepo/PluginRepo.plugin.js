@@ -599,7 +599,7 @@ class PluginRepo {
 		if (modal.find("#input-hideoutdated").prop("checked")) 		entries = entries.filter((entry) => {return entry.state != 1 ? entry : null;});
 		if (modal.find("#input-hidedownloadable").prop("checked")) 	entries = entries.filter((entry) => {return entry.state != 2 ? entry : null;});
 		entries = entries.filter((entry) => {return entry.search.indexOf(searchstring) > -1 ? entry : null;});
-		entries = BDFDB.sortArrayByKey(entries, modal.find(".sort-filter " + BDFDB.dotCN.quickselectvalue).attr("option"));
+		BDFDB.sortArrayByKey(entries, modal.find(".sort-filter " + BDFDB.dotCN.quickselectvalue).attr("option"));
 		if (modal.find(".order-filter " + BDFDB.dotCN.quickselectvalue).attr("option") == "desc") entries.reverse();
 		
 		modal.find(".pluginAmount").text("Plugin Repository " + entries.length + "/" + Object.keys(this.loadedPlugins).length + " Plugins");
