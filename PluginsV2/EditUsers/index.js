@@ -889,7 +889,8 @@ module.exports = (Plugin, Api, Vendor) => {
 		}
 		
 		changeTyping (div) {
-			let i = 0, ids = this.TypingUtils.getTypingUsers(this.LastChannelStore.getChannelId()), sortedids = [], alldata = BDFDB.loadAllData(this, "users");
+			let i = 0, ids = Object.assign({},this.TypingUtils.getTypingUsers(this.LastChannelStore.getChannelId())), sortedids = [], alldata = BDFDB.loadAllData(this, "users");
+			delete ids[BDFDB.myData.id];
 			for (let id in ids) sortedids.push({id:id,time:ids[id]});
 			BDFDB.sortArrayByKey(sortedids, "time");
 			for (let strong of div.querySelectorAll("strong")) {

@@ -172,7 +172,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "2.2.9";}
+	getVersion () {return "2.3.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -918,7 +918,8 @@ class EditUsers {
 	}
 	
 	changeTyping (div) {
-		let i = 0, ids = this.TypingUtils.getTypingUsers(this.LastChannelStore.getChannelId()), sortedids = [], alldata = BDFDB.loadAllData(this, "users");
+		let i = 0, ids = Object.assign({},this.TypingUtils.getTypingUsers(this.LastChannelStore.getChannelId())), sortedids = [], alldata = BDFDB.loadAllData(this, "users");
+		delete ids[BDFDB.myData.id];
 		for (let id in ids) sortedids.push({id:id,time:ids[id]});
 		BDFDB.sortArrayByKey(sortedids, "time");
 		for (let strong of div.querySelectorAll("strong")) {
