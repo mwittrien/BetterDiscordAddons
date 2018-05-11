@@ -34,7 +34,7 @@ class CompleteTimestamps {
 
 	getDescription () {return "Replace all timestamps with complete timestamps.";}
 
-	getVersion () {return "1.1.8";}
+	getVersion () {return "1.1.9";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -70,7 +70,6 @@ class CompleteTimestamps {
 			.on("click", ".toggle-info", (e) => {this.toggleInfo(settingspanel, e.currentTarget);});
 		return settingspanel;
 	}
-
 	
 	
 	//legacy
@@ -78,8 +77,7 @@ class CompleteTimestamps {
 	
 	start () {
 		var libraryScript = null;
-		if (typeof BDFDB !== "object" || BDFDB.isLibraryOutdated()) {
-			if (typeof BDFDB === "object") BDFDB = "";
+		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
 			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
@@ -88,7 +86,7 @@ class CompleteTimestamps {
 			document.head.appendChild(libraryScript);
 		}
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object") this.initialize();
+		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
 		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
@@ -303,8 +301,9 @@ class CompleteTimestamps {
 			languageid = BDFDB.getDiscordLanguage().id;
 			var hour = time.getHours(), minute = time.getMinutes(), second = time.getSeconds(), day = time.getDate(), month = time.getMonth()+1, timemode = "";
 			if (ownformat.indexOf("$timemode") > -1) {
-				timemode = hour > 12 ? "PM" : "AM";
-				hour = hour > 12 ? hour - 12 : hour;
+				timemode = hour >= 12 ? "PM" : "AM";
+				hour = hour % 12;
+				hour = hour ? hour : 12;
 			}
 			timestring = ownformat
 				.replace("$hour", settings.forceZeros && hour < 10 ? "0" + hour : hour)

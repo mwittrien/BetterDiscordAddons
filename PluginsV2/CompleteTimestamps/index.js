@@ -246,8 +246,9 @@ module.exports = (Plugin, Api, Vendor) => {
 				languageid = BDFDB.getDiscordLanguage().id;
 				var hour = time.getHours(), minute = time.getMinutes(), second = time.getSeconds(), day = time.getDate(), month = time.getMonth()+1, timemode = "";
 				if (ownformat.indexOf("$timemode") > -1) {
-					timemode = hour > 12 ? "PM" : "AM";
-					hour = hour > 12 ? hour - 12 : hour;
+					timemode = hour >= 12 ? "PM" : "AM";
+					hour = hour % 12;
+					hour = hour ? hour : 12;
 				}
 				timestring = ownformat
 					.replace("$hour", settings.forceZeros && hour < 10 ? "0" + hour : hour)
