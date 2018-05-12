@@ -2041,8 +2041,8 @@ BDFDB.setColorSwatches = function (currentCOMP, wrapper, swatch) {
 			</div>
 			<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCN.wrap} ui-color-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;">
 				<div class="ui-color-picker-${swatch} nocolor" style="background-color: null;">
-					<svg class="nocolor-cross" height="22" width="22">
-						<path d="m 3 2 l 17 18 m 0 -18 l -17 18" stroke="red" stroke-width="3" fill="none"/>
+					<svg class="nocolor-cross" height="21" width="21">
+						<path d="m 3 2 l 17 17 m 0 -17 l -17 17" stroke="red" stroke-width="3" fill="none"/>
 					</svg>
 				</div>
 				${ colourList.map((val, i) => `<div class="ui-color-picker-${swatch}" style="background-color: ${val};"></div>`).join("")}
