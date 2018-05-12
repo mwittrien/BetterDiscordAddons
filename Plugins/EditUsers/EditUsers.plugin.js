@@ -172,7 +172,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "2.3.0";}
+	getVersion () {return "2.3.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -924,15 +924,13 @@ class EditUsers {
 		BDFDB.sortArrayByKey(sortedids, "time");
 		for (let strong of div.querySelectorAll("strong")) {
 			let data = alldata[sortedids[i].id];
-			if (data) {
-				let user = this.UserStore.getUser(sortedids[i].id);
-				let member = this.MemberPerms.getMember(this.LastGuildStore.getGuildId(), sortedids[i].id);
-				if (user) {
-					var name = data.name ? data.name : (member && member.nick ? member.nick : info.username);
-					var color1 = data.color1 ? BDFDB.color2RGB(data.color1) : (member && member.colorString ? BDFDB.color2RGB(member.colorString) : "");
-					var color2 = data.color2 ? BDFDB.color2RGB(data.color2) : "";
-					strong.innerHTML = `<label style="color:${color1};background-color:${color2};">${name}</label>`;
-				}
+			let user = this.UserStore.getUser(sortedids[i].id);
+			let member = this.MemberPerms.getMember(this.LastGuildStore.getGuildId(), sortedids[i].id);
+			if (user) {
+				var name = data && data.name ? data.name : (member && member.nick ? member.nick : user.username);
+				var color1 = data && data.color1 ? BDFDB.color2RGB(data.color1) : (member && member.colorString ? BDFDB.color2RGB(member.colorString) : "");
+				var color2 = data && data.color2 ? BDFDB.color2RGB(data.color2) : "";
+				strong.innerHTML = `<label style="color:${color1};background-color:${color2};">${name}</label>`;
 			}
 			i++;
 		}
