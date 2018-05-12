@@ -84,6 +84,7 @@ https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/VCMute
 https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/ViewGuildRelationships.plugin.js
 https://raw.githubusercontent.com/Modder4869/LazyStuff/master/LazyPlugins/CSSCode.plugin.js
 https://raw.githubusercontent.com/Modder4869/LazyStuff/master/LazyPlugins/DeveloperUtils.plugin.js
+https://raw.githubusercontent.com/Modder4869/LazyStuff/master/LazyPlugins/ThemePreview.plugin.js
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/BetterFriendCount/BetterFriendCount.plugin.js
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/BetterNsfwTag/BetterNsfwTag.plugin.js
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/BetterSearchPage/BetterSearchPage.plugin.js
