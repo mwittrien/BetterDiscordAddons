@@ -2787,7 +2787,12 @@ html, span:not(.spinner-item) {
 	filter: drop-shadow(0 0 2px black);
 	opacity: 0.7 !important;
 }
-.replyer {
+.replyer-icon {
+	position: relative !important;
+	padding:  0 3px 1px 3px !important;
+	margin-top: 1px !important;
+}
+.replyer[style*="cursor:pointer;color:rgba(255,255,255,.4) !important;position:relative;top:-1px;"] {
 	background: url(data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjRkZGRkZGIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4gICAgPHBhdGggZD0iTTEwIDlWNWwtNyA3IDcgN3YtNC4xYzUgMCA4LjUgMS42IDExIDUuMS0xLTUtNC0xMC0xMS0xMXoiLz4gICAgPHBhdGggZD0iTTAgMGgyNHYyNEgweiIgZmlsbD0ibm9uZSIvPjwvc3ZnPg==) no-repeat center center !important;
 	background-size: contain !important;
 	font-size:0 !important;
@@ -2798,12 +2803,15 @@ html, span:not(.spinner-item) {
 	opacity: 0.7 !important;
 }
 .citar-btn:hover,
-.replyer:hover {
+.replyer-icon:hover,
+.replyer[style*="cursor:pointer;color:rgba(255,255,255,.4) !important;position:relative;top:-1px;"]:hover {
+	border-radius: 3px;
 	opacity: 1 !important; 
 	background-color: rgba(var(--transparencycolor),calc(var(--transparencyalpha) * 2)) !important
 }
 .citar-btn:active,
-.replyer:active {
+.replyer-icon:active,
+.replyer[style*="cursor:pointer;color:rgba(255,255,255,.4) !important;position:relative;top:-1px;"]:active {
 	background-color: rgb(var(--accentcolor)) !important
 }
 
