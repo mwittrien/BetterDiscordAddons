@@ -333,8 +333,8 @@ module.exports = (Plugin, Api, Vendor) => {
 											);
 										});
 										innerobserver.observe(node, {childList:true, subtree:true});
+										this.changeTyping(node);
 									}
-									this.changeTyping(node);
 								});
 							}
 						}

@@ -172,7 +172,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "2.3.1";}
+	getVersion () {return "2.3.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -360,8 +360,8 @@ class EditUsers {
 										);
 									});
 									innerobserver.observe(node, {childList:true, subtree:true});
+									this.changeTyping(node);
 								}
-								this.changeTyping(node);
 							});
 						}
 					}
