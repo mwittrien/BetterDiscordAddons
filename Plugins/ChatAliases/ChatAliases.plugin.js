@@ -15,7 +15,7 @@ class ChatAliases {
 
 	getDescription () {return "Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent.";}
 
-	getVersion () {return "1.8.6";}
+	getVersion () {return "1.8.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -67,8 +67,7 @@ class ChatAliases {
 
 	start () {
 		var libraryScript = null;
-		if (typeof BDFDB !== "object" || BDFDB.isLibraryOutdated()) {
-			if (typeof BDFDB === "object") BDFDB = "";
+		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
 			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
@@ -77,7 +76,7 @@ class ChatAliases {
 			document.head.appendChild(libraryScript);
 		}
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object") this.initialize();
+		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
 		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
@@ -128,7 +127,7 @@ class ChatAliases {
 			}
 			BDFDB.saveAllData(aliases, this, "words");
 			
-			document.querySelectorAll("textarea").forEach(textarea => {this.bindEventToTextArea(textarea);});
+			this.onSwitch();
 			
 			$(document).off("click." + this.getName()).on("click." + this.getName(), (e) => {
 				if (!e.target.tagName === "TEXTAREA") $(".autocompleteAliases, .autocompleteAliasesRow").remove();
@@ -145,6 +144,10 @@ class ChatAliases {
 			
 			BDFDB.unloadMessage(this);
 		}
+	}
+	
+	onSwitch () {
+		document.querySelectorAll(BDFDB.dotCN.textarea).forEach(textarea => {this.bindEventToTextArea(textarea);});
 	}
 
 

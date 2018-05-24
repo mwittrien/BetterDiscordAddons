@@ -62,7 +62,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				}
 				BDFDB.saveAllData(aliases, this, "words");
 				
-				document.querySelectorAll("textarea").forEach(textarea => {this.bindEventToTextArea(textarea);});
+				this.onSwitch();
 				
 				$(document).off("click." + this.name).on("click." + this.name, (e) => {
 					if (!e.target.tagName === "TEXTAREA") $(".autocompleteAliases, .autocompleteAliasesRow").remove();
@@ -86,6 +86,10 @@ module.exports = (Plugin, Api, Vendor) => {
 			else {
 				return false;
 			}
+		}
+	
+		onSwitch () {
+			document.querySelectorAll(BDFDB.dotCN.textarea).forEach(textarea => {this.bindEventToTextArea(textarea);});
 		}
 
 

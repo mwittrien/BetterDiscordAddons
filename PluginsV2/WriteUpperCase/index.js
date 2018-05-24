@@ -41,7 +41,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				});
 				BDFDB.addObserver(this, BDFDB.dotCN.appmount, {name:"textareaObserver",instance:observer}, {childList: true, subtree:true});
 				
-				document.querySelectorAll(BDFDB.dotCN.textarea).forEach(textarea => {this.bindEventToTextArea(textarea);});
+				this.onSwitch();
 
 				return true;
 			}
@@ -59,6 +59,10 @@ module.exports = (Plugin, Api, Vendor) => {
 			else {
 				return false;
 			}
+		}
+	
+		onSwitch () {
+			document.querySelectorAll(BDFDB.dotCN.textarea).forEach(textarea => {this.bindEventToTextArea(textarea);});
 		}
 
 		

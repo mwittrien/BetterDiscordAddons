@@ -5,7 +5,7 @@ class WriteUpperCase {
 
 	getDescription () {return "Change input to uppercase.";}
 
-	getVersion () {return "1.1.4";}
+	getVersion () {return "1.1.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -13,7 +13,7 @@ class WriteUpperCase {
 
 	start () {
 		var libraryScript = null;
-		if (typeof BDFDB !== "object" || BDFDB.isLibraryOutdated()) {
+		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
 			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
@@ -22,7 +22,7 @@ class WriteUpperCase {
 			document.head.appendChild(libraryScript);
 		}
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object") this.initialize();
+		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
 		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
@@ -47,7 +47,7 @@ class WriteUpperCase {
 			});
 			BDFDB.addObserver(this, BDFDB.dotCN.appmount, {name:"textareaObserver",instance:observer}, {childList: true, subtree:true});
 			
-			document.querySelectorAll(BDFDB.dotCN.textarea).forEach(textarea => {this.bindEventToTextArea(textarea);});
+			this.onSwitch();
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -58,6 +58,10 @@ class WriteUpperCase {
 		if (typeof BDFDB === "object") {			
 			BDFDB.unloadMessage(this);
 		}
+	}
+	
+	onSwitch () {
+		document.querySelectorAll(BDFDB.dotCN.textarea).forEach(textarea => {this.bindEventToTextArea(textarea);});
 	}
 
 	
