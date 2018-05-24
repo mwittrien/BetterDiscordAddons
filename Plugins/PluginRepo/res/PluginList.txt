@@ -73,6 +73,7 @@ https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/GuildA
 https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/GuildCounter.plugin.js
 https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/IdleGuildlistScroller.plugin.js
 https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/MentionAliases.plugin.js
+https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/OpenLinksInDiscord.plugin.js
 https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/SaveTo.plugin.js
 https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/SelectedChannelNotifications.plugin.js
 https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/SendBDEmotes.plugin.js
