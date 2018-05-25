@@ -15,7 +15,7 @@ class ChatAliases {
 
 	getDescription () {return "Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent.";}
 
-	getVersion () {return "1.8.7";}
+	getVersion () {return "1.8.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -110,7 +110,7 @@ class ChatAliases {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(BDFDB.dotCNC.textareainnerenabled + BDFDB.dotCN.textareainnerenablednoattach)) {
+								if (node && node.tagName && node.querySelector(BDFDB.dotCN.textareainner + ":not(" + BDFDB.dotCN.textareainnerdisabled + ")")) {
 									this.bindEventToTextArea(node.querySelector("textarea"));
 								}
 							});
@@ -127,7 +127,7 @@ class ChatAliases {
 			}
 			BDFDB.saveAllData(aliases, this, "words");
 			
-			this.onSwitch();
+			document.querySelectorAll(BDFDB.dotCN.textarea).forEach(textarea => {this.bindEventToTextArea(textarea);});
 			
 			$(document).off("click." + this.getName()).on("click." + this.getName(), (e) => {
 				if (!e.target.tagName === "TEXTAREA") $(".autocompleteAliases, .autocompleteAliasesRow").remove();
@@ -144,10 +144,6 @@ class ChatAliases {
 			
 			BDFDB.unloadMessage(this);
 		}
-	}
-	
-	onSwitch () {
-		document.querySelectorAll(BDFDB.dotCN.textarea).forEach(textarea => {this.bindEventToTextArea(textarea);});
 	}
 
 

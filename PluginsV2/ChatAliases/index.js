@@ -45,7 +45,7 @@ module.exports = (Plugin, Api, Vendor) => {
 						(change, i) => {
 							if (change.addedNodes) {
 								change.addedNodes.forEach((node) => {
-									if (node && node.tagName && node.querySelector(BDFDB.dotCNC.textareainnerenabled + BDFDB.dotCN.textareainnerenablednoattach)) {
+									if (node && node.tagName && node.querySelector(BDFDB.dotCN.textareainner + ":not(" + BDFDB.dotCN.textareainnerdisabled + ")")) {
 										this.bindEventToTextArea(node.querySelector("textarea"));
 									}
 								});
@@ -62,7 +62,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				}
 				BDFDB.saveAllData(aliases, this, "words");
 				
-				this.onSwitch();
+				document.querySelectorAll(BDFDB.dotCN.textarea).forEach(textarea => {this.bindEventToTextArea(textarea);});
 				
 				$(document).off("click." + this.name).on("click." + this.name, (e) => {
 					if (!e.target.tagName === "TEXTAREA") $(".autocompleteAliases, .autocompleteAliasesRow").remove();
@@ -86,10 +86,6 @@ module.exports = (Plugin, Api, Vendor) => {
 			else {
 				return false;
 			}
-		}
-	
-		onSwitch () {
-			document.querySelectorAll(BDFDB.dotCN.textarea).forEach(textarea => {this.bindEventToTextArea(textarea);});
 		}
 
 

@@ -5,25 +5,30 @@ module.exports = (Plugin, Api, Vendor) => {
 
 	return class extends Plugin {
 		initConstructor () {
-			this.css = ` 
-				.nsfw-tag {
-					position: relative;
-					overflow: hidden; 
-					padding: 1px 2px 1px 2px; 
-					margin-left: 5px; 
-					height: 13px;
-					border-radius: 3px;
-					text-transform: uppercase;
-					font-size: 12px;
-					font-weight: 500;
-					line-height: 14px;
-					white-space: nowrap;
-					color: rgb(240, 71, 71);
-					background-color: rgba(240, 71, 71, 0.0980392);
-					border: 1px solid rgba(240, 71, 71, 0.498039);
+			this.selecting = false;
+			
+			this.counterMarkup = `<div id="charcounter"></div>`;
+			
+			this.css = `
+				#charcounter {
+					display: block;
+					position: absolute;
+					opacity: .5;
+					z-index: 1000;
+					pointer-events: none;
+				}
+				#charcounter.normal {
+					right: 0; 
+					bottom: -1.3em;
+				}
+				#charcounter.edit {
+					left: 0;
+					bottom: -1.3em;
+				}
+				#charcounter.form {
+					right: 0; 
+					bottom: -1.0em;
 				}`;
-				
-			this.tagMarkup = `<span class="nsfw-tag">NSFW</span>`;
 		}
 		
 		onStart () {
@@ -46,6 +51,8 @@ module.exports = (Plugin, Api, Vendor) => {
 			if (typeof BDFDB === "object") {
 				BDFDB.loadMessage(this);
 				
+				this.MessageUtils = BDFDB.WebModules.findByProperties(["parse","isMentioned"]);
+							
 				var observer = null;
 
 				observer = new MutationObserver((changes, _) => {
@@ -53,20 +60,17 @@ module.exports = (Plugin, Api, Vendor) => {
 						(change, i) => {
 							if (change.addedNodes) {
 								change.addedNodes.forEach((node) => {
-									if (node && node.classList && node.classList.contains(BDFDB.disCN.channelcontainerdefault)) {
-										this.checkChannel(node);
-									} 
-									if (node && node.className && node.className.length > 0 && node.className.indexOf("container-") > -1) {
-										this.checkContainerForNsfwChannel(node);
-									} 
+									if (node && node.tagName && node.querySelector(BDFDB.dotCN.textareainner + ":not(" + BDFDB.dotCN.textareainnerdisabled + ")")) {
+										this.appendCounter(node.querySelector("textarea"));
+									}
 								});
 							}
 						}
 					);
 				});
-				BDFDB.addObserver(this, BDFDB.dotCN.channels, {name:"channelListObserver",instance:observer}, {childList: true, subtree: true});
-							
-				this.checkAllContainers();
+				BDFDB.addObserver(this, BDFDB.dotCN.appmount, {name:"textareaObserver",instance:observer}, {childList: true, subtree: true});
+				
+				document.querySelectorAll("textarea").forEach(textarea => {this.appendCounter(textarea);});
 
 				return true;
 			}
@@ -76,9 +80,11 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 		}
 
+
 		onStop () {
 			if (typeof BDFDB === "object") {
-				$(".nsfw-tag").remove();
+				$("#charcounter").remove();
+				$(".charcounter-added").removeClass("charcounter-added");
 							
 				BDFDB.unloadMessage(this);
 				return true;
@@ -88,32 +94,59 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 		}
 		
-		onSwitch () {
-			if (typeof BDFDB === "object") {
-				this.checkAllContainers();
-			}
-		}
-		
-		
 		// begin of own functions
 		
-		checkAllContainers () {
-			document.querySelectorAll(BDFDB.dotCNS.channels + "[class*=container-]").forEach(container => {
-				this.checkContainerForNsfwChannel(container);
-			});
+		getParsedLength (string, channel) {
+			let length = string.indexOf("/") == 0 ? string.length : this.MessageUtils.parse(channel, string).content.length
+			return length > string.length ? length : string.length;
 		}
 		
-		checkContainerForNsfwChannel (container) {
-			container.querySelectorAll(BDFDB.dotCN.channelcontainerdefault).forEach(channel => {
-				this.checkChannel(channel);
-			});
-		}
-		
-		checkChannel (channel) {
-			let channelData = BDFDB.getKeyInformation({"node":channel,"key":"channel"});
-			if (channelData && channelData.nsfw == true) {
-				if (!channel.querySelector(".nsfw-tag")) {
-					$(this.tagMarkup).appendTo(channel.querySelector(BDFDB.dotCN.channelname));
+		appendCounter (textarea) {
+			if (!textarea) return;
+			var channelObj = BDFDB.getSelectedChannel();
+			var channel = channelObj ? channelObj.data : null;
+			if (!channel) return;
+			var textareaWrap = textarea.parentElement;
+			if (textareaWrap && !textareaWrap.querySelector("#charcounter")) {
+				var textareaInstance = BDFDB.getOwnerInstance({"node":textarea, "props":["handlePaste","saveCurrentText"], "up":true});
+				if (textareaInstance && textareaInstance.props && textareaInstance.props.type) {
+					var counter = $(this.counterMarkup);
+					counter.addClass(textareaInstance.props.type).appendTo(textareaWrap);
+					
+					var updateCounter = () => {
+						var selection = textarea.selectionEnd - textarea.selectionStart == 0 ? "" : " (" + (textarea.selectionEnd - textarea.selectionStart) + ")";
+						counter.text(this.getParsedLength(textarea.value, channel) + "/2000" + selection);
+					}
+					
+					textareaWrap.parentElement.classList.add("charcounter-added");
+					$(textarea)
+						.off("keydown." + this.name + " click." + this.name)
+						.on("keydown." + this.name + " click." + this.name, e => {
+							setTimeout(() => {
+								updateCounter();
+							},10);
+						})
+						.off("mousedown." + this.name)
+						.on("mousedown." + this.name, e => {
+							this.selecting = true;
+						});
+					$(document)
+						.off("mouseup." + this.name)
+						.on("mouseup." + this.name, e => {
+							if (this.selecting) {
+								this.selecting = false;
+							}
+						})
+						.off("mousemove." + this.name)
+						.on("mousemove." + this.name, e => {
+							if (this.selecting) {
+								setTimeout(() => {
+									updateCounter();
+								},10);
+							}
+						});
+					
+					updateCounter();
 				}
 			}
 		}
