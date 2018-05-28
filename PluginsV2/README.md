@@ -1,3 +1,5 @@
+These Plugins are meant only for BDv2, not BD nor BandagedBD. If you got either of those two go to [Plugins](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/).
+
 ## Plugins
  - [Better Friend Count](https://github.com/mwittrien/BetterDiscordAddons/tree/master/PluginsV2/BetterFriendCount) - Shows the amount of total and online friends and blocked users in the friends tab.
  - [Better NSFW Tag](https://github.com/mwittrien/BetterDiscordAddons/tree/master/PluginsV2/BetterNsfwTag) - Adds a more noticeable tag to NSFW channels.
