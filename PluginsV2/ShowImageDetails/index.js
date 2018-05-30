@@ -105,7 +105,8 @@ module.exports = (Plugin, Api, Vendor) => {
 		}
 		
 		addDetails (container) {
-			if (!container || typeof container.querySelectorAll != "function") return; 
+			let scroller = document.querySelector(BDFDB.dotCNS.chat + BDFDB.dotCN.messages);
+			if (!container || typeof container.querySelectorAll != "function" || !scroller) return; 
 			var settings = BDFDB.getAllData(this, "settings");
 			container.querySelectorAll(BDFDB.dotCN.messageaccessory + " > " + BDFDB.dotCN.imagewrapper).forEach(image => {
 				var data = this.getImageData(image);
@@ -113,6 +114,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					image.classList.add("image-details-added");
 					if (!settings.showOnHover) {
 						$(`<div class="image-details-wrapper"><div class="image-details"><a class="image-details-link" title="${data.url}" href="${data.url}" target="_blank" rel="noreferrer noopener">${data.filename}</a><label class="image-details-size ${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">${BDFDB.formatBytes(data.size)}</label><label class="image-details-dimensions ${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">${data.width}x${data.height}px</label></div></div>`).insertBefore(image).append(image);
+						scroller.scrollTop += image.parentElement.getBoundingClientRect().height - image.getBoundingClientRect().height;
 					}
 					else {
 						$(image).on("mouseenter." + this.name, () => {

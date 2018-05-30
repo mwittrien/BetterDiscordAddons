@@ -144,7 +144,7 @@ module.exports = (Plugin, Api, Vendor) => {
 							let nextembed = accessory.querySelector(`${BDFDB.dotCN.embedimage}[href="${links[0] ? this.parseSrc(links[0].src) : void 0}"]`);
 							if (!accessory.querySelector(`${BDFDB.dotCN.embedimage}[href="${imagesrc}"]`)) {
 								accessory.insertBefore(embed, prevembed ? prevembed.parentElement.nextSibling : (nextembed ? nextembed.parentElement : null));
-								scroller.scrollTop += height;
+								scroller.scrollTop += embed.getBoundingClientRect().height;
 							}
 							this.addImageToAccessory(image, links, accessory, scroller);
 						};
