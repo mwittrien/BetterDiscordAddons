@@ -13,7 +13,8 @@ module.exports = (Plugin, Api, Vendor) => {
 					display: none;
 				}
 				
-				${BDFDB.dotCN.channelheadertopic} {
+				${BDFDB.dotCN.channelheadertopic},
+				${BDFDB.dotCN.contextmenu} * {
 					-webkit-app-region: no-drag;
 				}
 				
@@ -107,7 +108,7 @@ module.exports = (Plugin, Api, Vendor) => {
 							}
 							if (change.removedNodes) {
 								change.removedNodes.forEach((node) => {
-									if (node && node.tagName && node.getAttribute("layer-id") || node.querySelector(".ui-standard-sidebar-view")) {
+									if (node && node.tagName && (node.getAttribute("layer-id") || node.querySelector(".ui-standard-sidebar-view"))) {
 										this.removeTitleBar();
 										this.addTitleBar();
 									}
