@@ -9,21 +9,16 @@ class ForceImagePreviews {
 
 	getDescription () {return "Forces embedded Image Previews, if Discord doesn't do it itself.";}
 
-	getVersion () {return "1.0.3";}
+	getVersion () {return "1.0.4";}
 
 	getAuthor () {return "DevilBro";}
-	
-	getSettingsPanel () {
-		if (!this.started || typeof BDFDB !== "object") return;
-	}
 
 	//legacy
 	load () {}
 
 	start () {
 		var libraryScript = null;
-		if (typeof BDFDB !== "object" || BDFDB.isLibraryOutdated()) {
-			if (typeof BDFDB === "object") BDFDB = "";
+		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
 			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
@@ -32,7 +27,7 @@ class ForceImagePreviews {
 			document.head.appendChild(libraryScript);
 		}
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object") this.initialize();
+		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
 		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
@@ -112,7 +107,8 @@ class ForceImagePreviews {
 	}
 	
 	addPreviews (message) {
-		if (!message) return;
+		let scroller = document.querySelector(BDFDB.dotCNS.chat + BDFDB.dotCN.messages);
+		if (!message || !scroller) return;
 		var messageData = BDFDB.getKeyInformation({node:message,key:"message",up:true});
 		if (!messageData) return;
 		
@@ -126,31 +122,34 @@ class ForceImagePreviews {
 					else links.push({src:word,embedded:true});
 				}
 			}
-			if (links.length > 0) this.addImageToAccessory(null, links, accessory);
+			if (links.length > 0) this.addImageToAccessory(null, links, accessory, scroller);
 		}
 	}
 	
-	addImageToAccessory (previmage, links, accessory) {
+	addImageToAccessory (previmage, links, accessory, scroller) {
 		let image = links.shift();
 		if (!image) return;
-		else if (image.embedded) this.addImageToAccessory(image, links, accessory); 
+		else if (image.embedded) this.addImageToAccessory(image, links, accessory, scroller); 
 		else {
 			let imagesrc = this.parseSrc(image.src);
 			require("request")(imagesrc, (error, response, result) => {
 				if (response && response.headers["content-type"] && response.headers["content-type"].indexOf("image") > -1) {
 					let imagethrowaway = document.createElement("img");
 					imagethrowaway.src = imagesrc;
-					let width = 400;
-					let height = Math.round(width*(imagethrowaway.naturalHeight/imagethrowaway.naturalWidth));
-					let embed = $(`<div class="FIP-embed ${BDFDB.disCNS.embed + BDFDB.disCNS.flex + BDFDB.disCN.embedold}"><a class="${BDFDB.disCNS.imagewrapper + BDFDB.disCNS.imagezoom + BDFDB.disCN.embedimage}" href="${imagesrc}" rel="noreferrer noopener" target="_blank" style="width: ${width}px; height: ${height}px;"><img src="${imagesrc}" style="width: ${width}px; height: ${height}px;"></a></div>`)[0];
-					let prevembed = accessory.querySelector(`${BDFDB.dotCN.embedimage}[href="${previmage ? this.parseSrc(previmage.src) : void 0}"]`);
-					let nextembed = accessory.querySelector(`${BDFDB.dotCN.embedimage}[href="${links[0] ? this.parseSrc(links[0].src) : void 0}"]`);
-					if (!accessory.querySelector(`${BDFDB.dotCN.embedimage}[href="${imagesrc}"]`)) {
-						accessory.insertBefore(embed, prevembed ? prevembed.parentElement.nextSibling : (nextembed ? nextembed.parentElement : null));
-					}
-					this.addImageToAccessory(image, links, accessory);
+					imagethrowaway.onload = () => {
+						let width = 400;
+						let height = Math.round(width*(imagethrowaway.naturalHeight/imagethrowaway.naturalWidth));
+						let embed = $(`<div class="FIP-embed ${BDFDB.disCNS.embed + BDFDB.disCNS.flex + BDFDB.disCN.embedold}"><a class="${BDFDB.disCNS.imagewrapper + BDFDB.disCNS.imagezoom + BDFDB.disCN.embedimage}" href="${imagesrc}" rel="noreferrer noopener" target="_blank" style="width: ${width}px; height: ${height}px;"><img src="${imagesrc}" style="width: ${width}px; height: ${height}px;"></a></div>`)[0];
+						let prevembed = accessory.querySelector(`${BDFDB.dotCN.embedimage}[href="${previmage ? this.parseSrc(previmage.src) : void 0}"]`);
+						let nextembed = accessory.querySelector(`${BDFDB.dotCN.embedimage}[href="${links[0] ? this.parseSrc(links[0].src) : void 0}"]`);
+						if (!accessory.querySelector(`${BDFDB.dotCN.embedimage}[href="${imagesrc}"]`)) {
+							accessory.insertBefore(embed, prevembed ? prevembed.parentElement.nextSibling : (nextembed ? nextembed.parentElement : null));
+							scroller.scrollTop += height;
+						}
+						this.addImageToAccessory(image, links, accessory, scroller);
+					};
 				} 
-				else this.addImageToAccessory(image, links, accessory);
+				else this.addImageToAccessory(image, links, accessory, scroller);
 			});
 		}
 	}

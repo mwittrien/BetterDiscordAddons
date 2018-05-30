@@ -107,7 +107,8 @@ module.exports = (Plugin, Api, Vendor) => {
 		}
 		
 		addPreviews (message) {
-			if (!message) return;
+			let scroller = document.querySelector(BDFDB.dotCNS.chat + BDFDB.dotCN.messages);
+			if (!message || !scroller) return;
 			var messageData = BDFDB.getKeyInformation({node:message,key:"message",up:true});
 			if (!messageData) return;
 			
@@ -121,31 +122,34 @@ module.exports = (Plugin, Api, Vendor) => {
 						else links.push({src:word,embedded:true});
 					}
 				}
-				if (links.length > 0) this.addImageToAccessory(null, links, accessory);
+				if (links.length > 0) this.addImageToAccessory(null, links, accessory, scroller);
 			}
 		}
 		
-		addImageToAccessory (previmage, links, accessory) {
+		addImageToAccessory (previmage, links, accessory, scroller) {
 			let image = links.shift();
 			if (!image) return;
-			else if (image.embedded) this.addImageToAccessory(image, links, accessory); 
+			else if (image.embedded) this.addImageToAccessory(image, links, accessory, scroller); 
 			else {
 				let imagesrc = this.parseSrc(image.src);
 				require("request")(imagesrc, (error, response, result) => {
 					if (response && response.headers["content-type"] && response.headers["content-type"].indexOf("image") > -1) {
 						let imagethrowaway = document.createElement("img");
 						imagethrowaway.src = imagesrc;
-						let width = 400;
-						let height = Math.round(width*(imagethrowaway.naturalHeight/imagethrowaway.naturalWidth));
-						let embed = $(`<div class="FIP-embed ${BDFDB.disCNS.embed + BDFDB.disCNS.flex + BDFDB.disCN.embedold}"><a class="${BDFDB.disCNS.imagewrapper + BDFDB.disCNS.imagezoom + BDFDB.disCN.embedimage}" href="${imagesrc}" rel="noreferrer noopener" target="_blank" style="width: ${width}px; height: ${height}px;"><img src="${imagesrc}" style="width: ${width}px; height: ${height}px;"></a></div>`)[0];
-						let prevembed = accessory.querySelector(`${BDFDB.dotCN.embedimage}[href="${previmage ? this.parseSrc(previmage.src) : void 0}"]`);
-						let nextembed = accessory.querySelector(`${BDFDB.dotCN.embedimage}[href="${links[0] ? this.parseSrc(links[0].src) : void 0}"]`);
-						if (!accessory.querySelector(`${BDFDB.dotCN.embedimage}[href="${imagesrc}"]`)) {
-							accessory.insertBefore(embed, prevembed ? prevembed.parentElement.nextSibling : (nextembed ? nextembed.parentElement : null));
-						}
-						this.addImageToAccessory(image, links, accessory);
+						imagethrowaway.onload = () => {
+							let width = 400;
+							let height = Math.round(width*(imagethrowaway.naturalHeight/imagethrowaway.naturalWidth));
+							let embed = $(`<div class="FIP-embed ${BDFDB.disCNS.embed + BDFDB.disCNS.flex + BDFDB.disCN.embedold}"><a class="${BDFDB.disCNS.imagewrapper + BDFDB.disCNS.imagezoom + BDFDB.disCN.embedimage}" href="${imagesrc}" rel="noreferrer noopener" target="_blank" style="width: ${width}px; height: ${height}px;"><img src="${imagesrc}" style="width: ${width}px; height: ${height}px;"></a></div>`)[0];
+							let prevembed = accessory.querySelector(`${BDFDB.dotCN.embedimage}[href="${previmage ? this.parseSrc(previmage.src) : void 0}"]`);
+							let nextembed = accessory.querySelector(`${BDFDB.dotCN.embedimage}[href="${links[0] ? this.parseSrc(links[0].src) : void 0}"]`);
+							if (!accessory.querySelector(`${BDFDB.dotCN.embedimage}[href="${imagesrc}"]`)) {
+								accessory.insertBefore(embed, prevembed ? prevembed.parentElement.nextSibling : (nextembed ? nextembed.parentElement : null));
+								scroller.scrollTop += height;
+							}
+							this.addImageToAccessory(image, links, accessory, scroller);
+						};
 					} 
-					else this.addImageToAccessory(image, links, accessory);
+					else this.addImageToAccessory(image, links, accessory, scroller);
 				});
 			}
 		}
