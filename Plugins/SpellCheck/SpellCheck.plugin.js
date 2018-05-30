@@ -27,7 +27,7 @@ class SpellCheck {
 			</div>`;
 		
 		this.spellCheckLayerMarkup = 
-			`<div class="spellcheck-overlay" style="position:absolute !important; pointer-events:none !important; background:transparent !important; color:transparent !important;"></div>`;
+			`<div class="spellcheck-overlay" style="position:absolute !important; pointer-events:none !important; background:transparent !important; color:transparent !important; text-shadow:none !important;"></div>`;
 			
 		this.css = 
 			`.spellcheck-overlay {
@@ -71,7 +71,7 @@ class SpellCheck {
 
 	getDescription () {return "Adds a spellcheck to all textareas. Select a word and rightclick it to add it to your dictionary.";}
 
-	getVersion () {return "1.2.6";}
+	getVersion () {return "1.2.7";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -391,7 +391,7 @@ class SpellCheck {
 	spellCheckText (string) {
 		var htmlString = [];
 		string.replace(/[\n]/g, "\n ").split(" ").forEach((word, i) => {
-			htmlString.push(`<label class="${this.isWordNotInDictionary(word) ? "spelling-error" : "nospelling-error"}">${BDFDB.encodeToHTML(word)}</label>`);
+			htmlString.push(`<label class="${this.isWordNotInDictionary(word) ? "spelling-error" : "nospelling-error"}" style="color:transparent !important; text-shadow:none !important;">${BDFDB.encodeToHTML(word)}</label>`);
 		});
 		return htmlString.join(" ");
 	}
