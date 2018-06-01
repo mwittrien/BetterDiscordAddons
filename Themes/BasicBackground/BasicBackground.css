@@ -955,8 +955,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .popout-3sVMXz[style*="translateX(-100%)"] > * {
 	right: 100% !important;
 }
-.popout.popout-googletranslate[style*="translateY(-100%)"] > .themed-popout,
-.popout-3sVMXz.popout-googletranslate[style*="translateY(-100%)"] > .themed-popout {
+.popout-3sVMXz.popout-googletranslate[style*="translateY(-100%)"] > * {
 	position: relative !important;
 	bottom: 422px !important;
 }
