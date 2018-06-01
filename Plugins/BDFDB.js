@@ -3285,7 +3285,6 @@ BDFDB.DiscordClasses = {
 	popouts: "popouts-3dRSmE",
 	popoutsubtitle: "subtitle-37ivwK",
 	popoutthemedpopout: "themedPopout-25DgLi",
-	popoutthemedpopoutold: "themed-popout",
 	popouttip: "tip-2WErbi",
 	popouttitle: "title-23FrqZ",
 	popouttop: "popoutTop-3uu9vG",
