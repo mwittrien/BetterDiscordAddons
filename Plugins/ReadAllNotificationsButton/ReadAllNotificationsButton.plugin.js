@@ -27,7 +27,7 @@ class ReadAllNotificationsButton {
 
 	getDescription () {return "Adds a button to clear all notifications.";}
 
-	getVersion () {return "1.3.3";}
+	getVersion () {return "1.3.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -81,23 +81,26 @@ class ReadAllNotificationsButton {
 							change.addedNodes.forEach((node) => {
 								var mentionspopout = null;
 								if (node && node.tagName && (mentionspopout = node.querySelector(BDFDB.dotCN.recentmentionspopout)) != null) {
-									$(this.RAMbuttonMarkup).insertBefore(BDFDB.dotCN.recentmentionsmentionfilter, mentionspopout)
-										.on("click", () => {
-											var loadinterval = setInterval(() => {
-												if (!mentionspopout || !mentionspopout.parentElement) clearInterval(loadinterval);
-												var loadbutton = mentionspopout.querySelector(BDFDB.dotCNS.messagespopouthasmore + "button");
-												var closebuttons = mentionspopout.querySelectorAll(BDFDB.dotCN.messagespopoutclosebutton);
-												if (!loadbutton) {
-													closebuttons.forEach((btn) => {btn.click();});
-													clearInterval(loadinterval);
-												}
-												else {
-													closebuttons.forEach((btn,i) => {if (closebuttons.length-1 > i) btn.click();});
-													loadbutton.click();
-												}
-											},2000);
-										});
-									mentionspopout.classList.add("RAM-added");
+									let filter = node.querySelector(BDFDB.dotCN.recentmentionsmentionfilter);
+									if (filter) {
+										$(this.RAMbuttonMarkup).insertBefore(BDFDB.dotCN.recentmentionsmentionfilter, mentionspopout)
+											.on("click", () => {
+												var loadinterval = setInterval(() => {
+													if (!mentionspopout || !mentionspopout.parentElement) clearInterval(loadinterval);
+													var loadbutton = mentionspopout.querySelector(BDFDB.dotCNS.messagespopouthasmore + "button");
+													var closebuttons = mentionspopout.querySelectorAll(BDFDB.dotCN.messagespopoutclosebutton);
+													if (!loadbutton) {
+														closebuttons.forEach((btn) => {btn.click();});
+														clearInterval(loadinterval);
+													}
+													else {
+														closebuttons.forEach((btn,i) => {if (closebuttons.length-1 > i) btn.click();});
+														loadbutton.click();
+													}
+												},2000);
+											});
+										mentionspopout.classList.add("RAM-added");
+									}
 								}
 							});
 						}

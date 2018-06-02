@@ -67,7 +67,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				
 			this.translatePopoutMarkup = 
 				`<div class="${BDFDB.disCNS.popout + BDFDB.disCNS.popoutbottomright + BDFDB.disCNS.popoutnoarrow + BDFDB.disCN.popoutnoshadow} popout-googletranslate DevilBro-modal" style="z-index: 2000; overflow: visible; visibility: visible; transform: translateX(-100%) translateY(-100%) translateZ(0px);">
-					<div class="${BDFDB.disCNS.messagespopoutwrap + BDFDB.disCN.popoutthemedpopout}">
+					<div class="${BDFDB.disCN.popoutthemedpopout}">
 						<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop8 + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
 							<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Words starting with "!" will be ignored</h3>
 						</div>
@@ -358,6 +358,13 @@ module.exports = (Plugin, Api, Vendor) => {
 				${BDFDB.dotCN.popout}.popout-googletranslate ${BDFDB.dotCN.popoutthemedpopout} {
 					padding: 0 10px;
 					width: 400px;
+				}
+				
+				${BDFDB.dotCN.themedark} ${BDFDB.dotCN.popout}.popout-googletranslate ${BDFDB.dotCN.popoutthemedpopout} {
+					-webkit-box-shadow: 0 2px 10px 0 rgba(0,0,0,20%);
+					background-color: #2f3136;
+					border: 1px solid rgba(28,36,43,.6);
+					box-shadow: 0 2px 10px 0 rgba(0,0,0,.2);
 				}
 				
 				${BDFDB.dotCN.selectmenuouter} .inChat {
