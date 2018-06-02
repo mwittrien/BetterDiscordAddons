@@ -32,7 +32,7 @@ class CharCounter {
 
 	getDescription () {return "Adds a charcounter in the chat.";}
 
-	getVersion () {return "1.2.2";}
+	getVersion () {return "1.2.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -98,7 +98,7 @@ class CharCounter {
 	// begin of own functions
 	
 	getParsedLength (string, channel) {
-		let length = string.indexOf("/") == 0 ? string.length : this.MessageUtils.parse(channel, string).content.length
+		let length = string.indexOf("/") == 0 || string.indexOf("s/") == 0 ? string.length : this.MessageUtils.parse(channel, string).content.length
 		return length > string.length ? length : string.length;
 	}
 	

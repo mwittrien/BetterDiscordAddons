@@ -47,7 +47,7 @@ class WriteUpperCase {
 			});
 			BDFDB.addObserver(this, BDFDB.dotCN.appmount, {name:"textareaObserver",instance:observer}, {childList: true, subtree:true});
 			
-			document.querySelectorAll(BDFDB.dotCN.textarea).forEach(textarea => {this.bindEventToTextArea(textarea);});
+			document.querySelectorAll("textarea" + BDFDB.dotCN.textarea).forEach(textarea => {this.bindEventToTextArea(textarea);});
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");

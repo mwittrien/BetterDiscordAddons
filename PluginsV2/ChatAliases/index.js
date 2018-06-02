@@ -62,7 +62,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				}
 				BDFDB.saveAllData(aliases, this, "words");
 				
-				document.querySelectorAll(BDFDB.dotCN.textarea).forEach(textarea => {this.bindEventToTextArea(textarea);});
+				document.querySelectorAll("textarea" + BDFDB.dotCN.textarea).forEach(textarea => {this.bindEventToTextArea(textarea);});
 				
 				$(document).off("click." + this.name).on("click." + this.name, (e) => {
 					if (!e.target.tagName === "TEXTAREA") $(".autocompleteAliases, .autocompleteAliasesRow").remove();
@@ -98,7 +98,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 			BDFDB.saveAllData(settings, this, "settings");
 			
-			document.querySelectorAll("textarea").forEach(textarea => {this.bindEventToTextArea(textarea);});
+			document.querySelectorAll("textarea" + BDFDB.dotCN.textarea).forEach(textarea => {this.bindEventToTextArea(textarea);});
 		}
 
 		updateContainer (settingspanel, ele) {
@@ -443,7 +443,7 @@ module.exports = (Plugin, Api, Vendor) => {
 		}
 		
 		onSettingsClosed () {
-			document.querySelectorAll("textarea").forEach(textarea => {this.bindEventToTextArea(textarea);});
+			document.querySelectorAll("textarea" + BDFDB.dotCN.textarea).forEach(textarea => {this.bindEventToTextArea(textarea);});
 		}
 	}
 };

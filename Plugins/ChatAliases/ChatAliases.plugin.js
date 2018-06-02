@@ -96,7 +96,7 @@ class ChatAliases {
 						if (change.removedNodes) {
 							change.removedNodes.forEach((node) => {
 								if (node && node.tagName && node.getAttribute("layer-id") == "user-settings") {
-									document.querySelectorAll("textarea").forEach(textarea => {this.bindEventToTextArea(textarea);});
+									document.querySelectorAll("textarea" + BDFDB.dotCN.textarea).forEach(textarea => {this.bindEventToTextArea(textarea);});
 								}
 							});
 						}
@@ -127,7 +127,7 @@ class ChatAliases {
 			}
 			BDFDB.saveAllData(aliases, this, "words");
 			
-			document.querySelectorAll(BDFDB.dotCN.textarea).forEach(textarea => {this.bindEventToTextArea(textarea);});
+			document.querySelectorAll("textarea" + BDFDB.dotCN.textarea).forEach(textarea => {this.bindEventToTextArea(textarea);});
 			
 			$(document).off("click." + this.getName()).on("click." + this.getName(), (e) => {
 				if (!e.target.tagName === "TEXTAREA") $(".autocompleteAliases, .autocompleteAliasesRow").remove();
@@ -156,7 +156,7 @@ class ChatAliases {
 		}
 		BDFDB.saveAllData(settings, this, "settings");
 		
-		document.querySelectorAll("textarea").forEach(textarea => {this.bindEventToTextArea(textarea);});
+		document.querySelectorAll("textarea" + BDFDB.dotCN.textarea).forEach(textarea => {this.bindEventToTextArea(textarea);});
 	}
 
 	updateContainer (settingspanel, ele) {

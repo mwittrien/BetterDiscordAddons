@@ -363,6 +363,7 @@ class GoogleTranslateOption {
 				border: 1px solid rgba(28,36,43,.6);
 				box-shadow: 0 2px 10px 0 rgba(0,0,0,.2);
 			}
+			
 			${BDFDB.dotCN.selectmenuouter} .inChat {
 				top: 0%;
 				transform: translateY(-100%);
@@ -375,7 +376,7 @@ class GoogleTranslateOption {
 
 	getDescription () {return "Adds a Google Translate option to your context menu, which shows a preview of the translated text and on click will open the selected text in Google Translate. Also adds a translation button to your textareas, which will automatically translate the text for you before it is being send. DeepLApi written by square. Thanks ;)";}
 
-	getVersion () {return "1.4.6";}
+	getVersion () {return "1.4.7";}
 	
 	getAuthor () {return "DevilBro, square";}
 	
@@ -413,8 +414,7 @@ class GoogleTranslateOption {
 
 	start () {
 		var libraryScript = null;
-		if (typeof BDFDB !== "object" || BDFDB.isLibraryOutdated()) {
-			if (typeof BDFDB === "object") BDFDB = "";
+		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
 			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
@@ -423,7 +423,7 @@ class GoogleTranslateOption {
 			document.head.appendChild(libraryScript);
 		}
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object") this.initialize();
+		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
 		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
@@ -686,7 +686,7 @@ class GoogleTranslateOption {
 	addTranslationButton (textarea) {
 		if (!textarea) return;
 		var textareaWrap = textarea.parentElement;
-		if (textareaWrap && !textareaWrap.classList.contains(BDFDB.disCN.textareainnerdisabled) &&  !textareaWrap.querySelector(".translate-button")) {
+		if (textareaWrap && !textareaWrap.classList.contains(BDFDB.disCN.textareainnerdisabled) && !textareaWrap.querySelector(".translate-button")) {
 			var textareaInstance = BDFDB.getOwnerInstance({"node":textarea, "props":["handlePaste","saveCurrentText"], "up":true});
 			if (textareaInstance && textareaInstance.props && textareaInstance.props.type) {
 				var button = $(this.translateButtonMarkup)[0];
