@@ -343,6 +343,14 @@ module.exports = (Plugin, Api, Vendor) => {
 						
 						this.appendToChannelList(category);
 					}
+					let channelist = document.querySelector(BDFDB.dotCNS.channels + BDFDB.dotCN.scroller);
+					$(channelist).off("mouseenter." + this.name);
+					if (BDFDB.getData("showForNormal", this, "settings")) {
+						$(channelist).on("mouseenter." + this.name, BDFDB.dotCNC.channelcontainerdefault + BDFDB.dotCN.categorycontainerdefault, (e) => {
+							var channel = BDFDB.getKeyInformation({"node":e.currentTarget,"key":"channel"});
+							if (channel) this.showAccessRoles(serverObj, channel, e, true);
+						});
+					}
 				}
 			}
 		}
@@ -427,19 +435,7 @@ module.exports = (Plugin, Api, Vendor) => {
 		
 		appendToChannelList (category) {
 			var channelList = document.querySelector(BDFDB.dotCNS.channels + BDFDB.dotCN.scroller);
-			if (channelList) {
-				$(channelList).off("mouseenter." + this.name)
-				if (category) channelList.insertBefore(category,channelList.lastChild);
-				if (BDFDB.getData("showForNormal", this, "settings")) {
-					var serverObj = BDFDB.getSelectedServer();
-					if (serverObj) {
-						$(channelList).on("mouseenter." + this.name, BDFDB.dotCNC.channelcontainerdefault + BDFDB.dotCN.categorycontainerdefault, (e) => {
-							var channel = BDFDB.getKeyInformation({"node":e.currentTarget,"key":"channel"});
-							if (channel) this.showAccessRoles(serverObj, channel, e, true);
-						});
-					}
-				}
-			}
+			if (channelList && category) channelList.insertBefore(category,channelList.lastChild);
 		}
 	
 		getSettingsPanel () {

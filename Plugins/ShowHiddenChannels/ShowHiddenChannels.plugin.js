@@ -77,7 +77,7 @@ class ShowHiddenChannels {
 
 	getDescription () {return "Displays channels that are hidden from you by role restrictions.";}
 
-	getVersion () {return "2.2.4";}
+	getVersion () {return "2.2.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -105,8 +105,7 @@ class ShowHiddenChannels {
 
 	start () {
 		var libraryScript = null;
-		if (typeof BDFDB !== "object" || BDFDB.isLibraryOutdated()) {
-			if (typeof BDFDB === "object") BDFDB = "";
+		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
 			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
@@ -115,7 +114,7 @@ class ShowHiddenChannels {
 			document.head.appendChild(libraryScript);
 		}
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object") this.initialize();
+		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
 		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
@@ -380,6 +379,14 @@ class ShowHiddenChannels {
 					
 					this.appendToChannelList(category);
 				}
+				let channelist = document.querySelector(BDFDB.dotCNS.channels + BDFDB.dotCN.scroller);
+				$(channelist).off("mouseenter." + this.getName());
+				if (BDFDB.getData("showForNormal", this, "settings")) {
+					$(channelist).on("mouseenter." + this.getName(), BDFDB.dotCNC.channelcontainerdefault + BDFDB.dotCN.categorycontainerdefault, (e) => {
+						var channel = BDFDB.getKeyInformation({"node":e.currentTarget,"key":"channel"});
+						if (channel) this.showAccessRoles(serverObj, channel, e, true);
+					});
+				}
 			}
 		}
 	}
@@ -464,18 +471,6 @@ class ShowHiddenChannels {
 	
 	appendToChannelList (category) {
 		var channelList = document.querySelector(BDFDB.dotCNS.channels + BDFDB.dotCN.scroller);
-		if (channelList) {
-			$(channelList).off("mouseenter." + this.getName())
-			if (category) channelList.insertBefore(category,channelList.lastChild);
-			if (BDFDB.getData("showForNormal", this, "settings")) {
-				var serverObj = BDFDB.getSelectedServer();
-				if (serverObj) {
-					$(channelList).on("mouseenter." + this.getName(), BDFDB.dotCNC.channelcontainerdefault + BDFDB.dotCN.categorycontainerdefault, (e) => {
-						var channel = BDFDB.getKeyInformation({"node":e.currentTarget,"key":"channel"});
-						if (channel) this.showAccessRoles(serverObj, channel, e, true);
-					});
-				}
-			}
-		}
+		if (channelList && category) channelList.insertBefore(category,channelList.lastChild);
 	}
 }
