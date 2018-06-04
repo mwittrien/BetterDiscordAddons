@@ -80,10 +80,10 @@ module.exports = (Plugin, Api, Vendor) => {
 				var newstring = string;
 				var first = string.charAt(0);
 				var position = textarea.selectionStart;
-				if (first === first.toUpperCase() && string.toLowerCase().indexOf("http") == 0) {
+				if (first === first.toUpperCase() && (string.toLowerCase().indexOf("http") == 0 || string.toLowerCase().indexOf("s/") == 0)) {
 					newstring = string.charAt(0).toLowerCase() + string.slice(1);
 				}
-				else if (first === first.toLowerCase() && first !== first.toUpperCase() && string.toLowerCase().indexOf("http") != 0) {
+				else if (first === first.toLowerCase() && first !== first.toUpperCase() && string.toLowerCase().indexOf("http") != 0 && string.toLowerCase().indexOf("s/") != 0) {
 					newstring = string.charAt(0).toUpperCase() + string.slice(1);
 				}
 				if (string != newstring) {
