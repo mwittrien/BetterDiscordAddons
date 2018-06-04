@@ -1316,6 +1316,14 @@ BDFDB.getChannelAvatar = function (id) {
 	var channel = ChannelStore.getChannel(id);
 	return ((channel && channel.icon ? "" : "https://discordapp.com") + IconUtils.getChannelIconURL(channel)).split("?size")[0];
 };
+	
+BDFDB.getParsedLength = function (string) {
+	let channel = BDFDB.WebModules.findByProperties(["getChannels", "getChannel"]).getChannel(BDFDB.WebModules.findByProperties(["getLastSelectedChannelId"]).getChannelId());
+	let length = string.indexOf("/") == 0 || string.indexOf("s/") == 0 || string.indexOf("+:") == 0 ? 
+		string.length : 
+		BDFDB.WebModules.findByProperties(["parse","isMentioned"]).parse(channel, string).content.length;
+	return length > string.length ? length : string.length;
+};
 
 BDFDB.readServerList = function () {
 	var server, id, info, foundServers = [], GuildStore = BDFDB.WebModules.findByProperties(["getGuilds"]);
