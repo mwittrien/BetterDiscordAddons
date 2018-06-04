@@ -9,8 +9,6 @@ module.exports = (Plugin, Api, Vendor) => {
 			
 			this.messageDelay = 1000; //changing at own risk, might result in bans or mutes
 			
-			this.channel = null;
-			
 			this.css = `
 				.sendlargemessages-modal textarea {
 					rows: 0;
@@ -124,21 +122,13 @@ module.exports = (Plugin, Api, Vendor) => {
 			this.sendMessageModalMarkup = 		this.sendMessageModalMarkup.replace("REPLACE_btn_send_text", this.labels.btn_send_text);
 		}
 		
-		getParsedLength (string, channel) {
-			let length = string.indexOf("/") == 0 ? string.length : this.MessageUtils.parse(channel, string).content.length
-			return length > string.length ? length : string.length;
-		}
-		
 		bindEventToTextArea () {
-			var channelObj = BDFDB.getSelectedChannel();
-			var channel = channelObj ? channelObj.data : null;
-			if (!channel) return;
 			var checkTextarea = (textarea, text) => {
-				if (this.getParsedLength(text, channel) > 1950) {
+				if (BDFDB.getParsedLength(text) > 1950) {
 					textarea.selectionStart = 0;
 					textarea.selectionEnd = textarea.value.length;
 					document.execCommand("insertText", false, "");
-					this.showSendModal(text, channel);
+					this.showSendModal(text);
 				}
 			};
 			$(BDFDB.dotCNS.textareawrapchat + "textarea")
@@ -154,14 +144,14 @@ module.exports = (Plugin, Api, Vendor) => {
 				});
 		}
 		
-		showSendModal (text, channel) {
+		showSendModal (text) {
 			var sendMessageModal = $(this.sendMessageModalMarkup);
 			var textinput = sendMessageModal.find("#modal-inputtext");
 			var warning = sendMessageModal.find("#warning-message");
 			var counter = sendMessageModal.find("#character-counter");
 			
 			var updateCounter = () => {
-				var parsedlength = this.getParsedLength(textinput.val(), channel);
+				var parsedlength = BDFDB.getParsedLength(textinput.val());
 				var messageAmount = Math.ceil(parsedlength/1900);
 				warning.text(messageAmount > 15 ? this.labels.modal_messages_warning : "");
 				counter.text(parsedlength + " (" + (textinput[0].selectionEnd - textinput[0].selectionStart) + ") => " + this.labels.modal_messages_translation + ": " + messageAmount);
@@ -171,7 +161,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			sendMessageModal
 				.on("click", ".btn-send", (e) => {
 					e.preventDefault();
-					var messages = this.formatText(textinput.val(), channel);
+					var messages = this.formatText(textinput.val());
 					messages.forEach((message,i) => {
 						setTimeout(() => {
 							this.sendMessage(message);
@@ -208,7 +198,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			updateCounter();
 		}
 		
-		formatText (text, channel) {
+		formatText (text) {
 			text = text.replace(new RegExp("\t", 'g'), "	");
 			var longwords = text.match(/[\S]{1800,}/gm);
 			for (var i in longwords) {
@@ -216,7 +206,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				let count1 = 0;
 				let shortwords = [];
 				longword.split("").forEach((char) => {
-					if (shortwords[count1] && this.getParsedLength(shortwords[count1], channel) >= 1800) count1++;
+					if (shortwords[count1] && BDFDB.getParsedLength(shortwords[count1]) >= 1800) count1++;
 					shortwords[count1] = shortwords[count1] ? shortwords[count1] + char : char;
 				});
 				text = text.replace(longword, shortwords.join(" "));
@@ -224,7 +214,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			var messages = [];
 			var count2 = 0;
 			text.split(" ").forEach((word) => {
-				if (messages[count2] && this.getParsedLength(messages[count2] + "" + word, channel) > 1900) count2++;
+				if (messages[count2] && BDFDB.getParsedLength(messages[count2] + "" + word) > 1900) count2++;
 				messages[count2] = messages[count2] ? messages[count2] + " " + word : word;
 			});
 			

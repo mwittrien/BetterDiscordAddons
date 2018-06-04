@@ -50,8 +50,6 @@ module.exports = (Plugin, Api, Vendor) => {
 		initialize () {
 			if (typeof BDFDB === "object") {
 				BDFDB.loadMessage(this);
-				
-				this.MessageUtils = BDFDB.WebModules.findByProperties(["parse","isMentioned"]);
 							
 				var observer = null;
 
@@ -96,16 +94,8 @@ module.exports = (Plugin, Api, Vendor) => {
 		
 		// begin of own functions
 		
-		getParsedLength (string, channel) {
-			let length = string.indexOf("/") == 0 ? string.length : this.MessageUtils.parse(channel, string).content.length
-			return length > string.length ? length : string.length;
-		}
-		
 		appendCounter (textarea) {
 			if (!textarea) return;
-			var channelObj = BDFDB.getSelectedChannel();
-			var channel = channelObj ? channelObj.data : null;
-			if (!channel) return;
 			var textareaWrap = textarea.parentElement;
 			if (textareaWrap && !textareaWrap.querySelector("#charcounter")) {
 				var textareaInstance = BDFDB.getOwnerInstance({"node":textarea, "props":["handlePaste","saveCurrentText"], "up":true});
@@ -115,7 +105,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					
 					var updateCounter = () => {
 						var selection = textarea.selectionEnd - textarea.selectionStart == 0 ? "" : " (" + (textarea.selectionEnd - textarea.selectionStart) + ")";
-						counter.text(this.getParsedLength(textarea.value, channel) + "/2000" + selection);
+						counter.text(BDFDB.getParsedLength(textarea.value) + "/2000" + selection);
 					}
 					
 					textareaWrap.parentElement.classList.add("charcounter-added");
