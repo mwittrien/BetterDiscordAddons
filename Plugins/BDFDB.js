@@ -24,7 +24,8 @@ BDFDB.loadMessage = function (plugin) {
 	
 	BDFDB.checkUser(plugin);
 	
-	var downloadUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
+	var downloadUrl = typeof plugin.getRawUrl == "function" && typeof plugin.getRawUrl() == "string" ? plugin.getRawUrl() : `https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/${pluginName}/${pluginName}.plugin.js`;
+	
 	BDFDB.checkUpdate(pluginName, downloadUrl);
 	
 	if (typeof plugin.initConstructor === "function") plugin.initConstructor();
@@ -127,7 +128,7 @@ BDFDB.unloadMessage = function (plugin) {
 		delete plugin.observers;
 	}
 	
-	var downloadUrl = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/" + pluginName + "/" + pluginName + ".plugin.js";
+	var downloadUrl = typeof plugin.getRawUrl == "function" && typeof plugin.getRawUrl() == "string" ? plugin.getRawUrl() : `https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/${pluginName}/${pluginName}.plugin.js`;
 	
 	delete window.PluginUpdates.plugins[downloadUrl];
 	
