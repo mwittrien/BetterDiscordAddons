@@ -1305,7 +1305,7 @@ BDFDB.getUserAvatar = function (id = BDFDB.myData.id) {
 	var UserStore = BDFDB.WebModules.findByProperties(["getUser","getUsers"]);
 	var IconUtils = BDFDB.WebModules.findByProperties(["getUserAvatarURL"]);
 	var user = UserStore.getUser(id);
-	return ((user.avatar ? "" : "https://discordapp.com") + IconUtils.getUserAvatarURL(user)).split("?size")[0];
+	return ((user && user.avatar ? "" : "https://discordapp.com") + IconUtils.getUserAvatarURL(user)).split("?size")[0];
 };
 
 BDFDB.getChannelAvatar = function (id) {
@@ -1313,7 +1313,7 @@ BDFDB.getChannelAvatar = function (id) {
 	var ChannelStore = BDFDB.WebModules.findByProperties(["getChannel","getChannels"]);
 	var IconUtils = BDFDB.WebModules.findByProperties(["getChannelIconURL"]);
 	var channel = ChannelStore.getChannel(id);
-	return ((channel.icon ? "" : "https://discordapp.com") + IconUtils.getChannelIconURL(channel)).split("?size")[0];
+	return ((channel && channel.icon ? "" : "https://discordapp.com") + IconUtils.getChannelIconURL(channel)).split("?size")[0];
 };
 
 BDFDB.readServerList = function () {
@@ -3237,6 +3237,7 @@ BDFDB.DiscordClasses = {
 	modalsizemedium: "sizeMedium-1fwIF2",
 	modalsizesmall: "sizeSmall-Sf4iOi",
 	modalsub: "modal-3HD5ck",
+	modalsubcontent: "content-8biNdB",
 	modalsubinner: "inner-3wn6Q5",
 	modedefault: "modeDefault-3a2Ph1",
 	modedisabled: "modeDisabled-33Av8D",
@@ -3326,6 +3327,7 @@ BDFDB.DiscordClasses = {
 	searchresultspaginationprevious: "pagination-previous",
 	searchresultswrap: "search-results-wrap",
 	select: "Select",
+	selectable: "selectable-x8iAUj",
 	selectarrow: "Select-arrow",
 	selectarrowzone: "Select-arrow-zone",
 	selectcontrol: "Select-control",
