@@ -2799,6 +2799,7 @@ BDFDB.DiscordClasses = {
 	alignend: "alignEnd-1D6PQi",
 	alignstart: "alignStart-H-X2h-",
 	alignstretch: "alignStretch-DpGPf3",
+	anchor: "anchor-3Z-8Bb",
 	app: "app-19_DXt",
 	appmount: "appMount-3VJmYg",
 	appold: "app",
