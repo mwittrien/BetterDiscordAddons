@@ -701,7 +701,6 @@ BDfunctionsDevilBro.WebModules.find = function (filter) {
 	}, ['__extra_id__']).default : webpackJsonp.push([[], {
 		'__extra_id__': (module, exports, req) => module.exports = req
 	}, [['__extra_id__']]]);
-	delete req.m["__extra_id__"];
 	delete req.c["__extra_id__"];
 	for (let i in req.c) { 
 		if (req.c.hasOwnProperty(i)) {
