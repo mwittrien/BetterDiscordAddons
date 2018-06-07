@@ -27,7 +27,7 @@ class ShowImageDetails {
 
 	getDescription () {return "Display the name, size and dimensions of uploaded images (does not include embed images) in the chat as an header or as a tooltip.";}
 
-	getVersion () {return "1.0.6";}
+	getVersion () {return "1.0.7";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -78,7 +78,7 @@ class ShowImageDetails {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(BDFDB.dotCN.message)) {
+								if (node && node.tagName && (node.querySelector(BDFDB.dotCN.message) || node.classList.contains(BDFDB.disCN.message))) {
 									this.addDetails(node);
 								}
 							});
@@ -86,7 +86,7 @@ class ShowImageDetails {
 					}
 				);
 			});
-			BDFDB.addObserver(this, BDFDB.dotCN.messages, {name:"chatWindowObserver",instance:observer}, {childList:true});
+			BDFDB.addObserver(this, BDFDB.dotCN.messages, {name:"chatWindowObserver",instance:observer}, {childList:true, subtree:true});
 			
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(

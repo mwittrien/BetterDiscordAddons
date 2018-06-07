@@ -53,7 +53,7 @@ module.exports = (Plugin, Api, Vendor) => {
 						(change, i) => {
 							if (change.addedNodes) {
 								change.addedNodes.forEach((node) => {
-									if (node && node.tagName && node.querySelector(BDFDB.dotCN.message)) {
+									if (node && node.tagName && (node.querySelector(BDFDB.dotCN.message) || node.classList.contains(BDFDB.disCN.message))) {
 										this.addDetails(node);
 									}
 								});
@@ -61,7 +61,7 @@ module.exports = (Plugin, Api, Vendor) => {
 						}
 					);
 				});
-				BDFDB.addObserver(this, BDFDB.dotCN.messages, {name:"chatWindowObserver",instance:observer}, {childList:true});
+				BDFDB.addObserver(this, BDFDB.dotCN.messages, {name:"chatWindowObserver",instance:observer}, {childList:true, subtree:true});
 				
 				this.addDetails(document);
 

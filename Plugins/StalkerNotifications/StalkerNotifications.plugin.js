@@ -53,7 +53,7 @@ class StalkerNotifications {
 				cursor: pointer;
 			}
 			.stalkernotifications-modal .log-time {
-				width: 100px;
+				width: 110px;
 			}
 			.stalkernotifications-modal .log-avatar {
 				width: 35px;
@@ -113,6 +113,7 @@ class StalkerNotifications {
 			
 		this.defaults = {
 			settings: {
+				muteOnDND:			{value:false, 	description:"Do not notify me when I am DnD:"},
 				onlyOnOnline:		{value:false, 	description:"Only notify me when a User logs in:"},
 				openOnClick:		{value:false, 	description:"Open the DM when you click a Notification:"}
 			},
@@ -126,7 +127,7 @@ class StalkerNotifications {
 
 	getDescription () {return "Lets you observe the status of people that aren't your friends.";}
 
-	getVersion () {return "1.0.3";}
+	getVersion () {return "1.0.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -322,7 +323,7 @@ class StalkerNotifications {
 				let user = this.UserUtils.getUser(id);
 				if (user && this.stalkerOnlineList[id] != online && !users[id].disabled) {
 					this.timeLog.push({user, online, time: new Date()});
-					if (!(settings.onlyOnOnline && !online)) {
+					if (!(settings.onlyOnOnline && !online) && !(settings.muteOnDND && BDFDB.getUserStatus() == "dnd")) {
 						let data = BDFDB.loadData(user.id, "EditUsers", "users") || {};
 						let string = `${BDFDB.encodeToHTML(data.name ? data.name : user.username)} is ${online ? "online" : "offline"}.`;
 						let avatar = data.removeIcon ? "" : (data.url ? data.url : BDFDB.getUserAvatar(user.id));
