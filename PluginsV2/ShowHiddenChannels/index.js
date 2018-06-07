@@ -274,7 +274,10 @@ module.exports = (Plugin, Api, Vendor) => {
 									this.showAccessRoles(serverObj, hiddenChannel, e, false);
 								})
 								.on("click", () => {
-									BDFDB.showToast(`You can not enter the hidden channel ${hiddenChannel.name}.`, {type:"error"});
+									BDFDB.showToast(`You can not enter the hidden textchannel ${hiddenChannel.name}.`, {type:"error"});
+								})
+								.on("contextmenu", (e) => {
+									this.createHiddenObjContextMenu(hiddenChannel, e);
 								})
 								.appendTo(category);
 						}
@@ -299,7 +302,10 @@ module.exports = (Plugin, Api, Vendor) => {
 									this.showAccessRoles(serverObj, hiddenChannel, e, false);
 								})
 								.on("click", () => {
-									BDFDB.showToast(`You can not enter the hidden channel ${hiddenChannel.name}.`, {type:"error"});
+									BDFDB.showToast(`You can not enter the hidden voicechannel ${hiddenChannel.name}.`, {type:"error"});
+								})
+								.on("contextmenu", (e) => {
+									this.createHiddenObjContextMenu(hiddenChannel, e);
 								})
 								.appendTo(category);
 						}
@@ -321,7 +327,10 @@ module.exports = (Plugin, Api, Vendor) => {
 									this.showAccessRoles(serverObj, hiddenChannel, e, false);
 								})
 								.on("click", () => {
-									BDFDB.showToast(`You can not enter the hidden channel ${hiddenChannel.name}.`, {type:"error"});
+									BDFDB.showToast(`You can not open the hidden category ${hiddenChannel.name}.`, {type:"error"});
+								})
+								.on("contextmenu", (e) => {
+									this.createHiddenObjContextMenu(hiddenChannel, e);
 								})
 								.appendTo(category);
 						}
@@ -353,6 +362,19 @@ module.exports = (Plugin, Api, Vendor) => {
 					}
 				}
 			}
+		}
+	
+		createHiddenObjContextMenu (hiddenObj, e) {
+			e.preventDefault();
+			e.stopPropagation();
+			var contextMenu = $(`<div class="${BDFDB.disCN.contextmenu} ShowHiddenChannelsContextMenu"><div class="${BDFDB.disCN.contextmenuitemgroup}"><div class="${BDFDB.disCN.contextmenuitem} copyid-item"><span>${BDFDB.LanguageStrings.COPY_ID}</span><div class="${BDFDB.disCN.contextmenuhint}"></div></div></div>`);
+			contextMenu
+				.on("click." + this.name, ".copyid-item", (e2) => {
+					contextMenu.remove();
+					require("electron").clipboard.write({text: hiddenObj.id});
+				});
+			
+			BDFDB.appendContextMenu(contextMenu[0], e);
 		}
 		
 		showAccessRoles (serverObj, channel, e, allowed) {
