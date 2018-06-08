@@ -385,7 +385,7 @@ class SpellCheck {
 			this.languageToast.textContent = this.languageToast.textContent.indexOf(".....") > -1 ? "Grabbing dictionary (" + this.languages[lang].name + "). Please wait" : this.languageToast.textContent + ".";
 		},500);
 		this.languageToast.lang = lang
-		require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/SpellCheck/dic/aa" + lang + ".dic", (error, response, result) => {
+		require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/SpellCheck/dic/" + lang + ".dic", (error, response, result) => {
 			if (error || (response && result.toLowerCase().indexOf("<!doctype html>") > -1)) {
 				this.killLanguageToast();
 				BDFDB.showToast("Failed to grab dictionary (" + this.languages[lang].name + ").", {type: "error"});
