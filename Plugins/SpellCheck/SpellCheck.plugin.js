@@ -71,7 +71,7 @@ class SpellCheck {
 
 	getDescription () {return "Adds a spellcheck to all textareas. Select a word and rightclick it to add it to your dictionary.";}
 
-	getVersion () {return "1.2.7";}
+	getVersion () {return "1.2.8";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -171,7 +171,7 @@ class SpellCheck {
 			
 			this.languages = Object.assign({},BDFDB.languages);
 			this.languages = BDFDB.filterObject(this.languages , (lang) => {return lang.dic == true ? lang : null});
-			
+			console.log("test"); 
 			this.setDictionary(BDFDB.getData("dictionaryLanguage", this, "choices"));
 		}
 		else {
@@ -182,6 +182,8 @@ class SpellCheck {
 	stop () {
 		if (typeof BDFDB === "object") {
 			$(".spellcheck-overlay").remove();
+			
+			this.killLanguageToast();
 			
 			BDFDB.unloadMessage(this);
 		}
@@ -378,14 +380,32 @@ class SpellCheck {
 	
 	setDictionary (lang) {
 		this.dictionary = BDFDB.loadData(lang, this, "owndics") || [];
-		let request = require("request");
-		request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/SpellCheck/dic/" + lang + ".dic", (error, response, result) => {
-			if (response) {
+		this.killLanguageToast();
+		this.languageToast = BDFDB.showToast("Grabbing dictionary (" + this.languages[lang].name + "). Please wait", {timeout:0});
+		this.languageToast.interval = setInterval(() => {
+			this.languageToast.textContent = this.languageToast.textContent.indexOf(".....") > -1 ? "Grabbing dictionary (" + this.languages[lang].name + "). Please wait" : this.languageToast.textContent + ".";
+		},500);
+		this.languageToast.lang = lang
+		require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/SpellCheck/dic/aa" + lang + ".dic", (error, response, result) => {
+			if (error || (response && result.toLowerCase().indexOf("<!doctype html>") > -1)) {
+				this.killLanguageToast();
+				BDFDB.showToast("Failed to grab dictionary (" + this.languages[lang].name + ").", {type: "error"});
+			}
+			else if (response && this.languageToast.lang == lang) {
 				this.langDictionary = result.split("\n");
 				this.dictionary = this.langDictionary.concat(this.dictionary);
 				this.dictionary = this.dictionary.map(word => word.toLowerCase());
+				this.killLanguageToast();
+				BDFDB.showToast("Successfully grabbed dictionary (" + this.languages[lang].name + ").", {type: "success"});
 			}
 		});
+	}
+	
+	killLanguageToast () {
+		if (this.languageToast && typeof this.languageToast.close == "function") {
+			clearInterval(this.languageToast.interval);
+			this.languageToast.close();
+		}
 	}
 	
 	spellCheckText (string) {
@@ -399,6 +419,14 @@ class SpellCheck {
 	isWordNotInDictionary (word) {
 		var wordLow = word.toLowerCase();
 		var wordWithoutSymbols = wordLow.replace(/[0-9\µ\@\$\£\€\¥\¢\²\³\>\<\|\,\;\.\:\_\#\+\*\~\?\¿\\\´\`\}\=\]\)\[\(\{\/\&\%\§\"\!\¡\^\°\n\t\r]/g, "");
+		console.log(wordLow.indexOf("http://") != 0);
+		console.log(wordLow.indexOf("https://") != 0);
+		console.log(wordWithoutSymbols);
+		console.log(Array.isArray(this.dictionary));
+		console.log(this.dictionary.length > 0);
+		console.log(this.dictionary.length);
+		console.log(!this.dictionary.includes(wordLow));
+		console.log(!this.dictionary.includes(wordWithoutSymbols));
 		return (wordLow.indexOf("http://") != 0 && wordLow.indexOf("https://") != 0 && wordWithoutSymbols && Array.isArray(this.dictionary) && this.dictionary.length > 0 && !this.dictionary.includes(wordLow) && !this.dictionary.includes(wordWithoutSymbols));
 	}
 	

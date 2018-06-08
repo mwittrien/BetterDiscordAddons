@@ -326,7 +326,7 @@ BDFDB.showToast = function (content, options = {}) {
 	};
 	setTimeout(() => {
 		toastElem.close();
-	}, timeout > 0 ? timeout : 60000);
+	}, timeout > 0 ? timeout : 600000);
 	return toastElem;
 };
 
