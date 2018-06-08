@@ -701,7 +701,7 @@ BDFDB.languages = {
 	"pt-PT":	{name:"Portuguese (Portugal)",		id:"pt-PT",		ownlang:"Português do Portugal",	integrated:false,		dic:false,		deepl:false},
 	"pa":		{name:"Punjabi",					id:"pa",		ownlang:"पंजाबी",						integrated:false,		dic:false,		deepl:false},
 	"ro":		{name:"Romanian",					id:"ro",		ownlang:"Română",					integrated:false,		dic:false,		deepl:false},
-	"ru":		{name:"Russian",					id:"ru",		ownlang:"Pусский",					integrated:true,		dic:false,		deepl:false},
+	"ru":		{name:"Russian",					id:"ru",		ownlang:"Pусский",					integrated:true,		dic:true,		deepl:false},
 	"sm":		{name:"Samoan",						id:"sm",		ownlang:"Gagana Sāmoa",				integrated:false,		dic:false,		deepl:false},
 	"gd":		{name:"Scottish Gaelic",			id:"gd",		ownlang:"Gàidhlig",					integrated:false,		dic:false,		deepl:false},
 	"sr":		{name:"Serbian",					id:"sr",		ownlang:"Српски",					integrated:false,		dic:false,		deepl:false},
