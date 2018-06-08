@@ -171,7 +171,6 @@ class SpellCheck {
 			
 			this.languages = Object.assign({},BDFDB.languages);
 			this.languages = BDFDB.filterObject(this.languages , (lang) => {return lang.dic == true ? lang : null});
-			console.log("test"); 
 			this.setDictionary(BDFDB.getData("dictionaryLanguage", this, "choices"));
 		}
 		else {
@@ -419,14 +418,6 @@ class SpellCheck {
 	isWordNotInDictionary (word) {
 		var wordLow = word.toLowerCase();
 		var wordWithoutSymbols = wordLow.replace(/[0-9\µ\@\$\£\€\¥\¢\²\³\>\<\|\,\;\.\:\_\#\+\*\~\?\¿\\\´\`\}\=\]\)\[\(\{\/\&\%\§\"\!\¡\^\°\n\t\r]/g, "");
-		console.log(wordLow.indexOf("http://") != 0);
-		console.log(wordLow.indexOf("https://") != 0);
-		console.log(wordWithoutSymbols);
-		console.log(Array.isArray(this.dictionary));
-		console.log(this.dictionary.length > 0);
-		console.log(this.dictionary.length);
-		console.log(!this.dictionary.includes(wordLow));
-		console.log(!this.dictionary.includes(wordWithoutSymbols));
 		return (wordLow.indexOf("http://") != 0 && wordLow.indexOf("https://") != 0 && wordWithoutSymbols && Array.isArray(this.dictionary) && this.dictionary.length > 0 && !this.dictionary.includes(wordLow) && !this.dictionary.includes(wordWithoutSymbols));
 	}
 	
