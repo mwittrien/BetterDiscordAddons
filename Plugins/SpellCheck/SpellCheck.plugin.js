@@ -381,7 +381,7 @@ class SpellCheck {
 		let request = require("request");
 		request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/SpellCheck/dic/" + lang + ".dic", (error, response, result) => {
 			if (response) {
-				this.langDictionary = result.replace(new RegExp("[\\r|\\t]", "g"), "").split("\n");
+				this.langDictionary = result.split("\n");
 				this.dictionary = this.langDictionary.concat(this.dictionary);
 				this.dictionary = this.dictionary.map(word => word.toLowerCase());
 			}
