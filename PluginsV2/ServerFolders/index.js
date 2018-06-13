@@ -168,7 +168,7 @@ module.exports = (Plugin, Api, Vendor) => {
 							<span>REPLACE_foldercontext_createfolder_text</span>
 							<div class="${BDFDB.disCN.contextmenuhint}"></div>
 						</div>
-						<div class="${BDFDB.disCN.contextmenuitem} removefolder-item danger-1oUOCl">
+						<div class="${BDFDB.disCN.contextmenuitem} removefolder-item ${BDFDB.disCN.contextmenuitem}">
 							<span>REPLACE_foldercontext_removefolder_text</span>
 							<div class="${BDFDB.disCN.contextmenuhint}"></div>
 						</div>
@@ -1079,7 +1079,7 @@ module.exports = (Plugin, Api, Vendor) => {
 		};
 		
 		removeFolder (folderDiv) {
-			$(this.readIncludedServerList(folderDiv)).removeAttr("folder").show();
+			this.readIncludedServerList(folderDiv).forEach((serverObj) => {$(serverObj.div).removeAttr("folder").show();});
 			
 			BDFDB.removeData(folderDiv.id, this, "folders");
 			

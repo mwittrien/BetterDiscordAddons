@@ -163,7 +163,7 @@ class ServerFolders {
 						<span>REPLACE_foldercontext_createfolder_text</span>
 						<div class="${BDFDB.disCN.contextmenuhint}"></div>
 					</div>
-					<div class="${BDFDB.disCN.contextmenuitem} removefolder-item danger-1oUOCl">
+					<div class="${BDFDB.disCN.contextmenuitem} removefolder-item ${BDFDB.disCN.contextmenuitemdanger}">
 						<span>REPLACE_foldercontext_removefolder_text</span>
 						<div class="${BDFDB.disCN.contextmenuhint}"></div>
 					</div>
@@ -338,7 +338,7 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.6.5";}
+	getVersion () {return "5.6.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -524,7 +524,7 @@ class ServerFolders {
 		}
 	}
 
-	onSwitch() {
+	onSwitch () {
 		if (typeof BDFDB === "object") {
 			if (BDFDB.getData("forceOpenFolder", this, "settings")) {
 				var serverObj = BDFDB.getSelectedServer();
@@ -1111,7 +1111,7 @@ class ServerFolders {
 	};
 	
 	removeFolder (folderDiv) {
-		$(this.readIncludedServerList(folderDiv)).removeAttr("folder").show();
+		this.readIncludedServerList(folderDiv).forEach((serverObj) => {$(serverObj.div).removeAttr("folder").show();});
 		
 		BDFDB.removeData(folderDiv.id, this, "folders");
 		
