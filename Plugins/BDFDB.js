@@ -3196,7 +3196,7 @@ BDFDB.DiscordClasses = {
 	inputmini: "inputMini-2xQV9",
 	inputsuccess: "success-2-F980",
 	inputwrapper: "inputWrapper-31_8H8",
-	justifycenter: "justifyCenter-3D2jY",
+	justifycenter: "justifyCenter-3D2jYp",
 	justifyend: "justifyEnd-2E6vba",
 	justifystart: "justifyStart-2NDFzi",
 	large: "large-3Q-_XB",
