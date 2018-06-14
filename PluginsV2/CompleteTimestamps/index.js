@@ -96,13 +96,13 @@ module.exports = (Plugin, Api, Vendor) => {
 							var messagegroup = this.getMessageGroup(marker);
 							if (!messagegroup || !messagegroup.tagName) return;
 							var info = this.getMessageData(marker, messagegroup);
-							if (!info || !info.timestamp || !info.timestamp._i) return
+							if (!info || !info.editedTimestamp || !info.editedTimestamp._i) return
 							var choice = BDFDB.getData("creationDateLang", this, "choices");
 							var customTooltipCSS = `
 								body ${BDFDB.dotCN.tooltip}:not(.completetimestampedit-tooltip) {
 									display: none !important;
 								}`;
-							BDFDB.createTooltip(this.getTimestamp(this.languages[choice].id, info.timestamp._i), marker, {type:"top",selector:"completetimestampedit-tooltip",css:customTooltipCSS});
+							BDFDB.createTooltip(this.getTimestamp(this.languages[choice].id, info.editedTimestamp._i), marker, {type:"top",selector:"completetimestampedit-tooltip",css:customTooltipCSS});
 						}
 					});
 				

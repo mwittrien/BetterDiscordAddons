@@ -32,7 +32,7 @@ class CompleteTimestamps {
 
 	getDescription () {return "Replace all timestamps with complete timestamps.";}
 
-	getVersion () {return "1.2.0";}
+	getVersion () {return "1.2.1s";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -144,7 +144,7 @@ class CompleteTimestamps {
 						var messagegroup = this.getMessageGroup(message);
 						if (!messagegroup || !messagegroup.tagName) return;
 						var info = this.getMessageData(message, messagegroup);
-						if (!info || !info.timestamp || !info.timestamp._i) return
+						if (!info || !info.timestamp || !info.timestamp._i) return;
 						var choice = BDFDB.getData("creationDateLang", this, "choices");
 						BDFDB.createTooltip(this.getTimestamp(this.languages[choice].id, info.timestamp._i), message, {type:"left",selector:"completetimestamp-tooltip"});
 					}
@@ -155,13 +155,13 @@ class CompleteTimestamps {
 						var messagegroup = this.getMessageGroup(marker);
 						if (!messagegroup || !messagegroup.tagName) return;
 						var info = this.getMessageData(marker, messagegroup);
-						if (!info || !info.timestamp || !info.timestamp._i) return
+						if (!info || !info.editedTimestamp || !info.editedTimestamp._i) return;
 						var choice = BDFDB.getData("creationDateLang", this, "choices");
 						var customTooltipCSS = `
 							body ${BDFDB.dotCN.tooltip}:not(.completetimestampedit-tooltip) {
 								display: none !important;
 							}`;
-						BDFDB.createTooltip(this.getTimestamp(this.languages[choice].id, info.timestamp._i), marker, {type:"top",selector:"completetimestampedit-tooltip",css:customTooltipCSS});
+						BDFDB.createTooltip(this.getTimestamp(this.languages[choice].id, info.editedTimestamp._i), marker, {type:"top",selector:"completetimestampedit-tooltip",css:customTooltipCSS});
 					}
 				});
 			
