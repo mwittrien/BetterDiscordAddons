@@ -15,6 +15,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				settings: {
 					showInChat:		{value:true, 	description:"Replace Chat Timestamp with Complete Timestamp:"},
 					showOnHover:	{value:false, 	description:"Also show Timestamp when you hover over a message:"},
+					changeForEdit:	{value:false, 	description:"Change the Time for the Edited Time Tooltips:"},
 					displayTime:	{value:true, 	description:"Display the Time in the Timestamp:"},
 					displayDate:	{value:true, 	description:"Display the Date in the Timestamp:"},
 					cutSeconds:		{value:false, 	description:"Cut off Seconds of the Time:"},
@@ -77,17 +78,33 @@ module.exports = (Plugin, Api, Vendor) => {
 				
 				this.setMaxWidth();
 				
-				$(document).on("mouseenter." + this.name, BDFDB.dotCNS.message + BDFDB.dotCNC.messagetext + BDFDB.dotCNS.message + BDFDB.dotCN.messageaccessory, (e) => {
-					if (BDFDB.getData("showOnHover", this, "settings")) {
-						var message = e.currentTarget;
-						var messagegroup = this.getMessageGroup(message);
-						if (!messagegroup || !messagegroup.tagName) return;
-						var info = this.getMessageData(message, messagegroup);
-						if (!info || !info.timestamp || !info.timestamp._i) return
-						var choice = BDFDB.getData("creationDateLang", this, "choices");
-						BDFDB.createTooltip(this.getTimestamp(this.languages[choice].id, info.timestamp._i), message, {type:"left",selector:"completetimestamp-tooltip"});
-					}
-				});
+				$(document)
+					.on("mouseenter." + this.name, BDFDB.dotCNS.message + BDFDB.dotCNC.messagetext + BDFDB.dotCNS.message + BDFDB.dotCN.messageaccessory, (e) => {
+						if (BDFDB.getData("showOnHover", this, "settings")) {
+							var message = e.currentTarget;
+							var messagegroup = this.getMessageGroup(message);
+							if (!messagegroup || !messagegroup.tagName) return;
+							var info = this.getMessageData(message, messagegroup);
+							if (!info || !info.timestamp || !info.timestamp._i) return
+							var choice = BDFDB.getData("creationDateLang", this, "choices");
+							BDFDB.createTooltip(this.getTimestamp(this.languages[choice].id, info.timestamp._i), message, {type:"left",selector:"completetimestamp-tooltip"});
+						}
+					})
+					.on("mouseenter." + this.getName(), BDFDB.dotCNS.message + BDFDB.dotCN.messageedited, (e) => {
+						if (BDFDB.getData("changeForEdit", this, "settings")) {
+							var marker = e.currentTarget;
+							var messagegroup = this.getMessageGroup(marker);
+							if (!messagegroup || !messagegroup.tagName) return;
+							var info = this.getMessageData(marker, messagegroup);
+							if (!info || !info.timestamp || !info.timestamp._i) return
+							var choice = BDFDB.getData("creationDateLang", this, "choices");
+							var customTooltipCSS = `
+								body ${BDFDB.dotCN.tooltip}:not(.completetimestampedit-tooltip) {
+									display: none !important;
+								}`;
+							BDFDB.createTooltip(this.getTimestamp(this.languages[choice].id, info.timestamp._i), marker, {type:"top",selector:"completetimestampedit-tooltip",css:customTooltipCSS});
+						}
+					});
 				
 				document.querySelectorAll(BDFDB.dotCN.messagetext).forEach(message => {this.changeTimestamp(message);});
 
