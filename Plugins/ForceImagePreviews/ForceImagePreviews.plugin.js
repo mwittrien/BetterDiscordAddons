@@ -161,6 +161,7 @@ class ForceImagePreviews {
 						});
 						this.insertEmbed(embed, previmage, links, accessory, scroller);
 					}
+					this.addItemToAccessory(item, links, accessory, scroller);
 				}
 				else this.addItemToAccessory(item, links, accessory, scroller);
 			});
