@@ -1063,12 +1063,17 @@ module.exports = (Plugin, Api, Vendor) => {
 				modal.querySelectorAll("input[type='text'][option]").forEach((input) => {
 					input.value = "";
 				});
+			
+				var iconpreviewopeninner = iconpreviewopen.querySelector(".ui-picker-inner");
+				var iconpreviewclosedinner = iconpreviewclosed.querySelector(".ui-picker-inner");
+				var iconpreviewswitchinginner = iconpreviewswitching.querySelector(".ui-picker-inner");
+				
 				iconpreviewopen.classList.add("nopic");
-				iconpreviewopen.style.backgroundImage = "";
+				iconpreviewopeninner.style.backgroundImage = "";
 				iconpreviewclosed.classList.add("nopic");
-				iconpreviewclosed.style.backgroundImage = "";
+				iconpreviewclosedinner.style.backgroundImage = "";
 				iconpreviewswitching.classList.add("nopic");
-				iconpreviewswitching.style.backgroundImage = "";
+				iconpreviewswitchinginner.style.backgroundImage = "";
 				clearInterval(iconpreviewswitching.switchInterval);
 				BDFDB.showToast(`Custom Icon was added to selection.`, {type:"success"});
 				this.setIcons(modal.querySelector(".ui-icon-picker-icon.selected").getAttribute("value"), $(modal).find(".icons"));
