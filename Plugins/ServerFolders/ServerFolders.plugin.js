@@ -338,7 +338,7 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.6.6";}
+	getVersion () {return "5.6.7";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -804,7 +804,7 @@ class ServerFolders {
 			.css("background-image", "url(\"" + data.icons.closedicon + "\")");
 		
 		BDFDB.saveData(data.folderID, data, this, "folders");
-			
+		
 		this.updateFolderNotifications(folderDiv);
 			
 		return folderDiv;
@@ -981,7 +981,7 @@ class ServerFolders {
 		var icons = 
 			`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCN.nowrap}" style="flex: 1 1 auto; margin-top: 5px;">
 				<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa wrap-1da0e3 ui-icon-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;">
-					${Object.getOwnPropertyNames(folderIcons).map(id => `<div class="ui-icon-picker-icon${folderIcons[id].customID ? ' custom' : ''}" value="${id}"><div class="ui-picker-inner" style="background-image: url(${folderIcons[id].closedicon});"></div>${folderIcons[id].customID ? '<div value="' + id + '" class=BDFDB.disCN.hovercardbutton></div>' : ''}</div>`).join("")}
+					${Object.getOwnPropertyNames(folderIcons).map(id => `<div class="ui-icon-picker-icon${folderIcons[id].customID ? ' custom' : ''}" value="${id}"><div class="ui-picker-inner" style="background-image: url(${folderIcons[id].closedicon});"></div>${folderIcons[id].customID ? '<div value="' + id + '" class="' + BDFDB.disCN.hovercardbutton + '"></div>' : ''}</div>`).join("")}
 				</div>
 			</div>`;
 		$(icons).appendTo(wrapper);
@@ -1095,12 +1095,17 @@ class ServerFolders {
 			modal.querySelectorAll("input[type='text'][option]").forEach((input) => {
 				input.value = "";
 			});
+			
+			var iconpreviewopeninner = iconpreviewopen.querySelector(".ui-picker-inner");
+			var iconpreviewclosedinner = iconpreviewclosed.querySelector(".ui-picker-inner");
+			var iconpreviewswitchinginner = iconpreviewswitching.querySelector(".ui-picker-inner");
+			
 			iconpreviewopen.classList.add("nopic");
-			iconpreviewopen.style.backgroundImage = "";
+			iconpreviewopeninner.style.backgroundImage = "";
 			iconpreviewclosed.classList.add("nopic");
-			iconpreviewclosed.style.backgroundImage = "";
+			iconpreviewclosedinner.style.backgroundImage = "";
 			iconpreviewswitching.classList.add("nopic");
-			iconpreviewswitching.style.backgroundImage = "";
+			iconpreviewswitchinginner.style.backgroundImage = "";
 			clearInterval(iconpreviewswitching.switchInterval);
 			BDFDB.showToast(`Custom Icon was added to selection.`, {type:"success"});
 			this.setIcons(modal.querySelector(".ui-icon-picker-icon.selected").getAttribute("value"), $(modal).find(".icons"));
