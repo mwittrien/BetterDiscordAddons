@@ -698,7 +698,6 @@ class PluginRepo {
 							var text = `${outdated} of your Plugins ${outdated == 1 ? "is" : "are"} outdated. Check:`;
 							var bar = BDFDB.createNotificationsBar(text,{type:"danger",btn:"PluginRepo",selector:"pluginrepo-notice"});
 							$(bar).on("click." + this.getName(), BDFDB.dotCN.noticebutton, (e) => {
-								console.log(e);
 								this.openPluginRepoModal(true);
 								e.delegateTarget.querySelector(BDFDB.dotCN.noticedismiss).click();
 							});

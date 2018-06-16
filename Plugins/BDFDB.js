@@ -2821,6 +2821,7 @@ BDFDB.DiscordClasses = {
 	avatariconactivemini: "iconActiveMini-3PzjMn",
 	avatariconactivesmall: "iconActiveSmall-3IUUtn",
 	avatariconactivexlarge: "iconActiveXLarge-_qKvKn",
+	avatariconguild: "guild-icon",
 	avatariconinactive: "iconInactive-98JN5i",
 	avatariconsizelarge: "iconSizeLarge-161qtT",
 	avatariconsizemedium: "iconSizeMedium-2OqPjI",
