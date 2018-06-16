@@ -10,7 +10,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			this.updateFolders = false;
 			
 			this.css = `
-				${BDFDB.dotCN.guild}.folder ${BDFDB.dotCN.avatarsmallold} {
+				${BDFDB.dotCN.guild}.folder ${BDFDB.dotCN.avataricon} {
 					background-clip: padding-box;
 					background-position: 50%;
 					background-size: cover !important;
@@ -69,17 +69,9 @@ module.exports = (Plugin, Api, Vendor) => {
 					display: none;
 				}
 				
-				${BDFDB.dotCN.guild}.serverFoldersPreview a {
-					color: white;
-					width: 50px;
-					height: 50px;
-					background-size: cover;
-					background-position: center;
-					font-size: 16px;
-					font-weight: 600;
-					letter-spacing: .5px;
-					line-height: 50px;
-					text-align: center;
+				${BDFDB.dotCN.guild}.serverFoldersPreview ${BDFDB.dotCN.avataricon} {
+					background-color: transparent !important;
+					overflow: hidden;
 				}
 				
 				${BDFDB.dotCN.guildswrapper}.folderopen ${BDFDB.dotCN.guilds} {
@@ -179,7 +171,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				`<div class="${BDFDB.disCN.guild} folder">
 					<div draggable="true">
 						<div class="${BDFDB.disCN.guildinner}" draggable="false" style="border-radius: 25px;">
-							<a draggable="false" class="${BDFDB.disCN.avatarsmallold}"></a>
+							<a draggable="false" class="${BDFDB.disCN.avataricon}"></a>
 						</div>
 					</div>
 					<div class="${BDFDB.disCN.badge} folder notifications"></div>
@@ -707,7 +699,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			var folderDiv = $(this.folderIconMarkup)[0];
 			$(folderDiv).insertBefore(document.querySelectorAll("div" + BDFDB.dotCN.guildseparator + " ~ div" + BDFDB.dotCN.guild)[data.position]);
 				
-			var avatar = folderDiv.querySelector(BDFDB.dotCN.avatarsmallold);
+			var avatar = folderDiv.querySelector(BDFDB.dotCN.avataricon);
 			
 			$(folderDiv)
 				.addClass("closed")
@@ -728,7 +720,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					var mouseTimeout = null;
 					var folderPreview = folderDiv.cloneNode(true);
 					var hoveredElement = null;
-					var placeholder = $(`<div class="guild guild-placeholder folder folder-placeholder"></div>`)[0];
+					var placeholder = $(`<div class="${BDFDB.disCNS.guild + BDFDB.disCN.guildplaceholder} folder folder-placeholder"></div>`)[0];
 					var guildswrap = document.querySelector(BDFDB.dotCN.guilds);
 					$(folderPreview)
 						.hide()
@@ -920,7 +912,7 @@ module.exports = (Plugin, Api, Vendor) => {
 									icons.openicon = openicon;
 									this.changeImgColor(color1, color2, folderIcons[iconID].closedicon, (closedicon) => {
 										icons.closedicon = closedicon;
-										$(folderDiv).find(BDFDB.dotCN.avatarsmallold).css("background-image", isOpen ? "url(\"" + icons.openicon + "\")" : "url(\"" + icons.closedicon + "\")");
+										$(folderDiv).find(BDFDB.dotCN.avataricon).css("background-image", isOpen ? "url(\"" + icons.openicon + "\")" : "url(\"" + icons.closedicon + "\")");
 										BDFDB.saveData(folderID, {folderID,folderName,position,iconID,icons,color1,color2,color3,color4,servers}, this, "folders");
 									});
 								});
@@ -928,7 +920,7 @@ module.exports = (Plugin, Api, Vendor) => {
 							else {
 								icons.openicon = folderIcons[iconID].openicon;
 								icons.closedicon = folderIcons[iconID].closedicon;
-								$(folderDiv).find(BDFDB.dotCN.avatarsmallold).css("background-image", isOpen ? "url(\"" + icons.openicon + "\")" : "url(\"" + icons.closedicon + "\")");
+								$(folderDiv).find(BDFDB.dotCN.avataricon).css("background-image", isOpen ? "url(\"" + icons.openicon + "\")" : "url(\"" + icons.closedicon + "\")");
 								BDFDB.saveData(folderID, {folderID,folderName,position,iconID,icons,color1,color2,color3,color4,servers}, this, "folders");
 							}
 						}
@@ -1177,7 +1169,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					this.closeFolderContent(folderDiv);
 				}
 				
-				$(folderDiv).find(BDFDB.dotCN.avatarsmallold).css("background-image", !isOpen ? "url(\"" + data.icons.openicon + "\")" : "url(\"" + data.icons.closedicon + "\")");
+				$(folderDiv).find(BDFDB.dotCN.avataricon).css("background-image", !isOpen ? "url(\"" + data.icons.openicon + "\")" : "url(\"" + data.icons.closedicon + "\")");
 			}
 		}
 		
@@ -1243,7 +1235,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					var mouseTimeout = null;
 					var serverPreview = serverDiv.cloneNode(true);
 					var hoveredCopy = null;
-					var placeholder = $(`<div class="guild guild-placeholder copy copy-placeholder"></div>`)[0];
+					var placeholder = $(`<div class="${BDFDB.disCNS.guild + BDFDB.disCN.guildplaceholder} copy copy-placeholder"></div>`)[0];
 					$(serverPreview)
 						.appendTo(BDFDB.dotCN.appmount)
 						.addClass("serverFoldersPreview")
@@ -1377,7 +1369,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			if (document.querySelector(BDFDB.dotCN.dms) && document.querySelector(BDFDB.dotCN.dms).contains(div)) return {div:null};
 			if (div.tagName && div.querySelector(BDFDB.dotCN.guildserror)) return {div:null};
 			if (div.classList && div.classList.length > 0 && (div.classList.contains(BDFDB.disCN.guilds) || div.classList.contains("serverFoldersPreview"))) return {div:null};
-			if (div.classList && div.classList.length > 0 && div.classList.contains(BDFDB.disCN.guild) && div.classList.contains(type) && div.querySelector(BDFDB.dotCN.avatarsmallold)) {
+			if (div.classList && div.classList.length > 0 && div.classList.contains(BDFDB.disCN.guild) && div.classList.contains(type) && div.querySelector(BDFDB.dotCN.avataricon)) {
 				if (type == "guild") {
 					var info = BDFDB.getKeyInformation({"node":div, "key":"guild"});
 					if (info) return Object.assign({},info,{div:div,data:info});
