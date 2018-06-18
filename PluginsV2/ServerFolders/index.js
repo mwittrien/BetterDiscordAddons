@@ -1279,7 +1279,8 @@ module.exports = (Plugin, Api, Vendor) => {
 								}
 							});
 					},100);
-				});
+				})
+				.find("a").attr("draggable","false");
 			return serverCopy;
 		}
 		
