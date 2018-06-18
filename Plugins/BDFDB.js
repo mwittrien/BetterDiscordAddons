@@ -3042,7 +3042,7 @@ BDFDB.DiscordClasses = {
 	dmchannelname: "channel-name",
 	dmchannelprivate: "private",
 	dmchannels: "private-channels",
-	downloadlink: "downloadLink-2oSgiF",
+	downloadlink: "downloadLink-1ywL9o",
 	elevationhigh: "elevationHigh-3A9Xbf",
 	ellipsis: "ellipsis-1XUmPN",
 	embed: "embed-IeVjo6",
