@@ -75,23 +75,24 @@ module.exports = (Plugin, Api, Vendor) => {
 						(change, i) => {
 							if (change.addedNodes) {
 								change.addedNodes.forEach((node) => {
-									if ($(BDFDB.dotCN.messagegroup).has(BDFDB.dotCN.avatarlargeold).length > 0) {
+									var compact = document.querySelector(BDFDB.dotCN.messagegroup + BDFDB.dotCN.messagecompact);
+									if (!compact) {
 										if (node && node.tagName && node.querySelector(BDFDB.dotCN.messageusernamewrapper)) {
-											this.loadUser(node, "chat", false);
+											this.loadUser(node, "chat", compact);
 										}
 										else if (node && node.classList && node.classList.contains(BDFDB.disCN.messagetext)) {
-											this.loadUser($(BDFDB.dotCN.messagegroup).has(node)[0], "chat", false);
+											this.loadUser($(BDFDB.dotCN.messagegroup).has(node)[0], "chat", compact);
 										}
 									}
 									else {
 										if (node && node.tagName && node.querySelector(BDFDB.dotCN.messageusernamewrapper)) {
 											if (node.classList.contains(BDFDB.disCN.messagemarkup)) {
-												this.loadUser(node, "chat", true);
+												this.loadUser(node, "chat", compact);
 											}
 											else {
 												var markups = node.querySelectorAll(BDFDB.dotCN.messagemarkup);
 												for (var i = 0; i < markups.length; i++) {
-													this.loadUser(markups[i], "chat", true);
+													this.loadUser(markups[i], "chat", compact);
 												}
 											}
 										}
@@ -151,12 +152,13 @@ module.exports = (Plugin, Api, Vendor) => {
 				this.loadUser(user, "list", false);
 			} 
 			for (let user of document.querySelectorAll(BDFDB.dotCN.messagegroup)) {
-				if (user.querySelector(BDFDB.dotCN.avatarlargeold)) {
-					this.loadUser(user, "chat", false);
+				let compact = user.classList.contains(BDFDB.disCN.messagecompact);
+				if (!compact) {
+					this.loadUser(user, "chat", compact);
 				}
 				else {
 					for (let markup of user.querySelectorAll(BDFDB.dotCN.messagemarkup)) {
-						this.loadUser(markup, "chat", true);
+						this.loadUser(markup, "chat", compact);
 					}
 				}
 			}

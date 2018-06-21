@@ -376,7 +376,7 @@ class GoogleTranslateOption {
 
 	getDescription () {return "Adds a Google Translate option to your context menu, which shows a preview of the translated text and on click will open the selected text in Google Translate. Also adds a translation button to your textareas, which will automatically translate the text for you before it is being send. DeepLApi written by square. Thanks ;)";}
 
-	getVersion () {return "1.4.7";}
+	getVersion () {return "1.4.8";}
 	
 	getAuthor () {return "DevilBro, square";}
 	
@@ -663,7 +663,7 @@ class GoogleTranslateOption {
 				$(BDFDB.dotCN.popout).has(BDFDB.dotCN.optionpopout).hide();
 				this.translateMessage();
 				setTimeout(() => {
-					var popoutbutton = document.querySelector(BDFDB.dotCNS.optionpopoutbutton + BDFDB.dotCN.optionpopoutopen);
+					var popoutbutton = document.querySelector(BDFDB.dotCN.optionpopoutbutton + BDFDB.dotCN.optionpopoutopen);
 					if (popoutbutton) popoutbutton.classList.remove(BDFDB.disCN.optionpopoutopen);
 				},300);
 			});
@@ -740,7 +740,7 @@ class GoogleTranslateOption {
 			if (!message.classList.contains("translated")) {
 				this.translateText(this.message.content, "context", (translation, input, output) => {
 					if (translation) {
-						var markup = message.querySelector(BDFDB.dotCN.messagemarkup);
+						var markup = message.querySelector(BDFDB.dotCN.messagecontent) || message.querySelector(BDFDB.dotCN.messagemarkup);
 						if (markup) {
 							$(markup).data("orightmlGoogleTranslate", markup.innerHTML);
 							markup.innerText = translation;
@@ -766,7 +766,7 @@ class GoogleTranslateOption {
 			.removeClass("translated")
 			.find(BDFDB.dotCN.messageedited + ".translated").remove();
 			
-		var markup = message.querySelector(BDFDB.dotCN.messagemarkup);
+		var markup = message.querySelector(BDFDB.dotCN.messagecontent) || message.querySelector(BDFDB.dotCN.messagemarkup);
 		markup.innerHTML = $(markup).data("orightmlGoogleTranslate");
 	}
 	

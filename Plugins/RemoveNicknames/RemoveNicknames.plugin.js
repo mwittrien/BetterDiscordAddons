@@ -14,7 +14,7 @@ class RemoveNicknames {
 
 	getDescription () {return "Replace all nicknames with the actual accountnames.";}
 
-	getVersion () {return "1.0.7";}
+	getVersion () {return "1.0.8";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -41,8 +41,7 @@ class RemoveNicknames {
 
 	start () {
 		var libraryScript = null;
-		if (typeof BDFDB !== "object" || BDFDB.isLibraryOutdated()) {
-			if (typeof BDFDB === "object") BDFDB = "";
+		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
 			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
@@ -51,7 +50,7 @@ class RemoveNicknames {
 			document.head.appendChild(libraryScript);
 		}
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object") this.initialize();
+		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
 		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
@@ -99,23 +98,24 @@ class RemoveNicknames {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if ($(BDFDB.dotCN.messagegroup).has(BDFDB.dotCN.avatarlargeold).length > 0) {
+								var compact = document.querySelector(BDFDB.dotCN.messagegroup + BDFDB.dotCN.messagecompact);
+								if (!compact) {
 									if (node && node.tagName && node.querySelector(BDFDB.dotCN.messageusernamewrapper)) {
-										this.loadUser(node, "chat", false);
+										this.loadUser(node, "chat", compact);
 									}
 									else if (node && node.classList && node.classList.contains(BDFDB.disCN.messagetext)) {
-										this.loadUser($(BDFDB.dotCN.messagegroup).has(node)[0], "chat", false);
+										this.loadUser($(BDFDB.dotCN.messagegroup).has(node)[0], "chat", compact);
 									}
 								}
 								else {
 									if (node && node.tagName && node.querySelector(BDFDB.dotCN.messageusernamewrapper)) {
 										if (node.classList.contains(BDFDB.disCN.messagemarkup)) {
-											this.loadUser(node, "chat", true);
+											this.loadUser(node, "chat", compact);
 										}
 										else {
 											var markups = node.querySelectorAll(BDFDB.dotCN.messagemarkup);
 											for (var i = 0; i < markups.length; i++) {
-												this.loadUser(markups[i], "chat", true);
+												this.loadUser(markups[i], "chat", compact);
 											}
 										}
 									}
@@ -183,12 +183,13 @@ class RemoveNicknames {
 			this.loadUser(user, "list", false);
 		} 
 		for (let user of document.querySelectorAll(BDFDB.dotCN.messagegroup)) {
-			if (user.querySelector(BDFDB.dotCN.avatarlargeold)) {
-				this.loadUser(user, "chat", false);
+			let compact = user.classList.contains(BDFDB.disCN.messagecompact);
+			if (!compact) {
+				this.loadUser(user, "chat", compact);
 			}
 			else {
 				for (let markup of user.querySelectorAll(BDFDB.dotCN.messagemarkup)) {
-					this.loadUser(markup, "chat", true);
+					this.loadUser(markup, "chat", compact);
 				}
 			}
 		}

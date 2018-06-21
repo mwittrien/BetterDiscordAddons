@@ -91,23 +91,24 @@ module.exports = (Plugin, Api, Vendor) => {
 							if (change.addedNodes) {
 								change.addedNodes.forEach((node) => {
 									if (BDFDB.getData("showInChat", this, "settings")) {
-										if ($(BDFDB.dotCN.messagegroup).has(BDFDB.dotCN.avatarlargeold).length > 0) {
+										var compact = document.querySelector(BDFDB.dotCN.messagegroup + BDFDB.dotCN.messagecompact);
+										if (!compact) {
 											if (node && node.tagName && node.querySelector(BDFDB.dotCN.messageusernamewrapper)) {
-												this.addRoleTag(node, "chat", false);
+												this.addRoleTag(node, "chat", compact);
 											}
 											else if (node && node.classList && node.classList.contains(BDFDB.disCN.messagetext)) {
-												this.addRoleTag($(BDFDB.dotCN.messagegroup).has(node)[0], "chat", false);
+												this.addRoleTag($(BDFDB.dotCN.messagegroup).has(node)[0], "chat", compact);
 											}
 										}
 										else {
 											if (node && node.tagName && node.querySelector(BDFDB.dotCN.messageusernamewrapper)) {
 												if (node.classList.contains(BDFDB.disCN.messagemarkup)) {
-													this.addRoleTag(node, "chat", true);
+													this.addRoleTag(node, "chat", compact);
 												}
 												else {
 													var markups = node.querySelectorAll(BDFDB.dotCN.messagemarkup);
 													for (var i = 0; i < markups.length; i++) {
-														this.addRoleTag(markups[i], "chat", true);
+														this.addRoleTag(markups[i], "chat", compact);
 													}
 												}
 											}
@@ -172,12 +173,13 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 			if (settings.showInChat) { 
 				for (let user of document.querySelectorAll(BDFDB.dotCN.messagegroup)) {
-					if (user.querySelector(BDFDB.dotCN.avatarlargeold)) {
-						this.addRoleTag(user, "chat", false);
+					let compact = user.classList.contains(BDFDB.disCN.messagecompact);
+					if (!compact) {
+						this.addRoleTag(user, "chat", compact);
 					}
 					else {
 						for (let message of document.querySelectorAll(BDFDB.dotCN.messagemarkup)) {
-							this.addRoleTag(message, "chat", true);
+							this.addRoleTag(message, "chat", compact);
 						}
 					}
 				}

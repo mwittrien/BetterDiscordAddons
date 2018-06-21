@@ -635,7 +635,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					$(BDFDB.dotCN.popout).has(BDFDB.dotCN.optionpopout).hide();
 					this.translateMessage();
 					setTimeout(() => {
-						var popoutbutton = document.querySelector(BDFDB.dotCNS.optionpopoutbutton + BDFDB.dotCN.optionpopoutopen);
+						var popoutbutton = document.querySelector(BDFDB.dotCN.optionpopoutbutton + BDFDB.dotCN.optionpopoutopen);
 						if (popoutbutton) popoutbutton.classList.remove(BDFDB.disCN.optionpopoutopen);
 					},300);
 				});
@@ -712,7 +712,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				if (!message.classList.contains("translated")) {
 					this.translateText(this.message.content, "context", (translation, input, output) => {
 						if (translation) {
-							var markup = message.querySelector(BDFDB.dotCN.messagemarkup);
+							var markup = message.querySelector(BDFDB.dotCN.messagecontent) || message.querySelector(BDFDB.dotCN.messagemarkup);
 							if (markup) {
 								$(markup).data("orightmlGoogleTranslate", markup.innerHTML);
 								markup.innerText = translation;
@@ -738,7 +738,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				.removeClass("translated")
 				.find(BDFDB.dotCN.messageedited + ".translated").remove();
 				
-			var markup = message.querySelector(BDFDB.dotCN.messagemarkup);
+			var markup = message.querySelector(BDFDB.dotCN.messagecontent) || message.querySelector(BDFDB.dotCN.messagemarkup);
 			markup.innerHTML = $(markup).data("orightmlGoogleTranslate");
 		}
 		

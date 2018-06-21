@@ -116,7 +116,7 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.5.5";}
+	getVersion () {return "1.5.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -140,8 +140,7 @@ class PersonalPins {
 
 	start () {
 		var libraryScript = null;
-		if (typeof BDFDB !== "object" || BDFDB.isLibraryOutdated()) {
-			if (typeof BDFDB === "object") BDFDB = "";
+		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
 			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
@@ -150,7 +149,7 @@ class PersonalPins {
 			document.head.appendChild(libraryScript);
 		}
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object") this.initialize();
+		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
 		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
@@ -430,7 +429,7 @@ class PersonalPins {
 			.on("click." + this.getName(), ".btn-item-personalpins", (e) => {
 				$(BDFDB.dotCN.popout).has(BDFDB.dotCN.optionpopout).hide();
 				this.addMessageToNotes();
-				var popoutbutton = document.querySelector(BDFDB.dotCNS.optionpopoutbutton + BDFDB.dotCN.optionpopoutopen);
+				var popoutbutton = document.querySelector(BDFDB.dotCN.optionpopoutbutton + BDFDB.dotCN.optionpopoutopen);
 				if (popoutbutton) popoutbutton.classList.remove(BDFDB.disCN.optionpopoutopen);
 			});
 	}
@@ -455,6 +454,7 @@ class PersonalPins {
 					channelname = channelname + this.UserStore.getUser(dmmemberID).username;
 				}
 			}
+			var markup = this.message.div.querySelector(BDFDB.dotCN.messagecontent) || this.message.div.querySelector(BDFDB.dotCN.messagemarkup);
 			var message = {
 				"serverID": serverID,
 				"serverName": serverObj.name ? serverObj.name : "Direct Messages",
@@ -469,7 +469,7 @@ class PersonalPins {
 				"authorName": author.username,
 				"avatar": this.IconUtils.getUserAvatarURL(author),
 				"content": this.message.content,
-				"markup": this.message.div.querySelector(BDFDB.dotCN.messagemarkup).innerHTML,
+				"markup": markup.innerHTML,
 				"accessory": this.message.div.querySelector(BDFDB.dotCN.messageaccessory).innerHTML
 			};
 			pins[serverID][channelID][messageID + "_" + position] = message;

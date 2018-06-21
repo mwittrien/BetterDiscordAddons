@@ -414,7 +414,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				.on("click." + this.name, ".btn-item-personalpins", (e) => {
 					$(BDFDB.dotCN.popout).has(BDFDB.dotCN.optionpopout).hide();
 					this.addMessageToNotes();
-					var popoutbutton = document.querySelector(BDFDB.dotCNS.optionpopoutbutton + BDFDB.dotCN.optionpopoutopen);
+					var popoutbutton = document.querySelector(BDFDB.dotCN.optionpopoutbutton + BDFDB.dotCN.optionpopoutopen);
 					if (popoutbutton) popoutbutton.classList.remove(BDFDB.disCN.optionpopoutopen);
 				});
 		}
@@ -439,6 +439,7 @@ module.exports = (Plugin, Api, Vendor) => {
 						channelname = channelname + this.UserStore.getUser(dmmemberID).username;
 					}
 				}
+				var markup = this.message.div.querySelector(BDFDB.dotCN.messagecontent) || this.message.div.querySelector(BDFDB.dotCN.messagemarkup);
 				var message = {
 					"serverID": serverID,
 					"serverName": serverObj.name ? serverObj.name : "Direct Messages",
@@ -453,7 +454,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					"authorName": author.username,
 					"avatar": this.IconUtils.getUserAvatarURL(author),
 					"content": this.message.content,
-					"markup": this.message.div.querySelector(BDFDB.dotCN.messagemarkup).innerHTML,
+					"markup": markup.innerHTML,
 					"accessory": this.message.div.querySelector(BDFDB.dotCN.messageaccessory).innerHTML
 				};
 				pins[serverID][channelID][messageID + "_" + position] = message;
