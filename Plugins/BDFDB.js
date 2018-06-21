@@ -3949,10 +3949,14 @@ BDFDB.appendLocalStyle("BDFDB", `
 		filter: grayscale(70%) brightness(50%);
 	}
 
+	.DevilBro-modal .ui-color-picker-row {
+		width: 480px;
+	}
+	
 	.DevilBro-modal [class^="ui-color-picker-swatch"] {
 		cursor: pointer;
-		width: 21px;
-		height: 21px;
+		width: 22px;
+		height: 22px;
 		margin-bottom: 5px;
 		margin-top: 5px;
 		border: 4px solid transparent;
@@ -3964,8 +3968,8 @@ BDFDB.appendLocalStyle("BDFDB", `
 	}
 
 	.DevilBro-modal [class^="ui-color-picker-swatch"].large {
-		min-width: 60px;
-		height: 60px;
+		min-width: 62px;
+		height: 62px;
 		border-radius: 25px;
 	}
 
