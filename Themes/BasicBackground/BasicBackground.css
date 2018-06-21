@@ -133,6 +133,15 @@ button.guild {
 	background: rgba(var(--transparencycolor),calc(var(--transparencyalpha) * 3)) !important;
 }
 
+.paginationItem-3-MBTL:after {
+    background: -webkit-gradient(linear,right top,left top,from(transparent),to(rgba(var(--transparencycolor),calc(var(--transparencyalpha) * 3)))) !important;
+    background: linear-gradient(270deg,transparent 0,rgba(var(--transparencycolor),calc(var(--transparencyalpha) * 3))) !important;
+}
+
+.paginationItem-3-MBTL .splashArt-1anaP9 {
+	border-radius: 5px !important;
+}
+
 .bubble-3we2di,
 .container-2VW0UT {
 	background: rgba(var(--transparencycolor),0.8) !important;
