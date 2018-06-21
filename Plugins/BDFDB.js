@@ -3244,6 +3244,7 @@ BDFDB.DiscordClasses = {
 	messagebody: "body",
 	messagecomment: "comment",
 	messagecompact: "compact",
+	messagecontent: "message-content",
 	messageedited: "edited",
 	messagefirst: "first",
 	messagegroup: "message-group",
