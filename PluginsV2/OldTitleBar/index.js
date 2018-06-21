@@ -176,8 +176,15 @@ module.exports = (Plugin, Api, Vendor) => {
 		addTitleBar () {
 			this.removeTitleBar();
 			var settings = BDFDB.getAllData(this, "settings");
+			let activityfeed = document.querySelector(BDFDB.dotCN.activityfeed), container;
+			if (activityfeed) {
+				container = $(`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.flex2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifyend + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.channelheaderheaderbar} headerbarOTB" style="flex: 0 0 auto;"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.flex2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}" style="flex: 0 0 auto;"></div></div>`);
+				container.insertBefore(activityfeed.firstElementChild);
+				container = container.children().first();
+			}
+			container = container ? container : $(BDFDB.dotCN.channelheaderdivider).parent().has(BDFDB.dotCN.channelheadericoninactive);
 			if (settings.reloadButton) {
-				$(BDFDB.dotCN.channelheaderdivider).parent().has(BDFDB.dotCN.channelheadericoninactive)
+				container
 					.append(this.dividerMarkup)
 					.append(this.reloadButtonMarkup)
 					.on("click." + this.name, ".reloadButtonOTB", () => {
@@ -187,7 +194,7 @@ module.exports = (Plugin, Api, Vendor) => {
 						this.createReloadToolTip(e);
 					});
 			}
-			$(BDFDB.dotCN.channelheaderdivider).parent().has(BDFDB.dotCN.channelheadericoninactive)
+			container
 				.append(this.dividerMarkup)
 				.append(this.minButtonMarkup)
 				.append(require("electron").remote.getCurrentWindow().isMaximized() ? this.maxButtonIsMaxMarkup : this.maxButtonIsMinMarkup)
@@ -206,7 +213,7 @@ module.exports = (Plugin, Api, Vendor) => {
 		
 		addSettingsTitleBar (settingspane) {
 			if (!settingspane.querySelector(".dividerOTB, .reloadButtonOTB, .minButtonOTB, .maxButtonOTB, .closeButtonOTB")) {
-				var settingsbar = $(`<div class="settings-titlebar-OTB"></div>`);
+				var settingsbar = $(`<div class="settings-titlebar-OTB headerbarOTB"></div>`);
 				var settings = BDFDB.getAllData(this, "settings");
 				if (settings.reloadButton) {
 					settingsbar
@@ -275,7 +282,7 @@ module.exports = (Plugin, Api, Vendor) => {
 		}
 		
 		removeTitleBar () {
-			$(".settings-titlebar").remove();
+			$(".headerbarOTB").remove();
 			
 			$(BDFDB.dotCN.channelheaderdivider).parent().has(BDFDB.dotCN.channelheadericoninactive)
 				.off("click." + this.name)

@@ -69,7 +69,7 @@ class OldTitleBar {
 
 	getDescription () {return "Reverts the title bar back to its former self.";}
 
-	getVersion () {return "1.3.4";}
+	getVersion () {return "1.3.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -191,8 +191,15 @@ class OldTitleBar {
 	addTitleBar () {
 		this.removeTitleBar();
 		var settings = BDFDB.getAllData(this, "settings");
+		let activityfeed = document.querySelector(BDFDB.dotCN.activityfeed), container;
+		if (activityfeed) {
+			container = $(`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.flex2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifyend + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.channelheaderheaderbar} headerbarOTB" style="flex: 0 0 auto;"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.flex2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}" style="flex: 0 0 auto;"></div></div>`);
+			container.insertBefore(activityfeed.firstElementChild);
+			container = container.children().first();
+		}
+		container = container ? container : $(BDFDB.dotCN.channelheaderdivider).parent().has(BDFDB.dotCN.channelheadericoninactive);
 		if (settings.reloadButton) {
-			$(BDFDB.dotCN.channelheaderdivider).parent().has(BDFDB.dotCN.channelheadericoninactive)
+			container
 				.append(this.dividerMarkup)
 				.append(this.reloadButtonMarkup)
 				.on("click." + this.getName(), ".reloadButtonOTB", () => {
@@ -202,7 +209,7 @@ class OldTitleBar {
 					this.createReloadToolTip(e);
 				});
 		}
-		$(BDFDB.dotCN.channelheaderdivider).parent().has(BDFDB.dotCN.channelheadericoninactive)
+		container
 			.append(this.dividerMarkup)
 			.append(this.minButtonMarkup)
 			.append(require("electron").remote.getCurrentWindow().isMaximized() ? this.maxButtonIsMaxMarkup : this.maxButtonIsMinMarkup)
@@ -290,7 +297,7 @@ class OldTitleBar {
 	}
 	
 	removeTitleBar () {
-		$(".settings-titlebar").remove();
+		$(".headerbarOTB").remove();
 		
 		$(BDFDB.dotCN.channelheaderdivider).parent().has(BDFDB.dotCN.channelheadericoninactive)
 			.off("click." + this.getName())
