@@ -2883,7 +2883,7 @@ BDFDB.DiscordClasses = {
 	callavatar: "callAvatar-v-u4BM",
 	callavatarwrapper: "callAvatarWrapper-TICyxO",
 	callcontainer: "container-wrYOxa",
-	callcurrentcontainer: "private-channel-call",
+	callcurrentcontainer: "wrapper-29NfPK",
 	card: "card-3Qj_Yx",
 	cardbrand: "cardBrand-39zmMQ",
 	cardbrandoutline: "cardBrandOutline-3jvFfo",
