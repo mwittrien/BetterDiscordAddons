@@ -2794,6 +2794,7 @@ BDFDB.DiscordClasses = {
 	accountinfo: "container-2Thooq",
 	accountinfodetails: "accountDetails-3k9g4n",
 	accountinfousername: "username",
+	activityfeed: "activityFeed-28jde9",
 	alignbaseline: "alignBaseline-LAQbso",
 	aligncenter: "alignCenter-1dQNNs",
 	alignend: "alignEnd-1D6PQi",
