@@ -75,6 +75,10 @@
 .auth-brand,
 .authBox-hW6HRx,
 .date-picker-hint,
+.card-7JP0BX,
+.card-7JP0BX .header-1RC2Wb,
+.article-FleDq5,
+.news-2GDtLJ,
 .modal-3HD5ck,
 .modal-3HD5ck .header-1R_AjF,
 .modal-3HD5ck .footer-2yfCgX,
@@ -133,7 +137,6 @@ button.guild {
 .container-2VW0UT {
 	background: rgba(var(--transparencycolor),0.8) !important;
 }
-
 .bubble-3we2di:before {
 	border-top-color: rgba(var(--transparencycolor),0.8) !important;
 }
@@ -142,6 +145,7 @@ button.guild {
 	padding: 1px;
 }
 
+.headerText-2niCs_,
 .Select-control,
 .message-group-blocked,
 .input-cIJ7To:not(:focus),
@@ -296,6 +300,7 @@ input:disabled {
 	background-color: rgba(var(--transparencycolor),var(--transparencyalpha)) !important;
 }
 
+.partyMemberBackground-aSF9mc,
 .friends-action,
 .button-mM-y8i:hover,
 .guild.audio .guild-inner:after,
@@ -410,6 +415,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .friends-table,
 .friend-table-add-header,
 .tab-content > .ui-standard-sidebar-view,
+.activityFeed-28jde9,
 .chat .content,
 .chat,
 .chat form,
@@ -425,6 +431,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .action-buttons,
 .actionButtons-1sUUug,
 .wrapper-2NJDcI,
+.card-7JP0BX .body-SKIE6r,
 .autocomplete-header-background,
 .tutorial-popout section,
 .friend:not(:hover),
