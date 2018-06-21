@@ -3124,7 +3124,6 @@ BDFDB.DiscordClasses = {
 	friendscolumnnamewrap: "friends-column-name",
 	friendscolumnusername: "username",
 	friendsicon: {stable:"friends-icon",canary:"home-icon",ptb:"home-icon"},
-	friendsicon: "friends-icon",
 	friendsonline: "friends-online",
 	friendstabbar: "tab-bar",
 	friendstabbaritem: "tab-bar-item",
