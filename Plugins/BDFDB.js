@@ -3119,7 +3119,7 @@ BDFDB.DiscordClasses = {
 	flexchild: "flexChild-faoVW3",
 	formtext: "formText-3fs7AJ",
 	friends: "friends",
-	friendsbutton: "btn-friends",
+	friendsbutton: {stable:"btn-friends",canary:"btn-home",ptb:"btn-home"},
 	friendscolumn: "friends-column",
 	friendscolumnnamewrap: "friends-column-name",
 	friendscolumnusername: "username",
@@ -3521,7 +3521,7 @@ BDFDB.disCN = new Proxy(Object.create(null), {
 		if (BDFDB.DiscordClasses[arguments[1]] === undefined) {
 			throw new Error(arguments[1] + " not found in BDFDB.DiscordClasses");
 		}
-		return BDFDB.DiscordClasses[arguments[1]];
+		return (typeof BDFDB.DiscordClasses[arguments[1]] === "string" ? BDFDB.DiscordClasses[arguments[1]] : BDFDB.DiscordClasses[arguments[1]][BDFDB.getDiscordBuilt()]);
 	}
 });
 
@@ -3530,7 +3530,7 @@ BDFDB.disCNS = new Proxy(Object.create(null), {
 		if (BDFDB.DiscordClasses[arguments[1]] === undefined) {
 			throw new Error(arguments[1] + " not found in BDFDB.DiscordClasses");
 		}
-		return BDFDB.DiscordClasses[arguments[1]] + " ";
+		return (typeof BDFDB.DiscordClasses[arguments[1]] === "string" ? BDFDB.DiscordClasses[arguments[1]] : BDFDB.DiscordClasses[arguments[1]][BDFDB.getDiscordBuilt()]) + " ";
 	}
 });
 
@@ -3539,7 +3539,7 @@ BDFDB.disCNC = new Proxy(Object.create(null), {
 		if (BDFDB.DiscordClasses[arguments[1]] === undefined) {
 			throw new Error(arguments[1] + " not found in BDFDB.DiscordClasses");
 		}
-		return BDFDB.DiscordClasses[arguments[1]] + ",";
+		return (typeof BDFDB.DiscordClasses[arguments[1]] === "string" ? BDFDB.DiscordClasses[arguments[1]] : BDFDB.DiscordClasses[arguments[1]][BDFDB.getDiscordBuilt()]) + ",";
 	}
 });
 
@@ -3548,7 +3548,7 @@ BDFDB.dotCN = new Proxy(Object.create(null), {
 		if (BDFDB.DiscordClasses[arguments[1]] === undefined) {
 			throw new Error(arguments[1] + " not found in BDFDB.DiscordClasses");
 		}
-		return "." + BDFDB.DiscordClasses[arguments[1]];
+		return "." + (typeof BDFDB.DiscordClasses[arguments[1]] === "string" ? BDFDB.DiscordClasses[arguments[1]] : BDFDB.DiscordClasses[arguments[1]][BDFDB.getDiscordBuilt()]);
 	}
 });
 
@@ -3557,7 +3557,7 @@ BDFDB.dotCNS = new Proxy(Object.create(null), {
 		if (BDFDB.DiscordClasses[arguments[1]] === undefined) {
 			throw new Error(arguments[1] + " not found in BDFDB.DiscordClasses");
 		}
-		return "." + BDFDB.DiscordClasses[arguments[1]] + " ";
+		return "." + (typeof BDFDB.DiscordClasses[arguments[1]] === "string" ? BDFDB.DiscordClasses[arguments[1]] : BDFDB.DiscordClasses[arguments[1]][BDFDB.getDiscordBuilt()]) + " ";
 	}
 });
 
@@ -3566,7 +3566,7 @@ BDFDB.dotCNC = new Proxy(Object.create(null), {
 		if (BDFDB.DiscordClasses[arguments[1]] === undefined) {
 			throw new Error(arguments[1] + " not found in BDFDB.DiscordClasses");
 		}
-		return "." + BDFDB.DiscordClasses[arguments[1]] + ",";
+		return "." + (typeof BDFDB.DiscordClasses[arguments[1]] === "string" ? BDFDB.DiscordClasses[arguments[1]] : BDFDB.DiscordClasses[arguments[1]][BDFDB.getDiscordBuilt()]) + ",";
 	}
 });
 
@@ -3575,7 +3575,7 @@ BDFDB.idCN = new Proxy(Object.create(null), {
 		if (BDFDB.DiscordClasses[arguments[1]] === undefined) {
 			throw new Error(arguments[1] + " not found in BDFDB.DiscordClasses");
 		}
-		return "#" + BDFDB.DiscordClasses[arguments[1]];
+		return "#" + (typeof BDFDB.DiscordClasses[arguments[1]] === "string" ? BDFDB.DiscordClasses[arguments[1]] : BDFDB.DiscordClasses[arguments[1]][BDFDB.getDiscordBuilt()]);
 	}
 });
 
@@ -3584,7 +3584,7 @@ BDFDB.idCNS = new Proxy(Object.create(null), {
 		if (BDFDB.DiscordClasses[arguments[1]] === undefined) {
 			throw new Error(arguments[1] + " not found in BDFDB.DiscordClasses");
 		}
-		return "#" + BDFDB.DiscordClasses[arguments[1]] + " ";
+		return "#" + (typeof BDFDB.DiscordClasses[arguments[1]] === "string" ? BDFDB.DiscordClasses[arguments[1]] : BDFDB.DiscordClasses[arguments[1]][BDFDB.getDiscordBuilt()]) + " ";
 	}
 });
 
@@ -3593,7 +3593,7 @@ BDFDB.idCNC = new Proxy(Object.create(null), {
 		if (BDFDB.DiscordClasses[arguments[1]] === undefined) {
 			throw new Error(arguments[1] + " not found in BDFDB.DiscordClasses");
 		}
-		return "#" + BDFDB.DiscordClasses[arguments[1]] + ",";
+		return "#" + (typeof BDFDB.DiscordClasses[arguments[1]] === "string" ? BDFDB.DiscordClasses[arguments[1]] : BDFDB.DiscordClasses[arguments[1]][BDFDB.getDiscordBuilt()]) + ",";
 	}
 });
 
