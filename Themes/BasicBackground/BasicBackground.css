@@ -274,7 +274,7 @@ input:disabled {
 .message-group.compact .comment {
 	padding: 0 !important;
 }
-.message-group .avatar-large:after {
+.message-group .avatar-large[style*="background-image"]:after {
 	content: "";
 	position: relative;
 	float: left;
