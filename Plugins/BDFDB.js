@@ -3282,6 +3282,7 @@ BDFDB.DiscordClasses = {
 	messagespopoutvisible: "visible-1PE5Ym",
 	messagespopoutwrap: "messagesPopoutWrap-1MQ1bW",
 	messagesystem: "system-message",
+	messagesystemicon: "icon-2Po-VO",
 	messagetext: "message-text",
 	messagetimestamp: "timestamp",
 	messageuploadcancel: "cancelButton-3hVEV6",
