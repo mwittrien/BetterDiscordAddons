@@ -15,7 +15,7 @@ class ChatAliases {
 
 	getDescription () {return "Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent.";}
 
-	getVersion () {return "1.8.8";}
+	getVersion () {return "1.8.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -301,27 +301,45 @@ class ChatAliases {
 			})
 			.off("keydown." + this.getName())
 			.on("keydown." + this.getName(), e => {
-				if (e.which == 9) {
-					let selectedChatAlias = textarea.parentElement.querySelector(".autocompleteAliasesRow " + BDFDB.dotCN.autocompleteselected)
-					if (selectedChatAlias) {
+				let autocompletemenu = textarea.parentElement.querySelector(BDFDB.dotCN.autocomplete);
+				if ((e.which == 9 || e.which == 13) && autocompletemenu) {
+					if (autocompletemenu.querySelector(BDFDB.dotCN.autocompleteselected).parentElement.classList.contains("autocompleteAliasesRow")) {
 						e.preventDefault();
 						e.stopPropagation();
-						this.swapWordWithAlias(textarea);
+						this.swapWordWithAlias(textarea); 
 					}
 				}
-				else if (!e.ctrlKey && e.which != 38 && e.which != 40) {
-					if (!(e.which == 39 && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length)) {
-						$(".autocompleteAliases, .autocompleteAliasesRow").remove();
+				else if ((e.which == 38 || e.which == 40) && autocompletemenu) {
+					let autocompleteitems = autocompletemenu.querySelectorAll(BDFDB.dotCN.autocompleteselectable + ":not(.autocompleteAliasesSelector)");
+					let selected = autocompletemenu.querySelector(BDFDB.dotCN.autocompleteselected);
+					if (selected.classList.contains("autocompleteAliasesSelector") || autocompleteitems[e.which == 38 ? 0 : (autocompleteitems.length-1)] == selected) {
+						e.preventDefault();
+						e.stopPropagation();
+						let next = this.getNextSelection(autocompletemenu, null, e.which == 38 ? false : true);
+						selected.classList.remove(BDFDB.disCN.autocompleteselected);
+						next.classList.add(BDFDB.disCN.autocompleteselected);
+						if (!next.classList.contains("autocompleteAliasesSelector")) {
+							// if next element is a default discord autocomplete item, trigger the keypress again so the item is internally selected
+							var press = new KeyboardEvent("keypress", e);
+							Object.defineProperty(press, "keyCode", {value: e.which});
+							Object.defineProperty(press, "which", {value: e.which});
+							textarea.dispatchEvent(press);
+						}
 					}
 				}
-				
-				if (textarea.value && !e.shiftKey && e.which == 13 && !textarea.parentElement.querySelector(BDFDB.dotCN.autocomplete)) {
+				else if (textarea.value && !e.shiftKey && e.which == 13 && !autocompletemenu && textarea.value.indexOf("s/") != 0) {
 					this.format = true;
 					$(textarea).trigger("input");
 				}
 				else if (!e.ctrlKey && settings.addAutoComplete && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length) {
 					clearTimeout(textarea.chataliastimeout);
 					textarea.chataliastimeout = setTimeout(() => {this.addAutoCompleteMenu(textarea);},100);
+				}
+				
+				if (!e.ctrlKey && e.which != 38 && e.which != 40) {
+					if (!(e.which == 39 && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length)) {
+						$(".autocompleteAliases, .autocompleteAliasesRow").remove();
+					}
 				}
 			})
 			.off("click." + this.getName())
@@ -372,7 +390,7 @@ class ChatAliases {
 				}
 				
 				$(autocompletemenu)
-					.append(`<div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteAliasesRow"><div class="${BDFDB.disCN.autocompleteselector}"><div class="${BDFDB.disCNS.autocompletecontenttitle + BDFDB.disCNS.small + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCN.weightsemibold}">Aliases: <strong class="lastword">${BDFDB.encodeToHTML(lastword)}</strong></div></div></div>`)
+					.append(`<div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteAliasesRow"><div class="${BDFDB.disCN.autocompleteselector} autocompleteAliasesSelector"><div class="${BDFDB.disCNS.autocompletecontenttitle + BDFDB.disCNS.small + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCN.weightsemibold}">Aliases: <strong class="lastword">${BDFDB.encodeToHTML(lastword)}</strong></div></div></div>`)
 					.off("mouseenter." + this.getName()).on("mouseenter." + this.getName(), BDFDB.dotCN.autocompleteselectable, (e) => {
 						autocompletemenu.querySelectorAll(BDFDB.dotCN.autocompleteselected).forEach(selected => {selected.classList.remove(BDFDB.disCN.autocompleteselected);});
 						e.currentTarget.classList.add(BDFDB.disCN.autocompleteselected);
@@ -380,7 +398,7 @@ class ChatAliases {
 					
 				for (let alias in matchedaliases) {
 					if (amount-- < 1) break;
-					$(`<div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteAliasesRow"><div class="${BDFDB.disCNS.autocompleteselector + BDFDB.disCN.autocompleteselectable}"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.autocompletecontent}" style="flex: 1 1 auto;"><div class="${BDFDB.disCN.flexchild} aliasword" style="flex: 1 1 auto;">${BDFDB.encodeToHTML(alias)}</div><div class="${BDFDB.disCNS.autocompletedescription + BDFDB.disCN.flexchild}">${BDFDB.encodeToHTML(matchedaliases[alias].replace)}</div></div></div></div>`)
+					$(`<div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteAliasesRow"><div class="${BDFDB.disCNS.autocompleteselector + BDFDB.disCN.autocompleteselectable} autocompleteAliasesSelector"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.autocompletecontent}" style="flex: 1 1 auto;"><div class="${BDFDB.disCN.flexchild} aliasword" style="flex: 1 1 auto;">${BDFDB.encodeToHTML(alias)}</div><div class="${BDFDB.disCNS.autocompletedescription + BDFDB.disCN.flexchild}">${BDFDB.encodeToHTML(matchedaliases[alias].replace)}</div></div></div></div>`)
 						.appendTo(autocompletemenu)
 						.off("click." + this.getName()).on("click." + this.getName(), BDFDB.dotCN.autocompleteselectable, (e) => {
 							this.swapWordWithAlias(textarea);
@@ -393,12 +411,25 @@ class ChatAliases {
 		}
 	}
 	
+	getNextSelection (menu, selected, forward) {
+		selected = selected ? selected : menu.querySelector(BDFDB.dotCN.autocompleteselected).parentElement;
+		let next, sibling = forward ? selected.nextElementSibling : selected.previousElementSibling;
+		if (sibling) {
+			next = sibling.querySelector(BDFDB.dotCN.autocompleteselectable);
+		}
+		else {
+			let items = menu.querySelectorAll(BDFDB.dotCN.autocompleteselectable);
+			next = forward ? items[0] : items[items.length-1]; 
+		}
+		return next ? next : this.getNextSelection(menu, sibling, forward);
+	}
+	
 	swapWordWithAlias (textarea) {
 		let aliasword = textarea.parentElement.querySelector(".autocompleteAliasesRow " + BDFDB.dotCN.autocompleteselected + " .aliasword").innerText;
 		let lastword = textarea.parentElement.querySelector(".autocompleteAliasesRow .lastword").innerText;
 		if (aliasword && lastword) {
 			$(".autocompleteAliases, .autocompleteAliasesRow").remove();
-			textarea.focus();
+			textarea.focus(); 
 			textarea.selectionStart = textarea.value.length - lastword.length;
 			textarea.selectionEnd = textarea.value.length;
 			document.execCommand("insertText", false, aliasword);
