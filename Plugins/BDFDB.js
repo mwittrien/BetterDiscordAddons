@@ -2835,6 +2835,7 @@ BDFDB.DiscordClasses = {
 	avatarsmallold: "avatar-small",
 	avatarnoicon: "noIcon-1a_FrS",
 	avatarverifiedicon: "verifiedIcon-2TCIsJ",
+	avatarwrapper: "wrapper-2F3Zv8",
 	backdrop: "backdrop-1ocfXc",
 	badge: "badge",
 	bubble: "bubble-3we2di",
