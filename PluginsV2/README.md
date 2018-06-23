@@ -1,6 +1,7 @@
 These Plugins are meant only for BDv2, not BD nor BandagedBD. If you got either of those two go to [Plugins](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/).
 
 ## Plugins
+ - [BadgesEverywhere](https://github.com/mwittrien/BetterDiscordAddons/tree/master/PluginsV2/BadgesEverywhere) - Displays Badges (Nitro, Hypesquad, etc...) in the chat/memberlist/userpopout. Thanks for Zerebos' help.
  - [Better Friend Count](https://github.com/mwittrien/BetterDiscordAddons/tree/master/PluginsV2/BetterFriendCount) - Shows the amount of total and online friends and blocked users in the friends tab.
  - [Better NSFW Tag](https://github.com/mwittrien/BetterDiscordAddons/tree/master/PluginsV2/BetterNsfwTag) - Adds a more noticeable tag to NSFW channels.
  - [Char Counter](https://github.com/mwittrien/BetterDiscordAddons/tree/master/PluginsV2/CharCounter) - Adds a character counter to the chat.
