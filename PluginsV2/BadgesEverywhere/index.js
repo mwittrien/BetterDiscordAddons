@@ -95,7 +95,7 @@ module.exports = (Plugin, Api, Vendor) => {
 						}
 					);
 				});
-				BDFDB.addObserver(this, BDFDB.dotCN.members, {name:"userListObserver",instance:observer}, {childList:true});
+				BDFDB.addObserver(this, BDFDB.dotCN.memberswrap, {name:"userListObserver",instance:observer}, {childList:true, subtree:true});
 				
 				observer = new MutationObserver((changes, _) => {
 					changes.forEach(
@@ -175,7 +175,7 @@ module.exports = (Plugin, Api, Vendor) => {
 		
 		onSwitch () {
 			if (typeof BDFDB === "object") {
-				BDFDB.addObserver(this, BDFDB.dotCN.members, {name:"userListObserver"}, {childList:true});
+				BDFDB.addObserver(this, BDFDB.dotCN.memberswrap, {name:"userListObserver"}, {childList:true, subtree:true});
 				BDFDB.addObserver(this, BDFDB.dotCN.messages, {name:"chatWindowObserver"}, {childList:true, subtree:true});
 				this.loadBadges();
 			}

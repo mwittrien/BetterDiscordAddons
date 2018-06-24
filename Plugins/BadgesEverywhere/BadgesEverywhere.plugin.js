@@ -57,7 +57,7 @@ class BadgesEverywhere {
 
 	getDescription () {return "Displays Badges (Nitro, HypeSquad, etc...) in the chat/memberlist/userpopout. Thanks for Zerebos' help.";}
 
-	getVersion () {return "1.0.1";}
+	getVersion () {return "1.0.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -121,7 +121,7 @@ class BadgesEverywhere {
 					}
 				);
 			});
-			BDFDB.addObserver(this, BDFDB.dotCN.members, {name:"userListObserver",instance:observer}, {childList:true});
+			BDFDB.addObserver(this, BDFDB.dotCN.memberswrap, {name:"userListObserver",instance:observer}, {childList:true, subtree:true});
 			
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -209,7 +209,7 @@ class BadgesEverywhere {
 	
 	onSwitch () {
 		if (typeof BDFDB === "object") {
-			BDFDB.addObserver(this, BDFDB.dotCN.members, {name:"userListObserver"}, {childList:true});
+			BDFDB.addObserver(this, BDFDB.dotCN.memberswrap, {name:"userListObserver"}, {childList:true, subtree:true});
 			BDFDB.addObserver(this, BDFDB.dotCN.messages, {name:"chatWindowObserver"}, {childList:true, subtree:true});
 			this.loadBadges();
 		}
