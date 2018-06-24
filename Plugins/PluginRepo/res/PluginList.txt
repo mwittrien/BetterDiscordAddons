@@ -35,6 +35,7 @@ https://raw.githubusercontent.com/Hyperbot-one/hideServersChannels-plugin/master
 https://raw.githubusercontent.com/Hyperbot-one/showEmojiServer-plugin/master/showEmojiServer.plugin.js
 https://raw.githubusercontent.com/intrnl/discordextensions/master/NativeTitlebarPatcher/NativeTitlebarPatcher.plugin.js
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/autocompleteHoverFix.plugin.js
+https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/AvatarHover.plugin.js
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/botInfo.plugin.js
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/channelHistory.plugin.js
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/charCounter.plugin.js
