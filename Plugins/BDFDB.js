@@ -3445,6 +3445,7 @@ BDFDB.DiscordClasses = {
 	statusoffline: "offline-3qoTek",
 	statusonline: "online-2S838R",
 	status: "status-oxiHuE",
+	statusold: "status",
 	statusprofile: "statusProfile-3ynqtt",
 	statusstreaming: "streaming-2_dnHe",
 	statustyping: "typing-1KJk_j",

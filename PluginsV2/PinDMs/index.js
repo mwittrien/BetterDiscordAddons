@@ -17,9 +17,10 @@ module.exports = (Plugin, Api, Vendor) => {
 			this.pinnedDMMarkup =
 				`<div class="${BDFDB.disCNS.dmchannel + BDFDB.disCN.dmchannelprivate} pinned" style="height: 42px; opacity: 1;">
 					<a>
-						<div class="${BDFDB.disCN.avatarsmallold}">
-							<div class="${BDFDB.disCN.status}"></div>
-						</div>
+						<div class="${BDFDB.disCNS.avatarwrapper + BDFDB.disCNS.avatarsmall + BDFDB.disCNS.forcedarktheme + BDFDB.disCN.avatarsmallold}">
+							<div class="${BDFDB.disCN.avatarsmallold} stop-animation"></div>
+							<div class="${BDFDB.disCNS.status + BDFDB.disCNS.statusold + BDFDB.disCN.avatarsmall}"></div>
+						</div> 
 						<div class="${BDFDB.disCN.dmchannelname}">
 							<label style="cursor: pointer;"></label>
 							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.dmchannelactivity}" style="flex: 1 1 auto;">
@@ -215,8 +216,8 @@ module.exports = (Plugin, Api, Vendor) => {
 				if (user) {
 					let data = BDFDB.loadData(user.id, "EditUsers", "users") || {};
 					let activity = this.ActivityStore.getActivity(user.id);
-					pinnedDM.querySelector(BDFDB.dotCN.avatarsmallold).style.backgroundImage = `url(${data.removeIcon ? "" : (data.url ? data.url : BDFDB.getUserAvatar(user.id))})`;
-					pinnedDM.querySelector(BDFDB.dotCN.status).className = `status status-${BDFDB.getUserStatus(user.id)}`;
+					pinnedDM.querySelector(BDFDB.dotCN.avatarsmallold + ":not(" + BDFDB.dotCN.avatarwrapper + ")").style.backgroundImage = `url(${data.removeIcon ? "" : (data.url ? data.url : BDFDB.getUserAvatar(user.id))})`; 
+					pinnedDM.querySelector(BDFDB.dotCN.status).classList.add(BDFDB.disCN[`status${BDFDB.getUserStatus(user.id)}`]);
 					pinnedDM.querySelector(BDFDB.dotCN.dmchannelname + " > label").textContent = data.name ? data.name : user.username;
 					pinnedDM.querySelector(BDFDB.dotCN.dmchannelname).style.color = data.color1 ? BDFDB.color2RGB(data.color1) : "";
 					pinnedDM.querySelector(BDFDB.dotCN.dmchannelname).style.background = data.color2 ? BDFDB.color2RGB(data.color2) : "";
@@ -230,7 +231,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					id = pinnedDM.getAttribute("channel-id")
 					let channel = this.ChannelStore.getChannel(id);
 					if (channel) {
-						pinnedDM.querySelector(BDFDB.dotCN.avatarsmallold).style.backgroundImage = `url(${BDFDB.getChannelAvatar(channel.id)})`;
+						pinnedDM.querySelector(BDFDB.dotCN.avatarsmallold + ":not(" + BDFDB.dotCN.avatarwrapper + ")").style.backgroundImage = `url(${BDFDB.getChannelAvatar(channel.id)})`;
 						var channelname = channel.name;
 						if (!channelname && channel.recipients.length > 0) {
 							for (let dmmemberID of channel.recipients) {

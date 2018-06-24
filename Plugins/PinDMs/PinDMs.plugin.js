@@ -14,9 +14,10 @@ class PinDMs {
 		this.pinnedDMMarkup =
 			`<div class="${BDFDB.disCNS.dmchannel + BDFDB.disCN.dmchannelprivate} pinned" style="height: 42px; opacity: 1;">
 				<a>
-					<div class="${BDFDB.disCN.avatarsmallold}">
-						<div class="${BDFDB.disCN.status}"></div>
-					</div>
+					<div class="${BDFDB.disCNS.avatarwrapper + BDFDB.disCNS.avatarsmall + BDFDB.disCNS.forcedarktheme + BDFDB.disCN.avatarsmallold}">
+						<div class="${BDFDB.disCN.avatarsmallold} stop-animation"></div>
+						<div class="${BDFDB.disCNS.status + BDFDB.disCNS.statusold + BDFDB.disCN.avatarsmall}"></div>
+					</div> 
 					<div class="${BDFDB.disCN.dmchannelname}">
 						<label style="cursor: pointer;"></label>
 						<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.dmchannelactivity}" style="flex: 1 1 auto;">
@@ -37,21 +38,16 @@ class PinDMs {
 
 	getDescription () {return "Allows you to pin DMs, making them appear at the top of your DM-list.";}
 
-	getVersion () {return "1.0.7";}
+	getVersion () {return "1.0.8";}
 
 	getAuthor () {return "DevilBro";}
-	
-	getSettingsPanel () {
-		if (!this.started || typeof BDFDB !== "object") return;
-	}
 
 	//legacy
 	load () {}
 
 	start () {
 		var libraryScript = null;
-		if (typeof BDFDB !== "object" || BDFDB.isLibraryOutdated()) {
-			if (typeof BDFDB === "object") BDFDB = "";
+		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
 			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
@@ -60,7 +56,7 @@ class PinDMs {
 			document.head.appendChild(libraryScript);
 		}
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object") this.initialize();
+		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
 		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
@@ -220,8 +216,8 @@ class PinDMs {
 			if (user) {
 				let data = BDFDB.loadData(user.id, "EditUsers", "users") || {};
 				let activity = this.ActivityStore.getActivity(user.id);
-				pinnedDM.querySelector(BDFDB.dotCN.avatarsmallold).style.backgroundImage = `url(${data.removeIcon ? "" : (data.url ? data.url : BDFDB.getUserAvatar(user.id))})`;
-				pinnedDM.querySelector(BDFDB.dotCN.status).className = `status status-${BDFDB.getUserStatus(user.id)}`;
+				pinnedDM.querySelector(BDFDB.dotCN.avatarsmallold + ":not(" + BDFDB.dotCN.avatarwrapper + ")").style.backgroundImage = `url(${data.removeIcon ? "" : (data.url ? data.url : BDFDB.getUserAvatar(user.id))})`; 
+				pinnedDM.querySelector(BDFDB.dotCN.status).classList.add(BDFDB.disCN[`status${BDFDB.getUserStatus(user.id)}`]);
 				pinnedDM.querySelector(BDFDB.dotCN.dmchannelname + " > label").textContent = data.name ? data.name : user.username;
 				pinnedDM.querySelector(BDFDB.dotCN.dmchannelname).style.color = data.color1 ? BDFDB.color2RGB(data.color1) : "";
 				pinnedDM.querySelector(BDFDB.dotCN.dmchannelname).style.background = data.color2 ? BDFDB.color2RGB(data.color2) : "";
@@ -235,7 +231,7 @@ class PinDMs {
 				id = pinnedDM.getAttribute("channel-id")
 				let channel = this.ChannelStore.getChannel(id);
 				if (channel) {
-					pinnedDM.querySelector(BDFDB.dotCN.avatarsmallold).style.backgroundImage = `url(${BDFDB.getChannelAvatar(channel.id)})`;
+					pinnedDM.querySelector(BDFDB.dotCN.avatarsmallold + ":not(" + BDFDB.dotCN.avatarwrapper + ")").style.backgroundImage = `url(${BDFDB.getChannelAvatar(channel.id)})`;
 					var channelname = channel.name;
 					if (!channelname && channel.recipients.length > 0) {
 						for (let dmmemberID of channel.recipients) {
