@@ -41,6 +41,7 @@ class DisplayServersAsChannels {
 			${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild},
 			${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildinner},
 			${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildinner} a,
+			${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCNS.guildinner + BDFDB.dotCN.avataricon},
 			${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildserror}	{
 				margin-left: 0px;
 				height: 32px;
@@ -107,10 +108,10 @@ class DisplayServersAsChannels {
 			${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild + BDFDB.dotCNS.guildvideo + BDFDB.dotCN.guildinner}:after {
 				display: none !important;
 			}
-			.bd-minimal ${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildinner} a {
+			.bd-minimal ${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.avataricon} {
 				font-size: 14px !important;
 			}
-			${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildinner} a {
+			${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.avataricon} {
 				background: transparent !important;
 				font-size: 16px !important;
 				line-height: 32px;
@@ -126,7 +127,7 @@ class DisplayServersAsChannels {
 				left: 0;
 				top: 4px;
 			}
-			${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildinner} .DSAC-verification-badge + a {
+			${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildinner} .DSAC-verification-badge + ${BDFDB.dotCN.avataricon} {
 				left: 25px;
 			}
 			${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildserror} {
@@ -150,7 +151,7 @@ class DisplayServersAsChannels {
 
 	getDescription () {return "Display servers in a similar way as channels.";}
 
-	getVersion () {return "1.0.9";}
+	getVersion () {return "1.1.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -159,8 +160,7 @@ class DisplayServersAsChannels {
 
 	start () {
 		var libraryScript = null;
-		if (typeof BDFDB !== "object" || BDFDB.isLibraryOutdated()) {
-			if (typeof BDFDB === "object") BDFDB = "";
+		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
 			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
@@ -169,7 +169,7 @@ class DisplayServersAsChannels {
 			document.head.appendChild(libraryScript);
 		}
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object") this.initialize();
+		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
 		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
@@ -196,7 +196,7 @@ class DisplayServersAsChannels {
 					}
 				);
 			});
-			BDFDB.addObserver(this, BDFDB.dotCN.guilds, {name:"serverListObserver",instance:observer}, {childList: true, subtree:true, attributes:true, attributeFilte: ["class", "draggable"], attributeOldValue: true});
+			BDFDB.addObserver(this, BDFDB.dotCN.guilds, {name:"serverListObserver",instance:observer}, {childList: true, subtree:true, attributes:true, attributeFilter: ["class", "draggable"], attributeOldValue: true});
 			
 			BDFDB.readServerList().forEach(serverObj => {
 				this.changeServer(serverObj);
@@ -225,7 +225,7 @@ class DisplayServersAsChannels {
 
 	changeServer (serverObj) {
 		if (!serverObj) return;
-		var avatar = serverObj.div.querySelector("a");
+		var avatar = serverObj.div.querySelector(BDFDB.dotCN.avataricon);
 		if (avatar) {
 			avatar.DSAColdName = avatar.textContent;
 			avatar.textContent = serverObj.name;
@@ -243,7 +243,7 @@ class DisplayServersAsChannels {
 
 	resetServer (serverObj) {
 		if (!serverObj) return;
-		var avatar = serverObj.div.querySelector("a");
+		var avatar = serverObj.div.querySelector(BDFDB.dotCN.avataricon);
 		if (avatar) {
 			avatar.textContent = avatar.DSAColdName;
 			$(serverObj.div).off("." + this.getName()).find(".DSAC-verification-badge").remove();
