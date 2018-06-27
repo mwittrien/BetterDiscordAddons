@@ -78,11 +78,11 @@ class PersonalPins {
 		
 		this.optionsPopoutMarkup = 
 			`<div class="${BDFDB.disCNS.popout + BDFDB.disCNS.popoutbottom + BDFDB.disCN.popoutnoarrow} popout-personalpins-options" style="z-index: 1000; visibility: visible;">
-				<div class="${BDFDB.disCN.optionpopout + BDFDB.disCN.optionpopoutsmallbox}"></div
+				<div class="${BDFDB.disCN.optionpopout}"></div
 			</div>`;
 			
 		this.popoutEntryMarkup = 
-			`<div class="${BDFDB.disCN.optionpopoutitem} btn-item-personalpins">REPLACE_popout_noteoption_text</div>`;
+			`<div class="${BDFDB.disCNS.optionpopoutitem + BDFDB.disCN.weightmedium} btn-item-personalpins">REPLACE_popout_noteoption_text</div>`;
 			
 		this.messageMarkup = 
 			`<div class="${BDFDB.disCNS.messagegroup + BDFDB.disCN.messagehideoverflow}">
@@ -116,7 +116,7 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.5.6";}
+	getVersion () {return "1.5.7";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -439,6 +439,8 @@ class PersonalPins {
 		var channelObj = BDFDB.getSelectedChannel();
 		var serverObj = BDFDB.getSelectedServer() || {};
 		if (this.message && channelObj) {
+			var markup = this.message.div.querySelector(BDFDB.dotCN.messagecontent) || this.message.div.querySelector(BDFDB.dotCN.messagemarkup);
+			if (!markup) return;
 			var author = this.message.author;
 			var channelID = channelObj.id;
 			var serverID = serverObj.id ? serverObj.id : "@me";
@@ -454,7 +456,6 @@ class PersonalPins {
 					channelname = channelname + this.UserStore.getUser(dmmemberID).username;
 				}
 			}
-			var markup = this.message.div.querySelector(BDFDB.dotCN.messagecontent) || this.message.div.querySelector(BDFDB.dotCN.messagemarkup);
 			var message = {
 				"serverID": serverID,
 				"serverName": serverObj.name ? serverObj.name : "Direct Messages",

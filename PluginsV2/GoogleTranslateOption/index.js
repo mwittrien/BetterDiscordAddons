@@ -48,11 +48,11 @@ module.exports = (Plugin, Api, Vendor) => {
 			
 			this.optionsPopoutMarkup = 
 				`<div class="${BDFDB.disCNS.popout + BDFDB.disCNS.popoutbottom + BDFDB.disCN.popoutnoarrow} popout-googletranslateoption-options" style="z-index: 1000; visibility: visible;">
-					<div class="${BDFDB.disCN.optionpopout + BDFDB.disCN.optionpopoutsmallbox}"></div
+					<div class="${BDFDB.disCN.optionpopout}"></div
 				</div>`;
 				
 			this.popoutEntryMarkup = 
-				`<div class="${BDFDB.disCN.optionpopoutitem} btn-item-googletranslateoption">REPLACE_popout_translateoption_text</div>`;
+				`<div class="${BDFDB.disCNS.optionpopoutitem + BDFDB.disCN.weightmedium} btn-item-googletranslateoption">REPLACE_popout_translateoption_text</div>`;
 				
 			this.translateButtonMarkup = 
 				`<svg version="1.1" xmlns="http://www.w3.org/2000/svg" class="translate-button" width="22" height="30" fill="currentColor">

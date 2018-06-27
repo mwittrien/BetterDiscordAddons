@@ -81,11 +81,11 @@ module.exports = (Plugin, Api, Vendor) => {
 			
 			this.optionsPopoutMarkup = 
 				`<div class="${BDFDB.disCNS.popout + BDFDB.disCNS.popoutbottom + BDFDB.disCN.popoutnoarrow} popout-personalpins-options" style="z-index: 1000; visibility: visible;">
-					<div class="${BDFDB.disCN.optionpopout + BDFDB.disCN.optionpopoutsmallbox}"></div
+					<div class="${BDFDB.disCN.optionpopout}"></div
 				</div>`;
 				
 			this.popoutEntryMarkup = 
-				`<div class="${BDFDB.disCN.optionpopoutitem} btn-item-personalpins">REPLACE_popout_noteoption_text</div>`;
+				`<div class="${BDFDB.disCNS.optionpopoutitem + BDFDB.disCN.weightmedium} btn-item-personalpins">REPLACE_popout_noteoption_text</div>`;
 				
 			this.messageMarkup = 
 				`<div class="${BDFDB.disCNS.messagegroup + BDFDB.disCN.messagehideoverflow}">
