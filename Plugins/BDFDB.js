@@ -2846,7 +2846,7 @@ BDFDB.DiscordClasses = {
 	avatarxlarge: "xlarge-2z2DtB",
 	avatarxsmall: "xsmall-3afG_L",
 	avatarxxlarge: "xxlarge-1R_NA5",
-	backdrop: "backdrop-1ocfXc",
+	backdrop: "backdrop-1wrmKB",
 	badge: "badge",
 	bubble: "bubble-3we2di",
 	button: "button-38aScr",

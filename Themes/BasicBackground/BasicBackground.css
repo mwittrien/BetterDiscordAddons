@@ -17,7 +17,7 @@
 }
 
 .uploadArea-3QgLtW,
-.backdrop-1ocfXc {
+.backdrop-1wrmKB {
 	background: var(--backdrop) center/cover !important;
 	opacity: 1 !important;
 	animation: none !important;
@@ -356,7 +356,7 @@ input:disabled {
 }
 
 .container-16j22k:after,
-.backdrop-1ocfXc:after {
+.backdrop-1wrmKB:after {
 	content: "";
 	pointer-events: none !important;
 	position: absolute;
@@ -2689,7 +2689,7 @@ html, span:not(.spinner-item) {
 /* oldtitlebar */
 .hidden-by-OTB ~ * .bd-modal-close-area:after,
 .hidden-by-OTB ~ * .container-16j22k:after,
-.hidden-by-OTB ~ * .backdrop-1ocfXc:after {
+.hidden-by-OTB ~ * .backdrop-1wrmKB:after {
 	top: 0 !important;
 }
 .hidden-by-OTB ~ * .splashBackground-1FRCko:before {
