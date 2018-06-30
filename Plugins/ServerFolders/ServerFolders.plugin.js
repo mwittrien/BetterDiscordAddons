@@ -83,7 +83,6 @@ class ServerFolders {
 				position: absolute;
 				top: 0px;
 				left: 0px;
-				z-index: 1000;
 			}
 			
 			.foldercontainer::-webkit-scrollbar {
@@ -332,7 +331,7 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.7.0";}
+	getVersion () {return "5.7.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -1165,10 +1164,12 @@ class ServerFolders {
 									overflow-y: scroll !important;
 								}
 								
-								${BDFDB.dotCN.guildswrapper}.folderopen,
-								${BDFDB.dotCN.guildswrapper}.folderopen ${BDFDB.dotCN.scrollerwrapold},
-								${BDFDB.dotCN.guildswrapper}.folderopen ${BDFDB.dotCN.guilds}{
+								${BDFDB.dotCN.guildswrapper}.folderopen {
 									overflow: visible !important;
+									width: ${guildswrapper.outerWidth() + (guildswrapper.outerWidth() / columnamount)}px !important;
+								}
+								${BDFDB.dotCN.guildswrapper}.folderopen ${BDFDB.dotCN.scrollerwrapold},
+								${BDFDB.dotCN.guildswrapper}.folderopen ${BDFDB.dotCN.guilds} {
 									width: ${guildswrapper.outerWidth() + (guildswrapper.outerWidth() / columnamount)}px !important;
 								}`;
 						}
@@ -1186,10 +1187,13 @@ class ServerFolders {
 									overflow-y: hidden !important;
 								}
 								
-								${BDFDB.dotCN.guildswrapper}.folderopen,
+								${BDFDB.dotCN.guildswrapper}.folderopen {
+									overflow: visible !important;
+									height: ${guildswrapper.outerouterHeightWidth() + (guildswrapper.outerHeight() / rowamount)}px !important;
+								}
+								
 								${BDFDB.dotCN.guildswrapper}.folderopen ${BDFDB.dotCN.scrollerwrapold},
 								${BDFDB.dotCN.guildswrapper}.folderopen ${BDFDB.dotCN.guilds} {
-									overflow: visible !important;
 									height: ${guildswrapper.outerouterHeightWidth() + (guildswrapper.outerHeight() / rowamount)}px !important;
 								}`;
 						}

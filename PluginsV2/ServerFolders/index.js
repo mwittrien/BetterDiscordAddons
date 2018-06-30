@@ -62,7 +62,6 @@ module.exports = (Plugin, Api, Vendor) => {
 					opacity: 0.5;
 					width: 50px;
 					height: 50px;
-					z-index: 1000;
 				}
 				
 				${BDFDB.dotCN.guild}.serverFoldersPreview ${BDFDB.dotCN.badge} {
@@ -1138,6 +1137,10 @@ module.exports = (Plugin, Api, Vendor) => {
 									${BDFDB.dotCN.guildswrapper}.folderopen {
 										overflow: visible !important;
 										width: ${guildswrapper.outerWidth() + (guildswrapper.outerWidth() / columnamount)}px !important;
+									}
+									${BDFDB.dotCN.guildswrapper}.folderopen ${BDFDB.dotCN.scrollerwrapold},
+									${BDFDB.dotCN.guildswrapper}.folderopen ${BDFDB.dotCN.guilds} {
+										width: ${guildswrapper.outerWidth() + (guildswrapper.outerWidth() / columnamount)}px !important;
 									}`;
 							}
 							else {
@@ -1156,6 +1159,11 @@ module.exports = (Plugin, Api, Vendor) => {
 									
 									${BDFDB.dotCN.guildswrapper}.folderopen {
 										overflow: visible !important;
+										height: ${guildswrapper.outerouterHeightWidth() + (guildswrapper.outerHeight() / rowamount)}px !important;
+									}
+									
+									${BDFDB.dotCN.guildswrapper}.folderopen ${BDFDB.dotCN.scrollerwrapold},
+									${BDFDB.dotCN.guildswrapper}.folderopen ${BDFDB.dotCN.guilds} {
 										height: ${guildswrapper.outerouterHeightWidth() + (guildswrapper.outerHeight() / rowamount)}px !important;
 									}`;
 							}
