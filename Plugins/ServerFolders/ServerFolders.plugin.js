@@ -1206,14 +1206,32 @@ class ServerFolders {
 									overflow-y: hidden !important;
 								}
 								
-								${BDFDB.dotCN.guildswrapper}.folderopen {
-									overflow: visible !important;
-									height: ${guildswrapper.outerouterHeightWidth() + (guildswrapper.outerHeight() / rowamount)}px !important;
-								}
-								
+								${BDFDB.dotCN.guildswrapper}.folderopen,
 								${BDFDB.dotCN.guildswrapper}.folderopen ${BDFDB.dotCN.scrollerwrapold},
 								${BDFDB.dotCN.guildswrapper}.folderopen ${BDFDB.dotCN.guilds} {
-									height: ${guildswrapper.outerouterHeightWidth() + (guildswrapper.outerHeight() / rowamount)}px !important;
+									height: ${guildswrapper.outerHeight() + (guildswrapper.outerHeight() / rowamount)}px;
+									animation: SFwrapperOpen .3s 1 linear;
+								}
+								${BDFDB.dotCN.guildswrapper}.folderclosing,
+								${BDFDB.dotCN.guildswrapper}.folderclosing ${BDFDB.dotCN.scrollerwrapold},
+								${BDFDB.dotCN.guildswrapper}.folderclosing ${BDFDB.dotCN.guilds} {
+									height: ${guildswrapper.outerHeight()}px;
+									animation: SFwrapperClosing .3s 1 linear;
+								}
+								@keyframes SFwrapperOpen {
+									0% {
+										height: ${guildswrapper.outerHeight()}px;
+									}
+									100% {
+										height: ${guildswrapper.outerHeight() + (guildswrapper.outerHeight() / rowamount)}px ;
+									}
+								@keyframes SFwrapperClosing {
+									0% {
+										height: ${guildswrapper.outerHeight() + (guildswrapper.outerHeight() / rowamount)}px;
+									}
+									100% {
+										height: ${guildswrapper.outerHeight()}px;
+									}
 								}`;
 						}
 						
