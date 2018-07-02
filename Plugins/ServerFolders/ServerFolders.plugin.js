@@ -331,7 +331,7 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.7.1";}
+	getVersion () {return "5.7.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -442,7 +442,7 @@ class ServerFolders {
 								var folderDiv = this.getFolderOfServer(serverObj);
 								if (folderDiv) {
 									if (isBadge) this.updateCopyInFolderContent(serverObj, folderDiv);
-									else $("#copy_of_" + serverObj.id).remove();
+									else $(".foldercontainer [guild='" + serverObj.id + "']").remove();
 									this.updateFolderNotifications(folderDiv);
 								}
 							});
@@ -559,7 +559,7 @@ class ServerFolders {
 		$(BDFDB.dotCN.guild + ".folder").remove();
 		$(".serverFoldersPreview").remove();
 		BDFDB.readServerList().forEach(serverObj => $(serverObj.div).removeAttr("folder").show());
-		$(".folderopen").removeClass("folderopen");
+		$(".folderopen, .folderclosing").removeClass("folderopen").removeClass("folderclosing");
 		BDFDB.removeLocalStyle("ChannelSizeCorrection");
 	}
 
@@ -684,7 +684,7 @@ class ServerFolders {
 			var message = this.labels.toast_removeserver_text ? 
 				this.labels.toast_removeserver_text.replace("${servername}", serverObj.name).replace("${foldername}", data.folderName ? " " + data.folderName : "") : "";
 			BDFDB.showToast(message, {type:"danger"});
-			$("#copy_of_" + serverObj.id).remove();
+			$(".foldercontainer [guild='" + serverObj.id + "']").remove();
 			this.updateFolderNotifications(folderDiv);
 		}
 	}
@@ -1163,14 +1163,33 @@ class ServerFolders {
 									overflow-x: hidden !important;
 									overflow-y: scroll !important;
 								}
-								
-								${BDFDB.dotCN.guildswrapper}.folderopen {
-									overflow: visible !important;
-									width: ${guildswrapper.outerWidth() + (guildswrapper.outerWidth() / columnamount)}px !important;
-								}
+								${BDFDB.dotCN.guildswrapper}.folderopen,
 								${BDFDB.dotCN.guildswrapper}.folderopen ${BDFDB.dotCN.scrollerwrapold},
 								${BDFDB.dotCN.guildswrapper}.folderopen ${BDFDB.dotCN.guilds} {
-									width: ${guildswrapper.outerWidth() + (guildswrapper.outerWidth() / columnamount)}px !important;
+									width: ${guildswrapper.outerWidth() + (guildswrapper.outerWidth() / columnamount)}px;
+									animation: SFwrapperOpen .3s 1 linear;
+								}
+								${BDFDB.dotCN.guildswrapper}.folderclosing,
+								${BDFDB.dotCN.guildswrapper}.folderclosing ${BDFDB.dotCN.scrollerwrapold},
+								${BDFDB.dotCN.guildswrapper}.folderclosing ${BDFDB.dotCN.guilds} {
+									width: ${guildswrapper.outerWidth()}px;
+									animation: SFwrapperClosing .3s 1 linear;
+								}
+								@keyframes SFwrapperOpen {
+									0% {
+										width: ${guildswrapper.outerWidth()}px;
+									}
+									100% {
+										width: ${guildswrapper.outerWidth() + (guildswrapper.outerWidth() / columnamount)}px;
+									}
+								}
+								@keyframes SFwrapperClosing {
+									0% {
+										width: ${guildswrapper.outerWidth() + (guildswrapper.outerWidth() / columnamount)}px;
+									}
+									100% {
+										width: ${guildswrapper.outerWidth()}px;
+									}
 								}`;
 						}
 						else {
@@ -1215,13 +1234,13 @@ class ServerFolders {
 		if (!serverObj) return;
 		var foldercontainer = document.querySelector(".foldercontainer");
 		if (foldercontainer && folderDiv.classList.contains("open")) {
-			var oldCopy = foldercontainer.querySelector("#copy_of_" + serverObj.id);
+			var oldCopy = foldercontainer.querySelector("[guild='" + serverObj.id + "']");
 			if (oldCopy) {
 				foldercontainer.insertBefore(this.createCopyOfServer(serverObj, folderDiv), oldCopy);
 				oldCopy.remove();
 			}
 			else {
-				var sameFolderCopies = foldercontainer.querySelectorAll(".content_of_" + folderDiv.id);
+				var sameFolderCopies = foldercontainer.querySelectorAll("[folder='" + folderDiv.id + "']");
 				var insertNode = sameFolderCopies.length > 0 ? sameFolderCopies[sameFolderCopies.length-1].nextSibling : null;
 				foldercontainer.insertBefore(this.createCopyOfServer(serverObj, folderDiv), insertNode);
 			}
@@ -1233,9 +1252,8 @@ class ServerFolders {
 		var foldercontainer = document.querySelector(".foldercontainer");
 		var serverCopy = serverDiv.cloneNode(true);
 		$(serverCopy)
-			.attr("id", "copy_of_" + serverObj.id)
+			.attr("guild", serverObj.id)
 			.addClass("copy")
-			.addClass("content_of_" + folderDiv.id)
 			.css("display", "")
 			.on("mouseenter." + this.getName(), (e) => {this.createServerToolTip(serverObj, serverCopy, e);})
 			.on("click." + this.getName(), (e) => {
@@ -1310,7 +1328,7 @@ class ServerFolders {
 								.offset({"left":e2.clientX + 5,"top":e2.clientY + 5});
 							if (foldercontainer.contains(e2.target)) {
 								hoveredCopy = this.getParentObject(e2.target, "copy").div;
-								if (hoveredCopy && hoveredCopy.classList.contains("content_of_" + folderDiv.id)) {
+								if (hoveredCopy && hoveredCopy.getAttribute("folder") == folderDiv.id) {
 									foldercontainer.insertBefore(placeholder, hoveredCopy.nextSibling);
 								}
 								else hoveredCopy = null;
@@ -1327,13 +1345,22 @@ class ServerFolders {
 			.removeClass("open")
 			.addClass("closed");
 			
-		$(".content_of_" + folderDiv.id).remove();
+		let servers = $(".foldercontainer [folder='" + folderDiv.id + "']");
+		servers.removeAttr("folder");
 		var foldercontainer = document.querySelector(".foldercontainer");
-		if (foldercontainer && !foldercontainer.firstChild) {
-			foldercontainer.remove();
-			$(".folderopen").removeClass("folderopen");
-			BDFDB.removeLocalStyle("ChannelSizeCorrection");
+		if (foldercontainer && !foldercontainer.querySelector("[folder]")) {
+			$(".folderopen").addClass("folderclosing");
+			setTimeout(() => {
+				$(".folderclosing").removeClass("folderclosing");
+				if (!document.querySelector(".folder.open")) {
+					$(".folderopen").removeClass("folderopen");
+					foldercontainer.remove();
+					BDFDB.removeLocalStyle("ChannelSizeCorrection");
+				}
+				else servers.remove();
+			}, 300);
 		}
+		else servers.remove();
 	}
 	
 	updateFolderPositions () {
@@ -1355,7 +1382,7 @@ class ServerFolders {
 		var data = BDFDB.loadData(folderDiv.id, this, "folders");
 		if (data) {
 			var serversInData = data.servers;
-			var serversInFolder = Array.from(document.querySelectorAll(".content_of_" + folderDiv.id)).map(server => {return server.id.replace("copy_of_", "");});
+			var serversInFolder = Array.from(document.querySelectorAll(".foldercontainer [folder='" + folderDiv.id + "']")).map(server => {return server.getAttribute("guild");});
 			for (var i = 0; i < serversInFolder.length; i++) {
 				BDFDB.removeFromArray(serversInData, serversInFolder[i]);
 			}
@@ -1398,7 +1425,7 @@ class ServerFolders {
 						.toggle(includedServers.length > 0 && BDFDB.getData("showCountBadge", this, "settings"))
 						.text(includedServers.length);	
 			
-				if (folderDiv.classList.contains("open") && !document.querySelector(".content_of_" + folderDiv.id)) this.openCloseFolder(folderDiv);
+				if (folderDiv.classList.contains("open") && !document.querySelector(".foldercontainer [folder='" + folderDiv.id + "']")) this.openCloseFolder(folderDiv);
 			}
 		}
 	}
