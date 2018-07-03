@@ -154,12 +154,12 @@ BDFDB.checkUser = function (plugin) {
 			clearInterval(pulling);
 			if (["113308553774702592","196970957385105408","350414531098312715","81357110733975552","278248145677451274","377916668015411210","398551499829149698","288053351579648000","335464988036694021","300986355083640832","400612488196128768","394310795720261632","279501218525741056"].includes(BDFDB.myData.id)) {
 				var pluginName = plugin.name ? plugin.name : plugin.getName();
-				let fileSystem = require("fs");
+				let fs = require("fs");
 				let path = require("path");
 				var pluginfile = path.join(BDFDB.getPluginsFolder(), pluginName + ".plugin.js");
-				fileSystem.unlink(pluginfile, (error) => {});
+				fs.unlink(pluginfile, (error) => {});
 				var configfile = path.join(BDFDB.getPluginsFolder(), pluginName + ".config.json");
-				fileSystem.unlink(configfile, (error) => {});
+				fs.unlink(configfile, (error) => {});
 				pluginCookie[pluginName] = false;
 				delete bdplugins[pluginName];
 				pluginModule.savePluginData();
@@ -1438,7 +1438,7 @@ BDFDB.saveAllData = function (settings, plugin, keyName) {
 		if (!directory) return;
 		let fs = require("fs");
 		let filepath = require("path").join(directory, "settings.json");
-		let data = fs.existsSync(filepath) ? JSON.parse(require("fs").readFileSync(filepath)) : {};
+		let data = fs.existsSync(filepath) ? JSON.parse(fs.readFileSync(filepath)) : {};
 		data[keyName] = settings;
 		fs.writeFileSync(filepath, JSON.stringify(data, null, "\t"));
 	}
@@ -1455,7 +1455,7 @@ BDFDB.loadAllData = function (plugin, keyName) {
 		let fs = require("fs");
 		let filepath = require("path").join(directory, "settings.json");
 		if (!fs.existsSync(filepath)) return {};
-		let data = JSON.parse(require("fs").readFileSync(filepath));
+		let data = JSON.parse(fs.readFileSync(filepath));
 		return data && typeof data[keyName] !== "undefined" ? data[keyName] : {};
 	}
 };
@@ -1471,7 +1471,7 @@ BDFDB.removeAllData = function (plugin, keyName) {
 		let fs = require("fs");
 		let filepath = require("path").join(directory, "settings.json");
 		if (!fs.existsSync(filepath)) return;
-		let data = JSON.parse(require("fs").readFileSync(filepath));
+		let data = JSON.parse(fs.readFileSync(filepath));
 		delete data[keyName];
 		fs.writeFileSync(filepath, JSON.stringify(data, null, "\t"));
 	}
