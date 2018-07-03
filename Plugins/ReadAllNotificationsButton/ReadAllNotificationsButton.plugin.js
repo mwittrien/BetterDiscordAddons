@@ -3,8 +3,8 @@
 class ReadAllNotificationsButton {
 	initConstructor () {
 		this.RANbuttonMarkup = 
-			`<div class="${BDFDB.disCN.guild}" id="RANbutton-frame" style="height: 20px; width: 50px; margin-bottom: 10px;">
-				<div class="${BDFDB.disCN.guildinner}" style="height: 20px; width: 50px; border-radius: 4px;">
+			`<div class="${BDFDB.disCN.guild}" id="RANbutton-frame" style="height: 20px; margin-bottom: 10px;">
+				<div class="${BDFDB.disCN.guildinner}" style="height: 20px; border-radius: 4px;">
 					<a>
 						<div id="RANbutton" style="line-height: 20px; font-size: 12px;">read all</div>
 					</a>
@@ -27,7 +27,7 @@ class ReadAllNotificationsButton {
 
 	getDescription () {return "Adds a button to clear all notifications.";}
 
-	getVersion () {return "1.3.4";}
+	getVersion () {return "1.3.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -54,8 +54,7 @@ class ReadAllNotificationsButton {
 
 	start () {
 		var libraryScript = null;
-		if (typeof BDFDB !== "object" || BDFDB.isLibraryOutdated()) {
-			if (typeof BDFDB === "object") BDFDB = "";
+		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
 			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
@@ -64,7 +63,7 @@ class ReadAllNotificationsButton {
 			document.head.appendChild(libraryScript);
 		}
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object") this.initialize();
+		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
 		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
@@ -83,7 +82,7 @@ class ReadAllNotificationsButton {
 								if (node && node.tagName && (mentionspopout = node.querySelector(BDFDB.dotCN.recentmentionspopout)) != null) {
 									let filter = node.querySelector(BDFDB.dotCN.recentmentionsmentionfilter);
 									if (filter) {
-										$(this.RAMbuttonMarkup).insertBefore(BDFDB.dotCN.recentmentionsmentionfilter, mentionspopout)
+										$(this.RAMbuttonMarkup).insertBefore(filter, mentionspopout)
 											.on("click", () => {
 												var loadinterval = setInterval(() => {
 													if (!mentionspopout || !mentionspopout.parentElement) clearInterval(loadinterval);
