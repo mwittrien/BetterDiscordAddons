@@ -1,7 +1,7 @@
 //META{"name":"BetterSearchPage"}*//
 
 class BetterSearchPage {
-	initConstructor () {
+	initConstructor () {		
 		this.css = `
 			.BSP-pagination-button {
 				background: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="30" height="25"><g fill="#737f8d" fill-rule="evenodd" clip-rule="evenodd"><path xmlns="http://www.w3.org/2000/svg" d="M17.338 12.485c-4.156 4.156-8.312 8.312-12.468 12.467-1.402-1.402-2.805-2.804-4.207-4.206 2.756-2.757 5.513-5.514 8.27-8.27C6.176 9.72 3.419 6.963.663 4.207L4.87 0c-.058-.059 12.555 12.562 12.468 12.485z"/><path xmlns="http://www.w3.org/2000/svg" d="M17.338 12.485c-4.156 4.156-8.312 8.312-12.468 12.467-1.402-1.402-2.805-2.804-4.207-4.206 2.756-2.757 5.513-5.514 8.27-8.27C6.176 9.72 3.419 6.963.663 4.207L4.87 0c-.058-.059 12.555 12.562 12.468 12.485z" transform="translate(12 0)"/></g></svg>') 50%/9px 12px no-repeat;
@@ -27,6 +27,10 @@ class BetterSearchPage {
 				margin-left: 10px;
 				margin-right: 10px;
 			}
+			.BSP-pagination-button.BSP-pagination-jump {
+				margin-left: 10px;
+				transform: rotate(90deg);
+			}
 			.BSP-pagination-button${BDFDB.dotCN.searchresultspaginationdisabled} {
 				cursor: default;
 				opacity: .3;
@@ -49,7 +53,7 @@ class BetterSearchPage {
 
 	getDescription () {return "Adds some extra controls to the search results page.";}
 
-	getVersion () {return "1.0.1";}
+	getVersion () {return "1.0.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -154,7 +158,6 @@ class BetterSearchPage {
 		}
 	}
 	
-	
 	// begin of own functions
 
 	updateSettings (settingspanel) {
@@ -202,15 +205,7 @@ class BetterSearchPage {
 			pagination.appendChild(BSPpaginatonLast);
 		}
 		if (settings.addJumpTo) {
-			let jumpInput = 
-				$(`<div class="inputNumberWrapper inputNumberWrapperMini BSP-pagination-jumpinput ${BDFDB.disCN.inputwrapper}">
-					<span class="numberinput-buttons-zone">
-						<span class="numberinput-button-up"></span>
-						<span class="numberinput-button-down"></span>
-					</span>
-					<input type="number" min="1" max="${maxpage}" placeholder="${currentpage}" value="${currentpage}" class="${BDFDB.disCNS.inputmini + BDFDB.disCNS.input + BDFDB.disCN.size16}">
-				</div>`)[0];
-			pagination.appendChild(jumpInput);
+			$(`<div class="inputNumberWrapper inputNumberWrapperMini BSP-pagination-jumpinput ${BDFDB.disCN.inputwrapper}"><span class="numberinput-buttons-zone"><span class="numberinput-button-up"></span><span class="numberinput-button-down"></span></span><input type="number" min="1" max="${maxpage}" placeholder="${currentpage}" value="${currentpage}" class="${BDFDB.disCNS.inputmini + BDFDB.disCNS.input + BDFDB.disCN.size16}"></div><div class="BSP-pagination-button BSP-pagination-jump"></div>`).appendTo(pagination);;
 		}
 		BDFDB.initElements(pagination);
 		if (settings.cloneToTheTop) {
@@ -220,7 +215,7 @@ class BetterSearchPage {
 			BDFDB.initElements(BSPpaginaton);
 		}
 		$(searchResults.parentElement) 
-			.off("click." + this.getName()).off("keyup." + this.getName())
+			.off("click." + this.getName())
 			.on("click." + this.getName(), BDFDB.dotCN.searchresultspaginationprevious + BDFDB.dotCN.searchresultspaginationdisabled, (e) => {
 				e.preventDefault();
 				e.stopPropagation();
@@ -228,6 +223,21 @@ class BetterSearchPage {
 			.on("click." + this.getName(), BDFDB.dotCN.searchresultspaginationnext + BDFDB.dotCN.searchresultspaginationdisabled, (e) => {
 				e.preventDefault();
 				e.stopPropagation();
+			})
+			.on("mouseenter." + this.getName(), BDFDB.dotCN.searchresultspaginationprevious + ":not(" + BDFDB.dotCN.searchresultspaginationdisabled + ")", (e) => {
+				BDFDB.createTooltip("Previous", e.currentTarget, {type:"top"});
+			})
+			.on("mouseenter." + this.getName(), BDFDB.dotCN.searchresultspaginationnext + ":not(" + BDFDB.dotCN.searchresultspaginationdisabled + ")", (e) => {
+				BDFDB.createTooltip("Next", e.currentTarget, {type:"top"});
+			})
+			.on("mouseenter." + this.getName(), ".BSP-pagination-first:not(" + BDFDB.dotCN.searchresultspaginationdisabled + ")", (e) => {
+				BDFDB.createTooltip("First", e.currentTarget, {type:"top"});
+			})
+			.on("mouseenter." + this.getName(), ".BSP-pagination-last:not(" + BDFDB.dotCN.searchresultspaginationdisabled + ")", (e) => {
+				BDFDB.createTooltip("Last", e.currentTarget, {type:"top"});
+			})
+			.on("mouseenter." + this.getName(), ".BSP-pagination-jump:not(" + BDFDB.dotCN.searchresultspaginationdisabled + ")", (e) => {
+				BDFDB.createTooltip("Go To", e.currentTarget, {type:"top"});
 			})
 			.on("click." + this.getName(), ".BSP-pagination " + BDFDB.dotCN.searchresultspaginationprevious + ":not(" + BDFDB.dotCN.searchresultspaginationdisabled + ")", () => {
 				this.SearchNavigation.searchPreviousPage(searchID);
@@ -245,22 +255,21 @@ class BetterSearchPage {
 					this.SearchNavigation.searchNextPage(searchID);
 				}
 			})
-			.on("keyup." + this.getName(), ".BSP-pagination-jumpinput " + BDFDB.dotCN.inputmini, (e) => {
-				if (e.which == 13) {
-					let value = e.target.value;
-					if (value < 1 || value > maxpage) {
-						e.target.value = currentpage;
-						if (maxpage == 201 && value > maxpage) BDFDB.showToast("Discord doesn't allow you to go further than page 201.",{type:"error"});
+			.on("click." + this.getName(), ".BSP-pagination-jump:not(" + BDFDB.dotCN.searchresultspaginationdisabled + ")", (e) => {
+				let input = e.currentTarget.parentElement.querySelector(".BSP-pagination-jumpinput " + BDFDB.dotCN.inputmini);
+				let value = input.value;
+				if (value < 1 || value > maxpage) {
+					input.value = currentpage;
+					if (maxpage == 201 && value > maxpage) BDFDB.showToast("Discord doesn't allow you to go further than page 201.",{type:"error"});
+				}
+				else if (value < currentpage) {
+					for (; currentpage - value > 0; value++) {
+						this.SearchNavigation.searchPreviousPage(searchID);
 					}
-					else if (value < currentpage) {
-						for (; currentpage - value > 0; value++) {
-							this.SearchNavigation.searchPreviousPage(searchID);
-						}
-					}
-					else if (value > currentpage) {
-						for (; value - currentpage > 0; value--) {
-							this.SearchNavigation.searchNextPage(searchID);
-						}
+				}
+				else if (value > currentpage) {
+					for (; value - currentpage > 0; value--) {
+						this.SearchNavigation.searchNextPage(searchID);
 					}
 				}
 			});
