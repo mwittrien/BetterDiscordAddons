@@ -2787,6 +2787,9 @@ html, span:not(.spinner-item) {
 .serverfolders-modal .ui-icon-picker-icon.selected {
 	background-color: rgba(var(--transparencycolor),calc(var(--transparencyalpha) * 3)) !important;
 }
+.guild-icon {
+	position: static !important; /* fixed weird black square behind guild icons in folders */
+}
 
 /* citador & replyer */
 .quote-msg .avatar-large {
