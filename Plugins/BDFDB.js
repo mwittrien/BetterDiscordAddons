@@ -392,7 +392,7 @@ BDFDB.createTooltip = function (content, anker, options = {}) {
 	if (options.type) tooltip.classList.add(BDFDB.disCN["tooltip" + options.type]);
 	if (options.id) tooltip.id = options.id.split(" ")[0];
 	if (options.selector) options.selector.split(" ").forEach(selector => {if(selector) tooltip.classList.add(selector);});
-	if (options.css) BDFDB.appendLocalStyle("BDFDBcustomTooltip" + id, options.css);
+	if (options.css) BDFDB.appendLocalStyle("BDFDBcustomTooltip" + id, options.css, tooltipcontainer);
 	if (options.html === true) tooltip.innerHTML = content;
 	else tooltip.innerText = content;
 	
@@ -433,7 +433,7 @@ BDFDB.createTooltip = function (content, anker, options = {}) {
 				tooltipObserver.disconnect();
 				tooltip.remove();
 				BDFDB.$(anker).off("mouseleave.BDFDBTooltip" + id);
-				BDFDB.removeLocalStyle("BDFDBcustomTooltip" + id);
+				BDFDB.removeLocalStyle("BDFDBcustomTooltip" + id, tooltipcontainer);
 			}
 		});
 	});
@@ -1560,8 +1560,10 @@ BDFDB.removeWebStyle = function (cssname) {
 	document.head.querySelectorAll('bd-head bd-styles link[href="' + filepath + '"]').forEach((ele) => {ele.remove();});
 };
 
-BDFDB.appendLocalStyle = function (cssname, css) {
-	if (!document.head.querySelector("bd-head bd-styles")) BDFDB.$("head").append(`<bd-head><bd-styles></bd-styles></bd-head>`);
+BDFDB.appendLocalStyle = function (cssname, css, container) {
+	if (!container && !document.head.querySelector("bd-head bd-styles")) BDFDB.$("head").append(`<bd-head><bd-styles></bd-styles></bd-head>`);
+	container = container ? container : document.head.querySelector('bd-head bd-styles');
+	container = container ? container : document.head;
 	
 	BDFDB.removeLocalStyle(cssname);
 
@@ -1569,11 +1571,13 @@ BDFDB.appendLocalStyle = function (cssname, css) {
 	ele.id = cssname + "CSS";
 	ele.innerText = css;
 	
-	document.head.querySelector("bd-head bd-styles").appendChild(ele);
+	container.appendChild(ele);
 };
 
-BDFDB.removeLocalStyle = function (cssname) {
-	document.head.querySelectorAll('bd-head bd-styles style[id="' + cssname + 'CSS"]').forEach((ele) => {ele.remove();});
+BDFDB.removeLocalStyle = function (cssname, container) {
+	container = container ? container : document.head.querySelector('bd-head bd-styles');
+	container = container ? container : document.head;
+	container.querySelectorAll('style[id="' + cssname + 'CSS"]').forEach((ele) => {ele.remove();});
 };
 
 BDFDB.sortArrayByKey = function (array, key, except) {
