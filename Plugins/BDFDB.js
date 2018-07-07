@@ -114,6 +114,7 @@ BDFDB.unloadMessage = function (plugin) {
 	}
 	
 	if (typeof plugin.css === "string") BDFDB.removeLocalStyle(pluginName);
+	if (typeof plugin.patchCancels === "object") for (let p of plugin.patchCancels) p();
 	BDFDB.removeOnSwitchListener(plugin);
 	BDFDB.removeReloadListener(plugin);
 	BDFDB.removeSettingsButtonListener(plugin);
