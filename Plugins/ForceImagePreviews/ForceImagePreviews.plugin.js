@@ -9,7 +9,7 @@ class ForceImagePreviews {
 
 	getDescription () {return "Forces embedded Image Previews, if Discord doesn't do it itself.";}
 
-	getVersion () {return "1.0.5";}
+	getVersion () {return "1.0.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -116,7 +116,7 @@ class ForceImagePreviews {
 		if (accessory) {
 			let links = [];
 			for (let word of messageData.content.split(new RegExp("\\n|\\s|\\r|\\t|\\0"))) {
-				if (word.indexOf("https://") > -1 || word.indexOf("http://") > -1) { 
+				if (word.indexOf("https://") > -1 || word.indexOf("http://") > -1) {
 					if (word.indexOf("<") == 0 && word.indexOf(">") == word.length-1) links.push({src:word.slice(1,-1),embedded:false});
 					else if (!accessory.querySelector(`${BDFDB.dotCN.embedimage}[href="${this.parseSrc(word)}"]`) && !accessory.querySelector(`${BDFDB.dotCN.embedtitlelink}[href="${this.parseSrc(word)}"]`)) {
 						links.push({src:word,embedded:false});
@@ -139,9 +139,14 @@ class ForceImagePreviews {
 					let imagethrowaway = document.createElement("img");
 					imagethrowaway.src = itemsrc;
 					imagethrowaway.onload = () => {
-						let width = 400;
+						let width = imagethrowaway.naturalWidth > 400 ? 400 : imagethrowaway.naturalWidth;
 						let height = Math.round(width*(imagethrowaway.naturalHeight/imagethrowaway.naturalWidth));
-						if (!accessory.querySelector(`${BDFDB.dotCN.embedimage}[href="${itemsrc}"]`)) {
+						if (height > 300) {
+							width = Math.round(width*(300/height));
+							height = 300;
+						}
+						let checkedsrc = itemsrc.indexOf("imgur.com/") > -1 ? ("imgur.com/" + itemsrc.split("/")[3].split(".")[0]) : itemsrc;
+						if (!accessory.querySelector(`${BDFDB.dotCN.embedimage}[href*="${checkedsrc}"]`)) {
 							let embed = $(`<div class="FIP-embed ${BDFDB.disCNS.embed + BDFDB.disCNS.flex + BDFDB.disCN.embedold}"><a class="${BDFDB.disCNS.imagewrapper + BDFDB.disCNS.imagezoom + BDFDB.disCN.embedimage}" href="${itemsrc}" rel="noreferrer noopener" target="_blank" style="width: ${width}px; height: ${height}px;"><img src="${itemsrc}" style="width: ${width}px; height: ${height}px;"></a></div>`)[0];
 							this.insertEmbed(embed, previmage, links, accessory, scroller);
 						}
