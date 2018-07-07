@@ -2,6 +2,8 @@
 
 class NotificationSounds {
 	initConstructor () {
+		this.patchCancels = [];
+		
 		this.audio = new Audio();
 		
 		this.types = {
@@ -84,8 +86,6 @@ class NotificationSounds {
 		
 		this.choices = [];
 		
-		this.oldmentions = {};
-		
 		this.firedEvents = {};
 
 		this.hasPatchedOutgoing = false;
@@ -95,7 +95,7 @@ class NotificationSounds {
 	
 	getDescription () {return "Allows you to replace the native sounds of Discord with your own";}
 
-	getVersion () {return "3.1.6";}
+	getVersion () {return "3.1.7";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -170,31 +170,37 @@ class NotificationSounds {
 		if (typeof BDFDB === "object") {
 			BDFDB.loadMessage(this);
 			
-			/* REMOVE AFTER SOME TIME 07.05.2018 */
-			if (!BDFDB.loadData("success1", this, "success")) {
-				alert("Incoming and outgoing call sound are finally patched. Thanks to Zerebos for fixing the incoming call sound and so moving me in the right direction with the outgoing all sound.");
-				BDFDB.saveData("success1", true, this, "success");
-				
-			}
+			this.patchCancels.push(BDFDB.WebModules.monkeyPatch(BDFDB.WebModules.findByProperties(["receiveMessage"]), "receiveMessage", {before: (e) => {
+				let message = e.methodArguments[1];
+				if (message.author.id != BDFDB.myData.id) {
+					if (!message.guild_id) {
+						this.fireEvent("dm");
+						this.playAudio("dm");
+					}
+					else if (message.mentions) {
+						for (let mention of message.mentions) if (mention.id == BDFDB.myData.id) {
+							this.fireEvent("mentioned");
+							this.playAudio("mentioned");
+						}
+					}
+				}
+			}}));
 			
-			this.SoundUtils = BDFDB.WebModules.findByProperties(["playSound"]);
-			
-			this.patchCancel = BDFDB.WebModules.monkeyPatch(this.SoundUtils, "playSound", {instead: (e) => {
+			this.patchCancels.push(BDFDB.WebModules.monkeyPatch(BDFDB.WebModules.findByProperties(["playSound"]), "playSound", {instead: (e) => {
 				setImmediate(() => {
 					var type = e.methodArguments[0];
 					if (type == "message1") {
 						if (this.firedEvents["dm"]) {
-							type = "dm";
 							this.firedEvents["dm"] = false;
 						}
 						else if (this.firedEvents["mentioned"]) {
-							type = "mentioned";
 							this.firedEvents["mentioned"] = false;
 						}
+						else this.playAudio(type);
 					}
-					this.playAudio(type);
+					else this.playAudio(type);
 				});
-			}});
+			}}));
 			
 			var incomingCallAudio = new Audio();
 			this.incomingCallOwnerInstance = BDFDB.getOwnerInstance({"node":document.querySelector(BDFDB.dotCN.callcontainer), "props":["startRinging","stopRinging"], "up":true});
@@ -213,83 +219,6 @@ class NotificationSounds {
 			this.loadChoices();
 			
 			var observer = null;
-
-			observer = new MutationObserver((changes, _) => {
-				this.fireEvent("dm");
-			});
-			BDFDB.addObserver(this, null, {name:"dmBadgeObserver",instance:observer,multi:true}, {characterData: true, subtree: true});
-			
-			observer = new MutationObserver((changes, _) => {
-				this.fireEvent("mentioned");
-			});
-			BDFDB.addObserver(this, null, {name:"mentionBadgeObserver",instance:observer,multi:true}, {characterData: true, subtree: true});
-			
-			observer = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								BDFDB.addObserver(this, node, {name:"dmBadgeObserver",multi:true}, {characterData: true, subtree: true});
-								this.fireEvent("dm");
-							});
-						}
-					}
-				);
-			});
-			BDFDB.addObserver(this, BDFDB.dotCN.dms, {name:"dmObserver",instance:observer}, {childList: true});
-			
-			observer = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								if (node && node.className === BDFDB.disCN.badge) {
-									var data = BDFDB.getKeyInformation({"node":node.parentElement,"key":"guild"});
-									if (data) {
-										BDFDB.addObserver(this, node, {name:"mentionBadgeObserver",multi:true}, {characterData: true, subtree: true});
-										if (this.oldmentions && this.oldmentions[data.id] == 0) this.fireEvent("mentioned");
-									}
-								}
-								if (node && node.classList && node.classList.contains(BDFDB.disCN.guild) && !node.classList.contains(BDFDB.disCN.guildsadd) && !document.querySelector(BDFDB.dotCN.dms).contains(node)) {
-									BDFDB.addObserver(this, node, {name:"mentionBadgeObserver",multi:true}, {characterData: true, subtree: true});
-								}
-							});
-						}
-						if (change.removedNodes) {
-							change.removedNodes.forEach((node) => {
-								if (node && node.className === BDFDB.disCN.badge) {
-									this.oldmentions = BDFDB.getKeyInformation({"node":document.querySelector(BDFDB.dotCN.layers),"key":"mentionCounts"});
-								}
-							});
-						}
-					}
-				);
-			});
-			BDFDB.addObserver(this, BDFDB.dotCN.guilds, {name:"mentionObserver",instance:observer}, {childList: true, subtree:true});
-			
-			observer = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								if (node.classList && node.classList.contains(BDFDB.dotCN.channeliconspacing) && $(node).find(BDFDB.dotCN.channelbadge).length > 0) {
-									BDFDB.addObserver(this, node, {name:"mentionBadgeObserver",multi:true}, {characterData: true, subtree: true});
-									this.fireEvent("mentioned");
-									this.oldmentions = BDFDB.getKeyInformation({"node":$(BDFDB.dotCN.channelswrap).parent()[0],"key":"mentionCounts"});
-								}
-							});
-						}
-						if (change.removedNodes) {
-							change.removedNodes.forEach((node) => {
-								if (node.classList && node.classList.contains(BDFDB.dotCN.channeliconspacing) && $(node).find(BDFDB.dotCN.channelbadge).length > 0) {
-									this.oldmentions = BDFDB.getKeyInformation({"node":$(BDFDB.dotCN.channelswrap).parent()[0],"key":"mentionCounts"});
-								}
-							});
-						}
-					}
-				);
-			});
-			BDFDB.addObserver(this, BDFDB.dotCN.channels, {name:"channelListObserver",instance:observer}, {childList: true, subtree: true});
 
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -314,8 +243,8 @@ class NotificationSounds {
 										outgoingCallOwnerInstance.stopRinging = stop;
 
 										let CallingWrap = outgoingCallOwnerInstance._reactInternalFiber.type;
-										this.cancelOutgoingStart = BDFDB.WebModules.monkeyPatch(CallingWrap.prototype, "startRinging", {instead: play});
-										this.cancelOutgoingStop = BDFDB.WebModules.monkeyPatch(CallingWrap.prototype, "stopRinging", {instead: stop});
+										this.patchCancels.push(BDFDB.WebModules.monkeyPatch(CallingWrap.prototype, "startRinging", {instead: play}));
+										this.patchCancels.push(BDFDB.WebModules.monkeyPatch(CallingWrap.prototype, "stopRinging", {instead: stop}));
 
 										this.hasPatchedOutgoing = true;
 									}
@@ -326,20 +255,6 @@ class NotificationSounds {
 				);
 			});
 			BDFDB.addObserver(this, BDFDB.dotCNS.chat, {name:"chatObserver",instance:observer}, {childList:true});
-			
-			BDFDB.readServerList().forEach((serverObj) => {
-				var badge = serverObj.div.querySelector(BDFDB.dotCN.badge);
-				if (badge) {
-					BDFDB.addObserver(this, badge, {name:"mentionBadgeObserver",multi:true}, {characterData: true, subtree: true});
-				}
-			});
-			
-			BDFDB.readDmList().forEach((dmObj) => {
-				var badge = dmObj.div.querySelector(BDFDB.dotCN.badge);
-				if (badge) {
-					BDFDB.addObserver(this, badge, {name:"dmBadgeObserver",multi:true}, {characterData: true, subtree: true});
-				}
-			});
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -349,10 +264,7 @@ class NotificationSounds {
 
 	stop () {
 		if (typeof BDFDB === "object") {
-			if (typeof this.patchCancel === "function") this.patchCancel();
-			if (typeof this.cancelOutgoingStart === "function") this.cancelOutgoingStart();
-			if (typeof this.cancelOutgoingStop === "function") this.cancelOutgoingStop();
-			
+			if (typeof this.patchCancels === "object") for (let p of this.patchCancels) p();
 			this.incomingCallOwnerInstance.startRinging = this.oldStartRining;
 			this.incomingCallOwnerInstance.stopRinging = this.oldStopRining;
 			
