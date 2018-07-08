@@ -3657,6 +3657,19 @@ BDFDB.appendLocalStyle("BDFDB", `
 		text-decoration:underline;
 	}
 	
+	body .tooltip.tooltip-top.DevilBro-tooltip:after {
+			border-top-color: inherit !important;
+	}
+	body .tooltip.tooltip-right.DevilBro-tooltip:after {
+			border-right-color: inherit !important;
+	}
+	body .tooltip.tooltip-left.DevilBro-tooltip:after {
+			border-left-color: inherit !important;
+	}
+	body .tooltip.tooltip-bottom.DevilBro-tooltip:after {
+			border-bottom-color: inherit !important;
+	}
+	
 	.toasts {
 		position: fixed;
 		display: flex;
