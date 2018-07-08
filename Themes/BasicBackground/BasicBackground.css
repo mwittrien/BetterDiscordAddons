@@ -56,12 +56,17 @@
 .channels-Ie2l6A,
 .container-1UB9sr,
 .container-2Thooq,
+.listeningAlong-2UPsxf,
 .reactors-Blmlhw {
 	background: rgba(var(--transparencycolor),var(--transparencyalpha)) !important;
 }
 
 .sidebar-1-SQro {
 	background: rgba(var(--transparencycolor),calc(var(--transparencyalpha) * 2)) !important;
+}
+
+.base-3dtUhz {
+	border-radius: 0 !important;
 }
 
 .tutorial-popout .title-content,
