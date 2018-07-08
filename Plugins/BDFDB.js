@@ -392,6 +392,7 @@ BDFDB.createTooltip = function (content, anker, options = {}) {
 	if (options.type) tooltip.classList.add(BDFDB.disCN["tooltip" + options.type]);
 	if (options.id) tooltip.id = options.id.split(" ")[0];
 	if (options.selector) options.selector.split(" ").forEach(selector => {if(selector) tooltip.classList.add(selector);});
+	if (options.style) tooltip.style = options.style;
 	if (options.css) BDFDB.appendLocalStyle("BDFDBcustomTooltip" + id, options.css, tooltipcontainer);
 	if (options.html === true) tooltip.innerHTML = content;
 	else tooltip.innerText = content;
@@ -579,8 +580,7 @@ BDFDB.createUpdateButton = function () {
 		BDFDB.checkAllUpdates();
 	};			
 	updateButton.onmouseenter = function () {
-		BDFDB.createTooltip("Only checks for updates of plugins, which support the updatecheck. Rightclick for a list.", updateButton, {type:"top",selector:"update-button-tooltip"});
-		
+		BDFDB.createTooltip("Only checks for updates of plugins, which support the updatecheck. Rightclick for a list.", updateButton, {type:"top",selector:"update-button-tooltip"});	
 	};
 	updateButton.oncontextmenu = function () {
 		if (window.PluginUpdates && window.PluginUpdates.plugins && !document.querySelector(".update-list-tooltip")) {
