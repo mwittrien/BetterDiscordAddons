@@ -3,14 +3,16 @@
 class ChatAliases {
 	initConstructor () {
 		this.configs = ["case","exact","autoc","regex","file"];
-		
+
 		this.defaults = {
 			settings: {
 				addAutoComplete:	{value:true, 	description:"Add an Autocomplete-Menu for Non-Regex Aliases:"}
 			}
 		};
+
+		this.aliases = {};
 	}
-	
+
 	getName () {return "ChatAliases";}
 
 	getDescription () {return "Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent.";}
@@ -21,8 +23,8 @@ class ChatAliases {
 
 	getSettingsPanel () {
 		if (!this.started || typeof BDFDB !== "object") return;
-		var settings = BDFDB.getAllData(this, "settings"); 
-		var words = BDFDB.loadAllData(this, "words");
+		var settings = BDFDB.getAllData(this, "settings");
+		var words = this.aliases;
 		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		for (let key in settings) {
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}"${settings[key] ? " checked" : ""}></div></div>`;
@@ -121,14 +123,14 @@ class ChatAliases {
 			BDFDB.addObserver(this, BDFDB.dotCN.appmount, {name:"textareaObserver",instance:observer}, {childList: true, subtree:true});
 
 			// PATCH OLD DATA REMOVE SOON
-			let aliases = BDFDB.loadAllData(this, "words");
-			for (let alias in aliases) {
-				aliases[alias].autoc = aliases[alias].autoc == undefined ? !aliases[alias].regex : aliases[alias].autoc;
+			this.aliases = BDFDB.loadAllData(this, "words");
+			for (let alias in this.aliases) {
+				this.aliases[alias].autoc = this.aliases[alias].autoc == undefined ? !this.aliases[alias].regex : this.aliases[alias].autoc;
 			}
-			BDFDB.saveAllData(aliases, this, "words");
-			
+			BDFDB.saveAllData(this.aliases, this, "words");
+
 			document.querySelectorAll("textarea" + BDFDB.dotCN.textarea).forEach(textarea => {this.bindEventToTextArea(textarea);});
-			
+
 			$(document).off("click." + this.getName()).on("click." + this.getName(), (e) => {
 				if (!e.target.tagName === "TEXTAREA") $(".autocompleteAliases, .autocompleteAliasesRow").remove();
 			});
@@ -141,7 +143,7 @@ class ChatAliases {
 	stop () {
 		if (typeof BDFDB === "object") {
 			$(".autocompleteAliases, .autocompleteAliasesRow").remove();
-			
+
 			BDFDB.unloadMessage(this);
 		}
 	}
@@ -155,14 +157,14 @@ class ChatAliases {
 			settings[input.value] = input.checked;
 		}
 		BDFDB.saveAllData(settings, this, "settings");
-		
+
 		document.querySelectorAll("textarea" + BDFDB.dotCN.textarea).forEach(textarea => {this.bindEventToTextArea(textarea);});
 	}
 
 	updateContainer (settingspanel, ele) {
 		var update = false, wordvalue = null, replacevalue = null;
 		var action = ele.getAttribute("action");
-		var words = BDFDB.loadAllData(this, "words");
+		var words = this.aliases;
 
 		if (action == "add") {
 			var wordinput = settingspanel.querySelector("#input-wordvalue");
@@ -211,7 +213,7 @@ class ChatAliases {
 		}
 		if (update) {
 			BDFDB.saveAllData(words, this, "words");
-			words = BDFDB.loadAllData(this, "words");
+			words = this.aliases = BDFDB.loadAllData(this, "words");
 
 			var containerhtml = ``;
 			for (let word in words) {
@@ -230,9 +232,8 @@ class ChatAliases {
 		clearTimeout(ele.updateTimeout);
 		ele.updateTimeout = setTimeout(() => {
 			var card = ele.parentElement.parentElement;
-			var words = BDFDB.loadAllData(this, "words");
 			var oldwordvalue = ele.getAttribute("word");
-			if (oldwordvalue && words[oldwordvalue]) {
+			if (oldwordvalue && this.aliases[oldwordvalue]) {
 				var wordinput = card.querySelector(".word-name");
 				var replaceinput = card.querySelector(".replace-name");
 				var removebutton = card.querySelector(".remove-word");
@@ -243,21 +244,20 @@ class ChatAliases {
 				replaceinput.setAttribute("word", newwordvalue);
 				replaceinput.setAttribute("value", newreplacevalue);
 				removebutton.setAttribute("word", newwordvalue);
-				words[newwordvalue] = words[oldwordvalue];
-				words[newwordvalue].replace = newreplacevalue;
-				if (newwordvalue != oldwordvalue) delete words[oldwordvalue];
-				BDFDB.saveAllData(words, this, "words");
+				this.aliases[newwordvalue] = this.aliases[oldwordvalue];
+				this.aliases[newwordvalue].replace = newreplacevalue;
+				if (newwordvalue != oldwordvalue) delete this.aliases[oldwordvalue];
+				BDFDB.saveAllData(this.aliases, this, "words");
 			}
 		},500);
 	}
 
 	updateConfig (ele) {
-		var words = BDFDB.loadAllData(this, "words");
 		var wordvalue = ele.getAttribute("word");
 		var config = ele.getAttribute("config");
-		if (wordvalue && words[wordvalue] && config) {
-			words[wordvalue][config] = ele.checked;
-			BDFDB.saveAllData(words, this, "words");
+		if (wordvalue && this.aliases[wordvalue] && config) {
+			this.aliases[wordvalue][config] = ele.checked;
+			BDFDB.saveAllData(this.aliases, this, "words");
 		}
 	}
 
@@ -279,7 +279,7 @@ class ChatAliases {
 		var channelObj = BDFDB.getSelectedChannel();
 		var channel = channelObj ? channelObj.data : null;
 		if (!channel) return;
-		var settings = BDFDB.getAllData(this, "settings"); 
+		var settings = BDFDB.getAllData(this, "settings");
 		$(textarea)
 			.off("input." + this.getName())
 			.on("input." + this.getName(), () => {
@@ -306,7 +306,7 @@ class ChatAliases {
 					if (autocompletemenu.querySelector(BDFDB.dotCN.autocompleteselected).parentElement.classList.contains("autocompleteAliasesRow")) {
 						e.preventDefault();
 						e.stopPropagation();
-						this.swapWordWithAlias(textarea); 
+						this.swapWordWithAlias(textarea);
 					}
 				}
 				else if ((e.which == 38 || e.which == 40) && autocompletemenu) {
@@ -335,7 +335,7 @@ class ChatAliases {
 					clearTimeout(textarea.chataliastimeout);
 					textarea.chataliastimeout = setTimeout(() => {this.addAutoCompleteMenu(textarea);},100);
 				}
-				
+
 				if (!e.ctrlKey && e.which != 38 && e.which != 40) {
 					if (!(e.which == 39 && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length)) {
 						$(".autocompleteAliases, .autocompleteAliasesRow").remove();
@@ -349,7 +349,7 @@ class ChatAliases {
 				}
 			});
 	}
-	
+
 	addAutoCompleteMenu (textarea) {
 		if (textarea.parentElement.querySelector(".autocompleteAliasesRow")) return;
 		let words = textarea.value.split(" ");
@@ -364,7 +364,7 @@ class ChatAliases {
 			}
 		}
 		if (lastword) {
-			let aliases = BDFDB.loadAllData(this, "words"), matchedaliases = {};
+			let aliases = this.aliases, matchedaliases = {};
 			for (let alias in aliases) {
 				let aliasdata = aliases[alias];
 				if (!aliasdata.regex && aliasdata.autoc) {
@@ -388,14 +388,14 @@ class ChatAliases {
 				else {
 					amount -= autocompletemenu.querySelectorAll(BDFDB.dotCN.autocompleteselectable).length;
 				}
-				
+
 				$(autocompletemenu)
 					.append(`<div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteAliasesRow"><div class="${BDFDB.disCN.autocompleteselector} autocompleteAliasesSelector"><div class="${BDFDB.disCNS.autocompletecontenttitle + BDFDB.disCNS.small + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCN.weightsemibold}">Aliases: <strong class="lastword">${BDFDB.encodeToHTML(lastword)}</strong></div></div></div>`)
 					.off("mouseenter." + this.getName()).on("mouseenter." + this.getName(), BDFDB.dotCN.autocompleteselectable, (e) => {
 						autocompletemenu.querySelectorAll(BDFDB.dotCN.autocompleteselected).forEach(selected => {selected.classList.remove(BDFDB.disCN.autocompleteselected);});
 						e.currentTarget.classList.add(BDFDB.disCN.autocompleteselected);
 					});
-					
+
 				for (let alias in matchedaliases) {
 					if (amount-- < 1) break;
 					$(`<div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteAliasesRow"><div class="${BDFDB.disCNS.autocompleteselector + BDFDB.disCN.autocompleteselectable} autocompleteAliasesSelector"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.autocompletecontent}" style="flex: 1 1 auto;"><div class="${BDFDB.disCN.flexchild} aliasword" style="flex: 1 1 auto;">${BDFDB.encodeToHTML(alias)}</div><div class="${BDFDB.disCNS.autocompletedescription + BDFDB.disCN.flexchild}">${BDFDB.encodeToHTML(matchedaliases[alias].replace)}</div></div></div></div>`)
@@ -410,7 +410,7 @@ class ChatAliases {
 			}
 		}
 	}
-	
+
 	getNextSelection (menu, selected, forward) {
 		selected = selected ? selected : menu.querySelector(BDFDB.dotCN.autocompleteselected).parentElement;
 		let next, sibling = forward ? selected.nextElementSibling : selected.previousElementSibling;
@@ -419,17 +419,17 @@ class ChatAliases {
 		}
 		else {
 			let items = menu.querySelectorAll(BDFDB.dotCN.autocompleteselectable);
-			next = forward ? items[0] : items[items.length-1]; 
+			next = forward ? items[0] : items[items.length-1];
 		}
 		return next ? next : this.getNextSelection(menu, sibling, forward);
 	}
-	
+
 	swapWordWithAlias (textarea) {
 		let aliasword = textarea.parentElement.querySelector(".autocompleteAliasesRow " + BDFDB.dotCN.autocompleteselected + " .aliasword").innerText;
 		let lastword = textarea.parentElement.querySelector(".autocompleteAliasesRow .lastword").innerText;
 		if (aliasword && lastword) {
 			$(".autocompleteAliases, .autocompleteAliasesRow").remove();
-			textarea.focus(); 
+			textarea.focus();
 			textarea.selectionStart = textarea.value.length - lastword.length;
 			textarea.selectionEnd = textarea.value.length;
 			document.execCommand("insertText", false, aliasword);
@@ -439,7 +439,7 @@ class ChatAliases {
 	}
 
 	formatText (text) {
-		var newText = [], files = [], wordAliases = {}, multiAliases = {}, aliases = BDFDB.loadAllData(this, "words");
+		var newText = [], files = [], wordAliases = {}, multiAliases = {}, aliases = this.aliases;
 		for (let alias in aliases) {
 			if (!aliases[alias].regex && alias.indexOf(" ") == -1) wordAliases[alias] = aliases[alias];
 			else multiAliases[alias] = aliases[alias];
