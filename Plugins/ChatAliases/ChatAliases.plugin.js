@@ -355,16 +355,16 @@ class ChatAliases {
 		}
 		if (lastword) {
 			let matchedaliases = {};
-			for (let alias in this.aliases) {
-				let aliasdata = this.aliases[alias];
+			for (let word in this.aliases) {
+				let aliasdata = this.aliases[word];
 				if (!aliasdata.regex && aliasdata.autoc) {
 					if (aliasdata.exact) {
-						if (aliasdata.case && alias.indexOf(lastword) == 0) matchedaliases[alias] = aliasdata;
-						else if (!aliasdata.case && alias.toLowerCase().indexOf(lastword.toLowerCase()) == 0) matchedaliases[alias] = aliasdata;
+						if (aliasdata.case && word.indexOf(lastword) == 0) matchedaliases[word] = aliasdata;
+						else if (!aliasdata.case && word.toLowerCase().indexOf(lastword.toLowerCase()) == 0) matchedaliases[word] = aliasdata;
 					}
 					else {
-						if (aliasdata.case && alias.indexOf(lastword) > -1) matchedaliases[alias] = aliasdata;
-						else if (!aliasdata.case && alias.toLowerCase().indexOf(lastword.toLowerCase()) > -1) matchedaliases[alias] = aliasdata;
+						if (aliasdata.case && word.indexOf(lastword) > -1) matchedaliases[word] = aliasdata;
+						else if (!aliasdata.case && word.toLowerCase().indexOf(lastword.toLowerCase()) > -1) matchedaliases[word] = aliasdata;
 					}
 				}
 			}
@@ -386,9 +386,9 @@ class ChatAliases {
 						e.currentTarget.classList.add(BDFDB.disCN.autocompleteselected);
 					});
 					
-				for (let alias in matchedaliases) {
+				for (let word in matchedaliases) {
 					if (amount-- < 1) break;
-					$(`<div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteAliasesRow"><div class="${BDFDB.disCNS.autocompleteselector + BDFDB.disCN.autocompleteselectable} autocompleteAliasesSelector"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.autocompletecontent}" style="flex: 1 1 auto;"><div class="${BDFDB.disCN.flexchild} aliasword" style="flex: 1 1 auto;">${BDFDB.encodeToHTML(alias)}</div><div class="${BDFDB.disCNS.autocompletedescription + BDFDB.disCN.flexchild}">${BDFDB.encodeToHTML(matchedaliases[alias].replace)}</div></div></div></div>`)
+					$(`<div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteAliasesRow"><div class="${BDFDB.disCNS.autocompleteselector + BDFDB.disCN.autocompleteselectable} autocompleteAliasesSelector"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.autocompletecontent}" style="flex: 1 1 auto;"><div class="${BDFDB.disCN.flexchild} aliasword" style="flex: 1 1 auto;">${BDFDB.encodeToHTML(word)}</div><div class="${BDFDB.disCNS.autocompletedescription + BDFDB.disCN.flexchild}">${BDFDB.encodeToHTML(matchedaliases[word].replace)}</div></div></div></div>`)
 						.appendTo(autocompletemenu)
 						.off("click." + this.getName()).on("click." + this.getName(), BDFDB.dotCN.autocompleteselectable, (e) => {
 							this.swapWordWithAlias(textarea);
@@ -430,9 +430,9 @@ class ChatAliases {
 
 	formatText (text) {
 		var newText = [], files = [], wordAliases = {}, multiAliases = {};
-		for (let alias in this.aliases) {
-			if (!this.aliases[alias].regex && alias.indexOf(" ") == -1) wordAliases[alias] = this.aliases[alias];
-			else multiAliases[alias] = this.aliases[alias];
+		for (let word in this.aliases) {
+			if (!this.aliases[word].regex && word.indexOf(" ") == -1) wordAliases[word] = this.aliases[word];
+			else multiAliases[word] = this.aliases[word];
 		}
 		for (let word of text.trim().split(" ")) {
 			newText.push(this.useAliases(word, wordAliases, files, true));
@@ -443,9 +443,9 @@ class ChatAliases {
 	}
 
 	useAliases (string, aliases, files, singleword) {
-		for (let alias in aliases) {
-			let aliasdata = aliases[alias];
-			let escpAlias = aliasdata.regex ? alias : BDFDB.regEscape(alias);
+		for (let word in aliases) {
+			let aliasdata = aliases[word];
+			let escpAlias = aliasdata.regex ? word : BDFDB.regEscape(word);
 			let result = true, replaced = false, tempstring1 = string, tempstring2 = "";
 			let regstring = aliasdata.exact ? "^" + escpAlias + "$" : escpAlias;
 			while (result != null) {
