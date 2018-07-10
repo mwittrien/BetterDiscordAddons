@@ -1,27 +1,38 @@
 //META{"name":"ChatAliases"}*//
 
 class ChatAliases {
-	initConstructor () {
-		this.configs = ["case","exact","autoc","regex","file"];
+	initConstructor() {
+		this.configs = ["case", "exact", "autoc", "regex", "file"];
 
 		this.defaults = {
 			settings: {
-				addAutoComplete:	{value:true, 	description:"Add an Autocomplete-Menu for Non-Regex Aliases:"}
+				addAutoComplete: {
+					value: true,
+					description: "Add an Autocomplete-Menu for Non-Regex Aliases:"
+				}
 			}
 		};
 
 		this.aliases = {};
 	}
 
-	getName () {return "ChatAliases";}
+	getName() {
+		return "ChatAliases";
+	}
 
-	getDescription () {return "Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent.";}
+	getDescription() {
+		return "Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent.";
+	}
 
-	getVersion () {return "1.8.9";}
+	getVersion() {
+		return "1.8.9";
+	}
 
-	getAuthor () {return "DevilBro";}
+	getAuthor() {
+		return "DevilBro";
+	}
 
-	getSettingsPanel () {
+	getSettingsPanel() {
 		if (!this.started || typeof BDFDB !== "object") return;
 		var settings = BDFDB.getAllData(this, "settings");
 		var words = this.aliases;
@@ -55,19 +66,31 @@ class ChatAliases {
 		BDFDB.initElements(settingspanel);
 
 		$(settingspanel)
-			.on("click", BDFDB.dotCN.switchinner, () => {this.updateSettings(settingspanel);})
-			.on("keypress", ".wordInputs", (e) => {if (e.which == 13) this.updateContainer(settingspanel, e.currentTarget);})
-			.on("keyup", BDFDB.dotCN.gamenameinput, (e) => {this.updateWord(e.currentTarget);})
-			.on("click", ".btn-addword, .remove-word, .remove-all", (e) => {this.updateContainer(settingspanel, e.currentTarget);})
-			.on("click", BDFDB.dotCN.checkboxinput, (e) => {this.updateConfig(e.currentTarget);})
-			.on("click", ".toggle-info", (e) => {this.toggleInfo(settingspanel, e.currentTarget);});
+			.on("click", BDFDB.dotCN.switchinner, () => {
+				this.updateSettings(settingspanel);
+			})
+			.on("keypress", ".wordInputs", (e) => {
+				if (e.which == 13) this.updateContainer(settingspanel, e.currentTarget);
+			})
+			.on("keyup", BDFDB.dotCN.gamenameinput, (e) => {
+				this.updateWord(e.currentTarget);
+			})
+			.on("click", ".btn-addword, .remove-word, .remove-all", (e) => {
+				this.updateContainer(settingspanel, e.currentTarget);
+			})
+			.on("click", BDFDB.dotCN.checkboxinput, (e) => {
+				this.updateConfig(e.currentTarget);
+			})
+			.on("click", ".toggle-info", (e) => {
+				this.toggleInfo(settingspanel, e.currentTarget);
+			});
 		return settingspanel;
 	}
 
 	//legacy
-	load () {}
+	load() {}
 
-	start () {
+	start() {
 		var libraryScript = null;
 		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
 			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
@@ -77,12 +100,16 @@ class ChatAliases {
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
 			document.head.appendChild(libraryScript);
 		}
-		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
+		this.startTimeout = setTimeout(() => {
+			this.initialize();
+		}, 30000);
 		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-		else libraryScript.addEventListener("load", () => {this.initialize();});
+		else libraryScript.addEventListener("load", () => {
+			this.initialize();
+		});
 	}
 
-	initialize () {
+	initialize() {
 		if (typeof BDFDB === "object") {
 			BDFDB.loadMessage(this);
 
@@ -98,14 +125,21 @@ class ChatAliases {
 						if (change.removedNodes) {
 							change.removedNodes.forEach((node) => {
 								if (node && node.tagName && node.getAttribute("layer-id") == "user-settings") {
-									document.querySelectorAll("textarea" + BDFDB.dotCN.textarea).forEach(textarea => {this.bindEventToTextArea(textarea);});
+									document.querySelectorAll("textarea" + BDFDB.dotCN.textarea).forEach(textarea => {
+										this.bindEventToTextArea(textarea);
+									});
 								}
 							});
 						}
 					}
 				);
 			});
-			BDFDB.addObserver(this, BDFDB.dotCN.layers, {name:"settingsWindowObserver",instance:observer}, {childList:true});
+			BDFDB.addObserver(this, BDFDB.dotCN.layers, {
+				name: "settingsWindowObserver",
+				instance: observer
+			}, {
+				childList: true
+			});
 
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -120,7 +154,13 @@ class ChatAliases {
 					}
 				);
 			});
-			BDFDB.addObserver(this, BDFDB.dotCN.appmount, {name:"textareaObserver",instance:observer}, {childList: true, subtree:true});
+			BDFDB.addObserver(this, BDFDB.dotCN.appmount, {
+				name: "textareaObserver",
+				instance: observer
+			}, {
+				childList: true,
+				subtree: true
+			});
 
 			// PATCH OLD DATA REMOVE SOON
 			this.aliases = BDFDB.loadAllData(this, "words");
@@ -129,18 +169,19 @@ class ChatAliases {
 			}
 			BDFDB.saveAllData(this.aliases, this, "words");
 
-			document.querySelectorAll("textarea" + BDFDB.dotCN.textarea).forEach(textarea => {this.bindEventToTextArea(textarea);});
+			document.querySelectorAll("textarea" + BDFDB.dotCN.textarea).forEach(textarea => {
+				this.bindEventToTextArea(textarea);
+			});
 
 			$(document).off("click." + this.getName()).on("click." + this.getName(), (e) => {
 				if (!e.target.tagName === "TEXTAREA") $(".autocompleteAliases, .autocompleteAliasesRow").remove();
 			});
-		}
-		else {
+		} else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
 		}
 	}
 
-	stop () {
+	stop() {
 		if (typeof BDFDB === "object") {
 			$(".autocompleteAliases, .autocompleteAliasesRow").remove();
 
@@ -151,18 +192,22 @@ class ChatAliases {
 
 	// begin of own functions
 
-	updateSettings (settingspanel) {
+	updateSettings(settingspanel) {
 		var settings = {};
 		for (var input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner)) {
 			settings[input.value] = input.checked;
 		}
 		BDFDB.saveAllData(settings, this, "settings");
 
-		document.querySelectorAll("textarea" + BDFDB.dotCN.textarea).forEach(textarea => {this.bindEventToTextArea(textarea);});
+		document.querySelectorAll("textarea" + BDFDB.dotCN.textarea).forEach(textarea => {
+			this.bindEventToTextArea(textarea);
+		});
 	}
 
-	updateContainer (settingspanel, ele) {
-		var update = false, wordvalue = null, replacevalue = null;
+	updateContainer(settingspanel, ele) {
+		var update = false,
+			wordvalue = null,
+			replacevalue = null;
 		var action = ele.getAttribute("action");
 		var words = this.aliases;
 
@@ -197,15 +242,13 @@ class ChatAliases {
 				replaceinput.value = null;
 				update = true;
 			}
-		}
-		else if (action == "remove") {
+		} else if (action == "remove") {
 			wordvalue = ele.getAttribute("word");
 			if (wordvalue) {
 				delete words[wordvalue];
 				update = true;
 			}
-		}
-		else if (action == "removeall") {
+		} else if (action == "removeall") {
 			if (confirm("Are you sure you want to remove all added Words from your list?")) {
 				words = {};
 				update = true;
@@ -228,7 +271,7 @@ class ChatAliases {
 		}
 	}
 
-	updateWord (ele) {
+	updateWord(ele) {
 		clearTimeout(ele.updateTimeout);
 		ele.updateTimeout = setTimeout(() => {
 			var card = ele.parentElement.parentElement;
@@ -249,10 +292,10 @@ class ChatAliases {
 				if (newwordvalue != oldwordvalue) delete this.aliases[oldwordvalue];
 				BDFDB.saveAllData(this.aliases, this, "words");
 			}
-		},500);
+		}, 500);
 	}
 
-	updateConfig (ele) {
+	updateConfig(ele) {
 		var wordvalue = ele.getAttribute("word");
 		var config = ele.getAttribute("config");
 		if (wordvalue && this.aliases[wordvalue] && config) {
@@ -261,7 +304,7 @@ class ChatAliases {
 		}
 	}
 
-	toggleInfo (settingspanel, ele) {
+	toggleInfo(settingspanel, ele) {
 		ele.classList.toggle(BDFDB.disCN.categorywrappercollapsed);
 		ele.classList.toggle(BDFDB.disCN.categorywrapperdefault);
 		var svg = ele.querySelector(BDFDB.dotCN.categoryicontransition);
@@ -274,7 +317,7 @@ class ChatAliases {
 		BDFDB.saveData("hideInfo", visible, this, "hideInfo");
 	}
 
-	bindEventToTextArea (textarea) {
+	bindEventToTextArea(textarea) {
 		if (!textarea) return;
 		var channelObj = BDFDB.getSelectedChannel();
 		var channel = channelObj ? channelObj.data : null;
@@ -308,11 +351,10 @@ class ChatAliases {
 						e.stopPropagation();
 						this.swapWordWithAlias(textarea);
 					}
-				}
-				else if ((e.which == 38 || e.which == 40) && autocompletemenu) {
+				} else if ((e.which == 38 || e.which == 40) && autocompletemenu) {
 					let autocompleteitems = autocompletemenu.querySelectorAll(BDFDB.dotCN.autocompleteselectable + ":not(.autocompleteAliasesSelector)");
 					let selected = autocompletemenu.querySelector(BDFDB.dotCN.autocompleteselected);
-					if (selected.classList.contains("autocompleteAliasesSelector") || autocompleteitems[e.which == 38 ? 0 : (autocompleteitems.length-1)] == selected) {
+					if (selected.classList.contains("autocompleteAliasesSelector") || autocompleteitems[e.which == 38 ? 0 : (autocompleteitems.length - 1)] == selected) {
 						e.preventDefault();
 						e.stopPropagation();
 						let next = this.getNextSelection(autocompletemenu, null, e.which == 38 ? false : true);
@@ -321,19 +363,23 @@ class ChatAliases {
 						if (!next.classList.contains("autocompleteAliasesSelector")) {
 							// if next element is a default discord autocomplete item, trigger the keypress again so the item is internally selected
 							var press = new KeyboardEvent("keypress", e);
-							Object.defineProperty(press, "keyCode", {value: e.which});
-							Object.defineProperty(press, "which", {value: e.which});
+							Object.defineProperty(press, "keyCode", {
+								value: e.which
+							});
+							Object.defineProperty(press, "which", {
+								value: e.which
+							});
 							textarea.dispatchEvent(press);
 						}
 					}
-				}
-				else if (textarea.value && !e.shiftKey && e.which == 13 && !autocompletemenu && textarea.value.indexOf("s/") != 0) {
+				} else if (textarea.value && !e.shiftKey && e.which == 13 && !autocompletemenu && textarea.value.indexOf("s/") != 0) {
 					this.format = true;
 					$(textarea).trigger("input");
-				}
-				else if (!e.ctrlKey && settings.addAutoComplete && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length) {
+				} else if (!e.ctrlKey && settings.addAutoComplete && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length) {
 					clearTimeout(textarea.chataliastimeout);
-					textarea.chataliastimeout = setTimeout(() => {this.addAutoCompleteMenu(textarea);},100);
+					textarea.chataliastimeout = setTimeout(() => {
+						this.addAutoCompleteMenu(textarea);
+					}, 100);
 				}
 
 				if (!e.ctrlKey && e.which != 38 && e.which != 40) {
@@ -345,54 +391,57 @@ class ChatAliases {
 			.off("click." + this.getName())
 			.on("click." + this.getName(), e => {
 				if (settings.addAutoComplete && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length) {
-					setImmediate(() => {this.addAutoCompleteMenu(textarea);});
+					setImmediate(() => {
+						this.addAutoCompleteMenu(textarea);
+					});
 				}
 			});
 	}
 
-	addAutoCompleteMenu (textarea) {
+	addAutoCompleteMenu(textarea) {
 		if (textarea.parentElement.querySelector(".autocompleteAliasesRow")) return;
 		let words = textarea.value.split(" ");
-		let lastword = words[words.length-1].trim();
+		let lastword = words[words.length - 1].trim();
 		if (words.length == 1 && BDFDB.isPluginEnabled("WriteUpperCase")) {
 			let first = lastword.charAt(0);
 			if (first === first.toUpperCase() && lastword.toLowerCase().indexOf("http") == 0) {
 				lastword = lastword.charAt(0).toLowerCase() + lastword.slice(1);
-			}
-			else if (first === first.toLowerCase() && first !== first.toUpperCase() && lastword.toLowerCase().indexOf("http") != 0) {
+			} else if (first === first.toLowerCase() && first !== first.toUpperCase() && lastword.toLowerCase().indexOf("http") != 0) {
 				lastword = lastword.charAt(0).toUpperCase() + lastword.slice(1);
 			}
 		}
 		if (lastword) {
-			let aliases = this.aliases, matchedaliases = {};
+			let aliases = this.aliases,
+				matchedaliases = {};
 			for (let alias in aliases) {
 				let aliasdata = aliases[alias];
 				if (!aliasdata.regex && aliasdata.autoc) {
 					if (aliasdata.exact) {
 						if (aliasdata.case && alias.indexOf(lastword) == 0) matchedaliases[alias] = aliasdata;
 						else if (!aliasdata.case && alias.toLowerCase().indexOf(lastword.toLowerCase()) == 0) matchedaliases[alias] = aliasdata;
-					}
-					else {
+					} else {
 						if (aliasdata.case && alias.indexOf(lastword) > -1) matchedaliases[alias] = aliasdata;
 						else if (!aliasdata.case && alias.toLowerCase().indexOf(lastword.toLowerCase()) > -1) matchedaliases[alias] = aliasdata;
 					}
 				}
 			}
 			if (!BDFDB.isObjectEmpty(matchedaliases)) {
-				let autocompletemenu = textarea.parentElement.querySelector(BDFDB.dotCNS.autocomplete + BDFDB.dotCN.autocompleteinner), amount = 15;
+				let autocompletemenu = textarea.parentElement.querySelector(BDFDB.dotCNS.autocomplete + BDFDB.dotCN.autocompleteinner),
+					amount = 15;
 				if (!autocompletemenu) {
 					autocompletemenu = $(`<div class="${BDFDB.disCNS.autocomplete + BDFDB.disCN.autocomplete2} autocompleteAliases"><div class="${BDFDB.disCN.autocompleteinner}"></div></div>`)[0];
 					textarea.parentElement.appendChild(autocompletemenu);
 					autocompletemenu = autocompletemenu.firstElementChild;
-				}
-				else {
+				} else {
 					amount -= autocompletemenu.querySelectorAll(BDFDB.dotCN.autocompleteselectable).length;
 				}
 
 				$(autocompletemenu)
 					.append(`<div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteAliasesRow"><div class="${BDFDB.disCN.autocompleteselector} autocompleteAliasesSelector"><div class="${BDFDB.disCNS.autocompletecontenttitle + BDFDB.disCNS.small + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCN.weightsemibold}">Aliases: <strong class="lastword">${BDFDB.encodeToHTML(lastword)}</strong></div></div></div>`)
 					.off("mouseenter." + this.getName()).on("mouseenter." + this.getName(), BDFDB.dotCN.autocompleteselectable, (e) => {
-						autocompletemenu.querySelectorAll(BDFDB.dotCN.autocompleteselected).forEach(selected => {selected.classList.remove(BDFDB.disCN.autocompleteselected);});
+						autocompletemenu.querySelectorAll(BDFDB.dotCN.autocompleteselected).forEach(selected => {
+							selected.classList.remove(BDFDB.disCN.autocompleteselected);
+						});
 						e.currentTarget.classList.add(BDFDB.disCN.autocompleteselected);
 					});
 
@@ -411,20 +460,19 @@ class ChatAliases {
 		}
 	}
 
-	getNextSelection (menu, selected, forward) {
+	getNextSelection(menu, selected, forward) {
 		selected = selected ? selected : menu.querySelector(BDFDB.dotCN.autocompleteselected).parentElement;
 		let next, sibling = forward ? selected.nextElementSibling : selected.previousElementSibling;
 		if (sibling) {
 			next = sibling.querySelector(BDFDB.dotCN.autocompleteselectable);
-		}
-		else {
+		} else {
 			let items = menu.querySelectorAll(BDFDB.dotCN.autocompleteselectable);
-			next = forward ? items[0] : items[items.length-1];
+			next = forward ? items[0] : items[items.length - 1];
 		}
 		return next ? next : this.getNextSelection(menu, sibling, forward);
 	}
 
-	swapWordWithAlias (textarea) {
+	swapWordWithAlias(textarea) {
 		let aliasword = textarea.parentElement.querySelector(".autocompleteAliasesRow " + BDFDB.dotCN.autocompleteselected + " .aliasword").innerText;
 		let lastword = textarea.parentElement.querySelector(".autocompleteAliasesRow .lastword").innerText;
 		if (aliasword && lastword) {
@@ -438,8 +486,12 @@ class ChatAliases {
 		}
 	}
 
-	formatText (text) {
-		var newText = [], files = [], wordAliases = {}, multiAliases = {}, aliases = this.aliases;
+	formatText(text) {
+		var newText = [],
+			files = [],
+			wordAliases = {},
+			multiAliases = {},
+			aliases = this.aliases;
 		for (let alias in aliases) {
 			if (!aliases[alias].regex && alias.indexOf(" ") == -1) wordAliases[alias] = aliases[alias];
 			else multiAliases[alias] = aliases[alias];
@@ -449,26 +501,35 @@ class ChatAliases {
 		}
 		newText = newText.length == 1 ? newText[0] : newText.join(" ");
 		newText = this.useAliases(newText, multiAliases, files, false);
-		return {text:newText, files};
+		return {
+			text: newText,
+			files
+		};
 	}
 
-	useAliases (string, aliases, files, singleword) {
+	useAliases(string, aliases, files, singleword) {
 		for (let alias in aliases) {
 			let aliasdata = aliases[alias];
 			let escpAlias = aliasdata.regex ? alias : BDFDB.regEscape(alias);
-			let result = true, replaced = false, tempstring1 = string, tempstring2 = "";
+			let result = true,
+				replaced = false,
+				tempstring1 = string,
+				tempstring2 = "";
 			let regstring = aliasdata.exact ? "^" + escpAlias + "$" : escpAlias;
 			while (result != null) {
 				result = new RegExp(regstring, (aliasdata.case ? "" : "i") + (aliasdata.exact ? "" : "g")).exec(tempstring1);
 				if (result) {
 					replaced = true;
 					let replace = aliasdata.file ? "" : BDFDB.insertNRST(aliasdata.replace);
-					if (result.length > 1) for (var i = 1; i < result.length; i++) replace = replace.replace(new RegExp("\\\\" + i, "g"), result[i]);
+					if (result.length > 1)
+						for (var i = 1; i < result.length; i++) replace = replace.replace(new RegExp("\\\\" + i, "g"), result[i]);
 					tempstring2 += tempstring1.slice(0, result.index + result[0].length).replace(result[0], replace);
 					tempstring1 = tempstring1.slice(result.index + result[0].length);
 					if (aliasdata.file && typeof aliasdata.filedata == "string") {
 						var filedata = JSON.parse(aliasdata.filedata);
-						files.push(new File([Buffer.from(filedata.data, "base64")], filedata.name, {type:filedata.type}));
+						files.push(new File([Buffer.from(filedata.data, "base64")], filedata.name, {
+							type: filedata.type
+						}));
 					}
 					if (aliasdata.regex && regstring.indexOf("^") == 0) result = null;
 				}
@@ -484,10 +545,11 @@ class ChatAliases {
 		return string;
 	}
 
-	replaceWord (string, regex) {
-		let result = regex.exec(string), rest = "";
+	replaceWord(string, regex) {
+		let result = regex.exec(string),
+			rest = "";
 		if (result) {
-			rest = string.slice(a.indexOf(b)+b.length);
+			rest = string.slice(a.indexOf(b) + b.length);
 		}
 	}
 }
