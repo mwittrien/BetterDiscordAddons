@@ -15,14 +15,13 @@ class ChatAliases {
 
 	getDescription () {return "Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent.";}
 
-	getVersion () {return "1.8.9";}
+	getVersion () {return "1.9.0";}
 
 	getAuthor () {return "DevilBro";}
 
 	getSettingsPanel () {
 		if (!this.started || typeof BDFDB !== "object") return;
-		var settings = BDFDB.getAllData(this, "settings"); 
-		var words = BDFDB.loadAllData(this, "words");
+		var settings = BDFDB.getAllData(this, "settings");
 		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		for (let key in settings) {
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}"${settings[key] ? " checked" : ""}></div></div>`;
@@ -33,10 +32,10 @@ class ChatAliases {
 			settingshtml += `<div class="${BDFDB.disCNS.margintop8 +  BDFDB.disCNS.tableheadersize + BDFDB.disCNS.size10 + BDFDB.disCNS.primary + BDFDB.disCN.weightbold}" style="flex: 1 1 auto; width: 34px !important; text-align: center;">${config.toUpperCase()}</div>`;
 		}
 		settingshtml += `</div></div><div class="DevilBro-settings-inner-list alias-list ${BDFDB.disCNS.gamesettings + BDFDB.disCN.marginbottom8}">`;
-		for (let word in words) {
-			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.hovercard}"><div class="${BDFDB.disCN.hovercardinner}"><input type="text" word="${word}" action="edit" class="${BDFDB.disCNS.gamename + BDFDB.disCN.gamenameinput} word-name" value="${BDFDB.encodeToHTML(word)}"><input type="text" word="${word}" action="edit" class="${BDFDB.disCNS.gamename + BDFDB.disCN.gamenameinput} replace-name" value="${BDFDB.encodeToHTML(words[word].replace)}">`;
+		for (let word in this.aliases) {
+			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.hovercard}"><div class="${BDFDB.disCN.hovercardinner}"><input type="text" word="${word}" action="edit" class="${BDFDB.disCNS.gamename + BDFDB.disCN.gamenameinput} word-name" value="${BDFDB.encodeToHTML(word)}"><input type="text" word="${word}" action="edit" class="${BDFDB.disCNS.gamename + BDFDB.disCN.gamenameinput} replace-name" value="${BDFDB.encodeToHTML(this.aliases[word].replace)}">`;
 			for (let config of this.configs) {
-				settingshtml += `<div class="${BDFDB.disCNS.checkboxcontainer + BDFDB.disCN.marginreset}" style="flex: 0 0 auto;"><label class="${BDFDB.disCN.checkboxwrapper}"><input word="${word}" config="${config}" type="checkbox" class="${BDFDB.disCNS.checkboxinputdefault + BDFDB.disCN.checkboxinput}"${words[word][config] ? " checked" : ""}><div class="${BDFDB.disCNS.checkbox + BDFDB.disCNS.flexcenter + BDFDB.disCNS.flex + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.checkboxround}"><svg name="Checkmark" width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><polyline stroke="transparent" stroke-width="2" points="3.5 9.5 7 13 15 5"></polyline></g></svg></div></label></div>`;
+				settingshtml += `<div class="${BDFDB.disCNS.checkboxcontainer + BDFDB.disCN.marginreset}" style="flex: 0 0 auto;"><label class="${BDFDB.disCN.checkboxwrapper}"><input word="${word}" config="${config}" type="checkbox" class="${BDFDB.disCNS.checkboxinputdefault + BDFDB.disCN.checkboxinput}"${this.aliases[word][config] ? " checked" : ""}><div class="${BDFDB.disCNS.checkbox + BDFDB.disCNS.flexcenter + BDFDB.disCNS.flex + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.checkboxround}"><svg name="Checkmark" width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><polyline stroke="transparent" stroke-width="2" points="3.5 9.5 7 13 15 5"></polyline></g></svg></div></label></div>`;
 				console.log();
 			}
 			settingshtml += `</div><div word="${word}" action="remove" class="${BDFDB.disCN.hovercardbutton} remove-word"></div></div>`;
@@ -119,13 +118,8 @@ class ChatAliases {
 				);
 			});
 			BDFDB.addObserver(this, BDFDB.dotCN.appmount, {name:"textareaObserver",instance:observer}, {childList: true, subtree:true});
-
-			// PATCH OLD DATA REMOVE SOON
-			let aliases = BDFDB.loadAllData(this, "words");
-			for (let alias in aliases) {
-				aliases[alias].autoc = aliases[alias].autoc == undefined ? !aliases[alias].regex : aliases[alias].autoc;
-			}
-			BDFDB.saveAllData(aliases, this, "words");
+			
+			this.aliases = BDFDB.loadAllData(this, "words");
 			
 			document.querySelectorAll("textarea" + BDFDB.dotCN.textarea).forEach(textarea => {this.bindEventToTextArea(textarea);});
 			
@@ -162,7 +156,6 @@ class ChatAliases {
 	updateContainer (settingspanel, ele) {
 		var update = false, wordvalue = null, replacevalue = null;
 		var action = ele.getAttribute("action");
-		var words = BDFDB.loadAllData(this, "words");
 
 		if (action == "add") {
 			var wordinput = settingspanel.querySelector("#input-wordvalue");
@@ -182,7 +175,7 @@ class ChatAliases {
 						type: fileselection.files[0].type
 					});
 				}
-				words[wordvalue] = {
+				this.aliases[wordvalue] = {
 					replace: replacevalue,
 					filedata: filedata,
 					case: false,
@@ -199,25 +192,24 @@ class ChatAliases {
 		else if (action == "remove") {
 			wordvalue = ele.getAttribute("word");
 			if (wordvalue) {
-				delete words[wordvalue];
+				delete this.aliases[wordvalue];
 				update = true;
 			}
 		}
 		else if (action == "removeall") {
 			if (confirm("Are you sure you want to remove all added Words from your list?")) {
-				words = {};
+				this.aliases = {};
 				update = true;
 			}
 		}
 		if (update) {
-			BDFDB.saveAllData(words, this, "words");
-			words = BDFDB.loadAllData(this, "words");
+			BDFDB.saveAllData(this.aliases, this, "words");
 
 			var containerhtml = ``;
-			for (let word in words) {
-				containerhtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.hovercard}"><div class="${BDFDB.disCN.hovercardinner}"><input type="text" word="${word}" action="edit" class="${BDFDB.disCNS.gamename + BDFDB.disCN.gamenameinput} word-name" value="${BDFDB.encodeToHTML(word)}"><input type="text" word="${word}" action="edit" class="${BDFDB.disCNS.gamename + BDFDB.disCN.gamenameinput} replace-name" value="${BDFDB.encodeToHTML(words[word].replace)}">`;
+			for (let word in this.aliases) {
+				containerhtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.hovercard}"><div class="${BDFDB.disCN.hovercardinner}"><input type="text" word="${word}" action="edit" class="${BDFDB.disCNS.gamename + BDFDB.disCN.gamenameinput} word-name" value="${BDFDB.encodeToHTML(word)}"><input type="text" word="${word}" action="edit" class="${BDFDB.disCNS.gamename + BDFDB.disCN.gamenameinput} replace-name" value="${BDFDB.encodeToHTML(this.aliases[word].replace)}">`;
 				for (let config of this.configs) {
-					containerhtml += `<div class="${BDFDB.disCNS.checkboxcontainer + BDFDB.disCN.marginreset}" style="flex: 0 0 auto;"><label class="${BDFDB.disCN.checkboxwrapper}"><input word="${word}" config="${config}" type="checkbox" class="${BDFDB.disCNS.checkboxinputdefault + BDFDB.disCN.checkboxinput}"${words[word][config] ? " checked" : ""}><div class="${BDFDB.disCNS.checkbox + BDFDB.disCNS.flexcenter + BDFDB.disCNS.flex + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.checkboxround}"><svg name="Checkmark" width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><polyline stroke="transparent" stroke-width="2" points="3.5 9.5 7 13 15 5"></polyline></g></svg></div></label></div>`;
+					containerhtml += `<div class="${BDFDB.disCNS.checkboxcontainer + BDFDB.disCN.marginreset}" style="flex: 0 0 auto;"><label class="${BDFDB.disCN.checkboxwrapper}"><input word="${word}" config="${config}" type="checkbox" class="${BDFDB.disCNS.checkboxinputdefault + BDFDB.disCN.checkboxinput}"${this.aliases[word][config] ? " checked" : ""}><div class="${BDFDB.disCNS.checkbox + BDFDB.disCNS.flexcenter + BDFDB.disCNS.flex + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.checkboxround}"><svg name="Checkmark" width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><polyline stroke="transparent" stroke-width="2" points="3.5 9.5 7 13 15 5"></polyline></g></svg></div></label></div>`;
 				}
 				containerhtml += `</div><div word="${word}" action="remove" class="${BDFDB.disCN.hovercardbutton} remove-word"></div></div>`;
 			}
@@ -230,9 +222,8 @@ class ChatAliases {
 		clearTimeout(ele.updateTimeout);
 		ele.updateTimeout = setTimeout(() => {
 			var card = ele.parentElement.parentElement;
-			var words = BDFDB.loadAllData(this, "words");
 			var oldwordvalue = ele.getAttribute("word");
-			if (oldwordvalue && words[oldwordvalue]) {
+			if (oldwordvalue && this.aliases[oldwordvalue]) {
 				var wordinput = card.querySelector(".word-name");
 				var replaceinput = card.querySelector(".replace-name");
 				var removebutton = card.querySelector(".remove-word");
@@ -243,21 +234,20 @@ class ChatAliases {
 				replaceinput.setAttribute("word", newwordvalue);
 				replaceinput.setAttribute("value", newreplacevalue);
 				removebutton.setAttribute("word", newwordvalue);
-				words[newwordvalue] = words[oldwordvalue];
-				words[newwordvalue].replace = newreplacevalue;
-				if (newwordvalue != oldwordvalue) delete words[oldwordvalue];
-				BDFDB.saveAllData(words, this, "words");
+				this.aliases[newwordvalue] = this.aliases[oldwordvalue];
+				this.aliases[newwordvalue].replace = newreplacevalue;
+				if (newwordvalue != oldwordvalue) delete this.aliases[oldwordvalue];
+				BDFDB.saveAllData(this.aliases, this, "words");
 			}
 		},500);
 	}
 
 	updateConfig (ele) {
-		var words = BDFDB.loadAllData(this, "words");
 		var wordvalue = ele.getAttribute("word");
 		var config = ele.getAttribute("config");
-		if (wordvalue && words[wordvalue] && config) {
-			words[wordvalue][config] = ele.checked;
-			BDFDB.saveAllData(words, this, "words");
+		if (wordvalue && this.aliases[wordvalue] && config) {
+			this.aliases[wordvalue][config] = ele.checked;
+			BDFDB.saveAllData(this.aliases, this, "words");
 		}
 	}
 
@@ -364,9 +354,9 @@ class ChatAliases {
 			}
 		}
 		if (lastword) {
-			let aliases = BDFDB.loadAllData(this, "words"), matchedaliases = {};
-			for (let alias in aliases) {
-				let aliasdata = aliases[alias];
+			let matchedaliases = {};
+			for (let alias in this.aliases) {
+				let aliasdata = this.aliases[alias];
 				if (!aliasdata.regex && aliasdata.autoc) {
 					if (aliasdata.exact) {
 						if (aliasdata.case && alias.indexOf(lastword) == 0) matchedaliases[alias] = aliasdata;
@@ -439,10 +429,10 @@ class ChatAliases {
 	}
 
 	formatText (text) {
-		var newText = [], files = [], wordAliases = {}, multiAliases = {}, aliases = BDFDB.loadAllData(this, "words");
-		for (let alias in aliases) {
-			if (!aliases[alias].regex && alias.indexOf(" ") == -1) wordAliases[alias] = aliases[alias];
-			else multiAliases[alias] = aliases[alias];
+		var newText = [], files = [], wordAliases = {}, multiAliases = {};
+		for (let alias in this.aliases) {
+			if (!this.aliases[alias].regex && alias.indexOf(" ") == -1) wordAliases[alias] = this.aliases[alias];
+			else multiAliases[alias] = this.aliases[alias];
 		}
 		for (let word of text.trim().split(" ")) {
 			newText.push(this.useAliases(word, wordAliases, files, true));
