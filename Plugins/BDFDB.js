@@ -3654,20 +3654,35 @@ BDFDB.appendLocalStyle("BDFDB", `
 	} 
 	
 	#pluginNotice #outdatedPlugins span:hover {
-		text-decoration:underline;
+		text-decoration: underline;
 	}
 	
+	body .tooltip.tooltip-black.DevilBro-tooltip {
+		border-color: #000 !important;
+	}
+	body .tooltip.tooltip-red.DevilBro-tooltip {
+		border-color: #f04747 !important;
+	}
+	body .tooltip.tooltip-green.DevilBro-tooltip {
+		border-color: #f6fbf9 !important;
+	}
+	body .tooltip.tooltip-yellow.DevilBro-tooltip {
+		border-color: #faa61a !important;
+	}
+	body .tooltip.tooltip-brand.DevilBro-tooltip {
+		border-color: #7289da !important;
+	}
 	body .tooltip.tooltip-top.DevilBro-tooltip:after {
-			border-top-color: inherit !important;
+		border-top-color: inherit !important;
 	}
 	body .tooltip.tooltip-right.DevilBro-tooltip:after {
-			border-right-color: inherit !important;
+		border-right-color: inherit !important;
 	}
 	body .tooltip.tooltip-left.DevilBro-tooltip:after {
-			border-left-color: inherit !important;
+		border-left-color: inherit !important;
 	}
 	body .tooltip.tooltip-bottom.DevilBro-tooltip:after {
-			border-bottom-color: inherit !important;
+		border-bottom-color: inherit !important;
 	}
 	
 	.toasts {
