@@ -392,10 +392,13 @@ BDFDB.createTooltip = function (content, anker, options = {}) {
 	if (options.type) tooltip.classList.add(BDFDB.disCN["tooltip" + options.type]);
 	if (options.id) tooltip.id = options.id.split(" ")[0];
 	if (options.selector) options.selector.split(" ").forEach(selector => {if(selector) tooltip.classList.add(selector);});
-	if (options.style) tooltip.style = options.style;
 	if (options.css) BDFDB.appendLocalStyle("BDFDBcustomTooltip" + id, options.css, tooltipcontainer);
 	if (options.html === true) tooltip.innerHTML = content;
 	else tooltip.innerText = content;
+	if (options.style) {
+		tooltip.style = options.style;
+		if (options.style.indexOf("border-color:") > -1) tooltip.classList.add("tooltip-customcolor");
+	}
 	
 	tooltipcontainer.appendChild(tooltip);
 	
@@ -3657,31 +3660,16 @@ BDFDB.appendLocalStyle("BDFDB", `
 		text-decoration: underline;
 	}
 	
-	body .tooltip.tooltip-black.DevilBro-tooltip {
-		border-color: #000 !important;
-	}
-	body .tooltip.tooltip-red.DevilBro-tooltip {
-		border-color: #f04747 !important;
-	}
-	body .tooltip.tooltip-green.DevilBro-tooltip {
-		border-color: #f6fbf9 !important;
-	}
-	body .tooltip.tooltip-yellow.DevilBro-tooltip {
-		border-color: #faa61a !important;
-	}
-	body .tooltip.tooltip-brand.DevilBro-tooltip {
-		border-color: #7289da !important;
-	}
-	body .tooltip.tooltip-top.DevilBro-tooltip:after {
+	.tooltip.tooltip-customcolor.tooltip-top:after {
 		border-top-color: inherit !important;
 	}
-	body .tooltip.tooltip-right.DevilBro-tooltip:after {
+	.tooltip.tooltip-customcolor.tooltip-right:after {
 		border-right-color: inherit !important;
 	}
-	body .tooltip.tooltip-left.DevilBro-tooltip:after {
+	.tooltip.tooltip-customcolor.tooltip-left:after {
 		border-left-color: inherit !important;
 	}
-	body .tooltip.tooltip-bottom.DevilBro-tooltip:after {
+	.tooltip.tooltip-customcolor.tooltip-bottom:after {
 		border-bottom-color: inherit !important;
 	}
 	
