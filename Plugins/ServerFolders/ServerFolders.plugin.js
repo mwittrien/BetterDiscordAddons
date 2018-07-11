@@ -11,6 +11,10 @@ class ServerFolders {
 				background-size: cover !important;
 			}
 			
+			.foldercontainer ${BDFDB.dotCN.guild}.copy ${BDFDB.dotCN.avataricon} {
+				position: static !important; /* fixed weird black square behind guild icons in folders */
+			}
+			
 			.serverfolders-modal .ui-icon-picker-icon {
 				position: relative;
 				width: 70px;
@@ -857,15 +861,7 @@ class ServerFolders {
 			if (data.folderName) {
 				var bgColor = data.color3 ? BDFDB.color2RGB(data.color3) : "";
 				var fontColor = data.color4 ? BDFDB.color2RGB(data.color4) : "";
-				var customTooltipCSS = `
-					body .tooltip.guild-folder-tooltip {
-						color: ${fontColor} !important;
-						background-color: ${bgColor} !important;
-					}
-					body .guild-folder-tooltip:after {
-						border-right-color: ${bgColor} !important;
-					}`;
-				BDFDB.createTooltip(data.folderName, folderDiv, {type:"right",selector:"guild-folder-tooltip",css:customTooltipCSS});
+				BDFDB.createTooltip(data.folderName, folderDiv, {type:"right",selector:"guild-folder-tooltip",style:`color: ${fontColor} !important; background-color: ${bgColor} !important; border-color: ${bgColor} !important;`});
 			}
 		}
 	}
@@ -875,16 +871,8 @@ class ServerFolders {
 		var text = data ? (data.name ? data.name : serverObj.name) : serverObj.name;
 		var bgColor = data ? (data.color3 ? BDFDB.color2RGB(data.color3) : "") : "";
 		var fontColor = data ? (data.color4 ? BDFDB.color2RGB(data.color4) : "") : "";
-		var customTooltipCSS = `
-			body .tooltip.guild-custom-tooltip {
-				color: ${fontColor} !important;
-				background-color: ${bgColor} !important;
-			}
-			body .tooltip.guild-custom-tooltip:after {
-				border-right-color: ${bgColor} !important;
-			}`;
 			
-		BDFDB.createTooltip(text, target, {type:"right",selector:"guild-custom-tooltip",css:customTooltipCSS});
+		BDFDB.createTooltip(text, target, {type:"right",selector:"guild-custom-tooltip",style:`color: ${fontColor} !important; background-color: ${bgColor} !important; border-color: ${bgColor} !important;`});
 	}
 	
 	showFolderSettings (folderDiv) {
