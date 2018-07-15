@@ -3240,6 +3240,7 @@ BDFDB.DiscordClasses = {
 	large: "large-3Q-_XB",
 	layer: "layer-3QrUeG",
 	layers: "layers-3iHuyZ",
+	loginscreen: "wrapper-3Q5DdO",
 	marginbottom4: "marginBottom4-2qk4Hy",
 	marginbottom8: "marginBottom8-AtZOdT",
 	marginbottom20: "marginBottom20-32qID7",
