@@ -303,7 +303,7 @@ BDFDB.showToast = function (content, options = {}) {
 		toastWrapper.style.setProperty("left", left + "px");
 		toastWrapper.style.setProperty("width", width + "px");
 		toastWrapper.style.setProperty("bottom", bottom + "px");
-		document.querySelector(BDFDB.dotCN.appold).appendChild(toastWrapper);
+		document.querySelector(BDFDB.dotCN.app).appendChild(toastWrapper);
 	}
 	const {type = "", icon = true, timeout = 3000, html = false, selector = ""} = options;
 	let toastElem = document.createElement("div");
