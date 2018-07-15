@@ -7,6 +7,11 @@ class OldTitleBar {
 				display: none;
 			}
 			
+			${BDFDB.dotCN.titlebar}.hidden-by-OTB + ${BDFDB.dotCN.app} .splashBackground-1FRCko:before {
+				display: none;
+			}
+			
+			${BDFDB.dotCN.channelheadertitletext},
 			${BDFDB.dotCN.channelheadertopic},
 			${BDFDB.dotCN.contextmenu} * {
 				-webkit-app-region: no-drag;
@@ -69,7 +74,7 @@ class OldTitleBar {
 
 	getDescription () {return "Reverts the title bar back to its former self.";}
 
-	getVersion () {return "1.3.5";}
+	getVersion () {return "1.3.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -115,6 +120,23 @@ class OldTitleBar {
 			BDFDB.loadMessage(this);
 			
 			var observer = null;
+
+			observer = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.addedNodes) {
+							change.addedNodes.forEach((node) => {
+								setImmediate(() => {
+									if (node && node.tagName && node.classList.contains(BDFDB.disCN.loginscreen)) {
+										this.addSettingsTitleBar(node);
+									}
+								});
+							});
+						}
+					}
+				);
+			});
+			BDFDB.addObserver(this, BDFDB.dotCN.app, {name:"loginScreenObserver",instance:observer}, {childList:true});
 
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -267,22 +289,8 @@ class OldTitleBar {
 	}
 	
 	doMaximize () {
-		if (require("electron").remote.getCurrentWindow().isMaximized()) {
-			var newWidth = this.oldWidth ? this.oldWidth : Math.round(screen.availWidth - Math.round(screen.availWidth/10));
-			var newHeight = this.oldHeight ? this.oldHeight : Math.round(screen.availHeight - Math.round(screen.availHeight/10));
-			var newLeft = this.oldLeft ? this.oldLeft : Math.round((screen.availWidth - newWidth)/2);
-			var newTop = this.oldTop ? this.oldTop : Math.round((screen.availHeight - newHeight)/2);
-			
-			require("electron").remote.getCurrentWindow().setPosition(newLeft, newTop);
-			require("electron").remote.getCurrentWindow().setSize(newWidth, newHeight);
-		}
-		else {
-			this.oldLeft = window.screenX;
-			this.oldTop = window.screenY;
-			this.oldWidth = window.outerWidth;
-			this.oldHeight = window.outerHeight;
-			require("electron").remote.getCurrentWindow().maximize();
-		}
+		if (require("electron").remote.getCurrentWindow().isMaximized()) require("electron").remote.getCurrentWindow().unmaximize();
+		else require("electron").remote.getCurrentWindow().maximize();
 	}
 	
 	doClose () {
