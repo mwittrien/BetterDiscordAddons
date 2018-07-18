@@ -422,7 +422,6 @@ class ShowHiddenChannels {
 	showAccessRoles (serverObj, channel, e, allowed) {
 		if (e.type != "mouseenter" || !serverObj || !channel) return;
 		var settings = BDFDB.getAllData(this, "settings");
-		if (!settings.showAllowedRoles && !settings.showDeniedRoles) return;
 		var myMember = this.MemberStore.getMember(serverObj.id, BDFDB.myData.id);
 		var allowedRoles = [], allowedUsers = [], overwrittenRoles = [], deniedRoles = [], deniedUsers = [];
 		var everyoneDenied = false;
