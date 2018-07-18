@@ -58,12 +58,18 @@ class ShowHiddenChannels {
 				</div>
 			</div>`;
 			
+		this.css = `
+			.container-hidden .containerDefault-1ZnADq .iconTransition-2pOJ7l {
+				position: static;
+			}`;
+			
 		this.defaults = {
 			settings: {
 				showText:				{value:true, 	description:"Show hidden Textchannels:"},
 				showVoice:				{value:true, 	description:"Show hidden Voicechannels:"},
 				showCategory:			{value:false, 	description:"Show hidden Categories:"},
 				showAllowedRoles:		{value:true,	description:"Show allowed Roles on hover:"},
+				showAllowedUsers:		{value:true,	description:"Show specifically allowed Users on hover:"},
 				showOverWrittenRoles:	{value:true,	description:"Include overwritten Roles in allowed Roles:"},
 				showDeniedRoles:		{value:true,	description:"Show denied Roles on hover:"},
 				showDeniedUsers:		{value:true,	description:"Show denied Users on hover:"},
@@ -77,7 +83,7 @@ class ShowHiddenChannels {
 
 	getDescription () {return "Displays channels that are hidden from you by role restrictions.";}
 
-	getVersion () {return "2.2.6";}
+	getVersion () {return "2.2.7";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -418,7 +424,7 @@ class ShowHiddenChannels {
 		var settings = BDFDB.getAllData(this, "settings");
 		if (!settings.showAllowedRoles && !settings.showDeniedRoles) return;
 		var myMember = this.MemberStore.getMember(serverObj.id, BDFDB.myData.id);
-		var allowedRoles = [], overwrittenRoles = [], deniedRoles = [], deniedUsers = [];
+		var allowedRoles = [], allowedUsers = [], overwrittenRoles = [], deniedRoles = [], deniedUsers = [];
 		var everyoneDenied = false;
 		for (let id in channel.permissionOverwrites) {
 			if (settings.showAllowedRoles &&
@@ -431,6 +437,13 @@ class ShowHiddenChannels {
 					else {
 						allowedRoles.push(serverObj.roles[id]);
 					}
+			}
+			else if (settings.showAllowedUsers &&
+				channel.permissionOverwrites[id].type == "member" && 
+				(channel.permissionOverwrites[id].allow | this.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].allow) {
+					let user = this.UserStore.getUser(id);
+					let member = this.MemberStore.getMember(serverObj.id,id);
+					if (user && member) allowedUsers.push(Object.assign({name:user.username},member));
 			}
 			if (settings.showDeniedRoles &&
 				channel.permissionOverwrites[id].type == "role" && 
@@ -450,7 +463,7 @@ class ShowHiddenChannels {
 			allowedRoles.push({"name":"@everyone"});
 		}
 		var htmlString = ``;
-		if (settings.showTopic && !allowed && channel.topic) {
+		if (settings.showTopic && !allowed && channel.topic && channel.topic.replace(/[\t\n\r\s]/g, "")) {
 			htmlString += `<div class="${BDFDB.disCN.marginbottom4}">Topic:</div><div class="${BDFDB.disCNS.flex + BDFDB.disCN.wrap}"><div class="${BDFDB.disCNS.userpopoutrole + BDFDB.disCNS.flex + BDFDB.disCNS.aligncenter + BDFDB.disCN.wrap + BDFDB.disCNS.size12 + BDFDB.disCN.weightmedium} SHC-topic" style="border-color: rgba(255, 255, 255, 0.6); height: unset !important; padding-top: 5px; padding-bottom: 5px; max-width: ${window.outerWidth/3}px">${channel.topic}</div></div>`;
 		}
 		if (allowedRoles.length > 0 || overwrittenRoles.length > 0) {
@@ -462,6 +475,14 @@ class ShowHiddenChannels {
 			for (let role of overwrittenRoles) {
 				let color = role.colorString ? BDFDB.color2COMP(role.colorString) : [255,255,255];
 				htmlString += `<div class="${BDFDB.disCNS.userpopoutrole + BDFDB.disCNS.flex + BDFDB.disCNS.aligncenter + BDFDB.disCN.wrap + BDFDB.disCNS.size12 + BDFDB.disCN.weightmedium} SHC-overwrittenrole" style="border-color: rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.6);"><div class="${BDFDB.disCNS.userpopoutrolecircle}" style="background-color: rgb(${color[0]}, ${color[1]}, ${color[2]});"></div><div class="${BDFDB.disCNS.userpopoutrolename}" style="text-decoration: line-through !important;">${BDFDB.encodeToHTML(role.name)}</div></div>`;
+			}
+			htmlString += `</div>`;
+		}
+		if (allowedUsers.length > 0) {
+			htmlString += `<div class="${BDFDB.disCN.marginbottom4}">Allowed Users:</div><div class="${BDFDB.disCNS.flex + BDFDB.disCN.wrap}">`;
+			for (let user of allowedUsers) {
+				let color = user.colorString ? BDFDB.color2COMP(user.colorString) : [255,255,255];
+				htmlString += `<div class="${BDFDB.disCNS.userpopoutrole + BDFDB.disCNS.flex + BDFDB.disCNS.aligncenter + BDFDB.disCN.wrap + BDFDB.disCNS.size12 + BDFDB.disCN.weightmedium} SHC-denieduser" style="border-color: rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.6);"><div class="${BDFDB.disCNS.userpopoutrolecircle}" style="background-color: rgb(${color[0]}, ${color[1]}, ${color[2]});"></div><div class="${BDFDB.disCNS.userpopoutrolename}">${BDFDB.encodeToHTML(user.nick ? user.nick : user.name)}</div></div>`;
 			}
 			htmlString += `</div>`;
 		}
@@ -482,11 +503,7 @@ class ShowHiddenChannels {
 			htmlString += `</div>`;
 		}
 		if (htmlString) {
-			var customTooltipCSS = `
-				.showhiddenchannels-tooltip {
-					max-width: ${window.outerWidth/2}px !important;
-				}`;
-			var tooltip = BDFDB.createTooltip(htmlString, e.currentTarget, {type:"right", selector:"showhiddenchannels-tooltip", html:true, css:customTooltipCSS});
+			var tooltip = BDFDB.createTooltip(htmlString, e.currentTarget, {type:"right", selector:"showhiddenchannels-tooltip", html:true, style:`max-width: ${window.outerWidth/2}px !important;`});
 			tooltip.style.top = tooltip.style.top.replace("px","") - $(e.currentTarget).css("padding-bottom").replace("px","")/2 + $(e.currentTarget).css("padding-top").replace("px","")/2 + "px";
 		}
 	}
