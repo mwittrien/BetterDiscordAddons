@@ -3354,7 +3354,7 @@ BDFDB.DiscordClasses = {
 	noticesuccess: "noticeSuccess-3Y62ob",
 	note: "note-1V3kyJ",
 	nowrap: "noWrap-3jynv6",
-	optionpopout: "contents-18-Yxp",
+	optionpopout: "container-1rPqdX",
 	optionpopoutbutton: "button-3Jq0g9",
 	optionpopoutitem: "item-2J1YMK",
 	optionpopoutopen: "popout-open",
