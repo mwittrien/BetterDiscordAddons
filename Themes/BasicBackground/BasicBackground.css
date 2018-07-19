@@ -134,6 +134,7 @@
 .embed-IeVjo6,
 .personalizationNotice-2HTAH2,
 .emptyState-2-sT0o,
+.btn-11C5_u,
 .wrapper-35wsBm,
 .wrapper-2TxpI8,
 .audioControls-2HsaU6,
@@ -1470,28 +1471,18 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	border-color: rgb(var(--accentcolor)) !important;
 }
 
-.option-popout {
-	padding: 0 !important;
-	width: 72px !important;
-}
-
-.button-1ZXqCA {
-	left: -4px;
-	width: 72px;
-}
-
 .Select-option {
 	top: 0 !important;
 	background: rgba(var(--transparencycolor),var(--transparencyalpha)) !important;
 }
 
-.button-1ZXqCA,
+.item-2J1YMK,
 .attachPopoutRow-KrE-f6,
 .item-1GzJrl,
 .Select-option:hover {
 	background: rgba(var(--transparencycolor),calc(var(--transparencyalpha) * 2)) !important;
 }
-.button-1ZXqCA:hover,
+.item-2J1YMK:hover,
 .attachPopoutRow-KrE-f6:hover,
 .item-1GzJrl:hover,
 .Select-option.is-selected {
@@ -1611,7 +1602,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	padding: 8px 9px !important;
 	border-radius: 0px !important;
 }
-.button-1ZXqCA,
+.item-2J1YMK,
 .item-1GzJrl:not(.invite-271nFU):not(.leave-1DRJfn),
 .item-1Yvehc:not(.danger-2dXSTE):not(.disabled-2xniQf) {
 	color: #FFF !important;
