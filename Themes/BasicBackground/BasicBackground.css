@@ -1476,6 +1476,18 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	background: rgba(var(--transparencycolor),var(--transparencyalpha)) !important;
 }
 
+.container-3cGP6G {
+	padding: 0 !important;
+}
+
+.item-2J1YMK {
+	margin: 0 !important;
+	color: #FFF !important;
+	width: 100% !important;
+	padding: 2px 4px !important;
+	border-radius: 0 !important;
+}
+
 .item-2J1YMK,
 .attachPopoutRow-KrE-f6,
 .item-1GzJrl,
@@ -1602,7 +1614,6 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	padding: 8px 9px !important;
 	border-radius: 0px !important;
 }
-.item-2J1YMK,
 .item-1GzJrl:not(.invite-271nFU):not(.leave-1DRJfn),
 .item-1Yvehc:not(.danger-2dXSTE):not(.disabled-2xniQf) {
 	color: #FFF !important;
