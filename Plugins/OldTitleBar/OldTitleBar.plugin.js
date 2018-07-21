@@ -28,39 +28,49 @@ class OldTitleBar {
 		this.dividerMarkup = `<div class="dividerOTB ${BDFDB.disCN.channelheaderdivider}"></div>`;
 			
 		this.reloadButtonMarkup = 
-			`<svg class="reloadButtonOTB ${BDFDB.disCNS.channelheadericoninactive + BDFDB.disCNS.channelheadericon + BDFDB.disCN.channelheadericonmargin}" xmlns="http://www.w3.org/2000/svg">
-				<g fill="none" class="${BDFDB.disCN.channelheadericonforeground}" fill-rule="evenodd">
-					<path fill="currentColor" transform="translate(4,4)" d="M17.061,7.467V0l-2.507,2.507C13.013,0.96,10.885,0,8.528,0C3.813,0,0.005,3.819,0.005,8.533s3.808,8.533,8.523,8.533c3.973,0,7.301-2.72,8.245-6.4h-2.219c-0.88,2.485-3.237,4.267-6.027,4.267c-3.536,0-6.4-2.864-6.4-6.4s2.864-6.4,6.4-6.4c1.765,0,3.349,0.736,4.507,1.893l-3.44,3.44H17.061z"/>
-				</g>
-			</svg>`;
+			`<span class="${BDFDB.disCN.channelheadericonmargin} reloadButtonOTB">
+				<svg class="${BDFDB.disCNS.channelheadericoninactive + BDFDB.disCN.channelheadericon}" xmlns="http://www.w3.org/2000/svg">
+					<g fill="none" class="${BDFDB.disCN.channelheadericonforeground}" fill-rule="evenodd">
+						<path fill="currentColor" transform="translate(4,4)" d="M17.061,7.467V0l-2.507,2.507C13.013,0.96,10.885,0,8.528,0C3.813,0,0.005,3.819,0.005,8.533s3.808,8.533,8.523,8.533c3.973,0,7.301-2.72,8.245-6.4h-2.219c-0.88,2.485-3.237,4.267-6.027,4.267c-3.536,0-6.4-2.864-6.4-6.4s2.864-6.4,6.4-6.4c1.765,0,3.349,0.736,4.507,1.893l-3.44,3.44H17.061z"/>
+					</g>
+				</svg>
+			</span>`;
 			
 		this.minButtonMarkup = 
-			`<svg class="minButtonOTB ${BDFDB.disCNS.channelheadericoninactive + BDFDB.disCNS.channelheadericon + BDFDB.disCN.channelheadericonmargin}" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
-				<g fill="none" class="${BDFDB.disCN.channelheadericonforeground}" fill-rule="evenodd">
-					<path stroke-width="2" stroke="currentColor" d="M6 18 l13 0"/>
-				</g>
-			</svg>`;
+			`<span class="${BDFDB.disCN.channelheadericonmargin} minButtonOTB">
+				<svg class="${BDFDB.disCNS.channelheadericoninactive + BDFDB.disCN.channelheadericon}" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
+					<g fill="none" class="${BDFDB.disCN.channelheadericonforeground}" fill-rule="evenodd">
+						<path stroke-width="2" stroke="currentColor" d="M6 18 l13 0"/>
+					</g>
+				</svg>
+			</span>`;
 			
 		this.maxButtonIsMaxMarkup = 
-			`<svg class="maxButtonOTB ${BDFDB.disCNS.channelheadericoninactive + BDFDB.disCNS.channelheadericon + BDFDB.disCN.channelheadericonmargin}" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
-				<g fill="none" class="${BDFDB.disCN.channelheadericonforeground}" fill-rule="evenodd">
-					<path stroke-width="2" stroke="currentColor" d="M6 9 l10 0 l0 10 l-10 0 l0 -10 m3 -3 l10 0 l0 10"/>
-				</g>
-			</svg>`;
+			`<span class="${BDFDB.disCN.channelheadericonmargin} maxButtonOTB">
+				<svg class="${BDFDB.disCNS.channelheadericoninactive + BDFDB.disCN.channelheadericon}" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
+					<g fill="none" class="${BDFDB.disCN.channelheadericonforeground}" fill-rule="evenodd">
+						<path stroke-width="2" stroke="currentColor" d="M6 9 l10 0 l0 10 l-10 0 l0 -10 m3 -3 l10 0 l0 10"/>
+					</g>
+				</svg>
+			</span>`;
 			
 		this.maxButtonIsMinMarkup = 
-			`<svg class="maxButtonOTB ${BDFDB.disCNS.channelheadericoninactive + BDFDB.disCNS.channelheadericon + BDFDB.disCN.channelheadericonmargin}" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
-				<g fill="none" class="${BDFDB.disCN.channelheadericonforeground}" fill-rule="evenodd">
-					<path stroke-width="2" stroke="currentColor" d="M6 6 l13 0 l0 13 l-13 0 l0 -13"/>
-				</g>
-			</svg>`;
+			`<span class="${BDFDB.disCN.channelheadericonmargin} maxButtonOTB">
+				<svg class="${BDFDB.disCNS.channelheadericoninactive + BDFDB.disCN.channelheadericon}" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
+					<g fill="none" class="${BDFDB.disCN.channelheadericonforeground}" fill-rule="evenodd">
+						<path stroke-width="2" stroke="currentColor" d="M6 6 l13 0 l0 13 l-13 0 l0 -13"/>
+					</g>
+				</svg>
+			</span>`;
 			
 		this.closeButtonMarkup = 
-			`<svg class="closeButtonOTB ${BDFDB.disCNS.channelheadericoninactive + BDFDB.disCNS.channelheadericon + BDFDB.disCN.channelheadericonmargin}" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
-				<g fill="none" class="${BDFDB.disCN.channelheadericonforeground}" fill-rule="evenodd">
-					<path stroke-width="2" stroke="currentColor" d="M6 6 l13 13 m0 -13 l-13 13"/>
-				</g>
-			</svg>`;
+			`<span class="${BDFDB.disCN.channelheadericonmargin} closeButtonOTB">
+				<svg class="${BDFDB.disCNS.channelheadericoninactive + BDFDB.disCN.channelheadericon}" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
+					<g fill="none" class="${BDFDB.disCN.channelheadericonforeground}" fill-rule="evenodd">
+						<path stroke-width="2" stroke="currentColor" d="M6 6 l13 13 m0 -13 l-13 13"/>
+					</g>
+				</svg>
+			</span>`;
 			
 		this.defaults = {
 			settings: {
@@ -74,7 +84,7 @@ class OldTitleBar {
 
 	getDescription () {return "Reverts the title bar back to its former self.";}
 
-	getVersion () {return "1.3.6";}
+	getVersion () {return "1.3.7";}
 
 	getAuthor () {return "DevilBro";}
 
