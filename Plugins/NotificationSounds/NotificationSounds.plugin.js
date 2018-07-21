@@ -4,8 +4,6 @@ class NotificationSounds {
 	initConstructor () {
 		this.patchCancels = [];
 		
-		this.audio = new Audio();
-		
 		this.types = {
 			"message1":				{implemented:true,	name:"New Chatmessage",					src:"/assets/dd920c06a01e5bb8b09678581e29d56f.mp3"},
 			"dm":					{implemented:true,	name:"Direct Message",					src:"/assets/84c9fa3d07da865278bd77c97d952db4.mp3"},
@@ -82,6 +80,8 @@ class NotificationSounds {
 			}
 		};
 		
+		this.settingsaudio = new Audio();
+		
 		this.audios = {};
 		
 		this.choices = [];
@@ -95,7 +95,7 @@ class NotificationSounds {
 	
 	getDescription () {return "Allows you to replace the native sounds of Discord with your own";}
 
-	getVersion () {return "3.1.7";}
+	getVersion () {return "3.1.8";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -171,6 +171,7 @@ class NotificationSounds {
 			BDFDB.loadMessage(this);
 			
 			this.patchCancels.push(BDFDB.WebModules.monkeyPatch(BDFDB.WebModules.findByProperties(["receiveMessage"]), "receiveMessage", {before: (e) => {
+				if (this.dontPlayAudio()) return;
 				let message = e.methodArguments[1];
 				if (message.author.id != BDFDB.myData.id) {
 					if (!message.guild_id) {
@@ -187,6 +188,7 @@ class NotificationSounds {
 			}}));
 			
 			this.patchCancels.push(BDFDB.WebModules.monkeyPatch(BDFDB.WebModules.findByProperties(["playSound"]), "playSound", {instead: (e) => {
+				if (this.dontPlayAudio()) return;
 				setImmediate(() => {
 					var type = e.methodArguments[0];
 					if (type == "message1") {
@@ -208,6 +210,7 @@ class NotificationSounds {
 			this.oldStopRining = this.incomingCallOwnerInstance.stopRinging;
 			this.incomingCallOwnerInstance.startRinging = () => {
 				incomingCallAudio.pause();
+				if (this.dontPlayAudio()) return;
 				incomingCallAudio.loop = true;
 				incomingCallAudio.src = this.choices["call_ringing"].src;
 				incomingCallAudio.volume = this.choices["call_ringing"].volume/100;
@@ -228,7 +231,8 @@ class NotificationSounds {
 								if (node && node.tagName && node.classList.contains(BDFDB.disCN.callcurrentcontainer)) {
 									if (!this.hasPatchedOutgoing) {
 										var outgoingCallAudio = new Audio();
-										let play = () => {
+										let play = () => {											
+											if (this.dontPlayAudio()) return;
 											outgoingCallAudio.loop = true;
 											outgoingCallAudio.src = this.choices["call_calling"].src;
 											outgoingCallAudio.volume = this.choices["call_calling"].volume/100;
@@ -475,14 +479,19 @@ class NotificationSounds {
 	saveChoice (type, choice, play) {
 		BDFDB.saveData(type, choice, this, "choices");
 		this.choices[type] = choice;
-		if (play) this.playAudio(type);
+		if (play) this.playAudio(type, this.settingsaudio);
 	}
 	
-	playAudio (type) {
-		this.audio.pause();
-		this.audio.src = this.choices[type].src;
-		this.audio.volume = this.choices[type].volume/100;
-		this.audio.play();
+	playAudio (type, audio = new Audio()) {
+		audio.pause();
+		audio.src = this.choices[type].src;
+		audio.volume = this.choices[type].volume/100;
+		audio.play();
+	}
+	
+	dontPlayAudio () {
+		let status = BDFDB.getUserStatus();
+		return status == "dnd" || status == "streaming";
 	}
 	
 	fireEvent (type) {
