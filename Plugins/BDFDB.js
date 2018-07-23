@@ -3281,7 +3281,7 @@ BDFDB.DiscordClasses = {
 	messagecontent: {stable:"message-content", canary:"content-3dzVd8", ptb:"message-content"},
 	messagecontentcompact: "contentCompact-1QLHBj",
 	messagecontentcozy: "contentCozy-3XX413",
-	messagecompact: "messageCozy-2JPAPA",
+	messagecozy: "messageCozy-2JPAPA",
 	messagedivider: "divider-32i8lo",
 	messagedividerenabled: "dividerEnabled-2TTlcf",
 	messageedited: {stable:"edited", canary:"edited-DL9ECl", ptb:"edited"},
