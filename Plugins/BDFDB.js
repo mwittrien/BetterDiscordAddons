@@ -769,7 +769,7 @@ BDFDB.getDiscordTheme = function () {
 };
 
 BDFDB.getDiscordMode = function () {
-	return document.querySelectorAll(BDFDB.dotCN.messagegroupcompact).length >= document.querySelectorAll(BDFDB.dotCN.messagegroupcozy).length ? "cozy" : "compact";
+	return document.querySelectorAll(BDFDB.dotCN.messagegroupcompact).length >= document.querySelectorAll(BDFDB.dotCN.messagegroupcozy).length ? "compact" : "cozy";
 };
 	
 BDFDB.getReactInstance = function (node) { 
