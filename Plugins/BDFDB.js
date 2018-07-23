@@ -3267,7 +3267,7 @@ BDFDB.DiscordClasses = {
 	memberswrap: "membersWrap-2h-GB4",
 	memberusername: "username-1cB_5E",
 	message: {stable:"message", canary:"message-1PNnaP", ptb:"message"},
-	messageaccessory: "accessory",
+	messageaccessory: {stable:"accessory", canary:"container-1e22Ot", ptb:"accessory"},
 	messagebody: {stable:"body", canary:"container-206Blv", ptb:"body"},
 	messagebuttoncontainer: "buttonContainer-37UsAw",
 	messagecomment: "comment",
