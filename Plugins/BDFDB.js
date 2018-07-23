@@ -3316,6 +3316,8 @@ BDFDB.DiscordClasses = {
 	messagesystem: "icon-2Po-VO",
 	messagetext: "message-text",
 	messagetimestamp: "timestamp",
+	messagetimestampcompact: "timestampCompact-MHgFLv",
+	messagetimestampcozy: "timestampCozy-2hLAPV",
 	messageuploadcancel: "cancelButton-3hVEV6",
 	messageusername: {stable:"user-name", canary:"username-_4ZSMR", ptb:"user-name"},
 	messageusernamewrapper: {stable:"username-wrapper", canary:"usernameWrapper-1S-G5O", ptb:"username-wrapper"},
