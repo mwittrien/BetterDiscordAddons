@@ -765,7 +765,11 @@ BDFDB.getDiscordLanguage = function () {
 };
 
 BDFDB.getDiscordTheme = function () {
-	return document.querySelectorAll(BDFDB.dotCN.themelight).length > document.querySelectorAll(BDFDB.dotCN.themedark).length ? BDFDB.disCN.themelight : BDFDB.disCN.themedark;
+	return document.querySelectorAll(BDFDB.dotCN.themelight).length >= document.querySelectorAll(BDFDB.dotCN.themedark).length ? BDFDB.disCN.themelight : BDFDB.disCN.themedark;
+};
+
+BDFDB.getDiscordMode = function () {
+	return document.querySelectorAll(BDFDB.dotCN.messagegroupcompact).length >= document.querySelectorAll(BDFDB.dotCN.messagegroupcozy).length ? "cozy" : "compact";
 };
 	
 BDFDB.getReactInstance = function (node) { 
