@@ -95,7 +95,7 @@ class NotificationSounds {
 	
 	getDescription () {return "Allows you to replace the native sounds of Discord with your own";}
 
-	getVersion () {return "3.1.8";}
+	getVersion () {return "3.1.9";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -170,13 +170,17 @@ class NotificationSounds {
 		if (typeof BDFDB === "object") {
 			BDFDB.loadMessage(this);
 			
+			this.ChannelSettingsModule = BDFDB.WebModules.findByProperties(["isChannelMuted"]);
+			
 			this.patchCancels.push(BDFDB.WebModules.monkeyPatch(BDFDB.WebModules.findByProperties(["receiveMessage"]), "receiveMessage", {before: (e) => {
 				if (this.dontPlayAudio()) return;
 				let message = e.methodArguments[1];
 				if (message.author.id != BDFDB.myData.id) {
 					if (!message.guild_id) {
-						this.fireEvent("dm");
-						this.playAudio("dm");
+						if (!this.ChannelSettingsModule.isChannelMuted(null, message.channel_id)) {
+							this.fireEvent("dm");
+							this.playAudio("dm");
+						}
 					}
 					else if (message.mentions) {
 						for (let mention of message.mentions) if (mention.id == BDFDB.myData.id) {
