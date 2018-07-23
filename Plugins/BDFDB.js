@@ -3277,7 +3277,7 @@ BDFDB.DiscordClasses = {
 	messagebuttoncontainer: "buttonContainer-37UsAw",
 	messagebuttoncontainerouter: "buttonContainer-KtQ8wc",
 	messagecomment: "comment",
-	messagecompact: {stable:"compact" canary:"messageCompact-kQa7ES", ptb:"compact"},
+	messagecompact: {stable:"compact", canary:"messageCompact-kQa7ES", ptb:"compact"},
 	messagecontent: {stable:"message-content", canary:"content-3dzVd8", ptb:"message-content"},
 	messagecontentcompact: "contentCompact-1QLHBj",
 	messagecontentcozy: "contentCozy-3XX413",
