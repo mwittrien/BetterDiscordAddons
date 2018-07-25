@@ -18,7 +18,7 @@ class TopRoleEverywhere {
 				text-indent: 0px !important;
 				vertical-align: top;
 			}
-			%{BDFDB.dotCN.messagecompact} .TRE-tag {
+			%{BDFDB.dotCN.messagegroupcompact} .TRE-tag {
 				margin-left: 2px;
 				margin-right: 6px;
 			}`;
@@ -45,7 +45,7 @@ class TopRoleEverywhere {
 
 	getDescription () {return "Adds the highest role of a user as a tag.";}
 
-	getVersion () {return "2.6.9";}
+	getVersion () {return "2.7.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -117,27 +117,8 @@ class TopRoleEverywhere {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (BDFDB.getData("showInChat", this, "settings")) {
-									var compact = document.querySelector(BDFDB.dotCN.messagegroup + BDFDB.dotCN.messagecompact);
-									if (!compact) {
-										if (node && node.tagName && node.querySelector(BDFDB.dotCN.messageusernamewrapper)) {
-											this.addRoleTag(node, "chat", compact);
-										}
-										else if (node && node.classList && node.classList.contains(BDFDB.disCN.messagetext)) {
-											this.addRoleTag($(BDFDB.dotCN.messagegroup).has(node)[0], "chat", compact);
-										}
-									}
-									else {
-										if (node && node.tagName && node.querySelector(BDFDB.dotCN.messageusernamewrapper)) {
-											if (node.classList.contains(BDFDB.disCN.messagemarkup)) {
-												this.addRoleTag(node, "chat", compact);
-											}
-											else {
-												var markups = node.querySelectorAll(BDFDB.dotCN.messagemarkup);
-												for (var i = 0; i < markups.length; i++) {
-													this.addRoleTag(markups[i], "chat", compact);
-												}
-											}
-										}
+									if (node && node.tagName && node.querySelector(BDFDB.dotCN.messageusernamewrapper)) {
+										this.addRoleTag(node, "chat", BDFDB.getDiscordMode() == "compact");
 									}
 								}
 							});
@@ -200,22 +181,20 @@ class TopRoleEverywhere {
 
 	loadRoleTags() {
 		document.querySelectorAll(".TRE-tag").forEach(node=>{node.remove();});
+		if (!BDFDB.getSelectedServer()) return;
 		var settings = BDFDB.getAllData(this, "settings");
 		if (settings.showInMemberList) { 
 			for (let user of document.querySelectorAll(BDFDB.dotCN.member)) {
 				this.addRoleTag(user, "list", false);
 			}
 		}
-		if (settings.showInChat) { 
-			for (let user of document.querySelectorAll(BDFDB.dotCN.messagegroup)) {
-				let compact = user.classList.contains(BDFDB.disCN.messagecompact);
-				if (!compact) {
-					this.addRoleTag(user, "chat", compact);
-				}
-				else {
-					for (let message of document.querySelectorAll(BDFDB.dotCN.messagemarkup)) {
-						this.addRoleTag(message, "chat", compact);
-					}
+		if (settings.showInChat) {
+			for (let messagegroup of document.querySelectorAll(BDFDB.dotCN.messagegroupcozy)) {
+				this.addRoleTag(messagegroup, "chat", false);
+			}
+			for (let messagegroup of document.querySelectorAll(BDFDB.dotCN.messagegroupcompact)) {
+				for (let message of messagegroup.querySelectorAll(BDFDB.dotCN.messagemarkup)) {
+					this.addRoleTag(message, "chat", true);
 				}
 			}
 		}
