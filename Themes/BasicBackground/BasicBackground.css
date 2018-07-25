@@ -794,26 +794,29 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 }
 .reaction-me,
 .message-15tBk4 strong,
+.wrapper-3WhCwL:not([style]),
 .mention:not([style]) {
 	color: rgba(var(--accentcolor),1) !important;
 	background: rgba(var(--accentcolor),0.1) !important;
 }
+.wrapper-3WhCwL:not([style]):hover,
 .mention:not([style]):hover {
 	color: white !important;
 	background: rgba(var(--accentcolor),1) !important;
 }
+.wrapper-3WhCwL:hover,
 .mention:hover {
 	text-decoration: underline !important;
 }
-.mentioned .mention {
+.isMentioned-N-h9aa .mention {
 	background: transparent !important;
 }
 
-.mentioned .message-text:after {
+.isMentioned-N-h9aa:after {
 	background: rgba(var(--accentcolor),0.2) !important;
 	border-left-color: rgba(var(--accentcolor),0.8) !important;
 }
-.mentioned .message-text {
+.isMentioned-N-h9aa {
 	background: rgba(var(--accentcolor),0.2) !important;
 }
 
