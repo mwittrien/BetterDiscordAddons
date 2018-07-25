@@ -5,14 +5,14 @@ class ChatFilter {
 		this.configs = ["case","exact"];
 		
 		this.css = ` 
-			${BDFDB.dotCNS.messagegroup + BDFDB.dotCNS.messagecomment + BDFDB.dotCN.messageaccessory}.blocked:not(.revealed),
-			${BDFDB.dotCNS.messagegroup + BDFDB.dotCNS.messagecomment + BDFDB.dotCN.messagemarkup}.blocked:not(.revealed) {
+			${BDFDB.dotCNS.messagegroup + BDFDB.dotCN.messageaccessory}.blocked:not(.revealed),
+			${BDFDB.dotCNS.messagegroup + BDFDB.dotCN.messagemarkup}.blocked:not(.revealed) {
 				font-weight: bold;
 				font-style: italic;
 			}
 			
-			${BDFDB.dotCNS.messagegroup + BDFDB.dotCNS.messagecomment + BDFDB.dotCN.messageaccessory}.censored:not(.revealed),
-			${BDFDB.dotCNS.messagegroup + BDFDB.dotCNS.messagecomment + BDFDB.dotCN.messagemarkup}:not(.revealed) {
+			${BDFDB.dotCNS.messagegroup + BDFDB.dotCN.messageaccessory}.censored:not(.revealed),
+			${BDFDB.dotCNS.messagegroup + BDFDB.dotCN.messagemarkup}:not(.revealed) {
 				
 			}`;
 		
@@ -32,7 +32,7 @@ class ChatFilter {
 
 	getDescription () {return "Allows the user to censor words or block complete messages based on words in the chatwindow.";}
 
-	getVersion () {return "3.2.2";}
+	getVersion () {return "3.2.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -90,8 +90,7 @@ class ChatFilter {
 
 	start () {
 		var libraryScript = null;
-		if (typeof BDFDB !== "object" || BDFDB.isLibraryOutdated()) {
-			if (typeof BDFDB === "object") BDFDB = "";
+		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
 			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
@@ -100,7 +99,7 @@ class ChatFilter {
 			document.head.appendChild(libraryScript);
 		}
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object") this.initialize();
+		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
 		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
@@ -118,7 +117,7 @@ class ChatFilter {
 						}
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if ($(node).attr("class") == BDFDB.disCN.message) this.hideMessage($(node).find(BDFDB.dotCN.messagemarkup)[0]);
+								if (node && node.tagName && node.classList.contains(BDFDB.disCN.message)) this.hideMessage(node.querySelector(BDFDB.dotCN.messagemarkup));
 							});
 						}
 					}

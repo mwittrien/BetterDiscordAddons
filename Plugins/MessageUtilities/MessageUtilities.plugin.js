@@ -92,8 +92,7 @@ class MessageUtilities {
 
 	start () {
 		var libraryScript = null;
-		if (typeof BDFDB !== "object" || BDFDB.isLibraryOutdated()) {
-			if (typeof BDFDB === "object") BDFDB = "";
+		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
 			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
@@ -102,7 +101,7 @@ class MessageUtilities {
 			document.head.appendChild(libraryScript);
 		}
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object") this.initialize();
+		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
 		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
@@ -353,14 +352,23 @@ class MessageUtilities {
 		}
 	}
 	
+	getMessageGroup (message) {
+		var messagegroup = null;
+		while (messagegroup == null || message.parentElement) {
+			message = message.parentElement;
+			if (message.classList && message.classList.contains(BDFDB.disCN.messagegroup)) messagegroup = message;
+		}
+		return messagegroup;
+	}
+	
 	getMessageData (div) {
 		if (div) {
-			var messagegroup = $(BDFDB.dotCN.messagegroup).has(div);
-			var pos = messagegroup.find(BDFDB.dotCN.message).index(div);
-			if (messagegroup[0] && pos > -1) {
-				var info = BDFDB.getKeyInformation({"node":div,"key":"messages","up":true,"time":1000});
-				if (info) return Object.assign({},info[pos],{"div":div, "group":messagegroup[0], "pos":pos});
-			}
+			var messagegroup = this.getMessageGroup(div);
+			var pos = Array.from(messagegroup.querySelectorAll(BDFDB.dotCN.message)).indexOf(div);
+			var instance = BDFDB.getReactInstance(messagegroup);
+			if (!instance) return;
+			var info = instance.return.stateNode.props.messages;
+			if (info && pos > -1) return Object.assign({},info[pos],{"div":div, "group":messagegroup, "pos":pos});
 		}
 		return null;
 	}

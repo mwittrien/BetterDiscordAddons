@@ -45,7 +45,9 @@ class ForceImagePreviews {
 						}
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if ($(node).attr("class") == BDFDB.disCN.message) setTimeout(() => {this.addPreviews($(node).find(BDFDB.dotCN.messagemarkup)[0]);},this.waitTime);
+								if (node && node.tagName && node.classList.contains(BDFDB.disCN.message)) {
+									setTimeout(() => {this.addPreviews(node.querySelector(BDFDB.dotCN.messagemarkup));},this.waitTime);
+								}
 							});
 						}
 					}

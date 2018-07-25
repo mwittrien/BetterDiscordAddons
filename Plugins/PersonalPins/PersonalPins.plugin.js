@@ -78,7 +78,7 @@ class PersonalPins {
 		this.optionButtonMarkup = 
 			`<div class="${BDFDB.disCN.optionpopoutbutton} btn-personalpins"></div>`;
 		
-		this.optionsPopoutMarkup = 
+		this.optionsPopoutMarkup =
 			`<div class="${BDFDB.disCNS.popout + BDFDB.disCNS.popoutbottom + BDFDB.disCN.popoutnoarrow} popout-personalpins-options" style="z-index: 1000; visibility: visible;">
 				<div class="${BDFDB.disCN.optionpopout}"></div
 			</div>`;
@@ -88,30 +88,52 @@ class PersonalPins {
 				<div class="${BDFDB.disCN.buttoncontents}">REPLACE_popout_noteoption_text</div>
 			</button>`;
 			
-		this.messageMarkup = 
-			`<div class="${BDFDB.disCNS.messagegroup + BDFDB.disCN.messagehideoverflow}">
-				<div class="${BDFDB.disCN.avatarlargeold}"></div>
-				<div class="${BDFDB.disCN.messagecomment}">
-					<div class="${BDFDB.disCNS.message + BDFDB.disCN.messagefirst}">
-						<div class="${BDFDB.disCN.messagebody}">
-							<h2 class="${BDFDB.disCN.h2old}">
-								<span class="${BDFDB.disCN.messageusernamewrapper}"><strong class="${BDFDB.disCN.messageusername}"></strong></span>
-								<span class="${BDFDB.disCN.messagehighlightseparator}"> - </span>
-								<span class="${BDFDB.disCN.messagetimestamp}"></span>
-							</h2>
-							<div class="${BDFDB.disCN.messagetext}">
-								<div class="${BDFDB.disCN.messagemarkup}" style="width: 380px;"></div>
+		this.messageMarkupCozy = 
+			`<div class="${BDFDB.disCN.messagegroupwrapper}">
+				<div class="${BDFDB.disCN.messagegroupwrapperoffsetcorrection}">
+					<div class="${BDFDB.disCNS.messagegroup + BDFDB.disCN.messagegroupcozy}">
+						<div class="${BDFDB.disCNS.messagecozy + BDFDB.disCN.message}" aria-disabled="false">
+							<div class="${BDFDB.disCN.messageheadercozy}">
+								<div tabindex="0" class="${BDFDB.disCNS.avatarwrapper + BDFDB.disCNS.avatarlarge + BDFDB.disCN.avatar}" role="button">
+									<div class="${BDFDB.disCNS.avatarimage + BDFDB.disCN.avatarlarge}"></div>
+								</div>
+								<span>
+									<span class="${BDFDB.disCN.messageusernamewrapper}">
+										<strong tabindex="0" class="${BDFDB.disCN.messageusername}" role="button"></strong>
+									</span>
+									<time class="${BDFDB.disCN.messagetimestampcozy}" datetime="1531959706620"></time>
+								</span>
+							</div>
+							<div class="${BDFDB.disCNS.messagecontentcozy + BDFDB.disCN.messagecontent}">
+								<div class="${BDFDB.disCNS.messagebodycozy + BDFDB.disCN.messagebody}">
+									<div class="${BDFDB.disCN.messagebuttoncontainerouter}">
+										<div class="${BDFDB.disCN.messagebuttoncontainer}">
+											<div class="${BDFDB.disCN.emojipickerbutton}"></div>
+											<div class="${BDFDB.disCN.optionpopoutbutton}"></div>
+										</div>
+									</div>
+									<div class="${BDFDB.disCN.messagemarkup}"></div>
+								</div>
+								<div class="${BDFDB.disCNS.messageaccessorycozy + BDFDB.disCN.messageaccessory}"></div>
+								<div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.margintop4 + BDFDB.disCNS.modedefault + BDFDB.disCN.primary} server-channel"></div>
+							</div>
+							<div class="${BDFDB.disCNS.sinkinteractions + BDFDB.disCN.clickable}"></div>
+							<div class="${BDFDB.disCN.messagespopoutactionbuttons}">
+								<div tabindex="0" class="${BDFDB.disCN.messagespopoutjumpbutton} jump" role="button">
+									<div class="${BDFDB.disCN.messagespopouttext}">REPLACE_popout_jump_text</div>
+								</div>
+								<div tabindex="0" class="${BDFDB.disCN.messagespopoutjumpbutton} copy" role="button">
+									<div class="${BDFDB.disCN.messagespopouttext}">REPLACE_popout_copy_text</div>
+								</div>
+								<button type="button" class="${BDFDB.disCNS.button + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonlookblank + BDFDB.disCN.buttongrow}">
+									<div class="${BDFDB.disCN.buttoncontents}">
+										<div class="${BDFDB.disCN.messagespopoutclosebutton}"></div>
+									</div>
+								</button>
 							</div>
 						</div>
-						<div class="${BDFDB.disCN.messageaccessory}"></div>
-						<div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.margintop4 + BDFDB.disCNS.modedefault + BDFDB.disCN.primary} server-channel"></div>
+						<hr class="${BDFDB.disCNS.messagedividerenabled + BDFDB.messagedivider}">
 					</div>
-				</div>
-				<div class="${BDFDB.disCNS.sinkinteractions + BDFDB.disCN.clickable}"></div>
-				<div class="${BDFDB.disCN.messagespopoutactionbuttons}">
-					<div class="${BDFDB.disCN.messagespopoutjumpbutton} jump"><div class="${BDFDB.disCN.messagespopouttext}">REPLACE_popout_jump_text</div></div>
-					<div class="${BDFDB.disCN.messagespopoutjumpbutton} copy"><div class="${BDFDB.disCN.messagespopouttext}">REPLACE_popout_copy_text</div></div>
-					<div class="${BDFDB.disCN.messagespopoutclosebutton}"></div>
 				</div>
 			</div>`;
 	}
@@ -120,7 +142,7 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.5.8";}
+	getVersion () {return "1.5.9";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -277,8 +299,8 @@ class PersonalPins {
 		this.notesPopoutMarkup = 			this.notesPopoutMarkup.replace("REPLACE_popout_sort_text", this.labels.popout_sort_text);
 		this.notesPopoutMarkup = 			this.notesPopoutMarkup.replace("REPLACE_popout_messagesort_text", this.labels.popout_messagesort_text);
 		
-		this.messageMarkup = 				this.messageMarkup.replace("REPLACE_popout_jump_text", this.labels.popout_jump_text);
-		this.messageMarkup = 				this.messageMarkup.replace("REPLACE_popout_copy_text", this.labels.popout_copy_text);
+		this.messageMarkupCozy = 			this.messageMarkupCozy.replace("REPLACE_popout_jump_text", this.labels.popout_jump_text);
+		this.messageMarkupCozy = 			this.messageMarkupCozy.replace("REPLACE_popout_copy_text", this.labels.popout_copy_text);
 		
 		this.sortPopoutMarkup = 			this.sortPopoutMarkup.replace("REPLACE_popout_messagesort_text", this.labels.popout_messagesort_text);
 		this.sortPopoutMarkup = 			this.sortPopoutMarkup.replace("REPLACE_popout_datesort_text", this.labels.popout_datesort_text);
@@ -302,14 +324,23 @@ class PersonalPins {
 		}
 	}
 	
+	getMessageGroup (message) {
+		var messagegroup = null;
+		while (messagegroup == null || message.parentElement) {
+			message = message.parentElement;
+			if (message.classList && message.classList.contains(BDFDB.disCN.messagegroup)) messagegroup = message;
+		}
+		return messagegroup;
+	}
+	
 	getMessageData (div) {
 		if (div && !div.querySelector(BDFDB.dotCN.messagesystem)) {
-			var messagegroup = $(BDFDB.dotCN.messagegroup).has(div);
-			var pos = messagegroup.find(BDFDB.dotCN.message).index(div);
-			if (messagegroup[0] && pos > -1) {
-				var info = BDFDB.getKeyInformation({"node":div,"key":"messages","up":true,"time":1000});
-				if (info) this.message = Object.assign({},info[pos],{"div":div, "group":messagegroup[0], "pos":pos});
-			}
+			var messagegroup = this.getMessageGroup(div);
+			var pos = Array.from(messagegroup.querySelectorAll(BDFDB.dotCN.message)).indexOf(div);
+			var instance = BDFDB.getReactInstance(messagegroup);
+			if (!instance) return;
+			var info = instance.return.stateNode.props.messages;
+			if (info && pos > -1) this.message = Object.assign({},info[pos],{"div":div, "group":messagegroup, "pos":pos});
 		}
 		else {
 			this.message = null;
@@ -330,7 +361,7 @@ class PersonalPins {
 	
 	addOptionButton (message) {
 		if (!message.querySelector(BDFDB.dotCN.optionpopoutbutton) && !message.querySelector(BDFDB.dotCN.messagesystem) && !message.querySelector(BDFDB.dotCN.messageuploadcancel)) {
-			$(this.optionButtonMarkup).insertBefore(message.querySelector(BDFDB.dotCN.messagetext).firstChild);
+			$(this.optionButtonMarkup).appendTo(message.querySelector(BDFDB.dotCN.messagebuttoncontainer));
 			$(message).off("click." + this.getName()).on("click." + this.getName(), ".btn-personalpins", (e) => {
 				this.openOptionPopout(e);
 			});
@@ -443,8 +474,6 @@ class PersonalPins {
 		var channelObj = BDFDB.getSelectedChannel();
 		var serverObj = BDFDB.getSelectedServer() || {};
 		if (this.message && channelObj) {
-			var markup = this.message.div.querySelector(BDFDB.dotCN.messagecontent) || this.message.div.querySelector(BDFDB.dotCN.messagemarkup);
-			if (!markup) return;
 			var author = this.message.author;
 			var channelID = channelObj.id;
 			var serverID = serverObj.id ? serverObj.id : "@me";
@@ -460,6 +489,8 @@ class PersonalPins {
 					channelname = channelname + this.UserStore.getUser(dmmemberID).username;
 				}
 			}
+			var markup = this.message.div.querySelector(BDFDB.dotCN.messagemarkup).cloneNode(true);
+			markup.querySelectorAll(BDFDB.dotCN.messageheadercompact).forEach(h2 => {h2.remove();});
 			var message = {
 				"serverID": serverID,
 				"serverName": serverObj.name ? serverObj.name : "Direct Messages",
@@ -512,19 +543,20 @@ class PersonalPins {
 					messageArray.push(messages[id]);
 				}
 				BDFDB.sortArrayByKey(messageArray, notespopout.querySelector(BDFDB.dotCN.quickselectvalue).getAttribute("option"));
+				var compact = BDFDB.getDiscordMode == "compact";
 				for (let messageData of messageArray) {
-					let message = $(this.messageMarkup)[0];
+					let message = $(this.messageMarkupCozy)[0];
 					let server = this.GuildStore.getGuild(messageData.serverID);
 					let channel = this.ChannelStore.getChannel(messageData.channelID);
 					let user = this.UserStore.getUser(messageData.authorID);
 					let member = this.MemberStore.getMember(messageData.serverID, messageData.authorID);
 					let date = new Date(messageData.timestamp);
 					container.insertBefore(message, container.firstChild);
-					message.querySelector(BDFDB.dotCN.avatarlargeold).style.backgroundImage = 
+					message.querySelector(BDFDB.dotCN.avatarimage).style.backgroundImage = 
 						user ? "url(" + this.IconUtils.getUserAvatarURL(user) + ")" : "url(" + messageData.avatar + ")";
 					message.querySelector(BDFDB.dotCN.messageusername).innerText = user ? user.username : messageData.authorName;
 					message.querySelector(BDFDB.dotCN.messageusername).style.color = member ? member.colorString : messageData.color;
-					message.querySelector(BDFDB.dotCN.messagetimestamp).innerText = date.toLocaleString(language);
+					message.querySelector(compact ? BDFDB.dotCN.messagetimestampcompact : BDFDB.dotCN.messagetimestampcozy).innerText = date.toLocaleString(language);
 					message.querySelector(".server-channel").innerText = 
 						(server && server.name ? server.name : messageData.serverName) + 
 						(messageData.serverID == "@me" ? " @" : " #") + 

@@ -57,7 +57,7 @@ class BadgesEverywhere {
 
 	getDescription () {return "Displays Badges (Nitro, HypeSquad, etc...) in the chat/memberlist/userpopout. Thanks for Zerebos' help.";}
 
-	getVersion () {return "1.0.2";}
+	getVersion () {return "1.0.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -129,26 +129,8 @@ class BadgesEverywhere {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (BDFDB.getData("showInChat", this, "settings")) {
-									if ($(BDFDB.dotCN.messagegroup).has(BDFDB.dotCN.avatarlargeold).length > 0) {
-										if (node && node.tagName && node.querySelector(BDFDB.dotCN.messageusernamewrapper)) {
-											this.addBadges(node, "chat", false);
-										}
-										else if (node && node.classList && node.classList.contains(BDFDB.disCN.messagetext)) {
-											this.addBadges($(BDFDB.dotCN.messagegroup).has(node)[0], "chat", false);
-										}
-									}
-									else {
-										if (node && node.tagName && node.querySelector(BDFDB.dotCN.messageusernamewrapper)) {
-											if (node.classList.contains(BDFDB.disCN.messagemarkup)) {
-												this.addBadges(node, "chat", true);
-											}
-											else {
-												var markups = node.querySelectorAll(BDFDB.dotCN.messagemarkup);
-												for (var i = 0; i < markups.length; i++) {
-													this.addBadges(markups[i], "chat", true);
-												}
-											}
-										}
+									if (node && node.tagName && node.querySelector(BDFDB.dotCN.messageusernamewrapper)) {
+										this.addBadges(node, "chat", BDFDB.getDiscordMode() == "compact");
 									}
 								}
 							});
@@ -234,16 +216,13 @@ class BadgesEverywhere {
 				this.addBadges(user, "list", false, settings);
 			}
 		}
-		if (settings.showInChat) { 
-			for (let user of document.querySelectorAll(BDFDB.dotCN.messagegroup)) {
-				var compact = document.querySelector(BDFDB.dotCN.messagegroup + BDFDB.dotCN.messagecompact);
-				if (!compact) {
-					this.addBadges(user, "chat", compact, settings);
-				}
-				else {
-					for (let message of document.querySelectorAll(BDFDB.dotCN.messagemarkup)) {
-						this.addBadges(message, "chat", compact, settings);
-					}
+		if (settings.showInChat) {
+			for (let messagegroup of document.querySelectorAll(BDFDB.dotCN.messagegroupcozy)) {
+				this.addBadges(messagegroup, "chat", false, settings);
+			}
+			for (let messagegroup of document.querySelectorAll(BDFDB.dotCN.messagegroupcompact)) {
+				for (let message of messagegroup.querySelectorAll(BDFDB.dotCN.messagemarkup)) {
+					this.addBadges(message, "chat", true, settings);
 				}
 			}
 		}

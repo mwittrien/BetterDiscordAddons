@@ -49,7 +49,9 @@ class GoogleTranslateOption {
 			</div>`;
 			
 		this.popoutEntryMarkup = 
-			`<div class="${BDFDB.disCNS.optionpopoutitem + BDFDB.disCN.weightmedium} btn-item-googletranslateoption">REPLACE_popout_translateoption_text</div>`;
+			`<button type="button" class="${BDFDB.disCNS.optionpopoutitem + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow} btn-item-googletranslateoption">
+				<div class="${BDFDB.disCN.buttoncontents}">REPLACE_popout_translateoption_text</div>
+			</button>`;
 			
 		this.translateButtonMarkup = 
 			`<svg version="1.1" xmlns="http://www.w3.org/2000/svg" class="translate-button" width="22" height="30" fill="currentColor">
@@ -376,7 +378,7 @@ class GoogleTranslateOption {
 
 	getDescription () {return "Adds a Google Translate option to your context menu, which shows a preview of the translated text and on click will open the selected text in Google Translate. Also adds a translation button to your textareas, which will automatically translate the text for you before it is being send. DeepLApi written by square. Thanks ;)";}
 
-	getVersion () {return "1.4.9";}
+	getVersion () {return "1.5.0";}
 	
 	getAuthor () {return "DevilBro, square";}
 	
@@ -571,11 +573,8 @@ class GoogleTranslateOption {
 							this.translateText(text, "context", (translation, input, output) => {
 								if (translation) {
 									var tooltiptext = `From ${input.name}:\n${text}\n\nTo ${output.name}:\n${translation}`;
-									var customTooltipCSS = `
-										.googletranslate-tooltip {
-											max-width: ${window.outerWidth - $(e.currentTarget).offset().left - $(e.currentTarget).outerWidth()}px !important;
-										}`;
-									BDFDB.createTooltip(tooltiptext, e.currentTarget, {type: "right",selector:"googletranslate-tooltip",css:customTooltipCSS});
+									var maxwidth = window.outerWidth - $(e.currentTarget).offset().left - $(e.currentTarget).outerWidth();
+									BDFDB.createTooltip(tooltiptext, e.currentTarget, {type: "right",selector:"googletranslate-tooltip",style:`max-width: ${maxwidth}px !important;`});
 								}
 							});
 						})
@@ -627,7 +626,7 @@ class GoogleTranslateOption {
 	
 	addOptionButton (message) {
 		if (!message.querySelector(BDFDB.dotCN.optionpopoutbutton) && !message.querySelector(BDFDB.dotCN.messagesystem) && !message.querySelector(BDFDB.dotCN.messageuploadcancel)) {
-			$(this.optionButtonMarkup).insertBefore(message.querySelector(BDFDB.dotCN.messagetext).firstChild);
+			$(this.optionButtonMarkup).appendTo(message.querySelector(BDFDB.dotCN.messagebuttoncontainer));
 			$(message).off("click." + this.getName()).on("click." + this.getName(), ".btn-googletranslateoption", (e) => {
 				this.openOptionPopout(e);
 			});
@@ -669,14 +668,23 @@ class GoogleTranslateOption {
 			});
 	}
 	
+	getMessageGroup (message) {
+		var messagegroup = null;
+		while (messagegroup == null || message.parentElement) {
+			message = message.parentElement;
+			if (message.classList && message.classList.contains(BDFDB.disCN.messagegroup)) messagegroup = message;
+		}
+		return messagegroup;
+	}
+	
 	getMessageData (div) {
 		if (div && !div.querySelector(BDFDB.dotCN.messagesystem)) {
-			var messagegroup = $(BDFDB.dotCN.messagegroup).has(div);
-			var pos = messagegroup.find(BDFDB.dotCN.message).index(div);
-			if (messagegroup[0] && pos > -1) {
-				var info = BDFDB.getKeyInformation({"node":div,"key":"messages","up":true,"time":1000});
-				if (info) this.message = Object.assign({},info[pos],{"div":div, "group":messagegroup[0], "pos":pos});
-			}
+			var messagegroup = this.getMessageGroup(div);
+			var pos = Array.from(messagegroup.querySelectorAll(BDFDB.dotCN.message)).indexOf(div);
+			var instance = BDFDB.getReactInstance(messagegroup);
+			if (!instance) return;
+			var info = instance.return.stateNode.props.messages;
+			if (info && pos > -1) this.message = Object.assign({},info[pos],{"div":div, "group":messagegroup, "pos":pos});
 		}
 		else {
 			this.message = null;
@@ -740,7 +748,7 @@ class GoogleTranslateOption {
 			if (!message.classList.contains("translated")) {
 				this.translateText(this.message.content, "context", (translation, input, output) => {
 					if (translation) {
-						var markup = message.querySelector(BDFDB.dotCN.messagecontent) || message.querySelector(BDFDB.dotCN.messagemarkup);
+						var markup = message.querySelector(BDFDB.dotCN.messagemarkup);
 						if (markup) {
 							$(markup).data("orightmlGoogleTranslate", markup.innerHTML);
 							markup.innerText = translation;
@@ -766,7 +774,7 @@ class GoogleTranslateOption {
 			.removeClass("translated")
 			.find(BDFDB.dotCN.messageedited + ".translated").remove();
 			
-		var markup = message.querySelector(BDFDB.dotCN.messagecontent) || message.querySelector(BDFDB.dotCN.messagemarkup);
+		var markup = message.querySelector(BDFDB.dotCN.messagemarkup);
 		markup.innerHTML = $(markup).data("orightmlGoogleTranslate");
 	}
 	

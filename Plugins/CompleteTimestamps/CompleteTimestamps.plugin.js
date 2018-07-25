@@ -32,7 +32,7 @@ class CompleteTimestamps {
 
 	getDescription () {return "Replace all timestamps with complete timestamps.";}
 
-	getVersion () {return "1.2.2";}
+	getVersion () {return "1.2.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -99,10 +99,10 @@ class CompleteTimestamps {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node.tagName && node.querySelector(BDFDB.dotCN.messagetext)) {
-									node.querySelectorAll(BDFDB.dotCN.messagetext).forEach(message => {this.changeTimestamp(message);});
+								if (node.tagName && node.querySelector(BDFDB.dotCN.message)) {
+									node.querySelectorAll(BDFDB.dotCN.message).forEach(message => {this.changeTimestamp(message);});
 								}
-								else if (node.classList && node.classList.contains(BDFDB.disCN.messagetext)) {
+								else if (node.classList && node.classList.contains(BDFDB.disCN.message)) {
 									this.changeTimestamp(node);
 								}
 							});
@@ -120,7 +120,7 @@ class CompleteTimestamps {
 								if (this.updateTimestamps && node && node.tagName && node.getAttribute("layer-id") == "user-settings") {
 									this.setMaxWidth();
 									document.querySelectorAll(".complete-timestamp").forEach(timestamp => {timestamp.classList.remove("complete-timestamp");});
-									document.querySelectorAll(BDFDB.dotCN.messagetext).forEach(message => {this.changeTimestamp(message);});
+									document.querySelectorAll(BDFDB.dotCN.message).forEach(message => {this.changeTimestamp(message);});
 									this.updateTimestamps = false;
 								}
 							});
@@ -138,7 +138,7 @@ class CompleteTimestamps {
 			this.setMaxWidth();
 			
 			$(document)
-				.on("mouseenter." + this.getName(), BDFDB.dotCNS.message + BDFDB.dotCNC.messagetext + BDFDB.dotCNS.message + BDFDB.dotCN.messageaccessory, (e) => {
+				.on("mouseenter." + this.getName(), BDFDB.dotCNS.message + BDFDB.dotCN.messagecontent, (e) => {
 					if (BDFDB.getData("showOnHover", this, "settings")) {
 						var message = e.currentTarget;
 						var messagegroup = this.getMessageGroup(message);
@@ -165,7 +165,7 @@ class CompleteTimestamps {
 					}
 				});
 			
-			document.querySelectorAll(BDFDB.dotCN.messagetext).forEach(message => {this.changeTimestamp(message);});
+			document.querySelectorAll(BDFDB.dotCN.message).forEach(message => {this.changeTimestamp(message);});
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -265,8 +265,8 @@ class CompleteTimestamps {
 		if (!message || !message.tagName || !BDFDB.getData("showInChat", this, "settings")) return;
 		var messagegroup = this.getMessageGroup(message);
 		if (!messagegroup || !messagegroup.tagName) return;
-		var compact = messagegroup.classList.contains(BDFDB.disCN.messagecompact);
-		var timestamp = compact ? message.querySelector(BDFDB.dotCN.messagetimestamp) : messagegroup.querySelector(BDFDB.dotCN.messagetimestamp);
+		var compact = messagegroup.classList.contains(BDFDB.disCN.messagegroupcompact);
+		var timestamp = compact ? message.querySelector(BDFDB.dotCN.messagetimestampcompact) : messagegroup.querySelector(BDFDB.dotCN.messagetimestampcozy);
 		if (!timestamp || !timestamp.tagName || timestamp.classList.contains("complete-timestamp")) return;
 		var info = this.getMessageData(message, messagegroup);
 		if (!info || !info.timestamp || !info.timestamp._i) return;
@@ -276,9 +276,9 @@ class CompleteTimestamps {
 		if (compact && this.compactWidth) {
 			var markup = message.querySelector(BDFDB.dotCN.messagemarkup);
 			if (markup) {
-				var newpadding = 100 + (this.compactWidth - 65);
-				markup.style.paddingLeft =	newpadding + "px"; 
-				markup.style.textIndent =	"-" + newpadding + "px"; 
+				var newmargin = 100 + (this.compactWidth - 65); 
+				markup.style.marginLeft =	newmargin + "px"; 
+				markup.style.textIndent =	"-" + newmargin + "px"; 
 				timestamp.style.width = 	this.compactWidth + "px";
 			}
 		}
@@ -294,10 +294,11 @@ class CompleteTimestamps {
 	}
 	
 	getMessageData (message, messagegroup) {
-		var pos = $(messagegroup).find(BDFDB.dotCN.message).index($(messagegroup).find(BDFDB.dotCN.message).has(message)[0]);
-		var info = BDFDB.getKeyInformation({"node":message,"key":"messages","up":true,"time":1000});
-		if (info && pos > -1) info = info[pos];
-		return info;
+		var pos = Array.from(messagegroup.querySelectorAll(BDFDB.dotCN.message)).indexOf(message);
+		var instance = BDFDB.getReactInstance(messagegroup);
+		if (!instance) return;
+		var info = instance.return.stateNode.props.messages;
+		return info && pos > -1 ? info[pos] : null;
 	}
 	
 	getTimestamp (languageid, time = new Date()) {
@@ -351,11 +352,12 @@ class CompleteTimestamps {
 	}
 	
 	setMaxWidth () {
-		var wrapper = $(`<div class="${BDFDB.disCNS.messagegroup + BDFDB.disCN.messagecompact}"><div class="${BDFDB.disCN.messagetimestamp}"></div></div>`);
-		var timestamp = wrapper.find(BDFDB.dotCN.messagetimestamp);
 		var choice = BDFDB.getData("creationDateLang", this, "choices");
-		$(wrapper).appendTo(document.body);
-		this.compactWidth = timestamp.css("width", "auto").text(this.getTimestamp(this.languages[choice].id, new Date(253402124399995))).outerWidth();
-		wrapper.remove();
+		var timestamp = document.querySelector(BDFDB.dotCN.messagetimestampcompact);
+		if (!timestamp) return;
+		var testtimestamp = $(`<time class="${timestamp.className}" style="width: auto !important;">${this.getTimestamp(this.languages[choice].id, new Date(253402124399995))}</time>`);
+		$(testtimestamp).appendTo(document.body);
+		this.compactWidth = testtimestamp.outerWidth() + 10;
+		testtimestamp.remove();
 	}
 }

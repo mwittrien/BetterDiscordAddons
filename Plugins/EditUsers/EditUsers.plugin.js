@@ -19,7 +19,7 @@ class EditUsers {
 				text-indent: 0px !important;
 				vertical-align: top;
 			}
-			${BDFDB.dotCN.messagecompact} .user-tag {
+			${BDFDB.dotCN.messagegroupcompact} .user-tag {
 				margin-left: 2px;
 				margin-right: 6px;
 			}
@@ -27,6 +27,10 @@ class EditUsers {
 			.user-tag.profil-tag {
 				position: relative;
 				top: 2px;
+			}
+			.user-tag.dmheader-tag {
+				position: relative;
+				top: 4px;
 			}`;
 			
 		this.tagMarkup = `<span class="user-tag"></span>`;
@@ -172,7 +176,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "2.3.3";}
+	getVersion () {return "2.3.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -310,24 +314,8 @@ class EditUsers {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (BDFDB.getData("changeInChatWindow", this, "settings")) {
-									var compact = document.querySelector(BDFDB.dotCN.messagegroup + BDFDB.dotCN.messagecompact);
-									if (!compact) {
-										if (node.tagName && node.querySelector(BDFDB.dotCN.messageusernamewrapper)) {
-											this.loadUser(node, "chat", compact);
-										}
-										else if (node.classList && node.classList.contains(BDFDB.disCN.messagetext)) {
-											this.loadUser($(BDFDB.dotCN.messagegroup).has(node)[0], "chat", compact);
-										}
-									}
-									else {
-										if (node.tagName && node.querySelector(BDFDB.dotCN.messageusernamewrapper)) {
-											if (node.classList.contains(BDFDB.disCN.messagemarkup)) {
-												this.loadUser(node, "chat", compact);
-											}
-											else {
-												for (let markup of node.querySelectorAll(BDFDB.dotCN.messagemarkup)) this.loadUser(markup, "chat", compact);
-											}
-										}
+									if (node && node.tagName && node.querySelector(BDFDB.dotCN.messageusernamewrapper)) {
+										this.loadUser(node, "chat", BDFDB.getDiscordMode() == "compact");
 									}
 								}
 							});
@@ -442,7 +430,6 @@ class EditUsers {
 				);
 			});
 			BDFDB.addObserver(this, BDFDB.dotCN.layers, {name:"settingsWindowObserver",instance:observer}, {childList:true});
-						
 			this.loadAllUsers();
 		}
 		else {
@@ -679,14 +666,7 @@ class EditUsers {
 		if (disabled || valid || invalid) {
 			var text = disabled ? this.labels.modal_ignoreurl_text : valid ? this.labels.modal_validurl_text : this.labels.modal_invalidurl_text;
 			var bgColor = disabled ? "#282524" : valid ? "#297828" : "#8C2528";
-			var customTooltipCSS = `
-				body .notice-tooltip {
-					background-color: ${bgColor} !important;
-				}
-				body .notice-tooltip:after {
-					border-right-color: ${bgColor} !important;
-				}`;
-			BDFDB.createTooltip(text, input, {type:"right",selector:"notice-tooltip",css:customTooltipCSS});
+			BDFDB.createTooltip(text, input, {type:"right",selector:"notice-tooltip",style:`background-color: ${bgColor} !important; border-color: ${bgColor} !important;`});
 		}
 	}
 
@@ -701,14 +681,12 @@ class EditUsers {
 			} 
 		}
 		if (settings.changeInChatWindow) {
-			for (let user of document.querySelectorAll(BDFDB.dotCN.messagegroup)) {
-				if (user.querySelector(BDFDB.dotCN.avatarlargeold)) {
-					this.loadUser(user, "chat", false);
-				}
-				else {
-					for (let markup of user.querySelectorAll(BDFDB.dotCN.messagemarkup)) {
-						this.loadUser(markup, "chat", true);
-					}
+			for (let messagegroup of document.querySelectorAll(BDFDB.dotCN.messagegroupcozy)) {
+				this.loadUser(messagegroup, "chat", false);
+			}
+			for (let messagegroup of document.querySelectorAll(BDFDB.dotCN.messagegroupcompact)) {
+				for (let message of messagegroup.querySelectorAll(BDFDB.dotCN.messagemarkup)) {
+					this.loadUser(message, "chat", true);
 				}
 			}
 		}
@@ -766,7 +744,6 @@ class EditUsers {
 		if (!avatar && !username && !wrapper) return;
 		
 		$(div).data("compact", compact);
-		
 		var info = this.getUserInfo(compact ? $(BDFDB.dotCN.messagegroup).has(div)[0] : div);
 		if (!info) return;
 		
@@ -835,7 +812,9 @@ class EditUsers {
 			var {avatar, username, wrapper} = this.getAvatarNameWrapper(div);
 			if (!avatar && !username && !wrapper) return;
 			
-			var info = this.getUserInfo($(div).data(BDFDB.disCN.messagecompact) ? $(BDFDB.dotCN.messagegroup).has(div)[0] : div);
+			if (avatar) avatar.style.backgroundImage = "url()";
+			
+			var info = this.getUserInfo($(div).data("compact") ? $(BDFDB.dotCN.messagegroup).has(div)[0] : div);
 			if (!info) return;
 			
 			if (username) {
