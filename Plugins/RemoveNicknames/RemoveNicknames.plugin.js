@@ -5,7 +5,8 @@ class RemoveNicknames {
 		this.defaults = {
 			settings: {
 				replaceOwn:		{value:false, 	description:"Replace your own name:"},
-				addNickname:    {value:false, 	description:"Add nickname as parentheses:"}
+				addNickname:    {value:false, 	description:"Add nickname as parentheses:"},
+				swapPositions:	{value:false, 	description:"Swap the position of username and nickname:"}
 			}
 		};
 	}
@@ -14,7 +15,7 @@ class RemoveNicknames {
 
 	getDescription () {return "Replace all nicknames with the actual accountnames.";}
 
-	getVersion () {return "1.0.9";}
+	getVersion () {return "1.1.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -196,9 +197,10 @@ class RemoveNicknames {
 		var member = this.MemberPerms.getMember(serverObj.id, info.id);
 		if (!member || !member.nick) return;
 		
-		BDFDB.setInnerText(usernameWrapper, settings.addNickname ? info.username + " (" + member.nick + ")" : info.username);
+		var newname = settings.addNickname ? (settings.swapPositions ? (member.nick + " (" + info.username + ")") : (info.username + " (" + member.nick + ")")) : info.username;
+		BDFDB.setInnerText(usernameWrapper, newname);
 			
-		$(div).attr("removed-nickname", true);
+		div.setAttribute("removed-nickname", true);
 	}
 	
 	resetAllUsers () {
@@ -217,7 +219,7 @@ class RemoveNicknames {
 			
 			BDFDB.setInnerText(usernameWrapper, member.nick);
 				
-			$(div).removeAttr("removed-nickname");
+			div.removeAttribute("removed-nickname");
 		});
 	}
 	
