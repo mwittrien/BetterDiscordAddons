@@ -378,7 +378,7 @@ class GoogleTranslateOption {
 
 	getDescription () {return "Adds a Google Translate option to your context menu, which shows a preview of the translated text and on click will open the selected text in Google Translate. Also adds a translation button to your textareas, which will automatically translate the text for you before it is being send. DeepLApi written by square. Thanks ;)";}
 
-	getVersion () {return "1.5.0";}
+	getVersion () {return "1.5.1";}
 	
 	getAuthor () {return "DevilBro, square";}
 	
@@ -745,14 +745,17 @@ class GoogleTranslateOption {
 	translateMessage () {
 		if (this.message && this.message.content) {
 			var message = this.message.div;
-			if (!message.classList.contains("translated")) {
+			if (!message.querySelector(BDFDB.dotCN.messageedited + ".translated")) {
 				this.translateText(this.message.content, "context", (translation, input, output) => {
 					if (translation) {
 						var markup = message.querySelector(BDFDB.dotCN.messagemarkup);
 						if (markup) {
 							$(markup).data("orightmlGoogleTranslate", markup.innerHTML);
-							markup.innerText = translation;
-							$(`<span class="${BDFDB.disCN.messageedited} translated">(${this.labels.translated_watermark_text})</span>`)
+							var removeEles = [];
+							for (let ele of markup.childNodes) if (ele.tagName != "H2") removeEles.push(ele);
+							for (let ele of removeEles) ele.remove();
+							BDFDB.setInnerText(markup, translation);
+							$(`<time class="${BDFDB.disCN.messageedited} translated">(${this.labels.translated_watermark_text})</time>`)
 								.on("mouseenter." + this.getName(), (e) => {
 									BDFDB.createTooltip(`<div>From: ${input.name}</div><div>To: ${output.name}</div>`, e.currentTarget, {html:true, type:"top", selector:"translation-tooltip"});
 								})

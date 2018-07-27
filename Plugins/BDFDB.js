@@ -1815,6 +1815,10 @@ BDFDB.setInnerText = function (div, text) {
 	if (!div) return;
 	var textNode = BDFDB.$(div).contents().filter(function () {return this.nodeType == Node.TEXT_NODE;})[0];
 	if (textNode) textNode.textContent = text;
+	else {
+		textNode = document.createTextNode(text);
+		div.appendChild(textNode);
+	}
 };
 	
 BDFDB.getInnerText = function (div) {
