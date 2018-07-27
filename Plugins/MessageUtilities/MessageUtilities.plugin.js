@@ -43,7 +43,7 @@ class MessageUtilities {
 
 	getDescription () {return "Offers a number of useful message options. Remap the keybindings in the settings.";}
 
-	getVersion () {return "1.3.9";}
+	getVersion () {return "1.4.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -116,10 +116,10 @@ class MessageUtilities {
 			this.Permissions = BDFDB.WebModules.findByProperties(["Permissions", "ActivityTypes"]).Permissions
 			
 			$(document)
-				.on("click." + this.getName(), BDFDB.dotCN.message, (e) => {
+				.on("click." + this.getName(), BDFDB.dotCNC.message + BDFDB.dotCN.messagesystem, (e) => {
 					this.onClick(e.currentTarget, 0, "onSglClick");
 				})
-				.on("dblclick." + this.getName(), BDFDB.dotCN.message, (e) => {
+				.on("dblclick." + this.getName(), BDFDB.dotCNC.message + BDFDB.dotCN.messagesystem, (e) => {
 					this.onClick(e.currentTarget, 1, "onDblClick");
 				})
 				.on("keydown." + this.getName(), BDFDB.dotCN.textareawrapchat, (e) => {
@@ -133,8 +133,8 @@ class MessageUtilities {
 
 	stop () {
 		if (typeof BDFDB === "object") {
-			$(document).off("click." + this.getName(), BDFDB.dotCN.message);
-			$(document).off("dblclick." + this.getName(), BDFDB.dotCN.message);
+			$(document).off("click." + this.getName(), BDFDB.dotCNC.message + BDFDB.dotCN.messagesystem);
+			$(document).off("dblclick." + this.getName(), BDFDB.dotCNC.message + BDFDB.dotCN.messagesystem);
 			$(document).off("keydown." + this.getName(), BDFDB.dotCN.textareawrapchat);
 			
 			BDFDB.unloadMessage(this);
@@ -364,7 +364,7 @@ class MessageUtilities {
 	getMessageData (div) {
 		if (div) {
 			var messagegroup = this.getMessageGroup(div);
-			var pos = Array.from(messagegroup.querySelectorAll(BDFDB.dotCN.message)).indexOf(div);
+			var pos = Array.from(messagegroup.querySelectorAll(BDFDB.dotCNC.message + BDFDB.dotCN.messagesystem)).indexOf(div);
 			var instance = BDFDB.getReactInstance(messagegroup);
 			if (!instance) return;
 			var info = instance.return.stateNode.props.messages;
