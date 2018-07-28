@@ -66,8 +66,10 @@ https://raw.githubusercontent.com/mashirochan/Mashiro-chan/master/Plugins/CheckA
 https://raw.githubusercontent.com/mashirochan/Mashiro-chan/master/Plugins/EmoteBlacklistRedux/EmoteBlacklistRedux.plugin.js
 https://raw.githubusercontent.com/mashirochan/Mashiro-chan/master/Plugins/HorizontalCodeScroll/HorizontalCodeScroll.plugin.js
 https://raw.githubusercontent.com/mashirochan/Mashiro-chan/master/Plugins/PasteSend/PasteSend.plugin.js
+https://raw.githubusercontent.com/Mega-Mewthree/BetterDiscordPlugins/master/Plugins/AlwaysMentionEveryone/AlwaysMentionEveryone.plugin.js
 https://raw.githubusercontent.com/Mega-Mewthree/BetterDiscordPlugins/master/Plugins/AutoStartRichPresence/AutoStartRichPresence.plugin.js
 https://raw.githubusercontent.com/Mega-Mewthree/BetterDiscordPlugins/master/Plugins/DiscordCakeDay/DiscordCakeDay.plugin.js
+https://raw.githubusercontent.com/Mega-Mewthree/BetterDiscordPlugins/master/Plugins/RightClickRoleForID/RightClickRoleForID.plugin.js
 https://raw.githubusercontent.com/megamit/repository/gh-pages/renamer/1.5.4/renamer.plugin.js
 https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/AvatarIconViewer.plugin.js
 https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/BetterEmoteSizes.plugin.js
