@@ -3112,6 +3112,7 @@ BDFDB.DiscordClasses = {
 	embedproviderlink: "embedProviderLink-2Pq1Uw",
 	embedthumbnail: "embedThumbnail-2Y84-K",
 	embedtitle: "embedTitle-3OXDkz",
+	embedtitlelink: "embedTitleLink-1Zla9e",
 	embedvideo: "embedVideo-3nf0O9",
 	embedvideoaction: "embedVideoAction-2BIhKO",
 	embedvideoactions: "embedVideoActions-O6vR7W",
