@@ -32,7 +32,7 @@ class CompleteTimestamps {
 
 	getDescription () {return "Replace all timestamps with complete timestamps.";}
 
-	getVersion () {return "1.2.3";}
+	getVersion () {return "1.2.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -284,17 +284,17 @@ class CompleteTimestamps {
 		}
 	}
 	
-	getMessageGroup (message) {
+	getMessageGroup (div) {
 		var messagegroup = null;
-		while (messagegroup == null || message.parentElement) {
-			message = message.parentElement;
-			if (message.classList && message.classList.contains(BDFDB.disCN.messagegroup)) messagegroup = message;
+		while (messagegroup == null || div.parentElement) {
+			div = div.parentElement;
+			if (div.classList && div.classList.contains(BDFDB.disCN.messagegroup)) messagegroup = div;
 		}
 		return messagegroup;
 	}
 	
-	getMessageData (message, messagegroup) {
-		var pos = Array.from(messagegroup.querySelectorAll(BDFDB.dotCN.message)).indexOf(message);
+	getMessageData (div, messagegroup) {
+		var pos = Array.from(messagegroup.querySelectorAll("." + div.className.replace(/ /g, "."))).indexOf(div);
 		var instance = BDFDB.getReactInstance(messagegroup);
 		if (!instance) return;
 		var info = instance.return.stateNode.props.messages;
