@@ -3,8 +3,12 @@
 class BetterFriendCount {
 	initConstructor () {
 		this.css = `
-			${BDFDB.idCNS.friends+BDFDB.dotCNS.friendstabbaritem+BDFDB.dotCN.badge}:not(.betterfriendcount-badge) {
+			${BDFDB.idCNS.friends + BDFDB.dotCNS.friendstabbaritem + BDFDB.dotCN.badge}:not(.betterfriendcount-badge), 
+			${BDFDB.idCNS.friends + BDFDB.dotCNS.friendstabbaritem + BDFDB.dotCN.badgewrapper}:not(.betterfriendcount-badge) {
 				display: none !important;
+			}
+			${BDFDB.idCNS.friends + BDFDB.dotCNS.friendstabbaritem + BDFDB.dotCN.badgewrapper}.betterfriendcount-badge {
+				margin-left: 5px !important;
 			}
 		`;
 		
@@ -15,7 +19,7 @@ class BetterFriendCount {
 
 	getDescription () {return "Shows the amount of total and online friends and blocked users in the friends tab.";}
 
-	getVersion () {return "1.0.5";}
+	getVersion () {return "1.0.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -24,8 +28,7 @@ class BetterFriendCount {
 
 	start () {
 		var libraryScript = null;
-		if (typeof BDFDB !== "object" || BDFDB.isLibraryOutdated()) {
-			if (typeof BDFDB === "object") BDFDB = "";
+		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
 			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
@@ -34,7 +37,7 @@ class BetterFriendCount {
 			document.head.appendChild(libraryScript);
 		}
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object") this.initialize();
+		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
 		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
@@ -114,10 +117,10 @@ class BetterFriendCount {
 		for (let id in relationships) {relationshipCount[this.relationshipTypes[relationships[id]]]++;}
 		
 		var tabitems = friendstabbar.querySelectorAll(BDFDB.dotCN.friendstabbaritem);
-		$(`<div class="badge betterfriendcount-badge friendcount">${relationshipCount.FRIEND}</div>`).appendTo(tabitems[1]);
-		$(`<div class="badge betterfriendcount-badge onlinefriendcount">${this.UserMetaStore.getOnlineFriendCount()}</div>`).appendTo(tabitems[2]);
-		$(`<div class="badge betterfriendcount-badge requestincount">${relationshipCount.PENDING_INCOMING}</div>`).appendTo(tabitems[3]);
-		$(`<div class="badge betterfriendcount-badge requestoutcount">${relationshipCount.PENDING_OUTGOING}</div>`).appendTo(tabitems[3]);
-		$(`<div class="badge betterfriendcount-badge blockedcount">${relationshipCount.BLOCKED}</div>`).appendTo(tabitems[4]);
+		$(`<div class="${BDFDB.disCN.badgewrapper} betterfriendcount-badge friendcount">${relationshipCount.FRIEND}</div>`).appendTo(tabitems[1]);
+		$(`<div class="${BDFDB.disCN.badgewrapper} betterfriendcount-badge onlinefriendcount">${this.UserMetaStore.getOnlineFriendCount()}</div>`).appendTo(tabitems[2]);
+		$(`<div class="${BDFDB.disCN.badgewrapper} betterfriendcount-badge requestincount">${relationshipCount.PENDING_INCOMING}</div>`).appendTo(tabitems[3]);
+		$(`<div class="${BDFDB.disCN.badgewrapper} betterfriendcount-badge requestoutcount">${relationshipCount.PENDING_OUTGOING}</div>`).appendTo(tabitems[3]);
+		$(`<div class="${BDFDB.disCN.badgewrapper} betterfriendcount-badge blockedcount">${relationshipCount.BLOCKED}</div>`).appendTo(tabitems[4]);
 	}
 }
