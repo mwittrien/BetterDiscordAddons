@@ -253,6 +253,7 @@ BDFDB.downloadPlugin = function (pluginName, downloadUrl, updateNoticeBar) {
 	let path = require("path");
 	request(downloadUrl, (error, response, body) => {
 		if (error) return console.warn("Unable to get update for " + pluginName);
+		BDFDB.creationTime = 0;
 		let remoteVersion = body.match(/['"][0-9]+\.[0-9]+\.[0-9]+['"]/i);
 		remoteVersion = remoteVersion.toString().replace(/['"]/g, "");
 		let filename = downloadUrl.split("/");
