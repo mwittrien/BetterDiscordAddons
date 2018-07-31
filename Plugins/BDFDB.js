@@ -591,7 +591,7 @@ BDFDB.createUpdateButton = function () {
 		BDFDB.checkAllUpdates();
 	};			
 	updateButton.onmouseenter = function () {
-		BDFDB.createTooltip("Only checks for updates of plugins, which support the updatecheck. Rightclick for a list.", updateButton, {type:"top",selector:"update-button-tooltip"});	
+		BDFDB.createTooltip("Only checks for updates of plugins, which support the updatecheck. Rightclick for a list of supported plugins.", updateButton, {type:"top",selector:"update-button-tooltip"});	
 	};
 	updateButton.oncontextmenu = function () {
 		if (window.PluginUpdates && window.PluginUpdates.plugins && !document.querySelector(".update-list-tooltip")) {
