@@ -38,7 +38,7 @@ class PinDMs {
 
 	getDescription () {return "Allows you to pin DMs, making them appear at the top of your DM-list.";}
 
-	getVersion () {return "1.0.8";}
+	getVersion () {return "1.0.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -121,7 +121,8 @@ class PinDMs {
 	}
 	
 	onSwitch () {
-		if (!document.querySelector(BDFDB.dotCNS.guildactive + BDFDB.dotCN.friendsicon) || document.querySelector(BDFDB.dotCN.dmchannel + BDFDB.dotCN.dmchannelprivate + ".pinned")) return;
+		if (BDFDB.getSelectedServer()) clearInterval(this.statusInterval);
+		if (!document.querySelector(BDFDB.dotCNS.guildselected + BDFDB.dotCN.friendsicon) || document.querySelector(BDFDB.dotCN.dmchannel + BDFDB.dotCN.dmchannelprivate + ".pinned")) return;
 		
 		this.addAllPinnedDMs();
 		
@@ -138,7 +139,7 @@ class PinDMs {
 	}
 	
 	onContextMenu (context) {
-		if (!document.querySelector(BDFDB.dotCNS.guildactive + BDFDB.dotCN.friendsicon) || !context || !context.tagName || !context.parentElement || context.querySelector(".pindm-item")) return;
+		if (!document.querySelector(BDFDB.dotCNS.guildselected + BDFDB.dotCN.friendsicon) || !context || !context.tagName || !context.parentElement || context.querySelector(".pindm-item")) return;
 		var info = BDFDB.getKeyInformation({"node":context, "key":"user"}), ele = null;
 		if (info && BDFDB.getKeyInformation({"node":context, "key":"handleClose"})) {
 			ele = context.querySelectorAll(BDFDB.dotCN.contextmenuitem)[3];
@@ -248,6 +249,7 @@ class PinDMs {
 	}
 	
 	startUpdateInterval () {
+		clearInterval(this.statusInterval);
 		this.statusInterval = setInterval(() => {
 			for (let pinnedDM of document.querySelectorAll(BDFDB.dotCN.dmchannel + BDFDB.dotCN.dmchannelprivate + ".pinned")) this.setPinnedDM(pinnedDM);
 			if (!document.querySelector(BDFDB.dotCN.dmchannel + BDFDB.dotCN.friendsbutton + " + header.pinneddms-header")) clearInterval(this.statusInterval); 
