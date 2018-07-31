@@ -335,7 +335,7 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.7.4";}
+	getVersion () {return "5.7.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -388,7 +388,7 @@ class ServerFolders {
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
-						var serverObj = this.getParentObject(change.target, "guild");
+						var serverObj = this.getParentObject(change.target, BDFDB.disCN.guild);
 						var folderDiv = this.getFolderOfServer(serverObj);
 						if (folderDiv) {
 							this.updateCopyInFolderContent(serverObj, folderDiv);
@@ -418,7 +418,7 @@ class ServerFolders {
 				changes.forEach(
 					(change, i) => {
 						if (change.type == "attributes" && change.attributeName == "class") {
-							var serverObj = this.getParentObject(change.target, "guild");
+							var serverObj = this.getParentObject(change.target, BDFDB.disCN.guild);
 							var folderDiv = this.getFolderOfServer(serverObj);
 							if (folderDiv) {
 								this.updateCopyInFolderContent(serverObj, folderDiv);
@@ -427,7 +427,7 @@ class ServerFolders {
 						}
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								var serverObj = this.getParentObject(node, "guild");
+								var serverObj = this.getParentObject(node, BDFDB.disCN.guild);
 								var folderDiv = this.getFolderOfServer(serverObj);
 								if (folderDiv) {
 									this.updateCopyInFolderContent(serverObj, folderDiv);
@@ -442,7 +442,7 @@ class ServerFolders {
 						if (change.removedNodes) {
 							change.removedNodes.forEach((node) => {
 								var isBadge = $(node).hasClass(BDFDB.disCN.badge);
-								var serverObj = this.getParentObject(isBadge ? change.target : node, "guild");
+								var serverObj = this.getParentObject(isBadge ? change.target : node, BDFDB.disCN.guild);
 								var folderDiv = this.getFolderOfServer(serverObj);
 								if (folderDiv) {
 									if (isBadge) this.updateCopyInFolderContent(serverObj, folderDiv);
@@ -478,30 +478,6 @@ class ServerFolders {
 					document.querySelectorAll(".folder.open").forEach(openFolder => {this.openCloseFolder(openFolder);});
 				}
 			});
-			
-			// PATCH OLD DATA REMOVE AFTER SOME TIME
-			var customIcons = BDFDB.loadData("customicons", this, "customicons") || [];
-			if (customIcons.length > 0) {
-				BDFDB.showToast("Patching old ServerFolders data. This may take a minute. Do not close Discord.", {type:"warn"});
-				let folders = BDFDB.loadAllData(this, "folders");
-				this.folderIcons.forEach(pair => {
-					pair.custom = false;
-				});
-				customIcons.forEach(pair => {
-					pair.custom = true;
-					pair.customID = this.generateID("customicon", "customicons");
-					BDFDB.saveData(pair.customID, {"openicon":pair.openicon,"closedicon":pair.closedicon,"customID":pair.customID}, this, "customicons");
-				});
-				var icons = this.folderIcons.concat(customIcons);
-				for (var id in folders) {
-					var folder = folders[id];
-					if (icons[folder.iconID].custom) {
-						folder.iconID = icons[folder.iconID].customID;
-						BDFDB.saveData(id, folder, this, "folders");
-					}
-				}
-				BDFDB.removeData("customicons", this, "customicons");
-			}
 			
 			setTimeout(() => {
 				this.addDragListener();
@@ -641,8 +617,8 @@ class ServerFolders {
 				if (BDFDB.pressedKeys.includes(17)) {
 					e.stopPropagation();
 					e.preventDefault();
-					var serverObj = this.getParentObject(e.target, "guild");
-					if (serverObj) {
+					var serverObj = this.getParentObject(e.target, BDFDB.disCN.guild);
+					if (serverObj && serverObj.div) {
 						var serverPreview = serverObj.div.cloneNode(true);
 						$(serverPreview)
 							.appendTo(BDFDB.dotCN.appmount)
@@ -790,7 +766,7 @@ class ServerFolders {
 							hoveredElement = this.getParentObject(e2.target, "folder").div;
 							if (hoveredElement) guildswrap.insertBefore(placeholder, hoveredElement.nextSibling);
 							else {
-								hoveredElement = this.getParentObject(e2.target, "guild").div;
+								hoveredElement = this.getParentObject(e2.target, BDFDB.disCN.guild).div;
 								if (hoveredElement) guildswrap.insertBefore(placeholder, hoveredElement.nextSibling);
 							}
 							
@@ -961,7 +937,7 @@ class ServerFolders {
 		
 		var icons = 
 			`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCN.nowrap}" style="flex: 1 1 auto; margin-top: 5px;">
-				<div class="flex-lFgbSz flex-3B1Tl4 horizontal-2BEEBe horizontal-2VE-Fw directionRow-yNbSvJ justifyStart-2yIZo0 alignStretch-1hwxMa wrap-1da0e3 ui-icon-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;">
+				<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCN.wrap} ui-icon-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;">
 					${Object.getOwnPropertyNames(folderIcons).map(id => `<div class="ui-icon-picker-icon${folderIcons[id].customID ? ' custom' : ''}" value="${id}"><div class="ui-picker-inner" style="background-image: url(${folderIcons[id].closedicon});"></div>${folderIcons[id].customID ? '<div value="' + id + '" class="' + BDFDB.disCN.hovercardbutton + '"></div>' : ''}</div>`).join("")}
 				</div>
 			</div>`;
@@ -1411,11 +1387,10 @@ class ServerFolders {
 				var videoEnabled = false;
 				
 				includedServers.forEach((serverObj) => {
-					let serverDiv = serverObj.div;
-					let badge = serverDiv.querySelector(BDFDB.dotCN.badge);
+					let badge = serverObj.div.querySelector(BDFDB.dotCN.badge);
 					if (badge) badgeAmount += parseInt(badge.innerText);
-					if (serverDiv.classList.contains(BDFDB.disCN.guildaudio)) audioEnabled = true;
-					if (serverDiv.classList.contains(BDFDB.disCN.guildvideo)) videoEnabled = true;
+					if (serverObj.div.classList.contains(BDFDB.disCN.guildaudio)) audioEnabled = true;
+					if (serverObj.div.classList.contains(BDFDB.disCN.guildvideo)) videoEnabled = true;
 				});
 				
 				$(folderDiv)
@@ -1437,12 +1412,13 @@ class ServerFolders {
 	}
 	
 	getParentObject (div, type) {
+		console.log(div);
 		if (!div) return {div:null};
 		if (document.querySelector(BDFDB.dotCN.dms) && document.querySelector(BDFDB.dotCN.dms).contains(div)) return {div:null};
 		if (div.tagName && div.querySelector(BDFDB.dotCN.guildserror)) return {div:null};
 		if (div.classList && div.classList.length > 0 && (div.classList.contains(BDFDB.disCN.guilds) || div.classList.contains("serverFoldersPreview"))) return {div:null};
 		if (div.classList && div.classList.length > 0 && div.classList.contains(BDFDB.disCN.guild) && div.classList.contains(type) && div.querySelector(BDFDB.dotCN.avataricon)) {
-			if (type == "guild") {
+			if (type == BDFDB.disCN.guild) {
 				var info = BDFDB.getKeyInformation({"node":div, "key":"guild"});
 				if (info) return Object.assign({},info,{div:div,data:info});
 			}
@@ -1472,7 +1448,7 @@ class ServerFolders {
 			var serverIDs = data.servers;
 			for (var i = 0; serverIDs.length > i; i++) {
 				var serverObj = BDFDB.getDivOfServer(serverIDs[i]);
-				if (serverObj) includedServers.push(serverObj);
+				if (serverObj && serverObj.div) includedServers.push(serverObj);
 			}
 		}
 		return includedServers;
