@@ -744,7 +744,7 @@ BDFDB.languages = {
 };
 				
 (() => {
-var pulling = setInterval(() => {
+	var pulling = setInterval(() => {
 		var languageID = document.querySelector("html").lang;
 		if (languageID) {
 			clearInterval(pulling);
@@ -756,11 +756,15 @@ var pulling = setInterval(() => {
 })();
 
 BDFDB.getDiscordBuilt = function () {
-	return require(require('electron').remote.app.getAppPath() + "/build_info.json").releaseChannel.toLowerCase();
+	let built = BDFDB.getDiscordBuilt.built ? BDFDB.getDiscordBuilt.built : require(require('electron').remote.app.getAppPath() + "/build_info.json").releaseChannel.toLowerCase();
+    BDFDB.getDiscordBuilt.built = built;
+    return built;
 };
 
 BDFDB.getDiscordVersion = function () {
-	return require(require('electron').remote.app.getAppPath() + "/build_info.json").version.toLowerCase();
+    let version = BDFDB.getDiscordVersion.version ? BDFDB.getDiscordVersion.version : require(require('electron').remote.app.getAppPath() + "/build_info.json").version.toLowerCase();
+    BDFDB.getDiscordVersion.version = version;
+    return version;
 };
 
 BDFDB.getDiscordLanguage = function () {
