@@ -879,8 +879,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	background: rgba(240,71,71,calc(var(--transparencyalpha) * 6)) !important;
 }
 
-.itemDefault-3Jdr52[style*="background-color: rgb(240, 71, 71)"],
-.tab-bar-item.selected .badge {
+.itemDefault-3Jdr52[style*="background-color: rgb(240, 71, 71)"] {
 	color: #fff;
 	background: rgb(240,71,71) !important;
 	border: none !important;
@@ -2881,7 +2880,7 @@ html, span:not(.spinner-item) {
 }
 
 /* serverfolders */ 
-.folder .badge.count {
+.folder .wrapper-232cHJ.count {
 	background: rgb(var(--accentcolor)) !important;
 }
 
