@@ -1,5 +1,4 @@
 https://gist.githubusercontent.com/Jiiks/7eb81b8950c073a09fbc2493da3ec714/raw/249f01f981a9a6a14bfbd170f28b8bf0e0a540d3/fullSizeLightbox.plugin.js
-https://gist.githubusercontent.com/LuaTenshi/c43c220d1cadd7af4ab8734daf7a6706/raw/4b2c5a5acee5a5e570a83995772f2b4149ea1238/spoilerAlert.plugin.js
 https://gist.githubusercontent.com/megamit/29757d819de5356595271cebb577f6a8/raw/dfaf0d0474e4545a2968eaad1838ac01c31494bd/DetachableYoutube.plugin.js
 https://gist.githubusercontent.com/samogot/355ba0ff414a6a9551baff500b1af60e/raw/4251658b52b9591ea6bbd38e1a5309ffd101e266/count-unread.plugin.js
 https://gist.githubusercontent.com/samogot/026e8894684cd76839c786910192aabd/raw/eb6848d53e8c203ef7ab3b7c624b6d0c5ff47374/return-scroll.plugin.js
@@ -173,6 +172,7 @@ https://raw.githubusercontent.com/samogot/betterdiscord-plugins/master/v1/1lib_d
 https://raw.githubusercontent.com/samogot/betterdiscord-plugins/master/v1/full_offline_list.plugin.js
 https://raw.githubusercontent.com/samogot/betterdiscord-plugins/master/v1/no_send_scroll.plugin.js
 https://raw.githubusercontent.com/samogot/betterdiscord-plugins/master/v1/quoter.plugin.js
+https://raw.githubusercontent.com/satoru8/spoilerAlert/master/spoilerAlert.plugin.js
 https://raw.githubusercontent.com/tony311/betterdiscord-plugins/master/afk-deafen.plugin.js
 https://raw.githubusercontent.com/tony311/betterdiscord-plugins/master/auto-select-server.plugin.js
 https://raw.githubusercontent.com/tony311/betterdiscord-plugins/master/tts-events.plugin.js
