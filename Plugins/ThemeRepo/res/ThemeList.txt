@@ -118,6 +118,9 @@ https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Themes/Tran
 https://raw.githubusercontent.com/redsauce117/SauceysDiscordThemes/master/DarkerDiscordTheme.theme.css
 https://raw.githubusercontent.com/satoru8/BetterLightTheme/master/BetterLightTheme.theme.css
 https://raw.githubusercontent.com/satoru8/CleanDark/master/CleanDark.theme.css
+https://raw.githubusercontent.com/satoru8/CleanDark/master/CleanDarkBG.theme.css
+https://raw.githubusercontent.com/satoru8/Nyx/master/Nyx.theme.css
+https://raw.githubusercontent.com/satoru8/StarterTheme/master/StarterTheme.theme.css
 https://raw.githubusercontent.com/spthiel/BetterDiscord/master/Themes/CodeBlocks/CodeBlocks.theme.css
 https://raw.githubusercontent.com/spthiel/BetterDiscord/master/Themes/GameOver/GameOver.theme.css
 https://raw.githubusercontent.com/TakosThings/Battlefield/master/battlefield.theme.css
