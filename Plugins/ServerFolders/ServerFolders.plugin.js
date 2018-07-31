@@ -1412,7 +1412,6 @@ class ServerFolders {
 	}
 	
 	getParentObject (div, type) {
-		console.log(div);
 		if (!div) return {div:null};
 		if (document.querySelector(BDFDB.dotCN.dms) && document.querySelector(BDFDB.dotCN.dms).contains(div)) return {div:null};
 		if (div.tagName && div.querySelector(BDFDB.dotCN.guildserror)) return {div:null};
