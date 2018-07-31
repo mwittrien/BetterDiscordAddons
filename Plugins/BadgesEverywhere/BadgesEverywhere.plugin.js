@@ -14,6 +14,9 @@ class BadgesEverywhere {
 			.BE-badge-chat {
 				margin-bottom: -3px;
 			}
+			.BE-badge-popout {
+				margin-bottom: -2px;
+			}
 			.BE-badge:first-of-type {
 				margin-left: 5px;
 			}
@@ -57,7 +60,7 @@ class BadgesEverywhere {
 
 	getDescription () {return "Displays Badges (Nitro, HypeSquad, etc...) in the chat/memberlist/userpopout. Thanks for Zerebos' help.";}
 
-	getVersion () {return "1.0.4";}
+	getVersion () {return "1.0.5";}
 
 	getAuthor () {return "DevilBro";}
 	
