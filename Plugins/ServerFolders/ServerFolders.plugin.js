@@ -174,8 +174,8 @@ class ServerFolders {
 						</a>
 					</div>
 				</div>
-				<div class="${BDFDB.disCN.badge} folder notifications"></div>
-				<div class="${BDFDB.disCN.badge} folder count"></div>
+				<div class="${BDFDB.disCNS.badgewrapper + BDFDB.disCN.badge} folder notifications"></div>
+				<div class="${BDFDB.disCNS.badgewrapper + BDFDB.disCN.badge} folder count"></div>
 			</div>`;
 
 		this.folderSettingsModalMarkup =
