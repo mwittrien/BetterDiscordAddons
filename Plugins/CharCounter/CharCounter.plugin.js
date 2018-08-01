@@ -7,10 +7,17 @@ class CharCounter {
 		this.counterMarkup = `<div id="charcounter"></div>`;
 		
 		this.css = `
+			.theme-light #charcounter {
+				color: #747f8d;
+				opacity: .7;
+			}
+			.theme-dark #charcounter {
+				color: #ccc;
+				opacity: .5;
+			}
 			#charcounter {
 				display: block;
 				position: absolute;
-				opacity: .5;
 				z-index: 1000;
 				pointer-events: none;
 			}
@@ -32,7 +39,7 @@ class CharCounter {
 
 	getDescription () {return "Adds a charcounter in the chat.";}
 
-	getVersion () {return "1.2.4";}
+	getVersion () {return "1.2.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -113,9 +120,8 @@ class CharCounter {
 				$(textarea)
 					.off("keydown." + this.getName() + " click." + this.getName())
 					.on("keydown." + this.getName() + " click." + this.getName(), e => {
-						setTimeout(() => {
-							updateCounter();
-						},10);
+						clearTimeout(textarea.charcountertimeout);
+						textarea.charcountertimeout = setTimeout(() => {updateCounter();},100);
 					})
 					.off("mousedown." + this.getName())
 					.on("mousedown." + this.getName(), e => {
