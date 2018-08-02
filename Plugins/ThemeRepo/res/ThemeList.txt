@@ -116,7 +116,7 @@ https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Themes/Radi
 https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Themes/SwitchFix/SwitchFix.theme.css
 https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Themes/TransientMaterial/TransientMaterial.theme.css
 https://raw.githubusercontent.com/redsauce117/SauceysDiscordThemes/master/DarkerDiscordTheme.theme.css
-https://raw.githubusercontent.com/satoru8/Addons/master/BeautifuCategories.theme.css
+https://raw.githubusercontent.com/satoru8/Addons/master/BeautifulCategories.theme.css
 https://raw.githubusercontent.com/satoru8/BetterLightTheme/master/BetterLightTheme.theme.css
 https://raw.githubusercontent.com/satoru8/CleanDark/master/CleanDark.theme.css
 https://raw.githubusercontent.com/satoru8/CleanDark/master/CleanDarkBG.theme.css
