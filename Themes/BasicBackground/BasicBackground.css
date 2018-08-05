@@ -40,7 +40,6 @@
 .input-cIJ7To,
 .item-26Dhrx:not([style*="rgb(114, 137, 218)"]) .checked-3_4uQ9,
 .containerUserOver-1U5YnL:after,
-.chat .inner-zqa7da,
 .chat-3bRxxu .inner-zqa7da,
 .message-group-blocked,
 .embedInner-1-fpTo,
@@ -280,6 +279,7 @@ input:disabled {
 }
 
 .containerCozy-jafyvG {
+	overflow: visible !important;
 	padding: 10px 0 !important;
 	margin: 10px 5px 10px 80px !important;
 	border-radius: 5px !important;
@@ -408,16 +408,13 @@ input:disabled {
 	background: rgba(var(--transparencycolor),calc(var(--transparencyalpha) * 4)) !important;
 }
 
-.chat form,
 .chat-3bRxxu form {
 	box-shadow: 0 -1px 0 rgba(var(--transparencycolor),.3) !important;
 }
-.chat form .channelTextArea-1LDbYG,
 .chat-3bRxxu form .channelTextArea-1LDbYG {
 	position: relative !important;
 	z-index: 20 !important;
 }
-.chat form:after,
 .chat-3bRxxu form:after {
 	content: "";
 	pointer-events: none !important;
@@ -454,17 +451,13 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .friend-table-add-header,
 .tab-content > .ui-standard-sidebar-view,
 .activityFeed-28jde9,
-.chat,
-.chat .content,
-.chat form,
 .chat-3bRxxu,
 .chat-3bRxxu .content-yTz4x3,
 .chat-3bRxxu form,
-.content .flex-spacer,
+.content-yTz4x3 .flex-spacer,
 .embed-IeVjo6,
 .media-engine-video,
 .auditLog-3jNbM6,
-.messages-wrapper,
 .messagesWrapper-3lZDfY,
 .container-1YxwTf code,
 .userPopout-3XzG_A .activity-11LB_k,
@@ -565,7 +558,6 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .aka-1mqp34,
 .jump-to-present-bar,
 .new-messages-bar,
-.has-more button,
 .hasMore-3e72_v button,
 .hasMore-sul95G button,
 #friends .tab-bar-item.selected,
@@ -698,7 +690,6 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .regionSelect-3lf4eE:hover 
 .regionSelectInner-24f4Ce, 
 .regionSelect-3lf4eE:hover button,
-.has-more button,
 .hasMore-3e72_v button,
 .hasMore-sul95G button,
 .input-cIJ7To:focus,
@@ -770,7 +761,6 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .input-cIJ7To,
 #friends .tab-bar-item.selected,
 .new-messages-bar button,
-.has-more button,
 .hasMore-3e72_v button,
 .hasMore-sul95G button {
 	color: #FFF !important;
@@ -903,7 +893,6 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .questionMark-CWEQZn,
 .jump-to-present-bar,
 .new-messages-bar,
-.has-more button,
 .hasMore-3e72_v button,
 .hasMore-sul95G button,
 .wrapper-3JPufy button,
@@ -926,7 +915,6 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .questionMark-CWEQZn:hover,
 .jump-to-present-bar:hover,
 .new-messages-bar:hover,
-.has-more button:hover,
 .hasMore-3e72_v button:hover,
 .hasMore-sul95G button:hover,
 .btn-primary:hover,
