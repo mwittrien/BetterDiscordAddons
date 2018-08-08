@@ -556,7 +556,12 @@ BDFDB.createNotificationsBar = function (content, options = {}) {
 	return notifiybar;
 };
 
-// Plugins/Themes folder resolver from Square
+BDFDB.getDiscordFolder = function () {
+    let built = BDFDB.getDiscordBuilt();
+    built = "discord" + (built == "stable" ? "" : built);
+    return require("path").resolve(require("electron").remote.app.getPath("appData"), built, BDFDB.getDiscordVersion());
+};
+
 BDFDB.getPluginsFolder = function () {
 	let process = require("process");
 	let path = require("path");
