@@ -464,7 +464,7 @@ BDFDB.createNotificationsBar = function (content, options = {}) {
 	let notifiybar = document.createElement("div");
 	notifiybar.className = BDFDB.disCNS.notice + BDFDB.disCNS.size14 + BDFDB.disCNS.weightmedium + BDFDB.disCNS.height36 + "DevilBro-notice notice-" + id;
 	notifiybar.innerHTML = `<div class="${BDFDB.disCNS.noticedismiss}"></div><span class="notice-message"></span></strong>`;
-	BDFDB.$(BDFDB.dotCNS.app + BDFDB.dotCNS.guildswrapper + " + div > div:first > div:first").append(notifiybar);
+	BDFDB.$(BDFDB.dotCNS.chatbase + " > div:first > div:first").append(notifiybar);
 	var notifiybarinner = notifiybar.querySelector(".notice-message");
 	if (options.icon) {
 		var icons = {
@@ -3048,6 +3048,7 @@ BDFDB.DiscordClasses = {
 	channelwrapperunreadvoice: "wrapperUnreadVoice-23GIYe",
 	channels: "channels-Ie2l6A",
 	chat: "chat-3bRxxu",
+	chatbase: "base-3dtUhz",
 	chatcontent: "content-yTz4x3",
 	chatspacer: "spacer-29U_x8",
 	checkbox: "checkbox-1ix_J3",
