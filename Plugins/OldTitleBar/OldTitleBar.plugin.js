@@ -2,6 +2,8 @@
 
 class OldTitleBar {
 	initConstructor () {
+		this.patched = false;
+		
 		this.css = `
 			${BDFDB.dotCN.titlebar}.hidden-by-OTB {
 				display: none;
@@ -74,8 +76,9 @@ class OldTitleBar {
 			
 		this.defaults = {
 			settings: {
-				addToSettings:		{value:true, 	description:"Add a Title Bar to Settings Windows."},
-				reloadButton:		{value:false, 	description:"Add a Reload Button to the Title Bar."}
+				displayNative:		{value:!!document.querySelector(".platform-linux"), 	description:"Displays the native titlebar."},
+				addToSettings:		{value:true, 											description:"Add a Title Bar to Settings Windows."},
+				reloadButton:		{value:false, 											description:"Add a Reload Button to the Title Bar."}
 			}
 		};
 	}
@@ -84,7 +87,7 @@ class OldTitleBar {
 
 	getDescription () {return "Reverts the title bar back to its former self.";}
 
-	getVersion () {return "1.3.7";}
+	getVersion () {return "1.3.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -102,7 +105,7 @@ class OldTitleBar {
 		BDFDB.initElements(settingspanel);
 
 		$(settingspanel)
-			.on("click", BDFDB.dotCN.switchinner, () => {this.updateSettings(settingspanel);});
+			.on("click", BDFDB.dotCN.switchinner, (e) => {this.updateSettings(settingspanel, e.currentTarget.value);});
 			
 		return settingspanel;
 	}
@@ -179,6 +182,8 @@ class OldTitleBar {
 			});
 						
 			this.addTitleBar();
+			
+			this.patchMainScreen(BDFDB.getData("displayNative", this, "settings"));
 		
 			$(BDFDB.dotCN.titlebar).addClass("hidden-by-OTB");
 			
@@ -212,12 +217,13 @@ class OldTitleBar {
 	
 	// begin of own functions
 
-	updateSettings (settingspanel) {
+	updateSettings (settingspanel, key) {
 		var settings = {};
 		for (var input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner)) {
 			settings[input.value] = input.checked;
 		}
 		BDFDB.saveAllData(settings, this, "settings");
+		if (key == "displayNative") this.patchMainScreen(settings[key]);
 	}
 	
 	addTitleBar () {
@@ -307,6 +313,11 @@ class OldTitleBar {
 		require("electron").remote.getCurrentWindow().close();
 	}
 	
+	doRelaunch () {
+		require("electron").remote.app.relaunch();
+		require("electron").remote.app.quit();
+	}
+	
 	changeMaximizeButton () {
 		var maxButtonHTML = require("electron").remote.getCurrentWindow().isMaximized() ? this.maxButtonIsMaxMarkup : this.maxButtonIsMinMarkup;
 		document.querySelectorAll(".maxButtonOTB").forEach(maxButton => {
@@ -327,5 +338,23 @@ class OldTitleBar {
 	
 	createReloadToolTip (e) {
 		BDFDB.createTooltip("Reload", e.currentTarget, {type:"bottom",selector:"reload-button-tooltip"});
+	}
+	
+	patchMainScreen (enable) {
+		let fs = require("fs")
+		let mainScreenPath = require("path").resolve(BDFDB.getDiscordFolder(), "modules/discord_desktop_core/core/app/mainScreen.js");
+		let mainScreen = fs.readFileSync(mainScreenPath).toString();
+		if (!mainScreen.includes("frame: " + enable)) {
+			fs.writeFileSync(mainScreenPath, mainScreen.replace("frame: " + !enable, "frame: " + enable));
+			this.patched = !this.patched;
+			let notifybar = document.querySelector("#OldTitleBarNotifyBar");
+			if (notifybar) notifybar.querySelector(BDFDB.dotCN.noticedismiss).click();
+			if (this.patched) {
+				notifybar = BDFDB.createNotificationsBar("Changed nativebar settings, relaunch to see changes:", {type:"danger",btn:"Relaunch",id:"OldTitleBarNotifyBar"});
+				$(notifybar).on("click." + this.getName(), BDFDB.dotCN.noticebutton, (e) => {
+					this.doRelaunch();
+				});
+			}
+		}
 	}
 }
