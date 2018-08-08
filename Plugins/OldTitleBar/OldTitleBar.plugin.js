@@ -87,7 +87,7 @@ class OldTitleBar {
 
 	getDescription () {return "Reverts the title bar back to its former self.";}
 
-	getVersion () {return "1.3.8";}
+	getVersion () {return "1.3.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -223,7 +223,19 @@ class OldTitleBar {
 			settings[input.value] = input.checked;
 		}
 		BDFDB.saveAllData(settings, this, "settings");
-		if (key == "displayNative") this.patchMainScreen(settings[key]);
+		if (key == "displayNative") {
+			if (this.patchMainScreen(settings[key])) {
+				this.patched = !this.patched;
+				let notifybar = document.querySelector("#OldTitleBarNotifyBar");
+				if (notifybar) notifybar.querySelector(BDFDB.dotCN.noticedismiss).click();
+				if (this.patched) {
+					notifybar = BDFDB.createNotificationsBar("Changed nativebar settings, relaunch to see changes:", {type:"danger",btn:"Relaunch",id:"OldTitleBarNotifyBar"});
+					$(notifybar).on("click." + this.getName(), BDFDB.dotCN.noticebutton, (e) => {
+						this.doRelaunch();
+					});
+				}
+			}
+		}
 	}
 	
 	addTitleBar () {
@@ -344,17 +356,10 @@ class OldTitleBar {
 		let fs = require("fs")
 		let mainScreenPath = require("path").resolve(BDFDB.getDiscordFolder(), "modules/discord_desktop_core/core/app/mainScreen.js");
 		let mainScreen = fs.readFileSync(mainScreenPath).toString();
-		if (!mainScreen.includes("frame: " + enable)) {
-			fs.writeFileSync(mainScreenPath, mainScreen.replace("frame: " + !enable, "frame: " + enable));
-			this.patched = !this.patched;
-			let notifybar = document.querySelector("#OldTitleBarNotifyBar");
-			if (notifybar) notifybar.querySelector(BDFDB.dotCN.noticedismiss).click();
-			if (this.patched) {
-				notifybar = BDFDB.createNotificationsBar("Changed nativebar settings, relaunch to see changes:", {type:"danger",btn:"Relaunch",id:"OldTitleBarNotifyBar"});
-				$(notifybar).on("click." + this.getName(), BDFDB.dotCN.noticebutton, (e) => {
-					this.doRelaunch();
-				});
-			}
+		if (!mainScreen.includes("frame: " + enable) || !mainScreen.includes(".frame = " + enable)) {
+			fs.writeFileSync(mainScreenPath, mainScreen.replace("frame: " + !enable, "frame: " + enable).replace(".frame = " + !enable, ".frame = " + enable));
+			return true;
 		}
+		return false;
 	}
 }
