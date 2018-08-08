@@ -2814,6 +2814,12 @@ html, span:not(.spinner-item) {
 .serverfolders-modal .ui-icon-picker-icon.selected {
 	background-color: rgba(var(--transparencycolor),calc(var(--transparencyalpha) * 3)) !important;
 }
+.folder .wrapper-232cHJ.count {
+	background: rgb(var(--accentcolor)) !important;
+}
+.guildIcon-lQ0uiM {
+	position: static !important;
+}
 
 /* citador & replyer */
 .quote-msg .avatar-large {
@@ -2865,11 +2871,6 @@ html, span:not(.spinner-item) {
 .replyer-icon:active,
 .replyer[style*="cursor:pointer;color:rgba(255,255,255,.4) !important;position:relative;top:-1px;"]:active {
 	background-color: rgb(var(--accentcolor)) !important
-}
-
-/* serverfolders */ 
-.folder .wrapper-232cHJ.count {
-	background: rgb(var(--accentcolor)) !important;
 }
 
 /* direct download */
