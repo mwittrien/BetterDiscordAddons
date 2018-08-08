@@ -1624,7 +1624,8 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	border-radius: 0px !important;
 }
 .item-1GzJrl:not(.invite-271nFU):not(.leave-1DRJfn),
-.item-1Yvehc:not(.danger-2dXSTE):not(.disabled-2xniQf) {
+.item-1Yvehc:not(.danger-2dXSTE):not(.disabled-2xniQf):not([style*="color:"]),
+.item-1Yvehc:not(.danger-2dXSTE):not(.disabled-2xniQf):hover {
 	color: #FFF !important;
 }
 .item-1GzJrl.invite-271nFU {
