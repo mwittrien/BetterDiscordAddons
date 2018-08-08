@@ -93,8 +93,8 @@
 .modal-3HD5ck .footer-2yfCgX,
 .divider-3573oO,
 .divider-1pnAR2,
-.divider span,
-.divider > div,
+.divider-3gKybi span,
+.divider-3gKybi > div,
 .guildInner-3DSoA4,
 .header-GwIGlr,
 .itemDefault-3Jdr52:hover,
@@ -314,10 +314,10 @@ input:disabled {
 	border-radius: 5px !important;
 	background: rgba(var(--transparencycolor),var(--messagetransparency)) !important;
 }
-.containerCompact-3V0ioj + .divider {
+.containerCompact-3V0ioj + .divider-3gKybi {
 	top: 5px;
 }
-.divider + .containerCompact-3V0ioj {
+.divider-3gKybi + .containerCompact-3V0ioj {
 	margin-top: 15px !important;
 }
 .container-1YxwTf.containerCompact-3V0ioj .messageCozy-2JPAPA {
@@ -522,8 +522,8 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 }
 
 .edit-container-outer .avatar-large,
-.divider + .divider,
-.divider:before {
+.divider-3gKybi + .divider-3gKybi,
+.divider-3gKybi:before {
 	visibility: hidden !important;
 }
 
@@ -543,7 +543,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .header-tab-bar-wrapper .tab-bar-item.selected,
 .tabBarContainer-1s1u-z .tab-bar-item.selected,
 .regionSelect-3lf4eE:not(:hover) button,
-.divider-red span,
+.divider-3gKybi.dividerRed-MKoLlr span,
 .itemDefault-3Jdr52[style*="rgb(114, 137, 218)"] {
 	color: rgb(var(--accentcolor)) !important;
 }
@@ -556,8 +556,8 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .auth-name:after,
 .botTagRegular-2HEhHi:not([style]),
 .aka-1mqp34,
-.jump-to-present-bar,
-.new-messages-bar,
+.jumpToPresentBar-9P20AM,
+.newMessagesBar-mujexs,
 .hasMore-3e72_v button,
 .hasMore-sul95G button,
 #friends .tab-bar-item.selected,
@@ -760,13 +760,13 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .tutorial-popout .content p,
 .input-cIJ7To,
 #friends .tab-bar-item.selected,
-.new-messages-bar button,
+.newMessagesBar-mujexs button,
 .hasMore-3e72_v button,
 .hasMore-sul95G button {
 	color: #FFF !important;
 }
 
-.new-messages-bar button:hover {
+.newMessagesBar-mujexs button:hover {
 	text-decoration: underline;
 }
 
@@ -891,8 +891,8 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .unread-1xRYoj,
 .mention-1f5kbO,
 .questionMark-CWEQZn,
-.jump-to-present-bar,
-.new-messages-bar,
+.jumpToPresentBar-9P20AM,
+.newMessagesBar-mujexs,
 .hasMore-3e72_v button,
 .hasMore-sul95G button,
 .wrapper-3JPufy button,
@@ -913,8 +913,8 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .unread-1xRYoj:hover,
 .mention-1f5kbO:hover,
 .questionMark-CWEQZn:hover,
-.jump-to-present-bar:hover,
-.new-messages-bar:hover,
+.jumpToPresentBar-9P20AM:hover,
+.newMessagesBar-mujexs:hover,
 .hasMore-3e72_v button:hover,
 .hasMore-sul95G button:hover,
 .btn-primary:hover,
