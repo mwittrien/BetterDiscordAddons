@@ -736,10 +736,12 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 
 .search-bar {
 	background: transparent !important;
+	border: none !important;
 }
 .search-bar-inner,
 .searchBar-1MOL6S {
 	border-radius: 5px !important;
+	border: none !important;
 	background: rgba(var(--transparencycolor),var(--transparencyalpha)) !important;
 }
 .search-bar input,
@@ -764,6 +766,10 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .search-bar input:focus,
 .searchBar-1MOL6S .input-3Xdcic:focus {
 	border-color: rgb(var(--accentcolor)) !important;
+}
+.private-channels .search-bar .search-bar-inner input {
+	margin-right: 0px !important;
+	border: none !important;
 }
 
 .wrapperSelectedVoice-xzxa2u .wrapper-2NJDcI,
