@@ -2852,8 +2852,6 @@ BDFDB.DiscordClasses = {
 	autocompleteselector: "selector-2IcQBU",
 	avatar: "avatar-17mtNa",
 	avataranimate: "animate-iYrs3-",
-	avatarguildicon: "remove",
-	avatariconguild: "remove",
 	avataricon: "icon-3o6xvg",
 	avatariconactivelarge: "iconActiveLarge-2nzn9z",
 	avatariconactivemedium: "iconActiveMedium-1UaEIR",
