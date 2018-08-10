@@ -3016,6 +3016,7 @@ BDFDB.DiscordClasses = {
 	channelheadertopic: "topic-2QX7LI",
 	channelheaderdivider: "divider-2PMBlV",
 	channelheaderheaderbar: "headerBar-UHpsPw",
+	channelheaderheaderbardrag: "headerBarDrag-3bf7wG",
 	channelicon: "icon-sxakjD",
 	channeliconspacing: "iconSpacing-3JkGQO",
 	channelmarginreset: "marginReset-3RfdVe",
