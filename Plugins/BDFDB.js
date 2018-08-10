@@ -2373,7 +2373,7 @@ BDFDB.openColorPicker = function (currentColor, swatch) {
 		switch (type) {
 			case "hex":
 				hex = colorPickerModal.querySelector(".colorpicker-hex").value;
-				if (/^#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})BDFDB.$/i.test(hex)) {
+				if (/^#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.test(hex)) {
 					[red, green, blue] = BDFDB.color2COMP(hex);
 					[hue, saturation, lightness] = BDFDB.color2HSL(hex).replace(new RegExp(" ", "g"), "").slice(4, -1).split(",");
 					saturation *= 100;
