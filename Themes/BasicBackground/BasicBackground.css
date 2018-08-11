@@ -690,6 +690,8 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	background-color: rgba(var(--accentcolor), calc(var(--transparencyalpha) * 3)) !important;
 }
 
+.selected-mKYnfr.option-n0icdO,
+.wrapper-3jrx9n:not(.disabledSelected-2Kf0yZ),
 .regionSelect-3lf4eE:hover 
 .regionSelectInner-24f4Ce, 
 .regionSelect-3lf4eE:hover button,
@@ -705,7 +707,8 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .round-2jCFai.checked-3_4uQ9[style*="border-color: rgb(67, 181, 129)"] {
 	border-color: rgb(var(--accentcolor)) !important;
 }
-
+.selected-mKYnfr.option-n0icdO,
+.option-n0icdO:hover,
 .helpIcon-2EyVTp {
 	background: rgb(var(--accentcolor)) !important;
 }
