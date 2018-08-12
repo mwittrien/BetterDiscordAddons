@@ -86,7 +86,7 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "3.7.5";}
+	getVersion () {return "3.7.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -131,6 +131,8 @@ class EditChannels {
 	initialize () {
 		if (typeof BDFDB === "object") {
 			BDFDB.loadMessage(this);
+			
+			this.LastGuildStore = BDFDB.WebModules.findByProperties(["getLastSelectedGuildId"]);
 			
 			var observer = null;
 
@@ -360,10 +362,10 @@ class EditChannels {
 	}
 	
 	changeChannelHeader () {
-		if (BDFDB.getData("changeInChannelHeader", this, "settings")) {
+		if (BDFDB.getData("changeInChannelHeader", this, "settings") && this.LastGuildStore.getGuildId() ) {
 			var channelHeader = document.querySelector(BDFDB.dotCNS.channelheadertitle + BDFDB.dotCN.channelheadertitletext);
 			if (!channelHeader) return;
-			var channel = channelHeader.querySelector(`${BDFDB.dotCN.channelheaderchannelname}:not(${BDFDB.dotCN.channelheaderprivate})`);
+			var channel = channelHeader.querySelector(BDFDB.dotCN.channelheaderchannelname);
 			if (!channel) return;
 			var info = BDFDB.getKeyInformation({"node":channelHeader,"key":"channel"});
 			if (info) {

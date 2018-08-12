@@ -176,7 +176,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "2.3.5";}
+	getVersion () {return "2.3.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -448,7 +448,7 @@ class EditUsers {
 	
 	onSwitch () {
 		if (typeof BDFDB === "object") {
-			$(`${BDFDB.dotCN.channelheadertitletext}[custom-editusers]`).find(`${BDFDB.dotCN.channelheaderchannelname}:not(${BDFDB.dotCN.channelheaderprivate})`).css("color", "").css("background-color", "").parent().removeAttr("custom-editusers");
+			$(`${BDFDB.dotCN.channelheadertitletext}[custom-editusers]`).find(BDFDB.dotCN.channelheaderchannelname).css("color", "").css("background-color", "").parent().removeAttr("custom-editusers");
 			BDFDB.addObserver(this, BDFDB.dotCN.memberswrap, {name:"userListObserver"}, {childList:true, subtree:true});
 			BDFDB.addObserver(this, BDFDB.dotCN.messages, {name:"messagesObserver"}, {childList:true, subtree:true});
 			BDFDB.addObserver(this, BDFDB.dotCNS.chat + "form", {name:"chatFormObserver"}, {childList:true});
@@ -865,7 +865,7 @@ class EditUsers {
 	getAvatarNameWrapper (div) {
 		var avatar = div.querySelector(BDFDB.dotCN.avatarsmallold + ":not(" + BDFDB.dotCN.avatarwrapper + ")," + BDFDB.dotCN.avatarlargeold + ":not(" + BDFDB.dotCN.avatarwrapper + "), " + BDFDB.dotCNC.avatarprofileold + BDFDB.dotCNC.voiceavatardefault + BDFDB.dotCNC.avatarimage + BDFDB.dotCN.callavatar);
 						
-		var username = div.querySelector(BDFDB.dotCNC.userpopoutheadernickname + BDFDB.dotCNC.userpopoutheadernonickname + BDFDB.dotCNC.userprofileusername + BDFDB.dotCNC.memberusername + BDFDB.dotCNC.voicenamedefault + BDFDB.dotCNC.messageusername + BDFDB.dotCNC.dmchannelname + BDFDB.dotCN.channelheaderchannelname + BDFDB.dotCNC.channelheaderprivate + BDFDB.dotCNS.friendscolumnnamewrap + BDFDB.dotCNC.friendscolumnusername + BDFDB.dotCNS.accountinfodetails + BDFDB.dotCN.accountinfousername);
+		var username = div.querySelector(BDFDB.dotCNC.userpopoutheadernickname + BDFDB.dotCNC.userpopoutheadernonickname + BDFDB.dotCNC.userprofileusername + BDFDB.dotCNC.memberusername + BDFDB.dotCNC.voicenamedefault + BDFDB.dotCNC.messageusername + BDFDB.dotCNC.dmchannelname + BDFDB.dotCNC.channelheaderchannelname + BDFDB.dotCNS.friendscolumnnamewrap + BDFDB.dotCNC.friendscolumnusername + BDFDB.dotCNS.accountinfodetails + BDFDB.dotCN.accountinfousername);
 						
 		var wrapper = div.querySelector(BDFDB.dotCNC.userpopoutheadernickname + BDFDB.dotCNC.userpopoutheadernonickname + BDFDB.dotCNC.userprofileusername + BDFDB.dotCNC.memberusername + BDFDB.dotCNC.voicenamedefault + BDFDB.dotCNC.messageusernamewrapper + BDFDB.dotCNC.dmchannelname + BDFDB.dotCN.channelheaderchannelname + BDFDB.dotCNC.channelheaderprivate + BDFDB.dotCNS.friendscolumnnamewrap + BDFDB.dotCNC.nametag + BDFDB.dotCNS.accountinfodetails + BDFDB.dotCN.accountinfousername);
 						
