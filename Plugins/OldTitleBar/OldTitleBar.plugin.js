@@ -87,7 +87,7 @@ class OldTitleBar {
 
 	getDescription () {return "Reverts the title bar back to its former self.";}
 
-	getVersion () {return "1.3.9";}
+	getVersion () {return "1.4.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -241,13 +241,7 @@ class OldTitleBar {
 	addTitleBar () {
 		this.removeTitleBar();
 		var settings = BDFDB.getAllData(this, "settings");
-		let activityfeed = document.querySelector(BDFDB.dotCN.activityfeed), container;
-		if (activityfeed) {
-			container = $(`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.flex2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifyend + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.channelheaderheaderbar} headerbarOTB" style="flex: 0 0 auto;"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.flex2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}" style="flex: 0 0 auto;"></div></div>`);
-			container.insertBefore(activityfeed.firstElementChild);
-			container = container.children().first();
-		}
-		container = container ? container : $(BDFDB.dotCN.channelheaderdivider).parent().has(BDFDB.dotCN.channelheadericoninactive);
+		var container = $(BDFDB.dotCNS.channelheaderheaderbardrag + BDFDB.dotCN.flex + " > " + BDFDB.dotCN.channelheadericonmargin).parent();
 		if (settings.reloadButton) {
 			container
 				.append(this.dividerMarkup)
@@ -339,13 +333,14 @@ class OldTitleBar {
 	
 	removeTitleBar () {
 		$(".headerbarOTB").remove();
+		var container = $(BDFDB.dotCNS.channelheaderheaderbardrag + BDFDB.dotCN.flex + " > " + BDFDB.dotCN.channelheadericonmargin).parent();
 		
-		$(BDFDB.dotCN.channelheaderdivider).parent().has(BDFDB.dotCN.channelheadericoninactive)
+		container
 			.off("click." + this.getName())
 			.off("mouseenter." + this.getName())
 			.find(".dividerOTB, .reloadButtonOTB, .minButtonOTB, .maxButtonOTB, .closeButtonOTB").remove();
 			
-		$(BDFDB.dotCN.channelheaderdivider).parent().has(BDFDB.dotCN.channelheadericoninactive).parent().css("-webkit-app-region", "initial");
+		container.parent().css("-webkit-app-region", "initial");
 	}
 	
 	createReloadToolTip (e) {
