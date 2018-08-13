@@ -53,7 +53,7 @@ class BetterSearchPage {
 
 	getDescription () {return "Adds some extra controls to the search results page.";}
 
-	getVersion () {return "1.0.2";}
+	getVersion () {return "1.0.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -214,8 +214,25 @@ class BetterSearchPage {
 			searchResults.parentElement.insertBefore(BSPpaginaton, searchResults);
 			BDFDB.initElements(BSPpaginaton);
 		}
+		var doJump = (input) => {
+			let value = input.value;
+			if (value < 1 || value > maxpage) {
+				input.value = currentpage;
+				if (maxpage == 201 && value > maxpage) BDFDB.showToast("Discord doesn't allow you to go further than page 201.",{type:"error"});
+			}
+			else if (value < currentpage) {
+				for (; currentpage - value > 0; value++) {
+					this.SearchNavigation.searchPreviousPage(searchID);
+				}
+			}
+			else if (value > currentpage) {
+				for (; value - currentpage > 0; value--) {
+					this.SearchNavigation.searchNextPage(searchID);
+				}
+			}
+		};
 		$(searchResults.parentElement) 
-			.off("click." + this.getName())
+			.off("click." + this.getName()).off("mouseenter." + this.getName()).off("keydown." + this.getName())
 			.on("click." + this.getName(), BDFDB.dotCN.searchresultspaginationprevious + BDFDB.dotCN.searchresultspaginationdisabled, (e) => {
 				e.preventDefault();
 				e.stopPropagation();
@@ -255,23 +272,14 @@ class BetterSearchPage {
 					this.SearchNavigation.searchNextPage(searchID);
 				}
 			})
+			.on("keydown." + this.getName(), ".BSP-pagination-jumpinput " + BDFDB.dotCN.inputmini, (e) => {
+				e.stopPropagation();
+				if (e.which == 13) doJump(e.currentTarget);
+			})
 			.on("click." + this.getName(), ".BSP-pagination-jump:not(" + BDFDB.dotCN.searchresultspaginationdisabled + ")", (e) => {
-				let input = e.currentTarget.parentElement.querySelector(".BSP-pagination-jumpinput " + BDFDB.dotCN.inputmini);
-				let value = input.value;
-				if (value < 1 || value > maxpage) {
-					input.value = currentpage;
-					if (maxpage == 201 && value > maxpage) BDFDB.showToast("Discord doesn't allow you to go further than page 201.",{type:"error"});
-				}
-				else if (value < currentpage) {
-					for (; currentpage - value > 0; value++) {
-						this.SearchNavigation.searchPreviousPage(searchID);
-					}
-				}
-				else if (value > currentpage) {
-					for (; value - currentpage > 0; value--) {
-						this.SearchNavigation.searchNextPage(searchID);
-					}
-				}
+				doJump(e.currentTarget.parentElement.querySelector(".BSP-pagination-jumpinput " + BDFDB.dotCN.inputmini));
 			});
+			
+		
 	}
 }

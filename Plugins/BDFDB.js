@@ -1931,7 +1931,7 @@ BDFDB.initElements = function (container) {
 				e.currentTarget.parentElement.classList.add("pressed");
 				clearTimeout(e.currentTarget.parentElement.pressedTimeout);
 				input.value = (isNaN(min) || (!isNaN(min) && newvalue >= min)) ? newvalue : min;
-				BDFDB.$(input).trigger("input");
+				BDFDB.$(input).trigger("input").trigger("keydown").trigger("keyup").trigger("keypressed");
 				e.currentTarget.parentElement.pressedTimeout = setTimeout(() => {
 					e.currentTarget.parentElement.classList.remove("pressed");
 				},3000);
@@ -1946,7 +1946,7 @@ BDFDB.initElements = function (container) {
 				e.currentTarget.parentElement.classList.add("pressed");
 				clearTimeout(e.currentTarget.parentElement.pressedTimeout);
 				input.value = (isNaN(max) || (!isNaN(max) && newvalue <= max)) ? newvalue : max;
-				BDFDB.$(input).trigger("input");
+				BDFDB.$(input).trigger("input").trigger("keydown").trigger("keyup").trigger("keypressed");
 				e.currentTarget.parentElement.pressedTimeout = setTimeout(() => {
 					e.currentTarget.parentElement.classList.remove("pressed");
 				},3000);
@@ -2347,6 +2347,9 @@ BDFDB.openColorPicker = function (currentColor, swatch) {
 		});
 		
 	BDFDB.$(colorPickerModal)
+		.on("keydown", BDFDB.dotCN.inputmini, (e) => {
+			e.stopPropagation();
+		})
 		.on("input", BDFDB.dotCN.inputmini, (e) => {
 			updateValues(e.currentTarget.name);
 		});
@@ -2387,34 +2390,391 @@ BDFDB.openColorPicker = function (currentColor, swatch) {
 				}
 				break;
 			case "rgb":
-				red = colorPickerModal.querySelector(".colorpicker-red").value;
-				green = colorPickerModal.querySelector(".colorpicker-green").value;
-				blue = colorPickerModal.querySelector(".colorpicker-blue").value;
-				if (red && red >= 0 && red <= 255 && green && green >= 0 && green <= 255 && blue && blue >= 0 && blue <= 255) {
-					[hue, saturation, lightness] = BDFDB.color2HSL([red, green, blue]).replace(new RegExp(" ", "g"), "").slice(4, -1).split(",");
-					saturation *= 100;
-					lightness *= 100;
-					colorPickerModal.querySelector(".colorpicker-hex").value = BDFDB.color2HEX([red, green, blue]);
-					colorPickerModal.querySelector(".colorpicker-hue").value = Math.round(hue);
-					colorPickerModal.querySelector(".colorpicker-saturation").value = Math.round(saturation);
-					colorPickerModal.querySelector(".colorpicker-lightness").value = Math.round(lightness);
-				}
+				var redinput = colorPickerModal.querySelector(".colorpicker-red");
+				var greeninput = colorPickerModal.querySelector(".colorpicker-green");
+				var blueinput = colorPickerModal.querySelector(".colorpicker-blue");
+				red = getInputValue(redinput);
+				green = getInputValue(greeninput);
+				blue = getInputValue(blueinput);
+				redinput.value = red;
+				greeninput.value = green;
+				blueinput.value = blue;
+				
+				[hue, saturation, lightness] = BDFDB.color2HSL([red, green, blue]).replace(new RegExp(" ", "g"), "").slice(4, -1).split(",");
+				saturation *= 100;
+				lightness *= 100;
+				colorPickerModal.querySelector(".colorpicker-hex").value = BDFDB.color2HEX([red, green, blue]);
+				colorPickerModal.querySelector(".colorpicker-hue").value = Math.round(hue);
+				colorPickerModal.querySelector(".colorpicker-saturation").value = Math.round(saturation);
+				colorPickerModal.querySelector(".colorpicker-lightness").value = Math.round(lightness);
 				break;
 			case "hsl":
-				hue = colorPickerModal.querySelector(".colorpicker-hue").value;
-				saturation = colorPickerModal.querySelector(".colorpicker-saturation").value;
-				lightness = colorPickerModal.querySelector(".colorpicker-lightness").value;
-				if (hue && hue >= 0 && hue <= 360 && saturation && saturation >= 0 && saturation <= 100 && lightness && lightness >= 0 && lightness <= 100) {
-					[red, green, blue] = BDFDB.color2COMP("hsl(" + hue + ", " + saturation/100 + ", " + lightness/100 + ")");
-					colorPickerModal.querySelector(".colorpicker-hex").value = BDFDB.color2HEX([red, green, blue]);
-					colorPickerModal.querySelector(".colorpicker-red").value = red;
-					colorPickerModal.querySelector(".colorpicker-green").value = green;
-					colorPickerModal.querySelector(".colorpicker-blue").value = blue;
-				}
+				var hueinput = colorPickerModal.querySelector(".colorpicker-hue");
+				var saturationinput = colorPickerModal.querySelector(".colorpicker-saturation");
+				var lightnessinput = colorPickerModal.querySelector(".colorpicker-lightness");
+				hue = getInputValue(hueinput);
+				saturation = getInputValue(saturationinput);
+				lightness = getInputValue(lightnessinput);
+				hueinput.value = hue;
+				saturationinput.value = saturation;
+				lightnessinput.value = lightness;
+				hue = getInputValue(colorPickerModal.querySelector(".colorpicker-hue"));
+				saturation = getInputValue(colorPickerModal.querySelector(".colorpicker-saturation"));
+				lightness = getInputValue(colorPickerModal.querySelector(".colorpicker-lightness"));
+				
+				[red, green, blue] = BDFDB.color2COMP("hsl(" + hue + ", " + saturation/100 + ", " + lightness/100 + ")");
+				colorPickerModal.querySelector(".colorpicker-hex").value = BDFDB.color2HEX([red, green, blue]);
+				colorPickerModal.querySelector(".colorpicker-red").value = red;
+				colorPickerModal.querySelector(".colorpicker-green").value = green;
+				colorPickerModal.querySelector(".colorpicker-blue").value = blue;
 				break; 
 		}
 		updateColors();
 		updateCursors();
+	}
+	
+	function getInputValue (input) {
+		var val = parseInt(input.value);
+		var min = parseInt(input.getAttribute("min"));
+		var max = parseInt(input.getAttribute("max"));
+		return isNaN(val) ? input.getAttribute("placeholder") : (val < min ? min : (val > max ? max : val));
+	}
+	
+	function updateCursors () {
+		sHalfH = scursor.offsetHeight/2;
+		sMinY = BDFDB.$(spane).offset().top;
+		sY = BDFDB.mapRange([360, 0], [sMinY - sHalfH, sMaxY - sHalfH], hue);
+		
+		pHalfW = pcursor.offsetWidth/2;
+		pHalfH = pcursor.offsetHeight/2;
+		pMinX = BDFDB.$(ppane).offset().left;
+		pMaxX = pMinX + ppane.offsetWidth;
+		pMinY = BDFDB.$(ppane).offset().top;
+		pMaxY = pMinY + ppane.offsetHeight;
+		pX = BDFDB.mapRange([0, 100], [pMinX - pHalfW, pMaxX - pHalfW], saturation);
+		pY = BDFDB.mapRange([100, 0], [pMinY - pHalfH, pMaxY - pHalfH], lightness);
+		
+		BDFDB.$(scursor).offset({"top":sY});
+		BDFDB.$(pcursor).offset({"left":pX,"top":pY});
+		BDFDB.$(pcursor).find("circle").attr("stroke", BDFDB.colorINV([red, green, blue], "rgb"));
+		BDFDB.$(scursor).find("path").attr("stroke", BDFDB.color2RGB("hsl(" + hue + ", 1, 1)"));
+	}
+	
+	function updateAllValues () {
+		[red, green, blue] = BDFDB.color2COMP("hsl(" + hue + ", " + saturation/100 + ", " + lightness/100 + ")");
+		colorPickerModal.querySelector(".colorpicker-hex").value = BDFDB.color2HEX([red, green, blue]);
+		colorPickerModal.querySelector(".colorpicker-hue").value = Math.round(hue);
+		colorPickerModal.querySelector(".colorpicker-saturation").value = Math.round(saturation);
+		colorPickerModal.querySelector(".colorpicker-lightness").value = Math.round(lightness);
+		colorPickerModal.querySelector(".colorpicker-red").value = Math.round(red);
+		colorPickerModal.querySelector(".colorpicker-green").value = Math.round(green);
+		colorPickerModal.querySelector(".colorpicker-blue").value = Math.round(blue);
+		
+		updateColors();
+		
+		BDFDB.$(pcursor).find("circle").attr("stroke", BDFDB.colorINV([red, green, blue], "rgb"));
+		BDFDB.$(scursor).find("path").attr("stroke", BDFDB.color2RGB("hsl(" + hue + ", 1, 1)"));
+	}
+	
+	function updateColors () {
+		colorPickerModal.querySelector(".colorpicker-color").style.background = BDFDB.color2RGB("hsl(" + hue + ", 1, 1)");
+		colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").style.background = BDFDB.color2RGB([red, green, blue]);
+		colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").style.borderColor = BDFDB.colorINV([red, green, blue], "rgb");
+	}
+};
+	var libraryStrings = BDFDB.getLibraryStrings();
+	var inputs = {
+		HEX: 	{type:"text", 		name:"hex",				group:"hex", 	min:null,	max:null,	length:7,		default:"#000000"},
+		R: 		{type:"number", 	name:"red",				group:"rgb", 	min:0,		max:255,	length:null,	default:0},
+		G:		{type:"number", 	name:"green",			group:"rgb", 	min:0,		max:255,	length:null,	default:0},
+		B:		{type:"number", 	name:"blue",			group:"rgb", 	min:0,		max:255,	length:null,	default:0},
+		H: 		{type:"number", 	name:"hue",				group:"hsl", 	min:0,		max:360,	length:null,	default:0},
+		S: 		{type:"number", 	name:"saturation",		group:"hsl", 	min:0,		max:100,	length:null,	default:0},
+		L: 		{type:"number", 	name:"lightness",		group:"hsl", 	min:0,		max:100,	length:null,	default:0}
+	};
+	
+	var colorPickerModalMarkup = 
+		`<span class="colorpicker-modal DevilBro-modal">
+			<div class="${BDFDB.disCN.backdrop}"></div>
+			<div class="${BDFDB.disCN.modal}">
+				<div class="${BDFDB.disCN.modalinner}">
+					<div class="${BDFDB.disCNS.modalsub + BDFDB.disCN.modalsizemedium}">
+						<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex: 0 0 auto;">
+							<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">
+								<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.headertitle + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.defaultcolor + BDFDB.disCNS.h4defaultmargin + BDFDB.disCN.marginreset}">${libraryStrings.colorpicker_modal_header_text}</h4>
+							</div>
+							<svg class="${BDFDB.disCNS.modalclose + BDFDB.disCN.flexchild}" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12">
+								<g fill="none" fill-rule="evenodd">
+									<path d="M0 0h12v12H0"></path>
+									<path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path>
+								</g>
+							</svg>
+						</div>
+						<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.modalsubinner + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCN.nowrap} colorpicker-container" style="flex: 1 1 auto;">
+							<div class="colorpicker-color">
+								<div class="colorpicker-white" style="background: linear-gradient(to right, #fff, rgba(255,255,255,0))">
+									<div class="colorpicker-black" style="background: linear-gradient(to top, #000, rgba(0,0,0,0))">
+										<div class="colorpicker-pickercursor">
+											<svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+												<circle cx="7" cy="7" r="6" stroke="black" stroke-width="2" fill="none" />
+											</svg>
+										</div>
+										<div class="colorpicker-pickerpane"></div>
+									</div>
+								</div>
+							</div>
+							<div class="colorpicker-slider" style="background: linear-gradient(to top, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%)">
+									<div class="colorpicker-slidercursor">
+										<svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+											<path stroke="grey" fill="white" d="M 0 0, l 5 5, l -5 5, m 31 0, l -5 -5, l 5 -5"></path>
+										</svg>
+									</div>
+									<div class="colorpicker-sliderpane"></div>
+							</div>
+							<div class="colorpicker-controls">
+								<div class="colorpicker-previewcontainer">
+									<div class="colorpicker-preview-0 selected" style="background-color:#808080;"></div>
+									<div class="colorpicker-preview-2" style="background-color:#808080;"></div>
+								</div>
+								<div class="colorpicker-inputs ${BDFDB.disCNS.card + BDFDB.disCN.cardprimaryeditable}">
+									${Object.keys(inputs).map((key, i) => 
+									`<div class="colorpicker-input ${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.aligncenter + BDFDB.disCNS.justifycenter + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.nowrap}">
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCN.nowrap}" style="flex: 1 1 20%">
+											<h5 class="${BDFDB.disCNS.h5 + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCN.weightsemibold}">${key}:</h5>
+										</div>
+										<div class="${inputs[key].type == 'number' ? 'inputNumberWrapper inputNumberWrapperMini ' : ''}${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex + BDFDB.disCN.directioncolumn}" style="flex: 1 1 80%;">
+											${inputs[key].type == 'number' ? '<span class="numberinput-buttons-zone"><span class="numberinput-button-up"></span><span class="numberinput-button-down"></span></span>' : ''}
+											<input type="${inputs[key].type}"${!isNaN(inputs[key].min) && inputs[key].min != null ? ' min="' + inputs[key].min + '"' : ''}${!isNaN(inputs[key].max) && inputs[key].max != null ? ' max="' + inputs[key].max + '"' : ''}${!isNaN(inputs[key].length) && inputs[key].length != null ? ' maxlength="' + inputs[key].length + '"' : ''} name="${inputs[key].group}" placeholder="${inputs[key].default}" class="${BDFDB.disCNS.inputmini + BDFDB.disCNS.input + BDFDB.disCN.size16} colorpicker-${inputs[key].name}">
+										</div>
+									</div>`).join("")}
+								</div>
+							</div>
+						</div>
+						<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontalreverse + BDFDB.disCNS.horizontalreverse2 + BDFDB.disCNS.directionrowreverse + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.modalfooter}">
+							<button type="button" class="btn-ok ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}">
+								<div class="${BDFDB.disCN.buttoncontents}"></div>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</span>`;
+		
+	var colorPickerModal = BDFDB.$(colorPickerModalMarkup)[0];
+	BDFDB.appendModal(colorPickerModal);
+	BDFDB.$(colorPickerModal)
+		.on("click", ".btn-ok", () => {
+			var newRGB = colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").style.backgroundColor;
+			var newCOMP = BDFDB.color2COMP(newRGB);
+			var newInvRGB = BDFDB.colorINV(newRGB);
+			
+			BDFDB.$(".ui-color-picker-" + swatch + ".selected.nocolor")
+				.removeClass("selected")
+				.css("border", "4px solid red");
+				
+			BDFDB.$(".ui-color-picker-" + swatch + ".selected")
+				.removeClass("selected")
+				.css("border", "4px solid transparent");
+			
+			BDFDB.$(".ui-color-picker-" + swatch + ".custom")
+				.addClass("selected")
+				.css("background-color", newRGB)
+				.css("border", "4px solid " + newInvRGB);
+				
+			BDFDB.$(".color-picker-dropper-fg-" + swatch)
+				.attr("fill", newCOMP[0] > 150 && newCOMP[1] > 150 && newCOMP[2] > 150 ? "#000000" : "#ffffff");
+		});
+	
+	var hex = 0, red = 0, green = 0, blue = 0, hue = 0, saturation = 0, lightness = 0;
+	
+	var ppane = colorPickerModal.querySelector(".colorpicker-pickerpane");
+	var pcursor = colorPickerModal.querySelector(".colorpicker-pickercursor");
+	
+	var pX = 0;
+	var pY = 0;
+	var pHalfW = pcursor.offsetWidth/2;
+	var pHalfH = pcursor.offsetHeight/2;
+	var pMinX = BDFDB.$(ppane).offset().left;
+	var pMaxX = pMinX + ppane.offsetWidth;
+	var pMinY = BDFDB.$(ppane).offset().top;
+	var pMaxY = pMinY + ppane.offsetHeight;
+	
+	var spane = colorPickerModal.querySelector(".colorpicker-sliderpane");
+	var scursor = colorPickerModal.querySelector(".colorpicker-slidercursor");
+	
+	var sY = 0;
+	var sHalfH = scursor.offsetHeight/2;
+	var sMinY = BDFDB.$(spane).offset().top;
+	var sMaxY = sMinY + spane.offsetHeight;
+	
+	[hue, saturation, lightness] = BDFDB.color2HSL(currentColor).replace(new RegExp(" ", "g"), "").slice(4, -1).split(",");
+	saturation *= 100;
+	lightness *= 100;
+	updateAllValues();
+	updateCursors();
+	
+	BDFDB.$(ppane)
+		.on("mousedown", (e) => {
+			BDFDB.appendLocalStyle("crossHairColorPicker", `* {cursor: crosshair !important;}`);
+			
+			switchPreviews(e.button);
+			
+			pHalfW = pcursor.offsetWidth/2;
+			pHalfH = pcursor.offsetHeight/2;
+			pMinX = BDFDB.$(ppane).offset().left;
+			pMaxX = pMinX + ppane.offsetWidth;
+			pMinY = BDFDB.$(ppane).offset().top;
+			pMaxY = pMinY + ppane.offsetHeight;
+			pX = e.clientX - pHalfW;
+			pY = e.clientY - pHalfH;
+			
+			BDFDB.$(pcursor).offset({"left":pX,"top":pY});
+			
+			saturation = BDFDB.mapRange([pMinX - pHalfW, pMaxX - pHalfW], [0, 100], pX);
+			lightness = BDFDB.mapRange([pMinY - pHalfH, pMaxY - pHalfH], [100, 0], pY);
+			updateAllValues();
+			
+			BDFDB.$(document)
+				.off("mouseup.ColorPicker").off("mousemove.ColorPicker")
+				.on("mouseup.ColorPicker", () => {
+					BDFDB.removeLocalStyle("crossHairColorPicker");
+					BDFDB.$(document).off("mouseup.ColorPicker").off("mousemove.ColorPicker");
+				})
+				.on("mousemove.ColorPicker", (e2) => {
+					pX = e2.clientX > pMaxX ? pMaxX - pHalfW : (e2.clientX < pMinX ? pMinX - pHalfW : e2.clientX - pHalfW);
+					pY = e2.clientY > pMaxY ? pMaxY - pHalfH : (e2.clientY < pMinY ? pMinY - pHalfH : e2.clientY - pHalfH);
+					BDFDB.$(pcursor).offset({"left":pX,"top":pY});
+					
+					saturation = BDFDB.mapRange([pMinX - pHalfW, pMaxX - pHalfW], [0, 100], pX);
+					lightness = BDFDB.mapRange([pMinY - pHalfH, pMaxY - pHalfH], [100, 0], pY);
+					updateAllValues();
+				});
+		});
+	
+	BDFDB.$(spane)
+		.on("mousedown", (e) => {
+			BDFDB.appendLocalStyle("crossHairColorPicker", `* {cursor: crosshair !important;}`);
+			
+			switchPreviews(e.button);
+			
+			sHalfH = scursor.offsetHeight/2;
+			sMinY = BDFDB.$(spane).offset().top;
+			sMaxY = sMinY + spane.offsetHeight;
+			sY = e.clientY - sHalfH;
+			
+			BDFDB.$(scursor).offset({"top":sY});
+			
+			hue = BDFDB.mapRange([sMinY - sHalfH, sMaxY - sHalfH], [360, 0], sY);
+			updateAllValues();
+			
+			BDFDB.$(document)
+				.off("mouseup.ColorPicker").off("mousemove.ColorPicker")
+				.on("mouseup.ColorPicker", () => {
+					BDFDB.removeLocalStyle("crossHairColorPicker");
+					BDFDB.$(document).off("mouseup.ColorPicker").off("mousemove.ColorPicker");
+				})
+				.on("mousemove.ColorPicker", (e2) => {
+					sY = e2.clientY > sMaxY ? sMaxY - sHalfH : (e2.clientY < sMinY ? sMinY - sHalfH : e2.clientY - sHalfH);
+					BDFDB.$(scursor).offset({"top":sY});
+					
+					hue = BDFDB.mapRange([sMinY - sHalfH, sMaxY - sHalfH], [360, 0], sY);
+					updateAllValues();
+				});
+		});
+		
+	BDFDB.$(colorPickerModal)
+		.on("input", BDFDB.dotCN.inputmini, (e) => {
+			updateValues(e.currentTarget.name);
+		})
+		.on("keydown", ".inputNumberWrapperMini", (e) => {
+			e.stopPropagation();
+			updateValues(e.currentTarget.querySelector("input").name);
+		});
+		
+	BDFDB.$(colorPickerModal)
+		.on("click", "[class^='colorpicker-preview-']", (e) => {
+			colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").style.borderColor = "transparent";
+			colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").classList.remove("selected");
+			e.currentTarget.classList.add("selected");
+			[hue, saturation, lightness] = BDFDB.color2HSL(e.currentTarget.style.backgroundColor).replace(new RegExp(" ", "g"), "").slice(4, -1).split(",");
+			saturation *= 100;
+			lightness *= 100;
+			updateAllValues();
+			updateCursors();
+		});
+	
+	function switchPreviews (button) {
+		colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").style.borderColor = "transparent";
+		colorPickerModal.querySelector("[class^='colorpicker-preview-'].selected").classList.remove("selected");
+		colorPickerModal.querySelector(".colorpicker-preview-" + button).classList.add("selected");
+	}
+	
+	function updateValues (type) {
+		switch (type) {
+			case "hex":
+				hex = colorPickerModal.querySelector(".colorpicker-hex").value;
+				if (/^#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.test(hex)) {
+					[red, green, blue] = BDFDB.color2COMP(hex);
+					[hue, saturation, lightness] = BDFDB.color2HSL(hex).replace(new RegExp(" ", "g"), "").slice(4, -1).split(",");
+					saturation *= 100;
+					lightness *= 100;
+					colorPickerModal.querySelector(".colorpicker-hue").value = Math.round(hue);
+					colorPickerModal.querySelector(".colorpicker-saturation").value = Math.round(saturation);
+					colorPickerModal.querySelector(".colorpicker-lightness").value = Math.round(lightness);
+					colorPickerModal.querySelector(".colorpicker-red").value = red;
+					colorPickerModal.querySelector(".colorpicker-green").value = green;
+					colorPickerModal.querySelector(".colorpicker-blue").value = blue;
+				}
+				break;
+			case "rgb":
+				var redinput = colorPickerModal.querySelector(".colorpicker-red");
+				var greeninput = colorPickerModal.querySelector(".colorpicker-green");
+				var blueinput = colorPickerModal.querySelector(".colorpicker-blue");
+				red = getInputValue(redinput);
+				green = getInputValue(greeninput);
+				blue = getInputValue(blueinput);
+				redinput.value = red;
+				greeninput.value = green;
+				blueinput.value = blue;
+				
+				[hue, saturation, lightness] = BDFDB.color2HSL([red, green, blue]).replace(new RegExp(" ", "g"), "").slice(4, -1).split(",");
+				saturation *= 100;
+				lightness *= 100;
+				colorPickerModal.querySelector(".colorpicker-hex").value = BDFDB.color2HEX([red, green, blue]);
+				colorPickerModal.querySelector(".colorpicker-hue").value = Math.round(hue);
+				colorPickerModal.querySelector(".colorpicker-saturation").value = Math.round(saturation);
+				colorPickerModal.querySelector(".colorpicker-lightness").value = Math.round(lightness);
+				break;
+			case "hsl":
+				var hueinput = colorPickerModal.querySelector(".colorpicker-hue");
+				var saturationinput = colorPickerModal.querySelector(".colorpicker-saturation");
+				var lightnessinput = colorPickerModal.querySelector(".colorpicker-lightness");
+				hue = getInputValue(hueinput);
+				saturation = getInputValue(saturationinput);
+				lightness = getInputValue(lightnessinput);
+				hueinput.value = hue;
+				saturationinput.value = saturation;
+				lightnessinput.value = lightness;
+				hue = getInputValue(colorPickerModal.querySelector(".colorpicker-hue"));
+				saturation = getInputValue(colorPickerModal.querySelector(".colorpicker-saturation"));
+				lightness = getInputValue(colorPickerModal.querySelector(".colorpicker-lightness"));
+				
+				[red, green, blue] = BDFDB.color2COMP("hsl(" + hue + ", " + saturation/100 + ", " + lightness/100 + ")");
+				colorPickerModal.querySelector(".colorpicker-hex").value = BDFDB.color2HEX([red, green, blue]);
+				colorPickerModal.querySelector(".colorpicker-red").value = red;
+				colorPickerModal.querySelector(".colorpicker-green").value = green;
+				colorPickerModal.querySelector(".colorpicker-blue").value = blue;
+				break; 
+		}
+		updateColors();
+		updateCursors();
+	}
+	
+	function getInputValue (input) {
+		var val = parseInt(input.value);
+		var min = parseInt(input.getAttribute("min"));
+		var max = parseInt(input.getAttribute("max"));
+		return isNaN(val) ? input.getAttribute("placeholder") : (val < min ? min : (val > max ? max : val));
 	}
 	
 	function updateCursors () {
