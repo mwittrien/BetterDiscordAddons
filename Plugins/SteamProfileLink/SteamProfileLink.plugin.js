@@ -1,14 +1,12 @@
 //META{"name":"SteamProfileLink"}*//
 
 class SteamProfileLink {
-	initConstructor () {
-	}
 
 	getName () {return "SteamProfileLink";}
 
-	getDescription () {return "Opens a steam profile in steam instead of a browser when clicking the steamlink in a userprofile. With the help of square.";}
+	getDescription () {return "Opens any Steam links in Steam instead of your internet browser.";}
 
-	getVersion () {return "1.0.2";}
+	getVersion () {return "1.0.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -17,8 +15,7 @@ class SteamProfileLink {
 
 	start () {
 		var libraryScript = null;
-		if (typeof BDFDB !== "object" || BDFDB.isLibraryOutdated()) {
-			if (typeof BDFDB === "object") BDFDB = "";
+		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
 			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
@@ -27,7 +24,7 @@ class SteamProfileLink {
 			document.head.appendChild(libraryScript);
 		}
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object") this.initialize();
+		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
 		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
@@ -35,7 +32,7 @@ class SteamProfileLink {
 		if (typeof BDFDB === "object") {
 			BDFDB.loadMessage(this);
 			
-			$(document).on("click." + this.getName(), "a[href^='https://steamcommunity.com/profiles/']", (e) => {
+			$(document).on("click." + this.getName(), "a[href^='https://steamcommunity.'],a[href^='https://store.steampowered.']", (e) => {
 				if (require("electron").shell.openExternal("steam://openurl/" + e.currentTarget.href)) {
 					e.preventDefault();
 					e.stopImmediatePropagation();
@@ -49,13 +46,8 @@ class SteamProfileLink {
 
 
 	stop () {
-		if (typeof BDFDB === "object") {
-			$(document).off("click." + this.getName(), "a[href^='https://steamcommunity.com/profiles/']");
-			
+		if (typeof BDFDB === "object") {			
 			BDFDB.unloadMessage(this);
 		}
 	}
-
-	
-	// begin of own functions
 }
