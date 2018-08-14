@@ -9,6 +9,7 @@ https://raw.githubusercontent.com/BeardDesign1/Ios-switches/themes/IOS_Switches.
 https://raw.githubusercontent.com/BeardDesign1/Material-design-theme/themes/Beard's-Material-theme-for-Discord.theme.css
 https://raw.githubusercontent.com/CapnKitten/Material-Discord/master/Material-Discord.theme.css
 https://raw.githubusercontent.com/CAtOSe/Neon-Space-BetterDiscord-Theme/master/neon-space.theme.css
+https://raw.githubusercontent.com/Chloesviel/Discord-Stuff/master/minifiedMemberlist/minifiedMemberlist.theme.css
 https://raw.githubusercontent.com/cosmicsalad/Discord-Themes-and-Plugins/master/themes/DarkMatter/DarkMatter.theme.css
 https://raw.githubusercontent.com/CurimuChizu/CC-Themes/master/CC-Themes/Red.n.Black.theme.css
 https://raw.githubusercontent.com/CurimuChizu/CC-Themes/master/CC-Themes/ReZero.theme.css
@@ -55,6 +56,7 @@ https://raw.githubusercontent.com/gco360/thanos-theme/master/thanos.theme.css
 https://raw.githubusercontent.com/HansAnonymous/BD-Themes-and-Plugins/master/Themes/Glossy-Cyan/Glossy-Cyan.H.theme.css
 https://raw.githubusercontent.com/HansAnonymous/BD-Themes-and-Plugins/master/Themes/HansAnonymousAdditions/HAA.theme.css
 https://raw.githubusercontent.com/HansAnonymous/BD-Themes-and-Plugins/master/Themes/Patriotic/Patriotic.theme.css
+https://raw.githubusercontent.com/HighGuard/discord-popout-overhaul-theme/master/popoutOverhaul.theme.css
 https://raw.githubusercontent.com/ImBastion/BD-Themes/master/NieRDanceBase.theme.css
 https://raw.githubusercontent.com/ImBastion/BD-Themes/master/No2ABase.theme.css
 https://raw.githubusercontent.com/intrnl/discordcustomizations/master/codeblockLangIdentifier/codeblockLangIdentifier.theme.css
@@ -136,6 +138,8 @@ https://raw.githubusercontent.com/Quietess/Casual-Dark/master/Casual_Dark.theme.
 https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Themes/RadialStatus/RadialStatus.theme.css
 https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Themes/TransientMaterial/TransientMaterial.theme.css
 https://raw.githubusercontent.com/redsauce117/SauceysDiscordThemes/master/DarkerDiscordTheme.theme.css
+https://raw.githubusercontent.com/Ruben7173/Ruben7173.github.io/master/BetterDiscord-Themes/Darling-in-The-Franxx/02-theme.theme.css
+https://raw.githubusercontent.com/Ruben7173/Ruben7173.github.io/master/BetterDiscord-Themes/minimalistic-dark-theme/minimalist-dark.theme.css
 https://raw.githubusercontent.com/satoru8/Addons/master/BeautifulCategories.theme.css
 https://raw.githubusercontent.com/satoru8/Addons/master/BorderStatus.theme.css
 https://raw.githubusercontent.com/satoru8/Addons/master/FriendsList.theme.css
@@ -162,6 +166,8 @@ https://raw.githubusercontent.com/tehbasshunter/theme-fixes/master/Space_Nova.th
 https://raw.githubusercontent.com/TheBaconSpace/TMEMETheme/master/tmeme.theme.css
 https://raw.githubusercontent.com/TheWrestlingDiscordia/MiniTheme/master/MiniTheme.theme.css
 https://raw.githubusercontent.com/trueprominency/Shades-of-Red-Theme/master/shades-of-red.theme.css
+https://raw.githubusercontent.com/Twiistrz/TransparencyTheme/master/TransparencyConfig.theme.css
+https://raw.githubusercontent.com/Vaxuuu/Indigo-Theme/master/Indigo.theme.css
 https://raw.githubusercontent.com/Wahrandz/NieR-Automata-/master/Theme css/Final; Nier_Automata By AbdelBouklech.theme.css
 https://raw.githubusercontent.com/xNightWulf/ThemesForBetterDiscord/master/BlueLine.theme.css
 https://raw.githubusercontent.com/xNightWulf/ThemesForBetterDiscord/master/BlueNissanSkyline.theme.css
