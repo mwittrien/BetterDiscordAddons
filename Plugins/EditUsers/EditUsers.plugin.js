@@ -176,7 +176,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "2.3.6";}
+	getVersion () {return "2.3.7";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -909,7 +909,7 @@ class EditUsers {
 				var name = data && data.name ? data.name : (member && member.nick ? member.nick : user.username);
 				var color1 = data && data.color1 ? BDFDB.color2RGB(data.color1) : (member && member.colorString ? BDFDB.color2RGB(member.colorString) : "");
 				var color2 = data && data.color2 ? BDFDB.color2RGB(data.color2) : "";
-				strong.innerHTML = `<label style="color:${color1};background-color:${color2};">${name}</label>`;
+				strong.innerHTML = `<label style="color:${color1};background-color:${color2};">${BDFDB.encodeToHTML(name)}</label>`;
 			}
 			i++;
 		}
