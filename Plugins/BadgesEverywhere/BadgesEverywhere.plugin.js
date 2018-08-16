@@ -8,7 +8,7 @@ class BadgesEverywhere {
 				background-position: 50%;
 				background-repeat: no-repeat;
 				background-size: cover;
-				height: 16px;
+				height: 17px;
 				margin: 0 2px;
 			}
 			.BE-badge-chat {
@@ -27,6 +27,9 @@ class BadgesEverywhere {
 			.BE-badge-Partner {width:21px}
 			.BE-badge-HypeSquad {width:17px}
 			.BE-badge-BugHunter {width:17px}
+			.BE-badge-HypeSquadBravery {width:17px}
+			.BE-badge-HypeSquadBrilliance {width:17px}
+			.BE-badge-HypeSquadBalance {width:17px}
 			.BE-badge-Nitro {width:21px}`;
 			
 		this.loading = false;
@@ -34,13 +37,16 @@ class BadgesEverywhere {
 		this.updateBadges = false;
 		
 		this.badges = {
-			1:			{name:"Staff",			implemented:true,	white:"url(https://discordapp.com/assets/7cfd90c8062139e4804a1fa59f564731.svg)", color:"url(https://discordapp.com/assets/4358ad1fb423b346324516453750f569.svg)"},
-			2:			{name:"Partner",		implemented:true,	white:"url(https://discordapp.com/assets/a0e288a458c48dfcf548dadc277e42e6.svg)", color:"url(https://discordapp.com/assets/33fedf082addb91d88abc272b4b18daa.svg)"},
-			4:			{name:"HypeSquad",		implemented:true,	white:"url(https://discordapp.com/assets/0aae6033ad41cdda515a62cf72075afa.svg)", color:"url(https://discordapp.com/assets/17ebd99540a6e983bade13c3afff7946.svg)"},
-			8:			{name:"BugHunter",		implemented:true,	white:"url(https://discordapp.com/assets/df26f079738a4dcd07cbce6eb3c957f1.svg)", color:"url(https://discordapp.com/assets/f61b8981e92feead854f52e5a1ba14f0.svg)"},
-			16:			{name:"MFASMS",			implemented:false,	white:"", color:""},
-			32:			{name:"PROMODISMISSED",	implemented:false,	white:"", color:""},
-			256:		{name:"Nitro",		implemented:true,	white:"url(https://discordapp.com/assets/379d2b3171722ef8be494231234da5d1.svg)", color:"url(https://discordapp.com/assets/386884eecd36164487505ddfbac35a9d.svg)"}
+			1:			{name:"Staff",					implemented:true,	white:"url(https://discordapp.com/assets/7cfd90c8062139e4804a1fa59f564731.svg)", color:"url(https://discordapp.com/assets/4358ad1fb423b346324516453750f569.svg)"},
+			2:			{name:"Partner",				implemented:true,	white:"url(https://discordapp.com/assets/a0e288a458c48dfcf548dadc277e42e6.svg)", color:"url(https://discordapp.com/assets/33fedf082addb91d88abc272b4b18daa.svg)"},
+			4:			{name:"HypeSquad",				implemented:false,	white:"url(https://discordapp.com/assets/0aae6033ad41cdda515a62cf72075afa.svg)", color:"url(https://discordapp.com/assets/17ebd99540a6e983bade13c3afff7946.svg)"},
+			8:			{name:"BugHunter",				implemented:true,	white:"url(https://discordapp.com/assets/df26f079738a4dcd07cbce6eb3c957f1.svg)", color:"url(https://discordapp.com/assets/f61b8981e92feead854f52e5a1ba14f0.svg)"},
+			16:			{name:"MFASMS",					implemented:false,	white:"", color:""},
+			32:			{name:"PROMODISMISSED",			implemented:false,	white:"", color:""},
+			64:			{name:"HypeSquad Bravery",		implemented:true,	white:"url(https://discordapp.com/assets/1115767aed344e96a27a12e97718c171.svg)", color:"url(https://discordapp.com/assets/64ae1208b6aefc0a0c3681e6be36f0ff.svg)"},
+			128:		{name:"HypeSquad Brilliance",	implemented:true,	white:"url(https://discordapp.com/assets/48cf0556d93901c8cb16317be2436523.svg)", color:"url(https://discordapp.com/assets/48cf0556d93901c8cb16317be2436523.svg)"},
+			256:		{name:"HypeSquad Balance",		implemented:true,	white:"url(https://discordapp.com/assets/2a085ed9c86f3613935a6a8667ba8b89.svg)", color:"url(https://discordapp.com/assets/9fdc63ef8a3cc1617c7586286c34e4f1.svg)"},
+			2048:		{name:"Nitro",					implemented:true,	white:"url(https://discordapp.com/assets/379d2b3171722ef8be494231234da5d1.svg)", color:"url(https://discordapp.com/assets/386884eecd36164487505ddfbac35a9d.svg)"}
 		};
 		
 		this.requestedusers = {};
@@ -60,7 +66,7 @@ class BadgesEverywhere {
 
 	getDescription () {return "Displays Badges (Nitro, HypeSquad, etc...) in the chat/memberlist/userpopout. Thanks for Zerebos' help.";}
 
-	getVersion () {return "1.0.5";}
+	getVersion () {return "1.0.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -245,7 +251,7 @@ class BadgesEverywhere {
 				this.requestedusers[user.id] = [[wrapper,type]]
 				this.APIModule.get(this.DiscordConstants.Endpoints.USER_PROFILE(user.id)).then(result => {
 					let usercopy = Object.assign({},result.body.user);
-					if (result.body.premium_since) usercopy.flags += 256;
+					if (result.body.premium_since) usercopy.flags += 2048;
 					this.loadedusers[user.id] = usercopy;
 					for (let queredobj of this.requestedusers[user.id]) this.addToWrapper(queredobj[0], user.id, queredobj[1], settings);
 				});
@@ -265,12 +271,12 @@ class BadgesEverywhere {
 		if (memberwrap) for (let flag in this.badges) {
 			if ((this.loadedusers[id].flags | flag) == this.loadedusers[id].flags) {
 				let badge = document.createElement("div"); 
-				badge.className = "BE-badge BE-badge-" + this.badges[flag].name + " BE-badge-" + type;
+				badge.className = "BE-badge BE-badge-" + this.badges[flag].name.replace(/ /g, "") + " BE-badge-" + type;
 				badge.style.backgroundImage = settings.useColoredVersion ? this.badges[flag].color : this.badges[flag].white;
 				memberwrap.appendChild(badge);
 				$(badge)
 					.on("mouseenter." + this.getName(), (e) => {
-						BDFDB.createTooltip(this.badges[flag].name, e.currentTarget, {"type":"top"});
+						BDFDB.createTooltip(this.badges[flag].name, e.currentTarget, {"type":type == "list" ? "left" : "top"});
 					});
 			}
 		}
