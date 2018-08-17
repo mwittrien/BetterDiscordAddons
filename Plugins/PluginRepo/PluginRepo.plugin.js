@@ -241,7 +241,7 @@ class PluginRepo {
 
 	getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
 
-	getVersion () {return "1.5.1";}
+	getVersion () {return "1.5.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -716,8 +716,11 @@ class PluginRepo {
 			request(url, (error, response, body) => {
 				if (response) {
 					let plugin = {};
+					let regbody = body.split("\n");
+					let rblength = regbody.length-1;
+					regbody = rblength == 0 || regbody[rblength].length > 10000 || regbody[rblength-1].length > 10000 ? body.replace(new RegExp("}", "g"), "}\n") : body;
 					for (let tag of tags) {
-						let result = new RegExp(tag + "[\\s|\\t|\\n|\\r|=|>|_|:|function|\(|\)|\{|return]*([\"|\'|\`]).*\\1","gi").exec(body);
+						let result = new RegExp(tag + "[\\s|\\t|\\n|\\r|=|>|_|:|function|\(|\)|\{|return]*([\"|\'|\`]).*\\1","gi").exec(regbody);
 						if (result) {
 							let separator = result[1];
 							result = result[0].replace(new RegExp("\\\\" + separator, "g"), separator).split(separator);
@@ -729,7 +732,7 @@ class PluginRepo {
 					}
 					let valid = true;
 					for (let tag of tags) {
-						if (!plugin[tag]) valid = false;
+						if (!plugin[tag] || plugin[tag].length > 10000) valid = false;
 					}
 					if (valid) {
 						plugin.url = url;
