@@ -142,7 +142,7 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.5.9";}
+	getVersion () {return "1.6.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -516,7 +516,7 @@ class PersonalPins {
 	}
 	
 	addNotes (notespopout) {
-		notespopout.querySelectorAll(BDFDB.dotCN.messagegroup).forEach(message => {message.remove();});
+		notespopout.querySelectorAll(BDFDB.dotCN.messagegroupwrapper).forEach(message => {message.remove();});
 		var channelObj = BDFDB.getSelectedChannel();
 		if (channelObj) {
 			var serverID = channelObj.guild_id ? channelObj.guild_id : "@me";
