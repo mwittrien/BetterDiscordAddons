@@ -379,7 +379,7 @@ class PersonalPins {
 			.appendTo(BDFDB.dotCN.popouts)
 			.css("left", wrappersize.width/2 + wrappersize.left + "px")
 			.css("top", wrappersize.height + wrappersize.top + "px")
-			.on("click", ".tab", () => {
+			.on("click", ".tab:not(.selected)", () => {
 				this.addNotes(popout[0]);
 			})
 			.on("keyup." + this.getName(), BDFDB.dotCN.searchbarinput, () => {
