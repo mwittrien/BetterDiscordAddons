@@ -1556,12 +1556,12 @@ BDFDB.getData = function (id, plugin, keyName, compareObject) {
 };
 
 BDFDB.appendWebScript = function (filepath) {
-	if (!document.head.querySelector("bd-head bd-styles")) BDFDB.$("head").append(`<bd-head><bd-styles></bd-styles></bd-head>`);
+	if (!document.head.querySelector("bd-head bd-scripts")) BDFDB.$("head").append(`<bd-head><bd-scripts></bd-scripts></bd-head>`);
 	
 	var ele = document.createElement("script");
 	ele.setAttribute("src", filepath);
 	
-	document.head.querySelector("bd-head bd-styles").appendChild(ele);
+	document.head.querySelector("bd-head bd-scripts").appendChild(ele);
 };
 
 BDFDB.removeWebScript = function (cssname) {
@@ -1594,7 +1594,7 @@ BDFDB.appendLocalStyle = function (cssname, css, container) {
 
 	var ele = document.createElement("style");
 	ele.id = cssname + "CSS";
-	ele.innerText = css;
+	ele.innerHTML = css.replace(/[\t\n\r]/g, "");
 	
 	container.appendChild(ele);
 };
