@@ -156,8 +156,6 @@ https://raw.githubusercontent.com/satoru8/CleanDark/master/CleanDarkBG.theme.css
 https://raw.githubusercontent.com/satoru8/Nyx/master/Nyx.theme.css
 https://raw.githubusercontent.com/satoru8/StarterTheme/master/StarterTheme.theme.css
 https://raw.githubusercontent.com/satoru8/Void/master/Void.theme.css
-https://raw.githubusercontent.com/spthiel/BetterDiscord/master/Themes/CodeBlocks/CodeBlocks.theme.css
-https://raw.githubusercontent.com/spthiel/BetterDiscord/master/Themes/GameOver/GameOver.theme.css
 https://raw.githubusercontent.com/TakosThings/Battlefield/master/battlefield.theme.css
 https://raw.githubusercontent.com/TakosThings/Metro-for-Discord/master/dist/Metro_for_Discord.theme.css
 https://raw.githubusercontent.com/tehbasshunter/theme-fixes/master/Nova.theme.css
