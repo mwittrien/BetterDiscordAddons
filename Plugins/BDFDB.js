@@ -1594,7 +1594,7 @@ BDFDB.appendLocalStyle = function (cssname, css, container) {
 
 	var ele = document.createElement("style");
 	ele.id = cssname + "CSS";
-	ele.innerHTML = css.replace(/[\t\n\r]/g, "");
+	ele.innerHTML = css;
 	
 	container.appendChild(ele);
 };
