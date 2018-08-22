@@ -3,7 +3,8 @@ https://gist.githubusercontent.com/Jiiks/e1026d29aac91e7a7ad2d90dee87c90c/raw/b7
 https://raw.githubusercontent.com/AltenGD/Altens-betterdiscord-Themes-Plugins/master/Themes/FrostedGlassRewrite.theme.css
 https://raw.githubusercontent.com/AltenGD/Altens-betterdiscord-Themes-Plugins/master/Themes/MiniTheme.theme.css
 https://raw.githubusercontent.com/archnemeziz/Discord/master/ElegantBlue.theme.css
-https://raw.githubusercontent.com/Asteria5675/BetterDiscordThemes/master/Shadow%20Light%20Theme/Shadow_Light.theme.css
+https://raw.githubusercontent.com/Asteria5675/BetterDiscordThemes/master/Light_Dark.theme.css
+https://raw.githubusercontent.com/Asteria5675/BetterDiscordThemes/master/SL.theme.css
 https://raw.githubusercontent.com/Azagwen/Rainbow_kittens_theme/master/Rainbow_kittens_V0.1.2.theme.css
 https://raw.githubusercontent.com/BeardDesign1/Ios-switches/themes/IOS_Switches.theme.css
 https://raw.githubusercontent.com/BeardDesign1/Material-design-theme/themes/Beard's-Material-theme-for-Discord.theme.css
@@ -150,7 +151,7 @@ https://raw.githubusercontent.com/satoru8/Addons/master/ServerColumnX2.theme.css
 https://raw.githubusercontent.com/satoru8/Addons/master/SmallerGuildIcons.theme.css
 https://raw.githubusercontent.com/satoru8/Addons/master/SmallerGuildIconsSG.theme.css
 https://raw.githubusercontent.com/satoru8/Addons/master/StatusChooser.theme.css
-https://raw.githubusercontent.com/satoru8/BetterLightTheme/master/BetterLightTheme.the
+https://raw.githubusercontent.com/satoru8/BetterLightTheme/master/BetterLightTheme.theme.css
 https://raw.githubusercontent.com/satoru8/CleanDark/master/CleanDark.theme.css
 https://raw.githubusercontent.com/satoru8/CleanDark/master/CleanDarkBG.theme.css
 https://raw.githubusercontent.com/satoru8/Nyx/master/Nyx.theme.css
