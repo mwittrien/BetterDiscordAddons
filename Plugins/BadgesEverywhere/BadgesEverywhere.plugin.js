@@ -23,14 +23,14 @@ class BadgesEverywhere {
 			.BE-badge:last-of-type {
 				margin-right: 5px;
 			}
-			.BE-badge-Staff {width:17px}
-			.BE-badge-Partner {width:22px}
-			.BE-badge-HypeSquad {width:17px}
-			.BE-badge-BugHunter {width:17px}
-			.BE-badge-HypeSquadBravery {width:17px}
-			.BE-badge-HypeSquadBrilliance {width:17px}
-			.BE-badge-HypeSquadBalance {width:17px}
-			.BE-badge-Nitro {width:21px}`;
+			.BE-badge-Staff {width:17px;min-width:17px;}
+			.BE-badge-Partner {width:22px;min-width:22px;}
+			.BE-badge-HypeSquad {width:17px;min-width:17px;}
+			.BE-badge-BugHunter {width:17px;min-width:17px;}
+			.BE-badge-HypeSquadBravery {width:17px;min-width:17px;}
+			.BE-badge-HypeSquadBrilliance {width:17px;min-width:17px;}
+			.BE-badge-HypeSquadBalance {width:17px;min-width:17px;}
+			.BE-badge-Nitro {width:21px;min-width:21px;}`;
 			
 		this.loading = false;
 		
@@ -66,7 +66,7 @@ class BadgesEverywhere {
 
 	getDescription () {return "Displays Badges (Nitro, HypeSquad, etc...) in the chat/memberlist/userpopout. Thanks for Zerebos' help.";}
 
-	getVersion () {return "1.0.7";}
+	getVersion () {return "1.0.8";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -122,7 +122,7 @@ class BadgesEverywhere {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.querySelector(BDFDB.dotCN.memberusername) && BDFDB.getData("showInMemberList", this, "settings")) {
+								if (node.tagName && node.querySelector(BDFDB.dotCN.memberusername) && BDFDB.getData("showInMemberList", this, "settings")) {
 									this.addBadges(node, "list", false);
 								}
 							});
@@ -138,7 +138,7 @@ class BadgesEverywhere {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (BDFDB.getData("showInChat", this, "settings")) {
-									if (node && node.tagName && node.querySelector(BDFDB.dotCN.messageusernamewrapper)) {
+									if (node.tagName && node.querySelector(BDFDB.dotCN.messageusernamewrapper)) {
 										this.addBadges(node, "chat", BDFDB.getDiscordMode() == "compact");
 									}
 								}
@@ -244,8 +244,7 @@ class BadgesEverywhere {
 	
 	addBadges (wrapper, type, compact, settings = BDFDB.getAllData(this, "settings")) {
 		if (!wrapper) return;
-		
-		let user = compact ? BDFDB.getKeyInformation({"node":$(BDFDB.dotCN.messagegroup).has(wrapper)[0],"key":"message"}).author : BDFDB.getKeyInformation({"node":wrapper,"key":"user"});
+		let user = compact ? BDFDB.getKeyInformation({"node":wrapper.classList.contains(BDFDB.disCN.messagegroup) ? wrapper : $(BDFDB.dotCN.messagegroup).has(wrapper)[0],"key":"message"}).author : BDFDB.getKeyInformation({"node":wrapper,"key":"user"});
 		if (user && !user.bot) {
 			if (!this.requestedusers[user.id]) {
 				this.requestedusers[user.id] = [[wrapper,type]]

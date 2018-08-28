@@ -176,7 +176,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "2.3.7";}
+	getVersion () {return "2.3.8";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -743,8 +743,7 @@ class EditUsers {
 		let {avatar, username, wrapper} = this.getAvatarNameWrapper(div);
 		if (!avatar && !username && !wrapper) return;
 		
-		$(div).data("compact", compact);
-		var info = this.getUserInfo(compact ? $(BDFDB.dotCN.messagegroup).has(div)[0] : div);
+		var info = this.getUserInfo(compact && !div.classList.contains(BDFDB.disCN.messagegroup) ? $(BDFDB.dotCN.messagegroup).has(div)[0] : div);
 		if (!info) return;
 		
 		var data = BDFDB.loadData(info.id, this, "users");
@@ -763,7 +762,6 @@ class EditUsers {
 					markup.style.color = settingsCookie["bda-gs-7"] && settingsCookie["bda-gs-7"] == true ? color1 : "";
 				}
 			}
-			
 			if (avatar && (data.removeIcon || data.url)) {
 				avatar.style.background = data.removeIcon ? "" : "url(" + data.url + ")";
 				avatar.style.backgroundSize = "cover";
@@ -807,6 +805,7 @@ class EditUsers {
 	}
 	
 	resetAllUsers () {
+		var compact = BDFDB.getDiscordMode() == "compact";
 		document.querySelectorAll(".user-tag").forEach(node=>{node.remove();});
 		document.querySelectorAll("[custom-editusers]").forEach((div) => {
 			var {avatar, username, wrapper} = this.getAvatarNameWrapper(div);
@@ -814,7 +813,7 @@ class EditUsers {
 			
 			if (avatar) avatar.style.backgroundImage = "url()";
 			
-			var info = this.getUserInfo($(div).data("compact") ? $(BDFDB.dotCN.messagegroup).has(div)[0] : div);
+			var info = this.getUserInfo(compact && !div.classList.contains(BDFDB.disCN.messagegroup) ? $(BDFDB.dotCN.messagegroup).has(div)[0] : div);
 			if (!info) return;
 			
 			if (username) {
@@ -873,6 +872,7 @@ class EditUsers {
 	}
 	
 	getUserInfo (div) {
+		if (!div) return null;
 		let info, avatar = div.querySelector("[style*='/avatars/']");
 		if (avatar) info = this.UserStore.getUser(avatar.style.backgroundImage.split("/avatars/")[1].split("/")[0]);
 		else {
