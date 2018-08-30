@@ -176,7 +176,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "2.3.8";}
+	getVersion () {return "2.3.9";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -811,7 +811,7 @@ class EditUsers {
 			var {avatar, username, wrapper} = this.getAvatarNameWrapper(div);
 			if (!avatar && !username && !wrapper) return;
 			
-			if (avatar) avatar.style.backgroundImage = "url()";
+			if (avatar) avatar.style.background = "url()";
 			
 			var info = this.getUserInfo(compact && !div.classList.contains(BDFDB.disCN.messagegroup) ? $(BDFDB.dotCN.messagegroup).has(div)[0] : div);
 			if (!info) return;
