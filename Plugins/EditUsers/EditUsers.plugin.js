@@ -800,7 +800,7 @@ class EditUsers {
 					});
 			}
 			
-			$(div).attr("custom-editusers", true);
+			div.setAttribute("custom-editusers", info.id);
 		}
 	}
 	
@@ -810,8 +810,6 @@ class EditUsers {
 		document.querySelectorAll("[custom-editusers]").forEach((div) => {
 			var {avatar, username, wrapper} = this.getAvatarNameWrapper(div);
 			if (!avatar && !username && !wrapper) return;
-			
-			if (avatar) avatar.style.background = "url()";
 			
 			var info = this.getUserInfo(compact && !div.classList.contains(BDFDB.disCN.messagegroup) ? $(BDFDB.dotCN.messagegroup).has(div)[0] : div);
 			if (!info) return;
@@ -873,21 +871,24 @@ class EditUsers {
 	
 	getUserInfo (div) {
 		if (!div) return null;
-		let info, avatar = div.querySelector("[style*='/avatars/']");
-		if (avatar) info = this.UserStore.getUser(avatar.style.backgroundImage.split("/avatars/")[1].split("/")[0]);
-		else {
-			info = BDFDB.getKeyInformation({"node":div,"key":"user"});
-			if (!info) {
-				info = this.UserStore.getUser(BDFDB.getKeyInformation({"node":div,"key":"id","up":true}));  
+		let info = this.UserStore.getUser(div.getAttribute("custom-editusers"));
+		if (!info) {
+			let avatar = div.querySelector("[style*='/avatars/']");
+			if (avatar) info = this.UserStore.getUser(avatar.style.backgroundImage.split("/avatars/")[1].split("/")[0]);
+			else {
+				info = BDFDB.getKeyInformation({"node":div,"key":"user"});
 				if (!info) {
-					info = BDFDB.getKeyInformation({"node":div,"key":"message"});
-					if (info) info = info.author;
-					else {
-						info = BDFDB.getKeyInformation({"node":div,"key":"channel"});
-						if (info) info = {"id":info.recipients[0]};
+					info = this.UserStore.getUser(BDFDB.getKeyInformation({"node":div,"key":"id","up":true}));  
+					if (!info) {
+						info = BDFDB.getKeyInformation({"node":div,"key":"message"});
+						if (info) info = info.author;
 						else {
-							info = BDFDB.getKeyInformation({"node":$(BDFDB.dotCN.messagegroup).has(div)[0],"key":"message"});
-							if (info) info = info.author;
+							info = BDFDB.getKeyInformation({"node":div,"key":"channel"});
+							if (info) info = {"id":info.recipients[0]};
+							else {
+								info = BDFDB.getKeyInformation({"node":$(BDFDB.dotCN.messagegroup).has(div)[0],"key":"message"});
+								if (info) info = info.author;
+							}
 						}
 					}
 				}
