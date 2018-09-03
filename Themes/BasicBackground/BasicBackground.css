@@ -1046,6 +1046,9 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .popout-3sVMXz[style*="translateX(-100%)"] > * {
 	right: 100% !important;
 }
+.popout-3sVMXz[style*="translateX(-5"] > .container-3cGP6G {
+	right: 50% !important;
+}
 .popout-3sVMXz.popout-googletranslate[style*="translateY(-100%)"] > * {
 	position: relative !important;
 	bottom: 422px !important;
@@ -2647,6 +2650,17 @@ html, span:not(.spinner-item) {
 }
 #pubslayer input:focus {
 	border-color: rgb(var(--vaccentcolor)) !important;
+}
+
+/* group dm name change */
+.input-autosize-input {
+	box-sizing: border-box !important;
+	border-radius: 3px !important;
+	transition: background-color .15s ease,border .15s ease !important;
+}
+.input-autosize-input:focus {
+	background: rgba(var(--vtransparencycolor),var(--vtransparencyalpha)) !important;
+	border: 1px solid rgb(var(--vaccentcolor)) !important;
 }
 
 /* fix help modal */ 
