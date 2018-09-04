@@ -214,8 +214,8 @@ class ThemeRepo {
 		
 		this.css = `
 			.discordPreview {
-				width:100vw !important;
-				height:100vh !important;
+				width: 100vw !important;
+				height: 100vh !important;
 				position: absolute !important;
 				z-index: 3400 !important;
 			}
@@ -332,8 +332,7 @@ class ThemeRepo {
 
 	start () {
 		var libraryScript = null;
-		if (typeof BDFDB !== "object" || BDFDB.isLibraryOutdated()) {
-			if (typeof BDFDB === "object") BDFDB = "";
+		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
 			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
@@ -342,7 +341,7 @@ class ThemeRepo {
 			document.head.appendChild(libraryScript);
 		}
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object") this.initialize();
+		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
 		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
@@ -824,16 +823,25 @@ class ThemeRepo {
 							e.delegateTarget.querySelector(BDFDB.dotCN.noticedismiss).click();
 						});
 					}
+					if (BDFDB.myData.id == "278543574059057154") {
+						let wrongUrls = [];
+						for (let url of this.foundThemes) if (url && !this.loadedThemes[url]) wrongUrls.push(url);
+						if (wrongUrls.length > 0) {
+							console.log(wrongUrls);
+							BDFDB.showToast(`ThemeRepo: ${wrongUrls.length} Themes${wrongUrls.length > 1 ? "s" : ""} could not be loaded.`, {type:"error"});
+						}
+					}
 				});
 			}
 		});
-		
+		 
 		getThemeInfo = (callback) => {
 			if (i >= this.foundThemes.length) {
 				callback();
 				return;
 			}
 			let url = this.foundThemes[i].replace(new RegExp("[\\r|\\n|\\t]", "g"), "");
+			this.foundThemes[i] = url;
 			request(url, (error, response, body) => {
 				if (response) {
 					let theme = {};
