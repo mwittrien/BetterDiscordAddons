@@ -176,7 +176,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "2.3.9";}
+	getVersion () {return "2.4.0";}
 
 	getAuthor () {return "DevilBro";}
 	
