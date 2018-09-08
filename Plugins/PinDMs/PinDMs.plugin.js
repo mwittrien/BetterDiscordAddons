@@ -38,7 +38,7 @@ class PinDMs {
 
 	getDescription () {return "Allows you to pin DMs, making them appear at the top of your DM-list.";}
 
-	getVersion () {return "1.0.9";}
+	getVersion () {return "1.1.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -92,7 +92,7 @@ class PinDMs {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.classList && node.classList.contains("btn-friends")) {
+								if (node && node.tagName && node.querySelector(`a[href="/channels/@me"]`)) {
 									$(BDFDB.dotCN.dmchannel + BDFDB.dotCN.dmchannelprivate + ".pinned, header.pinneddms-header").remove();
 									this.addAllPinnedDMs();
 								}
@@ -177,8 +177,8 @@ class PinDMs {
 	}
 	
 	addPinnedDM (id, pos) {
-		if (!document.querySelector(BDFDB.dotCN.dmchannel + BDFDB.dotCN.friendsbutton + " + header.pinneddms-header")) {
-			$(this.pinDMsHeaderMarkup).insertBefore(BDFDB.dotCN.dmchannel + BDFDB.dotCN.friendsbutton + " + header");
+		if (!document.querySelector(BDFDB.dotCN.dmchannel + " + header.pinneddms-header")) {
+			$(this.pinDMsHeaderMarkup).insertBefore(BDFDB.dotCN.dmchannel + " + header");
 			this.startUpdateInterval();
 		}
 		let user = this.UserStore.getUser(id);
@@ -186,7 +186,7 @@ class PinDMs {
 		if (user || channel) {
 			let DMid = user ? this.ChannelStore.getDMFromUserId(user.id) : channel.id;
 			let pinnedDM = $(this.pinnedDMMarkup);
-			pinnedDM.attr("user-id", user ? user.id : null).attr("channel-id", DMid).insertAfter(BDFDB.dotCN.dmchannel + BDFDB.dotCN.friendsbutton + " + header.pinneddms-header")
+			pinnedDM.attr("user-id", user ? user.id : null).attr("channel-id", DMid).insertAfter(BDFDB.dotCN.dmchannel + " + header.pinneddms-header")
 				.on("contextmenu." + this.getName(), (e) => {
 					if (user && DMid) this.UserContextMenuUtils.openUserContextMenu(e, user, this.ChannelStore.getChannel(DMid));
 					else {
@@ -252,7 +252,7 @@ class PinDMs {
 		clearInterval(this.statusInterval);
 		this.statusInterval = setInterval(() => {
 			for (let pinnedDM of document.querySelectorAll(BDFDB.dotCN.dmchannel + BDFDB.dotCN.dmchannelprivate + ".pinned")) this.setPinnedDM(pinnedDM);
-			if (!document.querySelector(BDFDB.dotCN.dmchannel + BDFDB.dotCN.friendsbutton + " + header.pinneddms-header")) clearInterval(this.statusInterval); 
+			if (!document.querySelector(BDFDB.dotCN.dmchannel + " + header.pinneddms-header")) clearInterval(this.statusInterval); 
 		},10000);
 	}
 	
@@ -281,10 +281,10 @@ class PinDMs {
 	updatePinnedDMPositions () {
 		let pinnedDMs = BDFDB.loadAllData(this, "pinnedDMs");
 		let pinnedDMEles = document.querySelectorAll(BDFDB.dotCN.dmchannel + BDFDB.dotCN.dmchannelprivate + ".pinned");
-		for (let i = 0; i < pinnedDMEles.length; i++) {
-			pinnedDMs[pinnedDMEles[i].id] = i;
+		for (let i = 0; i < pinnedDMEles.length; i++) { 
+			pinnedDMs[pinnedDMEles[i].id] = i; 
 		}
-		if (pinnedDMEles.length == 0) $(BDFDB.dotCN.dmchannel + BDFDB.dotCN.friendsbutton + " + header.pinneddms-header").remove();
+		if (pinnedDMEles.length == 0) $(BDFDB.dotCN.dmchannel + " + header.pinneddms-header").remove();
 		BDFDB.saveAllData(pinnedDMs, this, "pinnedDMs")
 	}
 	
