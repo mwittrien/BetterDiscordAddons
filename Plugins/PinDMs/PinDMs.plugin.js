@@ -38,7 +38,7 @@ class PinDMs {
 
 	getDescription () {return "Allows you to pin DMs, making them appear at the top of your DM-list.";}
 
-	getVersion () {return "1.1.0";}
+	getVersion () {return "1.1.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -178,7 +178,7 @@ class PinDMs {
 	
 	addPinnedDM (id, pos) {
 		if (!document.querySelector(BDFDB.dotCN.dmchannel + " + header.pinneddms-header")) {
-			$(this.pinDMsHeaderMarkup).insertBefore(BDFDB.dotCN.dmchannel + " + header");
+			$(this.pinDMsHeaderMarkup).insertBefore(document.querySelector(BDFDB.dotCN.dmchannel + " + header"));
 			this.startUpdateInterval();
 		}
 		let user = this.UserStore.getUser(id);
