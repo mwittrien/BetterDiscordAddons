@@ -2950,23 +2950,7 @@ html, span:not(.spinner-item) {
 	background-color: rgb(var(--vaccentcolor)) !important
 }
 
-/* membercount */
-#memberCount {
-	height: 16px !important;
-	display: flex !important;
-	align-items: center !important;
-	justify-content: center !important;
-	padding: 0 !important;
-	position: absolute !important;
-	color: hsla(0,0%,100%,.8) !important;
-	background: rgba(var(--vtransparencycolor), var(--vmemberlistransparency)) !important;
-}
-
 /* dateviewer */
-
-#memberCount ~ #dv-mount {
-	height: 80px !important;
-}
 #dv-mount {
 	background: rgba(var(--vtransparencycolor), var(--vmemberlistransparency)) !important;
 }
