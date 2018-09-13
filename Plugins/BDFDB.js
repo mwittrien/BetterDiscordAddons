@@ -3111,7 +3111,7 @@ BDFDB.DiscordClasses = {
 	dmchannelactivityiconforeground: "activityIconForeground-3VIgI8",
 	dmchannelactivitytext: "activityText-OW8WYb",
 	dmchannelclose: "close-3hZ5Ni",
-	dmchannelname: "name-2WpE7M",,
+	dmchannelname: "name-2WpE7M",
 	dmchannelprivate: "private",
 	dmchannels: "privateChannels-1nO12o",
 	downloadlink: "downloadLink-1ywL9o",
