@@ -41,7 +41,6 @@ https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Theme
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Theme_Group_2/Yoshi.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Theme_Group_2/Yumeko.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Theme_Group_3/BrownMaterial.theme.css
-https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Theme_Group_3/History.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Theme_Group_3/NGNL.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Theme_Group_4/TouhouLibrary.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Theme_Group_4/Twitch.theme.css
