@@ -124,7 +124,7 @@ class EditServers {
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	getVersion () {return "1.8.3";} 
+	getVersion () {return "1.8.4";} 
 
 	getAuthor () {return "DevilBro";}
 	
@@ -435,6 +435,8 @@ class EditServers {
 			.removeAttr("custom-editservers")
 			.find(BDFDB.dotCN.avataricon)
 				.text(serverObj.icon ? "" : serverObj.data.acronym)
+				.toggleClass(BDFDB.disCN.avatarnoicon, !serverObj.icon)
+				.css("font-size", !serverObj.icon ? "10px" : "")
 				.css("background-image", serverObj.icon ? "url('https://cdn.discordapp.com/icons/" + serverObj.id + "/" + serverObj.icon + ".png')" : "")
 				.css("background-color", "")
 				.css("color", "");
@@ -445,9 +447,9 @@ class EditServers {
 		var data = BDFDB.loadData(serverObj.id, this, "servers");
 		if (data) {
 			var name = data.name ? data.name : serverObj.name;
-			var shortName = data.shortName ? data.shortName : (serverObj.icon ? "" : serverObj.data.acronym);
-			var bgImage = data.url ? "url(" + data.url + ")" : (serverObj.icon ? "url('https://cdn.discordapp.com/icons/" + serverObj.id + "/" + serverObj.icon + ".png')" : "");
+			var bgImage = data.url ? ("url(" + data.url + ")") : (serverObj.icon ? "url('https://cdn.discordapp.com/icons/" + serverObj.id + "/" + serverObj.icon + ".png')" : "");
 			var removeIcon = data.removeIcon;
+			var shortName = data.shortName ? data.shortName : (serverObj.icon && !removeIcon ? "" : serverObj.data.acronym);
 			var color1 = data.color1 ? BDFDB.color2RGB(data.color1) : "";
 			var color2 = data.color2 ? BDFDB.color2RGB(data.color2) : "";
 			$(serverObj.div)
@@ -455,11 +457,13 @@ class EditServers {
 				.on("mouseenter." + this.getName(), () => {this.createServerToolTip(serverObj);})
 				.attr("custom-editservers", true)
 				.find(BDFDB.dotCN.avataricon)
-					.text(data.shortName ? shortName : (removeIcon ? "" : shortName))
+					.text(bgImage && !removeIcon ? "" : shortName)
+					.toggleClass(BDFDB.disCN.avatarnoicon, removeIcon || bgImage)
+					.css("font-size", removeIcon || bgImage ? "10px" : "")
 					.css("background-image", removeIcon ? "" : bgImage)
 					.css("background-color", color1)
 					.css("color", color2);
-		}
+		} 
 	}
 	
 	loadAllServers () {
