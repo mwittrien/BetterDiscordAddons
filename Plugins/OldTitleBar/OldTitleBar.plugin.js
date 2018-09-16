@@ -9,12 +9,14 @@ class OldTitleBar {
 				display: none;
 			}
 			
-			${BDFDB.dotCN.titlebar}.hidden-by-OTB + ${BDFDB.dotCN.app} .splashBackground-1FRCko:before {
+			${BDFDB.dotCN.titlebar}.hidden-by-OTB + ${BDFDB.dotCNS.app + BDFDB.dotCN.splashbackground}:before {
 				display: none;
 			}
 			
 			${BDFDB.dotCN.channelheadertitletext},
 			${BDFDB.dotCN.channelheadertopic},
+			${BDFDB.dotCN.libraryfilter},
+			${BDFDB.dotCN.libraryfilter} *,
 			${BDFDB.dotCN.contextmenu} * {
 				-webkit-app-region: no-drag;
 			}
@@ -87,7 +89,7 @@ class OldTitleBar {
 
 	getDescription () {return "Reverts the title bar back to its former self.";}
 
-	getVersion () {return "1.4.0";}
+	getVersion () {return "1.4.1";}
 
 	getAuthor () {return "DevilBro";}
 

@@ -155,6 +155,7 @@
 .search-results-wrap .search-result-message.hit,
 .embed-IeVjo6,
 .personalizationNotice-2HTAH2,
+.rowWrapperActive-2L7i9f,
 .emptyState-2-sT0o,
 .btn-11C5_u,
 .wrapper-35wsBm,
@@ -477,6 +478,8 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .friend-table-add-header,
 .tab-content > .ui-standard-sidebar-view,
 .activityFeed-28jde9,
+.gameLibrary-TTDw4Y,
+.applicationStore-1pNvnv,
 .chat-3bRxxu,
 .chat-3bRxxu .content-yTz4x3,
 .chat-3bRxxu form,
@@ -1214,6 +1217,31 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
     background-attachment: fixed;
 }
 
+.header-39GIC8 {
+	background: transparent !important;
+}
+.header-39GIC8 > * {
+	position: relative !important;
+}
+.header-39GIC8:after,
+.header-39GIC8:before {
+	content: "";
+	position: absolute;
+	z-index: -1;
+	pointer-events: none;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+}
+.header-39GIC8:after {
+	background: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 3));
+}
+.header-39GIC8:before {
+	background: var(--vbackground) center/cover;
+    background-attachment: fixed;
+}
+
 .uploadDropModal-2kTwbc {
 	border-radius: 5px !important;
 }
@@ -1655,6 +1683,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	background: rgb(var(--vaccentcolor)) !important;
 }
 
+.contextMenu-HLZMGh > .item-1Yvehc,
 .itemGroup-1tL0uz {
 	background-color: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 2)) !important;
 }
