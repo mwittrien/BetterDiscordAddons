@@ -160,6 +160,7 @@
 .btn-11C5_u,
 .wrapper-35wsBm,
 .wrapper-2TxpI8,
+.tiles-2aXG_k,
 .inviteRow-2L02ae:hover,
 .audioControls-2HsaU6,
 .invite-18yqGF,
@@ -608,6 +609,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .checked-3_4uQ9[style*="background-color: rgb(114, 137, 218)"],
 .barFill-23-gu-:not(.fill),
 .progressBar-3u8FBM,
+.selectorButtonSelected-1j4DmC,
 .mediaBarGrabber-1FqnbN, 
 .mediaBarProgress-1xaPtl, 
 .mediaBarProgress-1xaPtl:after, 
@@ -912,6 +914,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .item-26Dhrx[style*="rgb(114, 137, 218)"] .checked-3_4uQ9 polyline {
 	stroke: rgb(var(--vaccentcolor)) !important;
 }
+.selectorNitroText-3ZFWAe + svg path,
 .container-3nXdBP polyline[style*="fill: slategray"] {
 	fill: rgb(var(--vaccentcolor)) !important;
 }
