@@ -176,7 +176,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "2.4.0";}
+	getVersion () {return "2.4.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -265,7 +265,7 @@ class EditUsers {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node.tagName && node.classList && node.classList.length > 0 && node.classList.contains(BDFDB.disCN.dmchannel) && node.classList.contains(BDFDB.disCN.dmchannelprivate) && BDFDB.getData("changeInDmsList", this, "settings")) {
+								if (node.tagName && node.classList && node.classList.length > 0 && node.classList.contains(BDFDB.disCN.dmchannel) && BDFDB.getData("changeInDmsList", this, "settings")) {
 									this.loadUser(node, "dms", false);
 								}
 								if (node.tagName && node.querySelector(BDFDB.dotCN.voiceuserdefault) && BDFDB.getData("changeInVoiceChat", this, "settings")) {
@@ -701,7 +701,7 @@ class EditUsers {
 			}
 		}
 		if (settings.changeInDmsList) {
-			for (let user of document.querySelectorAll(BDFDB.dotCN.dmchannel + BDFDB.dotCN.dmchannelprivate)) {
+			for (let user of document.querySelectorAll(BDFDB.dotCN.dmchannel)) {
 				this.loadUser(user, "dms", false);
 			}
 		}

@@ -121,7 +121,6 @@
 .ui-tab-bar-item:hover,
 .friends-row:hover,
 .channel-2QD9_O:hover a,
-.channel:hover a,
 .member-3W1lQa:hover .content-OzHfo4,
 .member-3W1lQa.popout-open .content-OzHfo4,
 .input-3yHnCz,
@@ -394,7 +393,6 @@ input:disabled {
 .changeDetails-bk98pu,
 .member-3W1lQa .content-OzHfo4,
 .channel-2QD9_O,
-.channel, 
 .wrapperHoveredCollapsed-1PADEo,
 .wrapperHovered-28fu1D,
 .userHovered-2_fT4Z {
@@ -565,7 +563,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 
 /* ----------------------- COLORING ----------------------- */
 
-:not(.guild-1EfMGQ):not(.guildInner-3DSoA4):not(.channel):not(.instructions-2Du9gG) > a:not(.textLink-3aPthL):not(.bodyLink-3A8Buv):not(.search-bar-tag):not(.channel-SEolQq):not(.downloadLink-2oSgiF):not(.embedAuthorName-3mnTWj):not([style]),
+:not(.guild-1EfMGQ):not(.guildInner-3DSoA4):not(.instructions-2Du9gG) > a:not(.textLink-3aPthL):not(.bodyLink-3A8Buv):not(.search-bar-tag):not(.channel-SEolQq):not(.downloadLink-2oSgiF):not(.embedAuthorName-3mnTWj):not([style]),
 .filenameLinkWrapper-1-14c5,
 .tab.selected,
 .h1-1IDj26,
@@ -615,7 +613,6 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .bda-settings-button,
 .ui-tab-bar-item.selected,
 .channel-2QD9_O.selected-1HYmZZ a,
-.channel.selected a,
 .content-20Aix8:active,
 .wrapperSelectedVoice-xzxa2u .content-20Aix8,
 .wrapperSelectedText-3dSUjC .content-20Aix8,
@@ -801,8 +798,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .searchBar-1MOL6S .input-3Xdcic:focus {
 	border-color: rgb(var(--vaccentcolor)) !important;
 }
-.privateChannels-1nO12o .search-bar .search-bar-inner input,
-.private-channels .search-bar .search-bar-inner input {
+.privateChannels-1nO12o .search-bar .search-bar-inner input {
 	margin-right: 0px !important;
 	border: none !important;
 }
@@ -836,7 +832,6 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	transition: background 500ms ease !important;
 }
 
-.private-channels .channel .close:not(:hover),
 .privateChannels-1nO12o .channel-2QD9_O .close-3hZ5Ni:not(:hover) {
 	opacity: 0.2 !important;
 }
@@ -1134,7 +1129,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .contextMenu-HLZMGh,
 .incomingCall-14zLcL,
 .keyboardShortcutsModal-3piNz7,
-.modal-1UGdnR .inner-1JeGVc > [class]:not(.premiumPaymentModal-3SpIbo):not(.container-3qKHyN):only-child,
+.modal-1UGdnR .inner-1JeGVc > *:not(.premiumPaymentModal-3SpIbo):not(.container-3qKHyN):only-child,
 #permissions-modal,
 .popout-3sVMXz > [class],
 .popout-3sVMXz > [id],
@@ -1158,8 +1153,8 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .incomingCall-14zLcL:before,
 .keyboardShortcutsModal-3piNz7:after,
 .keyboardShortcutsModal-3piNz7:before,
-.modal-1UGdnR .inner-1JeGVc > [class]:not(.premiumPaymentModal-3SpIbo):not(.container-3qKHyN):only-child:after,
-.modal-1UGdnR .inner-1JeGVc > [class]:not(.premiumPaymentModal-3SpIbo):not(.container-3qKHyN):only-child:before,
+.modal-1UGdnR .inner-1JeGVc > *:not(.premiumPaymentModal-3SpIbo):not(.container-3qKHyN):only-child:after,
+.modal-1UGdnR .inner-1JeGVc > *:not(.premiumPaymentModal-3SpIbo):not(.container-3qKHyN):only-child:before,
 #permissions-modal:after,
 #permissions-modal:before,
 .popout-3sVMXz > [class]:after,
@@ -1183,7 +1178,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .contextMenu-HLZMGh:after,
 .incomingCall-14zLcL:after,
 .keyboardShortcutsModal-3piNz7:after,
-.modal-1UGdnR .inner-1JeGVc > [class]:not(.premiumPaymentModal-3SpIbo):not(.container-3qKHyN):only-child:after,
+.modal-1UGdnR .inner-1JeGVc > *:not(.premiumPaymentModal-3SpIbo):not(.container-3qKHyN):only-child:after,
 #permissions-modal:after,
 .popout-3sVMXz > [class]:after,
 .popout-3sVMXz > [id]:after,
@@ -1201,7 +1196,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .contextMenu-HLZMGh:before,
 .incomingCall-14zLcL:before,
 .keyboardShortcutsModal-3piNz7:before,
-.modal-1UGdnR .inner-1JeGVc > [class]:not(.premiumPaymentModal-3SpIbo):not(.container-3qKHyN):only-child:before,
+.modal-1UGdnR .inner-1JeGVc > *:not(.premiumPaymentModal-3SpIbo):not(.container-3qKHyN):only-child:before,
 #permissions-modal:before,
 .popout-3sVMXz > [class]:before,
 .popout-3sVMXz > [id]:before,

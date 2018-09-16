@@ -12,7 +12,7 @@ class PinDMs {
 			`<header class="pinneddms-header">REPLACE_header_pinneddms_text</header>`;
 			
 		this.pinnedDMMarkup =
-			`<div class="${BDFDB.disCNS.dmchannel + BDFDB.disCN.dmchannelprivate} pinned" style="height: 42px; opacity: 1;">
+			`<div class="${BDFDB.disCNS.dmchannel} pinned" style="height: 42px; opacity: 1;">
 				<a>
 					<div class="${BDFDB.disCNS.avatarwrapper + BDFDB.disCNS.avatarsmall + BDFDB.disCNS.forcedarktheme + BDFDB.disCN.avatarsmallold}">
 						<div class="${BDFDB.disCN.avatarsmallold} stop-animation"></div>
@@ -38,7 +38,7 @@ class PinDMs {
 
 	getDescription () {return "Allows you to pin DMs, making them appear at the top of your DM-list.";}
 
-	getVersion () {return "1.1.1";}
+	getVersion () {return "1.1.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -93,7 +93,7 @@ class PinDMs {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (node && node.tagName && node.querySelector(`a[href="/channels/@me"]`)) {
-									$(BDFDB.dotCN.dmchannel + BDFDB.dotCN.dmchannelprivate + ".pinned, header.pinneddms-header").remove();
+									$(BDFDB.dotCN.dmchannel + ".pinned, header.pinneddms-header").remove();
 									this.addAllPinnedDMs();
 								}
 							});
@@ -112,7 +112,7 @@ class PinDMs {
 
 	stop () {
 		if (typeof BDFDB === "object") {
-			$(BDFDB.dotCN.dmchannel + BDFDB.dotCN.dmchannelprivate + ".pinned, header.pinneddms-header").remove();
+			$(BDFDB.dotCN.dmchannel + ".pinned, header.pinneddms-header").remove();
 			
 			clearInterval(this.statusInterval);
 			
@@ -122,7 +122,7 @@ class PinDMs {
 	
 	onSwitch () {
 		if (BDFDB.getSelectedServer()) clearInterval(this.statusInterval);
-		if (!document.querySelector(BDFDB.dotCNS.guildselected + BDFDB.dotCN.friendsicon) || document.querySelector(BDFDB.dotCN.dmchannel + BDFDB.dotCN.dmchannelprivate + ".pinned")) return;
+		if (!document.querySelector(BDFDB.dotCNS.guildselected + BDFDB.dotCN.friendsicon) || document.querySelector(BDFDB.dotCN.dmchannel + ".pinned")) return;
 		
 		this.addAllPinnedDMs();
 		
@@ -251,7 +251,7 @@ class PinDMs {
 	startUpdateInterval () {
 		clearInterval(this.statusInterval);
 		this.statusInterval = setInterval(() => {
-			for (let pinnedDM of document.querySelectorAll(BDFDB.dotCN.dmchannel + BDFDB.dotCN.dmchannelprivate + ".pinned")) this.setPinnedDM(pinnedDM);
+			for (let pinnedDM of document.querySelectorAll(BDFDB.dotCN.dmchannel + ".pinned")) this.setPinnedDM(pinnedDM);
 			if (!document.querySelector(BDFDB.dotCN.dmchannel + " + header.pinneddms-header")) clearInterval(this.statusInterval); 
 		},10000);
 	}
@@ -280,7 +280,7 @@ class PinDMs {
 	
 	updatePinnedDMPositions () {
 		let pinnedDMs = BDFDB.loadAllData(this, "pinnedDMs");
-		let pinnedDMEles = document.querySelectorAll(BDFDB.dotCN.dmchannel + BDFDB.dotCN.dmchannelprivate + ".pinned");
+		let pinnedDMEles = document.querySelectorAll(BDFDB.dotCN.dmchannel + ".pinned");
 		for (let i = 0; i < pinnedDMEles.length; i++) { 
 			pinnedDMs[pinnedDMEles[i].id] = i; 
 		}
