@@ -142,7 +142,7 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.6.0";}
+	getVersion () {return "1.6.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -563,6 +563,25 @@ class PersonalPins {
 						(channel && channel.name ? channel.name : messageData.channelName);
 					message.querySelector(BDFDB.dotCN.messagemarkup).innerHTML = messageData.markup;
 					message.querySelector(BDFDB.dotCN.messageaccessory).innerHTML = messageData.accessory;
+					if (messageData.accessory) {
+						let ytvideo = message.querySelector(BDFDB.dotCN.embed + " iframe[src*='https://www.youtube.com']");
+						if (ytvideo) {
+							let ytlink = ytvideo.parentElement.parentElement.querySelector(BDFDB.dotCN.embedtitle).href;
+							let wrapper = ytvideo.parentElement;
+							ytvideo.remove();
+							require("request")(ytlink, (error, response, result) => {
+								if (result) {
+									wrapper.innerHTML = `<a class="${BDFDB.disCNS.imagewrapper + BDFDB.disCN.imagezoom}" href="" rel="noreferrer noopener" target="_blank" style="width: 400px; height: 225px;"><img alt="" src="${result.split('<link itemprop="thumbnailUrl" href="')[1].split('"')[0]}" style="width: 400px; height: 225px;"></a><div class="${BDFDB.disCNS.embedvideoactions + BDFDB.disCNS.flexcenter + BDFDB.disCNS.flex + BDFDB.disCNS.justifycenter + BDFDB.disCN.aligncenter}"><div class="${BDFDB.disCNS.embedvideoactionsinner + BDFDB.disCNS.flexcenter + BDFDB.disCNS.flex + BDFDB.disCNS.justifycenter + BDFDB.disCN.aligncenter}"><div class="${BDFDB.disCN.iconactionswrapper}"><div tabindex="0" class="${BDFDB.disCNS.iconwrapper + BDFDB.disCN.iconwrapperactive}" role="button"><svg name="Play" class="${BDFDB.disCNS.iconplay + BDFDB.disCN.icon}" width="16" height="16" viewBox="0 0 24 24"><polygon fill="currentColor" points="0 0 0 14 11 7" transform="translate(7 5)"></polygon></svg></div><a class="${BDFDB.disCNS.anchor + BDFDB.disCN.iconwrapper}" href="${ytlink}" rel="noreferrer noopener" target="_blank"><svg name="OpenExternal" class="${BDFDB.disCNS.iconexternalmargins + BDFDB.disCN.icon}" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" transform="translate(3.000000, 4.000000)" d="M16 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4v-2H2V4h14v10h-4v2h4c1.1 0 2-.9 2-2V2a2 2 0 0 0-2-2zM9 6l-4 4h3v6h2v-6h3L9 6z"></path></svg></a></div></div></div></div>`;
+									$(wrapper).on("click." + this.getName(), BDFDB.dotCN.iconplay, (e) => {
+										while (wrapper.firstChild) wrapper.firstChild.remove();
+										let width = 400;
+										let height = Math.round(width*(result.split('<meta itemprop="height" content="')[1].split('"')[0]/result.split('<meta itemprop="width" content="')[1].split('"')[0])); 
+										$(`<iframe src="${result.split('<link itemprop="embedURL" href="')[1].split('"')[0]}?start=0&amp;autoplay=1&amp;auto_play=1" width="${width}" height="${height}" frameborder="0" allowfullscreen=""></iframe>`).appendTo(wrapper);
+									});
+								}
+							});
+						}
+					}
 					$(message).on("click." + this.getName(), BDFDB.dotCN.messagespopoutclosebutton, (e) => {
 						message.remove();
 						delete pins[messageData.serverID][messageData.channelID][messageData.id + "_" + messageData.pos];
