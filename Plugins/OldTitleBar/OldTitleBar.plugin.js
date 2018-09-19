@@ -15,6 +15,7 @@ class OldTitleBar {
 			
 			${BDFDB.dotCN.channelheadertitletext},
 			${BDFDB.dotCN.channelheadertopic},
+			${BDFDB.dotCN.channelheadersection},
 			${BDFDB.dotCN.libraryfilter},
 			${BDFDB.dotCN.libraryfilter} *,
 			${BDFDB.dotCN.contextmenu} * {
@@ -89,7 +90,7 @@ class OldTitleBar {
 
 	getDescription () {return "Reverts the title bar back to its former self.";}
 
-	getVersion () {return "1.4.1";}
+	getVersion () {return "1.4.2";}
 
 	getAuthor () {return "DevilBro";}
 
