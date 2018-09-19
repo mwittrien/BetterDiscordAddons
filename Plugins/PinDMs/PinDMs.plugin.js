@@ -38,7 +38,7 @@ class PinDMs {
 
 	getDescription () {return "Allows you to pin DMs, making them appear at the top of your DM-list.";}
 
-	getVersion () {return "1.1.2";}
+	getVersion () {return "1.1.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -65,7 +65,7 @@ class PinDMs {
 			BDFDB.loadMessage(this);
 			
 			this.UserStore = BDFDB.WebModules.findByProperties(["getUsers", "getUser"]);
-			this.ActivityStore = BDFDB.WebModules.findByProperties(["getStatuses", "getActivities"]);
+			this.ActivityModule = BDFDB.WebModules.findByProperties(["getActivity","getStatuses"]) || BDFDB.WebModules.findByProperties(["getApplicationActivity","getStatus"]);
 			this.ChannelStore = BDFDB.WebModules.findByProperties(["getDMFromUserId"]);
 			this.ChannelSwitchUtils = BDFDB.WebModules.findByProperties(["selectPrivateChannel"]);
 			this.UserContextMenuUtils = BDFDB.WebModules.findByProperties(["openUserContextMenu"]);
@@ -216,7 +216,7 @@ class PinDMs {
 			let user = this.UserStore.getUser(id);
 			if (user) {
 				let data = BDFDB.loadData(user.id, "EditUsers", "users") || {};
-				let activity = this.ActivityStore.getActivity(user.id);
+				let activity = this.ActivityModule.getActivity ? this.ActivityModule.getActivity(id) : this.ActivityModule.getApplicationActivity(id);
 				pinnedDM.querySelector(BDFDB.dotCN.avatarsmallold + ":not(" + BDFDB.dotCN.avatarwrapper + ")").style.backgroundImage = `url(${data.removeIcon ? "" : (data.url ? data.url : BDFDB.getUserAvatar(user.id))})`; 
 				pinnedDM.querySelector(BDFDB.dotCN.status).classList.add(BDFDB.disCN[`status${BDFDB.getUserStatus(user.id)}`]);
 				pinnedDM.querySelector(BDFDB.dotCN.dmchannelname + " > label").textContent = data.name ? data.name : user.username;

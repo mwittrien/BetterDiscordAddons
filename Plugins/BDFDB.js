@@ -1322,9 +1322,9 @@ var pulling = setInterval(() => {
 
 BDFDB.getUserStatus = function (id = BDFDB.myData.id) {
 	id = typeof id == "number" ? id.toFixed() : id;
-	var ActivityModule = BDFDB.WebModules.findByProperties(["getActivity","getStatuses"]);
+	var ActivityModule = BDFDB.WebModules.findByProperties(["getActivity","getStatuses"]) || BDFDB.WebModules.findByProperties(["getApplicationActivity","getStatus"]);
 	var StreamModule = BDFDB.WebModules.findByProperties(["isStreaming"]);
-	return StreamModule.isStreaming(ActivityModule.getActivity(id)) ? "streaming" : ActivityModule.getStatus(id);
+	return StreamModule.isStreaming(ActivityModule.getActivity ? ActivityModule.getActivity(id) : ActivityModule.getApplicationActivity(id)) ? "streaming" : ActivityModule.getStatus(id);
 };
 
 BDFDB.getUserAvatar = function (id = BDFDB.myData.id) {
