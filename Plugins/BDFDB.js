@@ -564,21 +564,25 @@ BDFDB.getDiscordFolder = function () {
 };
 
 BDFDB.getPluginsFolder = function () {
-	let process = require("process");
-	let path = require("path");
-	switch (process.platform) {
-		case "win32":
-		return path.resolve(process.env.appdata, "BetterDiscord/plugins/");
-		case "darwin":
-		return path.resolve(process.env.HOME, "Library/Preferences/", "BetterDiscord/plugins/");
-		default:
-		return path.resolve(process.env.HOME, ".config/", "BetterDiscord/plugins/");
-	}
+    let process = require("process");
+    let path = require("path");
+    let fs = require("fs");
+    switch (process.platform) {
+        case "win32":
+        return path.resolve(process.env.appdata, "BetterDiscord/plugins/");
+        case "darwin":
+        return path.resolve(process.env.HOME, "Library/Preferences/", "BetterDiscord/plugins/");
+        default:
+			let flatpak_path = path.resolve(process.env.HOME, ".var/app/com.discordapp.Discord/config", "BetterDiscord/plugins/");
+			if (fs.existsSync(flatpak_path)) return flatpak_path;
+			else return path.resolve(process.env.HOME, ".config/", "BetterDiscord/plugins/");
+    }
 };
 
 BDFDB.getThemesFolder = function () {
 	let process = require("process");
 	let path = require("path");
+    let fs = require("fs");
 	switch (process.platform) {
 		case "win32":
 		return path.resolve(process.env.appdata, "BetterDiscord/themes/");
@@ -586,6 +590,10 @@ BDFDB.getThemesFolder = function () {
 		return path.resolve(process.env.HOME, "Library/Preferences/", "BetterDiscord/themes/");
 		default:
 		return path.resolve(process.env.HOME, ".config/", "BetterDiscord/themes/");
+        default:
+			let flatpak_path = path.resolve(process.env.HOME, ".var/app/com.discordapp.Discord/config", "BetterDiscord/themes/");
+			if (fs.existsSync(flatpak_path)) return flatpak_path;
+			else return path.resolve(process.env.HOME, ".config/", "BetterDiscord/themes/");
 	}
 };
 
