@@ -3030,6 +3030,7 @@ BDFDB.DiscordClasses = {
 	channelheadericonmargin: "iconMargin-2YXk4F",
 	channelheaderprivate: "private-26pLvW",
 	channelheadersearch: "search-l1Wz-Q",
+	channelheadersection: "headerSection-3WgbOE",
 	channelheadertitle: "title-3qD0b-",
 	channelheadertitlecall: "titleCall-_b9o8P",
 	channelheadertitletext: "titleText-3X-zRE",
