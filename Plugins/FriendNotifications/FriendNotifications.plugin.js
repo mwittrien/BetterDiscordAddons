@@ -115,7 +115,7 @@ class FriendNotifications {
 
 	getDescription () {return "Notifies you when a friend either logs in or out. Click the Online Friend-Counter to display a timelog of the current session.";}
 
-	getVersion () {return "1.1.0";}
+	getVersion () {return "1.1.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -224,7 +224,7 @@ class FriendNotifications {
 			this.FriendUtils = BDFDB.WebModules.findByProperties(["getFriendIDs", "getRelationships"]);
 			this.ChannelUtils = BDFDB.WebModules.findByProperties(["getDMFromUserId"]);
 			this.ChannelSwitchUtils = BDFDB.WebModules.findByProperties(["selectPrivateChannel"]);
-			this.UserMetaStore = BDFDB.WebModules.findByProperties(["getStatuses", "getOnlineFriendCount"]);
+			this.UserMetaStore = BDFDB.WebModules.findByProperties(["getStatus", "getOnlineFriendCount"]);
 			this.UserUtils = BDFDB.WebModules.findByProperties(["getUsers"]);
 			
 			var observer = null;

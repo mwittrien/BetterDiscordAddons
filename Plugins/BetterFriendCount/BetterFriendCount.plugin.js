@@ -19,7 +19,7 @@ class BetterFriendCount {
 
 	getDescription () {return "Shows the amount of total and online friends and blocked users in the friends tab.";}
 
-	getVersion () {return "1.0.6";}
+	getVersion () {return "1.0.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -79,7 +79,7 @@ class BetterFriendCount {
 			BDFDB.addObserver(this, BDFDB.dotCN.friendsonline, {name:"friendCountObserver",instance:observer}, {childList:true, subtree:true, characterData:true});
 			
 			this.FriendUtils = BDFDB.WebModules.findByProperties(["getFriendIDs", "getRelationships"]);
-			this.UserMetaStore = BDFDB.WebModules.findByProperties(["getStatuses", "getOnlineFriendCount"]);
+			this.UserMetaStore = BDFDB.WebModules.findByProperties(["getStatus", "getOnlineFriendCount"]);
 			var RelationshipTypes = BDFDB.WebModules.findByProperties(["RelationshipTypes"]).RelationshipTypes;
 			for (let type in RelationshipTypes) {
 				this.relationshipTypes[RelationshipTypes[type]] = type;

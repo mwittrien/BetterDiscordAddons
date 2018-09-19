@@ -127,7 +127,7 @@ class StalkerNotifications {
 
 	getDescription () {return "Lets you observe the status of people that aren't your friends.";}
 
-	getVersion () {return "1.0.4";}
+	getVersion () {return "1.0.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -275,7 +275,7 @@ class StalkerNotifications {
 			
 			this.ChannelUtils = BDFDB.WebModules.findByProperties(["getDMFromUserId"]);
 			this.ChannelSwitchUtils = BDFDB.WebModules.findByProperties(["selectPrivateChannel"]);
-			this.UserMetaStore = BDFDB.WebModules.findByProperties(["getStatuses", "getOnlineFriendCount"]);
+			this.UserMetaStore = BDFDB.WebModules.findByProperties(["getStatus", "getOnlineFriendCount"]);
 			this.UserUtils = BDFDB.WebModules.findByProperties(["getUsers"]);
 			
 			for (let id in BDFDB.loadAllData(this, "users")) {
