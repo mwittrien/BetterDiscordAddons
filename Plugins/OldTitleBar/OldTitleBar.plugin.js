@@ -16,6 +16,7 @@ class OldTitleBar {
 			${BDFDB.dotCN.channelheadertitletext},
 			${BDFDB.dotCN.channelheadertopic},
 			${BDFDB.dotCN.channelheadersection},
+			${BDFDB.dotCN.channelheadersection2},
 			${BDFDB.dotCN.libraryfilter},
 			${BDFDB.dotCN.libraryfilter} *,
 			${BDFDB.dotCN.contextmenu} * {
