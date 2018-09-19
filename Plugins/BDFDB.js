@@ -3775,7 +3775,7 @@ BDFDB.appendLocalStyle("BDFDB", `
 	.toast {
 		animation: toast-up 300ms ease;
 		transform: translateY(-10px);
-		background: #36393F;
+		background-color: #36393F;
 		padding: 10px;
 		border-radius: 5px;
 		box-shadow: 0 0 0 1px rgba(32,34,37,.6), 0 2px 10px 0 rgba(0,0,0,.2);
