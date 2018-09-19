@@ -588,8 +588,6 @@ BDFDB.getThemesFolder = function () {
 		return path.resolve(process.env.appdata, "BetterDiscord/themes/");
 		case "darwin":
 		return path.resolve(process.env.HOME, "Library/Preferences/", "BetterDiscord/themes/");
-		default:
-		return path.resolve(process.env.HOME, ".config/", "BetterDiscord/themes/");
         default:
 			let flatpak_path = path.resolve(process.env.HOME, ".var/app/com.discordapp.Discord/config", "BetterDiscord/themes/");
 			if (fs.existsSync(flatpak_path)) return flatpak_path;
