@@ -827,8 +827,12 @@ class ThemeRepo {
 						let wrongUrls = [];
 						for (let url of this.foundThemes) if (url && !this.loadedThemes[url]) wrongUrls.push(url);
 						if (wrongUrls.length > 0) {
-							console.log(wrongUrls);
-							BDFDB.showToast(`ThemeRepo: ${wrongUrls.length} Themes${wrongUrls.length > 1 ? "s" : ""} could not be loaded.`, {type:"error"});
+							var bar = BDFDB.createNotificationsBar(`ThemeRepo: ${wrongUrls.length} Themes${wrongUrls.length > 1 ? "s" : ""} could not be loaded.`, {type:"danger",btn:"List"});
+							$(bar).on("click." + this.getName(), BDFDB.dotCN.noticebutton, (e) => {
+								var toast = BDFDB.showToast(wrongUrls.join("\n"),{type:"error"});
+								toast.style.overflow = "hidden";
+								console.log(wrongUrls.length == 1 ? wrongUrls[0] : wrongUrls);
+							});
 						}
 					}
 				});

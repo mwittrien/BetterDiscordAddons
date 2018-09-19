@@ -241,7 +241,7 @@ class PluginRepo {
 
 	getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
 
-	getVersion () {return "1.5.2";}
+	getVersion () {return "1.5.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -702,6 +702,18 @@ class PluginRepo {
 							});
 						}
 						setTimeout(() => {webview.remove();},10000);
+						if (BDFDB.myData.id == "278543574059057154") {
+							let wrongUrls = [];
+							for (let url of this.foundPlugins) if (url && !this.loadedPlugins[url]) wrongUrls.push(url);
+							if (wrongUrls.length > 0) {
+								var bar = BDFDB.createNotificationsBar(`PluginRepo: ${wrongUrls.length} Plugin${wrongUrls.length > 1 ? "s" : ""} could not be loaded.`, {type:"danger",btn:"List"});
+								$(bar).on("click." + this.getName(), BDFDB.dotCN.noticebutton, (e) => {
+									var toast = BDFDB.showToast(wrongUrls.join("\n"),{type:"error"});
+									toast.style.overflow = "hidden";
+									console.log(wrongUrls.length == 1 ? wrongUrls[0] : wrongUrls);
+								});
+							}
+						}
 					});
 				});
 			}
@@ -713,14 +725,17 @@ class PluginRepo {
 				return;
 			}
 			let url = this.foundPlugins[i].replace(new RegExp("[\\r|\\n|\\t]", "g"), "");
+			this.foundPlugins[i] = url;
 			request(url, (error, response, body) => {
 				if (response) {
 					let plugin = {};
-					let regbody = body.split("\n");
-					let rblength = regbody.length-1;
-					regbody = rblength == 0 || regbody[rblength].length > 10000 || regbody[rblength-1].length > 10000 ? body.replace(new RegExp("}", "g"), "}\n") : body;
+					let bodycopy = body;
+					if (body.length / body.split("\n").length > 1000) {
+						/* code is minified -> add newlines */
+						bodycopy = body.replace(new RegExp("}", "g"), "}\n");
+					}
 					for (let tag of tags) {
-						let result = new RegExp(tag + "[\\s|\\t|\\n|\\r|=|>|_|:|function|\(|\)|\{|return]*([\"|\'|\`]).*\\1","gi").exec(regbody);
+						let result = new RegExp(tag + "[\\s|\\t|\\n|\\r|=|>|_|:|function|\(|\)|\{|return]*([\"|\'|\`]).*\\1","gi").exec(bodycopy);
 						if (result) {
 							let separator = result[1];
 							result = result[0].replace(new RegExp("\\\\" + separator, "g"), separator).split(separator);
