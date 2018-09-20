@@ -12,7 +12,7 @@ class PinDMs {
 			`<header class="pinneddms-header">REPLACE_header_pinneddms_text</header>`;
 			
 		this.pinnedDMMarkup =
-			`<div class="${BDFDB.disCNS.dmchannel} pinned" style="height: 42px; opacity: 1;">
+			`<div class="${BDFDB.disCN.dmchannel} pinned" style="height: 42px; opacity: 1;">
 				<a>
 					<div class="${BDFDB.disCNS.avatarwrapper + BDFDB.disCNS.avatarsmall + BDFDB.disCNS.forcedarktheme + BDFDB.disCN.avatarsmallold}">
 						<div class="${BDFDB.disCN.avatarsmallold} stop-animation"></div>
@@ -38,7 +38,7 @@ class PinDMs {
 
 	getDescription () {return "Allows you to pin DMs, making them appear at the top of your DM-list.";}
 
-	getVersion () {return "1.1.3";}
+	getVersion () {return "1.1.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -168,12 +168,21 @@ class PinDMs {
 	}
 	
 	addAllPinnedDMs () {
-		var pinnedDMs = BDFDB.loadAllData(this, "pinnedDMs");
-		var sortedDMs = [];
-		for (let id in pinnedDMs) sortedDMs[pinnedDMs[id]] = id;
-		for (let pos in sortedDMs.reverse()) {
+		let pinnedDMs = BDFDB.loadAllData(this, "pinnedDMs");
+		let sortedDMs = [];
+		delete pinnedDMs[""];
+		for (let id in pinnedDMs) this.sortDM(sortedDMs, pinnedDMs[id], id);
+		sortedDMs = sortedDMs.filter(n => n);
+		for (let pos in sortedDMs) {
+			pinnedDMs[sortedDMs[pos]] = parseInt(pos);
 			this.addPinnedDM(sortedDMs[pos], pos);
 		}
+		BDFDB.saveAllData(pinnedDMs, this, "pinnedDMs");
+	}
+	
+	sortDM (sortedDMs, pos, id) {
+		if (typeof sortedDMs[pos] == "undefined") sortedDMs[pos] = id;
+		else this.sortDM(sortedDMs, pos+1, id);
 	}
 	
 	addPinnedDM (id, pos) {
@@ -248,6 +257,16 @@ class PinDMs {
 		}
 	}
 	
+	updatePinnedDMPositions () {
+		let pinnedDMs = BDFDB.loadAllData(this, "pinnedDMs");
+		let pinnedDMEles =  Array.from(document.querySelectorAll(BDFDB.dotCN.dmchannel + ".pinned")).reverse();
+		for (let i = 0; i < pinnedDMEles.length; i++) {
+			pinnedDMs[pinnedDMEles[i].getAttribute("user-id") ? pinnedDMEles[i].getAttribute("user-id") : pinnedDMEles[i].getAttribute("channel-id")] = i;
+		}
+		if (pinnedDMEles.length == 0) $(BDFDB.dotCN.dmchannel + " + header.pinneddms-header").remove();
+		BDFDB.saveAllData(pinnedDMs, this, "pinnedDMs")
+	}
+	
 	startUpdateInterval () {
 		clearInterval(this.statusInterval);
 		this.statusInterval = setInterval(() => {
@@ -276,16 +295,6 @@ class PinDMs {
 		let string = BDFDB.LanguageStrings[stringname] || "";
 		
 		return string.replace("**!!{name}!!**", `<strong>${name}</strong>`).replace("**!!{game}!!**", `<strong>${name}</strong>`);
-	}
-	
-	updatePinnedDMPositions () {
-		let pinnedDMs = BDFDB.loadAllData(this, "pinnedDMs");
-		let pinnedDMEles = document.querySelectorAll(BDFDB.dotCN.dmchannel + ".pinned");
-		for (let i = 0; i < pinnedDMEles.length; i++) { 
-			pinnedDMs[pinnedDMEles[i].id] = i; 
-		}
-		if (pinnedDMEles.length == 0) $(BDFDB.dotCN.dmchannel + " + header.pinneddms-header").remove();
-		BDFDB.saveAllData(pinnedDMs, this, "pinnedDMs")
 	}
 	
 	setLabelsByLanguage () {
