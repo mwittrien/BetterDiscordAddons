@@ -558,40 +558,36 @@ BDFDB.createNotificationsBar = function (content, options = {}) {
 };
 
 BDFDB.getDiscordFolder = function () {
-    let built = BDFDB.getDiscordBuilt();
-    built = "discord" + (built == "stable" ? "" : built);
-    return require("path").resolve(require("electron").remote.app.getPath("appData"), built, BDFDB.getDiscordVersion());
+	let built = BDFDB.getDiscordBuilt();
+	built = "discord" + (built == "stable" ? "" : built);
+	return require("path").resolve(require("electron").remote.app.getPath("appData"), built, BDFDB.getDiscordVersion());
 };
 
 BDFDB.getPluginsFolder = function () {
-    let process = require("process");
-    let path = require("path");
-    let fs = require("fs");
-    switch (process.platform) {
-        case "win32":
-        return path.resolve(process.env.appdata, "BetterDiscord/plugins/");
-        case "darwin":
-        return path.resolve(process.env.HOME, "Library/Preferences/", "BetterDiscord/plugins/");
-        default:
-			let flatpak_path = path.resolve(process.env.HOME, ".var/app/com.discordapp.Discord/config", "BetterDiscord/plugins/");
-			if (fs.existsSync(flatpak_path)) return flatpak_path;
-			else return path.resolve(process.env.HOME, ".config/", "BetterDiscord/plugins/");
-    }
+	let process = require("process");
+	let path = require("path");
+	switch (process.platform) {
+		case "win32":
+			return path.resolve(process.env.appdata, "BetterDiscord/plugins/");
+		case "darwin":
+			return path.resolve(process.env.HOME, "Library/Preferences/BetterDiscord/plugins/");
+		default:
+			if (process.env.XDG_CONFIG_HOME) return path.resolve(process.env.XDG_CONFIG_HOME, "BetterDiscord/plugins/");
+			else return path.resolve(process.env.HOME, ".config/BetterDiscord/plugins/");
+	}
 };
 
 BDFDB.getThemesFolder = function () {
 	let process = require("process");
 	let path = require("path");
-    let fs = require("fs");
 	switch (process.platform) {
 		case "win32":
-		return path.resolve(process.env.appdata, "BetterDiscord/themes/");
+			return path.resolve(process.env.appdata, "BetterDiscord/themes/");
 		case "darwin":
-		return path.resolve(process.env.HOME, "Library/Preferences/", "BetterDiscord/themes/");
-        default:
-			let flatpak_path = path.resolve(process.env.HOME, ".var/app/com.discordapp.Discord/config", "BetterDiscord/themes/");
-			if (fs.existsSync(flatpak_path)) return flatpak_path;
-			else return path.resolve(process.env.HOME, ".config/", "BetterDiscord/themes/");
+			return path.resolve(process.env.HOME, "Library/Preferences/BetterDiscord/themes/");
+		default:
+			if (process.env.XDG_CONFIG_HOME) return path.resolve(process.env.XDG_CONFIG_HOME, "BetterDiscord/themes/");
+			else return path.resolve(process.env.HOME, ".config/BetterDiscord/themes/");
 	}
 };
 
@@ -769,14 +765,14 @@ BDFDB.languages = {
 
 BDFDB.getDiscordBuilt = function () {
 	let built = BDFDB.getDiscordBuilt.built ? BDFDB.getDiscordBuilt.built : require(require('electron').remote.app.getAppPath() + "/build_info.json").releaseChannel.toLowerCase();
-    BDFDB.getDiscordBuilt.built = built;
-    return built;
+	BDFDB.getDiscordBuilt.built = built;
+	return built;
 };
 
 BDFDB.getDiscordVersion = function () {
-    let version = BDFDB.getDiscordVersion.version ? BDFDB.getDiscordVersion.version : require(require('electron').remote.app.getAppPath() + "/build_info.json").version.toLowerCase();
-    BDFDB.getDiscordVersion.version = version;
-    return version;
+	let version = BDFDB.getDiscordVersion.version ? BDFDB.getDiscordVersion.version : require(require('electron').remote.app.getAppPath() + "/build_info.json").version.toLowerCase();
+	BDFDB.getDiscordVersion.version = version;
+	return version;
 };
 
 BDFDB.getDiscordLanguage = function () {
