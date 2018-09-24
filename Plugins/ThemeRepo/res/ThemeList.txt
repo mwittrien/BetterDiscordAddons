@@ -130,7 +130,9 @@ https://raw.githubusercontent.com/Ruben7173/Ruben7173.github.io/master/BetterDis
 https://raw.githubusercontent.com/satoru8/Addons/master/BeautifulCategories.theme.css
 https://raw.githubusercontent.com/satoru8/Addons/master/BorderStatus.theme.css
 https://raw.githubusercontent.com/satoru8/Addons/master/FriendsList.theme.css
+https://raw.githubusercontent.com/satoru8/Addons/master/GlowStatus.theme.css
 https://raw.githubusercontent.com/satoru8/Addons/master/LargeChatAvatars.theme.css
+https://raw.githubusercontent.com/satoru8/Addons/master/Library.theme.css
 https://raw.githubusercontent.com/satoru8/Addons/master/MemberlistPopout.theme.css
 https://raw.githubusercontent.com/satoru8/Addons/master/RadialStatus.theme.css
 https://raw.githubusercontent.com/satoru8/Addons/master/ServerColumnX2.theme.css
@@ -140,6 +142,13 @@ https://raw.githubusercontent.com/satoru8/Addons/master/StatusChooser.theme.css
 https://raw.githubusercontent.com/satoru8/BetterLightTheme/master/BetterLightTheme.theme.css
 https://raw.githubusercontent.com/satoru8/CleanDark/master/CleanDark.theme.css
 https://raw.githubusercontent.com/satoru8/CleanDark/master/CleanDarkBG.theme.css
+https://raw.githubusercontent.com/satoru8/Collection/master/Anime/Chloe.theme.css
+https://raw.githubusercontent.com/satoru8/Collection/master/Anime/Madoka.theme.css
+https://raw.githubusercontent.com/satoru8/Collection/master/Anime/Miku.theme.css
+https://raw.githubusercontent.com/satoru8/Collection/master/Anime/Miku2.theme.css
+https://raw.githubusercontent.com/satoru8/Collection/master/Games/mhw.theme.css
+https://raw.githubusercontent.com/satoru8/FullSizePfp/master/FullSizePfp.theme.css
+https://raw.githubusercontent.com/satoru8/NovaFork/master/Nova.theme.css
 https://raw.githubusercontent.com/satoru8/Nyx/master/Nyx.theme.css
 https://raw.githubusercontent.com/satoru8/StarterTheme/master/StarterTheme.theme.css
 https://raw.githubusercontent.com/satoru8/Void/master/Void.theme.css
