@@ -5,8 +5,6 @@ class CompleteTimestamps {
 		this.languages;
 		
 		this.updateTimestamps = false;
-		
-		this.compactWidth = null;
 			
 		this.defaults = {
 			settings: {
@@ -32,7 +30,7 @@ class CompleteTimestamps {
 
 	getDescription () {return "Replace all timestamps with complete timestamps.";}
 
-	getVersion () {return "1.2.4";}
+	getVersion () {return "1.2.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -99,10 +97,10 @@ class CompleteTimestamps {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node.tagName && node.querySelector(BDFDB.dotCN.message)) {
-									node.querySelectorAll(BDFDB.dotCN.message).forEach(message => {this.changeTimestamp(message);});
+								if (node.tagName && node.querySelector("time")) {
+									node.querySelectorAll("time").forEach(stamp => {this.changeTimestamp(stamp);});
 								}
-								else if (node.classList && node.classList.contains(BDFDB.disCN.message)) {
+								else if (node.tagName && node.tagName == "TIME") {
 									this.changeTimestamp(node);
 								}
 							});
@@ -120,7 +118,7 @@ class CompleteTimestamps {
 								if (this.updateTimestamps && node && node.tagName && node.getAttribute("layer-id") == "user-settings") {
 									this.setMaxWidth();
 									document.querySelectorAll(".complete-timestamp").forEach(timestamp => {timestamp.classList.remove("complete-timestamp");});
-									document.querySelectorAll(BDFDB.dotCN.message).forEach(message => {this.changeTimestamp(message);});
+									document.querySelectorAll("time").forEach(stamp => {this.changeTimestamp(stamp);})
 									this.updateTimestamps = false;
 								}
 							});
@@ -140,32 +138,30 @@ class CompleteTimestamps {
 			$(document)
 				.on("mouseenter." + this.getName(), BDFDB.dotCNS.message + BDFDB.dotCN.messagecontent, (e) => {
 					if (BDFDB.getData("showOnHover", this, "settings")) {
-						var message = e.currentTarget;
-						var messagegroup = this.getMessageGroup(message);
+						let message = e.currentTarget;
+						let messagegroup = this.getMessageGroup(message);
 						if (!messagegroup || !messagegroup.tagName) return;
-						var info = this.getMessageData(message, messagegroup);
+						let info = this.getMessageData(message, messagegroup);
 						if (!info || !info.timestamp || !info.timestamp._i) return;
-						var choice = BDFDB.getData("creationDateLang", this, "choices");
+						let choice = BDFDB.getData("creationDateLang", this, "choices");
 						BDFDB.createTooltip(this.getTimestamp(this.languages[choice].id, info.timestamp._i), message, {type:"left",selector:"completetimestamp-tooltip"});
 					}
 				})
 				.on("mouseenter." + this.getName(), BDFDB.dotCNS.message + BDFDB.dotCN.messageedited, (e) => {
 					if (BDFDB.getData("changeForEdit", this, "settings")) {
-						var marker = e.currentTarget;
-						var messagegroup = this.getMessageGroup(marker);
-						if (!messagegroup || !messagegroup.tagName) return;
-						var info = this.getMessageData(marker, messagegroup);
-						if (!info || !info.editedTimestamp || !info.editedTimestamp._i) return;
-						var choice = BDFDB.getData("creationDateLang", this, "choices");
-						var customTooltipCSS = `
+						let marker = e.currentTarget;
+						let time = marker.getAttribute("datetime");
+						if (!time) return;
+						let choice = BDFDB.getData("creationDateLang", this, "choices");
+						let customTooltipCSS = `
 							body ${BDFDB.dotCN.tooltip}:not(.completetimestampedit-tooltip) {
 								display: none !important;
 							}`;
-						BDFDB.createTooltip(this.getTimestamp(this.languages[choice].id, info.editedTimestamp._i), marker, {type:"top",selector:"completetimestampedit-tooltip",css:customTooltipCSS});
+						BDFDB.createTooltip(this.getTimestamp(this.languages[choice].id, time), marker, {type:"top",selector:"completetimestampedit-tooltip",css:customTooltipCSS});
 					}
 				});
 			
-			document.querySelectorAll(BDFDB.dotCN.message).forEach(message => {this.changeTimestamp(message);});
+			document.querySelectorAll("time").forEach(stamp => {this.changeTimestamp(stamp);})
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -175,7 +171,9 @@ class CompleteTimestamps {
 
 	stop () {
 		if (typeof BDFDB === "object") {
-			document.querySelectorAll(".complete-timestamp").forEach(timestamp => {timestamp.classList.remove("complete-timestamp");});
+			document.querySelectorAll(".complete-timestamp").forEach(stamp => {stamp.classList.remove("complete-timestamp");});
+			
+			BDFDB.removeLocalStyle(this.getName() + "CompactCorrection");
 			
 			BDFDB.unloadMessage(this);
 		}
@@ -261,27 +259,13 @@ class CompleteTimestamps {
 		return $(menuhtml)[0];
 	}
 	
-	changeTimestamp (message) {
-		if (!message || !message.tagName || !BDFDB.getData("showInChat", this, "settings")) return;
-		var messagegroup = this.getMessageGroup(message);
-		if (!messagegroup || !messagegroup.tagName) return;
-		var compact = messagegroup.classList.contains(BDFDB.disCN.messagegroupcompact);
-		var timestamp = compact ? message.querySelector(BDFDB.dotCN.messagetimestampcompact) : messagegroup.querySelector(BDFDB.dotCN.messagetimestampcozy);
-		if (!timestamp || !timestamp.tagName || timestamp.classList.contains("complete-timestamp")) return;
-		var info = this.getMessageData(message, messagegroup);
-		if (!info || !info.timestamp || !info.timestamp._i) return;
-		var choice = BDFDB.getData("creationDateLang", this, "choices");
-		timestamp.classList.add("complete-timestamp");
-		BDFDB.setInnerText(timestamp, this.getTimestamp(this.languages[choice].id, info.timestamp._i));
-		if (compact && this.compactWidth) {
-			var markup = message.querySelector(BDFDB.dotCN.messagemarkup);
-			if (markup) {
-				var newmargin = 100 + (this.compactWidth - 65); 
-				markup.style.marginLeft =	newmargin + "px"; 
-				markup.style.textIndent =	"-" + newmargin + "px"; 
-				timestamp.style.width = 	this.compactWidth + "px";
-			}
-		}
+	changeTimestamp (stamp) {
+		if (!stamp.className || stamp.className.toLowerCase().indexOf("timestamp") == -1 || stamp.classList.contains("complete-timestamp")) return;
+		let time = stamp.getAttribute("datetime");
+		if (!time) return;
+		let choice = BDFDB.getData("creationDateLang", this, "choices");
+		stamp.classList.add("complete-timestamp");
+		BDFDB.setInnerText(stamp, this.getTimestamp(this.languages[choice].id, time));
 	}
 	
 	getMessageGroup (div) {
@@ -301,12 +285,16 @@ class CompleteTimestamps {
 		return info && pos > -1 ? info[pos] : null;
 	}
 	
-	getTimestamp (languageid, time = new Date()) {
+	getTimestamp (languageid, time) {
+		let timeobj = new Date();
+		if (typeof time == "string") timeobj = new Date(time);
+		if (timeobj.toString() == "Invalid Date") timeobj = new Date(parseInt(time));
+		if (timeobj.toString() == "Invalid Date") return;
 		var settings = BDFDB.getAllData(this, "settings"), timestring = "";
 		if (languageid != "own") {
 			var timestamp = [];
-			if (settings.displayDate) 	timestamp.push(time.toLocaleDateString(languageid));
-			if (settings.displayTime) 	timestamp.push(settings.cutSeconds ? this.cutOffSeconds(time.toLocaleTimeString(languageid)) : time.toLocaleTimeString(languageid));
+			if (settings.displayDate) 	timestamp.push(timeobj.toLocaleDateString(languageid));
+			if (settings.displayTime) 	timestamp.push(settings.cutSeconds ? this.cutOffSeconds(timeobj.toLocaleTimeString(languageid)) : timeobj.toLocaleTimeString(languageid));
 			if (settings.otherOrder)	timestamp.reverse();
 			timestring = timestamp.length > 1 ? timestamp.join(", ") : (timestamp.length > 0 ? timestamp[0] : "");
 			if (timestring && settings.forceZeros) timestring = this.addLeadingZeros(timestring);
@@ -314,7 +302,7 @@ class CompleteTimestamps {
 		else {
 			var ownformat = BDFDB.getData("ownFormat", this, "formats");
 			languageid = BDFDB.getDiscordLanguage().id;
-			var hour = time.getHours(), minute = time.getMinutes(), second = time.getSeconds(), msecond = time.getMilliseconds(), day = time.getDate(), month = time.getMonth()+1, timemode = "";
+			var hour = timeobj.getHours(), minute = timeobj.getMinutes(), second = timeobj.getSeconds(), msecond = timeobj.getMilliseconds(), day = timeobj.getDate(), month = timeobj.getMonth()+1, timemode = "";
 			if (ownformat.indexOf("$timemode") > -1) {
 				timemode = hour >= 12 ? "PM" : "AM";
 				hour = hour % 12;
@@ -326,13 +314,13 @@ class CompleteTimestamps {
 				.replace("$second", second < 10 ? "0" + second : second)
 				.replace("$msecond", msecond)
 				.replace("$timemode", timemode)
-				.replace("$weekdayL", time.toLocaleDateString(languageid,{weekday: "long"}))
-				.replace("$weekdayS", time.toLocaleDateString(languageid,{weekday: "short"}))
-				.replace("$monthnameL", time.toLocaleDateString(languageid,{month: "long"}))
-				.replace("$monthnameS", time.toLocaleDateString(languageid,{month: "short"}))
+				.replace("$weekdayL", timeobj.toLocaleDateString(languageid,{weekday: "long"}))
+				.replace("$weekdayS", timeobj.toLocaleDateString(languageid,{weekday: "short"}))
+				.replace("$monthnameL", timeobj.toLocaleDateString(languageid,{month: "long"}))
+				.replace("$monthnameS", timeobj.toLocaleDateString(languageid,{month: "short"}))
 				.replace("$day", settings.forceZeros && day < 10 ? "0" + day : day)
 				.replace("$month", settings.forceZeros && month < 10 ? "0" + month : month)
-				.replace("$year", time.getFullYear());
+				.replace("$year", timeobj.getFullYear());
 		}
 		return timestring;
 	}
@@ -352,12 +340,31 @@ class CompleteTimestamps {
 	}
 	
 	setMaxWidth () {
-		var choice = BDFDB.getData("creationDateLang", this, "choices");
 		var timestamp = document.querySelector(BDFDB.dotCN.messagetimestampcompact);
-		if (!timestamp) return;
-		var testtimestamp = $(`<time class="${timestamp.className}" style="width: auto !important;">${this.getTimestamp(this.languages[choice].id, new Date(253402124399995))}</time>`);
-		$(testtimestamp).appendTo(document.body);
-		this.compactWidth = testtimestamp.outerWidth() + 10;
-		testtimestamp.remove();
+		if (timestamp) {
+			var choice = BDFDB.getData("creationDateLang", this, "choices");
+			var testtimestamp = $(`<time class="${timestamp.className}" style="width: auto !important;">${this.getTimestamp(this.languages[choice].id, new Date(253402124399995))}</time>`);
+			$(testtimestamp).appendTo(document.body);
+			var width = testtimestamp.outerWidth() + 5;
+			testtimestamp.remove();
+			BDFDB.appendLocalStyle(this.getName() + "CompactCorrection", `
+				${BDFDB.dotCN.messagetimestampcompact} {
+					width: ${width}px !important;
+				}
+				${BDFDB.dotCN.messagetimestampcompactismentioned} {
+					width: ${width + 2}px !important;
+				}
+				${BDFDB.dotCN.messagemarkupiscompact} {
+					margin-left: ${width}px !important;
+					text-indent: -${width}px !important;
+				}
+				${BDFDB.dotCN.messageaccessorycompact} {
+					padding-left: ${width}px !important;
+				}
+			`);
+		}
+		else {
+			BDFDB.removeLocalStyle(this.getName() + "CompactCorrection");
+		}
 	}
 }
