@@ -36,7 +36,6 @@ https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Theme
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Theme_Group_3/KemonoFriends.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Theme_Group_3/KittyCat.theme.css
 https://raw.githubusercontent.com/fluffingtons/fulldark/master/fulldark.theme.css
-https://raw.githubusercontent.com/gco360/gco-anime-theme/master/anime.theme.css
 https://raw.githubusercontent.com/gco360/iron-man-theme/master/ironman.theme.css
 https://raw.githubusercontent.com/gco360/space-theme/master/space.theme.css
 https://raw.githubusercontent.com/gco360/thanos-theme/master/thanos.theme.css
