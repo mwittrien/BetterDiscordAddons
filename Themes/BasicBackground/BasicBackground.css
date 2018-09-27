@@ -114,7 +114,8 @@
 .modal-3HD5ck .footer-2yfCgX,
 .divider-3573oO,
 .divider-1pnAR2,
-.divider-3gKybi .dividerContent-2L12VI,
+.divider-3gKybi:not(.dividerRed-MKoLlr) > div,
+.divider-3gKybi > span,
 .guildInner-3DSoA4,
 .header-GwIGlr,
 .itemDefault-3Jdr52:hover,
@@ -176,10 +177,6 @@
 button.guild-1EfMGQ {
 	border-color: transparent !important;
 	background: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 3)) !important;
-}
-
-.divider-3gKybi .dividerContent-2L12VI {
-	border-radius: 5px !important;
 }
 
 .bubble-1gL_TN:after {
@@ -703,7 +700,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .header-tab-bar-wrapper .tab-bar-item.selected,
 .tabBarContainer-1s1u-z .tab-bar-item.selected,
 .regionSelect-3lf4eE:not(:hover) button,
-.divider-3gKybi.dividerRed-MKoLlr .dividerContent-2L12VI,
+.divider-3gKybi.dividerRed-MKoLlr > span,
 .itemDefault-3Jdr52[style*="rgb(114, 137, 218)"] {
 	color: rgb(var(--vaccentcolor)) !important;
 }
@@ -763,6 +760,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .tutorial-popout .button,
 .private-channel-recipients-invite button,
 .wrapper-39oAo3 button,
+.divider-3gKybi.dividerRed-MKoLlr > div,
 .btn-primary {
 	background: rgb(var(--vaccentcolor)) !important;
 }
