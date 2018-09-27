@@ -3386,7 +3386,7 @@ BDFDB.DiscordClasses = {
 	messagetext: "message-text",
 	messagetimestamp: "timestamp",
 	messagetimestampcompact: "timestampCompact-MHgFLv",
-	messagetimestampcompactismentioned: ".timestampCompactIsMentioned-cQaQoQ",
+	messagetimestampcompactismentioned: "timestampCompactIsMentioned-cQaQoQ",
 	messagetimestampcozy: "timestampCozy-2hLAPV",
 	messageuploadcancel: "cancelButton-3hVEV6",
 	messageusername: "username-_4ZSMR",
