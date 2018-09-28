@@ -6,7 +6,7 @@ module.exports = (Plugin, Api, Vendor) => {
 	return class extends Plugin {
 		initConstructor () {
 			this.RANbuttonMarkup = 
-				`<div class="${BDFDB.disCN.guild}" id="RANbutton-frame" style="height: 20px; width: 50px; margin-bottom: 10px;">
+				`<div class="${BDFDB.disCN.guild}" id="RANbutton-frame" style="height: 20px; width: 50px; margin-bottom: 10px; margin-right: auto; margin-left:auto">
 					<div class="${BDFDB.disCN.guildinner}" style="height: 20px; width: 50px; border-radius: 4px;">
 						<a>
 							<div id="RANbutton" style="line-height: 20px; font-size: 12px;">read all</div>
