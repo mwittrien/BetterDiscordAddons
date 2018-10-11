@@ -150,6 +150,7 @@ https://raw.githubusercontent.com/noodlebox/betterdiscord-plugins/master/StaticA
 https://raw.githubusercontent.com/Orrielel/BetterDiscordAddons/master/Plugins/BetterImagePopups/BetterImagePopups.plugin.js
 https://raw.githubusercontent.com/Orrielel/BetterDiscordAddons/master/Plugins/TwitchStreamPanel/TwitchStreamPanel.plugin.js
 https://raw.githubusercontent.com/planetarian/BetterDiscordPlugins/master/Zalgo.plugin.js
+https://raw.githubusercontent.com/qwerasd205/qwerasd205.github.io/master/EmptyEnter.plugin.js
 https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Plugins/AccountDetailsPlus/AccountDetailsPlus.plugin.js
 https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Plugins/AutoPlayGifs/AutoPlayGifs.plugin.js
 https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Plugins/BDContextMenu/BDContextMenu.plugin.js

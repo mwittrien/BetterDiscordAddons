@@ -11,6 +11,8 @@ https://raw.githubusercontent.com/BeardDesign1/Material-design-theme/themes/Bear
 https://raw.githubusercontent.com/CapnKitten/Material-Discord/master/Material-Discord.theme.css
 https://raw.githubusercontent.com/CAtOSe/Neon-Space-BetterDiscord-Theme/master/neon-space.theme.css
 https://raw.githubusercontent.com/Chloesviel/Discord-Stuff/master/minifiedMemberlist/minifiedMemberlist.theme.css
+https://raw.githubusercontent.com/codedotspectra/discordneutron/master/neutron.theme.css
+https://raw.githubusercontent.com/codedotspectra/discordneutron/master/neutron.wallpaper.theme.css
 https://raw.githubusercontent.com/cosmicsalad/Discord-Themes-and-Plugins/master/themes/DarkMatter/DarkMatter.theme.css
 https://raw.githubusercontent.com/CurimuChizu/CC-Themes/master/CC-Themes/Red.n.Black.theme.css
 https://raw.githubusercontent.com/CurimuChizu/CC-Themes/master/CC-Themes/ReZero.theme.css
@@ -35,6 +37,7 @@ https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Theme
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Theme_Group_3/Gumi.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Theme_Group_3/KemonoFriends.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Theme_Group_3/KittyCat.theme.css
+https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Theme_Group_4/Winter.theme.css
 https://raw.githubusercontent.com/fluffingtons/fulldark/master/fulldark.theme.css
 https://raw.githubusercontent.com/gco360/iron-man-theme/master/ironman.theme.css
 https://raw.githubusercontent.com/gco360/space-theme/master/space.theme.css
@@ -122,6 +125,8 @@ https://raw.githubusercontent.com/nirewen/Discordify/master/Discordify.theme.css
 https://raw.githubusercontent.com/ObserverOfTime/DiscordThemes/master/NewNihilism/dist/NewNihilism.theme.css
 https://raw.githubusercontent.com/Pierce01/Opacity/master/OpacityMaxBun.theme.css
 https://raw.githubusercontent.com/Quietess/Casual-Dark/master/Casual_Dark.theme.css
+https://raw.githubusercontent.com/qwerasd205/qwerasd205.github.io/master/CompactServerList.theme.css
+https://raw.githubusercontent.com/qwerasd205/qwerasd205.github.io/master/Dyslexia.theme.css
 https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Themes/RadialStatus/RadialStatus.theme.css
 https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Themes/TransientMaterial/TransientMaterial.theme.css
 https://raw.githubusercontent.com/redsauce117/SauceysDiscordThemes/master/DarkerDiscordTheme.theme.css
