@@ -1,0 +1,15 @@
+{
+	"info": {
+		"name": "ChatFilter",
+		"authors": [
+			{
+				"name": "DevilBro",
+				"url": "https://www.paypal.me/MircoWittrien",
+				"discord_id": "278543574059057154",
+				"github_username": "mwittrien"
+			}
+		],
+		"version": 1.0,
+		"description": "Allows the user to censor words or block complete messages based on words in the chatwindow. \n\nMy Support Server: http://bit.ly/DevilBrosHaus or https://discordapp.com/invite/Jx3TjNS"
+	}
+}
