@@ -45,7 +45,7 @@ class TopRoleEverywhere {
 
 	getDescription () {return "Adds the highest role of a user as a tag.";}
 
-	getVersion () {return "2.7.1";}
+	getVersion () {return "2.7.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -101,7 +101,7 @@ class TopRoleEverywhere {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.querySelector(BDFDB.dotCN.memberusername) && BDFDB.getData("showInMemberList", this, "settings")) {
+								if (node.tagName && node.querySelector(BDFDB.dotCN.memberusername) && BDFDB.getData("showInMemberList", this, "settings")) {
 									this.addRoleTag(node, "list", false);
 								}
 							});
@@ -109,7 +109,7 @@ class TopRoleEverywhere {
 					}
 				);
 			});
-			BDFDB.addObserver(this, BDFDB.dotCN.members, {name:"userListObserver",instance:observer}, {childList:true});
+			BDFDB.addObserver(this, BDFDB.dotCN.memberswrap, {name:"userListObserver",instance:observer}, {childList:true, subtree:true});
 			
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -161,7 +161,7 @@ class TopRoleEverywhere {
 	
 	onSwitch () {
 		if (typeof BDFDB === "object") {
-			BDFDB.addObserver(this, BDFDB.dotCN.members, {name:"userListObserver"}, {childList:true});
+			BDFDB.addObserver(this, BDFDB.dotCN.memberswrap, {name:"userListObserver"}, {childList:true, subtree:true});
 			BDFDB.addObserver(this, BDFDB.dotCN.messages, {name:"chatWindowObserver"}, {childList:true, subtree:true});
 			this.loadRoleTags();
 		}

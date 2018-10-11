@@ -30,6 +30,7 @@ class BadgesEverywhere {
 			.BE-badge-HypeSquadBravery {width:17px;min-width:17px;}
 			.BE-badge-HypeSquadBrilliance {width:17px;min-width:17px;}
 			.BE-badge-HypeSquadBalance {width:17px;min-width:17px;}
+			.BE-badge-EarlySupporter {width:24px;min-width:24px;}
 			.BE-badge-Nitro {width:21px;min-width:21px;}`;
 			
 		this.loading = false;
@@ -46,6 +47,7 @@ class BadgesEverywhere {
 			64:			{name:"HypeSquad Bravery",		implemented:true,	white:"url(https://discordapp.com/assets/1115767aed344e96a27a12e97718c171.svg)", color:"url(https://discordapp.com/assets/64ae1208b6aefc0a0c3681e6be36f0ff.svg)"},
 			128:		{name:"HypeSquad Brilliance",	implemented:true,	white:"url(https://discordapp.com/assets/48cf0556d93901c8cb16317be2436523.svg)", color:"url(https://discordapp.com/assets/48cf0556d93901c8cb16317be2436523.svg)"},
 			256:		{name:"HypeSquad Balance",		implemented:true,	white:"url(https://discordapp.com/assets/2a085ed9c86f3613935a6a8667ba8b89.svg)", color:"url(https://discordapp.com/assets/9fdc63ef8a3cc1617c7586286c34e4f1.svg)"},
+			512:		{name:"Early Supporter",		implemented:true,	white:"url(https://discordapp.com/assets/ce15562552e3d70c56d5408cfeed2ffd.svg)", color:"url(https://discordapp.com/assets/23e59d799436a73c024819f84ea0b627.svg)"},
 			2048:		{name:"Nitro",					implemented:true,	white:"url(https://discordapp.com/assets/379d2b3171722ef8be494231234da5d1.svg)", color:"url(https://discordapp.com/assets/386884eecd36164487505ddfbac35a9d.svg)"}
 		};
 		
@@ -66,7 +68,7 @@ class BadgesEverywhere {
 
 	getDescription () {return "Displays Badges (Nitro, HypeSquad, etc...) in the chat/memberlist/userpopout. Thanks for Zerebos' help.";}
 
-	getVersion () {return "1.0.9";}
+	getVersion () {return "1.1.0";}
 
 	getAuthor () {return "DevilBro";}
 	
