@@ -260,7 +260,7 @@ class BadgesEverywhere {
 			else if (!this.loadedusers[user.id]) {
 				this.requestedusers[user.id].push([wrapper,type]);
 			}
-			else {
+			else { 
 				this.addToWrapper(wrapper, user.id, type, settings);
 			}
 		}
