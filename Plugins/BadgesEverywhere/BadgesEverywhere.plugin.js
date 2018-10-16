@@ -1,5 +1,5 @@
 //META{"name":"BadgesEverywhere"}*//
-
+//aaa
 class BadgesEverywhere {
 	initConstructor () {
 		this.css = ` 
