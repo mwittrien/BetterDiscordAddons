@@ -1,4 +1,4 @@
-﻿//META{"name":"BadgesEverywhere"}*//
+//META{"name":"BadgesEverywhere"}*//
 
 class BadgesEverywhere {
 	initConstructor () {
