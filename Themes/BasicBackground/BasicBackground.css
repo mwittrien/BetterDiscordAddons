@@ -62,7 +62,7 @@
 .messageGroupBlocked-3wrQQX,
 .embedInner-1-fpTo,
 .changeDetails-bk98pu,
-.paginationItem-3-MBTL:not(.selectedPage-2JQS2s),
+.paginationItem-2lUq0s:not(.selectedPage-3cFHgU),
 .Select-control,
 .form-inner,
 .wrapper-29NfPK,
@@ -103,10 +103,11 @@
 .card-7JP0BX,
 .card-7JP0BX .header-1RC2Wb,
 .carousel-JbsNzL,
+.carousel-2WxMes,
 .smallCarousel-3UDi9v,
 .smallCarousel-2e0IQc,
 .article-FleDq5,
-.selectedPage-2JQS2s,
+.selectedPage-3cFHgU,
 .gameUpdates-2GPqBU,
 .root-1bFE0x,
 .bodySection-jqkkIP,
@@ -278,10 +279,10 @@ button.guild-1EfMGQ {
 	background: linear-gradient(90deg,rgb(var(--vaccentcolor)) 0,transparent 10%,transparent 90%,rgb(var(--vaccentcolor))) !important;
 }
 
-.paginationItem-3-MBTL:after {
+.paginationItem-2lUq0s:after {
 	background: linear-gradient(270deg,transparent 0,rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 3))) !important;
 }
-.paginationItem-3-MBTL .splashArt-1anaP9 {
+.paginationItem-2lUq0s .splashArt-1anaP9 {
 	border-radius: 5px !important;
 }
 
@@ -739,6 +740,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .channels-Ie2l6A [class*="containerDrag"]:after,
 .improved-1F5LIN:after,
 .auth-name:after,
+.exclusive-3zP8if,
 .botTagRegular-2HEhHi:not([style]),
 .aka-1mqp34,
 .jumpToPresentBar-9P20AM,
