@@ -827,7 +827,7 @@ class ThemeRepo {
 						let wrongUrls = [];
 						for (let url of this.foundThemes) if (url && !this.loadedThemes[url]) wrongUrls.push(url);
 						if (wrongUrls.length > 0) {
-							var bar = BDFDB.createNotificationsBar(`ThemeRepo: ${wrongUrls.length} Themes${wrongUrls.length > 1 ? "s" : ""} could not be loaded.`, {type:"danger",btn:"List"});
+							var bar = BDFDB.createNotificationsBar(`ThemeRepo: ${wrongUrls.length} Theme${wrongUrls.length > 1 ? "s" : ""} could not be loaded.`, {type:"danger",btn:"List"});
 							$(bar).on("click." + this.getName(), BDFDB.dotCN.noticebutton, (e) => {
 								var toast = BDFDB.showToast(wrongUrls.join("\n"),{type:"error"});
 								toast.style.overflow = "hidden";
