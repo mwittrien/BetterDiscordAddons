@@ -1,4 +1,4 @@
-//META{"name":"PluginRepo"}*//
+//META{"name":"PluginRepo"}*// 
 
 class PluginRepo {
 	initConstructor () {
@@ -241,7 +241,7 @@ class PluginRepo {
 
 	getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
 
-	getVersion () {return "1.5.3";}
+	getVersion () {return "1.5.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -704,7 +704,7 @@ class PluginRepo {
 						setTimeout(() => {webview.remove();},10000);
 						if (BDFDB.myData.id == "278543574059057154") {
 							let wrongUrls = [];
-							for (let url of this.foundPlugins) if (url && !this.loadedPlugins[url]) wrongUrls.push(url);
+							for (let url of this.foundPlugins) if (url && !this.loadedPlugins[url] && !wrongUrls[url]) wrongUrls.push(url);
 							if (wrongUrls.length > 0) {
 								var bar = BDFDB.createNotificationsBar(`PluginRepo: ${wrongUrls.length} Plugin${wrongUrls.length > 1 ? "s" : ""} could not be loaded.`, {type:"danger",btn:"List"});
 								$(bar).on("click." + this.getName(), BDFDB.dotCN.noticebutton, (e) => {
@@ -727,7 +727,10 @@ class PluginRepo {
 			let url = this.foundPlugins[i].replace(new RegExp("[\\r|\\n|\\t]", "g"), "");
 			this.foundPlugins[i] = url;
 			request(url, (error, response, body) => {
-				if (response) {
+				if (!response) {
+					if (url && BDFDB.getAllIndexes(this.foundPlugins, url).length < 2) this.foundPlugins.push(url);
+				}
+				else {
 					let plugin = {};
 					let bodycopy = body;
 					if (body.length / body.split("\n").length > 1000) {

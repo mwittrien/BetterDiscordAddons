@@ -296,7 +296,7 @@ class ThemeRepo {
 
 	getDescription () {return "Allows you to preview all themes from the theme repo and download them on the fly. Repo button is in the theme settings.";}
 
-	getVersion () {return "1.5.2";}
+	getVersion () {return "1.5.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -825,7 +825,7 @@ class ThemeRepo {
 					}
 					if (BDFDB.myData.id == "278543574059057154") {
 						let wrongUrls = [];
-						for (let url of this.foundThemes) if (url && !this.loadedThemes[url]) wrongUrls.push(url);
+						for (let url of this.foundThemes) if (url && !this.loadedThemes[url] && !wrongUrls[url]) wrongUrls.push(url);
 						if (wrongUrls.length > 0) {
 							var bar = BDFDB.createNotificationsBar(`ThemeRepo: ${wrongUrls.length} Theme${wrongUrls.length > 1 ? "s" : ""} could not be loaded.`, {type:"danger",btn:"List"});
 							$(bar).on("click." + this.getName(), BDFDB.dotCN.noticebutton, (e) => {
@@ -847,7 +847,10 @@ class ThemeRepo {
 			let url = this.foundThemes[i].replace(new RegExp("[\\r|\\n|\\t]", "g"), "");
 			this.foundThemes[i] = url;
 			request(url, (error, response, body) => {
-				if (response) {
+				if (!response) {
+					if (url && BDFDB.getAllIndexes(this.foundThemes, url).length < 2) this.foundThemes.push(url);
+				}
+				else {
 					let theme = {};
 					let text = body;
 					if (text.split("*//").length > 1 && text.split("\n").length > 1) {
