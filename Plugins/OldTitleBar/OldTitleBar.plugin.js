@@ -90,7 +90,7 @@ class OldTitleBar {
 
 	getDescription () {return "Reverts the title bar back to its former self.";}
 
-	getVersion () {return "1.4.5";}
+	getVersion () {return "1.4.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -347,11 +347,8 @@ class OldTitleBar {
 	}
 	
 	patchMainScreen (enable) {
-		let fs = require("fs")
-		let mainScreenPath = require("path").resolve(BDFDB.getDiscordFolder(), "modules/discord_desktop_core/core/app/mainScreen.js");
-		let mainScreen = fs.readFileSync(mainScreenPath).toString();
-		if (!mainScreen.includes("frame: " + enable) || !mainScreen.includes(".frame = " + enable)) {
-			fs.writeFileSync(mainScreenPath, mainScreen.replace("frame: " + !enable, "frame: " + enable).replace(".frame = " + !enable, ".frame = " + enable));
+		if (BdApi.getWindowPreference("frame") != enable) {
+			BdApi.setWindowPreference("frame", enable);
 			return true;
 		}
 		return false;

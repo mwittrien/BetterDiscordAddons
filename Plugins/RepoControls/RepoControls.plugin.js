@@ -154,8 +154,7 @@ class RepoControls {
 
 	start () {
 		var libraryScript = null;
-		if (typeof BDFDB !== "object" || BDFDB.isLibraryOutdated()) {
-			if (typeof BDFDB === "object") BDFDB = "";
+		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
 			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
@@ -164,7 +163,7 @@ class RepoControls {
 			document.head.appendChild(libraryScript);
 		}
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object") this.initialize();
+		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
 		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
@@ -340,22 +339,11 @@ class RepoControls {
 	
 	getEntry (repoControls, li) {
 		if (!repoControls || !li || !li.tagName || !li.querySelector(".bda-name")) return null;
-		let name, version, author, description, enabled;
-		if (BDFDB.zacksFork()) {
-			name = li.querySelector(".bda-name").textContent;
-			version = li.querySelector(".bda-version").textContent;
-			author = li.querySelector(".bda-author").textContent;
-			description = li.querySelector(".bda-description").textContent;
-			enabled = li.querySelector(".ui-switch-checkbox").checked;
-		}
-		else {
-			let namestring = li.querySelector(".bda-name").textContent;
-			name = namestring.split(" v")[0];
-			version = namestring.split(" v")[1].split(" by ")[0];
-			author = namestring.split(" by ")[1];
-			description = li.querySelector(".bda-description").textContent;
-			enabled = li.querySelector(".ui-switch-checkbox").checked;
-		}
+		let name = li.querySelector(".bda-name").textContent;
+		let version = li.querySelector(".bda-version").textContent;
+		let author = li.querySelector(".bda-author").textContent;
+		let description = li.querySelector(".bda-description").textContent;
+		let enabled = li.querySelector(".ui-switch-checkbox").checked;
 		let type = this.getSettingsPageType();
 		let pathstatscache = type ? repoControls[type][name] : null;
 		return {
