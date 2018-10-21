@@ -97,7 +97,7 @@ class PluginRepo {
 								</div>
 							</div>
 							<div tab="plugins" class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.modalcontent + BDFDB.disCNS.scrollerthemed + BDFDB.disCN.themeghosthairline} tab-content">
-								<div class="${BDFDB.disCNS.scroller + BDFDB.disCN.modalsubinner} ui-standard-sidebar-view">
+								<div class="${BDFDB.disCNS.scroller + BDFDB.disCNS.modalsubinner + BDFDB.disCN.standardsidebarview}">
 									<ul class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCN.nowrap} bda-slist plugins" style="flex: 1 1 auto;"></ul>
 								</div>
 							</div>
@@ -221,7 +221,7 @@ class PluginRepo {
 
 	getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
 
-	getVersion () {return "1.5.4";}
+	getVersion () {return "1.5.5";}
 
 	getAuthor () {return "DevilBro";}
 	
