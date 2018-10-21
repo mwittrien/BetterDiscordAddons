@@ -53,6 +53,7 @@
 .container-2lgZY8,
 .contentWrapper-3WC1ID,
 .popout-3sVMXz section,
+.content-region,
 .contentRegion-3nDuYy,
 #friends .tab-bar-item:hover,
 .input-cIJ7To,
@@ -70,7 +71,9 @@
 .search-l1Wz-Q .search-bar,
 .search-results-wrap,
 .search-results-wrap .search-header,
+.sidebar-region,
 .sidebarRegion-VFTUkN,
+:not(.tab-content) > .ui-standard-sidebar-view,
 :not(.tab-content) > .standardSidebarView-3F1I7i,
 .card-3Qj_Yx,
 .container-1UB9sr,
@@ -615,6 +618,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 #friends,
 .friends-table,
 .friend-table-add-header,
+.tab-content > .ui-standard-sidebar-view,
 .tab-content > .standardSidebarView-3F1I7i,
 .activityFeed-28jde9,
 .gameLibrary-TTDw4Y,
@@ -714,7 +718,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 
 /* ----------------------- COLORING ----------------------- */
 
-:not(.guild-1EfMGQ):not(.guildInner-3DSoA4):not(.instructions-2Du9gG):not(.searchLearnMore-3SQUAj) > a:not(.iconWrapper-21idzA):not(.textLink-3aPthL):not(.bodyLink-3A8Buv):not(.search-bar-tag):not(.channel-SEolQq):not(.downloadLink-2oSgiF):not(.embedAuthorName-3mnTWj):not([style]),
+:not(.guild-1EfMGQ):not(.guildInner-3DSoA4):not(.instructions-2Du9gG):not(.searchLearnMore-3SQUAj) > a:not(.button-1MICoQ):not(.iconWrapper-21idzA):not(.textLink-3aPthL):not(.bodyLink-3A8Buv):not(.search-bar-tag):not(.channel-SEolQq):not(.downloadLink-2oSgiF):not(.embedAuthorName-3mnTWj):not([style]),
 .filenameLinkWrapper-1-14c5,
 .announcingNitro-3Ptg6m,
 .tab.selected,
@@ -872,6 +876,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	background-color: rgba(47,49,54,.6) !important;
 }
 
+.ui-standard-sidebar-view .closeButton-1tv5uR:hover,
 .standardSidebarView-3F1I7i .closeButton-1tv5uR:hover {
 	background-color: rgba(var(--vaccentcolor), calc(var(--vtransparencyalpha) * 3)) !important;
 }
@@ -3293,12 +3298,12 @@ html, span:not(.spinner-item) {
 	height: 100%;
 	background: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 2)) !important;
 }
-.bd-sidebarRegion-VFTUkN,
-.bd-contentRegion-3nDuYy {
+.bd-sidebar-region,
+.bd-content-region {
 	background: var(--vbackground) center/cover !important;
 	background-attachment: fixed !important;
 }
-.bd-sidebarRegion-VFTUkN .bd-settingswrap,
+.bd-sidebar-region .bd-settingswrap,
 .bd-info {
 	margin: 0 !important;
 	background: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 4)) center/cover !important;
