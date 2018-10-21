@@ -83,7 +83,7 @@ class ShowHiddenChannels {
 
 	getDescription () {return "Displays channels that are hidden from you by role restrictions.";}
 
-	getVersion () {return "2.2.9";}
+	getVersion () {return "2.3.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -202,7 +202,6 @@ class ShowHiddenChannels {
 	}
 	
 	displayHiddenChannels () {
-		return; 
 		var serverObj = BDFDB.getSelectedServer();
 		if (serverObj) {
 			var serverID = serverObj.id;
@@ -512,7 +511,7 @@ class ShowHiddenChannels {
 		var channelList = document.querySelector(BDFDB.dotCNS.channels + BDFDB.dotCN.scroller);
 		if (channelList && category) {
 			category.remove();
-			let count = (parseInt(channelList).lastChild.previousSibling.className.split("-")[1])+1);
+			let count = parseInt(channelList.lastChild.previousSibling.className.split("-")[1])+1;
 			category.attr("class", "container-" + count + " container-hidden");
 			console.log(category);
 			channelList.insertBefore(category,channelList.lastChild);
