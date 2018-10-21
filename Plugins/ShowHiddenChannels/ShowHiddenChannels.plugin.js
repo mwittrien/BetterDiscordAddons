@@ -83,7 +83,7 @@ class ShowHiddenChannels {
 
 	getDescription () {return "Displays channels that are hidden from you by role restrictions.";}
 
-	getVersion () {return "2.2.8";}
+	getVersion () {return "2.2.9";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -202,10 +202,11 @@ class ShowHiddenChannels {
 	}
 	
 	displayHiddenChannels () {
+		return; 
 		var serverObj = BDFDB.getSelectedServer();
 		if (serverObj) {
 			var serverID = serverObj.id;
-			if (!document.querySelector(".container-hidden.server" + serverID)) {
+			if (!document.querySelector(".container-hidden[server='" + serverID + "']")) {
 				$(".container-hidden").remove();
 				var types = {
 					"text":0,
@@ -259,12 +260,12 @@ class ShowHiddenChannels {
 				hiddenChannels.count = count;
 				
 				if (count > 0) {
-					var category = $(this.categoryMarkup)[0]
+					var category = $(this.categoryMarkup)[0];
 					var wrapper = category.querySelector(BDFDB.dotCN.cursorpointer);
 					var svg = category.querySelector(BDFDB.dotCN.categoryicontransition);
 					var name = category.querySelector(BDFDB.dotCN.categorycolortransition);
 					$(category)
-						.addClass("server" + serverID)
+						.attr("server", serverID)
 						.on("click", BDFDB.dotCN.categorycontainerdefault + " > " + BDFDB.dotCN.flex, (e) => {
 							wrapper.classList.toggle(BDFDB.disCN.categorywrapperhovered);
 							wrapper.classList.toggle(BDFDB.disCN.categorywrapperhoveredcollapsed);
@@ -509,6 +510,12 @@ class ShowHiddenChannels {
 	
 	appendToChannelList (category) {
 		var channelList = document.querySelector(BDFDB.dotCNS.channels + BDFDB.dotCN.scroller);
-		if (channelList && category) channelList.insertBefore(category,channelList.lastChild);
+		if (channelList && category) {
+			category.remove();
+			let count = (parseInt(channelList).lastChild.previousSibling.className.split("-")[1])+1);
+			category.attr("class", "container-" + count + " container-hidden");
+			console.log(category);
+			channelList.insertBefore(category,channelList.lastChild);
+		}
 	}
 }
