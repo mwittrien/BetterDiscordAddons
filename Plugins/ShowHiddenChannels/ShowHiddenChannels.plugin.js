@@ -513,7 +513,6 @@ class ShowHiddenChannels {
 			category.remove();
 			let count = parseInt(channelList.lastChild.previousSibling.className.split("-")[1])+1;
 			category.attr("class", "container-" + count + " container-hidden");
-			console.log(category);
 			channelList.insertBefore(category,channelList.lastChild);
 		}
 	}
