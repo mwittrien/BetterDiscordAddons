@@ -6,7 +6,7 @@ class ReverseImageSearch {
 		
 		this.defaults = {
 			engines: {
-				_all: 			{value:true, 	name:BDFDB.getLibraryStrings().btn_all_text, 	url:null},
+				_all: 		{value:true, 	name:BDFDB.getLibraryStrings().btn_all_text, 	url:null},
 				Baidu: 		{value:true, 	name:"Baidu", 		url:"http://image.baidu.com/pcdutu?queryImageUrl=" + this.imgUrlReplaceString},
 				Bing: 		{value:true, 	name:"Bing", 		url:"https://www.bing.com/images/search?q=imgurl:" + this.imgUrlReplaceString + "&view=detailv2&iss=sbi&FORM=IRSBIQ"},
 				Google:		{value:true, 	name:"Google", 		url:"https://images.google.com/searchbyimage?image_url=" + this.imgUrlReplaceString},
@@ -45,7 +45,7 @@ class ReverseImageSearch {
 
 	getDescription () {return "Adds a reverse image search option to the context menu.";}
 
-	getVersion () {return "3.3.7";}
+	getVersion () {return "3.3.8";}
 	
 	getAuthor () {return "DevilBro";}
 
@@ -169,7 +169,7 @@ class ReverseImageSearch {
 				if (engine == "_all") {
 					var engines = BDFDB.getAllData(this, "engines");
 					for (let key in engines) {
-						if (key != "_all" && engines[key]) window.open(this.defaults.engines[key].url.replace(this.imgUrlReplaceString, encodeURIComponent(text)), "_blank");
+						if (key != "_all" && engines[key]) window.open(this.defaults.engines[key].url.replace(this.imgUrlReplaceString, encodeURIComponent(imageurl)), "_blank");
 					}
 				}
 				else {
