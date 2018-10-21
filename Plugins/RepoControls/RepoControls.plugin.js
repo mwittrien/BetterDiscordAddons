@@ -84,31 +84,23 @@ class RepoControls {
 			#bd-settingspane-container .bda-description {
 				display: block;
 			}
-			#bd-settingspane-container .bda-right .ui-switch-wrapper {
-				right: 0;
-			}
-			#bd-settingspane-container .bda-right button {
-				position: absolute;
-				right: 0;
-				top: 30px;
-			}
-			#bd-settingspane-container .bda-right,
 			#bd-settingspane-container .bda-header {
 				position: relative;
 			}
 			#bd-settingspane-container .trashIcon {
 				display: none;
 			}
-			#bd-settingspane-container .bda-right .trashIcon,
 			#bd-settingspane-container .bda-header .trashIcon {
 				cursor: pointer;
 				display: block;
 				position: absolute;
 				right: 50px;
+				top: 2px;
 			}
-			#bd-settingspane-container .bda-right .trashIcon {
-				top: 7px;
-			}`;
+			#bd-settingspane-container .bda-header .bd-reload ~ .trashIcon {
+				right: 78px;
+			}
+			`;
 			
 		this.defaults = {
 			settings: {
@@ -126,7 +118,7 @@ class RepoControls {
 
 	getDescription () {return "Lets you sort and filter your list of downloaded Themes and Plugins.";}
 
-	getVersion () {return "1.1.9";}
+	getVersion () {return "1.2.0";}
 
 	getAuthor () {return "DevilBro";}
 	
