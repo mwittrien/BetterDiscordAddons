@@ -2668,24 +2668,27 @@ img[src*="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * + *:before {
 	position: relative;
 }
 .role-2irmRk .roleName-32vpEy {
+	color: rgb(255,255,255);
 	margin: 0;
 	font-weight: normal;
 	position: relative;
 	height: 20px;
 	line-height: 20px;
+	z-index: 1000;
+	pointer-events: none;
 }
 .role-2irmRk .roleCircle-3xAZ1j {
 	position: absolute;
 	border-radius: 3px;
-	opacity: 0.2;
+	opacity: 0.3;
 	height: 100%;
 	width: 100%;
 	left: 0;
 	top: 0;
-	z-index: 1000;
 }
 .role-2irmRk .roleCircleButton-377y0l:hover {
 	opacity: 1;
+	z-index: 2000;
 }
 
 /* ownertag */
