@@ -1,4 +1,4 @@
-# Edit Servers - [Download Script](https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/PluginsV2/EditServers/index.js) [Download Config](https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/PluginsV2/EditServers/config.json)
+# Edit Servers - [Download Script](https://betterdiscord.net/ghdl?url=https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/PluginsV2/EditServers/index.js) [Download Config](https://betterdiscord.net/ghdl?url=https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/PluginsV2/EditServers/config.json)
 
 Adds two options on your server context menu.
 

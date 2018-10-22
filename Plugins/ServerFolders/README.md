@@ -1,4 +1,4 @@
-# Server Folders - [Download](https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ServerFolders/ServerFolders.plugin.js)
+# Server Folders - [Download](https://betterdiscord.net/ghdl?url=https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ServerFolders/ServerFolders.plugin.js)
 
 Adds the feature to create folders to organize your servers. 
 

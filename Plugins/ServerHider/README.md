@@ -1,4 +1,4 @@
-# Server Hider - [Download](https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ServerHider/ServerHider.plugin.js)
+# Server Hider - [Download](https://betterdiscord.net/ghdl?url=https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ServerHider/ServerHider.plugin.js)
 
 Adds two options on your server context menu.
 

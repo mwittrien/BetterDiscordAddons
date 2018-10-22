@@ -1,4 +1,4 @@
-# Reverse Image Search - [Download Script](https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/PluginsV2/ReverseImageSearch/index.js) [Download Config](https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/PluginsV2/ReverseImageSearch/config.json)
+# Reverse Image Search - [Download Script](https://betterdiscord.net/ghdl?url=https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/PluginsV2/ReverseImageSearch/index.js) [Download Config](https://betterdiscord.net/ghdl?url=https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/PluginsV2/ReverseImageSearch/config.json)
 
 Adds the option to right click an image and use an engine to reverse image search it. 
 Enable/Disable them in the settings.

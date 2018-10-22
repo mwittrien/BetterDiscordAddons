@@ -1,4 +1,4 @@
-# Server Folders - [Download Script](https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/PluginsV2/ServerFolders/index.js) [Download Config](https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/PluginsV2/ServerFolders/config.json)
+# Server Folders - [Download Script](https://betterdiscord.net/ghdl?url=https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/PluginsV2/ServerFolders/index.js) [Download Config](https://betterdiscord.net/ghdl?url=https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/PluginsV2/ServerFolders/config.json)
 
 Adds the feature to create folders to organize your servers. 
 

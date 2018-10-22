@@ -1,4 +1,4 @@
-# Edit Servers - [Download](https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/EditServers/EditServers.plugin.js)
+# Edit Servers - [Download](https://betterdiscord.net/ghdl?url=https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/EditServers/EditServers.plugin.js)
 
 Adds two options on your server context menu.
 

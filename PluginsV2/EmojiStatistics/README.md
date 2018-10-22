@@ -1,4 +1,4 @@
-# Emoji Statistics - [Download Script](https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/PluginsV2/EmojiStatistics/index.js) [Download Config](https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/PluginsV2/EmojiStatistics/config.json)
+# Emoji Statistics - [Download Script](https://betterdiscord.net/ghdl?url=https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/PluginsV2/EmojiStatistics/index.js) [Download Config](https://betterdiscord.net/ghdl?url=https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/PluginsV2/EmojiStatistics/config.json)
 
 Adds several options to get more information about emojis and emojiservers.
 
