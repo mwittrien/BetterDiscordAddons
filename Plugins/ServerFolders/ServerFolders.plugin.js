@@ -331,7 +331,7 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.8.0";}
+	getVersion () {return "5.8.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -672,7 +672,7 @@ class ServerFolders {
 		var folderName = 	"";
 		var position = 		Array.from(document.querySelectorAll("div" + BDFDB.dotCN.guildseparator + ":not(.folderseparator) ~ div" + BDFDB.dotCN.guild)).indexOf(ankerDiv);
 		var iconID = 		0;
-		var icons = 		this.folderIcons[0];
+		var icons = 		Object.assign({},this.folderIcons[0]);
 		var autounread = 	false;
 		var color1 = 		["0","0","0"];
 		var color2 = 		["255","255","255"];
@@ -698,8 +698,10 @@ class ServerFolders {
 		for (var i = 0; i < sortedFolders.length; i++) {
 			var data = sortedFolders[i];
 			if (data) {
-				var folderDiv = this.createFolderDiv(data);
-				this.readIncludedServerList(folderDiv).forEach((serverObj) => {$(serverObj.div).attr("folder",folderDiv.id).hide();});
+				if (!document.querySelector(".folder#" + data.folderID)) { 
+					var folderDiv = this.createFolderDiv(data);
+					this.readIncludedServerList(folderDiv).forEach((serverObj) => {$(serverObj.div).attr("folder",folderDiv.id).hide();});
+				}
 			}
 		}
 	}
@@ -925,6 +927,42 @@ class ServerFolders {
 				});
 			folderSettingsModal.find("#input-foldername").focus();
 		}
+	}
+	
+	changeImgColor (color1, color2, icon, callback) {
+		color1 = BDFDB.color2COMP(color1);
+		color2 = BDFDB.color2COMP(color2);
+		if (!color1 || !color2 || !icon) return;
+		var img = new Image();
+		img.src = icon;
+		img.onload = () => {
+			if (icon.indexOf("data:image") == 0 && img.width < 200 && img.height < 200) {
+				var can = document.createElement("canvas");
+				can.width = img.width;
+				can.height = img.height;
+				var ctx = can.getContext("2d");
+				ctx.drawImage(img, 0, 0);
+				var imageData = ctx.getImageData(0, 0, img.width, img.height);
+				var data = imageData.data;
+				for (var i = 0; i < data.length; i += 4) {
+					if (data[i] == 0 && data[i + 1] == 0 && data[i + 2] == 0) {
+						data[i] = color1[0];
+						data[i + 1] = color1[1];
+						data[i + 2] = color1[2];
+					}
+					else if (data[i] == 255 && data[i + 1] == 255 && data[i + 2] == 255) {
+						data[i] = color2[0];
+						data[i + 1] = color2[1];
+						data[i + 2] = color2[2];
+					}
+					ctx.putImageData(imageData, 0, 0);
+				}
+				callback(can.toDataURL("image/png"));
+			}
+			else {
+				callback(img.src);
+			}
+		};
 	}
 	
 	setIcons (selection, wrapper) {
@@ -1355,42 +1393,6 @@ class ServerFolders {
 			}
 		}
 		return includedServers;
-	}
-	
-	changeImgColor (color1, color2, icon, callback) {
-		color1 = BDFDB.color2COMP(color1);
-		color2 = BDFDB.color2COMP(color2);
-		if (!color1 || !color2 || !icon) return;
-		var img = new Image();
-		img.src = icon;
-		img.onload = () => {
-			if (icon.indexOf("data:image") == 0 && img.width < 200 && img.height < 200) {
-				var can = document.createElement("canvas");
-				can.width = img.width;
-				can.height = img.height;
-				var ctx = can.getContext("2d");
-				ctx.drawImage(img, 0, 0);
-				var imageData = ctx.getImageData(0, 0, img.width, img.height);
-				var data = imageData.data;
-				for (var i = 0; i < data.length; i += 4) {
-					if (data[i] == 0 && data[i + 1] == 0 && data[i + 2] == 0) {
-						data[i] = color1[0];
-						data[i + 1] = color1[1];
-						data[i + 2] = color1[2];
-					}
-					else if (data[i] == 255 && data[i + 1] == 255 && data[i + 2] == 255) {
-						data[i] = color2[0];
-						data[i + 1] = color2[1];
-						data[i + 2] = color2[2];
-					}
-					ctx.putImageData(imageData, 0, 0);
-				}
-				callback(can.toDataURL("image/png"));
-			}
-			else {
-				callback(img.src);
-			}
-		};
 	}
 	
 	setLabelsByLanguage () {
