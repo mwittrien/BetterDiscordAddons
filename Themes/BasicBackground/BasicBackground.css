@@ -53,7 +53,6 @@
 .container-2lgZY8,
 .contentWrapper-3WC1ID,
 .popout-3sVMXz section,
-.content-region,
 .contentRegion-3nDuYy,
 #friends .tab-bar-item:hover,
 .input-cIJ7To,
@@ -71,9 +70,7 @@
 .search-l1Wz-Q .search-bar,
 .search-results-wrap,
 .search-results-wrap .search-header,
-.sidebar-region,
 .sidebarRegion-VFTUkN,
-:not(.tab-content) > .ui-standard-sidebar-view,
 :not(.tab-content) > .standardSidebarView-3F1I7i,
 .card-3Qj_Yx,
 .container-1UB9sr,
@@ -618,7 +615,6 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 #friends,
 .friends-table,
 .friend-table-add-header,
-.tab-content > .ui-standard-sidebar-view,
 .tab-content > .standardSidebarView-3F1I7i,
 .activityFeed-28jde9,
 .gameLibrary-TTDw4Y,
@@ -876,7 +872,6 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	background-color: rgba(47,49,54,.6) !important;
 }
 
-.ui-standard-sidebar-view .closeButton-1tv5uR:hover,
 .standardSidebarView-3F1I7i .closeButton-1tv5uR:hover {
 	background-color: rgba(var(--vaccentcolor), calc(var(--vtransparencyalpha) * 3)) !important;
 }
@@ -2930,69 +2925,6 @@ html, span:not(.spinner-item) {
 }
 #help-query:focus {
 	border-color: rgb(var(--vaccentcolor)) !important;
-}
-
-/* switchfix (original by Zerebos) */
-.bda-right .ui-switch-wrapper {
-	-webkit-user-select: none;
-	user-select: none;
-	position: relative;
-	width: 44px;
-	height: 24px;
-	display: block;
-	flex: 0 0 auto;
-}
-.bda-right .ui-switch-wrapper {
-	margin-top: 5px;
-	margin-bottom: 15px;
-	float: right;
-}
-.bda-right .ui-switch-wrapper input {
-	position: absolute;
-	opacity: 0;
-	cursor: pointer;
-	width: 100%;
-	height: 100%;
-	z-index: 1;
-}
-.bda-right .ui-switch-wrapper .ui-switch {
-	position: absolute;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	background: #72767d;
-	border-radius: 14px;
-	transition: background .15s ease-in-out,box-shadow .15s ease-in-out,border .15s ease-in-out;
-}
-.bda-right .ui-switch-checkbox:checked+.ui-switch {
-	background: rgb(var(--vaccentcolor)) !important;
-}
-.bda-right .ui-switch-wrapper .ui-switch:before {
-	content: "";
-	display: block;
-	width: 18px;
-	height: 18px;
-	position: absolute;
-	top: 3px;
-	left: 3px;
-	bottom: 3px;
-	background: #f6f6f7;
-	border-radius: 10px;
-	transition: all .15s ease;
-	box-shadow: 0 3px 1px 0 rgba(0,0,0,.05),0 2px 2px 0 rgba(0,0,0,.1),0 3px 3px 0 rgba(0,0,0,.05);
-}
-.bda-right .ui-switch-wrapper .ui-switch-checkbox:checked+.ui-switch:before {
-	transform: translate(20px,0)!important;
-}
-.bda-right .ui-switch-wrapper .ui-switch-checkbox+.ui-switch:before {
-	transform: translate(0,0);
-}
-.bda-right .ui-switch-wrapper .ui-switch.checked:before {
-	transform: translateX(20px);
-}
-.bda-right button {
-	clear: right;
 }
 
 
