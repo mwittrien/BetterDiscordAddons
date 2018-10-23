@@ -32,7 +32,7 @@ class ChatFilter {
 
 	getDescription () {return "Allows the user to censor words or block complete messages based on words in the chatwindow.";}
 
-	getVersion () {return "3.2.6";}
+	getVersion () {return "3.2.7";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -169,7 +169,7 @@ class ChatFilter {
 
 	stop () {
 		if (typeof BDFDB === "object") {
-			document.querySelectorAll(`${BDFDB.dotCN.messagemarkup}.blocked, ${BDFDB.dotCN.messageaccessory}.censored, ${BDFDB.dotCN.messagemarkup}.blocked, ${BDFDB.dotCN.messageaccessory}.censored`).forEach(message => {
+			document.querySelectorAll(`${BDFDB.dotCN.messagemarkup}.blocked, ${BDFDB.dotCN.messageaccessory}.blocked, ${BDFDB.dotCN.messagemarkup}.censored, ${BDFDB.dotCN.messageaccessory}.censored`).forEach(message => {
 				this.resetMessage(message);
 			});
 						
@@ -300,7 +300,7 @@ class ChatFilter {
 	}
 	
 	hideMessage (message) {
-		if (!$(message).hasClass("blocked") && !$(message).hasClass("censored")) {
+		if (message.tagName && !message.classList.contains("blocked") && !message.classList.contains("censored")) {
 			var orightml = $(message).html();
 			var newhtml = "";
 			
@@ -327,8 +327,7 @@ class ChatFilter {
 					var blockedReplace = blockedWords[bWord].empty ? "" : (blockedWords[bWord].replace || replaces.blocked);
 					var reg = this.createReg(bWord, blockedWords[bWord]);
 					strings.forEach(string => {
-						let emojiname = this.getEmojiName(string);
-						if (emojiname && reg.test(emojiname)) blocked = true;
+						if (this.testForEmoji(string, reg)) blocked = true;
 						else if (string.indexOf('<img src="http') == 0) {
 							var url = string.split('src="').length > 0 ? string.split('src="')[1] : null;
 							url = url ? url.split('"')[0] : null;
@@ -355,12 +354,13 @@ class ChatFilter {
 				}
 				else {
 					var censoredWords = BDFDB.loadData("censored", this, "words");
+					var censored = false;
 					for (let cWord in censoredWords) {
 						var censoredReplace = censoredWords[cWord].empty ? "" : (censoredWords[cWord].replace || replaces.censored);
 						var reg = this.createReg(cWord, censoredWords[cWord]);
 						strings.forEach((string,i) => {
-							let emojiname = this.getEmojiName(string);
-							if (emojiname && reg.test(emojiname)) {
+							if (this.testForEmoji(string, reg)) {
+								censored = true;
 								strings[i] = BDFDB.encodeToHTML(censoredReplace);
 								if (strings[i+1] && strings[i+1].indexOf("<input") == 0) {
 									strings[i+1] = "";
@@ -372,22 +372,28 @@ class ChatFilter {
 								var url = string.split('src="').length > 0 ? string.split('src="')[1] : null;
 								url = url ? url.split('"')[0] : null;
 								if (reg.test(url)) {
+									censored = true;
 									strings = [BDFDB.encodeToHTML(censoredReplace)];
 								}
 							}
 							else if (string.indexOf("<") != 0) {
 								var newstring = [];
 								string.replace(/\n/g, " \n ").split(" ").forEach((word) => {
-									newstring.push(word && reg.test(word) ? BDFDB.encodeToHTML(censoredReplace) : word);
+									if (word && reg.test(word)) {
+										censored = true;
+										newstring.push(BDFDB.encodeToHTML(censoredReplace));
+									}
+									else {
+										newstring.push(word);
+									}
 								});
 								strings[i] = newstring.join(" ");
 							}
 						});
 					}
 					
-					newhtml = strings.join("");
-					
-					if (newhtml != orightml) {
+					if (censored) {
+						newhtml = strings.join("").replace(/\s\n\s/g, "\n");
 						$(message)
 							.html(newhtml)
 							.addClass("censored")
@@ -405,12 +411,12 @@ class ChatFilter {
 		return new RegExp(BDFDB.encodeToHTML(config.exact ? "^" + BDFDB.regEscape(word) + "$" : BDFDB.regEscape(word)), config.case ? "" : "i");
 	}
 	
-	getEmojiName (string) {
+	testForEmoji (string, reg) {
 		if (string.indexOf("<img ") == 0 && (string.indexOf('class="emote') > -1 || string.indexOf('class="emoji') > -1)) {
-			var emojiname = string.split('alt="').length > 0 ? string.split('alt="')[1] : null;
-			emojiname = emojiname ? emojiname.split('" src')[0] : null;
-			return emojiname = emojiname ? emojiname.replace(new RegExp(":", 'g'), "") : null;
+			var emojiname = string.split('alt="').length > 0 ? string.split('alt="')[1].split('"')[0] : null;
+			return emojiname = !emojiname ? false : (reg.test(emojiname) || reg.test(emojiname.replace(/:/g, "")));
 		}
+		return false;
 	}
 	
 	resetMessage (message) {
