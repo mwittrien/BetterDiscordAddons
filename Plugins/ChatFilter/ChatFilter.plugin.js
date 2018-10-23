@@ -330,7 +330,6 @@ class ChatFilter {
 							if (reg.test(url)) blocked = true;
 						}
 						else if (string.indexOf("<") != 0) {
-							console.log(string.replace(/\n/g, "\s\n\s").split(" "))
 							string.replace(/\n/g, " \n ").split(" ").forEach((word) => {
 								if (word && reg.test(word)) blocked = true;
 							});
