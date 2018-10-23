@@ -9,7 +9,7 @@ class ChatFilter {
 			${BDFDB.dotCNS.messagegroup + BDFDB.dotCN.messagemarkup}.blocked:not(.revealed) {
 				font-weight: bold;
 				font-style: italic;
-			}\n
+			}
 			
 			${BDFDB.dotCNS.messagegroup + BDFDB.dotCN.messageaccessory}.censored:not(.revealed),
 			${BDFDB.dotCNS.messagegroup + BDFDB.dotCN.messagemarkup}:not(.revealed) {
