@@ -21,12 +21,16 @@
 	--vbackdropblur: var(--backdropblur,var(--dblur));
 }
 
-.container-16j22k,
-.appMount-3VJmYg {
+.container-16j22k:before,
+.appMount-3VJmYg:before {
+	content: "";
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	position: absolute;
 	background: var(--vbackground) center/cover !important;
 	filter: blur(var(--vbackgroundblur)) !important;
-	opacity: 1 !important;
-	animation: none !important;
 }
 
 .wrapper-3Q5DdO {
@@ -611,6 +615,8 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	background: url(https://canary.discordapp.com/assets/72e1fd085e240aecf005e642e655c0f4.svg) no-repeat bottom !important;
 }
 
+.container-16j22k,
+.appMount-3VJmYg,
 .popout-2sKjHu,
 #friends,
 .friends-table,
