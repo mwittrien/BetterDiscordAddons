@@ -176,7 +176,7 @@ class DisplayServersAsChannels {
 
 	getDescription () {return "Display servers in a similar way as channels.";}
 
-	getVersion () {return "1.1.1";}
+	getVersion () {return "1.1.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -213,8 +213,13 @@ class DisplayServersAsChannels {
 						if (addedNodes) {
 							addedNodes.forEach((node) => {
 								if (node && node.classList && node.classList.contains(BDFDB.disCN.guild) && !node.querySelector(BDFDB.dotCN.guildserror)) {
-									var id = BDFDB.getIdOfServer(node);
-									if (id) this.changeServer(BDFDB.getDivOfServer(id));
+									if (node.classList.contains("folder")) {
+										this.changeServer(this.getFolderObject(node));
+									}
+									else {
+										var id = BDFDB.getIdOfServer(node);
+										if (id) this.changeServer(BDFDB.getDivOfServer(id));
+									}
 								}
 							});
 						}
