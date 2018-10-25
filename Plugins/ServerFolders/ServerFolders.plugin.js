@@ -47,9 +47,9 @@ class ServerFolders {
 			
 			${BDFDB.dotCN.guild}.folder ${BDFDB.dotCN.badge}.folder.count {
 				background: #7289DA;
-				height: 12px;
 				top: -3px;
 				right: 30px;
+				bottom: unset;
 			}
 			
 			${BDFDB.dotCN.guild}.guilddragpreview {
