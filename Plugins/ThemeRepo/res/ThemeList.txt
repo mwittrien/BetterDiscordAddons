@@ -5,7 +5,7 @@ https://raw.githubusercontent.com/AltenGD/Altens-betterdiscord-Themes-Plugins/ma
 https://raw.githubusercontent.com/archnemeziz/Discord/master/ElegantBlue.theme.css
 https://raw.githubusercontent.com/Asteria5675/BetterDiscordThemes/master/Light_Dark.theme.css
 https://raw.githubusercontent.com/Asteria5675/BetterDiscordThemes/master/SL.theme.css
-https://raw.githubusercontent.com/Azagwen/Rainbow_kittens_theme/master/Rainbow_kittens_V0.1.2.theme.css
+https://raw.githubusercontent.com/Azagwen/Rainbow_kittens_theme/master/Rainbow_kittens_V0.1.3.theme.css
 https://raw.githubusercontent.com/BeardDesign1/Ios-switches/themes/IOS_Switches.theme.css
 https://raw.githubusercontent.com/BeardDesign1/Material-design-theme/themes/Beard's-Material-theme-for-Discord.theme.css
 https://raw.githubusercontent.com/CapnKitten/Material-Discord/master/Material-Discord.theme.css
