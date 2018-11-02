@@ -9,7 +9,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			
 			this.defaults = {
 				engines: {
-					_all: 			{value:true, 	name:BDFDB.getLibraryStrings().btn_all_text, 	url:null},
+					_all: 		{value:true, 	name:BDFDB.getLibraryStrings().btn_all_text, 	url:null},
 					Baidu: 		{value:true, 	name:"Baidu", 		url:"http://image.baidu.com/pcdutu?queryImageUrl=" + this.imgUrlReplaceString},
 					Bing: 		{value:true, 	name:"Bing", 		url:"https://www.bing.com/images/search?q=imgurl:" + this.imgUrlReplaceString + "&view=detailv2&iss=sbi&FORM=IRSBIQ"},
 					Google:		{value:true, 	name:"Google", 		url:"https://images.google.com/searchbyimage?image_url=" + this.imgUrlReplaceString},
@@ -18,6 +18,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					SauceNAO: 	{value:true, 	name:"SauceNAO", 	url:"https://saucenao.com/search.php?db=999&url=" + this.imgUrlReplaceString},
 					Sogou: 		{value:true, 	name:"Sogou", 		url:"http://pic.sogou.com/ris?flag=1&drag=0&query=" + this.imgUrlReplaceString + "&flag=1"},
 					TinEye:		{value:true, 	name:"TinEye", 		url:"https://tineye.com/search?url=" + this.imgUrlReplaceString},
+					WhatAnime:	{value:true,	name:"WhatAnime",	url:"https://trace.moe/?url=" + this.imgUrlReplaceString},
 					Yandex: 	{value:true, 	name:"Yandex", 		url:"https://yandex.com/images/search?url=" + this.imgUrlReplaceString + "&rpt=imageview"}
 				}
 			};
@@ -147,7 +148,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					if (engine == "_all") {
 						var engines = BDFDB.getAllData(this, "engines");
 						for (let key in engines) {
-							if (key != "_all" && engines[key]) window.open(this.defaults.engines[key].url.replace(this.imgUrlReplaceString, encodeURIComponent(text)), "_blank");
+							if (key != "_all" && engines[key]) window.open(this.defaults.engines[key].url.replace(this.imgUrlReplaceString, encodeURIComponent(imageurl)), "_blank");
 						}
 					}
 					else {
