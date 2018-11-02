@@ -12,6 +12,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					_all: 			{value:true, 	name:BDFDB.getLibraryStrings().btn_all_text, 	url:null},
 					Baidu: 		{value:true, 	name:"Baidu", 		url:"http://image.baidu.com/pcdutu?queryImageUrl=" + this.imgUrlReplaceString},
 					Bing: 		{value:true, 	name:"Bing", 		url:"https://www.bing.com/images/search?q=imgurl:" + this.imgUrlReplaceString + "&view=detailv2&iss=sbi&FORM=IRSBIQ"},
+					e621:		{value:true, 	name:"e621", 		url:"https://iqdb.harry.lu/?url=" + this.imgUrlReplaceString},
 					Google:		{value:true, 	name:"Google", 		url:"https://images.google.com/searchbyimage?image_url=" + this.imgUrlReplaceString},
 					IQDB:		{value:true, 	name:"IQDB", 		url:"https://iqdb.org/?url=" + this.imgUrlReplaceString},
 					Reddit: 	{value:true, 	name:"Reddit", 		url:"http://karmadecay.com/search?q=" + this.imgUrlReplaceString},
