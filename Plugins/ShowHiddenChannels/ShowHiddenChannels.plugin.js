@@ -83,7 +83,7 @@ class ShowHiddenChannels {
 
 	getDescription () {return "Displays channels that are hidden from you by role restrictions.";}
 
-	getVersion () {return "2.3.2";}
+	getVersion () {return "2.3.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -502,7 +502,8 @@ class ShowHiddenChannels {
 			htmlString += `</div>`;
 		}
 		if (htmlString) {
-			var tooltip = BDFDB.createTooltip(htmlString, e.currentTarget, {type:"right", selector:"showhiddenchannels-tooltip", html:true, style:`max-width: ${window.outerWidth/2}px !important;`});
+			var width = window.outerWidth/2;
+			var tooltip = BDFDB.createTooltip(htmlString, e.currentTarget, {type:"right", selector:"showhiddenchannels-tooltip", html:true, style:`max-width: ${width < 200 ? 400 : width}px !important;`});
 			tooltip.style.top = tooltip.style.top.replace("px","") - $(e.currentTarget).css("padding-bottom").replace("px","")/2 + $(e.currentTarget).css("padding-top").replace("px","")/2 + "px";
 		}
 	}
