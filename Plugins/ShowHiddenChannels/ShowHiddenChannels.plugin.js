@@ -83,7 +83,7 @@ class ShowHiddenChannels {
 
 	getDescription () {return "Displays channels that are hidden from you by role restrictions.";}
 
-	getVersion () {return "2.3.0";}
+	getVersion () {return "2.3.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -128,6 +128,8 @@ class ShowHiddenChannels {
 		if (typeof BDFDB === "object") {
 			BDFDB.loadMessage(this);
 			
+			this.React = BDFDB.WebModules.findByProperties(["createElement", "cloneElement"]);
+			this.ChannelTypes = BDFDB.WebModules.findByProperties(["ChannelTypes"]).ChannelTypes;
 			this.UserStore = BDFDB.WebModules.findByProperties(["getUsers", "getUser"]);
 			this.MemberStore = BDFDB.WebModules.findByProperties(["getMember", "getMembers"]);
 			this.ChannelStore = BDFDB.WebModules.findByProperties(["getChannels", "getDMFromUserId"]);
@@ -207,24 +209,19 @@ class ShowHiddenChannels {
 			var serverID = serverObj.id;
 			if (!document.querySelector(".container-hidden[server='" + serverID + "']")) {
 				$(".container-hidden").remove();
-				var types = {
-					"text":0,
-					"voice":2,
-					"category":4
-				};
 				var allChannels = this.ChannelStore.getChannels();
 				var shownChannels = this.GuildChannels.getChannels(serverID);
 				var hiddenChannels = {};
 				
-				for (let type in types) hiddenChannels[types[type]] = [];
+				for (let type in this.ChannelTypes) hiddenChannels[this.ChannelTypes[type]] = [];
 				
 				for (let channelID in allChannels) {
 					var channel = allChannels[channelID];
 					if (channel.guild_id == serverID) {
                         var isHidden = true;
-						if (channel.type == types.category) {
-							for (let type in types) {
-								for (let shownChannel of shownChannels[types[type]]) {
+						if (channel.type == this.ChannelTypes.GUILD_CATEGORY) {
+							for (let type in this.ChannelTypes) {
+								for (let shownChannel of shownChannels[this.ChannelTypes[type]]) {
 									if (!channel.id || shownChannel.channel.parent_id == channel.id) {
 										isHidden = false;
 										break;
@@ -249,12 +246,12 @@ class ShowHiddenChannels {
 						
 				var settings = BDFDB.getAllData(this, "settings"); 
 				var count = 0;
-				for (let type in types) {
-					if (!settings.showText && type == "text" || !settings.showVoice && type == "voice" || !settings.showCategory && type == "category") {
-						hiddenChannels[types[type]] = [];
+				for (let type in this.ChannelTypes) {
+					if (!settings.showText && type == "GUILD_TEXT" || !settings.showVoice && type == "GUILD_VOICE" || !settings.showCategory && type == "GUILD_CATEGORY") {
+						hiddenChannels[this.ChannelTypes[type]] = [];
 					}
-					BDFDB.sortArrayByKey(hiddenChannels[types[type]], "name");
-					count += hiddenChannels[types[type]].length;
+					BDFDB.sortArrayByKey(hiddenChannels[this.ChannelTypes[type]], "name");
+					count += hiddenChannels[this.ChannelTypes[type]].length;
 				}
 				hiddenChannels.count = count;
 				
@@ -319,7 +316,7 @@ class ShowHiddenChannels {
 								BDFDB.showToast(`You can not enter the hidden textchannel ${hiddenChannel.name}.`, {type:"error"});
 							})
 							.on("contextmenu", (e) => {
-								this.createHiddenObjContextMenu(hiddenChannel, e);
+								this.createHiddenObjContextMenu(serverObj, hiddenChannel, "TEXT", e);
 							})
 							.appendTo(category);
 					}
@@ -347,7 +344,7 @@ class ShowHiddenChannels {
 								BDFDB.showToast(`You can not enter the hidden voicechannel ${hiddenChannel.name}.`, {type:"error"});
 							})
 							.on("contextmenu", (e) => {
-								this.createHiddenObjContextMenu(hiddenChannel, e);
+								this.createHiddenObjContextMenu(serverObj, hiddenChannel, "VOICE", e);
 							})
 							.appendTo(category);
 					}
@@ -372,7 +369,7 @@ class ShowHiddenChannels {
 								BDFDB.showToast(`You can not open the hidden category ${hiddenChannel.name}.`, {type:"error"});
 							})
 							.on("contextmenu", (e) => {
-								this.createHiddenObjContextMenu(hiddenChannel, e);
+								this.createHiddenObjContextMenu(serverObj, hiddenChannel, "CATEGORY", e);
 							})
 							.appendTo(category);
 					}
@@ -406,10 +403,13 @@ class ShowHiddenChannels {
 		}
 	}
 	
-	createHiddenObjContextMenu (hiddenObj, e) {
+	createHiddenObjContextMenu (serverObj, hiddenObj, type, e) {
 		e.preventDefault();
 		e.stopPropagation();
-		var contextMenu = $(`<div class="${BDFDB.disCN.contextmenu} ShowHiddenChannelsContextMenu"><div class="${BDFDB.disCN.contextmenuitemgroup}"><div class="${BDFDB.disCN.contextmenuitem} copyid-item"><span>${BDFDB.LanguageStrings.COPY_ID}</span><div class="${BDFDB.disCN.contextmenuhint}"></div></div></div>`);
+		var contextMenu = $(`<div class="${BDFDB.disCN.contextmenu} ShowHiddenChannelsContextMenu">${BDFDB.isPluginEnabled("PermissionsViewer") ? '<div class="' + BDFDB.disCN.contextmenuitemgroup + '"><div class="' + BDFDB.disCN.contextmenuitem + '" style="display: none !important;"></div></div>' : ''}<div class="${BDFDB.disCN.contextmenuitemgroup}"><div class="${BDFDB.disCN.contextmenuitem} copyid-item"><span>${BDFDB.LanguageStrings.COPY_ID}</span><div class="${BDFDB.disCN.contextmenuhint}"></div></div></div></div>`);
+		var reactInstance = this.React.createElement(contextMenu[0]);
+		reactInstance.return = {memoizedProps:{type:("CHANNEL_LIST_" + type),guild:serverObj.data,channel:hiddenObj}};
+		contextMenu[0].__reactInternalInstance = reactInstance;
 		contextMenu
 			.on("click." + this.getName(), ".copyid-item", (e2) => {
 				contextMenu.remove();
