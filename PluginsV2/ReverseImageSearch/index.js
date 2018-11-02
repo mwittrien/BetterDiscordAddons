@@ -14,6 +14,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					Bing: 		{value:true, 	name:"Bing", 		url:"https://www.bing.com/images/search?q=imgurl:" + this.imgUrlReplaceString + "&view=detailv2&iss=sbi&FORM=IRSBIQ"},
 					e621:		{value:true, 	name:"e621", 		url:"https://iqdb.harry.lu/?url=" + this.imgUrlReplaceString},
 					Google:		{value:true, 	name:"Google", 		url:"https://images.google.com/searchbyimage?image_url=" + this.imgUrlReplaceString},
+					ImgOps:		{value:true, 	name:"ImgOps", 		url:"https://imgops.com/" + this.imgUrlReplaceString},
 					IQDB:		{value:true, 	name:"IQDB", 		url:"https://iqdb.org/?url=" + this.imgUrlReplaceString},
 					Reddit: 	{value:true, 	name:"Reddit", 		url:"http://karmadecay.com/search?q=" + this.imgUrlReplaceString},
 					SauceNAO: 	{value:true, 	name:"SauceNAO", 	url:"https://saucenao.com/search.php?db=999&url=" + this.imgUrlReplaceString},
