@@ -10,6 +10,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			this.defaults = {
 				engines: {
 					_all: 		{value:true, 	name:BDFDB.getLibraryStrings().btn_all_text, 	url:null},
+					ascii2d: 	{value:true, 	name:"ascii2d", 	url:"https://ascii2d.net/search/url/" + this.imgUrlReplaceString},
 					Baidu: 		{value:true, 	name:"Baidu", 		url:"http://image.baidu.com/pcdutu?queryImageUrl=" + this.imgUrlReplaceString},
 					Bing: 		{value:true, 	name:"Bing", 		url:"https://www.bing.com/images/search?q=imgurl:" + this.imgUrlReplaceString + "&view=detailv2&iss=sbi&FORM=IRSBIQ"},
 					e621:		{value:true, 	name:"e621", 		url:"https://iqdb.harry.lu/?url=" + this.imgUrlReplaceString},
