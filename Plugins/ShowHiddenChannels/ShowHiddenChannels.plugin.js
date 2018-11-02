@@ -83,7 +83,7 @@ class ShowHiddenChannels {
 
 	getDescription () {return "Displays channels that are hidden from you by role restrictions.";}
 
-	getVersion () {return "2.3.1";}
+	getVersion () {return "2.3.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -221,7 +221,7 @@ class ShowHiddenChannels {
                         var isHidden = true;
 						if (channel.type == this.ChannelTypes.GUILD_CATEGORY) {
 							for (let type in this.ChannelTypes) {
-								for (let shownChannel of shownChannels[this.ChannelTypes[type]]) {
+								if (shownChannels[this.ChannelTypes[type]]) for (let shownChannel of shownChannels[this.ChannelTypes[type]]) {
 									if (!channel.id || shownChannel.channel.parent_id == channel.id) {
 										isHidden = false;
 										break;
