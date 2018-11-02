@@ -5,12 +5,9 @@ class OldTitleBar {
 		this.patched = false;
 		
 		this.css = `
-			${BDFDB.dotCN.titlebar}.hidden-by-OTB {
-				display: none;
-			}
-			
-			${BDFDB.dotCN.titlebar}.hidden-by-OTB + ${BDFDB.dotCNS.app + BDFDB.dotCN.splashbackground}:before {
-				display: none;
+			.hidden-by-OTB ${BDFDB.dotCN.titlebar},
+			.hidden-by-OTB ${BDFDB.dotCN.titlebar} + ${BDFDB.dotCNS.app + BDFDB.dotCN.splashbackground}:before {
+				display: none !important;
 			}
 			
 			${BDFDB.dotCN.channelheaderheaderbardrag} {
@@ -90,7 +87,7 @@ class OldTitleBar {
 
 	getDescription () {return "Reverts the title bar back to its former self.";}
 
-	getVersion () {return "1.4.6";}
+	getVersion () {return "1.4.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -187,6 +184,7 @@ class OldTitleBar {
 			
 			this.patchMainScreen(BDFDB.getData("displayNative", this, "settings"));
 		
+			$(document.body).addClass("hidden-by-OTB");
 			$(BDFDB.dotCN.titlebar).addClass("hidden-by-OTB");
 			
 			var settingswindow = document.querySelector(BDFDB.dotCN.layer + "[layer-id]");
