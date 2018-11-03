@@ -32,10 +32,14 @@ https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Theme
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Theme_Group_2/BokuNoHeroAcademia.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Theme_Group_2/Danganronpa.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Theme_Group_2/Thunderstorm.theme.css
+https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Theme_Group_2/Twitch.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Theme_Group_3/Fanta.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Theme_Group_3/Gumi.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Theme_Group_3/KemonoFriends.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Theme_Group_3/KittyCat.theme.css
+https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Theme_Group_4/Clear_Sunset.theme.css
+https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Theme_Group_4/Ram.theme.css
+https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Theme_Group_4/Rem.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Theme_Group_4/Winter.theme.css
 https://raw.githubusercontent.com/fluffingtons/fulldark/master/fulldark.theme.css
 https://raw.githubusercontent.com/gco360/iron-man-theme/master/ironman.theme.css
@@ -130,7 +134,9 @@ https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Themes/Radi
 https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Themes/TransientMaterial/TransientMaterial.theme.css
 https://raw.githubusercontent.com/redsauce117/SauceysDiscordThemes/master/DarkerDiscordTheme.theme.css
 https://raw.githubusercontent.com/Ruben7173/Ruben7173.github.io/master/BetterDiscord-Themes/Darling-in-The-Franxx/02-theme.theme.css
+https://raw.githubusercontent.com/Ruben7173/Ruben7173.github.io/master/BetterDiscord-Themes/Forest-Green-theme/forestgreen.theme.css
 https://raw.githubusercontent.com/Ruben7173/Ruben7173.github.io/master/BetterDiscord-Themes/minimalistic-dark-theme/minimalist-dark.theme.css
+https://raw.githubusercontent.com/Ruben7173/Ruben7173.github.io/master/BetterDiscord-Themes/wishful-blue/wishful-blue.theme.css
 https://raw.githubusercontent.com/satoru8/Addons/master/BeautifulCategories.theme.css
 https://raw.githubusercontent.com/satoru8/Addons/master/BorderStatus.theme.css
 https://raw.githubusercontent.com/satoru8/Addons/master/FriendsList.theme.css

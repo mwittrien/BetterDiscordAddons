@@ -221,7 +221,7 @@ class PluginRepo {
 
 	getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
 
-	getVersion () {return "1.5.6";}
+	getVersion () {return "1.5.7";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -663,37 +663,39 @@ class PluginRepo {
 				this.grabbedPlugins = result.split("\n");
 				this.foundPlugins = this.grabbedPlugins.concat(BDFDB.loadData("ownlist", this, "ownlist") || []);
 				this.loading = true;
-				getPluginInfo(() => {
-					var finishCounter = 0, finishInterval = setInterval(() => {
-						if ((webviewqueue.length == 0 && !webviewrunning) || finishCounter > 300) {
-							clearInterval(finishInterval);
-							if (typeof webview != "undefined") webview.remove();
-							this.loading = false;
-							console.log("PluginRepo: Finished fetching Plugins.");
-							if (document.querySelector(".bd-pluginrepobutton")) BDFDB.showToast(`Finished fetching Plugins.`, {type:"success"});
-							if (outdated > 0) {
-								var text = `${outdated} of your Plugins ${outdated == 1 ? "is" : "are"} outdated. Check:`;
-								var bar = BDFDB.createNotificationsBar(text,{type:"danger",btn:"PluginRepo",selector:"pluginrepo-notice"});
-								$(bar).on("click." + this.getName(), BDFDB.dotCN.noticebutton, (e) => {
-									this.openPluginRepoModal(true);
-									e.delegateTarget.querySelector(BDFDB.dotCN.noticedismiss).click();
-								});
-							}
-							if (BDFDB.myData.id == "278543574059057154") {
-								let wrongUrls = [];
-								for (let url of this.foundPlugins) if (url && !this.loadedPlugins[url] && !wrongUrls.includes(url)) wrongUrls.push(url);
-								if (wrongUrls.length > 0) {
-									var bar = BDFDB.createNotificationsBar(`PluginRepo: ${wrongUrls.length} Plugin${wrongUrls.length > 1 ? "s" : ""} could not be loaded.`, {type:"danger",btn:"List"});
+				createWebview().then(() => {
+					getPluginInfo(() => {
+						var finishCounter = 0, finishInterval = setInterval(() => {
+							if ((webviewqueue.length == 0 && !webviewrunning) || finishCounter > 300 || global.a) {
+								clearInterval(finishInterval);
+								if (typeof webview != "undefined") webview.remove();
+								this.loading = false;
+								console.log("PluginRepo: Finished fetching Plugins.");
+								if (document.querySelector(".bd-pluginrepobutton")) BDFDB.showToast(`Finished fetching Plugins.`, {type:"success"});
+								if (outdated > 0) {
+									var text = `${outdated} of your Plugins ${outdated == 1 ? "is" : "are"} outdated. Check:`;
+									var bar = BDFDB.createNotificationsBar(text,{type:"danger",btn:"PluginRepo",selector:"pluginrepo-notice"});
 									$(bar).on("click." + this.getName(), BDFDB.dotCN.noticebutton, (e) => {
-										var toast = BDFDB.showToast(wrongUrls.join("\n"),{type:"error"});
-										toast.style.overflow = "hidden";
-										console.log(wrongUrls.length == 1 ? wrongUrls[0] : wrongUrls);
+										this.openPluginRepoModal(true);
+										e.delegateTarget.querySelector(BDFDB.dotCN.noticedismiss).click();
 									});
 								}
+								if (BDFDB.myData.id == "278543574059057154") {
+									let wrongUrls = [];
+									for (let url of this.foundPlugins) if (url && !this.loadedPlugins[url] && !wrongUrls.includes(url)) wrongUrls.push(url);
+									if (wrongUrls.length > 0) {
+										var bar = BDFDB.createNotificationsBar(`PluginRepo: ${wrongUrls.length} Plugin${wrongUrls.length > 1 ? "s" : ""} could not be loaded.`, {type:"danger",btn:"List"});
+										$(bar).on("click." + this.getName(), BDFDB.dotCN.noticebutton, (e) => {
+											var toast = BDFDB.showToast(wrongUrls.join("\n"),{type:"error"});
+											toast.style.overflow = "hidden";
+											console.log(wrongUrls.length == 1 ? wrongUrls[0] : wrongUrls);
+										});
+									}
+								}
 							}
-						}
-						else finishCounter++;
-					},1000);
+							else finishCounter++;
+						},1000);
+					});
 				});
 			}
 		});
@@ -751,8 +753,6 @@ class PluginRepo {
 		
 		createWebview = () => {
 			return new Promise(function(callback) {
-				if (typeof webview != "undefined") webview.remove();
-				webviewrunning = true;
 				webview = document.createElement("webview");
 				webview.src = "https://discordapp.com/";
 				webview.setAttribute("webview-PluginRepo", null);
@@ -768,32 +768,32 @@ class PluginRepo {
 			if (webviewrunning) return;
 			let webviewdata = webviewqueue.shift();
 			if (!webviewdata) return;
-			createWebview().then(() => {
-				let {body, url} = webviewdata;
-				let name = body.replace(new RegExp("\\s*\:\\s*", "g"), ":").split('"name":"');
-				if (name.length > 1) {
-					name = name[1].split('"')[0];
-					webview.getWebContents().executeJavaScript(body).then(() => {
-						webview.getWebContents().executeJavaScript(`
-							var p = new ` + name + `(); 
-							var data = {
-								"getName":p.getName(),
-								"getAuthor":p.getAuthor(),
-								"getVersion":p.getVersion(),
-								"getDescription":p.getDescription()
-							}; 
-							Promise.resolve(data);`
-						).then((plugin) => {
-							plugin.url = url;
-							this.loadedPlugins[url] = plugin;
-							var installedPlugin = window.bdplugins[plugin.getName] ? window.bdplugins[plugin.getName].plugin : null;
-							if (installedPlugin && installedPlugin.getAuthor().toUpperCase() == plugin.getAuthor.toUpperCase() && installedPlugin.getVersion() != plugin.getVersion) outdated++;
-							webviewrunning = false;
-							runInWebview();
-						});
+			webviewrunning = true;
+			let {body, url} = webviewdata;
+			let name = body.replace(new RegExp("\\s*\:\\s*", "g"), ":").split('"name":"');
+			if (name.length > 1) {
+				name = name[1].split('"')[0];
+				webview.getWebContents().executeJavaScript(body).then(() => {
+					webview.getWebContents().executeJavaScript(`
+						var p = new ` + name + `(); 
+						var data = {
+							"getName":p.getName(),
+							"getAuthor":p.getAuthor(),
+							"getVersion":p.getVersion(),
+							"getDescription":p.getDescription()
+						}; 
+						Promise.resolve(data);`
+					).then((plugin) => {
+						plugin.url = url;
+						this.loadedPlugins[url] = plugin;
+						var installedPlugin = window.bdplugins[plugin.getName] ? window.bdplugins[plugin.getName].plugin : null;
+						if (installedPlugin && installedPlugin.getAuthor().toUpperCase() == plugin.getAuthor.toUpperCase() && installedPlugin.getVersion() != plugin.getVersion) outdated++;
+						webview.getWebContents().reload();
+						webviewrunning = false;
+						runInWebview();
 					});
-				}
-			});
+				});
+			}
 		}
 	}
 	
