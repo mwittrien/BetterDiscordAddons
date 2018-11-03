@@ -221,7 +221,7 @@ class PluginRepo {
 
 	getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
 
-	getVersion () {return "1.5.5";}
+	getVersion () {return "1.5.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -652,7 +652,8 @@ class PluginRepo {
 	}
 	
 	loadPlugins () {
-		var getPluginInfo, outdated = 0, i = 0;
+		var getPluginInfo, createWebview, runInWebview;
+		var webview, webviewrunning = false, webviewqueue = [], outdated = 0, i = 0;
 		var tags = ["getName", "getVersion", "getAuthor", "getDescription"];
 		var seps = ["\"", "\'", "\`"];
 		let request = require("request");
@@ -662,21 +663,22 @@ class PluginRepo {
 				this.grabbedPlugins = result.split("\n");
 				this.foundPlugins = this.grabbedPlugins.concat(BDFDB.loadData("ownlist", this, "ownlist") || []);
 				this.loading = true;
-				createWebview().then((webview) => {
-					getPluginInfo(webview, () => {
-						this.loading = false;
-						console.log("PluginRepo: Finished fetching Plugins.");
-						if (document.querySelector(".bd-pluginrepobutton")) BDFDB.showToast(`Finished fetching Plugins.`, {type:"success"});
-						if (outdated > 0) {
-							var text = `${outdated} of your Plugins ${outdated == 1 ? "is" : "are"} outdated. Check:`;
-							var bar = BDFDB.createNotificationsBar(text,{type:"danger",btn:"PluginRepo",selector:"pluginrepo-notice"});
-							$(bar).on("click." + this.getName(), BDFDB.dotCN.noticebutton, (e) => {
-								this.openPluginRepoModal(true);
-								e.delegateTarget.querySelector(BDFDB.dotCN.noticedismiss).click();
-							});
-						}
-						setTimeout(() => {
-							webview.remove();
+				getPluginInfo(() => {
+					var finishCounter = 0, finishInterval = setInterval(() => {
+						if ((webviewqueue.length == 0 && !webviewrunning) || finishCounter > 300) {
+							clearInterval(finishInterval);
+							if (typeof webview != "undefined") webview.remove();
+							this.loading = false;
+							console.log("PluginRepo: Finished fetching Plugins.");
+							if (document.querySelector(".bd-pluginrepobutton")) BDFDB.showToast(`Finished fetching Plugins.`, {type:"success"});
+							if (outdated > 0) {
+								var text = `${outdated} of your Plugins ${outdated == 1 ? "is" : "are"} outdated. Check:`;
+								var bar = BDFDB.createNotificationsBar(text,{type:"danger",btn:"PluginRepo",selector:"pluginrepo-notice"});
+								$(bar).on("click." + this.getName(), BDFDB.dotCN.noticebutton, (e) => {
+									this.openPluginRepoModal(true);
+									e.delegateTarget.querySelector(BDFDB.dotCN.noticedismiss).click();
+								});
+							}
 							if (BDFDB.myData.id == "278543574059057154") {
 								let wrongUrls = [];
 								for (let url of this.foundPlugins) if (url && !this.loadedPlugins[url] && !wrongUrls.includes(url)) wrongUrls.push(url);
@@ -689,13 +691,14 @@ class PluginRepo {
 									});
 								}
 							}
-						},10000);
-					});
+						}
+						else finishCounter++;
+					},1000);
 				});
 			}
 		});
 		
-		getPluginInfo = (webview, callback) => {
+		getPluginInfo = (callback) => {
 			if (i >= this.foundPlugins.length) {
 				callback();
 				return;
@@ -737,45 +740,59 @@ class PluginRepo {
 						}
 					}
 					else {
-						let name = body.replace(new RegExp("\\s*\:\\s*", "g"), ":").split('"name":"');
-						if (name.length > 1 && webview) {
-							name = name[1].split('"')[0];
-							webview.getWebContents().executeJavaScript(body).then(() => {
-								webview.getWebContents().executeJavaScript(`
-									var p = new ` + name + `(); 
-									var data = {
-										"getName":p.getName(),
-										"getAuthor":p.getAuthor(),
-										"getVersion":p.getVersion(),
-										"getDescription":p.getDescription()
-									}; 
-									Promise.resolve(data);`
-								).then((plugin) => {
-									plugin.url = url;
-									this.loadedPlugins[url] = plugin;
-									var installedPlugin = window.bdplugins[plugin.getName] ? window.bdplugins[plugin.getName].plugin : null;
-									if (installedPlugin && installedPlugin.getAuthor().toUpperCase() == plugin.getAuthor.toUpperCase() && installedPlugin.getVersion() != plugin.getVersion) outdated++;
-								});
-							});
-						}
+						webviewqueue.push({body, url});
+						runInWebview();
 					}
 				}
 				i++;
-				getPluginInfo(webview, callback);
+				getPluginInfo(callback);
 			});
 		}
 		
-		function createWebview () {
+		createWebview = () => {
 			return new Promise(function(callback) {
-				var webview;
+				if (typeof webview != "undefined") webview.remove();
+				webviewrunning = true;
 				webview = document.createElement("webview");
 				webview.src = "https://discordapp.com/";
 				webview.setAttribute("webview-PluginRepo", null);
 				webview.style.setProperty("visibility", "hidden");
 				webview.addEventListener("dom-ready", () => {
-					callback(webview);
+					callback();
 				});
 				document.body.appendChild(webview);
+			});
+		}
+		
+		runInWebview = () => {
+			if (webviewrunning) return;
+			let webviewdata = webviewqueue.shift();
+			if (!webviewdata) return;
+			createWebview().then(() => {
+				let {body, url} = webviewdata;
+				let name = body.replace(new RegExp("\\s*\:\\s*", "g"), ":").split('"name":"');
+				if (name.length > 1) {
+					name = name[1].split('"')[0];
+					webview.getWebContents().executeJavaScript(body).then(() => {
+						webview.getWebContents().executeJavaScript(`
+							var p = new ` + name + `(); 
+							var data = {
+								"getName":p.getName(),
+								"getAuthor":p.getAuthor(),
+								"getVersion":p.getVersion(),
+								"getDescription":p.getDescription()
+							}; 
+							Promise.resolve(data);`
+						).then((plugin) => {
+							plugin.url = url;
+							this.loadedPlugins[url] = plugin;
+							var installedPlugin = window.bdplugins[plugin.getName] ? window.bdplugins[plugin.getName].plugin : null;
+							if (installedPlugin && installedPlugin.getAuthor().toUpperCase() == plugin.getAuthor.toUpperCase() && installedPlugin.getVersion() != plugin.getVersion) outdated++;
+							webviewrunning = false;
+							runInWebview();
+						});
+					});
+				}
 			});
 		}
 	}
