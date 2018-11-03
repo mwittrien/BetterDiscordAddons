@@ -675,19 +675,21 @@ class PluginRepo {
 								e.delegateTarget.querySelector(BDFDB.dotCN.noticedismiss).click();
 							});
 						}
-						setTimeout(() => {webview.remove();},10000);
-						if (BDFDB.myData.id == "278543574059057154") {
-							let wrongUrls = [];
-							for (let url of this.foundPlugins) if (url && !this.loadedPlugins[url] && !wrongUrls.includes(url)) wrongUrls.push(url);
-							if (wrongUrls.length > 0) {
-								var bar = BDFDB.createNotificationsBar(`PluginRepo: ${wrongUrls.length} Plugin${wrongUrls.length > 1 ? "s" : ""} could not be loaded.`, {type:"danger",btn:"List"});
-								$(bar).on("click." + this.getName(), BDFDB.dotCN.noticebutton, (e) => {
-									var toast = BDFDB.showToast(wrongUrls.join("\n"),{type:"error"});
-									toast.style.overflow = "hidden";
-									console.log(wrongUrls.length == 1 ? wrongUrls[0] : wrongUrls);
-								});
+						setTimeout(() => {
+							webview.remove();
+							if (BDFDB.myData.id == "278543574059057154") {
+								let wrongUrls = [];
+								for (let url of this.foundPlugins) if (url && !this.loadedPlugins[url] && !wrongUrls.includes(url)) wrongUrls.push(url);
+								if (wrongUrls.length > 0) {
+									var bar = BDFDB.createNotificationsBar(`PluginRepo: ${wrongUrls.length} Plugin${wrongUrls.length > 1 ? "s" : ""} could not be loaded.`, {type:"danger",btn:"List"});
+									$(bar).on("click." + this.getName(), BDFDB.dotCN.noticebutton, (e) => {
+										var toast = BDFDB.showToast(wrongUrls.join("\n"),{type:"error"});
+										toast.style.overflow = "hidden";
+										console.log(wrongUrls.length == 1 ? wrongUrls[0] : wrongUrls);
+									});
+								}
 							}
-						}
+						},10000);
 					});
 				});
 			}
