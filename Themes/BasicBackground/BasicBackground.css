@@ -739,6 +739,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .arrow-1QsYio,
 .h1-1IDj26,
 .usageInfo-2WQAwr,
+.iconIncluded-2xYFq5,
 .premiumHeaderPrice-1F1CMD,
 .betaTag-1tngRx,
 .improved-1F5LIN,
@@ -1339,10 +1340,12 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	position: relative !important;
 }
 .modal-3Msmb3 .momentum-2CXCBH  .content-PS26MV > div > div[style*="transform: translateX"],
+.modal-1UGdnR .inner-1JeGVc .form-77IDep .modalContent-hXHrpZ" > div > div[style*="transform: translateX"],
 .modal-1UGdnR .inner-1JeGVc .animator-US5i9g .item-5R5nmE {
 	transform: none !important;
 }
 .modal-3Msmb3 .momentum-2CXCBH  .content-PS26MV > div > div[style*="transform: translateX"] + div[style*="transform: translateX"],
+.modal-1UGdnR .inner-1JeGVc .form-77IDep .modalContent-hXHrpZ" > div > div[style*="transform: translateX"] + div[style*="transform: translateX"],
 .modal-1UGdnR .inner-1JeGVc .animator-US5i9g .item-5R5nmE + .item-5R5nmE {
 	display: none !important;
 }
