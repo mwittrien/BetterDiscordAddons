@@ -7,7 +7,7 @@ class BadgesEverywhere {
 				display: inline-block;
 				background-position: 50%;
 				background-repeat: no-repeat;
-				background-size: cover;
+				background-size: contain;
 				height: 17px;
 				margin: 0 2px;
 			}
@@ -17,21 +17,24 @@ class BadgesEverywhere {
 			.BE-badge-popout {
 				margin-bottom: -2px;
 			}
+			.BE-badge-settings {
+				width: 30px !important;
+			}
 			.BE-badge:first-of-type {
 				margin-left: 5px;
 			}
 			.BE-badge:last-of-type {
 				margin-right: 5px;
 			}
-			.BE-badge-Staff {width:17px;min-width:17px;}
-			.BE-badge-Partner {width:22px;min-width:22px;}
-			.BE-badge-HypeSquad {width:17px;min-width:17px;}
-			.BE-badge-BugHunter {width:17px;min-width:17px;}
-			.BE-badge-HypeSquadBravery {width:17px;min-width:17px;}
-			.BE-badge-HypeSquadBrilliance {width:17px;min-width:17px;}
-			.BE-badge-HypeSquadBalance {width:17px;min-width:17px;}
-			.BE-badge-EarlySupporter {width:24px;min-width:24px;}
-			.BE-badge-Nitro {width:21px;min-width:21px;}`;
+			.BE-badge-Staff {width:17px; min-width:17px;}
+			.BE-badge-Partner {width:22px; min-width:22px;}
+			.BE-badge-HypeSquad {width:17px; min-width:17px;}
+			.BE-badge-BugHunter {width:17px; min-width:17px;}
+			.BE-badge-HypeSquadBravery {width:17px; min-width:17px;}
+			.BE-badge-HypeSquadBrilliance {width:17px; min-width:17px;}
+			.BE-badge-HypeSquadBalance {width:17px; min-width:17px;}
+			.BE-badge-EarlySupporter {width:24px; min-width:24px;}
+			.BE-badge-Nitro {width:21px; min-width:21px;}`;
 			
 		this.loading = false;
 		
@@ -68,25 +71,32 @@ class BadgesEverywhere {
 
 	getDescription () {return "Displays Badges (Nitro, HypeSquad, etc...) in the chat/memberlist/userpopout. Thanks for Zerebos' help.";}
 
-	getVersion () {return "1.1.1";}
+	getVersion () {return "1.1.2";}
 
 	getAuthor () {return "DevilBro";}
 	
 	getSettingsPanel () {
 		if (!this.started || typeof BDFDB !== "object") return;
 		var settings = BDFDB.getAllData(this, "settings"); 
+		var blacklist = BDFDB.loadAllData(this, "blacklist"); 
 		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		for (let key in settings) {
-			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}"${settings[key] ? " checked" : ""}></div></div>`;
+			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settingsswitch"${settings[key] ? " checked" : ""}></div></div>`;
 		}
-		settingshtml += `</div></div>`;
+		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">Display Badges:</h3></div><div class="DevilBro-settings-inner-list">`;
+		for (let flag in this.badges) {
+			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.badges[flag].name}</h3><div class="${BDFDB.disCNS.flexchild + "BE-badge-" + this.badges[flag].name.replace(/ /g, "")} BE-badge BE-badge-settings" style="background-image: ${this.badges[flag].color}; flex: 0 0 auto;"></div><div class="${BDFDB.disCNS.flexchild + "BE-badge-" + this.badges[flag].name.replace(/ /g, "")} BE-badge BE-badge-settings" style="background-image: ${this.badges[flag].white}; flex: 0 0 auto;"></div><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="${flag}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} blacklistswitch"${blacklist[flag] ? "" : " checked"}></div></div>`;
+		}
+		
+		settingshtml += `</div></div></div>`;
 		
 		var settingspanel = $(settingshtml)[0];
 
 		BDFDB.initElements(settingspanel);
 
 		$(settingspanel)
-			.on("click", BDFDB.dotCN.switchinner, () => {this.updateSettings(settingspanel);});
+			.on("click", BDFDB.dotCN.switchinner + ".settingsswitch", () => {this.updateSettings(settingspanel);})
+			.on("click", BDFDB.dotCN.switchinner + ".blacklistswitch", () => {this.updateBlacklist(settingspanel);});
 			
 		return settingspanel;
 	}
@@ -113,7 +123,6 @@ class BadgesEverywhere {
 		if (typeof BDFDB === "object") {
 			BDFDB.loadMessage(this);
 			
-			this.UserModalUtils = BDFDB.WebModules.findByProperties(["fetchMutualFriends","open"]);
 			this.APIModule = BDFDB.WebModules.findByProperties(["getAPIBaseURL"]);
 			this.DiscordConstants = BDFDB.WebModules.findByProperties(["Permissions", "ActivityTypes", "StatusTypes"]);
 			
@@ -182,9 +191,7 @@ class BadgesEverywhere {
 			});
 			BDFDB.addObserver(this, BDFDB.dotCN.layers, {name:"settingsWindowObserver",instance:observer}, {childList:true});
 			
-			for (let flag in this.badges) {
-				if (!this.badges[flag].implemented) delete this.badges[flag];
-			}
+			for (let flag in this.badges) if (!this.badges[flag].implemented) delete this.badges[flag];
 			
 			this.loadBadges();
 		}
@@ -212,10 +219,19 @@ class BadgesEverywhere {
 
 	updateSettings (settingspanel) {
 		var settings = {};
-		for (var input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner)) {
+		for (var input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner + ".settingsswitch")) {
 			settings[input.value] = input.checked;
 		}
 		BDFDB.saveAllData(settings, this, "settings");
+		this.updateBadges = true;
+	}
+
+	updateBlacklist (settingspanel) {
+		var blacklist = {};
+		for (var input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner + ".blacklistswitch")) {
+			blacklist[input.value] = !input.checked;
+		}
+		BDFDB.saveAllData(blacklist, this, "blacklist");
 		this.updateBadges = true;
 	}
 
@@ -224,27 +240,27 @@ class BadgesEverywhere {
 		var settings = BDFDB.getAllData(this, "settings");
 		if (settings.showInMemberList) {
 			for (let user of document.querySelectorAll(BDFDB.dotCN.member)) {
-				this.addBadges(user, "list", false, settings);
+				this.addBadges(user, "list", false);
 			}
 		}
 		if (settings.showInChat) {
 			for (let messagegroup of document.querySelectorAll(BDFDB.dotCN.messagegroupcozy)) {
-				this.addBadges(messagegroup, "chat", false, settings);
+				this.addBadges(messagegroup, "chat", false);
 			}
 			for (let messagegroup of document.querySelectorAll(BDFDB.dotCN.messagegroupcompact)) {
 				for (let message of messagegroup.querySelectorAll(BDFDB.dotCN.messagemarkup)) {
-					this.addBadges(message, "chat", true, settings);
+					this.addBadges(message, "chat", true);
 				}
 			}
 		}
 		if (settings.showInPopout) {
 			for (let user of document.querySelectorAll(BDFDB.dotCN.userpopout)) {
-				this.addBadges(user.parentElement, "popout", false, settings);
+				this.addBadges(user.parentElement, "popout", false);
 			}
 		}
 	}
 	
-	addBadges (wrapper, type, compact, settings = BDFDB.getAllData(this, "settings")) {
+	addBadges (wrapper, type, compact) {
 		if (!wrapper) return;
 		let user = compact ? BDFDB.getKeyInformation({"node":wrapper.classList.contains(BDFDB.disCN.messagegroup) ? wrapper : $(BDFDB.dotCN.messagegroup).has(wrapper)[0],"key":"message"}).author : BDFDB.getKeyInformation({"node":wrapper,"key":"user"});
 		if (user && !user.bot) {
@@ -254,34 +270,37 @@ class BadgesEverywhere {
 					let usercopy = Object.assign({},result.body.user);
 					if (result.body.premium_since) usercopy.flags += 2048;
 					this.loadedusers[user.id] = usercopy;
-					for (let queredobj of this.requestedusers[user.id]) this.addToWrapper(queredobj[0], user.id, queredobj[1], settings);
+					for (let queredobj of this.requestedusers[user.id]) this.addToWrapper(queredobj[0], user.id, queredobj[1]);
 				});
 			}
 			else if (!this.loadedusers[user.id]) {
 				this.requestedusers[user.id].push([wrapper,type]);
 			}
 			else {
-				this.addToWrapper(wrapper, user.id, type, settings);
+				this.addToWrapper(wrapper, user.id, type);
 			}
 		}
 	}
 	
-	addToWrapper (wrapper, id, type, settings) {
+	addToWrapper (wrapper, id, type) {
 		if (wrapper.querySelector(".BE-badge")) return; 
 		let memberwrap = wrapper.querySelector(BDFDB.dotCN.memberusername);
 		if (!memberwrap) memberwrap = wrapper.querySelector(BDFDB.dotCN.messageusername);
 		if (memberwrap) memberwrap = memberwrap.parentElement;
 		if (!memberwrap) memberwrap = wrapper.querySelector(BDFDB.dotCN.nametag);
-		if (memberwrap) for (let flag in this.badges) {
-			if ((this.loadedusers[id].flags | flag) == this.loadedusers[id].flags) {
-				let badge = document.createElement("div"); 
-				badge.className = "BE-badge BE-badge-" + this.badges[flag].name.replace(/ /g, "") + " BE-badge-" + type;
-				badge.style.backgroundImage = settings.useColoredVersion ? this.badges[flag].color : this.badges[flag].white;
-				memberwrap.appendChild(badge);
-				$(badge)
-					.on("mouseenter." + this.getName(), (e) => {
-						BDFDB.createTooltip(this.badges[flag].name, e.currentTarget, {"type":type == "list" ? "left" : "top"});
-					});
+		if (memberwrap) {
+			var blacklist = BDFDB.loadAllData(this, "blacklist");
+			for (let flag in this.badges) {
+				if ((this.loadedusers[id].flags | flag) == this.loadedusers[id].flags && !blacklist[flag]) {
+					let badge = document.createElement("div"); 
+					badge.className = "BE-badge BE-badge-" + this.badges[flag].name.replace(/ /g, "") + " BE-badge-" + type;
+					badge.style.backgroundImage = BDFDB.getData("useColoredVersion", this, "settings") ? this.badges[flag].color : this.badges[flag].white;
+					memberwrap.appendChild(badge);
+					$(badge)
+						.on("mouseenter." + this.getName(), (e) => {
+							BDFDB.createTooltip(this.badges[flag].name, e.currentTarget, {"type":type == "list" ? "left" : "top"});
+						});
+				}
 			}
 		}
 	}
