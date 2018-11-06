@@ -8,6 +8,12 @@ class PinDMs {
 				<div class="${BDFDB.disCN.contextmenuhint}"></div>
 			</div>`;
 			
+		this.unpinDMEntryMarkup =
+			`<div class="${BDFDB.disCN.contextmenuitem} unpindm-item">
+				<span>REPLACE_context_unpindm_text</span>
+				<div class="${BDFDB.disCN.contextmenuhint}"></div>
+			</div>`;
+			
 		this.pinDMsHeaderMarkup =
 			`<header class="pinneddms-header">REPLACE_header_pinneddms_text</header>`;
 			
@@ -38,7 +44,7 @@ class PinDMs {
 
 	getDescription () {return "Allows you to pin DMs, making them appear at the top of your DM-list.";}
 
-	getVersion () {return "1.1.5";}
+	getVersion () {return "1.1.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -68,6 +74,7 @@ class PinDMs {
 			this.ActivityModule = BDFDB.WebModules.findByProperties(["getApplicationActivity","getStatus"]);
 			this.ChannelStore = BDFDB.WebModules.findByProperties(["getDMFromUserId"]);
 			this.ChannelSwitchUtils = BDFDB.WebModules.findByProperties(["selectPrivateChannel"]);
+			this.PrivateChannelUtils = BDFDB.WebModules.findByProperties(["openPrivateChannel"]);
 			this.UserContextMenuUtils = BDFDB.WebModules.findByProperties(["openUserContextMenu"]);
 			
 			var observer = null;
@@ -136,10 +143,12 @@ class PinDMs {
 		this.pinDMsHeaderMarkup = 	this.pinDMsHeaderMarkup.replace("REPLACE_header_pinneddms_text", this.labels.header_pinneddms_text);
 		
 		this.pinDMEntryMarkup = 	this.pinDMEntryMarkup.replace("REPLACE_context_pindm_text", this.labels.context_pindm_text);
+		
+		this.unpinDMEntryMarkup = 	this.unpinDMEntryMarkup.replace("REPLACE_context_unpindm_text", this.labels.context_unpindm_text);
 	}
 	
 	onContextMenu (context) {
-		if (!document.querySelector(BDFDB.dotCNS.guildselected + BDFDB.dotCN.friendsicon) || !context || !context.tagName || !context.parentElement || context.querySelector(".pindm-item")) return;
+		if (!document.querySelector(BDFDB.dotCNS.guildselected + BDFDB.dotCN.friendsicon) || !context || !context.tagName || !context.parentElement || context.querySelector(".pindm-item") || context.querySelector(".unpindm-item")) return;
 		var info = BDFDB.getKeyInformation({"node":context, "key":"user"}), ele = null;
 		if (info && BDFDB.getKeyInformation({"node":context, "key":"handleClose"})) {
 			ele = context.querySelectorAll(BDFDB.dotCN.contextmenuitem)[3];
@@ -151,17 +160,29 @@ class PinDMs {
 			}
 		}
 		if (ele) {
-			$(this.pinDMEntryMarkup).insertBefore(ele)
-				.on("click", (e) => {
-					$(context).hide();
-					var pinnedDMs = BDFDB.loadAllData(this, "pinnedDMs");
-					if (typeof pinnedDMs[info.id] == "undefined") {
-						var pos = Object.keys(pinnedDMs).length;
-						pinnedDMs[info.id] = pos;
-						BDFDB.saveAllData(pinnedDMs, this, "pinnedDMs")
-						this.addPinnedDM(info.id, pos); 
-					}
-				});
+			if (BDFDB.loadData(info.id, this, "pinnedDMs") == null) {
+				$(this.pinDMEntryMarkup).insertBefore(ele)
+					.on("click", (e) => {
+						$(context).hide();
+						var pinnedDMs = BDFDB.loadAllData(this, "pinnedDMs");
+						if (typeof pinnedDMs[info.id] == "undefined") {
+							var pos = Object.keys(pinnedDMs).length;
+							pinnedDMs[info.id] = pos;
+							BDFDB.saveAllData(pinnedDMs, this, "pinnedDMs");
+							this.addPinnedDM(info.id, pos); 
+						}
+					});
+			}
+			else {
+				$(this.unpinDMEntryMarkup).insertBefore(ele)
+					.on("click", (e) => {
+						$(context).hide();
+						$(`${BDFDB.dotCN.dmchannel}.pinned[user-id="${info.id}"]`).remove();
+						$(`${BDFDB.dotCN.dmchannel}.pinned[channel-id="${info.id}"]`).remove(); 
+						BDFDB.removeData(info.id, this, "pinnedDMs");
+						this.updatePinnedDMPositions();
+					});
+			}
 				
 			BDFDB.updateContextPosition(context);
 		}
@@ -193,28 +214,42 @@ class PinDMs {
 		let user = this.UserStore.getUser(id);
 		let channel = this.ChannelStore.getChannel(id);
 		if (user || channel) {
-			let DMid = user ? this.ChannelStore.getDMFromUserId(user.id) : channel.id;
 			let pinnedDM = $(this.pinnedDMMarkup);
-			pinnedDM.attr("user-id", user ? user.id : null).attr("channel-id", DMid).insertAfter(BDFDB.dotCN.dmchannel + " + header.pinneddms-header")
+			pinnedDM.attr("user-id", user ? user.id : null).attr("channel-id", channel ? channel.id : null).insertAfter(BDFDB.dotCN.dmchannel + " + header.pinneddms-header")
 				.on("contextmenu." + this.getName(), (e) => {
-					if (user && DMid) this.UserContextMenuUtils.openUserContextMenu(e, user, this.ChannelStore.getChannel(DMid));
+					if (user) {
+						let DMid = this.ChannelStore.getDMFromUserId(user.id)
+						if (DMid) {
+							this.UserContextMenuUtils.openUserContextMenu(e, user, this.ChannelStore.getChannel(DMid));
+						}
+						else {
+							this.PrivateChannelUtils.ensurePrivateChannel(BDFDB.myData.id, user.id).then(DMid => {
+								this.UserContextMenuUtils.openUserContextMenu(e, user, this.ChannelStore.getChannel(DMid));
+							});
+						}
+					}
 					else if (channel) {
 						var channelObj = BDFDB.getDivOfChannel(channel.id);
 						if (channelObj && channelObj.div) BDFDB.getKeyInformation({"node":channelObj.div,"key":"onContextMenu"})(e);
-						else BDFDB.showToast("Could not open ContextMenu, make sure the DM exists, Group DMs habe to be loaded in the list.", {type:"error"});
-					}
-					else {
-						BDFDB.showToast("Could not open DM ContextMenu, make sure the DM exists.", {type:"error"});
+						else BDFDB.showToast("Could not open ContextMenu, make sure the DM exists, Group DMs have to be loaded in the list.", {type:"error"});
 					}
 				})
 				.on("click." + this.getName(), (e) => {
 					if (e.target.classList && e.target.classList.contains(BDFDB.disCN.dmchannelclose)) return;
-					if (DMid) this.ChannelSwitchUtils.selectPrivateChannel(DMid);
-					else BDFDB.showToast("Could not open DM, make sure it exists.", {type:"error"});
+					else if (channel) this.ChannelSwitchUtils.selectPrivateChannel(channel.id);
+					else if (user) {
+						let DMid = this.ChannelStore.getDMFromUserId(user.id)
+						if (DMid) {
+							this.ChannelSwitchUtils.selectPrivateChannel(DMid);
+						}
+						else {
+							this.PrivateChannelUtils.openPrivateChannel(BDFDB.myData.id, user.id);
+						}
+					}
 				})
 				.on("click." + this.getName(), BDFDB.dotCN.dmchannelclose, () => {
 					pinnedDM.remove();
-					BDFDB.removeData(user ? user.id : DMid, this, "pinnedDMs");
+					BDFDB.removeData(user ? user.id : channel.id, this, "pinnedDMs");
 					this.updatePinnedDMPositions();
 				});
 				
@@ -304,107 +339,128 @@ class PinDMs {
 		switch (BDFDB.getDiscordLanguage().id) {
 			case "hr":		//croatian
 				return {
-					context_pindm_text:				"Prikljucite Izravnu Dopisivanje",
-					header_pinneddms_text:			"Prikvačene izravne poruke"
+					context_pindm_text:				"Prikljucite Izravnu Poruku",
+					context_unpindm_text:			"Otključaj Izravnu Poruku",
+					header_pinneddms_text:			"Prikvačene Izravne Poruke"
 				};
 			case "da":		//danish
 				return {
-					context_pindm_text:				"Pin DB",
+					context_pindm_text:				"Fastgør PB",
+					context_unpindm_text:			"Frigør PB",
 					header_pinneddms_text:			"Pinned Privat Beskeder"
 				};
 			case "de":		//german
 				return {
-					context_pindm_text:				"Direktnachricht anpinnen",
+					context_pindm_text:				"Direktnachricht anheften",
+					context_unpindm_text:			"Direktnachricht loslösen",
 					header_pinneddms_text:			"Gepinnte Direktnachrichten"
 				};
 			case "es":		//spanish
 				return {
-					context_pindm_text:				"Pin MD",
+					context_pindm_text:				"Anclar MD",
+					context_unpindm_text:			"Desanclar MD",
 					header_pinneddms_text:			"Mensajes Directos Fijados"
 				};
 			case "fr":		//french
 				return {
 					context_pindm_text:				"Épingler MP",
+					context_unpindm_text:			"Désépingler MP",
 					header_pinneddms_text:			"Messages Prives Épinglés"
 				};
 			case "it":		//italian
 				return {
-					context_pindm_text:				"Appuntare il messaggio diretto",
+					context_pindm_text:				"Fissa il messaggio diretto",
+					context_unpindm_text:			"Togli il messaggio diretto",
 					header_pinneddms_text:			"Messaggi Diretti Aggiunti"
 				};
 			case "nl":		//dutch
 				return {
-					context_pindm_text:				"PB vastpinnen",
+					context_pindm_text:				"PB pinnen",
+					context_unpindm_text:			"PB losmaken",
 					header_pinneddms_text:			"Vastgezette Persoonluke Berichten"
 				};
 			case "no":		//norwegian
 				return {
-					context_pindm_text:				"Pinne DM",
+					context_pindm_text:				"Fest DM",
+					context_unpindm_text:			"Løsne DM",
 					header_pinneddms_text:			"Pinned Direktemeldinger"
 				};
 			case "pl":		//polish
 				return {
 					context_pindm_text:				"Przypnij PW",
+					context_unpindm_text:			"Odepnij PW",
 					header_pinneddms_text:			"Prywatne Wiadomości Bezpośrednie"
 				};
 			case "pt-BR":	//portuguese (brazil)
 				return {
 					context_pindm_text:				"Fixar MD",
+					context_unpindm_text:			"Desafixar MD",
 					header_pinneddms_text:			"Mensagens diretas fixadas"
 				};
 			case "fi":		//finnish
 				return {
 					context_pindm_text:				"Kiinnitä yksityisviestit",
+					context_unpindm_text:			"Poista yksityisviestit",
 					header_pinneddms_text:			"Liitetyt yksityisviestit"
 				};
 			case "sv":		//swedish
 				return {
-					context_pindm_text:				"Peka DM",
+					context_pindm_text:				"Fäst DM",
+					context_unpindm_text:			"Lossa DM",
 					header_pinneddms_text:			"Inlagda Direktmeddelanden"
 				};
 			case "tr":		//turkish
 				return {
 					context_pindm_text:				"DM'yi Sabitle",
+					context_unpindm_text:			"DM'yi Kaldır",
 					header_pinneddms_text:			"Direkt Mesajlar Sabitleyin"
 				};
 			case "cs":		//czech
 				return {
-					context_pindm_text:				"Připojte PZ",
-					header_pinneddms_text:			"Připojené přímá zpráva"
+					context_pindm_text:				"Připnout PZ",
+					context_unpindm_text:			"Odepnout PZ",
+					header_pinneddms_text:			"Připojené Přímá Zpráva"
 				};
 			case "bg":		//bulgarian
 				return {
-					context_pindm_text:				"Закачете",
+					context_pindm_text:				"Закачени ДС",
+					context_unpindm_text:			"Откачи ДС",
 					header_pinneddms_text:			"Свързани директни съобщения"
 				};
 			case "ru":		//russian
 				return {
-					context_pindm_text:				"Подключить ЛС",
-					header_pinneddms_text:			"Прикрепленные Личные сообщения"
+					context_pindm_text:				"Закрепить ЛС",
+					context_unpindm_text:			"Открепить ЛС",
+					header_pinneddms_text:			"Прикрепленные Личные Сообщения"
 				};
 			case "uk":		//ukrainian
 				return {
-					context_pindm_text:				"Прикріпити ОП",
+					context_pindm_text:				"Закріпити ОП",
+					context_unpindm_text:			"Відкріпити ОП",
 					header_pinneddms_text:			"Прикріплені oсобисті повідомлення"
 				};
 			case "ja":		//japanese
 				return {
-					context_pindm_text:				"DMをピン留めする",
+					context_pindm_text:				"DMピン",
+					context_unpindm_text:			"DMをピン止めする",
 					header_pinneddms_text:			"固定された直接メッセージ"
 				};
 			case "zh-TW":	//chinese (traditional)
 				return {
-					context_pindm_text:				"引用私人信息",
+					context_pindm_text:				"引腳直接留言",
+					context_unpindm_text:			"分離直接消息",
 					header_pinneddms_text:			"固定私人信息"
 				};
 			case "ko":		//korean
 				return {
-					context_pindm_text:				"개인 메시지 비공개",
+					context_pindm_text:				"비공개 메시지 고정",
+					context_unpindm_text:			"비공개 메시지 고정 해제",
 					header_pinneddms_text:			"고정 된 비공개 메시지"
 				};
 			default:		//default: english
 				return {
 					context_pindm_text:				"Pin DM",
+					context_unpindm_text:			"Unpin DM",
 					header_pinneddms_text:			"Pinned Direct Messages"
 				};
 		}

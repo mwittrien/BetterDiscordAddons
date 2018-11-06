@@ -1,6 +1,6 @@
 //META{"name":"PluginRepo"}*// 
 
-class PluginRepo {
+class PluginRepo { 
 	initConstructor () {
 		this.sortings = {
 			sort: {
@@ -666,7 +666,7 @@ class PluginRepo {
 				createWebview().then(() => {
 					getPluginInfo(() => {
 						var finishCounter = 0, finishInterval = setInterval(() => {
-							if ((webviewqueue.length == 0 && !webviewrunning) || finishCounter > 300 || global.a) {
+							if ((webviewqueue.length == 0 && !webviewrunning) || finishCounter > 300) {
 								clearInterval(finishInterval);
 								if (typeof webview != "undefined") webview.remove();
 								this.loading = false;
