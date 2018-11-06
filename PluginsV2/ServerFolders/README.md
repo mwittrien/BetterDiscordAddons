@@ -1,4 +1,6 @@
-# Server Folders - [Download Script](https://betterdiscord.net/ghdl?url=https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/PluginsV2/ServerFolders/index.js) [Download Config](https://betterdiscord.net/ghdl?url=https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/PluginsV2/ServerFolders/config.json)
+# These Plugins are meant only for BDv2, not BD nor BandagedBD. If you got either of those two go to [Plugins](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/).
+
+## Server Folders - [Download Script](https://betterdiscord.net/ghdl?url=https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/PluginsV2/ServerFolders/index.js) [Download Config](https://betterdiscord.net/ghdl?url=https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/PluginsV2/ServerFolders/config.json)
 
 Adds the feature to create folders to organize your servers. 
 

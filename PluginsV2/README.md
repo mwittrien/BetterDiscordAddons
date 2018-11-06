@@ -1,4 +1,4 @@
-These Plugins are meant only for BDv2, not BD nor BandagedBD. If you got either of those two go to [Plugins](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/).
+# These Plugins are meant only for BDv2, not BD nor BandagedBD. If you got either of those two go to [Plugins](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/).
 
 ## Plugins
  - [BadgesEverywhere](https://github.com/mwittrien/BetterDiscordAddons/tree/master/PluginsV2/BadgesEverywhere) - Displays Badges (Nitro, Hypesquad, etc...) in the chat/memberlist/userpopout. Thanks for Zerebos' help.
