@@ -2,7 +2,7 @@
 
 class EditUsers {
 	initConstructor () {
-		this.labels = {};
+		this.labels = {}; 
 
 		this.css = `
 			.user-tag {
@@ -157,6 +157,7 @@ class EditUsers {
 		this.defaults = {
 			settings: {
 				changeInChatWindow:		{value:true, 	description:"Chat"},
+				changeInMentions:		{value:true, 	description:"Mentions"},
 				changeInVoiceChat:		{value:true, 	description:"Voice Channels"},
 				changeInMemberList:		{value:true, 	description:"Member List"},
 				changeInRecentDms:		{value:true, 	description:"Direct Message Notifications"},
@@ -176,7 +177,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "2.4.3";}
+	getVersion () {return "2.4.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -313,15 +314,26 @@ class EditUsers {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(BDFDB.dotCN.messageusername) && BDFDB.getData("changeInChatWindow", this, "settings")) {
+								if (node.tagName && node.querySelector(BDFDB.dotCN.messageusername) && BDFDB.getData("changeInChatWindow", this, "settings")) {
+									if (node.classList.contains(BDFDB.disCN.modal) || node.classList.contains(BDFDB.disCN.popout)) {
+										for (let messagegroup of node.querySelectorAll(BDFDB.dotCN.messagegroupcozy)) {
+											this.loadUser(messagegroup, "chat", false);
+										}
+									}
+									else this.loadUser(node, "chat", BDFDB.getDiscordMode() == "compact");
+								}
+								else if (node.tagName && node.querySelector(BDFDB.dotCN.messagesystemcontent) && BDFDB.getData("changeInChatWindow", this, "settings")) {
 									this.loadUser(node, "chat", BDFDB.getDiscordMode() == "compact");
+								}
+								else if (node.tagName && node.querySelector(BDFDB.dotCN.mention + BDFDB.dotCN.mentionhover)) {
+									this.changeMentions(node);
 								}
 							});
 						}
 					}
 				);
 			});
-			BDFDB.addObserver(this, BDFDB.dotCN.messages, {name:"messagesObserver",instance:observer}, {childList:true, subtree:true});
+			BDFDB.addObserver(this, BDFDB.dotCN.appmount, {name:"messagesObserver",instance:observer}, {childList:true, subtree:true});
 
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -448,7 +460,6 @@ class EditUsers {
 		if (typeof BDFDB === "object") {
 			$(`${BDFDB.dotCN.channelheadertitletext}[custom-editusers]`).find(BDFDB.dotCN.channelheaderchannelname).css("color", "").css("background-color", "").parent().removeAttr("custom-editusers");
 			BDFDB.addObserver(this, BDFDB.dotCN.memberswrap, {name:"userListObserver"}, {childList:true, subtree:true});
-			BDFDB.addObserver(this, BDFDB.dotCN.messages, {name:"messagesObserver"}, {childList:true, subtree:true});
 			BDFDB.addObserver(this, BDFDB.dotCNS.chat + "form", {name:"chatFormObserver"}, {childList:true});
 			BDFDB.addObserver(this, BDFDB.dotCN.chat, {name:"chatObserver"}, {childList:true});
 			BDFDB.addObserver(this, BDFDB.dotCN.callcurrentcontainer, {name:"callObserver"}, {childList:true, subtree:true});
@@ -683,7 +694,8 @@ class EditUsers {
 				this.loadUser(messagegroup, "chat", false);
 			}
 			for (let messagegroup of document.querySelectorAll(BDFDB.dotCN.messagegroupcompact)) {
-				for (let message of messagegroup.querySelectorAll(BDFDB.dotCN.messagemarkup)) {
+				if (messagegroup.querySelector(BDFDB.dotCN.messagesystemcontent)) this.loadUser(messagegroup, "chat", false);
+				else for (let message of messagegroup.querySelectorAll(BDFDB.dotCN.messagemarkup)) {
 					this.loadUser(message, "chat", true);
 				}
 			}
@@ -738,6 +750,8 @@ class EditUsers {
 	loadUser (div, type, compact) {
 		if (!div || $(div).attr("custom-editusers") || !div.tagName || (!div.querySelector(BDFDB.dotCN.dmchannelactivitytext) && div.querySelector(BDFDB.dotCN.dmchannelactivity))) return;
 		
+		if (type == "chat") for (let markup of div.querySelectorAll(BDFDB.dotCN.messagemarkup)) this.changeMentions(markup);
+		
 		let {avatar, username, wrapper} = this.getAvatarNameWrapper(div);
 		if (!avatar && !username && !wrapper) return;
 		if (username && !wrapper && username.classList.contains(BDFDB.disCN.messageusername)) wrapper = username.parentElement;
@@ -748,6 +762,7 @@ class EditUsers {
 		var data = BDFDB.loadData(info.id, this, "users");
 		
 		if (data) {
+			if (div.querySelector(BDFDB.dotCN.messagesystemcontent)) type = "system";
 			var member = this.MemberPerms.getMember(this.LastGuildStore.getGuildId(), info.id);
 			if (username) {
 				var name = data.name ? data.name : (type == "info" || type == "profil" || !member || !member.nick ? info.username : member.nick);
@@ -861,9 +876,9 @@ class EditUsers {
 	getAvatarNameWrapper (div) {
 		var avatar = div.querySelector(BDFDB.dotCN.avatarsmallold + ":not(" + BDFDB.dotCN.avatarwrapper + ")," + BDFDB.dotCN.avatarlargeold + ":not(" + BDFDB.dotCN.avatarwrapper + "), " + BDFDB.dotCNC.avatarprofileold + BDFDB.dotCNC.voiceavatardefault + BDFDB.dotCNC.avatarimage + BDFDB.dotCN.callavatar);
 						
-		var username = div.querySelector(BDFDB.dotCNC.userpopoutheadernickname + BDFDB.dotCNC.userpopoutheadernonickname + BDFDB.dotCNC.userprofileusername + BDFDB.dotCNC.memberusername + BDFDB.dotCNC.voicenamedefault + BDFDB.dotCNC.messageusername + BDFDB.dotCNC.dmchannelname + BDFDB.dotCNC.channelheaderchannelname + BDFDB.dotCNS.friendscolumnnamewrap + BDFDB.dotCNC.friendscolumnusername + BDFDB.dotCNS.accountinfodetails + BDFDB.dotCN.accountinfousername);
+		var username = div.querySelector(BDFDB.dotCNC.userpopoutheadernickname + BDFDB.dotCNC.userpopoutheadernonickname + BDFDB.dotCNC.userprofileusername + BDFDB.dotCNC.memberusername + BDFDB.dotCNC.voicenamedefault + BDFDB.dotCNC.messageusername + BDFDB.dotCN.messagesystemcontent + " > a," + BDFDB.dotCNC.dmchannelname + BDFDB.dotCNC.channelheaderchannelname + BDFDB.dotCNS.friendscolumnnamewrap + BDFDB.dotCNC.friendscolumnusername + BDFDB.dotCNS.accountinfodetails + BDFDB.dotCN.accountinfousername);
 						
-		var wrapper = div.querySelector(BDFDB.dotCNC.userpopoutheadernickname + BDFDB.dotCNC.userpopoutheadernonickname + BDFDB.dotCNC.userprofileusername + BDFDB.dotCNC.memberusername + BDFDB.dotCNC.voicenamedefault + BDFDB.dotCNC.messageusernamewrapper + BDFDB.dotCNC.dmchannelname + BDFDB.dotCN.channelheaderchannelname + BDFDB.dotCNC.channelheaderprivate + BDFDB.dotCNS.friendscolumnnamewrap + BDFDB.dotCNC.nametag + BDFDB.dotCNS.accountinfodetails + BDFDB.dotCN.accountinfousername);
+		var wrapper = div.querySelector(BDFDB.dotCNC.userpopoutheadernickname + BDFDB.dotCNC.userpopoutheadernonickname + BDFDB.dotCNC.userprofileusername + BDFDB.dotCNC.memberusername + BDFDB.dotCNC.voicenamedefault + BDFDB.dotCNC.messageusernamewrapper + BDFDB.dotCN.messagesystemcontent + " > a," + BDFDB.dotCNC.dmchannelname + BDFDB.dotCN.channelheaderchannelname + BDFDB.dotCNC.channelheaderprivate + BDFDB.dotCNS.friendscolumnnamewrap + BDFDB.dotCNC.nametag + BDFDB.dotCNS.accountinfodetails + BDFDB.dotCN.accountinfousername);
 						
 		return {avatar, username, wrapper};
 	}
@@ -894,6 +909,35 @@ class EditUsers {
 			}
 		}
 		return info && info.id ? this.UserStore.getUser(info.id) : null;
+	}
+	
+	changeMentions (markup) {
+		if (!BDFDB.getData("changeInMentions", this, "settings")) return;
+		if (!markup.classList.contains(BDFDB.disCN.messagemarkup)) markup = markup.querySelector(BDFDB.dotCN.messagemarkup) || $(BDFDB.dotCN.messagemarkup).has(markup)[0];
+		var mentions = markup.querySelectorAll(BDFDB.dotCN.mention + BDFDB.dotCN.mentionhover);
+		if (mentions.length) {
+			var info = BDFDB.getKeyInformation({"node":markup,"key":"message","up":true}), i = 0;
+			if (info) for (let id of info.content.replace(/\\</g, "test").split(/<@!*|>/).filter((id) => this.UserStore.getUser(id))) {
+				let mention = mentions[i++];
+				let data = BDFDB.loadData(id, this, "users");
+				if (data) {
+					if (data.name) mention.innerText = "@" + data.name; 
+					let color = data.color1 ? BDFDB.color2COMP(data.color1) : null;
+					if (data.color1) {
+						mention.style.setProperty("color", "rgb(" + color[0] + "," + color[1] + "," + color[2] + ")", "important");
+						mention.style.setProperty("background", "rgba(" + color[0] + "," + color[1] + "," + color[2] + ",.1)", "important");
+						mention.on("mouseenter." + this.getName(), (e) => {
+							mention.style.setProperty("color", "#FFFFFF", "important");
+							mention.style.setProperty("background", "rgba(" + color[0] + "," + color[1] + "," + color[2] + ",.7)", "important");
+						});
+						mention.on("mouseleave." + this.getName(), (e) => {
+							mention.style.setProperty("color", "rgb(" + color[0] + "," + color[1] + "," + color[2] + ")", "important");
+							mention.style.setProperty("background", "rgba(" + color[0] + "," + color[1] + "," + color[2] + ",.1)", "important");
+						});
+					}
+				}
+			}
+		}
 	}
 	
 	changeTyping (div) {
