@@ -273,7 +273,7 @@ class OldTitleBar {
 	
 	addSettingsTitleBar (settingspane) {
 		var settings = BDFDB.getAllData(this, "settings");
-		if (settings.addSettingsTitleBar && !settingspane.querySelector(".dividerOTB, .reloadButtonOTB, .minButtonOTB, .maxButtonOTB, .closeButtonOTB")) {
+		if (settings.addToSettings && !settingspane.querySelector(".dividerOTB, .reloadButtonOTB, .minButtonOTB, .maxButtonOTB, .closeButtonOTB")) {
 			var settingsbar = $(`<div class="settingsTitlebarOTB"></div>`);
 			if (settings.reloadButton) {
 				settingsbar
