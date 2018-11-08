@@ -77,8 +77,9 @@ class OldTitleBar {
 		this.defaults = {
 			settings: {
 				displayNative:		{value:!!document.querySelector(".platform-linux"), 	description:"Displays the native titlebar."},
-				addToSettings:		{value:true, 											description:"Add a Title Bar to Settings Windows."},
-				reloadButton:		{value:false, 											description:"Add a Reload Button to the Title Bar."}
+				addOldBar:			{value:true, 											description:"Displays the titlebar in the old fashion."},
+				addToSettings:		{value:true, 											description:"Adds a Title Bar to Settings Windows."},
+				reloadButton:		{value:false, 											description:"Adds a Reload Button to the Title Bar."}
 			}
 		};
 	}
@@ -87,7 +88,7 @@ class OldTitleBar {
 
 	getDescription () {return "Reverts the title bar back to its former self.";}
 
-	getVersion () {return "1.4.7";}
+	getVersion () {return "1.4.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -132,6 +133,8 @@ class OldTitleBar {
 		if (typeof BDFDB === "object") {
 			BDFDB.loadMessage(this);
 			
+			this.window = require("electron").remote.getCurrentWindow();
+			
 			var observer = null;
 
 			observer = new MutationObserver((changes, _) => {
@@ -157,15 +160,15 @@ class OldTitleBar {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								setImmediate(() => {
-									if (node && node.tagName && node.getAttribute("layer-id") || node.querySelector(".ui-standard-sidebar-view")) {
-										if (BDFDB.getData("addToSettings", this, "settings")) this.addSettingsTitleBar(node);
+									if (node && node.tagName && node.getAttribute("layer-id") || node.querySelector(BDFDB.dot.standardsidebarview)) {
+										this.addSettingsTitleBar(node);
 									}
 								});
 							});
 						}
 						if (change.removedNodes) {
 							change.removedNodes.forEach((node) => {
-								if (node && node.tagName && node.getAttribute("layer-id") || node.querySelector(".ui-standard-sidebar-view")) {
+								if (node && node.tagName && node.getAttribute("layer-id") || node.querySelector(BDFDB.dot.standardsidebarview)) {
 									this.removeTitleBar();
 									this.addTitleBar();
 								}
@@ -188,9 +191,7 @@ class OldTitleBar {
 			$(BDFDB.dotCN.titlebar).addClass("hidden-by-OTB");
 			
 			var settingswindow = document.querySelector(BDFDB.dotCN.layer + "[layer-id]");
-			if (settingswindow && BDFDB.getData("addToSettings", this, "settings")) {
-				this.addSettingsTitleBar(settingswindow);
-			}
+			if (settingswindow) this.addSettingsTitleBar(settingswindow);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -241,6 +242,7 @@ class OldTitleBar {
 	addTitleBar () {
 		this.removeTitleBar();
 		var settings = BDFDB.getAllData(this, "settings");
+		if (!settings.addOldBar) return;
 		var container = $(BDFDB.dotCNS.channelheaderheaderbardrag + BDFDB.dotCN.flex + " > " + BDFDB.dotCN.channelheadericonmargin).parent();
 		if (settings.reloadButton) {
 			container
@@ -256,7 +258,7 @@ class OldTitleBar {
 		container
 			.append(this.dividerMarkup)
 			.append(this.minButtonMarkup)
-			.append(require("electron").remote.getCurrentWindow().isMaximized() ? this.maxButtonIsMaxMarkup : this.maxButtonIsMinMarkup)
+			.append(this.isMaximized() ? this.maxButtonIsMaxMarkup : this.maxButtonIsMinMarkup)
 			.append(this.closeButtonMarkup)
 			.on("click." + this.getName(), ".minButtonOTB", () => {
 				this.doMinimize();
@@ -270,7 +272,7 @@ class OldTitleBar {
 	}
 	
 	addSettingsTitleBar (settingspane) {
-		if (!settingspane.querySelector(".dividerOTB, .reloadButtonOTB, .minButtonOTB, .maxButtonOTB, .closeButtonOTB")) {
+		if (!settingspane.querySelector(".dividerOTB, .reloadButtonOTB, .minButtonOTB, .maxButtonOTB, .closeButtonOTB") && BDFDB.getData("addToSettings", this, "settings")) {
 			var settingsbar = $(`<div class="settingsTitlebarOTB"></div>`);
 			var settings = BDFDB.getAllData(this, "settings");
 			if (settings.reloadButton) {
@@ -285,7 +287,7 @@ class OldTitleBar {
 			}
 			settingsbar
 				.append(this.minButtonMarkup)
-				.append(require("electron").remote.getCurrentWindow().isMaximized() ? this.maxButtonIsMaxMarkup : this.maxButtonIsMinMarkup)
+				.append(this.isMaximized() ? this.maxButtonIsMaxMarkup : this.maxButtonIsMinMarkup)
 				.append(this.closeButtonMarkup)
 				.on("click." + this.getName(), ".minButtonOTB", () => {
 					this.doMinimize();
@@ -302,29 +304,37 @@ class OldTitleBar {
 	}
 	
 	doReload () {
-		require("electron").remote.getCurrentWindow().reload();
+		this.window.reload();
 	}
 	
 	doMinimize () {
-		require("electron").remote.getCurrentWindow().minimize();
+		this.window.minimize();
 	}
 	
 	doMaximize () {
-		if (require("electron").remote.getCurrentWindow().isMaximized()) require("electron").remote.getCurrentWindow().unmaximize();
-		else require("electron").remote.getCurrentWindow().maximize();
+		if (this.isMaximized()) this.window.unmaximize();
+		else this.window.maximize();
+		this.changeMaximizeButton();
+	}
+	
+	isMaximized () {
+		var pos = this.window.getPosition();
+		var size = this.window.getSize();
+		return (pos[0] == 0 && pos[1] == 0 && size[0] == global.window.screen.availWidth && size[1] == global.window.screen.availHeight);
 	}
 	
 	doClose () {
-		require("electron").remote.getCurrentWindow().close();
+		this.window.close(); 
 	}
 	
 	doRelaunch () {
-		require("electron").remote.app.relaunch();
-		require("electron").remote.app.quit();
+		var app = require("electron").remote.app;
+		app.relaunch();
+		app.quit();
 	}
 	
 	changeMaximizeButton () {
-		var maxButtonHTML = require("electron").remote.getCurrentWindow().isMaximized() ? this.maxButtonIsMaxMarkup : this.maxButtonIsMinMarkup;
+		var maxButtonHTML = this.isMaximized() ? this.maxButtonIsMaxMarkup : this.maxButtonIsMinMarkup;
 		document.querySelectorAll(".maxButtonOTB").forEach(maxButton => {
 			maxButton.outerHTML = maxButtonHTML;
 		});
