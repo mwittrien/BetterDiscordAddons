@@ -88,7 +88,7 @@ class OldTitleBar {
 
 	getDescription () {return "Reverts the title bar back to its former self.";}
 
-	getVersion () {return "1.4.8";}
+	getVersion () {return "1.4.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -143,7 +143,7 @@ class OldTitleBar {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								setImmediate(() => {
-									if (node && node.tagName && node.classList.contains(BDFDB.disCN.loginscreen)) {
+									if (node.tagName && node.classList && node.classList.contains(BDFDB.disCN.loginscreen)) {
 										this.addSettingsTitleBar(node);
 									}
 								});
@@ -160,7 +160,7 @@ class OldTitleBar {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								setImmediate(() => {
-									if (node && node.tagName && node.getAttribute("layer-id") || node.querySelector(BDFDB.dot.standardsidebarview)) {
+									if (node.tagName && node.getAttribute("layer-id") || node.querySelector(BDFDB.dotCN.standardsidebarview)) {
 										this.addSettingsTitleBar(node);
 									}
 								});
@@ -168,7 +168,7 @@ class OldTitleBar {
 						}
 						if (change.removedNodes) {
 							change.removedNodes.forEach((node) => {
-								if (node && node.tagName && node.getAttribute("layer-id") || node.querySelector(BDFDB.dot.standardsidebarview)) {
+								if (node.tagName && node.getAttribute("layer-id") || node.querySelector(BDFDB.dotCN.standardsidebarview)) {
 									this.removeTitleBar();
 									this.addTitleBar();
 								}
@@ -272,9 +272,9 @@ class OldTitleBar {
 	}
 	
 	addSettingsTitleBar (settingspane) {
-		if (!settingspane.querySelector(".dividerOTB, .reloadButtonOTB, .minButtonOTB, .maxButtonOTB, .closeButtonOTB") && BDFDB.getData("addToSettings", this, "settings")) {
+		var settings = BDFDB.getAllData(this, "settings");
+		if (settings.addSettingsTitleBar && !settingspane.querySelector(".dividerOTB, .reloadButtonOTB, .minButtonOTB, .maxButtonOTB, .closeButtonOTB")) {
 			var settingsbar = $(`<div class="settingsTitlebarOTB"></div>`);
-			var settings = BDFDB.getAllData(this, "settings");
 			if (settings.reloadButton) {
 				settingsbar
 					.append(this.reloadButtonMarkup)
