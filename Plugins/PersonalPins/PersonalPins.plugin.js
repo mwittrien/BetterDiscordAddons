@@ -88,51 +88,45 @@ class PersonalPins {
 				<div class="${BDFDB.disCN.buttoncontents}">REPLACE_popout_noteoption_text</div>
 			</button>`;
 			
-		this.messageMarkupCozy = 
-			`<div class="${BDFDB.disCN.messagegroupwrapper}">
-				<div class="${BDFDB.disCN.messagegroupwrapperoffsetcorrection}">
-					<div class="${BDFDB.disCNS.messagegroup + BDFDB.disCN.messagegroupcozy}">
-						<div class="${BDFDB.disCNS.messagecozy + BDFDB.disCN.message}" aria-disabled="false">
+		this.messageMarkup = 
+			`<div class="${BDFDB.disCN.messagespopoutmessagegroupwrapper}">
+				<div class="${BDFDB.disCN.messagespopoutmessagegroupwrapperoffsetcorrection}">
+					<div class="${BDFDB.disCNS.messagespopoutcontainercozybounded + BDFDB.disCNS.messagegroup + BDFDB.disCN.messagegroupcozy}">
+						<div class="${BDFDB.disCNS.messagespopoutmessagegroupcozy + BDFDB.disCNS.messagecozy + BDFDB.disCN.message}" aria-disabled="true">
 							<div class="${BDFDB.disCN.messageheadercozy}">
-								<div tabindex="0" class="${BDFDB.disCNS.avatarwrapper + BDFDB.disCNS.avatarlarge + BDFDB.disCN.avatar}" role="button">
+								<div tabindex="-1" aria-hidden="true" class="${BDFDB.disCNS.avatarwrapper + BDFDB.disCNS.avatarlarge + BDFDB.disCN.avatar}" role="button">
 									<div class="${BDFDB.disCNS.avatarimage + BDFDB.disCN.avatarlarge}"></div>
 								</div>
-								<span>
-									<span class="${BDFDB.disCN.messageusernamewrapper}">
+								<h2 class="${BDFDB.disCN.messageheadercozymeta}">
+									<span class="">
 										<strong tabindex="0" class="${BDFDB.disCN.messageusername}" role="button"></strong>
 									</span>
 									<time class="${BDFDB.disCN.messagetimestampcozy}" datetime="1531959706620"></time>
-								</span>
+								</h2>
 							</div>
 							<div class="${BDFDB.disCNS.messagecontentcozy + BDFDB.disCN.messagecontent}">
 								<div class="${BDFDB.disCNS.messagebodycozy + BDFDB.disCN.messagebody}">
-									<div class="${BDFDB.disCN.messagebuttoncontainerouter}">
-										<div class="${BDFDB.disCN.messagebuttoncontainer}">
-											<div class="${BDFDB.disCN.emojipickerbutton}"></div>
-											<div class="${BDFDB.disCN.optionpopoutbutton}"></div>
-										</div>
-									</div>
 									<div class="${BDFDB.disCN.messagemarkup}"></div>
 								</div>
-								<div class="${BDFDB.disCNS.messageaccessorycozy + BDFDB.disCN.messageaccessory}"></div>
+								<div class="${BDFDB.disCNS.messagespopoutaccessories + BDFDB.disCNS.messageaccessorycozy + BDFDB.disCN.messageaccessory}"></div>
 								<div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.margintop4 + BDFDB.disCNS.modedefault + BDFDB.disCN.primary} server-channel"></div>
 							</div>
-							<div class="${BDFDB.disCNS.sinkinteractions + BDFDB.disCN.clickable}"></div>
-							<div class="${BDFDB.disCN.messagespopoutactionbuttons}">
-								<div tabindex="0" class="${BDFDB.disCN.messagespopoutjumpbutton} jump" role="button">
-									<div class="${BDFDB.disCN.messagespopouttext}">REPLACE_popout_jump_text</div>
-								</div>
-								<div tabindex="0" class="${BDFDB.disCN.messagespopoutjumpbutton} copy" role="button">
-									<div class="${BDFDB.disCN.messagespopouttext}">REPLACE_popout_copy_text</div>
-								</div>
-								<button type="button" class="${BDFDB.disCNS.button + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonlookblank + BDFDB.disCN.buttongrow}">
-									<div class="${BDFDB.disCN.buttoncontents}">
-										<div class="${BDFDB.disCN.messagespopoutclosebutton}"></div>
-									</div>
-								</button>
-							</div>
 						</div>
-						<hr class="${BDFDB.disCNS.messagedividerenabled + BDFDB.messagedivider}">
+						<div class="${BDFDB.disCNS.sinkinteractions + BDFDB.disCN.clickable}"></div>
+						<div class="${BDFDB.disCN.messagespopoutactionbuttons}">
+							<div tabindex="0" class="${BDFDB.disCN.messagespopoutjumpbutton} jump" role="button">
+								<div class="${BDFDB.disCN.messagespopouttext}">REPLACE_popout_jump_text</div>
+							</div>
+							<div tabindex="0" class="${BDFDB.disCN.messagespopoutjumpbutton} copy" aria-label="Jump" role="button">
+								<div class="${BDFDB.disCN.messagespopouttext}">REPLACE_popout_copy_text</div>
+							</div>
+							<button type="button" class="${BDFDB.disCNS.button + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonlookblank + BDFDB.disCN.buttongrow}">
+								<div class="${BDFDB.disCN.buttoncontents}">
+									<div class="${BDFDB.disCN.messagespopoutclosebutton}"></div>
+								</div>
+							</button>
+						</div>
+						<hr aria-hidden="true" class="${BDFDB.disCNS.messagedividerenabled + BDFDB.disCN.messagedivider}">
 					</div>
 				</div>
 			</div>`;
@@ -142,7 +136,7 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.6.1";}
+	getVersion () {return "1.6.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -213,10 +207,10 @@ class PersonalPins {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.classList && node.classList.contains(BDFDB.disCN.messagegroup)) {
+								if (node.tagName && node.classList && node.classList.contains(BDFDB.disCN.messagegroup)) {
 									node.querySelectorAll(BDFDB.dotCN.message).forEach(message => {this.addOptionButton(message);});
 								}
-								else if (node && node.tagName && node.classList && node.classList.contains(BDFDB.disCN.message)) {
+								else if (node.tagName && node.classList && node.classList.contains(BDFDB.disCN.message)) {
 									this.addOptionButton(node);
 								}
 							});
@@ -231,7 +225,7 @@ class PersonalPins {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(BDFDB.dotCN.optionpopout) && !node.querySelector(".btn-item-personalpins")) {
+								if (node.tagName && node.querySelector(BDFDB.dotCN.optionpopout) && !node.querySelector(".btn-item-personalpins")) {
 									$(node).find(BDFDB.dotCN.optionpopout).append(this.popoutEntryMarkup);
 									this.addClickListener(node);
 								}
@@ -299,8 +293,8 @@ class PersonalPins {
 		this.notesPopoutMarkup = 			this.notesPopoutMarkup.replace("REPLACE_popout_sort_text", this.labels.popout_sort_text);
 		this.notesPopoutMarkup = 			this.notesPopoutMarkup.replace("REPLACE_popout_messagesort_text", this.labels.popout_messagesort_text);
 		
-		this.messageMarkupCozy = 			this.messageMarkupCozy.replace("REPLACE_popout_jump_text", this.labels.popout_jump_text);
-		this.messageMarkupCozy = 			this.messageMarkupCozy.replace("REPLACE_popout_copy_text", this.labels.popout_copy_text);
+		this.messageMarkup = 			this.messageMarkup.replace("REPLACE_popout_jump_text", this.labels.popout_jump_text);
+		this.messageMarkup = 			this.messageMarkup.replace("REPLACE_popout_copy_text", this.labels.popout_copy_text);
 		
 		this.sortPopoutMarkup = 			this.sortPopoutMarkup.replace("REPLACE_popout_messagesort_text", this.labels.popout_messagesort_text);
 		this.sortPopoutMarkup = 			this.sortPopoutMarkup.replace("REPLACE_popout_datesort_text", this.labels.popout_datesort_text);
@@ -545,7 +539,7 @@ class PersonalPins {
 				BDFDB.sortArrayByKey(messageArray, notespopout.querySelector(BDFDB.dotCN.quickselectvalue).getAttribute("option"));
 				var compact = BDFDB.getDiscordMode == "compact";
 				for (let messageData of messageArray) {
-					let message = $(this.messageMarkupCozy)[0];
+					let message = $(this.messageMarkup)[0];
 					let server = this.GuildStore.getGuild(messageData.serverID);
 					let channel = this.ChannelStore.getChannel(messageData.channelID);
 					let user = this.UserStore.getUser(messageData.authorID);
@@ -561,7 +555,7 @@ class PersonalPins {
 						(server && server.name ? server.name : messageData.serverName) + 
 						(messageData.serverID == "@me" ? " @" : " #") + 
 						(channel && channel.name ? channel.name : messageData.channelName);
-					message.querySelector(BDFDB.dotCN.messagemarkup).innerHTML = messageData.markup;
+					message.querySelector(BDFDB.dotCN.messagemarkup).innerHTML = messageData.markup.replace(`<span class="edited">`,`<span class="${BDFDB.disCN.messageedited}">`);
 					message.querySelector(BDFDB.dotCN.messageaccessory).innerHTML = messageData.accessory;
 					if (messageData.accessory) {
 						let ytvideo = message.querySelector(BDFDB.dotCN.embed + " iframe[src*='https://www.youtube.com']");
