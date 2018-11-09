@@ -115,7 +115,7 @@ class FriendNotifications {
 
 	getDescription () {return "Notifies you when a friend either logs in or out. Click the Online Friend-Counter to display a timelog of the current session.";}
 
-	getVersion () {return "1.1.1";}
+	getVersion () {return "1.1.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -224,6 +224,7 @@ class FriendNotifications {
 			this.FriendUtils = BDFDB.WebModules.findByProperties(["getFriendIDs", "getRelationships"]);
 			this.ChannelUtils = BDFDB.WebModules.findByProperties(["getDMFromUserId"]);
 			this.ChannelSwitchUtils = BDFDB.WebModules.findByProperties(["selectPrivateChannel"]);
+			this.PrivateChannelUtils = BDFDB.WebModules.findByProperties(["openPrivateChannel"]);
 			this.UserMetaStore = BDFDB.WebModules.findByProperties(["getStatus", "getOnlineFriendCount"]);
 			this.UserUtils = BDFDB.WebModules.findByProperties(["getUsers"]);
 			
@@ -244,12 +245,11 @@ class FriendNotifications {
 									let string = `${BDFDB.encodeToHTML(data.name ? data.name : user.username)} is ${online ? "online" : "offline"}.`;
 									let avatar = data.removeIcon ? "" : (data.url ? data.url : BDFDB.getUserAvatar(user.id));
 									let openChannel = () => {
-										if (settings.openOnClick){
-											let DMid = this.ChannelUtils.getDMFromUserId(user.id);
-											if (DMid) {
-												require("electron").remote.getCurrentWindow().maximize();
-												this.ChannelSwitchUtils.selectPrivateChannel(DMid);
-											}
+										if (settings.openOnClick) {
+											let DMid = this.ChannelStore.getDMFromUserId(user.id)
+											if (DMid) this.ChannelSwitchUtils.selectPrivateChannel(DMid);
+											else this.PrivateChannelUtils.openPrivateChannel(BDFDB.myData.id, user.id);
+											require("electron").remote.getCurrentWindow().maximize();
 										}
 									};
 									if (!BDFDB.loadData(id, this, "desktop")) {

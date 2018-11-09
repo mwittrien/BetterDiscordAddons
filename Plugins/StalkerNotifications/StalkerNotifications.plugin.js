@@ -127,7 +127,7 @@ class StalkerNotifications {
 
 	getDescription () {return "Lets you observe the status of people that aren't your friends.";}
 
-	getVersion () {return "1.0.5";}
+	getVersion () {return "1.0.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -275,6 +275,7 @@ class StalkerNotifications {
 			
 			this.ChannelUtils = BDFDB.WebModules.findByProperties(["getDMFromUserId"]);
 			this.ChannelSwitchUtils = BDFDB.WebModules.findByProperties(["selectPrivateChannel"]);
+			this.PrivateChannelUtils = BDFDB.WebModules.findByProperties(["openPrivateChannel"]);
 			this.UserMetaStore = BDFDB.WebModules.findByProperties(["getStatus", "getOnlineFriendCount"]);
 			this.UserUtils = BDFDB.WebModules.findByProperties(["getUsers"]);
 			
@@ -328,12 +329,11 @@ class StalkerNotifications {
 						let string = `${BDFDB.encodeToHTML(data.name ? data.name : user.username)} is ${online ? "online" : "offline"}.`;
 						let avatar = data.removeIcon ? "" : (data.url ? data.url : BDFDB.getUserAvatar(user.id));
 						let openChannel = () => {
-							if (settings.openOnClick){
-								let DMid = this.ChannelUtils.getDMFromUserId(user.id);
-								if (DMid) {
-									require("electron").remote.getCurrentWindow().maximize();
-									this.ChannelSwitchUtils.selectPrivateChannel(DMid);
-								}
+							if (settings.openOnClick) {
+								let DMid = this.ChannelStore.getDMFromUserId(user.id)
+								if (DMid) this.ChannelSwitchUtils.selectPrivateChannel(DMid);
+								else this.PrivateChannelUtils.openPrivateChannel(BDFDB.myData.id, user.id);
+								require("electron").remote.getCurrentWindow().maximize();
 							}
 						};
 						if (!users[id].desktop) {
