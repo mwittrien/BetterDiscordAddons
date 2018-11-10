@@ -43,7 +43,7 @@ class MessageUtilities {
 
 	getDescription () {return "Offers a number of useful message options. Remap the keybindings in the settings.";}
 
-	getVersion () {return "1.4.0";}
+	getVersion () {return "1.4.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -293,7 +293,7 @@ class MessageUtilities {
 	}
 	
 	doEdit (message) {
-		if (message.author.id == BDFDB.myData.id) {
+		if (message.author.id == BDFDB.myData.id && !message.div.querySelector("textarea")) {
 			this.MessageActions.startEditMessage(message.channel_id, message.id, message.content);
 		}
 	}
