@@ -143,7 +143,7 @@ class EmojiStatistics {
 				<label class="modal-emojicopies-label">modal-emojicopies-label</label>
 			</div>`;
 			
-		this.dividerMarkup = `<div class="${BDFDB.disCNS.modaldivider + BDFDB.disCN.modaldividerdefault}"></div>`;
+		this.dividerMarkup = `<div class="${BDFDB.disCN.modaldivider}"></div>`;
 			
 		this.emojiButtonMarkup = `<div class="emojistatistics-button"></div>`;
 			
@@ -159,7 +159,7 @@ class EmojiStatistics {
 
 	getDescription () {return "Adds some helpful options to show you more information about emojis and emojiservers.";}
 
-	getVersion () {return "2.7.5";}
+	getVersion () {return "2.7.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -211,7 +211,7 @@ class EmojiStatistics {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(BDFDB.dotCN.emojipicker)) {
+								if (node.tagName && node.querySelector(BDFDB.dotCN.emojipicker)) {
 									this.loadEmojiList();
 									if (!node.querySelector(".emojistatistics-button") && BDFDB.getData("enableEmojiStatisticsButton", this, "settings")) {
 										this.addEmojiInformationButton(node);
