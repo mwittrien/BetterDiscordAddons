@@ -920,11 +920,17 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .topLayer-1eMqbv.hover-3nZwuJ:not(.green-1kY_LT) {
 	fill: rgb(var(--vaccentcolor)) !important;
 }
+.secondaryAccent-24W-RJ.hover-3nZwuJ:not(.green-1kY_LT) {
+	fill: rgb(var(--vaccentcolor),0.8) !important;
+}
 .bottomLayer-XCk80b.hover-3nZwuJ.green-1kY_LT {
-	fill: rgba(67, 181, 129,0.5) !important;
+	fill: rgba(67,181,129,0.5) !important;
 }
 .topLayer-1eMqbv.hover-3nZwuJ.green-1kY_LT {
-	fill: rgb(67, 181, 129) !important;
+	fill: rgb(67,181,129) !important;
+}
+.secondaryAccent-24W-RJ.hover-3nZwuJ.green-1kY_LT {
+	fill: rgb(67,181,129,0.8) !important;
 }
 
 .helpIcon-2EyVTp g {
