@@ -733,6 +733,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 :not(.guild-1EfMGQ):not(.guildInner-3DSoA4):not(.instructions-2Du9gG):not(.searchLearnMore-3SQUAj):not(.viewAllButton-31gira) > a:not(.back-2Z4ATs):not(.viewAllGames-3LNpt1):not(.button-1MICoQ):not(.iconWrapper-21idzA):not(.textLink-3aPthL):not(.bodyLink-3A8Buv):not(.search-bar-tag):not(.channel-SEolQq):not(.downloadLink-2oSgiF):not(.embedAuthorName-3mnTWj):not([style]),
 .filenameLinkWrapper-1-14c5,
 .announcingNitro-3Ptg6m,
+.action-1lSjCi:hover .actionHeader-2CT5c7,
 .tab.selected,
 .price-1rEl-z,
 .arrow-1QsYio,
@@ -1361,6 +1362,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .keyboardShortcutsModal-3piNz7,
 .modal-1UGdnR .inner-1JeGVc > [class]:not(.premiumPaymentModal-3SpIbo):not(.container-3qKHyN):only-child,
 .modal-3Msmb3,
+.wrapper-2ZbzR9,
 #permissions-modal,
 .popout-2xBvMR,
 .popout-3sVMXz > [class],
@@ -1387,6 +1389,8 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .modal-1UGdnR .inner-1JeGVc > [class]:not(.premiumPaymentModal-3SpIbo):not(.container-3qKHyN):only-child:before,
 .modal-3Msmb3:after,
 .modal-3Msmb3:before,
+.wrapper-2ZbzR9:after,
+.wrapper-2ZbzR9:before,
 #permissions-modal:after,
 #permissions-modal:before,
 .popout-2xBvMR:after,
@@ -1413,6 +1417,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .keyboardShortcutsModal-3piNz7:after,
 .modal-1UGdnR .inner-1JeGVc > [class]:not(.premiumPaymentModal-3SpIbo):not(.container-3qKHyN):only-child:after,
 .modal-3Msmb3:after,
+.wrapper-2ZbzR9:after,
 #permissions-modal:after,
 .popout-2xBvMR:after,
 .popout-3sVMXz > [class]:after,
@@ -1432,6 +1437,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .keyboardShortcutsModal-3piNz7:before,
 .modal-1UGdnR .inner-1JeGVc > [class]:not(.premiumPaymentModal-3SpIbo):not(.container-3qKHyN):only-child:before,
 .modal-3Msmb3:before,
+.wrapper-2ZbzR9:before,
 #permissions-modal:before,
 .popout-2xBvMR:before,
 .popout-3sVMXz > [class]:before,
@@ -2758,6 +2764,82 @@ html, span:not(.spinner-item) {
 .input-autosize-input:focus {
 	background: rgba(var(--vtransparencycolor),var(--vtransparencyalpha)) !important;
 	border: 1px solid rgb(var(--vaccentcolor)) !important;
+}
+
+
+/* ----------------------- OLDCLASSES ----------------------- */
+
+/* old guild create */
+.create-guild-container,
+.create-guild-container .form-inner {
+	height: 440px !important;
+}
+.create-guild-container header,
+.create-guild-container h5,
+.create-guild-container .create .action-header,
+.create-guild-container .sample-link {
+	color: rgb(var(--vaccentcolor)) !important;
+}
+.create-guild-container .or {
+	background: rgba(var(--vtransparencycolor),0.8) !important;
+	width: 40px !important;
+	height: 40px !important;
+	border-radius: 50%;
+	padding: 0 !important;
+	line-height: 36px !important;
+	position: absolute !important;
+	top: 50% !important;
+	left: calc(50% - 20px) !important;
+}
+.create-guild-container .action {
+	background: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 3)) !important;
+}
+.create-guild-container .form-actions {
+	border: none !important;
+	background: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 3)) !important;
+}
+.create-guild-container .form-actions .btn-default {
+	color: rgb(255,255,255) !important;
+	border: none !important;
+	background: transparent !important;
+}
+.create-guild-container .form-actions .btn-default:before {
+	filter: brightness(1000%);
+}
+.create-guild-container .form-inner input {
+	background: rgba(var(--vtransparencycolor),var(--vtransparencyalpha)) !important;
+	border-radius: 3px !important;
+	border-style: solid !important;
+	border-width: 1px !important;
+	color: rgb(255,255,255) !important;
+	margin-right: 15px !important;
+	transition: background-color .15s ease,border .15s ease !important;
+}
+.create-guild-container .form-inner input#guild-name {
+	padding-left: 10px !important;
+	width: 240px !important;
+}
+.create-guild-container .form-inner .regionSelect-3lf4eE {
+	width: 250px !important;
+}
+.create-guild-container .form-inner input:not(:focus) {
+	border-color: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 3)) !important;
+}
+.create-guild-container .form-inner input:focus {
+	border-color: rgb(var(--vaccentcolor)) !important;
+}
+.create-guild-container.deprecated .action.join .btn {
+	background-color: #3ca374 !important;
+}
+.create-guild-container .create .action-icon {
+	-webkit-mask-size: cover;
+	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" viewBox="-290 382 40 30" version="1.1"><path d="M-273,409.5L-273,409.5c-4.1,0-6.8-0.6-7.9-1.7c-0.5-0.6-0.6-1.1-0.6-1.3c0-0.7,0.1-2.9,0.6-3.8c0.1-0.3,0.5-1,4.5-2.4c-1.6-1.4-2.6-4-2.6-7.1c0-4.2,2.3-7,5.9-7.1l0.1,0c3.6,0.1,5.9,2.8,5.9,7.1c0,3.1-1,5.7-2.6,7.1c4,1.4,4.4,2.1,4.5,2.4c0.4,0.9,0.5,3.1,0.6,3.8c0,0.2,0,0.7-0.6,1.3C-266.3,408.9-268.9,409.5-273,409.5z M-273,407.5L-273,407.5c5.1,0,6.2-0.9,6.4-1.1c-0.1-1.1-0.2-2.3-0.3-2.7c-0.6-0.4-2.9-1.3-4.8-1.9l-0.7-0.2l-0.1-2l0.7-0.3c1.7-0.6,2.8-3.1,2.8-6.1c0-3.1-1.5-5-3.9-5.1c-2.5,0-4,2-4,5.1c0,3,1.1,5.5,2.8,6.1l0.7,0.3l-0.1,2l-0.7,0.2c-1.9,0.6-4.2,1.5-4.8,1.9c-0.1,0.4-0.3,1.6-0.3,2.7C-279.2,406.6-278,407.5-273,407.5z"/><g opacity="0.6"><path class="st0" d="M-257,402.8c0-0.7-0.1-2.9-0.6-3.8c-0.1-0.3-0.5-1-4.5-2.4c1.6-1.4,2.6-4,2.6-7.1c0-4.2-2.3-7-5.9-7.1l-0.1,0c-1.9,0-3.5,0.8-4.5,2.2c0.6,0.3,1.2,0.6,1.8,1c0.7-0.8,1.6-1.3,2.8-1.3c2.4,0,3.9,2,3.9,5.1c0,3-1.1,5.5-2.8,6.1l-0.7,0.3l0.1,2l0.7,0.2c1.9,0.6,4.3,1.5,4.8,1.9c0.1,0.4,0.3,1.6,0.3,2.7c-0.2,0.2-1,0.8-3.8,1c0.1,0.6,0.2,1.2,0.2,2c2.5-0.2,4.2-0.8,5-1.6C-257,403.5-257,403-257,402.8z"/><path d="M-287,402.7c0.1-1.1,0.2-2.3,0.3-2.7c0.6-0.4,2.9-1.3,4.8-1.9l0.7-0.2l0.1-2l-0.7-0.3c-1.6-0.6-2.8-3.1-2.8-6.1c0-3.1,1.5-5,4-5.1c1.2,0,2.1,0.5,2.8,1.3c0.5-0.4,1.1-0.8,1.8-1c-1-1.4-2.6-2.2-4.5-2.2l-0.1,0c-3.6,0-5.9,2.8-5.9,7.1c0,3.1,1,5.7,2.6,7.1c-4,1.4-4.4,2.1-4.5,2.4c-0.4,0.9-0.5,3.1-0.6,3.8c0,0.2,0,0.7,0.6,1.3c0.8,0.9,2.5,1.4,5.1,1.6c0-0.7,0.1-1.4,0.2-2C-286,403.5-286.8,402.9-287,402.7z"/></g><path xmlns="http://www.w3.org/2000/svg" d="M-260,387 l4,0 l0,-4 l2,0 l0,4 l4,0 l0,2 l-4,0 l0,4 l-2,0 l0,-4 l-4,0 l0,-2"/></svg>') 58% no-repeat !important;
+	background: rgb(var(--vaccentcolor)) !important;
+}
+.create-guild-container .join .action-icon {
+	-webkit-mask-size: cover;
+	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" viewBox="-330 382 80 30" version="1.1"><path xmlns="http://www.w3.org/2000/svg" d="M-273,409.5L-273,409.5c-4.1,0-6.8-0.6-7.9-1.7c-0.5-0.6-0.6-1.1-0.6-1.3c0-0.7,0.1-2.9,0.6-3.8c0.1-0.3,0.5-1,4.5-2.4c-1.6-1.4-2.6-4-2.6-7.1c0-4.2,2.3-7,5.9-7.1l0.1,0c3.6,0.1,5.9,2.8,5.9,7.1c0,3.1-1,5.7-2.6,7.1c4,1.4,4.4,2.1,4.5,2.4c0.4,0.9,0.5,3.1,0.6,3.8c0,0.2,0,0.7-0.6,1.3C-266.3,408.9-268.9,409.5-273,409.5z M-273,407.5L-273,407.5c5.1,0,6.2-0.9,6.4-1.1c-0.1-1.1-0.2-2.3-0.3-2.7c-0.6-0.4-2.9-1.3-4.8-1.9l-0.7-0.2l-0.1-2l0.7-0.3c1.7-0.6,2.8-3.1,2.8-6.1c0-3.1-1.5-5-3.9-5.1c-2.5,0-4,2-4,5.1c0,3,1.1,5.5,2.8,6.1l0.7,0.3l-0.1,2l-0.7,0.2c-1.9,0.6-4.2,1.5-4.8,1.9c-0.1,0.4-0.3,1.6-0.3,2.7C-279.2,406.6-278,407.5-273,407.5z" transform="translate(-43,-2)"/><path xmlns="http://www.w3.org/2000/svg" d="M-307,395 l15,0 l-4,-4 l2.66,0 l5,5 l-5,5 l-2.66,0 l4-4 l-15,0 l0,-2"/><path d="M-273,409.5L-273,409.5c-4.1,0-6.8-0.6-7.9-1.7c-0.5-0.6-0.6-1.1-0.6-1.3c0-0.7,0.1-2.9,0.6-3.8c0.1-0.3,0.5-1,4.5-2.4c-1.6-1.4-2.6-4-2.6-7.1c0-4.2,2.3-7,5.9-7.1l0.1,0c3.6,0.1,5.9,2.8,5.9,7.1c0,3.1-1,5.7-2.6,7.1c4,1.4,4.4,2.1,4.5,2.4c0.4,0.9,0.5,3.1,0.6,3.8c0,0.2,0,0.7-0.6,1.3C-266.3,408.9-268.9,409.5-273,409.5z M-273,407.5L-273,407.5c5.1,0,6.2-0.9,6.4-1.1c-0.1-1.1-0.2-2.3-0.3-2.7c-0.6-0.4-2.9-1.3-4.8-1.9l-0.7-0.2l-0.1-2l0.7-0.3c1.7-0.6,2.8-3.1,2.8-6.1c0-3.1-1.5-5-3.9-5.1c-2.5,0-4,2-4,5.1c0,3,1.1,5.5,2.8,6.1l0.7,0.3l-0.1,2l-0.7,0.2c-1.9,0.6-4.2,1.5-4.8,1.9c-0.1,0.4-0.3,1.6-0.3,2.7C-279.2,406.6-278,407.5-273,407.5z"/><g opacity="0.6"><path class="st0" d="M-257,402.8c0-0.7-0.1-2.9-0.6-3.8c-0.1-0.3-0.5-1-4.5-2.4c1.6-1.4,2.6-4,2.6-7.1c0-4.2-2.3-7-5.9-7.1l-0.1,0c-1.9,0-3.5,0.8-4.5,2.2c0.6,0.3,1.2,0.6,1.8,1c0.7-0.8,1.6-1.3,2.8-1.3c2.4,0,3.9,2,3.9,5.1c0,3-1.1,5.5-2.8,6.1l-0.7,0.3l0.1,2l0.7,0.2c1.9,0.6,4.3,1.5,4.8,1.9c0.1,0.4,0.3,1.6,0.3,2.7c-0.2,0.2-1,0.8-3.8,1c0.1,0.6,0.2,1.2,0.2,2c2.5-0.2,4.2-0.8,5-1.6C-257,403.5-257,403-257,402.8z"/><path d="M-287,402.7c0.1-1.1,0.2-2.3,0.3-2.7c0.6-0.4,2.9-1.3,4.8-1.9l0.7-0.2l0.1-2l-0.7-0.3c-1.6-0.6-2.8-3.1-2.8-6.1c0-3.1,1.5-5,4-5.1c1.2,0,2.1,0.5,2.8,1.3c0.5-0.4,1.1-0.8,1.8-1c-1-1.4-2.6-2.2-4.5-2.2l-0.1,0c-3.6,0-5.9,2.8-5.9,7.1c0,3.1,1,5.7,2.6,7.1c-4,1.4-4.4,2.1-4.5,2.4c-0.4,0.9-0.5,3.1-0.6,3.8c0,0.2,0,0.7,0.6,1.3c0.8,0.9,2.5,1.4,5.1,1.6c0-0.7,0.1-1.4,0.2-2C-286,403.5-286.8,402.9-287,402.7z"/></g></svg>') center/cover no-repeat !important;
+	background: #3ca374 !important;
 }
 
 /* fix help modal */ 
