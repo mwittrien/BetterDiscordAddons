@@ -511,8 +511,8 @@ input:disabled {
 .partyMemberBackground-aSF9mc,
 .friends-action,
 .button-mM-y8i:hover,
-.guild-1EfMGQ.audio-3vVhBi .guildInner-3DSoA4:after,
-.guild-1EfMGQ.video-15yGu3 .guildInner-3DSoA4:after {
+.guild-1EfMGQ.audio-3vVhBi:after,
+.guild-1EfMGQ.video-15yGu3:after {
 	background-color: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 3)) !important;
 }
 
