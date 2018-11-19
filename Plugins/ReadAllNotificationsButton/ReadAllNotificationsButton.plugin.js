@@ -12,8 +12,8 @@ class ReadAllNotificationsButton {
 			</div>`;
 			
 		this.RAMbuttonMarkup = 
-			`<button type="button" id="RAMbutton" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemin + BDFDB.disCN.buttongrow}" style="flex: 0 0 auto; margin-top: -5px; height: 25px;">
-				<div class="${BDFDB.disCN.buttoncontents}">Clear all Mentions</div>
+			`<button type="button" id="RAMbutton" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemin + BDFDB.disCN.buttongrow}" style="flex: 0 0 auto; margin-left: 25px; height: 25px;">
+				<div class="${BDFDB.disCN.buttoncontents}">Clear Mentions</div>
 			</button>`;
 		
 		this.defaults = {
@@ -79,27 +79,24 @@ class ReadAllNotificationsButton {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								var mentionspopout = null;
-								if (node && node.tagName && (mentionspopout = node.querySelector(BDFDB.dotCN.recentmentionspopout)) != null) {
-									let filter = node.querySelector(BDFDB.dotCN.recentmentionsmentionfilter);
-									if (filter) {
-										$(this.RAMbuttonMarkup).insertBefore(filter, mentionspopout)
-											.on("click", () => {
-												var loadinterval = setInterval(() => {
-													if (!mentionspopout || !mentionspopout.parentElement) clearInterval(loadinterval);
-													var loadbutton = mentionspopout.querySelector(BDFDB.dotCNS.messagespopouthasmore + "button");
-													var closebuttons = mentionspopout.querySelectorAll(BDFDB.dotCN.messagespopoutclosebutton);
-													if (!loadbutton) {
-														closebuttons.forEach((btn) => {btn.click();});
-														clearInterval(loadinterval);
-													}
-													else {
-														closebuttons.forEach((btn,i) => {if (closebuttons.length-1 > i) btn.click();});
-														loadbutton.click();
-													}
-												},2000);
-											});
-										mentionspopout.classList.add("RAM-added");
-									}
+								if (node.tagName && (mentionspopout = node.querySelector(BDFDB.dotCN.recentmentionspopout)) != null && node.querySelector(BDFDB.dotCN.recentmentionsmentionfilter)) {
+									$(this.RAMbuttonMarkup).appendTo(BDFDB.dotCN.recentmentionstitle, mentionspopout)
+										.on("click", () => {
+											var loadinterval = setInterval(() => {
+												if (!mentionspopout || !mentionspopout.parentElement) clearInterval(loadinterval);
+												var loadbutton = mentionspopout.querySelector(BDFDB.dotCNS.messagespopouthasmore + "button");
+												var closebuttons = mentionspopout.querySelectorAll(BDFDB.dotCN.messagespopoutclosebutton);
+												if (!loadbutton) {
+													closebuttons.forEach((btn) => {btn.click();});
+													clearInterval(loadinterval);
+												}
+												else {
+													closebuttons.forEach((btn,i) => {if (closebuttons.length-1 > i) btn.click();});
+													loadbutton.click();
+												}
+											},2000);
+										});
+									mentionspopout.classList.add("RAM-added");
 								}
 							});
 						}
