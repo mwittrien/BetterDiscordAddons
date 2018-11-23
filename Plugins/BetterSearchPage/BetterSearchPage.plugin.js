@@ -107,7 +107,7 @@ class BetterSearchPage {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.classList.contains(BDFDB.disCN.searchresultswrap)) {
+								if (node.tagName && node.classList.contains(BDFDB.disCN.searchresultswrap)) {
 									BDFDB.addObserver(this, node, {name:"searchResultsObserver"}, {childList:true, subtree:true});
 								}
 							});
@@ -123,7 +123,7 @@ class BetterSearchPage {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								let pagination = null;
-								if (node && node.tagName && (pagination = node.querySelector(BDFDB.dotCN.searchresultspagination)) != null) {
+								if (node.tagName && (pagination = node.querySelector(BDFDB.dotCN.searchresultspagination)) != null) {
 									this.addNewControls(pagination);
 								}
 							});
@@ -273,7 +273,6 @@ class BetterSearchPage {
 				}
 			})
 			.on("keydown." + this.getName(), ".BSP-pagination-jumpinput " + BDFDB.dotCN.inputmini, (e) => {
-				e.stopPropagation();
 				if (e.which == 13) doJump(e.currentTarget);
 			})
 			.on("click." + this.getName(), ".BSP-pagination-jump:not(" + BDFDB.dotCN.searchresultspaginationdisabled + ")", (e) => {
