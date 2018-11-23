@@ -32,7 +32,7 @@ class ChatFilter {
 
 	getDescription () {return "Allows the user to censor words or block complete messages based on words in the chatwindow.";}
 
-	getVersion () {return "3.2.8";}
+	getVersion () {return "3.2.9";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -334,7 +334,7 @@ class ChatFilter {
 							if (reg.test(url)) blocked = true;
 						}
 						else if (string.indexOf("<") != 0) {
-							string.replace(/\n/g, " \n ").split(" ").forEach((word) => {
+							string.replace(/([\?\¿\!\¡\.\"\n])/g, " $1 ").split(" ").forEach((word) => {
 								if (word && reg.test(word)) blocked = true;
 							});
 						}
@@ -378,7 +378,7 @@ class ChatFilter {
 							}
 							else if (string.indexOf("<") != 0) {
 								var newstring = [];
-								string.replace(/\n/g, " \n ").split(" ").forEach((word) => {
+								string.replace(/([\?\¿\!\¡\.\"\n])/g, " $1 ").split(" ").forEach((word) => {
 									if (word && reg.test(word)) {
 										censored = true;
 										newstring.push(BDFDB.encodeToHTML(censoredReplace));
@@ -393,7 +393,7 @@ class ChatFilter {
 					}
 					
 					if (censored) {
-						newhtml = strings.join("").replace(/\s\n\s/g, "\n");
+						newhtml = strings.join("").replace(/ ([\?\¿\!\¡\.\"\n]) /g, "$1");
 						$(message)
 							.html(newhtml)
 							.addClass("censored")
