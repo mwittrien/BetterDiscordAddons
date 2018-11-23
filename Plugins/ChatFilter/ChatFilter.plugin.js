@@ -32,7 +32,7 @@ class ChatFilter {
 
 	getDescription () {return "Allows the user to censor words or block complete messages based on words in the chatwindow.";}
 
-	getVersion () {return "3.2.9";}
+	getVersion () {return "3.3.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -387,13 +387,13 @@ class ChatFilter {
 										newstring.push(word);
 									}
 								});
-								strings[i] = newstring.join(" ");
+								strings[i] = newstring.join(" ").replace(/ ([\?\¿\!\¡\.\"\n]) /g, "$1");
 							}
 						});
 					}
 					
 					if (censored) {
-						newhtml = strings.join("").replace(/ ([\?\¿\!\¡\.\"\n]) /g, "$1");
+						newhtml = strings.join("");
 						$(message)
 							.html(newhtml)
 							.addClass("censored")
