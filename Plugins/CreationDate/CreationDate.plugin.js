@@ -9,6 +9,9 @@ class CreationDate {
 		this.creationDateMarkup = `<div class="creationDate ${BDFDB.disCN.textrow}"></div>`;
 		
 		this.css = `
+			${BDFDB.dotCNS.userpopout + BDFDB.dotCN.nametag} {
+				margin-bottom: 4px;
+			}
 			${BDFDB.dotCNS.themelight + BDFDB.dotCN.userpopoutheadernormal} .creationDate {
 				color: #b9bbbe; 
 			}
@@ -42,7 +45,7 @@ class CreationDate {
 
 	getDescription () {return "Displays the Creation Date of an Account in the UserPopout and UserModal.";}
 
-	getVersion () {return "1.1.8";}
+	getVersion () {return "1.1.9";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -105,7 +108,7 @@ class CreationDate {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(BDFDB.dotCN.userpopout)) {
+								if (node.tagName && node.querySelector(BDFDB.dotCN.userpopout)) {
 									if (BDFDB.getData("addInUserPopout", this, "settings")) this.addCreationDate(node.querySelector(BDFDB.dotCN.userpopoutheadertext));
 								}
 							});
@@ -120,7 +123,7 @@ class CreationDate {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector("[class*='topSection']")) {
+								if (node.tagName && node.querySelector("[class*='topSection']")) {
 									if (BDFDB.getData("addInUserProfil", this, "settings")) this.addCreationDate(node.querySelector(BDFDB.dotCN.userprofileheaderinfo));
 								}
 							});
@@ -202,7 +205,8 @@ class CreationDate {
 			var choice = BDFDB.getData("creationDateLang", this, "choices");
 			creationDate.text(this.labels.createdat_text + " " + this.getCreationTime(this.languages[choice].id, info.createdAt));
 			var nametag = container.querySelector(BDFDB.dotCN.nametag);
-			container.insertBefore(creationDate[0], nametag ? nametag.nextSibling : null);
+			var joinedAtDate = container.querySelector(".joinedAtDate");
+			container.insertBefore(creationDate[0], joinedAtDate ? joinedAtDate.nextSibling : (nametag ? nametag.nextSibling : null));
 		}
 	}
 	
