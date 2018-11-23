@@ -113,6 +113,12 @@ class StalkerNotifications {
 				onlyOnOnline:		{value:false, 	description:"Only notify me when a User logs in:"},
 				openOnClick:		{value:false, 	description:"Open the DM when you click a Notification:"}
 			},
+			notificationsounds: {
+				toastonline: 		{value:{url:null,song:null,mute:false}},
+				toastoffline: 		{value:{url:null,song:null,mute:false}},
+				desktoponline: 		{value:{url:null,song:null,mute:false}},
+				desktopoffline: 	{value:{url:null,song:null,mute:false}}
+			},
 			amounts: {
 				checkInterval:		{value:10, 		description:"Check Users every X seconds:"}
 			}
@@ -123,7 +129,7 @@ class StalkerNotifications {
 
 	getDescription () {return "Lets you observe the status of people that aren't your friends.";}
 
-	getVersion () {return "1.0.7";}
+	getVersion () {return "1.0.8";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -133,7 +139,7 @@ class StalkerNotifications {
 		var amounts = BDFDB.getAllData(this, "amounts");
 		var settings = BDFDB.getAllData(this, "settings");
 		var users = BDFDB.loadAllData(this, "users");
-		var notificationsound = BDFDB.loadAllData(this, "notificationsound");
+		var notificationsounds = BDFDB.getAllData(this, "notificationsounds");
 		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCN.flexchild}" style="flex: 0 0 50%; line-height: 38px;">Add User:</h3><div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex + BDFDB.disCN.directioncolumn}" style="flex: 1 1 auto;"><input type="text" value="" placeholder="UserID" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16}" id="input-userid"></div><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} btn-add btn-adduser" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}"></div></button></div>`;
 		for (let key in amounts) {
@@ -142,7 +148,9 @@ class StalkerNotifications {
 		for (let key in settings) {
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-checkbox"${settings[key] ? " checked" : ""}></div></div>`;
 		}
-		if ("Notification" in window) settingshtml += `<div class="${BDFDB.disCNS.flexchild + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h5 class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.h5 + BDFDB.disCNS.title + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.h5defaultmargin}" style="flex: 1 1 auto;">Desktop Notification Sound:</h5><h5 class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.h5 + BDFDB.disCNS.title + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.h5defaultmargin}" style="flex: 0 0 auto;">Mute:</h5><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} mute-checkbox"${notificationsound.mute ? " checked" : ""}></div></div><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex + BDFDB.disCNS.directioncolumn + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;"><input type="text" value="${notificationsound.url ? notificationsound.url : ""}" placeholder="Url or Filepath" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16} songInput"></div><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} file-navigator" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}"></div><input type="file" accept="audio/*,video/*" style="display:none!important;"></button><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} btn-save btn-savesong" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}"></div></button></div></div>`;
+		for (let key in notificationsounds) {
+			if (key.indexOf("desktop") == -1 || "Notification" in window) settingshtml += `<div class="${BDFDB.disCNS.flexchild + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h5 class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.h5 + BDFDB.disCNS.title + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.h5defaultmargin}" style="flex: 1 1 auto;">${key} notification sound:</h5><h5 class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.h5 + BDFDB.disCNS.title + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.h5defaultmargin}" style="flex: 0 0 auto;">Mute:</h5><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" option="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} mute-checkbox"${notificationsounds[key].mute ? " checked" : ""}></div></div><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex + BDFDB.disCNS.directioncolumn + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;"><input type="text" option="${key}" value="${notificationsounds[key].url ? notificationsounds[key].url : ""}" placeholder="Url or Filepath" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16} songInput"></div><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} file-navigator" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}"></div><input type="file" accept="audio/*,video/*" style="display:none!important;"></button><button type="button" option="${key}" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} btn-save btn-savesong" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}"></div></button></div></div>`;
+		}
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">Click on a Icon to toggle <label class="type-toast">Toast</label> Notifications for that User:</h3></div>`;
 		if ("Notification" in window) settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">Rightclick on a Icon to toggle <label class="type-desktop">Desktop</label> Notifications for that User:</h3></div>`;
 		settingshtml += `<div class="avatar-list ${BDFDB.disCN.marginbottom8}">`;
@@ -161,11 +169,12 @@ class StalkerNotifications {
 
 		$(settingspanel)
 			.on("click", ".settings-checkbox", () => {this.updateSettings(settingspanel);})
-			.on("click", ".btn-savesong", () => {this.saveAudio(settingspanel);})
+			.on("click", ".btn-savesong", (e) => {this.saveAudio(settingspanel, e.currentTarget.getAttribute("option"));})
 			.on("click", ".mute-checkbox", (e) => {
-				var notificationsound = BDFDB.loadAllData(this, "notificationsound");
+				var option = e.currentTarget.getAttribute("option");
+				var notificationsound = BDFDB.getData(option, this, "notificationsounds");
 				notificationsound.mute = e.currentTarget.checked;
-				BDFDB.saveAllData(notificationsound, this, "notificationsound");
+				BDFDB.saveData(option, notificationsound, this, "notificationsounds");
 			})
 			.on("mouseenter", ".settings-avatar", (e) => {
 				let user = this.UserUtils.getUser(e.currentTarget.getAttribute("user-id"));
@@ -269,6 +278,15 @@ class StalkerNotifications {
 		if (typeof BDFDB === "object") {
 			BDFDB.loadMessage(this);
 			
+			var notificationsound = BDFDB.loadAllData(this, "notificationsound");
+			if (!BDFDB.isObjectEmpty(notificationsound)) {
+				var data = {};
+				data.desktoponline = notificationsound;
+				data.desktopoffline = notificationsound;
+				BDFDB.saveAllData(data, this, "notificationsounds");
+				BDFDB.removeAllData(this, "notificationsound");
+			}
+			
 			this.ChannelUtils = BDFDB.WebModules.findByProperties(["getDMFromUserId"]);
 			this.ChannelSwitchUtils = BDFDB.WebModules.findByProperties(["selectPrivateChannel"]);
 			this.PrivateChannelUtils = BDFDB.WebModules.findByProperties(["openPrivateChannel"]);
@@ -298,67 +316,24 @@ class StalkerNotifications {
 
 	updateSettings (settingspanel) {
 		var settings = {};
-		for (var input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner)) {
+		for (var input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner + ".settings-checkbox")) {
 			settings[input.value] = input.checked;
 		}
 		BDFDB.saveAllData(settings, this, "settings");
 	}
 	
-	createSettingsAvatarHtml (user, settings) {
-		let data = BDFDB.loadData(user.id, "EditUsers", "users") || {};
-		return `<div class="settings-avatar${settings.desktop ? " desktop" : ""}${settings.disabled ? " disabled" : ""}" user-id="${user.id}" style="background-image: url(${data.removeIcon ? "" : (data.url ? data.url : BDFDB.getUserAvatar(user.id))});"><div class="${BDFDB.disCN.hovercardbutton} remove-user"></div></div>`;
-	}
-	
-	startInterval () {
-		clearInterval(this.checkInterval);
-		this.checkInterval = setInterval(() => {
-			let settings = BDFDB.getAllData(this, "settings");
-			let notificationsound = BDFDB.loadAllData(this, "notificationsound");
-			let users = BDFDB.loadAllData(this, "users");
-			for (let id in users) {
-				let online = this.UserMetaStore.getStatus(id) != "offline";
-				let user = this.UserUtils.getUser(id);
-				if (user && this.stalkerOnlineList[id] != online && !users[id].disabled) {
-					this.timeLog.push({user, online, time: new Date()});
-					if (!(settings.onlyOnOnline && !online) && !(settings.muteOnDND && BDFDB.getUserStatus() == "dnd")) {
-						let data = BDFDB.loadData(user.id, "EditUsers", "users") || {};
-						let string = `${BDFDB.encodeToHTML(data.name ? data.name : user.username)} is ${online ? "online" : "offline"}.`;
-						let avatar = data.removeIcon ? "" : (data.url ? data.url : BDFDB.getUserAvatar(user.id));
-						let openChannel = () => {
-							if (settings.openOnClick) {
-								let DMid = this.ChannelStore.getDMFromUserId(user.id)
-								if (DMid) this.ChannelSwitchUtils.selectPrivateChannel(DMid);
-								else this.PrivateChannelUtils.openPrivateChannel(BDFDB.myData.id, user.id);
-								require("electron").remote.getCurrentWindow().maximize();
-							}
-						};
-						if (!users[id].desktop) {
-							let toast = BDFDB.showToast(`<div class="toast-inner"><div class="toast-avatar" style="background-image:url(${avatar});"></div><div>${string}</div></div>`, {html:true, timeout:5000, type:(online ? "success" : null), icon:false});
-							$(toast).on("click." + this.getName(), openChannel);
-						}
-						else {
-							let notificationsound = BDFDB.loadAllData(this, "notificationsound");
-							BDFDB.showDesktopNotification(string, {icon:avatar, timeout:5000, click:openChannel, silent:notificationsound.mute, sound:notificationsound.song});
-						}
-					}
-				}
-				this.stalkerOnlineList[id] = online;
-			}
-		},BDFDB.getData("checkInterval", this, "amounts") * 1000);
-	}
-	
-	saveAudio (settingspanel) {
+	saveAudio (settingspanel, option) {
 		var successSavedAudio = (parsedurl, parseddata) => {
 			if (parsedurl && parseddata) BDFDB.showToast(`Sound was saved successfully.`, {type:"success"});
-			let notificationsound = BDFDB.loadAllData(this, "notificationsound");
+			let notificationsound = BDFDB.getData(option, this, "notificationsounds");
 			notificationsound.url = parsedurl;
 			notificationsound.song = parseddata;
-			BDFDB.saveAllData(notificationsound, this, "notificationsound");
+			BDFDB.saveData(option, notificationsound, this, "notificationsounds");
 		};
 		
-		var url = settingspanel.querySelector(".songInput").value;
+		var url = settingspanel.querySelector(`.songInput[option="${option}"]`).value;
 		if (url.length == 0) {
-			BDFDB.showToast(`Sound was set to the default sound.`, {type:"warn"});
+			BDFDB.showToast(`Sound file was removed.`, {type:"warn"});
 			successSavedAudio(url, url);
 		}
 		else if (url.indexOf("http") == 0) {
@@ -383,6 +358,54 @@ class StalkerNotifications {
 				}
 			});
 		}
+	}
+	
+	createSettingsAvatarHtml (user, settings) {
+		let data = BDFDB.loadData(user.id, "EditUsers", "users") || {};
+		return `<div class="settings-avatar${settings.desktop ? " desktop" : ""}${settings.disabled ? " disabled" : ""}" user-id="${user.id}" style="background-image: url(${data.removeIcon ? "" : (data.url ? data.url : BDFDB.getUserAvatar(user.id))});"><div class="${BDFDB.disCN.hovercardbutton} remove-user"></div></div>`;
+	}
+	
+	startInterval () {
+		clearInterval(this.checkInterval);
+		this.checkInterval = setInterval(() => {
+			let settings = BDFDB.getAllData(this, "settings");
+			let users = BDFDB.loadAllData(this, "users");
+			for (let id in users) {
+				let online = this.UserMetaStore.getStatus(id) != "offline";
+				let user = this.UserUtils.getUser(id);
+				if (user && this.friendsOnlineList[id] != online && !BDFDB.loadData(id, this, "disabled")) {
+					this.timeLog.push({user, online, time: new Date()});
+					if (!(settings.onlyOnOnline && !online) && !(settings.muteOnDND && BDFDB.getUserStatus() == "dnd")) {
+						let data = BDFDB.loadData(user.id, "EditUsers", "users") || {};
+						let string = `${BDFDB.encodeToHTML(data.name ? data.name : user.username)} is ${online ? "online" : "offline"}.`;
+						let avatar = data.removeIcon ? "" : (data.url ? data.url : BDFDB.getUserAvatar(user.id));
+						let openChannel = () => {
+							if (settings.openOnClick) {
+								let DMid = this.ChannelUtils.getDMFromUserId(user.id)
+								if (DMid) this.ChannelSwitchUtils.selectPrivateChannel(DMid);
+								else this.PrivateChannelUtils.openPrivateChannel(BDFDB.myData.id, user.id);
+								require("electron").remote.getCurrentWindow().maximize();
+							}
+						};
+						if (!BDFDB.loadData(id, this, "desktop")) {
+							let toast = BDFDB.showToast(`<div class="toast-inner"><div class="toast-avatar" style="background-image:url(${avatar});"></div><div>${string}</div></div>`, {html:true, timeout:5000, type:(online ? "success" : null), icon:false});
+							$(toast).on("click." + this.getName(), openChannel);
+							let notificationsound = BDFDB.getData(online ? "toastonline" : "toastoffline", this, "notificationsounds");
+							if (!notificationsound.mute && notificationsound.song) {
+								var audio = new Audio();
+								audio.src = notificationsound.song;
+								audio.play();
+							}
+						}
+						else {
+							let notificationsound = BDFDB.getData(online ? "desktoponline" : "desktopoffline", this, "notificationsounds");
+							BDFDB.showDesktopNotification(string, {icon:avatar, timeout:5000, click:openChannel, silent:notificationsound.mute, sound:notificationsound.song});
+						}
+					}
+				}
+				this.stalkerOnlineList[id] = online;
+			}
+		},BDFDB.getData("checkInterval", this, "amounts") * 1000);
 	}
 	
 	showTimeLog () {		
