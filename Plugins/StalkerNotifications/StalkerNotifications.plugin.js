@@ -129,7 +129,7 @@ class StalkerNotifications {
 
 	getDescription () {return "Lets you observe the status of people that aren't your friends.";}
 
-	getVersion () {return "1.0.8";}
+	getVersion () {return "1.0.9";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -373,7 +373,7 @@ class StalkerNotifications {
 			for (let id in users) {
 				let online = this.UserMetaStore.getStatus(id) != "offline";
 				let user = this.UserUtils.getUser(id);
-				if (user && this.friendsOnlineList[id] != online && !BDFDB.loadData(id, this, "disabled")) {
+				if (user && this.stalkerOnlineList[id] != online && !BDFDB.loadData(id, this, "disabled")) {
 					this.timeLog.push({user, online, time: new Date()});
 					if (!(settings.onlyOnOnline && !online) && !(settings.muteOnDND && BDFDB.getUserStatus() == "dnd")) {
 						let data = BDFDB.loadData(user.id, "EditUsers", "users") || {};
