@@ -49,9 +49,6 @@ class StalkerNotifications {
 		this.dividerMarkup = `<div class="${BDFDB.disCN.modaldivider}"></div>`;
 		
 		this.css = `
-			.guilds > .friends-online {
-				cursor: pointer;
-			}
 			.stalkernotifications-modal .log-time {
 				width: 110px;
 			}
