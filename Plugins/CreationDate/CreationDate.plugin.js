@@ -45,7 +45,7 @@ class CreationDate {
 
 	getDescription () {return "Displays the Creation Date of an Account in the UserPopout and UserModal.";}
 
-	getVersion () {return "1.1.9";}
+	getVersion () {return "1.2.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -109,7 +109,7 @@ class CreationDate {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (node.tagName && node.querySelector(BDFDB.dotCN.userpopout)) {
-									if (BDFDB.getData("addInUserPopout", this, "settings")) this.addCreationDate(node.querySelector(BDFDB.dotCN.userpopoutheadertext));
+									if (BDFDB.getData("addInUserPopout", this, "settings")) this.addCreationDate(node.querySelector(BDFDB.dotCN.userpopoutheadertext), node);
 								}
 							});
 						}
@@ -124,7 +124,7 @@ class CreationDate {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (node.tagName && node.querySelector("[class*='topSection']")) {
-									if (BDFDB.getData("addInUserProfil", this, "settings")) this.addCreationDate(node.querySelector(BDFDB.dotCN.userprofileheaderinfo));
+									if (BDFDB.getData("addInUserProfil", this, "settings")) this.addCreationDate(node.querySelector(BDFDB.dotCN.userprofileheaderinfo), null);
 								}
 							});
 						}
@@ -197,7 +197,7 @@ class CreationDate {
 		return $(menuhtml)[0];
 	}
 	
-	addCreationDate (container) {
+	addCreationDate (container, popout) {
 		if (!container) return;
 		var info = BDFDB.getKeyInformation({"node":container,"key":"user"});
 		if (info) {
@@ -207,6 +207,11 @@ class CreationDate {
 			var nametag = container.querySelector(BDFDB.dotCN.nametag);
 			var joinedAtDate = container.querySelector(".joinedAtDate");
 			container.insertBefore(creationDate[0], joinedAtDate ? joinedAtDate.nextSibling : (nametag ? nametag.nextSibling : null));
+			if (popout) {
+				var arect = document.querySelector(BDFDB.dotCN.appmount).getBoundingClientRect();
+				var prect = popout.getBoundingClientRect();
+				popout.style.setProperty("top", (prect.y + prect.height > arect.height ? (arect.height - prect.height) : prect.y) + "px");
+			}
 		}
 	}
 	

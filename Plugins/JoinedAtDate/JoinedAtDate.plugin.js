@@ -45,9 +45,9 @@ class JoinedAtDate {
 
 	getName () {return "JoinedAtDate";}
 
-	getDescription () {return "Displays the Joined At Date of a Member in the UserPopout and UserModal.";}
+	getDescription () {return "Displays the Joined At Date of the current Server for a Member in the UserPopout and UserModal.";}
 
-	getVersion () {return "1.0.0";}
+	getVersion () {return "1.0.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -115,7 +115,7 @@ class JoinedAtDate {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (node.tagName && node.querySelector(BDFDB.dotCN.userpopout)) {
-									if (BDFDB.getData("addInUserPopout", this, "settings")) this.addJoinedAtDate(node.querySelector(BDFDB.dotCN.userpopoutheadertext));
+									if (BDFDB.getData("addInUserPopout", this, "settings")) this.addJoinedAtDate(node.querySelector(BDFDB.dotCN.userpopoutheadertext), node);
 								}
 							});
 						}
@@ -130,7 +130,7 @@ class JoinedAtDate {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (node.tagName && node.querySelector("[class*='topSection']")) {
-									if (BDFDB.getData("addInUserProfil", this, "settings")) this.addJoinedAtDate(node.querySelector(BDFDB.dotCN.userprofileheaderinfo));
+									if (BDFDB.getData("addInUserProfil", this, "settings")) this.addJoinedAtDate(node.querySelector(BDFDB.dotCN.userprofileheaderinfo), null);
 								}
 							});
 						}
@@ -203,7 +203,7 @@ class JoinedAtDate {
 		return $(menuhtml)[0];
 	}
 	
-	addJoinedAtDate (container) {
+	addJoinedAtDate (container, popout) {
 		if (!container) return;
 		var guildid = this.CurrentGuildStore.getGuildId();
 		if (guildid) {
@@ -217,6 +217,11 @@ class JoinedAtDate {
 					var nametag = container.querySelector(BDFDB.dotCN.nametag);
 					var creationDate = container.querySelector(".creationDate");
 					container.insertBefore(joinedAtDate[0], creationDate ? creationDate : (nametag ? nametag.nextSibling : null));
+					if (popout) {
+						var arect = document.querySelector(BDFDB.dotCN.appmount).getBoundingClientRect();
+						var prect = popout.getBoundingClientRect();
+						popout.style.setProperty("top", (prect.y + prect.height > arect.height ? (arect.height - prect.height) : prect.y) + "px");
+					}
 				};
 				if (this.loadedusers[guildid][info.id]) addTimestamp(this.loadedusers[guildid][info.id]);
 				else this.APIModule.get(this.DiscordConstants.Endpoints.GUILD_MEMBER(guildid,info.id)).then(result => {
