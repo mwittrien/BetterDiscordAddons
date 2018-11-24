@@ -95,7 +95,7 @@ class NotificationSounds {
 	
 	getDescription () {return "Allows you to replace the native sounds of Discord with your own";}
 
-	getVersion () {return "3.2.0";}
+	getVersion () {return "3.2.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -236,11 +236,12 @@ class NotificationSounds {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.classList.contains(BDFDB.disCN.callcurrentcontainer)) {
+								if (node.tagName && node.classList.contains(BDFDB.disCN.callcurrentcontainer)) {
 									if (!this.hasPatchedOutgoing) {
 										var outgoingCallAudio = new Audio();
-										let play = () => {											
-											if (this.dontPlayAudio("call_calling")) return;
+										var stopTimeout;
+										let play = () => {
+											if (!outgoingCallAudio.paused || this.dontPlayAudio("call_calling")) return;
 											outgoingCallAudio.loop = true;
 											outgoingCallAudio.src = this.choices["call_calling"].src;
 											outgoingCallAudio.volume = this.choices["call_calling"].volume/100;
