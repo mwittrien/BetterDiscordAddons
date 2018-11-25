@@ -86,7 +86,7 @@ class ShowHiddenChannels {
 
 	getDescription () {return "Displays channels that are hidden from you by role restrictions.";}
 
-	getVersion () {return "2.3.4";}
+	getVersion () {return "2.3.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -256,7 +256,6 @@ class ShowHiddenChannels {
 				
 						
 				var settings = BDFDB.getAllData(this, "settings"); 
-				var hoverDelay = BDFDB.getData("hoverDelay", this, "amounts");
 				var count = 0;
 				for (let type in this.ChannelTypes) {
 					if (!settings.showText && type == "GUILD_TEXT" || !settings.showVoice && type == "GUILD_VOICE" || !settings.showCategory && type == "GUILD_CATEGORY") {
@@ -322,8 +321,7 @@ class ShowHiddenChannels {
 								channelsvg.classList.toggle(BDFDB.disCN.channelcolorhoveredtext);
 								channelname.classList.toggle(BDFDB.disCN.channelnamedefaulttext);
 								channelname.classList.toggle(BDFDB.disCN.channelnamehoveredtext);
-								clearTimeout(this.hoverTimer);
-								this.hoverTimer = setTimeout(() => {this.showAccessRoles(serverObj, hiddenChannel, e, false);}, hoverDelay);
+								this.showAccessRoles(serverObj, hiddenChannel, e, false);
 							})
 							.on("click", () => {
 								BDFDB.showToast(`You can not enter the hidden textchannel ${hiddenChannel.name}.`, {type:"error"});
@@ -351,8 +349,7 @@ class ShowHiddenChannels {
 								channelsvg.classList.toggle(BDFDB.disCN.channelcolorhoveredvoice);
 								channelname.classList.toggle(BDFDB.disCN.channelnamedefaultvoice);
 								channelname.classList.toggle(BDFDB.disCN.channelnamehoveredvoice);
-								clearTimeout(this.hoverTimer);
-								this.hoverTimer = setTimeout(() => {this.showAccessRoles(serverObj, hiddenChannel, e, false);}, hoverDelay);
+								this.showAccessRoles(serverObj, hiddenChannel, e, false);
 							})
 							.on("click", () => {
 								BDFDB.showToast(`You can not enter the hidden voicechannel ${hiddenChannel.name}.`, {type:"error"});
@@ -377,8 +374,7 @@ class ShowHiddenChannels {
 								channelsvg.classList.toggle(BDFDB.disCN.categoryiconhoveredcollapsed);
 								channelname.classList.toggle(BDFDB.disCN.categorynamecollapsed);
 								channelname.classList.toggle(BDFDB.disCN.categorynamehoveredcollapsed);
-								clearTimeout(this.hoverTimer);
-								this.hoverTimer = setTimeout(() => {this.showAccessRoles(serverObj, hiddenChannel, e, false);}, hoverDelay);
+								this.showAccessRoles(serverObj, hiddenChannel, e, false);
 							})
 							.on("click", () => {
 								BDFDB.showToast(`You can not open the hidden category ${hiddenChannel.name}.`, {type:"error"});
@@ -412,10 +408,7 @@ class ShowHiddenChannels {
 					$(channelist)
 						.on("mouseenter." + this.getName(), BDFDB.dotCNC.channelcontainerdefault + BDFDB.dotCN.categorycontainerdefault, (e) => {
 							var channel = BDFDB.getKeyInformation({"node":e.currentTarget,"key":"channel"});
-							if (channel) this.hoverTimer = setTimeout(() => {this.showAccessRoles(serverObj, channel, e, false);}, hoverDelay);
-						})
-						.on("mouseleave." + this.getName(), BDFDB.dotCNC.channelcontainerdefault + BDFDB.dotCN.categorycontainerdefault, () => {
-							clearTimeout(this.hoverTimer);
+							if (channel) this.showAccessRoles(serverObj, channel, e, false);
 						});
 				}
 			}
@@ -522,7 +515,7 @@ class ShowHiddenChannels {
 		}
 		if (htmlString) {
 			var width = window.outerWidth/2;
-			var tooltip = BDFDB.createTooltip(htmlString, e.currentTarget, {type:"right", selector:"showhiddenchannels-tooltip", html:true, style:`max-width: ${width < 200 ? 400 : width}px !important;`});
+			var tooltip = BDFDB.createTooltip(htmlString, e.currentTarget, {type:"right", selector:"showhiddenchannels-tooltip", html:true, style:`max-width: ${width < 200 ? 400 : width}px !important;`, delay:BDFDB.getData("hoverDelay", this, "amounts")});
 			tooltip.style.top = tooltip.style.top.replace("px","") - $(e.currentTarget).css("padding-bottom").replace("px","")/2 + $(e.currentTarget).css("padding-top").replace("px","")/2 + "px";
 		}
 	}
