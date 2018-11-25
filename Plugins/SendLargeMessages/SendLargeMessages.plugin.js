@@ -63,7 +63,7 @@ class SendLargeMessages {
 
 	getDescription () {return "Opens a popout when your message is too large, which allows you to automatically send the message in several smaller messages.";}
 
-	getVersion () {return "1.4.7";}
+	getVersion () {return "1.4.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -88,6 +88,8 @@ class SendLargeMessages {
 	initialize () {
 		if (typeof BDFDB === "object") {
 			BDFDB.loadMessage(this);
+			
+			this.clipboard = require("electron").clipboard;
 						
 			this.bindEventToTextArea();
 		}
@@ -119,25 +121,27 @@ class SendLargeMessages {
 	}
 	
 	bindEventToTextArea () {
-		var checkTextarea = (textarea, text) => {
-			if (BDFDB.getParsedLength(text) > 1950) {
+		var modaltext, checkTextarea = (textarea) => {
+			if (BDFDB.getParsedLength(textarea.value) > 1950) {
 				textarea.selectionStart = 0;
 				textarea.selectionEnd = textarea.value.length;
 				document.execCommand("insertText", false, "");
-				this.showSendModal(text);
+				this.showSendModal(modaltext);
 			}
 		};
 		$(BDFDB.dotCNS.textareawrapchat + "textarea")
 			.off("input." + this.getName())
 			.on("input." + this.getName(), e => {
 				clearTimeout(e.currentTarget.sendlargemessagestimeout);
-				e.currentTarget.sendlargemessagestimeout = setTimeout(() => {checkTextarea(e.currentTarget, e.currentTarget.value);},100);
+				e.currentTarget.sendlargemessagestimeout = setTimeout(() => {
+					modaltext = e.currentTarget.value;
+					checkTextarea(e.currentTarget);
+				},100);
 			})
 			.off("paste." + this.getName())
 			.on("paste." + this.getName(), e => {
-				setImmediate(() => {
-					checkTextarea(e.currentTarget, e.currentTarget.value);
-				});
+				modaltext = e.currentTarget.value.slice(0, e.currentTarget.selectionStart) + this.clipboard.readText() + e.currentTarget.value.slice(e.currentTarget.selectionEnd);
+				setImmediate(() => {checkTextarea(e.currentTarget);});
 			});
 	}
 	
