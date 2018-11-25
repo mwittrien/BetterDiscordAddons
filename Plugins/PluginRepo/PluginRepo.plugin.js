@@ -239,7 +239,7 @@ class PluginRepo {
 
 	getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
 
-	getVersion () {return "1.5.9";}
+	getVersion () {return "1.6.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -357,7 +357,7 @@ class PluginRepo {
 		if (typeof BDFDB === "object") {
 			clearInterval(this.updateInterval);
 						
-			$(".pluginrepo-modal, .bd-pluginrepobutton, .pluginrepo-loadingicon").remove();
+			$("webview[webview-pluginrepo], .pluginrepo-modal, .bd-pluginrepobutton, .pluginrepo-loadingicon").remove();
 			$(BDFDB.dotCN.app + " > .repo-loadingwrapper:empty").remove();
 			
 			BDFDB.unloadMessage(this);
@@ -800,7 +800,7 @@ class PluginRepo {
 				webview = document.createElement("webview");
 				webview.src = "https://discordapp.com/";
 				webview.setAttribute("webview-PluginRepo", null);
-				webview.style.setProperty("visibility", "hidden");
+				webview.style.setProperty("visibility", "hidden", "important");
 				webview.addEventListener("dom-ready", () => {
 					callback();
 				});
