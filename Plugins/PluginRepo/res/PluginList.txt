@@ -56,7 +56,6 @@ https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/res
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/scrollToLast.plugin.js
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/Snowfall.plugin.js
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/toggleYourStuff.plugin.js
-https://raw.githubusercontent.com/IRDeNial/BD-Server-Themes/master/serverTheme.plugin.js
 https://raw.githubusercontent.com/Jiiks/BetterDiscordApp/master/Plugins/clock.plugin.js
 https://raw.githubusercontent.com/Jiiks/BetterDiscordApp/master/Plugins/dblClickEdit.plugin.js
 https://raw.githubusercontent.com/Jiiks/BetterDiscordApp/master/Plugins/mediaSupport.plugin.js
@@ -198,6 +197,7 @@ https://raw.githubusercontent.com/samogot/betterdiscord-plugins/master/v1/full_o
 https://raw.githubusercontent.com/samogot/betterdiscord-plugins/master/v1/no_send_scroll.plugin.js
 https://raw.githubusercontent.com/samogot/betterdiscord-plugins/master/v1/quoter.plugin.js
 https://raw.githubusercontent.com/satoru8/spoilerAlert/master/spoilerAlert.plugin.js
+https://raw.githubusercontent.com/TheDarkBomber/BD-Server-Themes/master/serverTheme.plugin.js
 https://raw.githubusercontent.com/tony311/betterdiscord-plugins/master/afk-deafen.plugin.js
 https://raw.githubusercontent.com/tony311/betterdiscord-plugins/master/auto-select-server.plugin.js
 https://raw.githubusercontent.com/tony311/betterdiscord-plugins/master/tts-events.plugin.js
