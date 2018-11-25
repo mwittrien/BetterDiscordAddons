@@ -35,6 +35,12 @@ class ThemeRepo {
 				<span>Theme Repo</span>
 				<div class="${BDFDB.disCN.contextmenuhint}"></div>
 			</div>`;
+			
+		this.themeRepoLoadingIconMarkup = 
+			`<svg class="themerepo-loadingicon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="40" height="30" viewBox="0 0 483 352">
+				<path d="M0.000 39.479 L 0.000 78.957 43.575 78.957 L 87.151 78.957 87.151 204.097 L 87.151 329.236 129.609 329.236 L 172.067 329.236 172.067 204.097 L 172.067 78.957 215.642 78.957 L 259.218 78.957 259.218 39.479 L 259.218 0.000 129.609 0.000 L 0.000 0.000 0.000 39.479" stroke="none" fill="#7289da" fill-rule="evenodd"></path>
+				<path d="M274.115 38.624 L 274.115 77.248 280.261 77.734 C 309.962 80.083,325.986 106.575,313.378 132.486 C 305.279 149.131,295.114 152.700,255.800 152.700 L 230.168 152.700 230.168 123.277 L 230.168 93.855 208.566 93.855 L 186.965 93.855 186.965 211.546 L 186.965 329.236 208.566 329.236 L 230.168 329.236 230.168 277.068 L 230.168 224.899 237.268 225.113 L 244.368 225.326 282.215 277.095 L 320.062 328.864 360.031 329.057 L 400.000 329.249 400.000 313.283 L 400.000 297.317 367.924 256.908 L 335.848 216.499 340.182 214.869 C 376.035 201.391,395.726 170.616,399.382 122.342 C 405.008 48.071,360.214 0.000,285.379 0.000 L 274.115 0.000 274.115 38.624" stroke="none" fill="#7f8186" fill-rule="evenodd"></path>
+			</svg>`;
 		
 		this.frameMarkup = 
 			`<iframe class="discordPreview" src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/DiscordPreview.html"></iframe>`;
@@ -190,6 +196,18 @@ class ThemeRepo {
 			</div>`;
 		
 		this.css = `
+			${BDFDB.dotCN.app} > .repo-loadingwrapper {
+				position: absolute;
+				bottom: 0;
+				right: 0;
+				z-index: 1000;
+				animation: repo-loadingwrapper-fade 3s infinite ease;
+			}
+			@keyframes repo-loadingwrapper-fade {
+				from {opacity: 0.1;}
+				50% {opacity: 0.9;}
+				to {opacity: 0.1;}
+			}
 			.discordPreview {
 				width: 100vw !important;
 				height: 100vh !important;
@@ -273,7 +291,7 @@ class ThemeRepo {
 
 	getDescription () {return "Allows you to preview all themes from the theme repo and download them on the fly. Repo button is in the theme settings.";}
 
-	getVersion () {return "1.5.5";}
+	getVersion () {return "1.5.8";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -350,7 +368,7 @@ class ThemeRepo {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								setImmediate(() => {
-									if (node && node.tagName && node.getAttribute("layer-id") == "user-settings") {
+									if (node.tagName && node.getAttribute("layer-id") == "user-settings") {
 										BDFDB.addObserver(this, node, {name:"innerSettingsWindowObserver"}, {childList:true,subtree:true});
 										this.checkIfThemesPage(node);
 									}
@@ -394,7 +412,8 @@ class ThemeRepo {
 		if (typeof BDFDB === "object") {
 			clearInterval(this.updateInterval);
 						
-			$(".discordPreview, .themerepo-modal, .bd-themerepobutton").remove();
+			$(".discordPreview, .themerepo-modal, .bd-themerepobutton, .themerepo-loadingicon").remove();
+			$(BDFDB.dotCN.app + " > .repo-loadingwrapper:empty").remove();
 			
 			BDFDB.unloadMessage(this);
 		}
@@ -782,8 +801,21 @@ class ThemeRepo {
 				this.grabbedThemes = result.split("\n");
 				this.foundThemes = this.grabbedThemes.concat(BDFDB.loadData("ownlist", this, "ownlist") || []);
 				this.loading = true;
+				var loadingiconwrapper = document.querySelector(BDFDB.dotCN.app + "> .repo-loadingwrapper");
+				if (!loadingiconwrapper) {
+					loadingiconwrapper = document.createElement("div");
+					loadingiconwrapper.className = "repo-loadingwrapper";
+					document.querySelector(BDFDB.dotCN.app).appendChild(loadingiconwrapper);
+				}
+				$(this.themeRepoLoadingIconMarkup)
+					.on("mouseenter." + this.getName(), (e) => {BDFDB.createTooltip("Loading ThemeRepo",e.currentTarget,{type:"left",delay:500});})
+					.appendTo(loadingiconwrapper);
+					
 				getThemeInfo(() => {
+					if (!this.started) return;
 					this.loading = false;
+					$(".themerepo-loadingicon").remove();
+					if (!loadingiconwrapper.firstChild) loadingiconwrapper.remove();
 					console.log("ThemeRepo: Finished fetching Themes.");
 					if (document.querySelector(".bd-themerepobutton")) BDFDB.showToast(`Finished fetching Themes.`, {type:"success"});
 					if (outdated > 0) {
@@ -811,7 +843,7 @@ class ThemeRepo {
 		});
 		 
 		getThemeInfo = (callback) => {
-			if (i >= this.foundThemes.length) {
+			if (i >= this.foundThemes.length || !this.started) {
 				callback();
 				return;
 			}

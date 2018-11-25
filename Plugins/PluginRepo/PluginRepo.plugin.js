@@ -1,6 +1,6 @@
 //META{"name":"PluginRepo"}*// 
 
-class PluginRepo { 
+class PluginRepo {
 	initConstructor () {
 		this.sortings = {
 			sort: {
@@ -33,6 +33,12 @@ class PluginRepo {
 				<span>Plugin Repo</span>
 				<div class="${BDFDB.disCN.contextmenuhint}"></div>
 			</div>`;
+			
+		this.pluginRepoLoadingIconMarkup =
+			`<svg class="pluginrepo-loadingicon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="40" height="30" viewBox="0 0 483 382">
+				<path d="M0.000 183.023 L 0.000 366.046 46.377 366.046 L 92.754 366.046 92.754 312.629 L 92.754 259.213 127.223 259.213 C 174.433 259.213,187.432 257.146,210.766 245.926 C 311.105 197.681,301.344 41.358,195.859 7.193 C 173.603 -0.015,173.838 0.000,80.846 0.000 L 0.000 0.000 0.000 183.023 M157.615 88.195 C 193.007 97.413,198.827 152.678,166.407 171.674 C 158.993 176.019,155.494 176.398,122.807 176.398 L 92.754 176.398 92.754 131.677 L 92.754 86.957 122.807 86.957 C 146.807 86.957,153.819 87.206,157.615 88.195" stroke="none" fill="#7289da" fill-rule="evenodd"></path>
+				<path d="M226.647 3.824 C 258.085 21.580,282.721 54.248,291.095 89.281 C 292.183 93.834,293.041 95.659,294.560 96.655 C 310.880 107.348,312.400 140.701,297.286 156.464 C 293.685 160.221,293.134 161.348,291.162 169.006 C 282.026 204.468,259.916 235.185,230.701 253.002 C 229.548 253.705,235.510 262.261,270.237 309.731 L 311.131 365.631 355.565 365.846 L 400.000 366.060 400.000 348.309 L 400.000 330.557 364.338 285.630 L 328.676 240.703 333.494 238.892 C 373.356 223.907,395.248 189.691,399.313 136.020 C 404.504 67.495,372.510 19.710,311.375 4.675 C 294.592 0.548,287.694 -0.000,252.482 0.000 L 219.876 0.000 226.647 3.824 M202.899 265.964 C 183.869 272.635,168.536 274.960,139.752 275.540 L 116.770 276.003 116.770 321.024 L 116.770 366.046 163.975 366.046 L 211.180 366.046 211.180 314.700 C 211.180 286.460,210.901 263.386,210.559 263.425 C 210.217 263.464,206.770 264.607,202.899 265.964" stroke="none" fill="#7f8186" fill-rule="evenodd"></path>
+			</svg>`;
 
 		this.pluginEntryMarkup =
 			`<li class="pluginEntry settings-closed ui-switch-item">
@@ -158,6 +164,18 @@ class PluginRepo {
 			</div>`;
 		
 		this.css = `
+			${BDFDB.dotCN.app} > .repo-loadingwrapper {
+				position: absolute;
+				bottom: 0;
+				right: 0;
+				z-index: 1000;
+				animation: repo-loadingwrapper-fade 3s infinite ease;
+			}
+			@keyframes repo-loadingwrapper-fade {
+				from {opacity: 0.1;}
+				50% {opacity: 0.9;}
+				to {opacity: 0.1;}
+			}
 			.pluginrepo-modal ${BDFDB.dotCN.modalinner} {
 				min-height: 100%;
 			}
@@ -221,7 +239,7 @@ class PluginRepo {
 
 	getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
 
-	getVersion () {return "1.5.7";}
+	getVersion () {return "1.5.8";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -295,7 +313,7 @@ class PluginRepo {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								setImmediate(() => {
-									if (node && node.tagName && node.getAttribute("layer-id") == "user-settings") {
+									if (node.tagName && node.getAttribute("layer-id") == "user-settings") {
 										BDFDB.addObserver(this, node, {name:"innerSettingsWindowObserver"}, {childList:true,subtree:true});
 										this.checkIfPluginsPage(node);
 									}
@@ -339,7 +357,8 @@ class PluginRepo {
 		if (typeof BDFDB === "object") {
 			clearInterval(this.updateInterval);
 						
-			$(".pluginrepo-modal, .bd-pluginrepobutton, webview[webview-PluginRepo]").remove();
+			$(".pluginrepo-modal, .bd-pluginrepobutton, .pluginrepo-loadingicon").remove();
+			$(BDFDB.dotCN.app + " > .repo-loadingwrapper:empty").remove();
 			
 			BDFDB.unloadMessage(this);
 		}
@@ -663,12 +682,28 @@ class PluginRepo {
 				this.grabbedPlugins = result.split("\n");
 				this.foundPlugins = this.grabbedPlugins.concat(BDFDB.loadData("ownlist", this, "ownlist") || []);
 				this.loading = true;
+				var loadingiconwrapper = document.querySelector(BDFDB.dotCN.app + "> .repo-loadingwrapper");
+				if (!loadingiconwrapper) {
+					loadingiconwrapper = document.createElement("div");
+					loadingiconwrapper.className = "repo-loadingwrapper";
+					document.querySelector(BDFDB.dotCN.app).appendChild(loadingiconwrapper);
+				}
+				$(this.pluginRepoLoadingIconMarkup)
+					.on("mouseenter." + this.getName(), (e) => {BDFDB.createTooltip("Loading PluginRepo",e.currentTarget,{type:"left",delay:500});})
+					.appendTo(loadingiconwrapper);
+					
 				createWebview().then(() => {
 					getPluginInfo(() => {
-						var finishCounter = 0, finishInterval = setInterval(() => {
+						if (!this.started) {
+							if (typeof webview != "undefined") webview.remove();
+							return;
+						}
+						var finishCounter = 0, finishInterval = setInterval(() => { 
 							if ((webviewqueue.length == 0 && !webviewrunning) || finishCounter > 300) {
 								clearInterval(finishInterval);
 								if (typeof webview != "undefined") webview.remove();
+								$(".pluginrepo-loadingicon").remove();
+								if (!loadingiconwrapper.firstChild) loadingiconwrapper.remove();
 								this.loading = false;
 								console.log("PluginRepo: Finished fetching Plugins.");
 								if (document.querySelector(".bd-pluginrepobutton")) BDFDB.showToast(`Finished fetching Plugins.`, {type:"success"});
@@ -701,7 +736,7 @@ class PluginRepo {
 		});
 		
 		getPluginInfo = (callback) => {
-			if (i >= this.foundPlugins.length) {
+			if (i >= this.foundPlugins.length || !this.started) {
 				callback();
 				return;
 			}
@@ -718,14 +753,23 @@ class PluginRepo {
 						/* code is minified -> add newlines */
 						bodycopy = body.replace(new RegExp("}", "g"), "}\n");
 					}
-					for (let tag of tags) {
-						let result = new RegExp(tag + "[\\s|\\t|\\n|\\r|=|>|_|:|function|\(|\)|\{|return]*([\"|\'|\`]).*\\1","gi").exec(bodycopy);
-						if (result) {
-							let separator = result[1];
-							result = result[0].replace(new RegExp("\\\\" + separator, "g"), separator).split(separator);
-							if (result.length > 2) {
-								result = result.slice(1, -1).join(separator).replace(new RegExp("\\\\n", "g"), "<br>").replace(new RegExp("\\\\", "g"), "");
-								plugin[tag] = tag != "getVersion" ? result.charAt(0).toUpperCase() + result.slice(1) : result;
+					if (body.indexOf('const config = {"info":{"name":"') > -1 && body.indexOf('"authors":[{"name":"Zerebos","discord_id":"249746236008169473",') > -1) {
+						let configstring = body.split('const config = {"info":{')[1].split(',"github":"http')[0];
+						for (let tag of tags) {
+							if (tag != "getAuthor") plugin[tag] = configstring.split('"' + tag.replace("get","").toLowerCase() + '":"')[1].split('"')[0];
+							else plugin[tag] = configstring.split('"authors":[{"name":"')[1].split('"')[0];
+						}
+					}
+					else {
+						for (let tag of tags) {
+							let result = new RegExp(tag + "[\\s|\\t|\\n|\\r|=|>|_|:|function|\(|\)|\{|return]*([\"|\'|\`]).*\\1","gi").exec(bodycopy);
+							if (result) {
+								let separator = result[1];
+								result = result[0].replace(new RegExp("\\\\" + separator, "g"), separator).split(separator);
+								if (result.length > 2) {
+									result = result.slice(1, -1).join(separator).replace(new RegExp("\\\\n", "g"), "<br>").replace(new RegExp("\\\\", "g"), "");
+									plugin[tag] = tag != "getVersion" ? result.charAt(0).toUpperCase() + result.slice(1) : result;
+								}
 							}
 						}
 					}
