@@ -239,7 +239,7 @@ class PluginRepo {
 
 	getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
 
-	getVersion () {return "1.5.8";}
+	getVersion () {return "1.5.9";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -753,7 +753,7 @@ class PluginRepo {
 						/* code is minified -> add newlines */
 						bodycopy = body.replace(new RegExp("}", "g"), "}\n");
 					}
-					if (body.indexOf('const config = {"info":{"name":"') > -1 && body.indexOf('"authors":[{"name":"Zerebos","discord_id":"249746236008169473",') > -1) {
+					if (url != "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/PluginRepo/PluginRepo.plugin.js" && body.indexOf('const config = {"info":{"name":"') > -1 && body.indexOf('"authors":[{"name":"Zerebos","discord_id":"249746236008169473",') > -1) {
 						let configstring = body.split('const config = {"info":{')[1].split(',"github":"http')[0];
 						for (let tag of tags) {
 							if (tag != "getAuthor") plugin[tag] = configstring.split('"' + tag.replace("get","").toLowerCase() + '":"')[1].split('"')[0];
