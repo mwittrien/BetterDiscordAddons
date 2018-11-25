@@ -775,8 +775,7 @@ class PluginRepo {
 								var separator = result[1];
 								result = result[0].replace(new RegExp("\\\\" + separator, "g"), separator).split(separator);
 								if (result.length > 2) {
-									result = tag != "getDescription" ? result[1] : result.slice(1, -1).join(separator).replace(new RegExp("\\\\n", "g"), "<br>").replace(new RegExp("\\\\", "g"), "");
-									plugin[tag] = tag != "getVersion" ? result.charAt(0).toUpperCase() + result.slice(1) : result;
+									plugin[tag] = tag != "getVersion" ? result[1].charAt(0).toUpperCase() + result[1].slice(1) : result[1];
 								}
 							}
 						}
