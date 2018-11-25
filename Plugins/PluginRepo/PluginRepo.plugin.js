@@ -239,7 +239,7 @@ class PluginRepo {
 
 	getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
 
-	getVersion () {return "1.6.0";}
+	getVersion () {return "1.6.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -753,16 +753,38 @@ class PluginRepo {
 						/* code is minified -> add newlines */
 						bodycopy = body.replace(new RegExp("}", "g"), "}\n");
 					}
-					if (url != "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/PluginRepo/PluginRepo.plugin.js" && body.indexOf('const config = {"info":{"name":"') > -1 && body.indexOf('"authors":[{"name":"Zerebos","discord_id":"249746236008169473",') > -1) {
-						let configstring = body.split('const config = {"info":{')[1].split(',"github":"http')[0];
+					if (url != "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/PluginRepo/PluginRepo.plugin.js" && body.indexOf("const config = {") > -1 && body.indexOf("index.js") > -1 && body.indexOf("discord_id") > -1 && body.indexOf("github_raw") > -1) {
+						let configstring = body.split("const config = {")[1].split("};")[0].replace(/[\n\r\t]/g, "").replace(/:\s|\s:/g, ":").replace(/["'`]:/g, ":").replace(/([{,])["'`]/g, "$1").split("info:{")[1].split(",github:")[0];
 						for (let tag of tags) {
-							if (tag != "getAuthor") plugin[tag] = configstring.split('"' + tag.replace("get","").toLowerCase() + '":"')[1].split('"')[0];
-							else plugin[tag] = configstring.split('"authors":[{"name":"')[1].split('"')[0];
+							let result = tag != "getAuthor" ? new RegExp(tag.replace("get", "").toLowerCase() + ":([\"|\'|\`]).*\\1","gi").exec(configstring) : /authors:\[{name:([\"|\'|\`]).*\1/gi.exec(configstring);
+							if (result) {
+								var separator = result[1];
+								result = result[0].replace(new RegExp("\\\\" + separator, "g"), separator).split(separator);
+								if (result.length > 2) {
+									result = tag != "getDescription" ? result[1] : result.slice(1, -1).join(separator).replace(new RegExp("\\\\n", "g"), "<br>").replace(new RegExp("\\\\", "g"), "");
+									plugin[tag] = tag != "getVersion" ? result.charAt(0).toUpperCase() + result.slice(1) : result;
+								}
+							}
+						}
+					}
+					else if (url.indexOf("https://raw.githubusercontent.com/samogot/") > -1) {
+						let configstring = body.replace(/[\n\r\t]/g, "").split('module.exports = {"info": {')[1].split("};")[0].replace(/:\s|\s:/g, ":").replace(/["'`]:/g, ":").replace(/([{,])["'`]/g, "$1");
+						for (let tag of tags) {
+							let result = tag != "getAuthor" ? new RegExp(tag.replace("get", "").toLowerCase() + ":([\"|\'|\`]).*\\1","gi").exec(configstring) : /authors:\[([\"|\'|\`]).*\1/gi.exec(configstring);
+							if (result) {
+								var separator = result[1];
+								result = result[0].replace(new RegExp("\\\\" + separator, "g"), separator).split(separator);
+								if (result.length > 2) {
+									result = tag != "getDescription" ? result[1] : result.slice(1, -1).join(separator).replace(new RegExp("\\\\n", "g"), "<br>").replace(new RegExp("\\\\", "g"), "");
+									plugin[tag] = tag != "getVersion" ? result.charAt(0).toUpperCase() + result.slice(1) : result;
+								}
+							}
 						}
 					}
 					else {
 						for (let tag of tags) {
 							let result = new RegExp(tag + "[\\s|\\t|\\n|\\r|=|>|_|:|function|\(|\)|\{|return]*([\"|\'|\`]).*\\1","gi").exec(bodycopy);
+							if (!result) result = new RegExp("get " + tag.replace("get", "").toLowerCase() + "[\\s|\\t|\\n|\\r|=|>|_|:|function|\(|\)|\{|return]*([\"|\'|\`]).*\\1","gi").exec(bodycopy);
 							if (result) {
 								let separator = result[1];
 								result = result[0].replace(new RegExp("\\\\" + separator, "g"), separator).split(separator);
