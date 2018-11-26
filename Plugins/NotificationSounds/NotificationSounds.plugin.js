@@ -2,8 +2,6 @@
 
 class NotificationSounds {
 	initConstructor () {
-		this.patchCancels = [];
-		
 		this.types = {
 			"message1":				{implemented:true,	name:"New Chatmessage",					src:"/assets/dd920c06a01e5bb8b09678581e29d56f.mp3",	mute:true},
 			"dm":					{implemented:true,	name:"Direct Message",					src:"/assets/84c9fa3d07da865278bd77c97d952db4.mp3",	mute:true},
@@ -277,7 +275,6 @@ class NotificationSounds {
 
 	stop () {
 		if (typeof BDFDB === "object") {
-			if (typeof this.patchCancels === "object") for (let p of this.patchCancels) p();
 			this.incomingCallOwnerInstance.startRinging = this.oldStartRining;
 			this.incomingCallOwnerInstance.stopRinging = this.oldStopRining;
 			
