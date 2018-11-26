@@ -19,7 +19,7 @@ class PinDMs {
 
 	getDescription () {return "Allows you to pin DMs, making them appear at the top of your DM-list.";}
 
-	getVersion () {return "1.1.7";}
+	getVersion () {return "1.1.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -46,11 +46,8 @@ class PinDMs {
 			BDFDB.loadMessage(this);
 			
 			this.UserStore = BDFDB.WebModules.findByProperties(["getUsers", "getUser"]);
-			this.ActivityModule = BDFDB.WebModules.findByProperties(["getApplicationActivity","getStatus"]);
-			this.ChannelStore = BDFDB.WebModules.findByProperties(["getDMFromUserId"]);
-			this.ChannelSwitchUtils = BDFDB.WebModules.findByProperties(["selectPrivateChannel"]);
+			this.ChannelUtils = BDFDB.WebModules.findByProperties(["getDMFromUserId"]);
 			this.PrivateChannelUtils = BDFDB.WebModules.findByProperties(["openPrivateChannel"]);
-			this.UserContextMenuUtils = BDFDB.WebModules.findByProperties(["openUserContextMenu"]);
 			
 			var observer = null;
 			
@@ -76,9 +73,7 @@ class PinDMs {
 					e.preventDefault();
 					let dmsscroller = document.querySelector(BDFDB.dotCNS.dmchannels + BDFDB.dotCN.scroller);
 					if (dmsscroller) {
-						let channel = instance.return.return.return.return.return.memoizedProps.channel;
-						let dms = BDFDB.getReactInstance(dmsscroller).return.return.return.memoizedProps.children;
-						this.removePinnedDM(channel.type == 1 ? channel.recipients[0] : channel.id, dms); 
+						this.removePinnedDM(instance.return.return.return.return.return.memoizedProps.channel.id, BDFDB.getReactInstance(dmsscroller).return.return.return.memoizedProps.children); 
 						this.forceUpdateScroller(dmsscroller);
 					}
 				}
@@ -117,7 +112,7 @@ class PinDMs {
 	}
 	
 	onSwitch () {
-		if (!document.querySelector(BDFDB.dotCNS.guildselected + BDFDB.dotCN.friendsicon) || document.querySelector(BDFDB.dotCN.dmchannel + ".pinned")) return;
+		if (!document.querySelector(BDFDB.dotCNS.guildselected + BDFDB.dotCN.friendsicon)) return;
 		
 		this.addAllPinnedDMs();
 	}
@@ -144,36 +139,41 @@ class PinDMs {
 			}
 		}
 		if (ele) {
-			let pinnedDMs = BDFDB.loadAllData(this, "pinnedDMs");
-			if (typeof pinnedDMs[info.id] == "undefined") {
-				$(this.pinDMEntryMarkup).insertBefore(ele)
-					.on("click", (e) => {
-						$(context).hide();
-						let dmsscroller = document.querySelector(BDFDB.dotCNS.dmchannels + BDFDB.dotCN.scroller);
-						if (dmsscroller) {
-							let dms = BDFDB.getReactInstance(dmsscroller).return.return.return.memoizedProps.children;
-							let insertpoint = this.getInsertPoint(dms);
-							this.addPinnedDM(info.id, dms, insertpoint); 
-							this.forceUpdateScroller(dmsscroller);
-							pinnedDMs[info.id] = Object.keys(pinnedDMs).length;
-							BDFDB.saveAllData(pinnedDMs, this, "pinnedDMs");
-						}
-					});
-			}
-			else {
-				$(this.unpinDMEntryMarkup).insertBefore(ele)
-					.on("click", (e) => {
-						$(context).hide();
-						let dmsscroller = document.querySelector(BDFDB.dotCNS.dmchannels + BDFDB.dotCN.scroller);
-						if (dmsscroller) {
-							let dms = BDFDB.getReactInstance(dmsscroller).return.return.return.memoizedProps.children;
-							this.removePinnedDM(info.id, dms); 
-							this.forceUpdateScroller(dmsscroller);
-						}
-					});
-			}
-			
-			BDFDB.updateContextPosition(context);
+			let proccesContextMenu = (id) => {
+				let pinnedDMs = BDFDB.loadAllData(this, "pinnedDMs");
+				if (typeof pinnedDMs[id] == "undefined") {
+					$(this.pinDMEntryMarkup).insertBefore(ele)
+						.on("click", (e) => {
+							$(context).hide();
+							let dmsscroller = document.querySelector(BDFDB.dotCNS.dmchannels + BDFDB.dotCN.scroller);
+							if (dmsscroller) {
+								let dms = BDFDB.getReactInstance(dmsscroller).return.return.return.memoizedProps.children;
+								let insertpoint = this.getInsertPoint(dms);
+								this.addPinnedDM(id, dms, insertpoint); 
+								this.forceUpdateScroller(dmsscroller);
+								pinnedDMs[id] = Object.keys(pinnedDMs).length;
+								BDFDB.saveAllData(pinnedDMs, this, "pinnedDMs");
+							}
+						});
+				}
+				else {
+					$(this.unpinDMEntryMarkup).insertBefore(ele)
+						.on("click", (e) => {
+							$(context).hide();
+							let dmsscroller = document.querySelector(BDFDB.dotCNS.dmchannels + BDFDB.dotCN.scroller);
+							if (dmsscroller) {
+								let dms = BDFDB.getReactInstance(dmsscroller).return.return.return.memoizedProps.children;
+								this.removePinnedDM(id, dms); 
+								this.forceUpdateScroller(dmsscroller);
+							}
+						});
+				}
+				
+				BDFDB.updateContextPosition(context);
+			};
+			let id = info.type ? info.id : this.ChannelUtils.getDMFromUserId(info.id);
+			if (id) proccesContextMenu(id);
+			else this.PrivateChannelUtils.ensurePrivateChannel(BDFDB.myData.id, info.id).then((id) => {proccesContextMenu(id)});
 		}
 	}
 	
@@ -181,10 +181,12 @@ class PinDMs {
 		let dmsscroller = document.querySelector(BDFDB.dotCNS.dmchannels + BDFDB.dotCN.scroller);
 		if (dmsscroller) {
 			let dms = BDFDB.getReactInstance(dmsscroller).return.return.return.memoizedProps.children;
-			let insertpoint = this.getInsertPoint(dms);
 			let sortedDMs = this.sortAndUpdate();
-			for (let pos in sortedDMs) this.addPinnedDM(sortedDMs[pos], dms, insertpoint);
-			this.forceUpdateScroller(dmsscroller);
+			if (sortedDMs.length > 0) {
+				let insertpoint = this.getInsertPoint(dms);
+				for (let pos in sortedDMs) this.addPinnedDM(sortedDMs[pos], dms, insertpoint);
+				this.forceUpdateScroller(dmsscroller);
+			}
 		}
 	}
 	
@@ -193,7 +195,7 @@ class PinDMs {
 		for (let i in dms) {
 			let ele = dms[i];
 			if (ele && ele.type == "header") {
-				insertpoint = i;
+				insertpoint = parseInt(i);
 				if (!ele.pinned && !ele.props.ispin) {
 					ele.pinned = true;
 					let headerpin = Object.assign({},ele);
@@ -209,7 +211,6 @@ class PinDMs {
 	}
 	
 	addPinnedDM (id, dms, insertpoint) {
-		id = this.ChannelStore.getDMFromUserId(id) || id;
 		for (let ele of dms) {
 			if (ele && !ele.pinned && id == ele.key) {
 				ele.pinned = true;
@@ -224,17 +225,18 @@ class PinDMs {
 	removePinnedDM (id, dms) {
 		BDFDB.removeData(id, this, "pinnedDMs");
 		this.sortAndUpdate();
-		id = this.ChannelStore.getDMFromUserId(id) || id;
 		let removepoint = null;
 		for (let i in dms) {
 			let ele = dms[i];
 			if (ele && ele.pinned && (id == ele.key || ("pin" + id) == ele.key)) {
 				delete ele.pinned;
-				if (ele.props.ispin) removepoint = i;
+				if (ele.props.ispin) removepoint = parseInt(i);
 			}
 		}
 		if (removepoint) {
-			dms.splice(removepoint,1);
+			let offset = BDFDB.isObjectEmpty(BDFDB.loadAllData(this, "pinnedDMs")) ? 1 : 0;
+			if (offset) delete dms[removepoint + offset].pinned;
+			dms.splice(removepoint-offset,1+offset);
 		}
 	}
 	
@@ -242,7 +244,14 @@ class PinDMs {
 		let pinnedDMs = BDFDB.loadAllData(this, "pinnedDMs");
 		delete pinnedDMs[""];
 		let sortedDMs = [], sortDM = (id) => {
-			if (!this.UserStore.getUser(id) && !this.ChannelStore.getChannel(id)) delete pinnedDMs[id];
+			// REMOVE AFTER SOME TIME - PATCH USERID TO DMID
+			let DMid = this.ChannelUtils.getDMFromUserId(id);
+			if (DMid) {
+				pinnedDMs[DMid] = pinnedDMs[id];
+				delete pinnedDMs[id];
+				id = DMid;
+			}
+			if (!this.ChannelUtils.getChannel(id)) delete pinnedDMs[id];
 			else if (typeof sortedDMs[pinnedDMs[id]] == "undefined") sortedDMs[pinnedDMs[id]] = id;
 			else sortDM(sortedDMs, pinnedDMs[id]+1, id);
 		};
