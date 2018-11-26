@@ -99,7 +99,7 @@ class PinDMs {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(`a[href="/channels/@me"]`)) {
+								if (node.tagName && node.querySelector(`a[href="/channels/@me"]`)) {
 									$(BDFDB.dotCN.dmchannel + ".pinned, header.pinneddms-header").remove();
 									this.addAllPinnedDMs();
 								}
@@ -192,7 +192,7 @@ class PinDMs {
 		let pinnedDMs = BDFDB.loadAllData(this, "pinnedDMs");
 		let sortedDMs = [];
 		delete pinnedDMs[""];
-		for (let id in pinnedDMs) this.sortDM(sortedDMs, pinnedDMs[id], id);
+		for (let id in pinnedDMs) this.sortDM(sortedDMs, pinnedDMs, id);
 		sortedDMs = sortedDMs.filter(n => n);
 		for (let pos in sortedDMs) {
 			pinnedDMs[sortedDMs[pos]] = parseInt(pos);
@@ -201,9 +201,10 @@ class PinDMs {
 		BDFDB.saveAllData(pinnedDMs, this, "pinnedDMs");
 	}
 	
-	sortDM (sortedDMs, pos, id) {
-		if (typeof sortedDMs[pos] == "undefined") sortedDMs[pos] = id;
-		else this.sortDM(sortedDMs, pos+1, id);
+	sortDM (sortedDMs, pinnedDMs, id) {
+		if (!this.UserStore.getUser(id) && !this.ChannelStore.getChannel(id)) delete pinnedDMs[id];
+		else if (typeof sortedDMs[pinnedDMs[id]] == "undefined") sortedDMs[pinnedDMs[id]] = id;
+		else this.sortDM(sortedDMs, pinnedDMs[id]+1, id);
 	}
 	
 	addPinnedDM (id, pos) {
@@ -239,12 +240,8 @@ class PinDMs {
 					else if (channel) this.ChannelSwitchUtils.selectPrivateChannel(channel.id);
 					else if (user) {
 						let DMid = this.ChannelStore.getDMFromUserId(user.id)
-						if (DMid) {
-							this.ChannelSwitchUtils.selectPrivateChannel(DMid);
-						}
-						else {
-							this.PrivateChannelUtils.openPrivateChannel(BDFDB.myData.id, user.id);
-						}
+						if (DMid) this.ChannelSwitchUtils.selectPrivateChannel(DMid);
+						else this.PrivateChannelUtils.openPrivateChannel(BDFDB.myData.id, user.id);
 					}
 				})
 				.on("click." + this.getName(), BDFDB.dotCN.dmchannelclose, () => {
