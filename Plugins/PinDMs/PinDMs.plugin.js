@@ -19,7 +19,7 @@ class PinDMs {
 
 	getDescription () {return "Allows you to pin DMs, making them appear at the top of your DM-list.";}
 
-	getVersion () {return "1.1.8";}
+	getVersion () {return "1.1.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -77,7 +77,6 @@ class PinDMs {
 						this.forceUpdateScroller(dmsscroller);
 					}
 				}
-				else setImmediate(() => {this.addAllPinnedDMs();});
 			});
 			
 			setTimeout(() => {this.onSwitch();},1000);
@@ -114,7 +113,7 @@ class PinDMs {
 	onSwitch () {
 		if (!document.querySelector(BDFDB.dotCNS.guildselected + BDFDB.dotCN.friendsicon)) return;
 		
-		this.addAllPinnedDMs();
+		this.patchDMsScroller();
 	}
 	
 	
@@ -177,14 +176,32 @@ class PinDMs {
 		}
 	}
 	
-	addAllPinnedDMs () {
+	patchDMsScroller () {
 		let dmsscroller = document.querySelector(BDFDB.dotCNS.dmchannels + BDFDB.dotCN.scroller);
 		if (dmsscroller) {
-			let dms = BDFDB.getReactInstance(dmsscroller).return.return.return.memoizedProps.children;
-			let sortedDMs = this.sortAndUpdate();
-			if (sortedDMs.length > 0) {
-				let insertpoint = this.getInsertPoint(dms);
-				for (let pos in sortedDMs) this.addPinnedDM(sortedDMs[pos], dms, insertpoint);
+			if (!this.lazyScrollerWasPatched) {
+				let addAllDMs = (dmsarray) => {
+					let sortedDMs = this.sortAndUpdate();
+					if (sortedDMs.length > 0) {
+						let insertpoint = this.getInsertPoint(dmsarray);
+						for (let pos in sortedDMs) this.addPinnedDM(sortedDMs[pos], dmsarray, insertpoint);
+					}
+				};
+				this.lazyScrollerWasPatched = true;
+				let lazyScrollerDMsInstance = BDFDB.getOwnerInstance({"node":dmsscroller, "props":["createComputer","getSubscriptions"], "up":true});
+				let lazyScrollerDMsWrap = lazyScrollerDMsInstance._reactInternalFiber.type;
+				this.patchCancels.push(BDFDB.WebModules.monkeyPatch(lazyScrollerDMsWrap.prototype, "componentDidMount", {before: (e) => {
+					e.thisObject.props.patched = true;
+					addAllDMs(e.thisObject.props.children);
+				}}));
+				this.patchCancels.push(BDFDB.WebModules.monkeyPatch(lazyScrollerDMsWrap.prototype, "componentDidUpdate", {before: (e) => {
+					if (!e.thisObject.props.patched) {
+						e.thisObject.props.patched = true;
+						addAllDMs(e.thisObject.props.children);
+						this.forceUpdateScroller(document.querySelector(BDFDB.dotCNS.dmchannels + BDFDB.dotCN.scroller));
+					}
+				}}));
+				addAllDMs(BDFDB.getReactInstance(dmsscroller).return.return.return.memoizedProps.children);
 				this.forceUpdateScroller(dmsscroller);
 			}
 		}
