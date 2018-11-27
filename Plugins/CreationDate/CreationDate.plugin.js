@@ -45,7 +45,7 @@ class CreationDate {
 
 	getDescription () {return "Displays the Creation Date of an Account in the UserPopout and UserModal.";}
 
-	getVersion () {return "1.2.0";}
+	getVersion () {return "1.2.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -207,7 +207,7 @@ class CreationDate {
 			var nametag = container.querySelector(BDFDB.dotCN.nametag);
 			var joinedAtDate = container.querySelector(".joinedAtDate");
 			container.insertBefore(creationDate[0], joinedAtDate ? joinedAtDate.nextSibling : (nametag ? nametag.nextSibling : null));
-			if (popout) {
+			if (popout && popout.style.transform.indexOf("translateY(-1") == -1) {
 				var arect = document.querySelector(BDFDB.dotCN.appmount).getBoundingClientRect();
 				var prect = popout.getBoundingClientRect();
 				popout.style.setProperty("top", (prect.y + prect.height > arect.height ? (arect.height - prect.height) : prect.y) + "px");

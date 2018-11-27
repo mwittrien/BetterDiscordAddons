@@ -47,7 +47,7 @@ class JoinedAtDate {
 
 	getDescription () {return "Displays the Joined At Date of the current Server for a Member in the UserPopout and UserModal.";}
 
-	getVersion () {return "1.0.1";}
+	getVersion () {return "1.0.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -217,7 +217,7 @@ class JoinedAtDate {
 					var nametag = container.querySelector(BDFDB.dotCN.nametag);
 					var creationDate = container.querySelector(".creationDate");
 					container.insertBefore(joinedAtDate[0], creationDate ? creationDate : (nametag ? nametag.nextSibling : null));
-					if (popout) {
+					if (popout && popout.style.transform.indexOf("translateY(-1") == -1) {
 						var arect = document.querySelector(BDFDB.dotCN.appmount).getBoundingClientRect();
 						var prect = popout.getBoundingClientRect();
 						popout.style.setProperty("top", (prect.y + prect.height > arect.height ? (arect.height - prect.height) : prect.y) + "px");
