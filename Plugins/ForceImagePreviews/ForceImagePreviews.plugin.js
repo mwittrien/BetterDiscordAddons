@@ -7,7 +7,7 @@ class ForceImagePreviews {
 
 	getName () {return "ForceImagePreviews";}
 
-	getDescription () {return "Forces embedded Image Previews, if Discord doesn't do it itself.";}
+	getDescription () {return "Forces embedded Image Previews, if Discord doesn't do it itself. Caution: Externals Images can contain malicious code!";}
 
 	getVersion () {return "1.0.7";}
 
@@ -45,7 +45,7 @@ class ForceImagePreviews {
 						}
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.classList.contains(BDFDB.disCN.message)) {
+								if (node.tagName && node.classList.contains(BDFDB.disCN.message)) {
 									setTimeout(() => {this.addPreviews(node.querySelector(BDFDB.dotCN.messagemarkup));},this.waitTime);
 								}
 							});
@@ -60,7 +60,7 @@ class ForceImagePreviews {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(BDFDB.dotCN.message)) {
+								if (node.tagName && node.querySelector(BDFDB.dotCN.message)) {
 									BDFDB.addObserver(this, node, {name:"messageChangeObserver",multi:true}, {childList:true, characterData:true, subtree:true});
 									node.querySelectorAll(BDFDB.dotCN.messagemarkup).forEach(message => {
 										setTimeout(() => {this.addPreviews(message);},this.waitTime);
