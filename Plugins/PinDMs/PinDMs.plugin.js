@@ -19,7 +19,7 @@ class PinDMs {
 
 	getDescription () {return "Allows you to pin DMs, making them appear at the top of your DM-list.";}
 
-	getVersion () {return "1.1.9";}
+	getVersion () {return "1.2.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -79,7 +79,7 @@ class PinDMs {
 				}
 			});
 			
-			setTimeout(() => {this.onSwitch();},1000);
+			setTimeout(() => {this.patchDMsScroller();},1000);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -108,12 +108,6 @@ class PinDMs {
 			}
 			BDFDB.unloadMessage(this);
 		}
-	}
-	
-	onSwitch () {
-		if (!document.querySelector(BDFDB.dotCNS.guildselected + BDFDB.dotCN.friendsicon)) return;
-		
-		this.patchDMsScroller();
 	}
 	
 	
@@ -177,33 +171,23 @@ class PinDMs {
 	}
 	
 	patchDMsScroller () {
+		let addAllDMs = (dmsarray) => {
+			let sortedDMs = this.sortAndUpdate();
+			if (sortedDMs.length > 0) {
+				let insertpoint = this.getInsertPoint(dmsarray);
+				for (let pos in sortedDMs) this.addPinnedDM(sortedDMs[pos], dmsarray, insertpoint);
+			}
+		};
+		this.patchCancels.push(BDFDB.WebModules.monkeyPatch(BDFDB.WebModules.findByName("LazyScroller").prototype, "render", {before: (e) => {
+			if (e.thisObject._reactInternalFiber.return.memoizedProps.privateChannelIds && !e.thisObject.props.PinDMsPatched) {
+				e.thisObject.props.PinDMsPatched = true; 
+				addAllDMs(e.thisObject.props.children);
+			}
+		}}));
 		let dmsscroller = document.querySelector(BDFDB.dotCNS.dmchannels + BDFDB.dotCN.scroller);
 		if (dmsscroller) {
-			if (!this.lazyScrollerWasPatched) {
-				let addAllDMs = (dmsarray) => {
-					let sortedDMs = this.sortAndUpdate();
-					if (sortedDMs.length > 0) {
-						let insertpoint = this.getInsertPoint(dmsarray);
-						for (let pos in sortedDMs) this.addPinnedDM(sortedDMs[pos], dmsarray, insertpoint);
-					}
-				};
-				this.lazyScrollerWasPatched = true;
-				let lazyScrollerDMsInstance = BDFDB.getOwnerInstance({"node":dmsscroller, "props":["createComputer","getSubscriptions"], "up":true});
-				let lazyScrollerDMsWrap = lazyScrollerDMsInstance._reactInternalFiber.type;
-				this.patchCancels.push(BDFDB.WebModules.monkeyPatch(lazyScrollerDMsWrap.prototype, "componentDidMount", {before: (e) => {
-					e.thisObject.props.patched = true;
-					addAllDMs(e.thisObject.props.children);
-				}}));
-				this.patchCancels.push(BDFDB.WebModules.monkeyPatch(lazyScrollerDMsWrap.prototype, "componentDidUpdate", {before: (e) => {
-					if (!e.thisObject.props.patched) {
-						e.thisObject.props.patched = true;
-						addAllDMs(e.thisObject.props.children);
-						this.forceUpdateScroller(document.querySelector(BDFDB.dotCNS.dmchannels + BDFDB.dotCN.scroller));
-					}
-				}}));
-				addAllDMs(BDFDB.getReactInstance(dmsscroller).return.return.return.memoizedProps.children);
-				this.forceUpdateScroller(dmsscroller);
-			}
+			addAllDMs(BDFDB.getReactInstance(dmsscroller).return.return.return.memoizedProps.children);
+			this.forceUpdateScroller(dmsscroller);
 		}
 	}
 	
