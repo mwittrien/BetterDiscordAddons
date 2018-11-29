@@ -7,7 +7,7 @@ class ForceImagePreviews {
 
 	getName () {return "ForceImagePreviews";}
 
-	getDescription () {return "Forces embedded Image Previews, if Discord doesn't do it itself. Caution: Externals Images can contain malicious code!";}
+	getDescription () {return "Forces embedded Image Previews, if Discord doesn't do it itself. Caution: Externals Images can contain malicious code and reveal your IP!";}
 
 	getVersion () {return "1.0.7";}
 
