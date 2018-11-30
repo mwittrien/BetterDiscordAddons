@@ -177,7 +177,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "2.4.5";}
+	getVersion () {return "2.4.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -779,9 +779,22 @@ class EditUsers {
 				}
 			}
 			if (avatar && (data.removeIcon || data.url)) {
-				avatar.style.background = data.removeIcon ? "" : "url(" + data.url + ")";
-				avatar.style.backgroundSize = "cover";
-				avatar.style.backgroundPosition = "center";
+				if (avatar.style.background.indexOf(info.id + "/a_")) {
+					let changeblock = false;
+					avatar.EditUsersAvatarObserver = new MutationObserver((changes, _) => {
+						changes.forEach(
+							(change, i) => {
+								if (!changeblock && avatar.style.background.indexOf(info.id + "/a_")) {
+									changeblock = true;
+									avatar.style.background = data.removeIcon ? "" : "url(" + data.url + ") center/cover";
+									setImmediate(() => {changeblock = false;});
+								}
+							}
+						);
+					});
+					avatar.EditUsersAvatarObserver.observe(avatar, {attributes:true});
+				}
+				avatar.style.background = data.removeIcon ? "" : "url(" + data.url + ") center/cover";
 				if (type == "call") {
 					$(avatar)
 						.off("mouseenter." + this.getName())
@@ -847,6 +860,7 @@ class EditUsers {
 			}
 			
 			if (avatar) {
+				if (avatar.EditUsersAvatarObserver && typeof avatar.EditUsersAvatarObserver.disconnect == "function") avatar.EditUsersAvatarObserver.disconnect();
 				avatar.style.background = "url(" + BDFDB.getUserAvatar(info.id) + ")";
 				avatar.style.backgroundSize = "cover";
 				$(avatar).off("mouseenter." + this.getName());
