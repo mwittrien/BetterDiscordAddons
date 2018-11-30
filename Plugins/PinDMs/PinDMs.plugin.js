@@ -72,7 +72,7 @@ class PinDMs {
 						let dmsscroller = document.querySelector(BDFDB.dotCNS.dmchannels + BDFDB.dotCN.scroller);
 						if (dmsscroller) {
 							this.oldSrollerPos = dmsscroller.scrollTop;
-							setImmediate(() => {this.oldSrollerPos = null;});
+							setTimeout(() => {this.oldSrollerPos = null;},1000);
 						}
 					}
 				})
