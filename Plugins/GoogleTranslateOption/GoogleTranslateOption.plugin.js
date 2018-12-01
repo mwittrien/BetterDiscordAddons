@@ -359,13 +359,6 @@ class GoogleTranslateOption {
 				width: 400px;
 			}
 			
-			${BDFDB.dotCN.themedark} ${BDFDB.dotCN.popout}.popout-googletranslate ${BDFDB.dotCN.popoutthemedpopout} {
-				-webkit-box-shadow: 0 2px 10px 0 rgba(0,0,0,20%);
-				background-color: #2f3136;
-				border: 1px solid rgba(28,36,43,.6);
-				box-shadow: 0 2px 10px 0 rgba(0,0,0,.2);
-			}
-			
 			${BDFDB.dotCN.selectmenuouter} .inChat {
 				top: 0%;
 				transform: translateY(-100%);
