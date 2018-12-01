@@ -63,7 +63,6 @@ class GoogleTranslateOption {
 				 <path d="M 0, 10.515 c 0, 2.892, 1.183, 5.521, 3.155, 7.361 L 0, 21.031 h 7.887 V 13.144 l -2.892, 2.892 C 3.549, 14.722, 2.629, 12.75, 2.629, 10.515 c 0 -3.418, 2.235 -6.309, 5.258 -7.492 v -2.629 C 3.418, 1.577, 0, 5.652, 0, 10.515 z M 21.031, 0 H 13.144 v 7.887 l 2.892 -2.892 C 17.482, 6.309, 18.402, 8.281, 18.402, 10.515 c 0, 3.418 -2.235, 6.309 -5.258, 7.492 V 20.768 c 4.469 -1.183, 7.887 -5.258, 7.887 -10.121 c 0 -2.892 -1.183 -5.521 -3.155 -7.361 L 21.031, 0 z"/>
 			</svg>`;
 			
-			
 		this.translatePopoutMarkup = 
 			`<div class="${BDFDB.disCNS.popout + BDFDB.disCNS.popoutbottomright + BDFDB.disCNS.popoutnoarrow + BDFDB.disCN.popoutnoshadow} popout-googletranslate DevilBro-modal" style="z-index: 2000; overflow: visible; visibility: visible; transform: translateX(-100%) translateY(-100%) translateZ(0px);">
 				<div class="${BDFDB.disCN.popoutthemedpopout}">
@@ -106,7 +105,6 @@ class GoogleTranslateOption {
 					</div>`).join("")}
 				</div>
 			</div>`;
-			
 	
 		this.DeepLTranslateAPI = function () {
 			var INPUT, OUTPUT, clearInput, current, domReady, enabled, executeScript, getLanguage, getOutput, langI, langO, setInput, setLanguage, timer, wc, webview;
