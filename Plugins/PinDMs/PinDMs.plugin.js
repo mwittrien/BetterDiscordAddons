@@ -19,7 +19,7 @@ class PinDMs {
 
 	getDescription () {return "Allows you to pin DMs, making them appear at the top of your DM-list.";}
 
-	getVersion () {return "1.2.1";}
+	getVersion () {return "1.2.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -267,8 +267,7 @@ class PinDMs {
 				delete pinnedDMs[id];
 				id = DMid;
 			}
-			if (!this.ChannelUtils.getChannel(id)) delete pinnedDMs[id];
-			else if (typeof sortedDMs[pinnedDMs[id]] == "undefined") sortedDMs[pinnedDMs[id]] = id;
+			if (typeof sortedDMs[pinnedDMs[id]] == "undefined") sortedDMs[pinnedDMs[id]] = id;
 			else sortDM(sortedDMs, pinnedDMs[id]+1, id);
 		};
 		for (let id in pinnedDMs) sortDM(id);
