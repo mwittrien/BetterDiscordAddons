@@ -117,6 +117,7 @@
 .bodySection-jqkkIP,
 .row-1bU71H,
 .applicationTile-1Goy1W,
+.tileMedia-1q3guD,
 .news-2GDtLJ,
 .modal-3HD5ck,
 .modal-3HD5ck .header-1R_AjF,
@@ -147,6 +148,7 @@
 .number-3ceIrJ,
 .result-2S5Awv:after,
 .body-1CAT0-,
+.body-1SVoBw,
 .content-35aVm0,
 .card-NB61oR,
 .bubble-1gL_TN,
@@ -238,12 +240,6 @@ button.guild-1EfMGQ {
 	width: 100%;
 	-webkit-mask: url(https://discordapp.com/assets/04a2e1509ad72be575b1529b51ea3977.svg) center/cover no-repeat !important;
 	background: rgb(var(--vaccentcolor)) !important;
-}
-.mediaFade-4Pqtcc {
-	background: linear-gradient(180deg,transparent 90%,rgb(var(--vtransparencycolor))) !important;
-}
-.description-3rB3Rp {
-	background: linear-gradient(180deg,transparent,rgb(var(--vtransparencycolor))) !important;
 }
 .paginationItemContainer-2q8AX7 {
 	background: rgb(var(--vaccentcolor));
@@ -654,6 +650,12 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .card-7JP0BX .body-SKIE6r,
 .messageGroupWrapper-o-Zw7G,
 .article-3kb3qm,
+.tileMedia-24cT6_,
+.info-P9dFwH,
+.mediaFade-1SdEfL,
+.mediaFade-4Pqtcc,
+.news-2KwXHF,
+.description-3rB3Rp,
 .autocomplete-header-background,
 .tutorial-popout section,
 .friend:not(:hover),
@@ -1612,14 +1614,15 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	border-color: rgba(var(--vaccentcolor),calc(var(--vtransparencyalpha) * 6)) !important;
 }
 
-.gamePreview-9weYR2 .body-1SVoBw {
-	background: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 3)) !important;
-}
-.gamePreview-9weYR2 .news-2KwXHF {
-	background: transparent !important;
-}
+.overlay-n52Tzn,
 .gamePreview-9weYR2 .background-3zYSQO {
-	-webkit-mask: linear-gradient(rgb(var(--vaccentcolor)),transparent);
+	-webkit-mask: linear-gradient(rgb(var(--vtransparencycolor)),transparent) !important;
+}
+.tileMedia-24cT6_ {
+	-webkit-mask: linear-gradient(rgb(var(--vtransparencycolor)) 50%, transparent) !important;
+}
+.tileMedia-1q3guD .tileMedia-24cT6_ {
+	height: 300px !important;
 }
 
 .userPopout-3XzG_A .header-2BwW8b {
