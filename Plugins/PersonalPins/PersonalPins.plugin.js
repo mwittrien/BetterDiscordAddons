@@ -55,7 +55,7 @@ class PersonalPins {
 					<div class="${BDFDB.disCN.scrollerwrap}">
 						<div class="${BDFDB.disCNS.messagespopout + BDFDB.disCN.scroller}">
 							<div class="${BDFDB.disCN.messagespopoutemptyplaceholder}">
-								<div class="${BDFDB.disCN.messagespopoutimage}" style="background-image: url(/assets/6793e022dc1b065b21f12d6df02f91bd.svg);"></div>
+								<div class="${BDFDB.disCN.messagespopoutimage}"></div>
 								<div class="${BDFDB.disCN.messagespopoutbody}"></div>
 							</div>
 						</div>
@@ -520,6 +520,7 @@ class PersonalPins {
 				var language = BDFDB.getDiscordLanguage().id;
 				var container = notespopout.querySelector(BDFDB.dotCN.messagespopout);
 				var placeholder = notespopout.querySelector(BDFDB.dotCN.messagespopoutemptyplaceholder);
+				placeholder.querySelector(BDFDB.dotCN.messagespopoutimage).style.setProperty("background-image", `url(${BDFDB.getDiscordTheme() == BDFDB.disCN.themelight ? "/assets/03c7541028afafafd1a9f6a81cb7f149.svg" : "/assets/6793e022dc1b065b21f12d6df02f91bd.svg"})`);
 				var messages = {};
 				switch (notespopout.querySelector(".tab.selected").getAttribute("tab")) {
 					case "channel":
