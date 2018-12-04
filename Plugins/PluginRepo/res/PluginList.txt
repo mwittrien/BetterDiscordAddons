@@ -167,6 +167,7 @@ https://raw.githubusercontent.com/Orrielel/BetterDiscordAddons/master/Plugins/Tw
 https://raw.githubusercontent.com/planetarian/BetterDiscordPlugins/master/Zalgo.plugin.js
 https://raw.githubusercontent.com/qwerasd205/qwerasd205.github.io/master/BDBGone.plugin.js
 https://raw.githubusercontent.com/qwerasd205/qwerasd205.github.io/master/EmptyEnter.plugin.js
+https://raw.githubusercontent.com/qwerasd205/qwerasd205.github.io/master/ExtendedContextMenu.plugin.js
 https://raw.githubusercontent.com/qwerasd205/qwerasd205.github.io/master/RepoUtils.plugin.js
 https://raw.githubusercontent.com/qwerasd205/qwerasd205.github.io/master/WordNotifications.plugin.js
 https://raw.githubusercontent.com/rauenzi/BDPluginLibrary/master/release/0PluginLibrary.plugin.js
