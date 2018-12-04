@@ -32,7 +32,7 @@ class ChatFilter {
 
 	getDescription () {return "Allows the user to censor words or block complete messages based on words in the chatwindow.";}
 
-	getVersion () {return "3.3.0";}
+	getVersion () {return "3.3.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -334,8 +334,9 @@ class ChatFilter {
 							if (reg.test(url)) blocked = true;
 						}
 						else if (string.indexOf("<") != 0) {
-							string.replace(/([\?\¿\!\¡\.\"\n])/g, " $1 ").split(" ").forEach((word) => {
-								if (word && reg.test(word)) blocked = true;
+							string.replace(/\n/g, " \n ").split(" ").forEach((word) => {
+								let wordWithoutSpecial = word.replace(/[\?\¿\!\¡\.\"]/g, "");
+								if (word && reg.test(word) || wordWithoutSpecial && reg.test(wordWithoutSpecial)) blocked = true;
 							});
 						}
 					});
@@ -378,8 +379,9 @@ class ChatFilter {
 							}
 							else if (string.indexOf("<") != 0) {
 								var newstring = [];
-								string.replace(/([\?\¿\!\¡\.\"\n])/g, " $1 ").split(" ").forEach((word) => {
-									if (word && reg.test(word)) {
+								string.replace(/\n/g, " \n ").split(" ").forEach((word) => {
+									let wordWithoutSpecial = word.replace(/[\?\¿\!\¡\.\"]/g, "");
+									if (word && reg.test(word) || wordWithoutSpecial && reg.test(wordWithoutSpecial)) {
 										censored = true;
 										newstring.push(BDFDB.encodeToHTML(censoredReplace));
 									}
@@ -387,7 +389,7 @@ class ChatFilter {
 										newstring.push(word);
 									}
 								});
-								strings[i] = newstring.join(" ").replace(/ ([\?\¿\!\¡\.\"\n]) /g, "$1");
+								strings[i] = newstring.join(" ").replace(/ \n /g, "\n");
 							}
 						});
 					}
