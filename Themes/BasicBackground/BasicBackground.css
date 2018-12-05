@@ -3437,10 +3437,40 @@ html > head + body > div#app-mount.appMount-3VJmYg > div.app-19_DXt > div > div.
 	visibility: visible !important;
 }
 
+html > head + body > div#app-mount.appMount-3VJmYg > div.app-19_DXt > div.app > div.layers-3iHuyZ.flex-vertical.flex-spacer > div.layer-3QrUeG + div.layer-3QrUeG > div > div.standardSidebarView-3F1I7i > div.sidebarRegion-VFTUkN > div.scrollerWrap-2lJEkd.scrollerThemed-2oenus.themeGhostHairline-DBD-2d.scrollerFade-1Ijw5y > div.scroller-2FKFPG.sidebarRegionScroller-3MXcoP > div.sidebar-CFHs9e > div.side-8zPYf6 > span#bd-settings-sidebar {
+	position: relative !important;
+}
 html > head + body > div#app-mount.appMount-3VJmYg > div.app-19_DXt > div.app > div.layers-3iHuyZ.flex-vertical.flex-spacer > div.layer-3QrUeG + div.layer-3QrUeG > div > div.standardSidebarView-3F1I7i > div.sidebarRegion-VFTUkN > div.scrollerWrap-2lJEkd.scrollerThemed-2oenus.themeGhostHairline-DBD-2d.scrollerFade-1Ijw5y > div.scroller-2FKFPG.sidebarRegionScroller-3MXcoP > div.sidebar-CFHs9e > div.side-8zPYf6 > span#bd-settings-sidebar:after {
-	content: "BasicBackground by DevilBro" !important;
+	content: "BasicBackground by" !important;
 	font-size: 12px !important; 
 	font-weight: 600 !important; 
 	color: rgb(114, 118, 125) !important; 
+	display: inline !important;
+	opacity: 1 !important;
 	padding: 2px 10px !important;
+	margin: 0 !important;
+	cursor: default !important;
+	visibility: visible !important;
+	position: relative !important;
+	top: 0 !important;
+	left: 0 !important;
+	bottom: 0 !important;
+	right: 0 !important;
+}
+html > head + body > div#app-mount.appMount-3VJmYg > div.app-19_DXt > div.app > div.layers-3iHuyZ.flex-vertical.flex-spacer > div.layer-3QrUeG + div.layer-3QrUeG > div > div.standardSidebarView-3F1I7i > div.sidebarRegion-VFTUkN > div.scrollerWrap-2lJEkd.scrollerThemed-2oenus.themeGhostHairline-DBD-2d.scrollerFade-1Ijw5y > div.scroller-2FKFPG.sidebarRegionScroller-3MXcoP > div.sidebar-CFHs9e > div.side-8zPYf6 > span#bd-settings-sidebar:before {
+	content: "DevilBro" !important;
+	font-size: 12px !important; 
+	font-weight: 600 !important; 
+	color: rgb(var(--vaccentcolor)) !important; 
+	display: inline !important;
+	opacity: 1 !important;
+	padding: 0 !important;
+	margin: 0 !important;
+	cursor: pointer !important;
+	visibility: visible !important;
+	position: absolute !important;
+	top: unset !important;
+	left: 115px !important;
+	bottom: 1px !important;
+	right: 0 !important;
 }
