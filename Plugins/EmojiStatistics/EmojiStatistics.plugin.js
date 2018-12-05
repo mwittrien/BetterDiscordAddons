@@ -159,7 +159,7 @@ class EmojiStatistics {
 
 	getDescription () {return "Adds some helpful options to show you more information about emojis and emojiservers.";}
 
-	getVersion () {return "2.7.6";}
+	getVersion () {return "2.7.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -302,10 +302,10 @@ class EmojiStatistics {
 	}
 	
 	addEmojiInformationButton (node) {
-		$(node).find(BDFDB.dotCN.emojipickerheader)
-			.append(this.emojiButtonMarkup)
+		$(this.emojiButtonMarkup)
+			.insertBefore(node.querySelector(BDFDB.dotCN.emojipickerdiversityselector))
 			.off("click." + this.getName())
-			.on("click." + this.getName(), ".emojistatistics-button", () => {
+			.on("click." + this.getName(), () => {
 				$(node).hide();
 				this.showEmojiInformationModal();
 			});
