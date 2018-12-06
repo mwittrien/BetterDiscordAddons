@@ -69,11 +69,11 @@ class ServerFolders {
 				overflow: hidden;
 			}
 			
-			.foldercontent {
+			${BDFDB.dotCN.guildswrapper}.foldercontent {
 				transition: width .3s linear;
 			}
 			
-			.foldercontent .folderseparator {
+			${BDFDB.dotCN.guildswrapper}.foldercontent .folderseparator {
 				margin-top: 10px;
 			}
 			
@@ -81,21 +81,21 @@ class ServerFolders {
 				width: 0px !important;
 			}
 
-			.foldercontent ${BDFDB.dotCN.guild}:not(${BDFDB.dotCN.guildselected}) ${BDFDB.dotCN.guildinner} {
+			${BDFDB.dotCN.guildswrapper}.foldercontent ${BDFDB.dotCN.guild}:not(${BDFDB.dotCN.guildselected}) ${BDFDB.dotCN.guildinner} {
 				border-radius: 25px !important;
 				transition: border-radius 1s;
 			}
 
-			.foldercontent ${BDFDB.dotCN.guild + BDFDB.dotCN.guildselected} ${BDFDB.dotCN.guildinner},
-			.foldercontent ${BDFDB.dotCN.guild}:not(${BDFDB.dotCN.guildselected}) ${BDFDB.dotCN.guildinner}:hover {
+			${BDFDB.dotCN.guildswrapper}.foldercontent ${BDFDB.dotCN.guild + BDFDB.dotCN.guildselected} ${BDFDB.dotCN.guildinner},
+			${BDFDB.dotCN.guildswrapper}.foldercontent ${BDFDB.dotCN.guild}:not(${BDFDB.dotCN.guildselected}) ${BDFDB.dotCN.guildinner}:hover {
 				border-radius: 15px !important;
 				transition: border-radius 1s;
 			}
 
-			.foldercontent ${BDFDB.dotCN.guild}:not(BDFDB.dotCN.guildselected) .guild-inner[style*="background-color:"] {
+			${BDFDB.dotCN.guildswrapper}.foldercontent ${BDFDB.dotCN.guild}:not(BDFDB.dotCN.guildselected) .guild-inner[style*="background-color:"] {
 				background-color: rgb(47, 49, 54) !important;
 			}
-			.foldercontent ${BDFDB.dotCN.guild + BDFDB.dotCN.guildselected} ${BDFDB.dotCN.guildinner}[style*="background-color:"] {
+			${BDFDB.dotCN.guildswrapper}.foldercontent ${BDFDB.dotCN.guild + BDFDB.dotCN.guildselected} ${BDFDB.dotCN.guildinner}[style*="background-color:"] {
 				background-color: rgb(114, 137, 218) !important;
 			}`;
 
@@ -331,7 +331,7 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.8.4";}
+	getVersion () {return "5.8.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -476,7 +476,7 @@ class ServerFolders {
 			});
 			
 			setTimeout(() => {
-				$(this.folderContainerMarkup).insertAfter(BDFDB.dotCN.guildswrapper);
+				if (!document.querySelector(BDFDB.dotCN.guildswrapper + ".foldercontent")) $(this.folderContainerMarkup).insertAfter(BDFDB.dotCN.guildswrapper);
 				this.addDragListener();
 				this.loadAllFolders();
 			},5000);
@@ -488,7 +488,7 @@ class ServerFolders {
 
 	stop () {
 		if (typeof BDFDB === "object") {
-			$(".foldercontent").remove();
+			$(BDFDB.dotCN.guildswrapper + ".foldercontent").remove();
 			this.resetAllElements();
 			
 			BDFDB.unloadMessage(this);
@@ -691,17 +691,12 @@ class ServerFolders {
 		var folders = BDFDB.loadAllData(this, "folders");
 		var sortedFolders = [];
 		
-		for (var id in folders) {
-			sortedFolders[folders[id].position] = folders[id];
-		}
+		for (var id in folders) sortedFolders[folders[id].position] = folders[id];
 		
 		for (var i = 0; i < sortedFolders.length; i++) {
 			var data = sortedFolders[i];
-			if (data) {
-				if (!document.querySelector(".folder#" + data.folderID)) { 
-					var folderDiv = this.createFolderDiv(data);
-					this.readIncludedServerList(folderDiv).forEach((serverObj) => {$(serverObj.div).attr("folder",folderDiv.id).hide();});
-				}
+			if (data && !document.querySelector(".folder#" + data.folderID)) {
+				this.readIncludedServerList(this.createFolderDiv(data)).forEach((serverObj) => {$(serverObj.div).attr("folder",data.folderID).hide();});
 			}
 		}
 	}
