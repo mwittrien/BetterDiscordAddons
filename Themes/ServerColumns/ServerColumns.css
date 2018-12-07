@@ -1,0 +1,37 @@
+:root {
+	--vcolumns: var(--columns, 2);
+}
+.guildsWrapper-5TJh6A {
+	width: calc((60px * var(--vcolumns)) + 30px - 20px) !important;
+}
+.guildsWrapper-5TJh6A .scrollerWrap-1IAIlv {
+	width: calc(60px * var(--vcolumns) + 30px) !important;
+}
+.guildsWrapper-5TJh6A .guilds-1q_RqH,
+.guildsWrapper-5TJh6A .guilds-1q_RqH .dms-rcsEnV {
+    display: flex;
+    flex-flow: row wrap;
+    align-content: flex-start;
+}
+.guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ {
+	margin: 4px 13px 4px -2px;
+}
+.guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ.selected-ML3OIq:before,
+.guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ.unread-qLkInr:before {
+	border-radius: 0px 50px 50px 0px;
+	width: 5px;
+	margin-left: 7px;
+}
+.guildsWrapper-5TJh6A .guilds-1q_RqH .dms-rcsEnV {
+	margin: 0;
+}
+.guildsWrapper-5TJh6A .guilds-1q_RqH .guildSeparator-1X4GQ1 {
+	margin: 10px 0;
+	width: calc(60px * var(--vcolumns) - 10px) !important;
+}
+.guildsWrapper-5TJh6A:not(.foldercontent) .guilds-1q_RqH > .guild-1EfMGQ:first-child,
+.guildsWrapper-5TJh6A .guilds-1q_RqH .friendsOnline-_wi_fM,
+#bd-pub-li,
+#RANbutton-frame {
+	margin: 5px calc((60px * var(--vcolumns) - 60px)/2) !important;
+}
