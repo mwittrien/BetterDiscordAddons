@@ -30,6 +30,7 @@
 	width: calc(60px * var(--vcolumns) - 10px) !important;
 }
 .guildsWrapper-5TJh6A:not(.foldercontent) .guilds-1q_RqH > .guild-1EfMGQ:first-child,
+.guildsWrapper-5TJh6A .guilds-1q_RqH .dms-rcsEnV .guild-1EfMGQ:only-child,
 .guildsWrapper-5TJh6A .guilds-1q_RqH .friendsOnline-_wi_fM,
 #bd-pub-li,
 #RANbutton-frame {
