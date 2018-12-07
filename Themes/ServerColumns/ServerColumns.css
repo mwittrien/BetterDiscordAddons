@@ -2,10 +2,10 @@
 	--vcolumns: var(--columns, 2);
 }
 .guildsWrapper-5TJh6A {
-	width: calc((60px * var(--vcolumns)) + 30px - 20px) !important;
+	width: calc((60px * var(--vcolumns)) + 35px - 25px) !important;
 }
 .guildsWrapper-5TJh6A .scrollerWrap-1IAIlv {
-	width: calc(60px * var(--vcolumns) + 30px) !important;
+	width: calc(60px * var(--vcolumns) + 35px) !important;
 }
 .guildsWrapper-5TJh6A .guilds-1q_RqH,
 .guildsWrapper-5TJh6A .guilds-1q_RqH .dms-rcsEnV {
