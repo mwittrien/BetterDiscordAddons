@@ -33,5 +33,5 @@
 .guildsWrapper-5TJh6A .guilds-1q_RqH .friendsOnline-_wi_fM,
 #bd-pub-li,
 #RANbutton-frame {
-	margin: 5px calc((60px * var(--vcolumns) - 60px)/2) !important;
+	margin: 4px calc((60px * var(--vcolumns) - 60px)/2) !important;
 }
