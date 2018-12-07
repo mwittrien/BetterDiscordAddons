@@ -79,24 +79,6 @@ class ServerFolders {
 			
 			${BDFDB.dotCN.guildswrapper}.foldercontent.foldercontentclosed {
 				width: 0px !important;
-			}
-
-			${BDFDB.dotCN.guildswrapper}.foldercontent ${BDFDB.dotCN.guild}:not(${BDFDB.dotCN.guildselected}) ${BDFDB.dotCN.guildinner} {
-				border-radius: 25px !important;
-				transition: border-radius 1s;
-			}
-
-			${BDFDB.dotCN.guildswrapper}.foldercontent ${BDFDB.dotCN.guild + BDFDB.dotCN.guildselected} ${BDFDB.dotCN.guildinner},
-			${BDFDB.dotCN.guildswrapper}.foldercontent ${BDFDB.dotCN.guild}:not(${BDFDB.dotCN.guildselected}) ${BDFDB.dotCN.guildinner}:hover {
-				border-radius: 15px !important;
-				transition: border-radius 1s;
-			}
-
-			${BDFDB.dotCN.guildswrapper}.foldercontent ${BDFDB.dotCN.guild}:not(BDFDB.dotCN.guildselected) .guild-inner[style*="background-color:"] {
-				background-color: rgb(47, 49, 54) !important;
-			}
-			${BDFDB.dotCN.guildswrapper}.foldercontent ${BDFDB.dotCN.guild + BDFDB.dotCN.guildselected} ${BDFDB.dotCN.guildinner}[style*="background-color:"] {
-				background-color: rgb(114, 137, 218) !important;
 			}`;
 
 		this.serverContextEntryMarkup =
@@ -331,7 +313,7 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.8.5";}
+	getVersion () {return "5.8.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -378,6 +360,9 @@ class ServerFolders {
 	initialize () {
 		if (typeof BDFDB === "object") {
 			BDFDB.loadMessage(this);
+			
+			this.DiscordConstants = BDFDB.WebModules.findByProperties(["Permissions", "ActivityTypes", "StatusTypes"]);
+			this.Animations = BDFDB.WebModules.findByProperties(["spring"]);
 			
 			var observer = null;
 
@@ -707,7 +692,7 @@ class ServerFolders {
 		$(folderDiv).insertBefore(serversandfolders[data.position > serversandfolders.length - 1 ? serversandfolders.length - 1 : data.position]);
 			
 		var avatar = folderDiv.querySelector(BDFDB.dotCN.avataricon);
-		
+			
 		$(folderDiv)
 			.addClass("closed")
 			.attr("id", data.folderID)
@@ -769,6 +754,8 @@ class ServerFolders {
 			});
 		$(avatar)
 			.css("background-image", "url(\"" + data.icons.closedicon + "\")");
+			
+		this.addHoverBehaviour(folderDiv);
 		
 		BDFDB.saveData(data.folderID, data, this, "folders");
 		
@@ -1279,7 +1266,49 @@ class ServerFolders {
 				},100);
 			})
 			.find("a").attr("draggable","false");
+			
+		this.addHoverBehaviour(serverCopy);
+		
 		return serverCopy;
+	}
+	
+	addHoverBehaviour (div) {
+		/* based on stuff from Zerebos */
+		let divinner = div.querySelector(BDFDB.dotCN.guildinner);
+		let divicon = div.querySelector(BDFDB.dotCN.guildicon);
+		let backgroundColor = new this.Animations.Value(0);
+		backgroundColor
+			.interpolate({
+				inputRange: [0, 1],
+				outputRange: [this.DiscordConstants.Colors.CHANNELS_GREY, this.DiscordConstants.Colors.BRAND_PURPLE]
+			})
+			.addListener((value) => {
+				if (divicon.classList.contains(BDFDB.disCN.avatarnoicon)) {
+					let comp = BDFDB.color2COMP(value.value.replace("a",""));
+					divinner.style.setProperty("background-color", `rgb(${comp[0]}, ${comp[1]}, ${comp[2]})`);
+				}
+			});
+
+		let borderRadius = new this.Animations.Value(0);
+		borderRadius
+			.interpolate({
+				inputRange: [0, 1],
+				outputRange: [25, 15]
+			})
+			.addListener((value) => {
+				divinner.style.setProperty("border-radius", `${value.value}px`);
+			});
+
+		let animate = (v) => {
+			this.Animations.parallel([
+				this.Animations.timing(backgroundColor, {toValue: v, duration: 200}),
+				this.Animations.spring(borderRadius, {toValue: v, friction: 3})
+			]).start();
+		};
+
+		$(div)
+			.on("mouseenter", (e) => {animate(1);})
+			.on("mouseleave", (e) => {if (!div.classList.contains(BDFDB.disCN.guildselected)) animate(0);});
 	}
 	
 	updateFolderPositions () {
