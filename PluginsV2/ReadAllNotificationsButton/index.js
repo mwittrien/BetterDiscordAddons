@@ -5,11 +5,11 @@ module.exports = (Plugin, Api, Vendor) => {
 
 	return class extends Plugin {
 		initConstructor () {
-			this.RANbuttonMarkup = 
-				`<div class="${BDFDB.disCN.guild}" id="RANbutton-frame" style="height: 20px; width: 50px; margin-bottom: 10px; margin-right: auto; margin-left: auto">
+			this.bd-pub-buttonMarkup = 
+				`<div class="${BDFDB.disCN.guild}" id="bd-pub-li" style="height: 20px; width: 50px; margin-bottom: 10px; margin-right: auto; margin-left: auto">
 					<div class="${BDFDB.disCN.guildinner}" style="height: 20px; width: 50px; border-radius: 4px;">
 						<a>
-							<div id="RANbutton" style="line-height: 20px; font-size: 12px;">read all</div>
+							<div id="bd-pub-button" style="line-height: 20px; font-size: 12px;">read all</div>
 						</a>
 					</div>
 				</div>`;
@@ -83,8 +83,8 @@ module.exports = (Plugin, Api, Vendor) => {
 				});
 				BDFDB.addObserver(this, BDFDB.dotCN.popouts, {name:"mentionsPopoutObserver",instance:observer}, {childList: true});
 				
-				$(this.RANbuttonMarkup).insertBefore(document.querySelector(BDFDB.dotCN.guildseparator))
-					.on("click", "#RANbutton", () => {
+				$(this.bd-pub-buttonMarkup).insertBefore(document.querySelector(BDFDB.dotCN.guildseparator))
+					.on("click", "#bd-pub-button", () => {
 						let servers = BDFDB.getData("includeMuted", this, "settings") ? BDFDB.readServerList() : BDFDB.readUnreadServerList();
 						BDFDB.clearReadNotifications(servers);
 					});
@@ -101,7 +101,7 @@ module.exports = (Plugin, Api, Vendor) => {
 
 		onStop () {
 			if (typeof BDFDB === "object") {
-				$("#RANbutton-frame, #RAMbutton").remove();
+				$("#bd-pub-li, #RAMbutton").remove();
 				
 				$(".RAN-added").removeClass("RAN-added");
 				

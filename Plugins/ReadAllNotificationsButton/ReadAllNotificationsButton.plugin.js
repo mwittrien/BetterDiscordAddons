@@ -3,10 +3,10 @@
 class ReadAllNotificationsButton {
 	initConstructor () {
 		this.RANbuttonMarkup = 
-			`<div class="${BDFDB.disCN.guild}" id="RANbutton-frame" style="height: 20px; margin-bottom: 10px;">
+			`<div class="${BDFDB.disCN.guild} RANbutton-frame" id="bd-pub-li" style="height: 20px; margin-bottom: 10px;">
 				<div class="${BDFDB.disCN.guildinner}" style="height: 20px; border-radius: 4px;">
 					<a>
-						<div id="RANbutton" style="line-height: 20px; font-size: 12px;">read all</div>
+						<div class="RANbutton" id="bd-pub-button" style="line-height: 20px; font-size: 12px;">read all</div>
 					</a>
 				</div>
 			</div>`;
@@ -27,7 +27,7 @@ class ReadAllNotificationsButton {
 
 	getDescription () {return "Adds a button to clear all notifications.";}
 
-	getVersion () {return "1.3.5";}
+	getVersion () {return "1.3.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -106,7 +106,7 @@ class ReadAllNotificationsButton {
 			BDFDB.addObserver(this, BDFDB.dotCN.popouts, {name:"mentionsPopoutObserver",instance:observer}, {childList: true});
 			
 			$(this.RANbuttonMarkup).insertBefore(document.querySelector(BDFDB.dotCN.guildseparator))
-				.on("click", "#RANbutton", () => {
+				.on("click", ".RANbutton", () => {
 					let servers = BDFDB.getData("includeMuted", this, "settings") ? BDFDB.readServerList() : BDFDB.readUnreadServerList();
 					BDFDB.clearReadNotifications(servers);
 				});
@@ -120,9 +120,10 @@ class ReadAllNotificationsButton {
 
 	stop () {
 		if (typeof BDFDB === "object") {
-			$("#RANbutton-frame, #RAMbutton").remove();
+			$(".RANbutton-frame, .RAMbutton").remove();
 			
 			$(".RAN-added").removeClass("RAN-added");
+			$(".RAM-added").removeClass("RAM-added");
 			
 			BDFDB.unloadMessage(this);
 		}

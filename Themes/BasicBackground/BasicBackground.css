@@ -771,7 +771,6 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 #friends .tab-bar-item.selected,
 .guild-1EfMGQ.selected-ML3OIq .guildInner-3DSoA4[style*="background-color:"],
 .guildInner-3DSoA4[style*="background-color:"]:hover,
-#RANbutton:hover,
 #bd-pub-button:hover,
 .embedPill-1Zntps:not([style]),
 .searchFilter-2ESiM3,
@@ -1042,7 +1041,6 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	padding: 1px 4px;
 }
 
-#RANbutton,
 #bd-pub-button,
 .guildInner-3DSoA4 {
 	transition: background 500ms ease !important;

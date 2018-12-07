@@ -38,7 +38,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					margin-left: 55px;
 				}
 				.bd-minimal ${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.friendsonline},
-				.bd-minimal ${BDFDB.dotCN.guildswrapper}.DSAC-styled #RANbutton-frame {
+				.bd-minimal ${BDFDB.dotCN.guildswrapper}.DSAC-styled #bd-pub-li {
 					margin-left: 40px;
 				}
 				${BDFDB.dotCN.guildswrapper}.DSAC-styled ${BDFDB.dotCN.guildseparator}, 

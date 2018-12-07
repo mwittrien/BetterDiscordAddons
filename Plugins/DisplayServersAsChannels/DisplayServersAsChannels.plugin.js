@@ -33,8 +33,7 @@ class DisplayServersAsChannels {
 			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guild} {
 				margin-left: 55px;
 			}
-			.bd-minimal .DSAC-styled ${BDFDB.dotCN.friendsonline},
-			.bd-minimal .DSAC-styled #RANbutton-frame {
+			.bd-minimal .DSAC-styled ${BDFDB.dotCN.friendsonline} {
 				margin-left: 40px;
 			}
 			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild},
