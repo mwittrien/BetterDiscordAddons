@@ -124,7 +124,7 @@ class EditServers {
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	getVersion () {return "1.8.5";} 
+	getVersion () {return "1.8.6";} 
 
 	getAuthor () {return "DevilBro";}
 	
@@ -348,16 +348,15 @@ class EditServers {
 					}
 				}
 				
+				removeIcon = serverSettingsModal.find("#input-removeicon").prop("checked");
 				if (serverSettingsModal.find("#input-serverurl:not('.invalid')").length > 0) {
 					url = null;
-					if (!serverSettingsModal.find("#input-removeicon").prop("checked") && serverSettingsModal.find("#input-serverurl").val()) {
+					if (!removeIcon && serverSettingsModal.find("#input-serverurl").val()) {
 						if (serverSettingsModal.find("#input-serverurl").val().trim().length > 0) {
 							url = serverSettingsModal.find("#input-serverurl").val().trim();
 						}
 					}
 				}
-				
-				removeIcon = serverSettingsModal.find("#input-removeicon").prop("checked");
 				
 				color1 = BDFDB.getSwatchColor("swatch1");
 				color2 = BDFDB.getSwatchColor("swatch2");
@@ -458,12 +457,13 @@ class EditServers {
 				.attr("custom-editservers", true)
 				.find(BDFDB.dotCN.avataricon)
 					.text(bgImage && !removeIcon ? "" : shortName)
-					.toggleClass(BDFDB.disCN.avatarnoicon, removeIcon || bgImage)
+					.addClass(removeIcon || !bgImage ? BDFDB.disCN.avatarnoicon : "")
+					.removeClass(!removeIcon && bgImage ? BDFDB.disCN.avatarnoicon : "")
 					.css("font-size", removeIcon || !bgImage ? "10px" : "")
 					.css("background-image", removeIcon ? "" : bgImage)
 					.css("background-color", color1)
 					.css("color", color2);
-		} 
+		}
 	}
 	
 	loadAllServers () {
