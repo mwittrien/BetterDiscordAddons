@@ -15,7 +15,7 @@
     align-content: flex-start;
 }
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ {
-	margin: 4px 13px 4px -2px;
+	margin: 4px 13px 4px -2px !important;
 }
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ:not(#bd-pub-li),
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ:not(#bd-pub-li) .guildInner-3DSoA4 a,
@@ -66,10 +66,10 @@
     background-size: calc(var(--vserversize)/3);
 }
 .guildsWrapper-5TJh6A .guilds-1q_RqH .dms-rcsEnV {
-	margin: 0;
+	margin: 0 !important;
 }
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guildSeparator-1X4GQ1 {
-	margin: 10px 0;
+	margin: 10px 0 !important;
 	width: calc((var(--vserversize) + 10px) * var(--vcolumns) - 10px) !important;
 }
 #server-search,
