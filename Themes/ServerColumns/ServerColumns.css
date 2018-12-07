@@ -25,6 +25,10 @@
 	line-height: var(--vserversize);
 	font-size: calc(var(--vserversize)/5) !important;
 }
+.guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ .guildInner-3DSoA4 .iconSizeLarge-161qtT,
+.guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ .guildInner-3DSoA4 .homeIcon-1FoKUJ {
+	background-size: cover !important;
+}
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ .badge-1GsMF2 {
 	font-size: calc(var(--vserversize)/4);
 	padding: calc(var(--vserversize)/10 - 2px) calc(var(--vserversize)/10 + 1px);
