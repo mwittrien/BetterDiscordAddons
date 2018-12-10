@@ -5,6 +5,15 @@ class CharCounter {
 		this.selecting = false;
 		
 		this.counterMarkup = `<div id="charcounter" class="charcounter"></div>`;
+		
+		this.maxLenghts = {
+			normal: 2000,
+			edit: 2000,
+			form: 2000,
+			nickname: 32,
+			popout: 256,
+			profile: 256
+		}
 		   
 		this.css = `
 			${BDFDB.dotCN.themelight} #charcounter {
@@ -40,8 +49,21 @@ class CharCounter {
 				bottom: -1.0em;
 			}
 			#charcounter.nickname {
-				right: 0;
-				top: 0;
+				right: 0 !important;
+				top: 0 !important;
+			}
+			#charcounter.popout {
+				right: 3px !important;
+				bottom: 1px !important;
+				font-size: 10px !important;
+			}
+			#charcounter.profile {
+				right: -5px !important;
+				bottom: 3px !important;
+				font-size: 12px !important;
+			}
+			${BDFDB.dotCN.usernote} textarea:not(:focus) + #charcounter {
+				display: none;
 			}`;
 	}
 
@@ -49,7 +71,7 @@ class CharCounter {
 
 	getDescription () {return "Adds a charcounter in the chat.";}
 
-	getVersion () {return "1.2.8";}
+	getVersion () {return "1.2.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -98,12 +120,30 @@ class CharCounter {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								let resetnickname;
-								if (node.tagName && (resetnickname = node.querySelector(BDFDB.dotCN.reset)) != null) {
-									if (BDFDB.getInnerText(resetnickname.firstElementChild) == BDFDB.LanguageStrings.RESET_NICKNAME) {
+								let ele;
+								if (node.tagName && node.querySelector(BDFDB.dotCN.userpopout) && (ele = node.querySelector(BDFDB.dotCN.usernote)) != null) {
+									this.appendCounter(ele.firstElementChild, "popout");
+								}
+							});
+						}
+					}
+				);
+			});
+			BDFDB.addObserver(this, BDFDB.dotCN.popouts, {name:"userPopoutObserver",instance:observer}, {childList: true});
+
+			observer = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
+						if (change.addedNodes) {
+							change.addedNodes.forEach((node) => {
+								let ele;
+								if (node.tagName && (ele = node.querySelector(BDFDB.dotCN.reset)) != null) {
+									if (BDFDB.getInnerText(ele.firstElementChild) == BDFDB.LanguageStrings.RESET_NICKNAME) {
 										this.appendCounter(node.querySelector(BDFDB.dotCN.inputdefault), "nickname");
-										console.log("yes");
 									}
+								}
+								if (node.tagName && node.querySelector(BDFDB.dotCN.userprofile) && (ele = node.querySelector(BDFDB.dotCN.usernote)) != null) {
+									this.appendCounter(ele.firstElementChild, "profile");
 								}
 							});
 						}
@@ -149,12 +189,13 @@ class CharCounter {
 		
 		var updateCounter = () => {
 			var selection = input.selectionEnd - input.selectionStart == 0 ? "" : " (" + (input.selectionEnd - input.selectionStart) + ")";
-			counter.text(type == "nickname" ? (input.value.length + "/32" + selection) : (BDFDB.getParsedLength(input.value) + "/2000" + selection));
+			var maxLength = this.maxLenghts[type] || 2000;
+			counter.text(input.value.length + "/" + maxLength + selection);
 		}
 		
 		input.parentElement.parentElement.classList.add("charcounter-added");
+		if (type == "nickname") input.setAttribute("maxlength", 32);
 		$(input)
-			.attr("maxlength", type == "nickname" ? 32 : "")
 			.off("keydown." + this.getName() + " click." + this.getName())
 			.on("keydown." + this.getName() + " click." + this.getName(), e => {
 				clearTimeout(input.charcountertimeout);
