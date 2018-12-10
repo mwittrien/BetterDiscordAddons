@@ -60,20 +60,20 @@
 	line-height: calc(var(--vserversize) - 10px) !important;
 	font-size: calc(var(--vserversize) - 10px) !important;
 }
-.guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ.selected-ML3OIq:before,
-.guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ.unread-qLkInr:before {
+.guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ.unread-qLkInr:before,
+.guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ.selected-ML3OIq:before {
 	top: 50% !important;
 	left: -8px !important;
 	border-radius: 0px 50px 50px 0px !important;
 	width: 5px !important;
 }
-.guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ.selected-ML3OIq:before {
-    height: calc(var(--vserversize) - 10px) !important;
-    margin-top: calc((var(--vserversize) - 10px)/-2) !important;
-}
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ.unread-qLkInr:before {
     height: 10px !important;
     margin-top: -6px !important;
+}
+.guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ.selected-ML3OIq:before {
+    height: calc(var(--vserversize) - 10px) !important;
+    margin-top: calc((var(--vserversize) - 10px)/-2) !important;
 }
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ.audio-3vVhBi:after, 
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ.video-15yGu3:after {
