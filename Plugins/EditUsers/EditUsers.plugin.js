@@ -419,7 +419,7 @@ class EditUsers {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node.tagName && node.querySelector("[class*='topSection']") && BDFDB.getData("changeInUserProfil", this, "settings")) {
+								if (node.tagName && node.querySelector(BDFDB.dotCN.userprofile) && BDFDB.getData("changeInUserProfil", this, "settings")) {
 									this.loadUser(node.querySelector("[class*='topSection']"), "profil", false);
 								}
 							});

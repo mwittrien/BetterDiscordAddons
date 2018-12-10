@@ -129,7 +129,7 @@ class JoinedAtDate {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node.tagName && node.querySelector("[class*='topSection']")) {
+								if (node.tagName && node.querySelector(BDFDB.dotCN.userprofile)) {
 									if (BDFDB.getData("addInUserProfil", this, "settings")) this.addJoinedAtDate(node.querySelector(BDFDB.dotCN.userprofileheaderinfo), null);
 								}
 							});

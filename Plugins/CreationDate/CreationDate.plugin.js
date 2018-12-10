@@ -123,7 +123,7 @@ class CreationDate {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node.tagName && node.querySelector("[class*='topSection']")) {
+								if (node.tagName && node.querySelector(BDFDB.dotCN.userprofile)) {
 									if (BDFDB.getData("addInUserProfil", this, "settings")) this.addCreationDate(node.querySelector(BDFDB.dotCN.userprofileheaderinfo), null);
 								}
 							});
