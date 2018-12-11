@@ -26,32 +26,32 @@ class BadgesEverywhere {
 			.BE-badge:last-of-type {
 				margin-right: 5px;
 			}
-			.BE-badge-Staff {width:17px; min-width:17px;}
-			.BE-badge-Partner {width:22px; min-width:22px;}
-			.BE-badge-HypeSquad {width:17px; min-width:17px;}
-			.BE-badge-BugHunter {width:17px; min-width:17px;}
-			.BE-badge-HypeSquadBravery {width:17px; min-width:17px;}
-			.BE-badge-HypeSquadBrilliance {width:17px; min-width:17px;}
-			.BE-badge-HypeSquadBalance {width:17px; min-width:17px;}
-			.BE-badge-EarlySupporter {width:24px; min-width:24px;}
-			.BE-badge-Nitro {width:21px; min-width:21px;}`;
+			.BE-badge.BE-badge-Staff {width:17px !important; min-width:17px !important;}
+			.BE-badge.BE-badge-Partner {width:22px !important; min-width:22px !important;}
+			.BE-badge.BE-badge-HypeSquad {width:17px !important; min-width:17px !important;}
+			.BE-badge.BE-badge-BugHunter {width:17px !important; min-width:17px !important;}
+			.BE-badge.BE-badge-HypeSquadBravery {width:17px !important; min-width:17px !important;}
+			.BE-badge.BE-badge-HypeSquadBrilliance {width:17px !important; min-width:17px !important;}
+			.BE-badge.BE-badge-HypeSquadBalance {width:17px !important; min-width:17px !important;}
+			.BE-badge.BE-badge-EarlySupporter {width:24px !important; min-width:24px !important;}
+			.BE-badge.BE-badge-Nitro {width:21px !important; min-width:21px !important;}`;
 			
 		this.loading = false;
 		
 		this.updateBadges = false;
 		
 		this.badges = {
-			1:			{name:"Staff",					implemented:true,	white:"url(https://discordapp.com/assets/7cfd90c8062139e4804a1fa59f564731.svg)", color:"url(https://discordapp.com/assets/4358ad1fb423b346324516453750f569.svg)"},
-			2:			{name:"Partner",				implemented:true,	white:"url(https://discordapp.com/assets/a0e288a458c48dfcf548dadc277e42e6.svg)", color:"url(https://discordapp.com/assets/33fedf082addb91d88abc272b4b18daa.svg)"},
-			4:			{name:"HypeSquad",				implemented:true,	white:"url(https://discordapp.com/assets/3a050fcc884255231b99b7033c776070.svg)", color:"url(https://discordapp.com/assets/6c73f47daf179ffade99f501bfc5101b.svg)"},
-			8:			{name:"BugHunter",				implemented:true,	white:"url(https://discordapp.com/assets/df26f079738a4dcd07cbce6eb3c957f1.svg)", color:"url(https://discordapp.com/assets/f61b8981e92feead854f52e5a1ba14f0.svg)"},
-			16:			{name:"MFASMS",					implemented:false,	white:"", color:""},
-			32:			{name:"PROMODISMISSED",			implemented:false,	white:"", color:""},
-			64:			{name:"HypeSquad Bravery",		implemented:true,	white:"url(https://discordapp.com/assets/1115767aed344e96a27a12e97718c171.svg)", color:"url(https://discordapp.com/assets/64ae1208b6aefc0a0c3681e6be36f0ff.svg)"},
-			128:		{name:"HypeSquad Brilliance",	implemented:true,	white:"url(https://discordapp.com/assets/d3478c6bd5cee0fc600e55935ddc81aa.svg)", color:"url(https://discordapp.com/assets/48cf0556d93901c8cb16317be2436523.svg)"},
-			256:		{name:"HypeSquad Balance",		implemented:true,	white:"url(https://discordapp.com/assets/2a085ed9c86f3613935a6a8667ba8b89.svg)", color:"url(https://discordapp.com/assets/9fdc63ef8a3cc1617c7586286c34e4f1.svg)"},
-			512:		{name:"Early Supporter",		implemented:true,	white:"url(https://discordapp.com/assets/ce15562552e3d70c56d5408cfeed2ffd.svg)", color:"url(https://discordapp.com/assets/23e59d799436a73c024819f84ea0b627.svg)"},
-			2048:		{name:"Nitro",					implemented:true,	white:"url(https://discordapp.com/assets/379d2b3171722ef8be494231234da5d1.svg)", color:"url(https://discordapp.com/assets/386884eecd36164487505ddfbac35a9d.svg)"}
+			1:			{name:"Staff",					selector:"profileBadgeStaff"},
+			2:			{name:"Partner",				selector:"profileBadgePartner"},
+			4:			{name:"HypeSquad",				selector:"profileBadgeHypeSquad"},
+			8:			{name:"BugHunter",				selector:"profileBadgeBugHunter"},
+			16:			{name:"MFASMS",					selector:false},
+			32:			{name:"PROMODISMISSED",			selector:false},
+			64:			{name:"HypeSquad Bravery",		selector:"profileBadgeHypeSquadOnlineHouse1"},
+			128:		{name:"HypeSquad Brilliance",	selector:"profileBadgeHypeSquadOnlineHouse2"},
+			256:		{name:"HypeSquad Balance",		selector:"profileBadgeHypeSquadOnlineHouse3"},
+			512:		{name:"Early Supporter",		selector:"profileBadgeEarlySupporter"},
+			2048:		{name:"Nitro",					selector:"profileBadgePremium"}
 		};
 		
 		this.requestedusers = {};
@@ -71,7 +71,7 @@ class BadgesEverywhere {
 
 	getDescription () {return "Displays Badges (Nitro, HypeSquad, etc...) in the chat/memberlist/userpopout. Thanks for Zerebos' help.";}
 
-	getVersion () {return "1.1.2";}
+	getVersion () {return "1.1.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -125,6 +125,7 @@ class BadgesEverywhere {
 			
 			this.APIModule = BDFDB.WebModules.findByProperties(["getAPIBaseURL"]);
 			this.DiscordConstants = BDFDB.WebModules.findByProperties(["Permissions", "ActivityTypes", "StatusTypes"]);
+			this.BadgeClasses = BDFDB.WebModules.findByProperties(["profileBadgeStaff","profileBadgePremium"]);
 			
 			var observer = null;
 
@@ -165,7 +166,7 @@ class BadgesEverywhere {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(BDFDB.dotCN.userpopout) && BDFDB.getData("showInPopout", this, "settings")) {
+								if (node.tagName && node.querySelector(BDFDB.dotCN.userpopout) && BDFDB.getData("showInPopout", this, "settings")) {
 									this.addBadges(node, "popout", false);
 								}
 							});
@@ -180,7 +181,7 @@ class BadgesEverywhere {
 					(change, i) => {
 						if (change.removedNodes) {
 							change.removedNodes.forEach((node) => {
-								if (node && node.tagName && node.getAttribute("layer-id") == "user-settings" && this.updateBadges) {
+								if (node.tagName && node.getAttribute("layer-id") == "user-settings" && this.updateBadges) {
 									this.updateBadges = false;
 									this.loadBadges();
 								}
@@ -191,7 +192,7 @@ class BadgesEverywhere {
 			});
 			BDFDB.addObserver(this, BDFDB.dotCN.layers, {name:"settingsWindowObserver",instance:observer}, {childList:true});
 			
-			for (let flag in this.badges) if (!this.badges[flag].implemented) delete this.badges[flag];
+			for (let flag in this.badges) if (!this.badges[flag].selector) delete this.badges[flag];
 			
 			this.loadBadges();
 		}
@@ -202,7 +203,7 @@ class BadgesEverywhere {
 
 	stop () {
 		if (typeof BDFDB === "object") {
-			document.querySelectorAll(".BE-badge").forEach(node=>{node.remove();});
+			document.querySelectorAll(".BE-badges").forEach(node=>{node.remove();});
 			BDFDB.unloadMessage(this);
 		}
 	}
@@ -283,23 +284,26 @@ class BadgesEverywhere {
 	}
 	
 	addToWrapper (wrapper, id, type) {
-		if (wrapper.querySelector(".BE-badge")) return; 
+		if (wrapper.querySelector(".BE-badges")) return; 
 		let memberwrap = wrapper.querySelector(BDFDB.dotCN.memberusername);
 		if (!memberwrap) memberwrap = wrapper.querySelector(BDFDB.dotCN.messageusername);
 		if (memberwrap) memberwrap = memberwrap.parentElement;
 		if (!memberwrap) memberwrap = wrapper.querySelector(BDFDB.dotCN.nametag);
 		if (memberwrap) {
-			var blacklist = BDFDB.loadAllData(this, "blacklist");
+			let blacklist = BDFDB.loadAllData(this, "blacklist");
+			let settings = BDFDB.getAllData(this, "settings"); 
+			let badgewrapper = document.createElement("span"); 
+			badgewrapper.className = `BE-badges ${settings.useColoredVersion ? BDFDB.disCN.userprofiletopsectionnormal : BDFDB.disCN.userprofiletopsectionplaying}`;
+			badgewrapper.setAttribute("style", "all: unset !important;");
+			memberwrap.appendChild(badgewrapper);
 			for (let flag in this.badges) {
 				if ((this.loadedusers[id].flags | flag) == this.loadedusers[id].flags && !blacklist[flag]) {
-					let badge = document.createElement("div"); 
-					badge.className = "BE-badge BE-badge-" + this.badges[flag].name.replace(/ /g, "") + " BE-badge-" + type;
-					badge.style.backgroundImage = BDFDB.getData("useColoredVersion", this, "settings") ? this.badges[flag].color : this.badges[flag].white;
-					memberwrap.appendChild(badge);
-					$(badge)
-						.on("mouseenter." + this.getName(), (e) => {
-							BDFDB.createTooltip(this.badges[flag].name, e.currentTarget, {"type":type == "list" ? "left" : "top"});
-						});
+					let badge = document.createElement("div");
+					badge.className = `BE-badge BE-badge-${this.badges[flag].name.replace(/ /g, "")} BE-badge-${type} ${this.BadgeClasses[this.badges[flag].selector].split(" ")[0]}`;
+					badgewrapper.appendChild(badge);
+					$(badge).on("mouseenter." + this.getName(), (e) => {
+						BDFDB.createTooltip(this.badges[flag].name, e.currentTarget, {"type":type == "list" ? "left" : "top"});
+					});
 				}
 			}
 		}
