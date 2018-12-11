@@ -7,7 +7,7 @@ class ThemeSettings {
 
 	getDescription () {return "Allows you to change Theme Variables within BetterDiscord.";}
 
-	getVersion () {return "1.0.1";}
+	getVersion () {return "1.0.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -126,7 +126,7 @@ class ThemeSettings {
 					button.className = "bda-settings-button themes-settings-button";
 					button.innerText = "Settings";
 					footer.appendChild(button);
-					$(button).on("click." + this.getName(), () => {
+					button.addEventListener("click", () => {
 						li.classList.remove("settings-closed");
 						li.classList.add("settings-open");
 						let children = [];
@@ -134,14 +134,14 @@ class ThemeSettings {
 							children.push(li.firstChild);
 							li.firstChild.remove();
 						}
-						$(`<div style="float: right; cursor: pointer;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" style="width: 18px; height: 18px;"><g class="background" fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="#dcddde" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div>`)
-							.on("click." + this.getName(), () => {
-								li.classList.remove("settings-open");
-								li.classList.add("settings-closed");
-								while (li.childElementCount) li.firstChild.remove();
-								while (children.length) li.appendChild(children.shift());
-							})
-							.appendTo(li);
+						let closebutton = $(`<div style="float: right; cursor: pointer;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" style="width: 18px; height: 18px;"><g class="background" fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="#dcddde" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div>`)[0];
+						li.appendChild(closebutton);
+						closebutton.addEventListener("click", () => {
+							li.classList.remove("settings-open");
+							li.classList.add("settings-closed");
+							while (li.childElementCount) li.firstChild.remove();
+							while (children.length) li.appendChild(children.shift());
+						})
 						li.appendChild(this.createThemeSettings(name, vars));
 					});
 				}
