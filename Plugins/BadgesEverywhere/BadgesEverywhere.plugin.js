@@ -295,7 +295,6 @@ class BadgesEverywhere {
 			let badgewrapper = document.createElement("span"); 
 			badgewrapper.className = `BE-badges ${settings.useColoredVersion ? BDFDB.disCN.userprofiletopsectionnormal : BDFDB.disCN.userprofiletopsectionplaying}`;
 			badgewrapper.setAttribute("style", "all: unset !important;");
-			memberwrap.appendChild(badgewrapper);
 			for (let flag in this.badges) {
 				if ((this.loadedusers[id].flags | flag) == this.loadedusers[id].flags && !blacklist[flag]) {
 					let badge = document.createElement("div");
@@ -306,6 +305,7 @@ class BadgesEverywhere {
 					});
 				}
 			}
+			if (badgewrapper.firstChild) memberwrap.appendChild(badgewrapper);
 		}
 	}
 }
