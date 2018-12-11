@@ -59,10 +59,10 @@ class BadgesEverywhere {
 		
 		this.defaults = {
 			settings: {
+				showInPopout:		{value:true, 	description:"Show Badge in User Popout."},
 				showInChat:			{value:true, 	description:"Show Badge in Chat Window."},
 				showInMemberList:	{value:true, 	description:"Show Badge in Member List."},
-				showInPopout:		{value:true, 	description:"Show Badge in User Popout."},
-				useColoredVersion:	{value:true, 	description:"Use colored version of the Badges."}
+				useColoredVersion:	{value:true, 	description:"Use colored version of the Badges for Chat and Members."}
 			}
 		};
 	}
@@ -71,7 +71,7 @@ class BadgesEverywhere {
 
 	getDescription () {return "Displays Badges (Nitro, HypeSquad, etc...) in the chat/memberlist/userpopout. Thanks for Zerebos' help.";}
 
-	getVersion () {return "1.1.3";}
+	getVersion () {return "1.1.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -237,7 +237,7 @@ class BadgesEverywhere {
 	}
 
 	loadBadges() {
-		document.querySelectorAll(".BE-badge").forEach(node=>{node.remove();});
+		document.querySelectorAll(".BE-badges").forEach(node=>{node.remove();});
 		var settings = BDFDB.getAllData(this, "settings");
 		if (settings.showInMemberList) {
 			for (let user of document.querySelectorAll(BDFDB.dotCN.member)) {
@@ -291,9 +291,10 @@ class BadgesEverywhere {
 		if (!memberwrap) memberwrap = wrapper.querySelector(BDFDB.dotCN.nametag);
 		if (memberwrap) {
 			let blacklist = BDFDB.loadAllData(this, "blacklist");
-			let settings = BDFDB.getAllData(this, "settings"); 
-			let badgewrapper = document.createElement("span"); 
-			badgewrapper.className = `BE-badges ${settings.useColoredVersion ? BDFDB.disCN.userprofiletopsectionnormal : BDFDB.disCN.userprofiletopsectionplaying}`;
+			let settings = BDFDB.getAllData(this, "settings");
+			let header = wrapper.querySelector(BDFDB.dotCN.userpopoutheader);
+			let badgewrapper = document.createElement("span");
+			badgewrapper.className = `BE-badges ${!settings.useColoredVersion || (header && !header.classList.contains(BDFDB.disCN.userpopoutheadernormal)) ? BDFDB.disCN.userprofiletopsectionplaying : BDFDB.disCN.userprofiletopsectionnormal}`;
 			badgewrapper.setAttribute("style", "all: unset !important;");
 			for (let flag in this.badges) {
 				if ((this.loadedusers[id].flags | flag) == this.loadedusers[id].flags && !blacklist[flag]) {
