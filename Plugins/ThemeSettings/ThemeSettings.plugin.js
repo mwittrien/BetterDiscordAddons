@@ -7,7 +7,7 @@ class ThemeSettings {
 
 	getDescription () {return "Allows you to change Theme Variables within BetterDiscord.";}
 
-	getVersion () {return "1.0.0";}
+	getVersion () {return "1.0.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -155,8 +155,10 @@ class ThemeSettings {
 			vars = vars[1].replace(/[\t\n\r]/g,"").replace(/\s{2,}/g," ").replace(/\/\*+.*?\*+\//g,"");
 			vars = vars.split("{");
 			vars.shift();
-			vars = vars.join("{").replace(/ (;|--)/g,"$1").replace(/(:) /g,"$1")
-			vars = vars.split(";}")[0].slice(2).split(";--");
+			vars = vars.join("{").replace(/\s+(;|--)/g,"$1").replace(/(:|;)\s+/g,"$1");
+			vars = vars.split("}")[0];
+			vars = vars[vars.length -1] == ";" ? vars.slice(0,-1) : vars;
+			vars = vars.slice(2).split(";--");
 			if (vars.length > 1) return vars;
 		}
 		return [];
@@ -164,18 +166,21 @@ class ThemeSettings {
 	
 	createThemeSettings (name, vars) {
 		if (!this.started || typeof BDFDB !== "object") return;
-		var settingshtml = `<div class="theme-settings" id="theme-settings-${name}"><div class="${name}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${BDFDB.encodeToHTML(name)}</div><div class="DevilBro-settings-inner"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Update all variables</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorgreen + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} update-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Update</div></button></div>`;
+		var settingshtml = `<div class="theme-settings" id="theme-settings-${name}"><div class="${name}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${BDFDB.encodeToHTML(name)}</div><div class="DevilBro-settings-inner"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Update all variables</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorgreen + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} update-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Update</div></button></div></div></div>`;
+		
+		var settingspanel = $(settingshtml)[0];
+		var settingspanelinner = settingspanel.querySelector(".DevilBro-settings-inner");
+		
 		for (let varstr of vars) {
 			varstr = varstr.split(":");
 			let varname = varstr.shift();
-			let varvalue = varstr.join(":");
-			let iscontentvar = varvalue[0] == varvalue[varvalue.length-1] && (varvalue[0] == `"` || varvalue[0] == `'`);
-			varvalue = iscontentvar ? varvalue.slice(1,-1) : varvalue;
-			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCN.flexchild}" style="flex: 0 0 30%; line-height: 38px;">${varname}:</h3><div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex + BDFDB.disCN.directioncolumn}" style="flex: 1 1 auto;"><input type="text" option="${varname}" value="${varvalue}"${iscontentvar ? " iscontent=true" : ""} placeholder="${varvalue}" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16}"></div></div>`;
+			let varvalue = varstr.join(":").trim();
+			$(`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCN.flexchild}" style="flex: 0 0 30%; line-height: 38px;">${varname}:</h3><div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex + BDFDB.disCN.directioncolumn}" style="flex: 1 1 auto;"><input type="text" option="${varname}" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16}"></div></div>`)
+				.appendTo(settingspanelinner)
+				.find(BDFDB.dotCN.input)
+					.val(varvalue)
+					.attr("placeholder", varvalue);
 		}
-		settingshtml += `</div></div>`; 
-		
-		var settingspanel = $(settingshtml)[0];
 
 		BDFDB.initElements(settingspanel);
 
@@ -189,8 +194,7 @@ class ThemeSettings {
 					let newvalue = input.value;
 					if (newvalue && newvalue.trim() && newvalue != oldvalue) {
 						let varname = input.getAttribute("option");
-						if (input.getAttribute("iscontent")) css = css.replace(new RegExp(`--${varname}(\\s*):(\\s*)(["'])${oldvalue}["']`,"g"),`--${varname}$1:$2$3${newvalue}$3`);
-						else css = css.replace(new RegExp(`--${varname}(\\s*):(\\s*)${oldvalue}`,"g"),`--${varname}$1:$2${newvalue}`);
+						css = css.replace(new RegExp(`--${varname}(\\s*):(\\s*)${oldvalue}`,"g"),`--${varname}$1:$2${newvalue}`);
 						amount++;
 					}
 				}
