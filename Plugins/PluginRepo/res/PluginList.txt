@@ -74,7 +74,6 @@ https://raw.githubusercontent.com/Mega-Mewthree/BetterDiscordPlugins/master/Plug
 https://raw.githubusercontent.com/Mega-Mewthree/BetterDiscordPlugins/master/Plugins/RightClickRoleForID/RightClickRoleForID.plugin.js
 https://raw.githubusercontent.com/megamit/repository/gh-pages/renamer/1.5.4/renamer.plugin.js
 https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/AutoCorrect.plugin.js
-https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/AutoRefreshSettingsPanel.plugin.js
 https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/AvatarIconViewer.plugin.js
 https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/BDEmoteAutocomplete.plugin.js
 https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/BetterEmoteSizes.plugin.js
