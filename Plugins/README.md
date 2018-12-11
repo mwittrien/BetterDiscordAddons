@@ -39,5 +39,6 @@
  - [Stalker Notifications](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/StalkerNotifications) - Lets you observe the status of people that aren't your friends.
  - [Steam Profile Link](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SteamProfileLink) - Opens a steam profile in steam instead of a browser when clicking the steamlink in a userprofile. With the help of square.
  - [Theme Repo](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ThemeRepo) - Allows you to preview all themes from the theme repo and download them on the fly.
+ - [Theme Settings](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ThemeSettings) - Allows you to change Theme Variables within BetterDiscord.
  - [Top Role Everywhere](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/TopRoleEverywhere) - Adds the highest role of a user as a tag.
  - [Write UpperCase](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/WriteUpperCase) - Changes the input in the textarea to uppercase.
