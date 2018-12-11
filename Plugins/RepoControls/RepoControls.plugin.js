@@ -99,8 +99,7 @@ class RepoControls {
 			}
 			#bd-settingspane-container .bda-header .bd-reload ~ .trashIcon {
 				right: 78px;
-			}
-			`;
+			}`;
 			
 		this.defaults = {
 			settings: {
@@ -118,7 +117,7 @@ class RepoControls {
 
 	getDescription () {return "Lets you sort and filter your list of downloaded Themes and Plugins.";}
 
-	getVersion () {return "1.2.0";}
+	getVersion () {return "1.2.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -163,6 +162,10 @@ class RepoControls {
 		if (typeof BDFDB === "object") {
 			BDFDB.loadMessage(this);
 			
+			this.fs = require("fs");
+			this.path = require("path");
+			this.dirs = {themes: BDFDB.getThemesFolder(), plugins: BDFDB.getPluginsFolder()};
+			
 			var observer = null;
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -171,7 +174,7 @@ class RepoControls {
 							change.addedNodes.forEach((node) => {
 								if (this.getSettingsPageType(node)) {
 									this.addControls(node.querySelector(".bda-slist"));
-									if (node && node.tagName && node.querySelector(".ui-switch")) {
+									if (node.tagName && node.querySelector(".ui-switch")) {
 										var entry = this.getEntry($(".repo-controls"), $("li").has(node)[0]);
 										if (entry) {
 											if (BDFDB.getData("addDeleteButton", this, "settings")) this.addDeleteButton(entry);
@@ -192,7 +195,7 @@ class RepoControls {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								setImmediate(() => {
-									if (node && node.tagName && node.getAttribute("layer-id") == "user-settings") {
+									if (node.tagName && node.getAttribute("layer-id") == "user-settings") {
 										BDFDB.addObserver(this, node, {name:"innerSettingsWindowObserver"}, {childList:true,subtree:true});
 										if (this.getSettingsPageType(node)) this.addControls(node.querySelector(".bda-slist"));
 									}
@@ -242,10 +245,8 @@ class RepoControls {
 				if (buttonbar && buttonbar.tagName) {
 					var header = buttonbar.querySelector("h2");
 					if (header) {
-						var headerText = header.innerText.toUpperCase();
-						if (headerText === "PLUGINS" || headerText === "THEMES") {
-							return headerText[0] + headerText.slice(1).toLowerCase();
-						}
+						var headerText = BDFDB.getInnerText(header).toLowerCase();
+						if (headerText === "plugins" || headerText === "themes") return headerText;
 					}
 				}
 			}
@@ -259,33 +260,6 @@ class RepoControls {
 		var sortings = BDFDB.getAllData(this, "sortings");
 		
 		var repoControls = $(this.repoControlsMarkup);
-		repoControls.Plugins = {}; 
-		repoControls.Themes = {};
-		var fs = require("fs"), folder = BDFDB.getPluginsFolder(), ending = ".plugin.js";
-		for (var plugin of fs.readdirSync(folder)) {
-			if (plugin.indexOf(ending) == plugin.length - ending.length) {
-				let path = folder + "/" + plugin;
-				let body = fs.readFileSync(path).toString();
-				let result = new RegExp("getName[\\s|\\t|\\n|\\r|=|>|_|:|function|\(|\)|\{|return]*([\"|\'|\`]).*\\1","gi").exec(body);
-				if (result) {
-					repoControls.Plugins[result[0].split(result[1])[1]] = {path, stats: fs.statSync(path)};
-				}
-			}
-		}
-		folder = BDFDB.getThemesFolder(), ending = ".theme.css";
-		for (var theme of fs.readdirSync(folder)) {
-			if (theme.indexOf(ending) == theme.length - ending.length) {
-				let path = folder + "/" + theme;
-				let body = fs.readFileSync(path).toString();
-				if (body.split("*//").length > 1 && body.split("\n").length > 1) {
-					let result = body.replace(new RegExp("\\s*\:\\s*", "g"), ":").replace(new RegExp("\\s*\}\\s*", "g"), "}").split('"name":"');
-					result = result.length > 1 ? result[1].split('",')[0].split('"}')[0] : null;
-					if (result) {
-						repoControls.Themes[result] = {path, stats: fs.statSync(path)};;
-					}
-				}
-			}
-		}
 		BDFDB.initElements(repoControls);
 		repoControls.find(".sort-filter " + BDFDB.dotCN.quickselectvalue).attr("option", sortings.sort).text(this.sortings.sort[sortings.sort]);
 		repoControls.find(".order-filter " + BDFDB.dotCN.quickselectvalue).attr("option", sortings.order).text(this.sortings.order[sortings.order]);
@@ -337,7 +311,8 @@ class RepoControls {
 		let description = li.querySelector(".bda-description").textContent;
 		let enabled = li.querySelector(".ui-switch-checkbox").checked;
 		let type = this.getSettingsPageType();
-		let pathstatscache = type ? repoControls[type][name] : null;
+		let path = type && global[`bd${type}`] && global[`bd${type}`][name] ? this.path.join(this.dirs[type], global[`bd${type}`][name].filename) : null;
+		let stats = path ? this.fs.statSync(path) : null;
 		return {
 			div: 			li,
 			search:			(name + " " + version + " " + author + " " + description).toUpperCase(),
@@ -347,9 +322,9 @@ class RepoControls {
 			author: 		(author).toUpperCase(),
 			description: 	(description).toUpperCase(),
 			type:			type,
-			path:			pathstatscache ? pathstatscache.path : null,
-			adddate:		pathstatscache ? pathstatscache.stats.atime.getTime() : null,
-			moddate:		pathstatscache ? pathstatscache.stats.mtime.getTime() : null,
+			path:			path,
+			adddate:		stats ? stats.atime.getTime() : null,
+			moddate:		stats ? stats.mtime.getTime() : null,
 			enabled:		enabled ? 0 : 1
 		};
 	}
@@ -383,9 +358,9 @@ class RepoControls {
 		$(this.deleteButtonMarkup)
 			.on("click." + this.getName(), () => {
 				var container = document.querySelector(".bda-slist");
-				let type = entry.type ? entry.type.slice(0, -1) : "File";
+				let type = entry.type ? entry.type.slice(0, -1) : "file";
 				if (container && (!BDFDB.getData("confirmDelete", this, "settings") || confirm(`Are you sure you want to delete this ${type}?`))) {
-					require("fs").unlink(entry.path, (error) => {
+					this.fs.unlink(entry.path, (error) => {
 						if (error) {
 							BDFDB.showToast(`Unable to delete ${type} "${entry.origName}". Filename might not be the same as ${type}name.`, {type:"danger"});
 						}
