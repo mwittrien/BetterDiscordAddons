@@ -198,6 +198,7 @@ class ThemeSettings {
 					this.fs.writeFileSync(path, css);
 					BDFDB.showToast(`Updated ${amount} variable${amount == 1 ? "" : "s"} in ${bdthemes[name].filename}`, {type:"success"});
 				}
+				else BDFDB.showToast(`There are no changed variables to be updated in ${bdthemes[name].filename}`, {type:"warning"});
 			}
 			else BDFDB.showToast(`Could not find themefile: ${bdthemes[name].filename}`, {type:"error"});
 		});
