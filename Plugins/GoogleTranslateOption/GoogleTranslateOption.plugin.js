@@ -311,28 +311,27 @@ class GoogleTranslateOption {
 				border: none !important;
 			}
 			
-			${BDFDB.dotCN.textareainner} > ${BDFDB.dotCN.textarea} {
+			${BDFDB.dotCN.textareainner} ${BDFDB.dotCN.textarea} {
 				margin-right: 0px;
 				padding-right: 3px;
 			}
 			
-			${BDFDB.dotCN.textareainner} > ${BDFDB.dotCN.textareapickerbuttons} {
+			${BDFDB.dotCN.textareainner} ${BDFDB.dotCN.textareapickerbuttons} {
 				position: static;
 			}
 			
-			${BDFDB.dotCN.textareainner} > .send-button {
+			${BDFDB.dotCN.textareainner} .send-button {
 				top: calc(50% - 15px);
 				right: 5px;
 			}
 			
-			${BDFDB.dotCN.textareainner} > .send-button,
-			${BDFDB.dotCN.textareainner} > ${BDFDB.dotCN.textareapickerbuttons} > ${BDFDB.dotCN.button} {
+			${BDFDB.dotCN.textareainner} .send-button,
+			${BDFDB.dotCN.textareainner} ${BDFDB.dotCN.button} {
 				max-height: unset;
 			}
 			
-			${BDFDB.dotCN.textareabutton}.translate-button.active {
-				color: #F04747;
-				opacity: 1;
+			${BDFDB.dotCN.textareabuttonwrapper + BDFDB.dotCNS.textareabuttonactive + BDFDB.dotCN.textareabutton}.translate-button {
+				color: #F04747 !important;
 			}
 			
 			${BDFDB.dotCN.textareabutton}.translate-button ${BDFDB.dotCN.textareaicon} {
@@ -340,8 +339,26 @@ class GoogleTranslateOption {
 				width: 24px;
 			}
 			
-			${BDFDB.dotCN.textareabutton}.translate-button.active ${BDFDB.dotCN.textareaicon} {
-				transform: scale(1);
+			${BDFDB.dotCN.textareabutton}.translate-button {
+				color: #4f545c;
+				opacity: 0.3;
+			}
+			${BDFDB.dotCN.textareabuttonwrapper + BDFDB.dotCNS.textareabuttonactive + BDFDB.dotCN.textareabutton}.translate-button,
+			${BDFDB.dotCN.textareabuttonwrapper}:hover ${BDFDB.dotCN.textareabutton}.translate-button {
+				opacity: 1;
+			}
+			${BDFDB.dotCNS.themedark + BDFDB.dotCN.textareabutton}.translate-button {
+				color: #fff;
+			}
+			${BDFDB.dotCN.textareainner} ${BDFDB.dotCN.textarea} ~ .translate-button-wrapper {
+				margin-right: 47px !important;
+				padding-left: 5px !important;
+			}
+			${BDFDB.dotCN.textareainner} ${BDFDB.dotCN.textarea} ~ ${BDFDB.dotCN.button}[style="margin-right: 40px;"] {
+				margin-right: 34px !important;
+			}
+			${BDFDB.dotCN.textareainner} ${BDFDB.dotCN.textarea} ~ ${BDFDB.dotCN.button}[style="margin-right: 40px;"] ~ .translate-button-wrapper {
+				margin-right: 80px !important;
 			}
 			
 			.reverse-button {
@@ -379,7 +396,7 @@ class GoogleTranslateOption {
 
 	getDescription () {return "Adds a Google Translate option to your context menu, which shows a preview of the translated text and on click will open the selected text in Google Translate. Also adds a translation button to your textareas, which will automatically translate the text for you before it is being send. DeepLApi written by square. Thanks ;)";}
 
-	getVersion () {return "1.5.4";}
+	getVersion () {return "1.5.5";}
 	
 	getAuthor () {return "DevilBro, square";}
 	
@@ -705,12 +722,12 @@ class GoogleTranslateOption {
 					})
 					.on("contextmenu." + this.getName(), () => {
 						this.translating = !this.translating;
-						document.querySelectorAll(BDFDB.dotCNS.textareawrapchat + ".translate-button").forEach(btn => {btn.classList.toggle("active", this.translating);});
+						document.querySelectorAll(BDFDB.dotCNS.textareawrapchat + ".translate-button-wrapper").forEach(btn => {btn.classList.toggle(BDFDB.disCN.textareabuttonactive, this.translating);});
 					});
 				if (buttoncontainer) buttoncontainer.insertBefore(button, buttoncontainer.firstElementChild);
 				else textareaWrap.appendChild(button);
 				button.classList.add(textareaInstance.props.type);
-				button.classList.toggle("active", this.translating);
+				button.classList.toggle(BDFDB.disCN.textareabuttonactive, this.translating);
 				$(textarea)
 					.off("input." + this.getName())
 					.on("input." + this.getName(), () => {
@@ -882,7 +899,7 @@ class GoogleTranslateOption {
 		var checkbox = popout[0].querySelector("#translating-checkbox");
 		checkbox.checked = this.translating;
 		$(checkbox).on("click." + this.getName(), () => {
-			button.classList.toggle("active", checkbox.checked);
+			button.classList.toggle(BDFDB.disCN.textareabuttonactive, checkbox.checked);
 			this.translating = checkbox.checked;
 		});
 			
