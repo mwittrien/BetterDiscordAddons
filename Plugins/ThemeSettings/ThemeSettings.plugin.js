@@ -7,7 +7,7 @@ class ThemeSettings {
 
 	getDescription () {return "Allows you to change Theme Variables within BetterDiscord.";}
 
-	getVersion () {return "1.0.2";}
+	getVersion () {return "1.0.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -152,14 +152,12 @@ class ThemeSettings {
 	getThemeVars (css) {
 		let vars = css.split(":root");
 		if (vars.length > 1) {
-			vars = vars[1].replace(/[\t\n\r]/g,"").replace(/\s{2,}/g," ").replace(/\/\*+.*?\*+\//g,"");
+			vars = vars[1].replace(/\t| {2,}/g,"").replace(/\n\/\*.*?\*\//g,"").replace(/[\n\r]/g,"");
 			vars = vars.split("{");
 			vars.shift();
-			vars = vars.join("{").replace(/\s+(;|--)/g,"$1").replace(/(:|;)\s+/g,"$1");
+			vars = vars.join("{").replace(/\s*(:|;|--|\*)\s*/g,"$1");
 			vars = vars.split("}")[0];
-			vars = vars[vars.length -1] == ";" ? vars.slice(0,-1) : vars;
-			vars = vars.slice(2).split(";--");
-			if (vars.length > 1) return vars;
+			return vars.slice(2).split(/;--|\*\/--/);
 		}
 		return [];
 	}
@@ -173,39 +171,44 @@ class ThemeSettings {
 		
 		for (let varstr of vars) {
 			varstr = varstr.split(":");
-			let varname = varstr.shift();
-			let varvalue = varstr.join(":").trim();
-			$(`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCN.flexchild}" style="flex: 0 0 30%; line-height: 38px;">${varname}:</h3><div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex + BDFDB.disCN.directioncolumn}" style="flex: 1 1 auto;"><input type="text" option="${varname}" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16}"></div></div>`)
+			let varname = varstr.shift().trim();
+			varstr = varstr.join(":").split(/;|\/\*/);
+			let varvalue = varstr.shift().trim();
+			let vardescription = varstr.join("").replace(/\*\/|\/\*/g, "").replace(/:/g, ": ").replace(/: \//g, ":/").replace(/--/g, " --").replace(/\( --/g, "(--").trim();
+			$(`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCN.flexchild}" style="flex: 0 0 50%; line-height: 38px;">${varname[0].toUpperCase() + varname.slice(1)}:</h3><div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex + BDFDB.disCN.directioncolumn}" style="flex: 1 1 auto;"><input type="text" option="${varname}" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16}"></div></div>${vardescription ? '<div class="' + BDFDB.disCNS.description + BDFDB.disCNS.note + BDFDB.disCN.primary + ' DevilBro-textscrollwrapper" style="flex: 1 1 auto;"><div class="DevilBro-textscroll">' + BDFDB.encodeToHTML(vardescription) + '</div></div>' : ""}<div class="${BDFDB.disCNS.modaldivider + BDFDB.disCN.modaldividerdefault}"></div></div>`)
 				.appendTo(settingspanelinner)
 				.find(BDFDB.dotCN.input)
 					.val(varvalue)
 					.attr("placeholder", varvalue);
 		}
-
+		let dividers = settingspanelinner.querySelectorAll(BDFDB.dotCN.modaldivider);
+		if (dividers.length) dividers[dividers.length - 1].remove();
+		
 		BDFDB.initElements(settingspanel);
 
-		$(settingspanel).on("click", ".update-button", () => {
-			let path = this.path.join(this.dir, bdthemes[name].filename);
-			let css = this.fs.readFileSync(path).toString();
-			if (css) {
-				let amount = 0;
-				for (let input of settingspanel.querySelectorAll(BDFDB.dotCN.input)) {
-					let oldvalue = input.getAttribute("placeholder");
-					let newvalue = input.value;
-					if (newvalue && newvalue.trim() && newvalue != oldvalue) {
-						let varname = input.getAttribute("option");
-						css = css.replace(new RegExp(`--${varname}(\\s*):(\\s*)${oldvalue}`,"g"),`--${varname}$1:$2${newvalue}`);
-						amount++;
+		$(settingspanel)
+			.on("click", ".update-button", () => {
+				let path = this.path.join(this.dir, bdthemes[name].filename);
+				let css = this.fs.readFileSync(path).toString();
+				if (css) {
+					let amount = 0;
+					for (let input of settingspanel.querySelectorAll(BDFDB.dotCN.input)) {
+						let oldvalue = input.getAttribute("placeholder");
+						let newvalue = input.value;
+						if (newvalue && newvalue.trim() && newvalue != oldvalue) {
+							let varname = input.getAttribute("option");
+							css = css.replace(new RegExp(`--${varname}(\\s*):(\\s*)${oldvalue}`,"g"),`--${varname}$1:$2${newvalue}`);
+							amount++;
+						}
 					}
+					if (amount > 0) {
+						this.fs.writeFileSync(path, css);
+						BDFDB.showToast(`Updated ${amount} variable${amount == 1 ? "" : "s"} in ${bdthemes[name].filename}`, {type:"success"});
+					}
+					else BDFDB.showToast(`There are no changed variables to be updated in ${bdthemes[name].filename}`, {type:"warning"});
 				}
-				if (amount > 0) {
-					this.fs.writeFileSync(path, css);
-					BDFDB.showToast(`Updated ${amount} variable${amount == 1 ? "" : "s"} in ${bdthemes[name].filename}`, {type:"success"});
-				}
-				else BDFDB.showToast(`There are no changed variables to be updated in ${bdthemes[name].filename}`, {type:"warning"});
-			}
-			else BDFDB.showToast(`Could not find themefile: ${bdthemes[name].filename}`, {type:"error"});
-		});
+				else BDFDB.showToast(`Could not find themefile: ${bdthemes[name].filename}`, {type:"error"});
+			});
 		return settingspanel;
 	}
 }
