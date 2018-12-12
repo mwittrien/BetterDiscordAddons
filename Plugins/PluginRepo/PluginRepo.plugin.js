@@ -835,13 +835,10 @@ class PluginRepo {
 			if (!webviewdata) return;
 			webviewrunning = true;
 			let {body, url} = webviewdata;
-			console.log({body, url});
 			let name = body.replace(new RegExp("\\s*\:\\s*", "g"), ":").split('"name":"');
 			if (name.length > 1) {
 				name = name[1].split('"')[0];
-				console.log("1: " + name);
 				webview.getWebContents().executeJavaScript(body).then(() => {
-					console.log("2: " + name);
 					webview.getWebContents().executeJavaScript(` 
 						var p = new ` + name + `(); 
 						var data = {
@@ -852,7 +849,6 @@ class PluginRepo {
 						}; 
 						Promise.resolve(data);`
 					).then((plugin) => {
-						console.log("3: " + name);
 						plugin.url = url;
 						this.loadedPlugins[url] = plugin;
 						var installedPlugin = window.bdplugins[plugin.getName] ? window.bdplugins[plugin.getName].plugin : null;
