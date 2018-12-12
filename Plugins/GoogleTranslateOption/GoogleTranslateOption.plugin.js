@@ -322,7 +322,7 @@ class GoogleTranslateOption {
 			
 			${BDFDB.dotCN.textareainner} .send-button {
 				top: calc(50% - 15px);
-				right: 5px;
+				right: 9px;
 			}
 			
 			${BDFDB.dotCN.textareainner} .send-button,
@@ -330,35 +330,21 @@ class GoogleTranslateOption {
 				max-height: unset;
 			}
 			
+			${BDFDB.dotCN.textareabuttonwrapper}.popout-open ${BDFDB.dotCN.textareabutton}.translate-button {
+				opacity: 1;
+			}
+			
 			${BDFDB.dotCN.textareabuttonwrapper + BDFDB.dotCNS.textareabuttonactive + BDFDB.dotCN.textareabutton}.translate-button {
 				color: #F04747 !important;
 			}
 			
-			${BDFDB.dotCN.textareabutton}.translate-button ${BDFDB.dotCN.textareaicon} {
+			${BDFDB.dotCNS.textareabuttonwrapper + BDFDB.dotCN.textareabutton}.translate-button ${BDFDB.dotCN.textareaicon} {
 				height: 24px;
 				width: 24px;
 			}
 			
-			${BDFDB.dotCN.textareabutton}.translate-button {
-				color: #4f545c;
-				opacity: 0.3;
-			}
-			${BDFDB.dotCN.textareabuttonwrapper + BDFDB.dotCNS.textareabuttonactive + BDFDB.dotCN.textareabutton}.translate-button,
-			${BDFDB.dotCN.textareabuttonwrapper}:hover ${BDFDB.dotCN.textareabutton}.translate-button {
-				opacity: 1;
-			}
-			${BDFDB.dotCNS.themedark + BDFDB.dotCN.textareabutton}.translate-button {
-				color: #fff;
-			}
-			${BDFDB.dotCN.textareainner} ${BDFDB.dotCN.textarea} ~ .translate-button-wrapper {
-				margin-right: 47px !important;
-				padding-left: 5px !important;
-			}
-			${BDFDB.dotCN.textareainner} ${BDFDB.dotCN.textarea} ~ ${BDFDB.dotCN.button}[style="margin-right: 40px;"] {
-				margin-right: 34px !important;
-			}
-			${BDFDB.dotCN.textareainner} ${BDFDB.dotCN.textarea} ~ ${BDFDB.dotCN.button}[style="margin-right: 40px;"] ~ .translate-button-wrapper {
-				margin-right: 80px !important;
+			${BDFDB.dotCN.textareabuttonwrapper}.popout-open ${BDFDB.dotCN.textareabutton}.translate-button ${BDFDB.dotCN.textareaicon} {
+				transform: none;
 			}
 			
 			.reverse-button {
