@@ -182,7 +182,10 @@ class ThemeSettings {
 					.attr("placeholder", varvalue);
 		}
 		let dividers = settingspanelinner.querySelectorAll(BDFDB.dotCN.modaldivider);
-		if (dividers.length) dividers[dividers.length - 1].remove();
+		if (dividers.length) {
+			dividers[dividers.length - 1].style.setProperty("visibility", "hidden", "important");
+			dividers[dividers.length - 1].style.setProperty("margin-top", "0", "important");
+		}
 		
 		BDFDB.initElements(settingspanel);
 
