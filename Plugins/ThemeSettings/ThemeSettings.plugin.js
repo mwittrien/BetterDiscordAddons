@@ -7,7 +7,7 @@ class ThemeSettings {
 
 	getDescription () {return "Allows you to change Theme Variables within BetterDiscord.";}
 
-	getVersion () {return "1.0.3";}
+	getVersion () {return "1.0.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -63,6 +63,7 @@ class ThemeSettings {
 								setImmediate(() => {
 									if (node.tagName && node.getAttribute("layer-id") == "user-settings") {
 										BDFDB.addObserver(this, node, {name:"innerSettingsWindowObserver"}, {childList:true,subtree:true});
+										if (this.isThemesPage(node))for (let li of node.querySelectorAll(".bda-slist > li")) this.addSettingsButton(li);
 									}
 								});
 							});
