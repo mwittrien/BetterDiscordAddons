@@ -9,7 +9,6 @@ https://raw.githubusercontent.com/Anxeal/BDEnhancements/master/plugins/ResizeX/R
 https://raw.githubusercontent.com/Arashiryuu/crap/master/doesNotEqualsInsertion.plugin.js
 https://raw.githubusercontent.com/Arashiryuu/crap/master/greenText.plugin.js
 https://raw.githubusercontent.com/Arashiryuu/crap/master/Miscellanious/backtickInsertion.plugin.js
-https://raw.githubusercontent.com/Arashiryuu/crap/master/Miscellanious/catImg.plugin.js
 https://raw.githubusercontent.com/Arashiryuu/crap/master/Miscellanious/jsMaterialThemeCodeblocks.plugin.js
 https://raw.githubusercontent.com/Arashiryuu/crap/master/Miscellanious/statusProfileContainer.plugin.js
 https://raw.githubusercontent.com/Arashiryuu/crap/master/ToastIntegrated/ChatUserIDsRedux/ChatUserIDsRedux.plugin.js

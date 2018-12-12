@@ -239,7 +239,7 @@ class PluginRepo {
 
 	getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
 
-	getVersion () {return "1.6.1";}
+	getVersion () {return "1.6.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -746,7 +746,7 @@ class PluginRepo {
 				if (!response) {
 					if (url && BDFDB.getAllIndexes(this.foundPlugins, url).length < 2) this.foundPlugins.push(url);
 				}
-				else {
+				else if (body.indexOf("404: Not Found") != 0) {
 					let plugin = {};
 					let bodycopy = body;
 					if (body.length / body.split("\n").length > 1000) {
@@ -835,11 +835,14 @@ class PluginRepo {
 			if (!webviewdata) return;
 			webviewrunning = true;
 			let {body, url} = webviewdata;
+			console.log({body, url});
 			let name = body.replace(new RegExp("\\s*\:\\s*", "g"), ":").split('"name":"');
 			if (name.length > 1) {
 				name = name[1].split('"')[0];
+				console.log("1: " + name);
 				webview.getWebContents().executeJavaScript(body).then(() => {
-					webview.getWebContents().executeJavaScript(`
+					console.log("2: " + name);
+					webview.getWebContents().executeJavaScript(` 
 						var p = new ` + name + `(); 
 						var data = {
 							"getName":p.getName(),
@@ -849,6 +852,7 @@ class PluginRepo {
 						}; 
 						Promise.resolve(data);`
 					).then((plugin) => {
+						console.log("3: " + name);
 						plugin.url = url;
 						this.loadedPlugins[url] = plugin;
 						var installedPlugin = window.bdplugins[plugin.getName] ? window.bdplugins[plugin.getName].plugin : null;
