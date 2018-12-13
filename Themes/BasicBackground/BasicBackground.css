@@ -65,6 +65,7 @@
 .containerUserOver-1U5YnL:after,
 .chat-3bRxxu .inner-zqa7da,
 .messageGroupBlocked-3wrQQX,
+.quickSelectPopoutOption-opKBx9:not(.selected):hover,
 .embedInner-1-fpTo,
 .changeDetails-bk98pu,
 .paginationItem-2lUq0s:not(.selectedPage-3cFHgU),
@@ -161,6 +162,7 @@
 #autocomplete-popout .row.selected,
 .friendSelected--wQP3f,
 .paginator-166-09,
+.quickSelectPopoutOption-opKBx9.selected,
 .payment-xT17Mq,
 .tier1Banner-1B_WXY,
 .paymentPane-3bwJ6A,
@@ -208,7 +210,10 @@ button.guild-1EfMGQ {
 	right: -30px;
 	border-left: 20px solid rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 3)) !important;
 }
-
+.check-2by_h9 {
+	-webkit-mask: url(https://discordapp.com/assets/6acb20d5e709b34b6a7f36ec13648666.svg) center/cover no-repeat !important;
+	background: rgb(var(--vaccentcolor)) !important;
+}
 .applicationStore-1pNvnv .home-2gmu2h {
 	padding-top: 5px;
 }
@@ -899,8 +904,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .overlappingBorder-1ysb12,
 .selected-mKYnfr.option-n0icdO,
 .wrapper-3jrx9n:not(.disabledSelected-2Kf0yZ),
-.regionSelect-3lf4eE:hover 
-.regionSelectInner-24f4Ce, 
+.regionSelect-3lf4eE:hover .regionSelectInner-24f4Ce, 
 .regionSelect-3lf4eE:hover button,
 .hasMore-3e72_v button,
 .hasMore-sul95G button,
@@ -1301,13 +1305,21 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 }
 .popout-3sVMXz[style*="translateY(-100%)"] > .userPopout-3XzG_A {
 	position: absolute !important;
-	bottom: -20px !important;
-	left: -120px !important;
+	bottom: -10px !important;
+	left: 10px !important;
 }
 .popout-3sVMXz[style*="translateY(-100%)"] > .attachPopout-1n-ZKM {
 	position: absolute !important;
 	bottom: -15px !important;
 	left: 3px !important;
+}
+.popout-3sVMXz[style*="translateX(-5"] > .regionSelectPopout-p9-0_W {
+	position: absolute !important;
+	right: -70px !important;
+}
+.popout-3sVMXz[style*="translateX(-6"] > .regionSelectPopout-p9-0_W {
+	position: absolute !important;
+	right: -50px !important;
 }
 .popout-3sVMXz .menu-Sp6bN1.alt-3btY0e {
 	top: -235px !important;
