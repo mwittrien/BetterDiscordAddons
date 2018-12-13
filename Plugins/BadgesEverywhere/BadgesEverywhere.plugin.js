@@ -5,26 +5,23 @@ class BadgesEverywhere {
 		this.css = ` 
 			.BE-badge {
 				display: inline-block;
-				background-position: 50%;
-				background-repeat: no-repeat;
-				background-size: contain;
-				height: 17px;
-				margin: 0 2px;
+				height: 17px !important;
+				margin: 0 2px !important;
 			}
-			.BE-badge-chat {
-				margin-bottom: -3px;
+			.BE-badge.BE-badge-chat {
+				margin-bottom: -3px !important;
 			}
-			.BE-badge-popout {
-				margin-bottom: -2px;
+			.BE-badge.BE-badge-popout {
+				margin-bottom: -2px !important;
 			}
-			.BE-badge-settings {
+			.BE-badge.BE-badge-settings {
 				width: 30px !important;
 			}
-			.BE-badge:first-of-type {
-				margin-left: 5px;
+			.BE-badge.BE-badge:first-of-type {
+				margin-left: 5px !important;
 			}
-			.BE-badge:last-of-type {
-				margin-right: 5px;
+			.BE-badge.BE-badge:last-of-type {
+				margin-right: 5px !important;
 			}
 			.BE-badge.BE-badge-Staff {width:17px !important; min-width:17px !important;}
 			.BE-badge.BE-badge-Partner {width:22px !important; min-width:22px !important;}
@@ -43,7 +40,7 @@ class BadgesEverywhere {
 		this.badges = {
 			1:			{name:"Staff",					selector:"profileBadgeStaff"},
 			2:			{name:"Partner",				selector:"profileBadgePartner"},
-			4:			{name:"HypeSquad",				selector:"profileBadgeHypeSquad"},
+			4:			{name:"HypeSquad",				selector:"profileBadgeHypesquad"},
 			8:			{name:"BugHunter",				selector:"profileBadgeBugHunter"},
 			16:			{name:"MFASMS",					selector:false},
 			32:			{name:"PROMODISMISSED",			selector:false},
@@ -71,7 +68,7 @@ class BadgesEverywhere {
 
 	getDescription () {return "Displays Badges (Nitro, HypeSquad, etc...) in the chat/memberlist/userpopout. Thanks for Zerebos' help.";}
 
-	getVersion () {return "1.1.4";}
+	getVersion () {return "1.1.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -299,7 +296,7 @@ class BadgesEverywhere {
 			for (let flag in this.badges) {
 				if ((this.loadedusers[id].flags | flag) == this.loadedusers[id].flags && !blacklist[flag]) {
 					let badge = document.createElement("div");
-					badge.className = `BE-badge BE-badge-${this.badges[flag].name.replace(/ /g, "")} BE-badge-${type} ${this.BadgeClasses[this.badges[flag].selector].split(" ")[0]}`;
+					badge.className = `BE-badge BE-badge-${this.badges[flag].name.replace(/ /g, "")} BE-badge-${type} ${this.BadgeClasses[this.badges[flag].selector]}`;
 					badgewrapper.appendChild(badge);
 					$(badge).on("mouseenter." + this.getName(), (e) => {
 						BDFDB.createTooltip(this.badges[flag].name, e.currentTarget, {"type":type == "list" ? "left" : "top"});
