@@ -112,29 +112,21 @@ class EditUsers {
 										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstart + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;">
 											<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">REPLACE_modal_colorpicker1_text</h3>
 										</div>
-										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
-											<div class="swatches1"></div>
-										</div>
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8} swatches" style="flex: 1 1 auto;"></div>
 										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstart + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;">
 											<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">REPLACE_modal_colorpicker2_text</h3>
 										</div>
-										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
-											<div class="swatches2"></div>
-										</div>
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8} swatches" style="flex: 1 1 auto;"></div>
 									</div>
 									<div tab="tag" class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20} tab-content" style="flex: 1 1 auto;">
 										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstart + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;">
 											<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">REPLACE_modal_colorpicker3_text</h3>
 										</div>
-										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
-											<div class="swatches3"></div>
-										</div>
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8} swatches" style="flex: 1 1 auto;"></div>
 										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstart + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;">
 											<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">REPLACE_modal_colorpicker4_text</h3>
 										</div>
-										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
-											<div class="swatches4"></div>
-										</div>
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8} swatches" style="flex: 1 1 auto;"></div>
 										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
 											<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">REPLACE_modal_ignoretagcolor_text</h3>
 											<div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;">
@@ -177,7 +169,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "2.4.6";}
+	getVersion () {return "2.4.7";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -553,7 +545,7 @@ class EditUsers {
 		var tag =				data ? data.tag : null;
 		var url =				data ? data.url : null;
 		var removeIcon =		data ? data.removeIcon : false;
-		var ignoreTagColor =	data && data.ignoreTagColor ? data.ignoreTagColor : false;
+		var ignoreTagColor =	data ? data.ignoreTagColor : false;
 		var color1 =			data ? data.color1 : null;
 		var color2 =			data ? data.color2 : null;
 		var color3 =			data ? data.color3 : null;
@@ -571,19 +563,19 @@ class EditUsers {
 		userSettingsModal.find("#input-userurl").addClass(url ? "valid" : "");
 		userSettingsModal.find("#input-userurl").prop("disabled", removeIcon);
 		userSettingsModal.find("#input-removeicon").prop("checked", removeIcon);
-		userSettingsModal.find(".swatches3, .swatches4").toggleClass("disabled", ignoreTagColor);
+		userSettingsModal.find(".swatches[swatchnr='3'], .swatches[swatchnr='4']").toggleClass("disabled", ignoreTagColor);
 		userSettingsModal.find("#input-ignoretagcolor").prop("checked", ignoreTagColor);
-		BDFDB.setColorSwatches(color1, userSettingsModal.find(".swatches1"), "swatch1");
-		BDFDB.setColorSwatches(color2, userSettingsModal.find(".swatches2"), "swatch2");
-		BDFDB.setColorSwatches(color3, userSettingsModal.find(".swatches3"), "swatch3");
-		BDFDB.setColorSwatches(color4, userSettingsModal.find(".swatches4"), "swatch4");
+		BDFDB.setColorSwatches(userSettingsModal, color1);
+		BDFDB.setColorSwatches(userSettingsModal, color2);
+		BDFDB.setColorSwatches(userSettingsModal, color3);
+		BDFDB.setColorSwatches(userSettingsModal, color4);
 		BDFDB.appendModal(userSettingsModal);
 		userSettingsModal
 			.on("click", "#input-removeicon", (event) => {
-				userSettingsModal.find("#input-userurl").prop("disabled", event.target.checked);
+				userSettingsModal.find("#input-userurl").prop("disabled", event.currentTarget.checked);
 			})
 			.on("click", "#input-ignoretagcolor", (event) => {
-				userSettingsModal.find(".swatches3, .swatches4").toggleClass("disabled", event.target.checked);
+				userSettingsModal.find(".swatches[swatchnr='3'], .swatches[swatchnr='4']").toggleClass("disabled", event.currentTarget.checked);
 			})
 			.on("change keyup paste", "#input-userurl", (event) => {
 				this.checkUrl(userSettingsModal, event);
@@ -625,10 +617,10 @@ class EditUsers {
 					}
 				}
 				
-				color1 = BDFDB.getSwatchColor("swatch1");
-				color2 = BDFDB.getSwatchColor("swatch2");
-				color3 = BDFDB.getSwatchColor("swatch3");
-				color4 = BDFDB.getSwatchColor("swatch4");
+				color1 = BDFDB.getSwatchColor(userSettingsModal, 1);
+				color2 = BDFDB.getSwatchColor(userSettingsModal, 2);
+				color3 = BDFDB.getSwatchColor(userSettingsModal, 3);
+				color4 = BDFDB.getSwatchColor(userSettingsModal, 4);
 				
 				if (name == null && tag == null && url == null && !removeIcon && !ignoreTagColor && color1 == null && color2 == null && color3 == null && color4 == null) {
 					BDFDB.removeData(info.id, this, "users")
@@ -669,10 +661,10 @@ class EditUsers {
 	createNoticeTooltip (e) {
 		$(BDFDB.dotCN.tooltips).find(".notice-tooltip").remove();
 		
-		var input = e.target;
-		var disabled = $(input).prop("disabled");
-		var valid = $(input).hasClass("valid");
-		var invalid = $(input).hasClass("invalid");
+		var input = e.currentTarget;
+		var disabled = input.disabled;
+		var valid = input.classList.contains("valid");
+		var invalid = input.classList.contains("invalid");
 		if (disabled || valid || invalid) {
 			var text = disabled ? this.labels.modal_ignoreurl_text : valid ? this.labels.modal_validurl_text : this.labels.modal_invalidurl_text;
 			var bgColor = disabled ? "#282524" : valid ? "#297828" : "#8C2528";

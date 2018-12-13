@@ -59,9 +59,7 @@ class EditChannels {
 										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstart + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;">
 											<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">REPLACE_modal_colorpicker1_text</h3>
 										</div>
-										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
-											<div class="swatches1"></div>
-										</div>
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8} swatches" style="flex: 1 1 auto;"></div>
 									</div>
 								</div>
 							</div>
@@ -86,7 +84,7 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "3.7.6";}
+	getVersion () {return "3.7.7";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -283,7 +281,7 @@ class EditChannels {
 		channelSettingsModal.find(BDFDB.dotCN.modalguildname).text(info.name);
 		channelSettingsModal.find("#input-channelname").val(name);
 		channelSettingsModal.find("#input-channelname").attr("placeholder", info.name);
-		BDFDB.setColorSwatches(color, channelSettingsModal.find(".swatches1"), "swatch1");
+		BDFDB.setColorSwatches(channelSettingsModal, color);
 		BDFDB.appendModal(channelSettingsModal);
 		channelSettingsModal
 			.on("click", ".btn-save", (event) => {
@@ -296,14 +294,14 @@ class EditChannels {
 					}
 				}
 				
-				color = BDFDB.getSwatchColor("swatch1");
+				color = BDFDB.getSwatchColor(channelSettingsModal, 1);
 				if (color) {
 					if (color[0] < 30 && color[1] < 30 && color[2] < 30) BDFDB.colorCHANGE(color, 30);
 					else if (color[0] > 225 && color[1] > 225 && color[2] > 225) BDFDB.colorCHANGE(color, -30);
 				}
 				
 				if (name == null && color == null) {
-					this.removeChannelData(info.id);
+					this.removeChannelData(info);
 				}
 				else {
 					BDFDB.saveData(info.id, {name,color}, this, "channels");

@@ -473,11 +473,4 @@ class ChatAliases {
 		}
 		return string;
 	}
-
-	replaceWord (string, regex) {
-		let result = regex.exec(string), rest = "";
-		if (result) {
-			rest = string.slice(a.indexOf(b)+b.length);
-		}
-	}
 }
