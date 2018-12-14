@@ -86,7 +86,7 @@ class ShowHiddenChannels {
 
 	getDescription () {return "Displays channels that are hidden from you by role restrictions.";}
 
-	getVersion () {return "2.3.6";}
+	getVersion () {return "2.3.7";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -310,6 +310,7 @@ class ShowHiddenChannels {
 						let channelicon = channel.querySelector(BDFDB.dotCN.channelcontent);
 						let channelsvg = channel.querySelector(BDFDB.dotCN.channelicon);
 						let channelname = channel.querySelector(BDFDB.dotCN.channelname);
+						this.setReactInstanceOfChannel(hiddenChannel, channel);
 						channelname.innerText = hiddenChannel.name;
 						$(channel)
 							.on("mouseenter mouseleave", BDFDB.dotCN.channelwrapper, (e) => {
@@ -338,6 +339,7 @@ class ShowHiddenChannels {
 						let channelicon = channel.querySelector(BDFDB.dotCN.channelcontent);
 						let channelsvg = channel.querySelector(BDFDB.dotCN.channelicon);
 						let channelname = channel.querySelector(BDFDB.dotCN.channelname);
+						this.setReactInstanceOfChannel(hiddenChannel, channel);
 						channelname.innerText = hiddenChannel.name;
 						$(channel)
 							.on("mouseenter mouseleave", BDFDB.dotCN.channelwrapper, (e) => {
@@ -365,6 +367,7 @@ class ShowHiddenChannels {
 						let channelwrapper = channel.querySelector(BDFDB.dotCN.categorywrappercollapsed);
 						let channelsvg = channel.querySelector(BDFDB.dotCN.categoryiconcollapsed);
 						let channelname = channel.querySelector(BDFDB.dotCN.categorynamecollapsed);
+						this.setReactInstanceOfChannel(hiddenChannel, channel);
 						channelname.innerText = hiddenChannel.name;
 						$(channel)
 							.on("mouseenter mouseleave", BDFDB.dotCN.flex, (e) => {
@@ -415,11 +418,18 @@ class ShowHiddenChannels {
 		}
 	}
 	
+	setReactInstanceOfChannel (info, div) {
+		var reactInstance = this.React.createElement(div);
+		reactInstance.memoizedProps = {channel:info};
+		div.__reactInternalInstance = reactInstance;
+	}
+	
 	createHiddenObjContextMenu (serverObj, hiddenObj, type, e) {
 		e.preventDefault();
 		e.stopPropagation();
 		var contextMenu = $(`<div class="${BDFDB.disCN.contextmenu} ShowHiddenChannelsContextMenu">${BDFDB.isPluginEnabled("PermissionsViewer") ? '<div class="' + BDFDB.disCN.contextmenuitemgroup + '"><div class="' + BDFDB.disCN.contextmenuitem + '" style="display: none !important;"></div></div>' : ''}<div class="${BDFDB.disCN.contextmenuitemgroup}"><div class="${BDFDB.disCN.contextmenuitem} copyid-item"><span>${BDFDB.LanguageStrings.COPY_ID}</span><div class="${BDFDB.disCN.contextmenuhint}"></div></div></div></div>`);
 		var reactInstance = this.React.createElement(contextMenu[0]);
+		reactInstance.memoizedProps = {displayName:"ChannelDeleteGroup",guild:serverObj.data,channel:hiddenObj};
 		reactInstance.return = {memoizedProps:{type:("CHANNEL_LIST_" + type),guild:serverObj.data,channel:hiddenObj}};
 		contextMenu[0].__reactInternalInstance = reactInstance;
 		contextMenu
