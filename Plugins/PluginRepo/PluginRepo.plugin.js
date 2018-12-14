@@ -758,7 +758,7 @@ class PluginRepo {
 				if (!response) {
 					if (url && BDFDB.getAllIndexes(this.foundPlugins, url).length < 2) this.foundPlugins.push(url);
 				}
-				else if (body.indexOf("404: Not Found") != 0) {
+				else if (body && body.indexOf("404: Not Found") != 0 && response.statusCode == 200) {
 					let plugin = {};
 					let bodycopy = body;
 					if (body.length / body.split("\n").length > 1000) {

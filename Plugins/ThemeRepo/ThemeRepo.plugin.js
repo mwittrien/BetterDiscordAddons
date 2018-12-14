@@ -867,7 +867,7 @@ class ThemeRepo {
 				if (!response) {
 					if (url && BDFDB.getAllIndexes(this.foundThemes, url).length < 2) this.foundThemes.push(url);
 				}
-				else {
+				else if (body && body.indexOf("404: Not Found") != 0 && response.statusCode == 200) {
 					let theme = {};
 					let text = body;
 					if (text.split("*//").length > 1 && text.split("\n").length > 1) {
