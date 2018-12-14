@@ -179,6 +179,7 @@ https://raw.githubusercontent.com/satoru8/Collection/master/Anime/Miku2.theme.cs
 https://raw.githubusercontent.com/satoru8/Collection/master/Anime/yugioh.theme.css
 https://raw.githubusercontent.com/satoru8/Collection/master/Games/mhw.theme.css
 https://raw.githubusercontent.com/satoru8/FullSizePfp/master/FullSizePfp.theme.css
+https://raw.githubusercontent.com/satoru8/FullTransparency/master/FullTransparency.theme.css
 https://raw.githubusercontent.com/satoru8/NovaFork/master/Nova.theme.css
 https://raw.githubusercontent.com/satoru8/Nyx/master/Nyx.theme.css
 https://raw.githubusercontent.com/satoru8/StarterTheme/master/StarterTheme.theme.css
