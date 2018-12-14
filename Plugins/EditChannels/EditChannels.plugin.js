@@ -84,7 +84,7 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "3.7.7";}
+	getVersion () {return "3.7.8";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -324,18 +324,20 @@ class EditChannels {
 	resetChannel (channelObj) {
 		if (!channelObj || !channelObj.div) return;
 		
+		if (typeof channelObj.div.editChannelsObserver == "object") channelObj.div.editChannelsObserver.disconnect();
+		
 		var channel = channelObj.div.querySelector(BDFDB.dotCNC.channelname + BDFDB.dotCN.categorycolortransition);
 	
-		$(channelObj.div)
-			.removeAttr("custom-editchannels");
-		$(channel)
-			.css("color", "");
+		channelObj.div.removeAttribute("custom-editchannels");
+		channel.style.removeProperty("color");
 			
 		BDFDB.setInnerText(channel, channelObj.name);
 	}
 	
 	loadChannel (channelObj) {
 		if (!channelObj || !channelObj.div) return;
+		
+		if (typeof channelObj.div.editChannelsObserver == "object") channelObj.div.editChannelsObserver.disconnect();
 		
 		var channel = channelObj.div.querySelector(BDFDB.dotCNC.channelname + BDFDB.dotCN.categorycolortransition);
 		
@@ -344,10 +346,12 @@ class EditChannels {
 			var name = data.name ? data.name : channelObj.name;
 			var color = data.color ? this.chooseColor(channel, data.color) : "";
 			
-			$(channelObj.div)
-				.attr("custom-editchannels", true);
-			$(channel)
-				.css("color", color);
+			channelObj.div.setAttribute("custom-editchannels", true);
+			channel.style.setProperty("color", color);
+			if (color) {
+				channelObj.div.editChannelsObserver = new MutationObserver(() => {channel.style.setProperty("color", this.chooseColor(channel, color));});
+				channelObj.div.editChannelsObserver.observe(channelObj.div, {attributes:true,characterData:true,subtree:true});
+			}
 				
 			BDFDB.setInnerText(channel, name);
 		}
@@ -369,16 +373,13 @@ class EditChannels {
 			if (info) {
 				var data = BDFDB.loadData(info.id, this, "channels");
 				var name = data && data.name ? data.name : info.name;
-				var color = data && data.color ? BDFDB.color2RGB(data.color) : "";
-				BDFDB.setInnerText(channel, name);
-				$(channel).css("color", color);
+				var color = data && data.color ? BDFDB.colorCONVERT(data.color, "RGB") : "";
 				
-				if (data && (data.name || data.color)) {
-					$(channelHeader).attr("custom-editchannelsheader", true);
-				}
-				else {
-					$(channelHeader).removeAttr("custom-editchannelsheader");
-				}
+				if (data && (data.name || data.color)) channelHeader.setAttribute("custom-editchannelsheader", true);
+				else channelHeader.removeAttribute("custom-editchannelsheader");
+				channel.style.setProperty("color", color);
+				
+				BDFDB.setInnerText(channel, name);
 			}
 		}
 	}
@@ -394,9 +395,11 @@ class EditChannels {
 			var info = BDFDB.getKeyInformation({"node":channelHeader, "key":"channel"});
 			if (info) {
 				var channel = channelHeader.querySelector(BDFDB.dotCN.channelheaderchannelname);
+				
+				channelHeader.removeAttribute("custom-editchannelsheader");
+				channel.style.removeProperty("color");
+				
 				BDFDB.setInnerText(channel, info.name);
-				$(channel).css("color", "");
-				$(channelHeader).removeAttr("custom-editchannelsheader");
 			}
 		}
 	}
@@ -412,7 +415,7 @@ class EditChannels {
 			if (channel.className.indexOf("nameSelected") > -1 || channel.className.indexOf("nameHovered") > -1 || channel.className.indexOf("nameUnread") > -1) {
 				color = BDFDB.colorCHANGE(color, 50);
 			}
-			return BDFDB.color2RGB(color);
+			return BDFDB.colorCONVERT(color, "RGB");
 		}
 		return null;
 	}
