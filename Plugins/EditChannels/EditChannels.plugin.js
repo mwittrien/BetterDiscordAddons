@@ -389,7 +389,7 @@ class EditChannels {
 					changes.forEach(
 						(change, i) => {
 							if (change.type == "attributes" && change.attributeName == "class") {
-								let choosencolor = this.chooseColor(channel, color);
+								let choosencolor = this.chooseColor(channel, data.color);
 								unread = channelObj.div.querySelector(BDFDB.dotCN.channelunread);
 								channel.style.setProperty("color", choosencolor, "important");
 								if (settings.changeChannelIcon) icon.style.setProperty("color", choosencolor, "important");
