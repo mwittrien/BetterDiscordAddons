@@ -88,7 +88,7 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "3.7.9";}
+	getVersion () {return "3.8.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -347,15 +347,20 @@ class EditChannels {
 		if (!channelObj || !channelObj.div) return;
 		
 		var channel = channelObj.div.querySelector(BDFDB.dotCNC.channelname + BDFDB.dotCN.categorycolortransition);
-		var icon = channelObj.div.querySelector(BDFDB.dotCN.channelicon);
-		var unread = channelObj.div.querySelector(BDFDB.dotCN.channelunread);
 		
 		if (channel.EditChannelsObserver && typeof channel.EditChannelsObserver.disconnect == "function") channel.EditChannelsObserver.disconnect();
 	
 		channelObj.div.removeAttribute("custom-editchannels");
 		channel.style.removeProperty("color");
-		icon.style.removeProperty("color");
-		icon.style.removeProperty("opacity");
+		channel.parentElement.querySelectorAll("svg [oldstroke]").forEach(icon => {
+			icon.setAttribute("stroke", icon.getAttribute("oldstroke"));
+			icon.removeAttribute("oldstroke");
+		});
+		channel.parentElement.querySelectorAll("svg [oldfill]").forEach(icon => {
+			icon.setAttribute("fill", icon.getAttribute("oldfill"));
+			icon.removeAttribute("oldfill");
+		});
+		var unread = channel.parentElement.querySelector(BDFDB.dotCN.channelunread);
 		if (unread) unread.style.removeProperty("background-color");
 			
 		BDFDB.setInnerText(channel, channelObj.name);
@@ -365,43 +370,49 @@ class EditChannels {
 		if (!channelObj || !channelObj.div) return;
 		
 		var channel = channelObj.div.querySelector(BDFDB.dotCNC.channelname + BDFDB.dotCN.categorycolortransition);
-		var icon = channelObj.div.querySelector(BDFDB.dotCN.channelicon);
 		var unread = channelObj.div.querySelector(BDFDB.dotCN.channelunread);
 		
 		if (channel.EditChannelsObserver && typeof channel.EditChannelsObserver.disconnect == "function") channel.EditChannelsObserver.disconnect();
 		
 		var data = BDFDB.loadData(channelObj.id, this, "channels");
 		if (data) {
-			var settings = BDFDB.getAllData(this, "settings");
-			
 			var name = data.name ? data.name : channelObj.name;
 			var color = data.color ? this.chooseColor(channel, data.color) : "";
 			
-			channelObj.div.setAttribute("custom-editchannels", true);
-			channel.style.setProperty("color", color, "important");
-			if (settings.changeChannelIcon) {
-				icon.style.setProperty("color", color, "important");
-				icon.style.setProperty("opacity", 1, "important");
-			}
-			if (unread && settings.changeUnreadIndicator) unread.style.setProperty("background-color", color);
+			this.colorChannel(channel, this.chooseColor(channel, color));
 			if (color) {
 				channel.EditChannelsObserver = new MutationObserver((changes, _) => {
 					changes.forEach(
 						(change, i) => {
-							if (change.type == "attributes" && change.attributeName == "class") {
-								let choosencolor = this.chooseColor(channel, data.color);
-								unread = channelObj.div.querySelector(BDFDB.dotCN.channelunread);
-								channel.style.setProperty("color", choosencolor, "important");
-								if (settings.changeChannelIcon) icon.style.setProperty("color", choosencolor, "important");
-								if (unread && settings.changeUnreadIndicator) unread.style.setProperty("background-color", choosencolor);
+							if (change.type == "childList" && change.target.classList.contains(BDFDB.disCN.channelactionicon) || change.type == "attributes" && change.attributeName == "class" && change.target.className.length && change.target.className.indexOf("name") > -1) {
+								this.colorChannel(channel, this.chooseColor(channel, data.color));
 							}
 						}
 					);
 				});
-				channel.EditChannelsObserver.observe(channel, {attributes:true});
+				channel.EditChannelsObserver.observe(channel.parentElement, {attributes:true, childList:true, subtree:true});
 			}
 				
 			BDFDB.setInnerText(channel, name);
+		}
+	}
+	
+	colorChannel (channel, color) {
+		var settings = BDFDB.getAllData(this, "settings");
+		channel.style.setProperty("color", color, "important");
+		if (settings.changeChannelIcon) {
+			channel.parentElement.querySelectorAll("svg [stroke='currentColor'], svg [stroke='#ffffff'], svg [oldstroke]").forEach(icon => {
+				icon.setAttribute("oldstroke", icon.getAttribute("oldstroke") || icon.getAttribute("stroke"));
+				icon.setAttribute("stroke", color, "important");
+			});
+			channel.parentElement.querySelectorAll("svg [fill='currentColor'], svg [fill='#ffffff'], svg [oldfill]").forEach(icon => {
+				icon.setAttribute("oldfill", icon.getAttribute("oldfill") || icon.getAttribute("fill"));
+				icon.setAttribute("fill", color, "important");
+			});
+		}
+		if (settings.changeUnreadIndicator) {
+			var unread = channel.parentElement.querySelector(BDFDB.dotCN.channelunread);
+			if (unread) unread.style.setProperty("background-color", color, "important");
 		}
 	}
 	
@@ -455,13 +466,13 @@ class EditChannels {
 	chooseColor (channel, color) {
 		if (color && channel && channel.className) {
 			if (channel.className.indexOf("nameMuted") > -1 || channel.className.indexOf("nameLocked") > -1) {
-				color = BDFDB.colorCHANGE(color, -50);
+				color = BDFDB.colorCHANGE(color, -0.5);
 			}
 			if (channel.className.indexOf("nameDefault") > -1) {
 				color = color;
 			}
 			if (channel.className.indexOf("nameSelected") > -1 || channel.className.indexOf("nameHovered") > -1 || channel.className.indexOf("nameUnread") > -1) {
-				color = BDFDB.colorCHANGE(color, 50);
+				color = BDFDB.colorCHANGE(color, 0.5);
 			}
 			return BDFDB.colorCONVERT(color, "RGB");
 		}
