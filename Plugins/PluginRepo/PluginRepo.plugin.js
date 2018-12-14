@@ -17,7 +17,7 @@ class PluginRepo {
 			}
 		};
 		
-		this.loading = false;
+		this.loading = {is:false, timeout:null, amount:0};
 		
 		this.grabbedPlugins = [];
 		this.foundPlugins = [];
@@ -239,7 +239,7 @@ class PluginRepo {
 
 	getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
 
-	getVersion () {return "1.6.2";}
+	getVersion () {return "1.6.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -266,7 +266,10 @@ class PluginRepo {
 			.on("keyup", "#input-pluginurl", (e) => {if (e.which == 13) this.addPluginToOwnList(settingspanel);})
 			.on("click", ".remove-plugin", (e) => {this.removePluginFromOwnList(e);})
 			.on("click", ".remove-all", () => {this.removeAllFromOwnList(settingspanel);})
-			.on("click", ".refresh-button", () => {this.loadPlugins();});
+			.on("click", ".refresh-button", () => {
+				this.loading = {is:false, timeout:null, amount:0};
+				this.loadPlugins();
+			});
 		return settingspanel;
 	}
 
@@ -356,6 +359,7 @@ class PluginRepo {
 	stop () {
 		if (typeof BDFDB === "object") {
 			clearInterval(this.updateInterval);
+			clearTimeout(this.loading.timeout);
 						
 			$("webview[webview-pluginrepo], .pluginrepo-modal, .bd-pluginrepobutton, .pluginrepo-loadingicon").remove();
 			$(BDFDB.dotCN.app + " > .repo-loadingwrapper:empty").remove();
@@ -381,7 +385,7 @@ class PluginRepo {
 											if (innerEntry.textContent == "Themes") {
 												$(this.settingsContextEntryMarkup)
 													.on("click", () => {
-														if (!this.loading) $(context).hide();
+														if (!this.loading.is) $(context).hide();
 														this.openPluginRepoModal();
 													})
 													.insertAfter(innerEntry);
@@ -462,7 +466,7 @@ class PluginRepo {
 	}
 	
 	openPluginRepoModal (showOnlyOutdated = false) {
-		if (this.loading) {
+		if (this.loading.is) {
 			BDFDB.showToast(`Plugins are still being fetched. Try again in some seconds.`, {type:"danger"});
 			return;
 		}
@@ -681,7 +685,13 @@ class PluginRepo {
 				this.loadedPlugins = {};
 				this.grabbedPlugins = result.split("\n");
 				this.foundPlugins = this.grabbedPlugins.concat(BDFDB.loadData("ownlist", this, "ownlist") || []);
-				this.loading = true;
+				this.loading = {is:true, timeout:setTimeout(() => {
+					clearTimeout(this.loading.timeout);
+					if (this.started) {
+						if (this.loading.is && this.loading.amount < 4) setTimeout(() => {this.loadPlugins();},10000);
+						this.loading = {is: false, timeout:null, amount:this.loading.amount};
+					}
+				},1200000), amount:this.loading.amount+1};
 				var loadingiconwrapper = document.querySelector(BDFDB.dotCN.app + "> .repo-loadingwrapper");
 				if (!loadingiconwrapper) {
 					loadingiconwrapper = document.createElement("div");
@@ -695,16 +705,18 @@ class PluginRepo {
 				createWebview().then(() => {
 					getPluginInfo(() => {
 						if (!this.started) {
+							clearTimeout(this.loading.timeout);
 							if (typeof webview != "undefined") webview.remove();
 							return;
 						}
 						var finishCounter = 0, finishInterval = setInterval(() => { 
-							if ((webviewqueue.length == 0 && !webviewrunning) || finishCounter > 300) {
+							if ((webviewqueue.length == 0 && !webviewrunning) || finishCounter > 300 || !this.loading.is) {
 								clearInterval(finishInterval);
 								if (typeof webview != "undefined") webview.remove();
 								$(".pluginrepo-loadingicon").remove();
 								if (!loadingiconwrapper.firstChild) loadingiconwrapper.remove();
-								this.loading = false;
+								clearTimeout(this.loading.timeout);
+								this.loading = {is:false, timeout:null, amount:this.loading.amount};
 								console.log("PluginRepo: Finished fetching Plugins.");
 								if (document.querySelector(".bd-pluginrepobutton")) BDFDB.showToast(`Finished fetching Plugins.`, {type:"success"});
 								if (outdated > 0) {
@@ -736,7 +748,7 @@ class PluginRepo {
 		});
 		
 		getPluginInfo = (callback) => {
-			if (i >= this.foundPlugins.length || !this.started) {
+			if (i >= this.foundPlugins.length || !this.started || !this.loading.is) {
 				callback();
 				return;
 			}
@@ -865,7 +877,10 @@ class PluginRepo {
 	checkForNewPlugins () {
 		let request = require("request");
 		request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/PluginRepo/res/PluginList.txt", (error, response, result) => {
-			if (response && !BDFDB.equals(result.split("\n"), this.grabbedPlugins)) this.loadPlugins();
+			if (response && !BDFDB.equals(result.split("\n"), this.grabbedPlugins)) {
+				this.loading = {is:false, timeout:null, amount:0};
+				this.loadPlugins();
+			}
 		});
 	}
 	

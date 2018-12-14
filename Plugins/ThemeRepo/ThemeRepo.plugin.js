@@ -17,7 +17,7 @@ class ThemeRepo {
 			}
 		};
 		
-		this.loading = false;
+		this.loading = {is:false, timeout:null, amount:0};
 		
 		this.grabbedThemes = [];
 		this.foundThemes = [];
@@ -291,7 +291,7 @@ class ThemeRepo {
 
 	getDescription () {return "Allows you to preview all themes from the theme repo and download them on the fly. Repo button is in the theme settings.";}
 
-	getVersion () {return "1.5.8";}
+	getVersion () {return "1.5.9";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -318,7 +318,10 @@ class ThemeRepo {
 			.on("keyup", "#input-themeurl", (e) => {if (e.which == 13) this.addThemeToOwnList(settingspanel);})
 			.on("click", ".remove-theme", (e) => {this.removeThemeFromOwnList(e);})
 			.on("click", ".remove-all", () => {this.removeAllFromOwnList(settingspanel);})
-			.on("click", ".refresh-button", () => {this.loadThemes();});
+			.on("click", ".refresh-button", () => {
+				this.loading = {is:false, timeout:null, amount:0};
+				this.loadThemes();
+			});
 		return settingspanel;
 	}
 
@@ -411,6 +414,7 @@ class ThemeRepo {
 	stop () {
 		if (typeof BDFDB === "object") {
 			clearInterval(this.updateInterval);
+			clearTimeout(this.loading.timeout);
 						
 			$(".discordPreview, .themerepo-modal, .bd-themerepobutton, .themerepo-loadingicon").remove();
 			$(BDFDB.dotCN.app + " > .repo-loadingwrapper:empty").remove();
@@ -435,7 +439,7 @@ class ThemeRepo {
 										var innerEntries = node.querySelectorAll(BDFDB.dotCN.contextmenuitem);
 										$(this.settingsContextEntryMarkup)
 											.on("click", () => {
-												if (!this.loading) $(context).hide();
+												if (!this.loading.is) $(context).hide();
 												this.openThemeRepoModal();
 											})
 											.insertAfter(innerEntries[innerEntries.length-1]);
@@ -513,7 +517,7 @@ class ThemeRepo {
 	}
 	
 	openThemeRepoModal (showOnlyOutdated = false) {
-		if (this.loading) {
+		if (this.loading.is) {
 			BDFDB.showToast(`Themes are still being fetched. Try again in some seconds.`, {type:"danger"});
 			return;
 		}
@@ -800,7 +804,13 @@ class ThemeRepo {
 				this.loadedThemes = {};
 				this.grabbedThemes = result.split("\n");
 				this.foundThemes = this.grabbedThemes.concat(BDFDB.loadData("ownlist", this, "ownlist") || []);
-				this.loading = true;
+				this.loading = {is:true, timeout:setTimeout(() => {
+					clearTimeout(this.loading.timeout);
+					if (this.started) {
+						if (this.loading.is && this.loading.amount < 4) setTimeout(() => {this.loadThemes();},10000);
+						this.loading = {is: false, timeout:null, amount:this.loading.amount};
+					}
+				},1200000), amount:this.loading.amount+1};
 				var loadingiconwrapper = document.querySelector(BDFDB.dotCN.app + "> .repo-loadingwrapper");
 				if (!loadingiconwrapper) {
 					loadingiconwrapper = document.createElement("div");
@@ -812,10 +822,14 @@ class ThemeRepo {
 					.appendTo(loadingiconwrapper);
 					
 				getThemeInfo(() => {
-					if (!this.started) return;
-					this.loading = false;
+					if (!this.started) {
+						clearTimeout(this.loading.timeout);
+						return;
+					}
 					$(".themerepo-loadingicon").remove();
 					if (!loadingiconwrapper.firstChild) loadingiconwrapper.remove();
+					clearTimeout(this.loading.timeout);
+					this.loading = {is:false, timeout:null, amount:this.loading.amount};
 					console.log("ThemeRepo: Finished fetching Themes.");
 					if (document.querySelector(".bd-themerepobutton")) BDFDB.showToast(`Finished fetching Themes.`, {type:"success"});
 					if (outdated > 0) {
@@ -843,7 +857,7 @@ class ThemeRepo {
 		});
 		 
 		getThemeInfo = (callback) => {
-			if (i >= this.foundThemes.length || !this.started) {
+			if (i >= this.foundThemes.length || !this.started || !this.loading.is) {
 				callback();
 				return;
 			}
@@ -885,7 +899,10 @@ class ThemeRepo {
 	checkForNewThemes () {
 		let request = require("request");
 		request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/ThemeList.txt", (error, response, result) => {
-			if (response && !BDFDB.equals(result.split("\n"), this.grabbedThemes)) this.loadThemes();
+			if (response && !BDFDB.equals(result.split("\n"), this.grabbedThemes)) {
+				this.loading = {is:false, timeout:null, amount:0};
+				this.loadThemes();
+			}
 		});
 	}
 	
