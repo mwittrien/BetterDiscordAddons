@@ -45,7 +45,7 @@ class TopRoleEverywhere {
 
 	getDescription () {return "Adds the highest role of a user as a tag.";}
 
-	getVersion () {return "2.7.2";}
+	getVersion () {return "2.7.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -117,7 +117,7 @@ class TopRoleEverywhere {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (BDFDB.getData("showInChat", this, "settings")) {
-									if (node && node.tagName && node.querySelector(BDFDB.dotCN.messageusername)) {
+									if (node.tagName && node.querySelector(BDFDB.dotCN.messageusername)) {
 										this.addRoleTag(node, "chat", BDFDB.getDiscordMode() == "compact");
 									}
 								}
@@ -216,7 +216,7 @@ class TopRoleEverywhere {
 			var role = this.GuildPerms.getHighestRole(guild, userID);
 			
 			if ((role && (role.colorString || settings.includeColorless)) || userID == 278543574059057154) {
-				var roleColor = role && role.colorString ? BDFDB.color2COMP(role.colorString) : [255,255,255];
+				var roleColor = role && role.colorString ? BDFDB.colorCONVERT(role.colorString, "RGBCOMP") : [255,255,255];
 				var roleName = role ? role.name : "";
 				var totalwidth, oldwidth, newwidth, maxwidth;
 				if (type == "list") {

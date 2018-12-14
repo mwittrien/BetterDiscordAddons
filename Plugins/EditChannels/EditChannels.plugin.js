@@ -324,7 +324,7 @@ class EditChannels {
 	resetChannel (channelObj) {
 		if (!channelObj || !channelObj.div) return;
 		
-		if (typeof channelObj.div.editChannelsObserver == "object") channelObj.div.editChannelsObserver.disconnect();
+		if (channelObj.div.EditChannelsObserver && typeof channelObj.div.EditChannelsObserver.disconnect == "function") channelObj.div.EditChannelsObserver.disconnect();
 		
 		var channel = channelObj.div.querySelector(BDFDB.dotCNC.channelname + BDFDB.dotCN.categorycolortransition);
 	
@@ -337,7 +337,7 @@ class EditChannels {
 	loadChannel (channelObj) {
 		if (!channelObj || !channelObj.div) return;
 		
-		if (typeof channelObj.div.editChannelsObserver == "object") channelObj.div.editChannelsObserver.disconnect();
+		if (channelObj.div.EditChannelsObserver && typeof channelObj.div.EditChannelsObserver.disconnect == "function") channelObj.div.EditChannelsObserver.disconnect();
 		
 		var channel = channelObj.div.querySelector(BDFDB.dotCNC.channelname + BDFDB.dotCN.categorycolortransition);
 		
@@ -349,8 +349,8 @@ class EditChannels {
 			channelObj.div.setAttribute("custom-editchannels", true);
 			channel.style.setProperty("color", color);
 			if (color) {
-				channelObj.div.editChannelsObserver = new MutationObserver(() => {channel.style.setProperty("color", this.chooseColor(channel, color));});
-				channelObj.div.editChannelsObserver.observe(channelObj.div, {attributes:true,characterData:true,subtree:true});
+				channelObj.div.EditChannelsObserver = new MutationObserver(() => {channel.style.setProperty("color", this.chooseColor(channel, color));});
+				channelObj.div.EditChannelsObserver.observe(channelObj.div, {attributes:true,characterData:true,subtree:true});
 			}
 				
 			BDFDB.setInnerText(channel, name);

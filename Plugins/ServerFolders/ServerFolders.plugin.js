@@ -304,7 +304,7 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.8.8";}
+	getVersion () {return "5.8.9";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -807,8 +807,8 @@ class ServerFolders {
 		var data = BDFDB.loadData(folderDiv.id, this, "folders");
 		if (data) {
 			if (data.folderName) {
-				var bgColor = data.color3 ? BDFDB.color2RGB(data.color3) : "";
-				var fontColor = data.color4 ? BDFDB.color2RGB(data.color4) : "";
+				var bgColor = data.color3 ? BDFDB.colorCONVERT(data.color3, "RGB") : "";
+				var fontColor = data.color4 ? BDFDB.colorCONVERT(data.color4, "RGB") : "";
 				BDFDB.createTooltip(data.folderName, folderDiv, {type:"right",selector:"guild-folder-tooltip",style:`color: ${fontColor} !important; background-color: ${bgColor} !important; border-color: ${bgColor} !important;`});
 			}
 		}
@@ -817,8 +817,8 @@ class ServerFolders {
 	createServerToolTip (serverObj, target, e) {
 		var data = BDFDB.loadData(serverObj.id, "EditServers", "servers");
 		var text = data ? (data.name ? data.name : serverObj.name) : serverObj.name;
-		var bgColor = data ? (data.color3 ? BDFDB.color2RGB(data.color3) : "") : "";
-		var fontColor = data ? (data.color4 ? BDFDB.color2RGB(data.color4) : "") : "";
+		var bgColor = data ? (data.color3 ? BDFDB.colorCONVERT(data.color3, "RGB") : "") : "";
+		var fontColor = data ? (data.color4 ? BDFDB.colorCONVERT(data.color4, "RGB") : "") : "";
 			
 		BDFDB.createTooltip(text, target, {type:"right",selector:"guild-custom-tooltip",style:`color: ${fontColor} !important; background-color: ${bgColor} !important; border-color: ${bgColor} !important;`});
 	}
@@ -903,8 +903,8 @@ class ServerFolders {
 	}
 	
 	changeImgColor (color1, color2, icon, callback) {
-		color1 = BDFDB.color2COMP(color1);
-		color2 = BDFDB.color2COMP(color2);
+		color1 = BDFDB.colorCONVERT(color1, "RGBCOMP");
+		color2 = BDFDB.colorCONVERT(color2, "RGBCOMP");
 		if (!color1 || !color2 || !icon) return;
 		var img = new Image();
 		img.src = icon;
@@ -1264,7 +1264,7 @@ class ServerFolders {
 		let hasicon = !serverCopy.querySelector(BDFDB.dotCN.guildicon).classList.contains(BDFDB.disCN.avatarnoicon);
 		
 		copyinner.style.setProperty("border-radius", isselected ? "15px" : "25px");
-		copyinner.style.setProperty("background-color", hasicon ? null : BDFDB.color2RGB(this.DiscordConstants.Colors[isselected ? "BRAND_PURPLE" : "CHANNELS_GREY"]));
+		copyinner.style.setProperty("background-color", hasicon ? null : BDFDB.colorCONVERT(this.DiscordConstants.Colors[isselected ? "BRAND_PURPLE" : "CHANNELS_GREY"], "RGB"));
 			
 		this.addHoverBehaviour(serverCopy);
 		
@@ -1283,8 +1283,8 @@ class ServerFolders {
 			})
 			.addListener((value) => {
 				if (divicon.classList.contains(BDFDB.disCN.avatarnoicon)) {
-					let comp = BDFDB.color2COMP(value.value.replace("a",""));
-					divinner.style.setProperty("background-color", `rgb(${comp[0]}, ${comp[1]}, ${comp[2]})`);
+					let comp = BDFDB.colorCONVERT(value.value, "RGBCOMP");
+					if (comp) divinner.style.setProperty("background-color", `rgb(${comp[0]}, ${comp[1]}, ${comp[2]})`);
 				}
 			});
 

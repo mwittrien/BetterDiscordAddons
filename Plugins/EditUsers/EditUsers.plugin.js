@@ -169,7 +169,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "2.4.7";}
+	getVersion () {return "2.4.8";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -760,25 +760,25 @@ class EditUsers {
 			var member = this.MemberPerms.getMember(this.LastGuildStore.getGuildId(), info.id);
 			if (username) {
 				var name = data.name ? data.name : (type == "info" || type == "profil" || !member || !member.nick ? info.username : member.nick);
-				var color1 = data.color1 ? BDFDB.color2RGB(data.color1) : (member && member.colorString ? BDFDB.color2RGB(member.colorString) : "");
-				var color2 = data.color2 ? BDFDB.color2RGB(data.color2) : "";
+				var color1 = data.color1 ? BDFDB.colorCONVERT(data.color1, "RGB") : (member && member.colorString ? BDFDB.colorCONVERT(member.colorString, "RGB") : "");
+				var color2 = data.color2 ? BDFDB.colorCONVERT(data.color2, "RGB") : "";
 				BDFDB.setInnerText(username, name);
-				username.style.color = color1;
-				username.style.background = color2;
+				username.style.setProperty("color", color1);
+				username.style.setProperty("background", color2);
 				
 				for (let markup of div.querySelectorAll(BDFDB.dotCN.messagemarkup)) {
-					markup.style.color = settingsCookie["bda-gs-7"] && settingsCookie["bda-gs-7"] == true ? color1 : "";
+					markup.style.setProperty("color", settingsCookie["bda-gs-7"] && settingsCookie["bda-gs-7"] == true ? color1 : "");
 				}
 			}
 			if (avatar && (data.removeIcon || data.url)) {
-				if (avatar.style.background.indexOf(info.id + "/a_")) {
+				if (avatar.style.getPropertyValue("background-image").indexOf(info.id + "/a_")) {
 					let changeblock = false;
 					avatar.EditUsersAvatarObserver = new MutationObserver((changes, _) => {
 						changes.forEach(
 							(change, i) => {
-								if (!changeblock && avatar.style.background.indexOf(info.id + "/a_")) {
+								if (!changeblock && avatar.style.getPropertyValue("background-image").indexOf(info.id + "/a_")) {
 									changeblock = true;
-									avatar.style.background = data.removeIcon ? "" : "url(" + data.url + ") center/cover";
+									avatar.style.setProperty("background", data.removeIcon ? "" : "url(" + data.url + ") center/cover");
 									setImmediate(() => {changeblock = false;});
 								}
 							}
@@ -786,7 +786,7 @@ class EditUsers {
 					});
 					avatar.EditUsersAvatarObserver.observe(avatar, {attributes:true});
 				}
-				avatar.style.background = data.removeIcon ? "" : "url(" + data.url + ") center/cover";
+				avatar.style.setProperty("background", data.removeIcon ? "" : "url(" + data.url + ") center/cover");
 				if (type == "call") {
 					$(avatar)
 						.off("mouseenter." + this.getName())
@@ -799,17 +799,17 @@ class EditUsers {
 			var tag = data.tag ? data.tag : null;
 			if (tag && wrapper && !wrapper.querySelector(".user-tag") && (type == "list" || type == "chat" || type == "popout" || type == "profil" || type == "dmheader")) {
 				var color3 = data.ignoreTagColor ? 
-								(member && member.colorString ? BDFDB.color2RGB(member.colorString) : "") :
-								(data.color3 ? BDFDB.color2RGB(data.color3) : "");
-				var color3COMP = color3 ? BDFDB.color2COMP(color3) : [0,0,0];
+								(member && member.colorString ? BDFDB.colorCONVERT(member.colorString, "RGB") : "") :
+								(data.color3 ? BDFDB.colorCONVERT(data.color3, "RGB") : "");
+				var color3COMP = color3 ? BDFDB.colorCONVERT(color3, "RGBCOMP") : [0,0,0];
 				var color4 = !data.ignoreTagColor && data.color4 ? 
-								BDFDB.color2RGB(data.color4) : 
+								BDFDB.colorCONVERT(data.color4, "RGB") : 
 								(color3COMP[0] > 180 && color3COMP[1] > 180 && color3COMP[2] > 180 ? "black" : "white");
 				var thisTag = $(this.tagMarkup)[0];
 				thisTag.classList.add(type + "-tag");
 				thisTag.innerText = tag;
-				thisTag.style.background = color3;
-				thisTag.style.color = color4;
+				thisTag.style.setProperty("background", color3);
+				thisTag.style.setProperty("color", color4);
 				wrapper.appendChild(thisTag);
 			}
 			
@@ -839,22 +839,20 @@ class EditUsers {
 				var serverObj = BDFDB.getSelectedServer();
 				var member = serverObj ? this.MemberPerms.getMember(serverObj.id, info.id) : null;
 				var name = div.classList.contains(BDFDB.disCN.accountinfo) || !member || !member.nick ? info.username : member.nick;
-				var color1 = member && member.colorString ? BDFDB.color2RGB(member.colorString) : "";
-				var color2 = "";
+				var color1 = member && member.colorString ? BDFDB.colorCONVERT(member.colorString, "RGB") : "";
 				
 				BDFDB.setInnerText(username, name);
-				username.style.color = color1;
-				username.style.background = color2;
+				username.style.setProperty("color", color1);
+				username.style.removeProperty("background");
 				
 				for (let markup of div.querySelectorAll(BDFDB.dotCN.messagemarkup)) {
-					markup.style.color = settingsCookie["bda-gs-7"] && settingsCookie["bda-gs-7"] == true ? color1 : "";
+					markup.style.setProperty("color", settingsCookie["bda-gs-7"] && settingsCookie["bda-gs-7"] == true ? color1 : "");
 				}
 			}
 			
 			if (avatar) {
 				if (avatar.EditUsersAvatarObserver && typeof avatar.EditUsersAvatarObserver.disconnect == "function") avatar.EditUsersAvatarObserver.disconnect();
-				avatar.style.background = "url(" + BDFDB.getUserAvatar(info.id) + ")";
-				avatar.style.backgroundSize = "cover";
+				avatar.style.setProperty("background", "url(" + BDFDB.getUserAvatar(info.id) + ") center/cover");
 				$(avatar).off("mouseenter." + this.getName());
 			}
 			
@@ -896,7 +894,7 @@ class EditUsers {
 		let info = this.UserStore.getUser(div.getAttribute("custom-editusers"));
 		if (!info) {
 			let avatar = div.querySelector("[style*='/avatars/']");
-			if (avatar) info = this.UserStore.getUser(avatar.style.backgroundImage.split("/avatars/")[1].split("/")[0]);
+			if (avatar) info = this.UserStore.getUser(avatar.style.getPropertyValue("background-image").split("/avatars/")[1].split("/")[0]);
 			else {
 				info = BDFDB.getKeyInformation({"node":div,"key":"user"});
 				if (!info) {
@@ -930,7 +928,7 @@ class EditUsers {
 				let data = BDFDB.loadData(id, this, "users");
 				if (data) {
 					if (data.name) mention.innerText = "@" + data.name; 
-					let color = data.color1 ? BDFDB.color2COMP(data.color1) : null;
+					let color = data.color1 ? BDFDB.colorCONVERT(data.color1, "RGBCOMP") : null;
 					if (data.color1) {
 						mention.style.setProperty("color", "rgb(" + color[0] + "," + color[1] + "," + color[2] + ")", "important");
 						mention.style.setProperty("background", "rgba(" + color[0] + "," + color[1] + "," + color[2] + ",.1)", "important");
@@ -959,8 +957,8 @@ class EditUsers {
 			let member = this.MemberPerms.getMember(this.LastGuildStore.getGuildId(), sortedids[i].id);
 			if (user) {
 				var name = data && data.name ? data.name : (member && member.nick ? member.nick : user.username);
-				var color1 = data && data.color1 ? BDFDB.color2RGB(data.color1) : (member && member.colorString ? BDFDB.color2RGB(member.colorString) : "");
-				var color2 = data && data.color2 ? BDFDB.color2RGB(data.color2) : "";
+				var color1 = data && data.color1 ? BDFDB.colorCONVERT(data.color1, "RGB") : (member && member.colorString ? BDFDB.colorCONVERT(member.colorString, "RGB") : "");
+				var color2 = data && data.color2 ? BDFDB.colorCONVERT(data.color2, "RGB") : "";
 				strong.innerHTML = `<label style="color:${color1};background-color:${color2};">${BDFDB.encodeToHTML(name)}</label>`;
 			}
 			i++;

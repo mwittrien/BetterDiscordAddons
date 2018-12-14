@@ -116,7 +116,7 @@ class EditServers {
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	getVersion () {return "1.8.7";} 
+	getVersion () {return "1.8.8";} 
 
 	getAuthor () {return "DevilBro";}
 	
@@ -441,8 +441,8 @@ class EditServers {
 			var bgImage = data.url ? ("url(" + data.url + ")") : (serverObj.icon ? "url('https://cdn.discordapp.com/icons/" + serverObj.id + "/" + serverObj.icon + ".png')" : "");
 			var removeIcon = data.removeIcon;
 			var shortName = data.shortName ? data.shortName : (serverObj.icon && !removeIcon ? "" : serverObj.data.acronym);
-			var color1 = data.color1 ? BDFDB.color2RGB(data.color1) : "";
-			var color2 = data.color2 ? BDFDB.color2RGB(data.color2) : "";
+			var color1 = data.color1 ? BDFDB.colorCONVERT(data.color1, "RGB") : "";
+			var color2 = data.color2 ? BDFDB.colorCONVERT(data.color2, "RGB") : "";
 			$(serverObj.div)
 				.off("mouseenter." + this.getName())
 				.on("mouseenter." + this.getName(), () => {this.createServerToolTip(serverObj);})
@@ -469,8 +469,8 @@ class EditServers {
 		var data = BDFDB.loadData(serverObj.id, this, "servers");
 		if (data) {
 			var text = data.name ? data.name : serverObj.name;
-			var bgColor = data.color3 ? BDFDB.color2RGB(data.color3) : "";
-			var fontColor = data.color4 ? BDFDB.color2RGB(data.color4) : "";
+			var bgColor = data.color3 ? BDFDB.colorCONVERT(data.color3, "RGB") : "";
+			var fontColor = data.color4 ? BDFDB.colorCONVERT(data.color4, "RGB") : "";
 			var customTooltipCSS = `
 				body ${BDFDB.dotCN.tooltip}:not(.guild-custom-tooltip) {
 					display: none !important;
