@@ -116,7 +116,6 @@ class CompleteTimestamps {
 						if (change.removedNodes) {
 							change.removedNodes.forEach((node) => {
 								if (this.updateTimestamps && node.tagName && node.getAttribute("layer-id") == "user-settings") {
-									this.setMaxWidth();
 									document.querySelectorAll(".complete-timestamp").forEach(timestamp => {timestamp.classList.remove("complete-timestamp");});
 									document.querySelectorAll(".complete-timestamp-divider").forEach(divider => {divider.remove();});
 									document.querySelectorAll("time").forEach(stamp => {this.changeTimestamp(stamp);})
@@ -133,8 +132,6 @@ class CompleteTimestamps {
 				{"own":	{name:"Own",		id:"own",		integrated:false,	dic:false}},
 				BDFDB.languages
 			);
-			
-			this.setMaxWidth();
 			
 			$(document)
 				.on("mouseenter." + this.getName(), BDFDB.dotCNS.message + BDFDB.dotCN.messagecontent, (e) => {
@@ -265,6 +262,7 @@ class CompleteTimestamps {
 		if (!stamp.className || stamp.className.toLowerCase().indexOf("timestamp") == -1 || stamp.classList.contains("complete-timestamp")) return;
 		let time = stamp.getAttribute("datetime");
 		if (time) {
+			this.setMaxWidth();
 			let choice = BDFDB.getData("creationDateLang", this, "choices");
 			stamp.classList.add("complete-timestamp");
 			let stampdivider = document.createElement("span");
@@ -351,31 +349,34 @@ class CompleteTimestamps {
 	}
 	
 	setMaxWidth () {
-		var timestamp = document.querySelector(BDFDB.dotCN.messagetimestampcompact);
-		if (timestamp) {
-			var choice = BDFDB.getData("creationDateLang", this, "choices");
-			var testtimestamp = $(`<time class="${timestamp.className}" style="width: auto !important;">${this.getTimestamp(this.languages[choice].id, new Date(253402124399995))}</time>`);
-			$(testtimestamp).appendTo(document.body);
-			var width = testtimestamp.outerWidth() + 5;
-			testtimestamp.remove();
-			BDFDB.appendLocalStyle(this.getName() + "CompactCorrection", `
-				${BDFDB.dotCN.messagetimestampcompact} {
-					width: ${width}px !important;
-				}
-				${BDFDB.dotCN.messagetimestampcompactismentioned} {
-					width: ${width + 2}px !important;
-				}
-				${BDFDB.dotCN.messagemarkupiscompact} {
-					margin-left: ${width}px !important;
-					text-indent: -${width}px !important;
-				}
-				${BDFDB.dotCN.messageaccessorycompact} {
-					padding-left: ${width}px !important;
-				}
-			`);
-		}
-		else {
-			BDFDB.removeLocalStyle(this.getName() + "CompactCorrection");
+		if (this.currentMode != BDFDB.getDiscordMode()) {
+			this.currentMode = BDFDB.getDiscordMode();
+			var timestamp = document.querySelector(BDFDB.dotCN.messagetimestampcompact);
+			if (timestamp) {
+				var choice = BDFDB.getData("creationDateLang", this, "choices");
+				var testtimestamp = $(`<time class="${timestamp.className}" style="width: auto !important;">${this.getTimestamp(this.languages[choice].id, new Date(253402124399995))}</time>`);
+				$(testtimestamp).appendTo(document.body);
+				var width = testtimestamp.outerWidth() + 5;
+				testtimestamp.remove();
+				BDFDB.appendLocalStyle(this.getName() + "CompactCorrection", `
+					${BDFDB.dotCN.messagetimestampcompact} {
+						width: ${width}px !important;
+					}
+					${BDFDB.dotCN.messagetimestampcompactismentioned} {
+						width: ${width + 2}px !important;
+					}
+					${BDFDB.dotCN.messagemarkupiscompact} {
+						margin-left: ${width}px !important;
+						text-indent: -${width}px !important;
+					}
+					${BDFDB.dotCN.messageaccessorycompact} {
+						padding-left: ${width}px !important;
+					}
+				`);
+			}
+			else {
+				BDFDB.removeLocalStyle(this.getName() + "CompactCorrection");
+			}
 		}
 	}
 }
