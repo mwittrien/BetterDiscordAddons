@@ -30,7 +30,7 @@ class CompleteTimestamps {
 
 	getDescription () {return "Replace all timestamps with complete timestamps.";}
 
-	getVersion () {return "1.2.7";}
+	getVersion () {return "1.2.8";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -118,6 +118,7 @@ class CompleteTimestamps {
 								if (this.updateTimestamps && node.tagName && node.getAttribute("layer-id") == "user-settings") {
 									this.setMaxWidth();
 									document.querySelectorAll(".complete-timestamp").forEach(timestamp => {timestamp.classList.remove("complete-timestamp");});
+									document.querySelectorAll(".complete-timestamp-divider").forEach(divider => {divider.remove();});
 									document.querySelectorAll("time").forEach(stamp => {this.changeTimestamp(stamp);})
 									this.updateTimestamps = false;
 								}
@@ -172,6 +173,7 @@ class CompleteTimestamps {
 	stop () {
 		if (typeof BDFDB === "object") {
 			document.querySelectorAll(".complete-timestamp").forEach(stamp => {stamp.classList.remove("complete-timestamp");});
+			document.querySelectorAll(".complete-timestamp-divider").forEach(divider => {divider.remove();});
 			
 			BDFDB.removeLocalStyle(this.getName() + "CompactCorrection");
 			
@@ -262,10 +264,19 @@ class CompleteTimestamps {
 	changeTimestamp (stamp) {
 		if (!stamp.className || stamp.className.toLowerCase().indexOf("timestamp") == -1 || stamp.classList.contains("complete-timestamp")) return;
 		let time = stamp.getAttribute("datetime");
-		if (!time) return;
-		let choice = BDFDB.getData("creationDateLang", this, "choices");
-		stamp.classList.add("complete-timestamp");
-		BDFDB.setInnerText(stamp, this.getTimestamp(this.languages[choice].id, time));
+		if (time) {
+			let choice = BDFDB.getData("creationDateLang", this, "choices");
+			stamp.classList.add("complete-timestamp");
+			let stampdivider = document.createElement("span");
+			stampdivider.className = "complete-timestamp-divider arabic-fix";
+			stampdivider.style.setProperty("display", "inline", "important");
+			stampdivider.style.setProperty("height", "0px", "important");
+			stampdivider.style.setProperty("width", "0px", "important");
+			stampdivider.style.setProperty("font-size", "0px", "important");
+			stampdivider.innerText = "ARABIC FIX";
+			stamp.parentElement.insertBefore(stampdivider, stamp);
+			BDFDB.setInnerText(stamp, this.getTimestamp(this.languages[choice].id, time));
+		}
 	}
 	
 	getMessageGroup (div) {
