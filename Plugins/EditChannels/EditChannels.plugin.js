@@ -4,6 +4,8 @@ class EditChannels {
 	initConstructor () {
 		this.labels = {};
 		
+		this.updateChannels = false;
+		
 		this.channelContextEntryMarkup =
 			`<div class="${BDFDB.disCN.contextmenuitemgroup}">
 				<div class="${BDFDB.disCN.contextmenuitem} localchannelsettings-item ${BDFDB.disCN.contextmenuitemsubmenu}">
@@ -75,6 +77,8 @@ class EditChannels {
 			
 		this.defaults = {
 			settings: {
+				changeChannelIcon:		{value:true, 	description:"Change color of Channel Icon."},
+				changeUnreadIndicator:	{value:true, 	description:"Change color of Unread Indicator."},
 				changeInChannelHeader:	{value:true, 	description:"Change in Channel Header."}
 			}
 		};
@@ -84,7 +88,7 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "3.7.8";}
+	getVersion () {return "3.7.9";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -166,6 +170,23 @@ class EditChannels {
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
+						if (change.removedNodes) {
+							change.removedNodes.forEach((node) => {
+								if (this.updateChannels && node.tagName && node.getAttribute("layer-id") == "user-settings") {
+									this.resetAllChannels();
+									this.loadAllChannels();
+									this.updateChannels = false;
+								}
+							});
+						}
+					}
+				);
+			});
+			BDFDB.addObserver(this, BDFDB.dotCN.layers, {name:"settingsWindowObserver",instance:observer}, {childList:true});
+			
+			observer = new MutationObserver((changes, _) => {
+				changes.forEach(
+					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
 								if (node && node.nodeType == 1 && node.className.includes(BDFDB.disCN.contextmenu)) {
@@ -212,6 +233,7 @@ class EditChannels {
 			settings[input.value] = input.checked;
 		}
 		BDFDB.saveAllData(settings, this, "settings");
+		this.updateChannels = true;
 	}
 
 	resetAll () {
@@ -324,12 +346,17 @@ class EditChannels {
 	resetChannel (channelObj) {
 		if (!channelObj || !channelObj.div) return;
 		
-		if (channelObj.div.EditChannelsObserver && typeof channelObj.div.EditChannelsObserver.disconnect == "function") channelObj.div.EditChannelsObserver.disconnect();
-		
 		var channel = channelObj.div.querySelector(BDFDB.dotCNC.channelname + BDFDB.dotCN.categorycolortransition);
+		var icon = channelObj.div.querySelector(BDFDB.dotCN.channelicon);
+		var unread = channelObj.div.querySelector(BDFDB.dotCN.channelunread);
+		
+		if (channel.EditChannelsObserver && typeof channel.EditChannelsObserver.disconnect == "function") channel.EditChannelsObserver.disconnect();
 	
 		channelObj.div.removeAttribute("custom-editchannels");
 		channel.style.removeProperty("color");
+		icon.style.removeProperty("color");
+		icon.style.removeProperty("opacity");
+		if (unread) unread.style.removeProperty("background-color");
 			
 		BDFDB.setInnerText(channel, channelObj.name);
 	}
@@ -337,20 +364,41 @@ class EditChannels {
 	loadChannel (channelObj) {
 		if (!channelObj || !channelObj.div) return;
 		
-		if (channelObj.div.EditChannelsObserver && typeof channelObj.div.EditChannelsObserver.disconnect == "function") channelObj.div.EditChannelsObserver.disconnect();
-		
 		var channel = channelObj.div.querySelector(BDFDB.dotCNC.channelname + BDFDB.dotCN.categorycolortransition);
+		var icon = channelObj.div.querySelector(BDFDB.dotCN.channelicon);
+		var unread = channelObj.div.querySelector(BDFDB.dotCN.channelunread);
+		
+		if (channel.EditChannelsObserver && typeof channel.EditChannelsObserver.disconnect == "function") channel.EditChannelsObserver.disconnect();
 		
 		var data = BDFDB.loadData(channelObj.id, this, "channels");
 		if (data) {
+			var settings = BDFDB.getAllData(this, "settings");
+			
 			var name = data.name ? data.name : channelObj.name;
 			var color = data.color ? this.chooseColor(channel, data.color) : "";
 			
 			channelObj.div.setAttribute("custom-editchannels", true);
-			channel.style.setProperty("color", color);
+			channel.style.setProperty("color", color, "important");
+			if (settings.changeChannelIcon) {
+				icon.style.setProperty("color", color, "important");
+				icon.style.setProperty("opacity", 1, "important");
+			}
+			if (unread && settings.changeUnreadIndicator) unread.style.setProperty("background-color", color);
 			if (color) {
-				channelObj.div.EditChannelsObserver = new MutationObserver(() => {channel.style.setProperty("color", this.chooseColor(channel, color));});
-				channelObj.div.EditChannelsObserver.observe(channelObj.div, {attributes:true,characterData:true,subtree:true});
+				channel.EditChannelsObserver = new MutationObserver((changes, _) => {
+					changes.forEach(
+						(change, i) => {
+							if (change.type == "attributes" && change.attributeName == "class") {
+								let choosencolor = this.chooseColor(channel, color);
+								unread = channelObj.div.querySelector(BDFDB.dotCN.channelunread);
+								channel.style.setProperty("color", choosencolor, "important");
+								if (settings.changeChannelIcon) icon.style.setProperty("color", choosencolor, "important");
+								if (unread && settings.changeUnreadIndicator) unread.style.setProperty("background-color", choosencolor);
+							}
+						}
+					);
+				});
+				channel.EditChannelsObserver.observe(channel, {attributes:true});
 			}
 				
 			BDFDB.setInnerText(channel, name);
