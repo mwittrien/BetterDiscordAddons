@@ -33,7 +33,7 @@ class PersonalPins {
 							<div class="${BDFDB.disCNS.recentmentionstitle + BDFDB.disCN.messagespopouttitle}">REPLACE_popout_note_text</div>
 							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCNS.searchbar + BDFDB.disCN.size14}" style="flex: 1 1 auto;">
 								<input class="${BDFDB.disCNS.searchbarinput + BDFDB.disCN.flexchild}" value="" placeholder="Search for ..." style="flex: 1 1 auto;">
-								<div class="${BDFDB.disCNS.searchbariconwrap + BDFDB.disCN.flexchild}">
+								<div class="${BDFDB.disCN.searchbariconwrap}">
 									<i class="${BDFDB.disCNS.searchbaricon + BDFDB.disCNS.searchbareyeglass + BDFDB.disCN.searchbarvisible}"/>
 									<i class="${BDFDB.disCNS.searchbaricon + BDFDB.disCN.searchbarclear}"/>
 								</div>
@@ -101,7 +101,7 @@ class PersonalPins {
 									<span class="">
 										<strong tabindex="0" class="${BDFDB.disCN.messageusername}" role="button"></strong>
 									</span>
-									<time class="${BDFDB.disCN.messagetimestampcozy}" datetime="1531959706620"></time>
+									<time class="${BDFDB.disCN.messagetimestampcozy}"></time>
 								</h2>
 							</div>
 							<div class="${BDFDB.disCNS.messagecontentcozy + BDFDB.disCN.messagecontent}">
@@ -136,7 +136,7 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.6.2";}
+	getVersion () {return "1.6.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -538,7 +538,6 @@ class PersonalPins {
 					messageArray.push(messages[id]);
 				}
 				BDFDB.sortArrayByKey(messageArray, notespopout.querySelector(BDFDB.dotCN.quickselectvalue).getAttribute("option"));
-				var compact = BDFDB.getDiscordMode == "compact";
 				for (let messageData of messageArray) {
 					let message = $(this.messageMarkup)[0];
 					let server = this.GuildStore.getGuild(messageData.serverID);
@@ -547,11 +546,13 @@ class PersonalPins {
 					let member = this.MemberStore.getMember(messageData.serverID, messageData.authorID);
 					let date = new Date(messageData.timestamp);
 					container.insertBefore(message, container.firstChild);
-					message.querySelector(BDFDB.dotCN.avatarimage).style.backgroundImage = 
-						user ? "url(" + this.IconUtils.getUserAvatarURL(user) + ")" : "url(" + messageData.avatar + ")";
-					message.querySelector(BDFDB.dotCN.messageusername).innerText = user ? user.username : messageData.authorName;
-					message.querySelector(BDFDB.dotCN.messageusername).style.color = member ? member.colorString : messageData.color;
-					message.querySelector(compact ? BDFDB.dotCN.messagetimestampcompact : BDFDB.dotCN.messagetimestampcozy).innerText = date.toLocaleString(language);
+					message.querySelector(BDFDB.dotCN.avatarimage).style.setProperty("background-image", `url(${user ? this.IconUtils.getUserAvatarURL(user) : messageData.avatar})`); 
+					let username = message.querySelector(BDFDB.dotCN.messageusername);
+					username.innerText = user ? user.username : messageData.authorName;
+					username.style.setProperty("color", member ? member.colorString : messageData.color);
+					let timestamp = message.querySelector(BDFDB.dotCN.messagetimestampcozy);
+					timestamp.innerText = date.toLocaleString(language);
+					timestamp.setAttribute("datetime", date);
 					message.querySelector(".server-channel").innerText = 
 						(server && server.name ? server.name : messageData.serverName) + 
 						(messageData.serverID == "@me" ? " @" : " #") + 
