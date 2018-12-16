@@ -94,7 +94,7 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "3.8.1";}
+	getVersion () {return "3.8.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -384,7 +384,7 @@ class EditChannels {
 				channel.EditChannelsObserver = new MutationObserver((changes, _) => {
 					changes.forEach(
 						(change, i) => {
-							if (change.type == "childList" && change.target.classList.contains(BDFDB.disCN.channelactionicon) || change.type == "attributes" && change.attributeName == "class" && change.target.className.length && change.target.className.indexOf("name") > -1) {
+							if (change.type == "childList" && change.addedNodes.length && change.target.tagName && (change.target.tagName == "SVG" || change.target.querySelector("svg")) || change.type == "attributes" && change.attributeName == "class" && change.target.className.length && change.target.className.indexOf("name") > -1) {
 								this.colorChannel(channel, this.chooseColor(channel, data.color));
 							}
 						}
