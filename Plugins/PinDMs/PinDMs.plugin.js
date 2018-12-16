@@ -19,7 +19,7 @@ class PinDMs {
 
 	getDescription () {return "Allows you to pin DMs, making them appear at the top of your DM-list.";}
 
-	getVersion () {return "1.2.2";}
+	getVersion () {return "1.2.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -240,7 +240,7 @@ class PinDMs {
 	
 	removePinnedDM (id, dms) {
 		BDFDB.removeData(id, this, "pinnedDMs");
-		this.sortAndUpdate();
+		let existingDMs = this.sortAndUpdate();
 		let removepoint = null;
 		for (let i in dms) {
 			let ele = dms[i];
@@ -250,7 +250,7 @@ class PinDMs {
 			}
 		}
 		if (removepoint) {
-			let offset = BDFDB.isObjectEmpty(BDFDB.loadAllData(this, "pinnedDMs")) ? 1 : 0;
+			let offset = existingDMs.length ? 0 : 1;
 			if (offset) delete dms[removepoint + offset].pinned;
 			dms.splice(removepoint-offset,1+offset);
 		}
@@ -259,22 +259,18 @@ class PinDMs {
 	sortAndUpdate () {
 		let pinnedDMs = BDFDB.loadAllData(this, "pinnedDMs");
 		delete pinnedDMs[""];
-		let sortedDMs = [], sortDM = (id) => {
-			// REMOVE AFTER SOME TIME - PATCH USERID TO DMID
-			let DMid = this.ChannelUtils.getDMFromUserId(id);
-			if (DMid) {
-				pinnedDMs[DMid] = pinnedDMs[id];
-				delete pinnedDMs[id];
-				id = DMid;
-			}
+		let sortedDMs = [], existingDMs = [], sortDM = (id) => {
 			if (typeof sortedDMs[pinnedDMs[id]] == "undefined") sortedDMs[pinnedDMs[id]] = id;
 			else sortDM(sortedDMs, pinnedDMs[id]+1, id);
 		};
 		for (let id in pinnedDMs) sortDM(id);
 		sortedDMs = sortedDMs.filter(n => n);
-		for (let pos in sortedDMs) pinnedDMs[sortedDMs[pos]] = parseInt(pos);
+		for (let pos in sortedDMs) {
+			pinnedDMs[sortedDMs[pos]] = parseInt(pos);
+			if (this.ChannelUtils.getChannel(sortedDMs[pos])) existingDMs.push(sortedDMs[pos]);
+		}
 		BDFDB.saveAllData(pinnedDMs, this, "pinnedDMs");
-		return sortedDMs;
+		return existingDMs;
 	}
 	
 	forceUpdateScroller (scroller) {
