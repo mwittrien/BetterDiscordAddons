@@ -7,7 +7,7 @@ class ThemeSettings {
 
 	getDescription () {return "Allows you to change Theme Variables within BetterDiscord. Adds a Settings button (similar to Plugins) to customizable Themes in your Themes Page.";}
 
-	getVersion () {return "1.0.4";}
+	getVersion () {return "1.0.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -45,8 +45,13 @@ class ThemeSettings {
 					(change, j) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node.tagName && node.querySelector(".ui-switch") && this.isThemesPage()) {
-									this.addSettingsButton(node);
+								if (this.isThemesPage() && node.tagName) {
+									if (node.classList && node.classList.contains(BDFDB.disCN.scrollerwrap)) {
+										for (let li of node.querySelectorAll(".bda-slist > li")) this.addSettingsButton(li);
+									}
+									else if (node.tagName == "LI" && node.querySelector(".ui-switch")) {
+										this.addSettingsButton(node);
+									}
 								}
 							});
 						}
@@ -63,7 +68,7 @@ class ThemeSettings {
 								setImmediate(() => {
 									if (node.tagName && node.getAttribute("layer-id") == "user-settings") {
 										BDFDB.addObserver(this, node, {name:"innerSettingsWindowObserver"}, {childList:true,subtree:true});
-										if (this.isThemesPage(node))for (let li of node.querySelectorAll(".bda-slist > li")) this.addSettingsButton(li);
+										if (this.isThemesPage(node)) for (let li of node.querySelectorAll(".bda-slist > li")) this.addSettingsButton(li);
 									}
 								});
 							});
