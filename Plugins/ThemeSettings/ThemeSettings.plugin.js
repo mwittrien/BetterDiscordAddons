@@ -5,7 +5,7 @@ class ThemeSettings {
 
 	getName () {return "ThemeSettings";}
 
-	getDescription () {return "Allows you to change Theme Variables within BetterDiscord.";}
+	getDescription () {return "Allows you to change Theme Variables within BetterDiscord. Adds a Settings button (similar to Plugins) to customizable Themes in your Themes Page.";}
 
 	getVersion () {return "1.0.4";}
 
