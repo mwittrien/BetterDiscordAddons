@@ -6,7 +6,7 @@ class SteamProfileLink {
 
 	getDescription () {return "Opens any Steam links in Steam instead of your internet browser.";}
 
-	getVersion () {return "1.0.3";}
+	getVersion () {return "1.0.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -33,10 +33,10 @@ class SteamProfileLink {
 			BDFDB.loadMessage(this);
 			
 			$(document).on("click." + this.getName(), "a[href^='https://steamcommunity.'],a[href^='https://store.steampowered.']", (e) => {
-				if (require("electron").shell.openExternal("steam://openurl/" + e.currentTarget.href)) {
-					e.preventDefault();
-					e.stopImmediatePropagation();
-				}
+				e.preventDefault();
+				e.stopImmediatePropagation();
+				if (require("electron").shell.openExternal("steam://openurl/" + e.currentTarget.href));
+				else window.open(e.currentTarget.href, "_blank");
 			});
 		}
 		else {
