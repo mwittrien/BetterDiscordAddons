@@ -311,13 +311,8 @@ class GoogleTranslateOption {
 				border: none !important;
 			}
 			
-			${BDFDB.dotCN.textareainner} ${BDFDB.dotCN.textarea} {
-				margin-right: 0px;
-				padding-right: 3px;
-			}
-			
 			${BDFDB.dotCN.textareainner} ${BDFDB.dotCN.textareapickerbuttons} {
-				position: static;
+				height: auto;
 			}
 			
 			${BDFDB.dotCN.textareainner} .send-button {
@@ -382,7 +377,7 @@ class GoogleTranslateOption {
 
 	getDescription () {return "Adds a Google Translate option to your context menu, which shows a preview of the translated text and on click will open the selected text in Google Translate. Also adds a translation button to your textareas, which will automatically translate the text for you before it is being send. DeepLApi written by square. Thanks ;)";}
 
-	getVersion () {return "1.5.5";}
+	getVersion () {return "1.5.6";}
 	
 	getAuthor () {return "DevilBro, square";}
 	
