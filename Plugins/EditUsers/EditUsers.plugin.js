@@ -169,7 +169,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "2.4.8";}
+	getVersion () {return "2.4.9";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -747,11 +747,9 @@ class EditUsers {
 		
 		let {avatar, username, wrapper} = this.getAvatarNameWrapper(div);
 		if (!avatar && !username && !wrapper) return;
-		if (username && !wrapper && username.classList.contains(BDFDB.disCN.messageusername)) wrapper = username.parentElement;
 		
 		var info = this.getUserInfo(compact && !div.classList.contains(BDFDB.disCN.messagegroup) ? $(BDFDB.dotCN.messagegroup).has(div)[0] : div);
 		if (!info) return;
-		
 		
 		var data = BDFDB.loadData(info.id, this, "users");
 		
@@ -885,6 +883,14 @@ class EditUsers {
 		var username = div.querySelector(BDFDB.dotCNC.userpopoutheadernickname + BDFDB.dotCNC.userpopoutheadernonickname + BDFDB.dotCNC.userprofileusername + BDFDB.dotCNC.memberusername + BDFDB.dotCNC.voicenamedefault + BDFDB.dotCNC.messageusername + BDFDB.dotCN.messagesystemcontent + " > a," + BDFDB.dotCNC.dmchannelname + BDFDB.dotCNC.channelheaderchannelname + BDFDB.dotCNS.friendscolumnnamewrap + BDFDB.dotCNC.friendscolumnusername + BDFDB.dotCNS.accountinfodetails + BDFDB.dotCN.accountinfousername);
 						
 		var wrapper = div.querySelector(BDFDB.dotCNC.userpopoutheadernickname + BDFDB.dotCNC.userpopoutheadernonickname + BDFDB.dotCNC.userprofileusername + BDFDB.dotCNC.memberusername + BDFDB.dotCNC.voicenamedefault + BDFDB.dotCNC.messageusernamewrapper + BDFDB.dotCN.messagesystemcontent + " > a," + BDFDB.dotCNC.dmchannelname + BDFDB.dotCN.channelheaderchannelname + BDFDB.dotCNC.channelheaderprivate + BDFDB.dotCNS.friendscolumnnamewrap + BDFDB.dotCNC.nametag + BDFDB.dotCNS.accountinfodetails + BDFDB.dotCN.accountinfousername);
+		
+		if (username) {
+			if (!wrapper && username.classList.contains(BDFDB.disCN.messageusername)) wrapper = username.parentElement;
+			if (username.classList.contains(BDFDB.disCN.dmchannelname) && username.querySelector(BDFDB.dotCN.dmchannelnamewithactivity)) {
+				wrapper = username.firstElementChild;
+				username = wrapper;
+			}
+		}
 						
 		return {avatar, username, wrapper};
 	}
