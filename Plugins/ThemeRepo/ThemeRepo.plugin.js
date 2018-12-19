@@ -90,7 +90,7 @@ class ThemeRepo {
 								<div tab="settings" class="tab">Settings</div>
 								<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCNS.searchbar + BDFDB.disCN.size14}" style="flex: 1 1 auto; margin: -15px 5px 0 0;">
 									<input class="${BDFDB.disCN.searchbarinput}" value="" placeholder="Search for ..." style="flex: 1 1 auto;">
-									<div class="${BDFDB.disCNS.searchbariconwrap + BDFDB.disCN.flexchild}">
+									<div class="${BDFDB.disCN.searchbariconwrap}">
 										<i class="${BDFDB.disCNS.searchbaricon + BDFDB.disCNS.searchbareyeglass + BDFDB.disCN.searchbarvisible}"/>
 										<i class="${BDFDB.disCNS.searchbaricon + BDFDB.disCN.searchbarclear}"/>
 									</div>
