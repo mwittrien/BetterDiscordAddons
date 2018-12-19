@@ -32,7 +32,7 @@ class PersonalPins {
 						<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.margintop8}" style="flex: 0 0 auto;">
 							<div class="${BDFDB.disCNS.recentmentionstitle + BDFDB.disCN.messagespopouttitle}">REPLACE_popout_note_text</div>
 							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCNS.searchbar + BDFDB.disCN.size14}" style="flex: 1 1 auto;">
-								<input class="${BDFDB.disCNS.searchbarinput + BDFDB.disCN.flexchild}" value="" placeholder="Search for ..." style="flex: 1 1 auto;">
+								<input class="${BDFDB.disCN.searchbarinput}" value="" placeholder="Search for ..." style="flex: 1 1 auto;">
 								<div class="${BDFDB.disCN.searchbariconwrap}">
 									<i class="${BDFDB.disCNS.searchbaricon + BDFDB.disCNS.searchbareyeglass + BDFDB.disCN.searchbarvisible}"/>
 									<i class="${BDFDB.disCNS.searchbaricon + BDFDB.disCN.searchbarclear}"/>
