@@ -18,7 +18,7 @@ class TopRoleEverywhere {
 				text-indent: 0px !important;
 				vertical-align: top;
 			}
-			%{BDFDB.dotCN.messagegroupcompact} .TRE-tag {
+			${BDFDB.dotCN.messagegroupcompact} .TRE-tag {
 				margin-left: 2px;
 				margin-right: 6px;
 			}`;
@@ -45,7 +45,7 @@ class TopRoleEverywhere {
 
 	getDescription () {return "Adds the highest role of a user as a tag.";}
 
-	getVersion () {return "2.7.3";}
+	getVersion () {return "2.7.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -209,8 +209,7 @@ class TopRoleEverywhere {
 		if (compact) wrapper = $(BDFDB.dotCN.messagegroup).has(wrapper)[0];
 		if (member && member.tagName && !member.querySelector(".TRE-tag")) {
 			var settings = BDFDB.getAllData(this, "settings");
-			var userInfo = 
-				compact ? BDFDB.getKeyInformation({"node":wrapper,"key":"message"}).author : BDFDB.getKeyInformation({"node":wrapper,"key":"user"});
+			var userInfo = compact ? BDFDB.getKeyInformation({"node":wrapper,"key":"message"}).author : BDFDB.getKeyInformation({"node":wrapper,"key":"user"});
 			if (!userInfo || (userInfo.bot && settings.disableForBots)) return;
 			var userID = userInfo.id;
 			var role = this.GuildPerms.getHighestRole(guild, userID);
@@ -248,6 +247,7 @@ class TopRoleEverywhere {
 					roleText = "Plugin Creator";
 					if (settings.useOtherStyle) {
 						bgColor = "linear-gradient(to right, rgba(180,0,0,1), rgba(180,90,0,1) , rgba(180,180,0,1), rgba(90,180,0,1), rgba(0,180,0,1), rgba(0,180,90,1), rgba(0,180,180,1), rgba(0,90,180,1), rgba(0,0,180,1), rgba(90,0,180,1), rgba(180,0,180,1), rgba(180,0,90,1))";
+						borderColor = "transparent";
 						textColor = "white";
 					}
 				}
@@ -256,12 +256,12 @@ class TopRoleEverywhere {
 					tag.classList.add("owner-tag");
 				}
 				tag.classList.add(type + "-tag");
-				tag.style.border = "1px solid " + borderColor;
-				tag.style.background = bgColor;
+				tag.style.setProperty("border", "1px solid " + borderColor);
+				tag.style.setProperty("background", bgColor);
 				var inner = tag.querySelector(".role-inner");
-				inner.style.color = textColor;
-				inner.style.backgroundImage = bgInner;
-				inner.style.webkitBackgroundClip = "text";
+				inner.style.setProperty("color", textColor);
+				inner.style.setProperty("background-image", bgInner);
+				inner.style.setProperty("-webkit-background-clip", "text");
 				inner.textContent = roleText;
 				
 				if (oldwidth && totalwidth) {
@@ -270,7 +270,7 @@ class TopRoleEverywhere {
 						newwidth = parseInt(newwidth.replace("px",""));
 						if (newwidth < 100 && oldwidth < 100) {
 							maxwidth = totalwidth - oldwidth - 15;
-							tag.style.maxWidth = maxwidth+"px";
+							tag.style.setProperty("max-width", maxwidth+"px");
 						}
 					}
 				}
@@ -289,12 +289,11 @@ class TopRoleEverywhere {
 					textColorID = idColor[0] > 180 && idColor[1] > 180 && idColor[2] > 180 ? "black" : "white";
 				}
 				idtag.classList.add("id-tag");
-				idtag.style.border = "1px solid " + borderColorID;
-				idtag.style.background = bgColorID;
+				idtag.style.setProperty("border", "1px solid " + borderColorID);
+				idtag.style.setProperty("background", bgColorID);
 				var idinner = idtag.querySelector(".role-inner");
-				idinner.style.color = textColorID;
-				idinner.style.backgroundImage = bgInnerID;
-				idinner.style.webkitBackgroundClip = "text";
+				idinner.style.setProperty("color", textColorID);
+				idinner.style.setProperty("background-image", bgInnerID); 
 				idinner.textContent = userID;
 			}
 		}
