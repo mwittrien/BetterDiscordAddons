@@ -24,6 +24,7 @@ https://raw.githubusercontent.com/ciaran/bd-switcher/master/switcher.plugin.js
 https://raw.githubusercontent.com/cosmicsalad/Discord-Themes-and-Plugins/master/plugins/emoteSorter.plugin.js
 https://raw.githubusercontent.com/cosmicsalad/Discord-Themes-and-Plugins/master/plugins/replyer.plugin.js
 https://raw.githubusercontent.com/cosmicsalad/Discord-Themes-and-Plugins/master/plugins/sorter.plugin.js
+https://raw.githubusercontent.com/Curtis-D/ChannelPopouts/master/ChannelPopouts.plugin.js
 https://raw.githubusercontent.com/Curtis-D/FullScreenSearch/master/FullScreenSearch.plugin.js
 https://raw.githubusercontent.com/Curtis-D/PinnedMessagesPlugin/master/PinnedMessagesPage.plugin.js
 https://raw.githubusercontent.com/Curtis-D/VIPs/master/VIPs.plugin.js
