@@ -93,7 +93,7 @@ class NotificationSounds {
 	
 	getDescription () {return "Allows you to replace the native sounds of Discord with your own";}
 
-	getVersion () {return "3.2.1";}
+	getVersion () {return "3.2.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -175,12 +175,12 @@ class NotificationSounds {
 		if (typeof BDFDB === "object") {
 			BDFDB.loadMessage(this);
 			
-			this.ChannelSettingsModule = BDFDB.WebModules.findByProperties(["isGuildOrCategoryOrChannelMuted"]);
+			this.ChannelSettingsUtils = BDFDB.WebModules.findByProperties(["isGuildOrCategoryOrChannelMuted"]);
 			
-			this.patchCancels.push(BDFDB.WebModules.monkeyPatch(BDFDB.WebModules.findByProperties(["receiveMessage"]), "receiveMessage", {before: (e) => {
+			BDFDB.WebModules.patch(BDFDB.WebModules.findByProperties(["receiveMessage"]), "receiveMessage", this, {before: (e) => {
 				let message = e.methodArguments[1];
 				let guildid = message.guild_id ? message.guild_id : null;
-				if (!this.ChannelSettingsModule.isGuildOrCategoryOrChannelMuted(guildid, message.channel_id) && message.author.id != BDFDB.myData.id) {
+				if (!this.ChannelSettingsUtils.isGuildOrCategoryOrChannelMuted(guildid, message.channel_id) && message.author.id != BDFDB.myData.id) {
 					if (!guildid) {
 						this.fireEvent("dm");
 						this.playAudio("dm");
@@ -192,9 +192,9 @@ class NotificationSounds {
 						}
 					}
 				}
-			}}));
+			}});
 			
-			this.patchCancels.push(BDFDB.WebModules.monkeyPatch(BDFDB.WebModules.findByProperties(["playSound"]), "playSound", {instead: (e) => {
+			BDFDB.WebModules.patch(BDFDB.WebModules.findByProperties(["playSound"]), "playSound", this, {instead: (e) => {
 				setImmediate(() => {
 					var type = e.methodArguments[0];
 					if (type == "message1") {
@@ -208,7 +208,7 @@ class NotificationSounds {
 					}
 					else this.playAudio(type);
 				});
-			}}));
+			}});
 			
 			var incomingCallAudio = new Audio();
 			this.incomingCallOwnerInstance = BDFDB.getOwnerInstance({"node":document.querySelector(BDFDB.dotCN.callcontainer), "props":["startRinging","stopRinging"], "up":true});
@@ -254,8 +254,8 @@ class NotificationSounds {
 										outgoingCallOwnerInstance.stopRinging = stop;
 
 										let CallingWrap = outgoingCallOwnerInstance._reactInternalFiber.type;
-										this.patchCancels.push(BDFDB.WebModules.monkeyPatch(CallingWrap.prototype, "startRinging", {instead: play}));
-										this.patchCancels.push(BDFDB.WebModules.monkeyPatch(CallingWrap.prototype, "stopRinging", {instead: stop}));
+										BDFDB.WebModules.patch(CallingWrap.prototype, "startRinging", this, {instead: play});
+										BDFDB.WebModules.patch(CallingWrap.prototype, "stopRinging", this, {instead: stop});
 
 										this.hasPatchedOutgoing = true;
 									}

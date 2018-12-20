@@ -19,7 +19,7 @@ class PinDMs {
 
 	getDescription () {return "Allows you to pin DMs, making them appear at the top of your DM-list.";}
 
-	getVersion () {return "1.2.3";}
+	getVersion () {return "1.2.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -188,7 +188,7 @@ class PinDMs {
 				for (let pos in sortedDMs) this.addPinnedDM(sortedDMs[pos], dmsarray, insertpoint);
 			}
 		};
-		this.patchCancels.push(BDFDB.WebModules.monkeyPatch(BDFDB.WebModules.findByName("LazyScroller").prototype, "render", {
+		BDFDB.WebModules.patch(BDFDB.WebModules.findByName("LazyScroller").prototype, "render", this, {
 			before: (e) => {
 				if (e.thisObject._reactInternalFiber.return.memoizedProps.privateChannelIds && !e.thisObject.props.PinDMsPatched) {
 					e.thisObject.props.PinDMsPatched = true; 
@@ -198,7 +198,7 @@ class PinDMs {
 					e.thisObject.getScrollerNode().scrollTop = this.oldSrollerPos;
 				}
 			}
-		}));
+		});
 		let dmsscroller = document.querySelector(BDFDB.dotCNS.dmchannels + BDFDB.dotCN.scroller);
 		if (dmsscroller) {
 			addAllDMs(BDFDB.getReactInstance(dmsscroller).return.return.return.memoizedProps.children);
