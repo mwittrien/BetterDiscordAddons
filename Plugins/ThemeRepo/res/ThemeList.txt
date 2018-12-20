@@ -11,7 +11,9 @@ https://raw.githubusercontent.com/BeardDesign1/Material-design-theme/themes/Bear
 https://raw.githubusercontent.com/CapnKitten/Material-Discord/master/Material-Discord.theme.css
 https://raw.githubusercontent.com/CAtOSe/Neon-Space-BetterDiscord-Theme/master/neon-space.theme.css
 https://raw.githubusercontent.com/Chloesviel/Discord-Stuff/master/minifiedMemberlist/minifiedMemberlist.theme.css
+https://raw.githubusercontent.com/codedotspectra/colorize/master/colorize_reborn.theme.css
 https://raw.githubusercontent.com/codedotspectra/discordneutron/master/neutronX.theme.css
+https://raw.githubusercontent.com/codedotspectra/dunes/master/dunes.theme.css
 https://raw.githubusercontent.com/CurimuChizu/CC-Themes/master/CC-Themes/Red.n.Black.theme.css
 https://raw.githubusercontent.com/CurimuChizu/CC-Themes/master/CC-Themes/ReZero.theme.css
 https://raw.githubusercontent.com/Dddsasul/TeamKappa-theme/master/ClearDiscord.theme.css
