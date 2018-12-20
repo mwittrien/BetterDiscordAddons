@@ -64,9 +64,9 @@ module.exports = (Plugin, Api, Vendor) => {
 			if (typeof BDFDB === "object") {			
 				BDFDB.loadMessage(this);
 				
-				this.GuildPerms = BDFDB.WebModules.findByProperties(["getHighestRole"]);
-				this.GuildStore = BDFDB.WebModules.findByProperties(["getGuild"]);
-				this.UserGuildState = BDFDB.WebModules.findByProperties(["getGuildId", "getLastSelectedGuildId"]);
+				this.GuildPerms = BDFDB.WebModules.findByProperties("getHighestRole");
+				this.GuildStore = BDFDB.WebModules.findByProperties("getGuild");
+				this.UserGuildState = BDFDB.WebModules.findByProperties("getGuildId", "getLastSelectedGuildId");
 				
 				var observer = null;
 

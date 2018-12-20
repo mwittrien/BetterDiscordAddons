@@ -120,9 +120,9 @@ class BadgesEverywhere {
 		if (typeof BDFDB === "object") {
 			BDFDB.loadMessage(this);
 			
-			this.APIModule = BDFDB.WebModules.findByProperties(["getAPIBaseURL"]);
-			this.DiscordConstants = BDFDB.WebModules.findByProperties(["Permissions", "ActivityTypes", "StatusTypes"]);
-			this.BadgeClasses = BDFDB.WebModules.findByProperties(["profileBadgeStaff","profileBadgePremium"]);
+			this.APIModule = BDFDB.WebModules.findByProperties("getAPIBaseURL");
+			this.DiscordConstants = BDFDB.WebModules.findByProperties("Permissions", "ActivityTypes", "StatusTypes");
+			this.BadgeClasses = BDFDB.WebModules.findByProperties("profileBadgeStaff","profileBadgePremium");
 			
 			var observer = null;
 

@@ -177,13 +177,13 @@ class PersonalPins {
 		if (typeof BDFDB === "object") {
 			BDFDB.loadMessage(this); 
 			
-			this.GuildStore = BDFDB.WebModules.findByProperties(["getGuild"]);
-			this.ChannelStore = BDFDB.WebModules.findByProperties(["getChannel"]);
-			this.UserStore = BDFDB.WebModules.findByProperties(["getUser"]);
-			this.MemberStore = BDFDB.WebModules.findByProperties(["getMember"]);
-			this.IconUtils = BDFDB.WebModules.findByProperties(["getUserAvatarURL"]);
-			this.HistoryUtils = BDFDB.WebModules.findByProperties(["transitionTo", "replaceWith", "getHistory"]);
-			this.MainDiscord = BDFDB.WebModules.findByProperties(["ActionTypes"]);
+			this.GuildStore = BDFDB.WebModules.findByProperties("getGuild");
+			this.ChannelStore = BDFDB.WebModules.findByProperties("getChannel");
+			this.UserStore = BDFDB.WebModules.findByProperties("getUser");
+			this.MemberStore = BDFDB.WebModules.findByProperties("getMember");
+			this.IconUtils = BDFDB.WebModules.findByProperties("getUserAvatarURL");
+			this.HistoryUtils = BDFDB.WebModules.findByProperties("transitionTo", "replaceWith", "getHistory");
+			this.MainDiscord = BDFDB.WebModules.findByProperties("ActionTypes");
 			
 			var observer = null;
 

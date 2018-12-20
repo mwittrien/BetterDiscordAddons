@@ -45,8 +45,8 @@ class PinDMs {
 		if (typeof BDFDB === "object") {
 			BDFDB.loadMessage(this);
 			
-			this.UserStore = BDFDB.WebModules.findByProperties(["getUsers", "getUser"]);
-			this.ChannelUtils = BDFDB.WebModules.findByProperties(["getDMFromUserId"]);
+			this.UserStore = BDFDB.WebModules.findByProperties("getUsers", "getUser");
+			this.ChannelUtils = BDFDB.WebModules.findByProperties("getDMFromUserId");
 			
 			var observer = null;
 			

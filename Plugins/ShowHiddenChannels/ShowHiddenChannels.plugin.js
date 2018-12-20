@@ -139,13 +139,13 @@ class ShowHiddenChannels {
 		if (typeof BDFDB === "object") {
 			BDFDB.loadMessage(this);
 			
-			this.React = BDFDB.WebModules.findByProperties(["createElement", "cloneElement"]);
-			this.ChannelTypes = BDFDB.WebModules.findByProperties(["ChannelTypes"]).ChannelTypes;
-			this.UserStore = BDFDB.WebModules.findByProperties(["getUsers", "getUser"]);
-			this.MemberStore = BDFDB.WebModules.findByProperties(["getMember", "getMembers"]);
-			this.ChannelStore = BDFDB.WebModules.findByProperties(["getChannels", "getDMFromUserId"]);
-			this.GuildChannels = BDFDB.WebModules.findByProperties(["getChannels", "getDefaultChannel"]);
-			this.Permissions = BDFDB.WebModules.findByProperties(["Permissions", "ActivityTypes"]).Permissions;
+			this.React = BDFDB.WebModules.findByProperties("createElement", "cloneElement");
+			this.ChannelTypes = BDFDB.WebModules.findByProperties("ChannelTypes").ChannelTypes;
+			this.UserStore = BDFDB.WebModules.findByProperties("getUsers", "getUser");
+			this.MemberStore = BDFDB.WebModules.findByProperties("getMember", "getMembers");
+			this.ChannelStore = BDFDB.WebModules.findByProperties("getChannels", "getDMFromUserId");
+			this.GuildChannels = BDFDB.WebModules.findByProperties("getChannels", "getDefaultChannel");
+			this.Permissions = BDFDB.WebModules.findByProperties("Permissions", "ActivityTypes").Permissions;
 			
 			var observer = null;
 

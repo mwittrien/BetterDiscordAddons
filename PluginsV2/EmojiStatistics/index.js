@@ -207,7 +207,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				});
 				BDFDB.addObserver(this, BDFDB.dotCN.popouts, {name:"emojiPickerObserver",instance:observer}, {childList: true});
 				
-				this.GuildEmojis = BDFDB.WebModules.findByProperties(["getGuildEmoji", "getDisambiguatedEmojiContext"]);
+				this.GuildEmojis = BDFDB.WebModules.findByProperties("getGuildEmoji", "getDisambiguatedEmojiContext");
 
 				return true;
 			}

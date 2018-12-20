@@ -67,9 +67,9 @@ module.exports = (Plugin, Api, Vendor) => {
 				});
 				BDFDB.addObserver(this, BDFDB.dotCN.friendsonline, {name:"friendCountObserver",instance:observer}, {childList:true, subtree:true, characterData:true});
 				
-				this.FriendUtils = BDFDB.WebModules.findByProperties(["getFriendIDs", "getRelationships"]);
-				this.UserMetaStore = BDFDB.WebModules.findByProperties(["getStatuses", "getOnlineFriendCount"]);
-				var RelationshipTypes = BDFDB.WebModules.findByProperties(["RelationshipTypes"]).RelationshipTypes;
+				this.FriendUtils = BDFDB.WebModules.findByProperties("getFriendIDs", "getRelationships");
+				this.UserMetaStore = BDFDB.WebModules.findByProperties("getStatuses", "getOnlineFriendCount");
+				var RelationshipTypes = BDFDB.WebModules.findByProperties("RelationshipTypes").RelationshipTypes;
 				for (let type in RelationshipTypes) {
 					this.relationshipTypes[RelationshipTypes[type]] = type;
 				}

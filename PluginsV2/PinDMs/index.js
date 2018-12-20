@@ -57,11 +57,11 @@ module.exports = (Plugin, Api, Vendor) => {
 			if (typeof BDFDB === "object") {
 				BDFDB.loadMessage(this);
 				
-				this.UserStore = BDFDB.WebModules.findByProperties(["getUsers", "getUser"]);
-				this.ActivityStore = BDFDB.WebModules.findByProperties(["getStatuses", "getActivities"]);
-				this.ChannelStore = BDFDB.WebModules.findByProperties(["getDMFromUserId"]);
-				this.ChannelSwitchUtils = BDFDB.WebModules.findByProperties(["selectPrivateChannel"]);
-				this.UserContextMenuUtils = BDFDB.WebModules.findByProperties(["openUserContextMenu"]);
+				this.UserStore = BDFDB.WebModules.findByProperties("getUsers", "getUser");
+				this.ActivityStore = BDFDB.WebModules.findByProperties("getStatuses", "getActivities");
+				this.ChannelStore = BDFDB.WebModules.findByProperties("getDMFromUserId");
+				this.ChannelSwitchUtils = BDFDB.WebModules.findByProperties("selectPrivateChannel");
+				this.UserContextMenuUtils = BDFDB.WebModules.findByProperties("openUserContextMenu");
 				
 				var observer = null;
 				

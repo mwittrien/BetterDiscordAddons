@@ -352,8 +352,8 @@ class ServerFolders {
 		if (typeof BDFDB === "object") {
 			BDFDB.loadMessage(this);
 			
-			this.DiscordConstants = BDFDB.WebModules.findByProperties(["Permissions", "ActivityTypes", "StatusTypes"]);
-			this.Animations = BDFDB.WebModules.findByProperties(["spring"]);
+			this.DiscordConstants = BDFDB.WebModules.findByProperties("Permissions", "ActivityTypes", "StatusTypes");
+			this.Animations = BDFDB.WebModules.findByProperties("spring");
 			
 			var observer = null;
 

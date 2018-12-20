@@ -347,8 +347,8 @@ class ThemeRepo {
 		if (typeof BDFDB === "object") {
 			BDFDB.loadMessage(this);
 			
-			this.UserUtils = BDFDB.WebModules.findByProperties(["getUsers"]);
-			this.IconUtils = BDFDB.WebModules.findByProperties(["getUserAvatarURL"]);
+			this.UserUtils = BDFDB.WebModules.findByProperties("getUsers");
+			this.IconUtils = BDFDB.WebModules.findByProperties("getUserAvatarURL");
 			
 			var observer = null;
 

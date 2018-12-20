@@ -234,7 +234,7 @@ class EmojiStatistics {
 			});
 			BDFDB.addObserver(this, BDFDB.dotCN.popouts, {name:"emojiPickerObserver",instance:observer}, {childList: true});
 			
-			this.GuildEmojis = BDFDB.WebModules.findByProperties(["getGuildEmoji", "getDisambiguatedEmojiContext"]);
+			this.GuildEmojis = BDFDB.WebModules.findByProperties("getGuildEmoji", "getDisambiguatedEmojiContext");
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");

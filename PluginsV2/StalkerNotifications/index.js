@@ -146,10 +146,10 @@ module.exports = (Plugin, Api, Vendor) => {
 			if (typeof BDFDB === "object") {
 				BDFDB.loadMessage(this);
 				
-				this.ChannelUtils = BDFDB.WebModules.findByProperties(["getDMFromUserId"]);
-				this.ChannelSwitchUtils = BDFDB.WebModules.findByProperties(["selectPrivateChannel"]);
-				this.UserMetaStore = BDFDB.WebModules.findByProperties(["getStatuses", "getOnlineFriendCount"]);
-				this.UserUtils = BDFDB.WebModules.findByProperties(["getUsers"]);
+				this.ChannelUtils = BDFDB.WebModules.findByProperties("getDMFromUserId");
+				this.ChannelSwitchUtils = BDFDB.WebModules.findByProperties("selectPrivateChannel");
+				this.UserMetaStore = BDFDB.WebModules.findByProperties("getStatuses", "getOnlineFriendCount");
+				this.UserUtils = BDFDB.WebModules.findByProperties("getUsers");
 				
 				for (let id in BDFDB.loadAllData(this, "users")) {
 					this.stalkerOnlineList[id] = this.UserMetaStore.getStatus(id) != "offline";

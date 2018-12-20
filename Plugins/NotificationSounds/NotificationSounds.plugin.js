@@ -175,9 +175,9 @@ class NotificationSounds {
 		if (typeof BDFDB === "object") {
 			BDFDB.loadMessage(this);
 			
-			this.ChannelSettingsUtils = BDFDB.WebModules.findByProperties(["isGuildOrCategoryOrChannelMuted"]);
+			this.ChannelSettingsUtils = BDFDB.WebModules.findByProperties("isGuildOrCategoryOrChannelMuted");
 			
-			BDFDB.WebModules.patch(BDFDB.WebModules.findByProperties(["receiveMessage"]), "receiveMessage", this, {before: (e) => {
+			BDFDB.WebModules.patch(BDFDB.WebModules.findByProperties("receiveMessage"), "receiveMessage", this, {before: (e) => {
 				let message = e.methodArguments[1];
 				let guildid = message.guild_id ? message.guild_id : null;
 				if (!this.ChannelSettingsUtils.isGuildOrCategoryOrChannelMuted(guildid, message.channel_id) && message.author.id != BDFDB.myData.id) {
@@ -194,7 +194,7 @@ class NotificationSounds {
 				}
 			}});
 			
-			BDFDB.WebModules.patch(BDFDB.WebModules.findByProperties(["playSound"]), "playSound", this, {instead: (e) => {
+			BDFDB.WebModules.patch(BDFDB.WebModules.findByProperties("playSound"), "playSound", this, {instead: (e) => {
 				setImmediate(() => {
 					var type = e.methodArguments[0];
 					if (type == "message1") {

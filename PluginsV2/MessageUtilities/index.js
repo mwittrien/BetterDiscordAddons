@@ -62,11 +62,11 @@ module.exports = (Plugin, Api, Vendor) => {
 			if (typeof BDFDB === "object") {
 				BDFDB.loadMessage(this);
 				
-				this.ChannelStore = BDFDB.WebModules.findByProperties(["getChannel", "getChannels"]);
-				this.MessageActions = BDFDB.WebModules.findByProperties(["startEditMessage", "endEditMessage"]);
-				this.PinActions = BDFDB.WebModules.findByProperties(["pinMessage", "unpinMessage"]);
-				this.CurrentUserPerms = BDFDB.WebModules.findByProperties(["getChannelPermissions", "can"]);
-				this.Permissions = BDFDB.WebModules.findByProperties(["Permissions", "ActivityTypes"]).Permissions
+				this.ChannelStore = BDFDB.WebModules.findByProperties("getChannel", "getChannels");
+				this.MessageActions = BDFDB.WebModules.findByProperties("startEditMessage", "endEditMessage");
+				this.PinActions = BDFDB.WebModules.findByProperties("pinMessage", "unpinMessage");
+				this.CurrentUserPerms = BDFDB.WebModules.findByProperties("getChannelPermissions", "can");
+				this.Permissions = BDFDB.WebModules.findByProperties("Permissions", "ActivityTypes").Permissions
 				
 				$(document)
 					.on("click." + this.name, BDFDB.dotCN.message, (e) => {

@@ -134,11 +134,11 @@ module.exports = (Plugin, Api, Vendor) => {
 			if (typeof BDFDB === "object") {
 				BDFDB.loadMessage(this);
 				
-				this.FriendUtils = BDFDB.WebModules.findByProperties(["getFriendIDs", "getRelationships"]);
-				this.ChannelUtils = BDFDB.WebModules.findByProperties(["getDMFromUserId"]);
-				this.ChannelSwitchUtils = BDFDB.WebModules.findByProperties(["selectPrivateChannel"]);
-				this.UserMetaStore = BDFDB.WebModules.findByProperties(["getStatuses", "getOnlineFriendCount"]);
-				this.UserUtils = BDFDB.WebModules.findByProperties(["getUsers"]);
+				this.FriendUtils = BDFDB.WebModules.findByProperties("getFriendIDs", "getRelationships");
+				this.ChannelUtils = BDFDB.WebModules.findByProperties("getDMFromUserId");
+				this.ChannelSwitchUtils = BDFDB.WebModules.findByProperties("selectPrivateChannel");
+				this.UserMetaStore = BDFDB.WebModules.findByProperties("getStatuses", "getOnlineFriendCount");
+				this.UserUtils = BDFDB.WebModules.findByProperties("getUsers");
 				
 				var observer = null;
 				

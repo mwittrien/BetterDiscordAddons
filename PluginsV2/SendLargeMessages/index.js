@@ -84,7 +84,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			if (typeof BDFDB === "object") {
 				BDFDB.loadMessage(this);
 				
-				this.MessageUtils = BDFDB.WebModules.findByProperties(["parse","isMentioned"]);
+				this.MessageUtils = BDFDB.WebModules.findByProperties("parse","isMentioned");
 							
 				this.bindEventToTextArea();
 

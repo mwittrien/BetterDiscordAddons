@@ -97,8 +97,8 @@ class BetterSearchPage {
 		if (typeof BDFDB === "object") {
 			BDFDB.loadMessage(this);
 			
-			this.SearchNavigation = BDFDB.WebModules.findByProperties(["searchNextPage","searchPreviousPage"]);
-			this.SearchUtils = BDFDB.WebModules.findByProperties(["getCurrentSearchId"]);
+			this.SearchNavigation = BDFDB.WebModules.findByProperties("searchNextPage","searchPreviousPage");
+			this.SearchUtils = BDFDB.WebModules.findByProperties("getCurrentSearchId");
 			
 			var observer = null;
 

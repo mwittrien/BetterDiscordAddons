@@ -284,11 +284,11 @@ class StalkerNotifications {
 				BDFDB.removeAllData(this, "notificationsound");
 			}
 			
-			this.ChannelUtils = BDFDB.WebModules.findByProperties(["getDMFromUserId"]);
-			this.ChannelSwitchUtils = BDFDB.WebModules.findByProperties(["selectPrivateChannel"]);
-			this.PrivateChannelUtils = BDFDB.WebModules.findByProperties(["openPrivateChannel"]);
-			this.UserMetaStore = BDFDB.WebModules.findByProperties(["getStatus", "getOnlineFriendCount"]);
-			this.UserUtils = BDFDB.WebModules.findByProperties(["getUsers"]);
+			this.ChannelUtils = BDFDB.WebModules.findByProperties("getDMFromUserId");
+			this.ChannelSwitchUtils = BDFDB.WebModules.findByProperties("selectPrivateChannel");
+			this.PrivateChannelUtils = BDFDB.WebModules.findByProperties("openPrivateChannel");
+			this.UserMetaStore = BDFDB.WebModules.findByProperties("getStatus", "getOnlineFriendCount");
+			this.UserUtils = BDFDB.WebModules.findByProperties("getUsers");
 			
 			for (let id in BDFDB.loadAllData(this, "users")) {
 				this.stalkerOnlineList[id] = this.UserMetaStore.getStatus(id) != "offline";

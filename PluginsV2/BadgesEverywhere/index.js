@@ -76,9 +76,9 @@ module.exports = (Plugin, Api, Vendor) => {
 			if (typeof BDFDB === "object") {
 				BDFDB.loadMessage(this);
 				
-				this.UserModalUtils = BDFDB.WebModules.findByProperties(["fetchMutualFriends","open"]);
-				this.APIModule = BDFDB.WebModules.findByProperties(["getAPIBaseURL"]);
-				this.DiscordConstants = BDFDB.WebModules.findByProperties(["Permissions", "ActivityTypes", "StatusTypes"]);
+				this.UserModalUtils = BDFDB.WebModules.findByProperties("fetchMutualFriends","open");
+				this.APIModule = BDFDB.WebModules.findByProperties("getAPIBaseURL");
+				this.DiscordConstants = BDFDB.WebModules.findByProperties("Permissions", "ActivityTypes", "StatusTypes");
 				
 				var observer = null;
 

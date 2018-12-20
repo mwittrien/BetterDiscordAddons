@@ -59,8 +59,8 @@ class RemoveNicknames {
 		if (typeof BDFDB === "object") {
 			BDFDB.loadMessage(this);
 			
-			this.UserStore = BDFDB.WebModules.findByProperties(["getUsers", "getUser"]);
-			this.MemberPerms = BDFDB.WebModules.findByProperties(["getNicknames", "getNick"]);
+			this.UserStore = BDFDB.WebModules.findByProperties("getUsers", "getUser");
+			this.MemberPerms = BDFDB.WebModules.findByProperties("getNicknames", "getNick");
 			
 			var observer = null;
 

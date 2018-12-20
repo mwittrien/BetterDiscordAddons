@@ -217,11 +217,11 @@ class EditUsers {
 		if (typeof BDFDB === "object") {
 			BDFDB.loadMessage(this);
 			
-			this.UserStore = BDFDB.WebModules.findByProperties(["getUsers", "getUser"]);
-			this.MemberPerms = BDFDB.WebModules.findByProperties(["getNicknames", "getNick"]);
-			this.TypingUtils = BDFDB.WebModules.findByProperties(["getTypingUsers"]);
-			this.LastGuildStore = BDFDB.WebModules.findByProperties(["getLastSelectedGuildId"]);
-			this.LastChannelStore = BDFDB.WebModules.findByProperties(["getLastSelectedChannelId"]);
+			this.UserStore = BDFDB.WebModules.findByProperties("getUsers", "getUser");
+			this.MemberPerms = BDFDB.WebModules.findByProperties("getNicknames", "getNick");
+			this.TypingUtils = BDFDB.WebModules.findByProperties("getTypingUsers");
+			this.LastGuildStore = BDFDB.WebModules.findByProperties("getLastSelectedGuildId");
+			this.LastChannelStore = BDFDB.WebModules.findByProperties("getLastSelectedChannelId");
 			
 			var observer = null;
 

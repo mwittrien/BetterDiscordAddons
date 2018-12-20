@@ -217,7 +217,7 @@ module.exports = (Plugin, Api, Vendor) => {
 		initialize () {
 			if (typeof BDFDB === "object") {
 				BDFDB.loadMessage(this);
-				this.LanguageUtils = BDFDB.WebModules.findByProperties(["getLanguages"]);
+				this.LanguageUtils = BDFDB.WebModules.findByProperties("getLanguages");
 				this.translateInterval = setInterval(() => {
 					if (document.querySelector("html").lang && document.querySelector("html").lang == "de") {
 						clearInterval(this.translateInterval);

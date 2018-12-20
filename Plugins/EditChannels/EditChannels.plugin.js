@@ -140,7 +140,7 @@ class EditChannels {
 		if (typeof BDFDB === "object") {
 			BDFDB.loadMessage(this);
 			
-			this.LastGuildStore = BDFDB.WebModules.findByProperties(["getLastSelectedGuildId"]);
+			this.LastGuildStore = BDFDB.WebModules.findByProperties("getLastSelectedGuildId");
 			
 			var observer = null;
 

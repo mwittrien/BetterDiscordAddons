@@ -112,7 +112,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			if (typeof BDFDB === "object") {
 				BDFDB.loadMessage(this);
 				
-				this.SoundUtils = BDFDB.WebModules.findByProperties(["playSound"]);
+				this.SoundUtils = BDFDB.WebModules.findByProperties("playSound");
 				
 				this.patchCancel = BDFDB.WebModules.monkeyPatch(this.SoundUtils, "playSound", {instead: (e) => {
 					setImmediate(() => {

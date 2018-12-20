@@ -234,12 +234,12 @@ class FriendNotifications {
 				BDFDB.removeAllData(this, "notificationsound");
 			}
 			
-			this.FriendUtils = BDFDB.WebModules.findByProperties(["getFriendIDs", "getRelationships"]);
-			this.ChannelUtils = BDFDB.WebModules.findByProperties(["getDMFromUserId"]);
-			this.ChannelSwitchUtils = BDFDB.WebModules.findByProperties(["selectPrivateChannel"]);
-			this.PrivateChannelUtils = BDFDB.WebModules.findByProperties(["openPrivateChannel"]);
-			this.UserMetaStore = BDFDB.WebModules.findByProperties(["getStatus", "getOnlineFriendCount"]);
-			this.UserUtils = BDFDB.WebModules.findByProperties(["getUsers"]);
+			this.FriendUtils = BDFDB.WebModules.findByProperties("getFriendIDs", "getRelationships");
+			this.ChannelUtils = BDFDB.WebModules.findByProperties("getDMFromUserId");
+			this.ChannelSwitchUtils = BDFDB.WebModules.findByProperties("selectPrivateChannel");
+			this.PrivateChannelUtils = BDFDB.WebModules.findByProperties("openPrivateChannel");
+			this.UserMetaStore = BDFDB.WebModules.findByProperties("getStatus", "getOnlineFriendCount");
+			this.UserUtils = BDFDB.WebModules.findByProperties("getUsers");
 			
 			var observer = null;
 			

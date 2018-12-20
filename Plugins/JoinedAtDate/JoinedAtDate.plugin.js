@@ -103,9 +103,9 @@ class JoinedAtDate {
 		if (typeof BDFDB === "object") {
 			BDFDB.loadMessage(this);
 			
-			this.CurrentGuildStore = BDFDB.WebModules.findByProperties(["getLastSelectedGuildId"]);
-			this.APIModule = BDFDB.WebModules.findByProperties(["getAPIBaseURL"]);
-			this.DiscordConstants = BDFDB.WebModules.findByProperties(["Permissions", "ActivityTypes", "StatusTypes"]);
+			this.CurrentGuildStore = BDFDB.WebModules.findByProperties("getLastSelectedGuildId");
+			this.APIModule = BDFDB.WebModules.findByProperties("getAPIBaseURL");
+			this.DiscordConstants = BDFDB.WebModules.findByProperties("Permissions", "ActivityTypes", "StatusTypes");
 			
 			var observer = null;
 

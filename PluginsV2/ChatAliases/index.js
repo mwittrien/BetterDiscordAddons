@@ -34,9 +34,9 @@ module.exports = (Plugin, Api, Vendor) => {
 			if (typeof BDFDB === "object") {
 				BDFDB.loadMessage(this);
 
-				this.UploadModule = BDFDB.WebModules.findByProperties(["instantBatchUpload"]);
-				this.CurrentUserPerms = BDFDB.WebModules.findByProperties(["getChannelPermissions", "can"]);
-				this.Permissions = BDFDB.WebModules.findByProperties(["Permissions", "ActivityTypes"]).Permissions;
+				this.UploadModule = BDFDB.WebModules.findByProperties("instantBatchUpload");
+				this.CurrentUserPerms = BDFDB.WebModules.findByProperties("getChannelPermissions", "can");
+				this.Permissions = BDFDB.WebModules.findByProperties("Permissions", "ActivityTypes").Permissions;
 
 				var observer = null;
 
