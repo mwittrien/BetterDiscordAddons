@@ -294,6 +294,7 @@ class TopRoleEverywhere {
 				var idinner = idtag.querySelector(".role-inner");
 				idinner.style.setProperty("color", textColorID);
 				idinner.style.setProperty("background-image", bgInnerID); 
+				idinner.style.setProperty("-webkit-background-clip", "text");
 				idinner.textContent = userID;
 			}
 		}
