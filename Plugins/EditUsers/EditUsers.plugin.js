@@ -145,7 +145,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "3.0.0";}
+	getVersion () {return "3.0.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -194,7 +194,6 @@ class EditUsers {
 			}
 			BDFDB.WebModules.patch(BDFDB.WebModules.findByProperties("AvatarWrapper").default, "default", this, {after: (e) => {this.initiateProcess(e.thisObject, "Avatar");}});
 			
-			this.UserPopoutClasses = BDFDB.WebModules.findByProperties("userPopout", "header");
 			this.RelationshipUtils = BDFDB.WebModules.findByProperties("isBlocked", "isFriend");
 			this.UserUtils = BDFDB.WebModules.findByProperties("getUsers","getUser");
 			this.MemberUtils = BDFDB.WebModules.findByProperties("getMembers", "getMember");
@@ -658,8 +657,8 @@ class EditUsers {
 	changeTooltip (info, wrapper, type) {
 		if (!info || !wrapper) return;
 		var data = BDFDB.loadData(info.id, this, "users");
-		wrapper.off("mouseenter." + this.getName())
-		if (data && data.name) wrapper.on("mouseenter." + this.getName(), () => {
+		$(wrapper).off("mouseenter." + this.getName())
+		if (data && data.name) $(wrapper).on("mouseenter." + this.getName(), () => {
 			BDFDB.createTooltip(data.name, wrapper, {type,selector:"edituser-tooltip",css:`body ${BDFDB.dotCN.tooltip}:not(.edituser-tooltip) {display: none !important;}`});
 		});
 	}
@@ -689,17 +688,17 @@ class EditUsers {
 		BDFDB.setInnerText(mention, "@" + (data.name || member.nick || info.username));
 		mention.style.setProperty("color", color1 ? "rgb(" + color1[0] + "," + color1[1] + "," + color1[2] + ")" : null, "important");
 		mention.style.setProperty("background", color1 ? "rgba(" + color1[0] + "," + color1[1] + "," + color1[2] + ",.1)" : null, "important");
-		mention.off("mouseenter." + this.getName());
-		mention.off("mouseleave." + this.getName());
+		$(mention).off("mouseenter." + this.getName()).off("mouseleave." + this.getName());
 		if (color1) {
-			mention.on("mouseenter." + this.getName(), (e) => {
-				mention.style.setProperty("color", "#FFFFFF", "important");
-				mention.style.setProperty("background", "rgba(" + color1[0] + "," + color1[1] + "," + color1[2] + ",.7)", "important");
-			});
-			mention.on("mouseleave." + this.getName(), (e) => {
-				mention.style.setProperty("color", "rgb(" + color1[0] + "," + color1[1] + "," + color1[2] + ")", "important");
-				mention.style.setProperty("background", "rgba(" + color1[0] + "," + color1[1] + "," + color1[2] + ",.1)", "important");
-			});
+			$(mention)
+				.on("mouseenter." + this.getName(), (e) => {
+					mention.style.setProperty("color", "#FFFFFF", "important");
+					mention.style.setProperty("background", "rgba(" + color1[0] + "," + color1[1] + "," + color1[2] + ",.7)", "important");
+				})
+				.on("mouseleave." + this.getName(), (e) => {
+					mention.style.setProperty("color", "rgb(" + color1[0] + "," + color1[1] + "," + color1[2] + ")", "important");
+					mention.style.setProperty("background", "rgba(" + color1[0] + "," + color1[1] + "," + color1[2] + ",.1)", "important");
+				});
 		}
 	}
 	
