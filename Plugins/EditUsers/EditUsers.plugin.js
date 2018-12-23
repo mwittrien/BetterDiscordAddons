@@ -161,8 +161,12 @@ class EditUsers {
 		BDFDB.initElements(settingspanel);
 
 		$(settingspanel)
-			.on("click", BDFDB.dotCN.switchinner, () => {this.updateSettings(settingspanel);})
-			.on("click", ".reset-button", () => {this.resetAll();});
+			.on("click", ".reset-button", () => {
+				if (confirm("Are you sure you want to reset all users?")) {
+					BDFDB.removeAllData(this, "users");
+					this.forceAllUpdates();
+				}
+			});
 		return settingspanel;
 	}
 
@@ -239,21 +243,6 @@ class EditUsers {
 
 	
 	// begin of own functions
-
-	updateSettings (settingspanel) {
-		var settings = {};
-		for (var input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner)) {
-			settings[input.value] = input.checked;
-		}
-		BDFDB.saveAllData(settings, this, "settings");
-	}
-
-	resetAll () {
-		if (confirm("Are you sure you want to reset all users?")) {
-			BDFDB.removeAllData(this, "users");
-			this.forceAllUpdates();
-		}
-	}
 
 	changeLanguageStrings () {
 		this.userContextEntryMarkup =		this.userContextEntryMarkup.replace("REPLACE_context_localusersettings_text", this.labels.context_localusersettings_text);
