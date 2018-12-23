@@ -5,15 +5,15 @@ class EditUsers {
 		this.labels = {}; 
 		
 		this.moduleTypes = {
-			"ChannelTextArea":"componentDidMount",
 			"NameTag":"componentDidMount",
-			"Popout":"componentDidMount",
+			"ChannelTextArea":"componentDidMount",
 			"AuditLog":"componentDidMount",
 			"FluxContainer(TypingUsers)":"componentDidUpdate",
-			"DirectMessage":"render",
-			"CallAvatar":"render",
-			"PrivateChannel":"render",
-			"Clickable":"render"
+			"Popout":"componentDidMount",
+			"DirectMessage":"componentDidMount",
+			"CallAvatar":"componentDidMount",
+			"PrivateChannel":"componentDidMount",
+			"Clickable":"componentDidMount"
 		};
 
 		this.css = `
@@ -145,7 +145,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "3.0.1";}
+	getVersion () {return "3.0.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -585,7 +585,8 @@ class EditUsers {
 		let data = BDFDB.loadData(info.id, this, "users") || {};
 		let member = this.MemberUtils.getMember(guildid, info.id) || {};
 		let usenick = !username.classList.contains(BDFDB.disCN.userprofileusername) && !username.parentElement.classList.contains(BDFDB.disCN.accountinfodetails) && member.nick;
-		let color1 = BDFDB.colorCONVERT(data.color1 || member.colorString, "RGB");
+		let changecolor = username.classList.contains(BDFDB.disCN.memberusername) || username.classList.contains(BDFDB.disCN.messageusername) || BDFDB.isPluginEnabled("BetterRoleColors");
+		let color1 = BDFDB.colorCONVERT(data.color1 || (changecolor ? member.colorString : null), "RGB");
 		let color2 = BDFDB.colorCONVERT(data.color2, "RGB");
 		username.style.setProperty("color", color1, "important");
 		username.style.setProperty("background-color", color2, "important");
@@ -657,6 +658,7 @@ class EditUsers {
 		wrapper.querySelectorAll(".EditUsers-tag").forEach((tag) => tag.remove());
 		let data = BDFDB.loadData(info.id, this, "users");
 		if (data && data.tag) {
+			let member = data.ignoreTagColor ? (this.MemberUtils.getMember(this.LastGuildStore.getGuildId(), info.id) || {}) : {};
 			let color3 = BDFDB.colorCONVERT(!data.ignoreTagColor ? data.color3 : member.colorString, "RGB");
 			let color3COMP = color3 ? BDFDB.colorCONVERT(color3, "RGBCOMP") : [0,0,0];
 			let color4 = !data.ignoreTagColor && data.color4 ? BDFDB.colorCONVERT(data.color4, "RGB") : (color3COMP[0] > 180 && color3COMP[1] > 180 && color3COMP[2] > 180 ? "black" : "white");
