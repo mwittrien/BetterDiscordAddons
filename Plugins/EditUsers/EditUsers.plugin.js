@@ -145,7 +145,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "3.0.3";}
+	getVersion () {return "3.0.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -633,7 +633,7 @@ class EditUsers {
 		let url = data.removeIcon ? null : ("url(" + (data.url || BDFDB.getUserAvatar(info.id)) + ") center/cover");
 		if (url && avatar.classList.contains(BDFDB.disCN.avatarmaskprofile) && url.search(/discordapp\.com\/avatars\/[0-9]*\/a_/) > -1) url = url.replace(".webp)", ".gif)");
 		avatar.style.setProperty("background", url);
-		if (!BDFDB.isObjectEmpty(data)) {
+		if (data.url || data.removeIcon) {
 			avatar.EditUsersChangeObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
