@@ -17,15 +17,15 @@ class EditUsers {
 		};
 
 		this.css = `
-			.EditUsers-tag {
+			${BDFDB.dotCN.bottag} {
 				top: -4px;
 				position: relative;
 				margin-left: 1ch;
 			}
-			${BDFDB.dotCN.memberusername} ~ .EditUsers-tag {
+			${BDFDB.dotCN.memberusername} ~ ${BDFDB.dotCN.bottag} {
 				top: 0px;
 			}
-			${BDFDB.dotCN.messagegroupcompact} .EditUsers-tag {
+			${BDFDB.dotCN.messagegroupcompact} ${BDFDB.dotCN.bottag} {
 				margin-right: 6px;
 			}`;
 
@@ -196,7 +196,6 @@ class EditUsers {
 				let module = BDFDB.WebModules.findByName(type);
 				if (module && module.prototype) BDFDB.WebModules.patch(module.prototype, this.moduleTypes[type], this, {after: (e) => {this.initiateProcess(e.thisObject, type);}});
 			}
-			BDFDB.WebModules.patch(BDFDB.WebModules.findByProperties("AvatarWrapper").default, "default", this, {after: (e) => {this.initiateProcess(e.thisObject, "Avatar");}});
 			
 			this.RelationshipUtils = BDFDB.WebModules.findByProperties("isBlocked", "isFriend");
 			this.UserUtils = BDFDB.WebModules.findByProperties("getUsers","getUser");
