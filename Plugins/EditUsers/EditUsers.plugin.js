@@ -13,6 +13,7 @@ class EditUsers {
 			"DirectMessage":"componentDidMount",
 			"CallAvatar":"componentDidMount",
 			"PrivateChannel":"componentDidMount",
+			"HeaderBar":["componentDidMount","componentDidUpdate"],
 			"Clickable":"componentDidMount"
 		};
 
@@ -145,7 +146,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "3.0.5";}
+	getVersion () {return "3.0.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -509,6 +510,25 @@ class EditUsers {
 		}
 	}
 	
+	processHeaderBar (instance, wrapper) {
+		let fiber = instance._reactInternalFiber;
+		if (fiber.return && fiber.return.memoizedProps && fiber.return.memoizedProps.channelId) {
+			let username = wrapper.querySelector(BDFDB.dotCN.channelheaderchannelname);
+			if (username) {
+				let channel = this.ChannelUtils.getChannel(fiber.return.memoizedProps.channelId);
+				if (channel) {
+					if (channel.type == 1) this.changeName(this.UserUtils.getUser(channel.recipients[0]), username);
+					else {
+						if (username.EditUsersChangeObserver && typeof username.EditUsersChangeObserver.disconnect == "function") username.EditUsersChangeObserver.disconnect();
+						username.style.removeProperty("color");
+						username.style.removeProperty("background");
+						BDFDB.setInnerText(username, channel.name);
+					}
+				}
+			}
+		}
+	}
+	
 	processClickable (instance, wrapper) {
 		if (!wrapper || !instance.props || !instance.props.className) return;
 		if (instance.props.tag == "a" && instance.props.className.indexOf(BDFDB.disCN.anchorunderlineonhover) > -1) {
@@ -516,10 +536,6 @@ class EditUsers {
 				let message = BDFDB.getKeyInformation({node:wrapper.parentElement, key:"message", up:true});
 				if (message) this.changeName(message.author, wrapper);
 			}
-		}
-		else if (instance.props.tag == "span" && instance.props.className.indexOf(BDFDB.disCN.channelheaderchannelname) > -1) {
-			let channel = this.ChannelUtils.getChannel(this.LastChannelStore.getChannelId());
-			if (channel && channel.type == 1) this.changeName(this.UserUtils.getUser(channel.recipients[0]), wrapper);
 		}
 		else if (instance.props.tag == "span" && instance.props.className.indexOf(BDFDB.disCN.mention) > -1) {
 			let fiber = instance._reactInternalFiber;
