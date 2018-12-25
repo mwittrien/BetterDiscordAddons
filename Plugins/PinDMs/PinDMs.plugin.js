@@ -19,7 +19,7 @@ class PinDMs {
 
 	getDescription () {return "Allows you to pin DMs, making them appear at the top of your DM-list.";}
 
-	getVersion () {return "1.2.4";}
+	getVersion () {return "1.2.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -47,6 +47,7 @@ class PinDMs {
 			
 			this.UserStore = BDFDB.WebModules.findByProperties("getUsers", "getUser");
 			this.ChannelUtils = BDFDB.WebModules.findByProperties("getDMFromUserId");
+			this.PrivateChannelUtils = BDFDB.WebModules.findByProperties("ensurePrivateChannel");
 			
 			var observer = null;
 			
