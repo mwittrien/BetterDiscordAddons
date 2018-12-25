@@ -5,8 +5,8 @@ class EditUsers {
 		this.labels = {}; 
 		
 		this.moduleTypes = {
-			"NameTag":"componentDidMount",
 			"ChannelTextArea":"componentDidMount",
+			"NameTag":"componentDidMount",
 			"AuditLog":"componentDidMount",
 			"FluxContainer(TypingUsers)":"componentDidUpdate",
 			"Popout":"componentDidMount",
@@ -145,7 +145,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "3.0.4";}
+	getVersion () {return "3.0.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -204,23 +204,6 @@ class EditUsers {
 			this.LastGuildStore = BDFDB.WebModules.findByProperties("getLastSelectedGuildId");
 			this.LastChannelStore = BDFDB.WebModules.findByProperties("getLastSelectedChannelId");
 			
-			var observer = null;
-
-			observer = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								if (node.nodeType == 1 && node.className.includes(BDFDB.disCN.contextmenu)) {
-									this.onContextMenu(node);
-								}
-							});
-						}
-					}
-				);
-			});
-			BDFDB.addObserver(this, BDFDB.dotCN.appmount, {name:"userContextObserver",instance:observer}, {childList: true});
-			
 			this.forceAllUpdates();
 		}
 		else {
@@ -266,40 +249,29 @@ class EditUsers {
 		this.userSettingsModalMarkup =		this.userSettingsModalMarkup.replace("REPLACE_btn_save_text", this.labels.btn_save_text);
 	}
 	
-	onContextMenu (context) {
-		if (!context || !context.tagName || !context.parentElement || context.querySelector(".localusersettings-item")) return;
-		var info = BDFDB.getKeyInformation({"node":context, "key":"user"});
-		if (info && BDFDB.getKeyInformation({"node":context, "key":"displayName", "value":"UserNoteItem"})) {
-			$(context).append(this.userContextEntryMarkup)
+	onUserContextMenu (instance, menu) {
+		if (instance.props && instance.props.user && !menu.querySelector(".localusersettings-item")) {
+			$(menu).append(this.userContextEntryMarkup)
 				.on("mouseenter", ".localusersettings-item", (e) => {
-					this.createContextSubMenu(info, e, context);
-				});
-				
-			BDFDB.updateContextPosition(context);
-		}
-	}
-	
-	createContextSubMenu (info, e, context) {
-		var userContextSubMenu = $(this.userContextSubMenuMarkup);
-		
-		userContextSubMenu
-			.on("click", ".usersettings-item", () => {
-				$(context).hide();
-				this.showUserSettings(info);
-			});
-			
-		if (BDFDB.loadData(info.id, this, "users")) {
-			userContextSubMenu
-				.find(".resetsettings-item")
-				.removeClass(BDFDB.disCN.contextmenuitemdisabled)
-				.on("click", () => {
-					$(context).hide();
-					BDFDB.removeData(info.id, this, "users");
-					this.forceAllUpdates();
+					var userContextSubMenu = $(this.userContextSubMenuMarkup);
+					userContextSubMenu
+						.on("click", ".usersettings-item", () => {
+							$(menu).hide();
+							this.showUserSettings(instance.props.user);
+						});
+					if (BDFDB.loadData(instance.props.user.id, this, "users")) {
+						userContextSubMenu
+							.find(".resetsettings-item")
+							.removeClass(BDFDB.disCN.contextmenuitemdisabled)
+							.on("click", () => {
+								$(menu).hide();
+								BDFDB.removeData(instance.props.user.id, this, "users");
+								this.forceAllUpdates();
+							});
+					}
+					BDFDB.appendSubMenu(e.currentTarget, userContextSubMenu);
 				});
 		}
-		
-		BDFDB.appendSubMenu(e.currentTarget, userContextSubMenu);
 	}
 	
 	showUserSettings (info, e) {
@@ -538,14 +510,14 @@ class EditUsers {
 	}
 	
 	processClickable (instance, wrapper) {
-		if (!wrapper || !instance.props) return;
-		if (instance.props.tag == "a" && instance.props.className && instance.props.className.indexOf(BDFDB.disCN.anchorunderlineonhover) > -1) {
+		if (!wrapper || !instance.props || !instance.props.className) return;
+		if (instance.props.tag == "a" && instance.props.className.indexOf(BDFDB.disCN.anchorunderlineonhover) > -1) {
 			if (wrapper.parentElement.classList.contains(BDFDB.disCN.messagesystemcontent)) {
 				let message = BDFDB.getKeyInformation({node:wrapper.parentElement, key:"message", up:true});
 				if (message) this.changeName(message.author, wrapper);
 			}
 		}
-		else if (instance.props.tag == "span" && instance.props.className && instance.props.className.indexOf(BDFDB.disCN.channelheaderchannelname) > -1) {
+		else if (instance.props.tag == "span" && instance.props.className.indexOf(BDFDB.disCN.channelheaderchannelname) > -1) {
 			let channel = this.ChannelUtils.getChannel(this.LastChannelStore.getChannelId());
 			if (channel && channel.type == 1) this.changeName(this.UserUtils.getUser(channel.recipients[0]), wrapper);
 		}
@@ -555,25 +527,44 @@ class EditUsers {
 				this.changeMention(fiber.return.return.stateNode.props.render().props.user, wrapper);
 			}
 		}
-		else if (instance.props.tag == "div" && instance.props.className && instance.props.className.indexOf(BDFDB.disCN.voiceuser) > -1) {
+		else if (instance.props.tag == "div" && instance.props.className.indexOf(BDFDB.disCN.voiceuser) > -1) {
 			let fiber = instance._reactInternalFiber;
 			if (fiber.return && fiber.return.memoizedProps && fiber.return.memoizedProps.user) {
 				this.changeVoiceUser(fiber.return.memoizedProps.user, wrapper.querySelector(BDFDB.dotCN.voicename));
 				this.changeAvatar(fiber.return.memoizedProps.user, this.getAvatarDiv(wrapper));
 			}
 		}
-		else if (instance.props.tag == "div" && instance.props.className && instance.props.className.indexOf(BDFDB.disCN.quickswitchresult) > -1) {
+		else if (instance.props.tag == "div" && instance.props.className.indexOf(BDFDB.disCN.quickswitchresult) > -1) {
 			let fiber = instance._reactInternalFiber;
 			if (fiber.return && fiber.return.memoizedProps && fiber.return.memoizedProps.result && fiber.return.memoizedProps.result.type == "USER") {
 				this.changeName2(fiber.return.memoizedProps.result.record, wrapper.querySelector(BDFDB.dotCN.quickswitchresultmatch));
 				this.changeAvatar(fiber.return.memoizedProps.result.record, this.getAvatarDiv(wrapper));
 			}
 		}
-		else if (instance.props.tag == "div" && instance.props.className && instance.props.className.indexOf(BDFDB.disCN.autocompleterow) > -1) {
+		else if (instance.props.tag == "div" && instance.props.className.indexOf(BDFDB.disCN.autocompleterow) > -1) {
 			let fiber = instance._reactInternalFiber;
 			if (fiber.return && fiber.return.memoizedProps && fiber.return.memoizedProps.user) {
 				this.changeName2(fiber.return.memoizedProps.user, wrapper.querySelector(BDFDB.dotCN.marginleft8));
 				this.changeAvatar(fiber.return.memoizedProps.user, this.getAvatarDiv(wrapper));
+			}
+		}
+		else if (instance.props.tag == "div" && instance.props.className.indexOf(BDFDB.disCN.searchpopoutoption) > -1) {
+			let fiber = instance._reactInternalFiber;
+			if (fiber.return && fiber.return.memoizedState && Array.isArray(fiber.return.memoizedState.tokens)) {
+				for (let i in fiber.return.memoizedState.tokens) {
+					let token = fiber.return.memoizedState.tokens[i];
+					if (token.type == "ANSWER_USERNAME_FROM" && token._data && token._data.get("user")) {
+						this.changeName3(token._data.get("user"), wrapper.children[i], true);
+						this.changeAvatar(fiber.return.memoizedProps.user, this.getAvatarDiv(wrapper));
+						break;
+					}
+				}
+			}
+			else if (instance.props.className.indexOf(BDFDB.disCN.searchpopoutuser) > -1) {
+				if (fiber.return && fiber.return.memoizedProps && fiber.return.memoizedProps.result && fiber.return.memoizedProps.result.user) {
+					this.changeName3(fiber.return.memoizedProps.result.user, wrapper.querySelector(BDFDB.dotCN.searchpopoutdisplayednick), false);
+					this.changeAvatar(fiber.return.memoizedProps.result.user, wrapper.querySelector(BDFDB.dotCN.searchpopoutdisplayavatar));
+				}
 			}
 		}
 	}
@@ -625,13 +616,37 @@ class EditUsers {
 		}
 	}
 	
+	changeName3 (info, username, adddisc) {
+		if (!info || !username) return;
+		if (username.EditUsersChangeObserver && typeof username.EditUsersChangeObserver.disconnect == "function") username.EditUsersChangeObserver.disconnect();
+		let data = BDFDB.loadData(info.id, this, "users");
+		if (data) { 
+			let color1 = BDFDB.colorCONVERT(data.color1, "RGB");
+			if (adddisc) {
+				username.innerHTML = `<span ${color1 ? 'style="color:' + color1 + '!important;"': ''}>${BDFDB.encodeToHTML(data.name || info.username)}</span><span>#${info.discriminator}</span>`;
+			}
+			else {
+				username.style.setProperty("color", color1, "important");
+				BDFDB.setInnerText(username, data.name || info.username);
+			}
+			username.EditUsersChangeObserver = new MutationObserver((changes, _) => {
+				username.EditUsersChangeObserver.disconnect();
+				this.changeName(info, username);
+			});
+			username.EditUsersChangeObserver.observe(username, {attributes:true});
+		}
+	}
+	
 	changeAvatar (info, avatar) {
 		if (!info || !avatar) return;
 		if (avatar.EditUsersChangeObserver && typeof avatar.EditUsersChangeObserver.disconnect == "function") avatar.EditUsersChangeObserver.disconnect();
 		let data = BDFDB.loadData(info.id, this, "users") || {};
-		let url = data.removeIcon ? null : ("url(" + (data.url || BDFDB.getUserAvatar(info.id)) + ") center/cover");
-		if (url && avatar.classList.contains(BDFDB.disCN.avatarmaskprofile) && url.search(/discordapp\.com\/avatars\/[0-9]*\/a_/) > -1) url = url.replace(".webp)", ".gif)");
-		avatar.style.setProperty("background", url);
+		if (avatar.tagName == "IMG") avatar.setAttribute("src", data.removeIcon ? null : (data.url || BDFDB.getUserAvatar(info.id)));
+		else {
+			let url = data.removeIcon ? null : ("url(" + (data.url || BDFDB.getUserAvatar(info.id)) + ") center/cover");
+			if (url && avatar.classList.contains(BDFDB.disCN.avatarmaskprofile) && url.search(/discordapp\.com\/avatars\/[0-9]*\/a_/) > -1) url = url.replace(".webp)", ".gif)");
+			avatar.style.setProperty("background", url);
+		}
 		if (data.url || data.removeIcon) {
 			avatar.EditUsersChangeObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
