@@ -706,7 +706,6 @@ class EditUsers {
 	changeMention (info, mention) {
 		if (!info || !mention || !mention.parentElement) return;
 		if (mention.EditUsersChangeObserver && typeof mention.EditUsersChangeObserver.disconnect == "function") mention.EditUsersChangeObserver.disconnect();
-		console.log(info, mention);
 		let data = BDFDB.loadData(info.id, this, "users") || {};
 		let member = this.MemberUtils.getMember(this.LastGuildStore.getGuildId(), info.id) || {};
 		let color1 = BDFDB.colorCONVERT(data.color1 || (BDFDB.isPluginEnabled("BetterRoleColors") ? member.colorString : null), "RGBCOMP");
