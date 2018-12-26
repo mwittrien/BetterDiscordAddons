@@ -146,7 +146,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "3.0.8";}
+	getVersion () {return "3.0.9";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -539,7 +539,7 @@ class EditUsers {
 		}
 		else if (instance.props.tag == "span" && instance.props.className.indexOf(BDFDB.disCN.mention) > -1) {
 			let fiber = instance._reactInternalFiber;
-			if (fiber.return && fiber.return.return && fiber.return.return.stateNode && fiber.return.return.stateNode.props && fiber.return.return.stateNode.props.render) {
+			if (fiber.return && fiber.return.return && fiber.return.return.stateNode && fiber.return.return.stateNode.props && typeof fiber.return.return.stateNode.props.render == "function") {
 				this.changeMention(fiber.return.return.stateNode.props.render().props.user, wrapper);
 			}
 		}
@@ -705,23 +705,38 @@ class EditUsers {
 	
 	changeMention (info, mention) {
 		if (!info || !mention || !mention.parentElement) return;
+		if (mention.EditUsersChangeObserver && typeof mention.EditUsersChangeObserver.disconnect == "function") mention.EditUsersChangeObserver.disconnect();
+		console.log(info, mention);
 		let data = BDFDB.loadData(info.id, this, "users") || {};
 		let member = this.MemberUtils.getMember(this.LastGuildStore.getGuildId(), info.id) || {};
 		let color1 = BDFDB.colorCONVERT(data.color1 || (BDFDB.isPluginEnabled("BetterRoleColors") ? member.colorString : null), "RGBCOMP");
 		BDFDB.setInnerText(mention, "@" + (data.name || member.nick || info.username));
-		mention.style.setProperty("color", color1 ? "rgb(" + color1[0] + "," + color1[1] + "," + color1[2] + ")" : null, "important");
-		mention.style.setProperty("background", color1 ? "rgba(" + color1[0] + "," + color1[1] + "," + color1[2] + ",.1)" : null, "important");
+		if (mention.EditUsersHovered) colorHover();
+		else colorDefault();
 		$(mention).off("mouseenter." + this.getName()).off("mouseleave." + this.getName());
 		if (color1) {
 			$(mention)
 				.on("mouseenter." + this.getName(), (e) => {
-					mention.style.setProperty("color", "#FFFFFF", "important");
-					mention.style.setProperty("background", "rgba(" + color1[0] + "," + color1[1] + "," + color1[2] + ",.7)", "important");
+					mention.EditUsersHovered = true;
+					colorHover();
 				})
 				.on("mouseleave." + this.getName(), (e) => {
-					mention.style.setProperty("color", "rgb(" + color1[0] + "," + color1[1] + "," + color1[2] + ")", "important");
-					mention.style.setProperty("background", "rgba(" + color1[0] + "," + color1[1] + "," + color1[2] + ",.1)", "important");
+					mention.EditUsersHovered = false;
+					colorDefault();
 				});
+			mention.EditUsersChangeObserver = new MutationObserver((changes, _) => {
+				mention.EditUsersChangeObserver.disconnect();
+				this.changeMention(info, mention);
+			});
+			mention.EditUsersChangeObserver.observe(mention, {attributes:true});
+		}
+		function colorDefault() {
+			mention.style.setProperty("color", color1 ? "rgb(" + color1[0] + "," + color1[1] + "," + color1[2] + ")" : null, "important");
+			mention.style.setProperty("background", color1 ? "rgba(" + color1[0] + "," + color1[1] + "," + color1[2] + ",.1)" : null, "important");
+		}
+		function colorHover() {
+			mention.style.setProperty("color", "#FFFFFF", "important");
+			mention.style.setProperty("background", "rgba(" + color1[0] + "," + color1[1] + "," + color1[2] + ",.7)", "important");
 		}
 	}
 	
