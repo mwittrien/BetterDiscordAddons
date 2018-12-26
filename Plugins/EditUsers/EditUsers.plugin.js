@@ -734,11 +734,10 @@ class EditUsers {
 			mention.style.setProperty("background", color1 ? "rgba(" + color1[0] + "," + color1[1] + "," + color1[2] + ",.1)" : null, "important");
 		}
 		function colorHover() {
-			mention.style.setProperty("color", "#FFFFFF", "important");
-			mention.style.setProperty("background", "rgba(" + color1[0] + "," + color1[1] + "," + color1[2] + ",.7)", "important");
+			mention.style.setProperty("color", color1 ? "#FFFFFF" : null, "important");
+			mention.style.setProperty("background", color1 ? "rgba(" + color1[0] + "," + color1[1] + "," + color1[2] + ",.7)" : null, "important");
 		}
 	}
-	
 	
 	changeVoiceUser (info, username) {
 		if (!info || !username || !username.parentElement) return;
