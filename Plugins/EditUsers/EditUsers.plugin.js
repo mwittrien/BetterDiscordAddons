@@ -146,7 +146,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "3.0.9";}
+	getVersion () {return "3.1.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -456,7 +456,7 @@ class EditUsers {
 	processAuditLog (instance, wrapper) {
 		if (!wrapper) return;
 		if (instance.props && instance.props.log && instance.props.log.user) {
-			let hooks = wrapper.querySelectorAll(DiscordSelectors.AuditLog.userHook);
+			let hooks = wrapper.querySelectorAll(BDFDB.dotCN.auditloguserhook);
 			let guildid = instance._reactInternalFiber.return.memoizedProps.guildId;
 			if (hooks.length > 0) this.changeName2(instance.props.log.user, hooks[0].firstChild, guildid);
 			if (hooks.length > 1 && instance.props.log.targetType == "USER") this.changeName2(instance.props.log.target, hooks[1].firstChild, guildid);
@@ -678,10 +678,10 @@ class EditUsers {
 	
 	changeTooltip (info, wrapper, type) {
 		if (!info || !wrapper || !wrapper.parentElement) return;
-		var data = BDFDB.loadData(info.id, this, "users");
-		$(wrapper).off("mouseenter." + this.getName())
-		if (data && data.name) $(wrapper).on("mouseenter." + this.getName(), () => {
-			BDFDB.createTooltip(data.name, wrapper, {type,selector:"edituser-tooltip",css:`body ${BDFDB.dotCN.tooltip}:not(.edituser-tooltip) {display: none !important;}`});
+		let data = BDFDB.loadData(info.id, this, "users") || {};
+		$(wrapper).off("mouseenter." + this.getName());
+		if (data.name) $(wrapper).on("mouseenter." + this.getName(), () => {
+			BDFDB.createTooltip(data.name, wrapper, {type,selector:"EditUsers-tooltip",css:`body ${BDFDB.dotCN.tooltip}:not(.EditUsers-tooltip) {display: none !important;}`});
 		});
 	}
 	
@@ -712,23 +712,21 @@ class EditUsers {
 		BDFDB.setInnerText(mention, "@" + (data.name || member.nick || info.username));
 		if (mention.EditUsersHovered) colorHover();
 		else colorDefault();
-		$(mention).off("mouseenter." + this.getName()).off("mouseleave." + this.getName());
-		if (color1) {
-			$(mention)
-				.on("mouseenter." + this.getName(), (e) => {
-					mention.EditUsersHovered = true;
-					colorHover();
-				})
-				.on("mouseleave." + this.getName(), (e) => {
-					mention.EditUsersHovered = false;
-					colorDefault();
-				});
-			mention.EditUsersChangeObserver = new MutationObserver((changes, _) => {
-				mention.EditUsersChangeObserver.disconnect();
-				this.changeMention(info, mention);
+		$(mention)
+			.off("mouseenter." + this.getName()).off("mouseleave." + this.getName())
+			.on("mouseenter." + this.getName(), (e) => {
+				mention.EditUsersHovered = true;
+				colorHover();
+			})
+			.on("mouseleave." + this.getName(), (e) => {
+				mention.EditUsersHovered = false;
+				colorDefault();
 			});
-			mention.EditUsersChangeObserver.observe(mention, {attributes:true});
-		}
+		mention.EditUsersChangeObserver = new MutationObserver((changes, _) => {
+			mention.EditUsersChangeObserver.disconnect();
+			this.changeMention(info, mention);
+		});
+		mention.EditUsersChangeObserver.observe(mention, {attributes:true});
 		function colorDefault() {
 			mention.style.setProperty("color", color1 ? "rgb(" + color1[0] + "," + color1[1] + "," + color1[2] + ")" : null, "important");
 			mention.style.setProperty("background", color1 ? "rgba(" + color1[0] + "," + color1[1] + "," + color1[2] + ",.1)" : null, "important");
