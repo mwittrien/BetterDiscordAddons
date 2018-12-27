@@ -11,6 +11,7 @@ class BetterNsfwTag {
 		this.css = `
 			.NSFW-tag${BDFDB.dotCN.bottag} {
 				top: -3px;
+				position: relative;
 			}`
 	}
 
