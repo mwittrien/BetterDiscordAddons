@@ -2,6 +2,11 @@
 
 class BetterFriendCount {
 	initConstructor () {
+		this.patchModules = {
+			"TabBar":"componentDidMount",
+			"NameTag":["componentWillMount","componentWillUnmount"]
+		};
+		
 		this.css = `
 			${BDFDB.idCNS.friends + BDFDB.dotCNS.friendstabbaritem + BDFDB.dotCN.badge}:not(.betterfriendcount-badge), 
 			${BDFDB.idCNS.friends + BDFDB.dotCNS.friendstabbaritem + BDFDB.dotCN.badgewrapper}:not(.betterfriendcount-badge) {
@@ -19,7 +24,7 @@ class BetterFriendCount {
 
 	getDescription () {return "Shows the amount of total and online friends and blocked users in the friends tab.";}
 
-	getVersion () {return "1.0.7";}
+	getVersion () {return "1.0.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -45,46 +50,14 @@ class BetterFriendCount {
 		if (typeof BDFDB === "object") {		
 			BDFDB.loadMessage(this);
 			
-			var observer = null;
-			
-			observer = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(BDFDB.dotCN.friendscolumn)) {
-									this.addCountNumbers();
-								}
-							});
-						}
-						if (change.removedNodes) {
-							change.removedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(BDFDB.dotCN.friendscolumn)) {
-									this.addCountNumbers();
-								}
-							});
-						}
-					}
-				);
-			});
-			BDFDB.addObserver(this, BDFDB.idCN.friends, {name:"friendListObserver",instance:observer}, {childList:true, subtree:true});
-			
-			observer = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						this.addCountNumbers();
-					}
-				);
-			});
-			BDFDB.addObserver(this, BDFDB.dotCN.friendsonline, {name:"friendCountObserver",instance:observer}, {childList:true, subtree:true, characterData:true});
-			
 			this.FriendUtils = BDFDB.WebModules.findByProperties("getFriendIDs", "getRelationships");
 			this.UserMetaStore = BDFDB.WebModules.findByProperties("getStatus", "getOnlineFriendCount");
-			var RelationshipTypes = BDFDB.WebModules.findByProperties("RelationshipTypes").RelationshipTypes;
+			let RelationshipTypes = BDFDB.WebModules.findByProperties("RelationshipTypes").RelationshipTypes;
 			for (let type in RelationshipTypes) {
 				this.relationshipTypes[RelationshipTypes[type]] = type;
 			}
-			this.addCountNumbers();
+			
+			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -93,30 +66,32 @@ class BetterFriendCount {
 
 	stop () {
 		if (typeof BDFDB === "object") {
-			document.querySelectorAll(".betterfriendcount-badge").forEach(counter => {counter.remove();});
-			
+			BDFDB.removeEles(".betterfriendcount-badge");
 			BDFDB.unloadMessage(this);
 		}
 	}
 	
-	onSwitch () {
-		this.addCountNumbers();
-		
-		BDFDB.addObserver(this, BDFDB.idCN.friends, {name:"friendListObserver"}, {childList:true, subtree:true});
-	}
 	
 	// begin of own functions
 	
-	addCountNumbers () {
-		var friendstabbar = document.querySelector(BDFDB.idCNS.friends + BDFDB.dotCN.friendstabbar);
-		if (!friendstabbar) return;
-		friendstabbar.querySelectorAll(".betterfriendcount-badge").forEach(counter => {counter.remove();});
+	processTabBar (instance, wrapper) {
+		if (instance.props && instance.props.children && instance.props.children[0].key == "ADD_FRIEND") this.addCountNumbers(wrapper);
+	}
+	
+	processNameTag (instance, wrapper) {
+		if (wrapper.parentElement && wrapper.parentElement.classList && wrapper.parentElement.classList.contains(BDFDB.disCN.friendscolumn)) this.addCountNumbers();
+	}
+	
+	addCountNumbers (wrapper = document.querySelector(BDFDB.idCNS.friends + BDFDB.dotCN.friendstabbar)) {
+		if (!wrapper) return;
+		let tabitems = wrapper.querySelectorAll(BDFDB.dotCN.friendstabbaritem);
+		if (!tabitems || tabitems.length < 5) return;
+		BDFDB.removeEles(".betterfriendcount-badge");
 		
-		var relationships = this.FriendUtils.getRelationships(), relationshipCount = {};
-		for (let type in this.relationshipTypes) {relationshipCount[this.relationshipTypes[type]] = 0;}
-		for (let id in relationships) {relationshipCount[this.relationshipTypes[relationships[id]]]++;}
+		let relationships = this.FriendUtils.getRelationships(), relationshipCount = {};
+		for (let type in this.relationshipTypes) relationshipCount[this.relationshipTypes[type]] = 0;
+		for (let id in relationships) relationshipCount[this.relationshipTypes[relationships[id]]]++;
 		
-		var tabitems = friendstabbar.querySelectorAll(BDFDB.dotCN.friendstabbaritem);
 		$(`<div class="${BDFDB.disCN.badgewrapper} betterfriendcount-badge friendcount">${relationshipCount.FRIEND}</div>`).appendTo(tabitems[1]);
 		$(`<div class="${BDFDB.disCN.badgewrapper} betterfriendcount-badge onlinefriendcount">${this.UserMetaStore.getOnlineFriendCount()}</div>`).appendTo(tabitems[2]);
 		$(`<div class="${BDFDB.disCN.badgewrapper} betterfriendcount-badge requestincount">${relationshipCount.PENDING_INCOMING}</div>`).appendTo(tabitems[3]);

@@ -23,6 +23,7 @@ class EditUsers {
 				position: relative;
 				margin-left: 1ch;
 			}
+			${BDFDB.dotCN.friendscolumn}  ${BDFDB.dotCN.bottag},
 			${BDFDB.dotCN.memberusername} ~ ${BDFDB.dotCN.bottag} {
 				top: 0px;
 			}
@@ -317,7 +318,7 @@ class EditUsers {
 				this.createNoticeTooltip(event);
 			})
 			.on("mouseleave", "#input-userurl", (event) => {
-				$(BDFDB.dotCN.tooltips).find(".notice-tooltip").remove();
+				BDFDB.removeEles(BDFDB.dotCNS.tooltips + ".notice-tooltip");
 				$(event.target).removeClass("hovering");
 			})
 			.on("click", ".btn-save", (event) => {
@@ -370,7 +371,7 @@ class EditUsers {
 			$(e.target)
 				.removeClass("valid")
 				.removeClass("invalid");
-			if ($(e.target).hasClass("hovering")) $(BDFDB.dotCNS.tooltips + ".notice-tooltip").remove();
+			if ($(e.target).hasClass("hovering")) BDFDB.removeEles(BDFDB.dotCNS.tooltips + ".notice-tooltip");
 		}
 		else {
 			let request = require("request");
@@ -391,7 +392,7 @@ class EditUsers {
 	}
 	
 	createNoticeTooltip (e) {
-		$(BDFDB.dotCN.tooltips).find(".notice-tooltip").remove();
+		BDFDB.removeEles(BDFDB.dotCNS.tooltips + ".notice-tooltip");
 		
 		var input = e.currentTarget;
 		var disabled = input.disabled;
@@ -405,7 +406,6 @@ class EditUsers {
 	}
 	
 	processChannelTextArea (instance, wrapper) {
-		if (!wrapper) return;
 		if (instance.props && instance.props.type == "normal" && instance.props.channel && instance.props.channel.type == 1) {
 			let user = this.UserUtils.getUser(instance.props.channel.recipients[0]);
 			if (user) {
@@ -416,7 +416,6 @@ class EditUsers {
 	}
 	
 	processNameTag (instance, wrapper) {
-		if (!wrapper) return;
 		let username = wrapper.parentElement.querySelector("." + (wrapper.classList && wrapper.classList.contains(BDFDB.disCN.userpopoutheadertagwithnickname) ? BDFDB.disCN.userpopoutheadernickname : instance.props.usernameClass).replace(/ /g, "."));
 		this.changeName(instance.props.user, username);
 		this.changeAvatar(instance.props.user, this.getAvatarDiv(wrapper));
@@ -424,7 +423,6 @@ class EditUsers {
 	}
 	
 	processPopout (instance, wrapper) {
-		if (!wrapper) return;
 		let fiber = instance._reactInternalFiber;
 		if (fiber.return && fiber.return.memoizedProps && fiber.return.memoizedProps.message) {
 			let username = wrapper.querySelector(BDFDB.dotCN.messageusername);
@@ -437,7 +435,6 @@ class EditUsers {
 	}
 	
 	processAuditLog (instance, wrapper) {
-		if (!wrapper) return;
 		if (instance.props && instance.props.log && instance.props.log.user) {
 			let hooks = wrapper.querySelectorAll(BDFDB.dotCN.auditloguserhook);
 			let guildid = instance._reactInternalFiber.return.memoizedProps.guildId;
@@ -454,7 +451,6 @@ class EditUsers {
 	}
 	
 	processDirectMessage (instance, wrapper) {
-		if (!wrapper) return;
 		if (instance.props && instance.props.channel && instance.props.channel.type == 1) {
 			let user = this.UserUtils.getUser(instance.props.channel.recipients[0]);
 			if (user) {
@@ -468,7 +464,6 @@ class EditUsers {
 	}
 	
 	processCallAvatar (instance, wrapper) {
-		if (!wrapper) return;
 		if (instance.props && instance.props.id) {
 			let user = this.UserUtils.getUser(instance.props.id);
 			if (!user) {
@@ -485,7 +480,6 @@ class EditUsers {
 	}
 	
 	processPrivateChannel (instance, wrapper) {
-		if (!wrapper) return;
 		if (instance.props && instance.props.user) {
 			let username = wrapper.querySelector(BDFDB.dotCN.dmchannelname);
 			this.changeName(instance.props.user, username.firstElementChild ? username.firstElementChild : username);
@@ -670,7 +664,7 @@ class EditUsers {
 	
 	addTag (info, wrapper, selector = "") {
 		if (!info || !wrapper || !wrapper.parentElement || wrapper.classList.contains(BDFDB.disCN.accountinfodetails) || wrapper.classList.contains("discord-tag")) return;
-		wrapper.querySelectorAll(".EditUsers-tag").forEach((tag) => tag.remove());
+		BDFDB.removeEles(wrapper.querySelectorAll(".EditUsers-tag"));
 		let data = BDFDB.loadData(info.id, this, "users");
 		if (data && data.tag) {
 			let member = data.ignoreTagColor ? (this.MemberUtils.getMember(this.LastGuildStore.getGuildId(), info.id) || {}) : {};
