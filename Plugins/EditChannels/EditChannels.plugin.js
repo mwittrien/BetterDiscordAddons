@@ -101,7 +101,7 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "3.8.3";}
+	getVersion () {return "3.8.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -346,6 +346,12 @@ class EditChannels {
 			if (fiber.return && fiber.return.memoizedProps && fiber.return.memoizedProps.channel) {
 				this.changeChannel(fiber.return.memoizedProps.channel, wrapper.querySelector(BDFDB.dotCN.marginleft4));
 				if (fiber.return.memoizedProps.category) this.changeChannel(fiber.return.memoizedProps.category, wrapper.querySelector(BDFDB.dotCN.autocompletedescription));
+			}
+		}
+		else if (instance.props.tag == "span" && instance.props.className.indexOf(BDFDB.disCN.messagespopoutchannelname) > -1) {
+			let fiber = instance._reactInternalFiber;
+			if (fiber.return && fiber.return.sibling && fiber.return.sibling.child && fiber.return.sibling.child.child && fiber.return.sibling.child.child.memoizedProps) {
+				this.changeChannel2(fiber.return.sibling.child.child.memoizedProps.channel, wrapper);
 			}
 		}
 	}
