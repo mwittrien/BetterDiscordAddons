@@ -6,7 +6,7 @@ class BetterNsfwTag {
 			"ChannelItem":"componentDidMount"
 		};
 		
-		this.tagMarkup = `<span class="NSFW-tag ${BDFDB.disCNS.bottag + BDFDB.disCNS.bottagregular + BDFDB.disCN.bottagnametag}" style="background-color: rgb(241, 71, 71);">NSFW</span>`;
+		this.tagMarkup = `<span class="NSFW-tag ${BDFDB.disCNS.bottag + BDFDB.disCNS.bottagregular + BDFDB.disCN.bottagnametag}" style="background-color: rgb(241, 71, 71) !important; color: white !important;">NSFW</span>`;
 		
 		this.css = `
 			.NSFW-tag${BDFDB.dotCN.bottag} {
