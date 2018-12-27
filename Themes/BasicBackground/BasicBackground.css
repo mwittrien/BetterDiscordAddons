@@ -120,6 +120,8 @@
 .root-1bFE0x,
 .bodySection-jqkkIP,
 .row-1bU71H,
+.option-1l2vXe,
+.focused-1Yu0L3,
 .expandedInfo-3kfShd,
 .defaultIndicator-2X8Auf,
 .applicationTile-1Goy1W,
@@ -268,6 +270,7 @@ button.guild-1EfMGQ {
 	-webkit-mask: url(https://discordapp.com/assets/b44da97e40cc628c39b0a0441c356e2d.svg) center/cover no-repeat !important;
 	background: rgb(var(--vaccentcolor)) !important;
 }
+.revenueShareUpsell-27xExj,
 .headerFancy-1AcCLF,
 .premium-33BYwD,
 .premium-39U29H {
@@ -275,9 +278,13 @@ button.guild-1EfMGQ {
 	background-color: rgb(255,255,255) !important;
 	background-image: linear-gradient(90deg,rgba(var(--vaccentcolor),0.8),rgba(var(--vaccentcolor),0.5)) !important;
 }
-.headerFancy-1AcCLF * {
+.revenueShareUpsell-27xExj > *,
+.headerFancy-1AcCLF > *,
+.premium-33BYwD > *,
+.premium-39U29H > * {
 	z-index: 1;
 }
+.revenueShareUpsell-27xExj:before,
 .headerFancy-1AcCLF:before {
 	bottom: 0;
 	content: "";
@@ -918,6 +925,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	background-color: rgba(var(--vaccentcolor), calc(var(--vtransparencyalpha) * 3)) !important;
 }
 
+.imageSelected-4Kl81J,
 .overlappingBorder-1-XPGl,
 .overlappingBorder-1ysb12,
 .selected-mKYnfr.option-n0icdO,
