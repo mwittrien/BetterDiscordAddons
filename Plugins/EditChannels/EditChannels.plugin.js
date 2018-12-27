@@ -4,7 +4,7 @@ class EditChannels {
 	initConstructor () {
 		this.labels = {};
 		
-		this.moduleTypes = {
+		this.patchModules = {
 			"ChannelTextArea":"componentDidMount",
 			"AuditLog":"componentDidMount",
 			"ChannelCategoryItem":"componentDidMount",
@@ -123,7 +123,7 @@ class EditChannels {
 			.on("click", ".reset-button", () => {
 				if (confirm("Are you sure you want to reset all channels?")) {
 					BDFDB.removeAllData(this, "channels");
-					this.forceAllUpdates();
+					BDFDB.WebModules.forceAllUpdates(this);
 				}
 			});
 		return settingspanel;
@@ -151,18 +151,13 @@ class EditChannels {
 		if (typeof BDFDB === "object") {
 			BDFDB.loadMessage(this);
 			
-			for (let type in this.moduleTypes) {
-				let module = BDFDB.WebModules.findByName(type);
-				if (module && module.prototype) BDFDB.WebModules.patch(module.prototype, this.moduleTypes[type], this, {after: (e) => {this.initiateProcess(e.thisObject, type);}});
-			}
-			
 			this.UserUtils = BDFDB.WebModules.findByProperties("getUsers","getUser");
 			this.ChannelUtils = BDFDB.WebModules.findByProperties("getChannels","getChannel");
 			this.CurrentChannelUtils = BDFDB.WebModules.findByProperties("getChannels","getDefaultChannel");
 			this.LastGuildStore = BDFDB.WebModules.findByProperties("getLastSelectedGuildId");
 			this.LastChannelStore = BDFDB.WebModules.findByProperties("getLastSelectedChannelId");
 			
-			this.forceAllUpdates();
+			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -173,7 +168,7 @@ class EditChannels {
 		if (typeof BDFDB === "object") {
 			let data = BDFDB.loadAllData(this, "channels");
 			BDFDB.removeAllData(this, "channels");
-			this.forceAllUpdates();
+			BDFDB.WebModules.forceAllUpdates(this);
 			BDFDB.saveAllData(data, this, "channels");
 			
 			BDFDB.unloadMessage(this);
@@ -221,7 +216,7 @@ class EditChannels {
 							.on("click", () => {
 								$(menu).hide();
 								BDFDB.removeData(instance.props.channel.id, this, "channels");
-								this.forceAllUpdates();
+								BDFDB.WebModules.forceAllUpdates(this);
 							});
 					}
 					BDFDB.appendSubMenu(e.currentTarget, channelContextSubMenu);
@@ -265,22 +260,10 @@ class EditChannels {
 				else {
 					BDFDB.saveData(info.id, {name,color}, this, "channels");
 				}
-				this.forceAllUpdates();
+				BDFDB.WebModules.forceAllUpdates(this);
 			});
 			
 		channelSettingsModal.find("#input-channelname").focus();
-	}
-	
-	initiateProcess (instance, type) {
-		type = type.replace(/[^A-z]/g,"");
-		type = type[0].toUpperCase() + type.slice(1);
-		if (typeof this["process" + type] == "function") {
-			let wrapper = BDFDB.React.findDOMNodeSafe(instance);
-			if (wrapper) this["process" + type](instance, wrapper);
-			else setImmediate(() => {
-				this["process" + type](instance, BDFDB.React.findDOMNodeSafe(instance));
-			});
-		}
 	}
 	
 	processChannelTextArea (instance, wrapper) {
@@ -474,14 +457,6 @@ class EditChannels {
 			return BDFDB.colorCONVERT(color, "RGB");
 		}
 		return null;
-	}
-	
-	forceAllUpdates () {
-		let app = document.querySelector(BDFDB.dotCN.app);
-		if (app) {
-			let ins = BDFDB.getOwnerInstance({node:app, name:Object.keys(this.moduleTypes), all:true, noCopies:true, group:true, depth:99999999, time:99999999});
-			for (let type in ins) for (let i in ins[type]) this.initiateProcess(ins[type][i], type);
-		}
 	}
 	
 	setLabelsByLanguage () {

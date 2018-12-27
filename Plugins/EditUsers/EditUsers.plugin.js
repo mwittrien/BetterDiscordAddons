@@ -4,7 +4,7 @@ class EditUsers {
 	initConstructor () {
 		this.labels = {}; 
 		
-		this.moduleTypes = {
+		this.patchModules = {
 			"ChannelTextArea":"componentDidMount",
 			"NameTag":"componentDidMount",
 			"AuditLog":"componentDidMount",
@@ -165,7 +165,7 @@ class EditUsers {
 			.on("click", ".reset-button", () => {
 				if (confirm("Are you sure you want to reset all users?")) {
 					BDFDB.removeAllData(this, "users");
-					this.forceAllUpdates();
+					BDFDB.WebModules.forceAllUpdates(this);
 				}
 			});
 		return settingspanel;
@@ -193,11 +193,6 @@ class EditUsers {
 		if (typeof BDFDB === "object") {
 			BDFDB.loadMessage(this);
 			
-			for (let type in this.moduleTypes) {
-				let module = BDFDB.WebModules.findByName(type);
-				if (module && module.prototype) BDFDB.WebModules.patch(module.prototype, this.moduleTypes[type], this, {after: (e) => {this.initiateProcess(e.thisObject, type);}});
-			}
-			
 			this.RelationshipUtils = BDFDB.WebModules.findByProperties("isBlocked", "isFriend");
 			this.UserUtils = BDFDB.WebModules.findByProperties("getUsers","getUser");
 			this.MemberUtils = BDFDB.WebModules.findByProperties("getMembers", "getMember");
@@ -205,7 +200,7 @@ class EditUsers {
 			this.LastGuildStore = BDFDB.WebModules.findByProperties("getLastSelectedGuildId");
 			this.LastChannelStore = BDFDB.WebModules.findByProperties("getLastSelectedChannelId");
 			
-			this.forceAllUpdates();
+			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -217,7 +212,7 @@ class EditUsers {
 		if (typeof BDFDB === "object") {
 			let data = BDFDB.loadAllData(this, "users");
 			BDFDB.removeAllData(this, "users");
-			this.forceAllUpdates();
+			BDFDB.WebModules.forceAllUpdates(this);
 			BDFDB.saveAllData(data, this, "users");
 			
 			BDFDB.unloadMessage(this);
@@ -267,7 +262,7 @@ class EditUsers {
 							.on("click", () => {
 								$(menu).hide();
 								BDFDB.removeData(instance.props.user.id, this, "users");
-								this.forceAllUpdates();
+								BDFDB.WebModules.forceAllUpdates(this);
 							});
 					}
 					BDFDB.appendSubMenu(e.currentTarget, userContextSubMenu);
@@ -365,7 +360,7 @@ class EditUsers {
 				else {
 					BDFDB.saveData(info.id, {name,tag,url,removeIcon,ignoreTagColor,color1,color2,color3,color4}, this, "users");
 				}
-				this.forceAllUpdates();
+				BDFDB.WebModules.forceAllUpdates(this);
 			});
 		userSettingsModal.find("#input-username").focus();
 	}
@@ -406,18 +401,6 @@ class EditUsers {
 			var text = disabled ? this.labels.modal_ignoreurl_text : valid ? this.labels.modal_validurl_text : this.labels.modal_invalidurl_text;
 			var bgColor = disabled ? "#282524" : valid ? "#297828" : "#8C2528";
 			BDFDB.createTooltip(text, input, {type:"right",selector:"notice-tooltip",style:`background-color: ${bgColor} !important; border-color: ${bgColor} !important;`});
-		}
-	}
-	
-	initiateProcess (instance, type) {
-		type = type.replace(/[^A-z]/g,"");
-		type = type[0].toUpperCase() + type.slice(1);
-		if (typeof this["process" + type] == "function") {
-			let wrapper = BDFDB.React.findDOMNodeSafe(instance);
-			if (wrapper) this["process" + type](instance, wrapper);
-			else setImmediate(() => {
-				this["process" + type](instance, BDFDB.React.findDOMNodeSafe(instance));
-			});
 		}
 	}
 	
@@ -744,14 +727,6 @@ class EditUsers {
 		let color1 = BDFDB.colorCONVERT(data.color1 ? data.color1 : (BDFDB.isPluginEnabled("BetterRoleColors") ? member.colorString : ""), "RGB");
 		BDFDB.setInnerText(username, data.name || member.nick || info.username);
 		username.style.setProperty("color", !username.classList.contains(BDFDB.disCN.voicenamedefault) ? BDFDB.colorCHANGE(color1, -50) : color1, "important");
-	}
-	
-	forceAllUpdates () {
-		let app = document.querySelector(BDFDB.dotCN.app);
-		if (app) {
-			let ins = BDFDB.getOwnerInstance({node:app, name:Object.keys(this.moduleTypes), all:true, noCopies:true, group:true, depth:99999999, time:99999999});
-			for (let type in ins) for (let i in ins[type]) this.initiateProcess(ins[type][i], type);
-		}
 	}
 	
 	getAvatarDiv (wrapper) {

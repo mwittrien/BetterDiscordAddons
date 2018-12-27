@@ -2,7 +2,7 @@
 
 class CharCounter {
 	initConstructor () {
-		this.moduleTypes = {
+		this.patchModules = {
 			"ChannelTextArea":"componentDidMount",
 			"Note":"componentDidMount",
 			"Modal":"componentDidMount"
@@ -104,12 +104,7 @@ class CharCounter {
 		if (typeof BDFDB === "object") {
 			BDFDB.loadMessage(this);
 			
-			for (let type in this.moduleTypes) {
-				let module = BDFDB.WebModules.findByName(type);
-				if (module && module.prototype) BDFDB.WebModules.patch(module.prototype, this.moduleTypes[type], this, {after: (e) => {this.initiateProcess(e.thisObject, type);}});
-			}
-			
-			this.forceAllUpdates();
+			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -128,18 +123,6 @@ class CharCounter {
 	
 	
 	// begin of own functions
-	
-	initiateProcess (instance, type) {
-		type = type.replace(/[^A-z]/g,"");
-		type = type[0].toUpperCase() + type.slice(1);
-		if (typeof this["process" + type] == "function") {
-			let wrapper = BDFDB.React.findDOMNodeSafe(instance);
-			if (wrapper) this["process" + type](instance, wrapper);
-			else setImmediate(() => {
-				this["process" + type](instance, BDFDB.React.findDOMNodeSafe(instance));
-			});
-		}
-	}
 	
 	processChannelTextArea (instance, wrapper) {
 		if (!wrapper) return;
@@ -199,13 +182,5 @@ class CharCounter {
 			});
 		
 		updateCounter();
-	}
-	
-	forceAllUpdates () {
-		let app = document.querySelector(BDFDB.dotCN.app);
-		if (app) {
-			let ins = BDFDB.getOwnerInstance({node:app, name:Object.keys(this.moduleTypes), all:true, noCopies:true, group:true, depth:99999999, time:99999999});
-			for (let type in ins) for (let i in ins[type]) this.initiateProcess(ins[type][i], type);
-		}
 	}
 }
