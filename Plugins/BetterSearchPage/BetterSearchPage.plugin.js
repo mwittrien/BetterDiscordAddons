@@ -1,7 +1,11 @@
 //META{"name":"BetterSearchPage"}*//
 
 class BetterSearchPage {
-	initConstructor () {		
+	initConstructor () {	
+		this.patchModules = {
+			"SearchResults":["componentDidMount","componentDidUpdate"]
+		};
+	
 		this.css = `
 			.BSP-pagination-button {
 				background: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="30" height="25"><g fill="#737f8d" fill-rule="evenodd" clip-rule="evenodd"><path xmlns="http://www.w3.org/2000/svg" d="M17.338 12.485c-4.156 4.156-8.312 8.312-12.468 12.467-1.402-1.402-2.805-2.804-4.207-4.206 2.756-2.757 5.513-5.514 8.27-8.27C6.176 9.72 3.419 6.963.663 4.207L4.87 0c-.058-.059 12.555 12.562 12.468 12.485z"/><path xmlns="http://www.w3.org/2000/svg" d="M17.338 12.485c-4.156 4.156-8.312 8.312-12.468 12.467-1.402-1.402-2.805-2.804-4.207-4.206 2.756-2.757 5.513-5.514 8.27-8.27C6.176 9.72 3.419 6.963.663 4.207L4.87 0c-.058-.059 12.555 12.562 12.468 12.485z" transform="translate(12 0)"/></g></svg>') 50%/9px 12px no-repeat;
@@ -19,7 +23,6 @@ class BetterSearchPage {
 				border: 1px solid hsla(0,0%,100%,.16);
 			}
 			.BSP-pagination-button.BSP-pagination-first {
-				-webkit-transform: rotate(180deg);
 				margin-right: 10px;
 				transform: rotate(180deg);
 			}
@@ -53,7 +56,7 @@ class BetterSearchPage {
 
 	getDescription () {return "Adds some extra controls to the search results page.";}
 
-	getVersion () {return "1.0.3";}
+	getVersion () {return "1.0.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -98,43 +101,8 @@ class BetterSearchPage {
 			BDFDB.loadMessage(this);
 			
 			this.SearchNavigation = BDFDB.WebModules.findByProperties("searchNextPage","searchPreviousPage");
-			this.SearchUtils = BDFDB.WebModules.findByProperties("getCurrentSearchId");
 			
-			var observer = null;
-
-			observer = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								if (node.tagName && node.classList.contains(BDFDB.disCN.searchresultswrap)) {
-									BDFDB.addObserver(this, node, {name:"searchResultsObserver"}, {childList:true, subtree:true});
-								}
-							});
-						}
-					}
-				);
-			});
-			BDFDB.addObserver(this, BDFDB.dotCNS.chat + BDFDB.dotCN.chatcontent, {name:"chatContentObserver",instance:observer}, {childList:true});
-
-			observer = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								let pagination = null;
-								if (node.tagName && (pagination = node.querySelector(BDFDB.dotCN.searchresultspagination)) != null) {
-									this.addNewControls(pagination);
-								}
-							});
-						}
-					}
-				);
-			});
-			BDFDB.addObserver(this, BDFDB.dotCNS.searchresultswrap, {name:"searchResultsObserver",instance:observer}, {childList:true, subtree:true});
-			
-			let pagination = document.querySelector(BDFDB.dotCNS.searchresultswrap + BDFDB.dotCNS.searchresultspagination);
-			if (pagination) this.addNewControls(pagination);
+			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -143,18 +111,8 @@ class BetterSearchPage {
 
 	stop () {
 		if (typeof BDFDB === "object") {
-			document.querySelectorAll(".BSP-pagination, .BSP-pagination-button, .BSP-pagination-jumpinput").forEach(ele => {ele.remove();});
-			
+			BDFDB.removeEles(".BSP-pagination",".BSP-pagination-button",".BSP-pagination-jumpinput");
 			BDFDB.unloadMessage(this);
-		}
-	}
-
-	onSwitch () {
-		if (typeof BDFDB === "object") {
-			BDFDB.addObserver(this, BDFDB.dotCNS.chat + BDFDB.dotCN.chatcontent, {name:"chatContentObserver"}, {childList:true});
-			BDFDB.addObserver(this, BDFDB.dotCNS.searchresultswrap, {name:"searchResultsObserver"}, {childList:true, subtree:true});
-			let pagination = document.querySelector(BDFDB.dotCNS.searchresultswrap + BDFDB.dotCNS.searchresultspagination);
-			if (pagination) this.addNewControls(pagination);
 		}
 	}
 	
@@ -168,17 +126,18 @@ class BetterSearchPage {
 		BDFDB.saveAllData(settings, this, "settings");
 	}
 	
-	addNewControls (pagination) {
-		if (!pagination || document.querySelector(".BSP-pagination, .BSP-pagination-button, .BSP-pagination-jumpinput")) return; 
-		let searchResults = document.querySelector(BDFDB.dotCN.searchresults);
-		let searchID = this.SearchUtils.getCurrentSearchId();
-		if (!searchResults || !searchID) return;
+	processSearchResults (instance, wrapper) {
+		if (instance.props && instance.props.searchId) this.addNewControls(wrapper.querySelector(BDFDB.dotCN.searchresultspagination), instance.props.searchId);
+	}
+	
+	addNewControls (pagination, searchId) {
+		if (!pagination || !searchId || document.querySelector(".BSP-pagination, .BSP-pagination-button, .BSP-pagination-jumpinput")) return;
+		let searchResultsWrapper = BDFDB.getParentEle(BDFDB.dotCN.searchresultswrapper, pagination);
+		if (!searchResultsWrapper) return;
 		let currentpage, maxpage;
 		for (let word of pagination.textContent.split(" ")) {
 			let number = parseInt(word.replace(/\./g,""));
-			if (!isNaN(number) && !currentpage) {
-				currentpage = number;
-			}
+			if (!isNaN(number) && !currentpage) currentpage = number;
 			else if (!isNaN(number)) {
 				maxpage = number;
 				break;
@@ -194,24 +153,36 @@ class BetterSearchPage {
 		}
 		if (currentpage == maxpage && maxpage == 201) pagination.querySelector(BDFDB.dotCN.searchresultspaginationnext).classList.add(BDFDB.disCN.searchresultspaginationdisabled);
 		let settings = BDFDB.getAllData(this, "settings");
+		let BSPpaginatonPrevious = pagination.querySelector(BDFDB.dotCN.searchresultspaginationprevious);
+		if (BSPpaginatonPrevious) {
+			BSPpaginatonPrevious.classList.add("pagination-button");
+			BSPpaginatonPrevious.setAttribute("type", "Previous");
+		}
+		let BSPpaginatonNext = pagination.querySelector(BDFDB.dotCN.searchresultspaginationnext);
+		if (BSPpaginatonNext) {
+			BSPpaginatonNext.classList.add("pagination-button");
+			BSPpaginatonNext.setAttribute("type", "Next");
+		}
 		if (settings.addFirstLast) {
 			let BSPpaginatonFirst = document.createElement("div");
-			BSPpaginatonFirst.className = "BSP-pagination-button BSP-pagination-first";
+			BSPpaginatonFirst.className = "pagination-button BSP-pagination-button BSP-pagination-first";
+			BSPpaginatonFirst.setAttribute("type", "First");
 			if (currentpage == 1) BSPpaginatonFirst.classList.add(BDFDB.disCN.searchresultspaginationdisabled);
 			pagination.insertBefore(BSPpaginatonFirst, pagination.firstElementChild);
 			let BSPpaginatonLast = document.createElement("div");
-			BSPpaginatonLast.className = "BSP-pagination-button BSP-pagination-last";
+			BSPpaginatonLast.className = "pagination-button BSP-pagination-button BSP-pagination-last";
+			BSPpaginatonFirst.setAttribute("type", "Last");
 			if (currentpage == maxpage) BSPpaginatonLast.classList.add(BDFDB.disCN.searchresultspaginationdisabled);
 			pagination.appendChild(BSPpaginatonLast);
 		}
 		if (settings.addJumpTo) {
-			$(`<div class="inputNumberWrapper inputNumberWrapperMini BSP-pagination-jumpinput ${BDFDB.disCN.inputwrapper}"><span class="numberinput-buttons-zone"><span class="numberinput-button-up"></span><span class="numberinput-button-down"></span></span><input type="number" min="1" max="${maxpage}" placeholder="${currentpage}" value="${currentpage}" class="${BDFDB.disCNS.inputmini + BDFDB.disCNS.input + BDFDB.disCN.size16}"></div><div class="BSP-pagination-button BSP-pagination-jump"></div>`).appendTo(pagination);;
+			$(`<div class="inputNumberWrapper inputNumberWrapperMini BSP-pagination-jumpinput ${BDFDB.disCN.inputwrapper}"><span class="numberinput-buttons-zone"><span class="numberinput-button-up"></span><span class="numberinput-button-down"></span></span><input type="number" min="1" max="${maxpage}" placeholder="${currentpage}" value="${currentpage}" class="${BDFDB.disCNS.inputmini + BDFDB.disCNS.input + BDFDB.disCN.size16}"></div><div type="Go To" class="pagination-button BSP-pagination-button BSP-pagination-jump"></div>`).appendTo(pagination);
 		}
 		BDFDB.initElements(pagination);
 		if (settings.cloneToTheTop) {
 			let BSPpaginaton = pagination.cloneNode(true);
 			BSPpaginaton.classList.add("BSP-pagination");
-			searchResults.parentElement.insertBefore(BSPpaginaton, searchResults);
+			searchResultsWrapper.insertBefore(BSPpaginaton, searchResultsWrapper.firstElementChild);
 			BDFDB.initElements(BSPpaginaton);
 		}
 		var doJump = (input) => {
@@ -222,55 +193,36 @@ class BetterSearchPage {
 			}
 			else if (value < currentpage) {
 				for (; currentpage - value > 0; value++) {
-					this.SearchNavigation.searchPreviousPage(searchID);
+					this.SearchNavigation.searchPreviousPage(searchId);
 				}
 			}
 			else if (value > currentpage) {
 				for (; value - currentpage > 0; value--) {
-					this.SearchNavigation.searchNextPage(searchID);
+					this.SearchNavigation.searchNextPage(searchId);
 				}
 			}
 		};
-		$(searchResults.parentElement) 
+		$(searchResultsWrapper) 
 			.off("click." + this.getName()).off("mouseenter." + this.getName()).off("keydown." + this.getName())
-			.on("click." + this.getName(), BDFDB.dotCN.searchresultspaginationprevious + BDFDB.dotCN.searchresultspaginationdisabled, (e) => {
+			.on("click." + this.getName(), BDFDB.dotCN.searchresultspaginationdisabled, (e) => {
 				e.preventDefault();
 				e.stopPropagation();
 			})
-			.on("click." + this.getName(), BDFDB.dotCN.searchresultspaginationnext + BDFDB.dotCN.searchresultspaginationdisabled, (e) => {
-				e.preventDefault();
-				e.stopPropagation();
-			})
-			.on("mouseenter." + this.getName(), BDFDB.dotCN.searchresultspaginationprevious + ":not(" + BDFDB.dotCN.searchresultspaginationdisabled + ")", (e) => {
-				BDFDB.createTooltip("Previous", e.currentTarget, {type:"top"});
-			})
-			.on("mouseenter." + this.getName(), BDFDB.dotCN.searchresultspaginationnext + ":not(" + BDFDB.dotCN.searchresultspaginationdisabled + ")", (e) => {
-				BDFDB.createTooltip("Next", e.currentTarget, {type:"top"});
-			})
-			.on("mouseenter." + this.getName(), ".BSP-pagination-first:not(" + BDFDB.dotCN.searchresultspaginationdisabled + ")", (e) => {
-				BDFDB.createTooltip("First", e.currentTarget, {type:"top"});
-			})
-			.on("mouseenter." + this.getName(), ".BSP-pagination-last:not(" + BDFDB.dotCN.searchresultspaginationdisabled + ")", (e) => {
-				BDFDB.createTooltip("Last", e.currentTarget, {type:"top"});
-			})
-			.on("mouseenter." + this.getName(), ".BSP-pagination-jump:not(" + BDFDB.dotCN.searchresultspaginationdisabled + ")", (e) => {
-				BDFDB.createTooltip("Go To", e.currentTarget, {type:"top"});
+			.on("mouseenter." + this.getName(), ".pagination-button:not(" + BDFDB.dotCN.searchresultspaginationdisabled + ")", (e) => {
+				let type = e.currentTarget.getAttribute("type");
+				if (type) BDFDB.createTooltip(type, e.currentTarget, {type:"top"});
 			})
 			.on("click." + this.getName(), ".BSP-pagination " + BDFDB.dotCN.searchresultspaginationprevious + ":not(" + BDFDB.dotCN.searchresultspaginationdisabled + ")", () => {
-				this.SearchNavigation.searchPreviousPage(searchID);
+				this.SearchNavigation.searchPreviousPage(searchId);
 			})
 			.on("click." + this.getName(), ".BSP-pagination " + BDFDB.dotCN.searchresultspaginationnext + ":not(" + BDFDB.dotCN.searchresultspaginationdisabled + ")", () => {
-				this.SearchNavigation.searchNextPage(searchID);
+				this.SearchNavigation.searchNextPage(searchId);
 			})
 			.on("click." + this.getName(), ".BSP-pagination-first:not(" + BDFDB.dotCN.searchresultspaginationdisabled + ")", () => {
-				for (let i = 0; currentpage - 1 - i > 0; i++) {
-					this.SearchNavigation.searchPreviousPage(searchID);
-				}
+				for (let i = 0; currentpage - 1 - i > 0; i++) this.SearchNavigation.searchPreviousPage(searchId);
 			})
 			.on("click." + this.getName(), ".BSP-pagination-last:not(" + BDFDB.dotCN.searchresultspaginationdisabled + ")", () => {
-				for (let i = 0; maxpage - currentpage - i > 0; i++) {
-					this.SearchNavigation.searchNextPage(searchID);
-				}
+				for (let i = 0; maxpage - currentpage - i > 0; i++) this.SearchNavigation.searchNextPage(searchId);
 			})
 			.on("keydown." + this.getName(), ".BSP-pagination-jumpinput " + BDFDB.dotCN.inputmini, (e) => {
 				if (e.which == 13) doJump(e.currentTarget);
@@ -278,7 +230,5 @@ class BetterSearchPage {
 			.on("click." + this.getName(), ".BSP-pagination-jump:not(" + BDFDB.dotCN.searchresultspaginationdisabled + ")", (e) => {
 				doJump(e.currentTarget.parentElement.querySelector(".BSP-pagination-jumpinput " + BDFDB.dotCN.inputmini));
 			});
-			
-		
 	}
 }
