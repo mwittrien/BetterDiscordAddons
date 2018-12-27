@@ -304,7 +304,7 @@ class ThemeRepo {
 			.on("click", ".btn-addtheme", () => {this.addThemeToOwnList(settingspanel);})
 			.on("keyup", "#input-themeurl", (e) => {if (e.which == 13) this.addThemeToOwnList(settingspanel);})
 			.on("click", ".remove-theme", (e) => {this.removeThemeFromOwnList(e);})
-			.on("click", ".remove-all", () => {this.removeAllFromOwnList(settingspanel);})
+			.on("click", ".remove-all", () => {this.removeAllFromOwnList();})
 			.on("click", ".refresh-button", () => {
 				this.loading = {is:false, timeout:null, amount:0};
 				this.loadThemes();
@@ -403,8 +403,7 @@ class ThemeRepo {
 			clearInterval(this.updateInterval);
 			clearTimeout(this.loading.timeout);
 						
-			$(".discordPreview, .themerepo-modal,  .themerepo-notice, .bd-themerepobutton, .themerepo-loadingicon").remove();
-			$(BDFDB.dotCN.app + " > .repo-loadingwrapper:empty").remove();
+			BDFDB.removeEles(".discordPreview",".themerepo-modal",".themerepo-notice",".bd-themerepobutton",".themerepo-loadingicon",BDFDB.dotCN.app + " > .repo-loadingwrapper:empty");
 			
 			BDFDB.unloadMessage(this);
 		}
@@ -467,10 +466,10 @@ class ThemeRepo {
 		BDFDB.saveData("ownlist", ownlist, this, "ownlist");
 	}
 	
-	removeAllFromOwnList (settingspanel) {
+	removeAllFromOwnList () {
 		if (confirm("Are you sure you want to remove all added Themes from your own list?")) {
 			BDFDB.saveData("ownlist", [], this, "ownlist");
-			settingspanel.querySelectorAll(BDFDB.dotCN.hovercard).forEach(ele => {ele.remove();});
+			BDFDB.removeEles(this.getName() + "-settings " + BDFDB.dotCN.hovercard);
 		}
 	}
 	
@@ -520,7 +519,7 @@ class ThemeRepo {
 		themeRepoModal.find("#input-hideupdated").prop("checked", hiddenSettings.updated || showOnlyOutdated);
 		themeRepoModal.find("#input-hideoutdated").prop("checked", hiddenSettings.outdated && !showOnlyOutdated);
 		themeRepoModal.find("#input-hidedownloadable").prop("checked", hiddenSettings.downloadable || showOnlyOutdated);
-		if (!BDFDB.isRestartNoMoreEnabled()) themeRepoModal.find("#RNMoption").remove();
+		if (!BDFDB.isRestartNoMoreEnabled()) BDFDB.removeEles(".themerepo-modal #RNMoption");
 		else themeRepoModal.find("#input-rnmstart").prop("checked", BDFDB.loadData("RNMstart", this, "settings"));
 		themeRepoModal
 			.on("keyup." + this.getName(), BDFDB.dotCN.searchbarinput, () => {
@@ -799,11 +798,11 @@ class ThemeRepo {
 						clearTimeout(this.loading.timeout);
 						return;
 					}
-					$(".themerepo-loadingicon").remove();
-					if (!loadingiconwrapper.firstChild) loadingiconwrapper.remove();
+					BDFDB.removeEles(".themerepo-loadingicon");
+					if (!loadingiconwrapper.firstChild) BDFDB.removeEles(loadingiconwrapper);
 					clearTimeout(this.loading.timeout);
 					this.loading = {is:false, timeout:null, amount:this.loading.amount};
-					console.log("ThemeRepo: Finished fetching Themes.");
+					console.log(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Finished fetching Themes.");
 					if (document.querySelector(".bd-themerepobutton")) BDFDB.showToast(`Finished fetching Themes.`, {type:"success"});
 					if (outdated > 0) {
 						var text = `${outdated} of your Themes ${outdated == 1 ? "is" : "are"} outdated. Check:`;
@@ -909,11 +908,11 @@ class ThemeRepo {
 	applyTheme (entry) {
 		var name = entry.name;
 		if (BDFDB.isThemeEnabled(name) == false) {
-			$(`style#${name}`).remove();
+			BDFDB.removeEles(`style#${name}`);
 			$("head").append(`<style id=${name}>${entry.css}</style>`);
 			themeCookie[name] = true;
 			themeModule.saveThemeData();
-			console.log("ThemeRepo: applied Theme " + name);
+			console.log(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Applied Theme " + name + ".");
 		}
 	}
 	
@@ -936,11 +935,11 @@ class ThemeRepo {
 	removeTheme (entry) {
 		var name = entry.name;
 		if (BDFDB.isThemeEnabled(name) == true) {
-			$(`style#${name}`).remove();
+			BDFDB.removeEles(`style#${name}`);
 			themeCookie[name] = false;
 			delete bdthemes[name];
 			themeModule.saveThemeData();
-			console.log("ThemeRepo: removed Theme " + name);
+			console.log(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Removed Theme " + name + ".");
 		}
 	}
 }

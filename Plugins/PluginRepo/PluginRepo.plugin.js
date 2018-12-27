@@ -258,7 +258,7 @@ class PluginRepo {
 			.on("click", ".btn-addplugin", () => {this.addPluginToOwnList(settingspanel);})
 			.on("keyup", "#input-pluginurl", (e) => {if (e.which == 13) this.addPluginToOwnList(settingspanel);})
 			.on("click", ".remove-plugin", (e) => {this.removePluginFromOwnList(e);})
-			.on("click", ".remove-all", () => {this.removeAllFromOwnList(settingspanel);})
+			.on("click", ".remove-all", () => {this.removeAllFromOwnList();})
 			.on("click", ".refresh-button", () => {
 				this.loading = {is:false, timeout:null, amount:0};
 				this.loadPlugins();
@@ -353,9 +353,8 @@ class PluginRepo {
 		if (typeof BDFDB === "object") {
 			clearInterval(this.updateInterval);
 			clearTimeout(this.loading.timeout);
-						
-			$("webview[webview-pluginrepo], .pluginrepo-modal, .pluginrepo-notice, .bd-pluginrepobutton, .pluginrepo-loadingicon").remove();
-			$(BDFDB.dotCN.app + " > .repo-loadingwrapper:empty").remove();
+			
+			BDFDB.removeEles("webview[webview-pluginrepo]",".pluginrepo-modal",".pluginrepo-notice",".bd-pluginrepobutton",".pluginrepo-loadingicon",BDFDB.dotCN.app + " > .repo-loadingwrapper:empty");
 			
 			BDFDB.unloadMessage(this);
 		}
@@ -422,10 +421,10 @@ class PluginRepo {
 		BDFDB.saveData("ownlist", ownlist, this, "ownlist");
 	}
 	
-	removeAllFromOwnList (settingspanel) {
+	removeAllFromOwnList () {
 		if (confirm("Are you sure you want to remove all added Plugins from your own list?")) {
 			BDFDB.saveData("ownlist", [], this, "ownlist");
-			settingspanel.querySelectorAll(BDFDB.dotCN.hovercard).forEach(ele => {ele.remove();});
+			BDFDB.removeEles(this.getName() + "-settings " + BDFDB.dotCN.hovercard);
 		}
 	}
 	
@@ -686,18 +685,17 @@ class PluginRepo {
 					getPluginInfo(() => {
 						if (!this.started) {
 							clearTimeout(this.loading.timeout);
-							if (typeof webview != "undefined") webview.remove();
+							BDFDB.removeEles(webview);
 							return;
 						}
 						var finishCounter = 0, finishInterval = setInterval(() => { 
 							if ((webviewqueue.length == 0 && !webviewrunning) || finishCounter > 300 || !this.loading.is) {
 								clearInterval(finishInterval);
-								if (typeof webview != "undefined") webview.remove();
-								$(".pluginrepo-loadingicon").remove();
-								if (!loadingiconwrapper.firstChild) loadingiconwrapper.remove();
+								BDFDB.removeEles(webview, ".pluginrepo-loadingicon");
+								if (!loadingiconwrapper.firstChild) BDFDB.removeEles(loadingiconwrapper);
 								clearTimeout(this.loading.timeout);
 								this.loading = {is:false, timeout:null, amount:this.loading.amount};
-								console.log("PluginRepo: Finished fetching Plugins.");
+								console.log(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Finished fetching Plugins.");
 								if (document.querySelector(".bd-pluginrepobutton")) BDFDB.showToast(`Finished fetching Plugins.`, {type:"success"});
 								if (outdated > 0) {
 									var text = `${outdated} of your Plugins ${outdated == 1 ? "is" : "are"} outdated. Check:`;
@@ -897,7 +895,7 @@ class PluginRepo {
 			bdplugins[name].plugin.start();
 			pluginCookie[name] = true;
 			pluginModule.savePluginData();
-			console.log("PluginRepo: started Plugin " + name);
+			console.log(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Started Plugin " + name + ".");
 		}
 	}
 	
@@ -924,7 +922,7 @@ class PluginRepo {
 			pluginCookie[name] = false;
 			delete bdplugins[name];
 			pluginModule.savePluginData();
-			console.log("PluginRepo: stopped Plugin " + name);
+			console.log(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Stopped Plugin " + name + ".");
 		}
 	}
 }
