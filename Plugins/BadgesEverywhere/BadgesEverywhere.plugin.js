@@ -74,7 +74,7 @@ class BadgesEverywhere {
 
 	getDescription () {return "Displays Badges (Nitro, HypeSquad, etc...) in the chat/memberlist/userpopout. Thanks for Zerebos' help.";}
 
-	getVersion () {return "1.1.6";}
+	getVersion () {return "1.1.7";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -181,7 +181,7 @@ class BadgesEverywhere {
 		let fiber = instance._reactInternalFiber;
 		if (fiber.return && fiber.return.memoizedProps && fiber.return.memoizedProps.message) {
 			let username = wrapper.querySelector(BDFDB.dotCN.messageusername);
-			if (username) this.addBadges(fiber.return.memoizedProps.message.author, wrapper, "chat");
+			if (username && BDFDB.getData("showInChat", this, "settings")) this.addBadges(fiber.return.memoizedProps.message.author, wrapper, "chat");
 		}
 	}
 	
