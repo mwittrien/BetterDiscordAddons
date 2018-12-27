@@ -141,7 +141,7 @@ class BadgesEverywhere {
 
 	stop () {
 		if (typeof BDFDB === "object") {
-			document.querySelectorAll(".BE-badges").forEach(node=>{node.remove();});
+			BDFDB.removeEles(".BE-badges");
 			BDFDB.unloadMessage(this);
 		}
 	}
@@ -188,7 +188,7 @@ class BadgesEverywhere {
 	processStandardSidebarView (instance, wrapper) {
 		if (this.updateBadges) {
 			this.updateBadges = false;
-			document.querySelectorAll(".BE-badges").forEach(node=>{node.remove();});
+			BDFDB.removeEles(".BE-badges");
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 	}
