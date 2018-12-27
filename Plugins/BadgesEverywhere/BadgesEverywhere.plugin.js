@@ -2,6 +2,12 @@
 
 class BadgesEverywhere {
 	initConstructor () {
+		this.patchModules = {
+			"NameTag":"componentDidMount",
+			"Popout":"componentDidMount",
+			"StandardSidebarView":"componentWillUnmount"
+		};
+		
 		this.css = ` 
 			.BE-badge {
 				display: inline-block;
@@ -68,7 +74,7 @@ class BadgesEverywhere {
 
 	getDescription () {return "Displays Badges (Nitro, HypeSquad, etc...) in the chat/memberlist/userpopout. Thanks for Zerebos' help.";}
 
-	getVersion () {return "1.1.5";}
+	getVersion () {return "1.1.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -124,74 +130,9 @@ class BadgesEverywhere {
 			this.DiscordConstants = BDFDB.WebModules.findByProperties("Permissions", "ActivityTypes", "StatusTypes");
 			this.BadgeClasses = BDFDB.WebModules.findByProperties("profileBadgeStaff","profileBadgePremium");
 			
-			var observer = null;
-
-			observer = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								if (node.tagName && node.querySelector(BDFDB.dotCN.memberusername) && BDFDB.getData("showInMemberList", this, "settings")) {
-									this.addBadges(node, "list", false);
-								}
-							});
-						}
-					}
-				);
-			});
-			BDFDB.addObserver(this, BDFDB.dotCN.memberswrap, {name:"userListObserver",instance:observer}, {childList:true, subtree:true});
-			
-			observer = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								if (BDFDB.getData("showInChat", this, "settings")) {
-									if (node.tagName && node.querySelector(BDFDB.dotCN.messageusername)) {
-										this.addBadges(node, "chat", BDFDB.getDiscordMode() == "compact");
-									}
-								}
-							});
-						}
-					}
-				);
-			});
-			BDFDB.addObserver(this, BDFDB.dotCN.messages, {name:"chatWindowObserver",instance:observer}, {childList:true, subtree:true});
-			
-			observer = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								if (node.tagName && node.querySelector(BDFDB.dotCN.userpopout) && BDFDB.getData("showInPopout", this, "settings")) {
-									this.addBadges(node, "popout", false);
-								}
-							});
-						}
-					}
-				);
-			});
-			BDFDB.addObserver(this, BDFDB.dotCN.popouts, {name:"userPopoutObserver",instance:observer}, {childList: true});
-			
-			observer = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.removedNodes) {
-							change.removedNodes.forEach((node) => {
-								if (node.tagName && node.getAttribute("layer-id") == "user-settings" && this.updateBadges) {
-									this.updateBadges = false;
-									this.loadBadges();
-								}
-							});
-						}
-					}
-				);
-			});
-			BDFDB.addObserver(this, BDFDB.dotCN.layers, {name:"settingsWindowObserver",instance:observer}, {childList:true});
-			
 			for (let flag in this.badges) if (!this.badges[flag].selector) delete this.badges[flag];
 			
-			this.loadBadges();
+			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -202,14 +143,6 @@ class BadgesEverywhere {
 		if (typeof BDFDB === "object") {
 			document.querySelectorAll(".BE-badges").forEach(node=>{node.remove();});
 			BDFDB.unloadMessage(this);
-		}
-	}
-	
-	onSwitch () {
-		if (typeof BDFDB === "object") {
-			BDFDB.addObserver(this, BDFDB.dotCN.memberswrap, {name:"userListObserver"}, {childList:true, subtree:true});
-			BDFDB.addObserver(this, BDFDB.dotCN.messages, {name:"chatWindowObserver"}, {childList:true, subtree:true});
-			this.loadBadges();
 		}
 	}
 	
@@ -232,78 +165,70 @@ class BadgesEverywhere {
 		BDFDB.saveAllData(blacklist, this, "blacklist");
 		this.updateBadges = true;
 	}
-
-	loadBadges() {
-		document.querySelectorAll(".BE-badges").forEach(node=>{node.remove();});
-		var settings = BDFDB.getAllData(this, "settings");
-		if (settings.showInMemberList) {
-			for (let user of document.querySelectorAll(BDFDB.dotCN.member)) {
-				this.addBadges(user, "list", false);
-			}
+	
+	processNameTag (instance, wrapper) { 
+		if (!wrapper.classList || !instance || !instance.props) return;
+		else if (wrapper.classList.contains(BDFDB.disCN.membernametag) && BDFDB.getData("showInMemberList", this, "settings")) {
+			this.addBadges(instance.props.user, wrapper, "list");
 		}
-		if (settings.showInChat) {
-			for (let messagegroup of document.querySelectorAll(BDFDB.dotCN.messagegroupcozy)) {
-				this.addBadges(messagegroup, "chat", false);
-			}
-			for (let messagegroup of document.querySelectorAll(BDFDB.dotCN.messagegroupcompact)) {
-				for (let message of messagegroup.querySelectorAll(BDFDB.dotCN.messagemarkup)) {
-					this.addBadges(message, "chat", true);
-				}
-			}
-		}
-		if (settings.showInPopout) {
-			for (let user of document.querySelectorAll(BDFDB.dotCN.userpopout)) {
-				this.addBadges(user.parentElement, "popout", false);
-			}
+		else if (wrapper.classList.contains(BDFDB.disCN.userpopoutheadertag) && BDFDB.getData("showInPopout", this, "settings")) {
+			wrapper = wrapper.classList.contains(BDFDB.disCN.userpopoutheadertagwithnickname) && wrapper.previousSibling ? wrapper.previousSibling : wrapper;
+			this.addBadges(instance.props.user, wrapper, "popout");
 		}
 	}
 	
-	addBadges (wrapper, type, compact) {
-		if (!wrapper) return;
-		let user = compact ? BDFDB.getKeyInformation({"node":wrapper.classList.contains(BDFDB.disCN.messagegroup) ? wrapper : $(BDFDB.dotCN.messagegroup).has(wrapper)[0],"key":"message"}).author : BDFDB.getKeyInformation({"node":wrapper,"key":"user"});
-		if (user && !user.bot) {
-			if (!this.requestedusers[user.id]) {
-				this.requestedusers[user.id] = [[wrapper,type]]
-				this.APIModule.get(this.DiscordConstants.Endpoints.USER_PROFILE(user.id)).then(result => {
-					let usercopy = Object.assign({},result.body.user);
-					if (result.body.premium_since) usercopy.flags += 2048;
-					this.loadedusers[user.id] = usercopy;
-					for (let queredobj of this.requestedusers[user.id]) this.addToWrapper(queredobj[0], user.id, queredobj[1]);
+	processPopout (instance, wrapper) {
+		let fiber = instance._reactInternalFiber;
+		if (fiber.return && fiber.return.memoizedProps && fiber.return.memoizedProps.message) {
+			let username = wrapper.querySelector(BDFDB.dotCN.messageusername);
+			if (username) this.addBadges(fiber.return.memoizedProps.message.author, wrapper, "chat");
+		}
+	}
+	
+	processStandardSidebarView (instance, wrapper) {
+		if (this.updateBadges) {
+			this.updateBadges = false;
+			document.querySelectorAll(".BE-badges").forEach(node=>{node.remove();});
+			BDFDB.WebModules.forceAllUpdates(this);
+		}
+	}
+	
+	addBadges (info, wrapper, type) {
+		if (!info || info.bot || !wrapper) return;
+		if (!this.requestedusers[info.id]) {
+			this.requestedusers[info.id] = [[wrapper,type]]
+			this.APIModule.get(this.DiscordConstants.Endpoints.USER_PROFILE(info.id)).then(result => {
+				let usercopy = Object.assign({},result.body.user);
+				if (result.body.premium_since) usercopy.flags += 2048;
+				this.loadedusers[info.id] = usercopy;
+				for (let queredobj of this.requestedusers[info.id]) this.addToWrapper(info, queredobj[0], queredobj[1]);
+			});
+		}
+		else if (!this.loadedusers[info.id]) {
+			this.requestedusers[info.id].push([wrapper,type]);
+		}
+		else {
+			this.addToWrapper(info, wrapper, type);
+		}
+	}
+	
+	addToWrapper (info, wrapper, type) {
+		let blacklist = BDFDB.loadAllData(this, "blacklist");
+		let settings = BDFDB.getAllData(this, "settings");
+		let header = BDFDB.getParentEle(BDFDB.dotCN.userpopoutheader, wrapper);
+		let badgewrapper = document.createElement("span");
+		badgewrapper.className = `BE-badges ${!settings.useColoredVersion || (header && !header.classList.contains(BDFDB.disCN.userpopoutheadernormal)) ? BDFDB.disCN.userprofiletopsectionplaying : BDFDB.disCN.userprofiletopsectionnormal}`;
+		badgewrapper.setAttribute("style", "all: unset !important;");
+		for (let flag in this.badges) {
+			if ((this.loadedusers[info.id].flags | flag) == this.loadedusers[info.id].flags && !blacklist[flag]) {
+				let badge = document.createElement("div");
+				badge.className = `BE-badge BE-badge-${this.badges[flag].name.replace(/ /g, "")} BE-badge-${type} ${this.BadgeClasses[this.badges[flag].selector]}`;
+				badgewrapper.appendChild(badge);
+				$(badge).on("mouseenter." + this.getName(), (e) => {
+					BDFDB.createTooltip(this.badges[flag].name, e.currentTarget, {"type":type == "list" ? "left" : "top"});
 				});
 			}
-			else if (!this.loadedusers[user.id]) {
-				this.requestedusers[user.id].push([wrapper,type]);
-			}
-			else {
-				this.addToWrapper(wrapper, user.id, type);
-			}
 		}
-	}
-	
-	addToWrapper (wrapper, id, type) {
-		if (wrapper.querySelector(".BE-badges")) return; 
-		let memberwrap = wrapper.querySelector(BDFDB.dotCN.memberusername);
-		if (!memberwrap) memberwrap = wrapper.querySelector(BDFDB.dotCN.messageusername);
-		if (memberwrap) memberwrap = memberwrap.parentElement;
-		if (!memberwrap) memberwrap = wrapper.querySelector(BDFDB.dotCN.nametag);
-		if (memberwrap) {
-			let blacklist = BDFDB.loadAllData(this, "blacklist");
-			let settings = BDFDB.getAllData(this, "settings");
-			let header = wrapper.querySelector(BDFDB.dotCN.userpopoutheader);
-			let badgewrapper = document.createElement("span");
-			badgewrapper.className = `BE-badges ${!settings.useColoredVersion || (header && !header.classList.contains(BDFDB.disCN.userpopoutheadernormal)) ? BDFDB.disCN.userprofiletopsectionplaying : BDFDB.disCN.userprofiletopsectionnormal}`;
-			badgewrapper.setAttribute("style", "all: unset !important;");
-			for (let flag in this.badges) {
-				if ((this.loadedusers[id].flags | flag) == this.loadedusers[id].flags && !blacklist[flag]) {
-					let badge = document.createElement("div");
-					badge.className = `BE-badge BE-badge-${this.badges[flag].name.replace(/ /g, "")} BE-badge-${type} ${this.BadgeClasses[this.badges[flag].selector]}`;
-					badgewrapper.appendChild(badge);
-					$(badge).on("mouseenter." + this.getName(), (e) => {
-						BDFDB.createTooltip(this.badges[flag].name, e.currentTarget, {"type":type == "list" ? "left" : "top"});
-					});
-				}
-			}
-			if (badgewrapper.firstChild) memberwrap.appendChild(badgewrapper);
-		}
+		if (badgewrapper.firstChild) wrapper.appendChild(badgewrapper);
 	}
 }
