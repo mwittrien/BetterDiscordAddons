@@ -114,9 +114,8 @@ class CharCounter {
 
 	stop () {
 		if (typeof BDFDB === "object") {
-			$(".charcounter").remove();
-			$(".charcounter-added").removeClass("charcounter-added");
-						
+			BDFDB.removeEles(".charcounter");
+			BDFDB.removeClasses("charcounter-added");
 			BDFDB.unloadMessage(this);
 		}
 	}
@@ -125,17 +124,14 @@ class CharCounter {
 	// begin of own functions
 	
 	processChannelTextArea (instance, wrapper) {
-		if (!wrapper) return;
 		if (instance.props && instance.props.type && this.maxLenghts[instance.props.type]) this.appendCounter(wrapper.querySelector("textarea"), instance.props.type);
 	}
 	
 	processNote (instance, wrapper) {
-		if (!wrapper) return;
 		if (wrapper.classList) this.appendCounter(wrapper.firstElementChild, wrapper.classList.contains(BDFDB.disCN.usernotepopout) ? "popout" : (wrapper.classList.contains(BDFDB.disCN.usernoteprofile) ? "profile" : null));
 	}
 	
 	processModal (instance, wrapper) {
-		if (!wrapper) return;
 		if (instance.props && instance.props.tag == "form") {
 			let reset = wrapper.querySelector(BDFDB.dotCN.reset);
 			if (reset && BDFDB.getInnerText(reset.firstElementChild) == BDFDB.LanguageStrings.RESET_NICKNAME) this.appendCounter(wrapper.querySelector(BDFDB.dotCN.inputdefault), "nickname");
