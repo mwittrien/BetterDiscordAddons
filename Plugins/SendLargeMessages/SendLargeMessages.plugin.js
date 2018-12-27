@@ -67,7 +67,7 @@ class SendLargeMessages {
 
 	getDescription () {return "Opens a popout when your message is too large, which allows you to automatically send the message in several smaller messages.";}
 
-	getVersion () {return "1.5.0";}
+	getVersion () {return "1.5.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -252,7 +252,7 @@ class SendLargeMessages {
 	sendMessage (text) {
 		let textarea = document.querySelector(BDFDB.dotCNS.textareawrapchat + "textarea");
 		if (textarea) {
-			var instance = BDFDB.getOwnerInstance({"node":textarea.parentElement, "name":"ChannelTextAreaForm", "up":true});
+			let instance = BDFDB.getOwnerInstance({"node":textarea.parentElement, "name":"ChannelTextAreaForm", "up":true});
 			if (instance) {
 				instance.setState({textValue:text});
 				BDFDB.triggerSend(textarea);

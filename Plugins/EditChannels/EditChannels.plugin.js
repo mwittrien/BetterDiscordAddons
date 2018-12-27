@@ -10,7 +10,8 @@ class EditChannels {
 			"ChannelCategoryItem":"componentDidMount",
 			"ChannelItem":"componentDidMount",
 			"HeaderBar":["componentDidMount","componentDidUpdate"],
-			"Clickable":"componentDidMount"
+			"Clickable":"componentDidMount",
+			"StandardSidebarView":"componentWillUnmount"
 		};
 		
 		this.channelContextEntryMarkup =
@@ -267,7 +268,6 @@ class EditChannels {
 	}
 	
 	processChannelTextArea (instance, wrapper) {
-		if (!wrapper) return;
 		if (instance.props && instance.props.type == "normal" && instance.props.channel && instance.props.channel.type == 0) {
 			let channel = instance.props.channel;
 			let data = BDFDB.loadData(channel.id, this, "channels") || {};
@@ -276,7 +276,6 @@ class EditChannels {
 	}
 	
 	processAuditLog (instance, wrapper) {
-		if (!wrapper) return;
 		if (instance.props && instance.props.log && instance.props.log.options && instance.props.log.options.channel) {
 			let hooks = wrapper.querySelectorAll(BDFDB.dotCN.flexchild + " > span:not(" + BDFDB.dotCN.auditloguserhook + ")");
 			if (hooks.length > 0) this.changeChannel2(instance.props.log.options.channel, hooks[0].firstChild);
@@ -284,14 +283,12 @@ class EditChannels {
 	}
 	
 	processChannelCategoryItem (instance, wrapper) {
-		if (!wrapper) return;
 		if (instance.props && instance.props.channel) {
 			this.changeChannel(instance.props.channel, wrapper.querySelector(BDFDB.dotCN.categorycolortransition));
 		}
 	}
 	
 	processChannelItem (instance, wrapper) {
-		if (!wrapper) return;
 		if (instance.props && instance.props.channel) {
 			this.changeChannel(instance.props.channel, wrapper.querySelector(BDFDB.dotCN.channelname));
 		}
@@ -318,7 +315,7 @@ class EditChannels {
 	}
 	
 	processClickable (instance, wrapper) {
-		if (!wrapper || !instance.props || !instance.props.className) return;
+		if (!instance.props || !instance.props.className) return;
 		else if (instance.props.tag == "span" && instance.props.className.indexOf(BDFDB.disCN.mentionwrapper) > -1 && instance.props.className.indexOf(BDFDB.disCN.mention) == -1) {
 			let fiber = instance._reactInternalFiber;
 			if (fiber.memoizedProps && fiber.memoizedProps.children && typeof fiber.memoizedProps.children[0] == "string") {
@@ -350,6 +347,13 @@ class EditChannels {
 				this.changeChannel(fiber.return.memoizedProps.channel, wrapper.querySelector(BDFDB.dotCN.marginleft4));
 				if (fiber.return.memoizedProps.category) this.changeChannel(fiber.return.memoizedProps.category, wrapper.querySelector(BDFDB.dotCN.autocompletedescription));
 			}
+		}
+	}
+	
+	processStandardSidebarView (instance, wrapper) {
+		if (this.updateChannels) {
+			this.updateChannels = false;
+			BDFDB.WebModules.forceAllUpdates(this);
 		}
 	}
 	
@@ -396,7 +400,6 @@ class EditChannels {
 		if (channelname.EditChannelsChangeObserver && typeof channelname.EditChannelsChangeObserver.disconnect == "function") channelname.EditChannelsChangeObserver.disconnect();
 		let data = BDFDB.loadData(info.id, this, "channels") || {};
 		let color = this.chooseColor(channelname, data.color);
-		console.log();
 		channelname.style.setProperty("color", color, "important");
 		BDFDB.setInnerText(channelname, "#" + (data.name || info.name));
 		if (color) {
