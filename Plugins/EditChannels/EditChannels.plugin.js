@@ -101,7 +101,7 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "3.8.4";}
+	getVersion () {return "3.8.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -383,14 +383,14 @@ class EditChannels {
 				icon.setAttribute("fill", color && settings.changeChannelIcon ? color : icon.getAttribute("oldfill"), "important");
 				icon.style.setProperty("fill", color && settings.changeChannelIcon ? color : icon.getAttribute("oldfill"), "important");
 			});
-			let unread = iconparent.querySelector(BDFDB.dotCN.channelunread);
-			if (unread) unread.style.setProperty("background-color", color && settings.changeUnreadIndicator ? color : "currentColor", "important");
+			let unread = iconparent.parentElement.querySelector(BDFDB.dotCN.channelunread);
+			if (unread) unread.style.setProperty("background-color", color && settings.changeUnreadIndicator ? color : null, "important");
 		}
 		if (color) {
 			channelname.EditChannelsChangeObserver = new MutationObserver((changes, _) => {				
 				changes.forEach(
 					(change, i) => {
-						if (change.type == "childList" && change.addedNodes.length && change.target.tagName && (change.target.tagName == "SVG" || change.target.querySelector("svg")) || change.type == "attributes" && change.attributeName == "class" && change.target.className.length && change.target.className.indexOf("name") > -1) {
+						if (change.type == "childList" && change.addedNodes.length && change.target.tagName && (change.target.tagName == "SVG" || change.target.querySelector("svg")) || change.type == "attributes" && change.attributeName == "class" && change.target.className.length && change.target.className.indexOf("name") > -1 || change.type == "attributes" && change.attributeName == "style" && change.target.classList && change.target.classList.contains(BDFDB.disCN.channelheaderchannelname)) {
 							channelname.EditChannelsChangeObserver.disconnect();
 							this.changeChannel(info, channelname);
 						}
