@@ -2,7 +2,7 @@
 
 class WriteUpperCase {
 	initConstructor () {
-		this.moduleTypes = {
+		this.patchModules = {
 			"ChannelTextArea":"componentDidMount"
 		};
 	}
@@ -11,7 +11,7 @@ class WriteUpperCase {
 
 	getDescription () {return "Change input to uppercase.";}
 
-	getVersion () {return "1.1.8";}
+	getVersion () {return "1.1.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -36,12 +36,7 @@ class WriteUpperCase {
 		if (typeof BDFDB === "object") {
 			BDFDB.loadMessage(this);
 			
-			for (let type in this.moduleTypes) {
-				let module = BDFDB.WebModules.findByName(type);
-				if (module && module.prototype) BDFDB.WebModules.patch(module.prototype, this.moduleTypes[type], this, {after: (e) => {this.initiateProcess(e.thisObject, type);}});
-			}
-			
-			this.forceAllUpdates();
+			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -84,28 +79,7 @@ class WriteUpperCase {
 			});
 	}
 	
-	initiateProcess (instance, type) {
-		type = type.replace(/[^A-z]/g,"");
-		type = type[0].toUpperCase() + type.slice(1);
-		if (typeof this["process" + type] == "function") {
-			let wrapper = BDFDB.React.findDOMNodeSafe(instance);
-			if (wrapper) this["process" + type](instance, wrapper);
-			else setImmediate(() => {
-				this["process" + type](instance, BDFDB.React.findDOMNodeSafe(instance));
-			});
-		}
-	}
-	
 	processChannelTextArea (instance, wrapper) {
-		if (!wrapper) return;
 		if (instance.props && instance.props.type) this.bindEventToTextArea(wrapper.querySelector("textarea"));
-	}
-	
-	forceAllUpdates () {
-		let app = document.querySelector(BDFDB.dotCN.app);
-		if (app) {
-			let ins = BDFDB.getOwnerInstance({node:app, name:Object.keys(this.moduleTypes), all:true, noCopies:true, group:true, depth:99999999, time:99999999});
-			for (let type in ins) for (let i in ins[type]) this.initiateProcess(ins[type][i], type);
-		}
 	}
 }
