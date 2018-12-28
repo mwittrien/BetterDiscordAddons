@@ -155,7 +155,7 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.6.4";}
+	getVersion () {return "1.6.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -295,26 +295,27 @@ class PersonalPins {
 	
 	processMessageOptionPopout (instance, wrapper) {
 		if (!wrapper.querySelector(".btn-pinitem-personalpins") && !wrapper.querySelector(".btn-unpinitem-personalpins")) {
-				let pins = BDFDB.loadAllData(this, "pins");
-				let channel = instance.props.channel;
-				let {messagediv, pos} = this.getMessageAndPos(instance._reactInternalFiber.return.return.return.memoizedProps.target);
-				if (!messagediv || pos == -1) return;
-				if (pins[channel.guild_id] && pins[channel.guild_id][channel.id] && pins[channel.guild_id][channel.id][instance.props.message.id + "_" + pos]) {
-					$(this.popoutUnpinEntryMarkup)
-						.on("click." + this.getName(), () => {
-							this.removeNoteData(instance.props.message, instance.props.channel, pos);
-							instance.props.onClose();
-						})
-						.appendTo(wrapper);
-				}
-				else {
-					$(this.popoutPinEntryMarkup)
-						.on("click." + this.getName(), () => {
-							this.addMessageToNotes(instance.props.message, instance._reactInternalFiber.return.return.return.memoizedProps.target, instance.props.channel);
-							instance.props.onClose();
-						})
-						.appendTo(wrapper);
-				}
+			let pins = BDFDB.loadAllData(this, "pins");
+			let channel = instance.props.channel;
+			let target = instance.props.target || instance._reactInternalFiber.return.return.return.memoizedProps.target;
+			let {messagediv, pos} = this.getMessageAndPos(target);
+			if (!messagediv || pos == -1) return;
+			if (pins[channel.guild_id] && pins[channel.guild_id][channel.id] && pins[channel.guild_id][channel.id][instance.props.message.id + "_" + pos]) {
+				$(this.popoutUnpinEntryMarkup)
+					.on("click." + this.getName(), () => {
+						this.removeNoteData(instance.props.message, instance.props.channel, pos);
+						instance.props.onClose();
+					})
+					.appendTo(wrapper);
+			}
+			else {
+				$(this.popoutPinEntryMarkup)
+					.on("click." + this.getName(), () => {
+						this.addMessageToNotes(instance.props.message, target, instance.props.channel);
+						instance.props.onClose();
+					})
+					.appendTo(wrapper);
+			}
 		}
 	}
 	
