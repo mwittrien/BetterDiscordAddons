@@ -101,7 +101,7 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "3.8.5";}
+	getVersion () {return "3.8.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -307,7 +307,7 @@ class EditChannels {
 						if (channelname.EditChannelsChangeObserver && typeof channelname.EditChannelsChangeObserver.disconnect == "function") channelname.EditChannelsChangeObserver.disconnect();
 						channelname.style.removeProperty("color");
 						channelname.style.removeProperty("background");
-						BDFDB.setInnerText(channelname, channel.name);
+						BDFDB.setInnerText(channelname, channel.name || channel.username);
 					}
 				}
 			}
