@@ -360,7 +360,7 @@ class MessageUtilities {
 			let binding = BDFDB.getData(action, this, "bindings");
 			if (binding) for (let type in binding) {
 				let typename = type.indexOf("click") == 0 ? this.clickMap[binding[type]] : this.keyboardMap[binding[type]];
-				if (typename != "NONE") str += typename + "+";
+				if (typename && typename != "NONE") str += typename + "+";
 			}
 		}
 		return str ? str.slice(0,-1) : null;
