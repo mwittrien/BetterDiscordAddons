@@ -155,7 +155,7 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.6.6";}
+	getVersion () {return "1.6.7";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -197,10 +197,10 @@ class PersonalPins {
 			BDFDB.loadMessage(this); 
 			
 			this.SelectChannelUtils = BDFDB.WebModules.findByProperties("selectGuild","selectChannel");
-			this.GuildUtils = BDFDB.WebModules.findByProperties("getGuild");
-			this.ChannelUtils = BDFDB.WebModules.findByProperties("getChannel");
-			this.UserUtils = BDFDB.WebModules.findByProperties("getUser");
-			this.MemberUtils = BDFDB.WebModules.findByProperties("getMember");
+			this.GuildUtils = BDFDB.WebModules.findByProperties("getGuilds","getGuild");
+			this.ChannelUtils = BDFDB.WebModules.findByProperties("getChannels","getChannel");
+			this.UserUtils = BDFDB.WebModules.findByProperties("getUsers","getUser");
+			this.MemberUtils = BDFDB.WebModules.findByProperties("getMembers","getMember");
 			this.LastGuildStore = BDFDB.WebModules.findByProperties("getLastSelectedGuildId");
 			this.LastChannelStore = BDFDB.WebModules.findByProperties("getLastSelectedChannelId");
 			this.HistoryUtils = BDFDB.WebModules.findByProperties("transitionTo", "replaceWith", "getHistory");
@@ -255,14 +255,14 @@ class PersonalPins {
 				if (!messagediv || pos == -1) return;
 				if (pins[channel.guild_id] && pins[channel.guild_id][channel.id] && pins[channel.guild_id][channel.id][instance.props.message.id + "_" + pos]) {
 					$(this.messageUnpinContextEntryMarkup).insertAfter(pininstance._reactInternalFiber.return.stateNode)
-						.on("click", ".personalpin-pin-item", () => {
+						.on("click", ".personalpin-unpin-item", () => {
 							instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
 							this.removeNoteData(instance.props.message, instance.props.channel, pos);
 						});
 				}
 				else {
 					$(this.messagePinContextEntryMarkup).insertAfter(pininstance._reactInternalFiber.return.stateNode)
-						.on("click", ".personalpin-unpin-item", () => {
+						.on("click", ".personalpin-pin-item", () => {
 							instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
 							this.addMessageToNotes(instance.props.message, instance.props.target, instance.props.channel);
 						});
