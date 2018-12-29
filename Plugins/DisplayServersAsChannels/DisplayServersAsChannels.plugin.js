@@ -36,6 +36,21 @@ class DisplayServersAsChannels {
 			.bd-minimal .DSAC-styled ${BDFDB.dotCN.friendsonline} {
 				margin-left: 40px;
 			}
+			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild},
+			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildinner},
+			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildinner} a,
+			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCNS.guildinner + BDFDB.dotCN.guildicon},
+			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guild}.copy,
+			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guild}.copy ${BDFDB.dotCN.guildinner},
+			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guild}.copy ${BDFDB.dotCN.guildinner} a,
+			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guild}.copy ${BDFDB.dotCNS.guildinner + BDFDB.dotCN.guildicon},
+			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildserror} {
+				height: 20px;
+			}
+			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCNS.guildinner + BDFDB.dotCN.guildicon},
+			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guild}.copy ${BDFDB.dotCNS.guildinner + BDFDB.dotCN.guildicon} {
+				line-height: 20px;
+			}
 			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild},
 			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildinner},
 			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildinner} a,
@@ -64,18 +79,23 @@ class DisplayServersAsChannels {
 			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildserror} {
 				width: 130px;
 			}
-			.DSAC-styled ${BDFDB.dotCN.guildseparator}:not([style*="display: none"]), 
-			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild}:not([style*="display: none"]),
-			.DSAC-styled ${BDFDB.dotCN.guild}.copy:not([style*="display: none"]),
-			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildserror}:not([style*="display: none"]) {
+			.DSAC-styled ${BDFDB.dotCN.guildseparator}, 
+			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild},
+			.DSAC-styled ${BDFDB.dotCN.guild}.copy,
+			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildserror} {
 				width: 215px;
 				box-sizing: border-box;
 				opacity: 0.4;
 				padding-left: 5px;
 				border-radius: 3px;
-				display: flex;
 				align-items: center;
 				justify-content: flex-start;
+			}
+			.DSAC-styled ${BDFDB.dotCN.guildseparator}:not([style*="display: none"]), 
+			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild}:not([style*="display: none"]),
+			.DSAC-styled ${BDFDB.dotCN.guild}.copy:not([style*="display: none"]),
+			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildserror}:not([style*="display: none"]) {		
+				display: flex;
 			}
 			.DSAC-styled ${BDFDB.dotCN.guild + BDFDB.dotCN.guildunread}.copy.
 			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild + BDFDB.dotCN.guildunread} {
@@ -113,7 +133,7 @@ class DisplayServersAsChannels {
 			.DSAC-styled ${BDFDB.dotCN.guild}.copy ${BDFDB.dotCN.badge},
 			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.badge} {
 				position: static;
-				margin-right: 5px;
+				margin: 0 3px;
 			}
 			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guild}.copy ${BDFDB.dotCN.guildinner},
 			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildinner} {
@@ -161,7 +181,7 @@ class DisplayServersAsChannels {
 				display: block !important;
 			}
 			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild + BDFDB.dotCNS.guildsadd + BDFDB.dotCN.guildsaddinner} {
-				top: 0;
+				top: -0.2em;
 			}
 			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild + BDFDB.dotCNS.guildsadd + BDFDB.dotCN.guildsaddinner} {
 				top: -6px;
@@ -172,7 +192,7 @@ class DisplayServersAsChannels {
 
 	getDescription () {return "Display servers in a similar way as channels.";}
 
-	getVersion () {return "1.1.3";}
+	getVersion () {return "1.1.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -280,7 +300,7 @@ class DisplayServersAsChannels {
 		var avatar = serverObj.div.querySelector(BDFDB.dotCN.guildicon);
 		if (avatar) {
 			avatar.textContent = avatar.DSAColdName;
-			$(serverObj.div).find(".DSAC-verification-badge").remove();
+			BDFDB.removeEles(serverObj.div.querySelector(".DSAC-verification-badge"));
 		}
 	}
 	
