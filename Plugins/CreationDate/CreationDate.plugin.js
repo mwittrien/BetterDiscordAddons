@@ -187,7 +187,7 @@ class CreationDate {
 	}
 	
 	addCreationDate (info, container, popout) {
-		if (!info || !container) return;
+		if (!info || !container || container.querySelector(".creationDate")) return;
 		let creationDate = $(this.creationDateMarkup);
 		let choice = BDFDB.getData("creationDateLang", this, "choices");
 		let nametag = container.querySelector(BDFDB.dotCN.nametag);

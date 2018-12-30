@@ -193,7 +193,7 @@ class JoinedAtDate {
 	}
 	
 	addJoinedAtDate (info, container, popout) {
-		if (!info || !container) return;
+		if (!info || !container || container.querySelector(".joinedAtDate")) return;
 		let guildid = this.CurrentGuildStore.getGuildId();
 		if (guildid) {
 			if (!this.loadedusers[guildid]) this.loadedusers[guildid] = {};
