@@ -147,7 +147,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "3.1.0";}
+	getVersion () {return "3.1.1";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -253,7 +253,7 @@ class EditUsers {
 					var userContextSubMenu = $(this.userContextSubMenuMarkup);
 					userContextSubMenu
 						.on("click", ".usersettings-item", () => {
-							$(menu).hide();
+							instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
 							this.showUserSettings(instance.props.user);
 						});
 					if (BDFDB.loadData(instance.props.user.id, this, "users")) {
@@ -261,7 +261,7 @@ class EditUsers {
 							.find(".resetsettings-item")
 							.removeClass(BDFDB.disCN.contextmenuitemdisabled)
 							.on("click", () => {
-								$(menu).hide();
+								instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
 								BDFDB.removeData(instance.props.user.id, this, "users");
 								BDFDB.WebModules.forceAllUpdates(this);
 							});
@@ -428,7 +428,9 @@ class EditUsers {
 			let username = wrapper.querySelector(BDFDB.dotCN.messageusername);
 			if (username) {
 				this.changeName(fiber.return.memoizedProps.message.author, username);
-				this.changeAvatar(fiber.return.memoizedProps.message.author, this.getAvatarDiv(wrapper));
+				if (wrapper.parentElement && wrapper.parentElement.classList && !wrapper.parentElement.classList.contains(BDFDB.disCN.messageheadercompact)) {
+					this.changeAvatar(fiber.return.memoizedProps.message.author, this.getAvatarDiv(wrapper));
+				}
 				this.addTag(fiber.return.memoizedProps.message.author, wrapper);
 			}
 		}
