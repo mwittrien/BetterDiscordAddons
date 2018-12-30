@@ -4,15 +4,21 @@ class JoinedAtDate {
 	initConstructor () {
 		this.labels = {};
 		
+		this.patchModules = {
+			"UserPopout":"componentDidMount",
+			"UserProfile":"componentDidMount"
+		};
+		
 		this.languages;
 		
 		this.loadedusers = {};
 		
-		this.joinedAtDateMarkup = `<div class="joinedAtDate ${BDFDB.disCN.textrow}"></div>`;
-		
 		this.css = `
 			${BDFDB.dotCNS.userpopout + BDFDB.dotCN.nametag} {
 				margin-bottom: 4px;
+			}
+			${BDFDB.dotCN.userprofile} .joinedAtDate {
+				max-width: 200px;
 			}
 			${BDFDB.dotCNS.themelight + BDFDB.dotCN.userpopoutheadernormal} .joinedAtDate {
 				color: #b9bbbe; 
@@ -47,15 +53,15 @@ class JoinedAtDate {
 
 	getDescription () {return "Displays the Joined At Date of the current Server for a Member in the UserPopout and UserModal.";}
 
-	getVersion () {return "1.0.2";}
+	getVersion () {return "1.0.3";}
 
 	getAuthor () {return "DevilBro";}
 	
 	getSettingsPanel () {
 		if (!this.started || typeof BDFDB !== "object") return;
-		var settings = BDFDB.getAllData(this, "settings");
-		var choices = BDFDB.getAllData(this, "choices");
-		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.getName()}</div><div class="DevilBro-settings-inner">`;
+		let settings = BDFDB.getAllData(this, "settings");
+		let choices = BDFDB.getAllData(this, "choices");
+		let settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		for (let key in settings) {
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}"${settings[key] ? " checked" : ""}></div></div>`;
 		}
@@ -64,14 +70,14 @@ class JoinedAtDate {
 		}
 		settingshtml += `</div></div>`;
 		
-		var settingspanel = $(settingshtml)[0];
+		let settingspanel = $(settingshtml)[0];
 
 		BDFDB.initElements(settingspanel);
 
 		$(settingspanel)
 			.on("click", BDFDB.dotCN.switchinner, () => {
 				this.updateSettings(settingspanel);
-				var choices = BDFDB.getAllData(this, "choices");
+				let choices = BDFDB.getAllData(this, "choices");
 				for (let key in choices) {
 					settingspanel.querySelector(`${BDFDB.dotCN.select}[type='${key}'] .languageTimestamp`).innerText = this.getJoinedTime(this.languages[choices[key]].id);
 				}
@@ -84,7 +90,7 @@ class JoinedAtDate {
 	load () {}
 
 	start () {
-		var libraryScript = null;
+		let libraryScript = null;
 		if (typeof BDFDB !== "object" || BDFDB.isLibraryOutdated()) {
 			if (typeof BDFDB === "object") BDFDB = "";
 			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
@@ -107,39 +113,9 @@ class JoinedAtDate {
 			this.APIModule = BDFDB.WebModules.findByProperties("getAPIBaseURL");
 			this.DiscordConstants = BDFDB.WebModules.findByProperties("Permissions", "ActivityTypes", "StatusTypes");
 			
-			var observer = null;
-
-			observer = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								if (node.tagName && node.querySelector(BDFDB.dotCN.userpopout)) {
-									if (BDFDB.getData("addInUserPopout", this, "settings")) this.addJoinedAtDate(node.querySelector(BDFDB.dotCN.userpopoutheadertext), node);
-								}
-							});
-						}
-					}
-				);
-			});
-			BDFDB.addObserver(this, BDFDB.dotCN.popouts, {name:"userPopoutObserver",instance:observer}, {childList: true});
-			
-			observer = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								if (node.tagName && node.querySelector(BDFDB.dotCN.userprofile)) {
-									if (BDFDB.getData("addInUserProfil", this, "settings")) this.addJoinedAtDate(node.querySelector(BDFDB.dotCN.userprofileheaderinfo), null);
-								}
-							});
-						}
-					}
-				);
-			});
-			BDFDB.addObserver(this, BDFDB.dotCN.app + " ~ [class^='theme-']:not([class*='popouts'])", {name:"userProfilModalObserver",instance:observer}, {childList: true});
-			
 			this.languages = Object.assign({},BDFDB.languages);
+			
+			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -148,7 +124,8 @@ class JoinedAtDate {
 
 
 	stop () {
-		if (typeof BDFDB === "object") {		
+		if (typeof BDFDB === "object") {
+			BDFDB.removeEles(".joinedAtDate");
 			BDFDB.unloadMessage(this);
 		}
 	}
@@ -157,28 +134,28 @@ class JoinedAtDate {
 	// begin of own functions
 
 	updateSettings (settingspanel) {
-		var settings = {};
-		for (var input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner)) {
+		let settings = {};
+		for (let input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner)) {
 			settings[input.value] = input.checked;
 		}
 		BDFDB.saveAllData(settings, this, "settings");
 	}
 	
 	openDropdownMenu (e) {
-		var selectControl = e.currentTarget;
-		var selectWrap = selectControl.parentElement;
+		let selectControl = e.currentTarget;
+		let selectWrap = selectControl.parentElement;
 		
 		if (selectWrap.classList.contains(BDFDB.disCN.selectisopen)) return;
 		
 		selectWrap.classList.add(BDFDB.disCN.selectisopen);
 		$("li").has(selectWrap).css("overflow", "visible");
 		
-		var type = selectWrap.getAttribute("type");
-		var selectMenu = this.createDropdownMenu(selectWrap.getAttribute("value"), type);
+		let type = selectWrap.getAttribute("type");
+		let selectMenu = this.createDropdownMenu(selectWrap.getAttribute("value"), type);
 		selectWrap.appendChild(selectMenu);
 		
 		$(selectMenu).on("mousedown." + this.getName(), BDFDB.dotCN.selectoption, (e2) => {
-			var language = e2.currentTarget.getAttribute("value");
+			let language = e2.currentTarget.getAttribute("value");
 			selectWrap.setAttribute("value", language);
 			selectControl.querySelector(".languageName").innerText = this.languages[language].name;
 			selectControl.querySelector(".languageTimestamp").innerText = this.getJoinedTime(language);
@@ -194,58 +171,66 @@ class JoinedAtDate {
 	}
 	
 	createDropdownMenu (choice, type) {
-		var menuhtml = `<div class="${BDFDB.disCN.selectmenuouter}"><div class="${BDFDB.disCN.selectmenu}">`;
-		for (var key in this.languages) {
-			var isSelected = key == choice ? ` ${BDFDB.disCN.selectselected}` : ``;
+		let menuhtml = `<div class="${BDFDB.disCN.selectmenuouter}"><div class="${BDFDB.disCN.selectmenu}">`;
+		for (let key in this.languages) {
+			let isSelected = key == choice ? ` ${BDFDB.disCN.selectselected}` : ``;
 			menuhtml += `<div value="${key}" class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignbaseline + BDFDB.disCNS.nowrap + BDFDB.disCN.selectoption + isSelected}" style="flex: 1 1 auto; display:flex;"><div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.primary + BDFDB.disCN.weightnormal}" style="flex: 1 1 42%;">${this.languages[key].name}</div><div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.primary + BDFDB.disCN.weightnormal}" style="flex: 1 1 58%;">${this.getJoinedTime(this.languages[key].id)}</div></div>`
 		}
 		menuhtml += `</div></div>`;
 		return $(menuhtml)[0];
 	}
 	
-	addJoinedAtDate (container, popout) {
-		if (!container) return;
-		var guildid = this.CurrentGuildStore.getGuildId();
+	processUserPopout (instance, wrapper) {
+		if (instance.props && instance.props.user && BDFDB.getData("addInUserPopout", this, "settings")) {
+			this.addJoinedAtDate(instance.props.user, wrapper.querySelector(BDFDB.dotCN.userpopoutheadertext), wrapper.parentElement);
+		}
+	}
+	
+	processUserProfile (instance, wrapper) {
+		if (instance.props && instance.props.user && BDFDB.getData("addInUserProfil", this, "settings")) {
+			this.addJoinedAtDate(instance.props.user, wrapper.querySelector(BDFDB.dotCN.userprofileheaderinfo), null);
+		}
+	}
+	
+	addJoinedAtDate (info, container, popout) {
+		if (!info || !container) return;
+		let guildid = this.CurrentGuildStore.getGuildId();
 		if (guildid) {
-			var info = BDFDB.getKeyInformation({"node":container,"key":"user"});
-			if (info) {
-				if (!this.loadedusers[guildid]) this.loadedusers[guildid] = {};
-				let timestamp, addTimestamp = (timestamp) => {
-					var joinedAtDate = $(this.joinedAtDateMarkup);
-					var choice = BDFDB.getData("joinedAtDateLang", this, "choices");
-					joinedAtDate.text(this.labels.joinedat_text + " " + this.getJoinedTime(this.languages[choice].id, timestamp));
-					var nametag = container.querySelector(BDFDB.dotCN.nametag);
-					var creationDate = container.querySelector(".creationDate");
-					container.insertBefore(joinedAtDate[0], creationDate ? creationDate : (nametag ? nametag.nextSibling : null));
-					if (popout && popout.style.transform.indexOf("translateY(-1") == -1) {
-						var arect = document.querySelector(BDFDB.dotCN.appmount).getBoundingClientRect();
-						var prect = popout.getBoundingClientRect();
-						popout.style.setProperty("top", (prect.y + prect.height > arect.height ? (arect.height - prect.height) : prect.y) + "px");
-					}
-				};
-				if (this.loadedusers[guildid][info.id]) addTimestamp(this.loadedusers[guildid][info.id]);
-				else this.APIModule.get(this.DiscordConstants.Endpoints.GUILD_MEMBER(guildid,info.id)).then(result => {
-					if (result && result.body) {
-						timestamp = new Date(result.body.joined_at);
-						this.loadedusers[guildid][info.id] = timestamp;
-						addTimestamp(timestamp);
-					}
-				});
-			}
+			if (!this.loadedusers[guildid]) this.loadedusers[guildid] = {};
+			let timestamp, addTimestamp = (timestamp) => {
+				let choice = BDFDB.getData("joinedAtDateLang", this, "choices");
+				let nametag = container.querySelector(BDFDB.dotCN.nametag);
+				let creationDate = container.querySelector(".creationDate");
+				container.insertBefore($(`<div class="joinedAtDate DevilBro-textscrollwrapper ${BDFDB.disCN.textrow}"><div class="DevilBro-textscroll">${this.labels.joinedat_text + " " + this.getJoinedTime(this.languages[choice].id, timestamp)}</div></div>`)[0], creationDate ? creationDate : (nametag ? nametag.nextSibling : null));
+				BDFDB.initElements(container.parentElement);
+				if (popout && popout.style.transform.indexOf("translateY(-1") == -1) {
+					let arect = document.querySelector(BDFDB.dotCN.appmount).getBoundingClientRect();
+					let prect = popout.getBoundingClientRect();
+					popout.style.setProperty("top", (prect.y + prect.height > arect.height ? (arect.height - prect.height) : prect.y) + "px");
+				}
+			};
+			if (this.loadedusers[guildid][info.id]) addTimestamp(this.loadedusers[guildid][info.id]);
+			else this.APIModule.get(this.DiscordConstants.Endpoints.GUILD_MEMBER(guildid,info.id)).then(result => {
+				if (result && result.body) {
+					timestamp = new Date(result.body.joined_at);
+					this.loadedusers[guildid][info.id] = timestamp;
+					addTimestamp(timestamp);
+				}
+			});
 		}
 	}
 	
 	getJoinedTime (languageid, timestamp = new Date()) {
-		var settings = BDFDB.getAllData(this, "settings");
-		var timestring = settings.addJoinedAtTime ? timestamp.toLocaleString(languageid) : timestamp.toLocaleDateString(languageid);
+		let settings = BDFDB.getAllData(this, "settings");
+		let timestring = settings.addJoinedAtTime ? timestamp.toLocaleString(languageid) : timestamp.toLocaleDateString(languageid);
 		if (timestring && settings.forceZeros) timestring = this.addLeadingZeros(timestring);
 		return timestring;
 	}
 	
 	addLeadingZeros (timestring) {
-		var chararray = timestring.split("");
-		var numreg = /[0-9]/;
-		for (var i = 0; i < chararray.length; i++) {
+		let chararray = timestring.split("");
+		let numreg = /[0-9]/;
+		for (let i = 0; i < chararray.length; i++) {
 			if (!numreg.test(chararray[i-1]) && numreg.test(chararray[i]) && !numreg.test(chararray[i+1])) chararray[i] = "0" + chararray[i];
 		}
 		
