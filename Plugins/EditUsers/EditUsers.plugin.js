@@ -172,7 +172,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "3.1.1";}
+	getVersion () {return "3.1.2";} 
 
 	getAuthor () {return "DevilBro";}
 	
@@ -193,6 +193,7 @@ class EditUsers {
 		BDFDB.initElements(settingspanel);
 
 		$(settingspanel)
+			.on("click", BDFDB.dotCN.switchinner, () => {this.updateSettings(settingspanel);})
 			.on("click", ".reset-button", () => {
 				if (confirm("Are you sure you want to reset all users?")) {
 					BDFDB.removeAllData(this, "users");
