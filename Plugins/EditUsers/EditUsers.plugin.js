@@ -611,9 +611,9 @@ class EditUsers {
 		if (username.EditUsersChangeObserver && typeof username.EditUsersChangeObserver.disconnect == "function") username.EditUsersChangeObserver.disconnect();
 		let data = this.getUserData(info.id, username);
 		let member = this.MemberUtils.getMember(guildid, info.id) || {};
-		let usenick = !username.classList.contains(BDFDB.disCN.userprofileusername) && !username.parentElement.classList.contains(BDFDB.disCN.accountinfodetails) && member.nick;
-		let changecolor = username.classList.contains(BDFDB.disCN.memberusername) || username.classList.contains(BDFDB.disCN.messageusername) || BDFDB.isPluginEnabled("BetterRoleColors");
-		let color1 = BDFDB.colorCONVERT(data.color1 || (changecolor ? member.colorString : null), "RGB");
+		let usenick = !username.parentElement.classList.contains(BDFDB.disCN.userprofilelistname) && !username.classList.contains(BDFDB.disCN.userprofileusername) && !username.parentElement.classList.contains(BDFDB.disCN.accountinfodetails) && member.nick;
+		let usemembercolor = !username.parentElement.classList.contains(BDFDB.disCN.userprofilelistname) && (username.classList.contains(BDFDB.disCN.memberusername) || username.classList.contains(BDFDB.disCN.messageusername) || BDFDB.isPluginEnabled("BetterRoleColors"));
+		let color1 = BDFDB.colorCONVERT(data.color1 || (usemembercolor ? member.colorString : null), "RGB");
 		let color2 = BDFDB.colorCONVERT(data.color2, "RGB");
 		username.style.setProperty("color", color1, "important");
 		username.style.setProperty("background-color", color2, "important");
