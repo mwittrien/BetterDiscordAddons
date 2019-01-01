@@ -7,7 +7,7 @@ class FriendNotifications {
 		this.timeLog = [];
 
 		this.timeLogModalMarkup =
-			`<span class="FriendNotifications-modal DevilBro-modal">
+			`<span class="${this.getName()}-modal DevilBro-modal">
 				<div class="${BDFDB.disCN.backdrop}"></div>
 				<div class="${BDFDB.disCN.modal}">
 					<div class="${BDFDB.disCN.modalinner}">
@@ -50,10 +50,10 @@ class FriendNotifications {
 			${BDFDB.dotCN.guilds} > ${BDFDB.dotCN.friendsonline} {
 				cursor: pointer;
 			}
-			.FriendNotifications-modal .log-time {
+			.${this.getName()}-modal .log-time {
 				width: 110px;
 			}
-			.FriendNotifications-modal .log-avatar {
+			.${this.getName()}-modal .log-avatar {
 				width: 35px;
 				height: 35px;
 				background-size: cover;

@@ -59,7 +59,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				</div>`;
 				
 			this.userSettingsModalMarkup =
-				`<span class="editusers-modal DevilBro-modal">
+				`<span class=""${this.name}-modal DevilBro-modal"">
 					<div class="${BDFDB.disCN.backdrop}"></div>
 					<div class="${BDFDB.disCN.modal}">
 						<div class="${BDFDB.disCN.modalinner}">

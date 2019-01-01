@@ -11,24 +11,24 @@ class SendLargeMessages {
 		this.messageDelay = 1000; //changing at own risk, might result in bans or mutes
 		
 		this.css = `
-			.sendlargemessages-modal textarea {
+			.${this.getName()}-modal textarea {
 				rows: 0;
 				cols: 0;
 				height: 100vw;
 				resize: none;
 			}
-			.sendlargemessages-modal #warning-message {
+			.${this.getName()}-modal #warning-message {
 				color: red;
 			}
 			
-			.sendlargemessages-modal #character-counter {
+			.${this.getName()}-modal #character-counter {
 				float: right;
 				color: white;
 				opacity: .5;
 			}`;
 
 		this.sendMessageModalMarkup =
-			`<span class="sendlargemessages-modal DevilBro-modal">
+			`<span class="${this.getName()}-modal DevilBro-modal">
 				<div class="${BDFDB.disCN.backdrop}"></div>
 				<div class="${BDFDB.disCN.modal}">
 					<div class="${BDFDB.disCN.modalinner}">

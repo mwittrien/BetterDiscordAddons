@@ -29,7 +29,7 @@ class EditServers {
 			</div>`;
 
 		this.serverSettingsModalMarkup =
-			`<span class="editservers-modal DevilBro-modal">
+			`<span class="${this.getName()}-modal DevilBro-modal">
 				<div class="${BDFDB.disCN.backdrop}"></div>
 				<div class="${BDFDB.disCN.modal}">
 					<div class="${BDFDB.disCN.modalinner}">

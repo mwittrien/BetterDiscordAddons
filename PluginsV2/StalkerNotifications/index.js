@@ -12,7 +12,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			this.timeLog = [];
 
 			this.timeLogModalMarkup =
-				`<span class="stalkernotifications-modal DevilBro-modal">
+				`<span class=""${this.name}-modal DevilBro-modal"">
 					<div class="${BDFDB.disCN.backdrop}"></div>
 					<div class="${BDFDB.disCN.modal}">
 						<div class="${BDFDB.disCN.modalinner}">
@@ -55,10 +55,10 @@ module.exports = (Plugin, Api, Vendor) => {
 				.guilds > .friends-online {
 					cursor: pointer;
 				}
-				.stalkernotifications-modal .log-time {
+				.${this.name}-modal .log-time {
 					width: 100px;
 				}
-				.stalkernotifications-modal .log-avatar {
+				.${this.name}-modal .log-avatar {
 					width: 35px;
 					height: 35px;
 					background-size: cover;

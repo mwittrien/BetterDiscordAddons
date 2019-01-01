@@ -10,26 +10,26 @@ module.exports = (Plugin, Api, Vendor) => {
 			this.messageDelay = 1000; //changing at own risk, might result in bans or mutes
 			
 			this.css = `
-				.sendlargemessages-modal textarea {
+				.${this.name}-modal textarea {
 					rows: 0;
 					cols: 0;
 					height: 100vw;
 					resize: none;
 				}
-				.sendlargemessages-modal #warning-message {
+				.${this.name}-modal #warning-message {
 					font-weight: bold;
 					color: red;
 					opacity: 1;
 				}
 				
-				.sendlargemessages-modal #character-counter {
+				.${this.name}-modal #character-counter {
 					float: right;
 					color: white;
 					opacity: .5;
 				}`;
 
 			this.sendMessageModalMarkup =
-				`<span class="sendlargemessages-modal DevilBro-modal">
+				`<span class=""${this.name}-modal DevilBro-modal"">
 					<div class="${BDFDB.disCN.backdrop}"></div>
 					<div class="${BDFDB.disCN.modal}">
 						<div class="${BDFDB.disCN.modalinner}">

@@ -74,7 +74,7 @@ class PluginRepo {
 			</li>`;
 			
 		this.pluginRepoModalMarkup =
-			`<span class="pluginrepo-modal DevilBro-modal">
+			`<span class="${this.getName()}-modal DevilBro-modal">
 				<div class="${BDFDB.disCN.backdrop}"></div>
 				<div class="${BDFDB.disCN.modal}">
 					<div class="${BDFDB.disCN.modalinner}">
@@ -190,39 +190,39 @@ class PluginRepo {
 				50% {opacity: 0.9;}
 				to {opacity: 0.1;}
 			}
-			.pluginrepo-modal ${BDFDB.dotCN.modalinner} {
+			.${this.getName()}-modal ${BDFDB.dotCN.modalinner} {
 				min-height: 100%;
 				min-width: 800px;
 				width: 50%;
 			}
-			.pluginrepo-modal .pluginEntry,
-			.pluginrepo-modal .pluginEntry .bda-header {
+			.${this.getName()}-modal .pluginEntry,
+			.${this.getName()}-modal .pluginEntry .bda-header {
 				overflow: visible !important;
 			}
-			.pluginrepo-modal .pluginEntry .gitIcon,
-			.pluginrepo-modal .pluginEntry ${BDFDB.dotCN.giffavoritebutton},
-			.pluginrepo-modal .pluginEntry .trashIcon {
+			.${this.getName()}-modal .pluginEntry .gitIcon,
+			.${this.getName()}-modal .pluginEntry ${BDFDB.dotCN.giffavoritebutton},
+			.${this.getName()}-modal .pluginEntry .trashIcon {
 				position: relative !important;
 				transform: none !important;
 				opacity: 1 !important;
 				margin-right: 5px !important;
 				cursor: pointer !important;
 			}
-			.pluginrepo-modal .pluginEntry .gitIcon,
-			.pluginrepo-modal .pluginEntry ${BDFDB.dotCN.giffavoritebutton}:not(${BDFDB.dotCN.giffavoriteselected}),
-			.pluginrepo-modal .pluginEntry .trashIcon {
+			.${this.getName()}-modal .pluginEntry .gitIcon,
+			.${this.getName()}-modal .pluginEntry ${BDFDB.dotCN.giffavoritebutton}:not(${BDFDB.dotCN.giffavoriteselected}),
+			.${this.getName()}-modal .pluginEntry .trashIcon {
 				color: #4f545c !important;
 			}
-			${BDFDB.dotCN.themedark} .pluginrepo-modal .pluginEntry .gitIcon,
-			${BDFDB.dotCN.themedark} .pluginrepo-modal .pluginEntry ${BDFDB.dotCN.giffavoritebutton}:not(${BDFDB.dotCN.giffavoriteselected}),
-			${BDFDB.dotCN.themedark} .pluginrepo-modal .pluginEntry .trashIcon {
+			${BDFDB.dotCN.themedark} .${this.getName()}-modal .pluginEntry .gitIcon,
+			${BDFDB.dotCN.themedark} .${this.getName()}-modal .pluginEntry ${BDFDB.dotCN.giffavoritebutton}:not(${BDFDB.dotCN.giffavoriteselected}),
+			${BDFDB.dotCN.themedark} .${this.getName()}-modal .pluginEntry .trashIcon {
 				color: #fff !important;
 			}
-			.pluginrepo-modal .pluginEntry .trashIcon,
-			.pluginrepo-modal .pluginEntry ${BDFDB.dotCN.giffavoritebutton} {
+			.${this.getName()}-modal .pluginEntry .trashIcon,
+			.${this.getName()}-modal .pluginEntry ${BDFDB.dotCN.giffavoritebutton} {
 				margin-left: auto !important;
 			}
-			.pluginrepo-modal .pluginEntry.downloadable .trashIcon {
+			.${this.getName()}-modal .pluginEntry.downloadable .trashIcon {
 				opacity: 0 !important;
 				pointer-events: none !important;
 			}`;

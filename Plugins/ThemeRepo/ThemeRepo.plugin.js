@@ -82,7 +82,7 @@ class ThemeRepo {
 			</li>`;
 			
 		this.themeRepoModalMarkup =
-			`<span class="themerepo-modal DevilBro-modal">
+			`<span class="${this.getName()}-modal DevilBro-modal">
 				<div class="${BDFDB.disCN.backdrop}"></div>
 				<div class="${BDFDB.disCN.modal}">
 					<div class="${BDFDB.disCN.modalinner}">
@@ -236,39 +236,39 @@ class ThemeRepo {
 				opacity: 0 !important;
 				visibility: hidden !important;
 			}
-			.themerepo-modal ${BDFDB.dotCN.modalinner} {
+			.${this.getName()}-modal ${BDFDB.dotCN.modalinner} {
 				min-height: 100%;
 				min-width: 800px;
 				width: 50%;
 			}
-			.themerepo-modal .themeEntry,
-			.themerepo-modal .themeEntry .bda-header {
+			.${this.getName()}-modal .themeEntry,
+			.${this.getName()}-modal .themeEntry .bda-header {
 				overflow: visible !important;
 			}
-			.themerepo-modal .themeEntry .gitIcon,
-			.themerepo-modal .themeEntry ${BDFDB.dotCN.giffavoritebutton},
-			.themerepo-modal .themeEntry .trashIcon {
+			.${this.getName()}-modal .themeEntry .gitIcon,
+			.${this.getName()}-modal .themeEntry ${BDFDB.dotCN.giffavoritebutton},
+			.${this.getName()}-modal .themeEntry .trashIcon {
 				position: relative !important;
 				transform: none !important;
 				opacity: 1 !important;
 				margin-right: 5px !important;
 				cursor: pointer !important;
 			}
-			.themerepo-modal .themeEntry .gitIcon,
-			.themerepo-modal .themeEntry ${BDFDB.dotCN.giffavoritebutton}:not(${BDFDB.dotCN.giffavoriteselected}),
-			.themerepo-modal .themeEntry .trashIcon {
+			.${this.getName()}-modal .themeEntry .gitIcon,
+			.${this.getName()}-modal .themeEntry ${BDFDB.dotCN.giffavoritebutton}:not(${BDFDB.dotCN.giffavoriteselected}),
+			.${this.getName()}-modal .themeEntry .trashIcon {
 				color: #4f545c !important;
 			}
-			${BDFDB.dotCN.themedark} .themerepo-modal .themeEntry .gitIcon,
-			${BDFDB.dotCN.themedark} .themerepo-modal .themeEntry ${BDFDB.dotCN.giffavoritebutton}:not(${BDFDB.dotCN.giffavoriteselected}),
-			${BDFDB.dotCN.themedark} .themerepo-modal .themeEntry .trashIcon {
+			${BDFDB.dotCN.themedark} .${this.getName()}-modal .themeEntry .gitIcon,
+			${BDFDB.dotCN.themedark} .${this.getName()}-modal .themeEntry ${BDFDB.dotCN.giffavoritebutton}:not(${BDFDB.dotCN.giffavoriteselected}),
+			${BDFDB.dotCN.themedark} .${this.getName()}-modal .themeEntry .trashIcon {
 				color: #fff !important;
 			}
-			.themerepo-modal .themeEntry .trashIcon,
-			.themerepo-modal .themeEntry ${BDFDB.dotCN.giffavoritebutton} {
+			.${this.getName()}-modal .themeEntry .trashIcon,
+			.${this.getName()}-modal .themeEntry ${BDFDB.dotCN.giffavoritebutton} {
 				margin-left: auto !important;
 			}
-			.themerepo-modal .themeEntry.downloadable .trashIcon {
+			.${this.getName()}-modal .themeEntry.downloadable .trashIcon {
 				opacity: 0 !important;
 				pointer-events: none !important;
 			}`;
@@ -403,7 +403,7 @@ class ThemeRepo {
 			clearInterval(this.updateInterval);
 			clearTimeout(this.loading.timeout);
 						
-			BDFDB.removeEles(".discordPreview",".themerepo-modal",".themerepo-notice",".bd-themerepobutton",".themerepo-loadingicon",BDFDB.dotCN.app + " > .repo-loadingwrapper:empty");
+			BDFDB.removeEles(".discordPreview",".themerepo-notice",".bd-themerepobutton",".themerepo-loadingicon",BDFDB.dotCN.app + " > .repo-loadingwrapper:empty");
 			
 			BDFDB.unloadMessage(this);
 		}
@@ -519,7 +519,7 @@ class ThemeRepo {
 		themeRepoModal.find("#input-hideupdated").prop("checked", hiddenSettings.updated || showOnlyOutdated);
 		themeRepoModal.find("#input-hideoutdated").prop("checked", hiddenSettings.outdated && !showOnlyOutdated);
 		themeRepoModal.find("#input-hidedownloadable").prop("checked", hiddenSettings.downloadable || showOnlyOutdated);
-		if (!BDFDB.isRestartNoMoreEnabled()) BDFDB.removeEles(".themerepo-modal #RNMoption");
+		if (!BDFDB.isRestartNoMoreEnabled()) BDFDB.removeEles("." + this.getName() + "-modal #RNMoption");
 		else themeRepoModal.find("#input-rnmstart").prop("checked", BDFDB.loadData("RNMstart", this, "settings"));
 		themeRepoModal
 			.on("keyup." + this.getName(), BDFDB.dotCN.searchbarinput, () => {

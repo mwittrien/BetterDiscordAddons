@@ -5,13 +5,13 @@ class ServerHider {
 		this.labels = {};
 		
 		this.css = `
-			.serverhider-modal .entry ${BDFDB.dotCN.guild} {
+			.${this.getName()}-modal .entry ${BDFDB.dotCN.guild} {
 				height: 50px;
 				position: relative;
 				width: 50px;
 				z-index: 1;
 			}
-			.serverhider-modal .entry ${BDFDB.dotCN.guildinner} {
+			.${this.getName()}-modal .entry ${BDFDB.dotCN.guildinner} {
 				background: #2f3136;
 				border-radius: 25px !important;
 				cursor: pointer;
@@ -20,7 +20,7 @@ class ServerHider {
 				overflow: hidden;
 				text-align: center;
 			}
-			.serverhider-modal .entry ${BDFDB.dotCNS.guild + BDFDB.dotCN.avatarsmallold} {
+			.${this.getName()}-modal .entry ${BDFDB.dotCNS.guild + BDFDB.dotCN.avatarsmallold} {
 				background-repeat: no-repeat;
 				background-size: 50px 50px;
 				border-radius: 0;
@@ -31,7 +31,7 @@ class ServerHider {
 				height: 50px;
 				width: 50px;
 			}
-			.serverhider-modal .entry ${BDFDB.dotCNS.guild + BDFDB.dotCN.badge} {
+			.${this.getName()}-modal .entry ${BDFDB.dotCNS.guild + BDFDB.dotCN.badge} {
 				background-clip: padding-box;
 				background-color: #f04747;
 				border-radius: 3px;
@@ -48,13 +48,13 @@ class ServerHider {
 				right: -2px;
 				text-shadow: 0 1px 0 rgba(0,0,0,.25);
 			}
-			.serverhider-modal .folderhideCheckboxWrapper {
+			.${this.getName()}-modal .folderhideCheckboxWrapper {
 				right: 8px;
 			}`;
 		
 			
 		this.serverHiderModalMarkup =
-			`<span class="serverhider-modal DevilBro-modal">
+			`<span class="${this.getName()}-modal DevilBro-modal">
 				<div class="${BDFDB.disCN.backdrop}"></div>
 				<div class="${BDFDB.disCN.modal}">
 					<div class="${BDFDB.disCN.modalinner}">
@@ -257,7 +257,7 @@ class ServerHider {
 	}
 	
 	onContextMenu (context) {
-		if (document.querySelector(".serverhider-modal") || !context || !context.tagName || !context.parentElement || context.querySelector(".serverhider-item")) return;
+		if (document.querySelector("." + this.getName() + "-modal") || !context || !context.tagName || !context.parentElement || context.querySelector(".serverhider-item")) return;
 		var info = BDFDB.getKeyInformation({"node":context, "key":"guild"});
 		var valid = false;
 		if (info && BDFDB.getKeyInformation({"node":context, "key":"displayName", "value":"GuildLeaveGroup"})) {

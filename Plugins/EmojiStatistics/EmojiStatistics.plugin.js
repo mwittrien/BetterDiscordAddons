@@ -5,17 +5,17 @@ class EmojiStatistics {
 		this.labels = {};
 		
 		this.css = `
-			.emojistatistics-modal .titles {
+			.${this.getName()}-modal .titles {
 				height: 20px;
 			}
 			
-			.emojistatistics-modal .emojiserver-entry {
+			.${this.getName()}-modal .emojiserver-entry {
 				height: 50px;
 				padding-top: 5px;
 				padding-bottom: 5px;
 			}
 			
-			.emojistatistics-modal .emojiserver-entry .modal-emojiserver-icon {
+			.${this.getName()}-modal .emojiserver-entry .modal-emojiserver-icon {
 				background-color: #484B51;
 				background-size: cover;
 				border-radius: 25px;
@@ -31,8 +31,8 @@ class EmojiStatistics {
 				width: 50px;
 			}
 			
-			.emojistatistics-modal .titles-entry label,
-			.emojistatistics-modal .emojiserver-entry label {
+			.${this.getName()}-modal .titles-entry label,
+			.${this.getName()}-modal .emojiserver-entry label {
 				color: #b9bbbe;
 				display: inline-block;
 				flex: 1;
@@ -46,37 +46,37 @@ class EmojiStatistics {
 				text-transform: uppercase;
 			}
 			
-			.emojistatistics-modal .emojiserver-entry label {
+			.${this.getName()}-modal .emojiserver-entry label {
 				height: 12px;
 				overflow: hidden;
 			}
 			
-			.emojistatistics-modal .titles-entry label {
+			.${this.getName()}-modal .titles-entry label {
 				margin-top: 0px;
 			}
-			.emojistatistics-modal .titles-entry .modal-titlesicon-label {
+			.${this.getName()}-modal .titles-entry .modal-titlesicon-label {
 				margin-left: 0px;
 				text-align: center;
 				width: 50px;
 			}
 			
-			.emojistatistics-modal .titles-entry .modal-titlesname-label,
-			.emojistatistics-modal .emojiserver-entry .modal-emojiname-label {
+			.${this.getName()}-modal .titles-entry .modal-titlesname-label,
+			.${this.getName()}-modal .emojiserver-entry .modal-emojiname-label {
 				width: 300px;
 			}
 			
-			.emojistatistics-modal .titles-entry .modal-sorttitle-label {
+			.${this.getName()}-modal .titles-entry .modal-sorttitle-label {
 				cursor: pointer;
 			}
 			
-			.emojistatistics-modal .titles-entry .modal-titlestotal-label,
-			.emojistatistics-modal .titles-entry .modal-titlesglobal-label,
-			.emojistatistics-modal .titles-entry .modal-titleslocal-label,
-			.emojistatistics-modal .titles-entry .modal-titlescopies-label,
-			.emojistatistics-modal .emojiserver-entry .modal-emojitotal-label,
-			.emojistatistics-modal .emojiserver-entry .modal-emojiglobal-label,
-			.emojistatistics-modal .emojiserver-entry .modal-emojilocal-label,
-			.emojistatistics-modal .emojiserver-entry .modal-emojicopies-label {
+			.${this.getName()}-modal .titles-entry .modal-titlestotal-label,
+			.${this.getName()}-modal .titles-entry .modal-titlesglobal-label,
+			.${this.getName()}-modal .titles-entry .modal-titleslocal-label,
+			.${this.getName()}-modal .titles-entry .modal-titlescopies-label,
+			.${this.getName()}-modal .emojiserver-entry .modal-emojitotal-label,
+			.${this.getName()}-modal .emojiserver-entry .modal-emojiglobal-label,
+			.${this.getName()}-modal .emojiserver-entry .modal-emojilocal-label,
+			.${this.getName()}-modal .emojiserver-entry .modal-emojicopies-label {
 				text-align: center;
 				width: 82px;
 			}
@@ -92,7 +92,7 @@ class EmojiStatistics {
 			}`;
 			
 		this.emojiInformationModalMarkup =
-			`<span class="emojistatistics-modal DevilBro-modal">
+			`<span class="${this.getName()}-modal DevilBro-modal">
 				<div class="${BDFDB.disCN.backdrop}"></div>
 				<div class="${BDFDB.disCN.modal}">
 					<div class="${BDFDB.disCN.modalinner}">
@@ -343,7 +343,7 @@ class EmojiStatistics {
 		}
 		
 		var titleentry = $(this.emojiserverTitlesMarkup)
-			.appendTo(".emojistatistics-modal .titles")
+			.appendTo("." + this.getName() + "-modal .titles")
 			.on("click", ".modal-sorttitle-label ", (e2) => {
 				var oldTitle = e2.target.innerText;
 				
