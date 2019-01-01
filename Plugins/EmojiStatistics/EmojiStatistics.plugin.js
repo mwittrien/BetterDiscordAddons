@@ -4,7 +4,15 @@ class EmojiStatistics {
 	initConstructor () {
 		this.labels = {};
 		
+		this.patchModules = {
+			"EmojiPicker":"componentDidMount"
+		};
+		
 		this.css = `
+			.emoji-tooltip {
+				z-index: 2002;
+			}
+			
 			.${this.getName()}-modal .titles {
 				height: 20px;
 			}
@@ -151,6 +159,9 @@ class EmojiStatistics {
 			settings: {
 				enableEmojiHovering:			{value:true, 	description:"Show Information about Emojis on hover over an Emoji in the Emojipicker."},
 				enableEmojiStatisticsButton:	{value:true, 	description:"Add a Button in the Emojipicker to open the Statistics Overview."}
+			},
+			amounts: {
+				hoverDelay:						{value:1000, 	description:"Tooltip delay in millisec:"}
 			}
 		};
 	}
@@ -159,16 +170,20 @@ class EmojiStatistics {
 
 	getDescription () {return "Adds some helpful options to show you more information about emojis and emojiservers.";}
 
-	getVersion () {return "2.7.7";}
+	getVersion () {return "2.7.8";}
 
 	getAuthor () {return "DevilBro";}
 
 	getSettingsPanel () {
 		if (!this.started || typeof BDFDB !== "object") return;
-		var settings = BDFDB.getAllData(this, "settings"); 
+		var settings = BDFDB.getAllData(this, "settings");
+		var amounts = BDFDB.getAllData(this, "amounts");
 		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		for (let key in settings) {
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}"${settings[key] ? " checked" : ""}></div></div>`;
+		}
+		for (let key in amounts) {
+			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCN.flexchild}" style="flex: 0 0 50%; line-height: 38px;">${this.defaults.amounts[key].description}</h3><div class="${BDFDB.disCN.inputwrapper} inputNumberWrapper ${BDFDB.disCNS.vertical +  BDFDB.disCNS.flex + BDFDB.disCNS.directioncolumn}" style="flex: 1 1 auto;"><span class="numberinput-buttons-zone"><span class="numberinput-button-up"></span><span class="numberinput-button-down"></span></span><input type="number" min="0" option="${key}" value="${amounts[key]}" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16} amountInput"></div></div>`;
 		}
 		settingshtml += `</div></div>`;
 		
@@ -177,7 +192,11 @@ class EmojiStatistics {
 		BDFDB.initElements(settingspanel);
 
 		$(settingspanel)
-			.on("click", BDFDB.dotCN.switchinner, () => {this.updateSettings(settingspanel);});
+			.on("click", BDFDB.dotCN.switchinner, () => {this.updateSettings(settingspanel);})
+			.on("input", ".amountInput", (e) => {
+				var input = parseInt(e.currentTarget.value);
+				if (!isNaN(input) && input > -1) BDFDB.saveData(e.currentTarget.getAttribute("option"), input, this, "amounts");
+			});
 			
 		return settingspanel;
 	}
@@ -204,37 +223,9 @@ class EmojiStatistics {
 		if (typeof BDFDB === "object") {
 			BDFDB.loadMessage(this);
 			
-			var observer = null;
-
-			observer = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								if (node.tagName && node.querySelector(BDFDB.dotCN.emojipicker)) {
-									this.loadEmojiList();
-									if (!node.querySelector(".emojistatistics-button") && BDFDB.getData("enableEmojiStatisticsButton", this, "settings")) {
-										this.addEmojiInformationButton(node);
-									}
-									if (BDFDB.getData("enableEmojiHovering", this, "settings")) {
-										this.hoverEmoji(node);
-									}
-								}
-							});
-						}
-						if (change.removedNodes) {
-							change.removedNodes.forEach((node) => {
-								if (node.querySelector(BDFDB.dotCN.emojipicker)) {
-									$(BDFDB.dotCN.tooltips).find(".emoji-tooltip").remove();
-								}
-							});
-						}
-					}
-				);
-			});
-			BDFDB.addObserver(this, BDFDB.dotCN.popouts, {name:"emojiPickerObserver",instance:observer}, {childList: true});
-			
 			this.GuildEmojis = BDFDB.WebModules.findByProperties("getGuildEmoji", "getDisambiguatedEmojiContext");
+			
+			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -242,7 +233,8 @@ class EmojiStatistics {
 	}
 
 	stop () {
-		if (typeof BDFDB === "object") {			
+		if (typeof BDFDB === "object") {
+			BDFDB.removeEles(".emoji-tooltip",".emojistatistics-button");
 			BDFDB.unloadMessage(this);
 		}
 	}
@@ -271,44 +263,39 @@ class EmojiStatistics {
 		this.emojiserverTitlesMarkup = 		this.emojiserverTitlesMarkup.replace("REPLACE_modal_titlescopies_text", this.labels.modal_titlescopies_text);
 	}
 	
+	processEmojiPicker (instance, wrapper) {
+		if (!wrapper.querySelector(".emojistatistics-button")) {
+			this.loadEmojiList();
+			let settings = BDFDB.getAllData(this, "settings");
+			if (settings.enableEmojiStatisticsButton) {
+				$(this.emojiButtonMarkup)
+					.insertBefore(BDFDB.dotCN.emojipickerdiversityselector, wrapper)
+					.off("click." + this.getName())
+					.on("click." + this.getName(), () => {
+						instance._reactInternalFiber.return.return.return.return.stateNode.close();
+						this.showEmojiInformationModal();
+					});
+			}
+			if (settings.enableEmojiHovering) {
+				$(wrapper)
+					.off("mouseenter." + this.getName())
+					.on("mouseenter." + this.getName(), BDFDB.dotCN.emojipickeremojiitem, e => {
+						let data = this.emojiToServerList[e.target.style.getPropertyValue("background-image").replace('url("',"").replace('")',"")];
+						if (data) BDFDB.createTooltip(`${BDFDB.encodeToHTML(data.emoji)}\n${BDFDB.encodeToHTML(data.server)}`, e.target, {type:"right",selector:"emoji-tooltip",delay:BDFDB.getData("hoverDelay", this, "amounts")});
+					});
+			}
+		}
+	}
+	
 	loadEmojiList () {
 		this.emojiReplicaList = {};
 		this.emojiToServerList = {};
 		for (let serverObj of BDFDB.readServerList()) {
 			for (let emoji of this.GuildEmojis.getGuildEmoji(serverObj.id)) {
 				this.emojiToServerList[emoji.url] = {emoji:emoji.allNamesString, server:serverObj.name};
-				if (emoji.managed) {
-					if (this.emojiReplicaList[emoji.name] != undefined) {
-						this.emojiReplicaList[emoji.name] = true;
-					}
-					else {
-						this.emojiReplicaList[emoji.name] = false;
-					}
-				}
+				if (emoji.managed) this.emojiReplicaList[emoji.name] = this.emojiReplicaList[emoji.name] != undefined;
 			}
 		}
-	}
-	
-	hoverEmoji (picker) {
-		$(picker)
-			.off("mouseenter." + this.getName())
-			.on("mouseenter." + this.getName(), BDFDB.dotCN.emojipickeremojiitem, (e) => {
-				var data = this.emojiToServerList[$(e.target).css("background-image").replace("url(\"","").replace("\")","")];
-				if (data) {
-					var text = `${BDFDB.encodeToHTML(data.emoji)}\n${BDFDB.encodeToHTML(data.server)}`;
-					BDFDB.createTooltip(text, e.target, {type:"right",selector:"emoji-tooltip",css:`.emoji-tooltip{z-index:30000;}`});
-				}
-			});
-	}
-	
-	addEmojiInformationButton (node) {
-		$(this.emojiButtonMarkup)
-			.insertBefore(node.querySelector(BDFDB.dotCN.emojipickerdiversityselector))
-			.off("click." + this.getName())
-			.on("click." + this.getName(), () => {
-				$(node).hide();
-				this.showEmojiInformationModal();
-			});
 	}
 	
 	showEmojiInformationModal () {
@@ -343,7 +330,7 @@ class EmojiStatistics {
 		}
 		
 		var titleentry = $(this.emojiserverTitlesMarkup)
-			.appendTo("." + this.getName() + "-modal .titles")
+			.appendTo(".titles", emojiInformationModal)
 			.on("click", ".modal-sorttitle-label ", (e2) => {
 				var oldTitle = e2.target.innerText;
 				
