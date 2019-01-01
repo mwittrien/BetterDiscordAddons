@@ -354,7 +354,7 @@ class PluginRepo {
 			clearInterval(this.updateInterval);
 			clearTimeout(this.loading.timeout);
 			
-			BDFDB.removeEles("webview[webview-pluginrepo]",".pluginrepo-modal",".pluginrepo-notice",".bd-pluginrepobutton",".pluginrepo-loadingicon",BDFDB.dotCN.app + " > .repo-loadingwrapper:empty");
+			BDFDB.removeEles("webview[webview-pluginrepo]",".pluginrepo-notice",".bd-pluginrepobutton",".pluginrepo-loadingicon",BDFDB.dotCN.app + " > .repo-loadingwrapper:empty");
 			
 			BDFDB.unloadMessage(this);
 		}
