@@ -651,7 +651,6 @@ class GoogleTranslateOption {
 	}
 	
 	translateMessage (message, target, channel) {
-		console.log(message, target, channel);
 		if (!message || !target) return;
 		let {messagediv, pos} = this.getMessageAndPos(target);
 		if (!messagediv || pos == -1) return;

@@ -43,15 +43,15 @@ class MessageUtilities {
 
 	getDescription () {return "Offers a number of useful message options. Remap the keybindings in the settings.";}
 
-	getVersion () {return "1.4.2";}
+	getVersion () {return "1.4.3";}
 
 	getAuthor () {return "DevilBro";}
 	
 	getSettingsPanel () {
 		if (!this.started || typeof BDFDB !== "object") return;
-		var settings = BDFDB.getAllData(this, "settings"); 
-		var bindings = BDFDB.getAllData(this, "bindings");
-		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.getName()}</div><div class="DevilBro-settings-inner">`;
+		let settings = BDFDB.getAllData(this, "settings"); 
+		let bindings = BDFDB.getAllData(this, "bindings");
+		let settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		for (let key in settings) {
 			if (this.defaults.settings[key].description) settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}"${settings[key] ? " checked" : ""}></div></div>`;
 		}
@@ -68,7 +68,7 @@ class MessageUtilities {
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Reset all key bindings.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} reset-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Reset</div></button></div>`;
 		settingshtml += `</div></div>`;
 		
-		var settingspanel = $(settingshtml)[0];
+		let settingspanel = $(settingshtml)[0];
 
 		BDFDB.initElements(settingspanel);
 		
@@ -91,7 +91,7 @@ class MessageUtilities {
 	load () {}
 
 	start () {
-		var libraryScript = null;
+		let libraryScript = null;
 		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
 			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 			if (libraryScript) libraryScript.remove();
@@ -109,7 +109,7 @@ class MessageUtilities {
 		if (typeof BDFDB === "object") {
 			BDFDB.loadMessage(this);
 			
-			this.ChannelStore = BDFDB.WebModules.findByProperties("getChannel", "getChannels");
+			this.ChannelUtils = BDFDB.WebModules.findByProperties("getChannels","getChannel");
 			this.MessageActions = BDFDB.WebModules.findByProperties("startEditMessage", "endEditMessage");
 			this.PinActions = BDFDB.WebModules.findByProperties("pinMessage", "unpinMessage");
 			this.CurrentUserPerms = BDFDB.WebModules.findByProperties("getChannelPermissions", "can");
@@ -133,10 +133,6 @@ class MessageUtilities {
 
 	stop () {
 		if (typeof BDFDB === "object") {
-			$(document).off("click." + this.getName(), BDFDB.dotCNC.message + BDFDB.dotCN.messagesystem);
-			$(document).off("dblclick." + this.getName(), BDFDB.dotCNC.message + BDFDB.dotCN.messagesystem);
-			$(document).off("keydown." + this.getName(), BDFDB.dotCN.textareawrapchat);
-			
 			BDFDB.unloadMessage(this);
 		}
 	}
@@ -145,8 +141,8 @@ class MessageUtilities {
 	//begin of own functions
 
 	updateSettings (settingspanel) {
-		var settings = {};
-		for (var input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner)) {
+		let settings = {};
+		for (let input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner)) {
 			settings[input.value] = input.checked;
 		}
 		BDFDB.saveAllData(settings, this, "settings");
@@ -155,40 +151,40 @@ class MessageUtilities {
 	resetAll (settingspanel) {
 		if (confirm("Are you sure you want to delete all key bindings?")) {
 			BDFDB.removeAllData(this, "bindings");
-			var bindings = BDFDB.getAllData(this, "bindings");
+			let bindings = BDFDB.getAllData(this, "bindings");
 			settingspanel.querySelectorAll(BDFDB.dotCN.select).forEach((wrap) => {
-				var action = wrap.getAttribute("type");
-				var option = wrap.getAttribute("option");
+				let action = wrap.getAttribute("type");
+				let option = wrap.getAttribute("option");
 				wrap.setAttribute("value", bindings[action][option]);
 				wrap.querySelector(BDFDB.dotCN.title).innerText = this.clickMap[bindings[action][option]];
 			});
 			settingspanel.querySelectorAll(BDFDB.dotCN.hotkeycontainer).forEach((wrap) => {
-				var action = wrap.getAttribute("type");
-				var option = wrap.getAttribute("option");
+				let action = wrap.getAttribute("type");
+				let option = wrap.getAttribute("option");
 				wrap.setAttribute("value", bindings[action][option]);
 				wrap.querySelector("input").setAttribute("value", this.keyboardMap[bindings[action][option]]);
-			});;
+			});
 		}
 	}
 	
 	openDropdownMenu (settingspanel, e) {
-		var selectControl = e.currentTarget;
-		var selectWrap = e.currentTarget.parentElement;
+		let selectControl = e.currentTarget;
+		let selectWrap = e.currentTarget.parentElement;
 		
 		if (selectWrap.classList.contains(BDFDB.disCN.selectisopen)) return;
 		
 		selectWrap.classList.add(BDFDB.disCN.selectisopen);
 		
-		var action = selectWrap.getAttribute("type");
-		var option = selectWrap.getAttribute("option");
-		var value = selectWrap.getAttribute("value");
+		let action = selectWrap.getAttribute("type");
+		let option = selectWrap.getAttribute("option");
+		let value = selectWrap.getAttribute("value");
 		
-		var selectMenu = this.createDropdownMenu(action, value);
+		let selectMenu = this.createDropdownMenu(action, value);
 		selectWrap.appendChild(selectMenu);
 		
 		$(selectMenu).on("mousedown." + this.getName(), BDFDB.dotCN.selectoption, (e2) => {
-			var binding = BDFDB.getData(action, this, "bindings");
-			var selection = e2.currentTarget.getAttribute("value");
+			let binding = BDFDB.getData(action, this, "bindings");
+			let selection = e2.currentTarget.getAttribute("value");
 			selectWrap.setAttribute("value", selection);
 			selectControl.querySelector(BDFDB.dotCN.title).innerText = e2.currentTarget.textContent;
 			binding[option] = parseInt(selection);
@@ -203,9 +199,9 @@ class MessageUtilities {
 	}
 	
 	createDropdownMenu (action, value) {
-		var menuhtml = `<div class="${BDFDB.disCN.selectmenuouter}"><div class="${BDFDB.disCN.selectmenu}">`;
-		for (var i in this.clickMap) {
-			var isSelected = i == value ? ` ${BDFDB.disCN.selectselected}` : ``;
+		let menuhtml = `<div class="${BDFDB.disCN.selectmenuouter}"><div class="${BDFDB.disCN.selectmenu}">`;
+		for (let i in this.clickMap) {
+			let isSelected = i == value ? ` ${BDFDB.disCN.selectselected}` : ``;
 			menuhtml += `<div value="${i}" class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignbaseline + BDFDB.disCNS.nowrap + BDFDB.disCN.selectoption + isSelected}" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.primary + BDFDB.disCN.weightnormal}">${this.clickMap[i]}</div></div>`
 		}
 		menuhtml += `</div></div>`;
@@ -213,14 +209,14 @@ class MessageUtilities {
 	}
 	
 	startRecording (settingspanel, e) {
-		var recorderWrap = e.currentTarget;
+		let recorderWrap = e.currentTarget;
 		
 		if (recorderWrap.classList.contains(BDFDB.disCN.hotkeyrecording)) return;
 		
-		var recorderInput = recorderWrap.querySelector("input");
-		var recorderText = recorderWrap.querySelector(BDFDB.dotCN.hotkeytext);
-		var action = recorderWrap.getAttribute("type");
-		var option = recorderWrap.getAttribute("option");
+		let recorderInput = recorderWrap.querySelector("input");
+		let recorderText = recorderWrap.querySelector(BDFDB.dotCN.hotkeytext);
+		let action = recorderWrap.getAttribute("type");
+		let option = recorderWrap.getAttribute("option");
 		
 		recorderWrap.classList.add(BDFDB.disCN.hotkeyrecording);
 		recorderWrap.classList.remove(BDFDB.disCN.hotkeyhasvalue);
@@ -234,7 +230,7 @@ class MessageUtilities {
 		$(document).on("mousedown.recorder" + this.getName(), () => {
 			$(document).off("mousedown.recorder" + this.getName());
 			$(document).off("keydown.recorder" + this.getName());
-			var binding = BDFDB.getData(action, this, "bindings");
+			let binding = BDFDB.getData(action, this, "bindings");
 			binding[option] = parseInt(recorderWrap.getAttribute("value"));
 			BDFDB.saveData(action, binding, this, "bindings");
 			setTimeout(() => {
@@ -246,14 +242,14 @@ class MessageUtilities {
 	}
 	
 	resetRecorder (settingspanel, e) {
-		var resetButton = e.currentTarget;
-		var recorderWrap = e.currentTarget.parentElement.parentElement.querySelector(BDFDB.dotCN.hotkeycontainer);
-		var recorderInput = recorderWrap.querySelector("input");
-		var action = recorderWrap.getAttribute("type");
-		var option = recorderWrap.getAttribute("option");
+		let resetButton = e.currentTarget;
+		let recorderWrap = e.currentTarget.parentElement.parentElement.querySelector(BDFDB.dotCN.hotkeycontainer);
+		let recorderInput = recorderWrap.querySelector("input");
+		let action = recorderWrap.getAttribute("type");
+		let option = recorderWrap.getAttribute("option");
 		recorderWrap.setAttribute("value", 0);
 		recorderInput.setAttribute("value", this.keyboardMap[0]);
-		var binding = BDFDB.getData(action, this, "bindings");
+		let binding = BDFDB.getData(action, this, "bindings");
 		binding[option] = parseInt(recorderWrap.getAttribute("value"));
 		BDFDB.saveData(action, binding, this, "bindings");
 	}
@@ -261,12 +257,12 @@ class MessageUtilities {
 	onClick (div, click, name) {
 		if (!this.isEventFired(name)) {
 			this.fireEvent(name);
-			var settings = BDFDB.getAllData(this, "settings");
-			var bindings = BDFDB.getAllData(this, "bindings")
+			let settings = BDFDB.getAllData(this, "settings");
+			let bindings = BDFDB.getAllData(this, "bindings");
 			for (let action in bindings) {
 				if (settings[action] && this.checkIfBindingIsValid(bindings[action], click)) {
-					var message = this.getMessageData(div);
-					if (message) this.defaults.bindings[action].func.bind(this)(message);
+					let {messagediv, pos, message} = this.getMessageData(div);
+					if (messagediv && pos > -1 && message) this.defaults.bindings[action].func.bind(this)({messagediv, pos, message});
 					break;
 				}
 			}
@@ -275,7 +271,7 @@ class MessageUtilities {
 	}
 	
 	checkIfBindingIsValid (binding, doneclick) {
-		var valid = true;
+		let valid = true;
 		for (let click of this.clicks) {
 			if (binding[click] != doneclick) valid = false;
 		}
@@ -285,58 +281,59 @@ class MessageUtilities {
 		return valid;
 	}
 	
-	doDelete (message) {
-		var channel = this.ChannelStore.getChannel(message.channel_id);
+	doDelete ({messagediv, pos, message}) {
+		let channel = this.ChannelUtils.getChannel(message.channel_id);
 		if ((channel && this.CurrentUserPerms.can(this.Permissions.MANAGE_MESSAGES, channel)) || message.author.id == BDFDB.myData.id) {
 			this.MessageActions.deleteMessage(message.channel_id, message.id);
 		}
 	}
 	
-	doEdit (message) {
-		if (message.author.id == BDFDB.myData.id && !message.div.querySelector("textarea")) {
+	doEdit ({messagediv, pos, message}) {
+		if (message.author.id == BDFDB.myData.id && !messagediv.querySelector("textarea")) {
 			this.MessageActions.startEditMessage(message.channel_id, message.id, message.content);
 		}
 	}
 	
-	doOpenReact (message) {
-		var reactButton = message.div.querySelector(BDFDB.dotCN.emojipickerbutton);
+	doOpenReact ({messagediv, pos, message}) {
+		let reactButton = messagediv.querySelector(BDFDB.dotCN.emojipickerbutton);
 		if (reactButton) reactButton.click();
 	}
 	
-	doPinUnPin (message) {
-		var channel = this.ChannelStore.getChannel(message.channel_id);
+	doPinUnPin ({messagediv, pos, message}) {
+		let channel = this.ChannelUtils.getChannel(message.channel_id);
 		if (channel && this.CurrentUserPerms.can(this.Permissions.MANAGE_MESSAGES, channel)) {
-			if (message.pinned) 	this.PinActions.unpinMessage(channel, message.id);
-			else 					this.PinActions.pinMessage(channel, message.id);
+			if (message.pinned) this.PinActions.unpinMessage(channel, message.id);
+			else this.PinActions.pinMessage(channel, message.id);
 		}
 	}
 	
-	doNote (message) {
+	doNote ({messagediv, pos, message}) {
 		if (BDFDB.isPluginEnabled("PersonalPins") == true) {
-			var PersonalPins = window.bdplugins["PersonalPins"].plugin;
-			PersonalPins.getMessageData(message.div);
-			PersonalPins.addMessageToNotes();
+			let channel = this.ChannelUtils.getChannel(message.channel_id);
+			if (channel) {
+				if (bdplugins.PersonalPins.plugin.getNoteData(message, channel, pos)) bdplugins.PersonalPins.plugin.removeNoteData(message, channel, pos);
+				else bdplugins.PersonalPins.plugin.addMessageToNotes(message, messagediv, channel);
+			}
 		}
 	}
 	
-	doTranslate (message) {
+	doTranslate ({messagediv, pos, message}) {
 		if (BDFDB.isPluginEnabled("GoogleTranslateOption") == true) {
-			var GoogleTranslateOption = window.bdplugins["GoogleTranslateOption"].plugin;
-			GoogleTranslateOption.getMessageData(message.div);
-			GoogleTranslateOption.translateMessage();
+			let channel = this.ChannelUtils.getChannel(message.channel_id);
+			if (channel) bdplugins.GoogleTranslateOption.plugin.translateMessage(message, messagediv, channel);
 		}
 	}
 	
-	doQuote (message) {
+	doQuote ({messagediv, pos, message}) {
 		if (BDFDB.isPluginEnabled("Quoter") == true) {
-			var quoteButton = message.div.querySelector(".btn-quote");
+			let quoteButton = messagediv.querySelector(".btn-quote");
 			if (quoteButton) quoteButton.click();
 		}
 	}
 	
-	doCitate (message) {
+	doCitate ({messagediv, pos, message}) {
 		if (BDFDB.isPluginEnabled("Citador") == true) {
-			var citarButton = message.div.parentElement.querySelector(".citar-btn");
+			let citarButton = messagediv.parentElement.querySelector(".citar-btn");
 			if (citarButton) citarButton.click();
 		}
 	}
@@ -345,7 +342,7 @@ class MessageUtilities {
 		if (!this.isEventFired(name)) {
 			this.fireEvent(name);
 			if (key == 27 && BDFDB.getData("clearOnEscape", this, "settings")) {
-				var instance = BDFDB.getOwnerInstance({"node":div, "name":"ChannelTextAreaForm", "up":true});
+				let instance = BDFDB.getOwnerInstance({"node":div, "name":"ChannelTextAreaForm", "up":true});
 				if (instance) {
 					instance.setState({textValue:""});
 				}
@@ -366,25 +363,12 @@ class MessageUtilities {
 		return str ? str.slice(0,-1) : null;
 	}
 	
-	getMessageGroup (message) {
-		var messagegroup = null;
-		while (messagegroup == null || message.parentElement) {
-			message = message.parentElement;
-			if (message.classList && message.classList.contains(BDFDB.disCN.messagegroup)) messagegroup = message;
-		}
-		return messagegroup;
-	}
-	
-	getMessageData (div) {
-		if (div) {
-			var messagegroup = this.getMessageGroup(div);
-			var pos = Array.from(messagegroup.querySelectorAll(BDFDB.dotCNC.message + BDFDB.dotCN.messagesystem)).indexOf(div);
-			var instance = BDFDB.getReactInstance(messagegroup);
-			if (!instance) return;
-			var info = instance.return.stateNode.props.messages;
-			if (info && pos > -1) return Object.assign({},info[pos],{"div":div, "group":messagegroup, "pos":pos});
-		}
-		return null;
+	getMessageData (target) {
+		let messagediv = BDFDB.getParentEle(BDFDB.dotCN.message, target);
+		let pos = messagediv ? Array.from(messagediv.parentElement.querySelectorAll(BDFDB.dotCN.message)).indexOf(messagediv) : -1;
+		let instance = BDFDB.getReactInstance(messagediv);
+		let message = instance && instance.return && instance.return.memoizedProps && instance.return.memoizedProps.message ? instance.return.memoizedProps.message : null;
+		return {messagediv, pos, message};
 	}
 	
 	fireEvent (name) {
