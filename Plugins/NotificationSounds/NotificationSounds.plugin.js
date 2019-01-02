@@ -90,8 +90,6 @@ class NotificationSounds {
 		this.choices = [];
 		
 		this.firedEvents = {};
-		
-		this.callingModules = {};
 	}
 
 	getName () {return "NotificationSounds";}
@@ -245,13 +243,6 @@ class NotificationSounds {
 
 	stop () {
 		if (typeof BDFDB === "object") {
-			for (let instancetype in this.callingModules) {
-				if (this.callingModules[instancetype] && this.callingModules[instancetype].instance) {
-					this.callingModules[instancetype].instance.startRinging = this.callingModules[instancetype].startRinging;
-					this.callingModules[instancetype].instance.stopRinging = this.callingModules[instancetype].stopRinging;
-				}
-			}
-			
 			BDFDB.unloadMessage(this);
 		}
 	}
@@ -456,11 +447,6 @@ class NotificationSounds {
 	}
 	
 	patchCallingSound (instance, instancetype, type) {
-		this.callingModules[instancetype] = {
-			instance: instance,
-			startRinging: instance.startRinging,
-			stopRinging: instance.stopRinging,
-		};
 		let audio = new Audio();
 		let play = () => {
 			if (!audio.paused || this.dontPlayAudio(type)) return;
@@ -471,8 +457,8 @@ class NotificationSounds {
 		};
 		let stop = () => {audio.pause();}
 		instance.stopRinging();
-		instance.startRinging = play;
-		instance.stopRinging = stop;
+		BDFDB.WebModules.patch(instance, "startRinging", this, {instead: play});
+		BDFDB.WebModules.patch(instance, "stopRinging", this, {instead: stop});
 		BDFDB.WebModules.patch(instance._reactInternalFiber.type.prototype, "startRinging", this, {instead: play});
 		BDFDB.WebModules.patch(instance._reactInternalFiber.type.prototype, "stopRinging", this, {instead: stop});
 		BDFDB.WebModules.unpatch(instance._reactInternalFiber.type.prototype, this.patchModules[instancetype], this);
@@ -481,7 +467,7 @@ class NotificationSounds {
 	processIncomingCalls (instance, wrapper) {
 		this.patchCallingSound(instance, "IncomingCalls", "call_ringing");
 	}
-	 
+	
 	processPrivateChannelCall (instance, wrapper) {
 		this.patchCallingSound(instance, "PrivateChannelCall", "call_calling");
 	}
