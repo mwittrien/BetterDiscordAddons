@@ -75,7 +75,7 @@ class PersonalPins {
 		
 		this.messagePinContextEntryMarkup =
 			`<div class="${BDFDB.disCN.contextmenuitemgroup}">
-				<div class="${BDFDB.disCN.contextmenuitem} personalpin-item personalpin-pin-item">
+				<div class="${BDFDB.disCN.contextmenuitem} personalpins-item personalpins-pin-item">
 					<span>REPLACE_context_pinoption_text</span>
 					<div class="${BDFDB.disCN.contextmenuhint}"></div>
 				</div>
@@ -83,22 +83,19 @@ class PersonalPins {
 		
 		this.messageUnpinContextEntryMarkup =
 			`<div class="${BDFDB.disCN.contextmenuitemgroup}">
-				<div class="${BDFDB.disCN.contextmenuitem} personalpin-item personalpin-unpin-item">
+				<div class="${BDFDB.disCN.contextmenuitem} personalpins-item personalpins-unpin-item">
 					<span>REPLACE_context_unpinoption_text</span>
 					<div class="${BDFDB.disCN.contextmenuhint}"></div>
 				</div>
 			</div>`;
-		
-		this.optionButtonMarkup = 
-			`<div class="${BDFDB.disCN.optionpopoutbutton}"></div>`;
 			
 		this.popoutPinEntryMarkup = 
-			`<button role="menuitem" type="button" class="${BDFDB.disCNS.optionpopoutitem + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow} personalpin-itembtn personalpin-pin-itembtn">
+			`<button role="menuitem" type="button" class="${BDFDB.disCNS.optionpopoutitem + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow} personalpins-itembtn personalpins-pin-itembtn">
 				<div class="${BDFDB.disCN.buttoncontents}">REPLACE_popout_pinoption_text</div>
 			</button>`;
 			
 		this.popoutUnpinEntryMarkup = 
-			`<button role="menuitem" type="button" class="${BDFDB.disCNS.optionpopoutitem + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow} personalpin-itembtn personalpin-unpin-itembtn">
+			`<button role="menuitem" type="button" class="${BDFDB.disCNS.optionpopoutitem + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow} personalpins-itembtn personalpins-unpin-itembtn">
 				<div class="${BDFDB.disCN.buttoncontents}">REPLACE_popout_unpinoption_text</div>
 			</button>`;
 			
@@ -246,33 +243,27 @@ class PersonalPins {
 	}
 	
 	onMessageContextMenu (instance, menu) {
-		if (instance.props && instance.props.message && instance.props.channel && instance.props.target && !menu.querySelector(".personalpin-item")) {
+		if (instance.props && instance.props.message && instance.props.channel && instance.props.target && !menu.querySelector(".personalpins-item")) {
 			let pininstance = BDFDB.getOwnerInstance({node:menu,name:"MessagePinItem"});
 			if (pininstance && pininstance._reactInternalFiber && pininstance._reactInternalFiber.return && pininstance._reactInternalFiber.return.stateNode) {
-				let channel = instance.props.channel;
 				let {messagediv, pos} = this.getMessageAndPos(instance.props.target);
 				if (!messagediv || pos == -1) return;
 				if (this.getNoteData(instance.props.message, instance.props.channel, pos)) {
 					$(this.messageUnpinContextEntryMarkup).insertAfter(pininstance._reactInternalFiber.return.stateNode)
-						.on("click", ".personalpin-unpin-item", () => {
+						.on("click", ".personalpins-unpin-item", () => {
 							instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
 							this.removeNoteData(instance.props.message, instance.props.channel, pos);
 						});
 				}
 				else {
 					$(this.messagePinContextEntryMarkup).insertAfter(pininstance._reactInternalFiber.return.stateNode)
-						.on("click", ".personalpin-pin-item", () => {
+						.on("click", ".personalpins-pin-item", () => {
 							instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
 							this.addMessageToNotes(instance.props.message, instance.props.target, instance.props.channel);
 						});
 				}
 				if (BDFDB.isPluginEnabled("MessageUtilities")) {
-					let hint = menu.querySelector(".personalpin-item " + BDFDB.dotCN.contextmenuhint);
-					if (hint) {
-						hint.style.setProperty("max-width", "36px");
-						hint.innerHTML = `<div class="DevilBro-textscrollwrapper"><div class="DevilBro-textscroll DevilBro-textscroll-faster">${BDFDB.encodeToHTML(bdplugins.MessageUtilities.plugin.getActiveShortcutString("__Note_Message"))}</div></div>`;
-						BDFDB.initElements(hint);
-					}
+					BDFDB.setContextHint(menu.querySelector(".personalpins-item"), bdplugins.MessageUtilities.plugin.getActiveShortcutString("__Note_Message"));
 				}
 			}
 		}
@@ -294,15 +285,14 @@ class PersonalPins {
 		if (instance.props && typeof instance.props.renderButtons == "function" && !wrapper.querySelector(BDFDB.dotCN.optionpopoutbutton)) {
 			let buttonwrap = wrapper.querySelector(BDFDB.dotCN.messagebuttoncontainer);
 			if (buttonwrap) {
-				let button = $(this.optionButtonMarkup)[0];
+				let button = $(`<div class="${BDFDB.disCN.optionpopoutbutton}"></div>`)[0];
 				$(button).on("click", () => {BDFDB.createMessageOptionPopout(button);}).appendTo(buttonwrap);
 			}
 		}
 	}
 	
 	processMessageOptionPopout (instance, wrapper) {
-		if (instance.props.message && instance.props.target && instance.props.channel && !wrapper.querySelector(".personalpin-itembtn")) {
-			let pins = BDFDB.loadAllData(this, "pins");
+		if (instance.props.message && instance.props.target && instance.props.channel && !wrapper.querySelector(".personalpins-itembtn")) {
 			let {messagediv, pos} = this.getMessageAndPos(instance.props.target);
 			if (!messagediv || pos == -1) return;
 			if (this.getNoteData(instance.props.message, instance.props.channel, pos)) {
