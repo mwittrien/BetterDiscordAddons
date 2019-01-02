@@ -76,7 +76,7 @@ class PersonalPins {
 		this.messagePinContextEntryMarkup =
 			`<div class="${BDFDB.disCN.contextmenuitemgroup}">
 				<div class="${BDFDB.disCN.contextmenuitem} personalpins-item personalpins-pin-item">
-					<span>REPLACE_context_pinoption_text</span>
+					<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_context_pinoption_text</div></span>
 					<div class="${BDFDB.disCN.contextmenuhint}"></div>
 				</div>
 			</div>`;
@@ -84,7 +84,7 @@ class PersonalPins {
 		this.messageUnpinContextEntryMarkup =
 			`<div class="${BDFDB.disCN.contextmenuitemgroup}">
 				<div class="${BDFDB.disCN.contextmenuitem} personalpins-item personalpins-unpin-item">
-					<span>REPLACE_context_unpinoption_text</span>
+					<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_context_unpinoption_text</div></span>
 					<div class="${BDFDB.disCN.contextmenuhint}"></div>
 				</div>
 			</div>`;

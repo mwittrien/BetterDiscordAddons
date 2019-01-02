@@ -9,11 +9,11 @@ class SpellCheck {
 		this.spellCheckContextEntryMarkup =
 			`<div class="${BDFDB.disCN.contextmenuitemgroup}">
 				<div class="${BDFDB.disCN.contextmenuitem} similarwords-item ${BDFDB.disCN.contextmenuitemsubmenu}">
-					<span>REPLACE_context_similarwords_text</span>
+					<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_context_similarwords_text</div></span>
 					<div class="${BDFDB.disCN.contextmenuhint}"></div>
 				</div>
 				<div class="${BDFDB.disCN.contextmenuitem} spellcheck-item">
-					<span>REPLACE_context_spellcheck_text</span>
+					<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_context_spellcheck_text</div></span>
 					<div class="${BDFDB.disCN.contextmenuhint}"></div>
 				</div>
 			</div>`;
@@ -21,7 +21,7 @@ class SpellCheck {
 		this.similarWordsContextSubMenuMarkup = 
 			`<div class="${BDFDB.disCN.contextmenu} spellcheck-submenu">
 				<div class="${BDFDB.disCN.contextmenuitem} nosimilars-item">
-					<span>REPLACE_similarwordssubmenu_none_text</span>
+					<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_similarwordssubmenu_none_text</div></span>
 					<div class="${BDFDB.disCN.contextmenuhint}"></div>
 				</div>
 			</div>`;

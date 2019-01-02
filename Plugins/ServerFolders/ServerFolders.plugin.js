@@ -85,7 +85,7 @@ class ServerFolders {
 		this.serverContextEntryMarkup =
 			`<div class="${BDFDB.disCN.contextmenuitemgroup}">
 				<div class="${BDFDB.disCN.contextmenuitem} serverfolders-item ${BDFDB.disCN.contextmenuitemsubmenu}">
-					<span>REPLACE_servercontext_serverfolders_text</span>
+					<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_servercontext_serverfolders_text</div></span>
 					<div class="${BDFDB.disCN.contextmenuhint}"></div>
 				</div>
 			</div>`;
@@ -94,11 +94,11 @@ class ServerFolders {
 			`<div class="${BDFDB.disCN.contextmenu} serverfolders-submenu">
 				<div class="${BDFDB.disCN.contextmenuitemgroup}">
 					<div class="${BDFDB.disCN.contextmenuitem} createfolder-item">
-						<span>REPLACE_serversubmenu_createfolder_text</span>
+						<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_serversubmenu_createfolder_text</div></span>
 						<div class="${BDFDB.disCN.contextmenuhint}"></div>
 					</div>
 					<div class="${BDFDB.disCN.contextmenuitem} removefromfolder-item ${BDFDB.disCN.contextmenuitemdisabled}">
-						<span>REPLACE_serversubmenu_removefromfolder_text</span>
+						<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_serversubmenu_removefromfolder_text</div></span>
 						<div class="${BDFDB.disCN.contextmenuhint}"></div>
 					</div>
 				</div>
@@ -108,11 +108,11 @@ class ServerFolders {
 			`<div class="${BDFDB.disCN.contextmenu} folderSettings">
 				<div class="${BDFDB.disCN.contextmenuitemgroup}">
 					<div class="${BDFDB.disCN.contextmenuitem} unreadfolder-item ${BDFDB.disCN.contextmenuitemdisabled}">
-						<span>REPLACE_foldercontext_unreadfolder_text</span>
+						<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_foldercontext_unreadfolder_text</div></span>
 						<div class="${BDFDB.disCN.contextmenuhint}"></div>
 					</div>
 					<div class="${BDFDB.disCN.contextmenuitem} autounreadfolder-item ${BDFDB.disCN.contextmenuitemtoggle}">
-						<div class="${BDFDB.disCN.contextmenulabel}">REPLACE_foldercontext_autounreadfolder_text</div>
+						<div class="${BDFDB.disCN.contextmenulabel} DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_foldercontext_autounreadfolder_text</div></div>
 						<div class="checkbox">
 							<div class="checkbox-inner">
 								<input type="checkbox" value="on">
@@ -122,15 +122,15 @@ class ServerFolders {
 						</div>
 					</div>
 					<div class="${BDFDB.disCN.contextmenuitem} foldersettings-item">
-						<span>REPLACE_foldercontext_foldersettings_text</span>
+						<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_foldercontext_foldersettings_text</div></span>
 						<div class="${BDFDB.disCN.contextmenuhint}"></div>
 					</div>
 					<div class="${BDFDB.disCN.contextmenuitem} createfolder-item">
-						<span>REPLACE_foldercontext_createfolder_text</span>
+						<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_foldercontext_createfolder_text</div></span>
 						<div class="${BDFDB.disCN.contextmenuhint}"></div>
 					</div>
 					<div class="${BDFDB.disCN.contextmenuitem} removefolder-item ${BDFDB.disCN.contextmenuitemdanger}">
-						<span>REPLACE_foldercontext_removefolder_text</span>
+						<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_foldercontext_removefolder_text</div></span>
 						<div class="${BDFDB.disCN.contextmenuhint}"></div>
 					</div>
 				</div>
@@ -418,7 +418,7 @@ class ServerFolders {
 								var folderDiv = this.getFolderOfServer(serverObj);
 								if (folderDiv) {
 									if (isBadge) this.updateCopyInFolderContent(serverObj, folderDiv);
-									else $(".foldercontent [guild='" + serverObj.id + "']").remove();
+									else BDFDB.removeEles(".foldercontent [guild='" + serverObj.id + "']");
 									this.updateFolderNotifications(folderDiv);
 								}
 							});
@@ -464,9 +464,8 @@ class ServerFolders {
 
 	stop () {
 		if (typeof BDFDB === "object") {
-			$(BDFDB.dotCN.guildswrapper + ".foldercontent").remove();
+			BDFDB.removeEles(BDFDB.dotCN.guildswrapper + ".foldercontent");
 			this.resetAllElements();
-			
 			BDFDB.unloadMessage(this);
 		}
 	}
@@ -509,10 +508,9 @@ class ServerFolders {
 	}
 	
 	resetAllElements () {
-		$(BDFDB.dotCN.guild + ".folder").remove();
-		$(".guilddragpreview").remove();
+		BDFDB.removeEles(BDFDB.dotCN.guild + ".folder", ".guilddragpreview");
+		BDFDB.removeClasses("foldercontentopen","foldercontentclosed");
 		BDFDB.readServerList().forEach(serverObj => $(serverObj.div).removeAttr("folder").show());
-		$(".foldercontentopen, .foldercontentclosed").removeClass("foldercontentopen").removeClass("foldercontentclosed");
 	}
 
 	changeLanguageStrings () {
@@ -636,7 +634,7 @@ class ServerFolders {
 			var message = this.labels.toast_removeserver_text ? 
 				this.labels.toast_removeserver_text.replace("${servername}", serverObj.name).replace("${foldername}", data.folderName ? " " + data.folderName : "") : "";
 			BDFDB.showToast(message, {type:"danger"});
-			$(".foldercontent [guild='" + serverObj.id + "']").remove();
+			BDFDB.removeEles(".foldercontent [guild='" + serverObj.id + "']");
 			this.updateFolderNotifications(folderDiv);
 		}
 	}

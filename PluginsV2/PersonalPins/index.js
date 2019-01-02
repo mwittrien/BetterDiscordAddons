@@ -10,7 +10,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			this.messageContextEntryMarkup =
 				`<div class="${BDFDB.disCN.contextmenuitemgroup}">
 					<div class="${BDFDB.disCN.contextmenuitem} personalpin-item">
-						<span>REPLACE_context_noteoption_text</span>
+						<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_context_noteoption_text</div></span>
 						<div class="${BDFDB.disCN.contextmenuhint}"></div>
 					</div>
 				</div>`;

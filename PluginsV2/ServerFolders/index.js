@@ -115,7 +115,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			this.serverContextEntryMarkup =
 				`<div class="${BDFDB.disCN.contextmenuitemgroup}">
 					<div class="${BDFDB.disCN.contextmenuitem} serverfolders-item ${BDFDB.disCN.contextmenuitemsubmenu}">
-						<span>REPLACE_servercontext_serverfolders_text</span>
+						<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_servercontext_serverfolders_text</div></span>
 						<div class="${BDFDB.disCN.contextmenuhint}"></div>
 					</div>
 				</div>`;
@@ -124,11 +124,11 @@ module.exports = (Plugin, Api, Vendor) => {
 				`<div class="${BDFDB.disCN.contextmenu} serverfolders-submenu">
 					<div class="${BDFDB.disCN.contextmenuitemgroup}">
 						<div class="${BDFDB.disCN.contextmenuitem} createfolder-item">
-							<span>REPLACE_serversubmenu_createfolder_text</span>
+							<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_serversubmenu_createfolder_text</div></span>
 							<div class="${BDFDB.disCN.contextmenuhint}"></div>
 						</div>
 						<div class="${BDFDB.disCN.contextmenuitem} removefromfolder-item ${BDFDB.disCN.contextmenuitemdisabled}">
-							<span>REPLACE_serversubmenu_removefromfolder_text</span>
+							<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_serversubmenu_removefromfolder_text</div></span>
 							<div class="${BDFDB.disCN.contextmenuhint}"></div>
 						</div>
 					</div>
@@ -138,7 +138,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				`<div class="${BDFDB.disCN.contextmenu} folderSettings">
 					<div class="${BDFDB.disCN.contextmenuitemgroup}">
 						<div class="${BDFDB.disCN.contextmenuitem} unreadfolder-item ${BDFDB.disCN.contextmenuitemdisabled}">
-							<span>REPLACE_foldercontext_unreadfolder_text</span>
+							<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_foldercontext_unreadfolder_text</div></span>
 							<div class="${BDFDB.disCN.contextmenuhint}"></div>
 						</div>
 						<div class="${BDFDB.disCN.contextmenuitem} autounreadfolder-item ${BDFDB.disCN.contextmenuitemtoggle}">
@@ -152,15 +152,15 @@ module.exports = (Plugin, Api, Vendor) => {
 							</div>
 						</div>
 						<div class="${BDFDB.disCN.contextmenuitem} foldersettings-item">
-							<span>REPLACE_foldercontext_foldersettings_text</span>
+							<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_foldercontext_foldersettings_text</div></span>
 							<div class="${BDFDB.disCN.contextmenuhint}"></div>
 						</div>
 						<div class="${BDFDB.disCN.contextmenuitem} createfolder-item">
-							<span>REPLACE_foldercontext_createfolder_text</span>
+							<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_foldercontext_createfolder_text</div></span>
 							<div class="${BDFDB.disCN.contextmenuhint}"></div>
 						</div>
 						<div class="${BDFDB.disCN.contextmenuitem} removefolder-item ${BDFDB.disCN.contextmenuitem}">
-							<span>REPLACE_foldercontext_removefolder_text</span>
+							<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_foldercontext_removefolder_text</div></span>
 							<div class="${BDFDB.disCN.contextmenuhint}"></div>
 						</div>
 					</div>

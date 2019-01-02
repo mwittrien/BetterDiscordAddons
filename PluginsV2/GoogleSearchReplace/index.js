@@ -30,7 +30,7 @@ module.exports = (Plugin, Api, Vendor) => {
 
 			this.messageContextEntryMarkup =
 				`<div class="${BDFDB.disCN.contextmenuitem} googlereplacesearch-item ${BDFDB.disCN.contextmenuitemsubmenu}">
-					<span>REPLACE_context_googlesearchreplace_text</span>
+					<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_context_googlesearchreplace_text</div></span>
 					<div class="${BDFDB.disCN.contextmenuhint}"></div>
 				</div>`;
 				
@@ -38,7 +38,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				`<div class="${BDFDB.disCN.contextmenu} googleReplaceSearchSubMenu">
 					<div class="${BDFDB.disCN.contextmenuitemgroup}">
 						<div class="${BDFDB.disCN.contextmenuitem} alldisabled-item ${BDFDB.disCN.contextmenuitemdisabled}">
-							<span>REPLACE_submenu_disabled_text</span>
+							<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_submenu_disabled_text</div></span>
 							<div class="${BDFDB.disCN.contextmenuhint}"></div>
 						</div>
 						${Object.keys(this.defaults.engines).map((key, i) => `<div engine="${key}" class="${BDFDB.disCN.contextmenuitem} GRS-item"><span>${this.defaults.engines[key].name}</span><div class="${BDFDB.disCN.contextmenuhint}"></div></div>`).join("")}

@@ -39,7 +39,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			this.userContextEntryMarkup =
 				`<div class="${BDFDB.disCN.contextmenuitemgroup}">
 					<div class="${BDFDB.disCN.contextmenuitem} localusersettings-item ${BDFDB.disCN.contextmenuitemsubmenu}">
-						<span>REPLACE_context_localusersettings_text</span>
+						<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_context_localusersettings_text</div></span>
 						<div class="${BDFDB.disCN.contextmenuhint}"></div>
 					</div>
 				</div>`;
@@ -48,11 +48,11 @@ module.exports = (Plugin, Api, Vendor) => {
 				`<div class="${BDFDB.disCN.contextmenu} editusers-submenu">
 					<div class="${BDFDB.disCN.contextmenuitemgroup}">
 						<div class="${BDFDB.disCN.contextmenuitem} usersettings-item">
-							<span>REPLACE_submenu_usersettings_text</span>
+							<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_submenu_usersettings_text</div></span>
 							<div class="${BDFDB.disCN.contextmenuhint}"></div>
 						</div>
 						<div class="${BDFDB.disCN.contextmenuitem} resetsettings-item ${BDFDB.disCN.contextmenuitemdisabled}">
-							<span>REPLACE_submenu_resetsettings_text</span>
+							<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_submenu_resetsettings_text</div></span>
 							<div class="${BDFDB.disCN.contextmenuhint}"></div>
 						</div>
 					</div>

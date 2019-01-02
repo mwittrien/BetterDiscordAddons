@@ -4,13 +4,13 @@ class PinDMs {
 	initConstructor () {
 		this.pinDMEntryMarkup =
 			`<div class="${BDFDB.disCN.contextmenuitem} pindm-item">
-				<span>REPLACE_context_pindm_text</span>
+				<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_context_pindm_text</div></span>
 				<div class="${BDFDB.disCN.contextmenuhint}"></div>
 			</div>`;
 			
 		this.unpinDMEntryMarkup =
 			`<div class="${BDFDB.disCN.contextmenuitem} unpindm-item">
-				<span>REPLACE_context_unpindm_text</span>
+				<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_context_unpindm_text</div></span>
 				<div class="${BDFDB.disCN.contextmenuhint}"></div>
 			</div>`;
 	}

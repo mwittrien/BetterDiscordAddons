@@ -33,7 +33,7 @@ class ReverseImageSearch {
 			`<div class="${BDFDB.disCN.contextmenu} reverseImageSearchSubMenu">
 				<div class="${BDFDB.disCN.contextmenuitemgroup}">
 					<div class="${BDFDB.disCN.contextmenuitem} alldisabled-item ${BDFDB.disCN.contextmenuitemdisabled}">
-						<span>REPLACE_submenu_disabled_text</span>
+						<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_submenu_disabled_text</div></span>
 						<div class="${BDFDB.disCN.contextmenuhint}"></div>
 					</div>
 					${Object.keys(this.defaults.engines).map((key, i) => `<div engine="${key}" class="${BDFDB.disCN.contextmenuitem} RIS-item"><span>${this.defaults.engines[key].name}</span><div class="${BDFDB.disCN.contextmenuhint}"></div></div>`).join("")}

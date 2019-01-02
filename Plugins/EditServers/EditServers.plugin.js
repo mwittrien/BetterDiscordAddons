@@ -9,7 +9,7 @@ class EditServers {
 		this.serverContextEntryMarkup =
 			`<div class="${BDFDB.disCN.contextmenuitemgroup}">
 				<div class="${BDFDB.disCN.contextmenuitem} localserversettings-item ${BDFDB.disCN.contextmenuitemsubmenu}">
-					<span>REPLACE_context_localserversettings_text</span>
+					<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_context_localserversettings_text</div></span>
 					<div class="${BDFDB.disCN.contextmenuhint}"></div>
 				</div>
 			</div>`;
@@ -18,11 +18,11 @@ class EditServers {
 			`<div class="${BDFDB.disCN.contextmenu} editservers-submenu">
 				<div class="${BDFDB.disCN.contextmenuitemgroup}">
 					<div class="${BDFDB.disCN.contextmenuitem} serversettings-item">
-						<span>REPLACE_submenu_serversettings_text</span>
+						<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_submenu_serversettings_text</div></span>
 						<div class="${BDFDB.disCN.contextmenuhint}"></div>
 					</div>
 					<div class="${BDFDB.disCN.contextmenuitem} resetsettings-item ${BDFDB.disCN.contextmenuitemdisabled}">
-						<span>REPLACE_submenu_resetsettings_text</span>
+						<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_submenu_resetsettings_text</div></span>
 						<div class="${BDFDB.disCN.contextmenuhint}"></div>
 					</div>
 				</div>
