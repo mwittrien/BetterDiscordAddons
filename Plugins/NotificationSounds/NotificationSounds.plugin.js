@@ -2,6 +2,11 @@
 
 class NotificationSounds {
 	initConstructor () {
+		this.patchModules = {
+			"IncomingCalls":"componentDidMount",
+			"PrivateChannelCall":"componentDidMount"
+		};
+		
 		this.types = {
 			"message1":				{implemented:true,	name:"New Chatmessage",					src:"/assets/dd920c06a01e5bb8b09678581e29d56f.mp3",	mute:true},
 			"dm":					{implemented:true,	name:"Direct Message",					src:"/assets/84c9fa3d07da865278bd77c97d952db4.mp3",	mute:true},
@@ -85,15 +90,15 @@ class NotificationSounds {
 		this.choices = [];
 		
 		this.firedEvents = {};
-
-		this.hasPatchedOutgoing = false;
+		
+		this.callingModules = {};
 	}
 
 	getName () {return "NotificationSounds";}
 	
 	getDescription () {return "Allows you to replace the native sounds of Discord with your own";}
 
-	getVersion () {return "3.2.2";}
+	getVersion () {return "3.2.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -136,7 +141,27 @@ class NotificationSounds {
 			.on("click", BDFDB.dotCN.selectcontrol, (e) => {this.openDropdownMenu(settingspanel, e);})
 			.on("click", ".btn-addsong", (e) => {this.saveAudio(settingspanel);})
 			.on("keyup", ".songInput", (e) => {if (e.which == 13) this.saveAudio(settingspanel);})
-			.on("click", ".reset-button", () => {this.resetAll(settingspanel);})
+			.on("click", ".reset-button", () => {
+				if (confirm("Are you sure you want to delete all added songs?")) {
+					BDFDB.removeAllData(this, "choices");
+					BDFDB.removeAllData(this, "audios");
+					this.loadAudios();
+					this.loadChoices();
+					settingspanel.querySelectorAll(BDFDB.dotCN.select).forEach((wrap) => {
+						wrap.setAttribute("value", "---");
+						wrap.querySelector(BDFDB.dotCN.title).innerText = "---";
+					});
+					settingspanel.querySelectorAll(BDFDB.dotCN.slidergrabber).forEach((grabber) => {
+						grabber.style.left = "100%";
+					});
+					settingspanel.querySelectorAll(BDFDB.dotCN.sliderbarfill).forEach((bar) => {
+						bar.style.width = "100%";
+					});
+					settingspanel.querySelectorAll(".volumeInput").forEach((input) => {
+						input.value = 100;
+					});
+				}
+			})
 			.on("click", ".mute-checkbox", (e) => {
 				var checkbox = e.currentTarget;
 				var type = checkbox.parentElement.getAttribute("type");
@@ -189,6 +214,7 @@ class NotificationSounds {
 						for (let mention of message.mentions) if (mention.id == BDFDB.myData.id) {
 							this.fireEvent("mentioned");
 							this.playAudio("mentioned");
+							break;
 						}
 					}
 				}
@@ -198,74 +224,18 @@ class NotificationSounds {
 				setImmediate(() => {
 					var type = e.methodArguments[0];
 					if (type == "message1") {
-						if (this.firedEvents["dm"]) {
-							this.firedEvents["dm"] = false;
-						}
-						else if (this.firedEvents["mentioned"]) {
-							this.firedEvents["mentioned"] = false;
-						}
+						if (this.firedEvents["dm"]) this.firedEvents["dm"] = false;
+						else if (this.firedEvents["mentioned"]) this.firedEvents["mentioned"] = false;
 						else this.playAudio(type);
 					}
 					else this.playAudio(type);
 				});
 			}});
 			
-			var incomingCallAudio = new Audio();
-			this.incomingCallOwnerInstance = BDFDB.getOwnerInstance({"node":document.querySelector(BDFDB.dotCN.callcontainer), "props":["startRinging","stopRinging"], "up":true});
-			this.oldStartRining = this.incomingCallOwnerInstance.startRinging;
-			this.oldStopRining = this.incomingCallOwnerInstance.stopRinging;
-			this.incomingCallOwnerInstance.startRinging = () => {
-				incomingCallAudio.pause();
-				if (this.dontPlayAudio("call_ringing")) return;
-				incomingCallAudio.loop = true;
-				incomingCallAudio.src = this.choices["call_ringing"].src;
-				incomingCallAudio.volume = this.choices["call_ringing"].volume/100;
-				incomingCallAudio.play();
-			};
-			this.incomingCallOwnerInstance.stopRinging = () => {incomingCallAudio.pause();};
-			
 			this.loadAudios();
 			this.loadChoices();
 			
-			var observer = null;
-
-			observer = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								if (node.tagName && node.classList.contains(BDFDB.disCN.callcurrentcontainer)) {
-									if (!this.hasPatchedOutgoing) {
-										var outgoingCallAudio = new Audio();
-										var stopTimeout;
-										let play = () => {
-											if (!outgoingCallAudio.paused || this.dontPlayAudio("call_calling")) return;
-											outgoingCallAudio.loop = true;
-											outgoingCallAudio.src = this.choices["call_calling"].src;
-											outgoingCallAudio.volume = this.choices["call_calling"].volume/100;
-											outgoingCallAudio.play();
-										};
-
-										let stop = () => {outgoingCallAudio.pause();}
-
-										var outgoingCallOwnerInstance = BDFDB.getOwnerInstance({"node":node, "props":["startRinging"], "up":true});
-										outgoingCallOwnerInstance.stopRinging();
-										outgoingCallOwnerInstance.startRinging = play;
-										outgoingCallOwnerInstance.stopRinging = stop;
-
-										let CallingWrap = outgoingCallOwnerInstance._reactInternalFiber.type;
-										BDFDB.WebModules.patch(CallingWrap.prototype, "startRinging", this, {instead: play});
-										BDFDB.WebModules.patch(CallingWrap.prototype, "stopRinging", this, {instead: stop});
-
-										this.hasPatchedOutgoing = true;
-									}
-								}
-							});
-						}
-					}
-				);
-			});
-			BDFDB.addObserver(this, BDFDB.dotCNS.chat, {name:"chatObserver",instance:observer}, {childList:true});
+			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -275,43 +245,19 @@ class NotificationSounds {
 
 	stop () {
 		if (typeof BDFDB === "object") {
-			this.incomingCallOwnerInstance.startRinging = this.oldStartRining;
-			this.incomingCallOwnerInstance.stopRinging = this.oldStopRining;
+			for (let instancetype in this.callingModules) {
+				if (this.callingModules[instancetype] && this.callingModules[instancetype].instance) {
+					this.callingModules[instancetype].instance.startRinging = this.callingModules[instancetype].startRinging;
+					this.callingModules[instancetype].instance.stopRinging = this.callingModules[instancetype].stopRinging;
+				}
+			}
 			
 			BDFDB.unloadMessage(this);
 		}
 	}
 
-	onSwitch () {
-		if (typeof BDFDB === "object") {
-			if (!this.hasPatchedOutgoing) BDFDB.addObserver(this, BDFDB.dotCNS.chat, {name:"chatObserver"}, {childList:true});
-		}
-	}
-
 	
 	// begin of own functions
-	
-	resetAll (settingspanel) {
-		if (confirm("Are you sure you want to delete all added songs?")) {
-			BDFDB.removeAllData(this, "choices");
-			BDFDB.removeAllData(this, "audios");
-			this.loadAudios();
-			this.loadChoices();
-			settingspanel.querySelectorAll(BDFDB.dotCN.select).forEach((wrap) => {
-				wrap.setAttribute("value", "---");
-				wrap.querySelector(BDFDB.dotCN.title).innerText = "---";
-			});
-			settingspanel.querySelectorAll(BDFDB.dotCN.slidergrabber).forEach((grabber) => {
-				grabber.style.left = "100%";
-			});
-			settingspanel.querySelectorAll(BDFDB.dotCN.sliderbarfill).forEach((bar) => {
-				bar.style.width = "100%";
-			});
-			settingspanel.querySelectorAll(".volumeInput").forEach((input) => {
-				input.value = 100;
-			});
-		}
-	}
 	
 	openDropdownMenu (settingspanel, e) {
 		var selectControl = e.currentTarget;
@@ -507,5 +453,36 @@ class NotificationSounds {
 	fireEvent (type) {
 		this.firedEvents[type] = true;
 		setTimeout(() => {this.firedEvents[type] = false;},3000);
+	}
+	
+	patchCallingSound (instance, instancetype, type) {
+		this.callingModules[instancetype] = {
+			instance: instance,
+			startRinging: instance.startRinging,
+			stopRinging: instance.stopRinging,
+		};
+		let audio = new Audio();
+		let play = () => {
+			if (!audio.paused || this.dontPlayAudio(type)) return;
+			audio.loop = true;
+			audio.src = this.choices[type].src;
+			audio.volume = this.choices[type].volume/100;
+			audio.play();
+		};
+		let stop = () => {audio.pause();}
+		instance.stopRinging();
+		instance.startRinging = play;
+		instance.stopRinging = stop;
+		BDFDB.WebModules.patch(instance._reactInternalFiber.type.prototype, "startRinging", this, {instead: play});
+		BDFDB.WebModules.patch(instance._reactInternalFiber.type.prototype, "stopRinging", this, {instead: stop});
+		BDFDB.WebModules.unpatch(instance._reactInternalFiber.type.prototype, this.patchModules[instancetype], this);
+	}
+	
+	processIncomingCalls (instance, wrapper) {
+		this.patchCallingSound(instance, "IncomingCalls", "call_ringing");
+	}
+	 
+	processPrivateChannelCall (instance, wrapper) {
+		this.patchCallingSound(instance, "PrivateChannelCall", "call_calling");
 	}
 }
