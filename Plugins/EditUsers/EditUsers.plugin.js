@@ -2,7 +2,7 @@
 
 class EditUsers {
 	initConstructor () {
-		this.labels = {}; 
+		this.labels = {};
 		
 		this.patchModules = {
 			"ChannelTextArea":"componentDidMount",
@@ -680,9 +680,13 @@ class EditUsers {
 		let data = this.getUserData(info.id, avatar);
 		if (avatar.tagName == "IMG") avatar.setAttribute("src", data.removeIcon ? null : (data.url || BDFDB.getUserAvatar(info.id)));
 		else {
-			let url = data.removeIcon ? null : ("url(" + (data.url || BDFDB.getUserAvatar(info.id)) + ") center/cover");
+			let url = data.removeIcon ? null : ("url(" + (data.url || BDFDB.getUserAvatar(info.id)) + ")");
 			if (url && avatar.classList.contains(BDFDB.disCN.avatarmaskprofile) && url.search(/discordapp\.com\/avatars\/[0-9]*\/a_/) > -1) url = url.replace(".webp)", ".gif)");
-			avatar.style.setProperty("background", url);
+			avatar.style.setProperty("background-image", url);
+			if (data.url && !data.removeIcon) {
+				avatar.style.setProperty("background-position", "center");
+				avatar.style.setProperty("background-size", "cover");
+			}
 		}
 		if (data.url || data.removeIcon) {
 			avatar.EditUsersChangeObserver = new MutationObserver((changes, _) => {
