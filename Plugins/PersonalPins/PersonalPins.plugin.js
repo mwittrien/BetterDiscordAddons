@@ -155,7 +155,7 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.6.7";}
+	getVersion () {return "1.6.8";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -249,11 +249,10 @@ class PersonalPins {
 		if (instance.props && instance.props.message && instance.props.channel && instance.props.target && !menu.querySelector(".personalpin-item")) {
 			let pininstance = BDFDB.getOwnerInstance({node:menu,name:"MessagePinItem"});
 			if (pininstance && pininstance._reactInternalFiber && pininstance._reactInternalFiber.return && pininstance._reactInternalFiber.return.stateNode) {
-				let pins = BDFDB.loadAllData(this, "pins");
 				let channel = instance.props.channel;
 				let {messagediv, pos} = this.getMessageAndPos(instance.props.target);
 				if (!messagediv || pos == -1) return;
-				if (pins[channel.guild_id] && pins[channel.guild_id][channel.id] && pins[channel.guild_id][channel.id][instance.props.message.id + "_" + pos]) {
+				if (this.getNoteData(instance.props.message, instance.props.channel, pos)) {
 					$(this.messageUnpinContextEntryMarkup).insertAfter(pininstance._reactInternalFiber.return.stateNode)
 						.on("click", ".personalpin-unpin-item", () => {
 							instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
@@ -291,7 +290,7 @@ class PersonalPins {
 			});
 	}
 	
-	processMessage (instance, wrapper) {
+	processMessage (instance, wrapper) {  
 		if (instance.props && typeof instance.props.renderButtons == "function" && !wrapper.querySelector(BDFDB.dotCN.optionpopoutbutton)) {
 			let buttonwrap = wrapper.querySelector(BDFDB.dotCN.messagebuttoncontainer);
 			if (buttonwrap) {
@@ -304,10 +303,9 @@ class PersonalPins {
 	processMessageOptionPopout (instance, wrapper) {
 		if (instance.props.message && instance.props.target && instance.props.channel && !wrapper.querySelector(".personalpin-itembtn")) {
 			let pins = BDFDB.loadAllData(this, "pins");
-			let channel = instance.props.channel;
 			let {messagediv, pos} = this.getMessageAndPos(instance.props.target);
 			if (!messagediv || pos == -1) return;
-			if (pins[channel.guild_id] && pins[channel.guild_id][channel.id] && pins[channel.guild_id][channel.id][instance.props.message.id + "_" + pos]) {
+			if (this.getNoteData(instance.props.message, instance.props.channel, pos)) {
 				$(this.popoutUnpinEntryMarkup)
 					.on("click." + this.getName(), () => {
 						this.removeNoteData(instance.props.message, instance.props.channel, pos);
@@ -583,13 +581,20 @@ class PersonalPins {
 		}
 	}
 	
+	getNoteData (message, channel, pos) {
+		let pins = BDFDB.loadAllData(this, "pins");
+		let guildid = channel.guild_id ? channel.guild_id : "@me";
+		return pins[guildid] && pins[guildid][channel.id] && pins[guildid][channel.id][message.id + "_" + pos] ? pins[guildid][channel.id][message.id + "_" + pos] : null;
+	}
+	
 	removeNoteData (message, channel, pos) {
 		if (!message || !channel) return;
 		let pins = BDFDB.loadAllData(this, "pins");
-		delete pins[channel.guild_id][channel.id][message.id + "_" + pos];
-		if (BDFDB.isObjectEmpty(pins[channel.guild_id][channel.id])) {
-			delete pins[channel.guild_id][channel.id];
-			if (BDFDB.isObjectEmpty(pins[channel.guild_id])) delete pins[channel.guild_id];
+		let guildid = channel.guild_id ? channel.guild_id : "@me";
+		delete pins[guildid][channel.id][message.id + "_" + pos];
+		if (BDFDB.isObjectEmpty(pins[guildid][channel.id])) {
+			delete pins[guildid][channel.id];
+			if (BDFDB.isObjectEmpty(pins[guildid])) delete pins[guildid];
 		}
 		BDFDB.saveAllData(pins, this, "pins");
 		BDFDB.showToast(this.labels.toast_noteremove_text, {type:"danger"});
