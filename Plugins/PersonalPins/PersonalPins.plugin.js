@@ -1,16 +1,13 @@
 //META{"name":"PersonalPins"}*//
 
 class PersonalPins {
-	initConstructor () {//META{"name":"PersonalPins"}*//
-
-class PersonalPins {
 	initConstructor () {
 		this.labels = {};
 		
 		this.patchModules = {
 			"HeaderBar":["componentDidMount","componentDidUpdate"],
 			"Message":"componentDidMount",
-			"MessageOptionPopout":"componentDidMount"
+			"MessageOptionPopout":"componentDidMount" 
 		};
 		
 		this.notesButton =
@@ -155,7 +152,7 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.6.9";}
+	getVersion () {return "1.7.0";}
 
 	getAuthor () {return "DevilBro";}
 	
