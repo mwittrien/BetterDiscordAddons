@@ -2,6 +2,14 @@
 
 class RemoveNicknames {
 	initConstructor () {
+		this.patchModules = {
+			"NameTag":"componentDidMount",
+			"FluxContainer(TypingUsers)":"componentDidUpdate",
+			"Popout":"componentDidMount",
+			"Clickable":"componentDidMount",
+			"StandardSidebarView":"componentWillUnmount"
+		};
+		
 		this.defaults = {
 			settings: {
 				replaceOwn:		{value:false, 	description:"Replace your own name:"},
@@ -15,7 +23,7 @@ class RemoveNicknames {
 
 	getDescription () {return "Replace all nicknames with the actual accountnames.";}
 
-	getVersion () {return "1.1.1";}
+	getVersion () {return "1.1.2";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -59,73 +67,14 @@ class RemoveNicknames {
 		if (typeof BDFDB === "object") {
 			BDFDB.loadMessage(this);
 			
+			this.reseting = false;
+			
 			this.UserStore = BDFDB.WebModules.findByProperties("getUsers", "getUser");
-			this.MemberPerms = BDFDB.WebModules.findByProperties("getNicknames", "getNick");
+			this.LastGuildStore = BDFDB.WebModules.findByProperties("getLastSelectedGuildId");
+			this.LastChannelStore = BDFDB.WebModules.findByProperties("getLastSelectedChannelId");
+			this.MemberStore = BDFDB.WebModules.findByProperties("getNicknames", "getNick");
 			
-			var observer = null;
-
-			observer = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(BDFDB.dotCN.voiceuserdefault)) {
-									this.loadUser(node.querySelector(BDFDB.dotCN.voiceuserdefault).parentElement, "voice", false);
-								}
-							});
-						}
-					}
-				);
-			});
-			BDFDB.addObserver(this, BDFDB.dotCN.channels, {name:"channelListObserver",instance:observer}, {childList: true, subtree: true});
-			
-			observer = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(BDFDB.dotCN.memberusername)) {
-									this.loadUser(node, "list", false);
-								}
-							});
-						}
-					}
-				);
-			});
-			BDFDB.addObserver(this, BDFDB.dotCN.members, {name:"userListObserver",instance:observer}, {childList:true});
-			
-			observer = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(BDFDB.dotCN.messageusername)) {
-									this.loadUser(node, "chat", BDFDB.getDiscordTheme() == "compact");
-								}
-							});
-						}
-					}
-				);
-			});
-			BDFDB.addObserver(this, BDFDB.dotCN.messages, {name:"chatWindowObserver",instance:observer}, {childList:true, subtree:true});
-			
-			observer = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.removedNodes) {
-							change.removedNodes.forEach((node) => {
-								if (node && node.tagName && node.getAttribute("layer-id") == "user-settings") {
-									this.resetAllUsers();
-									this.loadAllUsers();
-								}
-							});
-						}
-					}
-				);
-			});
-			BDFDB.addObserver(this, BDFDB.dotCN.layers, {name:"settingsWindowObserver",instance:observer}, {childList:true});
-			
-			this.loadAllUsers();
+			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -135,17 +84,11 @@ class RemoveNicknames {
 
 	stop () {
 		if (typeof BDFDB === "object") {
-			this.resetAllUsers();
+			this.reseting = true;
+			
+			BDFDB.WebModules.forceAllUpdates(this);
 			
 			BDFDB.unloadMessage(this);
-		}
-	}
-	
-	onSwitch () {
-		if (typeof BDFDB === "object") {
-			BDFDB.addObserver(this, BDFDB.dotCN.members, {name:"userListObserver"}, {childList:true});
-			BDFDB.addObserver(this, BDFDB.dotCN.messages, {name:"chatWindowObserver"}, {childList:true, subtree:true});
-			setImmediate(() => {this.loadAllUsers();});
 		}
 	}
 
@@ -157,90 +100,75 @@ class RemoveNicknames {
 		for (var input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner)) {
 			settings[input.value] = input.checked;
 		}
+		this.updateUsers = true;
 		BDFDB.saveAllData(settings, this, "settings");
 	}
-
-	loadAllUsers () {
-		for (let user of document.querySelectorAll(BDFDB.dotCN.member)) {
-			this.loadUser(user, "list", false);
-		}
-		for (let messagegroup of document.querySelectorAll(BDFDB.dotCN.messagegroupcozy)) {
-			this.loadUser(messagegroup, "chat", false);
-		}
-		for (let messagegroup of document.querySelectorAll(BDFDB.dotCN.messagegroupcompact)) {
-			for (let message of messagegroup.querySelectorAll(BDFDB.dotCN.messagemarkup)) {
-				this.loadUser(message, "chat", true);
-			}
-		}
-		for (let user of document.querySelectorAll(BDFDB.dotCN.voiceuserdefault)) {
-			this.loadUser(user.parentElement, "voice", false);
+	
+	getNewName (info) {
+		if (!info) return null;
+		let EditUsersData = BDFDB.isPluginEnabled("EditUsers") ? BDFDB.loadData(info.id, "EditUsers", "users") : null;
+		if (EditUsersData && EditUsersData.name) return EditUsersData.name;
+		let settings = BDFDB.getAllData(this, "settings");
+		let member = this.MemberStore.getMember(this.LastGuildStore.getGuildId(), info.id);
+		if (!member || !member.nick || info.id == BDFDB.myData.id && !settings.replaceOwn) return info.username;
+		if (this.reseting) return member.nick || info.username;
+		return settings.addNickname ? (settings.swapPositions ? (member.nick + " (" + info.username + ")") : (info.username + " (" + member.nick + ")")) : info.username;
+	}
+	
+	processNameTag (instance, wrapper) {
+		let username = wrapper.parentElement.querySelector("." + (wrapper.classList && wrapper.classList.contains(BDFDB.disCN.userpopoutheadertagwithnickname) ? BDFDB.disCN.userpopoutheadernickname : instance.props.usernameClass).replace(/ /g, "."));
+		if (username) BDFDB.setInnerText(username, this.getNewName(instance.props.user));
+	}
+	
+	processPopout (instance, wrapper) {
+		let fiber = instance._reactInternalFiber;
+		if (fiber.return && fiber.return.memoizedProps && fiber.return.memoizedProps.message) {
+			let username = wrapper.querySelector(BDFDB.dotCN.messageusername);
+			if (username) BDFDB.setInnerText(username, this.getNewName(fiber.return.memoizedProps.message.author));
 		}
 	}
 	
-	loadUser (div, type, compact) {
-		if (!div || $(div).attr("removed-nickname") || !div.tagName) return;
-		
-		let usernameWrapper = this.getNameWrapper(div);
-		if (!usernameWrapper) return;
-		
-		$(div).data("compact", compact);
-		
-		var info = this.getUserInfo(compact ? $(BDFDB.dotCN.messagegroup).has(div)[0] : div);
-		if (!info) return;
-		
-		var settings = BDFDB.getAllData(this, "settings");
-		if (info.id == BDFDB.myData.id && !settings.replaceOwn) return;
-		
-		var serverObj = BDFDB.getSelectedServer();
-		if (!serverObj) return;
-		
-		var member = this.MemberPerms.getMember(serverObj.id, info.id);
-		if (!member || !member.nick) return;
-		
-		var newname = settings.addNickname ? (settings.swapPositions ? (member.nick + " (" + info.username + ")") : (info.username + " (" + member.nick + ")")) : info.username;
-		BDFDB.setInnerText(usernameWrapper, newname);
-			
-		div.setAttribute("removed-nickname", true);
-	}
-	
-	resetAllUsers () {
-		document.querySelectorAll("[removed-nickname]").forEach((div) => {
-			let usernameWrapper = this.getNameWrapper(div);
-			if (!usernameWrapper) return;
-			
-			var info = this.getUserInfo($(div).data("compact") ? $(BDFDB.dotCN.messagegroup).has(div)[0] : div);
-			if (!info) return;
-			
-			var serverObj = BDFDB.getSelectedServer();
-			if (!serverObj) return;
-			
-			var member = this.MemberPerms.getMember(serverObj.id, info.id);
-			if (!member || !member.nick) return;
-			
-			BDFDB.setInnerText(usernameWrapper, member.nick);
-				
-			div.removeAttribute("removed-nickname");
+	processFluxContainerTypingUsers (instance) {
+		let users = !instance.state.typingUsers ? [] : Object.keys(instance.state.typingUsers).filter(id => id != BDFDB.myData.id).filter(id => !this.RelationshipUtils.isBlocked(id)).map(id => this.UserUtils.getUser(id)).filter(id => id != null);
+		document.querySelectorAll(BDFDB.dotCNS.typing + "strong").forEach((username, i) => {
+			if (users[i]) if (username) BDFDB.setInnerText(username, this.getNewName(users[i]));
 		});
 	}
 	
-	getNameWrapper (div) {		
-		return div.querySelector(BDFDB.dotCNC.memberusername + BDFDB.dotCNC.voicenamedefault + BDFDB.dotCN.messageusername);
-	}
-	
-	getUserInfo (div) {
-		var info = BDFDB.getKeyInformation({"node":div,"key":"user"});
-		if (!info) {
-			info = BDFDB.getKeyInformation({"node":div,"key":"message"});
-			if (info) info = info.author;
-			else {
-				info = BDFDB.getKeyInformation({"node":div,"key":"channel"});
-				if (info) info = {"id":info.recipients[0]};
-				else {
-					info = BDFDB.getKeyInformation({"node":$(BDFDB.dotCN.messagegroup).has(div)[0],"key":"message"});
-					if (info) info = info.author;
-				}
+	processClickable (instance, wrapper) {
+		if (!wrapper || !instance.props || !instance.props.className) return;
+		if (instance.props.tag == "a" && instance.props.className.indexOf(BDFDB.disCN.anchorunderlineonhover) > -1) {
+			if (wrapper.parentElement.classList.contains(BDFDB.disCN.messagesystemcontent)) {
+				let message = BDFDB.getKeyInformation({node:wrapper.parentElement, key:"message", up:true});
+				if (message) BDFDB.setInnerText(wrapper, this.getNewName(message.author));
 			}
 		}
-		return info && info.id ? this.UserStore.getUser(info.id) : null;
+		else if (instance.props.tag == "span" && instance.props.className.indexOf(BDFDB.disCN.mention) > -1) {
+			let fiber = instance._reactInternalFiber;
+			if (fiber.return && fiber.return.return && fiber.return.return.stateNode && fiber.return.return.stateNode.props && typeof fiber.return.return.stateNode.props.render == "function") {
+				if (wrapper) BDFDB.setInnerText(wrapper, "@" + this.getNewName(fiber.return.return.stateNode.props.render().props.user));
+			}
+		}
+		else if (instance.props.tag == "div" && instance.props.className.indexOf(BDFDB.disCN.voiceuser) > -1) {
+			let fiber = instance._reactInternalFiber;
+			if (fiber.return && fiber.return.memoizedProps && fiber.return.memoizedProps.user) {
+				let username = wrapper.querySelector(BDFDB.dotCN.voicename);
+				if (username) BDFDB.setInnerText(username, this.getNewName(fiber.return.memoizedProps.user));
+			}
+		}
+		else if (instance.props.tag == "div" && instance.props.className.indexOf(BDFDB.disCN.autocompleterow) > -1) {
+			let fiber = instance._reactInternalFiber;
+			if (fiber.return && fiber.return.memoizedProps && fiber.return.memoizedProps.user) {
+				let username = wrapper.querySelector(BDFDB.dotCN.marginleft8);
+				if (username) BDFDB.setInnerText(username, this.getNewName(fiber.return.memoizedProps.user));
+			}
+		}
+	}
+	
+	processStandardSidebarView (instance, wrapper) {
+		if (this.updateUsers) {
+			this.updateUsers = false;
+			BDFDB.WebModules.forceAllUpdates(this);
+		}
 	}
 }

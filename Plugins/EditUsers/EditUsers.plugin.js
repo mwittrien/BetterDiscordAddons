@@ -289,7 +289,7 @@ class EditUsers {
 	onUserContextMenu (instance, menu) {
 		if (instance.props && instance.props.user && !menu.querySelector(".localusersettings-item")) {
 			$(menu).append(this.userContextEntryMarkup)
-				.on("mouseenter", ".localusersettings-item", (e) => {
+				.on("mouseenter." + this.getName(), ".localusersettings-item", (e) => {
 					var userContextSubMenu = $(this.userContextSubMenuMarkup);
 					userContextSubMenu
 						.on("click", ".usersettings-item", () => {
@@ -734,7 +734,8 @@ class EditUsers {
 		let data = this.getUserData(info.id, mention);
 		let member = this.MemberUtils.getMember(this.LastGuildStore.getGuildId(), info.id) || {};
 		let color1 = BDFDB.colorCONVERT(data.color1 || (BDFDB.isPluginEnabled("BetterRoleColors") ? member.colorString : null), "RGBCOMP");
-		BDFDB.setInnerText(mention, "@" + (data.name || member.nick || info.username));
+		let name = BDFDB.isPluginEnabled("RemoveNicknames") ? bdplugins.RemoveNicknames.plugin.getNewName(info) : data.name || member.nick || info.username;
+		BDFDB.setInnerText(mention, "@" + name);
 		if (mention.EditUsersHovered) colorHover();
 		else colorDefault();
 		$(mention)
