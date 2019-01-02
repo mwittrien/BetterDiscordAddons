@@ -1,6 +1,9 @@
 //META{"name":"PersonalPins"}*//
 
 class PersonalPins {
+	initConstructor () {//META{"name":"PersonalPins"}*//
+
+class PersonalPins {
 	initConstructor () {
 		this.labels = {};
 		
@@ -152,7 +155,7 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.6.8";}
+	getVersion () {return "1.6.9";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -292,8 +295,8 @@ class PersonalPins {
 	}
 	
 	processMessageOptionPopout (instance, wrapper) {
-		if (instance.props.message && instance.props.target && instance.props.channel && !wrapper.querySelector(".personalpins-itembtn")) {
-			let {messagediv, pos} = this.getMessageAndPos(instance.props.target);
+		if (instance.props.message && instance.props.channel && instance._reactInternalFiber.memoizedProps.target && !wrapper.querySelector(".personalpins-itembtn")) {
+			let {messagediv, pos} = this.getMessageAndPos(instance._reactInternalFiber.memoizedProps.target);
 			if (!messagediv || pos == -1) return;
 			if (this.getNoteData(instance.props.message, instance.props.channel, pos)) {
 				$(this.popoutUnpinEntryMarkup)
@@ -306,7 +309,7 @@ class PersonalPins {
 			else {
 				$(this.popoutPinEntryMarkup)
 					.on("click." + this.getName(), () => {
-						this.addMessageToNotes(instance.props.message, instance.props.target, instance.props.channel);
+						this.addMessageToNotes(instance.props.message, instance._reactInternalFiber.memoizedProps.target, instance.props.channel);
 						instance.props.onClose();
 					})
 					.appendTo(wrapper);
