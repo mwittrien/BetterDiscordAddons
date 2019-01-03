@@ -47,7 +47,7 @@ class GoogleSearchReplace {
 
 	getDescription () {return "Replaces the default Google Text Search with a selection menu of several search engines.";}
 
-	getVersion () {return "1.1.5";}
+	getVersion () {return "1.1.6";}
 	
 	getAuthor () {return "DevilBro";}
 
@@ -121,35 +121,48 @@ class GoogleSearchReplace {
 		this.messageContextSubMenuMarkup = 	this.messageContextSubMenuMarkup.replace("REPLACE_submenu_disabled_text", this.labels.submenu_disabled_text);
 	}
 	
+	onNativeContextMenu (instance, menu) {
+		if (instance.props && instance.props.type == "NATIVE_TEXT" && instance.props.value && !menu.querySelector(".reverseimagesearch-item")) {
+			let searchinstance = BDFDB.getOwnerInstance({node:menu,props:["handleSearchWithGoogle"]});
+			if (searchinstance && searchinstance._reactInternalFiber && searchinstance._reactInternalFiber.return && searchinstance._reactInternalFiber.return.stateNode) {
+				this.appendItem(instance, searchinstance._reactInternalFiber.return.stateNode, instance.props.value);
+			}
+		}
+	}
+	
 	onMessageContextMenu (instance, menu) {
 		if (instance.props && instance.props.message && instance.props.channel && instance.props.target && !menu.querySelector(".googlereplacesearch-item")) {
 			let text = document.getSelection().toString();
 			let searchinstance = BDFDB.getOwnerInstance({node:menu,props:["handleSearchWithGoogle"]});
 			if (text && searchinstance && searchinstance._reactInternalFiber && searchinstance._reactInternalFiber.return && searchinstance._reactInternalFiber.return.stateNode) {
-				$(this.messageContextEntryMarkup).appendTo(searchinstance._reactInternalFiber.return.stateNode)
-					.on("mouseenter", (e) => {
-						let messageContextSubMenu = $(this.messageContextSubMenuMarkup)[0];
-						let engines = BDFDB.getAllData(this, "engines");
-						$(messageContextSubMenu)
-							.on("click", ".GRS-item", (e2) => {
-								instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
-								let engine = e2.currentTarget.getAttribute("engine");
-								if (engine == "_all") {
-									for (let key in engines) {
-										if (key != "_all" && engines[key]) {
-											window.open(this.defaults.engines[key].url.replace(this.textUrlReplaceString, encodeURIComponent(text)), "_blank");
-										}
-									}
-								}
-								else window.open(this.defaults.engines[engine].url.replace(this.textUrlReplaceString, encodeURIComponent(text)), "_blank");
-							});
-						for (let key in engines) if (!engines[key]) BDFDB.removeEles(messageContextSubMenu.querySelector("[engine='" + key + "']"));
-						if (messageContextSubMenu.querySelector(".GRS-item")) BDFDB.removeEles(messageContextSubMenu.querySelector(".alldisabled-item"));
-						BDFDB.appendSubMenu(e.currentTarget, messageContextSubMenu);
-					});
-				searchinstance._reactInternalFiber.return.stateNode.firstElementChild.style.setProperty("display", "none", "important");
+				this.appendItem(instance, searchinstance._reactInternalFiber.return.stateNode, text);
 			}
 		}
+	}
+	
+	appendItem (instance, target, text) {
+		$(this.messageContextEntryMarkup).appendTo(target)
+			.on("mouseenter", (e) => {
+				let messageContextSubMenu = $(this.messageContextSubMenuMarkup)[0];
+				let engines = BDFDB.getAllData(this, "engines");
+				$(messageContextSubMenu)
+					.on("click", ".GRS-item", (e2) => {
+						instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
+						let engine = e2.currentTarget.getAttribute("engine");
+						if (engine == "_all") {
+							for (let key in engines) {
+								if (key != "_all" && engines[key]) {
+									window.open(this.defaults.engines[key].url.replace(this.textUrlReplaceString, encodeURIComponent(text)), "_blank");
+								}
+							}
+						}
+						else window.open(this.defaults.engines[engine].url.replace(this.textUrlReplaceString, encodeURIComponent(text)), "_blank");
+					});
+				for (let key in engines) if (!engines[key]) BDFDB.removeEles(messageContextSubMenu.querySelector("[engine='" + key + "']"));
+				if (messageContextSubMenu.querySelector(".GRS-item")) BDFDB.removeEles(messageContextSubMenu.querySelector(".alldisabled-item"));
+				BDFDB.appendSubMenu(e.currentTarget, messageContextSubMenu);
+			});
+		target.firstElementChild.style.setProperty("display", "none", "important");
 	}
 	
 	setLabelsByLanguage () {

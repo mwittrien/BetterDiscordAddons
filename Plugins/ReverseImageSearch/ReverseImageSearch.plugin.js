@@ -30,13 +30,13 @@ class ReverseImageSearch {
 			
 			
 		this.messageContextSubMenuMarkup = 
-			`<div class="${BDFDB.disCN.contextmenu} reverseImageSearchSubMenu">
+			`<div class="${BDFDB.disCN.contextmenu} reverseimagesearch-submenu">
 				<div class="${BDFDB.disCN.contextmenuitemgroup}">
 					<div class="${BDFDB.disCN.contextmenuitem} alldisabled-item ${BDFDB.disCN.contextmenuitemdisabled}">
 						<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_submenu_disabled_text</div></span>
 						<div class="${BDFDB.disCN.contextmenuhint}"></div>
 					</div>
-					${Object.keys(this.defaults.engines).map((key, i) => `<div engine="${key}" class="${BDFDB.disCN.contextmenuitem} RIS-item"><span>${this.defaults.engines[key].name}</span><div class="${BDFDB.disCN.contextmenuhint}"></div></div>`).join("")}
+					${Object.keys(this.defaults.engines).map((key, i) => `<div engine="${key}" class="${BDFDB.disCN.contextmenuitem} RIS-item"><span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">${this.defaults.engines[key].name}</div></span><div class="${BDFDB.disCN.contextmenuhint}"></div></div>`).join("")}
 				</div>
 			</div>`;
 	}
@@ -45,14 +45,14 @@ class ReverseImageSearch {
 
 	getDescription () {return "Adds a reverse image search option to the context menu.";}
 
-	getVersion () {return "3.3.9";}
+	getVersion () {return "3.4.0";}
 	
 	getAuthor () {return "DevilBro";}
 
 	getSettingsPanel () {
 		if (!this.started || typeof BDFDB !== "object") return;
-		var engines = BDFDB.getAllData(this, "engines");
-		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.getName()}</div><div class="DevilBro-settings-inner">`;
+		let engines = BDFDB.getAllData(this, "engines");
+		let settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">Search Engines:</h3></div><div class="DevilBro-settings-inner-list">`;
 		for (let key in engines) {
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.engines[key].name}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}"${engines[key] ? " checked" : ""}></div></div>`;
@@ -60,7 +60,7 @@ class ReverseImageSearch {
 		settingshtml += `</div>`;
 		settingshtml += `</div></div>`;
 		
-		var settingspanel = $(settingshtml)[0];
+		let settingspanel = $(settingshtml)[0];
 
 		BDFDB.initElements(settingspanel);
 
@@ -74,7 +74,7 @@ class ReverseImageSearch {
 	load () {}
 
 	start () {
-		var libraryScript = null;
+		let libraryScript = null;
 		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
 			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 			if (libraryScript) libraryScript.remove();
@@ -91,23 +91,6 @@ class ReverseImageSearch {
 	initialize () {
 		if (typeof BDFDB === "object") {
 			BDFDB.loadMessage(this);
-			
-			var observer = null;
-
-			observer = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								if (node.nodeType == 1 && node.className.includes(BDFDB.disCN.contextmenu)) {
-									this.onContextMenu(node);
-								}
-							});
-						}
-					}
-				);
-			});
-			BDFDB.addObserver(this, BDFDB.dotCN.appmount, {name:"messageContextObserver",instance:observer}, {childList: true});
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -128,64 +111,68 @@ class ReverseImageSearch {
 	}
 	
 	updateSettings (settingspanel) {
-		var settings = {};
-		for (var input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner)) {
+		let settings = {};
+		for (let input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner)) {
 			settings[input.value] = input.checked;
 		}
 		BDFDB.saveAllData(settings, this, "engines");
 	}
 	
-	onContextMenu (context) {
-		if (!context || !context.tagName || !context.parentElement || context.querySelector(".reverseimagesearch-item")) return;
-		var url = BDFDB.getKeyInformation({"node":context, "key":"src"});
-		if (url) {
-			if (url.indexOf("discordapp.com/assets/") == -1) {
-				if (url.indexOf("https://images-ext-1.discordapp.net/external/") > -1) {
-					if (url.split("/https/").length != 1) {
-						url = "https://" + url.split("/https/")[url.split("/https/").length-1];
+	onNativeContextMenu (instance, menu) {
+		if (instance.props && instance.props.type == "NATIVE_IMAGE" && instance.props.href && !menu.querySelector(".reverseimagesearch-item")) {
+			this.appendItem(instance, menu, instance.props.href);
+		}
+	}
+	
+	onMessageContextMenu (instance, menu) {
+		if (instance.props && instance.props.message && instance.props.channel && instance.props.target && !menu.querySelector(".reverseimagesearch-item")) {
+			if (instance.props.attachment) {
+				this.appendItem(instance, menu, instance.props.attachment.url);
+			}
+			if (instance.props.target.tagName == "A") {
+				menu.style.setProperty("display","none","important");
+				require("request")(instance.props.target.href, (error, response, result) => {
+					if (response && response.headers["content-type"] && response.headers["content-type"].indexOf("image") != -1) {
+						this.appendItem(instance, menu, instance.props.target.href);
 					}
-					else if (url.split("/http/").length != 1) {
-						url = "http://" + url.split("/http/")[url.split("/http/").length-1];
-					}
-				}
-					
-				$(context).append(this.messageContextEntryMarkup)
-					.on("mouseenter", ".reverseimagesearch-item", (e) => {
-						this.createContextSubMenu(url, e, context);
-					});
-				
-				BDFDB.updateContextPosition(context);
+					menu.style.removeProperty("display");
+					BDFDB.updateContextPosition(menu);
+				});
 			}
 		}
 	}
 	
-	createContextSubMenu (imageurl, e, context) {
-		var messageContextSubMenu = $(this.messageContextSubMenuMarkup);
-		
-		messageContextSubMenu
-			.on("click", ".RIS-item", (e2) => {
-				$(context).hide();
-				var engine = e2.currentTarget.getAttribute("engine");
-				if (engine == "_all") {
-					var engines = BDFDB.getAllData(this, "engines");
-					for (let key in engines) {
-						if (key != "_all" && engines[key]) window.open(this.defaults.engines[key].url.replace(this.imgUrlReplaceString, encodeURIComponent(imageurl)), "_blank");
-					}
+	appendItem (instance, menu, url) {
+		if (instance && menu && url) {
+			if (url.indexOf("discordapp.com/assets/") == -1) {
+				if (url.indexOf("https://images-ext-1.discordapp.net/external/") > -1) {
+					if (url.split("/https/").length != 1) url = "https://" + url.split("/https/")[url.split("/https/").length-1];
+					else if (url.split("/http/").length != 1) url = "http://" + url.split("/http/")[url.split("/http/").length-1];
 				}
-				else {
-					window.open(this.defaults.engines[engine].url.replace(this.imgUrlReplaceString, encodeURIComponent(imageurl)), "_blank");
-				}
-			});
-		
-		var engines = BDFDB.getAllData(this, "engines");
-		for (let key in engines) {
-			if (!engines[key]) messageContextSubMenu.find("[engine='" + key + "']").remove();
+				$(menu)
+					.append(this.messageContextEntryMarkup)
+					.on("mouseenter", ".reverseimagesearch-item", (e) => {
+						let messageContextSubMenu = $(this.messageContextSubMenuMarkup)[0];
+						let engines = BDFDB.getAllData(this, "engines");
+						$(messageContextSubMenu)
+							.on("click", ".RIS-item", (e2) => {
+								instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
+								let engine = e2.currentTarget.getAttribute("engine");
+								if (engine == "_all") {
+									for (let key in engines) {
+										if (key != "_all" && engines[key]) {
+											window.open(this.defaults.engines[key].url.replace(this.imgUrlReplaceString, encodeURIComponent(url)), "_blank");
+										}
+									}
+								}
+								else window.open(this.defaults.engines[engine].url.replace(this.imgUrlReplaceString, encodeURIComponent(url)), "_blank");
+							});
+						for (let key in engines) if (!engines[key]) BDFDB.removeEles(messageContextSubMenu.querySelector("[engine='" + key + "']"));
+						if (messageContextSubMenu.querySelector(".RIS-item")) BDFDB.removeEles(messageContextSubMenu.querySelector(".alldisabled-item"));
+						BDFDB.appendSubMenu(e.currentTarget, messageContextSubMenu);
+					});
+			}
 		}
-		if (messageContextSubMenu.find(".RIS-item").length > 0) {
-			messageContextSubMenu.find(".alldisabled-item").remove();
-		}
-		
-		BDFDB.appendSubMenu(e.currentTarget, messageContextSubMenu);
 	}
 	
 	setLabelsByLanguage () {
