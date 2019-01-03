@@ -4,54 +4,9 @@ class ServerHider {
 	initConstructor () {
 		this.labels = {};
 		
-		this.css = `
-			.${this.getName()}-modal .entry ${BDFDB.dotCN.guild} {
-				height: 50px;
-				position: relative;
-				width: 50px;
-				z-index: 1;
-			}
-			.${this.getName()}-modal .entry ${BDFDB.dotCN.guildinner} {
-				background: #2f3136;
-				border-radius: 25px !important;
-				cursor: pointer;
-				font-size: 18px;
-				line-height: 50px;
-				overflow: hidden;
-				text-align: center;
-			}
-			.${this.getName()}-modal .entry ${BDFDB.dotCNS.guild + BDFDB.dotCN.avatarsmallold} {
-				background-repeat: no-repeat;
-				background-size: 50px 50px;
-				border-radius: 0;
-				color: #fff;
-				display: block;
-				float: left;
-				margin: 0;
-				height: 50px;
-				width: 50px;
-			}
-			.${this.getName()}-modal .entry ${BDFDB.dotCNS.guild + BDFDB.dotCN.badge} {
-				background-clip: padding-box;
-				background-color: #f04747;
-				border-radius: 3px;
-				bottom: -2px;
-				box-shadow: 0 1px 0 rgba(0,0,0,.25), inset 0 1px 0 hsla(0,0%,100%,.15);
-				color: #fff;
-				display: inline-block;
-				font-size: 12px;
-				font-weight: 500;
-				line-height: 12px;
-				padding: 3px 6px;
-				pointer-events: none;
-				position: absolute;
-				right: -2px;
-				text-shadow: 0 1px 0 rgba(0,0,0,.25);
-			}
-			.${this.getName()}-modal .folderhideCheckboxWrapper {
-				right: 8px;
-			}`;
-		
+		this.patchModules = {
+			"Guild":"componentDidMount"
+		};
 			
 		this.serverHiderModalMarkup =
 			`<span class="${this.getName()}-modal DevilBro-modal">
@@ -71,19 +26,11 @@ class ServerHider {
 									</g>
 								</svg>
 							</div>
-							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCNS.modalsubinner + BDFDB.disCN.marginbottom8} folderhideSettings" style="flex: 0 0 auto;">
-								<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">
-									<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">REPLACE_modal_folderhide_text</h3>
-								</div>
-								<div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault} folderhideCheckboxWrapper" style="flex: 0 0 auto;">
-									<input type="checkbox" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} folderhideCheckbox">
-								</div>
-							</div>
 							<div class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.modalcontent + BDFDB.disCNS.scrollerthemed + BDFDB.disCN.themeghosthairline}">
 								<div class="${BDFDB.disCNS.scroller + BDFDB.disCN.modalsubinner} entries"></div>
 							</div>
 							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontalreverse + BDFDB.disCNS.horizontalreverse2 + BDFDB.disCNS.directionrowreverse + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.modalfooter}">
-								<button type="button" class="btn-save ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}">
+								<button type="button" class="btn-ok ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}">
 									<div class="${BDFDB.disCN.buttoncontents}">REPLACE_btn_ok_text</div>
 								</button>
 								<button type="button" class="btn-all ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlooklink + BDFDB.disCNS.buttoncolortransparent + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}">
@@ -132,22 +79,28 @@ class ServerHider {
 
 	getDescription () {return "Hide Servers in your Serverlist";}
 
-	getVersion () {return "2.6.0";}
+	getVersion () {return "2.6.2";}
 
 	getAuthor () {return "DevilBro";}
 	
 	getSettingsPanel () {
 		if (!this.started || typeof BDFDB !== "object") return;
-		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.getName()}</div><div class="DevilBro-settings-inner">`;
+		let settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Reset all Servers.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} reset-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Reset</div></button></div>`;
 		settingshtml += `</div></div>`;
 		
-		var settingspanel = $(settingshtml)[0];
+		let settingspanel = $(settingshtml)[0];
 
 		BDFDB.initElements(settingspanel);
 
 		$(settingspanel)
-			.on("click", ".reset-button", () => {this.resetAll();});
+			.on("click", ".reset-button", () => {
+				if (confirm("Are you sure you want to reset all servers?")) {
+					BDFDB.removeAllData(this, "servers");
+					BDFDB.readServerList().forEach(serverObj => {
+						if (!serverObj.div.getAttribute("folder")) $(serverObj.div).show();
+					});
+				}});
 		return settingspanel;
 	}
 
@@ -155,7 +108,7 @@ class ServerHider {
 	load () {}
 
 	start () {
-		var libraryScript = null;
+		let libraryScript = null;
 		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
 			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 			if (libraryScript) libraryScript.remove();
@@ -173,47 +126,7 @@ class ServerHider {
 		if (typeof BDFDB === "object") {
 			BDFDB.loadMessage(this);
 			
-			var observer = null;
-
-			observer = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								if (node.nodeType == 1 && node.className.includes(BDFDB.disCN.contextmenu)) {
-									this.onContextMenu(node);
-								}
-							});
-						}
-					}
-				);
-			});
-			BDFDB.addObserver(this, BDFDB.dotCN.appmount, {name:"serverContextObserver",instance:observer}, {childList: true});
-			
-			observer = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								if (node && node.classList && node.classList.contains(BDFDB.disCN.guild) && !node.querySelector(BDFDB.dotCN.guildserror)) {
-									var info = BDFDB.getKeyInformation({"node":node, "key":"guild"});
-									if (info) {
-										var data = BDFDB.loadData(info.id, this, "servers");
-										if (data) {
-											$(node).toggle(data.visible);
-										}
-									}
-								}
-							});
-						}
-					}
-				);
-			});
-			BDFDB.addObserver(this, BDFDB.dotCN.guilds, {name:"serverListObserver",instance:observer}, {childList: true});
-			
-			$(BDFDB.dotCN.guilds).on("mouseleave." + this.getName(), () => {this.updateAllServers(false);});
-			
-			this.updateAllServers(true);
+			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -233,15 +146,6 @@ class ServerHider {
 	
 	// begin of own functions
 
-	resetAll () {
-		if (confirm("Are you sure you want to reset all servers?")) {
-			BDFDB.removeAllData(this, "servers");
-			BDFDB.readServerList().forEach(serverObj => {
-				if (!serverObj.div.getAttribute("folder")) $(serverObj.div).show();
-			});
-		}
-	}
-
 	changeLanguageStrings () {
 		this.serverContextEntryMarkup = 	this.serverContextEntryMarkup.replace("REPLACE_context_serverhider_text", this.labels.context_serverhider_text);
 		
@@ -249,142 +153,95 @@ class ServerHider {
 		this.serverContextSubMenuMarkup = 	this.serverContextSubMenuMarkup.replace("REPLACE_submenu_openhidemenu_text", this.labels.submenu_openhidemenu_text);
 		
 		this.serverHiderModalMarkup = 		this.serverHiderModalMarkup.replace("REPLACE_modal_header_text", this.labels.modal_header_text);
-		this.serverHiderModalMarkup = 		this.serverHiderModalMarkup.replace("REPLACE_modal_folderhide_text", this.labels.modal_folderhide_text);
 		this.serverHiderModalMarkup = 		this.serverHiderModalMarkup.replace("REPLACE_btn_ok_text", this.labels.btn_ok_text);
 		this.serverHiderModalMarkup = 		this.serverHiderModalMarkup.replace("REPLACE_btn_all_text", this.labels.btn_all_text);
 		
 		this.serverEntryMarkup = 			this.serverEntryMarkup.replace("REPLACE_btn_visible_text", this.labels.btn_visible_text);
 	}
 	
-	onContextMenu (context) {
-		if (document.querySelector("." + this.getName() + "-modal") || !context || !context.tagName || !context.parentElement || context.querySelector(".serverhider-item")) return;
-		var info = BDFDB.getKeyInformation({"node":context, "key":"guild"});
-		var valid = false;
-		if (info && BDFDB.getKeyInformation({"node":context, "key":"displayName", "value":"GuildLeaveGroup"})) {
-			valid = true;
-		}
-		else if (BDFDB.getKeyInformation({"node":context, "key":"handleGuildCreate"})) {
-			info = {guildCreate:true};
-			valid = true;
-		}
-		if (valid) {
-			$(context).append(this.serverContextEntryMarkup)
+	onGuildContextMenu (instance, menu) {
+		if (document.querySelector("." + this.getName() + "-modal")) return;
+		if (instance.props && instance.props.target && instance.props.type.indexOf("GUILD_ICON_") == 0 && !menu.querySelector(".serverhider-item")) {
+			$(this.serverContextEntryMarkup).appendTo(menu)
 				.on("mouseenter", ".serverhider-item", (e) => {
-					this.createContextSubMenu(info, e, context);
-				});
-				
-			BDFDB.updateContextPosition(context);
-		}
-	}
-	
-	createContextSubMenu (info, e, context) {
-		var serverContextSubMenu = $(this.serverContextSubMenuMarkup);
-			
-		serverContextSubMenu
-			.on("click", ".openhidemenu-item", () => {
-				$(context).hide();
-				this.showServerModal();
-			});
-			
-		if (!info.guildCreate) {
-			serverContextSubMenu
-				.find(".hideserver-item")
-				.removeClass(BDFDB.disCN.contextmenuitemdisabled)
-				.on("click", () => {
-					$(context).hide();
-					this.hideServer(info);
+					let serverContextSubMenu = $(this.serverContextSubMenuMarkup);
+					serverContextSubMenu
+						.on("click", ".openhidemenu-item", () => {
+							instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
+							this.showServerModal();
+						});
+					if (instance.props.guild && !instance.props.target.getAttribute("folder")) {
+						serverContextSubMenu
+							.find(".hideserver-item")
+							.removeClass(BDFDB.disCN.contextmenuitemdisabled)
+							.on("click", () => {
+								instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
+								this.toggleServer(instance.props.guild, instance.props.target, false);
+							});
+					}
+					BDFDB.appendSubMenu(e.currentTarget, serverContextSubMenu);
 				});
 		}
-		
-		BDFDB.appendSubMenu(e.currentTarget, serverContextSubMenu);
-	}
-
-	hideServer (info) {
-		var serverObj = BDFDB.getDivOfServer(info.id);
-		
-		if (!serverObj) return;
-		
-		$(serverObj.div).hide();
-		
-		BDFDB.saveData(info.id, {visible:false}, this, "servers");
 	}
 	
 	showServerModal () {
-		var serverObjs = BDFDB.readServerList();
+		let serverObjs = BDFDB.readServerList();
 		
-		var serverHiderModal = $(this.serverHiderModalMarkup);
+		let serverHiderModal = $(this.serverHiderModalMarkup);
 		serverHiderModal
-			.on("click", ".folderhideCheckbox", (e) => {
-				serverHiderModal.find(".hidefolder").toggle(!$(e.target).prop("checked"));
-			})
 			.on("click", ".btn-all", () => {
-				var hideAll = $(serverObjs[0].div).is(":visible");
-				for (let serverObj of serverObjs) {
-					$(serverObj.div).toggle(!hideAll);
-					BDFDB.saveData(serverObj.id, {visible:!hideAll}, this, "servers");
-				}
-				$(".serverhiderCheckbox").each((_, checkBox) => {if ($(checkBox).prop("checked") == hideAll) checkBox.click();});
+				$(".serverhiderCheckbox").each((_, checkBox) => {if (checkBox.checked == $(".serverhiderCheckbox")[0].checked) checkBox.click();});
 			});
-			
-		if (!BDFDB.isPluginEnabled("ServerFolders")) serverHiderModal.find(".folderhideSettings").hide();
 		
 		for (let serverObj of serverObjs) {
-			
-			let badge = serverObj.div.querySelector(BDFDB.dotCN.badge);
-			
-			let entry = $(this.serverEntryMarkup);
-			let divider = $(this.dividerMarkup);
-			let isHiddenByFolder = $(serverObj.div).attr("folder") ? true : false;
-			entry.toggleClass("hidefolder", isHiddenByFolder);
-			divider.toggleClass("hidefolder", isHiddenByFolder);
-			serverHiderModal.find(".entries").append(entry).append(divider);
-			entry.find(".serverhiderName")
-				.before(this.createCopyOfServer(serverObj))
-				.text(serverObj.name);
-			entry.find(".serverhiderCheckbox")
-				.prop("checked", $(serverObj.div).is(":visible"))
-				.on("click", (event) => {
-					var visible = $(event.target).prop("checked");
-					$(serverObj.div).toggle(visible);
-					BDFDB.saveData(serverObj.id, {visible:visible}, this, "servers");
-				});
+			if (!serverObj.div.getAttribute("folder")) {
+				let entry = $(this.serverEntryMarkup);
+				let divider = $(this.dividerMarkup);
+				serverHiderModal.find(".entries").append(entry).append(divider);
+				entry.find(".serverhiderName")
+					.before(this.createCopyOfServer(serverObj))
+					.text(serverObj.name);
+				entry.find(".serverhiderCheckbox")
+					.prop("checked", $(serverObj.div).is(":visible"))
+					.on("click", (e) => {
+						this.toggleServer(serverObj, serverObj.div, e.currentTarget.checked);
+					});
+			}
 		}
+		BDFDB.removeEles("." + this.getName() + "-modal " + BDFDB.dotCN.modaldivider + ":last-of-type");
 		BDFDB.appendModal(serverHiderModal);
 	}
 	
 	createCopyOfServer (serverObj) {
-		var serverDiv = serverObj.div;
-		var serverCopy = serverDiv.cloneNode(true);
+		let serverCopy = serverObj.div.cloneNode(true);
+		serverCopy.style.removeProperty("display");
 		$(serverCopy)
-			.css("display", "")
+			.removeClass(BDFDB.disCN.guildunread)
+			.removeClass(BDFDB.disCN.guildselected)
 			.on("click." + this.getName(), (e) => {
 				e.preventDefault();
-				serverDiv.querySelector("a").click();
+				serverObj.div.querySelector("a").click();
 			})
-			.on("contextmenu." + this.getName(), (e) => {
-				var handleContextMenu = BDFDB.getKeyInformation({"node":serverDiv.firstElementChild, "key":"handleContextMenu"});
-				if (handleContextMenu) {
-					var data = {
-						preventDefault: a=>a,
-						stopPropagation: a=>a,
-						pageX: e.pageX,
-						pageY: e.pageY,
-					};
-					
-					handleContextMenu(data);
-				}
-			});
+			.on("contextmenu." + this.getName(), (e) => {BDFDB.openGuildContextMenu(serverObj.div, e);});
 		return serverCopy;
 	}
+
+	toggleServer (info, target, visible) {
+		if (!info || !target) return;
+		let guilddiv = BDFDB.getParentEle(BDFDB.dotCN.guild, target);
+		if (!guilddiv || guilddiv.getAttribute("folder")) return;
+		if (visible) guilddiv.style.removeProperty("display");
+		else guilddiv.style.setProperty("display", "none", "important");
+		let hiddenservers = BDFDB.loadData("hiddenservers", this, "hiddenservers") || [];
+		BDFDB.removeFromArray(hiddenservers, info.id);
+		if (!visible) hiddenservers.push(info.id);
+		BDFDB.saveData("hiddenservers", hiddenservers, this, "hiddenservers");
+	}
 	
-	updateAllServers (write) {
-		for (let serverObj of BDFDB.readServerList()) {
-			var data = BDFDB.loadData(serverObj.id, this, "servers");
-			
-			var visible = data && write ? data.visible : $(serverObj.div).is(":visible");
-			$(serverObj.div).toggle(visible);
-			
-			BDFDB.saveData(serverObj.id, {visible}, this, "servers");
+	processGuild (instance, wrapper) {
+		if (instance.props && instance.props.guild) {
+			let hiddenservers = BDFDB.loadData("hiddenservers", this, "hiddenservers") || [];
+			this.toggleServer(instance.props.guild, instance._reactInternalFiber.child.stateNode, !hiddenservers.includes(instance.props.guild.id));
 		}
 	}
 	
@@ -393,7 +250,6 @@ class ServerHider {
 			case "hr":		//croatian
 				return {
 					modal_header_text:				"Upravljanje popisom poslužitelja",
-					modal_folderhide_text:			"Nemoj prikazivati poslužitelje skrivene po narudžbi",
 					btn_ok_text:					"OK",
 					btn_all_text:					"Sve",
 					context_serverhider_text:		"Vidljivost poslužitelj",
@@ -403,7 +259,6 @@ class ServerHider {
 			case "da":		//danish
 				return {
 					modal_header_text:				"Styring af Serverliste",
-					modal_folderhide_text:			"Vis ingen servere, som er gemt af mapper",
 					btn_ok_text:					"OK",
 					btn_all_text:					"Alle",
 					context_serverhider_text:		"Server synlighed",
@@ -413,7 +268,6 @@ class ServerHider {
 			case "de":		//german
 				return {
 					modal_header_text:				"Verwaltung der Serverliste",
-					modal_folderhide_text:			"Zeige keine Server, die durch Order versteckt wurden",
 					btn_ok_text:					"OK",
 					btn_all_text:					"Alle",
 					context_serverhider_text:		"Serversichtbarkeit",
@@ -423,7 +277,6 @@ class ServerHider {
 			case "es":		//spanish
 				return {
 					modal_header_text:				"Administración de lista de servidores",
-					modal_folderhide_text:			"No mostrar servidores, que están ocultos por las carpetas",
 					btn_ok_text:					"OK",
 					btn_all_text:					"Todo",
 					context_serverhider_text:		"Visibilidad del servidor",
@@ -433,7 +286,6 @@ class ServerHider {
 			case "fr":		//french
 				return {
 					modal_header_text:				"Gestion de la liste des serveurs",
-					modal_folderhide_text:			"Afficher aucun serveur, qui sont cachés par des dossiers",
 					btn_ok_text:					"OK",
 					btn_all_text:					"Tout",
 					context_serverhider_text:		"Visibilité du serveur",
@@ -443,7 +295,6 @@ class ServerHider {
 			case "it":		//italian
 				return {
 					modal_header_text:				"Gestione dell'elenco dei server",
-					modal_folderhide_text:			"Mostra nessun server nascosto nelle cartelle",
 					btn_ok_text:					"OK",
 					btn_all_text:					"Tutto",
 					context_serverhider_text:		"Visibilità del server",
@@ -453,7 +304,6 @@ class ServerHider {
 			case "nl":		//dutch
 				return {
 					modal_header_text:				"Beheer van de Serverlijst",
-					modal_folderhide_text:			"Toon geen servers, die zijn verborgen door mappen",
 					btn_ok_text:					"OK",
 					btn_all_text:					"Alle",
 					context_serverhider_text:		"Server zichtbaarheid",
@@ -463,7 +313,6 @@ class ServerHider {
 			case "no":		//norwegian
 				return {
 					modal_header_text:				"Administrasjon av serverlisten",
-					modal_folderhide_text:			"Vis ingen servere, som er skjult av mapper",
 					btn_ok_text:					"OK",
 					btn_all_text:					"Alle",
 					context_serverhider_text:		"Server synlighet",
@@ -473,7 +322,6 @@ class ServerHider {
 			case "pl":		//polish
 				return {
 					modal_header_text:				"Zarządzanie listą serwerów",
-					modal_folderhide_text:			"Nie pokazuj żadnych serwerów, które są ukryte w folderach",
 					btn_ok_text:					"OK",
 					btn_all_text:					"Wszystkie",
 					context_serverhider_text:		"Widoczność serwera",
@@ -483,7 +331,6 @@ class ServerHider {
 			case "pt-BR":	//portuguese (brazil)
 				return {
 					modal_header_text:				"Gerenciamento da lista de servidores",
-					modal_folderhide_text:			"Não exiba servidores, que estão ocultos por pastas",
 					btn_ok_text:					"OK",
 					btn_all_text:					"Todo",
 					context_serverhider_text:		"Visibilidade do servidor",
@@ -493,7 +340,6 @@ class ServerHider {
 			case "fi":		//finnish
 				return {
 					modal_header_text:				"Palvelinluettelon hallinta",
-					modal_folderhide_text:			"Näytä mitään palvelimia, jotka ovat kansioiden piilossa",
 					btn_ok_text:					"OK",
 					btn_all_text:					"Kaikki",
 					context_serverhider_text:		"Palvelimen näkyvyys",
@@ -503,7 +349,6 @@ class ServerHider {
 			case "sv":		//swedish
 				return {
 					modal_header_text:				"Hantering av serverlistan",
-					modal_folderhide_text:			"Visa inga servrar, vilka är dolda av mappar",
 					btn_ok_text:					"OK",
 					btn_all_text:					"All",
 					context_serverhider_text:		"Server sikt",
@@ -513,7 +358,6 @@ class ServerHider {
 			case "tr":		//turkish
 				return {
 					modal_header_text:				"Sunucu Listesinin Yönetimi",
-					modal_folderhide_text:			"Klasörler tarafından gizlenen hiçbir sunucu gösterme",
 					btn_ok_text:					"Okey",
 					btn_all_text:					"Her",
 					context_serverhider_text:		"Sunucu görünürlüğü",
@@ -523,7 +367,6 @@ class ServerHider {
 			case "cs":		//czech
 				return {
 					modal_header_text:				"Správa seznamu serverů",
-					modal_folderhide_text:			"Zobrazit žádné servery, které jsou skryty podle složek",
 					btn_ok_text:					"OK",
 					btn_all_text:					"Vše",
 					context_serverhider_text:		"Viditelnost serveru",
@@ -533,7 +376,6 @@ class ServerHider {
 			case "bg":		//bulgarian
 				return {
 					modal_header_text:				"Управление на списъка със сървъри",
-					modal_folderhide_text:			"Показване на сървъри, които са скрити от папки",
 					btn_ok_text:					"Добре",
 					btn_all_text:					"Bсичко",
 					context_serverhider_text:		"Видимост на сървъра",
@@ -543,7 +385,6 @@ class ServerHider {
 			case "ru":		//russian
 				return {
 					modal_header_text:				"Управление списком серверов",
-					modal_folderhide_text:			"Показывать никакие серверы, скрытые папками",
 					btn_ok_text:					"ОК",
 					btn_all_text:					"Все",
 					context_serverhider_text:		"Видимость сервера",
@@ -553,7 +394,6 @@ class ServerHider {
 			case "uk":		//ukrainian
 				return {
 					modal_header_text:				"Управління списком серверів",
-					modal_folderhide_text:			"Не показувати жодних серверів, які приховуються папками",
 					btn_ok_text:					"Добре",
 					btn_all_text:					"Все",
 					context_serverhider_text:		"Видимість сервера",
@@ -563,7 +403,6 @@ class ServerHider {
 			case "ja":		//japanese
 				return {
 					modal_header_text:				"サーバリストの管理",
-					modal_folderhide_text:			"フォルダに隠されているサーバーは表示しない",
 					btn_ok_text:					"はい",
 					btn_all_text:					"すべて",
 					context_serverhider_text:		"サーバーの可視性",
@@ -573,7 +412,6 @@ class ServerHider {
 			case "zh-TW":	//chinese (traditional)
 				return {
 					modal_header_text:				"管理服务器列表",
-					modal_folderhide_text:			"不顯示被文件夾隱藏的服務器",
 					btn_ok_text:					"好",
 					btn_all_text:					"所有",
 					context_serverhider_text:		"服務器可見性",
@@ -583,7 +421,6 @@ class ServerHider {
 			case "ko":		//korean
 				return {
 					modal_header_text:				"서버 목록 관리",
-					modal_folderhide_text:			"폴더별로 숨겨진 서버 표시 안 함",
 					btn_ok_text:					"승인",
 					btn_all_text:					"모든",
 					context_serverhider_text:		"서버 가시성",
@@ -593,7 +430,6 @@ class ServerHider {
 			default:		//default: english
 				return {
 					modal_header_text:				"Managing Serverlist",
-					modal_folderhide_text:			"Show no servers, which are hidden by folders",
 					btn_ok_text:					"OK",
 					btn_all_text:					"All",
 					context_serverhider_text:		"Server Visibility",
