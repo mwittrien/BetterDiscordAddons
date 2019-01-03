@@ -16,7 +16,7 @@ class CreationDate {
 				margin-bottom: 4px;
 			}
 			${BDFDB.dotCN.userprofile} .creationDate {
-				max-width: 200px;
+				margin-right: 20px;
 			}
 			${BDFDB.dotCNS.themelight + BDFDB.dotCN.userpopoutheadernormal} .creationDate {
 				color: #b9bbbe; 
@@ -51,7 +51,7 @@ class CreationDate {
 
 	getDescription () {return "Displays the Creation Date of an Account in the UserPopout and UserModal.";}
 
-	getVersion () {return "1.2.2";}
+	getVersion () {return "1.2.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -192,7 +192,7 @@ class CreationDate {
 		let choice = BDFDB.getData("creationDateLang", this, "choices");
 		let nametag = container.querySelector(BDFDB.dotCN.nametag);
 		let joinedAtDate = container.querySelector(".joinedAtDate");
-		container.insertBefore($(`<div class="creationDate DevilBro-textscrollwrapper ${BDFDB.disCN.textrow}"><div class="DevilBro-textscroll">${this.labels.createdat_text + " " + this.getCreationTime(this.languages[choice].id, info.createdAt)}</div></div>`)[0], joinedAtDate ? joinedAtDate.nextSibling : (nametag ? nametag.nextSibling : null));
+		container.insertBefore($(`<div class="creationDate DevilBro-textscrollwrapper ${BDFDB.disCN.textrow}" style="max-width: ${BDFDB.getParentEle(popout ? BDFDB.dotCN.userpopoutheader : BDFDB.dotCN.userprofileheaderinfo, container).getBoundingClientRect().width - 20}px !important;"><div class="DevilBro-textscroll">${this.labels.createdat_text + " " + this.getCreationTime(this.languages[choice].id, info.createdAt)}</div></div>`)[0], joinedAtDate ? joinedAtDate.nextSibling : (nametag ? nametag.nextSibling : null));
 		BDFDB.initElements(container.parentElement);
 		if (popout && popout.style.transform.indexOf("translateY(-1") == -1) {
 			let arect = document.querySelector(BDFDB.dotCN.appmount).getBoundingClientRect();

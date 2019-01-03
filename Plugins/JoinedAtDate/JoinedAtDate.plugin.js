@@ -18,7 +18,7 @@ class JoinedAtDate {
 				margin-bottom: 4px;
 			}
 			${BDFDB.dotCN.userprofile} .joinedAtDate {
-				max-width: 200px;
+				margin-right: 20px;
 			}
 			${BDFDB.dotCNS.themelight + BDFDB.dotCN.userpopoutheadernormal} .joinedAtDate {
 				color: #b9bbbe; 
@@ -53,7 +53,7 @@ class JoinedAtDate {
 
 	getDescription () {return "Displays the Joined At Date of the current Server for a Member in the UserPopout and UserModal.";}
 
-	getVersion () {return "1.0.3";}
+	getVersion () {return "1.0.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -201,7 +201,7 @@ class JoinedAtDate {
 				let choice = BDFDB.getData("joinedAtDateLang", this, "choices");
 				let nametag = container.querySelector(BDFDB.dotCN.nametag);
 				let creationDate = container.querySelector(".creationDate");
-				container.insertBefore($(`<div class="joinedAtDate DevilBro-textscrollwrapper ${BDFDB.disCN.textrow}"><div class="DevilBro-textscroll">${this.labels.joinedat_text + " " + this.getJoinedTime(this.languages[choice].id, timestamp)}</div></div>`)[0], creationDate ? creationDate : (nametag ? nametag.nextSibling : null));
+				container.insertBefore($(`<div class="joinedAtDate DevilBro-textscrollwrapper ${BDFDB.disCN.textrow}" style="max-width: ${BDFDB.getParentEle(popout ? BDFDB.dotCN.userpopoutheader : BDFDB.dotCN.userprofileheaderinfo, container).getBoundingClientRect().width - 20}px !important;"><div class="DevilBro-textscroll">${this.labels.joinedat_text + " " + this.getJoinedTime(this.languages[choice].id, timestamp)}</div></div>`)[0], creationDate ? creationDate : (nametag ? nametag.nextSibling : null));
 				BDFDB.initElements(container.parentElement);
 				if (popout && popout.style.transform.indexOf("translateY(-1") == -1) {
 					let arect = document.querySelector(BDFDB.dotCN.appmount).getBoundingClientRect();
