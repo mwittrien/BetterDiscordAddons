@@ -134,7 +134,6 @@ class GoogleSearchReplace {
 							.on("click", ".GRS-item", (e2) => {
 								instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
 								let engine = e2.target.getAttribute("engine");
-									console.log(engine);
 								if (engine == "_all") {
 									for (let key in engines) {
 										if (key != "_all" && engines[key]) {
