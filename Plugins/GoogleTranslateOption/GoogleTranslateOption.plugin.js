@@ -576,6 +576,7 @@ class GoogleTranslateOption {
 			let textarea = wrapper.querySelector("textarea");
 			if (textarea) {
 				var buttoncontainer = wrapper.querySelector(BDFDB.dotCN.textareapickerbuttons);
+				if (!buttoncontainer) return;
 				var button = $(this.translateButtonMarkup)[0];
 				$(button)
 					.on("click." + this.getName(), () => {
