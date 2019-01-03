@@ -2,6 +2,11 @@
 
 class ReadAllNotificationsButton {
 	initConstructor () {
+		this.patchModules = {
+			"Guilds":"componentDidMount",
+			"RecentMentions":"componentDidMount"
+		};
+		
 		this.RANbuttonMarkup = 
 			`<div class="${BDFDB.disCN.guild} RANbutton-frame" id="bd-pub-li" style="height: 20px; margin-bottom: 10px;">
 				<div class="${BDFDB.disCN.guildinner}" style="height: 20px; border-radius: 4px;">
@@ -12,7 +17,7 @@ class ReadAllNotificationsButton {
 			</div>`;
 			
 		this.RAMbuttonMarkup = 
-			`<button type="button" id="RAMbutton" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemin + BDFDB.disCN.buttongrow}" style="flex: 0 0 auto; margin-left: 25px; height: 25px;">
+			`<button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemin + BDFDB.disCN.buttongrow} RAMbutton" style="flex: 0 0 auto; margin-left: 25px; height: 25px;">
 				<div class="${BDFDB.disCN.buttoncontents}">Clear Mentions</div>
 			</button>`;
 		
@@ -27,7 +32,7 @@ class ReadAllNotificationsButton {
 
 	getDescription () {return "Adds a button to clear all notifications.";}
 
-	getVersion () {return "1.3.6";}
+	getVersion () {return "1.3.7";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -71,47 +76,7 @@ class ReadAllNotificationsButton {
 		if (typeof BDFDB === "object") {
 			BDFDB.loadMessage(this);
 			
-			var observer = null;
-			
-			observer = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								var mentionspopout = null;
-								if (node.tagName && (mentionspopout = node.querySelector(BDFDB.dotCN.recentmentionspopout)) != null && node.querySelector(BDFDB.dotCN.recentmentionsmentionfilter)) {
-									$(this.RAMbuttonMarkup).appendTo(BDFDB.dotCN.recentmentionstitle, mentionspopout)
-										.on("click", () => {
-											var loadinterval = setInterval(() => {
-												if (!mentionspopout || !mentionspopout.parentElement) clearInterval(loadinterval);
-												var loadbutton = mentionspopout.querySelector(BDFDB.dotCNS.messagespopouthasmore + "button");
-												var closebuttons = mentionspopout.querySelectorAll(BDFDB.dotCN.messagespopoutclosebutton);
-												if (!loadbutton) {
-													closebuttons.forEach((btn) => {btn.click();});
-													clearInterval(loadinterval);
-												}
-												else {
-													closebuttons.forEach((btn,i) => {if (closebuttons.length-1 > i) btn.click();});
-													loadbutton.click();
-												}
-											},2000);
-										});
-									mentionspopout.classList.add("RAM-added");
-								}
-							});
-						}
-					}
-				);
-			});
-			BDFDB.addObserver(this, BDFDB.dotCN.popouts, {name:"mentionsPopoutObserver",instance:observer}, {childList: true});
-			
-			$(this.RANbuttonMarkup).insertBefore(document.querySelector(BDFDB.dotCN.guildseparator))
-				.on("click", ".RANbutton", () => {
-					let servers = BDFDB.getData("includeMuted", this, "settings") ? BDFDB.readServerList() : BDFDB.readUnreadServerList();
-					BDFDB.clearReadNotifications(servers);
-				});
-				
-			$(BDFDB.dotCN.guilds).addClass("RAN-added");
+			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -120,11 +85,8 @@ class ReadAllNotificationsButton {
 
 	stop () {
 		if (typeof BDFDB === "object") {
-			$(".RANbutton-frame, .RAMbutton").remove();
-			
-			$(".RAN-added").removeClass("RAN-added");
-			$(".RAM-added").removeClass("RAM-added");
-			
+			BDFDB.removeEles(".RANbutton-frame", ".RAMbutton");
+			BDFDB.removeClasses("RAN-added", "RAM-added");
 			BDFDB.unloadMessage(this);
 		}
 	}
@@ -138,5 +100,31 @@ class ReadAllNotificationsButton {
 			settings[input.value] = input.checked;
 		}
 		BDFDB.saveAllData(settings, this, "settings");
+	}
+	
+	processGuilds (instance, wrapper) {
+		$(this.RANbuttonMarkup).insertBefore(wrapper.querySelector(BDFDB.dotCN.guildseparator))
+			.on("click", ".RANbutton", () => {
+				BDFDB.clearReadNotifications(BDFDB.getData("includeMuted", this, "settings") ? BDFDB.readServerList() : BDFDB.readUnreadServerList());
+			});
+		wrapper.classList.add("RAN-added");
+	}
+	
+	processRecentMentions (instance, wrapper) {
+		BDFDB.removeEles(".RAMbutton");
+		if (instance.props && instance.props.popoutName == "RECENT_MENTIONS_POPOUT") {
+			wrapper.classList.add("RAM-added");
+			$(this.RAMbuttonMarkup).appendTo(wrapper.querySelector(BDFDB.dotCN.recentmentionstitle))
+				.on("click", () => {this.clearMentions(instance, wrapper);});
+		}
+	}
+	
+	clearMentions (instance, wrapper) {
+		let closebuttons = wrapper.querySelectorAll(BDFDB.dotCN.messagespopoutclosebutton);
+		for (let btn of wrapper.querySelectorAll(BDFDB.dotCN.messagespopoutclosebutton)) btn.click();
+		if (closebuttons.length) {
+			instance.loadMore();
+			setTimeout(() => {this.clearMentions(instance, wrapper);},3000);
+		}
 	}
 }
