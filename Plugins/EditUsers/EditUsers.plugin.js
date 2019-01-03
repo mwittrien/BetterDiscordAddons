@@ -525,7 +525,7 @@ class EditUsers {
 	
 	processClickable (instance, wrapper) {
 		if (!wrapper || !instance.props || !instance.props.className) return;
-		if (instance.props.tag == "a" && instance.props.className.indexOf(BDFDB.disCN.anchorunderlineonhover) > -1) {
+		else if (instance.props.tag == "a" && instance.props.className.indexOf(BDFDB.disCN.anchorunderlineonhover) > -1) {
 			if (wrapper.parentElement.classList.contains(BDFDB.disCN.messagesystemcontent)) {
 				let message = BDFDB.getKeyInformation({node:wrapper.parentElement, key:"message", up:true});
 				if (message) this.changeName(message.author, wrapper);
@@ -677,6 +677,10 @@ class EditUsers {
 			if (data.url && !data.removeIcon) {
 				avatar.style.setProperty("background-position", "center");
 				avatar.style.setProperty("background-size", "cover");
+			}
+			else {
+				avatar.style.removeProperty("background-position");
+				avatar.style.removeProperty("background-size");
 			}
 		}
 		if (data.url || data.removeIcon) {
