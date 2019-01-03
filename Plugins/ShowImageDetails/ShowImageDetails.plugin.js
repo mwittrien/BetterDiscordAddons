@@ -130,7 +130,6 @@ class ShowImageDetails {
 		if (fiber.return && fiber.return.return && fiber.return.return.memoizedProps && fiber.return.return.memoizedProps.attachment) {
 			let info = fiber.return.return.memoizedProps.attachment;
 			if (info && !info.filename.endsWith(".bdemote.png") && !info.filename.endsWith(".bdemote.gif")) {
-				let scroller = BDFDB.getParentEle(BDFDB.dotCN.messages, image);
 				image.classList.add("image-details-added");
 				if (BDFDB.getData("showOnHover", this, "settings")) {
 					$(image).on("mouseenter." + this.getName(), () => {
@@ -139,7 +138,8 @@ class ShowImageDetails {
 				}
 				else {
 					$(`<div class="image-details-wrapper"><div class="image-details"><a class="${BDFDB.disCNS.anchor + BDFDB.disCN.anchorunderlineonhover} image-details-link" title="${info.url}" href="${info.url}" target="_blank" rel="noreferrer noopener">${info.filename}</a><label class="image-details-size ${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">${BDFDB.formatBytes(info.size)}</label><label class="image-details-dimensions ${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">${info.width}x${info.height}px</label></div></div>`).insertBefore(image).append(image);
-					scroller.scrollTop += image.parentElement.getBoundingClientRect().height - image.getBoundingClientRect().height;
+					let scroller = BDFDB.getParentEle(BDFDB.dotCN.messages, image);
+					if (scroller) scroller.scrollTop += image.parentElement.getBoundingClientRect().height - image.getBoundingClientRect().height;
 				}
 			}
 		}
