@@ -122,7 +122,6 @@ class GoogleSearchReplace {
 	}
 	
 	onMessageContextMenu (instance, menu) {
-		console.log(instance);
 		if (instance.props && instance.props.message && instance.props.channel && instance.props.target && !menu.querySelector(".googlereplacesearch-item")) {
 			let text = document.getSelection().toString();
 			let searchinstance = BDFDB.getOwnerInstance({node:menu,props:["handleSearchWithGoogle"]});
