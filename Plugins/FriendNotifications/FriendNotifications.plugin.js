@@ -2,6 +2,10 @@
 
 class FriendNotifications {
 	initConstructor () {
+		this.patchModules = {
+			"FluxContainer(FriendsOnline)":["componentDidMount","componentDidUpdate"]
+		};
+		
 		this.friendsOnlineList = {};
 		
 		this.timeLog = [];
@@ -60,25 +64,25 @@ class FriendNotifications {
 				background-position: center;
 				border-radius: 50%;
 			}
-			.FriendNotifications-settings .avatar-list {
+			.${this.getName()}-settings .avatar-list {
 				display: flex;
 				align-items: center;
 				flex-wrap: wrap;
 			}
-			.FriendNotifications-settings .type-toast, .FriendNotifications-settings .type-desktop {
+			.${this.getName()}-settings .type-toast, .${this.getName()}-settings .type-desktop {
 				border-radius: 3px;
 				padding: 0 3px;
 			}
-			.FriendNotifications-settings .type-toast {
+			.${this.getName()}-settings .type-toast {
 				background-color: #7289DA;
 			}
-			.FriendNotifications-settings .type-desktop {
+			.${this.getName()}-settings .type-desktop {
 				background-color: #43B581;
 			}
-			.FriendNotifications-settings .settings-avatar.desktop {
+			.${this.getName()}-settings .settings-avatar.desktop {
 				border-color: #43B581;
 			}
-			.FriendNotifications-settings .settings-avatar {
+			.${this.getName()}-settings .settings-avatar {
 				margin: 5px;
 				width: 50px;
 				height: 50px;
@@ -89,10 +93,10 @@ class FriendNotifications {
 				box-sizing: border-box;
 				cursor: pointer;
 			}
-			.FriendNotifications-settings .settings-avatar.desktop {
+			.${this.getName()}-settings .settings-avatar.desktop {
 				border-color: #43B581;
 			} 
-			.FriendNotifications-settings .settings-avatar.disabled {
+			.${this.getName()}-settings .settings-avatar.disabled {
 				border-color: #36393F;
 				filter: grayscale(100%) brightness(50%);
 			}`;
@@ -116,18 +120,18 @@ class FriendNotifications {
 
 	getDescription () {return "Notifies you when a friend either logs in or out. Click the Online Friend-Counter to display a timelog of the current session.";}
 
-	getVersion () {return "1.1.4";}
+	getVersion () {return "1.1.5";}
 
 	getAuthor () {return "DevilBro";}
 	
 	getSettingsPanel () {
 		if (!this.started || typeof BDFDB !== "object") return;
 		
-		var settings = BDFDB.getAllData(this, "settings");
-		var notificationsounds = BDFDB.getAllData(this, "notificationsounds");
-		var desktop = BDFDB.loadAllData(this, "desktop");
-		var disabled = BDFDB.loadAllData(this, "disabled");
-		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.getName()}</div><div class="DevilBro-settings-inner">`;
+		let settings = BDFDB.getAllData(this, "settings");
+		let notificationsounds = BDFDB.getAllData(this, "notificationsounds");
+		let desktop = BDFDB.loadAllData(this, "desktop");
+		let disabled = BDFDB.loadAllData(this, "disabled");
+		let settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		for (let key in settings) {
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-checkbox"${settings[key] ? " checked" : ""}></div></div>`;
 		}
@@ -148,7 +152,7 @@ class FriendNotifications {
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Batch set Users:</h3><button type="button" do-disable=true class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttoncolorprimary + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} disable-all" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Disable</div></button><button type="button" do-toast=true class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} toast-all" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Toast</div></button>${"Notification" in window ? `<button type="button" do-desktop=true class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorgreen + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} desktop-all" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Desktop</div></button>` : ``}</div>`;
 		settingshtml += `</div></div>`;
 			
-		var settingspanel = $(settingshtml)[0];
+		let settingspanel = $(settingshtml)[0];
 
 		BDFDB.initElements(settingspanel);
 
@@ -156,8 +160,8 @@ class FriendNotifications {
 			.on("click", ".settings-checkbox", () => {this.updateSettings(settingspanel);})
 			.on("click", ".btn-savesong", (e) => {this.saveAudio(settingspanel, e.currentTarget.getAttribute("option"));})
 			.on("click", ".mute-checkbox", (e) => {
-				var option = e.currentTarget.getAttribute("option");
-				var notificationsound = BDFDB.getData(option, this, "notificationsounds");
+				let option = e.currentTarget.getAttribute("option");
+				let notificationsound = BDFDB.getData(option, this, "notificationsounds");
 				notificationsound.mute = e.currentTarget.checked;
 				BDFDB.saveData(option, notificationsound, this, "notificationsounds");
 			})
@@ -207,7 +211,7 @@ class FriendNotifications {
 	load () {}
 
 	start () {
-		var libraryScript = null;
+		let libraryScript = null;
 		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
 			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 			if (libraryScript) libraryScript.remove();
@@ -225,15 +229,6 @@ class FriendNotifications {
 		if (typeof BDFDB === "object") {
 			BDFDB.loadMessage(this);
 			
-			var notificationsound = BDFDB.loadAllData(this, "notificationsound");
-			if (!BDFDB.isObjectEmpty(notificationsound)) {
-				var data = {};
-				data.desktoponline = notificationsound;
-				data.desktopoffline = notificationsound;
-				BDFDB.saveAllData(data, this, "notificationsounds");
-				BDFDB.removeAllData(this, "notificationsound");
-			}
-			
 			this.FriendUtils = BDFDB.WebModules.findByProperties("getFriendIDs", "getRelationships");
 			this.ChannelUtils = BDFDB.WebModules.findByProperties("getDMFromUserId");
 			this.ChannelSwitchUtils = BDFDB.WebModules.findByProperties("selectPrivateChannel");
@@ -241,62 +236,11 @@ class FriendNotifications {
 			this.UserMetaStore = BDFDB.WebModules.findByProperties("getStatus", "getOnlineFriendCount");
 			this.UserUtils = BDFDB.WebModules.findByProperties("getUsers");
 			
-			var observer = null;
-			
-			observer = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						let settings = BDFDB.getAllData(this, "settings");
-						for (let id of this.FriendUtils.getFriendIDs()) {
-							let online = this.UserMetaStore.getStatus(id) != "offline";
-							let user = this.UserUtils.getUser(id);
-							if (user && this.friendsOnlineList[id] != online && !BDFDB.loadData(id, this, "disabled")) {
-								this.timeLog.push({user, online, time: new Date()});
-								if (!(settings.onlyOnOnline && !online) && !(settings.muteOnDND && BDFDB.getUserStatus() == "dnd")) {
-									let data = BDFDB.loadData(user.id, "EditUsers", "users") || {};
-									let string = `${BDFDB.encodeToHTML(data.name ? data.name : user.username)} is ${online ? "online" : "offline"}.`;
-									let avatar = data.removeIcon ? "" : (data.url ? data.url : BDFDB.getUserAvatar(user.id));
-									let openChannel = () => {
-										if (settings.openOnClick) {
-											let DMid = this.ChannelUtils.getDMFromUserId(user.id)
-											if (DMid) this.ChannelSwitchUtils.selectPrivateChannel(DMid);
-											else this.PrivateChannelUtils.openPrivateChannel(BDFDB.myData.id, user.id);
-											require("electron").remote.getCurrentWindow().maximize();
-										}
-									};
-									if (!BDFDB.loadData(id, this, "desktop")) {
-										let toast = BDFDB.showToast(`<div class="toast-inner"><div class="toast-avatar" style="background-image:url(${avatar});"></div><div>${string}</div></div>`, {html:true, timeout:5000, type:(online ? "success" : null), icon:false});
-										$(toast).on("click." + this.getName(), openChannel);
-										let notificationsound = BDFDB.getData(online ? "toastonline" : "toastoffline", this, "notificationsounds");
-										if (!notificationsound.mute && notificationsound.song) {
-											var audio = new Audio();
-											audio.src = notificationsound.song;
-											audio.play();
-										}
-									}
-									else {
-										let notificationsound = BDFDB.getData(online ? "desktoponline" : "desktopoffline", this, "notificationsounds");
-										BDFDB.showDesktopNotification(string, {icon:avatar, timeout:5000, click:openChannel, silent:notificationsound.mute, sound:notificationsound.song});
-									}
-								}
-							}
-							this.friendsOnlineList[id] = online;
-						}
-					}
-				);
-			});
-			BDFDB.addObserver(this, `${BDFDB.dotCN.guilds} > ${BDFDB.dotCN.friendsonline}`, {name:"friendCountObserver",instance:observer}, {childList:true, subtree:true, characterData:true});
-			
 			for (let id of this.FriendUtils.getFriendIDs()) {
 				this.friendsOnlineList[id] = this.UserMetaStore.getStatus(id) != "offline";
 			}
-			$(`${BDFDB.dotCN.guilds} > ${BDFDB.dotCN.friendsonline}`).first()
-				.on("mouseenter." + this.getName(), (e) => {
-					BDFDB.createTooltip("Timelog", e.currentTarget, {type:"right"});
-				})
-				.on("click." + this.getName(), (e) => {
-					this.showTimeLog();
-				});
+				
+			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -313,15 +257,15 @@ class FriendNotifications {
 	// begin of own functions
 
 	updateSettings (settingspanel) {
-		var settings = {};
-		for (var input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner + ".settings-checkbox")) {
+		let settings = {};
+		for (let input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner + ".settings-checkbox")) {
 			settings[input.value] = input.checked;
 		}
 		BDFDB.saveAllData(settings, this, "settings");
 	}
 	
 	saveAudio (settingspanel, option) {
-		var successSavedAudio = (parsedurl, parseddata) => {
+		let successSavedAudio = (parsedurl, parseddata) => {
 			if (parsedurl && parseddata) BDFDB.showToast(`Sound was saved successfully.`, {type:"success"});
 			let notificationsound = BDFDB.getData(option, this, "notificationsounds");
 			notificationsound.url = parsedurl;
@@ -329,7 +273,7 @@ class FriendNotifications {
 			BDFDB.saveData(option, notificationsound, this, "notificationsounds");
 		};
 		
-		var url = settingspanel.querySelector(`.songInput[option="${option}"]`).value;
+		let url = settingspanel.querySelector(`.songInput[option="${option}"]`).value;
 		if (url.length == 0) {
 			BDFDB.showToast(`Sound file was removed.`, {type:"warn"});
 			successSavedAudio(url, url);
@@ -337,7 +281,7 @@ class FriendNotifications {
 		else if (url.indexOf("http") == 0) {
 			require("request")(url, (error, response, result) => {
 				if (response) {
-					var type = response.headers["content-type"];
+					let type = response.headers["content-type"];
 					if (type && (type.indexOf("octet-stream") > -1 || type.indexOf("audio") > -1 || type.indexOf("video") > -1)) {
 						successSavedAudio(url, url);
 						return;
@@ -348,18 +292,62 @@ class FriendNotifications {
 		}
 		else {
 			require("fs").readFile(url, (error, response) => {
-				if (error) {
-					BDFDB.showToast("Could not fetch file. Please make sure the file exists.", {type:"danger"});
-				}
-				else {
-					successSavedAudio(url, `data:audio/mpeg;base64,${response.toString("base64")}`);
-				}
+				if (error) BDFDB.showToast("Could not fetch file. Please make sure the file exists.", {type:"danger"});
+				else successSavedAudio(url, `data:audio/mpeg;base64,${response.toString("base64")}`);
 			});
 		}
 	}
 	
+	processFluxContainerFriendsOnline (instance, wrapper) {
+		$(wrapper)
+			.off("." + this.getName())
+			.on("mouseenter." + this.getName(), (e) => {
+				BDFDB.createTooltip("Timelog", e.currentTarget, {type:"right"});
+			})
+			.on("click." + this.getName(), (e) => {
+				this.showTimeLog();
+			});
+			
+		let settings = BDFDB.getAllData(this, "settings");
+		for (let id of this.FriendUtils.getFriendIDs()) {
+			let online = this.UserMetaStore.getStatus(id) != "offline";
+			let user = this.UserUtils.getUser(id);
+			if (user && this.friendsOnlineList[id] != online && !BDFDB.loadData(id, this, "disabled")) {
+				this.timeLog.push({user, online, time: new Date()});
+				if (!(settings.onlyOnOnline && !online) && !(settings.muteOnDND && BDFDB.getUserStatus() == "dnd")) {
+					let data = BDFDB.loadData(user.id, "EditUsers", "users") || {};
+					let string = `${BDFDB.encodeToHTML(data.name ? data.name : user.username)} is ${online ? "online" : "offline"}.`;
+					let avatar = data.removeIcon ? "" : (data.url ? data.url : BDFDB.getUserAvatar(user.id));
+					let openChannel = () => {
+						if (settings.openOnClick) {
+							let DMid = this.ChannelUtils.getDMFromUserId(user.id)
+							if (DMid) this.ChannelSwitchUtils.selectPrivateChannel(DMid);
+							else this.PrivateChannelUtils.openPrivateChannel(BDFDB.myData.id, user.id);
+							require("electron").remote.getCurrentWindow().maximize();
+						}
+					};
+					if (!BDFDB.loadData(id, this, "desktop")) {
+						let toast = BDFDB.showToast(`<div class="toast-inner"><div class="toast-avatar" style="background-image:url(${avatar});"></div><div>${string}</div></div>`, {html:true, timeout:5000, type:(online ? "success" : null), icon:false});
+						$(toast).on("click." + this.getName(), openChannel);
+						let notificationsound = BDFDB.getData(online ? "toastonline" : "toastoffline", this, "notificationsounds");
+						if (!notificationsound.mute && notificationsound.song) {
+							let audio = new Audio();
+							audio.src = notificationsound.song;
+							audio.play();
+						}
+					}
+					else {
+						let notificationsound = BDFDB.getData(online ? "desktoponline" : "desktopoffline", this, "notificationsounds");
+						BDFDB.showDesktopNotification(string, {icon:avatar, timeout:5000, click:openChannel, silent:notificationsound.mute, sound:notificationsound.song});
+					}
+				}
+			}
+			this.friendsOnlineList[id] = online;
+		}
+	}
+	
 	showTimeLog () {		
-		var timeLogModal = $(this.timeLogModalMarkup);
+		let timeLogModal = $(this.timeLogModalMarkup);
 		let logs = this.timeLog.slice(0).reverse();
 		for (let log of logs) {
 			let entry = $(this.logEntryMarkup);
@@ -370,7 +358,7 @@ class FriendNotifications {
 			entry.find(".log-description").text(`${data.name ? data.name : log.user.username} is ${log.online ? "online" : "offline"}.`);
 			timeLogModal.find(".entries").append(entry).append(divider);
 		}
-		timeLogModal.find(BDFDB.dotCN.modaldivider + ":last-of-type").remove();
+		BDFDB.removeEles("." + this.getName() + "-modal " + BDFDB.dotCN.modaldivider + ":last-of-type");
 		BDFDB.appendModal(timeLogModal);
 	}
 }
