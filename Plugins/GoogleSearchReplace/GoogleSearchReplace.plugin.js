@@ -133,7 +133,7 @@ class GoogleSearchReplace {
 						$(messageContextSubMenu)
 							.on("click", ".GRS-item", (e2) => {
 								instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
-								let engine = e2.currentTarget.getAttribute("engine");
+								let engine = e2.target.getAttribute("engine");
 									console.log(engine);
 								if (engine == "_all") {
 									for (let key in engines) {
