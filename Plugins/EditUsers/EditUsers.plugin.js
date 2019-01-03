@@ -311,7 +311,7 @@ class EditUsers {
 		}
 	}
 	
-	showUserSettings (info, e) {
+	showUserSettings (info,) {
 		var {name,tag,url,removeIcon,ignoreTagColor,color1,color2,color3,color4} = BDFDB.loadData(info.id, this, "users") || {};
 		
 		var member = this.MemberUtils.getMember(this.LastGuildStore.getGuildId(), info.id) ;
@@ -334,25 +334,25 @@ class EditUsers {
 		BDFDB.setColorSwatches(userSettingsModal, color4);
 		BDFDB.appendModal(userSettingsModal);
 		userSettingsModal
-			.on("click", "#input-removeicon", (event) => {
-				userSettingsModal.find("#input-userurl").prop("disabled", event.currentTarget.checked);
+			.on("click", "#input-removeicon", (e) => {
+				userSettingsModal.find("#input-userurl").prop("disabled", e.currentTarget.checked);
 			})
-			.on("click", "#input-ignoretagcolor", (event) => {
-				userSettingsModal.find(".swatches[swatchnr='3'], .swatches[swatchnr='4']").toggleClass("disabled", event.currentTarget.checked);
+			.on("click", "#input-ignoretagcolor", (e) => {
+				userSettingsModal.find(".swatches[swatchnr='3'], .swatches[swatchnr='4']").toggleClass("disabled", e.currentTarget.checked);
 			})
-			.on("change keyup paste", "#input-userurl", (event) => {
-				this.checkUrl(userSettingsModal, event);
+			.on("change keyup paste", "#input-userurl", (e) => {
+				this.checkUrl(e.currentTarget);
 			})
-			.on("mouseenter", "#input-userurl", (event) => {
-				$(event.target).addClass("hovering");
-				this.createNoticeTooltip(event);
+			.on("mouseenter", "#input-userurl", (e) => {
+				e.currentTarget.classList.add("hovering");
+				this.createNoticeTooltip(e.currentTarget);
 			})
-			.on("mouseleave", "#input-userurl", (event) => {
+			.on("mouseleave", "#input-userurl", (e) => {
+				e.currentTarget.classList.remove("hovering");
 				BDFDB.removeEles(BDFDB.dotCNS.tooltips + ".notice-tooltip");
-				$(event.target).removeClass("hovering");
 			})
-			.on("click", ".btn-save", (event) => {
-				event.preventDefault();
+			.on("click", ".btn-save", (e) => {
+				e.preventDefault();
 				
 				removeIcon = userSettingsModal.find("#input-removeicon").prop("checked");
 				ignoreTagColor = userSettingsModal.find("#input-ignoretagcolor").prop("checked");
@@ -390,42 +390,33 @@ class EditUsers {
 		userSettingsModal.find("#input-username").focus();
 	}
 	
-	checkUrl (modal, e) {
-		if (!e.target.value) {
-			$(e.target)
-				.removeClass("valid")
-				.removeClass("invalid");
-			if ($(e.target).hasClass("hovering")) BDFDB.removeEles(BDFDB.dotCNS.tooltips + ".notice-tooltip");
+	checkUrl (input) {
+		BDFDB.removeEles(BDFDB.dotCNS.tooltips + ".notice-tooltip");
+		if (!input.value) {
+			input.classList.remove("valid");
+			input.classList.remove("invalid");
 		}
 		else {
-			let request = require("request");
-			request(e.target.value, (error, response, result) => {
+			require("request")(input.value, (error, response, result) => {
 				if (response && response.headers["content-type"] && response.headers["content-type"].indexOf("image") != -1) {
-					$(e.target)
-						.removeClass("invalid")
-						.addClass("valid");
+					input.classList.add("valid");
+					input.classList.remove("invalid");
 				}
 				else {
-					$(e.target)
-						.removeClass("valid")
-						.addClass("invalid");
+					input.classList.remove("valid");
+					input.classList.add("invalid");
 				}
-				if ($(e.target).hasClass("hovering")) this.createNoticeTooltip(e);
+				if (input.classList.contains("hovering")) this.createNoticeTooltip(input);
 			});
 		}
 	}
 	
-	createNoticeTooltip (e) {
-		BDFDB.removeEles(BDFDB.dotCNS.tooltips + ".notice-tooltip");
-		
-		var input = e.currentTarget;
+	createNoticeTooltip (input) {
 		var disabled = input.disabled;
 		var valid = input.classList.contains("valid");
 		var invalid = input.classList.contains("invalid");
 		if (disabled || valid || invalid) {
-			var text = disabled ? this.labels.modal_ignoreurl_text : valid ? this.labels.modal_validurl_text : this.labels.modal_invalidurl_text;
-			var bgColor = disabled ? "#282524" : valid ? "#297828" : "#8C2528";
-			BDFDB.createTooltip(text, input, {type:"right",selector:"notice-tooltip",style:`background-color: ${bgColor} !important; border-color: ${bgColor} !important;`});
+			BDFDB.createTooltip(disabled ? this.labels.modal_ignoreurl_text : valid ? this.labels.modal_validurl_text : this.labels.modal_invalidurl_text, input, {type:"right",selector:"notice-tooltip",color: disabled ? "black" : invalid ? "red" : "green"});
 		}
 	}
 	
