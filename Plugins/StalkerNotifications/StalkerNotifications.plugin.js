@@ -338,12 +338,8 @@ class StalkerNotifications {
 		}
 		else {
 			require("fs").readFile(url, (error, response) => {
-				if (error) {
-					BDFDB.showToast("Could not fetch file. Please make sure the file exists.", {type:"danger"});
-				}
-				else {
-					successSavedAudio(url, `data:audio/mpeg;base64,${response.toString("base64")}`);
-				}
+				if (error) BDFDB.showToast("Could not fetch file. Please make sure the file exists.", {type:"danger"});
+				else successSavedAudio(url, `data:audio/mpeg;base64,${response.toString("base64")}`);
 			});
 		}
 	}
