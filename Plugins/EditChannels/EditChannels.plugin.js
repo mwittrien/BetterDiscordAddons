@@ -101,7 +101,7 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	getVersion () {return "3.8.6";}
+	getVersion () {return "3.8.7";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -334,7 +334,7 @@ class EditChannels {
 		}
 		else if (instance.props.tag == "div" && instance.props.className.indexOf(BDFDB.disCN.quickswitchresult) > -1) {
 			let fiber = instance._reactInternalFiber;
-			if (fiber.return && fiber.return.memoizedProps && fiber.return.memoizedProps.result && fiber.return.memoizedProps.result.type == "TEXT_CHANNEL") {
+			if (fiber.return && fiber.return.memoizedProps && fiber.return.memoizedProps.result && fiber.return.memoizedProps.result.type.indexOf("_CHANNEL") != -1) {
 				this.changeChannel(fiber.return.memoizedProps.result.record, wrapper.querySelector(BDFDB.dotCN.quickswitchresultmatch));
 				if (fiber.return.memoizedProps.result.record.parent_id) {
 					this.changeChannel(this.ChannelUtils.getChannel(fiber.return.memoizedProps.result.record.parent_id), wrapper.querySelector(BDFDB.dotCN.quickswitchresultnote));
