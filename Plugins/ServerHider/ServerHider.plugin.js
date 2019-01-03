@@ -190,7 +190,8 @@ class ServerHider {
 		let serverHiderModal = $(this.serverHiderModalMarkup);
 		serverHiderModal
 			.on("click", ".btn-all", () => {
-				$(".serverhiderCheckbox").each((_, checkBox) => {if (checkBox.checked == $(".serverhiderCheckbox")[0].checked) checkBox.click();});
+				$(".serverhiderCheckbox")[0].click();
+				$(".serverhiderCheckbox").each((i, checkBox) => {if (i > 0 && checkBox.checked != $(".serverhiderCheckbox")[0].checked) checkBox.click();});
 			});
 		
 		for (let serverObj of serverObjs) {
