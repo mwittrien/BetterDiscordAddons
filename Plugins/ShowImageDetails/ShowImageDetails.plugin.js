@@ -2,6 +2,11 @@
 
 class ShowImageDetails {
 	initConstructor () {
+		this.patchModules = {
+			"LazyImageZoomable":"componentDidMount",
+			"StandardSidebarView":"componentWillUnmount"
+		};
+		
 		this.css = `
 			 .image-details .image-details-size {
 				 margin: 0 10px;
@@ -30,7 +35,7 @@ class ShowImageDetails {
 
 	getDescription () {return "Display the name, size and dimensions of uploaded images (does not include embed images) in the chat as an header or as a tooltip.";}
 
-	getVersion () {return "1.0.9";}
+	getVersion () {return "1.1.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -83,41 +88,7 @@ class ShowImageDetails {
 		if (typeof BDFDB === "object") {
 			BDFDB.loadMessage(this);
 			
-			var observer = null;
-			
-			observer = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								if (node.tagName && (node.querySelector(BDFDB.dotCN.message) || node.classList.contains(BDFDB.disCN.message))) {
-									this.addDetails(node);
-								}
-							});
-						}
-					}
-				);
-			});
-			BDFDB.addObserver(this, BDFDB.dotCN.messages, {name:"chatWindowObserver",instance:observer}, {childList:true, subtree:true});
-			
-			observer = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.removedNodes) {
-							change.removedNodes.forEach((node) => {
-								if (node && $(node).attr("layer-id") == "user-settings" && this.updateDetails) {
-									document.querySelectorAll(".image-details-added").forEach(image => {this.resetImage(image);});
-									this.addDetails(document);
-									this.updateDetails = false;
-								}
-							});
-						}
-					}
-				);
-			});
-			BDFDB.addObserver(this, BDFDB.dotCN.layers, {name:"settingsWindowObserver",instance:observer}, {childList:true});
-			
-			this.addDetails(document);
+			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -126,16 +97,9 @@ class ShowImageDetails {
 
 	stop () {
 		if (typeof BDFDB === "object") {
-			document.querySelectorAll(".image-details-added").forEach(image => {this.resetImage(image);});
+			document.querySelectorAll(".image-details-added").forEach(wrapper => {this.resetImage(wrapper);});
 			
 			BDFDB.unloadMessage(this);
-		}
-	}
-	
-	onSwitch () {
-		if (typeof BDFDB === "object") {
-			this.addDetails(document);
-			BDFDB.addObserver(this, BDFDB.dotCN.messages, {name:"chatWindowObserver"}, {childList:true, subtree:true});
 		}
 	}
 	
@@ -151,51 +115,41 @@ class ShowImageDetails {
 		this.updateDetails = true;
 	}
 	
-	addDetails (container) {
-		let scroller = document.querySelector(BDFDB.dotCNS.chat + BDFDB.dotCN.messages);
-		if (!container || typeof container.querySelectorAll != "function" || !scroller) return; 
-		var settings = BDFDB.getAllData(this, "settings");
-		container.querySelectorAll(BDFDB.dotCN.messageaccessory + " > " + BDFDB.dotCN.imagewrapper).forEach(image => {
-			var data = this.getImageData(image);
-			if (data) {
-				image.classList.add("image-details-added");
-				if (!settings.showOnHover) {
-					$(`<div class="image-details-wrapper"><div class="image-details"><a class="${BDFDB.disCNS.anchor + BDFDB.disCN.anchorunderlineonhover} image-details-link" title="${data.url}" href="${data.url}" target="_blank" rel="noreferrer noopener">${data.filename}</a><label class="image-details-size ${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">${BDFDB.formatBytes(data.size)}</label><label class="image-details-dimensions ${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">${data.width}x${data.height}px</label></div></div>`).insertBefore(image).append(image);
-					scroller.scrollTop += image.parentElement.getBoundingClientRect().height - image.getBoundingClientRect().height;
-				}
-				else {
-					$(image).on("mouseenter." + this.getName(), () => {
-						BDFDB.createTooltip(`<div class="image-details-tooltip-name">${data.filename}</div><div class="image-details-tooltip-size">${BDFDB.formatBytes(data.size)}</div><div class="image-details-tooltip-dimensions">${data.width}x${data.height}px</div>`, image, {type:"right", html:true, selector:"image-details-tooltip", delay:BDFDB.getData("hoverDelay", this, "amounts")});
-					});
-				}
-			}
-		}); 
-	}
-	
-	resetImage (image) {
-		image.classList.remove("image-details-added");
-		$(image).off("." + this.getName());
-		var wrapper = image.parentElement;
+	resetImage (wrapper) {
+		wrapper.classList.remove("image-details-added");
+		$(wrapper).off("." + this.getName());
+		var wrapper = wrapper.parentElement;
 		if (wrapper.classList.contains("image-details-wrapper")) {
-			wrapper.parentElement.insertBefore(image, wrapper);
+			wrapper.parentElement.insertBefore(wrapper, wrapper);
 			wrapper.remove();
 		}
 	}
 	
-	getImageData (attachment) {
-		var messageInfo = BDFDB.getKeyInformation({"node":attachment,"key":"message","up":true,"time":1000});
-		if (messageInfo) {
-			var message = null, temp = attachment;
-			while (message == null || temp.parentElement) {
-				temp = temp.parentElement;
-				if (temp.classList && temp.classList.contains(BDFDB.disCN.message)) message = temp;
+	processLazyImageZoomable (instance, wrapper) {
+		let fiber = instance._reactInternalFiber;
+		if (fiber.return && fiber.return.return && fiber.return.return.memoizedProps && fiber.return.return.memoizedProps.attachment) {
+			let info = fiber.return.return.memoizedProps.attachment;
+			if (info && !info.filename.endsWith(".bdemote.png") && !info.filename.endsWith(".bdemote.gif")) {
+				let scroller = BDFDB.getParentEle(BDFDB.dotCN.messages, wrapper);
+				wrapper.classList.add("image-details-added");
+				if (!settings.showOnHover) {
+					$(`<div class="image-details-wrapper"><div class="image-details"><a class="${BDFDB.disCNS.anchor + BDFDB.disCN.anchorunderlineonhover} image-details-link" title="${info.url}" href="${info.url}" target="_blank" rel="noreferrer noopener">${info.filename}</a><label class="image-details-size ${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">${BDFDB.formatBytes(info.size)}</label><label class="image-details-dimensions ${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">${info.width}x${info.height}px</label></div></div>`).insertBefore(wrapper).append(wrapper);
+					scroller.scrollTop += wrapper.parentElement.getBoundingClientRect().height - wrapper.getBoundingClientRect().height;
+				}
+				else {
+					$(wrapper).on("mouseenter." + this.getName(), () => {
+						BDFDB.createTooltip(`<div class="image-details-tooltip-name">${info.filename}</div><div class="image-details-tooltip-size">${BDFDB.formatBytes(info.size)}</div><div class="image-details-tooltip-dimensions">${info.width}x${info.height}px</div>`, wrapper, {type:"right", html:true, selector:"image-details-tooltip", delay:BDFDB.getData("hoverDelay", this, "amounts")});
+					});
+				}
 			}
-			if (message) {
-				var pos = $(message).find(BDFDB.dotCN.imagewrapper).index(attachment);
-				var info = messageInfo.attachments;
-				if (info && pos > -1) info = info[pos];
-				return info;
-			}
+		}
+	}
+	
+	processStandardSidebarView (instance, wrapper) {
+		if (this.updateDetails) {
+			this.updateDetails = false;
+			document.querySelectorAll(".image-details-added").forEach(wrapper => {this.resetImage(wrapper);});
+			BDFDB.WebModules.forceAllUpdates(this);
 		}
 	}
 }
