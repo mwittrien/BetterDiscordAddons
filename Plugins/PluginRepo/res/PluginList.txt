@@ -165,6 +165,7 @@ https://raw.githubusercontent.com/Orrielel/BetterDiscordAddons/master/Plugins/Be
 https://raw.githubusercontent.com/Orrielel/BetterDiscordAddons/master/Plugins/TwitchStreamPanel/TwitchStreamPanel.plugin.js
 https://raw.githubusercontent.com/planetarian/BetterDiscordPlugins/master/Zalgo.plugin.js
 https://raw.githubusercontent.com/qwerasd205/qwerasd205.github.io/master/BDBGone.plugin.js
+https://raw.githubusercontent.com/qwerasd205/qwerasd205.github.io/master/EditUploads.plugin.js
 https://raw.githubusercontent.com/qwerasd205/qwerasd205.github.io/master/EmptyEnter.plugin.js
 https://raw.githubusercontent.com/qwerasd205/qwerasd205.github.io/master/ExtendedContextMenu.plugin.js
 https://raw.githubusercontent.com/qwerasd205/qwerasd205.github.io/master/RepoUtils.plugin.js
