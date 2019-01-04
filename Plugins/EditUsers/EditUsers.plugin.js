@@ -311,7 +311,7 @@ class EditUsers {
 		}
 	}
 	
-	showUserSettings (info,) {
+	showUserSettings (info) {
 		var {name,tag,url,removeIcon,ignoreTagColor,color1,color2,color3,color4} = BDFDB.loadData(info.id, this, "users") || {};
 		
 		var member = this.MemberUtils.getMember(this.LastGuildStore.getGuildId(), info.id) ;
