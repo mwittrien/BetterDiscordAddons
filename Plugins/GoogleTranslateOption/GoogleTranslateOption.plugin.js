@@ -7,7 +7,8 @@ class GoogleTranslateOption {
 		this.patchModules = {
 			"ChannelTextArea":"componentDidMount",
 			"Message":"componentDidMount",
-			"MessageOptionPopout":"componentDidMount"
+			"MessageOptionPopout":"componentDidMount",
+			"StandardSidebarView":"componentWillUnmount"
 		};
 		
 		this.languages = {};
@@ -17,6 +18,7 @@ class GoogleTranslateOption {
 			
 		this.defaults = {
 			settings: {
+				addTranslateButton:		{value:true, 		description:"Adds an translate button to the chatbar."},
 				sendOriginalMessage:	{value:false, 		description:"Send the original message together with the translation."}
 			},
 			translators: {
@@ -388,7 +390,7 @@ class GoogleTranslateOption {
 
 	getDescription () {return "Adds a Google Translate option to your context menu, which shows a preview of the translated text and on click will open the selected text in Google Translate. Also adds a translation button to your textareas, which will automatically translate the text for you before it is being send. DeepLApi written by square. Thanks ;)";}
 
-	getVersion () {return "1.5.7";}
+	getVersion () {return "1.5.8";}
 	
 	getAuthor () {return "DevilBro, square";}
 	
@@ -508,6 +510,7 @@ class GoogleTranslateOption {
 			BDFDB.saveAllData(data[option], this, option);
 		}
 		this.setLanguage();
+		this.updateChatBar = true;
 	}
 	
 	onMessageContextMenu (instance, menu) {
@@ -571,8 +574,16 @@ class GoogleTranslateOption {
 		return choice;
 	}
 	
+	processStandardSidebarView (instance, wrapper) {
+		if (this.updateChatBar) {
+			this.updateChatBar = false;
+			BDFDB.removeEles(".translate-button-wrapper");
+			BDFDB.WebModules.forceAllUpdates(this, "ChannelTextArea");
+		}
+	}
+	
 	processChannelTextArea (instance, wrapper) {
-		if (instance.props && instance.props.type && instance.props.type == "normal" && !instance.props.disabled && !wrapper.querySelector(".translate-button-wrapper")) {
+		if (instance.props && instance.props.type && instance.props.type == "normal" && !instance.props.disabled && !wrapper.querySelector(".translate-button-wrapper") && BDFDB.getData("addTranslateButton", this, "settings")) {
 			let textarea = wrapper.querySelector("textarea");
 			if (textarea) {
 				var buttoncontainer = wrapper.querySelector(BDFDB.dotCN.textareapickerbuttons);
