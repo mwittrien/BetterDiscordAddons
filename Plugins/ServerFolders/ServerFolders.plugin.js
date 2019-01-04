@@ -371,12 +371,6 @@ class ServerFolders {
 			this.DiscordConstants = BDFDB.WebModules.findByProperties("Permissions", "ActivityTypes", "StatusTypes");
 			this.Animations = BDFDB.WebModules.findByProperties("spring");
 			
-			$(BDFDB.dotCN.guilds).on("click." + this.getName(), "div" + BDFDB.dotCN.guildseparator + ":not(.folderseparator) ~ div" + BDFDB.dotCN.guild + ":not(.folder)", () => {
-				if (BDFDB.getData("closeAllFolders", this, "settings")) {
-					document.querySelectorAll(".folder.open").forEach(openFolder => {this.openCloseFolder(openFolder);});
-				}
-			});
-			
 			let folders = BDFDB.loadAllData(this, "folders"), sortedFolders = [];
 			for (let id in folders) sortedFolders[folders[id].position] = folders[id];
 			for (let data of sortedFolders) if (data && !document.querySelector(BDFDB.dotCN.guild + ".folder#" + data.folderID)) {
@@ -491,6 +485,9 @@ class ServerFolders {
 			}
 			$(wrapper)
 				.off("." + this.getName())
+				.on("click." + this.getName(), () => {
+					if (BDFDB.getData("closeAllFolders", this, "settings")) document.querySelectorAll(".folder.open").forEach(openFolder => {this.openCloseFolder(openFolder);});
+				})
 				.on("mousedown." + this.getName(), (e) => {
 					if (BDFDB.pressedKeys.includes(17)) {
 						e.stopPropagation();
