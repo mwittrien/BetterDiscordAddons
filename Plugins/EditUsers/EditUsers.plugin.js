@@ -172,7 +172,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "3.1.5";} 
+	getVersion () {return "3.1.6";} 
 
 	getAuthor () {return "DevilBro";}
 	
@@ -311,7 +311,7 @@ class EditUsers {
 		}
 	}
 	
-	showUserSettings (info,) {
+	showUserSettings (info) {
 		var {name,tag,url,removeIcon,ignoreTagColor,color1,color2,color3,color4} = BDFDB.loadData(info.id, this, "users") || {};
 		
 		var member = this.MemberUtils.getMember(this.LastGuildStore.getGuildId(), info.id) ;
