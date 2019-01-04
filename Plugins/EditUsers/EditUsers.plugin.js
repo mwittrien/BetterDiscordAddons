@@ -172,7 +172,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "3.1.3";} 
+	getVersion () {return "3.1.4";} 
 
 	getAuthor () {return "DevilBro";}
 	
@@ -584,8 +584,9 @@ class EditUsers {
 			let markup = wrapper.querySelector(BDFDB.dotCN.messagemarkup);
 			if (markup) {
 				let info = instance.props.message.author;
+				let member = this.MemberUtils.getMember(this.LastGuildStore.getGuildId(), info.id) || {};
 				let data = this.getUserData(info.id, wrapper);
-				markup.style.setProperty("color", settingsCookie["bda-gs-7"] ? BDFDB.colorCONVERT(data.color1 || info.colorString, "RGB") : null, "important");
+				markup.style.setProperty("color", settingsCookie["bda-gs-7"] ? BDFDB.colorCONVERT(data.color1 || member.colorString, "RGB") : null, "important");
 			}
 		}
 	}
