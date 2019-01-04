@@ -2,14 +2,16 @@
 
 class ForceImagePreviews {
 	initConstructor () {
-		this.waitTime = 3000;
+		this.patchModules = {
+			"Message":"componentDidMount"
+		};
 	}
 
 	getName () {return "ForceImagePreviews";}
 
 	getDescription () {return "Forces embedded Image Previews, if Discord doesn't do it itself. Caution: Externals Images can contain malicious code and reveal your IP!";}
 
-	getVersion () {return "1.0.7";}
+	getVersion () {return "1.0.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -35,45 +37,7 @@ class ForceImagePreviews {
 		if (typeof BDFDB === "object") {
 			BDFDB.loadMessage(this);
 			
-			var observer = null;
-
-			observer = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.type == "characterData") {
-							setTimeout(() => {this.addPreviews(change.target.parentElement);},this.waitTime);
-						}
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								if (node.tagName && node.classList.contains(BDFDB.disCN.message)) {
-									setTimeout(() => {this.addPreviews(node.querySelector(BDFDB.dotCN.messagemarkup));},this.waitTime);
-								}
-							});
-						}
-					}
-				);
-			});
-			BDFDB.addObserver(this, null, {name:"messageChangeObserver",instance:observer,multi:true}, {childList:true, characterData:true, subtree:true});
-			
-			observer = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								if (node.tagName && node.querySelector(BDFDB.dotCN.message)) {
-									BDFDB.addObserver(this, node, {name:"messageChangeObserver",multi:true}, {childList:true, characterData:true, subtree:true});
-									node.querySelectorAll(BDFDB.dotCN.messagemarkup).forEach(message => {
-										setTimeout(() => {this.addPreviews(message);},this.waitTime);
-									});
-								}
-							});
-						}
-					}
-				);
-			});
-			BDFDB.addObserver(this, BDFDB.dotCN.messages, {name:"chatWindowObserver",instance:observer}, {childList:true});
-			
-			this.addAllPreviews();
+			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -82,58 +46,38 @@ class ForceImagePreviews {
 
 	stop () {
 		if (typeof BDFDB === "object") {
-			document.querySelectorAll(".FIP-embed").forEach(embed => {embed.remove();});
-			
+			BDFDB.removeEles(".FIP-embed");
 			BDFDB.unloadMessage(this);
-		}
-	}
-	
-	onSwitch () {
-		if (typeof BDFDB === "object") {
-			this.addAllPreviews();
-			BDFDB.addObserver(this, BDFDB.dotCN.messages, {name:"chatWindowObserver"}, {childList:true, subtree:true});
 		}
 	}
 	
 	
 	// begin of own functions
 	
-	addAllPreviews () {
-		document.querySelectorAll(".FIP-embed").forEach(embed => {embed.remove();});
-		document.querySelectorAll(BDFDB.dotCN.messagegroup).forEach(messageContainer => {
-			BDFDB.addObserver(this, messageContainer, {name:"messageChangeObserver",multi:true}, {childList:true, characterData:true, subtree:true});
-			messageContainer.querySelectorAll(BDFDB.dotCN.messagemarkup).forEach(message => {
-				this.addPreviews(message);
-			});
-		});
-	}
 	
-	addPreviews (message) {
-		let scroller = document.querySelector(BDFDB.dotCNS.chat + BDFDB.dotCN.messages);
-		if (!message || !scroller) return;
-		var messageData = BDFDB.getKeyInformation({node:message,key:"message",up:true});
-		if (!messageData) return;
-		
-		let accessory = this.getAccessoryOfMessage(message);
-		if (accessory) {
-			let links = [];
-			for (let word of messageData.content.split(new RegExp("\\n|\\s|\\r|\\t|\\0"))) {
-				if (word.indexOf("https://") > -1 || word.indexOf("http://") > -1) {
-					if (word.indexOf("<") == 0 && word.indexOf(">") == word.length-1) links.push({src:word.slice(1,-1),embedded:false});
-					else if (!accessory.querySelector(`${BDFDB.dotCN.embedimage}[href="${this.parseSrc(word)}"]`) && !accessory.querySelector(`${BDFDB.dotCN.embedtitlelink}[href="${this.parseSrc(word)}"]`)) {
-						links.push({src:word,embedded:false});
+	processMessage (instance, wrapper) {
+		if (instance.props && instance.props.message) {
+			let accessory = wrapper.querySelector(BDFDB.dotCN.messageaccessory);
+			if (accessory) {
+				let links = [];
+				for (let word of instance.props.message.content.split(/\n|\s|\r|\t|\0/g)) {
+					if (word.indexOf("https://") > -1 || word.indexOf("http://") > -1) {
+						if (word.indexOf("<") == 0 && word.indexOf(">") == word.length-1) links.push({src:word.slice(1,-1),embedded:false});
+						else if (!accessory.querySelector(`${BDFDB.dotCN.embedimage}[href="${this.parseSrc(word)}"]`) && !accessory.querySelector(`${BDFDB.dotCN.embedtitlelink}[href="${this.parseSrc(word)}"]`)) {
+							links.push({src:word,embedded:false});
+						}
+						else links.push({src:word,embedded:true});
 					}
-					else links.push({src:word,embedded:true});
 				}
+				if (links.length > 0) this.addItemToAccessory(null, links, accessory);
 			}
-			if (links.length > 0) this.addItemToAccessory(null, links, accessory, scroller);
 		}
 	}
 	
-	addItemToAccessory (previmage, links, accessory, scroller) {
+	addItemToAccessory (previmage, links, accessory) {
 		let item = links.shift();
 		if (!item) return;
-		else if (item.embedded) this.addItemToAccessory(item, links, accessory, scroller); 
+		else if (item.embedded) this.addItemToAccessory(item, links, accessory); 
 		else {
 			let itemsrc = this.parseSrc(item.src);
 			require("request")(itemsrc, (error, response, result) => {
@@ -150,9 +94,9 @@ class ForceImagePreviews {
 						let checkedsrc = itemsrc.indexOf("imgur.com/") > -1 ? ("imgur.com/" + itemsrc.split("/")[3].split(".")[0]) : itemsrc;
 						if (!accessory.querySelector(`${BDFDB.dotCN.embedimage}[href*="${checkedsrc}"]`)) {
 							let embed = $(`<div class="FIP-embed ${BDFDB.disCNS.embed + BDFDB.disCNS.flex + BDFDB.disCN.embedold}"><a class="${BDFDB.disCNS.imagewrapper + BDFDB.disCNS.imagezoom + BDFDB.disCN.embedimage}" href="${itemsrc}" rel="noreferrer noopener" target="_blank" style="width: ${width}px; height: ${height}px;"><img src="${itemsrc}" style="width: ${width}px; height: ${height}px;"></a></div>`)[0];
-							this.insertEmbed(embed, previmage, links, accessory, scroller);
+							this.insertEmbed(embed, previmage, links, accessory);
 						}
-						this.addItemToAccessory(item, links, accessory, scroller);
+						this.addItemToAccessory(item, links, accessory);
 					};
 				}
 				else if (response && response.headers["server"] && response.headers["server"].toLowerCase().indexOf("youtube") > -1 && result.indexOf("yt-user-info") > -1) {
@@ -166,31 +110,25 @@ class ForceImagePreviews {
 							while (videowrapper.firstChild) videowrapper.firstChild.remove();
 							$(`<iframe src="${result.split('<link itemprop="embedURL" href="')[1].split('"')[0]}?start=0&amp;autoplay=1&amp;auto_play=1" width="${width}" height="${height}" frameborder="0" allowfullscreen=""></iframe>`).appendTo(videowrapper);
 						});
-						this.insertEmbed(embed, previmage, links, accessory, scroller);
+						this.insertEmbed(embed, previmage, links, accessory);
 					}
-					this.addItemToAccessory(item, links, accessory, scroller);
+					this.addItemToAccessory(item, links, accessory);
 				}
-				else this.addItemToAccessory(item, links, accessory, scroller);
+				else this.addItemToAccessory(item, links, accessory);
 			});
 		}
 	}
 	
-	insertEmbed (embed, previmage, links, accessory, scroller) {
+	insertEmbed (embed, previmage, links, accessory) {
 		let prev = accessory.querySelector(`${BDFDB.dotCNS.embed + BDFDB.dotCN.embedimage}[href="${previmage ? this.parseSrc(previmage.src) : void 0}"]`);
 		let next = accessory.querySelector(`${BDFDB.dotCNS.embed + BDFDB.dotCN.embedimage}[href="${links[0] ? this.parseSrc(links[0].src) : void 0}"]`);
 		prev = prev ? prev : accessory.querySelector(`${BDFDB.dotCNS.embed + BDFDB.dotCN.embedtitlelink}[href="${previmage ? this.parseSrc(previmage.src) : void 0}"]`);
 		next = next ? next : accessory.querySelector(`${BDFDB.dotCNS.embed + BDFDB.dotCN.embedtitlelink}[href="${links[0] ? this.parseSrc(links[0].src) : void 0}"]`);
+		let isempty = accessory.childElementCount == 0;
+		if (embed.firstElementChild.classList.contains(BDFDB.disCN.embedimage)) embed.style.setProperty("pointer-events", "none", "important");
 		accessory.insertBefore(embed, prev ? prev.nextSibling : next);
-		scroller.scrollTop += embed.getBoundingClientRect().height;
-	}
-	
-	getAccessoryOfMessage (message) {
-		var accessory = null;
-		while (message && !message.querySelector(BDFDB.dotCN.messagegroup) && !accessory) {
-			accessory = message.querySelector(BDFDB.dotCN.messageaccessory);
-			message = message.parentElement;
-		}
-		return accessory;
+		let scroller = document.querySelector(BDFDB.dotCNS.chat + BDFDB.dotCN.messages);
+		if (scroller) scroller.scrollTop += (embed.getBoundingClientRect().height + (isempty ? 15 : 0));
 	}
 	
 	parseSrc (src) {
