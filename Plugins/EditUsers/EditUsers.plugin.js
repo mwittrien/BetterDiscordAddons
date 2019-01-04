@@ -172,7 +172,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "3.1.2";} 
+	getVersion () {return "3.1.3";} 
 
 	getAuthor () {return "DevilBro";}
 	
@@ -525,8 +525,8 @@ class EditUsers {
 	
 	processClickable (instance, wrapper) {
 		if (!wrapper || !instance.props || !instance.props.className) return;
-		else if (instance.props.tag == "a" && instance.props.className.indexOf(BDFDB.disCN.anchorunderlineonhover) > -1) {
-			if (wrapper.parentElement.classList.contains(BDFDB.disCN.messagesystemcontent)) {
+		if (instance.props.tag == "a" && instance.props.className.indexOf(BDFDB.disCN.anchorunderlineonhover) > -1) {
+			if (wrapper.parentElement.classList.contains(BDFDB.disCN.messagesystemcontent) && wrapper.parentElement.querySelector("a") == wrapper) {
 				let message = BDFDB.getKeyInformation({node:wrapper.parentElement, key:"message", up:true});
 				if (message) this.changeName(message.author, wrapper);
 			}
@@ -677,10 +677,6 @@ class EditUsers {
 			if (data.url && !data.removeIcon) {
 				avatar.style.setProperty("background-position", "center");
 				avatar.style.setProperty("background-size", "cover");
-			}
-			else {
-				avatar.style.removeProperty("background-position");
-				avatar.style.removeProperty("background-size");
 			}
 		}
 		if (data.url || data.removeIcon) {
