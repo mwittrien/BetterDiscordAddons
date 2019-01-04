@@ -172,7 +172,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "3.1.4";} 
+	getVersion () {return "3.1.5";} 
 
 	getAuthor () {return "DevilBro";}
 	
@@ -442,7 +442,8 @@ class EditUsers {
 		if (fiber.return && fiber.return.memoizedProps && fiber.return.memoizedProps.message) {
 			let username = wrapper.querySelector(BDFDB.dotCN.messageusername);
 			if (username) {
-				this.changeName(fiber.return.memoizedProps.message.author, username);
+				let channel = this.ChannelUtils.getChannel(fiber.return.memoizedProps.message.channel_id) || {};
+				this.changeName(fiber.return.memoizedProps.message.author, username, channel.guild_id);
 				if (wrapper.parentElement && wrapper.parentElement.classList && !wrapper.parentElement.classList.contains(BDFDB.disCN.messageheadercompact)) {
 					this.changeAvatar(fiber.return.memoizedProps.message.author, this.getAvatarDiv(wrapper));
 				}
@@ -584,7 +585,8 @@ class EditUsers {
 			let markup = wrapper.querySelector(BDFDB.dotCN.messagemarkup);
 			if (markup) {
 				let info = instance.props.message.author;
-				let member = this.MemberUtils.getMember(this.LastGuildStore.getGuildId(), info.id) || {};
+				let channel = this.ChannelUtils.getChannel(instance.props.message.channel_id) || {};
+				let member = this.MemberUtils.getMember(channel.guild_id, info.id) || {};
 				let data = this.getUserData(info.id, wrapper);
 				markup.style.setProperty("color", settingsCookie["bda-gs-7"] ? BDFDB.colorCONVERT(data.color1 || member.colorString, "RGB") : null, "important");
 			}
