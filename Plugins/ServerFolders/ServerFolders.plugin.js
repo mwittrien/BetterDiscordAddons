@@ -482,6 +482,7 @@ class ServerFolders {
 		if (instance.props && instance.props.guild) {
 			let folderdiv = this.getFolderOfServer(instance.props.guild);
 			if (folderdiv && !wrapper.getAttribute("folder")) {
+				this.hideServer(wrapper, folderdiv);
 				this.updateCopyInFolderContent(wrapper, folderdiv);
 				this.updateFolderNotifications(folderdiv);
 			}
