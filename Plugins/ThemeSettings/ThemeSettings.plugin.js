@@ -11,7 +11,6 @@ class ThemeSettings {
 
 	getAuthor () {return "DevilBro";}
 	
-	getSettingsPanel () {}
 
 	//legacy
 	load () {}
