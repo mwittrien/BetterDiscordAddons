@@ -4,8 +4,8 @@ class OldTitleBar {
 	initConstructor () {
 		this.patchModules = {
 			"HeaderBar":["componentDidMount","componentDidUpdate"],
-			"StandardSidebarView":["componentDidMount","componentWillUnmount"]
-			
+			"StandardSidebarView":["componentDidMount","componentWillUnmount"],
+			"AuthWrapper":["componentDidMount","componentWillUnmount"]
 		};
 		
 		this.patched = false;
@@ -94,7 +94,7 @@ class OldTitleBar {
 
 	getDescription () {return "Reverts the title bar back to its former self.";}
 
-	getVersion () {return "1.5.0";}
+	getVersion () {return "1.5.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -193,10 +193,15 @@ class OldTitleBar {
 	}
 	
 	processStandardSidebarView (instance, wrapper, methodnames) {
+		this.processAuthWrapper(instance, wrapper, methodnames);
+	}
+	
+	processAuthWrapper (instance, wrapper, methodnames) {
 		if (methodnames.includes("componentDidMount")) {
 			this.addSettingsTitleBar(wrapper);
 		}
 		else if (methodnames.includes("componentWillUnmount")) {
+			BDFDB.removeEles(".settingsTitlebarOTB");
 			this.addTitleBar();
 		}
 	}
@@ -224,7 +229,7 @@ class OldTitleBar {
 	createButtons (bar) {
 		if (BDFDB.getData("reloadButton", this, "settings")) {
 			$(bar)
-				.append(this.dividerMarkup)
+				.append(bar.classList.contains("settingsTitlebarOTB") ? "" : this.dividerMarkup)
 				.append(this.reloadButtonMarkup)
 				.on("click." + this.getName(), ".reloadButtonOTB " + BDFDB.dotCN.channelheadericon, () => {
 					this.doReload();
@@ -234,7 +239,7 @@ class OldTitleBar {
 				});
 		}
 		$(bar)
-			.append(this.dividerMarkup)
+			.append(bar.classList.contains("settingsTitlebarOTB") ? "" : this.dividerMarkup)
 			.append(this.minButtonMarkup)
 			.append(this.isMaximized() ? this.maxButtonIsMaxMarkup : this.maxButtonIsMinMarkup)
 			.append(this.closeButtonMarkup)
