@@ -305,7 +305,7 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.9.4";}
+	getVersion () {return "5.9.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -760,10 +760,11 @@ class ServerFolders {
 	
 	createNewFolder (ankerdiv) {
 		if (!Node.prototype.isPrototypeOf(ankerdiv)) return;
-		
+		let guilddiv = BDFDB.getParentEle(BDFDB.dotCN.guild, ankerdiv);
+		if (!guilddiv) return;
 		let folderID = 		this.generateID("folder");
 		let folderName = 	"";
-		let position = 		Array.from(document.querySelectorAll("div" + BDFDB.dotCN.guildseparator + ":not(.folderseparator) ~ div" + BDFDB.dotCN.guild)).indexOf(ankerdiv);
+		let position = 		Array.from(document.querySelectorAll("div" + BDFDB.dotCN.guildseparator + ":not(.folderseparator) ~ div" + BDFDB.dotCN.guild)).indexOf(guilddiv);
 		let iconID = 		0;
 		let icons = 		Object.assign({},this.folderIcons[0]);
 		let autounread = 	false;
@@ -780,7 +781,7 @@ class ServerFolders {
 	
 	createFolderDiv (data) {
 		let folderdiv = $(this.folderIconMarkup)[0];
-		let serversandfolders = document.querySelectorAll(BDFDB.dotCN.guildseparator + ":not(.folderseparator) ~ " + BDFDB.dotCN.guild);
+		let serversandfolders = document.querySelectorAll("div" + BDFDB.dotCN.guildseparator + ":not(.folderseparator) ~ div" + BDFDB.dotCN.guild);
 		$(folderdiv).insertBefore(serversandfolders[data.position > serversandfolders.length - 1 ? serversandfolders.length - 1 : data.position]);
 			
 		$(folderdiv)
