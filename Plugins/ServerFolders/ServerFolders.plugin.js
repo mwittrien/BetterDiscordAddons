@@ -952,6 +952,7 @@ class ServerFolders {
 					if (change.type == "attributes" && change.attributeName == "class" && change.target && change.target.classList && change.target.classList.contains(BDFDB.disCN.guild)) updatefolder = true;
 					if (change.type == "characterData" && change.target.parentElement.tagName && change.target.parentElement.classList.contains(BDFDB.disCN.badge)) updatefolder = true;
 					else if (change.addedNodes.length) change.addedNodes.forEach(node => {if (node.tagName && node.classList.contains(BDFDB.disCN.badge)) updatefolder = true;});
+					else if (change.removedNodes.length) change.removedNodes.forEach(node => {if (node.tagName && node.classList.contains(BDFDB.disCN.badge)) updatefolder = true;});
 					this.updateCopyInFolderContent(guilddiv, folderdiv);
 					if (updatefolder) this.updateFolderNotifications(folderdiv);
 				}
