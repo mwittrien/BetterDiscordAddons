@@ -120,7 +120,7 @@ class FriendNotifications {
 
 	getDescription () {return "Notifies you when a friend either logs in or out. Click the Online Friend-Counter to display a timelog of the current session.";}
 
-	getVersion () {return "1.1.5";}
+	getVersion () {return "1.1.6";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -327,7 +327,7 @@ class FriendNotifications {
 						}
 					};
 					if (!BDFDB.loadData(id, this, "desktop")) {
-						let toast = BDFDB.showToast(`<div class="toast-inner"><div class="toast-avatar" style="background-image:url(${avatar});"></div><div>${string}</div></div>`, {html:true, timeout:5000, type:(online ? "success" : null), icon:false});
+						let toast = BDFDB.showToast(`<div class="toast-inner"><div class="toast-avatar" style="background-image:url(${avatar});"></div><div>${string}</div></div>`, {html:true, timeout:5000, type:(online ? "success" : null), icon:false, selector:`friendnotifications-${online ? "online" : "offline"}-toast`});
 						$(toast).on("click." + this.getName(), openChannel);
 						let notificationsound = BDFDB.getData(online ? "toastonline" : "toastoffline", this, "notificationsounds");
 						if (!notificationsound.mute && notificationsound.song) {

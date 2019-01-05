@@ -126,7 +126,7 @@ class StalkerNotifications {
 
 	getDescription () {return "Lets you observe the status of people that aren't your friends.";}
 
-	getVersion () {return "1.0.9";}
+	getVersion () {return "1.1.0";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -372,7 +372,7 @@ class StalkerNotifications {
 							}
 						};
 						if (!BDFDB.loadData(id, this, "desktop")) {
-							let toast = BDFDB.showToast(`<div class="toast-inner"><div class="toast-avatar" style="background-image:url(${avatar});"></div><div>${string}</div></div>`, {html:true, timeout:5000, type:(online ? "success" : null), icon:false});
+							let toast = BDFDB.showToast(`<div class="toast-inner"><div class="toast-avatar" style="background-image:url(${avatar});"></div><div>${string}</div></div>`, {html:true, timeout:5000, type:(online ? "success" : null), icon:false, selector:`stalkernotifications-${online ? "online" : "offline"}-toast`});
 							$(toast).on("click." + this.getName(), openChannel);
 							let notificationsound = BDFDB.getData(online ? "toastonline" : "toastoffline", this, "notificationsounds");
 							if (!notificationsound.mute && notificationsound.song) {
