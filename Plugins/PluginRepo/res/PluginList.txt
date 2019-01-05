@@ -18,6 +18,7 @@ https://raw.githubusercontent.com/Arashiryuu/crap/master/ToastIntegrated/HideUti
 https://raw.githubusercontent.com/Arashiryuu/crap/master/ToastIntegrated/KillXD/KillXD.plugin.js
 https://raw.githubusercontent.com/Arashiryuu/crap/master/ToastIntegrated/LineNumbersRedux/LineNumbersRedux.plugin.js
 https://raw.githubusercontent.com/Arashiryuu/crap/master/ToastIntegrated/MemberCount/MemberCount.plugin.js
+https://raw.githubusercontent.com/Arashiryuu/crap/master/ToastIntegrated/MessageTimestampsRedux/MessageTimestampsRedux.plugin.js
 https://raw.githubusercontent.com/Arashiryuu/crap/master/ToastIntegrated/TitleForTitlebar/TitleForTitlebar.plugin.js
 https://raw.githubusercontent.com/ciaran/bd-switcher/master/switcher.plugin.js
 https://raw.githubusercontent.com/cosmicsalad/Discord-Themes-and-Plugins/master/plugins/emoteSorter.plugin.js
