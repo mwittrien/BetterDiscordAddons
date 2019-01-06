@@ -172,7 +172,7 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
 
-	getVersion () {return "3.1.6";} 
+	getVersion () {return "3.1.7";} 
 
 	getAuthor () {return "DevilBro";}
 	
@@ -604,29 +604,31 @@ class EditUsers {
 		if (!info || !username || !username.parentElement) return;
 		if (username.EditUsersChangeObserver && typeof username.EditUsersChangeObserver.disconnect == "function") username.EditUsersChangeObserver.disconnect();
 		let data = this.getUserData(info.id, username);
-		let member = this.MemberUtils.getMember(guildid, info.id) || {};
-		let usenick = !username.parentElement.classList.contains(BDFDB.disCN.userprofilelistname) && !username.classList.contains(BDFDB.disCN.userprofileusername) && !username.parentElement.classList.contains(BDFDB.disCN.accountinfodetails) && member.nick;
-		let usemembercolor = !username.parentElement.classList.contains(BDFDB.disCN.userprofilelistname) && (username.classList.contains(BDFDB.disCN.memberusername) || username.classList.contains(BDFDB.disCN.messageusername) || BDFDB.isPluginEnabled("BetterRoleColors"));
-		let color1 = BDFDB.colorCONVERT(data.color1 || (usemembercolor ? member.colorString : null), "RGB");
-		let color2 = BDFDB.colorCONVERT(data.color2, "RGB");
-		username.style.setProperty("color", color1, "important");
-		username.style.setProperty("background-color", color2, "important");
-		BDFDB.setInnerText(username, data.name || (usenick ? member.nick : info.username));
-		if (info.bot) {
-			let tag = username.parentElement.querySelector(BDFDB.dotCN.bottagnametag);
-			if (tag) {
-				let invert = tag.className.indexOf(BDFDB.disCN.bottaginvert) > -1;
-				let tagcolor =  BDFDB.colorCONVERT(data.color1 || (BDFDB.isPluginEnabled("BetterRoleColors") ? member.colorString : null), "RGB");
-				tag.style.setProperty("color", invert ? tagcolor : "white");
-				tag.style.setProperty("background-color", invert ? "white" : tagcolor);
+		if (data.name || data.color1 || data.color2 || username.getAttribute("changed-by-editusers")) {
+			let member = this.MemberUtils.getMember(guildid, info.id) || {};
+			let usenick = !username.parentElement.classList.contains(BDFDB.disCN.userprofilelistname) && !username.classList.contains(BDFDB.disCN.userprofileusername) && !username.parentElement.classList.contains(BDFDB.disCN.accountinfodetails) && member.nick;
+			let usemembercolor = !username.parentElement.classList.contains(BDFDB.disCN.userprofilelistname) && (username.classList.contains(BDFDB.disCN.memberusername) || username.classList.contains(BDFDB.disCN.messageusername) || BDFDB.isPluginEnabled("BetterRoleColors"));
+			username.style.setProperty("color", BDFDB.colorCONVERT(data.color1 || (usemembercolor ? member.colorString : null), "RGB"), "important");
+			username.style.setProperty("background-color", BDFDB.colorCONVERT(data.color2, "RGB"), "important");
+			BDFDB.setInnerText(username, data.name || (usenick ? member.nick : info.username));
+			if (info.bot) {
+				let tag = username.parentElement.querySelector(BDFDB.dotCN.bottagnametag);
+				if (tag) {
+					let invert = tag.className.indexOf(BDFDB.disCN.bottaginvert) > -1;
+					let tagcolor =  BDFDB.colorCONVERT(data.color1 || (BDFDB.isPluginEnabled("BetterRoleColors") ? member.colorString : null), "RGB");
+					tag.style.setProperty("color", invert ? tagcolor : "white");
+					tag.style.setProperty("background-color", invert ? "white" : tagcolor);
+				}
 			}
-		}
-		if (!BDFDB.isObjectEmpty(data)) {
-			username.EditUsersChangeObserver = new MutationObserver((changes, _) => {
-				username.EditUsersChangeObserver.disconnect();
-				this.changeName(info, username);
-			});
-			username.EditUsersChangeObserver.observe(username, {attributes:true});
+			if (data.name || data.color1 || data.color2) {
+				username.setAttribute("changed-by-editusers", true);
+				username.EditUsersChangeObserver = new MutationObserver((changes, _) => {
+					username.EditUsersChangeObserver.disconnect();
+					this.changeName(info, username);
+				});
+				username.EditUsersChangeObserver.observe(username, {attributes:true});
+			}
+			else username.removeAttribute("changed-by-editusers", true);
 		}
 	}
 	
@@ -634,16 +636,19 @@ class EditUsers {
 		if (!info || !username || !username.parentElement) return;
 		if (username.EditUsersChangeObserver && typeof username.EditUsersChangeObserver.disconnect == "function") username.EditUsersChangeObserver.disconnect();
 		let data = this.getUserData(info.id, username);
-		let member = this.MemberUtils.getMember(guildid, info.id) || {};
-		let color1 = BDFDB.colorCONVERT(data.color1 || (BDFDB.isPluginEnabled("BetterRoleColors") ? member.colorString : null), "RGB");
-		username.style.setProperty("color", color1, "important");
-		BDFDB.setInnerText(username, data.name || member.nick || info.username);
-		if (!BDFDB.isObjectEmpty(data)) {
-			username.EditUsersChangeObserver = new MutationObserver((changes, _) => {
-				username.EditUsersChangeObserver.disconnect();
-				this.changeName(info, username);
-			});
-			username.EditUsersChangeObserver.observe(username, {attributes:true});
+		if (data.name || data.color1 || username.getAttribute("changed-by-editusers")) {
+			let member = this.MemberUtils.getMember(guildid, info.id) || {};
+			username.style.setProperty("color", BDFDB.colorCONVERT(data.color1 || (BDFDB.isPluginEnabled("BetterRoleColors") ? member.colorString : null), "RGB"), "important");
+			BDFDB.setInnerText(username, data.name || member.nick || info.username);
+			if (data.name || data.color1) {
+				username.setAttribute("changed-by-editusers", true);
+				username.EditUsersChangeObserver = new MutationObserver((changes, _) => {
+					username.EditUsersChangeObserver.disconnect();
+					this.changeName(info, username);
+				});
+				username.EditUsersChangeObserver.observe(username, {attributes:true});
+			}
+			else username.removeAttribute("changed-by-editusers", true);
 		}
 	}
 	
@@ -651,7 +656,7 @@ class EditUsers {
 		if (!info || !username || !username.parentElement) return;
 		if (username.EditUsersChangeObserver && typeof username.EditUsersChangeObserver.disconnect == "function") username.EditUsersChangeObserver.disconnect();
 		let data = this.getUserData(info.id, username);
-		if (!BDFDB.isObjectEmpty(data)) { 
+		if (data.name || data.color1 || username.getAttribute("changed-by-editusers")) {
 			let color1 = BDFDB.colorCONVERT(data.color1, "RGB");
 			if (adddisc) {
 				username.innerHTML = `<span ${color1 ? 'style="color:' + color1 + '!important;"': ''}>${BDFDB.encodeToHTML(data.name || info.username)}</span><span>#${info.discriminator}</span>`;
@@ -660,11 +665,15 @@ class EditUsers {
 				username.style.setProperty("color", color1, "important");
 				BDFDB.setInnerText(username, data.name || info.username);
 			}
-			username.EditUsersChangeObserver = new MutationObserver((changes, _) => {
-				username.EditUsersChangeObserver.disconnect();
-				this.changeName(info, username);
-			});
-			username.EditUsersChangeObserver.observe(username, {attributes:true});
+			if (data.name || data.color1) {
+				username.setAttribute("changed-by-editusers", true);
+				username.EditUsersChangeObserver = new MutationObserver((changes, _) => {
+					username.EditUsersChangeObserver.disconnect();
+					this.changeName(info, username);
+				});
+				username.EditUsersChangeObserver.observe(username, {attributes:true});
+			}
+			else username.removeAttribute("changed-by-editusers", true);
 		}
 	}
 	
@@ -672,26 +681,30 @@ class EditUsers {
 		if (!info || !avatar || !avatar.parentElement) return;
 		if (avatar.EditUsersChangeObserver && typeof avatar.EditUsersChangeObserver.disconnect == "function") avatar.EditUsersChangeObserver.disconnect();
 		let data = this.getUserData(info.id, avatar);
-		if (avatar.tagName == "IMG") avatar.setAttribute("src", data.removeIcon ? null : (data.url || BDFDB.getUserAvatar(info.id)));
-		else {
-			let url = data.removeIcon ? null : ("url(" + (data.url || BDFDB.getUserAvatar(info.id)) + ")");
-			if (url && avatar.classList.contains(BDFDB.disCN.avatarmaskprofile) && url.search(/discordapp\.com\/avatars\/[0-9]*\/a_/) > -1) url = url.replace(".webp)", ".gif)");
-			avatar.style.setProperty("background-image", url);
-			if (data.url && !data.removeIcon) {
-				avatar.style.setProperty("background-position", "center");
-				avatar.style.setProperty("background-size", "cover");
+		if (data.url || data.removeIcon || avatar.getAttribute("changed-by-editusers")) {
+			if (avatar.tagName == "IMG") avatar.setAttribute("src", data.removeIcon ? null : (data.url || BDFDB.getUserAvatar(info.id)));
+			else {
+				let url = data.removeIcon ? null : ("url(" + (data.url || BDFDB.getUserAvatar(info.id)) + ")");
+				if (url && avatar.classList.contains(BDFDB.disCN.avatarmaskprofile) && url.search(/discordapp\.com\/avatars\/[0-9]*\/a_/) > -1) url = url.replace(".webp)", ".gif)");
+				avatar.style.setProperty("background-image", url);
+				if (data.url && !data.removeIcon) {
+					avatar.style.setProperty("background-position", "center");
+					avatar.style.setProperty("background-size", "cover");
+				}
 			}
-		}
-		if (data.url || data.removeIcon) {
-			avatar.EditUsersChangeObserver = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						avatar.EditUsersChangeObserver.disconnect();
-						this.changeAvatar(info, avatar);
-					}
-				);
-			});
-			avatar.EditUsersChangeObserver.observe(avatar, {attributes:true});
+			if (data.url || data.removeIcon) {
+				avatar.setAttribute("changed-by-editusers", true);
+				avatar.EditUsersChangeObserver = new MutationObserver((changes, _) => {
+					changes.forEach(
+						(change, i) => {
+							avatar.EditUsersChangeObserver.disconnect();
+							this.changeAvatar(info, avatar);
+						}
+					);
+				});
+				avatar.EditUsersChangeObserver.observe(avatar, {attributes:true});
+			}
+			else avatar.removeAttribute("changed-by-editusers", true);
 		}
 	}
 	
@@ -761,16 +774,19 @@ class EditUsers {
 		if (!info || !username || !username.parentElement) return;
 		if (username.EditUsersChangeObserver && typeof username.EditUsersChangeObserver.disconnect == "function") username.EditUsersChangeObserver.disconnect();
 		let data = this.getUserData(info.id, username);
-		let member = this.MemberUtils.getMember(this.LastGuildStore.getGuildId(), info.id) || {};
-		let color1 = BDFDB.colorCONVERT(data.color1 ? data.color1 : (BDFDB.isPluginEnabled("BetterRoleColors") ? member.colorString : ""), "RGB");
-		BDFDB.setInnerText(username, data.name || member.nick || info.username);
-		username.style.setProperty("color", username.classList.contains(BDFDB.disCN.voicenamedefault) ? BDFDB.colorCHANGE(color1, -50) : color1, "important");
-		if (!BDFDB.isObjectEmpty(data)) {
-			username.EditUsersChangeObserver = new MutationObserver((changes, _) => {
-				username.EditUsersChangeObserver.disconnect();
-				this.changeVoiceUser(info, username);
-			});
-			username.EditUsersChangeObserver.observe(username, {attributes:true});
+		if (data.name || data.color1 || username.getAttribute("changed-by-editusers")) {
+			let member = this.MemberUtils.getMember(this.LastGuildStore.getGuildId(), info.id) || {};
+			let color1 = BDFDB.colorCONVERT(data.color1 || (BDFDB.isPluginEnabled("BetterRoleColors") ? member.colorString : ""), "RGB");
+			BDFDB.setInnerText(username, data.name || member.nick || info.username);
+			username.style.setProperty("color", username.classList.contains(BDFDB.disCN.voicenamedefault) ? BDFDB.colorCHANGE(color1, -50) : color1, "important");
+			if (data.name || data.color1) {
+				username.EditUsersChangeObserver = new MutationObserver((changes, _) => {
+					username.EditUsersChangeObserver.disconnect();
+					this.changeVoiceUser(info, username);
+				});
+				username.EditUsersChangeObserver.observe(username, {attributes:true});
+			}
+			else username.removeAttribute("changed-by-editusers", true);
 		}
 	}
 	
