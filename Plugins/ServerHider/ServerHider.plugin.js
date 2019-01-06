@@ -95,12 +95,13 @@ class ServerHider {
 
 		$(settingspanel)
 			.on("click", ".reset-button", () => {
-				if (confirm("Are you sure you want to reset all servers?")) {
+				BDFDB.openConfirmModal(this, "Are you sure you want to reset all servers?", () => {
 					BDFDB.removeAllData(this, "servers");
-					BDFDB.readServerList().forEach(serverObj => {
-						if (!serverObj.div.getAttribute("folder")) $(serverObj.div).show();
+					BDFDB.readServerList().forEach(info => {
+						if (!info.div.getAttribute("folder")) info.div.style.removeProperty("display");
 					});
-				}});
+				});
+			});
 		return settingspanel;
 	}
 

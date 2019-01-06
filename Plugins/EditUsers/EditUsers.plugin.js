@@ -195,10 +195,10 @@ class EditUsers {
 		$(settingspanel)
 			.on("click", BDFDB.dotCN.switchinner, () => {this.updateSettings(settingspanel);})
 			.on("click", ".reset-button", () => {
-				if (confirm("Are you sure you want to reset all users?")) {
+				BDFDB.openConfirmModal(this, "Are you sure you want to reset all users?", () => {
 					BDFDB.removeAllData(this, "users");
 					BDFDB.WebModules.forceAllUpdates(this);
-				}
+				});
 			});
 		return settingspanel;
 	}

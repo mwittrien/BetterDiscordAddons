@@ -7,7 +7,7 @@ class PersonalPins {
 		this.patchModules = {
 			"HeaderBar":["componentDidMount","componentDidUpdate"],
 			"Message":"componentDidMount",
-			"MessageOptionPopout":"componentDidMount" 
+			"MessageOptionPopout":"componentDidMount"
 		};
 		
 		this.notesButton =
@@ -167,7 +167,11 @@ class PersonalPins {
 		BDFDB.initElements(settingspanel);
 
 		$(settingspanel)
-			.on("click", ".reset-button", () => {if (confirm("Are you sure you want to delete all pinned notes?")) BDFDB.removeAllData(this, "pins");});
+			.on("click", ".reset-button", () => {
+				BDFDB.openConfirmModal(this, "Are you sure you want to delete all pinned notes?", () => {
+					BDFDB.removeAllData(this, "pins");
+				});
+			});
 		return settingspanel;
 	}
 

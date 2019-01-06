@@ -74,7 +74,7 @@ class PluginRepo {
 			</li>`;
 			
 		this.pluginRepoModalMarkup =
-			`<span class="${this.getName()}-modal DevilBro-modal">
+			`<span class="${this.getName()}-modal Repo-modal DevilBro-modal">
 				<div class="${BDFDB.disCN.backdrop}"></div>
 				<div class="${BDFDB.disCN.modal}">
 					<div class="${BDFDB.disCN.modalinner}">
@@ -190,7 +190,7 @@ class PluginRepo {
 				50% {opacity: 0.9;}
 				to {opacity: 0.1;}
 			}
-			.${this.getName()}-modal ${BDFDB.dotCN.modalinner} {
+			.${this.getName()}-modal.Repo-modal ${BDFDB.dotCN.modalinner} {
 				min-height: 100%;
 				min-width: 800px;
 				width: 50%;
@@ -422,10 +422,10 @@ class PluginRepo {
 	}
 	
 	removeAllFromOwnList () {
-		if (confirm("Are you sure you want to remove all added Plugins from your own list?")) {
+		BDFDB.openConfirmModal(this, "Are you sure you want to remove all added Plugins from your own list?", () => {
 			BDFDB.saveData("ownlist", [], this, "ownlist");
-			BDFDB.removeEles(this.getName() + "-settings " + BDFDB.dotCN.hovercard);
-		}
+			BDFDB.removeEles("." + this.getName() + "-settings " + BDFDB.dotCN.hovercard);
+		});
 	}
 	
 	checkIfPluginsPage (container) {

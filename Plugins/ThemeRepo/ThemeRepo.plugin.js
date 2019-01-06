@@ -82,7 +82,7 @@ class ThemeRepo {
 			</li>`;
 			
 		this.themeRepoModalMarkup =
-			`<span class="${this.getName()}-modal DevilBro-modal">
+			`<span class="${this.getName()}-modal Repo-modal DevilBro-modal">
 				<div class="${BDFDB.disCN.backdrop}"></div>
 				<div class="${BDFDB.disCN.modal}">
 					<div class="${BDFDB.disCN.modalinner}">
@@ -236,7 +236,7 @@ class ThemeRepo {
 				opacity: 0 !important;
 				visibility: hidden !important;
 			}
-			.${this.getName()}-modal ${BDFDB.dotCN.modalinner} {
+			.${this.getName()}-modal.Repo-modal ${BDFDB.dotCN.modalinner} {
 				min-height: 100%;
 				min-width: 800px;
 				width: 50%;
@@ -467,10 +467,10 @@ class ThemeRepo {
 	}
 	
 	removeAllFromOwnList () {
-		if (confirm("Are you sure you want to remove all added Themes from your own list?")) {
+		BDFDB.openConfirmModal(this, "Are you sure you want to remove all added Themes from your own list?", () => {
 			BDFDB.saveData("ownlist", [], this, "ownlist");
-			BDFDB.removeEles(this.getName() + "-settings " + BDFDB.dotCN.hovercard);
-		}
+			BDFDB.removeEles("." + this.getName() + "-settings " + BDFDB.dotCN.hovercard);
+		});
 	}
 	
 	checkIfThemesPage (container) {
@@ -519,7 +519,7 @@ class ThemeRepo {
 		themeRepoModal.find("#input-hideupdated").prop("checked", hiddenSettings.updated || showOnlyOutdated);
 		themeRepoModal.find("#input-hideoutdated").prop("checked", hiddenSettings.outdated && !showOnlyOutdated);
 		themeRepoModal.find("#input-hidedownloadable").prop("checked", hiddenSettings.downloadable || showOnlyOutdated);
-		if (!BDFDB.isRestartNoMoreEnabled()) BDFDB.removeEles("." + this.getName() + "-modal #RNMoption");
+		if (!BDFDB.isRestartNoMoreEnabled()) BDFDB.removeEles(".themerepo-modal #RNMoption");
 		else themeRepoModal.find("#input-rnmstart").prop("checked", BDFDB.loadData("RNMstart", this, "settings"));
 		themeRepoModal
 			.on("keyup." + this.getName(), BDFDB.dotCN.searchbarinput, () => {

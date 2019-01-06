@@ -149,7 +149,7 @@ class MessageUtilities {
 	}
 	
 	resetAll (settingspanel) {
-		if (confirm("Are you sure you want to delete all key bindings?")) {
+		BDFDB.openConfirmModal(this, "Are you sure you want to delete all key bindings?", () => {
 			BDFDB.removeAllData(this, "bindings");
 			let bindings = BDFDB.getAllData(this, "bindings");
 			settingspanel.querySelectorAll(BDFDB.dotCN.select).forEach((wrap) => {
@@ -164,7 +164,7 @@ class MessageUtilities {
 				wrap.setAttribute("value", bindings[action][option]);
 				wrap.querySelector("input").setAttribute("value", this.keyboardMap[bindings[action][option]]);
 			});
-		}
+		});
 	}
 	
 	openDropdownMenu (settingspanel, e) {

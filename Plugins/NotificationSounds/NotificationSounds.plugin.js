@@ -140,7 +140,7 @@ class NotificationSounds {
 			.on("click", ".btn-addsong", (e) => {this.saveAudio(settingspanel);})
 			.on("keyup", ".songInput", (e) => {if (e.which == 13) this.saveAudio(settingspanel);})
 			.on("click", ".reset-button", () => {
-				if (confirm("Are you sure you want to delete all added songs?")) {
+				BDFDB.openConfirmModal(this, "Are you sure you want to delete all added songs?", () => {
 					BDFDB.removeAllData(this, "choices");
 					BDFDB.removeAllData(this, "audios");
 					this.loadAudios();
@@ -158,7 +158,7 @@ class NotificationSounds {
 					settingspanel.querySelectorAll(".volumeInput").forEach((input) => {
 						input.value = 100;
 					});
-				}
+				});
 			})
 			.on("click", ".mute-checkbox", (e) => {
 				var checkbox = e.currentTarget;

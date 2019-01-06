@@ -327,15 +327,15 @@ class ServerFolders {
 		$(settingspanel)
 			.on("click", BDFDB.dotCN.switchinner, () => {this.updateSettings(settingspanel);})
 			.on("click", ".reset-button", () => {
-				if (confirm("Are you sure you want to delete all folders?")) {
+				BDFDB.openConfirmModal(this, "Are you sure you want to delete all folders?", () => {
 					BDFDB.removeAllData(this, "folders");
 					this.resetAllElements();
-				}
+				});
 			})
 			.on("click", ".removecustom-button", () => {
-				if (confirm("Are you sure you want to remove all custom icons?")) {
+				BDFDB.openConfirmModal(this, "Are you sure you want to remove all custom icons?", () => {
 					BDFDB.removeAllData(this, "customicons");
-				}
+				});
 			});
 		return settingspanel;
 	}

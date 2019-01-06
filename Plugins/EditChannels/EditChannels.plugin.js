@@ -122,10 +122,10 @@ class EditChannels {
 		$(settingspanel)
 			.on("click", BDFDB.dotCN.switchinner, () => {this.updateSettings(settingspanel);})
 			.on("click", ".reset-button", () => {
-				if (confirm("Are you sure you want to reset all channels?")) {
+				BDFDB.openConfirmModal(this, "Are you sure you want to reset all channels?", () => {
 					BDFDB.removeAllData(this, "channels");
 					BDFDB.WebModules.forceAllUpdates(this);
-				}
+				});
 			});
 		return settingspanel;
 	}
@@ -226,12 +226,7 @@ class EditChannels {
 	}
 	
 	showChannelSettings (info) {
-		var channelObj = BDFDB.getDivOfChannel(info.id);
-		
-		var data = BDFDB.loadData(info.id, this, "channels");
-		
-		var name = data ? data.name : null;
-		var color = data ? data.color : null;
+		var {name,color} = BDFDB.loadData(info.id, this, "channels") || {}
 		
 		var channelSettingsModal = $(this.channelSettingsModalMarkup);
 		channelSettingsModal.find(BDFDB.dotCN.modalguildname).text(info.name);
