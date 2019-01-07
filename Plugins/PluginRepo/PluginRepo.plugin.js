@@ -2,6 +2,10 @@
 
 class PluginRepo {
 	initConstructor () {
+		this.patchModules = {
+			"V2C_List":"componentDidMount"
+		};
+		
 		this.sortings = {
 			sort: {
 				name:			"Name",
@@ -25,9 +29,6 @@ class PluginRepo {
 		
 		this.updateInterval;
 		
-		this.pluginRepoButtonMarkup = 
-			`<button class="bd-pfbtn bd-pluginrepobutton">Plugin Repo</button>`;
-		
 		this.settingsContextEntryMarkup =
 			`<div class="${BDFDB.disCN.contextmenuitem} pluginrepo-item">
 				<span>Plugin Repo</span>
@@ -41,35 +42,37 @@ class PluginRepo {
 			</svg>`;
 
 		this.pluginEntryMarkup =
-			`<li class="pluginEntry settings-closed ui-switch-item">
-				<div class="bda-header">
-					<span class="bda-header-title">
-						<span class="bda-name"></span> v<span class="bda-version"></span> by <span class="bda-author"></span>
+			`<li class="pluginEntry ${BDFDB.disCNS._reposettingsclosed + BDFDB.disCN._repocheckboxitem}">
+				<div class="${BDFDB.disCN._repoheader}" style="overflow: visible !important;">
+					<span class="${BDFDB.disCN._repoheadertitle}">
+						<span class="${BDFDB.disCN._reponame}"></span> v<span class="${BDFDB.disCN._repoversion}"></span> by <span class="${BDFDB.disCN._repoauthor}"></span>
 					</span>
-					<div tabindex="0" class="${BDFDB.disCNS.giffavoritebutton + BDFDB.disCN.giffavoritecolor}" role="button" style="width: 20px; height: 20px;">
-						<svg class="${BDFDB.disCNS.giffavoriteicon}" name="Favorite" viewBox="3 3 18 18" width="20" height="20"></svg>
+					<div class="${BDFDB.disCN._repocontrols}">
+						<div tabindex="0" class="${BDFDB.disCNS.giffavoritebutton + BDFDB.disCN.giffavoritecolor}" role="button" style="width: 24px !important; height: 24px !important; position: relative !important; opacity: 1 !important; transform: none !important;">
+							<svg class="${BDFDB.disCNS.giffavoriteicon}" name="Favorite" viewBox="2 2 20 20" width="24" height="24"></svg>
+						</div>
+						<svg class="gitIcon" version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" transform="translate(2,1.5)">
+							<path d="M 7.19, 16.027 c -0.139, 0.026 -0.199, 0.091 -0.182, 0.195 c 0.017, 0.104, 0.095, 0.138, 0.234, 0.104 c 0.139 -0.035, 0.199 -0.095, 0.182 -0.182 C 7.406, 16.049, 7.328, 16.01, 7.19, 16.027 z"></path>
+							<path d="M 6.45, 16.131 c -0.138, 0 -0.208, 0.047 -0.208, 0.143 c 0, 0.112, 0.074, 0.16, 0.221, 0.143 c 0.138, 0, 0.208 -0.048, 0.208 -0.143 C 6.671, 16.162, 6.597, 16.114, 6.45, 16.131 z"></path>
+							<path d="M 5.438, 16.092 c -0.035, 0.095, 0.022, 0.16, 0.169, 0.195 c 0.13, 0.052, 0.212, 0.026, 0.247 -0.078 c 0.026 -0.095 -0.03 -0.164 -0.169 -0.208 C 5.554, 15.967, 5.472, 15.996, 5.438, 16.092 z"></path>
+							<path d="M 18.837, 1.097 C 18.106, 0.366, 17.226, 0, 16.196, 0 H 3.738 C 2.708, 0, 1.828, 0.366, 1.097, 1.097 C 0.366, 1.828, 0, 2.708, 0, 3.738 v 12.459 c 0, 1.03, 0.366, 1.91, 1.097, 2.641 c 0.731, 0.731, 1.612, 1.097, 2.641, 1.097 h 2.907 c 0.19, 0, 0.333 -0.007, 0.428 -0.019 c 0.095 -0.013, 0.19 -0.069, 0.285 -0.169 c 0.095 -0.099, 0.143 -0.244, 0.143 -0.435 c 0 -0.026 -0.002 -0.32 -0.007 -0.883 c -0.004 -0.562 -0.007 -1.008 -0.007 -1.337 l -0.298, 0.052 c -0.19, 0.035 -0.43, 0.05 -0.72, 0.045 c -0.29 -0.004 -0.59 -0.035 -0.902 -0.091 c -0.312 -0.056 -0.601 -0.186 -0.87 -0.389 c -0.268 -0.203 -0.458 -0.469 -0.571 -0.798 l -0.13 -0.299 c -0.086 -0.199 -0.223 -0.419 -0.409 -0.662 c -0.186 -0.242 -0.374 -0.407 -0.564 -0.493 l -0.091 -0.065 c -0.06 -0.043 -0.117 -0.095 -0.169 -0.156 c -0.052 -0.061 -0.091 -0.121 -0.117 -0.182 c -0.026 -0.061 -0.004 -0.11, 0.065 -0.149 c 0.069 -0.039, 0.195 -0.058, 0.376 -0.058 l 0.259, 0.039 c 0.173, 0.035, 0.387, 0.138, 0.642, 0.311 c 0.255, 0.173, 0.465, 0.398, 0.629, 0.675 c 0.199, 0.355, 0.439, 0.625, 0.72, 0.811 c 0.281, 0.186, 0.565, 0.279, 0.85, 0.279 s 0.532 -0.022, 0.74 -0.065 c 0.208 -0.043, 0.402 -0.108, 0.584 -0.195 c 0.078 -0.58, 0.29 -1.025, 0.636 -1.337 c -0.493 -0.052 -0.936 -0.13 -1.33 -0.234 c -0.394 -0.104 -0.8 -0.272 -1.22 -0.506 c -0.42 -0.234 -0.768 -0.523 -1.045 -0.87 c -0.277 -0.346 -0.504 -0.8 -0.681 -1.363 c -0.177 -0.562 -0.266 -1.211 -0.266 -1.947 c 0 -1.047, 0.342 -1.938, 1.025 -2.673 c -0.32 -0.787 -0.29 -1.67, 0.091 -2.647 c 0.251 -0.078, 0.623 -0.019, 1.116, 0.175 c 0.493, 0.195, 0.854, 0.361, 1.084, 0.5 c 0.229, 0.138, 0.413, 0.255, 0.552, 0.35 c 0.805 -0.225, 1.635 -0.337, 2.492 -0.337 c 0.856, 0, 1.687, 0.112, 2.492, 0.337 l 0.493 -0.311 c 0.338 -0.208, 0.735 -0.398, 1.194 -0.571 c 0.459 -0.173, 0.809 -0.221, 1.051 -0.143 c 0.389, 0.978, 0.424, 1.86, 0.104, 2.647 c 0.683, 0.735, 1.025, 1.627, 1.025, 2.673 c 0, 0.735 -0.089, 1.387 -0.266, 1.953 c -0.177, 0.567 -0.406, 1.021 -0.688, 1.363 c -0.281, 0.342 -0.632, 0.629 -1.051, 0.863 c -0.42, 0.234 -0.826, 0.402 -1.22, 0.506 c -0.394, 0.104 -0.837, 0.182 -1.33, 0.234 c 0.45, 0.389, 0.675, 1.003, 0.675, 1.843 v 3.102 c 0, 0.147, 0.021, 0.266, 0.065, 0.357 c 0.044, 0.091, 0.113, 0.153, 0.208, 0.188 c 0.096, 0.035, 0.18, 0.056, 0.253, 0.065 c 0.074, 0.009, 0.18, 0.013, 0.318, 0.013 h 2.907 c 1.029, 0, 1.91 -0.366, 2.641 -1.097 c 0.731 -0.731, 1.097 -1.612, 1.097 -2.641 V 3.738 C 19.933, 2.708, 19.568, 1.827, 18.837, 1.097 z"></path>
+							<path d="M 3.945, 14.509 c -0.06, 0.043 -0.052, 0.112, 0.026, 0.208 c 0.087, 0.086, 0.156, 0.1, 0.208, 0.039 c 0.061 -0.043, 0.052 -0.112 -0.026 -0.208 C 4.066, 14.47, 3.997, 14.457, 3.945, 14.509 z"></path>
+							<path d="M 3.517, 14.184 c -0.026, 0.061, 0.004, 0.113, 0.091, 0.156 c 0.069, 0.043, 0.126, 0.035, 0.169 -0.026 c 0.026 -0.061 -0.004 -0.113 -0.091 -0.156 C 3.599, 14.132, 3.543, 14.141, 3.517, 14.184 z"></path>
+							<path d="M 4.348, 15.015 c -0.078, 0.043 -0.078, 0.121, 0, 0.234 c 0.078, 0.113, 0.151, 0.143, 0.221, 0.091 c 0.078 -0.061, 0.078 -0.143, 0 -0.247 C 4.499, 14.981, 4.425, 14.954, 4.348, 15.015 z"></path>
+							<path d="M 4.802, 15.599 c -0.078, 0.069 -0.061, 0.151, 0.052, 0.247 c 0.104, 0.104, 0.19, 0.117, 0.259, 0.039 c 0.069 -0.069, 0.052 -0.151 -0.052 -0.246 C 4.958, 15.534, 4.871, 15.521, 4.802, 15.599 z"></path>
+						</svg>
 					</div>
-					<svg class="gitIcon" version="1.1" xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor">
-						<path d="M 7.19, 16.027 c -0.139, 0.026 -0.199, 0.091 -0.182, 0.195 c 0.017, 0.104, 0.095, 0.138, 0.234, 0.104 c 0.139 -0.035, 0.199 -0.095, 0.182 -0.182 C 7.406, 16.049, 7.328, 16.01, 7.19, 16.027 z"></path>
-						<path d="M 6.45, 16.131 c -0.138, 0 -0.208, 0.047 -0.208, 0.143 c 0, 0.112, 0.074, 0.16, 0.221, 0.143 c 0.138, 0, 0.208 -0.048, 0.208 -0.143 C 6.671, 16.162, 6.597, 16.114, 6.45, 16.131 z"></path>
-						<path d="M 5.438, 16.092 c -0.035, 0.095, 0.022, 0.16, 0.169, 0.195 c 0.13, 0.052, 0.212, 0.026, 0.247 -0.078 c 0.026 -0.095 -0.03 -0.164 -0.169 -0.208 C 5.554, 15.967, 5.472, 15.996, 5.438, 16.092 z"></path>
-						<path d="M 18.837, 1.097 C 18.106, 0.366, 17.226, 0, 16.196, 0 H 3.738 C 2.708, 0, 1.828, 0.366, 1.097, 1.097 C 0.366, 1.828, 0, 2.708, 0, 3.738 v 12.459 c 0, 1.03, 0.366, 1.91, 1.097, 2.641 c 0.731, 0.731, 1.612, 1.097, 2.641, 1.097 h 2.907 c 0.19, 0, 0.333 -0.007, 0.428 -0.019 c 0.095 -0.013, 0.19 -0.069, 0.285 -0.169 c 0.095 -0.099, 0.143 -0.244, 0.143 -0.435 c 0 -0.026 -0.002 -0.32 -0.007 -0.883 c -0.004 -0.562 -0.007 -1.008 -0.007 -1.337 l -0.298, 0.052 c -0.19, 0.035 -0.43, 0.05 -0.72, 0.045 c -0.29 -0.004 -0.59 -0.035 -0.902 -0.091 c -0.312 -0.056 -0.601 -0.186 -0.87 -0.389 c -0.268 -0.203 -0.458 -0.469 -0.571 -0.798 l -0.13 -0.299 c -0.086 -0.199 -0.223 -0.419 -0.409 -0.662 c -0.186 -0.242 -0.374 -0.407 -0.564 -0.493 l -0.091 -0.065 c -0.06 -0.043 -0.117 -0.095 -0.169 -0.156 c -0.052 -0.061 -0.091 -0.121 -0.117 -0.182 c -0.026 -0.061 -0.004 -0.11, 0.065 -0.149 c 0.069 -0.039, 0.195 -0.058, 0.376 -0.058 l 0.259, 0.039 c 0.173, 0.035, 0.387, 0.138, 0.642, 0.311 c 0.255, 0.173, 0.465, 0.398, 0.629, 0.675 c 0.199, 0.355, 0.439, 0.625, 0.72, 0.811 c 0.281, 0.186, 0.565, 0.279, 0.85, 0.279 s 0.532 -0.022, 0.74 -0.065 c 0.208 -0.043, 0.402 -0.108, 0.584 -0.195 c 0.078 -0.58, 0.29 -1.025, 0.636 -1.337 c -0.493 -0.052 -0.936 -0.13 -1.33 -0.234 c -0.394 -0.104 -0.8 -0.272 -1.22 -0.506 c -0.42 -0.234 -0.768 -0.523 -1.045 -0.87 c -0.277 -0.346 -0.504 -0.8 -0.681 -1.363 c -0.177 -0.562 -0.266 -1.211 -0.266 -1.947 c 0 -1.047, 0.342 -1.938, 1.025 -2.673 c -0.32 -0.787 -0.29 -1.67, 0.091 -2.647 c 0.251 -0.078, 0.623 -0.019, 1.116, 0.175 c 0.493, 0.195, 0.854, 0.361, 1.084, 0.5 c 0.229, 0.138, 0.413, 0.255, 0.552, 0.35 c 0.805 -0.225, 1.635 -0.337, 2.492 -0.337 c 0.856, 0, 1.687, 0.112, 2.492, 0.337 l 0.493 -0.311 c 0.338 -0.208, 0.735 -0.398, 1.194 -0.571 c 0.459 -0.173, 0.809 -0.221, 1.051 -0.143 c 0.389, 0.978, 0.424, 1.86, 0.104, 2.647 c 0.683, 0.735, 1.025, 1.627, 1.025, 2.673 c 0, 0.735 -0.089, 1.387 -0.266, 1.953 c -0.177, 0.567 -0.406, 1.021 -0.688, 1.363 c -0.281, 0.342 -0.632, 0.629 -1.051, 0.863 c -0.42, 0.234 -0.826, 0.402 -1.22, 0.506 c -0.394, 0.104 -0.837, 0.182 -1.33, 0.234 c 0.45, 0.389, 0.675, 1.003, 0.675, 1.843 v 3.102 c 0, 0.147, 0.021, 0.266, 0.065, 0.357 c 0.044, 0.091, 0.113, 0.153, 0.208, 0.188 c 0.096, 0.035, 0.18, 0.056, 0.253, 0.065 c 0.074, 0.009, 0.18, 0.013, 0.318, 0.013 h 2.907 c 1.029, 0, 1.91 -0.366, 2.641 -1.097 c 0.731 -0.731, 1.097 -1.612, 1.097 -2.641 V 3.738 C 19.933, 2.708, 19.568, 1.827, 18.837, 1.097 z"></path>
-						<path d="M 3.945, 14.509 c -0.06, 0.043 -0.052, 0.112, 0.026, 0.208 c 0.087, 0.086, 0.156, 0.1, 0.208, 0.039 c 0.061 -0.043, 0.052 -0.112 -0.026 -0.208 C 4.066, 14.47, 3.997, 14.457, 3.945, 14.509 z"></path>
-						<path d="M 3.517, 14.184 c -0.026, 0.061, 0.004, 0.113, 0.091, 0.156 c 0.069, 0.043, 0.126, 0.035, 0.169 -0.026 c 0.026 -0.061 -0.004 -0.113 -0.091 -0.156 C 3.599, 14.132, 3.543, 14.141, 3.517, 14.184 z"></path>
-						<path d="M 4.348, 15.015 c -0.078, 0.043 -0.078, 0.121, 0, 0.234 c 0.078, 0.113, 0.151, 0.143, 0.221, 0.091 c 0.078 -0.061, 0.078 -0.143, 0 -0.247 C 4.499, 14.981, 4.425, 14.954, 4.348, 15.015 z"></path>
-						<path d="M 4.802, 15.599 c -0.078, 0.069 -0.061, 0.151, 0.052, 0.247 c 0.104, 0.104, 0.19, 0.117, 0.259, 0.039 c 0.069 -0.069, 0.052 -0.151 -0.052 -0.246 C 4.958, 15.534, 4.871, 15.521, 4.802, 15.599 z"></path>
-					</svg>
 				</div>
-				<div class="bda-description-wrap ${BDFDB.disCN.scrollerwrap}">
-					<div class="bda-description ${BDFDB.disCN.scroller}" style="display: block;"></div>
+				<div class="${BDFDB.disCNS._repodescriptionwrap + BDFDB.disCN.scrollerwrap}">
+					<div class="${BDFDB.disCNS._repodescription + BDFDB.disCN.scroller}" style="display: block !important;"></div>
 				</div>
-				<div class="bda-footer">
-					<span class="bda-links"></span>
-					<svg class="trashIcon" version="1.1" xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor">
+				<div class="${BDFDB.disCN._repofooter}">
+					<span class="${BDFDB.disCN._repolinks}"></span>
+					<svg class="trashIcon" version="1.1" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" style="margin: 0 5px 0 auto !important;">
 						<path d="M 18.012, 0.648 H 12.98 C 12.944, 0.284, 12.637, 0, 12.264, 0 H 8.136 c -0.373, 0 -0.68, 0.284 -0.716, 0.648 H 2.389 c -0.398, 0 -0.72, 0.322 -0.72, 0.72 v 1.368 c 0, 0.398, 0.322, 0.72, 0.72, 0.72 h 15.623 c 0.398, 0, 0.72 -0.322, 0.72 -0.72 V 1.368 C 18.731, 0.97, 18.409, 0.648, 18.012, 0.648 z"></path>
 						<path d="M 3.178, 4.839 v 14.841 c 0, 0.397, 0.322, 0.72, 0.72, 0.72 h 12.604 c 0.398, 0, 0.72 -0.322, 0.72 -0.72 V 4.839 H 3.178 z M 8.449, 15.978 c 0, 0.438 -0.355, 0.794 -0.794, 0.794 c -0.438, 0 -0.794 -0.355 -0.794 -0.794 V 8.109 c 0 -0.438, 0.355 -0.794, 0.794 -0.794 c 0.438, 0, 0.794, 0.355, 0.794, 0.794 V 15.978 z M 13.538, 15.978 c 0, 0.438 -0.355, 0.794 -0.794, 0.794 s -0.794 -0.355 -0.794 -0.794 V 8.109 c 0 -0.438, 0.355 -0.794, 0.794 -0.794 c 0.438, 0, 0.794, 0.355, 0.794, 0.794 V 15.978 z"></path>
 					</svg>
-					<button class="btn-download bda-settings-button" style="margin-left: 0 !important;">Download</button>
+					<button class="${BDFDB.disCN._reposettingsbutton} btn-download" style="margin-left: 0 !important;">Download</button>
 				</div>
 			</li>`;
 			
@@ -118,7 +121,7 @@ class PluginRepo {
 							</div>
 							<div tab="plugins" class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.modalcontent + BDFDB.disCNS.scrollerthemed + BDFDB.disCN.themeghosthairline} tab-content">
 								<div class="${BDFDB.disCNS.scroller + BDFDB.disCN.modalsubinner}">
-									<ul class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCN.nowrap} bda-slist plugins" style="flex: 1 1 auto;"></ul>
+									<ul class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN._repolist} plugins" style="flex: 1 1 auto; display: flex !important; display: flex-direction: column !important;"></ul>
 								</div>
 							</div>
 							<div tab="settings" class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.modalsubinner} tab-content" style="flex: 1 1 auto;">
@@ -195,32 +198,16 @@ class PluginRepo {
 				min-width: 800px;
 				width: 50%;
 			}
-			.${this.getName()}-modal .pluginEntry,
-			.${this.getName()}-modal .pluginEntry .bda-header {
-				overflow: visible !important;
-			}
-			.${this.getName()}-modal .pluginEntry .gitIcon,
-			.${this.getName()}-modal .pluginEntry ${BDFDB.dotCN.giffavoritebutton},
-			.${this.getName()}-modal .pluginEntry .trashIcon {
-				position: relative !important;
-				transform: none !important;
-				opacity: 1 !important;
+			.${this.getName()}-modal .pluginEntry ${BDFDB.dotCN._repocontrols} > * {
 				margin-right: 5px !important;
-				cursor: pointer !important;
 			}
-			.${this.getName()}-modal .pluginEntry .gitIcon,
-			.${this.getName()}-modal .pluginEntry ${BDFDB.dotCN.giffavoritebutton}:not(${BDFDB.dotCN.giffavoriteselected}),
-			.${this.getName()}-modal .pluginEntry .trashIcon {
-				color: #4f545c !important;
+			.${this.getName()}-modal .pluginEntry svg[fill="currentColor"],
+			.${this.getName()}-modal .pluginEntry ${BDFDB.dotCN.giffavoritebutton}:not(${BDFDB.dotCN.giffavoriteselected}) {
+				color: #72767d !important;
 			}
-			${BDFDB.dotCN.themedark} .${this.getName()}-modal .pluginEntry .gitIcon,
-			${BDFDB.dotCN.themedark} .${this.getName()}-modal .pluginEntry ${BDFDB.dotCN.giffavoritebutton}:not(${BDFDB.dotCN.giffavoriteselected}),
-			${BDFDB.dotCN.themedark} .${this.getName()}-modal .pluginEntry .trashIcon {
-				color: #fff !important;
-			}
-			.${this.getName()}-modal .pluginEntry .trashIcon,
-			.${this.getName()}-modal .pluginEntry ${BDFDB.dotCN.giffavoritebutton} {
-				margin-left: auto !important;
+			${BDFDB.dotCN.themedark} .${this.getName()}-modal .pluginEntry svg[fill="currentColor"],
+			${BDFDB.dotCN.themedark} .${this.getName()}-modal .pluginEntry ${BDFDB.dotCN.giffavoritebutton}:not(${BDFDB.dotCN.giffavoriteselected}) {
+				color: #dcddde !important;
 			}
 			.${this.getName()}-modal .pluginEntry.downloadable .trashIcon {
 				opacity: 0 !important;
@@ -232,7 +219,7 @@ class PluginRepo {
 
 	getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
 
-	getVersion () {return "1.6.4";}
+	getVersion () {return "1.6.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -287,61 +274,12 @@ class PluginRepo {
 	initialize () {
 		if (typeof BDFDB === "object") {
 			BDFDB.loadMessage(this);
-			
-			var observer = null;
-
-			observer = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, j) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								this.checkIfPluginsPage(node);
-							});
-						}
-					}
-				);
-			});
-			BDFDB.addObserver(this, BDFDB.dotCN.layer + "[layer-id='user-settings']", {name:"innerSettingsWindowObserver",instance:observer}, {childList:true,subtree:true});
-			
-			observer = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								setImmediate(() => {
-									if (node.tagName && node.getAttribute("layer-id") == "user-settings") {
-										BDFDB.addObserver(this, node, {name:"innerSettingsWindowObserver"}, {childList:true,subtree:true});
-										this.checkIfPluginsPage(node);
-									}
-								});
-							});
-						}
-					}
-				);
-			});
-			BDFDB.addObserver(this, BDFDB.dotCN.layers, {name:"settingsWindowObserver",instance:observer}, {childList:true});
-			
-			observer = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								if (node && node.nodeType == 1 && node.className.includes(BDFDB.disCN.contextmenu)) {
-									this.onContextMenu(node);
-								}
-							});
-						}
-					}
-				);
-			});
-			BDFDB.addObserver(this, BDFDB.dotCN.appmount, {name:"settingsContextObserver",instance:observer}, {childList: true});
-			
-			var settingswindow = document.querySelector(BDFDB.dotCN.layer + "[layer-id='user-settings']");
-			if (settingswindow) this.checkIfPluginsPage(settingswindow);
 						
 			this.loadPlugins();
 			
 			this.updateInterval = setInterval(() => {this.checkForNewPlugins();},1000*60*30);
+			
+			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -363,39 +301,43 @@ class PluginRepo {
 	
 	// begin of own functions
 	
-	onContextMenu (context) {
-		if (!context || !context.tagName || !context.parentElement) return;
-		for (let entry of context.querySelectorAll(BDFDB.dotCN.contextmenuitem)) {
-			if (entry.textContent == "BetterDiscord") {
-				let innerObserver = new MutationObserver((changes, _) => {
-					changes.forEach(
-						(change, i) => {
-							if (change.addedNodes) {
-								change.addedNodes.forEach((node) => {
-									if (node && node.nodeType == 1 && node.className.includes(BDFDB.disCN.contextmenu) && !node.querySelector(".pluginrepo-item")) {
-										for (let innerEntry of node.querySelectorAll(BDFDB.dotCN.contextmenuitem)) {
-											if (innerEntry.textContent == "Themes") {
-												$(this.settingsContextEntryMarkup)
-													.on("click", () => {
-														if (!this.loading.is) $(context).hide();
-														this.openPluginRepoModal();
-													})
-													.insertAfter(innerEntry);
-												$(node).css("top", $(context).css("top").replace("px","") - $(node).outerHeight() + $(context).outerHeight());
-												break;
-											}
-										}
-									}
-								});
-							}
-						}
-					);
+	onUserSettingsCogContextMenu (instance, menu) {
+		let observer = new MutationObserver(changes => {
+			changes.forEach(change => {
+				if (change.addedNodes) change.addedNodes.forEach(node => {
+					if (node.tagName && node.classList && node.className.includes("plugin-context-menu") && !node.querySelector(".pluginrepo-item")) {
+						let items = node.querySelectorAll(BDFDB.dotCN.contextmenuitem);
+						$(this.settingsContextEntryMarkup)
+							.on("click", () => {
+								if (!this.loading.is) instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
+								this.openPluginRepoModal();
+							})
+							.insertAfter(items[items.length-1]);
+						node.style.setProperty("top", (menu.getBoundingClientRect().top - node.getBoundingClientRect().height + menu.getBoundingClientRect().height) + "px");
+					}
 				});
-				innerObserver.observe(entry, {childList: true});
-				break;
+			});
+		});
+		observer.observe(menu, {childList: true, subtree:true});
+	}
+	
+	processV2CList (instance, wrapper) {
+		if (!document.querySelector(".bd-pluginrepobutton") && window.PluginUpdates && window.PluginUpdates.plugins && instance._reactInternalFiber.key && instance._reactInternalFiber.key.split("-")[0] == "plugin") {
+			var folderbutton = document.querySelector(BDFDB.dotCN._repofolderbutton);
+			if (folderbutton) {
+				var repoButton = document.createElement("button");
+				repoButton.className = BDFDB.disCN._repofolderbutton + " bd-pluginrepobutton";
+				repoButton.innerText = "PluginRepo";
+				repoButton.addEventListener("click", () => {
+					this.openPluginRepoModal()
+				});
+				repoButton.addEventListener("mouseenter", () => {
+					BDFDB.createTooltip("Open Plugin Repo", repoButton, {type:"top",selector:"pluginrepo-button-tooltip"});
+				});	
+				folderbutton.parentElement.insertBefore(repoButton, folderbutton.nextSibling);
 			}
 		}
-	}
+	};
 	
 	addPluginToOwnList (settingspanel) {
 		var pluginUrlInput = settingspanel.querySelector("#input-pluginurl");
@@ -428,63 +370,33 @@ class PluginRepo {
 		});
 	}
 	
-	checkIfPluginsPage (container) {
-		if (container && container.tagName) {
-			var folderbutton = container.querySelector(".bd-pfbtn");
-			if (folderbutton) {
-				var buttonbar = folderbutton.parentElement;
-				if (buttonbar && buttonbar.tagName) {
-					var header = buttonbar.querySelector("h2");
-					if (header && header.innerText.toUpperCase() === "PLUGINS") {
-						this.addPluginRepoButton(buttonbar);
-					}
-				}
-			}
-		}
-	}
-	
-	addPluginRepoButton (container) {
-		if (container && !container.querySelector(".bd-pluginrepobutton")) {
-			$(container).find(".bda-description").css("display", "block");
-			$(this.pluginRepoButtonMarkup)
-				.insertAfter(container.querySelector(".bd-pfbtn"))
-				.on("click", () => {
-					this.openPluginRepoModal()
-				})
-				.on("mouseenter", (e) => {
-					BDFDB.createTooltip("Open Plugin Repo", e.currentTarget, {type:"top",selector:"pluginrepo-button-tooltip"});
-				});
-		}
-	}
-	
 	openPluginRepoModal (showOnlyOutdated = false) {
 		if (this.loading.is) {
 			BDFDB.showToast(`Plugins are still being fetched. Try again in some seconds.`, {type:"danger"});
 			return;
 		}
 		var pluginRepoModal = $(this.pluginRepoModalMarkup);
-		pluginRepoModal.updateModal = true;
-		pluginRepoModal.enableSearch = false;
 		var hiddenSettings = Object.assign({},BDFDB.loadAllData(this, "hidden"));
 		pluginRepoModal.find("#input-hideupdated").prop("checked", hiddenSettings.updated || showOnlyOutdated);
 		pluginRepoModal.find("#input-hideoutdated").prop("checked", hiddenSettings.outdated && !showOnlyOutdated);
 		pluginRepoModal.find("#input-hidedownloadable").prop("checked", hiddenSettings.downloadable || showOnlyOutdated);
 		if (!BDFDB.isRestartNoMoreEnabled()) pluginRepoModal.find("#RNMoption").remove();
 		else pluginRepoModal.find("#input-rnmstart").prop("checked", BDFDB.loadData("RNMstart", this, "settings"));
-		pluginRepoModal
+		pluginRepoModal = pluginRepoModal[0];
+		$(pluginRepoModal)
 			.on("keyup." + this.getName(), BDFDB.dotCN.searchbarinput, () => {
 				clearTimeout(pluginRepoModal.searchTimeout);
-				pluginRepoModal.searchTimeout = setTimeout(() => {this.addPluginEntries(pluginRepoModal);},1000);
+				pluginRepoModal.searchTimeout = setTimeout(() => {this.sortEntries(pluginRepoModal);},1000);
 			})
 			.on("click." + this.getName(), BDFDB.dotCN.searchbarclear + BDFDB.dotCN.searchbarvisible, () => {
 				clearTimeout(pluginRepoModal.searchTimeout);
-				pluginRepoModal.searchTimeout = setTimeout(() => {this.addPluginEntries(pluginRepoModal);},1000);
+				pluginRepoModal.searchTimeout = setTimeout(() => {this.sortEntries(pluginRepoModal);},1000);
 			})
 			.on("change." + this.getName(), ".hide-checkbox", (e) => {
 				BDFDB.saveData(e.currentTarget.value, e.currentTarget.checked, this, "hidden");
 			})
 			.on("change." + this.getName(), "#input-rnmstart", (e) => {
-				BDFDB.saveData("RNMstart", $(e.currentTarget).prop("checked"), this, "settings");
+				BDFDB.saveData("RNMstart", e.currentTarget.checked, this, "settings");
 			})
 			.on("click." + this.getName(), ".sort-filter", (e) => {
 				this.openSortPopout(e, this.sortPopoutMarkup, pluginRepoModal);
@@ -496,16 +408,143 @@ class PluginRepo {
 				var newHiddenSettings = BDFDB.loadAllData(this, "hidden");
 				if (!BDFDB.equals(newHiddenSettings, hiddenSettings)) {
 					hiddenSettings = Object.assign({},newHiddenSettings);
-					this.addPluginEntries(pluginRepoModal);
+					this.sortEntries(pluginRepoModal);
 				}
 			});
-			
-		this.createPluginEntries(pluginRepoModal);
+		
+		let favorites = BDFDB.loadAllData(this, "favorites");
+		let container = pluginRepoModal.querySelector(".plugins");
+		pluginRepoModal.entries = {};
+		for (let url in this.loadedPlugins) {
+			let plugin = this.loadedPlugins[url];
+			let instPlugin = window.bdplugins[plugin.getName] ? window.bdplugins[plugin.getName].plugin : null;
+			if (instPlugin && instPlugin.getAuthor().toUpperCase() == plugin.getAuthor.toUpperCase()) plugin.getState = instPlugin.getVersion() != plugin.getVersion ? 1 : 0;
+			else plugin.getState = 2;
+			plugin.getFav = favorites[url] ? 0 : 1;
+			let data = {
+				url: plugin.url,
+				search: (plugin.getName + " " + plugin.getVersion + " " + plugin.getAuthor + " " + plugin.getDescription).toUpperCase(),
+				name: plugin.getName,
+				version: plugin.getVersion,
+				author: plugin.getAuthor,
+				description: plugin.getDescription ? plugin.getDescription : "No Description found.",
+				fav: plugin.getFav,
+				state: plugin.getState
+			};
+			pluginRepoModal.entries[url] = data;
+			this.addEntry(pluginRepoModal, container, data);
+		}
+		this.sortEntries(pluginRepoModal);
 			
 		BDFDB.appendModal(pluginRepoModal);
 	}
 	
-	openSortPopout (e, markup, modal) {
+	addEntry (pluginRepoModal, container, data) {
+		if (!pluginRepoModal || !container || !data) return;
+		let entry = $(this.pluginEntryMarkup)[0];
+		entry.querySelector(BDFDB.dotCN.giffavoritebutton).classList.toggle(BDFDB.disCN.giffavoriteselected, data.fav == 0);
+		setEntryState(data.state);
+		entry.setAttribute("data-name", data.name);
+		entry.setAttribute("data-version", data.version);
+		entry.setAttribute("data-url", data.url);
+		entry.querySelector(BDFDB.dotCN._reponame).innerHTML = data.name;
+		entry.querySelector(BDFDB.dotCN._repoversion).innerHTML = data.version;
+		entry.querySelector(BDFDB.dotCN._repoauthor).innerHTML = data.author;
+		entry.querySelector(BDFDB.dotCN._repodescription).innerHTML = data.description;
+		$(entry)
+			.on("click." + this.getName(), BDFDB.dotCN.giffavoritebutton, (e) => {
+				let favorize = data.fav == 1;
+				data.fav = favorize ? 0 : 1;
+				if (favorize) BDFDB.saveData(data.url, true, this, "favorites");
+				else BDFDB.removeData(data.url, this, "favorites");
+				pluginRepoModal.entries[data.url] = data;
+			})
+			.on("click." + this.getName(), ".gitIcon", (e) => {
+				var giturl = null;
+				if (data.url.indexOf("https://raw.githubusercontent.com") == 0) {
+					var temp = data.url.replace("//raw.githubusercontent", "//github").split("/");
+					temp.splice(5, 0, "blob");
+					giturl = temp.join("/");
+				}
+				else if (data.url.indexOf("https://gist.githubusercontent.com/") == 0) {
+					giturl = data.url.replace("//gist.githubusercontent", "//gist.github").split("/raw/")[0];
+				}
+				if (giturl) window.open(giturl, "_blank");
+			})
+			.on("click." + this.getName(), ".trashIcon", () => {
+				if (entry.classList.contains("outdated") || entry.classList.contains("updated")) {
+					setEntryState(2);
+					this.deletePluginFile(data);
+					if (!BDFDB.isRestartNoMoreEnabled()) this.stopPlugin(data);
+				}
+			})
+			.on("click." + this.getName(), ".btn-download", () => {
+				setEntryState(0);
+				this.downloadPlugin(data);
+				if (pluginRepoModal.querySelector("#input-rnmstart").checked) setTimeout(() => {this.startPlugin(data);},3000);
+			})
+			.on("mouseenter." + this.getName(), BDFDB.dotCN.giffavoritebutton, (e) => {
+				BDFDB.createTooltip("Favorize", e.currentTarget, {type:"top",selector:"pluginrepo-favicon-tooltip"});
+			})
+			.on("mouseenter." + this.getName(), ".gitIcon", (e) => {
+				BDFDB.createTooltip("Go to Git", e.currentTarget, {type:"top",selector:"pluginrepo-giticon-tooltip"});
+			})
+			.on("mouseenter." + this.getName(), ".trashIcon", (e) => {
+				BDFDB.createTooltip("Delete Pluginfile", e.currentTarget, {type:"top",selector:"pluginrepo-trashicon-tooltip"});
+			});
+			
+		container.appendChild(entry);
+			
+		function setEntryState (state) {
+			data.state = state;
+			entry.classList.toggle("downloadable", state > 1);
+			entry.classList.toggle("outdated", state == 1);
+			entry.classList.toggle("updated", state < 1);
+			let downloadbutton = entry.querySelector(".btn-download");
+			downloadbutton.innerText = state < 1 ? "Updated" : (state > 1 ? "Download" : "Outdated");
+			downloadbutton.style.setProperty("background-color", "rgb(" + (state < 1 ? "67,181,129" : (state > 1 ? "114,137,218" : "241,71,71")) + ")", "important");
+			pluginRepoModal.entries[data.url] = data;
+		};
+	}
+	
+	sortEntries (pluginRepoModal) {
+		if (!pluginRepoModal || typeof pluginRepoModal.entries != "object") return;
+		
+		let container = pluginRepoModal.querySelector(".plugins");
+		if (!container) return;
+		
+		let searchstring = pluginRepoModal.querySelector(BDFDB.dotCN.searchbarinput).value.replace(/[<|>]/g, "").toUpperCase();
+		
+		let entries = pluginRepoModal.entries;
+		if (pluginRepoModal.querySelector("#input-hideupdated").checked) 		entries = BDFDB.filterObject(entries, entry => {return entry.state < 1 ? null : entry;});
+		if (pluginRepoModal.querySelector("#input-hideoutdated").checked) 		entries = BDFDB.filterObject(entries, entry => {return entry.state == 1 ? null : entry;});
+		if (pluginRepoModal.querySelector("#input-hidedownloadable").checked) 	entries = BDFDB.filterObject(entries, entry => {return entry.state > 1 ? null : entry;});
+		entries = BDFDB.filterObject(entries, entry => {return entry.search.indexOf(searchstring) > -1 ? entry : null;});
+		
+		entries = BDFDB.sortObject(entries, pluginRepoModal.querySelector(".sort-filter " + BDFDB.dotCN.quickselectvalue).getAttribute("option"));
+		if (pluginRepoModal.querySelector(".order-filter " + BDFDB.dotCN.quickselectvalue).getAttribute("option") == "desc") entries = BDFDB.reverseObject(entries);
+		
+		let entrypositions = Object.keys(entries);
+		
+		pluginRepoModal.querySelector(".pluginAmount").innerText = "PluginRepo Repository " + entrypositions.length + "/" + Object.keys(this.loadedPlugins).length + " Plugins";
+		
+		for (let li of container.children) {
+			let pos = entrypositions.indexOf(li.getAttribute("data-url"));
+			if (pos > -1) {
+				li.querySelectorAll(BDFDB.dotCNC._reponame + BDFDB.dotCNC._repoversion + BDFDB.dotCNC._repoauthor + BDFDB.dotCN._repodescription).forEach(ele => {
+					if (searchstring || ele.querySelector(".highlight")) ele.innerHTML = BDFDB.highlightText(ele.innerText, searchstring); 
+				});
+				li.style.removeProperty("display");
+				li.style.setProperty("order", pos, "important");
+			}
+			else { 
+				li.style.setProperty("display", "none", "important");
+				li.style.removeProperty("order");
+			}
+		}
+	}
+	
+	openSortPopout (e, markup, pluginRepoModal) {
 		var wrapper = e.currentTarget;
 		if (wrapper.classList.contains("popout-open")) return;
 		wrapper.classList.add("popout-open");
@@ -518,7 +557,7 @@ class PluginRepo {
 				value.attr("option", $(e2.currentTarget).attr("option"));
 				$(document).off("mousedown.sortpopout" + this.getName());
 				popout.remove();
-				this.addPluginEntries(modal);
+				this.sortEntries(pluginRepoModal);
 				setTimeout(() => {wrapper.classList.remove("popout-open");},300);
 			});
 			
@@ -534,123 +573,6 @@ class PluginRepo {
 				setTimeout(() => {wrapper.classList.remove("popout-open");},300);
 			}
 		});
-	}
-	
-	createPluginEntries (modal) {
-		var favorites = BDFDB.loadAllData(this, "favorites");
-		modal.entries = [];
-		for (let url in this.loadedPlugins) {
-			let plugin = this.loadedPlugins[url];
-			let div = $(this.pluginEntryMarkup);
-			var installedPlugin = window.bdplugins[plugin.getName] ? window.bdplugins[plugin.getName].plugin : null;
-			if (installedPlugin && installedPlugin.getAuthor().toUpperCase() == plugin.getAuthor.toUpperCase()) {
-				plugin.getState = installedPlugin.getVersion() != plugin.getVersion ? 1 : 0;
-			}
-			else {
-				plugin.getState = 2;
-			}
-			this.setEntryDivState(div, plugin.getState);
-			plugin.getFav = !!favorites[url] ? 0 : 1;
-			div.find(BDFDB.dotCN.giffavoritebutton).toggleClass(BDFDB.disCN.giffavoriteselected, !!favorites[url]);
-				
-			modal.entries.push({
-				div: div,
-				url: plugin.url,
-				search: (plugin.getName + " " + plugin.getVersion + " " + plugin.getAuthor + " " + plugin.getDescription).toUpperCase(),
-				name: plugin.getName,
-				version: plugin.getVersion,
-				author: plugin.getAuthor,
-				description: plugin.getDescription ? plugin.getDescription : "No Description found.",
-				fav: plugin.getFav,
-				state: plugin.getState
-			});
-		}
-		this.addPluginEntries(modal);
-	}
-	
-	addPluginEntries (modal) {
-		if (typeof modal.entries != "object") return;
-		modal.find(".pluginEntry").remove();
-		
-		var searchstring = modal.find(BDFDB.dotCN.searchbarinput).val().replace(/[<|>]/g, "").toUpperCase();
-		
-		var entries = modal.entries;
-		if (modal.find("#input-hideupdated").prop("checked")) 		entries = entries.filter((entry) => {return entry.state != 0 ? entry : null;});
-		if (modal.find("#input-hideoutdated").prop("checked")) 		entries = entries.filter((entry) => {return entry.state != 1 ? entry : null;});
-		if (modal.find("#input-hidedownloadable").prop("checked")) 	entries = entries.filter((entry) => {return entry.state != 2 ? entry : null;});
-		entries = entries.filter((entry) => {return entry.search.indexOf(searchstring) > -1 ? entry : null;});
-		BDFDB.sortArrayByKey(entries, modal.find(".sort-filter " + BDFDB.dotCN.quickselectvalue).attr("option"));
-		if (modal.find(".order-filter " + BDFDB.dotCN.quickselectvalue).attr("option") == "desc") entries.reverse();
-		
-		modal.find(".pluginAmount").text("Plugin Repository " + entries.length + "/" + Object.keys(this.loadedPlugins).length + " Plugins");
-		
-		var container = modal.find(".plugins");
-		entries.forEach((entry) => {
-			var div = entry.div;
-			
-			var values = [entry.name, entry.version, entry.author, entry.description];
-			if (searchstring.length > 0) {
-				for (let i in values) values[i] = BDFDB.highlightText(values[i], searchstring);
-			}
-			div.find(".bda-name").html(values[0]);
-			div.find(".bda-version").html(values[1]);
-			div.find(".bda-author").html(values[2]);
-			div.find(".bda-description").html(values[3]);
-			div
-				.on("click." + this.getName(), BDFDB.dotCN.giffavoritebutton, (e) => {
-					let favorize = entry.fav == 1;
-					entry.fav = favorize ? 0 : 1;
-					if (favorize) BDFDB.saveData(entry.url, true, this, "favorites");
-					else BDFDB.removeData(entry.url, this, "favorites");
-				})
-				.on("click." + this.getName(), ".gitIcon", (e) => {
-					var giturl = null;
-					if (entry.url.indexOf("https://raw.githubusercontent.com") == 0) {
-						var temp = entry.url.replace("//raw.githubusercontent", "//github").split("/");
-						temp.splice(5, 0, "blob");
-						giturl = temp.join("/");
-					}
-					else if (entry.url.indexOf("https://gist.githubusercontent.com/") == 0) {
-						giturl = entry.url.replace("//gist.githubusercontent", "//gist.github").split("/raw/")[0];
-					}
-					if (giturl) window.open(giturl, "_blank");
-				})
-				.on("click." + this.getName(), ".trashIcon", () => {
-					if (div.hasClass("outdated") || div.hasClass("updated")) {
-						entry.state = 2;
-						this.setEntryDivState(div, entry.state);
-						this.deletePluginFile(entry);
-						if (!BDFDB.isRestartNoMoreEnabled()) this.stopPlugin(entry);
-					}
-				})
-				.on("click." + this.getName(), ".btn-download", () => {
-					entry.state = 0;
-					this.setEntryDivState(div, entry.state);
-					this.downloadPlugin(entry);
-					if (modal.find("#input-rnmstart").prop("checked")) setTimeout(() => {this.startPlugin(entry);},3000);
-				})
-				.on("mouseenter." + this.getName(), BDFDB.dotCN.giffavoritebutton, (e) => {
-					BDFDB.createTooltip("Favorize", e.currentTarget, {type:"top",selector:"pluginrepo-favicon-tooltip"});
-				})
-				.on("mouseenter." + this.getName(), ".gitIcon", (e) => {
-					BDFDB.createTooltip("Go to Git", e.currentTarget, {type:"top",selector:"pluginrepo-giticon-tooltip"});
-				})
-				.on("mouseenter." + this.getName(), ".trashIcon", (e) => {
-					BDFDB.createTooltip("Delete Pluginfile", e.currentTarget, {type:"top",selector:"pluginrepo-trashicon-tooltip"});
-				});
-				
-			container.append(div);
-		});
-	}
-	
-	setEntryDivState (div, state) {
-		div
-			.toggleClass("downloadable", state > 1)
-			.toggleClass("outdated", state == 1)
-			.toggleClass("updated", state < 1)
-			.find(".btn-download")
-				.text(state < 1 ? "Updated" : (state > 1 ? "Download" : "Outdated"))
-				.get(0).style.setProperty("background-color", "rgb(" + (state < 1 ? "67,181,129" : (state > 1 ? "114,137,218" : "241,71,71")) + ")", "important");
 	}
 	
 	loadPlugins () {
@@ -791,8 +713,8 @@ class PluginRepo {
 					if (valid) {
 						plugin.url = url;
 						this.loadedPlugins[url] = plugin;
-						var installedPlugin = window.bdplugins[plugin.getName] ? window.bdplugins[plugin.getName].plugin : null;
-						if (installedPlugin && installedPlugin.getAuthor().toUpperCase() == plugin.getAuthor.toUpperCase() && installedPlugin.getVersion() != plugin.getVersion) {
+						var instPlugin = window.bdplugins[plugin.getName] ? window.bdplugins[plugin.getName].plugin : null;
+						if (instPlugin && instPlugin.getAuthor().toUpperCase() == plugin.getAuthor.toUpperCase() && instPlugin.getVersion() != plugin.getVersion) {
 							if (PluginUpdates && PluginUpdates.plugins && !PluginUpdates.plugins[url]) outdated++;
 						}
 					}
@@ -841,8 +763,8 @@ class PluginRepo {
 					).then((plugin) => {
 						plugin.url = url;
 						this.loadedPlugins[url] = plugin;
-						var installedPlugin = window.bdplugins[plugin.getName] ? window.bdplugins[plugin.getName].plugin : null;
-						if (installedPlugin && installedPlugin.getAuthor().toUpperCase() == plugin.getAuthor.toUpperCase() && installedPlugin.getVersion() != plugin.getVersion) outdated++;
+						var instPlugin = window.bdplugins[plugin.getName] ? window.bdplugins[plugin.getName].plugin : null;
+						if (instPlugin && instPlugin.getAuthor().toUpperCase() == plugin.getAuthor.toUpperCase() && instPlugin.getVersion() != plugin.getVersion) outdated++;
 						webview.getWebContents().reload();
 						webviewrunning = false;
 						runInWebview();
@@ -862,14 +784,14 @@ class PluginRepo {
 		});
 	}
 	
-	downloadPlugin (entry) {
+	downloadPlugin (data) {
 		let request = require("request");
-		request(entry.url, (error, response, body) => {
+		request(data.url, (error, response, body) => {
 			if (error) {
 				BDFDB.showToast(`Unable to download Plugin "${plugin.getName}".`, {type:"danger"});
 			}
 			else {
-				let filename = entry.url.split("/");
+				let filename = data.url.split("/");
 				this.createPluginFile(filename[filename.length - 1], body);
 			}
 		});
@@ -889,8 +811,8 @@ class PluginRepo {
 		});
 	}
 	
-	startPlugin (entry) {
-		var name = entry.name;
+	startPlugin (data) {
+		var name = data.name;
 		if (BDFDB.isPluginEnabled(name) == false) {
 			bdplugins[name].plugin.start();
 			pluginCookie[name] = true;
@@ -899,10 +821,10 @@ class PluginRepo {
 		}
 	}
 	
-	deletePluginFile (entry) {
+	deletePluginFile (data) {
 		let fileSystem = require("fs");
 		let path = require("path");
-		let filename = entry.url.split("/");
+		let filename = data.url.split("/");
 		filename = filename[filename.length - 1];
 		var file = path.join(BDFDB.getPluginsFolder(), filename);
 		fileSystem.unlink(file, (error) => {
@@ -915,8 +837,8 @@ class PluginRepo {
 		});
 	}
 	
-	stopPlugin (entry) {
-		var name = entry.name;
+	stopPlugin (data) {
+		var name = data.name;
 		if (BDFDB.isPluginEnabled(name) == true) {
 			bdplugins[name].plugin.stop();
 			pluginCookie[name] = false;
