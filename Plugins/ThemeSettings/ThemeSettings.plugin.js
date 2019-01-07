@@ -3,7 +3,7 @@
 class ThemeSettings {
 	initConstructor () {
 		this.patchModules = {
-			"V2C_ThemeCard":"componentDidMount" 
+			"V2C_ThemeCard":"componentDidMount"
 		};
 	}
 
@@ -11,7 +11,7 @@ class ThemeSettings {
 
 	getDescription () {return "Allows you to change Theme Variables within BetterDiscord. Adds a Settings button (similar to Plugins) to customizable Themes in your Themes Page.";}
 
-	getVersion () {return "1.0.6";}
+	getVersion () {return "1.0.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -88,7 +88,7 @@ class ThemeSettings {
 						while (wrapper.childElementCount) wrapper.firstChild.remove();
 						while (children.length) wrapper.appendChild(children.shift());
 					})
-					wrapper.appendChild(this.createThemeSettings(instance.props.theme, vars));
+					this.createThemeSettings(wrapper, instance.props.theme, vars);
 				});
 			}
 		}
@@ -107,12 +107,14 @@ class ThemeSettings {
 		return [];
 	}
 	
-	createThemeSettings (theme, vars) {
+	createThemeSettings (wrapper, theme, vars) {
 		if (!this.started || typeof BDFDB !== "object") return;
 		var settingshtml = `<div class="theme-settings" id="theme-settings-${theme.name}"><div class="${theme.name}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${BDFDB.encodeToHTML(theme.name)}</div><div class="DevilBro-settings-inner"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Update all variables</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorgreen + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} update-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Update</div></button></div></div></div>`;
 		
 		var settingspanel = $(settingshtml)[0];
 		var settingspanelinner = settingspanel.querySelector(".DevilBro-settings-inner");
+		
+		var maxwidth = wrapper.getBoundingClientRect().width - 80;
 		
 		for (let varstr of vars) {
 			varstr = varstr.split(":");
@@ -120,7 +122,7 @@ class ThemeSettings {
 			varstr = varstr.join(":").split(/;|\/\*/);
 			let varvalue = varstr.shift().trim();
 			let vardescription = varstr.join("").replace(/\*\/|\/\*/g, "").replace(/:/g, ": ").replace(/: \//g, ":/").replace(/--/g, " --").replace(/\( --/g, "(--").trim();
-			$(`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCN.flexchild}" style="flex: 0 0 50%; line-height: 38px;">${varname[0].toUpperCase() + varname.slice(1)}:</h3><div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex + BDFDB.disCN.directioncolumn}" style="flex: 1 1 auto;"><input type="text" option="${varname}" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16}"></div></div>${vardescription ? '<div class="' + BDFDB.disCNS.description + BDFDB.disCNS.note + BDFDB.disCN.primary + ' DevilBro-textscrollwrapper" style="flex: 1 1 auto;"><div class="DevilBro-textscroll">' + BDFDB.encodeToHTML(vardescription) + '</div></div>' : ""}<div class="${BDFDB.disCNS.modaldivider + BDFDB.disCN.modaldividerdefault}"></div></div>`)
+			$(`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCN.flexchild}" style="flex: 0 0 50%; line-height: 38px;">${varname[0].toUpperCase() + varname.slice(1)}:</h3><div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex + BDFDB.disCN.directioncolumn}" style="flex: 1 1 auto;"><input type="text" option="${varname}" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16}"></div></div>${vardescription ? '<div class="' + BDFDB.disCNS.description + BDFDB.disCNS.note + BDFDB.disCN.primary + ' DevilBro-textscrollwrapper" style="flex: 1 1 auto; max-width: ' + maxwidth + 'px !important;"><div class="DevilBro-textscroll">' + BDFDB.encodeToHTML(vardescription) + '</div></div>' : ""}<div class="${BDFDB.disCNS.modaldivider + BDFDB.disCN.modaldividerdefault}"></div></div>`)
 				.appendTo(settingspanelinner)
 				.find(BDFDB.dotCN.input)
 					.val(varvalue)
@@ -157,6 +159,7 @@ class ThemeSettings {
 				}
 				else BDFDB.showToast(`Could not find themefile: ${theme.filename}`, {type:"error"});
 			});
-		return settingspanel;
+		
+		wrapper.appendChild(settingspanel);
 	}
 }
