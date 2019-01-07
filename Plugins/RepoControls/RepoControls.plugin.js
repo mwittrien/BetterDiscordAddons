@@ -5,7 +5,7 @@ class RepoControls {
 		this.patchModules = {
 			"V2C_List":"componentDidMount",
 			"V2C_PluginCard": ["componentDidMount","componentDidUpdate"],
-			"V2C_ThemeCard":"componentDidMount"
+			"V2C_ThemeCard": ["componentDidMount","componentDidUpdate"]
 		};
 		
 		this.sortings = {
@@ -112,7 +112,7 @@ class RepoControls {
 
 	getDescription () {return "Lets you sort and filter your list of downloaded Themes and Plugins.";}
 
-	getVersion () {return "1.2.3";}
+	getVersion () {return "1.2.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -202,17 +202,17 @@ class RepoControls {
 		if (instance._reactInternalFiber.key) this.addControls(instance._reactInternalFiber.key.split("-")[0], container);
 	}
 	
-	processV2CPluginCard (instance, wrapper) {
+	processV2CPluginCard (instance, wrapper, methodnames) {
 		if (wrapper.querySelector(BDFDB.dotCN._reponame)) {
 			if (instance.props && BDFDB.getData("addDeleteButton", this, "settings")) this.addDeleteButton("plugin", wrapper);
-			this.changeTextToHTML(wrapper, "");
+			if (methodnames.includes("componentDidUpdate")) this.changeTextToHTML(wrapper, "");
 		}
 	}
 	
-	processV2CThemeCard (instance, wrapper) {
+	processV2CThemeCard (instance, wrapper, methodnames) {
 		if (wrapper.querySelector(BDFDB.dotCN._reponame)) {
 			if (instance.props && BDFDB.getData("addDeleteButton", this, "settings")) this.addDeleteButton("theme", wrapper);
-			this.changeTextToHTML(wrapper, "");
+			if (methodnames.includes("componentDidUpdate")) this.changeTextToHTML(wrapper, "");
 		}
 	}
 	
@@ -337,10 +337,13 @@ class RepoControls {
 	
 	changeTextToHTML (wrapper, searchstring) {
 		if (!wrapper || !wrapper.tagName) return;
-		wrapper.querySelectorAll(BDFDB.dotCNC._reponame + BDFDB.dotCNC._repoversion + BDFDB.dotCNC._repoauthor + BDFDB.dotCN._repodescription).forEach(ele => {
-			if (ele.classList.contains(BDFDB.disCN._repodescription)) ele.style.display = "block";
-			ele.innerHTML = searchstring ? ele.innerText : BDFDB.highlightText(ele.innerText, searchstring);
-		});
+		for (let ele of wrapper.querySelectorAll(BDFDB.dotCNC._reponame + BDFDB.dotCNC._repoversion + BDFDB.dotCNC._repoauthor + BDFDB.dotCN._repodescription)) {
+			if (ele.classList.contains(BDFDB.disCN._repodescription)) {
+				ele.style.display = "block";
+				ele.innerHTML = BDFDB.highlightText(ele.innerText, searchstring);
+			}
+			else if (searchstring || ele.querySelector(".highlight")) ele.innerHTML = BDFDB.highlightText(ele.innerText, searchstring); 
+		}
 	}
 	
 	toggleAll (type, container, enable) {
