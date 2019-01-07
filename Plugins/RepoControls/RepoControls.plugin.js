@@ -242,15 +242,6 @@ class RepoControls {
 		if (controls) controls.insertBefore(button, controls.firstElementChild);
 	}
 	
-	changeTextToHTML (wrapper, searchstring) {
-		if (!wrapper || !wrapper.tagName) return;
-		if (typeof searchstring === "undefined") searchstring = document.querySelector(".repo-controls " + BDFDB.dotCN.searchbarinput).value;
-		wrapper.querySelectorAll(BDFDB.dotCNC._reponame + BDFDB.dotCNC._repoversion + BDFDB.dotCNC._repoauthor + BDFDB.dotCN._repodescription).forEach(ele => {
-			if (ele.classList.contains(BDFDB.disCN._repodescription)) ele.style.display = "block";
-			ele.innerHTML = BDFDB.highlightText(ele.innerText, searchstring);
-		});
-	}
-	
 	addControls (type, container) {
 		if (!type || !container) return;
 		BDFDB.removeEles(".repo-controls");
@@ -342,6 +333,15 @@ class RepoControls {
 				li.style.removeProperty("order");
 			}
 		}
+	}
+	
+	changeTextToHTML (wrapper, searchstring) {
+		if (!wrapper || !wrapper.tagName) return;
+		if (typeof searchstring === "undefined") searchstring = document.querySelector(".repo-controls " + BDFDB.dotCN.searchbarinput).value.replace(/[<|>]/g, "").toUpperCase();
+		if (searchstring) wrapper.querySelectorAll(BDFDB.dotCNC._reponame + BDFDB.dotCNC._repoversion + BDFDB.dotCNC._repoauthor + BDFDB.dotCN._repodescription).forEach(ele => {
+			if (ele.classList.contains(BDFDB.disCN._repodescription)) ele.style.display = "block";
+			ele.innerHTML = BDFDB.highlightText(ele.innerText, searchstring);
+		});
 	}
 	
 	toggleAll (type, container, enable) {
