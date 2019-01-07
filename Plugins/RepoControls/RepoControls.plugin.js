@@ -112,7 +112,7 @@ class RepoControls {
 
 	getDescription () {return "Lets you sort and filter your list of downloaded Themes and Plugins.";}
 
-	getVersion () {return "1.2.2";}
+	getVersion () {return "1.2.3";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -315,6 +315,7 @@ class RepoControls {
 	}
 	
 	sortEntries (container, repoControls) {
+		if (typeof container.entries != "object") return;
 		let searchstring = repoControls.find(BDFDB.dotCN.searchbarinput).val().replace(/[<|>]/g, "").toUpperCase();
 		
 		let sortings = BDFDB.getAllData(this, "sortings");
@@ -326,6 +327,7 @@ class RepoControls {
 			let name = li.getAttribute("data-name");
 			let pos = entrypositions.indexOf(name);
 			if (pos > -1) {
+				this.changeTextToHTML(li, searchstring);
 				li.style.removeProperty("display");
 				li.style.setProperty("order", pos, "important");
 				$(li)
