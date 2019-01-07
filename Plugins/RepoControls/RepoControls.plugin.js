@@ -336,10 +336,10 @@ class RepoControls {
 	}
 	
 	changeTextToHTML (wrapper, searchstring) {
-		if (!wrapper || !wrapper.tagName || !searchstring) return;
+		if (!wrapper || !wrapper.tagName) return;
 		wrapper.querySelectorAll(BDFDB.dotCNC._reponame + BDFDB.dotCNC._repoversion + BDFDB.dotCNC._repoauthor + BDFDB.dotCN._repodescription).forEach(ele => {
 			if (ele.classList.contains(BDFDB.disCN._repodescription)) ele.style.display = "block";
-			ele.innerHTML = BDFDB.highlightText(ele.innerText, searchstring);
+			ele.innerHTML = searchstring ? ele.innerText : BDFDB.highlightText(ele.innerText, searchstring);
 		});
 	}
 	
