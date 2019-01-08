@@ -114,9 +114,9 @@ class ServerFolders {
 					</div>
 					<div class="${BDFDB.disCN.contextmenuitem} autounreadfolder-item ${BDFDB.disCN.contextmenuitemtoggle}">
 						<div class="${BDFDB.disCN.contextmenulabel} DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_foldercontext_autounreadfolder_text</div></div>
-						<div class="checkbox">
-							<div class="checkbox-inner">
-								<input type="checkbox" value="on">
+						<div class="${BDFDB.disCNS.contextmenucheckbox + BDFDB.disCN.contextmenucheckbox2}">
+							<div class="${BDFDB.disCN.contextmenucheckboxinner}">
+								<input class="${BDFDB.disCN.contextmenucheckboxelement}" type="checkbox">
 								<span></span>
 							</div>
 							<span></span>
@@ -305,7 +305,7 @@ class ServerFolders {
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
-	getVersion () {return "5.9.5";}
+	getVersion () {return "5.9.6";}
 
 	getAuthor () {return "DevilBro";}
 	
