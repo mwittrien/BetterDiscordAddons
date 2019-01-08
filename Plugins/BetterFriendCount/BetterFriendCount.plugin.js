@@ -8,11 +8,11 @@ class BetterFriendCount {
 		};
 		
 		this.css = `
-			${BDFDB.idCNS.friends + BDFDB.dotCNS.friendstabbaritem + BDFDB.dotCN.badge}:not(.betterfriendcount-badge), 
-			${BDFDB.idCNS.friends + BDFDB.dotCNS.friendstabbaritem + BDFDB.dotCN.badgewrapper}:not(.betterfriendcount-badge) {
+			${BDFDB.dotCNS.friends + BDFDB.dotCNS.friendstabbaritem + BDFDB.dotCN.badge}:not(.betterfriendcount-badge), 
+			${BDFDB.dotCNS.friends + BDFDB.dotCNS.friendstabbaritem + BDFDB.dotCN.badgewrapper}:not(.betterfriendcount-badge) {
 				display: none !important;
 			}
-			${BDFDB.idCNS.friends + BDFDB.dotCNS.friendstabbaritem + BDFDB.dotCN.badgewrapper}.betterfriendcount-badge {
+			${BDFDB.dotCNS.friends + BDFDB.dotCNS.friendstabbaritem + BDFDB.dotCN.badgewrapper}.betterfriendcount-badge {
 				margin-left: 5px !important;
 			}
 		`;
@@ -24,7 +24,7 @@ class BetterFriendCount {
 
 	getDescription () {return "Shows the amount of total and online friends and blocked users in the friends tab.";}
 
-	getVersion () {return "1.0.8";}
+	getVersion () {return "1.0.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -82,9 +82,9 @@ class BetterFriendCount {
 		if (wrapper.parentElement && wrapper.parentElement.classList && wrapper.parentElement.classList.contains(BDFDB.disCN.friendscolumn)) this.addCountNumbers();
 	}
 	
-	addCountNumbers (wrapper = document.querySelector(BDFDB.idCNS.friends + BDFDB.dotCN.friendstabbar)) {
+	addCountNumbers (wrapper = document.querySelector(BDFDB.dotCNS.friends + BDFDB.dotCN.settingstabbar)) {
 		if (!wrapper) return;
-		let tabitems = wrapper.querySelectorAll(BDFDB.dotCN.friendstabbaritem);
+		let tabitems = wrapper.querySelectorAll(BDFDB.dotCN.settingsitem);
 		if (!tabitems || tabitems.length < 5) return;
 		BDFDB.removeEles(".betterfriendcount-badge");
 		
