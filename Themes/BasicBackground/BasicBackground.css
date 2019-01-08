@@ -139,6 +139,7 @@
 .selectableItem-1MP3MQ:hover,
 .friend:hover,
 .ui-tab-bar-item:hover,
+.friendsRow-2yicud:hover,
 .friends-row:hover,
 .channel-2QD9_O:hover a,
 .member-3W1lQa:hover .content-OzHfo4,
@@ -531,7 +532,8 @@ input:disabled {
 }
 
 .partyMemberBackground-aSF9mc,
-.friends-action,
+.friendsAction-__WNE9:not(:hover),
+.friends-action:not(:hover),
 .button-mM-y8i:hover,
 .guild-1EfMGQ.audio-3vVhBi:after,
 .guild-1EfMGQ.video-15yGu3:after {
