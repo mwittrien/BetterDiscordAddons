@@ -23,6 +23,7 @@
  - [Moveable Popups](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/MoveablePopups) - Adds the feature to move all popups and modals around like on a normal desktop. Ctrl + drag with your left mousebutton to drag element.
  - [Notification Sounds](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/NotificationSounds) - Allows you to replace the native sounds of Discord with your own.
  - [Old Title Bar](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/OldTitleBar) - Reverts the title bar back to its former self.
+ - [Owner Tag](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/OwnerTag) - Adds a Tag like Bottags to the Serverowner..
  - [Personal Pins](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/PersonalPins) - Similar to normal pins. Lets you save messages as notes for yourself.
  - [Pin DMs](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/PinDMs) - Allows you to pin DMs, making them appear at the top of your DM-list.
  - [Plugin Repo](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/PluginRepo) - Allows you to look at all plugins from the plugin repo and download them on the fly.
