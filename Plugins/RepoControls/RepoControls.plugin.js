@@ -1,6 +1,14 @@
 //META{"name":"RepoControls"}*//
 
 class RepoControls {
+	getName () {return "RepoControls";}
+
+	getVersion () {return "1.2.4";}
+
+	getAuthor () {return "DevilBro";}
+
+	getDescription () {return "Lets you sort and filter your list of downloaded Themes and Plugins.";}
+	
 	initConstructor () {
 		this.patchModules = {
 			"V2C_List":"componentDidMount",
@@ -107,14 +115,6 @@ class RepoControls {
 			}
 		};
 	}
-
-	getName () {return "RepoControls";}
-
-	getDescription () {return "Lets you sort and filter your list of downloaded Themes and Plugins.";}
-
-	getVersion () {return "1.2.4";}
-
-	getAuthor () {return "DevilBro";}
 	
 	getSettingsPanel () {
 		if (!this.started || typeof BDFDB !== "object") return;
@@ -281,26 +281,28 @@ class RepoControls {
 			
 		container.entries = {};
 		for (let li of container.children) {
-			let name = li.querySelector(BDFDB.dotCN._reponame).textContent;
-			let version = li.querySelector(BDFDB.dotCN._repoversion).textContent;
-			let author = li.querySelector(BDFDB.dotCN._repoauthor).textContent;
-			let description = li.querySelector(BDFDB.dotCN._repodescription).textContent;
-			let enabled = li.querySelector(BDFDB.dotCN._repocheckbox).checked;
-			let path = global[`bd${type}s`] && global[`bd${type}s`][name] ? this.path.join(this.dirs[type], global[`bd${type}s`][name].filename) : null;
-			let stats = path ? this.fs.statSync(path) : null;
-			container.entries[name] = {
-				search:			(name + " " + version + " " + author + " " + description).toUpperCase(),
-				origName: 		name,
-				name: 			(name).toUpperCase(),
-				version: 		(version).toUpperCase(),
-				author: 		(author).toUpperCase(),
-				description: 	(description).toUpperCase(),
-				type:			type,
-				path:			path,
-				adddate:		stats ? stats.atime.getTime() : null,
-				moddate:		stats ? stats.mtime.getTime() : null,
-				enabled:		enabled ? 0 : 1
-			};
+			if (li.querySelector(BDFDB.dotCN._reponame)) {
+				let name = li.querySelector(BDFDB.dotCN._reponame).textContent;
+				let version = li.querySelector(BDFDB.dotCN._repoversion).textContent;
+				let author = li.querySelector(BDFDB.dotCN._repoauthor).textContent;
+				let description = li.querySelector(BDFDB.dotCN._repodescription).textContent;
+				let enabled = li.querySelector(BDFDB.dotCN._repocheckbox).checked;
+				let path = global[`bd${type}s`] && global[`bd${type}s`][name] ? this.path.join(this.dirs[type], global[`bd${type}s`][name].filename) : null;
+				let stats = path ? this.fs.statSync(path) : null;
+				container.entries[name] = {
+					search:			(name + " " + version + " " + author + " " + description).toUpperCase(),
+					origName: 		name,
+					name: 			(name).toUpperCase(),
+					version: 		(version).toUpperCase(),
+					author: 		(author).toUpperCase(),
+					description: 	(description).toUpperCase(),
+					type:			type,
+					path:			path,
+					adddate:		stats ? stats.atime.getTime() : null,
+					moddate:		stats ? stats.mtime.getTime() : null,
+					enabled:		enabled ? 0 : 1
+				};
+			}
 		}
 		this.sortEntries(container, repoControls);
 	}
@@ -340,9 +342,10 @@ class RepoControls {
 		for (let ele of wrapper.querySelectorAll(BDFDB.dotCNC._reponame + BDFDB.dotCNC._repoversion + BDFDB.dotCNC._repoauthor + BDFDB.dotCN._repodescription)) {
 			if (ele.classList.contains(BDFDB.disCN._repodescription)) {
 				ele.style.display = "block";
-				ele.innerHTML = BDFDB.highlightText(ele.innerText, searchstring);
+				if (searchstring && searchstring.length > 2) ele.innerHTML = BDFDB.highlightText(ele.innerText, searchstring);
+				else ele.innerHTML = ele.innerText;
 			}
-			else if (searchstring || ele.querySelector(".highlight")) ele.innerHTML = BDFDB.highlightText(ele.innerText, searchstring); 
+			else if (searchstring && searchstring.length > 2 || ele.querySelector(BDFDB.dotCN.highlight)) ele.innerHTML = BDFDB.highlightText(ele.innerText, searchstring); 
 		}
 	}
 	
