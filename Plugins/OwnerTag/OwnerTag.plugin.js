@@ -3,7 +3,7 @@
 class OwnerTag {
 	getName () {return "OwnerTag";}
 
-	getVersion () {return "1.0.1";}
+	getVersion () {return "1.0.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -120,15 +120,16 @@ class OwnerTag {
 	}
 	
 	processNameTag (instance, wrapper) {
+		let container = null;
 		if (!instance.props || !wrapper.classList) return;
 		else if (wrapper.classList.contains(BDFDB.disCN.membernametag) && BDFDB.getData("addInMemberList", this, "settings")) {
-			this.addOwnerTag(instance.props.user, wrapper, "list", BDFDB.disCN.bottagnametag + (instance.props.botClass ? (" " + instance.props.botClass) : ""));
+			this.addOwnerTag(instance.props.user, wrapper, "list", BDFDB.disCN.bottagnametag + (instance.props.botClass ? (" " + instance.props.botClass) : ""), container);
 		}
-		else if (BDFDB.getParentEle(BDFDB.dotCN.userpopout, wrapper) && BDFDB.getData("addInUserPopout", this, "settings")) {
-			this.addOwnerTag(instance.props.user, wrapper, "popout", BDFDB.disCN.bottagnametag + (instance.props.botClass ? (" " + instance.props.botClass) : ""));
+		else if ((container = BDFDB.getParentEle(BDFDB.dotCN.userpopout, wrapper)) != null && BDFDB.getData("addInUserPopout", this, "settings")) {
+			this.addOwnerTag(instance.props.user, wrapper, "popout", BDFDB.disCN.bottagnametag + (instance.props.botClass ? (" " + instance.props.botClass) : ""), container);
 		}
-		else if (BDFDB.getParentEle(BDFDB.dotCN.userprofile, wrapper) && BDFDB.getData("addInUserProfil", this, "settings")) {
-			this.addOwnerTag(instance.props.user, wrapper, "profile", BDFDB.disCN.bottagnametag + (instance.props.botClass ? (" " + instance.props.botClass) : ""));
+		else if ((container = BDFDB.getParentEle(BDFDB.dotCN.userprofile, wrapper)) != null && BDFDB.getData("addInUserProfil", this, "settings")) {
+			this.addOwnerTag(instance.props.user, wrapper, "profile", BDFDB.disCN.bottagnametag + (instance.props.botClass ? (" " + instance.props.botClass) : ""), container);
 		}
 	}
 	
@@ -138,7 +139,7 @@ class OwnerTag {
 			let username = wrapper.querySelector(BDFDB.dotCN.messageusername);
 			if (username) {
 				let message = BDFDB.getParentEle(BDFDB.dotCN.messagegroup, wrapper);
-				this.addOwnerTag(fiber.return.memoizedProps.message.author, username.parentElement, "chat", BDFDB.disCN.bottagmessage + " " + (message.classList.contains(BDFDB.disCN.messagegroupcozy) ? BDFDB.disCN.bottagmessagecozy : BDFDB.disCN.bottagmessagecompact));
+				this.addOwnerTag(fiber.return.memoizedProps.message.author, username.parentElement, "chat", BDFDB.disCN.bottagmessage + " " + (message.classList.contains(BDFDB.disCN.messagegroupcozy) ? BDFDB.disCN.bottagmessagecozy : BDFDB.disCN.bottagmessagecompact), null);
 			}
 		}
 	}
@@ -151,7 +152,7 @@ class OwnerTag {
 		}
 	}
 	
-	addOwnerTag (info, wrapper, type, selector = "") {
+	addOwnerTag (info, wrapper, type, selector = "", container) {
 		if (!info || !wrapper || !wrapper.parentElement) return;
 		BDFDB.removeEles(wrapper.querySelectorAll(".owner-tag"));
 		let guild = this.GuildUtils.getGuild(this.LastGuildStore.getGuildId());
@@ -162,7 +163,8 @@ class OwnerTag {
 		let tag = document.createElement("span");
 		tag.className = "owner-tag " + "owner-" + type + "-tag " + (userolecolor ? "owner-tag-rolecolor " : "") + BDFDB.disCN.bottag + (selector ? (" " + selector) : "");
 		tag.innerText = BDFDB.getData("ownTagName", this, "inputs") || "Owner";
-		let invert = type == "popout" || type == "profile";
+		let invert = false;
+		if (container && container.firstElementChild && !container.firstElementChild.classList.contains(BDFDB.disCN.userpopoutheadernormal) && !container.firstElementChild.classList.contains(BDFDB.disCN.userprofiletopsectionnormal)) invert = true;
 		tag.classList.add(invert ? BDFDB.disCN.bottaginvert : BDFDB.disCN.bottagregular);
 		let tagcolor = BDFDB.colorCONVERT(EditUsersData.color1 || member.colorString, "RGB");
 		tagcolor = BDFDB.colorISBRIGHT(tagcolor) ? BDFDB.colorCHANGE(tagcolor, -0.3) : tagcolor;
