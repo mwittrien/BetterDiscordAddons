@@ -3,7 +3,7 @@
 class OwnerTag {
 	getName () {return "OwnerTag";}
 
-	getVersion () {return "1.0.0";}
+	getVersion () {return "1.0.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -162,9 +162,11 @@ class OwnerTag {
 		let tag = document.createElement("span");
 		tag.className = "owner-tag " + "owner-" + type + "-tag " + (userolecolor ? "owner-tag-rolecolor " : "") + BDFDB.disCN.bottag + (selector ? (" " + selector) : "");
 		tag.innerText = BDFDB.getData("ownTagName", this, "inputs") || "Owner";
-		let inverted = type == "popout" || type == "profile";
-		tag.classList.add(inverted ? BDFDB.disCN.bottaginvert : BDFDB.disCN.bottagregular);
-		tag.style.setProperty(inverted ? "color" : "background-color", BDFDB.colorCONVERT(EditUsersData.color1 || member.colorString, "RGB"), "important");
+		let invert = type == "popout" || type == "profile";
+		tag.classList.add(invert ? BDFDB.disCN.bottaginvert : BDFDB.disCN.bottagregular);
+		let tagcolor = BDFDB.colorCONVERT(EditUsersData.color1 || member.colorString, "RGB");
+		tagcolor = BDFDB.colorISBRIGHT(tagcolor) ? BDFDB.colorCHANGE(tagcolor, -0.3) : tagcolor;
+		tag.style.setProperty(invert ? "color" : "background-color", tagcolor, "important");
 		wrapper.appendChild(tag);
 	}
 }

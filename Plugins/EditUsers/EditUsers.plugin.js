@@ -3,7 +3,7 @@
 class EditUsers {
 	getName () {return "EditUsers";}
 
-	getVersion () {return "3.1.9";} 
+	getVersion () {return "3.2.0";} 
 
 	getAuthor () {return "DevilBro";}
 
@@ -618,8 +618,8 @@ class EditUsers {
 			for (let tag of username.parentElement.querySelectorAll(BDFDB.dotCN.bottag)) {
 				let invert = tag.className.indexOf(BDFDB.disCN.bottaginvert) > -1;
 				let tagcolor =  BDFDB.colorCONVERT(data.color1 || (isBRCenabled || tag.classList.contains("owner-tag-rolecolor") ? member.colorString : null), "RGB");
-				tag.style.setProperty("color", invert ? tagcolor : "white", "important");
-				tag.style.setProperty("background-color", invert ? "white" : tagcolor, "important");
+				tagcolor = BDFDB.colorISBRIGHT(tagcolor) ? BDFDB.colorCHANGE(tagcolor, -0.3) : tagcolor;
+				tag.style.setProperty(invert ? "color" : "background-color", tagcolor, "important");
 			}
 			if (data.name || data.color1 || data.color2) {
 				username.setAttribute("changed-by-editusers", true);
@@ -725,13 +725,12 @@ class EditUsers {
 		if (data.tag) {
 			let member = data.ignoreTagColor ? (this.MemberUtils.getMember(this.LastGuildStore.getGuildId(), info.id) || {}) : {};
 			let color3 = BDFDB.colorCONVERT(!data.ignoreTagColor ? data.color3 : member.colorString, "RGB");
-			let color3COMP = color3 ? BDFDB.colorCONVERT(color3, "RGBCOMP") : [0,0,0];
-			let color4 = !data.ignoreTagColor && data.color4 ? BDFDB.colorCONVERT(data.color4, "RGB") : (color3COMP[0] > 180 && color3COMP[1] > 180 && color3COMP[2] > 180 ? "black" : "white");
+			let color4 = !data.ignoreTagColor && data.color4 ? BDFDB.colorCONVERT(data.color4, "RGB") : (BDFDB.colorISBRIGHT(color3) ? "black" : "white");
 			let tag = document.createElement("span");
 			tag.className = "EditUsers-tag " + BDFDB.disCN.bottag + (selector ? (" " + selector) : "");
 			tag.innerText = data.tag;
-			tag.style.setProperty("background-color", color3);
-			tag.style.setProperty("color", color4);
+			tag.style.setProperty("background-color", color3, "important");
+			tag.style.setProperty("color", color4, "important");
 			wrapper.appendChild(tag);
 		}
 	}
