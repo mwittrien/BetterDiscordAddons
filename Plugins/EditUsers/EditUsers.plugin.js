@@ -615,7 +615,7 @@ class EditUsers {
 			username.style.setProperty("color", BDFDB.colorCONVERT(data.color1 || (usemembercolor ? member.colorString : null), "RGB"), "important");
 			username.style.setProperty("background-color", BDFDB.colorCONVERT(data.color2, "RGB"), "important");
 			BDFDB.setInnerText(username, data.name || (usenick ? member.nick : info.username));
-			for (let tag of username.parentElement.querySelectorAll(BDFDB.dotCN.bottagnametag)) {
+			for (let tag of username.parentElement.querySelectorAll(BDFDB.dotCN.bottag)) {
 				let invert = tag.className.indexOf(BDFDB.disCN.bottaginvert) > -1;
 				let tagcolor =  BDFDB.colorCONVERT(data.color1 || (isBRCenabled || tag.classList.contains("owner-tag-rolecolor") ? member.colorString : null), "RGB");
 				tag.style.setProperty("color", invert ? tagcolor : "white", "important");
