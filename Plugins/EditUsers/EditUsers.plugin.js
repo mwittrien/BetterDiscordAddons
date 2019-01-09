@@ -1,6 +1,14 @@
 //META{"name":"EditUsers"}*//
 
 class EditUsers {
+	getName () {return "EditUsers";}
+
+	getVersion () {return "3.1.9";} 
+
+	getAuthor () {return "DevilBro";}
+
+	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
+	
 	initConstructor () {
 		this.labels = {};
 		
@@ -61,7 +69,7 @@ class EditUsers {
 				<div class="${BDFDB.disCN.modal}">
 					<div class="${BDFDB.disCN.modalinner}">
 						<div class="${BDFDB.disCNS.modalsub + BDFDB.disCN.modalsizemedium}">
-							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex: 0 0 auto;">
+							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex: 0 0 auto; padding-bottom: 10px;">
 								<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">
 									<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.headertitle + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.defaultcolor + BDFDB.disCNS.h4defaultmargin + BDFDB.disCN.marginreset}">REPLACE_modal_header_text</h4>
 									<div class="${BDFDB.disCNS.modalguildname + BDFDB.disCNS.small + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCN.primary}"></div>
@@ -73,10 +81,12 @@ class EditUsers {
 									</g>
 								</svg>
 							</div>
-							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCNS.marginbottom8 + BDFDB.disCN.modalsubinner}" style="flex: 0 0 auto;">
-								<div tab="user" class="tab">REPLACE_modal_tabheader1_text</div>
-								<div tab="name" class="tab">REPLACE_modal_tabheader2_text</div>
-								<div tab="tag" class="tab">REPLACE_modal_tabheader3_text</div>
+							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCNS.marginbottom8 + BDFDB.disCN.tabbarcontainer}" style="flex: 0 0 auto; padding-right: 12px;">
+								<div class="${BDFDB.disCNS.tabbar + BDFDB.disCN.tabbartop}">
+									<div tab="user" class="${BDFDB.disCNS.settingsitemdefault + BDFDB.disCNS.settingsitem + BDFDB.disCNS.settingsnotselected + BDFDB.disCN.tabbaritem}">REPLACE_modal_tabheader1_text</div>
+									<div tab="name" class="${BDFDB.disCNS.settingsitemdefault + BDFDB.disCNS.settingsitem + BDFDB.disCNS.settingsnotselected + BDFDB.disCN.tabbaritem}">REPLACE_modal_tabheader2_text</div>
+									<div tab="tag" class="${BDFDB.disCNS.settingsitemdefault + BDFDB.disCNS.settingsitem + BDFDB.disCNS.settingsnotselected + BDFDB.disCN.tabbaritem}">REPLACE_modal_tabheader3_text</div>
+								</div>
 							</div>
 							<div class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.modalcontent + BDFDB.disCNS.scrollerthemed + BDFDB.disCN.themeghosthairline}">
 								<div class="${BDFDB.disCNS.scroller + BDFDB.disCN.modalsubinner}">
@@ -167,14 +177,6 @@ class EditUsers {
 			}
 		};
 	}
-
-	getName () {return "EditUsers";}
-
-	getDescription () {return "Allows you to change the icon, name, tag and color of users. Does not work in compact mode.";}
-
-	getVersion () {return "3.1.8";} 
-
-	getAuthor () {return "DevilBro";}
 	
 	getSettingsPanel () {
 		if (!this.started || typeof BDFDB !== "object") return;
@@ -434,7 +436,7 @@ class EditUsers {
 		let username = wrapper.parentElement.querySelector("." + (wrapper.classList && wrapper.classList.contains(BDFDB.disCN.userpopoutheadertagwithnickname) ? BDFDB.disCN.userpopoutheadernickname : instance.props.usernameClass).replace(/ /g, "."));
 		this.changeName(instance.props.user, username);
 		this.changeAvatar(instance.props.user, this.getAvatarDiv(wrapper));
-		this.addTag(instance.props.user, username.parentElement, (instance.props.botClass ? (" " + instance.props.botClass) : "") + " " + BDFDB.disCN.bottagnametag);
+		this.addTag(instance.props.user, username.parentElement, BDFDB.disCN.bottagnametag + (instance.props.botClass ? (" " + instance.props.botClass) : ""));
 	}
 	
 	processPopout (instance, wrapper) {
@@ -447,7 +449,8 @@ class EditUsers {
 				if (wrapper.parentElement && wrapper.parentElement.classList && !wrapper.parentElement.classList.contains(BDFDB.disCN.messageheadercompact)) {
 					this.changeAvatar(fiber.return.memoizedProps.message.author, this.getAvatarDiv(wrapper));
 				}
-				this.addTag(fiber.return.memoizedProps.message.author, wrapper);
+				let message = BDFDB.getParentEle(BDFDB.dotCN.messagegroup, wrapper);
+				this.addTag(fiber.return.memoizedProps.message.author, wrapper, BDFDB.disCN.bottagmessage + " " + (message.classList.contains(BDFDB.disCN.messagegroupcozy) ? BDFDB.disCN.bottagmessagecozy : BDFDB.disCN.bottagmessagecompact));
 			}
 		}
 	}
@@ -606,19 +609,17 @@ class EditUsers {
 		let data = this.getUserData(info.id, username);
 		if (data.name || data.color1 || data.color2 || username.getAttribute("changed-by-editusers")) {
 			let member = this.MemberUtils.getMember(guildid, info.id) || {};
+			let isBRCenabled = BDFDB.isPluginEnabled("BetterRoleColors");
 			let usenick = !username.parentElement.classList.contains(BDFDB.disCN.userprofilelistname) && !username.classList.contains(BDFDB.disCN.userprofileusername) && !username.parentElement.classList.contains(BDFDB.disCN.accountinfodetails) && member.nick;
-			let usemembercolor = !username.parentElement.classList.contains(BDFDB.disCN.userprofilelistname) && (username.classList.contains(BDFDB.disCN.memberusername) || username.classList.contains(BDFDB.disCN.messageusername) || BDFDB.isPluginEnabled("BetterRoleColors"));
+			let usemembercolor = !username.parentElement.classList.contains(BDFDB.disCN.userprofilelistname) && (username.classList.contains(BDFDB.disCN.memberusername) || username.classList.contains(BDFDB.disCN.messageusername) || isBRCenabled);
 			username.style.setProperty("color", BDFDB.colorCONVERT(data.color1 || (usemembercolor ? member.colorString : null), "RGB"), "important");
 			username.style.setProperty("background-color", BDFDB.colorCONVERT(data.color2, "RGB"), "important");
 			BDFDB.setInnerText(username, data.name || (usenick ? member.nick : info.username));
-			if (info.bot) {
-				let tag = username.parentElement.querySelector(BDFDB.dotCN.bottagnametag);
-				if (tag) {
-					let invert = tag.className.indexOf(BDFDB.disCN.bottaginvert) > -1;
-					let tagcolor =  BDFDB.colorCONVERT(data.color1 || (BDFDB.isPluginEnabled("BetterRoleColors") ? member.colorString : null), "RGB");
-					tag.style.setProperty("color", invert ? tagcolor : "white");
-					tag.style.setProperty("background-color", invert ? "white" : tagcolor);
-				}
+			for (let tag of username.parentElement.querySelectorAll(BDFDB.dotCN.bottagnametag)) {
+				let invert = tag.className.indexOf(BDFDB.disCN.bottaginvert) > -1;
+				let tagcolor =  BDFDB.colorCONVERT(data.color1 || (isBRCenabled || tag.classList.contains("ownertag-rolecolor") ? member.colorString : null), "RGB");
+				tag.style.setProperty("color", invert ? tagcolor : "white");
+				tag.style.setProperty("background-color", invert ? "white" : tagcolor);
 			}
 			if (data.name || data.color1 || data.color2) {
 				username.setAttribute("changed-by-editusers", true);
@@ -727,7 +728,7 @@ class EditUsers {
 			let color3COMP = color3 ? BDFDB.colorCONVERT(color3, "RGBCOMP") : [0,0,0];
 			let color4 = !data.ignoreTagColor && data.color4 ? BDFDB.colorCONVERT(data.color4, "RGB") : (color3COMP[0] > 180 && color3COMP[1] > 180 && color3COMP[2] > 180 ? "black" : "white");
 			let tag = document.createElement("span");
-			tag.className = "EditUsers-tag " + BDFDB.disCN.bottag + selector;
+			tag.className = "EditUsers-tag " + BDFDB.disCN.bottag + (selector ? (" " + selector) : "");
 			tag.innerText = data.tag;
 			tag.style.setProperty("background-color", color3);
 			tag.style.setProperty("color", color4);
