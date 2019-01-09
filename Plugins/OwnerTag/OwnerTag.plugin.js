@@ -3,7 +3,7 @@
 class OwnerTag {
 	getName () {return "OwnerTag";}
 
-	getVersion () {return "1.0.2";}
+	getVersion () {return "1.0.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -135,7 +135,7 @@ class OwnerTag {
 	
 	processPopout (instance, wrapper) {
 		let fiber = instance._reactInternalFiber;
-		if (fiber.return && fiber.return.memoizedProps && fiber.return.memoizedProps.message) {
+		if (fiber.return && fiber.return.memoizedProps && fiber.return.memoizedProps.message && BDFDB.getData("addInChatWindow", this, "settings")) {
 			let username = wrapper.querySelector(BDFDB.dotCN.messageusername);
 			if (username) {
 				let message = BDFDB.getParentEle(BDFDB.dotCN.messagegroup, wrapper);
