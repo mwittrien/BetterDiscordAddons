@@ -618,8 +618,8 @@ class EditUsers {
 			for (let tag of username.parentElement.querySelectorAll(BDFDB.dotCN.bottagnametag)) {
 				let invert = tag.className.indexOf(BDFDB.disCN.bottaginvert) > -1;
 				let tagcolor =  BDFDB.colorCONVERT(data.color1 || (isBRCenabled || tag.classList.contains("owner-tag-rolecolor") ? member.colorString : null), "RGB");
-				tag.style.setProperty("color", invert ? tagcolor : "white");
-				tag.style.setProperty("background-color", invert ? "white" : tagcolor);
+				tag.style.setProperty("color", invert ? tagcolor : "white", "important");
+				tag.style.setProperty("background-color", invert ? "white" : tagcolor, "important");
 			}
 			if (data.name || data.color1 || data.color2) {
 				username.setAttribute("changed-by-editusers", true);
