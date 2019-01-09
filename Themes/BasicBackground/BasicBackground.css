@@ -77,6 +77,8 @@
 .wrapper-29NfPK,
 .searchBar-2_Yu-C,
 .search-l1Wz-Q .search-bar,
+.searchResultsWrap-2DKFzt,
+.searchResultsWrap-2DKFzt .searchHeader-1l-wpR,
 .search-results-wrap,
 .search-results-wrap .search-header,
 .sidebarRegion-VFTUkN,
@@ -185,6 +187,7 @@
 .dockItem-2kQDqg:hover,
 .previewOverlay-2O7_KC,
 .wrapper-29NfPK .actions-2vadYq .center-1Vp33r,
+.searchResultsWrap-2DKFzt .searchResultMessage-2VxO12.hit-NLlWXA,
 .search-results-wrap .search-result-message.hit,
 .embed-IeVjo6,
 .personalizationNotice-2HTAH2,
@@ -405,14 +408,16 @@ input:disabled {
 	stroke: hsla(0,0%,100%,.8) !important;
 }
 
-.messageGroupWrapper-o-Zw7G .actionButtons-1sUUug {
+.actionButtons-1sUUug {
 	top: 5px !important;
 	right: 15px !important;
 }
+.actionButtons-14P9IC,
 .search-result .action-buttons {
 	right: 20px !important;
 }
 .action-buttons .jump-button,
+.actionButtons-14P9IC .jumpButton-Ia2hRJ,
 .actionButtons-1sUUug .jumpButton-3DTcS_,
 .action-buttons .close-button,
 .actionButtons-1sUUug .closeButton-17RIVZ {
@@ -424,18 +429,21 @@ input:disabled {
 }
 .container-1YxwTf:hover .jump-button,
 .container-1YxwTf:hover .close-button,
+.container-1YxwTf:hover .jumpButton-Ia2hRJ,
 .container-1YxwTf:hover .jumpButton-3DTcS_,
 .container-1YxwTf:hover .closeButton-17RIVZ {
 	opacity: 0.5 !important;
 }
 .container-1YxwTf .jump-button:hover,
 .container-1YxwTf .close-button:hover,
+.container-1YxwTf .jumpButton-Ia2hRJ:hover,
 .container-1YxwTf .jumpButton-3DTcS_:hover,
 .container-1YxwTf .closeButton-17RIVZ:hover {
 	opacity: 1 !important;
 }
 .action-buttons .text,
-.actionButtons-1sUUug .text-3ewTZb {
+.actionButtons-14P9IC *,
+.actionButtons-1sUUug * {
 	color: rgb(255,255,255) !important;
 }
 
@@ -700,6 +708,9 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .headerBar-UHpsPw,
 .titleBar-AC4pGV,
 .titleWrapper-1l0xT9 .title-3qD0b-,
+.searchResultsWrap-2DKFzt .searchResult-3pzFAB:before,
+.searchResultsWrap-2DKFzt .searchResult-3pzFAB:after,
+.searchResultsWrap-2DKFzt .channelName-1QajIf,
 .search-results-wrap .search-result:before,
 .search-results-wrap .search-result:after,
 .search-results-wrap .channel-name {
@@ -724,6 +735,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .row-2okwlC,
 .bar-30k2ka,
 .card-FDVird,
+.searchResultsWrap-2DKFzt .searchResultMessage-2VxO12.hit-NLlWXA,
 .search-results-wrap .search-result-message.hit {
 	box-shadow: none !important;
 }
@@ -744,7 +756,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .callAvatarStatus-3y6S04,
 .wrapper-3JPufy button,
 .accountBtnInner-sj5jLs,
-.search-result.expanded,
+.searchResultsWrap-2DKFzt .searchResultMessage-2VxO12.expanded-v2Szsz,
 .status,
 .status-2s6iDp,
 .iconBadge-2dji3k {
