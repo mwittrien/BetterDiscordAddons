@@ -134,6 +134,7 @@ https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/M
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/MoveablePopups/MoveablePopups.plugin.js
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/NotificationSounds/NotificationSounds.plugin.js
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/OldTitleBar/OldTitleBar.plugin.js
+https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/OwnerTag/OwnerTag.plugin.js
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/PersonalPins/PersonalPins.plugin.js
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/PinDMs/PinDMs.plugin.js
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/PluginRepo/PluginRepo.plugin.js
@@ -159,7 +160,6 @@ https://raw.githubusercontent.com/nirewen/Citador/master/Citador.plugin.js
 https://raw.githubusercontent.com/nirewen/Quicksave/master/Quicksave.plugin.js
 https://raw.githubusercontent.com/noodlebox/betterdiscord-plugins/master/KawaiiEmotes.plugin.js
 https://raw.githubusercontent.com/noodlebox/betterdiscord-plugins/master/LineNumbers.plugin.js
-https://raw.githubusercontent.com/noodlebox/betterdiscord-plugins/master/OwnerTag.plugin.js
 https://raw.githubusercontent.com/noodlebox/betterdiscord-plugins/master/SilentTyping.plugin.js
 https://raw.githubusercontent.com/noodlebox/betterdiscord-plugins/master/StaticAvatars.plugin.js
 https://raw.githubusercontent.com/Orrielel/BetterDiscordAddons/master/Plugins/BetterImagePopups/BetterImagePopups.plugin.js
