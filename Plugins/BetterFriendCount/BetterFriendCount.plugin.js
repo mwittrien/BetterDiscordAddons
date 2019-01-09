@@ -1,6 +1,14 @@
 //META{"name":"BetterFriendCount"}*//
 
 class BetterFriendCount {
+	getName () {return "BetterFriendCount";}
+
+	getVersion () {return "1.1.0";}
+
+	getAuthor () {return "DevilBro";}
+
+	getDescription () {return "Shows the amount of total and online friends and blocked users in the friends tab.";}
+	
 	initConstructor () {
 		this.patchModules = {
 			"TabBar":"componentDidMount",
@@ -8,25 +16,17 @@ class BetterFriendCount {
 		};
 		
 		this.css = `
-			${BDFDB.dotCNS.friends + BDFDB.dotCNS.friendstabbaritem + BDFDB.dotCN.badge}:not(.betterfriendcount-badge), 
-			${BDFDB.dotCNS.friends + BDFDB.dotCNS.friendstabbaritem + BDFDB.dotCN.badgewrapper}:not(.betterfriendcount-badge) {
+			${BDFDB.dotCNS.friends + BDFDB.dotCNS.settingstabbar + BDFDB.dotCN.badge}:not(.betterfriendcount-badge), 
+			${BDFDB.dotCNS.friends + BDFDB.dotCNS.settingstabbar + BDFDB.dotCN.badgewrapper}:not(.betterfriendcount-badge) {
 				display: none !important;
 			}
-			${BDFDB.dotCNS.friends + BDFDB.dotCNS.friendstabbaritem + BDFDB.dotCN.badgewrapper}.betterfriendcount-badge {
+			${BDFDB.dotCNS.friends + BDFDB.dotCNS.settingstabbar + BDFDB.dotCN.badgewrapper}.betterfriendcount-badge {
 				margin-left: 5px !important;
 			}
 		`;
 		
 		this.relationshipTypes = {};
 	}
-
-	getName () {return "BetterFriendCount";}
-
-	getDescription () {return "Shows the amount of total and online friends and blocked users in the friends tab.";}
-
-	getVersion () {return "1.0.9";}
-
-	getAuthor () {return "DevilBro";}
 
 	//legacy
 	load () {}
