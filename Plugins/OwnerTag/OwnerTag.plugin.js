@@ -21,7 +21,7 @@ class OwnerTag {
 				addInChatWindow:		{value:true, 	inner:true,		description:"Messages"},
 				addInMemberList:		{value:true, 	inner:true,		description:"Member List"},
 				addInUserPopout:		{value:true, 	inner:true,		description:"User Popouts"},
-				addInUserProfil:		{value:true, 	inner:true,		description:"User Profil Modal"},
+				addInUserProfil:		{value:true, 	inner:true,		description:"User Profile Modal"},
 				useRoleColor:			{value:true, 	inner:false,	description:"Use the Rolecolor instead of the default Blue."},
 			},
 			inputs: {

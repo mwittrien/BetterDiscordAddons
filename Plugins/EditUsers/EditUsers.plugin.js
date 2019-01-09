@@ -169,7 +169,7 @@ class EditUsers {
 				changeInFriendList:		{value:true, 	description:"Friend List"},
 				changeInActivity:		{value:true, 	description:"Activity Page"},
 				changeInUserPopout:		{value:true, 	description:"User Popouts"},
-				changeInUserProfil:		{value:true, 	description:"User Profil Modal"},
+				changeInUserProfil:		{value:true, 	description:"User Profile Modal"},
 				changeInAutoComplete:	{value:true, 	description:"Autocomplete Menu"},
 				changeInAuditLog:		{value:true, 	description:"Audit Log"},
 				changeInSearchPopout:	{value:true, 	description:"Search Popout"},
