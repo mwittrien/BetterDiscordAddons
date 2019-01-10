@@ -3,7 +3,7 @@
 class OwnerTag {
 	getName () {return "OwnerTag";}
 
-	getVersion () {return "1.0.3";}
+	getVersion () {return "1.0.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -22,7 +22,8 @@ class OwnerTag {
 				addInMemberList:		{value:true, 	inner:true,		description:"Member List"},
 				addInUserPopout:		{value:true, 	inner:true,		description:"User Popouts"},
 				addInUserProfil:		{value:true, 	inner:true,		description:"User Profile Modal"},
-				useRoleColor:			{value:true, 	inner:false,	description:"Use the Rolecolor instead of the default Blue."},
+				useRoleColor:			{value:true, 	inner:false,	description:"Use the Rolecolor instead of the default blue."},
+				useBlackFont:			{value:false, 	inner:false,	description:"Instead of darkening the Rolecolor on bright colors use black font."}
 			},
 			inputs: {
 				ownTagName:				{value:"Owner", 	description:"Owner Tag Text"}
@@ -48,7 +49,7 @@ class OwnerTag {
 		settingshtml += `</div>`;
 		settingshtml += `</div></div>`;
 		
-		var settingspanel = $(settingshtml)[0];
+		let settingspanel = BDFDB.htmlToElement(settingshtml);
 
 		BDFDB.initElements(settingspanel);
 
@@ -157,18 +158,20 @@ class OwnerTag {
 		BDFDB.removeEles(wrapper.querySelectorAll(".owner-tag"));
 		let guild = this.GuildUtils.getGuild(this.LastGuildStore.getGuildId());
 		if (!guild || guild.ownerId != info.id) return;
-		let userolecolor = BDFDB.getData("useRoleColor", this, "settings");
-		let member = userolecolor ? (this.MemberUtils.getMember(this.LastGuildStore.getGuildId(), info.id) || {}) : {};
+		let settings = BDFDB.getAllData(this, "settings");
+		let member = settings.useRoleColor ? (this.MemberUtils.getMember(this.LastGuildStore.getGuildId(), info.id) || {}) : {};
 		let EditUsersData = BDFDB.isPluginEnabled("EditUsers") ? bdplugins.EditUsers.plugin.getUserData(info.id, wrapper) : {};
 		let tag = document.createElement("span");
-		tag.className = "owner-tag " + "owner-" + type + "-tag " + (userolecolor ? "owner-tag-rolecolor " : "") + BDFDB.disCN.bottag + (selector ? (" " + selector) : "");
+		tag.className = "owner-tag " + "owner-" + type + "-tag " + (settings.useRoleColor ? "owner-tag-rolecolor " : "") + BDFDB.disCN.bottag + (selector ? (" " + selector) : "");
 		tag.innerText = BDFDB.getData("ownTagName", this, "inputs") || "Owner";
 		let invert = false;
 		if (container && container.firstElementChild && !container.firstElementChild.classList.contains(BDFDB.disCN.userpopoutheadernormal) && !container.firstElementChild.classList.contains(BDFDB.disCN.userprofiletopsectionnormal)) invert = true;
 		tag.classList.add(invert ? BDFDB.disCN.bottaginvert : BDFDB.disCN.bottagregular);
 		let tagcolor = BDFDB.colorCONVERT(EditUsersData.color1 || member.colorString, "RGB");
-		tagcolor = BDFDB.colorISBRIGHT(tagcolor) ? BDFDB.colorCHANGE(tagcolor, -0.3) : tagcolor;
+		let isbright = BDFDB.colorISBRIGHT(tagcolor);
+		tagcolor = isbright ? (settings.useBlackFont ? tagcolor : BDFDB.colorCHANGE(tagcolor, -0.3)) : tagcolor;
 		tag.style.setProperty(invert ? "color" : "background-color", tagcolor, "important");
+		if (isbright && settings.useBlackFont) tag.style.setProperty(invert ? "background-color" : "color", "black", "important");
 		wrapper.appendChild(tag);
 	}
 }
