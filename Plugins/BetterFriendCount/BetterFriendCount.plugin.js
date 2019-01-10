@@ -53,9 +53,7 @@ class BetterFriendCount {
 			this.FriendUtils = BDFDB.WebModules.findByProperties("getFriendIDs", "getRelationships");
 			this.UserMetaStore = BDFDB.WebModules.findByProperties("getStatus", "getOnlineFriendCount");
 			let RelationshipTypes = BDFDB.WebModules.findByProperties("RelationshipTypes").RelationshipTypes;
-			for (let type in RelationshipTypes) {
-				this.relationshipTypes[RelationshipTypes[type]] = type;
-			}
+			for (let type in RelationshipTypes) this.relationshipTypes[RelationshipTypes[type]] = type;
 			
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
@@ -91,11 +89,11 @@ class BetterFriendCount {
 		let relationships = this.FriendUtils.getRelationships(), relationshipCount = {};
 		for (let type in this.relationshipTypes) relationshipCount[this.relationshipTypes[type]] = 0;
 		for (let id in relationships) relationshipCount[this.relationshipTypes[relationships[id]]]++;
-		
-		$(`<div class="${BDFDB.disCN.badgewrapper} betterfriendcount-badge friendcount">${relationshipCount.FRIEND}</div>`).appendTo(tabitems[1]);
-		$(`<div class="${BDFDB.disCN.badgewrapper} betterfriendcount-badge onlinefriendcount">${this.UserMetaStore.getOnlineFriendCount()}</div>`).appendTo(tabitems[2]);
-		$(`<div class="${BDFDB.disCN.badgewrapper} betterfriendcount-badge requestincount">${relationshipCount.PENDING_INCOMING}</div>`).appendTo(tabitems[3]);
-		$(`<div class="${BDFDB.disCN.badgewrapper} betterfriendcount-badge requestoutcount">${relationshipCount.PENDING_OUTGOING}</div>`).appendTo(tabitems[3]);
-		$(`<div class="${BDFDB.disCN.badgewrapper} betterfriendcount-badge blockedcount">${relationshipCount.BLOCKED}</div>`).appendTo(tabitems[4]);
+		let badgeclass = BDFDB.disCN.badgewrapper;
+		tabitems[1].appendChild(BDFDB.htmlToElement(`<div class="${badgeclass} betterfriendcount-badge friendcount">${relationshipCount.FRIEND}</div>`));
+		tabitems[2].appendChild(BDFDB.htmlToElement(`<div class="${badgeclass} betterfriendcount-badge onlinefriendcount">${this.UserMetaStore.getOnlineFriendCount()}</div>`));
+		tabitems[3].appendChild(BDFDB.htmlToElement(`<div class="${badgeclass} betterfriendcount-badge requestincount">${relationshipCount.PENDING_INCOMING}</div>`));
+		tabitems[3].appendChild(BDFDB.htmlToElement(`<div class="${badgeclass} betterfriendcount-badge requestoutcount">${relationshipCount.PENDING_OUTGOING}</div>`));
+		tabitems[4].appendChild(BDFDB.htmlToElement(`<div class="${badgeclass} betterfriendcount-badge blockedcount">${relationshipCount.BLOCKED}</div>`));
 	}
 }

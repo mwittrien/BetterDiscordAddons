@@ -1,6 +1,14 @@
 //META{"name":"ChatAliases"}*//
 
 class ChatAliases {
+	getName () {return "ChatAliases";}
+
+	getVersion () {return "1.9.3";}
+
+	getAuthor () {return "DevilBro";}
+
+	getDescription () {return "Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent.";}
+	
 	initConstructor () {
 		this.configs = ["case","exact","autoc","regex","file"];
 		
@@ -10,14 +18,6 @@ class ChatAliases {
 			}
 		};
 	}
-	
-	getName () {return "ChatAliases";}
-
-	getDescription () {return "Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent.";}
-
-	getVersion () {return "1.9.2";}
-
-	getAuthor () {return "DevilBro";}
 
 	getSettingsPanel () {
 		if (!this.started || typeof BDFDB !== "object") return;
@@ -36,7 +36,6 @@ class ChatAliases {
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.hovercard}"><div class="${BDFDB.disCN.hovercardinner}"><input type="text" word="${word}" action="edit" class="${BDFDB.disCNS.gamename + BDFDB.disCN.gamenameinput} word-name" value="${BDFDB.encodeToHTML(word)}"><input type="text" word="${word}" action="edit" class="${BDFDB.disCNS.gamename + BDFDB.disCN.gamenameinput} replace-name" value="${BDFDB.encodeToHTML(this.aliases[word].replace)}">`;
 			for (let config of this.configs) {
 				settingshtml += `<div class="${BDFDB.disCNS.checkboxcontainer + BDFDB.disCN.marginreset}" style="flex: 0 0 auto;"><label class="${BDFDB.disCN.checkboxwrapper}"><input word="${word}" config="${config}" type="checkbox" class="${BDFDB.disCNS.checkboxinputdefault + BDFDB.disCN.checkboxinput}"${this.aliases[word][config] ? " checked" : ""}><div class="${BDFDB.disCNS.checkbox + BDFDB.disCNS.flexcenter + BDFDB.disCNS.flex + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.checkboxround}"><svg name="Checkmark" width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><polyline stroke="transparent" stroke-width="2" points="3.5 9.5 7 13 15 5"></polyline></g></svg></div></label></div>`;
-				console.log();
 			}
 			settingshtml += `</div><div word="${word}" action="remove" class="${BDFDB.disCN.hovercardbutton} remove-word"></div></div>`;
 		}
@@ -47,7 +46,7 @@ class ChatAliases {
 		settingshtml += `<div class="DevilBro-settings-inner-list info-container" ${infoHidden ? "style='display:none;'" : ""}><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Case: Will replace words while comparing lowercase/uppercase. apple => apple, not APPLE or AppLe</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Not Case: Will replace words while ignoring lowercase/uppercase. apple => apple, APPLE and AppLe</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Exact: Will replace words that are exactly the replaceword. apple to pear => applepie stays applepie</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Not Exact: Will replace words anywhere they appear. apple to pear => applepieapple to pearpiepear</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Autoc: Will appear in the Autocomplete Menu (if enabled).</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Regex: Will treat the entered wordvalue as a regular expression. <a class="${BDFDB.disCNS.anchor + BDFDB.disCN.anchorunderlineonhover}" target="_blank" href="https://regexr.com/">Help</a></div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">File: If the replacevalue is a filepath it will try to upload the file located at the filepath.</div></div>`;
 		settingshtml += `</div>`;
 
-		var settingspanel = $(settingshtml)[0];
+		var settingspanel = BDFDB.htmlToElement(settingshtml);
 
 		BDFDB.initElements(settingspanel);
 
@@ -134,8 +133,7 @@ class ChatAliases {
 
 	stop () {
 		if (typeof BDFDB === "object") {
-			$(".autocompleteAliases, .autocompleteAliasesRow").remove();
-			
+			BDFDB.removeEles(".autocompleteAliases", ".autocompleteAliasesRow");
 			BDFDB.unloadMessage(this);
 		}
 	}
@@ -266,8 +264,7 @@ class ChatAliases {
 
 	bindEventToTextArea (textarea) {
 		if (!textarea) return;
-		var channelObj = BDFDB.getSelectedChannel();
-		var channel = channelObj ? channelObj.data : null;
+		var channel = BDFDB.getSelectedChannel();
 		if (!channel) return;
 		var settings = BDFDB.getAllData(this, "settings"); 
 		$(textarea)
@@ -321,14 +318,14 @@ class ChatAliases {
 					this.format = true;
 					$(textarea).trigger("input");
 				}
-				else if (!e.ctrlKey && settings.addAutoComplete && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length) {
+				else if (!e.ctrlKey && e.which != 16 && settings.addAutoComplete && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length) {
 					clearTimeout(textarea.chataliastimeout);
 					textarea.chataliastimeout = setTimeout(() => {this.addAutoCompleteMenu(textarea);},100);
 				}
 				
 				if (!e.ctrlKey && e.which != 38 && e.which != 40) {
 					if (!(e.which == 39 && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length)) {
-						$(".autocompleteAliases, .autocompleteAliasesRow").remove();
+						BDFDB.removeEles(".autocompleteAliases", ".autocompleteAliasesRow");
 					}
 				}
 			})
@@ -342,7 +339,7 @@ class ChatAliases {
 	
 	addAutoCompleteMenu (textarea) {
 		if (textarea.parentElement.querySelector(".autocompleteAliasesRow")) return;
-		let words = textarea.value.split(" ");
+		let words = textarea.value.split(/\s/);
 		let lastword = words[words.length-1].trim();
 		if (words.length == 1 && BDFDB.isPluginEnabled("WriteUpperCase")) {
 			let first = lastword.charAt(0);
@@ -371,26 +368,29 @@ class ChatAliases {
 			if (!BDFDB.isObjectEmpty(matchedaliases)) {
 				let autocompletemenu = textarea.parentElement.querySelector(BDFDB.dotCNS.autocomplete + BDFDB.dotCN.autocompleteinner), amount = 15;
 				if (!autocompletemenu) {
-					autocompletemenu = $(`<div class="${BDFDB.disCNS.autocomplete + BDFDB.disCN.autocomplete2} autocompleteAliases"><div class="${BDFDB.disCN.autocompleteinner}"></div></div>`)[0];
+					autocompletemenu = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.autocomplete + BDFDB.disCN.autocomplete2} autocompleteAliases"><div class="${BDFDB.disCN.autocompleteinner}"></div></div>`);
 					textarea.parentElement.appendChild(autocompletemenu);
 					autocompletemenu = autocompletemenu.firstElementChild;
 				}
 				else {
 					amount -= autocompletemenu.querySelectorAll(BDFDB.dotCN.autocompleteselectable).length;
 				}
-				
+				let autocompleterowheader = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteAliasesRow"><div class="${BDFDB.disCN.autocompleteselector} autocompleteAliasesSelector"><div class="${BDFDB.disCNS.autocompletecontenttitle + BDFDB.disCNS.small + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCN.weightsemibold}">Aliases: <strong class="lastword">${BDFDB.encodeToHTML(lastword)}</strong></div></div></div>`);
+				autocompletemenu.appendChild(autocompleterowheader);
 				$(autocompletemenu)
-					.append(`<div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteAliasesRow"><div class="${BDFDB.disCN.autocompleteselector} autocompleteAliasesSelector"><div class="${BDFDB.disCNS.autocompletecontenttitle + BDFDB.disCNS.small + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCN.weightsemibold}">Aliases: <strong class="lastword">${BDFDB.encodeToHTML(lastword)}</strong></div></div></div>`)
-					.off("mouseenter." + this.getName()).on("mouseenter." + this.getName(), BDFDB.dotCN.autocompleteselectable, (e) => {
+					.off("mouseenter." + this.getName())
+					.on("mouseenter." + this.getName(), BDFDB.dotCN.autocompleteselectable, (e) => {
 						autocompletemenu.querySelectorAll(BDFDB.dotCN.autocompleteselected).forEach(selected => {selected.classList.remove(BDFDB.disCN.autocompleteselected);});
 						e.currentTarget.classList.add(BDFDB.disCN.autocompleteselected);
 					});
 					
 				for (let word in matchedaliases) {
 					if (amount-- < 1) break;
-					$(`<div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteAliasesRow"><div class="${BDFDB.disCNS.autocompleteselector + BDFDB.disCN.autocompleteselectable} autocompleteAliasesSelector"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.autocompletecontent}" style="flex: 1 1 auto;"><div class="${BDFDB.disCN.flexchild} aliasword" style="flex: 1 1 auto;">${BDFDB.encodeToHTML(word)}</div><div class="${BDFDB.disCNS.autocompletedescription + BDFDB.disCN.flexchild}">${BDFDB.encodeToHTML(matchedaliases[word].replace)}</div></div></div></div>`)
-						.appendTo(autocompletemenu)
-						.off("click." + this.getName()).on("click." + this.getName(), BDFDB.dotCN.autocompleteselectable, (e) => {
+					let autocompleterow = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteAliasesRow"><div class="${BDFDB.disCNS.autocompleteselector + BDFDB.disCN.autocompleteselectable} autocompleteAliasesSelector"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.autocompletecontent}" style="flex: 1 1 auto;"><div class="${BDFDB.disCN.flexchild} aliasword" style="flex: 1 1 auto;">${BDFDB.encodeToHTML(word)}</div><div class="${BDFDB.disCNS.autocompletedescription + BDFDB.disCN.flexchild}">${BDFDB.encodeToHTML(matchedaliases[word].replace)}</div></div></div></div>`);
+					autocompletemenu.appendChild(autocompleterow);
+					$(autocompleterow)
+						.off("click." + this.getName())
+						.on("click." + this.getName(), BDFDB.dotCN.autocompleteselectable, (e) => {
 							this.swapWordWithAlias(textarea);
 						});
 				}
@@ -418,7 +418,7 @@ class ChatAliases {
 		let aliasword = textarea.parentElement.querySelector(".autocompleteAliasesRow " + BDFDB.dotCN.autocompleteselected + " .aliasword").innerText;
 		let lastword = textarea.parentElement.querySelector(".autocompleteAliasesRow .lastword").innerText;
 		if (aliasword && lastword) {
-			$(".autocompleteAliases, .autocompleteAliasesRow").remove();
+			BDFDB.removeEles(".autocompleteAliases", ".autocompleteAliasesRow");
 			textarea.focus(); 
 			textarea.selectionStart = textarea.value.length - lastword.length;
 			textarea.selectionEnd = textarea.value.length;
@@ -429,6 +429,7 @@ class ChatAliases {
 	}
 
 	formatText (text) {
+		text = text.replace(/([\n\t\r])/g, " $1 ");
 		var newText = [], files = [], wordAliases = {}, multiAliases = {};
 		for (let word in this.aliases) {
 			if (!this.aliases[word].regex && word.indexOf(" ") == -1) wordAliases[word] = this.aliases[word];
@@ -438,6 +439,7 @@ class ChatAliases {
 			newText.push(this.useAliases(word, wordAliases, files, true));
 		}
 		newText = newText.length == 1 ? newText[0] : newText.join(" ");
+		newText = newText.replace(/ ([\n\t\r]) /g, "$1");
 		newText = this.useAliases(newText, multiAliases, files, false);
 		return {text:newText, files};
 	}
@@ -462,9 +464,7 @@ class ChatAliases {
 					}
 					if (aliasdata.regex && regstring.indexOf("^") == 0) result = null;
 				}
-				if (!result) {
-					tempstring2 += tempstring1;
-				}
+				if (!result) tempstring2 += tempstring1;
 			}
 			if (replaced) {
 				string = tempstring2;
