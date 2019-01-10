@@ -35,7 +35,6 @@ https://raw.githubusercontent.com/hammy1/BDStuff/master/Plugins/dateViewer/dateV
 https://raw.githubusercontent.com/HoLLy-HaCKeR/BetterDiscord-Themes-and-Plugins/master/Plugins/lazyload_patcher.plugin.js
 https://raw.githubusercontent.com/Hyperbot-one/hideServersChannels-plugin/master/hideServersChannels.plugin.js
 https://raw.githubusercontent.com/Hyperbot-one/showEmojiServer-plugin/master/showEmojiServer.plugin.js
-https://raw.githubusercontent.com/intrnl/discordextensions/master/NativeTitlebarPatcher/NativeTitlebarPatcher.plugin.js
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/autocompleteHoverFix.plugin.js
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/AvatarHover.plugin.js
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/botInfo.plugin.js
