@@ -157,7 +157,7 @@ class PinDMs {
 								this.forceUpdateScroller(dmsscroller);
 								pinnedDMs[id] = Object.keys(pinnedDMs).length;
 								BDFDB.saveAllData(pinnedDMs, this, "pinnedDMs");
-							}
+							} 
 						});
 				}
 				else {
