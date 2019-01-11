@@ -1,7 +1,18 @@
 //META{"name":"ImageGallery"}*//
 
 class ImageGallery {
+	getName () {return "ImageGallery";}
+
+	getVersion () {return "1.5.6";}
+
+	getAuthor () {return "DevilBro";}
+
+	getDescription () {return "Allows the user to browse through images sent inside the same message.";}
+	
 	initConstructor () {
+		this.patchModules = {
+			"ImageModal":["componentDidMount","componentWillUnmount"]
+		}
 		this.eventFired = false;
 		
 		this.imageMarkup = `<div class="${BDFDB.disCN.imagewrapper}" style="width: 100px; height: 100px;"><img src="" style="width: 100px; height: 100px; display: inline;"></div>`;
@@ -20,14 +31,6 @@ class ImageGallery {
 				left: 90%;
 			}`;
 	}
-
-	getName () {return "ImageGallery";}
-
-	getDescription () {return "Allows the user to browse through images sent inside the same message.";}
-
-	getVersion () {return "1.5.5";}
-
-	getAuthor () {return "DevilBro";}
 
 	//legacy
 	load () {}
@@ -51,29 +54,7 @@ class ImageGallery {
 		if (typeof BDFDB === "object") {
 			BDFDB.loadMessage(this);
 			
-			var observer = null;
-
-			observer = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(BDFDB.dotCN.imagewrapper) && node.querySelector(BDFDB.dotCN.downloadlink)) {
-									this.loadImages(node);
-								}
-							});
-						}
-						if (change.removedNodes) {
-							change.removedNodes.forEach((node) => {
-								if (node && node.tagName && node.querySelector(BDFDB.dotCN.imagewrapper) && node.querySelector(BDFDB.dotCN.downloadlink)) {
-									$(document).off("keyup." + this.getName()).off("keydown." + this.getName());
-								}
-							});
-						}
-					}
-				);
-			});
-			BDFDB.addObserver(this, BDFDB.dotCN.app + " ~ [class^='theme-']:not([class*='popouts'])", {name:"imageModalObserver",instance:observer}, {childList: true});
+			BDFDB.WebModules.forceAllUpdates(this); 
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -82,6 +63,12 @@ class ImageGallery {
 
 	stop () {
 		if (typeof BDFDB === "object") {
+			this.closemodal = true;
+			
+			BDFDB.WebModules.forceAllUpdates(this, "ImageModal");
+			
+			delete this.closemodal;
+			
 			BDFDB.unloadMessage(this);
 		}
 	}
@@ -89,22 +76,28 @@ class ImageGallery {
 	
 	// begin of own functions
 	
-	loadImages (modal) {
-		var start = performance.now();
-		var waitForImg = setInterval(() => {
-			var img = modal.querySelector(BDFDB.dotCNS.imagewrapper + "img");
-			if (img && img.src) {
-				clearInterval(waitForImg);
-				var message = this.getMessageGroupOfImage(img);
-				if (message) {
-					modal.classList.add("image-gallery");
-					this.addImages(modal, message.querySelectorAll(BDFDB.dotCNS.imagewrapper + "img"), img);
+	processImageModal (instance, wrapper, methodnames) {
+		if (this.closemodal && instance.props && instance.props.onClose) instance.props.onClose();
+		else if (methodnames.includes("componentDidMount")) {
+			let modal = BDFDB.getParentEle(BDFDB.dotCN.modal, wrapper);
+			if (!modal) return;
+			let start = performance.now();
+			let waitForImg = setInterval(() => {
+				let img = modal.querySelector(BDFDB.dotCNS.imagewrapper + "img");
+				if (img && img.src) {
+					clearInterval(waitForImg);
+					let message = this.getMessageGroupOfImage(img);
+					if (message) {
+						modal.classList.add("image-gallery");
+						this.addImages(modal, message.querySelectorAll(BDFDB.dotCNS.imagewrapper + "img"), img);
+					}
 				}
-			}
-			else if (performance.now() - start > 10000) {
-				clearInterval(waitForImg);
-			}
-		}, 100);
+				else if (performance.now() - start > 10000) {
+					clearInterval(waitForImg);
+				}
+			}, 100);
+		}
+		else if (methodnames.includes("componentWillUnmount")) $(document).off("keyup." + this.getName()).off("keydown." + this.getName());
 	}
 	
 	getMessageGroupOfImage (thisimg) {
@@ -121,12 +114,11 @@ class ImageGallery {
 	}
 	
 	getSrcOfImage (img) {
-		var src = img.src ? img.src : (img.querySelector("canvas") ? img.querySelector("canvas").src : "");
-		return src.split("?width=")[0];
+		return (img.src || (img.querySelector("canvas") ? img.querySelector("canvas").src : "")).split("?width=")[0];
 	}
 	
 	addImages (modal, imgs, img) {
-		modal.querySelectorAll(`${BDFDB.dotCN.imagewrapper}.prev, ${BDFDB.dotCN.imagewrapper}.next`).forEach(ele => {ele.remove();});
+		BDFDB.removeEles(`${BDFDB.dotCN.imagewrapper}.prev`,`${BDFDB.dotCN.imagewrapper}.next`);
 		
 		var prevImg, nextImg, index;
 		for (index = 0; index < imgs.length; index++) {
