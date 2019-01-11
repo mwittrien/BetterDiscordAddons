@@ -1036,6 +1036,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	background: rgba(var(--vtransparencycolor),var(--vtransparencyalpha)) !important;
 }
 .search-bar input,
+.searchBarInner-1_Tg2R input,
 .searchBar-1MOL6S .input-3Xdcic {
 	background: rgba(var(--vtransparencycolor),var(--vtransparencyalpha)) !important;
 	border-radius: 3px !important;
@@ -1051,10 +1052,12 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	margin-right: 3px !important;
 }
 .search-bar input:not(:focus),
+.searchBarInner-1_Tg2R input:not(:focus),
 .searchBar-1MOL6S .input-3Xdcic:not(:focus) {
 	border-color: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 3)) !important;
 }
 .search-bar input:focus,
+.searchBarInner-1_Tg2R input:focus,
 .searchBar-1MOL6S .input-3Xdcic:focus {
 	border-color: rgb(var(--vaccentcolor)) !important;
 }
@@ -2931,6 +2934,27 @@ html, span:not(.spinner-item) {
 
 
 /* ----------------------- OLDCLASSES ----------------------- */
+
+/* fix twitch and favorite menu */
+#bda-qem-twitch-container .scroller-wrap,
+#bda-qem-favourite-container .scroller-wrap {
+	overflow: hidden;
+	-ms-flex: 1 1 auto;
+	-webkit-box-flex: 1;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	flex: 1 1 auto;
+	height: 100%;
+	position: relative;
+}
+#bda-qem-twitch-container .scroller-wrap .scroller,
+#bda-qem-favourite-container .scroller-wrap .scroller {
+	-webkit-box-flex: 1;
+	flex: 1 1 auto;
+	overflow-y: scroll;
+	overflow-x: hidden;
+}
 
 /* fix help modal */ 
 .need-help-modal,

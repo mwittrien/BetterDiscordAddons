@@ -183,7 +183,6 @@ class ImageGallery {
 			
 			var wrapper = img.parentElement;
 			
-			
 			$(wrapper)
 				.css("top", !wrapper.classList.contains("current") ? (container.clientHeight - newHeight) / 2 : "")
 				.css("width", newWidth)
