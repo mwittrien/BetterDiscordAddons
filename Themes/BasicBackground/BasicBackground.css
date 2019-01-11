@@ -3096,7 +3096,7 @@ html, span:not(.spinner-item) {
 }
 
 /* serverfolders */ 
-.serverfolders-modal .ui-icon-picker-icon.selected {
+.ui-icon-picker-icon.selected {
 	background-color: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 3)) !important;
 }
 .folder .wrapper-232cHJ.count {
