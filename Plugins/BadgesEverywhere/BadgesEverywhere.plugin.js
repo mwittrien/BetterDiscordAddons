@@ -44,10 +44,7 @@ class BadgesEverywhere {
 			.BE-badge.BE-badge-EarlySupporter {width:24px !important; min-width:24px !important;}
 			.BE-badge.BE-badge-Nitro {width:21px !important; min-width:21px !important;}
 			.BE-badge.BE-badge-settings {width:30px !important; min-width:30px !important;}`;
-			
-		this.loading = false;
 		
-		this.updateBadges = false;
 		
 		this.requestedusers = {};
 		this.loadedusers = {};
@@ -172,7 +169,7 @@ class BadgesEverywhere {
 	addBadges (info, wrapper, type) {
 		if (!info || info.bot || !wrapper) return;
 		if (!this.requestedusers[info.id]) {
-			this.requestedusers[info.id] = [[wrapper,type]]
+			this.requestedusers[info.id] = [[wrapper,type]];
 			this.APIModule.get(this.DiscordConstants.Endpoints.USER_PROFILE(info.id)).then(result => {
 				let usercopy = Object.assign({},result.body.user);
 				if (result.body.premium_since) usercopy.flags += 2048;
