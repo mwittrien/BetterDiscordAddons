@@ -88,7 +88,7 @@ class GoogleTranslateOption {
 				 <path d="M 0, 10.515 c 0, 2.892, 1.183, 5.521, 3.155, 7.361 L 0, 21.031 h 7.887 V 13.144 l -2.892, 2.892 C 3.549, 14.722, 2.629, 12.75, 2.629, 10.515 c 0 -3.418, 2.235 -6.309, 5.258 -7.492 v -2.629 C 3.418, 1.577, 0, 5.652, 0, 10.515 z M 21.031, 0 H 13.144 v 7.887 l 2.892 -2.892 C 17.482, 6.309, 18.402, 8.281, 18.402, 10.515 c 0, 3.418 -2.235, 6.309 -5.258, 7.492 V 20.768 c 4.469 -1.183, 7.887 -5.258, 7.887 -10.121 c 0 -2.892 -1.183 -5.521 -3.155 -7.361 L 21.031, 0 z"/>
 			</svg>`;
 			
-		this.translatepopoutMarkup = 
+		this.translatePopoutMarkup = 
 			`<div class="${BDFDB.disCNS.popout + BDFDB.disCNS.popoutbottomright + BDFDB.disCNS.popoutnoarrow + BDFDB.disCN.popoutnoshadow} popout-googletranslate DevilBro-modal" style="z-index: 2000; overflow: visible; visibility: visible; transform: translateX(-100%) translateY(-100%) translateZ(0px);">
 				<div class="${BDFDB.disCN.popoutthemedpopout}">
 					<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop8 + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
@@ -765,7 +765,7 @@ class GoogleTranslateOption {
 		let container = document.querySelector(BDFDB.dotCN.popouts);
 		if (!container || button.classList.contains("popout-open")) return;
 		button.classList.add("popout-open");
-		let translatepopout = BDFDB.htmlToElement(this.translatepopoutMarkup);
+		let translatepopout = BDFDB.htmlToElement(this.translatePopoutMarkup);
 		container.appendChild(translatepopout);
 		let buttonrects = button.getBoundingClientRect(); 
 		translatepopout.style.setProperty("left", buttonrects.left + buttonrects.width + "px");
