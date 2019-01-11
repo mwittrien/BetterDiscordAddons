@@ -382,7 +382,7 @@ class GoogleTranslateOption {
 				width: 400px;
 			}
 			
-			${BDFDB.dotCN.selectmenuouter} .inChat {
+			${BDFDB.dotCN.selectmenuouter}.inChat {
 				top: 0%;
 				transform: translateY(-100%);
 				border-radius: 4px 4px 0 0;
@@ -835,7 +835,7 @@ class GoogleTranslateOption {
 		
 		var type = selectWrap.getAttribute("type");
 		var selectMenu = this.createDropdownMenu(selectWrap.getAttribute("value"), type);
-		selectMenu.classList.add("selector");
+		selectMenu.classList.add(selector);
 		selectWrap.appendChild(selectMenu);
 		
 		selectMenu.querySelectorAll(BDFDB.dotCN.selectoption).forEach(option => {option.addEventListener("mousedown", e2 => {
