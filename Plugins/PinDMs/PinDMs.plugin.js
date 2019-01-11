@@ -1,27 +1,31 @@
 //META{"name":"PinDMs"}*//
 
 class PinDMs {
+	getName () {return "PinDMs";}
+
+	getVersion () {return "1.2.6";}
+
+	getAuthor () {return "DevilBro";}
+
+	getDescription () {return "Allows you to pin DMs, making them appear at the top of your DM-list.";}
+	
 	initConstructor () {
+		this.patchModules = {
+			"LazyScroller":["render"]
+		};
+		
 		this.pinDMEntryMarkup =
-			`<div class="${BDFDB.disCN.contextmenuitem} pindm-item">
+			`<div class="${BDFDB.disCN.contextmenuitem} pindms-item pindm-item">
 				<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_context_pindm_text</div></span>
 				<div class="${BDFDB.disCN.contextmenuhint}"></div>
 			</div>`;
 			
 		this.unpinDMEntryMarkup =
-			`<div class="${BDFDB.disCN.contextmenuitem} unpindm-item">
+			`<div class="${BDFDB.disCN.contextmenuitem} pindms-item unpindm-item">
 				<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_context_unpindm_text</div></span>
 				<div class="${BDFDB.disCN.contextmenuhint}"></div>
 			</div>`;
 	}
-
-	getName () {return "PinDMs";}
-
-	getDescription () {return "Allows you to pin DMs, making them appear at the top of your DM-list.";}
-
-	getVersion () {return "1.2.5";}
-
-	getAuthor () {return "DevilBro";}
 
 	//legacy
 	load () {}
@@ -45,52 +49,32 @@ class PinDMs {
 		if (typeof BDFDB === "object") {
 			BDFDB.loadMessage(this);
 			
-			this.UserStore = BDFDB.WebModules.findByProperties("getUsers", "getUser");
 			this.ChannelUtils = BDFDB.WebModules.findByProperties("getDMFromUserId");
 			this.PrivateChannelUtils = BDFDB.WebModules.findByProperties("ensurePrivateChannel");
 			
-			var observer = null;
 			
-			observer = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								if (node && node.nodeType == 1 && node.className.includes(BDFDB.disCN.contextmenu)) {
-									this.onContextMenu(node);
-								}
-							});
-						}
+			BDFDB.addEventListener(this, document, "click", BDFDB.dotCNS.dmchannels + BDFDB.dotCN.dmchannel, e => {
+				let instance = BDFDB.getReactInstance(e.currentTarget);
+				if (BDFDB.getReactValue(instance, "return.return.return.memoizedProps.ispin")) {
+					let dmsscroller = document.querySelector(BDFDB.dotCNS.dmchannels + BDFDB.dotCN.scroller);
+					if (dmsscroller) {
+						this.oldScrollerPos = dmsscroller.scrollTop;
+						setTimeout(() => {this.oldScrollerPos = null;},1000);
 					}
-				);
+				}
 			});
-			BDFDB.addObserver(this, BDFDB.dotCN.appmount, {name:"dmContextObserver",instance:observer}, {childList: true});
-			
-			$(BDFDB.dotCN.appmount)
-				.on("click." + this.getName(), BDFDB.dotCNS.dmchannels + BDFDB.dotCNS.dmchannel, (e) => {
-					let instance = BDFDB.getReactInstance(e.currentTarget);
-					if (instance.return.return.return.memoizedProps.ispin) {
-						let dmsscroller = document.querySelector(BDFDB.dotCNS.dmchannels + BDFDB.dotCN.scroller);
-						if (dmsscroller) {
-							this.oldSrollerPos = dmsscroller.scrollTop;
-							setTimeout(() => {this.oldSrollerPos = null;},1000);
-						}
-					}
-				})
-				.on("click." + this.getName(), BDFDB.dotCNS.dmchannels + BDFDB.dotCNS.dmchannel + BDFDB.dotCN.dmchannelclose, (e) => {
-					let instance = BDFDB.getReactInstance(e.currentTarget);
-					if (instance.return.return.return.return.return.memoizedProps.ispin) {
-						e.stopPropagation();
-						e.preventDefault();
-						let dmsscroller = document.querySelector(BDFDB.dotCNS.dmchannels + BDFDB.dotCN.scroller);
-						if (dmsscroller) {
-							this.removePinnedDM(instance.return.return.return.return.return.memoizedProps.channel.id, BDFDB.getReactInstance(dmsscroller).return.return.return.memoizedProps.children); 
-							this.forceUpdateScroller(dmsscroller);
-						}
-					}
-				});
-			
-			setTimeout(() => {this.patchDMsScroller();},1000);
+			BDFDB.addEventListener(this, document, "click", BDFDB.dotCNS.dmchannels + BDFDB.dotCNS.dmchannel + BDFDB.dotCN.dmchannelclose, e => {
+				let instance = BDFDB.getReactInstance(e.currentTarget);
+				if (BDFDB.getReactValue(instance, "return.return.return.return.return.memoizedProps.ispin")) {
+					e.originalEvent.stopPropagation();
+					e.originalEvent.preventDefault();
+					this.removePinnedDM(BDFDB.getReactValue(instance, "return.return.return.return.return.memoizedProps.channel.id")); 
+				}
+			});
+				
+			this.forceAdding = true;
+			BDFDB.WebModules.forceAllUpdates(this);
+			delete this.forceAdding;
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -99,9 +83,9 @@ class PinDMs {
 
 	stop () {
 		if (typeof BDFDB === "object") {
-			let dmsscroller = document.querySelector(BDFDB.dotCNS.dmchannels + BDFDB.dotCN.scroller);
-			if (dmsscroller) {
-				let dms = BDFDB.getReactInstance(dmsscroller).return.return.return.memoizedProps.children;
+			let dmsscrollerinstance = BDFDB.getReactInstance(document.querySelector(BDFDB.dotCNS.dmchannels + BDFDB.dotCN.scroller));
+			if (dmsscrollerinstance) {
+				let dms = dmsscrollerinstance.return.return.return.memoizedProps.children;
 				let amount = 0;
 				let insertpoint = null;
 				for (let i in dms) {
@@ -115,8 +99,9 @@ class PinDMs {
 					}
 				}
 				dms.splice(insertpoint, amount);
-				this.forceUpdateScroller(dmsscroller);
+				this.forceUpdateScroller(dmsscrollerinstance.stateNode);
 			}
+			
 			BDFDB.unloadMessage(this);
 		}
 	}
@@ -130,80 +115,69 @@ class PinDMs {
 		this.unpinDMEntryMarkup = 	this.unpinDMEntryMarkup.replace("REPLACE_context_unpindm_text", this.labels.context_unpindm_text);
 	}
 	
-	onContextMenu (context) {
-		if (!document.querySelector(BDFDB.dotCNS.guildselected + BDFDB.dotCN.friendsicon) || !context || !context.tagName || !context.parentElement || context.querySelector(".pindm-item") || context.querySelector(".unpindm-item")) return;
-		var info = BDFDB.getKeyInformation({"node":context, "key":"user"}), ele = null;
-		if (info && BDFDB.getKeyInformation({"node":context, "key":"handleClose"})) {
-			ele = context.querySelectorAll(BDFDB.dotCN.contextmenuitem)[3];
-		}
-		else {
-			info = BDFDB.getKeyInformation({"node":context, "key":"channel"});
-			if (info && BDFDB.getKeyInformation({"node":context, "key":"handleChangeIcon"})) {
-				ele = context.querySelectorAll(BDFDB.dotCN.contextmenuitem)[1];
+	onUserContextMenu (instance, menu) {
+		if (instance.props && instance.props.user && !menu.querySelector(".pindms-item")) {
+			let closeentry = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:menu,props:["handleClose"]}));
+			if (closeentry) {
+				let id = this.ChannelUtils.getDMFromUserId(instance.props.user.id);
+				if (id) this.appendItem(instance, id, closeentry);
+				else this.PrivateChannelUtils.ensurePrivateChannel(BDFDB.myData.id, instance.props.user.id).then(id => {this.appendItem(instance, id, closeentry);});
 			}
-		}
-		if (ele) {
-			let proccesContextMenu = (id) => {
-				let pinnedDMs = BDFDB.loadAllData(this, "pinnedDMs");
-				if (typeof pinnedDMs[id] == "undefined") {
-					$(this.pinDMEntryMarkup).insertBefore(ele)
-						.on("click", (e) => {
-							$(context).hide();
-							let dmsscroller = document.querySelector(BDFDB.dotCNS.dmchannels + BDFDB.dotCN.scroller);
-							if (dmsscroller) {
-								let dms = BDFDB.getReactInstance(dmsscroller).return.return.return.memoizedProps.children;
-								let insertpoint = this.getInsertPoint(dms);
-								this.addPinnedDM(id, dms, insertpoint); 
-								this.forceUpdateScroller(dmsscroller);
-								pinnedDMs[id] = Object.keys(pinnedDMs).length;
-								BDFDB.saveAllData(pinnedDMs, this, "pinnedDMs");
-							} 
-						});
-				}
-				else {
-					$(this.unpinDMEntryMarkup).insertBefore(ele)
-						.on("click", (e) => {
-							$(context).hide();
-							let dmsscroller = document.querySelector(BDFDB.dotCNS.dmchannels + BDFDB.dotCN.scroller);
-							if (dmsscroller) {
-								let dms = BDFDB.getReactInstance(dmsscroller).return.return.return.memoizedProps.children;
-								this.removePinnedDM(id, dms); 
-								this.forceUpdateScroller(dmsscroller);
-							}
-						});
-				}
-				
-				BDFDB.updateContextPosition(context);
-			};
-			let id = info.type ? info.id : this.ChannelUtils.getDMFromUserId(info.id);
-			if (id) proccesContextMenu(id);
-			else this.PrivateChannelUtils.ensurePrivateChannel(BDFDB.myData.id, info.id).then((id) => {proccesContextMenu(id)});
 		}
 	}
 	
-	patchDMsScroller () {
-		let addAllDMs = (dmsarray) => {
-			let sortedDMs = this.sortAndUpdate();
-			if (sortedDMs.length > 0) {
-				let insertpoint = this.getInsertPoint(dmsarray);
-				for (let pos in sortedDMs) this.addPinnedDM(sortedDMs[pos], dmsarray, insertpoint);
+	onGroupDMContextMenu (instance, menu) {
+		if (instance.props && instance.props.channelId && !menu.querySelector(".pindms-item")) {
+			let changeentry = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:menu,props:["handleChangeIcon"]}));
+			if (changeentry) {
+				this.appendItem(instance, instance.props.channelId, changeentry);
 			}
-		};
-		BDFDB.WebModules.patch(BDFDB.WebModules.findByName("LazyScroller").prototype, "render", this, {
-			before: (e) => {
-				if (e.thisObject._reactInternalFiber.return.memoizedProps.privateChannelIds && !e.thisObject.props.PinDMsPatched) {
-					e.thisObject.props.PinDMsPatched = true; 
-					addAllDMs(e.thisObject.props.children);
+		}
+	}
+	
+	appendItem (instance, id, target) {
+		let pinnedDMs = BDFDB.loadAllData(this, "pinnedDMs");
+		if (!pinnedDMs[id]) {
+			let pinDMEntry = BDFDB.htmlToElement(this.pinDMEntryMarkup);
+			target.parentElement.insertBefore(pinDMEntry, target);
+			pinDMEntry.addEventListener("click", () => {
+				instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
+				let dmsscrollerinstance = BDFDB.getReactInstance(document.querySelector(BDFDB.dotCNS.dmchannels + BDFDB.dotCN.scroller));
+				if (dmsscrollerinstance) {
+					let dms = dmsscrollerinstance.return.return.return.memoizedProps.children;
+					let insertpoint = this.getInsertPoint(dms);
+					this.addPinnedDM(id, dms, insertpoint); 
+					this.forceUpdateScroller(dmsscrollerinstance.stateNode);
 				}
-				if (e.thisObject._reactInternalFiber.return.memoizedProps.privateChannelIds && this.oldSrollerPos != null) {
-					e.thisObject.getScrollerNode().scrollTop = this.oldSrollerPos;
+				pinnedDMs[id] = Object.keys(pinnedDMs).length;
+				BDFDB.saveAllData(pinnedDMs, this, "pinnedDMs");
+			});
+		}
+		else {
+			let unpinDMEntry = BDFDB.htmlToElement(this.unpinDMEntryMarkup);
+			target.parentElement.insertBefore(unpinDMEntry, target);
+			unpinDMEntry.addEventListener("click", () => {
+				instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
+				this.removePinnedDM(id);
+			});
+		}
+	}
+	
+	processLazyScroller (instance, wrapper) {
+		if (instance._reactInternalFiber && instance._reactInternalFiber.return.memoizedProps && instance._reactInternalFiber.return.memoizedProps.privateChannelIds) {
+			if (this.forceAdding || !instance.props.PinDMsPatched) {
+				instance.props.PinDMsPatched = true;
+				let dms = instance.props.children;
+				let sortedDMs = this.sortAndUpdate();
+				if (sortedDMs.length > 0) {
+					let insertpoint = this.getInsertPoint(dms);
+					for (let pos in sortedDMs) this.addPinnedDM(sortedDMs[pos], dms, insertpoint);
 				}
+				this.forceUpdateScroller(instance.getScrollerNode());
 			}
-		});
-		let dmsscroller = document.querySelector(BDFDB.dotCNS.dmchannels + BDFDB.dotCN.scroller);
-		if (dmsscroller) {
-			addAllDMs(BDFDB.getReactInstance(dmsscroller).return.return.return.memoizedProps.children);
-			this.forceUpdateScroller(dmsscroller);
+			if (this.oldScrollerPos != null) {
+				instance.getScrollerNode().scrollTop = this.oldScrollerPos;
+			}
 		}
 	}
 	
@@ -239,21 +213,27 @@ class PinDMs {
 		}
 	}
 	
-	removePinnedDM (id, dms) {
+	removePinnedDM (id) {
+		if (!id) return;
 		BDFDB.removeData(id, this, "pinnedDMs");
-		let existingDMs = this.sortAndUpdate();
-		let removepoint = null;
-		for (let i in dms) {
-			let ele = dms[i];
-			if (ele && ele.pinned && (id == ele.key || ("pin" + id) == ele.key)) {
-				delete ele.pinned;
-				if (ele.props.ispin) removepoint = parseInt(i);
+		let dmsscrollerinstance = BDFDB.getReactInstance(document.querySelector(BDFDB.dotCNS.dmchannels + BDFDB.dotCN.scroller));
+		if (dmsscrollerinstance) {
+			let dms = dmsscrollerinstance.return.return.return.memoizedProps.children;
+			let existingDMs = this.sortAndUpdate();
+			let removepoint = null;
+			for (let i in dms) {
+				let ele = dms[i];
+				if (ele && ele.pinned && (id == ele.key || ("pin" + id) == ele.key)) {
+					delete ele.pinned;
+					if (ele.props.ispin) removepoint = parseInt(i);
+				}
 			}
-		}
-		if (removepoint) {
-			let offset = existingDMs.length ? 0 : 1;
-			if (offset) delete dms[removepoint + offset].pinned;
-			dms.splice(removepoint-offset,1+offset);
+			if (removepoint) {
+				let offset = existingDMs.length ? 0 : 1;
+				if (offset) delete dms[removepoint + offset].pinned;
+				dms.splice(removepoint-offset,1+offset);
+			}
+			this.forceUpdateScroller(dmsscrollerinstance.stateNode);
 		}
 	}
 	
