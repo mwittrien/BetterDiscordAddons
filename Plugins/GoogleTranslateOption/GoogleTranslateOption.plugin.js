@@ -591,7 +591,6 @@ class GoogleTranslateOption {
 							textarea.selectionEnd = text.length;
 							document.execCommand("insertText", false, "");
 							this.translateText(text, "message", (translation, input, output) => {
-								console.log(input, output);
 								translation = !translation ? text : (BDFDB.getData("sendOriginalMessage", this, "settings") ? text + "\n\n" + translation : translation);
 								textarea.focus();
 								document.execCommand("insertText", false, translation + " ");
