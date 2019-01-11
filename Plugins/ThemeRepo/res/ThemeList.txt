@@ -155,7 +155,6 @@ https://raw.githubusercontent.com/satoru8/Addons/master/Guild3xHover/Guild3xHove
 https://raw.githubusercontent.com/satoru8/Addons/master/GlowStatus.theme.css
 https://raw.githubusercontent.com/satoru8/Addons/master/LargeChatAvatars.theme.css
 https://raw.githubusercontent.com/satoru8/Addons/master/Library.theme.css
-https://raw.githubusercontent.com/satoru8/Addons/master/MemberlistPopout.theme.css
 https://raw.githubusercontent.com/satoru8/Addons/master/RadialStatus.theme.css
 https://raw.githubusercontent.com/satoru8/Addons/master/ServerColumnX2.theme.css
 https://raw.githubusercontent.com/satoru8/Addons/master/SmallerGuildIcons.theme.css
