@@ -160,7 +160,7 @@ class BadgesEverywhere {
 	
 	processStandardSidebarView (instance, wrapper) {
 		if (this.SettingsUpdated) {
-			this.SettingsUpdated = false;
+			delete this.SettingsUpdated;
 			BDFDB.removeEles(".BE-badges");
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
