@@ -346,7 +346,7 @@ class EditUsers {
 		
 		let ignoredswatches = userSettingsModal.querySelectorAll(".swatches[swatchnr='3'], .swatches[swatchnr='4']");
 		
-		ignoredswatches.forEach(swatches => {swatches.classList.toggle("disabled", ignoreTagColor);});
+		ignoredswatches.forEach(swatches => {swatches.classList.toggle("disabled", ignoretagcolorinput.checked);});
 		
 		BDFDB.appendModal(userSettingsModal);
 		
