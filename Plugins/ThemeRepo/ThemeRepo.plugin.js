@@ -1,6 +1,14 @@
 //META{"name":"ThemeRepo"}*//
 
 class ThemeRepo {
+	getName () {return "ThemeRepo";}
+
+	getVersion () {return "1.6.6";}
+
+	getAuthor () {return "DevilBro";}
+
+	getDescription () {return "Allows you to preview all themes from the theme repo and download them on the fly. Repo button is in the theme settings.";}
+	
 	initConstructor () {
 		this.patchModules = {
 			"V2C_List":"componentDidMount"
@@ -94,7 +102,7 @@ class ThemeRepo {
 				<div class="${BDFDB.disCN.modal}">
 					<div class="${BDFDB.disCN.modalinner}">
 						<div class="${BDFDB.disCN.modalsub}">
-							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex: 0 0 auto; padding: 20px 20px 0 20px;">
+							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex: 0 0 auto; padding-bottom: 10px;">
 								<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">
 									<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.headertitle + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.defaultcolor + BDFDB.disCNS.h4defaultmargin + BDFDB.disCN.marginreset} themeAmount">Theme Repository</h4>
 									<div class="${BDFDB.disCNS.modalguildname + BDFDB.disCNS.small + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCN.primary}"></div>
@@ -106,24 +114,26 @@ class ThemeRepo {
 									</g>
 								</svg>
 							</div>
-							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCNS.modalheader + BDFDB.disCN.marginbottom20}" style="flex: 0 0 auto; padding: 10px 20px 0px 20px;">
-								<div tab="themes" class="tab selected">Themes</div>
-								<div tab="settings" class="tab">Settings</div>
-								<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCNS.searchbar + BDFDB.disCN.size14}" style="flex: 1 1 auto; margin: -15px 5px 0 0;">
+							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCNS.marginbottom8 + BDFDB.disCN.tabbarcontainer}" style="flex: 0 0 auto; padding-right: 12px;">
+								<div class="${BDFDB.disCNS.tabbar + BDFDB.disCN.tabbartop}">
+									<div tab="themes" class="${BDFDB.disCNS.settingsitemdefault + BDFDB.disCNS.settingsitem + BDFDB.disCNS.settingsnotselected + BDFDB.disCN.tabbaritem}">Themes</div>
+									<div tab="settings" class="${BDFDB.disCNS.settingsitemdefault + BDFDB.disCNS.settingsitem + BDFDB.disCNS.settingsnotselected + BDFDB.disCN.tabbaritem}">Settings</div>
+								</div>
+								<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCNS.searchbar + BDFDB.disCN.size14}" style="flex: 1 1 auto;">
 									<input class="${BDFDB.disCN.searchbarinput}" value="" placeholder="Search for ..." style="flex: 1 1 auto;">
 									<div class="${BDFDB.disCN.searchbariconwrap}">
 										<i class="${BDFDB.disCNS.searchbaricon + BDFDB.disCNS.searchbareyeglass + BDFDB.disCN.searchbarvisible}"/>
 										<i class="${BDFDB.disCNS.searchbaricon + BDFDB.disCN.searchbarclear}"/>
 									</div>
 								</div>
-								<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.quickselect}" style="padding-bottom: 15px;">
+								<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.quickselect}">
 									<div class="${BDFDB.disCN.quickselectlabel}">Sort by:</div>
 									<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.quickselectclick} sort-filter" style="flex: 0 0 auto;">
 										<div option="${Object.keys(this.sortings.sort)[0]}" class="${BDFDB.disCN.quickselectvalue}">${this.sortings.sort[Object.keys(this.sortings.sort)[0]]}</div>
 										<div class="${BDFDB.disCN.quickselectarrow}"></div>
 									</div>
 								</div>
-								<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.quickselect}" style="padding-bottom: 15px;">
+								<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.quickselect}">
 									<div class="${BDFDB.disCN.quickselectlabel}">Order:</div>
 									<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.quickselectclick} order-filter" style="flex: 0 0 auto;">
 										<div option="${Object.keys(this.sortings.order)[0]}" class="${BDFDB.disCN.quickselectvalue}">${this.sortings.order[Object.keys(this.sortings.order)[0]]}</div>
@@ -251,6 +261,9 @@ class ThemeRepo {
 			.${this.getName()}-modal .themeEntry ${BDFDB.dotCN._repocontrols} > * {
 				margin-right: 5px !important;
 			}
+			.${this.getName()}-modal .themeEntry ${BDFDB.dotCN._repocontrols} > .previewCheckboxWrapper {
+				margin-right: 0px !important;
+			}
 			.${this.getName()}-modal .themeEntry svg[fill="currentColor"],
 			.${this.getName()}-modal .themeEntry ${BDFDB.dotCN.giffavoritebutton}:not(${BDFDB.dotCN.giffavoriteselected}) {
 				color: #72767d !important;
@@ -264,14 +277,6 @@ class ThemeRepo {
 				pointer-events: none !important;
 			}`;
 	}
-
-	getName () {return "ThemeRepo";}
-
-	getDescription () {return "Allows you to preview all themes from the theme repo and download them on the fly. Repo button is in the theme settings.";}
-
-	getVersion () {return "1.6.5";}
-
-	getAuthor () {return "DevilBro";}
 	
 	getSettingsPanel () {
 		if (!this.started || typeof BDFDB !== "object") return;
@@ -287,7 +292,7 @@ class ThemeRepo {
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Remove all added Themes from your own list.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} remove-all" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Reset</div></button></div>`;
 		settingshtml += `</div></div>`;
 		
-		var settingspanel = $(settingshtml)[0];
+		let settingspanel = BDFDB.htmlToElement(settingshtml);
 
 		BDFDB.initElements(settingspanel);
 
@@ -359,6 +364,7 @@ class ThemeRepo {
 			changes.forEach(change => {
 				if (change.addedNodes) change.addedNodes.forEach(node => {
 					if (node.tagName && node.classList && node.className.includes("plugin-context-menu") && !node.querySelector(".themerepo-item")) {
+						observer.disconnect();
 						let items = node.querySelectorAll(BDFDB.dotCN.contextmenuitem);
 						$(this.settingsContextEntryMarkup)
 							.on("click", () => {
@@ -456,10 +462,10 @@ class ThemeRepo {
 				$(window).off("message." + this.getName());
 			})
 			.on("click." + this.getName(), ".sort-filter", (e) => {
-				this.openSortPopout(e, this.sortPopoutMarkup, themeRepoModal);
+				BDFDB.createSortPopout(e.currentTarget, this.sortPopoutMarkup, () => {this.sortEntries(themeRepoModal);});
 			})
 			.on("click." + this.getName(), ".order-filter", (e) => {
-				this.openSortPopout(e, this.orderPopoutMarkup, themeRepoModal);
+				BDFDB.createSortPopout(e.currentTarget, this.orderPopoutMarkup, () => {this.sortEntries(themeRepoModal);});
 			})
 			.on("change." + this.getName(), "#input-darklight", (e) => {
 				frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"DarkLight",checked:e.currentTarget.checked},"*");
@@ -480,7 +486,7 @@ class ThemeRepo {
 			.on("change." + this.getName(), "#input-rnmstart", (e) => {
 				BDFDB.saveData("RNMstart", e.currentTarget.checked, this, "settings");
 			})
-			.on("click." + this.getName(), ".tab[tab=themes]:not(.selected)", (e) => {
+			.on("click." + this.getName(), BDFDB.dotCN.tabbaritem + "[tab=themes]:not(" + BDFDB.dotCN.settingsitemselected + ")", (e) => {
 				var newHiddenSettings = BDFDB.loadAllData(this, "hidden");
 				if (!BDFDB.equals(newHiddenSettings, hiddenSettings)) {
 					hiddenSettings = Object.assign({},newHiddenSettings);
@@ -656,7 +662,7 @@ class ThemeRepo {
 			let pos = entrypositions.indexOf(li.getAttribute("data-url"));
 			if (pos > -1) {
 				li.querySelectorAll(BDFDB.dotCNC._reponame + BDFDB.dotCNC._repoversion + BDFDB.dotCNC._repoauthor + BDFDB.dotCN._repodescription).forEach(ele => {
-					if (searchstring || ele.querySelector(".highlight")) ele.innerHTML = BDFDB.highlightText(ele.innerText, searchstring); 
+					if (searchstring && searchstring.length > 2 || ele.querySelector(BDFDB.dotCN.highlight)) ele.innerHTML = BDFDB.highlightText(ele.innerText, searchstring);
 				});
 				li.style.removeProperty("display");
 				li.style.setProperty("order", pos, "important");
@@ -666,37 +672,6 @@ class ThemeRepo {
 				li.style.removeProperty("order");
 			}
 		}
-	}
-	
-	openSortPopout (e, markup, themeRepoModal) {
-		var wrapper = e.currentTarget;
-		if (wrapper.classList.contains("popout-open")) return;
-		wrapper.classList.add("popout-open");
-		var value = $(wrapper).find(BDFDB.dotCN.quickselectvalue);
-		var popout = $(markup);
-		$(BDFDB.dotCN.popouts).append(popout)
-			.off("click", BDFDB.dotCN.contextmenuitem)
-			.on("click", BDFDB.dotCN.contextmenuitem, (e2) => {
-				value.text($(e2.currentTarget).text());
-				value.attr("option", $(e2.currentTarget).attr("option"));
-				$(document).off("mousedown.sortpopout" + this.getName());
-				popout.remove();
-				this.sortEntries(themeRepoModal);
-				setTimeout(() => {wrapper.classList.remove("popout-open");},300);
-			});
-			
-		popout
-			.css("left", $(wrapper).offset().left + $(wrapper).outerWidth() + "px")
-			.css("top", $(wrapper).offset().top + value.outerHeight() + "px")
-			.find(BDFDB.dotCN.contextmenu).addClass(BDFDB.getDiscordTheme());
-			
-		$(document).on("mousedown.sortpopout" + this.getName(), (e2) => {
-			if (popout.has(e2.target).length == 0) {
-				$(document).off("mousedown.sortpopout" + this.getName());
-				popout.remove();
-				setTimeout(() => {wrapper.classList.remove("popout-open");},300);
-			}
-		});
 	}
 	
 	loadThemes () {

@@ -805,7 +805,7 @@ class GoogleTranslateOption {
 			translatorcheckbox.addEventListener("click", () => {
 				this.updateSettings(translatepopout);
 				translatepopout.remove();
-				button.classList.remove(BDFDB.disCN.optionpopoutopen);
+				button.classList.remove("popout-open");
 				this.openTranslatePopout(button);
 			});
 		});
@@ -814,7 +814,7 @@ class GoogleTranslateOption {
 			if (!translatepopout.contains(e.target)) {
 				document.removeEventListener("mousedown", removePopout);
 				translatepopout.remove();
-				setTimeout(() => {button.classList.remove(BDFDB.disCN.optionpopoutopen);},300);
+				setTimeout(() => {button.classList.remove("popout-open");},300);
 			}
 		};
 		document.addEventListener("mousedown", removePopout);
@@ -841,7 +841,6 @@ class GoogleTranslateOption {
 			var language = option.getAttribute("value");
 			selectWrap.setAttribute("value", language);
 			selectControl.querySelector(BDFDB.dotCN.title).innerText = this.languages[language].name;
-			console.log(type, language);
 			BDFDB.saveData(type, language, this, "choices");
 		})});
 		

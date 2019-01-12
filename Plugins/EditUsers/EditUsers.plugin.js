@@ -3,7 +3,7 @@
 class EditUsers {
 	getName () {return "EditUsers";}
 
-	getVersion () {return "3.2.0";} 
+	getVersion () {return "3.2.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -20,12 +20,14 @@ class EditUsers {
 			"Popout":"componentDidMount",
 			"DirectMessage":"componentDidMount",
 			"CallAvatar":"componentDidMount",
-			"PrivateChannel":"componentDidMount",
+			"PrivateChannel":["componentDidMount","componentDidUpdate"],
 			"HeaderBar":["componentDidMount","componentDidUpdate"],
 			"Clickable":"componentDidMount",
 			"MessageContent":["componentDidMount","componentDidUpdate"],
 			"StandardSidebarView":"componentWillUnmount"
 		};
+		
+		this.avatarselector = BDFDB.dotCNC.avatarinner + BDFDB.dotCNC.avatarimage + BDFDB.dotCNC.callavatarwrapper + BDFDB.dotCNC.voiceavatarcontainer + "[class*='avatar-']";
 
 		this.css = `
 			${BDFDB.dotCN.bottag} {
@@ -184,13 +186,13 @@ class EditUsers {
 		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">Change User in:</h3></div><div class="DevilBro-settings-inner-list">`;
 		for (let key in settings) {
-			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}"${settings[key] ? " checked" : ""}></div></div>`;
+			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
 		}
 		settingshtml += `</div>`;
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Reset all Users.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} reset-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Reset</div></button></div>`;
 		settingshtml += `</div></div>`;
 		
-		var settingspanel = $(settingshtml)[0];
+		let settingspanel = BDFDB.htmlToElement(settingshtml);
 
 		BDFDB.initElements(settingspanel);
 
@@ -290,16 +292,18 @@ class EditUsers {
 	
 	onUserContextMenu (instance, menu) {
 		if (instance.props && instance.props.user && !menu.querySelector(".localusersettings-item")) {
-			$(menu).append(this.userContextEntryMarkup)
+			let userContextEntry = BDFDB.htmlToElement(this.userContextEntryMarkup);
+			menu.appendChild(userContextEntry);
+			$(userContextEntry)
 				.on("mouseenter." + this.getName(), ".localusersettings-item", (e) => {
-					var userContextSubMenu = $(this.userContextSubMenuMarkup);
-					userContextSubMenu
+					var userContextSubMenu = BDFDB.htmlToElement(this.userContextSubMenuMarkup);
+					$(userContextSubMenu)
 						.on("click", ".usersettings-item", () => {
 							instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
 							this.showUserSettings(instance.props.user);
 						});
 					if (BDFDB.loadData(instance.props.user.id, this, "users")) {
-						userContextSubMenu
+						$(userContextSubMenu)
 							.find(".resetsettings-item")
 							.removeClass(BDFDB.disCN.contextmenuitemdisabled)
 							.on("click", () => {
@@ -316,31 +320,42 @@ class EditUsers {
 	showUserSettings (info) {
 		var {name,tag,url,removeIcon,ignoreTagColor,color1,color2,color3,color4} = BDFDB.loadData(info.id, this, "users") || {};
 		
-		var member = this.MemberUtils.getMember(this.LastGuildStore.getGuildId(), info.id) ;
+		var member = this.MemberUtils.getMember(this.LastGuildStore.getGuildId(), info.id) || {};
 		
-		var userSettingsModal = $(this.userSettingsModalMarkup);
-		userSettingsModal.find(BDFDB.dotCN.modalguildname).text(member && member.nick ? member.nick : info.username);
-		userSettingsModal.find("#input-username").val(name);
-		userSettingsModal.find("#input-username").attr("placeholder", member && member.nick ? member.nick : info.username);
-		userSettingsModal.find("#input-usertag").val(tag);
-		userSettingsModal.find("#input-userurl").val(url);
-		userSettingsModal.find("#input-userurl").attr("placeholder", BDFDB.getUserAvatar(info.id));
-		userSettingsModal.find("#input-userurl").addClass(url ? "valid" : "");
-		userSettingsModal.find("#input-userurl").prop("disabled", removeIcon);
-		userSettingsModal.find("#input-removeicon").prop("checked", removeIcon);
-		userSettingsModal.find(".swatches[swatchnr='3'], .swatches[swatchnr='4']").toggleClass("disabled", ignoreTagColor);
-		userSettingsModal.find("#input-ignoretagcolor").prop("checked", ignoreTagColor);
+		let userSettingsModal = BDFDB.htmlToElement(this.userSettingsModalMarkup);
+		let usernameinput = userSettingsModal.querySelector("#input-username");
+		let usertaginput = userSettingsModal.querySelector("#input-usertag");
+		let userurlinput = userSettingsModal.querySelector("#input-userurl");
+		let removeiconinput = userSettingsModal.querySelector("#input-removeicon");
+		let ignoretagcolorinput = userSettingsModal.querySelector("#input-ignoretagcolor");
+		
+		userSettingsModal.querySelector(BDFDB.dotCN.modalguildname).innerText = member.nick || info.username;
+		usernameinput.value = name || "";
+		usernameinput.setAttribute("placeholder", member.nick || info.username);
+		usertaginput.value = tag || "";
+		userurlinput.value = url || "";
+		userurlinput.setAttribute("placeholder", BDFDB.getUserAvatar(info.id) || "");
+		userurlinput.classList.toggle("valid", userurlinput.value);
+		userurlinput.disabled = removeIcon;
+		removeiconinput.checked = removeIcon;
+		ignoretagcolorinput.checked = ignoreTagColor;
 		BDFDB.setColorSwatches(userSettingsModal, color1);
 		BDFDB.setColorSwatches(userSettingsModal, color2);
 		BDFDB.setColorSwatches(userSettingsModal, color3);
 		BDFDB.setColorSwatches(userSettingsModal, color4);
+		
+		let ignoredswatches = userSettingsModal.querySelectorAll(".swatches[swatchnr='3'], .swatches[swatchnr='4']");
+		
+		ignoredswatches.forEach(swatches => {swatches.classList.toggle("disabled", ignoreTagColor);});
+		
 		BDFDB.appendModal(userSettingsModal);
-		userSettingsModal
+		
+		$(userSettingsModal)
 			.on("click", "#input-removeicon", (e) => {
-				userSettingsModal.find("#input-userurl").prop("disabled", e.currentTarget.checked);
+				userurlinput.disabled = e.currentTarget.checked;
 			})
 			.on("click", "#input-ignoretagcolor", (e) => {
-				userSettingsModal.find(".swatches[swatchnr='3'], .swatches[swatchnr='4']").toggleClass("disabled", e.currentTarget.checked);
+				ignoredswatches.forEach(swatches => {swatches.classList.toggle("disabled", e.currentTarget.checked);});
 			})
 			.on("change keyup paste", "#input-userurl", (e) => {
 				this.checkUrl(e.currentTarget);
@@ -356,25 +371,18 @@ class EditUsers {
 			.on("click", ".btn-save", (e) => {
 				e.preventDefault();
 				
-				removeIcon = userSettingsModal.find("#input-removeicon").prop("checked");
-				ignoreTagColor = userSettingsModal.find("#input-ignoretagcolor").prop("checked");
+				name = usernameinput.value.trim();
+				name = name ? name : null;
 				
-				name = null;
-				if (userSettingsModal.find("#input-username").val() && userSettingsModal.find("#input-username").val().trim().length > 0) {
-					name = userSettingsModal.find("#input-username").val().trim();
-				}
+				tag = usertaginput.value.trim();
+				tag = tag ? tag : null;
 				
-				tag = null;
-				if (userSettingsModal.find("#input-usertag").val() && userSettingsModal.find("#input-usertag").val().trim().length > 0) {
-					tag = userSettingsModal.find("#input-usertag").val().trim();
-				}
+				removeIcon = removeiconinput.checked;
 				
-				if (userSettingsModal.find("#input-userurl:not('.invalid')").length > 0) {
-					url = null;
-					if (!removeIcon && userSettingsModal.find("#input-userurl").val() && userSettingsModal.find("#input-userurl").val().trim().length > 0) {
-						url = userSettingsModal.find("#input-userurl").val().trim();
-					}
-				}
+				ignoreTagColor = ignoretagcolorinput.checked;
+				
+				url = !removeIcon && userurlinput.classList.contains("valid") ? userurlinput.value.trim() : null;
+				url = url ? url : null;
 				
 				color1 = BDFDB.getSwatchColor(userSettingsModal, 1);
 				color2 = BDFDB.getSwatchColor(userSettingsModal, 2);
@@ -389,7 +397,8 @@ class EditUsers {
 				}
 				BDFDB.WebModules.forceAllUpdates(this);
 			});
-		userSettingsModal.find("#input-username").focus();
+			
+		usernameinput.focus();
 	}
 	
 	checkUrl (input) {
@@ -503,7 +512,7 @@ class EditUsers {
 	processPrivateChannel (instance, wrapper) {
 		if (instance.props && instance.props.user) {
 			let username = wrapper.querySelector(BDFDB.dotCN.dmchannelname);
-			this.changeName(instance.props.user, username.firstElementChild ? username.firstElementChild : username);
+			this.changePrivateChannel(instance.props.user, username.firstElementChild ? username.firstElementChild : username);
 			this.changeAvatar(instance.props.user, this.getAvatarDiv(wrapper));
 		}
 	}
@@ -629,7 +638,7 @@ class EditUsers {
 				});
 				username.EditUsersChangeObserver.observe(username, {attributes:true});
 			}
-			else username.removeAttribute("changed-by-editusers", true);
+			else username.removeAttribute("changed-by-editusers");
 		}
 	}
 	
@@ -649,7 +658,7 @@ class EditUsers {
 				});
 				username.EditUsersChangeObserver.observe(username, {attributes:true});
 			}
-			else username.removeAttribute("changed-by-editusers", true);
+			else username.removeAttribute("changed-by-editusers");
 		}
 	}
 	
@@ -674,7 +683,7 @@ class EditUsers {
 				});
 				username.EditUsersChangeObserver.observe(username, {attributes:true});
 			}
-			else username.removeAttribute("changed-by-editusers", true);
+			else username.removeAttribute("changed-by-editusers");
 		}
 	}
 	
@@ -705,7 +714,7 @@ class EditUsers {
 				});
 				avatar.EditUsersChangeObserver.observe(avatar, {attributes:true});
 			}
-			else avatar.removeAttribute("changed-by-editusers", true);
+			else avatar.removeAttribute("changed-by-editusers");
 		}
 	}
 	
@@ -735,6 +744,49 @@ class EditUsers {
 		}
 	}
 	
+	changePrivateChannel (info, username) {
+		if (!info || !username || !username.parentElement) return;
+		let dmchannel = BDFDB.getParentEle(BDFDB.dotCN.dmchannel, username);
+		if (!dmchannel) return;
+		if (username.EditUsersChangeObserver && typeof username.EditUsersChangeObserver.disconnect == "function") username.EditUsersChangeObserver.disconnect();
+		$(dmchannel).off("." + this.getName())
+		let data = this.getUserData(info.id, username);
+		if (data.name || data.color1 || data.color2 || username.getAttribute("changed-by-editusers")) {
+			let color1 = BDFDB.colorCONVERT(data.color1, "RGB");
+			let color2 = BDFDB.colorCONVERT(data.color2, "RGB");
+			BDFDB.setInnerText(username, data.name || info.username);
+			if (username.EditUsersHovered || dmchannel.classList.contains(BDFDB.disCN.dmchannelselected)) colorHover();
+			else colorDefault();
+				
+			if (data.name || data.color1 || data.color2) {
+				$(dmchannel)
+					.on("mouseenter." + this.getName(), () => {
+						username.EditUsersHovered = true;
+						colorHover();
+					})
+					.on("mouseleave." + this.getName(), () => {
+						delete username.EditUsersHovered;
+						colorDefault();
+					});
+				username.setAttribute("changed-by-editusers", true);
+				username.EditUsersChangeObserver = new MutationObserver((changes, _) => {
+					username.EditUsersChangeObserver.disconnect();
+					this.changePrivateChannel(info, username);
+				});
+				username.EditUsersChangeObserver.observe(username, {attributes:true});
+			}
+			else username.removeAttribute("changed-by-editusers");
+			function colorDefault() {
+				username.style.setProperty("color", color1 ? BDFDB.colorCHANGE(color1, -0.5) : null, "important");
+				username.style.setProperty("background", color2 ? BDFDB.colorCHANGE(color2, -0.5) : null, "important");
+			}
+			function colorHover() {
+				username.style.setProperty("color", color1, "important");
+				username.style.setProperty("background", color2, "important");
+			}
+		}
+	}
+	
 	changeMention (info, mention) {
 		if (!info || !mention || !mention.parentElement) return;
 		if (mention.EditUsersChangeObserver && typeof mention.EditUsersChangeObserver.disconnect == "function") mention.EditUsersChangeObserver.disconnect();
@@ -746,13 +798,13 @@ class EditUsers {
 		if (mention.EditUsersHovered) colorHover();
 		else colorDefault();
 		$(mention)
-			.off("mouseenter." + this.getName()).off("mouseleave." + this.getName())
-			.on("mouseenter." + this.getName(), (e) => {
+			.off("." + this.getName())
+			.on("mouseenter." + this.getName(), () => {
 				mention.EditUsersHovered = true;
 				colorHover();
 			})
-			.on("mouseleave." + this.getName(), (e) => {
-				mention.EditUsersHovered = false;
+			.on("mouseleave." + this.getName(), () => {
+				delete mention.EditUsersHovered;
 				colorDefault();
 			});
 		mention.EditUsersChangeObserver = new MutationObserver((changes, _) => {
@@ -786,15 +838,15 @@ class EditUsers {
 				});
 				username.EditUsersChangeObserver.observe(username, {attributes:true});
 			}
-			else username.removeAttribute("changed-by-editusers", true);
+			else username.removeAttribute("changed-by-editusers");
 		}
 	}
 	
 	getAvatarDiv (wrapper) {
-		var avatar = wrapper.querySelector(BDFDB.dotCNC.avatarimage + BDFDB.dotCNC.callavatarwrapper + BDFDB.dotCNC.voiceavatarcontainer + "[class*='avatar-']");
+		var avatar = wrapper.querySelector(this.avatarselector);
 		while (!avatar && wrapper.parentElement) {
 			wrapper = wrapper.parentElement;
-			avatar = wrapper.querySelector(BDFDB.dotCNC.avatarimage + BDFDB.dotCNC.callavatarwrapper + BDFDB.dotCNC.voiceavatarcontainer + "[class*='avatar-']");
+			avatar = wrapper.querySelector(this.avatarselector);
 		}
 		return avatar.firstElementChild || avatar;
 	}
