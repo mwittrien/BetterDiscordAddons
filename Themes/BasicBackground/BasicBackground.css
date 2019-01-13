@@ -3099,9 +3099,6 @@ html, span:not(.spinner-item) {
 }
 
 /* serverfolders */ 
-.ui-icon-picker-icon.selected {
-	background-color: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 3)) !important;
-}
 .folder .wrapper-232cHJ.count {
 	background: rgb(var(--vaccentcolor)) !important;
 }
