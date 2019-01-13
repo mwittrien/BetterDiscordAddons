@@ -819,7 +819,7 @@ class GoogleTranslateOption {
 		};
 		document.addEventListener("mousedown", removePopout);
 		
-		BDFDB.initElements(translatepopout);
+		BDFDB.initElements(translatepopout, this);
 	}
 	
 	openDropdownMenu (selector, e) {
