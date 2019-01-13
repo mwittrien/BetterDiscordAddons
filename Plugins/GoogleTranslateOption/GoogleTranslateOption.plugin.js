@@ -412,7 +412,7 @@ class GoogleTranslateOption {
 
 		BDFDB.initElements(settingspanel, this);
 
-		BDFDB.addChildEventListener(settingspanel, "click", BDFDB.dotCN.selectcontrol, e =>  {this.openDropdownMenu("inSettings", e);});});
+		BDFDB.addChildEventListener(settingspanel, "click", BDFDB.dotCN.selectcontrol, e =>  {this.openDropdownMenu("inSettings", e);});
 			
 		return settingspanel;
 	}
