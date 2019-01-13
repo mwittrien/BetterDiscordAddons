@@ -770,8 +770,8 @@ class GoogleTranslateOption {
 		translatepopout.style.setProperty("left", buttonrects.left + buttonrects.width + "px");
 		translatepopout.style.setProperty("top", buttonrects.top - buttonrects.height/2 + "px")
 		
-		translatepopout.querySelectorAll(BDFDB.dotCN.selectcontrol).forEach(control => {control.addEventListener("click", e =>  {this.openDropdownMenu("inChat", e);});});
-		translatepopout.querySelectorAll(".reverse-button").forEach(reversebutton => {reversebutton.addEventListener("click", () => {
+		BDFDB.addChildEventListener(translatepopout, "click", BDFDB.dotCN.selectcontrol, e =>  {this.openDropdownMenu("inChat", e);});
+		BDFDB.addChildEventListener(translatepopout, "click", ".reverse-button", () => {
 			let place = reversebutton.getAttribute("type").replace("output","");
 			let input = this.getLanguageChoice("output", place);
 			let output = this.getLanguageChoice("input", place);
@@ -784,7 +784,7 @@ class GoogleTranslateOption {
 			outputselect.querySelector(BDFDB.dotCN.title).innerText = this.languages[output].name;
 			BDFDB.saveData("input" + place, input, this, "choices");
 			BDFDB.saveData("output" + place, output, this, "choices");
-		});});
+		});
 		
 		translatepopout.querySelectorAll(BDFDB.dotCN.select).forEach(selectWrap => {
 			let language = this.getLanguageChoice(selectWrap.getAttribute("type"));
@@ -837,12 +837,12 @@ class GoogleTranslateOption {
 		selectMenu.classList.add(selector);
 		selectWrap.appendChild(selectMenu);
 		
-		selectMenu.querySelectorAll(BDFDB.dotCN.selectoption).forEach(option => {option.addEventListener("mousedown", e2 => {
+		BDFDB.addChildEventListener(selectMenu, "mousedown", BDFDB.dotCN.selectoption, e2 => {
 			var language = option.getAttribute("value");
 			selectWrap.setAttribute("value", language);
 			selectControl.querySelector(BDFDB.dotCN.title).innerText = this.languages[language].name;
 			BDFDB.saveData(type, language, this, "choices");
-		})});
+		});
 		
 		var removeMenu = e2 =>  {
 			if (e2.target.parentElement != selectMenu) {
