@@ -1,11 +1,19 @@
 //META{"name":"ServerFolders"}*//
 
 class ServerFolders {
+	getName () {return "ServerFolders";}
+
+	getVersion () {return "5.9.7";}
+
+	getAuthor () {return "DevilBro";}
+
+	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
+	
 	initConstructor () {
 		this.labels = {};
 		
 		this.patchModules = {
-			"Guild":"componentDidMount"
+			"Guild":["componentDidMount","componentWillUnmount"]
 		};
 		
 		this.css = `
@@ -36,7 +44,7 @@ class ServerFolders {
 				right: -10px;
 			}
 			.${this.getName()}-modal .ui-icon-picker-icon.preview.nopic .ui-picker-inner {
-				background-image: url('data:image/svg+xml; utf8, <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" width="400" height="400"><path d="M40.400 17.178 C 39.850 17.366,38.793 17.538,38.050 17.560 C 33.351 17.699,23.397 24.788,21.381 29.432 C 21.087 30.109,20.566 30.896,20.223 31.181 C 19.880 31.465,19.600 31.866,19.600 32.071 C 19.600 32.276,19.236 33.242,18.792 34.218 C 16.345 39.589,16.345 49.611,18.792 54.982 C 19.236 55.958,19.600 56.918,19.600 57.116 C 19.600 57.314,19.960 57.802,20.400 58.200 C 20.840 58.598,21.200 59.131,21.200 59.385 C 21.200 60.391,25.680 64.942,91.505 130.800 C 128.995 168.310,159.849 199.326,160.068 199.724 C 160.409 200.344,150.950 209.964,93.989 266.924 C 18.798 342.113,19.600 341.292,19.600 343.126 C 19.600 343.283,19.250 344.065,18.822 344.864 C 15.429 351.195,15.958 362.918,19.932 369.440 C 22.094 372.990,27.474 378.800,28.598 378.800 C 28.861 378.800,29.402 379.160,29.800 379.600 C 30.198 380.040,30.703 380.400,30.922 380.400 C 31.141 380.400,32.238 380.831,33.360 381.358 C 34.482 381.886,36.480 382.533,37.800 382.797 C 43.786 383.994,44.323 384.027,47.299 383.386 C 48.895 383.042,51.010 382.619,52.000 382.446 C 52.990 382.274,54.517 381.743,55.394 381.266 C 56.271 380.790,57.188 380.400,57.432 380.400 C 57.676 380.400,58.202 380.040,58.600 379.600 C 58.998 379.160,59.598 378.800,59.932 378.800 C 60.267 378.800,91.725 347.615,129.839 309.500 C 169.057 270.281,199.496 240.145,199.964 240.073 C 200.602 239.975,216.001 255.193,267.495 306.814 C 327.046 366.511,339.531 378.800,340.627 378.800 C 340.798 378.800,341.265 379.097,341.667 379.461 C 345.728 383.136,361.013 384.409,365.685 381.461 C 366.188 381.143,367.024 380.757,367.541 380.602 C 370.583 379.691,376.623 374.200,379.382 369.836 C 385.105 360.785,384.039 346.409,377.039 338.228 C 376.084 337.113,344.846 305.743,307.621 268.517 C 255.329 216.224,239.969 200.647,240.070 200.009 C 240.143 199.545,270.062 169.288,308.216 131.091 C 345.625 93.641,376.723 62.370,377.324 61.600 C 384.286 52.678,385.036 40.621,379.277 30.171 C 376.136 24.469,367.906 18.537,361.668 17.477 C 354.656 16.286,345.095 17.665,341.883 20.331 C 341.567 20.594,340.549 21.318,339.622 21.941 C 338.695 22.563,307.031 53.972,269.259 91.737 C 231.486 129.501,200.330 160.400,200.022 160.400 C 199.714 160.400,168.938 129.869,131.631 92.554 C 56.225 17.131,60.288 21.047,55.200 18.887 C 51.591 17.354,42.836 16.343,40.400 17.178z" fill="#dc2b43"></path></svg>');
+				background-image: url('data:image/svg+xml; utf8, <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" width="400" height="400"><path d="M40.400 17.178 C 39.850 17.366,38.793 17.538,38.050 17.560 C 33.351 17.699,23.397 24.788,21.381 29.432 C 21.087 30.109,20.566 30.896,20.223 31.181 C 19.880 31.465,19.600 31.866,19.600 32.071 C 19.600 32.276,19.236 33.242,18.792 34.218 C 16.345 39.589,16.345 49.611,18.792 54.982 C 19.236 55.958,19.600 56.918,19.600 57.116 C 19.600 57.314,19.960 57.802,20.400 58.200 C 20.840 58.598,21.200 59.131,21.200 59.385 C 21.200 60.391,25.680 64.942,91.505 130.800 C 128.995 168.310,159.849 199.326,160.068 199.724 C 160.409 200.344,150.950 209.964,93.989 266.924 C 18.798 342.113,19.600 341.292,19.600 343.126 C 19.600 343.283,19.250 344.065,18.822 344.864 C 15.429 351.195,15.958 362.918,19.932 369.440 C 22.094 372.990,27.474 378.800,28.598 378.800 C 28.861 378.800,29.402 379.160,29.800 379.600 C 30.198 380.040,30.703 380.400,30.922 380.400 C 31.141 380.400,32.238 380.831,33.360 381.358 C 34.482 381.886,36.480 382.533,37.800 382.797 C 43.786 383.994,44.323 384.027,47.299 383.386 C 48.895 383.042,51.010 382.619,52.000 382.446 C 52.990 382.274,54.517 381.743,55.394 381.266 C 56.271 380.790,57.188 380.400,57.432 380.400 C 57.676 380.400,58.202 380.040,58.600 379.600 C 58.998 379.160,59.598 378.800,59.932 378.800 C 60.267 378.800,91.725 347.615,129.839 309.500 C 169.057 270.281,199.496 240.145,199.964 240.073 C 200.602 239.975,216.001 255.193,267.495 306.814 C 327.046 366.511,339.531 378.800,340.627 378.800 C 340.798 378.800,341.265 379.097,341.667 379.461 C 345.728 383.136,361.013 384.409,365.685 381.461 C 366.188 381.143,367.024 380.757,367.541 380.602 C 370.583 379.691,376.623 374.200,379.382 369.836 C 385.105 360.785,384.039 346.409,377.039 338.228 C 376.084 337.113,344.846 305.743,307.621 268.517 C 255.329 216.224,239.969 200.647,240.070 200.009 C 240.143 199.545,270.062 169.288,308.216 131.091 C 345.625 93.641,376.723 62.370,377.324 61.600 C 384.286 52.678,385.036 40.621,379.277 30.171 C 376.136 24.469,367.906 18.537,361.668 17.477 C 354.656 16.286,345.095 17.665,341.883 20.331 C 341.567 20.594,340.549 21.318,339.622 21.941 C 338.695 22.563,307.031 53.972,269.259 91.737 C 231.486 129.501,200.330 160.400,200.022 160.400 C 199.714 160.400,168.938 129.869,131.631 92.554 C 56.225 17.131,60.288 21.047,55.200 18.887 C 51.591 17.354,42.836 16.343,40.400 17.178z" fill="rgb(220,43,67)"></path></svg>');
 			}
 			${BDFDB.dotCN.guild}.folder ${BDFDB.dotCN.avataricon} {
 				background-clip: padding-box !important;
@@ -106,7 +114,7 @@ class ServerFolders {
 			</div>`;
 			
 		this.folderContextMarkup = 
-			`<div class="${BDFDB.disCN.contextmenu} folderSettings">
+			`<div class="${BDFDB.disCN.contextmenu} serverfolder-contextmenu">
 				<div class="${BDFDB.disCN.contextmenuitemgroup}">
 					<div class="${BDFDB.disCN.contextmenuitem} unreadfolder-item ${BDFDB.disCN.contextmenuitemdisabled}">
 						<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_foldercontext_unreadfolder_text</div></span>
@@ -139,8 +147,8 @@ class ServerFolders {
 			
 		this.folderContentMarkup = 
 			`<div class="${BDFDB.disCN.guildswrapper} foldercontent foldercontentclosed">
-				<div class="${BDFDB.disCNS.guildsscrollerwrap + BDFDB.disCN.scrollerwrapold}">
-					<div class="${BDFDB.disCNS.guilds + BDFDB.disCN.scrollerold}"></div>
+				<div class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.firefoxfixscrollflex + BDFDB.disCNS.guildsscrollerwrap + BDFDB.disCNS.scrollerthemed + BDFDB.disCN.themeghosthairline}">
+					<div class="${BDFDB.disCNS.guilds + BDFDB.disCN.scroller}"></div>
 				</div>
 			</div>`;
 			
@@ -163,7 +171,7 @@ class ServerFolders {
 				<div class="${BDFDB.disCN.modal}">
 					<div class="${BDFDB.disCN.modalinner}">
 						<div class="${BDFDB.disCNS.modalsub + BDFDB.disCN.modalsizemedium}">
-							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex: 0 0 auto;">
+							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex: 0 0 auto; padding-bottom: 10px;">
 								<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">
 									<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.headertitle + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.defaultcolor + BDFDB.disCNS.h4defaultmargin + BDFDB.disCN.marginreset}">REPLACE_modal_header_text</h4>
 									<div class="${BDFDB.disCNS.modalguildname + BDFDB.disCNS.small + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCN.primary}"></div>
@@ -175,11 +183,13 @@ class ServerFolders {
 									</g>
 								</svg>
 							</div>
-							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCNS.marginbottom8 + BDFDB.disCN.modalsubinner}" style="flex: 0 0 auto;">
-								<div tab="folder" class="tab">REPLACE_modal_tabheader1_text</div>
-								<div tab="icon" class="tab">REPLACE_modal_tabheader2_text</div>
-								<div tab="tooltip" class="tab">REPLACE_modal_tabheader3_text</div>
-								<div tab="custom" class="tab">REPLACE_modal_tabheader4_text</div>
+							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCNS.marginbottom8 + BDFDB.disCN.tabbarcontainer}" style="flex: 0 0 auto; padding-right: 12px;">
+								<div class="${BDFDB.disCNS.tabbar + BDFDB.disCN.tabbartop}">
+									<div tab="folder" class="${BDFDB.disCNS.settingsitemdefault + BDFDB.disCNS.settingsitem + BDFDB.disCNS.settingsnotselected + BDFDB.disCN.tabbaritem}">REPLACE_modal_tabheader1_text</div>
+									<div tab="icon" class="${BDFDB.disCNS.settingsitemdefault + BDFDB.disCNS.settingsitem + BDFDB.disCNS.settingsnotselected + BDFDB.disCN.tabbaritem}">REPLACE_modal_tabheader2_text</div>
+									<div tab="tooltip" class="${BDFDB.disCNS.settingsitemdefault + BDFDB.disCNS.settingsitem + BDFDB.disCNS.settingsnotselected + BDFDB.disCN.tabbaritem}">REPLACE_modal_tabheader3_text</div>
+									<div tab="custom" class="${BDFDB.disCNS.settingsitemdefault + BDFDB.disCNS.settingsitem + BDFDB.disCNS.settingsnotselected + BDFDB.disCN.tabbaritem}">REPLACE_modal_tabheader4_text</div>
+								</div>
 							</div>
 							<div class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.modalcontent + BDFDB.disCNS.scrollerthemed + BDFDB.disCN.themeghosthairline}">
 								<div class="${BDFDB.disCNS.scroller + BDFDB.disCN.modalsubinner}">
@@ -300,43 +310,33 @@ class ServerFolders {
 			}
 		};
 	}
-		
-	getName () {return "ServerFolders";}
-
-	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
-
-	getVersion () {return "5.9.6";}
-
-	getAuthor () {return "DevilBro";}
 	
 	getSettingsPanel () {
 		if (!this.started || typeof BDFDB !== "object") return;
 		let settings = BDFDB.getAllData(this, "settings"); 
 		let settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		for (let key in settings) {
-			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}"${settings[key] ? " checked" : ""}></div></div>`;
+			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
 		}
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Reset all Folders.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} reset-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Reset</div></button></div>`;
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Remove all custom Icons.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} removecustom-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Remove</div></button></div>`;
 		settingshtml += `</div></div>`;
 		
-		let settingspanel = $(settingshtml)[0];
+		let settingspanel = BDFDB.htmlToElement(settingshtml);
 
-		BDFDB.initElements(settingspanel);
+		BDFDB.initElements(settingspanel, this);
 
-		$(settingspanel)
-			.on("click", BDFDB.dotCN.switchinner, () => {this.updateSettings(settingspanel);})
-			.on("click", ".reset-button", () => {
-				BDFDB.openConfirmModal(this, "Are you sure you want to delete all folders?", () => {
-					BDFDB.removeAllData(this, "folders");
-					this.resetAllElements();
-				});
-			})
-			.on("click", ".removecustom-button", () => {
-				BDFDB.openConfirmModal(this, "Are you sure you want to remove all custom icons?", () => {
-					BDFDB.removeAllData(this, "customicons");
-				});
+		BDFDB.addChildEventListener(settingspanel, "click", ".reset-button", () => {
+			BDFDB.openConfirmModal(this, "Are you sure you want to delete all folders?", () => {
+				BDFDB.removeAllData(this, "folders");
+				this.resetAllElements();
 			});
+		});
+		BDFDB.addChildEventListener(settingspanel, "click", ".removecustom-button", () => {
+			BDFDB.openConfirmModal(this, "Are you sure you want to remove all custom icons?", () => {
+				BDFDB.removeAllData(this, "customicons");
+			});
+		});
 		return settingspanel;
 	}
 
@@ -363,8 +363,11 @@ class ServerFolders {
 			BDFDB.loadMessage(this);
 			
 			if (!document.querySelector(BDFDB.dotCN.guildswrapper + ".foldercontent")) {
-				this.foldercontent = $(this.folderContentMarkup)[0];
-				$(BDFDB.dotCN.guildswrapper).after(this.foldercontent);
+				let guildswrapper = document.querySelector(BDFDB.dotCN.guildswrapper);
+				if (guildswrapper) {
+					this.foldercontent = BDFDB.htmlToElement(this.folderContentMarkup);
+					guildswrapper.parentElement.insertBefore(this.foldercontent, guildswrapper.nextElementSibling);
+				}
 			}
 			
 			this.GuildUtils = BDFDB.WebModules.findByProperties("getGuilds","getGuild");
@@ -372,14 +375,16 @@ class ServerFolders {
 			this.Animations = BDFDB.WebModules.findByProperties("spring");
 			
 			setTimeout(() => {
-				let folders = BDFDB.loadAllData(this, "folders"), sortedFolders = [];
-				for (let id in folders) sortedFolders[folders[id].position] = folders[id];
-				for (let data of sortedFolders) if (data && !document.querySelector(BDFDB.dotCN.guild + ".folder#" + data.folderID)) {
-					let folderdiv = this.createFolderDiv(data);
-					this.readIncludedServerList(folderdiv).forEach(guilddiv => {this.hideServer(guilddiv, folderdiv);});
+				if (this.foldercontent) {
+					let folders = BDFDB.loadAllData(this, "folders"), sortedFolders = [];
+					for (let id in folders) sortedFolders[folders[id].position] = folders[id];
+					for (let data of sortedFolders) if (data && !document.querySelector(BDFDB.dotCN.guild + ".folder#" + data.folderID)) {
+						let folderdiv = this.createFolderDiv(data);
+						this.readIncludedServerList(folderdiv).forEach(guilddiv => {this.hideServer(guilddiv, folderdiv);});
+					}
+					
+					BDFDB.WebModules.forceAllUpdates(this);
 				}
-				
-				BDFDB.WebModules.forceAllUpdates(this);
 			},5000);
 		}
 		else {
@@ -390,7 +395,7 @@ class ServerFolders {
 	stop () {
 		if (typeof BDFDB === "object") {
 			this.resetAllElements();
-			BDFDB.removeEles(this.foldercontent);
+			BDFDB.removeEles(this.foldercontent, ".serverfolder-contextmenu");
 			BDFDB.unloadMessage(this);
 		}
 	}
@@ -454,62 +459,67 @@ class ServerFolders {
 	onGuildContextMenu (instance, menu) {
 		if (document.querySelector(".DevilBro-modal")) return;
 		if (instance.props && instance.props.target && instance.props.guild && !menu.querySelector(".serverfolders-item")) {
-			$(this.serverContextEntryMarkup).appendTo(menu)
-				.on("mouseenter", ".serverfolders-item", (e) => {
-					let serverContextSubMenu = $(this.serverContextSubMenuMarkup);
-					serverContextSubMenu
-						.on("click." + this.getName(), ".createfolder-item", () => {
-							instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
-							this.createNewFolder(instance.props.target);
-						});
-					
-					let folderdiv = this.getFolderOfServer(instance.props.guild);
-					if (folderdiv) {
-						serverContextSubMenu
-							.find(".removefromfolder-item")
-							.removeClass(BDFDB.disCN.contextmenuitemdisabled)
-							.on("click." + this.getName(), () => {
-								instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
-								this.removeServerFromFolder(instance.props.guild, folderdiv);
-							});
-					}
-					BDFDB.appendSubMenu(e.currentTarget, serverContextSubMenu);
+			let serverContextEntry = BDFDB.htmlToElement(this.serverContextEntryMarkup);
+			menu.appendChild(serverContextEntry);
+			let folderitem = serverContextEntry.querySelector(".serverfolders-item");
+			folderitem.addEventListener("mouseenter", () => {
+				let serverContextSubMenu = BDFDB.htmlToElement(this.serverContextSubMenuMarkup);
+				let createitem = serverContextSubMenu.querySelector(".createfolder-item");
+				createitem.addEventListener("click", () => {
+					instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
+					this.createNewFolder(instance.props.target);
 				});
+				let folderdiv = this.getFolderOfServer(instance.props.guild);
+				if (folderdiv) {
+					let removeitem = serverContextSubMenu.querySelector(".removefromfolder-item");
+					removeitem.classList.remove(BDFDB.disCN.contextmenuitemdisabled);
+					removeitem.addEventListener("click", () => {
+						instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
+						this.removeServerFromFolder(instance.props.guild, folderdiv);
+					});
+				}
+				BDFDB.appendSubMenu(e.currentTarget, serverContextSubMenu);
+			});
 		}
 	}
 	
-	processGuild (instance, wrapper) {
+	processGuild (instance, wrapper, methodnames) {
 		if (instance.props && instance.props.guild) {
-			let folderdiv = this.getFolderOfServer(instance.props.guild);
-			if (folderdiv && !wrapper.getAttribute("folder")) {
-				this.hideServer(wrapper, folderdiv);
-				this.updateCopyInFolderContent(wrapper, folderdiv);
-				this.updateFolderNotifications(folderdiv);
-			}
-			$(wrapper)
-				.off("." + this.getName())
-				.on("click." + this.getName(), () => {
+			if (methodnames.includes("componentDidMount")) {
+				let folderdiv = this.getFolderOfServer(instance.props.guild);
+				if (folderdiv && !wrapper.getAttribute("folder")) {
+					this.hideServer(wrapper, folderdiv);
+					this.updateCopyInFolderContent(wrapper, folderdiv);
+					this.updateFolderNotifications(folderdiv);
+				}
+				BDFDB.addEventListener(this, wrapper, "click", () => {
 					if (BDFDB.getData("closeAllFolders", this, "settings")) document.querySelectorAll(".folder.open").forEach(openFolder => {this.openCloseFolder(openFolder);});
-				})
-				.on("mousedown." + this.getName(), (e) => {
+				});
+				BDFDB.addEventListener(this, wrapper, "mousedown", e => {
 					if (BDFDB.pressedKeys.includes(17)) {
-						e.stopPropagation();
-						e.preventDefault();
+						e.originalEvent.stopPropagation();
+						e.originalEvent.preventDefault();
 						let dragpreview = this.createDragPreview(wrapper, e);
-						
-						$(document)
-							.off("mouseup." + this.getName()).off("mousemove." + this.getName())
-							.on("mouseup." + this.getName(), (e2) => {
-								let dropfolderdiv = BDFDB.getParentEle(BDFDB.dotCN.guild + ".folder", e2.target);
-								if (dropfolderdiv) this.addServerToFolder(instance.props.guild, dropfolderdiv);
-								$(document).off("mouseup." + this.getName()).off("mousemove." + this.getName());
-								BDFDB.removeEles(dragpreview);
-							})
-							.on("mousemove." + this.getName(), (e2) => {
-								this.updateDragPreview(dragpreview, e2);
-							});
+						let updatePreview = e2 => {
+							this.updateDragPreview(dragpreview, e2);
+						};
+						let droppedPreview = e2 => {
+							let dropfolderdiv = BDFDB.getParentEle(BDFDB.dotCN.guild + ".folder", e2.target);
+							if (dropfolderdiv) this.addServerToFolder(instance.props.guild, dropfolderdiv);
+							document.removeEventListener("mousemove", updatePreview);
+							document.removeEventListener("mouseup", droppedPreview);
+							BDFDB.removeEles(dragpreview);
+						};
 					}
 				});
+			}
+			if (methodnames.includes("componentWillUnmount")) {
+				let folderdiv = this.getFolderOfServer(instance.props.guild);
+				if (folderdiv) {
+					BDFDB.removeEles(this.foldercontent.querySelectorAll(`[guild="${instance.props.guild.id}"]`));
+					this.updateFolderNotifications(folderdiv);
+				}
+			}
 		}
 	}
 	
@@ -517,67 +527,71 @@ class ServerFolders {
 		if (!folderdiv) return;
 		let {folderID,folderName,position,iconID,icons,color1,color2,color3,color4,servers} = BDFDB.loadData(folderdiv.id, this, "folders") || {};
 		if (!folderID) return;
-		let folderSettingsModal = $(this.folderSettingsModalMarkup);
-		folderSettingsModal.find(BDFDB.dotCN.modalguildname).text(folderName ? folderName : "");
-		folderSettingsModal.find("#input-foldername").val(folderName);
-		folderSettingsModal.find("#input-foldername").attr("placeholder", folderName);
+		
+		let folderSettingsModal = BDFDB.htmlToElement(this.folderSettingsModalMarkup);
+		let foldernameinput = folderSettingsModal.querySelector("#input-foldername");
+		
+		folderSettingsModal.querySelector(BDFDB.dotCN.modalguildname).innerText = folderName || "";
+		foldernameinput.value = folderName || "";
+		foldernameinput.setAttribute("placeholder", folderName || "");
 		this.setIcons(folderSettingsModal, iconID);
 		BDFDB.setColorSwatches(folderSettingsModal, color1);
 		BDFDB.setColorSwatches(folderSettingsModal, color2);
 		BDFDB.setColorSwatches(folderSettingsModal, color3);
 		BDFDB.setColorSwatches(folderSettingsModal, color4);
-		BDFDB.appendModal(folderSettingsModal);
-		folderSettingsModal
-			.on("change", "input[type='file'][option]", (e) => {
-				let file = e.currentTarget.files[0];
-				if (file) this.fetchCustomIcon(folderSettingsModal[0], e.currentTarget.getAttribute("option"));
-			})
-			.on("keyup", "input[type='text'][option]", (e) => {
-				if (e.which == 13) this.fetchCustomIcon(folderSettingsModal[0], e.currentTarget.getAttribute("option"));
-			})
-			.on("click", ".btn-addcustom", (e) => {
-				this.saveCustomIcon(folderSettingsModal[0]);
-			})
-			.on("click", ".btn-save", (e) => {
-				folderName = null;
-				if (folderSettingsModal.find("#input-foldername").val()) {
-					if (folderSettingsModal.find("#input-foldername").val().trim().length > 0) {
-						folderName = folderSettingsModal.find("#input-foldername").val().trim();
-					}
-				}
-				var oldIconID = iconID;
-				iconID = folderSettingsModal.find(".ui-icon-picker-icon.selected").attr("value");
 		
-				var oldColor1 = color1;
-				var oldColor2 = color2;
-				color1 = BDFDB.getSwatchColor(folderSettingsModal, 1);
-				color2 = BDFDB.getSwatchColor(folderSettingsModal, 2);
-				color3 = BDFDB.getSwatchColor(folderSettingsModal, 3);
-				color4 = BDFDB.getSwatchColor(folderSettingsModal, 4);
-				
-				if (iconID != oldIconID || !BDFDB.equals(color1, oldColor1) || !BDFDB.equals(color2, oldColor2)) {
-					let folderIcons = this.loadAllIcons();
-					let isOpen = folderdiv.classList.contains("open");
-					if (!folderSettingsModal.find(".ui-icon-picker-icon.selected").hasClass("custom")) {
-						this.changeImgColor(color1, color2, folderIcons[iconID].openicon, (openicon) => {
-							icons.openicon = openicon;
-							this.changeImgColor(color1, color2, folderIcons[iconID].closedicon, (closedicon) => {
-								icons.closedicon = closedicon;
-								folderdiv.querySelector(BDFDB.dotCN.avataricon).style.setProperty("background-image", `url(${isOpen ? icons.openicon : icons.closedicon})`);
-								BDFDB.saveData(folderID, {folderID,folderName,position,iconID,icons,color1,color2,color3,color4,servers}, this, "folders");
-							});
+		BDFDB.appendModal(folderSettingsModal);
+		
+		BDFDB.addChildEventListener(folderSettingsModal, "change", "input[type='file'][option]", () => {
+			let file = ele.files[0];
+			if (file) this.fetchCustomIcon(folderSettingsModal, ele.getAttribute("option"));
+		});
+		BDFDB.addChildEventListener(folderSettingsModal, "keyup", "input[type='text'][option]", e => {
+			if (e.which == 13) this.fetchCustomIcon(folderSettingsModal, e.currentTarget.getAttribute("option"));
+		});
+		BDFDB.addChildEventListener(folderSettingsModal, "click", ".btn-addcustom", () => {
+			this.saveCustomIcon(folderSettingsModal);
+		});
+		BDFDB.addChildEventListener(folderSettingsModal, "click", ".btn-save", e => {
+			e.preventDefault();
+			
+			folderName = foldernameinput.value.trim();
+			folderName = folderName ? folderName : null;
+			
+			var oldIconID = iconID;
+			var selectedIcon = folderSettingsModal.querySelector(".ui-icon-picker-icon.selected");
+			iconID = selectedIcon.getAttribute("value");
+	
+			var oldColor1 = color1;
+			var oldColor2 = color2;
+			color1 = BDFDB.getSwatchColor(folderSettingsModal, 1);
+			color2 = BDFDB.getSwatchColor(folderSettingsModal, 2);
+			color3 = BDFDB.getSwatchColor(folderSettingsModal, 3);
+			color4 = BDFDB.getSwatchColor(folderSettingsModal, 4);
+			
+			if (iconID != oldIconID || !BDFDB.equals(color1, oldColor1) || !BDFDB.equals(color2, oldColor2)) {
+				let folderIcons = this.loadAllIcons();
+				let isOpen = folderdiv.classList.contains("open");
+				if (!selectedIcon.classList.contains("custom")) {
+					this.changeImgColor(color1, color2, folderIcons[iconID].openicon, (openicon) => {
+						icons.openicon = openicon;
+						this.changeImgColor(color1, color2, folderIcons[iconID].closedicon, (closedicon) => {
+							icons.closedicon = closedicon;
+							folderdiv.querySelector(BDFDB.dotCN.avataricon).style.setProperty("background-image", `url(${isOpen ? icons.openicon : icons.closedicon})`);
+							BDFDB.saveData(folderID, {folderID,folderName,position,iconID,icons,color1,color2,color3,color4,servers}, this, "folders");
 						});
-					}
-					else {
-						icons.openicon = folderIcons[iconID].openicon;
-						icons.closedicon = folderIcons[iconID].closedicon;
-						folderdiv.querySelector(BDFDB.dotCN.avataricon).style.setProperty("background-image", `url(${isOpen ? icons.openicon : icons.closedicon})`);
-						BDFDB.saveData(folderID, {folderID,folderName,position,iconID,icons,color1,color2,color3,color4,servers}, this, "folders");
-					}
+					});
 				}
-				else BDFDB.saveData(folderID, {folderID,folderName,position,iconID,icons,color1,color2,color3,color4,servers}, this, "folders");
-			});
-		folderSettingsModal.find("#input-foldername").focus();
+				else {
+					icons.openicon = folderIcons[iconID].openicon;
+					icons.closedicon = folderIcons[iconID].closedicon;
+					folderdiv.querySelector(BDFDB.dotCN.avataricon).style.setProperty("background-image", `url(${isOpen ? icons.openicon : icons.closedicon})`);
+					BDFDB.saveData(folderID, {folderID,folderName,position,iconID,icons,color1,color2,color3,color4,servers}, this, "folders");
+				}
+			}
+			else BDFDB.saveData(folderID, {folderID,folderName,position,iconID,icons,color1,color2,color3,color4,servers}, this, "folders");
+		});
+		foldernameinput.focus();
 	}
 	
 	changeImgColor (color1, color2, icon, callback) {
@@ -616,51 +630,49 @@ class ServerFolders {
 		};
 	}
 	
-	setIcons (container, selection) {
-		let wrapper = BDFDB.$(container).find(".icons:not('[iconsnr]')").first();
-		if (!wrapper.length) return;
-		wrapper.attr("iconsnr", parseInt(BDFDB.$(container).find(".icons[iconsnr]").length + 1)).find(".ui-icon-picker-icon").remove();
+	setIcons (modal, selection) {
+		let wrapper = modal.querySelector(".icons");
+		if (!wrapper) return;
+		BDFDB.removeEles(wrapper.childNodes);
 		
 		let folderIcons = this.loadAllIcons();
 		
-		let icons = 
-			`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.margintop4}" style="flex: 1 1 auto;">
-				<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCN.wrap} ui-icon-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;">
-					${Object.getOwnPropertyNames(folderIcons).map(id => `<div class="ui-icon-picker-icon${folderIcons[id].customID ? ' custom' : ''}" value="${id}"><div class="ui-picker-inner" style="background-image: url(${folderIcons[id].closedicon});"></div>${folderIcons[id].customID ? '<div value="' + id + '" class="' + BDFDB.disCN.hovercardbutton + '"></div>' : ''}</div>`).join("")}
-				</div>
-			</div>`;
-		wrapper.append(icons);
+		wrapper.appendChild(BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.margintop4}" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCN.wrap} ui-icon-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;">${Object.getOwnPropertyNames(folderIcons).map(id => `<div class="ui-icon-picker-icon${folderIcons[id].customID ? ' custom' : ''}" value="${id}"><div class="ui-picker-inner" style="background-image: url(${folderIcons[id].closedicon});"></div>${folderIcons[id].customID ? '<div value="' + id + '" class="' + BDFDB.disCN.hovercardbutton + '"></div>' : ''}</div>`).join("")}</div></div>`));
 		
-		if (!folderIcons[selection]) {
-			selection = 0;
+		setIcon(wrapper.querySelector(`.ui-icon-picker-icon[value="${folderIcons[selection] ? selection : 0}"]`), false, true);
+		
+		BDFDB.addChildEventListener(wrapper, "click", ".ui-icon-picker-icon", e => {
+			if (e.target.classList.contains(BDFDB.disCN.hovercardbutton)) return;
+			setIcon(wrapper.querySelector(".ui-icon-picker-icon.selected"), false, false);
+			setIcon(e.currentTarget, true, true);
+		});
+		BDFDB.addChildEventListener(wrapper, "click", BDFDB.dotCN.hovercardbutton, e => {
+			if (e.currentTarget.parentElement.classList.contains("selected")) return;
+			BDFDB.removeData(e.currentTarget.getAttribute("value"), this, "customicons");
+			e.currentTarget.parentElement.remove();
+			BDFDB.showToast(`Custom Icon was deleted.`, {type:"success"});
+		});
+		BDFDB.addChildEventListener(wrapper, "mouseenter", ".ui-icon-picker-icon", e => {
+			setIcon(e.currentTarget, true);
+		});
+		BDFDB.addChildEventListener(wrapper, "mouseleave", ".ui-icon-picker-icon", e => {
+			setIcon(e.currentTarget, false);
+		});
+		
+		function setIcon (icon, hover, enable) {
+			if (!icon) return;
+			if (enable != undefined) icon.classList.toggle("selected", enable);
+			if (hover) {
+				icon.querySelector(".ui-picker-inner").style.setProperty("background-image", `url(${folderIcons[icon.getAttribute("value")].openicon})`);
+				if (icon.classList.contains("selected")) icon.style.setProperty("background-color", "rgb(255,255,255,0.2)");
+				else icon.style.setProperty("background-color", "rgb(255,255,255,0.1)");
+			}
+			else {
+				icon.querySelector(".ui-picker-inner").style.setProperty("background-image", `url(${folderIcons[icon.getAttribute("value")].closedicon})`);
+				if (icon.classList.contains("selected")) icon.style.setProperty("background-color", "rgb(255,255,255,0.2)");
+				else icon.style.removeProperty("background-color");
+			}
 		}
-		wrapper.find(`.ui-icon-picker-icon[value="${selection}"]`)
-			.addClass("selected")
-			.css("background-color", "grey");
-		
-		wrapper
-			.off("click").off("mouseenter").off("mouseleave")
-			.on("click", ".ui-icon-picker-icon", (e) => {
-				if (e.target.classList.contains(BDFDB.disCN.hovercardbutton)) return 
-				wrapper.find(".ui-icon-picker-icon.selected")
-					.removeClass("selected")
-					.css("background-color", "transparent");
-				
-				$(e.currentTarget)
-					.addClass("selected")
-					.css("background-color", "grey");
-			})
-			.on("click", BDFDB.dotCN.hovercardbutton, (e) => {
-				BDFDB.removeData(e.currentTarget.getAttribute("value"), this, "customicons");
-				e.currentTarget.parentElement.remove();
-				BDFDB.showToast(`Custom Icon was deleted.`, {type:"success"});
-			})
-			.on("mouseenter", ".ui-icon-picker-icon", (e) => {
-				$(e.currentTarget).find(".ui-picker-inner").css("background-image", "url(" + folderIcons[e.currentTarget.getAttribute("value")].openicon + ")");
-			})
-			.on("mouseleave", ".ui-icon-picker-icon", (e) => {
-				$(e.currentTarget).find(".ui-picker-inner").css("background-image", "url(" + folderIcons[e.currentTarget.getAttribute("value")].closedicon + ")");
-			});
 	}
 	
 	loadAllIcons () {
@@ -706,23 +718,23 @@ class ServerFolders {
 			let iconpreviewinner = iconpreview.querySelector(".ui-picker-inner");
 			iconpreview.classList.remove("nopic");
 			iconpreview.url = url;
-			iconpreviewinner.style.backgroundImage = "url(" + url + ")";
+			iconpreviewinner.style.setProperty("background-image", `url(${url})`);
 			
 			let iconpreviewopen = modal.querySelector(".ui-icon-picker-icon.preview.open");
 			let iconpreviewclosed = modal.querySelector(".ui-icon-picker-icon.preview.closed");
 			if (!iconpreviewopen.classList.contains("nopic") && !iconpreviewclosed.classList.contains("nopic")) {
 				let iconpreviewswitching = modal.querySelector(".ui-icon-picker-icon.preview.switching");
 				
-				let iconpreviewopeninner = iconpreviewopen.querySelector(".ui-picker-inner");
-				let iconpreviewclosedinner = iconpreviewclosed.querySelector(".ui-picker-inner");
+				let iconpreviewopenimage = iconpreviewopen.querySelector(".ui-picker-inner").style.getPropertyValue("background-image");
+				let iconpreviewclosedimage = iconpreviewclosed.querySelector(".ui-picker-inner").style.getPropertyValue("background-image");
 				let iconpreviewswitchinginner = iconpreviewswitching.querySelector(".ui-picker-inner");
 				
 				iconpreviewswitching.classList.remove("nopic");
-				iconpreviewswitchinginner.style.backgroundImage = iconpreviewopeninner.style.backgroundImage;
+				iconpreviewswitchinginner.style.setProperty("background-image", iconpreviewopenimage);
 				let switching = true;
 				iconpreviewswitching.switchInterval = setInterval(() => {
 					switching = !switching; 
-					iconpreviewswitchinginner.style.backgroundImage = switching ? iconpreviewopeninner.style.backgroundImage : iconpreviewclosedinner.style.backgroundImage;
+					iconpreviewswitchinginner.style.setProperty("background-image", switching ? iconpreviewopenimage : iconpreviewclosedimage);
 				},1000);
 			}
 		};
@@ -735,20 +747,18 @@ class ServerFolders {
 		if (!iconpreviewopen.classList.contains("nopic") && !iconpreviewclosed.classList.contains("nopic") && !iconpreviewswitching.classList.contains("nopic")) {
 			let customID = this.generateID("customicon");
 			BDFDB.saveData(customID, {"openicon":iconpreviewopen.url,"closedicon":iconpreviewclosed.url,customID}, this, "customicons");
-			modal.querySelectorAll("input[type='text'][option]").forEach((input) => {
-				input.value = "";
-			});
+			modal.querySelectorAll("input[type='text'][option]").forEach((input) => {input.value = "";});
 			
 			let iconpreviewopeninner = iconpreviewopen.querySelector(".ui-picker-inner");
 			let iconpreviewclosedinner = iconpreviewclosed.querySelector(".ui-picker-inner");
 			let iconpreviewswitchinginner = iconpreviewswitching.querySelector(".ui-picker-inner");
 			
 			iconpreviewopen.classList.add("nopic");
-			iconpreviewopeninner.style.backgroundImage = "";
+			iconpreviewopeninner.style.removeProperty("background-image");
 			iconpreviewclosed.classList.add("nopic");
-			iconpreviewclosedinner.style.backgroundImage = "";
+			iconpreviewclosedinner.style.removeProperty("background-image");
 			iconpreviewswitching.classList.add("nopic");
-			iconpreviewswitchinginner.style.backgroundImage = "";
+			iconpreviewswitchinginner.style.removeProperty("background-image");
 			clearInterval(iconpreviewswitching.switchInterval);
 			BDFDB.showToast(`Custom Icon was added to selection.`, {type:"success"});
 			this.setIcons(modal, modal.querySelector(".ui-icon-picker-icon.selected").getAttribute("value"));
@@ -764,7 +774,7 @@ class ServerFolders {
 		if (!guilddiv) return;
 		let folderID = 		this.generateID("folder");
 		let folderName = 	"";
-		let position = 		Array.from(document.querySelectorAll("div" + BDFDB.dotCN.guildseparator + ":not(.folderseparator) ~ div" + BDFDB.dotCN.guild)).indexOf(guilddiv);
+		let position = 		Array.from(document.querySelectorAll(`div${BDFDB.dotCN.guildseparator}:not(.folderseparator) ~ div${BDFDB.dotCN.guild}`)).indexOf(guilddiv);
 		let iconID = 		0;
 		let icons = 		Object.assign({},this.folderIcons[0]);
 		let autounread = 	false;
@@ -780,107 +790,95 @@ class ServerFolders {
 	}
 	
 	createFolderDiv (data) {
-		let folderdiv = $(this.folderIconMarkup)[0];
-		let serversandfolders = document.querySelectorAll("div" + BDFDB.dotCN.guildseparator + ":not(.folderseparator) ~ div" + BDFDB.dotCN.guild);
-		$(folderdiv).insertBefore(serversandfolders[data.position > serversandfolders.length - 1 ? serversandfolders.length - 1 : data.position]);
-			
-		$(folderdiv)
-			.addClass("closed")
-			.attr("id", data.folderID)
-			.on("click", () => {
-				if (BDFDB.getData("closeOtherFolders", this, "settings")) {
-					document.querySelectorAll(".folder.open").forEach(openFolder => {
-						if (openFolder != folderdiv) this.openCloseFolder(openFolder);
-					});
-				}
-				this.openCloseFolder(folderdiv);
-			})
-			.on("contextmenu", (e) => {
-				let newdata = BDFDB.loadData(folderdiv.id, this, "folders");
-				if (!newdata) return;
-				let folderContext = $(this.folderContextMarkup);
-				folderContext
-					.on("click." + this.getName(), ".autounreadfolder-item", (e2) => {
-						let checkbox = $(e2.currentTarget).find("input");
-						let isChecked = checkbox.prop("checked");
-						checkbox.prop("checked", !isChecked)
-						newdata.autounread = !isChecked;
-						BDFDB.saveData(newdata.folderID, newdata, this, "folders");
-					})
-					.on("click." + this.getName(), ".foldersettings-item", () => {
-						folderContext.remove();
-						this.showFolderSettings(folderdiv);
-					})
-					.on("click." + this.getName(), ".createfolder-item", () => {
-						folderContext.remove();
-						this.createNewFolder(folderdiv);
-					})
-					.on("click." + this.getName(), ".removefolder-item", () => {
-						folderContext.remove();
-						this.removeFolder(folderdiv);
-					})
-					.find(".autounreadfolder-item input").prop("checked", newdata.autounread);
-					
-				let unreadServers = BDFDB.readUnreadServerList(this.readIncludedServerList(folderdiv));
-				if (unreadServers.length > 0) {
-					folderContext
-						.find(".unreadfolder-item")
-						.removeClass(BDFDB.disCN.contextmenuitemdisabled)
-						.on("click." + this.getName(), () => {
-							folderContext.remove();
-							BDFDB.clearReadNotifications(unreadServers);
-						});
-				}
-				BDFDB.appendContextMenu(folderContext[0], e);
-			})
-			.on("mouseenter", () => {
-				let newdata = BDFDB.loadData(folderdiv.id, this, "folders");
-				if (!newdata || !newdata.folderName) return;
-				let bgColor = BDFDB.colorCONVERT(newdata.color3, "RGB");
-				let fontColor = BDFDB.colorCONVERT(newdata.color4, "RGB");
-				BDFDB.createTooltip(newdata.folderName, folderdiv, {type:"right",selector:"guild-folder-tooltip",style:`color: ${fontColor} !important; background-color: ${bgColor} !important; border-color: ${bgColor} !important;`});
-			})
-			.on("mousedown." + this.getName(), (e) => {
-				let guildswrap = document.querySelector(BDFDB.dotCN.guildswrapper + ":not(.foldercontent) " + BDFDB.dotCN.guilds);
-				if (!guildswrap) return;
-				let mouseTimeout = null, hovele = null;
-				let placeholder = $(`<div class="${BDFDB.disCNS.guild + BDFDB.disCN.guildplaceholder} folderplaceholder"></div>`)[0];
-				let dragpreview = this.createDragPreview(folderdiv, e);
-				
-				$(document)
-					.off("mouseup." + this.getName())
-					.on("mouseup." + this.getName(), (e2) => {
-						clearTimeout(mouseTimeout);
-						BDFDB.removeEles(placeholder, dragpreview);
-						folderdiv.style.removeProperty("display");
-						$(document).off("mouseup." + this.getName()).off("mousemove." + this.getName());
-						if (hovele) {
-							guildswrap.insertBefore(folderdiv, hovele.nextSibling);
-							this.updateFolderPositions(folderdiv);
-						}
-					});
-				mouseTimeout = setTimeout(() => {
-					$(document)
-						.off("mousemove." + this.getName())
-						.on("mousemove." + this.getName(), (e2) => {
-							BDFDB.removeEles(placeholder);
-							folderdiv.style.setProperty("display", "none", "important");
-							this.updateDragPreview(dragpreview, e2);
-							hovele = BDFDB.getParentEle(BDFDB.dotCN.guild + ".folder", e2.target);
-							if (hovele) guildswrap.insertBefore(placeholder, hovele.nextSibling);
-							else {
-								hovele = BDFDB.getParentEle(BDFDB.dotCN.guild, e2.target);
-								let ins = BDFDB.getReactInstance(hovele);
-								if (hovele && ins && ins.return && ins.return.memoizedProps && ins.return.memoizedProps.guild && guildswrap.contains(hovele)) {
-									guildswrap.insertBefore(placeholder, hovele.nextSibling);
-								}
-							}
-							
-						});
-				},100);
-			});
-			
+		let folderdiv = BDFDB.htmlToElement(this.folderIconMarkup);
+		let serversandfolders = document.querySelectorAll(`div${BDFDB.dotCN.guildseparator}:not(.folderseparator) ~ div${BDFDB.dotCN.guild}`);
+		let insertnode = serversandfolders[data.position > serversandfolders.length - 1 ? serversandfolders.length - 1 : data.position];
+		insertnode.parentElement.insertBefore(folderdiv, insertnode);
+		
+		folderdiv.id = data.folderID;
+		folderdiv.classList.add("closed");
 		folderdiv.querySelector(BDFDB.dotCN.avataricon).style.setProperty("background-image", `url(${data.icons.closedicon})`);
+		folderdiv.addEventListener("click", () => {
+			clearTimeout(folderdiv.dragTimeout);
+			if (BDFDB.getData("closeOtherFolders", this, "settings")) {
+				document.querySelectorAll(".folder.open").forEach(folder => {
+					if (folder != folderdiv) this.openCloseFolder(folder);
+				});
+			}
+			this.openCloseFolder(folderdiv);
+		});
+		folderdiv.addEventListener("contextmenu", e => {
+			clearTimeout(folderdiv.dragTimeout);
+			let newdata = BDFDB.loadData(folderdiv.id, this, "folders");
+			if (!newdata) return;
+			let folderContext = BDFDB.htmlToElement(this.folderContextMarkup);
+			let autounreadinput = folderContext.querySelector(".autounreadfolder-item input");
+			autounreadinput.checked = newdata.autounread;
+			folderContext.querySelector(".autounreadfolder-item").addEventListener("click", () => {
+				autounreadinput.checked = !autounreadinput.checked;
+				newdata.autounread = autounreadinput.checked;
+				BDFDB.saveData(newdata.folderID, newdata, this, "folders");
+			});
+			folderContext.querySelector(".foldersettings-item").addEventListener("click", () => {
+				folderContext.remove();
+				this.showFolderSettings(folderdiv);
+			});
+			folderContext.querySelector(".createfolder-item").addEventListener("click", () => {
+				folderContext.remove();
+				this.createNewFolder(folderdiv);
+			});
+			folderContext.querySelector(".removefolder-item").addEventListener("click", () => {
+				folderContext.remove();
+				this.removeFolder(folderdiv);
+			});
+				
+			let unreadServers = BDFDB.readUnreadServerList(this.readIncludedServerList(folderdiv));
+			if (unreadServers.length > 0) {
+				let unreaditem = folderContext.querySelector(".unreadfolder-item");
+				unreaditem.classList.remove(BDFDB.disCN.contextmenuitemdisabled);
+				unreaditem.addEventListener("click", () => {
+					folderContext.remove();
+					BDFDB.clearReadNotifications(unreadServers);
+				});
+			}
+			BDFDB.appendContextMenu(folderContext, e);
+		});
+		folderdiv.addEventListener("mousedown", e => {
+			clearTimeout(folderdiv.dragTimeout);
+			folderdiv.dragTimeout = setTimeout(() => {
+				let guildswrap = document.querySelector(`${BDFDB.dotCN.guildswrapper}:not(.foldercontent) ${BDFDB.dotCN.guilds}`);
+				if (!guildswrap) return;
+				let hovele = null;
+				let placeholder = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.guild + BDFDB.disCN.guildplaceholder} folderplaceholder"></div>`);
+				let dragpreview = this.createDragPreview(folderdiv, e);
+				let updatePreview = e2 => {
+					BDFDB.removeEles(placeholder);
+					folderdiv.style.setProperty("display", "none", "important");
+					this.updateDragPreview(dragpreview, e2);
+					hovele = BDFDB.getParentEle(BDFDB.dotCN.guild + ".folder", e2.target);
+					if (hovele) guildswrap.insertBefore(placeholder, hovele.nextSibling);
+					else {
+						hovele = BDFDB.getParentEle(BDFDB.dotCN.guild, e2.target);
+						if (hovele && BDFDB.getReactValue(hovele, "return.memoizedProps.guild") && guildswrap.contains(hovele)) {
+							guildswrap.insertBefore(placeholder, hovele.nextSibling);
+						}
+					}
+				};
+				let droppedPreview = e2 => {
+					document.removeEventListener("mousemove", updatePreview);
+					document.removeEventListener("mouseup", droppedPreview);
+					BDFDB.removeEles(placeholder, dragpreview);
+					folderdiv.style.removeProperty("display");
+					if (hovele) {
+						guildswrap.insertBefore(folderdiv, hovele.nextSibling);
+						this.updateFolderPositions(folderdiv);
+					}
+				};
+				document.addEventListener("mousemove", updatePreview);
+				document.addEventListener("mouseup", droppedPreview);
+			},100);
+			
+		});
 			
 		this.addHoverBehaviour(folderdiv);
 		
@@ -993,9 +991,7 @@ class ServerFolders {
 			let settings = BDFDB.getAllData(this, "settings");
 			
 			setTimeout(() => {
-				if (settings.addSeparators && containsguilds) {
-					$(`<div class="${BDFDB.disCN.guildseparator} folderseparator" folder="${folderdiv.id}"></div>`).appendTo(this.foldercontent.querySelector(BDFDB.dotCN.guilds));
-				}
+				if (settings.addSeparators && containsguilds) this.foldercontent.querySelector(BDFDB.dotCN.guilds).appendChild(BDFDB.htmlToElement(`<div class="${BDFDB.disCN.guildseparator} folderseparator" folder="${folderdiv.id}"></div>`));
 				includedServers.forEach(guilddiv => {this.updateCopyInFolderContent(guilddiv, folderdiv);});
 			}, settings.closeOtherFolders && containsguilds ? 300 : 0);
 		}
@@ -1050,63 +1046,63 @@ class ServerFolders {
 		guildcopy.setAttribute("guild", info.id);
 		guildcopy.classList.add("copy");
 		guildcopy.style.removeProperty("display");
-		$(guildcopy)
-			.on("mouseenter." + this.getName(), () => {
-				let EditUsersData = BDFDB.loadData(info.id, "EditServers", "servers") || {};
-				let bgColor = BDFDB.colorCONVERT(EditUsersData.color3, "RGB");
-				let fontColor = BDFDB.colorCONVERT(EditUsersData.color4, "RGB");
-				BDFDB.createTooltip(EditUsersData.name || info.name, guildcopy, {type:"right",selector:(!BDFDB.isObjectEmpty(EditUsersData) ? "EditUsers-tooltip" : ""),style:`color: ${fontColor} !important; background-color: ${bgColor} !important; border-color: ${bgColor} !important;`});
-			})
-			.on("click." + this.getName(), (e) => {
-				e.preventDefault();
-				if (BDFDB.pressedKeys.includes(46)) this.removeServerFromFolder(info, folderdiv);
-				else {
-					let settings = BDFDB.getAllData(this, "settings");
-					if (settings.closeAllFolders) document.querySelectorAll(".folder.open").forEach(openFolder => {this.openCloseFolder(openFolder);});
-					else if (settings.closeTheFolder) this.openCloseFolder(folderdiv);
-					guilddiv.querySelector("a").click();
-				}
-			})
-			.on("contextmenu." + this.getName(), (e) => {BDFDB.openGuildContextMenu(guilddiv, e);})
-			.on("mousedown." + this.getName(), (e) => {
-				let mouseTimeout = null, hovcopy = null;
-				let placeholder = $(`<div class="${BDFDB.disCNS.guild + BDFDB.disCN.guildplaceholder} copyplaceholder"></div>`)[0];
+		guildcopy.addEventListener("mouseenter", () => {
+			let EditUsersData = BDFDB.loadData(info.id, "EditServers", "servers") || {};
+			let bgColor = BDFDB.colorCONVERT(EditUsersData.color3, "RGB");
+			let fontColor = BDFDB.colorCONVERT(EditUsersData.color4, "RGB");
+			BDFDB.createTooltip(EditUsersData.name || info.name, guildcopy, {type:"right",selector:(!BDFDB.isObjectEmpty(EditUsersData) ? "EditUsers-tooltip" : ""),style:`color: ${fontColor} !important; background-color: ${bgColor} !important; border-color: ${bgColor} !important;`});
+		});
+		guildcopy.addEventListener("click", e => {
+			clearTimeout(guildcopy.dragTimeout);
+			e.preventDefault();
+			if (BDFDB.pressedKeys.includes(46)) this.removeServerFromFolder(info, folderdiv);
+			else {
+				let settings = BDFDB.getAllData(this, "settings");
+				if (settings.closeAllFolders) document.querySelectorAll(".folder.open").forEach(openFolder => {this.openCloseFolder(openFolder);});
+				else if (settings.closeTheFolder) this.openCloseFolder(folderdiv);
+				guilddiv.querySelector("a").click();
+			}
+		});
+		guildcopy.addEventListener("contextmenu", e => {
+			clearTimeout(guildcopy.dragTimeout);
+			BDFDB.openGuildContextMenu(guilddiv, e);
+		});
+		guildcopy.addEventListener("mousedown", e => {
+			clearTimeout(guildcopy.dragTimeout);
+			folderdiv.dragTimeout = setTimeout(() => {
+				let hovcopy = null;
+				let placeholder = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.guild + BDFDB.disCN.guildplaceholder} copyplaceholder"></div>`);
 				let dragpreview = this.createDragPreview(guilddiv, e);
 				
-				$(document)
-					.off("mouseup." + this.getName())
-					.on("mouseup." + this.getName(), (e2) => {
-						clearTimeout(mouseTimeout);
-						BDFDB.removeEles(placeholder, dragpreview);
-						guildcopy.style.removeProperty("display");
-						let dropfolderdiv = BDFDB.getParentEle(BDFDB.dotCN.guild + ".folder", e2.target);
-						if (dropfolderdiv && dropfolderdiv != folderdiv) {
-							this.removeServerFromFolder(info, folderdiv);
-							this.addServerToFolder(info, dropfolderdiv);
-						}
-						else if (hovcopy) {
-							this.foldercontent.querySelector(BDFDB.dotCN.guilds).insertBefore(guildcopy, hovcopy.nextSibling);
-							this.updateServerPositions(folderdiv);
-						}
-						$(document).off("mouseup." + this.getName()).off("mousemove." + this.getName());
-					});
-					
-				mouseTimeout = setTimeout(() => {
-					$(document)
-						.off("mousemove." + this.getName())
-						.on("mousemove." + this.getName(), (e2) => {
-							let target = e2.target;
-							BDFDB.removeEles(placeholder);
-							guildcopy.style.setProperty("display", "none", "important");
-							this.updateDragPreview(dragpreview, e2);
-							if (this.foldercontent.contains(target)) {
-								hovcopy = target.classList && target.classList.contains("folderseparator") ? target : BDFDB.getParentEle(BDFDB.dotCN.guild + ".copy", target);
-								if (hovcopy && hovcopy.getAttribute("folder") == folderdiv.id) this.foldercontent.querySelector(BDFDB.dotCN.guilds).insertBefore(placeholder, hovcopy.nextSibling);
-								else hovcopy = null;
-							}
-						});
-				},100);
-			});
+				let updatePreview = e2 => {
+					BDFDB.removeEles(placeholder);
+					guildcopy.style.setProperty("display", "none", "important");
+					this.updateDragPreview(dragpreview, e2);
+					if (this.foldercontent.contains(e2.target)) {
+						hovcopy = e2.target.classList && e2.target.classList.contains("folderseparator") ? e2.target : BDFDB.getParentEle(BDFDB.dotCN.guild + ".copy", e2.target);
+						if (hovcopy && hovcopy.getAttribute("folder") == folderdiv.id) this.foldercontent.querySelector(BDFDB.dotCN.guilds).insertBefore(placeholder, hovcopy.nextSibling);
+						else hovcopy = null;
+					}
+				};
+				let droppedPreview = e2 => {
+					document.removeEventListener("mousemove", updatePreview);
+					document.removeEventListener("mouseup", droppedPreview);
+					BDFDB.removeEles(placeholder, dragpreview);
+					guildcopy.style.removeProperty("display");
+					let dropfolderdiv = BDFDB.getParentEle(BDFDB.dotCN.guild + ".folder", e2.target);
+					if (dropfolderdiv && dropfolderdiv != folderdiv) {
+						this.removeServerFromFolder(info, folderdiv);
+						this.addServerToFolder(info, dropfolderdiv);
+					}
+					else if (hovcopy) {
+						this.foldercontent.querySelector(BDFDB.dotCN.guilds).insertBefore(guildcopy, hovcopy.nextSibling);
+						this.updateServerPositions(folderdiv);
+					}
+				};
+				document.addEventListener("mousemove", updatePreview);
+				document.addEventListener("mouseup", droppedPreview);
+			},100);
+		});
 			
 		let copyinner = guildcopy.querySelector(BDFDB.dotCN.guildinner);
 		let isselected = guildcopy.classList.contains(BDFDB.disCN.guildselected);
@@ -1140,7 +1136,7 @@ class ServerFolders {
 	}
 	
 	updateFolderPositions () {
-		let serverAndFolders = document.querySelectorAll("div" + BDFDB.dotCN.guildseparator + ":not(.folderseparator) ~ div" + BDFDB.dotCN.guild);
+		let serverAndFolders = document.querySelectorAll(`div${BDFDB.dotCN.guildseparator}:not(.folderseparator) ~ div${BDFDB.dotCN.guild}`);
 		for (let i = 0; i < serverAndFolders.length; i++) {
 			let folderdiv = BDFDB.getParentEle(BDFDB.dotCN.guild + ".folder", serverAndFolders[i]);
 			if (folderdiv) {
@@ -1156,7 +1152,9 @@ class ServerFolders {
 	updateServerPositions (folderdiv) {
 		let data = BDFDB.loadData(folderdiv.id, this, "folders");
 		if (data) {
-			let servers = Array.from(this.foldercontent.querySelector(`${BDFDB.dotCN.guild}.copy[folder="${folderdiv.id}"]`)).map(server => {return server.getAttribute("guild");});
+			let servers = Array.from(this.foldercontent.querySelectorAll(`${BDFDB.dotCN.guild}.copy[folder="${folderdiv.id}"]`)).map(server => {
+				return server.getAttribute("guild");
+			});
 			for (let serverid of servers) BDFDB.removeFromArray(data.servers, serverid);
 			data.servers = servers.concat(data.servers);
 			BDFDB.saveData(folderdiv.id, data, this, "folders");
@@ -1182,18 +1180,17 @@ class ServerFolders {
 				if (div.classList.contains(BDFDB.disCN.guildvideo)) videoEnabled = true;
 			});
 			
-			$(folderdiv)
-				.toggleClass(BDFDB.disCN.guildunread, unreadServers.length > 0)
-				.toggleClass(BDFDB.disCN.guildaudio, audioEnabled)
-				.toggleClass(BDFDB.disCN.guildvideo, videoEnabled);
-			$(folderdiv)
-				.find(".folder" + BDFDB.dotCN.badge + ".notifications")
-					.toggle(badgeAmount > 0)
-					.text(badgeAmount);	
-			$(folderdiv)
-				.find(".folder" + BDFDB.dotCN.badge + ".count")
-					.toggle(includedServers.length > 0 && BDFDB.getData("showCountBadge", this, "settings"))
-					.text(includedServers.length);	
+			folderdiv.classList.toggle(BDFDB.disCN.guildunread, unreadServers.length > 0);
+			folderdiv.classList.toggle(BDFDB.disCN.guildaudio, audioEnabled);
+			folderdiv.classList.toggle(BDFDB.disCN.guildvideo, videoEnabled);
+			let notifications = folderdiv.querySelector(".folder" + BDFDB.dotCN.badge + ".notifications");
+			notifications.innerText = badgeAmount;	
+			if (badgeAmount > 0) notifications.style.removeProperty("display");
+			else notifications.style.setProperty("display", "none", "important");
+			let amount = folderdiv.querySelector(".folder" + BDFDB.dotCN.badge + ".count");
+			amount.innerText = includedServers.length;	
+			if (includedServers.length > 0 && BDFDB.getData("showCountBadge", this, "settings")) amount.style.removeProperty("display");
+			else amount.style.setProperty("display", "none", "important");
 		
 			if (folderdiv.classList.contains("open") && !document.querySelector(".foldercontent [folder='" + folderdiv.id + "']")) this.openCloseFolder(folderdiv);
 		}
@@ -1243,9 +1240,8 @@ class ServerFolders {
 			]).start();
 		};
 
-		$(div)
-			.on("mouseenter", () => {animate(1);})
-			.on("mouseleave", () => {if (!div.classList.contains(BDFDB.disCN.guildselected)) animate(0);});
+		div.addEventListener("mouseenter", () => {animate(1);})
+		div.addEventListener("mouseleave", () => {if (!div.classList.contains(BDFDB.disCN.guildselected)) animate(0);});
 	}
 	
 	setLabelsByLanguage () {
