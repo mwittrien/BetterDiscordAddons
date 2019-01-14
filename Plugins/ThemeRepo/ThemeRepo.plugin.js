@@ -3,7 +3,7 @@
 class ThemeRepo {
 	getName () {return "ThemeRepo";}
 
-	getVersion () {return "1.6.7";}
+	getVersion () {return "1.6.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -445,7 +445,6 @@ class ThemeRepo {
 		};
 		
 		var messageReceived = e => {
-			console.log(e);
 			if (typeof e.data === "object" && e.data.origin == "DiscordPreview") {
 				switch (e.data.reason) {
 					case "OnLoad":
@@ -619,7 +618,7 @@ class ThemeRepo {
 			this.downloadTheme(data);
 			if (themeRepoModal.querySelector("#input-rnmstart").checked) setTimeout(() => {this.applyTheme(data);},3000);
 		});
-		entry.querySelector(".previewCheckbox").addEventListener("change", e => {
+		entry.querySelector(".previewCheckbox").addEventListener("click", e => {
 			if (e.currentTarget.checked) themeRepoModal.querySelectorAll(".previewCheckbox").forEach(checkbox => {
 				if (e.currentTarget != checkbox) {
 					checkbox.checked = false;
