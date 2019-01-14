@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "5.9.8";}
+	getVersion () {return "5.9.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -413,20 +413,6 @@ class ServerFolders {
 	
 	// begin of own functions
 
-	updateSettings (settingspanel) {
-		let settings = {};
-		for (let input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner)) {
-			settings[input.value] = input.checked;
-		}
-		BDFDB.saveAllData(settings, this, "settings");
-	}
-	
-	resetAllElements () {
-		this.toggleFolderContent(false);
-		BDFDB.removeEles(BDFDB.dotCN.guild + ".folder", ".serverfolders-dragpreview");
-		BDFDB.readServerList().forEach(info => {this.unhideServer(info.div);});
-	}
-
 	changeLanguageStrings () {
 		this.serverContextEntryMarkup = 	this.serverContextEntryMarkup.replace("REPLACE_servercontext_serverfolders_text", this.labels.servercontext_serverfolders_text);
 		
@@ -768,7 +754,13 @@ class ServerFolders {
 		else {
 			BDFDB.showToast(`Add an image for the open and the closed icon.`, {type:"danger"});
 		}
-	};
+	}
+	
+	resetAllElements () {
+		this.toggleFolderContent(false);
+		BDFDB.removeEles(BDFDB.dotCN.guild + ".folder", ".serverfolders-dragpreview");
+		BDFDB.readServerList().forEach(info => {this.unhideServer(info.div);});
+	}
 	
 	createNewFolder (ankerdiv) {
 		if (!Node.prototype.isPrototypeOf(ankerdiv)) return;
@@ -808,6 +800,13 @@ class ServerFolders {
 				});
 			}
 			this.openCloseFolder(folderdiv);
+		});
+		folderdiv.addEventListener("mouseenter", () => {
+			let newdata = BDFDB.loadData(folderdiv.id, this, "folders");
+			if (!newdata || !newdata.folderName) return;
+			let bgColor = BDFDB.colorCONVERT(newdata.color3, "RGB");
+			let fontColor = BDFDB.colorCONVERT(newdata.color4, "RGB");
+			BDFDB.createTooltip(newdata.folderName, folderdiv, {type:"right",selector:"guild-folder-tooltip",style:`color: ${fontColor} !important; background-color: ${bgColor} !important; border-color: ${bgColor} !important;`});
 		});
 		folderdiv.addEventListener("contextmenu", e => {
 			clearTimeout(folderdiv.dragTimeout);
@@ -1049,7 +1048,7 @@ class ServerFolders {
 		guildcopy.classList.add("copy");
 		guildcopy.style.removeProperty("display");
 		guildcopy.addEventListener("mouseenter", () => {
-			let EditUsersData = BDFDB.loadData(info.id, "EditServers", "servers") || {};
+			let EditUsersData = BDFDB.isPluginEnabled("EditServers") ? (BDFDB.loadData(info.id, "EditServers", "servers") || {}) : {};
 			let bgColor = BDFDB.colorCONVERT(EditUsersData.color3, "RGB");
 			let fontColor = BDFDB.colorCONVERT(EditUsersData.color4, "RGB");
 			BDFDB.createTooltip(EditUsersData.name || info.name, guildcopy, {type:"right",selector:(!BDFDB.isObjectEmpty(EditUsersData) ? "EditUsers-tooltip" : ""),style:`color: ${fontColor} !important; background-color: ${bgColor} !important; border-color: ${bgColor} !important;`});
