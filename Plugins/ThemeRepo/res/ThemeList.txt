@@ -7,7 +7,6 @@ https://raw.githubusercontent.com/Asteria5675/BetterDiscordThemes/master/Light_D
 https://raw.githubusercontent.com/Asteria5675/BetterDiscordThemes/master/SL.theme.css
 https://raw.githubusercontent.com/Azagwen/Rainbow_kittens_theme/master/Rainbow_kittens_V0.1.3.theme.css
 https://raw.githubusercontent.com/BeardDesign1/Ios-switches/themes/IOS_Switches.theme.css
-https://raw.githubusercontent.com/BeardDesign1/Material-design-theme/themes/Beard's-Material-theme-for-Discord.theme.css
 https://raw.githubusercontent.com/CapnKitten/Material-Discord/master/Material-Discord.theme.css
 https://raw.githubusercontent.com/CAtOSe/Neon-Space-BetterDiscord-Theme/master/neon-space.theme.css
 https://raw.githubusercontent.com/Chloesviel/Discord-Stuff/master/minifiedMemberlist/minifiedMemberlist.theme.css
