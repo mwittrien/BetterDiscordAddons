@@ -2,7 +2,7 @@ window.onload = function () {
 	window.parent.postMessage({origin:"DiscordPreview",reason:"OnLoad"},"*");
 };
 window.onkeyup = function (e) {
-	window.parent.postMessage({origin:"DiscordPreview",reason:"KeyUp",key:e.which},"*");
+	window.parent.postMessage({origin:"DiscordPreview",reason:"KeyUp",which:e.which,key:e},"*");
 };
 window.onmessage = function (e) {
 	if (typeof e.data === "object" && e.data.origin == "ThemeRepo") {

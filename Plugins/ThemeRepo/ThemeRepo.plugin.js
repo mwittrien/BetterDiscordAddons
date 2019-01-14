@@ -445,6 +445,7 @@ class ThemeRepo {
 		};
 		
 		var messageReceived = e => {
+			console.log(e);
 			if (typeof e.data === "object" && e.data.origin == "DiscordPreview") {
 				switch (e.data.reason) {
 					case "OnLoad":
@@ -460,7 +461,7 @@ class ThemeRepo {
 						frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"DarkLight",checked:lightTheme},"*");
 						break;
 					case "KeyUp":
-						keyPressed(e.data.key);
+						keyPressed(e.data);
 						break;
 				}
 			}
@@ -835,12 +836,8 @@ class ThemeRepo {
 		filename = filename[filename.length - 1];
 		var file = path.join(BDFDB.getThemesFolder(), filename);
 		fileSystem.unlink(file, (error) => {
-			if (error) {
-				BDFDB.showToast(`Unable to delete Theme "${filename}".`, {type:"danger"});
-			}
-			else {
-				BDFDB.showToast(`Successfully deleted Theme "${filename}".`, {type:"success"});
-			}
+			if (error) BDFDB.showToast(`Unable to delete Theme "${filename}".`, {type:"danger"});
+			else BDFDB.showToast(`Successfully deleted Theme "${filename}".`, {type:"success"});
 		});
 	}
 	
