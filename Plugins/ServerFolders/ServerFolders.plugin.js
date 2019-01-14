@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.0.0";}
+	getVersion () {return "6.0.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -530,9 +530,9 @@ class ServerFolders {
 		
 		BDFDB.appendModal(folderSettingsModal);
 		
-		BDFDB.addChildEventListener(folderSettingsModal, "change", "input[type='file'][option]", () => {
-			let file = ele.files[0];
-			if (file) this.fetchCustomIcon(folderSettingsModal, ele.getAttribute("option"));
+		BDFDB.addChildEventListener(folderSettingsModal, "change", "input[type='file'][option]", e => {
+			let file = e.currentTarget.files[0];
+			if (file) this.fetchCustomIcon(folderSettingsModal, e.currentTarget.getAttribute("option"));
 		});
 		BDFDB.addChildEventListener(folderSettingsModal, "keyup", "input[type='text'][option]", e => {
 			if (e.which == 13) this.fetchCustomIcon(folderSettingsModal, e.currentTarget.getAttribute("option"));
