@@ -3,7 +3,7 @@
 class GoogleTranslateOption {
 	getName () {return "GoogleTranslateOption";}
 
-	getVersion () {return "1.6.0";}
+	getVersion () {return "1.6.1";}
 	
 	getAuthor () {return "DevilBro, square";}
 
@@ -412,7 +412,7 @@ class GoogleTranslateOption {
 
 		BDFDB.initElements(settingspanel, this);
 
-		BDFDB.addChildEventListener(settingspanel, "click", BDFDB.dotCN.selectcontrol, e =>  {this.openDropdownMenu("inSettings", e);});
+		BDFDB.addChildEventListener(settingspanel, "click", BDFDB.dotCN.selectcontrol, e => {this.openDropdownMenu("inSettings", e);});
 			
 		return settingspanel;
 	}
@@ -513,7 +513,7 @@ class GoogleTranslateOption {
 					let messageSearchContextEntry = BDFDB.htmlToElement(this.messageSearchContextEntryMarkup);
 					searchentry.parentElement.appendChild(messageSearchContextEntry);
 					let searchitem = messageSearchContextEntry.querySelector(".googletranslateoption-search-item");
-					searchitem.addEventListener("mouseenter", e =>  {
+					searchitem.addEventListener("mouseenter", e => {
 						this.translateText(text, "context", (translation, input, output) => {
 							if (translation) {
 								var openGoogleSearch = () => {
@@ -599,7 +599,7 @@ class GoogleTranslateOption {
 						}
 					}
 				});
-				BDFDB.addEventListener(this, textarea, "keydown", e =>  {
+				BDFDB.addEventListener(this, textarea, "keydown", e => {
 					if (textarea.value && this.translating && !e.shiftKey && e.which == 13 && !wrapper.querySelector(BDFDB.dotCN.autocomplete)) {
 						this.doTranslate = true;
 						textarea.dispatchEvent(new Event("input"));
@@ -770,9 +770,9 @@ class GoogleTranslateOption {
 		translatepopout.style.setProperty("left", buttonrects.left + buttonrects.width + "px");
 		translatepopout.style.setProperty("top", buttonrects.top - buttonrects.height/2 + "px")
 		
-		BDFDB.addChildEventListener(translatepopout, "click", BDFDB.dotCN.selectcontrol, e =>  {this.openDropdownMenu("inChat", e);});
-		BDFDB.addChildEventListener(translatepopout, "click", ".reverse-button", () => {
-			let place = reversebutton.getAttribute("type").replace("output","");
+		BDFDB.addChildEventListener(translatepopout, "click", BDFDB.dotCN.selectcontrol, e => {this.openDropdownMenu("inChat", e);});
+		BDFDB.addChildEventListener(translatepopout, "click", ".reverse-button", e => {
+			let place = e.currentTarget.getAttribute("type").replace("output","");
 			let input = this.getLanguageChoice("output", place);
 			let output = this.getLanguageChoice("input", place);
 			output = output == "auto" ? "en" : output;
@@ -810,7 +810,7 @@ class GoogleTranslateOption {
 			});
 		});
 		
-		var removePopout = e =>  {
+		var removePopout = e => {
 			if (!translatepopout.contains(e.target)) {
 				document.removeEventListener("mousedown", removePopout);
 				translatepopout.remove();
@@ -838,13 +838,13 @@ class GoogleTranslateOption {
 		selectWrap.appendChild(selectMenu);
 		
 		BDFDB.addChildEventListener(selectMenu, "mousedown", BDFDB.dotCN.selectoption, e2 => {
-			var language = option.getAttribute("value");
+			var language = e2.currentTarget.getAttribute("value");
 			selectWrap.setAttribute("value", language);
 			selectControl.querySelector(BDFDB.dotCN.title).innerText = this.languages[language].name;
 			BDFDB.saveData(type, language, this, "choices");
 		});
 		
-		var removeMenu = e2 =>  {
+		var removeMenu = e2 => {
 			if (e2.target.parentElement != selectMenu) {
 				document.removeEventListener("mousedown", removeMenu);
 				selectMenu.remove();
