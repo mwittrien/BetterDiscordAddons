@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "5.9.9";}
+	getVersion () {return "6.0.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -464,7 +464,7 @@ class ServerFolders {
 						this.removeServerFromFolder(instance.props.guild, folderdiv);
 					});
 				}
-				BDFDB.appendSubMenu(e.currentTarget, serverContextSubMenu);
+				BDFDB.appendSubMenu(folderitem, serverContextSubMenu);
 			});
 		}
 	}
