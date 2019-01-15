@@ -1,6 +1,14 @@
 //META{"name":"StalkerNotifications"}*//
 
 class StalkerNotifications {
+	getName () {return "StalkerNotifications";}
+
+	getVersion () {return "1.1.1";}
+
+	getAuthor () {return "DevilBro";}
+
+	getDescription () {return "Lets you observe the status of people that aren't your friends.";}
+	
 	initConstructor () {
 		this.stalkerOnlineList = {};
 		
@@ -121,14 +129,6 @@ class StalkerNotifications {
 			}
 		};
 	}
-
-	getName () {return "StalkerNotifications";}
-
-	getDescription () {return "Lets you observe the status of people that aren't your friends.";}
-
-	getVersion () {return "1.1.0";}
-
-	getAuthor () {return "DevilBro";}
 	
 	getSettingsPanel () {
 		if (!this.started || typeof BDFDB !== "object") return;
@@ -143,7 +143,7 @@ class StalkerNotifications {
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCN.flexchild}" style="flex: 0 0 50%;">${this.defaults.amounts[key].description}</h3><div class="${BDFDB.disCN.inputwrapper}  inputNumberWrapper ${BDFDB.disCNS.vertical +  BDFDB.disCNS.flex + BDFDB.disCNS.directioncolumn}" style="flex: 1 1 auto;"><span class="numberinput-buttons-zone"><span class="numberinput-button-up"></span><span class="numberinput-button-down"></span></span><input type="number" min="0" option="${key}" value="${amounts[key]}" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16} amountInput"></div></div>`;
 		}
 		for (let key in settings) {
-			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-checkbox"${settings[key] ? " checked" : ""}></div></div>`;
+			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
 		}
 		for (let key in notificationsounds) {
 			if (key.indexOf("desktop") == -1 || "Notification" in window) settingshtml += `<div class="${BDFDB.disCNS.flexchild + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h5 class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.h5 + BDFDB.disCNS.title + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.h5defaultmargin}" style="flex: 1 1 auto;">${key} notification sound:</h5><h5 class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.h5 + BDFDB.disCNS.title + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.h5defaultmargin}" style="flex: 0 0 auto;">Mute:</h5><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" option="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} mute-checkbox"${notificationsounds[key].mute ? " checked" : ""}></div></div><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex + BDFDB.disCNS.directioncolumn + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;"><input type="text" option="${key}" value="${notificationsounds[key].url ? notificationsounds[key].url : ""}" placeholder="Url or Filepath" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16} songInput"></div><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} file-navigator" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}"></div><input type="file" accept="audio/*,video/*" style="display:none!important;"></button><button type="button" option="${key}" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} btn-save btn-savesong" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}"></div></button></div></div>`;
@@ -160,55 +160,54 @@ class StalkerNotifications {
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Timelog of LogIns/-Outs:</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} btn-timelog" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Timelog</div></button></div>`;
 		settingshtml += `</div></div>`;
 			
-		let settingspanel = $(settingshtml)[0];
+		let settingspanel = BDFDB.htmlToElement(settingshtml);
 
-		BDFDB.initElements(settingspanel);
+		BDFDB.initElements(settingspanel, this);
 
 		$(settingspanel)
-			.on("click", ".settings-checkbox", () => {this.updateSettings(settingspanel);})
-			.on("click", ".btn-savesong", (e) => {this.saveAudio(settingspanel, e.currentTarget.getAttribute("option"));})
-			.on("click", ".mute-checkbox", (e) => {
+			.on("click", ".btn-savesong", e => {this.saveAudio(settingspanel, e.currentTarget.getAttribute("option"));})
+			.on("click", ".mute-checkbox", e => {
 				let option = e.currentTarget.getAttribute("option");
 				let notificationsound = BDFDB.getData(option, this, "notificationsounds");
 				notificationsound.mute = e.currentTarget.checked;
 				BDFDB.saveData(option, notificationsound, this, "notificationsounds");
 			})
-			.on("mouseenter", ".settings-avatar", (e) => {
+			.on("mouseenter", ".settings-avatar", e => {
 				let user = this.UserUtils.getUser(e.currentTarget.getAttribute("user-id"));
 				let data = BDFDB.loadData(user.id, "EditUsers", "users") || {};
 				BDFDB.createTooltip(data.name ? data.name : user.username, e.currentTarget, {type:"top"});
 			})
-			.on("contextmenu", ".settings-avatar", (e) => {
+			.on("contextmenu", ".settings-avatar", e => {
 				if (!("Notification" in window)) return;
-				let desktopoff = !e.currentTarget.classList.contains("desktop");
+				let desktopoff = !BDFDB.containsClass(e.currentTarget, "desktop");
 				let id = e.currentTarget.getAttribute("user-id");
-				e.currentTarget.classList.remove("disabled");
-				e.currentTarget.classList.toggle("desktop", desktopoff);
+				BDFDB.removeClass(e.currentTarget, "disabled");
+				BDFDB.toggleClass(e.currentTarget, "desktop", desktopoff);
 				BDFDB.saveData(id, {"desktop":desktopoff,"disabled":false}, this, "users");
 			})
-			.on("click", ".settings-avatar", (e) => {
-				if (e.target.classList.contains("remove-user")) return;
-				let disableoff = !e.currentTarget.classList.contains("disabled");
+			.on("click", ".settings-avatar", e => {
+				if (BDFDB.containsClass(e.target, "remove-user")) return;
+				let disableoff = !BDFDB.containsClass(e.currentTarget, "disabled");
 				let id = e.currentTarget.getAttribute("user-id");
-				e.currentTarget.classList.remove("desktop");
-				e.currentTarget.classList.toggle("disabled", disableoff);
+				BDFDB.removeClass(e.currentTarget, "desktop");
+				BDFDB.toggleClass(e.currentTarget, "disabled", disableoff);
 				BDFDB.saveData(id, {"desktop":false,"disabled":disableoff}, this, "users");
 			})
-			.on("click", ".disable-all, .toast-all, .desktop-all", (e) => {
+			.on("click", ".disable-all, .toast-all, .desktop-all", e => {
 				let button = e.currentTarget;
 				let disableon = button.getAttribute("do-disable");
 				let desktopon = button.getAttribute("do-desktop");
 				let users = BDFDB.loadAllData(this, "users");
 				settingspanel.querySelectorAll(".settings-avatar").forEach(avatar => {
 					let id = avatar.getAttribute("user-id");
-					avatar.classList.toggle("disabled", disableon);
-					avatar.classList.toggle("desktop", desktopon);
+					BDFDB.toggleClass(avatar, "disabled", disableon);
+					BDFDB.toggleClass(avatar, "desktop", desktopon);
 					users[id].desktop = desktopon ? true : false;
 					users[id].disabled = disableon ? true : false;
 				});
 				BDFDB.saveAllData(users, this, "users");
 			})
-			.on("click", ".btn-adduser", (e) => {
+			.on("click", ".btn-adduser", e => {
 				let idinput = settingspanel.querySelector("#input-userid");
 				let user = this.UserUtils.getUser(idinput.value);
 				if (user) {
@@ -226,7 +225,7 @@ class StalkerNotifications {
 				}
 				else BDFDB.showToast("Please enter a valid UserID.",{type:"error"});
 			})
-			.on("click", ".remove-user", (e) => {
+			.on("click", ".remove-user", e => {
 				BDFDB.removeData(e.currentTarget.parentElement.getAttribute("user-id"), this, "users");
 				BDFDB.removeEles(this.getName() + "-settings .settings-avatar");
 				let listhtml = `<div class="avatar-list ${BDFDB.disCN.marginbottom8}">`;
@@ -241,7 +240,7 @@ class StalkerNotifications {
 			.on("click", ".btn-timelog", () => {
 				this.showTimeLog();
 			})
-			.on("input", ".amountInput", (e) => {
+			.on("input", ".amountInput", e => {
 				let input = parseInt(e.currentTarget.value);
 				if (!isNaN(input) && input > 0) {
 					BDFDB.saveData(e.currentTarget.getAttribute("option"), input, this, "amounts");
@@ -301,14 +300,6 @@ class StalkerNotifications {
 	
 	
 	// begin of own functions
-
-	updateSettings (settingspanel) {
-		let settings = {};
-		for (let input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner + ".settings-checkbox")) {
-			settings[input.value] = input.checked;
-		}
-		BDFDB.saveAllData(settings, this, "settings");
-	}
 	
 	saveAudio (settingspanel, option) {
 		let successSavedAudio = (parsedurl, parseddata) => {
@@ -357,7 +348,7 @@ class StalkerNotifications {
 			for (let id in users) {
 				let online = this.UserMetaStore.getStatus(id) != "offline";
 				let user = this.UserUtils.getUser(id);
-				if (user && this.stalkerOnlineList[id] != online && !BDFDB.loadData(id, this, "disabled")) {
+				if (user && !user.disabled && this.stalkerOnlineList[id] != online) {
 					this.timeLog.push({user, online, time: new Date()});
 					if (!(settings.onlyOnOnline && !online) && !(settings.muteOnDND && BDFDB.getUserStatus() == "dnd")) {
 						let data = BDFDB.loadData(user.id, "EditUsers", "users") || {};
@@ -371,7 +362,7 @@ class StalkerNotifications {
 								require("electron").remote.getCurrentWindow().maximize();
 							}
 						};
-						if (!BDFDB.loadData(id, this, "desktop")) {
+						if (!user.desktop) {
 							let toast = BDFDB.showToast(`<div class="toast-inner"><div class="toast-avatar" style="background-image:url(${avatar});"></div><div>${string}</div></div>`, {html:true, timeout:5000, type:(online ? "success" : null), icon:false, selector:`stalkernotifications-${online ? "online" : "offline"}-toast`});
 							$(toast).on("click." + this.getName(), openChannel);
 							let notificationsound = BDFDB.getData(online ? "toastonline" : "toastoffline", this, "notificationsounds");
@@ -393,18 +384,19 @@ class StalkerNotifications {
 	}
 	
 	showTimeLog () {		
-		let timeLogModal = $(this.timeLogModalMarkup);
+		let timeLogModal = BDFDB.htmlToElement(this.timeLogModalMarkup);
+		let container = timeLogModal.querySelector(".entries");
+		if (!container) return;
 		let logs = this.timeLog.slice(0).reverse();
 		for (let log of logs) {
-			let entry = $(this.logEntryMarkup);
-			let divider = $(this.dividerMarkup);
+			if (container.childElementCount) container.appendChild(BDFDB.htmlToElement(`<div class="${BDFDB.disCN.modaldivider}"></div>`));
 			let data = BDFDB.loadData(log.user.id, "EditUsers", "users") || {};
-			entry.find(".log-time").text(`[${log.time.toLocaleTimeString()}]`);
-			entry.find(".log-avatar").css("background-image", `url(${data.removeIcon ? "" : (data.url ? data.url : BDFDB.getUserAvatar(log.user.id))})`);
-			entry.find(".log-description").text(`${data.name ? data.name : log.user.username} is ${log.online ? "online" : "offline"}.`);
-			timeLogModal.find(".entries").append(entry).append(divider);
+			let entry = BDFDB.htmlToElement(this.logEntryMarkup);
+			entry.querySelector(".log-time").innerText = `[${log.time.toLocaleTimeString()}]`;
+			entry.querySelector(".log-avatar").style.setProperty("background-image", `url(${data.removeIcon ? "" : (data.url ? data.url : BDFDB.getUserAvatar(log.user.id))})`);
+			entry.querySelector(".log-description").innerText = `${data.name || log.user.username} is ${log.online ? "online" : "offline"}.`;
+			container.appendChild(entry)
 		}
-		BDFDB.removeEles(".StalkerNotifications-modal " + BDFDB.dotCN.modaldivider + ":last-of-type");
 		BDFDB.appendModal(timeLogModal);
 	}
 }
