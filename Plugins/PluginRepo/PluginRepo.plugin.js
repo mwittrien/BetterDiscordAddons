@@ -3,7 +3,7 @@
 class PluginRepo {
 	getName () {return "PluginRepo";} 
 
-	getVersion () {return "1.6.9";}
+	getVersion () {return "1.7.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -707,7 +707,7 @@ class PluginRepo {
 		createWebview = () => {
 			return new Promise(function(callback) {
 				webview = document.createElement("webview");
-				webview.src = "https://discordapp.com/login";
+				webview.src = "https://discordapp.com/";
 				webview.setAttribute("webview-PluginRepo", null);
 				webview.style.setProperty("opacity", "0", "important");
 				webview.style.setProperty("pointer-events", "none", "important");
