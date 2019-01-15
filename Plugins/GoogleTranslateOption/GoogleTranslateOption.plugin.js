@@ -3,7 +3,7 @@
 class GoogleTranslateOption {
 	getName () {return "GoogleTranslateOption";}
 
-	getVersion () {return "1.6.1";}
+	getVersion () {return "1.6.3";}
 	
 	getAuthor () {return "DevilBro, square";}
 
@@ -124,7 +124,7 @@ class GoogleTranslateOption {
 						<h3 class="flex-3B1Tl4 justifyStart-2yIZo0 ${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Translator:</h3>
 						<h3 class="flex-3B1Tl4 justifyStart-2yIZo0 ${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.translators[key].choice1}</h3>
 						<div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCNS.switchthemedefault + BDFDB.disCN.switchvalueunchecked}" style="flex: 0 0 auto;">
-							<input type="checkbox" option="translators" value="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}">
+							<input type="checkbox" value="translators ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch translators-switch">
 						</div>
 						<h3 class="flex-3B1Tl4 justifyEnd-1ceqOU ${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.translators[key].choice2}</h3>
 					</div>`).join("")}
@@ -404,7 +404,7 @@ class GoogleTranslateOption {
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
 		}
 		for (let key in translators) {
-			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="flex-3B1Tl4 justifyStart-2yIZo0 ${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Translator:</h3><h3 class="flex-3B1Tl4 justifyStart-2yIZo0 ${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.translators[key].choice1}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="translators ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${translators[key] ? " checked" : ""}></div><h3 class="flex-3B1Tl4 justifyEnd-1ceqOU ${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.translators[key].choice2}</h3></div>`;
+			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="flex-3B1Tl4 justifyStart-2yIZo0 ${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Translator:</h3><h3 class="flex-3B1Tl4 justifyStart-2yIZo0 ${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.translators[key].choice1}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="translators ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch translators-switch"${translators[key] ? " checked" : ""}></div><h3 class="flex-3B1Tl4 justifyEnd-1ceqOU ${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.translators[key].choice2}</h3></div>`;
 		}
 		settingshtml += `</div></div>`;
 		
@@ -495,7 +495,7 @@ class GoogleTranslateOption {
 			let {messagediv, pos} = this.getMessageAndPos(instance.props.target);
 			if (!messagediv || pos == -1) return;
 			let pinentry = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:menu,name:"MessagePinItem"}));
-			let messageTranslateContextEntry = BDFDB.htmlToElement(messagediv.classList.contains("translated") ? this.messageUntranslateContextEntryMarkup : this.messageTranslateContextEntryMarkup);
+			let messageTranslateContextEntry = BDFDB.htmlToElement(BDFDB.containsClass(messagediv, "translated") ? this.messageUntranslateContextEntryMarkup : this.messageTranslateContextEntryMarkup);
 			if (pinentry) pinentry.parentElement.insertBefore(messageTranslateContextEntry, pinentry.nextElementSibling);
 			else menu.insertBefore(messageTranslateContextEntry, menu.firstElementChild);
 			let translateitem = messageTranslateContextEntry.querySelector(".googletranslateoption-item");
@@ -574,13 +574,11 @@ class GoogleTranslateOption {
 				});
 				translateButton.addEventListener("contextmenu", () => {
 					this.translating = !this.translating;
-					document.querySelectorAll(BDFDB.dotCNS.textareawrapchat + ".translate-button-wrapper").forEach(btn => {
-						btn.classList.toggle(BDFDB.disCN.textareabuttonactive, this.translating);
-					});
+					BDFDB.toggleClass(document.querySelectorAll(BDFDB.dotCNS.textareawrapchat + ".translate-button-wrapper"), BDFDB.disCN.textareabuttonactive, this.translating);
 				});
 				buttoncontainer.insertBefore(translateButton, buttoncontainer.firstElementChild);
-				translateButton.classList.add(instance.props.type);
-				translateButton.classList.toggle(BDFDB.disCN.textareabuttonactive, this.translating);
+				BDFDB.addClass(translateButton, instance.props.type);
+				BDFDB.toggleClass(translateButton, BDFDB.disCN.textareabuttonactive, this.translating);
 				BDFDB.addEventListener(this, textarea, "input", () => {
 					if (this.doTranslate) {
 						this.doTranslate = false;
@@ -624,7 +622,7 @@ class GoogleTranslateOption {
 		if (instance.props.message && instance.props.channel && instance._reactInternalFiber.memoizedProps.target && !wrapper.querySelector(".personalpin-itembtn")) {
 			let {messagediv, pos} = this.getMessageAndPos(instance._reactInternalFiber.memoizedProps.target);
 			if (!messagediv || pos == -1) return;
-			let popoutTranslateEntry = BDFDB.htmlToElement(messagediv.classList.contains("translated") ? this.popoutUntranslateEntryMarkup : this.popoutTranslateEntryMarkup);
+			let popoutTranslateEntry = BDFDB.htmlToElement(BDFDB.containsClass(messagediv, "translated") ? this.popoutUntranslateEntryMarkup : this.popoutTranslateEntryMarkup);
 			wrapper.appendChild(popoutTranslateEntry);
 			popoutTranslateEntry.addEventListener("click", () => {
 				this.translateMessage(instance.props.message, instance._reactInternalFiber.memoizedProps.target, instance.props.channel);
@@ -659,7 +657,7 @@ class GoogleTranslateOption {
 						BDFDB.createTooltip(`<div>From: ${input.name}</div><div>To: ${output.name}</div>`, translatestamp, {html:true, type:"top", selector:"translation-tooltip"});
 					});
 					markup.appendChild(translatestamp);
-					messagediv.classList.add("translated");
+					BDFDB.addClass(messagediv, "translated");
 					if (compactheader) markup.insertBefore(compactheader, markup.firstElementChild);
 				}
 			});
@@ -669,7 +667,7 @@ class GoogleTranslateOption {
 	
 	resetMessage (messagediv) {
 		BDFDB.removeEles(messagediv.querySelector(BDFDB.dotCN.messageedited + ".translated"));
-		messagediv.classList.remove("translated");
+		BDFDB.removeClass(messagediv, "translated");
 		let markup = messagediv.querySelector(BDFDB.dotCN.messagemarkup);
 		markup.innerHTML = markup.GoogleTranslateOriginalHTML;
 		delete markup.GoogleTranslateOriginalHTML;
@@ -762,8 +760,8 @@ class GoogleTranslateOption {
 	
 	openTranslatePopout (button) {
 		let container = document.querySelector(BDFDB.dotCN.popouts);
-		if (!container || button.classList.contains("popout-open")) return;
-		button.classList.add("popout-open");
+		if (!container || BDFDB.containsClass(button, "popout-open")) return;
+		BDFDB.addClass(button, "popout-open");
 		let translatepopout = BDFDB.htmlToElement(this.translatePopoutMarkup);
 		container.appendChild(translatepopout);
 		let buttonrects = button.getBoundingClientRect(); 
@@ -795,18 +793,18 @@ class GoogleTranslateOption {
 		var translatecheckbox = translatepopout.querySelector("#translating-checkbox");
 		translatecheckbox.checked = this.translating;
 		translatecheckbox.addEventListener("click", () => {
-			button.classList.toggle(BDFDB.disCN.textareabuttonactive, translatecheckbox.checked);
+			BDFDB.toggleClass(button, BDFDB.disCN.textareabuttonactive, translatecheckbox.checked);
 			this.translating = translatecheckbox.checked;
 		});
 			
 		var translators = BDFDB.getAllData(this, "translators");
-		translatepopout.querySelectorAll(BDFDB.dotCN.switchinner + "[option=translators]").forEach(translatorcheckbox => {
-			translatorcheckbox.checked = translators[translatorcheckbox.value];
+		translatepopout.querySelectorAll(".translators-switch").forEach(translatorcheckbox => {
+			translatorcheckbox.checked = translators[translatorcheckbox.value.split(" ")[1]];
 			translatorcheckbox.addEventListener("click", () => {
-				this.updateSettings(translatepopout);
+				document.removeEventListener("mousedown", removePopout);
 				translatepopout.remove();
-				button.classList.remove("popout-open");
-				this.openTranslatePopout(button);
+				BDFDB.removeClass(button, "popout-open");
+				setImmediate(() => {this.openTranslatePopout(button);});
 			});
 		});
 		
@@ -814,7 +812,7 @@ class GoogleTranslateOption {
 			if (!translatepopout.contains(e.target)) {
 				document.removeEventListener("mousedown", removePopout);
 				translatepopout.remove();
-				setTimeout(() => {button.classList.remove("popout-open");},300);
+				setTimeout(() => {BDFDB.removeClass(button, "popout-open");},300);
 			}
 		};
 		document.addEventListener("mousedown", removePopout);
@@ -827,14 +825,14 @@ class GoogleTranslateOption {
 		let selectWrap = selectControl.parentElement;
 		let plugincard = selector == "inSettings" ? BDFDB.getParentEle("li", selectWrap) : document.createElement("div");
 		
-		if (!plugincard || selectWrap.classList.contains(BDFDB.disCN.selectisopen)) return;
+		if (!plugincard || BDFDB.containsClass(selectWrap, BDFDB.disCN.selectisopen)) return;
 		
-		selectWrap.classList.add(BDFDB.disCN.selectisopen);
+		BDFDB.addClass(selectWrap, BDFDB.disCN.selectisopen);
 		plugincard.style.setProperty("overflow", "visible", "important");
 		
 		var type = selectWrap.getAttribute("type");
 		var selectMenu = this.createDropdownMenu(selectWrap.getAttribute("value"), type);
-		selectMenu.classList.add(selector);
+		BDFDB.addClass(selectMenu, selector);
 		selectWrap.appendChild(selectMenu);
 		
 		BDFDB.addChildEventListener(selectMenu, "mousedown", BDFDB.dotCN.selectoption, e2 => {
@@ -849,7 +847,7 @@ class GoogleTranslateOption {
 				document.removeEventListener("mousedown", removeMenu);
 				selectMenu.remove();
 				plugincard.style.removeProperty("overflow");
-				setTimeout(() => {selectWrap.classList.remove(BDFDB.disCN.selectisopen);},100);
+				setTimeout(() => {BDFDB.removeClass(selectWrap, BDFDB.disCN.selectisopen);},100);
 			}
 		};
 		document.addEventListener("mousedown", removeMenu);
