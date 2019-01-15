@@ -1,19 +1,19 @@
 //META{"name":"ThemeSettings"}*//
 
 class ThemeSettings {
+	getName () {return "ThemeSettings";}
+
+	getVersion () {return "1.0.9";}
+
+	getAuthor () {return "DevilBro";}
+
+	getDescription () {return "Allows you to change Theme Variables within BetterDiscord. Adds a Settings button (similar to Plugins) to customizable Themes in your Themes Page.";}
+	
 	initConstructor () {
 		this.patchModules = {
 			"V2C_ThemeCard":"componentDidMount"
 		};
 	}
-
-	getName () {return "ThemeSettings";}
-
-	getDescription () {return "Allows you to change Theme Variables within BetterDiscord. Adds a Settings button (similar to Plugins) to customizable Themes in your Themes Page.";}
-
-	getVersion () {return "1.0.8";}
-
-	getAuthor () {return "DevilBro";}
 
 	//legacy
 	load () {}
@@ -80,7 +80,7 @@ class ThemeSettings {
 						children.push(wrapper.firstChild);
 						wrapper.firstChild.remove();
 					}
-					let closebutton = $(`<div style="float: right; cursor: pointer;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" style="width: 18px; height: 18px;"><g class="background" fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="#dcddde" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div>`)[0];
+					let closebutton = BDFDB.htmlToElement(`<div style="float: right; cursor: pointer;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" style="width: 18px; height: 18px;"><g class="background" fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="#dcddde" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div>`);
 					wrapper.appendChild(closebutton);
 					closebutton.addEventListener("click", () => {
 						wrapper.classList.remove(BDFDB.disCN._reposettingsopen);
@@ -111,7 +111,7 @@ class ThemeSettings {
 		if (!this.started || typeof BDFDB !== "object") return;
 		var settingshtml = `<div class="theme-settings" id="theme-settings-${theme.name}"><div class="${theme.name}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${BDFDB.encodeToHTML(theme.name)}</div><div class="DevilBro-settings-inner"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Update all variables</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorgreen + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} update-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Update</div></button></div></div></div>`;
 		
-		var settingspanel = $(settingshtml)[0];
+		let settingspanel = BDFDB.htmlToElement(settingshtml);
 		var settingspanelinner = settingspanel.querySelector(".DevilBro-settings-inner");
 		
 		var maxwidth = wrapper.getBoundingClientRect().width - 80;
@@ -123,43 +123,37 @@ class ThemeSettings {
 			let varvalue = varstr.shift().trim();
 			let vardescription = varstr.join("").replace(/\*\/|\/\*/g, "").replace(/:/g, ": ").replace(/: \//g, ":/").replace(/--/g, " --").replace(/\( --/g, "(--").trim();
 			vardescription = vardescription && vardescription.indexOf("*") == 0 ? vardescription.slice(1) : vardescription;
-			$(`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCN.flexchild}" style="flex: 0 0 50%;">${varname[0].toUpperCase() + varname.slice(1)}:</h3><div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex + BDFDB.disCN.directioncolumn}" style="flex: 1 1 auto;"><input type="text" option="${varname}" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16}"></div></div>${vardescription ? '<div class="' + BDFDB.disCNS.description + BDFDB.disCNS.note + BDFDB.disCN.primary + ' DevilBro-textscrollwrapper" style="flex: 1 1 auto; max-width: ' + maxwidth + 'px !important;"><div class="DevilBro-textscroll">' + BDFDB.encodeToHTML(vardescription) + '</div></div>' : ""}<div class="${BDFDB.disCNS.modaldivider + BDFDB.disCN.modaldividerdefault}"></div></div>`)
-				.appendTo(settingspanelinner)
-				.find(BDFDB.dotCN.input)
-					.val(varvalue)
-					.attr("placeholder", varvalue);
-		}
-		let dividers = settingspanelinner.querySelectorAll(BDFDB.dotCN.modaldivider);
-		if (dividers.length) {
-			dividers[dividers.length - 1].style.setProperty("visibility", "hidden", "important");
-			dividers[dividers.length - 1].style.setProperty("margin-top", "0", "important");
+			var varcontainer = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCN.flexchild}" style="flex: 0 0 50%;">${varname[0].toUpperCase() + varname.slice(1)}:</h3><div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex + BDFDB.disCN.directioncolumn}" style="flex: 1 1 auto;"><input type="text" option="${varname}" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16}"></div></div>${vardescription ? '<div class="' + BDFDB.disCNS.description + BDFDB.disCNS.note + BDFDB.disCN.primary + ' DevilBro-textscrollwrapper" style="flex: 1 1 auto; max-width: ' + maxwidth + 'px !important;"><div class="DevilBro-textscroll">' + BDFDB.encodeToHTML(vardescription) + '</div></div>' : ""}${vars[vars.length-1] == varstr ? '' : '<div class="${BDFDB.disCNS.modaldivider + BDFDB.disCN.modaldividerdefault}"></div>'}</div>`);
+			let varinput = varcontainer.querySelector(BDFDB.dotCN.input);
+			varinput.value = varvalue || "";
+			varinput.setAttribute("placeholder", varvalue || "");
+			settingspanelinner.appendChild(varcontainer);
 		}
 		
-		BDFDB.initElements(settingspanel);
+		BDFDB.initElements(settingspanel, this);
 
-		$(settingspanel)
-			.on("click", ".update-button", () => {
-				let path = this.path.join(this.dir, theme.filename);
-				let css = this.fs.readFileSync(path).toString();
-				if (css) {
-					let amount = 0;
-					for (let input of settingspanel.querySelectorAll(BDFDB.dotCN.input)) {
-						let oldvalue = input.getAttribute("placeholder");
-						let newvalue = input.value;
-						if (newvalue && newvalue.trim() && newvalue != oldvalue) {
-							let varname = input.getAttribute("option");
-							css = css.replace(new RegExp(`--${varname}(\\s*):(\\s*)${oldvalue}`,"g"),`--${varname}$1:$2${newvalue}`);
-							amount++;
-						}
+		BDFDB.addChildEventListener(settingspanel, "click", ".update-button", () => {
+			let path = this.path.join(this.dir, theme.filename);
+			let css = this.fs.readFileSync(path).toString();
+			if (css) {
+				let amount = 0;
+				for (let input of settingspanel.querySelectorAll(BDFDB.dotCN.input)) {
+					let oldvalue = input.getAttribute("placeholder");
+					let newvalue = input.value;
+					if (newvalue && newvalue.trim() && newvalue != oldvalue) {
+						let varname = input.getAttribute("option");
+						css = css.replace(new RegExp(`--${BDFDB.regEscape(varname)}(\\s*):(\\s*)${BDFDB.regEscape(oldvalue)}`,"g"),`--${varname}$1:$2${newvalue}`);
+						amount++;
 					}
-					if (amount > 0) {
-						this.fs.writeFileSync(path, css);
-						BDFDB.showToast(`Updated ${amount} variable${amount == 1 ? "" : "s"} in ${theme.filename}`, {type:"success"});
-					}
-					else BDFDB.showToast(`There are no changed variables to be updated in ${theme.filename}`, {type:"warning"});
 				}
-				else BDFDB.showToast(`Could not find themefile: ${theme.filename}`, {type:"error"});
-			});
+				if (amount > 0) {
+					this.fs.writeFileSync(path, css);
+					BDFDB.showToast(`Updated ${amount} variable${amount == 1 ? "" : "s"} in ${theme.filename}`, {type:"success"});
+				}
+				else BDFDB.showToast(`There are no changed variables to be updated in ${theme.filename}`, {type:"warning"});
+			}
+			else BDFDB.showToast(`Could not find themefile: ${theme.filename}`, {type:"error"});
+		});
 		
 		wrapper.appendChild(settingspanel);
 	}
