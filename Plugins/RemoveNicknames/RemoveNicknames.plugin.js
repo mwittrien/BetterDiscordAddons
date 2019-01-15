@@ -1,11 +1,19 @@
 //META{"name":"RemoveNicknames"}*//
 
 class RemoveNicknames {
+	getName () {return "RemoveNicknames";}
+
+	getVersion () {return "1.1.3";}
+
+	getAuthor () {return "DevilBro";}
+
+	getDescription () {return "Replace all nicknames with the actual accountnames.";}
+	
 	initConstructor () {
 		this.patchModules = {
 			"NameTag":"componentDidMount",
 			"FluxContainer(TypingUsers)":"componentDidUpdate",
-			"Popout":"componentDidMount",
+			"MessageUsername":"componentDidMount",
 			"Clickable":"componentDidMount",
 			"StandardSidebarView":"componentWillUnmount"
 		};
@@ -18,30 +26,20 @@ class RemoveNicknames {
 			}
 		};
 	}
-
-	getName () {return "RemoveNicknames";}
-
-	getDescription () {return "Replace all nicknames with the actual accountnames.";}
-
-	getVersion () {return "1.1.2";}
-
-	getAuthor () {return "DevilBro";}
 	
 	getSettingsPanel () {
 		if (!this.started || typeof BDFDB !== "object") return;
 		var settings = BDFDB.getAllData(this, "settings"); 
 		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		for (let key in settings) {
-			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}"${settings[key] ? " checked" : ""}></div></div>`;
+			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
 		}
 		settingshtml += `</div></div>`;
 		
-		var settingspanel = $(settingshtml)[0];
+		let settingspanel = BDFDB.htmlToElement(settingshtml);
 
-		BDFDB.initElements(settingspanel);
-
-		$(settingspanel)
-			.on("click", BDFDB.dotCN.switchinner, () => {this.updateSettings(settingspanel);});
+		BDFDB.initElements(settingspanel, this);
+;
 		return settingspanel;
 	}
 
@@ -94,15 +92,6 @@ class RemoveNicknames {
 
 	
 	// begin of own functions
-
-	updateSettings (settingspanel) {
-		var settings = {};
-		for (var input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner)) {
-			settings[input.value] = input.checked;
-		}
-		this.updateUsers = true;
-		BDFDB.saveAllData(settings, this, "settings");
-	}
 	
 	getNewName (info) {
 		if (!info) return null;
@@ -120,18 +109,18 @@ class RemoveNicknames {
 		if (username) BDFDB.setInnerText(username, this.getNewName(instance.props.user));
 	}
 	
-	processPopout (instance, wrapper) {
-		let fiber = instance._reactInternalFiber;
-		if (fiber.return && fiber.return.memoizedProps && fiber.return.memoizedProps.message) {
+	processMessageUsername (instance, wrapper) {
+		let message = BDFDB.getReactValue(instance, "props.message");
+		if (message) {
 			let username = wrapper.querySelector(BDFDB.dotCN.messageusername);
-			if (username) BDFDB.setInnerText(username, this.getNewName(fiber.return.memoizedProps.message.author));
+			if (username) BDFDB.setInnerText(username, this.getNewName(message.author));
 		}
 	}
 	
-	processFluxContainerTypingUsers (instance) {
+	processFluxContainerTypingUsers (instance, wrapper) {
 		let users = !instance.state.typingUsers ? [] : Object.keys(instance.state.typingUsers).filter(id => id != BDFDB.myData.id).filter(id => !this.RelationshipUtils.isBlocked(id)).map(id => this.UserUtils.getUser(id)).filter(id => id != null);
-		document.querySelectorAll(BDFDB.dotCNS.typing + "strong").forEach((username, i) => {
-			if (users[i]) if (username) BDFDB.setInnerText(username, this.getNewName(users[i]));
+		wrapper.querySelectorAll("strong").forEach((username, i) => {
+			if (users[i] && username) BDFDB.setInnerText(username, this.getNewName(users[i]));
 		});
 	}
 	
@@ -144,30 +133,28 @@ class RemoveNicknames {
 			}
 		}
 		else if (instance.props.tag == "span" && instance.props.className.indexOf(BDFDB.disCN.mention) > -1) {
-			let fiber = instance._reactInternalFiber;
-			if (fiber.return && fiber.return.return && fiber.return.return.stateNode && fiber.return.return.stateNode.props && typeof fiber.return.return.stateNode.props.render == "function") {
-				if (wrapper) BDFDB.setInnerText(wrapper, "@" + this.getNewName(fiber.return.return.stateNode.props.render().props.user));
-			}
+			let render = BDFDB.getReactValue(instance, "_reactInternalFiber.return.return.stateNode.props.render");
+			if (typeof render == "function") BDFDB.setInnerText(wrapper, "@" + this.getNewName(render().props.user));
 		}
 		else if (instance.props.tag == "div" && instance.props.className.indexOf(BDFDB.disCN.voiceuser) > -1) {
-			let fiber = instance._reactInternalFiber;
-			if (fiber.return && fiber.return.memoizedProps && fiber.return.memoizedProps.user) {
+			let user = BDFDB.getReactValue(instance, "_reactInternalFiber.return.memoizedProps.user");
+			if (user) {
 				let username = wrapper.querySelector(BDFDB.dotCN.voicename);
-				if (username) BDFDB.setInnerText(username, this.getNewName(fiber.return.memoizedProps.user));
+				if (username) BDFDB.setInnerText(username, this.getNewName(user));
 			}
 		}
 		else if (instance.props.tag == "div" && instance.props.className.indexOf(BDFDB.disCN.autocompleterow) > -1) {
-			let fiber = instance._reactInternalFiber;
-			if (fiber.return && fiber.return.memoizedProps && fiber.return.memoizedProps.user) {
+			let user = BDFDB.getReactValue(instance, "_reactInternalFiber.return.memoizedProps.user");
+			if (user) {
 				let username = wrapper.querySelector(BDFDB.dotCN.marginleft8);
-				if (username) BDFDB.setInnerText(username, this.getNewName(fiber.return.memoizedProps.user));
+				if (username) BDFDB.setInnerText(username, this.getNewName(user));
 			}
 		}
 	}
 	
 	processStandardSidebarView (instance, wrapper) {
-		if (this.updateUsers) {
-			this.updateUsers = false;
+		if (this.SettingsUpdated) {
+			delete this.SettingsUpdated;
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 	}

@@ -3,7 +3,7 @@
 class EditUsers {
 	getName () {return "EditUsers";}
 
-	getVersion () {return "3.2.1";}
+	getVersion () {return "3.2.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -17,7 +17,7 @@ class EditUsers {
 			"NameTag":"componentDidMount",
 			"AuditLog":"componentDidMount",
 			"FluxContainer(TypingUsers)":"componentDidUpdate",
-			"Popout":"componentDidMount",
+			"MessageUsername":"componentDidMount",
 			"DirectMessage":"componentDidMount",
 			"CallAvatar":"componentDidMount",
 			"PrivateChannel":["componentDidMount","componentDidUpdate"],
@@ -194,10 +194,9 @@ class EditUsers {
 		
 		let settingspanel = BDFDB.htmlToElement(settingshtml);
 
-		BDFDB.initElements(settingspanel);
+		BDFDB.initElements(settingspanel, this);
 
 		$(settingspanel)
-			.on("click", BDFDB.dotCN.switchinner, () => {this.updateSettings(settingspanel);})
 			.on("click", ".reset-button", () => {
 				BDFDB.openConfirmModal(this, "Are you sure you want to reset all users?", () => {
 					BDFDB.removeAllData(this, "users");
@@ -258,15 +257,6 @@ class EditUsers {
 	
 	// begin of own functions
 
-	updateSettings (settingspanel) {
-		var settings = {};
-		for (var input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner)) {
-			settings[input.value] = input.checked;
-		}
-		BDFDB.saveAllData(settings, this, "settings");
-		this.updateUsers = true;
-	}
-
 	changeLanguageStrings () {
 		this.userContextEntryMarkup =		this.userContextEntryMarkup.replace("REPLACE_context_localusersettings_text", this.labels.context_localusersettings_text);
 		
@@ -295,7 +285,7 @@ class EditUsers {
 			let userContextEntry = BDFDB.htmlToElement(this.userContextEntryMarkup);
 			menu.appendChild(userContextEntry);
 			$(userContextEntry)
-				.on("mouseenter." + this.getName(), ".localusersettings-item", (e) => {
+				.on("mouseenter." + this.getName(), ".localusersettings-item", e => {
 					var userContextSubMenu = BDFDB.htmlToElement(this.userContextSubMenuMarkup);
 					$(userContextSubMenu)
 						.on("click", ".usersettings-item", () => {
@@ -351,24 +341,24 @@ class EditUsers {
 		BDFDB.appendModal(userSettingsModal);
 		
 		$(userSettingsModal)
-			.on("click", "#input-removeicon", (e) => {
+			.on("click", "#input-removeicon", e => {
 				userurlinput.disabled = e.currentTarget.checked;
 			})
-			.on("click", "#input-ignoretagcolor", (e) => {
+			.on("click", "#input-ignoretagcolor", e => {
 				ignoredswatches.forEach(swatches => {swatches.classList.toggle("disabled", e.currentTarget.checked);});
 			})
-			.on("change keyup paste", "#input-userurl", (e) => {
+			.on("change keyup paste", "#input-userurl", e => {
 				this.checkUrl(e.currentTarget);
 			})
-			.on("mouseenter", "#input-userurl", (e) => {
+			.on("mouseenter", "#input-userurl", e => {
 				e.currentTarget.classList.add("hovering");
 				this.createNoticeTooltip(e.currentTarget);
 			})
-			.on("mouseleave", "#input-userurl", (e) => {
+			.on("mouseleave", "#input-userurl", e => {
 				e.currentTarget.classList.remove("hovering");
 				BDFDB.removeEles(BDFDB.dotCNS.tooltips + ".notice-tooltip");
 			})
-			.on("click", ".btn-save", (e) => {
+			.on("click", ".btn-save", e => {
 				e.preventDefault();
 				
 				name = usernameinput.value.trim();
@@ -448,41 +438,43 @@ class EditUsers {
 		this.addTag(instance.props.user, username.parentElement, BDFDB.disCN.bottagnametag + (instance.props.botClass ? (" " + instance.props.botClass) : ""));
 	}
 	
-	processPopout (instance, wrapper) {
-		let fiber = instance._reactInternalFiber;
-		if (fiber.return && fiber.return.memoizedProps && fiber.return.memoizedProps.message) {
+	processMessageUsername (instance, wrapper) {
+		let message = BDFDB.getReactValue(instance, "props.message");
+		if (message) {
 			let username = wrapper.querySelector(BDFDB.dotCN.messageusername);
 			if (username) {
-				let channel = this.ChannelUtils.getChannel(fiber.return.memoizedProps.message.channel_id) || {};
-				this.changeName(fiber.return.memoizedProps.message.author, username, channel.guild_id);
+				let channel = this.ChannelUtils.getChannel(message.channel_id) || {};
+				this.changeName(message.author, username, channel.guild_id);
 				if (wrapper.parentElement && wrapper.parentElement.classList && !wrapper.parentElement.classList.contains(BDFDB.disCN.messageheadercompact)) {
-					this.changeAvatar(fiber.return.memoizedProps.message.author, this.getAvatarDiv(wrapper));
+					this.changeAvatar(message.author, this.getAvatarDiv(wrapper));
 				}
-				let message = BDFDB.getParentEle(BDFDB.dotCN.messagegroup, wrapper);
-				this.addTag(fiber.return.memoizedProps.message.author, wrapper, BDFDB.disCN.bottagmessage + " " + (message.classList.contains(BDFDB.disCN.messagegroupcozy) ? BDFDB.disCN.bottagmessagecozy : BDFDB.disCN.bottagmessagecompact));
+				let messagegroup = BDFDB.getParentEle(BDFDB.dotCN.messagegroup, wrapper);
+				this.addTag(message.author, wrapper, BDFDB.disCN.bottagmessage + " " + (messagegroup.classList.contains(BDFDB.disCN.messagegroupcozy) ? BDFDB.disCN.bottagmessagecozy : BDFDB.disCN.bottagmessagecompact));
 			}
 		}
 	}
 	
 	processAuditLog (instance, wrapper) {
-		if (instance.props && instance.props.log && instance.props.log.user) {
+		let log = BDFDB.getReactValue(instance, "props.log");
+		if (log && log.user) {
 			let hooks = wrapper.querySelectorAll(BDFDB.dotCN.auditloguserhook);
-			let guildid = instance._reactInternalFiber.return.memoizedProps.guildId;
-			if (hooks.length > 0) this.changeName2(instance.props.log.user, hooks[0].firstChild, guildid);
-			if (hooks.length > 1 && instance.props.log.targetType == "USER") this.changeName2(instance.props.log.target, hooks[1].firstChild, guildid);
+			let guild_id = BDFDB.getReactValue(instance, "_reactInternalFiber.return.memoizedProps.guildId");
+			if (hooks.length > 0) this.changeName2(log.user, hooks[0].firstChild, guild_id);
+			if (hooks.length > 1 && log.targetType == "USER") this.changeName2(log.target, hooks[1].firstChild, guild_id);
 		}
 	}
 	
-	processFluxContainerTypingUsers (instance) {
+	processFluxContainerTypingUsers (instance, wrapper) {
 		let users = !instance.state.typingUsers ? [] : Object.keys(instance.state.typingUsers).filter(id => id != BDFDB.myData.id).filter(id => !this.RelationshipUtils.isBlocked(id)).map(id => this.UserUtils.getUser(id)).filter(id => id != null);
-		document.querySelectorAll(BDFDB.dotCNS.typing + "strong").forEach((username, i) => {
-			if (users[i]) this.changeName2(users[i], username);
+		wrapper.querySelectorAll(BDFDB.dotCNS.typing + "strong").forEach((username, i) => {
+			if (users[i] && username) this.changeName2(users[i], username);
 		});
 	}
 	
 	processDirectMessage (instance, wrapper) {
-		if (instance.props && instance.props.channel && instance.props.channel.type == 1) {
-			let user = this.UserUtils.getUser(instance.props.channel.recipients[0]);
+		let channel = BDFDB.getReactValue(instance, "props.channel");
+		if (channel && channel.type == 1) {
+			let user = this.UserUtils.getUser(channel.recipients[0]);
 			if (user) {
 				let avatar = this.getAvatarDiv(wrapper);
 				if (avatar) {
@@ -518,11 +510,11 @@ class EditUsers {
 	}
 	
 	processHeaderBar (instance, wrapper) {
-		let fiber = instance._reactInternalFiber;
-		if (fiber.return && fiber.return.memoizedProps && fiber.return.memoizedProps.channelId) {
+		let channel_id = BDFDB.getReactValue(instance, "_reactInternalFiber.return.memoizedProps.channelId");
+		if (channel_id) {
 			let username = wrapper.querySelector(BDFDB.dotCN.channelheaderchannelname);
 			if (username) {
-				let channel = this.ChannelUtils.getChannel(fiber.return.memoizedProps.channelId);
+				let channel = this.ChannelUtils.getChannel(channel_id);
 				if (channel) {
 					if (channel.type == 1) this.changeName(this.UserUtils.getUser(channel.recipients[0]), username);
 					else {
@@ -545,69 +537,69 @@ class EditUsers {
 			}
 		}
 		else if (instance.props.tag == "span" && instance.props.className.indexOf(BDFDB.disCN.mention) > -1) {
-			let fiber = instance._reactInternalFiber;
-			if (fiber.return && fiber.return.return && fiber.return.return.stateNode && fiber.return.return.stateNode.props && typeof fiber.return.return.stateNode.props.render == "function") {
-				this.changeMention(fiber.return.return.stateNode.props.render().props.user, wrapper);
-			}
+			let render = BDFDB.getReactValue(instance, "_reactInternalFiber.return.return.stateNode.props.render");
+			if (typeof render == "function") this.changeMention(render().props.user, wrapper);
 		}
 		else if (instance.props.tag == "div" && instance.props.className.indexOf(BDFDB.disCN.voiceuser) > -1) {
-			let fiber = instance._reactInternalFiber;
-			if (fiber.return && fiber.return.memoizedProps && fiber.return.memoizedProps.user) {
-				this.changeVoiceUser(fiber.return.memoizedProps.user, wrapper.querySelector(BDFDB.dotCN.voicename));
-				this.changeAvatar(fiber.return.memoizedProps.user, this.getAvatarDiv(wrapper));
+			let user = BDFDB.getReactValue(instance, "_reactInternalFiber.return.memoizedProps.user");
+			if (user) {
+				this.changeVoiceUser(user, wrapper.querySelector(BDFDB.dotCN.voicename));
+				this.changeAvatar(user, this.getAvatarDiv(wrapper));
 			}
 		}
 		else if (instance.props.tag == "div" && instance.props.className.indexOf(BDFDB.disCN.quickswitchresult) > -1) {
-			let fiber = instance._reactInternalFiber;
-			if (fiber.return && fiber.return.memoizedProps && fiber.return.memoizedProps.result && fiber.return.memoizedProps.result.type == "USER") {
-				this.changeName2(fiber.return.memoizedProps.result.record, wrapper.querySelector(BDFDB.dotCN.quickswitchresultmatch));
-				this.changeAvatar(fiber.return.memoizedProps.result.record, this.getAvatarDiv(wrapper));
+			let result = BDFDB.getReactValue(instance, "_reactInternalFiber.return.memoizedProps.result");
+			if (result && result.type == "USER") {
+				this.changeName2(result.record, wrapper.querySelector(BDFDB.dotCN.quickswitchresultmatch));
+				this.changeAvatar(result.record, this.getAvatarDiv(wrapper));
 			}
 		}
 		else if (instance.props.tag == "div" && instance.props.className.indexOf(BDFDB.disCN.autocompleterow) > -1) {
-			let fiber = instance._reactInternalFiber;
-			if (fiber.return && fiber.return.memoizedProps && fiber.return.memoizedProps.user) {
-				this.changeName2(fiber.return.memoizedProps.user, wrapper.querySelector(BDFDB.dotCN.marginleft8));
-				this.changeAvatar(fiber.return.memoizedProps.user, this.getAvatarDiv(wrapper));
+			let user = BDFDB.getReactValue(instance, "_reactInternalFiber.return.memoizedProps.user");
+			if (user) {
+				this.changeName2(user, wrapper.querySelector(BDFDB.dotCN.marginleft8));
+				this.changeAvatar(user, this.getAvatarDiv(wrapper));
 			}
 		}
 		else if (instance.props.tag == "div" && instance.props.className.indexOf(BDFDB.disCN.searchpopoutoption) > -1) {
-			let fiber = instance._reactInternalFiber;
-			if (fiber.return && fiber.return.memoizedState && Array.isArray(fiber.return.memoizedState.tokens)) {
-				for (let i in fiber.return.memoizedState.tokens) {
-					let token = fiber.return.memoizedState.tokens[i];
+			let user = BDFDB.getReactValue(instance, "_reactInternalFiber.return.memoizedProps.user");
+			let tokens = BDFDB.getReactValue(instance, "_reactInternalFiber.return.memoizedState.tokens");
+			if (user && tokens && Array.isArray(tokens)) {
+				for (let i in tokens) {
+					let token = tokens[i];
 					if (token.type == "ANSWER_USERNAME_FROM" && token._data && token._data.get("user")) {
 						this.changeName3(token._data.get("user"), wrapper.children[i], true);
-						this.changeAvatar(fiber.return.memoizedProps.user, this.getAvatarDiv(wrapper));
+						this.changeAvatar(user, this.getAvatarDiv(wrapper));
 						break;
 					}
 				}
 			}
 			else if (instance.props.className.indexOf(BDFDB.disCN.searchpopoutuser) > -1) {
-				if (fiber.return && fiber.return.memoizedProps && fiber.return.memoizedProps.result && fiber.return.memoizedProps.result.user) {
-					this.changeName3(fiber.return.memoizedProps.result.user, wrapper.querySelector(BDFDB.dotCN.searchpopoutdisplayednick), false);
-					this.changeAvatar(fiber.return.memoizedProps.result.user, wrapper.querySelector(BDFDB.dotCN.searchpopoutdisplayavatar));
+				let result = BDFDB.getReactValue(instance, "_reactInternalFiber.return.memoizedProps.result");
+				if (result && result.user) {
+					this.changeName3(result.user, wrapper.querySelector(BDFDB.dotCN.searchpopoutdisplayednick), false);
+					this.changeAvatar(result.user, wrapper.querySelector(BDFDB.dotCN.searchpopoutdisplayavatar));
 				}
 			}
 		}
 	}
 	
 	processMessageContent (instance, wrapper) {
-		if (instance.props && instance.props.message && instance.props.message.author) {
+		let message = BDFDB.getReactValue(instance, "props.message");
+		if (message && message.author) {
 			let markup = wrapper.querySelector(BDFDB.dotCN.messagemarkup);
 			if (markup) {
-				let info = instance.props.message.author;
-				let channel = this.ChannelUtils.getChannel(instance.props.message.channel_id) || {};
-				let member = this.MemberUtils.getMember(channel.guild_id, info.id) || {};
-				let data = this.getUserData(info.id, wrapper);
+				let channel = this.ChannelUtils.getChannel(message.channel_id) || {};
+				let member = this.MemberUtils.getMember(channel.guild_id, message.author.id) || {};
+				let data = this.getUserData(message.author.id, wrapper);
 				markup.style.setProperty("color", settingsCookie["bda-gs-7"] ? BDFDB.colorCONVERT(data.color1 || member.colorString, "RGB") : null, "important");
 			}
 		}
 	}
 	
 	processStandardSidebarView (instance, wrapper) {
-		if (this.updateUsers) {
-			this.updateUsers = false;
+		if (this.SettingsUpdated) {
+			delete this.SettingsUpdated;
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 	}

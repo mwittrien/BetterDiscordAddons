@@ -3,7 +3,7 @@
 class BadgesEverywhere {
 	getName () {return "BadgesEverywhere";}
 
-	getVersion () {return "1.1.8";}
+	getVersion () {return "1.1.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -12,7 +12,7 @@ class BadgesEverywhere {
 	initConstructor () {
 		this.patchModules = {
 			"NameTag":"componentDidMount",
-			"Popout":"componentDidMount",
+			"MessageUsername":"componentDidMount",
 			"StandardSidebarView":"componentWillUnmount"
 		};
 		
@@ -150,11 +150,11 @@ class BadgesEverywhere {
 		}
 	}
 	
-	processPopout (instance, wrapper) {
-		let fiber = instance._reactInternalFiber;
-		if (fiber.return && fiber.return.memoizedProps && fiber.return.memoizedProps.message) {
+	processMessageUsername (instance, wrapper) {
+		let message = BDFDB.getReactValue(instance, "props.message");
+		if (message) {
 			let username = wrapper.querySelector(BDFDB.dotCN.messageusername);
-			if (username && BDFDB.getData("showInChat", this, "settings")) this.addBadges(fiber.return.memoizedProps.message.author, wrapper, "chat");
+			if (username && BDFDB.getData("showInChat", this, "settings")) this.addBadges(message.author, wrapper, "chat");
 		}
 	}
 	
