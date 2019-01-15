@@ -3,7 +3,7 @@
 class PluginRepo {
 	getName () {return "PluginRepo";} 
 
-	getVersion () {return "1.6.7";}
+	getVersion () {return "1.6.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -383,9 +383,9 @@ class PluginRepo {
 		}
 		
 		var pluginRepoModal = BDFDB.htmlToElement(this.pluginRepoModalMarkup);
-		var hiddenSettings = Object.assign({},BDFDB.loadAllData(this, "hidden"));
+		var hiddenSettings = BDFDB.loadAllData(this, "hidden");
 		pluginRepoModal.querySelector("#input-hideupdated").checked = hiddenSettings.updated || showOnlyOutdated;
-		pluginRepoModal.querySelector("#input-hideoutdated").checked = hiddenSettings.outdated || showOnlyOutdated;
+		pluginRepoModal.querySelector("#input-hideoutdated").checked = hiddenSettings.outdated && !showOnlyOutdated;
 		pluginRepoModal.querySelector("#input-hidedownloadable").checked = hiddenSettings.downloadable || showOnlyOutdated;
 		if (!BDFDB.isRestartNoMoreEnabled()) pluginRepoModal.querySelector("#RNMoption").remove();
 		else pluginRepoModal.querySelector("#input-rnmstart").checked = BDFDB.loadData("RNMstart", this, "settings");
@@ -399,6 +399,7 @@ class PluginRepo {
 			pluginRepoModal.searchTimeout = setTimeout(() => {this.sortEntries(pluginRepoModal);},1000);
 		});
 		BDFDB.addChildEventListener(pluginRepoModal, "change", ".hide-checkbox", e => {
+			pluginRepoModal.updateHidden = true;
 			BDFDB.saveData(e.currentTarget.value, e.currentTarget.checked, this, "hidden");
 		});
 		BDFDB.addChildEventListener(pluginRepoModal, "change", "#input-rnmstart", e => {
@@ -411,12 +412,9 @@ class PluginRepo {
 			BDFDB.createSortPopout(e.currentTarget, this.orderPopoutMarkup, () => {this.sortEntries(pluginRepoModal);});
 		});
 		BDFDB.addChildEventListener(pluginRepoModal, "click", BDFDB.dotCN.tabbaritem + "[tab=plugins]", e => {
-			if (!e.currentTarget.classList.contains(BDFDB.disCN.settingsitemselected)) {
-				var newHiddenSettings = BDFDB.loadAllData(this, "hidden");
-				if (!BDFDB.equals(newHiddenSettings, hiddenSettings)) {
-					hiddenSettings = Object.assign({},newHiddenSettings);
-					this.sortEntries(pluginRepoModal);
-				}
+			if (!e.currentTarget.classList.contains(BDFDB.disCN.settingsitemselected) && pluginRepoModal.updateHidden) {
+				delete pluginRepoModal.updateHidden;
+				this.sortEntries(pluginRepoModal);
 			}
 		});
 		
@@ -811,12 +809,8 @@ class PluginRepo {
 		filename = filename[filename.length - 1];
 		var file = path.join(BDFDB.getPluginsFolder(), filename);
 		fileSystem.unlink(file, (error) => {
-			if (error) {
-				BDFDB.showToast(`Unable to delete Plugin "${filename}".`, {type:"danger"});
-			}
-			else {
-				BDFDB.showToast(`Successfully deleted Plugin "${filename}".`, {type:"success"});
-			}
+			if (error) BDFDB.showToast(`Unable to delete Plugin "${filename}".`, {type:"danger"});
+			else BDFDB.showToast(`Successfully deleted Plugin "${filename}".`, {type:"success"});
 		});
 	}
 	

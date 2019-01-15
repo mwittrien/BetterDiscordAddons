@@ -3,7 +3,7 @@
 class ThemeRepo {
 	getName () {return "ThemeRepo";}
 
-	getVersion () {return "1.6.8";}
+	getVersion () {return "1.6.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -472,7 +472,7 @@ class ThemeRepo {
 		var frame = BDFDB.htmlToElement(this.frameMarkup);
 		var lightTheme = BDFDB.getDiscordTheme() == BDFDB.disCN.themelight;
 		var themeRepoModal = BDFDB.htmlToElement(this.themeRepoModalMarkup);
-		var hiddenSettings = Object.assign({},BDFDB.loadAllData(this, "hidden"));
+		var hiddenSettings = BDFDB.loadAllData(this, "hidden");
 		var darklightinput = themeRepoModal.querySelector("#input-darklight");
 		var customcssinput = themeRepoModal.querySelector("#input-customcss");
 		var themefixerinput = themeRepoModal.querySelector("#input-themefixer");
@@ -480,7 +480,7 @@ class ThemeRepo {
 		customcssinput.checked = false;
 		themefixerinput.checked = false;
 		themeRepoModal.querySelector("#input-hideupdated").checked = hiddenSettings.updated || showOnlyOutdated;
-		themeRepoModal.querySelector("#input-hideoutdated").checked = hiddenSettings.outdated || showOnlyOutdated;
+		themeRepoModal.querySelector("#input-hideoutdated").checked = hiddenSettings.outdated && !showOnlyOutdated;
 		themeRepoModal.querySelector("#input-hidedownloadable").checked = hiddenSettings.downloadable || showOnlyOutdated;
 		if (!BDFDB.isRestartNoMoreEnabled()) themeRepoModal.querySelector("#RNMoption").remove();
 		else themeRepoModal.querySelector("#input-rnmstart").checked = BDFDB.loadData("RNMstart", this, "settings");
@@ -512,6 +512,7 @@ class ThemeRepo {
 			themeRepoModal.searchTimeout = setTimeout(() => {this.sortEntries(themeRepoModal);},1000);
 		});
 		BDFDB.addChildEventListener(themeRepoModal, "change", ".hide-checkbox", e => {
+			themeRepoModal.updateHidden = true;
 			BDFDB.saveData(e.currentTarget.value, e.currentTarget.checked, this, "hidden");
 		});
 		BDFDB.addChildEventListener(themeRepoModal, "change", "#input-rnmstart", e => {
@@ -525,9 +526,8 @@ class ThemeRepo {
 		});
 		BDFDB.addChildEventListener(themeRepoModal, "click", BDFDB.dotCN.tabbaritem + "[tab=themes]", e => {
 			if (!e.currentTarget.classList.contains(BDFDB.disCN.settingsitemselected)) {
-				var newHiddenSettings = BDFDB.loadAllData(this, "hidden");
-				if (!BDFDB.equals(newHiddenSettings, hiddenSettings)) {
-					hiddenSettings = Object.assign({},newHiddenSettings);
+				if (themeRepoModal.updateHidden) {
+					delete themeRepoModal.updateHidden;
 					this.sortEntries(themeRepoModal);
 				}
 			}
@@ -606,7 +606,7 @@ class ThemeRepo {
 		trashbutton.addEventListener("click", e => {
 			if (entry.classList.contains("outdated") || entry.classList.contains("updated")) {
 				setEntryState(2);
-				this.deletePluginFile(data);
+				this.deleteThemeFile(data);
 				if (!BDFDB.isRestartNoMoreEnabled()) this.removeTheme(data);
 			}
 		});
