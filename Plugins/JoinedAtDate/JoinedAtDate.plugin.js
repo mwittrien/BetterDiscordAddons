@@ -3,7 +3,7 @@
 class JoinedAtDate {
 	getName () {return "JoinedAtDate";}
 
-	getVersion () {return "1.0.5";}
+	getVersion () {return "1.0.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -82,7 +82,7 @@ class JoinedAtDate {
 					settingspanel.querySelector(`${BDFDB.dotCN.select}[type='${key}'] .languageTimestamp`).innerText = this.getJoinedTime(this.languages[choices[key]].id);
 				}
 			})
-			.on("click", BDFDB.dotCN.selectcontrol, e => {this.openDropdownMenue;});
+			.on("click", BDFDB.dotCN.selectcontrol, e => {this.openDropdownMenu(e);});
 		return settingspanel;
 	}
 
