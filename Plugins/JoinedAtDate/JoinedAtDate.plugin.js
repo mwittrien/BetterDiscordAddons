@@ -1,6 +1,14 @@
 ﻿//META{"name":"JoinedAtDate"}*//
 
 class JoinedAtDate {
+	getName () {return "JoinedAtDate";}
+
+	getVersion () {return "1.0.5";}
+
+	getAuthor () {return "DevilBro";}
+
+	getDescription () {return "Displays the Joined At Date of the current Server for a Member in the UserPopout and UserModal.";}
+	
 	initConstructor () {
 		this.labels = {};
 		
@@ -48,14 +56,6 @@ class JoinedAtDate {
 			}
 		};
 	}
-
-	getName () {return "JoinedAtDate";}
-
-	getDescription () {return "Displays the Joined At Date of the current Server for a Member in the UserPopout and UserModal.";}
-
-	getVersion () {return "1.0.4";}
-
-	getAuthor () {return "DevilBro";}
 	
 	getSettingsPanel () {
 		if (!this.started || typeof BDFDB !== "object") return;
@@ -63,16 +63,16 @@ class JoinedAtDate {
 		let choices = BDFDB.getAllData(this, "choices");
 		let settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		for (let key in settings) {
-			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}"${settings[key] ? " checked" : ""}></div></div>`;
+			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
 		}
 		for (let key in choices) {
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCN.flexchild}" style="flex: 0 0 30%;">${this.defaults.choices[key].description}</h3><div class="${BDFDB.disCN.selectwrap}" style="flex: 1 1 70%;"><div class="${BDFDB.disCNS.select + BDFDB.disCNS.selectsingle + BDFDB.disCN.selecthasvalue}" type="${key}" value="${choices[key]}"><div class="${BDFDB.disCN.selectcontrol}"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignbaseline + BDFDB.disCNS.nowrap + BDFDB.disCN.selectvalue}" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.primary + BDFDB.disCN.weightnormal} languageName" style="flex: 1 1 42%; padding:0;">${this.languages[choices[key]].name}</div><div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.primary + BDFDB.disCN.weightnormal} languageTimestamp" style="flex: 1 1 58%; padding:0;">${this.getJoinedTime(this.languages[choices[key]].id)}</div></div><span class="${BDFDB.disCN.selectarrowzone}"><span class="${BDFDB.disCN.selectarrow}"></span></span></div></div></div></div>`;
 		}
 		settingshtml += `</div></div>`;
 		
-		let settingspanel = $(settingshtml)[0];
+		let settingspanel = BDFDB.htmlToElement(settingshtml);
 
-		BDFDB.initElements(settingspanel);
+		BDFDB.initElements(settingspanel, this);
 
 		$(settingspanel)
 			.on("click", BDFDB.dotCN.switchinner, () => {
@@ -82,7 +82,7 @@ class JoinedAtDate {
 					settingspanel.querySelector(`${BDFDB.dotCN.select}[type='${key}'] .languageTimestamp`).innerText = this.getJoinedTime(this.languages[choices[key]].id);
 				}
 			})
-			.on("click", BDFDB.dotCN.selectcontrol, (e) => {this.openDropdownMenu(e);});
+			.on("click", BDFDB.dotCN.selectcontrol, e => {this.openDropdownMenue;});
 		return settingspanel;
 	}
 
@@ -144,30 +144,33 @@ class JoinedAtDate {
 	openDropdownMenu (e) {
 		let selectControl = e.currentTarget;
 		let selectWrap = selectControl.parentElement;
+		let plugincard = BDFDB.getParentEle("li", selectWrap);
 		
-		if (selectWrap.classList.contains(BDFDB.disCN.selectisopen)) return;
+		if (!plugincard || selectWrap.classList.contains(BDFDB.disCN.selectisopen)) return;
 		
 		selectWrap.classList.add(BDFDB.disCN.selectisopen);
-		$("li").has(selectWrap).css("overflow", "visible");
+		plugincard.style.setProperty("overflow", "visible", "important");
 		
 		let type = selectWrap.getAttribute("type");
 		let selectMenu = this.createDropdownMenu(selectWrap.getAttribute("value"), type);
 		selectWrap.appendChild(selectMenu);
 		
-		$(selectMenu).on("mousedown." + this.getName(), BDFDB.dotCN.selectoption, (e2) => {
-			let language = e2.currentTarget.getAttribute("value");
-			selectWrap.setAttribute("value", language);
-			selectControl.querySelector(".languageName").innerText = this.languages[language].name;
-			selectControl.querySelector(".languageTimestamp").innerText = this.getJoinedTime(language);
-			BDFDB.saveData(type, language, this, "choices");
-		});
-		$(document).on("mousedown.select" + this.getName(), (e2) => {
-			if (e2.target.parentElement == selectMenu) return;
-			$(document).off("mousedown.select" + this.getName());
-			selectMenu.remove();
-			$("li").has(selectWrap).css("overflow", "auto");
-			setTimeout(() => {selectWrap.classList.remove(BDFDB.disCN.selectisopen);},100);
-		});
+		$(selectMenu)
+			.on("mousedown." + this.getName(), BDFDB.dotCN.selectoption, e2 => {
+				let language = e2.currentTarget.getAttribute("value");
+				selectWrap.setAttribute("value", language);
+				selectControl.querySelector(".languageName").innerText = this.languages[language].name;
+				selectControl.querySelector(".languageTimestamp").innerText = this.getJoinedTime(language);
+				BDFDB.saveData(type, language, this, "choices");
+			});
+		$(document)
+			.on("mousedown.select" + this.getName(), e2 => {
+				if (e2.target.parentElement == selectMenu) return;
+				$(document).off("mousedown.select" + this.getName());
+				selectMenu.remove();
+				plugincard.style.removeProperty("overflow");
+				setTimeout(() => {selectWrap.classList.remove(BDFDB.disCN.selectisopen);},100);
+			});
 	}
 	
 	createDropdownMenu (choice, type) {
@@ -177,7 +180,7 @@ class JoinedAtDate {
 			menuhtml += `<div value="${key}" class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignbaseline + BDFDB.disCNS.nowrap + BDFDB.disCN.selectoption + isSelected}" style="flex: 1 1 auto; display:flex;"><div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.primary + BDFDB.disCN.weightnormal}" style="flex: 1 1 42%;">${this.languages[key].name}</div><div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.primary + BDFDB.disCN.weightnormal}" style="flex: 1 1 58%;">${this.getJoinedTime(this.languages[key].id)}</div></div>`
 		}
 		menuhtml += `</div></div>`;
-		return $(menuhtml)[0];
+		return BDFDB.htmlToElement(menuhtml);
 	}
 	
 	processUserPopout (instance, wrapper) {
@@ -198,15 +201,17 @@ class JoinedAtDate {
 		if (guildid) {
 			if (!this.loadedusers[guildid]) this.loadedusers[guildid] = {};
 			let timestamp, addTimestamp = (timestamp) => {
-				let choice = BDFDB.getData("joinedAtDateLang", this, "choices");
-				let nametag = container.querySelector(BDFDB.dotCN.nametag);
-				let creationDate = container.querySelector(".creationDate");
-				container.insertBefore($(`<div class="joinedAtDate DevilBro-textscrollwrapper ${BDFDB.disCN.textrow}" style="max-width: ${BDFDB.getParentEle(popout ? BDFDB.dotCN.userpopoutheader : BDFDB.dotCN.userprofileheaderinfo, container).getBoundingClientRect().width - 20}px !important;"><div class="DevilBro-textscroll">${this.labels.joinedat_text + " " + this.getJoinedTime(this.languages[choice].id, timestamp)}</div></div>`)[0], creationDate ? creationDate : (nametag ? nametag.nextSibling : null));
-				BDFDB.initElements(container.parentElement);
-				if (popout && popout.style.transform.indexOf("translateY(-1") == -1) {
-					let arect = document.querySelector(BDFDB.dotCN.appmount).getBoundingClientRect();
-					let prect = popout.getBoundingClientRect();
-					popout.style.setProperty("top", (prect.y + prect.height > arect.height ? (arect.height - prect.height) : prect.y) + "px");
+				if (document.contains(container)) {
+					let choice = BDFDB.getData("joinedAtDateLang", this, "choices");
+					let nametag = container.querySelector(BDFDB.dotCN.nametag);
+					let creationDate = container.querySelector(".creationDate");
+					container.insertBefore(BDFDB.htmlToElement(`<div class="joinedAtDate DevilBro-textscrollwrapper ${BDFDB.disCN.textrow}" style="max-width: ${BDFDB.getParentEle(popout ? BDFDB.dotCN.userpopoutheader : BDFDB.dotCN.userprofileheaderinfo, container).getBoundingClientRect().width - 20}px !important;"><div class="DevilBro-textscroll">${this.labels.joinedat_text + " " + this.getJoinedTime(this.languages[choice].id, timestamp)}</div></div>`), creationDate ? creationDate : (nametag ? nametag.nextSibling : null));
+					BDFDB.initElements(container.parentElement);
+					if (popout && popout.style.transform.indexOf("translateY(-1") == -1) {
+						let arect = document.querySelector(BDFDB.dotCN.appmount).getBoundingClientRect();
+						let prect = popout.getBoundingClientRect();
+						popout.style.setProperty("top", (prect.y + prect.height > arect.height ? (arect.height - prect.height) : prect.y) + "px");
+					}
 				}
 			};
 			if (this.loadedusers[guildid][info.id]) addTimestamp(this.loadedusers[guildid][info.id]);
