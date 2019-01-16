@@ -3,7 +3,7 @@
 class BadgesEverywhere {
 	getName () {return "BadgesEverywhere";}
 
-	getVersion () {return "1.1.9";}
+	getVersion () {return "1.2.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -141,11 +141,11 @@ class BadgesEverywhere {
 	
 	processNameTag (instance, wrapper) { 
 		if (!wrapper.classList || !instance || !instance.props) return;
-		else if (wrapper.classList.contains(BDFDB.disCN.membernametag) && BDFDB.getData("showInMemberList", this, "settings")) {
+		else if (BDFDB.containsClass(wrapper, BDFDB.disCN.membernametag) && BDFDB.getData("showInMemberList", this, "settings")) {
 			this.addBadges(instance.props.user, wrapper, "list");
 		}
-		else if (wrapper.classList.contains(BDFDB.disCN.userpopoutheadertag) && BDFDB.getData("showInPopout", this, "settings")) {
-			wrapper = wrapper.classList.contains(BDFDB.disCN.userpopoutheadertagwithnickname) && wrapper.previousSibling ? wrapper.previousSibling : wrapper;
+		else if (BDFDB.containsClass(wrapper, BDFDB.disCN.userpopoutheadertag) && BDFDB.getData("showInPopout", this, "settings")) {
+			wrapper = BDFDB.containsClass(wrapper, BDFDB.disCN.userpopoutheadertagwithnickname) && wrapper.previousSibling ? wrapper.previousSibling : wrapper;
 			this.addBadges(instance.props.user, wrapper, "popout");
 		}
 	}
@@ -161,7 +161,6 @@ class BadgesEverywhere {
 	processStandardSidebarView (instance, wrapper) {
 		if (this.SettingsUpdated) {
 			delete this.SettingsUpdated;
-			BDFDB.removeEles(".BE-badges");
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 	}
@@ -186,10 +185,11 @@ class BadgesEverywhere {
 	}
 	
 	addToWrapper (info, wrapper, type) {
+		BDFDB.removeEles(wrapper.querySelectorAll(".BE-badges"));
 		let badges = BDFDB.getAllData(this, "badges");
 		let settings = BDFDB.getAllData(this, "settings");
 		let header = BDFDB.getParentEle(BDFDB.dotCN.userpopoutheader, wrapper);
-		let badgewrapper = BDFDB.htmlToElement(`<span class="BE-badges ${!settings.useColoredVersion || (header && !header.classList.contains(BDFDB.disCN.userpopoutheadernormal)) ? BDFDB.disCN.userprofiletopsectionplaying : BDFDB.disCN.userprofiletopsectionnormal}" style="all: unset !important;"></span>`);
+		let badgewrapper = BDFDB.htmlToElement(`<span class="BE-badges ${!settings.useColoredVersion || (header && !BDFDB.containsClass(header, BDFDB.disCN.userpopoutheadernormal)) ? BDFDB.disCN.userprofiletopsectionplaying : BDFDB.disCN.userprofiletopsectionnormal}" style="all: unset !important;"></span>`);
 		for (let flag in this.defaults.badges) {
 			if ((this.loadedusers[info.id].flags | flag) == this.loadedusers[info.id].flags && badges[flag]) {
 				let badge = BDFDB.htmlToElement(`<div class="BE-badge BE-badge-${this.defaults.badges[flag].name.replace(/ /g, "")} BE-badge-${type} ${this.BadgeClasses[this.defaults.badges[flag].selector]}"></div>`);

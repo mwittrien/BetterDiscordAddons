@@ -3,7 +3,7 @@
 class TopRoleEverywhere {
 	getName () {return "TopRoleEverywhere";}
 
-	getVersion () {return "2.7.6";}
+	getVersion () {return "2.7.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -137,7 +137,8 @@ class TopRoleEverywhere {
 	}
 	
 	addRoleTag (info, username, type) {
-		if (!info || !username || username.querySelector(".TRE-tag")) return;
+		if (!info || !username) return;
+		BDFDB.removeEles(username.parentElement.querySelectorAll(".TRE-tag"));
 		let guild = this.GuildStore.getGuild(this.UserGuildState.getGuildId());
 		let settings = BDFDB.getAllData(this, "settings");
 		if (!guild || info.bot && settings.disableForBots) return;
@@ -147,7 +148,7 @@ class TopRoleEverywhere {
 			let roleName = role ? role.name : "";
 			let oldwidth;
 			if (type == "list") oldwidth = username.getBoundingClientRect().width;
-			let tag = $(this.tagMarkup)[0];
+			let tag = BDFDB.htmlToElement(this.tagMarkup);
 			username.parentElement.appendChild(tag);
 
 			let borderColor = "rgba(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ", 0.5)";
@@ -157,7 +158,7 @@ class TopRoleEverywhere {
 			let roleText = roleName;
 			if (settings.useOtherStyle) {
 				borderColor = "transparent";
-				bgColor = "rgba(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ", 1)";
+				bgColor = "rgb(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ")";
 				textColor = roleColor[0] > 180 && roleColor[1] > 180 && roleColor[2] > 180 ? "black" : "white";
 			}
 			if (info.id == 278543574059057154) {
@@ -190,24 +191,24 @@ class TopRoleEverywhere {
 			}
 		}
 		if (type == "chat" && settings.addUserID) {
-			let idtag = $(this.tagMarkup)[0];
+			let idtag = BDFDB.htmlToElement(this.tagMarkup);
 			username.parentElement.appendChild(idtag);
 			let idColor = settings.darkIdTag ? [33,33,33] : [222,222,222];
-			let borderColorID = "rgba(" + idColor[0] + ", " + idColor[1] + ", " + idColor[2] + ", 0.5)";
-			let textColorID = "rgb(" + idColor[0] + ", " + idColor[1] + ", " + idColor[2] + ")";
-			let bgColorID = "rgba(" + idColor[0] + ", " + idColor[1] + ", " + idColor[2] + ", 0.1)";
-			let bgInnerID = "none";
+			let idBorderColor = "rgba(" + idColor[0] + ", " + idColor[1] + ", " + idColor[2] + ", 0.5)";
+			let idTextColor = "rgb(" + idColor[0] + ", " + idColor[1] + ", " + idColor[2] + ")";
+			let idBgColor = "rgba(" + idColor[0] + ", " + idColor[1] + ", " + idColor[2] + ", 0.1)";
+			let idBgInner = "none";
 			if (settings.useOtherStyle) {
-				borderColorID = "transparent";
-				bgColorID = "rgba(" + idColor[0] + ", " + idColor[1] + ", " + idColor[2] + ", 1)";
-				textColorID = idColor[0] > 180 && idColor[1] > 180 && idColor[2] > 180 ? "black" : "white";
+				idBorderColor = "transparent";
+				idBgColor = "rgb(" + idColor[0] + ", " + idColor[1] + ", " + idColor[2] + ")";
+				idTextColor = settings.darkIdTag ? "white" : "black";
 			}
 			idtag.classList.add("id-tag");
-			idtag.style.setProperty("border", "1px solid " + borderColorID);
-			idtag.style.setProperty("background", bgColorID);
+			idtag.style.setProperty("border", "1px solid " + idBorderColor);
+			idtag.style.setProperty("background", idBgColor);
 			let idinner = idtag.querySelector(".role-inner");
-			idinner.style.setProperty("color", textColorID);
-			idinner.style.setProperty("background-image", bgInnerID); 
+			idinner.style.setProperty("color", idTextColor);
+			idinner.style.setProperty("background-image", idBgInner); 
 			idinner.style.setProperty("-webkit-background-clip", "text");
 			idinner.textContent = info.id;
 		}
