@@ -1,24 +1,20 @@
 //META{"name":"MoveablePopups"}*//
 
 class MoveablePopups {
-	initConstructor () {
-	}
-
 	getName () {return "MoveablePopups";}
 
-	getDescription () {return "Adds the feature to move all popups and modals around like on a normal desktop. Ctrl + drag with your left mousebutton to drag element.";}
-
-	getVersion () {return "1.1.0";}
+	getVersion () {return "1.1.1";}
 
 	getAuthor () {return "DevilBro";}
+
+	getDescription () {return "Adds the feature to move all popups and modals around like on a normal desktop. Ctrl + drag with your left mousebutton to drag element.";}
 
 	//legacy
 	load () {}
 
 	start () {
 		var libraryScript = null;
-		if (typeof BDFDB !== "object" || BDFDB.isLibraryOutdated()) {
-			if (typeof BDFDB === "object") BDFDB = "";
+		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
 			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
@@ -27,7 +23,7 @@ class MoveablePopups {
 			document.head.appendChild(libraryScript);
 		}
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object") this.initialize();
+		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
 		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
@@ -42,7 +38,7 @@ class MoveablePopups {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.classList && node.classList.length > 0 && node.classList.contains(BDFDB.disCN.popout)) {
+								if (node && BDFDB.containsClass(node, BDFDB.disCN.popout)) {
 									this.makeMoveable(node);
 								}
 							});
@@ -57,10 +53,10 @@ class MoveablePopups {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && node.classList && node.classList.contains(BDFDB.disCN.modal) && !node.querySelector(BDFDB.dotCN.downloadlink)) {
+								if (node && BDFDB.containsClass(node, BDFDB.disCN.modal) && !node.querySelector(BDFDB.dotCN.downloadlink)) {
 									this.makeMoveable(node.querySelector(BDFDB.dotCN.modalinner));
 								}
-								else if (node && node.tagName && node.querySelector(BDFDB.dotCN.modal) && !node.querySelector(BDFDB.dotCN.downloadlink)) {
+								else if (node.tagName && node.querySelector(BDFDB.dotCN.modal) && !node.querySelector(BDFDB.dotCN.downloadlink)) {
 									this.makeMoveable(node.querySelector(BDFDB.dotCN.modalinner));
 								}
 							});
@@ -86,45 +82,43 @@ class MoveablePopups {
 	// begin of own functions
 	
 	makeMoveable (div) {
-		$(div)
-			.off("mousedown." + this.getName()).off("click." + this.getName())
-			.on("click." + this.getName(), (e) => {
-				if (this.dragging) {
-					e.stopPropagation();
-					e.preventDefault();
-				}
-			})
-			.on("mousedown." + this.getName(), (e) => {
-				if (e.ctrlKey) {
-					this.dragging = true;
-					
-					var disableTextSelectionCSS = `
-						* {
-							user-select: none !important;
-						}`;
-						
-					BDFDB.appendLocalStyle("disableTextSelection", disableTextSelectionCSS);
-					var left = div.getBoundingClientRect().left;
-					var top = div.getBoundingClientRect().top;
-					var oldX = e.pageX;
-					var oldY = e.pageY;
-					$(document)
-						.off("mouseup." + this.getName()).off("mousemove." + this.getName())
-						.on("mouseup." + this.getName(), () => {
-							BDFDB.removeLocalStyle("disableTextSelection");
-							$(document).off("mouseup." + this.getName()).off("mousemove." + this.getName());
-							setTimeout(() => {this.dragging = false},1);
-						})
-						.on("mousemove." + this.getName(), (e2) => {
-							var newX = e2.pageX;
-							var newY = e2.pageY;
-							left = left - (oldX - newX);
-							top = top - (oldY - newY);
-							oldX = newX;
-							oldY = newY;
-							$(div).offset({"left":left,"top":top});
-						});
-				}
-			});
+		div.removeEventListener("click", div.clickMovablePopups);
+		div.removeEventListener("mousedown", div.mousedownMovablePopups);
+		div.clickMovablePopups = e => {
+			if (this.dragging) {
+				e.stopPropagation();
+				e.preventDefault();
+			}
+		};
+		div.mousedownMovablePopups = e => {
+			if (!e.ctrlKey) return;
+			div.style.setProperty("position", "fixed", "important");
+			this.dragging = true;
+			var rects = div.getBoundingClientRect();
+			var transform = getComputedStyle(div,null).getPropertyValue("transform").replace(/[^0-9,-]/g,"").split(",");
+			var left = rects.left - (transform.length > 4 ? parseFloat(transform[4]) : 0);
+			var top = rects.top - (transform.length > 4 ? parseFloat(transform[5]) : 0);
+			var oldX = e.pageX;
+			var oldY = e.pageY;
+			var mouseup = e2 => {
+				BDFDB.removeLocalStyle("disableTextSelection");
+				document.removeEventListener("mouseup", mouseup);
+				document.removeEventListener("mousemove", mousemove);
+				setTimeout(() => {this.dragging = false},1);
+			};
+			var mousemove = e2 => {
+				left = left - (oldX - e2.pageX);
+				top = top - (oldY - e2.pageY);
+				oldX = e2.pageX;
+				oldY = e2.pageY;
+				div.style.setProperty("left", left + "px", "important");
+				div.style.setProperty("top", top + "px", "important");
+				
+			};
+			document.addEventListener("mouseup", mouseup);
+			document.addEventListener("mousemove", mousemove);
+		};
+		div.addEventListener("click", div.clickMovablePopups);
+		div.addEventListener("mousedown", div.mousedownMovablePopups);
 	}
 }
