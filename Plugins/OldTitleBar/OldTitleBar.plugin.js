@@ -1,6 +1,14 @@
 //META{"name":"OldTitleBar"}*//
 
 class OldTitleBar {
+	getName () {return "OldTitleBar";}
+
+	getVersion () {return "1.5.2";}
+
+	getAuthor () {return "DevilBro";}
+
+	getDescription () {return "Reverts the title bar back to its former self.";}
+	
 	initConstructor () {
 		this.patchModules = {
 			"HeaderBar":["componentDidMount","componentDidUpdate"],
@@ -16,7 +24,7 @@ class OldTitleBar {
 				display: none !important;
 			}
 			
-			${BDFDB.dotCN.channelheaderheaderbardrag} {
+			body:not(.settingsTitlebarOTB-added) ${BDFDB.dotCN.channelheaderheaderbardrag} {
 				-webkit-app-region: drag !important;
 			}
 			
@@ -53,23 +61,14 @@ class OldTitleBar {
 				</svg>
 			</span>`;
 			
-		this.maxButtonIsMaxMarkup = 
+		this.maxButtonMarkup = 
 			`<span class="${BDFDB.disCN.channelheadericonmargin} buttonOTB maxButtonOTB">
 				<svg class="${BDFDB.disCNS.channelheadericoninactive + BDFDB.disCN.channelheadericon}" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
-					<g fill="none" class="${BDFDB.disCN.channelheadericonforeground}" fill-rule="evenodd">
-						<path stroke-width="2" stroke="currentColor" d="M6 9 l10 0 l0 10 l-10 0 l0 -10 m3 -3 l10 0 l0 10"/>
-					</g>
+					<g fill="none" class="${BDFDB.disCN.channelheadericonforeground}" fill-rule="evenodd"></g>
 				</svg>
 			</span>`;
-			
-		this.maxButtonIsMinMarkup = 
-			`<span class="${BDFDB.disCN.channelheadericonmargin} buttonOTB maxButtonOTB">
-				<svg class="${BDFDB.disCNS.channelheadericoninactive + BDFDB.disCN.channelheadericon}" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
-					<g fill="none" class="${BDFDB.disCN.channelheadericonforeground}" fill-rule="evenodd">
-						<path stroke-width="2" stroke="currentColor" d="M6 6 l13 0 l0 13 l-13 0 l0 -13"/>
-					</g>
-				</svg>
-			</span>`;
+		this.maxButtonInnerMin = `<path stroke-width="2" stroke="currentColor" d="M6 6 l13 0 l0 13 l-13 0 l0 -13"/>`;
+		this.maxButtonInnerMax = `<path stroke-width="2" stroke="currentColor" d="M6 9 l10 0 l0 10 l-10 0 l0 -10 m3 -3 l10 0 l0 10"/>`;
 			
 		this.closeButtonMarkup = 
 			`<span class="${BDFDB.disCN.channelheadericonmargin} buttonOTB closeButtonOTB">
@@ -90,29 +89,20 @@ class OldTitleBar {
 		};
 	}
 
-	getName () {return "OldTitleBar";}
-
-	getDescription () {return "Reverts the title bar back to its former self.";}
-
-	getVersion () {return "1.5.1";}
-
-	getAuthor () {return "DevilBro";}
-
 	getSettingsPanel () {
 		if (!this.started || typeof BDFDB !== "object") return;
 		var settings = BDFDB.getAllData(this, "settings"); 
 		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		for (let key in settings) {
-			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}"${settings[key] ? " checked" : ""}></div></div>`;
+			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
 		}
 		settingshtml += `</div></div>`;
 		
-		var settingspanel = $(settingshtml)[0];
+		let settingspanel = BDFDB.htmlToElement(settingshtml);
 
-		BDFDB.initElements(settingspanel);
+		BDFDB.initElements(settingspanel, this);
 
-		$(settingspanel)
-			.on("click", BDFDB.dotCN.switchinner, (e) => {this.updateSettings(settingspanel, e.currentTarget.value);});
+		BDFDB.addChildEventListener(settingspanel, "click", BDFDB.dotCN.switchinner, e => {this.updateSettings(settingspanel, e.currentTarget.value);});
 			
 		return settingspanel;
 	}
@@ -122,7 +112,7 @@ class OldTitleBar {
 
 	start () {
 		var libraryScript = null;
-		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
+		if (!global.BDFDB || typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
 			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
@@ -131,22 +121,24 @@ class OldTitleBar {
 			document.head.appendChild(libraryScript);
 		}
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-		else libraryScript.addEventListener("load", () => {this.initialize();});
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
+		else if (libraryScript) libraryScript.addEventListener("load", () => {
+			BDFDB.loaded = true;
+			this.initialize();
+		});
 	}
 
 	initialize () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.loadMessage(this);
+			
+			BDFDB.addEventListener(this, window, "resize", e => {this.changeMaximizeButtons();});
 			
 			this.window = require("electron").remote.getCurrentWindow();
 			
-			$(window).on("resize." + this.getName(), (e) => {this.changeMaximizeButton();});
-			
 			this.patchMainScreen(BDFDB.getData("displayNative", this, "settings"));
 		
-			document.body.classList.add("hidden-by-OTB");
-			document.querySelector(BDFDB.dotCN.titlebar).classList.add("hidden-by-OTB");
+			BDFDB.addClass([document.body,document.querySelector(BDFDB.dotCN.titlebar)], "hidden-by-OTB");
 			
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
@@ -157,10 +149,10 @@ class OldTitleBar {
 
 
 	stop () {
-		if (typeof BDFDB === "object") {
-			BDFDB.removeEles(".headerbarOTB",".settingsTitlebarOTB");
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			BDFDB.removeEles(".headerbarOTB", ".settingsTitlebarOTB");
 		
-			BDFDB.removeClasses("hidden-by-OTB");
+			BDFDB.removeClasses("hidden-by-OTB", "settingsTitlebarOTB-added");
 			
 			BDFDB.unloadMessage(this);
 		}
@@ -182,7 +174,11 @@ class OldTitleBar {
 				if (notifybar) notifybar.querySelector(BDFDB.dotCN.noticedismiss).click();
 				if (this.patched) {
 					notifybar = BDFDB.createNotificationsBar("Changed nativebar settings, relaunch to see changes:", {type:"danger",btn:"Relaunch",id:"OldTitleBarNotifyBar"});
-					$(notifybar).on("click." + this.getName(), BDFDB.dotCN.noticebutton, (e) => {this.doRelaunch();});
+					notifybar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", e => {
+						let app = require("electron").remote.app;
+						app.relaunch();
+						app.quit();
+					});
 				}
 			}
 		}
@@ -202,91 +198,65 @@ class OldTitleBar {
 		}
 		else if (methodnames.includes("componentWillUnmount")) {
 			BDFDB.removeEles(".settingsTitlebarOTB");
+			BDFDB.removeClass(document.body, "settingsTitlebarOTB-added");
 			this.addTitleBar();
 		}
 	}
 	
 	addTitleBar () {
-		$("*").off("." + this.getName());
 		BDFDB.removeEles(".headerbarOTB");
 		var settings = BDFDB.getAllData(this, "settings");
 		if (BDFDB.getData("addOldBar", this, "settings")) {
-			var headerbar = $(`<span class="headerbarOTB ${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}"></span>`)[0];
+			var headerbar = BDFDB.htmlToElement(`<span class="headerbarOTB ${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}"></span>`);
 			this.createButtons(headerbar);
-			$(BDFDB.dotCNS.channelheaderheaderbardrag + BDFDB.dotCN.flex + " > " + BDFDB.dotCN.channelheadericonmargin).parent().append(headerbar);
+			let headerbaricon = document.querySelector(BDFDB.dotCNS.channelheaderheaderbardrag + BDFDB.dotCN.flex + " > " + BDFDB.dotCN.channelheadericonmargin);
+			if (headerbaricon) headerbaricon.parentElement.appendChild(headerbar);
+			this.changeMaximizeButtons();
 		}
 	}
 	
 	addSettingsTitleBar (settingspane) {
 		BDFDB.removeEles(".settingsTitlebarOTB");
 		if (BDFDB.getData("addToSettings", this, "settings")) {
-			var settingsbar = $(`<div class="settingsTitlebarOTB"></div>`)[0];
+			BDFDB.addClass(document.body, "settingsTitlebarOTB-added");
+			var settingsbar = BDFDB.htmlToElement(`<div class="settingsTitlebarOTB"></div>`);
 			this.createButtons(settingsbar);
 			settingspane.parentElement.appendChild(settingsbar);
+			this.changeMaximizeButtons();
 		}
 	}
 	
 	createButtons (bar) {
+		var settings = BDFDB.containsClass(bar, "settingsTitlebarOTB");
 		if (BDFDB.getData("reloadButton", this, "settings")) {
-			$(bar)
-				.append(bar.classList.contains("settingsTitlebarOTB") ? "" : this.dividerMarkup)
-				.append(this.reloadButtonMarkup)
-				.on("click." + this.getName(), ".reloadButtonOTB " + BDFDB.dotCN.channelheadericon, () => {
-					this.doReload();
-				})
-				.on("mouseenter." + this.getName(), ".reloadButtonOTB " + BDFDB.dotCN.channelheadericon, (e) => {
-					BDFDB.createTooltip("Reload", e.currentTarget, {type:"bottom",selector:"reload-button-tooltip"});
-				});
-		}
-		$(bar)
-			.append(bar.classList.contains("settingsTitlebarOTB") ? "" : this.dividerMarkup)
-			.append(this.minButtonMarkup)
-			.append(this.isMaximized() ? this.maxButtonIsMaxMarkup : this.maxButtonIsMinMarkup)
-			.append(this.closeButtonMarkup)
-			.on("click." + this.getName(), ".minButtonOTB " + BDFDB.dotCN.channelheadericon, () => {
-				this.doMinimize();
-			})
-			.on("click." + this.getName(), ".maxButtonOTB " + BDFDB.dotCN.channelheadericon, () => {
-				this.doMaximize();
-			})
-			.on("click." + this.getName(), ".closeButtonOTB " + BDFDB.dotCN.channelheadericon, () => {
-				this.doClose();
+			if (!settings) bar.appendChild(BDFDB.htmlToElement(this.dividerMarkup));
+			var reloadbutton = BDFDB.htmlToElement(this.reloadButtonMarkup);
+			bar.appendChild(reloadbutton);
+			var reloadbuttonicon = reloadbutton.querySelector(BDFDB.dotCN.channelheadericon);
+			reloadbuttonicon.addEventListener("click", () => {this.window.reload();});
+			reloadbuttonicon.addEventListener("mouseenter", e => {
+				BDFDB.createTooltip("Reload", reloadbuttonicon, {type:"bottom",selector:"reload-button-tooltip"});
 			});
+		}
+		if (!settings) bar.appendChild(BDFDB.htmlToElement(this.dividerMarkup));
+		var minbutton = BDFDB.htmlToElement(this.minButtonMarkup);
+		bar.appendChild(minbutton);
+		minbutton.querySelector(BDFDB.dotCN.channelheadericon).addEventListener("click", () => {this.window.minimize();});
+		var maxbutton = BDFDB.htmlToElement(this.maxButtonMarkup);
+		bar.appendChild(maxbutton);
+		maxbutton.querySelector(BDFDB.dotCN.channelheadericon).addEventListener("click", () => {
+			if (this.window.isMaximized()) this.window.unmaximize();
+			else this.window.maximize();
+			this.changeMaximizeButtons();
+		});
+		var closebutton = BDFDB.htmlToElement(this.closeButtonMarkup);
+		bar.appendChild(closebutton);
+		closebutton.querySelector(BDFDB.dotCN.channelheadericon).addEventListener("click", () => {this.window.close();});
 	}
 	
-	doReload () {
-		this.window.reload();
-	}
-	
-	doMinimize () {
-		this.window.minimize();
-	}
-	
-	doMaximize () {
-		if (this.isMaximized()) this.window.unmaximize();
-		else this.window.maximize();
-		this.changeMaximizeButton();
-	}
-	
-	isMaximized () {
-		var pos = this.window.getPosition();
-		var size = this.window.getSize();
-		return (pos[0] == 0 && pos[1] == 0 && size[0] == global.window.screen.availWidth && size[1] == global.window.screen.availHeight);
-	}
-	
-	doClose () {
-		this.window.close(); 
-	}
-	
-	doRelaunch () {
-		var app = require("electron").remote.app;
-		app.relaunch();
-		app.quit();
-	}
-	
-	changeMaximizeButton () {
-		var maxButtonHTML = this.isMaximized() ? this.maxButtonIsMaxMarkup : this.maxButtonIsMinMarkup;
-		document.querySelectorAll(".maxButtonOTB").forEach(maxButton => {maxButton.outerHTML = maxButtonHTML;});
+	changeMaximizeButtons () {
+		var innerHTML = this.window.isMaximized() ? this.maxButtonInnerMax : this.maxButtonInnerMin;
+		document.querySelectorAll(".maxButtonOTB g").forEach(g => {g.innerHTML = innerHTML;});
 	}
 	
 	patchMainScreen (enable) {
