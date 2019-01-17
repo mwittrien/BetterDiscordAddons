@@ -3,7 +3,7 @@
 class BadgesEverywhere {
 	getName () {return "BadgesEverywhere";}
 
-	getVersion () {return "1.2.2";}
+	getVersion () {return "1.2.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -98,22 +98,25 @@ class BadgesEverywhere {
 	load () {}
 
 	start () {
-		var libraryScript = null;
-		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+			libraryScript.setAttribute("date", performance.now());
+			libraryScript.addEventListener("load", () => {
+				BDFDB.loaded = true;
+				this.initialize();
+			});
 			document.head.appendChild(libraryScript);
 		}
+		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
 	initialize () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.loadMessage(this);
 			
 			this.APIModule = BDFDB.WebModules.findByProperties("getAPIBaseURL");
@@ -130,7 +133,7 @@ class BadgesEverywhere {
 	}
 
 	stop () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.removeEles(".BE-badges");
 			BDFDB.unloadMessage(this);
 		}

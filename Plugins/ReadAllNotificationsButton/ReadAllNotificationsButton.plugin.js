@@ -1,6 +1,14 @@
 //META{"name":"ReadAllNotificationsButton"}*//
 
 class ReadAllNotificationsButton {
+	getName () {return "ReadAllNotificationsButton";}
+
+	getVersion () {return "1.3.8";}
+
+	getAuthor () {return "DevilBro";}
+	
+	getDescription () {return "Adds a button to clear all notifications.";}
+	
 	initConstructor () {
 		this.patchModules = {
 			"Guilds":"componentDidMount",
@@ -27,30 +35,20 @@ class ReadAllNotificationsButton {
 			}
 		};
 	}
-
-	getName () {return "ReadAllNotificationsButton";}
-
-	getDescription () {return "Adds a button to clear all notifications.";}
-
-	getVersion () {return "1.3.7";}
-
-	getAuthor () {return "DevilBro";}
 	
 	getSettingsPanel () {
 		if (!this.started || typeof BDFDB !== "object") return;
 		var settings = BDFDB.getAllData(this, "settings"); 
 		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		for (let key in settings) {
-			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}"${settings[key] ? " checked" : ""}></div></div>`;
+			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
 		}
 		settingshtml += `</div></div>`;
 		
-		var settingspanel = $(settingshtml)[0];
+		let settingspanel = BDFDB.htmlToElement(settingshtml);
 
-		BDFDB.initElements(settingspanel);
+		BDFDB.initElements(settingspanel, this);
 
-		$(settingspanel)
-			.on("click", BDFDB.dotCN.switchinner, () => {this.updateSettings(settingspanel);});
 		return settingspanel;
 	}
 
@@ -58,22 +56,25 @@ class ReadAllNotificationsButton {
 	load () {}
 
 	start () {
-		var libraryScript = null;
-		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+			libraryScript.setAttribute("date", performance.now());
+			libraryScript.addEventListener("load", () => {
+				BDFDB.loaded = true;
+				this.initialize();
+			});
 			document.head.appendChild(libraryScript);
 		}
+		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
 	initialize () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.loadMessage(this);
 			
 			BDFDB.WebModules.forceAllUpdates(this);
@@ -84,7 +85,7 @@ class ReadAllNotificationsButton {
 	}
 
 	stop () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.removeEles(".RANbutton-frame", ".RAMbutton");
 			BDFDB.removeClasses("RAN-added", "RAM-added");
 			BDFDB.unloadMessage(this);
@@ -93,29 +94,29 @@ class ReadAllNotificationsButton {
 	
 	
 	// begin of own functions
-
-	updateSettings (settingspanel) {
-		var settings = {};
-		for (var input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner)) {
-			settings[input.value] = input.checked;
-		}
-		BDFDB.saveAllData(settings, this, "settings");
-	}
 	
 	processGuilds (instance, wrapper) {
-		$(this.RANbuttonMarkup).insertBefore(wrapper.querySelector(BDFDB.dotCN.guildseparator))
-			.on("click", ".RANbutton", () => {
+		let guildseparator = wrapper.querySelector(BDFDB.dotCN.guildseparator);
+		if (guildseparator) {
+			let ranbutton = BDFDB.htmlToElement(this.RANbuttonMarkup);
+			guildseparator.parentElement.insertBefore(ranbutton, guildseparator);
+			ranbutton.addEventListener("click", () => {
 				BDFDB.clearReadNotifications(BDFDB.getData("includeMuted", this, "settings") ? BDFDB.readServerList() : BDFDB.readUnreadServerList());
 			});
-		wrapper.classList.add("RAN-added");
+			BDFDB.addClass(wrapper, "RAN-added");
+		}
 	}
 	
 	processRecentMentions (instance, wrapper) {
 		BDFDB.removeEles(".RAMbutton");
 		if (instance.props && instance.props.popoutName == "RECENT_MENTIONS_POPOUT") {
-			wrapper.classList.add("RAM-added");
-			$(this.RAMbuttonMarkup).appendTo(wrapper.querySelector(BDFDB.dotCN.recentmentionstitle))
-				.on("click", () => {this.clearMentions(instance, wrapper);});
+			let recentmentionstitle = wrapper.querySelector(BDFDB.dotCN.recentmentionstitle);
+			if (recentmentionstitle) {
+				let ranbutton = BDFDB.htmlToElement(this.RANbuttonMarkup);
+				recentmentionstitle.appendChild(ranbutton);
+				ranbutton.addEventListener("click", () => {this.clearMentions(instance, wrapper);});
+				BDFDB.addClass(wrapper, "RAM-added");
+			}
 		}
 	}
 	

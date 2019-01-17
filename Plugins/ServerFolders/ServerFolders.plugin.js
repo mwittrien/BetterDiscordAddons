@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.0.2";}
+	getVersion () {return "6.0.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -332,13 +332,13 @@ class ServerFolders {
 
 		BDFDB.initElements(settingspanel, this);
 
-		BDFDB.addChildEventListener(settingspanel, "click", ".reset-button", () => {
+		BDFDB.addEventListener(this, settingspanel, "click", ".reset-button", () => {
 			BDFDB.openConfirmModal(this, "Are you sure you want to delete all folders?", () => {
 				BDFDB.removeAllData(this, "folders");
 				this.resetAllElements();
 			});
 		});
-		BDFDB.addChildEventListener(settingspanel, "click", ".removecustom-button", () => {
+		BDFDB.addEventListener(this, settingspanel, "click", ".removecustom-button", () => {
 			BDFDB.openConfirmModal(this, "Are you sure you want to remove all custom icons?", () => {
 				BDFDB.removeAllData(this, "customicons");
 			});
@@ -350,22 +350,25 @@ class ServerFolders {
 	load () {}
 
 	start () {
-		let libraryScript = null;
-		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+			libraryScript.setAttribute("date", performance.now());
+			libraryScript.addEventListener("load", () => {
+				BDFDB.loaded = true;
+				this.initialize();
+			});
 			document.head.appendChild(libraryScript);
 		}
+		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
 	initialize () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.loadMessage(this);
 			
 			if (!document.querySelector(BDFDB.dotCN.guildswrapper + ".foldercontent")) {
@@ -399,7 +402,7 @@ class ServerFolders {
 	}
 
 	stop () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.resetAllElements();
 			BDFDB.removeEles(this.foldercontent, ".serverfolder-contextmenu");
 			BDFDB.unloadMessage(this);
@@ -450,7 +453,7 @@ class ServerFolders {
 	
 	onGuildContextMenu (instance, menu) {
 		if (document.querySelector(".DevilBro-modal")) return;
-		if (instance.props && instance.props.target && instance.props.guild && !menu.querySelector(".serverfolders-item")) {
+		if (instance.props && instance.props.target && instance.props.guild && instance.props.type == "GUILD_ICON_BAR" && !menu.querySelector(".serverfolders-item")) {
 			let serverContextEntry = BDFDB.htmlToElement(this.serverContextEntryMarkup);
 			menu.appendChild(serverContextEntry);
 			let folderitem = serverContextEntry.querySelector(".serverfolders-item");

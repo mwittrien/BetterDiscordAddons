@@ -3,7 +3,7 @@
 class TopRoleEverywhere {
 	getName () {return "TopRoleEverywhere";}
 
-	getVersion () {return "2.7.8";}
+	getVersion () {return "2.7.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -75,22 +75,25 @@ class TopRoleEverywhere {
 	load () {}
 
 	start () {
-		let libraryScript = null;
-		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+			libraryScript.setAttribute("date", performance.now());
+			libraryScript.addEventListener("load", () => {
+				BDFDB.loaded = true;
+				this.initialize();
+			});
 			document.head.appendChild(libraryScript);
 		}
+		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
 	initialize () {
-		if (typeof BDFDB === "object") {			
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {			
 			BDFDB.loadMessage(this);
 			
 			this.GuildPerms = BDFDB.WebModules.findByProperties("getHighestRole");
@@ -105,7 +108,7 @@ class TopRoleEverywhere {
 	}
 
 	stop () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.removeEles(".TRE-tag");
 			BDFDB.unloadMessage(this);
 		}
@@ -115,7 +118,7 @@ class TopRoleEverywhere {
 	// begin of own functions
 	
 	processNameTag (instance, wrapper) {
-		if (instance.props && wrapper.classList && wrapper.classList.contains(BDFDB.disCN.membernametag) && BDFDB.getData("showInMemberList", this, "settings")) {
+		if (instance.props && BDFDB.containsClass(wrapper, BDFDB.disCN.membernametag) && BDFDB.getData("showInMemberList", this, "settings")) {
 			this.addRoleTag(instance.props.user, wrapper.querySelector(BDFDB.dotCN.memberusername), "list");
 		}
 	}
@@ -147,7 +150,7 @@ class TopRoleEverywhere {
 			let roleColor = role && role.colorString ? BDFDB.colorCONVERT(role.colorString, "RGBCOMP") : [255,255,255];
 			let roleName = role ? role.name : "";
 			let oldwidth;
-			if (type == "list") oldwidth = username.getBoundingClientRect().width;
+			if (type == "list") oldwidth = BDFDB.getRects(username).width;
 			let tag = BDFDB.htmlToElement(this.tagMarkup);
 			username.parentElement.insertBefore(tag, username.parentElement.querySelector("svg[name=MobileDevice]"));
 
@@ -173,11 +176,8 @@ class TopRoleEverywhere {
 					textColor = "white";
 				}
 			}
-			else if (settings.showOwnerRole && info.id == guild.ownerId) {
-				roleText = "Owner";
-				tag.classList.add("owner-tag");
-			}
-			tag.classList.add(type + "-tag");
+			else if (settings.showOwnerRole && info.id == guild.ownerId) roleText = "Owner";
+			BDFDB.addClass(tag, type + "-tag");
 			tag.style.setProperty("border", "1px solid " + borderColor);
 			tag.style.setProperty("background", bgColor);
 			tag.style.setProperty("order", 11, "important");
@@ -187,8 +187,8 @@ class TopRoleEverywhere {
 			inner.style.setProperty("-webkit-background-clip", "text");
 			inner.textContent = roleText;
 			
-			if (oldwidth && oldwidth < 100 && username.getBoundingClientRect().width < 100) {
-				tag.style.setProperty("max-width", (BDFDB.getParentEle(BDFDB.dotCN.memberinner, username).getBoundingClientRect().width - oldwidth - 15) + "px");
+			if (oldwidth && oldwidth < 100 && BDFDB.getRects(username).width < 100) {
+				tag.style.setProperty("max-width", (BDFDB.getRects(BDFDB.getParentEle(BDFDB.dotCN.memberinner, username)).width - oldwidth - 15) + "px");
 			}
 		}
 		if (type == "chat" && settings.addUserID) {
@@ -204,7 +204,7 @@ class TopRoleEverywhere {
 				idBgColor = "rgb(" + idColor[0] + ", " + idColor[1] + ", " + idColor[2] + ")";
 				idTextColor = settings.darkIdTag ? "white" : "black";
 			}
-			idtag.classList.add("id-tag");
+			BDFDB.addClass(idtag, "id-tag");
 			idtag.style.setProperty("border", "1px solid " + idBorderColor);
 			idtag.style.setProperty("background", idBgColor);
 			idtag.style.setProperty("order", 12, "important");

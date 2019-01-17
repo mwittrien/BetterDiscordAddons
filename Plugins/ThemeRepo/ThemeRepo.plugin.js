@@ -3,7 +3,7 @@
 class ThemeRepo {
 	getName () {return "ThemeRepo";}
 
-	getVersion () {return "1.6.9";}
+	getVersion () {return "1.7.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -300,11 +300,11 @@ class ThemeRepo {
 
 		BDFDB.initElements(settingspanel, this);
 
-		BDFDB.addChildEventListener(settingspanel, "click", ".btn-addtheme", () => {this.addThemeToOwnList(settingspanel);});
-		BDFDB.addChildEventListener(settingspanel, "click", "#input-themeurl", e => {if (e.which == 13) this.addThemeToOwnList(settingspanel);});
-		BDFDB.addChildEventListener(settingspanel, "click", ".remove-theme", e => {this.removeThemeFromOwnList(e);});
-		BDFDB.addChildEventListener(settingspanel, "click", ".remove-all", () => {this.removeAllFromOwnList();})
-		BDFDB.addChildEventListener(settingspanel, "click", ".refresh-button", () => {
+		BDFDB.addEventListener(this, settingspanel, "click", ".btn-addtheme", () => {this.addThemeToOwnList(settingspanel);});
+		BDFDB.addEventListener(this, settingspanel, "click", "#input-themeurl", e => {if (e.which == 13) this.addThemeToOwnList(settingspanel);});
+		BDFDB.addEventListener(this, settingspanel, "click", ".remove-theme", e => {this.removeThemeFromOwnList(e);});
+		BDFDB.addEventListener(this, settingspanel, "click", ".remove-all", () => {this.removeAllFromOwnList(settingspanel);})
+		BDFDB.addEventListener(this, settingspanel, "click", ".refresh-button", () => {
 			this.loading = {is:false, timeout:null, amount:0};
 			this.loadThemes();
 		});
@@ -314,22 +314,25 @@ class ThemeRepo {
 	load () {}
 
 	start () {
-		var libraryScript = null;
-		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+			libraryScript.setAttribute("date", performance.now());
+			libraryScript.addEventListener("load", () => {
+				BDFDB.loaded = true;
+				this.initialize();
+			});
 			document.head.appendChild(libraryScript);
 		}
+		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
 	initialize () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.loadMessage(this);
 			
 			this.UserUtils = BDFDB.WebModules.findByProperties("getUsers");
@@ -348,7 +351,7 @@ class ThemeRepo {
 
 
 	stop () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			clearInterval(this.updateInterval);
 			clearTimeout(this.loading.timeout);
 						
@@ -365,7 +368,7 @@ class ThemeRepo {
 		let observer = new MutationObserver(changes => {
 			changes.forEach(change => {
 				if (change.addedNodes) change.addedNodes.forEach(node => {
-					if (node.tagName && node.classList && node.className.includes("plugin-context-menu") && !node.querySelector(".themerepo-item")) {
+					if (node.tagName && BDFDB.containsClass(node, "plugin-context-menu") && !node.querySelector(".themerepo-item")) {
 						observer.disconnect();
 						let item = node.querySelectorAll(BDFDB.dotCN.contextmenuitem);
 						item = item[item.length-1];
@@ -375,7 +378,8 @@ class ThemeRepo {
 							this.openThemeRepoModal();
 						});
 						item.parentElement.insertBefore(settingsContextEntry, item.nextElementSibling);
-						node.style.setProperty("top", (menu.getBoundingClientRect().top - node.getBoundingClientRect().height + menu.getBoundingClientRect().height) + "px");
+						var menurects = BDFDB.getRects(menu);
+						node.style.setProperty("top", (menurects.top - BDFDB.getRects(node).height + menurects.height) + "px");
 					}
 				});
 			});
@@ -409,7 +413,9 @@ class ThemeRepo {
 			if (!ownlist.includes(url)) {
 				ownlist.push(url);
 				BDFDB.saveData("ownlist", ownlist, this, "ownlist");
-				themeList.appendChild(BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.hovercard}"><div class="${BDFDB.disCN.hovercardinner}"><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.margintop4 + BDFDB.disCNS.modedefault + BDFDB.disCNS.primary + BDFDB.disCN.ellipsis} entryurl">${url}</div></div><div class="${BDFDB.disCN.hovercardbutton} remove-theme"></div></div>`));
+				let entry = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.hovercard}"><div class="${BDFDB.disCN.hovercardinner}"><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.margintop4 + BDFDB.disCNS.modedefault + BDFDB.disCNS.primary + BDFDB.disCN.ellipsis} entryurl">${url}</div></div><div class="${BDFDB.disCN.hovercardbutton} remove-theme"></div></div>`)
+				BDFDB.addChildEventListener(entry, "click", ".remove-theme", e => {this.removeThemeFromOwnList(e);});
+				themeList.appendChild(entry);
 			}
 		}
 	}
@@ -423,10 +429,10 @@ class ThemeRepo {
 		BDFDB.saveData("ownlist", ownlist, this, "ownlist");
 	}
 	
-	removeAllFromOwnList () {
+	removeAllFromOwnList (settingspanel) {
 		BDFDB.openConfirmModal(this, "Are you sure you want to remove all added Themes from your own list?", () => {
 			BDFDB.saveData("ownlist", [], this, "ownlist");
-			BDFDB.removeEles("." + this.getName() + "-settings " + BDFDB.dotCN.hovercard);
+			BDFDB.removeEles(settingspanel.querySelector(BDFDB.dotCN.hovercard));
 		});
 	}
 	
@@ -522,7 +528,7 @@ class ThemeRepo {
 			BDFDB.createSortPopout(e.currentTarget, this.orderPopoutMarkup, () => {this.sortEntries(themeRepoModal);});
 		});
 		BDFDB.addChildEventListener(themeRepoModal, "click", BDFDB.dotCN.tabbaritem + "[tab=themes]", e => {
-			if (!e.currentTarget.classList.contains(BDFDB.disCN.settingsitemselected)) {
+			if (!BDFDB.containsClass(e.currentTarget, BDFDB.disCN.settingsitemselected)) {
 				if (themeRepoModal.updateHidden) {
 					delete themeRepoModal.updateHidden;
 					this.sortEntries(themeRepoModal);
@@ -572,7 +578,7 @@ class ThemeRepo {
 		entry.querySelector(BDFDB.dotCN._repoauthor).innerHTML = data.author;
 		entry.querySelector(BDFDB.dotCN._repodescription).innerHTML = data.description;
 		let favbutton = entry.querySelector(BDFDB.dotCN.giffavoritebutton);
-		favbutton.classList.toggle(BDFDB.disCN.giffavoriteselected, data.fav == 0);
+		BDFDB.toggleClass(favbutton, BDFDB.disCN.giffavoriteselected, data.fav == 0);
 		favbutton.addEventListener("click", e => {
 			let favorize = data.fav == 1;
 			data.fav = favorize ? 0 : 1;
@@ -601,7 +607,7 @@ class ThemeRepo {
 		});
 		let trashbutton = entry.querySelector(".trashIcon");
 		trashbutton.addEventListener("click", e => {
-			if (entry.classList.contains("outdated") || entry.classList.contains("updated")) {
+			if (BDFDB.containsClass(entry, "outdated", "updated", false)) {
 				setEntryState(2);
 				this.deleteThemeFile(data);
 				if (!BDFDB.isRestartNoMoreEnabled()) this.removeTheme(data);
@@ -619,8 +625,8 @@ class ThemeRepo {
 			if (e.currentTarget.checked) themeRepoModal.querySelectorAll(".previewCheckbox").forEach(checkbox => {
 				if (e.currentTarget != checkbox) {
 					checkbox.checked = false;
-					checkbox.parentElement.classList.remove(BDFDB.disCN.switchvaluechecked);
-					checkbox.parentElement.classList.add(BDFDB.disCN.switchvalueunchecked);
+					BDFDB.removeClass(checkbox.parentElement, BDFDB.disCN.switchvaluechecked);
+					BDFDB.addClass(checkbox.parentElement, BDFDB.disCN.switchvalueunchecked);
 				}
 			});
 			frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"NewTheme",checked:e.currentTarget.checked,css:data.css},"*");
@@ -630,9 +636,9 @@ class ThemeRepo {
 			
 		function setEntryState (state) {
 			data.state = state;
-			entry.classList.toggle("downloadable", state > 1);
-			entry.classList.toggle("outdated", state == 1);
-			entry.classList.toggle("updated", state < 1);
+			BDFDB.toggleClass(entry, "downloadable", state > 1);
+			BDFDB.toggleClass(entry, "outdated", state == 1);
+			BDFDB.toggleClass(entry, "updated", state < 1);
 			let downloadbutton = entry.querySelector(".btn-download");
 			downloadbutton.innerText = state < 1 ? "Updated" : (state > 1 ? "Download" : "Outdated");
 			downloadbutton.style.setProperty("background-color", "rgb(" + (state < 1 ? "67,181,129" : (state > 1 ? "114,137,218" : "241,71,71")) + ")", "important");

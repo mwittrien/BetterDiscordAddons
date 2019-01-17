@@ -3,7 +3,7 @@
 class RemoveNicknames {
 	getName () {return "RemoveNicknames";}
 
-	getVersion () {return "1.1.3";}
+	getVersion () {return "1.1.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -38,8 +38,7 @@ class RemoveNicknames {
 		
 		let settingspanel = BDFDB.htmlToElement(settingshtml);
 
-		BDFDB.initElements(settingspanel, this);
-;
+		BDFDB.initElements(settingspanel, this);;
 		return settingspanel;
 	}
 
@@ -47,22 +46,25 @@ class RemoveNicknames {
 	load () {}
 
 	start () {
-		var libraryScript = null;
-		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+			libraryScript.setAttribute("date", performance.now());
+			libraryScript.addEventListener("load", () => {
+				BDFDB.loaded = true;
+				this.initialize();
+			});
 			document.head.appendChild(libraryScript);
 		}
+		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
 	initialize () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.loadMessage(this);
 			
 			this.reseting = false;
@@ -81,7 +83,7 @@ class RemoveNicknames {
 
 
 	stop () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.reseting = true;
 			
 			BDFDB.WebModules.forceAllUpdates(this);
@@ -105,7 +107,7 @@ class RemoveNicknames {
 	}
 	
 	processNameTag (instance, wrapper) {
-		let username = wrapper.parentElement.querySelector("." + (wrapper.classList && wrapper.classList.contains(BDFDB.disCN.userpopoutheadertagwithnickname) ? BDFDB.disCN.userpopoutheadernickname : instance.props.usernameClass).replace(/ /g, "."));
+		let username = wrapper.parentElement.querySelector("." + (BDFDB.containsClass(wrapper, BDFDB.disCN.userpopoutheadertagwithnickname) ? BDFDB.disCN.userpopoutheadernickname : instance.props.usernameClass).replace(/ /g, "."));
 		if (username) BDFDB.setInnerText(username, this.getNewName(instance.props.user));
 	}
 	
@@ -127,7 +129,7 @@ class RemoveNicknames {
 	processClickable (instance, wrapper) {
 		if (!wrapper || !instance.props || !instance.props.className) return;
 		if (instance.props.tag == "a" && instance.props.className.indexOf(BDFDB.disCN.anchorunderlineonhover) > -1) {
-			if (wrapper.parentElement.classList.contains(BDFDB.disCN.messagesystemcontent)) {
+			if (BDFDB.containsClass(wrapper.parentElement, BDFDB.disCN.messagesystemcontent)) {
 				let message = BDFDB.getKeyInformation({node:wrapper.parentElement, key:"message", up:true});
 				if (message) BDFDB.setInnerText(wrapper, this.getNewName(message.author));
 			}

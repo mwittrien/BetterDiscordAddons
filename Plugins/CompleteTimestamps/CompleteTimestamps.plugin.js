@@ -1,10 +1,21 @@
 //META{"name":"CompleteTimestamps"}*//
 
 class CompleteTimestamps {
+	getName () {return "CompleteTimestamps";}
+
+	getVersion () {return "1.2.9";}
+
+	getAuthor () {return "DevilBro";}
+
+	getDescription () {return "Replace all timestamps with complete timestamps.";}
+	
 	initConstructor () {
-		this.languages;
+		this.patchModules = {
+			"MessageGroup":["componentDidMount","componentDidUpdate"],
+			"StandardSidebarView":"componentWillUnmount"
+		};
 		
-		this.updateTimestamps = false;
+		this.languages;
 			
 		this.defaults = {
 			settings: {
@@ -25,23 +36,15 @@ class CompleteTimestamps {
 			}
 		};
 	}
-
-	getName () {return "CompleteTimestamps";}
-
-	getDescription () {return "Replace all timestamps with complete timestamps.";}
-
-	getVersion () {return "1.2.8";}
-
-	getAuthor () {return "DevilBro";}
 	
 	getSettingsPanel () {
 		if (!this.started || typeof BDFDB !== "object") return;
-		var settings = BDFDB.getAllData(this, "settings");
-		var choices = BDFDB.getAllData(this, "choices");
-		var formats = BDFDB.getAllData(this, "formats");
-		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.getName()}</div><div class="DevilBro-settings-inner">`;
+		let settings = BDFDB.getAllData(this, "settings");
+		let choices = BDFDB.getAllData(this, "choices");
+		let formats = BDFDB.getAllData(this, "formats");
+		let settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		for (let key in settings) {
-			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}"${settings[key] ? " checked" : ""}></div></div>`;
+			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
 		}
 		for (let key in choices) {
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCN.flexchild}" style="flex: 0 0 30%;">${this.defaults.choices[key].description}</h3><div class="${BDFDB.disCN.selectwrap}" style="flex: 1 1 70%;"><div class="${BDFDB.disCNS.select + BDFDB.disCNS.selectsingle + BDFDB.disCN.selecthasvalue}" option="${key}" value="${choices[key]}"><div class="${BDFDB.disCN.selectcontrol}"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignbaseline + BDFDB.disCNS.nowrap + BDFDB.disCN.selectvalue}" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.primary + BDFDB.disCN.weightnormal} languageName" style="flex: 1 1 42%; padding:0;">${this.languages[choices[key]].name}</div><div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.primary + BDFDB.disCN.weightnormal} languageTimestamp" style="flex: 1 1 58%; padding:0;">${this.getTimestamp(this.languages[choices[key]].id)}</div></div><span class="${BDFDB.disCN.selectarrowzone}"><span class="${BDFDB.disCN.selectarrow}"></span></span></div></div></div></div>`;
@@ -49,21 +52,20 @@ class CompleteTimestamps {
 		for (let key in formats) {
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCN.flexchild}" style="flex: 0 0 30%;">${this.defaults.formats[key].description}</h3><div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex + BDFDB.disCN.directioncolumn}" style="flex: 1 1 auto;"><input type="text" option="${key}" value="${formats[key]}" placeholder="${this.defaults.formats[key].value}" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16}"></div></div>`;
 		}
-		var infoHidden = BDFDB.loadData("hideInfo", this, "hideInfo");
+		let infoHidden = BDFDB.loadData("hideInfo", this, "hideInfo");
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCNS.cursorpointer + (infoHidden ? BDFDB.disCN.categorywrappercollapsed : BDFDB.disCN.categorywrapperdefault)} toggle-info" style="flex: 1 1 auto;"><svg class="${BDFDB.disCNS.categoryicontransition + BDFDB.disCNS.directionright + (infoHidden ? BDFDB.disCN.categoryiconcollapsed : BDFDB.disCN.categoryicondefault)}" width="12" height="12" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 10L12 15 17 10"></path></svg><div class="${BDFDB.disCNS.categorycolortransition + BDFDB.disCNS.overflowellipsis + BDFDB.disCN.categorynamecollapsed}" style="flex: 1 1 auto;">Information</div></div>`;
 		settingshtml += `<div class="DevilBro-settings-inner-list info-container" ${infoHidden ? "style='display:none;'" : ""}>`;
 		settingshtml += `<div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$hour will be replaced with the current hour</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$minute will be replaced with the current minutes</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$second will be replaced with the current seconds</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$msecond will be replaced with the current milliseconds</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$timemode will change $hour to a 12h format and will be replaced with AM/PM</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$year will be replaced with the current year</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$month will be replaced with the current month</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$day will be replaced with the current day</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$monthnameL will be replaced with the monthname in long format based on the Discord Language</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$monthnameS will be replaced with the monthname in short format based on the Discord Language</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$weekdayL will be replaced with the weekday in long format based on the Discord Language</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$weekdayS will be replaced with the weekday in short format based on the Discord Language</div>`;
 		settingshtml += `</div></div>`;
 		
-		var settingspanel = $(settingshtml)[0];
+		let settingspanel = BDFDB.htmlToElement(settingshtml);
 
-		BDFDB.initElements(settingspanel);
+		BDFDB.initElements(settingspanel, this);
 
-		$(settingspanel)
-			.on("click", BDFDB.dotCN.switchinner, () => {this.updateSettings(settingspanel);})
-			.on("keyup", BDFDB.dotCN.input, () => {this.saveInputs(settingspanel);})
-			.on("click", BDFDB.dotCN.selectcontrol, (e) => {this.openDropdownMenu(e);})
-			.on("click", ".toggle-info", (e) => {this.toggleInfo(settingspanel, e.currentTarget);});
+		BDFDB.addEventListener(this, settingspanel, "click", ".settings-switch", () => {this.updateSettingsPanel(settingspanel);});
+		BDFDB.addEventListener(this, settingspanel, "keyup", BDFDB.dotCN.input, () => {this.saveInputs(settingspanel);});
+		BDFDB.addEventListener(this, settingspanel, "click", BDFDB.dotCN.selectcontrol, e => {this.openDropdownMenu(e);});
+		BDFDB.addEventListener(this, settingspanel, "click", ".toggle-info", e => {this.toggleInfo(e.currentTarget);});
 		return settingspanel;
 	}
 	
@@ -72,94 +74,55 @@ class CompleteTimestamps {
 	load () {}
 	
 	start () {
-		var libraryScript = null;
-		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+			libraryScript.setAttribute("date", performance.now());
+			libraryScript.addEventListener("load", () => {
+				BDFDB.loaded = true;
+				this.initialize();
+			});
 			document.head.appendChild(libraryScript);
 		}
+		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
 	initialize () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.loadMessage(this);
 			
-			var observer = null;
-
-			observer = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								if (node.tagName && node.querySelector("time")) {
-									node.querySelectorAll("time").forEach(stamp => {this.changeTimestamp(stamp);});
-								}
-								else if (node.tagName && node.tagName == "TIME") {
-									this.changeTimestamp(node);
-								}
-							});
-						}
-					}
-				);
+			this.languages = Object.assign({"own":{name:"Own",id:"own",integrated:false,dic:false}},BDFDB.languages);
+			
+			BDFDB.addEventListener(this, document, "mouseenter", BDFDB.dotCNS.message + BDFDB.dotCN.messagecontent, e => {
+				if (BDFDB.getData("showOnHover", this, "settings")) {
+					let message = e.currentTarget;
+					let messagegroup = BDFDB.getParentEle(BDFDB.dotCN.messagegroup, message);
+					if (!messagegroup || !messagegroup.tagName) return;
+					let info = this.getMessageData(message, messagegroup);
+					if (!info || !info.timestamp || !info.timestamp._i) return;
+					let choice = BDFDB.getData("creationDateLang", this, "choices");
+					BDFDB.createTooltip(this.getTimestamp(this.languages[choice].id, info.timestamp._i), message, {type:"left",selector:"completetimestamp-tooltip"});
+				}
 			});
-			BDFDB.addObserver(this, BDFDB.dotCN.appmount, {name:"messageObserver",instance:observer}, {childList: true, subtree: true});
-			
-			observer = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.removedNodes) {
-							change.removedNodes.forEach((node) => {
-								if (this.updateTimestamps && node.tagName && node.getAttribute("layer-id") == "user-settings") {
-									document.querySelectorAll(".complete-timestamp").forEach(timestamp => {timestamp.classList.remove("complete-timestamp");});
-									document.querySelectorAll(".complete-timestamp-divider").forEach(divider => {divider.remove();});
-									document.querySelectorAll("time").forEach(stamp => {this.changeTimestamp(stamp);})
-									this.updateTimestamps = false;
-								}
-							});
-						}
-					}
-				);
+			BDFDB.addEventListener(this, document, "mouseenter", BDFDB.dotCNS.message + BDFDB.dotCN.messageedited, e => {
+				if (BDFDB.getData("changeForEdit", this, "settings")) {
+					let marker = e.currentTarget;
+					let time = marker.getAttribute("datetime");
+					if (!time) return;
+					let choice = BDFDB.getData("creationDateLang", this, "choices");
+					let customTooltipCSS = `
+						body ${BDFDB.dotCN.tooltip}:not(.completetimestampedit-tooltip) {
+							display: none !important;
+						}`;
+					BDFDB.createTooltip(this.getTimestamp(this.languages[choice].id, time), marker, {type:"top",selector:"completetimestampedit-tooltip",css:customTooltipCSS});
+				}
 			});
-			BDFDB.addObserver(this, BDFDB.dotCN.layers, {name:"settingsWindowObserver",instance:observer}, {childList:true});
 			
-			this.languages = Object.assign({},
-				{"own":	{name:"Own",		id:"own",		integrated:false,	dic:false}},
-				BDFDB.languages
-			);
-			
-			$(document)
-				.on("mouseenter." + this.getName(), BDFDB.dotCNS.message + BDFDB.dotCN.messagecontent, (e) => {
-					if (BDFDB.getData("showOnHover", this, "settings")) {
-						let message = e.currentTarget;
-						let messagegroup = this.getMessageGroup(message);
-						if (!messagegroup || !messagegroup.tagName) return;
-						let info = this.getMessageData(message, messagegroup);
-						if (!info || !info.timestamp || !info.timestamp._i) return;
-						let choice = BDFDB.getData("creationDateLang", this, "choices");
-						BDFDB.createTooltip(this.getTimestamp(this.languages[choice].id, info.timestamp._i), message, {type:"left",selector:"completetimestamp-tooltip"});
-					}
-				})
-				.on("mouseenter." + this.getName(), BDFDB.dotCNS.message + BDFDB.dotCN.messageedited, (e) => {
-					if (BDFDB.getData("changeForEdit", this, "settings")) {
-						let marker = e.currentTarget;
-						let time = marker.getAttribute("datetime");
-						if (!time) return;
-						let choice = BDFDB.getData("creationDateLang", this, "choices");
-						let customTooltipCSS = `
-							body ${BDFDB.dotCN.tooltip}:not(.completetimestampedit-tooltip) {
-								display: none !important;
-							}`;
-						BDFDB.createTooltip(this.getTimestamp(this.languages[choice].id, time), marker, {type:"top",selector:"completetimestampedit-tooltip",css:customTooltipCSS});
-					}
-				});
-			
-			document.querySelectorAll("time").forEach(stamp => {this.changeTimestamp(stamp);})
+			BDFDB.WebModules.forceAllUpdates();
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -168,9 +131,9 @@ class CompleteTimestamps {
 
 
 	stop () {
-		if (typeof BDFDB === "object") {
-			document.querySelectorAll(".complete-timestamp").forEach(stamp => {stamp.classList.remove("complete-timestamp");});
-			document.querySelectorAll(".complete-timestamp-divider").forEach(divider => {divider.remove();});
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			BDFDB.removeEles(".complete-timestamp-divider");
+			BDFDB.removeClasses("complete-timestamp");
 			
 			BDFDB.removeLocalStyle(this.getName() + "CompactCorrection");
 			
@@ -181,18 +144,9 @@ class CompleteTimestamps {
 	
 	// begin of own functions
 
-	updateSettings (settingspanel) {
-		var settings = {};
-		for (var input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner)) {
-			settings[input.value] = input.checked;
-		}
-		BDFDB.saveAllData(settings, this, "settings");
-		this.updateSettingsPanel(settingspanel);
-	}
-
 	saveInputs (settingspanel) {
-		var formats = {};
-		for (var input of settingspanel.querySelectorAll(BDFDB.dotCN.input)) {
+		let formats = {};
+		for (let input of settingspanel.querySelectorAll(BDFDB.dotCN.input)) {
 			formats[input.getAttribute("option")] = input.value;
 		}
 		BDFDB.saveAllData(formats, this, "formats");
@@ -200,71 +154,85 @@ class CompleteTimestamps {
 	}
 
 	updateSettingsPanel (settingspanel) {
-		var choices = BDFDB.getAllData(this, "choices");
+		let choices = BDFDB.getAllData(this, "choices");
 		for (let key in choices) {
 			settingspanel.querySelector(`${BDFDB.dotCN.select}[option='${key}'] .languageTimestamp`).innerText = this.getTimestamp(this.languages[choices[key]].id);
 		}
-		this.updateTimestamps = true;
+		this.SettingsUpdated = true;
 	}
-	
-	toggleInfo (settingspanel, ele) {
-		ele.classList.toggle(BDFDB.disCN.categorywrappercollapsed);
-		ele.classList.toggle(BDFDB.disCN.categorywrapperdefault);
+
+	toggleInfo (ele) {
+		BDFDB.toggleClass(ele, BDFDB.disCN.categorywrappercollapsed);
+		BDFDB.toggleClass(ele, BDFDB.disCN.categorywrapperdefault);
 		var svg = ele.querySelector(BDFDB.dotCN.categoryicontransition);
-		svg.classList.toggle(BDFDB.disCN.directionright);
-		svg.classList.toggle(BDFDB.disCN.categoryiconcollapsed);
-		svg.classList.toggle(BDFDB.disCN.categoryicondefault);
+		BDFDB.toggleClass(svg, BDFDB.disCN.directionright);
+		BDFDB.toggleClass(svg, BDFDB.disCN.categoryiconcollapsed);
+		BDFDB.toggleClass(svg, BDFDB.disCN.categoryicondefault);
 		
-		var visible = $(settingspanel).find(".info-container").is(":visible");
-		$(settingspanel).find(".info-container").toggle(!visible);
-		BDFDB.saveData("hideInfo", visible, this, "hideInfo");
+		BDFDB.toggleEles(ele.nextElementSibling);
+		BDFDB.saveData("hideInfo", BDFDB.isEleHidden(ele.nextElementSibling), this, "hideInfo");
 	}
 	
 	openDropdownMenu (e) {
-		var selectControl = e.currentTarget;
-		var selectWrap = selectControl.parentElement;
+		let selectControl = e.currentTarget;
+		let selectWrap = selectControl.parentElement;
+		let plugincard = BDFDB.getParentEle("li", selectWrap);
 		
-		if (selectWrap.classList.contains(BDFDB.disCN.selectisopen)) return;
+		if (!plugincard || BDFDB.containsClass(selectWrap, BDFDB.disCN.selectisopen)) return;
 		
-		selectWrap.classList.add(BDFDB.disCN.selectisopen);
-		$("li").has(selectWrap).css("overflow", "visible");
+		BDFDB.addClass(selectWrap, BDFDB.disCN.selectisopen);
+		plugincard.style.setProperty("overflow", "visible", "important");
 		
-		var selectMenu = this.createDropdownMenu(selectWrap.getAttribute("value"));
+		let selectMenu = this.createDropdownMenu(selectWrap.getAttribute("value"));
 		selectWrap.appendChild(selectMenu);
 		
-		$(selectMenu).on("mousedown." + this.getName(), BDFDB.dotCN.selectoption, (e2) => {
-			var language = e2.currentTarget.getAttribute("value");
+		BDFDB.addChildEventListener(selectMenu, "mousedown", BDFDB.dotCN.selectoption, e2 => {
+			let language = e2.currentTarget.getAttribute("value");
 			selectWrap.setAttribute("value", language);
 			selectControl.querySelector(".languageName").innerText = this.languages[language].name;
 			selectControl.querySelector(".languageTimestamp").innerText = this.getTimestamp(this.languages[language].id);
 			BDFDB.saveData(selectWrap.getAttribute("option"), language, this, "choices");
 		});
-		$(document).on("mousedown.select" + this.getName(), (e2) => {
-			if (e2.target.parentElement == selectMenu) return;
-			$(document).off("mousedown.select" + this.getName());
-			selectMenu.remove();
-			$("li").has(selectWrap).css("overflow", "auto");
-			setTimeout(() => {selectWrap.classList.remove(BDFDB.disCN.selectisopen);},100);
-		});
+		
+		var removeMenu = e2 => {
+			if (e2.target.parentElement != selectMenu) {
+				document.removeEventListener("mousedown", removeMenu);
+				selectMenu.remove();
+				plugincard.style.removeProperty("overflow");
+				setTimeout(() => {BDFDB.removeClass(selectWrap, BDFDB.disCN.selectisopen);},100);
+			}
+		};
+		
+		document.addEventListener("mousedown", removeMenu);
 	}
 	
 	createDropdownMenu (choice) {
-		var menuhtml = `<div class="${BDFDB.disCN.selectmenuouter}"><div class="${BDFDB.disCN.selectmenu}">`;
-		for (var key in this.languages) {
-			var isSelected = key == choice ? ` ${BDFDB.disCN.selectselected}` : ``;
+		let menuhtml = `<div class="${BDFDB.disCN.selectmenuouter}"><div class="${BDFDB.disCN.selectmenu}">`;
+		for (let key in this.languages) {
+			let isSelected = key == choice ? ` ${BDFDB.disCN.selectselected}` : ``;
 			menuhtml += `<div value="${key}" class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignbaseline + BDFDB.disCNS.nowrap + BDFDB.disCN.selectoption + isSelected}" style="flex: 1 1 auto; display:flex;"><div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.primary + BDFDB.disCN.weightnormal}" style="flex: 1 1 42%;">${this.languages[key].name}</div><div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.primary + BDFDB.disCN.weightnormal}" style="flex: 1 1 58%;">${this.getTimestamp(this.languages[key].id)}</div></div>`
 		}
 		menuhtml += `</div></div>`;
-		return $(menuhtml)[0];
+		return BDFDB.htmlToElement(menuhtml);
+	}
+	
+	processMessageGroup (instance, wrapper) {
+		for (let stamp of wrapper.querySelectorAll("time[datetime]")) this.changeTimestamp(stamp);
+	}
+	
+	processStandardSidebarView (instance, wrapper) {
+		if (this.SettingsUpdated) {
+			delete this.SettingsUpdated;
+			BDFDB.WebModules.forceAllUpdates(this);
+		}
 	}
 	
 	changeTimestamp (stamp) {
-		if (!stamp.className || stamp.className.toLowerCase().indexOf("timestamp") == -1 || stamp.classList.contains("complete-timestamp")) return;
+		if (!stamp.className || stamp.className.toLowerCase().indexOf("timestamp") == -1 || BDFDB.containsClass(stamp, "complete-timestamp")) return;
 		let time = stamp.getAttribute("datetime");
 		if (time) {
 			this.setMaxWidth();
-			let choice = BDFDB.getData("creationDateLang", this, "choices");
-			stamp.classList.add("complete-timestamp");
+			BDFDB.addClass(stamp, "complete-timestamp");
 			let stampdivider = document.createElement("span");
 			stampdivider.className = "complete-timestamp-divider arabic-fix";
 			stampdivider.style.setProperty("display", "inline", "important");
@@ -273,24 +241,15 @@ class CompleteTimestamps {
 			stampdivider.style.setProperty("font-size", "0px", "important");
 			stampdivider.innerText = "ARABIC FIX";
 			stamp.parentElement.insertBefore(stampdivider, stamp);
-			BDFDB.setInnerText(stamp, this.getTimestamp(this.languages[choice].id, time));
+			BDFDB.setInnerText(stamp, this.getTimestamp(this.languages[BDFDB.getData("creationDateLang", this, "choices")].id, time));
 		}
-	}
-	
-	getMessageGroup (div) {
-		var messagegroup = null;
-		while (messagegroup == null || div.parentElement) {
-			div = div.parentElement;
-			if (div.classList && div.classList.contains(BDFDB.disCN.messagegroup)) messagegroup = div;
-		}
-		return messagegroup;
 	}
 	
 	getMessageData (div, messagegroup) {
-		var pos = Array.from(messagegroup.querySelectorAll("." + div.className.replace(/ /g, "."))).indexOf(div);
-		var instance = BDFDB.getReactInstance(messagegroup);
+		let pos = Array.from(messagegroup.querySelectorAll("." + div.className.replace(/ /g, "."))).indexOf(div);
+		let instance = BDFDB.getReactInstance(messagegroup);
 		if (!instance) return;
-		var info = instance.return.stateNode.props.messages;
+		let info = instance.return.stateNode.props.messages;
 		return info && pos > -1 ? info[pos] : null;
 	}
 	
@@ -299,9 +258,9 @@ class CompleteTimestamps {
 		if (typeof time == "string") timeobj = new Date(time);
 		if (timeobj.toString() == "Invalid Date") timeobj = new Date(parseInt(time));
 		if (timeobj.toString() == "Invalid Date") return;
-		var settings = BDFDB.getAllData(this, "settings"), timestring = "";
+		let settings = BDFDB.getAllData(this, "settings"), timestring = "";
 		if (languageid != "own") {
-			var timestamp = [];
+			let timestamp = [];
 			if (settings.displayDate) 	timestamp.push(timeobj.toLocaleDateString(languageid));
 			if (settings.displayTime) 	timestamp.push(settings.cutSeconds ? this.cutOffSeconds(timeobj.toLocaleTimeString(languageid)) : timeobj.toLocaleTimeString(languageid));
 			if (settings.otherOrder)	timestamp.reverse();
@@ -309,9 +268,9 @@ class CompleteTimestamps {
 			if (timestring && settings.forceZeros) timestring = this.addLeadingZeros(timestring);
 		}
 		else {
-			var ownformat = BDFDB.getData("ownFormat", this, "formats");
+			let ownformat = BDFDB.getData("ownFormat", this, "formats");
 			languageid = BDFDB.getDiscordLanguage().id;
-			var hour = timeobj.getHours(), minute = timeobj.getMinutes(), second = timeobj.getSeconds(), msecond = timeobj.getMilliseconds(), day = timeobj.getDate(), month = timeobj.getMonth()+1, timemode = "";
+			let hour = timeobj.getHours(), minute = timeobj.getMinutes(), second = timeobj.getSeconds(), msecond = timeobj.getMilliseconds(), day = timeobj.getDate(), month = timeobj.getMonth()+1, timemode = "";
 			if (ownformat.indexOf("$timemode") > -1) {
 				timemode = hour >= 12 ? "PM" : "AM";
 				hour = hour % 12;
@@ -339,9 +298,9 @@ class CompleteTimestamps {
 	}
 	
 	addLeadingZeros (timestring) {
-		var chararray = timestring.split("");
-		var numreg = /[0-9]/;
-		for (var i = 0; i < chararray.length; i++) {
+		let chararray = timestring.split("");
+		let numreg = /[0-9]/;
+		for (let i = 0; i < chararray.length; i++) {
 			if (!numreg.test(chararray[i-1]) && numreg.test(chararray[i]) && !numreg.test(chararray[i+1])) chararray[i] = "0" + chararray[i];
 		}
 		
@@ -351,12 +310,12 @@ class CompleteTimestamps {
 	setMaxWidth () {
 		if (this.currentMode != BDFDB.getDiscordMode()) {
 			this.currentMode = BDFDB.getDiscordMode();
-			var timestamp = document.querySelector(BDFDB.dotCN.messagetimestampcompact);
+			let timestamp = document.querySelector(BDFDB.dotCN.messagetimestampcompact);
 			if (timestamp) {
-				var choice = BDFDB.getData("creationDateLang", this, "choices");
-				var testtimestamp = $(`<time class="${timestamp.className}" style="width: auto !important;">${this.getTimestamp(this.languages[choice].id, new Date(253402124399995))}</time>`);
-				$(testtimestamp).appendTo(document.body);
-				var width = testtimestamp.outerWidth() + 5;
+				let choice = BDFDB.getData("creationDateLang", this, "choices");
+				let testtimestamp = BDFDB.htmlToElement(`<time class="${timestamp.className}" style="width: auto !important;">${this.getTimestamp(this.languages[choice].id, new Date(253402124399995))}</time>`);
+				document.body.appendChild(testtimestamp);
+				let width = BDFDB.getRects(testtimestamp).width + 5;
 				testtimestamp.remove();
 				BDFDB.appendLocalStyle(this.getName() + "CompactCorrection", `
 					${BDFDB.dotCN.messagetimestampcompact} {
@@ -374,9 +333,7 @@ class CompleteTimestamps {
 					}
 				`);
 			}
-			else {
-				BDFDB.removeLocalStyle(this.getName() + "CompactCorrection");
-			}
+			else BDFDB.removeLocalStyle(this.getName() + "CompactCorrection");
 		}
 	}
 }

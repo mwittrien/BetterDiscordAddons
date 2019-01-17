@@ -1,48 +1,43 @@
 //META{"name":"BetterNsfwTag"}*//
 
 class BetterNsfwTag {
+	getName () {return "BetterNsfwTag";}
+
+	getVersion () {return "1.1.7";}
+
+	getAuthor () {return "DevilBro";}
+
+	getDescription () {return "Adds a more noticeable tag to NSFW channels.";}
+	
 	initConstructor () {
 		this.patchModules = {
 			"ChannelItem":"componentDidMount"
 		};
-		
-		this.tagMarkup = `<span class="NSFW-tag ${BDFDB.disCNS.bottag + BDFDB.disCNS.bottagregular + BDFDB.disCN.bottagnametag}" style="background-color: rgb(241, 71, 71) !important; color: white !important;">NSFW</span>`;
-		
-		this.css = `
-			.NSFW-tag${BDFDB.dotCN.bottag} {
-				top: -3px;
-				position: relative;
-			}`
 	}
-
-	getName () {return "BetterNsfwTag";}
-
-	getDescription () {return "Adds a more noticeable tag to NSFW channels.";}
-
-	getVersion () {return "1.1.6";}
-
-	getAuthor () {return "DevilBro";}
 
 	//legacy
 	load () {}
 
 	start () {
-		var libraryScript = null;
-		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+			libraryScript.setAttribute("date", performance.now());
+			libraryScript.addEventListener("load", () => {
+				BDFDB.loaded = true;
+				this.initialize();
+			});
 			document.head.appendChild(libraryScript);
 		}
+		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
 	initialize () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.loadMessage(this);
 						
 			BDFDB.WebModules.forceAllUpdates(this);
@@ -53,7 +48,7 @@ class BetterNsfwTag {
 	}
 
 	stop () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.removeEles(".NSFW-tag");		
 			BDFDB.unloadMessage(this);
 		}
@@ -64,7 +59,8 @@ class BetterNsfwTag {
 	
 	processChannelItem (instance, wrapper) {
 		if (instance.props && instance.props.channel && instance.props.channel.nsfw) {
-			$(this.tagMarkup).appendTo(wrapper.querySelector(BDFDB.dotCN.channelname));
+			let channelname = wrapper.querySelector(BDFDB.dotCN.channelname);
+			if (channelname) channelname.appendChild(BDFDB.htmlToElement(`<span class="NSFW-tag ${BDFDB.disCNS.bottag + BDFDB.disCNS.bottagregular + BDFDB.disCN.bottagnametag}" style="background-color: rgb(241, 71, 71) !important; color: white !important; top: -3px; position: relative;">NSFW</span>`));
 		}
 	}
 }

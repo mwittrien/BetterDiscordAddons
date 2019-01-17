@@ -3,13 +3,18 @@
 class ChatAliases {
 	getName () {return "ChatAliases";}
 
-	getVersion () {return "1.9.3";}
+	getVersion () {return "1.9.4";}
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent.";}
 	
 	initConstructor () {
+		this.patchModules = {
+			"ChannelTextArea":"componentDidMount",
+			"StandardSidebarView":"componentWillUnmount"
+		};
+		
 		this.configs = ["case","exact","autoc","regex","file"];
 		
 		this.defaults = {
@@ -24,7 +29,7 @@ class ChatAliases {
 		var settings = BDFDB.getAllData(this, "settings");
 		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		for (let key in settings) {
-			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}"${settings[key] ? " checked" : ""}></div></div>`;
+			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
 		}
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">Replace:</h3><input action="add" type="text" placeholder="Wordvalue" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16} wordInputs" id="input-wordvalue" style="flex: 1 1 auto;"><button action="add" type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} btn-add btn-addword" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}"></div></button></div><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">With:</h3><input action="add" type="text" placeholder="Replacevalue" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16} wordInputs" id="input-replacevalue" style="flex: 1 1 auto;"><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} file-navigator" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}"></div><input id="input-file" type="file" style="display:none!important;"></button></div>`;
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto; max-width: ${560 - (this.configs.length * 33)}px;">List of Chataliases:</h3><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifycenter + BDFDB.disCNS.alignend + BDFDB.disCN.nowrap}" style="flex: 1 1 auto; max-width: ${this.configs.length * 34}px;">`;
@@ -46,17 +51,15 @@ class ChatAliases {
 		settingshtml += `<div class="DevilBro-settings-inner-list info-container" ${infoHidden ? "style='display:none;'" : ""}><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Case: Will replace words while comparing lowercase/uppercase. apple => apple, not APPLE or AppLe</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Not Case: Will replace words while ignoring lowercase/uppercase. apple => apple, APPLE and AppLe</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Exact: Will replace words that are exactly the replaceword. apple to pear => applepie stays applepie</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Not Exact: Will replace words anywhere they appear. apple to pear => applepieapple to pearpiepear</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Autoc: Will appear in the Autocomplete Menu (if enabled).</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Regex: Will treat the entered wordvalue as a regular expression. <a class="${BDFDB.disCNS.anchor + BDFDB.disCN.anchorunderlineonhover}" target="_blank" href="https://regexr.com/">Help</a></div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">File: If the replacevalue is a filepath it will try to upload the file located at the filepath.</div></div>`;
 		settingshtml += `</div>`;
 
-		var settingspanel = BDFDB.htmlToElement(settingshtml);
+		let settingspanel = BDFDB.htmlToElement(settingshtml);
 
-		BDFDB.initElements(settingspanel);
+		BDFDB.initElements(settingspanel, this);
 
-		$(settingspanel)
-			.on("click", BDFDB.dotCN.switchinner, () => {this.updateSettings(settingspanel);})
-			.on("keypress", ".wordInputs", (e) => {if (e.which == 13) this.updateContainer(settingspanel, e.currentTarget);})
-			.on("keyup", BDFDB.dotCN.gamenameinput, (e) => {this.updateWord(e.currentTarget);})
-			.on("click", ".btn-addword, .remove-word, .remove-all", (e) => {this.updateContainer(settingspanel, e.currentTarget);})
-			.on("click", BDFDB.dotCN.checkboxinput, (e) => {this.updateConfig(e.currentTarget);})
-			.on("click", ".toggle-info", (e) => {this.toggleInfo(settingspanel, e.currentTarget);});
+		BDFDB.addEventListener(this, settingspanel, "keypress", ".wordInputs", e => {if (e.which == 13) this.updateContainer(settingspanel, e.currentTarget);});
+		BDFDB.addEventListener(this, settingspanel, "keyup", BDFDB.dotCN.gamenameinput, e => {this.updateWord(e.currentTarget);});
+		BDFDB.addEventListener(this, settingspanel, "click", ".btn-addword, .remove-word, .remove-all", e => {this.updateContainer(settingspanel, e.currentTarget);});
+		BDFDB.addEventListener(this, settingspanel, "click", BDFDB.dotCN.checkboxinput, e => {this.updateConfig(e.currentTarget);});
+		BDFDB.addEventListener(this, settingspanel, "click", ".toggle-info", e => {this.toggleInfo(e.currentTarget);});
 		return settingspanel;
 	}
 
@@ -64,67 +67,38 @@ class ChatAliases {
 	load () {}
 
 	start () {
-		var libraryScript = null;
-		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+			libraryScript.setAttribute("date", performance.now());
+			libraryScript.addEventListener("load", () => {
+				BDFDB.loaded = true;
+				this.initialize();
+			});
 			document.head.appendChild(libraryScript);
 		}
+		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
 	initialize () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.loadMessage(this);
 
 			this.UploadModule = BDFDB.WebModules.findByProperties("instantBatchUpload");
 			this.CurrentUserPerms = BDFDB.WebModules.findByProperties("getChannelPermissions", "can");
 			this.Permissions = BDFDB.WebModules.findByProperties("Permissions", "ActivityTypes").Permissions;
-
-			var observer = null;
-
-			observer = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.removedNodes) {
-							change.removedNodes.forEach((node) => {
-								if (node.tagName && node.getAttribute("layer-id") == "user-settings") {
-									document.querySelectorAll("textarea" + BDFDB.dotCN.textarea).forEach(textarea => {this.bindEventToTextArea(textarea);});
-								}
-							});
-						}
-					}
-				);
-			});
-			BDFDB.addObserver(this, BDFDB.dotCN.layers, {name:"settingsWindowObserver",instance:observer}, {childList:true});
-
-			observer = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								if (node.tagName && node.querySelector(BDFDB.dotCN.textareainner + ":not(" + BDFDB.dotCN.textareainnerdisabled + ")")) {
-									this.bindEventToTextArea(node.querySelector("textarea"));
-								}
-							});
-						}
-					}
-				);
-			});
-			BDFDB.addObserver(this, BDFDB.dotCN.appmount, {name:"textareaObserver",instance:observer}, {childList: true, subtree:true});
 			
 			this.aliases = BDFDB.loadAllData(this, "words");
 			
-			document.querySelectorAll("textarea" + BDFDB.dotCN.textarea).forEach(textarea => {this.bindEventToTextArea(textarea);});
-			
-			$(document).off("click." + this.getName()).on("click." + this.getName(), (e) => {
-				if (!e.target.tagName === "TEXTAREA") $(".autocompleteAliases, .autocompleteAliasesRow").remove();
+			BDFDB.addEventListener(document, "click", e => {
+				if (!e.target.tagName === "TEXTAREA") BDFDB.removeEles(".autocompleteAliases", ".autocompleteAliasesRow");
 			});
+			
+			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -132,7 +106,7 @@ class ChatAliases {
 	}
 
 	stop () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.removeEles(".autocompleteAliases", ".autocompleteAliasesRow");
 			BDFDB.unloadMessage(this);
 		}
@@ -140,16 +114,6 @@ class ChatAliases {
 
 
 	// begin of own functions
-
-	updateSettings (settingspanel) {
-		var settings = {};
-		for (var input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner)) {
-			settings[input.value] = input.checked;
-		}
-		BDFDB.saveAllData(settings, this, "settings");
-		
-		document.querySelectorAll("textarea" + BDFDB.dotCN.textarea).forEach(textarea => {this.bindEventToTextArea(textarea);});
-	}
 
 	updateContainer (settingspanel, ele) {
 		var update = false, wordvalue = null, replacevalue = null;
@@ -211,8 +175,8 @@ class ChatAliases {
 				}
 				containerhtml += `</div><div word="${word}" action="remove" class="${BDFDB.disCN.hovercardbutton} remove-word"></div></div>`;
 			}
-			$(settingspanel).find(".alias-list").html(containerhtml);
-			BDFDB.initElements(settingspanel);
+			settingspanel.querySelector(".alias-list").innerHTML = containerhtml;
+			BDFDB.initElements(settingspanel, this);
 		}
 	}
 
@@ -249,27 +213,33 @@ class ChatAliases {
 		}
 	}
 
-	toggleInfo (settingspanel, ele) {
-		ele.classList.toggle(BDFDB.disCN.categorywrappercollapsed);
-		ele.classList.toggle(BDFDB.disCN.categorywrapperdefault);
+	toggleInfo (ele) {
+		BDFDB.toggleClass(ele, BDFDB.disCN.categorywrappercollapsed);
+		BDFDB.toggleClass(ele, BDFDB.disCN.categorywrapperdefault);
 		var svg = ele.querySelector(BDFDB.dotCN.categoryicontransition);
-		svg.classList.toggle(BDFDB.disCN.directionright);
-		svg.classList.toggle(BDFDB.disCN.categoryiconcollapsed);
-		svg.classList.toggle(BDFDB.disCN.categoryicondefault);
-
-		var visible = $(settingspanel).find(".info-container").is(":visible");
-		$(settingspanel).find(".info-container").toggle(!visible);
-		BDFDB.saveData("hideInfo", visible, this, "hideInfo");
+		BDFDB.toggleClass(svg, BDFDB.disCN.directionright);
+		BDFDB.toggleClass(svg, BDFDB.disCN.categoryiconcollapsed);
+		BDFDB.toggleClass(svg, BDFDB.disCN.categoryicondefault);
+		
+		BDFDB.toggleEles(ele.nextElementSibling);
+		BDFDB.saveData("hideInfo", BDFDB.isEleHidden(ele.nextElementSibling), this, "hideInfo");
 	}
-
-	bindEventToTextArea (textarea) {
-		if (!textarea) return;
-		var channel = BDFDB.getSelectedChannel();
-		if (!channel) return;
-		var settings = BDFDB.getAllData(this, "settings"); 
-		$(textarea)
-			.off("input." + this.getName())
-			.on("input." + this.getName(), () => {
+	
+	processStandardSidebarView (instance, wrapper) {
+		if (this.SettingsUpdated) {
+			BDFDB.WebModules.forceAllUpdates(this);
+			delete this.SettingsUpdated;
+		}
+	}
+	
+	processChannelTextArea (instance, wrapper) {
+		if (instance.props && instance.props.type) {
+			var textarea = wrapper.querySelector("textarea");
+			if (!textarea) return;
+			var channel = BDFDB.getSelectedChannel();
+			if (!channel) return;
+			var settings = BDFDB.getAllData(this, "settings");
+			BDFDB.addEventListener(this, textarea, "input", () => {
 				if (this.format) {
 					this.format = false;
 					textarea.focus();
@@ -285,27 +255,26 @@ class ChatAliases {
 						}
 					}
 				}
-			})
-			.off("keydown." + this.getName())
-			.on("keydown." + this.getName(), e => {
+			});
+			BDFDB.addEventListener(this, textarea, "keydown", e => {
 				let autocompletemenu = textarea.parentElement.querySelector(BDFDB.dotCN.autocomplete);
-				if ((e.which == 9 || e.which == 13) && autocompletemenu) {
-					if (autocompletemenu.querySelector(BDFDB.dotCN.autocompleteselected).parentElement.classList.contains("autocompleteAliasesRow")) {
+				if (autocompletemenu && (e.which == 9 || e.which == 13)) {
+					if (BDFDB.containsClass(autocompletemenu.querySelector(BDFDB.dotCN.autocompleteselected).parentElement, "autocompleteAliasesRow")) {
 						e.preventDefault();
 						e.stopPropagation();
 						this.swapWordWithAlias(textarea); 
 					}
 				}
-				else if ((e.which == 38 || e.which == 40) && autocompletemenu) {
+				else if (autocompletemenu && (e.which == 38 || e.which == 40)) {
 					let autocompleteitems = autocompletemenu.querySelectorAll(BDFDB.dotCN.autocompleteselectable + ":not(.autocompleteAliasesSelector)");
 					let selected = autocompletemenu.querySelector(BDFDB.dotCN.autocompleteselected);
-					if (selected.classList.contains("autocompleteAliasesSelector") || autocompleteitems[e.which == 38 ? 0 : (autocompleteitems.length-1)] == selected) {
+					if (BDFDB.containsClass(selected, "autocompleteAliasesSelector") || autocompleteitems[e.which == 38 ? 0 : (autocompleteitems.length-1)] == selected) {
 						e.preventDefault();
 						e.stopPropagation();
 						let next = this.getNextSelection(autocompletemenu, null, e.which == 38 ? false : true);
-						selected.classList.remove(BDFDB.disCN.autocompleteselected);
-						next.classList.add(BDFDB.disCN.autocompleteselected);
-						if (!next.classList.contains("autocompleteAliasesSelector")) {
+						BDFDB.removeClass(selected, BDFDB.disCN.autocompleteselected);
+						BDFDB.addClass(next, BDFDB.disCN.autocompleteselected);
+						if (!BDFDB.containsClass(next, "autocompleteAliasesSelector")) {
 							// if next element is a default discord autocomplete item, trigger the keypress again so the item is internally selected
 							var press = new KeyboardEvent("keypress", e);
 							Object.defineProperty(press, "keyCode", {value: e.which});
@@ -316,25 +285,19 @@ class ChatAliases {
 				}
 				else if (textarea.value && !e.shiftKey && e.which == 13 && !autocompletemenu && textarea.value.indexOf("s/") != 0) {
 					this.format = true;
-					$(textarea).trigger("input");
+					textarea.dispatchEvent(new Event("input"));
 				}
 				else if (!e.ctrlKey && e.which != 16 && settings.addAutoComplete && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length) {
 					clearTimeout(textarea.chataliastimeout);
 					textarea.chataliastimeout = setTimeout(() => {this.addAutoCompleteMenu(textarea);},100);
 				}
 				
-				if (!e.ctrlKey && e.which != 38 && e.which != 40) {
-					if (!(e.which == 39 && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length)) {
-						BDFDB.removeEles(".autocompleteAliases", ".autocompleteAliasesRow");
-					}
-				}
-			})
-			.off("click." + this.getName())
-			.on("click." + this.getName(), e => {
-				if (settings.addAutoComplete && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length) {
-					setImmediate(() => {this.addAutoCompleteMenu(textarea);});
-				}
+				if (!e.ctrlKey && e.which != 38 && e.which != 40 && !(e.which == 39 && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length)) BDFDB.removeEles(".autocompleteAliases", ".autocompleteAliasesRow");
 			});
+			BDFDB.addEventListener(this, textarea, "click", e => {
+				if (settings.addAutoComplete && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length) setImmediate(() => {this.addAutoCompleteMenu(textarea);});
+			});
+		}
 	}
 	
 	addAutoCompleteMenu (textarea) {
@@ -377,25 +340,19 @@ class ChatAliases {
 				}
 				let autocompleterowheader = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteAliasesRow"><div class="${BDFDB.disCN.autocompleteselector} autocompleteAliasesSelector"><div class="${BDFDB.disCNS.autocompletecontenttitle + BDFDB.disCNS.small + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCN.weightsemibold}">Aliases: <strong class="lastword">${BDFDB.encodeToHTML(lastword)}</strong></div></div></div>`);
 				autocompletemenu.appendChild(autocompleterowheader);
-				$(autocompletemenu)
-					.off("mouseenter." + this.getName())
-					.on("mouseenter." + this.getName(), BDFDB.dotCN.autocompleteselectable, (e) => {
-						autocompletemenu.querySelectorAll(BDFDB.dotCN.autocompleteselected).forEach(selected => {selected.classList.remove(BDFDB.disCN.autocompleteselected);});
-						e.currentTarget.classList.add(BDFDB.disCN.autocompleteselected);
-					});
+				BDFDB.addEventListener(this, autocompletemenu, "mouseenter", BDFDB.dotCN.autocompleteselectable, e => {
+					BDFDB.removeClass(autocompletemenu.querySelectorAll(BDFDB.dotCN.autocompleteselected), BDFDB.disCN.autocompleteselected);
+					BDFDB.addClass(e.currentTarget, BDFDB.disCN.autocompleteselected);
+				});
 					
 				for (let word in matchedaliases) {
 					if (amount-- < 1) break;
 					let autocompleterow = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteAliasesRow"><div class="${BDFDB.disCNS.autocompleteselector + BDFDB.disCN.autocompleteselectable} autocompleteAliasesSelector"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.autocompletecontent}" style="flex: 1 1 auto;"><div class="${BDFDB.disCN.flexchild} aliasword" style="flex: 1 1 auto;">${BDFDB.encodeToHTML(word)}</div><div class="${BDFDB.disCNS.autocompletedescription + BDFDB.disCN.flexchild}">${BDFDB.encodeToHTML(matchedaliases[word].replace)}</div></div></div></div>`);
+					autocompleterow.querySelector(BDFDB.dotCN.autocompleteselectable).addEventListener("click", () => {this.swapWordWithAlias(textarea);});
 					autocompletemenu.appendChild(autocompleterow);
-					$(autocompleterow)
-						.off("click." + this.getName())
-						.on("click." + this.getName(), BDFDB.dotCN.autocompleteselectable, (e) => {
-							this.swapWordWithAlias(textarea);
-						});
 				}
 				if (!autocompletemenu.querySelector(BDFDB.dotCN.autocompleteselected)) {
-					autocompletemenu.querySelector(".autocompleteAliasesRow " + BDFDB.dotCN.autocompleteselectable).classList.add(BDFDB.disCN.autocompleteselected);
+					BDFDB.addClass(autocompletemenu.querySelector(".autocompleteAliasesRow " + BDFDB.dotCN.autocompleteselectable), BDFDB.disCN.autocompleteselected);
 				}
 			}
 		}

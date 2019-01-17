@@ -1,6 +1,14 @@
 //META{"name":"PersonalPins"}*//
 
 class PersonalPins {
+	getName () {return "PersonalPins";}
+
+	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
+
+	getVersion () {return "1.7.3";}
+
+	getAuthor () {return "DevilBro";}
+	
 	initConstructor () {
 		this.labels = {};
 		
@@ -146,14 +154,6 @@ class PersonalPins {
 				</div>
 			</div>`;
 	}
-
-	getName () {return "PersonalPins";}
-
-	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
-
-	getVersion () {return "1.7.2";}
-
-	getAuthor () {return "DevilBro";}
 	
 	getSettingsPanel () {
 		if (!this.started || typeof BDFDB !== "object") return;
@@ -163,7 +163,7 @@ class PersonalPins {
 		
 		let settingspanel = BDFDB.htmlToElement(settingshtml);
 
-		BDFDB.initElements(settingspanel);
+		BDFDB.initElements(settingspanel, this);
 
 		settingspanel.querySelector(".reset-button").addEventListener("click", () => {
 			BDFDB.openConfirmModal(this, "Are you sure you want to delete all pinned notes?", () => {
@@ -177,22 +177,25 @@ class PersonalPins {
 	load () {}
 
 	start () {
-		let libraryScript = null;
-		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+			libraryScript.setAttribute("date", performance.now());
+			libraryScript.addEventListener("load", () => {
+				BDFDB.loaded = true;
+				this.initialize();
+			});
 			document.head.appendChild(libraryScript);
 		}
+		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
 	initialize () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.loadMessage(this); 
 			
 			this.SelectChannelUtils = BDFDB.WebModules.findByProperties("selectGuild","selectChannel");
@@ -244,7 +247,7 @@ class PersonalPins {
 
 
 	stop () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.removeEles(".popout-personalpins-notes", ".personalpins-sort-popout", ".notes-button");
 			BDFDB.unloadMessage(this);
 		}
@@ -319,6 +322,8 @@ class PersonalPins {
 	
 	processMessageOptionPopout (instance, wrapper) {
 		if (instance.props.message && instance.props.channel && instance._reactInternalFiber.memoizedProps.target && !wrapper.querySelector(".personalpins-itembtn")) {
+			let {messagediv, pos} = this.getMessageAndPos(instance._reactInternalFiber.memoizedProps.target);
+			if (!messagediv || pos == -1) return;
 			let popoutUnpinEntry = BDFDB.htmlToElement(this.getNoteData(instance.props.message, instance._reactInternalFiber.memoizedProps.target, instance.props.channel) ? this.popoutUnpinEntryMarkup : this.popoutPinEntryMarkup);
 			wrapper.appendChild(popoutUnpinEntry);
 			popoutUnpinEntry.addEventListener("click", () => {
@@ -330,12 +335,12 @@ class PersonalPins {
 	
 	openNotesPopout (button) {
 		let container = document.querySelector(BDFDB.dotCN.popouts);
-		if (!container || button.classList.contains("popout-open")) return;
-		button.classList.add("popout-open");
+		if (!container || BDFDB.containsClass(button, "popout-open")) return;
+		BDFDB.addClass(button, "popout-open");
 		let notespopout = BDFDB.htmlToElement(this.notesPopoutMarkup);
 		container.appendChild(notespopout);
 		BDFDB.initElements(notespopout);
-		let buttonrects = button.getBoundingClientRect(); 
+		let buttonrects = BDFDB.getRects(button); 
 		notespopout.style.setProperty("left", buttonrects.left + buttonrects.width/2 + "px");
 		notespopout.style.setProperty("top", buttonrects.top + buttonrects.height + "px")
 		notespopout.querySelectorAll(BDFDB.dotCN.tabbarheaderitem).forEach(tab => {tab.addEventListener("click", () => {
@@ -353,11 +358,11 @@ class PersonalPins {
 			BDFDB.createSortPopout(e.currentTarget, this.sortPopoutMarkup, () => {this.addNotes(notespopout);});
 		});
 		
-		var removePopout = (e) => {
+		var removePopout = e => {
 			if (!notespopout.contains(e.target) && !BDFDB.getParentEle(".personalpins-sort-popout", e.target)) {
 				document.removeEventListener("mousedown", removePopout);
 				notespopout.remove();
-				setTimeout(() => {button.classList.remove("popout-open");},300);
+				setTimeout(() => {BDFDB.removeClass(button, "popout-open");},300);
 			}
 		};
 		document.addEventListener("mousedown", removePopout);
@@ -400,8 +405,7 @@ class PersonalPins {
 						note.remove();
 					}
 				}
-				if (container.firstElementChild == placeholder) placeholder.style.removeProperty("display");
-				else placeholder.style.setProperty("display", "none", "important");
+				BDFDB.toggleEles(placeholder, container.firstElementChild == placeholder);
 			}
 		}
 	}
@@ -456,7 +460,7 @@ class PersonalPins {
 				require("request")(ytlink, (error, response, result) => {
 					if (result) {
 						wrapper.innerHTML = `<a class="${BDFDB.disCNS.imagewrapper + BDFDB.disCN.imagezoom}" href="" rel="noreferrer noopener" target="_blank" style="width: 400px; height: 225px;"><img alt="" src="${result.split('<link itemprop="thumbnailUrl" href="')[1].split('"')[0]}" style="width: 400px; height: 225px;"></a><div class="${BDFDB.disCNS.embedvideoactions + BDFDB.disCNS.flexcenter + BDFDB.disCNS.flex + BDFDB.disCNS.justifycenter + BDFDB.disCN.aligncenter}"><div class="${BDFDB.disCNS.embedvideoactionsinner + BDFDB.disCNS.flexcenter + BDFDB.disCNS.flex + BDFDB.disCNS.justifycenter + BDFDB.disCN.aligncenter}"><div class="${BDFDB.disCN.iconactionswrapper}"><div tabindex="0" class="${BDFDB.disCNS.iconwrapper + BDFDB.disCN.iconwrapperactive}" role="button"><svg name="Play" class="${BDFDB.disCNS.iconplay + BDFDB.disCN.icon}" width="16" height="16" viewBox="0 0 24 24"><polygon fill="currentColor" points="0 0 0 14 11 7" transform="translate(7 5)"></polygon></svg></div><a class="${BDFDB.disCNS.anchor + BDFDB.disCN.iconwrapper}" href="${ytlink}" rel="noreferrer noopener" target="_blank"><svg name="OpenExternal" class="${BDFDB.disCNS.iconexternalmargins + BDFDB.disCN.icon}" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" transform="translate(3.000000, 4.000000)" d="M16 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4v-2H2V4h14v10h-4v2h4c1.1 0 2-.9 2-2V2a2 2 0 0 0-2-2zM9 6l-4 4h3v6h2v-6h3L9 6z"></path></svg></a></div></div></div></div>`;
-						wrapper.querySelector(BDFDB.dotCN.iconplay).addEventListener("click", (e) => {
+						wrapper.querySelector(BDFDB.dotCN.iconplay).addEventListener("click", e => {
 							while (wrapper.firstChild) wrapper.firstChild.remove();
 							let width = 400;
 							let height = Math.round(width*(result.split('<meta itemprop="height" content="')[1].split('"')[0]/result.split('<meta itemprop="width" content="')[1].split('"')[0]));
@@ -466,23 +470,22 @@ class PersonalPins {
 				});
 			}
 		}
-		messagedivider.querySelector(BDFDB.dotCN.messagespopoutchannelname).addEventListener("click", (e) => {
+		messagedivider.querySelector(BDFDB.dotCN.messagespopoutchannelname).addEventListener("click", e => {
 			if (!BDFDB.isObjectEmpty(channel)) {
 				notespopout.remove();
 				this.SelectChannelUtils.selectChannel(server.id, channel.id);
 			}
 			else BDFDB.shake();
 		});
-		message.querySelector(BDFDB.dotCN.messagespopoutclosebutton).addEventListener("click", (e) => {
-			messagedivider.remove();
-			message.remove();
+		message.querySelector(BDFDB.dotCN.messagespopoutclosebutton).addEventListener("click", e => {
+			BDFDB.removeEles(messagedivider, message);
 			this.removeNoteData(noteData);
-			if (container.firstElementChild == placeholder) placeholder.style.removeProperty("display");
+			BDFDB.toggleEles(placeholder, container.firstElementChild == placeholder);
 		});
-		message.querySelector(BDFDB.dotCN.messagespopoutjumpbutton + ".jump").addEventListener("click", (e) => {
+		message.querySelector(BDFDB.dotCN.messagespopoutjumpbutton + ".jump").addEventListener("click", e => {
 			this.HistoryUtils.transitionTo(this.MainDiscord.Routes.MESSAGE(noteData.guild_id, noteData.channel_id, noteData.id));
 		});
-		message.querySelector(BDFDB.dotCN.messagespopoutjumpbutton + ".copy").addEventListener("click", (e) => {
+		message.querySelector(BDFDB.dotCN.messagespopoutjumpbutton + ".copy").addEventListener("click", e => {
 			let clipboard = require("electron").clipboard;
 			if (noteData.content) clipboard.write({text: noteData.content});
 			else {
@@ -575,7 +578,7 @@ class PersonalPins {
 	
 	getMessageAndPos (target) {
 		let messagediv = BDFDB.getParentEle(BDFDB.dotCN.message, target);
-		let pos = Array.from(messagediv.parentElement.querySelectorAll(BDFDB.dotCN.message)).indexOf(messagediv);
+		let pos = messagediv ? Array.from(messagediv.parentElement.querySelectorAll(BDFDB.dotCN.message)).indexOf(messagediv) : -1;
 		return {messagediv, pos};
 	}
 	

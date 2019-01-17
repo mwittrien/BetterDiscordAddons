@@ -3,7 +3,7 @@
 class BetterFriendCount {
 	getName () {return "BetterFriendCount";}
 
-	getVersion () {return "1.1.0";}
+	getVersion () {return "1.1.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -32,22 +32,25 @@ class BetterFriendCount {
 	load () {}
 
 	start () {
-		var libraryScript = null;
-		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+			libraryScript.setAttribute("date", performance.now());
+			libraryScript.addEventListener("load", () => {
+				BDFDB.loaded = true;
+				this.initialize();
+			});
 			document.head.appendChild(libraryScript);
 		}
+		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
 	initialize () {
-		if (typeof BDFDB === "object") {		
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {		
 			BDFDB.loadMessage(this);
 			
 			this.FriendUtils = BDFDB.WebModules.findByProperties("getFriendIDs", "getRelationships");
@@ -63,7 +66,7 @@ class BetterFriendCount {
 	}
 
 	stop () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.removeEles(".betterfriendcount-badge");
 			BDFDB.unloadMessage(this);
 		}
@@ -77,7 +80,7 @@ class BetterFriendCount {
 	}
 	
 	processNameTag (instance, wrapper) {
-		if (wrapper.parentElement && wrapper.parentElement.classList && wrapper.parentElement.classList.contains(BDFDB.disCN.friendscolumn)) this.addCountNumbers();
+		if (wrapper.parentElement && BDFDB.containsClass(wrapper.parentElement, BDFDB.disCN.friendscolumn)) this.addCountNumbers();
 	}
 	
 	addCountNumbers (wrapper = document.querySelector(BDFDB.dotCNS.friends + BDFDB.dotCN.settingstabbar)) {

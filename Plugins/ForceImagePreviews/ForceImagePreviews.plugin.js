@@ -1,40 +1,43 @@
 //META{"name":"ForceImagePreviews"}*//
 
 class ForceImagePreviews {
+	getName () {return "ForceImagePreviews";}
+
+	getVersion () {return "1.0.9";}
+
+	getAuthor () {return "DevilBro";}
+
+	getDescription () {return "Forces embedded Image Previews, if Discord doesn't do it itself. Caution: Externals Images can contain malicious code and reveal your IP!";}
+	
 	initConstructor () {
 		this.patchModules = {
 			"Message":"componentDidMount"
 		};
 	}
 
-	getName () {return "ForceImagePreviews";}
-
-	getDescription () {return "Forces embedded Image Previews, if Discord doesn't do it itself. Caution: Externals Images can contain malicious code and reveal your IP!";}
-
-	getVersion () {return "1.0.8";}
-
-	getAuthor () {return "DevilBro";}
-
 	//legacy
 	load () {}
 
 	start () {
-		var libraryScript = null;
-		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+			libraryScript.setAttribute("date", performance.now());
+			libraryScript.addEventListener("load", () => {
+				BDFDB.loaded = true;
+				this.initialize();
+			});
 			document.head.appendChild(libraryScript);
 		}
+		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
 	initialize () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.loadMessage(this);
 			
 			BDFDB.WebModules.forceAllUpdates(this);
@@ -45,7 +48,7 @@ class ForceImagePreviews {
 	}
 
 	stop () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.removeEles(".FIP-embed");
 			BDFDB.unloadMessage(this);
 		}
@@ -93,7 +96,7 @@ class ForceImagePreviews {
 						}
 						let checkedsrc = itemsrc.indexOf("imgur.com/") > -1 ? ("imgur.com/" + itemsrc.split("/")[3].split(".")[0]) : itemsrc;
 						if (!accessory.querySelector(`${BDFDB.dotCN.embedimage}[href*="${checkedsrc}"]`)) {
-							let embed = $(`<div class="FIP-embed ${BDFDB.disCNS.embed + BDFDB.disCNS.flex + BDFDB.disCN.embedold}"><a class="${BDFDB.disCNS.imagewrapper + BDFDB.disCNS.imagezoom + BDFDB.disCN.embedimage}" href="${itemsrc}" rel="noreferrer noopener" target="_blank" style="width: ${width}px; height: ${height}px;"><img src="${itemsrc}" style="width: ${width}px; height: ${height}px;"></a></div>`)[0];
+							let embed = BDFDB.htmlToElement(`<div class="FIP-embed ${BDFDB.disCNS.embed + BDFDB.disCNS.flex + BDFDB.disCN.embedold}"><a class="${BDFDB.disCNS.imagewrapper + BDFDB.disCNS.imagezoom + BDFDB.disCN.embedimage}" href="${itemsrc}" rel="noreferrer noopener" target="_blank" style="width: ${width}px; height: ${height}px;"><img src="${itemsrc}" style="width: ${width}px; height: ${height}px;"></a></div>`);
 							this.insertEmbed(embed, previmage, links, accessory);
 						}
 						this.addItemToAccessory(item, links, accessory);
@@ -104,11 +107,11 @@ class ForceImagePreviews {
 						result = result.replace(new RegExp("[\\r|\\n|\\t]|[\\s]{2,}", "g"), "");
 						let width = 400;
 						let height = Math.round(width*(result.split('<meta itemprop="height" content="')[1].split('"')[0]/result.split('<meta itemprop="width" content="')[1].split('"')[0])); 
-						let embed = $(`<div class="FIP-embed ${BDFDB.disCNS.embed + BDFDB.disCNS.flex + BDFDB.disCN.embedold}" style="max-width: 426px;"><div class="${BDFDB.disCN.embedpill}" style="background-color: rgb(255, 0, 0);"></div><div class="${BDFDB.disCN.embedinner}"><div class="${BDFDB.disCNS.embedcontent + BDFDB.disCN.flex}"><div class="${BDFDB.disCN.embedcontentinner}"><div class=""><a class="${BDFDB.disCNS.anchor + BDFDB.disCNS.embedproviderlink + BDFDB.disCNS.embedlink + BDFDB.disCNS.embedprovider + BDFDB.disCNS.size12 + BDFDB.disCN.weightnormal}" href="https://www.youtube.com/" rel="noreferrer noopener" target="_blank">YouTube</a></div><div class="${BDFDB.disCNS.embedauthor + BDFDB.disCNS.flex + BDFDB.disCNS.aligncenter + BDFDB.disCNS.embedmargin + BDFDB.disCN.margintop4}"><a class="${BDFDB.disCNS.anchor + BDFDB.disCNS.embedauthornamelink + BDFDB.disCNS.embedlink + BDFDB.disCNS.embedauthorname + BDFDB.disCNS.weightmedium + BDFDB.disCN.size14}" href="https://www.youtube.com${result.split('<div class="yt-user-info"><a href="')[1].split('"')[0]}" rel="noreferrer noopener" target="_blank">${BDFDB.encodeToHTML(result.split('<div class="yt-user-info"><a href="')[1].split('>')[1].split('<')[0])}</a></div><div class="${BDFDB.disCNS.embedmargin + BDFDB.disCN.margintop4}"><a class="${BDFDB.disCNS.anchor + BDFDB.disCNS.embedtitlelink + BDFDB.disCNS.embedlink + BDFDB.disCNS.embedtitle + BDFDB.disCNS.size14 + BDFDB.disCN.weightmedium}" href="${itemsrc}" rel="noreferrer noopener" target="_blank">${BDFDB.encodeToHTML(result.split('<meta property="og:title" content="')[1].split('"')[0])}</a></div></div></div><div class="${BDFDB.disCNS.embedvideo + BDFDB.disCNS.embedimage + BDFDB.disCNS.embedmarginlarge + BDFDB.disCN.margintop8}" style="width: ${width}px; height: ${height}px;"><div class="${BDFDB.disCNS.imagewrapper + BDFDB.disCN.imagezoom}" style="width: ${width}px; height: ${height}px;"><img alt="" src="${result.split('<link itemprop="thumbnailUrl" href="')[1].split('"')[0]}" style="width: ${width}px; height: ${height}px;"></div><div class="${BDFDB.disCNS.embedvideoactions + BDFDB.disCNS.flexcenter + BDFDB.disCNS.flex + BDFDB.disCNS.justifycenter + BDFDB.disCN.aligncenter}"><div class="${BDFDB.disCNS.embedvideoactionsinner + BDFDB.disCNS.flexcenter + BDFDB.disCNS.flex + BDFDB.disCNS.justifycenter + BDFDB.disCN.aligncenter}"><div class="${BDFDB.disCN.iconactionswrapper}"><div tabindex="0" class="${BDFDB.disCN.iconwrapper}" role="button"><svg name="Play" class="${BDFDB.disCNS.iconplay + BDFDB.disCN.icon}" width="16" height="16" viewBox="0 0 24 24"><polygon fill="currentColor" points="0 0 0 14 11 7" transform="translate(7 5)"></polygon></svg></div><a class="${BDFDB.disCNS.anchor + BDFDB.disCN.iconwrapper}" href="${itemsrc}" rel="noreferrer noopener" target="_blank"><svg name="OpenExternal" class="${BDFDB.disCNS.iconexternalmargins + BDFDB.disCN.icon}" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" transform="translate(3.000000, 4.000000)" d="M16 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4v-2H2V4h14v10h-4v2h4c1.1 0 2-.9 2-2V2a2 2 0 0 0-2-2zM9 6l-4 4h3v6h2v-6h3L9 6z"></path></svg></a></div></div></div></div></div></div>`)[0];
-						$(embed).on("click." + this.getName(), BDFDB.dotCN.iconplay, (e) => {
+						let embed = BDFDB.htmlToElement(`<div class="FIP-embed ${BDFDB.disCNS.embed + BDFDB.disCNS.flex + BDFDB.disCN.embedold}" style="max-width: 426px;"><div class="${BDFDB.disCN.embedpill}" style="background-color: rgb(255, 0, 0);"></div><div class="${BDFDB.disCN.embedinner}"><div class="${BDFDB.disCNS.embedcontent + BDFDB.disCN.flex}"><div class="${BDFDB.disCN.embedcontentinner}"><div class=""><a class="${BDFDB.disCNS.anchor + BDFDB.disCNS.embedproviderlink + BDFDB.disCNS.embedlink + BDFDB.disCNS.embedprovider + BDFDB.disCNS.size12 + BDFDB.disCN.weightnormal}" href="https://www.youtube.com/" rel="noreferrer noopener" target="_blank">YouTube</a></div><div class="${BDFDB.disCNS.embedauthor + BDFDB.disCNS.flex + BDFDB.disCNS.aligncenter + BDFDB.disCNS.embedmargin + BDFDB.disCN.margintop4}"><a class="${BDFDB.disCNS.anchor + BDFDB.disCNS.embedauthornamelink + BDFDB.disCNS.embedlink + BDFDB.disCNS.embedauthorname + BDFDB.disCNS.weightmedium + BDFDB.disCN.size14}" href="https://www.youtube.com${result.split('<div class="yt-user-info"><a href="')[1].split('"')[0]}" rel="noreferrer noopener" target="_blank">${BDFDB.encodeToHTML(result.split('<div class="yt-user-info"><a href="')[1].split('>')[1].split('<')[0])}</a></div><div class="${BDFDB.disCNS.embedmargin + BDFDB.disCN.margintop4}"><a class="${BDFDB.disCNS.anchor + BDFDB.disCNS.embedtitlelink + BDFDB.disCNS.embedlink + BDFDB.disCNS.embedtitle + BDFDB.disCNS.size14 + BDFDB.disCN.weightmedium}" href="${itemsrc}" rel="noreferrer noopener" target="_blank">${BDFDB.encodeToHTML(result.split('<meta property="og:title" content="')[1].split('"')[0])}</a></div></div></div><div class="${BDFDB.disCNS.embedvideo + BDFDB.disCNS.embedimage + BDFDB.disCNS.embedmarginlarge + BDFDB.disCN.margintop8}" style="width: ${width}px; height: ${height}px;"><div class="${BDFDB.disCNS.imagewrapper + BDFDB.disCN.imagezoom}" style="width: ${width}px; height: ${height}px;"><img alt="" src="${result.split('<link itemprop="thumbnailUrl" href="')[1].split('"')[0]}" style="width: ${width}px; height: ${height}px;"></div><div class="${BDFDB.disCNS.embedvideoactions + BDFDB.disCNS.flexcenter + BDFDB.disCNS.flex + BDFDB.disCNS.justifycenter + BDFDB.disCN.aligncenter}"><div class="${BDFDB.disCNS.embedvideoactionsinner + BDFDB.disCNS.flexcenter + BDFDB.disCNS.flex + BDFDB.disCNS.justifycenter + BDFDB.disCN.aligncenter}"><div class="${BDFDB.disCN.iconactionswrapper}"><div tabindex="0" class="${BDFDB.disCN.iconwrapper}" role="button"><svg name="Play" class="${BDFDB.disCNS.iconplay + BDFDB.disCN.icon}" width="16" height="16" viewBox="0 0 24 24"><polygon fill="currentColor" points="0 0 0 14 11 7" transform="translate(7 5)"></polygon></svg></div><a class="${BDFDB.disCNS.anchor + BDFDB.disCN.iconwrapper}" href="${itemsrc}" rel="noreferrer noopener" target="_blank"><svg name="OpenExternal" class="${BDFDB.disCNS.iconexternalmargins + BDFDB.disCN.icon}" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" transform="translate(3.000000, 4.000000)" d="M16 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4v-2H2V4h14v10h-4v2h4c1.1 0 2-.9 2-2V2a2 2 0 0 0-2-2zM9 6l-4 4h3v6h2v-6h3L9 6z"></path></svg></a></div></div></div></div></div></div>`);
+						BDFDB.addChildEventListener(embed, "click", BDFDB.dotCN.iconplay, () => {
 							let videowrapper = embed.querySelector(BDFDB.dotCN.embedvideo);
-							while (videowrapper.firstChild) videowrapper.firstChild.remove();
-							$(`<iframe src="${result.split('<link itemprop="embedURL" href="')[1].split('"')[0]}?start=0&amp;autoplay=1&amp;auto_play=1" width="${width}" height="${height}" frameborder="0" allowfullscreen=""></iframe>`).appendTo(videowrapper);
+							BDFDB.removeEles(videowrapper.childNodes);
+							videowrapper.appendChild(BDFDB.htmlToElement(`<iframe src="${result.split('<link itemprop="embedURL" href="')[1].split('"')[0]}?start=0&amp;autoplay=1&amp;auto_play=1" width="${width}" height="${height}" frameborder="0" allowfullscreen=""></iframe>`));
 						});
 						this.insertEmbed(embed, previmage, links, accessory);
 					}
@@ -125,10 +128,10 @@ class ForceImagePreviews {
 		prev = prev ? prev : accessory.querySelector(`${BDFDB.dotCNS.embed + BDFDB.dotCN.embedtitlelink}[href="${previmage ? this.parseSrc(previmage.src) : void 0}"]`);
 		next = next ? next : accessory.querySelector(`${BDFDB.dotCNS.embed + BDFDB.dotCN.embedtitlelink}[href="${links[0] ? this.parseSrc(links[0].src) : void 0}"]`);
 		let isempty = accessory.childElementCount == 0;
-		if (embed.firstElementChild.classList.contains(BDFDB.disCN.embedimage)) embed.style.setProperty("pointer-events", "none", "important");
+		if (BDFDB.containsClass(embed.firstElementChild, BDFDB.disCN.embedimage)) embed.style.setProperty("pointer-events", "none", "important");
 		accessory.insertBefore(embed, prev ? prev.nextSibling : next);
 		let scroller = document.querySelector(BDFDB.dotCNS.chat + BDFDB.dotCN.messages);
-		if (scroller) scroller.scrollTop += (embed.getBoundingClientRect().height + (isempty ? 15 : 0));
+		if (scroller) scroller.scrollTop += (BDFDB.getRects(embed).height + (isempty ? 15 : 0));
 	}
 	
 	parseSrc (src) {

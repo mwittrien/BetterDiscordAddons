@@ -3,7 +3,7 @@
 class StalkerNotifications {
 	getName () {return "StalkerNotifications";}
 
-	getVersion () {return "1.1.1";}
+	getVersion () {return "1.1.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -164,69 +164,65 @@ class StalkerNotifications {
 
 		BDFDB.initElements(settingspanel, this);
 
-		$(settingspanel)
-			.on("click", ".btn-savesong", e => {this.saveAudio(settingspanel, e.currentTarget.getAttribute("option"));})
-			.on("click", ".mute-checkbox", e => {
-				let option = e.currentTarget.getAttribute("option");
-				let notificationsound = BDFDB.getData(option, this, "notificationsounds");
-				notificationsound.mute = e.currentTarget.checked;
-				BDFDB.saveData(option, notificationsound, this, "notificationsounds");
-			})
-			.on("mouseenter", ".settings-avatar", e => {
-				let user = this.UserUtils.getUser(e.currentTarget.getAttribute("user-id"));
-				let data = BDFDB.loadData(user.id, "EditUsers", "users") || {};
-				BDFDB.createTooltip(data.name ? data.name : user.username, e.currentTarget, {type:"top"});
-			})
-			.on("contextmenu", ".settings-avatar", e => {
-				if (!("Notification" in window)) return;
-				let desktopoff = !BDFDB.containsClass(e.currentTarget, "desktop");
-				let id = e.currentTarget.getAttribute("user-id");
-				BDFDB.removeClass(e.currentTarget, "disabled");
-				BDFDB.toggleClass(e.currentTarget, "desktop", desktopoff);
-				BDFDB.saveData(id, {"desktop":desktopoff,"disabled":false}, this, "users");
-			})
-			.on("click", ".settings-avatar", e => {
-				if (BDFDB.containsClass(e.target, "remove-user")) return;
-				let disableoff = !BDFDB.containsClass(e.currentTarget, "disabled");
-				let id = e.currentTarget.getAttribute("user-id");
-				BDFDB.removeClass(e.currentTarget, "desktop");
-				BDFDB.toggleClass(e.currentTarget, "disabled", disableoff);
-				BDFDB.saveData(id, {"desktop":false,"disabled":disableoff}, this, "users");
-			})
-			.on("click", ".disable-all, .toast-all, .desktop-all", e => {
-				let button = e.currentTarget;
-				let disableon = button.getAttribute("do-disable");
-				let desktopon = button.getAttribute("do-desktop");
-				let users = BDFDB.loadAllData(this, "users");
-				settingspanel.querySelectorAll(".settings-avatar").forEach(avatar => {
-					let id = avatar.getAttribute("user-id");
-					BDFDB.toggleClass(avatar, "disabled", disableon);
-					BDFDB.toggleClass(avatar, "desktop", desktopon);
-					users[id].desktop = desktopon ? true : false;
-					users[id].disabled = disableon ? true : false;
-				});
-				BDFDB.saveAllData(users, this, "users");
-			})
-			.on("click", ".btn-adduser", e => {
-				let idinput = settingspanel.querySelector("#input-userid");
-				let user = this.UserUtils.getUser(idinput.value);
-				if (user) {
-					idinput.value = "";
-					BDFDB.saveData(user.id, {desktop:false,disabled:false}, this, "users");
-					BDFDB.removeEles(this.getName() + "-settings .settings-avatar");
-					let listhtml = `<div class="avatar-list ${BDFDB.disCN.marginbottom8}">`;
-					let users = BDFDB.loadAllData(this, "users");
-					for (let id in users) {
-						let user = this.UserUtils.getUser(id);
-						if (user) listhtml += this.createSettingsAvatarHtml(user, users[id]);
-					}
-					listhtml += `</div>`;
-					settingspanel.querySelector(".avatar-list").innerHTML = listhtml;
-				}
-				else BDFDB.showToast("Please enter a valid UserID.",{type:"error"});
-			})
-			.on("click", ".remove-user", e => {
-				BDFDB.removeData(e.currentTarget.parentElement.getAttribute("user-id"), this, "users");
+		BDFDB.addEventListener(this, settingspanel, "click", ".btn-savesong", e => {this.saveAudio(settingspanel, e.currentTarget.getAttribute("option"));})
+		BDFDB.addEventListener(this, settingspanel, "click", ".mute-checkbox", e => {
+			let option = e.currentTarget.getAttribute("option");
+			let notificationsound = BDFDB.getData(option, this, "notificationsounds");
+			notificationsound.mute = e.currentTarget.checked;
+			BDFDB.saveData(option, notificationsound, this, "notificationsounds");
+		});
+		BDFDB.addEventListener(this, settingspanel, "mouseenter", ".settings-avatar", e => {
+			let user = this.UserUtils.getUser(e.currentTarget.getAttribute("user-id"));
+			let data = BDFDB.loadData(user.id, "EditUsers", "users") || {};
+			BDFDB.createTooltip(data.name ? data.name : user.username, e.currentTarget, {type:"top"});
+		});
+		BDFDB.addEventListener(this, settingspanel, "contextmenu", ".settings-avatar", e => {
+			if (!("Notification" in window)) return;
+			let desktopoff = !BDFDB.containsClass(e.currentTarget, "desktop");
+			let id = e.currentTarget.getAttribute("user-id");
+			BDFDB.removeClass(e.currentTarget, "disabled");
+			BDFDB.toggleClass(e.currentTarget, "desktop", desktopoff);
+			BDFDB.saveData(id, {"desktop":desktopoff,"disabled":false}, this, "users");
+		});
+		BDFDB.addEventListener(this, settingspanel, "click", ".settings-avatar", e => {
+			if (BDFDB.containsClass(e.target, "remove-user")) return;
+			let disableoff = !BDFDB.containsClass(e.currentTarget, "disabled");
+			let id = e.currentTarget.getAttribute("user-id");
+			BDFDB.removeClass(e.currentTarget, "desktop");
+			BDFDB.toggleClass(e.currentTarget, "disabled", disableoff);
+			BDFDB.saveData(id, {"desktop":false,"disabled":disableoff}, this, "users");
+		});
+		BDFDB.addEventListener(this, settingspanel, "click", ".remove-user", e => {
+			BDFDB.removeData(e.currentTarget.parentElement.getAttribute("user-id"), this, "users");
+			BDFDB.removeEles(this.getName() + "-settings .settings-avatar");
+			let listhtml = `<div class="avatar-list ${BDFDB.disCN.marginbottom8}">`;
+			let users = BDFDB.loadAllData(this, "users");
+			for (let id in users) {
+				let user = this.UserUtils.getUser(id);
+				if (user) listhtml += this.createSettingsAvatarHtml(user, users[id]);
+			}
+			listhtml += `</div>`;
+			settingspanel.querySelector(".avatar-list").innerHTML = listhtml;
+		});
+		BDFDB.addEventListener(this, settingspanel, "click", ".disable-all, .toast-all, .desktop-all", e => {
+			let disableon = e.currentTarget.getAttribute("do-disable");
+			let desktopon = e.currentTarget.getAttribute("do-desktop");
+			let users = BDFDB.loadAllData(this, "users");
+			settingspanel.querySelectorAll(".settings-avatar").forEach(avatar => {
+				let id = avatar.getAttribute("user-id");
+				BDFDB.toggleClass(avatar, "disabled", disableon);
+				BDFDB.toggleClass(avatar, "desktop", desktopon);
+				users[id].desktop = desktopon ? true : false;
+				users[id].disabled = disableon ? true : false;
+			});
+			BDFDB.saveAllData(users, this, "users");
+		});
+		BDFDB.addEventListener(this, settingspanel, "click", ".btn-adduser", e => {
+			let idinput = settingspanel.querySelector("#input-userid");
+			let user = this.UserUtils.getUser(idinput.value);
+			if (user) {
+				idinput.value = "";
+				BDFDB.saveData(user.id, {desktop:false,disabled:false}, this, "users");
 				BDFDB.removeEles(this.getName() + "-settings .settings-avatar");
 				let listhtml = `<div class="avatar-list ${BDFDB.disCN.marginbottom8}">`;
 				let users = BDFDB.loadAllData(this, "users");
@@ -236,18 +232,18 @@ class StalkerNotifications {
 				}
 				listhtml += `</div>`;
 				settingspanel.querySelector(".avatar-list").innerHTML = listhtml;
-			})
-			.on("click", ".btn-timelog", () => {
-				this.showTimeLog();
-			})
-			.on("input", ".amountInput", e => {
-				let input = parseInt(e.currentTarget.value);
-				if (!isNaN(input) && input > 0) {
-					BDFDB.saveData(e.currentTarget.getAttribute("option"), input, this, "amounts");
-					this.startInterval();
-				}
-				else e.currentTarget.value = 1;
-			});
+			}
+			else BDFDB.showToast("Please enter a valid UserID.",{type:"error"});
+		});
+		BDFDB.addEventListener(this, settingspanel, "click", ".btn-timelog", () => {this.showTimeLog();});
+		BDFDB.addEventListener(this, settingspanel, "input", ".amountInput", e => {
+			let input = parseInt(e.currentTarget.value);
+			if (!isNaN(input) && input > 0) {
+				BDFDB.saveData(e.currentTarget.getAttribute("option"), input, this, "amounts");
+				this.startInterval();
+			}
+			else e.currentTarget.value = 1;
+		});
 			
 		return settingspanel;
 	}
@@ -256,22 +252,25 @@ class StalkerNotifications {
 	load () {}
 
 	start () {
-		let libraryScript = null;
-		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+			libraryScript.setAttribute("date", performance.now());
+			libraryScript.addEventListener("load", () => {
+				BDFDB.loaded = true;
+				this.initialize();
+			});
 			document.head.appendChild(libraryScript);
 		}
+		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
 	initialize () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.loadMessage(this);
 			
 			this.ChannelUtils = BDFDB.WebModules.findByProperties("getDMFromUserId");
@@ -292,7 +291,7 @@ class StalkerNotifications {
 	}
 
 	stop () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			clearInterval(this.checkInterval);
 			BDFDB.unloadMessage(this);
 		}
@@ -364,7 +363,7 @@ class StalkerNotifications {
 						};
 						if (!user.desktop) {
 							let toast = BDFDB.showToast(`<div class="toast-inner"><div class="toast-avatar" style="background-image:url(${avatar});"></div><div>${string}</div></div>`, {html:true, timeout:5000, type:(online ? "success" : null), icon:false, selector:`stalkernotifications-${online ? "online" : "offline"}-toast`});
-							$(toast).on("click." + this.getName(), openChannel);
+							toast.addEventListener("click", openChannel);
 							let notificationsound = BDFDB.getData(online ? "toastonline" : "toastoffline", this, "notificationsounds");
 							if (!notificationsound.mute && notificationsound.song) {
 								let audio = new Audio();

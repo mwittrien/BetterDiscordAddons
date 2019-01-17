@@ -1,7 +1,20 @@
 //META{"name":"ChatFilter"}*//
 
 class ChatFilter {
+	getName () {return "ChatFilter";}
+
+	getVersion () {return "3.3.2";}
+
+	getAuthor () {return "DevilBro";}
+
+	getDescription () {return "Allows the user to censor words or block complete messages based on words in the chatwindow.";}
+	
 	initConstructor () {
+		this.patchModules = {
+			"Message":["componentDidMount","componentDidUpdate"],
+			"StandardSidebarView":"componentWillUnmount"
+		};
+		
 		this.configs = ["empty","case","exact"];
 		
 		this.css = ` 
@@ -9,11 +22,6 @@ class ChatFilter {
 			${BDFDB.dotCNS.messagegroup + BDFDB.dotCN.messagemarkup}.blocked:not(.revealed) {
 				font-weight: bold;
 				font-style: italic;
-			}
-			
-			${BDFDB.dotCNS.messagegroup + BDFDB.dotCN.messageaccessory}.censored:not(.revealed),
-			${BDFDB.dotCNS.messagegroup + BDFDB.dotCN.messagemarkup}:not(.revealed) {
-				
 			}`;
 		
 		this.defaults = {
@@ -27,14 +35,6 @@ class ChatFilter {
 			}
 		};
 	}
-
-	getName () {return "ChatFilter";}
-
-	getDescription () {return "Allows the user to censor words or block complete messages based on words in the chatwindow.";}
-
-	getVersion () {return "3.3.1";}
-
-	getAuthor () {return "DevilBro";}
 	
 	getSettingsPanel () {
 		if (!this.started || typeof BDFDB !== "object") return;
@@ -45,7 +45,7 @@ class ChatFilter {
 			var words = BDFDB.loadData(rtype, this, "words");
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto; min-width:55px;">${this.defaults.replaces[rtype].title}</h3><input rtype="${rtype}" action="add" type="text" placeholder="Wordvalue" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16} wordInputs" id="input-${rtype}-wordvalue" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">With:</h3><input rtype="${rtype}" action="add" type="text" placeholder="Replacevalue" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16} wordInputs" id="input-${rtype}-replacevalue" style="flex: 1 1 auto;"><button rtype="${rtype}" action="add" type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} btn-add btn-addword" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}"></div></button></div>`;
 			for (let key in settings) {
-				settingshtml += `<div rtype="${rtype}" value="${key}" class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" rtype="${rtype}" value="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}"${settings[key][rtype] ? " checked" : ""}></div></div>`;
+				if (this.defaults.settings[key].enabled[rtype]) settingshtml += `<div value="${key}" class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key} ${rtype}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key][rtype] ? " checked" : ""}></div></div>`;
 			}
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto; min-width: 320px;">${this.defaults.replaces[rtype].description}</h3><input rtype="${rtype}" type="text" placeholder="${this.defaults.replaces[rtype].value}" value="${replaces[rtype]}" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16} defaultInputs" id="input-${rtype}-defaultvalue" style="flex: 1 1 auto;"></div>`;
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto; max-width: ${560 - (this.configs.length * 33)}px;">List of ${rtype} Words:</h3><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifycenter + BDFDB.disCNS.alignend + BDFDB.disCN.nowrap}" style="flex: 1 1 auto; max-width: ${this.configs.length * 34}px;">`;
@@ -69,23 +69,16 @@ class ChatFilter {
 		settingshtml += `<div class="DevilBro-settings-inner-list info-container" ${infoHidden ? "style='display:none;'" : ""}><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Case: Will block/censor words while comparing lowercase/uppercase. apple => apple, not APPLE or AppLe</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Not Case: Will block/censor words while ignoring lowercase/uppercase. apple => apple, APPLE and AppLe</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Exact: Will block/censor words that are exactly the selected word. apple => apple, not applepie or pineapple</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Not Exact: Will block/censor all words containing the selected word. apple => apple, applepie and pineapple</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Empty: Ignores the default and set replace word and removes the word/message instead.</div></div>`;
 		settingshtml += `</div>`;
 		
-		var settingspanel = $(settingshtml)[0];
+		let settingspanel = BDFDB.htmlToElement(settingshtml);
 
-		BDFDB.initElements(settingspanel);
+		BDFDB.initElements(settingspanel, this);
 
-		$(settingspanel)
-			.on("click", BDFDB.dotCN.switchinner, () => {this.updateSettings(settingspanel);})
-			.on("keypress", ".wordInputs", (e) => {if (e.which == 13) this.updateContainer(settingspanel, e.currentTarget);})
-			.on("keyup", ".defaultInputs", (e) => {this.saveReplace(e.currentTarget);})
-			.on("click", ".btn-addword, .remove-word, .remove-all", (e) => {this.updateContainer(settingspanel, e.currentTarget);})
-			.on("click", BDFDB.dotCN.checkboxinput, (e) => {this.updateConfig(e.currentTarget);})
-			.on("click", ".toggle-info", (e) => {this.toggleInfo(settingspanel, e.currentTarget);});
+		BDFDB.addEventListener(this, settingspanel, "keypress", ".wordInputs", e => {if (e.which == 13) this.updateContainer(settingspanel, e.currentTarget);});
+		BDFDB.addEventListener(this, settingspanel, "keyup", ".defaultInputs", e => {this.saveReplace(e.currentTarget);});
+		BDFDB.addEventListener(this, settingspanel, "click", ".btn-addword, .remove-word, .remove-all", e => {this.updateContainer(settingspanel, e.currentTarget);});
+		BDFDB.addEventListener(this, settingspanel, "click", BDFDB.dotCN.checkboxinput, e => {this.updateConfig(e.currentTarget);});
+		BDFDB.addEventListener(this, settingspanel, "click", ".toggle-info", e => {this.toggleInfo(e.currentTarget);});
 			
-		for (let key in settings) {
-			for (let rtype in this.defaults.settings[key].enabled) {
-				if (!this.defaults.settings[key].enabled[rtype]) $(settingspanel).find(`${BDFDB.dotCN.flex}[value='${key}'][rtype='${rtype}']`).hide();
-			}
-		}
 		return settingspanel;
 	}
 
@@ -93,74 +86,28 @@ class ChatFilter {
 	load () {}
 
 	start () {
-		var libraryScript = null;
-		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+			libraryScript.setAttribute("date", performance.now());
+			libraryScript.addEventListener("load", () => {
+				BDFDB.loaded = true;
+				this.initialize();
+			});
 			document.head.appendChild(libraryScript);
 		}
+		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
 	initialize () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.loadMessage(this);
 			
-			var observer = null;
-
-			observer = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.type == "characterData") {
-							this.hideMessage(change.target.parentElement);
-						}
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								if (node.tagName && node.classList.contains(BDFDB.disCN.message)) this.hideMessage(node.querySelector(BDFDB.dotCN.messagemarkup));
-							});
-						}
-					}
-				);
-			});
-			BDFDB.addObserver(this, null, {name:"messageChangeObserver",instance:observer,multi:true}, {childList:true, characterData:true, subtree:true});
-			
-			observer = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.addedNodes) {
-							change.addedNodes.forEach((node) => {
-								if (node.tagName && node.querySelector(BDFDB.dotCN.message)) {
-									BDFDB.addObserver(this, node, {name:"messageChangeObserver",multi:true}, {childList:true, characterData:true, subtree:true});
-									node.querySelectorAll(BDFDB.dotCNC.messagemarkup + BDFDB.dotCN.messageaccessory).forEach(message => {
-										this.hideMessage(message);
-									});
-								}
-							});
-						}
-					}
-				);
-			});
-			BDFDB.addObserver(this, BDFDB.dotCN.messages, {name:"chatWindowObserver",instance:observer}, {childList:true});
-			
-			observer = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.removedNodes) {
-							change.removedNodes.forEach((node) => {
-								if (node && $(node).attr("layer-id") == "user-settings") this.hideAllMessages();
-							});
-						}
-					}
-				);
-			});
-			BDFDB.addObserver(this, BDFDB.dotCN.layers, {name:"settingsWindowObserver",instance:observer}, {childList:true});
-			
-			this.hideAllMessages();
+			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -168,19 +115,10 @@ class ChatFilter {
 	}
 
 	stop () {
-		if (typeof BDFDB === "object") {
-			document.querySelectorAll(`${BDFDB.dotCN.messagemarkup}.blocked, ${BDFDB.dotCN.messageaccessory}.blocked, ${BDFDB.dotCN.messagemarkup}.censored, ${BDFDB.dotCN.messageaccessory}.censored`).forEach(message => {
-				this.resetMessage(message);
-			});
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			document.querySelectorAll(`${BDFDB.dotCN.messagemarkup}.blocked, ${BDFDB.dotCN.messageaccessory}.censored, ${BDFDB.dotCN.messagemarkup}.blocked, ${BDFDB.dotCN.messageaccessory}.censored`).forEach(message => {this.resetMessage(message);});
 						
 			BDFDB.unloadMessage(this);
-		}
-	}
-	
-	onSwitch () {
-		if (typeof BDFDB === "object") {
-			this.hideAllMessages();
-			BDFDB.addObserver(this, BDFDB.dotCN.messages, {name:"chatWindowObserver"}, {childList:true, subtree:true});
 		}
 	}
 	
@@ -188,9 +126,24 @@ class ChatFilter {
 	// begin of own functions
 	
 	updateContainer (settingspanel, ele) {
-		var update = false, wordvalue = null, replacevalue = null;
-		var action = ele.getAttribute("action"), rtype = ele.getAttribute("rtype");
-		var words = BDFDB.loadData(rtype, this, "words") || {};
+		var wordvalue = null, replacevalue = null, action = ele.getAttribute("action"), rtype = ele.getAttribute("rtype"), words = BDFDB.loadData(rtype, this, "words") || {};
+		
+		var update = () => {
+			BDFDB.saveData(rtype, words, this, "words");
+			
+			var containerhtml = ``;
+			for (let word in words) {
+				containerhtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.hovercard}"><div class="${BDFDB.disCN.hovercardinner}"><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCNS.primary + BDFDB.disCN.ellipsis}" style="flex: 1 1 auto;">${BDFDB.encodeToHTML(word)} (${BDFDB.encodeToHTML(words[word].replace)})</div>`
+				for (let config of this.configs) {
+					containerhtml += `<div class="${BDFDB.disCNS.checkboxcontainer + BDFDB.disCN.marginreset}" style="flex: 0 0 auto;"><label class="${BDFDB.disCN.checkboxwrapper}"><input word="${word}" rtype="${rtype}" config="${config}" type="checkbox" class="${BDFDB.disCNS.checkboxinputdefault + BDFDB.disCN.checkboxinput}"${words[word][config] ? " checked" : ""}><div class="${BDFDB.disCNS.checkbox + BDFDB.disCNS.flexcenter + BDFDB.disCNS.flex + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.checkboxround}"><svg name="Checkmark" width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><polyline stroke="transparent" stroke-width="2" points="3.5 9.5 7 13 15 5"></polyline></g></svg></div></label></div>`;
+				}
+				containerhtml += `</div><div word="${word}" rtype="${rtype}" action="remove" class="${BDFDB.disCN.hovercardbutton} remove-word"></div></div>`;
+			}
+			containerhtml += `</div>`;
+			settingspanel.querySelector("." + rtype + "-list").innerHTML = containerhtml;
+			BDFDB.initElements(settingspanel, this);
+			this.SettingsUpdated = true;
+		};
 		
 		if (action == "add") {
 			var wordinput = settingspanel.querySelector("#input-" + rtype + "-wordvalue");
@@ -209,37 +162,21 @@ class ChatFilter {
 				};
 				wordinput.value = null;
 				replaceinput.value = null;
-				update = true;
+				update();
 			}
 		}
 		else if (action == "remove") {
 			wordvalue = ele.getAttribute("word");
 			if (wordvalue) {
 				delete words[wordvalue];
-				update = true;
+				update();
 			}
 		}
 		else if (action == "removeall") {
-			if (confirm("Are you sure you want to remove all added Words from your list?")) {
+			BDFDB.openConfirmModal(this, "Are you sure you want to remove all added Words from your list?", () => {
 				words = {};
-				update = true;
-			}
-		}
-		if (update) {
-			BDFDB.saveData(rtype, words, this, "words");
-			words = BDFDB.loadData(rtype, this, "words");
-			
-			var containerhtml = ``;
-			for (let word in words) {
-				containerhtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.hovercard}"><div class="${BDFDB.disCN.hovercardinner}"><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCNS.primary + BDFDB.disCN.ellipsis}" style="flex: 1 1 auto;">${BDFDB.encodeToHTML(word)} (${BDFDB.encodeToHTML(words[word].replace)})</div>`
-				for (let config of this.configs) {
-					containerhtml += `<div class="${BDFDB.disCNS.checkboxcontainer + BDFDB.disCN.marginreset}" style="flex: 0 0 auto;"><label class="${BDFDB.disCN.checkboxwrapper}"><input word="${word}" rtype="${rtype}" config="${config}" type="checkbox" class="${BDFDB.disCNS.checkboxinputdefault + BDFDB.disCN.checkboxinput}"${words[word][config] ? " checked" : ""}><div class="${BDFDB.disCNS.checkbox + BDFDB.disCNS.flexcenter + BDFDB.disCNS.flex + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.checkboxround}"><svg name="Checkmark" width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><polyline stroke="transparent" stroke-width="2" points="3.5 9.5 7 13 15 5"></polyline></g></svg></div></label></div>`;
-				}
-				containerhtml += `</div><div word="${word}" rtype="${rtype}" action="remove" class="${BDFDB.disCN.hovercardbutton} remove-word"></div></div>`;
-			}
-			containerhtml += `</div>`;
-			$(settingspanel).find("." + rtype + "-list").html(containerhtml);
-			BDFDB.initElements(settingspanel);
+				update();
+			});
 		}
 	}
 	
@@ -250,17 +187,6 @@ class ChatFilter {
 			var replaces = BDFDB.getData(rtype, this, "replaces");
 			BDFDB.saveData(rtype, wordvalue.trim(), this, "replaces");
 		}
-	}
-
-	updateSettings (settingspanel) {
-		var settings = {};
-		for (var input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner)) {
-			let key = input.getAttribute("value");
-			let rtype = input.getAttribute("rtype");
-			if (!settings[key]) settings[key] = {};
-			settings[key][rtype] = input.checked;
-		}
-		BDFDB.saveAllData(settings, this, "settings");
 	}
 	
 	updateConfig (ele) {
@@ -273,35 +199,34 @@ class ChatFilter {
 			BDFDB.saveData(rtype, words, this, "words");
 		}
 	}
-	
-	toggleInfo (settingspanel, ele) {
-		ele.classList.toggle(BDFDB.disCN.categorywrappercollapsed);
-		ele.classList.toggle(BDFDB.disCN.categorywrapperdefault);
+
+	toggleInfo (ele) {
+		BDFDB.toggleClass(ele, BDFDB.disCN.categorywrappercollapsed);
+		BDFDB.toggleClass(ele, BDFDB.disCN.categorywrapperdefault);
 		var svg = ele.querySelector(BDFDB.dotCN.categoryicontransition);
-		svg.classList.toggle(BDFDB.disCN.directionright);
-		svg.classList.toggle(BDFDB.disCN.categoryiconcollapsed);
-		svg.classList.toggle(BDFDB.disCN.categoryicondefault);
+		BDFDB.toggleClass(svg, BDFDB.disCN.directionright);
+		BDFDB.toggleClass(svg, BDFDB.disCN.categoryiconcollapsed);
+		BDFDB.toggleClass(svg, BDFDB.disCN.categoryicondefault);
 		
-		var visible = $(settingspanel).find(".info-container").is(":visible");
-		$(settingspanel).find(".info-container").toggle(!visible);
-		BDFDB.saveData("hideInfo", visible, this, "hideInfo");
+		BDFDB.toggleEles(ele.nextElementSibling);
+		BDFDB.saveData("hideInfo", BDFDB.isEleHidden(ele.nextElementSibling), this, "hideInfo");
 	}
 	
-	hideAllMessages () {
-		document.querySelectorAll(`${BDFDB.dotCN.messagemarkup}.blocked, ${BDFDB.dotCN.messageaccessory}.censored, ${BDFDB.dotCN.messagemarkup}.blocked, ${BDFDB.dotCN.messageaccessory}.censored`).forEach(message => {
-			this.resetMessage(message);
-		});
-		document.querySelectorAll(BDFDB.dotCN.messagegroup).forEach(messageContainer => {
-			BDFDB.addObserver(this, messageContainer, {name:"messageChangeObserver",multi:true}, {childList:true, characterData:true, subtree:true});
-			messageContainer.querySelectorAll(BDFDB.dotCNC.messagemarkup + BDFDB.dotCN.messageaccessory).forEach(message => {
-				this.hideMessage(message);
-			});
-		});
+	processMessage (instance, wrapper) {
+		wrapper.querySelectorAll(`${BDFDB.dotCNC.messagemarkup + BDFDB.dotCN.messageaccessory}`).forEach(message => {this.hideMessage(message);});
+	}
+	
+	processStandardSidebarView (instance, wrapper) {
+		if (this.SettingsUpdated) {
+			delete this.SettingsUpdated;
+			document.querySelectorAll(`${BDFDB.dotCN.messagemarkup}.blocked, ${BDFDB.dotCN.messageaccessory}.censored, ${BDFDB.dotCN.messagemarkup}.blocked, ${BDFDB.dotCN.messageaccessory}.censored`).forEach(message => {this.resetMessage(message);});
+			BDFDB.WebModules.forceAllUpdates(this);
+		}
 	}
 	
 	hideMessage (message) {
-		if (message.tagName && !message.classList.contains("blocked") && !message.classList.contains("censored")) {
-			var orightml = $(message).html();
+		if (message.tagName && !BDFDB.containsClass(message, "blocked", "censored", false)) {
+			var orightml = message.innerHTML;
 			var newhtml = "";
 			
 			if (orightml) {
@@ -343,13 +268,12 @@ class ChatFilter {
 					if (blocked) break;
 				}
 				if (blocked) {
-					if (settings.hideMessage.blocked) $(message).hide();
+					if (settings.hideMessage.blocked) BDFDB.toggleEles(message, false);
 					newhtml = BDFDB.encodeToHTML(blockedReplace);
-					$(message)
-						.html(newhtml)
-						.addClass("blocked")
-						.data("newhtmlChatFilter",newhtml)
-						.data("orightmlChatFilter",orightml);
+					message.innerHTML = newhtml;
+					BDFDB.addClass(message, "blocked");
+					message.ChatFilterOriginalHTML = orightml;
+					message.ChatFilterNewHTML = newhtml;
 						
 					this.addClickListener(message, settings.showMessageOnClick.blocked);
 				}
@@ -396,11 +320,10 @@ class ChatFilter {
 					
 					if (censored) {
 						newhtml = strings.join("");
-						$(message)
-							.html(newhtml)
-							.addClass("censored")
-							.data("newhtmlChatFilter",newhtml)
-							.data("orightmlChatFilter",orightml);
+						message.innerHTML = newhtml;
+						BDFDB.addClass(message, "censored");
+						message.ChatFilterOriginalHTML = orightml;
+						message.ChatFilterNewHTML = newhtml;
 							
 						this.addClickListener(message, settings.showMessageOnClick.censored);
 					}
@@ -422,34 +345,28 @@ class ChatFilter {
 	}
 	
 	resetMessage (message) {
-		$(message)
-			.html($(message).data("orightmlChatFilter"))
-			.off("click." + this.getName())
-			.removeClass("blocked")
-			.removeClass("censored")
-			.removeClass("revealed");
+		message.innerHTML = message.ChatFilterOriginalHTML;
+		BDFDB.removeClass(message, "blocked", "censored", "revealed");
+		BDFDB.toggleEles(message, true);
+		delete message.ChatFilterOriginalHTML;
+		delete message.ChatFilterNewHTML;
+		message.removeEventListener("click", message.clickChatFilterListener);
 	}
 	
-	addClickListener (message, add) {
-		$(message)
-			.off("click." + this.getName());
-		if (add) {
-			var orightml = $(message).data("orightmlChatFilter");
-			var newhtml = $(message).data("newhtmlChatFilter");
-			$(message)
-				.on("click." + this.getName(), () => {	
-					if ($(message).hasClass("revealed")) {
-						$(message)
-							.html(newhtml)
-							.removeClass("revealed");
-					}
-					else {
-						$(message)
-							.html(orightml)
-							.addClass("revealed");
-					}
-				});
-				
+	addClickListener (message, addListener) {
+		message.removeEventListener("click", message.clickChatFilterListener);
+		if (addListener) {
+			message.clickChatFilterListener = () => {
+				if (BDFDB.containsClass(message, "revealed")) {
+					BDFDB.removeClass(message, "revealed");
+					message.innerHTML = message.ChatFilterNewHTML;
+				}
+				else {
+					BDFDB.addClass(message, "revealed");
+					message.innerHTML = message.ChatFilterOriginalHTML;
+				}
+			};
+			message.addEventListener("click", message.clickChatFilterListener);
 		}
 	}
 }

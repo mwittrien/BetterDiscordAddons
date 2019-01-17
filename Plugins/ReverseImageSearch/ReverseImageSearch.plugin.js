@@ -1,6 +1,14 @@
 //META{"name":"ReverseImageSearch"}*//
 
 class ReverseImageSearch {
+	getName () {return "ReverseImageSearch";}
+
+	getVersion () {return "3.4.1";}
+	
+	getAuthor () {return "DevilBro";}
+
+	getDescription () {return "Adds a reverse image search option to the context menu.";}
+	
 	initConstructor () {
 		this.imgUrlReplaceString = "DEVILBRO_BD_REVERSEIMAGESEARCH_REPLACE_IMAGEURL";
 		
@@ -40,14 +48,6 @@ class ReverseImageSearch {
 				</div>
 			</div>`;
 	}
-		
-	getName () {return "ReverseImageSearch";}
-
-	getDescription () {return "Adds a reverse image search option to the context menu.";}
-
-	getVersion () {return "3.4.0";}
-	
-	getAuthor () {return "DevilBro";}
 
 	getSettingsPanel () {
 		if (!this.started || typeof BDFDB !== "object") return;
@@ -55,17 +55,14 @@ class ReverseImageSearch {
 		let settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">Search Engines:</h3></div><div class="DevilBro-settings-inner-list">`;
 		for (let key in engines) {
-			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.engines[key].name}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}"${engines[key] ? " checked" : ""}></div></div>`;
+			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.engines[key].name}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="engines ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${engines[key] ? " checked" : ""}></div></div>`;
 		}
 		settingshtml += `</div>`;
 		settingshtml += `</div></div>`;
 		
-		let settingspanel = $(settingshtml)[0];
+		let settingspanel = BDFDB.htmlToElement(settingshtml);
 
-		BDFDB.initElements(settingspanel);
-
-		$(settingspanel)
-			.on("click", BDFDB.dotCN.switchinner, () => {this.updateSettings(settingspanel);});
+		BDFDB.initElements(settingspanel, this);
 			
 		return settingspanel;
 	}
@@ -74,22 +71,25 @@ class ReverseImageSearch {
 	load () {}
 
 	start () {
-		let libraryScript = null;
-		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+			libraryScript.setAttribute("date", performance.now());
+			libraryScript.addEventListener("load", () => {
+				BDFDB.loaded = true;
+				this.initialize();
+			});
 			document.head.appendChild(libraryScript);
 		}
+		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
 	initialize () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.loadMessage(this);
 		}
 		else {
@@ -98,7 +98,7 @@ class ReverseImageSearch {
 	}
 
 	stop () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.unloadMessage(this);
 		}
 	}
@@ -108,14 +108,6 @@ class ReverseImageSearch {
 	
 	changeLanguageStrings () {
 		this.messageContextSubMenuMarkup = 	this.messageContextSubMenuMarkup.replace("REPLACE_submenu_disabled_text", this.labels.submenu_disabled_text);
-	}
-	
-	updateSettings (settingspanel) {
-		let settings = {};
-		for (let input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner)) {
-			settings[input.value] = input.checked;
-		}
-		BDFDB.saveAllData(settings, this, "engines");
 	}
 	
 	onNativeContextMenu (instance, menu) {
@@ -130,12 +122,12 @@ class ReverseImageSearch {
 				this.appendItem(instance, menu, instance.props.attachment.url);
 			}
 			if (instance.props.target.tagName == "A") {
-				menu.style.setProperty("display","none","important");
+				BDFDB.toggleEles(menu, false);
 				require("request")(instance.props.target.href, (error, response, result) => {
 					if (response && response.headers["content-type"] && response.headers["content-type"].indexOf("image") != -1) {
 						this.appendItem(instance, menu, instance.props.target.href);
 					}
-					menu.style.removeProperty("display");
+					BDFDB.toggleEles(menu, true);
 					BDFDB.updateContextPosition(menu);
 				});
 			}
@@ -149,28 +141,24 @@ class ReverseImageSearch {
 					if (url.split("/https/").length != 1) url = "https://" + url.split("/https/")[url.split("/https/").length-1];
 					else if (url.split("/http/").length != 1) url = "http://" + url.split("/http/")[url.split("/http/").length-1];
 				}
-				$(menu)
-					.append(this.messageContextEntryMarkup)
-					.on("mouseenter", ".reverseimagesearch-item", (e) => {
-						let messageContextSubMenu = $(this.messageContextSubMenuMarkup)[0];
-						let engines = BDFDB.getAllData(this, "engines");
-						$(messageContextSubMenu)
-							.on("click", ".RIS-item", (e2) => {
-								instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
-								let engine = e2.currentTarget.getAttribute("engine");
-								if (engine == "_all") {
-									for (let key in engines) {
-										if (key != "_all" && engines[key]) {
-											window.open(this.defaults.engines[key].url.replace(this.imgUrlReplaceString, encodeURIComponent(url)), "_blank");
-										}
-									}
-								}
-								else window.open(this.defaults.engines[engine].url.replace(this.imgUrlReplaceString, encodeURIComponent(url)), "_blank");
-							});
-						for (let key in engines) if (!engines[key]) BDFDB.removeEles(messageContextSubMenu.querySelector("[engine='" + key + "']"));
-						if (messageContextSubMenu.querySelector(".RIS-item")) BDFDB.removeEles(messageContextSubMenu.querySelector(".alldisabled-item"));
-						BDFDB.appendSubMenu(e.currentTarget, messageContextSubMenu);
+				let messageContextEntry = BDFDB.htmlToElement(this.messageContextEntryMarkup);
+				menu.appendChild(messageContextEntry);
+				let searchitem = messageContextEntry.querySelector(".reverseimagesearch-item");
+				searchitem.addEventListener("mouseenter", () => {
+					let messageContextSubMenu = BDFDB.htmlToElement(this.messageContextSubMenuMarkup);
+					let engines = BDFDB.getAllData(this, "engines");
+					for (let key in engines) if (!engines[key]) BDFDB.removeEles(messageContextSubMenu.querySelector("[engine='" + key + "']"));
+					if (messageContextSubMenu.querySelector(".RIS-item")) BDFDB.removeEles(messageContextSubMenu.querySelector(".alldisabled-item"));
+					BDFDB.addChildEventListener(messageContextSubMenu, "click", ".RIS-item", e => {
+						instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
+						let engine = e.currentTarget.getAttribute("engine");
+						if (engine == "_all") {
+							for (let key in engines) if (key != "_all" && engines[key]) window.open(this.defaults.engines[key].url.replace(this.imgUrlReplaceString, encodeURIComponent(url)), "_blank");
+						}
+						else window.open(this.defaults.engines[engine].url.replace(this.imgUrlReplaceString, encodeURIComponent(url)), "_blank");
 					});
+					BDFDB.appendSubMenu(searchitem, messageContextSubMenu);
+				});
 			}
 		}
 	}

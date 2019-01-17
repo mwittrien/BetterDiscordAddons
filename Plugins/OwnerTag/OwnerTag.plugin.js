@@ -3,7 +3,7 @@
 class OwnerTag {
 	getName () {return "OwnerTag";}
 
-	getVersion () {return "1.0.6";}
+	getVersion () {return "1.0.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -53,7 +53,7 @@ class OwnerTag {
 
 		BDFDB.initElements(settingspanel, this);
 
-		BDFDB.addChildEventListener(settingspanel, "keyup", BDFDB.dotCN.input, () => {this.saveInputs(settingspanel);});
+		BDFDB.addEventListener(this, settingspanel, "keyup", BDFDB.dotCN.input, () => {this.saveInputs(settingspanel);});
 			
 		return settingspanel;
 	}
@@ -62,22 +62,25 @@ class OwnerTag {
 	load () {}
 
 	start () {
-		var libraryScript = null;
-		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+			libraryScript.setAttribute("date", performance.now());
+			libraryScript.addEventListener("load", () => {
+				BDFDB.loaded = true;
+				this.initialize();
+			});
 			document.head.appendChild(libraryScript);
 		}
+		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
 	initialize () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.loadMessage(this);
 			
 			this.MemberUtils = BDFDB.WebModules.findByProperties("getMembers", "getMember");
@@ -92,7 +95,7 @@ class OwnerTag {
 	}
 
 	stop () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.removeEles(".owner-tag");
 			BDFDB.unloadMessage(this);
 		}
@@ -107,7 +110,7 @@ class OwnerTag {
 			inputs[input.getAttribute("option")] = input.value;
 		}
 		BDFDB.saveAllData(inputs, this, "inputs");
-		this.updateTags = true;
+		this.SettingsUpdated = true;
 	}
 	
 	processNameTag (instance, wrapper) {

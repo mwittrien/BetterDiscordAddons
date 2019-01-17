@@ -3,7 +3,7 @@
 class OldTitleBar {
 	getName () {return "OldTitleBar";}
 
-	getVersion () {return "1.5.2";}
+	getVersion () {return "1.5.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -94,7 +94,7 @@ class OldTitleBar {
 		var settings = BDFDB.getAllData(this, "settings"); 
 		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		for (let key in settings) {
-			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
+			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch${key == "displayNative" ? " nativetitlebar-switch" : ""}"${settings[key] ? " checked" : ""}></div></div>`;
 		}
 		settingshtml += `</div></div>`;
 		
@@ -102,7 +102,21 @@ class OldTitleBar {
 
 		BDFDB.initElements(settingspanel, this);
 
-		BDFDB.addChildEventListener(settingspanel, "click", BDFDB.dotCN.switchinner, e => {this.updateSettings(settingspanel, e.currentTarget.value);});
+		BDFDB.addEventListener(this, settingspanel, "click", ".nativetitlebar-switch", e => {
+			if (this.patchMainScreen(e.currentTarget.checked)) {
+				this.patched = !this.patched;
+				let notifybar = document.querySelector("#OldTitleBarNotifyBar");
+				if (notifybar) notifybar.querySelector(BDFDB.dotCN.noticedismiss).click();
+				if (this.patched) {
+					notifybar = BDFDB.createNotificationsBar("Changed nativebar settings, relaunch to see changes:", {type:"danger",btn:"Relaunch",id:"OldTitleBarNotifyBar"});
+					notifybar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", () => {
+						let app = require("electron").remote.app;
+						app.relaunch();
+						app.quit();
+					});
+				}
+			}
+		});
 			
 		return settingspanel;
 	}
@@ -111,21 +125,21 @@ class OldTitleBar {
 	load () {}
 
 	start () {
-		var libraryScript = null;
-		if (!global.BDFDB || typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+			libraryScript.setAttribute("date", performance.now());
+			libraryScript.addEventListener("load", () => {
+				BDFDB.loaded = true;
+				this.initialize();
+			});
 			document.head.appendChild(libraryScript);
 		}
+		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
-		else if (libraryScript) libraryScript.addEventListener("load", () => {
-			BDFDB.loaded = true;
-			this.initialize();
-		});
 	}
 
 	initialize () {
@@ -160,29 +174,6 @@ class OldTitleBar {
 
 	
 	// begin of own functions
-
-	updateSettings (settingspanel, key) {
-		var settings = {};
-		for (var input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner)) {
-			settings[input.value] = input.checked;
-		}
-		BDFDB.saveAllData(settings, this, "settings");
-		if (key == "displayNative") {
-			if (this.patchMainScreen(settings[key])) {
-				this.patched = !this.patched;
-				let notifybar = document.querySelector("#OldTitleBarNotifyBar");
-				if (notifybar) notifybar.querySelector(BDFDB.dotCN.noticedismiss).click();
-				if (this.patched) {
-					notifybar = BDFDB.createNotificationsBar("Changed nativebar settings, relaunch to see changes:", {type:"danger",btn:"Relaunch",id:"OldTitleBarNotifyBar"});
-					notifybar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", e => {
-						let app = require("electron").remote.app;
-						app.relaunch();
-						app.quit();
-					});
-				}
-			}
-		}
-	}
 	
 	processHeaderBar (instance, wrapper) {
 		this.addTitleBar();

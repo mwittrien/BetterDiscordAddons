@@ -1,39 +1,42 @@
 //META{"name":"WriteUpperCase"}*//
 
 class WriteUpperCase {
-	initConstructor () {
-		this.patchModules = {
-			"ChannelTextArea":"componentDidMount"
-		};
-	}
-	
 	getName () {return "WriteUpperCase";}
 
-	getDescription () {return "Change input to uppercase.";}
-
-	getVersion () {return "1.1.9";}
+	getVersion () {return "1.2.0";}
 
 	getAuthor () {return "DevilBro";}
+
+	getDescription () {return "Change input to uppercase.";}
+	
+	initConstructor () {
+		this.patchModules = {
+			"ChannelTextArea":"componentDidMount",
+		};
+	}
 
 	load () {}
 
 	start () {
-		var libraryScript = null;
-		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+			libraryScript.setAttribute("date", performance.now());
+			libraryScript.addEventListener("load", () => {
+				BDFDB.loaded = true;
+				this.initialize();
+			});
 			document.head.appendChild(libraryScript);
 		}
+		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
 	initialize () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.loadMessage(this);
 			
 			BDFDB.WebModules.forceAllUpdates(this);
@@ -44,7 +47,7 @@ class WriteUpperCase {
 	}
 
 	stop () {
-		if (typeof BDFDB === "object") {			
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {			
 			BDFDB.unloadMessage(this);
 		}
 	}
@@ -52,11 +55,11 @@ class WriteUpperCase {
 	
 	// begin of own functions
 	
-	bindEventToTextArea (textarea) {
-		if (!textarea) return;
-		$(textarea)
-			.off("keyup." + this.getName())
-			.on("keyup." + this.getName(), () => {
+	processChannelTextArea (instance, wrapper) {
+		if (instance.props && instance.props.type) {
+			var textarea = wrapper.querySelector("textarea");
+			if (!textarea) return;
+			BDFDB.addEventListener(this, textarea, "keyup", () => {
 				clearTimeout(textarea.WriteUpperCaseTimeout);
 				textarea.WriteUpperCaseTimeout = setTimeout(() => {
 					let string = textarea.value;
@@ -77,9 +80,6 @@ class WriteUpperCase {
 					}
 				},1);
 			});
-	}
-	
-	processChannelTextArea (instance, wrapper) {
-		if (instance.props && instance.props.type) this.bindEventToTextArea(wrapper.querySelector("textarea"));
+		}
 	}
 }

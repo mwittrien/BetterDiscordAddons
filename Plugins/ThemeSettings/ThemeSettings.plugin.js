@@ -3,7 +3,7 @@
 class ThemeSettings {
 	getName () {return "ThemeSettings";}
 
-	getVersion () {return "1.0.9";}
+	getVersion () {return "1.1.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -19,22 +19,25 @@ class ThemeSettings {
 	load () {}
 
 	start () {
-		var libraryScript = null;
-		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+			libraryScript.setAttribute("date", performance.now());
+			libraryScript.addEventListener("load", () => {
+				BDFDB.loaded = true;
+				this.initialize();
+			});
 			document.head.appendChild(libraryScript);
 		}
+		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
 	initialize () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.loadMessage(this);
 			
 			this.fs = require("fs");
@@ -49,7 +52,7 @@ class ThemeSettings {
 	}
 
 	stop () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.removeEles(".themes-settings-button",".themes-settings-footer");
 			BDFDB.unloadMessage(this);
 		}
@@ -73,8 +76,8 @@ class ThemeSettings {
 				button.innerText = "Settings";
 				footer.appendChild(button);
 				button.addEventListener("click", () => {
-					wrapper.classList.add(BDFDB.disCN._reposettingsopen);
-					wrapper.classList.remove(BDFDB.disCN._reposettingsclosed);
+					BDFDB.addClass(wrapper, BDFDB.disCN._reposettingsopen);
+					BDFDB.removeClass(wrapper, BDFDB.disCN._reposettingsclosed);
 					let children = [];
 					while (wrapper.childElementCount) {
 						children.push(wrapper.firstChild);
@@ -83,8 +86,8 @@ class ThemeSettings {
 					let closebutton = BDFDB.htmlToElement(`<div style="float: right; cursor: pointer;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" style="width: 18px; height: 18px;"><g class="background" fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="#dcddde" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div>`);
 					wrapper.appendChild(closebutton);
 					closebutton.addEventListener("click", () => {
-						wrapper.classList.remove(BDFDB.disCN._reposettingsopen);
-						wrapper.classList.add(BDFDB.disCN._reposettingsclosed);
+						BDFDB.removeClass(wrapper, BDFDB.disCN._reposettingsopen);
+						BDFDB.addClass(wrapper, BDFDB.disCN._reposettingsclosed);
 						while (wrapper.childElementCount) wrapper.firstChild.remove();
 						while (children.length) wrapper.appendChild(children.shift());
 					})
@@ -114,7 +117,7 @@ class ThemeSettings {
 		let settingspanel = BDFDB.htmlToElement(settingshtml);
 		var settingspanelinner = settingspanel.querySelector(".DevilBro-settings-inner");
 		
-		var maxwidth = wrapper.getBoundingClientRect().width - 80;
+		var maxwidth = BDFDB.getRects(wrapper).width - 80;
 		
 		for (let varstr of vars) {
 			varstr = varstr.split(":");
@@ -132,7 +135,7 @@ class ThemeSettings {
 		
 		BDFDB.initElements(settingspanel, this);
 
-		BDFDB.addChildEventListener(settingspanel, "click", ".update-button", () => {
+		BDFDB.addEventListener(this, settingspanel, "click", ".update-button", () => {
 			let path = this.path.join(this.dir, theme.filename);
 			let css = this.fs.readFileSync(path).toString();
 			if (css) {

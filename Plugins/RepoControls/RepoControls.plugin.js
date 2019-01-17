@@ -3,7 +3,7 @@
 class RepoControls {
 	getName () {return "RepoControls";}
 
-	getVersion () {return "1.2.4";}
+	getVersion () {return "1.2.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -37,8 +37,8 @@ class RepoControls {
 				<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCNS.searchbar + BDFDB.disCN.size14}" style="flex: 1 1 auto;">
 					<input class="${BDFDB.disCN.searchbarinput}" value="" placeholder="Search for ..." style="flex: 1 1 auto;">
 					<div class="${BDFDB.disCN.searchbariconwrap}">
-						<i class="${BDFDB.disCNS.searchbaricon + BDFDB.disCNS.searchbareyeglass + BDFDB.disCN.searchbarvisible}"/>
-						<i class="${BDFDB.disCNS.searchbaricon + BDFDB.disCN.searchbarclear}"/>
+						<i class="${BDFDB.disCNS.searchbaricon + BDFDB.disCNS.searchbareyeglass + BDFDB.disCN.searchbarvisible}"></i>
+						<i class="${BDFDB.disCNS.searchbaricon + BDFDB.disCN.searchbarclear}"></i>
 					</div>
 				</div>
 				<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}" style="flex: 0 1 auto;">
@@ -66,7 +66,7 @@ class RepoControls {
 			</div>`;
 			
 		this.sortPopoutMarkup =
-			`<div class="${BDFDB.disCNS.popout + BDFDB.disCNS.popoutbottomright + BDFDB.disCN.popoutnoshadow} repocontrols-sort-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);" option="sort">
+			`<div class="${BDFDB.disCNS.popout + BDFDB.disCNS.popoutbottomright + BDFDB.disCN.popoutnoshadow} repocontrols-sort-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
 				<div>
 					<div class="${BDFDB.disCN.contextmenu} quickSelectPopout">
 						<div class="${BDFDB.disCN.contextmenuitemgroup}">
@@ -77,7 +77,7 @@ class RepoControls {
 			</div>`;
 			
 		this.orderPopoutMarkup =
-			`<div class="${BDFDB.disCNS.popout + BDFDB.disCNS.popoutbottomright + BDFDB.disCN.popoutnoshadow} repocontrols-order-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);" option="order">
+			`<div class="${BDFDB.disCNS.popout + BDFDB.disCNS.popoutbottomright + BDFDB.disCN.popoutnoshadow} repocontrols-order-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
 				<div>
 					<div class="${BDFDB.disCN.contextmenu} quickSelectPopout">
 						<div class="${BDFDB.disCN.contextmenuitemgroup}">
@@ -121,17 +121,14 @@ class RepoControls {
 		let settings = BDFDB.getAllData(this, "settings");
 		let settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		for (let key in settings) {
-			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}"${settings[key] ? " checked" : ""}></div></div>`;
+			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
 		}
 		settingshtml += `</div></div>`;
 		
-		let settingspanel = $(settingshtml)[0];
+		let settingspanel = BDFDB.htmlToElement(settingshtml);
 
-		BDFDB.initElements(settingspanel);
+		BDFDB.initElements(settingspanel, this);
 
-		$(settingspanel)
-			.on("click", BDFDB.dotCN.switchinner, () => {this.updateSettings(settingspanel);});
-			
 		return settingspanel;
 	}
 
@@ -139,22 +136,25 @@ class RepoControls {
 	load () {}
 
 	start () {
-		let libraryScript = null;
-		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+			libraryScript.setAttribute("date", performance.now());
+			libraryScript.addEventListener("load", () => {
+				BDFDB.loaded = true;
+				this.initialize();
+			});
 			document.head.appendChild(libraryScript);
 		}
+		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
 	initialize () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.loadMessage(this);
 			
 			this.fs = require("fs");
@@ -170,7 +170,7 @@ class RepoControls {
 
 
 	stop () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.removeEles(".repo-controls","#bd-settingspane-container .trashIcon");
 			BDFDB.removeClasses("repocontrols-added");
 			
@@ -180,6 +180,8 @@ class RepoControls {
 				for (let li of list.querySelectorAll("li")) {
 					li.style.removeProperty("display");
 					li.style.removeProperty("order");
+					var checkbox = li.querySelector(BDFDB.dotCN._repocheckbox);
+					if (checkbox) checkbox.removeEventListener("change", checkbox.changeRepoControlsListener);
 				}
 			}
 			
@@ -189,14 +191,6 @@ class RepoControls {
 
 	
 	// begin of own functions
-
-	updateSettings (settingspanel) {
-		let settings = {};
-		for (let input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner)) {
-			settings[input.value] = input.checked;
-		}
-		BDFDB.saveAllData(settings, this, "settings");
-	}
 	
 	processV2CList (instance, container) {
 		if (instance._reactInternalFiber.key) this.addControls(instance._reactInternalFiber.key.split("-")[0], container);
@@ -222,7 +216,7 @@ class RepoControls {
 		if (!name) return;
 		let path = global[`bd${type}s`] && global[`bd${type}s`][name] ? this.path.join(this.dirs[type], global[`bd${type}s`][name].filename) : null;
 		if (!path) return;
-		let button = $(this.deleteButtonMarkup)[0];
+		let button = BDFDB.htmlToElement(this.deleteButtonMarkup);
 		button.addEventListener("click", () => {
 			let deleteFile = () => {
 				this.fs.unlink(path, (error) => {
@@ -235,7 +229,7 @@ class RepoControls {
 				deleteFile();
 			});
 		});
-		button.addEventListener("mouseenter", (e) => {
+		button.addEventListener("mouseenter", e => {
 			BDFDB.createTooltip(`Delete ${type[0].toUpperCase() + type.slice(1)}`, e.currentTarget, {type:"top",selector:"repocontrols-trashicon-tooltip"});
 		});
 		let controls = wrapper.querySelector(BDFDB.dotCN._repocontrols);
@@ -246,38 +240,49 @@ class RepoControls {
 		if (!type || !container) return;
 		BDFDB.removeEles(".repo-controls");
 		
-		container.style.setProperty("display","flex","important");
-		container.style.setProperty("flex-direction","column","important");
+		container.style.setProperty("display", "flex", "important");
+		container.style.setProperty("flex-direction", "column", "important");
 		
 		let sortings = BDFDB.getAllData(this, "sortings");
 		
-		let repoControls = $(this.repoControlsMarkup);
-		BDFDB.initElements(repoControls);
-		repoControls.find(".sort-filter " + BDFDB.dotCN.quickselectvalue).attr("option", sortings.sort).text(this.sortings.sort[sortings.sort]);
-		repoControls.find(".order-filter " + BDFDB.dotCN.quickselectvalue).attr("option", sortings.order).text(this.sortings.order[sortings.order]);
-		repoControls
-			.on("keyup." + this.getName(), BDFDB.dotCN.searchbarinput, () => {
-				clearTimeout(repoControls.searchTimeout);
-				repoControls.searchTimeout = setTimeout(() => {this.sortEntries(container, repoControls);},1000);
-			})
-			.on("click." + this.getName(), BDFDB.dotCN.searchbarclear + BDFDB.dotCN.searchbarvisible, () => {
-				this.sortEntries(container, repoControls);
-			})
-			.on("click." + this.getName(), ".btn-enableall", (e) => {
-				this.toggleAll(type, container, true);
-			})
-			.on("click." + this.getName(), ".btn-disableall", (e) => {
-				this.toggleAll(type, container, false);
-			})
-			.on("click." + this.getName(), ".sort-filter", (e) => {
-				this.openSortPopout(e, this.sortPopoutMarkup, container, repoControls);
-			})
-			.on("click." + this.getName(), ".order-filter", (e) => {
-				this.openSortPopout(e, this.orderPopoutMarkup, container, repoControls);
-			})
-			.insertBefore(container);
+		let repocontrols = BDFDB.htmlToElement(this.repoControlsMarkup);
+		BDFDB.initElements(repocontrols);
+		container.parentElement.insertBefore(repocontrols, container);
 		
-		container.classList.add("repocontrols-added");
+		let sortfilter = repocontrols.querySelector(".sort-filter " + BDFDB.dotCN.quickselectvalue);
+		sortfilter.setAttribute("option", sortings.sort);
+		sortfilter.innerText = this.sortings.sort[sortings.sort];
+		let orderfilter = repocontrols.querySelector(".order-filter " + BDFDB.dotCN.quickselectvalue);
+		orderfilter.setAttribute("option", sortings.order);
+		orderfilter.innerText = this.sortings.order[sortings.order];
+		
+		BDFDB.addChildEventListener(repocontrols, "keyup", BDFDB.dotCN.searchbarinput, () => {
+			clearTimeout(repocontrols.searchTimeout);
+			repocontrols.searchTimeout = setTimeout(() => {this.sortEntries(container, repocontrols);},1000);
+		});
+		BDFDB.addChildEventListener(repocontrols, "click", BDFDB.dotCN.searchbarclear + BDFDB.dotCN.searchbarvisible, () => {
+			this.sortEntries(container, repocontrols);
+		});
+		BDFDB.addChildEventListener(repocontrols, "click", ".btn-enableall", e => {
+			this.toggleAll(type, container, true);
+		});
+		BDFDB.addChildEventListener(repocontrols, "click", ".btn-disableall", e => {
+			this.toggleAll(type, container, false);
+		});
+		BDFDB.addChildEventListener(repocontrols, "click", ".sort-filter", e => {
+			BDFDB.createSortPopout(e.currentTarget, this.sortPopoutMarkup, () => {
+				BDFDB.saveData("sort", sortfilter.getAttribute("option"), this, "sortings");
+				this.sortEntries(container, repocontrols);
+			});
+		});
+		BDFDB.addChildEventListener(repocontrols, "click", ".order-filter", e => {
+			BDFDB.createSortPopout(e.currentTarget, this.orderPopoutMarkup, () => {
+				BDFDB.saveData("order", orderfilter.getAttribute("option"), this, "sortings");
+				this.sortEntries(container, repocontrols);
+			});
+		});
+		
+		BDFDB.addClass(container, "repocontrols-added");
 			
 		container.entries = {};
 		for (let li of container.children) {
@@ -304,12 +309,12 @@ class RepoControls {
 				};
 			}
 		}
-		this.sortEntries(container, repoControls);
+		this.sortEntries(container, repocontrols);
 	}
 	
-	sortEntries (container, repoControls) {
+	sortEntries (container, repocontrols) {
 		if (typeof container.entries != "object") return;
-		let searchstring = repoControls.find(BDFDB.dotCN.searchbarinput).val().replace(/[<|>]/g, "").toUpperCase();
+		let searchstring = repocontrols.querySelector(BDFDB.dotCN.searchbarinput).value.replace(/[<|>]/g, "").toUpperCase();
 		
 		let sortings = BDFDB.getAllData(this, "sortings");
 		let entries = BDFDB.filterObject(container.entries, entry => {return entry.search.indexOf(searchstring) > -1 ? entry : null;});
@@ -321,26 +326,23 @@ class RepoControls {
 			let pos = entrypositions.indexOf(name);
 			if (pos > -1) {
 				this.changeTextToHTML(li, searchstring);
-				li.style.removeProperty("display");
 				li.style.setProperty("order", pos, "important");
-				$(li)
-					.find(BDFDB.dotCN._repocheckbox)
-						.off("change." + this.getName())
-						.on("change." + this.getName(), (e) => {
-							entries[name].enabled = e.checked ? 0 : 1
-						});
+				var checkbox = li.querySelector(BDFDB.dotCN._repocheckbox);
+				if (checkbox) {
+					checkbox.removeEventListener("change", checkbox.changeRepoControlsListener);
+					checkbox.changeRepoControlsListener = () => {entries[name].enabled = checkbox.checked ? 0 : 1};
+					checkbox.addEventListener("change", checkbox.changeRepoControlsListener);
+				}
 			}
-			else { 
-				li.style.setProperty("display", "none", "important");
-				li.style.removeProperty("order");
-			}
+			else li.style.removeProperty("order");
+			BDFDB.toggleEles(li, pos > -1)
 		}
 	}
 	
 	changeTextToHTML (wrapper, searchstring) {
 		if (!wrapper || !wrapper.tagName) return;
 		for (let ele of wrapper.querySelectorAll(BDFDB.dotCNC._reponame + BDFDB.dotCNC._repoversion + BDFDB.dotCNC._repoauthor + BDFDB.dotCN._repodescription)) {
-			if (ele.classList.contains(BDFDB.disCN._repodescription)) {
+			if (BDFDB.containsClass(ele, BDFDB.disCN._repodescription)) {
 				ele.style.display = "block";
 				if (searchstring && searchstring.length > 2) ele.innerHTML = BDFDB.highlightText(ele.innerText, searchstring);
 				else ele.innerHTML = ele.innerText;
@@ -358,44 +360,11 @@ class RepoControls {
 						let switchinner = switchwrap.querySelector(BDFDB.dotCN._repocheckboxinner);
 						let switchinput = switchwrap.querySelector(BDFDB.dotCN._repocheckbox);
 						if (switchinner && switchinput) {
-							if (switchinner.classList.contains("checked") && !enable) switchinput.click();
-							else if (!switchinner.classList.contains("checked") && enable) switchinput.click();
+							if (BDFDB.containsClass(switchinner, BDFDB.disCN._repocheckboxchecked) && !enable) switchinput.click();
+							else if (!BDFDB.containsClass(switchinner, BDFDB.disCN._repocheckboxchecked) && enable) switchinput.click();
 						}
 					}
 				}
-			}
-		});
-	}
-	
-	openSortPopout (e, markup, container, repoControls) {
-		let wrapper = e.currentTarget;
-		if (wrapper.classList.contains("popout-open")) return;
-		wrapper.classList.add("popout-open");
-		let value = $(wrapper).find(BDFDB.dotCN.quickselectvalue);
-		let popout = $(markup);
-		$(BDFDB.dotCN.popouts).append(popout)
-			.off("click", BDFDB.dotCN.contextmenuitem)
-			.on("click", BDFDB.dotCN.contextmenuitem, (e2) => {
-				let option = $(e2.currentTarget).attr("option");
-				value.text($(e2.currentTarget).text());
-				value.attr("option", option);
-				$(document).off("mousedown.sortpopout" + this.getName());
-				popout.remove();
-				BDFDB.saveData(popout.attr("option"), option, this, "sortings");
-				this.sortEntries(container, repoControls);
-				setTimeout(() => {wrapper.classList.remove("popout-open");},300);
-			});
-			
-		popout
-			.css("left", $(wrapper).offset().left + $(wrapper).outerWidth() + "px")
-			.css("top", $(wrapper).offset().top + value.outerHeight() + "px")
-			.find(BDFDB.dotCN.contextmenu).addClass(BDFDB.getDiscordTheme());
-			
-		$(document).on("mousedown.sortpopout" + this.getName(), (e2) => {
-			if (popout.has(e2.target).length == 0) {
-				$(document).off("mousedown.sortpopout" + this.getName());
-				popout.remove();
-				setTimeout(() => {wrapper.classList.remove("popout-open");},300);
 			}
 		});
 	}

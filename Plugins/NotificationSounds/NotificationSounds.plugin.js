@@ -1,6 +1,14 @@
 //META{"name":"NotificationSounds"}*//
 
 class NotificationSounds {
+	getName () {return "NotificationSounds";}
+
+	getVersion () {return "3.2.4";}
+
+	getAuthor () {return "DevilBro";}
+	
+	getDescription () {return "Allows you to replace the native sounds of Discord with your own";}
+	
 	initConstructor () {
 		this.patchModules = {
 			"IncomingCalls":"componentDidMount",
@@ -91,14 +99,6 @@ class NotificationSounds {
 		
 		this.firedEvents = {};
 	}
-
-	getName () {return "NotificationSounds";}
-	
-	getDescription () {return "Allows you to replace the native sounds of Discord with your own";}
-
-	getVersion () {return "3.2.3";}
-
-	getAuthor () {return "DevilBro";}
 	
 	getSettingsPanel () {
 		if (!this.started || typeof BDFDB !== "object") return;
@@ -119,8 +119,7 @@ class NotificationSounds {
 		
 		for (var type in this.types) {
 			var choice = BDFDB.loadData(type, this, "choices");
-			var unimplemented = this.types[type].implemented ? "" : " unimplemented";
-			settingshtml += `<div class="${type}-song-settings ${unimplemented}"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.types[type].name}:</h3><h5 class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.h5 + BDFDB.disCNS.title + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.h5defaultmargin}" style="flex: 0 0 auto;">Mute in DnD:</h5><div type="${type}" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} mute-checkbox"${choice.mute ? " checked" : ""}></div></div><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">`;
+			settingshtml += `<div class="${type}-song-settings${this.types[type].implemented ? '"' : ' unimplemented" style="display: none !important;"'}><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.types[type].name}:</h3><h5 class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.h5 + BDFDB.disCNS.title + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.h5defaultmargin}" style="flex: 0 0 auto;">Mute in DnD:</h5><div type="${type}" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} mute-checkbox"${choice.mute ? " checked" : ""}></div></div><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">`;
 			for (var key of fields) {
 				settingshtml += `<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 33%;"><h5 class="${BDFDB.disCNS.h5 + BDFDB.disCNS.title + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.h5defaultmargin + BDFDB.disCN.marginbottom4}">${key}:</h5><div class="${BDFDB.disCN.selectwrap}"><div type="${type}" option="${key}" value="${choice[key]}" class="${BDFDB.disCNS.select + BDFDB.disCNS.selectsingle + BDFDB.disCN.selecthasvalue}"><div class="${BDFDB.disCN.selectcontrol}"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignbaseline + BDFDB.disCNS.nowrap + BDFDB.disCN.selectvalue}" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.primary + BDFDB.disCN.weightnormal}" style="padding:0;">${choice[key]}</div></div><span class="${BDFDB.disCN.selectarrowzone}"><span class="${BDFDB.disCN.selectarrow}"></span></span></div></div></div></div>`;
 			}
@@ -131,47 +130,44 @@ class NotificationSounds {
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Remove all added songs.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} reset-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Reset</div></button></div>`;
 		settingshtml += `</div></div>`;
 		
-		var settingspanel = $(settingshtml)[0];
+		let settingspanel = BDFDB.htmlToElement(settingshtml);
 
-		BDFDB.initElements(settingspanel);
+		BDFDB.initElements(settingspanel, this);
 
-		$(settingspanel)
-			.on("click", BDFDB.dotCN.selectcontrol, (e) => {this.openDropdownMenu(settingspanel, e);})
-			.on("click", ".btn-addsong", (e) => {this.saveAudio(settingspanel);})
-			.on("keyup", ".songInput", (e) => {if (e.which == 13) this.saveAudio(settingspanel);})
-			.on("click", ".reset-button", () => {
-				BDFDB.openConfirmModal(this, "Are you sure you want to delete all added songs?", () => {
-					BDFDB.removeAllData(this, "choices");
-					BDFDB.removeAllData(this, "audios");
-					this.loadAudios();
-					this.loadChoices();
-					settingspanel.querySelectorAll(BDFDB.dotCN.select).forEach((wrap) => {
-						wrap.setAttribute("value", "---");
-						wrap.querySelector(BDFDB.dotCN.title).innerText = "---";
-					});
-					settingspanel.querySelectorAll(BDFDB.dotCN.slidergrabber).forEach((grabber) => {
-						grabber.style.left = "100%";
-					});
-					settingspanel.querySelectorAll(BDFDB.dotCN.sliderbarfill).forEach((bar) => {
-						bar.style.width = "100%";
-					});
-					settingspanel.querySelectorAll(".volumeInput").forEach((input) => {
-						input.value = 100;
-					});
+		BDFDB.addEventListener(this, settingspanel, "click", BDFDB.dotCN.selectcontrol, e => {this.openDropdownMenu(settingspanel, e);});
+		BDFDB.addEventListener(this, settingspanel, "click", ".btn-addsong", e => {this.saveAudio(settingspanel);});
+		BDFDB.addEventListener(this, settingspanel, "keyup", ".songInput", e => {if (e.which == 13) this.saveAudio(settingspanel);});
+		BDFDB.addEventListener(this, settingspanel, "click", ".reset-button", () => {
+			BDFDB.openConfirmModal(this, "Are you sure you want to delete all added songs?", () => {
+				BDFDB.removeAllData(this, "choices");
+				BDFDB.removeAllData(this, "audios");
+				this.loadAudios();
+				this.loadChoices();
+				settingspanel.querySelectorAll(BDFDB.dotCN.select).forEach(wrap => {
+					wrap.setAttribute("value", "---");
+					wrap.querySelector(BDFDB.dotCN.title).innerText = "---";
 				});
-			})
-			.on("click", ".mute-checkbox", (e) => {
-				var checkbox = e.currentTarget;
-				var type = checkbox.parentElement.getAttribute("type");
-				var choice = BDFDB.loadData(type, this, "choices");
-				choice.mute = checkbox.checked;
-				this.saveChoice(type, choice, false);
-			})
-			.on("click", "#input-unimplemented", (e) => {
-				$(settingspanel).find(".unimplemented").toggle(e.currentTarget.checked);
-			})
-			.on("mousedown", BDFDB.dotCN.slidergrabber, (e) => {this.dragSlider(settingspanel,e);})
-			.find(".unimplemented").hide();
+				settingspanel.querySelectorAll(BDFDB.dotCN.slidergrabber).forEach(grabber => {
+					grabber.style.left = "100%";
+				});
+				settingspanel.querySelectorAll(BDFDB.dotCN.sliderbarfill).forEach(bar => {
+					bar.style.width = "100%";
+				});
+				settingspanel.querySelectorAll(".volumeInput").forEach(input => {
+					input.value = 100;
+				});
+			});
+		});
+		BDFDB.addEventListener(this, settingspanel, "click", ".mute-checkbox", e => {
+			var type = e.currentTarget.parentElement.getAttribute("type");
+			var choice = BDFDB.loadData(type, this, "choices");
+			choice.mute = e.currentTarget.checked;
+			this.saveChoice(type, choice, false);
+		});
+		BDFDB.addEventListener(this, settingspanel, "click", "#input-unimplemented", e => {
+			BDFDB.toggleEles(settingspanel.querySelectorAll(".unimplemented"), e.currentTarget.checked);
+		});
+		BDFDB.addEventListener(this, settingspanel, "mousedown", BDFDB.dotCN.slidergrabber, e => {this.dragSlider(settingspanel,e);});
 			
 		return settingspanel;
 	}
@@ -180,27 +176,30 @@ class NotificationSounds {
 	load () {}
 
 	start () {
-		var libraryScript = null;
-		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+			libraryScript.setAttribute("date", performance.now());
+			libraryScript.addEventListener("load", () => {
+				BDFDB.loaded = true;
+				this.initialize();
+			});
 			document.head.appendChild(libraryScript);
 		}
+		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
 	initialize () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.loadMessage(this);
 			
 			this.ChannelSettingsUtils = BDFDB.WebModules.findByProperties("isGuildOrCategoryOrChannelMuted");
 			
-			BDFDB.WebModules.patch(BDFDB.WebModules.findByProperties("receiveMessage"), "receiveMessage", this, {before: (e) => {
+			BDFDB.WebModules.patch(BDFDB.WebModules.findByProperties("receiveMessage"), "receiveMessage", this, {before: e => {
 				let message = e.methodArguments[1];
 				let guildid = message.guild_id ? message.guild_id : null;
 				if (!this.ChannelSettingsUtils.isGuildOrCategoryOrChannelMuted(guildid, message.channel_id) && message.author.id != BDFDB.myData.id) {
@@ -218,7 +217,7 @@ class NotificationSounds {
 				}
 			}});
 			
-			BDFDB.WebModules.patch(BDFDB.WebModules.findByProperties("playSound"), "playSound", this, {instead: (e) => {
+			BDFDB.WebModules.patch(BDFDB.WebModules.findByProperties("playSound"), "playSound", this, {instead: e => {
 				setImmediate(() => {
 					var type = e.methodArguments[0];
 					if (type == "message1") {
@@ -242,7 +241,7 @@ class NotificationSounds {
 
 
 	stop () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.unloadMessage(this);
 		}
 	}
@@ -251,12 +250,14 @@ class NotificationSounds {
 	// begin of own functions
 	
 	openDropdownMenu (settingspanel, e) {
-		var selectControl = e.currentTarget;
-		var selectWrap = selectControl.parentElement;
+		let selectControl = e.currentTarget;
+		let selectWrap = selectControl.parentElement;
+		let plugincard = BDFDB.getParentEle("li", selectWrap);
 		
-		if (selectWrap.classList.contains(BDFDB.disCN.selectisopen)) return;
+		if (!plugincard || BDFDB.containsClass(selectWrap, BDFDB.disCN.selectisopen)) return;
 		
-		selectWrap.classList.add(BDFDB.disCN.selectisopen);
+		BDFDB.addClass(selectWrap, BDFDB.disCN.selectisopen);
+		plugincard.style.setProperty("overflow", "visible", "important");
 		
 		var type = selectWrap.getAttribute("type");
 		var option = selectWrap.getAttribute("option");
@@ -269,7 +270,7 @@ class NotificationSounds {
 		var selectMenu = this.createDropdownMenu({type, option, category, song});
 		selectWrap.appendChild(selectMenu);
 		
-		$(selectMenu).on("mousedown." + this.getName(), BDFDB.dotCN.selectoption, (e2) => {
+		BDFDB.addChildEventListener(selectMenu, "mousedown", BDFDB.dotCN.selectoption, e2 => {
 			var choice = BDFDB.loadData(type, this, "choices");
 			var selection = e2.currentTarget.textContent;
 			selectWrap.setAttribute("value", selection);
@@ -283,12 +284,17 @@ class NotificationSounds {
 			choice.src = choice.src ? choice.src : this.types[type].src;
 			this.saveChoice(type, choice, true);
 		});
-		$(document).on("mousedown.select" + this.getName(), (e2) => {
-			if (e2.target.parentElement == selectMenu) return;
-			$(document).off("mousedown.select" + this.getName());
-			selectMenu.remove()
-			setTimeout(() => {selectWrap.classList.remove(BDFDB.disCN.selectisopen);},100);
-		});
+		
+		var removeMenu = e2 => {
+			if (e2.target.parentElement != selectMenu) {
+				document.removeEventListener("mousedown", removeMenu);
+				selectMenu.remove();
+				plugincard.style.removeProperty("overflow");
+				setTimeout(() => {BDFDB.removeClass(selectWrap, BDFDB.disCN.selectisopen);},100);
+			}
+		};
+		
+		document.addEventListener("mousedown", removeMenu);
 	}
 	
 	createDropdownMenu ({type, option, category, song} = data) {
@@ -300,7 +306,7 @@ class NotificationSounds {
 			menuhtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignbaseline + BDFDB.disCNS.nowrap + BDFDB.disCN.selectoption + isSelected}" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.primary + BDFDB.disCN.weightnormal}">${ele}</div></div>`
 		}
 		menuhtml += `</div></div>`;
-		return $(menuhtml)[0];
+		return BDFDB.htmlToElement(menuhtml);
 	}
 	
 	dragSlider (settingspanel, e) {
@@ -309,36 +315,32 @@ class NotificationSounds {
 		var slider = track.parentNode;
 		var input = slider.querySelector(".volumeInput");
 		var bar = slider.querySelector(BDFDB.dotCN.sliderbarfill);
-		
-		var disableTextSelectionCSS = `
-			* {
-				user-select: none !important;
-			}`;
 			
-		BDFDB.appendLocalStyle("disableTextSelection", disableTextSelectionCSS);
+		BDFDB.appendLocalStyle("disableTextSelection", `*{user-select: none !important;}`);
 		
 		var volume = 0;
 		var sY = 0;
-		var sHalfW = grabber.offsetWidth/2;
-		var sMinX = $(track).offset().left;
-		var sMaxX = sMinX + track.offsetWidth;
-		$(document)
-			.off("mouseup.slider" + this.getName()).off("mousemove.slider" + this.getName())
-			.on("mouseup.slider" + this.getName(), () => {
-				$(document).off("mouseup.slider" + this.getName()).off("mousemove.slider" + this.getName());
-				BDFDB.removeLocalStyle("disableTextSelection");
-				var type = slider.getAttribute("type");
-				var choice = this.choices[type];
-				choice.volume = volume;
-				this.saveChoice(type, choice, true);
-			})
-			.on("mousemove.slider" + this.getName(), (e2) => {
-				sY = e2.clientX > sMaxX ? sMaxX - sHalfW : (e2.clientX < sMinX ? sMinX - sHalfW : e2.clientX - sHalfW);
-				volume = BDFDB.mapRange([sMinX - sHalfW, sMaxX - sHalfW], [0, 100], sY);
-				grabber.style.left = volume + "%";
-				bar.style.width = volume + "%";
-				input.value = volume;
-			});
+		var sHalfW = BDFDB.getRects(grabber).width/2;
+		var sMinX = BDFDB.getRects(track).left;
+		var sMaxX = sMinX + BDFDB.getRects(track).width;
+		var mouseup = () => {
+			document.removeEventListener("mouseup", mouseup);
+			document.removeEventListener("mousemove", mousemove);
+			BDFDB.removeLocalStyle("disableTextSelection");
+			var type = slider.getAttribute("type");
+			var choice = this.choices[type];
+			choice.volume = volume;
+			this.saveChoice(type, choice, true);
+		};
+		var mousemove = e2 => {
+			sY = e2.clientX > sMaxX ? sMaxX - sHalfW : (e2.clientX < sMinX ? sMinX - sHalfW : e2.clientX - sHalfW);
+			volume = BDFDB.mapRange([sMinX - sHalfW, sMaxX - sHalfW], [0, 100], sY);
+			grabber.style.setProperty("left", volume + "%");
+			bar.style.setProperty("width", volume + "%");
+			input.value = volume;
+		};
+		document.addEventListener("mouseup", mouseup);
+		document.addEventListener("mousemove", mousemove);
 	}
 	
 	loadAudios () {

@@ -3,7 +3,7 @@
 class GoogleTranslateOption {
 	getName () {return "GoogleTranslateOption";}
 
-	getVersion () {return "1.6.3";}
+	getVersion () {return "1.6.4";} 
 	
 	getAuthor () {return "DevilBro, square";}
 
@@ -412,7 +412,7 @@ class GoogleTranslateOption {
 
 		BDFDB.initElements(settingspanel, this);
 
-		BDFDB.addChildEventListener(settingspanel, "click", BDFDB.dotCN.selectcontrol, e => {this.openDropdownMenu("inSettings", e);});
+		BDFDB.addEventListener(this, settingspanel, "click", BDFDB.dotCN.selectcontrol, e => {this.openDropdownMenu("inSettings", e);});
 			
 		return settingspanel;
 	}
@@ -421,22 +421,25 @@ class GoogleTranslateOption {
 	load () {}
 
 	start () {
-		var libraryScript = null;
-		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+			libraryScript.setAttribute("date", performance.now());
+			libraryScript.addEventListener("load", () => {
+				BDFDB.loaded = true;
+				this.initialize();
+			});
 			document.head.appendChild(libraryScript);
 		}
+		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
 	initialize () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.loadMessage(this);
 			
 			this.GuildUtils = BDFDB.WebModules.findByProperties("getGuilds","getGuild");
@@ -454,7 +457,7 @@ class GoogleTranslateOption {
 	}
 
 	stop () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopDeepL();
 			
 			document.querySelectorAll(BDFDB.dotCN.message + ".translated").forEach(message => {
@@ -522,7 +525,7 @@ class GoogleTranslateOption {
 								};
 								searchitem.removeEventListener("click", openGoogleSearch);
 								searchitem.addEventListener("click", openGoogleSearch);
-								let rects = searchitem.getBoundingClientRect();
+								let rects = BDFDB.getRects(searchitem);
 								BDFDB.createTooltip(`From ${input.name}:\n${text}\n\nTo ${output.name}:\n${translation}`, searchitem, {type: "right",selector:"googletranslate-tooltip",style:`max-width: ${window.outerWidth - rects.left - rects.width}px !important;`});
 							}
 						});
@@ -633,7 +636,7 @@ class GoogleTranslateOption {
 	
 	getMessageAndPos (target) {
 		let messagediv = BDFDB.getParentEle(BDFDB.dotCN.message, target);
-		let pos = Array.from(messagediv.parentElement.querySelectorAll(BDFDB.dotCN.message)).indexOf(messagediv);
+		let pos = messagediv ? Array.from(messagediv.parentElement.querySelectorAll(BDFDB.dotCN.message)).indexOf(messagediv) : -1;
 		return {messagediv, pos};
 	}
 	
@@ -764,7 +767,7 @@ class GoogleTranslateOption {
 		BDFDB.addClass(button, "popout-open");
 		let translatepopout = BDFDB.htmlToElement(this.translatePopoutMarkup);
 		container.appendChild(translatepopout);
-		let buttonrects = button.getBoundingClientRect(); 
+		let buttonrects = BDFDB.getRects(button); 
 		translatepopout.style.setProperty("left", buttonrects.left + buttonrects.width + "px");
 		translatepopout.style.setProperty("top", buttonrects.top - buttonrects.height/2 + "px")
 		

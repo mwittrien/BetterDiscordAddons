@@ -1,6 +1,14 @@
 //META{"name":"EmojiStatistics"}*//
 
 class EmojiStatistics {
+	getName () {return "EmojiStatistics";}
+
+	getVersion () {return "2.7.9";}
+
+	getAuthor () {return "DevilBro";}
+
+	getDescription () {return "Adds some helpful options to show you more information about emojis and emojiservers.";}
+	
 	initConstructor () {
 		this.labels = {};
 		
@@ -9,6 +17,7 @@ class EmojiStatistics {
 		};
 		
 		this.css = `
+			.emojistatistics-tooltip,
 			.emoji-tooltip {
 				z-index: 2002;
 			}
@@ -24,19 +33,7 @@ class EmojiStatistics {
 			}
 			
 			.${this.getName()}-modal .emojiserver-entry .modal-emojiserver-icon {
-				background-color: #484B51;
-				background-size: cover;
-				border-radius: 25px;
-				color: #b9bbbe;
 				display: inline-block;
-				font-size: 16px;
-				font-weight: 600;
-				height: 35px;
-				letter-spacing: .5px;
-				overflow: hidden;
-				padding-top: 15px;
-				text-align: center;
-				width: 50px;
 			}
 			
 			.${this.getName()}-modal .titles-entry label,
@@ -151,10 +148,6 @@ class EmojiStatistics {
 				<label class="modal-emojicopies-label">modal-emojicopies-label</label>
 			</div>`;
 			
-		this.dividerMarkup = `<div class="${BDFDB.disCN.modaldivider}"></div>`;
-			
-		this.emojiButtonMarkup = `<div class="emojistatistics-button"></div>`;
-			
 		this.defaults = {
 			settings: {
 				enableEmojiHovering:			{value:true, 	description:"Show Information about Emojis on hover over an Emoji in the Emojipicker."},
@@ -166,37 +159,27 @@ class EmojiStatistics {
 		};
 	}
 
-	getName () {return "EmojiStatistics";}
-
-	getDescription () {return "Adds some helpful options to show you more information about emojis and emojiservers.";}
-
-	getVersion () {return "2.7.8";}
-
-	getAuthor () {return "DevilBro";}
-
 	getSettingsPanel () {
 		if (!this.started || typeof BDFDB !== "object") return;
 		var settings = BDFDB.getAllData(this, "settings");
 		var amounts = BDFDB.getAllData(this, "amounts");
 		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		for (let key in settings) {
-			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}"${settings[key] ? " checked" : ""}></div></div>`;
+			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
 		}
 		for (let key in amounts) {
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCN.flexchild}" style="flex: 0 0 50%;">${this.defaults.amounts[key].description}</h3><div class="${BDFDB.disCN.inputwrapper} inputNumberWrapper ${BDFDB.disCNS.vertical +  BDFDB.disCNS.flex + BDFDB.disCNS.directioncolumn}" style="flex: 1 1 auto;"><span class="numberinput-buttons-zone"><span class="numberinput-button-up"></span><span class="numberinput-button-down"></span></span><input type="number" min="0" option="${key}" value="${amounts[key]}" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16} amountInput"></div></div>`;
 		}
 		settingshtml += `</div></div>`;
 		
-		var settingspanel = $(settingshtml)[0];
+		let settingspanel = BDFDB.htmlToElement(settingshtml);
 
-		BDFDB.initElements(settingspanel);
+		BDFDB.initElements(settingspanel, this);
 
-		$(settingspanel)
-			.on("click", BDFDB.dotCN.switchinner, () => {this.updateSettings(settingspanel);})
-			.on("input", ".amountInput", (e) => {
-				var input = parseInt(e.currentTarget.value);
-				if (!isNaN(input) && input > -1) BDFDB.saveData(e.currentTarget.getAttribute("option"), input, this, "amounts");
-			});
+		BDFDB.addEventListener(this, settingspanel, "input", ".amountInput", e => {
+			var input = parseInt(e.currentTarget.value);
+			if (!isNaN(input) && input > -1) BDFDB.saveData(e.currentTarget.getAttribute("option"), input, this, "amounts");
+		});
 			
 		return settingspanel;
 	}
@@ -205,22 +188,25 @@ class EmojiStatistics {
 	load () {}
 
 	start () {
-		var libraryScript = null;
-		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+			libraryScript.setAttribute("date", performance.now());
+			libraryScript.addEventListener("load", () => {
+				BDFDB.loaded = true;
+				this.initialize();
+			});
 			document.head.appendChild(libraryScript);
 		}
+		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
 	initialize () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.loadMessage(this);
 			
 			this.GuildEmojis = BDFDB.WebModules.findByProperties("getGuildEmoji", "getDisambiguatedEmojiContext");
@@ -233,7 +219,7 @@ class EmojiStatistics {
 	}
 
 	stop () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.removeEles(".emoji-tooltip",".emojistatistics-button");
 			BDFDB.unloadMessage(this);
 		}
@@ -241,14 +227,6 @@ class EmojiStatistics {
 	
 	
 	// begin of own functions
-
-	updateSettings (settingspanel) {
-		var settings = {};
-		for (var input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner)) {
-			settings[input.value] = input.checked;
-		}
-		BDFDB.saveAllData(settings, this, "settings");
-	}
 	
 	changeLanguageStrings () {
 		this.emojiInformationModalMarkup = 	this.emojiInformationModalMarkup.replace("REPLACE_modal_header_text", this.labels.modal_header_text);
@@ -265,24 +243,26 @@ class EmojiStatistics {
 	
 	processEmojiPicker (instance, wrapper) {
 		if (!wrapper.querySelector(".emojistatistics-button")) {
+			let emojipickerdiversityselector = document.querySelector(BDFDB.dotCN.emojipickerdiversityselector);
+			if (!emojipickerdiversityselector) return;
 			this.loadEmojiList();
 			let settings = BDFDB.getAllData(this, "settings");
 			if (settings.enableEmojiStatisticsButton) {
-				$(this.emojiButtonMarkup)
-					.insertBefore(BDFDB.dotCN.emojipickerdiversityselector, wrapper)
-					.off("click." + this.getName())
-					.on("click." + this.getName(), () => {
-						instance._reactInternalFiber.return.return.return.return.stateNode.close();
-						this.showEmojiInformationModal();
-					});
+				let emojiStatisticsButton = BDFDB.htmlToElement(`<div class="emojistatistics-button"></div>`);
+				emojipickerdiversityselector.parentElement.insertBefore(emojiStatisticsButton, emojipickerdiversityselector);
+				emojiStatisticsButton.addEventListener("click", () => {
+					instance._reactInternalFiber.return.return.return.return.stateNode.close();
+					this.showEmojiInformationModal();
+				});
+				emojiStatisticsButton.addEventListener("mouseenter", e => {
+					BDFDB.createTooltip("Emoji Statistics", emojiStatisticsButton, {type:"top",selector:"emojistatistics-tooltip"});
+				});
 			}
 			if (settings.enableEmojiHovering) {
-				$(wrapper)
-					.off("mouseenter." + this.getName())
-					.on("mouseenter." + this.getName(), BDFDB.dotCN.emojipickeremojiitem, e => {
-						let data = this.emojiToServerList[e.target.style.getPropertyValue("background-image").replace('url("',"").replace('")',"")];
-						if (data) BDFDB.createTooltip(`${BDFDB.encodeToHTML(data.emoji)}\n${BDFDB.encodeToHTML(data.server)}`, e.target, {type:"right",selector:"emoji-tooltip",delay:BDFDB.getData("hoverDelay", this, "amounts")});
-					});
+				BDFDB.addEventListener(this, wrapper, "mouseenter", BDFDB.dotCN.emojipickeremojiitem, e => {
+					let data = this.emojiToServerList[e.target.style.getPropertyValue("background-image").replace('url("',"").replace('")',"")];
+					if (data) BDFDB.createTooltip(`${BDFDB.encodeToHTML(data.emoji)}\n${BDFDB.encodeToHTML(data.server)}`, e.target, {type:"right",selector:"emoji-tooltip",delay:BDFDB.getData("hoverDelay", this, "amounts")});
+				});
 			}
 		}
 	}
@@ -299,13 +279,43 @@ class EmojiStatistics {
 	}
 	
 	showEmojiInformationModal () {
-		var emojiInformationModal = $(this.emojiInformationModalMarkup);
-		BDFDB.appendModal(emojiInformationModal);
+		var emojiInformationModal = BDFDB.htmlToElement(this.emojiInformationModalMarkup);
 		
+		let titlescontainer = emojiInformationModal.querySelector(".titles");
+		let entriescontainer = emojiInformationModal.querySelector(".entries");
+		
+		if (!titlescontainer || !entriescontainer) return;
+		
+		var titleEntry = BDFDB.htmlToElement(this.emojiserverTitlesMarkup);
+		titlescontainer.appendChild(titleEntry);
+		BDFDB.addChildEventListener(titleEntry, "click", ".modal-sorttitle-label ", e => {
+			var oldTitle = e.currentTarget.innerText;
+			
+			var reverse = oldTitle.indexOf("▼") < 0 ? false : true;
+			
+			titleEntry.querySelector(".modal-titlesname-label").innerText = this.labels.modal_titlesname_text;
+			titleEntry.querySelector(".modal-titlestotal-label").innerText = this.labels.modal_titlestotal_text;
+			titleEntry.querySelector(".modal-titlesglobal-label").innerText = this.labels.modal_titlesglobal_text;
+			titleEntry.querySelector(".modal-titleslocal-label").innerText = this.labels.modal_titleslocal_text;
+			titleEntry.querySelector(".modal-titlescopies-label").innerText = this.labels.modal_titlescopies_text;
+			
+			var sortKey = "index";
+			if (oldTitle.indexOf("▲") < 0) {
+				sortKey = e.currentTarget.getAttribute("sortkey");
+				var title = this.labels["modal_titles" + sortKey + "_text"];
+				e.currentTarget.innerText = oldTitle.indexOf("▼") < 0 ? title + "▼" : title + "▲";
+			}
+			
+			BDFDB.sortArrayByKey(entries, sortKey);
+			if (reverse) entries.reverse();
+			
+			this.updateAllEntries(entriescontainer, entries);
+		});
+			
 		var entries = [], index = 0;
-		for (let serverObj of BDFDB.readServerList()) {
+		for (let info of BDFDB.readServerList()) {
 			let amountGlobal = 0, amountLocal = 0, amountCopies = 0;
-			for (let emoji of this.GuildEmojis.getGuildEmoji(serverObj.id)) {
+			for (let emoji of this.GuildEmojis.getGuildEmoji(info.id)) {
 				if (emoji.managed) {
 					amountGlobal++;
 					if (this.emojiReplicaList[emoji.name]) amountCopies++;
@@ -314,57 +324,34 @@ class EmojiStatistics {
 					amountLocal++;
 				}
 			}
-			var entry = $(this.emojiserverEntryMarkup);
-			if (serverObj.icon) {
-				entry.find(".modal-emojiserver-icon").css("background-image", "url('https://cdn.discordapp.com/icons/" + serverObj.id + "/" + serverObj.icon + ".png')");
-			}
-			else {
-				entry.find(".modal-emojiserver-icon").text(serverObj.div.querySelector("a").innerText);
-			}
-			entry.find(".modal-emojiname-label").text(serverObj.name);
-			entry.find(".modal-emojitotal-label").text(amountGlobal+amountLocal);
-			entry.find(".modal-emojiglobal-label").text(amountGlobal);
-			entry.find(".modal-emojilocal-label").text(amountLocal);
-			entry.find(".modal-emojicopies-label").text(amountCopies);
-			entries.push({entry:entry, index:index++, name:serverObj.name, total:amountGlobal+amountLocal, global:amountGlobal, local:amountLocal, copies:amountCopies});
+			var emojiEntry = BDFDB.htmlToElement(this.emojiserverEntryMarkup);
+			emojiEntry.querySelector(".modal-emojiserver-icon").innerHTML = this.createCopyOfServer(info).outerHTML;
+			emojiEntry.querySelector(".modal-emojiname-label").innerText = info.name || "";
+			emojiEntry.querySelector(".modal-emojitotal-label").innerText = amountGlobal + amountLocal;
+			emojiEntry.querySelector(".modal-emojiglobal-label").innerText = amountGlobal;
+			emojiEntry.querySelector(".modal-emojilocal-label").innerText = amountLocal;
+			emojiEntry.querySelector(".modal-emojicopies-label").innerText = amountCopies;
+			entries.push({div:emojiEntry, index:index++, name:info.name || "", total:amountGlobal+amountLocal, global:amountGlobal, local:amountLocal, copies:amountCopies});
 		}
-		
-		var titleentry = $(this.emojiserverTitlesMarkup)
-			.appendTo(".titles", emojiInformationModal)
-			.on("click", ".modal-sorttitle-label ", (e2) => {
-				var oldTitle = e2.target.innerText;
+			
+		BDFDB.appendModal(emojiInformationModal);
 				
-				var reverse = oldTitle.indexOf("▼") < 0 ? false : true;
-				
-				titleentry.find(".modal-titlesname-label").text(this.labels.modal_titlesname_text);
-				titleentry.find(".modal-titlestotal-label").text(this.labels.modal_titlestotal_text);
-				titleentry.find(".modal-titlesglobal-label").text(this.labels.modal_titlesglobal_text);
-				titleentry.find(".modal-titleslocal-label").text(this.labels.modal_titleslocal_text);
-				titleentry.find(".modal-titlescopies-label").text(this.labels.modal_titlescopies_text);
-				
-				var sortKey = "index";
-				if (oldTitle.indexOf("▲") < 0) {
-					sortKey = e2.target.getAttribute("sortkey");
-					var title = this.labels["modal_titles" + sortKey + "_text"];
-					e2.target.innerText = oldTitle.indexOf("▼") < 0 ? title + "▼" : title + "▲";
-				}
-				
-				BDFDB.sortArrayByKey(entries, sortKey);
-				if (reverse) entries.reverse();
-				
-				this.updateAllEntries(emojiInformationModal, entries);
-			});
-				
-		this.updateAllEntries(emojiInformationModal, entries);
+		this.updateAllEntries(entriescontainer, entries);
 	}
 	
-	updateAllEntries (modal, entries) {
-		var container = modal.find(".entries");
-		container.children().remove();
-		for (let i = 0; entries.length > i; i++) {
-			if (i > 0) container.append(this.dividerMarkup);
-			container.append(entries[i].entry);
+	updateAllEntries (entriescontainer, entries) {
+		BDFDB.removeEles(entriescontainer.childNodes);
+		for (let entry of entries) {
+			if (entriescontainer.childElementCount) entriescontainer.appendChild(BDFDB.htmlToElement(`<div class="${BDFDB.disCN.modaldivider}"></div>`));
+			entriescontainer.appendChild(entry.div);
 		}
+	}
+	
+	createCopyOfServer (info) {
+		let serverCopy = info.div.cloneNode(true);
+		BDFDB.toggleEles(serverCopy, true);
+		BDFDB.removeClass(serverCopy, BDFDB.disCN.guildunread, BDFDB.disCN.guildselected);
+		return serverCopy;
 	}
 	
 	setLabelsByLanguage () {

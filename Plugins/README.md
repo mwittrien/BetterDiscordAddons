@@ -42,4 +42,5 @@
  - [Theme Repo](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ThemeRepo) - Allows you to preview all themes from the theme repo and download them on the fly.
  - [Theme Settings](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ThemeSettings) - Allows you to change Theme Variables within BetterDiscord.
  - [Top Role Everywhere](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/TopRoleEverywhere) - Adds the highest role of a user as a tag.
+ - [User Notes](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/UserNotes) - Allows you to write your own user notes wihtout a character limit.
  - [Write UpperCase](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/WriteUpperCase) - Changes the input in the textarea to uppercase.

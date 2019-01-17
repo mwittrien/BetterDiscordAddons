@@ -1,6 +1,14 @@
 //META{"name":"SendLargeMessages"}*//
 
 class SendLargeMessages {
+	getName () {return "SendLargeMessages";}
+
+	getVersion () {return "1.5.2";}
+
+	getAuthor () {return "DevilBro";}
+
+	getDescription () {return "Opens a popout when your message is too large, which allows you to automatically send the message in several smaller messages.";}
+	
 	initConstructor () {
 		this.labels = {};
 		
@@ -63,34 +71,29 @@ class SendLargeMessages {
 			</span>`;
 	}
 
-	getName () {return "SendLargeMessages";}
-
-	getDescription () {return "Opens a popout when your message is too large, which allows you to automatically send the message in several smaller messages.";}
-
-	getVersion () {return "1.5.1";}
-
-	getAuthor () {return "DevilBro";}
-
 	//legacy
 	load () {}
 
 	start () {
-		var libraryScript = null;
-		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+			libraryScript.setAttribute("date", performance.now());
+			libraryScript.addEventListener("load", () => {
+				BDFDB.loaded = true;
+				this.initialize();
+			});
 			document.head.appendChild(libraryScript);
 		}
+		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
 	initialize () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.loadMessage(this);
 			
 			this.clipboard = require("electron").clipboard;
@@ -104,7 +107,7 @@ class SendLargeMessages {
 
 
 	stop () {
-		if (typeof BDFDB === "object") {			
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {			
 			BDFDB.unloadMessage(this);
 		}
 	}
@@ -120,86 +123,72 @@ class SendLargeMessages {
 	
 	processChannelTextArea (instance, wrapper) {
 		if (instance.props && instance.props.type && instance.props.type == "normal") {
-			let textarea = wrapper.querySelector("textarea");
-			if (textarea) {
-				let modaltext, checkTextarea = () => {
-					if (BDFDB.getParsedLength(textarea.value) > 1950) {
-						textarea.selectionStart = 0;
-						textarea.selectionEnd = textarea.value.length;
-						document.execCommand("insertText", false, "");
-						this.showSendModal(modaltext);
-					}
-				};
-				$(textarea)
-					.off("input." + this.getName())
-					.on("input." + this.getName(), e => {
-						clearTimeout(textarea.sendlargemessagestimeout);
-						textarea.sendlargemessagestimeout = setTimeout(() => {
-							modaltext = textarea.value;
-							checkTextarea();
-						},100);
-					})
-					.off("paste." + this.getName())
-					.on("paste." + this.getName(), e => {
-						modaltext = textarea.value.slice(0, textarea.selectionStart) + this.clipboard.readText() + textarea.value.slice(textarea.selectionEnd);
-						setImmediate(() => {checkTextarea(textarea);});
-					});
-			}
+			var textarea = wrapper.querySelector("textarea");
+			if (!textarea) return;
+			let modaltext, checkTextarea = () => {
+				if (BDFDB.getParsedLength(textarea.value) > 1950) {
+					textarea.selectionStart = 0;
+					textarea.selectionEnd = textarea.value.length;
+					document.execCommand("insertText", false, "");
+					this.showSendModal(modaltext);
+				}
+			};
+			BDFDB.addEventListener(this, textarea, "keyup", e => {
+				clearTimeout(textarea.sendlargemessagestimeout);
+				textarea.sendlargemessagestimeout = setTimeout(() => {
+					modaltext = textarea.value;
+					checkTextarea();
+				},100);
+			});
+			BDFDB.addEventListener(this, textarea, "paste", e => {
+				modaltext = textarea.value.slice(0, textarea.selectionStart) + this.clipboard.readText() + textarea.value.slice(textarea.selectionEnd);
+				setImmediate(() => {checkTextarea(textarea);});
+			});
 		}
 	}
 	
 	showSendModal (text) {
-		let sendMessageModal = $(this.sendMessageModalMarkup);
-		let textinput = sendMessageModal.find("#modal-inputtext");
-		let warning = sendMessageModal.find("#warning-message");
-		let counter = sendMessageModal.find("#character-counter");
+		let sendMessageModal = BDFDB.htmlToElement(this.sendMessageModalMarkup);
+		let textinput = sendMessageModal.querySelector("#modal-inputtext");
+		let warning = sendMessageModal.querySelector("#warning-message");
+		let counter = sendMessageModal.querySelector("#character-counter");
 		
 		let updateCounter = () => {
-			let parsedlength = BDFDB.getParsedLength(textinput.val());
+			let parsedlength = BDFDB.getParsedLength(textinput.value);
 			let messageAmount = Math.ceil(parsedlength/1900);
-			warning.text(messageAmount > 15 ? this.labels.modal_messages_warning : "");
-			counter.text(parsedlength + " (" + (textinput[0].selectionEnd - textinput[0].selectionStart) + ") => " + this.labels.modal_messages_translation + ": " + messageAmount);
+			warning.innerText = messageAmount > 15 ? this.labels.modal_messages_warning : "";
+			counter.innerText = parsedlength + " (" + (textinput.selectionEnd - textinput.selectionStart) + ") => " + this.labels.modal_messages_translation + ": " + messageAmount;
 		};
 		
 		BDFDB.appendModal(sendMessageModal);
-		sendMessageModal
-			.on("click", ".btn-send", (e) => {
-				e.preventDefault();
-				let messages = this.formatText(textinput.val());
-				messages.forEach((message,i) => {
-					setTimeout(() => {
-						this.sendMessage(message);
-						if (i >= messages.length-1) BDFDB.showToast(this.labels.toast_allsent_text, {type:"success"});
-					},this.messageDelay * i);
-				});
-			});
-			
-		textinput
-			.val(text)
-			.focus()
-			.off("keydown." + this.getName() + " click." + this.getName())
-			.on("keydown." + this.getName() + " click." + this.getName(), () => {
+		
+		BDFDB.addChildEventListener(sendMessageModal, "click", ".btn-send", e => {
+			e.preventDefault();
+			let messages = this.formatText(textinput.value || "");
+			messages.forEach((message,i) => {
 				setTimeout(() => {
-					updateCounter();
-				},10);
-			})
-			.off("mousedown." + this.getName())
-			.on("mousedown." + this.getName(), () => {
-				$(document)
-					.off("mouseup." + this.getName())
-					.on("mouseup." + this.getName(), () => {
-						$(document)
-							.off("mouseup." + this.getName())
-							.off("mousemove." + this.getName());
-					})
-					.off("mousemove." + this.getName())
-					.on("mousemove." + this.getName(), () => {
-						setTimeout(() => {
-							updateCounter();
-						},10);
-					});
+					this.sendMessage(message);
+					if (i >= messages.length-1) BDFDB.showToast(this.labels.toast_allsent_text, {type:"success"});
+				},this.messageDelay * i);
 			});
+		});
+		
+		textinput.value = text || "";
+		textinput.addEventListener("keyup", () => {setTimeout(() => {updateCounter();},10);});
+		textinput.addEventListener("click", () => {updateCounter();});
+		textinput.addEventListener("mousedown", () => {
+			var mouseup = () => {
+				document.removeEventListener("mouseup", mouseup);
+				document.removeEventListener("mousemove", mousemove);
+			};
+			var mousemove = () => {
+				setTimeout(() => {updateCounter();},10);
+			};
+			document.addEventListener("mouseup", mouseup);
+			document.addEventListener("mousemove", mousemove);
+		});
 		updateCounter();
+		textinput.focus();
 	}
 	
 	formatText (text) {

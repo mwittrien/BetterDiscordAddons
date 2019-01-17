@@ -1,6 +1,14 @@
 //META{"name":"GoogleSearchReplace"}*//
 
 class GoogleSearchReplace {
+	getName () {return "GoogleSearchReplace";}
+
+	getVersion () {return "1.1.7";}
+	
+	getAuthor () {return "DevilBro";}
+
+	getDescription () {return "Replaces the default Google Text Search with a selection menu of several search engines.";}
+	
 	initConstructor () {
 		this.labels = {};
 		
@@ -42,14 +50,6 @@ class GoogleSearchReplace {
 				</div>
 			</div>`;
 	}
-		
-	getName () {return "GoogleSearchReplace";}
-
-	getDescription () {return "Replaces the default Google Text Search with a selection menu of several search engines.";}
-
-	getVersion () {return "1.1.6";}
-	
-	getAuthor () {return "DevilBro";}
 
 	getSettingsPanel () {
 		if (!this.started || typeof BDFDB !== "object") return;
@@ -57,17 +57,14 @@ class GoogleSearchReplace {
 		let settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">Search Engines:</h3></div><div class="DevilBro-settings-inner-list">`;
 		for (let key in engines) {
-			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.engines[key].name}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}"${engines[key] ? " checked" : ""}></div></div>`;
+			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.engines[key].name}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="engines ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${engines[key] ? " checked" : ""}></div></div>`;
 		}
 		settingshtml += `</div>`;
 		settingshtml += `</div></div>`;
 		
-		let settingspanel = $(settingshtml)[0];
+		let settingspanel = BDFDB.htmlToElement(settingshtml);
 
-		BDFDB.initElements(settingspanel);
-
-		$(settingspanel)
-			.on("click", BDFDB.dotCN.switchinner, () => {this.updateSettings(settingspanel);});
+		BDFDB.initElements(settingspanel, this);
 			
 		return settingspanel;
 	}
@@ -76,22 +73,25 @@ class GoogleSearchReplace {
 	load () {}
 
 	start () {
-		let libraryScript = null;
-		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+			libraryScript.setAttribute("date", performance.now());
+			libraryScript.addEventListener("load", () => {
+				BDFDB.loaded = true;
+				this.initialize();
+			});
 			document.head.appendChild(libraryScript);
 		}
+		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
 	initialize () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.loadMessage(this);
 		}
 		else {
@@ -100,20 +100,13 @@ class GoogleSearchReplace {
 	}
 
 	stop () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.unloadMessage(this);
 		}
 	}
 	
+	
 	// begin of own functions
-
-	updateSettings (settingspanel) {
-		let settings = {};
-		for (let input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner)) {
-			settings[input.value] = input.checked;
-		}
-		BDFDB.saveAllData(settings, this, "engines");
-	}
 	
 	changeLanguageStrings () {
 		this.messageContextEntryMarkup = 	this.messageContextEntryMarkup.replace("REPLACE_context_googlesearchreplace_text", this.labels.context_googlesearchreplace_text);
@@ -123,46 +116,40 @@ class GoogleSearchReplace {
 	
 	onNativeContextMenu (instance, menu) {
 		if (instance.props && instance.props.type == "NATIVE_TEXT" && instance.props.value && !menu.querySelector(".reverseimagesearch-item")) {
-			let searchinstance = BDFDB.getOwnerInstance({node:menu,props:["handleSearchWithGoogle"]});
-			if (searchinstance && searchinstance._reactInternalFiber && searchinstance._reactInternalFiber.return && searchinstance._reactInternalFiber.return.stateNode) {
-				this.appendItem(instance, searchinstance._reactInternalFiber.return.stateNode, instance.props.value);
-			}
+			let searchentry = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:menu,props:["handleSearchWithGoogle"]}));
+			if (searchentry) this.appendItem(instance, searchentry, instance.props.value);
 		}
 	}
 	
 	onMessageContextMenu (instance, menu) {
 		if (instance.props && instance.props.message && instance.props.channel && instance.props.target && !menu.querySelector(".googlereplacesearch-item")) {
 			let text = document.getSelection().toString();
-			let searchinstance = BDFDB.getOwnerInstance({node:menu,props:["handleSearchWithGoogle"]});
-			if (text && searchinstance && searchinstance._reactInternalFiber && searchinstance._reactInternalFiber.return && searchinstance._reactInternalFiber.return.stateNode) {
-				this.appendItem(instance, searchinstance._reactInternalFiber.return.stateNode, text);
+			if (text) {
+				let searchentry = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:menu,props:["handleSearchWithGoogle"]}));
+				if (searchentry) this.appendItem(instance, searchentry, text);
 			}
 		}
 	}
 	
 	appendItem (instance, target, text) {
-		$(this.messageContextEntryMarkup).appendTo(target)
-			.on("mouseenter", (e) => {
-				let messageContextSubMenu = $(this.messageContextSubMenuMarkup)[0];
-				let engines = BDFDB.getAllData(this, "engines");
-				$(messageContextSubMenu)
-					.on("click", ".GRS-item", (e2) => {
-						instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
-						let engine = e2.currentTarget.getAttribute("engine");
-						if (engine == "_all") {
-							for (let key in engines) {
-								if (key != "_all" && engines[key]) {
-									window.open(this.defaults.engines[key].url.replace(this.textUrlReplaceString, encodeURIComponent(text)), "_blank");
-								}
-							}
-						}
-						else window.open(this.defaults.engines[engine].url.replace(this.textUrlReplaceString, encodeURIComponent(text)), "_blank");
-					});
-				for (let key in engines) if (!engines[key]) BDFDB.removeEles(messageContextSubMenu.querySelector("[engine='" + key + "']"));
-				if (messageContextSubMenu.querySelector(".GRS-item")) BDFDB.removeEles(messageContextSubMenu.querySelector(".alldisabled-item"));
-				BDFDB.appendSubMenu(e.currentTarget, messageContextSubMenu);
+		let messageContextEntry = BDFDB.htmlToElement(this.messageContextEntryMarkup);
+		target.parentElement.insertBefore(messageContextEntry, target.nextElementSibling);
+		messageContextEntry.addEventListener("mouseenter", () => {
+			let messageContextSubMenu = BDFDB.htmlToElement(this.messageContextSubMenuMarkup);
+			let engines = BDFDB.getAllData(this, "engines");
+			for (let key in engines) if (!engines[key]) BDFDB.removeEles(messageContextSubMenu.querySelector("[engine='" + key + "']"));
+			if (messageContextSubMenu.querySelector(".GRS-item")) BDFDB.removeEles(messageContextSubMenu.querySelector(".alldisabled-item"));
+			BDFDB.addChildEventListener(messageContextSubMenu, "click", ".GRS-item", e => {
+				instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
+				let engine = e.currentTarget.getAttribute("engine");
+				if (engine == "_all") {
+					for (let key in engines) if (key != "_all" && engines[key]) window.open(this.defaults.engines[key].url.replace(this.textUrlReplaceString, encodeURIComponent(text)), "_blank");
+				}
+				else window.open(this.defaults.engines[engine].url.replace(this.textUrlReplaceString, encodeURIComponent(text)), "_blank");
 			});
-		target.firstElementChild.style.setProperty("display", "none", "important");
+			BDFDB.appendSubMenu(messageContextEntry, messageContextSubMenu);
+		});
+		BDFDB.toggleEles(target, false);
 	}
 	
 	setLabelsByLanguage () {

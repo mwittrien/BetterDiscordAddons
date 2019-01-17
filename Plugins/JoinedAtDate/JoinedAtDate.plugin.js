@@ -3,7 +3,7 @@
 class JoinedAtDate {
 	getName () {return "JoinedAtDate";}
 
-	getVersion () {return "1.0.6";}
+	getVersion () {return "1.0.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -74,15 +74,11 @@ class JoinedAtDate {
 
 		BDFDB.initElements(settingspanel, this);
 
-		$(settingspanel)
-			.on("click", BDFDB.dotCN.switchinner, () => {
-				this.updateSettings(settingspanel);
-				let choices = BDFDB.getAllData(this, "choices");
-				for (let key in choices) {
-					settingspanel.querySelector(`${BDFDB.dotCN.select}[type='${key}'] .languageTimestamp`).innerText = this.getJoinedTime(this.languages[choices[key]].id);
-				}
-			})
-			.on("click", BDFDB.dotCN.selectcontrol, e => {this.openDropdownMenu(e);});
+		BDFDB.addEventListener(this, settingspanel, "click", ".settings-switch", () => {
+			let choices = BDFDB.getAllData(this, "choices");
+			for (let key in choices) settingspanel.querySelector(`${BDFDB.dotCN.select}[type='${key}'] .languageTimestamp`).innerText = this.getJoinedTime(this.languages[choices[key]].id);
+		});
+		BDFDB.addEventListener(this, settingspanel, "click", BDFDB.dotCN.selectcontrol, e => {this.openDropdownMenu(e);});
 		return settingspanel;
 	}
 
@@ -90,23 +86,25 @@ class JoinedAtDate {
 	load () {}
 
 	start () {
-		let libraryScript = null;
-		if (typeof BDFDB !== "object" || BDFDB.isLibraryOutdated()) {
-			if (typeof BDFDB === "object") BDFDB = "";
-			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+			libraryScript.setAttribute("date", performance.now());
+			libraryScript.addEventListener("load", () => {
+				BDFDB.loaded = true;
+				this.initialize();
+			});
 			document.head.appendChild(libraryScript);
 		}
+		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object") this.initialize();
-		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
 	initialize () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.loadMessage(this);
 			
 			this.CurrentGuildStore = BDFDB.WebModules.findByProperties("getLastSelectedGuildId");
@@ -124,7 +122,7 @@ class JoinedAtDate {
 
 
 	stop () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.removeEles(".joinedAtDate");
 			BDFDB.unloadMessage(this);
 		}
@@ -132,45 +130,39 @@ class JoinedAtDate {
 
 	
 	// begin of own functions
-
-	updateSettings (settingspanel) {
-		let settings = {};
-		for (let input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner)) {
-			settings[input.value] = input.checked;
-		}
-		BDFDB.saveAllData(settings, this, "settings");
-	}
 	
 	openDropdownMenu (e) {
 		let selectControl = e.currentTarget;
 		let selectWrap = selectControl.parentElement;
 		let plugincard = BDFDB.getParentEle("li", selectWrap);
 		
-		if (!plugincard || selectWrap.classList.contains(BDFDB.disCN.selectisopen)) return;
+		if (!plugincard || BDFDB.containsClass(selectWrap, BDFDB.disCN.selectisopen)) return;
 		
-		selectWrap.classList.add(BDFDB.disCN.selectisopen);
+		BDFDB.addClass(selectWrap, BDFDB.disCN.selectisopen);
 		plugincard.style.setProperty("overflow", "visible", "important");
 		
 		let type = selectWrap.getAttribute("type");
 		let selectMenu = this.createDropdownMenu(selectWrap.getAttribute("value"), type);
 		selectWrap.appendChild(selectMenu);
 		
-		$(selectMenu)
-			.on("mousedown." + this.getName(), BDFDB.dotCN.selectoption, e2 => {
-				let language = e2.currentTarget.getAttribute("value");
-				selectWrap.setAttribute("value", language);
-				selectControl.querySelector(".languageName").innerText = this.languages[language].name;
-				selectControl.querySelector(".languageTimestamp").innerText = this.getJoinedTime(language);
-				BDFDB.saveData(type, language, this, "choices");
-			});
-		$(document)
-			.on("mousedown.select" + this.getName(), e2 => {
-				if (e2.target.parentElement == selectMenu) return;
-				$(document).off("mousedown.select" + this.getName());
+		BDFDB.addChildEventListener(selectMenu, "mousedown", BDFDB.dotCN.selectoption, e2 => {
+			let language = e2.currentTarget.getAttribute("value");
+			selectWrap.setAttribute("value", language);
+			selectControl.querySelector(".languageName").innerText = this.languages[language].name;
+			selectControl.querySelector(".languageTimestamp").innerText = this.getJoinedTime(language);
+			BDFDB.saveData(type, language, this, "choices");
+		});
+		
+		var removeMenu = e2 => {
+			if (e2.target.parentElement != selectMenu) {
+				document.removeEventListener("mousedown", removeMenu);
 				selectMenu.remove();
 				plugincard.style.removeProperty("overflow");
-				setTimeout(() => {selectWrap.classList.remove(BDFDB.disCN.selectisopen);},100);
-			});
+				setTimeout(() => {BDFDB.removeClass(selectWrap, BDFDB.disCN.selectisopen);},100);
+			}
+		};
+		
+		document.addEventListener("mousedown", removeMenu);
 	}
 	
 	createDropdownMenu (choice, type) {
@@ -205,11 +197,11 @@ class JoinedAtDate {
 					let choice = BDFDB.getData("joinedAtDateLang", this, "choices");
 					let nametag = container.querySelector(BDFDB.dotCN.nametag);
 					let creationDate = container.querySelector(".creationDate");
-					container.insertBefore(BDFDB.htmlToElement(`<div class="joinedAtDate DevilBro-textscrollwrapper ${BDFDB.disCN.textrow}" style="max-width: ${BDFDB.getParentEle(popout ? BDFDB.dotCN.userpopoutheader : BDFDB.dotCN.userprofileheaderinfo, container).getBoundingClientRect().width - 20}px !important;"><div class="DevilBro-textscroll">${this.labels.joinedat_text + " " + this.getJoinedTime(this.languages[choice].id, timestamp)}</div></div>`), creationDate ? creationDate : (nametag ? nametag.nextSibling : null));
+					container.insertBefore(BDFDB.htmlToElement(`<div class="joinedAtDate DevilBro-textscrollwrapper ${BDFDB.disCN.textrow}" style="max-width: ${BDFDB.getRects(BDFDB.getParentEle(popout ? BDFDB.dotCN.userpopoutheader : BDFDB.dotCN.userprofileheaderinfo, container)).width - 20}px !important;"><div class="DevilBro-textscroll">${this.labels.joinedat_text + " " + this.getJoinedTime(this.languages[choice].id, timestamp)}</div></div>`), creationDate ? creationDate : (nametag ? nametag.nextSibling : null));
 					BDFDB.initElements(container.parentElement);
 					if (popout && popout.style.transform.indexOf("translateY(-1") == -1) {
-						let arect = document.querySelector(BDFDB.dotCN.appmount).getBoundingClientRect();
-						let prect = popout.getBoundingClientRect();
+						let arect = BDFDB.getRects(document.querySelector(BDFDB.dotCN.appmount));
+						let prect = BDFDB.getRects(popout);
 						popout.style.setProperty("top", (prect.y + prect.height > arect.height ? (arect.height - prect.height) : prect.y) + "px");
 					}
 				}

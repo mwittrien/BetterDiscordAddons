@@ -1,6 +1,14 @@
 //META{"name":"FriendNotifications"}*//
 
 class FriendNotifications {
+	getName () {return "FriendNotifications";}
+
+	getVersion () {return "1.1.7";}
+
+	getAuthor () {return "DevilBro";}
+
+	getDescription () {return "Notifies you when a friend either logs in or out. Click the Online Friend-Counter to display a timelog of the current session.";}
+	
 	initConstructor () {
 		this.patchModules = {
 			"FluxContainer(FriendsOnline)":["componentDidMount","componentDidUpdate"]
@@ -47,8 +55,6 @@ class FriendNotifications {
 				<div class="log-avatar"></div>
 				<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCNS.flexchild + BDFDB.disCNS.overflowellipsis} log-description" style="flex: 1 1 auto;"></h3>
 			</div>`;
-			
-		this.dividerMarkup = `<div class="${BDFDB.disCN.modaldivider}"></div>`;
 		
 		this.css = `
 			${BDFDB.dotCN.guilds} > ${BDFDB.dotCN.friendsonline} {
@@ -115,14 +121,6 @@ class FriendNotifications {
 			}
 		};
 	}
-
-	getName () {return "FriendNotifications";}
-
-	getDescription () {return "Notifies you when a friend either logs in or out. Click the Online Friend-Counter to display a timelog of the current session.";}
-
-	getVersion () {return "1.1.6";}
-
-	getAuthor () {return "DevilBro";}
 	
 	getSettingsPanel () {
 		if (!this.started || typeof BDFDB !== "object") return;
@@ -133,7 +131,7 @@ class FriendNotifications {
 		let disabled = BDFDB.loadAllData(this, "disabled");
 		let settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.getName()}</div><div class="DevilBro-settings-inner">`;
 		for (let key in settings) {
-			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-checkbox"${settings[key] ? " checked" : ""}></div></div>`;
+			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
 		}
 		for (let key in notificationsounds) {
 			if (key.indexOf("desktop") == -1 || "Notification" in window) settingshtml += `<div class="${BDFDB.disCNS.flexchild + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h5 class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.h5 + BDFDB.disCNS.title + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.h5defaultmargin}" style="flex: 1 1 auto;">${key} notification sound:</h5><h5 class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.h5 + BDFDB.disCNS.title + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.h5defaultmargin}" style="flex: 0 0 auto;">Mute:</h5><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" option="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} mute-checkbox"${notificationsounds[key].mute ? " checked" : ""}></div></div><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex + BDFDB.disCNS.directioncolumn + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;"><input type="text" option="${key}" value="${notificationsounds[key].url ? notificationsounds[key].url : ""}" placeholder="Url or Filepath" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16} songInput"></div><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} file-navigator" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}"></div><input type="file" accept="audio/*,video/*" style="display:none!important;"></button><button type="button" option="${key}" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} btn-save btn-savesong" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}"></div></button></div></div>`;
@@ -152,57 +150,54 @@ class FriendNotifications {
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Batch set Users:</h3><button type="button" do-disable=true class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttoncolorprimary + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} disable-all" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Disable</div></button><button type="button" do-toast=true class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} toast-all" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Toast</div></button>${"Notification" in window ? `<button type="button" do-desktop=true class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorgreen + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} desktop-all" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Desktop</div></button>` : ``}</div>`;
 		settingshtml += `</div></div>`;
 			
-		let settingspanel = $(settingshtml)[0];
+		let settingspanel = BDFDB.htmlToElement(settingshtml);
 
-		BDFDB.initElements(settingspanel);
+		BDFDB.initElements(settingspanel, this);
 
-		$(settingspanel)
-			.on("click", ".settings-checkbox", () => {this.updateSettings(settingspanel);})
-			.on("click", ".btn-savesong", (e) => {this.saveAudio(settingspanel, e.currentTarget.getAttribute("option"));})
-			.on("click", ".mute-checkbox", (e) => {
-				let option = e.currentTarget.getAttribute("option");
-				let notificationsound = BDFDB.getData(option, this, "notificationsounds");
-				notificationsound.mute = e.currentTarget.checked;
-				BDFDB.saveData(option, notificationsound, this, "notificationsounds");
-			})
-			.on("mouseenter", ".settings-avatar", (e) => {
-				let user = this.UserUtils.getUser(e.currentTarget.getAttribute("user-id"));
-				let data = BDFDB.loadData(user.id, "EditUsers", "users") || {};
-				BDFDB.createTooltip(data.name ? data.name : user.username, e.currentTarget, {type:"top"});
-			})
-			.on("contextmenu", ".settings-avatar", (e) => {
-				if (!("Notification" in window)) return;
-				let desktopoff = !e.currentTarget.classList.contains("desktop");
-				let id = e.currentTarget.getAttribute("user-id");
-				e.currentTarget.classList.remove("disabled");
-				e.currentTarget.classList.toggle("desktop", desktopoff);
-				BDFDB.saveData(id, desktopoff, this, "desktop");
-				BDFDB.removeData(id, this, "disabled");
-			})
-			.on("click", ".settings-avatar", (e) => {
-				let disableoff = !e.currentTarget.classList.contains("disabled");
-				let id = e.currentTarget.getAttribute("user-id");
-				e.currentTarget.classList.remove("desktop");
-				e.currentTarget.classList.toggle("disabled", disableoff);
-				BDFDB.saveData(id, disableoff, this, "disabled");
-				BDFDB.removeData(id, this, "desktop");
-			})
-			.on("click", ".disable-all, .toast-all, .desktop-all", (e) => {
-				let button = e.currentTarget;
-				let disableon = button.getAttribute("do-disable");
-				let desktopon = button.getAttribute("do-desktop");
-				let disabledata = BDFDB.loadAllData(this, "disabled");
-				let desktopdata = BDFDB.loadAllData(this, "desktop");
-				settingspanel.querySelectorAll(".settings-avatar").forEach(avatar => {
-					let id = avatar.getAttribute("user-id");
-					avatar.classList.toggle("disabled", disableon);
-					avatar.classList.toggle("desktop", desktopon);
-					disableon ? disabledata[id] = true : delete disabledata[id];
-					desktopon ? desktopdata[id] = true : delete desktopdata[id];
-				});
-				BDFDB.saveAllData(disabledata, this, "disabled");
-				BDFDB.saveAllData(desktopdata, this, "desktop");
+		BDFDB.addEventListener(this, settingspanel, "click", ".btn-savesong", e => {this.saveAudio(settingspanel, e.currentTarget.getAttribute("option"));});
+		BDFDB.addEventListener(this, settingspanel, "click", ".mute-checkbox", e => {
+			let option = e.currentTarget.getAttribute("option");
+			let notificationsound = BDFDB.getData(option, this, "notificationsounds");
+			notificationsound.mute = e.currentTarget.checked;
+			BDFDB.saveData(option, notificationsound, this, "notificationsounds");
+		});
+		BDFDB.addEventListener(this, settingspanel, "mouseenter", ".settings-avatar", e => {
+			let user = this.UserUtils.getUser(e.currentTarget.getAttribute("user-id"));
+			let data = BDFDB.loadData(user.id, "EditUsers", "users") || {};
+			BDFDB.createTooltip(data.name ? data.name : user.username, e.currentTarget, {type:"top"});
+		});
+		BDFDB.addEventListener(this, settingspanel, "contextmenu", ".settings-avatar", e => {
+			if (!("Notification" in window)) return;
+			let desktopoff = !BDFDB.containsClass(e.currentTarget, "desktop");
+			let id = e.currentTarget.getAttribute("user-id");
+			BDFDB.removeClass(e.currentTarget, "disabled");
+			BDFDB.toggleClass(e.currentTarget, "desktop", desktopoff);
+			BDFDB.saveData(id, desktopoff, this, "desktop");
+			BDFDB.removeData(id, this, "disabled");
+		});
+		BDFDB.addEventListener(this, settingspanel, "click", ".settings-avatar", e => {
+			let disableoff = !BDFDB.containsClass(e.currentTarget, "disabled");
+			let id = e.currentTarget.getAttribute("user-id");
+			BDFDB.removeClass(e.currentTarget, "desktop");
+			BDFDB.toggleClass(e.currentTarget, "disabled", disableoff);
+			BDFDB.saveData(id, disableoff, this, "disabled");
+			BDFDB.removeData(id, this, "desktop");
+		});
+		BDFDB.addEventListener(this, settingspanel, "click", ".disable-all, .toast-all, .desktop-all", e => {
+			let disableon = e.currentTarget.getAttribute("do-disable");
+			let desktopon = e.currentTarget.getAttribute("do-desktop");
+			let disabledata = BDFDB.loadAllData(this, "disabled");
+			let desktopdata = BDFDB.loadAllData(this, "desktop");
+			settingspanel.querySelectorAll(".settings-avatar").forEach(avatar => {
+				let id = avatar.getAttribute("user-id");
+				BDFDB.toggleClass(avatar, "disabled", disableon);
+				BDFDB.toggleClass(avatar, "desktop", desktopon);
+				disableon ? disabledata[id] = true : delete disabledata[id];
+				desktopon ? desktopdata[id] = true : delete desktopdata[id];
 			});
+			BDFDB.saveAllData(disabledata, this, "disabled");
+			BDFDB.saveAllData(desktopdata, this, "desktop");
+		});
 			
 		return settingspanel;
 	}
@@ -211,22 +206,25 @@ class FriendNotifications {
 	load () {}
 
 	start () {
-		let libraryScript = null;
-		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+			libraryScript.setAttribute("date", performance.now());
+			libraryScript.addEventListener("load", () => {
+				BDFDB.loaded = true;
+				this.initialize();
+			});
 			document.head.appendChild(libraryScript);
 		}
+		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
 	initialize () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.loadMessage(this);
 			
 			this.FriendUtils = BDFDB.WebModules.findByProperties("getFriendIDs", "getRelationships");
@@ -248,21 +246,13 @@ class FriendNotifications {
 	}
 
 	stop () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.unloadMessage(this);
 		}
 	}
 	
 	
 	// begin of own functions
-
-	updateSettings (settingspanel) {
-		let settings = {};
-		for (let input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner + ".settings-checkbox")) {
-			settings[input.value] = input.checked;
-		}
-		BDFDB.saveAllData(settings, this, "settings");
-	}
 	
 	saveAudio (settingspanel, option) {
 		let successSavedAudio = (parsedurl, parseddata) => {
@@ -299,14 +289,8 @@ class FriendNotifications {
 	}
 	
 	processFluxContainerFriendsOnline (instance, wrapper) {
-		$(wrapper)
-			.off("." + this.getName())
-			.on("mouseenter." + this.getName(), (e) => {
-				BDFDB.createTooltip("Timelog", e.currentTarget, {type:"right"});
-			})
-			.on("click." + this.getName(), (e) => {
-				this.showTimeLog();
-			});
+		BDFDB.addEventListener(this, wrapper, "mouseenter", () => {BDFDB.createTooltip("Timelog", wrapper, {type:"right"});});
+		BDFDB.addEventListener(this, wrapper, "click", () => {this.showTimeLog();});
 			
 		let settings = BDFDB.getAllData(this, "settings");
 		for (let id of this.FriendUtils.getFriendIDs()) {
@@ -328,7 +312,7 @@ class FriendNotifications {
 					};
 					if (!BDFDB.loadData(id, this, "desktop")) {
 						let toast = BDFDB.showToast(`<div class="toast-inner"><div class="toast-avatar" style="background-image:url(${avatar});"></div><div>${string}</div></div>`, {html:true, timeout:5000, type:(online ? "success" : null), icon:false, selector:`friendnotifications-${online ? "online" : "offline"}-toast`});
-						$(toast).on("click." + this.getName(), openChannel);
+						toast.addEventListener("click", openChannel);
 						let notificationsound = BDFDB.getData(online ? "toastonline" : "toastoffline", this, "notificationsounds");
 						if (!notificationsound.mute && notificationsound.song) {
 							let audio = new Audio();
@@ -346,19 +330,20 @@ class FriendNotifications {
 		}
 	}
 	
-	showTimeLog () {		
-		let timeLogModal = $(this.timeLogModalMarkup);
+	showTimeLog () {
+		let timeLogModal = BDFDB.htmlToElement(this.timeLogModalMarkup);
+		let container = timeLogModal.querySelector(".entries");
+		if (!container) return;
 		let logs = this.timeLog.slice(0).reverse();
 		for (let log of logs) {
-			let entry = $(this.logEntryMarkup);
-			let divider = $(this.dividerMarkup);
+			if (container.childElementCount) container.appendChild(BDFDB.htmlToElement(`<div class="${BDFDB.disCN.modaldivider}"></div>`));
 			let data = BDFDB.loadData(log.user.id, "EditUsers", "users") || {};
-			entry.find(".log-time").text(`[${log.time.toLocaleTimeString()}]`);
-			entry.find(".log-avatar").css("background-image", `url(${data.removeIcon ? "" : (data.url ? data.url : BDFDB.getUserAvatar(log.user.id))})`);
-			entry.find(".log-description").text(`${data.name ? data.name : log.user.username} is ${log.online ? "online" : "offline"}.`);
-			timeLogModal.find(".entries").append(entry).append(divider);
+			let entry = BDFDB.htmlToElement(this.logEntryMarkup);
+			entry.querySelector(".log-time").innerText = `[${log.time.toLocaleTimeString()}]`;
+			entry.querySelector(".log-avatar").style.setProperty("background-image", `url(${data.removeIcon ? "" : (data.url ? data.url : BDFDB.getUserAvatar(log.user.id))})`);
+			entry.querySelector(".log-description").innerText = `${data.name || log.user.username} is ${log.online ? "online" : "offline"}.`;
+			container.appendChild(entry)
 		}
-		BDFDB.removeEles("." + this.getName() + "-modal " + BDFDB.dotCN.modaldivider + ":last-of-type");
 		BDFDB.appendModal(timeLogModal);
 	}
 }

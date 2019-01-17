@@ -1,6 +1,14 @@
 //META{"name":"CharCounter"}*//
 
 class CharCounter {
+	getName () {return "CharCounter";}
+
+	getVersion () {return "1.3.1";}
+
+	getAuthor () {return "DevilBro";}
+
+	getDescription () {return "Adds a charcounter in the chat.";}
+	
 	initConstructor () {
 		this.patchModules = {
 			"ChannelTextArea":"componentDidMount",
@@ -9,8 +17,6 @@ class CharCounter {
 		};
 		
 		this.selecting = false;
-		
-		this.counterMarkup = `<div id="charcounter" class="charcounter"></div>`;
 		
 		this.maxLenghts = {
 			normal: 2000,
@@ -73,35 +79,29 @@ class CharCounter {
 			}`;
 	}
 
-	getName () {return "CharCounter";}
-
-	getDescription () {return "Adds a charcounter in the chat.";}
-
-	getVersion () {return "1.3.0";}
-
-	getAuthor () {return "DevilBro";}
-
 	//legacy
 	load () {}
 
 	start () {
-		var libraryScript = null;
-		if (typeof BDFDB !== "object" || BDFDB.isLibraryOutdated()) {
-			if (typeof BDFDB === "object") BDFDB = "";
-			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+			libraryScript.setAttribute("date", performance.now());
+			libraryScript.addEventListener("load", () => {
+				BDFDB.loaded = true;
+				this.initialize();
+			});
 			document.head.appendChild(libraryScript);
 		}
+		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object") this.initialize();
-		else libraryScript.addEventListener("load", () => {this.initialize();});
 	}
 
 	initialize () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.loadMessage(this);
 			
 			BDFDB.WebModules.forceAllUpdates(this);
@@ -113,7 +113,7 @@ class CharCounter {
 
 
 	stop () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.removeEles(".charcounter");
 			BDFDB.removeClasses("charcounter-added");
 			BDFDB.unloadMessage(this);
@@ -128,7 +128,7 @@ class CharCounter {
 	}
 	
 	processNote (instance, wrapper) {
-		if (wrapper.classList) this.appendCounter(wrapper.firstElementChild, wrapper.classList.contains(BDFDB.disCN.usernotepopout) ? "popout" : (wrapper.classList.contains(BDFDB.disCN.usernoteprofile) ? "profile" : null));
+		this.appendCounter(wrapper.firstElementChild, BDFDB.containsClass(wrapper, BDFDB.disCN.usernotepopout) ? "popout" : (BDFDB.containsClass(wrapper, BDFDB.disCN.usernoteprofile) ? "profile" : null));
 	}
 	
 	processModal (instance, wrapper) {
@@ -140,42 +140,29 @@ class CharCounter {
 	
 	appendCounter (input, type) {
 		if (!input || !type) return;
-		var counter = $(this.counterMarkup);
-		counter.addClass(type).appendTo(input.parentElement);
+		var counter = BDFDB.htmlToElement(`<div id="charcounter" class="charcounter ${type}"></div>`);
+		input.parentElement.appendChild(counter);
 		
-		var updateCounter = () => {
-			var selection = input.selectionEnd - input.selectionStart == 0 ? "" : " (" + (input.selectionEnd - input.selectionStart) + ")";
-			var maxLength = this.maxLenghts[type] || 2000;
-			counter.text(input.value.length + "/" + maxLength + selection);
-		}
+		var updateCounter = () => {counter.innerText = input.value.length + "/" + (this.maxLenghts[type] || 2000) + (input.selectionEnd - input.selectionStart == 0 ? "" : " (" + (input.selectionEnd - input.selectionStart) + ")");};
 		
-		input.parentElement.parentElement.classList.add("charcounter-added");
+		BDFDB.addClass(input.parentElement.parentElement, "charcounter-added");
 		if (type == "nickname") input.setAttribute("maxlength", 32);
-		$(input)
-			.off("keydown." + this.getName() + " click." + this.getName())
-			.on("keydown." + this.getName() + " click." + this.getName(), e => {
-				clearTimeout(input.charcountertimeout);
-				input.charcountertimeout = setTimeout(() => {updateCounter();},100);
-			})
-			.off("mousedown." + this.getName())
-			.on("mousedown." + this.getName(), e => {
-				this.selecting = true;
+		BDFDB.addEventListener(this, input, "keydown click", e => {
+			clearTimeout(input.charcountertimeout);
+			input.charcountertimeout = setTimeout(() => {updateCounter();},100);
+		});
+		BDFDB.addEventListener(this, input, "mousedown", e => {
+			BDFDB.addEventListener(this, document, "mouseup", () => {
+				BDFDB.removeEventListener(this, document);
+				if (input.selectionEnd - input.selectionStart) setImmediate(() => {BDFDB.addEventListener(this, document, "click", () => {
+					input.selectionStart = 0;
+					input.selectionEnd = 0;
+					updateCounter();
+					BDFDB.removeEventListener(this, document);
+				});});
 			});
-		$(document)
-			.off("mouseup." + this.getName())
-			.on("mouseup." + this.getName(), e => {
-				if (this.selecting) {
-					this.selecting = false;
-				}
-			})
-			.off("mousemove." + this.getName())
-			.on("mousemove." + this.getName(), e => {
-				if (this.selecting) {
-					setTimeout(() => {
-						updateCounter();
-					},10);
-				}
-			});
+			BDFDB.addEventListener(this, document, "mousemove", () => {setTimeout(() => {updateCounter();},10);});
+		});
 		
 		updateCounter();
 	}
