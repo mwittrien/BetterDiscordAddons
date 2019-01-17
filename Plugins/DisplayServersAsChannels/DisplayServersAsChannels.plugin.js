@@ -3,7 +3,7 @@
 class DisplayServersAsChannels {
 	getName () {return "DisplayServersAsChannels";}
 
-	getVersion () {return "1.1.6";}
+	getVersion () {return "1.1.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -200,21 +200,21 @@ class DisplayServersAsChannels {
 	load () {}
 
 	start () {
-		var libraryScript = null;
-		if (!global.BDFDB || typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+		if ((!global.BDFDB || typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) && !(libraryScript && performance.now() - libraryScript.getAttribute("date") < 600000)) {
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+			libraryScript.setAttribute("date", performance.now());
+			libraryScript.addEventListener("load", () => {
+				BDFDB.loaded = true;
+				this.initialize();
+			});
 			document.head.appendChild(libraryScript);
 		}
+		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
-		else if (libraryScript) libraryScript.addEventListener("load", () => {
-			BDFDB.loaded = true;
-			this.initialize();
-		});
 	}
 
 	initialize () {
@@ -283,7 +283,7 @@ class DisplayServersAsChannels {
 			avatar.DSAColdName = avatar.textContent;
 			avatar.innerHTML = `<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">${BDFDB.encodeToHTML(info.name || info.folderName || "")}</div></span>`;
 			BDFDB.initElements(avatar);
-			if (info.features && info.features.has("VERIFIED")) avatar.parentElement.insertBefore(avatar, BDFDB.htmlToElement(this.verificationBadgeMarkup));
+			if (info.features && info.features.has("VERIFIED")) avatar.parentElement.insertBefore(BDFDB.htmlToElement(this.verificationBadgeMarkup), avatar);
 		}
 	}
 
