@@ -1,6 +1,14 @@
 //META{"name":"DisplayServersAsChannels"}*//
 
 class DisplayServersAsChannels {
+	getName () {return "DisplayServersAsChannels";}
+
+	getVersion () {return "1.1.6";}
+
+	getAuthor () {return "DevilBro";}
+
+	getDescription () {return "Display servers in a similar way as channels.";}
+	
 	initConstructor () {
 		this.verificationBadgeMarkup =
 			`<svg class="DSAC-verification-badge" name="Verified" width="24" height="24" viewBox="0 0 20 20">
@@ -188,20 +196,12 @@ class DisplayServersAsChannels {
 			}`;
 	}
 
-	getName () {return "DisplayServersAsChannels";}
-
-	getDescription () {return "Display servers in a similar way as channels.";}
-
-	getVersion () {return "1.1.4";}
-
-	getAuthor () {return "DevilBro";}
-
 	//legacy
 	load () {}
 
 	start () {
 		var libraryScript = null;
-		if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
+		if (!global.BDFDB || typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
 			libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
@@ -210,12 +210,15 @@ class DisplayServersAsChannels {
 			document.head.appendChild(libraryScript);
 		}
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-		if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-		else libraryScript.addEventListener("load", () => {this.initialize();});
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
+		else if (libraryScript) libraryScript.addEventListener("load", () => {
+			BDFDB.loaded = true;
+			this.initialize();
+		});
 	}
 
 	initialize () {
-		if (typeof BDFDB === "object") {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.loadMessage(this);
 			
 			var observer = null;
@@ -228,14 +231,9 @@ class DisplayServersAsChannels {
 						if (change.attributeName == "draggable" && change.oldValue && change.oldValue == "false")  addedNodes = [change.target.parentElement];
 						if (addedNodes) {
 							addedNodes.forEach((node) => {
-								if (node && node.classList && node.classList.contains(BDFDB.disCN.guild) && !node.querySelector(BDFDB.dotCN.guildserror)) {
-									if (node.classList.contains("folder")) {
-										this.changeServer(this.getFolderObject(node));
-									}
-									else {
-										var id = BDFDB.getIdOfServer(node);
-										if (id) this.changeServer(BDFDB.getDivOfServer(id));
-									}
+								if (node && BDFDB.containsClass(node, BDFDB.disCN.guild) && !node.querySelector(BDFDB.dotCN.guildserror)) {
+									if (BDFDB.containsClass(node, "folder")) this.changeServer(this.getFolderObject(node));
+									else this.changeServer(BDFDB.getServerData(node));
 								}
 							});
 						}
@@ -244,24 +242,21 @@ class DisplayServersAsChannels {
 			});
 			BDFDB.addObserver(this, BDFDB.dotCN.guilds, {name:"serverListObserver",instance:observer}, {childList: true, subtree:true, attributes:true, attributeFilter: ["class", "draggable"], attributeOldValue: true});
 			
-			BDFDB.readServerList().forEach(serverObj => {
-				this.changeServer(serverObj);
-			});
-			document.querySelectorAll(BDFDB.dotCN.guild + ".folder").forEach(folderdiv => {
-				this.changeServer(this.getFolderObject(folderdiv));
-			});
+			BDFDB.readServerList().forEach(info => {this.changeServer(info);});
+			document.querySelectorAll(BDFDB.dotCN.guild + ".folder").forEach(folderdiv => {this.changeServer(this.getFolderObject(folderdiv));});
 			
-			$(BDFDB.dotCN.guildswrapper).parent()
-				.off("." + this.getName())
-				.on("mouseenter." + this.getName(), `${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild}, ${BDFDB.dotCN.guild}.copy`, (e) => {
+			var appcontainer = document.querySelector(BDFDB.dotCN.appcontainer);
+			if (appcontainer) {
+				BDFDB.addEventListener(this, appcontainer, "mouseenter", `${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild}, ${BDFDB.dotCN.guild}.copy`, e => {
 					if (e.currentTarget.tagName && e.currentTarget.querySelector(BDFDB.dotCN.guildserror)) return;
 					BDFDB.appendLocalStyle("HideAllToolTips" + this.getName(), `${BDFDB.dotCN.tooltip} {display: none !important;}`);
-				})
-				.on("mouseleave." + this.getName(), `${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild}, ${BDFDB.dotCN.guild}.copy`, (e) => {
+				});
+				BDFDB.addEventListener(this, appcontainer, "mouseleave", `${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild}, ${BDFDB.dotCN.guild}.copy`, e => {
 					if (e.currentTarget.tagName && e.currentTarget.querySelector(BDFDB.dotCN.guildserror)) return;
 					BDFDB.removeLocalStyle("HideAllToolTips" + this.getName());
-				})
-				.addClass("DSAC-styled");
+				});
+			}
+			BDFDB.addClass(appcontainer, "DSAC-styled");
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -269,14 +264,10 @@ class DisplayServersAsChannels {
 	}
 
 	stop () {
-		if (typeof BDFDB === "object") {
-			BDFDB.readServerList().forEach(serverObj => {
-				this.resetServer(serverObj);
-			});
-			document.querySelectorAll(BDFDB.dotCN.guild + ".folder").forEach(folderdiv => {
-				this.resetServer(this.getFolderObject(folderdiv));
-			});
-			$(".DSAC-styled").removeClass("DSAC-styled");
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			BDFDB.readServerList().forEach(info => {this.resetServer(info);});
+			document.querySelectorAll(BDFDB.dotCN.guild + ".folder").forEach(folderdiv => {this.resetServer(this.getFolderObject(folderdiv));});
+			BDFDB.removeClasses("DSAC-styled");
 			
 			BDFDB.unloadMessage(this);
 		}
@@ -285,22 +276,23 @@ class DisplayServersAsChannels {
 	
 	// begin of own functions
 
-	changeServer (serverObj) {
-		if (!serverObj) return;
-		var avatar = serverObj.div.querySelector(BDFDB.dotCN.guildicon);
+	changeServer (info) {
+		if (!info || !info.div) return;
+		var avatar = info.div.querySelector(BDFDB.dotCN.guildicon);
 		if (avatar) {
 			avatar.DSAColdName = avatar.textContent;
-			avatar.textContent = serverObj.name || serverObj.folderName;
-			if (serverObj.features && serverObj.features.has("VERIFIED")) $(this.verificationBadgeMarkup).insertBefore(avatar);
+			avatar.innerHTML = `<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">${BDFDB.encodeToHTML(info.name || info.folderName || "")}</div></span>`;
+			BDFDB.initElements(avatar);
+			if (info.features && info.features.has("VERIFIED")) avatar.parentElement.insertBefore(avatar, BDFDB.htmlToElement(this.verificationBadgeMarkup));
 		}
 	}
 
-	resetServer (serverObj) {
-		if (!serverObj) return;
-		var avatar = serverObj.div.querySelector(BDFDB.dotCN.guildicon);
+	resetServer (info) {
+		if (!info || !info.div) return;
+		var avatar = info.div.querySelector(BDFDB.dotCN.guildicon);
 		if (avatar) {
-			avatar.textContent = avatar.DSAColdName;
-			BDFDB.removeEles(serverObj.div.querySelector(".DSAC-verification-badge"));
+			avatar.innerHTML = BDFDB.encodeToHTML(avatar.DSAColdName);
+			BDFDB.removeEles(info.div.querySelector(".DSAC-verification-badge"));
 		}
 	}
 	
