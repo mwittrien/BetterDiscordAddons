@@ -53,8 +53,7 @@ class OwnerTag {
 
 		BDFDB.initElements(settingspanel, this);
 
-		$(settingspanel)
-			.on("keyup", BDFDB.dotCN.input, () => {this.saveInputs(settingspanel);});
+		BDFDB.addChildEventListener(settingspanel, "keyup", BDFDB.dotCN.input, () => {this.saveInputs(settingspanel);});
 			
 		return settingspanel;
 	}
@@ -114,7 +113,7 @@ class OwnerTag {
 	processNameTag (instance, wrapper) {
 		let container = null;
 		if (!instance.props || !wrapper.classList) return;
-		else if (wrapper.classList.contains(BDFDB.disCN.membernametag) && BDFDB.getData("addInMemberList", this, "settings")) {
+		else if (BDFDB.containsClass(wrapper, BDFDB.disCN.membernametag) && BDFDB.getData("addInMemberList", this, "settings")) {
 			this.addOwnerTag(instance.props.user, wrapper, "list", BDFDB.disCN.bottagnametag + (instance.props.botClass ? (" " + instance.props.botClass) : ""), container);
 		}
 		else if ((container = BDFDB.getParentEle(BDFDB.dotCN.userpopout, wrapper)) != null && BDFDB.getData("addInUserPopout", this, "settings")) {
@@ -131,7 +130,7 @@ class OwnerTag {
 			let username = wrapper.querySelector(BDFDB.dotCN.messageusername);
 			if (username) {
 				let messagegroup = BDFDB.getParentEle(BDFDB.dotCN.messagegroup, wrapper);
-				this.addOwnerTag(message.author, username.parentElement, "chat", BDFDB.disCN.bottagmessage + " " + (messagegroup.classList.contains(BDFDB.disCN.messagegroupcozy) ? BDFDB.disCN.bottagmessagecozy : BDFDB.disCN.bottagmessagecompact), null);
+				this.addOwnerTag(message.author, username.parentElement, "chat", BDFDB.disCN.bottagmessage + " " + (BDFDB.containsClass(messagegroup, BDFDB.disCN.messagegroupcozy) ? BDFDB.disCN.bottagmessagecozy : BDFDB.disCN.bottagmessagecompact), null);
 			}
 		}
 	}
@@ -156,13 +155,13 @@ class OwnerTag {
 		tag.className = "owner-tag " + "owner-" + type + "-tag " + (settings.useRoleColor ? "owner-tag-rolecolor " : "") + BDFDB.disCN.bottag + (selector ? (" " + selector) : "");
 		tag.innerText = BDFDB.getData("ownTagName", this, "inputs") || "Owner";
 		let invert = false;
-		if (container && container.firstElementChild && !container.firstElementChild.classList.contains(BDFDB.disCN.userpopoutheadernormal) && !container.firstElementChild.classList.contains(BDFDB.disCN.userprofiletopsectionnormal)) invert = true;
-		tag.classList.add(invert ? BDFDB.disCN.bottaginvert : BDFDB.disCN.bottagregular);
+		if (container && container.firstElementChild && !BDFDB.containsClass(container.firstElementChild, BDFDB.disCN.userpopoutheadernormal, BDFDB.disCN.userprofiletopsectionnormal), false) invert = true;
+		BDFDB.addClass(tag, invert ? BDFDB.disCN.bottaginvert : BDFDB.disCN.bottagregular);
 		let tagcolor = BDFDB.colorCONVERT(EditUsersData.color1 || member.colorString, "RGB");
 		let isbright = BDFDB.colorISBRIGHT(tagcolor);
 		tagcolor = isbright ? (settings.useBlackFont ? tagcolor : BDFDB.colorCHANGE(tagcolor, -0.3)) : tagcolor;
 		tag.style.setProperty(invert ? "color" : "background-color", tagcolor, "important");
 		if (isbright && settings.useBlackFont) tag.style.setProperty(invert ? "background-color" : "color", "black", "important");
-		wrapper.appendChild(tag);
+		wrapper.insertBefore(tag, wrapper.querySelector("svg[name=MobileDevice]"));
 	}
 }

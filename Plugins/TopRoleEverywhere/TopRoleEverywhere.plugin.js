@@ -149,7 +149,6 @@ class TopRoleEverywhere {
 			let oldwidth;
 			if (type == "list") oldwidth = username.getBoundingClientRect().width;
 			let tag = BDFDB.htmlToElement(this.tagMarkup);
-			username.parentElement.appendChild(tag);
 
 			let borderColor = "rgba(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ", 0.5)";
 			let textColor = "rgb(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ")";
@@ -192,7 +191,7 @@ class TopRoleEverywhere {
 		}
 		if (type == "chat" && settings.addUserID) {
 			let idtag = BDFDB.htmlToElement(this.tagMarkup);
-			username.parentElement.appendChild(idtag);
+			username.parentElement.insertBefore(idtag, username.parentElement.querySelector("svg[name=MobileDevice]"));
 			let idColor = settings.darkIdTag ? [33,33,33] : [222,222,222];
 			let idBorderColor = "rgba(" + idColor[0] + ", " + idColor[1] + ", " + idColor[2] + ", 0.5)";
 			let idTextColor = "rgb(" + idColor[0] + ", " + idColor[1] + ", " + idColor[2] + ")";

@@ -33,11 +33,11 @@ class ThemeRepo {
 		
 		this.grabbedThemes = [];
 		this.foundThemes = [];
-		this.loadedThemes = {};
+		this.loadedThemes = {}; 
 		
 		this.updateInterval;
 		
-		this.themeFixerCSS = `#voice-connection,#friends,.friends-header,.friends-table,.guilds-wrapper,.guild-header header,.channels-wrap,.private-channels .search-bar,.private-channels,.guild-channels,.account,.friend-table-add-header,.chat,.content,.title-wrap:not(.search-bar),.messages-wrapper,.messages .divider span,.messages .divider:before,.content,.message-group-blocked,.is-local-bot-message,.channel-members-loading,.channel-members-loading .heading,.channel-members-loading .member,.typing,.container-RYiLUQ,.ui-standard-sidebar-view,.ui-standard-sidebar-view .sidebar-region,.ui-standard-sidebar-view .content-region,.channel-members,.container-2OU7Cz,.chat form,.channels-3g2vYe,.messages-wrapper,.content .flex-spacer,.chat>.content,.chat,.channel-members,.search .search-bar,.container-iksrDt,.container-3lnMWU,.title-qAcLxz,.typing-3eiiL_,.activityFeed-HeiGwL,.headerBar-cxbhPD,.lfg-3xoFkI,.video-3lOWa6,.private-channel-call,.appMount-3VJmYg,.container-2lgZY8,.channels-Ie2l6A,.container-PNkimc,.container-2Thooq,.noChannel-Z1DQK7,.container-3gCOGc,.friendsTableHeader-32yE7d,.friendsTable-133bsv,.guilds-1q_RqH,.guildsWrapper-5TJh6A,.title-3qD0b-,.typing-2GQL18,.search-bar.search-bar-light,.emojiPicker-3m1S-j .scroller-3vODG7 .emojiItem-109bjA.selected-39BZ4S,.members-1998pB,.chat-3bRxxu,.content-yTz4x3,.messagesWrapper-3lZDfY,.chat-3bRxxu form,.searchResultsWrap-2DKFzt,.channelName-1QajIf,.searchHeader-1l-wpR,.root-1BQpZw,.guildsWrapper-5TJh6A,.applicationStore-1pNvnv,.gameLibrary-TTDw4Y,.sidebarRegion-VFTUkN,.standardSidebarView-3F1I7i,.contentRegion-3nDuYy,.scroller-2FKFPG,.sidebarRegion-VFTUkN,.standardSidebarView-3F1I7i {background: transparent !important;}.card-2WxYqG {background-color: rgba(54,57,63,0.3)!important;}.layer-3QrUeG,.layers-3iHuyZ,.typeWindows-15E0Ys {background: rgba(0,0,0,0.18) !important;}`;
+		this.themeFixerCSS = `${BDFDB.dotCNC.appmount + BDFDB.dotCNC.appcontainer + BDFDB.dotCNC.channelheaderheaderbar + BDFDB.dotCNC.channelheadertitle + BDFDB.dotCNC.guildchannels + BDFDB.dotCNC.channels + BDFDB.dotCNC.callcurrentcontainer + BDFDB.dotCNC.callcurrentvideo + BDFDB.dotCNC.callcurrentdetails + BDFDB.dotCNC.accountinfo + BDFDB.dotCNC.nochannel + BDFDB.dotCNC.friends + BDFDB.dotCNC.friendstable + BDFDB.dotCNC.friendstableheader + BDFDB.dotCNC.guilds + BDFDB.dotCNC.guildswrapper + BDFDB.dotCNC.channelheadertitle + BDFDB.dotCNC.typing + BDFDB.dotCNS.emojipicker + BDFDB.dotCNS.emojipickerscroller + BDFDB.dotCN.emojipickeremojiitem + BDFDB.dotCNC.emojipickerselected + BDFDB.dotCNC.members + BDFDB.dotCNC.chat + BDFDB.dotCNS.chat+ "form," + BDFDB.dotCNC.chatcontent + BDFDB.dotCNC.messageswrapper + BDFDB.dotCNC.searchresultswrap + BDFDB.dotCNC.searchresultschannelname + BDFDB.dotCNC.searchresultssearchheader + BDFDB.dotCNC.giftinventory + BDFDB.dotCNC.activityfeed + BDFDB.dotCNC.lfg + BDFDB.dotCNC.applicationstore + BDFDB.dotCNC.gamelibrary + BDFDB.dotCNC.gamelibrarytableheader + BDFDB.dotCNC.standardsidebarview + BDFDB.dotCNC.sidebarregion + BDFDB.dotCNC.contentregion + BDFDB.dotCN.scroller} {background: transparent !important;} ${BDFDB.dotCNC.layer + BDFDB.dotCNC.layers + BDFDB.dotCN.titlebar} {background: rgba(0,0,0,0.18) !important;} ${BDFDB.dotCN.card}:not([style*="background-color"]) {background: rgba(0,0,0,0.4) !important;}`;
 		
 		this.themeRepoButtonMarkup = 
 			`<button class="bd-pfbtn bd-themerepobutton">Theme Repo</button>`;
@@ -437,10 +437,7 @@ class ThemeRepo {
 		}
 			
 		var keyPressed = e => {
-			if (e.which == 17 && themeRepoModal.querySelector(BDFDB.dotCN.searchbarinput) != document.activeElement) {
-				if (getComputedStyle(themeRepoModal).display == "none") themeRepoModal.style.removeProperty("display");
-				else themeRepoModal.style.setProperty("display", "none", "important");
-			}
+			if (e.which == 17 && themeRepoModal.querySelector(BDFDB.dotCN.searchbarinput) != document.activeElement) BDFDB.toggleEles(themeRepoModal);
 			if (e.which == 27) frame.remove();
 		};
 		
@@ -670,13 +667,10 @@ class ThemeRepo {
 				li.querySelectorAll(BDFDB.dotCNC._reponame + BDFDB.dotCNC._repoversion + BDFDB.dotCNC._repoauthor + BDFDB.dotCN._repodescription).forEach(ele => {
 					if (searchstring && searchstring.length > 2 || ele.querySelector(BDFDB.dotCN.highlight)) ele.innerHTML = BDFDB.highlightText(ele.innerText, searchstring);
 				});
-				li.style.removeProperty("display");
 				li.style.setProperty("order", pos, "important");
 			}
-			else { 
-				li.style.setProperty("display", "none", "important");
-				li.style.removeProperty("order");
-			}
+			else li.style.removeProperty("order");
+			BDFDB.toggleEles(li, pos > -1);
 		}
 	}
 	

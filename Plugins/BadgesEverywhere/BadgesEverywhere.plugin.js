@@ -197,6 +197,6 @@ class BadgesEverywhere {
 				badge.addEventListener("mouseenter", () => {BDFDB.createTooltip(this.defaults.badges[flag].name, badge, {"type":type == "list" ? "left" : "top"});});
 			}
 		}
-		if (badgewrapper.firstChild) wrapper.appendChild(badgewrapper);
+		if (badgewrapper.firstChild) wrapper.insertBefore(badgewrapper, wrapper.querySelector("svg[name=MobileDevice]"));
 	}
 }
