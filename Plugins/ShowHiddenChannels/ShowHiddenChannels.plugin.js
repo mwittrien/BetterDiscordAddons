@@ -3,7 +3,7 @@
 class ShowHiddenChannels {
 	getName () {return "ShowHiddenChannels";}
 
-	getVersion () {return "2.3.9";}
+	getVersion () {return "2.4.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ShowHiddenChannels {
 	
 	initConstructor () {
 		this.patchModules = {
-			"Channels":"componentDidMount",
+			"Channels":["componentDidMount","componentDidUpdate"],
 			"CategoryItem":"componentDidMount",
 			"StandardSidebarView":"componentWillUnmount"
 		};
@@ -148,6 +148,7 @@ class ShowHiddenChannels {
 			this.ChannelTypes = BDFDB.WebModules.findByProperties("ChannelTypes").ChannelTypes;
 			this.UserStore = BDFDB.WebModules.findByProperties("getUsers", "getUser");
 			this.MemberStore = BDFDB.WebModules.findByProperties("getMember", "getMembers");
+			this.GuildStore = BDFDB.WebModules.findByProperties("getGuilds", "getGuild");
 			this.ChannelStore = BDFDB.WebModules.findByProperties("getChannels", "getDMFromUserId");
 			this.GuildChannels = BDFDB.WebModules.findByProperties("getChannels", "getDefaultChannel");
 			this.Permissions = BDFDB.WebModules.findByProperties("Permissions", "ActivityTypes").Permissions;
@@ -169,12 +170,15 @@ class ShowHiddenChannels {
 	
 	// begin of own functions
 	
-	processChannels (instance, wrapper) {
-		if (instance.props && instance.props.guild) this.appendHiddenContainer(instance.props.guild);
+	processChannels (instance, wrapper, methodnames) {
+		if (instance.props && instance.props.guild) {
+			if (methodnames.includes("componentDidMount")) this.appendHiddenContainer(instance.props.guild);
+			if (methodnames.includes("componentDidUpdate")) this.reappendHiddenContainer(instance.props.guild);
+		}
 	}
 	
 	processCategoryItem (instance, wrapper) {
-		if (instance.props && instance.props.channel) this.reappendHiddenContainer(instance.props.channel.guild_id);
+		if (instance.props && instance.props.channel) this.reappendHiddenContainer(this.GuildStore.getGuild(instance.props.channel.guild_id));
 	}
 	
 	processStandardSidebarView (instance, wrapper) {
@@ -187,7 +191,7 @@ class ShowHiddenChannels {
 	appendHiddenContainer (guild) {
 		BDFDB.removeEles(".container-hidden");
 		if (!guild) return;
-		this.currentGuild = guild.id;
+		this.currentGuild = guild;
 		var allChannels = this.ChannelStore.getChannels();
 		var shownChannels = this.GuildChannels.getChannels(guild.id);
 		var hiddenChannels = {};
@@ -336,7 +340,7 @@ class ShowHiddenChannels {
 				BDFDB.toggleEles(category.querySelectorAll(BDFDB.dotCN.channelcontainerdefault), false);
 			}
 			
-			this.reappendHiddenContainer(guild.id, category);
+			this.reappendHiddenContainer(guild, category);
 		}
 		let channellist = document.querySelector(BDFDB.dotCNS.channels + BDFDB.dotCN.scroller);
 		if (channellist) {
@@ -350,11 +354,12 @@ class ShowHiddenChannels {
 		}
 	}
 	
-	reappendHiddenContainer (guildid, category = document.querySelector(BDFDB.dotCNS.channels + BDFDB.dotCNS.scroller + "container-hidden")) {
-		if (guildid != this.currentGuild) this.appendHiddenContainer(guild);
+	reappendHiddenContainer (guild, category = document.querySelector(BDFDB.dotCNS.channels + BDFDB.dotCNS.scroller + "container-hidden")) {
+		if (!guild) return;
+		if (guild != this.currentGuild) this.appendHiddenContainer(guild);
 		else if (category) {
 			var scroller = document.querySelector(BDFDB.dotCNS.channels + BDFDB.dotCN.scroller);
-			if (!scroller) return;
+			if (!scroller || scroller.lastChild.previousSibling == category) return;
 			category.remove();
 			let count = parseInt(scroller.lastChild.previousSibling.className.split("-")[1])+1;
 			category.className = "container-" + count + " container-hidden";
