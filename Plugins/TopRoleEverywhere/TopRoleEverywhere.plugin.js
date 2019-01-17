@@ -3,7 +3,7 @@
 class TopRoleEverywhere {
 	getName () {return "TopRoleEverywhere";}
 
-	getVersion () {return "2.7.7";}
+	getVersion () {return "2.7.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -49,8 +49,8 @@ class TopRoleEverywhere {
 				includeColorless:	{value:false, 	description:"Include colorless roles."},
 				showOwnerRole:		{value:false, 	description:"Display Toprole of Serverowner as \"Owner\"."},
 				disableForBots:		{value:false, 	description:"Disable Toprole for Bots."},
-				addUserID:			{value:false, 	description:"Add the info.id as a Tag to the Chat Window."},
-				darkIdTag:			{value:false, 	description:"Use a dark version for the info.id-Tag."}
+				addUserID:			{value:false, 	description:"Add the UserID as a Tag to the Chat Window."},
+				darkIdTag:			{value:false, 	description:"Use a dark version for the UserID-Tag."}
 			}
 		};
 	}
@@ -149,6 +149,7 @@ class TopRoleEverywhere {
 			let oldwidth;
 			if (type == "list") oldwidth = username.getBoundingClientRect().width;
 			let tag = BDFDB.htmlToElement(this.tagMarkup);
+			username.parentElement.insertBefore(tag, username.parentElement.querySelector("svg[name=MobileDevice]"));
 
 			let borderColor = "rgba(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ", 0.5)";
 			let textColor = "rgb(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ")";
@@ -179,6 +180,7 @@ class TopRoleEverywhere {
 			tag.classList.add(type + "-tag");
 			tag.style.setProperty("border", "1px solid " + borderColor);
 			tag.style.setProperty("background", bgColor);
+			tag.style.setProperty("order", 11, "important");
 			let inner = tag.querySelector(".role-inner");
 			inner.style.setProperty("color", textColor);
 			inner.style.setProperty("background-image", bgInner);
@@ -205,6 +207,7 @@ class TopRoleEverywhere {
 			idtag.classList.add("id-tag");
 			idtag.style.setProperty("border", "1px solid " + idBorderColor);
 			idtag.style.setProperty("background", idBgColor);
+			idtag.style.setProperty("order", 12, "important");
 			let idinner = idtag.querySelector(".role-inner");
 			idinner.style.setProperty("color", idTextColor);
 			idinner.style.setProperty("background-image", idBgInner); 

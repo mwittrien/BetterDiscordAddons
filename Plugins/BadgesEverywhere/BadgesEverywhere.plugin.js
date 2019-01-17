@@ -3,7 +3,7 @@
 class BadgesEverywhere {
 	getName () {return "BadgesEverywhere";}
 
-	getVersion () {return "1.2.0";}
+	getVersion () {return "1.2.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -189,7 +189,7 @@ class BadgesEverywhere {
 		let badges = BDFDB.getAllData(this, "badges");
 		let settings = BDFDB.getAllData(this, "settings");
 		let header = BDFDB.getParentEle(BDFDB.dotCN.userpopoutheader, wrapper);
-		let badgewrapper = BDFDB.htmlToElement(`<span class="BE-badges ${!settings.useColoredVersion || (header && !BDFDB.containsClass(header, BDFDB.disCN.userpopoutheadernormal)) ? BDFDB.disCN.userprofiletopsectionplaying : BDFDB.disCN.userprofiletopsectionnormal}" style="all: unset !important;"></span>`);
+		let badgewrapper = BDFDB.htmlToElement(`<span class="BE-badges ${!settings.useColoredVersion || (header && !BDFDB.containsClass(header, BDFDB.disCN.userpopoutheadernormal)) ? BDFDB.disCN.userprofiletopsectionplaying : BDFDB.disCN.userprofiletopsectionnormal}" style="all: unset !important; order: 9 !important;"></span>`);
 		for (let flag in this.defaults.badges) {
 			if ((this.loadedusers[info.id].flags | flag) == this.loadedusers[info.id].flags && badges[flag]) {
 				let badge = BDFDB.htmlToElement(`<div class="BE-badge BE-badge-${this.defaults.badges[flag].name.replace(/ /g, "")} BE-badge-${type} ${this.BadgeClasses[this.defaults.badges[flag].selector]}"></div>`);
@@ -197,6 +197,6 @@ class BadgesEverywhere {
 				badge.addEventListener("mouseenter", () => {BDFDB.createTooltip(this.defaults.badges[flag].name, badge, {"type":type == "list" ? "left" : "top"});});
 			}
 		}
-		if (badgewrapper.firstChild) wrapper.insertBefore(badgewrapper, wrapper.querySelector("svg[name=MobileDevice]"));
+		if (badgewrapper.firstChild) wrapper.insertBefore(badgewrapper, wrapper.querySelector(".owner-tag,.TRE-tag,svg[name=MobileDevice]"));
 	}
 }

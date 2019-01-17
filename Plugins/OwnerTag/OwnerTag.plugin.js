@@ -3,7 +3,7 @@
 class OwnerTag {
 	getName () {return "OwnerTag";}
 
-	getVersion () {return "1.0.5";}
+	getVersion () {return "1.0.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -151,9 +151,7 @@ class OwnerTag {
 		let settings = BDFDB.getAllData(this, "settings");
 		let member = settings.useRoleColor ? (this.MemberUtils.getMember(this.LastGuildStore.getGuildId(), info.id) || {}) : {};
 		let EditUsersData = BDFDB.isPluginEnabled("EditUsers") ? bdplugins.EditUsers.plugin.getUserData(info.id, wrapper) : {};
-		let tag = document.createElement("span");
-		tag.className = "owner-tag " + "owner-" + type + "-tag " + (settings.useRoleColor ? "owner-tag-rolecolor " : "") + BDFDB.disCN.bottag + (selector ? (" " + selector) : "");
-		tag.innerText = BDFDB.getData("ownTagName", this, "inputs") || "Owner";
+		let tag = BDFDB.htmlToElement(`<span class="owner-tag owner-${type}-tag ${(settings.useRoleColor ? "owner-tag-rolecolor " : "") + BDFDB.disCN.bottag + (selector ? (" " + selector) : "")}" style="order: 10 !important;">${BDFDB.getData("ownTagName", this, "inputs") || "Owner"}</span>`);
 		let invert = false;
 		if (container && container.firstElementChild && !BDFDB.containsClass(container.firstElementChild, BDFDB.disCN.userpopoutheadernormal, BDFDB.disCN.userprofiletopsectionnormal), false) invert = true;
 		BDFDB.addClass(tag, invert ? BDFDB.disCN.bottaginvert : BDFDB.disCN.bottagregular);
@@ -162,6 +160,6 @@ class OwnerTag {
 		tagcolor = isbright ? (settings.useBlackFont ? tagcolor : BDFDB.colorCHANGE(tagcolor, -0.3)) : tagcolor;
 		tag.style.setProperty(invert ? "color" : "background-color", tagcolor, "important");
 		if (isbright && settings.useBlackFont) tag.style.setProperty(invert ? "background-color" : "color", "black", "important");
-		wrapper.insertBefore(tag, wrapper.querySelector("svg[name=MobileDevice]"));
+		wrapper.insertBefore(tag, wrapper.querySelector(".TRE-tag,svg[name=MobileDevice]"));
 	}
 }
