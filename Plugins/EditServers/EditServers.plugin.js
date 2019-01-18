@@ -3,7 +3,7 @@
 class EditServers {
 	getName () {return "EditServers";}
 
-	getVersion () {return "1.9.0";} 
+	getVersion () {return "1.9.1";} 
 
 	getAuthor () {return "DevilBro";}
 
@@ -402,7 +402,7 @@ class EditServers {
 			if (icon.tagName == "IMG") icon.setAttribute("src", data.removeIcon ? null : (data.url || BDFDB.getGuildIcon(info.id)));
 			else {
 				BDFDB.setInnerText(icon, data.url ? "" : (data.shortName || (info.icon && !data.removeIcon ? "" : info.acronym)));
-				icon.style.setProperty("background-image", data.removeIcon || data.shortName ? null : (url ? `url(${data.url || BDFDB.getUserAvatar(info.id)})` : null));
+				icon.style.setProperty("background-image", data.removeIcon || data.shortName ? null : `url(${data.url || BDFDB.getGuildIcon(info.id)})`);
 				icon.style.setProperty("background-color", BDFDB.colorCONVERT(data.color1, "RGB"), "important");
 				icon.style.setProperty("color", BDFDB.colorCONVERT(data.color2, "RGB", "important"));
 				icon.style.setProperty("font-size", this.getFontSize(icon));
