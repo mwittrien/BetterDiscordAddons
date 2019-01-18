@@ -3,7 +3,7 @@
 class ShowHiddenChannels {
 	getName () {return "ShowHiddenChannels";}
 
-	getVersion () {return "2.4.0";}
+	getVersion () {return "2.4.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -12,6 +12,7 @@ class ShowHiddenChannels {
 	initConstructor () {
 		this.patchModules = {
 			"Channels":["componentDidMount","componentDidUpdate"],
+			"ChannelItem":"componentDidMount",
 			"CategoryItem":"componentDidMount",
 			"StandardSidebarView":"componentWillUnmount"
 		};
@@ -177,6 +178,10 @@ class ShowHiddenChannels {
 		}
 	}
 	
+	processChannelItem (instance, wrapper) {
+		if (instance.props && instance.props.channel) this.reappendHiddenContainer(this.GuildStore.getGuild(instance.props.channel.guild_id));
+	}
+	
 	processCategoryItem (instance, wrapper) {
 		if (instance.props && instance.props.channel) this.reappendHiddenContainer(this.GuildStore.getGuild(instance.props.channel.guild_id));
 	}
@@ -184,14 +189,14 @@ class ShowHiddenChannels {
 	processStandardSidebarView (instance, wrapper) {
 		if (this.SettingsUpdated) {
 			delete this.SettingsUpdated;
-			BDFDB.WebModules.forceAllUpdates(this);
+			BDFDB.WebModules.forceAllUpdates(this, "Channels");
 		}
 	}
 	
 	appendHiddenContainer (guild) {
 		BDFDB.removeEles(".container-hidden");
 		if (!guild) return;
-		this.currentGuild = guild;
+		this.currentGuild = guild.id;
 		var allChannels = this.ChannelStore.getChannels();
 		var shownChannels = this.GuildChannels.getChannels(guild.id);
 		var hiddenChannels = {};
@@ -354,9 +359,9 @@ class ShowHiddenChannels {
 		}
 	}
 	
-	reappendHiddenContainer (guild, category = document.querySelector(BDFDB.dotCNS.channels + BDFDB.dotCNS.scroller + "container-hidden")) {
+	reappendHiddenContainer (guild, category = document.querySelector(BDFDB.dotCNS.channels + BDFDB.dotCNS.scroller + ".container-hidden")) {
 		if (!guild) return;
-		if (guild != this.currentGuild) this.appendHiddenContainer(guild);
+		if (guild.id != this.currentGuild) this.appendHiddenContainer(guild);
 		else if (category) {
 			var scroller = document.querySelector(BDFDB.dotCNS.channels + BDFDB.dotCN.scroller);
 			if (!scroller || scroller.lastChild.previousSibling == category) return;
