@@ -3,7 +3,7 @@
 class SpellCheck {
 	getName () {return "SpellCheck";}
 
-	getVersion () {return "1.2.9";}
+	getVersion () {return "1.3.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -236,7 +236,7 @@ class SpellCheck {
 	}
 	
 	replaceWord (textarea, word, replacement) {
-		if (!textarea || document.activeElement != textarea) return;
+		if (!textarea) return;
 		textarea.focus();
 		textarea.selectionStart = 0;
 		textarea.selectionEnd = textarea.value.length;
@@ -245,6 +245,8 @@ class SpellCheck {
 		replacement = isCapitalised ? replacement.charAt(0).toUpperCase() + replacement.slice(1) : replacement;
 		document.execCommand("insertText", false, textarea.value.replace(new RegExp(word.trim(), "i"), replacement));
 		textarea.dispatchEvent(new Event("input"));
+		textarea.dispatchEvent(new Event("keyup"));
+		textarea.dispatchEvent(new Event("change"));
 	}
 	
 	addToOwnDictionary (word) {
