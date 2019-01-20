@@ -3,7 +3,7 @@
 class EditServers {
 	getName () {return "EditServers";}
 
-	getVersion () {return "1.9.1";} 
+	getVersion () {return "1.9.2";} 
 
 	getAuthor () {return "DevilBro";}
 
@@ -266,18 +266,18 @@ class EditServers {
 		
 		BDFDB.appendModal(serverSettingsModal);
 		
-		removeiconinput.addEventListener("click", e => {
-			serverurlinput.disabled = e.currentTarget.checked;
+		removeiconinput.addEventListener("click", () => {
+			serverurlinput.disabled = removeiconinput.checked;
 		});
-		serverurlinput.addEventListener("change keyup paste", e => {
-			this.checkUrl(e.currentTarget);
+		serverurlinput.addEventListener("input", () => {
+			this.checkUrl(serverurlinput);
 		});
-		serverurlinput.addEventListener("mouseenter", e => {
-			BDFDB.addClass(e.currentTarget, "hovering");
-			this.createNoticeTooltip(e.currentTarget);
+		serverurlinput.addEventListener("mouseenter", () => {
+			BDFDB.addClass(serverurlinput, "hovering");
+			this.createNoticeTooltip(serverurlinput);
 		});
-		serverurlinput.addEventListener("mouseleave", e => {
-			BDFDB.removeClass(e.currentTarget, "hovering");
+		serverurlinput.addEventListener("mouseleave", () => {
+			BDFDB.removeClass(serverurlinput, "hovering");
 			BDFDB.removeEles(BDFDB.dotCNS.tooltips + ".notice-tooltip");
 		});
 		BDFDB.addChildEventListener(serverSettingsModal, "click", ".btn-save", e => {

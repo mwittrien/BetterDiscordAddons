@@ -3,7 +3,7 @@
 class EditUsers {
 	getName () {return "EditUsers";}
 
-	getVersion () {return "3.2.3";}
+	getVersion () {return "3.2.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -341,21 +341,21 @@ class EditUsers {
 		
 		BDFDB.appendModal(userSettingsModal);
 		
-		removeiconinput.addEventListener("click", e => {
-			userurlinput.disabled = e.currentTarget.checked;
+		removeiconinput.addEventListener("click", () => {
+			userurlinput.disabled = removeiconinput.checked;
 		});
-		ignoretagcolorinput.addEventListener("click", e => {
-			BDFDB.toggleClass(ignoredswatches, "disabled", e.currentTarget.checked);
+		ignoretagcolorinput.addEventListener("click", () => {
+			BDFDB.toggleClass(ignoredswatches, "disabled", ignoretagcolorinput.checked);
 		});
-		userurlinput.addEventListener("change keyup paste", e => {
-			this.checkUrl(e.currentTarget);
+		userurlinput.addEventListener("input", () => {
+			this.checkUrl(userurlinput);
 		});
-		userurlinput.addEventListener("mouseenter", e => {
-			BDFDB.addClass(e.currentTarget, "hovering");
-			this.createNoticeTooltip(e.currentTarget);
+		userurlinput.addEventListener("mouseenter", () => {
+			BDFDB.addClass(userurlinput, "hovering");
+			this.createNoticeTooltip(userurlinput);
 		});
-		userurlinput.addEventListener("mouseleave", e => {
-			BDFDB.removeClass(e.currentTarget, "hovering");
+		userurlinput.addEventListener("mouseleave", () => {
+			BDFDB.removeClass(userurlinput, "hovering");
 			BDFDB.removeEles(BDFDB.dotCNS.tooltips + ".notice-tooltip");
 		});
 		BDFDB.addChildEventListener(userSettingsModal, "click", ".btn-save", e => {
