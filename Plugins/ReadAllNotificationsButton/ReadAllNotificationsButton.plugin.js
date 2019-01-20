@@ -113,7 +113,7 @@ class ReadAllNotificationsButton {
 		if (instance.props && instance.props.popoutName == "RECENT_MENTIONS_POPOUT") {
 			let recentmentionstitle = wrapper.querySelector(BDFDB.dotCN.recentmentionstitle);
 			if (recentmentionstitle) {
-				let ranbutton = BDFDB.htmlToElement(this.RANbuttonMarkup);
+				let ranbutton = BDFDB.htmlToElement(this.RAMbuttonMarkup);
 				recentmentionstitle.appendChild(ranbutton);
 				ranbutton.addEventListener("click", () => {this.clearMentions(instance, wrapper);});
 				BDFDB.addClass(wrapper, "RAM-added");
