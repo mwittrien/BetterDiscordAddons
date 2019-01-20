@@ -180,6 +180,7 @@ https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Plugins/Blu
 https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Plugins/DoNotTrack/DoNotTrack.plugin.js
 https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Plugins/EmojiUtilities/EmojiUtilities.plugin.js
 https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Plugins/HideDisabledEmojis/HideDisabledEmojis.plugin.js
+https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Plugins/HideMutedServers/HideMutedServers.plugin.js
 https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Plugins/HideIconBadge/HideIconBadge.plugin.js
 https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Plugins/ImageToClipboard/ImageToClipboard.plugin.js
 https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Plugins/PermissionsViewer/PermissionsViewer.plugin.js
