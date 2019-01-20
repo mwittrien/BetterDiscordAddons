@@ -3,7 +3,7 @@
 class ReadAllNotificationsButton {
 	getName () {return "ReadAllNotificationsButton";}
 
-	getVersion () {return "1.3.8";}
+	getVersion () {return "1.3.9";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -96,6 +96,7 @@ class ReadAllNotificationsButton {
 	// begin of own functions
 	
 	processGuilds (instance, wrapper) {
+		BDFDB.removeEles(".RANbutton-frame");
 		let guildseparator = wrapper.querySelector(BDFDB.dotCN.guildseparator);
 		if (guildseparator) {
 			let ranbutton = BDFDB.htmlToElement(this.RANbuttonMarkup);
