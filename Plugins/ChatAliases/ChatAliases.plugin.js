@@ -3,7 +3,7 @@
 class ChatAliases {
 	getName () {return "ChatAliases";}
 
-	getVersion () {return "1.9.4";}
+	getVersion () {return "1.9.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -260,8 +260,8 @@ class ChatAliases {
 				let autocompletemenu = textarea.parentElement.querySelector(BDFDB.dotCN.autocomplete);
 				if (autocompletemenu && (e.which == 9 || e.which == 13)) {
 					if (BDFDB.containsClass(autocompletemenu.querySelector(BDFDB.dotCN.autocompleteselected).parentElement, "autocompleteAliasesRow")) {
-						e.preventDefault();
-						e.stopPropagation();
+						e.originalEvent.preventDefault();
+						e.originalEvent.stopPropagation();
 						this.swapWordWithAlias(textarea); 
 					}
 				}
@@ -269,18 +269,11 @@ class ChatAliases {
 					let autocompleteitems = autocompletemenu.querySelectorAll(BDFDB.dotCN.autocompleteselectable + ":not(.autocompleteAliasesSelector)");
 					let selected = autocompletemenu.querySelector(BDFDB.dotCN.autocompleteselected);
 					if (BDFDB.containsClass(selected, "autocompleteAliasesSelector") || autocompleteitems[e.which == 38 ? 0 : (autocompleteitems.length-1)] == selected) {
-						e.preventDefault();
-						e.stopPropagation();
+						e.originalEvent.preventDefault();
+						e.originalEvent.stopPropagation();
 						let next = this.getNextSelection(autocompletemenu, null, e.which == 38 ? false : true);
 						BDFDB.removeClass(selected, BDFDB.disCN.autocompleteselected);
 						BDFDB.addClass(next, BDFDB.disCN.autocompleteselected);
-						if (!BDFDB.containsClass(next, "autocompleteAliasesSelector")) {
-							// if next element is a default discord autocomplete item, trigger the keypress again so the item is internally selected
-							var press = new KeyboardEvent("keypress", e);
-							Object.defineProperty(press, "keyCode", {value: e.which});
-							Object.defineProperty(press, "which", {value: e.which});
-							textarea.dispatchEvent(press);
-						}
 					}
 				}
 				else if (textarea.value && !e.shiftKey && e.which == 13 && !autocompletemenu && textarea.value.indexOf("s/") != 0) {
