@@ -2992,6 +2992,27 @@ html, span:not(.spinner-item) {
 
 /* ----------------------- PLUGINSUPPORT ----------------------- */
 
+/* MemberCount */
+#MemberCount:after,
+#MemberCount:before {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	z-index: -1;
+	pointer-events: none;
+}
+#MemberCount:after {
+	background: rgba(var(--vtransparencycolor),calc((var(--vtransparencyalpha) * 3.1) + var(--vmemberlistransparency) * 0.6));
+}
+#MemberCount:before {
+	background: var(--vbackground) center/cover;
+	filter: blur(var(--vbackgroundblur));
+	background-attachment: fixed;
+}
+
 /* oldtitlebar */
 .hidden-by-OTB ~ * .bd-modal-close-area:after,
 .hidden-by-OTB ~ * .container-16j22k:after,
