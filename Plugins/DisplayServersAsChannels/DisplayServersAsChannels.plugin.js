@@ -3,7 +3,7 @@
 class DisplayServersAsChannels {
 	getName () {return "DisplayServersAsChannels";}
 
-	getVersion () {return "1.1.7";}
+	getVersion () {return "1.1.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -21,12 +21,12 @@ class DisplayServersAsChannels {
 		
 		this.css = `
 			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guildswrapper},
-			.bd-minimal .DSAC-styled ${BDFDB.dotCN.scrollerwrapold},
+			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guildsscrollerwrap},
 			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guilds} {
 				width: 160px;
 			}
 			.DSAC-styled ${BDFDB.dotCN.guildswrapper},
-			.DSAC-styled ${BDFDB.dotCN.scrollerwrapold},
+			.DSAC-styled ${BDFDB.dotCN.guildsscrollerwrap},
 			.DSAC-styled ${BDFDB.dotCN.guilds} {
 				width: 240px;
 			}
