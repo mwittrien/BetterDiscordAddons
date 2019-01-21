@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.0.3";}
+	getVersion () {return "6.0.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -890,7 +890,7 @@ class ServerFolders {
 				};
 				document.addEventListener("mousemove", updatePreview);
 				document.addEventListener("mouseup", droppedPreview);
-			},100);
+			},1000);
 			
 		});
 			
@@ -1116,7 +1116,7 @@ class ServerFolders {
 				};
 				document.addEventListener("mousemove", updatePreview);
 				document.addEventListener("mouseup", droppedPreview);
-			},100);
+			},1000);
 		});
 			
 		let copyinner = guildcopy.querySelector(BDFDB.dotCN.guildinner);
@@ -1214,7 +1214,7 @@ class ServerFolders {
 		let includedServers = [];
 		if (data) for (let id of data.servers) {
 			let div = BDFDB.getServerDiv(id);
-			if (div) includedServers.push(div);
+			if (div && includedServers.indexOf(div) == -1) includedServers.push(div);
 		}
 		return includedServers;
 	}
