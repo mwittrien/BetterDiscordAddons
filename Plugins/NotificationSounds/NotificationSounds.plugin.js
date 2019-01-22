@@ -101,7 +101,7 @@ class NotificationSounds {
 	}
 	
 	getSettingsPanel () {
-		if (!this.started || typeof BDFDB !== "object") return;
+		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		
 		var fields = ["category","song"];
 		

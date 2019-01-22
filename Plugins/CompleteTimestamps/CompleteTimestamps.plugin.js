@@ -38,7 +38,7 @@ class CompleteTimestamps {
 	}
 	
 	getSettingsPanel () {
-		if (!this.started || typeof BDFDB !== "object") return;
+		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		let settings = BDFDB.getAllData(this, "settings");
 		let choices = BDFDB.getAllData(this, "choices");
 		let formats = BDFDB.getAllData(this, "formats");

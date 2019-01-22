@@ -123,7 +123,7 @@ class FriendNotifications {
 	}
 	
 	getSettingsPanel () {
-		if (!this.started || typeof BDFDB !== "object") return;
+		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		
 		let settings = BDFDB.getAllData(this, "settings");
 		let notificationsounds = BDFDB.getAllData(this, "notificationsounds");

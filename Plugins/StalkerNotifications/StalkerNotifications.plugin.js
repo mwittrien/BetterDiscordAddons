@@ -131,7 +131,7 @@ class StalkerNotifications {
 	}
 	
 	getSettingsPanel () {
-		if (!this.started || typeof BDFDB !== "object") return;
+		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		
 		let amounts = BDFDB.getAllData(this, "amounts");
 		let settings = BDFDB.getAllData(this, "settings");
