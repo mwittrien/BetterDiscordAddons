@@ -3,7 +3,7 @@
 class PinDMs {
 	getName () {return "PinDMs";}
 
-	getVersion () {return "1.2.7";}
+	getVersion () {return "1.2.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -259,8 +259,11 @@ class PinDMs {
 	}
 	
 	forceUpdateScroller (scroller) {
-		scroller.scrollTop += 10;
-		scroller.scrollTop -= 10;
+		if (this.updatingScroller) return;
+		this.updatingScroller = true;
+		var stateNode = BDFDB.getReactValue(scroller, "return.return.return.stateNode");
+		if (stateNode) stateNode.updater.enqueueForceUpdate(stateNode);
+		setTimeout(() => {delete this.updatingScroller;},1000);
 	}
 	
 	setLabelsByLanguage () {
