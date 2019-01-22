@@ -93,7 +93,8 @@ class TopRoleEverywhere {
 	}
 
 	initialize () {
-		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {			
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			if (this.started) return;			
 			BDFDB.loadMessage(this);
 			
 			this.GuildPerms = BDFDB.WebModules.findByProperties("getHighestRole");

@@ -37,6 +37,7 @@ class WriteUpperCase {
 
 	initialize () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			if (this.started) return;
 			BDFDB.loadMessage(this);
 			
 			BDFDB.WebModules.forceAllUpdates(this);

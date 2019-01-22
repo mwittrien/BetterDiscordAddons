@@ -369,6 +369,7 @@ class ServerFolders {
 
 	initialize () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			if (this.started) return;
 			BDFDB.loadMessage(this);
 			
 			if (!document.querySelector(BDFDB.dotCN.guildswrapper + ".foldercontent")) {

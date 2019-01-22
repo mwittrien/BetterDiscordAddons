@@ -105,6 +105,7 @@ class JoinedAtDate {
 
 	initialize () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			if (this.started) return;
 			BDFDB.loadMessage(this);
 			
 			this.CurrentGuildStore = BDFDB.WebModules.findByProperties("getLastSelectedGuildId");

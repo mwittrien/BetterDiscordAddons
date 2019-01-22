@@ -151,6 +151,7 @@ class EditChannels {
 
 	initialize () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			if (this.started) return;
 			BDFDB.loadMessage(this);
 			
 			this.UserUtils = BDFDB.WebModules.findByProperties("getUsers","getUser");

@@ -103,6 +103,7 @@ class CreationDate {
 
 	initialize () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			if (this.started) return;
 			BDFDB.loadMessage(this);
 			
 			this.languages = Object.assign({},BDFDB.languages);

@@ -32,6 +32,7 @@ class SteamProfileLink {
 
 	initialize () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			if (this.started) return;
 			BDFDB.loadMessage(this);
 			
 			BDFDB.addEventListener(this, document, "click", "a[href^='https://steamcommunity.'],a[href^='https://store.steampowered.']", e => {

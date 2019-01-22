@@ -225,6 +225,7 @@ class FriendNotifications {
 
 	initialize () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			if (this.started) return;
 			BDFDB.loadMessage(this);
 			
 			this.FriendUtils = BDFDB.WebModules.findByProperties("getFriendIDs", "getRelationships");

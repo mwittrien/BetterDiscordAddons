@@ -50,6 +50,7 @@ class PinDMs {
 
 	initialize () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			if (this.started) return;
 			BDFDB.loadMessage(this);
 			
 			this.ChannelUtils = BDFDB.WebModules.findByProperties("getDMFromUserId");

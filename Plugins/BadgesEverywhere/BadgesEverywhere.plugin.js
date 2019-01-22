@@ -117,6 +117,7 @@ class BadgesEverywhere {
 
 	initialize () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			if (this.started) return;
 			BDFDB.loadMessage(this);
 			
 			this.APIModule = BDFDB.WebModules.findByProperties("getAPIBaseURL");

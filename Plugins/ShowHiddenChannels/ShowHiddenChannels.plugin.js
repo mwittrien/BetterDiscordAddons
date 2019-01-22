@@ -143,6 +143,7 @@ class ShowHiddenChannels {
 
 	initialize () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			if (this.started) return;
 			BDFDB.loadMessage(this);
 			
 			this.React = BDFDB.WebModules.findByProperties("createElement", "cloneElement");

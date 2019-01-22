@@ -196,6 +196,7 @@ class PersonalPins {
 
 	initialize () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			if (this.started) return;
 			BDFDB.loadMessage(this); 
 			
 			this.SelectChannelUtils = BDFDB.WebModules.findByProperties("selectGuild","selectChannel");

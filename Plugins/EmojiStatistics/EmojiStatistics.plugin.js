@@ -207,6 +207,7 @@ class EmojiStatistics {
 
 	initialize () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			if (this.started) return;
 			BDFDB.loadMessage(this);
 			
 			this.GuildEmojis = BDFDB.WebModules.findByProperties("getGuildEmoji", "getDisambiguatedEmojiContext");
