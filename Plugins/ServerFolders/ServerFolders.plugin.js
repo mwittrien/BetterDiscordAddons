@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.0.4";}
+	getVersion () {return "6.0.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -13,6 +13,7 @@ class ServerFolders {
 		this.labels = {};
 		
 		this.patchModules = {
+			"Guilds":"componentDidMount",
 			"Guild":["componentDidMount","componentWillUnmount"]
 		};
 		
@@ -372,30 +373,11 @@ class ServerFolders {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
 			
-			if (!document.querySelector(BDFDB.dotCN.guildswrapper + ".foldercontent")) {
-				let guildswrapper = document.querySelector(BDFDB.dotCN.guildswrapper);
-				if (guildswrapper) {
-					this.foldercontent = BDFDB.htmlToElement(this.folderContentMarkup);
-					guildswrapper.parentElement.insertBefore(this.foldercontent, guildswrapper.nextElementSibling);
-				}
-			}
-			
 			this.GuildUtils = BDFDB.WebModules.findByProperties("getGuilds","getGuild");
 			this.DiscordConstants = BDFDB.WebModules.findByProperties("Permissions", "ActivityTypes", "StatusTypes");
 			this.Animations = BDFDB.WebModules.findByProperties("spring");
 			
-			setTimeout(() => {
-				if (this.foldercontent) {
-					let folders = BDFDB.loadAllData(this, "folders"), sortedFolders = [];
-					for (let id in folders) sortedFolders[folders[id].position] = folders[id];
-					for (let data of sortedFolders) if (data && !document.querySelector(BDFDB.dotCN.guild + ".folder#" + data.folderID)) {
-						let folderdiv = this.createFolderDiv(data);
-						this.readIncludedServerList(folderdiv).forEach(guilddiv => {this.hideServer(guilddiv, folderdiv);});
-					}
-					
-					BDFDB.WebModules.forceAllUpdates(this);
-				}
-			},5000);
+			BDFDB.WebModules.forceAllUpdates(this, "Guilds");
 		}
 		else {
 			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
@@ -405,7 +387,7 @@ class ServerFolders {
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.resetAllElements();
-			BDFDB.removeEles(this.foldercontent, ".serverfolder-contextmenu");
+			BDFDB.removeEles(this.foldercontent, BDFDB.dotCN.guildswrapper + ".foldercontent", ".serverfolder-contextmenu");
 			BDFDB.unloadMessage(this);
 		}
 	}
@@ -477,6 +459,23 @@ class ServerFolders {
 				BDFDB.appendSubMenu(folderitem, serverContextSubMenu);
 			});
 		}
+	}
+	
+	processGuilds (instance, wrapper) {
+		setTimeout(() => {
+			if (!wrapper.parentElement.querySelector(BDFDB.dotCN.guildswrapper + ".foldercontent")) {
+				this.foldercontent = BDFDB.htmlToElement(this.folderContentMarkup);
+				wrapper.parentElement.insertBefore(this.foldercontent, wrapper.nextElementSibling);
+				this.foldercontentguilds = this.foldercontent.querySelector(BDFDB.dotCN.guilds);
+			}
+			let folders = BDFDB.loadAllData(this, "folders"), sortedFolders = [];
+			for (let id in folders) sortedFolders[folders[id].position] = folders[id];
+			for (let data of sortedFolders) if (data && !wrapper.querySelector(BDFDB.dotCN.guild + ".folder#" + data.folderID)) {
+				let folderdiv = this.createFolderDiv(data);
+				this.readIncludedServerList(folderdiv).forEach(guilddiv => {this.hideServer(guilddiv, folderdiv);});
+			}
+			BDFDB.WebModules.forceAllUpdates(this, "Guild");
+		},5000);
 	}
 	
 	processGuild (instance, wrapper, methodnames) {
@@ -892,7 +891,11 @@ class ServerFolders {
 				document.addEventListener("mousemove", updatePreview);
 				document.addEventListener("mouseup", droppedPreview);
 			},1000);
-			
+			let mouseup = () => {
+				document.removeEventListener("mouseup", mouseup);
+				clearTimeout(folderdiv.dragTimeout);
+			};
+			document.addEventListener("mouseup", mouseup);
 		});
 			
 		this.addHoverBehaviour(folderdiv);
@@ -1006,7 +1009,7 @@ class ServerFolders {
 			let settings = BDFDB.getAllData(this, "settings");
 			
 			setTimeout(() => {
-				if (settings.addSeparators && containsguilds) this.foldercontent.querySelector(BDFDB.dotCN.guilds).appendChild(BDFDB.htmlToElement(`<div class="${BDFDB.disCN.guildseparator} folderseparator" folder="${folderdiv.id}"></div>`));
+				if (settings.addSeparators && containsguilds) this.foldercontentguilds.appendChild(BDFDB.htmlToElement(`<div class="${BDFDB.disCN.guildseparator} folderseparator" folder="${folderdiv.id}"></div>`));
 				includedServers.forEach(guilddiv => {this.updateCopyInFolderContent(guilddiv, folderdiv);});
 			}, settings.closeOtherFolders && containsguilds ? 300 : 0);
 		}
@@ -1031,7 +1034,7 @@ class ServerFolders {
 		}
 		else BDFDB.removeEles(includedCopies);
 		
-		let firstchild = this.foldercontent.querySelector(BDFDB.dotCN.guilds).firstElementChild;
+		let firstchild = this.foldercontentguilds.firstElementChild;
 		if (BDFDB.containsClass(firstchild, "folderseparator")) BDFDB.removeEles(firstchild);
 	}
 	
@@ -1040,15 +1043,15 @@ class ServerFolders {
 		if (BDFDB.containsClass(folderdiv, "open")) {
 			let info = this.GuildUtils.getGuild(BDFDB.getServerID(guilddiv));
 			if (!info) return;
-			let oldCopy = this.foldercontent.querySelector("[guild='" + info.id + "']");
+			let oldCopy = this.foldercontent.querySelector(`[guild="${info.id}"]`);
 			if (oldCopy) {
-				this.foldercontent.querySelector(BDFDB.dotCN.guilds).insertBefore(this.createCopyOfServer(guilddiv, folderdiv), oldCopy);
+				this.foldercontentguilds.insertBefore(this.createCopyOfServer(guilddiv, folderdiv), oldCopy);
 				BDFDB.removeEles(oldCopy);
 			}
 			else {
-				let sameFolderCopies = this.foldercontent.querySelectorAll("[folder='" + folderdiv.id + "']");
+				let sameFolderCopies = this.foldercontent.querySelectorAll(`[folder="${folderdiv.id}"]`);
 				let insertNode = sameFolderCopies.length > 0 ? sameFolderCopies[sameFolderCopies.length-1].nextSibling : null;
-				this.foldercontent.querySelector(BDFDB.dotCN.guilds).insertBefore(this.createCopyOfServer(guilddiv, folderdiv), insertNode);
+				this.foldercontentguilds.insertBefore(this.createCopyOfServer(guilddiv, folderdiv), insertNode);
 			}
 		}
 	}
@@ -1096,7 +1099,7 @@ class ServerFolders {
 					this.updateDragPreview(dragpreview, e2);
 					if (this.foldercontent.contains(e2.target)) {
 						hovcopy = BDFDB.containsClass(e2.target, "folderseparator") ? e2.target : BDFDB.getParentEle(BDFDB.dotCN.guild + ".copy", e2.target);
-						if (hovcopy && hovcopy.getAttribute("folder") == folderdiv.id) this.foldercontent.querySelector(BDFDB.dotCN.guilds).insertBefore(placeholder, hovcopy.nextSibling);
+						if (hovcopy && hovcopy.getAttribute("folder") == folderdiv.id) this.foldercontentguilds.insertBefore(placeholder, hovcopy.nextSibling);
 						else hovcopy = null;
 					}
 				};
@@ -1111,13 +1114,18 @@ class ServerFolders {
 						this.addServerToFolder(info, dropfolderdiv);
 					}
 					else if (hovcopy) {
-						this.foldercontent.querySelector(BDFDB.dotCN.guilds).insertBefore(guildcopy, hovcopy.nextSibling);
+						this.foldercontentguilds.insertBefore(guildcopy, hovcopy.nextSibling);
 						this.updateServerPositions(folderdiv);
 					}
 				};
 				document.addEventListener("mousemove", updatePreview);
 				document.addEventListener("mouseup", droppedPreview);
 			},1000);
+			let mouseup = () => {
+				document.removeEventListener("mouseup", mouseup);
+				clearTimeout(guildcopy.dragTimeout);
+			};
+			document.addEventListener("mouseup", mouseup);
 		});
 			
 		let copyinner = guildcopy.querySelector(BDFDB.dotCN.guildinner);
@@ -1168,11 +1176,9 @@ class ServerFolders {
 	updateServerPositions (folderdiv) {
 		let data = BDFDB.loadData(folderdiv.id, this, "folders");
 		if (data) {
-			let servers = Array.from(this.foldercontent.querySelectorAll(`${BDFDB.dotCN.guild}.copy[folder="${folderdiv.id}"]`)).map(server => {
-				return server.getAttribute("guild");
-			});
+			let servers = Array.from(this.foldercontent.querySelectorAll(`${BDFDB.dotCN.guild}.copy[folder="${folderdiv.id}"]`)).map(div => {return div.getAttribute("guild");});
 			for (let serverid of servers) BDFDB.removeFromArray(data.servers, serverid);
-			data.servers = servers.concat(data.servers);
+			data.servers = BDFDB.removeCopiesFromArray(servers.concat(data.servers));
 			BDFDB.saveData(folderdiv.id, data, this, "folders");
 		}
 	}	
