@@ -43,8 +43,9 @@ window.onmessage = function (e) {
 				var newhtml = oldhtml.shift();
 				for (let html of oldhtml) {
 					html = html.split('"');
-					newhtml += 'class="' + (e.data.checked ? html[0].replace(/([A-z0-9]+?)-([A-z0-9_-]{6})(["| ])/g, "$1-$2 da-$1$3") : html[0].split(" ").filter(n => n.indexOf("da-") != 0).join(" ")) + html[1];
+					newhtml += 'class="' + (e.data.checked ? html[0].replace(/([A-z0-9]+?)-([A-z0-9_-]{6})(["| ])/g, "$1-$2 da-$1$3") : html[0].split(" ").filter(n => n.indexOf("da-") != 0).join(" ")) + html.slice(1).join('"');
 				}
+				console.log(newhtml)
 				document.body.innerHTML = newhtml;
 				break;
 		}
