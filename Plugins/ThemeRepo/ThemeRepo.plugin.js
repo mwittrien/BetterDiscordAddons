@@ -3,7 +3,7 @@
 class ThemeRepo {
 	getName () {return "ThemeRepo";}
 
-	getVersion () {return "1.7.0";}
+	getVersion () {return "1.7.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -154,6 +154,12 @@ class ThemeRepo {
 									<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Preview in light mode</h3>
 									<div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;">
 										<input type="checkbox" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}" id="input-darklight">
+									</div>
+								</div>
+								<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 0 0 auto;">
+									<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Preview with normalized classes</h3>
+									<div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;">
+										<input type="checkbox" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}" id="input-normalize">
 									</div>
 								</div>
 								<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 0 0 auto;">
@@ -336,9 +342,6 @@ class ThemeRepo {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
 			
-			this.UserUtils = BDFDB.WebModules.findByProperties("getUsers");
-			this.IconUtils = BDFDB.WebModules.findByProperties("getUserAvatarURL");
-			
 			this.loadThemes();
 			
 			this.updateInterval = setInterval(() => {this.checkForNewThemes();},1000*60*30);
@@ -452,16 +455,15 @@ class ThemeRepo {
 			if (typeof e.data === "object" && e.data.origin == "DiscordPreview") {
 				switch (e.data.reason) {
 					case "OnLoad":
-						var user = this.UserUtils.getCurrentUser();
-						if (!user) return;
-						var username = user.username;
-						var id = user.id;
-						var avatar = "url(" + (((user.avatar ? "" : "https://discordapp.com") + this.IconUtils.getUserAvatarURL(user)).split("?size")[0]) + ");";
-						var discriminator = user.discriminator;
+						var username = BDFDB.myData.username;
+						var id = BDFDB.myData.id;
+						var discriminator = BDFDB.myData.discriminator;
+						var avatar = BDFDB.getUserAvatar();
 						var nativecss = document.querySelector("head link[rel='stylesheet'][integrity]");
 						nativecss = nativecss && nativecss.href ? nativecss.href : null;
-						frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"OnLoad",username,id,avatar,discriminator,nativecss},"*");
-						frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"DarkLight",checked:lightTheme},"*");
+						frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"OnLoad",username,id,discriminator,avatar,nativecss},"*");
+						frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"DarkLight",checked:darklightinput.checked,light:BDFDB.disCN.themelight,dark:BDFDB.disCN.themedark},"*");
+						frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"Normalize",checked:normalizeinput.checked},"*");
 						break;
 					case "KeyUp":
 						keyPressed(e.data);
@@ -474,13 +476,14 @@ class ThemeRepo {
 		window.addEventListener("message", messageReceived);
 		
 		var frame = BDFDB.htmlToElement(this.frameMarkup);
-		var lightTheme = BDFDB.getDiscordTheme() == BDFDB.disCN.themelight;
 		var themeRepoModal = BDFDB.htmlToElement(this.themeRepoModalMarkup);
 		var hiddenSettings = BDFDB.loadAllData(this, "hidden");
 		var darklightinput = themeRepoModal.querySelector("#input-darklight");
+		var normalizeinput = themeRepoModal.querySelector("#input-normalize");
 		var customcssinput = themeRepoModal.querySelector("#input-customcss");
 		var themefixerinput = themeRepoModal.querySelector("#input-themefixer");
-		darklightinput.checked = lightTheme;
+		darklightinput.checked = BDFDB.getDiscordTheme() == BDFDB.disCN.themelight;
+		normalizeinput.checked = settingsCookie["fork-ps-4"] == true;
 		customcssinput.checked = false;
 		themefixerinput.checked = false;
 		themeRepoModal.querySelector("#input-hideupdated").checked = hiddenSettings.updated || showOnlyOutdated;
@@ -490,7 +493,10 @@ class ThemeRepo {
 		else themeRepoModal.querySelector("#input-rnmstart").checked = BDFDB.loadData("RNMstart", this, "settings");
 		
 		darklightinput.addEventListener("change", e => {
-			frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"DarkLight",checked:darklightinput.checked},"*");
+			frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"DarkLight",checked:darklightinput.checked,light:BDFDB.disCN.themelight,dark:BDFDB.disCN.themedark},"*");
+		});
+		normalizeinput.addEventListener("change", e => {
+			frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"Normalize",checked:normalizeinput.checked},"*");
 		});
 		customcssinput.addEventListener("change", e => {
 			var customCSS = document.querySelector("style#customcss");
