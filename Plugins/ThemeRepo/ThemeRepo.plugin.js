@@ -565,6 +565,8 @@ class ThemeRepo {
 		BDFDB.appendModal(themeRepoModal);
 		
 		document.body.insertBefore(frame, document.body.firstElementChild);
+		
+		themeRepoModal.querySelector(BDFDB.dotCN.searchbarinput).focus();
 	}
 	
 	addEntry (frame, themeRepoModal, container, data) {

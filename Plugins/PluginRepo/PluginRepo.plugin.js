@@ -450,6 +450,8 @@ class PluginRepo {
 		this.sortEntries(pluginRepoModal);
 			
 		BDFDB.appendModal(pluginRepoModal);
+		
+		pluginRepoModal.querySelector(BDFDB.dotCN.searchbarinput).focus();
 	}
 	
 	addEntry (pluginRepoModal, container, data) {
