@@ -216,11 +216,11 @@ class PluginRepo {
 				cursor: pointer;
 			}
 			.${this.getName()}-modal .pluginEntry svg[fill="currentColor"],
-			.${this.getName()}-modal .pluginEntry ${BDFDB.dotCN.giffavoritebutton}:not(${BDFDB.dotCN.giffavoriteselected}) {
+			.${this.getName()}-modal .pluginEntry ${BDFDB.dotCN.giffavoritebutton + BDFDB.notCN.giffavoriteselected} {
 				color: #72767d !important;
 			}
 			${BDFDB.dotCN.themedark} .${this.getName()}-modal .pluginEntry svg[fill="currentColor"],
-			${BDFDB.dotCN.themedark} .${this.getName()}-modal .pluginEntry ${BDFDB.dotCN.giffavoritebutton}:not(${BDFDB.dotCN.giffavoriteselected}) {
+			${BDFDB.dotCN.themedark} .${this.getName()}-modal .pluginEntry ${BDFDB.dotCN.giffavoritebutton + BDFDB.notCN.giffavoriteselected} {
 				color: #dcddde !important;
 			}
 			.${this.getName()}-modal .pluginEntry.downloadable .trashIcon {

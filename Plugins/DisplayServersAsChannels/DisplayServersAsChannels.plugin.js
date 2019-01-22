@@ -110,7 +110,7 @@ class DisplayServersAsChannels {
 				opacity: 0.7;
 			}
 			.DSAC-styled ${BDFDB.dotCN.guild}.copy:not(${BDFDB.dotCN.guildselected}):hover,
-			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild}:not(${BDFDB.dotCN.guildselected}):hover {
+			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild + BDFDB.notCN.guildselected}:hover {
 				opacity: 0.9;
 				background-color: rgba(79,84,92,.3);
 			}

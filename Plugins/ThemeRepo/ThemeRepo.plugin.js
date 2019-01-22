@@ -269,11 +269,11 @@ class ThemeRepo {
 				cursor: pointer;
 			}
 			.${this.getName()}-modal .themeEntry svg[fill="currentColor"],
-			.${this.getName()}-modal .themeEntry ${BDFDB.dotCN.giffavoritebutton}:not(${BDFDB.dotCN.giffavoriteselected}) {
+			.${this.getName()}-modal .themeEntry ${BDFDB.dotCN.giffavoritebutton + BDFDB.notCN.giffavoriteselected} {
 				color: #72767d !important;
 			}
 			${BDFDB.dotCN.themedark} .${this.getName()}-modal .themeEntry svg[fill="currentColor"],
-			${BDFDB.dotCN.themedark} .${this.getName()}-modal .themeEntry ${BDFDB.dotCN.giffavoritebutton}:not(${BDFDB.dotCN.giffavoriteselected}) {
+			${BDFDB.dotCN.themedark} .${this.getName()}-modal .themeEntry ${BDFDB.dotCN.giffavoritebutton + BDFDB.notCN.giffavoriteselected} {
 				color: #dcddde !important;
 			}
 			.${this.getName()}-modal .themeEntry.downloadable .trashIcon {

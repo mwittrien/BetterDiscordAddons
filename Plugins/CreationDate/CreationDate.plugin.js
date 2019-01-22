@@ -3,7 +3,7 @@
 class CreationDate {
 	getName () {return "CreationDate";}
 
-	getVersion () {return "1.2.4";}
+	getVersion () {return "1.2.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -29,14 +29,14 @@ class CreationDate {
 			${BDFDB.dotCNS.themelight + BDFDB.dotCN.userpopoutheadernormal} .creationDate {
 				color: #b9bbbe; 
 			}
-			${BDFDB.dotCNS.themelight + BDFDB.dotCN.userpopoutheader}:not(${BDFDB.dotCN.userpopoutheadernormal}) .creationDate,
+			${BDFDB.dotCNS.themelight + BDFDB.dotCN.userpopoutheader + BDFDB.notCN.userpopoutheadernormal} .creationDate,
 			${BDFDB.dotCNS.themedark + BDFDB.dotCN.userpopoutheader} .creationDate {
 				color: hsla(0,0%,100%,.6);
 			}
 			${BDFDB.dotCNS.themelight + BDFDB.dotCN.userprofiletopsectionnormal} .creationDate {
 				color: hsla(216,4%,74%,.6); 
 			}
-			${BDFDB.dotCN.themelight} [class*='topSection']:not(${BDFDB.dotCN.userprofiletopsectionnormal}) .creationDate,
+			${BDFDB.dotCN.themelight} [class*='topSection']${BDFDB.notCN.userprofiletopsectionnormal} .creationDate,
 			${BDFDB.dotCN.themedark} [class*='topSection'] .creationDate {
 				color: hsla(0,0%,100%,.6);
 			}`;

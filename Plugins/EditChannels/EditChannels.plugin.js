@@ -266,7 +266,7 @@ class EditChannels {
 	processAuditLog (instance, wrapper) {
 		let channel = BDFDB.getReactValue(instance, "props.log.options.channel");
 		if (channel) {
-			let hooks = wrapper.querySelectorAll(BDFDB.dotCN.flexchild + " > span:not(" + BDFDB.dotCN.auditloguserhook + ")");
+			let hooks = wrapper.querySelectorAll(`${BDFDB.dotCN.flexchild} > span${BDFDB.notCN.auditloguserhook}`);
 			if (hooks.length > 0) this.changeChannel2(channel, hooks[0].firstChild);
 		} 
 	}

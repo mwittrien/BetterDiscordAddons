@@ -46,7 +46,7 @@ class BetterSearchPage {
 				cursor: default;
 				opacity: .3;
 			}
-			.BSP-pagination-button:not(${BDFDB.dotCN.searchresultspaginationdisabled}):hover {
+			.BSP-pagination-button${BDFDB.notCN.searchresultspaginationdisabled}:hover {
 				opacity: 1;
 			}
 		`;
@@ -184,26 +184,26 @@ class BetterSearchPage {
 			e.preventDefault();
 			e.stopPropagation();
 		});
-		BDFDB.addEventListener(this, searchResultsWrapper, "click", `.BSP-pagination ${BDFDB.dotCN.searchresultspaginationprevious}:not(${BDFDB.dotCN.searchresultspaginationdisabled})`, () => {
+		BDFDB.addEventListener(this, searchResultsWrapper, "click", `.BSP-pagination ${BDFDB.dotCN.searchresultspaginationprevious + BDFDB.notCN.searchresultspaginationdisabled}`, () => {
 			this.SearchNavigation.searchPreviousPage(searchId);
 		});
-		BDFDB.addEventListener(this, searchResultsWrapper, "click", `.BSP-pagination ${BDFDB.dotCN.searchresultspaginationnext}:not(${BDFDB.dotCN.searchresultspaginationdisabled})`, () => {
+		BDFDB.addEventListener(this, searchResultsWrapper, "click", `.BSP-pagination ${BDFDB.dotCN.searchresultspaginationnext + BDFDB.notCN.searchresultspaginationdisabled}`, () => {
 			this.SearchNavigation.searchNextPage(searchId);
 		});
-		BDFDB.addEventListener(this, searchResultsWrapper, "click", `.BSP-pagination-first:not(${BDFDB.dotCN.searchresultspaginationdisabled})`, () => {
+		BDFDB.addEventListener(this, searchResultsWrapper, "click", `.BSP-pagination-first${BDFDB.notCN.searchresultspaginationdisabled}`, () => {
 			for (let i = 0; currentpage - 1 - i > 0; i++) this.SearchNavigation.searchPreviousPage(searchId);
 		});
-		BDFDB.addEventListener(this, searchResultsWrapper, "click", `.BSP-pagination-last:not(${BDFDB.dotCN.searchresultspaginationdisabled})`, () => {
+		BDFDB.addEventListener(this, searchResultsWrapper, "click", `.BSP-pagination-last${BDFDB.notCN.searchresultspaginationdisabled}`, () => {
 			for (let i = 0; maxpage - currentpage - i > 0; i++) this.SearchNavigation.searchNextPage(searchId);
 		});
-		BDFDB.addEventListener(this, searchResultsWrapper, "click", `.BSP-pagination-jump:not(${BDFDB.dotCN.searchresultspaginationdisabled})`, e => {
+		BDFDB.addEventListener(this, searchResultsWrapper, "click", `.BSP-pagination-jump${BDFDB.notCN.searchresultspaginationdisabled}`, e => {
 			doJump(e.currentTarget.parentElement.querySelector(`.BSP-pagination-jumpinput ${BDFDB.dotCN.inputmini}`));
 		});
 		BDFDB.addEventListener(this, searchResultsWrapper, "keydown", `.BSP-pagination-jumpinput ${BDFDB.dotCN.inputmini}`, e => {
 			let label = e.currentTarget.getAttribute("aria-label");
 			if (label) BDFDB.createTooltip(label, e.currentTarget, {type:"top"});
 		});
-		BDFDB.addEventListener(this, searchResultsWrapper, "mouseenter", `.pagination-button:not(${BDFDB.dotCN.searchresultspaginationdisabled})`, e => {
+		BDFDB.addEventListener(this, searchResultsWrapper, "mouseenter", `.pagination-button${BDFDB.notCN.searchresultspaginationdisabled}`, e => {
 			let label = e.currentTarget.getAttribute("aria-label");
 			if (label) BDFDB.createTooltip(label, e.currentTarget, {type:"top"});
 		});
