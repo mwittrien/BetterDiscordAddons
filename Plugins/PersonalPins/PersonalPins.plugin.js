@@ -5,7 +5,7 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.7.3";}
+	getVersion () {return "1.7.4";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -34,9 +34,9 @@ class PersonalPins {
 		this.notesPopoutMarkup = 
 			`<div class="${BDFDB.disCNS.popout + BDFDB.disCNS.popoutbottomright + BDFDB.disCNS.popoutnoarrow + BDFDB.disCN.popoutnoshadow} popout-personalpins-notes DevilBro-modal" style="z-index: 1000; visibility: visible; left: 544.844px; top: 35.9896px; transform: translateX(-100%) translateY(0%) translateZ(0px);">
 				<div class="${BDFDB.disCNS.messagespopoutwrap + BDFDB.disCNS.recentmentionspopout + BDFDB.disCN.popoutthemedpopout}" style="max-height: 740px; width: 500px;">
-					<div class="${BDFDB.disCNS.recentmentionsheader + BDFDB.disCNS.recentmentionsheader2 + BDFDB.disCN.messagespopoutheader}" style="padding-bottom: 0;">
+					<div class="${BDFDB.disCNS.recentmentionsheader + BDFDB.disCNS.popoutheader + BDFDB.disCN.messagespopoutheader}" style="padding-bottom: 0;">
 						<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.margintop8}" style="flex: 0 0 auto;">
-							<div class="${BDFDB.disCNS.recentmentionstitle + BDFDB.disCN.messagespopouttitle}">REPLACE_popout_note_text</div>
+							<div class="${BDFDB.disCNS.popouttitle + BDFDB.disCN.messagespopouttitle}">REPLACE_popout_note_text</div>
 							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCNS.searchbar + BDFDB.disCN.size14}" style="flex: 1 1 auto;">
 								<input class="${BDFDB.disCN.searchbarinput}" value="" placeholder="Search for ..." style="flex: 1 1 auto;">
 								<div class="${BDFDB.disCN.searchbariconwrap}">
@@ -452,6 +452,7 @@ class PersonalPins {
 		message.querySelector(BDFDB.dotCN.messagemarkup).innerHTML = noteData.markup.replace(`<span class="edited">`,`<span class="${BDFDB.disCN.messageedited}">`);
 		message.querySelector(BDFDB.dotCN.messageaccessory).innerHTML = noteData.accessory;
 		if (noteData.accessory) {
+			BDFDB.addChildEventListener(message, "click", BDFDB.dotCN.iconplay, e => {this.startYoutubeVideo(e.currentTarget);});
 			let ytvideo = message.querySelector(BDFDB.dotCN.embed + " iframe[src*='https://www.youtube.com']");
 			if (ytvideo) {
 				let ytlink = ytvideo.parentElement.parentElement.querySelector(BDFDB.dotCN.embedtitle).href;
@@ -459,13 +460,8 @@ class PersonalPins {
 				ytvideo.remove();
 				require("request")(ytlink, (error, response, result) => {
 					if (result) {
-						wrapper.innerHTML = `<a class="${BDFDB.disCNS.imagewrapper + BDFDB.disCN.imagezoom}" href="" rel="noreferrer noopener" target="_blank" style="width: 400px; height: 225px;"><img alt="" src="${result.split('<link itemprop="thumbnailUrl" href="')[1].split('"')[0]}" style="width: 400px; height: 225px;"></a><div class="${BDFDB.disCNS.embedvideoactions + BDFDB.disCNS.flexcenter + BDFDB.disCNS.flex + BDFDB.disCNS.justifycenter + BDFDB.disCN.aligncenter}"><div class="${BDFDB.disCNS.embedvideoactionsinner + BDFDB.disCNS.flexcenter + BDFDB.disCNS.flex + BDFDB.disCNS.justifycenter + BDFDB.disCN.aligncenter}"><div class="${BDFDB.disCN.iconactionswrapper}"><div tabindex="0" class="${BDFDB.disCNS.iconwrapper + BDFDB.disCN.iconwrapperactive}" role="button"><svg name="Play" class="${BDFDB.disCNS.iconplay + BDFDB.disCN.icon}" width="16" height="16" viewBox="0 0 24 24"><polygon fill="currentColor" points="0 0 0 14 11 7" transform="translate(7 5)"></polygon></svg></div><a class="${BDFDB.disCNS.anchor + BDFDB.disCN.iconwrapper}" href="${ytlink}" rel="noreferrer noopener" target="_blank"><svg name="OpenExternal" class="${BDFDB.disCNS.iconexternalmargins + BDFDB.disCN.icon}" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" transform="translate(3.000000, 4.000000)" d="M16 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4v-2H2V4h14v10h-4v2h4c1.1 0 2-.9 2-2V2a2 2 0 0 0-2-2zM9 6l-4 4h3v6h2v-6h3L9 6z"></path></svg></a></div></div></div></div>`;
-						wrapper.querySelector(BDFDB.dotCN.iconplay).addEventListener("click", e => {
-							while (wrapper.firstChild) wrapper.firstChild.remove();
-							let width = 400;
-							let height = Math.round(width*(result.split('<meta itemprop="height" content="')[1].split('"')[0]/result.split('<meta itemprop="width" content="')[1].split('"')[0]));
-							wrapper.appendChild(BDFDB.htmlToElement(`<iframe src="${result.split('<link itemprop="embedURL" href="')[1].split('"')[0]}?start=0&amp;autoplay=1&amp;auto_play=1" width="${width}" height="${height}" frameborder="0" allowfullscreen=""></iframe>`));
-						});
+						wrapper.innerHTML = `<div class="${BDFDB.disCNS.imagewrapper + BDFDB.disCNS.imageclickable + BDFDB.disCN.embedvideoimagecomponent}" style="width: 400px; height: 225px;"><img alt="" src="${result.split('<link itemprop="thumbnailUrl" href="')[1].split('"')[0]}" style="width: 400px; height: 225px;"></div><div class="${BDFDB.disCN.embedvideoactions}"><div class="${BDFDB.disCN.embedcentercontent}"><div class="${BDFDB.disCN.iconactionswrapper}"><div tabindex="0" class="${BDFDB.disCNS.iconwrapper + BDFDB.disCN.iconwrapperactive}" role="button"><svg name="Play" class="${BDFDB.disCNS.iconplay + BDFDB.disCN.icon}" width="16" height="16" viewBox="0 0 24 24"><polygon fill="currentColor" points="0 0 0 14 11 7" transform="translate(7 5)"></polygon></svg></div><a class="${BDFDB.disCNS.anchor + BDFDB.disCNS.anchorunderlineonhover + BDFDB.disCNS.iconwrapper + BDFDB.disCN.iconwrapperactive}" href="${ytlink}" rel="noreferrer noopener" target="_blank"><svg name="OpenExternal" class="${BDFDB.disCNS.iconexternalmargins + BDFDB.disCN.icon}" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" transform="translate(3.000000, 4.000000)" d="M16 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4v-2H2V4h14v10h-4v2h4c1.1 0 2-.9 2-2V2a2 2 0 0 0-2-2zM9 6l-4 4h3v6h2v-6h3L9 6z"></path></svg></a></div></div></div>`;
+						wrapper.querySelector(BDFDB.dotCN.iconplay).addEventListener("click", e => {this.startYoutubeVideo(e.currentTarget);});
 					}
 				});
 			}
@@ -507,6 +503,19 @@ class PersonalPins {
 						}
 					});
 				}
+			}
+		});
+	}
+	
+	startYoutubeVideo (button) {
+		let embedwrapper = BDFDB.getParentEle(BDFDB.dotCN.embedvideo, button);
+		let ytlink = embedwrapper.parentElement.querySelector(BDFDB.dotCN.embedtitle).href;
+		require("request")(ytlink, (error, response, result) => {
+			if (result && response.headers && typeof response.headers.server == "string" && response.headers.server.toUpperCase() == "YOUTUBE FRONTEND PROXY") {
+				while (embedwrapper.firstChild) embedwrapper.firstChild.remove();
+				let width = 400;
+				let height = Math.round(width*(result.split('<meta itemprop="height" content="')[1].split('"')[0]/result.split('<meta itemprop="width" content="')[1].split('"')[0]));
+				embedwrapper.appendChild(BDFDB.htmlToElement(`<iframe src="${result.split('<link itemprop="embedURL" href="')[1].split('"')[0]}?start=0&amp;autoplay=1&amp;auto_play=1" width="${width}" height="${height}" frameborder="0" allowfullscreen=""></iframe>`));
 			}
 		});
 	}
