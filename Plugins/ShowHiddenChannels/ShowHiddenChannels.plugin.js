@@ -13,7 +13,7 @@ class ShowHiddenChannels {
 		this.patchModules = {
 			"Channels":["componentDidMount","componentDidUpdate"],
 			"ChannelItem":"componentDidMount",
-			"CategoryItem":"componentDidMount",
+			"ChannelCategoryItem":"componentDidMount",
 			"StandardSidebarView":"componentWillUnmount"
 		};
 		
@@ -24,7 +24,7 @@ class ShowHiddenChannels {
 						<svg class="${BDFDB.disCNS.categoryicondefault + BDFDB.disCN.categoryicontransition}" width="12" height="12" viewBox="0 0 24 24">
 							<path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 10L12 15 17 10"></path>
 						</svg>
-						<div class="${BDFDB.disCNS.categorynamedefault + BDFDB.disCNS.categorycolortransition + BDFDB.disCN.overflowellipsis}" style="flex: 1 1 auto;">hidden</div>
+						<div class="${BDFDB.disCNS.categorynamedefault + BDFDB.disCNS.categorycolortransition + BDFDB.disCN.categoryoverflowellipsis}" style="flex: 1 1 auto;">hidden</div>
 					</div>
 				</div>
 			</div>`;
@@ -39,7 +39,7 @@ class ShowHiddenChannels {
 								<path class="${BDFDB.disCN.channelforeground}" fill="currentColor" fill-rule="nonzero" d="M15.1,3.2 L15.1,2 C15.1,0.88 14.05,0 13,0 C11.95,0 10.9,0.88 10.9,2 L10.9,3.2 C10.45,3.2 10,3.68 10,4.16 L10,6.96 C10,7.52 10.45,8 10.9,8 L15.025,8 C15.55,8 16,7.52 16,7.04 L16,4.24 C16,3.68 15.55,3.2 15.1,3.2 Z M14,3 L12,3 L12,1.92857143 C12,1.35714286 12.4666667,1 13,1 C13.5333333,1 14,1.35714286 14,1.92857143 L14,3 Z"></path>
 							</svg>
 						</div>
-						<div class="${BDFDB.disCNS.channelnamedefaulttext + BDFDB.disCNS.channelname + BDFDB.disCN.overflowellipsis}" style="flex: 1 1 auto;"></div>
+						<div class="${BDFDB.disCNS.channelnamedefaulttext + BDFDB.disCNS.channelname + BDFDB.disCN.channeloverflowellipsis}" style="flex: 1 1 auto;"></div>
 						<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginreset}" style="flex: 0 1 auto;"></div>
 					</div>
 				</div>
@@ -55,7 +55,7 @@ class ShowHiddenChannels {
 								<path class="${BDFDB.disCN.channelforeground}" fill="currentColor" fill-rule="nonzero" d="M15.1,3.2 L15.1,2 C15.1,0.88 14.05,0 13,0 C11.95,0 10.9,0.88 10.9,2 L10.9,3.2 C10.45,3.2 10,3.68 10,4.16 L10,6.96 C10,7.52 10.45,8 10.9,8 L15.025,8 C15.55,8 16,7.52 16,7.04 L16,4.24 C16,3.68 15.55,3.2 15.1,3.2 Z M14,3 L12,3 L12,1.92857143 C12,1.35714286 12.4666667,1 13,1 C13.5333333,1 14,1.35714286 14,1.92857143 L14,3 Z"></path>
 							</svg>
 						</div>
-						<div class="${BDFDB.disCNS.channelnamedefaultvoice + BDFDB.disCNS.channelname + BDFDB.disCN.overflowellipsis}" style="flex: 1 1 auto;"></div>
+						<div class="${BDFDB.disCNS.channelnamedefaultvoice + BDFDB.disCNS.channelname + BDFDB.disCN.channeloverflowellipsis}" style="flex: 1 1 auto;"></div>
 						<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginreset}" style="flex: 0 1 auto;"></div>
 					</div>
 				</div>
@@ -67,7 +67,7 @@ class ShowHiddenChannels {
 					<svg class="${BDFDB.disCNS.categoryicontransition + BDFDB.disCNS.directionright + BDFDB.disCN.categoryiconcollapsed}" width="12" height="12" viewBox="0 0 24 24">
 						<path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 10L12 15 17 10"></path>
 					</svg>
-					<div class="${BDFDB.disCNS.categorycolortransition + BDFDB.disCNS.overflowellipsis + BDFDB.disCN.categorynamecollapsed}" style="flex: 1 1 auto;"></div>
+					<div class="${BDFDB.disCNS.categorycolortransition + BDFDB.disCNS.categoryoverflowellipsis + BDFDB.disCN.categorynamecollapsed}" style="flex: 1 1 auto;"></div>
 				</div>
 			</div>`;
 			
@@ -183,7 +183,7 @@ class ShowHiddenChannels {
 		if (instance.props && instance.props.channel) this.reappendHiddenContainer(this.GuildStore.getGuild(instance.props.channel.guild_id));
 	}
 	
-	processCategoryItem (instance, wrapper) {
+	processChannelCategoryItem (instance, wrapper) {
 		if (instance.props && instance.props.channel) this.reappendHiddenContainer(this.GuildStore.getGuild(instance.props.channel.guild_id));
 	}
 	
