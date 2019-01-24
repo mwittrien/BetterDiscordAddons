@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.0.5";}
+	getVersion () {return "6.0.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -810,7 +810,6 @@ class ServerFolders {
 		BDFDB.addClass(folderdiv, "closed");
 		folderdiv.querySelector(BDFDB.dotCN.avataricon).style.setProperty("background-image", `url(${data.icons.closedicon})`);
 		folderdiv.addEventListener("click", () => {
-			clearTimeout(folderdiv.dragTimeout);
 			if (BDFDB.getData("closeOtherFolders", this, "settings")) {
 				document.querySelectorAll(".folder.open").forEach(folder => {
 					if (folder != folderdiv) this.openCloseFolder(folder);
@@ -826,7 +825,6 @@ class ServerFolders {
 			BDFDB.createTooltip(newdata.folderName, folderdiv, {type:"right",selector:"guild-folder-tooltip",style:`color: ${fontColor} !important; background-color: ${bgColor} !important; border-color: ${bgColor} !important;`});
 		});
 		folderdiv.addEventListener("contextmenu", e => {
-			clearTimeout(folderdiv.dragTimeout);
 			let newdata = BDFDB.loadData(folderdiv.id, this, "folders");
 			if (!newdata) return;
 			let folderContext = BDFDB.htmlToElement(this.folderContextMarkup);
@@ -862,43 +860,48 @@ class ServerFolders {
 			BDFDB.appendContextMenu(folderContext, e);
 		});
 		folderdiv.addEventListener("mousedown", e => {
-			clearTimeout(folderdiv.dragTimeout);
-			folderdiv.dragTimeout = setTimeout(() => {
-				let guildswrap = document.querySelector(`${BDFDB.dotCN.guildswrapper}:not(.foldercontent) ${BDFDB.dotCN.guilds}`);
-				if (!guildswrap) return;
-				let hovele = null;
-				let placeholder = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.guild + BDFDB.disCN.guildplaceholder} folderplaceholder"></div>`);
-				let dragpreview = this.createDragPreview(folderdiv, e);
-				let updatePreview = e2 => {
-					BDFDB.removeEles(placeholder);
-					BDFDB.toggleEles(folderdiv, false);
-					this.updateDragPreview(dragpreview, e2);
-					hovele = BDFDB.getParentEle(BDFDB.dotCN.guild + ".folder", e2.target);
-					if (hovele) guildswrap.insertBefore(placeholder, hovele.nextSibling);
-					else {
-						hovele = BDFDB.getParentEle(BDFDB.dotCN.guild, e2.target);
-						if (hovele && BDFDB.getReactValue(hovele, "return.memoizedProps.guild") && guildswrap.contains(hovele)) {
-							guildswrap.insertBefore(placeholder, hovele.nextSibling);
+			let x = e.pageX, y = e.pageY;
+			let mousemove = e2 => {
+				if (Math.sqrt((x - e2.pageX)**2) > 20 || Math.sqrt((y - e2.pageY)**2) > 20) {
+					document.removeEventListener("mousemove", mousemove);
+					document.removeEventListener("mouseup", mouseup);
+					let guildswrap = document.querySelector(`${BDFDB.dotCN.guildswrapper}:not(.foldercontent) ${BDFDB.dotCN.guilds}`);
+					if (!guildswrap) return;
+					let hovele = null;
+					let placeholder = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.guild + BDFDB.disCN.guildplaceholder} folderplaceholder"></div>`);
+					let dragpreview = this.createDragPreview(folderdiv, e);
+					let dragging = e3 => {
+						BDFDB.removeEles(placeholder);
+						BDFDB.toggleEles(folderdiv, false);
+						this.updateDragPreview(dragpreview, e3);
+						hovele = BDFDB.getParentEle(BDFDB.dotCN.guild + ".folder", e3.target);
+						if (hovele) guildswrap.insertBefore(placeholder, hovele.nextSibling);
+						else {
+							hovele = BDFDB.getParentEle(BDFDB.dotCN.guild, e3.target);
+							if (hovele && BDFDB.getReactValue(hovele, "return.memoizedProps.guild") && guildswrap.contains(hovele)) {
+								guildswrap.insertBefore(placeholder, hovele.nextSibling);
+							}
 						}
-					}
-				};
-				let droppedPreview = e2 => {
-					document.removeEventListener("mousemove", updatePreview);
-					document.removeEventListener("mouseup", droppedPreview);
-					BDFDB.removeEles(placeholder, dragpreview);
-					BDFDB.toggleEles(folderdiv, true);
-					if (hovele) {
-						guildswrap.insertBefore(folderdiv, hovele.nextSibling);
-						this.updateFolderPositions(folderdiv);
-					}
-				};
-				document.addEventListener("mousemove", updatePreview);
-				document.addEventListener("mouseup", droppedPreview);
-			},1000);
-			let mouseup = () => {
-				document.removeEventListener("mouseup", mouseup);
-				clearTimeout(folderdiv.dragTimeout);
+					};
+					let releasing = e3 => {
+						document.removeEventListener("mousemove", dragging);
+						document.removeEventListener("mouseup", releasing);
+						BDFDB.removeEles(placeholder, dragpreview);
+						BDFDB.toggleEles(folderdiv, true);
+						if (hovele) {
+							guildswrap.insertBefore(folderdiv, hovele.nextSibling);
+							this.updateFolderPositions(folderdiv);
+						}
+					};
+					document.addEventListener("mousemove", dragging);
+					document.addEventListener("mouseup", releasing);
+				}
 			};
+			let mouseup = () => {
+				document.removeEventListener("mousemove", mousemove);
+				document.removeEventListener("mouseup", mouseup);
+			};
+			document.addEventListener("mousemove", mousemove);
 			document.addEventListener("mouseup", mouseup);
 		});
 			
@@ -1076,7 +1079,6 @@ class ServerFolders {
 			BDFDB.createTooltip(EditServersData.name || info.name, guildcopy, {type:"right",selector:(!BDFDB.isObjectEmpty(EditServersData) ? "EditUsers-tooltip" : ""),style:`color: ${fontColor} !important; background-color: ${bgColor} !important; border-color: ${bgColor} !important;`});
 		});
 		guildcopy.addEventListener("click", e => {
-			clearTimeout(guildcopy.dragTimeout);
 			e.preventDefault();
 			if (BDFDB.pressedKeys.includes(46)) this.removeServerFromFolder(info, folderdiv);
 			else {
@@ -1087,48 +1089,52 @@ class ServerFolders {
 			}
 		});
 		guildcopy.addEventListener("contextmenu", e => {
-			clearTimeout(guildcopy.dragTimeout);
 			BDFDB.openGuildContextMenu(guilddiv, e);
 		});
 		guildcopy.addEventListener("mousedown", e => {
-			clearTimeout(guildcopy.dragTimeout);
-			guildcopy.dragTimeout = setTimeout(() => {
-				let hovcopy = null;
-				let placeholder = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.guild + BDFDB.disCN.guildplaceholder} copyplaceholder"></div>`);
-				let dragpreview = this.createDragPreview(guilddiv, e);
-				
-				let updatePreview = e2 => {
-					BDFDB.removeEles(placeholder);
-					BDFDB.toggleEles(guildcopy, false);
-					this.updateDragPreview(dragpreview, e2);
-					if (this.foldercontent.contains(e2.target)) {
-						hovcopy = BDFDB.containsClass(e2.target, "folderseparator") ? e2.target : BDFDB.getParentEle(BDFDB.dotCN.guild + ".copy", e2.target);
-						if (hovcopy && hovcopy.getAttribute("folder") == folderdiv.id) this.foldercontentguilds.insertBefore(placeholder, hovcopy.nextSibling);
-						else hovcopy = null;
-					}
-				};
-				let droppedPreview = e2 => {
-					document.removeEventListener("mousemove", updatePreview);
-					document.removeEventListener("mouseup", droppedPreview);
-					BDFDB.removeEles(placeholder, dragpreview);
-					BDFDB.toggleEles(guildcopy, true);
-					let dropfolderdiv = BDFDB.getParentEle(BDFDB.dotCN.guild + ".folder", e2.target);
-					if (dropfolderdiv && dropfolderdiv != folderdiv) {
-						this.removeServerFromFolder(info, folderdiv);
-						this.addServerToFolder(info, dropfolderdiv);
-					}
-					else if (hovcopy) {
-						this.foldercontentguilds.insertBefore(guildcopy, hovcopy.nextSibling);
-						this.updateServerPositions(folderdiv);
-					}
-				};
-				document.addEventListener("mousemove", updatePreview);
-				document.addEventListener("mouseup", droppedPreview);
-			},1000);
-			let mouseup = () => {
-				document.removeEventListener("mouseup", mouseup);
-				clearTimeout(guildcopy.dragTimeout);
+			let x = e.pageX, y = e.pageY;
+			let mousemove = e2 => {
+				if (Math.sqrt((x - e2.pageX)**2) > 20 || Math.sqrt((y - e2.pageY)**2) > 20) {
+					document.removeEventListener("mousemove", mousemove);
+					document.removeEventListener("mouseup", mouseup);
+					let hovcopy = null;
+					let placeholder = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.guild + BDFDB.disCN.guildplaceholder} copyplaceholder"></div>`);
+					let dragpreview = this.createDragPreview(guilddiv, e);
+					
+					let dragging = e3 => {
+						BDFDB.removeEles(placeholder);
+						BDFDB.toggleEles(guildcopy, false);
+						this.updateDragPreview(dragpreview, e3);
+						if (this.foldercontent.contains(e3.target)) {
+							hovcopy = BDFDB.containsClass(e3.target, "folderseparator") ? e3.target : BDFDB.getParentEle(BDFDB.dotCN.guild + ".copy", e3.target);
+							if (hovcopy && hovcopy.getAttribute("folder") == folderdiv.id) this.foldercontentguilds.insertBefore(placeholder, hovcopy.nextSibling);
+							else hovcopy = null;
+						}
+					};
+					let releasing = e3 => {
+						document.removeEventListener("mousemove", dragging);
+						document.removeEventListener("mouseup", releasing);
+						BDFDB.removeEles(placeholder, dragpreview);
+						BDFDB.toggleEles(guildcopy, true);
+						let dropfolderdiv = BDFDB.getParentEle(BDFDB.dotCN.guild + ".folder", e3.target);
+						if (dropfolderdiv && dropfolderdiv != folderdiv) {
+							this.removeServerFromFolder(info, folderdiv);
+							this.addServerToFolder(info, dropfolderdiv);
+						}
+						else if (hovcopy) {
+							this.foldercontentguilds.insertBefore(guildcopy, hovcopy.nextSibling);
+							this.updateServerPositions(folderdiv);
+						}
+					};
+					document.addEventListener("mousemove", dragging);
+					document.addEventListener("mouseup", releasing);
+				}
 			};
+			let mouseup = () => {
+				document.removeEventListener("mousemove", mousemove);
+				document.removeEventListener("mouseup", mouseup);
+			};
+			document.addEventListener("mousemove", mousemove);
 			document.addEventListener("mouseup", mouseup);
 		});
 			
