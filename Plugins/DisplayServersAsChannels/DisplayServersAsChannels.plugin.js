@@ -250,17 +250,17 @@ class DisplayServersAsChannels {
 			if (appcontainer) {
 				BDFDB.addEventListener(this, appcontainer, "mouseenter", `${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild}, ${BDFDB.dotCN.guild}.copy`, e => {
 					if (e.currentTarget.tagName && e.currentTarget.querySelector(BDFDB.dotCN.guildserror)) return;
-					BDFDB.appendLocalStyle("HideAllToolTips" + this.getName(), `${BDFDB.dotCN.tooltip} {display: none !important;}`);
+					BDFDB.appendLocalStyle("HideAllToolTips" + this.name, `${BDFDB.dotCN.tooltip} {display: none !important;}`);
 				});
 				BDFDB.addEventListener(this, appcontainer, "mouseleave", `${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild}, ${BDFDB.dotCN.guild}.copy`, e => {
 					if (e.currentTarget.tagName && e.currentTarget.querySelector(BDFDB.dotCN.guildserror)) return;
-					BDFDB.removeLocalStyle("HideAllToolTips" + this.getName());
+					BDFDB.removeLocalStyle("HideAllToolTips" + this.name);
 				});
 			}
 			BDFDB.addClass(appcontainer, "DSAC-styled");
 		}
 		else {
-			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
+			console.error(`%c[${this.name}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
 		}
 	}
 

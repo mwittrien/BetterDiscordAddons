@@ -3,7 +3,7 @@
 class NotificationSounds {
 	getName () {return "NotificationSounds";}
 
-	getVersion () {return "3.2.4";}
+	getVersion () {return "3.2.5";}
 
 	getAuthor () {return "DevilBro";}
 	
@@ -105,7 +105,7 @@ class NotificationSounds {
 		
 		var fields = ["category","song"];
 		
-		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.getName()}</div><div class="DevilBro-settings-inner">`;
+		var settingshtml = `<div class="${this.name}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="DevilBro-settings-inner">`;
 		
 		settingshtml += `<div class="add-new-song-settings"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">Add New Song:</h3></div>`;
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">`;
@@ -236,7 +236,7 @@ class NotificationSounds {
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
-			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
+			console.error(`%c[${this.name}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
 		}
 	}
 
@@ -258,7 +258,6 @@ class NotificationSounds {
 		if (!plugincard || BDFDB.containsClass(selectWrap, BDFDB.disCN.selectisopen)) return;
 		
 		BDFDB.addClass(selectWrap, BDFDB.disCN.selectisopen);
-		plugincard.style.setProperty("overflow", "visible", "important");
 		
 		var type = selectWrap.getAttribute("type");
 		var option = selectWrap.getAttribute("option");
@@ -290,7 +289,6 @@ class NotificationSounds {
 			if (e2.target.parentElement != selectMenu) {
 				document.removeEventListener("mousedown", removeMenu);
 				selectMenu.remove();
-				plugincard.style.removeProperty("overflow");
 				setTimeout(() => {BDFDB.removeClass(selectWrap, BDFDB.disCN.selectisopen);},100);
 			}
 		};
@@ -472,6 +470,7 @@ class NotificationSounds {
 	}
 	
 	processPrivateChannelCall (instance, wrapper) {
+		console.log(wrapper);
 		this.patchCallingSound(instance, "PrivateChannelCall", "call_calling");
 	}
 }

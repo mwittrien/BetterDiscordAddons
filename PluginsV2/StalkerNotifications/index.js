@@ -160,7 +160,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				return true;
 			}
 			else {
-				console.error(this.name + ": Fatal Error: Could not load BD functions!");
+				console.error(`%c[${this.name}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
 				return false;
 			}
 		}

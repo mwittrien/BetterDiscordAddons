@@ -196,7 +196,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				return true;
 			}
 			else {
-				console.error(this.name + ": Fatal Error: Could not load BD functions!");
+				console.error(`%c[${this.name}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
 				return false;
 			}
 		}
@@ -242,7 +242,7 @@ module.exports = (Plugin, Api, Vendor) => {
 		}
 		
 		onContextMenu (context) {
-			if (document.querySelector("." + this.getName() + "-modal") || !context || !context.tagName || !context.parentElement || context.querySelector(".serverhider-item")) return;
+			if (document.querySelector("." + this.name + "-modal") || !context || !context.tagName || !context.parentElement || context.querySelector(".serverhider-item")) return;
 			var info = BDFDB.getKeyInformation({"node":context, "key":"guild"});
 			var valid = false;
 			if (info && BDFDB.getKeyInformation({"node":context, "key":"displayName", "value":"GuildLeaveGroup"})) {

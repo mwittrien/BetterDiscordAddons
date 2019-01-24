@@ -22,22 +22,22 @@ class EmojiStatistics {
 				z-index: 2002;
 			}
 			
-			.${this.getName()}-modal .titles {
+			.${this.name}-modal .titles {
 				height: 20px;
 			}
 			
-			.${this.getName()}-modal .emojiserver-entry {
+			.${this.name}-modal .emojiserver-entry {
 				height: 50px;
 				padding-top: 5px;
 				padding-bottom: 5px;
 			}
 			
-			.${this.getName()}-modal .emojiserver-entry .modal-emojiserver-icon {
+			.${this.name}-modal .emojiserver-entry .modal-emojiserver-icon {
 				display: inline-block;
 			}
 			
-			.${this.getName()}-modal .titles-entry label,
-			.${this.getName()}-modal .emojiserver-entry label {
+			.${this.name}-modal .titles-entry label,
+			.${this.name}-modal .emojiserver-entry label {
 				color: #b9bbbe;
 				display: inline-block;
 				flex: 1;
@@ -51,37 +51,37 @@ class EmojiStatistics {
 				text-transform: uppercase;
 			}
 			
-			.${this.getName()}-modal .emojiserver-entry label {
+			.${this.name}-modal .emojiserver-entry label {
 				height: 12px;
 				overflow: hidden;
 			}
 			
-			.${this.getName()}-modal .titles-entry label {
+			.${this.name}-modal .titles-entry label {
 				margin-top: 0px;
 			}
-			.${this.getName()}-modal .titles-entry .modal-titlesicon-label {
+			.${this.name}-modal .titles-entry .modal-titlesicon-label {
 				margin-left: 0px;
 				text-align: center;
 				width: 50px;
 			}
 			
-			.${this.getName()}-modal .titles-entry .modal-titlesname-label,
-			.${this.getName()}-modal .emojiserver-entry .modal-emojiname-label {
+			.${this.name}-modal .titles-entry .modal-titlesname-label,
+			.${this.name}-modal .emojiserver-entry .modal-emojiname-label {
 				width: 300px;
 			}
 			
-			.${this.getName()}-modal .titles-entry .modal-sorttitle-label {
+			.${this.name}-modal .titles-entry .modal-sorttitle-label {
 				cursor: pointer;
 			}
 			
-			.${this.getName()}-modal .titles-entry .modal-titlestotal-label,
-			.${this.getName()}-modal .titles-entry .modal-titlesglobal-label,
-			.${this.getName()}-modal .titles-entry .modal-titleslocal-label,
-			.${this.getName()}-modal .titles-entry .modal-titlescopies-label,
-			.${this.getName()}-modal .emojiserver-entry .modal-emojitotal-label,
-			.${this.getName()}-modal .emojiserver-entry .modal-emojiglobal-label,
-			.${this.getName()}-modal .emojiserver-entry .modal-emojilocal-label,
-			.${this.getName()}-modal .emojiserver-entry .modal-emojicopies-label {
+			.${this.name}-modal .titles-entry .modal-titlestotal-label,
+			.${this.name}-modal .titles-entry .modal-titlesglobal-label,
+			.${this.name}-modal .titles-entry .modal-titleslocal-label,
+			.${this.name}-modal .titles-entry .modal-titlescopies-label,
+			.${this.name}-modal .emojiserver-entry .modal-emojitotal-label,
+			.${this.name}-modal .emojiserver-entry .modal-emojiglobal-label,
+			.${this.name}-modal .emojiserver-entry .modal-emojilocal-label,
+			.${this.name}-modal .emojiserver-entry .modal-emojicopies-label {
 				text-align: center;
 				width: 82px;
 			}
@@ -97,7 +97,7 @@ class EmojiStatistics {
 			}`;
 			
 		this.emojiInformationModalMarkup =
-			`<span class="${this.getName()}-modal DevilBro-modal">
+			`<span class="${this.name}-modal DevilBro-modal">
 				<div class="${BDFDB.disCN.backdrop}"></div>
 				<div class="${BDFDB.disCN.modal}">
 					<div class="${BDFDB.disCN.modalinner}">
@@ -167,7 +167,7 @@ class EmojiStatistics {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		var settings = BDFDB.getAllData(this, "settings");
 		var amounts = BDFDB.getAllData(this, "amounts");
-		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.getName()}</div><div class="DevilBro-settings-inner">`;
+		var settingshtml = `<div class="${this.name}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="DevilBro-settings-inner">`;
 		for (let key in settings) {
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
 		}
@@ -219,7 +219,7 @@ class EmojiStatistics {
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
-			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
+			console.error(`%c[${this.name}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
 		}
 	}
 

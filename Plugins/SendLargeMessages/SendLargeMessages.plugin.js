@@ -19,24 +19,24 @@ class SendLargeMessages {
 		this.messageDelay = 1000; //changing at own risk, might result in bans or mutes
 		
 		this.css = `
-			.${this.getName()}-modal textarea {
+			.${this.name}-modal textarea {
 				rows: 0;
 				cols: 0;
 				height: 100vw;
 				resize: none;
 			}
-			.${this.getName()}-modal #warning-message {
+			.${this.name}-modal #warning-message {
 				color: red;
 			}
 			
-			.${this.getName()}-modal #character-counter {
+			.${this.name}-modal #character-counter {
 				float: right;
 				color: white;
 				opacity: .5;
 			}`;
 
 		this.sendMessageModalMarkup =
-			`<span class="${this.getName()}-modal DevilBro-modal">
+			`<span class="${this.name}-modal DevilBro-modal">
 				<div class="${BDFDB.disCN.backdrop}"></div>
 				<div class="${BDFDB.disCN.modal}">
 					<div class="${BDFDB.disCN.modalinner}">
@@ -106,7 +106,7 @@ class SendLargeMessages {
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
-			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
+			console.error(`%c[${this.name}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
 		}
 	}
 

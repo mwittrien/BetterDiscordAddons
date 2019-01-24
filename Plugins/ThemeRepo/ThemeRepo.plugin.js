@@ -97,7 +97,7 @@ class ThemeRepo {
 			</li>`;
 			
 		this.themeRepoModalMarkup =
-			`<span class="${this.getName()}-modal Repo-modal DevilBro-modal">
+			`<span class="${this.name}-modal Repo-modal DevilBro-modal">
 				<div class="${BDFDB.disCN.backdrop}"></div>
 				<div class="${BDFDB.disCN.modal}">
 					<div class="${BDFDB.disCN.modalinner}">
@@ -263,30 +263,30 @@ class ThemeRepo {
 				opacity: 0 !important;
 				visibility: hidden !important;
 			}
-			.${this.getName()}-modal.Repo-modal ${BDFDB.dotCN.modalinner} {
+			.${this.name}-modal.Repo-modal ${BDFDB.dotCN.modalinner} {
 				min-height: 100%;
 				min-width: 800px;
 				width: 50%;
 			}
-			.${this.getName()}-modal .themeEntry ${BDFDB.dotCN._repocontrols} > * {
+			.${this.name}-modal .themeEntry ${BDFDB.dotCN._repocontrols} > * {
 				margin-right: 5px !important;
 			}
-			.${this.getName()}-modal .themeEntry ${BDFDB.dotCN._repocontrols} > .previewCheckboxWrapper {
+			.${this.name}-modal .themeEntry ${BDFDB.dotCN._repocontrols} > .previewCheckboxWrapper {
 				margin-right: 0px !important;
 			}
-			.${this.getName()}-modal .themeEntry svg[fill="currentColor"],
-			.${this.getName()}-modal .themeEntry ${BDFDB.dotCN.giffavoritebutton} {
+			.${this.name}-modal .themeEntry svg[fill="currentColor"],
+			.${this.name}-modal .themeEntry ${BDFDB.dotCN.giffavoritebutton} {
 				cursor: pointer;
 			}
-			.${this.getName()}-modal .themeEntry svg[fill="currentColor"],
-			.${this.getName()}-modal .themeEntry ${BDFDB.dotCN.giffavoritebutton + BDFDB.notCN.giffavoriteselected} {
+			.${this.name}-modal .themeEntry svg[fill="currentColor"],
+			.${this.name}-modal .themeEntry ${BDFDB.dotCN.giffavoritebutton + BDFDB.notCN.giffavoriteselected} {
 				color: #72767d !important;
 			}
-			${BDFDB.dotCN.themedark} .${this.getName()}-modal .themeEntry svg[fill="currentColor"],
-			${BDFDB.dotCN.themedark} .${this.getName()}-modal .themeEntry ${BDFDB.dotCN.giffavoritebutton + BDFDB.notCN.giffavoriteselected} {
+			${BDFDB.dotCN.themedark} .${this.name}-modal .themeEntry svg[fill="currentColor"],
+			${BDFDB.dotCN.themedark} .${this.name}-modal .themeEntry ${BDFDB.dotCN.giffavoritebutton + BDFDB.notCN.giffavoriteselected} {
 				color: #dcddde !important;
 			}
-			.${this.getName()}-modal .themeEntry.downloadable .trashIcon {
+			.${this.name}-modal .themeEntry.downloadable .trashIcon {
 				opacity: 0 !important;
 				pointer-events: none !important;
 			}`;
@@ -294,7 +294,7 @@ class ThemeRepo {
 	
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-		var settingshtml = `<div class="${this.getName()}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.getName()}</div><div class="DevilBro-settings-inner">`;
+		var settingshtml = `<div class="${this.name}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="DevilBro-settings-inner">`;
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">Add Theme:</h3><input type="text" placeholder="Insert Raw Github Link of Theme (https://raw.githubusercontent.com/...)" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16}" id="input-themeurl" style="flex: 1 1 auto;"><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} btn-add btn-addtheme" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}"></div></button></div>`;
 		settingshtml += `<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Your additional Theme List:</h3><div class="DevilBro-settings-inner-list theme-list ${BDFDB.disCN.marginbottom8}">`;
 		var ownlist = BDFDB.loadData("ownlist", this, "ownlist") || [];
@@ -353,7 +353,7 @@ class ThemeRepo {
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
-			console.error(this.getName() + ": Fatal Error: Could not load BD functions!");
+			console.error(`%c[${this.name}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
 		}
 	}
 
@@ -728,7 +728,7 @@ class ThemeRepo {
 					if (!loadingiconwrapper.firstChild) BDFDB.removeEles(loadingiconwrapper);
 					clearTimeout(this.loading.timeout);
 					this.loading = {is:false, timeout:null, amount:this.loading.amount};
-					console.log(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Finished fetching Themes.");
+					console.log(`%c[${this.name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Finished fetching Themes.");
 					if (document.querySelector(".bd-themerepobutton")) BDFDB.showToast(`Finished fetching Themes.`, {type:"success"});
 					if (outdated > 0) {
 						var bar = BDFDB.createNotificationsBar(`${outdated} of your Themes ${outdated == 1 ? "is" : "are"} outdated. Check:`,{type:"danger",btn:"ThemeRepo",selector:"themerepo-notice"});
@@ -837,7 +837,7 @@ class ThemeRepo {
 			document.head.appendChild(BDFDB.htmlToElement(`<style id=${name}>${data.css}</style>`));
 			themeCookie[name] = true;
 			themeModule.saveThemeData();
-			console.log(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Applied Theme " + name + ".");
+			console.log(`%c[${this.name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Applied Theme " + name + ".");
 		}
 	}
 	
@@ -860,7 +860,7 @@ class ThemeRepo {
 			themeCookie[name] = false;
 			delete bdthemes[name];
 			themeModule.saveThemeData();
-			console.log(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Removed Theme " + name + ".");
+			console.log(`%c[${this.name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Removed Theme " + name + ".");
 		}
 	}
 }
