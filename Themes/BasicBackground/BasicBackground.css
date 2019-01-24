@@ -539,8 +539,7 @@ input:disabled {
 .partyMemberBackground-aSF9mc,
 .friendsAction-__WNE9:not(:hover),
 .button-mM-y8i:hover,
-.guild-1EfMGQ.audio-3vVhBi:after,
-.guild-1EfMGQ.video-15yGu3:after {
+.guild-1EfMGQ:after {
 	background-color: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 3)) !important;
 }
 
