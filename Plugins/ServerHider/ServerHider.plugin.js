@@ -130,6 +130,8 @@ class ServerHider {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
 			
+			if (BDFDB.isPluginEnabled("HideUtils") && !BDFDB.loadData("hideutils", this, "warnings")) BDFDB.openConfirmModal(this, this.name + " is not compartible with the plugin HideUtils by Arashiryuu. You might expierence bugs like Servers that should be hidden by " + this.name + " still being visible in the Guildlist. To avoid this disable the Plugin HideUtils. Press the " + BDFDB.getLibraryStrings().btn_ok_text + "-Button to not show this Message again.", "Warning", () => {BDFDB.saveData("hideutils", true, this, "warnings")});
+			
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
