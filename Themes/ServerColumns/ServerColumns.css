@@ -27,7 +27,8 @@
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ:not(#bd-pub-li),
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ:not(#bd-pub-li) .guildInner-3DSoA4 a,
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ .guildsError-3cFMtY,
-.guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ .guildInner-3DSoA4 .iconSizeLarge-161qtT,
+.guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ .guildInner-3DSoA4 .guildIcon-CT-ZDq,
+.guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ .guildInner-3DSoA4 .avatar-S_nsxk,
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ .guildInner-3DSoA4 .homeIcon-1FoKUJ {
 	height: var(--vserversize) !important;
 	width: var(--vserversize) !important;
@@ -36,12 +37,11 @@
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ:not(#bd-pub-li):not(.guildsAdd-21_IdK) {
 	border: none !important;
 }
-.guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ .guildInner-3DSoA4 .iconSizeLarge-161qtT {
-	font-size: calc(var(--vserversize)/5) !important;
-}
-.guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ .guildInner-3DSoA4 .iconSizeLarge-161qtT,
+.guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ .guildInner-3DSoA4 .guildIcon-CT-ZDq,
+.guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ .guildInner-3DSoA4 .avatar-S_nsxk,
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ .guildInner-3DSoA4 .homeIcon-1FoKUJ {
 	background-size: cover !important;
+	font-size: calc(var(--vserversize)/5) !important;
 }
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ .badge-1GsMF2 {
 	font-size: calc(var(--vserversize)/4) !important;
@@ -75,7 +75,8 @@
     height: calc(var(--vserversize) - 10px) !important;
     margin-top: calc((var(--vserversize) - 10px)/-2) !important;
 }
-.guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ.audio-3vVhBi:after, 
+.guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ.pinned:after,
+.guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ.audio-3vVhBi:after,
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ.video-15yGu3:after {
     height: calc(var(--vserversize)/2) !important;
     width: calc(var(--vserversize)/2) !important;
