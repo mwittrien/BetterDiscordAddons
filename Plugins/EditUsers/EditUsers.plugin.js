@@ -3,7 +3,7 @@
 class EditUsers {
 	getName () {return "EditUsers";}
 
-	getVersion () {return "3.2.4";}
+	getVersion () {return "3.2.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -257,6 +257,8 @@ class EditUsers {
 			BDFDB.WebModules.forceAllUpdates(this);
 			BDFDB.saveAllData(data, this, "users");
 			
+			BDFDB.removeEles(".autocompleteEditUsers", ".autocompleteEditUsersRow");
+			
 			BDFDB.unloadMessage(this);
 		}
 	}
@@ -426,11 +428,52 @@ class EditUsers {
 	}
 	
 	processChannelTextArea (instance, wrapper) {
-		if (instance.props && instance.props.type == "normal" && instance.props.channel && instance.props.channel.type == 1) {
-			let user = this.UserUtils.getUser(instance.props.channel.recipients[0]);
-			if (user) {
-				let data = this.getUserData(user.id, wrapper);
-				wrapper.querySelector("textarea").setAttribute("placeholder", BDFDB.LanguageStrings.TEXTAREA_PLACEHOLDER.replace("{{channel}}", "@" + (data.name || user.username)));
+		if (instance.props && instance.props.channel) {
+			var textarea = wrapper.querySelector("textarea");
+			if (!textarea) return;
+			if (instance.props.type == "normal" && instance.props.channel.type == 1) {
+				let user = this.UserUtils.getUser(instance.props.channel.recipients[0]);
+				if (user) {
+					let data = this.getUserData(user.id, wrapper);
+					textarea.setAttribute("placeholder", BDFDB.LanguageStrings.TEXTAREA_PLACEHOLDER.replace("{{channel}}", "@" + (data.name || user.username)));
+				}
+			}
+			if (BDFDB.getData("changeInAutoComplete", this, "settings")) {
+				BDFDB.addEventListener(this, textarea, "keydown", e => {
+					let autocompletemenu = textarea.parentElement.querySelector(BDFDB.dotCN.autocomplete);
+					if (autocompletemenu && (e.which == 9 || e.which == 13)) {
+						if (BDFDB.containsClass(autocompletemenu.querySelector(BDFDB.dotCN.autocompleteselected).parentElement, "autocompleteEditUsersRow")) {
+							e.originalEvent.preventDefault();
+							e.originalEvent.stopPropagation();
+							this.swapWordWithMention(textarea); 
+						}
+					}
+					else if (autocompletemenu && (e.which == 38 || e.which == 40)) {
+						let autocompleteitems = autocompletemenu.querySelectorAll(BDFDB.dotCN.autocompleteselectable + ":not(.autocompleteEditUsersSelector)");
+						let selected = autocompletemenu.querySelector(BDFDB.dotCN.autocompleteselected);
+						if (BDFDB.containsClass(selected, "autocompleteEditUsersSelector") || autocompleteitems[e.which == 38 ? 0 : (autocompleteitems.length-1)] == selected) {
+							e.originalEvent.preventDefault();
+							e.originalEvent.stopPropagation();
+							let next = this.getNextSelection(autocompletemenu, null, e.which == 38 ? false : true);
+							BDFDB.removeClass(selected, BDFDB.disCN.autocompleteselected);
+							BDFDB.addClass(selected, BDFDB.disCN.autocompleteselector);
+							BDFDB.addClass(next, BDFDB.disCN.autocompleteselected);
+						}
+					}
+					else if (textarea.value && !e.shiftKey && e.which == 13 && !autocompletemenu && textarea.value.indexOf("s/") != 0) {
+						this.format = true;
+						textarea.dispatchEvent(new Event("input"));
+					}
+					else if (!e.ctrlKey && e.which != 16 && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length) {
+						clearTimeout(textarea.EditUsersAutocompleteTimeout);
+						textarea.EditUsersAutocompleteTimeout = setTimeout(() => {this.addAutoCompleteMenu(textarea, instance.props.channel);},100);
+					}
+					
+					if (!e.ctrlKey && e.which != 38 && e.which != 40 && !(e.which == 39 && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length)) BDFDB.removeEles(".autocompleteEditUsers", ".autocompleteEditUsersRow");
+				});
+				BDFDB.addEventListener(this, textarea, "click", e => {
+					if (textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length) setImmediate(() => {this.addAutoCompleteMenu(textarea, instance.props.channel);});
+				});
 			}
 		}
 	}
@@ -882,6 +925,82 @@ class EditUsers {
 		else if (BDFDB.getParentEle(BDFDB.dotCN.accountinfo, wrapper)) key = "changeInUserAccount";
 		
 		return !key || BDFDB.getData(key, this, "settings") ? data : {};
+	}
+	
+	addAutoCompleteMenu (textarea, channel) {
+		if (textarea.parentElement.querySelector(".autocompleteEditUsersRow")) return;
+		let words = textarea.value.split(/\s/);
+		let lastword = words[words.length-1].trim();
+		if (lastword && lastword.length > 1 && lastword[0] == "@") {
+			let users = BDFDB.loadAllData(this, "users");
+			if (!users) return;
+			let userarray = [];
+			for (let id in users) if (users[id].name) {
+				let user = this.UserUtils.getUser(id);
+				let member = user ? this.MemberUtils.getMember(channel.guild_id, id) : null;
+				if (user && member) userarray.push(Object.assign({lowercasename:users[id].name.toLowerCase(),user,member},users[id]));
+			}
+			userarray = BDFDB.sortArrayByKey(userarray.filter(n => n.lowercasename.indexOf(lastword.toLowerCase().slice(1)) != -1), "lowercasename");
+			if (userarray.length) {
+				let autocompletemenu = textarea.parentElement.querySelector(BDFDB.dotCNS.autocomplete + BDFDB.dotCN.autocompleteinner), amount = 15;
+				if (!autocompletemenu) {
+					autocompletemenu = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.autocomplete + BDFDB.disCN.autocomplete2} autocompleteEditUsers"><div class="${BDFDB.disCN.autocompleteinner}"><div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteEditUsersRow"><div class="${BDFDB.disCN.autocompleteselector} autocompleteEditUsersSelector"><div class="${BDFDB.disCNS.autocompletecontenttitle + BDFDB.disCNS.small + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCN.weightsemibold}">${BDFDB.LanguageStrings.MEMBERS_MATCHING.replace("{{prefix}}", BDFDB.encodeToHTML(lastword))}</strong></div></div></div></div></div>`);
+					textarea.parentElement.appendChild(autocompletemenu);
+					autocompletemenu = autocompletemenu.firstElementChild;
+				}
+				else {
+					amount -= autocompletemenu.querySelectorAll(BDFDB.dotCN.autocompleteselectable).length;
+				}
+				
+				BDFDB.addEventListener(this, autocompletemenu, "mouseenter", BDFDB.dotCN.autocompleteselectable, e => {
+					var selected = autocompletemenu.querySelectorAll(BDFDB.dotCN.autocompleteselected);
+					BDFDB.removeClass(selected, BDFDB.disCN.autocompleteselected);
+					BDFDB.addClass(selected, BDFDB.disCN.autocompleteselector);
+					BDFDB.addClass(e.currentTarget, BDFDB.disCN.autocompleteselected);
+				});
+					
+				for (let data of userarray) {
+					if (amount-- < 1) break;
+					let autocompleterow = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteEditUsersRow"><div userid="${data.user.is}" class="${BDFDB.disCNS.autocompleteselector + BDFDB.disCN.autocompleteselectable} autocompleteEditUsersSelector"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.autocompletecontent}" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.avatarwrapper + BDFDB.disCN.avatarxsmall}"><div class="${BDFDB.disCN.avatarimage + BDFDB.disCNS.avatarxsmall + BDFDB.disCN.avatarmask}"${data.removeIcon ? '' : 'style="background-image: url(' + (data.url || BDFDB.getUserAvatar(data.user.id)) + ');"'}></div><div class="${BDFDB.disCNS['status' + BDFDB.getUserStatus(data.user.id)] + BDFDB.disCNS.status + BDFDB.disCNS.avatarxsmall + BDFDB.disCN.autocompleteavatarstatus}"></div></div><div class="${BDFDB.disCN.marginleft8}" changed-by-editusers="true" style="flex: 1 1 auto;${data.color1 ? (' color: ' + BDFDB.colorCONVERT(data.color1, 'RGB') + ' !important;') : ''}">${BDFDB.encodeToHTML(data.name || data.member.nick || data.user.username)}</div><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignbaseline + BDFDB.disCNS.nowrap + BDFDB.disCN.autocompletedescription}" style="flex: 0 1 auto;"><div class="${BDFDB.disCN.autocompletedescriptionusername}">${BDFDB.encodeToHTML(data.user.username)}</div><div class="${BDFDB.disCN.autocompletedescriptiondiscriminator}">#${data.user.discriminator}</div></div></div></div></div>`);
+					autocompleterow.querySelector(BDFDB.dotCN.autocompleteselectable).addEventListener("click", () => {this.swapWordWithMention(textarea);});
+					autocompletemenu.appendChild(autocompleterow);
+				}
+				if (!autocompletemenu.querySelector(BDFDB.dotCN.autocompleteselected)) {
+					BDFDB.addClass(autocompletemenu.querySelector(".autocompleteEditUsersRow " + BDFDB.dotCN.autocompleteselectable), BDFDB.disCN.autocompleteselected);
+				}
+			}
+		}
+	}
+	
+	getNextSelection (menu, selected, forward) {
+		selected = selected ? selected : menu.querySelector(BDFDB.dotCN.autocompleteselected).parentElement;
+		let next, sibling = forward ? selected.nextElementSibling : selected.previousElementSibling;
+		if (sibling) {
+			next = sibling.querySelector(BDFDB.dotCN.autocompleteselectable);
+		}
+		else {
+			let items = menu.querySelectorAll(BDFDB.dotCN.autocompleteselectable);
+			next = forward ? items[0] : items[items.length-1]; 
+		}
+		return next ? next : this.getNextSelection(menu, sibling, forward);
+	}
+	
+	swapWordWithMention (textarea) {
+		let selected = textarea.parentElement.querySelector(".autocompleteEditUsersRow " + BDFDB.dotCN.autocompleteselected);
+		let words = textarea.value.split(/\s/);
+		let lastword = words[words.length-1].trim();
+		if (selected && lastword) {
+			let username = selected.querySelector(BDFDB.dotCN.autocompletedescriptionusername).textContent;
+			let discriminator = selected.querySelector(BDFDB.dotCN.autocompletedescriptiondiscriminator).textContent;
+			let userid = selected.getAttribute("userid");
+			BDFDB.removeEles(".autocompleteEditUsers", ".autocompleteEditUsersRow");
+			textarea.focus(); 
+			textarea.selectionStart = textarea.value.length - lastword.length;
+			textarea.selectionEnd = textarea.value.length;
+			document.execCommand("insertText", false, username && discriminator ? ("@" + username + discriminator) : `<@!${userid}>`);
+			textarea.selectionStart = textarea.value.length;
+			textarea.selectionEnd = textarea.value.length;
+		}
 	}
 	
 	setLabelsByLanguage () {
