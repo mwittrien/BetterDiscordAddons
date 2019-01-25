@@ -998,7 +998,7 @@ class EditUsers {
 			textarea.focus(); 
 			textarea.selectionStart = textarea.value.length - lastword.length;
 			textarea.selectionEnd = textarea.value.length;
-			document.execCommand("insertText", false, username && discriminator ? ("@" + username + discriminator) : `<@!${userid}>`);
+			document.execCommand("insertText", false, (username && discriminator ? ("@" + username + discriminator) : `<@!${userid}>`) + " ");
 			textarea.selectionStart = textarea.value.length;
 			textarea.selectionEnd = textarea.value.length;
 		}
