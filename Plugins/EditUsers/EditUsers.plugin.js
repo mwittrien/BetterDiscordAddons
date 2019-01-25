@@ -428,11 +428,12 @@ class EditUsers {
 	}
 	
 	processChannelTextArea (instance, wrapper) {
-		if (instance.props && instance.props.channel) {
+		let channel = BDFDB.getReactValue(instance, "props.channel");
+		if (channel) {
 			var textarea = wrapper.querySelector("textarea");
 			if (!textarea) return;
-			if (instance.props.type == "normal" && instance.props.channel.type == 1) {
-				let user = this.UserUtils.getUser(instance.props.channel.recipients[0]);
+			if (instance.props.type == "normal" && channel.type == 1) {
+				let user = this.UserUtils.getUser(channel.recipients[0]);
 				if (user) {
 					let data = this.getUserData(user.id, wrapper);
 					textarea.setAttribute("placeholder", BDFDB.LanguageStrings.TEXTAREA_PLACEHOLDER.replace("{{channel}}", "@" + (data.name || user.username)));
@@ -466,13 +467,13 @@ class EditUsers {
 					}
 					else if (!e.ctrlKey && e.which != 16 && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length) {
 						clearTimeout(textarea.EditUsersAutocompleteTimeout);
-						textarea.EditUsersAutocompleteTimeout = setTimeout(() => {this.addAutoCompleteMenu(textarea, instance.props.channel);},100);
+						textarea.EditUsersAutocompleteTimeout = setTimeout(() => {this.addAutoCompleteMenu(textarea, channel);},100);
 					}
 					
 					if (!e.ctrlKey && e.which != 38 && e.which != 40 && !(e.which == 39 && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length)) BDFDB.removeEles(".autocompleteEditUsers", ".autocompleteEditUsersRow");
 				});
 				BDFDB.addEventListener(this, textarea, "click", e => {
-					if (textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length) setImmediate(() => {this.addAutoCompleteMenu(textarea, instance.props.channel);});
+					if (textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length) setImmediate(() => {this.addAutoCompleteMenu(textarea, channel);});
 				});
 			}
 		}
