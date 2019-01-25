@@ -3,7 +3,7 @@
 class EditChannels {
 	getName () {return "EditChannels";}
 
-	getVersion () {return "3.8.8";}
+	getVersion () {return "3.8.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -178,6 +178,8 @@ class EditChannels {
 			BDFDB.WebModules.forceAllUpdates(this);
 			BDFDB.saveAllData(data, this, "channels");
 			
+			BDFDB.removeEles(".autocompleteEditChannels", ".autocompleteEditChannelsRow");
+			
 			BDFDB.unloadMessage(this);
 		}
 	}
@@ -261,9 +263,48 @@ class EditChannels {
 	
 	processChannelTextArea (instance, wrapper) {
 		let channel = BDFDB.getReactValue(instance, "props.channel");
-		if (channel && channel.type == 0 && instance.props.type == "normal") {
-			let data = BDFDB.loadData(channel.id, this, "channels") || {};
-			wrapper.querySelector("textarea").setAttribute("placeholder", BDFDB.LanguageStrings.TEXTAREA_PLACEHOLDER.replace("{{channel}}", "#" + (data.name || channel.name)));
+		if (channel) {
+			var textarea = wrapper.querySelector("textarea");
+			if (!textarea) return;
+			if (channel.type == 0 && instance.props.type == "normal") {
+				let data = BDFDB.loadData(channel.id, this, "channels") || {};
+				wrapper.querySelector("textarea").setAttribute("placeholder", BDFDB.LanguageStrings.TEXTAREA_PLACEHOLDER.replace("{{channel}}", "#" + (data.name || channel.name)));
+			}
+			BDFDB.addEventListener(this, textarea, "keydown", e => {
+				let autocompletemenu = textarea.parentElement.querySelector(BDFDB.dotCN.autocomplete);
+				if (autocompletemenu && (e.which == 9 || e.which == 13)) {
+					if (BDFDB.containsClass(autocompletemenu.querySelector(BDFDB.dotCN.autocompleteselected).parentElement, "autocompleteEditChannelsRow")) {
+						e.originalEvent.preventDefault();
+						e.originalEvent.stopPropagation();
+						this.swapWordWithMention(textarea); 
+					}
+				}
+				else if (autocompletemenu && (e.which == 38 || e.which == 40)) {
+					let autocompleteitems = autocompletemenu.querySelectorAll(BDFDB.dotCN.autocompleteselectable + ":not(.autocompleteEditChannelsSelector)");
+					let selected = autocompletemenu.querySelector(BDFDB.dotCN.autocompleteselected);
+					if (BDFDB.containsClass(selected, "autocompleteEditChannelsSelector") || autocompleteitems[e.which == 38 ? 0 : (autocompleteitems.length-1)] == selected) {
+						e.originalEvent.preventDefault();
+						e.originalEvent.stopPropagation();
+						let next = this.getNextSelection(autocompletemenu, null, e.which == 38 ? false : true);
+						BDFDB.removeClass(selected, BDFDB.disCN.autocompleteselected);
+						BDFDB.addClass(selected, BDFDB.disCN.autocompleteselector);
+						BDFDB.addClass(next, BDFDB.disCN.autocompleteselected);
+					}
+				}
+				else if (textarea.value && !e.shiftKey && e.which == 13 && !autocompletemenu && textarea.value.indexOf("s/") != 0) {
+					this.format = true;
+					textarea.dispatchEvent(new Event("input"));
+				}
+				else if (!e.ctrlKey && e.which != 16 && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length) {
+					clearTimeout(textarea.EditChannelsAutocompleteTimeout);
+					textarea.EditChannelsAutocompleteTimeout = setTimeout(() => {this.addAutoCompleteMenu(textarea, channel);},100);
+				}
+				
+				if (!e.ctrlKey && e.which != 38 && e.which != 40 && !(e.which == 39 && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length)) BDFDB.removeEles(".autocompleteEditChannels", ".autocompleteEditChannelsRow");
+			});
+			BDFDB.addEventListener(this, textarea, "click", e => {
+				if (textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length) setImmediate(() => {this.addAutoCompleteMenu(textarea, channel);});
+			});
 		}
 	}
 	
@@ -460,6 +501,84 @@ class EditChannels {
 			return BDFDB.colorCONVERT(color, "RGB");
 		}
 		return null;
+	}
+	
+	addAutoCompleteMenu (textarea, channel) {
+		if (textarea.parentElement.querySelector(".autocompleteEditChannelsRow")) return;
+		let words = textarea.value.split(/\s/);
+		let lastword = words[words.length-1].trim();
+		if (lastword && lastword.length > 1 && lastword[0] == "#") {
+			let channels = BDFDB.loadAllData(this, "channels");
+			if (!channels) return;
+			let channelarray = [];
+			for (let id in channels) if (channels[id].name) {
+				let channel = this.ChannelUtils.getChannel(id);
+				let category = channel && channel.parent_id ? this.ChannelUtils.getChannel(channel.parent_id) : null;
+				let catdata = (category ? channels[category.id] : null) || {};
+				if (channel && channel.type == 0) channelarray.push(Object.assign({lowercasename:channels[id].name.toLowerCase(),lowercasecatname:(catdata && catdata.name ? catdata.name.toLowerCase() : null),channel,category,catdata},channels[id])); 
+			}
+			channelarray = BDFDB.sortArrayByKey(channelarray.filter(n => n.lowercasename.indexOf(lastword.toLowerCase().slice(1)) != -1 || (n.lowercasecatname && n.lowercasecatname.indexOf(lastword.toLowerCase().slice(1)) != -1)), "lowercasename");
+			if (channelarray.length) {
+				let settings = BDFDB.getAllData(this, "settings");
+				let autocompletemenu = textarea.parentElement.querySelector(BDFDB.dotCNS.autocomplete + BDFDB.dotCN.autocompleteinner), amount = 15;
+				if (!autocompletemenu) {
+					autocompletemenu = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.autocomplete + BDFDB.disCN.autocomplete2} autocompleteEditChannels"><div class="${BDFDB.disCN.autocompleteinner}"><div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteEditChannelsRow"><div class="${BDFDB.disCN.autocompleteselector} autocompleteEditChannelsSelector"><div class="${BDFDB.disCNS.autocompletecontenttitle + BDFDB.disCNS.small + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCN.weightsemibold}">${BDFDB.LanguageStrings.TEXT_CHANNELS_MATCHING.replace("{{prefix}}", BDFDB.encodeToHTML(lastword))}</strong></div></div></div></div></div>`);
+					textarea.parentElement.appendChild(autocompletemenu);
+					autocompletemenu = autocompletemenu.firstElementChild;
+				}
+				else {
+					amount -= autocompletemenu.querySelectorAll(BDFDB.dotCN.autocompleteselectable).length;
+				}
+				
+				BDFDB.addEventListener(this, autocompletemenu, "mouseenter", BDFDB.dotCN.autocompleteselectable, e => {
+					var selected = autocompletemenu.querySelectorAll(BDFDB.dotCN.autocompleteselected);
+					BDFDB.removeClass(selected, BDFDB.disCN.autocompleteselected);
+					BDFDB.addClass(selected, BDFDB.disCN.autocompleteselector);
+					BDFDB.addClass(e.currentTarget, BDFDB.disCN.autocompleteselected);
+				});
+					
+				for (let data of channelarray) {
+					if (amount-- < 1) break;
+					let color = BDFDB.colorCONVERT(data.color, "RGB");
+					let catcolor = BDFDB.colorCONVERT(data.catdata.color, "RGB");
+					let autocompleterow = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteEditChannelsRow"><div channelid="${data.channel.id}" class="${BDFDB.disCNS.autocompleteselector + BDFDB.disCN.autocompleteselectable} autocompleteEditChannelsSelector"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.autocompletecontent}" style="flex: 1 1 auto;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" class="${BDFDB.disCN.autocompleteicon}"><path class="${BDFDB.disCN.autocompleteiconforeground}" d="M2.27333333,12 L2.74666667,9.33333333 L0.08,9.33333333 L0.313333333,8 L2.98,8 L3.68666667,4 L1.02,4 L1.25333333,2.66666667 L3.92,2.66666667 L4.39333333,0 L5.72666667,0 L5.25333333,2.66666667 L9.25333333,2.66666667 L9.72666667,0 L11.06,0 L10.5866667,2.66666667 L13.2533333,2.66666667 L13.02,4 L10.3533333,4 L9.64666667,8 L12.3133333,8 L12.08,9.33333333 L9.41333333,9.33333333 L8.94,12 L7.60666667,12 L8.08,9.33333333 L4.08,9.33333333 L3.60666667,12 L2.27333333,12 L2.27333333,12 Z M5.02,4 L4.31333333,8 L8.31333333,8 L9.02,4 L5.02,4 L5.02,4 Z" transform="translate(1.333 2)" ${settings.changeChannelIcon && color ? ('fill="' + color + '" oldfill="currentColor" style="fill: ' + color + ' !important;"') : 'fill="currentColor"'}></path></svg><div class="${BDFDB.disCN.marginleft4}" changed-by-editchannels="true" style="flex: 1 1 auto;${color ? (' color: ' + color + ' !important;') : ''}">${BDFDB.encodeToHTML(data.name || data.channel.name)}</div>${data.category ? '<div class="${BDFDB.disCN.autocompletedescription}"' + (catcolor ? (' style="color: ' + catcolor + ' !important;"') : '') + '>' + BDFDB.encodeToHTML(data.catdata.name || data.category.name) + '</div>' : ''}</div></div></div>`);
+					autocompleterow.querySelector(BDFDB.dotCN.autocompleteselectable).addEventListener("click", () => {this.swapWordWithMention(textarea);});
+					autocompletemenu.appendChild(autocompleterow);
+				}
+				if (!autocompletemenu.querySelector(BDFDB.dotCN.autocompleteselected)) {
+					BDFDB.addClass(autocompletemenu.querySelector(".autocompleteEditChannelsRow " + BDFDB.dotCN.autocompleteselectable), BDFDB.disCN.autocompleteselected);
+				}
+			}
+		}
+	}
+	
+	getNextSelection (menu, selected, forward) {
+		selected = selected ? selected : menu.querySelector(BDFDB.dotCN.autocompleteselected).parentElement;
+		let next, sibling = forward ? selected.nextElementSibling : selected.previousElementSibling;
+		if (sibling) {
+			next = sibling.querySelector(BDFDB.dotCN.autocompleteselectable);
+		}
+		else {
+			let items = menu.querySelectorAll(BDFDB.dotCN.autocompleteselectable);
+			next = forward ? items[0] : items[items.length-1]; 
+		}
+		return next ? next : this.getNextSelection(menu, sibling, forward);
+	}
+	
+	swapWordWithMention (textarea) {
+		let selected = textarea.parentElement.querySelector(".autocompleteEditChannelsRow " + BDFDB.dotCN.autocompleteselected);
+		let channelid = selected ? selected.getAttribute("channelid") : null;
+		let words = textarea.value.split(/\s/);
+		let lastword = words[words.length-1].trim();
+		if (channelid && lastword) {
+			BDFDB.removeEles(".autocompleteEditChannels", ".autocompleteEditChannelsRow");
+			textarea.focus(); 
+			textarea.selectionStart = textarea.value.length - lastword.length;
+			textarea.selectionEnd = textarea.value.length;
+			document.execCommand("insertText", false, `<#${channelid}> `);
+			textarea.selectionStart = textarea.value.length;
+			textarea.selectionEnd = textarea.value.length;
+		}
 	}
 	
 	setLabelsByLanguage () {
