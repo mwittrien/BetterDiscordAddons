@@ -3,7 +3,7 @@
 class SpellCheck {
 	getName () {return "SpellCheck";}
 
-	getVersion () {return "1.3.0";}
+	getVersion () {return "1.3.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -207,6 +207,8 @@ class SpellCheck {
 				for (let i in style) if (i.indexOf("webkit") == -1) spellcheck.style[i] = style[i];
 				spellcheck.style.setProperty("box-sizing", "border-box", "important");
 				spellcheck.style.setProperty("color", "transparent", "important");
+				spellcheck.style.setProperty("background", "none", "important");
+				spellcheck.style.setProperty("mask", "none", "important");
 				spellcheck.style.setProperty("pointer-events", "none", "important");
 				spellcheck.style.setProperty("position", "absolute", "important");
 				spellcheck.style.setProperty("left", BDFDB.getRects(textarea).left - BDFDB.getRects(wrapper).left + "px", "important");
