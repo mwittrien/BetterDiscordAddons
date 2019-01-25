@@ -3,7 +3,7 @@
 class PinDMs {
 	getName () {return "PinDMs";}
 
-	getVersion () {return "1.2.9";}
+	getVersion () {return "1.3.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -307,7 +307,7 @@ class PinDMs {
 	
 	processGuilds (instance, wrapper) {
 		let dms = wrapper.querySelector(BDFDB.dotCN.dms);
-		if (dms) for (let id of this.sortAndUpdate("pinnedRecents").reverse()) this.addPinnedRecent(id);
+		if (dms) for (let id of this.sortAndUpdate("pinnedRecents")) this.addPinnedRecent(id);
 	}
 	
 	processDirectMessage (instance, wrapper, methodnames) {
@@ -440,36 +440,39 @@ class PinDMs {
 		if (dms && !dms.querySelector(`${BDFDB.dotCN.guild}.pinned[channelid="${id}"]`)) {
 			let info = this.ChannelUtils.getChannel(id);
 			if (info) {
-				let channel = BDFDB.htmlToElement(this.recentDMMarkup);
-				channel.setAttribute("channelid", id);
-				dms.appendChild(channel);
-				let avatar = channel.querySelector(BDFDB.dotCN.avatarinner);
-				let channelname = info.name;
-				if (!channelname && info.recipients.length > 0) {
+				let dmdiv = BDFDB.htmlToElement(this.recentDMMarkup);
+				let user = info.type == 1 ? this.UserUtils.getUser(info.recipients[0]) : null;
+				dmdiv.setAttribute("channelid", id);
+				dms.insertBefore(dmdiv, dms.firstElementChild);
+				let avatar = dmdiv.querySelector(BDFDB.dotCN.avatarinner);
+				let dmname = info.name;
+				if (!dmname && info.recipients.length > 0) {
 					for (let dmuser_id of info.recipients) {
-						channelname = channelname ? channelname + ", " : channelname;
-						channelname = channelname + this.UserUtils.getUser(dmuser_id).username;
+						dmname = dmname ? dmname + ", " : dmname;
+						dmname = dmname + this.UserUtils.getUser(dmuser_id).username;
 					}
-				} 
-				avatar.style.setProperty("background-image", `url(${BDFDB.getChannelIcon(id)})`);
-				avatar.setAttribute("channel", channelname);
-				if (info.type == 1) avatar.setAttribute("user", this.UserUtils.getUser(info.recipients[0]).username);
-				channel.addEventListener("mouseenter", () => {
-					BDFDB.createTooltip(channelname, channel, {type:"right"});
+				}
+				let EditUsersData = user && BDFDB.isPluginEnabled("EditUsers") ? bdplugins.EditUsers.plugin.getUserData(user.id, dmdiv) : {};
+				if (!EditUsersData.removeIcon) avatar.style.setProperty("background-image", `url(${EditUsersData.url || BDFDB.getChannelIcon(id)})`);
+				avatar.setAttribute("channel", dmname);
+				if (user) avatar.setAttribute("user", user.username);
+				dmdiv.addEventListener("mouseenter", () => {
+					let FreshEditUsersData = user && BDFDB.isPluginEnabled("EditUsers") ? bdplugins.EditUsers.plugin.getUserData(user.id, dmdiv) : {};
+					BDFDB.createTooltip(FreshEditUsersData.name || dmname, dmdiv, {selector:(BDFDB.isObjectEmpty(FreshEditUsersData) ? "" : "EditUsers-tooltip"),type:"right"});
 				});
-				channel.addEventListener("click", () => {
+				dmdiv.addEventListener("click", () => {
 					this.ChannelSwitchUtils.selectPrivateChannel(id);
 				});
-				channel.addEventListener("contextmenu", e => {
+				dmdiv.addEventListener("contextmenu", e => {
 					let dmContext = BDFDB.htmlToElement(this.dmUnpinContextMarkup);
 					dmContext.querySelector(".unpindm-guild-item").addEventListener("click", () => {
-						BDFDB.removeEles(channel, dmContext);
+						BDFDB.removeEles(dmdiv, dmContext);
 						this.unhideNativeDM(id);
 						BDFDB.removeData(id, this, "pinnedRecents");
 					});
 					BDFDB.appendContextMenu(dmContext, e);
 				});
-				this.addHoverBehaviour(channel);
+				this.addHoverBehaviour(dmdiv);
 				this.updateUnreadCount(id);
 				this.hideNativeDM(id);
 			}
@@ -482,6 +485,7 @@ class PinDMs {
 			let count = this.UnreadUtils.getUnreadCount(dmdiv.getAttribute("channelid"));
 			let badge = dmdiv.querySelector(BDFDB.dotCN.badge);
 			BDFDB.toggleEles(badge, count > 0);
+			BDFDB.toggleClass(dmdiv, "has-new-messages", count > 0);
 			badge.innerText = count;
 		}
 	}
