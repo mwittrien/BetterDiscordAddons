@@ -8,12 +8,12 @@ class BetterSearchPage {
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Adds some extra controls to the search results page.";}
-	
-	initConstructor () {	
+
+	initConstructor () {
 		this.patchModules = {
 			"SearchResults":["componentDidMount","componentDidUpdate"]
 		};
-	
+
 		this.css = `
 			.BSP-pagination-button {
 				background: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="30" height="25"><g fill="#737f8d" fill-rule="evenodd" clip-rule="evenodd"><path xmlns="http://www.w3.org/2000/svg" d="M17.338 12.485c-4.156 4.156-8.312 8.312-12.468 12.467-1.402-1.402-2.805-2.804-4.207-4.206 2.756-2.757 5.513-5.514 8.27-8.27C6.176 9.72 3.419 6.963.663 4.207L4.87 0c-.058-.059 12.555 12.562 12.468 12.485z"/><path xmlns="http://www.w3.org/2000/svg" d="M17.338 12.485c-4.156 4.156-8.312 8.312-12.468 12.467-1.402-1.402-2.805-2.804-4.207-4.206 2.756-2.757 5.513-5.514 8.27-8.27C6.176 9.72 3.419 6.963.663 4.207L4.87 0c-.058-.059 12.555 12.562 12.468 12.485z" transform="translate(12 0)"/></g></svg>') 50%/9px 12px no-repeat;
@@ -50,7 +50,7 @@ class BetterSearchPage {
 				opacity: 1;
 			}
 		`;
-			
+
 		this.defaults = {
 			settings: {
 				addFirstLast:	{value:true, 	description:"Adds a first and last page button."},
@@ -59,7 +59,7 @@ class BetterSearchPage {
 			}
 		};
 	}
-	
+
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		var settings = BDFDB.getAllData(this, "settings"); 
@@ -68,7 +68,7 @@ class BetterSearchPage {
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
 		}
 		settingshtml += `</div></div>`;
-		
+
 		let settingspanel = BDFDB.htmlToElement(settingshtml);
 
 		BDFDB.initElements(settingspanel, this);
@@ -100,9 +100,9 @@ class BetterSearchPage {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.loadMessage(this);     
-			
+
 			this.SearchNavigation = BDFDB.WebModules.findByProperties("searchNextPage","searchPreviousPage");
-			
+
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
@@ -116,14 +116,14 @@ class BetterSearchPage {
 			BDFDB.unloadMessage(this);
 		}
 	}
-	
-	
+
+
 	// begin of own functions
-	
+
 	processSearchResults (instance, wrapper) {
 		if (instance.props && instance.props.searchId) this.addNewControls(wrapper.querySelector(BDFDB.dotCN.searchresultspagination), instance.props.searchId);
 	}
-	
+
 	addNewControls (pagination, searchId) {
 		if (!pagination || !searchId || document.querySelector(".BSP-pagination, .BSP-pagination-button, .BSP-pagination-jumpinput")) return;
 		let searchResultsWrapper = BDFDB.getParentEle(BDFDB.dotCN.searchresultswrapper, pagination);
@@ -156,12 +156,12 @@ class BetterSearchPage {
 			pagination.appendChild(BDFDB.htmlToElement(`<div class="inputNumberWrapper inputNumberWrapperMini BSP-pagination-jumpinput ${BDFDB.disCN.inputwrapper}"><span class="numberinput-buttons-zone"><span class="numberinput-button-up"></span><span class="numberinput-button-down"></span></span><input type="number" min="1" max="${maxpage}" placeholder="${currentpage}" value="${currentpage}" class="${BDFDB.disCNS.inputmini + BDFDB.disCNS.input + BDFDB.disCN.size16}"></div>`));
 			pagination.appendChild(BDFDB.htmlToElement(`<div aria-label="Go To" class="pagination-button BSP-pagination-button BSP-pagination-jump"></div>`));
 		}
-		BDFDB.initElements(pagination);
+		BDFDB.initElements(pagination, this);
 		if (settings.cloneToTheTop) {
 			let BSPpaginaton = pagination.cloneNode(true);
 			BDFDB.addClass(BSPpaginaton, "BSP-pagination");
 			searchResultsWrapper.insertBefore(BSPpaginaton, searchResultsWrapper.firstElementChild);
-			BDFDB.initElements(BSPpaginaton);
+			BDFDB.initElements(BSPpaginaton, this);
 		}
 		var doJump = (input) => {
 			let value = input.value;

@@ -1,12 +1,10 @@
 module.exports = (Plugin, Api, Vendor) => {
-	if (typeof BDFDB !== "object") global.BDFDB = {$: Vendor.$, BDv2Api: Api};
-	
-	const {$} = Vendor;
+	if (!global.BDFDB || typeof BDFDB != "object") global.BDFDB = {BDv2Api: Api};
 
 	return class extends Plugin {
 		initConstructor () {
 			this.friendsOnlineList = {};
-			
+
 			this.timeLog = [];
 
 			this.timeLogModalMarkup =
@@ -46,9 +44,9 @@ module.exports = (Plugin, Api, Vendor) => {
 					<div class="log-avatar"></div>
 					<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCNS.flexchild + BDFDB.disCNS.overflowellipsis} log-description" style="flex: 1 1 auto;"></h3>
 				</div>`;
-				
+
 			this.dividerMarkup = `<div class="${BDFDB.disCNS.modaldivider + BDFDB.disCN.modaldividerdefault}"></div>`;
-			
+
 			this.css = `
 				${BDFDB.dotCN.guilds} > ${BDFDB.dotCN.friendsonline} {
 					cursor: pointer;
@@ -104,7 +102,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					background-color: #36393F;
 				}
 			`;
-				
+
 			this.defaults = {
 				settings: {
 					muteOnDND:			{value:false, 	description:"Do not notify me when I am DnD:"},
@@ -115,33 +113,35 @@ module.exports = (Plugin, Api, Vendor) => {
 		}
 
 		onStart () {
-			var libraryScript = null;
-			if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-				libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+			var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+			if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 				if (libraryScript) libraryScript.remove();
 				libraryScript = document.createElement("script");
 				libraryScript.setAttribute("type", "text/javascript");
 				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+				libraryScript.setAttribute("date", performance.now());
+				libraryScript.addEventListener("load", () => {
+					BDFDB.loaded = true;
+					this.initialize();
+				});
 				document.head.appendChild(libraryScript);
 			}
+			else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 			this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-			if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-			else libraryScript.addEventListener("load", () => {this.initialize();});
-			return true;
 		}
 
 		initialize () {
-			if (typeof BDFDB === "object") {
+			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				BDFDB.loadMessage(this);
-				
+
 				this.FriendUtils = BDFDB.WebModules.findByProperties("getFriendIDs", "getRelationships");
 				this.ChannelUtils = BDFDB.WebModules.findByProperties("getDMFromUserId");
 				this.ChannelSwitchUtils = BDFDB.WebModules.findByProperties("selectPrivateChannel");
 				this.UserMetaStore = BDFDB.WebModules.findByProperties("getStatuses", "getOnlineFriendCount");
 				this.UserUtils = BDFDB.WebModules.findByProperties("getUsers");
-				
+
 				var observer = null;
-				
+
 				observer = new MutationObserver((changes, _) => {
 					changes.forEach(
 						(change, i) => {
@@ -180,7 +180,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					);
 				});
 				BDFDB.addObserver(this, `${BDFDB.dotCN.guilds} > ${BDFDB.dotCN.friendsonline}`, {name:"friendCountObserver",instance:observer}, {childList:true, subtree:true, characterData:true});
-				
+
 				for (let id of this.FriendUtils.getFriendIDs()) {
 					this.friendsOnlineList[id] = this.UserMetaStore.getStatus(id) != "offline";
 				}
@@ -201,7 +201,7 @@ module.exports = (Plugin, Api, Vendor) => {
 		}
 
 		onStop () {
-			if (typeof BDFDB === "object") {
+			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				BDFDB.unloadMessage(this);
 				return true;
 			}
@@ -209,8 +209,8 @@ module.exports = (Plugin, Api, Vendor) => {
 				return false;
 			}
 		}
-		
-		
+
+
 		// begin of own functions
 
 		updateSettings (settingspanel) {
@@ -220,7 +220,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 			BDFDB.saveAllData(settings, this, "settings");
 		}
-		
+
 		saveAudio (settingspanel) {
 			var successSavedAudio = (parsedurl, parseddata) => {
 				if (parsedurl && parseddata) BDFDB.showToast(`Sound was saved successfully.`, {type:"success"});
@@ -229,7 +229,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				notificationsound.song = parseddata;
 				BDFDB.saveAllData(notificationsound, this, "notificationsound");
 			};
-			
+
 			var url = settingspanel.querySelector(".songInput").value;
 			if (url.length == 0) {
 				BDFDB.showToast(`Sound was set to the default sound.`, {type:"warn"});
@@ -258,8 +258,8 @@ module.exports = (Plugin, Api, Vendor) => {
 				});
 			}
 		}
-		
-		showTimeLog () {		
+
+		showTimeLog () {
 			var timeLogModal = $(this.timeLogModalMarkup);
 			let logs = this.timeLog.slice(0).reverse();
 			for (let log of logs) {
@@ -274,7 +274,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			timeLogModal.find(BDFDB.dotCN.modaldivider + ":last-of-type").remove();
 			BDFDB.appendModal(timeLogModal);
 		}
-		
+
 		getSettingsPanel () {
 			var settings = BDFDB.getAllData(this, "settings");
 			var notificationsound = BDFDB.loadAllData(this, "notificationsound");
@@ -298,7 +298,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			settingshtml += `</div>`;
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Batch set Users:</h3><button type="button" do-disable=true class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttoncolorprimary + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} disable-all" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Disable</div></button><button type="button" do-toast=true class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} toast-all" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Toast</div></button>${"Notification" in window ? `<button type="button" do-desktop=true class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorgreen + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} desktop-all" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Desktop</div></button>` : ``}</div>`;
 			settingshtml += `</div>`;
-				
+
 			var settingspanel = $(settingshtml)[0];
 
 			$(settingspanel)
@@ -347,7 +347,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					BDFDB.saveAllData(disabledata, this, "disabled");
 					BDFDB.saveAllData(desktopdata, this, "desktop");
 				});
-				
+
 			return settingspanel;
 		}
 	}

@@ -1,12 +1,10 @@
 module.exports = (Plugin, Api, Vendor) => {
-	if (typeof BDFDB !== "object") global.BDFDB = {$: Vendor.$, BDv2Api: Api};
-	
-	const {$} = Vendor;
+	if (!global.BDFDB || typeof BDFDB != "object") global.BDFDB = {BDv2Api: Api};
 
 	return class extends Plugin {
 		initConstructor () {
 			this.labels = {};
-			
+
 			this.channelContextEntryMarkup =
 				`<div class="${BDFDB.disCN.contextmenuitemgroup}">
 					<div class="${BDFDB.disCN.contextmenuitem} localchannelsettings-item ${BDFDB.disCN.contextmenuitemsubmenu}">
@@ -14,7 +12,7 @@ module.exports = (Plugin, Api, Vendor) => {
 						<div class="${BDFDB.disCN.contextmenuhint}"></div>
 					</div>
 				</div>`;
-				
+
 			this.channelContextSubMenuMarkup = 
 				`<div class="${BDFDB.disCN.contextmenu} editchannels-submenu">
 					<div class="${BDFDB.disCN.contextmenuitemgroup}">
@@ -77,34 +75,36 @@ module.exports = (Plugin, Api, Vendor) => {
 						</div>
 					</div>
 				</span>`;
-				
+
 			this.defaults = {
 				settings: {
 					changeInChannelHeader:	{value:true, 	description:"Change in Channel Header."}
 				}
 			};
 		}
-	
+
 		onStart () {
-			var libraryScript = null;
-			if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-				libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+			var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+			if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 				if (libraryScript) libraryScript.remove();
 				libraryScript = document.createElement("script");
 				libraryScript.setAttribute("type", "text/javascript");
 				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+				libraryScript.setAttribute("date", performance.now());
+				libraryScript.addEventListener("load", () => {
+					BDFDB.loaded = true;
+					this.initialize();
+				});
 				document.head.appendChild(libraryScript);
 			}
+			else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 			this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-			if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-			else libraryScript.addEventListener("load", () => {this.initialize();});
-			return true;
 		}
 
 		initialize () {
-			if (typeof BDFDB === "object") {
+			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				BDFDB.loadMessage(this);
-				
+
 				var observer = null;
 
 				observer = new MutationObserver((changes, _) => {
@@ -132,7 +132,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					);
 				});
 				BDFDB.addObserver(this, BDFDB.dotCN.channels, {name:"channelListObserver",instance:observer}, {childList: true, attributes:true, subtree: true});
-				
+
 				observer = new MutationObserver((changes, _) => {
 					changes.forEach(
 						(change, i) => {
@@ -147,9 +147,9 @@ module.exports = (Plugin, Api, Vendor) => {
 					);
 				});
 				BDFDB.addObserver(this, BDFDB.dotCN.appmount, {name:"channelContextObserver",instance:observer}, {childList: true});
-				
+
 				this.loadAllChannels();
-				
+
 				this.changeChannelHeader();
 
 				return true;
@@ -161,9 +161,9 @@ module.exports = (Plugin, Api, Vendor) => {
 		}
 
 		onStop () {
-			if (typeof BDFDB === "object") {
+			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				this.resetAllChannels();
-				
+
 				BDFDB.unloadMessage(this);
 				return true;
 			}
@@ -171,16 +171,16 @@ module.exports = (Plugin, Api, Vendor) => {
 				return false;
 			}
 		}
-		
+
 		onSwitch () {
-			if (typeof BDFDB === "object") {
+			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				$(`${BDFDB.dotCN.channelheadertitletext}[custom-editchannelsheader]`).find(BDFDB.dotCN.channelheaderchannelname + BDFDB.dotCN.channelheaderprivate).css("color", "").css("background-color", "").parent().removeAttr("custom-editchannelsheader");
 				this.loadAllChannels();
 				setImmediate(() => {this.changeChannelHeader();}); //setImmediate so EditChannels sets the color after EditUsers set it back to white
 			}
 		}
-		
-		
+
+
 		// begin of own functions
 
 		updateSettings (settingspanel) {
@@ -194,23 +194,23 @@ module.exports = (Plugin, Api, Vendor) => {
 		resetAll () {
 			if (confirm("Are you sure you want to reset all channels?")) {
 				BDFDB.removeAllData(this, "channels");
-				
+
 				this.resetAllChannels();
 			}
 		}
 
 		changeLanguageStrings () {
 			this.channelContextEntryMarkup = 	this.channelContextEntryMarkup.replace("REPLACE_context_localchannelsettings_text", this.labels.context_localchannelsettings_text);
-			
+
 			this.channelContextSubMenuMarkup = 	this.channelContextSubMenuMarkup.replace("REPLACE_submenu_channelsettings_text", this.labels.submenu_channelsettings_text);
 			this.channelContextSubMenuMarkup = 	this.channelContextSubMenuMarkup.replace("REPLACE_submenu_resetsettings_text", this.labels.submenu_resetsettings_text);
-			
+
 			this.channelSettingsModalMarkup = 	this.channelSettingsModalMarkup.replace("REPLACE_modal_header_text", this.labels.modal_header_text);
 			this.channelSettingsModalMarkup = 	this.channelSettingsModalMarkup.replace("REPLACE_modal_channelname_text", this.labels.modal_channelname_text);
 			this.channelSettingsModalMarkup = 	this.channelSettingsModalMarkup.replace("REPLACE_modal_colorpicker1_text", this.labels.modal_colorpicker1_text);
 			this.channelSettingsModalMarkup = 	this.channelSettingsModalMarkup.replace("REPLACE_btn_save_text", this.labels.btn_save_text);
 		}
-		
+
 		onContextMenu (context) {
 			if (!context || !context.tagName || !context.parentElement || context.querySelector(".localchannelsettings-item")) return;
 			var info = BDFDB.getKeyInformation({"node":context, "key":"channel"});
@@ -219,20 +219,20 @@ module.exports = (Plugin, Api, Vendor) => {
 					.on("mouseenter", ".localchannelsettings-item", (e) => {
 						this.createContextSubMenu(info, e, context);
 					});
-					
+
 				BDFDB.updateContextPosition(context);
 			}
 		}
-		
+
 		createContextSubMenu (info, e, context) {
 			var channelContextSubMenu = $(this.channelContextSubMenuMarkup);
-				
+
 			channelContextSubMenu
 				.on("click", ".channelsettings-item", () => {
 					$(context).hide();
 					this.showChannelSettings(info);
 				});
-				
+
 			if (BDFDB.loadData(info.id, this, "channels")) {
 				channelContextSubMenu
 					.find(".resetsettings-item")
@@ -242,18 +242,18 @@ module.exports = (Plugin, Api, Vendor) => {
 						this.removeChannelData(info);
 					});
 			}
-			
+
 			BDFDB.appendSubMenu(e.currentTarget, channelContextSubMenu);
 		}
-		
+
 		showChannelSettings (info) {
 			var channelObj = BDFDB.getDivOfChannel(info.id);
-			
+
 			var data = BDFDB.loadData(info.id, this, "channels");
-			
+
 			var name = data ? data.name : null;
 			var color = data ? data.color : null;
-			
+
 			var channelSettingsModal = $(this.channelSettingsModalMarkup);
 			channelSettingsModal.find(BDFDB.dotCN.modalguildname).text(info.name);
 			channelSettingsModal.find("#input-channelname").val(name);
@@ -263,20 +263,20 @@ module.exports = (Plugin, Api, Vendor) => {
 			channelSettingsModal
 				.on("click", ".btn-save", (event) => {
 					event.preventDefault();
-					
+
 					name = null;
 					if (channelSettingsModal.find("#input-channelname").val()) {
 						if (channelSettingsModal.find("#input-channelname").val().trim().length > 0) {
 							name = channelSettingsModal.find("#input-channelname").val().trim();
 						}
 					}
-					
+
 					color = BDFDB.getSwatchColor("swatch1");
 					if (color) {
 						if (color[0] < 30 && color[1] < 30 && color[2] < 30) BDFDB.colorCHANGE(color, 30);
 						else if (color[0] > 225 && color[1] > 225 && color[2] > 225) BDFDB.colorCHANGE(color, -30);
 					}
-					
+
 					if (name == null && color == null) {
 						this.removeChannelData(info.id);
 					}
@@ -286,56 +286,56 @@ module.exports = (Plugin, Api, Vendor) => {
 						this.changeChannelHeader();
 					}
 				});
-				
+
 			channelSettingsModal.find("#input-channelname").focus();
 		}
-		
+
 		removeChannelData (info) {
 			this.resetChannel(BDFDB.getDivOfChannel(info.id));
-			
+
 			BDFDB.removeData(info.id, this, "channels");
-			
+
 			this.changeChannelHeader();
 		}
-		
+
 		resetChannel (channelObj) {
 			if (!channelObj || !channelObj.div) return;
-			
+
 			var channel = channelObj.div.querySelector(BDFDB.dotCNC.channelname + BDFDB.dotCN.categorycolortransition);
-		
+
 			$(channelObj.div)
 				.removeAttr("custom-editchannels");
 			$(channel)
 				.css("color", "");
-				
+
 			BDFDB.setInnerText(channel, channelObj.name);
 		}
-		
+
 		loadChannel (channelObj) {
 			if (!channelObj || !channelObj.div) return;
-			
+
 			var channel = channelObj.div.querySelector(BDFDB.dotCNC.channelname + BDFDB.dotCN.categorycolortransition);
-			
+
 			var data = BDFDB.loadData(channelObj.id, this, "channels");
 			if (data) {
 				var name = data.name ? data.name : channelObj.name;
 				var color = data.color ? this.chooseColor(channel, data.color) : "";
-				
+
 				$(channelObj.div)
 					.attr("custom-editchannels", true);
 				$(channel)
 					.css("color", color);
-					
+
 				BDFDB.setInnerText(channel, name);
 			}
 		}
-		
+
 		loadAllChannels () {
 			for (let channelObj of BDFDB.readChannelList()) {
 				this.loadChannel(channelObj);
 			}
 		}
-		
+
 		changeChannelHeader () {
 			if (BDFDB.getData("changeInChannelHeader", this, "settings")) {
 				var channelHeader = document.querySelector(BDFDB.dotCNS.channelheadertitle + BDFDB.dotCN.channelheadertitletext);
@@ -349,7 +349,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					var color = data && data.color ? BDFDB.color2RGB(data.color) : "";
 					BDFDB.setInnerText(channel, name);
 					$(channel).css("color", color);
-					
+
 					if (data && (data.name || data.color)) {
 						$(channelHeader).attr("custom-editchannelsheader", true);
 					}
@@ -359,13 +359,13 @@ module.exports = (Plugin, Api, Vendor) => {
 				}
 			}
 		}
-		
+
 		resetAllChannels () {
 			document.querySelectorAll("[custom-editchannels]").forEach(channelDiv => {
 				var info = BDFDB.getKeyInformation({"node":channelDiv, "key":"channel"});
 				if (info) this.resetChannel({div:channelDiv,info});
 			});
-				
+
 			var channelHeader = document.querySelector("[custom-editchannelsheader]");
 			if (channelHeader) {
 				var info = BDFDB.getKeyInformation({"node":channelHeader, "key":"channel"});
@@ -393,7 +393,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 			return null;
 		}
-		
+
 		getSettingsPanel () {
 			var settings = BDFDB.getAllData(this, "settings"); 
 			var settingshtml = `<div class="DevilBro-settings ${this.name}-settings">`;
@@ -402,7 +402,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Reset all Channels.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} reset-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Reset</div></button></div>`;
 			settingshtml += `</div>`;
-			
+
 			var settingspanel = $(settingshtml)[0];
 
 			$(settingspanel)
@@ -410,7 +410,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				.on("click", ".reset-button", () => {this.resetAll();});
 			return settingspanel;
 		}
-		
+
 		setLabelsByLanguage () {
 			switch (BDFDB.getDiscordLanguage().id) {
 				case "hr":		//croatian

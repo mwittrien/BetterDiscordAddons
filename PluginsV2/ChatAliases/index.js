@@ -1,37 +1,37 @@
 module.exports = (Plugin, Api, Vendor) => {
-	if (typeof BDFDB !== "object") global.BDFDB = {$: Vendor.$, BDv2Api: Api};
-	
-	const {$} = Vendor;
+	if (!global.BDFDB || typeof BDFDB != "object") global.BDFDB = {BDv2Api: Api};
 
 	return class extends Plugin {
 		initConstructor () {
 			this.configstypes = ["case","exact","autoc","regex","file"];
-			
+
 			this.defaults = {
 				settings: {
 					addAutoComplete:	{value:true, 	description:"Add an Autocomplete-Menu for Non-Regex Aliases:"}
 				}
 			};
 		}
-		
+
 		onStart () {
-			var libraryScript = null;
-			if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-				libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+			var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+			if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 				if (libraryScript) libraryScript.remove();
 				libraryScript = document.createElement("script");
 				libraryScript.setAttribute("type", "text/javascript");
 				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+				libraryScript.setAttribute("date", performance.now());
+				libraryScript.addEventListener("load", () => {
+					BDFDB.loaded = true;
+					this.initialize();
+				});
 				document.head.appendChild(libraryScript);
 			}
+			else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 			this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-			if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-			else libraryScript.addEventListener("load", () => {this.initialize();});
-			return true;
 		}
 
 		initialize () {
-			if (typeof BDFDB === "object") {
+			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				BDFDB.loadMessage(this);
 
 				this.UploadModule = BDFDB.WebModules.findByProperties("instantBatchUpload");
@@ -61,9 +61,9 @@ module.exports = (Plugin, Api, Vendor) => {
 					aliases[alias].autoc = aliases[alias].autoc == undefined ? !aliases[alias].regex : aliases[alias].autoc;
 				}
 				BDFDB.saveAllData(aliases, this, "words");
-				
+
 				document.querySelectorAll("textarea" + BDFDB.dotCN.textarea).forEach(textarea => {this.bindEventToTextArea(textarea);});
-				
+
 				$(document).off("click." + this.name).on("click." + this.name, (e) => {
 					if (!e.target.tagName === "TEXTAREA") $(".autocompleteAliases, .autocompleteAliasesRow").remove();
 				});
@@ -77,9 +77,9 @@ module.exports = (Plugin, Api, Vendor) => {
 		}
 
 		onStop () {
-			if (typeof BDFDB === "object") {
+			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				$(".autocompleteAliases, .autocompleteAliasesRow").remove();
-				
+
 				BDFDB.unloadMessage(this);
 				return true;
 			}
@@ -97,7 +97,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				settings[input.value] = input.checked;
 			}
 			BDFDB.saveAllData(settings, this, "settings");
-			
+
 			document.querySelectorAll("textarea" + BDFDB.dotCN.textarea).forEach(textarea => {this.bindEventToTextArea(textarea);});
 		}
 
@@ -164,7 +164,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					containerhtml += `</div><div word="${word}" action="remove" class="${BDFDB.disCN.hovercardbutton} remove-word"></div></div>`;
 				}
 				$(settingspanel).find(".alias-list").html(containerhtml);
-				BDFDB.initElements(settingspanel);
+				BDFDB.initElements(settingspanel, this);
 			}
 		}
 
@@ -277,7 +277,7 @@ module.exports = (Plugin, Api, Vendor) => {
 						clearTimeout(textarea.chataliastimeout);
 						textarea.chataliastimeout = setTimeout(() => {this.addAutoCompleteMenu(textarea);},100);
 					}
-					
+
 					if (!e.ctrlKey && e.which != 38 && e.which != 40) {
 						if (!(e.which == 39 && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length)) {
 							$(".autocompleteAliases, .autocompleteAliasesRow").remove();
@@ -291,7 +291,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					}
 				});
 		}
-		
+
 		addAutoCompleteMenu (textarea) {
 			if (textarea.parentElement.querySelector(".autocompleteAliasesRow")) return;
 			let words = textarea.value.split(" ");
@@ -330,14 +330,14 @@ module.exports = (Plugin, Api, Vendor) => {
 					else {
 						amount -= autocompletemenu.querySelectorAll(BDFDB.dotCN.autocompleteselectable).length;
 					}
-					
+
 					$(autocompletemenu)
 						.append(`<div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteAliasesRow"><div class="${BDFDB.disCN.autocompleteselector} autocompleteAliasesSelector"><div class="${BDFDB.disCNS.autocompletecontenttitle + BDFDB.disCNS.small + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCN.weightsemibold}">Aliases: <strong class="lastword">${BDFDB.encodeToHTML(lastword)}</strong></div></div></div>`)
 						.off("mouseenter." + this.name).on("mouseenter." + this.name, BDFDB.dotCN.autocompleteselectable, (e) => {
 							autocompletemenu.querySelectorAll(BDFDB.dotCN.autocompleteselected).forEach(selected => {selected.classList.remove(BDFDB.disCN.autocompleteselected);});
 							e.currentTarget.classList.add(BDFDB.disCN.autocompleteselected);
 						});
-						
+
 					for (let alias in matchedaliases) {
 						if (amount-- < 1) break;
 						$(`<div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteAliasesRow"><div class="${BDFDB.disCNS.autocompleteselector + BDFDB.disCN.autocompleteselectable} autocompleteAliasesSelector"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.autocompletecontent}" style="flex: 1 1 auto;"><div class="${BDFDB.disCN.flexchild} aliasword" style="flex: 1 1 auto;">${BDFDB.encodeToHTML(alias)}</div><div class="${BDFDB.disCNS.autocompletedescription + BDFDB.disCN.flexchild}">${BDFDB.encodeToHTML(matchedaliases[alias].replace)}</div></div></div></div>`)
@@ -352,7 +352,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				}
 			}
 		}
-		
+
 		getNextSelection (menu, selected, forward) {
 			selected = selected ? selected : menu.querySelector(BDFDB.dotCN.autocompleteselected).parentElement;
 			let next, sibling = forward ? selected.nextElementSibling : selected.previousElementSibling;
@@ -365,7 +365,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 			return next ? next : this.getNextSelection(menu, sibling, forward);
 		}
-		
+
 		swapWordWithAlias (textarea) {
 			let aliasword = textarea.parentElement.querySelector(".autocompleteAliasesRow " + BDFDB.dotCN.autocompleteselected + " .aliasword").innerText;
 			let lastword = textarea.parentElement.querySelector(".autocompleteAliasesRow .lastword").innerText;
@@ -432,7 +432,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				rest = string.slice(a.indexOf(b)+b.length);
 			}
 		}
-		
+
 		getSettingsPanel () {
 			var settings = BDFDB.getAllData(this, "settings"); 
 			var words = BDFDB.loadAllData(this, "words");
@@ -472,7 +472,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				.on("click", ".toggle-info", (e) => {this.toggleInfo(settingspanel, e.currentTarget);});
 			return settingspanel;
 		}
-		
+
 		onSettingsClosed () {
 			document.querySelectorAll("textarea" + BDFDB.dotCN.textarea).forEach(textarea => {this.bindEventToTextArea(textarea);});
 		}

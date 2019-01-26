@@ -8,7 +8,7 @@ class ForceImagePreviews {
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Forces embedded Image Previews, if Discord doesn't do it itself. Caution: Externals Images can contain malicious code and reveal your IP!";}
-	
+
 	initConstructor () {
 		this.patchModules = {
 			"Message":"componentDidMount"
@@ -40,7 +40,7 @@ class ForceImagePreviews {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
-			
+
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
@@ -54,11 +54,11 @@ class ForceImagePreviews {
 			BDFDB.unloadMessage(this);
 		}
 	}
-	
-	
+
+
 	// begin of own functions
-	
-	
+
+
 	processMessage (instance, wrapper) {
 		if (instance.props && instance.props.message) {
 			let accessory = wrapper.querySelector(BDFDB.dotCN.messageaccessory);
@@ -77,7 +77,7 @@ class ForceImagePreviews {
 			}
 		}
 	}
-	
+
 	addItemToAccessory (previmage, links, accessory) {
 		let item = links.shift();
 		if (!item) return;
@@ -122,7 +122,7 @@ class ForceImagePreviews {
 			});
 		}
 	}
-	
+
 	insertEmbed (embed, previmage, links, accessory) {
 		let prev = accessory.querySelector(`${BDFDB.dotCNS.embed + BDFDB.dotCN.embedimage}[href="${previmage ? this.parseSrc(previmage.src) : void 0}"]`);
 		let next = accessory.querySelector(`${BDFDB.dotCNS.embed + BDFDB.dotCN.embedimage}[href="${links[0] ? this.parseSrc(links[0].src) : void 0}"]`);
@@ -134,7 +134,7 @@ class ForceImagePreviews {
 		let scroller = document.querySelector(BDFDB.dotCNS.chat + BDFDB.dotCN.messages);
 		if (scroller) scroller.scrollTop += (BDFDB.getRects(embed).height + (isempty ? 15 : 0));
 	}
-	
+
 	parseSrc (src) {
 		return src.replace(/"/g, "");
 	}

@@ -8,16 +8,16 @@ class PersonalPins {
 	getVersion () {return "1.7.4";}
 
 	getAuthor () {return "DevilBro";}
-	
+
 	initConstructor () {
 		this.labels = {};
-		
+
 		this.patchModules = {
 			"HeaderBar":["componentDidMount","componentDidUpdate"],
 			"Message":"componentDidMount",
 			"MessageOptionPopout":"componentDidMount"
 		};
-		
+
 		this.notesButtonMarkup =
 			`<span class="${BDFDB.disCN.channelheadericonmargin} notes-button">
 				<svg class="${BDFDB.disCNS.channelheadericoninactive + BDFDB.disCN.channelheadericon}" name="Note" width="16" height="16" viewBox="0 0 26 26">
@@ -30,7 +30,7 @@ class PersonalPins {
 					</g>
 				</svg>
 			</span>`;
-			
+
 		this.notesPopoutMarkup = 
 			`<div class="${BDFDB.disCNS.popout + BDFDB.disCNS.popoutbottomright + BDFDB.disCNS.popoutnoarrow + BDFDB.disCN.popoutnoshadow} popout-personalpins-notes DevilBro-modal" style="z-index: 1000; visibility: visible; left: 544.844px; top: 35.9896px; transform: translateX(-100%) translateY(0%) translateZ(0px);">
 				<div class="${BDFDB.disCNS.messagespopoutwrap + BDFDB.disCNS.recentmentionspopout + BDFDB.disCN.popoutthemedpopout}" style="max-height: 740px; width: 500px;">
@@ -67,7 +67,7 @@ class PersonalPins {
 					</div>
 				</div>
 			</div>`;
-			
+
 		this.sortPopoutMarkup =
 			`<div class="${BDFDB.disCNS.popout + BDFDB.disCNS.popoutbottomright + BDFDB.disCN.popoutnoshadow} personalpins-sort-popout" style="z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
 				<div>
@@ -79,7 +79,7 @@ class PersonalPins {
 					</div>
 				</div>
 			</div>`;
-		
+
 		this.messagePinContextEntryMarkup =
 			`<div class="${BDFDB.disCN.contextmenuitemgroup}">
 				<div class="${BDFDB.disCN.contextmenuitem} personalpins-item personalpins-pin-item">
@@ -87,7 +87,7 @@ class PersonalPins {
 					<div class="${BDFDB.disCN.contextmenuhint}"></div>
 				</div>
 			</div>`;
-		
+
 		this.messageUnpinContextEntryMarkup =
 			`<div class="${BDFDB.disCN.contextmenuitemgroup}">
 				<div class="${BDFDB.disCN.contextmenuitem} personalpins-item personalpins-unpin-item">
@@ -95,23 +95,23 @@ class PersonalPins {
 					<div class="${BDFDB.disCN.contextmenuhint}"></div>
 				</div>
 			</div>`;
-			
+
 		this.popoutPinEntryMarkup = 
 			`<button role="menuitem" type="button" class="${BDFDB.disCNS.optionpopoutitem + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow} personalpins-itembtn personalpins-pin-itembtn">
 				<div class="${BDFDB.disCN.buttoncontents}">REPLACE_popout_pinoption_text</div>
 			</button>`;
-			
+
 		this.popoutUnpinEntryMarkup = 
 			`<button role="menuitem" type="button" class="${BDFDB.disCNS.optionpopoutitem + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow} personalpins-itembtn personalpins-unpin-itembtn">
 				<div class="${BDFDB.disCN.buttoncontents}">REPLACE_popout_unpinoption_text</div>
 			</button>`;
-			
+
 		this.messageDividerMarkup = 
 			`<div class="${BDFDB.disCN.messagespopoutchannelseparator}">
 				<span tabindex="0" class="${BDFDB.disCN.messagespopoutchannelname}" role="button"></span>
 				<span class=${BDFDB.disCN.messagespopoutguildname}></span>
 			</div>`;
-			
+
 		this.messageMarkup = 
 			`<div class="${BDFDB.disCN.messagespopoutmessagegroupwrapper}">
 				<div class="${BDFDB.disCN.messagespopoutmessagegroupwrapperoffsetcorrection}">
@@ -154,13 +154,13 @@ class PersonalPins {
 				</div>
 			</div>`;
 	}
-	
+
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		let settingshtml = `<div class="${this.name}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="DevilBro-settings-inner">`;
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Delete all Notes.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} reset-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Reset</div></button></div>`;
 		settingshtml += `</div></div>`;
-		
+
 		let settingspanel = BDFDB.htmlToElement(settingshtml);
 
 		BDFDB.initElements(settingspanel, this);
@@ -198,7 +198,7 @@ class PersonalPins {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.loadMessage(this); 
-			
+
 			this.SelectChannelUtils = BDFDB.WebModules.findByProperties("selectGuild","selectChannel");
 			this.GuildUtils = BDFDB.WebModules.findByProperties("getGuilds","getGuild");
 			this.ChannelUtils = BDFDB.WebModules.findByProperties("getChannels","getChannel");
@@ -208,37 +208,7 @@ class PersonalPins {
 			this.LastChannelStore = BDFDB.WebModules.findByProperties("getLastSelectedChannelId");
 			this.HistoryUtils = BDFDB.WebModules.findByProperties("transitionTo", "replaceWith", "getHistory");
 			this.MainDiscord = BDFDB.WebModules.findByProperties("ActionTypes");
-			
-			/* REMOVE 11.01.2019 */
-			let p = BDFDB.loadAllData(this, "pins");
-			for (let g in p) {
-				for (let c in p[g]) {
-					for (let m in p[g][c]) {
-						if (p[g][c][m].serverID) {
-							p[g][c][m].guild_id = p[g][c][m].serverID;
-							delete p[g][c][m].serverID;
-							p[g][c][m].guild_name = p[g][c][m].serverName;
-							delete p[g][c][m].serverName;
-							p[g][c][m].channel_id = p[g][c][m].channelID;
-							delete p[g][c][m].channelID;
-							p[g][c][m].channel_name = p[g][c][m].channelName;
-							delete p[g][c][m].channelName;
-							p[g][c][m].author_id = p[g][c][m].authorID;
-							delete p[g][c][m].authorID;
-							p[g][c][m].author_name = p[g][c][m].authorName;
-							delete p[g][c][m].authorName;
-							p[g][c][m].dmuser_id = p[g][c][m].dmUserID;
-							delete p[g][c][m].dmUserID;
-							p[g][c][m] = BDFDB.sortObject(p[g][c][m]);
-						}
-						if (BDFDB.isObjectEmpty(p[g][c][m])) delete p[g][c][m];
-					}
-					if (BDFDB.isObjectEmpty(p[g][c])) delete p[g][c];
-				}
-				if (BDFDB.isObjectEmpty(p[g])) delete p[g];
-			}
-			BDFDB.saveAllData(p, this, "pins");
-			
+
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
@@ -254,30 +224,30 @@ class PersonalPins {
 		}
 	}
 
-	
+
 	// begin of own functions
-	
+
 	changeLanguageStrings () {
 		this.messagePinContextEntryMarkup = 	this.messagePinContextEntryMarkup.replace("REPLACE_context_pinoption_text", this.labels.context_pinoption_text);
 		this.messageUnpinContextEntryMarkup = 	this.messageUnpinContextEntryMarkup.replace("REPLACE_context_unpinoption_text", this.labels.context_unpinoption_text);
-		
+
 		this.notesPopoutMarkup = 				this.notesPopoutMarkup.replace("REPLACE_popout_note_text", this.labels.popout_note_text);
 		this.notesPopoutMarkup = 				this.notesPopoutMarkup.replace("REPLACE_popout_channel_text", this.labels.popout_channel_text);
 		this.notesPopoutMarkup = 				this.notesPopoutMarkup.replace("REPLACE_popout_server_text", this.labels.popout_server_text);
 		this.notesPopoutMarkup = 				this.notesPopoutMarkup.replace("REPLACE_popout_allservers_text", this.labels.popout_allservers_text);
 		this.notesPopoutMarkup = 				this.notesPopoutMarkup.replace("REPLACE_popout_sort_text", this.labels.popout_sort_text);
 		this.notesPopoutMarkup = 				this.notesPopoutMarkup.replace("REPLACE_popout_messagesort_text", this.labels.popout_messagesort_text);
-		
+
 		this.messageMarkup = 					this.messageMarkup.replace("REPLACE_popout_jump_text", this.labels.popout_jump_text);
 		this.messageMarkup = 					this.messageMarkup.replace("REPLACE_popout_copy_text", this.labels.popout_copy_text);
-		
+
 		this.sortPopoutMarkup = 				this.sortPopoutMarkup.replace("REPLACE_popout_messagesort_text", this.labels.popout_messagesort_text);
 		this.sortPopoutMarkup = 				this.sortPopoutMarkup.replace("REPLACE_popout_datesort_text", this.labels.popout_datesort_text);
-		
+
 		this.popoutPinEntryMarkup = 			this.popoutPinEntryMarkup.replace("REPLACE_popout_pinoption_text", this.labels.popout_pinoption_text);
 		this.popoutUnpinEntryMarkup = 			this.popoutUnpinEntryMarkup.replace("REPLACE_popout_unpinoption_text", this.labels.context_unpinoption_text);
 	}
-	
+
 	onMessageContextMenu (instance, menu) {
 		if (instance.props && instance.props.message && instance.props.channel && instance.props.target && !menu.querySelector(".personalpins-item")) {
 			let pinentry = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:menu,name:"MessagePinItem"}));
@@ -294,7 +264,7 @@ class PersonalPins {
 			}
 		}
 	}
-	
+
 	processHeaderBar (instance, wrapper) {
 		BDFDB.removeEles(".notes-button");
 		let search = wrapper.querySelector(BDFDB.dotCN.channelheadersearch);
@@ -309,7 +279,7 @@ class PersonalPins {
 			BDFDB.createTooltip(this.labels.popout_note_text, icon, {type:"bottom",selector:"note-button-tooltip"});
 		});
 	}
-	
+
 	processMessage (instance, wrapper) {  
 		if (instance.props && typeof instance.props.renderButtons == "function" && !wrapper.querySelector(BDFDB.dotCN.optionpopoutbutton)) {
 			let buttonwrap = wrapper.querySelector(BDFDB.dotCN.messagebuttoncontainer);
@@ -320,7 +290,7 @@ class PersonalPins {
 			}
 		}
 	}
-	
+
 	processMessageOptionPopout (instance, wrapper) {
 		if (instance.props.message && instance.props.channel && instance._reactInternalFiber.memoizedProps.target && !wrapper.querySelector(".personalpins-itembtn")) {
 			let {messagediv, pos} = this.getMessageAndPos(instance._reactInternalFiber.memoizedProps.target);
@@ -333,14 +303,14 @@ class PersonalPins {
 			});
 		}
 	}
-	
+
 	openNotesPopout (button) {
 		let container = document.querySelector(BDFDB.dotCN.popouts);
 		if (!container || BDFDB.containsClass(button, "popout-open")) return;
 		BDFDB.addClass(button, "popout-open");
 		let notespopout = BDFDB.htmlToElement(this.notesPopoutMarkup);
 		container.appendChild(notespopout);
-		BDFDB.initElements(notespopout);
+		BDFDB.initElements(notespopout, this);
 		let buttonrects = BDFDB.getRects(button); 
 		notespopout.style.setProperty("left", buttonrects.left + buttonrects.width/2 + "px");
 		notespopout.style.setProperty("top", buttonrects.top + buttonrects.height + "px")
@@ -358,7 +328,7 @@ class PersonalPins {
 		notespopout.querySelector(BDFDB.dotCN.recentmentionsmentionfilter).addEventListener("click", e => {
 			BDFDB.createSortPopout(e.currentTarget, this.sortPopoutMarkup, () => {this.addNotes(notespopout);});
 		});
-		
+
 		var removePopout = e => {
 			if (!notespopout.contains(e.target) && !BDFDB.getParentEle(".personalpins-sort-popout", e.target)) {
 				document.removeEventListener("mousedown", removePopout);
@@ -367,10 +337,10 @@ class PersonalPins {
 			}
 		};
 		document.addEventListener("mousedown", removePopout);
-		
+
 		this.addNotes(notespopout);
 	}
-	
+
 	addNotes (notespopout) {
 		BDFDB.removeEles(notespopout.querySelectorAll(BDFDB.dotCNC.messagegroupwrapper + BDFDB.dotCN.messagespopoutchannelseparator));
 		let channel = BDFDB.getSelectedChannel();
@@ -410,7 +380,7 @@ class PersonalPins {
 			}
 		}
 	}
-	
+
 	appendNote (container, noteData, placeholder) {
 		if (!container || !noteData) return;
 		let server = this.GuildUtils.getGuild(noteData.guild_id) || {};
@@ -507,7 +477,7 @@ class PersonalPins {
 			}
 		});
 	}
-	
+
 	startYoutubeVideo (button) {
 		let embedwrapper = BDFDB.getParentEle(BDFDB.dotCN.embedvideo, button);
 		let ytlink = embedwrapper.parentElement.querySelector(BDFDB.dotCN.embedtitle).href;
@@ -520,7 +490,7 @@ class PersonalPins {
 			}
 		});
 	}
-	
+
 	addMessageToNotes (message, target, channel) {
 		if (!message || !target) return;
 		let {messagediv, pos} = this.getMessageAndPos(target);
@@ -564,7 +534,7 @@ class PersonalPins {
 		}
 		else this.removeNoteData(pins[guild_id][channel.id][message.id + "_" + pos]);
 	}
-	
+
 	getNoteData (message, target, channel) {
 		if (!message || !target) return;
 		let {messagediv, pos} = this.getMessageAndPos(target);
@@ -574,7 +544,7 @@ class PersonalPins {
 		let guildid = channel.guild_id ? channel.guild_id : "@me";
 		return pins[guildid] && pins[guildid][channel.id] && pins[guildid][channel.id][message.id + "_" + pos] ? pins[guildid][channel.id][message.id + "_" + pos] : null;
 	}
-	
+
 	removeNoteData (noteData) {
 		let pins = BDFDB.loadAllData(this, "pins");
 		delete pins[noteData.guild_id][noteData.channel_id][noteData.id + "_" + noteData.pos];
@@ -585,13 +555,13 @@ class PersonalPins {
 		BDFDB.saveAllData(pins, this, "pins");
 		BDFDB.showToast(this.labels.toast_noteremove_text, {type:"danger"});
 	}
-	
+
 	getMessageAndPos (target) {
 		let messagediv = BDFDB.getParentEle(BDFDB.dotCN.message, target);
 		let pos = messagediv ? Array.from(messagediv.parentElement.querySelectorAll(BDFDB.dotCN.message)).indexOf(messagediv) : -1;
 		return {messagediv, pos};
 	}
-	
+
 	setLabelsByLanguage () {
 		switch (BDFDB.getDiscordLanguage().id) {
 			case "hr":		//croatian

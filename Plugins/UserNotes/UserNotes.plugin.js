@@ -8,8 +8,8 @@ class UserNotes {
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Allows you to write your own user notes wihtout a character limit.";}
-	
-	initConstructor () {		
+
+	initConstructor () {
 		this.css = `
 			.${this.name}-modal textarea {
 				rows: 0;
@@ -25,7 +25,7 @@ class UserNotes {
 					<div class="${BDFDB.disCN.contextmenuhint}"></div>
 				</div>
 			</div>`;
-			
+
 		this.userNotesModalMarkup =
 			`<span class="${this.name}-modal DevilBro-modal">
 				<div class="${BDFDB.disCN.backdrop}"></div>
@@ -64,14 +64,14 @@ class UserNotes {
 				</div>
 			</span>`;
 	}
-	
+
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		var settings = BDFDB.getAllData(this, "settings"); 
 		var settingshtml = `<div class="${this.name}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="DevilBro-settings-inner">`;
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Remove all User Notes.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} remove-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Remove</div></button></div>`;
 		settingshtml += `</div></div>`;
-		
+
 		let settingspanel = BDFDB.htmlToElement(settingshtml);
 
 		BDFDB.initElements(settingspanel, this);
@@ -117,14 +117,14 @@ class UserNotes {
 
 
 	stop () {
-		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {			
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.unloadMessage(this);
 		}
 	}
 
-	
+
 	// begin of own functions
-	
+
 	onUserContextMenu (instance, menu) {
 		if (instance.props && instance.props.user && !menu.querySelector(".localusernotes-item")) {
 			let userContextEntry = BDFDB.htmlToElement(this.userContextEntryMarkup);
@@ -135,10 +135,10 @@ class UserNotes {
 			menu.appendChild(userContextEntry);
 		}
 	}
-	
+
 	openNotesModal (info) {
 		let note = BDFDB.loadData(info.id, this, "notes") || "";
-		
+
 		let userNotesModal = BDFDB.htmlToElement(this.userNotesModalMarkup);
 		let noteinput = userNotesModal.querySelector("#modal-inputtext")
 		userNotesModal.querySelector(BDFDB.dotCN.modalguildname).text(info.username);

@@ -8,12 +8,12 @@ class ThemeRepo {
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Allows you to preview all themes from the theme repo and download them on the fly. Repo button is in the theme settings.";}
-	
+
 	initConstructor () {
 		this.patchModules = {
 			"V2C_List":"componentDidMount"
 		};
-		
+
 		this.sortings = {
 			sort: {
 				name:			"Name",
@@ -28,32 +28,32 @@ class ThemeRepo {
 				desc:			"Descending"
 			}
 		};
-		
+
 		this.loading = {is:false, timeout:null, amount:0};
-		
+
 		this.grabbedThemes = [];
 		this.foundThemes = [];
 		this.loadedThemes = {}; 
-		
+
 		this.updateInterval;
-		
+
 		this.themeFixerCSS = `${BDFDB.dotCNC.appmount + BDFDB.dotCNC.appcontainer + BDFDB.dotCNC.channelheaderheaderbar + BDFDB.dotCNC.channelheadertitle + BDFDB.dotCNC.guildchannels + BDFDB.dotCNC.channels + BDFDB.dotCNC.callcurrentcontainer + BDFDB.dotCNC.callcurrentvideo + BDFDB.dotCNC.callcurrentdetails + BDFDB.dotCNC.accountinfo + BDFDB.dotCNC.nochannel + BDFDB.dotCNC.friends + BDFDB.dotCNC.friendstable + BDFDB.dotCNC.friendstableheader + BDFDB.dotCNC.guilds + BDFDB.dotCNC.guildswrapper + BDFDB.dotCNC.channelheadertitle + BDFDB.dotCNC.typing + BDFDB.dotCNS.emojipicker + BDFDB.dotCNS.emojipickerscroller + BDFDB.dotCN.emojipickeremojiitem + BDFDB.dotCNC.emojipickerselected + BDFDB.dotCNC.members + BDFDB.dotCNC.chat + BDFDB.dotCNS.chat+ "form," + BDFDB.dotCNC.chatcontent + BDFDB.dotCNC.messageswrapper + BDFDB.dotCNC.searchresultswrap + BDFDB.dotCNC.searchresultschannelname + BDFDB.dotCNC.searchresultssearchheader + BDFDB.dotCNC.giftinventory + BDFDB.dotCNC.activityfeed + BDFDB.dotCNC.lfg + BDFDB.dotCNC.applicationstore + BDFDB.dotCNC.gamelibrary + BDFDB.dotCNC.gamelibrarytableheader + BDFDB.dotCNC.standardsidebarview + BDFDB.dotCNC.sidebarregion + BDFDB.dotCNC.contentregion + BDFDB.dotCN.scroller} {background: transparent !important;} ${BDFDB.dotCNC.layer + BDFDB.dotCNC.layers + BDFDB.dotCN.titlebar} {background: rgba(0,0,0,0.18) !important;} ${BDFDB.dotCN.card}:not([style*="background-color"]) {background: rgba(0,0,0,0.4) !important;}`;
-		
+
 		this.themeRepoButtonMarkup = 
 			`<button class="bd-pfbtn bd-themerepobutton">Theme Repo</button>`;
-		
+
 		this.settingsContextEntryMarkup =
 			`<div class="${BDFDB.disCN.contextmenuitem} themerepo-item">
 				<span>Theme Repo</span>
 				<div class="${BDFDB.disCN.contextmenuhint}"></div>
 			</div>`;
-			
+
 		this.themeRepoLoadingIconMarkup = 
 			`<svg class="themerepo-loadingicon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="42" height="31" viewBox="0 0 483 332">
 				<path d="M0.000 39.479 L 0.000 78.957 43.575 78.957 L 87.151 78.957 87.151 204.097 L 87.151 329.236 129.609 329.236 L 172.067 329.236 172.067 204.097 L 172.067 78.957 215.642 78.957 L 259.218 78.957 259.218 39.479 L 259.218 0.000 129.609 0.000 L 0.000 0.000 0.000 39.479" stroke="none" fill="#7289da" fill-rule="evenodd"></path>
 				<path d="M274.115 38.624 L 274.115 77.248 280.261 77.734 C 309.962 80.083,325.986 106.575,313.378 132.486 C 305.279 149.131,295.114 152.700,255.800 152.700 L 230.168 152.700 230.168 123.277 L 230.168 93.855 208.566 93.855 L 186.965 93.855 186.965 211.546 L 186.965 329.236 208.566 329.236 L 230.168 329.236 230.168 277.068 L 230.168 224.899 237.268 225.113 L 244.368 225.326 282.215 277.095 L 320.062 328.864 360.031 329.057 L 400.000 329.249 400.000 313.283 L 400.000 297.317 367.924 256.908 L 335.848 216.499 340.182 214.869 C 376.035 201.391,395.726 170.616,399.382 122.342 C 405.008 48.071,360.214 0.000,285.379 0.000 L 274.115 0.000 274.115 38.624" stroke="none" fill="#7f8186" fill-rule="evenodd"></path>
 			</svg>`;
-		
+
 		this.frameMarkup = 
 			`<iframe class="discordPreview" src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/DiscordPreview.html"></iframe>`;
 
@@ -95,7 +95,7 @@ class ThemeRepo {
 					<button class="${BDFDB.disCN._reposettingsbutton} btn-download" style="margin-left: 0 !important;">Download</button>
 				</div>
 			</li>`;
-			
+
 		this.themeRepoModalMarkup =
 			`<span class="${this.name}-modal Repo-modal DevilBro-modal">
 				<div class="${BDFDB.disCN.backdrop}"></div>
@@ -213,7 +213,7 @@ class ThemeRepo {
 					</div>
 				</div>
 			</span>`;
-			
+
 		this.sortPopoutMarkup =
 			`<div class="${BDFDB.disCNS.popout + BDFDB.disCNS.popoutbottomright + BDFDB.disCN.popoutnoshadow} themerepo-sort-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
 				<div>
@@ -224,7 +224,7 @@ class ThemeRepo {
 					</div>
 				</div>
 			</div>`;
-			
+
 		this.orderPopoutMarkup =
 			`<div class="${BDFDB.disCNS.popout + BDFDB.disCNS.popoutbottomright + BDFDB.disCN.popoutnoshadow} themerepo-order-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
 				<div>
@@ -235,7 +235,7 @@ class ThemeRepo {
 					</div>
 				</div>
 			</div>`;
-		
+
 		this.css = `
 			${BDFDB.dotCN.app} > .repo-loadingwrapper {
 				position: absolute;
@@ -291,7 +291,7 @@ class ThemeRepo {
 				pointer-events: none !important;
 			}`;
 	}
-	
+
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		var settingshtml = `<div class="${this.name}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="DevilBro-settings-inner">`;
@@ -305,7 +305,7 @@ class ThemeRepo {
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Force all Themes to be fetched again.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} refresh-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Refresh</div></button></div>`;
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Remove all added Themes from your own list.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} remove-all" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Reset</div></button></div>`;
 		settingshtml += `</div></div>`;
-		
+
 		let settingspanel = BDFDB.htmlToElement(settingshtml);
 
 		BDFDB.initElements(settingspanel, this);
@@ -345,11 +345,11 @@ class ThemeRepo {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
-			
+
 			this.loadThemes();
-			
+
 			this.updateInterval = setInterval(() => {this.checkForNewThemes();},1000*60*30);
-			
+
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
@@ -362,16 +362,16 @@ class ThemeRepo {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			clearInterval(this.updateInterval);
 			clearTimeout(this.loading.timeout);
-						
+
 			BDFDB.removeEles(".discordPreview",".themerepo-notice",".bd-themerepobutton",".themerepo-loadingicon",BDFDB.dotCN.app + " > .repo-loadingwrapper:empty");
-			
+
 			BDFDB.unloadMessage(this);
 		}
 	}
 
-	
+
 	// begin of own functions
-	
+
 	onUserSettingsCogContextMenu (instance, menu) {
 		let observer = new MutationObserver(changes => {
 			changes.forEach(change => {
@@ -394,7 +394,7 @@ class ThemeRepo {
 		});
 		observer.observe(menu, {childList: true, subtree:true});
 	}
-	
+
 	processV2CList (instance, wrapper) {
 		if (!document.querySelector(".bd-themerepobutton") && window.PluginUpdates && window.PluginUpdates.plugins && instance._reactInternalFiber.key && instance._reactInternalFiber.key.split("-")[0] == "theme") {
 			var folderbutton = document.querySelector(BDFDB.dotCN._repofolderbutton);
@@ -405,12 +405,12 @@ class ThemeRepo {
 				});
 				repoButton.addEventListener("mouseenter", () => {
 					BDFDB.createTooltip("Open Theme Repo", repoButton, {type:"top",selector:"themerepo-button-tooltip"});
-				});	
+				});
 				folderbutton.parentElement.insertBefore(repoButton, folderbutton.nextSibling);
 			}
 		}
 	};
-	
+
 	addThemeToOwnList (settingspanel) {
 		var themeUrlInput = settingspanel.querySelector("#input-themeurl");
 		var themeList = settingspanel.querySelector(".theme-list");
@@ -427,7 +427,7 @@ class ThemeRepo {
 			}
 		}
 	}
-	
+
 	removeThemeFromOwnList (e) {
 		var entry = e.currentTarget.parentElement;
 		var url = entry.querySelector(".entryurl").textContent;
@@ -436,25 +436,25 @@ class ThemeRepo {
 		BDFDB.removeFromArray(ownlist, url);
 		BDFDB.saveData("ownlist", ownlist, this, "ownlist");
 	}
-	
+
 	removeAllFromOwnList (settingspanel) {
 		BDFDB.openConfirmModal(this, "Are you sure you want to remove all added Themes from your own list?", () => {
 			BDFDB.saveData("ownlist", [], this, "ownlist");
 			BDFDB.removeEles(settingspanel.querySelector(BDFDB.dotCN.hovercard));
 		});
 	}
-	
+
 	openThemeRepoModal (showOnlyOutdated = false) {
 		if (this.loading.is) {
 			BDFDB.showToast(`Themes are still being fetched. Try again in some seconds.`, {type:"danger"});
 			return;
 		}
-			
+
 		var keyPressed = e => {
 			if (e.which == 17 && themeRepoModal.querySelector(BDFDB.dotCN.searchbarinput) != document.activeElement) BDFDB.toggleEles(themeRepoModal);
 			if (e.which == 27) frame.remove();
 		};
-		
+
 		var messageReceived = e => {
 			if (typeof e.data === "object" && e.data.origin == "DiscordPreview") {
 				switch (e.data.reason) {
@@ -475,10 +475,10 @@ class ThemeRepo {
 				}
 			}
 		};
-		
+
 		document.addEventListener("keyup", keyPressed);
 		window.addEventListener("message", messageReceived);
-		
+
 		var frame = BDFDB.htmlToElement(this.frameMarkup);
 		var themeRepoModal = BDFDB.htmlToElement(this.themeRepoModalMarkup);
 		var hiddenSettings = BDFDB.loadAllData(this, "hidden");
@@ -495,7 +495,7 @@ class ThemeRepo {
 		themeRepoModal.querySelector("#input-hidedownloadable").checked = hiddenSettings.downloadable || showOnlyOutdated;
 		if (!BDFDB.isRestartNoMoreEnabled()) themeRepoModal.querySelector("#RNMoption").remove();
 		else themeRepoModal.querySelector("#input-rnmstart").checked = BDFDB.loadData("RNMstart", this, "settings");
-		
+
 		darklightinput.addEventListener("change", e => {
 			frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"DarkLight",checked:darklightinput.checked,light:BDFDB.disCN.themelight,dark:BDFDB.disCN.themedark},"*");
 		});
@@ -546,7 +546,7 @@ class ThemeRepo {
 				}
 			}
 		});
-		
+
 		let favorites = BDFDB.loadAllData(this, "favorites");
 		let container = themeRepoModal.querySelector(".themes");
 		themeRepoModal.entries = {};
@@ -571,14 +571,14 @@ class ThemeRepo {
 			this.addEntry(frame, themeRepoModal, container, data);
 		}
 		this.sortEntries(themeRepoModal);
-			
+
 		BDFDB.appendModal(themeRepoModal);
-		
+
 		document.body.insertBefore(frame, document.body.firstElementChild);
-		
+
 		themeRepoModal.querySelector(BDFDB.dotCN.searchbarinput).focus();
 	}
-	
+
 	addEntry (frame, themeRepoModal, container, data) {
 		if (!frame || !themeRepoModal || !container || !data) return;
 		let entry = BDFDB.htmlToElement(this.themeEntryMarkup);
@@ -644,9 +644,9 @@ class ThemeRepo {
 			});
 			frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"NewTheme",checked:e.currentTarget.checked,css:data.css},"*");
 		});
-			
+
 		container.appendChild(entry);
-			
+
 		function setEntryState (state) {
 			data.state = state;
 			BDFDB.toggleClass(entry, "downloadable", state > 1);
@@ -658,28 +658,28 @@ class ThemeRepo {
 			themeRepoModal.entries[data.url] = data;
 		};
 	}
-	
+
 	sortEntries (themeRepoModal) {
 		if (!themeRepoModal || typeof themeRepoModal.entries != "object") return;
-		
+
 		let container = themeRepoModal.querySelector(".themes");
 		if (!container) return;
-		
+
 		let searchstring = themeRepoModal.querySelector(BDFDB.dotCN.searchbarinput).value.replace(/[<|>]/g, "").toUpperCase();
-		
+
 		let entries = themeRepoModal.entries;
 		if (themeRepoModal.querySelector("#input-hideupdated").checked) 		entries = BDFDB.filterObject(entries, entry => {return entry.state < 1 ? null : entry;});
 		if (themeRepoModal.querySelector("#input-hideoutdated").checked) 		entries = BDFDB.filterObject(entries, entry => {return entry.state == 1 ? null : entry;});
 		if (themeRepoModal.querySelector("#input-hidedownloadable").checked) 	entries = BDFDB.filterObject(entries, entry => {return entry.state > 1 ? null : entry;});
 		entries = BDFDB.filterObject(entries, entry => {return entry.search.indexOf(searchstring) > -1 ? entry : null;});
-		
+
 		entries = BDFDB.sortObject(entries, themeRepoModal.querySelector(".sort-filter " + BDFDB.dotCN.quickselectvalue).getAttribute("option"));
 		if (themeRepoModal.querySelector(".order-filter " + BDFDB.dotCN.quickselectvalue).getAttribute("option") == "desc") entries = BDFDB.reverseObject(entries);
-		
+
 		let entrypositions = Object.keys(entries);
-		
+
 		themeRepoModal.querySelector(".themeAmount").innerText = "ThemeRepo Repository " + entrypositions.length + "/" + Object.keys(this.loadedThemes).length + " Themes";
-		
+
 		for (let li of container.children) {
 			let pos = entrypositions.indexOf(li.getAttribute("data-url"));
 			if (pos > -1) {
@@ -692,7 +692,7 @@ class ThemeRepo {
 			BDFDB.toggleEles(li, pos > -1);
 		}
 	}
-	
+
 	loadThemes () {
 		BDFDB.removeEles(".themerepo-loadingicon");
 		var getThemeInfo, outdated = 0, i = 0;
@@ -718,7 +718,7 @@ class ThemeRepo {
 				var loadingicon = BDFDB.htmlToElement(this.themeRepoLoadingIconMarkup);
 				loadingicon.addEventListener("mouseenter", () => {BDFDB.createTooltip("Loading ThemeRepo",loadingicon,{type:"left",delay:500});})
 				loadingiconwrapper.appendChild(loadingicon);
-					
+
 				getThemeInfo(() => {
 					if (!this.started) {
 						clearTimeout(this.loading.timeout);
@@ -792,7 +792,7 @@ class ThemeRepo {
 			});
 		}
 	}
-	
+
 	checkForNewThemes () {
 		let request = require("request");
 		request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/ThemeList.txt", (error, response, result) => {
@@ -802,7 +802,7 @@ class ThemeRepo {
 			}
 		});
 	}
-	
+
 	downloadTheme (data) {
 		let request = require("request");
 		request(data.url, (error, response, body) => {
@@ -815,7 +815,7 @@ class ThemeRepo {
 			}
 		});
 	}
-	
+
 	createThemeFile (filename, content) {
 		let fileSystem = require("fs");
 		let path = require("path");
@@ -829,7 +829,7 @@ class ThemeRepo {
 			}
 		});
 	}
-	
+
 	applyTheme (data) {
 		var name = data.name;
 		if (BDFDB.isThemeEnabled(name) == false) {
@@ -840,7 +840,7 @@ class ThemeRepo {
 			console.log(`%c[${this.name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Applied Theme " + name + ".");
 		}
 	}
-	
+
 	deleteThemeFile (data) {
 		let fileSystem = require("fs");
 		let path = require("path");
@@ -852,7 +852,7 @@ class ThemeRepo {
 			else BDFDB.showToast(`Successfully deleted Theme "${filename}".`, {type:"success"});
 		});
 	}
-	
+
 	removeTheme (data) {
 		var name = data.name;
 		if (BDFDB.isThemeEnabled(name) == true) {

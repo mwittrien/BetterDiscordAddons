@@ -8,31 +8,31 @@ class OldTitleBar {
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Reverts the title bar back to its former self.";}
-	
+
 	initConstructor () {
 		this.patchModules = {
 			"HeaderBar":["componentDidMount","componentDidUpdate"],
 			"StandardSidebarView":["componentDidMount","componentWillUnmount"],
 			"AuthWrapper":["componentDidMount","componentWillUnmount"]
 		};
-		
+
 		this.patched = false;
-		
+
 		this.css = `
 			.hidden-by-OTB ${BDFDB.dotCN.titlebar},
 			.hidden-by-OTB ${BDFDB.dotCN.titlebar} + ${BDFDB.dotCNS.app + BDFDB.dotCN.splashbackground}:before {
 				display: none !important;
 			}
-			
+
 			body:not(.settingsTitlebarOTB-added) ${BDFDB.dotCN.channelheaderheaderbardrag} {
 				-webkit-app-region: drag !important;
 			}
-			
+
 			${BDFDB.dotCN.channelheaderheaderbardrag} *,
 			${BDFDB.dotCN.contextmenu} * {
 				-webkit-app-region: no-drag !important;
 			}
-			
+
 			.settingsTitlebarOTB {
 				position: relative;
 				z-index: 1000;
@@ -40,9 +40,9 @@ class OldTitleBar {
 				padding: 10px;
 				-webkit-app-region: drag;
 			}`;
-			
+
 		this.dividerMarkup = `<div class="buttonOTB dividerOTB ${BDFDB.disCN.channelheaderdivider}"></div>`;
-			
+
 		this.reloadButtonMarkup = 
 			`<span class="${BDFDB.disCN.channelheadericonmargin} buttonOTB reloadButtonOTB">
 				<svg class="${BDFDB.disCNS.channelheadericoninactive + BDFDB.disCN.channelheadericon}" xmlns="http://www.w3.org/2000/svg">
@@ -51,7 +51,7 @@ class OldTitleBar {
 					</g>
 				</svg>
 			</span>`;
-			
+
 		this.minButtonMarkup = 
 			`<span class="${BDFDB.disCN.channelheadericonmargin} buttonOTB minButtonOTB">
 				<svg class="${BDFDB.disCNS.channelheadericoninactive + BDFDB.disCN.channelheadericon}" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
@@ -60,7 +60,7 @@ class OldTitleBar {
 					</g>
 				</svg>
 			</span>`;
-			
+
 		this.maxButtonMarkup = 
 			`<span class="${BDFDB.disCN.channelheadericonmargin} buttonOTB maxButtonOTB">
 				<svg class="${BDFDB.disCNS.channelheadericoninactive + BDFDB.disCN.channelheadericon}" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
@@ -69,7 +69,7 @@ class OldTitleBar {
 			</span>`;
 		this.maxButtonInnerMin = `<path stroke-width="2" stroke="currentColor" d="M6 6 l13 0 l0 13 l-13 0 l0 -13"/>`;
 		this.maxButtonInnerMax = `<path stroke-width="2" stroke="currentColor" d="M6 9 l10 0 l0 10 l-10 0 l0 -10 m3 -3 l10 0 l0 10"/>`;
-			
+
 		this.closeButtonMarkup = 
 			`<span class="${BDFDB.disCN.channelheadericonmargin} buttonOTB closeButtonOTB">
 				<svg class="${BDFDB.disCNS.channelheadericoninactive + BDFDB.disCN.channelheadericon}" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
@@ -78,7 +78,7 @@ class OldTitleBar {
 					</g>
 				</svg>
 			</span>`;
-			
+
 		this.defaults = {
 			settings: {
 				displayNative:		{value:!!document.querySelector(".platform-linux"), 	description:"Displays the native Title Bar."},
@@ -97,7 +97,7 @@ class OldTitleBar {
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch${key == "displayNative" ? " nativetitlebar-switch" : ""}"${settings[key] ? " checked" : ""}></div></div>`;
 		}
 		settingshtml += `</div></div>`;
-		
+
 		let settingspanel = BDFDB.htmlToElement(settingshtml);
 
 		BDFDB.initElements(settingspanel, this);
@@ -117,7 +117,7 @@ class OldTitleBar {
 				}
 			}
 		});
-			
+
 		return settingspanel;
 	}
 
@@ -146,15 +146,15 @@ class OldTitleBar {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
-			
+
 			BDFDB.addEventListener(this, window, "resize", e => {this.changeMaximizeButtons();});
-			
+
 			this.window = require("electron").remote.getCurrentWindow();
-			
+
 			this.patchMainScreen(BDFDB.getData("displayNative", this, "settings"));
-		
+
 			BDFDB.addClass([document.body,document.querySelector(BDFDB.dotCN.titlebar)], "hidden-by-OTB");
-			
+
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
@@ -166,24 +166,24 @@ class OldTitleBar {
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.removeEles(".headerbarOTB", ".settingsTitlebarOTB");
-		
+
 			BDFDB.removeClasses("hidden-by-OTB", "settingsTitlebarOTB-added");
-			
+
 			BDFDB.unloadMessage(this);
 		}
 	}
 
-	
+
 	// begin of own functions
-	
+
 	processHeaderBar (instance, wrapper) {
 		this.addTitleBar();
 	}
-	
+
 	processStandardSidebarView (instance, wrapper, methodnames) {
 		this.processAuthWrapper(instance, wrapper, methodnames);
 	}
-	
+
 	processAuthWrapper (instance, wrapper, methodnames) {
 		if (methodnames.includes("componentDidMount")) {
 			this.addSettingsTitleBar(wrapper);
@@ -194,7 +194,7 @@ class OldTitleBar {
 			this.addTitleBar();
 		}
 	}
-	
+
 	addTitleBar () {
 		BDFDB.removeEles(".headerbarOTB");
 		var settings = BDFDB.getAllData(this, "settings");
@@ -206,7 +206,7 @@ class OldTitleBar {
 			this.changeMaximizeButtons();
 		}
 	}
-	
+
 	addSettingsTitleBar (settingspane) {
 		BDFDB.removeEles(".settingsTitlebarOTB");
 		if (BDFDB.getData("addToSettings", this, "settings")) {
@@ -217,7 +217,7 @@ class OldTitleBar {
 			this.changeMaximizeButtons();
 		}
 	}
-	
+
 	createButtons (bar) {
 		var settings = BDFDB.containsClass(bar, "settingsTitlebarOTB");
 		if (BDFDB.getData("reloadButton", this, "settings")) {
@@ -245,12 +245,12 @@ class OldTitleBar {
 		bar.appendChild(closebutton);
 		closebutton.querySelector(BDFDB.dotCN.channelheadericon).addEventListener("click", () => {this.window.close();});
 	}
-	
+
 	changeMaximizeButtons () {
 		var innerHTML = this.window.isMaximized() ? this.maxButtonInnerMax : this.maxButtonInnerMin;
 		document.querySelectorAll(".maxButtonOTB g").forEach(g => {g.innerHTML = innerHTML;});
 	}
-	
+
 	patchMainScreen (enable) {
 		if (BdApi.getWindowPreference("frame") != enable) {
 			BdApi.setWindowPreference("frame", enable);

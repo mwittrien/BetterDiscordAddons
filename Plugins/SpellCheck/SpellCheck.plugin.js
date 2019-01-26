@@ -8,12 +8,12 @@ class SpellCheck {
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Adds a spellcheck to all textareas. Select a word and rightclick it to add it to your dictionary.";}
-	
+
 	initConstructor () {
 		this.patchModules = {
 			"ChannelTextArea":"componentDidMount"
 		};
-		
+
 		this.languages = {};
 		this.langDictionary = [];
 		this.dictionary = [];
@@ -29,7 +29,7 @@ class SpellCheck {
 					<div class="${BDFDB.disCN.contextmenuhint}"></div>
 				</div>
 			</div>`;
-			
+
 		this.similarWordsContextSubMenuMarkup = 
 			`<div class="${BDFDB.disCN.contextmenu} spellcheck-submenu">
 				<div class="${BDFDB.disCN.contextmenuitem} nosimilars-item">
@@ -37,10 +37,10 @@ class SpellCheck {
 					<div class="${BDFDB.disCN.contextmenuhint}"></div>
 				</div>
 			</div>`;
-		
+
 		this.spellCheckLayerMarkup = 
 			`<div class="spellcheck-overlay" style="position:absolute !important; pointer-events:none !important; background:transparent !important; color:transparent !important; text-shadow:none !important;"></div>`;
-			
+
 		this.css = 
 			`.spellcheck-overlay::-webkit-scrollbar,
 			.spellcheck-overlay::-webkit-scrollbar-button,
@@ -56,8 +56,8 @@ class SpellCheck {
 				background-repeat: repeat-x;
 				background-position: bottom;
 			}`;
-			
-			
+
+
 		this.defaults = {
 			settings: {
 				disableDiscordSpellcheck:	{value:true, 	description:"Disable Discord's internal Spellcheck:"}
@@ -70,7 +70,7 @@ class SpellCheck {
 			}
 		};
 	}
-	
+
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		var settings = BDFDB.getAllData(this, "settings");
@@ -93,11 +93,11 @@ class SpellCheck {
 		}
 		settingshtml += `</div>`;
 		settingshtml += `</div></div>`;
-		
+
 		let settingspanel = BDFDB.htmlToElement(settingshtml);
 
 		BDFDB.initElements(settingspanel, this);
-		
+
 		BDFDB.addEventListener(this, settingspanel, "click", BDFDB.dotCN.selectcontrol, e => {this.openDropdownMenu(settingspanel, e);});
 		BDFDB.addEventListener(this, settingspanel, "click", ".remove-word", e => {this.removeFromOwnDictionarye;});
 		BDFDB.addEventListener(this, settingspanel, "input", ".amountInput", e => {
@@ -132,11 +132,11 @@ class SpellCheck {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
-			
+
 			this.languages = Object.assign({},BDFDB.languages);
 			this.languages = BDFDB.filterObject(this.languages , (lang) => {return lang.dic == true ? lang : null});
 			this.setDictionary(BDFDB.getData("dictionaryLanguage", this, "choices"));
-			
+
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
@@ -148,23 +148,23 @@ class SpellCheck {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.removeEles(".spellcheck-overlay");
 			BDFDB.removeClasses("spellcheck-added");
-			
+
 			this.killLanguageToast();
-			
+
 			BDFDB.unloadMessage(this);
 		}
 	}
 
-	
+
 	// begin of own functions
 
 	changeLanguageStrings () {
 		this.spellCheckContextEntryMarkup = this.spellCheckContextEntryMarkup.replace("REPLACE_context_spellcheck_text", this.labels.context_spellcheck_text);
 		this.spellCheckContextEntryMarkup = this.spellCheckContextEntryMarkup.replace("REPLACE_context_similarwords_text", this.labels.context_similarwords_text);
-		
+
 		this.similarWordsContextSubMenuMarkup = this.similarWordsContextSubMenuMarkup.replace("REPLACE_similarwordssubmenu_none_text", this.labels.similarwordssubmenu_none_text);
 	}
-	
+
 	onNativeContextMenu (instance, menu) {
 		if (instance.props && instance.props.type == "CHANNEL_TEXT_AREA" && instance.props.value && !menu.querySelector(".spellcheck-item")) {
 			let selection = document.getSelection();
@@ -196,12 +196,12 @@ class SpellCheck {
 			}
 		}
 	}
-	
+
 	processChannelTextArea (instance, wrapper) {
 		if (instance.props && instance.props.type) {
 			var textarea = wrapper.querySelector("textarea");
 			if (!textarea) return;
-			
+
 			var updateSpellcheck = () => {
 				var style = Object.assign({},getComputedStyle(textarea));
 				for (let i in style) if (i.indexOf("webkit") == -1) spellcheck.style[i] = style[i];
@@ -214,19 +214,19 @@ class SpellCheck {
 				spellcheck.style.setProperty("left", BDFDB.getRects(textarea).left - BDFDB.getRects(wrapper).left + "px", "important");
 				spellcheck.style.setProperty("width", BDFDB.getRects(textarea).width + "px", "important");
 				spellcheck.style.setProperty("height", BDFDB.getRects(textarea).height + "px", "important");
-				
+
 				spellcheck.innerHTML = this.spellCheckText(textarea.value);
 				spellcheck.scrollTop = textarea.scrollTop;
 			}
-					
+
 			var spellcheck = BDFDB.htmlToElement(this.spellCheckLayerMarkup);
 			BDFDB.addClass(spellcheck, textarea.className);
-			
+
 			textarea.setAttribute("spellcheck", !BDFDB.getData("disableDiscordSpellcheck", this, "settings"));
-			
+
 			textarea.parentElement.appendChild(spellcheck);
 			wrapper.addClass("spellcheck-added");
-				
+
 			updateSpellcheck();
 			BDFDB.addEventListener(this, textarea, "keyup", e => {
 				clearTimeout(textarea.spellchecktimeout);
@@ -237,7 +237,7 @@ class SpellCheck {
 			});
 		}
 	}
-	
+
 	replaceWord (textarea, word, replacement) {
 		if (!textarea) return;
 		textarea.focus();
@@ -251,7 +251,7 @@ class SpellCheck {
 		textarea.dispatchEvent(new Event("keyup"));
 		textarea.dispatchEvent(new Event("change"));
 	}
-	
+
 	addToOwnDictionary (word) {
 		word = word.split(" ")[0].split("\n")[0].split("\r")[0].split("\t")[0];
 		if (word) {
@@ -268,7 +268,7 @@ class SpellCheck {
 			}
 		}
 	}
-	
+
 	removeFromOwnDictionary (e) {
 		var entry = e.currentTarget.parentElement;
 		var word = entry.querySelector(".entryword").textContent;
@@ -279,28 +279,28 @@ class SpellCheck {
 		BDFDB.saveData(lang, ownDictionary, this, "owndics");
 		this.dictionary = this.langDictionary.concat(ownDictionary);
 	}
-	
+
 	openDropdownMenu (settingspanel, e) {
 		let selectControl = e.currentTarget;
 		let selectWrap = selectControl.parentElement;
 		let plugincard = BDFDB.getParentEle("li", selectWrap);
-		
+
 		if (!plugincard || selectWrap.classList.contains(BDFDB.disCN.selectisopen)) return;
-		
+
 		selectWrap.classList.add(BDFDB.disCN.selectisopen);
 		plugincard.style.setProperty("overflow", "visible", "important");
-		
+
 		var type = selectWrap.getAttribute("type");
 		var selectMenu = this.createDropdownMenu(selectWrap.getAttribute("value"), type);
 		selectWrap.appendChild(selectMenu);
-		
+
 		BDFDB.addChildEventListener(selectMenu, "mousedown", BDFDB.dotCN.selectoption, e2 => {
 			var language = e2.currentTarget.getAttribute("value");
 			selectWrap.setAttribute("value", language);
 			selectControl.querySelector(BDFDB.dotCN.title).innerText = this.languages[language].name;
 			this.setDictionary(language);
 			BDFDB.saveData(type, language, this, "choices");
-			
+
 			var listcontainer = settingspanel.querySelector(".word-list");
 			if (listcontainer) {
 				var ownDictionary = BDFDB.loadData(language, this, "owndics") || [];
@@ -311,7 +311,7 @@ class SpellCheck {
 				listcontainer.innerHTML = containerhtml;
 			}
 		});
-		
+
 		var removeMenu = e2 => {
 			if (e2.target.parentElement != selectMenu) {
 				document.removeEventListener("mousedown", removeMenu);
@@ -322,7 +322,7 @@ class SpellCheck {
 		};
 		document.addEventListener("mousedown", removeMenu);
 	}
-	
+
 	createDropdownMenu (choice, type) {
 		var menuhtml = `<div class="${BDFDB.disCN.selectmenuouter}"><div class="${BDFDB.disCN.selectmenu}">`;
 		for (var key in this.languages) {
@@ -332,7 +332,7 @@ class SpellCheck {
 		menuhtml += `</div></div>`;
 		return BDFDB.htmlToElement(menuhtml);
 	}
-	
+
 	setDictionary (lang) {
 		this.dictionary = BDFDB.loadData(lang, this, "owndics") || [];
 		this.killLanguageToast();
@@ -355,14 +355,14 @@ class SpellCheck {
 			}
 		});
 	}
-	
+
 	killLanguageToast () {
 		if (this.languageToast && typeof this.languageToast.close == "function") {
 			clearInterval(this.languageToast.interval);
 			this.languageToast.close();
 		}
 	}
-	
+
 	spellCheckText (string) {
 		var htmlString = [];
 		string.replace(/[\n]/g, "\n ").split(" ").forEach((word, i) => {
@@ -370,14 +370,14 @@ class SpellCheck {
 		});
 		return htmlString.join(" ");
 	}
-	
+
 	isWordNotInDictionary (word) {
 		var wordLow = word.toLowerCase();
 		var wordWithoutSymbols = wordLow.replace(/[0-9\µ\@\$\£\€\¥\¢\²\³\>\<\|\,\;\.\:\_\#\+\*\~\?\¿\\\´\`\}\=\]\)\[\(\{\/\&\%\§\"\!\¡\^\°\n\t\r]/g, "");
 		return (wordLow.indexOf("http://") != 0 && wordLow.indexOf("https://") != 0 && wordWithoutSymbols && Array.isArray(this.dictionary) && this.dictionary.length > 0 && !this.dictionary.includes(wordLow) && !this.dictionary.includes(wordWithoutSymbols));
 	}
-	
-	
+
+
 	getSimilarWords (word) {
 		var maxAmount = BDFDB.getData("maxSimilarAmount", this, "amounts"), similarWords = [];
 		if (maxAmount > 0) {
@@ -402,7 +402,7 @@ class SpellCheck {
 		}
 		return similarWords;
 	}
-	
+
 	wordSimilarity (a, b) {
 		var temp;
 		if (a.length === 0 || b.length === 0 || a.length - b.length > 3 || b.length - a.length > 3) { return 0; }
@@ -423,7 +423,7 @@ class SpellCheck {
 		}
 		return (b.length - result) / b.length;
 	}
-	
+
 	setLabelsByLanguage () {
 		switch (BDFDB.getDiscordLanguage().id) {
 			case "hr":		//croatian

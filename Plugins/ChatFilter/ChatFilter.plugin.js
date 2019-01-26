@@ -8,22 +8,22 @@ class ChatFilter {
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Allows the user to censor words or block complete messages based on words in the chatwindow.";}
-	
+
 	initConstructor () {
 		this.patchModules = {
 			"Message":["componentDidMount","componentDidUpdate"],
 			"StandardSidebarView":"componentWillUnmount"
 		};
-		
+
 		this.configs = ["empty","case","exact"];
-		
+
 		this.css = ` 
 			${BDFDB.dotCNS.messagegroup + BDFDB.dotCN.messageaccessory}.blocked:not(.revealed),
 			${BDFDB.dotCNS.messagegroup + BDFDB.dotCN.messagemarkup}.blocked:not(.revealed) {
 				font-weight: bold;
 				font-style: italic;
 			}`;
-		
+
 		this.defaults = {
 			replaces: {
 				blocked: 	{value:"~~BLOCKED~~",	title:"Block:",		description:"Default Replace Word for blocked Messages:"},
@@ -35,7 +35,7 @@ class ChatFilter {
 			}
 		};
 	}
-	
+
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		var replaces = BDFDB.getAllData(this, "replaces");
@@ -52,7 +52,7 @@ class ChatFilter {
 			for (let config of this.configs) {
 				settingshtml += `<div class="${BDFDB.disCNS.margintop8 +  BDFDB.disCNS.tableheadersize + BDFDB.disCNS.size10 + BDFDB.disCNS.primary + BDFDB.disCN.weightbold}" style="flex: 1 1 auto; width: 34px !important; text-align: center;">${config.toUpperCase()}</div>`;
 			}
-			settingshtml += `</div></div><div class="DevilBro-settings-inner-list ${rtype}-list">`;			
+			settingshtml += `</div></div><div class="DevilBro-settings-inner-list ${rtype}-list">`;
 			for (let word in words) {
 				settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.hovercard}"><div class="${BDFDB.disCN.hovercardinner}"><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCNS.primary + BDFDB.disCN.ellipsis}" style="flex: 1 1 auto;">${BDFDB.encodeToHTML(word)} (${BDFDB.encodeToHTML(words[word].replace)})</div>`
 				for (let config of this.configs) {
@@ -68,7 +68,7 @@ class ChatFilter {
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCNS.cursorpointer + (infoHidden ? BDFDB.disCN.categorywrappercollapsed : BDFDB.disCN.categorywrapperdefault)} toggle-info" style="flex: 1 1 auto;"><svg class="${BDFDB.disCNS.categoryicontransition + BDFDB.disCNS.directionright + (infoHidden ? BDFDB.disCN.categoryiconcollapsed : BDFDB.disCN.categoryicondefault)}" width="12" height="12" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 10L12 15 17 10"></path></svg><div class="${BDFDB.disCNS.categorycolortransition + BDFDB.disCNS.overflowellipsis + BDFDB.disCN.categorynamecollapsed}" style="flex: 1 1 auto;">Information</div></div>`;
 		settingshtml += `<div class="DevilBro-settings-inner-list info-container" ${infoHidden ? "style='display:none;'" : ""}><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Case: Will block/censor words while comparing lowercase/uppercase. apple => apple, not APPLE or AppLe</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Not Case: Will block/censor words while ignoring lowercase/uppercase. apple => apple, APPLE and AppLe</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Exact: Will block/censor words that are exactly the selected word. apple => apple, not applepie or pineapple</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Not Exact: Will block/censor all words containing the selected word. apple => apple, applepie and pineapple</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Empty: Ignores the default and set replace word and removes the word/message instead.</div></div>`;
 		settingshtml += `</div>`;
-		
+
 		let settingspanel = BDFDB.htmlToElement(settingshtml);
 
 		BDFDB.initElements(settingspanel, this);
@@ -78,7 +78,7 @@ class ChatFilter {
 		BDFDB.addEventListener(this, settingspanel, "click", ".btn-addword, .remove-word, .remove-all", e => {this.updateContainer(settingspanel, e.currentTarget);});
 		BDFDB.addEventListener(this, settingspanel, "click", BDFDB.dotCN.checkboxinput, e => {this.updateConfig(e.currentTarget);});
 		BDFDB.addEventListener(this, settingspanel, "click", ".toggle-info", e => {this.toggleInfo(e.currentTarget);});
-			
+
 		return settingspanel;
 	}
 
@@ -107,7 +107,7 @@ class ChatFilter {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
-			
+
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
@@ -118,20 +118,20 @@ class ChatFilter {
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			document.querySelectorAll(`${BDFDB.dotCN.messagemarkup}.blocked, ${BDFDB.dotCN.messageaccessory}.censored, ${BDFDB.dotCN.messagemarkup}.blocked, ${BDFDB.dotCN.messageaccessory}.censored`).forEach(message => {this.resetMessage(message);});
-						
+
 			BDFDB.unloadMessage(this);
 		}
 	}
-	
-	
+
+
 	// begin of own functions
-	
+
 	updateContainer (settingspanel, ele) {
 		var wordvalue = null, replacevalue = null, action = ele.getAttribute("action"), rtype = ele.getAttribute("rtype"), words = BDFDB.loadData(rtype, this, "words") || {};
-		
+
 		var update = () => {
 			BDFDB.saveData(rtype, words, this, "words");
-			
+
 			var containerhtml = ``;
 			for (let word in words) {
 				containerhtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.hovercard}"><div class="${BDFDB.disCN.hovercardinner}"><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCNS.primary + BDFDB.disCN.ellipsis}" style="flex: 1 1 auto;">${BDFDB.encodeToHTML(word)} (${BDFDB.encodeToHTML(words[word].replace)})</div>`
@@ -145,7 +145,7 @@ class ChatFilter {
 			BDFDB.initElements(settingspanel, this);
 			this.SettingsUpdated = true;
 		};
-		
+
 		if (action == "add") {
 			var wordinput = settingspanel.querySelector("#input-" + rtype + "-wordvalue");
 			var replaceinput = settingspanel.querySelector("#input-" + rtype + "-replacevalue");
@@ -180,7 +180,7 @@ class ChatFilter {
 			});
 		}
 	}
-	
+
 	saveReplace (input) {
 		var rtype = input.getAttribute("rtype");
 		var wordvalue = input.value;
@@ -189,7 +189,7 @@ class ChatFilter {
 			BDFDB.saveData(rtype, wordvalue.trim(), this, "replaces");
 		}
 	}
-	
+
 	updateConfig (ele) {
 		var wordvalue = ele.getAttribute("word");
 		var config = ele.getAttribute("config");
@@ -208,15 +208,15 @@ class ChatFilter {
 		BDFDB.toggleClass(svg, BDFDB.disCN.directionright);
 		BDFDB.toggleClass(svg, BDFDB.disCN.categoryiconcollapsed);
 		BDFDB.toggleClass(svg, BDFDB.disCN.categoryicondefault);
-		
+
 		BDFDB.toggleEles(ele.nextElementSibling);
 		BDFDB.saveData("hideInfo", BDFDB.isEleHidden(ele.nextElementSibling), this, "hideInfo");
 	}
-	
+
 	processMessage (instance, wrapper) {
 		wrapper.querySelectorAll(`${BDFDB.dotCNC.messagemarkup + BDFDB.dotCN.messageaccessory}`).forEach(message => {this.hideMessage(message);});
 	}
-	
+
 	processStandardSidebarView (instance, wrapper) {
 		if (this.SettingsUpdated) {
 			delete this.SettingsUpdated;
@@ -224,15 +224,15 @@ class ChatFilter {
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 	}
-	
+
 	hideMessage (message) {
 		if (message.tagName && !BDFDB.containsClass(message, "blocked", "censored", false)) {
 			var orightml = message.innerHTML;
 			var newhtml = "";
-			
+
 			if (orightml) {
 				var blocked = null;
-				
+
 				var strings = [];
 				var count = 0;
 				orightml.split("").forEach((chara) => { 
@@ -244,7 +244,7 @@ class ChatFilter {
 						count++;
 					}
 				});
-			
+
 				var settings = BDFDB.getAllData(this, "settings");
 				var replaces = BDFDB.getAllData(this, "replaces");
 				var blockedWords = BDFDB.loadData("blocked", this, "words");
@@ -275,7 +275,7 @@ class ChatFilter {
 					BDFDB.addClass(message, "blocked");
 					message.ChatFilterOriginalHTML = orightml;
 					message.ChatFilterNewHTML = newhtml;
-						
+
 					this.addClickListener(message, settings.showMessageOnClick.blocked);
 				}
 				else {
@@ -318,25 +318,25 @@ class ChatFilter {
 							}
 						});
 					}
-					
+
 					if (censored) {
 						newhtml = strings.join("");
 						message.innerHTML = newhtml;
 						BDFDB.addClass(message, "censored");
 						message.ChatFilterOriginalHTML = orightml;
 						message.ChatFilterNewHTML = newhtml;
-							
+
 						this.addClickListener(message, settings.showMessageOnClick.censored);
 					}
 				}
 			}
 		}
 	}
-	
+
 	createReg (word, config) {
 		return new RegExp(BDFDB.encodeToHTML(config.exact ? "^" + BDFDB.regEscape(word) + "$" : BDFDB.regEscape(word)), config.case ? "" : "i");
 	}
-	
+
 	testForEmoji (string, reg) {
 		if (string.indexOf("<img ") == 0 && (string.indexOf('class="emote') > -1 || string.indexOf('class="emoji') > -1)) {
 			var emojiname = string.split('alt="').length > 0 ? string.split('alt="')[1].split('"')[0] : null;
@@ -344,7 +344,7 @@ class ChatFilter {
 		}
 		return false;
 	}
-	
+
 	resetMessage (message) {
 		message.innerHTML = message.ChatFilterOriginalHTML;
 		BDFDB.removeClass(message, "blocked", "censored", "revealed");
@@ -353,7 +353,7 @@ class ChatFilter {
 		delete message.ChatFilterNewHTML;
 		message.removeEventListener("click", message.clickChatFilterListener);
 	}
-	
+
 	addClickListener (message, addListener) {
 		message.removeEventListener("click", message.clickChatFilterListener);
 		if (addListener) {

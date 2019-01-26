@@ -1,14 +1,16 @@
 module.exports = (Plugin, Api, Vendor) => {
-	if (typeof BDFDB !== "object") global.BDFDB = {$: Vendor.$, BDv2Api: Api};
-	
-	const {$} = Vendor;
+	if (!global.BDFDB || typeof BDFDB != "object") global.BDFDB = {BDv2Api: Api};
 
 	return class extends Plugin {
 		initConstructor () {
 			this.labels = {};
-			
+
+			this.patchModules = {
+				"ChannelTextArea":"componentDidMount"
+			};
+
 			this.messageDelay = 1000; //changing at own risk, might result in bans or mutes
-			
+
 			this.css = `
 				.${this.name}-modal textarea {
 					rows: 0;
@@ -17,11 +19,9 @@ module.exports = (Plugin, Api, Vendor) => {
 					resize: none;
 				}
 				.${this.name}-modal #warning-message {
-					font-weight: bold;
 					color: red;
-					opacity: 1;
 				}
-				
+
 				.${this.name}-modal #character-counter {
 					float: right;
 					color: white;
@@ -29,7 +29,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				}`;
 
 			this.sendMessageModalMarkup =
-				`<span class=""${this.name}-modal DevilBro-modal"">
+				`<span class="${this.name}-modal DevilBro-modal">
 					<div class="${BDFDB.disCN.backdrop}"></div>
 					<div class="${BDFDB.disCN.modal}">
 						<div class="${BDFDB.disCN.modalinner}">
@@ -39,19 +39,23 @@ module.exports = (Plugin, Api, Vendor) => {
 										<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.headertitle + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.defaultcolor + BDFDB.disCNS.h4defaultmargin + BDFDB.disCN.marginreset}">REPLACE_modal_header_text</h4>
 										<div class="${BDFDB.disCNS.modalguildname + BDFDB.disCNS.small + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCN.primary}"></div>
 									</div>
-									<svg class="${BDFDB.disCNS.modalclose + BDFDB.disCN.flexchild}" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12">
-										<g fill="none" fill-rule="evenodd">
-											<path d="M0 0h12v12H0"></path>
-											<path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path>
-										</g>
-									</svg>
+									<button type="button" class="${BDFDB.disCNS.modalclose + BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow}">
+										<div class="${BDFDB.disCN.buttoncontents}">
+											<svg name="Close" width="18" height="18" viewBox="0 0 12 12" style="flex: 0 1 auto;">
+												<g fill="none" fill-rule="evenodd">
+													<path d="M0 0h12v12H0"></path>
+													<path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path>
+												</g>
+											</svg>
+										</div>
+									</button>
 								</div>
 								<div class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.modalcontent + BDFDB.disCNS.scrollerthemed + BDFDB.disCNS.themeghosthairline + BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.flexchild + BDFDB.disCN.modalsubinner}" style="flex: 1 1 auto;">
 									<textarea class="${BDFDB.disCNS.scroller + BDFDB.disCNS.inputdefault + BDFDB.disCN.input}" id="modal-inputtext"></textarea>
 								</div>
 								<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstart + BDFDB.disCNS.nowrap + BDFDB.disCNS.modalsubinner + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;">
-									<h5 id="warning-message" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.h5 + BDFDB.disCNS.title + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.h5defaultmargin}" style="flex: 1 1 auto;"></h5>
-									<h5 id="character-counter" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.h5 + BDFDB.disCNS.title + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.h5defaultmargin}" style="flex: 0 0 auto;"></h5>
+									<h5 id="warning-message" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.h5 + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightbold + BDFDB.disCNS.h5defaultmargin}" style="flex: 1 1 auto;"></h5>
+									<h5 id="character-counter" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.h5 + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightmedium + BDFDB.disCNS.h5defaultmargin}" style="flex: 0 0 auto;"></h5>
 								</div>
 								<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontalreverse + BDFDB.disCNS.horizontalreverse2 + BDFDB.disCNS.directionrowreverse + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.modalfooter}">
 									<button type="button" class="btn-send ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}">
@@ -65,28 +69,31 @@ module.exports = (Plugin, Api, Vendor) => {
 		}
 
 		onStart () {
-			var libraryScript = null;
-			if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-				libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+			var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+			if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 				if (libraryScript) libraryScript.remove();
 				libraryScript = document.createElement("script");
 				libraryScript.setAttribute("type", "text/javascript");
 				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+				libraryScript.setAttribute("date", performance.now());
+				libraryScript.addEventListener("load", () => {
+					BDFDB.loaded = true;
+					this.initialize();
+				});
 				document.head.appendChild(libraryScript);
 			}
+			else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 			this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-			if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-			else libraryScript.addEventListener("load", () => {this.initialize();});
-			return true;
 		}
 
 		initialize () {
-			if (typeof BDFDB === "object") {
+			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+				if (this.started) return true;
 				BDFDB.loadMessage(this);
-				
-				this.MessageUtils = BDFDB.WebModules.findByProperties("parse","isMentioned");
-							
-				this.bindEventToTextArea();
+
+				this.clipboard = require("electron").clipboard;
+
+				BDFDB.WebModules.forceAllUpdates(this);
 
 				return true;
 			}
@@ -98,7 +105,7 @@ module.exports = (Plugin, Api, Vendor) => {
 
 
 		onStop () {
-			if (typeof BDFDB === "object") {			
+			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				BDFDB.unloadMessage(this);
 				return true;
 			}
@@ -106,14 +113,8 @@ module.exports = (Plugin, Api, Vendor) => {
 				return false;
 			}
 		}
-		
-		onSwitch () {
-			if (typeof BDFDB === "object") {
-				this.bindEventToTextArea();
-			}
-		}
 
-		
+
 		// begin of own functions
 
 		changeLanguageStrings () {
@@ -121,87 +122,81 @@ module.exports = (Plugin, Api, Vendor) => {
 			this.sendMessageModalMarkup = 		this.sendMessageModalMarkup.replace("REPLACE_btn_cancel_text", this.labels.btn_cancel_text);
 			this.sendMessageModalMarkup = 		this.sendMessageModalMarkup.replace("REPLACE_btn_send_text", this.labels.btn_send_text);
 		}
-		
-		bindEventToTextArea () {
-			var checkTextarea = (textarea, text) => {
-				if (BDFDB.getParsedLength(text) > 1950) {
-					textarea.selectionStart = 0;
-					textarea.selectionEnd = textarea.value.length;
-					document.execCommand("insertText", false, "");
-					this.showSendModal(text);
-				}
-			};
-			$(BDFDB.dotCNS.textareawrapchat + "textarea")
-				.off("input." + this.name)
-				.on("input." + this.name, e => {
-					checkTextarea(e.currentTarget, e.currentTarget.value);
-				})
-				.off("paste." + this.name)
-				.on("paste." + this.name, e => {
-					setImmediate(() => {
-						checkTextarea(e.currentTarget, e.currentTarget.value);
-					});
+
+		processChannelTextArea (instance, wrapper) {
+			if (instance.props && instance.props.type && instance.props.type == "normal") {
+				var textarea = wrapper.querySelector("textarea");
+				if (!textarea) return;
+				let modaltext, checkTextarea = () => {
+					if (BDFDB.getParsedLength(textarea.value) > 1950) {
+						textarea.selectionStart = 0;
+						textarea.selectionEnd = textarea.value.length;
+						document.execCommand("insertText", false, "");
+						this.showSendModal(modaltext);
+					}
+				};
+				BDFDB.addEventListener(this, textarea, "keyup", e => {
+					clearTimeout(textarea.sendlargemessagestimeout);
+					textarea.sendlargemessagestimeout = setTimeout(() => {
+						modaltext = textarea.value;
+						checkTextarea();
+					},100);
 				});
+				BDFDB.addEventListener(this, textarea, "paste", e => {
+					modaltext = textarea.value.slice(0, textarea.selectionStart) + this.clipboard.readText() + textarea.value.slice(textarea.selectionEnd);
+					setImmediate(() => {checkTextarea(textarea);});
+				});
+			}
 		}
-		
+
 		showSendModal (text) {
-			var sendMessageModal = $(this.sendMessageModalMarkup);
-			var textinput = sendMessageModal.find("#modal-inputtext");
-			var warning = sendMessageModal.find("#warning-message");
-			var counter = sendMessageModal.find("#character-counter");
-			
-			var updateCounter = () => {
-				var parsedlength = BDFDB.getParsedLength(textinput.val());
-				var messageAmount = Math.ceil(parsedlength/1900);
-				warning.text(messageAmount > 15 ? this.labels.modal_messages_warning : "");
-				counter.text(parsedlength + " (" + (textinput[0].selectionEnd - textinput[0].selectionStart) + ") => " + this.labels.modal_messages_translation + ": " + messageAmount);
+			let sendMessageModal = BDFDB.htmlToElement(this.sendMessageModalMarkup);
+			let textinput = sendMessageModal.querySelector("#modal-inputtext");
+			let warning = sendMessageModal.querySelector("#warning-message");
+			let counter = sendMessageModal.querySelector("#character-counter");
+
+			let updateCounter = () => {
+				let parsedlength = BDFDB.getParsedLength(textinput.value);
+				let messageAmount = Math.ceil(parsedlength/1900);
+				warning.innerText = messageAmount > 15 ? this.labels.modal_messages_warning : "";
+				counter.innerText = parsedlength + " (" + (textinput.selectionEnd - textinput.selectionStart) + ") => " + this.labels.modal_messages_translation + ": " + messageAmount;
 			};
-			
+
 			BDFDB.appendModal(sendMessageModal);
-			sendMessageModal
-				.on("click", ".btn-send", (e) => {
-					e.preventDefault();
-					var messages = this.formatText(textinput.val());
-					messages.forEach((message,i) => {
-						setTimeout(() => {
-							this.sendMessage(message);
-							if (i == messages.length-1) BDFDB.showToast(this.labels.toast_allsent_text, {type:"success"});
-						},this.messageDelay * i);
-					});
-				});
-				
-			textinput
-				.val(text)
-				.focus()
-				.off("keydown." + this.name + " click." + this.name)
-				.on("keydown." + this.name + " click." + this.name, () => {
+
+			BDFDB.addChildEventListener(sendMessageModal, "click", ".btn-send", e => {
+				e.preventDefault();
+				let messages = this.formatText(textinput.value || "");
+				messages.forEach((message,i) => {
 					setTimeout(() => {
-						updateCounter();
-					},10);
-				})
-				.off("mousedown." + this.name)
-				.on("mousedown." + this.name, () => {
-					$(document)
-						.off("mouseup." + this.name)
-						.on("mouseup." + this.name, () => {
-							$(document)
-								.off("mouseup." + this.name)
-								.off("mousemove." + this.name);
-						})
-						.off("mousemove." + this.name)
-						.on("mousemove." + this.name, () => {
-							setTimeout(() => {
-								updateCounter();
-							},10);
-						});
+						this.sendMessage(message);
+						if (i >= messages.length-1) BDFDB.showToast(this.labels.toast_allsent_text, {type:"success"});
+					},this.messageDelay * i);
 				});
+			});
+
+			textinput.value = text || "";
+			textinput.addEventListener("keyup", () => {setTimeout(() => {updateCounter();},10);});
+			textinput.addEventListener("click", () => {updateCounter();});
+			textinput.addEventListener("mousedown", () => {
+				var mouseup = () => {
+					document.removeEventListener("mouseup", mouseup);
+					document.removeEventListener("mousemove", mousemove);
+				};
+				var mousemove = () => {
+					setTimeout(() => {updateCounter();},10);
+				};
+				document.addEventListener("mouseup", mouseup);
+				document.addEventListener("mousemove", mousemove);
+			});
 			updateCounter();
+			textinput.focus();
 		}
-		
+
 		formatText (text) {
 			text = text.replace(new RegExp("\t", 'g'), "	");
-			var longwords = text.match(/[\S]{1800,}/gm);
-			for (var i in longwords) {
+			let longwords = text.match(/[\S]{1800,}/gm);
+			for (let i in longwords) {
 				let longword = longwords[i];
 				let count1 = 0;
 				let shortwords = [];
@@ -211,15 +206,15 @@ module.exports = (Plugin, Api, Vendor) => {
 				});
 				text = text.replace(longword, shortwords.join(" "));
 			}
-			var messages = [];
-			var count2 = 0;
+			let messages = [];
+			let count2 = 0;
 			text.split(" ").forEach((word) => {
 				if (messages[count2] && BDFDB.getParsedLength(messages[count2] + "" + word) > 1900) count2++;
 				messages[count2] = messages[count2] ? messages[count2] + " " + word : word;
 			});
-			
-			var insertCodeBlock = null, insertCodeLine = null;
-			for (var j = 0; j < messages.length; j++) {
+
+			let insertCodeBlock = null, insertCodeLine = null;
+			for (let j = 0; j < messages.length; j++) {
 				if (insertCodeBlock) {
 					messages[j] = insertCodeBlock + messages[j];
 					insertCodeBlock = null;
@@ -228,10 +223,10 @@ module.exports = (Plugin, Api, Vendor) => {
 					messages[j] = insertCodeLine + messages[j];
 					insertCodeLine = null;
 				}
-				
-				var codeBlocks = messages[j].match(/`{3,}[\S]*\n|`{3,}/gm);
-				var codeLines = messages[j].match(/[^`]{0,1}`{1,2}[^`]|[^`]`{1,2}[^`]{0,1}/gm);
-				
+
+				let codeBlocks = messages[j].match(/`{3,}[\S]*\n|`{3,}/gm);
+				let codeLines = messages[j].match(/[^`]{0,1}`{1,2}[^`]|[^`]`{1,2}[^`]{0,1}/gm);
+
 				if (codeBlocks && codeBlocks.length % 2 == 1) {
 					messages[j] = messages[j] + "```";
 					insertCodeBlock = codeBlocks[codeBlocks.length-1] + "\n";
@@ -241,18 +236,21 @@ module.exports = (Plugin, Api, Vendor) => {
 					messages[j] = messages[j] + insertCodeLine;
 				}
 			}
-			
+
 			return messages;
 		}
-		
+
 		sendMessage (text) {
-			var textarea = document.querySelector(BDFDB.dotCNS.textareawrapchat + "textarea");
+			let textarea = document.querySelector(BDFDB.dotCNS.textareawrapchat + "textarea");
 			if (textarea) {
-				BDFDB.getOwnerInstance({"node":textarea, "name":"ChannelTextAreaForm", "up":true}).setState({textValue:text});
-				BDFDB.triggerSend(textarea);
+				let instance = BDFDB.getOwnerInstance({"node":textarea.parentElement, "name":"ChannelTextAreaForm", "up":true});
+				if (instance) {
+					instance.setState({textValue:text});
+					BDFDB.triggerSend(textarea);
+				}
 			}
 		}
-		
+
 		setLabelsByLanguage () {
 			switch (BDFDB.getDiscordLanguage().id) {
 				case "hr":		//croatian

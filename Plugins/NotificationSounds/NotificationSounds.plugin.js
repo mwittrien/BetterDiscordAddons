@@ -6,15 +6,15 @@ class NotificationSounds {
 	getVersion () {return "3.2.5";}
 
 	getAuthor () {return "DevilBro";}
-	
+
 	getDescription () {return "Allows you to replace the native sounds of Discord with your own";}
-	
+
 	initConstructor () {
 		this.patchModules = {
 			"IncomingCalls":"componentDidMount",
 			"PrivateChannelCall":"componentDidMount"
 		};
-		
+
 		this.types = {
 			"message1":				{implemented:true,	name:"New Chatmessage",					src:"/assets/dd920c06a01e5bb8b09678581e29d56f.mp3",	mute:true},
 			"dm":					{implemented:true,	name:"Direct Message",					src:"/assets/84c9fa3d07da865278bd77c97d952db4.mp3",	mute:true},
@@ -46,7 +46,7 @@ class NotificationSounds {
 			"reconnect":			{implemented:false,	name:"Voicechat Reconnect",				src:"/assets/471cfd0005b112ff857705e894bf41a6.mp3",	mute:true},
 			"robot_man":			{implemented:false,	name:"Robot Man Voice",					src:"/assets/66598bea6e59eb8acdf32cf2d9d75ba9.mp3",	mute:true}
 		};
-		
+
 		this.defaults = {
 			"---": {
 				"---":						null
@@ -90,23 +90,23 @@ class NotificationSounds {
 				"Voicechat Reconnect":		"/assets/471cfd0005b112ff857705e894bf41a6.mp3"
 			}
 		};
-		
+
 		this.settingsaudio = new Audio();
-		
+
 		this.audios = {};
-		
+
 		this.choices = [];
-		
+
 		this.firedEvents = {};
 	}
-	
+
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-		
+
 		var fields = ["category","song"];
-		
+
 		var settingshtml = `<div class="${this.name}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="DevilBro-settings-inner">`;
-		
+
 		settingshtml += `<div class="add-new-song-settings"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">Add New Song:</h3></div>`;
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">`;
 		settingshtml += `<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 50%;"><h5 class="${BDFDB.disCNS.h5 + BDFDB.disCNS.title + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.h5defaultmargin + BDFDB.disCN.marginbottom4}">Categoryname:</h5><div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex + BDFDB.disCNS.directioncolumn + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;"><input type="text" placeholder="Category" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16} songInput" id="input-category"></div></div>`;
@@ -116,7 +116,7 @@ class NotificationSounds {
 		settingshtml += `<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 auto;"><h5 class="${BDFDB.disCNS.h5 + BDFDB.disCNS.title + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.h5defaultmargin + BDFDB.disCN.marginbottom4}">File:</h5><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex + BDFDB.disCNS.directioncolumn + BDFDB.disCN.flexchild}"  style="flex: 1 1 auto;"><input type="text" placeholder="Url or Filepath" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16} songInput" id="input-url"></div><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} file-navigator" id="input-file" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}"></div><input type="file" accept="audio/*,video/*" style="display:none!important;"></button><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} btn-add btn-addsong" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}"></div></button></div></div>`;
 		settingshtml += `</div>`;
 		settingshtml += `</div>`;
-		
+
 		for (var type in this.types) {
 			var choice = BDFDB.loadData(type, this, "choices");
 			settingshtml += `<div class="${type}-song-settings${this.types[type].implemented ? '"' : ' unimplemented" style="display: none !important;"'}><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.types[type].name}:</h3><h5 class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.h5 + BDFDB.disCNS.title + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.h5defaultmargin}" style="flex: 0 0 auto;">Mute in DnD:</h5><div type="${type}" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} mute-checkbox"${choice.mute ? " checked" : ""}></div></div><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">`;
@@ -129,7 +129,7 @@ class NotificationSounds {
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Show unimplemented Sounds</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}" id="input-unimplemented"></div></div>`;
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Remove all added songs.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} reset-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Reset</div></button></div>`;
 		settingshtml += `</div></div>`;
-		
+
 		let settingspanel = BDFDB.htmlToElement(settingshtml);
 
 		BDFDB.initElements(settingspanel, this);
@@ -168,7 +168,7 @@ class NotificationSounds {
 			BDFDB.toggleEles(settingspanel.querySelectorAll(".unimplemented"), e.currentTarget.checked);
 		});
 		BDFDB.addEventListener(this, settingspanel, "mousedown", BDFDB.dotCN.slidergrabber, e => {this.dragSlider(settingspanel,e);});
-			
+
 		return settingspanel;
 	}
 
@@ -197,9 +197,9 @@ class NotificationSounds {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
-			
+
 			this.ChannelSettingsUtils = BDFDB.WebModules.findByProperties("isGuildOrCategoryOrChannelMuted");
-			
+
 			BDFDB.WebModules.patch(BDFDB.WebModules.findByProperties("receiveMessage"), "receiveMessage", this, {before: e => {
 				let message = e.methodArguments[1];
 				let guildid = message.guild_id ? message.guild_id : null;
@@ -217,7 +217,7 @@ class NotificationSounds {
 					}
 				}
 			}});
-			
+
 			BDFDB.WebModules.patch(BDFDB.WebModules.findByProperties("playSound"), "playSound", this, {instead: e => {
 				setImmediate(() => {
 					var type = e.methodArguments[0];
@@ -229,10 +229,10 @@ class NotificationSounds {
 					else this.playAudio(type);
 				});
 			}});
-			
+
 			this.loadAudios();
 			this.loadChoices();
-			
+
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
@@ -247,29 +247,29 @@ class NotificationSounds {
 		}
 	}
 
-	
+
 	// begin of own functions
-	
+
 	openDropdownMenu (settingspanel, e) {
 		let selectControl = e.currentTarget;
 		let selectWrap = selectControl.parentElement;
 		let plugincard = BDFDB.getParentEle("li", selectWrap);
-		
+
 		if (!plugincard || BDFDB.containsClass(selectWrap, BDFDB.disCN.selectisopen)) return;
-		
+
 		BDFDB.addClass(selectWrap, BDFDB.disCN.selectisopen);
-		
+
 		var type = selectWrap.getAttribute("type");
 		var option = selectWrap.getAttribute("option");
 		var categorySelect = settingspanel.querySelector(`${BDFDB.dotCN.select}[type="${type}"][option="category"]`);
 		var songSelect = settingspanel.querySelector(`${BDFDB.dotCN.select}[type="${type}"][option="song"]`);
-		
+
 		var category = categorySelect.getAttribute("value");
 		var song = songSelect.getAttribute("value");
-		
+
 		var selectMenu = this.createDropdownMenu({type, option, category, song});
 		selectWrap.appendChild(selectMenu);
-		
+
 		BDFDB.addChildEventListener(selectMenu, "mousedown", BDFDB.dotCN.selectoption, e2 => {
 			var choice = BDFDB.loadData(type, this, "choices");
 			var selection = e2.currentTarget.textContent;
@@ -284,7 +284,7 @@ class NotificationSounds {
 			choice.src = choice.src ? choice.src : this.types[type].src;
 			this.saveChoice(type, choice, true);
 		});
-		
+
 		var removeMenu = e2 => {
 			if (e2.target.parentElement != selectMenu) {
 				document.removeEventListener("mousedown", removeMenu);
@@ -292,10 +292,10 @@ class NotificationSounds {
 				setTimeout(() => {BDFDB.removeClass(selectWrap, BDFDB.disCN.selectisopen);},100);
 			}
 		};
-		
+
 		document.addEventListener("mousedown", removeMenu);
 	}
-	
+
 	createDropdownMenu ({type, option, category, song} = data) {
 		var choice = BDFDB.loadData(type, this, "choices");
 		var eles = option == "song" ? this.audios[category] : this.audios;
@@ -307,16 +307,16 @@ class NotificationSounds {
 		menuhtml += `</div></div>`;
 		return BDFDB.htmlToElement(menuhtml);
 	}
-	
+
 	dragSlider (settingspanel, e) {
 		var grabber = e.target;
 		var track = grabber.parentNode;
 		var slider = track.parentNode;
 		var input = slider.querySelector(".volumeInput");
 		var bar = slider.querySelector(BDFDB.dotCN.sliderbarfill);
-			
+
 		BDFDB.appendLocalStyle("disableTextSelection", `*{user-select: none !important;}`);
-		
+
 		var volume = 0;
 		var sY = 0;
 		var sHalfW = BDFDB.getRects(grabber).width/2;
@@ -341,13 +341,13 @@ class NotificationSounds {
 		document.addEventListener("mouseup", mouseup);
 		document.addEventListener("mousemove", mousemove);
 	}
-	
+
 	loadAudios () {
 		this.audios = BDFDB.loadAllData(this, "audios");
 		if (BDFDB.isObjectEmpty(this.audios)) this.audios = this.defaults;
 		BDFDB.saveAllData(this.audios, this, "audios");
 	}
-	
+
 	saveAudio (settingspanel) {
 		var valid = true;
 		var inputs = settingspanel.querySelectorAll(".songInput");
@@ -382,7 +382,7 @@ class NotificationSounds {
 					}
 				});
 			}
-			
+
 			successSavedAudio = () => {
 				BDFDB.showToast(`Song ${song} was added to category ${category}.`, {type:"success"});
 				if (!this.audios[category]) this.audios[category] = {};
@@ -397,12 +397,12 @@ class NotificationSounds {
 			BDFDB.showToast("Fill out all fields to add a new song.", {type:"danger"});
 		}
 	}
-	
+
 	loadChoices () {
 		for (var type in this.types) {
 			var choice = BDFDB.loadData(type, this, "choices");
 			choice = choice ? choice : {};
-			
+
 			var songFound = false;
 			for (var category in this.audios) {
 				if (choice.category == category) {
@@ -419,13 +419,13 @@ class NotificationSounds {
 			this.saveChoice(type, choice, false);
 		}
 	}
-	
+
 	saveChoice (type, choice, play) {
 		BDFDB.saveData(type, choice, this, "choices");
 		this.choices[type] = choice;
 		if (play) this.playAudio(type, this.settingsaudio);
 	}
-	
+
 	playAudio (type, audio) {
 		if (!audio) {
 			if (this.dontPlayAudio(type)) return;
@@ -436,17 +436,17 @@ class NotificationSounds {
 		audio.volume = this.choices[type].volume/100;
 		audio.play();
 	}
-	
+
 	dontPlayAudio (type) {
 		let status = BDFDB.getUserStatus();
 		return this.choices[type].mute && (status == "dnd" || status == "streaming");
 	}
-	
+
 	fireEvent (type) {
 		this.firedEvents[type] = true;
 		setTimeout(() => {this.firedEvents[type] = false;},3000);
 	}
-	
+
 	patchCallingSound (instance, instancetype, type) {
 		let audio = new Audio();
 		let play = () => {
@@ -464,11 +464,11 @@ class NotificationSounds {
 		BDFDB.WebModules.patch(instance._reactInternalFiber.type.prototype, "stopRinging", this, {instead: stop});
 		BDFDB.WebModules.unpatch(instance._reactInternalFiber.type.prototype, this.patchModules[instancetype], this);
 	}
-	
+
 	processIncomingCalls (instance, wrapper) {
 		this.patchCallingSound(instance, "IncomingCalls", "call_ringing");
 	}
-	
+
 	processPrivateChannelCall (instance, wrapper) {
 		console.log(wrapper);
 		this.patchCallingSound(instance, "PrivateChannelCall", "call_calling");

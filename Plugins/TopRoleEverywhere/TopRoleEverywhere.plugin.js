@@ -8,14 +8,14 @@ class TopRoleEverywhere {
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Adds the highest role of a user as a tag.";}
-	
+
 	initConstructor () {
 		this.patchModules = {
 			"NameTag":"componentDidMount",
 			"MessageUsername":"componentDidMount",
 			"StandardSidebarView":"componentWillUnmount"
 		};
-		
+
 		this.css = `
 			.TRE-tag {
 				border-radius: 3px;
@@ -38,9 +38,9 @@ class TopRoleEverywhere {
 				margin-left: 2px;
 				margin-right: 6px;
 			}`;
-			
+
 		this.tagMarkup = `<span class="TRE-tag"><span class="role-inner"></span></span>`;
-			
+
 		this.defaults = {
 			settings: {
 				showInChat:			{value:true, 	description:"Show Tag in Chat Window."},
@@ -54,7 +54,7 @@ class TopRoleEverywhere {
 			}
 		};
 	}
-	
+
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		let settings = BDFDB.getAllData(this, "settings"); 
@@ -63,11 +63,11 @@ class TopRoleEverywhere {
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
 		}
 		settingshtml += `</div></div>`;
-		
+
 		let settingspanel = BDFDB.htmlToElement(settingshtml);
 
 		BDFDB.initElements(settingspanel, this);
-			
+
 		return settingspanel;
 	}
 
@@ -94,13 +94,13 @@ class TopRoleEverywhere {
 
 	initialize () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
-			if (this.started) return;			
+			if (this.started) return;
 			BDFDB.loadMessage(this);
-			
+
 			this.GuildPerms = BDFDB.WebModules.findByProperties("getHighestRole");
 			this.GuildStore = BDFDB.WebModules.findByProperties("getGuild");
 			this.UserGuildState = BDFDB.WebModules.findByProperties("getGuildId", "getLastSelectedGuildId");
-			
+
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
@@ -114,16 +114,16 @@ class TopRoleEverywhere {
 			BDFDB.unloadMessage(this);
 		}
 	}
-	
-	
+
+
 	// begin of own functions
-	
+
 	processNameTag (instance, wrapper) {
 		if (instance.props && BDFDB.containsClass(wrapper, BDFDB.disCN.membernametag) && BDFDB.getData("showInMemberList", this, "settings")) {
 			this.addRoleTag(instance.props.user, wrapper.querySelector(BDFDB.dotCN.memberusername), "list");
 		}
 	}
-	
+
 	processMessageUsername (instance, wrapper) {
 		let message = BDFDB.getReactValue(instance, "props.message");
 		if (message) {
@@ -131,7 +131,7 @@ class TopRoleEverywhere {
 			if (username && BDFDB.getData("showInChat", this, "settings")) this.addRoleTag(message.author, username, "chat");
 		}
 	}
-	
+
 	processStandardSidebarView (instance, wrapper) {
 		if (this.SettingsUpdated) {
 			delete this.SettingsUpdated;
@@ -139,7 +139,7 @@ class TopRoleEverywhere {
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 	}
-	
+
 	addRoleTag (info, username, type) {
 		if (!info || !username) return;
 		BDFDB.removeEles(username.parentElement.querySelectorAll(".TRE-tag"));
@@ -187,7 +187,7 @@ class TopRoleEverywhere {
 			inner.style.setProperty("background-image", bgInner);
 			inner.style.setProperty("-webkit-background-clip", "text");
 			inner.textContent = roleText;
-			
+
 			if (oldwidth && oldwidth < 100 && BDFDB.getRects(username).width < 100) {
 				tag.style.setProperty("max-width", (BDFDB.getRects(BDFDB.getParentEle(BDFDB.dotCN.memberinner, username)).width - oldwidth - 15) + "px");
 			}

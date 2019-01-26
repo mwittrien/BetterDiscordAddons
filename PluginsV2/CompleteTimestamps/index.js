@@ -1,16 +1,14 @@
 module.exports = (Plugin, Api, Vendor) => {
-	if (typeof BDFDB !== "object") global.BDFDB = {$: Vendor.$, BDv2Api: Api};
-	
-	const {$} = Vendor;
+	if (!global.BDFDB || typeof BDFDB != "object") global.BDFDB = {BDv2Api: Api};
 
 	return class extends Plugin {
 		initConstructor () {
 			this.languages;
-			
+
 			this.updateTimestamps = false;
-			
+
 			this.compactWidth = null;
-				
+
 			this.defaults = {
 				settings: {
 					showInChat:		{value:true, 	description:"Replace Chat Timestamp with Complete Timestamp:"},
@@ -30,27 +28,29 @@ module.exports = (Plugin, Api, Vendor) => {
 				}
 			};
 		}
-		
+
 		onStart () {
-			var libraryScript = null;
-			if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-				libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+			var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+			if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 				if (libraryScript) libraryScript.remove();
 				libraryScript = document.createElement("script");
 				libraryScript.setAttribute("type", "text/javascript");
 				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+				libraryScript.setAttribute("date", performance.now());
+				libraryScript.addEventListener("load", () => {
+					BDFDB.loaded = true;
+					this.initialize();
+				});
 				document.head.appendChild(libraryScript);
 			}
+			else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 			this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-			if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-			else libraryScript.addEventListener("load", () => {this.initialize();});
-			return true;
 		}
 
 		initialize () {
-			if (typeof BDFDB === "object") {
+			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				BDFDB.loadMessage(this);
-				
+
 				var observer = null;
 
 				observer = new MutationObserver((changes, _) => {
@@ -70,14 +70,14 @@ module.exports = (Plugin, Api, Vendor) => {
 					);
 				});
 				BDFDB.addObserver(this, BDFDB.dotCN.appmount, {name:"messageObserver",instance:observer}, {childList: true, subtree: true});
-				
+
 				this.languages = Object.assign({},
 					{"own":	{name:"Own",		id:"own",		integrated:false,	dic:false}},
 					BDFDB.languages
 				);
-				
+
 				this.setMaxWidth();
-				
+
 				$(document)
 					.on("mouseenter." + this.name, BDFDB.dotCNS.message + BDFDB.dotCNC.messagetext + BDFDB.dotCNS.message + BDFDB.dotCN.messageaccessory, (e) => {
 						if (BDFDB.getData("showOnHover", this, "settings")) {
@@ -105,7 +105,7 @@ module.exports = (Plugin, Api, Vendor) => {
 							BDFDB.createTooltip(this.getTimestamp(this.languages[choice].id, info.editedTimestamp._i), marker, {type:"top",selector:"completetimestampedit-tooltip",css:customTooltipCSS});
 						}
 					});
-				
+
 				document.querySelectorAll(BDFDB.dotCN.messagetext).forEach(message => {this.changeTimestamp(message);});
 
 				return true;
@@ -118,9 +118,9 @@ module.exports = (Plugin, Api, Vendor) => {
 
 
 		onStop () {
-			if (typeof BDFDB === "object") {
+			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				document.querySelectorAll(".complete-timestamp").forEach(timestamp => {timestamp.classList.remove("complete-timestamp");});
-				
+
 				BDFDB.unloadMessage(this);
 				return true;
 			}
@@ -129,7 +129,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 		}
 
-		
+
 		// begin of own functions
 
 		updateSettings (settingspanel) {
@@ -157,7 +157,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 			this.updateTimestamps = true;
 		}
-		
+
 		toggleInfo (settingspanel, ele) {
 			ele.classList.toggle(BDFDB.disCN.categorywrappercollapsed);
 			ele.classList.toggle(BDFDB.disCN.categorywrapperdefault);
@@ -165,24 +165,24 @@ module.exports = (Plugin, Api, Vendor) => {
 			svg.classList.toggle(BDFDB.disCN.closed);
 			svg.classList.toggle(BDFDB.disCN.categoryiconcollapsed);
 			svg.classList.toggle(BDFDB.disCN.categoryicondefault);
-			
+
 			var visible = $(settingspanel).find(".info-container").is(":visible");
 			$(settingspanel).find(".info-container").toggle(!visible);
 			BDFDB.saveData("hideInfo", visible, this, "hideInfo");
 		}
-		
+
 		openDropdownMenu (e) {
 			var selectControl = e.currentTarget;
 			var selectWrap = selectControl.parentElement;
-			
+
 			if (selectWrap.classList.contains(BDFDB.disCN.selectisopen)) return;
-			
+
 			selectWrap.classList.add(BDFDB.disCN.selectisopen);
 			$("li").has(selectWrap).css("overflow", "visible");
-			
+
 			var selectMenu = this.createDropdownMenu(selectWrap.getAttribute("value"));
 			selectWrap.appendChild(selectMenu);
-			
+
 			$(selectMenu).on("mousedown." + this.name, BDFDB.dotCN.selectoption, (e2) => {
 				var language = e2.currentTarget.getAttribute("value");
 				selectWrap.setAttribute("value", language);
@@ -198,7 +198,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				setTimeout(() => {selectWrap.classList.remove(BDFDB.disCN.selectisopen);},100);
 			});
 		}
-		
+
 		createDropdownMenu (choice) {
 			var menuhtml = `<div class="${BDFDB.disCN.selectmenuouter}"><div class="${BDFDB.disCN.selectmenu}">`;
 			for (var key in this.languages) {
@@ -208,7 +208,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			menuhtml += `</div></div>`;
 			return $(menuhtml)[0];
 		}
-		
+
 		changeTimestamp (message) {
 			if (!message || !message.tagName || !BDFDB.getData("showInChat", this, "settings")) return;
 			var messagegroup = this.getMessageGroup(message);
@@ -231,7 +231,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				}
 			}
 		}
-		
+
 		getMessageGroup (message) {
 			var messagegroup = null;
 			while (messagegroup == null || message.parentElement) {
@@ -240,14 +240,14 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 			return messagegroup;
 		}
-		
+
 		getMessageData (message, messagegroup) {
 			var pos = $(messagegroup).find(BDFDB.dotCN.message).index($(messagegroup).find(BDFDB.dotCN.message).has(message)[0]);
 			var info = BDFDB.getKeyInformation({"node":message,"key":"messages","up":true,"time":1000});
 			if (info && pos > -1) info = info[pos];
 			return info;
 		}
-		
+
 		getTimestamp (languageid, time = new Date()) {
 			var settings = BDFDB.getAllData(this, "settings"), timestring = "";
 			if (languageid != "own") {
@@ -283,21 +283,21 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 			return timestring;
 		}
-		
+
 		cutOffSeconds (timestring) {
 			return timestring.replace(/(.*):(.*):(.{2})(.*)/, "$1:$2$4");
 		}
-		
+
 		addLeadingZeros (timestring) {
 			var chararray = timestring.split("");
 			var numreg = /[0-9]/;
 			for (var i = 0; i < chararray.length; i++) {
 				if (!numreg.test(chararray[i-1]) && numreg.test(chararray[i]) && !numreg.test(chararray[i+1])) chararray[i] = "0" + chararray[i];
 			}
-			
+
 			return chararray.join("");
 		}
-		
+
 		setMaxWidth () {
 			var wrapper = $(`<div class="${BDFDB.disCNS.messagegroup + BDFDB.disCN.messagecompact}"><div class="${BDFDB.disCN.messagetimestamp}"></div></div>`);
 			var timestamp = wrapper.find(BDFDB.dotCN.messagetimestamp);
@@ -306,7 +306,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			this.compactWidth = timestamp.css("width", "auto").text(this.getTimestamp(this.languages[choice].id, new Date(253402124399995))).outerWidth();
 			wrapper.remove();
 		}
-		
+
 		getSettingsPanel () {
 			var settings = BDFDB.getAllData(this, "settings");
 			var choices = BDFDB.getAllData(this, "choices");
@@ -326,7 +326,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			settingshtml += `<div class="DevilBro-settings-inner-list info-container" ${infoHidden ? "style='display:none;'" : ""}>`;
 			settingshtml += `<div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$hour will be replaced with the current hour</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$minute will be replaced with the current minutes</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$second will be replaced with the current seconds</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$msecond will be replaced with the current milliseconds</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$timemode will change $hour to a 12h format and will be replaced with AM/PM</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$year will be replaced with the current year</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$month will be replaced with the current month</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$day will be replaced with the current day</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$monthnameL will be replaced with the monthname in long format based on the Discord Language</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$monthnameS will be replaced with the monthname in short format based on the Discord Language</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$weekdayL will be replaced with the weekday in long format based on the Discord Language</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$weekdayS will be replaced with the weekday in short format based on the Discord Language</div>`;
 			settingshtml += `</div>`;
-			
+
 			var settingspanel = $(settingshtml)[0];
 
 
@@ -337,7 +337,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				.on("click", ".toggle-info", (e) => {this.toggleInfo(settingspanel, e.currentTarget);});
 			return settingspanel;
 		}
-		
+
 		onSettingsClosed () {
 			if (this.updateTimestamps) {
 				this.setMaxWidth();

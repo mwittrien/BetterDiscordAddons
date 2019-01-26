@@ -8,18 +8,18 @@ class MessageUtilities {
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Offers a number of useful message options. Remap the keybindings in the settings.";}
-	
-	initConstructor () {		
+
+	initConstructor () {
 		this.bindings = {};
-		
+
 		this.firedEvents = [];
-		
+
 		this.clickMap = ["CLICK" /*[0]*/, "DBLCLICK" /*[1]*/];
-		
+
 		this.keyboardMap = [
 			"NONE" /*[0]*/, "" /*[1]*/, "" /*[2]*/, "CANCEL" /*[3]*/, "" /*[4]*/, "" /*[5]*/, "HELP" /*[6]*/, "" /*[7]*/, "BACK_SPACE" /*[8]*/, "TAB" /*[9]*/, "" /*[10]*/, "" /*[11]*/, "CLEAR" /*[12]*/, "ENTER" /*[13]*/, "ENTER_SPECIAL" /*[14]*/, "" /*[15]*/, "SHIFT" /*[16]*/, "CONTROL" /*[17]*/, "ALT" /*[18]*/, "PAUSE" /*[19]*/, "CAPS_LOCK" /*[20]*/, "KANA" /*[21]*/, "EISU" /*[22]*/, "JUNJA" /*[23]*/, "FINAL" /*[24]*/, "HANJA" /*[25]*/, "" /*[26]*/, "ESCAPE" /*[27]*/, "CONVERT" /*[28]*/, "NONCONVERT" /*[29]*/, "ACCEPT" /*[30]*/, "MODECHANGE" /*[31]*/, "SPACE" /*[32]*/, "PAGE_UP" /*[33]*/, "PAGE_DOWN" /*[34]*/, "END" /*[35]*/, "HOME" /*[36]*/, "LEFT" /*[37]*/, "UP" /*[38]*/, "RIGHT" /*[39]*/, "DOWN" /*[40]*/, "SELECT" /*[41]*/, "PRINT" /*[42]*/, "EXECUTE" /*[43]*/, "PRINTSCREEN" /*[44]*/, "INSERT" /*[45]*/, "DELETE" /*[46]*/, "" /*[47]*/,"0" /*[48]*/, "1" /*[49]*/, "2" /*[50]*/, "3" /*[51]*/, "4" /*[52]*/, "5" /*[53]*/, "6" /*[54]*/, "7" /*[55]*/, "8" /*[56]*/, "9" /*[57]*/, "COLON" /*[58]*/, "SEMICOLON" /*[59]*/, "LESS_THAN" /*[60]*/, "EQUALS" /*[61]*/, "GREATER_THAN" /*[62]*/, "QUESTION_MARK" /*[63]*/, "AT" /*[64]*/, "A" /*[65]*/, "B" /*[66]*/, "C" /*[67]*/, "D" /*[68]*/, "E" /*[69]*/, "F" /*[70]*/, "G" /*[71]*/, "H" /*[72]*/, "I" /*[73]*/, "J" /*[74]*/, "K" /*[75]*/, "L" /*[76]*/, "M" /*[77]*/, "N" /*[78]*/, "O" /*[79]*/, "P" /*[80]*/, "Q" /*[81]*/, "R" /*[82]*/, "S" /*[83]*/, "T" /*[84]*/, "U" /*[85]*/, "V" /*[86]*/, "W" /*[87]*/, "X" /*[88]*/, "Y" /*[89]*/, "Z" /*[90]*/, "OS_KEY" /*[91]*/, "" /*[92]*/, "CONTEXT_MENU" /*[93]*/, "" /*[94]*/, "SLEEP" /*[95]*/, "NUMPAD0" /*[96]*/, "NUMPAD1" /*[97]*/, "NUMPAD2" /*[98]*/, "NUMPAD3" /*[99]*/, "NUMPAD4" /*[100]*/, "NUMPAD5" /*[101]*/, "NUMPAD6" /*[102]*/, "NUMPAD7" /*[103]*/, "NUMPAD8" /*[104]*/, "NUMPAD9" /*[105]*/, "MULTIPLY" /*[106]*/, "ADD" /*[107]*/, "SEPARATOR" /*[108]*/, "SUBTRACT" /*[109]*/, "DECIMAL" /*[110]*/, "DIVIDE" /*[111]*/, "F1" /*[112]*/, "F2" /*[113]*/, "F3" /*[114]*/, "F4" /*[115]*/, "F5" /*[116]*/, "F6" /*[117]*/, "F7" /*[118]*/, "F8" /*[119]*/, "F9" /*[120]*/, "F10" /*[121]*/, "F11" /*[122]*/, "F12" /*[123]*/, "F13" /*[124]*/, "F14" /*[125]*/, "F15" /*[126]*/, "F16" /*[127]*/, "F17" /*[128]*/, "F18" /*[129]*/, "F19" /*[130]*/, "F20" /*[131]*/, "F21" /*[132]*/, "F22" /*[133]*/, "F23" /*[134]*/, "F24" /*[135]*/, "" /*[136]*/, "" /*[137]*/, "" /*[138]*/, "" /*[139]*/, "" /*[140]*/, "" /*[141]*/, "" /*[142]*/, "" /*[143]*/, "NUM_LOCK" /*[144]*/, "SCROLL_LOCK" /*[145]*/, "WIN_OEM_FJ_JISHO" /*[146]*/, "WIN_OEM_FJ_MASSHOU" /*[147]*/, "WIN_OEM_FJ_TOUROKU" /*[148]*/, "WIN_OEM_FJ_LOYA" /*[149]*/, "WIN_OEM_FJ_ROYA" /*[150]*/, "" /*[151]*/, "" /*[152]*/, "" /*[153]*/, "" /*[154]*/, "" /*[155]*/, "" /*[156]*/, "" /*[157]*/, "" /*[158]*/, "" /*[159]*/, "CIRCUMFLEX" /*[160]*/, "EXCLAMATION" /*[161]*/, "DOUBLE_QUOTE" /*[162]*/, "HASH" /*[163]*/, "DOLLAR" /*[164]*/, "PERCENT" /*[165]*/, "AMPERSAND" /*[166]*/, "UNDERSCORE" /*[167]*/, "OPEN_PAREN" /*[168]*/, "CLOSE_PAREN" /*[169]*/, "ASTERISK" /*[170]*/, "PLUS" /*[171]*/, "PIPE" /*[172]*/, "HYPHEN_MINUS" /*[173]*/, "OPEN_CURLY_BRACKET" /*[174]*/, "CLOSE_CURLY_BRACKET" /*[175]*/, "TILDE" /*[176]*/, "" /*[177]*/, "" /*[178]*/, "" /*[179]*/, "" /*[180]*/, "VOLUME_MUTE" /*[181]*/, "VOLUME_DOWN" /*[182]*/, "VOLUME_UP" /*[183]*/, "" /*[184]*/, "" /*[185]*/, "SEMICOLON" /*[186]*/, "EQUALS" /*[187]*/, "COMMA" /*[188]*/, "MINUS" /*[189]*/, "PERIOD" /*[190]*/, "SLASH" /*[191]*/, "BACK_QUOTE" /*[192]*/, "" /*[193]*/, "" /*[194]*/, "" /*[195]*/, "" /*[196]*/, "" /*[197]*/, "" /*[198]*/, "" /*[199]*/, "" /*[200]*/, "" /*[201]*/, "" /*[202]*/, "" /*[203]*/, "" /*[204]*/, "" /*[205]*/, "" /*[206]*/, "" /*[207]*/, "" /*[208]*/, "" /*[209]*/, "" /*[210]*/, "" /*[211]*/, "" /*[212]*/, "" /*[213]*/, "" /*[214]*/, "" /*[215]*/, "" /*[216]*/, "" /*[217]*/, "" /*[218]*/, "OPEN_BRACKET" /*[219]*/, "BACK_SLASH" /*[220]*/, "CLOSE_BRACKET" /*[221]*/, "QUOTE" /*[222]*/, "" /*[223]*/, "META" /*[224]*/, "ALTGR" /*[225]*/, "" /*[226]*/, "WIN_ICO_HELP" /*[227]*/, "WIN_ICO_00" /*[228]*/, "" /*[229]*/, "WIN_ICO_CLEAR" /*[230]*/, "" /*[231]*/,"" /*[232]*/, "WIN_OEM_RESET" /*[233]*/, "WIN_OEM_JUMP" /*[234]*/, "WIN_OEM_PA1" /*[235]*/, "WIN_OEM_PA2" /*[236]*/, "WIN_OEM_PA3" /*[237]*/, "WIN_OEM_WSCTRL" /*[238]*/,"WIN_OEM_CUSEL" /*[239]*/, "WIN_OEM_ATTN" /*[240]*/, "WIN_OEM_FINISH" /*[241]*/, "WIN_OEM_COPY" /*[242]*/, "WIN_OEM_AUTO" /*[243]*/, "WIN_OEM_ENLW" /*[244]*/, "WIN_OEM_BACKTAB" /*[245]*/, "ATTN" /*[246]*/, "CRSEL" /*[247]*/, "EXSEL" /*[248]*/, "EREOF" /*[249]*/, "PLAY" /*[250]*/, "ZOOM" /*[251]*/, "" /*[252]*/, "PA1" /*[253]*/, "WIN_OEM_CLEAR" /*[254]*/, "" /*[255]*/
 		];
-		
+
 		this.clicks = 	["click"];
 		this.keys = 	["key1","key2"];
 		this.defaults = {
@@ -46,7 +46,7 @@ class MessageUtilities {
 			}
 		};
 	}
-	
+
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		let settings = BDFDB.getAllData(this, "settings"); 
@@ -69,16 +69,16 @@ class MessageUtilities {
 		}
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Reset all key bindings.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} reset-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Reset</div></button></div>`;
 		settingshtml += `</div></div>`;
-		
+
 		let settingspanel = BDFDB.htmlToElement(settingshtml);
 
 		BDFDB.initElements(settingspanel, this);
-		
+
 		BDFDB.addEventListener(this, settingspanel, "click", BDFDB.dotCN.selectcontrol, e => {this.openDropdownMenu(e);})
 		BDFDB.addEventListener(this, settingspanel, "click", BDFDB.dotCN.hotkeycontainer, e => {this.startRecording(settingspanel, e);})
 		BDFDB.addEventListener(this, settingspanel, "click", ".reset-recorder", e => {this.resetRecorder(settingspanel, e);})
 		BDFDB.addEventListener(this, settingspanel, "click", ".reset-button", () => {this.resetAll(settingspanel);});
-			
+
 		return settingspanel;
 	}
 
@@ -107,13 +107,13 @@ class MessageUtilities {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
-			
+
 			this.ChannelUtils = BDFDB.WebModules.findByProperties("getChannels","getChannel");
 			this.MessageActions = BDFDB.WebModules.findByProperties("startEditMessage", "endEditMessage");
 			this.PinActions = BDFDB.WebModules.findByProperties("pinMessage", "unpinMessage");
 			this.CurrentUserPerms = BDFDB.WebModules.findByProperties("getChannelPermissions", "can");
 			this.Permissions = BDFDB.WebModules.findByProperties("Permissions", "ActivityTypes").Permissions
-			
+
 			BDFDB.addEventListener(this, document, "click", BDFDB.dotCNC.message + BDFDB.dotCN.messagesystem, e => {
 				this.onClick(e.currentTarget, 0, "onSglClick");
 			})
@@ -135,9 +135,9 @@ class MessageUtilities {
 		}
 	}
 
-	
+
 	//begin of own functions
-	
+
 	resetAll (settingspanel) {
 		BDFDB.openConfirmModal(this, "Are you sure you want to delete all key bindings?", () => {
 			BDFDB.removeAllData(this, "bindings");
@@ -156,24 +156,24 @@ class MessageUtilities {
 			});
 		});
 	}
-	
+
 	openDropdownMenu (e) {
 		let selectControl = e.currentTarget;
 		let selectWrap = selectControl.parentElement;
 		let plugincard = BDFDB.getParentEle("li", selectWrap);
-		
+
 		if (!plugincard || BDFDB.containsClass(selectWrap, BDFDB.disCN.selectisopen)) return;
-		
+
 		BDFDB.addClass(selectWrap, BDFDB.disCN.selectisopen);
 		plugincard.style.setProperty("overflow", "visible", "important");
-		
+
 		let action = selectWrap.getAttribute("type");
 		let option = selectWrap.getAttribute("option");
 		let value = selectWrap.getAttribute("value");
-		
+
 		let selectMenu = this.createDropdownMenu(action, value);
 		selectWrap.appendChild(selectMenu);
-			
+
 		BDFDB.addChildEventListener(selectMenu, "mousedown", BDFDB.dotCN.selectoption, e2 => {
 			let binding = BDFDB.getData(action, this, "bindings");
 			let selection = e2.currentTarget.getAttribute("value");
@@ -182,7 +182,7 @@ class MessageUtilities {
 			binding[option] = parseInt(selection);
 			BDFDB.saveData(action, binding, this, "bindings");
 		});
-		
+
 		var removeMenu = e2 => {
 			if (e2.target.parentElement != selectMenu) {
 				document.removeEventListener("mousedown", removeMenu);
@@ -193,7 +193,7 @@ class MessageUtilities {
 		};
 		document.addEventListener("mousedown", removeMenu);
 	}
-	
+
 	createDropdownMenu (action, value) {
 		let menuhtml = `<div class="${BDFDB.disCN.selectmenuouter}"><div class="${BDFDB.disCN.selectmenu}">`;
 		for (let i in this.clickMap) {
@@ -203,26 +203,26 @@ class MessageUtilities {
 		menuhtml += `</div></div>`;
 		return BDFDB.htmlToElement(menuhtml);
 	}
-	
+
 	startRecording (settingspanel, e) {
 		let recorderWrap = e.currentTarget;
 		if (BDFDB.containsClass(recorderWrap, BDFDB.disCN.hotkeyrecording)) return;
-		
+
 		let recorderInput = recorderWrap.querySelector("input");
 		let recorderText = recorderWrap.querySelector(BDFDB.dotCN.hotkeytext);
 		let action = recorderWrap.getAttribute("type");
 		let option = recorderWrap.getAttribute("option");
-		
+
 		BDFDB.addClass(recorderWrap, BDFDB.disCN.hotkeyrecording);
 		BDFDB.removeClass(recorderWrap, BDFDB.disCN.hotkeyhasvalue);
 		recorderText.innerText = BDFDB.LanguageStrings.SHORTCUT_RECORDER_BUTTON_RECORDING;
-		
-		
+
+
 		var saveRecording = e => {
 			recorderWrap.setAttribute("value", e.which);
 			recorderInput.setAttribute("value", this.keyboardMap[e.which]);
 		};
-		
+
 		var stopRecording = e => {
 			document.removeEventListener("mousedown", stopRecording);
 			document.removeEventListener("keydown", saveRecording);
@@ -235,11 +235,11 @@ class MessageUtilities {
 				recorderText.innerText = BDFDB.LanguageStrings.SHORTCUT_RECORDER_BUTTON_EDIT;
 			},100);
 		};
-		
+
 		document.addEventListener("mousedown", stopRecording);
 		document.addEventListener("keydown", saveRecording);
 	}
-	
+
 	resetRecorder (settingspanel, e) {
 		let resetButton = e.currentTarget;
 		let recorderWrap = e.currentTarget.parentElement.parentElement.querySelector(BDFDB.dotCN.hotkeycontainer);
@@ -252,7 +252,7 @@ class MessageUtilities {
 		binding[option] = parseInt(recorderWrap.getAttribute("value"));
 		BDFDB.saveData(action, binding, this, "bindings");
 	}
-	
+
 	onClick (div, click, name) {
 		if (!this.isEventFired(name)) {
 			this.fireEvent(name);
@@ -268,7 +268,7 @@ class MessageUtilities {
 			this.cancelEvent(name);
 		}
 	}
-	
+
 	checkIfBindingIsValid (binding, doneclick) {
 		let valid = true;
 		for (let click of this.clicks) {
@@ -279,25 +279,25 @@ class MessageUtilities {
 		}
 		return valid;
 	}
-	
+
 	doDelete ({messagediv, pos, message}) {
 		let channel = this.ChannelUtils.getChannel(message.channel_id);
 		if ((channel && this.CurrentUserPerms.can(this.Permissions.MANAGE_MESSAGES, channel)) || message.author.id == BDFDB.myData.id) {
 			this.MessageActions.deleteMessage(message.channel_id, message.id);
 		}
 	}
-	
+
 	doEdit ({messagediv, pos, message}) {
 		if (message.author.id == BDFDB.myData.id && !messagediv.querySelector("textarea")) {
 			this.MessageActions.startEditMessage(message.channel_id, message.id, message.content);
 		}
 	}
-	
+
 	doOpenReact ({messagediv, pos, message}) {
 		let reactButton = messagediv.querySelector(BDFDB.dotCN.emojipickerbutton);
 		if (reactButton) reactButton.click();
 	}
-	
+
 	doPinUnPin ({messagediv, pos, message}) {
 		let channel = this.ChannelUtils.getChannel(message.channel_id);
 		if (channel && this.CurrentUserPerms.can(this.Permissions.MANAGE_MESSAGES, channel)) {
@@ -305,35 +305,35 @@ class MessageUtilities {
 			else this.PinActions.pinMessage(channel, message.id);
 		}
 	}
-	
+
 	doNote ({messagediv, pos, message}) {
 		if (BDFDB.isPluginEnabled(this.defaults.bindings.__Note_Message.plugin)) {
 			let channel = this.ChannelUtils.getChannel(message.channel_id);
 			if (channel) bdplugins[this.defaults.bindings.__Note_Message.plugin].plugin.addMessageToNotes(message, messagediv, channel);
 		}
 	}
-	
+
 	doTranslate ({messagediv, pos, message}) {
 		if (BDFDB.isPluginEnabled(this.defaults.bindings.__Translate_Message.plugin)) {
 			let channel = this.ChannelUtils.getChannel(message.channel_id);
 			if (channel) bdplugins[this.defaults.bindings.__Translate_Message.plugin].plugin.translateMessage(message, messagediv, channel);
 		}
 	}
-	
+
 	doQuote ({messagediv, pos, message}) {
 		if (BDFDB.isPluginEnabled(this.defaults.bindings.__Quote_Message.plugin)) {
 			let quoteButton = messagediv.querySelector(".btn-quote");
 			if (quoteButton) quoteButton.click();
 		}
 	}
-	
+
 	doCitate ({messagediv, pos, message}) {
 		if (BDFDB.isPluginEnabled(this.defaults.bindings.__Citate_Message.plugin)) {
 			let citarButton = messagediv.parentElement.querySelector(".citar-btn");
 			if (citarButton) citarButton.click();
 		}
 	}
-	
+
 	onKeyDown (div, key, name) {
 		if (!this.isEventFired(name)) {
 			this.fireEvent(name);
@@ -346,7 +346,7 @@ class MessageUtilities {
 			this.cancelEvent(name);
 		}
 	}
-	
+
 	getActiveShortcutString (action) {
 		let str = "";
 		if (BDFDB.getData(action, this, "settings")) {
@@ -358,7 +358,7 @@ class MessageUtilities {
 		}
 		return str ? str.slice(0,-1) : null;
 	}
-	
+
 	getMessageData (target) {
 		let messagediv = BDFDB.getParentEle(BDFDB.dotCN.message, target);
 		let pos = messagediv ? Array.from(messagediv.parentElement.querySelectorAll(BDFDB.dotCN.message)).indexOf(messagediv) : -1;
@@ -366,15 +366,15 @@ class MessageUtilities {
 		let message = instance && instance.return && instance.return.memoizedProps && instance.return.memoizedProps.message ? instance.return.memoizedProps.message : null;
 		return {messagediv, pos, message};
 	}
-	
+
 	fireEvent (name) {
 		this.firedEvents.push(name);
 	}
-	
+
 	isEventFired (name) {
 		return this.firedEvents.includes(name);
 	}
-	
+
 	cancelEvent (name) {
 		BDFDB.removeFromArray(this.firedEvents, name);
 	}

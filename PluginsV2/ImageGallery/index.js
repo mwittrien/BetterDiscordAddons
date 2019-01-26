@@ -1,49 +1,49 @@
 module.exports = (Plugin, Api, Vendor) => {
-	if (typeof BDFDB !== "object") global.BDFDB = {$: Vendor.$, BDv2Api: Api};
-	
-	const {$} = Vendor;
+	if (!global.BDFDB || typeof BDFDB != "object") global.BDFDB = {BDv2Api: Api};
 
 	return class extends Plugin {
 		initConstructor () {
 			this.eventFired = false;
-			
+
 			this.imageMarkup = `<div class="${BDFDB.disCN.imagewrapper}" style="width: 100px; height: 100px;"><img src="" style="width: 100px; height: 100px; display: inline;"></div>`;
-			
+
 			this.css = ` 
 				.image-gallery ${BDFDB.dotCN.imagewrapper}.prev,
 				.image-gallery ${BDFDB.dotCN.imagewrapper}.next {
 					position: absolute;
 				} 
-				
+
 				.image-gallery ${BDFDB.dotCN.imagewrapper}.prev {
 					right: 90%;
 				} 
-				
+
 				.image-gallery ${BDFDB.dotCN.imagewrapper}.next {
 					left: 90%;
 				}`;
 		}
-		
+
 		onStart () {
-			var libraryScript = null;
-			if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-				libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+			var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+			if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 				if (libraryScript) libraryScript.remove();
 				libraryScript = document.createElement("script");
 				libraryScript.setAttribute("type", "text/javascript");
 				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+				libraryScript.setAttribute("date", performance.now());
+				libraryScript.addEventListener("load", () => {
+					BDFDB.loaded = true;
+					this.initialize();
+				});
 				document.head.appendChild(libraryScript);
 			}
+			else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 			this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-			if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-			else libraryScript.addEventListener("load", () => {this.initialize();});
-			return true;
 		}
 
 		initialize () {
-			if (typeof BDFDB === "object") {
+			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				BDFDB.loadMessage(this);
-				
+
 				var observer = null;
 
 				observer = new MutationObserver((changes, _) => {
@@ -77,7 +77,7 @@ module.exports = (Plugin, Api, Vendor) => {
 		}
 
 		onStop () {
-			if (typeof BDFDB === "object") {
+			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				BDFDB.unloadMessage(this);
 				return true;
 			}
@@ -86,9 +86,9 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 		}
 
-		
+
 		// begin of own functions
-		
+
 		loadImages (modal) {
 			var start = performance.now();
 			var waitForImg = setInterval(() => {
@@ -106,7 +106,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				}
 			}, 100);
 		}
-		
+
 		getMessageGroupOfImage (thisimg) {
 			if (thisimg && thisimg.src) {
 				for (let group of document.querySelectorAll(BDFDB.dotCN.messagegroup)) {
@@ -119,15 +119,15 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 			return null;
 		}
-		
+
 		getSrcOfImage (img) {
 			var src = img.src ? img.src : (img.querySelector("canvas") ? img.querySelector("canvas").src : "");
 			return src.split("?width=")[0];
 		}
-		
+
 		addImages (modal, imgs, img) {
 			modal.querySelectorAll(`${BDFDB.dotCN.imagewrapper}.prev, ${BDFDB.dotCN.imagewrapper}.next`).forEach(ele => {ele.remove();});
-			
+
 			var prevImg, nextImg, index;
 			for (index = 0; index < imgs.length; index++) {
 				if (this.getSrcOfImage(img) == this.getSrcOfImage(imgs[index])) {
@@ -137,14 +137,14 @@ module.exports = (Plugin, Api, Vendor) => {
 					break;
 				}
 			}
-			
+
 			$(modal).find(BDFDB.dotCN.imagewrapper)
 				.addClass("current")
 				.find("img").attr("src", this.getSrcOfImage(img));
-				
+
 			$(modal.querySelector(BDFDB.dotCN.downloadlink))
 				.attr("href", this.getSrcOfImage(img));
-				
+
 			this.resizeImage(modal, img, modal.querySelector(BDFDB.dotCN.imagewrapper + ".current img"));
 			if (prevImg) {
 				$(this.imageMarkup)
@@ -166,7 +166,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					.find("img").attr("src", this.getSrcOfImage(nextImg));
 				this.resizeImage(modal, nextImg, modal.querySelector(BDFDB.dotCN.imagewrapper + ".next img"));
 			}
-			
+
 			$(document).off("keydown." + this.name).off("keyup." + this.name)
 				.on("keydown." + this.name, (e) => {
 					this.keyPressed({modal, imgs, prevImg, nextImg}, e);
@@ -175,7 +175,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					this.eventFired = false;
 				});
 		}
-		
+
 		resizeImage (container, src, img) {
 			$(img).hide();
 			var temp = new Image();
@@ -188,22 +188,22 @@ module.exports = (Plugin, Api, Vendor) => {
 				var newHeight = src.clientHeight * resize;
 				newWidth = temp.width > newWidth ? newWidth : temp.width;
 				newHeight = temp.height > newHeight ? newHeight : temp.height;
-				
+
 				var wrapper = img.parentElement;
-				
-				
+
+
 				$(wrapper)
 					.css("top", !wrapper.classList.contains("current") ? (container.clientHeight - newHeight) / 2 : "")
 					.css("width", newWidth)
 					.css("height", newHeight);
-					
+
 				$(img)
 					.css("width", newWidth)
 					.css("height", newHeight)
 					.show();
 			};
 		}
-		
+
 		keyPressed (data, e) {
 			if (!this.eventFired) {
 				this.eventFired = true;

@@ -1,12 +1,10 @@
 module.exports = (Plugin, Api, Vendor) => {
-	if (typeof BDFDB !== "object") global.BDFDB = {$: Vendor.$, BDv2Api: Api};
-	
-	const {$} = Vendor;
+	if (!global.BDFDB || typeof BDFDB != "object") global.BDFDB = {BDv2Api: Api};
 
 	return class extends Plugin {
 		initConstructor () {
 			this.labels = {};
-			
+
 			this.updateUsers = false;
 
 			this.css = `
@@ -33,7 +31,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					position: relative;
 					top: 2px;
 				}`;
-				
+
 			this.tagMarkup = `<span class="user-tag"></span>`;
 
 			this.userContextEntryMarkup =
@@ -43,7 +41,7 @@ module.exports = (Plugin, Api, Vendor) => {
 						<div class="${BDFDB.disCN.contextmenuhint}"></div>
 					</div>
 				</div>`;
-				
+
 			this.userContextSubMenuMarkup = 
 				`<div class="${BDFDB.disCN.contextmenu} editusers-submenu">
 					<div class="${BDFDB.disCN.contextmenuitemgroup}">
@@ -57,7 +55,7 @@ module.exports = (Plugin, Api, Vendor) => {
 						</div>
 					</div>
 				</div>`;
-				
+
 			this.userSettingsModalMarkup =
 				`<span class=""${this.name}-modal DevilBro-modal"">
 					<div class="${BDFDB.disCN.backdrop}"></div>
@@ -154,7 +152,7 @@ module.exports = (Plugin, Api, Vendor) => {
 						</div>
 					</div>
 				</span>`;
-				
+
 			this.defaults = {
 				settings: {
 					changeInChatWindow:		{value:true, 	description:"Chat"},
@@ -174,31 +172,33 @@ module.exports = (Plugin, Api, Vendor) => {
 		}
 
 		onStart () {
-			var libraryScript = null;
-			if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-				libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+			var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+			if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 				if (libraryScript) libraryScript.remove();
 				libraryScript = document.createElement("script");
 				libraryScript.setAttribute("type", "text/javascript");
 				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+				libraryScript.setAttribute("date", performance.now());
+				libraryScript.addEventListener("load", () => {
+					BDFDB.loaded = true;
+					this.initialize();
+				});
 				document.head.appendChild(libraryScript);
 			}
+			else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 			this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-			if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-			else libraryScript.addEventListener("load", () => {this.initialize();});
-			return true;
 		}
 
 		initialize () {
-			if (typeof BDFDB === "object") {
+			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				BDFDB.loadMessage(this);
-				
+
 				this.UserStore = BDFDB.WebModules.findByProperties("getUsers", "getUser");
 				this.MemberPerms = BDFDB.WebModules.findByProperties("getNicknames", "getNick");
 				this.TypingUtils = BDFDB.WebModules.findByProperties("getTypingUsers");
 				this.LastGuildStore = BDFDB.WebModules.findByProperties("getLastSelectedGuildId");
 				this.LastChannelStore = BDFDB.WebModules.findByProperties("getLastSelectedChannelId");
-				
+
 				var observer = null;
 
 				observer = new MutationObserver((changes, _) => {
@@ -215,7 +215,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					);
 				});
 				BDFDB.addObserver(this, BDFDB.dotCN.appmount, {name:"userContextObserver",instance:observer}, {childList: true});
-				
+
 				observer = new MutationObserver((changes, _) => {
 					changes.forEach(
 						(change, i) => {
@@ -228,7 +228,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					);
 				});
 				BDFDB.addObserver(this, BDFDB.dotCN.dms, {name:"dmObserver",instance:observer}, {childList: true});
-				
+
 				observer = new MutationObserver((changes, _) => {
 					changes.forEach(
 						(change, i) => {
@@ -246,7 +246,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					);
 				});
 				BDFDB.addObserver(this, BDFDB.dotCN.channels, {name:"channelListObserver",instance:observer}, {childList: true, subtree: true});
-				
+
 				observer = new MutationObserver((changes, _) => {
 					changes.forEach(
 						(change, i) => {
@@ -261,7 +261,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					);
 				});
 				BDFDB.addObserver(this, BDFDB.idCN.friends, {name:"friendListObserver",instance:observer}, {childList:true, subtree:true});
-				
+
 				observer = new MutationObserver((changes, _) => {
 					changes.forEach(
 						(change, i) => {
@@ -276,7 +276,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					);
 				});
 				BDFDB.addObserver(this, BDFDB.dotCN.memberswrap, {name:"userListObserver",instance:observer}, {childList:true, subtree:true});
-				
+
 				observer = new MutationObserver((changes, _) => {
 					changes.forEach(
 						(change, i) => {
@@ -372,7 +372,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					);
 				});
 				BDFDB.addObserver(this, BDFDB.dotCN.callcurrentcontainer, {name:"callObserver",instance:observer}, {childList:true, subtree:true});
-				
+
 				observer = new MutationObserver((changes, _) => {
 					changes.forEach(
 						(change, i) => {
@@ -387,7 +387,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					);
 				});
 				BDFDB.addObserver(this, BDFDB.dotCN.popouts, {name:"userPopoutObserver",instance:observer}, {childList: true});
-				
+
 				observer = new MutationObserver((changes, _) => {
 					changes.forEach(
 						(change, i) => {
@@ -402,7 +402,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					);
 				});
 				BDFDB.addObserver(this, BDFDB.dotCN.app + " ~ [class^='theme-']:not([class*='popouts'])", {name:"userProfilModalObserver",instance:observer}, {childList: true});
-				
+
 				observer = new MutationObserver((changes, _) => {
 					changes.forEach(
 						(change, i) => {
@@ -415,7 +415,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					);
 				});
 				BDFDB.addObserver(this, BDFDB.dotCN.layers, {name:"settingsWindowObserver",instance:observer}, {childList:true});
-							
+
 				this.loadAllUsers();
 
 				return true;
@@ -427,9 +427,9 @@ module.exports = (Plugin, Api, Vendor) => {
 		}
 
 		onStop () {
-			if (typeof BDFDB === "object") {
+			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				this.resetAllUsers();
-							
+
 				BDFDB.unloadMessage(this);
 				return true;
 			}
@@ -437,9 +437,9 @@ module.exports = (Plugin, Api, Vendor) => {
 				return false;
 			}
 		}
-		
+
 		onSwitch () {
-			if (typeof BDFDB === "object") {
+			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				$(`${BDFDB.dotCN.channelheadertitletext}[custom-editusers]`).find(`${BDFDB.dotCN.channelheaderchannelname}:not(${BDFDB.dotCN.channelheaderprivate})`).css("color", "").css("background-color", "").parent().removeAttr("custom-editusers");
 				BDFDB.addObserver(this, BDFDB.dotCN.memberswrap, {name:"userListObserver"}, {childList:true, subtree:true});
 				BDFDB.addObserver(this, BDFDB.dotCN.messages, {name:"messagesObserver"}, {childList:true, subtree:true});
@@ -451,7 +451,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 		}
 
-		
+
 		// begin of own functions
 
 		updateSettings (settingspanel) {
@@ -471,10 +471,10 @@ module.exports = (Plugin, Api, Vendor) => {
 
 		changeLanguageStrings () {
 			this.userContextEntryMarkup =		this.userContextEntryMarkup.replace("REPLACE_context_localusersettings_text", this.labels.context_localusersettings_text);
-			
+
 			this.userContextSubMenuMarkup =		this.userContextSubMenuMarkup.replace("REPLACE_submenu_usersettings_text", this.labels.submenu_usersettings_text);
 			this.userContextSubMenuMarkup =		this.userContextSubMenuMarkup.replace("REPLACE_submenu_resetsettings_text", this.labels.submenu_resetsettings_text);
-			
+
 			this.userSettingsModalMarkup =		this.userSettingsModalMarkup.replace("REPLACE_modal_header_text", this.labels.modal_header_text);
 			this.userSettingsModalMarkup =		this.userSettingsModalMarkup.replace("REPLACE_modal_username_text", this.labels.modal_username_text);
 			this.userSettingsModalMarkup =		this.userSettingsModalMarkup.replace("REPLACE_modal_usertag_text", this.labels.modal_usertag_text);
@@ -491,7 +491,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			this.userSettingsModalMarkup =		this.userSettingsModalMarkup.replace("REPLACE_btn_cancel_text", this.labels.btn_cancel_text);
 			this.userSettingsModalMarkup =		this.userSettingsModalMarkup.replace("REPLACE_btn_save_text", this.labels.btn_save_text);
 		}
-		
+
 		onContextMenu (context) {
 			if (!context || !context.tagName || !context.parentElement || context.querySelector(".localusersettings-item")) return;
 			var info = BDFDB.getKeyInformation({"node":context, "key":"user"});
@@ -500,20 +500,20 @@ module.exports = (Plugin, Api, Vendor) => {
 					.on("mouseenter", ".localusersettings-item", (e) => {
 						this.createContextSubMenu(info, e, context);
 					});
-					
+
 				BDFDB.updateContextPosition(context);
 			}
 		}
-		
+
 		createContextSubMenu (info, e, context) {
 			var userContextSubMenu = $(this.userContextSubMenuMarkup);
-			
+
 			userContextSubMenu
 				.on("click", ".usersettings-item", () => {
 					$(context).hide();
 					this.showUserSettings(info);
 				});
-				
+
 			if (BDFDB.loadData(info.id, this, "users")) {
 				userContextSubMenu
 					.find(".resetsettings-item")
@@ -524,13 +524,13 @@ module.exports = (Plugin, Api, Vendor) => {
 						this.loadAllUsers();
 					});
 			}
-			
+
 			BDFDB.appendSubMenu(e.currentTarget, userContextSubMenu);
 		}
-		
+
 		showUserSettings (info, e) {
 			var data = BDFDB.loadData(info.id, this, "users");
-			
+
 			var name =				data ? data.name : null;
 			var tag =				data ? data.tag : null;
 			var url =				data ? data.url : null;
@@ -540,9 +540,9 @@ module.exports = (Plugin, Api, Vendor) => {
 			var color2 =			data ? data.color2 : null;
 			var color3 =			data ? data.color3 : null;
 			var color4 =			data ? data.color4 : null;
-			
+
 			var member = this.MemberPerms.getMember(this.LastGuildStore.getGuildId(), info.id) ;
-			
+
 			var userSettingsModal = $(this.userSettingsModalMarkup);
 			userSettingsModal.find(BDFDB.dotCN.modalguildname).text(member && member.nick ? member.nick : info.username);
 			userSettingsModal.find("#input-username").val(name);
@@ -580,24 +580,24 @@ module.exports = (Plugin, Api, Vendor) => {
 				})
 				.on("click", ".btn-save", (event) => {
 					event.preventDefault();
-					
+
 					removeIcon = userSettingsModal.find("#input-removeicon").prop("checked");
 					ignoreTagColor = userSettingsModal.find("#input-ignoretagcolor").prop("checked");
-					
+
 					name = null;
 					if (userSettingsModal.find("#input-username").val()) {
 						if (userSettingsModal.find("#input-username").val().trim().length > 0) {
 							name = userSettingsModal.find("#input-username").val().trim();
 						}
 					}
-					
+
 					tag = null;
 					if (userSettingsModal.find("#input-usertag").val()) {
 						if (userSettingsModal.find("#input-usertag").val().trim().length > 0) {
 							tag = userSettingsModal.find("#input-usertag").val().trim();
 						}
 					}
-					
+
 					if (userSettingsModal.find("#input-userurl:not('.invalid')").length > 0) {
 						url = null;
 						if (!removeIcon && userSettingsModal.find("#input-userurl").val()) {
@@ -606,12 +606,12 @@ module.exports = (Plugin, Api, Vendor) => {
 							}
 						}
 					}
-					
+
 					color1 = BDFDB.getSwatchColor("swatch1");
 					color2 = BDFDB.getSwatchColor("swatch2");
 					color3 = BDFDB.getSwatchColor("swatch3");
 					color4 = BDFDB.getSwatchColor("swatch4");
-					
+
 					if (name == null && tag == null && url == null && !removeIcon && !ignoreTagColor && color1 == null && color2 == null && color3 == null && color4 == null) {
 						BDFDB.removeData(info.id, this, "users")
 					}
@@ -622,7 +622,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				});
 			userSettingsModal.find("#input-username").focus();
 		}
-		
+
 		checkUrl (modal, e) {
 			if (!e.target.value) {
 				$(e.target)
@@ -647,10 +647,10 @@ module.exports = (Plugin, Api, Vendor) => {
 				});
 			}
 		}
-		
+
 		createNoticeTooltip (e) {
 			$(BDFDB.dotCN.tooltips).find(".notice-tooltip").remove();
-			
+
 			var input = e.target;
 			var disabled = $(input).prop("disabled");
 			var valid = $(input).hasClass("valid");
@@ -671,9 +671,9 @@ module.exports = (Plugin, Api, Vendor) => {
 
 		loadAllUsers () {
 			this.resetAllUsers();
-			
+
 			var settings = BDFDB.getAllData(this, "settings");
-			
+
 			if (settings.changeInMemberList) {
 				for (let user of document.querySelectorAll(BDFDB.dotCN.member)) {
 					this.loadUser(user, "list", false);
@@ -737,20 +737,20 @@ module.exports = (Plugin, Api, Vendor) => {
 				}
 			}
 		}
-		
+
 		loadUser (div, type, compact) {
 			if (!div || $(div).attr("custom-editusers") || !div.tagName || (!div.querySelector(BDFDB.dotCN.dmchannelactivitytext) && div.querySelector(BDFDB.dotCN.dmchannelactivity))) return;
-			
+
 			let {avatar, username, wrapper} = this.getAvatarNameWrapper(div);
 			if (!avatar && !username && !wrapper) return;
-			
+
 			$(div).data("compact", compact);
-			
+
 			var info = this.getUserInfo(compact ? $(BDFDB.dotCN.messagegroup).has(div)[0] : div);
 			if (!info) return;
-			
+
 			var data = BDFDB.loadData(info.id, this, "users");
-			
+
 			if (data) {
 				var member = this.MemberPerms.getMember(this.LastGuildStore.getGuildId(), info.id);
 				if (username) {
@@ -761,7 +761,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					username.style.color = color1;
 					username.style.background = color2;
 				}
-				
+
 				if (avatar && (data.removeIcon || data.url)) {
 					avatar.style.background = data.removeIcon ? "" : "url(" + data.url + ")";
 					avatar.style.backgroundSize = "cover";
@@ -774,7 +774,7 @@ module.exports = (Plugin, Api, Vendor) => {
 							});
 					}
 				}
-					
+
 				var tag = data.tag ? data.tag : null;
 				if (tag && wrapper && !wrapper.querySelector(".user-tag") && (type == "list" || type == "chat" || type == "popout" || type == "profil" || type == "dmheader")) {
 					var color3 = data.ignoreTagColor ? 
@@ -791,7 +791,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					thisTag.style.color = color4;
 					wrapper.appendChild(thisTag);
 				}
-				
+
 				if (type == "recentdms") {
 					$(div).find(BDFDB.dotCN.guildinner)
 						.off("mouseenter." + this.name)
@@ -799,43 +799,43 @@ module.exports = (Plugin, Api, Vendor) => {
 							this.createDmToolTip({"div":div,"nick":data.name,"name":info.username});
 						});
 				}
-				
+
 				$(div).attr("custom-editusers", true);
 			}
 		}
-		
+
 		resetAllUsers () {
 			document.querySelectorAll(".user-tag").forEach(node=>{node.remove();});
 			document.querySelectorAll("[custom-editusers]").forEach((div) => {
 				var {avatar, username, wrapper} = this.getAvatarNameWrapper(div);
 				if (!avatar && !username && !wrapper) return;
-				
+
 				var info = this.getUserInfo($(div).data(BDFDB.disCN.messagecompact) ? $(BDFDB.dotCN.messagegroup).has(div)[0] : div);
 				if (!info) return;
-				
+
 				if (username) {
 					var serverObj = BDFDB.getSelectedServer();
 					var member = serverObj ? this.MemberPerms.getMember(serverObj.id, info.id) : null;
 					var name = div.classList.contains(BDFDB.disCN.accountinfo) || !member || !member.nick ? info.username : member.nick;
 					var color1 = member && member.colorString ? BDFDB.color2RGB(member.colorString) : "";
 					var color2 = "";
-					
+
 					BDFDB.setInnerText(username, name);
 					username.style.color = color1;
 					username.style.background = color2;
 				}
-				
+
 				if (avatar) {
 					avatar.style.background = "url(" + BDFDB.getUserAvatar(info.id) + ")";
 					avatar.style.backgroundSize = "cover";
 					$(avatar).off("mouseenter." + this.name);
 				}
-				
+
 				$(div).removeAttr("custom-editusers")
 					.find(BDFDB.dotCN.guildinner).off("mouseenter." + this.name);
 			});
 		}
-		
+
 		createDmToolTip (userObj) {
 			var text = userObj.nick ? userObj.nick : userObj.name;
 			var customTooltipCSS = `
@@ -844,7 +844,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				}`;
 			BDFDB.createTooltip(text, userObj.div, {type:"right",selector:"dm-custom-tooltip",css:customTooltipCSS});
 		}
-		
+
 		createCallToolTip (userObj) {
 			var text = userObj.nick ? userObj.nick : userObj.name;
 			var customTooltipCSS = `
@@ -853,17 +853,17 @@ module.exports = (Plugin, Api, Vendor) => {
 				}`;
 			BDFDB.createTooltip(text, userObj.div, {type:"left",selector:"call-custom-tooltip",css:customTooltipCSS});
 		}
-		
+
 		getAvatarNameWrapper (div) {
 			var avatar = div.querySelector(BDFDB.dotCNC.avatarsmallold + BDFDB.dotCN.avatarlargeold + ":not(" + BDFDB.dotCN.avatarwrapper + "), " + BDFDB.dotCNC.avatarprofileold + BDFDB.dotCNC.voiceavatardefault + BDFDB.dotCNC.avatarimage + BDFDB.dotCN.callavatar);
-							
+
 			var username = div.querySelector(BDFDB.dotCNC.userpopoutheadernickname + BDFDB.dotCNC.userpopoutheadernonickname + BDFDB.dotCNC.userprofileusername + BDFDB.dotCNC.memberusername + BDFDB.dotCNC.voicenamedefault + BDFDB.dotCNC.messageusername + BDFDB.dotCNC.dmchannelname + BDFDB.dotCN.channelheaderchannelname + BDFDB.dotCNC.channelheaderprivate + BDFDB.dotCNS.friendscolumnnamewrap + BDFDB.dotCNC.friendscolumnusername + BDFDB.dotCNS.accountinfodetails + BDFDB.dotCN.accountinfousername);
-							
+
 			var wrapper = div.querySelector(BDFDB.dotCNC.userpopoutheadernickname + BDFDB.dotCNC.userpopoutheadernonickname + BDFDB.dotCNC.userprofileusername + BDFDB.dotCNC.memberusername + BDFDB.dotCNC.voicenamedefault + BDFDB.dotCNC.messageusernamewrapper + BDFDB.dotCNC.dmchannelname + BDFDB.dotCN.channelheaderchannelname + BDFDB.dotCNC.channelheaderprivate + BDFDB.dotCNS.friendscolumnnamewrap + BDFDB.dotCNC.nametag + BDFDB.dotCNS.accountinfodetails + BDFDB.dotCN.accountinfousername);
-							
+
 			return {avatar, username, wrapper};
 		}
-		
+
 		getUserInfo (div) {
 			let info, avatar = div.querySelector("[style*='/avatars/']");
 			if (avatar) info = this.UserStore.getUser(avatar.style.backgroundImage.split("/avatars/")[1].split("/")[0]);
@@ -887,7 +887,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 			return info && info.id ? this.UserStore.getUser(info.id) : null;
 		}
-		
+
 		changeTyping (div) {
 			let i = 0, ids = Object.assign({},this.TypingUtils.getTypingUsers(this.LastChannelStore.getChannelId())), sortedids = [], alldata = BDFDB.loadAllData(this, "users");
 			delete ids[BDFDB.myData.id];
@@ -906,7 +906,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				i++;
 			}
 		}
-		
+
 		getSettingsPanel () {
 			var settings = BDFDB.getAllData(this, "settings"); 
 			var settingshtml = `<div class="DevilBro-settings ${this.name}-settings">`;
@@ -917,7 +917,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			settingshtml += `</div>`;
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Reset all Users.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} reset-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Reset</div></button></div>`;
 			settingshtml += `</div>`;
-			
+
 			var settingspanel = $(settingshtml)[0];
 
 			$(settingspanel)
@@ -925,14 +925,14 @@ module.exports = (Plugin, Api, Vendor) => {
 				.on("click", ".reset-button", () => {this.resetAll();});
 			return settingspanel;
 		}
-	
+
 		onSettingsClosed () {
 			if (this.updateUsers) {
 				this.loadAllUsers();
 				this.updateUsers = false;
 			}
 		}
-		
+
 		setLabelsByLanguage () {
 			switch (BDFDB.getDiscordLanguage().id) {
 				case "hr":		//croatian

@@ -8,7 +8,7 @@ class ThemeSettings {
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Allows you to change Theme Variables within BetterDiscord. Adds a Settings button (similar to Plugins) to customizable Themes in your Themes Page.";}
-	
+
 	initConstructor () {
 		this.patchModules = {
 			"V2C_ThemeCard":"componentDidMount"
@@ -40,11 +40,11 @@ class ThemeSettings {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
-			
+
 			this.fs = require("fs");
 			this.path = require("path");
 			this.dir = BDFDB.getThemesFolder();
-			
+
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
@@ -58,10 +58,10 @@ class ThemeSettings {
 			BDFDB.unloadMessage(this);
 		}
 	}
-	
-	
+
+
 	// begin of own functions
-	
+
 	processV2CThemeCard (instance, wrapper) {
 		if (instance.props && instance.props.theme && !wrapper.querySelector(BDFDB.dotCN._reposettingsbutton + ".themes-settings-button")) {
 			let vars = this.getThemeVars(instance.props.theme.css);
@@ -97,7 +97,7 @@ class ThemeSettings {
 			}
 		}
 	}
-	
+
 	getThemeVars (css) {
 		let vars = css.split(":root");
 		if (vars.length > 1) {
@@ -110,16 +110,16 @@ class ThemeSettings {
 		}
 		return [];
 	}
-	
+
 	createThemeSettings (wrapper, theme, vars) {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		var settingshtml = `<div class="theme-settings" id="theme-settings-${theme.name}"><div class="${theme.name}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${BDFDB.encodeToHTML(theme.name)}</div><div class="DevilBro-settings-inner"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Update all variables</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorgreen + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} update-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Update</div></button></div></div></div>`;
-		
+
 		let settingspanel = BDFDB.htmlToElement(settingshtml);
 		var settingspanelinner = settingspanel.querySelector(".DevilBro-settings-inner");
-		
+
 		var maxwidth = BDFDB.getRects(wrapper).width - 80;
-		
+
 		for (let varstr of vars) {
 			varstr = varstr.split(":");
 			let varname = varstr.shift().trim();
@@ -133,7 +133,7 @@ class ThemeSettings {
 			varinput.setAttribute("placeholder", varvalue || "");
 			settingspanelinner.appendChild(varcontainer);
 		}
-		
+
 		BDFDB.initElements(settingspanel, this);
 
 		BDFDB.addEventListener(this, settingspanel, "click", ".update-button", () => {
@@ -158,7 +158,7 @@ class ThemeSettings {
 			}
 			else BDFDB.showToast(`Could not find themefile: ${theme.filename}`, {type:"error"});
 		});
-		
+
 		wrapper.appendChild(settingspanel);
 	}
 }

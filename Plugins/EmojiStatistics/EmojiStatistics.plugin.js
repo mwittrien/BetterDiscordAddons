@@ -8,34 +8,34 @@ class EmojiStatistics {
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Adds some helpful options to show you more information about emojis and emojiservers.";}
-	
+
 	initConstructor () {
 		this.labels = {};
-		
+
 		this.patchModules = {
 			"EmojiPicker":"componentDidMount"
 		};
-		
+
 		this.css = `
 			.emojistatistics-tooltip,
 			.emoji-tooltip {
 				z-index: 2002;
 			}
-			
+
 			.${this.name}-modal .titles {
 				height: 20px;
 			}
-			
+
 			.${this.name}-modal .emojiserver-entry {
 				height: 50px;
 				padding-top: 5px;
 				padding-bottom: 5px;
 			}
-			
+
 			.${this.name}-modal .emojiserver-entry .modal-emojiserver-icon {
 				display: inline-block;
 			}
-			
+
 			.${this.name}-modal .titles-entry label,
 			.${this.name}-modal .emojiserver-entry label {
 				color: #b9bbbe;
@@ -50,12 +50,12 @@ class EmojiStatistics {
 				vertical-align: top;
 				text-transform: uppercase;
 			}
-			
+
 			.${this.name}-modal .emojiserver-entry label {
 				height: 12px;
 				overflow: hidden;
 			}
-			
+
 			.${this.name}-modal .titles-entry label {
 				margin-top: 0px;
 			}
@@ -64,16 +64,16 @@ class EmojiStatistics {
 				text-align: center;
 				width: 50px;
 			}
-			
+
 			.${this.name}-modal .titles-entry .modal-titlesname-label,
 			.${this.name}-modal .emojiserver-entry .modal-emojiname-label {
 				width: 300px;
 			}
-			
+
 			.${this.name}-modal .titles-entry .modal-sorttitle-label {
 				cursor: pointer;
 			}
-			
+
 			.${this.name}-modal .titles-entry .modal-titlestotal-label,
 			.${this.name}-modal .titles-entry .modal-titlesglobal-label,
 			.${this.name}-modal .titles-entry .modal-titleslocal-label,
@@ -85,7 +85,7 @@ class EmojiStatistics {
 				text-align: center;
 				width: 82px;
 			}
-			
+
 			.emojistatistics-button {
 				background-image: url("/assets/f24711dae4f6d6b28335e866a93e9d9b.png");
 				background-position: -770px -374px;
@@ -95,7 +95,7 @@ class EmojiStatistics {
 				margin-right: 10px;
 				width: 22px;
 			}`;
-			
+
 		this.emojiInformationModalMarkup =
 			`<span class="${this.name}-modal DevilBro-modal">
 				<div class="${BDFDB.disCN.backdrop}"></div>
@@ -151,7 +151,7 @@ class EmojiStatistics {
 				<label class="modal-emojilocal-label">modal-emojilocal-label</label>
 				<label class="modal-emojicopies-label">modal-emojicopies-label</label>
 			</div>`;
-			
+
 		this.defaults = {
 			settings: {
 				enableEmojiHovering:			{value:true, 	description:"Show Information about Emojis on hover over an Emoji in the Emojipicker."},
@@ -175,7 +175,7 @@ class EmojiStatistics {
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCN.flexchild}" style="flex: 0 0 50%;">${this.defaults.amounts[key].description}</h3><div class="${BDFDB.disCN.inputwrapper} inputNumberWrapper ${BDFDB.disCNS.vertical +  BDFDB.disCNS.flex + BDFDB.disCNS.directioncolumn}" style="flex: 1 1 auto;"><span class="numberinput-buttons-zone"><span class="numberinput-button-up"></span><span class="numberinput-button-down"></span></span><input type="number" min="0" option="${key}" value="${amounts[key]}" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16} amountInput"></div></div>`;
 		}
 		settingshtml += `</div></div>`;
-		
+
 		let settingspanel = BDFDB.htmlToElement(settingshtml);
 
 		BDFDB.initElements(settingspanel, this);
@@ -184,7 +184,7 @@ class EmojiStatistics {
 			var input = parseInt(e.currentTarget.value);
 			if (!isNaN(input) && input > -1) BDFDB.saveData(e.currentTarget.getAttribute("option"), input, this, "amounts");
 		});
-			
+
 		return settingspanel;
 	}
 
@@ -213,9 +213,9 @@ class EmojiStatistics {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
-			
+
 			this.GuildEmojis = BDFDB.WebModules.findByProperties("getGuildEmoji", "getDisambiguatedEmojiContext");
-			
+
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
@@ -229,15 +229,15 @@ class EmojiStatistics {
 			BDFDB.unloadMessage(this);
 		}
 	}
-	
-	
+
+
 	// begin of own functions
-	
+
 	changeLanguageStrings () {
 		this.emojiInformationModalMarkup = 	this.emojiInformationModalMarkup.replace("REPLACE_modal_header_text", this.labels.modal_header_text);
 		this.emojiInformationModalMarkup = 	this.emojiInformationModalMarkup.replace("REPLACE_btn_ok_text", this.labels.btn_ok_text);
 		this.emojiInformationModalMarkup = 	this.emojiInformationModalMarkup.replace("REPLACE_btn_all_text", this.labels.btn_all_text);
-		
+
 		this.emojiserverTitlesMarkup = 		this.emojiserverTitlesMarkup.replace("REPLACE_modal_titlesicon-label", this.labels.modal_titlesicon_text);
 		this.emojiserverTitlesMarkup = 		this.emojiserverTitlesMarkup.replace("REPLACE_modal_titlesname_text", this.labels.modal_titlesname_text);
 		this.emojiserverTitlesMarkup = 		this.emojiserverTitlesMarkup.replace("REPLACE_modal_titlestotal_text", this.labels.modal_titlestotal_text);
@@ -245,7 +245,7 @@ class EmojiStatistics {
 		this.emojiserverTitlesMarkup = 		this.emojiserverTitlesMarkup.replace("REPLACE_modal_titleslocal_text", this.labels.modal_titleslocal_text);
 		this.emojiserverTitlesMarkup = 		this.emojiserverTitlesMarkup.replace("REPLACE_modal_titlescopies_text", this.labels.modal_titlescopies_text);
 	}
-	
+
 	processEmojiPicker (instance, wrapper) {
 		if (!wrapper.querySelector(".emojistatistics-button")) {
 			let emojipickerdiversityselector = document.querySelector(BDFDB.dotCN.emojipickerdiversityselector);
@@ -271,7 +271,7 @@ class EmojiStatistics {
 			}
 		}
 	}
-	
+
 	loadEmojiList () {
 		this.emojiReplicaList = {};
 		this.emojiToServerList = {};
@@ -282,41 +282,41 @@ class EmojiStatistics {
 			}
 		}
 	}
-	
+
 	showEmojiInformationModal () {
 		var emojiInformationModal = BDFDB.htmlToElement(this.emojiInformationModalMarkup);
-		
+
 		let titlescontainer = emojiInformationModal.querySelector(".titles");
 		let entriescontainer = emojiInformationModal.querySelector(".entries");
-		
+
 		if (!titlescontainer || !entriescontainer) return;
-		
+
 		var titleEntry = BDFDB.htmlToElement(this.emojiserverTitlesMarkup);
 		titlescontainer.appendChild(titleEntry);
 		BDFDB.addChildEventListener(titleEntry, "click", ".modal-sorttitle-label ", e => {
 			var oldTitle = e.currentTarget.innerText;
-			
+
 			var reverse = oldTitle.indexOf("▼") < 0 ? false : true;
-			
+
 			titleEntry.querySelector(".modal-titlesname-label").innerText = this.labels.modal_titlesname_text;
 			titleEntry.querySelector(".modal-titlestotal-label").innerText = this.labels.modal_titlestotal_text;
 			titleEntry.querySelector(".modal-titlesglobal-label").innerText = this.labels.modal_titlesglobal_text;
 			titleEntry.querySelector(".modal-titleslocal-label").innerText = this.labels.modal_titleslocal_text;
 			titleEntry.querySelector(".modal-titlescopies-label").innerText = this.labels.modal_titlescopies_text;
-			
+
 			var sortKey = "index";
 			if (oldTitle.indexOf("▲") < 0) {
 				sortKey = e.currentTarget.getAttribute("sortkey");
 				var title = this.labels["modal_titles" + sortKey + "_text"];
 				e.currentTarget.innerText = oldTitle.indexOf("▼") < 0 ? title + "▼" : title + "▲";
 			}
-			
+
 			BDFDB.sortArrayByKey(entries, sortKey);
 			if (reverse) entries.reverse();
-			
+
 			this.updateAllEntries(entriescontainer, entries);
 		});
-			
+
 		var entries = [], index = 0;
 		for (let info of BDFDB.readServerList()) {
 			let amountGlobal = 0, amountLocal = 0, amountCopies = 0;
@@ -338,12 +338,12 @@ class EmojiStatistics {
 			emojiEntry.querySelector(".modal-emojicopies-label").innerText = amountCopies;
 			entries.push({div:emojiEntry, index:index++, name:info.name || "", total:amountGlobal+amountLocal, global:amountGlobal, local:amountLocal, copies:amountCopies});
 		}
-			
+
 		BDFDB.appendModal(emojiInformationModal);
-				
+
 		this.updateAllEntries(entriescontainer, entries);
 	}
-	
+
 	updateAllEntries (entriescontainer, entries) {
 		BDFDB.removeEles(entriescontainer.childNodes);
 		for (let entry of entries) {
@@ -351,14 +351,14 @@ class EmojiStatistics {
 			entriescontainer.appendChild(entry.div);
 		}
 	}
-	
+
 	createCopyOfServer (info) {
 		let serverCopy = info.div.cloneNode(true);
 		BDFDB.toggleEles(serverCopy, true);
 		BDFDB.removeClass(serverCopy, BDFDB.disCN.guildunread, BDFDB.disCN.guildselected);
 		return serverCopy;
 	}
-	
+
 	setLabelsByLanguage () {
 		switch (BDFDB.getDiscordLanguage().id) {
 			case "hr":		//croatian

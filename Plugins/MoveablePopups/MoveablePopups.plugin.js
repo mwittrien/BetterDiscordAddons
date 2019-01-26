@@ -34,7 +34,7 @@ class MoveablePopups {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
-			
+
 			var observer = null;
 
 			observer = new MutationObserver((changes, _) => {
@@ -51,7 +51,7 @@ class MoveablePopups {
 				);
 			});
 			BDFDB.addObserver(this, BDFDB.dotCN.popouts, {name:"popoutObserver",instance:observer}, {childList: true});
-			
+
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
@@ -82,9 +82,9 @@ class MoveablePopups {
 		}
 	}
 
-	
+
 	// begin of own functions
-	
+
 	makeMoveable (div) {
 		div.removeEventListener("click", div.clickMovablePopups);
 		div.removeEventListener("mousedown", div.mousedownMovablePopups);
@@ -117,7 +117,7 @@ class MoveablePopups {
 				oldY = e2.pageY;
 				div.style.setProperty("left", left + "px", "important");
 				div.style.setProperty("top", top + "px", "important");
-				
+
 			};
 			document.addEventListener("mouseup", mouseup);
 			document.addEventListener("mousemove", mousemove);

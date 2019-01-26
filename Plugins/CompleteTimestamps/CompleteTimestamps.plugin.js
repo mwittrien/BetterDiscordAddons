@@ -8,15 +8,15 @@ class CompleteTimestamps {
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Replace all timestamps with complete timestamps.";}
-	
+
 	initConstructor () {
 		this.patchModules = {
 			"MessageGroup":["componentDidMount","componentDidUpdate"],
 			"StandardSidebarView":"componentWillUnmount"
 		};
-		
+
 		this.languages;
-			
+
 		this.defaults = {
 			settings: {
 				showInChat:		{value:true, 	description:"Replace Chat Timestamp with Complete Timestamp:"},
@@ -36,7 +36,7 @@ class CompleteTimestamps {
 			}
 		};
 	}
-	
+
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		let settings = BDFDB.getAllData(this, "settings");
@@ -57,7 +57,7 @@ class CompleteTimestamps {
 		settingshtml += `<div class="DevilBro-settings-inner-list info-container" ${infoHidden ? "style='display:none;'" : ""}>`;
 		settingshtml += `<div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$hour will be replaced with the current hour</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$minute will be replaced with the current minutes</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$second will be replaced with the current seconds</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$msecond will be replaced with the current milliseconds</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$timemode will change $hour to a 12h format and will be replaced with AM/PM</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$year will be replaced with the current year</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$month will be replaced with the current month</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$day will be replaced with the current day</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$monthnameL will be replaced with the monthname in long format based on the Discord Language</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$monthnameS will be replaced with the monthname in short format based on the Discord Language</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$weekdayL will be replaced with the weekday in long format based on the Discord Language</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$weekdayS will be replaced with the weekday in short format based on the Discord Language</div>`;
 		settingshtml += `</div></div>`;
-		
+
 		let settingspanel = BDFDB.htmlToElement(settingshtml);
 
 		BDFDB.initElements(settingspanel, this);
@@ -68,11 +68,11 @@ class CompleteTimestamps {
 		BDFDB.addEventListener(this, settingspanel, "click", ".toggle-info", e => {this.toggleInfo(e.currentTarget);});
 		return settingspanel;
 	}
-	
-	
+
+
 	//legacy
 	load () {}
-	
+
 	start () {
 		var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 		if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
@@ -95,9 +95,9 @@ class CompleteTimestamps {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
-			
+
 			this.languages = Object.assign({"own":{name:"Own",id:"own",integrated:false,dic:false}},BDFDB.languages);
-			
+
 			BDFDB.addEventListener(this, document, "mouseenter", BDFDB.dotCNS.message + BDFDB.dotCN.messagecontent, e => {
 				if (BDFDB.getData("showOnHover", this, "settings")) {
 					let message = e.currentTarget;
@@ -122,7 +122,7 @@ class CompleteTimestamps {
 					BDFDB.createTooltip(this.getTimestamp(this.languages[choice].id, time), marker, {type:"top",selector:"completetimestampedit-tooltip",css:customTooltipCSS});
 				}
 			});
-			
+
 			BDFDB.WebModules.forceAllUpdates();
 		}
 		else {
@@ -135,14 +135,14 @@ class CompleteTimestamps {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.removeEles(".complete-timestamp-divider");
 			BDFDB.removeClasses("complete-timestamp");
-			
+
 			BDFDB.removeLocalStyle(this.name + "CompactCorrection");
-			
+
 			BDFDB.unloadMessage(this);
 		}
 	}
 
-	
+
 	// begin of own functions
 
 	saveInputs (settingspanel) {
@@ -169,24 +169,24 @@ class CompleteTimestamps {
 		BDFDB.toggleClass(svg, BDFDB.disCN.directionright);
 		BDFDB.toggleClass(svg, BDFDB.disCN.categoryiconcollapsed);
 		BDFDB.toggleClass(svg, BDFDB.disCN.categoryicondefault);
-		
+
 		BDFDB.toggleEles(ele.nextElementSibling);
 		BDFDB.saveData("hideInfo", BDFDB.isEleHidden(ele.nextElementSibling), this, "hideInfo");
 	}
-	
+
 	openDropdownMenu (e) {
 		let selectControl = e.currentTarget;
 		let selectWrap = selectControl.parentElement;
 		let plugincard = BDFDB.getParentEle("li", selectWrap);
-		
+
 		if (!plugincard || BDFDB.containsClass(selectWrap, BDFDB.disCN.selectisopen)) return;
-		
+
 		BDFDB.addClass(selectWrap, BDFDB.disCN.selectisopen);
 		plugincard.style.setProperty("overflow", "visible", "important");
-		
+
 		let selectMenu = this.createDropdownMenu(selectWrap.getAttribute("value"));
 		selectWrap.appendChild(selectMenu);
-		
+
 		BDFDB.addChildEventListener(selectMenu, "mousedown", BDFDB.dotCN.selectoption, e2 => {
 			let language = e2.currentTarget.getAttribute("value");
 			selectWrap.setAttribute("value", language);
@@ -194,7 +194,7 @@ class CompleteTimestamps {
 			selectControl.querySelector(".languageTimestamp").innerText = this.getTimestamp(this.languages[language].id);
 			BDFDB.saveData(selectWrap.getAttribute("option"), language, this, "choices");
 		});
-		
+
 		var removeMenu = e2 => {
 			if (e2.target.parentElement != selectMenu) {
 				document.removeEventListener("mousedown", removeMenu);
@@ -203,10 +203,10 @@ class CompleteTimestamps {
 				setTimeout(() => {BDFDB.removeClass(selectWrap, BDFDB.disCN.selectisopen);},100);
 			}
 		};
-		
+
 		document.addEventListener("mousedown", removeMenu);
 	}
-	
+
 	createDropdownMenu (choice) {
 		let menuhtml = `<div class="${BDFDB.disCN.selectmenuouter}"><div class="${BDFDB.disCN.selectmenu}">`;
 		for (let key in this.languages) {
@@ -216,18 +216,18 @@ class CompleteTimestamps {
 		menuhtml += `</div></div>`;
 		return BDFDB.htmlToElement(menuhtml);
 	}
-	
+
 	processMessageGroup (instance, wrapper) {
 		for (let stamp of wrapper.querySelectorAll("time[datetime]")) this.changeTimestamp(stamp);
 	}
-	
+
 	processStandardSidebarView (instance, wrapper) {
 		if (this.SettingsUpdated) {
 			delete this.SettingsUpdated;
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 	}
-	
+
 	changeTimestamp (stamp) {
 		if (!stamp.className || stamp.className.toLowerCase().indexOf("timestamp") == -1 || BDFDB.containsClass(stamp, "complete-timestamp")) return;
 		let time = stamp.getAttribute("datetime");
@@ -245,7 +245,7 @@ class CompleteTimestamps {
 			BDFDB.setInnerText(stamp, this.getTimestamp(this.languages[BDFDB.getData("creationDateLang", this, "choices")].id, time));
 		}
 	}
-	
+
 	getMessageData (div, messagegroup) {
 		let pos = Array.from(messagegroup.querySelectorAll("." + div.className.replace(/ /g, "."))).indexOf(div);
 		let instance = BDFDB.getReactInstance(messagegroup);
@@ -253,7 +253,7 @@ class CompleteTimestamps {
 		let info = instance.return.stateNode.props.messages;
 		return info && pos > -1 ? info[pos] : null;
 	}
-	
+
 	getTimestamp (languageid, time) {
 		let timeobj = time ? time : new Date();
 		if (typeof time == "string") timeobj = new Date(time);
@@ -293,21 +293,21 @@ class CompleteTimestamps {
 		}
 		return timestring;
 	}
-	
+
 	cutOffSeconds (timestring) {
 		return timestring.replace(/(.*):(.*):(.{2})(.*)/, "$1:$2$4");
 	}
-	
+
 	addLeadingZeros (timestring) {
 		let chararray = timestring.split("");
 		let numreg = /[0-9]/;
 		for (let i = 0; i < chararray.length; i++) {
 			if (!numreg.test(chararray[i-1]) && numreg.test(chararray[i]) && !numreg.test(chararray[i+1])) chararray[i] = "0" + chararray[i];
 		}
-		
+
 		return chararray.join("");
 	}
-	
+
 	setMaxWidth () {
 		if (this.currentMode != BDFDB.getDiscordMode()) {
 			this.currentMode = BDFDB.getDiscordMode();

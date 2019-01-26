@@ -4,16 +4,16 @@ class GoogleSearchReplace {
 	getName () {return "GoogleSearchReplace";}
 
 	getVersion () {return "1.1.8";}
-	
+
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Replaces the default Google Text Search with a selection menu of several search engines.";}
-	
+
 	initConstructor () {
 		this.labels = {};
-		
+
 		this.textUrlReplaceString = "DEVILBRO_BD_GOOGLESEARCHREPLACE_REPLACE_TEXTURL";
-		
+
 		this.defaults = {
 			engines: {
 				_all: 				{value:true, 	name:BDFDB.getLibraryStrings().btn_all_text, 	url:null},
@@ -39,7 +39,7 @@ class GoogleSearchReplace {
 				<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_context_googlesearchreplace_text</div></span>
 				<div class="${BDFDB.disCN.contextmenuhint}"></div>
 			</div>`;
-			
+
 		this.messageContextSubMenuMarkup = 
 			`<div class="${BDFDB.disCN.contextmenu} googlereplacesearch-submenu">
 				<div class="${BDFDB.disCN.contextmenuitemgroup}">
@@ -62,14 +62,14 @@ class GoogleSearchReplace {
 		}
 		settingshtml += `</div>`;
 		settingshtml += `</div></div>`;
-		
+
 		let settingspanel = BDFDB.htmlToElement(settingshtml);
 
 		BDFDB.initElements(settingspanel, this);
-			
+
 		return settingspanel;
 	}
-	
+
 	//legacy
 	load () {}
 
@@ -106,23 +106,23 @@ class GoogleSearchReplace {
 			BDFDB.unloadMessage(this);
 		}
 	}
-	
-	
+
+
 	// begin of own functions
-	
+
 	changeLanguageStrings () {
 		this.messageContextEntryMarkup = 	this.messageContextEntryMarkup.replace("REPLACE_context_googlesearchreplace_text", this.labels.context_googlesearchreplace_text);
-		
+
 		this.messageContextSubMenuMarkup = 	this.messageContextSubMenuMarkup.replace("REPLACE_submenu_disabled_text", this.labels.submenu_disabled_text);
 	}
-	
+
 	onNativeContextMenu (instance, menu) {
 		if (instance.props && instance.props.type == "NATIVE_TEXT" && instance.props.value && !menu.querySelector(".reverseimagesearch-item")) {
 			let searchentry = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:menu,props:["handleSearchWithGoogle"]}));
 			if (searchentry) this.appendItem(instance, searchentry, instance.props.value);
 		}
 	}
-	
+
 	onMessageContextMenu (instance, menu) {
 		if (instance.props && instance.props.message && instance.props.channel && instance.props.target && !menu.querySelector(".googlereplacesearch-item")) {
 			let text = document.getSelection().toString();
@@ -132,7 +132,7 @@ class GoogleSearchReplace {
 			}
 		}
 	}
-	
+
 	appendItem (instance, target, text) {
 		let messageContextEntry = BDFDB.htmlToElement(this.messageContextEntryMarkup);
 		target.parentElement.insertBefore(messageContextEntry, target.nextElementSibling);
@@ -153,7 +153,7 @@ class GoogleSearchReplace {
 		});
 		BDFDB.toggleEles(target, false);
 	}
-	
+
 	setLabelsByLanguage () {
 		switch (BDFDB.getDiscordLanguage().id) {
 			case "hr":		//croatian

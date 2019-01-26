@@ -8,16 +8,16 @@ class CharCounter {
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Adds a charcounter in the chat.";}
-	
+
 	initConstructor () {
 		this.patchModules = {
 			"ChannelTextArea":"componentDidMount",
 			"Note":"componentDidMount",
 			"Modal":"componentDidMount"
 		};
-		
+
 		this.selecting = false;
-		
+
 		this.maxLenghts = {
 			normal: 2000,
 			edit: 2000,
@@ -104,7 +104,7 @@ class CharCounter {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
-			
+
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
@@ -120,33 +120,33 @@ class CharCounter {
 			BDFDB.unloadMessage(this);
 		}
 	}
-	
-	
+
+
 	// begin of own functions
-	
+
 	processChannelTextArea (instance, wrapper) {
 		if (instance.props && instance.props.type && this.maxLenghts[instance.props.type]) this.appendCounter(wrapper.querySelector("textarea"), instance.props.type);
 	}
-	
+
 	processNote (instance, wrapper) {
 		this.appendCounter(wrapper.firstElementChild, BDFDB.containsClass(wrapper, BDFDB.disCN.usernotepopout) ? "popout" : (BDFDB.containsClass(wrapper, BDFDB.disCN.usernoteprofile) ? "profile" : null));
 	}
-	
+
 	processModal (instance, wrapper) {
 		if (instance.props && instance.props.tag == "form") {
 			let reset = wrapper.querySelector(BDFDB.dotCN.reset);
 			if (reset && BDFDB.getInnerText(reset.firstElementChild) == BDFDB.LanguageStrings.RESET_NICKNAME) this.appendCounter(wrapper.querySelector(BDFDB.dotCN.inputdefault), "nickname");
 		}
 	}
-	
+
 	appendCounter (input, type) {
 		if (!input || !type) return;
 		BDFDB.removeEles(input.parentElement.querySelectorAll("#charcounter"));
 		var counter = BDFDB.htmlToElement(`<div id="charcounter" class="charcounter ${type}"></div>`);
 		input.parentElement.appendChild(counter);
-		
+
 		var updateCounter = () => {counter.innerText = input.value.length + "/" + (this.maxLenghts[type] || 2000) + (input.selectionEnd - input.selectionStart == 0 ? "" : " (" + (input.selectionEnd - input.selectionStart) + ")");};
-		
+
 		BDFDB.addClass(input.parentElement.parentElement, "charcounter-added");
 		if (type == "nickname") input.setAttribute("maxlength", 32);
 		BDFDB.addEventListener(this, input, "keydown click", e => {
@@ -165,7 +165,7 @@ class CharCounter {
 			});
 			BDFDB.addEventListener(this, document, "mousemove", () => {setTimeout(() => {updateCounter();},10);});
 		});
-		
+
 		updateCounter();
 	}
 }

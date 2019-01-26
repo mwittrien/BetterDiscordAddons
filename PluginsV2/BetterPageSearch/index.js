@@ -1,7 +1,5 @@
 module.exports = (Plugin, Api, Vendor) => {
-	if (typeof BDFDB !== "object") global.BDFDB = {$: Vendor.$, BDv2Api: Api};
-	
-	const {$} = Vendor;
+	if (!global.BDFDB || typeof BDFDB != "object") global.BDFDB = {BDv2Api: Api};
 
 	return class extends Plugin {
 		initConstructor () {
@@ -38,7 +36,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					opacity: 1;
 				}
 			`;
-				
+
 			this.defaults = {
 				settings: {
 					addFirstLast:	{value:true, 	description:"Adds a first and last page button."},
@@ -47,30 +45,32 @@ module.exports = (Plugin, Api, Vendor) => {
 				}
 			};
 		}
-		
+
 		onStart () {
-			var libraryScript = null;
-			if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-				libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+			var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+			if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 				if (libraryScript) libraryScript.remove();
 				libraryScript = document.createElement("script");
 				libraryScript.setAttribute("type", "text/javascript");
 				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+				libraryScript.setAttribute("date", performance.now());
+				libraryScript.addEventListener("load", () => {
+					BDFDB.loaded = true;
+					this.initialize();
+				});
 				document.head.appendChild(libraryScript);
 			}
+			else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 			this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-			if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-			else libraryScript.addEventListener("load", () => {this.initialize();});
-			return true;
 		}
 
 		initialize () {
-			if (typeof BDFDB === "object") {		
+			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				BDFDB.loadMessage(this);
-				
+
 				this.SearchNavigation = BDFDB.WebModules.findByProperties("searchNextPage","searchPreviousPage");
 				this.SearchUtils = BDFDB.WebModules.findByProperties("getCurrentSearchId");
-				
+
 				var observer = null;
 
 				observer = new MutationObserver((changes, _) => {
@@ -103,7 +103,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					);
 				});
 				BDFDB.addObserver(this, BDFDB.dotCNS.searchresultswrap, {name:"searchResultsObserver",instance:observer}, {childList:true, subtree:true});
-				
+
 				let pagination = document.querySelector(BDFDB.dotCNS.searchresultswrap + BDFDB.dotCNS.searchresultspagination);
 				if (pagination) this.addNewControls(pagination);
 
@@ -116,9 +116,9 @@ module.exports = (Plugin, Api, Vendor) => {
 		}
 
 		onStop () {
-			if (typeof BDFDB === "object") {
+			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				document.querySelectorAll(".BSP-pagination, .BSP-pagination-button, .BSP-pagination-jumpinput").forEach(ele => {ele.remove();});
-				
+
 				BDFDB.unloadMessage(this);
 				return true;
 			}
@@ -133,8 +133,8 @@ module.exports = (Plugin, Api, Vendor) => {
 			let pagination = document.querySelector(BDFDB.dotCNS.searchresultswrap + BDFDB.dotCNS.searchresultspagination);
 			if (pagination) this.addNewControls(pagination);
 		}
-		
-		
+
+
 		// begin of own functions
 
 		updateSettings (settingspanel) {
@@ -144,7 +144,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 			BDFDB.saveAllData(settings, this, "settings");
 		}
-		
+
 		addNewControls (pagination) {
 			if (!pagination || document.querySelector(".BSP-pagination, .BSP-pagination-button, .BSP-pagination-jumpinput")) return; 
 			let searchResults = document.querySelector(BDFDB.dotCN.searchresults);
@@ -192,12 +192,12 @@ module.exports = (Plugin, Api, Vendor) => {
 					</div>`)[0];
 				pagination.appendChild(jumpInput);
 			}
-			BDFDB.initElements(pagination);
+			BDFDB.initElements(pagination, this);
 			if (settings.cloneToTheTop) {
 				let BSPpaginaton = pagination.cloneNode(true);
 				BSPpaginaton.classList.add("BSP-pagination");
 				searchResults.parentElement.insertBefore(BSPpaginaton, searchResults);
-				BDFDB.initElements(BSPpaginaton);
+				BDFDB.initElements(BSPpaginaton, this);
 			}
 			$(searchResults.parentElement) 
 				.off("click." + this.name).off("keyup." + this.name)
@@ -245,7 +245,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					}
 				});
 		}
-	
+
 		getSettingsPanel () {
 			var settings = BDFDB.getAllData(this, "settings"); 
 			var settingshtml = `<div class="DevilBro-settings ${this.name}-settings">`;
@@ -253,14 +253,14 @@ module.exports = (Plugin, Api, Vendor) => {
 				settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}"${settings[key] ? " checked" : ""}></div></div>`;
 			}
 			settingshtml += `</div>`;
-			
+
 			var settingspanel = $(settingshtml)[0];
 
 			$(settingspanel)
 				.on("click", BDFDB.dotCN.switchinner, () => {this.updateSettings(settingspanel);});
 			return settingspanel;
 		}
-		
+
 		onSettingsClosed () {
 			document.querySelectorAll(".BSP-pagination, .BSP-pagination-button, .BSP-pagination-jumpinput").forEach(ele => {ele.remove();});
 			let pagination = document.querySelector(BDFDB.dotCNS.searchresultswrap + BDFDB.dotCNS.searchresultspagination);

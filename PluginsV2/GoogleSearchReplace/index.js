@@ -1,14 +1,12 @@
 module.exports = (Plugin, Api, Vendor) => {
-	if (typeof BDFDB !== "object") global.BDFDB = {$: Vendor.$, BDv2Api: Api};
-	
-	const {$} = Vendor;
+	if (!global.BDFDB || typeof BDFDB != "object") global.BDFDB = {BDv2Api: Api};
 
 	return class extends Plugin {
 		initConstructor () {
 			this.labels = {};
-			
+
 			this.textUrlReplaceString = "DEVILBRO_BD_GOOGLESEARCHREPLACE_REPLACE_TEXTURL";
-			
+
 			this.defaults = {
 				engines: {
 					_all: 			{value:true, 	name:BDFDB.getLibraryStrings().btn_all_text, 	url:null},
@@ -33,7 +31,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_context_googlesearchreplace_text</div></span>
 					<div class="${BDFDB.disCN.contextmenuhint}"></div>
 				</div>`;
-				
+
 			this.messageContextSubMenuMarkup = 
 				`<div class="${BDFDB.disCN.contextmenu} googleReplaceSearchSubMenu">
 					<div class="${BDFDB.disCN.contextmenuitemgroup}">
@@ -45,27 +43,29 @@ module.exports = (Plugin, Api, Vendor) => {
 					</div>
 				</div>`;
 		}
-	
+
 		onStart () {
-			var libraryScript = null;
-			if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-				libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+			var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+			if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 				if (libraryScript) libraryScript.remove();
 				libraryScript = document.createElement("script");
 				libraryScript.setAttribute("type", "text/javascript");
 				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+				libraryScript.setAttribute("date", performance.now());
+				libraryScript.addEventListener("load", () => {
+					BDFDB.loaded = true;
+					this.initialize();
+				});
 				document.head.appendChild(libraryScript);
 			}
+			else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 			this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-			if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-			else libraryScript.addEventListener("load", () => {this.initialize();});
-			return true;
 		}
 
 		initialize () {
-			if (typeof BDFDB === "object") {
+			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				BDFDB.loadMessage(this);
-				
+
 				var observer = null;
 
 				observer = new MutationObserver((changes, _) => {
@@ -92,7 +92,7 @@ module.exports = (Plugin, Api, Vendor) => {
 		}
 
 		onStop () {
-			if (typeof BDFDB === "object") {
+			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				BDFDB.unloadMessage(this);
 				return true;
 			}
@@ -100,7 +100,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				return false;
 			}
 		}
-		
+
 		// begin of own functions
 
 		updateSettings (settingspanel) {
@@ -110,13 +110,13 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 			BDFDB.saveAllData(settings, this, "engines");
 		}
-		
+
 		changeLanguageStrings () {
 			this.messageContextEntryMarkup = 	this.messageContextEntryMarkup.replace("REPLACE_context_googlesearchreplace_text", this.labels.context_googlesearchreplace_text);
-			
+
 			this.messageContextSubMenuMarkup = 	this.messageContextSubMenuMarkup.replace("REPLACE_submenu_disabled_text", this.labels.submenu_disabled_text);
 		}
-		
+
 		onContextMenu (context) {
 			if (!context || !context.tagName || !context.parentElement || context.querySelector(".googlereplacesearch-item")) return;
 			for (let group of context.querySelectorAll(BDFDB.dotCN.contextmenuitemgroup)) {
@@ -128,17 +128,17 @@ module.exports = (Plugin, Api, Vendor) => {
 							.on("mouseenter", ".googlereplacesearch-item", (e) => {
 								this.createContextSubMenu(text, e, context);
 							});
-					
+
 						BDFDB.updateContextPosition(context);
 					}
 					break;
 				}
 			}
 		}
-		
+
 		createContextSubMenu (text, e, context) {
 			var messageContextSubMenu = $(this.messageContextSubMenuMarkup);
-			
+
 			messageContextSubMenu
 				.on("click", ".GRS-item", (e2) => {
 					$(context).hide();
@@ -153,7 +153,7 @@ module.exports = (Plugin, Api, Vendor) => {
 						window.open(this.defaults.engines[engine].url.replace(this.textUrlReplaceString, encodeURIComponent(text)), "_blank");
 					}
 				});
-			
+
 			var engines = BDFDB.getAllData(this, "engines");
 			for (let key in engines) {
 				if (!engines[key]) messageContextSubMenu.find("[engine='" + key + "']").remove();
@@ -161,10 +161,10 @@ module.exports = (Plugin, Api, Vendor) => {
 			if (messageContextSubMenu.find(".GRS-item").length > 0) {
 				messageContextSubMenu.find(".alldisabled-item").remove();
 			}
-			
+
 			BDFDB.appendSubMenu(e.currentTarget, messageContextSubMenu);
 		}
-		
+
 		getSettingsPanel () {
 			var engines = BDFDB.getAllData(this, "engines");
 			var settingshtml = `<div class="DevilBro-settings ${this.name}-settings">`;
@@ -174,15 +174,15 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 			settingshtml += `</div>`;
 			settingshtml += `</div>`;
-			
+
 			var settingspanel = $(settingshtml)[0];
 
 			$(settingspanel)
 				.on("click", BDFDB.dotCN.switchinner, () => {this.updateSettings(settingspanel);});
-				
+
 			return settingspanel;
 		}
-		
+
 		setLabelsByLanguage () {
 			switch (BDFDB.getDiscordLanguage().id) {
 				case "hr":		//croatian

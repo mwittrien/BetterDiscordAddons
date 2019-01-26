@@ -8,7 +8,7 @@ class DisplayServersAsChannels {
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Display servers in a similar way as channels.";}
-	
+
 	initConstructor () {
 		this.verificationBadgeMarkup =
 			`<svg class="DSAC-verification-badge" name="Verified" width="24" height="24" viewBox="0 0 20 20">
@@ -18,7 +18,7 @@ class DisplayServersAsChannels {
 					<path fill="#ffffff" d="M8.84273967,12.8167603 L13.8643,7.7952 C14.0513,7.6072 14.0513,7.3042 13.8643,7.1172 C13.6773,6.9312 13.3743,6.9312 13.1863,7.1172 L8.52303089,11.78139 L6.8883,10.1475 C6.6843,9.9445 6.3553,9.9445 6.1523,10.1475 C5.9493,10.3515 5.9493,10.6805 6.1523,10.8835 L8.08381122,12.8160053 C8.09561409,12.8309877 8.10844368,12.8454178 8.1223,12.8592 C8.3093,13.0472 8.6123,13.0472 8.8003,12.8592 L8.82157566,12.8379243 C8.82518839,12.8345112 8.82876362,12.8310364 8.8323,12.8275 C8.83584168,12.8239583 8.83932157,12.820378 8.84273967,12.8167603 Z"/>
 				</g>
 			</svg>`;
-		
+
 		this.css = `
 			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guildswrapper},
 			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guildsscrollerwrap},
@@ -102,7 +102,7 @@ class DisplayServersAsChannels {
 			.DSAC-styled ${BDFDB.dotCN.guildseparator}:not([style*="display: none"]), 
 			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild}:not([style*="display: none"]),
 			.DSAC-styled ${BDFDB.dotCN.guild}.copy:not([style*="display: none"]),
-			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildserror}:not([style*="display: none"]) {		
+			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildserror}:not([style*="display: none"]) {
 				display: flex;
 			}
 			.DSAC-styled ${BDFDB.dotCN.guild + BDFDB.dotCN.guildunread}.copy.
@@ -221,9 +221,9 @@ class DisplayServersAsChannels {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
-			
+
 			var observer = null;
-			
+
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
@@ -242,10 +242,10 @@ class DisplayServersAsChannels {
 				);
 			});
 			BDFDB.addObserver(this, BDFDB.dotCN.guilds, {name:"serverListObserver",instance:observer}, {childList: true, subtree:true, attributes:true, attributeFilter: ["class", "draggable"], attributeOldValue: true});
-			
+
 			BDFDB.readServerList().forEach(info => {this.changeServer(info);});
 			document.querySelectorAll(BDFDB.dotCN.guild + ".folder").forEach(folderdiv => {this.changeServer(this.getFolderObject(folderdiv));});
-			
+
 			var appcontainer = document.querySelector(BDFDB.dotCN.appcontainer);
 			if (appcontainer) {
 				BDFDB.addEventListener(this, appcontainer, "mouseenter", `${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild}, ${BDFDB.dotCN.guild}.copy`, e => {
@@ -269,12 +269,12 @@ class DisplayServersAsChannels {
 			BDFDB.readServerList().forEach(info => {this.resetServer(info);});
 			document.querySelectorAll(BDFDB.dotCN.guild + ".folder").forEach(folderdiv => {this.resetServer(this.getFolderObject(folderdiv));});
 			BDFDB.removeClasses("DSAC-styled");
-			
+
 			BDFDB.unloadMessage(this);
 		}
 	}
 
-	
+
 	// begin of own functions
 
 	changeServer (info) {
@@ -283,7 +283,7 @@ class DisplayServersAsChannels {
 		if (avatar) {
 			avatar.DSAColdName = avatar.textContent;
 			avatar.innerHTML = `<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">${BDFDB.encodeToHTML(info.name || info.folderName || "")}</div></span>`;
-			BDFDB.initElements(avatar);
+			BDFDB.initElements(avatar, this);
 			if (info.features && info.features.has("VERIFIED")) avatar.parentElement.insertBefore(BDFDB.htmlToElement(this.verificationBadgeMarkup), avatar);
 		}
 	}
@@ -296,7 +296,7 @@ class DisplayServersAsChannels {
 			BDFDB.removeEles(info.div.querySelector(".DSAC-verification-badge"));
 		}
 	}
-	
+
 	getFolderObject (folderdiv) {
 		var data = BDFDB.loadData(folderdiv.id, "ServerFolders", "folders");
 		return data ? Object.assign({div:folderdiv}, data) : null;

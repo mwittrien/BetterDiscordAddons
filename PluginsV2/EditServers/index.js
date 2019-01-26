@@ -1,12 +1,10 @@
 module.exports = (Plugin, Api, Vendor) => {
-	if (typeof BDFDB !== "object") global.BDFDB = {$: Vendor.$, BDv2Api: Api};
-	
-	const {$} = Vendor;
+	if (!global.BDFDB || typeof BDFDB != "object") global.BDFDB = {BDv2Api: Api};
 
 	return class extends Plugin {
 		initConstructor () {
 			this.labels = {};
-			
+
 			this.serverDragged = false;
 
 			this.serverContextEntryMarkup =
@@ -16,7 +14,7 @@ module.exports = (Plugin, Api, Vendor) => {
 						<div class="${BDFDB.disCN.contextmenuhint}"></div>
 					</div>
 				</div>`;
-				
+
 			this.serverContextSubMenuMarkup = 
 				`<div class="${BDFDB.disCN.contextmenu} editservers-submenu">
 					<div class="${BDFDB.disCN.contextmenuitemgroup}">
@@ -124,25 +122,27 @@ module.exports = (Plugin, Api, Vendor) => {
 		}
 
 		onStart () {
-			var libraryScript = null;
-			if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-				libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+			var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+			if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 				if (libraryScript) libraryScript.remove();
 				libraryScript = document.createElement("script");
 				libraryScript.setAttribute("type", "text/javascript");
 				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+				libraryScript.setAttribute("date", performance.now());
+				libraryScript.addEventListener("load", () => {
+					BDFDB.loaded = true;
+					this.initialize();
+				});
 				document.head.appendChild(libraryScript);
 			}
+			else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 			this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-			if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-			else libraryScript.addEventListener("load", () => {this.initialize();});
-			return true;
 		}
 
 		initialize () {
-			if (typeof BDFDB === "object") {
+			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				BDFDB.loadMessage(this);
-				
+
 				var observer = null;
 
 				observer = new MutationObserver((changes, _) => {
@@ -159,7 +159,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					);
 				});
 				BDFDB.addObserver(this, BDFDB.dotCN.appmount, {name:"serverContextObserver",instance:observer}, {childList: true});
-				
+
 				observer = new MutationObserver((changes, _) => {
 					changes.forEach(
 						(change, i) => {
@@ -178,7 +178,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					);
 				});
 				BDFDB.addObserver(this, BDFDB.dotCN.guilds, {name:"serverListObserver",instance:observer}, {childList: true, subtree:true, attributes:true, attributeFilte: ["class", "draggable"], attributeOldValue: true});
-					
+
 				setTimeout(() => {
 					this.loadAllServers();
 				},3000);
@@ -192,9 +192,9 @@ module.exports = (Plugin, Api, Vendor) => {
 		}
 
 		onStop () {
-			if (typeof BDFDB === "object") {
+			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				document.querySelectorAll("[custom-editservers]").forEach(serverDiv => {this.resetServer(BDFDB.getIdOfServer(serverDiv));});
-				
+
 				BDFDB.unloadMessage(this);
 				return true;
 			}
@@ -203,23 +203,23 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 		}
 
-		
+
 		// begin of own functions
 
 		resetAll () {
 			if (confirm("Are you sure you want to reset all servers?")) {
 				BDFDB.removeAllData(this, "servers");
-				
+
 				document.querySelectorAll("[custom-editservers]").forEach(serverDiv => {this.resetServer(BDFDB.getIdOfServer(serverDiv));});
 			}
 		}
 
 		changeLanguageStrings () {
 			this.serverContextEntryMarkup = 	this.serverContextEntryMarkup.replace("REPLACE_context_localserversettings_text", this.labels.context_localserversettings_text);
-			
+
 			this.serverContextSubMenuMarkup = 	this.serverContextSubMenuMarkup.replace("REPLACE_submenu_serversettings_text", this.labels.submenu_serversettings_text);
 			this.serverContextSubMenuMarkup = 	this.serverContextSubMenuMarkup.replace("REPLACE_submenu_resetsettings_text", this.labels.submenu_resetsettings_text);
-			
+
 			this.serverSettingsModalMarkup = 	this.serverSettingsModalMarkup.replace("REPLACE_modal_header_text", this.labels.modal_header_text);
 			this.serverSettingsModalMarkup = 	this.serverSettingsModalMarkup.replace("REPLACE_modal_servername_text", this.labels.modal_servername_text);
 			this.serverSettingsModalMarkup = 	this.serverSettingsModalMarkup.replace("REPLACE_modal_servershortname_text", this.labels.modal_servershortname_text);
@@ -234,7 +234,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			this.serverSettingsModalMarkup = 	this.serverSettingsModalMarkup.replace("REPLACE_modal_colorpicker4_text", this.labels.modal_colorpicker4_text);
 			this.serverSettingsModalMarkup = 	this.serverSettingsModalMarkup.replace("REPLACE_btn_save_text", this.labels.btn_save_text);
 		}
-		
+
 		onContextMenu (context) {
 			if (!context || !context.tagName || !context.parentElement || context.querySelector(".localserversettings-item")) return;
 			var info = BDFDB.getKeyInformation({"node":context, "key":"guild"});
@@ -243,22 +243,22 @@ module.exports = (Plugin, Api, Vendor) => {
 					.on("mouseenter", ".localserversettings-item", (e) => {
 						this.createContextSubMenu(info, e, context);
 					});
-					
+
 				BDFDB.updateContextPosition(context);
 			}
 		}
-		
+
 		createContextSubMenu (info, e, context) {
 			var id = info.id;
-			
+
 			var serverContextSubMenu = $(this.serverContextSubMenuMarkup);
-			
+
 			serverContextSubMenu
 				.on("click", ".serversettings-item", () => {
 					$(context).hide();
 					this.showServerSettings(info);
 				});
-				
+
 			if (BDFDB.loadData(id, this, "servers")) {
 				serverContextSubMenu
 					.find(".resetsettings-item")
@@ -268,13 +268,13 @@ module.exports = (Plugin, Api, Vendor) => {
 						this.removeServerData(info.id);
 					});
 			}
-			
+
 			BDFDB.appendSubMenu(e.currentTarget, serverContextSubMenu);
 		}
-		
+
 		showServerSettings (info) {
 			var data = BDFDB.loadData(info.id, this, "servers");
-			
+
 			var name = 			data ? data.name : null;
 			var shortName = 	data ? data.shortName : null;
 			var url = 			data ? data.url : null;
@@ -283,7 +283,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			var color2 = 		data ? data.color2 : null;
 			var color3 = 		data ? data.color3 : null;
 			var color4 = 		data ? data.color4 : null;
-			
+
 			var serverSettingsModal = $(this.serverSettingsModalMarkup);
 			serverSettingsModal.find(BDFDB.dotCN.modalguildname).text(info.name);
 			serverSettingsModal.find("#input-servername").val(name);
@@ -317,14 +317,14 @@ module.exports = (Plugin, Api, Vendor) => {
 				})
 				.on("click", ".btn-save", (event) => {
 					event.preventDefault();
-					
+
 					name = null;
 					if (serverSettingsModal.find("#input-servername").val()) {
 						if (serverSettingsModal.find("#input-servername").val().trim().length > 0) {
 							name = serverSettingsModal.find("#input-servername").val().trim();
 						}
 					}
-					
+
 					shortName = null;
 					if (serverSettingsModal.find("#input-servershortname").val()) {
 						if (serverSettingsModal.find("#input-servershortname").val().trim().length > 0) {
@@ -332,7 +332,7 @@ module.exports = (Plugin, Api, Vendor) => {
 							shortName = shortName == info.acronym ? null : shortName;
 						}
 					}
-					
+
 					if (serverSettingsModal.find("#input-serverurl:not('.invalid')").length > 0) {
 						url = null;
 						if (!serverSettingsModal.find("#input-removeicon").prop("checked") && serverSettingsModal.find("#input-serverurl").val()) {
@@ -341,14 +341,14 @@ module.exports = (Plugin, Api, Vendor) => {
 							}
 						}
 					}
-					
+
 					removeIcon = serverSettingsModal.find("#input-removeicon").prop("checked");
-					
+
 					color1 = BDFDB.getSwatchColor("swatch1");
 					color2 = BDFDB.getSwatchColor("swatch2");
 					color3 = BDFDB.getSwatchColor("swatch3");
 					color4 = BDFDB.getSwatchColor("swatch4");
-					
+
 					if (name == null && shortName == null && url == null && !removeIcon && color1 == null && color2 == null && color3 == null && color4 == null) {
 						this.removeServerData(info.id);
 					}
@@ -359,7 +359,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				});
 			serverSettingsModal.find("#input-servername").focus();
 		}
-		
+
 		checkUrl (modal, e) {
 			if (!e.target.value) {
 				$(e.target)
@@ -384,10 +384,10 @@ module.exports = (Plugin, Api, Vendor) => {
 				});
 			}
 		}
-		
+
 		createNoticeTooltip (e) {
 			$(BDFDB.dotCN.tooltips).find(".notice-tooltip").remove();
-			
+
 			var input = e.target;
 			var disabled = $(input).prop("disabled");
 			var valid = $(input).hasClass("valid");
@@ -405,13 +405,13 @@ module.exports = (Plugin, Api, Vendor) => {
 				BDFDB.createTooltip(text, input, {type:"right",selector:"notice-tooltip",css:customTooltipCSS});
 			}
 		}
-		
+
 		removeServerData (id) {
 			this.resetServer(id);
-			
+
 			BDFDB.removeData(id, this, "servers");
 		}
-		
+
 		resetServer (id) {
 			let serverObj = BDFDB.getDivOfServer(id);
 			if (typeof serverObj !== "object" || !serverObj) return;
@@ -424,7 +424,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					.css("background-color", "")
 					.css("color", "");
 		}
-		
+
 		loadServer (serverObj) {
 			if (typeof serverObj !== "object" || !serverObj) return;
 			var data = BDFDB.loadData(serverObj.id, this, "servers");
@@ -446,14 +446,14 @@ module.exports = (Plugin, Api, Vendor) => {
 						.css("color", color2);
 			}
 		}
-		
+
 		loadAllServers () {
 			var serverObjs = BDFDB.readServerList();
 			for (var i = 0; i < serverObjs.length; i++) {
 				this.loadServer(serverObjs[i]);
 			}
 		}
-		
+
 		createServerToolTip (serverObj) {
 			var data = BDFDB.loadData(serverObj.id, this, "servers");
 			if (data) {
@@ -471,23 +471,23 @@ module.exports = (Plugin, Api, Vendor) => {
 					body .guild-custom-tooltip:after {
 						border-right-color: ${bgColor} !important;
 					}`;
-					
+
 				BDFDB.createTooltip(text, serverObj.div, {type:"right",selector:"guild-custom-tooltip",css:customTooltipCSS});
 			}
 		}
-	
+
 		getSettingsPanel () {
 			var settingshtml = `<div class="DevilBro-settings ${this.name}-settings">`;
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Reset all Servers.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} reset-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Reset</div></button></div>`;
 			settingshtml += `</div>`;
-			
+
 			var settingspanel = $(settingshtml)[0];
 
 			$(settingspanel)
 				.on("click", ".reset-button", () => {this.resetAll();});
 			return settingspanel;
 		}
-		
+
 		setLabelsByLanguage () {
 			switch (BDFDB.getDiscordLanguage().id) {
 				case "hr":		//croatian

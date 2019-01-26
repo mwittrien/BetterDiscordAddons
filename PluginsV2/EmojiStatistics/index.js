@@ -1,23 +1,21 @@
 module.exports = (Plugin, Api, Vendor) => {
-	if (typeof BDFDB !== "object") global.BDFDB = {$: Vendor.$, BDv2Api: Api};
-	
-	const {$} = Vendor;
+	if (!global.BDFDB || typeof BDFDB != "object") global.BDFDB = {BDv2Api: Api};
 
 	return class extends Plugin {
 		initConstructor () {
 			this.labels = {};
-			
+
 			this.css = `
 				.${this.name}-modal .titles {
 					height: 20px;
 				}
-				
+
 				.${this.name}-modal .emojiserver-entry {
 					height: 50px;
 					padding-top: 5px;
 					padding-bottom: 5px;
 				}
-				
+
 				.${this.name}-modal .emojiserver-entry .modal-emojiserver-icon {
 					background-color: #484B51;
 					background-size: cover;
@@ -32,7 +30,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					text-align: center;
 					width: 50px;
 				}
-				
+
 				.${this.name}-modal .titles-entry label,
 				.${this.name}-modal .emojiserver-entry label {
 					color: #b9bbbe;
@@ -47,12 +45,12 @@ module.exports = (Plugin, Api, Vendor) => {
 					vertical-align: top;
 					text-transform: uppercase;
 				}
-				
+
 				.${this.name}-modal .emojiserver-entry label {
 					height: 12px;
 					overflow: hidden;
 				}
-				
+
 				.${this.name}-modal .titles-entry label {
 					margin-top: 0px;
 				}
@@ -61,16 +59,16 @@ module.exports = (Plugin, Api, Vendor) => {
 					text-align: center;
 					width: 50px;
 				}
-				
+
 				.${this.name}-modal .titles-entry .modal-titlesname-label,
 				.${this.name}-modal .emojiserver-entry .modal-emojiname-label {
 					width: 300px;
 				}
-				
+
 				.${this.name}-modal .titles-entry .modal-sorttitle-label {
 					cursor: pointer;
 				}
-				
+
 				.${this.name}-modal .titles-entry .modal-titlestotal-label,
 				.${this.name}-modal .titles-entry .modal-titlesglobal-label,
 				.${this.name}-modal .titles-entry .modal-titleslocal-label,
@@ -82,7 +80,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					text-align: center;
 					width: 82px;
 				}
-				
+
 				.emojistatistics-button {
 					background-image: url("/assets/f24711dae4f6d6b28335e866a93e9d9b.png");
 					background-position: -770px -374px;
@@ -92,7 +90,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					margin-right: 10px;
 					width: 22px;
 				}`;
-				
+
 			this.emojiInformationModalMarkup =
 				`<span class=""${this.name}-modal DevilBro-modal"">
 					<div class="${BDFDB.disCN.backdrop}"></div>
@@ -144,11 +142,11 @@ module.exports = (Plugin, Api, Vendor) => {
 					<label class="modal-emojilocal-label">modal-emojilocal-label</label>
 					<label class="modal-emojicopies-label">modal-emojicopies-label</label>
 				</div>`;
-				
+
 			this.dividerMarkup = `<div class="${BDFDB.disCNS.modaldivider + BDFDB.disCN.modaldividerdefault}"></div>`;
-				
+
 			this.emojiButtonMarkup = `<div class="emojistatistics-button"></div>`;
-				
+
 			this.defaults = {
 				settings: {
 					enableEmojiHovering:			{value:true, 	description:"Show Information about Emojis on hover over an Emoji in the Emojipicker."},
@@ -158,25 +156,27 @@ module.exports = (Plugin, Api, Vendor) => {
 		}
 
 		onStart () {
-			var libraryScript = null;
-			if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-				libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+			var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+			if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 				if (libraryScript) libraryScript.remove();
 				libraryScript = document.createElement("script");
 				libraryScript.setAttribute("type", "text/javascript");
 				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+				libraryScript.setAttribute("date", performance.now());
+				libraryScript.addEventListener("load", () => {
+					BDFDB.loaded = true;
+					this.initialize();
+				});
 				document.head.appendChild(libraryScript);
 			}
+			else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 			this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-			if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-			else libraryScript.addEventListener("load", () => {this.initialize();});
-			return true;
 		}
 
 		initialize () {
-			if (typeof BDFDB === "object") {
+			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				BDFDB.loadMessage(this);
-				
+
 				var observer = null;
 
 				observer = new MutationObserver((changes, _) => {
@@ -206,7 +206,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					);
 				});
 				BDFDB.addObserver(this, BDFDB.dotCN.popouts, {name:"emojiPickerObserver",instance:observer}, {childList: true});
-				
+
 				this.GuildEmojis = BDFDB.WebModules.findByProperties("getGuildEmoji", "getDisambiguatedEmojiContext");
 
 				return true;
@@ -218,7 +218,7 @@ module.exports = (Plugin, Api, Vendor) => {
 		}
 
 		onStop () {
-			if (typeof BDFDB === "object") {			
+			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				BDFDB.unloadMessage(this);
 				return true;
 			}
@@ -226,8 +226,8 @@ module.exports = (Plugin, Api, Vendor) => {
 				return false;
 			}
 		}
-		
-		
+
+
 		// begin of own functions
 
 		updateSettings (settingspanel) {
@@ -237,12 +237,12 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 			BDFDB.saveAllData(settings, this, "settings");
 		}
-		
+
 		changeLanguageStrings () {
 			this.emojiInformationModalMarkup = 	this.emojiInformationModalMarkup.replace("REPLACE_modal_header_text", this.labels.modal_header_text);
 			this.emojiInformationModalMarkup = 	this.emojiInformationModalMarkup.replace("REPLACE_btn_ok_text", this.labels.btn_ok_text);
 			this.emojiInformationModalMarkup = 	this.emojiInformationModalMarkup.replace("REPLACE_btn_all_text", this.labels.btn_all_text);
-			
+
 			this.emojiserverTitlesMarkup = 		this.emojiserverTitlesMarkup.replace("REPLACE_modal_titlesicon-label", this.labels.modal_titlesicon_text);
 			this.emojiserverTitlesMarkup = 		this.emojiserverTitlesMarkup.replace("REPLACE_modal_titlesname_text", this.labels.modal_titlesname_text);
 			this.emojiserverTitlesMarkup = 		this.emojiserverTitlesMarkup.replace("REPLACE_modal_titlestotal_text", this.labels.modal_titlestotal_text);
@@ -250,7 +250,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			this.emojiserverTitlesMarkup = 		this.emojiserverTitlesMarkup.replace("REPLACE_modal_titleslocal_text", this.labels.modal_titleslocal_text);
 			this.emojiserverTitlesMarkup = 		this.emojiserverTitlesMarkup.replace("REPLACE_modal_titlescopies_text", this.labels.modal_titlescopies_text);
 		}
-		
+
 		loadEmojiList () {
 			this.emojiReplicaList = {};
 			this.emojiToServerList = {};
@@ -268,7 +268,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				}
 			}
 		}
-		
+
 		hoverEmoji (picker) {
 			$(picker)
 				.off("mouseenter." + this.name)
@@ -280,7 +280,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					}
 				});
 		}
-		
+
 		addEmojiInformationButton (node) {
 			$(node).find(BDFDB.dotCN.emojipickerheader)
 				.append(this.emojiButtonMarkup)
@@ -290,11 +290,11 @@ module.exports = (Plugin, Api, Vendor) => {
 					this.showEmojiInformationModal();
 				});
 		}
-		
+
 		showEmojiInformationModal () {
 			var emojiInformationModal = $(this.emojiInformationModalMarkup);
 			BDFDB.appendModal(emojiInformationModal);
-			
+
 			var entries = [], index = 0;
 			for (let serverObj of BDFDB.readServerList()) {
 				let amountGlobal = 0, amountLocal = 0, amountCopies = 0;
@@ -321,33 +321,33 @@ module.exports = (Plugin, Api, Vendor) => {
 				entry.find(".modal-emojicopies-label").text(amountCopies);
 				entries.push({entry:entry, index:index++, name:serverObj.name, total:amountGlobal+amountLocal, global:amountGlobal, local:amountLocal, copies:amountCopies});
 			}
-			
+
 			var titleentry = $(this.emojiserverTitlesMarkup)
 				.appendTo("." + this.name + "-modal .titles")
 				.on("click", ".modal-title-label ", (e2) => {
 					var oldTitle = e2.target.innerText;
-					
+
 					var reverse = oldTitle.indexOf("▼") < 0 ? false : true;
-					
+
 					titleentry.find(".modal-titlesname-label").text(this.labels.modal_titlesname_text);
 					titleentry.find(".modal-titlestotal-label").text(this.labels.modal_titlestotal_text);
 					titleentry.find(".modal-titlesglobal-label").text(this.labels.modal_titlesglobal_text);
 					titleentry.find(".modal-titleslocal-label").text(this.labels.modal_titleslocal_text);
 					titleentry.find(".modal-titlescopies-label").text(this.labels.modal_titlescopies_text);
-					
+
 					var sortKey = "index";
 					if (oldTitle.indexOf("▲") < 0) {
 						sortKey = e2.target.getAttribute("sortkey");
 						var title = this.labels["modal_titles" + sortKey + "_text"];
 						e2.target.innerText = oldTitle.indexOf("▼") < 0 ? title + "▼" : title + "▲";
 					}
-					
+
 					this.updateAllEntries(emojiInformationModal, entries);
 				});
-					
+
 			this.updateAllEntries(emojiInformationModal, entries);
 		}
-		
+
 		updateAllEntries (modal, entries) {
 			var container = modal.find(".entries");
 			container.children().remove();
@@ -356,7 +356,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				container.append(entries[i].entry);
 			}
 		}
-		
+
 		getSettingsPanel () {
 			var settings = BDFDB.getAllData(this, "settings"); 
 			var settingshtml = `<div class="DevilBro-settings ${this.name}-settings">`;
@@ -364,15 +364,15 @@ module.exports = (Plugin, Api, Vendor) => {
 				settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}"${settings[key] ? " checked" : ""}></div></div>`;
 			}
 			settingshtml += `</div>`;
-			
+
 			var settingspanel = $(settingshtml)[0];
 
 			$(settingspanel)
 				.on("click", BDFDB.dotCN.switchinner, () => {this.updateSettings(settingspanel);});
-				
+
 			return settingspanel;
 		}
-		
+
 		setLabelsByLanguage () {
 			switch (BDFDB.getDiscordLanguage().id) {
 				case "hr":		//croatian

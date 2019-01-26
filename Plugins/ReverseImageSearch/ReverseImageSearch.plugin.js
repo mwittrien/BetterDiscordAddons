@@ -4,14 +4,14 @@ class ReverseImageSearch {
 	getName () {return "ReverseImageSearch";}
 
 	getVersion () {return "3.4.1";}
-	
+
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Adds a reverse image search option to the context menu.";}
-	
+
 	initConstructor () {
 		this.imgUrlReplaceString = "DEVILBRO_BD_REVERSEIMAGESEARCH_REPLACE_IMAGEURL";
-		
+
 		this.defaults = {
 			engines: {
 				_all: 		{value:true, 	name:BDFDB.getLibraryStrings().btn_all_text, 	url:null},
@@ -35,8 +35,8 @@ class ReverseImageSearch {
 					<div class="${BDFDB.disCN.contextmenuhint}"></div>
 				</div>
 			</div>`;
-			
-			
+
+
 		this.messageContextSubMenuMarkup = 
 			`<div class="${BDFDB.disCN.contextmenu} reverseimagesearch-submenu">
 				<div class="${BDFDB.disCN.contextmenuitemgroup}">
@@ -59,14 +59,14 @@ class ReverseImageSearch {
 		}
 		settingshtml += `</div>`;
 		settingshtml += `</div></div>`;
-		
+
 		let settingspanel = BDFDB.htmlToElement(settingshtml);
 
 		BDFDB.initElements(settingspanel, this);
-			
+
 		return settingspanel;
 	}
-	
+
 	//legacy
 	load () {}
 
@@ -103,20 +103,20 @@ class ReverseImageSearch {
 			BDFDB.unloadMessage(this);
 		}
 	}
-	
-	
+
+
 	// begin of own functions
-	
+
 	changeLanguageStrings () {
 		this.messageContextSubMenuMarkup = 	this.messageContextSubMenuMarkup.replace("REPLACE_submenu_disabled_text", this.labels.submenu_disabled_text);
 	}
-	
+
 	onNativeContextMenu (instance, menu) {
 		if (instance.props && instance.props.type == "NATIVE_IMAGE" && instance.props.href && !menu.querySelector(".reverseimagesearch-item")) {
 			this.appendItem(instance, menu, instance.props.href);
 		}
 	}
-	
+
 	onMessageContextMenu (instance, menu) {
 		if (instance.props && instance.props.message && instance.props.channel && instance.props.target && !menu.querySelector(".reverseimagesearch-item")) {
 			if (instance.props.attachment) {
@@ -134,7 +134,7 @@ class ReverseImageSearch {
 			}
 		}
 	}
-	
+
 	appendItem (instance, menu, url) {
 		if (instance && menu && url) {
 			if (url.indexOf("discordapp.com/assets/") == -1) {
@@ -163,7 +163,7 @@ class ReverseImageSearch {
 			}
 		}
 	}
-	
+
 	setLabelsByLanguage () {
 		switch (BDFDB.getDiscordLanguage().id) {
 			case "hr":		//croatian

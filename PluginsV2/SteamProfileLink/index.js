@@ -1,36 +1,36 @@
 module.exports = (Plugin, Api, Vendor) => {
-	if (typeof BDFDB !== "object") global.BDFDB = {$: Vendor.$, BDv2Api: Api};
-	
-	const {$} = Vendor;
+	if (!global.BDFDB || typeof BDFDB != "object") global.BDFDB = {BDv2Api: Api};
 
 	return class extends Plugin {
 		onStart () {
-			var libraryScript = null;
-			if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-				libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+			var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+			if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 				if (libraryScript) libraryScript.remove();
 				libraryScript = document.createElement("script");
 				libraryScript.setAttribute("type", "text/javascript");
 				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+				libraryScript.setAttribute("date", performance.now());
+				libraryScript.addEventListener("load", () => {
+					BDFDB.loaded = true;
+					this.initialize();
+				});
 				document.head.appendChild(libraryScript);
 			}
+			else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 			this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-			if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-			else libraryScript.addEventListener("load", () => {this.initialize();});
-			return true;
 		}
 
 		initialize () {
-			if (typeof BDFDB === "object") {
+			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+				if (this.started) return true;
 				BDFDB.loadMessage(this);
-				
-				$(document).on("click." + this.name, "a[href^='https://steamcommunity.com/profiles/']", (e) => {
-					if (require("electron").shell.openExternal("steam://openurl/" + e.currentTarget.href)) {
-						e.preventDefault();
-						e.stopImmediatePropagation();
-					}
-				});
 
+				BDFDB.addEventListener(this, document, "click", "a[href^='https://steamcommunity.'],a[href^='https://store.steampowered.']", e => {
+					e.originalEvent.preventDefault();
+					e.originalEvent.stopImmediatePropagation();
+					if (require("electron").shell.openExternal("steam://openurl/" + e.currentTarget.href));
+					else window.open(e.currentTarget.href, "_blank");
+				});
 				return true;
 			}
 			else {
@@ -41,9 +41,7 @@ module.exports = (Plugin, Api, Vendor) => {
 
 
 		onStop () {
-			if (typeof BDFDB === "object") {
-				$(document).off("click." + this.name, "a[href^='https://steamcommunity.com/profiles/']");
-				
+			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				BDFDB.unloadMessage(this);
 				return true;
 			}

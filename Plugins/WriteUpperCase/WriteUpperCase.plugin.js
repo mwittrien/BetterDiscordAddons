@@ -8,7 +8,7 @@ class WriteUpperCase {
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Change input to uppercase.";}
-	
+
 	initConstructor () {
 		this.patchModules = {
 			"ChannelTextArea":"componentDidMount",
@@ -39,7 +39,7 @@ class WriteUpperCase {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
-			
+
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
@@ -48,14 +48,14 @@ class WriteUpperCase {
 	}
 
 	stop () {
-		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {			
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.unloadMessage(this);
 		}
 	}
 
-	
+
 	// begin of own functions
-	
+
 	processChannelTextArea (instance, wrapper) {
 		if (instance.props && instance.props.type) {
 			var textarea = wrapper.querySelector("textarea");

@@ -8,14 +8,14 @@ class PinDMs {
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Allows you to pin DMs, making them appear at the top of your DM-list.";}
-	
+
 	initConstructor () {
 		this.patchModules = {
 			"Guilds":"componentDidMount",
 			"DirectMessage":["componentDidMount","componentDidUpdate","componentWillUnmount"],
 			"LazyScroller":"render"
 		};
-		
+
 		this.dmContextEntryMarkup =
 			`<div class="${BDFDB.disCN.contextmenuitemgroup}">
 				<div class="${BDFDB.disCN.contextmenuitem} pindms-item ${BDFDB.disCN.contextmenuitemsubmenu}">
@@ -23,7 +23,7 @@ class PinDMs {
 					<div class="${BDFDB.disCN.contextmenuhint}"></div>
 				</div>
 			</div>`;
-			
+
 		this.dmContextSubMenuMarkup = 
 			`<div class="${BDFDB.disCN.contextmenu} pindms-submenu">
 				<div class="${BDFDB.disCN.contextmenuitemgroup}">
@@ -45,7 +45,7 @@ class PinDMs {
 					</div>
 				</div>
 			</div>`;
-			
+
 		this.dmPinContextMarkup = 
 			`<div class="${BDFDB.disCN.contextmenu} pinneddm-contextmenu">
 				<div class="${BDFDB.disCN.contextmenuitemgroup}">
@@ -55,7 +55,7 @@ class PinDMs {
 					</div>
 				</div>
 			</div>`;
-			
+
 		this.dmUnpinContextMarkup = 
 			`<div class="${BDFDB.disCN.contextmenu} pinneddm-contextmenu">
 				<div class="${BDFDB.disCN.contextmenuitemgroup}">
@@ -65,7 +65,7 @@ class PinDMs {
 					</div>
 				</div>
 			</div>`;
-			
+
 		this.recentDMMarkup = 
 			`<div class="${BDFDB.disCN.guild} pinned" style="transform: translateX(0px);">
 				<div class="${BDFDB.disCN.guildinner}" draggable="false" style="border-radius: 25px;">
@@ -75,7 +75,7 @@ class PinDMs {
 				</div>
 				<div class="${BDFDB.disCNS.badge + BDFDB.disCN.badgewrapper}" style="display: none !important;">0</div>
 			</div>`;
-			
+
 		this.css = `
 			${BDFDB.dotCN.guild}.pinned:after {
 				background-position: 50%;
@@ -99,13 +99,13 @@ class PinDMs {
 				background-color: #202225;
 			}`;
 	}
-	
+
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		let settingshtml = `<div class="${this.name}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="DevilBro-settings-inner">`;
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Unpin all DMs.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} reset-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Reset</div></button></div>`;
 		settingshtml += `</div></div>`;
-		
+
 		let settingspanel = BDFDB.htmlToElement(settingshtml);
 
 		BDFDB.initElements(settingspanel, this);
@@ -144,7 +144,7 @@ class PinDMs {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
-			
+
 			this.UserUtils = BDFDB.WebModules.findByProperties("getUsers", "getUser");
 			this.ChannelUtils = BDFDB.WebModules.findByProperties("getChannels", "getChannel");
 			this.PrivateChannelUtils = BDFDB.WebModules.findByProperties("ensurePrivateChannel");
@@ -152,7 +152,7 @@ class PinDMs {
 			this.UnreadUtils = BDFDB.WebModules.findByProperties("getUnreadCount");
 			this.DiscordConstants = BDFDB.WebModules.findByProperties("Permissions", "ActivityTypes", "StatusTypes");
 			this.Animations = BDFDB.WebModules.findByProperties("spring");
-			
+
 			BDFDB.addEventListener(this, document, "click", BDFDB.dotCNS.dmchannels + BDFDB.dotCN.dmchannel, e => {
 				let instance = BDFDB.getReactInstance(e.currentTarget);
 				if (BDFDB.getReactValue(instance, "return.return.return.memoizedProps.ispin")) {
@@ -171,7 +171,7 @@ class PinDMs {
 					this.removePinnedDM(BDFDB.getReactValue(instance, "return.return.return.return.return.memoizedProps.channel.id")); 
 				}
 			});
-				
+
 			this.forceAdding = true;
 			BDFDB.WebModules.forceAllUpdates(this);
 			delete this.forceAdding;
@@ -201,33 +201,33 @@ class PinDMs {
 				dms.splice(insertpoint, amount);
 				this.forceUpdateScroller(dmsscrollerinstance.stateNode);
 			}
-			
+
 			for (let info of BDFDB.readDmList()) {
 				this.unhideNativeDM(info.id);
 				if (info.div) info.div.removeEventListener("contextmenu", info.div.PinDMsContextMenuListener);
 			}
 			BDFDB.removeEles(BDFDB.dotCNS.dms + BDFDB.dotCN.guild + ".pinned");
-			
+
 			BDFDB.unloadMessage(this);
 		}
 	}
-	
-	
+
+
 	// begin of own functions
-	
+
 	changeLanguageStrings () {
 		this.dmContextEntryMarkup = 	this.dmContextEntryMarkup.replace("REPLACE_context_pindm_text", this.labels.context_pindm_text);
-		
+
 		this.dmContextSubMenuMarkup = 	this.dmContextSubMenuMarkup.replace("REPLACE_context_pinchannel_text", this.labels.context_pinchannel_text);
 		this.dmContextSubMenuMarkup = 	this.dmContextSubMenuMarkup.replace("REPLACE_context_unpinchannel_text", this.labels.context_unpinchannel_text);
 		this.dmContextSubMenuMarkup = 	this.dmContextSubMenuMarkup.replace("REPLACE_context_pinguild_text", this.labels.context_pinguild_text);
 		this.dmContextSubMenuMarkup = 	this.dmContextSubMenuMarkup.replace("REPLACE_context_unpinguild_text", this.labels.context_unpinguild_text);
-		
+
 		this.dmPinContextMarkup = 		this.dmPinContextMarkup.replace("REPLACE_context_pinguild_text", this.labels.context_pinguild_text);
-		
+
 		this.dmUnpinContextMarkup = 	this.dmUnpinContextMarkup.replace("REPLACE_context_unpinguild_text", this.labels.context_unpinguild_text);
 	}
-	
+
 	onUserContextMenu (instance, menu) {
 		if (instance.props && instance.props.user && !menu.querySelector(".pindms-item")) {
 			let closeentry = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:menu,props:["handleClose"]}));
@@ -238,7 +238,7 @@ class PinDMs {
 			}
 		}
 	}
-	
+
 	onGroupDMContextMenu (instance, menu) {
 		if (instance.props && instance.props.channelId && !menu.querySelector(".pindms-item")) {
 			let changeentry = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:menu,props:["handleChangeIcon"]}));
@@ -247,7 +247,7 @@ class PinDMs {
 			}
 		}
 	}
-	
+
 	appendItem (instance, id, target) {
 		let dmContextEntry = BDFDB.htmlToElement(this.dmContextEntryMarkup);
 		target.parentElement.insertBefore(dmContextEntry, target);
@@ -304,12 +304,12 @@ class PinDMs {
 			BDFDB.appendSubMenu(pindmsitem, dmContextSubMenu);
 		});
 	}
-	
+
 	processGuilds (instance, wrapper) {
 		let dms = wrapper.querySelector(BDFDB.dotCN.dms);
 		if (dms) for (let id of this.sortAndUpdate("pinnedRecents")) this.addPinnedRecent(id);
 	}
-	
+
 	processDirectMessage (instance, wrapper, methodnames) {
 		if (instance.props && instance.props.channel) {
 			if (methodnames.includes("componentDidMount")) {
@@ -336,7 +336,7 @@ class PinDMs {
 			}
 		}
 	}
-	
+
 	processLazyScroller (instance, wrapper) {
 		let privateChannelIds = BDFDB.getReactValue(instance, "_reactInternalFiber.return.memoizedProps.privateChannelIds");
 		if (privateChannelIds) {
@@ -355,7 +355,7 @@ class PinDMs {
 			}
 		}
 	}
-	
+
 	getInsertPoint (dms) {
 		let insertpoint = null;
 		for (let i in dms) {
@@ -375,7 +375,7 @@ class PinDMs {
 		}
 		return insertpoint;
 	}
-	
+
 	addPinnedDM (id, dms, insertpoint) {
 		for (let ele of dms) if (ele && !ele.pinned && id == ele.key) {
 			ele.pinned = true;
@@ -385,7 +385,7 @@ class PinDMs {
 			dms.splice(insertpoint, 0, dmpin);
 		}
 	}
-	
+
 	removePinnedDM (id) {
 		if (!id) return;
 		BDFDB.removeData(id, this, "pinnedDMs");
@@ -409,7 +409,7 @@ class PinDMs {
 			this.forceUpdateScroller(dmsscrollerinstance.stateNode);
 		}
 	}
-	
+
 	sortAndUpdate (type) {
 		let pinnedDMs = BDFDB.loadAllData(this, type);
 		delete pinnedDMs[""];
@@ -426,7 +426,7 @@ class PinDMs {
 		BDFDB.saveAllData(pinnedDMs, this, type);
 		return existingDMs;
 	}
-	
+
 	forceUpdateScroller (scroller) {
 		if (this.updatingScroller) return;
 		this.updatingScroller = true;
@@ -434,7 +434,7 @@ class PinDMs {
 		if (stateNode) stateNode.updater.enqueueForceUpdate(stateNode);
 		setTimeout(() => {delete this.updatingScroller;},1000);
 	}
-	
+
 	addPinnedRecent (id) {
 		let dms = document.querySelector(BDFDB.dotCN.dms);
 		if (dms && !dms.querySelector(`${BDFDB.dotCN.guild}.pinned[channelid="${id}"]`)) {
@@ -478,7 +478,7 @@ class PinDMs {
 			}
 		}
 	}
-	
+
 	updateUnreadCount (id) {
 		let dmdiv = document.querySelector(`${BDFDB.dotCNS.dms + BDFDB.dotCN.guild}.pinned[channelid="${id}"]`);
 		if (Node.prototype.isPrototypeOf(dmdiv)) {
@@ -489,7 +489,7 @@ class PinDMs {
 			badge.innerText = count;
 		}
 	}
-	
+
 	hideNativeDM (id) {
 		let dmdiv = BDFDB.getDmDiv(id);
 		if (Node.prototype.isPrototypeOf(dmdiv)) {
@@ -497,7 +497,7 @@ class PinDMs {
 			BDFDB.addClass(dmdiv, "hidden-by-pin");
 		}
 	}
-	
+
 	unhideNativeDM (id) {
 		let dmdiv = BDFDB.getDmDiv(id);
 		if (Node.prototype.isPrototypeOf(dmdiv) && BDFDB.containsClass(dmdiv, "hidden-by-pin")) {
@@ -505,7 +505,7 @@ class PinDMs {
 			BDFDB.removeClass(dmdiv, "hidden-by-pin");
 		}
 	}
-	
+
 	addHoverBehaviour (div) {
 		/* based on stuff from Zerebos */
 		let divinner = div.querySelector(BDFDB.dotCN.guildinner);
@@ -543,7 +543,7 @@ class PinDMs {
 		div.addEventListener("mouseenter", () => {animate(1);})
 		div.addEventListener("mouseleave", () => {if (!BDFDB.containsClass(div, BDFDB.disCN.guildselected)) animate(0);});
 	}
-	
+
 	setLabelsByLanguage () {
 		switch (BDFDB.getDiscordLanguage().id) {
 			case "hr":		//croatian

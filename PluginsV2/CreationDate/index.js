@@ -1,16 +1,14 @@
 module.exports = (Plugin, Api, Vendor) => {
-	if (typeof BDFDB !== "object") global.BDFDB = {$: Vendor.$, BDv2Api: Api};
-	
-	const {$} = Vendor;
+	if (!global.BDFDB || typeof BDFDB != "object") global.BDFDB = {BDv2Api: Api};
 
 	return class extends Plugin {
 		initConstructor () {
 			this.labels = {};
-			
+
 			this.languages;
-			
+
 			this.creationDateMarkup = `<div class="creationDate ${BDFDB.disCN.textrow}"></div>`;
-			
+
 			this.css = `
 				${BDFDB.dotCNS.themelight + BDFDB.dotCN.userpopoutheadernormal} .creationDate {
 					color: #b9bbbe; 
@@ -26,8 +24,8 @@ module.exports = (Plugin, Api, Vendor) => {
 				${BDFDB.dotCN.themedark} [class*='topSection'] .creationDate {
 					color: hsla(0,0%,100%,.6);
 				}`;
-				
-				
+
+
 			this.defaults = {
 				settings: {
 					addInUserPopout:		{value:true, 		description:"Add in User Popouts:"},
@@ -40,27 +38,29 @@ module.exports = (Plugin, Api, Vendor) => {
 				}
 			};
 		}
-		
+
 		onStart () {
-			var libraryScript = null;
-			if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-				libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+			var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+			if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 				if (libraryScript) libraryScript.remove();
 				libraryScript = document.createElement("script");
 				libraryScript.setAttribute("type", "text/javascript");
 				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+				libraryScript.setAttribute("date", performance.now());
+				libraryScript.addEventListener("load", () => {
+					BDFDB.loaded = true;
+					this.initialize();
+				});
 				document.head.appendChild(libraryScript);
 			}
+			else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 			this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-			if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-			else libraryScript.addEventListener("load", () => {this.initialize();});
-			return true;
 		}
 
 		initialize () {
-			if (typeof BDFDB === "object") {
+			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				BDFDB.loadMessage(this);
-				
+
 				var observer = null;
 
 				observer = new MutationObserver((changes, _) => {
@@ -77,7 +77,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					);
 				});
 				BDFDB.addObserver(this, BDFDB.dotCN.popouts, {name:"userPopoutObserver",instance:observer}, {childList: true});
-				
+
 				observer = new MutationObserver((changes, _) => {
 					changes.forEach(
 						(change, i) => {
@@ -92,7 +92,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					);
 				});
 				BDFDB.addObserver(this, BDFDB.dotCN.app + " ~ [class^='theme-']:not([class*='popouts'])", {name:"userProfilModalObserver",instance:observer}, {childList: true});
-				
+
 				this.languages = Object.assign({},BDFDB.languages);
 
 				return true;
@@ -105,7 +105,7 @@ module.exports = (Plugin, Api, Vendor) => {
 
 
 		onStop () {
-			if (typeof BDFDB === "object") {		
+			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				BDFDB.unloadMessage(this);
 				return true;
 			}
@@ -114,7 +114,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 		}
 
-		
+
 		// begin of own functions
 
 		updateSettings (settingspanel) {
@@ -124,20 +124,20 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 			BDFDB.saveAllData(settings, this, "settings");
 		}
-		
+
 		openDropdownMenu (e) {
 			var selectControl = e.currentTarget;
 			var selectWrap = selectControl.parentElement;
-			
+
 			if (selectWrap.classList.contains(BDFDB.disCN.selectisopen)) return;
-			
+
 			selectWrap.classList.add(BDFDB.disCN.selectisopen);
 			$("li").has(selectWrap).css("overflow", "visible");
-			
+
 			var type = selectWrap.getAttribute("type");
 			var selectMenu = this.createDropdownMenu(selectWrap.getAttribute("value"), type);
 			selectWrap.appendChild(selectMenu);
-			
+
 			$(selectMenu).on("mousedown." + this.name, BDFDB.dotCN.selectoption, (e2) => {
 				var language = e2.currentTarget.getAttribute("value");
 				selectWrap.setAttribute("value", language);
@@ -153,7 +153,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				setTimeout(() => {selectWrap.classList.remove(BDFDB.disCN.selectisopen);},100);
 			});
 		}
-		
+
 		createDropdownMenu (choice, type) {
 			var menuhtml = `<div class="${BDFDB.disCN.selectmenuouter}"><div class="${BDFDB.disCN.selectmenu}">`;
 			for (var key in this.languages) {
@@ -163,7 +163,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			menuhtml += `</div></div>`;
 			return $(menuhtml)[0];
 		}
-		
+
 		addCreationDate (container) {
 			if (!container) return;
 			var info = BDFDB.getKeyInformation({"node":container,"key":"user"});
@@ -175,24 +175,24 @@ module.exports = (Plugin, Api, Vendor) => {
 				container.insertBefore(creationDate[0], nametag ? nametag.nextSibling : null);
 			}
 		}
-		
+
 		getCreationTime (languageid, timestamp = new Date()) {
 			var settings = BDFDB.getAllData(this, "settings");
 			var timestring = settings.addCreationTime ? timestamp.toLocaleString(languageid) : timestamp.toLocaleDateString(languageid);
 			if (timestring && settings.forceZeros) timestring = this.addLeadingZeros(timestring);
 			return timestring;
 		}
-		
+
 		addLeadingZeros (timestring) {
 			var chararray = timestring.split("");
 			var numreg = /[0-9]/;
 			for (var i = 0; i < chararray.length; i++) {
 				if (!numreg.test(chararray[i-1]) && numreg.test(chararray[i]) && !numreg.test(chararray[i+1])) chararray[i] = "0" + chararray[i];
 			}
-			
+
 			return chararray.join("");
 		}
-		
+
 		getSettingsPanel () {
 			var settings = BDFDB.getAllData(this, "settings");
 			var choices = BDFDB.getAllData(this, "choices");
@@ -204,7 +204,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}"${settings[key] ? " checked" : ""}></div></div>`;
 			}
 			settingshtml += `</div>`;
-			
+
 			var settingspanel = $(settingshtml)[0];
 
 			$(settingspanel)
@@ -218,7 +218,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				.on("click", BDFDB.dotCN.selectcontrol, (e) => {this.openDropdownMenu(e);});
 			return settingspanel;
 		}
-		
+
 		setLabelsByLanguage () {
 			switch (BDFDB.getDiscordLanguage().id) {
 				case "hr":		//croatian

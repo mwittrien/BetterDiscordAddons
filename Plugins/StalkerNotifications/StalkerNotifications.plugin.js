@@ -8,12 +8,12 @@ class StalkerNotifications {
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Lets you observe the status of people that aren't your friends.";}
-	
+
 	initConstructor () {
 		this.stalkerOnlineList = {};
-		
+
 		this.checkInterval = null;
-		
+
 		this.timeLog = [];
 
 		this.timeLogModalMarkup =
@@ -57,9 +57,9 @@ class StalkerNotifications {
 				<div class="log-avatar"></div>
 				<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCNS.flexchild + BDFDB.disCNS.overflowellipsis} log-description" style="flex: 1 1 auto;"></h3>
 			</div>`;
-			
+
 		this.dividerMarkup = `<div class="${BDFDB.disCN.modaldivider}"></div>`;
-		
+
 		this.css = `
 			.${this.name}-modal .log-time {
 				width: 110px;
@@ -115,7 +115,7 @@ class StalkerNotifications {
 			.${this.name}-settings .settings-avatar:not(:hover) ${BDFDB.dotCN.hovercardbutton} {
 				opacity: 1;
 			}`;
-			
+
 		this.defaults = {
 			settings: {
 				muteOnDND:			{value:false, 	description:"Do not notify me when I am DnD:"},
@@ -133,10 +133,10 @@ class StalkerNotifications {
 			}
 		};
 	}
-	
+
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-		
+
 		let amounts = BDFDB.getAllData(this, "amounts");
 		let settings = BDFDB.getAllData(this, "settings");
 		let users = BDFDB.loadAllData(this, "users");
@@ -163,7 +163,7 @@ class StalkerNotifications {
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Batch set Users:</h3><button type="button" do-disable=true class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttoncolorprimary + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} disable-all" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Disable</div></button><button type="button" do-toast=true class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} toast-all" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Toast</div></button>${"Notification" in window ? `<button type="button" do-desktop=true class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorgreen + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} desktop-all" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Desktop</div></button>` : ``}</div>`;
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Timelog of LogIns/-Outs:</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} btn-timelog" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Timelog</div></button></div>`;
 		settingshtml += `</div></div>`;
-			
+
 		let settingspanel = BDFDB.htmlToElement(settingshtml);
 
 		BDFDB.initElements(settingspanel, this);
@@ -248,7 +248,7 @@ class StalkerNotifications {
 			}
 			else e.currentTarget.value = 1;
 		});
-			
+
 		return settingspanel;
 	}
 
@@ -277,17 +277,17 @@ class StalkerNotifications {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
-			
+
 			this.ChannelUtils = BDFDB.WebModules.findByProperties("getDMFromUserId");
 			this.ChannelSwitchUtils = BDFDB.WebModules.findByProperties("selectPrivateChannel");
 			this.PrivateChannelUtils = BDFDB.WebModules.findByProperties("openPrivateChannel");
 			this.UserMetaStore = BDFDB.WebModules.findByProperties("getStatus", "getOnlineFriendCount");
 			this.UserUtils = BDFDB.WebModules.findByProperties("getUsers");
-			
+
 			for (let id in BDFDB.loadAllData(this, "users")) {
 				this.stalkerOnlineList[id] = this.UserMetaStore.getStatus(id) != "offline";
 			}
-			
+
 			this.startInterval();
 		}
 		else {
@@ -301,10 +301,10 @@ class StalkerNotifications {
 			BDFDB.unloadMessage(this);
 		}
 	}
-	
-	
+
+
 	// begin of own functions
-	
+
 	saveAudio (settingspanel, option) {
 		let successSavedAudio = (parsedurl, parseddata) => {
 			if (parsedurl && parseddata) BDFDB.showToast(`Sound was saved successfully.`, {type:"success"});
@@ -313,7 +313,7 @@ class StalkerNotifications {
 			notificationsound.song = parseddata;
 			BDFDB.saveData(option, notificationsound, this, "notificationsounds");
 		};
-		
+
 		let url = settingspanel.querySelector(`.songInput[option="${option}"]`).value;
 		if (url.length == 0) {
 			BDFDB.showToast(`Sound file was removed.`, {type:"warn"});
@@ -338,12 +338,12 @@ class StalkerNotifications {
 			});
 		}
 	}
-	
+
 	createSettingsAvatarHtml (user, settings) {
 		let data = BDFDB.loadData(user.id, "EditUsers", "users") || {};
 		return `<div class="settings-avatar${settings.desktop ? " desktop" : ""}${settings.disabled ? " disabled" : ""}" user-id="${user.id}" style="background-image: url(${data.removeIcon ? "" : (data.url ? data.url : BDFDB.getUserAvatar(user.id))});"><div class="${BDFDB.disCN.hovercardbutton} remove-user"></div></div>`;
 	}
-	
+
 	startInterval () {
 		clearInterval(this.checkInterval);
 		this.checkInterval = setInterval(() => {
@@ -386,8 +386,8 @@ class StalkerNotifications {
 			}
 		},BDFDB.getData("checkInterval", this, "amounts") * 1000);
 	}
-	
-	showTimeLog () {		
+
+	showTimeLog () {
 		let timeLogModal = BDFDB.htmlToElement(this.timeLogModalMarkup);
 		let container = timeLogModal.querySelector(".entries");
 		if (!container) return;

@@ -1,17 +1,15 @@
 module.exports = (Plugin, Api, Vendor) => {
-	if (typeof BDFDB !== "object") global.BDFDB = {$: Vendor.$, BDv2Api: Api};
-	
-	const {$} = Vendor;
+	if (!global.BDFDB || typeof BDFDB != "object") global.BDFDB = {BDv2Api: Api};
 
 	return class extends Plugin {
 		initConstructor () {
 			this.labels = {};
-			
+
 			this.languages = {};
-			
+
 			this.doTranslate = false;
 			this.translating = false;
-				
+
 			this.defaults = {
 				settings: {
 					sendOriginalMessage:	{value:false, 	description:"Send the original message together with the translation."}
@@ -42,29 +40,29 @@ module.exports = (Plugin, Api, Vendor) => {
 						<div class="${BDFDB.disCN.contextmenuhint}"></div>
 					</div>
 				</div>`;
-			
+
 			this.optionButtonMarkup = 
 				`<div class="${BDFDB.disCN.optionpopoutbutton} btn-googletranslateoption"></div>`;
-			
+
 			this.optionsPopoutMarkup = 
 				`<div class="${BDFDB.disCNS.popout + BDFDB.disCNS.popoutbottom + BDFDB.disCN.popoutnoarrow} popout-googletranslateoption-options" style="z-index: 1000; visibility: visible;">
 					<div class="${BDFDB.disCN.optionpopout}"></div
 				</div>`;
-				
+
 			this.popoutEntryMarkup = 
 				`<div class="${BDFDB.disCNS.optionpopoutitem + BDFDB.disCN.weightmedium} btn-item-googletranslateoption">REPLACE_popout_translateoption_text</div>`;
-				
+
 			this.translateButtonMarkup = 
 				`<svg version="1.1" xmlns="http://www.w3.org/2000/svg" class="translate-button" width="22" height="30" fill="currentColor">
 					<path d="M 19.794, 3.299 H 9.765 L 8.797, 0 h -6.598 C 0.99, 0, 0, 0.99, 0, 2.199 V 16.495 c 0, 1.21, 0.99, 2.199, 2.199, 2.199 H 9.897 l 1.1, 3.299 H 19.794 c 1.21, 0, 2.199 -0.99, 2.199 -2.199 V 5.498 C 21.993, 4.289, 21.003, 3.299, 19.794, 3.299 z M 5.68, 13.839 c -2.48, 0 -4.492 -2.018 -4.492 -4.492 s 2.018 -4.492, 4.492 -4.492 c 1.144, 0, 2.183, 0.407, 3.008, 1.171 l 0.071, 0.071 l -1.342, 1.298 l -0.066 -0.06 c -0.313 -0.297 -0.858 -0.643 -1.671 -0.643 c -1.441, 0 -2.612, 1.193 -2.612, 2.661 c 0, 1.468, 1.171, 2.661, 2.612, 2.661 c 1.507, 0, 2.161 -0.962, 2.337 -1.606 h -2.43 v -1.704 h 4.344 l 0.016, 0.077 c 0.044, 0.231, 0.06, 0.434, 0.06, 0.665 C 10.001, 12.036, 8.225, 13.839, 5.68, 13.839 z M 11.739, 9.979 h 4.393 c 0, 0 -0.374, 1.446 -1.715, 3.008 c -0.588 -0.676 -0.995 -1.336 -1.254 -1.864 h -1.089 L 11.739, 9.979 z M 13.625, 13.839 l -0.588, 0.583 l -0.72 -2.452 C 12.685, 12.63, 13.13, 13.262, 13.625, 13.839 z M 20.893, 19.794 c 0, 0.605 -0.495, 1.1 -1.1, 1.1 H 12.096 l 2.199 -2.199 l -0.896 -3.041 l 1.012 -1.012 l 2.953, 2.953 l 0.803 -0.803 l -2.975 -2.953 c 0.99 -1.138, 1.759 -2.474, 2.106 -3.854 h 1.397 V 8.841 H 14.697 v -1.144 h -1.144 v 1.144 H 11.398 l -1.309 -4.443 H 19.794 c 0.605, 0, 1.1, 0.495, 1.1, 1.1 V 19.794 z"/>
 				</svg>`;
-				
+
 			this.reverseButtonMarkup = 
 				`<svg class="reverse-button ${BDFDB.disCN.flexchild}" type="REPLACETYPE" version="1.1" xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" style="flex: 0 0 auto;">
 					 <path d="M 0, 10.515 c 0, 2.892, 1.183, 5.521, 3.155, 7.361 L 0, 21.031 h 7.887 V 13.144 l -2.892, 2.892 C 3.549, 14.722, 2.629, 12.75, 2.629, 10.515 c 0 -3.418, 2.235 -6.309, 5.258 -7.492 v -2.629 C 3.418, 1.577, 0, 5.652, 0, 10.515 z M 21.031, 0 H 13.144 v 7.887 l 2.892 -2.892 C 17.482, 6.309, 18.402, 8.281, 18.402, 10.515 c 0, 3.418 -2.235, 6.309 -5.258, 7.492 V 20.768 c 4.469 -1.183, 7.887 -5.258, 7.887 -10.121 c 0 -2.892 -1.183 -5.521 -3.155 -7.361 L 21.031, 0 z"/>
 				</svg>`;
-				
-				
+
+
 			this.translatePopoutMarkup = 
 				`<div class="${BDFDB.disCNS.popout + BDFDB.disCNS.popoutbottomright + BDFDB.disCNS.popoutnoarrow + BDFDB.disCN.popoutnoshadow} popout-googletranslate DevilBro-modal" style="z-index: 2000; overflow: visible; visibility: visible; transform: translateX(-100%) translateY(-100%) translateZ(0px);">
 					<div class="${BDFDB.disCN.popoutthemedpopout}">
@@ -107,8 +105,8 @@ module.exports = (Plugin, Api, Vendor) => {
 						</div>`).join("")}
 					</div>
 				</div>`;
-				
-		
+
+
 			this.DeepLTranslateAPI = function () {
 				var INPUT, OUTPUT, clearInput, current, domReady, enabled, executeScript, getLanguage, getOutput, langI, langO, setInput, setLanguage, timer, wc, webview;
 				var _extends = Object.assign || function (target) {
@@ -304,12 +302,12 @@ module.exports = (Plugin, Api, Vendor) => {
 
 				return DeepLTranslateAPI;
 			}.call(this);
-				
+
 			this.css = `
 				.chat form textarea {
 					padding-right: 0 !important;
 				}
-				
+
 				.translate-button {
 					position: absolute;
 					right: 46px;
@@ -317,15 +315,15 @@ module.exports = (Plugin, Api, Vendor) => {
 					opacity: 0.2;
 					transition: all 200ms ease;
 				}
-				
+
 				${BDFDB.dotCN.themedark} .translate-button {
 					fill: #fff;
 				}
-				
+
 				${BDFDB.dotCN.themelight} .translate-button {
 					fill: #4f545c;
 				}
-				
+
 				.translate-button.active {
 					fill: #F04747;
 					opacity: 1;
@@ -336,17 +334,17 @@ module.exports = (Plugin, Api, Vendor) => {
 					opacity: 1;
 					transform: scale(1.1);
 				}
-				
+
 				.reverse-button {
 					margin-top: -5px;
 					opacity: 0.2;
 					transition: all 200ms ease;
 				}
-				
+
 				${BDFDB.dotCN.themedark} .reverse-button {
 					fill: #fff;
 				}
-				
+
 				${BDFDB.dotCN.themelight} .reverse-button {
 					fill: #4f545c;
 				}
@@ -354,19 +352,19 @@ module.exports = (Plugin, Api, Vendor) => {
 					cursor: pointer;
 					opacity: 1;
 				}
-				
+
 				${BDFDB.dotCN.popout}.popout-googletranslate ${BDFDB.dotCN.popoutthemedpopout} {
 					padding: 0 10px;
 					width: 400px;
 				}
-				
+
 				${BDFDB.dotCN.themedark} ${BDFDB.dotCN.popout}.popout-googletranslate ${BDFDB.dotCN.popoutthemedpopout} {
 					-webkit-box-shadow: 0 2px 10px 0 rgba(0,0,0,20%);
 					background-color: #2f3136;
 					border: 1px solid rgba(28,36,43,.6);
 					box-shadow: 0 2px 10px 0 rgba(0,0,0,.2);
 				}
-				
+
 				${BDFDB.dotCN.selectmenuouter} .inChat {
 					top: 0%;
 					transform: translateY(-100%);
@@ -375,27 +373,29 @@ module.exports = (Plugin, Api, Vendor) => {
 				}`;
 		}
 
-		
+
 		onStart () {
-			var libraryScript = null;
-			if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-				libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+			var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+			if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 				if (libraryScript) libraryScript.remove();
 				libraryScript = document.createElement("script");
 				libraryScript.setAttribute("type", "text/javascript");
 				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+				libraryScript.setAttribute("date", performance.now());
+				libraryScript.addEventListener("load", () => {
+					BDFDB.loaded = true;
+					this.initialize();
+				});
 				document.head.appendChild(libraryScript);
 			}
+			else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 			this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-			if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-			else libraryScript.addEventListener("load", () => {this.initialize();});
-			return true;
 		}
 
 		initialize () {
-			if (typeof BDFDB === "object") {
+			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				BDFDB.loadMessage(this);
-				
+
 				var observer = null;
 
 				observer = new MutationObserver((changes, _) => {
@@ -412,7 +412,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					);
 				});
 				BDFDB.addObserver(this, BDFDB.dotCN.appmount, {name:"messageContextObserver",instance:observer}, {childList: true});
-				
+
 				observer = new MutationObserver((changes, _) => {
 					changes.forEach(
 						(change, i) => {
@@ -430,7 +430,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					);
 				});
 				BDFDB.addObserver(this, BDFDB.dotCN.messages, {name:"chatWindowObserver",instance:observer}, {childList:true, subtree:true});
-				
+
 				observer = new MutationObserver((changes, _) => {
 					changes.forEach(
 						(change, i) => {
@@ -446,7 +446,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					);
 				});
 				BDFDB.addObserver(this, BDFDB.dotCN.popouts, {name:"optionPopoutObserver",instance:observer}, {childList: true});
-				
+
 				$(document).off("click." + this.name, BDFDB.dotCN.optionpopoutbutton).off("contextmenu." + this.name, BDFDB.dotCN.message)
 					.on("click." + this.name, BDFDB.dotCN.optionpopoutbutton, (e) => {
 						this.getMessageData($(BDFDB.dotCN.message).has(e.currentTarget)[0]);
@@ -454,11 +454,11 @@ module.exports = (Plugin, Api, Vendor) => {
 					.on("contextmenu." + this.name, BDFDB.dotCN.message, (e) => {
 						this.getMessageData(e.currentTarget);
 					});
-				
+
 				document.querySelectorAll(BDFDB.dotCNS.messagegroup + BDFDB.dotCN.message).forEach(message => {this.addOptionButton(message);});
-				
+
 				document.querySelectorAll(BDFDB.dotCNS.chat + "form textarea").forEach(textarea => {this.addTranslationButton(textarea);});
-				
+
 				this.setLanguage();
 
 				return true;
@@ -470,17 +470,17 @@ module.exports = (Plugin, Api, Vendor) => {
 		}
 
 		onStop () {
-			if (typeof BDFDB === "object") {
+			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				this.stopDeepL();
 				$(document).off("click." + this.name, BDFDB.dotCN.optionpopoutbutton).off("contextmenu." + this.name, BDFDB.dotCN.message);
-				
+
 				document.querySelectorAll(BDFDB.dotCN.message + ".translated").forEach(message => {
 					this.resetMessage(message);
 				});
-				
+
 				document.querySelectorAll(".translate-button").forEach(button => {button.remove();});
 				document.querySelectorAll(BDFDB.dotCNS.chat + "form textarea").forEach(textarea => {textarea.parentElement.style.paddingRight = "0px";});
-							
+
 				BDFDB.unloadMessage(this);
 				return true;
 			}
@@ -488,22 +488,22 @@ module.exports = (Plugin, Api, Vendor) => {
 				return false;
 			}
 		}
-		
+
 		onSwitch () {
-			if (typeof BDFDB === "object") {
+			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				document.querySelectorAll(BDFDB.dotCNS.chat + "form textarea").forEach(textarea => {this.addTranslationButton(textarea);});
 				document.querySelectorAll(BDFDB.dotCNS.messages + BDFDB.dotCN.message).forEach(message => {this.addOptionButton(message);});
 			}
 		}
-		
-		
+
+
 		// begin of own functions
-		
+
 		changeLanguageStrings () {
 			this.messageContextEntryMarkup = 	this.messageContextEntryMarkup.replace("REPLACE_context_messagetranslateoption_text", this.labels.context_messagetranslateoption_text);
-			
+
 			this.messageContextEntryMarkup2 = 	this.messageContextEntryMarkup2.replace("REPLACE_context_googletranslateoption_text", this.labels.context_googletranslateoption_text);
-			
+
 			this.popoutEntryMarkup = 			this.popoutEntryMarkup.replace("REPLACE_popout_translateoption_text", this.labels.popout_translateoption_text);
 		}
 
@@ -522,7 +522,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 			this.setLanguage();
 		}
-		
+
 		onContextMenu (context) {
 			if (!context || !context.tagName || !context.parentElement) return;
 			for (let group of context.querySelectorAll(BDFDB.dotCN.contextmenuitemgroup)) {
@@ -532,7 +532,7 @@ module.exports = (Plugin, Api, Vendor) => {
 							$(context).hide();
 							this.translateMessage();
 						});
-					
+
 					BDFDB.updateContextPosition(context);
 				}
 				if (!context.querySelector(".googletranslateoption-item") && BDFDB.getKeyInformation({"node":group, "key":"handleSearchWithGoogle"})) {
@@ -556,24 +556,24 @@ module.exports = (Plugin, Api, Vendor) => {
 								window.open(this.getGoogleTranslatePageURL(input.id, output.id, text), "_blank");
 							});
 					}
-					
+
 					BDFDB.updateContextPosition(context);
 				}
 			}
-			
+
 		}
-		
+
 		startDeepL () {
 			this.stopDeepL();
 			this.DeepLTranslate = new this.DeepLTranslateAPI();
 			this.DeepLTranslate.start();
 		}
-		
+
 		stopDeepL () {
 			if (this.DeepLTranslate && typeof this.DeepLTranslate.stop === "function") this.DeepLTranslate.stop();
 			this.DeepLTranslate = undefined;
 		}
-		
+
 		setLanguage () {
 			this.languages = Object.assign({},
 				{"auto":	{name:"Auto",		id:"auto",		integrated:false,	dic:false,	deepl:true}},
@@ -588,7 +588,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				this.stopDeepL();
 			}
 		}
-		
+
 		getLanguageChoice (direction, place) {
 			var type = typeof place === "undefined" ? direction : direction.toLowerCase() + place.charAt(0).toUpperCase() + place.slice(1).toLowerCase();
 			var choice = BDFDB.getData(type, this, "choices");
@@ -596,7 +596,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			choice = type.indexOf("output") > -1 && choice == "auto" ? "en" : choice;
 			return choice;
 		}
-		
+
 		addOptionButton (message) {
 			if (!message.querySelector(BDFDB.dotCN.optionpopoutbutton) && !message.querySelector(BDFDB.dotCN.messagesystem) && !message.querySelector(BDFDB.dotCN.messageuploadcancel)) {
 				$(this.optionButtonMarkup).insertBefore(message.querySelector(BDFDB.dotCN.messagetext).firstChild);
@@ -605,7 +605,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				});
 			}
 		}
-		
+
 		openOptionPopout (e) {
 			var wrapper = e.currentTarget;
 			if (wrapper.classList.contains(BDFDB.disCN.optionpopoutopen)) return;
@@ -614,11 +614,11 @@ module.exports = (Plugin, Api, Vendor) => {
 			$(BDFDB.dotCN.popouts).append(popout);
 			$(popout).find(BDFDB.dotCN.optionpopout).append(this.popoutEntryMarkup);
 			this.addClickListener(popout);
-			
+
 			popout
 				.css("left", e.pageX - ($(popout).outerWidth() / 2) + "px")
 				.css("top", e.pageY + "px");
-				
+
 			$(document).on("mousedown.optionpopout" + this.name, (e2) => {
 				if (popout.has(e2.target).length == 0) {
 					$(document).off("mousedown.optionpopout" + this.name);
@@ -627,7 +627,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				}
 			});
 		}
-		
+
 		addClickListener (popout) {
 			$(popout)
 				.off("click." + this.name, ".btn-item-googletranslateoption")
@@ -640,7 +640,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					},300);
 				});
 		}
-		
+
 		getMessageData (div) {
 			if (div && !div.querySelector(BDFDB.dotCN.messagesystem)) {
 				var messagegroup = $(BDFDB.dotCN.messagegroup).has(div);
@@ -654,7 +654,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				this.message = null;
 			}
 		}
-		
+
 		addTranslationButton (textarea) {
 			if (!textarea) return;
 			var textareaWrap = textarea.parentElement;
@@ -705,7 +705,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				}
 			}
 		}
-		
+
 		translateMessage () {
 			if (this.message && this.message.content) {
 				var message = this.message.div;
@@ -732,16 +732,16 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 			this.message = null;
 		}
-		
+
 		resetMessage (message) {
 			$(message)
 				.removeClass("translated")
 				.find(BDFDB.dotCN.messageedited + ".translated").remove();
-				
+
 			var markup = message.querySelector(BDFDB.dotCN.messagecontent) || message.querySelector(BDFDB.dotCN.messagemarkup);
 			markup.innerHTML = $(markup).data("orightmlGoogleTranslate");
 		}
-		
+
 		translateText (text, type, callback) {
 			var finishTranslation = (translation, mentions, input, output, toast) => {
 				if (translation) translation = this.addMentions(translation, mentions);
@@ -782,7 +782,7 @@ module.exports = (Plugin, Api, Vendor) => {
 							if (newtext.lastIndexOf(".") != newtext.length-1 && translation.lastIndexOf(".") == translation.length-1) translation = translation.slice(0,-1);
 							finishTranslation(translation, mentions, input, output, toast);
 						});
-						
+
 					}
 				}
 			}
@@ -791,14 +791,14 @@ module.exports = (Plugin, Api, Vendor) => {
 				finishTranslation(translation, mentions, input, output, toast);
 			}
 		}
-		
+
 		addMentions (string, mentions) {
 			for (let i in mentions) {
 				string = string.replace("a" + i + "_______", mentions[i].indexOf("!") == 0 ? mentions[i].slice(1) : mentions[i]);
 			}
 			return string;
 		}
-		
+
 		removeMentions (string) {
 			var mentions = {}, newString = [], count = 0;
 			string.split(" ").forEach((word) => {
@@ -813,7 +813,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			});
 			return [newString.join(" "), mentions, newString.length-count != 0];
 		}
-		
+
 		openTranslatePopout (button) {
 			if (button.classList.contains(BDFDB.disCN.optionpopoutopen)) return;
 			button.classList.add(BDFDB.disCN.optionpopoutopen);
@@ -833,20 +833,20 @@ module.exports = (Plugin, Api, Vendor) => {
 					BDFDB.saveData("input" + place, input, this, "choices");
 					BDFDB.saveData("output" + place, output, this, "choices");
 				});
-			
+
 			popout.find(BDFDB.dotCN.select).each((_,selectWrap) => {
 				let language = this.getLanguageChoice(selectWrap.getAttribute("type"));
 				selectWrap.setAttribute("value", language);
 				selectWrap.querySelector(BDFDB.dotCN.title).innerText = this.languages[language].name;
 			});
-				
+
 			var checkbox = popout[0].querySelector("#translating-checkbox");
 			checkbox.checked = this.translating;
 			$(checkbox).on("click." + this.name, () => {
 				button.classList.toggle("active", checkbox.checked);
 				this.translating = checkbox.checked;
 			});
-				
+
 			var translators = BDFDB.getAllData(this, "translators");
 			popout[0].querySelectorAll(BDFDB.dotCN.switchinner + "[option=translators]").forEach((checkbox) => {
 				checkbox.checked = translators[checkbox.value];
@@ -857,7 +857,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					this.openTranslatePopout(button);
 				});
 			});
-				
+
 			$(document).on("mousedown.translatepopout" + this.name, (e) => {
 				if (popout.has(e.target).length == 0) {
 					$(document).off("mousedown.translatepopout" + this.name);
@@ -865,23 +865,23 @@ module.exports = (Plugin, Api, Vendor) => {
 					setTimeout(() => {button.classList.remove(BDFDB.disCN.optionpopoutopen);},300);
 				}
 			});
-			
-			BDFDB.initElements(popout[0]);
+
+			BDFDB.initElements(popout[0], this);
 		}
-		
+
 		openDropdownMenu (selector, e) {
 			var selectControl = e.currentTarget;
 			var selectWrap = selectControl.parentElement;
-			
+
 			if (selectWrap.classList.contains(BDFDB.disCN.selectisopen)) return;
-			
+
 			selectWrap.classList.add(BDFDB.disCN.selectisopen);
 			$("li").has(selectWrap).css("overflow", "visible");
-			
+
 			var type = selectWrap.getAttribute("type");
 			var selectMenu = this.createDropdownMenu(selectWrap.getAttribute("value"), type);
 			selectWrap.appendChild(selectMenu);
-			
+
 			$(selectMenu).addClass(selector).on("mousedown." + this.name, BDFDB.dotCN.selectoption, (e2) => {
 				var language = e2.currentTarget.getAttribute("value");
 				selectWrap.setAttribute("value", language);
@@ -896,7 +896,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				setTimeout(() => {selectWrap.classList.remove(BDFDB.disCN.selectisopen);},100);
 			});
 		}
-		
+
 		createDropdownMenu (choice, type) {
 			var menuhtml = `<div class="${BDFDB.disCN.selectmenuouter}"><div class="${BDFDB.disCN.selectmenu}">`;
 			for (var key in this.languages) {
@@ -907,13 +907,13 @@ module.exports = (Plugin, Api, Vendor) => {
 			menuhtml += `</div></div>`;
 			return $(menuhtml)[0];
 		}
-		
+
 		string2binary (string) {
 			var binary = "";
 			for (var character of string) binary += parseInt(character.charCodeAt(0).toString(2)).toPrecision(8).split(".").reverse().join("").toString() + " ";
 			return binary;
 		}
-		
+
 		binary2string (binary) {
 			var string = "";
 			binary = binary.replace(new RegExp(" ", "g"), "");
@@ -935,15 +935,15 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 			return string;
 		}
-		
+
 		getGoogleTranslateApiURL (input, output, text) {
 			return "https://translate.googleapis.com/translate_a/single?client=gtx&sl=" + input + "&tl=" + output + "&dt=t&ie=UTF-8&oe=UTF-8&q=" + encodeURIComponent(text);
 		}
-		
+
 		getGoogleTranslatePageURL (input, output, text) {
 			return "https://translate.google.com/#" + input + "/" + output + "/" + encodeURIComponent(text);
 		}
-		
+
 		getSettingsPanel () {
 			var choices = 	BDFDB.getAllData(this, "choices"); 
 			var settings = 	BDFDB.getAllData(this, "settings"); 
@@ -960,13 +960,13 @@ module.exports = (Plugin, Api, Vendor) => {
 				settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="flex-3B1Tl4 justifyStart-2yIZo0 ${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Translator:</h3><h3 class="flex-3B1Tl4 justifyStart-2yIZo0 ${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.translators[key].choice1}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" option="translators" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}"${translators[key] ? " checked" : ""}></div><h3 class="flex-3B1Tl4 justifyEnd-1ceqOU ${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.translators[key].choice2}</h3></div>`;
 			}
 			settingshtml += `</div>`;
-			
+
 			var settingspanel = $(settingshtml)[0];
 
 			$(settingspanel)
 				.on("click", BDFDB.dotCN.selectcontrol, (e) => {this.openDropdownMenu("inSettings", e);})
 				.on("click", BDFDB.dotCN.switchinner, () => {this.updateSettings(settingspanel);});
-				
+
 			return settingspanel;
 		}
 

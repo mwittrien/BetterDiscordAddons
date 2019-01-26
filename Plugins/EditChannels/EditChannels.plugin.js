@@ -8,10 +8,10 @@ class EditChannels {
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
-	
+
 	initConstructor () {
 		this.labels = {};
-		
+
 		this.patchModules = {
 			"ChannelTextArea":"componentDidMount",
 			"AuditLog":"componentDidMount",
@@ -21,7 +21,7 @@ class EditChannels {
 			"Clickable":"componentDidMount",
 			"StandardSidebarView":"componentWillUnmount"
 		};
-		
+
 		this.channelContextEntryMarkup =
 			`<div class="${BDFDB.disCN.contextmenuitemgroup}">
 				<div class="${BDFDB.disCN.contextmenuitem} localchannelsettings-item ${BDFDB.disCN.contextmenuitemsubmenu}">
@@ -29,7 +29,7 @@ class EditChannels {
 					<div class="${BDFDB.disCN.contextmenuhint}"></div>
 				</div>
 			</div>`;
-			
+
 		this.channelContextSubMenuMarkup = 
 			`<div class="${BDFDB.disCN.contextmenu} editchannels-submenu">
 				<div class="${BDFDB.disCN.contextmenuitemgroup}">
@@ -94,13 +94,13 @@ class EditChannels {
 					</div>
 				</div>
 			</span>`;
-			
+
 		this.css = `
 			${BDFDB.dotCN.channelheadertitletext}[custom-editchannelsheader] ${BDFDB.dotCN.channelheaderchannelicon} {
 				opacity: 0.6;
 			}
 		`;
-			
+
 		this.defaults = {
 			settings: {
 				changeChannelIcon:		{value:true, 	description:"Change color of Channel Icon."},
@@ -108,7 +108,7 @@ class EditChannels {
 			}
 		};
 	}
-	
+
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		var settings = BDFDB.getAllData(this, "settings"); 
@@ -118,7 +118,7 @@ class EditChannels {
 		}
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Reset all Channels.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} reset-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Reset</div></button></div>`;
 		settingshtml += `</div></div>`;
-		
+
 		let settingspanel = BDFDB.htmlToElement(settingshtml);
 
 		BDFDB.initElements(settingspanel, this);
@@ -157,13 +157,13 @@ class EditChannels {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
-			
+
 			this.UserUtils = BDFDB.WebModules.findByProperties("getUsers","getUser");
 			this.ChannelUtils = BDFDB.WebModules.findByProperties("getChannels","getChannel");
 			this.CurrentChannelUtils = BDFDB.WebModules.findByProperties("getChannels","getDefaultChannel");
 			this.LastGuildStore = BDFDB.WebModules.findByProperties("getLastSelectedGuildId");
 			this.LastChannelStore = BDFDB.WebModules.findByProperties("getLastSelectedChannelId");
-			
+
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
@@ -177,28 +177,28 @@ class EditChannels {
 			BDFDB.removeAllData(this, "channels");
 			BDFDB.WebModules.forceAllUpdates(this);
 			BDFDB.saveAllData(data, this, "channels");
-			
+
 			BDFDB.removeEles(".autocompleteEditChannels", ".autocompleteEditChannelsRow");
-			
+
 			BDFDB.unloadMessage(this);
 		}
 	}
-	
-	
+
+
 	// begin of own functions
 
 	changeLanguageStrings () {
 		this.channelContextEntryMarkup = 	this.channelContextEntryMarkup.replace("REPLACE_context_localchannelsettings_text", this.labels.context_localchannelsettings_text);
-		
+
 		this.channelContextSubMenuMarkup = 	this.channelContextSubMenuMarkup.replace("REPLACE_submenu_channelsettings_text", this.labels.submenu_channelsettings_text);
 		this.channelContextSubMenuMarkup = 	this.channelContextSubMenuMarkup.replace("REPLACE_submenu_resetsettings_text", this.labels.submenu_resetsettings_text);
-		
+
 		this.channelSettingsModalMarkup = 	this.channelSettingsModalMarkup.replace("REPLACE_modal_header_text", this.labels.modal_header_text);
 		this.channelSettingsModalMarkup = 	this.channelSettingsModalMarkup.replace("REPLACE_modal_channelname_text", this.labels.modal_channelname_text);
 		this.channelSettingsModalMarkup = 	this.channelSettingsModalMarkup.replace("REPLACE_modal_colorpicker1_text", this.labels.modal_colorpicker1_text);
 		this.channelSettingsModalMarkup = 	this.channelSettingsModalMarkup.replace("REPLACE_btn_save_text", this.labels.btn_save_text);
 	}
-	
+
 	onChannelContextMenu (instance, menu) {
 		if (instance.props && instance.props.channel && !menu.querySelector(".localchannelsettings-item")) {
 			let channelContextEntry = BDFDB.htmlToElement(this.channelContextEntryMarkup);
@@ -224,32 +224,32 @@ class EditChannels {
 			});
 		}
 	}
-	
+
 	showChannelSettings (info) {
 		var {name,color} = BDFDB.loadData(info.id, this, "channels") || {}
-		
+
 		let channelSettingsModal = BDFDB.htmlToElement(this.channelSettingsModalMarkup);
 		let channelnameinput = channelSettingsModal.querySelector("#input-channelname");
-		
+
 		channelSettingsModal.querySelector(BDFDB.dotCN.modalguildname).innerText = info.name;
 		channelnameinput.value = name || "";
 		channelnameinput.setAttribute("placeholder", info.name);
 		BDFDB.setColorSwatches(channelSettingsModal, color);
-		
+
 		BDFDB.appendModal(channelSettingsModal);
-		
+
 		BDFDB.addChildEventListener(channelSettingsModal, "click", ".btn-save", e => {
 			e.preventDefault();
-			
+
 			name = channelnameinput.value.trim();
 			name = name ? name : null;
-			
+
 			color = BDFDB.getSwatchColor(channelSettingsModal, 1);
 			if (color) {
 				if (color[0] < 30 && color[1] < 30 && color[2] < 30) color = BDFDB.colorCHANGE(color, 30);
 				else if (color[0] > 225 && color[1] > 225 && color[2] > 225) color = BDFDB.colorCHANGE(color, -30);
 			}
-			
+
 			if (name == null && color == null) {
 				BDFDB.removeData(info.id, this, "channels");
 			}
@@ -260,7 +260,7 @@ class EditChannels {
 		});
 		channelnameinput.focus();
 	}
-	
+
 	processChannelTextArea (instance, wrapper) {
 		let channel = BDFDB.getReactValue(instance, "props.channel");
 		if (channel) {
@@ -299,7 +299,7 @@ class EditChannels {
 					clearTimeout(textarea.EditChannelsAutocompleteTimeout);
 					textarea.EditChannelsAutocompleteTimeout = setTimeout(() => {this.addAutoCompleteMenu(textarea, channel);},100);
 				}
-				
+
 				if (!e.ctrlKey && e.which != 38 && e.which != 40 && !(e.which == 39 && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length)) BDFDB.removeEles(".autocompleteEditChannels", ".autocompleteEditChannelsRow");
 			});
 			BDFDB.addEventListener(this, textarea, "click", e => {
@@ -307,7 +307,7 @@ class EditChannels {
 			});
 		}
 	}
-	
+
 	processAuditLog (instance, wrapper) {
 		let channel = BDFDB.getReactValue(instance, "props.log.options.channel");
 		if (channel) {
@@ -315,19 +315,19 @@ class EditChannels {
 			if (hooks.length > 0) this.changeChannel2(channel, hooks[0].firstChild);
 		} 
 	}
-	
+
 	processChannelCategoryItem (instance, wrapper) {
 		if (instance.props && instance.props.channel) {
 			this.changeChannel(instance.props.channel, wrapper.querySelector(BDFDB.dotCN.categorycolortransition));
 		}
 	}
-	
+
 	processChannelItem (instance, wrapper) {
 		if (instance.props && instance.props.channel) {
 			this.changeChannel(instance.props.channel, wrapper.querySelector(BDFDB.dotCN.channelname));
 		}
 	}
-	
+
 	processHeaderBar (instance, wrapper) {
 		let channel_id = BDFDB.getReactValue(instance, "_reactInternalFiber.return.memoizedProps.channelId");
 		if (channel_id) {
@@ -347,7 +347,7 @@ class EditChannels {
 			}
 		}
 	}
-	
+
 	processClickable (instance, wrapper) {
 		if (!instance.props || !instance.props.className) return;
 		else if (instance.props.tag == "span" && instance.props.className.indexOf(BDFDB.disCN.mentionwrapper) > -1 && instance.props.className.indexOf(BDFDB.disCN.mention) == -1) {
@@ -388,14 +388,14 @@ class EditChannels {
 			if (channel) this.changeChannel2(channel, wrapper);
 		}
 	}
-	
+
 	processStandardSidebarView (instance, wrapper) {
 		if (this.SettingsUpdated) {
 			delete this.SettingsUpdated;
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 	}
-	
+
 	changeChannel (info, channelname) {
 		if (!info || !channelname || !channelname.parentElement) return;
 		if (channelname.EditChannelsChangeObserver && typeof channelname.EditChannelsChangeObserver.disconnect == "function") channelname.EditChannelsChangeObserver.disconnect();
@@ -420,7 +420,7 @@ class EditChannels {
 			if (unread) unread.style.setProperty("background-color", color && settings.changeUnreadIndicator ? color : null, "important");
 		}
 		if (color) {
-			channelname.EditChannelsChangeObserver = new MutationObserver((changes, _) => {				
+			channelname.EditChannelsChangeObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.type == "childList" && change.addedNodes.length && change.target.tagName && (change.target.tagName == "SVG" || change.target.querySelector("svg")) || change.type == "attributes" && change.attributeName == "class" && change.target.className.length && change.target.className.indexOf("name") > -1 || change.type == "attributes" && change.attributeName == "style" && BDFDB.containsClass(change.target, BDFDB.disCN.channelheaderchannelname)) {
@@ -433,7 +433,7 @@ class EditChannels {
 			channelname.EditChannelsChangeObserver.observe(iconparent, {attributes:true, childList:true, subtree:true});
 		}
 	}
-	
+
 	changeChannel2 (info, channelname) {
 		if (!info || !channelname || !channelname.parentElement) return;
 		if (channelname.EditChannelsChangeObserver && typeof channelname.EditChannelsChangeObserver.disconnect == "function") channelname.EditChannelsChangeObserver.disconnect();
@@ -442,7 +442,7 @@ class EditChannels {
 		channelname.style.setProperty("color", color, "important");
 		BDFDB.setInnerText(channelname, "#" + (data.name || info.name));
 		if (color) {
-			channelname.EditChannelsChangeObserver = new MutationObserver((changes, _) => {				
+			channelname.EditChannelsChangeObserver = new MutationObserver((changes, _) => {
 				changes.forEach(
 					(change, i) => {
 						if (change.type == "childList" && change.addedNodes.length && change.target.tagName && (change.target.tagName == "SVG" || change.target.querySelector("svg")) || change.type == "attributes" && change.attributeName == "class" && change.target.className.length && change.target.className.indexOf("name") > -1) {
@@ -455,7 +455,7 @@ class EditChannels {
 			channelname.EditChannelsChangeObserver.observe(channelname.parentElement, {attributes:true, childList:true, subtree:true});
 		}
 	}
-	
+
 	changeMention (info, mention, categoryinfo) {
 		if (!info || !mention || !mention.parentElement) return;
 		if (mention.EditChannelsChangeObserver && typeof mention.EditChannelsChangeObserver.disconnect == "function") mention.EditChannelsChangeObserver.disconnect();
@@ -502,7 +502,7 @@ class EditChannels {
 		}
 		return null;
 	}
-	
+
 	addAutoCompleteMenu (textarea, channel) {
 		if (textarea.parentElement.querySelector(".autocompleteEditChannelsRow")) return;
 		let words = textarea.value.split(/\s/);
@@ -529,14 +529,14 @@ class EditChannels {
 				else {
 					amount -= autocompletemenu.querySelectorAll(BDFDB.dotCN.autocompleteselectable).length;
 				}
-				
+
 				BDFDB.addEventListener(this, autocompletemenu, "mouseenter", BDFDB.dotCN.autocompleteselectable, e => {
 					var selected = autocompletemenu.querySelectorAll(BDFDB.dotCN.autocompleteselected);
 					BDFDB.removeClass(selected, BDFDB.disCN.autocompleteselected);
 					BDFDB.addClass(selected, BDFDB.disCN.autocompleteselector);
 					BDFDB.addClass(e.currentTarget, BDFDB.disCN.autocompleteselected);
 				});
-					
+
 				for (let data of channelarray) {
 					if (amount-- < 1) break;
 					let color = BDFDB.colorCONVERT(data.color, "RGB");
@@ -551,7 +551,7 @@ class EditChannels {
 			}
 		}
 	}
-	
+
 	getNextSelection (menu, selected, forward) {
 		selected = selected ? selected : menu.querySelector(BDFDB.dotCN.autocompleteselected).parentElement;
 		let next, sibling = forward ? selected.nextElementSibling : selected.previousElementSibling;
@@ -564,7 +564,7 @@ class EditChannels {
 		}
 		return next ? next : this.getNextSelection(menu, sibling, forward);
 	}
-	
+
 	swapWordWithMention (textarea) {
 		let selected = textarea.parentElement.querySelector(".autocompleteEditChannelsRow " + BDFDB.dotCN.autocompleteselected);
 		let channelid = selected ? selected.getAttribute("channelid") : null;
@@ -580,7 +580,7 @@ class EditChannels {
 			textarea.selectionEnd = textarea.value.length;
 		}
 	}
-	
+
 	setLabelsByLanguage () {
 		switch (BDFDB.getDiscordLanguage().id) {
 			case "hr":		//croatian

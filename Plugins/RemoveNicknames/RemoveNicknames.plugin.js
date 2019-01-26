@@ -8,7 +8,7 @@ class RemoveNicknames {
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Replace all nicknames with the actual accountnames.";}
-	
+
 	initConstructor () {
 		this.patchModules = {
 			"NameTag":"componentDidMount",
@@ -17,7 +17,7 @@ class RemoveNicknames {
 			"Clickable":"componentDidMount",
 			"StandardSidebarView":"componentWillUnmount"
 		};
-		
+
 		this.defaults = {
 			settings: {
 				replaceOwn:		{value:false, 	description:"Replace your own name:"},
@@ -26,7 +26,7 @@ class RemoveNicknames {
 			}
 		};
 	}
-	
+
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		var settings = BDFDB.getAllData(this, "settings"); 
@@ -35,7 +35,7 @@ class RemoveNicknames {
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
 		}
 		settingshtml += `</div></div>`;
-		
+
 		let settingspanel = BDFDB.htmlToElement(settingshtml);
 
 		BDFDB.initElements(settingspanel, this);;
@@ -67,14 +67,14 @@ class RemoveNicknames {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
-			
+
 			this.reseting = false;
-			
+
 			this.UserStore = BDFDB.WebModules.findByProperties("getUsers", "getUser");
 			this.LastGuildStore = BDFDB.WebModules.findByProperties("getLastSelectedGuildId");
 			this.LastChannelStore = BDFDB.WebModules.findByProperties("getLastSelectedChannelId");
 			this.MemberStore = BDFDB.WebModules.findByProperties("getNicknames", "getNick");
-			
+
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
@@ -86,16 +86,16 @@ class RemoveNicknames {
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.reseting = true;
-			
+
 			BDFDB.WebModules.forceAllUpdates(this);
-			
+
 			BDFDB.unloadMessage(this);
 		}
 	}
 
-	
+
 	// begin of own functions
-	
+
 	getNewName (info) {
 		if (!info) return null;
 		let EditUsersData = BDFDB.isPluginEnabled("EditUsers") ? BDFDB.loadData(info.id, "EditUsers", "users") : null;
@@ -106,12 +106,12 @@ class RemoveNicknames {
 		if (this.reseting) return member.nick || info.username;
 		return settings.addNickname ? (settings.swapPositions ? (member.nick + " (" + info.username + ")") : (info.username + " (" + member.nick + ")")) : info.username;
 	}
-	
+
 	processNameTag (instance, wrapper) {
 		let username = wrapper.parentElement.querySelector("." + (BDFDB.containsClass(wrapper, BDFDB.disCN.userpopoutheadertagwithnickname) ? BDFDB.disCN.userpopoutheadernickname : instance.props.usernameClass).replace(/ /g, "."));
 		if (username) BDFDB.setInnerText(username, this.getNewName(instance.props.user));
 	}
-	
+
 	processMessageUsername (instance, wrapper) {
 		let message = BDFDB.getReactValue(instance, "props.message");
 		if (message) {
@@ -119,14 +119,14 @@ class RemoveNicknames {
 			if (username) BDFDB.setInnerText(username, this.getNewName(message.author));
 		}
 	}
-	
+
 	processFluxContainerTypingUsers (instance, wrapper) {
 		let users = !instance.state.typingUsers ? [] : Object.keys(instance.state.typingUsers).filter(id => id != BDFDB.myData.id).filter(id => !this.RelationshipUtils.isBlocked(id)).map(id => this.UserUtils.getUser(id)).filter(id => id != null);
 		wrapper.querySelectorAll("strong").forEach((username, i) => {
 			if (users[i] && username) BDFDB.setInnerText(username, this.getNewName(users[i]));
 		});
 	}
-	
+
 	processClickable (instance, wrapper) {
 		if (!wrapper || !instance.props || !instance.props.className) return;
 		if (instance.props.tag == "a" && instance.props.className.indexOf(BDFDB.disCN.anchorunderlineonhover) > -1) {
@@ -154,7 +154,7 @@ class RemoveNicknames {
 			}
 		}
 	}
-	
+
 	processStandardSidebarView (instance, wrapper) {
 		if (this.SettingsUpdated) {
 			delete this.SettingsUpdated;

@@ -1,7 +1,5 @@
 module.exports = (Plugin, Api, Vendor) => {
-	if (typeof BDFDB !== "object") global.BDFDB = {$: Vendor.$, BDv2Api: Api};
-	
-	const {$} = Vendor;
+	if (!global.BDFDB || typeof BDFDB != "object") global.BDFDB = {BDv2Api: Api};
 
 	return class extends Plugin {
 		initConstructor () {
@@ -22,30 +20,32 @@ module.exports = (Plugin, Api, Vendor) => {
 					background-color: rgba(240, 71, 71, 0.0980392);
 					border: 1px solid rgba(240, 71, 71, 0.498039);
 				}`;
-				
+
 			this.tagMarkup = `<span class="nsfw-tag">NSFW</span>`;
 		}
-		
+
 		onStart () {
-			var libraryScript = null;
-			if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-				libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+			var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+			if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 				if (libraryScript) libraryScript.remove();
 				libraryScript = document.createElement("script");
 				libraryScript.setAttribute("type", "text/javascript");
 				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+				libraryScript.setAttribute("date", performance.now());
+				libraryScript.addEventListener("load", () => {
+					BDFDB.loaded = true;
+					this.initialize();
+				});
 				document.head.appendChild(libraryScript);
 			}
+			else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 			this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-			if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-			else libraryScript.addEventListener("load", () => {this.initialize();});
-			return true;
 		}
 
 		initialize () {
-			if (typeof BDFDB === "object") {
+			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				BDFDB.loadMessage(this);
-				
+
 				var observer = null;
 
 				observer = new MutationObserver((changes, _) => {
@@ -65,7 +65,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					);
 				});
 				BDFDB.addObserver(this, BDFDB.dotCN.channels, {name:"channelListObserver",instance:observer}, {childList: true, subtree: true});
-							
+
 				this.checkAllContainers();
 
 				return true;
@@ -77,9 +77,9 @@ module.exports = (Plugin, Api, Vendor) => {
 		}
 
 		onStop () {
-			if (typeof BDFDB === "object") {
+			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				$(".nsfw-tag").remove();
-							
+
 				BDFDB.unloadMessage(this);
 				return true;
 			}
@@ -87,28 +87,28 @@ module.exports = (Plugin, Api, Vendor) => {
 				return false;
 			}
 		}
-		
+
 		onSwitch () {
-			if (typeof BDFDB === "object") {
+			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				this.checkAllContainers();
 			}
 		}
-		
-		
+
+
 		// begin of own functions
-		
+
 		checkAllContainers () {
 			document.querySelectorAll(BDFDB.dotCNS.channels + "[class*=container-]").forEach(container => {
 				this.checkContainerForNsfwChannel(container);
 			});
 		}
-		
+
 		checkContainerForNsfwChannel (container) {
 			container.querySelectorAll(BDFDB.dotCN.channelcontainerdefault).forEach(channel => {
 				this.checkChannel(channel);
 			});
 		}
-		
+
 		checkChannel (channel) {
 			let channelData = BDFDB.getKeyInformation({"node":channel,"key":"channel"});
 			if (channelData && channelData.nsfw == true) {

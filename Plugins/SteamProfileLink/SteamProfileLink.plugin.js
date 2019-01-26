@@ -34,7 +34,7 @@ class SteamProfileLink {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
-			
+
 			BDFDB.addEventListener(this, document, "click", "a[href^='https://steamcommunity.'],a[href^='https://store.steampowered.']", e => {
 				e.originalEvent.preventDefault();
 				e.originalEvent.stopImmediatePropagation();
@@ -49,7 +49,7 @@ class SteamProfileLink {
 
 
 	stop () {
-		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {			
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.unloadMessage(this);
 		}
 	}

@@ -8,14 +8,14 @@ class OwnerTag {
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Adds a Tag like Bottags to the Serverowner.";}
-	
+
 	initConstructor () {
 		this.patchModules = {
 			"NameTag":["componentDidMount","componentDidUpdate"],
 			"MessageUsername":["componentDidMount","componentDidUpdate"],
 			"StandardSidebarView":"componentWillUnmount"
 		};
-			
+
 		this.defaults = {
 			settings: {
 				addInChatWindow:		{value:true, 	inner:true,		description:"Messages"},
@@ -30,7 +30,7 @@ class OwnerTag {
 			}
 		};
 	}
-	
+
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		var settings = BDFDB.getAllData(this, "settings"); 
@@ -48,13 +48,13 @@ class OwnerTag {
 		}
 		settingshtml += `</div>`;
 		settingshtml += `</div></div>`;
-		
+
 		let settingspanel = BDFDB.htmlToElement(settingshtml);
 
 		BDFDB.initElements(settingspanel, this);
 
 		BDFDB.addEventListener(this, settingspanel, "keyup", BDFDB.dotCN.input, () => {this.saveInputs(settingspanel);});
-			
+
 		return settingspanel;
 	}
 
@@ -83,11 +83,11 @@ class OwnerTag {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
-			
+
 			this.MemberUtils = BDFDB.WebModules.findByProperties("getMembers", "getMember");
 			this.GuildUtils = BDFDB.WebModules.findByProperties("getGuilds","getGuild");
 			this.LastGuildStore = BDFDB.WebModules.findByProperties("getLastSelectedGuildId");
-			
+
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
@@ -101,8 +101,8 @@ class OwnerTag {
 			BDFDB.unloadMessage(this);
 		}
 	}
-	
-	
+
+
 	// begin of own functions
 
 	saveInputs (settingspanel) {
@@ -113,7 +113,7 @@ class OwnerTag {
 		BDFDB.saveAllData(inputs, this, "inputs");
 		this.SettingsUpdated = true;
 	}
-	
+
 	processNameTag (instance, wrapper) {
 		let container = null;
 		if (!instance.props || !wrapper.classList) return;
@@ -127,7 +127,7 @@ class OwnerTag {
 			this.addOwnerTag(instance.props.user, wrapper, "profile", BDFDB.disCN.bottagnametag + (instance.props.botClass ? (" " + instance.props.botClass) : ""), container);
 		}
 	}
-	
+
 	processMessageUsername (instance, wrapper, methodnames) {
 		let message = BDFDB.getReactValue(instance, "props.message");
 		if (message && BDFDB.getData("addInChatWindow", this, "settings")) {
@@ -138,7 +138,7 @@ class OwnerTag {
 			}
 		}
 	}
-	
+
 	processStandardSidebarView (instance, wrapper) {
 		if (this.SettingsUpdated) {
 			delete this.SettingsUpdated;
@@ -146,7 +146,7 @@ class OwnerTag {
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 	}
-	
+
 	addOwnerTag (info, wrapper, type, selector = "", container) {
 		if (!info || !wrapper || !wrapper.parentElement) return;
 		BDFDB.removeEles(wrapper.querySelectorAll(".owner-tag"));

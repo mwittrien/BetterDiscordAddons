@@ -8,13 +8,13 @@ class BetterFriendCount {
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Shows the amount of total and online friends and blocked users in the friends tab.";}
-	
+
 	initConstructor () {
 		this.patchModules = {
 			"TabBar":"componentDidMount",
 			"NameTag":["componentWillMount","componentWillUnmount"]
 		};
-		
+
 		this.css = `
 			${BDFDB.dotCNS.friends + BDFDB.dotCNS.settingstabbar + BDFDB.dotCN.badge}:not(.betterfriendcount-badge), 
 			${BDFDB.dotCNS.friends + BDFDB.dotCNS.settingstabbar + BDFDB.dotCN.badgewrapper}:not(.betterfriendcount-badge) {
@@ -24,7 +24,7 @@ class BetterFriendCount {
 				margin-left: 5px !important;
 			}
 		`;
-		
+
 		this.relationshipTypes = {};
 	}
 
@@ -51,14 +51,14 @@ class BetterFriendCount {
 
 	initialize () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
-			if (this.started) return;		
+			if (this.started) return;
 			BDFDB.loadMessage(this);
-			
+
 			this.FriendUtils = BDFDB.WebModules.findByProperties("getFriendIDs", "getRelationships");
 			this.UserMetaStore = BDFDB.WebModules.findByProperties("getStatus", "getOnlineFriendCount");
 			let RelationshipTypes = BDFDB.WebModules.findByProperties("RelationshipTypes").RelationshipTypes;
 			for (let type in RelationshipTypes) this.relationshipTypes[RelationshipTypes[type]] = type;
-			
+
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
@@ -72,24 +72,24 @@ class BetterFriendCount {
 			BDFDB.unloadMessage(this);
 		}
 	}
-	
-	
+
+
 	// begin of own functions
-	
+
 	processTabBar (instance, wrapper) {
 		if (instance.props && instance.props.children && instance.props.children[0].key == "ADD_FRIEND") this.addCountNumbers(wrapper);
 	}
-	
+
 	processNameTag (instance, wrapper) {
 		if (wrapper.parentElement && BDFDB.containsClass(wrapper.parentElement, BDFDB.disCN.friendscolumn)) this.addCountNumbers();
 	}
-	
+
 	addCountNumbers (wrapper = document.querySelector(BDFDB.dotCNS.friends + BDFDB.dotCN.settingstabbar)) {
 		if (!wrapper) return;
 		let tabitems = wrapper.querySelectorAll(BDFDB.dotCN.settingsitem);
 		if (!tabitems || tabitems.length < 5) return;
 		BDFDB.removeEles(".betterfriendcount-badge");
-		
+
 		let relationships = this.FriendUtils.getRelationships(), relationshipCount = {};
 		for (let type in this.relationshipTypes) relationshipCount[this.relationshipTypes[type]] = 0;
 		for (let id in relationships) relationshipCount[this.relationshipTypes[relationships[id]]]++;

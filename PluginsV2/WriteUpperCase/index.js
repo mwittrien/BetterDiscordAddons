@@ -1,47 +1,37 @@
 module.exports = (Plugin, Api, Vendor) => {
-	if (typeof BDFDB !== "object") global.BDFDB = {$: Vendor.$, BDv2Api: Api};
-	
-	const {$} = Vendor;
+	if (!global.BDFDB || typeof BDFDB != "object") global.BDFDB = {BDv2Api: Api};
 
 	return class extends Plugin {
+		initConstructor () {
+			this.patchModules = {
+				"ChannelTextArea":"componentDidMount",
+			};
+		}
+
 		onStart () {
-			var libraryScript = null;
-			if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-				libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+			var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+			if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 				if (libraryScript) libraryScript.remove();
 				libraryScript = document.createElement("script");
 				libraryScript.setAttribute("type", "text/javascript");
 				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+				libraryScript.setAttribute("date", performance.now());
+				libraryScript.addEventListener("load", () => {
+					BDFDB.loaded = true;
+					this.initialize();
+				});
 				document.head.appendChild(libraryScript);
 			}
+			else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 			this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-			if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-			else libraryScript.addEventListener("load", () => {this.initialize();});
-			return true;
 		}
 
 		initialize () {
-			if (typeof BDFDB === "object") {
+			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+				if (this.started) return true;
 				BDFDB.loadMessage(this);
-				
-				var observer = null;
 
-				observer = new MutationObserver((changes, _) => {
-					changes.forEach(
-						(change, i) => {
-							if (change.addedNodes) {
-								change.addedNodes.forEach((node) => {
-									if (node && node.tagName && node.querySelector(BDFDB.dotCN.textareainner + ":not(" + BDFDB.dotCN.textareainnerdisabled + ")")) {
-										this.bindEventToTextArea(node.querySelector(BDFDB.dotCN.textarea));
-									}
-								});
-							}
-						}
-					);
-				});
-				BDFDB.addObserver(this, BDFDB.dotCN.appmount, {name:"textareaObserver",instance:observer}, {childList: true, subtree:true});
-				
-				document.querySelectorAll("textarea" + BDFDB.dotCN.textarea).forEach(textarea => {this.bindEventToTextArea(textarea);});
+				BDFDB.WebModules.forceAllUpdates(this);
 
 				return true;
 			}
@@ -52,7 +42,7 @@ module.exports = (Plugin, Api, Vendor) => {
 		}
 
 		onStop () {
-			if (typeof BDFDB === "object") {			
+			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				BDFDB.unloadMessage(this);
 				return true;
 			}
@@ -61,39 +51,34 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 		}
 
-		
+
 		// begin of own functions
-		
-		bindEventToTextArea (textarea) {
-			if (!textarea) return;
-			$(textarea)
-				.off("keyup." + this.name)
-				.on("keyup." + this.name, () => {
-					clearTimeout(textarea.writeuppercasetimeout);
-					textarea.writeuppercasetimeout = setTimeout(() => {this.formatText(textarea);},1);
+
+		processChannelTextArea (instance, wrapper) {
+			if (instance.props && instance.props.type) {
+				var textarea = wrapper.querySelector("textarea");
+				if (!textarea) return;
+				BDFDB.addEventListener(this, textarea, "keyup", () => {
+					clearTimeout(textarea.WriteUpperCaseTimeout);
+					textarea.WriteUpperCaseTimeout = setTimeout(() => {
+						let string = textarea.value;
+						if (string.length > 0) {
+							let newstring = string;
+							let first = string.charAt(0);
+							let position = textarea.selectionStart;
+							if (first === first.toUpperCase() && (string.toLowerCase().indexOf("http") == 0 || string.toLowerCase().indexOf("s/") == 0)) newstring = string.charAt(0).toLowerCase() + string.slice(1);
+							else if (first === first.toLowerCase() && first !== first.toUpperCase() && string.toLowerCase().indexOf("http") != 0 && string.toLowerCase().indexOf("s/") != 0) newstring = string.charAt(0).toUpperCase() + string.slice(1);
+							if (string != newstring) {
+								textarea.focus();
+								textarea.selectionStart = 0;
+								textarea.selectionEnd = textarea.value.length;
+								document.execCommand("insertText", false, newstring);
+								textarea.selectionStart = position;
+								textarea.selectionEnd = position;
+							}
+						}
+					},1);
 				});
-		}
-		
-		formatText (textarea) {
-			var string = textarea.value;
-			if (string.length > 0) {
-				var newstring = string;
-				var first = string.charAt(0);
-				var position = textarea.selectionStart;
-				if (first === first.toUpperCase() && (string.toLowerCase().indexOf("http") == 0 || string.toLowerCase().indexOf("s/") == 0)) {
-					newstring = string.charAt(0).toLowerCase() + string.slice(1);
-				}
-				else if (first === first.toLowerCase() && first !== first.toUpperCase() && string.toLowerCase().indexOf("http") != 0 && string.toLowerCase().indexOf("s/") != 0) {
-					newstring = string.charAt(0).toUpperCase() + string.slice(1);
-				}
-				if (string != newstring) {
-					textarea.focus();
-					textarea.selectionStart = 0;
-					textarea.selectionEnd = textarea.value.length;
-					document.execCommand("insertText", false, newstring);
-					textarea.selectionStart = position;
-					textarea.selectionEnd = position;
-				}
 			}
 		}
 	}

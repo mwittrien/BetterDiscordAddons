@@ -1,24 +1,22 @@
 module.exports = (Plugin, Api, Vendor) => {
-	if (typeof BDFDB !== "object") global.BDFDB = {$: Vendor.$, BDv2Api: Api};
-	
-	const {$} = Vendor;
+	if (!global.BDFDB || typeof BDFDB != "object") global.BDFDB = {BDv2Api: Api};
 
 	return class extends Plugin {
 		initConstructor () {
 			this.configstypes = ["case","exact"];
-			
+
 			this.css = ` 
 				${BDFDB.dotCNS.messagegroup + BDFDB.dotCNS.messagecomment + BDFDB.dotCN.messageaccessory}.blocked:not(.revealed),
 				${BDFDB.dotCNS.messagegroup + BDFDB.dotCNS.messagecomment + BDFDB.dotCN.messagemarkup}.blocked:not(.revealed) {
 					font-weight: bold;
 					font-style: italic;
 				}
-				
+
 				${BDFDB.dotCNS.messagegroup + BDFDB.dotCNS.messagecomment + BDFDB.dotCN.messageaccessory}.censored:not(.revealed),
 				${BDFDB.dotCNS.messagegroup + BDFDB.dotCNS.messagecomment + BDFDB.dotCN.messagemarkup}:not(.revealed) {
-					
+
 				}`;
-			
+
 			this.defaults = {
 				replaces: {
 					blocked: 	{value:"~~BLOCKED~~",	title:"Block:",		description:"Default Replace Word for blocked Messages:"},
@@ -30,27 +28,29 @@ module.exports = (Plugin, Api, Vendor) => {
 				}
 			};
 		}
-		
+
 		onStart () {
-			var libraryScript = null;
-			if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-				libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+			var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+			if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 				if (libraryScript) libraryScript.remove();
 				libraryScript = document.createElement("script");
 				libraryScript.setAttribute("type", "text/javascript");
 				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+				libraryScript.setAttribute("date", performance.now());
+				libraryScript.addEventListener("load", () => {
+					BDFDB.loaded = true;
+					this.initialize();
+				});
 				document.head.appendChild(libraryScript);
 			}
+			else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 			this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-			if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-			else libraryScript.addEventListener("load", () => {this.initialize();});
-			return true;
 		}
 
 		initialize () {
-			if (typeof BDFDB === "object") {
+			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				BDFDB.loadMessage(this);
-				
+
 				var observer = null;
 
 				observer = new MutationObserver((changes, _) => {
@@ -68,7 +68,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					);
 				});
 				BDFDB.addObserver(this, null, {name:"messageChangeObserver",instance:observer,multi:true}, {childList:true, characterData:true, subtree:true});
-				
+
 				observer = new MutationObserver((changes, _) => {
 					changes.forEach(
 						(change, i) => {
@@ -86,7 +86,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					);
 				});
 				BDFDB.addObserver(this, BDFDB.dotCN.messages, {name:"chatWindowObserver",instance:observer}, {childList:true});
-				
+
 				this.hideAllMessages();
 
 				return true;
@@ -98,11 +98,11 @@ module.exports = (Plugin, Api, Vendor) => {
 		}
 
 		onStop () {
-			if (typeof BDFDB === "object") {
+			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				document.querySelectorAll(`${BDFDB.dotCN.messagemarkup}.blocked, ${BDFDB.dotCN.messageaccessory}.censored, ${BDFDB.dotCN.messagemarkup}.blocked, ${BDFDB.dotCN.messageaccessory}.censored`).forEach(message => {
 					this.resetMessage(message);
 				});
-							
+
 				BDFDB.unloadMessage(this);
 				return true;
 			}
@@ -110,22 +110,22 @@ module.exports = (Plugin, Api, Vendor) => {
 				return false;
 			}
 		}
-		
+
 		onSwitch () {
-			if (typeof BDFDB === "object") {
+			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				this.hideAllMessages();
 				BDFDB.addObserver(this, BDFDB.dotCN.messages, {name:"chatWindowObserver"}, {childList:true, subtree:true});
 			}
 		}
-		
-		
+
+
 		// begin of own functions
-		
+
 		updateContainer (settingspanel, ele) {
 			var update = false, wordvalue = null, replacevalue = null;
 			var action = ele.getAttribute("action"), rtype = ele.getAttribute("rtype");
 			var words = BDFDB.loadData(rtype, this, "words") || {};
-			
+
 			if (action == "add") {
 				var wordinput = settingspanel.querySelector("#input-" + rtype + "-wordvalue");
 				var replaceinput = settingspanel.querySelector("#input-" + rtype + "-replacevalue");
@@ -161,7 +161,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			if (update) {
 				BDFDB.saveData(rtype, words, this, "words");
 				words = BDFDB.loadData(rtype, this, "words");
-				
+
 				var containerhtml = ``;
 				for (let word in words) {
 					containerhtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.hovercard}"><div class="${BDFDB.disCN.hovercardinner}"><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCNS.primary + BDFDB.disCN.ellipsis}" style="flex: 1 1 auto;">${BDFDB.encodeToHTML(word)} (${BDFDB.encodeToHTML(words[word].replace)})</div>`
@@ -172,10 +172,10 @@ module.exports = (Plugin, Api, Vendor) => {
 				}
 				containerhtml += `</div>`;
 				$(settingspanel).find("." + rtype + "-list").html(containerhtml);
-				BDFDB.initElements(settingspanel);
+				BDFDB.initElements(settingspanel, this);
 			}
 		}
-		
+
 		saveReplace (input) {
 			var rtype = input.getAttribute("rtype");
 			var wordvalue = input.value;
@@ -195,7 +195,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 			BDFDB.saveAllData(settings, this, "settings");
 		}
-		
+
 		updateConfig (ele) {
 			var wordvalue = ele.getAttribute("word");
 			var config = ele.getAttribute("config");
@@ -206,7 +206,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				BDFDB.saveData(rtype, words, this, "words");
 			}
 		}
-		
+
 		toggleInfo (settingspanel, ele) {
 			ele.classList.toggle(BDFDB.disCN.categorywrappercollapsed);
 			ele.classList.toggle(BDFDB.disCN.categorywrapperdefault);
@@ -214,12 +214,12 @@ module.exports = (Plugin, Api, Vendor) => {
 			svg.classList.toggle(BDFDB.disCN.closed);
 			svg.classList.toggle(BDFDB.disCN.categoryiconcollapsed);
 			svg.classList.toggle(BDFDB.disCN.categoryicondefault);
-			
+
 			var visible = $(settingspanel).find(".info-container").is(":visible");
 			$(settingspanel).find(".info-container").toggle(!visible);
 			BDFDB.saveData("hideInfo", visible, this, "hideInfo");
 		}
-		
+
 		hideAllMessages () {
 			document.querySelectorAll(`${BDFDB.dotCN.messagemarkup}.blocked, ${BDFDB.dotCN.messageaccessory}.censored, ${BDFDB.dotCN.messagemarkup}.blocked, ${BDFDB.dotCN.messageaccessory}.censored`).forEach(message => {
 				this.resetMessage(message);
@@ -231,15 +231,15 @@ module.exports = (Plugin, Api, Vendor) => {
 				});
 			});
 		}
-		
+
 		hideMessage (message) {
 			if (!$(message).hasClass("blocked") && !$(message).hasClass("censored")) {
 				var orightml = $(message).html();
 				var newhtml = "";
-				
+
 				if (orightml) {
 					var blocked = null;
-					
+
 					var strings = [];
 					var count = 0;
 					orightml.split("").forEach((chara) => { 
@@ -251,7 +251,7 @@ module.exports = (Plugin, Api, Vendor) => {
 							count++;
 						}
 					});
-				
+
 					var settings = BDFDB.getAllData(this, "settings");
 					var replaces = BDFDB.getAllData(this, "replaces");
 					var blockedWords = BDFDB.loadData("blocked", this, "words");
@@ -283,7 +283,7 @@ module.exports = (Plugin, Api, Vendor) => {
 							.addClass("blocked")
 							.data("newhtmlChatFilter",newhtml)
 							.data("orightmlChatFilter",orightml);
-							
+
 						this.addClickListener(message, settings.showMessageOnClick.blocked);
 					}
 					else {
@@ -317,27 +317,27 @@ module.exports = (Plugin, Api, Vendor) => {
 								}
 							});
 						}
-						
+
 						newhtml = strings.join("");
-						
+
 						if (newhtml != orightml) {
 							$(message)
 								.html(newhtml)
 								.addClass("censored")
 								.data("newhtmlChatFilter",newhtml)
 								.data("orightmlChatFilter",orightml);
-								
+
 							this.addClickListener(message, settings.showMessageOnClick.censored);
 						}
 					}
 				}
 			}
 		}
-		
+
 		createReg (word, config) {
 			return new RegExp(BDFDB.encodeToHTML(config.exact ? "^" + BDFDB.regEscape(word) + "$" : BDFDB.regEscape(word)), config.case ? "" : "i");
 		}
-		
+
 		getEmojiName (string) {
 			if (string.indexOf("<img ") == 0 && (string.indexOf('class="emote') > -1 || string.indexOf('class="emoji') > -1)) {
 				var emojiname = string.split('alt="').length > 0 ? string.split('alt="')[1] : null;
@@ -345,7 +345,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				return emojiname = emojiname ? emojiname.replace(new RegExp(":", 'g'), "") : null;
 			}
 		}
-		
+
 		resetMessage (message) {
 			$(message)
 				.html($(message).data("orightmlChatFilter"))
@@ -354,7 +354,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				.removeClass("censored")
 				.removeClass("revealed");
 		}
-		
+
 		addClickListener (message, add) {
 			$(message)
 				.off("click." + this.name);
@@ -362,7 +362,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				var orightml = $(message).data("orightmlChatFilter");
 				var newhtml = $(message).data("newhtmlChatFilter");
 				$(message)
-					.on("click." + this.name, () => {	
+					.on("click." + this.name, () => {
 						if ($(message).hasClass("revealed")) {
 							$(message)
 								.html(newhtml)
@@ -374,7 +374,7 @@ module.exports = (Plugin, Api, Vendor) => {
 								.addClass("revealed");
 						}
 					});
-					
+
 			}
 		}
 		getSettingsPanel () {
@@ -388,7 +388,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					settingshtml += `<div rtype="${rtype}" value="${key}" class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" rtype="${rtype}" value="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}"${settings[key][rtype] ? " checked" : ""}></div></div>`;
 				}
 				settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto; min-width: 320px;">${this.defaults.replaces[rtype].description}</h3><input rtype="${rtype}" type="text" placeholder="${this.defaults.replaces[rtype].value}" value="${replaces[rtype]}" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16} defaultInputs" id="input-${rtype}-defaultvalue" style="flex: 1 1 auto;"></div>`;
-				settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto; max-width: 495px;">List of ${rtype} Words:</h3><div class="${BDFDB.disCNS.margintop8 +  BDFDB.disCNS.tableheadersize + BDFDB.disCNS.size10 + BDFDB.disCNS.primary + BDFDB.disCN.weightbold}" style="flex: 1 1 auto; max-width: 32px;">CASE</div><div class="${BDFDB.disCNS.margintop8 +  BDFDB.disCNS.tableheadersize + BDFDB.disCNS.size10 + BDFDB.disCNS.primary + BDFDB.disCN.weightbold}" style="flex: 0 0 auto;">EXACT</div></div><div class="DevilBro-settings-inner-list ${rtype}-list">`;			
+				settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto; max-width: 495px;">List of ${rtype} Words:</h3><div class="${BDFDB.disCNS.margintop8 +  BDFDB.disCNS.tableheadersize + BDFDB.disCNS.size10 + BDFDB.disCNS.primary + BDFDB.disCN.weightbold}" style="flex: 1 1 auto; max-width: 32px;">CASE</div><div class="${BDFDB.disCNS.margintop8 +  BDFDB.disCNS.tableheadersize + BDFDB.disCNS.size10 + BDFDB.disCNS.primary + BDFDB.disCN.weightbold}" style="flex: 0 0 auto;">EXACT</div></div><div class="DevilBro-settings-inner-list ${rtype}-list">`;
 				for (let word in words) {
 					settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.hovercard}"><div class="${BDFDB.disCN.hovercardinner}"><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCNS.primary + BDFDB.disCN.ellipsis}" style="flex: 1 1 auto;">${BDFDB.encodeToHTML(word)} (${BDFDB.encodeToHTML(words[word].replace)})</div>`
 					for (let config of this.configs) {
@@ -404,7 +404,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.cursorpointer} ${infoHidden ? BDFDB.disCN.categorywrappercollapsed : BDFDB.disCN.categorywrapperdefault} toggle-info" style="flex: 1 1 auto;"><svg class="${BDFDB.disCNS.categoryicontransition + (infoHidden ? BDFDB.disCNS.closed + BDFDB.disCN.categoryiconcollapsed : BDFDB.disCN.categoryicondefault)}" width="12" height="12" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 10L12 15 17 10"></path></svg><div class="${BDFDB.disCNS.categorycolortransition + BDFDB.disCNS.overflowellipsis + BDFDB.disCN.categorynamecollapsed}" style="flex: 1 1 auto;">Information</div></div>`;
 			settingshtml += `<div class="DevilBro-settings-inner-list info-container" ${infoHidden ? "style='display:none;'" : ""}><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Case: Will block/censor words while comparing lowercase/uppercase. apple => apple, not APPLE or AppLe</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Not Case: Will block/censor words while ignoring lowercase/uppercase. apple => apple, APPLE and AppLe</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Exact: Will block/censor words that are exactly the selected word. apple => apple, not applepie or pineapple</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Not Exact: Will block/censor all words containing the selected word. apple => apple, applepie and pineapple</div></div>`;
 			settingshtml += `</div>`;
-			
+
 			var settingspanel = $(settingshtml)[0];
 
 			$(settingspanel)
@@ -414,7 +414,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				.on("click", ".btn-addword, .remove-word, .remove-all", (e) => {this.updateContainer(settingspanel, e.currentTarget);})
 				.on("click", BDFDB.dotCN.checkboxinput, (e) => {this.updateConfig(e.currentTarget);})
 				.on("click", ".toggle-info", (e) => {this.toggleInfo(settingspanel, e.currentTarget);});
-				
+
 			for (let key in settings) {
 				for (let rtype in this.defaults.settings[key].enabled) {
 					if (!this.defaults.settings[key].enabled[rtype]) $(settingspanel).find(`${BDFDB.dotCN.flex}[value='${key}'][rtype='${rtype}']`).hide();
@@ -422,7 +422,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 			return settingspanel;
 		}
-	
+
 		onSettingsClosed () {
 			this.hideAllMessages();
 		}

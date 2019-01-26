@@ -8,16 +8,16 @@ class SendLargeMessages {
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Opens a popout when your message is too large, which allows you to automatically send the message in several smaller messages.";}
-	
+
 	initConstructor () {
 		this.labels = {};
-		
+
 		this.patchModules = {
 			"ChannelTextArea":"componentDidMount"
 		};
-		
+
 		this.messageDelay = 1000; //changing at own risk, might result in bans or mutes
-		
+
 		this.css = `
 			.${this.name}-modal textarea {
 				rows: 0;
@@ -28,7 +28,7 @@ class SendLargeMessages {
 			.${this.name}-modal #warning-message {
 				color: red;
 			}
-			
+
 			.${this.name}-modal #character-counter {
 				float: right;
 				color: white;
@@ -100,9 +100,9 @@ class SendLargeMessages {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
-			
+
 			this.clipboard = require("electron").clipboard;
-			
+
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
@@ -112,12 +112,12 @@ class SendLargeMessages {
 
 
 	stop () {
-		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {			
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.unloadMessage(this);
 		}
 	}
 
-	
+
 	// begin of own functions
 
 	changeLanguageStrings () {
@@ -125,7 +125,7 @@ class SendLargeMessages {
 		this.sendMessageModalMarkup = 		this.sendMessageModalMarkup.replace("REPLACE_btn_cancel_text", this.labels.btn_cancel_text);
 		this.sendMessageModalMarkup = 		this.sendMessageModalMarkup.replace("REPLACE_btn_send_text", this.labels.btn_send_text);
 	}
-	
+
 	processChannelTextArea (instance, wrapper) {
 		if (instance.props && instance.props.type && instance.props.type == "normal") {
 			var textarea = wrapper.querySelector("textarea");
@@ -151,22 +151,22 @@ class SendLargeMessages {
 			});
 		}
 	}
-	
+
 	showSendModal (text) {
 		let sendMessageModal = BDFDB.htmlToElement(this.sendMessageModalMarkup);
 		let textinput = sendMessageModal.querySelector("#modal-inputtext");
 		let warning = sendMessageModal.querySelector("#warning-message");
 		let counter = sendMessageModal.querySelector("#character-counter");
-		
+
 		let updateCounter = () => {
 			let parsedlength = BDFDB.getParsedLength(textinput.value);
 			let messageAmount = Math.ceil(parsedlength/1900);
 			warning.innerText = messageAmount > 15 ? this.labels.modal_messages_warning : "";
 			counter.innerText = parsedlength + " (" + (textinput.selectionEnd - textinput.selectionStart) + ") => " + this.labels.modal_messages_translation + ": " + messageAmount;
 		};
-		
+
 		BDFDB.appendModal(sendMessageModal);
-		
+
 		BDFDB.addChildEventListener(sendMessageModal, "click", ".btn-send", e => {
 			e.preventDefault();
 			let messages = this.formatText(textinput.value || "");
@@ -177,7 +177,7 @@ class SendLargeMessages {
 				},this.messageDelay * i);
 			});
 		});
-		
+
 		textinput.value = text || "";
 		textinput.addEventListener("keyup", () => {setTimeout(() => {updateCounter();},10);});
 		textinput.addEventListener("click", () => {updateCounter();});
@@ -195,7 +195,7 @@ class SendLargeMessages {
 		updateCounter();
 		textinput.focus();
 	}
-	
+
 	formatText (text) {
 		text = text.replace(new RegExp("\t", 'g'), "	");
 		let longwords = text.match(/[\S]{1800,}/gm);
@@ -215,7 +215,7 @@ class SendLargeMessages {
 			if (messages[count2] && BDFDB.getParsedLength(messages[count2] + "" + word) > 1900) count2++;
 			messages[count2] = messages[count2] ? messages[count2] + " " + word : word;
 		});
-		
+
 		let insertCodeBlock = null, insertCodeLine = null;
 		for (let j = 0; j < messages.length; j++) {
 			if (insertCodeBlock) {
@@ -226,10 +226,10 @@ class SendLargeMessages {
 				messages[j] = insertCodeLine + messages[j];
 				insertCodeLine = null;
 			}
-			
+
 			let codeBlocks = messages[j].match(/`{3,}[\S]*\n|`{3,}/gm);
 			let codeLines = messages[j].match(/[^`]{0,1}`{1,2}[^`]|[^`]`{1,2}[^`]{0,1}/gm);
-			
+
 			if (codeBlocks && codeBlocks.length % 2 == 1) {
 				messages[j] = messages[j] + "```";
 				insertCodeBlock = codeBlocks[codeBlocks.length-1] + "\n";
@@ -239,10 +239,10 @@ class SendLargeMessages {
 				messages[j] = messages[j] + insertCodeLine;
 			}
 		}
-		
+
 		return messages;
 	}
-	
+
 	sendMessage (text) {
 		let textarea = document.querySelector(BDFDB.dotCNS.textareawrapchat + "textarea");
 		if (textarea) {
@@ -253,7 +253,7 @@ class SendLargeMessages {
 			}
 		}
 	}
-	
+
 	setLabelsByLanguage () {
 		switch (BDFDB.getDiscordLanguage().id) {
 			case "hr":		//croatian

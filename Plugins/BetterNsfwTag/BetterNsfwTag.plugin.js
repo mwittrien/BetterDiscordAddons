@@ -8,7 +8,7 @@ class BetterNsfwTag {
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Adds a more noticeable tag to NSFW channels.";}
-	
+
 	initConstructor () {
 		this.patchModules = {
 			"ChannelItem":"componentDidMount"
@@ -40,7 +40,7 @@ class BetterNsfwTag {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
-						
+
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
@@ -50,14 +50,14 @@ class BetterNsfwTag {
 
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
-			BDFDB.removeEles(".NSFW-tag");		
+			BDFDB.removeEles(".NSFW-tag");
 			BDFDB.unloadMessage(this);
 		}
 	}
-	
-	
+
+
 	// begin of own functions
-	
+
 	processChannelItem (instance, wrapper) {
 		if (instance.props && instance.props.channel && instance.props.channel.nsfw) {
 			let channelname = wrapper.querySelector(BDFDB.dotCN.channelname);

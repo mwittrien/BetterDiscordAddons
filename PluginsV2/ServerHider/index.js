@@ -1,63 +1,16 @@
 module.exports = (Plugin, Api, Vendor) => {
-	if (typeof BDFDB !== "object") global.BDFDB = {$: Vendor.$, BDv2Api: Api};
-	
-	const {$} = Vendor;
+	if (!global.BDFDB || typeof BDFDB != "object") global.BDFDB = {BDv2Api: Api};
 
 	return class extends Plugin {
 		initConstructor () {
 			this.labels = {};
-			
-			this.css = `
-				.${this.name}-modal .entry ${BDFDB.dotCN.guild} {
-					height: 50px;
-					position: relative;
-					width: 50px;
-					z-index: 1;
-				}
-				.${this.name}-modal .entry ${BDFDB.dotCN.guildinner} {
-					background: #2f3136;
-					border-radius: 25px !important;
-					cursor: pointer;
-					font-size: 18px;
-					line-height: 50px;
-					overflow: hidden;
-					text-align: center;
-				}
-				.${this.name}-modal .entry ${BDFDB.dotCNS.guild + BDFDB.dotCN.avatarsmallold} {
-					background-repeat: no-repeat;
-					background-size: 50px 50px;
-					border-radius: 0;
-					color: #fff;
-					display: block;
-					float: left;
-					margin: 0;
-					height: 50px;
-					width: 50px;
-				}
-				.${this.name}-modal .entry ${BDFDB.dotCNS.guild + BDFDB.dotCN.badge} {
-					background-clip: padding-box;
-					background-color: #f04747;
-					border-radius: 3px;
-					bottom: -2px;
-					box-shadow: 0 1px 0 rgba(0,0,0,.25), inset 0 1px 0 hsla(0,0%,100%,.15);
-					color: #fff;
-					display: inline-block;
-					font-size: 12px;
-					font-weight: 500;
-					line-height: 12px;
-					padding: 3px 6px;
-					pointer-events: none;
-					position: absolute;
-					right: -2px;
-					text-shadow: 0 1px 0 rgba(0,0,0,.25);
-				}
-				.${this.name}-modal .folderhideCheckboxWrapper {
-					right: 8px;
-				}`;
-			
-				
+
+			this.patchModules = {
+				"Guild":"componentDidMount"
+			};
+
 			this.serverHiderModalMarkup =
-				`<span class=""${this.name}-modal DevilBro-modal"">
+				`<span class="${this.name}-modal DevilBro-modal">
 					<div class="${BDFDB.disCN.backdrop}"></div>
 					<div class="${BDFDB.disCN.modal}">
 						<div class="${BDFDB.disCN.modalinner}">
@@ -67,26 +20,22 @@ module.exports = (Plugin, Api, Vendor) => {
 										<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.headertitle + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.defaultcolor + BDFDB.disCNS.h4defaultmargin + BDFDB.disCN.marginreset}">REPLACE_modal_header_text</h4>
 										<div class="${BDFDB.disCNS.modalguildname + BDFDB.disCNS.small + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCN.primary}"></div>
 									</div>
-									<svg class="${BDFDB.disCNS.modalclose + BDFDB.disCN.flexchild}" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12">
-										<g fill="none" fill-rule="evenodd">
-											<path d="M0 0h12v12H0"></path>
-											<path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path>
-										</g>
-									</svg>
-								</div>
-								<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCNS.modalsubinner + BDFDB.disCN.marginbottom8} folderhideSettings" style="flex: 0 0 auto;">
-									<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">
-										<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">REPLACE_modal_folderhide_text</h3>
-									</div>
-									<div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault} folderhideCheckboxWrapper" style="flex: 0 0 auto;">
-										<input type="checkbox" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} folderhideCheckbox">
-									</div>
+									<button type="button" class="${BDFDB.disCNS.modalclose + BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow}">
+										<div class="${BDFDB.disCN.buttoncontents}">
+											<svg name="Close" width="18" height="18" viewBox="0 0 12 12" style="flex: 0 1 auto;">
+												<g fill="none" fill-rule="evenodd">
+													<path d="M0 0h12v12H0"></path>
+													<path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path>
+												</g>
+											</svg>
+										</div>
+									</button>
 								</div>
 								<div class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.modalcontent + BDFDB.disCNS.scrollerthemed + BDFDB.disCN.themeghosthairline}">
 									<div class="${BDFDB.disCNS.scroller + BDFDB.disCN.modalsubinner} entries"></div>
 								</div>
 								<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontalreverse + BDFDB.disCNS.horizontalreverse2 + BDFDB.disCNS.directionrowreverse + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.modalfooter}">
-									<button type="button" class="btn-save ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}">
+									<button type="button" class="btn-ok ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}">
 										<div class="${BDFDB.disCN.buttoncontents}">REPLACE_btn_ok_text</div>
 									</button>
 									<button type="button" class="btn-all ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlooklink + BDFDB.disCNS.buttoncolortransparent + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}">
@@ -105,8 +54,6 @@ module.exports = (Plugin, Api, Vendor) => {
 						<input type="checkbox" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} serverhiderCheckbox">
 					</div>
 				</div>`;
-				
-			this.dividerMarkup = `<div class="${BDFDB.disCNS.modaldivider + BDFDB.disCN.modaldividerdefault}"></div>`;
 
 			this.serverContextEntryMarkup =
 				`<div class="${BDFDB.disCN.contextmenuitemgroup}">
@@ -115,7 +62,7 @@ module.exports = (Plugin, Api, Vendor) => {
 						<div class="${BDFDB.disCN.contextmenuhint}"></div>
 					</div>
 				</div>`;
-				
+
 			this.serverContextSubMenuMarkup = 
 				`<div class="${BDFDB.disCN.contextmenu} serverhider-submenu">
 					<div class="${BDFDB.disCN.contextmenuitemgroup}">
@@ -132,66 +79,31 @@ module.exports = (Plugin, Api, Vendor) => {
 		}
 
 		onStart () {
-			var libraryScript = null;
-			if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-				libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+			var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+			if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 				if (libraryScript) libraryScript.remove();
 				libraryScript = document.createElement("script");
 				libraryScript.setAttribute("type", "text/javascript");
 				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+				libraryScript.setAttribute("date", performance.now());
+				libraryScript.addEventListener("load", () => {
+					BDFDB.loaded = true;
+					this.initialize();
+				});
 				document.head.appendChild(libraryScript);
 			}
+			else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 			this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-			if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-			else libraryScript.addEventListener("load", () => {this.initialize();});
-			return true;
 		}
 
 		initialize () {
-			if (typeof BDFDB === "object") {
+			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+				if (this.started) return true;
 				BDFDB.loadMessage(this);
-				
-				var observer = null;
 
-				observer = new MutationObserver((changes, _) => {
-					changes.forEach(
-						(change, i) => {
-							if (change.addedNodes) {
-								change.addedNodes.forEach((node) => {
-									if (node.nodeType == 1 && node.className.includes(BDFDB.disCN.contextmenu)) {
-										this.onContextMenu(node);
-									}
-								});
-							}
-						}
-					);
-				});
-				BDFDB.addObserver(this, BDFDB.dotCN.appmount, {name:"serverContextObserver",instance:observer}, {childList: true});
-				
-				observer = new MutationObserver((changes, _) => {
-					changes.forEach(
-						(change, i) => {
-							if (change.addedNodes) {
-								change.addedNodes.forEach((node) => {
-									if (node && node.classList && node.classList.contains(BDFDB.disCN.guild) && !node.querySelector(BDFDB.dotCN.guildserror)) {
-										var info = BDFDB.getKeyInformation({"node":node, "key":"guild"});
-										if (info) {
-											var data = BDFDB.loadData(info.id, this, "servers");
-											if (data) {
-												$(node).toggle(data.visible);
-											}
-										}
-									}
-								});
-							}
-						}
-					);
-				});
-				BDFDB.addObserver(this, BDFDB.dotCN.guilds, {name:"serverListObserver",instance:observer}, {childList: true});
-				
-				$(BDFDB.dotCN.guilds).on("mouseleave." + this.name, () => {this.updateAllServers(false);});
-				
-				this.updateAllServers(true);
+				if (BDFDB.isPluginEnabled("HideUtils") && !BDFDB.loadData("hideutils", this, "warnings")) BDFDB.openConfirmModal(this, this.name + " is not compartible with the plugin HideUtils by Arashiryuu. You might expierence bugs like Servers that should be hidden by " + this.name + " still being visible in the Guildlist. To avoid this disable the Plugin HideUtils. Press the " + BDFDB.getLibraryStrings().btn_ok_text + "-Button to not show this Message again.", "Warning", () => {BDFDB.saveData("hideutils", true, this, "warnings")});
+
+				BDFDB.WebModules.forceAllUpdates(this);
 
 				return true;
 			}
@@ -202,11 +114,9 @@ module.exports = (Plugin, Api, Vendor) => {
 		}
 
 		onStop () {
-			if (typeof BDFDB === "object") {
-				BDFDB.readServerList().forEach(serverObj => {
-					if (!serverObj.div.getAttribute("folder")) $(serverObj.div).show();
-				});
-				
+			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+				BDFDB.readServerList().forEach(info => {if (!info.div.getAttribute("folder")) BDFDB.toggleEles(info.div, true);});
+
 				BDFDB.unloadMessage(this);
 				return true;
 			}
@@ -215,176 +125,128 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 		}
 
-		
-		// begin of own functions
 
-		resetAll () {
-			if (confirm("Are you sure you want to reset all servers?")) {
-				BDFDB.removeAllData(this, "servers");
-				BDFDB.readServerList().forEach(serverObj => {
-					if (!serverObj.div.getAttribute("folder")) $(serverObj.div).show();
-				});
-			}
-		}
+		// begin of own functions
 
 		changeLanguageStrings () {
 			this.serverContextEntryMarkup = 	this.serverContextEntryMarkup.replace("REPLACE_context_serverhider_text", this.labels.context_serverhider_text);
-			
+
 			this.serverContextSubMenuMarkup = 	this.serverContextSubMenuMarkup.replace("REPLACE_submenu_hideserver_text", this.labels.submenu_hideserver_text);
 			this.serverContextSubMenuMarkup = 	this.serverContextSubMenuMarkup.replace("REPLACE_submenu_openhidemenu_text", this.labels.submenu_openhidemenu_text);
-			
+
 			this.serverHiderModalMarkup = 		this.serverHiderModalMarkup.replace("REPLACE_modal_header_text", this.labels.modal_header_text);
-			this.serverHiderModalMarkup = 		this.serverHiderModalMarkup.replace("REPLACE_modal_folderhide_text", this.labels.modal_folderhide_text);
 			this.serverHiderModalMarkup = 		this.serverHiderModalMarkup.replace("REPLACE_btn_ok_text", this.labels.btn_ok_text);
 			this.serverHiderModalMarkup = 		this.serverHiderModalMarkup.replace("REPLACE_btn_all_text", this.labels.btn_all_text);
-			
+
 			this.serverEntryMarkup = 			this.serverEntryMarkup.replace("REPLACE_btn_visible_text", this.labels.btn_visible_text);
 		}
-		
-		onContextMenu (context) {
-			if (document.querySelector("." + this.name + "-modal") || !context || !context.tagName || !context.parentElement || context.querySelector(".serverhider-item")) return;
-			var info = BDFDB.getKeyInformation({"node":context, "key":"guild"});
-			var valid = false;
-			if (info && BDFDB.getKeyInformation({"node":context, "key":"displayName", "value":"GuildLeaveGroup"})) {
-				valid = true;
-			}
-			else if (BDFDB.getKeyInformation({"node":context, "key":"handleGuildCreate"})) {
-				info = {guildCreate:true};
-				valid = true;
-			}
-			if (valid) {
-				$(context).append(this.serverContextEntryMarkup)
-					.on("mouseenter", ".serverhider-item", (e) => {
-						this.createContextSubMenu(info, e, context);
+
+		onGuildContextMenu (instance, menu) {
+			if (document.querySelector(".DevilBro-modal")) return;
+			if (instance.props && instance.props.target && instance.props.type.indexOf("GUILD_ICON_") == 0 && !menu.querySelector(".serverhider-item")) {
+				let serverContextEntry = BDFDB.htmlToElement(this.serverContextEntryMarkup);
+				menu.appendChild(serverContextEntry);
+				let hideritem = serverContextEntry.querySelector(".serverhider-item");
+				hideritem.addEventListener("mouseenter", () => {
+					let serverContextSubMenu = BDFDB.htmlToElement(this.serverContextSubMenuMarkup);
+					let openitem = serverContextSubMenu.querySelector(".openhidemenu-item");
+					openitem.addEventListener("click", () => {
+						instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
+						this.showServerModal();
 					});
-					
-				BDFDB.updateContextPosition(context);
-			}
-		}
-		
-		createContextSubMenu (info, e, context) {
-			var serverContextSubMenu = $(this.serverContextSubMenuMarkup);
-				
-			serverContextSubMenu
-				.on("click", ".openhidemenu-item", () => {
-					$(context).hide();
-					this.showServerModal();
+					if (instance.props.guild && !instance.props.target.getAttribute("folder")) {
+						let hideitem = serverContextSubMenu.querySelector(".hideserver-item");
+						BDFDB.removeClass(hideitem, BDFDB.disCN.contextmenuitemdisabled);
+						hideitem.addEventListener("click", () => {
+							instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
+							this.toggleServer(instance.props.guild, instance.props.target, false);
+						});
+					}
+					BDFDB.appendSubMenu(hideritem, serverContextSubMenu);
 				});
-				
-			if (!info.guildCreate) {
-				serverContextSubMenu
-					.find(".hideserver-item")
-					.removeClass(BDFDB.disCN.contextmenuitemdisabled)
-					.on("click", () => {
-						$(context).hide();
-						this.hideServer(info);
-					});
 			}
-			
-			BDFDB.appendSubMenu(e.currentTarget, serverContextSubMenu);
 		}
 
-		hideServer (info) {
-			var serverObj = BDFDB.getDivOfServer(info.id);
-			
-			if (!serverObj) return;
-			
-			$(serverObj.div).hide();
-			
-			BDFDB.saveData(info.id, {visible:false}, this, "servers");
+		processGuild (instance, wrapper) {
+			if (instance.props && instance.props.guild) {
+				let hiddenservers = BDFDB.loadData("hiddenservers", this, "hiddenservers") || [];
+				this.toggleServer(instance.props.guild, wrapper, !hiddenservers.includes(instance.props.guild.id));
+			}
 		}
-		
+
 		showServerModal () {
-			var serverObjs = BDFDB.readServerList();
-			
-			var serverHiderModal = $(this.serverHiderModalMarkup);
-			serverHiderModal
-				.on("click", ".folderhideCheckbox", (e) => {
-					serverHiderModal.find(".hidefolder").toggle(!$(e.target).prop("checked"));
-				})
-				.on("click", ".btn-all", () => {
-					var hideAll = $(serverObjs[0].div).is(":visible");
-					for (let serverObj of serverObjs) {
-						$(serverObj.div).toggle(!hideAll);
-						BDFDB.saveData(serverObj.id, {visible:!hideAll}, this, "servers");
-					}
-					$(".serverhiderCheckbox").each((_, checkBox) => {if ($(checkBox).prop("checked") == hideAll) checkBox.click();});
+			let serverHiderModal = BDFDB.htmlToElement(this.serverHiderModalMarkup);
+			let container = serverHiderModal.querySelector(".entries");
+			if (!container) return;
+
+			BDFDB.addChildEventListener(serverHiderModal, "click", ".btn-all", () => {
+				let firstcheckbox = serverHiderModal.querySelector(".serverhiderCheckbox");
+				firstcheckbox.click();
+				serverHiderModal.querySelectorAll(".serverhiderCheckbox").forEach(checkbox => {
+					if (checkbox != firstcheckbox && checkbox.checked != firstcheckbox.checked) checkbox.click();
 				});
-				
-			if (!BDFDB.isPluginEnabled("ServerFolders")) serverHiderModal.find(".folderhideSettings").hide();
-			
-			for (let serverObj of serverObjs) {
-				
-				let badge = serverObj.div.querySelector(BDFDB.dotCN.badge);
-				
-				let entry = $(this.serverEntryMarkup);
-				let divider = $(this.dividerMarkup);
-				let isHiddenByFolder = $(serverObj.div).attr("folder") ? true : false;
-				entry.toggleClass("hidefolder", isHiddenByFolder);
-				divider.toggleClass("hidefolder", isHiddenByFolder);
-				serverHiderModal.find(".entries").append(entry).append(divider);
-				entry.find(".serverhiderName")
-					.before(this.createCopyOfServer(serverObj))
-					.text(serverObj.name);
-				entry.find(".serverhiderCheckbox")
-					.prop("checked", $(serverObj.div).is(":visible"))
-					.on("click", (event) => {
-						var visible = $(event.target).prop("checked");
-						$(serverObj.div).toggle(visible);
-						BDFDB.saveData(serverObj.id, {visible:visible}, this, "servers");
+			});
+
+			for (let info of BDFDB.readServerList()) {
+				if (!info.div.getAttribute("folder")) {
+					if (container.firstElementChild) container.appendChild(BDFDB.htmlToElement(`<div class="${BDFDB.disCN.modaldivider}"></div>`));
+					let entry = BDFDB.htmlToElement(this.serverEntryMarkup);
+					container.appendChild(entry);
+					let name = entry.querySelector(".serverhiderName");
+					name.innerText = info.name || "";
+					name.parentElement.insertBefore(this.createCopyOfServer(info), name);
+					let hidecheckbox = entry.querySelector(".serverhiderCheckbox");
+					hidecheckbox.checked = !BDFDB.isEleHidden(info.div);
+					hidecheckbox.addEventListener("click", e => {
+						this.toggleServer(info, info.div, e.currentTarget.checked);
 					});
+				}
 			}
 			BDFDB.appendModal(serverHiderModal);
 		}
-		
-		createCopyOfServer (serverObj) {
-			var serverDiv = serverObj.div;
-			var serverCopy = serverDiv.cloneNode(true);
-			$(serverCopy)
-				.css("display", "")
-				.on("click." + this.name, (e) => {
-					e.preventDefault();
-					serverDiv.querySelector("a").click();
-				})
-				.on("contextmenu." + this.name, (e) => {
-					var handleContextMenu = BDFDB.getKeyInformation({"node":serverDiv.firstElementChild, "key":"handleContextMenu"});
-					if (handleContextMenu) {
-						var data = {
-							preventDefault: a=>a,
-							stopPropagation: a=>a,
-							pageX: e.pageX,
-							pageY: e.pageY,
-						};
-						
-						handleContextMenu(data);
-					}
-				});
+
+		createCopyOfServer (info) {
+			let serverCopy = info.div.cloneNode(true);
+			BDFDB.toggleEles(serverCopy, true);
+			BDFDB.removeClass(serverCopy, BDFDB.disCN.guildunread, BDFDB.disCN.guildselected);
+			serverCopy.addEventListener("click", e => {
+				e.preventDefault();
+				info.div.querySelector("a").click();
+			});
+			serverCopy.addEventListener("contextmenu", e => {BDFDB.openGuildContextMenu(info.div, e);});
 			return serverCopy;
 		}
-		
-		updateAllServers (write) {
-			for (let serverObj of BDFDB.readServerList()) {
-				var data = BDFDB.loadData(serverObj.id, this, "servers");
-				
-				var visible = data && write ? data.visible : $(serverObj.div).is(":visible");
-				$(serverObj.div).toggle(visible);
-				
-				BDFDB.saveData(serverObj.id, {visible}, this, "servers");
-			}
+
+		toggleServer (info, target, visible) {
+			if (!info || !target) return;
+			let guilddiv = BDFDB.getParentEle(BDFDB.dotCN.guild, target);
+			if (!guilddiv || guilddiv.getAttribute("folder")) return;
+			BDFDB.toggleEles(guilddiv, visible);
+			let hiddenservers = BDFDB.loadData("hiddenservers", this, "hiddenservers") || [];
+			BDFDB.removeFromArray(hiddenservers, info.id);
+			if (!visible) hiddenservers.push(info.id);
+			BDFDB.saveData("hiddenservers", hiddenservers, this, "hiddenservers");
 		}
 
 		getSettingsPanel () {
-			var settingshtml = `<div class="DevilBro-settings ${this.name}-settings">`;
+			if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
+			let settingshtml = `<div class="${this.name}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="DevilBro-settings-inner">`;
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Reset all Servers.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} reset-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Reset</div></button></div>`;
-			settingshtml += `</div>`;
-			
-			var settingspanel = $(settingshtml)[0];
+			settingshtml += `</div></div>`;
 
-			$(settingspanel)
-				.on("click", ".reset-button", () => {this.resetAll();});
+			let settingspanel = BDFDB.htmlToElement(settingshtml);
+
+			BDFDB.initElements(settingspanel, this);
+
+			BDFDB.addEventListener(this, settingspanel, "click", ".reset-button", () => {
+				BDFDB.openConfirmModal(this, "Are you sure you want to reset all servers?", () => {
+					BDFDB.removeAllData(this, "servers");
+					BDFDB.readServerList().forEach(info => {if (!info.div.getAttribute("folder")) BDFDB.toggleEles(info.div, false);});
+				});
+			});
 			return settingspanel;
 		}
-		
+
 		setLabelsByLanguage () {
 			switch (BDFDB.getDiscordLanguage().id) {
 				case "hr":		//croatian

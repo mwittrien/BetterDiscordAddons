@@ -8,12 +8,12 @@ class PluginRepo {
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
-	
+
 	initConstructor () {
 		this.patchModules = {
 			"V2C_List":"componentDidMount"
 		};
-		
+
 		this.sortings = {
 			sort: {
 				name:			"Name",
@@ -28,21 +28,21 @@ class PluginRepo {
 				desc:			"Descending"
 			}
 		};
-		
+
 		this.loading = {is:false, timeout:null, amount:0};
-		
+
 		this.grabbedPlugins = [];
 		this.foundPlugins = [];
 		this.loadedPlugins = {};
-		
+
 		this.updateInterval;
-		
+
 		this.settingsContextEntryMarkup =
 			`<div class="${BDFDB.disCN.contextmenuitem} pluginrepo-item">
 				<span>Plugin Repo</span>
 				<div class="${BDFDB.disCN.contextmenuhint}"></div>
 			</div>`;
-			
+
 		this.pluginRepoLoadingIconMarkup =
 			`<svg class="pluginrepo-loadingicon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="40" height="30" viewBox="0 0 483 382">
 				<path d="M0.000 183.023 L 0.000 366.046 46.377 366.046 L 92.754 366.046 92.754 312.629 L 92.754 259.213 127.223 259.213 C 174.433 259.213,187.432 257.146,210.766 245.926 C 311.105 197.681,301.344 41.358,195.859 7.193 C 173.603 -0.015,173.838 0.000,80.846 0.000 L 0.000 0.000 0.000 183.023 M157.615 88.195 C 193.007 97.413,198.827 152.678,166.407 171.674 C 158.993 176.019,155.494 176.398,122.807 176.398 L 92.754 176.398 92.754 131.677 L 92.754 86.957 122.807 86.957 C 146.807 86.957,153.819 87.206,157.615 88.195" stroke="none" fill="#7289da" fill-rule="evenodd"></path>
@@ -83,7 +83,7 @@ class PluginRepo {
 					<button class="${BDFDB.disCN._reposettingsbutton} btn-download" style="margin-left: 0 !important;">Download</button>
 				</div>
 			</li>`;
-			
+
 		this.pluginRepoModalMarkup =
 			`<span class="${this.name}-modal Repo-modal DevilBro-modal">
 				<div class="${BDFDB.disCN.backdrop}"></div>
@@ -171,7 +171,7 @@ class PluginRepo {
 					</div>
 				</div>
 			</span>`;
-			
+
 		this.sortPopoutMarkup =
 			`<div class="${BDFDB.disCNS.popout + BDFDB.disCNS.popoutbottomright + BDFDB.disCN.popoutnoshadow} pluginrepo-sort-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
 				<div>
@@ -182,7 +182,7 @@ class PluginRepo {
 					</div>
 				</div>
 			</div>`;
-			
+
 		this.orderPopoutMarkup =
 			`<div class="${BDFDB.disCNS.popout + BDFDB.disCNS.popoutbottomright + BDFDB.disCN.popoutnoshadow} pluginrepo-order-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
 				<div>
@@ -193,7 +193,7 @@ class PluginRepo {
 					</div>
 				</div>
 			</div>`;
-		
+
 		this.css = `
 			${BDFDB.dotCN.app} > .repo-loadingwrapper {
 				position: absolute;
@@ -232,7 +232,7 @@ class PluginRepo {
 				pointer-events: none !important;
 			}`;
 	}
-	
+
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		var settingshtml = `<div class="${this.name}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="DevilBro-settings-inner">`;
@@ -246,7 +246,7 @@ class PluginRepo {
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Force all Plugins to be fetched again.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} refresh-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Refresh</div></button></div>`;
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Remove all added Plugins from your own list.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} remove-all" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Reset</div></button></div>`;
 		settingshtml += `</div></div>`;
-		
+
 		let settingspanel = BDFDB.htmlToElement(settingshtml);
 
 		BDFDB.initElements(settingspanel, this);
@@ -259,7 +259,7 @@ class PluginRepo {
 			this.loading = {is:false, timeout:null, amount:0};
 			this.loadPlugins();
 		});
-			
+
 		return settingspanel;
 	}
 
@@ -288,11 +288,11 @@ class PluginRepo {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
-						
+
 			this.loadPlugins();
-			
+
 			this.updateInterval = setInterval(() => {this.checkForNewPlugins();},1000*60*30);
-			
+
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
@@ -305,16 +305,16 @@ class PluginRepo {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			clearInterval(this.updateInterval);
 			clearTimeout(this.loading.timeout);
-			
+
 			BDFDB.removeEles("webview[webview-pluginrepo]",".pluginrepo-notice",".bd-pluginrepobutton",".pluginrepo-loadingicon",BDFDB.dotCN.app + " > .repo-loadingwrapper:empty");
-			
+
 			BDFDB.unloadMessage(this);
 		}
 	}
 
-	
+
 	// begin of own functions
-	
+
 	onUserSettingsCogContextMenu (instance, menu) {
 		let observer = new MutationObserver(changes => {
 			changes.forEach(change => {
@@ -337,7 +337,7 @@ class PluginRepo {
 		});
 		observer.observe(menu, {childList: true, subtree:true});
 	}
-	
+
 	processV2CList (instance, wrapper) {
 		if (!document.querySelector(".bd-pluginrepobutton") && window.PluginUpdates && window.PluginUpdates.plugins && instance._reactInternalFiber.key && instance._reactInternalFiber.key.split("-")[0] == "plugin") {
 			var folderbutton = document.querySelector(BDFDB.dotCN._repofolderbutton);
@@ -348,12 +348,12 @@ class PluginRepo {
 				});
 				repoButton.addEventListener("mouseenter", () => {
 					BDFDB.createTooltip("Open Plugin Repo", repoButton, {type:"top",selector:"pluginrepo-button-tooltip"});
-				});	
+				});
 				folderbutton.parentElement.insertBefore(repoButton, folderbutton.nextSibling);
 			}
 		}
 	};
-	
+
 	addPluginToOwnList (settingspanel) {
 		var pluginUrlInput = settingspanel.querySelector("#input-pluginurl");
 		var pluginList = settingspanel.querySelector(".plugin-list");
@@ -370,7 +370,7 @@ class PluginRepo {
 			}
 		}
 	}
-	
+
 	removePluginFromOwnList (e) {
 		var entry = e.currentTarget.parentElement;
 		var url = entry.querySelector(".entryurl").textContent;
@@ -379,20 +379,20 @@ class PluginRepo {
 		BDFDB.removeFromArray(ownlist, url);
 		BDFDB.saveData("ownlist", ownlist, this, "ownlist");
 	}
-	
+
 	removeAllFromOwnList (settingspanel) {
 		BDFDB.openConfirmModal(this, "Are you sure you want to remove all added Plugins from your own list?", () => {
 			BDFDB.saveData("ownlist", [], this, "ownlist");
 			BDFDB.removeEles(settingspanel.querySelector(BDFDB.dotCN.hovercard));
 		});
 	}
-	
+
 	openPluginRepoModal (showOnlyOutdated = false) {
 		if (this.loading.is) {
 			BDFDB.showToast(`Plugins are still being fetched. Try again in some seconds.`, {type:"danger"});
 			return;
 		}
-		
+
 		var pluginRepoModal = BDFDB.htmlToElement(this.pluginRepoModalMarkup);
 		var hiddenSettings = BDFDB.loadAllData(this, "hidden");
 		pluginRepoModal.querySelector("#input-hideupdated").checked = hiddenSettings.updated || showOnlyOutdated;
@@ -400,7 +400,7 @@ class PluginRepo {
 		pluginRepoModal.querySelector("#input-hidedownloadable").checked = hiddenSettings.downloadable || showOnlyOutdated;
 		if (!BDFDB.isRestartNoMoreEnabled()) pluginRepoModal.querySelector("#RNMoption").remove();
 		else pluginRepoModal.querySelector("#input-rnmstart").checked = BDFDB.loadData("RNMstart", this, "settings");
-		
+
 		BDFDB.addChildEventListener(pluginRepoModal, "keyup", BDFDB.dotCN.searchbarinput, () => {
 			clearTimeout(pluginRepoModal.searchTimeout);
 			pluginRepoModal.searchTimeout = setTimeout(() => {this.sortEntries(pluginRepoModal);},1000);
@@ -428,7 +428,7 @@ class PluginRepo {
 				this.sortEntries(pluginRepoModal);
 			}
 		});
-		
+
 		let favorites = BDFDB.loadAllData(this, "favorites");
 		let container = pluginRepoModal.querySelector(".plugins");
 		pluginRepoModal.entries = {};
@@ -452,12 +452,12 @@ class PluginRepo {
 			this.addEntry(pluginRepoModal, container, data);
 		}
 		this.sortEntries(pluginRepoModal);
-			
+
 		BDFDB.appendModal(pluginRepoModal);
-		
+
 		pluginRepoModal.querySelector(BDFDB.dotCN.searchbarinput).focus();
 	}
-	
+
 	addEntry (pluginRepoModal, container, data) {
 		if (!pluginRepoModal || !container || !data) return;
 		let entry = BDFDB.htmlToElement(this.pluginEntryMarkup);
@@ -513,9 +513,9 @@ class PluginRepo {
 			this.downloadPlugin(data);
 			if (pluginRepoModal.querySelector("#input-rnmstart").checked) setTimeout(() => {this.startPlugin(data);},3000);
 		});
-			
+
 		container.appendChild(entry);
-			
+
 		function setEntryState (state) {
 			data.state = state;
 			BDFDB.toggleClass(entry, "downloadable", state > 1);
@@ -527,28 +527,28 @@ class PluginRepo {
 			pluginRepoModal.entries[data.url] = data;
 		};
 	}
-	
+
 	sortEntries (pluginRepoModal) {
 		if (!pluginRepoModal || typeof pluginRepoModal.entries != "object") return;
-		
+
 		let container = pluginRepoModal.querySelector(".plugins");
 		if (!container) return;
-		
+
 		let searchstring = pluginRepoModal.querySelector(BDFDB.dotCN.searchbarinput).value.replace(/[<|>]/g, "").toUpperCase();
-		
+
 		let entries = pluginRepoModal.entries;
 		if (pluginRepoModal.querySelector("#input-hideupdated").checked) 		entries = BDFDB.filterObject(entries, entry => {return entry.state < 1 ? null : entry;});
 		if (pluginRepoModal.querySelector("#input-hideoutdated").checked) 		entries = BDFDB.filterObject(entries, entry => {return entry.state == 1 ? null : entry;});
 		if (pluginRepoModal.querySelector("#input-hidedownloadable").checked) 	entries = BDFDB.filterObject(entries, entry => {return entry.state > 1 ? null : entry;});
 		entries = BDFDB.filterObject(entries, entry => {return entry.search.indexOf(searchstring) > -1 ? entry : null;});
-		
+
 		entries = BDFDB.sortObject(entries, pluginRepoModal.querySelector(".sort-filter " + BDFDB.dotCN.quickselectvalue).getAttribute("option"));
 		if (pluginRepoModal.querySelector(".order-filter " + BDFDB.dotCN.quickselectvalue).getAttribute("option") == "desc") entries = BDFDB.reverseObject(entries);
-		
+
 		let entrypositions = Object.keys(entries);
-		
+
 		pluginRepoModal.querySelector(".pluginAmount").innerText = "PluginRepo Repository " + entrypositions.length + "/" + Object.keys(this.loadedPlugins).length + " Plugins";
-		
+
 		for (let li of container.children) {
 			let pos = entrypositions.indexOf(li.getAttribute("data-url"));
 			if (pos > -1) {
@@ -561,7 +561,7 @@ class PluginRepo {
 			BDFDB.toggleEles(li, pos > -1);
 		}
 	}
-	
+
 	loadPlugins () {
 		BDFDB.removeEles("webview[webview-pluginrepo]",".pluginrepo-loadingicon");
 		var getPluginInfo, createWebview, runInWebview;
@@ -589,7 +589,7 @@ class PluginRepo {
 				var loadingicon = BDFDB.htmlToElement(this.pluginRepoLoadingIconMarkup);
 				loadingicon.addEventListener("mouseenter", () => {BDFDB.createTooltip("Loading PluginRepo",loadingicon,{type:"left",delay:500});})
 				loadingiconwrapper.appendChild(loadingicon);
-					
+
 				createWebview().then(() => {
 					getPluginInfo(() => {
 						if (!this.started) {
@@ -632,7 +632,7 @@ class PluginRepo {
 				});
 			}
 		});
-		
+
 		getPluginInfo = (callback) => {
 			if (i >= this.foundPlugins.length || !this.started || !this.loading.is) {
 				callback();
@@ -713,7 +713,7 @@ class PluginRepo {
 				getPluginInfo(callback);
 			});
 		}
-		
+
 		createWebview = () => {
 			return new Promise(function(callback) {
 				webview = document.createElement("webview");
@@ -731,7 +731,7 @@ class PluginRepo {
 				document.body.appendChild(webview);
 			});
 		}
-		
+
 		runInWebview = () => {
 			if (webviewrunning) return;
 			let webviewdata = webviewqueue.shift();
@@ -764,7 +764,7 @@ class PluginRepo {
 			}
 		}
 	}
-	
+
 	checkForNewPlugins () {
 		let request = require("request");
 		request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/PluginRepo/res/PluginList.txt", (error, response, result) => {
@@ -774,7 +774,7 @@ class PluginRepo {
 			}
 		});
 	}
-	
+
 	downloadPlugin (data) {
 		let request = require("request");
 		request(data.url, (error, response, body) => {
@@ -787,7 +787,7 @@ class PluginRepo {
 			}
 		});
 	}
-	
+
 	createPluginFile (filename, content) {
 		let fileSystem = require("fs");
 		let path = require("path");
@@ -801,7 +801,7 @@ class PluginRepo {
 			}
 		});
 	}
-	
+
 	startPlugin (data) {
 		var name = data.name;
 		if (BDFDB.isPluginEnabled(name) == false) {
@@ -811,7 +811,7 @@ class PluginRepo {
 			console.log(`%c[${this.name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Started Plugin " + name + ".");
 		}
 	}
-	
+
 	deletePluginFile (data) {
 		let fileSystem = require("fs");
 		let path = require("path");
@@ -823,7 +823,7 @@ class PluginRepo {
 			else BDFDB.showToast(`Successfully deleted Plugin "${filename}".`, {type:"success"});
 		});
 	}
-	
+
 	stopPlugin (data) {
 		var name = data.name;
 		if (BDFDB.isPluginEnabled(name) == true) {

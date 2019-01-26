@@ -1,14 +1,12 @@
 module.exports = (Plugin, Api, Vendor) => {
-	if (typeof BDFDB !== "object") global.BDFDB = {$: Vendor.$, BDv2Api: Api};
-	
-	const {$} = Vendor;
+	if (!global.BDFDB || typeof BDFDB != "object") global.BDFDB = {BDv2Api: Api};
 
 	return class extends Plugin {
 		initConstructor () {
 			this.selecting = false;
-			
+
 			this.counterMarkup = `<div id="charcounter"></div>`;
-			
+
 			this.css = `
 				#charcounter {
 					display: block;
@@ -30,27 +28,29 @@ module.exports = (Plugin, Api, Vendor) => {
 					bottom: -1.0em;
 				}`;
 		}
-		
+
 		onStart () {
-			var libraryScript = null;
-			if (typeof BDFDB !== "object" || typeof BDFDB.isLibraryOutdated !== "function" || BDFDB.isLibraryOutdated()) {
-				libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+			var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
+			if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 				if (libraryScript) libraryScript.remove();
 				libraryScript = document.createElement("script");
 				libraryScript.setAttribute("type", "text/javascript");
 				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+				libraryScript.setAttribute("date", performance.now());
+				libraryScript.addEventListener("load", () => {
+					BDFDB.loaded = true;
+					this.initialize();
+				});
 				document.head.appendChild(libraryScript);
 			}
+			else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 			this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-			if (typeof BDFDB === "object" && typeof BDFDB.isLibraryOutdated === "function") this.initialize();
-			else libraryScript.addEventListener("load", () => {this.initialize();});
-			return true;
 		}
 
 		initialize () {
-			if (typeof BDFDB === "object") {
+			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				BDFDB.loadMessage(this);
-							
+
 				var observer = null;
 
 				observer = new MutationObserver((changes, _) => {
@@ -67,7 +67,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					);
 				});
 				BDFDB.addObserver(this, BDFDB.dotCN.appmount, {name:"textareaObserver",instance:observer}, {childList: true, subtree: true});
-				
+
 				document.querySelectorAll("textarea").forEach(textarea => {this.appendCounter(textarea);});
 
 				return true;
@@ -80,10 +80,10 @@ module.exports = (Plugin, Api, Vendor) => {
 
 
 		onStop () {
-			if (typeof BDFDB === "object") {
+			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				$("#charcounter").remove();
 				$(".charcounter-added").removeClass("charcounter-added");
-							
+
 				BDFDB.unloadMessage(this);
 				return true;
 			}
@@ -91,9 +91,9 @@ module.exports = (Plugin, Api, Vendor) => {
 				return false;
 			}
 		}
-		
+
 		// begin of own functions
-		
+
 		appendCounter (textarea) {
 			if (!textarea) return;
 			var textareaWrap = textarea.parentElement;
@@ -102,12 +102,12 @@ module.exports = (Plugin, Api, Vendor) => {
 				if (textareaInstance && textareaInstance.props && textareaInstance.props.type) {
 					var counter = $(this.counterMarkup);
 					counter.addClass(textareaInstance.props.type).appendTo(textareaWrap);
-					
+
 					var updateCounter = () => {
 						var selection = textarea.selectionEnd - textarea.selectionStart == 0 ? "" : " (" + (textarea.selectionEnd - textarea.selectionStart) + ")";
 						counter.text(BDFDB.getParsedLength(textarea.value) + "/2000" + selection);
 					}
-					
+
 					textareaWrap.parentElement.classList.add("charcounter-added");
 					$(textarea)
 						.off("keydown." + this.name + " click." + this.name)
@@ -135,7 +135,7 @@ module.exports = (Plugin, Api, Vendor) => {
 								},10);
 							}
 						});
-					
+
 					updateCounter();
 				}
 			}
