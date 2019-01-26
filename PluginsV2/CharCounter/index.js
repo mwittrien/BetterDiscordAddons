@@ -3,20 +3,44 @@ module.exports = (Plugin, Api, Vendor) => {
 
 	return class extends Plugin {
 		initConstructor () {
-			this.selecting = false;
+			this.patchModules = {
+				"ChannelTextArea":"componentDidMount",
+				"Note":"componentDidMount",
+				"Modal":"componentDidMount"
+			};
 
-			this.counterMarkup = `<div id="charcounter"></div>`;
-
+			this.maxLenghts = {
+				normal: 2000,
+				edit: 2000,
+				form: 2000,
+				nickname: 32,
+				popout: 256,
+				profile: 256
+			}
+			   
 			this.css = `
+				${BDFDB.dotCN.themelight} #charcounter {
+					color: #747f8d; 
+					opacity: .7;
+				}
+				${BDFDB.dotCN.themedark} #charcounter {
+					color: #ccc;
+					opacity: .5;
+				}
+				${BDFDB.dotCNS.typing + BDFDB.dotCN.cooldownwrapper} {
+					margin-right: 64px;
+				}
+				.charcounter-added {
+					position: relative !important;
+				}
 				#charcounter {
 					display: block;
 					position: absolute;
-					opacity: .5;
 					z-index: 1000;
 					pointer-events: none;
 				}
 				#charcounter.normal {
-					right: 0; 
+					right: 0;
 					bottom: -1.3em;
 				}
 				#charcounter.edit {
@@ -24,8 +48,25 @@ module.exports = (Plugin, Api, Vendor) => {
 					bottom: -1.3em;
 				}
 				#charcounter.form {
-					right: 0; 
+					right: 0;
 					bottom: -1.0em;
+				}
+				#charcounter.nickname {
+					right: 0 !important;
+					top: 0 !important;
+				}
+				#charcounter.popout {
+					right: 3px !important;
+					bottom: 1px !important;
+					font-size: 10px !important;
+				}
+				#charcounter.profile {
+					right: -5px !important;
+					bottom: 3px !important;
+					font-size: 12px !important;
+				}
+				${BDFDB.dotCN.usernote} textarea:not(:focus) + #charcounter {
+					display: none;
 				}`;
 		}
 
@@ -49,26 +90,10 @@ module.exports = (Plugin, Api, Vendor) => {
 
 		initialize () {
 			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+				if (this.started) return true;
 				BDFDB.loadMessage(this);
 
-				var observer = null;
-
-				observer = new MutationObserver((changes, _) => {
-					changes.forEach(
-						(change, i) => {
-							if (change.addedNodes) {
-								change.addedNodes.forEach((node) => {
-									if (node && node.tagName && node.querySelector(BDFDB.dotCN.textareainner + ":not(" + BDFDB.dotCN.textareainnerdisabled + ")")) {
-										this.appendCounter(node.querySelector("textarea"));
-									}
-								});
-							}
-						}
-					);
-				});
-				BDFDB.addObserver(this, BDFDB.dotCN.appmount, {name:"textareaObserver",instance:observer}, {childList: true, subtree: true});
-
-				document.querySelectorAll("textarea").forEach(textarea => {this.appendCounter(textarea);});
+				BDFDB.WebModules.forceAllUpdates(this);
 
 				return true;
 			}
@@ -81,8 +106,8 @@ module.exports = (Plugin, Api, Vendor) => {
 
 		onStop () {
 			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
-				$("#charcounter").remove();
-				$(".charcounter-added").removeClass("charcounter-added");
+				BDFDB.removeEles(".charcounter");
+				BDFDB.removeClasses("charcounter-added");
 
 				BDFDB.unloadMessage(this);
 				return true;
@@ -92,53 +117,52 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 		}
 
+		
 		// begin of own functions
 
-		appendCounter (textarea) {
-			if (!textarea) return;
-			var textareaWrap = textarea.parentElement;
-			if (textareaWrap && !textareaWrap.querySelector("#charcounter")) {
-				var textareaInstance = BDFDB.getOwnerInstance({"node":textarea, "props":["handlePaste","saveCurrentText"], "up":true});
-				if (textareaInstance && textareaInstance.props && textareaInstance.props.type) {
-					var counter = $(this.counterMarkup);
-					counter.addClass(textareaInstance.props.type).appendTo(textareaWrap);
+		processChannelTextArea (instance, wrapper) {
+			if (instance.props && instance.props.type && this.maxLenghts[instance.props.type]) this.appendCounter(wrapper.querySelector("textarea"), instance.props.type);
+		}
 
-					var updateCounter = () => {
-						var selection = textarea.selectionEnd - textarea.selectionStart == 0 ? "" : " (" + (textarea.selectionEnd - textarea.selectionStart) + ")";
-						counter.text(BDFDB.getParsedLength(textarea.value) + "/2000" + selection);
-					}
+		processNote (instance, wrapper) {
+			this.appendCounter(wrapper.firstElementChild, BDFDB.containsClass(wrapper, BDFDB.disCN.usernotepopout) ? "popout" : (BDFDB.containsClass(wrapper, BDFDB.disCN.usernoteprofile) ? "profile" : null));
+		}
 
-					textareaWrap.parentElement.classList.add("charcounter-added");
-					$(textarea)
-						.off("keydown." + this.name + " click." + this.name)
-						.on("keydown." + this.name + " click." + this.name, e => {
-							setTimeout(() => {
-								updateCounter();
-							},10);
-						})
-						.off("mousedown." + this.name)
-						.on("mousedown." + this.name, e => {
-							this.selecting = true;
-						});
-					$(document)
-						.off("mouseup." + this.name)
-						.on("mouseup." + this.name, e => {
-							if (this.selecting) {
-								this.selecting = false;
-							}
-						})
-						.off("mousemove." + this.name)
-						.on("mousemove." + this.name, e => {
-							if (this.selecting) {
-								setTimeout(() => {
-									updateCounter();
-								},10);
-							}
-						});
-
-					updateCounter();
-				}
+		processModal (instance, wrapper) {
+			if (instance.props && instance.props.tag == "form") {
+				let reset = wrapper.querySelector(BDFDB.dotCN.reset);
+				if (reset && BDFDB.getInnerText(reset.firstElementChild) == BDFDB.LanguageStrings.RESET_NICKNAME) this.appendCounter(wrapper.querySelector(BDFDB.dotCN.inputdefault), "nickname");
 			}
+		}
+
+		appendCounter (input, type) {
+			if (!input || !type) return;
+			BDFDB.removeEles(input.parentElement.querySelectorAll("#charcounter"));
+			var counter = BDFDB.htmlToElement(`<div id="charcounter" class="charcounter ${type}"></div>`);
+			input.parentElement.appendChild(counter);
+
+			var updateCounter = () => {counter.innerText = input.value.length + "/" + (this.maxLenghts[type] || 2000) + (input.selectionEnd - input.selectionStart == 0 ? "" : " (" + (input.selectionEnd - input.selectionStart) + ")");};
+
+			BDFDB.addClass(input.parentElement.parentElement, "charcounter-added");
+			if (type == "nickname") input.setAttribute("maxlength", 32);
+			BDFDB.addEventListener(this, input, "keydown click", e => {
+				clearTimeout(input.charcountertimeout);
+				input.charcountertimeout = setTimeout(() => {updateCounter();},100);
+			});
+			BDFDB.addEventListener(this, input, "mousedown", e => {
+				BDFDB.addEventListener(this, document, "mouseup", () => {
+					BDFDB.removeEventListener(this, document);
+					if (input.selectionEnd - input.selectionStart) setImmediate(() => {BDFDB.addEventListener(this, document, "click", () => {
+						input.selectionStart = 0;
+						input.selectionEnd = 0;
+						updateCounter();
+						BDFDB.removeEventListener(this, document);
+					});});
+				});
+				BDFDB.addEventListener(this, document, "mousemove", () => {setTimeout(() => {updateCounter();},10);});
+			});
+
+			updateCounter();
 		}
 	}
 };

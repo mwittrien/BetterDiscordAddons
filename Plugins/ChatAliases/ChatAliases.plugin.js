@@ -228,8 +228,8 @@ class ChatAliases {
 
 	processStandardSidebarView (instance, wrapper) {
 		if (this.SettingsUpdated) {
-			BDFDB.WebModules.forceAllUpdates(this);
 			delete this.SettingsUpdated;
+			BDFDB.WebModules.forceAllUpdates(this);
 		}
 	}
 

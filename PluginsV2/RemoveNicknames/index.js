@@ -7,8 +7,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				"NameTag":"componentDidMount",
 				"FluxContainer(TypingUsers)":"componentDidUpdate",
 				"MessageUsername":"componentDidMount",
-				"Clickable":"componentDidMount",
-				"StandardSidebarView":"componentWillUnmount"
+				"Clickable":"componentDidMount"
 			};
 
 			this.defaults = {

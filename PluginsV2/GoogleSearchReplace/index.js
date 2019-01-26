@@ -9,20 +9,21 @@ module.exports = (Plugin, Api, Vendor) => {
 
 			this.defaults = {
 				engines: {
-					_all: 			{value:true, 	name:BDFDB.getLibraryStrings().btn_all_text, 	url:null},
-					Ask: 			{value:true, 	name:"Ask", 			url:"https://ask.com/web?q=" + this.textUrlReplaceString},
-					Bing: 			{value:true, 	name:"Bing", 			url:"https://www.bing.com/search?q=" + this.textUrlReplaceString},
-					DogPile:		{value:true, 	name:"DogPile", 		url:"http://www.dogpile.com/search/web?q=" + this.textUrlReplaceString},
-					DuckDuckGo:		{value:true, 	name:"DuckDuckGo", 		url:"https://duckduckgo.com/?q=" + this.textUrlReplaceString},
-					Google: 		{value:true, 	name:"Google", 			url:"https://www.google.com/search?q=" + this.textUrlReplaceString},
-					GoogleScholar: 	{value:true, 	name:"Google Scholar", 	url:"https://scholar.google.com/scholar?q=" + this.textUrlReplaceString},
-					Quora: 			{value:true, 	name:"Quora", 			url:"https://www.quora.com/search?q=" + this.textUrlReplaceString},
-					Qwant: 			{value:true, 	name:"Qwant", 			url:"https://www.qwant.com/?t=all&q=" + this.textUrlReplaceString},
-					Searx: 			{value:true, 	name:"Searx", 			url:"https://searx.me/?q=" + this.textUrlReplaceString},
-					WolframAlpha:	{value:true, 	name:"Wolfram Alpha", 	url:"https://www.wolframalpha.com/input/?i=" + this.textUrlReplaceString},
-					Yandex: 		{value:true, 	name:"Yandex", 			url:"https://yandex.com/search/?text=" + this.textUrlReplaceString},
-					Yahoo: 			{value:true, 	name:"Yahoo", 			url:"https://search.yahoo.com/search?p=" + this.textUrlReplaceString},
-					YouTube: 		{value:true, 	name:"YouTube", 		url:"https://www.youtube.com/results?q=" + this.textUrlReplaceString}
+					_all: 				{value:true, 	name:BDFDB.getLibraryStrings().btn_all_text, 	url:null},
+					Ask: 				{value:true, 	name:"Ask", 				url:"https://ask.com/web?q=" + this.textUrlReplaceString},
+					Bing: 				{value:true, 	name:"Bing", 				url:"https://www.bing.com/search?q=" + this.textUrlReplaceString},
+					DogPile:			{value:true, 	name:"DogPile", 			url:"http://www.dogpile.com/search/web?q=" + this.textUrlReplaceString},
+					DuckDuckGo:			{value:true, 	name:"DuckDuckGo", 			url:"https://duckduckgo.com/?q=" + this.textUrlReplaceString},
+					Google: 			{value:true, 	name:"Google", 				url:"https://www.google.com/search?q=" + this.textUrlReplaceString},
+					GoogleScholar: 		{value:true, 	name:"Google Scholar", 		url:"https://scholar.google.com/scholar?q=" + this.textUrlReplaceString},
+					Quora: 				{value:true, 	name:"Quora", 				url:"https://www.quora.com/search?q=" + this.textUrlReplaceString},
+					Qwant: 				{value:true, 	name:"Qwant", 				url:"https://www.qwant.com/?t=all&q=" + this.textUrlReplaceString},
+					UrbanDictionary: 	{value:true, 	name:"Urban Dictionary", 	url:"https://www.urbandictionary.com/define.php?term=" + this.textUrlReplaceString},
+					Searx: 				{value:true, 	name:"Searx", 				url:"https://searx.me/?q=" + this.textUrlReplaceString},
+					WolframAlpha:		{value:true, 	name:"Wolfram Alpha", 		url:"https://www.wolframalpha.com/input/?i=" + this.textUrlReplaceString},
+					Yandex: 			{value:true, 	name:"Yandex", 				url:"https://yandex.com/search/?text=" + this.textUrlReplaceString},
+					Yahoo: 				{value:true, 	name:"Yahoo", 				url:"https://search.yahoo.com/search?p=" + this.textUrlReplaceString},
+					YouTube: 			{value:true, 	name:"YouTube", 			url:"https://www.youtube.com/results?q=" + this.textUrlReplaceString}
 				}
 			};
 
@@ -33,13 +34,13 @@ module.exports = (Plugin, Api, Vendor) => {
 				</div>`;
 
 			this.messageContextSubMenuMarkup = 
-				`<div class="${BDFDB.disCN.contextmenu} googleReplaceSearchSubMenu">
+				`<div class="${BDFDB.disCN.contextmenu} googlereplacesearch-submenu">
 					<div class="${BDFDB.disCN.contextmenuitemgroup}">
 						<div class="${BDFDB.disCN.contextmenuitem} alldisabled-item ${BDFDB.disCN.contextmenuitemdisabled}">
 							<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_submenu_disabled_text</div></span>
 							<div class="${BDFDB.disCN.contextmenuhint}"></div>
 						</div>
-						${Object.keys(this.defaults.engines).map((key, i) => `<div engine="${key}" class="${BDFDB.disCN.contextmenuitem} GRS-item"><span>${this.defaults.engines[key].name}</span><div class="${BDFDB.disCN.contextmenuhint}"></div></div>`).join("")}
+						${Object.keys(this.defaults.engines).map((key, i) => `<div engine="${key}" class="${BDFDB.disCN.contextmenuitem} GRS-item"><span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">${this.defaults.engines[key].name}</div></span><div class="${BDFDB.disCN.contextmenuhint}"></div></div>`).join("")}
 					</div>
 				</div>`;
 		}
@@ -64,24 +65,8 @@ module.exports = (Plugin, Api, Vendor) => {
 
 		initialize () {
 			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+				if (this.started) return true;
 				BDFDB.loadMessage(this);
-
-				var observer = null;
-
-				observer = new MutationObserver((changes, _) => {
-					changes.forEach(
-						(change, i) => {
-							if (change.addedNodes) {
-								change.addedNodes.forEach((node) => {
-									if (node.nodeType == 1 && node.className.includes(BDFDB.disCN.contextmenu)) {
-										this.onContextMenu(node);
-									}
-								});
-							}
-						}
-					);
-				});
-				BDFDB.addObserver(this, BDFDB.dotCN.appmount, {name:"messageContextObserver",instance:observer}, {childList: true});
 
 				return true;
 			}
@@ -103,82 +88,64 @@ module.exports = (Plugin, Api, Vendor) => {
 
 		// begin of own functions
 
-		updateSettings (settingspanel) {
-			var settings = {};
-			for (var input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner)) {
-				settings[input.value] = input.checked;
-			}
-			BDFDB.saveAllData(settings, this, "engines");
-		}
-
 		changeLanguageStrings () {
 			this.messageContextEntryMarkup = 	this.messageContextEntryMarkup.replace("REPLACE_context_googlesearchreplace_text", this.labels.context_googlesearchreplace_text);
 
 			this.messageContextSubMenuMarkup = 	this.messageContextSubMenuMarkup.replace("REPLACE_submenu_disabled_text", this.labels.submenu_disabled_text);
 		}
 
-		onContextMenu (context) {
-			if (!context || !context.tagName || !context.parentElement || context.querySelector(".googlereplacesearch-item")) return;
-			for (let group of context.querySelectorAll(BDFDB.dotCN.contextmenuitemgroup)) {
-				if (BDFDB.getKeyInformation({"node":group, "key":"handleSearchWithGoogle"})) {
-					var text = BDFDB.getKeyInformation({"node":group, "key":"value"});
-					if (text) {
-						$(group).find(BDFDB.dotCN.contextmenuitem).hide();
-						$(group).append(this.messageContextEntryMarkup)
-							.on("mouseenter", ".googlereplacesearch-item", (e) => {
-								this.createContextSubMenu(text, e, context);
-							});
+		onNativeContextMenu (instance, menu) {
+			if (instance.props && instance.props.type == "NATIVE_TEXT" && instance.props.value && !menu.querySelector(".reverseimagesearch-item")) {
+				let searchentry = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:menu,props:["handleSearchWithGoogle"]}));
+				if (searchentry) this.appendItem(instance, searchentry, instance.props.value);
+			}
+		}
 
-						BDFDB.updateContextPosition(context);
-					}
-					break;
+		onMessageContextMenu (instance, menu) {
+			if (instance.props && instance.props.message && instance.props.channel && instance.props.target && !menu.querySelector(".googlereplacesearch-item")) {
+				let text = document.getSelection().toString();
+				if (text) {
+					let searchentry = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:menu,props:["handleSearchWithGoogle"]}));
+					if (searchentry) this.appendItem(instance, searchentry, text);
 				}
 			}
 		}
 
-		createContextSubMenu (text, e, context) {
-			var messageContextSubMenu = $(this.messageContextSubMenuMarkup);
-
-			messageContextSubMenu
-				.on("click", ".GRS-item", (e2) => {
-					$(context).hide();
-					var engine = e2.currentTarget.getAttribute("engine");
+		appendItem (instance, target, text) {
+			let messageContextEntry = BDFDB.htmlToElement(this.messageContextEntryMarkup);
+			target.parentElement.insertBefore(messageContextEntry, target.nextElementSibling);
+			messageContextEntry.addEventListener("mouseenter", () => {
+				let messageContextSubMenu = BDFDB.htmlToElement(this.messageContextSubMenuMarkup);
+				let engines = BDFDB.getAllData(this, "engines");
+				for (let key in engines) if (!engines[key]) BDFDB.removeEles(messageContextSubMenu.querySelector("[engine='" + key + "']"));
+				if (messageContextSubMenu.querySelector(".GRS-item")) BDFDB.removeEles(messageContextSubMenu.querySelector(".alldisabled-item"));
+				BDFDB.addChildEventListener(messageContextSubMenu, "click", ".GRS-item", e => {
+					instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
+					let engine = e.currentTarget.getAttribute("engine");
 					if (engine == "_all") {
-						var engines = BDFDB.getAllData(this, "engines");
-						for (let key in engines) {
-							if (key != "_all" && engines[key]) window.open(this.defaults.engines[key].url.replace(this.textUrlReplaceString, encodeURIComponent(text)), "_blank");
-						}
+						for (let key in engines) if (key != "_all" && engines[key]) window.open(this.defaults.engines[key].url.replace(this.textUrlReplaceString, encodeURIComponent(text)), "_blank");
 					}
-					else {
-						window.open(this.defaults.engines[engine].url.replace(this.textUrlReplaceString, encodeURIComponent(text)), "_blank");
-					}
+					else window.open(this.defaults.engines[engine].url.replace(this.textUrlReplaceString, encodeURIComponent(text)), "_blank");
 				});
-
-			var engines = BDFDB.getAllData(this, "engines");
-			for (let key in engines) {
-				if (!engines[key]) messageContextSubMenu.find("[engine='" + key + "']").remove();
-			}
-			if (messageContextSubMenu.find(".GRS-item").length > 0) {
-				messageContextSubMenu.find(".alldisabled-item").remove();
-			}
-
-			BDFDB.appendSubMenu(e.currentTarget, messageContextSubMenu);
+				BDFDB.appendSubMenu(messageContextEntry, messageContextSubMenu);
+			});
+			BDFDB.toggleEles(target, false);
 		}
 
 		getSettingsPanel () {
-			var engines = BDFDB.getAllData(this, "engines");
-			var settingshtml = `<div class="DevilBro-settings ${this.name}-settings">`;
+			if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
+			let engines = BDFDB.getAllData(this, "engines");
+			let settingshtml = `<div class="${this.name}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="DevilBro-settings-inner">`;
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">Search Engines:</h3></div><div class="DevilBro-settings-inner-list">`;
 			for (let key in engines) {
-				settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.engines[key].name}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}"${engines[key] ? " checked" : ""}></div></div>`;
+				settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.engines[key].name}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="engines ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${engines[key] ? " checked" : ""}></div></div>`;
 			}
 			settingshtml += `</div>`;
-			settingshtml += `</div>`;
+			settingshtml += `</div></div>`;
 
-			var settingspanel = $(settingshtml)[0];
+			let settingspanel = BDFDB.htmlToElement(settingshtml);
 
-			$(settingspanel)
-				.on("click", BDFDB.dotCN.switchinner, () => {this.updateSettings(settingspanel);});
+			BDFDB.initElements(settingspanel, this);
 
 			return settingspanel;
 		}

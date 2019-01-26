@@ -5,7 +5,16 @@ module.exports = (Plugin, Api, Vendor) => {
 		initConstructor () {
 			this.labels = {};
 
+			this.patchModules = {
+				"EmojiPicker":"componentDidMount"
+			};
+
 			this.css = `
+				.emojistatistics-tooltip,
+				.emoji-tooltip {
+					z-index: 2002;
+				}
+
 				.${this.name}-modal .titles {
 					height: 20px;
 				}
@@ -17,18 +26,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				}
 
 				.${this.name}-modal .emojiserver-entry .modal-emojiserver-icon {
-					background-color: #484B51;
-					background-size: cover;
-					border-radius: 25px;
-					color: #b9bbbe;
 					display: inline-block;
-					font-size: 16px;
-					font-weight: 600;
-					height: 35px;
-					letter-spacing: .5px;
-					padding-top: 15px;
-					text-align: center;
-					width: 50px;
 				}
 
 				.${this.name}-modal .titles-entry label,
@@ -92,7 +90,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				}`;
 
 			this.emojiInformationModalMarkup =
-				`<span class=""${this.name}-modal DevilBro-modal"">
+				`<span class="${this.name}-modal DevilBro-modal">
 					<div class="${BDFDB.disCN.backdrop}"></div>
 					<div class="${BDFDB.disCN.modal}">
 						<div class="${BDFDB.disCN.modalinner}">
@@ -102,12 +100,16 @@ module.exports = (Plugin, Api, Vendor) => {
 										<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.headertitle + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.defaultcolor + BDFDB.disCNS.h4defaultmargin + BDFDB.disCN.marginreset}">REPLACE_modal_header_text</h4>
 										<div class="${BDFDB.disCNS.modalguildname + BDFDB.disCNS.small + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCN.primary}"></div>
 									</div>
-									<svg class="${BDFDB.disCNS.modalclose + BDFDB.disCN.flexchild}" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12">
-										<g fill="none" fill-rule="evenodd">
-											<path d="M0 0h12v12H0"></path>
-											<path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path>
-										</g>
-									</svg>
+									<button type="button" class="${BDFDB.disCNS.modalclose + BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow}">
+										<div class="${BDFDB.disCN.buttoncontents}">
+											<svg name="Close" width="18" height="18" viewBox="0 0 12 12" style="flex: 0 1 auto;">
+												<g fill="none" fill-rule="evenodd">
+													<path d="M0 0h12v12H0"></path>
+													<path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path>
+												</g>
+											</svg>
+										</div>
+									</button>
 								</div>
 								<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalsubinner} titles" style="flex: 0 0 auto;"></div>
 								<div class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.modalcontent + BDFDB.disCNS.scrollerthemed + BDFDB.disCN.themeghosthairline}">
@@ -143,14 +145,13 @@ module.exports = (Plugin, Api, Vendor) => {
 					<label class="modal-emojicopies-label">modal-emojicopies-label</label>
 				</div>`;
 
-			this.dividerMarkup = `<div class="${BDFDB.disCNS.modaldivider + BDFDB.disCN.modaldividerdefault}"></div>`;
-
-			this.emojiButtonMarkup = `<div class="emojistatistics-button"></div>`;
-
 			this.defaults = {
 				settings: {
 					enableEmojiHovering:			{value:true, 	description:"Show Information about Emojis on hover over an Emoji in the Emojipicker."},
 					enableEmojiStatisticsButton:	{value:true, 	description:"Add a Button in the Emojipicker to open the Statistics Overview."}
+				},
+				amounts: {
+					hoverDelay:						{value:1000, 	description:"Tooltip delay in millisec:"}
 				}
 			};
 		}
@@ -175,39 +176,12 @@ module.exports = (Plugin, Api, Vendor) => {
 
 		initialize () {
 			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+				if (this.started) return true;
 				BDFDB.loadMessage(this);
 
-				var observer = null;
-
-				observer = new MutationObserver((changes, _) => {
-					changes.forEach(
-						(change, i) => {
-							if (change.addedNodes) {
-								change.addedNodes.forEach((node) => {
-									if (node && node.tagName && node.querySelector(BDFDB.dotCN.emojipicker)) {
-										this.loadEmojiList();
-										if (!node.querySelector(".emojistatistics-button") && BDFDB.getData("enableEmojiStatisticsButton", this, "settings")) {
-											this.addEmojiInformationButton(node);
-										}
-										if (BDFDB.getData("enableEmojiHovering", this, "settings")) {
-											this.hoverEmoji(node);
-										}
-									}
-								});
-							}
-							if (change.removedNodes) {
-								change.removedNodes.forEach((node) => {
-									if (node.querySelector(BDFDB.dotCN.emojipicker)) {
-										$(BDFDB.dotCN.tooltips).find(".emoji-tooltip").remove();
-									}
-								});
-							}
-						}
-					);
-				});
-				BDFDB.addObserver(this, BDFDB.dotCN.popouts, {name:"emojiPickerObserver",instance:observer}, {childList: true});
-
 				this.GuildEmojis = BDFDB.WebModules.findByProperties("getGuildEmoji", "getDisambiguatedEmojiContext");
+
+				BDFDB.WebModules.forceAllUpdates(this);
 
 				return true;
 			}
@@ -219,6 +193,7 @@ module.exports = (Plugin, Api, Vendor) => {
 
 		onStop () {
 			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+				BDFDB.removeEles(".emoji-tooltip",".emojistatistics-button");
 				BDFDB.unloadMessage(this);
 				return true;
 			}
@@ -229,14 +204,6 @@ module.exports = (Plugin, Api, Vendor) => {
 
 
 		// begin of own functions
-
-		updateSettings (settingspanel) {
-			var settings = {};
-			for (var input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner)) {
-				settings[input.value] = input.checked;
-			}
-			BDFDB.saveAllData(settings, this, "settings");
-		}
 
 		changeLanguageStrings () {
 			this.emojiInformationModalMarkup = 	this.emojiInformationModalMarkup.replace("REPLACE_modal_header_text", this.labels.modal_header_text);
@@ -251,54 +218,81 @@ module.exports = (Plugin, Api, Vendor) => {
 			this.emojiserverTitlesMarkup = 		this.emojiserverTitlesMarkup.replace("REPLACE_modal_titlescopies_text", this.labels.modal_titlescopies_text);
 		}
 
+		processEmojiPicker (instance, wrapper) {
+			if (!wrapper.querySelector(".emojistatistics-button")) {
+				let emojipickerdiversityselector = document.querySelector(BDFDB.dotCN.emojipickerdiversityselector);
+				if (!emojipickerdiversityselector) return;
+				this.loadEmojiList();
+				let settings = BDFDB.getAllData(this, "settings");
+				if (settings.enableEmojiStatisticsButton) {
+					let emojiStatisticsButton = BDFDB.htmlToElement(`<div class="emojistatistics-button"></div>`);
+					emojipickerdiversityselector.parentElement.insertBefore(emojiStatisticsButton, emojipickerdiversityselector);
+					emojiStatisticsButton.addEventListener("click", () => {
+						instance._reactInternalFiber.return.return.return.return.stateNode.close();
+						this.showEmojiInformationModal();
+					});
+					emojiStatisticsButton.addEventListener("mouseenter", e => {
+						BDFDB.createTooltip("Emoji Statistics", emojiStatisticsButton, {type:"top",selector:"emojistatistics-tooltip"});
+					});
+				}
+				if (settings.enableEmojiHovering) {
+					BDFDB.addEventListener(this, wrapper, "mouseenter", BDFDB.dotCN.emojipickeremojiitem, e => {
+						let data = this.emojiToServerList[e.target.style.getPropertyValue("background-image").replace('url("',"").replace('")',"")];
+						if (data) BDFDB.createTooltip(`${BDFDB.encodeToHTML(data.emoji)}\n${BDFDB.encodeToHTML(data.server)}`, e.target, {type:"right",selector:"emoji-tooltip",delay:BDFDB.getData("hoverDelay", this, "amounts")});
+					});
+				}
+			}
+		}
+
 		loadEmojiList () {
 			this.emojiReplicaList = {};
 			this.emojiToServerList = {};
 			for (let serverObj of BDFDB.readServerList()) {
 				for (let emoji of this.GuildEmojis.getGuildEmoji(serverObj.id)) {
 					this.emojiToServerList[emoji.url] = {emoji:emoji.allNamesString, server:serverObj.name};
-					if (emoji.managed) {
-						if (this.emojiReplicaList[emoji.name] != undefined) {
-							this.emojiReplicaList[emoji.name] = true;
-						}
-						else {
-							this.emojiReplicaList[emoji.name] = false;
-						}
-					}
+					if (emoji.managed) this.emojiReplicaList[emoji.name] = this.emojiReplicaList[emoji.name] != undefined;
 				}
 			}
 		}
 
-		hoverEmoji (picker) {
-			$(picker)
-				.off("mouseenter." + this.name)
-				.on("mouseenter." + this.name, BDFDB.dotCN.emojipickeremojiitem, (e) => {
-					var data = this.emojiToServerList[$(e.target).css("background-image").replace("url(\"","").replace("\")","")];
-					if (data) {
-						var text = `${BDFDB.encodeToHTML(data.emoji)}\n${BDFDB.encodeToHTML(data.server)}`;
-						BDFDB.createTooltip(text, e.target, {type:"right",selector:"emoji-tooltip",css:`.emoji-tooltip{z-index:30000;}`});
-					}
-				});
-		}
-
-		addEmojiInformationButton (node) {
-			$(node).find(BDFDB.dotCN.emojipickerheader)
-				.append(this.emojiButtonMarkup)
-				.off("click." + this.name)
-				.on("click." + this.name, ".emojistatistics-button", () => {
-					$(node).hide();
-					this.showEmojiInformationModal();
-				});
-		}
-
 		showEmojiInformationModal () {
-			var emojiInformationModal = $(this.emojiInformationModalMarkup);
-			BDFDB.appendModal(emojiInformationModal);
+			var emojiInformationModal = BDFDB.htmlToElement(this.emojiInformationModalMarkup);
+
+			let titlescontainer = emojiInformationModal.querySelector(".titles");
+			let entriescontainer = emojiInformationModal.querySelector(".entries");
+
+			if (!titlescontainer || !entriescontainer) return;
+
+			var titleEntry = BDFDB.htmlToElement(this.emojiserverTitlesMarkup);
+			titlescontainer.appendChild(titleEntry);
+			BDFDB.addChildEventListener(titleEntry, "click", ".modal-sorttitle-label ", e => {
+				var oldTitle = e.currentTarget.innerText;
+
+				var reverse = oldTitle.indexOf("▼") < 0 ? false : true;
+
+				titleEntry.querySelector(".modal-titlesname-label").innerText = this.labels.modal_titlesname_text;
+				titleEntry.querySelector(".modal-titlestotal-label").innerText = this.labels.modal_titlestotal_text;
+				titleEntry.querySelector(".modal-titlesglobal-label").innerText = this.labels.modal_titlesglobal_text;
+				titleEntry.querySelector(".modal-titleslocal-label").innerText = this.labels.modal_titleslocal_text;
+				titleEntry.querySelector(".modal-titlescopies-label").innerText = this.labels.modal_titlescopies_text;
+
+				var sortKey = "index";
+				if (oldTitle.indexOf("▲") < 0) {
+					sortKey = e.currentTarget.getAttribute("sortkey");
+					var title = this.labels["modal_titles" + sortKey + "_text"];
+					e.currentTarget.innerText = oldTitle.indexOf("▼") < 0 ? title + "▼" : title + "▲";
+				}
+
+				BDFDB.sortArrayByKey(entries, sortKey);
+				if (reverse) entries.reverse();
+
+				this.updateAllEntries(entriescontainer, entries);
+			});
 
 			var entries = [], index = 0;
-			for (let serverObj of BDFDB.readServerList()) {
+			for (let info of BDFDB.readServerList()) {
 				let amountGlobal = 0, amountLocal = 0, amountCopies = 0;
-				for (let emoji of this.GuildEmojis.getGuildEmoji(serverObj.id)) {
+				for (let emoji of this.GuildEmojis.getGuildEmoji(info.id)) {
 					if (emoji.managed) {
 						amountGlobal++;
 						if (this.emojiReplicaList[emoji.name]) amountCopies++;
@@ -307,68 +301,57 @@ module.exports = (Plugin, Api, Vendor) => {
 						amountLocal++;
 					}
 				}
-				var entry = $(this.emojiserverEntryMarkup);
-				if (serverObj.icon) {
-					entry.find(".modal-emojiserver-icon").css("background-image", "url('https://cdn.discordapp.com/icons/" + serverObj.id + "/" + serverObj.icon + ".png')");
-				}
-				else {
-					entry.find(".modal-emojiserver-icon").text(serverObj.div.querySelector("a").innerText);
-				}
-				entry.find(".modal-emojiname-label").text(serverObj.name);
-				entry.find(".modal-emojitotal-label").text(amountGlobal+amountLocal);
-				entry.find(".modal-emojiglobal-label").text(amountGlobal);
-				entry.find(".modal-emojilocal-label").text(amountLocal);
-				entry.find(".modal-emojicopies-label").text(amountCopies);
-				entries.push({entry:entry, index:index++, name:serverObj.name, total:amountGlobal+amountLocal, global:amountGlobal, local:amountLocal, copies:amountCopies});
+				var emojiEntry = BDFDB.htmlToElement(this.emojiserverEntryMarkup);
+				emojiEntry.querySelector(".modal-emojiserver-icon").innerHTML = this.createCopyOfServer(info).outerHTML;
+				emojiEntry.querySelector(".modal-emojiname-label").innerText = info.name || "";
+				emojiEntry.querySelector(".modal-emojitotal-label").innerText = amountGlobal + amountLocal;
+				emojiEntry.querySelector(".modal-emojiglobal-label").innerText = amountGlobal;
+				emojiEntry.querySelector(".modal-emojilocal-label").innerText = amountLocal;
+				emojiEntry.querySelector(".modal-emojicopies-label").innerText = amountCopies;
+				entries.push({div:emojiEntry, index:index++, name:info.name || "", total:amountGlobal+amountLocal, global:amountGlobal, local:amountLocal, copies:amountCopies});
 			}
 
-			var titleentry = $(this.emojiserverTitlesMarkup)
-				.appendTo("." + this.name + "-modal .titles")
-				.on("click", ".modal-title-label ", (e2) => {
-					var oldTitle = e2.target.innerText;
+			BDFDB.appendModal(emojiInformationModal);
 
-					var reverse = oldTitle.indexOf("▼") < 0 ? false : true;
-
-					titleentry.find(".modal-titlesname-label").text(this.labels.modal_titlesname_text);
-					titleentry.find(".modal-titlestotal-label").text(this.labels.modal_titlestotal_text);
-					titleentry.find(".modal-titlesglobal-label").text(this.labels.modal_titlesglobal_text);
-					titleentry.find(".modal-titleslocal-label").text(this.labels.modal_titleslocal_text);
-					titleentry.find(".modal-titlescopies-label").text(this.labels.modal_titlescopies_text);
-
-					var sortKey = "index";
-					if (oldTitle.indexOf("▲") < 0) {
-						sortKey = e2.target.getAttribute("sortkey");
-						var title = this.labels["modal_titles" + sortKey + "_text"];
-						e2.target.innerText = oldTitle.indexOf("▼") < 0 ? title + "▼" : title + "▲";
-					}
-
-					this.updateAllEntries(emojiInformationModal, entries);
-				});
-
-			this.updateAllEntries(emojiInformationModal, entries);
+			this.updateAllEntries(entriescontainer, entries);
 		}
 
-		updateAllEntries (modal, entries) {
-			var container = modal.find(".entries");
-			container.children().remove();
-			for (let i = 0; entries.length > i; i++) {
-				if (i > 0) container.append(this.dividerMarkup);
-				container.append(entries[i].entry);
+		updateAllEntries (entriescontainer, entries) {
+			BDFDB.removeEles(entriescontainer.childNodes);
+			for (let entry of entries) {
+				if (entriescontainer.childElementCount) entriescontainer.appendChild(BDFDB.htmlToElement(`<div class="${BDFDB.disCN.modaldivider}"></div>`));
+				entriescontainer.appendChild(entry.div);
 			}
+		}
+
+		createCopyOfServer (info) {
+			let serverCopy = info.div.cloneNode(true);
+			BDFDB.toggleEles(serverCopy, true);
+			BDFDB.removeClass(serverCopy, BDFDB.disCN.guildunread, BDFDB.disCN.guildselected);
+			return serverCopy;
 		}
 
 		getSettingsPanel () {
-			var settings = BDFDB.getAllData(this, "settings"); 
-			var settingshtml = `<div class="DevilBro-settings ${this.name}-settings">`;
+			if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
+			var settings = BDFDB.getAllData(this, "settings");
+			var amounts = BDFDB.getAllData(this, "amounts");
+			var settingshtml = `<div class="${this.name}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="DevilBro-settings-inner">`;
 			for (let key in settings) {
-				settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}"${settings[key] ? " checked" : ""}></div></div>`;
+				settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
 			}
-			settingshtml += `</div>`;
+			for (let key in amounts) {
+				settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCN.flexchild}" style="flex: 0 0 50%;">${this.defaults.amounts[key].description}</h3><div class="${BDFDB.disCN.inputwrapper} inputNumberWrapper ${BDFDB.disCNS.vertical +  BDFDB.disCNS.flex + BDFDB.disCNS.directioncolumn}" style="flex: 1 1 auto;"><span class="numberinput-buttons-zone"><span class="numberinput-button-up"></span><span class="numberinput-button-down"></span></span><input type="number" min="0" option="${key}" value="${amounts[key]}" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16} amountInput"></div></div>`;
+			}
+			settingshtml += `</div></div>`;
 
-			var settingspanel = $(settingshtml)[0];
+			let settingspanel = BDFDB.htmlToElement(settingshtml);
 
-			$(settingspanel)
-				.on("click", BDFDB.dotCN.switchinner, () => {this.updateSettings(settingspanel);});
+			BDFDB.initElements(settingspanel, this);
+
+			BDFDB.addEventListener(this, settingspanel, "input", ".amountInput", e => {
+				var input = parseInt(e.currentTarget.value);
+				if (!isNaN(input) && input > -1) BDFDB.saveData(e.currentTarget.getAttribute("option"), input, this, "amounts");
+			});
 
 			return settingspanel;
 		}

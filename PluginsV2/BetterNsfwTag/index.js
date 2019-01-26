@@ -3,25 +3,9 @@ module.exports = (Plugin, Api, Vendor) => {
 
 	return class extends Plugin {
 		initConstructor () {
-			this.css = ` 
-				.nsfw-tag {
-					position: relative;
-					overflow: hidden; 
-					padding: 1px 2px 1px 2px; 
-					margin-left: 5px; 
-					height: 13px;
-					border-radius: 3px;
-					text-transform: uppercase;
-					font-size: 12px;
-					font-weight: 500;
-					line-height: 14px;
-					white-space: nowrap;
-					color: rgb(240, 71, 71);
-					background-color: rgba(240, 71, 71, 0.0980392);
-					border: 1px solid rgba(240, 71, 71, 0.498039);
-				}`;
-
-			this.tagMarkup = `<span class="nsfw-tag">NSFW</span>`;
+			this.patchModules = {
+				"ChannelItem":"componentDidMount"
+			};
 		}
 
 		onStart () {
@@ -44,29 +28,10 @@ module.exports = (Plugin, Api, Vendor) => {
 
 		initialize () {
 			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+				if (this.started) return true;
 				BDFDB.loadMessage(this);
 
-				var observer = null;
-
-				observer = new MutationObserver((changes, _) => {
-					changes.forEach(
-						(change, i) => {
-							if (change.addedNodes) {
-								change.addedNodes.forEach((node) => {
-									if (node && node.classList && node.classList.contains(BDFDB.disCN.channelcontainerdefault)) {
-										this.checkChannel(node);
-									} 
-									if (node && node.className && node.className.length > 0 && node.className.indexOf("container-") > -1) {
-										this.checkContainerForNsfwChannel(node);
-									} 
-								});
-							}
-						}
-					);
-				});
-				BDFDB.addObserver(this, BDFDB.dotCN.channels, {name:"channelListObserver",instance:observer}, {childList: true, subtree: true});
-
-				this.checkAllContainers();
+				BDFDB.WebModules.forceAllUpdates(this);
 
 				return true;
 			}
@@ -78,7 +43,7 @@ module.exports = (Plugin, Api, Vendor) => {
 
 		onStop () {
 			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
-				$(".nsfw-tag").remove();
+				BDFDB.removeEles(".NSFW-tag");
 
 				BDFDB.unloadMessage(this);
 				return true;
@@ -88,33 +53,13 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 		}
 
-		onSwitch () {
-			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
-				this.checkAllContainers();
-			}
-		}
-
 
 		// begin of own functions
 
-		checkAllContainers () {
-			document.querySelectorAll(BDFDB.dotCNS.channels + "[class*=container-]").forEach(container => {
-				this.checkContainerForNsfwChannel(container);
-			});
-		}
-
-		checkContainerForNsfwChannel (container) {
-			container.querySelectorAll(BDFDB.dotCN.channelcontainerdefault).forEach(channel => {
-				this.checkChannel(channel);
-			});
-		}
-
-		checkChannel (channel) {
-			let channelData = BDFDB.getKeyInformation({"node":channel,"key":"channel"});
-			if (channelData && channelData.nsfw == true) {
-				if (!channel.querySelector(".nsfw-tag")) {
-					$(this.tagMarkup).appendTo(channel.querySelector(BDFDB.dotCN.channelname));
-				}
+		processChannelItem (instance, wrapper) {
+			if (instance.props && instance.props.channel && instance.props.channel.nsfw) {
+				let channelname = wrapper.querySelector(BDFDB.dotCN.channelname);
+				if (channelname) channelname.appendChild(BDFDB.htmlToElement(`<span class="NSFW-tag ${BDFDB.disCNS.bottag + BDFDB.disCNS.bottagregular + BDFDB.disCN.bottagnametag}" style="background-color: rgb(241, 71, 71) !important; color: white !important; top: -3px; position: relative;">NSFW</span>`));
 			}
 		}
 	}

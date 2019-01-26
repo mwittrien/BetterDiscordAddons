@@ -16,8 +16,6 @@ class CharCounter {
 			"Modal":"componentDidMount"
 		};
 
-		this.selecting = false;
-
 		this.maxLenghts = {
 			normal: 2000,
 			edit: 2000,

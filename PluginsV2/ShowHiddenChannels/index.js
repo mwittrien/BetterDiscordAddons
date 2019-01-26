@@ -6,8 +6,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			this.patchModules = {
 				"Channels":["componentDidMount","componentDidUpdate"],
 				"ChannelItem":"componentDidMount",
-				"ChannelCategoryItem":"componentDidMount",
-				"StandardSidebarView":"componentWillUnmount"
+				"ChannelCategoryItem":"componentDidMount"
 			};
 
 			this.categoryMarkup = 

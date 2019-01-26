@@ -22,6 +22,7 @@ module.exports = (Plugin, Api, Vendor) => {
 
 		initialize () {
 			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+				if (this.started) return true;
 				BDFDB.loadMessage(this);
 
 				var observer = null;
@@ -31,7 +32,7 @@ module.exports = (Plugin, Api, Vendor) => {
 						(change, i) => {
 							if (change.addedNodes) {
 								change.addedNodes.forEach((node) => {
-									if (node && node.classList && node.classList.length > 0 && node.classList.contains(BDFDB.disCN.popout)) {
+									if (node && BDFDB.containsClass(node, BDFDB.disCN.popout)) {
 										this.makeMoveable(node);
 									}
 								});
@@ -46,10 +47,10 @@ module.exports = (Plugin, Api, Vendor) => {
 						(change, i) => {
 							if (change.addedNodes) {
 								change.addedNodes.forEach((node) => {
-									if (node && node.classList && node.classList.contains(BDFDB.disCN.modal) && !node.querySelector(BDFDB.dotCN.downloadlink)) {
+									if (node && BDFDB.containsClass(node, BDFDB.disCN.modal) && !node.querySelector(BDFDB.dotCN.downloadlink)) {
 										this.makeMoveable(node.querySelector(BDFDB.dotCN.modalinner));
 									}
-									else if (node && node.tagName && node.querySelector(BDFDB.dotCN.modal) && !node.querySelector(BDFDB.dotCN.downloadlink)) {
+									else if (node.tagName && node.querySelector(BDFDB.dotCN.modal) && !node.querySelector(BDFDB.dotCN.downloadlink)) {
 										this.makeMoveable(node.querySelector(BDFDB.dotCN.modalinner));
 									}
 								});
@@ -82,46 +83,44 @@ module.exports = (Plugin, Api, Vendor) => {
 		// begin of own functions
 
 		makeMoveable (div) {
-			$(div)
-				.off("mousedown." + this.name).off("click." + this.name)
-				.on("click." + this.name, (e) => {
-					if (this.dragging) {
-						e.stopPropagation();
-						e.preventDefault();
-					}
-				})
-				.on("mousedown." + this.name, (e) => {
-					if (e.ctrlKey) {
-						this.dragging = true;
+			div.removeEventListener("click", div.clickMovablePopups);
+			div.removeEventListener("mousedown", div.mousedownMovablePopups);
+			div.clickMovablePopups = e => {
+				if (this.dragging) {
+					e.stopPropagation();
+					e.preventDefault();
+				}
+			};
+			div.mousedownMovablePopups = e => {
+				if (!e.ctrlKey) return;
+				div.style.setProperty("position", "fixed", "important");
+				this.dragging = true;
+				var rects = BDFDB.getRects(div);
+				var transform = getComputedStyle(div,null).getPropertyValue("transform").replace(/[^0-9,-]/g,"").split(",");
+				var left = rects.left - (transform.length > 4 ? parseFloat(transform[4]) : 0);
+				var top = rects.top - (transform.length > 4 ? parseFloat(transform[5]) : 0);
+				var oldX = e.pageX;
+				var oldY = e.pageY;
+				var mouseup = e2 => {
+					BDFDB.removeLocalStyle("disableTextSelection");
+					document.removeEventListener("mouseup", mouseup);
+					document.removeEventListener("mousemove", mousemove);
+					setTimeout(() => {this.dragging = false},1);
+				};
+				var mousemove = e2 => {
+					left = left - (oldX - e2.pageX);
+					top = top - (oldY - e2.pageY);
+					oldX = e2.pageX;
+					oldY = e2.pageY;
+					div.style.setProperty("left", left + "px", "important");
+					div.style.setProperty("top", top + "px", "important");
 
-						var disableTextSelectionCSS = `
-							* {
-								user-select: none !important;
-							}`;
-
-						BDFDB.appendLocalStyle("disableTextSelection", disableTextSelectionCSS);
-						var left = div.getBoundingClientRect().left;
-						var top = div.getBoundingClientRect().top;
-						var oldX = e.pageX;
-						var oldY = e.pageY;
-						$(document)
-							.off("mouseup." + this.name).off("mousemove." + this.name)
-							.on("mouseup." + this.name, () => {
-								BDFDB.removeLocalStyle("disableTextSelection");
-								$(document).off("mouseup." + this.name).off("mousemove." + this.name);
-								setTimeout(() => {this.dragging = false},1);
-							})
-							.on("mousemove." + this.name, (e2) => {
-								var newX = e2.pageX;
-								var newY = e2.pageY;
-								left = left - (oldX - newX);
-								top = top - (oldY - newY);
-								oldX = newX;
-								oldY = newY;
-								$(div).offset({"left":left,"top":top});
-							});
-					}
-				});
+				};
+				document.addEventListener("mouseup", mouseup);
+				document.addEventListener("mousemove", mousemove);
+			};
+			div.addEventListener("click", div.clickMovablePopups);
+			div.addEventListener("mousedown", div.mousedownMovablePopups);
 		}
 	}
 };

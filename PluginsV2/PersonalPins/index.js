@@ -168,7 +168,7 @@ module.exports = (Plugin, Api, Vendor) => {
 
 		initialize () {
 			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
-				if (this.started) return;
+				if (this.started) return true;
 				BDFDB.loadMessage(this); 
 
 				this.SelectChannelUtils = BDFDB.WebModules.findByProperties("selectGuild","selectChannel");

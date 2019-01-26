@@ -3,53 +3,63 @@ module.exports = (Plugin, Api, Vendor) => {
 
 	return class extends Plugin {
 		initConstructor () {
+			this.patchModules = {
+				"NameTag":"componentDidMount",
+				"MessageUsername":"componentDidMount"
+			};
+
 			this.css = ` 
 				.BE-badge {
 					display: inline-block;
-					background-position: 50%;
-					background-repeat: no-repeat;
-					background-size: cover;
-					height: 16px;
-					margin: 0 2px;
+					height: 17px !important;
+					margin: 0 2px !important;
 				}
-				.BE-badge-chat {
-					margin-bottom: -3px;
+				.BE-badge.BE-badge-chat {
+					margin-bottom: -3px !important;
 				}
-				.BE-badge:first-of-type {
-					margin-left: 5px;
+				.BE-badge.BE-badge-popout {
+					margin-bottom: -2px !important;
 				}
-				.BE-badge:last-of-type {
-					margin-right: 5px;
+				.BE-badge.BE-badge:first-of-type {
+					margin-left: 5px !important;
 				}
-				.BE-badge-Staff {width:16px}
-				.BE-badge-Partner {width:21px}
-				.BE-badge-HypeSquad {width:17px}
-				.BE-badge-BugHunter {width:17px}
-				.BE-badge-Nitro {width:21px}`;
+				.BE-badge.BE-badge:last-of-type {
+					margin-right: 5px !important;
+				}
+				.BE-badge.BE-badge-Staff {width:17px !important; min-width:17px !important;}
+				.BE-badge.BE-badge-Partner {width:22px !important; min-width:22px !important;}
+				.BE-badge.BE-badge-HypeSquad {width:17px !important; min-width:17px !important;}
+				.BE-badge.BE-badge-BugHunter {width:17px !important; min-width:17px !important;}
+				.BE-badge.BE-badge-HypeSquadBravery {width:17px !important; min-width:17px !important;}
+				.BE-badge.BE-badge-HypeSquadBrilliance {width:17px !important; min-width:17px !important;}
+				.BE-badge.BE-badge-HypeSquadBalance {width:17px !important; min-width:17px !important;}
+				.BE-badge.BE-badge-EarlySupporter {width:24px !important; min-width:24px !important;}
+				.BE-badge.BE-badge-Nitro {width:21px !important; min-width:21px !important;}
+				.BE-badge.BE-badge-settings {width:30px !important; min-width:30px !important;}`;
 
-			this.loading = false;
-
-			this.updateBadges = false;
-
-			this.badges = {
-				1:			{name:"Staff",			implemented:true,	white:"url(https://discordapp.com/assets/7cfd90c8062139e4804a1fa59f564731.svg)", color:"url(https://discordapp.com/assets/4358ad1fb423b346324516453750f569.svg)"},
-				2:			{name:"Partner",		implemented:true,	white:"url(https://discordapp.com/assets/a0e288a458c48dfcf548dadc277e42e6.svg)", color:"url(https://discordapp.com/assets/33fedf082addb91d88abc272b4b18daa.svg)"},
-				4:			{name:"HypeSquad",		implemented:true,	white:"url(https://discordapp.com/assets/0aae6033ad41cdda515a62cf72075afa.svg)", color:"url(https://discordapp.com/assets/17ebd99540a6e983bade13c3afff7946.svg)"},
-				8:			{name:"BugHunter",		implemented:true,	white:"url(https://discordapp.com/assets/df26f079738a4dcd07cbce6eb3c957f1.svg)", color:"url(https://discordapp.com/assets/f61b8981e92feead854f52e5a1ba14f0.svg)"},
-				16:			{name:"MFASMS",			implemented:false,	white:"", color:""},
-				32:			{name:"PROMODISMISSED",	implemented:false,	white:"", color:""},
-				256:		{name:"Nitro",		implemented:true,	white:"url(https://discordapp.com/assets/379d2b3171722ef8be494231234da5d1.svg)", color:"url(https://discordapp.com/assets/386884eecd36164487505ddfbac35a9d.svg)"}
-			};
 
 			this.requestedusers = {};
 			this.loadedusers = {};
 
 			this.defaults = {
 				settings: {
+					showInPopout:		{value:true, 	description:"Show Badge in User Popout."},
 					showInChat:			{value:true, 	description:"Show Badge in Chat Window."},
 					showInMemberList:	{value:true, 	description:"Show Badge in Member List."},
-					showInPopout:		{value:true, 	description:"Show Badge in User Popout."},
-					useColoredVersion:	{value:true, 	description:"Use colored version of the Badges."}
+					useColoredVersion:	{value:true, 	description:"Use colored version of the Badges for Chat and Members."}
+				},
+				badges: {
+					1:			{value:true, 	name:"Staff",					selector:"profileBadgeStaff"},
+					2:			{value:true, 	name:"Partner",					selector:"profileBadgePartner"},
+					4:			{value:true, 	name:"HypeSquad",				selector:"profileBadgeHypesquad"},
+					8:			{value:true, 	name:"BugHunter",				selector:"profileBadgeBugHunter"},
+					16:			{value:false, 	name:"MFASMS",					selector:false},
+					32:			{value:false, 	name:"PROMODISMISSED",			selector:false},
+					64:			{value:true, 	name:"HypeSquad Bravery",		selector:"profileBadgeHypeSquadOnlineHouse1"},
+					128:		{value:true, 	name:"HypeSquad Brilliance",	selector:"profileBadgeHypeSquadOnlineHouse2"},
+					256:		{value:true, 	name:"HypeSquad Balance",		selector:"profileBadgeHypeSquadOnlineHouse3"},
+					512:		{value:true, 	name:"Early Supporter",			selector:"profileBadgeEarlySupporter"},
+					2048:		{value:true, 	name:"Nitro",					selector:"profileBadgePremium"}
 				}
 			};
 		}
@@ -74,84 +84,16 @@ module.exports = (Plugin, Api, Vendor) => {
 
 		initialize () {
 			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+				if (this.started) return true;
 				BDFDB.loadMessage(this);
 
-				this.UserModalUtils = BDFDB.WebModules.findByProperties("fetchMutualFriends","open");
 				this.APIModule = BDFDB.WebModules.findByProperties("getAPIBaseURL");
 				this.DiscordConstants = BDFDB.WebModules.findByProperties("Permissions", "ActivityTypes", "StatusTypes");
+				this.BadgeClasses = BDFDB.WebModules.findByProperties("profileBadgeStaff","profileBadgePremium");
 
-				var observer = null;
+				for (let flag in this.defaults.badges) if (!this.defaults.badges[flag].selector) delete this.defaults.badges[flag];
 
-				observer = new MutationObserver((changes, _) => {
-					changes.forEach(
-						(change, i) => {
-							if (change.addedNodes) {
-								change.addedNodes.forEach((node) => {
-									if (node && node.querySelector(BDFDB.dotCN.memberusername) && BDFDB.getData("showInMemberList", this, "settings")) {
-										this.addBadges(node, "list", false);
-									}
-								});
-							}
-						}
-					);
-				});
-				BDFDB.addObserver(this, BDFDB.dotCN.memberswrap, {name:"userListObserver",instance:observer}, {childList:true, subtree:true});
-
-				observer = new MutationObserver((changes, _) => {
-					changes.forEach(
-						(change, i) => {
-							if (change.addedNodes) {
-								change.addedNodes.forEach((node) => {
-									if (BDFDB.getData("showInChat", this, "settings")) {
-										if ($(BDFDB.dotCN.messagegroup).has(BDFDB.dotCN.avatarlargeold).length > 0) {
-											if (node && node.tagName && node.querySelector(BDFDB.dotCN.messageusernamewrapper)) {
-												this.addBadges(node, "chat", false);
-											}
-											else if (node && node.classList && node.classList.contains(BDFDB.disCN.messagetext)) {
-												this.addBadges($(BDFDB.dotCN.messagegroup).has(node)[0], "chat", false);
-											}
-										}
-										else {
-											if (node && node.tagName && node.querySelector(BDFDB.dotCN.messageusernamewrapper)) {
-												if (node.classList.contains(BDFDB.disCN.messagemarkup)) {
-													this.addBadges(node, "chat", true);
-												}
-												else {
-													var markups = node.querySelectorAll(BDFDB.dotCN.messagemarkup);
-													for (var i = 0; i < markups.length; i++) {
-														this.addBadges(markups[i], "chat", true);
-													}
-												}
-											}
-										}
-									}
-								});
-							}
-						}
-					);
-				});
-				BDFDB.addObserver(this, BDFDB.dotCN.messages, {name:"chatWindowObserver",instance:observer}, {childList:true, subtree:true});
-
-				observer = new MutationObserver((changes, _) => {
-					changes.forEach(
-						(change, i) => {
-							if (change.addedNodes) {
-								change.addedNodes.forEach((node) => {
-									if (node && node.tagName && node.querySelector(BDFDB.dotCN.userpopout) && BDFDB.getData("showInPopout", this, "settings")) {
-										this.addBadges(node, "popout", false);
-									}
-								});
-							}
-						}
-					);
-				});
-				BDFDB.addObserver(this, BDFDB.dotCN.popouts, {name:"userPopoutObserver",instance:observer}, {childList: true});
-
-				for (let flag in this.badges) {
-					if (!this.badges[flag].implemented) delete this.badges[flag];
-				}
-
-				this.loadBadges();
+				BDFDB.WebModules.forceAllUpdates(this);
 
 				return true;
 			}
@@ -163,7 +105,7 @@ module.exports = (Plugin, Api, Vendor) => {
 
 		onStop () {
 			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
-				document.querySelectorAll(".BE-badge").forEach(node=>{node.remove();});
+				BDFDB.removeEles(".BE-badges");
 
 				BDFDB.unloadMessage(this);
 				return true;
@@ -172,114 +114,90 @@ module.exports = (Plugin, Api, Vendor) => {
 				return false;
 			}
 		}
-
-		onSwitch () {
-			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
-				BDFDB.addObserver(this, BDFDB.dotCN.memberswrap, {name:"userListObserver"}, {childList:true, subtree:true});
-				BDFDB.addObserver(this, BDFDB.dotCN.messages, {name:"chatWindowObserver"}, {childList:true, subtree:true});
-				this.loadBadges();
-			}
-		}
+		
 
 		// begin of own functions
 
-		updateSettings (settingspanel) {
-			var settings = {};
-			for (var input of settingspanel.querySelectorAll(BDFDB.dotCN.switchinner)) {
-				settings[input.value] = input.checked;
+		processNameTag (instance, wrapper) { 
+			if (!wrapper.classList || !instance || !instance.props) return;
+			else if (BDFDB.containsClass(wrapper, BDFDB.disCN.membernametag) && BDFDB.getData("showInMemberList", this, "settings")) {
+				this.addBadges(instance.props.user, wrapper, "list");
 			}
-			BDFDB.saveAllData(settings, this, "settings");
-			this.updateBadges = true;
-		}
-
-		loadBadges() {
-			document.querySelectorAll(".BE-badge").forEach(node=>{node.remove();});
-			var settings = BDFDB.getAllData(this, "settings");
-			if (settings.showInMemberList) {
-				for (let user of document.querySelectorAll(BDFDB.dotCN.member)) {
-					this.addBadges(user, "list", false, settings);
-				}
-			}
-			if (settings.showInChat) { 
-				for (let user of document.querySelectorAll(BDFDB.dotCN.messagegroup)) {
-					var compact = document.querySelector(BDFDB.dotCN.messagegroup + BDFDB.dotCN.messagecompact);
-					if (!compact) {
-						this.addBadges(user, "chat", compact, settings);
-					}
-					else {
-						for (let message of document.querySelectorAll(BDFDB.dotCN.messagemarkup)) {
-							this.addBadges(message, "chat", compact, settings);
-						}
-					}
-				}
-			}
-			if (settings.showInPopout) {
-				for (let user of document.querySelectorAll(BDFDB.dotCN.userpopout)) {
-					this.addBadges(user.parentElement, "popout", false, settings);
-				}
+			else if (BDFDB.containsClass(wrapper, BDFDB.disCN.userpopoutheadertag) && BDFDB.getData("showInPopout", this, "settings")) {
+				wrapper = BDFDB.containsClass(wrapper, BDFDB.disCN.userpopoutheadertagwithnickname) && wrapper.previousSibling ? wrapper.previousSibling : wrapper;
+				this.addBadges(instance.props.user, wrapper, "popout");
 			}
 		}
 
-		addBadges (wrapper, type, compact, settings = BDFDB.getAllData(this, "settings")) {
-			if (!wrapper) return;
-
-			let user = compact ? BDFDB.getKeyInformation({"node":$(BDFDB.dotCN.messagegroup).has(wrapper)[0],"key":"message"}).author : BDFDB.getKeyInformation({"node":wrapper,"key":"user"});
-			if (user && !user.bot) {
-				if (!this.requestedusers[user.id]) {
-					this.requestedusers[user.id] = [[wrapper,type]]
-					this.APIModule.get(this.DiscordConstants.Endpoints.USER_PROFILE(user.id)).then(result => {
-						let usercopy = Object.assign({},result.body.user);
-						if (result.body.premium_since) usercopy.flags += 256;
-						this.loadedusers[user.id] = usercopy;
-						for (let queredobj of this.requestedusers[user.id]) this.addToWrapper(queredobj[0], user.id, queredobj[1], settings);
-					});
-				}
-				else if (!this.loadedusers[user.id]) {
-					this.requestedusers[user.id].push([wrapper,type]);
-				}
-				else {
-					this.addToWrapper(wrapper, user.id, type, settings);
-				}
+		processMessageUsername (instance, wrapper) {
+			let message = BDFDB.getReactValue(instance, "props.message");
+			if (message) {
+				let username = wrapper.querySelector(BDFDB.dotCN.messageusername);
+				if (username && BDFDB.getData("showInChat", this, "settings")) this.addBadges(message.author, wrapper, "chat");
 			}
 		}
 
-		addToWrapper (wrapper, id, type, settings) {
-			if (wrapper.querySelector(".BE-badge")) return; 
-			let memberwrap = wrapper.querySelector(BDFDB.dotCNC.memberusername + BDFDB.dotCNC.messageusernamewrapper + BDFDB.dotCN.nametag);
-			if (memberwrap) for (let flag in this.badges) {
-				if ((this.loadedusers[id].flags | flag) == this.loadedusers[id].flags) {
-					let badge = document.createElement("div"); 
-					badge.className = "BE-badge BE-badge-" + this.badges[flag].name + " BE-badge-" + type;
-					badge.style.backgroundImage = settings.useColoredVersion ? this.badges[flag].color : this.badges[flag].white;
-					memberwrap.appendChild(badge);
-					$(badge)
-						.on("mouseenter." + this.name, (e) => {
-							BDFDB.createTooltip(this.badges[flag].name, e.currentTarget, {"type":"top"});
-						});
-				}
+		addBadges (info, wrapper, type) {
+			if (!info || info.bot || !wrapper) return;
+			if (!this.requestedusers[info.id]) {
+				this.requestedusers[info.id] = [[wrapper,type]];
+				this.APIModule.get(this.DiscordConstants.Endpoints.USER_PROFILE(info.id)).then(result => {
+					let usercopy = Object.assign({},result.body.user);
+					if (result.body.premium_since) usercopy.flags += 2048;
+					this.loadedusers[info.id] = usercopy;
+					for (let queredobj of this.requestedusers[info.id]) this.addToWrapper(info, queredobj[0], queredobj[1]);
+				});
+			}
+			else if (!this.loadedusers[info.id]) {
+				this.requestedusers[info.id].push([wrapper,type]);
+			}
+			else {
+				this.addToWrapper(info, wrapper, type);
 			}
 		}
 
+		addToWrapper (info, wrapper, type) {
+			BDFDB.removeEles(wrapper.querySelectorAll(".BE-badges"));
+			let badges = BDFDB.getAllData(this, "badges");
+			let settings = BDFDB.getAllData(this, "settings");
+			let header = BDFDB.getParentEle(BDFDB.dotCN.userpopoutheader, wrapper);
+			let badgewrapper = BDFDB.htmlToElement(`<span class="BE-badges ${!settings.useColoredVersion || (header && !BDFDB.containsClass(header, BDFDB.disCN.userpopoutheadernormal)) ? BDFDB.disCN.userprofiletopsectionplaying : BDFDB.disCN.userprofiletopsectionnormal}" style="all: unset !important; order: 9 !important;"></span>`);
+			for (let flag in this.defaults.badges) {
+				if ((this.loadedusers[info.id].flags | flag) == this.loadedusers[info.id].flags && badges[flag]) {
+					let badge = BDFDB.htmlToElement(`<div class="BE-badge BE-badge-${this.defaults.badges[flag].name.replace(/ /g, "")} BE-badge-${type} ${this.BadgeClasses[this.defaults.badges[flag].selector]}"></div>`);
+					badgewrapper.appendChild(badge);
+					badge.addEventListener("mouseenter", () => {BDFDB.createTooltip(this.defaults.badges[flag].name, badge, {"type":type == "list" ? "left" : "top"});});
+				}
+			}
+			if (badgewrapper.firstChild) wrapper.insertBefore(badgewrapper, wrapper.querySelector(".owner-tag,.TRE-tag,svg[name=MobileDevice]"));
+		}
+		
 		getSettingsPanel () {
+			if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 			var settings = BDFDB.getAllData(this, "settings"); 
-			var settingshtml = `<div class="DevilBro-settings ${this.name}-settings">`;
+			var badges = BDFDB.getAllData(this, "badges"); 
+			var settingshtml = `<div class="${this.name}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="DevilBro-settings-inner">`;
 			for (let key in settings) {
-				settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}"${settings[key] ? " checked" : ""}></div></div>`;
+				settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
 			}
-			settingshtml += `</div>`;
+			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">Display Badges:</h3></div><div class="DevilBro-settings-inner-list">`;
+			for (let flag in badges) {
+				settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.badges[flag].name}</h3><span class="BE-badges ${BDFDB.disCN.userprofiletopsectionplaying}" style="all: unset !important;"><div class="BE-badge BE-badge-${this.defaults.badges[flag].name.replace(/ /g, "")} BE-badge-settings ${this.BadgeClasses[this.defaults.badges[flag].selector]}"></div></span><span class="BE-badges ${BDFDB.disCN.userprofiletopsectionnormal}" style="all: unset !important;"><div class="BE-badge BE-badge-${this.defaults.badges[flag].name.replace(/ /g, "")} BE-badge-settings ${this.BadgeClasses[this.defaults.badges[flag].selector]}"></div></span><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="badges ${flag}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${badges[flag] ? " checked" : ""}></div></div>`;
+			}
 
-			var settingspanel = $(settingshtml)[0];
+			settingshtml += `</div></div></div>`;
 
-			$(settingspanel)
-				.on("click", BDFDB.dotCN.switchinner, () => {this.updateSettings(settingspanel);});
+			let settingspanel = BDFDB.htmlToElement(settingshtml);
+
+			BDFDB.initElements(settingspanel, this);
 
 			return settingspanel;
 		}
 
 		onSettingsClosed () {
-			if (this.updateBadges) {
-				this.loadBadges();
-				this.updateBadges = false;
+			if (this.SettingsUpdated) {
+				delete this.SettingsUpdated;
+				BDFDB.WebModules.forceAllUpdates(this);
 			}
 		}
 	}

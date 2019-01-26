@@ -3,9 +3,18 @@ module.exports = (Plugin, Api, Vendor) => {
 
 	return class extends Plugin {
 		initConstructor () {
+			this.patchModules = {
+				"TabBar":"componentDidMount",
+				"NameTag":["componentWillMount","componentWillUnmount"]
+			};
+
 			this.css = `
-				${BDFDB.idCNS.friends+BDFDB.dotCNS.friendstabbaritem+BDFDB.dotCN.badge}:not(.betterfriendcount-badge) {
+				${BDFDB.dotCNS.friends + BDFDB.dotCNS.settingstabbar + BDFDB.dotCN.badge}:not(.betterfriendcount-badge), 
+				${BDFDB.dotCNS.friends + BDFDB.dotCNS.settingstabbar + BDFDB.dotCN.badgewrapper}:not(.betterfriendcount-badge) {
 					display: none !important;
+				}
+				${BDFDB.dotCNS.friends + BDFDB.dotCNS.settingstabbar + BDFDB.dotCN.badgewrapper}.betterfriendcount-badge {
+					margin-left: 5px !important;
 				}
 			`;
 
@@ -32,48 +41,15 @@ module.exports = (Plugin, Api, Vendor) => {
 
 		initialize () {
 			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+				if (this.started) return true;
 				BDFDB.loadMessage(this);
 
-				var observer = null;
-
-				observer = new MutationObserver((changes, _) => {
-					changes.forEach(
-						(change, i) => {
-							if (change.addedNodes) {
-								change.addedNodes.forEach((node) => {
-									if (node && node.tagName && node.querySelector(BDFDB.dotCN.friendscolumn)) {
-										this.addCountNumbers();
-									}
-								});
-							}
-							if (change.removedNodes) {
-								change.removedNodes.forEach((node) => {
-									if (node && node.tagName && node.querySelector(BDFDB.dotCN.friendscolumn)) {
-										this.addCountNumbers();
-									}
-								});
-							}
-						}
-					);
-				});
-				BDFDB.addObserver(this, BDFDB.idCN.friends, {name:"friendListObserver",instance:observer}, {childList:true, subtree:true});
-
-				observer = new MutationObserver((changes, _) => {
-					changes.forEach(
-						(change, i) => {
-							this.addCountNumbers();
-						}
-					);
-				});
-				BDFDB.addObserver(this, BDFDB.dotCN.friendsonline, {name:"friendCountObserver",instance:observer}, {childList:true, subtree:true, characterData:true});
-
 				this.FriendUtils = BDFDB.WebModules.findByProperties("getFriendIDs", "getRelationships");
-				this.UserMetaStore = BDFDB.WebModules.findByProperties("getStatuses", "getOnlineFriendCount");
-				var RelationshipTypes = BDFDB.WebModules.findByProperties("RelationshipTypes").RelationshipTypes;
-				for (let type in RelationshipTypes) {
-					this.relationshipTypes[RelationshipTypes[type]] = type;
-				}
-				this.addCountNumbers();
+				this.UserMetaStore = BDFDB.WebModules.findByProperties("getStatus", "getOnlineFriendCount");
+				let RelationshipTypes = BDFDB.WebModules.findByProperties("RelationshipTypes").RelationshipTypes;
+				for (let type in RelationshipTypes) this.relationshipTypes[RelationshipTypes[type]] = type;
+
+				BDFDB.WebModules.forceAllUpdates(this);
 
 				return true;
 			}
@@ -85,7 +61,7 @@ module.exports = (Plugin, Api, Vendor) => {
 
 		onStop () {
 			if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
-				document.querySelectorAll(".betterfriendcount-badge").forEach(counter => {counter.remove();});
+				BDFDB.removeEles(".betterfriendcount-badge");
 
 				BDFDB.unloadMessage(this);
 				return true;
@@ -94,30 +70,33 @@ module.exports = (Plugin, Api, Vendor) => {
 				return false;
 			}
 		}
-
-		onSwitch () {
-			this.addCountNumbers();
-
-			BDFDB.addObserver(this, BDFDB.idCN.friends, {name:"friendListObserver"}, {childList:true, subtree:true});
-		}
+		
 
 		// begin of own functions
 
-		addCountNumbers () {
-			var friendstabbar = document.querySelector(BDFDB.idCNS.friends + BDFDB.dotCN.friendstabbar);
-			if (!friendstabbar) return;
-			friendstabbar.querySelectorAll(".betterfriendcount-badge").forEach(counter => {counter.remove();});
+		processTabBar (instance, wrapper) {
+			if (instance.props && instance.props.children && instance.props.children[0].key == "ADD_FRIEND") this.addCountNumbers(wrapper);
+		}
 
-			var relationships = this.FriendUtils.getRelationships(), relationshipCount = {};
-			for (let type in this.relationshipTypes) {relationshipCount[this.relationshipTypes[type]] = 0;}
-			for (let id in relationships) {relationshipCount[this.relationshipTypes[relationships[id]]]++;}
+		processNameTag (instance, wrapper) {
+			if (wrapper.parentElement && BDFDB.containsClass(wrapper.parentElement, BDFDB.disCN.friendscolumn)) this.addCountNumbers();
+		}
 
-			var tabitems = friendstabbar.querySelectorAll(BDFDB.dotCN.friendstabbaritem);
-			$(`<div class="badge betterfriendcount-badge friendcount">${relationshipCount.FRIEND}</div>`).appendTo(tabitems[1]);
-			$(`<div class="badge betterfriendcount-badge onlinefriendcount">${this.UserMetaStore.getOnlineFriendCount()}</div>`).appendTo(tabitems[2]);
-			$(`<div class="badge betterfriendcount-badge requestincount">${relationshipCount.PENDING_INCOMING}</div>`).appendTo(tabitems[3]);
-			$(`<div class="badge betterfriendcount-badge requestoutcount">${relationshipCount.PENDING_OUTGOING}</div>`).appendTo(tabitems[3]);
-			$(`<div class="badge betterfriendcount-badge blockedcount">${relationshipCount.BLOCKED}</div>`).appendTo(tabitems[4]);
+		addCountNumbers (wrapper = document.querySelector(BDFDB.dotCNS.friends + BDFDB.dotCN.settingstabbar)) {
+			if (!wrapper) return;
+			let tabitems = wrapper.querySelectorAll(BDFDB.dotCN.settingsitem);
+			if (!tabitems || tabitems.length < 5) return;
+			BDFDB.removeEles(".betterfriendcount-badge");
+
+			let relationships = this.FriendUtils.getRelationships(), relationshipCount = {};
+			for (let type in this.relationshipTypes) relationshipCount[this.relationshipTypes[type]] = 0;
+			for (let id in relationships) relationshipCount[this.relationshipTypes[relationships[id]]]++;
+			let badgeclass = BDFDB.disCN.badgewrapper;
+			tabitems[1].appendChild(BDFDB.htmlToElement(`<div class="${badgeclass} betterfriendcount-badge friendcount">${relationshipCount.FRIEND}</div>`));
+			tabitems[2].appendChild(BDFDB.htmlToElement(`<div class="${badgeclass} betterfriendcount-badge onlinefriendcount">${this.UserMetaStore.getOnlineFriendCount()}</div>`));
+			tabitems[3].appendChild(BDFDB.htmlToElement(`<div class="${badgeclass} betterfriendcount-badge requestincount">${relationshipCount.PENDING_INCOMING}</div>`));
+			tabitems[3].appendChild(BDFDB.htmlToElement(`<div class="${badgeclass} betterfriendcount-badge requestoutcount">${relationshipCount.PENDING_OUTGOING}</div>`));
+			tabitems[4].appendChild(BDFDB.htmlToElement(`<div class="${badgeclass} betterfriendcount-badge blockedcount">${relationshipCount.BLOCKED}</div>`));
 		}
 	}
 };

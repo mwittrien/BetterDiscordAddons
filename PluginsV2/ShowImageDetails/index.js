@@ -4,8 +4,7 @@ module.exports = (Plugin, Api, Vendor) => {
 	return class extends Plugin {
 		initConstructor () {
 			this.patchModules = {
-				"LazyImageZoomable":"componentDidMount",
-				"StandardSidebarView":"componentWillUnmount"
+				"LazyImageZoomable":"componentDidMount"
 			};
 
 			this.css = `
