@@ -171,16 +171,16 @@
 #autocomplete-popout .row.selected,
 .friendSelected--wQP3f,
 .paginator-166-09,
+.emptyHintCard-2mUdMe,
+.categoryFade-2ybR1J,
 .quickSelectPopoutOption-opKBx9.selected,
 .payment-xT17Mq,
 .tier1Banner-1B_WXY,
 .paymentPane-3bwJ6A,
+.wrapper-39oAo3,
 .gameNameInput-385LoS:hover,
 .gameNameInput-385LoS:focus,
-.game-name-input:hover,
-.game-name-input:focus,
 .selectableItem-1MP3MQ:hover,
-.not-detected,
 .notDetected-33MY4s,
 .dockItem-2kQDqg:hover,
 .previewOverlay-2O7_KC,
@@ -671,7 +671,6 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .messagesWrapper-3lZDfY,
 .container-1YxwTf code,
 .typing-2GQL18,
-.root-1BQpZw,
 .action-buttons,
 .actionButtons-1sUUug,
 .wrapper-2NJDcI,
@@ -907,13 +906,13 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	background-color: rgb(67,181,129) !important;
 }
 
-.nowPlaying-284llR,
-.now-playing {
+.nowPlaying-284llR {
 	background: rgba(var(--vaccentcolor), calc(var(--vtransparencyalpha) * 3)) !important;
 }
 
+.categoryFadeBlurple-1j72_A,
 .guildAvatarWithoutIcon-1sTmE_,
-.avatar-uploader-inner,
+.avatarUploaderInner-3UNxY3,
 .guildIcon-lQ0uiM.noIcon-1a_FrS,
 .button-2b6hmh:hover,
 .button-2KyEfG:hover,
@@ -2950,12 +2949,12 @@ html, span:not(.spinner-item) {
 }
 
 /* oldtitlebar */
-.hidden-by-OTB ~ * .bd-modal-close-area:after,
-.hidden-by-OTB ~ * .container-16j22k:after,
-.hidden-by-OTB ~ * .backdrop-1wrmKB:after {
+.hidden-by-OTB .bd-modal-close-area:after,
+.hidden-by-OTB .container-16j22k:after,
+.hidden-by-OTB .backdrop-1wrmKB:after {
 	top: 0 !important;
 }
-.hidden-by-OTB ~ * .splashBackground-1FRCko:before {
+.hidden-by-OTB .splashBackground-1FRCko:before {
 	display: none !important;
 }
 .wrapper-3Q5DdO .settingsTitlebarOTB {
