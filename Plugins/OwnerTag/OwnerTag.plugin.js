@@ -11,7 +11,7 @@ class OwnerTag {
 
 	initConstructor () {
 		this.changelog = {
-			"added":[["Added OwnerIcon Option","You can not switch from the OwnerTag to the native Crown OwnerIcon"]]
+			"added":[["Added OwnerIcon Option","You can now switch from the OwnerTag to the native Crown OwnerIcon"]]
 		};
 		
 		this.patchModules = {
