@@ -35,6 +35,7 @@ class EditUsers {
 				position: relative;
 				margin-left: 1ch;
 			}
+			${BDFDB.dotCN.userpopoutheadertagwithnickname} ${BDFDB.dotCN.bottag},
 			${BDFDB.dotCN.friendscolumn} ${BDFDB.dotCN.bottag},
 			${BDFDB.dotCN.memberusername} ~ ${BDFDB.dotCN.bottag} {
 				top: 0px;

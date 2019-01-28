@@ -127,6 +127,7 @@
 .expandedInfo-3kfShd,
 .defaultIndicator-2X8Auf,
 .applicationTile-1Goy1W,
+.tile-2OwFgW,
 .tileMedia-1q3guD,
 .news-2GDtLJ,
 .modal-3HD5ck,
@@ -229,21 +230,26 @@ button.guild-1EfMGQ {
 .applicationStore-1pNvnv .home-2gmu2h {
 	padding-top: 5px;
 }
+.itemBackground-2vEldQ,
 .itemBackground-1jfD8p {
 	border-radius: 9px;
 	background-color: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 3)) !important;
 }
+.itemBackground-2vEldQ:before,
 .itemBackground-1jfD8p:before {
 	border-radius: 9px;
 	background: radial-gradient(ellipse at top,transparent,rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 4))),linear-gradient(90deg,rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 4)) 0,transparent 40%,transparent 60%,rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 4))),linear-gradient(0deg,rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 4)) 0,transparent 25%) !important;
 }
+.itemBackground-2vEldQ[style*='background-image: url("/assets/5cf4181401e3d81acd4e811fae0797da.png")'],
 .itemBackground-1jfD8p[style*='background-image: url("/assets/5cf4181401e3d81acd4e811fae0797da.png")'] {
 	background-color: rgb(255,255,255) !important;
 	background-image: linear-gradient(90deg,rgba(var(--vaccentcolor),0.9),rgba(var(--vaccentcolor),0.7)) !important;
 }
+.itemBackground-2vEldQ[style*='background-image: url("/assets/5cf4181401e3d81acd4e811fae0797da.png")']:before,
 .itemBackground-1jfD8p[style*='background-image: url("/assets/5cf4181401e3d81acd4e811fae0797da.png")']:before {
 	z-index: 1;
 }
+.itemBackground-2vEldQ[style*='background-image: url("/assets/5cf4181401e3d81acd4e811fae0797da.png")']:after,
 .itemBackground-1jfD8p[style*='background-image: url("/assets/5cf4181401e3d81acd4e811fae0797da.png")']:after {
 	border-radius: 10px;
 	bottom: 0;
@@ -902,6 +908,11 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	background: rgb(240,71,71) !important;
 	border: none !important;
 }
+.lookOutlined-3sRXeN.colorBrand-3pXr91,
+.lookOutlined-3sRXeN.colorLink-35jkBc,
+.lookOutlined-3sRXeN.colorPrimary-3b3xI6 {
+	background-color: transparent !important;
+}
 .action-1lSjCi.join-33Tr-7 .actionButton-2PeQbJ {
 	background-color: rgb(67,181,129) !important;
 }
@@ -910,6 +921,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	background: rgba(var(--vaccentcolor), calc(var(--vtransparencyalpha) * 3)) !important;
 }
 
+.result-3w1ZcL[style*="background-color"],
 .categoryFadeBlurple-1j72_A,
 .guildAvatarWithoutIcon-1sTmE_,
 .avatarUploaderInner-3UNxY3,
@@ -921,6 +933,12 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .friendsAction-__WNE9:hover {
 	background-color: rgb(var(--vaccentcolor)) !important;
 }
+.result-3w1ZcL[style*="background-color: rgb(146, 154, 250)"] {
+	filter: brightness(125%);
+}
+.result-3w1ZcL[style*="background-color: rgb(179, 174, 255)"] {
+	filter: brightness(150%);
+}
 
 .guildIconExpired-2Qcq05 {
 	background-color: rgba(47,49,54,.6) !important;
@@ -931,6 +949,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 }
 
 .imageSelected-4Kl81J,
+.overlappingBorder-3aFng4,
 .overlappingBorder-1-XPGl,
 .overlappingBorder-1ysb12,
 .selected-mKYnfr.option-n0icdO,
