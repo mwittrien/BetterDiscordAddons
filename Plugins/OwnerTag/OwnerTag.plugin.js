@@ -3,13 +3,17 @@
 class OwnerTag {
 	getName () {return "OwnerTag";}
 
-	getVersion () {return "1.0.7";}
+	getVersion () {return "1.0.8";}
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Adds a Tag like Bottags to the Serverowner.";}
 
 	initConstructor () {
+		this.changelog = {
+			"added":[["Added OwnerIcon Option","You can not switch from the OwnerTag to the native Crown OwnerIcon"]]
+		};
+		
 		this.patchModules = {
 			"NameTag":["componentDidMount","componentDidUpdate"],
 			"MessageUsername":["componentDidMount","componentDidUpdate"],
@@ -23,7 +27,8 @@ class OwnerTag {
 				addInUserPopout:		{value:true, 	inner:true,		description:"User Popouts"},
 				addInUserProfil:		{value:true, 	inner:true,		description:"User Profile Modal"},
 				useRoleColor:			{value:true, 	inner:false,	description:"Use the Rolecolor instead of the default blue."},
-				useBlackFont:			{value:false, 	inner:false,	description:"Instead of darkening the Rolecolor on bright colors use black font."}
+				useBlackFont:			{value:false, 	inner:false,	description:"Instead of darkening the Rolecolor on bright colors use black font."},
+				useCrown:				{value:false, 	inner:false,	description:"Use the Crown OwnerIcon instead of the OwnerTag."}
 			},
 			inputs: {
 				ownTagName:				{value:"Owner", 	description:"Owner Tag Text"}
@@ -97,7 +102,7 @@ class OwnerTag {
 
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
-			BDFDB.removeEles(".owner-tag");
+			BDFDB.removeEles(".owner-tag, .owner-tag-crown");
 			BDFDB.unloadMessage(this);
 		}
 	}
@@ -149,21 +154,30 @@ class OwnerTag {
 
 	addOwnerTag (info, wrapper, type, selector = "", container) {
 		if (!info || !wrapper || !wrapper.parentElement) return;
-		BDFDB.removeEles(wrapper.querySelectorAll(".owner-tag"));
+		BDFDB.removeEles(wrapper.querySelectorAll(".owner-tag, .owner-tag-crown"));
 		let guild = this.GuildUtils.getGuild(this.LastGuildStore.getGuildId());
 		if (!guild || guild.ownerId != info.id) return;
 		let settings = BDFDB.getAllData(this, "settings");
 		let member = settings.useRoleColor ? (this.MemberUtils.getMember(this.LastGuildStore.getGuildId(), info.id) || {}) : {};
 		let EditUsersData = BDFDB.isPluginEnabled("EditUsers") ? bdplugins.EditUsers.plugin.getUserData(info.id, wrapper) : {};
-		let tag = BDFDB.htmlToElement(`<span class="owner-tag owner-${type}-tag ${(settings.useRoleColor ? "owner-tag-rolecolor " : "") + BDFDB.disCN.bottag + (selector ? (" " + selector) : "")}" style="order: 10 !important;">${BDFDB.getData("ownTagName", this, "inputs") || "Owner"}</span>`);
-		let invert = false;
-		if (container && container.firstElementChild && !BDFDB.containsClass(container.firstElementChild, BDFDB.disCN.userpopoutheadernormal, BDFDB.disCN.userprofiletopsectionnormal), false) invert = true;
-		BDFDB.addClass(tag, invert ? BDFDB.disCN.bottaginvert : BDFDB.disCN.bottagregular);
-		let tagcolor = BDFDB.colorCONVERT(EditUsersData.color1 || member.colorString, "RGB");
-		let isbright = BDFDB.colorISBRIGHT(tagcolor);
-		tagcolor = isbright ? (settings.useBlackFont ? tagcolor : BDFDB.colorCHANGE(tagcolor, -0.3)) : tagcolor;
-		tag.style.setProperty(invert ? "color" : "background-color", tagcolor, "important");
-		if (isbright && settings.useBlackFont) tag.style.setProperty(invert ? "background-color" : "color", "black", "important");
-		wrapper.insertBefore(tag, wrapper.querySelector(".TRE-tag,svg[name=MobileDevice]"));
+		if (!settings.useCrown) {
+			let tag = BDFDB.htmlToElement(`<span class="owner-tag owner-${type}-tag ${(settings.useRoleColor ? "owner-tag-rolecolor " : "") + BDFDB.disCN.bottag + (selector ? (" " + selector) : "")}" style="order: 10 !important;">${BDFDB.getData("ownTagName", this, "inputs") || "Owner"}</span>`);
+			let invert = false;
+			if (container && container.firstElementChild && !BDFDB.containsClass(container.firstElementChild, BDFDB.disCN.userpopoutheadernormal, BDFDB.disCN.userprofiletopsectionnormal), false) invert = true;
+			BDFDB.addClass(tag, invert ? BDFDB.disCN.bottaginvert : BDFDB.disCN.bottagregular);
+			let tagcolor = BDFDB.colorCONVERT(EditUsersData.color1 || member.colorString, "RGB");
+			let isbright = BDFDB.colorISBRIGHT(tagcolor);
+			tagcolor = isbright ? (settings.useBlackFont ? tagcolor : BDFDB.colorCHANGE(tagcolor, -0.3)) : tagcolor;
+			tag.style.setProperty(invert ? "color" : "background-color", tagcolor, "important");
+			if (isbright && settings.useBlackFont) tag.style.setProperty(invert ? "background-color" : "color", "black", "important");
+			wrapper.insertBefore(tag, wrapper.querySelector(".TRE-tag,svg[name=MobileDevice]"));
+		}
+		else if (!wrapper.querySelector(BDFDB.dotCN.ownericon)) {
+			let crown = BDFDB.htmlToElement(`<svg name="Crown" class="owner-tag-crown ${BDFDB.disCNS.ownericon + BDFDB.disCN.memberownericon}" width="24" height="24" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd"><path fill="#faa61a" fill-rule="nonzero" d="M2,11 L0,0 L5.5,7 L9,0 L12.5,7 L18,0 L16,11 L2,11 L2,11 Z M16,14 C16,14.5522847 15.5522847,15 15,15 L3,15 C2.44771525,15 2,14.5522847 2,14 L2,13 L16,13 L16,14 Z" transform="translate(3 4)"></path><rect width="24" height="24"></rect></g></svg>`);
+			crown.addEventListener("mouseenter", () => {
+				BDFDB.createTooltip(BDFDB.LanguageStrings.GUILD_OWNER, crown, {type: "top"});
+			});
+			wrapper.insertBefore(crown, wrapper.querySelector(".TRE-tag,svg[name=MobileDevice]"));
+		}
 	}
 }
