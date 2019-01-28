@@ -9,11 +9,12 @@ window.onmessage = function (e) {
 	if (typeof e.data === "object" && e.data.origin == "ThemeRepo") {
 		switch (e.data.reason) {
 			case "OnLoad":
-				document.body.innerHTML = document.body.innerHTML.replace(new RegExp("REPLACE_USERNAMESMALL", "g"), e.data.username.toLowerCase());
-				document.body.innerHTML = document.body.innerHTML.replace(new RegExp("REPLACE_USERNAME", "g"), e.data.username);
-				document.body.innerHTML = document.body.innerHTML.replace(new RegExp("REPLACE_USERID", "g"), e.data.id);
-				document.body.innerHTML = document.body.innerHTML.replace(new RegExp("REPLACE_AVATAR", "g"), e.data.avatar.split('"').join(''));
-				document.body.innerHTML = document.body.innerHTML.replace(new RegExp("REPLACE_DISCRIMINATOR", "g"), e.data.discriminator);
+				document.body.innerHTML = document.body.innerHTML.replace(/\t|\n|\r/g, "");
+				document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_USERNAMESMALL/gi, e.data.username.toLowerCase());
+				document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_USERNAME/gi, e.data.username);
+				document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_USERID/gi, e.data.id);
+				document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_AVATAR/gi, "url(" + e.data.avatar.split('"').join('') + ")");
+				document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_DISCRIMINATOR/gi, e.data.discriminator);
 				if (e.data.nativecss) {
 					var theme = document.createElement("link");
 					theme.classList.add(e.data.reason);
