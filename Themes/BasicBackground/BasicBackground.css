@@ -54,6 +54,7 @@
 .gameLibrary-TTDw4Y,
 .applicationStore-1pNvnv,
 .lfg-3xoFkI,
+.root-1BQpZw,
 .app-2rEoOp,
 .layers-3iHuyZ,
 .layer-3QrUeG,
@@ -734,7 +735,6 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .messageGroupWrapper-o-Zw7G,
 .item-26Dhrx[style*="border-color: rgb(114, 137, 218)"],
 .auditLog-3jNbM6,
-.friend-table-add-header,
 .changeDetails-bk98pu,
 .popout-2sKjHu,
 .incomingCallInner-2VmFiR,
@@ -746,7 +746,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .wrapper-3JPufy button,
 .accountBtnInner-sj5jLs,
 .searchResultsWrap-2DKFzt .searchResultMessage-2VxO12.expanded-v2Szsz,
-.status-2s6iDp,
+.status-oxiHuE,
 .iconBadge-2dji3k {
 	border-color: transparent !important;
 }
@@ -764,7 +764,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 
 /* ----------------------- COLORING ----------------------- */
 
-:not(.guild-1EfMGQ):not(.guildInner-3DSoA4):not(.instructions-2Du9gG):not(.searchLearnMore-3SQUAj):not(.viewAllButton-31gira) > a:not(.back-2Z4ATs):not(.viewAllGames-3LNpt1):not(.button-1MICoQ):not(.iconWrapper-21idzA):not(.textLink-3aPthL):not(.bodyLink-3A8Buv):not(.search-bar-tag):not(.channel-SEolQq):not(.downloadLink-2oSgiF):not(.embedAuthorName-3mnTWj):not([style]),
+.anchor-3Z-8Bb:not(.embedAuthorName-3mnTWj):not(.downloadLink-1ywL9o):not([style]),
 .filenameLinkWrapper-1-14c5,
 .announcingNitro-3Ptg6m,
 .action-1lSjCi.create-3jownz .actionHeader-2CT5c7,
@@ -842,7 +842,6 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .questionMark-CWEQZn,
 .root-SR8cQa .buttonInvertedDefault-1UdvTn,
 .popout-3sVMXz .btn,
-.friends-empty .btn,
 .tutorial-popout .button,
 .private-channel-recipients-invite button,
 .wrapper-39oAo3 button,
@@ -1190,7 +1189,6 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 }
 
 .popout-3sVMXz .btn,
-.friends-empty .btn,
 .private-channel-recipients-invite button,
 .item-26Dhrx,
 .valueChecked-m-4IJZ,
@@ -2981,7 +2979,7 @@ html, span:not(.spinner-item) {
 }
 
 /* statuseverywhere */
-.status-oxiHuE.typing-1KJk_j, .status.status-typing {
+.status-oxiHuE.typing-1KJk_j {
 	border-radius: 999px !important;
 }
 
