@@ -309,11 +309,13 @@ class NotificationSounds {
 	}
 
 	dragSlider (settingspanel, e) {
-		var grabber = e.target;
+		var grabber = e.currentTarget;
 		var track = grabber.parentNode;
 		var slider = track.parentNode;
 		var input = slider.querySelector(".volumeInput");
 		var bar = slider.querySelector(BDFDB.dotCN.sliderbarfill);
+		var type = slider.getAttribute("type");
+		var choice = this.choices[type];
 
 		BDFDB.appendLocalStyle("disableTextSelection", `*{user-select: none !important;}`);
 
@@ -322,12 +324,13 @@ class NotificationSounds {
 		var sHalfW = BDFDB.getRects(grabber).width/2;
 		var sMinX = BDFDB.getRects(track).left;
 		var sMaxX = sMinX + BDFDB.getRects(track).width;
+		var bubble = BDFDB.htmlToElement(`<span class="${BDFDB.disCN.sliderbubble}">${Math.floor(choice.volume)}%</span>`);
+		grabber.appendChild(bubble);
 		var mouseup = () => {
 			document.removeEventListener("mouseup", mouseup);
 			document.removeEventListener("mousemove", mousemove);
+			BDFDB.removeEles(bubble);
 			BDFDB.removeLocalStyle("disableTextSelection");
-			var type = slider.getAttribute("type");
-			var choice = this.choices[type];
 			choice.volume = volume;
 			this.saveChoice(type, choice, true);
 		};
@@ -337,6 +340,7 @@ class NotificationSounds {
 			grabber.style.setProperty("left", volume + "%");
 			bar.style.setProperty("width", volume + "%");
 			input.value = volume;
+			bubble.innerText = Math.floor(volume) + "%";
 		};
 		document.addEventListener("mouseup", mouseup);
 		document.addEventListener("mousemove", mousemove);
