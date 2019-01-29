@@ -36,7 +36,7 @@ class ChatAliases {
 		for (let config of this.configs) {
 			settingshtml += `<div class="${BDFDB.disCNS.margintop8 +  BDFDB.disCNS.tableheadersize + BDFDB.disCNS.size10 + BDFDB.disCNS.primary + BDFDB.disCN.weightbold}" style="flex: 1 1 auto; width: 34px !important; text-align: center;">${config.toUpperCase()}</div>`;
 		}
-		settingshtml += `</div></div><div class="DevilBro-settings-inner-list alias-list ${BDFDB.disCNS.gamesettings + BDFDB.disCN.marginbottom8}">`;
+		settingshtml += `</div></div><div class="DevilBro-settings-inner-list alias-list ${BDFDB.disCN.marginbottom8}">`;
 		for (let word in this.aliases) {
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.hovercard}"><div class="${BDFDB.disCN.hovercardinner}"><input type="text" word="${word}" action="edit" class="${BDFDB.disCNS.gamename + BDFDB.disCN.gamenameinput} word-name" value="${BDFDB.encodeToHTML(word)}"><input type="text" word="${word}" action="edit" class="${BDFDB.disCNS.gamename + BDFDB.disCN.gamenameinput} replace-name" value="${BDFDB.encodeToHTML(this.aliases[word].replace)}">`;
 			for (let config of this.configs) {
@@ -108,7 +108,7 @@ class ChatAliases {
 
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
-			BDFDB.removeEles(".autocompleteAliases", ".autocompleteAliasesRow");
+			BDFDB.removeEles(".autocompleteAliases", ".autocompleteAliasesRow"); 
 			BDFDB.unloadMessage(this);
 		}
 	}
@@ -283,8 +283,8 @@ class ChatAliases {
 					textarea.dispatchEvent(new Event("input"));
 				}
 				else if (!e.ctrlKey && e.which != 16 && settings.addAutoComplete && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length) {
-					clearTimeout(textarea.chataliastimeout);
-					textarea.chataliastimeout = setTimeout(() => {this.addAutoCompleteMenu(textarea);},100);
+					clearTimeout(textarea.ChatAliasAutocompleteTimeout);
+					textarea.ChatAliasAutocompleteTimeout = setTimeout(() => {this.addAutoCompleteMenu(textarea);},100);
 				}
 
 				if (!e.ctrlKey && e.which != 38 && e.which != 40 && !(e.which == 39 && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length)) BDFDB.removeEles(".autocompleteAliases", ".autocompleteAliasesRow");
