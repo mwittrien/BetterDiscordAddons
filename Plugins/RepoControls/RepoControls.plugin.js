@@ -3,13 +3,17 @@
 class RepoControls {
 	getName () {return "RepoControls";}
 
-	getVersion () {return "1.2.5";}
+	getVersion () {return "1.2.6";}
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Lets you sort and filter your list of downloaded Themes and Plugins.";}
 
 	initConstructor () {
+		this.changelog = {
+			"improved":[["Search Function","Slightly improved the performance of the feature to search for entries"]]
+		};
+		
 		this.patchModules = {
 			"V2C_List":"componentDidMount",
 			"V2C_PluginCard": ["componentDidMount","componentDidUpdate"],
@@ -340,12 +344,13 @@ class RepoControls {
 	changeTextToHTML (wrapper, searchstring) {
 		if (!wrapper || !wrapper.tagName) return;
 		for (let ele of wrapper.querySelectorAll(BDFDB.dotCNC._reponame + BDFDB.dotCNC._repoversion + BDFDB.dotCNC._repoauthor + BDFDB.dotCN._repodescription)) {
+			var string = ele.firstElementChild ? ele.innerHTML : ele.innerText;
 			if (BDFDB.containsClass(ele, BDFDB.disCN._repodescription)) {
 				ele.style.display = "block";
-				if (searchstring && searchstring.length > 2) ele.innerHTML = BDFDB.highlightText(ele.innerText, searchstring);
-				else ele.innerHTML = ele.innerText;
+				if (searchstring && searchstring.length > 2) ele.innerHTML = BDFDB.highlightText(string, searchstring);
+				else ele.innerHTML = string;
 			}
-			else if (searchstring && searchstring.length > 2 || ele.querySelector(BDFDB.dotCN.highlight)) ele.innerHTML = BDFDB.highlightText(ele.innerText, searchstring); 
+			else if (searchstring && searchstring.length > 2 || ele.querySelector(BDFDB.dotCN.highlight)) ele.innerHTML = BDFDB.highlightText(string, searchstring); 
 		}
 	}
 
