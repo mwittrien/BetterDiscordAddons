@@ -597,7 +597,7 @@ class PluginRepo {
 						var finishCounter = 0, finishInterval = setInterval(() => { 
 							if ((webviewqueue.length == 0 && !webviewrunning) || finishCounter > 300 || !this.loading.is) {
 								clearInterval(finishInterval);
-								BDFDB.removeEles(webview, loadingicon);
+								BDFDB.removeEles(webview, loadingicon, ".pluginrepo-loadingicon");
 								if (!loadingiconwrapper.firstChild) BDFDB.removeEles(loadingiconwrapper);
 								clearTimeout(this.loading.timeout);
 								this.loading = {is:false, timeout:null, amount:this.loading.amount};

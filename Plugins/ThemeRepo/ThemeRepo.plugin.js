@@ -721,7 +721,7 @@ class ThemeRepo {
 						clearTimeout(this.loading.timeout);
 						return;
 					}
-					BDFDB.removeEles(loadingicon);
+					BDFDB.removeEles(loadingicon, ".themerepo-loadingicon");
 					if (!loadingiconwrapper.firstChild) BDFDB.removeEles(loadingiconwrapper);
 					clearTimeout(this.loading.timeout);
 					this.loading = {is:false, timeout:null, amount:this.loading.amount};
