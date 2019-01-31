@@ -7,7 +7,7 @@ class PinDMs {
 
 	getAuthor () {return "DevilBro";}
 
-	getDescription () {return "Allows you to pin DMs, making them appear at the top of your DM-list.";}
+	getDescription () {return "Allows you to pin DMs, making them appear at the top of your DMs/Guild-list.";}
 
 	initConstructor () {
 		this.patchModules = {
