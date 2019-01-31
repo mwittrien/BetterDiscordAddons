@@ -1,12 +1,12 @@
 :root {
 	--vcolumns: var(--columns, 2);
-	--vserversize: var(--serversize, 50px);
+	--vguildsize: var(--guildsize, 50);
 }
 .guildsWrapper-5TJh6A {
-	width: calc((var(--vserversize) + 10px) * var(--vcolumns) + 35px - 25px) !important;
+	width: calc(1px * ((var(--vguildsize) + 10) * var(--vcolumns) + 35 - 25)) !important;
 }
 .guildsWrapper-5TJh6A .scrollerWrap-1IAIlv {
-	width: calc((var(--vserversize) + 10px) * var(--vcolumns) + 35px) !important;
+	width: calc(1px * ((var(--vguildsize) + 10) * var(--vcolumns) + 35)) !important;
 }
 .guildsWrapper-5TJh6A,
 .guildsWrapper-5TJh6A .scrollerWrap-1IAIlv {
@@ -17,9 +17,9 @@
 }
 .guildsWrapper-5TJh6A .guilds-1q_RqH,
 .guildsWrapper-5TJh6A .guilds-1q_RqH .dms-rcsEnV {
-    display: flex;
-    flex-flow: row wrap;
-    align-content: flex-start;
+	display: flex;
+	flex-flow: row wrap;
+	align-content: flex-start;
 }
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ {
 	margin: 4px 13px 4px -2px !important;
@@ -27,12 +27,13 @@
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ:not(#bd-pub-li),
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ:not(#bd-pub-li) .guildInner-3DSoA4 a,
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ .guildsError-3cFMtY,
+.guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ.guildsAdd-21_IdK .guildsAddInner-1KMFy-,
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ .guildInner-3DSoA4 .guildIcon-CT-ZDq,
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ .guildInner-3DSoA4 .avatar-S_nsxk,
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ .guildInner-3DSoA4 .homeIcon-1FoKUJ {
-	height: var(--vserversize) !important;
-	width: var(--vserversize) !important;
-	line-height: var(--vserversize) !important;
+	height: calc(1px * var(--vguildsize)) !important;
+	width: calc(1px * var(--vguildsize)) !important;
+	line-height: calc(1px * var(--vguildsize)) !important;
 }
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ:not(#bd-pub-li):not(.guildsAdd-21_IdK) {
 	border: none !important;
@@ -41,24 +42,30 @@
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ .guildInner-3DSoA4 .avatar-S_nsxk,
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ .guildInner-3DSoA4 .homeIcon-1FoKUJ {
 	background-size: cover !important;
-	font-size: calc(var(--vserversize)/5) !important;
-}
-.guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ .badge-1GsMF2 {
-	font-size: calc(var(--vserversize)/4) !important;
-	padding: calc(var(--vserversize)/10 - 2px) calc(var(--vserversize)/10 + 1px) !important;
-}
-.guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ .guildsError-3cFMtY {
-	line-height: calc(var(--vserversize) - 5px) !important;
-	font-size: calc(var(--vserversize)/(5/2))) !important;
+	font-size: calc(1px * (var(--vguildsize)/5)) !important;
 }
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ.guildsAdd-21_IdK .guildsAddInner-1KMFy- {
-	position: static !important;
 	display: block !important;
-	margin: auto !important;
-	height: calc(var(--vserversize) - 10px) !important;
-	width: calc(var(--vserversize) - 10px) !important;
-	line-height: calc(var(--vserversize) - 10px) !important;
-	font-size: calc(var(--vserversize) - 10px) !important;
+	position: static !important;
+	width: calc(1px * (var(--vguildsize) - (var(--vguildsize)/30))) !important;
+	font-size: calc(1px * (var(--vguildsize)/(5/4))) !important;
+}
+.guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ .guildsError-3cFMtY {
+	font-size: calc(1px * (var(--vguildsize)/(5/2))) !important;
+}
+.guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ.guildsAdd-21_IdK .guildsAddInner-1KMFy-,
+.guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ .guildsError-3cFMtY {
+	line-height: calc(1px * (var(--vguildsize) - 5)) !important;
+}
+.guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ .badge-1GsMF2 {
+	font-size: calc(1px * (var(--vguildsize)/4)) !important;
+	padding: calc(1px * (var(--vguildsize)/10 - 2)) calc(1px * (var(--vguildsize)/10 + 1)) !important;
+}
+.guildsWrapper-5TJh6A .guilds-1q_RqH .guildInner-3DSoA4[style*="border-radius: 23"],
+.guildsWrapper-5TJh6A .guilds-1q_RqH .guildInner-3DSoA4[style*="border-radius: 24"],
+.guildsWrapper-5TJh6A .guilds-1q_RqH .guildInner-3DSoA4[style*="border-radius: 25"] {
+	transition: all .2s linear !important;
+	border-radius: 50% !important;
 }
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ.unread-qLkInr:before,
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ.selected-ML3OIq:before {
@@ -68,39 +75,52 @@
 	width: 5px !important;
 }
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ.unread-qLkInr:before {
-    height: 10px !important;
-    margin-top: -6px !important;
+	height: calc(1px * (46.03756 + (9.744341 - 46.03756)/(1 + ((var(--vguildsize)/67.64791)*(var(--vguildsize)/67.64791)*(var(--vguildsize)/67.64791)*(var(--vguildsize)/67.64791)*(var(--vguildsize)/67.64791)*(var(--vguildsize)/67.64791)*(var(--vguildsize)/67.64791)*(var(--vguildsize)/67.64791)*(var(--vguildsize)/67.64791))))) !important;
+	margin-top: calc(1px * ((46.03756 + (9.744341 - 46.03756)/(1 + ((var(--vguildsize)/67.64791)*(var(--vguildsize)/67.64791)*(var(--vguildsize)/67.64791)*(var(--vguildsize)/67.64791)*(var(--vguildsize)/67.64791)*(var(--vguildsize)/67.64791)*(var(--vguildsize)/67.64791)*(var(--vguildsize)/67.64791)*(var(--vguildsize)/67.64791))))/-2)) !important;
 }
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ.selected-ML3OIq:before {
-    height: calc(var(--vserversize) - 10px) !important;
-    margin-top: calc((var(--vserversize) - 10px)/-2) !important;
+	height: calc(1px * (106.6077 + (19.08392 - 106.6077)/(1 + ((var(--vguildsize)/71.81239)*(var(--vguildsize)/71.81239)*(var(--vguildsize)/71.81239)*(var(--vguildsize)/71.81239))))) !important;
+	min-height: 30px !important;
+	margin-top: calc(1px * ((106.6077 + (19.08392 - 106.6077)/(1 + ((var(--vguildsize)/71.81239)*(var(--vguildsize)/71.81239)*(var(--vguildsize)/71.81239)*(var(--vguildsize)/71.81239))))/-2)) !important;
 }
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ.pinned:after,
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ.audio-3vVhBi:after,
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ.video-15yGu3:after {
-    height: calc(var(--vserversize)/2) !important;
-    width: calc(var(--vserversize)/2) !important;
-    background-size: calc(var(--vserversize)/3) !important;
+	height: calc(1px * (var(--vguildsize)/2)) !important;
+	width: calc(1px * (var(--vguildsize)/2)) !important;
+	background-size: calc(1px * (var(--vguildsize)/3)) !important;
 }
 .guildsWrapper-5TJh6A .guilds-1q_RqH .dms-rcsEnV {
 	margin: 0 !important;
 }
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guildSeparator-1X4GQ1 {
-	width: calc((var(--vserversize) + 10px) * var(--vcolumns) - 10px) !important;
+	width: calc(1px * ((var(--vguildsize) + 10) * var(--vcolumns) - 10)) !important;
 	margin: 10px 0 !important;
 }
 #server-search,
 .guildsWrapper-5TJh6A:not(.foldercontent) .guilds-1q_RqH > .guild-1EfMGQ:first-child,
 .guildsWrapper-5TJh6A .guilds-1q_RqH .dms-rcsEnV .guild-1EfMGQ:only-child {
-	margin: 4px calc(((var(--vserversize) + 10px) * (var(--vcolumns) - 1))/2) !important;
+	margin: 4px calc(1px * (((var(--vguildsize) + 10) * (var(--vcolumns) - 1))/2)) !important;
+}
+.guildsWrapper-5TJh6A .guilds-1q_RqH .friendsOnline-_wi_fM {
+	font-size: calc(1px * ((var(--vguildsize)/8) + 3.75)) !important;
+}
+#bd-pub-li,
+#bd-pub-li .guildInner-3DSoA4,
+#bd-pub-li .guildInner-3DSoA4 a {
+	height: calc(1px * ((var(--vguildsize)/5) + 10)) !important;
 }
 .guildsWrapper-5TJh6A .guilds-1q_RqH .friendsOnline-_wi_fM,
 #bd-pub-li,
 #bd-pub-li .guildInner-3DSoA4,
 #bd-pub-li .guildInner-3DSoA4 a {
-	width: 50px !important;
+	width: calc(1px * ((var(--vguildsize)*4/5) + 10)) !important;
 }
 .guildsWrapper-5TJh6A .guilds-1q_RqH .friendsOnline-_wi_fM,
 #bd-pub-li {
-	margin: 4px calc(((var(--vserversize) + 10px) * (var(--vcolumns) - 1) - 50px + var(--vserversize))/2) !important;
+	margin: 4px calc(1px * (((var(--vguildsize) + 10) * (var(--vcolumns) - 1) - ((var(--vguildsize)*4/5) + 10) + var(--vguildsize))/2)) !important;
+}
+#bd-pub-li #bd-pub-button {
+	font-size: calc(1px * ((var(--vguildsize)/10) + 7)) !important;
+	line-height: calc(1px * ((var(--vguildsize)/5) + 10)) !important;
 }
