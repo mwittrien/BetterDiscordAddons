@@ -1,4 +1,4 @@
-//META{"name":"PinDMs"}*//
+//META{"name":"PinDMs","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/PinDMs","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/PinDMs/PinDMs.plugin.js"}*//
 
 class PinDMs {
 	getName () {return "PinDMs";}

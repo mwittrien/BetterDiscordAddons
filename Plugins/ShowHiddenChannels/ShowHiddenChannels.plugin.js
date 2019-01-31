@@ -1,4 +1,4 @@
-//META{"name":"ShowHiddenChannels"}*//
+//META{"name":"ShowHiddenChannels","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ShowHiddenChannels","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ShowHiddenChannels/ShowHiddenChannels.plugin.js"}*//
 
 class ShowHiddenChannels {
 	getName () {return "ShowHiddenChannels";}

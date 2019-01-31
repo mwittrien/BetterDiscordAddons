@@ -1,4 +1,4 @@
-//META{"name":"ThemeRepo"}*//
+//META{"name":"ThemeRepo","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ThemeRepo","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ThemeRepo/ThemeRepo.plugin.js"}*//
 
 class ThemeRepo {
 	getName () {return "ThemeRepo";}
