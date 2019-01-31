@@ -3,13 +3,17 @@
 class MessageUtilities {
 	getName () {return "MessageUtilities";}
 
-	getVersion () {return "1.4.4";}
+	getVersion () {return "1.4.5";}
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Offers a number of useful message options. Remap the keybindings in the settings.";}
 
 	initConstructor () {
+		this.changelog = {
+			"improved":[["Event Handling","Setting a keybinding to a native keycombo will now stop the native event. Meaning you can now use combos like Click + Alt without natively marking messages as unread"]]
+		};
+		
 		this.bindings = {};
 
 		this.firedEvents = [];
@@ -112,13 +116,13 @@ class MessageUtilities {
 			this.Permissions = BDFDB.WebModules.findByProperties("Permissions", "ActivityTypes").Permissions
 
 			BDFDB.addEventListener(this, document, "click", BDFDB.dotCNC.message + BDFDB.dotCN.messagesystem, e => {
-				this.onClick(e.currentTarget, 0, "onSglClick");
+				this.onClick(e, 0, "onSglClick");
 			})
 			BDFDB.addEventListener(this, document, "dblclick", BDFDB.dotCNC.message + BDFDB.dotCN.messagesystem, e => {
-				this.onClick(e.currentTarget, 1, "onDblClick");
+				this.onClick(e, 1, "onDblClick");
 			});
 			BDFDB.addEventListener(this, document, "keydown", BDFDB.dotCN.textareawrapchat, e => {
-				this.onKeyDown(e.currentTarget, e.which, "onKeyDown");
+				this.onKeyDown(e, e.which, "onKeyDown");
 			});
 		}
 		else {
@@ -250,15 +254,18 @@ class MessageUtilities {
 		BDFDB.saveData(action, binding, this, "bindings");
 	}
 
-	onClick (div, click, name) {
+	onClick (e, click, name) {
 		if (!this.isEventFired(name)) {
 			this.fireEvent(name);
 			let settings = BDFDB.getAllData(this, "settings");
 			let bindings = BDFDB.getAllData(this, "bindings");
 			for (let action in bindings) {
 				if (settings[action] && this.checkIfBindingIsValid(bindings[action], click)) {
-					let {messagediv, pos, message} = this.getMessageData(div);
-					if (messagediv && pos > -1 && message) this.defaults.bindings[action].func.bind(this)({messagediv, pos, message});
+					let {messagediv, pos, message} = this.getMessageData(e.currentTarget);
+					if (messagediv && pos > -1 && message) {
+						BDFDB.stopEvent(e);
+						this.defaults.bindings[action].func.bind(this)({messagediv, pos, message});
+					}
 					break;
 				}
 			}
@@ -331,12 +338,13 @@ class MessageUtilities {
 		}
 	}
 
-	onKeyDown (div, key, name) {
+	onKeyDown (e, key, name) {
 		if (!this.isEventFired(name)) {
 			this.fireEvent(name);
 			if (key == 27 && BDFDB.getData("clearOnEscape", this, "settings")) {
-				let instance = BDFDB.getOwnerInstance({"node":div, "name":"ChannelTextAreaForm", "up":true});
+				let instance = BDFDB.getOwnerInstance({"node":e.currentTarget, "name":"ChannelTextAreaForm", "up":true});
 				if (instance) {
+					BDFDB.stopEvent(e);
 					instance.setState({textValue:""});
 				}
 			}
