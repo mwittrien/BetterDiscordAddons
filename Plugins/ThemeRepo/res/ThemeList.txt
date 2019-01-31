@@ -3,8 +3,7 @@ https://gist.githubusercontent.com/Jiiks/e1026d29aac91e7a7ad2d90dee87c90c/raw/Se
 https://raw.githubusercontent.com/AltenGD/Altens-betterdiscord-Themes-Plugins/master/Themes/FrostedGlassRewrite.theme.css
 https://raw.githubusercontent.com/AltenGD/Altens-betterdiscord-Themes-Plugins/master/Themes/MiniTheme.theme.css
 https://raw.githubusercontent.com/archnemeziz/Discord/master/ElegantBlue.theme.css
-https://raw.githubusercontent.com/Asteria5675/BetterDiscordThemes/master/Light_Dark.theme.css
-https://raw.githubusercontent.com/Asteria5675/BetterDiscordThemes/master/SL.theme.css
+https://raw.githubusercontent.com/Asteria5675/asteria5675.github.io/master/src/themes/Dusk_to_Dawn.theme.css
 https://raw.githubusercontent.com/Azagwen/Rainbow_kittens_theme/master/Rainbow_kittens_V0.1.3.5.theme.css
 https://raw.githubusercontent.com/BeardDesign1/Ios-switches/themes/IOS_Switches.theme.css
 https://raw.githubusercontent.com/CapnKitten/Material-Discord/master/Material-Discord.theme.css
@@ -46,6 +45,8 @@ https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Theme
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Theme_Group_4/Winter.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Theme_Group_4/WonderfulLeaves.theme.css
 https://raw.githubusercontent.com/fluffingtons/fulldark/master/fulldark.theme.css
+https://raw.githubusercontent.com/Gibbu/BetterDiscord-Themes/master/AdjustableServerWidth/AdjustableServerWidth.theme.css
+https://raw.githubusercontent.com/Gibbu/BetterDiscord-Themes/master/HorizontalServerlist/HorizontalServerlist.theme.css
 https://raw.githubusercontent.com/Gibbu/BetterDiscord-Themes/master/SimplyDarkDiscord/SimplyDarkDiscord-Dark.theme.css
 https://raw.githubusercontent.com/Gibbu/BetterDiscord-Themes/master/SimplyDarkDiscord/SimplyDarkDiscord-Grey.theme.css
 https://raw.githubusercontent.com/HansAnonymous/BD-Themes-and-Plugins/master/Themes/Glossy-Cyan/Glossy-Cyan.H.theme.css
@@ -125,6 +126,7 @@ https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Themes/Radi
 https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Themes/TransientMaterial/TransientMaterial.theme.css
 https://raw.githubusercontent.com/rauenzi/Nox/master/release/Nox.theme.css
 https://raw.githubusercontent.com/redsauce117/SauceysDiscordThemes/master/DarkerDiscordTheme.theme.css
+https://raw.githubusercontent.com/Ruben7173/Ruben7173.github.io/master/BetterDiscord-Themes/BlackPanther-Theme/blackpanther.theme.css
 https://raw.githubusercontent.com/Ruben7173/Ruben7173.github.io/master/BetterDiscord-Themes/Darling-in-The-Franxx/02-theme.theme.css
 https://raw.githubusercontent.com/Ruben7173/Ruben7173.github.io/master/BetterDiscord-Themes/Fixed-Themes-Misc/Dark-Matter-Remastered/dark-matter.theme.css
 https://raw.githubusercontent.com/Ruben7173/Ruben7173.github.io/master/BetterDiscord-Themes/Forest-Green-theme/forestgreen.theme.css
@@ -182,6 +184,7 @@ https://raw.githubusercontent.com/TheWrestlingDiscordia/MiniTheme/master/MiniThe
 https://raw.githubusercontent.com/Tropix126/BetterDiscordStuff/master/aurora/Aurora.theme.css
 https://raw.githubusercontent.com/trueprominency/Shades-of-Red-Theme/master/shades-of-red.theme.css
 https://raw.githubusercontent.com/Twiistrz/TransparencyTheme/master/TransparencyConfig.theme.css
+https://raw.githubusercontent.com/VaporousCreeper/BetterDiscord-ThemesAndPlugins/master/Themes/GGO_Kirito/GGO_Kirito.theme.css
 https://raw.githubusercontent.com/Vaxuuu/Indigo-Theme/master/Indigo.theme.css
 https://raw.githubusercontent.com/Wahrandz/NieR-Automata-/master/Theme css/Final; Nier_Automata By AbdelBouklech.theme.css
 https://raw.githubusercontent.com/xNightWulf/ThemesForBetterDiscord/master/BlueLine.theme.css
