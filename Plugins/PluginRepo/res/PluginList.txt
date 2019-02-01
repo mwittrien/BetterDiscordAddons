@@ -187,6 +187,7 @@ https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Plugins/Per
 https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Plugins/ResizableCSS/ResizableCSS.plugin.js
 https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Plugins/RemoveMinimumSize/RemoveMinimumSize.plugin.js
 https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Plugins/ReplySystem/ReplySystem.plugin.js
+https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Plugins/RevealSpoilers/RevealSpoilers.plugin.js
 https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Plugins/RoleMembers/RoleMembers.plugin.js
 https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Plugins/SendButton/SendButton.plugin.js
 https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Plugins/ServerSearch/ServerSearch.plugin.js
