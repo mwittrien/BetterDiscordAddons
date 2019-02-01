@@ -30,6 +30,7 @@
  - [Read All Notifications Button](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ReadAllNotificationsButton) - Adds a little button at the top of your serverlist that enables you to clear all mentions and messagesnotifications at once.
  - [Remove Nicknames](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/RemoveNicknames) - Replace all nicknames with the actual accountnames.
  - [Repo Controls](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/RepoControls) - Lets you sort and filter your list of downloaded Themes and Plugins.
+ - [Reveal All Spoilers Option](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/RevealAllSpoilersOption) - Adds an entry to the message contextmenu to reveal all spoilers within a messageblock.
  - [Reverse Image Search](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ReverseImageSearch) - Adds the option to reverse image search images in discord via several engines.
  - [Send Large Messages](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SendLargeMessages) - Opens a popout when your message is too large, which allows you to automatically send the message in several smaller messages.
  - [Server Hider](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ServerHider) - Adds two options on your server context menu to hide servers in your server list.
