@@ -80,7 +80,7 @@
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guildInner-3DSoA4[style*="border-radius: 24"],
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guildInner-3DSoA4[style*="border-radius: 25"] {
 	transition: all .2s linear !important;
-	border-radius: var(--guildroundness) !important;
+	border-radius: var(--vguildroundness) !important;
 }
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ.unread-qLkInr:before,
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ.selected-ML3OIq:before {
