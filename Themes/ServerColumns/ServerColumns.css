@@ -43,7 +43,7 @@
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ .guildInner-3DSoA4 .homeIcon-1FoKUJ {
 	background-size: cover !important;
 }
-.guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ .guildInner-3DSoA4 .guildIcon-CT-ZDq[style*="font-size: 10px"] {
+.guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ .guildInner-3DSoA4 .guildIcon-CT-ZDq {
 	font-size: calc(1px * (var(--vguildsize)/5)) !important;
 }
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ .guildInner-3DSoA4 .guildIcon-CT-ZDq[style*="font-size: 12px"] {
@@ -94,7 +94,6 @@
 }
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ.selected-ML3OIq:before {
 	height: calc(1px * (106.6077 + (19.08392 - 106.6077)/(1 + ((var(--vguildsize)/71.81239)*(var(--vguildsize)/71.81239)*(var(--vguildsize)/71.81239)*(var(--vguildsize)/71.81239))))) !important;
-	min-height: 30px !important;
 	margin-top: calc(1px * ((106.6077 + (19.08392 - 106.6077)/(1 + ((var(--vguildsize)/71.81239)*(var(--vguildsize)/71.81239)*(var(--vguildsize)/71.81239)*(var(--vguildsize)/71.81239))))/-2)) !important;
 }
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ.pinned:after,
