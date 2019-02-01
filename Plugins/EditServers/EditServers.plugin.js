@@ -3,13 +3,17 @@
 class EditServers {
 	getName () {return "EditServers";}
 
-	getVersion () {return "1.9.2";} 
+	getVersion () {return "1.9.3";} 
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
 	initConstructor () {
+		this.changelog = {
+			"fixed":[["Servericon Text Size","If you choose to remove a servericon or choose a shortname for a server the fontsize will now properly be scaled relative to the shortnamelength"]]
+		};
+		
 		this.labels = {};
 
 		this.patchModules = {
@@ -283,8 +287,6 @@ class EditServers {
 			BDFDB.removeEles(BDFDB.dotCNS.tooltips + ".notice-tooltip");
 		});
 		BDFDB.addChildEventListener(serverSettingsModal, "click", ".btn-save", e => {
-			e.preventDefault();
-
 			name = servernameinput.value.trim();
 			name = name ? name : null;
 
@@ -400,11 +402,13 @@ class EditServers {
 		if (!info || !icon || !icon.parentElement) return;
 		if (icon.EditServersChangeObserver && typeof icon.EditServersChangeObserver.disconnect == "function") icon.EditServersChangeObserver.disconnect();
 		let data = BDFDB.loadData(info.id, this, "servers") || {};
-		if (data.url || data.removeIcon || icon.getAttribute("changed-by-editservers")) {
-			if (icon.tagName == "IMG") icon.setAttribute("src", data.removeIcon ? null : (data.url || BDFDB.getGuildIcon(info.id)));
+		if (data.url || data.shortName || data.removeIcon || icon.getAttribute("changed-by-editservers")) {
+			let url = data.url || BDFDB.getGuildIcon(info.id);
+			if (icon.tagName == "IMG") icon.setAttribute("src", data.removeIcon ? null : url);
 			else {
 				BDFDB.setInnerText(icon, data.url ? "" : (data.shortName || (info.icon && !data.removeIcon ? "" : info.acronym)));
-				icon.style.setProperty("background-image", data.removeIcon || data.shortName ? null : `url(${data.url || BDFDB.getGuildIcon(info.id)})`);
+				if (!data.removeIcon && !data.shortName && url) icon.style.setProperty("background-image", `url(${url})`);
+				else icon.style.removeProperty("background-image");
 				icon.style.setProperty("background-color", BDFDB.colorCONVERT(data.color1, "RGB"), "important");
 				icon.style.setProperty("color", BDFDB.colorCONVERT(data.color2, "RGB", "important"));
 				icon.style.setProperty("font-size", this.getFontSize(icon));
@@ -416,7 +420,7 @@ class EditServers {
 					icon.style.setProperty("background-size", "cover");
 				}
 			}
-			if (data.url || data.removeIcon) {
+			if (data.url || data.shortName || data.removeIcon) {
 				icon.setAttribute("changed-by-editservers", true);
 				icon.EditServersChangeObserver = new MutationObserver((changes, _) => {
 					changes.forEach(
@@ -448,12 +452,22 @@ class EditServers {
 
 	getFontSize (icon) {
 		if (icon.style.getPropertyValue("background-image")) return null;
+		else if (BDFDB.containsClass(icon, BDFDB.disCN.guildicon)) {
+			var shortname = icon.innerText;
+			if (shortname) {
+				if (shortname.length > 5) return "10px";
+				else if (shortname.length > 4) return "12px";
+				else if (shortname.length > 3) return "14px";
+				else if (shortname.length > 1) return "16px";
+				else if (shortname.length == 1) return "18px";
+			}
+		}
 		else if (BDFDB.containsClass(icon, BDFDB.disCN.avatariconsizexlarge)) return "12px";
 		else if (BDFDB.containsClass(icon, BDFDB.disCN.avatariconsizelarge)) return "10px";
 		else if (BDFDB.containsClass(icon, BDFDB.disCN.avatariconsizemedium)) return "8px";
 		else if (BDFDB.containsClass(icon, BDFDB.disCN.avatariconsizesmall)) return "4.8px";
 		else if (BDFDB.containsClass(icon, BDFDB.disCN.avatariconsizemini)) return "4px";
-		else return "10px";
+		return "10px";
 	}
 
 	getNoIconClasses (icon) {
