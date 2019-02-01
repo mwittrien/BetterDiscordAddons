@@ -1,6 +1,7 @@
 :root {
 	--vcolumns: var(--columns, 2);
 	--vguildsize: var(--guildsize, 50);
+	--vguildroundness: var(--guildroundness, 50%);
 }
 .guildsWrapper-5TJh6A {
 	width: calc(1px * ((var(--vguildsize) + 10) * var(--vcolumns) + 35 - 25)) !important;
@@ -79,7 +80,7 @@
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guildInner-3DSoA4[style*="border-radius: 24"],
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guildInner-3DSoA4[style*="border-radius: 25"] {
 	transition: all .2s linear !important;
-	border-radius: 50% !important;
+	border-radius: var(--guildroundness) !important;
 }
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ.unread-qLkInr:before,
 .guildsWrapper-5TJh6A .guilds-1q_RqH .guild-1EfMGQ.selected-ML3OIq:before {
