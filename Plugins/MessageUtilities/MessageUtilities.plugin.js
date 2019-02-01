@@ -365,7 +365,6 @@ class MessageUtilities {
 		let str = "";
 		if (BDFDB.getData(action, this, "settings")) {
 			let binding = BDFDB.getData(action, this, "bindings");
-			console.log(action, binding);
 			if (binding) for (let type in binding) {
 				let typename = type.indexOf("click") == 0 ? this.clickMap[binding[type]] : this.keyboardMap[binding[type]];
 				if (typename && typename != "NONE") str += typename + "+";
