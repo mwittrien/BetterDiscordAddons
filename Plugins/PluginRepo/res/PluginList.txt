@@ -61,6 +61,7 @@ https://raw.githubusercontent.com/Jiiks/BetterDiscordApp/master/Plugins/mediaSup
 https://raw.githubusercontent.com/kosshishub/BetterCustomCSS-BD-plugin/master/BetterCustomCSS.plugin.js
 https://raw.githubusercontent.com/kosshishub/CompactGuilds-BD-plugin/master/CompactGuilds.plugin.js
 https://raw.githubusercontent.com/kosshishub/Quicksave-BD-plugin/master/Quicksave.plugin.js
+https://raw.githubusercontent.com/l0c4lh057/Minespoiler/master/Minespoiler.plugin.js
 https://raw.githubusercontent.com/leogx9r/DiscordCrypt/master/build/discordCrypt.plugin.js
 https://raw.githubusercontent.com/mashirochan/Mashiro-chan/master/Plugins/AutoServerSelect/AutoServerSelect.plugin.js
 https://raw.githubusercontent.com/mashirochan/Mashiro-chan/master/Plugins/CheckAllPluginsButton/CheckAllPluginsButton.plugin.js
