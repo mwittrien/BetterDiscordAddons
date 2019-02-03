@@ -5,11 +5,15 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.7.4";}
+	getVersion () {return "1.7.5";}
 
 	getAuthor () {return "DevilBro";}
 
 	initConstructor () {
+		this.changelog = {
+			"improved":[["Copy Button","Pressing the copy button in a note that contains files will now add the filelinks to the copied text"]]
+		};
+		
 		this.labels = {};
 
 		this.patchModules = {
@@ -453,26 +457,27 @@ class PersonalPins {
 		});
 		message.querySelector(BDFDB.dotCN.messagespopoutjumpbutton + ".copy").addEventListener("click", e => {
 			let clipboard = require("electron").clipboard;
-			if (noteData.content) clipboard.write({text: noteData.content});
+			if (noteData.content) {
+				let text = noteData.content;
+				for (let file of message.querySelectorAll(BDFDB.dotCN.filenamelink)) text += ("\n" + file.href);
+				clipboard.write({text});
+			}
 			else {
 				let image = message.querySelector(BDFDB.dotCNS.imagewrapper + "img");
-				if (image) {
-					// stolen from Image2Clipboard
-					require("request")({url: image.src, encoding: null}, (error, response, buffer) => {
-						if (buffer) {
-							let platform = require("process").platform;
-							if (platform === "win32" || platform === "darwin") {
-								clipboard.write({image: require("electron").nativeImage.createFromBuffer(buffer)});
-							}
-							else {
-								let file = require("path").join(require("process").env["HOME"], "personalpinstemp.png");
-								require("fs").writeFileSync(file, buffer, {encoding: null});
-								clipboard.write({image: file});
-								require("fs").unlinkSync(file);
-							}
+				if (image) require("request")({url: image.src, encoding: null}, (error, response, buffer) => {
+					if (buffer) {
+						let platform = require("process").platform;
+						if (platform === "win32" || platform === "darwin") {
+							clipboard.write({image: require("electron").nativeImage.createFromBuffer(buffer)});
 						}
-					});
-				}
+						else {
+							let file = require("path").join(require("process").env["HOME"], "personalpinstemp.png");
+							require("fs").writeFileSync(file, buffer, {encoding: null});
+							clipboard.write({image: file});
+							require("fs").unlinkSync(file);
+						}
+					}
+				});
 			}
 		});
 	}
@@ -501,6 +506,7 @@ class PersonalPins {
 		pins[guild_id] = pins[guild_id] || {}
 		pins[guild_id][channel.id] = pins[guild_id][channel.id] || {}
 		if (!pins[guild_id][channel.id][message.id + "_" + pos]) {
+			for (let spoiler of messagediv.querySelectorAll(BDFDB.dotCN.spoilerhidden)) spoiler.click();
 			let channelname = channel.name;
 			if (!channelname && channel.recipients.length > 0) {
 				for (let dmuser_id of channel.recipients) {
