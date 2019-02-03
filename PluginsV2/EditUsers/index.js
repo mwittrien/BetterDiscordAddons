@@ -800,7 +800,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			let data = this.getUserData(info.id, mention);
 			let member = this.MemberUtils.getMember(this.LastGuildStore.getGuildId(), info.id) || {};
 			let color1 = BDFDB.colorCONVERT(data.color1 || (BDFDB.isPluginEnabled("BetterRoleColors") ? member.colorString : null), "RGBCOMP");
-			let name = data.name ? data.name : (BDFDB.isPluginEnabled("RemoveNicknames") ? bdplugins.RemoveNicknames.plugin.getNewName(info) : member.nick || info.username);
+			let name = data.name ? data.name : (BDFDB.isPluginEnabled("RemoveNicknames") ? BDFDB.Plugins["removenicknames"].getNewName(info) : member.nick || info.username);
 			BDFDB.setInnerText(mention, "@" + name);
 			if (mention.EditUsersHovered) colorHover();
 			else colorDefault();

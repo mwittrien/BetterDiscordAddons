@@ -427,12 +427,12 @@ module.exports = (Plugin, Api, Vendor) => {
 							dmname = dmname + this.UserUtils.getUser(dmuser_id).username;
 						}
 					}
-					let EditUsersData = user && BDFDB.isPluginEnabled("EditUsers") ? bdplugins.EditUsers.plugin.getUserData(user.id, dmdiv) : {};
+					let EditUsersData = user && BDFDB.isPluginEnabled("EditUsers") ? BDFDB.Plugins["editusers"].getUserData(user.id, dmdiv) : {};
 					if (!EditUsersData.removeIcon) avatar.style.setProperty("background-image", `url(${EditUsersData.url || BDFDB.getChannelIcon(id)})`);
 					avatar.setAttribute("channel", dmname);
 					if (user) avatar.setAttribute("user", user.username);
 					dmdiv.addEventListener("mouseenter", () => {
-						let FreshEditUsersData = user && BDFDB.isPluginEnabled("EditUsers") ? bdplugins.EditUsers.plugin.getUserData(user.id, dmdiv) : {};
+						let FreshEditUsersData = user && BDFDB.isPluginEnabled("EditUsers") ? BDFDB.Plugins["editusers"].getUserData(user.id, dmdiv) : {};
 						BDFDB.createTooltip(FreshEditUsersData.name || dmname, dmdiv, {selector:(BDFDB.isObjectEmpty(FreshEditUsersData) ? "" : "EditUsers-tooltip"),type:"right"});
 					});
 					dmdiv.addEventListener("click", () => {

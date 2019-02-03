@@ -76,7 +76,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					}
 				});
 
-				BDFDB.WebModules.forceAllUpdates();
+				BDFDB.WebModules.forceAllUpdates(this);
 
 				return true;
 			}
@@ -178,7 +178,7 @@ module.exports = (Plugin, Api, Vendor) => {
 		}
 
 		processMessageGroup (instance, wrapper) {
-			for (let stamp of wrapper.querySelectorAll("time[datetime]")) this.changeTimestamp(stamp);
+			if (BDFDB.getData("showInChat", this, "settings")) for (let stamp of wrapper.querySelectorAll("time[datetime]")) this.changeTimestamp(stamp);
 		}
 
 		changeTimestamp (stamp) {
