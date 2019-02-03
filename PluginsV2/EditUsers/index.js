@@ -9,7 +9,7 @@ module.exports = (Plugin, Api, Vendor) => {
 				"ChannelTextArea":"componentDidMount",
 				"NameTag":"componentDidMount",
 				"AuditLog":"componentDidMount",
-				"FluxContainer(TypingUsers)":"componentDidUpdate",
+				"TypingUsers":"componentDidUpdate",
 				"MessageUsername":"componentDidMount",
 				"DirectMessage":"componentDidMount",
 				"CallAvatar":"componentDidMount",
@@ -479,7 +479,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 		}
 
-		processFluxContainerTypingUsers (instance, wrapper) {
+		processTypingUsers (instance, wrapper) {
 			let users = !instance.state.typingUsers ? [] : Object.keys(instance.state.typingUsers).filter(id => id != BDFDB.myData.id).filter(id => !this.RelationshipUtils.isBlocked(id)).map(id => this.UserUtils.getUser(id)).filter(id => id != null);
 			wrapper.querySelectorAll(BDFDB.dotCNS.typing + "strong").forEach((username, i) => {
 				if (users[i] && username) this.changeName2(users[i], username);

@@ -16,7 +16,7 @@ class EditUsers {
 			"ChannelTextArea":"componentDidMount",
 			"NameTag":"componentDidMount",
 			"AuditLog":"componentDidMount",
-			"FluxContainer(TypingUsers)":"componentDidUpdate",
+			"TypingUsers":"componentDidUpdate",
 			"MessageUsername":"componentDidMount",
 			"DirectMessage":"componentDidMount",
 			"CallAvatar":"componentDidMount",
@@ -364,8 +364,6 @@ class EditUsers {
 			BDFDB.removeEles(BDFDB.dotCNS.tooltips + ".notice-tooltip");
 		});
 		BDFDB.addChildEventListener(userSettingsModal, "click", ".btn-save", e => {
-			e.preventDefault();
-
 			name = usernameinput.value.trim();
 			name = name ? name : null;
 
@@ -442,8 +440,7 @@ class EditUsers {
 					let autocompletemenu = textarea.parentElement.querySelector(BDFDB.dotCN.autocomplete);
 					if (autocompletemenu && (e.which == 9 || e.which == 13)) {
 						if (BDFDB.containsClass(autocompletemenu.querySelector(BDFDB.dotCN.autocompleteselected).parentElement, "autocompleteEditUsersRow")) {
-							e.originalEvent.preventDefault();
-							e.originalEvent.stopPropagation();
+							BDFDB.stopEvent(e);
 							this.swapWordWithMention(textarea); 
 						}
 					}
@@ -451,8 +448,7 @@ class EditUsers {
 						let autocompleteitems = autocompletemenu.querySelectorAll(BDFDB.dotCN.autocompleteselectable + ":not(.autocompleteEditUsersSelector)");
 						let selected = autocompletemenu.querySelector(BDFDB.dotCN.autocompleteselected);
 						if (BDFDB.containsClass(selected, "autocompleteEditUsersSelector") || autocompleteitems[e.which == 38 ? 0 : (autocompleteitems.length-1)] == selected) {
-							e.originalEvent.preventDefault();
-							e.originalEvent.stopPropagation();
+							BDFDB.stopEvent(e);
 							let next = this.getNextSelection(autocompletemenu, null, e.which == 38 ? false : true);
 							BDFDB.removeClass(selected, BDFDB.disCN.autocompleteselected);
 							BDFDB.addClass(selected, BDFDB.disCN.autocompleteselector);
@@ -510,7 +506,7 @@ class EditUsers {
 		}
 	}
 
-	processFluxContainerTypingUsers (instance, wrapper) {
+	processTypingUsers (instance, wrapper) {
 		let users = !instance.state.typingUsers ? [] : Object.keys(instance.state.typingUsers).filter(id => id != BDFDB.myData.id).filter(id => !this.RelationshipUtils.isBlocked(id)).map(id => this.UserUtils.getUser(id)).filter(id => id != null);
 		wrapper.querySelectorAll(BDFDB.dotCNS.typing + "strong").forEach((username, i) => {
 			if (users[i] && username) this.changeName2(users[i], username);

@@ -5,7 +5,7 @@ module.exports = (Plugin, Api, Vendor) => {
 		initConstructor () {
 			this.patchModules = {
 				"NameTag":"componentDidMount",
-				"FluxContainer(TypingUsers)":"componentDidUpdate",
+				"TypingUsers":"componentDidUpdate",
 				"MessageUsername":"componentDidMount",
 				"Clickable":"componentDidMount"
 			};
@@ -98,7 +98,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			}
 		}
 
-		processFluxContainerTypingUsers (instance, wrapper) {
+		processTypingUsers (instance, wrapper) {
 			let users = !instance.state.typingUsers ? [] : Object.keys(instance.state.typingUsers).filter(id => id != BDFDB.myData.id).filter(id => !this.RelationshipUtils.isBlocked(id)).map(id => this.UserUtils.getUser(id)).filter(id => id != null);
 			wrapper.querySelectorAll("strong").forEach((username, i) => {
 				if (users[i] && username) BDFDB.setInnerText(username, this.getNewName(users[i]));
