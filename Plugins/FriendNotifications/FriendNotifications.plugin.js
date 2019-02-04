@@ -210,6 +210,8 @@ class FriendNotifications {
 	load () {}
 
 	start () {
+		if (!global.BDFDB) global.BDFDB = {myPlugins:{}};
+		if (global.BDFDB && global.BDFDB.myPlugins && typeof global.BDFDB.myPlugins == "object") global.BDFDB.myPlugins[this.getName()] = this;
 		var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 		if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 			if (libraryScript) libraryScript.remove();
