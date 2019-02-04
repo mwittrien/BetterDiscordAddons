@@ -3,7 +3,7 @@
 class ShowImageDetails {
 	getName () {return "ShowImageDetails";}
 
-	getVersion () {return "1.1.3";}
+	getVersion () {return "1.1.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ShowImageDetails {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Spoilers","Properly works with images that are marked as spoilers now"]]
+			"fixed":[["Spoilers","Properly works with images that are marked as spoilers now"],["Spoiler Crash","Fixed crash occuring when trying to reveal an inline spoiler"]]
 		};
 		
 		this.patchModules = {
@@ -122,7 +122,7 @@ class ShowImageDetails {
 	processLazyImageZoomable (instance, image) {
 		let attachment = BDFDB.getReactValue(instance, "_reactInternalFiber.return.return.memoizedProps.attachment");
 		if (attachment && !attachment.filename.endsWith(".bdemote.png") && !attachment.filename.endsWith(".bdemote.gif")) {
-			if (BDFDB.containsClass(image.parentElement.parentElement, BDFDB.disCN.spoilercontainer)) image = image.parentElement.parentElement;
+			if (BDFDB.containsClass(image.parentElement.parentElement, BDFDB.disCN.spoilercontainer, BDFDB.disCN.spoilertext, false)) image = image.parentElement.parentElement;
 			BDFDB.addClass(image, "image-details-added");
 			image.removeEventListener("mouseenter", image.mouseenterShowImageDetails);
 			if (BDFDB.getData("showOnHover", this, "settings")) {
