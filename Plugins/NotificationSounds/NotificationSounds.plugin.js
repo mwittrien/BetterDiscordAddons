@@ -473,7 +473,6 @@ class NotificationSounds {
 	}
 
 	processPrivateChannelCall (instance, wrapper) {
-		console.log(wrapper);
 		this.patchCallingSound(instance, "PrivateChannelCall", "call_calling");
 	}
 }
