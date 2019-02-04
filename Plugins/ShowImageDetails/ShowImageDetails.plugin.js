@@ -3,13 +3,17 @@
 class ShowImageDetails {
 	getName () {return "ShowImageDetails";}
 
-	getVersion () {return "1.1.2";}
+	getVersion () {return "1.1.3";}
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Display the name, size and dimensions of uploaded images (does not include embed images) in the chat as an header or as a tooltip.";}
 
 	initConstructor () {
+		this.changelog = {
+			"fixed":[["Spoilers","Properly works with images that are marked as spoilers now"]]
+		};
+		
 		this.patchModules = {
 			"LazyImageZoomable":"componentDidMount",
 			"StandardSidebarView":"componentWillUnmount"
@@ -118,6 +122,7 @@ class ShowImageDetails {
 	processLazyImageZoomable (instance, image) {
 		let attachment = BDFDB.getReactValue(instance, "_reactInternalFiber.return.return.memoizedProps.attachment");
 		if (attachment && !attachment.filename.endsWith(".bdemote.png") && !attachment.filename.endsWith(".bdemote.gif")) {
+			if (BDFDB.containsClass(image.parentElement.parentElement, BDFDB.disCN.spoilercontainer)) image = image.parentElement.parentElement;
 			BDFDB.addClass(image, "image-details-added");
 			image.removeEventListener("mouseenter", image.mouseenterShowImageDetails);
 			if (BDFDB.getData("showOnHover", this, "settings")) {

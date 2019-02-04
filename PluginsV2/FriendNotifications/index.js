@@ -1,5 +1,5 @@
 module.exports = (Plugin, Api, Vendor) => {
-	if (!global.BDFDB || typeof BDFDB != "object") global.BDFDB = {BDv2Api: Api};
+	if (!global.BDFDB || typeof BDFDB != "object") global.BDFDB = {myPlugins:{}, BDv2Api: Api};
 
 	return class extends Plugin {
 		initConstructor () {
@@ -120,6 +120,7 @@ module.exports = (Plugin, Api, Vendor) => {
 		}
 
 		onStart () {
+			if (global.BDFDB && global.BDFDB.myPlugins && typeof global.BDFDB.myPlugins == "object") global.BDFDB.myPlugins[this.name] = this;
 			var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
 			if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
 				if (libraryScript) libraryScript.remove();
