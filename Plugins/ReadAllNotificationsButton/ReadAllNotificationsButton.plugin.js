@@ -3,7 +3,7 @@
 class ReadAllNotificationsButton {
 	getName () {return "ReadAllNotificationsButton";}
 
-	getVersion () {return "1.4.0";}
+	getVersion () {return "1.4.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -12,7 +12,8 @@ class ReadAllNotificationsButton {
 	initConstructor () {
 		this.changelog = {
 			"added":[["Mark DMs as read","You can now also mark DMs as read"],["ContextMenu","Right clicking the 'read all' button now opens a context menu that lets you more freely choose what should be marked as read"]],
-			"improved":[["Settings","You can now more freely change the left click behaviour of the 'read all' button"]],
+			"fixed":[["Languages","The context menu now properly displays the three options in all languages (was broken for example in japanese or russian"]],
+			"improved":[["Settings","You can now more freely change the left click behaviour of the 'read all' button"]]
 		};
 		
 		this.patchModules = {
@@ -189,15 +190,15 @@ class ReadAllNotificationsButton {
 		switch (BDFDB.getDiscordLanguage().id) {
 			case "hr":		//croatian
 				return {
-					context_guilds_text:		"Poslu�itelji",
-					context_mutedguilds_text:	"Prigu�eni Poslu�itelji",
+					context_guilds_text:		"Poslužitelji",
+					context_mutedguilds_text:	"Prigušeni Poslužitelji",
 					context_dms_text:			"Prikvacene Izravne"
 				};
 			case "da":		//danish
 				return {
 					context_guilds_text:		"Servere",
-					context_mutedguilds_text:	"D�mpede Servere",
-					context_dms_text:			"Privat Beskeder"
+					context_mutedguilds_text:	"Dæmpede Servere",
+					context_dms_text:			"Private Beskeder"
 				};
 			case "de":		//german
 				return {
@@ -215,7 +216,7 @@ class ReadAllNotificationsButton {
 				return {
 					context_guilds_text:		"Serveurs",
 					context_mutedguilds_text:	"Serveurs en sourdine",
-					context_dms_text:			"Messages prives"
+					context_dms_text:			"Messages privés"
 				};
 			case "it":		//italian
 				return {
@@ -227,7 +228,7 @@ class ReadAllNotificationsButton {
 				return {
 					context_guilds_text:		"Servers",
 					context_mutedguilds_text:	"Gedempte Servers",
-					context_dms_text:			"Persoonluke Berichten"
+					context_dms_text:			"Prive Berichten"
 				};
 			case "no":		//norwegian
 				return {
@@ -239,7 +240,7 @@ class ReadAllNotificationsButton {
 				return {
 					context_guilds_text:		"Serwery",
 					context_mutedguilds_text:	"Wyciszone Serwery",
-					context_dms_text:			"Prywatne Wiadomosci"
+					context_dms_text:			"Prywatne Wiadomości"
 				};
 			case "pt-BR":	//portuguese (brazil)
 				return {
@@ -256,56 +257,56 @@ class ReadAllNotificationsButton {
 			case "sv":		//swedish
 				return {
 					context_guilds_text:		"Servrar",
-					context_mutedguilds_text:	"D�mpade Servrar",
+					context_mutedguilds_text:	"Dämpade Servrar",
 					context_dms_text:			"Direktmeddelanden"
 				};
 			case "tr":		//turkish
 				return {
 					context_guilds_text:		"Sunucular",
 					context_mutedguilds_text:	"Sessiz Sunucular",
-					context_dms_text:			"Direkt Mesajlar"
+					context_dms_text:			"Özel Mesajlar"
 				};
 			case "cs":		//czech
 				return {
 					context_guilds_text:		"Servery",
-					context_mutedguilds_text:	"Tlumen� Servery",
-					context_dms_text:			"Pr�m� Zpr�va"
+					context_mutedguilds_text:	"Tlumené Servery",
+					context_dms_text:			"Přímé Zpráva"
 				};
 			case "bg":		//bulgarian
 				return {
-					context_guilds_text:		"C??????",
-					context_mutedguilds_text:	"?????????? C??????",
-					context_dms_text:			"???????? C????????"
+					context_guilds_text:		"Сървъри",
+					context_mutedguilds_text:	"приглушени Сървъри",
+					context_dms_text:			"директно Съобщение"
 				};
 			case "ru":		//russian
 				return {
-					context_guilds_text:		"C??????",
-					context_mutedguilds_text:	"O?????????? C??????",
-					context_dms_text:			"?????? ?????????"
+					context_guilds_text:		"Серверы",
+					context_mutedguilds_text:	"Отключенные Серверы",
+					context_dms_text:			"Прямые Сообщения"
 				};
 			case "uk":		//ukrainian
 				return {
-					context_guilds_text:		"C??????",
-					context_mutedguilds_text:	"?????????? C??????",
-					context_dms_text:			"???????? ????????????"
+					context_guilds_text:		"Сервери",
+					context_mutedguilds_text:	"Приглушені Сервери",
+					context_dms_text:			"Прямі Повідомлення"
 				};
 			case "ja":		//japanese
 				return {
-					context_guilds_text:		"????",
-					context_mutedguilds_text:	"????????",
-					context_dms_text:			"??????????"
+					context_guilds_text:		"サーバー",
+					context_mutedguilds_text:	"ミュートサーバー",
+					context_dms_text:			"ダイレクトメッセージ"
 				};
 			case "zh-TW":	//chinese (traditional)
 				return {
-					context_guilds_text:		"???",
-					context_mutedguilds_text:	"?????",
-					context_dms_text:			"????"
+					context_guilds_text:		"服務器",
+					context_mutedguilds_text:	"靜音服務器",
+					context_dms_text:			"直接消息",
 				};
 			case "ko":		//korean
 				return {
-					context_guilds_text:		"??",
-					context_mutedguilds_text:	"??? ? ??",
-					context_dms_text:			"?? ???"
+					context_guilds_text:		"서버",
+					context_mutedguilds_text:	"음소거 된 서버",
+					context_dms_text:			"직접 메시지"
 				};
 			default:		//default: english
 				return {
