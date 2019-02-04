@@ -14,7 +14,8 @@ class ServerFolders {
 
 		this.patchModules = {
 			"Guilds":"componentDidMount",
-			"Guild":["componentDidMount","componentWillUnmount"]
+			"Guild":["componentDidMount","componentWillUnmount"],
+			"StandardSidebarView":"componentWillUnmount"
 		};
 
 		this.css = `
@@ -497,8 +498,7 @@ class ServerFolders {
 				});
 				BDFDB.addEventListener(this, wrapper, "mousedown", e => {
 					if (BDFDB.pressedKeys.includes(17)) {
-						e.originalEvent.stopPropagation();
-						e.originalEvent.preventDefault();
+						BDFDB.stopEvent(e);
 						let dragpreview = this.createDragPreview(wrapper, e);
 						let updatePreview = e2 => {
 							this.updateDragPreview(dragpreview, e2);
@@ -522,6 +522,13 @@ class ServerFolders {
 					this.updateFolderNotifications(folderdiv);
 				}
 			}
+		}
+	}
+
+	processStandardSidebarView (instance, wrapper) {
+		if (this.SettingsUpdated) {
+			delete this.SettingsUpdated;
+			this.foldercontent.querySelectorAll(BDFDB.dotCN.guild + ".folder").forEach(folderdiv => {this.updateFolderNotifications(folderdiv);});
 		}
 	}
 
@@ -557,8 +564,6 @@ class ServerFolders {
 			this.saveCustomIcon(folderSettingsModal);
 		});
 		BDFDB.addChildEventListener(folderSettingsModal, "click", ".btn-save", e => {
-			e.preventDefault();
-
 			folderName = foldernameinput.value.trim();
 			folderName = folderName ? folderName : null;
 
@@ -855,7 +860,7 @@ class ServerFolders {
 				BDFDB.removeClass(unreaditem, BDFDB.disCN.contextmenuitemdisabled);
 				unreaditem.addEventListener("click", () => {
 					folderContext.remove();
-					BDFDB.clearReadNotifications(unreadServers);
+					BDFDB.markGuildAsRead(unreadServers);
 				});
 			}
 			BDFDB.appendContextMenu(folderContext, e);
@@ -1080,7 +1085,7 @@ class ServerFolders {
 			BDFDB.createTooltip(EditServersData.name || info.name, guildcopy, {type:"right",selector:(!BDFDB.isObjectEmpty(EditServersData) ? "EditUsers-tooltip" : ""),style:`color: ${fontColor} !important; background-color: ${bgColor} !important; border-color: ${bgColor} !important;`});
 		});
 		guildcopy.addEventListener("click", e => {
-			e.preventDefault();
+			BDFDB.stopEvent(e);
 			if (BDFDB.pressedKeys.includes(46)) this.removeServerFromFolder(info, folderdiv);
 			else {
 				let settings = BDFDB.getAllData(this, "settings");
@@ -1200,7 +1205,7 @@ class ServerFolders {
 		if (!data) return;
 		let includedServers = this.readIncludedServerList(folderdiv);
 		let unreadServers = BDFDB.readUnreadServerList(includedServers);
-		if (unreadServers.length > 0 && data.autounread) BDFDB.clearReadNotifications(unreadServers);
+		if (unreadServers.length > 0 && data.autounread) BDFDB.markGuildAsRead(unreadServers);
 		else {
 			let badgeAmount = 0;
 			let audioEnabled = false;

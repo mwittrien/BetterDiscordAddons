@@ -794,7 +794,7 @@ module.exports = (Plugin, Api, Vendor) => {
 					BDFDB.removeClass(unreaditem, BDFDB.disCN.contextmenuitemdisabled);
 					unreaditem.addEventListener("click", () => {
 						folderContext.remove();
-						BDFDB.clearReadNotifications(unreadServers);
+						BDFDB.markGuildAsRead(unreadServers);
 					});
 				}
 				BDFDB.appendContextMenu(folderContext, e);
@@ -1139,7 +1139,7 @@ module.exports = (Plugin, Api, Vendor) => {
 			if (!data) return;
 			let includedServers = this.readIncludedServerList(folderdiv);
 			let unreadServers = BDFDB.readUnreadServerList(includedServers);
-			if (unreadServers.length > 0 && data.autounread) BDFDB.clearReadNotifications(unreadServers);
+			if (unreadServers.length > 0 && data.autounread) BDFDB.markGuildAsRead(unreadServers);
 			else {
 				let badgeAmount = 0;
 				let audioEnabled = false;
