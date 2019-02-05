@@ -3,15 +3,20 @@
 class PinDMs {
 	getName () {return "PinDMs";}
 
-	getVersion () {return "1.3.0";}
+	getVersion () {return "1.3.1";}
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Allows you to pin DMs, making them appear at the top of your DMs/Guild-list.";}
 
 	initConstructor () {
+		this.changelog = {
+			"added":[["Sorting","You can now sort pinned DMs (both in the guild and channel list) by dragging them around, only works within pinned boundaries"]]
+		};
+		
 		this.patchModules = {
 			"Guilds":"componentDidMount",
+			"PrivateChannel":"componentDidMount",
 			"DirectMessage":["componentDidMount","componentDidUpdate","componentWillUnmount"],
 			"LazyScroller":"render"
 		};
@@ -97,6 +102,22 @@ class PinDMs {
 			}
 			${BDFDB.dotCNS.themedark + BDFDB.dotCN.guild}.pinned:after {
 				background-color: #202225;
+			}
+			${BDFDB.dotCN.dmchannel}.pindms-dragpreview,
+			${BDFDB.dotCN.guild}.pindms-dragpreview {
+				pointer-events: none !important;
+				position: absolute !important;
+				opacity: 0.5 !important;
+				z-index: 10000 !important;
+			}
+			${BDFDB.dotCN.guild}.pindms-dragpreview:before,
+			${BDFDB.dotCN.guild}.pindms-dragpreview:after,
+			${BDFDB.dotCN.guild}.pindms-dragpreview ${BDFDB.dotCN.badge} {
+				display: none !important;
+			}
+			${BDFDB.dotCN.guild}.pindms-dragpreview ${BDFDB.dotCN.avataricon} {
+				background-color: transparent !important;
+				overflow: hidden !important;
 			}`;
 	}
 
@@ -152,25 +173,6 @@ class PinDMs {
 			this.DiscordConstants = BDFDB.WebModules.findByProperties("Permissions", "ActivityTypes", "StatusTypes");
 			this.Animations = BDFDB.WebModules.findByProperties("spring");
 
-			BDFDB.addEventListener(this, document, "click", BDFDB.dotCNS.dmchannels + BDFDB.dotCN.dmchannel, e => {
-				let instance = BDFDB.getReactInstance(e.currentTarget);
-				if (BDFDB.getReactValue(instance, "return.return.return.memoizedProps.ispin")) {
-					let dmsscroller = document.querySelector(BDFDB.dotCNS.dmchannels + BDFDB.dotCN.scroller);
-					if (dmsscroller) {
-						this.oldScrollerPos = dmsscroller.scrollTop;
-						setTimeout(() => {this.oldScrollerPos = null;},1000);
-					}
-				}
-			});
-			BDFDB.addEventListener(this, document, "click", BDFDB.dotCNS.dmchannels + BDFDB.dotCNS.dmchannel + BDFDB.dotCN.dmchannelclose, e => {
-				let instance = BDFDB.getReactInstance(e.currentTarget);
-				if (BDFDB.getReactValue(instance, "return.return.return.return.return.memoizedProps.ispin")) {
-					e.originalEvent.stopPropagation();
-					e.originalEvent.preventDefault();
-					this.removePinnedDM(BDFDB.getReactValue(instance, "return.return.return.return.return.memoizedProps.channel.id")); 
-				}
-			});
-
 			this.forceAdding = true;
 			BDFDB.WebModules.forceAllUpdates(this);
 			delete this.forceAdding;
@@ -205,7 +207,7 @@ class PinDMs {
 				this.unhideNativeDM(info.id);
 				if (info.div) info.div.removeEventListener("contextmenu", info.div.PinDMsContextMenuListener);
 			}
-			BDFDB.removeEles(BDFDB.dotCNS.dms + BDFDB.dotCN.guild + ".pinned");
+			BDFDB.removeEles(BDFDB.dotCNS.dms + BDFDB.dotCN.guild + ".pinned", ".pindms-dragpreview");
 
 			BDFDB.unloadMessage(this);
 		}
@@ -269,8 +271,7 @@ class PinDMs {
 						this.addPinnedDM(id, dms, insertpoint); 
 						this.forceUpdateScroller(dmsscrollerinstance.stateNode);
 					}
-					pinnedDMs[id] = Object.keys(pinnedDMs).length;
-					BDFDB.saveAllData(pinnedDMs, this, "pinnedDMs");
+					this.updatePinnedPositions("pinnedDMs");
 				});
 			}
 			else {
@@ -286,8 +287,7 @@ class PinDMs {
 				pinguilditem.addEventListener("click", () => {
 					instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
 					this.addPinnedRecent(id);
-					pinnedRecents[id] = Object.keys(pinnedRecents).length;
-					BDFDB.saveAllData(pinnedRecents, this, "pinnedRecents");
+					this.updatePinnedPositions("pinnedRecents");
 				});
 			}
 			else {
@@ -296,8 +296,7 @@ class PinDMs {
 					instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
 					BDFDB.removeEles(document.querySelector(`${BDFDB.dotCNS.dms + BDFDB.dotCN.guild}.pinned[channelid="${id}"]`));
 					this.unhideNativeDM(id);
-					delete pinnedRecents[id];
-					BDFDB.saveAllData(pinnedRecents, this, "pinnedRecents");
+					this.updatePinnedPositions("pinnedRecents");
 				});
 			}
 			BDFDB.appendSubMenu(pindmsitem, dmContextSubMenu);
@@ -307,6 +306,65 @@ class PinDMs {
 	processGuilds (instance, wrapper) {
 		let dms = wrapper.querySelector(BDFDB.dotCN.dms);
 		if (dms) for (let id of this.sortAndUpdate("pinnedRecents")) this.addPinnedRecent(id);
+	}
+
+	processPrivateChannel (instance, wrapper) {
+		if (instance && instance.props && instance.props.ispin) {
+			let id = BDFDB.getReactValue(instance, "props.channel.id");
+			wrapper.setAttribute("channelid", id);
+			BDFDB.addClass(wrapper, "pinned");
+			wrapper.querySelector("a").setAttribute("draggable", false);
+			wrapper.addEventListener("click", e => {
+				let dmsscroller = document.querySelector(BDFDB.dotCNS.dmchannels + BDFDB.dotCN.scroller);
+				if (dmsscroller) {
+					this.oldScrollerPos = dmsscroller.scrollTop;
+					setTimeout(() => {this.oldScrollerPos = null;},1000);
+				}
+			});
+			wrapper.querySelector(BDFDB.dotCN.dmchannelclose).addEventListener("click", e => {
+				BDFDB.stopEvent(e);
+				this.removePinnedDM(id);
+			});
+			wrapper.addEventListener("mousedown", e => {
+				let x = e.pageX, y = e.pageY;
+				let mousemove = e2 => {
+					if (Math.sqrt((x - e2.pageX)**2) > 20 || Math.sqrt((y - e2.pageY)**2) > 20) {
+						document.removeEventListener("mousemove", mousemove);
+						document.removeEventListener("mouseup", mouseup);
+						let dmchannelswrap = document.querySelector(`${BDFDB.dotCNS.dmchannels + BDFDB.dotCN.scroller}`);
+						if (!dmchannelswrap) return;
+						let hovele = null;
+						let placeholder = BDFDB.htmlToElement(`<div class="${BDFDB.disCN.dmchannel} dmchannelplaceholder" style="height: 42px; opacity: 1;"><a style="border: 1px dashed #535559 !important;"></a></div>`);
+						let dragpreview = this.createDragPreview(wrapper, e);
+						let dragging = e3 => {
+							BDFDB.removeEles(placeholder);
+							BDFDB.toggleEles(wrapper, false);
+							this.updateDragPreview(dragpreview, e3);
+							hovele = BDFDB.getParentEle(BDFDB.dotCNS.dmchannels + BDFDB.dotCN.dmchannel + ".pinned", e3.target);
+							if (hovele) dmchannelswrap.insertBefore(placeholder, hovele.nextSibling);
+						};
+						let releasing = e3 => {
+							document.removeEventListener("mousemove", dragging);
+							document.removeEventListener("mouseup", releasing);
+							BDFDB.removeEles(placeholder, dragpreview);
+							BDFDB.toggleEles(wrapper, true);
+							if (hovele) {
+								dmchannelswrap.insertBefore(wrapper, hovele.nextSibling);
+								this.updatePinnedPositions("pinnedDMs");
+							}
+						};
+						document.addEventListener("mousemove", dragging);
+						document.addEventListener("mouseup", releasing);
+					}
+				};
+				let mouseup = () => {
+					document.removeEventListener("mousemove", mousemove);
+					document.removeEventListener("mouseup", mouseup);
+				};
+				document.addEventListener("mousemove", mousemove);
+				document.addEventListener("mouseup", mouseup);
+			});
+		}
 	}
 
 	processDirectMessage (instance, wrapper, methodnames) {
@@ -320,8 +378,7 @@ class PinDMs {
 						dmContext.querySelector(".pindm-guild-item").addEventListener("click", () => {
 							BDFDB.removeEles(dmContext);
 							this.addPinnedRecent(instance.props.channel.id);
-							freshPinnedRecents[instance.props.channel.id] = Object.keys(freshPinnedRecents).length;
-							BDFDB.saveAllData(freshPinnedRecents, this, "pinnedRecents");
+							this.updatePinnedPositions("pinnedRecents");
 						});
 						BDFDB.appendContextMenu(dmContext, e);
 					}
@@ -387,7 +444,13 @@ class PinDMs {
 
 	removePinnedDM (id) {
 		if (!id) return;
+		let div = document.querySelector(`${BDFDB.dotCNS.dmchannels + BDFDB.dotCN.dmchannel}.pinned[channelid="${id}"]`);
+		if (div) {
+			BDFDB.removeClass(div, "pinned");
+			div.removeAttribute("channelid");
+		}
 		BDFDB.removeData(id, this, "pinnedDMs");
+		this.updatePinnedPositions("pinnedDMs");
 		let dmsscrollerinstance = BDFDB.getReactInstance(document.querySelector(BDFDB.dotCNS.dmchannels + BDFDB.dotCN.scroller));
 		if (dmsscrollerinstance) {
 			let dms = dmsscrollerinstance.return.return.return.memoizedProps.children;
@@ -418,11 +481,8 @@ class PinDMs {
 		};
 		for (let id in pinnedDMs) sortDM(id);
 		sortedDMs = sortedDMs.filter(n => n);
-		for (let pos in sortedDMs) {
-			pinnedDMs[sortedDMs[pos]] = parseInt(pos);
-			if (this.ChannelUtils.getChannel(sortedDMs[pos])) existingDMs.push(sortedDMs[pos]);
-		}
-		BDFDB.saveAllData(pinnedDMs, this, type);
+		for (let pos in sortedDMs) if (this.ChannelUtils.getChannel(sortedDMs[pos])) existingDMs.push(sortedDMs[pos]);
+		this.updatePinnedPositions(type); 
 		return existingDMs;
 	}
 
@@ -468,14 +528,83 @@ class PinDMs {
 						BDFDB.removeEles(dmdiv, dmContext);
 						this.unhideNativeDM(id);
 						BDFDB.removeData(id, this, "pinnedRecents");
+						this.updatePinnedPositions("pinnedRecents");
 					});
 					BDFDB.appendContextMenu(dmContext, e);
+				});
+				dmdiv.addEventListener("mousedown", e => {
+					let x = e.pageX, y = e.pageY;
+					let mousemove = e2 => {
+						if (Math.sqrt((x - e2.pageX)**2) > 20 || Math.sqrt((y - e2.pageY)**2) > 20) {
+							document.removeEventListener("mousemove", mousemove);
+							document.removeEventListener("mouseup", mouseup);
+							let dmswrap = document.querySelector(`${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.dms}`);
+							if (!dmswrap) return;
+							let hovele = null;
+							let placeholder = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.guild + BDFDB.disCN.guildplaceholder} dmplaceholder"></div>`);
+							let dragpreview = this.createDragPreview(dmdiv, e);
+							let dragging = e3 => {
+								BDFDB.removeEles(placeholder);
+								BDFDB.toggleEles(dmdiv, false);
+								this.updateDragPreview(dragpreview, e3);
+								hovele = BDFDB.getParentEle(BDFDB.dotCNS.dms + BDFDB.dotCN.guild + ".pinned", e3.target);
+								if (hovele) dmswrap.insertBefore(placeholder, hovele.nextSibling);
+							};
+							let releasing = e3 => {
+								document.removeEventListener("mousemove", dragging);
+								document.removeEventListener("mouseup", releasing);
+								BDFDB.removeEles(placeholder, dragpreview);
+								BDFDB.toggleEles(dmdiv, true);
+								if (hovele) {
+									dmswrap.insertBefore(dmdiv, hovele.nextSibling);
+									this.updatePinnedPositions("pinnedRecents");
+								}
+							};
+							document.addEventListener("mousemove", dragging);
+							document.addEventListener("mouseup", releasing);
+						}
+					};
+					let mouseup = () => {
+						document.removeEventListener("mousemove", mousemove);
+						document.removeEventListener("mouseup", mouseup);
+					};
+					document.addEventListener("mousemove", mousemove);
+					document.addEventListener("mouseup", mouseup);
 				});
 				this.addHoverBehaviour(dmdiv);
 				this.updateUnreadCount(id);
 				this.hideNativeDM(id);
 			}
 		}
+	}
+
+	createDragPreview (div, e) {
+		if (!Node.prototype.isPrototypeOf(div)) return;
+		let dragpreview = div.cloneNode(true);
+		BDFDB.addClass(dragpreview, "pindms-dragpreview");
+		document.querySelector(BDFDB.dotCN.appmount).appendChild(dragpreview);
+		let rects = BDFDB.getRects(dragpreview);
+		BDFDB.toggleEles(dragpreview, false);
+		dragpreview.style.setProperty("pointer-events", "none", "important");
+		dragpreview.style.setProperty("left", e.clientX - (rects.width/2) + "px", "important");
+		dragpreview.style.setProperty("top", e.clientY - (rects.height/2) + "px", "important");
+		return dragpreview;
+	}
+
+	updateDragPreview (dragpreview, e) {
+		if (!Node.prototype.isPrototypeOf(dragpreview)) return;
+		BDFDB.toggleEles(dragpreview, true);
+		let rects = BDFDB.getRects(dragpreview);
+		dragpreview.style.setProperty("left", e.clientX - (rects.width/2) + "px", "important");
+		dragpreview.style.setProperty("top", e.clientY - (rects.height/2) + "px", "important");
+	}
+
+	updatePinnedPositions (type) {
+		let newPinned = {}, oldPinned = BDFDB.loadAllData(this, type);
+		let pins = Array.from(document.querySelectorAll(type == "pinnedRecents" ? `${BDFDB.dotCNS.dms + BDFDB.dotCN.guild}.pinned` : `${BDFDB.dotCNS.dmchannels + BDFDB.dotCN.dmchannel}.pinned`)).map(div => {return div.getAttribute("channelid");}).reverse();
+		for (let i in pins) newPinned[pins[i]] = parseInt(i);
+		for (let id in oldPinned) if (newPinned[id] == undefined) newPinned[id] = Object.keys(newPinned).length;
+		BDFDB.saveAllData(newPinned, this, type);
 	}
 
 	updateUnreadCount (id) {
