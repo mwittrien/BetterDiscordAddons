@@ -3,13 +3,17 @@
 class ThemeRepo {
 	getName () {return "ThemeRepo";}
 
-	getVersion () {return "1.7.1";}
+	getVersion () {return "1.7.2";}
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Allows you to preview all themes from the theme repo and download them on the fly. Repo button is in the theme settings.";}
 
 	initConstructor () {
+		this.changelog = {
+			"fixed":[["DiscordPreview","Fixed the issue where the titlebar would overlap with the titlebar in the fake preview"]]
+		};
+		
 		this.patchModules = {
 			"V2C_List":"componentDidMount"
 		};
@@ -259,6 +263,7 @@ class ThemeRepo {
 				position: absolute !important;
 				top: 0 !important;
 			}
+			.discordPreview ~ ${BDFDB.dotCNS.appmount + BDFDB.dotCN.titlebar},
 			.discordPreview ~ ${BDFDB.dotCNS.appmount + BDFDB.dotCN.app} {
 				opacity: 0 !important;
 				visibility: hidden !important;
