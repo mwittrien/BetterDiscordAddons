@@ -188,33 +188,9 @@ class ChatAliases {
 	// begin of own functions
 
 	updateContainer (settingspanel, ele) {
-		var update = false, wordvalue = null, replacevalue = null;
-		var action = ele.getAttribute("action");
+		var wordvalue = null, replacevalue = null, action = ele.getAttribute("action");
 
-		if (action == "add") {
-			var wordinput = settingspanel.querySelector("#input-wordvalue");
-			var replaceinput = settingspanel.querySelector("#input-replacevalue");
-			if (wordinput.value && wordinput.value.trim().length > 0 && replaceinput.value && replaceinput.value.trim().length > 0) {
-				this.saveWord(wordinput.value.trim(), replaceinput.value.trim(), settingspanel.querySelector("#input-file"));
-				wordinput.value = null;
-				replaceinput.value = null;
-				update = true;
-			}
-		}
-		else if (action == "remove") {
-			wordvalue = ele.getAttribute("word");
-			if (wordvalue) {
-				delete this.aliases[wordvalue];
-				update = true;
-			}
-		}
-		else if (action == "removeall") {
-			if (confirm("Are you sure you want to remove all added Words from your list?")) {
-				this.aliases = {};
-				update = true;
-			}
-		}
-		if (update) {
+		var update = () => {
 			BDFDB.saveAllData(this.aliases, this, "words");
 
 			var containerhtml = ``;
@@ -227,6 +203,30 @@ class ChatAliases {
 			}
 			settingspanel.querySelector(".alias-list").innerHTML = containerhtml;
 			BDFDB.initElements(settingspanel, this);
+		};
+
+		if (action == "add") {
+			var wordinput = settingspanel.querySelector("#input-wordvalue");
+			var replaceinput = settingspanel.querySelector("#input-replacevalue");
+			if (wordinput.value && wordinput.value.trim().length > 0 && replaceinput.value && replaceinput.value.trim().length > 0) {
+				this.saveWord(wordinput.value.trim(), replaceinput.value.trim(), settingspanel.querySelector("#input-file"));
+				wordinput.value = null;
+				replaceinput.value = null;
+				update();
+			}
+		}
+		else if (action == "remove") {
+			wordvalue = ele.getAttribute("word");
+			if (wordvalue) {
+				delete this.aliases[wordvalue];
+				update();
+			}
+		}
+		else if (action == "removeall") {
+			BDFDB.openConfirmModal(this, "Are you sure you want to remove all added Words from your list?", () => {
+				this.aliases = {};
+				update();
+			});
 		}
 	}
 	
