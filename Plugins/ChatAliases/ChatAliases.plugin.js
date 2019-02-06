@@ -188,9 +188,7 @@ class ChatAliases {
 	// begin of own functions
 
 	updateContainer (settingspanel, ele) {
-		var wordvalue = null, replacevalue = null, action = ele.getAttribute("action");
-
-		var update = () => {
+		var action = ele.getAttribute("action"), update = () => {
 			BDFDB.saveAllData(this.aliases, this, "words");
 
 			var containerhtml = ``;
@@ -216,7 +214,7 @@ class ChatAliases {
 			}
 		}
 		else if (action == "remove") {
-			wordvalue = ele.getAttribute("word");
+			var wordvalue = ele.getAttribute("word");
 			if (wordvalue) {
 				delete this.aliases[wordvalue];
 				update();
