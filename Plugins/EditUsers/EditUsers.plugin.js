@@ -3,19 +3,26 @@
 class EditUsers {
 	getName () {return "EditUsers";}
 
-	getVersion () {return "3.2.5";}
+	getVersion () {return "3.2.6";}
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users.";}
 
 	initConstructor () {
+		this.changelog = {
+			"improved":[["Affected Elements","Names/Avatars will also now be changed in the member/invite/ban overview in the guildsettings"]]
+		};
+		
 		this.labels = {};
 
 		this.patchModules = {
 			"ChannelTextArea":"componentDidMount",
 			"NameTag":"componentDidMount",
 			"AuditLog":"componentDidMount",
+			"BannedCard":"componentDidMount",
+			"InviteCard":"componentDidMount",
+			"MemberCard":"componentDidMount",
 			"TypingUsers":"componentDidUpdate",
 			"MessageUsername":"componentDidMount",
 			"DirectMessage":"componentDidMount",
@@ -35,8 +42,9 @@ class EditUsers {
 				position: relative;
 				margin-left: 1ch;
 			}
-			${BDFDB.dotCN.userpopoutheadertagwithnickname} ${BDFDB.dotCN.bottag},
-			${BDFDB.dotCN.friendscolumn} ${BDFDB.dotCN.bottag},
+			${BDFDB.dotCNS.guildsettingsmembercard + BDFDB.dotCN.bottag},
+			${BDFDB.dotCNS.userpopoutheadertagwithnickname + BDFDB.dotCN.bottag},
+			${BDFDB.dotCNS.friendscolumn + BDFDB.dotCN.bottag},
 			${BDFDB.dotCN.memberusername} ~ ${BDFDB.dotCN.bottag} {
 				top: 0px;
 			}
@@ -179,6 +187,7 @@ class EditUsers {
 				changeInUserProfil:		{value:true, 	description:"User Profile Modal"},
 				changeInAutoComplete:	{value:true, 	description:"Autocomplete Menu"},
 				changeInAuditLog:		{value:true, 	description:"Audit Log"},
+				changeInMemberLog:		{value:true, 	description:"Member Log"},
 				changeInSearchPopout:	{value:true, 	description:"Search Popout"},
 				changeInUserAccount:	{value:true, 	description:"Your Account Information"}
 			}
@@ -489,9 +498,7 @@ class EditUsers {
 			if (username) {
 				let channel = this.ChannelUtils.getChannel(message.channel_id) || {};
 				this.changeName(message.author, username, channel.guild_id);
-				if (!BDFDB.containsClass(wrapper.parentElement, BDFDB.disCN.messageheadercompact)) {
-					this.changeAvatar(message.author, this.getAvatarDiv(wrapper));
-				}
+				if (!BDFDB.containsClass(wrapper.parentElement, BDFDB.disCN.messageheadercompact)) this.changeAvatar(message.author, this.getAvatarDiv(wrapper));
 				let messagegroup = BDFDB.getParentEle(BDFDB.dotCN.messagegroup, wrapper);
 				this.addTag(message.author, wrapper, BDFDB.disCN.bottagmessage + " " + (BDFDB.containsClass(messagegroup, BDFDB.disCN.messagegroupcozy) ? BDFDB.disCN.bottagmessagecozy : BDFDB.disCN.bottagmessagecompact));
 			}
@@ -505,6 +512,37 @@ class EditUsers {
 			let guild_id = BDFDB.getReactValue(instance, "_reactInternalFiber.return.memoizedProps.guildId");
 			if (hooks.length > 0) this.changeName2(log.user, hooks[0].firstChild, guild_id);
 			if (hooks.length > 1 && log.targetType == "USER") this.changeName2(log.target, hooks[1].firstChild, guild_id);
+		}
+	}
+
+	processBannedCard (instance, wrapper) {
+		if (instance.props && instance.props.user && instance.props.guild) {
+			let username = wrapper.querySelector(BDFDB.dotCN.guildsettingsbannedusername);
+			if (username) {
+				this.changeName3(instance.props.user, username, BDFDB.disCN.guildsettingsbanneddiscrim); 
+				this.changeAvatar(instance.props.user, this.getAvatarDiv(wrapper));
+			}
+		}
+	}
+
+	processInviteCard (instance, wrapper) {
+		let invite = BDFDB.getReactValue(instance, "props.invite");
+		if (invite && invite.inviter && invite.guild) {
+			let username = wrapper.querySelector(BDFDB.dotCN.guildsettingsinviteusername);
+			if (username) {
+				this.changeName2(invite.inviter, username, invite.guild.id);
+				this.changeAvatar(invite.inviter, this.getAvatarDiv(wrapper));
+			}
+		}
+	}
+
+	processMemberCard (instance, wrapper) {
+		if (instance.props && instance.props.user && instance.props.guild) {
+			let username = wrapper.querySelector(BDFDB.dotCN.guildsettingsmembername);
+			if (username) {
+				this.changeName2(instance.props.user, username, instance.props.guild.id);
+				this.changeAvatar(instance.props.user, this.getAvatarDiv(wrapper));
+			}
 		}
 	}
 
@@ -660,12 +698,7 @@ class EditUsers {
 			username.style.setProperty("color", BDFDB.colorCONVERT(data.color1 || (usemembercolor ? member.colorString : null), "RGB"), "important");
 			username.style.setProperty("background-color", BDFDB.colorCONVERT(data.color2, "RGB"), "important");
 			BDFDB.setInnerText(username, data.name || (usenick ? member.nick : info.username));
-			for (let tag of username.parentElement.querySelectorAll(BDFDB.dotCN.bottag)) {
-				let invert = tag.className.indexOf(BDFDB.disCN.bottaginvert) > -1;
-				let tagcolor =  BDFDB.colorCONVERT(data.color1 || (isBRCenabled || BDFDB.containsClass(tag, "owner-tag-rolecolor") ? member.colorString : null), "RGB");
-				tagcolor = BDFDB.colorISBRIGHT(tagcolor) ? BDFDB.colorCHANGE(tagcolor, -0.3) : tagcolor;
-				tag.style.setProperty(invert ? "color" : "background-color", tagcolor, "important");
-			}
+			this.changeBotTags(data, username, member);
 			if (data.name || data.color1 || data.color2) {
 				username.setAttribute("changed-by-editusers", true);
 				username.EditUsersChangeObserver = new MutationObserver((changes, _) => {
@@ -686,6 +719,7 @@ class EditUsers {
 			let member = this.MemberUtils.getMember(guildid, info.id) || {};
 			username.style.setProperty("color", BDFDB.colorCONVERT(data.color1 || (BDFDB.isPluginEnabled("BetterRoleColors") ? member.colorString : null), "RGB"), "important");
 			BDFDB.setInnerText(username, data.name || member.nick || info.username);
+			this.changeBotTags(data, username, member);
 			if (data.name || data.color1) {
 				username.setAttribute("changed-by-editusers", true);
 				username.EditUsersChangeObserver = new MutationObserver((changes, _) => {
@@ -705,7 +739,7 @@ class EditUsers {
 		if (data.name || data.color1 || username.getAttribute("changed-by-editusers")) {
 			let color1 = BDFDB.colorCONVERT(data.color1, "RGB");
 			if (adddisc) {
-				username.innerHTML = `<span ${color1 ? 'style="color:' + color1 + '!important;"': ''}>${BDFDB.encodeToHTML(data.name || info.username)}</span><span>#${info.discriminator}</span>`;
+				username.innerHTML = `<span ${color1 ? 'style="color:' + color1 + ' !important;"': ''}>${BDFDB.encodeToHTML(data.name || info.username)}</span><span${typeof adddisc == "string" ? ' class="' + adddisc + '"' : ''}>#${info.discriminator}</span>`;
 			}
 			else {
 				username.style.setProperty("color", color1, "important");
@@ -720,6 +754,15 @@ class EditUsers {
 				username.EditUsersChangeObserver.observe(username, {attributes:true});
 			}
 			else username.removeAttribute("changed-by-editusers");
+		}
+	}
+	
+	changeBotTags (data, username, member) {
+		for (let tag of username.parentElement.querySelectorAll(BDFDB.dotCN.bottag)) {
+			let invert = tag.className.indexOf(BDFDB.disCN.bottaginvert) > -1;
+			let tagcolor =  BDFDB.colorCONVERT(data.color1 || (isBRCenabled || BDFDB.containsClass(tag, "owner-tag-rolecolor") ? member.colorString : null), "RGB");
+			tagcolor = BDFDB.colorISBRIGHT(tagcolor) ? BDFDB.colorCHANGE(tagcolor, -0.3) : tagcolor;
+			tag.style.setProperty(invert ? "color" : "background-color", tagcolor, "important");
 		}
 	}
 
@@ -898,7 +941,10 @@ class EditUsers {
 		let data = BDFDB.loadData(id, this, "users");
 		if (!data) return {};
 		let allenabled = true, settings = BDFDB.getAllData(this, "settings");
-		for (let i in settings) if (!settings[i]) allenabled = false;
+		for (let i in settings) if (!settings[i]) {
+			allenabled = false;
+			break;
+		}
 		if (allenabled) return data;
 		let key = null, ele = null;
 		if (!BDFDB.containsClass(wrapper, BDFDB.disCN.mention) && BDFDB.getParentEle(BDFDB.dotCN.messagegroup, wrapper)) key = "changeInChatWindow";
@@ -918,6 +964,9 @@ class EditUsers {
 		else if (BDFDB.getParentEle(BDFDB.dotCN.userprofileheader, wrapper)) key = "changeInUserProfil";
 		else if (BDFDB.getParentEle(BDFDB.dotCN.autocomplete, wrapper)) key = "changeInAutoComplete";
 		else if (BDFDB.getParentEle(BDFDB.dotCN.auditlog, wrapper)) key = "changeInAuditLog";
+		else if (BDFDB.getParentEle(BDFDB.dotCN.guildsettingsbannedcard, wrapper)) key = "changeInMemberLog";
+		else if (BDFDB.getParentEle(BDFDB.dotCN.guildsettingsinvitecard, wrapper)) key = "changeInMemberLog";
+		else if (BDFDB.getParentEle(BDFDB.dotCN.guildsettingsmembercard, wrapper)) key = "changeInMemberLog";
 		else if (BDFDB.getParentEle(BDFDB.dotCN.searchpopout, wrapper) || BDFDB.getParentEle(BDFDB.dotCN.searchpopoutdmaddpopout, wrapper)) key = "changeInSearchPopout";
 		else if (BDFDB.getParentEle(BDFDB.dotCN.accountinfo, wrapper)) key = "changeInUserAccount";
 
