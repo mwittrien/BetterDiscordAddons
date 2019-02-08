@@ -3,13 +3,17 @@
 class NotificationSounds {
 	getName () {return "NotificationSounds";}
 
-	getVersion () {return "3.2.5";}
+	getVersion () {return "3.2.6";}
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Allows you to replace the native sounds of Discord with your own";}
 
 	initConstructor () {
+		this.changelog = {
+			"fixed":[["Mention/DM sound","Mention and DM sounds no longer play when the message occured in the current channel while Discord is focused"]]
+		};
+		
 		this.patchModules = {
 			"IncomingCalls":"componentDidMount",
 			"PrivateChannelCall":"componentDidMount"
@@ -198,12 +202,14 @@ class NotificationSounds {
 			BDFDB.loadMessage(this);
 
 			this.ChannelSettingsUtils = BDFDB.WebModules.findByProperties("isGuildOrCategoryOrChannelMuted");
+			this.LastChannelStore = BDFDB.WebModules.findByProperties("getLastSelectedChannelId");
 
 			BDFDB.WebModules.patch(BDFDB.WebModules.findByProperties("receiveMessage"), "receiveMessage", this, {before: e => {
 				let message = e.methodArguments[1];
 				let guildid = message.guild_id ? message.guild_id : null;
 				if (!this.ChannelSettingsUtils.isGuildOrCategoryOrChannelMuted(guildid, message.channel_id) && message.author.id != BDFDB.myData.id) {
-					if (!guildid) {
+					if (document.hasFocus() && this.LastChannelStore.getChannelId() == message.channel_id) return null;
+					else if (!guildid) {
 						this.fireEvent("dm");
 						this.playAudio("dm");
 					}
