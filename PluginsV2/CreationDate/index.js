@@ -51,7 +51,7 @@ module.exports = (Plugin, Api, Vendor) => {
 		onStart () {
 			if (global.BDFDB && global.BDFDB.myPlugins && typeof global.BDFDB.myPlugins == "object") global.BDFDB.myPlugins[this.name] = this;
 			var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
-			if (!global.BDFDB || typeof BDFDB != "object" || performance.now() - BDFDB.creationTime > 600000e.now() - BDFDB.creationTime > 600000) {
+			if (!global.BDFDB || typeof BDFDB != "object" || performance.now() - BDFDB.creationTime > 600000) {
 				if (libraryScript) libraryScript.remove();
 				libraryScript = document.createElement("script");
 				libraryScript.setAttribute("type", "text/javascript");
