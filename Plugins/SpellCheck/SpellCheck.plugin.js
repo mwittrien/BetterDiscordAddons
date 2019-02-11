@@ -3,13 +3,17 @@
 class SpellCheck {
 	getName () {return "SpellCheck";}
 
-	getVersion () {return "1.3.1";}
+	getVersion () {return "1.3.2";}
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Adds a spellcheck to all textareas. Select a word and rightclick it to add it to your dictionary.";}
 
 	initConstructor () {
+		this.changelog = {
+			"fixed":[["Plugin not working","Fixed a bug that could break the plugin and render SpellCheck unusable"]]
+		};
+		
 		this.patchModules = {
 			"ChannelTextArea":"componentDidMount"
 		};
@@ -224,7 +228,7 @@ class SpellCheck {
 			textarea.setAttribute("spellcheck", !BDFDB.getData("disableDiscordSpellcheck", this, "settings"));
 
 			textarea.parentElement.appendChild(spellcheck);
-			wrapper.addClass("spellcheck-added");
+			BDFDB.addClass(wrapper, "spellcheck-added");
 
 			updateSpellcheck();
 			BDFDB.addEventListener(this, textarea, "keyup", e => {
