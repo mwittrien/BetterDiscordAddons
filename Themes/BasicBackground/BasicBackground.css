@@ -1,3 +1,5 @@
+@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/BlurpleRecolor/BlurpleRecolor.css);
+
 :root {
 	--dtransparencycolor: 0,0,0;
 	--dtransparencyalpha: 0.15;
@@ -20,8 +22,6 @@
 	--vpopoutblur: var(--popoutblur,var(--dblur));
 	--vbackdropblur: var(--backdropblur,var(--dblur));
 }
-
-@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/BlurpleRecolor/BlurpleRecolor.css);
 
 .container-16j22k:before,
 .appMount-3lHmkl:before {
