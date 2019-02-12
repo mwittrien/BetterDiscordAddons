@@ -111,6 +111,7 @@
 }
 
 /* BUTTONS */
+.bd-modal-wrapper .footer button,
 .colorBrand-3pXr91 .spinnerItem-3GlVyU,
 .platform-iik236.active-iLSdWQ .downloadButton-1bWXpg,
 .action-1lSjCi.create-3jownz .actionButton-2PeQbJ,
@@ -139,6 +140,7 @@
 .lookLink-9FtZy-.colorBrand-3pXr91:hover .contents-18-Yxp {
 	background-image: linear-gradient(0deg,transparent,transparent 1px,rgb(var(--vaccentcolor)) 0,rgb(var(--vaccentcolor)) 2px,transparent 0) !important;
 }
+.bd-modal-wrapper .footer button:hover,
 .platform-iik236.active-iLSdWQ .downloadButton-1bWXpg:hover,
 .action-1lSjCi.create-3jownz .actionButton-2PeQbJ:hover,
 .lookFilled-1Gx00P.colorBrand-3pXr91:hover,
