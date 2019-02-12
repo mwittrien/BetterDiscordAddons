@@ -1,3 +1,8 @@
+:root {
+	--daccentcolor: 114,137,218;
+	--vaccentcolor: var(--accentcolor,var(--daccentcolor));
+}
+
 #app-mount .regionSelectModal-12e-57,
 #app-mount .wrapper-2ZbzR9,
 #app-mount .slide-2pHaq5 {
@@ -56,14 +61,14 @@
 	background-color: #2F3136;
 }
 #app-mount .uploadModal-2ifh8j .checked-3_4uQ9 {
-	background-color: #7289DA;
+	background-color: rgb(var(--vaccentcolor));
 }
 #app-mount .uploadModal-2ifh8j .checked-3_4uQ9 polyline {
 	stroke: #FFF;
 }
 #app-mount .uploadModal-2ifh8j .button-38aScr.lookInverted-2D7oAl.colorBrand-3pXr91 {
 	color: #FFF !important;
-	background-color: #7289DA;
+	background-color: rgb(var(--vaccentcolor));
 }
 #app-mount .uploadModal-2ifh8j .button-38aScr.lookInverted-2D7oAl.colorBrand-3pXr91:hover {
 	background-color: #677bc4;
