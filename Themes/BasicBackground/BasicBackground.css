@@ -942,18 +942,6 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	opacity: 0.2 !important;
 }
 
-.message-15tBk4 strong,
-.wrapper-3WhCwL:not([style]) {
-	color: rgba(var(--vaccentcolor),1) !important;
-	background: rgba(var(--vaccentcolor),0.1) !important;
-}
-.wrapper-3WhCwL:not([style]):hover {
-	color: rgb(255,255,255) !important;
-	background: rgba(var(--vaccentcolor),1) !important;
-}
-.wrapper-3WhCwL:hover {
-	text-decoration: underline !important;
-}
 .isMentioned-N-h9aa .wrapper-3WhCwL {
 	background: transparent !important;
 }
