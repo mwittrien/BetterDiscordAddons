@@ -3,7 +3,7 @@
 class PinDMs {
 	getName () {return "PinDMs";}
 
-	getVersion () {return "1.3.1";}
+	getVersion () {return "1.3.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class PinDMs {
 
 	initConstructor () {
 		this.changelog = {
-			"added":[["Sorting","You can now sort pinned DMs (both in the guild and channel list) by dragging them around, only works within pinned boundaries"]]
+			"improved":[["Selected Channel","Pinned channels are no longer also marked as selected in the normal channel list"]]
 		};
 		
 		this.patchModules = {
@@ -311,8 +311,8 @@ class PinDMs {
 	processPrivateChannel (instance, wrapper) {
 		if (instance && instance.props && instance.props.ispin) {
 			let id = BDFDB.getReactValue(instance, "props.channel.id");
-			wrapper.setAttribute("channelid", id);
 			BDFDB.addClass(wrapper, "pinned");
+			BDFDB.removeClass(BDFDB.getChannelDiv(id), BDFDB.disCN.dmchannelselected);
 			wrapper.querySelector("a").setAttribute("draggable", false);
 			wrapper.addEventListener("click", e => {
 				let dmsscroller = document.querySelector(BDFDB.dotCNS.dmchannels + BDFDB.dotCN.scroller);
@@ -475,11 +475,12 @@ class PinDMs {
 	sortAndUpdate (type) {
 		let pinnedDMs = BDFDB.loadAllData(this, type);
 		delete pinnedDMs[""];
-		let sortedDMs = [], existingDMs = [], sortDM = (id) => {
-			if (typeof sortedDMs[pinnedDMs[id]] == "undefined") sortedDMs[pinnedDMs[id]] = id;
-			else sortDM(sortedDMs, pinnedDMs[id]+1, id);
+		delete pinnedDMs["null"];
+		let sortedDMs = [], existingDMs = [], sortDM = (id, pos) => {
+			if (typeof sortedDMs[pos] == "undefined") sortedDMs[pos] = id;
+			else sortDM(id, pos+1);
 		};
-		for (let id in pinnedDMs) sortDM(id);
+		for (let id in pinnedDMs) sortDM(id, pinnedDMs[id]);
 		sortedDMs = sortedDMs.filter(n => n);
 		for (let pos in sortedDMs) if (this.ChannelUtils.getChannel(sortedDMs[pos])) existingDMs.push(sortedDMs[pos]);
 		this.updatePinnedPositions(type); 
@@ -602,7 +603,7 @@ class PinDMs {
 	updatePinnedPositions (type) {
 		let newPinned = {}, oldPinned = BDFDB.loadAllData(this, type);
 		let pins = Array.from(document.querySelectorAll(type == "pinnedRecents" ? `${BDFDB.dotCNS.dms + BDFDB.dotCN.guild}.pinned` : `${BDFDB.dotCNS.dmchannels + BDFDB.dotCN.dmchannel}.pinned`)).map(div => {return div.getAttribute("channelid");}).reverse();
-		for (let i in pins) newPinned[pins[i]] = parseInt(i);
+		for (let i in pins) if (pins[i]) newPinned[pins[i]] = parseInt(i);
 		for (let id in oldPinned) if (newPinned[id] == undefined) newPinned[id] = Object.keys(newPinned).length;
 		BDFDB.saveAllData(newPinned, this, type);
 	}
