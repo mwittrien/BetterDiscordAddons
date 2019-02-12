@@ -214,6 +214,14 @@
 	box-shadow: inset 0 0 0 3px rgb(var(--vaccentcolor)), inset 0 0 0 4px #2f3136 !important;
 }
 
+/* SCROLLER */
+.theme-light .scrollerThemed-2oenus.themedWithTrack-q8E3vB .scroller-2FKFPG::-webkit-scrollbar-thumb,
+.scrollerThemed-2oenus.themeLight-1_DWyY .scroller-2FKFPG::-webkit-scrollbar-thumb, 
+.theme-dark .scrollerThemed-2oenus.themeLight-1_DWyY .scroller-2FKFPG::-webkit-scrollbar-thumb, 
+.theme-light .scrollerWrap-2lJEkd .scroller-2FKFPG::-webkit-scrollbar-thumb {
+	background-color: rgb(var(--vaccentcolor));
+}
+
 /* FONT */
 [style^="color: rgb(114, 137, 218)"],
 [style*=" color: rgb(114, 137, 218)"],
