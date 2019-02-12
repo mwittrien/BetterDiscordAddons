@@ -810,8 +810,8 @@ class ServerFolders {
 		let folderdiv = BDFDB.htmlToElement(this.folderIconMarkup);
 		let serversandfolders = document.querySelectorAll(`div${BDFDB.dotCN.guildseparator}:not(.folderseparator) ~ div${BDFDB.dotCN.guild}`);
 		let insertnode = serversandfolders[data.position > serversandfolders.length - 1 ? serversandfolders.length - 1 : data.position];
-		if (!insertNode) insertNode = document.querySelector(`div${BDFDB.dotCN.guildseparator}:not(.folderseparator) ~ div${BDFDB.dotCN.guildsadd}`);
-		if (insertNode) insertnode.parentElement.insertBefore(folderdiv, insertnode);
+		if (!insertnode) insertnode = document.querySelector(`div${BDFDB.dotCN.guildseparator}:not(.folderseparator) ~ div${BDFDB.dotCN.guildsadd}`);
+		if (insertnode) insertnode.parentElement.insertBefore(folderdiv, insertnode);
 
 		folderdiv.id = data.folderID;
 		BDFDB.addClass(folderdiv, "closed");
