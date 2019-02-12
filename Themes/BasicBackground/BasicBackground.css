@@ -718,8 +718,6 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .root-SR8cQa .buttonInvertedDefault-1UdvTn {
 	background: rgb(var(--vaccentcolor)) !important;
 }
-
-.result-3w1ZcL[style*="background-color"],
 .button-2b6hmh:hover,
 .button-2KyEfG:hover,
 .wrapper-3JPufy button:hover,
@@ -805,13 +803,6 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	background: rgba(var(--vaccentcolor), calc(var(--vtransparencyalpha) * 3)) !important;
 }
 
-.result-3w1ZcL[style*="background-color: rgb(146, 154, 250)"] {
-	filter: brightness(125%);
-}
-.result-3w1ZcL[style*="background-color: rgb(179, 174, 255)"] {
-	filter: brightness(150%);
-}
-
 .guildIconExpired-2Qcq05 {
 	background-color: rgba(47,49,54,.6) !important;
 }
@@ -851,10 +842,6 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 }
 .round-2jCFai.checked-3_4uQ9 polyline[stroke="#43b581"] {
 	stroke: rgb(var(--vaccentcolor)) !important;
-}
-
-.result-3w1ZcL:hover:after {
-	box-shadow: inset 0 0 0 3px rgb(var(--vaccentcolor)), inset 0 0 0 4px #2f3136 !important;
 }
 
 .search-bar {
