@@ -259,7 +259,7 @@ class DisplayServersAsChannels {
 			BDFDB.addClass(appcontainer, "DSAC-styled");
 		}
 		else {
-			console.error(`%c[${this.name}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
+			console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
 		}
 	}
 
