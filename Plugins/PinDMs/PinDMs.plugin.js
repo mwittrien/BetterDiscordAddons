@@ -311,6 +311,7 @@ class PinDMs {
 	processPrivateChannel (instance, wrapper) {
 		if (instance && instance.props && instance.props.ispin) {
 			let id = BDFDB.getReactValue(instance, "props.channel.id");
+			wrapper.setAttribute("channelid", id);
 			BDFDB.addClass(wrapper, "pinned");
 			BDFDB.removeClass(BDFDB.getChannelDiv(id), BDFDB.disCN.dmchannelselected);
 			wrapper.querySelector("a").setAttribute("draggable", false);
