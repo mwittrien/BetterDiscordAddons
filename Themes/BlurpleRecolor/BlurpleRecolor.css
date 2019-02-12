@@ -205,7 +205,7 @@
 	background-color: rgb(var(--vaccentcolor));
 }
 .result-3w1ZcL[style*="background-color"] {
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--vaccentcolor)) !important;
 }
 .result-3w1ZcL[style*="background-color: rgb(146, 154, 250)"] {
 	filter: brightness(125%);
