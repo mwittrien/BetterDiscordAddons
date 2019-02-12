@@ -205,8 +205,7 @@
 .botTagInvert-18-95s:not([style]),
 .betaTag-1tngRx,
 .improved-1F5LIN,
-.regionSelect-3lf4eE:not(:hover) button,
-.itemDefault-3Jdr52[style*="rgb(114, 137, 218)"] {
+.regionSelect-3lf4eE:not(:hover) button {
 	color: rgb(var(--vaccentcolor)) !important;
 }
 [style^="color: rgba(114, 137, 218, 0.9)"],
