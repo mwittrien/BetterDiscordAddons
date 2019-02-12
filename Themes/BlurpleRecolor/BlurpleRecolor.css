@@ -183,7 +183,8 @@
 }
 
 /* FONT */
-[style="color: rgb(114, 137, 218)"],
+[style^="color: rgb(114, 137, 218)"],
+[style*=" color: rgb(114, 137, 218)"],
 .item-1GzJrl.invite-271nFU,
 .noticeBrand-3nQBC_ .button-1MICoQ:hover,
 .reactionMe-23mbRf .reactionCount-2ddRoS,
@@ -208,34 +209,44 @@
 .itemDefault-3Jdr52[style*="rgb(114, 137, 218)"] {
 	color: rgb(var(--vaccentcolor)) !important;
 }
-[style="color: rgba(114, 137, 218, 0.9)"] {
+[style^="color: rgba(114, 137, 218, 0.9)"],
+[style*=" color: rgba(114, 137, 218, 0.9)"] {
 	color: rgba(var(--vaccentcolor),0.9) !important;
 }
-[style="color: rgba(114, 137, 218, 0.8)"] {
+[style^="color: rgba(114, 137, 218, 0.8)"],
+[style*=" color: rgba(114, 137, 218, 0.8)"] {
 	color: rgba(var(--vaccentcolor),0.8) !important;
 }
-[style="color: rgba(114, 137, 218, 0.7)"] {
+[style^="color: rgba(114, 137, 218, 0.7)"],
+[style*=" color: rgba(114, 137, 218, 0.7)"] {
 	color: rgba(var(--vaccentcolor),0.7) !important;
 }
-[style="color: rgba(114, 137, 218, 0.6)"] {
+[style^="color: rgba(114, 137, 218, 0.6)"],
+[style*=" color: rgba(114, 137, 218, 0.6)"] {
 	color: rgba(var(--vaccentcolor),0.6) !important;
 }
-[style="color: rgba(114, 137, 218, 0.5)"] {
+[style^="color: rgba(114, 137, 218, 0.5)"],
+[style*=" color: rgba(114, 137, 218, 0.5)"] {
 	color: rgba(var(--vaccentcolor),0.5) !important;
 }
-[style="color: rgba(114, 137, 218, 0.4)"] {
+[style^="color: rgba(114, 137, 218, 0.4)"],
+[style*=" color: rgba(114, 137, 218, 0.4)"] {
 	color: rgba(var(--vaccentcolor),0.4) !important;
 }
-[style="color: rgba(114, 137, 218, 0.3)"] {
+[style^="color: rgba(114, 137, 218, 0.3)"],
+[style*=" color: rgba(114, 137, 218, 0.3)"] {
 	color: rgba(var(--vaccentcolor),0.3) !important;
 }
-[style="color: rgba(114, 137, 218, 0.2)"] {
+[style^="color: rgba(114, 137, 218, 0.2)"],
+[style*=" color: rgba(114, 137, 218, 0.2)"] {
 	color: rgba(var(--vaccentcolor),0.2) !important;
 }
-[style="color: rgba(114, 137, 218, 0.1)"] {
+[style^="color: rgba(114, 137, 218, 0.1)"],
+[style*=" color: rgba(114, 137, 218, 0.1)"] {
 	color: rgba(var(--vaccentcolor),0.1) !important;
 }
-[style="color: rgba(114, 137, 218, 0.14902)"] {
+[style^="color: rgba(114, 137, 218, 0.14902)"],
+[style*=" color: rgba(114, 137, 218, 0.14902)"] {
 	color: rgba(var(--vaccentcolor), 0.14902) !important;
 }
 
