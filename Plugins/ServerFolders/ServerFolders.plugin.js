@@ -386,7 +386,7 @@ class ServerFolders {
 			BDFDB.WebModules.forceAllUpdates(this, "Guilds");
 		}
 		else {
-			console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
+			console.error(`%c[${this.name}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
 		}
 	}
 
@@ -810,7 +810,8 @@ class ServerFolders {
 		let folderdiv = BDFDB.htmlToElement(this.folderIconMarkup);
 		let serversandfolders = document.querySelectorAll(`div${BDFDB.dotCN.guildseparator}:not(.folderseparator) ~ div${BDFDB.dotCN.guild}`);
 		let insertnode = serversandfolders[data.position > serversandfolders.length - 1 ? serversandfolders.length - 1 : data.position];
-		insertnode.parentElement.insertBefore(folderdiv, insertnode);
+		if (!insertNode) insertNode = document.querySelector(`div${BDFDB.dotCN.guildseparator}:not(.folderseparator) ~ div${BDFDB.dotCN.guildsadd}`);
+		if (insertNode) insertnode.parentElement.insertBefore(folderdiv, insertnode);
 
 		folderdiv.id = data.folderID;
 		BDFDB.addClass(folderdiv, "closed");
