@@ -64,7 +64,7 @@
 	background-color: rgb(var(--vaccentcolor));
 }
 #app-mount .uploadModal-2ifh8j .checked-3_4uQ9 polyline {
-	stroke: #FFF;
+	stroke: #FFF !important;
 }
 #app-mount .uploadModal-2ifh8j .button-38aScr.lookInverted-2D7oAl.colorBrand-3pXr91 {
 	color: #FFF !important;
