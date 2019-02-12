@@ -112,7 +112,7 @@
 
 /* BUTTONS */
 .bd-modal-wrapper .footer button,
-.colorBrand-3pXr91 .spinnerItem-3GlVyU,
+.colorBrand-3pXr91:not(.lookFilled-1Gx00P) .spinnerItem-3GlVyU,
 .platform-iik236.active-iLSdWQ .downloadButton-1bWXpg,
 .action-1lSjCi.create-3jownz .actionButton-2PeQbJ,
 .lookFilled-1Gx00P.hoverBrand-1_Fxlk.hasHover-3X1-zV:hover,
@@ -495,7 +495,7 @@ a {
 .sampleLink-KPFu3I {
 	color: rgb(var(--vlinkcolor)) !important;
 }
-.colorLink-35jkBc .spinnerItem-3GlVyU,
+.colorLink-35jkBc:not(.lookFilled-1Gx00P) .spinnerItem-3GlVyU,
 .lookFilled-1Gx00P.hoverLink-i1fEKS.hasHover-3X1-zV:hover,
 .lookFilled-1Gx00P.colorLink-35jkBc {
 	background: rgb(var(--vlinkcolor)) !important;
