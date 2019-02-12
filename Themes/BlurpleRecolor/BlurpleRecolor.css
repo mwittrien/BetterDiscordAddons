@@ -189,11 +189,14 @@
 	border-color: rgba(255,255,255,0.5);
 }
 .uploadModal-2ifh8j .inner-zqa7da {
-    background-color: rgba(114,118,125,.3);
+	background-color: rgba(114,118,125,.3);
 }
 .uploadModal-2ifh8j #charcounter {
 	color: rgba(255,255,255);
 	opacity: 0.7;
+}
+.uploadModal-2ifh8j .inner-3nWsbo .file-34mY5K .icon-kyxXVr.image-2yrs5j {
+	border-color: rgb(var(--vaccentcolor)) !important;
 }
 
 /* GIF MENU */
@@ -220,6 +223,48 @@
 .theme-dark .scrollerThemed-2oenus.themeLight-1_DWyY .scroller-2FKFPG::-webkit-scrollbar-thumb, 
 .theme-light .scrollerWrap-2lJEkd .scroller-2FKFPG::-webkit-scrollbar-thumb {
 	background-color: rgb(var(--vaccentcolor));
+}
+
+/* EMOJI PICKER */
+.emojiPicker-3m1S-j,
+#bda-qem,
+#bda-qem-twitch-container,
+#bda-qem-favourite-container {
+	border: 1px solid hsla(0,0%,74.9%,.2);
+}
+.emojiPicker-3m1S-j,
+.emojiPicker-3m1S-j .dimmer-3iH-5D,
+#bda-qem,
+#bda-qem-twitch-container,
+#bda-qem-favourite-container {
+	width: 376px;
+}
+#bda-qem-twitch-container,
+#bda-qem-favourite-container {
+	height: 326px;
+}
+#bda-qem {
+	border-bottom: none;
+}
+#bda-qem button {
+	border: none;
+}
+.emojiPicker-3m1S-j:not(:only-child),
+#bda-qem-twitch-container:not(:only-child),
+#bda-qem-favourite-container:not(:only-child) {
+	border-top: none;
+}
+.emojiPicker-3m1S-j .item-16cXuq.selected-39BZ4S {
+	border-color: rgb(var(--vaccentcolor)) !important;
+}
+.emojiPicker-3m1S-j .categories-1feg4n .item-16cXuq.flags-3peqg9.selected-39BZ4S:after, 
+.emojiPicker-3m1S-j .categories-1feg4n .item-16cXuq.flags-3peqg9:hover:after {
+	content: "";
+	position: absolute;
+	width: 27px;
+	height: 41px;
+	background: rgb(var(--vaccentcolor)) !important;
+	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" width="22px" height="22px" viewBox="0 0 22 22" version="1.1"><!-- Generator: Sketch 3.5.2 (25235) - http://www.bohemiancoding.com/sketch --><title>emoji-flags-color</title><desc>Created with Sketch.</desc><defs><path id="path-1" d="M0,0 L18,0 L18,16 L0,16 L0,0 Z"/></defs><g id="General-Playground" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage"><g id="emoji-flags-color" sketch:type="MSArtboardGroup"><g id="Page-1" sketch:type="MSLayerGroup" transform="translate(2.000000, 3.000000)"><path d="M5,1 L5,14 L9,11 L13,14 L13,1 L5,1 Z" id="Fill-9" fill="#738BD7" sketch:type="MSShapeGroup" mask="url(#mask-2)"/></g></g></g></svg>') center/21px 21px no-repeat;
 }
 
 /* FONT */
@@ -369,9 +414,7 @@
 
 /* BORDER */
 [style*="border-color: rgb(114, 137, 218)"],
-.uploadModal-2ifh8j .inner-3nWsbo .file-34mY5K .icon-kyxXVr.image-2yrs5j,
 .platform-iik236.active-iLSdWQ,
-.emojiPicker-3m1S-j .item-16cXuq.selected-39BZ4S,
 .imageSelected-4Kl81J,
 .focused-1mmYsC,
 .overlappingBorder-3aFng4,
