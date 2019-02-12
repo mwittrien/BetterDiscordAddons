@@ -183,6 +183,7 @@
 }
 
 /* FONT */
+[style="color: rgb(114, 137, 218)"],
 .item-1GzJrl.invite-271nFU,
 .noticeBrand-3nQBC_ .button-1MICoQ:hover,
 .reactionMe-23mbRf .reactionCount-2ddRoS,
@@ -206,6 +207,36 @@
 .regionSelect-3lf4eE:not(:hover) button,
 .itemDefault-3Jdr52[style*="rgb(114, 137, 218)"] {
 	color: rgb(var(--vaccentcolor)) !important;
+}
+[style="color: rgba(114, 137, 218, 0.9)"] {
+	color: rgba(var(--vaccentcolor),0.9) !important;
+}
+[style="color: rgba(114, 137, 218, 0.8)"] {
+	color: rgba(var(--vaccentcolor),0.8) !important;
+}
+[style="color: rgba(114, 137, 218, 0.7)"] {
+	color: rgba(var(--vaccentcolor),0.7) !important;
+}
+[style="color: rgba(114, 137, 218, 0.6)"] {
+	color: rgba(var(--vaccentcolor),0.6) !important;
+}
+[style="color: rgba(114, 137, 218, 0.5)"] {
+	color: rgba(var(--vaccentcolor),0.5) !important;
+}
+[style="color: rgba(114, 137, 218, 0.4)"] {
+	color: rgba(var(--vaccentcolor),0.4) !important;
+}
+[style="color: rgba(114, 137, 218, 0.3)"] {
+	color: rgba(var(--vaccentcolor),0.3) !important;
+}
+[style="color: rgba(114, 137, 218, 0.2)"] {
+	color: rgba(var(--vaccentcolor),0.2) !important;
+}
+[style="color: rgba(114, 137, 218, 0.1)"] {
+	color: rgba(var(--vaccentcolor),0.1) !important;
+}
+[style="color: rgba(114, 137, 218, 0.14902)"] {
+	color: rgba(var(--vaccentcolor), 0.14902) !important;
 }
 
 /* BACKGROUND */
@@ -250,6 +281,30 @@
 .wrapper-39oAo3 button {
 	background-color: rgb(var(--vaccentcolor)) !important;
 }
+[style*="background-color: rgba(114, 137, 218, 0.9)"] {
+	background-color: rgba(var(--vaccentcolor),0.9) !important;
+}
+[style*="background-color: rgba(114, 137, 218, 0.8)"] {
+	background-color: rgba(var(--vaccentcolor),0.8) !important;
+}
+[style*="background-color: rgba(114, 137, 218, 0.7)"] {
+	background-color: rgba(var(--vaccentcolor),0.7) !important;
+}
+[style*="background-color: rgba(114, 137, 218, 0.6)"] {
+	background-color: rgba(var(--vaccentcolor),0.6) !important;
+}
+[style*="background-color: rgba(114, 137, 218, 0.5)"] {
+	background-color: rgba(var(--vaccentcolor),0.5) !important;
+}
+[style*="background-color: rgba(114, 137, 218, 0.4)"] {
+	background-color: rgba(var(--vaccentcolor),0.4) !important;
+}
+[style*="background-color: rgba(114, 137, 218, 0.3)"] {
+	background-color: rgba(var(--vaccentcolor),0.3) !important;
+}
+[style*="background-color: rgba(114, 137, 218, 0.2)"] {
+	background-color: rgba(var(--vaccentcolor),0.2) !important;
+}
 [style*="background-color: rgba(114, 137, 218, 0.1)"],
 .reactionMe-23mbRf {
 	background-color: rgba(var(--vaccentcolor),0.1) !important;
@@ -279,6 +334,33 @@
 .checkbox-3kaeSU .checkboxInner-3yjcPe .checkboxElement-1qV33p:checked + span,
 .item-26Dhrx[style*="border-color: rgb(114, 137, 218)"] .checked-3_4uQ9 {
 	border-color: rgb(var(--vaccentcolor)) !important;
+}
+[style*="border-color: rgba(114, 137, 218, 0.9)"] {
+	border-color: rgba(var(--vaccentcolor),0.9) !important;
+}
+[style*="border-color: rgba(114, 137, 218, 0.8)"] {
+	border-color: rgba(var(--vaccentcolor),0.8) !important;
+}
+[style*="border-color: rgba(114, 137, 218, 0.7)"] {
+	border-color: rgba(var(--vaccentcolor),0.7) !important;
+}
+[style*="border-color: rgba(114, 137, 218, 0.6)"] {
+	border-color: rgba(var(--vaccentcolor),0.6) !important;
+}
+[style*="border-color: rgba(114, 137, 218, 0.5)"] {
+	border-color: rgba(var(--vaccentcolor),0.5) !important;
+}
+[style*="border-color: rgba(114, 137, 218, 0.4)"] {
+	border-color: rgba(var(--vaccentcolor),0.4) !important;
+}
+[style*="border-color: rgba(114, 137, 218, 0.3)"] {
+	border-color: rgba(var(--vaccentcolor),0.3) !important;
+}
+[style*="border-color: rgba(114, 137, 218, 0.2)"] {
+	border-color: rgba(var(--vaccentcolor),0.2) !important;
+}
+[style*="border-color: rgba(114, 137, 218, 0.1)"] {
+	border-color: rgba(var(--vaccentcolor),0.1) !important;
 }
 [style*="border-color: rgba(114, 137, 218, 0.14902)"] {
 	border-color: rgba(var(--vaccentcolor), 0.14902) !important;
@@ -310,7 +392,7 @@
 a {
 	color: rgb(var(--vlinkcolor));
 }
-:not(.searchLearnMore-3SQUAj) > .anchor-3Z-8Bb:not(.pruneLink-3V7wes):not(.channelLink-2TxEu3):not(.guildsError-3cFMtY):not(.embedAuthorName-3mnTWj):not(.downloadButton-1bWXpg):not(.downloadLink-1ywL9o):not([style]),
+:not(.searchLearnMore-3SQUAj) > .anchor-3Z-8Bb:not(.activityName-1IaRLn):not(.pruneLink-3V7wes):not(.channelLink-2TxEu3):not(.guildsError-3cFMtY):not(.embedAuthorName-3mnTWj):not(.downloadButton-1bWXpg):not(.downloadLink-1ywL9o):not([style]),
 .genre-1Fi2SE,
 #bd-settings-sidebar a,
 .filenameLinkWrapper-1-14c5,
