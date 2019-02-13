@@ -149,7 +149,7 @@ class OwnerTag {
 	processStandardSidebarView (instance, wrapper) {
 		if (this.SettingsUpdated) {
 			delete this.SettingsUpdated;
-			BDFDB.removeEles(".owner-tag");
+			BDFDB.removeEles(".owner-tag, .owner-tag-crown");
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 	}
@@ -166,7 +166,7 @@ class OwnerTag {
 		let member = settings.useRoleColor ? (this.MemberUtils.getMember(channel.guild_id, info.id) || {}) : {};
 		let EditUsersData = BDFDB.isPluginEnabled("EditUsers") ? bdplugins.EditUsers.plugin.getUserData(info.id, wrapper) : {};
 		if (!settings.useCrown) {
-			let tag = BDFDB.htmlToElement(`<span class="owner-tag owner-${type}-tag ${(settings.useRoleColor ? "owner-tag-rolecolor " : "") + BDFDB.disCN.bottag + (selector ? (" " + selector) : "")}" style="order: 10 !important;">${BDFDB.getData(isowner ? "ownTagName" : "ownAdminTagName", this, "inputs")}</span>`);
+			let tag = BDFDB.htmlToElement(`<span class="owner-tag ${isowner ? "owner-tag-owner" : "owner-tag-admin"} owner-${type}-tag ${(settings.useRoleColor ? "owner-tag-rolecolor " : "") + BDFDB.disCN.bottag + (selector ? (" " + selector) : "")}" style="order: 10 !important;">${BDFDB.getData(isowner ? "ownTagName" : "ownAdminTagName", this, "inputs")}</span>`);
 			let invert = false;
 			if (container && container.firstElementChild && !BDFDB.containsClass(container.firstElementChild, BDFDB.disCN.userpopoutheadernormal, BDFDB.disCN.userprofiletopsectionnormal), false) invert = true;
 			BDFDB.addClass(tag, invert ? BDFDB.disCN.bottaginvert : BDFDB.disCN.bottagregular);
@@ -178,7 +178,7 @@ class OwnerTag {
 			wrapper.insertBefore(tag, wrapper.querySelector(".TRE-tag,svg[name=MobileDevice]"));
 		}
 		else if (!wrapper.querySelector(BDFDB.dotCN.ownericon)) {
-			let crown = BDFDB.htmlToElement(`<svg name="Crown" class="owner-tag-crown ${BDFDB.disCNS.ownericon + BDFDB.disCN.memberownericon}" width="24" height="24" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd"><path fill="#faa61a" fill-rule="nonzero" d="M2,11 L0,0 L5.5,7 L9,0 L12.5,7 L18,0 L16,11 L2,11 L2,11 Z M16,14 C16,14.5522847 15.5522847,15 15,15 L3,15 C2.44771525,15 2,14.5522847 2,14 L2,13 L16,13 L16,14 Z" transform="translate(3 4)"></path><rect width="24" height="24"></rect></g></svg>`);
+			let crown = BDFDB.htmlToElement(`<svg name="Crown" class="owner-tag-crown ${isowner ? "owner-tag-owner" : "owner-tag-admin"} ${BDFDB.disCNS.ownericon + BDFDB.disCN.memberownericon}" width="24" height="24" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd"><path fill="${isowner ? "#faa61a" : "#b3b3b3"}" fill-rule="nonzero" d="M2,11 L0,0 L5.5,7 L9,0 L12.5,7 L18,0 L16,11 L2,11 L2,11 Z M16,14 C16,14.5522847 15.5522847,15 15,15 L3,15 C2.44771525,15 2,14.5522847 2,14 L2,13 L16,13 L16,14 Z" transform="translate(3 4)"></path><rect width="24" height="24"></rect></g></svg>`);
 			crown.addEventListener("mouseenter", () => {
 				BDFDB.createTooltip(isowner ? (channel.type == 3 ? BDFDB.LanguageStrings.GROUP_OWNER : BDFDB.LanguageStrings.GUILD_OWNER) : BDFDB.LanguageStrings.ADMINISTRATOR, crown, {type: "top"});
 			});
