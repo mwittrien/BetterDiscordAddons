@@ -3,7 +3,7 @@
 class NotificationSounds {
 	getName () {return "NotificationSounds";}
 
-	getVersion () {return "3.2.7";}
+	getVersion () {return "3.2.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class NotificationSounds {
 
 	initConstructor () {
 		this.changelog = {
-			"improved":[["Mention/DM sound","You can now choose whether you want mention/dm sound to play or not, when the channel is open and discord is focused. To change it 'Mute when Channel focused' in the plugin settings for the song type"]]
+			"fixed":[["Settings","Fixed the bug where you couldn't save the focused/muted settings"]]
 		};
 		
 		this.patchModules = {
@@ -166,12 +166,12 @@ class NotificationSounds {
 		BDFDB.addEventListener(this, settingspanel, "click", ".mute-checkbox", e => {
 			var type = e.currentTarget.parentElement.getAttribute("type");
 			this.choices[type].mute = e.currentTarget.checked;
-			this.saveChoice(type, choice, false);
+			this.saveChoice(type, false);
 		});
 		BDFDB.addEventListener(this, settingspanel, "click", ".mutefocus-checkbox", e => {
 			var type = e.currentTarget.parentElement.getAttribute("type");
 			this.choices[type].focus = e.currentTarget.checked;
-			this.saveChoice(type, choice, false);
+			this.saveChoice(type, false);
 		});
 		BDFDB.addEventListener(this, settingspanel, "click", "#input-unimplemented", e => {
 			BDFDB.toggleEles(settingspanel.querySelectorAll(".unimplemented"), e.currentTarget.checked);
