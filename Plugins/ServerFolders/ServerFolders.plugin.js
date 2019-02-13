@@ -1079,11 +1079,14 @@ class ServerFolders {
 		BDFDB.addClass(guildcopy, "copy");
 		BDFDB.toggleEles(guildcopy, true);
 		guildcopy.addEventListener("mouseenter", () => {
-			let folderData = BDFDB.loadData(folderdiv.id, this, "folders") || {};
-			let EditServersData = BDFDB.isPluginEnabled("EditServers") ? (BDFDB.loadData(info.id, "EditServers", "servers") || {}) : {};
-			let bgColor = BDFDB.colorCONVERT(EditServersData.color3 || (folderData.copyTooltipColor ? folderData.color3 : null), "RGB");
-			let fontColor = BDFDB.colorCONVERT(EditServersData.color4 || (folderData.copyTooltipColor ? folderData.color4 : null), "RGB");
-			BDFDB.createTooltip(EditServersData.name || info.name, guildcopy, {type:"right",selector:(!BDFDB.isObjectEmpty(EditServersData) ? "EditUsers-tooltip" : ""),style:`color: ${fontColor} !important; background-color: ${bgColor} !important; border-color: ${bgColor} !important;`});
+			let EditServersData = BDFDB.isPluginEnabled("EditServers") ? BDFDB.loadData(info.id, "EditServers", "servers") : null;
+			if (EditServersData) bdplugins.EditServers.plugin.changeTooltip(info, guildcopy, "right");
+			else {
+				let folderData = BDFDB.loadData(folderdiv.id, this, "folders") || {};
+				let bgColor = BDFDB.colorCONVERT(folderData.copyTooltipColor ? folderData.color3 : null, "RGB");
+				let fontColor = BDFDB.colorCONVERT(folderData.copyTooltipColor ? folderData.color4 : null, "RGB");
+				BDFDB.createTooltip(info.name, guildcopy, {type:"right",style:`color: ${fontColor} !important; background-color: ${bgColor} !important; border-color: ${bgColor} !important;`});
+			}
 		});
 		guildcopy.addEventListener("click", e => {
 			BDFDB.stopEvent(e);
