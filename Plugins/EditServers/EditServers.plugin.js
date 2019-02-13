@@ -399,7 +399,7 @@ class EditServers {
 	changeGuildName (info, guildname) {
 		if (!info || !guildname || !guildname.parentElement) return;
 		if (guildname.EditServersChangeObserver && typeof guildname.EditServersChangeObserver.disconnect == "function") guildname.EditServersChangeObserver.disconnect();
-		let data = BDFDB.loadData(info.id, this, "servers") || {};
+		let data = this.getGuildData(info.id, guildname);
 		if (data.name || data.color2 || guildname.getAttribute("changed-by-editservers")) {
 			guildname.style.setProperty("color", BDFDB.colorCONVERT(data.color2, "RGB"), "important");
 			BDFDB.setInnerText(guildname, data.name || info.name);
@@ -418,7 +418,7 @@ class EditServers {
 	changeGuildIcon (info, icon) {
 		if (!info || !icon || !icon.parentElement) return;
 		if (icon.EditServersChangeObserver && typeof icon.EditServersChangeObserver.disconnect == "function") icon.EditServersChangeObserver.disconnect();
-		let data = BDFDB.loadData(info.id, this, "servers") || {};
+		let data = this.getGuildData(info.id, icon);
 		if (data.url || data.shortName || data.removeIcon || icon.getAttribute("changed-by-editservers")) {
 			let url = data.url || BDFDB.getGuildIcon(info.id);
 			if (icon.tagName == "IMG") icon.setAttribute("src", data.removeIcon ? null : url);
@@ -455,7 +455,7 @@ class EditServers {
 
 	changeTooltip (info, wrapper, type) {
 		if (!info || !wrapper || !wrapper.parentElement) return;
-		let data = BDFDB.loadData(info.id, this, "servers") || {};
+		let data = this.getGuildData(info.id, wrapper);
 		wrapper.removeEventListener("mouseenter", wrapper.tooltipListenerEditServers);
 		if (data.name || data.color3 || data.color4) {
 			var bgColor = data.color3 ? BDFDB.colorCONVERT(data.color3, "RGB") : "";
