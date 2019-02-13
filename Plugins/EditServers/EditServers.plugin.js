@@ -3,7 +3,7 @@
 class EditServers {
 	getName () {return "EditServers";}
 
-	getVersion () {return "1.9.3";} 
+	getVersion () {return "1.9.4";} 
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class EditServers {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Servericon Text Size","If you choose to remove a servericon or choose a shortname for a server the fontsize will now properly be scaled relative to the shortnamelength"]]
+			"improved":[["Settings","You can now choose where EditServers changes the server data"]]
 		};
 		
 		this.labels = {};
@@ -132,11 +132,26 @@ class EditServers {
 					</div>
 				</div>
 			</span>`;
+
+		this.defaults = {
+			settings: {
+				changeInGuildList:		{value:true, 	description:"Server List"},
+				changeInMutualGuilds:	{value:true, 	description:"Mutual Servers"},
+				changeInGuildHeader:	{value:true, 	description:"Guild Header"},
+				changeInSearchPopout:	{value:true, 	description:"Search Popout"}
+			}
+		};
 	}
 
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
+		var settings = BDFDB.getAllData(this, "settings"); 
 		var settingshtml = `<div class="${this.name}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="DevilBro-settings-inner">`;
+		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">Change Server in:</h3></div><div class="DevilBro-settings-inner-list">`;
+		for (let key in settings) {
+			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
+		}
+		settingshtml += `</div>`;
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Reset all Servers.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} reset-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Reset</div></button></div>`;
 		settingshtml += `</div></div>`;
 
@@ -476,6 +491,24 @@ class EditServers {
 		let noiconclasses = [BDFDB.disCN.avatarnoicon];
 		if (BDFDB.containsClass(icon, BDFDB.disCN.userprofilelistavatar)) noiconclasses.push(BDFDB.disCN.userprofilelistguildavatarwithouticon);
 		return noiconclasses;
+	}
+
+	getGuildData (id, wrapper) {
+		let data = BDFDB.loadData(id, this, "servers");
+		if (!data) return {};
+		let allenabled = true, settings = BDFDB.getAllData(this, "settings");
+		for (let i in settings) if (!settings[i]) {
+			allenabled = false;
+			break;
+		}
+		if (allenabled) return data;
+		let key = null;
+		if (BDFDB.getParentEle(BDFDB.dotCN.guilds, wrapper)) key = "changeInGuildList";
+		else if (BDFDB.getParentEle(BDFDB.dotCN.userprofile, wrapper) || BDFDB.getParentEle(BDFDB.dotCN.friends, wrapper)) key = "changeInMutualGuilds";
+		else if (BDFDB.getParentEle(BDFDB.dotCN.guildheader, wrapper)) key = "changeInGuildHeader";
+		else if (BDFDB.getParentEle(BDFDB.dotCN.searchpopout, wrapper) || BDFDB.getParentEle(BDFDB.dotCN.quickswitcher, wrapper)) key = "changeInSearchPopout";
+
+		return !key || settings[key] ? data : {};
 	}
 
 	setLabelsByLanguage () {
