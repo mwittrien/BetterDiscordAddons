@@ -257,14 +257,28 @@
 .emojiPicker-3m1S-j .item-16cXuq.selected-39BZ4S {
 	border-color: rgb(var(--vaccentcolor)) !important;
 }
+.emojiPicker-3m1S-j .categories-1feg4n .item-16cXuq.flags-3peqg9.selected-39BZ4S, 
+.emojiPicker-3m1S-j .categories-1feg4n .item-16cXuq.flags-3peqg9:hover {
+	background: none !important;
+}
 .emojiPicker-3m1S-j .categories-1feg4n .item-16cXuq.flags-3peqg9.selected-39BZ4S:after, 
-.emojiPicker-3m1S-j .categories-1feg4n .item-16cXuq.flags-3peqg9:hover:after {
+.emojiPicker-3m1S-j .categories-1feg4n .item-16cXuq.flags-3peqg9:hover:after
+.emojiPicker-3m1S-j .categories-1feg4n .item-16cXuq.flags-3peqg9.selected-39BZ4S:before, 
+.emojiPicker-3m1S-j .categories-1feg4n .item-16cXuq.flags-3peqg9:hover:before {
 	content: "";
 	position: absolute;
-	width: 27px;
-	height: 41px;
+	width: 28px;
+	height: 42px;
+	pointer-events: none;
+}
+.emojiPicker-3m1S-j .categories-1feg4n .item-16cXuq.flags-3peqg9.selected-39BZ4S:after, 
+.emojiPicker-3m1S-j .categories-1feg4n .item-16cXuq.flags-3peqg9:hover:after {
+	background: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="22px" height="22px" viewBox="0 0 22 22" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g><g transform="translate(2.000000, 3.000000)"><path d="M2.5,2.5 C2.5,3.052 2.052,3.5 1.5,3.5 C0.948,3.5 0.5,3.052 0.5,2.5 C0.5,1.948 0.948,1.5 1.5,1.5 C2.052,1.5 2.5,1.948 2.5,2.5" fill="#D5D7DB"/><path d="M17.5,2.5 C17.5,3.052 17.052,3.5 16.5,3.5 C15.948,3.5 15.5,3.052 15.5,2.5 C15.5,1.948 15.948,1.5 16.5,1.5 C17.052,1.5 17.5,1.948 17.5,2.5" fill="#D5D7DB"/><g/><path xmlns="http://www.w3.org/2000/svg" d="M15.5,3 L2.5,3 L2.5,2 L4.5,2 L4.5,3 Z" fill="#282B2E"/><path xmlns="http://www.w3.org/2000/svg" d="M15.5,3 L13.5,3 L13.5,2 L15.5,2 L15.5,3 Z" fill="#282B2E"/><path d="M1.5,1 C0.673,1 0,1.673 0,2.5 C0,3.327 0.673,4 1.5,4 C2.327,4 3,3.327 3,2.5 C3,1.673 2.327,1 1.5,1 M1.5,2 C1.776,2 2,2.224 2,2.5 C2,2.776 1.776,3 1.5,3 C1.224,3 1,2.776 1,2.5 C1,2.224 1.224,2 1.5,2" fill="#282B2E"/><path d="M16.5,1 C15.673,1 15,1.673 15,2.5 C15,3.327 15.673,4 16.5,4 C17.327,4 18,3.327 18,2.5 C18,1.673 17.327,1 16.5,1 M16.5,2 C16.776,2 17,2.224 17,2.5 C17,2.776 16.776,3 16.5,3 C16.224,3 16,2.776 16,2.5 C16,2.224 16.224,2 16.5,2" fill="#282B2E"/><path d="M14,0 L13,0 L5,0 L4,0 L4,1 L4,14 L4,16 L5.6,14.8 L9,12.25 L12.4,14.8 L14,16 L14,14 L14,1 L14,0 Z M13,1 L13,14 L9,11 L5,14 L5,1 L13,1 Z" fill="#282B2E"/></g></g></g></svg>') center/22px 22px no-repeat;
+}
+.emojiPicker-3m1S-j .categories-1feg4n .item-16cXuq.flags-3peqg9.selected-39BZ4S:before, 
+.emojiPicker-3m1S-j .categories-1feg4n .item-16cXuq.flags-3peqg9:hover:before {
 	background: rgb(var(--vaccentcolor)) !important;
-	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" width="22px" height="22px" viewBox="0 0 22 22" version="1.1"><!-- Generator: Sketch 3.5.2 (25235) - http://www.bohemiancoding.com/sketch --><title>emoji-flags-color</title><desc>Created with Sketch.</desc><defs><path id="path-1" d="M0,0 L18,0 L18,16 L0,16 L0,0 Z"/></defs><g id="General-Playground" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage"><g id="emoji-flags-color" sketch:type="MSArtboardGroup"><g id="Page-1" sketch:type="MSLayerGroup" transform="translate(2.000000, 3.000000)"><path d="M5,1 L5,14 L9,11 L13,14 L13,1 L5,1 Z" id="Fill-9" fill="#738BD7" sketch:type="MSShapeGroup" mask="url(#mask-2)"/></g></g></g></svg>') center/21px 21px no-repeat;
+	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="22px" height="22px" viewBox="0 0 22 22" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g><g transform="translate(2.000000, 3.000000)"><path d="M5,1 L5,14 L9,11 L13,14 L13,1 L5,1 Z" fill="#738BD7"/></g></g></g></svg>') center/24px 23px no-repeat;
 }
 
 /* FONT */
