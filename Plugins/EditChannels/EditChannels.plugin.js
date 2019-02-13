@@ -3,18 +3,23 @@
 class EditChannels {
 	getName () {return "EditChannels";}
 
-	getVersion () {return "3.8.9";}
+	getVersion () {return "3.9.0";}
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
 	initConstructor () {
+		this.changelog = {
+			"improved":[["Settings","You can now choose where EditChannels changes the channel data"]]
+		};
+		
 		this.labels = {};
 
 		this.patchModules = {
 			"ChannelTextArea":"componentDidMount",
 			"AuditLog":"componentDidMount",
+			"InviteCard":"componentDidMount",
 			"ChannelCategoryItem":"componentDidMount",
 			"ChannelItem":"componentDidMount",
 			"HeaderBar":["componentDidMount","componentDidUpdate"],
@@ -96,15 +101,27 @@ class EditChannels {
 			</span>`;
 
 		this.css = `
-			${BDFDB.dotCN.channelheadertitletext}[custom-editchannelsheader] ${BDFDB.dotCN.channelheaderchannelicon} {
+			${BDFDB.dotCN.channelheadertitletext}[changed-by-editchannels] ${BDFDB.dotCN.channelheaderchannelicon} {
 				opacity: 0.6;
+			}
+			${BDFDB.dotCN.guildsettingsinvitechannelname}[changed-by-editchannels] {
+				opacity: 1;
 			}
 		`;
 
 		this.defaults = {
 			settings: {
-				changeChannelIcon:		{value:true, 	description:"Change color of Channel Icon."},
-				changeUnreadIndicator:	{value:true, 	description:"Change color of Unread Indicator."}
+				changeChannelIcon:		{value:true, 	inner:false,	description:"Change color of Channel Icon."},
+				changeUnreadIndicator:	{value:true, 	inner:false,	description:"Change color of Unread Indicator."},
+				changeInChatTextarea:	{value:true, 	inner:true,		description:"Chat Textarea"},
+				changeInMentions:		{value:true, 	inner:true,		description:"Mentions"},
+				changeInChannelList:	{value:true, 	inner:true,		description:"Channel List"},
+				changeInChannelHeader:	{value:true, 	inner:true,		description:"Channel Header"},
+				changeInRecentMentions:	{value:true, 	inner:true,		description:"Recent Mentions Popout"},
+				changeInAutoComplete:	{value:true, 	inner:true,		description:"Autocomplete Menu"},
+				changeInAuditLog:		{value:true, 	inner:true,		description:"Audit Log"},
+				changeInInviteLog:		{value:true, 	inner:true,		description:"Invite Log"},
+				changeInSearchPopout:	{value:true, 	inner:true,		description:"Search Popout"}
 			}
 		};
 	}
@@ -114,8 +131,13 @@ class EditChannels {
 		var settings = BDFDB.getAllData(this, "settings"); 
 		var settingshtml = `<div class="${this.name}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="DevilBro-settings-inner">`;
 		for (let key in settings) {
-			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
+			if (!this.defaults.settings[key].inner) settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
 		}
+		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">Change Channel in:</h3></div><div class="DevilBro-settings-inner-list">`;
+		for (let key in settings) {
+			if (this.defaults.settings[key].inner) settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
+		}
+		settingshtml += `</div>`;
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Reset all Channels.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} reset-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Reset</div></button></div>`;
 		settingshtml += `</div></div>`;
 
@@ -238,8 +260,6 @@ class EditChannels {
 		BDFDB.appendModal(channelSettingsModal);
 
 		BDFDB.addChildEventListener(channelSettingsModal, "click", ".btn-save", e => {
-			e.preventDefault();
-
 			name = channelnameinput.value.trim();
 			name = name ? name : null;
 
@@ -266,44 +286,45 @@ class EditChannels {
 			var textarea = wrapper.querySelector("textarea");
 			if (!textarea) return;
 			if (channel.type == 0 && instance.props.type == "normal") {
-				let data = BDFDB.loadData(channel.id, this, "channels") || {};
+				let data = this.getChannelData(channel.id, wrapper);
 				wrapper.querySelector("textarea").setAttribute("placeholder", BDFDB.LanguageStrings.TEXTAREA_PLACEHOLDER.replace("{{channel}}", "#" + (data.name || channel.name)));
 			}
-			BDFDB.addEventListener(this, textarea, "keydown", e => {
-				let autocompletemenu = textarea.parentElement.querySelector(BDFDB.dotCN.autocomplete);
-				if (autocompletemenu && (e.which == 9 || e.which == 13)) {
-					if (BDFDB.containsClass(autocompletemenu.querySelector(BDFDB.dotCN.autocompleteselected).parentElement, "autocompleteEditChannelsRow")) {
-						e.originalEvent.preventDefault();
-						e.originalEvent.stopPropagation();
-						this.swapWordWithMention(textarea); 
+			BDFDB.removeEventListener(this, textarea);
+			if (BDFDB.getData("changeInAutoComplete", this, "settings")) {
+				BDFDB.addEventListener(this, textarea, "keydown", e => {
+					let autocompletemenu = textarea.parentElement.querySelector(BDFDB.dotCN.autocomplete);
+					if (autocompletemenu && (e.which == 9 || e.which == 13)) {
+						if (BDFDB.containsClass(autocompletemenu.querySelector(BDFDB.dotCN.autocompleteselected).parentElement, "autocompleteEditChannelsRow")) {
+							BDFDB.stopEvent(e);
+							this.swapWordWithMention(textarea); 
+						}
 					}
-				}
-				else if (autocompletemenu && (e.which == 38 || e.which == 40)) {
-					let autocompleteitems = autocompletemenu.querySelectorAll(BDFDB.dotCN.autocompleteselectable + ":not(.autocompleteEditChannelsSelector)");
-					let selected = autocompletemenu.querySelector(BDFDB.dotCN.autocompleteselected);
-					if (BDFDB.containsClass(selected, "autocompleteEditChannelsSelector") || autocompleteitems[e.which == 38 ? 0 : (autocompleteitems.length-1)] == selected) {
-						e.originalEvent.preventDefault();
-						e.originalEvent.stopPropagation();
-						let next = this.getNextSelection(autocompletemenu, null, e.which == 38 ? false : true);
-						BDFDB.removeClass(selected, BDFDB.disCN.autocompleteselected);
-						BDFDB.addClass(selected, BDFDB.disCN.autocompleteselector);
-						BDFDB.addClass(next, BDFDB.disCN.autocompleteselected);
+					else if (autocompletemenu && (e.which == 38 || e.which == 40)) {
+						let autocompleteitems = autocompletemenu.querySelectorAll(BDFDB.dotCN.autocompleteselectable + ":not(.autocompleteEditChannelsSelector)");
+						let selected = autocompletemenu.querySelector(BDFDB.dotCN.autocompleteselected);
+						if (BDFDB.containsClass(selected, "autocompleteEditChannelsSelector") || autocompleteitems[e.which == 38 ? 0 : (autocompleteitems.length-1)] == selected) {
+							BDFDB.stopEvent(e);
+							let next = this.getNextSelection(autocompletemenu, null, e.which == 38 ? false : true);
+							BDFDB.removeClass(selected, BDFDB.disCN.autocompleteselected);
+							BDFDB.addClass(selected, BDFDB.disCN.autocompleteselector);
+							BDFDB.addClass(next, BDFDB.disCN.autocompleteselected);
+						}
 					}
-				}
-				else if (textarea.value && !e.shiftKey && e.which == 13 && !autocompletemenu && textarea.value.indexOf("s/") != 0) {
-					this.format = true;
-					textarea.dispatchEvent(new Event("input"));
-				}
-				else if (!e.ctrlKey && e.which != 16 && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length) {
-					clearTimeout(textarea.EditChannelsAutocompleteTimeout);
-					textarea.EditChannelsAutocompleteTimeout = setTimeout(() => {this.addAutoCompleteMenu(textarea, channel);},100);
-				}
+					else if (textarea.value && !e.shiftKey && e.which == 13 && !autocompletemenu && textarea.value.indexOf("s/") != 0) {
+						this.format = true;
+						textarea.dispatchEvent(new Event("input"));
+					}
+					else if (!e.ctrlKey && e.which != 16 && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length) {
+						clearTimeout(textarea.EditChannelsAutocompleteTimeout);
+						textarea.EditChannelsAutocompleteTimeout = setTimeout(() => {this.addAutoCompleteMenu(textarea, channel);},100);
+					}
 
-				if (!e.ctrlKey && e.which != 38 && e.which != 40 && !(e.which == 39 && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length)) BDFDB.removeEles(".autocompleteEditChannels", ".autocompleteEditChannelsRow");
-			});
-			BDFDB.addEventListener(this, textarea, "click", e => {
-				if (textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length) setImmediate(() => {this.addAutoCompleteMenu(textarea, channel);});
-			});
+					if (!e.ctrlKey && e.which != 38 && e.which != 40 && !(e.which == 39 && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length)) BDFDB.removeEles(".autocompleteEditChannels", ".autocompleteEditChannelsRow");
+				});
+				BDFDB.addEventListener(this, textarea, "click", e => {
+					if (textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length) setImmediate(() => {this.addAutoCompleteMenu(textarea, channel);});
+				});
+			}
 		}
 	}
 
@@ -313,6 +334,14 @@ class EditChannels {
 			let hooks = wrapper.querySelectorAll(`${BDFDB.dotCN.flexchild} > span${BDFDB.notCN.auditloguserhook}`);
 			if (hooks.length > 0) this.changeChannel2(channel, hooks[0].firstChild);
 		} 
+	}
+
+	processInviteCard (instance, wrapper) {
+		let invite = BDFDB.getReactValue(instance, "props.invite");
+		if (invite && invite.inviter && invite.channel) {
+			let channelname = wrapper.querySelector(BDFDB.dotCN.guildsettingsinvitechannelname);
+			if (channelname) this.changeChannel2(invite.channel, channelname);
+		}
 	}
 
 	processChannelCategoryItem (instance, wrapper) {
@@ -398,60 +427,67 @@ class EditChannels {
 	changeChannel (info, channelname) {
 		if (!info || !channelname || !channelname.parentElement) return;
 		if (channelname.EditChannelsChangeObserver && typeof channelname.EditChannelsChangeObserver.disconnect == "function") channelname.EditChannelsChangeObserver.disconnect();
-		let data = BDFDB.loadData(info.id, this, "channels") || {};
-		let settings = BDFDB.getAllData(this, "settings");
-		let color = this.chooseColor(channelname, data.color);
-		channelname.style.setProperty("color", color, "important");
-		BDFDB.setInnerText(channelname, data.name || info.name);
-		let iconparent = BDFDB.containsClass(channelname, BDFDB.disCN.quickswitchresultmatch) ? channelname.parentElement.parentElement : channelname.parentElement;
-		if (!BDFDB.containsClass(channelname, BDFDB.disCN.autocompletedescription)) {
-			iconparent.querySelectorAll('svg [stroke]:not([stroke="none"]').forEach(icon => {
-				if (!icon.getAttribute("oldstroke")) icon.setAttribute("oldstroke", icon.getAttribute("stroke"));
-				icon.setAttribute("stroke", color && settings.changeChannelIcon ? color : icon.getAttribute("oldstroke"), "important");
-				icon.style.setProperty("stroke", color && settings.changeChannelIcon ? color : icon.getAttribute("oldstroke"), "important");
-			});
-			iconparent.querySelectorAll('svg [fill]:not([fill="none"]').forEach(icon => {
-				if (!icon.getAttribute("oldfill")) icon.setAttribute("oldfill", icon.getAttribute("fill"));
-				icon.setAttribute("fill", color && settings.changeChannelIcon ? color : icon.getAttribute("oldfill"), "important");
-				icon.style.setProperty("fill", color && settings.changeChannelIcon ? color : icon.getAttribute("oldfill"), "important");
-			});
-			let unread = iconparent.parentElement.querySelector(BDFDB.dotCN.channelunread);
-			if (unread) unread.style.setProperty("background-color", color && settings.changeUnreadIndicator ? color : null, "important");
-		}
-		if (color) {
-			channelname.EditChannelsChangeObserver = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.type == "childList" && change.addedNodes.length && change.target.tagName && (change.target.tagName == "SVG" || change.target.querySelector("svg")) || change.type == "attributes" && change.attributeName == "class" && change.target.className.length && change.target.className.indexOf("name") > -1 || change.type == "attributes" && change.attributeName == "style" && BDFDB.containsClass(change.target, BDFDB.disCN.channelheaderchannelname)) {
-							channelname.EditChannelsChangeObserver.disconnect();
-							this.changeChannel(info, channelname);
+		let data = this.getChannelData(info.id, channelname);
+		if (data.name || data.color || channelname.parentElement.getAttribute("changed-by-editchannels")) {
+			let color = this.chooseColor(channelname, data.color);
+			channelname.style.setProperty("color", color, "important");
+			BDFDB.setInnerText(channelname, data.name || info.name);
+			let iconparent = BDFDB.containsClass(channelname, BDFDB.disCN.quickswitchresultmatch) ? channelname.parentElement.parentElement : channelname.parentElement;
+			if (!BDFDB.containsClass(channelname, BDFDB.disCN.autocompletedescription)) {
+				let settings = BDFDB.getAllData(this, "settings");
+				iconparent.querySelectorAll('svg [stroke]:not([stroke="none"]').forEach(icon => {
+					if (!icon.getAttribute("oldstroke")) icon.setAttribute("oldstroke", icon.getAttribute("stroke"));
+					icon.setAttribute("stroke", color && settings.changeChannelIcon ? color : icon.getAttribute("oldstroke"), "important");
+					icon.style.setProperty("stroke", color && settings.changeChannelIcon ? color : icon.getAttribute("oldstroke"), "important");
+				});
+				iconparent.querySelectorAll('svg [fill]:not([fill="none"]').forEach(icon => {
+					if (!icon.getAttribute("oldfill")) icon.setAttribute("oldfill", icon.getAttribute("fill"));
+					icon.setAttribute("fill", color && settings.changeChannelIcon ? color : icon.getAttribute("oldfill"), "important");
+					icon.style.setProperty("fill", color && settings.changeChannelIcon ? color : icon.getAttribute("oldfill"), "important");
+				});
+				let unread = iconparent.parentElement.querySelector(BDFDB.dotCN.channelunread);
+				if (unread) unread.style.setProperty("background-color", color && settings.changeUnreadIndicator ? color : null, "important");
+			}
+			if (data.name || data.color) {
+				channelname.parentElement.setAttribute("changed-by-editchannels", true);
+				channelname.EditChannelsChangeObserver = new MutationObserver((changes, _) => {
+					changes.forEach(
+						(change, i) => {
+							if (change.type == "childList" && change.addedNodes.length && change.target.tagName && (change.target.tagName == "SVG" || change.target.querySelector("svg")) || change.type == "attributes" && change.attributeName == "class" && change.target.className.length && change.target.className.indexOf("name") > -1 || change.type == "attributes" && change.attributeName == "style" && BDFDB.containsClass(change.target, BDFDB.disCN.channelheaderchannelname)) {
+								channelname.EditChannelsChangeObserver.disconnect();
+								this.changeChannel(info, channelname);
+							}
 						}
-					}
-				);
-			});
-			channelname.EditChannelsChangeObserver.observe(iconparent, {attributes:true, childList:true, subtree:true});
+					);
+				});
+				channelname.EditChannelsChangeObserver.observe(iconparent, {attributes:true, childList:true, subtree:true});
+			}
+			else channelname.parentElement.removeAttribute("changed-by-editchannels");
 		}
 	}
 
 	changeChannel2 (info, channelname) {
 		if (!info || !channelname || !channelname.parentElement) return;
 		if (channelname.EditChannelsChangeObserver && typeof channelname.EditChannelsChangeObserver.disconnect == "function") channelname.EditChannelsChangeObserver.disconnect();
-		let data = BDFDB.loadData(info.id, this, "channels") || {};
-		let color = this.chooseColor(channelname, data.color);
-		channelname.style.setProperty("color", color, "important");
-		BDFDB.setInnerText(channelname, "#" + (data.name || info.name));
-		if (color) {
-			channelname.EditChannelsChangeObserver = new MutationObserver((changes, _) => {
-				changes.forEach(
-					(change, i) => {
-						if (change.type == "childList" && change.addedNodes.length && change.target.tagName && (change.target.tagName == "SVG" || change.target.querySelector("svg")) || change.type == "attributes" && change.attributeName == "class" && change.target.className.length && change.target.className.indexOf("name") > -1) {
-							channelname.EditChannelsChangeObserver.disconnect();
-							this.changeChannel2(info, channelname);
+		let data = this.getChannelData(info.id, channelname);
+		if (data.name || data.color || channelname.getAttribute("changed-by-editchannels")) {
+			channelname.style.setProperty("color", this.chooseColor(channelname, data.color), "important");
+			BDFDB.setInnerText(channelname, "#" + (data.name || info.name));
+			if (data.name || data.color) {
+				channelname.setAttribute("changed-by-editchannels", true);
+				channelname.EditChannelsChangeObserver = new MutationObserver((changes, _) => {
+					changes.forEach(
+						(change, i) => {
+							if (change.type == "childList" && change.addedNodes.length && change.target.tagName && (change.target.tagName == "SVG" || change.target.querySelector("svg")) || change.type == "attributes" && change.attributeName == "class" && change.target.className.length && change.target.className.indexOf("name") > -1) {
+								channelname.EditChannelsChangeObserver.disconnect();
+								this.changeChannel2(info, channelname);
+							}
 						}
-					}
-				);
-			});
-			channelname.EditChannelsChangeObserver.observe(channelname.parentElement, {attributes:true, childList:true, subtree:true});
+					);
+				});
+				channelname.EditChannelsChangeObserver.observe(channelname.parentElement, {attributes:true, childList:true, subtree:true});
+			}
+			else channelname.removeAttribute("changed-by-editchannels");
 		}
 	}
 
@@ -460,7 +496,7 @@ class EditChannels {
 		if (mention.EditChannelsChangeObserver && typeof mention.EditChannelsChangeObserver.disconnect == "function") mention.EditChannelsChangeObserver.disconnect();
 		mention.removeEventListener("mouseover", mention.mouseoverListenerEditChannels);
 		mention.removeEventListener("mouseout", mention.mouseoutListenerEditChannels);
-		let data = BDFDB.loadData(info.id, this, "channels") || {};
+		let data = this.getChannelData(info.id, mention);
 		let color = BDFDB.colorCONVERT(data.color, "RGBCOMP");
 		BDFDB.setInnerText(mention, "#" + (data.name || info.name));
 		if (mention.EditChannelsHovered) colorHover();
@@ -468,7 +504,7 @@ class EditChannels {
 		mention.mouseoverListenerEditChannels = () => {
 			mention.EditChannelsHovered = true;
 			colorHover();
-			let categorydata = BDFDB.loadData(categoryinfo.id, this, "channels") || {};
+			let categorydata = this.getChannelData(categoryinfo.id, mention);
 			if (categorydata.name) BDFDB.createTooltip(categorydata.name, mention, {type:"top",selector:"EditChannels-tooltip",css:`body ${BDFDB.dotCN.tooltip}:not(.EditChannels-tooltip) {display: none !important;}`});
 		};
 		mention.mouseoutListenerEditChannels = () => {
@@ -500,6 +536,29 @@ class EditChannels {
 			return BDFDB.colorCONVERT(color, "RGB");
 		}
 		return null;
+	}
+	
+	getChannelData (id, wrapper) {
+		let data = BDFDB.loadData(id, this, "channels");
+		if (!data) return {};
+		let allenabled = true, settings = BDFDB.getAllData(this, "settings");
+		for (let i in settings) if (!settings[i]) {
+			allenabled = false;
+			break;
+		}
+		if (allenabled) return data;
+		let key = null;
+		if (BDFDB.getParentEle(BDFDB.dotCN.textareawrapchat, wrapper)) key = "changeInChatTextarea";
+		else if (BDFDB.containsClass(wrapper, BDFDB.disCN.mentionwrapper)) key = "changeInMentions";
+		else if (BDFDB.getParentEle(BDFDB.dotCN.guildchannels, wrapper)) key = "changeInChannelList";
+		else if (BDFDB.getParentEle(BDFDB.dotCN.channelheaderheaderbar, wrapper)) key = "changeInChannelHeader";
+		else if (BDFDB.getParentEle(BDFDB.dotCN.recentmentionspopout, wrapper)) key = "changeInRecentMentions";
+		else if (BDFDB.getParentEle(BDFDB.dotCN.autocomplete, wrapper)) key = "changeInAutoComplete";
+		else if (BDFDB.getParentEle(BDFDB.dotCN.auditlog, wrapper)) key = "changeInAuditLog";
+		else if (BDFDB.getParentEle(BDFDB.dotCN.guildsettingsinvitecard, wrapper)) key = "changeInInviteLog";
+		else if (BDFDB.getParentEle(BDFDB.dotCN.searchpopout, wrapper) || BDFDB.getParentEle(BDFDB.dotCN.quickswitcher, wrapper)) key = "changeInSearchPopout";
+
+		return !key || settings[key] ? data : {};
 	}
 
 	addAutoCompleteMenu (textarea, channel) {
