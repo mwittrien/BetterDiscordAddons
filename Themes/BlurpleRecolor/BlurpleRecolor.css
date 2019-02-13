@@ -146,7 +146,7 @@
 .action-1lSjCi.create-3jownz .actionButton-2PeQbJ:hover,
 .lookFilled-1Gx00P.colorBrand-3pXr91:hover,
 .lookFilled-1Gx00P.colorLink-35jkBc:hover {
-	filter: brightness(90%);
+	background-image: linear-gradient(0deg,rgba(0,0,0,.1),rgba(0,0,0,.1)) !important;
 }
 
 /* MENTION */
