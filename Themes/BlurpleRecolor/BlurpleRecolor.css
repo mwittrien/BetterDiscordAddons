@@ -439,7 +439,7 @@
 .regionSelectModalOption-2DSIZ3:hover,
 .regionSelect-3lf4eE:hover .regionSelectInner-24f4Ce, 
 .regionSelect-3lf4eE:hover button,
-.input-cIJ7To:focus,
+.input-cIJ7To:not(.valid):not(.invalid):focus,
 .containerUserOver-1U5YnL:after,
 .checkbox-3kaeSU .checkboxInner-3yjcPe .checkboxElement-1qV33p:checked + span,
 .item-26Dhrx[style*="border-color: rgb(114, 137, 218)"] .checked-3_4uQ9 {
