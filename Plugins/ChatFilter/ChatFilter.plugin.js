@@ -3,7 +3,7 @@
 class ChatFilter {
 	getName () {return "ChatFilter";}
 
-	getVersion () {return "3.3.3";}
+	getVersion () {return "3.3.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -226,9 +226,9 @@ class ChatFilter {
 			var wordinput = settingspanel.querySelector("#input-" + rtype + "-wordvalue");
 			var replaceinput = settingspanel.querySelector("#input-" + rtype + "-replacevalue");
 			if (wordinput.value && wordinput.value.trim().length > 0) {
+				this.saveWord(wordinput.value.trim(), replaceinput.value.trim(), rtype);
 				wordinput.value = null;
 				replaceinput.value = null;
-				this.saveWord(wordinput.value.trim(), replaceinput.value.trim());
 				update();
 			}
 		}
