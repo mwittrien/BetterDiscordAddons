@@ -509,6 +509,9 @@ a {
 .sampleLink-KPFu3I {
 	color: rgb(var(--vlinkcolor)) !important;
 }
+.uploadModalIn-1z07Bv .uploadDropModal-2kTwbc.error-kKl9o2 a.anchor-3Z-8Bb {
+    color: hsla(0,0%,100%,.7) !important;
+}
 .colorLink-35jkBc:not(.lookFilled-1Gx00P) .spinnerItem-3GlVyU,
 .lookFilled-1Gx00P.hoverLink-i1fEKS.hasHover-3X1-zV:hover,
 .lookFilled-1Gx00P.colorLink-35jkBc {
