@@ -490,13 +490,13 @@ class PinDMs {
 
 	forceUpdateScroller (scroller) {
 		if (this.updatingScroller) return;
-		this.updatingScroller = true;
 		var stateNode = BDFDB.getReactValue(scroller, "return.return.return.stateNode");
 		if (stateNode) {
+			this.updatingScroller = true;
 			stateNode.updater.enqueueForceUpdate(stateNode);
 			setTimeout(() => {stateNode.updater.enqueueForceUpdate(stateNode);},500);
+			setTimeout(() => {delete this.updatingScroller;},1000);
 		}
-		setTimeout(() => {delete this.updatingScroller;},1000);
 	}
 
 	addPinnedRecent (id) {

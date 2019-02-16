@@ -446,6 +446,7 @@ class EditUsers {
 					textarea.setAttribute("placeholder", BDFDB.LanguageStrings.TEXTAREA_PLACEHOLDER.replace("{{channel}}", "@" + (data.name || user.username)));
 				}
 			}
+			BDFDB.removeEventListener(this, textarea);
 			if (BDFDB.getData("changeInAutoComplete", this, "settings")) {
 				BDFDB.addEventListener(this, textarea, "keydown", e => {
 					let autocompletemenu = textarea.parentElement.querySelector(BDFDB.dotCN.autocomplete);
@@ -615,7 +616,10 @@ class EditUsers {
 		if (instance.props.tag == "a" && instance.props.className.indexOf(BDFDB.disCN.anchorunderlineonhover) > -1) {
 			if (BDFDB.containsClass(wrapper.parentElement, BDFDB.disCN.messagesystemcontent) && wrapper.parentElement.querySelector("a") == wrapper) {
 				let message = BDFDB.getKeyInformation({node:wrapper.parentElement, key:"message", up:true});
-				if (message) this.changeName(message.author, wrapper);
+				if (message) {
+					this.changeName(message.author, wrapper);
+					if (message.mentions.length == 1) this.changeName(this.UserUtils.getUser(message.mentions[0]), wrapper.parentElement.querySelectorAll("a")[1]);
+				}
 			}
 		}
 		else if (instance.props.tag == "span" && instance.props.className.indexOf(BDFDB.disCN.mention) > -1) {
@@ -946,7 +950,7 @@ class EditUsers {
 			break;
 		}
 		if (allenabled) return data;
-		let key = null, ele = null;
+		let key = null;
 		if (!BDFDB.containsClass(wrapper, BDFDB.disCN.mention) && BDFDB.getParentEle(BDFDB.dotCN.messagegroup, wrapper)) key = "changeInChatWindow";
 		else if (BDFDB.containsClass(wrapper, BDFDB.disCN.mention)) key = "changeInMentions";
 		else if (BDFDB.getParentEle(BDFDB.dotCN.textareawrapchat, wrapper)) key = "changeInChatTextarea";
@@ -956,7 +960,7 @@ class EditUsers {
 		else if (BDFDB.getParentEle(BDFDB.dotCN.dmchannels, wrapper)) key = "changeInDmsList";
 		else if (BDFDB.getParentEle(BDFDB.dotCN.channelheaderheaderbar, wrapper)) key = "changeInDmHeader";
 		else if (BDFDB.getParentEle(BDFDB.dotCN.callavatarwrapper, wrapper)) key = "changeInDmCalls";
-		else if (BDFDB.getParentEle(BDFDB.dotCN.callincoming, wrapper) || BDFDB.getParentEle(BDFDB.dotCN.callcurentcontainer, wrapper)) key = "changeInDmCalls";
+		else if (BDFDB.getParentEle(BDFDB.dotCN.callincoming, wrapper) || BDFDB.getParentEle(BDFDB.dotCN.callcurrentcontainer, wrapper)) key = "changeInDmCalls";
 		else if (BDFDB.getParentEle(BDFDB.dotCN.typing, wrapper)) key = "changeInTyping";
 		else if (BDFDB.getParentEle(BDFDB.dotCN.friends, wrapper) || BDFDB.getParentEle(BDFDB.dotCN.userprofilebody, wrapper)) key = "changeInFriendList";
 		else if (BDFDB.getParentEle(BDFDB.dotCN.activityfeed, wrapper)) key = "changeInActivity";
@@ -964,13 +968,11 @@ class EditUsers {
 		else if (BDFDB.getParentEle(BDFDB.dotCN.userprofileheader, wrapper)) key = "changeInUserProfil";
 		else if (BDFDB.getParentEle(BDFDB.dotCN.autocomplete, wrapper)) key = "changeInAutoComplete";
 		else if (BDFDB.getParentEle(BDFDB.dotCN.auditlog, wrapper)) key = "changeInAuditLog";
-		else if (BDFDB.getParentEle(BDFDB.dotCN.guildsettingsbannedcard, wrapper)) key = "changeInMemberLog";
-		else if (BDFDB.getParentEle(BDFDB.dotCN.guildsettingsinvitecard, wrapper)) key = "changeInMemberLog";
-		else if (BDFDB.getParentEle(BDFDB.dotCN.guildsettingsmembercard, wrapper)) key = "changeInMemberLog";
-		else if (BDFDB.getParentEle(BDFDB.dotCN.searchpopout, wrapper) || BDFDB.getParentEle(BDFDB.dotCN.searchpopoutdmaddpopout, wrapper)) key = "changeInSearchPopout";
+		else if (BDFDB.getParentEle(BDFDB.dotCN.guildsettingsbannedcard, wrapper) || BDFDB.getParentEle(BDFDB.dotCN.guildsettingsinvitecard, wrapper) || BDFDB.getParentEle(BDFDB.dotCN.guildsettingsmembercard, wrapper)) key = "changeInMemberLog";
+		else if (BDFDB.getParentEle(BDFDB.dotCN.searchpopout, wrapper) || BDFDB.getParentEle(BDFDB.dotCN.searchpopoutdmaddpopout, wrapper) || BDFDB.getParentEle(BDFDB.dotCN.quickswitcher, wrapper)) key = "changeInSearchPopout";
 		else if (BDFDB.getParentEle(BDFDB.dotCN.accountinfo, wrapper)) key = "changeInUserAccount";
 
-		return !key || BDFDB.getData(key, this, "settings") ? data : {};
+		return !key || settings[key] ? data : {};
 	}
 
 	addAutoCompleteMenu (textarea, channel) {
