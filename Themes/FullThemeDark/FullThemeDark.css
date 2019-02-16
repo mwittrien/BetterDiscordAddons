@@ -288,3 +288,140 @@
 	background-color: #2B2C31;
 	border-color: #2F3136;
 }
+
+#ace_settingsmenu {
+	position: absolute;
+	top: 10vh;
+	right: 20vw;
+	bottom: 10vh;
+	left: 20vw;
+	background-color: #36393f;
+	border-radius: 5px;
+	padding-right: 20px;
+    box-shadow: 0 0 0 1px rgba(32,34,37,.6), 0 2px 10px 0 rgba(0,0,0,.2);
+}
+#ace_settingsmenu::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+}
+#ace_settingsmenu::-webkit-scrollbar-thumb {
+    background-color: rgba(32,34,37,.6);
+    border: 2px solid transparent;
+    border-radius: 4px;
+}
+#ace_settingsmenu::-webkit-scrollbar-track {
+    background-color: transparent;
+    border: 2px solid transparent;
+}
+#ace_settingsmenu .ace_optionsMenuEntry {
+    height: 40px;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	margin-bottom: 10px;
+}
+#ace_settingsmenu .ace_optionsMenuEntry:hover {
+	background: none;
+}
+#ace_settingsmenu > *:last-child {
+    color: #f6f6f7;
+	float: right;
+}
+#ace_settingsmenu .ace_optionsMenuEntry label {
+    color: #f6f6f7;
+    font-size: 16px;
+    line-height: 24px;
+    cursor: pointer;
+    flex: 1 0 auto;
+    font-weight: 500;
+	margin-right: 10px;
+}
+#ace_settingsmenu .ace_optionsMenuEntry input[type="text"],
+#ace_settingsmenu .ace_optionsMenuEntry select {
+	box-sizing: border-box;
+    flex: 0 1 auto;
+	width: 200px;
+	float: none !important;
+    background-color: rgba(0,0,0,.1);
+    border-color: rgba(0,0,0,.3);
+    color: #f6f6f7;
+    height: 40px;
+    padding: 10px;
+    border-radius: 3px;
+    border-style: solid;
+    border-width: 1px;
+    transition: background-color .15s ease,border .15s ease;
+    font-size: 16px;
+}
+#ace_settingsmenu .ace_optionsMenuEntry input[type="text"]:hover,
+#ace_settingsmenu .ace_optionsMenuEntry select:hover {
+	border-color: #040405;
+}
+#ace_settingsmenu .ace_optionsMenuEntry input[type="text"]:focus,
+#ace_settingsmenu .ace_optionsMenuEntry select:focus {
+	border-color: rgb(var(--vaccentcolor));
+}
+#ace_settingsmenu .ace_optionsMenuEntry select option {
+    background-color: #303339;
+    color: #f6f6f7;
+}
+#ace_settingsmenu input[type="checkbox"] {
+    position: relative;
+    width: 44px;
+    height: 24px;
+	float: none !important;
+}
+#ace_settingsmenu input[type="checkbox"]:before {
+    content: "";
+    display: block;
+    position: relative;
+    width: 44px;
+    height: 24px;
+    background: #72767d;
+    border-radius: 14px;
+    transition: background .15s ease-in-out,box-shadow .15s ease-in-out,border .15s ease-in-out;
+}
+#ace_settingsmenu input[type="checkbox"]:checked:before {
+    background: rgb(var(--vaccentcolor));
+}
+#ace_settingsmenu input[type="checkbox"]:after {
+    content: "";
+    display: block;
+    width: 18px;
+    height: 18px;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    bottom: 3px;
+    background: #f6f6f7;
+    border-radius: 10px;
+    transition: all .15s ease;
+    box-shadow: 0 3px 1px 0 rgba(0,0,0,.05), 0 2px 2px 0 rgba(0,0,0,.1), 0 3px 3px 0 rgba(0,0,0,.05);
+}
+#ace_settingsmenu input[type="checkbox"]:checked:after {
+    transform: translateX(20px);
+}
+.ace_closeButton {
+	position: absolute;
+	height: 35px;
+	width: 35px;
+	top: calc(10vh - 13px);
+	right: calc(20vw - 13px);
+	z-index: 10000;
+	background-color: #36393f;
+    border-radius: 50%;
+    border: 2px solid #72767d;
+	padding: 0;
+	cursor: pointer;
+}
+.ace_closeButton:before {
+	content: "✖";
+	color: #dcddde;
+	margin-left: 11px;
+	line-height: 34px;
+	text-align: center;
+	vertical-align: middle;
+}
+.ace_closeButton:hover {
+	filter: brightness(120%);
+}
