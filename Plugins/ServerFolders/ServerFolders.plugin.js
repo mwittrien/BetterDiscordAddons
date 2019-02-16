@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.0.7";}
+	getVersion () {return "6.0.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -17,7 +17,7 @@ class ServerFolders {
 		this.labels = {};
 
 		this.patchModules = {
-			"Guilds":"componentDidMount",
+			"Guilds":["componentDidMount","componentWillUnmount"],
 			"Guild":["componentDidMount","componentWillUnmount"],
 			"StandardSidebarView":"componentWillUnmount"
 		};
@@ -471,23 +471,29 @@ class ServerFolders {
 		}
 	}
 
-	processGuilds (instance, wrapper) {
-		let process = () => {
-			if (!wrapper.parentElement.querySelector(BDFDB.dotCN.guildswrapper + ".foldercontent")) {
-				this.foldercontent = BDFDB.htmlToElement(this.folderContentMarkup);
-				wrapper.parentElement.insertBefore(this.foldercontent, wrapper.nextElementSibling);
-				this.foldercontentguilds = this.foldercontent.querySelector(BDFDB.dotCN.guilds);
-			}
-			let folders = BDFDB.loadAllData(this, "folders"), sortedFolders = [];
-			for (let id in folders) sortedFolders[folders[id].position] = folders[id];
-			for (let data of sortedFolders) if (data && !wrapper.querySelector(BDFDB.dotCN.guild + ".folder#" + data.folderID)) {
-				let folderdiv = this.createFolderDiv(data);
-				this.readIncludedServerList(folderdiv).forEach(guilddiv => {this.hideServer(guilddiv, folderdiv);});
-			}
-			BDFDB.WebModules.forceAllUpdates(this, "Guild");
-		};
-		if (document.querySelector(BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guild + ":not(.folder):not(.copy) " + BDFDB.dotCN.guildicon)) process();
-		else setTimeout(process, 5000);
+	processGuilds (instance, wrapper, methodnames) {
+		if (methodnames.includes("componentWillUnmount")) {
+			BDFDB.removeEles(this.foldercontent, BDFDB.dotCN.guildswrapper + ".foldercontent", ".serverfolder-contextmenu", BDFDB.dotCN.guild + ".folder");
+			this.foldercontent = null;
+		}
+		if (methodnames.includes("componentDidMount")) {
+			let process = () => {
+				if (!wrapper.parentElement.querySelector(BDFDB.dotCN.guildswrapper + ".foldercontent")) {
+					this.foldercontent = BDFDB.htmlToElement(this.folderContentMarkup);
+					wrapper.parentElement.insertBefore(this.foldercontent, wrapper.nextElementSibling);
+					this.foldercontentguilds = this.foldercontent.querySelector(BDFDB.dotCN.guilds);
+				}
+				let folders = BDFDB.loadAllData(this, "folders"), sortedFolders = [];
+				for (let id in folders) sortedFolders[folders[id].position] = folders[id];
+				for (let data of sortedFolders) if (data && !wrapper.querySelector(BDFDB.dotCN.guild + ".folder#" + data.folderID)) {
+					let folderdiv = this.createFolderDiv(data);
+					this.readIncludedServerList(folderdiv).forEach(guilddiv => {this.hideServer(guilddiv, folderdiv);});
+				}
+				BDFDB.WebModules.forceAllUpdates(this, "Guild");
+			};
+			if (document.querySelector(BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guild + ":not(.folder):not(.copy) " + BDFDB.dotCN.guildicon)) process();
+			else setTimeout(process, 5000);
+		}
 	}
 
 	processGuild (instance, wrapper, methodnames) {
@@ -532,7 +538,7 @@ class ServerFolders {
 	}
 
 	processStandardSidebarView (instance, wrapper) {
-		if (this.SettingsUpdated) {
+		if (this.SettingsUpdated && this.foldercontent) {
 			delete this.SettingsUpdated;
 			this.foldercontent.querySelectorAll(BDFDB.dotCN.guild + ".folder").forEach(folderdiv => {this.updateFolderNotifications(folderdiv);});
 		}
@@ -952,7 +958,7 @@ class ServerFolders {
 	}
 
 	removeServerFromFolder (info, folderdiv) {
-		if (!info || !folderdiv) return;
+		if (!info || !folderdiv || !this.foldercontent) return;
 		let data = BDFDB.loadData(folderdiv.id, this, "folders");
 		if (!data) return;
 		BDFDB.removeFromArray(data.servers, info.id);
@@ -964,7 +970,7 @@ class ServerFolders {
 	}
 
 	removeFolder (folderdiv) {
-		if (!folderdiv) return;
+		if (!folderdiv || !this.foldercontent) return;
 		this.readIncludedServerList(folderdiv).forEach(guilddiv => {this.unhideServer(guilddiv);});
 		BDFDB.removeData(folderdiv.id, this, "folders");
 		this.closeFolderContent(folderdiv);
@@ -973,7 +979,7 @@ class ServerFolders {
 	}
 
 	getFolderOfServer (idOrInfoOrEle) {
-		if (!idOrInfoOrEle) return;
+		if (!idOrInfoOrEle || !this.foldercontent) return;
 		let id = Node.prototype.isPrototypeOf(idOrInfoOrEle) ? BDFDB.getServerID(idOrInfoOrEle) : (typeof idOrInfoOrEle == "object" ? idOrInfoOrEle.id : idOrInfoOrEle);
 		if (!id) return;
 		let folders = BDFDB.loadAllData(this, "folders");
@@ -1018,7 +1024,7 @@ class ServerFolders {
 	}
 
 	openCloseFolder (folderdiv) {
-		if (!folderdiv) return;
+		if (!folderdiv || !this.foldercontent) return;
 		let data = BDFDB.loadData(folderdiv.id, this, "folders");
 		if (!data) return;
 		let isClosed = !BDFDB.containsClass(folderdiv, "open");
@@ -1045,7 +1051,7 @@ class ServerFolders {
 	}
 
 	closeFolderContent (folderdiv) {
-		if (!folderdiv) return;
+		if (!folderdiv || !this.foldercontent) return;
 		BDFDB.removeClass(folderdiv, "open");
 		BDFDB.addClass(folderdiv, "closed");
 		let includedCopies = this.foldercontent.querySelectorAll(`[folder="${folderdiv.id}"]`);
@@ -1065,7 +1071,7 @@ class ServerFolders {
 	}
 
 	updateCopyInFolderContent (guilddiv, folderdiv) {
-		if (!guilddiv || !folderdiv) return;
+		if (!guilddiv || !folderdiv || !this.foldercontent) return;
 		if (BDFDB.containsClass(folderdiv, "open")) {
 			let info = this.GuildUtils.getGuild(BDFDB.getServerID(guilddiv));
 			if (!info) return;
@@ -1083,7 +1089,7 @@ class ServerFolders {
 	}
 
 	createCopyOfServer (guilddiv, folderdiv) {
-		if (!guilddiv || !folderdiv) return;
+		if (!guilddiv || !folderdiv || !this.foldercontent) return;
 		let info = this.GuildUtils.getGuild(BDFDB.getServerID(guilddiv));
 		if (!info) return;
 		let guildcopy = guilddiv.cloneNode(true);
@@ -1192,6 +1198,7 @@ class ServerFolders {
 	}
 
 	updateFolderPositions () {
+		if (!this.foldercontent) return;
 		let serverAndFolders = document.querySelectorAll(`div${BDFDB.dotCN.guildseparator}:not(.folderseparator) ~ div${BDFDB.dotCN.guild}`);
 		for (let i = 0; i < serverAndFolders.length; i++) {
 			let folderdiv = BDFDB.getParentEle(BDFDB.dotCN.guild + ".folder", serverAndFolders[i]);
@@ -1206,6 +1213,7 @@ class ServerFolders {
 	}
 
 	updateServerPositions (folderdiv) {
+		if (!this.foldercontent) return;
 		let data = BDFDB.loadData(folderdiv.id, this, "folders");
 		if (data) {
 			let servers = Array.from(this.foldercontent.querySelectorAll(`${BDFDB.dotCN.guild}.copy[folder="${folderdiv.id}"]`)).map(div => {return div.getAttribute("guild");});
@@ -1216,6 +1224,7 @@ class ServerFolders {
 	}
 
 	updateFolderNotifications (folderdiv) {
+		if (!this.foldercontent) return;
 		let data = BDFDB.loadData(folderdiv.id, this, "folders");
 		var a = performance.now();
 		if (!data) return;
