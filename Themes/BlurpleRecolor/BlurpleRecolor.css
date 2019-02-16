@@ -113,6 +113,9 @@
 
 /* BUTTONS */
 .bd-modal-wrapper .footer button,
+.bd-pfbtn,
+.bda-settings-button,
+.btn-primary,
 .colorBrand-3pXr91:not(.lookFilled-1Gx00P) .spinnerItem-3GlVyU,
 .platform-iik236.active-iLSdWQ .downloadButton-1bWXpg,
 .action-1lSjCi.create-3jownz .actionButton-2PeQbJ,
@@ -142,6 +145,9 @@
 	background-image: linear-gradient(0deg,transparent,transparent 1px,rgb(var(--vaccentcolor)) 0,rgb(var(--vaccentcolor)) 2px,transparent 0) !important;
 }
 .bd-modal-wrapper .footer button:hover,
+.bd-pfbtn:hover,
+.bda-settings-button:not(:disabled):hover,
+.btn-primary:hover,
 .platform-iik236.active-iLSdWQ .downloadButton-1bWXpg:hover,
 .action-1lSjCi.create-3jownz .actionButton-2PeQbJ:hover,
 .lookFilled-1Gx00P.colorBrand-3pXr91:hover,
@@ -378,9 +384,6 @@
 .valueChecked-m-4IJZ:not([style*="background-color: rgba(255, 255, 255, 0.3)"]),
 .ui-switch.checked,
 .checkbox-3kaeSU .checkboxInner-3yjcPe .checkboxElement-1qV33p:checked + span,
-.bd-pfbtn,
-.bda-right button,
-.bda-settings-button,
 .ui-tab-bar-item.selected,
 .side-8zPYf6 .itemSelected-1qLhcL,
 .selectableItem-1MP3MQ.selected-31soGA,
