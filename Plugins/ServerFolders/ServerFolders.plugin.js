@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.0.8";}
+	getVersion () {return "6.0.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ServerFolders {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["'Reloading'","Thanks to stupid Discord devs the serverlist now reloads, when you switch between a server and the homepage, which made ServerFolders also reload the folderlist, ServerFolders now quickly readds the folders when this happens and remembers now which folder was open and which one wasn't, due to the serverlist reloading on server <-> home switch loading can be a bit slow, this has to be fixed by Discord and not me"]]
+			"fixed":[["'Reloading'","Thanks to stupid Discord devs the serverlist now reloads, when you switch between a server and the homepage, which made ServerFolders also reload the folderlist, ServerFolders now quickly readds the folders when this happens and remembers now which folder was open and which one wasn't, due to the serverlist reloading on server <-> home switch loading can be a bit slow, this has to be fixed by Discord and not me"],["Closing Behaviour","The memory feature now properly checks the closing settings"]]
 		};
 		
 		this.labels = {};
@@ -830,14 +830,12 @@ class ServerFolders {
 		BDFDB.addClass(folderdiv, "closed");
 		folderdiv.querySelector(BDFDB.dotCN.avataricon).style.setProperty("background-image", `url(${data.icons.closedicon})`);
 		folderdiv.addEventListener("click", () => {
-			let newdata = BDFDB.loadData(folderdiv.id, this, "folders");
 			if (BDFDB.getData("closeOtherFolders", this, "settings")) {
 				document.querySelectorAll(BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guild + ".folder.open").forEach(folder => {
 					if (folder != folderdiv) this.openCloseFolder(folder);
 				});
 			}
-			newdata.isOpen = this.openCloseFolder(folderdiv);
-			BDFDB.saveData(folderdiv.id, newdata, this, "folders");
+			this.openCloseFolder(folderdiv);
 		});
 		folderdiv.addEventListener("mouseenter", () => {
 			let newdata = BDFDB.loadData(folderdiv.id, this, "folders");
@@ -1047,7 +1045,8 @@ class ServerFolders {
 
 		folderdiv.querySelector(BDFDB.dotCN.avataricon).style.setProperty("background-image", `url(${isClosed ? data.icons.openicon : data.icons.closedicon})`);
 		
-		return isClosed;
+		data.isOpen = isClosed;
+		BDFDB.saveData(folderdiv.id, data, this, "folders");
 	}
 
 	closeFolderContent (folderdiv) {
@@ -1061,7 +1060,7 @@ class ServerFolders {
 			setTimeout(() => {
 				let settings = BDFDB.getAllData(this, "settings");
 				if (settings.closeOtherFolders) BDFDB.removeEles(includedCopies);
-				else if (!settings.closeOtherFolders && !document.querySelectorAll(BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guild + ".folder.open")) BDFDB.removeEles(includedCopies);
+				else if (!settings.closeOtherFolders && !document.querySelector(BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guild + ".folder.open")) BDFDB.removeEles(includedCopies);
 			}, 300);
 		}
 		else BDFDB.removeEles(includedCopies);
