@@ -3,7 +3,7 @@
 class PinDMs {
 	getName () {return "PinDMs";}
 
-	getVersion () {return "1.3.2";}
+	getVersion () {return "1.3.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class PinDMs {
 
 	initConstructor () {
 		this.changelog = {
-			"improved":[["Selected Channel","Pinned channels are no longer also marked as selected in the normal channel list"]]
+			"fixed":[["Rendering","Pinned DMs sometimes didn't render when switching DMs, this should be fixed now"]]
 		};
 		
 		this.patchModules = {
@@ -492,7 +492,10 @@ class PinDMs {
 		if (this.updatingScroller) return;
 		this.updatingScroller = true;
 		var stateNode = BDFDB.getReactValue(scroller, "return.return.return.stateNode");
-		if (stateNode) stateNode.updater.enqueueForceUpdate(stateNode);
+		if (stateNode) {
+			stateNode.updater.enqueueForceUpdate(stateNode);
+			setTimeout(() => {stateNode.updater.enqueueForceUpdate(stateNode);},500);
+		}
 		setTimeout(() => {delete this.updatingScroller;},1000);
 	}
 
