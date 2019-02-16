@@ -1952,9 +1952,9 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 #ace_settingsmenu {
 	position: absolute;
 	top: 10vh;
-	right: 20vw;
+	right: calc(50vw - 300px);
 	bottom: 10vh;
-	left: 20vw;
+	left: calc(50vw - 300px);
 	border-radius: 5px;
 	padding-right: 20px;
     box-shadow: 0 0 0 1px rgba(32,34,37,.6), 0 2px 10px 0 rgba(0,0,0,.2);
@@ -2065,7 +2065,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	height: 35px;
 	width: 35px;
 	top: calc(10vh - 13px);
-	right: calc(20vw - 13px);
+	right: calc(50vw - 313px);
 	z-index: 10000;
 	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) * 3)) !important;
     border-radius: 50%;

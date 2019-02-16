@@ -292,9 +292,9 @@
 #ace_settingsmenu {
 	position: absolute;
 	top: 10vh;
-	right: 20vw;
+	right: calc(50vw - 300px);
 	bottom: 10vh;
-	left: 20vw;
+	left: calc(50vw - 300px);
 	background-color: #36393f;
 	border-radius: 5px;
 	padding-right: 20px;
@@ -406,7 +406,7 @@
 	height: 35px;
 	width: 35px;
 	top: calc(10vh - 13px);
-	right: calc(20vw - 13px);
+	right: calc(50vw - 313px);
 	z-index: 10000;
 	background-color: #36393f;
     border-radius: 50%;
