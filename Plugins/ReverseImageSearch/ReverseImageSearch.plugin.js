@@ -123,6 +123,7 @@ class ReverseImageSearch {
 	onMessageContextMenu (instance, menu) {
 		if (instance.props && instance.props.message && instance.props.channel && instance.props.target && !menu.querySelector(".reverseimagesearch-item")) {
 			if (instance.props.attachment) {
+				console.log(instance);
 				this.appendItem(instance, menu, instance.props.attachment.url);
 			}
 			if (instance.props.target.tagName == "A") {
@@ -139,31 +140,29 @@ class ReverseImageSearch {
 	}
 
 	appendItem (instance, menu, url) {
-		if (instance && menu && url) {
-			if (url.indexOf("discordapp.com/assets/") == -1) {
-				if (url.indexOf("https://images-ext-1.discordapp.net/external/") > -1) {
-					if (url.split("/https/").length != 1) url = "https://" + url.split("/https/")[url.split("/https/").length-1];
-					else if (url.split("/http/").length != 1) url = "http://" + url.split("/http/")[url.split("/http/").length-1];
-				}
-				let messageContextEntry = BDFDB.htmlToElement(this.messageContextEntryMarkup);
-				menu.appendChild(messageContextEntry);
-				let searchitem = messageContextEntry.querySelector(".reverseimagesearch-item");
-				searchitem.addEventListener("mouseenter", () => {
-					let messageContextSubMenu = BDFDB.htmlToElement(this.messageContextSubMenuMarkup);
-					let engines = BDFDB.getAllData(this, "engines");
-					for (let key in engines) if (!engines[key]) BDFDB.removeEles(messageContextSubMenu.querySelector("[engine='" + key + "']"));
-					if (messageContextSubMenu.querySelector(".RIS-item")) BDFDB.removeEles(messageContextSubMenu.querySelector(".alldisabled-item"));
-					BDFDB.addChildEventListener(messageContextSubMenu, "click", ".RIS-item", e => {
-						instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
-						let engine = e.currentTarget.getAttribute("engine");
-						if (engine == "_all") {
-							for (let key in engines) if (key != "_all" && engines[key]) window.open(this.defaults.engines[key].url.replace(this.imgUrlReplaceString, encodeURIComponent(url)), "_blank");
-						}
-						else window.open(this.defaults.engines[engine].url.replace(this.imgUrlReplaceString, encodeURIComponent(url)), "_blank");
-					});
-					BDFDB.appendSubMenu(searchitem, messageContextSubMenu);
-				});
+		if (instance && menu && url && url.indexOf("discordapp.com/assets/") == -1 && !url.endsWith(".mp4")) {
+			if (url.indexOf("https://images-ext-1.discordapp.net/external/") > -1) {
+				if (url.split("/https/").length != 1) url = "https://" + url.split("/https/")[url.split("/https/").length-1];
+				else if (url.split("/http/").length != 1) url = "http://" + url.split("/http/")[url.split("/http/").length-1];
 			}
+			let messageContextEntry = BDFDB.htmlToElement(this.messageContextEntryMarkup);
+			menu.appendChild(messageContextEntry);
+			let searchitem = messageContextEntry.querySelector(".reverseimagesearch-item");
+			searchitem.addEventListener("mouseenter", () => {
+				let messageContextSubMenu = BDFDB.htmlToElement(this.messageContextSubMenuMarkup);
+				let engines = BDFDB.getAllData(this, "engines");
+				for (let key in engines) if (!engines[key]) BDFDB.removeEles(messageContextSubMenu.querySelector("[engine='" + key + "']"));
+				if (messageContextSubMenu.querySelector(".RIS-item")) BDFDB.removeEles(messageContextSubMenu.querySelector(".alldisabled-item"));
+				BDFDB.addChildEventListener(messageContextSubMenu, "click", ".RIS-item", e => {
+					instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
+					let engine = e.currentTarget.getAttribute("engine");
+					if (engine == "_all") {
+						for (let key in engines) if (key != "_all" && engines[key]) window.open(this.defaults.engines[key].url.replace(this.imgUrlReplaceString, encodeURIComponent(url)), "_blank");
+					}
+					else window.open(this.defaults.engines[engine].url.replace(this.imgUrlReplaceString, encodeURIComponent(url)), "_blank");
+				});
+				BDFDB.appendSubMenu(searchitem, messageContextSubMenu);
+			});
 		}
 	}
 
