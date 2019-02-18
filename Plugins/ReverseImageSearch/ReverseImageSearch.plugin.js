@@ -3,13 +3,17 @@
 class ReverseImageSearch {
 	getName () {return "ReverseImageSearch";}
 
-	getVersion () {return "3.4.1";}
+	getVersion () {return "3.4.2";}
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Adds a reverse image search option to the context menu.";}
 
 	initConstructor () {
+		this.changelog = {
+			"fixed":[["Image Modal","Option is now also added to a contextmenu when you right click the image in the image modal"]]
+		};
+		
 		this.imgUrlReplaceString = "DEVILBRO_BD_REVERSEIMAGESEARCH_REPLACE_IMAGEURL";
 
 		this.defaults = {
@@ -111,8 +115,8 @@ class ReverseImageSearch {
 	}
 
 	onNativeContextMenu (instance, menu) {
-		if (instance.props && instance.props.type == "NATIVE_IMAGE" && instance.props.href && !menu.querySelector(".reverseimagesearch-item")) {
-			this.appendItem(instance, menu, instance.props.href);
+		if (instance.props && instance.props.type == "NATIVE_IMAGE" && (instance.props.href || instance.props.src) && !menu.querySelector(".reverseimagesearch-item")) {
+			this.appendItem(instance, menu, instance.props.href || instance.props.src);
 		}
 	}
 

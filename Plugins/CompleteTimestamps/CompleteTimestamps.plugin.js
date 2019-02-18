@@ -3,7 +3,7 @@
 class CompleteTimestamps {
 	getName () {return "CompleteTimestamps";}
 
-	getVersion () {return "1.3.0";}
+	getVersion () {return "1.3.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class CompleteTimestamps {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Chat Timestamps","The plugin now properly checking the option whether chat timestamps should be changed or not"]]
+			"fixed":[["Arabic Fix","Selecting and copying messages no longer copies the invisible arabic fix divider"]]
 		};
 		
 		this.patchModules = {
@@ -202,7 +202,6 @@ class CompleteTimestamps {
 				setTimeout(() => {BDFDB.removeClass(selectWrap, BDFDB.disCN.selectisopen);},100);
 			}
 		};
-
 		document.addEventListener("mousedown", removeMenu);
 	}
 
@@ -233,14 +232,7 @@ class CompleteTimestamps {
 		if (time) {
 			this.setMaxWidth();
 			BDFDB.addClass(stamp, "complete-timestamp");
-			let stampdivider = document.createElement("span");
-			stampdivider.className = "complete-timestamp-divider arabic-fix";
-			stampdivider.style.setProperty("display", "inline", "important");
-			stampdivider.style.setProperty("height", "0px", "important");
-			stampdivider.style.setProperty("width", "0px", "important");
-			stampdivider.style.setProperty("font-size", "0px", "important");
-			stampdivider.innerText = "ARABIC FIX";
-			stamp.parentElement.insertBefore(stampdivider, stamp);
+			stamp.parentElement.insertBefore(BDFDB.htmlToElement(`<span class="complete-timestamp-divider arabic-fix" style="display: inline !important; height: 0 !important; width: 0 !important; font-size: 0 !important; user-select: none !important;">ARABIC FIX</span>`), stamp);
 			BDFDB.setInnerText(stamp, this.getTimestamp(this.languages[BDFDB.getData("creationDateLang", this, "choices")].id, time));
 		}
 	}
