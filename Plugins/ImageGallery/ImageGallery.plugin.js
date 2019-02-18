@@ -3,13 +3,17 @@
 class ImageGallery {
 	getName () {return "ImageGallery";}
 
-	getVersion () {return "1.5.7";}
+	getVersion () {return "1.5.8";}
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Allows the user to browse through images sent inside the same message.";}
 
 	initConstructor () {
+		this.changelog = {
+			"fixed":[["Prev/Next Image","Fixed bug where the previou/next image would sometimes be doubled with the current image on the first/last image"]]
+		};
+		
 		this.patchModules = {
 			"ImageModal":["componentDidMount","componentWillUnmount"]
 		}
@@ -127,7 +131,7 @@ class ImageGallery {
 	}
 
 	addImages (modal, imgs, img) {
-		BDFDB.removeEles(modal.querySelector(`${BDFDB.dotCN.imagewrapper}.prev, ${BDFDB.dotCN.imagewrapper}.next`));
+		BDFDB.removeEles(modal.querySelectorAll(`${BDFDB.dotCN.imagewrapper}.prev, ${BDFDB.dotCN.imagewrapper}.next`));
 
 		let inner = modal.querySelector(BDFDB.dotCN.modalinner);
 
