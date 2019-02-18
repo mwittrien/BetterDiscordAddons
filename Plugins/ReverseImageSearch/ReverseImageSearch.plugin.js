@@ -123,7 +123,6 @@ class ReverseImageSearch {
 	onMessageContextMenu (instance, menu) {
 		if (instance.props && instance.props.message && instance.props.channel && instance.props.target && !menu.querySelector(".reverseimagesearch-item")) {
 			if (instance.props.attachment) {
-				console.log(instance);
 				this.appendItem(instance, menu, instance.props.attachment.url);
 			}
 			if (instance.props.target.tagName == "A") {
