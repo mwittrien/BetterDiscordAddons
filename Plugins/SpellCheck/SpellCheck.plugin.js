@@ -3,7 +3,7 @@
 class SpellCheck {
 	getName () {return "SpellCheck";}
 
-	getVersion () {return "1.3.2";}
+	getVersion () {return "1.3.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class SpellCheck {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Plugin not working","Fixed a bug that could break the plugin and render SpellCheck unusable"]]
+			"improved":[["Correcting Words","You can now prompt the contextmenu entries by simply right clicking an incorrect word instead of having to select and right click it"],["Native Spellcheck","If you are above Win8 discord allows you to use a native Spellcheck, using this plugin disables the native Spellcheck automatically and removes all contextmenu entries related to it"]]
 		};
 		
 		this.patchModules = {
@@ -63,9 +63,6 @@ class SpellCheck {
 
 
 		this.defaults = {
-			settings: {
-				disableDiscordSpellcheck:	{value:true, 	description:"Disable Discord's internal Spellcheck:"}
-			},
 			choices: {
 				dictionaryLanguage:			{value:"en", 	description:"Dictionay Language:"}
 			},
@@ -169,14 +166,31 @@ class SpellCheck {
 	}
 
 	onNativeContextMenu (instance, menu) {
-		if (instance.props && instance.props.type == "CHANNEL_TEXT_AREA" && instance.props.value && !menu.querySelector(".spellcheck-item")) {
-			let selection = document.getSelection();
-			let word = selection.toString();
+		if (instance.props && instance.props.target && instance.props.type == "CHANNEL_TEXT_AREA" && !menu.querySelector(".spellcheck-item")) {
+			BDFDB.toggleEles(BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:menu,name:"FluxContainer(NativeSpellcheckGroup)"})), false);
+			var textarea = instance.props.target, word = null, length = 0;
+			if (textarea.value && (textarea.selectionStart || textarea.selectionEnd)) for (let splitword of textarea.value.split(/\s/g)) {
+				length += splitword.length + 1;
+				if (length > textarea.selectionStart) {
+					word = splitword;
+					break;
+				}
+			}
+			if (true || !word && textarea.value) for (let error of textarea.parentElement.querySelectorAll(".spelling-error")) {
+				let rects = BDFDB.getRects(error);
+				if (BDFDB.mousePosition.pageX > rects.x && BDFDB.mousePosition.pageX < (rects.x + rects.width) && BDFDB.mousePosition.pageY > rects.y && BDFDB.mousePosition.pageY < (rects.y + rects.height)) {
+					word = error.innerText;
+					break;
+				}
+			}
 			if (word && this.isWordNotInDictionary(word)) {
-				let cutentry = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:menu,props:["handleCutItem"]}));
-				if (cutentry) {
+				let pasteentry = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:menu,props:["handlePasteItem"]}));
+				if (pasteentry) {
 					let spellCheckContextEntry = BDFDB.htmlToElement(this.spellCheckContextEntryMarkup);
 					menu.appendChild(spellCheckContextEntry);
+					spellCheckContextEntry.addEventListener("mouseenter", () => {
+						BDFDB.createTooltip(word, spellCheckContextEntry, {type: "left"});
+					});
 					spellCheckContextEntry.querySelector(".spellcheck-item").addEventListener("click", () => {
 						instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
 						this.addToOwnDictionary(word);
@@ -190,7 +204,7 @@ class SpellCheck {
 							for (let foundWord of similarWords.sort()) similarWordsContextSubMenu.appendChild(BDFDB.htmlToElement(`<div value="${foundWord}" class="${BDFDB.disCN.contextmenuitem} similarword-item"><span>${foundWord}</span><div class="${BDFDB.disCN.contextmenuhint}"></div></div>`));
 							BDFDB.addChildEventListener(similarWordsContextSubMenu, "click", ".similarword-item", e => {
 								instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
-								this.replaceWord(selection.getRangeAt(0).startContainer.querySelector("textarea"), word, e.currentTarget.getAttribute("value"));
+								this.replaceWord(textarea, word, e.currentTarget.getAttribute("value"));
 							});
 						}
 						BDFDB.appendSubMenu(similarwordsitem, similarWordsContextSubMenu);
@@ -208,15 +222,14 @@ class SpellCheck {
 			var updateSpellcheck = () => {
 				var style = Object.assign({},getComputedStyle(textarea));
 				for (let i in style) if (i.indexOf("webkit") == -1) spellcheck.style[i] = style[i];
-				spellcheck.style.setProperty("box-sizing", "border-box", "important");
 				spellcheck.style.setProperty("color", "transparent", "important");
 				spellcheck.style.setProperty("background", "none", "important");
 				spellcheck.style.setProperty("mask", "none", "important");
 				spellcheck.style.setProperty("pointer-events", "none", "important");
 				spellcheck.style.setProperty("position", "absolute", "important");
 				spellcheck.style.setProperty("left", BDFDB.getRects(textarea).left - BDFDB.getRects(wrapper).left + "px", "important");
-				spellcheck.style.setProperty("width", BDFDB.getRects(textarea).width + "px", "important");
-				spellcheck.style.setProperty("height", BDFDB.getRects(textarea).height + "px", "important");
+				spellcheck.style.setProperty("width", BDFDB.getRects(textarea).width - style.paddingLeft - style.paddingRight + "px", "important");
+				spellcheck.style.setProperty("height", style.height, "important");
 
 				spellcheck.innerHTML = this.spellCheckText(textarea.value);
 				spellcheck.scrollTop = textarea.scrollTop;
@@ -225,7 +238,7 @@ class SpellCheck {
 			var spellcheck = BDFDB.htmlToElement(this.spellCheckLayerMarkup);
 			BDFDB.addClass(spellcheck, textarea.className);
 
-			textarea.setAttribute("spellcheck", !BDFDB.getData("disableDiscordSpellcheck", this, "settings"));
+			textarea.setAttribute("spellcheck", false);
 
 			textarea.parentElement.appendChild(spellcheck);
 			BDFDB.addClass(wrapper, "spellcheck-added");
@@ -233,7 +246,8 @@ class SpellCheck {
 			updateSpellcheck();
 			BDFDB.addEventListener(this, textarea, "keyup", e => {
 				clearTimeout(textarea.spellchecktimeout);
-				textarea.spellchecktimeout = setTimeout(() => {updateSpellcheck();},100);
+				if (textarea.value) textarea.spellchecktimeout = setTimeout(() => {updateSpellcheck();},100);
+				else updateSpellcheck();
 			});
 			BDFDB.addEventListener(this, textarea, "scroll", e => {
 				spellcheck.scrollTop = textarea.scrollTop;
@@ -264,9 +278,7 @@ class SpellCheck {
 			if (!ownDictionary.includes(wordlow)) {
 				ownDictionary.push(wordlow);
 				BDFDB.saveData(lang, ownDictionary, this, "owndics");
-				var message = this.labels.toast_wordadd_text ? 
-							this.labels.toast_wordadd_text.replace("${word}", word).replace("${dicname}", this.languages[lang].name) : "";
-				BDFDB.showToast(message, {type:"success"});
+				BDFDB.showToast(this.labels.toast_wordadd_text ? this.labels.toast_wordadd_text.replace("${word}", word).replace("${dicname}", this.languages[lang].name) : "", {type:"success"});
 				this.dictionary = this.langDictionary.concat(ownDictionary);
 			}
 		}
@@ -368,10 +380,12 @@ class SpellCheck {
 
 	spellCheckText (string) {
 		var htmlString = [];
-		string.replace(/[\n]/g, "\n ").split(" ").forEach((word, i) => {
-			htmlString.push(`<label class="${this.isWordNotInDictionary(word) ? "spelling-error" : "nospelling-error"}" style="color: transparent !important; text-shadow: none !important;">${BDFDB.encodeToHTML(word)}</label>`);
+		string.replace(/\n/g, "\n ").split(" ").forEach(word => {
+			let hasnewline = word.endsWith("\n");
+			word = word.replace(/\n/g, "");
+			htmlString.push(`<label class="${this.isWordNotInDictionary(word) ? "spelling-error" : "nospelling-error"}" style="color: transparent !important; text-shadow: none !important;">${BDFDB.encodeToHTML(word)}</label>${hasnewline ? "\n" : ""}`);
 		});
-		return htmlString.join(" ");
+		return htmlString.join(" ").replace(/\n /g, "\n");
 	}
 
 	isWordNotInDictionary (word) {
