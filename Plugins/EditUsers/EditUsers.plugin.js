@@ -3,7 +3,7 @@
 class EditUsers {
 	getName () {return "EditUsers";}
 
-	getVersion () {return "3.2.6";}
+	getVersion () {return "3.2.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class EditUsers {
 
 	initConstructor () {
 		this.changelog = {
-			"improved":[["Affected Elements","Names/Avatars will also now be changed in the member/invite/ban overview in the guildsettings"]]
+			"improved":[["Affected Elements","Avatar in the ScreenShare popout is also now changed"]]
 		};
 		
 		this.labels = {};
@@ -27,6 +27,7 @@ class EditUsers {
 			"MessageUsername":"componentDidMount",
 			"DirectMessage":"componentDidMount",
 			"CallAvatar":"componentDidMount",
+			"PictureInPictureVideo":"componentDidMount",
 			"PrivateChannel":["componentDidMount","componentDidUpdate"],
 			"HeaderBar":["componentDidMount","componentDidUpdate"],
 			"Clickable":"componentDidMount",
@@ -581,6 +582,14 @@ class EditUsers {
 				this.changeAvatar(user, avatar);
 				if (BDFDB.containsClass(avatar, BDFDB.disCN.callvideo)) this.changeTooltip(user, avatar, "left");
 			}
+		}
+	}
+
+	processPictureInPictureVideo (instance, wrapper) {
+		console.log(instance);
+		if (instance.props && instance.props.backgroundKey) {
+			let user = this.UserUtils.getUser(instance.props.backgroundKey);
+			if (user) this.changeAvatar(user, this.getAvatarDiv(wrapper));
 		}
 	}
 
