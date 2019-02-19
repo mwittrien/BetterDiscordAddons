@@ -88,6 +88,10 @@
 .carousel-tQMSVK:before {
 	background: linear-gradient(90deg,rgb(var(--vaccentcolor)) 0,transparent 10%,transparent 90%,rgb(var(--vaccentcolor))) !important;
 }
+.pageWrapper-3F6owx {
+	background-color: rgb(255,255,255) !important;
+	background-image: linear-gradient(114deg,rgb(var(--vaccentcolor)),rgba(var(--vaccentcolor),0.6)) !important;
+}
 
 /* GUILDICON */
 .guildInner-3DSoA4 {
@@ -409,6 +413,7 @@
 [style*=" color: rgba(114, 137, 218, 0.3)"] {
 	color: rgba(var(--vaccentcolor),0.3) !important;
 }
+.theme-light .shine-KMI5j7,
 [style^="color: rgba(114, 137, 218, 0.2)"],
 [style*=" color: rgba(114, 137, 218, 0.2)"] {
 	color: rgba(var(--vaccentcolor),0.2) !important;
@@ -462,12 +467,11 @@
 .improved-1F5LIN:after,
 .botTagRegular-2HEhHi:not([style]),
 .switch-1bkg5j input:checked+.slider-2-A75I,
-.newMessagesBar-mujexs,
+.newMessagesBar-mujexs:hover,
 .progressBar-3u8FBM,
-.themeBrand-2qTyWV.container-fEIfjO,
 .themeBrand-2qTyWV .dismissButton-AdNfLV,
 .selectorButtonSelected-1j4DmC,
-.categoryFadeBlurple-1j72_A,
+.categoryFadeBlurple-1j72_A:hover,
 .mediaBarGrabber-1FqnbN,
 .mediaBarProgress-1xaPtl, 
 .mediaBarProgress-1xaPtl:after, 
@@ -485,9 +489,12 @@
 [style*="background-color: rgb(114, 137, 218)"] {
 	background-color: rgb(var(--vaccentcolor)) !important;
 }
+.themeBrand-2qTyWV.container-fEIfjO,
+.newMessagesBar-mujexs,
 [style*="background-color: rgba(114, 137, 218, 0.9)"] {
 	background-color: rgba(var(--vaccentcolor),0.9) !important;
 }
+.categoryFadeBlurple-1j72_A,
 .theme-light .base-gE7OpD .ellipsis-19qdx6 .spinnerItem-2HfQC8,
 [style*="background-color: rgba(114, 137, 218, 0.8)"] {
 	background-color: rgba(var(--vaccentcolor),0.8) !important;
@@ -517,6 +524,8 @@
 [style*="background-color: rgba(114, 137, 218, 0.14902)"] {
 	background-color: rgba(var(--vaccentcolor), 0.14902) !important;
 }
+.grandfatheredMessage-1BnHtv,
+.gradientBar-1XmvR-,
 .noticePremiumGrandfathered-ollUxF {
 	background-color: rgb(255,255,255) !important;
 	background-image: linear-gradient(90deg,rgba(var(--vaccentcolor),1),rgba(var(--vaccentcolor),0.5)) !important;
@@ -545,7 +554,7 @@
 .containerUserOver-1U5YnL:after,
 .checkbox-3kaeSU .checkboxInner-3yjcPe .checkboxElement-1qV33p:checked + span,
 .checkbox-3kaeSU .checkboxInner-3yjcPe.alt-6FvZrq .checkboxElement-1qV33p:checked + span:after,
-.item-26Dhrx[style*="border-color: rgb(114, 137, 218)"] .checked-3_4uQ9.
+.item-26Dhrx[style*="border-color: rgb(114, 137, 218)"] .checked-3_4uQ9,
 [style*="border-color: rgb(114, 137, 218)"] {
 	border-color: rgb(var(--vaccentcolor)) !important;
 }
