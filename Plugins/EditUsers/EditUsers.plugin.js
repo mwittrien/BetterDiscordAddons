@@ -3,7 +3,7 @@
 class EditUsers {
 	getName () {return "EditUsers";}
 
-	getVersion () {return "3.2.7";}
+	getVersion () {return "3.2.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class EditUsers {
 
 	initConstructor () {
 		this.changelog = {
-			"improved":[["Affected Elements","Avatar in the ScreenShare popout is also now changed"]]
+			"fixed":[["ScreenShare","Avatar in the ScreenShare popout is now properly changed"]]
 		};
 		
 		this.labels = {};
@@ -27,6 +27,7 @@ class EditUsers {
 			"MessageUsername":"componentDidMount",
 			"DirectMessage":"componentDidMount",
 			"CallAvatar":"componentDidMount",
+			"VideoTile":"componentDidMount",
 			"PictureInPictureVideo":"componentDidMount",
 			"PrivateChannel":["componentDidMount","componentDidUpdate"],
 			"HeaderBar":["componentDidMount","componentDidUpdate"],
@@ -180,7 +181,7 @@ class EditUsers {
 				changeInRecentDms:		{value:true, 	description:"Direct Message Notifications"},
 				changeInDmsList:		{value:true, 	description:"Direct Message List"},
 				changeInDmHeader:		{value:true, 	description:"Direct Message Header"},
-				changeInDmCalls:		{value:true, 	description:"Direct Message Calls"},
+				changeInDmCalls:		{value:true, 	description:"Calls/ScreenShares"},
 				changeInTyping:			{value:true, 	description:"Typing List"},
 				changeInFriendList:		{value:true, 	description:"Friend List"},
 				changeInActivity:		{value:true, 	description:"Activity Page"},
@@ -585,8 +586,11 @@ class EditUsers {
 		}
 	}
 
+	processVideoTile (instance, wrapper) {
+		if (instance.props && instance.props.user) this.changeAvatar(instance.props.user, this.getAvatarDiv(wrapper));
+	}
+
 	processPictureInPictureVideo (instance, wrapper) {
-		console.log(instance);
 		if (instance.props && instance.props.backgroundKey) {
 			let user = this.UserUtils.getUser(instance.props.backgroundKey);
 			if (user) this.changeAvatar(user, this.getAvatarDiv(wrapper));
@@ -968,8 +972,7 @@ class EditUsers {
 		else if (BDFDB.getParentEle(BDFDB.dotCN.dms, wrapper)) key = "changeInRecentDms";
 		else if (BDFDB.getParentEle(BDFDB.dotCN.dmchannels, wrapper)) key = "changeInDmsList";
 		else if (BDFDB.getParentEle(BDFDB.dotCN.channelheaderheaderbar, wrapper)) key = "changeInDmHeader";
-		else if (BDFDB.getParentEle(BDFDB.dotCN.callavatarwrapper, wrapper)) key = "changeInDmCalls";
-		else if (BDFDB.getParentEle(BDFDB.dotCN.callincoming, wrapper) || BDFDB.getParentEle(BDFDB.dotCN.callcurrentcontainer, wrapper)) key = "changeInDmCalls";
+		else if (BDFDB.getParentEle(BDFDB.dotCN.callavatarwrapper, wrapper) || BDFDB.getParentEle(BDFDB.dotCN.callincoming, wrapper) || BDFDB.getParentEle(BDFDB.dotCN.callcurrentcontainer, wrapper) || BDFDB.getParentEle(BDFDB.dotCN.pictureinpicture, wrapper)) key = "changeInDmCalls";
 		else if (BDFDB.getParentEle(BDFDB.dotCN.typing, wrapper)) key = "changeInTyping";
 		else if (BDFDB.getParentEle(BDFDB.dotCN.friends, wrapper) || BDFDB.getParentEle(BDFDB.dotCN.userprofilebody, wrapper)) key = "changeInFriendList";
 		else if (BDFDB.getParentEle(BDFDB.dotCN.activityfeed, wrapper)) key = "changeInActivity";
