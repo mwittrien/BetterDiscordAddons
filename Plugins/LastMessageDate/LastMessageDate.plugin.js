@@ -3,7 +3,7 @@
 class LastMessageDate {
 	getName () {return "LastMessageDate";}
 
-	getVersion () {return "1.0.0";}
+	getVersion () {return "1.0.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -112,6 +112,11 @@ class LastMessageDate {
 			this.DiscordConstants = BDFDB.WebModules.findByProperties("Permissions", "ActivityTypes", "StatusTypes");
 
 			this.languages = Object.assign({},BDFDB.languages);
+			
+			BDFDB.WebModules.patch(BDFDB.WebModules.findByProperties("receiveMessage"), "receiveMessage", this, {after: e => {
+				let message = e.methodArguments[1];
+				if (message.guild_id && this.loadedusers[message.guild_id] && this.loadedusers[message.guild_id][message.author.id]) this.loadedusers[message.guild_id][message.author.id] = new Date(message.timestamp);
+			}});
 
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
@@ -192,12 +197,12 @@ class LastMessageDate {
 		let guildid = this.CurrentGuildStore.getGuildId();
 		if (guildid) {
 			if (!this.loadedusers[guildid]) this.loadedusers[guildid] = {};
-			let timestamp, addTimestamp = (timestamp) => {
+			let addTimestamp = (timestamp) => {
 				if (document.contains(container)) {
 					let choice = BDFDB.getData("lastMessageDateLang", this, "choices");
 					let nametag = container.querySelector(BDFDB.dotCN.nametag);
 					let joinedAtDate = container.querySelector(".joinedAtDate");
-					container.insertBefore(BDFDB.htmlToElement(`<div class="lastMessageDate DevilBro-textscrollwrapper ${BDFDB.disCN.textrow}" style="max-width: ${BDFDB.getRects(BDFDB.getParentEle(popout ? BDFDB.dotCN.userpopoutheader : BDFDB.dotCN.userprofileheaderinfo, container)).width - 20}px !important;"><div class="DevilBro-textscroll">${this.labels.lastmessage_text + " " + this.getLastMessageTime(this.languages[choice].id, timestamp)}</div></div>`), joinedAtDate ? joinedAtDate.nextSibling : (nametag ? nametag.nextSibling : null));
+					container.insertBefore(BDFDB.htmlToElement(`<div class="lastMessageDate DevilBro-textscrollwrapper ${BDFDB.disCN.textrow}" style="max-width: ${BDFDB.getRects(BDFDB.getParentEle(popout ? BDFDB.dotCN.userpopoutheader : BDFDB.dotCN.userprofileheaderinfo, container)).width - 20}px !important;"><div class="DevilBro-textscroll">${this.labels.lastmessage_text + " " + (timestamp == "never" ? "---" : this.getLastMessageTime(this.languages[choice].id, timestamp))}</div></div>`), joinedAtDate ? joinedAtDate.nextSibling : (nametag ? nametag.nextSibling : null));
 					BDFDB.initElements(container.parentElement, this);
 					if (popout && popout.style.transform.indexOf("translateY(-1") == -1) {
 						let arect = BDFDB.getRects(document.querySelector(BDFDB.dotCN.appmount));
@@ -208,8 +213,15 @@ class LastMessageDate {
 			};
 			if (this.loadedusers[guildid][info.id]) addTimestamp(this.loadedusers[guildid][info.id]);
 			else this.APIModule.get(this.DiscordConstants.Endpoints.SEARCH_GUILD(guildid) + "?author_id=" + info.id).then(result => {
-				if (result && result.body) for (let message of result.body.messages[0]) if (message.hit && message.author.id == info.id) {
-					timestamp = new Date(message.timestamp);
+				if (result && result.body && Array.isArray(result.body.messages[0])) {
+					for (let message of result.body.messages[0]) if (message.hit && message.author.id == info.id) {
+						let timestamp = new Date(message.timestamp);
+						this.loadedusers[guildid][info.id] = timestamp;
+						addTimestamp(timestamp);
+					}
+				}
+				else {
+					let timestamp = "never";
 					this.loadedusers[guildid][info.id] = timestamp;
 					addTimestamp(timestamp);
 				}
