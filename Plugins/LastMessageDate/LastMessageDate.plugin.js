@@ -3,13 +3,17 @@
 class LastMessageDate {
 	getName () {return "LastMessageDate";}
 
-	getVersion () {return "1.0.1";}
+	getVersion () {return "1.0.2";}
 
 	getAuthor () {return "DevilBro";}
 
-	getDescription () {return "Displays the Date of the last sent Message of a Member for the current Server in the UserPopout and UserModal.";}
+	getDescription () {return "Displays the Date of the last sent Message of a Member for the current Server/DM in the UserPopout and UserModal.";}
 
 	initConstructor () {
+		this.changelog = {
+			"improved":[["DMs","Now also shows the Date of the last send Message in DMs"]]
+		};
+		
 		this.labels = {};
 
 		this.patchModules = {
@@ -108,6 +112,7 @@ class LastMessageDate {
 			BDFDB.loadMessage(this);
 
 			this.CurrentGuildStore = BDFDB.WebModules.findByProperties("getLastSelectedGuildId");
+			this.CurrentChannelStore = BDFDB.WebModules.findByProperties("getLastSelectedChannelId");
 			this.APIModule = BDFDB.WebModules.findByProperties("getAPIBaseURL");
 			this.DiscordConstants = BDFDB.WebModules.findByProperties("Permissions", "ActivityTypes", "StatusTypes");
 
@@ -115,7 +120,8 @@ class LastMessageDate {
 			
 			BDFDB.WebModules.patch(BDFDB.WebModules.findByProperties("receiveMessage"), "receiveMessage", this, {after: e => {
 				let message = e.methodArguments[1];
-				if (message.guild_id && this.loadedusers[message.guild_id] && this.loadedusers[message.guild_id][message.author.id]) this.loadedusers[message.guild_id][message.author.id] = new Date(message.timestamp);
+				let guildid = message.guild_id || message.channel_id;
+				if (guildid && this.loadedusers[guildid] && this.loadedusers[guildid][message.author.id]) this.loadedusers[guildid][message.author.id] = new Date(message.timestamp);
 			}});
 
 			BDFDB.WebModules.forceAllUpdates(this);
@@ -193,8 +199,10 @@ class LastMessageDate {
 	}
 
 	addLastMessageDate (info, container, popout) {
-		if (!info || !container || container.querySelector(".lastMessageDate")) return;
+		if (!info || info.isLocalBot() || !container || container.querySelector(".lastMessageDate")) return;
 		let guildid = this.CurrentGuildStore.getGuildId();
+		let isguild = !!guildid;
+		guildid = guildid || this.CurrentChannelStore.getChannelId();
 		if (guildid) {
 			if (!this.loadedusers[guildid]) this.loadedusers[guildid] = {};
 			let addTimestamp = (timestamp) => {
@@ -212,7 +220,7 @@ class LastMessageDate {
 				}
 			};
 			if (this.loadedusers[guildid][info.id]) addTimestamp(this.loadedusers[guildid][info.id]);
-			else this.APIModule.get(this.DiscordConstants.Endpoints.SEARCH_GUILD(guildid) + "?author_id=" + info.id).then(result => {
+			else this.APIModule.get((isguild ? this.DiscordConstants.Endpoints.SEARCH_GUILD(guildid) : this.DiscordConstants.Endpoints.SEARCH_CHANNEL(guildid)) + "?author_id=" + info.id).then(result => {
 				if (result && result.body && Array.isArray(result.body.messages[0])) {
 					for (let message of result.body.messages[0]) if (message.hit && message.author.id == info.id) {
 						let timestamp = new Date(message.timestamp);
