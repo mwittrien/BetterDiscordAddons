@@ -3,13 +3,17 @@
 class PluginRepo {
 	getName () {return "PluginRepo";} 
 
-	getVersion () {return "1.7.3";}
+	getVersion () {return "1.7.4";}
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
 
 	initConstructor () {
+		this.changelog = {
+			"fixed":[["BDContextMenu","Fixed compatibility with the newest version of BDContextMenu"]]
+		};
+		
 		this.patchModules = {
 			"V2C_List":"componentDidMount"
 		};
@@ -318,8 +322,7 @@ class PluginRepo {
 		let observer = new MutationObserver(changes => {
 			changes.forEach(change => {
 				if (change.addedNodes) change.addedNodes.forEach(node => {
-					if (node.tagName && BDFDB.containsClass(node, "plugin-context-menu") && !node.querySelector(".pluginrepo-item")) {
-						observer.disconnect();
+					if (node.tagName && BDFDB.containsClass(node, BDFDB.disCN.contextmenu) && BDFDB.getReactValue(node, "return.return.return.memoizedProps.label") == "BandagedBD" && !node.querySelector(".pluginrepo-item")) {
 						let item = node.querySelectorAll(BDFDB.dotCN.contextmenuitem);
 						item = item[item.length-1];
 						var settingsContextEntry = BDFDB.htmlToElement(this.settingsContextEntryMarkup);

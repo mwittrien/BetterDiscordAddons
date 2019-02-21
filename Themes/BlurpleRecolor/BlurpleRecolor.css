@@ -818,6 +818,8 @@ a {
 [style*="/assets/f046e2247d730629309457e902d5c5b3.svg"]:before {
 	content: "";
 	position: absolute;
+	top: 0;
+	left: 0;
 	width: 100%;
 	height: 100%;
 	background: rgb(var(--vaccentcolor)) !important;

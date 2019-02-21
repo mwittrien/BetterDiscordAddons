@@ -3,7 +3,7 @@
 class ThemeRepo {
 	getName () {return "ThemeRepo";}
 
-	getVersion () {return "1.7.3";}
+	getVersion () {return "1.7.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ThemeRepo {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["DiscordPreview","Fixed the issue where the titlebar would overlap with the titlebar in the fake preview"]]
+			"fixed":[["BDContextMenu","Fixed compatibility with the newest version of BDContextMenu"]]
 		};
 		
 		this.patchModules = {
@@ -380,8 +380,7 @@ class ThemeRepo {
 		let observer = new MutationObserver(changes => {
 			changes.forEach(change => {
 				if (change.addedNodes) change.addedNodes.forEach(node => {
-					if (node.tagName && BDFDB.containsClass(node, "plugin-context-menu") && !node.querySelector(".themerepo-item")) {
-						observer.disconnect();
+					if (node.tagName && BDFDB.containsClass(node, BDFDB.disCN.contextmenu) && BDFDB.getReactValue(node, "return.return.return.memoizedProps.label") == "BandagedBD" && !node.querySelector(".themerepo-item")) {
 						let item = node.querySelectorAll(BDFDB.dotCN.contextmenuitem);
 						item = item[item.length-1];
 						var settingsContextEntry = BDFDB.htmlToElement(this.settingsContextEntryMarkup);
