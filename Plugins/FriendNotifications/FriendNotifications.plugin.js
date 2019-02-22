@@ -3,7 +3,7 @@
 class FriendNotifications {
 	getName () {return "FriendNotifications";}
 
-	getVersion () {return "1.1.7";}
+	getVersion () {return "1.1.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class FriendNotifications {
 
 	initConstructor () {
 		this.patchModules = {
-			"FluxContainer(FriendsOnline)":["componentDidMount","componentDidUpdate"]
+			"FriendsOnline":["componentDidMount","componentDidUpdate"]
 		};
 
 		this.friendsOnlineList = {};
@@ -128,7 +128,6 @@ class FriendNotifications {
 
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-
 		let settings = BDFDB.getAllData(this, "settings");
 		let notificationsounds = BDFDB.getAllData(this, "notificationsounds");
 		let desktop = BDFDB.loadAllData(this, "desktop");
@@ -292,7 +291,7 @@ class FriendNotifications {
 		}
 	}
 
-	processFluxContainerFriendsOnline (instance, wrapper) {
+	processFriendsOnline (instance, wrapper) {
 		BDFDB.addEventListener(this, wrapper, "mouseenter", () => {BDFDB.createTooltip("Timelog", wrapper, {type:"right"});});
 		BDFDB.addEventListener(this, wrapper, "click", () => {this.showTimeLog();});
 
