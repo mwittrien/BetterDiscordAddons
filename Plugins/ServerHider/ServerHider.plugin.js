@@ -3,7 +3,7 @@
 class ServerHider {
 	getName () {return "ServerHider";}
 
-	getVersion () {return "6.0.1";}
+	getVersion () {return "6.0.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -189,7 +189,7 @@ class ServerHider {
 	}
 
 	processGuild (instance, wrapper) {
-		if (instance.props && instance.props.guild) {
+		if (instance.currentType = "GUILD" && instance.props && instance.props.guild) {
 			let hiddenservers = BDFDB.loadData("hiddenservers", this, "hiddenservers") || [];
 			this.toggleServer(instance.props.guild, wrapper, !hiddenservers.includes(instance.props.guild.id));
 		}
@@ -231,7 +231,7 @@ class ServerHider {
 		BDFDB.toggleEles(serverCopy, true);
 		BDFDB.removeClass(serverCopy, BDFDB.disCN.guildunread, BDFDB.disCN.guildselected);
 		serverCopy.addEventListener("click", e => {
-			e.preventDefault();
+			BDFDB.stopEvent(e);
 			info.div.querySelector("a").click();
 		});
 		serverCopy.addEventListener("contextmenu", e => {BDFDB.openGuildContextMenu(info.div, e);});

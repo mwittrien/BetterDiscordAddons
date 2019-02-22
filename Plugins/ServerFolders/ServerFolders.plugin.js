@@ -3,17 +3,13 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.1.0";}
+	getVersion () {return "6.1.1";}
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
 	initConstructor () {
-		this.changelog = {
-			"improved":[["Adding Servers","Seems like a lot of people can't read a simple description, that's why now you can either add servers to folders by ctrl + dragging them onto folders or by right click a server and selecting Serverfolder -> Add Server to Folder -> 'Foldername'"]]
-		};
-		
 		this.labels = {};
 
 		this.patchModules = {
@@ -532,7 +528,7 @@ class ServerFolders {
 	}
 
 	processGuild (instance, wrapper, methodnames) {
-		if (instance.props && instance.props.guild) {
+		if (instance.currentType = "GUILD" && instance.props && instance.props.guild) {
 			if (methodnames.includes("componentDidMount")) {
 				let folderdiv = this.getFolderOfServer(instance.props.guild);
 				if (folderdiv && !wrapper.getAttribute("folder")) {
