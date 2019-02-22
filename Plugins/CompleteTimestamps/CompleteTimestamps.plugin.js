@@ -66,7 +66,7 @@ class CompleteTimestamps {
 
 		BDFDB.initElements(settingspanel, this);
 
-		BDFDB.addEventListener(this, settingspanel, "click", ".settings-switch", () => {this.updateSettingsPanel(settingspanel);});
+		BDFDB.addEventListener(this, settingspanel, "click", ".settings-switch", () => {setImmediate(() => {this.updateSettingsPanel(settingspanel);})});
 		BDFDB.addEventListener(this, settingspanel, "keyup", BDFDB.dotCN.input, () => {this.saveInputs(settingspanel);});
 		BDFDB.addEventListener(this, settingspanel, "click", BDFDB.dotCN.selectcontrol, e => {this.openDropdownMenu(e);});
 		BDFDB.addEventListener(this, settingspanel, "click", ".toggle-info", e => {this.toggleInfo(e.currentTarget);});
