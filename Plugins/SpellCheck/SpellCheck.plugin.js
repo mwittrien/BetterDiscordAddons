@@ -3,17 +3,13 @@
 class SpellCheck {
 	getName () {return "SpellCheck";}
 
-	getVersion () {return "1.3.3";}
+	getVersion () {return "1.3.4";}
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Adds a spellcheck to all textareas. Select a word and rightclick it to add it to your dictionary.";}
 
 	initConstructor () {
-		this.changelog = {
-			"improved":[["Correcting Words","You can now prompt the contextmenu entries by simply right clicking an incorrect word instead of having to select and right click it"],["Native Spellcheck","If you are above Win8 discord allows you to use a native Spellcheck, using this plugin disables the native Spellcheck automatically and removes all contextmenu entries related to it"]]
-		};
-		
 		this.patchModules = {
 			"ChannelTextArea":"componentDidMount"
 		};
@@ -167,7 +163,7 @@ class SpellCheck {
 
 	onNativeContextMenu (instance, menu) {
 		if (instance.props && instance.props.target && instance.props.type == "CHANNEL_TEXT_AREA" && !menu.querySelector(".spellcheck-item")) {
-			BDFDB.toggleEles(BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:menu,name:"FluxContainer(NativeSpellcheckGroup)"})), false);
+			BDFDB.toggleEles(BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:menu,name:"NativeSpellcheckGroup"})), false);
 			var textarea = instance.props.target, word = null, length = 0;
 			if (textarea.value && (textarea.selectionStart || textarea.selectionEnd)) for (let splitword of textarea.value.split(/\s/g)) {
 				length += splitword.length + 1;
