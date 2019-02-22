@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.1.1";}
+	getVersion () {return "6.1.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -1025,19 +1025,16 @@ class ServerFolders {
 		guilddiv.setAttribute("folder", folderdiv.id);
 		BDFDB.toggleEles(guilddiv, false);
 		if (guilddiv.ServerFoldersChangeObserver && typeof guilddiv.ServerFoldersChangeObserver.disconnect == "function") guilddiv.ServerFoldersChangeObserver.disconnect();
-		guilddiv.ServerFoldersChangeObserver = new MutationObserver((changes, _) => {
-			changes.forEach(
-				(change, i) => {
-					let updatefolder = false;
-					if (change.type == "attributes" && change.attributeName == "class" && BDFDB.containsClass(change.target, BDFDB.disCN.guild)) updatefolder = true;
-					if (change.type == "characterData" && change.target.parentElement && BDFDB.containsClass(change.target.parentElement, BDFDB.disCN.badge)) updatefolder = true;
-					else if (change.addedNodes.length) change.addedNodes.forEach(node => {if (node.tagName && BDFDB.containsClass(node, BDFDB.disCN.badge)) updatefolder = true;});
-					else if (change.removedNodes.length) change.removedNodes.forEach(node => {if (node.tagName && BDFDB.containsClass(node, BDFDB.disCN.badge)) updatefolder = true;});
-					this.updateCopyInFolderContent(guilddiv, folderdiv);
-					if (updatefolder) this.updateFolderNotifications(folderdiv);
-				}
-			);
-		});
+		guilddiv.ServerFoldersChangeObserver = new MutationObserver(changes => {changes.forEach(change => {
+			if (change.type == "attributes" && change.attributeName == "draggable") return;
+			let updatefolder = false;
+			if (change.type == "attributes" && change.attributeName == "class" && BDFDB.containsClass(change.target, BDFDB.disCN.guild)) updatefolder = true;
+			if (change.type == "characterData" && change.target.parentElement && BDFDB.containsClass(change.target.parentElement, BDFDB.disCN.badge)) updatefolder = true;
+			else if (change.addedNodes.length) change.addedNodes.forEach(node => {if (node.tagName && BDFDB.containsClass(node, BDFDB.disCN.badge)) updatefolder = true;});
+			else if (change.removedNodes.length) change.removedNodes.forEach(node => {if (node.tagName && BDFDB.containsClass(node, BDFDB.disCN.badge)) updatefolder = true;});
+			this.updateCopyInFolderContent(guilddiv, folderdiv);
+			if (updatefolder) this.updateFolderNotifications(folderdiv);
+		});});
 		guilddiv.ServerFoldersChangeObserver.observe(guilddiv, {attributes:true, childList:true, characterData: true, subtree:true});
 	}
 
