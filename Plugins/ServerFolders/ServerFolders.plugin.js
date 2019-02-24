@@ -10,6 +10,10 @@ class ServerFolders {
 	getDescription () {return "Adds the feature to create folders to organize your servers. Right click a server > 'Serverfolders' > 'Create Server' to create a server. To add servers to a folder hold 'Ctrl' and drag the server onto the folder, this will add the server to the folderlist and hide it in the serverlist. To open a folder click the folder. A folder can only be opened when it has at least one server in it. To remove a server from a folder, open the folder and either right click the server > 'Serverfolders' > 'Remove Server from Folder' or hold 'Del' and click the server in the folderlist.";}
 
 	initConstructor () {
+		this.changelog = {
+			"improved":[["UnreadCountBadges","Added support for the UnreadCountBadges plugin by Metalloriff, when you have the plugin enabled, the sum of all unread messages of the servers in a folder will be displayed on the folder"]]
+		};
+		
 		this.labels = {};
 
 		this.patchModules = {
@@ -176,6 +180,7 @@ class ServerFolders {
 				</div>
 				<div class="${BDFDB.disCNS.badgewrapper + BDFDB.disCN.badge} folder notifications"></div>
 				<div class="${BDFDB.disCNS.badgewrapper + BDFDB.disCN.badge} folder count"></div>
+				<div class="${BDFDB.disCNS.badgewrapper + BDFDB.disCN.badge} folder unread-count-badge"></div>
 			</div>`;
 
 		this.folderSettingsModalMarkup =
@@ -329,6 +334,7 @@ class ServerFolders {
 				closeAllFolders:	{value:false, 	description:"Close All Folders when selecting a Server."},
 				forceOpenFolder:	{value:false, 	description:"Force a Folder to open when switching to a Server of that Folder."},
 				showCountBadge:		{value:true, 	description:"Display Badge for Amount of Servers in a Folder."},
+				showUnreadBadge:	{value:true, 	description:"Display Badge for Sum of Unread Message of Servers in a Folder (needs UnreadCountBadges plugin)."},
 				addSeparators:		{value:true, 	description:"Adds separators between Servers of different Folders."}
 			}
 		};
@@ -1264,13 +1270,13 @@ class ServerFolders {
 		let unreadServers = BDFDB.readUnreadServerList(includedServers);
 		if (unreadServers.length > 0 && data.autounread) BDFDB.markGuildAsRead(unreadServers);
 		else {
-			let badgeAmount = 0;
-			let audioEnabled = false;
-			let videoEnabled = false;
+			let mentionAmount = 0, unreadAmount = 0, audioEnabled = false, videoEnabled = false;
 
 			includedServers.forEach(div => {
-				let badge = div.querySelector(BDFDB.dotCN.badge);
-				if (badge) badgeAmount += parseInt(badge.innerText);
+				let mentionbadge = div.querySelector(BDFDB.dotCN.badgewrapper + ":not(.unread-count-badge)");
+				if (mentionbadge) mentionAmount += parseInt(mentionbadge.innerText);
+				let unreadbadge = div.querySelector(BDFDB.dotCN.badgewrapper + ".unread-count-badge");
+				if (unreadbadge) unreadAmount += parseInt(unreadbadge.innerText);
 				if (BDFDB.containsClass(div, BDFDB.disCN.guildaudio)) audioEnabled = true;
 				if (BDFDB.containsClass(div, BDFDB.disCN.guildvideo)) videoEnabled = true;
 			});
@@ -1279,11 +1285,14 @@ class ServerFolders {
 			BDFDB.toggleClass(folderdiv, BDFDB.disCN.guildaudio, audioEnabled);
 			BDFDB.toggleClass(folderdiv, BDFDB.disCN.guildvideo, videoEnabled);
 			let notifications = folderdiv.querySelector(".folder" + BDFDB.dotCN.badge + ".notifications");
-			notifications.innerText = badgeAmount;
-			BDFDB.toggleEles(notifications, badgeAmount > 0);
-			let amount = folderdiv.querySelector(".folder" + BDFDB.dotCN.badge + ".count");
-			amount.innerText = includedServers.length;
-			BDFDB.toggleEles(amount, includedServers.length > 0 && BDFDB.getData("showCountBadge", this, "settings"));
+			notifications.innerText = mentionAmount;
+			BDFDB.toggleEles(notifications, mentionAmount > 0);
+			let count = folderdiv.querySelector(".folder" + BDFDB.dotCN.badge + ".count");
+			count.innerText = includedServers.length;
+			BDFDB.toggleEles(count, includedServers.length > 0 && BDFDB.getData("showCountBadge", this, "settings"));
+			let unreads = folderdiv.querySelector(".folder" + BDFDB.dotCN.badge + ".unread-count-badge");
+			unreads.innerText = unreadAmount;
+			BDFDB.toggleEles(unreads, unreadAmount > 0 && BDFDB.getData("showUnreadBadge", this, "settings"));
 			
 			if (document.contains(folderdiv) && BDFDB.containsClass(folderdiv, "open") && !this.foldercontent.querySelector(`[folder="${folderdiv.id}"]`)) this.openCloseFolder(folderdiv);
 		}
