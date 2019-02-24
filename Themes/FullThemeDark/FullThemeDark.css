@@ -10,6 +10,7 @@
 #app-mount .input-cIJ7To:hover {
 	border-color: #040405;
 }
+#app-mount .backdrop-1wrmKB,
 #app-mount .regionSelectModal-12e-57,
 #app-mount .wrapper-2ZbzR9,
 #app-mount .slide-2pHaq5 {
@@ -287,6 +288,15 @@
 #app-mount #bda-qem-favourite-container .scroller-wrap .scroller::-webkit-scrollbar-track-piece {
 	background-color: #2B2C31;
 	border-color: #2F3136;
+}
+
+#app-mount .backdrop-1wrmKB[style*="background-color: rgb(255, 255, 255)"] {
+	background-color: rgb(0, 0, 0) !important;
+	opacity: 0.85 !important;
+}
+#app-mount .downloadApps-wbBFdZ {
+	background-color: #36393F;
+	border-radius: 5px;
 }
 
 body #ace_settingsmenu {
