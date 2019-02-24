@@ -996,7 +996,8 @@ class ServerFolders {
 		if (!data) return;
 		BDFDB.removeFromArray(data.servers, info.id);
 		BDFDB.saveData(folderdiv.id, data, this, "folders");
-		BDFDB.removeEles(this.foldercontent.querySelectorAll(`[guild="${info.id}"]`));
+		BDFDB.removeEles(this.foldercontent.querySelectorAll(`${BDFDB.dotCN.guild}.copy[guild="${info.id}"]`));
+		if (!this.foldercontent.querySelector(`${BDFDB.dotCN.guild}.copy[folder="${folderdiv.id}"]`)) BDFDB.removeEles(this.foldercontent.querySelectorAll(`${BDFDB.dotCN.guildseparator}.folderseparator[folder="${folderdiv.id}"]`));
 		this.unhideServer(BDFDB.getServerDiv(info));
 		this.updateFolderNotifications(folderdiv);
 		BDFDB.showToast(this.labels.toast_removeserver_text.replace("${servername}", info.name).replace("${foldername}", data.folderName ? " " + data.folderName : ""), {type:"danger"});
@@ -1284,7 +1285,7 @@ class ServerFolders {
 			amount.innerText = includedServers.length;
 			BDFDB.toggleEles(amount, includedServers.length > 0 && BDFDB.getData("showCountBadge", this, "settings"));
 			
-			if (document.contains(folderdiv) && BDFDB.containsClass(folderdiv, "open") && !this.foldercontent.querySelector("[folder='" + folderdiv.id + "']")) this.openCloseFolder(folderdiv);
+			if (document.contains(folderdiv) && BDFDB.containsClass(folderdiv, "open") && !this.foldercontent.querySelector(`[folder="${folderdiv.id}"]`)) this.openCloseFolder(folderdiv);
 		}
 	}
 
