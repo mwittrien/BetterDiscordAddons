@@ -3,7 +3,7 @@
 class RepoControls {
 	getName () {return "RepoControls";}
 
-	getVersion () {return "1.2.6";}
+	getVersion () {return "1.2.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class RepoControls {
 
 	initConstructor () {
 		this.changelog = {
-			"improved":[["Search Function","Slightly improved the performance of the feature to search for entries"]]
+			"added":[["Edit Feature","Added the feature to add an edit button to all plugin/theme entries that on click opens the file in your choosen default editor application"]]
 		};
 		
 		this.patchModules = {
@@ -91,27 +91,43 @@ class RepoControls {
 				</div>
 			</div>`;
 
+		this.editButtonMarkup = 
+			`<svg class="editIcon" version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="-150 -55 620 620">
+				<g fill="currentColor" fill-rule="evenodd">
+					<path d="M496.093,189.613c-18.643-15.674-47.168-13.807-63.354,5.493l-9.727,11.508l68.945,57.849l9.288-11.466 C517.22,233.997,515.199,205.621,496.093,189.613z"/>
+					<path d="M301.375,350.534l-5.131,6.072c-4.453,5.332-7.661,11.704-9.272,18.457l-13.945,58.359 c-1.318,5.522,0.601,11.323,4.951,14.971c4.234,3.558,10.206,4.591,15.601,2.285l55.063-23.877 c6.372-2.769,12.085-7.031,16.538-12.319l5.149-6.092L301.375,350.534z"/>
+					<polygon points="403.656,229.517 320.733,327.631 389.683,385.487 472.601,287.366"/>
+					<path d="M376.02,66.504l-56.982-54.141c-5.387-5.107-12.014-8.115-18.999-10.069V90h89.052 C387.23,81.09,382.69,72.836,376.02,66.504z"/>
+					<path d="M257.792,368.091c2.681-11.221,8.027-21.841,15.439-30.718l116.807-138.214V120h-105c-8.291,0-15-6.709-15-15V0h-225 c-24.814,0-45,20.186-45,45v422c0,24.814,20.186,45,45,45h300c24.814,0,45-20.186,45-45v-35.459l-1.948,2.305 c-7.368,8.775-16.875,15.85-27.466,20.465l-55.107,23.892c-15.532,6.707-33.511,4.331-46.816-6.812 c-13.14-11.03-18.838-28.242-14.854-44.941L257.792,368.091z M75.038,90h150c8.291,0,15,6.709,15,15s-6.709,15-15,15h-150 c-8.291,0-15-6.709-15-15S66.747,90,75.038,90z M75.038,181h240c8.291,0,15,6.709,15,15s-6.709,15-15,15h-240 c-8.291,0-15-6.709-15-15S66.747,181,75.038,181z M195.038,391h-120c-8.291,0-15-6.709-15-15c0-8.291,6.709-15,15-15h120 c8.291,0,15,6.709,15,15C210.038,384.291,203.329,391,195.038,391z M75.038,301c-8.291,0-15-6.709-15-15c0-8.291,6.709-15,15-15 h180c8.291,0,15,6.709,15,15c0,8.291-6.709,15-15,15H75.038z"/>
+				</g>
+			</svg>`;
+
 		this.deleteButtonMarkup = 
-			`<svg class="trashIcon" fill="currentColor" version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" transform="translate(2,1.5)">
-				<path d="M 18.012, 0.648 H 12.98 C 12.944, 0.284, 12.637, 0, 12.264, 0 H 8.136 c -0.373, 0 -0.68, 0.284 -0.716, 0.648 H 2.389 c -0.398, 0 -0.72, 0.322 -0.72, 0.72 v 1.368 c 0, 0.398, 0.322, 0.72, 0.72, 0.72 h 15.623 c 0.398, 0, 0.72 -0.322, 0.72 -0.72 V 1.368 C 18.731, 0.97, 18.409, 0.648, 18.012, 0.648 z"/>
-				<path d="M 3.178, 4.839 v 14.841 c 0, 0.397, 0.322, 0.72, 0.72, 0.72 h 12.604 c 0.398, 0, 0.72 -0.322, 0.72 -0.72 V 4.839 H 3.178 z M 8.449, 15.978 c 0, 0.438 -0.355, 0.794 -0.794, 0.794 c -0.438, 0 -0.794 -0.355 -0.794 -0.794 V 8.109 c 0 -0.438, 0.355 -0.794, 0.794 -0.794 c 0.438, 0, 0.794, 0.355, 0.794, 0.794 V 15.978 z M 13.538, 15.978 c 0, 0.438 -0.355, 0.794 -0.794, 0.794 s -0.794 -0.355 -0.794 -0.794 V 8.109 c 0 -0.438, 0.355 -0.794, 0.794 -0.794 c 0.438, 0, 0.794, 0.355, 0.794, 0.794 V 15.978 z"/>
+			`<svg class="trashIcon" version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24">
+				<g fill="currentColor" transform="translate(2,1.5)">
+					<path d="M 18.012, 0.648 H 12.98 C 12.944, 0.284, 12.637, 0, 12.264, 0 H 8.136 c -0.373, 0 -0.68, 0.284 -0.716, 0.648 H 2.389 c -0.398, 0 -0.72, 0.322 -0.72, 0.72 v 1.368 c 0, 0.398, 0.322, 0.72, 0.72, 0.72 h 15.623 c 0.398, 0, 0.72 -0.322, 0.72 -0.72 V 1.368 C 18.731, 0.97, 18.409, 0.648, 18.012, 0.648 z"/>
+					<path d="M 3.178, 4.839 v 14.841 c 0, 0.397, 0.322, 0.72, 0.72, 0.72 h 12.604 c 0.398, 0, 0.72 -0.322, 0.72 -0.72 V 4.839 H 3.178 z M 8.449, 15.978 c 0, 0.438 -0.355, 0.794 -0.794, 0.794 c -0.438, 0 -0.794 -0.355 -0.794 -0.794 V 8.109 c 0 -0.438, 0.355 -0.794, 0.794 -0.794 c 0.438, 0, 0.794, 0.355, 0.794, 0.794 V 15.978 z M 13.538, 15.978 c 0, 0.438 -0.355, 0.794 -0.794, 0.794 s -0.794 -0.355 -0.794 -0.794 V 8.109 c 0 -0.438, 0.355 -0.794, 0.794 -0.794 c 0.438, 0, 0.794, 0.355, 0.794, 0.794 V 15.978 z"/>
+				</g>
 			</svg>`;
 
 		this.css = `
+			#bd-settingspane-container .editIcon,
 			#bd-settingspane-container .trashIcon {
-				margin-right: 5px;
+				margin: 0 5px 0 -2px;
 				cursor: pointer;
 				vertical-align: top;
 				color: #72767d;
 			}
+			${BDFDB.dotCN.themedark} #bd-settingspane-container .editIcon,
 			${BDFDB.dotCN.themedark} #bd-settingspane-container .trashIcon {
 				color: #dcddde;
 			}`;
 
 		this.defaults = {
 			settings: {
-				addDeleteButton:	{value:true, 	description:"Add a Delete Button to your Plugin and Theme List."},
-				confirmDelete:		{value:true, 	description:"Ask for your confirmation before deleting a File."}
+				addEditButton:		{value:true, 	description:"Adds an Edit Button to your Plugin and Theme List."},
+				addDeleteButton:	{value:true, 	description:"Adds a Delete Button to your Plugin and Theme List."},
+				confirmDelete:		{value:true, 	description:"Asks for your confirmation before deleting a File."}
 			},
 			sortings: {
 				sort:		{value:"name"},
@@ -202,22 +218,44 @@ class RepoControls {
 
 	processV2CPluginCard (instance, wrapper, methodnames) {
 		if (wrapper.querySelector(BDFDB.dotCN._reponame)) {
-			if (instance.props && BDFDB.getData("addDeleteButton", this, "settings")) this.addDeleteButton("plugin", wrapper);
+			let settings = BDFDB.getAllData(this, "settings");
+			if (instance.props && settings.addDeleteButton) this.addDeleteButton("plugin", wrapper);
+			if (instance.props && settings.addEditButton) this.addEditButton("plugin", wrapper);
 			if (methodnames.includes("componentDidUpdate")) this.changeTextToHTML(wrapper, "");
 		}
 	}
 
 	processV2CThemeCard (instance, wrapper, methodnames) {
 		if (wrapper.querySelector(BDFDB.dotCN._reponame)) {
-			if (instance.props && BDFDB.getData("addDeleteButton", this, "settings")) this.addDeleteButton("theme", wrapper);
+			let settings = BDFDB.getAllData(this, "settings");
+			if (instance.props && settings.addDeleteButton) this.addDeleteButton("theme", wrapper);
+			if (instance.props && settings.addEditButton) this.addEditButton("theme", wrapper);
 			if (methodnames.includes("componentDidUpdate")) this.changeTextToHTML(wrapper, "");
 		}
+	}
+
+	addEditButton (type, wrapper) {
+		if (!type || !wrapper || wrapper.querySelector(".editIcon")) return;
+		let name = wrapper.getAttribute("data-name");
+		let controls = wrapper.querySelector(BDFDB.dotCN._repocontrols);
+		if (!name || !controls) return;
+		let path = global[`bd${type}s`] && global[`bd${type}s`][name] ? this.path.join(this.dirs[type], global[`bd${type}s`][name].filename) : null;
+		if (!path) return;
+		let button = BDFDB.htmlToElement(this.editButtonMarkup);
+		button.addEventListener("click", () => {
+			if (!require("electron").shell.openItem(path)) BDFDB.showToast(`Unable to open ${type} "${name}".`, {type:"danger"});;
+		});
+		button.addEventListener("mouseenter", e => {
+			BDFDB.createTooltip(`Edit ${type[0].toUpperCase() + type.slice(1)}`, e.currentTarget, {type:"top",selector:"repocontrols-editicon-tooltip"});
+		});
+		controls.insertBefore(button, controls.firstElementChild);
 	}
 
 	addDeleteButton (type, wrapper) {
 		if (!type || !wrapper || wrapper.querySelector(".trashIcon")) return;
 		let name = wrapper.getAttribute("data-name");
-		if (!name) return;
+		let controls = wrapper.querySelector(BDFDB.dotCN._repocontrols);
+		if (!name || !controls) return;
 		let path = global[`bd${type}s`] && global[`bd${type}s`][name] ? this.path.join(this.dirs[type], global[`bd${type}s`][name].filename) : null;
 		if (!path) return;
 		let button = BDFDB.htmlToElement(this.deleteButtonMarkup);
@@ -236,8 +274,7 @@ class RepoControls {
 		button.addEventListener("mouseenter", e => {
 			BDFDB.createTooltip(`Delete ${type[0].toUpperCase() + type.slice(1)}`, e.currentTarget, {type:"top",selector:"repocontrols-trashicon-tooltip"});
 		});
-		let controls = wrapper.querySelector(BDFDB.dotCN._repocontrols);
-		if (controls) controls.insertBefore(button, controls.firstElementChild);
+		controls.insertBefore(button, controls.firstElementChild);
 	}
 
 	addControls (type, container) {
