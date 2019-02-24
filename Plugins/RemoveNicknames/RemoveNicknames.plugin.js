@@ -3,13 +3,17 @@
 class RemoveNicknames {
 	getName () {return "RemoveNicknames";}
 
-	getVersion () {return "1.1.4";}
+	getVersion () {return "1.1.5";}
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Replace all nicknames with the actual accountnames.";}
 
 	initConstructor () {
+		this.changelog = {
+			"fixed":[["Typing Users","The plugin now properly changes the names in the typing users list"]]
+		};
+		
 		this.patchModules = {
 			"NameTag":"componentDidMount",
 			"TypingUsers":"componentDidUpdate",
@@ -121,7 +125,7 @@ class RemoveNicknames {
 	}
 
 	processTypingUsers (instance, wrapper) {
-		let users = !instance.state.typingUsers ? [] : Object.keys(instance.state.typingUsers).filter(id => id != BDFDB.myData.id).filter(id => !this.RelationshipUtils.isBlocked(id)).map(id => this.UserUtils.getUser(id)).filter(id => id != null);
+		let users = !instance.props.typingUsers ? [] : Object.keys(instance.props.typingUsers).filter(id => id != BDFDB.myData.id).filter(id => !this.RelationshipUtils.isBlocked(id)).map(id => this.UserUtils.getUser(id)).filter(id => id != null);
 		wrapper.querySelectorAll("strong").forEach((username, i) => {
 			if (users[i] && username) BDFDB.setInnerText(username, this.getNewName(users[i]));
 		});
