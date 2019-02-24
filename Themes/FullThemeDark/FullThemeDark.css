@@ -143,6 +143,9 @@
 #app-mount #bda-qem button  {
 	background-color: #2F3136;
 }
+#app-mount .premiumPromo-yVfLiA {
+	background-color: rgba(47,49,54,0.95) !important;
+}
 #app-mount #bda-qem button:hover {
 	background-color: #36393F;
 }
@@ -291,7 +294,7 @@
 }
 
 #app-mount .backdrop-1wrmKB[style*="background-color: rgb(255, 255, 255)"] {
-	background-color: rgb(0, 0, 0) !important;
+	background-color: rgb(0,0,0) !important;
 	opacity: 0.85 !important;
 }
 #app-mount .downloadApps-wbBFdZ {
