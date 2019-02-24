@@ -301,6 +301,18 @@
 	background-color: #36393F;
 	border-radius: 5px;
 }
+#app-mount .downloadApps-wbBFdZ .inner-2LETmR {
+	overflow-y: scroll;
+}
+#app-mount .downloadApps-wbBFdZ .inner-2LETmR::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+}
+#app-mount .downloadApps-wbBFdZ .inner-2LETmR::-webkit-scrollbar-thumb {
+    background-color: rgba(32,34,37,.6);
+    border: 2px solid transparent;
+    border-radius: 4px;
+}
 
 body #ace_settingsmenu {
 	position: absolute;
