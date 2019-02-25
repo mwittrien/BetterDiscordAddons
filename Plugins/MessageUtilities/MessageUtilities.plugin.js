@@ -3,18 +3,13 @@
 class MessageUtilities {
 	getName () {return "MessageUtilities";}
 
-	getVersion () {return "1.4.6";}
+	getVersion () {return "1.4.7";}
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Offers a number of useful message options. Remap the keybindings in the settings.";}
 
-	initConstructor () {
-		this.changelog = {
-			"added":[["Reveal All Spoilers","Added support for the new Plugin 'RevealAllSpoilersOption'"]],
-			"fixed":[["Enable/Disabled","Fixed the bug where enabling/disabling a keycombo option wouldn't be saved in the config"]]
-		};
-		
+	initConstructor () {		
 		this.bindings = {};
 
 		this.firedEvents = [];
@@ -117,8 +112,6 @@ class MessageUtilities {
 			this.ChannelUtils = BDFDB.WebModules.findByProperties("getChannels","getChannel");
 			this.MessageActions = BDFDB.WebModules.findByProperties("startEditMessage", "endEditMessage");
 			this.PinActions = BDFDB.WebModules.findByProperties("pinMessage", "unpinMessage");
-			this.CurrentUserPerms = BDFDB.WebModules.findByProperties("getChannelPermissions", "can");
-			this.Permissions = BDFDB.WebModules.findByProperties("Permissions", "ActivityTypes").Permissions
 
 			BDFDB.addEventListener(this, document, "click", BDFDB.dotCNC.message + BDFDB.dotCN.messagesystem, e => {
 				this.onClick(e, 0, "onSglClick");
@@ -291,7 +284,7 @@ class MessageUtilities {
 
 	doDelete ({messagediv, pos, message}) {
 		let channel = this.ChannelUtils.getChannel(message.channel_id);
-		if ((channel && this.CurrentUserPerms.can(this.Permissions.MANAGE_MESSAGES, channel)) || message.author.id == BDFDB.myData.id) {
+		if ((channel && BDFDB.isUserAllowedTo("MANAGE_MESSAGES")) || message.author.id == BDFDB.myData.id) {
 			this.MessageActions.deleteMessage(message.channel_id, message.id);
 		}
 	}
@@ -309,7 +302,7 @@ class MessageUtilities {
 
 	doPinUnPin ({messagediv, pos, message}) {
 		let channel = this.ChannelUtils.getChannel(message.channel_id);
-		if (channel && this.CurrentUserPerms.can(this.Permissions.MANAGE_MESSAGES, channel)) {
+		if (channel && BDFDB.isUserAllowedTo("MANAGE_MESSAGES")) {
 			if (message.pinned) this.PinActions.unpinMessage(channel, message.id);
 			else this.PinActions.pinMessage(channel, message.id);
 		}
@@ -354,10 +347,7 @@ class MessageUtilities {
 			this.fireEvent(name);
 			if (key == 27 && BDFDB.getData("clearOnEscape", this, "settings")) {
 				let instance = BDFDB.getOwnerInstance({"node":e.currentTarget, "name":"ChannelTextAreaForm", "up":true});
-				if (instance) {
-					BDFDB.stopEvent(e);
-					instance.setState({textValue:""});
-				}
+				if (instance) instance.setState({textValue:""});
 			}
 			this.cancelEvent(name);
 		}
