@@ -1424,6 +1424,9 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .emojiPicker-3m1S-j .dimmer-3iH-5D.visible-3k45bQ {
 	background: rgba(var(--vtransparencycolor),0.6) !important;
 }
+.emojiPicker-3m1S-j .premiumPromo-yVfLiA {
+	background: rgba(var(--vtransparencycolor),0.95) !important;
+}
 .emojiPicker-3m1S-j .popout-2nUePc {
 	border-color: rgb(var(--vaccentcolor)) !important;
 	background: rgba(var(--vtransparencycolor),0.8) !important;
