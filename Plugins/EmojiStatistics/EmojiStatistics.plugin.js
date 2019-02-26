@@ -3,7 +3,7 @@
 class EmojiStatistics {
 	getName () {return "EmojiStatistics";}
 
-	getVersion () {return "2.7.9";}
+	getVersion () {return "2.8.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -13,7 +13,7 @@ class EmojiStatistics {
 		this.labels = {};
 
 		this.patchModules = {
-			"EmojiPicker":"componentDidMount"
+			"EmojiPicker":"componentDidMount" 
 		};
 
 		this.css = `
@@ -355,6 +355,7 @@ class EmojiStatistics {
 		let serverCopy = info.div.cloneNode(true);
 		BDFDB.toggleEles(serverCopy, true);
 		BDFDB.removeClass(serverCopy, BDFDB.disCN.guildunread, BDFDB.disCN.guildselected);
+		serverCopy.style.setProperty("pointer-events", "none", "important");
 		return serverCopy;
 	}
 
