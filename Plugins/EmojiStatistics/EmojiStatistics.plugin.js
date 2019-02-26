@@ -255,8 +255,8 @@ class EmojiStatistics {
 				let emojiStatisticsButton = BDFDB.htmlToElement(`<div class="emojistatistics-button"></div>`);
 				emojipickerdiversityselector.parentElement.insertBefore(emojiStatisticsButton, emojipickerdiversityselector);
 				emojiStatisticsButton.addEventListener("click", () => {
-					instance._reactInternalFiber.return.return.return.return.stateNode.close();
 					this.showEmojiInformationModal();
+					instance._reactInternalFiber.return.return.return.return.return.stateNode.close();
 				});
 				emojiStatisticsButton.addEventListener("mouseenter", e => {
 					BDFDB.createTooltip("Emoji Statistics", emojiStatisticsButton, {type:"top",selector:"emojistatistics-tooltip"});
