@@ -256,7 +256,8 @@ class EmojiStatistics {
 				emojipickerdiversityselector.parentElement.insertBefore(emojiStatisticsButton, emojipickerdiversityselector);
 				emojiStatisticsButton.addEventListener("click", () => {
 					this.showEmojiInformationModal();
-					instance._reactInternalFiber.return.return.return.return.return.stateNode.close();
+					let close = BDFDB.getReactValue(instance, "_reactInternalFiber.return.return.return.return.return.stateNode.close") || BDFDB.getReactValue(instance, "_reactInternalFiber.return.return.return.return.stateNode.close");
+					if (close) close();
 				});
 				emojiStatisticsButton.addEventListener("mouseenter", e => {
 					BDFDB.createTooltip("Emoji Statistics", emojiStatisticsButton, {type:"top",selector:"emojistatistics-tooltip"});
@@ -356,6 +357,9 @@ class EmojiStatistics {
 		BDFDB.toggleEles(serverCopy, true);
 		BDFDB.removeClass(serverCopy, BDFDB.disCN.guildunread, BDFDB.disCN.guildselected);
 		serverCopy.style.setProperty("pointer-events", "none", "important");
+		let serverInner = serverCopy.querySelector(BDFDB.dotCN.guildinner);
+		serverInner.style.removeProperty("background-color");
+		serverInner.style.removeProperty("border-radius");
 		return serverCopy;
 	}
 
