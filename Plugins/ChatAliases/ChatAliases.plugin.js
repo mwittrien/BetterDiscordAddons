@@ -3,7 +3,7 @@
 class ChatAliases {
 	getName () {return "ChatAliases";}
 
-	getVersion () {return "1.9.7";}
+	getVersion () {return "1.9.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ChatAliases {
 
 	initConstructor () {
 		this.changelog = {
-			"added":[["ContextMenu","Added an contextmenu entry when right clicking a highlighted/selected word to allow you to faster add new aliases"]]
+			"improved":[["Min Length","Plugin now allows you to set a minimum character length required for the Autocomplete-Menu to show up to avoid the Autocomplete-Menu from opening on words like 'i' and 'a' in case an aliases starts with these letters, which could have prevented you from sending the message via enter before"]]
 		};
 		
 		this.patchModules = {
@@ -30,6 +30,9 @@ class ChatAliases {
 			settings: {
 				addContextMenu:		{value:true, 	description:"Add a ContextMenu entry to faster add new Aliases:"},
 				addAutoComplete:	{value:true, 	description:"Add an Autocomplete-Menu for Non-Regex Aliases:"}
+			},
+			amounts: {
+				minAliasLength:		{value:2, 		min:1,	description:"Minimal Character Length to open Autocomplete-Menu:"}
 			}
 		};
 
@@ -99,9 +102,13 @@ class ChatAliases {
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		var settings = BDFDB.getAllData(this, "settings");
+		var amounts = BDFDB.getAllData(this, "amounts");
 		var settingshtml = `<div class="${this.name}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="DevilBro-settings-inner">`;
 		for (let key in settings) {
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
+		}
+		for (let key in amounts) {
+			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.amounts[key].description}</h3><div class="${BDFDB.disCN.inputwrapper} inputNumberWrapper ${BDFDB.disCNS.vertical +  BDFDB.disCNS.flex + BDFDB.disCNS.directioncolumn}" style="flex: 1 1 20%;"><span class="numberinput-buttons-zone"><span class="numberinput-button-up"></span><span class="numberinput-button-down"></span></span><input type="number"${(!isNaN(this.defaults.amounts[key].min) && this.defaults.amounts[key].min !== null ? ' min="' + this.defaults.amounts[key].min + '"' : '') + (!isNaN(this.defaults.amounts[key].max) && this.defaults.amounts[key].max !== null ? ' max="' + this.defaults.amounts[key].max + '"' : '')} option="${key}" value="${amounts[key]}" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16} amount-input"></div></div>`;
 		}
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">Replace:</h3><input action="add" type="text" placeholder="Wordvalue" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16} wordInputs" id="input-wordvalue" style="flex: 1 1 auto;"><button action="add" type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} btn-add btn-addword" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}"></div></button></div><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">With:</h3><input action="add" type="text" placeholder="Replacevalue" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16} wordInputs" id="input-replacevalue" style="flex: 1 1 auto;"><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} file-navigator" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}"></div><input id="input-file" type="file" style="display:none!important;"></button></div>`;
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto; max-width: ${560 - (Object.keys(this.defaults.configs).length * 33)}px;">List of Chataliases:</h3><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifycenter + BDFDB.disCNS.alignend + BDFDB.disCN.nowrap}" style="flex: 1 1 auto; max-width: ${Object.keys(this.defaults.configs).length * 34}px;">`;
@@ -161,8 +168,6 @@ class ChatAliases {
 			BDFDB.loadMessage(this);
 
 			this.UploadModule = BDFDB.WebModules.findByProperties("instantBatchUpload");
-			this.CurrentUserPerms = BDFDB.WebModules.findByProperties("getChannelPermissions", "can");
-			this.Permissions = BDFDB.WebModules.findByProperties("Permissions", "ActivityTypes").Permissions;
 
 			this.aliases = BDFDB.loadAllData(this, "words");
 
@@ -188,7 +193,9 @@ class ChatAliases {
 	// begin of own functions
 
 	updateContainer (settingspanel, ele) {
-		var action = ele.getAttribute("action"), update = () => {
+		var wordvalue = null, replacevalue = null, action = ele.getAttribute("action");
+
+		var update = () => {
 			BDFDB.saveAllData(this.aliases, this, "words");
 
 			var containerhtml = ``;
@@ -214,7 +221,7 @@ class ChatAliases {
 			}
 		}
 		else if (action == "remove") {
-			var wordvalue = ele.getAttribute("word");
+			wordvalue = ele.getAttribute("word");
 			if (wordvalue) {
 				delete this.aliases[wordvalue];
 				update();
@@ -327,11 +334,9 @@ class ChatAliases {
 	}
 
 	processChannelTextArea (instance, wrapper) {
-		if (instance.props && instance.props.type) {
+		if (instance.props && instance.props.channel && instance.props.type) {
 			var textarea = wrapper.querySelector("textarea");
 			if (!textarea) return;
-			var channel = BDFDB.getSelectedChannel();
-			if (!channel) return;
 			var settings = BDFDB.getAllData(this, "settings");
 			BDFDB.addEventListener(this, textarea, "input", () => {
 				if (this.format) {
@@ -344,8 +349,8 @@ class ChatAliases {
 						if (messageInput && messageInput.text != null) {
 							document.execCommand("insertText", false, messageInput.text ? messageInput.text + " " : "");
 						}
-						if (messageInput && messageInput.files.length > 0 && (channel.type == 1 || this.CurrentUserPerms.can(this.Permissions.ATTACH_FILES, channel))) {
-							this.UploadModule.instantBatchUpload(channel.id, messageInput.files);
+						if (messageInput && messageInput.files.length > 0 && (instance.props.channel.type == 1 || BDFDB.isUserAllowedTo("ATTACH_FILES"))) {
+							this.UploadModule.instantBatchUpload(instance.props.channel.id, messageInput.files);
 						}
 					}
 				}
@@ -387,7 +392,7 @@ class ChatAliases {
 	}
 
 	addAutoCompleteMenu (textarea) {
-		if (textarea.parentElement.querySelector(".autocompleteAliasesRow")) return;
+		if (!textarea.value || textarea.parentElement.querySelector(".autocompleteAliasesRow") || BDFDB.getData("minAliasLength", this, "amounts") > textarea.value.length) return;
 		let words = textarea.value.split(/\s/);
 		let lastword = words[words.length-1].trim();
 		if (words.length == 1 && BDFDB.isPluginEnabled("WriteUpperCase")) {
