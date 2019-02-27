@@ -734,6 +734,8 @@ class ThemeRepo {
 					console.log(`%c[${this.name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Finished fetching Themes.");
 					if (document.querySelector(".bd-themerepobutton")) BDFDB.showToast(`Finished fetching Themes.`, {type:"success"});
 					if (outdated > 0) {
+						var oldbarbutton = document.querySelector(".themerepo-notice " + BDFDB.dotCN.noticedismiss);
+						if (oldbarbutton) oldbarbutton.click();
 						var bar = BDFDB.createNotificationsBar(`${outdated} of your Themes ${outdated == 1 ? "is" : "are"} outdated. Check:`,{type:"danger",btn:"ThemeRepo",selector:"themerepo-notice"});
 						bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", e => {
 							this.openThemeRepoModal(true);

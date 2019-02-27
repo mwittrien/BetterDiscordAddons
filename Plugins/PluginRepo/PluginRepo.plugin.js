@@ -609,6 +609,8 @@ class PluginRepo {
 								console.log(`%c[${this.name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Finished fetching Plugins.");
 								if (document.querySelector(".bd-pluginrepobutton")) BDFDB.showToast(`Finished fetching Plugins.`, {type:"success"});
 								if (outdated > 0) {
+									var oldbarbutton = document.querySelector(".pluginrepo-notice " + BDFDB.dotCN.noticedismiss);
+									if (oldbarbutton) oldbarbutton.click();
 									var bar = BDFDB.createNotificationsBar(`${outdated} of your Plugins ${outdated == 1 ? "is" : "are"} outdated. Check:`,{type:"danger",btn:"PluginRepo",selector:"pluginrepo-notice"});
 									bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", e => {
 										this.openPluginRepoModal(true);
