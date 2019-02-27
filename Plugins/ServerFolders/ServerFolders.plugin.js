@@ -1076,8 +1076,10 @@ class ServerFolders {
 			let settings = BDFDB.getAllData(this, "settings");
 
 			setTimeout(() => {
-				if (settings.addSeparators && this.foldercontent.querySelectorAll(BDFDB.dotCN.guild).length) this.foldercontentguilds.appendChild(BDFDB.htmlToElement(`<div class="${BDFDB.disCN.guildseparator} folderseparator" folder="${folderdiv.id}"></div>`));
-				includedServers.forEach(guilddiv => {this.updateCopyInFolderContent(guilddiv, folderdiv);});
+				if (this.foldercontent) {
+					if (settings.addSeparators && this.foldercontent.querySelectorAll(BDFDB.dotCN.guild).length) this.foldercontentguilds.appendChild(BDFDB.htmlToElement(`<div class="${BDFDB.disCN.guildseparator} folderseparator" folder="${folderdiv.id}"></div>`));
+					includedServers.forEach(guilddiv => {this.updateCopyInFolderContent(guilddiv, folderdiv);});
+				}
 			}, settings.closeOtherFolders && this.foldercontent.querySelectorAll(BDFDB.dotCN.guild).length ? 300 : 0);
 		}
 		else this.closeFolderContent(folderdiv);
