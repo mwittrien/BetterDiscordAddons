@@ -140,7 +140,7 @@ class BetterSearchPage {
 		if (!pagination || !searchId || document.querySelector(".BSP-pagination, .BSP-pagination-button, .BSP-pagination-jumpinput")) return;
 		let searchResultsWrapper = BDFDB.getParentEle(BDFDB.dotCN.searchresultswrapper, pagination);
 		if (!searchResultsWrapper) return;
-		let numbers = pagination.textContent.split(/[^\d]/).filter(n => n);
+		let numbers = pagination.textContent.replace(/\s/g,"").split(/[^\d]/).filter(n => n);
 		let currentpage = parseInt(numbers[0]);
 		let maxpage = parseInt(numbers[1]);
 		if (isNaN(currentpage) || isNaN(maxpage)) return;
