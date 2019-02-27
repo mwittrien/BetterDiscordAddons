@@ -3,7 +3,7 @@
 class ChatAliases {
 	getName () {return "ChatAliases";}
 
-	getVersion () {return "1.9.8";}
+	getVersion () {return "1.9.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -392,7 +392,7 @@ class ChatAliases {
 	}
 
 	addAutoCompleteMenu (textarea) {
-		if (!textarea.value || textarea.parentElement.querySelector(".autocompleteAliasesRow") || BDFDB.getData("minAliasLength", this, "amounts") > textarea.value.length) return;
+		if (!textarea.value || textarea.parentElement.querySelector(".autocompleteAliasesRow")) return;
 		let words = textarea.value.split(/\s/);
 		let lastword = words[words.length-1].trim();
 		if (words.length == 1 && BDFDB.isPluginEnabled("WriteUpperCase")) {
@@ -404,7 +404,7 @@ class ChatAliases {
 				lastword = lastword.charAt(0).toUpperCase() + lastword.slice(1);
 			}
 		}
-		if (lastword) {
+		if (lastword && BDFDB.getData("minAliasLength", this, "amounts") <= lastword.length) {
 			let matchedaliases = {};
 			for (let word in this.aliases) {
 				let aliasdata = this.aliases[word];
