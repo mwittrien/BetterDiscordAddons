@@ -3,15 +3,20 @@
 class BetterSearchPage {
 	getName () {return "BetterSearchPage";}
 
-	getVersion () {return "1.0.5";}
+	getVersion () {return "1.0.6";}
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Adds some extra controls to the search results page.";}
 
 	initConstructor () {
+		this.changelog = {
+			"fixed":[["Language Issues","Fixed the bug where the plugin wouldn't work with certain languages"]]
+		};
+		
 		this.patchModules = {
-			"SearchResults":["componentDidMount","componentDidUpdate"]
+			"SearchResults":["componentDidMount","componentDidUpdate"],
+			"StandardSidebarView":"componentWillUnmount"
 		};
 
 		this.css = `
@@ -123,20 +128,22 @@ class BetterSearchPage {
 		if (instance.props && instance.props.searchId) this.addNewControls(wrapper.querySelector(BDFDB.dotCN.searchresultspagination), instance.props.searchId);
 	}
 
+	processStandardSidebarView (instance, wrapper) {
+		if (this.SettingsUpdated) {
+			delete this.SettingsUpdated;
+			BDFDB.removeEles(".BSP-pagination",".BSP-pagination-button",".BSP-pagination-jumpinput");
+			BDFDB.WebModules.forceAllUpdates(this);
+		}
+	}
+
 	addNewControls (pagination, searchId) {
 		if (!pagination || !searchId || document.querySelector(".BSP-pagination, .BSP-pagination-button, .BSP-pagination-jumpinput")) return;
 		let searchResultsWrapper = BDFDB.getParentEle(BDFDB.dotCN.searchresultswrapper, pagination);
 		if (!searchResultsWrapper) return;
-		let currentpage, maxpage;
-		for (let word of pagination.textContent.split(" ")) {
-			let number = parseInt(word.replace(/\./g,""));
-			if (!isNaN(number) && !currentpage) currentpage = number;
-			else if (!isNaN(number)) {
-				maxpage = number;
-				break;
-			}
-		}
-		if (!currentpage || !maxpage) return;
+		let numbers = pagination.textContent.split(/[^\d]/).filter(n => n);
+		let currentpage = parseInt(numbers[0]);
+		let maxpage = parseInt(numbers[1]);
+		if (isNaN(currentpage) || isNaN(maxpage)) return;
 		let temppage = currentpage;
 		currentpage = currentpage < maxpage ? currentpage : maxpage;
 		maxpage = temppage < maxpage ? maxpage : temppage;
@@ -180,8 +187,7 @@ class BetterSearchPage {
 			}
 		};
 		BDFDB.addEventListener(this, searchResultsWrapper, "click", BDFDB.dotCN.searchresultspaginationdisabled, e => {
-			e.preventDefault();
-			e.stopPropagation();
+			BDFDB.stopEvent(e);
 		});
 		BDFDB.addEventListener(this, searchResultsWrapper, "click", `.BSP-pagination ${BDFDB.dotCN.searchresultspaginationprevious + BDFDB.notCN.searchresultspaginationdisabled}`, () => {
 			this.SearchNavigation.searchPreviousPage(searchId);
