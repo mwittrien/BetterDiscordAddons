@@ -11,7 +11,7 @@ class ShowHiddenChannels {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Discord","Fixed a bug cuased by retarded Discord Devs"]]
+			"fixed":[["Discord","Fixed a bug caused by retarded Discord Devs"]]
 		};
 		
 		this.patchModules = {
