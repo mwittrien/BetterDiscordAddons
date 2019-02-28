@@ -3,7 +3,7 @@
 class PinDMs {
 	getName () {return "PinDMs";}
 
-	getVersion () {return "1.3.3";}
+	getVersion () {return "1.3.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class PinDMs {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Rendering","Pinned DMs sometimes didn't render when switching DMs, this should be fixed now"]]
+			"fixed":[["Group DMs","Fixed issue where Group DMs could not be pinned"]]
 		};
 		
 		this.patchModules = {
@@ -230,26 +230,28 @@ class PinDMs {
 	}
 
 	onUserContextMenu (instance, menu) {
+		console.log(instance);
 		if (instance.props && instance.props.user && !menu.querySelector(".pindms-item")) {
 			let closeentry = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:menu,props:["handleClose"]}));
 			if (closeentry) {
 				let id = this.ChannelUtils.getDMFromUserId(instance.props.user.id);
-				if (id) this.appendItem(instance, id, closeentry);
-				else this.PrivateChannelUtils.ensurePrivateChannel(BDFDB.myData.id, instance.props.user.id).then(id => {this.appendItem(instance, id, closeentry);});
+				if (id) this.appendItem(id, closeentry);
+				else this.PrivateChannelUtils.ensurePrivateChannel(BDFDB.myData.id, instance.props.user.id).then(id => {this.appendItem(id, closeentry);});
 			}
 		}
 	}
 
 	onGroupDMContextMenu (instance, menu) {
+		console.log(instance);
 		if (instance.props && instance.props.channelId && !menu.querySelector(".pindms-item")) {
 			let changeentry = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:menu,props:["handleChangeIcon"]}));
 			if (changeentry) {
-				this.appendItem(instance, instance.props.channelId, changeentry);
+				this.appendItem(instance.props.channelId, changeentry);
 			}
 		}
 	}
 
-	appendItem (instance, id, target) {
+	appendItem (id, target) {
 		let dmContextEntry = BDFDB.htmlToElement(this.dmContextEntryMarkup);
 		target.parentElement.insertBefore(dmContextEntry, target);
 		let pindmsitem = dmContextEntry.querySelector(".pindms-item");
@@ -263,7 +265,7 @@ class PinDMs {
 			if (pinnedDMs[id] == undefined) {
 				BDFDB.removeEles(unpinchannelitem);
 				pinchannelitem.addEventListener("click", () => {
-					instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
+					BDFDB.closeContextMenu(target);
 					let dmsscrollerinstance = BDFDB.getReactInstance(document.querySelector(BDFDB.dotCNS.dmchannels + BDFDB.dotCN.scroller));
 					if (dmsscrollerinstance) {
 						let dms = dmsscrollerinstance.return.return.return.memoizedProps.children;
@@ -277,7 +279,7 @@ class PinDMs {
 			else {
 				BDFDB.removeEles(pinchannelitem);
 				unpinchannelitem.addEventListener("click", () => {
-					instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
+					BDFDB.closeContextMenu(target);
 					this.removePinnedDM(id);
 				});
 			}
@@ -285,7 +287,7 @@ class PinDMs {
 			if (pinnedRecents[id] == undefined) {
 				BDFDB.removeEles(unpinguilditem);
 				pinguilditem.addEventListener("click", () => {
-					instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
+					BDFDB.closeContextMenu(target);
 					this.addPinnedRecent(id);
 					this.updatePinnedPositions("pinnedRecents");
 				});
@@ -293,7 +295,7 @@ class PinDMs {
 			else {
 				BDFDB.removeEles(pinguilditem);
 				unpinguilditem.addEventListener("click", () => {
-					instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
+					BDFDB.closeContextMenu(target);
 					BDFDB.removeEles(document.querySelector(`${BDFDB.dotCNS.dms + BDFDB.dotCN.guild}.pinned[channelid="${id}"]`));
 					this.unhideNativeDM(id);
 					this.updatePinnedPositions("pinnedRecents");
