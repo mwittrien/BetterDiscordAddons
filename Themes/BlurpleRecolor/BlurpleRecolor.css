@@ -269,6 +269,9 @@
 }
 
 /* EMOJI PICKER */
+.emojiPicker-3m1S-j .item-16cXuq.selected-39BZ4S {
+	border-color: rgb(var(--vaccentcolor)) !important;
+}
 .emojiPicker-3m1S-j .categories-1feg4n .item-16cXuq.flags-3peqg9.selected-39BZ4S, 
 .emojiPicker-3m1S-j .categories-1feg4n .item-16cXuq.flags-3peqg9:hover {
 	background: none !important;
