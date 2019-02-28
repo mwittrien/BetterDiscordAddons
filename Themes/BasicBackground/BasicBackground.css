@@ -122,6 +122,7 @@
 .action-1lSjCi,
 .or-3THJsp,
 .quickSelectPopoutOption-opKBx9:not(.selected):hover,
+.embed-IeVjo6,
 .embedInner-1-fpTo,
 .changeDetails-bk98pu,
 .paginationItem-2lUq0s:not(.selectedPage-3cFHgU),
@@ -142,7 +143,6 @@
 	background: rgba(var(--vtransparencycolor),var(--vtransparencyalpha)) !important;
 }
 
-.embed-IeVjo6,
 .sidebar-1-SQro {
 	background: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 2)) !important;
 }
