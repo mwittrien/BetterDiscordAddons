@@ -2489,11 +2489,6 @@ html, span:not(.spinner-item) {
 	animation: slide-up 300ms cubic-bezier(0,0,0,1), opacity 300ms ease;
 }
 
-/* serverfolders */ 
-.guildIcon-CT-ZDq {
-	position: static !important;
-}
-
 /* citador & replyer */
 .quote-msg .avatar-large {
 	left: 0 !important;
