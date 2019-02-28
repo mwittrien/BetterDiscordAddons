@@ -269,37 +269,6 @@
 }
 
 /* EMOJI PICKER */
-.emojiPicker-3m1S-j,
-#bda-qem,
-#bda-qem-twitch-container,
-#bda-qem-favourite-container {
-	border: 1px solid hsla(0,0%,74.9%,.2);
-}
-.emojiPicker-3m1S-j,
-.emojiPicker-3m1S-j .dimmer-3iH-5D,
-#bda-qem,
-#bda-qem-twitch-container,
-#bda-qem-favourite-container {
-	width: 376px;
-}
-#bda-qem-twitch-container,
-#bda-qem-favourite-container {
-	height: 326px;
-}
-#bda-qem {
-	border-bottom: none;
-}
-#bda-qem button {
-	border: none;
-}
-.emojiPicker-3m1S-j:not(:only-child),
-#bda-qem-twitch-container:not(:only-child),
-#bda-qem-favourite-container:not(:only-child) {
-	border-top: none;
-}
-.emojiPicker-3m1S-j .item-16cXuq.selected-39BZ4S {
-	border-color: rgb(var(--vaccentcolor)) !important;
-}
 .emojiPicker-3m1S-j .categories-1feg4n .item-16cXuq.flags-3peqg9.selected-39BZ4S, 
 .emojiPicker-3m1S-j .categories-1feg4n .item-16cXuq.flags-3peqg9:hover {
 	background: none !important;
