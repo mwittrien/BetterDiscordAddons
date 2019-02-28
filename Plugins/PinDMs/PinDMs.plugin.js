@@ -3,7 +3,7 @@
 class PinDMs {
 	getName () {return "PinDMs";}
 
-	getVersion () {return "1.3.5";}
+	getVersion () {return "1.3.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,6 +11,7 @@ class PinDMs {
 
 	initConstructor () {
 		this.changelog = {
+			"added":[["Pin Icon","Fixed issue where Group DMs could not be pinned"]],
 			"fixed":[["Group DMs","Fixed issue where Group DMs could not be pinned"]]
 		};
 		
@@ -18,7 +19,8 @@ class PinDMs {
 			"Guilds":"componentDidMount",
 			"PrivateChannel":"componentDidMount",
 			"DirectMessage":["componentDidMount","componentDidUpdate","componentWillUnmount"],
-			"LazyScroller":"render"
+			"LazyScroller":"render",
+			"StandardSidebarView":"componentWillUnmount"
 		};
 
 		this.dmContextEntryMarkup =
@@ -82,6 +84,24 @@ class PinDMs {
 			</div>`;
 
 		this.css = `
+			${BDFDB.dotCN.dmchannel}.pindms-dragpreview,
+			${BDFDB.dotCN.guild}.pindms-dragpreview {
+				pointer-events: none !important;
+				position: absolute !important;
+				opacity: 0.5 !important;
+				z-index: 10000 !important;
+			}
+			${BDFDB.dotCN.guild}.pindms-dragpreview:before,
+			${BDFDB.dotCN.guild}.pindms-dragpreview:after,
+			${BDFDB.dotCN.guild}.pindms-dragpreview ${BDFDB.dotCN.badge} {
+				display: none !important;
+			}
+			${BDFDB.dotCN.guild}.pindms-dragpreview ${BDFDB.dotCN.avataricon} {
+				background-color: transparent !important;
+				overflow: hidden !important;
+			}`;
+			
+		this.pinIconCSS = `
 			${BDFDB.dotCN.guild}.pinned:after {
 				background-position: 50%;
 				background-repeat: no-repeat;
@@ -102,28 +122,22 @@ class PinDMs {
 			}
 			${BDFDB.dotCNS.themedark + BDFDB.dotCN.guild}.pinned:after {
 				background-color: #202225;
+			}`
+
+		this.defaults = {
+			settings: {
+				showPinIcon:		{value:true, 	description:"Shows a little 'Pin' icon for pinned DMs in the server list:"}
 			}
-			${BDFDB.dotCN.dmchannel}.pindms-dragpreview,
-			${BDFDB.dotCN.guild}.pindms-dragpreview {
-				pointer-events: none !important;
-				position: absolute !important;
-				opacity: 0.5 !important;
-				z-index: 10000 !important;
-			}
-			${BDFDB.dotCN.guild}.pindms-dragpreview:before,
-			${BDFDB.dotCN.guild}.pindms-dragpreview:after,
-			${BDFDB.dotCN.guild}.pindms-dragpreview ${BDFDB.dotCN.badge} {
-				display: none !important;
-			}
-			${BDFDB.dotCN.guild}.pindms-dragpreview ${BDFDB.dotCN.avataricon} {
-				background-color: transparent !important;
-				overflow: hidden !important;
-			}`;
+		};
 	}
 
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-		let settingshtml = `<div class="${this.name}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="DevilBro-settings-inner">`;
+		var settings = BDFDB.getAllData(this, "settings");
+		var settingshtml = `<div class="${this.name}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="DevilBro-settings-inner">`;
+		for (let key in settings) {
+			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
+		}
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Unpin all DMs.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} reset-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Reset</div></button></div>`;
 		settingshtml += `</div></div>`;
 
@@ -164,6 +178,8 @@ class PinDMs {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
+			
+			if (BDFDB.getData("showPinIcon", this, "settings")) BDFDB.appendLocalStyle(this.name, this.css + this.pinIconCSS);
 
 			this.UserUtils = BDFDB.WebModules.findByProperties("getUsers", "getUser");
 			this.ChannelUtils = BDFDB.WebModules.findByProperties("getChannels", "getChannel");
@@ -413,6 +429,13 @@ class PinDMs {
 			if (this.oldScrollerPos != null) {
 				instance.getScrollerNode().scrollTop = this.oldScrollerPos;
 			}
+		}
+	}
+
+	processStandardSidebarView (instance, wrapper) {
+		if (this.SettingsUpdated) {
+			delete this.SettingsUpdated;
+			BDFDB.appendLocalStyle(this.name, this.css + (BDFDB.getData("showPinIcon", this, "settings") ? this.pinIconCSS : ""));
 		}
 	}
 
