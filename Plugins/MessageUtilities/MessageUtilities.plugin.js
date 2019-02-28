@@ -3,13 +3,17 @@
 class MessageUtilities {
 	getName () {return "MessageUtilities";}
 
-	getVersion () {return "1.4.7";}
+	getVersion () {return "1.4.8";}
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Offers a number of useful message options. Remap the keybindings in the settings.";}
 
-	initConstructor () {		
+	initConstructor () {	
+		this.changelog = {
+			"fixed":[["Pinning/Deleting","Fixed some issues with pinning and deleting messages"]]
+		};
+		
 		this.bindings = {};
 
 		this.firedEvents = [];
@@ -284,7 +288,7 @@ class MessageUtilities {
 
 	doDelete ({messagediv, pos, message}) {
 		let channel = this.ChannelUtils.getChannel(message.channel_id);
-		if ((channel && BDFDB.isUserAllowedTo("MANAGE_MESSAGES")) || message.author.id == BDFDB.myData.id) {
+		if ((channel && BDFDB.isUserAllowedTo("MANAGE_MESSAGES")) || message.author.id == BDFDB.myData.id && message.type != 1 && message.type != 2 && message.type != 3) {
 			this.MessageActions.deleteMessage(message.channel_id, message.id);
 		}
 	}
@@ -302,7 +306,7 @@ class MessageUtilities {
 
 	doPinUnPin ({messagediv, pos, message}) {
 		let channel = this.ChannelUtils.getChannel(message.channel_id);
-		if (channel && BDFDB.isUserAllowedTo("MANAGE_MESSAGES")) {
+		if (channel && (channel.type == 1 || channel.type == 3 || BDFDB.isUserAllowedTo("MANAGE_MESSAGES")) && message.type == 0) {
 			if (message.pinned) this.PinActions.unpinMessage(channel, message.id);
 			else this.PinActions.pinMessage(channel, message.id);
 		}
@@ -366,10 +370,10 @@ class MessageUtilities {
 	}
 
 	getMessageData (target) {
-		let messagediv = BDFDB.getParentEle(BDFDB.dotCN.message, target);
-		let pos = messagediv ? Array.from(messagediv.parentElement.querySelectorAll(BDFDB.dotCN.message)).indexOf(messagediv) : -1;
+		let messagediv = BDFDB.getParentEle(BDFDB.dotCN.message, target) || BDFDB.getParentEle(BDFDB.dotCN.messagesystem, target);
+		let pos = messagediv ? Array.from(messagediv.parentElement.querySelectorAll(BDFDB.dotCNC.message + BDFDB.dotCN.messagesystem)).indexOf(messagediv) : -1;
 		let instance = BDFDB.getReactInstance(messagediv);
-		let message = instance && instance.return && instance.return.memoizedProps && instance.return.memoizedProps.message ? instance.return.memoizedProps.message : null;
+		let message = instance ? BDFDB.getKeyInformation({instance, key:"message", up:true}) : null;
 		return {messagediv, pos, message};
 	}
 
