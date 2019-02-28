@@ -116,30 +116,24 @@ class ReverseImageSearch {
 
 	onNativeContextMenu (instance, menu) {
 		if (instance.props && instance.props.type == "NATIVE_IMAGE" && (instance.props.href || instance.props.src) && !menu.querySelector(".reverseimagesearch-item")) {
-			this.appendItem(instance, menu, instance.props.href || instance.props.src);
+			this.appendItem(menu, instance.props.href || instance.props.src);
 		}
 	}
 
 	onMessageContextMenu (instance, menu) {
 		if (instance.props && instance.props.message && instance.props.channel && instance.props.target && !menu.querySelector(".reverseimagesearch-item")) {
 			if (instance.props.attachment) {
-				this.appendItem(instance, menu, instance.props.attachment.url);
+				this.appendItem(menu, instance.props.attachment.url);
 			}
-			if (instance.props.target.tagName == "A") {
-				BDFDB.toggleEles(menu, false);
-				require("request")(instance.props.target.href, (error, response, result) => {
-					if (response && response.headers["content-type"] && response.headers["content-type"].indexOf("image") != -1) {
-						this.appendItem(instance, menu, instance.props.target.href);
-					}
-					BDFDB.toggleEles(menu, true);
-					BDFDB.updateContextPosition(menu);
-				});
+			if (instance.props.target.tagName == "A" && instance.props.message.embeds && instance.props.message.embeds[0] && instance.props.message.embeds[0].type == "image") {
+				this.appendItem(menu, instance.props.target.href);
+				BDFDB.updateContextPosition(menu);
 			}
 		}
 	}
 
-	appendItem (instance, menu, url) {
-		if (instance && menu && url && url.indexOf("discordapp.com/assets/") == -1 && !url.endsWith(".mp4")) {
+	appendItem (menu, url) {
+		if (url && url.indexOf("discordapp.com/assets/") == -1 && !url.endsWith(".mp4")) {
 			if (url.indexOf("https://images-ext-1.discordapp.net/external/") > -1) {
 				if (url.split("/https/").length != 1) url = "https://" + url.split("/https/")[url.split("/https/").length-1];
 				else if (url.split("/http/").length != 1) url = "http://" + url.split("/http/")[url.split("/http/").length-1];
@@ -153,7 +147,7 @@ class ReverseImageSearch {
 				for (let key in engines) if (!engines[key]) BDFDB.removeEles(messageContextSubMenu.querySelector("[engine='" + key + "']"));
 				if (messageContextSubMenu.querySelector(".RIS-item")) BDFDB.removeEles(messageContextSubMenu.querySelector(".alldisabled-item"));
 				BDFDB.addChildEventListener(messageContextSubMenu, "click", ".RIS-item", e => {
-					instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
+					BDFDB.closeContextMenu(menu);
 					let engine = e.currentTarget.getAttribute("engine");
 					if (engine == "_all") {
 						for (let key in engines) if (key != "_all" && engines[key]) window.open(this.defaults.engines[key].url.replace(this.imgUrlReplaceString, encodeURIComponent(url)), "_blank");
