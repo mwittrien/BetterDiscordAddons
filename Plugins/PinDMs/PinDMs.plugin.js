@@ -3,7 +3,7 @@
 class PinDMs {
 	getName () {return "PinDMs";}
 
-	getVersion () {return "1.3.4";}
+	getVersion () {return "1.3.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -298,6 +298,7 @@ class PinDMs {
 					BDFDB.closeContextMenu(target);
 					BDFDB.removeEles(document.querySelector(`${BDFDB.dotCNS.dms + BDFDB.dotCN.guild}.pinned[channelid="${id}"]`));
 					this.unhideNativeDM(id);
+					BDFDB.removeData(id, this, "pinnedRecents");
 					this.updatePinnedPositions("pinnedRecents");
 				});
 			}
