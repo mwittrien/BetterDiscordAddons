@@ -3,13 +3,17 @@
 class ShowHiddenChannels {
 	getName () {return "ShowHiddenChannels";}
 
-	getVersion () {return "2.4.1";}
+	getVersion () {return "2.4.2";}
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Displays channels that are hidden from you by role restrictions.";}
 
 	initConstructor () {
+		this.changelog = {
+			"fixed":[["Discord","Fixed a bug cuased by retarded Discord Devs"]]
+		};
+		
 		this.patchModules = {
 			"Channels":["componentDidMount","componentDidUpdate"],
 			"ChannelItem":"componentDidMount",
@@ -203,15 +207,19 @@ class ShowHiddenChannels {
 			if (channel.guild_id == guild.id) {
 				var isHidden = true;
 				if (channel.type == this.ChannelTypes.GUILD_CATEGORY) {
-					for (let type in this.ChannelTypes) if (shownChannels[this.ChannelTypes[type]]) for (let shownChannel of shownChannels[this.ChannelTypes[type]]) {
-						if (!channel.id || shownChannel.channel.parent_id == channel.id) {
-							isHidden = false;
-							break;
+					for (let type in this.ChannelTypes) {
+						let shownChannelsOfType = type == 0 && shownChannels.SELECTABLE ? shownChannels.SELECTABLE : shownChannels[type];
+						if (shownChannelsOfType) for (let shownChannel of shownChannelsOfType) {
+							if (!channel.id || shownChannel.channel.parent_id == channel.id) {
+								isHidden = false;
+								break;
+							}
 						}
 					}
 				}
 				else {
-					for (let shownChannel of shownChannels[channel.type]) if (shownChannel.channel.id == channel.id) {
+					let shownChannelsOfType = channel.type == 0 && shownChannels.SELECTABLE ? shownChannels.SELECTABLE : shownChannels[channel.type];
+					if (shownChannelsOfType) for (let shownChannel of shownChannelsOfType) if (shownChannel.channel.id == channel.id) {
 						isHidden = false;
 						break;
 					}
