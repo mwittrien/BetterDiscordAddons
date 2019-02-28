@@ -62,8 +62,6 @@
 .chat-3bRxxu,
 .chat-3bRxxu .content-yTz4x3,
 .chat-3bRxxu form,
-.content-yTz4x3 .flex-spacer,
-.embed-IeVjo6,
 .media-engine-video,
 .auditLog-3jNbM6,
 .embedContainer-26S24y,
@@ -144,6 +142,7 @@
 	background: rgba(var(--vtransparencycolor),var(--vtransparencyalpha)) !important;
 }
 
+.embed-IeVjo6,
 .sidebar-1-SQro {
 	background: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 2)) !important;
 }
@@ -241,7 +240,6 @@
 .previewOverlay-2O7_KC,
 .wrapper-29NfPK .actions-2vadYq .center-1Vp33r,
 .searchResultsWrap-2DKFzt .searchResultMessage-2VxO12.hit-NLlWXA,
-.embed-IeVjo6,
 .personalizationNotice-2HTAH2,
 .rowWrapperActive-2L7i9f,
 .emptyState-2-sT0o,
