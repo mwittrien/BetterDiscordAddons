@@ -3,13 +3,16 @@
 class SendLargeMessages {
 	getName () {return "SendLargeMessages";}
 
-	getVersion () {return "1.5.2";}
+	getVersion () {return "1.5.3";}
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Opens a popout when your message is too large, which allows you to automatically send the message in several smaller messages.";}
 
 	initConstructor () {
+		this.changelog = {
+			"fixed":[["Sending","Fixed the issue where Messages are not being sent"]]
+		};
 		this.labels = {};
 
 		this.patchModules = {
@@ -167,7 +170,6 @@ class SendLargeMessages {
 		BDFDB.appendModal(sendMessageModal);
 
 		BDFDB.addChildEventListener(sendMessageModal, "click", ".btn-send", e => {
-			e.preventDefault();
 			let messages = this.formatText(textinput.value || "");
 			messages.forEach((message,i) => {
 				setTimeout(() => {
@@ -245,7 +247,7 @@ class SendLargeMessages {
 	sendMessage (text) {
 		let textarea = document.querySelector(BDFDB.dotCNS.textareawrapchat + "textarea");
 		if (textarea) {
-			let instance = BDFDB.getOwnerInstance({"node":textarea.parentElement, "name":"ChannelTextAreaForm", "up":true});
+			let instance = BDFDB.getOwnerInstance({"node":BDFDB.getParentEle(BDFDB.dotCNS.chat + "form", textarea), "name":"ChannelTextAreaForm", "up":true});
 			if (instance) {
 				instance.setState({textValue:text});
 				BDFDB.triggerSend(textarea);
