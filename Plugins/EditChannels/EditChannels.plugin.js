@@ -3,7 +3,7 @@
 class EditChannels {
 	getName () {return "EditChannels";}
 
-	getVersion () {return "3.9.0";}
+	getVersion () {return "3.9.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class EditChannels {
 
 	initConstructor () {
 		this.changelog = {
-			"improved":[["Settings","You can now choose where EditChannels changes the channel data"]]
+			"fixed":[["Discord","Fixed a bug caused by retarded Discord Devs"]]
 		};
 		
 		this.labels = {};
@@ -181,7 +181,7 @@ class EditChannels {
 
 			this.UserUtils = BDFDB.WebModules.findByProperties("getUsers","getUser");
 			this.ChannelUtils = BDFDB.WebModules.findByProperties("getChannels","getChannel");
-			this.CurrentChannelUtils = BDFDB.WebModules.findByProperties("getChannels","getDefaultChannel");
+			this.GuildChannels = BDFDB.WebModules.findByProperties("getChannels","getDefaultChannel");
 			this.LastGuildStore = BDFDB.WebModules.findByProperties("getLastSelectedGuildId");
 			this.LastChannelStore = BDFDB.WebModules.findByProperties("getLastSelectedChannelId");
 
@@ -382,8 +382,10 @@ class EditChannels {
 			let children = BDFDB.getReactValue(instance, "_reactInternalFiber.memoizedProps.children");
 			if (children && typeof children[0] == "string") {
 				let channelname = children[0].slice(1);
-				let categoryname = BDFDB.getReactValue(instance, "_reactInternalFiber.return.return.type.displayName") == "Tooltip" ? BDFDB.getReactValue(instance, "_reactInternalFiber.return.return.memoizedProps.text") : null;
-				for (let channel of this.CurrentChannelUtils.getChannels(this.LastGuildStore.getGuildId())[0]) {
+				let categoryname = BDFDB.getReactValue(instance, "_reactInternalFiber.return.return.type.displayName") == "Tooltip" ? BDFDB.getReactValue(instance, "_reactInternalFiber.return.return.memoizedProps.text") : null
+				let channelid = this.LastGuildStore.getGuildId();
+				let channels = channelid ? (this.GuildChannels.getChannels(channelid)[0] || this.GuildChannels.getChannels(channelid).SELECTABLE) : null;
+				if (Array.isArray(channels)) for (let channel of channels) {
 					if (channelname == channel.channel.name) {
 						let category = categoryname ? this.ChannelUtils.getChannel(channel.channel.parent_id) : null;
 						if (!category || category && categoryname == category.name) {
