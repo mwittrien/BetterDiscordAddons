@@ -3,7 +3,7 @@
 class ShowHiddenChannels {
 	getName () {return "ShowHiddenChannels";}
 
-	getVersion () {return "2.4.2";}
+	getVersion () {return "2.4.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -208,7 +208,7 @@ class ShowHiddenChannels {
 				var isHidden = true;
 				if (channel.type == this.ChannelTypes.GUILD_CATEGORY) {
 					for (let type in this.ChannelTypes) {
-						let shownChannelsOfType = type == 0 && shownChannels.SELECTABLE ? shownChannels.SELECTABLE : shownChannels[type];
+						let shownChannelsOfType = this.ChannelTypes[type] == 0 && shownChannels.SELECTABLE ? shownChannels.SELECTABLE : shownChannels[this.ChannelTypes[type]];
 						if (shownChannelsOfType) for (let shownChannel of shownChannelsOfType) {
 							if (!channel.id || shownChannel.channel.parent_id == channel.id) {
 								isHidden = false;
@@ -287,7 +287,7 @@ class ShowHiddenChannels {
 					this.showAccessRoles(guild, hiddenChannel, e, false);
 				});
 				channel.addEventListener("click", () => {
-					BDFDB.showToast(`You can not enter the hidden textchannel ${hiddenChannel.name}.`, {type:"error"});
+					BDFDB.showToast(`You can not enter the hidden textchannel&nbsp;&nbsp;<strong>${BDFDB.encodeToHTML(hiddenChannel.name)}</strong>.`, {type:"error", html:true});
 				});
 				channel.addEventListener("contextmenu", e => {
 					this.createHiddenObjContextMenu(guild, hiddenChannel, "TEXT", e);
@@ -311,7 +311,7 @@ class ShowHiddenChannels {
 					this.showAccessRoles(guild, hiddenChannel, e, false);
 				});
 				channel.addEventListener("click", () => {
-					BDFDB.showToast(`You can not enter the hidden voicechannel ${hiddenChannel.name}.`, {type:"error"});
+					BDFDB.showToast(`You can not enter the hidden voicechannel&nbsp;&nbsp;<strong>${BDFDB.encodeToHTML(hiddenChannel.name)}</strong>.`, {type:"error", html:true});
 				});
 				channel.addEventListener("contextmenu", e => {
 					this.createHiddenObjContextMenu(guild, hiddenChannel, "VOICE", e);
@@ -333,7 +333,7 @@ class ShowHiddenChannels {
 					this.showAccessRoles(guild, hiddenChannel, e, false);
 				});
 				channel.addEventListener("click", () => {
-					BDFDB.showToast(`You can not open the hidden category ${hiddenChannel.name}.`, {type:"error"});
+					BDFDB.showToast(`You can not open the hidden category&nbsp;&nbsp;<strong>${BDFDB.encodeToHTML(hiddenChannel.name)}</strong>.`, {type:"error", html:true});
 				});
 				channel.addEventListener("contextmenu", e => {
 					this.createHiddenObjContextMenu(guild, hiddenChannel, "CATEGORY", e);
