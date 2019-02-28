@@ -3,15 +3,15 @@
 class MessageUtilities {
 	getName () {return "MessageUtilities";}
 
-	getVersion () {return "1.4.8";}
+	getVersion () {return "1.4.9";}
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Offers a number of useful message options. Remap the keybindings in the settings.";}
 
-	initConstructor () {	
+	initConstructor () {
 		this.changelog = {
-			"fixed":[["Pinning/Deleting","Fixed some issues with pinning and deleting messages"]]
+			"fixed":[["Pinning/Deleting","Fixed some issues with pinning and deleting messages"],["ESC clear","Fixed ESC clear not working"]]
 		};
 		
 		this.bindings = {};
@@ -350,7 +350,7 @@ class MessageUtilities {
 		if (!this.isEventFired(name)) {
 			this.fireEvent(name);
 			if (key == 27 && BDFDB.getData("clearOnEscape", this, "settings")) {
-				let instance = BDFDB.getOwnerInstance({"node":e.currentTarget, "name":"ChannelTextAreaForm", "up":true});
+				let instance = BDFDB.getOwnerInstance({"node":BDFDB.getParentEle(BDFDB.dotCNS.chat + "form", e.currentTarget), "name":"ChannelTextAreaForm", "up":true});
 				if (instance) instance.setState({textValue:""});
 			}
 			this.cancelEvent(name);
