@@ -11,7 +11,7 @@ class PinDMs {
 
 	initConstructor () {
 		this.changelog = {
-			"added":[["Pin Icon","Fixed issue where Group DMs could not be pinned"]],
+			"added":[["Pin Icon","Added the option to disable the 'Pin' icon for pinned DMs in the server list"]],
 			"fixed":[["Group DMs","Fixed issue where Group DMs could not be pinned"]]
 		};
 		
