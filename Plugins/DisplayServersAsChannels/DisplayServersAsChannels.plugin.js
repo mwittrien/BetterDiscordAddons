@@ -3,7 +3,7 @@
 class DisplayServersAsChannels {
 	getName () {return "DisplayServersAsChannels";}
 
-	getVersion () {return "1.1.8";}
+	getVersion () {return "1.1.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -143,6 +143,8 @@ class DisplayServersAsChannels {
 				position: static;
 				margin: 0 3px;
 			}
+			.DSAC-styled ${BDFDB.dotCN.guild}.copy ${BDFDB.dotCN.guildinner},
+			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildinner},
 			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guild}.copy ${BDFDB.dotCN.guildinner},
 			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildinner} {
 				width: unset;
@@ -280,7 +282,6 @@ class DisplayServersAsChannels {
 		if (!info || !info.div) return;
 		var avatar = info.div.querySelector(BDFDB.dotCN.guildicon);
 		if (avatar) {
-			avatar.DSAColdName = avatar.textContent;
 			avatar.innerHTML = `<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">${BDFDB.encodeToHTML(info.name || info.folderName || "")}</div></span>`;
 			BDFDB.initElements(avatar, this);
 			if (info.features && info.features.has("VERIFIED")) avatar.parentElement.insertBefore(BDFDB.htmlToElement(this.verificationBadgeMarkup), avatar);
@@ -291,7 +292,7 @@ class DisplayServersAsChannels {
 		if (!info || !info.div) return;
 		var avatar = info.div.querySelector(BDFDB.dotCN.guildicon);
 		if (avatar) {
-			avatar.innerHTML = BDFDB.encodeToHTML(avatar.DSAColdName);
+			avatar.innerHTML = BDFDB.encodeToHTML(info.icon ? "" : (info.acronym || ""));
 			BDFDB.removeEles(info.div.querySelector(".DSAC-verification-badge"));
 		}
 	}
