@@ -3,15 +3,15 @@
 class MessageUtilities {
 	getName () {return "MessageUtilities";}
 
-	getVersion () {return "1.4.9";}
+	getVersion () {return "1.5.0";}
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Offers a number of useful message options. Remap the keybindings in the settings.";}
 
-	initConstructor () {
+	initConstructor () {	
 		this.changelog = {
-			"fixed":[["Pinning/Deleting","Fixed some issues with pinning and deleting messages"],["ESC clear","Fixed ESC clear not working"]]
+			"fixed":[["Deleting Clyde/Error","Properly delete Clyde messages and message that failed to send now"]]
 		};
 		
 		this.bindings = {};
@@ -287,9 +287,13 @@ class MessageUtilities {
 	}
 
 	doDelete ({messagediv, pos, message}) {
-		let channel = this.ChannelUtils.getChannel(message.channel_id);
-		if ((channel && BDFDB.isUserAllowedTo("MANAGE_MESSAGES")) || message.author.id == BDFDB.myData.id && message.type != 1 && message.type != 2 && message.type != 3) {
-			this.MessageActions.deleteMessage(message.channel_id, message.id);
+		let deletelink = messagediv.parentElement.querySelector(BDFDB.dotCNS.messagelocalbotmessage + BDFDB.dotCN.anchor);
+		if (deletelink) deletelink.click();
+		else {
+			let channel = this.ChannelUtils.getChannel(message.channel_id);
+			if ((channel && BDFDB.isUserAllowedTo("MANAGE_MESSAGES")) || message.author.id == BDFDB.myData.id && message.type != 1 && message.type != 2 && message.type != 3) {
+				this.MessageActions.deleteMessage(message.channel_id, message.id, message.state != "SENT");
+			}
 		}
 	}
 
@@ -305,10 +309,12 @@ class MessageUtilities {
 	}
 
 	doPinUnPin ({messagediv, pos, message}) {
-		let channel = this.ChannelUtils.getChannel(message.channel_id);
-		if (channel && (channel.type == 1 || channel.type == 3 || BDFDB.isUserAllowedTo("MANAGE_MESSAGES")) && message.type == 0) {
-			if (message.pinned) this.PinActions.unpinMessage(channel, message.id);
-			else this.PinActions.pinMessage(channel, message.id);
+		if (message.state == "SENT") {
+			let channel = this.ChannelUtils.getChannel(message.channel_id);
+			if (channel && (channel.type == 1 || channel.type == 3 || BDFDB.isUserAllowedTo("MANAGE_MESSAGES")) && message.type == 0) {
+				if (message.pinned) this.PinActions.unpinMessage(channel, message.id);
+				else this.PinActions.pinMessage(channel, message.id);
+			}
 		}
 	}
 
