@@ -499,7 +499,7 @@ class GoogleTranslateOption {
 			else menu.insertBefore(messageTranslateContextEntry, menu.firstElementChild);
 			let translateitem = messageTranslateContextEntry.querySelector(".googletranslateoption-item");
 			translateitem.addEventListener("click", () => {
-				instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
+				BDFDB.closeContextMenu(menu);
 				this.translateMessage(instance.props.message, instance.props.target, instance.props.channel);
 			});
 			if (BDFDB.isPluginEnabled("MessageUtilities")) {
@@ -516,7 +516,7 @@ class GoogleTranslateOption {
 						this.translateText(text, "context", (translation, input, output) => {
 							if (translation) {
 								var openGoogleSearch = () => {
-									instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
+									BDFDB.closeContextMenu(menu);
 									window.open(this.getGoogleTranslatePageURL(input.id, output.id, text), "_blank");
 								};
 								searchitem.removeEventListener("click", openGoogleSearch);
@@ -607,7 +607,7 @@ class GoogleTranslateOption {
 	}
 
 	processMessage (instance, wrapper) {  
-		if (instance.props && typeof instance.props.renderButtons == "function" && !wrapper.querySelector(BDFDB.dotCN.optionpopoutbutton)) {
+		if (instance.props && typeof instance.props.renderButtons == "function" && !wrapper.querySelector(BDFDB.dotCN.optionpopoutbutton) && BDFDB.getReactValue(instance, "props.message.author.id") != 1) {
 			let buttonwrap = wrapper.querySelector(BDFDB.dotCN.messagebuttoncontainer);
 			if (buttonwrap) {
 				let optionPopoutButton = BDFDB.htmlToElement(`<div class="${BDFDB.disCN.optionpopoutbutton}"></div>`);
