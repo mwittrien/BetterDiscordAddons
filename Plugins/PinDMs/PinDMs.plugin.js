@@ -246,7 +246,6 @@ class PinDMs {
 	}
 
 	onUserContextMenu (instance, menu) {
-		console.log(instance);
 		if (instance.props && instance.props.user && !menu.querySelector(".pindms-item")) {
 			let closeentry = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:menu,props:["handleClose"]}));
 			if (closeentry) {
@@ -258,7 +257,6 @@ class PinDMs {
 	}
 
 	onGroupDMContextMenu (instance, menu) {
-		console.log(instance);
 		if (instance.props && instance.props.channelId && !menu.querySelector(".pindms-item")) {
 			let changeentry = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:menu,props:["handleChangeIcon"]}));
 			if (changeentry) {
