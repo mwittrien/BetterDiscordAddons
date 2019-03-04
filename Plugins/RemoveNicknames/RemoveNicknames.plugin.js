@@ -3,7 +3,7 @@
 class RemoveNicknames {
 	getName () {return "RemoveNicknames";}
 
-	getVersion () {return "1.1.5";}
+	getVersion () {return "1.1.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class RemoveNicknames {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Typing Users","The plugin now properly changes the names in the typing users list"]]
+			"fixed":[["Replace Own","Fixed the issue where it would replace your own nick even with the option disabled"]]
 		};
 		
 		this.patchModules = {
@@ -106,14 +106,15 @@ class RemoveNicknames {
 		if (EditUsersData && EditUsersData.name) return EditUsersData.name;
 		let settings = BDFDB.getAllData(this, "settings");
 		let member = this.MemberStore.getMember(this.LastGuildStore.getGuildId(), info.id);
-		if (!member || !member.nick || info.id == BDFDB.myData.id && !settings.replaceOwn) return info.username;
-		if (this.reseting) return member.nick || info.username;
+		if (this.reseting || !member || !member.nick || info.id == BDFDB.myData.id && !settings.replaceOwn) return member.nick || info.username;
 		return settings.addNickname ? (settings.swapPositions ? (member.nick + " (" + info.username + ")") : (info.username + " (" + member.nick + ")")) : info.username;
 	}
 
 	processNameTag (instance, wrapper) {
-		let username = wrapper.parentElement.querySelector("." + (BDFDB.containsClass(wrapper, BDFDB.disCN.userpopoutheadertagwithnickname) ? BDFDB.disCN.userpopoutheadernickname : instance.props.usernameClass).replace(/ /g, "."));
-		if (username) BDFDB.setInnerText(username, this.getNewName(instance.props.user));
+		if (wrapper && !BDFDB.containsClass(wrapper, BDFDB.disCN.userprofilenametag)) {
+			let username = wrapper.parentElement.querySelector("." + (BDFDB.containsClass(wrapper, BDFDB.disCN.userpopoutheadertagwithnickname) ? BDFDB.disCN.userpopoutheadernickname : instance.props.usernameClass).replace(/ /g, "."));
+			if (username) BDFDB.setInnerText(username, this.getNewName(instance.props.user));
+		}
 	}
 
 	processMessageUsername (instance, wrapper) {
