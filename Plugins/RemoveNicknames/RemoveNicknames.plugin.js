@@ -74,10 +74,11 @@ class RemoveNicknames {
 
 			this.reseting = false;
 
-			this.UserStore = BDFDB.WebModules.findByProperties("getUsers", "getUser");
+			this.RelationshipUtils = BDFDB.WebModules.findByProperties("isBlocked", "isFriend");
+			this.UserUtils = BDFDB.WebModules.findByProperties("getUsers", "getUser");
+			this.MemberUtils = BDFDB.WebModules.findByProperties("getNicknames", "getNick");
 			this.LastGuildStore = BDFDB.WebModules.findByProperties("getLastSelectedGuildId");
 			this.LastChannelStore = BDFDB.WebModules.findByProperties("getLastSelectedChannelId");
-			this.MemberStore = BDFDB.WebModules.findByProperties("getNicknames", "getNick");
 
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
@@ -105,7 +106,7 @@ class RemoveNicknames {
 		let EditUsersData = BDFDB.isPluginEnabled("EditUsers") ? BDFDB.loadData(info.id, "EditUsers", "users") : null;
 		if (EditUsersData && EditUsersData.name) return EditUsersData.name;
 		let settings = BDFDB.getAllData(this, "settings");
-		let member = this.MemberStore.getMember(this.LastGuildStore.getGuildId(), info.id);
+		let member = this.MemberUtils.getMember(this.LastGuildStore.getGuildId(), info.id);
 		if (this.reseting || !member || !member.nick || info.id == BDFDB.myData.id && !settings.replaceOwn) return member.nick || info.username;
 		return settings.addNickname ? (settings.swapPositions ? (member.nick + " (" + info.username + ")") : (info.username + " (" + member.nick + ")")) : info.username;
 	}
