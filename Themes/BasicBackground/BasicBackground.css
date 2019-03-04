@@ -189,6 +189,7 @@
 .divider-3573oO,
 .divider-1pnAR2,
 .guildInner-3DSoA4,
+.wrapper-2lTRaf,
 .header-GwIGlr,
 .itemDefault-3Jdr52:not(.tabBarItem-1b8RUP):not(.tabBarItem-1Cg-MI):hover,
 .selectableItem-1MP3MQ:hover,
@@ -252,6 +253,8 @@
 .invite-18yqGF,
 .close-18n9bP:hover,
 .guildSeparator-1X4GQ1:after,
+.guildSeparator-3s64Iy:after,
+.circleIconButton-jET_ig,
 .guildsAdd-21_IdK {
 	border-color: transparent !important;
 	background: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 3)) !important;
@@ -512,6 +515,8 @@ input:disabled {
 .partyMemberBackground-aSF9mc,
 .friendsAction-__WNE9:not(:hover),
 .button-mM-y8i:hover,
+.container-2td-dC:after,
+.container-1aNBdK:after,
 .guild-1EfMGQ:after {
 	background-color: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 3)) !important;
 }
@@ -625,6 +630,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	background: url(https://discordapp.com/assets/72e1fd085e240aecf005e642e655c0f4.svg) no-repeat bottom !important;
 }
 
+.wrapper-1Rf91z,
 .guildsWrapper-5TJh6A,
 .channels-Ie2l6A {
 	background: rgba(var(--vtransparencycolor), var(--vguildchanneltransparency)) !important;
@@ -686,7 +692,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 /* ----------------------- COLORING ----------------------- */
 
 .userSettingsSecurity-3IYeMF .isEnabled-24g9qA,
-#app-mount :not(.searchLearnMore-3SQUAj) > .anchor-3Z-8Bb:not(.channelLink-2TxEu3):not(.guildsError-3cFMtY):not(.embedAuthorName-3mnTWj):not(.downloadButton-1bWXpg):not(.downloadLink-1ywL9o):not([style]),
+#app-mount :not(.searchLearnMore-3SQUAj) > .anchor-3Z-8Bb:not(.channelLink-2TxEu3):not(.guildsError-3cFMtY):not(.guildsError-b7zR5H):not(.embedAuthorName-3mnTWj):not(.downloadButton-1bWXpg):not(.downloadLink-1ywL9o):not([style]),
 #app-mount .usageInfo-2WQAwr,
 #app-mount .genre-1Fi2SE,
 #app-mount #bd-settings-sidebar a,
@@ -923,7 +929,8 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 }
 
 #bd-pub-button,
-.guildInner-3DSoA4 {
+.guildInner-3DSoA4,
+.wrapper-2lTRaf {
 	transition: background 500ms ease !important;
 }
 
@@ -2211,7 +2218,9 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 }
 
 /* change member loadings screen */
-.memberGroupsPlaceholder-3mwPub, .placeholderAvatar-damqh6, .placeholderUsername-2B_OA9 {
+.memberGroupsPlaceholder-3mwPub,
+.placeholderAvatar-damqh6,
+.placeholderUsername-2B_OA9 {
 	background-color: rgb(var(--vaccentcolor)) !important;
 }
 
@@ -2402,9 +2411,13 @@ html, span:not(.spinner-item) {
 }
 
 /* displayserveraschannels */
+.container-2td-dC.selected-nT-gM3,
+.guild-1EfMGQ.selected-ML3OIq.copy,
 .DSAC-styled .guildSeparator-1X4GQ1 ~ .guild-1EfMGQ.selected-ML3OIq {
 	background-color: rgb(var(--vaccentcolor)) !important;
 }
+.container-2td-dC:not(.selected-nT-gM3):hover,
+.guild-1EfMGQ.copy:not(.selected-ML3OIq):hover,
 .DSAC-styled .guildSeparator-1X4GQ1 ~ .guild-1EfMGQ:not(.selected-ML3OIq):hover {
 	opacity: 1 !important;
 	background-color: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 3)) !important;

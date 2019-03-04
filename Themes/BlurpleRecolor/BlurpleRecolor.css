@@ -94,12 +94,17 @@
 }
 
 /* GUILDICON */
+.wrapper-2lTRaf,
 .guildInner-3DSoA4 {
 	transition: background-color .2s ease !important;
 }
+.guildIcon-VlWW86:not(.guildIconImage-3qTk45):not(.guildIconExpired-2Qcq05),
 .guildIcon-lQ0uiM:not(.guildIconImage-3qTk45):not(.guildIconExpired-2Qcq05),
 .guildAvatarWithoutIcon-1sTmE_,
+.container-2td-dC.selected-nT-gM3 .wrapper-2lTRaf[style*="background-color:"],
 .guild-1EfMGQ.selected-ML3OIq .guildInner-3DSoA4[style*="background-color:"],
+.wrapper-2lTRaf[style*="background-color:"]:hover,
+.wrapper-2lTRaf[style*="background-color:"]:not([style*="background-color: rgb(47, 49, 54)"]),
 .guildInner-3DSoA4[style*="background-color:"]:hover,
 .guildInner-3DSoA4[style*="background-color:"]:not([style*="background-color: rgb(47, 49, 54)"]) {
 	background-color: rgb(var(--vaccentcolor)) !important;
