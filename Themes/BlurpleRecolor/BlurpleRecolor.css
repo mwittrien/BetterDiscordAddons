@@ -1201,3 +1201,35 @@ img[src*="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * + *:before {
 .DevilBro-settings .settings-avatar:not(.disabled):not(.desktop) {
 	border-color: rgb(var(--vaccentcolor)) !important;
 }
+/* hideutils */
+#HideUtils-Settings button {
+	background-color: rgb(var(--vaccentcolor)) !important;
+}
+/* quicksave */
+#quicksave-modal-wrapper .modal-body {
+	background-color: rgb(var(--vaccentcolor)) !important;
+}
+/* pastesend */
+.ps-change, .ps-save {
+	background-color: rgb(var(--vaccentcolor)) !important;
+}
+/* horizontalcodescroll */
+.hcs-save {
+	background-color: rgb(var(--vaccentcolor)) !important;
+}
+/* checkallpluginsbutton */
+.cap-check, .cap-uncheck {
+	background-color: rgb(var(--vaccentcolor)) !important;
+}
+/* viewguildrelationships */
+.vgr-friend-item:hover {
+	background-color: rgb(var(--vaccentcolor)) !important;
+}
+/* userbirthdays */
+.ub-item-inner {
+	background-color: rgb(var(--vaccentcolor)) !important;
+}
+/* autocorrect */
+.ac-selected {
+	background-color: rgb(var(--vaccentcolor)) !important;
+}
