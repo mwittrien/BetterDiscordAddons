@@ -16,9 +16,11 @@ class NotificationSounds {
 		
 		this.patchModules = {
 			"IncomingCalls":"componentDidMount",
-			"PrivateChannelCall":"componentDidMount"
+			"PrivateChannelCall":"componentDidMount",
+			"StandardSidebarView":"componentWillUnmount"
 		};
 
+		/* NEVER CHANGE THE SRC LINKS IN THE PLUGIN FILE, TO ADD NEW SONGS ADD THEM IN THE SETTINGS GUI IN THE PLUGINS PAGE */
 		this.types = {
 			"message1":				{implemented:true,	name:"New Chatmessage",					src:"/assets/dd920c06a01e5bb8b09678581e29d56f.mp3",	mute:true,	focus:null},
 			"dm":					{implemented:true,	name:"Direct Message",					src:"/assets/84c9fa3d07da865278bd77c97d952db4.mp3",	mute:true,	focus:true},
@@ -51,6 +53,7 @@ class NotificationSounds {
 			"robot_man":			{implemented:false,	name:"Robot Man Voice",					src:"/assets/66598bea6e59eb8acdf32cf2d9d75ba9.mp3",	mute:true,	focus:null}
 		};
 
+		/* NEVER CHANGE THE SRC LINKS IN THE PLUGIN FILE, TO ADD NEW SONGS ADD THEM IN THE SETTINGS GUI IN THE PLUGINS PAGE */
 		this.defaults = {
 			"---": {
 				"---":						null
@@ -251,6 +254,7 @@ class NotificationSounds {
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.unloadMessage(this);
+			this.settingsaudio.pause();
 		}
 	}
 
@@ -422,7 +426,10 @@ class NotificationSounds {
 	saveChoice (type, play) {
 		if (!this.choices[type]) return;
 		BDFDB.saveData(type, this.choices[type], this, "choices");
-		if (play) this.playAudio(type, this.settingsaudio);
+		if (play) {
+			this.SettingsUpdated = true;
+			this.playAudio(type, this.settingsaudio);
+		}
 	}
 
 	playAudio (type, audio) {
@@ -470,5 +477,12 @@ class NotificationSounds {
 
 	processPrivateChannelCall (instance, wrapper) {
 		this.patchCallingSound(instance, "PrivateChannelCall", "call_calling");
+	}
+
+	processStandardSidebarView (instance, wrapper) {
+		if (this.SettingsUpdated) {
+			delete this.SettingsUpdated;
+			this.settingsaudio.pause();
+		}
 	}
 }
