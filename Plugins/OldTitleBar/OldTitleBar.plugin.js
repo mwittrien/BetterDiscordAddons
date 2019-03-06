@@ -3,13 +3,17 @@
 class OldTitleBar {
 	getName () {return "OldTitleBar";}
 
-	getVersion () {return "1.5.3";}
+	getVersion () {return "1.5.4";}
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Reverts the title bar back to its former self.";}
 
 	initConstructor () {
+		this.changelog = {
+			"fixed":[["Maxmize","Fixed the issue where the maximize button wouldn't properly update between the maximizable and maximized state"]]
+		};
+		
 		this.patchModules = {
 			"HeaderBar":["componentDidMount","componentDidUpdate"],
 			"StandardSidebarView":["componentDidMount","componentWillUnmount"],
@@ -146,7 +150,9 @@ class OldTitleBar {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
 
-			BDFDB.addEventListener(this, window, "resize", e => {this.changeMaximizeButtons();});
+			BDFDB.addEventListener(this, window, "resize", e => {
+				this.changeMaximizeButtons();
+			});
 
 			this.window = require("electron").remote.getCurrentWindow();
 
@@ -236,9 +242,8 @@ class OldTitleBar {
 		var maxbutton = BDFDB.htmlToElement(this.maxButtonMarkup);
 		bar.appendChild(maxbutton);
 		maxbutton.querySelector(BDFDB.dotCN.channelheadericon).addEventListener("click", () => {
-			if (this.window.isMaximized()) this.window.unmaximize();
+			if (this.isMaximized()) this.window.unmaximize();
 			else this.window.maximize();
-			this.changeMaximizeButtons();
 		});
 		var closebutton = BDFDB.htmlToElement(this.closeButtonMarkup);
 		bar.appendChild(closebutton);
@@ -246,8 +251,12 @@ class OldTitleBar {
 	}
 
 	changeMaximizeButtons () {
-		var innerHTML = this.window.isMaximized() ? this.maxButtonInnerMax : this.maxButtonInnerMin;
+		var innerHTML = this.isMaximized() ? this.maxButtonInnerMax : this.maxButtonInnerMin;
 		document.querySelectorAll(".maxButtonOTB g").forEach(g => {g.innerHTML = innerHTML;});
+	}
+	
+	isMaximized () {
+		return window.screen.availWidth == window.outerWidth && window.screen.availHeight == window.outerHeight && window.screenX == 0 && window.screenY == 0;
 	}
 
 	patchMainScreen (enable) {
