@@ -583,14 +583,13 @@
 /* FILL & STROKE */
 .path-92Hmty:not(.path3-2l9TIX),
 .theme-dark .path2-1q7bG_,
-[stroke="rgb(160, 176, 230)"],
+.wrapper-1u09nF[role="progressbar"] .foreground-2aE44H.path-3H_ZFA,
 [stroke="rgb(114, 137, 218)"],
 [stroke="#7289da"],
 [stroke="#7289DA"] {
 	stroke: rgb(var(--vaccentcolor)) !important;
 }
 .phoneVerificationModal-OzcDc3 path[fill="rgb(118,134,177)"],
-[fill="rgb(160, 176, 230)"],
 [fill="rgb(114, 137, 218)"],
 [fill="#7289da"],
 [fill="#7289DA"] {
