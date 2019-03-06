@@ -3,7 +3,7 @@
 class PinDMs {
 	getName () {return "PinDMs";}
 
-	getVersion () {return "1.3.6";}
+	getVersion () {return "1.3.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -12,7 +12,7 @@ class PinDMs {
 	initConstructor () {
 		this.changelog = {
 			"added":[["Pin Icon","Added the option to disable the 'Pin' icon for pinned DMs in the server list"]],
-			"fixed":[["Group DMs","Fixed issue where Group DMs could not be pinned"]]
+			"fixed":[["Pin Icon","Repositioned the pin icon in a way that it doesn't cover the audio/video icon"]]
 		};
 		
 		this.patchModules = {
@@ -102,7 +102,7 @@ class PinDMs {
 			}`;
 			
 		this.pinIconCSS = `
-			${BDFDB.dotCN.guild}.pinned:after {
+			${BDFDB.dotCN.guild}.pinned:before {
 				background-position: 50%;
 				background-repeat: no-repeat;
 				background-size: 16px;
@@ -112,15 +112,16 @@ class PinDMs {
 				overflow: hidden;
 				pointer-events: none;
 				position: absolute;
-				right: -6px;
-				top: -6px;
 				width: 24px;
-				background-image: url('data:image/svg+xml; utf8, <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-90 -80 700 700" xml:space="preserve"><g fill="#FFF"><path d="M291.31,402.761L109.241,220.693C79.073,190.525,30.166,190.526,0,220.692l291.31,291.31C321.474,481.835,321.476,432.927,291.31,402.761z"/><polygon points="273.104,111.449 154.758,211.589 300.412,357.242 400.55,238.898"/><path d="M500.688,175.174L336.827,11.313c-15.085-15.085-39.539-15.083-54.621,0c-15.082,15.082-15.082,39.538,0,54.62 l163.861,163.861c15.083,15.085,39.539,15.085,54.621,0.001C515.773,214.712,515.773,190.257,500.688,175.174z"/><polygon points="91.032,366.346 0,512 145.655,420.967"/></g></svg>');
+				left: -6px;
+				top: -6px;
+				z-index: 1;
+				background-image: url('data:image/svg+xml; utf8, <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-90 -80 700 700" xml:space="preserve" style="transform: scale(-1, 1);"><g fill="#FFF"><path d="M291.31,402.761L109.241,220.693C79.073,190.525,30.166,190.526,0,220.692l291.31,291.31C321.474,481.835,321.476,432.927,291.31,402.761z"/><polygon points="273.104,111.449 154.758,211.589 300.412,357.242 400.55,238.898"/><path d="M500.688,175.174L336.827,11.313c-15.085-15.085-39.539-15.083-54.621,0c-15.082,15.082-15.082,39.538,0,54.62 l163.861,163.861c15.083,15.085,39.539,15.085,54.621,0.001C515.773,214.712,515.773,190.257,500.688,175.174z"/><polygon points="91.032,366.346 0,512 145.655,420.967"/></g></svg>');
 			}
-			${BDFDB.dotCNS.themelight + BDFDB.dotCN.guild}.pinned:after {
+			${BDFDB.dotCNS.themelight + BDFDB.dotCN.guild}.pinned:before {
 				background-color: #202225;
 			}
-			${BDFDB.dotCNS.themedark + BDFDB.dotCN.guild}.pinned:after {
+			${BDFDB.dotCNS.themedark + BDFDB.dotCN.guild}.pinned:before {
 				background-color: #202225;
 			}`
 
@@ -406,7 +407,7 @@ class PinDMs {
 			let pinnedRecents = BDFDB.loadAllData(this, "pinnedRecents");
 			if (pinnedRecents[instance.props.channel.id] != undefined) {
 				if (methodnames.includes("componentDidMount")) this.hideNativeDM(instance.props.channel.id);
-				this.updateUnreadCount(instance.props.channel.id);
+				this.updatePinnedRecent(instance.props.channel.id, methodnames.includes("componentWillUnmount"));
 			}
 		}
 	}
@@ -601,7 +602,7 @@ class PinDMs {
 					document.addEventListener("mouseup", mouseup);
 				});
 				this.addHoverBehaviour(dmdiv);
-				this.updateUnreadCount(id);
+				this.updatePinnedRecent(id);
 				this.hideNativeDM(id);
 			}
 		}
@@ -636,14 +637,17 @@ class PinDMs {
 		BDFDB.saveAllData(newPinned, this, type);
 	}
 
-	updateUnreadCount (id) {
-		let dmdiv = document.querySelector(`${BDFDB.dotCNS.dms + BDFDB.dotCN.guild}.pinned[channelid="${id}"]`);
-		if (Node.prototype.isPrototypeOf(dmdiv)) {
-			let count = this.UnreadUtils.getUnreadCount(dmdiv.getAttribute("channelid"));
-			let badge = dmdiv.querySelector(BDFDB.dotCN.badge);
+	updatePinnedRecent (id, unmouted = false) {
+		let pinneddmdiv = document.querySelector(`${BDFDB.dotCNS.dms + BDFDB.dotCN.guild}.pinned[channelid="${id}"]`);
+		if (Node.prototype.isPrototypeOf(pinneddmdiv)) {
+			let dmdiv = BDFDB.getDmDiv(id);
+			let count = this.UnreadUtils.getUnreadCount(id);
+			let badge = pinneddmdiv.querySelector(BDFDB.dotCN.badge);
 			BDFDB.toggleEles(badge, count > 0);
-			BDFDB.toggleClass(dmdiv, "has-new-messages", count > 0);
+			BDFDB.toggleClass(pinneddmdiv, "has-new-messages", count > 0);
 			badge.innerText = count;
+			BDFDB.toggleClass(pinneddmdiv, BDFDB.disCN.guildaudio, !unmouted && Node.prototype.isPrototypeOf(dmdiv) && BDFDB.containsClass(dmdiv, BDFDB.disCN.guildaudio));
+			BDFDB.toggleClass(pinneddmdiv, BDFDB.disCN.guildvideo, !unmouted && Node.prototype.isPrototypeOf(dmdiv) && BDFDB.containsClass(dmdiv, BDFDB.disCN.guildvideo));
 		}
 	}
 
