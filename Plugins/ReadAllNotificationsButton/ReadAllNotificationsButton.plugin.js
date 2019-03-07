@@ -3,7 +3,7 @@
 class ReadAllNotificationsButton {
 	getName () {return "ReadAllNotificationsButton";}
 
-	getVersion () {return "1.4.2";}
+	getVersion () {return "1.4.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,12 +11,13 @@ class ReadAllNotificationsButton {
 
 	initConstructor () {
 		this.changelog = {
-			"improved":[["Clear Mentions","Added an option to add the 'Clear Mentions' button in the recent mentions popout"]]
+			"fixed":[["Changes","Fixed for the new server classes"]]
 		};
 		
 		this.patchModules = {
 			"Guilds":"componentDidMount",
-			"RecentMentions":"componentDidMount"
+			"RecentMentions":"componentDidMount",
+			"DirectMessage":"componentDidMount"
 		};
 
 		this.RANcontextMenuMarkup = 
@@ -168,6 +169,12 @@ class ReadAllNotificationsButton {
 		}
 	}
 
+	processDirectMessage (instance, wrapper, methodnames) {
+		let ranbutton = document.querySelector(".RANbutton-frame");
+		let guildseparator = wrapper.parentElement.parentElement.querySelector(BDFDB.dotCN.guildseparator);
+		if (ranbutton && guildseparator) guildseparator.parentElement.insertBefore(ranbutton, guildseparator);
+	}
+
 	processRecentMentions (instance, wrapper) {
 		BDFDB.removeEles(".RAMbutton");
 		if (instance.props && instance.props.popoutName == "RECENT_MENTIONS_POPOUT" && BDFDB.getData("addClearButton", this, "settings")) {
@@ -188,7 +195,9 @@ class ReadAllNotificationsButton {
 			instance.loadMore();
 			setTimeout(() => {this.clearMentions(instance, wrapper);},3000);
 		}
-	}setLabelsByLanguage () {
+	}
+	
+	setLabelsByLanguage () {
 		switch (BDFDB.getDiscordLanguage().id) {
 			case "hr":		//croatian
 				return {
