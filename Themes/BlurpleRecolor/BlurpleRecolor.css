@@ -164,8 +164,12 @@
 	color: rgb(var(--vaccentcolor)) !important;
 	border-color: rgba(var(--vaccentcolor),0.7) !important;
 }
+.lookOutlined-3sRXeN.colorBrand-3pXr91:active,
 .lookOutlined-3sRXeN.colorBrand-3pXr91:hover {
 	border-color: rgb(var(--vaccentcolor)) !important;
+}
+.lookOutlined-3sRXeN.colorBrand-3pXr91:active {
+	background: rgba(var(--vaccentcolor),0.1) !important;
 }
 .lookInverted-2D7oAl.colorBrand-3pXr91 {
 	color: rgb(var(--vaccentcolor)) !important;
@@ -193,6 +197,20 @@
 .lookFilled-1Gx00P.colorBrand-3pXr91:hover,
 .lookFilled-1Gx00P.colorLink-35jkBc:hover {
 	background-image: linear-gradient(0deg,rgba(0,0,0,.1),rgba(0,0,0,.1)) !important;
+}
+.form-236Xmo .btnPrimary-346kfV:active,
+.button-22FETM:active,
+.btn-1PnLxm.btnPrimary-1jluZW:active:not(:disabled),
+.btn-15Au6M.btnPrimary-ggBniE:active:not(:disabled),
+.bd-modal-wrapper .footer button:active,
+.bd-pfbtn:active,
+.bda-settings-button:not(:disabled):active,
+.btn-primary:active,
+.platform-iik236.active-iLSdWQ .downloadButton-1bWXpg:active,
+.action-1lSjCi.create-3jownz .actionButton-2PeQbJ:active,
+.lookFilled-1Gx00P.colorBrand-3pXr91:active,
+.lookFilled-1Gx00P.colorLink-35jkBc:active {
+	background-image: linear-gradient(0deg,rgba(0,0,0,.2),rgba(0,0,0,.2)) !important;
 }
 
 /* MENTION */
@@ -623,8 +641,12 @@ a {
 	color: rgb(var(--vlinkcolor)) !important;
 	border-color: rgba(var(--vlinkcolor),0.7) !important;
 }
+.lookOutlined-3sRXeN.colorLink-35jkBc:active,
 .lookOutlined-3sRXeN.colorLink-35jkBc:hover {
 	border-color: rgb(var(--vlinkcolor)) !important;
+}
+.lookOutlined-3sRXeN.colorLink-35jkBc:active {
+	background: rgba(var(--vlinkcolor),0.1) !important;
 }
 .lookInverted-2D7oAl.colorLink-35jkBc {
 	color: rgb(var(--vlinkcolor)) !important;
