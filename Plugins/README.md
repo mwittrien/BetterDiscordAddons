@@ -43,6 +43,7 @@
  - [Steam Profile Link](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SteamProfileLink) - Opens a steam profile in steam instead of a browser when clicking the steamlink in a userprofile. With the help of square.
  - [Theme Repo](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ThemeRepo) - Allows you to preview all themes from the theme repo and download them on the fly.
  - [Theme Settings](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ThemeSettings) - Allows you to change Theme Variables within BetterDiscord.
+ - [Timed Light Dark Mode](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/TimedLightDarkMode) - Allows you to automatically change light/dark mode depending on the time of date. Slider is added to the 'Appearance' settings.
  - [Top Role Everywhere](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/TopRoleEverywhere) - Adds the highest role of a user as a tag.
  - [User Notes](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/UserNotes) - Allows you to write your own user notes wihtout a character limit.
  - [Write UpperCase](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/WriteUpperCase) - Changes the input in the textarea to uppercase.
