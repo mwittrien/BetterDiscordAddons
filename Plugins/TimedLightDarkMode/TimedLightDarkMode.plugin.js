@@ -3,7 +3,7 @@
 class TimedLightDarkMode {
 	getName () {return "TimedLightDarkMode";}
 
-	getVersion () {return "1.0.0";}
+	getVersion () {return "1.0.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -15,6 +15,9 @@ class TimedLightDarkMode {
 		};
 		
 		this.defaults = {
+			settings: {
+				running:	{value: true}
+			},
 			values: {
 				timer1:		{value:25},
 				timer2:		{value:75}
@@ -62,7 +65,7 @@ class TimedLightDarkMode {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			clearInterval(this.checkInterval);
 			
-			BDFDB.removeEles(".TLDM-slider", ".TLDM-header");
+			BDFDB.removeEles(".TLDM-settingsbox");
 			
 			BDFDB.unloadMessage(this);
 		}
@@ -73,29 +76,37 @@ class TimedLightDarkMode {
 	
 	processRadioGroup (instance, wrapper) {
 		if (instance.props && Array.isArray(instance.props.options) && instance.props.options[0] && instance.props.options[0].value == "light" && instance.props.options[1] && instance.props.options[1].value == "dark" && wrapper.parentElement.firstElementChild.innerText && wrapper.parentElement.firstElementChild.innerText.toUpperCase() == BDFDB.LanguageStrings.THEME.toUpperCase()) {
+			var settings = BDFDB.getAllData(this, "settings");
 			var values = BDFDB.getAllData(this, "values");
-			var header = BDFDB.htmlToElement(`<h5 class="${BDFDB.disCNS.h5 + BDFDB.disCNS.h5defaultmargin + BDFDB.disCN.margintop8} TLDM-header">${BDFDB.LanguageStrings.THEME} Timer</h5>`);
-			var slider = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.slider + BDFDB.disCN.margintop20} TLDM-slider"><input type="number" key="timer1" class="${BDFDB.disCN.sliderinput}" value="${values.timer1}" readonly=""><input type="number" key="timer2" class="${BDFDB.disCN.sliderinput}" value="${values.timer2}" readonly=""><div class="${BDFDB.disCN.slidertrack}"><div class="${BDFDB.disCN.slidermark}" style="left: 0%;"><div class="${BDFDB.disCN.slidermarkvalue}">00:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 12.5%;"><div class="${BDFDB.disCN.slidermarkvalue}">03:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 25%;"><div class="${BDFDB.disCN.slidermarkvalue}">06:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 37.5%;"><div class="${BDFDB.disCN.slidermarkvalue}">09:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 50%;"><div class="${BDFDB.disCN.slidermarkvalue}">12:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 62.5%;"><div class="${BDFDB.disCN.slidermarkvalue}">15:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 75%;"><div class="${BDFDB.disCN.slidermarkvalue}">18:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 87.5%;"><div class="${BDFDB.disCN.slidermarkvalue}">21:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 100%;"><div class="${BDFDB.disCN.slidermarkvalue}">24:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div></div><div class="${BDFDB.disCN.sliderbar}"><div class="${BDFDB.disCN.sliderbarfill}"></div></div><div class="${BDFDB.disCN.slidertrack}"><div class="${BDFDB.disCN.slidergrabber}" key="timer1" style="left: ${values.timer1}%;"></div><div class="${BDFDB.disCN.slidergrabber}" key="timer2" style="left: ${values.timer2}%;"></div></div></div>`);
-			wrapper.parentElement.appendChild(header);
-			wrapper.parentElement.appendChild(slider);
+			var settingsbox = BDFDB.htmlToElement(`<div class="${BDFDB.disCN.margintop8} TLDM-settingsbox"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;"><h5 class="${BDFDB.disCN.h5}">${BDFDB.LanguageStrings.THEME} Timer</h5><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings running" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings.running ? " checked" : ""}></div></div><div class="${BDFDB.disCNS.slider + BDFDB.disCN.margintop20}${!settings.running ? (" " + BDFDB.disCN.sliderdisabled): ""}"><input type="number" key="timer1" class="${BDFDB.disCN.sliderinput}" value="${values.timer1}" readonly=""><input type="number" key="timer2" class="${BDFDB.disCN.sliderinput}" value="${values.timer2}" readonly=""><div class="${BDFDB.disCN.slidertrack}"><div class="${BDFDB.disCN.slidermark}" style="left: 0%;"><div class="${BDFDB.disCN.slidermarkvalue}">00:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 12.5%;"><div class="${BDFDB.disCN.slidermarkvalue}">03:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 25%;"><div class="${BDFDB.disCN.slidermarkvalue}">06:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 37.5%;"><div class="${BDFDB.disCN.slidermarkvalue}">09:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 50%;"><div class="${BDFDB.disCN.slidermarkvalue}">12:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 62.5%;"><div class="${BDFDB.disCN.slidermarkvalue}">15:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 75%;"><div class="${BDFDB.disCN.slidermarkvalue}">18:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 87.5%;"><div class="${BDFDB.disCN.slidermarkvalue}">21:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 100%;"><div class="${BDFDB.disCN.slidermarkvalue}">24:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div></div><div class="${BDFDB.disCN.sliderbar}"><div class="${BDFDB.disCN.sliderbarfill}"></div></div><div class="${BDFDB.disCN.slidertrack}"><div class="${BDFDB.disCN.slidergrabber}" key="timer1" style="left: ${values.timer1}%;"></div><div class="${BDFDB.disCN.slidergrabber}" key="timer2" style="left: ${values.timer2}%;"></div></div></div></div>`);
+			wrapper.parentElement.appendChild(settingsbox);
+			var slider = settingsbox.querySelector(BDFDB.dotCN.slider);
+			
+			BDFDB.initElements(settingsbox, this);
 			this.updateSlider(slider, values);
-			BDFDB.addChildEventListener(slider, "mousedown", BDFDB.dotCN.slidergrabber, e => {this.dragSlider(e.currentTarget);});
+			BDFDB.addChildEventListener(settingsbox, "mousedown", BDFDB.dotCN.slidergrabber, e => {this.dragSlider(e.currentTarget);});
+			BDFDB.addChildEventListener(settingsbox, "click", ".settings-switch", e => {
+				this.startInterval();
+				BDFDB.toggleClass(slider, BDFDB.disCN.sliderdisabled, !e.currentTarget.checked);
+			});
 		}
 	}
 	
 	startInterval () {
 		clearInterval(this.checkInterval);
-		var values = BDFDB.getAllData(this, "values");
-		var inverted = values.timer1 > values.timer2;
-		var timer1LOW = this.getTime(values.timer1), timer2LOW = this.getTime(values.timer2);
-		var timer1HIGH = this.getHighTime(timer2LOW), timer2HIGH = this.getHighTime(timer1LOW);
-		this.checkInterval = setInterval(() => {
-			var currenttime = new Date();
-			var currenthours = currenttime.getHours();
-			var currentminutes = currenttime.getMinutes();
-			if (inverted) this.changeTheme(!(this.checkTime(timer1LOW, timer1HIGH, [currenthours, currentminutes])));
-			else this.changeTheme(this.checkTime(timer2LOW, timer2HIGH, [currenthours, currentminutes]));
-		},60000);
+		if (BDFDB.getData("running", this, "settings")) {
+			var values = BDFDB.getAllData(this, "values");
+			var inverted = values.timer1 > values.timer2;
+			var timer1LOW = this.getTime(values.timer1), timer2LOW = this.getTime(values.timer2);
+			var timer1HIGH = this.getHighTime(timer2LOW), timer2HIGH = this.getHighTime(timer1LOW);
+			this.checkInterval = setInterval(() => {
+				var currenttime = new Date();
+				var currenthours = currenttime.getHours();
+				var currentminutes = currenttime.getMinutes();
+				if (inverted) this.changeTheme(!(this.checkTime(timer1LOW, timer1HIGH, [currenthours, currentminutes])));
+				else this.changeTheme(this.checkTime(timer2LOW, timer2HIGH, [currenthours, currentminutes]));
+			},60000);
+		}
 	}
 	
 	checkTime (timerLOW, timerHIGH, time) {
@@ -111,6 +122,7 @@ class TimedLightDarkMode {
 
 	dragSlider (grabber) {
 		var track = grabber.parentNode;
+		if (BDFDB.containsClass(track.parentNode, BDFDB.disCN.sliderdisabled)) return;
 		var type = grabber.getAttribute("key");
 		var input = track.parentNode.querySelector(`${BDFDB.dotCN.sliderinput}[key="${type}"]`);
 		var values = BDFDB.getAllData(this, "values");
