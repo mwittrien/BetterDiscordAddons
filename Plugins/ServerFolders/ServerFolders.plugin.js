@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.1.3";}
+	getVersion () {return "6.1.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ServerFolders {
 
 	initConstructor () {
 		this.changelog = {
-			"improved":[["UnreadCountBadges","Added support for the UnreadCountBadges plugin by Metalloriff, when you have the plugin enabled, the sum of all unread messages of the servers in a folder will be displayed on the folder"]]
+			"fixed":[["Changes","Fixed for the new server classes"]]
 		};
 		
 		this.labels = {};
@@ -470,7 +470,7 @@ class ServerFolders {
 				let additem = serverContextSubMenu.querySelector(".addtofolder-item");
 				let removeitem = serverContextSubMenu.querySelector(".removefromfolder-item");
 				createitem.addEventListener("click", () => {
-					instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
+					BDFDB.closeContextMenu(menu);
 					this.createNewFolder(instance.props.target);
 				});
 				let folderdiv = this.getFolderOfServer(instance.props.guild);
@@ -486,7 +486,7 @@ class ServerFolders {
 								let name = foundfolderdiv.getAttribute("foldername");
 								let folderentry = BDFDB.htmlToElement(`<div class="${BDFDB.disCN.contextmenuitem} addtospecificfolder-item"><span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">${name ? BDFDB.encodeToHTML(name) : (this.labels.modal_tabheader1_text + " #" + (i+1))}</div></span><div class="${BDFDB.disCN.contextmenuhint}"></div></div>`);
 								folderentry.addEventListener("click", () => {
-									instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
+									BDFDB.closeContextMenu(menu);
 									this.addServerToFolder(instance.props.guild, foundfolderdiv);
 								});
 								serverContextSubFolderMenu.firstElementChild.firstElementChild.appendChild(folderentry);
@@ -499,7 +499,7 @@ class ServerFolders {
 				else {
 					BDFDB.removeEles(additem);
 					removeitem.addEventListener("click", () => {
-						instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
+						BDFDB.closeContextMenu(menu);
 						this.removeServerFromFolder(instance.props.guild, folderdiv);
 					});
 				}
@@ -863,8 +863,11 @@ class ServerFolders {
 		let folderdiv = BDFDB.htmlToElement(this.folderIconMarkup);
 		let serversandfolders = document.querySelectorAll(`div${BDFDB.dotCN.guildseparator}:not(.folderseparator) ~ div${BDFDB.dotCN.guild}`);
 		let insertnode = serversandfolders[data.position > serversandfolders.length - 1 ? serversandfolders.length - 1 : data.position];
-		if (!insertnode) insertnode = document.querySelector(`div${BDFDB.dotCN.guildseparator}:not(.folderseparator) ~ button${BDFDB.dotCN.guildsadd}`);
 		if (insertnode) insertnode.parentElement.insertBefore(folderdiv, insertnode);
+		else {
+			insertnode = document.querySelector(`div${BDFDB.dotCN.guildseparator}:not(.folderseparator) ~ * ${BDFDB.dotCN.guildsadd}`);
+			if (insertnode) insertnode.parentElement.parentElement.insertBefore(folderdiv, insertnode.parentElement);
+		}
 
 		folderdiv.id = data.folderID;
 		folderdiv.setAttribute("foldername", data.folderName);
