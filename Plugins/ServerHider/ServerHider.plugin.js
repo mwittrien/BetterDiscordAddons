@@ -3,13 +3,17 @@
 class ServerHider {
 	getName () {return "ServerHider";}
 
-	getVersion () {return "6.0.2";}
+	getVersion () {return "6.0.3";}
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Hide Servers in your Serverlist";}
 
 	initConstructor () {
+		this.changelog = {
+			"added":[["Auto Read","Added an option to automatically mark all hidden servers as read. This will automatically clear all new notifications of all hidden servers"]]
+		};
+		
 		this.labels = {};
 
 		this.patchModules = {
@@ -83,11 +87,21 @@ class ServerHider {
 					</div>
 				</div>
 			</div>`;
+
+		this.defaults = {
+			settings: {
+				clearNotifications:	{value:false, 	description:"Automatically clear any kind of notification of all hidden servers."},
+			}
+		};
 	}
 
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
+		let settings = BDFDB.getAllData(this, "settings"); 
 		let settingshtml = `<div class="${this.name}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="DevilBro-settings-inner">`;
+		for (let key in settings) {
+			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
+		}
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Reset all Servers.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} reset-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Reset</div></button></div>`;
 		settingshtml += `</div></div>`;
 
@@ -140,7 +154,11 @@ class ServerHider {
 
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
-			BDFDB.readServerList().forEach(info => {if (!info.div.getAttribute("folder")) BDFDB.toggleEles(info.div, true);});
+			BDFDB.readServerList().forEach(info => {
+				if (info.div.ServerHiderChangeObserver && typeof info.div.ServerHiderChangeObserver.disconnect == "function") info.div.ServerHiderChangeObserver.disconnect();
+				if (!info.div.getAttribute("folder")) BDFDB.toggleEles(info.div, true);
+				delete info.div.ServerHiderChanged;
+			});
 
 			BDFDB.unloadMessage(this);
 		}
@@ -172,14 +190,14 @@ class ServerHider {
 				let serverContextSubMenu = BDFDB.htmlToElement(this.serverContextSubMenuMarkup);
 				let openitem = serverContextSubMenu.querySelector(".openhidemenu-item");
 				openitem.addEventListener("click", () => {
-					instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
+					BDFDB.closeContextMenu(menu);
 					this.showServerModal();
 				});
 				if (instance.props.guild && !instance.props.target.getAttribute("folder")) {
 					let hideitem = serverContextSubMenu.querySelector(".hideserver-item");
 					BDFDB.removeClass(hideitem, BDFDB.disCN.contextmenuitemdisabled);
 					hideitem.addEventListener("click", () => {
-						instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
+						BDFDB.closeContextMenu(menu);
 						this.toggleServer(instance.props.guild, instance.props.target, false);
 					});
 				}
@@ -245,8 +263,28 @@ class ServerHider {
 		BDFDB.toggleEles(guilddiv, visible);
 		let hiddenservers = BDFDB.loadData("hiddenservers", this, "hiddenservers") || [];
 		BDFDB.removeFromArray(hiddenservers, info.id);
-		if (!visible) hiddenservers.push(info.id);
+		if (guilddiv.ServerHiderChangeObserver && typeof guilddiv.ServerHiderChangeObserver.disconnect == "function") guilddiv.ServerHiderChangeObserver.disconnect();
+		if (!visible) {
+			guilddiv.ServerHiderChangeObserver = new MutationObserver(changes => {changes.forEach(change => {
+				if (!change.type == "attributes" && change.attributeName == "draggable") return;
+				let clearnotifications = false;
+				if (change.type == "attributes" && change.attributeName == "class" && BDFDB.containsClass(change.target, BDFDB.disCN.guild)) clearnotifications = true;
+				if (change.type == "characterData" && change.target.parentElement && BDFDB.containsClass(change.target.parentElement, BDFDB.disCN.badge)) clearnotifications = true;
+				else if (change.addedNodes.length) change.addedNodes.forEach(node => {if (node.tagName && BDFDB.containsClass(node, BDFDB.disCN.badge)) clearnotifications = true;});
+				if (clearnotifications) this.unreadServer(guilddiv, info.id);
+			});});
+			guilddiv.ServerHiderChangeObserver.observe(guilddiv, {attributes:true, childList:true, characterData: true, subtree:true});
+			if (BDFDB.containsClass(guilddiv, BDFDB.disCN.guildunread) || guilddiv.querySelector(BDFDB.dotCN.badge)) this.unreadServer(guilddiv, info.id);
+		}
 		BDFDB.saveData("hiddenservers", hiddenservers, this, "hiddenservers");
+	}
+	
+	unreadServer (guilddiv, id) {
+		if (BDFDB.getData("clearNotifications", this, "settings") && !guilddiv.ServerHiderChanged) {
+			guilddiv.ServerHiderChanged = true;
+			BDFDB.markGuildAsRead(id);
+			setTimeout(() => {delete guilddiv.ServerHiderChanged;},1000);
+		}
 	}
 
 	setLabelsByLanguage () {
