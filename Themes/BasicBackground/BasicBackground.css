@@ -64,6 +64,7 @@
 .chat-3bRxxu form,
 .media-engine-video,
 .auditLog-3jNbM6,
+.pinnedBanner-31szAF,
 .embedContainer-26S24y,
 .assetWrapper-2Qw_5D,
 .messagesWrapper-3lZDfY,
@@ -2177,6 +2178,9 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	background-clip: content-box !important;
 	background-color: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 3)) !important;
 }
+.scrollerThemed-2oenus.themeHidden-2yP93k .scroller-2FKFPG::-webkit-scrollbar-corner, 
+.scrollerThemed-2oenus.themeHidden-2yP93k .scroller-2FKFPG::-webkit-scrollbar-thumb, 
+.scrollerThemed-2oenus.themeHidden-2yP93k .scroller-2FKFPG::-webkit-scrollbar-track,
 ::-webkit-scrollbar-corner {
 	visibility: hidden !important;
 }
