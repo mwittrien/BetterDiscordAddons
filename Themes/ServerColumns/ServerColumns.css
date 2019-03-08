@@ -27,10 +27,15 @@
 .wrapper-1Rf91z .scroller-2TZvBN .circleIconButton-jET_ig {
 	margin: 4px 13px 4px -2px !important;
 }
-#server-search,
+.wrapper-1Rf91z .scroller-2TZvBN #server-search,
+.wrapper-1Rf91z .scroller-2TZvBN .lurkingGuild-3ZJ1gi,
 .wrapper-1Rf91z .scroller-2TZvBN .container-1ETFDs {
 	margin: 4px calc(1px * (((var(--vguildsize) + 10) * (var(--vcolumns) - 1))/2)) !important;
 }
+.wrapper-1Rf91z .scroller-2TZvBN .lurkingGuild-3ZJ1gi .container-2td-dC {
+	margin: 0 !important;
+}
+.wrapper-1Rf91z .scroller-2TZvBN .lurkingGuild-3ZJ1gi,
 .wrapper-1Rf91z .scroller-2TZvBN .container-1ETFDs,
 .wrapper-1Rf91z .scroller-2TZvBN .container-1ETFDs .homeButton-2Cw51C,
 .wrapper-1Rf91z .scroller-2TZvBN .container-1ETFDs .homeLink-2NBBKi,
