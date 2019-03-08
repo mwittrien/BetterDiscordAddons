@@ -306,7 +306,7 @@ class ChatFilter {
 
 	appendItem (instance, menu, text) {
 		let chatfilterContextEntry = BDFDB.htmlToElement(this.chatfilterContextEntryMarkup);
-		let devgroup = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:menu,name:"DeveloperModeGroup"}));
+		let devgroup = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:menu,name:["DeveloperModeGroup","MessageDeveloperModeGroup"]}));
 		if (devgroup) devgroup.parentElement.insertBefore(chatfilterContextEntry, devgroup);
 		else menu.appendChild(chatfilterContextEntry, menu);
 		chatfilterContextEntry.querySelector(".chatfilter-item").addEventListener("click", () => {

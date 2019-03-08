@@ -63,7 +63,7 @@ class RevealAllSpoilersOption {
 		if (instance.props && instance.props.message && instance.props.target && !menu.querySelector(".revealspoilers-item")) {
 			let messagediv = BDFDB.getParentEle(BDFDB.dotCN.message, instance.props.target);
 			if (!messagediv || !messagediv.querySelector(BDFDB.dotCN.spoilerhidden)) return;
-			let devgroup = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:menu,name:"DeveloperModeGroup"}));
+			let devgroup = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:menu,name:["DeveloperModeGroup","MessageDeveloperModeGroup"]}));
 			let messageContextEntry = BDFDB.htmlToElement(this.messageContextEntryMarkup);
 			if (devgroup) devgroup.parentElement.insertBefore(messageContextEntry, devgroup);
 			else menu.appendChild(messageContextEntry, menu);
