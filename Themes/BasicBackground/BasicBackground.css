@@ -144,6 +144,7 @@
 	background: rgba(var(--vtransparencycolor),var(--vtransparencyalpha)) !important;
 }
 
+.outer-2IVh5n,
 .sidebar-1-SQro {
 	background: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 2)) !important;
 }
