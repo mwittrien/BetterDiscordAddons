@@ -193,7 +193,7 @@
 .bda-settings-button:not(:disabled):hover,
 .btn-primary:hover,
 .platform-iik236.active-iLSdWQ .downloadButton-1bWXpg:hover,
-.action-1lSjCi.create-3jownz .actionButton-2PeQbJ:hover,
+.action-1lSjCi.create-3jownz:hover .actionButton-2PeQbJ,
 .lookFilled-1Gx00P.colorBrand-3pXr91:hover,
 .lookFilled-1Gx00P.colorLink-35jkBc:hover {
 	background-image: linear-gradient(0deg,rgba(0,0,0,.1),rgba(0,0,0,.1)) !important;
@@ -207,7 +207,6 @@
 .bda-settings-button:not(:disabled):active,
 .btn-primary:active,
 .platform-iik236.active-iLSdWQ .downloadButton-1bWXpg:active,
-.action-1lSjCi.create-3jownz .actionButton-2PeQbJ:active,
 .lookFilled-1Gx00P.colorBrand-3pXr91:active,
 .lookFilled-1Gx00P.colorLink-35jkBc:active {
 	background-image: linear-gradient(0deg,rgba(0,0,0,.2),rgba(0,0,0,.2)) !important;
