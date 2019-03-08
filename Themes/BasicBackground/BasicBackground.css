@@ -639,6 +639,14 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	background: rgba(var(--vtransparencycolor), var(--vguildchanneltransparency)) !important;
 }
 
+.banner-1TiK82 {
+	-webkit-mask: linear-gradient(rgb(24, 25, 28) 50%, rgba(47, 49, 54, 0) 100%) !important;
+}
+.banner-1TiK82 .header-2o-2hj {
+	bottom: unset;
+	box-shadow: none;
+}
+
 .members-1998pB {
 	box-sizing: content-box !important;
 	background: rgba(var(--vtransparencycolor), var(--vmemberlistransparency)) !important;
