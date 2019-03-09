@@ -653,6 +653,10 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .container-2Rl01u:not(.banner-1TiK82) .header-2o-2hj:hover {
 	background: rgba(var(--vtransparencycolor), .1) !important;
 }
+.scroller-2wx7Hm.pinnedBanner-fd4XS4 {
+	margin-top: 48px !important;
+	padding-top: 82px !important;
+}
 
 .members-1998pB {
 	box-sizing: content-box !important;
