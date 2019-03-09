@@ -64,7 +64,6 @@
 .chat-3bRxxu form,
 .media-engine-video,
 .auditLog-3jNbM6,
-.pinnedBanner-31szAF,
 .embedContainer-26S24y,
 .assetWrapper-2Qw_5D,
 .messagesWrapper-3lZDfY,
@@ -640,12 +639,19 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	background: rgba(var(--vtransparencycolor), var(--vguildchanneltransparency)) !important;
 }
 
-.banner-1TiK82 {
+.container-2Rl01u.pinnedBanner-31szAF {
+	background: transparent !important;
+}
+.container-2Rl01u:not(.pinnedBanner-31szAF) {
 	-webkit-mask: linear-gradient(rgb(24, 25, 28) 50%, rgba(47, 49, 54, 0) 100%) !important;
 }
-.banner-1TiK82 .header-2o-2hj {
+.container-2Rl01u:not(.pinnedBanner-31szAF) .header-2o-2hj {
 	bottom: unset;
 	box-shadow: none;
+}
+.container-2Rl01u.pinnedBanner-31szAF .header-2o-2hj:hover,
+.container-2Rl01u:not(.banner-1TiK82) .header-2o-2hj:hover {
+	background: rgba(var(--vtransparencycolor), .1) !important;
 }
 
 .members-1998pB {
