@@ -22,7 +22,7 @@ class ShowHiddenChannels {
 		};
 
 		this.categoryMarkup = 
-			`<div class="container-hidden">
+			`<div class="container-hidden ${BDFDB.disCN.channelgroup}">
 				<div class="${BDFDB.disCN.categorycontainerdefault} hidden-channel">
 					<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstart + BDFDB.disCNS.nowrap + BDFDB.disCNS.categorywrapperdefault + BDFDB.disCN.cursorpointer}" style="flex: 1 1 auto;">
 						<svg class="${BDFDB.disCNS.categoryicondefault + BDFDB.disCN.categoryicontransition}" width="12" height="12" viewBox="0 0 24 24">
@@ -76,7 +76,7 @@ class ShowHiddenChannels {
 			</div>`;
 
 		this.css = `
-			.container-hidden .containerDefault-1ZnADq .iconTransition-2pOJ7l {
+			.container-hidden${BDFDB.disCNS.channelgroup + BDFDB.dotCNS.categorycontainerdefault + BDFDB.dotCN.categoryicontransition} {
 				position: static;
 			}`;
 
@@ -370,7 +370,7 @@ class ShowHiddenChannels {
 			if (!scroller || scroller.lastChild.previousSibling == category) return;
 			category.remove();
 			let count = parseInt(scroller.lastChild.previousSibling.className.split("-")[1])+1;
-			category.className = "container-" + count + " container-hidden";
+			category.className = "container-" + count + " container-hidden " + BDFDB.disCN.channelgroup;
 			scroller.insertBefore(category, scroller.lastChild);
 		}
 	}

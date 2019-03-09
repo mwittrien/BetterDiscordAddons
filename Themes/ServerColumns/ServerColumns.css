@@ -24,7 +24,11 @@
 }
 .wrapper-1Rf91z .scroller-2TZvBN .container-1aNBdK,
 .wrapper-1Rf91z .scroller-2TZvBN .container-2td-dC,
-.wrapper-1Rf91z .scroller-2TZvBN .circleIconButton-jET_ig {
+.wrapper-1Rf91z .scroller-2TZvBN .guildsErrorContainer-2uWYsE,
+.wrapper-1Rf91z .scroller-2TZvBN .container-2td-dC + div[class=""],
+.wrapper-1Rf91z .scroller-2TZvBN .guildsErrorContainer-2uWYsE + div[class=""],
+.wrapper-1Rf91z .scroller-2TZvBN .createJoinContainer-2Av064,
+.wrapper-1Rf91z .scroller-2TZvBN .container-11WMXy {
 	margin: 4px 13px 4px -2px !important;
 }
 .wrapper-1Rf91z .scroller-2TZvBN #server-search,
@@ -32,6 +36,7 @@
 .wrapper-1Rf91z .scroller-2TZvBN .container-1ETFDs {
 	margin: 4px calc(1px * (((var(--vguildsize) + 10) * (var(--vcolumns) - 1))/2)) !important;
 }
+.wrapper-1Rf91z .scroller-2TZvBN .circleIconButton-jET_ig,
 .wrapper-1Rf91z .scroller-2TZvBN .lurkingGuild-3ZJ1gi .container-2td-dC {
 	margin: 0 !important;
 }
@@ -48,6 +53,10 @@
 .wrapper-1Rf91z .scroller-2TZvBN .container-2td-dC .wrapper-2lTRaf .guildIcon-VlWW86,
 .wrapper-1Rf91z .scroller-2TZvBN .guildsErrorContainer-2uWYsE,
 .wrapper-1Rf91z .scroller-2TZvBN .guildsError-b7zR5H,
+.wrapper-1Rf91z .scroller-2TZvBN .container-2td-dC + div[class=""],
+.wrapper-1Rf91z .scroller-2TZvBN .guildsErrorContainer-2uWYsE + div[class=""],
+.wrapper-1Rf91z .scroller-2TZvBN .createJoinContainer-2Av064,
+.wrapper-1Rf91z .scroller-2TZvBN .container-11WMXy,
 .wrapper-1Rf91z .scroller-2TZvBN .circleIconButton-jET_ig {
 	height: calc(1px * var(--vguildsize)) !important;
 	width: calc(1px * var(--vguildsize)) !important;

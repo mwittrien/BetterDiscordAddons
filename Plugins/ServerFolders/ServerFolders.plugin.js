@@ -394,8 +394,6 @@ class ServerFolders {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
 
-			if (BDFDB.isPluginEnabled("HideUtils") && !BDFDB.loadData("hideutils", this, "warnings")) BDFDB.openConfirmModal(this, this.name + " is not compartible with the plugin HideUtils by Arashiryuu. You might expierence bugs like Servers that should be hidden due to being part of a Folder still being visible in the Guildlist. To avoid this disable the Plugin HideUtils. Press the " + BDFDB.getLibraryStrings().btn_ok_text + "-Button to not show this Message again.", "Warning", () => {BDFDB.saveData("hideutils", true, this, "warnings")});
-
 			this.GuildUtils = BDFDB.WebModules.findByProperties("getGuilds","getGuild");
 			this.DiscordConstants = BDFDB.WebModules.findByProperties("Permissions", "ActivityTypes", "StatusTypes");
 			this.Animations = BDFDB.WebModules.findByProperties("spring");
@@ -462,7 +460,9 @@ class ServerFolders {
 		if (document.querySelector(".DevilBro-modal")) return;
 		if (instance.props && instance.props.target && instance.props.guild && instance.props.type == "GUILD_ICON_BAR" && !menu.querySelector(".serverfolders-item")) {
 			let serverContextEntry = BDFDB.htmlToElement(this.serverContextEntryMarkup);
-			menu.appendChild(serverContextEntry);
+			let devgroup = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:menu,name:["DeveloperModeGroup","MessageDeveloperModeGroup"]}));
+			if (devgroup) devgroup.parentElement.insertBefore(serverContextEntry, devgroup);
+			else menu.appendChild(serverContextEntry, menu);
 			let folderitem = serverContextEntry.querySelector(".serverfolders-item");
 			folderitem.addEventListener("mouseenter", () => {
 				let serverContextSubMenu = BDFDB.htmlToElement(this.serverContextSubMenuMarkup);
