@@ -303,7 +303,9 @@ class EditUsers {
 	onUserContextMenu (instance, menu) {
 		if (instance.props && instance.props.user && !menu.querySelector(".localusersettings-item")) {
 			let userContextEntry = BDFDB.htmlToElement(this.userContextEntryMarkup);
-			menu.appendChild(userContextEntry);
+			let devgroup = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:menu,name:["DeveloperModeGroup","MessageDeveloperModeGroup"]}));
+			if (devgroup) devgroup.parentElement.insertBefore(userContextEntry, devgroup);
+			else menu.appendChild(userContextEntry, menu);
 			let settingsitem = userContextEntry.querySelector(".localusersettings-item");
 			settingsitem.addEventListener("mouseenter", () => {
 				let userContextSubMenu = BDFDB.htmlToElement(this.userContextSubMenuMarkup);

@@ -196,7 +196,7 @@ class EditChannels {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			let data = BDFDB.loadAllData(this, "channels");
 			BDFDB.removeAllData(this, "channels");
-			BDFDB.WebModules.forceAllUpdates(this);
+			try {BDFDB.WebModules.forceAllUpdates(this);} catch (err) {}
 			BDFDB.saveAllData(data, this, "channels");
 
 			BDFDB.removeEles(".autocompleteEditChannels", ".autocompleteEditChannelsRow");
@@ -223,20 +223,22 @@ class EditChannels {
 	onChannelContextMenu (instance, menu) {
 		if (instance.props && instance.props.channel && !menu.querySelector(".localchannelsettings-item")) {
 			let channelContextEntry = BDFDB.htmlToElement(this.channelContextEntryMarkup);
-			menu.appendChild(channelContextEntry);
+			let devgroup = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:menu,name:["DeveloperModeGroup","MessageDeveloperModeGroup"]}));
+			if (devgroup) devgroup.parentElement.insertBefore(channelContextEntry, devgroup);
+			else menu.appendChild(channelContextEntry, menu);
 			let settingsitem = channelContextEntry.querySelector(".localchannelsettings-item");
 			settingsitem.addEventListener("mouseenter", () => {
 				let channelContextSubMenu = BDFDB.htmlToElement(this.channelContextSubMenuMarkup);
 				let channelitem = channelContextSubMenu.querySelector(".channelsettings-item");
 				channelitem.addEventListener("click", () => {
-					instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
+					BDFDB.closeContextMenu(menu);
 					this.showChannelSettings(instance.props.channel);
 				});
 				if (BDFDB.loadData(instance.props.channel.id, this, "channels")) {
 					let resetitem = channelContextSubMenu.querySelector(".resetsettings-item");
 					BDFDB.removeClass(resetitem, BDFDB.disCN.contextmenuitemdisabled);
 					resetitem.addEventListener("click", () => {
-						instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
+						BDFDB.closeContextMenu(menu);
 						BDFDB.removeData(instance.props.channel.id, this, "channels");
 						BDFDB.WebModules.forceAllUpdates(this);
 					});

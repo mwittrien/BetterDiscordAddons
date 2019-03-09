@@ -210,7 +210,7 @@ class EditServers {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			let data = BDFDB.loadAllData(this, "servers");
 			BDFDB.removeAllData(this, "servers");
-			BDFDB.WebModules.forceAllUpdates(this);
+			try {BDFDB.WebModules.forceAllUpdates(this);} catch (err) {}
 			BDFDB.saveAllData(data, this, "servers");
 
 			BDFDB.unloadMessage(this);
@@ -244,20 +244,22 @@ class EditServers {
 	onGuildContextMenu (instance, menu) {
 		if (instance.props && instance.props.target && instance.props.guild && !menu.querySelector(".localserversettings-item")) {
 			let serverContextEntry = BDFDB.htmlToElement(this.serverContextEntryMarkup);
-			menu.appendChild(serverContextEntry);
+			let devgroup = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:menu,name:["DeveloperModeGroup","MessageDeveloperModeGroup"]}));
+			if (devgroup) devgroup.parentElement.insertBefore(serverContextEntry, devgroup);
+			else menu.appendChild(serverContextEntry, menu);
 			let settingsitem = serverContextEntry.querySelector(".localserversettings-item");
 			settingsitem.addEventListener("mouseenter", () => {
 				let serverContextSubMenu = BDFDB.htmlToElement(this.serverContextSubMenuMarkup);
 				let serveritem = serverContextSubMenu.querySelector(".serversettings-item");
 				serveritem.addEventListener("click", () => {
-					instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
+					BDFDB.closeContextMenu(menu);
 					this.showServerSettings(instance.props.guild);
 				});
 				if (BDFDB.loadData(instance.props.guild.id, this, "servers")) {
 					let resetitem = serverContextSubMenu.querySelector(".resetsettings-item");
 					BDFDB.removeClass(resetitem, BDFDB.disCN.contextmenuitemdisabled);
 					resetitem.addEventListener("click", () => {
-						instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
+						BDFDB.closeContextMenu(menu);
 						BDFDB.removeData(instance.props.guild.id, this, "servers");
 						BDFDB.WebModules.forceAllUpdates(this);
 					});
@@ -440,9 +442,7 @@ class EditServers {
 				icon.style.setProperty("background-color", BDFDB.colorCONVERT(data.color1, "RGB"), "important");
 				icon.style.setProperty("color", BDFDB.colorCONVERT(data.color2, "RGB", "important"));
 				icon.style.setProperty("font-size", this.getFontSize(icon));
-				let hasicon = icon.style.getPropertyValue("background-image");
-				if (hasicon) BDFDB.removeClass(icon, this.getNoIconClasses(icon));
-				else BDFDB.addClass(icon, this.getNoIconClasses(icon));
+				BDFDB.toggleClass(icon, this.getNoIconClasses(icon), !icon.style.getPropertyValue("background-image"));
 				if (data.url && !data.removeIcon) {
 					icon.style.setProperty("background-position", "center");
 					icon.style.setProperty("background-size", "cover");
