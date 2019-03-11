@@ -3,13 +3,17 @@
 class DisplayServersAsChannels {
 	getName () {return "DisplayServersAsChannels";}
 
-	getVersion () {return "1.1.9";}
+	getVersion () {return "1.2.0";}
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Display servers in a similar way as channels.";}
 
 	initConstructor () {
+		this.changelog = {
+			"fixed":[["Changes","Fixed for the new server classes"]]
+		};
+		
 		this.verificationBadgeMarkup =
 			`<svg class="DSAC-verification-badge" name="Verified" width="24" height="24" viewBox="0 0 20 20">
 				<g fill="none" fill-rule="evenodd">
@@ -30,67 +34,53 @@ class DisplayServersAsChannels {
 			.DSAC-styled ${BDFDB.dotCN.guilds} {
 				width: 240px;
 			}
-			.DSAC-styled ${BDFDB.dotCN.guilds}::-webkit-scrollbar-track-piece {
-				background-color: rgb(27, 29, 32);
-				border-color: rgb(32, 34, 37);
+			.DSAC-styled ${BDFDB.dotCN.guilds + BDFDB.dotCN.scroller}::-webkit-scrollbar-thumb {
+				background-color: rgb(22, 24, 27);
 			}
-			.DSAC-styled ${BDFDB.dotCN.guilds}::-webkit-scrollbar-thumb {
-				background-color: rgb(17, 19, 22);
-				border-color: rgb(32, 34, 37);
+			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guild}:not(#bd-pub-li),
+			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guild}:not(#bd-pub-li) ${BDFDB.dotCN.guildinner},
+			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guild}:not(#bd-pub-li) ${BDFDB.dotCN.guildinner} a,
+			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guild}:not(#bd-pub-li) ${BDFDB.dotCNS.guildinner + BDFDB.dotCN.guildicon} {
+				height: 20px;
 			}
-			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guild} {
+			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guild}:not(#bd-pub-li) ${BDFDB.dotCNS.guildinner + BDFDB.dotCN.guildicon} {
+				line-height: 20px;
+			}
+			.DSAC-styled ${BDFDB.dotCN.guild}:not(#bd-pub-li),
+			.DSAC-styled ${BDFDB.dotCN.guild}:not(#bd-pub-li) ${BDFDB.dotCN.guildinner},
+			.DSAC-styled ${BDFDB.dotCN.guild}:not(#bd-pub-li) ${BDFDB.dotCN.guildinner} a,
+			.DSAC-styled ${BDFDB.dotCN.guild}:not(#bd-pub-li) ${BDFDB.dotCNS.guildinner + BDFDB.dotCN.guildicon} {
+				margin-left: 0px;
+				height: 32px;
+			}
+			.bd-minimal .DSAC-styled #bd-pub-li,
+			.bd-minimal .DSAC-styled ${BDFDB.dotCN.homebuttoncontainer},
+			.bd-minimal .DSAC-styled ${BDFDB.dotCN.dmguild} {
 				margin-left: 55px;
 			}
 			.bd-minimal .DSAC-styled ${BDFDB.dotCN.friendsonline} {
 				margin-left: 40px;
 			}
-			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild},
-			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildinner},
-			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildinner} a,
-			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCNS.guildinner + BDFDB.dotCN.guildicon},
-			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guild}.copy,
-			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guild}.copy ${BDFDB.dotCN.guildinner},
-			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guild}.copy ${BDFDB.dotCN.guildinner} a,
-			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guild}.copy ${BDFDB.dotCNS.guildinner + BDFDB.dotCN.guildicon},
-			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildserror} {
-				height: 20px;
-			}
-			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCNS.guildinner + BDFDB.dotCN.guildicon},
-			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guild}.copy ${BDFDB.dotCNS.guildinner + BDFDB.dotCN.guildicon} {
-				line-height: 20px;
-			}
-			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild},
-			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildinner},
-			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildinner} a,
-			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCNS.guildinner + BDFDB.dotCN.guildicon},
-			.DSAC-styled ${BDFDB.dotCN.guild}.copy,
-			.DSAC-styled ${BDFDB.dotCN.guild}.copy ${BDFDB.dotCN.guildinner},
-			.DSAC-styled ${BDFDB.dotCN.guild}.copy ${BDFDB.dotCN.guildinner} a,
-			.DSAC-styled ${BDFDB.dotCN.guild}.copy ${BDFDB.dotCNS.guildinner + BDFDB.dotCN.guildicon},
-			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildserror} {
-				margin-left: 0px;
-				height: 32px;
-			}
 			.DSAC-styled ${BDFDB.dotCN.guildseparator} {
 				margin-left: 0px;
 			}
-			.DSAC-styled ${BDFDB.dotCN.guild},
-			.DSAC-styled ${BDFDB.dotCN.friendsonline} {
+			.DSAC-styled #bd-pub-li,
+			.DSAC-styled ${BDFDB.dotCN.homebuttoncontainer},
+			.DSAC-styled ${BDFDB.dotCN.dmguild} {
 				margin-left: 80px;
+			}
+			.DSAC-styled ${BDFDB.dotCN.friendsonline} {
+				margin-left: 70px;
 			}
 			.DSAC-styled ${BDFDB.dotCN.guild}.folder.open ${BDFDB.dotCN.guildicon} {
 				text-decoration: underline;
 			}
 			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guildseparator}, 
-			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild},
-			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guild}.copy,
-			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildserror} {
+			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guild}:not(#bd-pub-li) {
 				width: 130px;
 			}
 			.DSAC-styled ${BDFDB.dotCN.guildseparator}, 
-			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild},
-			.DSAC-styled ${BDFDB.dotCN.guild}.copy,
-			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildserror} {
+			.DSAC-styled ${BDFDB.dotCN.guild}:not(#bd-pub-li) {
 				width: 215px;
 				box-sizing: border-box;
 				opacity: 0.4;
@@ -99,74 +89,93 @@ class DisplayServersAsChannels {
 				align-items: center;
 				justify-content: flex-start;
 			}
-			.DSAC-styled ${BDFDB.dotCN.guildseparator}:not([style*="display: none"]), 
-			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild}:not([style*="display: none"]),
-			.DSAC-styled ${BDFDB.dotCN.guild}.copy:not([style*="display: none"]),
-			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildserror}:not([style*="display: none"]) {
+			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guildserrorcontainer},
+			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guildserror},
+			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guildsaddcontainer},
+			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guildsadd},
+			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guildsdiscoverycontainer},
+			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guild} + div[class=""],
+			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guildserrorcontainer} + div[class=""] {
+				width: 130px;
+				height: 22px;
+			}
+			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guildserror} {
+				font-size: 14px;
+				line-height: 20px;
+			}
+			.bd-minimal .DSAC-styled ${BDFDB.dotCNS.guildsadd + BDFDB.dotCN.guildsaddinner} {
+				font-size: 24px;
+				line-height: 32px;
+			}
+			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guildsadd} svg {
+				width: 16px;
+				height: 16px;
+			}
+			.DSAC-styled ${BDFDB.dotCN.guildserror} {
+				line-height: 29px;
+			}
+			.DSAC-styled ${BDFDB.dotCN.guildserrorcontainer},
+			.DSAC-styled ${BDFDB.dotCN.guildserror},
+			.DSAC-styled ${BDFDB.dotCN.guildsaddcontainer},
+			.DSAC-styled ${BDFDB.dotCN.guildsadd},
+			.DSAC-styled ${BDFDB.dotCN.guildsdiscoverycontainer},
+			.DSAC-styled ${BDFDB.dotCN.guild} + div[class=""],
+			.DSAC-styled ${BDFDB.dotCN.guildserrorcontainer} + div[class=""] {
+				width: 215px;
+				border-radius: 3px;
+				height: 32px;
+				margin-bottom: 10px;
+			}
+			.DSAC-styled ${BDFDB.dotCN.guild}:not(#bd-pub-li):not([style*="display: none"]) {
 				display: flex;
 			}
-			.DSAC-styled ${BDFDB.dotCN.guild + BDFDB.dotCN.guildunread}.copy.
-			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild + BDFDB.dotCN.guildunread} {
+			.DSAC-styled ${BDFDB.dotCN.guild + BDFDB.dotCN.guildunread}:not(#bd-pub-li) {
 				opacity: 0.7;
 			}
-			.DSAC-styled ${BDFDB.dotCN.guild}.copy:not(${BDFDB.dotCN.guildselected}):hover,
-			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild + BDFDB.notCN.guildselected}:hover {
+			.DSAC-styled ${BDFDB.dotCN.guild + BDFDB.notCN.guildselected}:not(#bd-pub-li):hover {
 				opacity: 0.9;
 				background-color: rgba(79,84,92,.3);
 			}
-			.DSAC-styled ${BDFDB.dotCN.guild + BDFDB.dotCN.guildselected}.copy,
-			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild + BDFDB.dotCN.guildselected} {
+			.DSAC-styled ${BDFDB.dotCN.guild + BDFDB.dotCN.guildselected}:not(#bd-pub-li) {
 				opacity: 1;
 				background-color: rgba(79,84,92,.6);
 			}
-			.DSAC-styled ${BDFDB.dotCN.guild}.copy > div[draggable],
-			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild} > div[draggable] {
+			.DSAC-styled ${BDFDB.dotCNS.guild + BDFDB.dotCN.guilddragfix} {
 				flex: 1 1 auto;
 			}
-			.DSAC-styled ${BDFDB.dotCN.guild + BDFDB.dotCN.guildaudio}.copy > div[draggable],
-			.DSAC-styled ${BDFDB.dotCN.guild + BDFDB.dotCN.guildvideo}.copy > div[draggable],
-			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild + BDFDB.dotCN.guildaudio} > div[draggable],
-			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild + BDFDB.dotCN.guildvideo} > div[draggable] {
+			.DSAC-styled ${BDFDB.dotCN.guild + BDFDB.dotCNS.guildaudio + BDFDB.dotCN.guilddragfix},
+			.DSAC-styled ${BDFDB.dotCN.guild + BDFDB.dotCNS.guildvideo + BDFDB.dotCN.guilddragfix} {
 				padding-right: 20px;
 				margin-right: 5px;
 			}
-			.DSAC-styled ${BDFDB.dotCN.guild + BDFDB.dotCN.guildaudio}.copy > div[draggable],
-			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild + BDFDB.dotCN.guildaudio} > div[draggable] {
+			.DSAC-styled ${BDFDB.dotCN.guild + BDFDB.dotCNS.guildaudio + BDFDB.dotCN.guilddragfix} {
 				background: url(/assets/382ca83d9dc390c4be715248bb4864f4.svg) right no-repeat !important;
 			}
-			.DSAC-styled ${BDFDB.dotCN.guild + BDFDB.dotCN.guildvideo}.copy > div[draggable],
-			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild + BDFDB.dotCN.guildvideo} > div[draggable] {
+			.DSAC-styled ${BDFDB.dotCN.guild + BDFDB.dotCNS.guildvideo + BDFDB.dotCN.guilddragfix} {
 				background: url(/assets/c46f51f425c824899b6138ea2b61b41d.svg) right no-repeat !important;
 			}
-			.DSAC-styled ${BDFDB.dotCN.guild}.copy ${BDFDB.dotCN.badge},
-			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.badge} {
+			.DSAC-styled ${BDFDB.dotCNS.guild + BDFDB.dotCN.badge} {
 				position: static;
 				margin: 0 3px;
 			}
-			.DSAC-styled ${BDFDB.dotCN.guild}.copy ${BDFDB.dotCN.guildinner},
-			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildinner},
-			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guild}.copy ${BDFDB.dotCN.guildinner},
-			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildinner} {
+			.DSAC-styled ${BDFDB.dotCN.guild}:not(#bd-pub-li) ${BDFDB.dotCN.guildinner},
+			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guild}:not(#bd-pub-li) ${BDFDB.dotCN.guildinner} {
 				width: unset;
 			}
-			.DSAC-styled ${BDFDB.dotCN.guild}.copy ${BDFDB.dotCN.guildinner},
-			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildinner} {
-				background: transparent !important;
+			.DSAC-styled ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildinner}[style*="background-color:"]:not([style*="background-color: rgb(47, 49, 54)"]),
+			.DSAC-styled ${BDFDB.dotCN.guild}:not(#bd-pub-li) ${BDFDB.dotCN.guildinner} {
+				background-color: transparent !important;
 				border-radius: 0px !important;
 				position: relative;
 			}
-			.DSAC-styled ${BDFDB.dotCN.guild + BDFDB.dotCN.guildaudio}.copy ${BDFDB.dotCN.guildinner}:after,
-			.DSAC-styled ${BDFDB.dotCN.guild + BDFDB.dotCN.guildvideo}.copy ${BDFDB.dotCN.guildinner}:after,
-			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild + BDFDB.dotCNS.guildaudio + BDFDB.dotCN.guildinner}:after,
-			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild + BDFDB.dotCNS.guildvideo + BDFDB.dotCN.guildinner}:after {
+			.DSAC-styled ${BDFDB.dotCN.guild + BDFDB.dotCNS.guildaudio + BDFDB.dotCN.guildinner}:after,
+			.DSAC-styled ${BDFDB.dotCN.guild + BDFDB.dotCNS.guildvideo + BDFDB.dotCN.guildinner}:after {
 				display: none !important;
 			}
-			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guild}.copy ${BDFDB.dotCN.guildicon},
-			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildicon} {
+			.bd-minimal .DSAC-styled ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildicon} {
 				font-size: 14px !important;
 			}
-			.DSAC-styled ${BDFDB.dotCN.guild}.copy ${BDFDB.dotCN.guildicon},
-			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildicon} {
+			.DSAC-styled ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildicon} {
 				background: transparent !important;
 				font-size: 16px !important;
 				line-height: 32px;
@@ -176,25 +185,6 @@ class DisplayServersAsChannels {
 				left: 0;
 				right: 0;
 				width: unset;
-			}
-			.DSAC-styled ${BDFDB.dotCN.guild}.copy ${BDFDB.dotCN.guildinner} .DSAC-verification-badge,
-			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildinner} .DSAC-verification-badge {
-				position: absolute;
-				left: 0;
-			}
-			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildserror} {
-				margin-left: -5px;
-				line-height: 28px;
-			}
-			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCNS.guild + BDFDB.dotCN.guildserror},
-			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild + BDFDB.dotCN.guildsadd} {
-				display: block !important;
-			}
-			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild + BDFDB.dotCNS.guildsadd + BDFDB.dotCN.guildsaddinner} {
-				top: -0.2em;
-			}
-			.DSAC-styled ${BDFDB.dotCN.guildseparator} ~ ${BDFDB.dotCN.guild + BDFDB.dotCNS.guildsadd + BDFDB.dotCN.guildsaddinner} {
-				top: -6px;
 			}`;
 	}
 
@@ -270,6 +260,7 @@ class DisplayServersAsChannels {
 			BDFDB.readServerList().forEach(info => {this.resetServer(info);});
 			document.querySelectorAll(BDFDB.dotCN.guild + ".folder").forEach(folderdiv => {this.resetServer(this.getFolderObject(folderdiv));});
 			BDFDB.removeClasses("DSAC-styled");
+			BDFDB.removeEles(".DSAC-verification-badge");
 
 			BDFDB.unloadMessage(this);
 		}
@@ -284,7 +275,9 @@ class DisplayServersAsChannels {
 		if (avatar) {
 			avatar.innerHTML = `<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">${BDFDB.encodeToHTML(info.name || info.folderName || "")}</div></span>`;
 			BDFDB.initElements(avatar, this);
-			if (info.features && info.features.has("VERIFIED")) avatar.parentElement.insertBefore(BDFDB.htmlToElement(this.verificationBadgeMarkup), avatar);
+			if (info.features && info.features.has("VERIFIED") && !info.features.has("FAKE_VERIFIED")) {
+				info.div.insertBefore(BDFDB.htmlToElement(this.verificationBadgeMarkup), info.div.firstElementChild);
+			}
 		}
 	}
 
@@ -293,7 +286,7 @@ class DisplayServersAsChannels {
 		var avatar = info.div.querySelector(BDFDB.dotCN.guildicon);
 		if (avatar) {
 			avatar.innerHTML = BDFDB.encodeToHTML(info.icon ? "" : (info.acronym || ""));
-			BDFDB.removeEles(info.div.querySelector(".DSAC-verification-badge"));
+			BDFDB.removeEles(info.div.querySelectorAll(".DSAC-verification-badge"));
 		}
 	}
 
