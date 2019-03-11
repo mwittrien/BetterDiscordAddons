@@ -5,13 +5,13 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.7.5";}
+	getVersion () {return "1.7.6";}
 
 	getAuthor () {return "DevilBro";}
 
 	initConstructor () {
 		this.changelog = {
-			"improved":[["Copy Button","Pressing the copy button in a note that contains files will now add the filelinks to the copied text"]]
+			"fixed":[["Jump Button","Jump button now properly works again"]]
 		};
 		
 		this.labels = {};
@@ -210,7 +210,7 @@ class PersonalPins {
 			this.LastGuildStore = BDFDB.WebModules.findByProperties("getLastSelectedGuildId");
 			this.LastChannelStore = BDFDB.WebModules.findByProperties("getLastSelectedChannelId");
 			this.HistoryUtils = BDFDB.WebModules.findByProperties("transitionTo", "replaceWith", "getHistory");
-			this.MainDiscord = BDFDB.WebModules.findByProperties("ActionTypes");
+			this.DiscordConstants = BDFDB.WebModules.findByProperties("Permissions", "ActivityTypes", "StatusTypes");
 
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
@@ -455,7 +455,7 @@ class PersonalPins {
 			BDFDB.toggleEles(placeholder, container.firstElementChild == placeholder);
 		});
 		message.querySelector(BDFDB.dotCN.messagespopoutjumpbutton + ".jump").addEventListener("click", e => {
-			this.HistoryUtils.transitionTo(this.MainDiscord.Routes.MESSAGE(noteData.guild_id, noteData.channel_id, noteData.id));
+			this.HistoryUtils.transitionTo(this.DiscordConstants.Routes.CHANNEL(noteData.guild_id, noteData.channel_id, noteData.id));
 		});
 		message.querySelector(BDFDB.dotCN.messagespopoutjumpbutton + ".copy").addEventListener("click", e => {
 			let clipboard = require("electron").clipboard;
