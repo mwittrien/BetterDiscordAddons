@@ -511,6 +511,7 @@
 [style*="background-color: rgba(114, 137, 218, 0.3)"] {
 	background-color: rgba(var(--vaccentcolor),0.3) !important;
 }
+.container-1YxwTf > div[style*="background-color: rgba(114, 137, 218, 0."],
 [style*="background-color: rgba(114, 137, 218, 0.2)"] {
 	background-color: rgba(var(--vaccentcolor),0.2) !important;
 }
@@ -520,6 +521,9 @@
 }
 [style*="background-color: rgba(114, 137, 218, 0.14902)"] {
 	background-color: rgba(var(--vaccentcolor), 0.14902) !important;
+}
+[style*="background-color: rgba(114, 137, 218, 0)"] {
+	background-color: rgba(var(--vaccentcolor), 0) !important;
 }
 .grandfatheredMessage-1BnHtv,
 .gradientBar-1XmvR-,
