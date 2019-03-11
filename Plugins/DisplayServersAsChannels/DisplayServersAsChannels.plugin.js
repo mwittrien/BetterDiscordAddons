@@ -89,6 +89,7 @@ class DisplayServersAsChannels {
 				align-items: center;
 				justify-content: flex-start;
 			}
+			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guildplaceholder},
 			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guildserrorcontainer},
 			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guildserror},
 			.bd-minimal .DSAC-styled ${BDFDB.dotCN.guildsaddcontainer},
@@ -114,6 +115,7 @@ class DisplayServersAsChannels {
 			.DSAC-styled ${BDFDB.dotCN.guildserror} {
 				line-height: 29px;
 			}
+			.DSAC-styled ${BDFDB.dotCN.guildplaceholder},
 			.DSAC-styled ${BDFDB.dotCN.guildserrorcontainer},
 			.DSAC-styled ${BDFDB.dotCN.guildserror},
 			.DSAC-styled ${BDFDB.dotCN.guildsaddcontainer},
