@@ -1,6 +1,6 @@
 //META{"name":"ServerHider","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ServerHider","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ServerHider/ServerHider.plugin.js"}*//
 
-class ServerHider { 
+class ServerHider {
 	getName () {return "ServerHider";}
 
 	getVersion () {return "6.0.4";}
