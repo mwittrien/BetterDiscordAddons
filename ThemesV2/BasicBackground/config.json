@@ -1,0 +1,108 @@
+{
+	"info": {
+		"name": "BasicBackground",
+		"authors": [
+			{
+				"name": "DevilBro",
+				"url": "https://www.paypal.me/MircoWittrien",
+				"discord_id": "278543574059057154",
+				"github_username": "mwittrien"
+			}
+		],
+		"version": 1.0,
+		"description": "Allows you to use a background image in Discord without greatly altering the basic look of Discord. \n\nMy Support Server: http://bit.ly/DevilBrosHaus or https://discordapp.com/invite/Jx3TjNS.",
+		"type": "sass"
+	},
+	"main": "index.scss",
+	"defaultConfig": [
+		{
+			"category": "default",
+			"settings": [
+				{
+					"id": "var-background",
+					"type": "file",
+					"value": [
+						"background.jpg"
+					],
+					"text": "Background image"
+				},
+				{
+					"id": "var-accentcolor",
+					"type": "colour",
+					"value": "rgb(190, 78, 180)",
+					"text": "Accent color"
+				},
+				{
+					"id": "var-backdropcolor",
+					"type": "colour",
+					"value": "rgba(0, 0, 0, 0.4)",
+					"text": "Backdrop color"
+				},
+				{
+					"id": "var-transparency-color",
+					"type": "colour",
+					"value": "rgba(0, 0, 0, 0.15)",
+					"text": "Transparency color"
+				},
+				{
+					"id": "var-transparency-message",
+					"type": "slider",
+					"value": 0.5,
+					"min": 0,
+					"max": 1,
+					"step": 0.05,
+					"text": "Message transparency"
+				},
+				{
+					"id": "var-transparency-memberlist",
+					"type": "slider",
+					"value": 0,
+					"min": 0,
+					"max": 1,
+					"step": 0.05,
+					"text": "Member list transparency"
+				}
+			]
+		}
+	],
+	"configSchemes": [
+		{
+			"id": "default-scheme",
+			"name": "Reset to default",
+			"icon_url": "https://mwittrien.github.io/BetterDiscordAddons/ThemesV2/BasicBackground/background.jpg",
+			"settings": [
+				{
+					"category": "default",
+					"settings": [
+						{
+							"id": "var-background",
+							"value": [
+								"background.jpg"
+							]
+						},
+						{
+							"id": "var-accentcolor",
+							"value": "rgb(190, 78, 180)"
+						},
+						{
+							"id": "var-backdropcolor",
+							"value": "rgba(0, 0, 0, 0.4)"
+						},
+						{
+							"id": "var-transparency-color",
+							"value": "rgba(0, 0, 0, 0.15)"
+						},
+						{
+							"id": "var-transparency-message",
+							"value": 0.5
+						},
+						{
+							"id": "var-transparency-memberlist",
+							"value": 0
+						}
+					]
+				}
+			]
+		}
+	]
+}
