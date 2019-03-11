@@ -593,6 +593,9 @@
 [style*="border-color: rgba(114, 137, 218, 0.14902)"] {
 	border-color: rgba(var(--vaccentcolor), 0.14902) !important;
 }
+[style*="border-color: rgba(114, 137, 218, 0)"] {
+	border-color: rgba(var(--vaccentcolor), 0) !important;
+}
 
 /* BOXSHADOW */
 .callAvatarBorder-1D_KaE.video-3GgX2M.selected-2esnyn:not(.speaking-oCqYMI):not(.soundsharing-102bS9) {
