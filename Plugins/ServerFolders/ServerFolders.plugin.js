@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.1.4";}
+	getVersion () {return "6.1.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -171,7 +171,7 @@ class ServerFolders {
 
 		this.folderIconMarkup = 
 			`<div class="${BDFDB.disCN.guild} folder">
-				<div draggable="true">
+				<div class="${BDFDB.disCN.guilddragfix}" draggable="true">
 					<div class="${BDFDB.disCN.guildinner}" draggable="false" style="border-radius: 25px;">
 						<a>
 							<div class="${BDFDB.disCNS.avataricon + BDFDB.disCNS.guildicon + BDFDB.disCNS.avatariconsizelarge + BDFDB.disCN.avatariconinactive}"></div>
