@@ -124,15 +124,17 @@ class ImageZoom {
 		if (methodnames.includes("componentDidMount")) {
 			let modal = BDFDB.getParentEle(BDFDB.dotCN.modal, wrapper);
 			if (!modal) return;
+			let inner = modal.querySelector(BDFDB.dotCN.modalinner);
+			if (!inner) return;
 			let start = performance.now();
 			let waitForImg = setInterval(() => {
 				let img = modal.querySelector(BDFDB.dotCNS.imagewrapper + "img," + BDFDB.dotCNS.imagewrapper + "video");
 				if (img && img.src) {
 					clearInterval(waitForImg);
 					img.setAttribute("draggable", "false");
-					img.parentElement.parentElement.appendChild(BDFDB.htmlToElement(`<span class="${BDFDB.disCN.downloadlink} imagezoom-separator" style="margin: 0px 5px;"> | </div>`));
+					inner.firstElementChild.appendChild(BDFDB.htmlToElement(`<span class="${BDFDB.disCN.downloadlink} imagezoom-separator" style="margin: 0px 5px;"> | </div>`));
 					let settingslink = BDFDB.htmlToElement(`<span class="${BDFDB.disCN.downloadlink} imagezoom-settings">Zoom ${BDFDB.LanguageStrings.SETTINGS}</div>`);
-					img.parentElement.parentElement.appendChild(settingslink);
+					inner.firstElementChild.appendChild(settingslink);
 					let openContext = e => {
 						let settings = BDFDB.getAllData(this, "settings");
 						let zoomSettingsContext = BDFDB.htmlToElement(this.zoomSettingsContextMarkup);
