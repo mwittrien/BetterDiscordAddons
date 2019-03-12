@@ -19,7 +19,7 @@ class ImageZoom {
 				<div class="${BDFDB.disCN.contextmenuitemgroup}">
 					<div class="${BDFDB.disCN.contextmenuitem} zoomlevel-item ${BDFDB.disCN.contextmenuitemslider}">
 						<div class="${BDFDB.disCN.contextmenulabel}"></div>
-						<div class="${BDFDB.disCNS.contextmenuslider + BDFDB.disCNS.slider + BDFDB.disCN.slidermini}" digits=1 min=1 max=10 unit="x" type="zoomlevel" name="Zoom Level">
+						<div class="${BDFDB.disCNS.contextmenuslider + BDFDB.disCNS.slider + BDFDB.disCN.slidermini}" type="zoomlevel">
 							<input type="number" class="${BDFDB.disCN.sliderinput}" readonly="" value="">
 							<div class="${BDFDB.disCN.slidertrack}"></div>
 							<div class="${BDFDB.disCN.sliderbar}">
@@ -32,7 +32,7 @@ class ImageZoom {
 					</div>
 					<div class="${BDFDB.disCN.contextmenuitem} lensesize-item ${BDFDB.disCN.contextmenuitemslider}">
 						<div class="${BDFDB.disCN.contextmenulabel}"></div>
-						<div class="${BDFDB.disCNS.contextmenuslider + BDFDB.disCNS.slider + BDFDB.disCN.slidermini}" digits=0 min=50 max=1000 unit="px" type="lensesize" name="Lense Size">
+						<div class="${BDFDB.disCNS.contextmenuslider + BDFDB.disCNS.slider + BDFDB.disCN.slidermini}" type="lensesize">
 							<input type="number" class="${BDFDB.disCN.sliderinput}" readonly="" value="">
 							<div class="${BDFDB.disCN.slidertrack}"></div>
 							<div class="${BDFDB.disCN.sliderbar}">
@@ -66,8 +66,8 @@ class ImageZoom {
 
 		this.defaults = {
 			settings: {
-				zoomlevel:		{value:2},
-				lensesize:		{value:200}
+				zoomlevel:		{value:2,	digits:1,	min:1,	max:10,		unit:"x",	name:"Zoom Level"},
+				lensesize:		{value:200,	digits:0,	min:50,	max:1000,	unit:"px",	name:"Lense Size"}
 			}
 		};
 	}
@@ -139,14 +139,15 @@ class ImageZoom {
 						let zoomSettingsContext = BDFDB.htmlToElement(this.zoomSettingsContextMarkup);
 						for (let slideritem of zoomSettingsContext.querySelectorAll(BDFDB.dotCN.contextmenuitemslider)) {
 							let slider = slideritem.querySelector(BDFDB.dotCN.contextmenuslider);
-							let value = settings[slider.getAttribute("type")];
-							let percent = BDFDB.mapRange([slider.getAttribute("min"), slider.getAttribute("max")], [0, 100], value);
+							let type = slider.getAttribute("type");
+							let value = settings[type];
+							let percent = BDFDB.mapRange([this.defaults.settings[type].min, this.defaults.settings[type].max], [0, 100], value);
 							let grabber = slider.querySelector(BDFDB.dotCN.slidergrabber);
 							grabber.style.setProperty("left", percent + "%");
 							grabber.addEventListener("mousedown", e => {this.dragSlider(slider, value, e);});
 							slider.querySelector(BDFDB.dotCN.sliderbarfill).style.setProperty("width", percent + "%");
 							slider.querySelector(BDFDB.dotCN.sliderinput).value = value;
-							slider.previousSibling.innerText = slider.getAttribute("name") + ": " + value + slider.getAttribute("unit");
+							slider.previousSibling.innerText = this.defaults.settings[type].name + ": " + value + this.defaults.settings[type].unit;
 						}
 						let zoomlevelitem = zoomSettingsContext.querySelector(".zoomlevel-item");
 						let lensesizeitem = zoomSettingsContext.querySelector(".lensesize-item");
@@ -212,10 +213,6 @@ class ImageZoom {
 		var slider = track.parentNode;
 		var input = slider.querySelector(BDFDB.dotCN.sliderinput);
 		var barfill = slider.querySelector(BDFDB.dotCN.sliderbarfill);
-		var min = slider.getAttribute("min");
-		var max = slider.getAttribute("max");
-		var unit = slider.getAttribute("unit");
-		var digits = slider.getAttribute("digits");
 		var type = slider.getAttribute("type");
 
 		BDFDB.appendLocalStyle("disableTextSelection", `*{user-select: none !important;}`);
@@ -224,7 +221,7 @@ class ImageZoom {
 		var sHalfW = BDFDB.getRects(grabber).width/2;
 		var sMinX = BDFDB.getRects(track).left;
 		var sMaxX = sMinX + BDFDB.getRects(track).width;
-		var bubble = BDFDB.htmlToElement(`<span class="${BDFDB.disCN.sliderbubble}">${value + unit}</span>`);
+		var bubble = BDFDB.htmlToElement(`<span class="${BDFDB.disCN.sliderbubble}">${value + this.defaults.settings[type].unit}</span>`);
 		grabber.appendChild(bubble);
 		var mouseup = () => {
 			document.removeEventListener("mouseup", mouseup);
@@ -232,16 +229,16 @@ class ImageZoom {
 			BDFDB.removeEles(bubble);
 			BDFDB.removeLocalStyle("disableTextSelection");
 			BDFDB.saveData(type, value, this, "settings");
-			slider.previousSibling.innerText = slider.getAttribute("name") + ": " + value + unit;
+			slider.previousSibling.innerText = this.defaults.settings[type].name + ": " + value + this.defaults.settings[type].unit;
 		};
 		var mousemove = e2 => {
 			sY = e2.clientX > sMaxX ? sMaxX - sHalfW : (e2.clientX < sMinX ? sMinX - sHalfW : e2.clientX - sHalfW);
-			value = parseInt(BDFDB.mapRange([sMinX - sHalfW, sMaxX - sHalfW], [min, max], sY)*Math.pow(10, digits))/Math.pow(10, digits);
+			value = parseInt(BDFDB.mapRange([sMinX - sHalfW, sMaxX - sHalfW], [this.defaults.settings[type].min, this.defaults.settings[type].max], sY)*Math.pow(10, this.defaults.settings[type].digits))/Math.pow(10, this.defaults.settings[type].digits);
 			let percent = BDFDB.mapRange([sMinX - sHalfW, sMaxX - sHalfW], [0, 100], sY);
 			grabber.style.setProperty("left", percent + "%");
 			barfill.style.setProperty("width", percent + "%");
 			input.value = value;
-			bubble.innerText = value + unit;
+			bubble.innerText = value + this.defaults.settings[type].unit;
 		};
 		document.addEventListener("mouseup", mouseup);
 		document.addEventListener("mousemove", mousemove);
