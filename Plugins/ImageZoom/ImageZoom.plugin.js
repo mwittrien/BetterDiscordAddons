@@ -3,7 +3,7 @@
 class ImageZoom {
 	getName () {return "ImageZoom";}
 
-	getVersion () {return "1.0.0";}
+	getVersion () {return "1.0.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -126,7 +126,7 @@ class ImageZoom {
 			if (!modal) return;
 			let start = performance.now();
 			let waitForImg = setInterval(() => {
-				let img = modal.querySelector(BDFDB.dotCNS.imagewrapper + "img");
+				let img = modal.querySelector(BDFDB.dotCNS.imagewrapper + "img," + BDFDB.dotCNS.imagewrapper + "video");
 				if (img && img.src) {
 					clearInterval(waitForImg);
 					img.setAttribute("draggable", "false");
@@ -156,13 +156,12 @@ class ImageZoom {
 					settingslink.addEventListener("contextmenu", openContext);
 					img.ImageZoomMouseDownListener = e => {
 						BDFDB.stopEvent(e);
+						BDFDB.appendLocalStyle("ImageZoomCrossHair", "* {cursor: crosshair !important;}");
 						
+						let imgrects = BDFDB.getRects(img);
 						let settings = BDFDB.getAllData(this, "settings");
 						
-						BDFDB.appendLocalStyle("ImageZoomCrossHair", "* {cursor: crosshair !important;}");
-						let imgrects = BDFDB.getRects(img);
-						
-						let lense = BDFDB.htmlToElement(`<div class="imagezoom-lense" style="overflow: hidden !important; width: ${settings.lensesize}px !important; height: ${settings.lensesize}px !important;"><div class="imagezoom-pane" style="background: url(${img.src}) center/cover no-repeat !important; width: ${imgrects.width * settings.zoomlevel}px; height: ${imgrects.height * settings.zoomlevel}px; position:fixed !important;"></div></div>`);
+						let lense = BDFDB.htmlToElement(`<div class="imagezoom-lense" style="overflow: hidden !important; width: ${settings.lensesize}px !important; height: ${settings.lensesize}px !important;"><${img.tagName} class="imagezoom-pane" src="${img.src}" style="width: ${imgrects.width * settings.zoomlevel}px; height: ${imgrects.height * settings.zoomlevel}px; position:fixed !important;"${img.tagName == "VIDEO" ? " loop autoplay" : ""}></${img.tagName}></div>`);
 						let pane = lense.firstElementChild;
 						let backdrop = BDFDB.htmlToElement(`<div class="imagezoom-backdrop" style="background: rgba(0,0,0,0.2) !important;"></div>`);
 						document.querySelector(BDFDB.dotCN.appmount).appendChild(lense);
