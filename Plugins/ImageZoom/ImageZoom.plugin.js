@@ -48,7 +48,6 @@ class ImageZoom {
 
 		this.css = `
 			.imagezoom-lense {
-				overflow: hidden !important;
 				pointer-events: none !important;
 				z-index: 10000 !important;
 				position: absolute !important;
@@ -163,7 +162,7 @@ class ImageZoom {
 						BDFDB.appendLocalStyle("ImageZoomCrossHair", "* {cursor: crosshair !important;}");
 						let imgrects = BDFDB.getRects(img);
 						
-						let lense = BDFDB.htmlToElement(`<div class="imagezoom-lense" style="width: ${settings.lensesize}px !important; height: ${settings.lensesize}px !important;"><div class="imagezoom-pane" style="background: url(${img.src}) center/cover no-repeat !important; width: ${imgrects.width * settings.zoomlevel}px; height: ${imgrects.height * settings.zoomlevel}px; position:fixed !important;"></div></div>`);
+						let lense = BDFDB.htmlToElement(`<div class="imagezoom-lense" style="overflow: hidden !important; width: ${settings.lensesize}px !important; height: ${settings.lensesize}px !important;"><div class="imagezoom-pane" style="background: url(${img.src}) center/cover no-repeat !important; width: ${imgrects.width * settings.zoomlevel}px; height: ${imgrects.height * settings.zoomlevel}px; position:fixed !important;"></div></div>`);
 						let pane = lense.firstElementChild;
 						let backdrop = BDFDB.htmlToElement(`<div class="imagezoom-backdrop" style="background: rgba(0,0,0,0.2) !important;"></div>`);
 						document.querySelector(BDFDB.dotCN.appmount).appendChild(lense);
