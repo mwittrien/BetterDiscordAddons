@@ -18,6 +18,7 @@
  - [Google Search Replace](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/GoogleSearchReplace) - Replaces the default Google Text Search with a selection menu of several search engines.
  - [Google Translate Option](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/GoogleTranslateOption) - Adds a Google Translate option to your context menu, which will open the selected text in Google Translate.
  - [Image Gallery](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ImageGallery) - Allows the user to browse through images sent inside the same message.
+ - [Image Zoom](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ImageZoom) - Allows you to zoom in opened Images by holding left clicking on them in the Image Modal.
  - [Joined At Date](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/JoinedAtDate) - Displays the Joined At Date of a Member in the UserPopout and UserModal.
  - [Last Message Date](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/LastMessageDate) - Displays the Date of the last sent Message of a Member for the current Server/DM in the UserPopout and UserModal.
  - [Message Utilities](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/MessageUtilities) - Offers a number of useful message options.
