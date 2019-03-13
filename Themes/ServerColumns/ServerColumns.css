@@ -16,21 +16,19 @@
 .wrapper-1Rf91z .scrollerWrap-1IAIlv .scroller-2TZvBN {
 	padding: 10px 0 10px 10px !important;
 }
-.wrapper-1Rf91z .scroller-2TZvBN,
-.wrapper-1Rf91z .scroller-2TZvBN .dms-rcsEnV {
+.wrapper-1Rf91z .scroller-2TZvBN {
 	display: flex;
 	flex-flow: row wrap;
 	align-content: flex-start;
 }
-.wrapper-1Rf91z .scroller-2TZvBN .container-1aNBdK,
 .wrapper-1Rf91z .scroller-2TZvBN .container-2td-dC,
 .wrapper-1Rf91z .scroller-2TZvBN .guildsErrorContainer-2uWYsE,
 .wrapper-1Rf91z .scroller-2TZvBN .container-2td-dC + div[class=""],
 .wrapper-1Rf91z .scroller-2TZvBN .guildsErrorContainer-2uWYsE + div[class=""],
-.wrapper-1Rf91z .scroller-2TZvBN .createJoinContainer-2Av064,
-.wrapper-1Rf91z .scroller-2TZvBN .container-11WMXy {
+.wrapper-1Rf91z .scroller-2TZvBN .createJoinContainer-2Av064 {
 	margin: 4px 13px 4px -2px !important;
 }
+.wrapper-1Rf91z .scroller-2TZvBN .container-1aNBdK,
 .wrapper-1Rf91z .scroller-2TZvBN #server-search,
 .wrapper-1Rf91z .scroller-2TZvBN .lurkingGuild-3ZJ1gi,
 .wrapper-1Rf91z .scroller-2TZvBN .container-1ETFDs {
@@ -61,9 +59,6 @@
 	height: calc(1px * var(--vguildsize)) !important;
 	width: calc(1px * var(--vguildsize)) !important;
 	line-height: calc(1px * var(--vguildsize)) !important;
-}
-.wrapper-1Rf91z .scroller-2TZvBN .container-1aNBdK {
-	height: calc(1.2px * var(--vguildsize)) !important;
 }
 .wrapper-1Rf91z .scroller-2TZvBN .container-2td-dC:not(#bd-pub-li):not(.circleIconButton-jET_ig) {
 	border: none !important;
