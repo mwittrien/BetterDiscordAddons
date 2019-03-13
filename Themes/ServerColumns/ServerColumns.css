@@ -25,7 +25,8 @@
 .wrapper-1Rf91z .scroller-2TZvBN .guildsErrorContainer-2uWYsE,
 .wrapper-1Rf91z .scroller-2TZvBN .container-2td-dC + div[class=""],
 .wrapper-1Rf91z .scroller-2TZvBN .guildsErrorContainer-2uWYsE + div[class=""],
-.wrapper-1Rf91z .scroller-2TZvBN .createJoinContainer-2Av064 {
+.wrapper-1Rf91z .scroller-2TZvBN .createJoinContainer-2Av064,
+.wrapper-1Rf91z .scroller-2TZvBN .container-11WMXy {
 	margin: 4px 13px 4px -2px !important;
 }
 .wrapper-1Rf91z .scroller-2TZvBN .container-1aNBdK,
@@ -92,9 +93,11 @@
 .wrapper-1Rf91z .scroller-2TZvBN .guildsError-b7zR5H {
 	font-size: calc(1px * (var(--vguildsize)/(5/2))) !important;
 }
-.wrapper-1Rf91z .scroller-2TZvBN .circleIconButton-jET_ig .plus-3UqSQu,
 .wrapper-1Rf91z .scroller-2TZvBN .guildsError-b7zR5H {
 	line-height: calc(1px * (var(--vguildsize) - 5)) !important;
+}
+.wrapper-1Rf91z .scroller-2TZvBN .circleIconButton-jET_ig .plus-3UqSQu {
+	line-height: calc(1px * (var(--vguildsize) - (var(--vguildsize)/5))) !important;
 }
 .wrapper-1Rf91z .scroller-2TZvBN .container-11WMXy .circleIconButton-jET_ig svg {
 	width: calc(1px * (var(--vguildsize)/2)) !important;
