@@ -3,7 +3,7 @@
 class EditServers {
 	getName () {return "EditServers";}
 
-	getVersion () {return "1.9.4";} 
+	getVersion () {return "1.9.5";} 
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class EditServers {
 
 	initConstructor () {
 		this.changelog = {
-			"improved":[["Settings","You can now choose where EditServers changes the server data"]]
+			"fixed":[["Quick Switcher","Fixed Servers not being changed in the Quick Switcher"]]
 		};
 		
 		this.labels = {};
@@ -392,12 +392,11 @@ class EditServers {
 			}
 		}
 		else if (instance.props.tag == "div" && instance.props.className.indexOf(BDFDB.disCN.quickswitchresult) > -1) {
-			let result = BDFDB.getReactValue(instance, "_reactInternalFiber.return.memoizedProps.result");
-			if (result && result.type == "GUILD") {
-				this.changeGuildName(result.record, wrapper.querySelector(BDFDB.dotCN.quickswitchresultmatch));
-			}
-			else if (result && result.type.indexOf("_CHANNEL") != -1 && result.record && result.record.guild_id) {
-				this.changeGuildName(this.GuildUtils.getGuild(result.record.guild_id), wrapper.querySelector(BDFDB.dotCN.quickswitchresultmisccontainer));
+			let guild = BDFDB.getReactValue(instance, "_reactInternalFiber.return.return.memoizedProps.guild");
+			if (guild) this.changeGuildName(result.record, wrapper.querySelector(BDFDB.dotCN.quickswitchresultmatch));
+			else {
+				let channel = BDFDB.getReactValue(instance, "_reactInternalFiber.return.return.memoizedProps.channel");
+				if (channel && channel.guild_id) this.changeGuildName(this.GuildUtils.getGuild(channel.guild_id), wrapper.querySelector(BDFDB.dotCN.quickswitchresultmisccontainer));
 			}
 		}
 	}

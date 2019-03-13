@@ -3,7 +3,7 @@
 class EditChannels {
 	getName () {return "EditChannels";}
 
-	getVersion () {return "3.9.1";}
+	getVersion () {return "3.9.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class EditChannels {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Discord","Fixed a bug caused by retarded Discord Devs"]]
+			"fixed":[["Quick Switcher","Fixed Channels not being changed in the Quick Switcher"]]
 		};
 		
 		this.labels = {};
@@ -399,12 +399,10 @@ class EditChannels {
 			}
 		}
 		else if (instance.props.tag == "div" && instance.props.className.indexOf(BDFDB.disCN.quickswitchresult) > -1) {
-			let result = BDFDB.getReactValue(instance, "_reactInternalFiber.return.memoizedProps.result");
-			if (result && result.type.indexOf("_CHANNEL") != -1) {
-				this.changeChannel(result.record, wrapper.querySelector(BDFDB.dotCN.quickswitchresultmatch));
-				if (result.record.parent_id) {
-					this.changeChannel(this.ChannelUtils.getChannel(result.record.parent_id), wrapper.querySelector(BDFDB.dotCN.quickswitchresultnote));
-				} 
+			let channel = BDFDB.getReactValue(instance, "_reactInternalFiber.return.return.memoizedProps.channel");
+			if (channel) {
+				this.changeChannel(channel, wrapper.querySelector(BDFDB.dotCN.quickswitchresultmatch));
+				if (channel.parent_id) this.changeChannel(this.ChannelUtils.getChannel(channel.parent_id), wrapper.querySelector(BDFDB.dotCN.quickswitchresultnote));
 			}
 		}
 		else if (instance.props.tag == "div" && instance.props.className.indexOf(BDFDB.disCN.autocompleterow) > -1) {
