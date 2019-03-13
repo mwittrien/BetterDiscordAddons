@@ -139,6 +139,7 @@
 .wrapper-1Rf91z .scroller-2TZvBN .container-1aNBdK.video-3I9W8t:after,
 .wrapper-1Rf91z .scroller-2TZvBN .container-2td-dC.audio-2KA0-x:after,
 .wrapper-1Rf91z .scroller-2TZvBN .container-2td-dC.video-2jNDI4:after {
+	border-radius: 50% !important;
 	height: calc(1px * (var(--vguildsize)/2)) !important;
 	width: calc(1px * (var(--vguildsize)/2)) !important;
 	background-size: calc(1px * (var(--vguildsize)/3)) !important;
