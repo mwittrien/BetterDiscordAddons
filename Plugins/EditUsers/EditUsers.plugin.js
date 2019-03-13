@@ -649,7 +649,6 @@ class EditUsers {
 			}
 		}
 		else if (instance.props.tag == "div" && instance.props.className.indexOf(BDFDB.disCN.quickswitchresult) > -1) {
-			console.log(instance);
 			let user = BDFDB.getReactValue(instance, "_reactInternalFiber.return.return.memoizedProps.user");
 			if (user) {
 				this.changeName2(user, wrapper.querySelector(BDFDB.dotCN.quickswitchresultmatch));
