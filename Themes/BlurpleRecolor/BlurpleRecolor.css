@@ -6,18 +6,18 @@
 }
 
 /* STORE */
-.itemBackground-2vEldQ[style*='background-image: url("/530820671283003422/store/555559839523274762.png")'],
+.itemBackground-2vEldQ[style*='/530820671283003422/store/555559839523274762.png'],
 .itemBackground-2vEldQ[style*='background-image: url("/assets/5cf4181401e3d81acd4e811fae0797da.png")'],
 .itemBackground-1jfD8p[style*='background-image: url("/assets/5cf4181401e3d81acd4e811fae0797da.png")'] {
 	background-color: rgb(255,255,255) !important;
 	background-image: linear-gradient(90deg,rgba(var(--vaccentcolor),0.9),rgba(var(--vaccentcolor),0.7)) !important;
 }
-.itemBackground-2vEldQ[style*='background-image: url("/530820671283003422/store/555559839523274762.png']:before,
+.itemBackground-2vEldQ[style*='/530820671283003422/store/555559839523274762.png']:before,
 .itemBackground-2vEldQ[style*='background-image: url("/assets/5cf4181401e3d81acd4e811fae0797da.png")']:before,
 .itemBackground-1jfD8p[style*='background-image: url("/assets/5cf4181401e3d81acd4e811fae0797da.png")']:before {
 	z-index: 1;
 }
-.itemBackground-2vEldQ[style*='background-image: url("/530820671283003422/store/555559839523274762.png")']:after,
+.itemBackground-2vEldQ[style*='/530820671283003422/store/555559839523274762.png']:after,
 .itemBackground-2vEldQ[style*='background-image: url("/assets/5cf4181401e3d81acd4e811fae0797da.png")']:after,
 .itemBackground-1jfD8p[style*='background-image: url("/assets/5cf4181401e3d81acd4e811fae0797da.png")']:after {
 	border-radius: 10px;
