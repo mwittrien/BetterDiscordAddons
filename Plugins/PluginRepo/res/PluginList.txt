@@ -76,7 +76,6 @@ https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/Better
 https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/CustomizableAvatarDPI.plugin.js
 https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/CustomJs.plugin.js
 https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/DetailedServerTooltips.plugin.js
-https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/DiscordLogger.plugin.js
 https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/DoubleClickVoiceChannels.plugin.js
 https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/FormattableMessageCopier.plugin.js
 https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/GuildAndFriendRemovalAlerts.plugin.js
