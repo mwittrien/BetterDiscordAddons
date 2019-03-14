@@ -3,7 +3,7 @@
 class EditServers {
 	getName () {return "EditServers";}
 
-	getVersion () {return "1.9.5";} 
+	getVersion () {return "1.9.6";} 
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class EditServers {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Quick Switcher","Fixed Servers not being changed in the Quick Switcher"]]
+			"added":[["Banners","You can now add/change/remove banners to/from servers"]]
 		};
 		
 		this.labels = {};
@@ -89,15 +89,27 @@ class EditServers {
 											<div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex + BDFDB.disCNS.directioncolumn + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;"><input type="text" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16}" id="input-servershortname"></div>
 										</div>
 										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
-											<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">REPLACE_modal_serverurl_text</h3>
+											<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">REPLACE_modal_servericon_text</h3>
 										</div>
 										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
-											<div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex + BDFDB.disCNS.directioncolumn + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;"><input type="text" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16}" id="input-serverurl"></div>
+											<div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex + BDFDB.disCNS.directioncolumn + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;"><input type="text" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16}" id="input-servericon"></div>
 										</div>
 										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
 											<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">REPLACE_modal_removeicon_text</h3>
 											<div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;">
 												<input type="checkbox" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}" id="input-removeicon">
+											</div>
+										</div>
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
+											<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">REPLACE_modal_serverbanner_text</h3>
+										</div>
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
+											<div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex + BDFDB.disCNS.directioncolumn + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;"><input type="text" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16}" id="input-serverbanner"></div>
+										</div>
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
+											<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">REPLACE_modal_removebanner_text</h3>
+											<div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;">
+												<input type="checkbox" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}" id="input-removebanner">
 											</div>
 										</div>
 									</div>
@@ -167,6 +179,7 @@ class EditServers {
 			BDFDB.openConfirmModal(this, "Are you sure you want to reset all servers?", () => {
 				BDFDB.removeAllData(this, "servers");
 				BDFDB.WebModules.forceAllUpdates(this);
+				this.updateGuildSidebar();
 			});
 		});
 		return settingspanel;
@@ -198,8 +211,19 @@ class EditServers {
 			BDFDB.loadMessage(this);
 
 			this.GuildUtils = BDFDB.WebModules.findByProperties("getGuilds","getGuild");
+			
+			BDFDB.WebModules.patch(BDFDB.WebModules.findByProperties('getGuildBannerURL'), 'getGuildBannerURL', this, {instead:e => {
+				let guild = this.GuildUtils.getGuild(e.methodArguments[0].id);
+				if (guild) {
+					if (e.methodArguments[0].id == "410787888507256842") return guild.banner;
+					let data = BDFDB.loadData(guild.id, this, "servers");
+					if (data && data.banner && !data.removeBanner) return data.banner;
+				}
+				return e.callOriginalMethod();
+			}});
 
 			BDFDB.WebModules.forceAllUpdates(this);
+			this.updateGuildSidebar();
 		}
 		else {
 			console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
@@ -210,8 +234,16 @@ class EditServers {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			let data = BDFDB.loadAllData(this, "servers");
 			BDFDB.removeAllData(this, "servers");
-			try {BDFDB.WebModules.forceAllUpdates(this);} catch (err) {}
+			try {
+				BDFDB.WebModules.forceAllUpdates(this);
+				this.updateGuildSidebar();
+			} catch (err) {}
 			BDFDB.saveAllData(data, this, "servers");
+			
+			for (let guildobj of BDFDB.readServerList()) if (guildobj.instance) {
+				delete guildobj.instance.props.guild.savedbanner;
+				delete guildobj.instance.props.guild.savedsplash;
+			}
 
 			BDFDB.unloadMessage(this);
 		}
@@ -229,8 +261,10 @@ class EditServers {
 		this.serverSettingsModalMarkup = 	this.serverSettingsModalMarkup.replace("REPLACE_modal_header_text", this.labels.modal_header_text);
 		this.serverSettingsModalMarkup = 	this.serverSettingsModalMarkup.replace("REPLACE_modal_servername_text", this.labels.modal_servername_text);
 		this.serverSettingsModalMarkup = 	this.serverSettingsModalMarkup.replace("REPLACE_modal_servershortname_text", this.labels.modal_servershortname_text);
-		this.serverSettingsModalMarkup = 	this.serverSettingsModalMarkup.replace("REPLACE_modal_serverurl_text", this.labels.modal_serverurl_text);
+		this.serverSettingsModalMarkup = 	this.serverSettingsModalMarkup.replace("REPLACE_modal_servericon_text", this.labels.modal_servericon_text);
 		this.serverSettingsModalMarkup = 	this.serverSettingsModalMarkup.replace("REPLACE_modal_removeicon_text", this.labels.modal_removeicon_text);
+		this.serverSettingsModalMarkup = 	this.serverSettingsModalMarkup.replace("REPLACE_modal_serverbanner_text", this.labels.modal_serverbanner_text);
+		this.serverSettingsModalMarkup = 	this.serverSettingsModalMarkup.replace("REPLACE_modal_removebanner_text", this.labels.modal_removebanner_text);
 		this.serverSettingsModalMarkup = 	this.serverSettingsModalMarkup.replace("REPLACE_modal_tabheader1_text", this.labels.modal_tabheader1_text);
 		this.serverSettingsModalMarkup = 	this.serverSettingsModalMarkup.replace("REPLACE_modal_tabheader2_text", this.labels.modal_tabheader2_text);
 		this.serverSettingsModalMarkup = 	this.serverSettingsModalMarkup.replace("REPLACE_modal_tabheader3_text", this.labels.modal_tabheader3_text);
@@ -262,6 +296,7 @@ class EditServers {
 						BDFDB.closeContextMenu(menu);
 						BDFDB.removeData(instance.props.guild.id, this, "servers");
 						BDFDB.WebModules.forceAllUpdates(this);
+						this.updateGuildSidebar();
 					});
 				}
 				BDFDB.appendSubMenu(settingsitem, serverContextSubMenu);
@@ -270,24 +305,31 @@ class EditServers {
 	}
 
 	showServerSettings (info) {
-		var {name,shortName,url,removeIcon,color1,color2,color3,color4} = BDFDB.loadData(info.id, this, "servers") || {};
+		var {name,shortName,url,removeIcon,banner,removeBanner,color1,color2,color3,color4} = BDFDB.loadData(info.id, this, "servers") || {};
 
 		let serverSettingsModal = BDFDB.htmlToElement(this.serverSettingsModalMarkup);
 		let servernameinput = serverSettingsModal.querySelector("#input-servername");
 		let servershortnameinput = serverSettingsModal.querySelector("#input-servershortname");
-		let serverurlinput = serverSettingsModal.querySelector("#input-serverurl");
+		let servericoninput = serverSettingsModal.querySelector("#input-servericon");
 		let removeiconinput = serverSettingsModal.querySelector("#input-removeicon");
+		let serverbannerinput = serverSettingsModal.querySelector("#input-serverbanner");
+		let removebannerinput = serverSettingsModal.querySelector("#input-removebanner");
 
 		serverSettingsModal.querySelector(BDFDB.dotCN.modalguildname).innerText = info.name;
 		servernameinput.value = name || "";
 		servernameinput.setAttribute("placeholder", info.name);
 		servershortnameinput.value = shortName || (info.icon ? "" : info.acronym);
 		servershortnameinput.setAttribute("placeholder", info.acronym);
-		serverurlinput.value = url || "";
-		serverurlinput.setAttribute("placeholder", BDFDB.getGuildIcon(info.id) || "");
-		BDFDB.toggleClass(serverurlinput, "valid", serverurlinput.value.length > 0);
-		serverurlinput.disabled = removeIcon;
+		servericoninput.value = url || "";
+		servericoninput.setAttribute("placeholder", BDFDB.getGuildIcon(info.id) || "");
+		BDFDB.toggleClass(servericoninput, "valid", servericoninput.value.length > 0);
+		servericoninput.disabled = removeIcon;
 		removeiconinput.checked = removeIcon;
+		serverbannerinput.value = banner || "";
+		serverbannerinput.setAttribute("placeholder", BDFDB.getGuildBanner(info.id) || "");
+		BDFDB.toggleClass(serverbannerinput, "valid", serverbannerinput.value.length > 0);
+		serverbannerinput.disabled = removeBanner;
+		removebannerinput.checked = removeBanner;
 		BDFDB.setColorSwatches(serverSettingsModal, color1);
 		BDFDB.setColorSwatches(serverSettingsModal, color2);
 		BDFDB.setColorSwatches(serverSettingsModal, color3);
@@ -296,19 +338,32 @@ class EditServers {
 		BDFDB.appendModal(serverSettingsModal);
 
 		removeiconinput.addEventListener("click", () => {
-			serverurlinput.disabled = removeiconinput.checked;
+			servericoninput.disabled = removeiconinput.checked;
 		});
-		serverurlinput.addEventListener("input", () => {
-			this.checkUrl(serverurlinput);
+		removebannerinput.addEventListener("click", () => {
+			serverbannerinput.disabled = removebannerinput.checked;
 		});
-		serverurlinput.addEventListener("mouseenter", () => {
-			BDFDB.addClass(serverurlinput, "hovering");
-			this.createNoticeTooltip(serverurlinput);
-		});
-		serverurlinput.addEventListener("mouseleave", () => {
-			BDFDB.removeClass(serverurlinput, "hovering");
-			BDFDB.removeEles(BDFDB.dotCNS.tooltips + ".notice-tooltip");
-		});
+		for (let urlinput of [servericoninput, serverbannerinput]) {
+			urlinput.addEventListener("input", () => {
+				this.checkUrl(urlinput);
+			});
+			urlinput.addEventListener("mouseenter", () => {
+				BDFDB.addClass(urlinput, "hovering");
+				this.createNoticeTooltip(urlinput);
+			});
+			urlinput.addEventListener("mouseleave", () => {
+				BDFDB.removeClass(urlinput, "hovering");
+				BDFDB.removeEles(BDFDB.dotCNS.tooltips + ".notice-tooltip");
+			});
+		}
+		if (info.id == "410787888507256842") {
+			serverbannerinput.parentElement.parentElement.previousSibling.remove();
+			serverbannerinput.parentElement.parentElement.nextSibling.remove();
+			serverbannerinput.parentElement.parentElement.remove();
+			serverbannerinput = null;
+			removebannerinput = null;
+		}
+		
 		BDFDB.addChildEventListener(serverSettingsModal, "click", ".btn-save", e => {
 			name = servernameinput.value.trim();
 			name = name ? name : null;
@@ -318,21 +373,23 @@ class EditServers {
 
 			removeIcon = removeiconinput.checked;
 
-			url = !removeIcon && BDFDB.containsClass(serverurlinput, "valid") ? serverurlinput.value.trim() : null;
+			url = !removeIcon && BDFDB.containsClass(servericoninput, "valid") ? servericoninput.value.trim() : null;
 			url = url ? url : null;
+
+			removeBanner = removebannerinput ? removebannerinput.checked : false;
+
+			banner = !removeBanner && serverbannerinput && BDFDB.containsClass(serverbannerinput, "valid") ? serverbannerinput.value.trim() : null;
+			banner = banner ? banner : null;
 
 			color1 = BDFDB.getSwatchColor(serverSettingsModal, 1);
 			color2 = BDFDB.getSwatchColor(serverSettingsModal, 2);
 			color3 = BDFDB.getSwatchColor(serverSettingsModal, 3);
 			color4 = BDFDB.getSwatchColor(serverSettingsModal, 4);
 
-			if (name == null && shortName == null && url == null && !removeIcon && color1 == null && color2 == null && color3 == null && color4 == null) {
-				BDFDB.removeData(info.id, this, "servers");
-			}
-			else {
-				BDFDB.saveData(info.id, {name,shortName,url,removeIcon,color1,color2,color3,color4}, this, "servers");
-			}
+			if (name == null && shortName == null && url == null && !removeIcon && banner == null && !removeBanner && color1 == null && color2 == null && color3 == null && color4 == null) BDFDB.removeData(info.id, this, "servers");
+			else BDFDB.saveData(info.id, {name,shortName,url,removeIcon,banner,removeBanner,color1,color2,color3,color4}, this, "servers");
 			BDFDB.WebModules.forceAllUpdates(this);
+			this.updateGuildSidebar();
 		});
 		servernameinput.focus();
 	}
@@ -366,7 +423,7 @@ class EditServers {
 			BDFDB.createTooltip(disabled ? this.labels.modal_ignoreurl_text : valid ? this.labels.modal_validurl_text : this.labels.modal_invalidurl_text, input, {type:"right",selector:"notice-tooltip",color: disabled ? "black" : invalid ? "red" : "green"});
 		}
 	}
-
+	
 	processGuildIcon (instance, wrapper) {
 		if (instance.props && instance.props.guild) {
 			let icon = wrapper.classList && BDFDB.containsClass(wrapper, BDFDB.disCN.avataricon) ? wrapper : wrapper.querySelector(BDFDB.dotCN.avataricon);
@@ -505,6 +562,7 @@ class EditServers {
 
 	getGuildData (id, wrapper) {
 		let data = BDFDB.loadData(id, this, "servers");
+		this.setVerifiedFlags(id, data);
 		if (!data) return {};
 		let allenabled = true, settings = BDFDB.getAllData(this, "settings");
 		for (let i in settings) if (!settings[i]) {
@@ -520,6 +578,50 @@ class EditServers {
 
 		return !key || settings[key] ? data : {};
 	}
+	
+	setVerifiedFlags (id, data) {
+		data = data || {};
+		let guild = this.GuildUtils.getGuild(id);
+		if (!guild) return;
+		if (!guild.savedbanner && guild.banner) guild.savedbanner = guild.banner;
+		if (!guild.savedsplash && guild.splash) guild.savedsplash = guild.splash;
+		if (guild.features.has("VERIFIED") && !guild.features.has("FAKE_VERIFIED")) guild.features.add("ORIG_VERIFIED");
+		if (!data.removeBanner && !guild.features.has("ORIG_VERIFIED")) {
+			if (data.banner || id == "410787888507256842") {
+				guild.features.add("VERIFIED");
+				guild.features.add("FAKE_VERIFIED");
+				if (data.banner) {
+					guild.banner = data.banner;
+					guild.splash = data.banner;
+				}
+			}
+			else {
+				guild.features.delete("VERIFIED");
+				guild.features.delete("FAKE_VERIFIED");
+				guild.banner = null;
+				guild.splash = null;
+			}
+		}
+		if (data.removeBanner) {
+			guild.features.delete("VERIFIED");
+			guild.features.delete("FAKE_VERIFIED");
+			guild.banner = null;
+			guild.splash = null;
+		}
+		if (!data.removeBanner && !data.banner && guild.features.has("ORIG_VERIFIED")) {
+			if (guild.savedbanner) guild.banner = guild.savedbanner;
+			if (guild.savedsplash) guild.splash = guild.savedsplash;
+			guild.features.add("VERIFIED");
+			guild.features.delete("ORIG_VERIFIED");
+		}
+	}
+	
+	updateGuildSidebar() {
+		if (document.querySelector(BDFDB.dotCN.guildheader)) {
+			var ins = BDFDB.getOwnerInstance({node: document.querySelector(BDFDB.dotCN.app), name: ["GuildSidebar", "GuildHeader"], all: true, noCopies: true, depth: 99999999, time: 99999999});
+			if (ins) for (let i in ins) ins[i].updater.enqueueForceUpdate(ins[i])
+		}
+	}
 
 	setLabelsByLanguage () {
 		switch (BDFDB.getDiscordLanguage().id) {
@@ -531,8 +633,10 @@ class EditServers {
 					modal_header_text:					"Lokalne postavke poslužitelja",
 					modal_servername_text:				"Naziv lokalnog poslužitelja",
 					modal_servershortname_text:			"Poslužitelj prečaca",
-					modal_serverurl_text:				"Ikona",
+					modal_servericon_text:				"Ikona",
 					modal_removeicon_text:				"Ukloni ikonu",
+					modal_serverbanner_text:			"Baner",
+					modal_removebanner_text:			"Uklonite baner",
 					modal_tabheader1_text:				"Poslužitelja",
 					modal_tabheader2_text:				"Boja ikona",
 					modal_tabheader3_text:				"Boja tooltip",
@@ -554,8 +658,10 @@ class EditServers {
 					modal_header_text:	 				"Lokal serverindstillinger",
 					modal_servername_text:				"Lokalt servernavn",
 					modal_servershortname_text:			"Initialer",
-					modal_serverurl_text:				"Ikon",
+					modal_servericon_text:				"Ikon",
 					modal_removeicon_text:				"Fjern ikon",
+					modal_serverbanner_text:			"Banner",
+					modal_removebanner_text:			"Fjern banner",
 					modal_tabheader1_text:				"Server",
 					modal_tabheader2_text:				"Ikonfarve",
 					modal_tabheader3_text:				"Tooltipfarve",
@@ -577,8 +683,10 @@ class EditServers {
 					modal_header_text:					"Lokale Servereinstellungen",
 					modal_servername_text:				"Lokaler Servername",
 					modal_servershortname_text:			"Serverkürzel",
-					modal_serverurl_text:				"Icon",
-					modal_removeicon_text:				"Entferne Icon",
+					modal_servericon_text:				"Icon",
+					modal_removeicon_text:				"Icon entfernen",
+					modal_serverbanner_text:			"Banner",
+					modal_removebanner_text:			"Banner entfernen",
 					modal_tabheader1_text:				"Server",
 					modal_tabheader2_text:				"Iconfarbe",
 					modal_tabheader3_text:				"Tooltipfarbe",
@@ -600,8 +708,10 @@ class EditServers {
 					modal_header_text:					"Ajustes local de servidor",
 					modal_servername_text:				"Nombre local del servidor",
 					modal_servershortname_text:			"Iniciales",
-					modal_serverurl_text:				"Icono",
+					modal_servericon_text:				"Icono",
 					modal_removeicon_text:				"Eliminar icono",
+					modal_serverbanner_text:			"Bandera",
+					modal_removebanner_text:			"Eliminar bandera",
 					modal_tabheader1_text:				"Servidor",
 					modal_tabheader2_text:				"Color del icono",
 					modal_tabheader3_text:				"Color de tooltip",
@@ -623,8 +733,10 @@ class EditServers {
 					modal_header_text:					"Paramètres locale du serveur",
 					modal_servername_text:				"Nom local du serveur",
 					modal_servershortname_text:			"Initiales",
-					modal_serverurl_text:				"Icône",
+					modal_servericon_text:				"Icône",
 					modal_removeicon_text:				"Supprimer l'icône",
+					modal_serverbanner_text:			"Bannière",
+					modal_removebanner_text:			"Supprimer la bannière",
 					modal_tabheader1_text:				"Serveur",
 					modal_tabheader2_text:				"Couleur de l'icône",
 					modal_tabheader3_text:				"Couleur de tooltip",
@@ -646,8 +758,10 @@ class EditServers {
 					modal_header_text:					"Impostazioni locale server",
 					modal_servername_text:				"Nome locale server",
 					modal_servershortname_text:			"Iniziali",
-					modal_serverurl_text:				"Icona",
+					modal_servericon_text:				"Icona",
 					modal_removeicon_text:				"Rimuova l'icona",
+					modal_serverbanner_text:			"Bandiera",
+					modal_removebanner_text:			"Rimuovi bandiera",
 					modal_tabheader1_text:				"Server",
 					modal_tabheader2_text:				"Colore dell'icona",
 					modal_tabheader3_text:				"Colore della tooltip",
@@ -669,8 +783,10 @@ class EditServers {
 					modal_header_text:					"Lokale serverinstellingen",
 					modal_servername_text:				"Lokale servernaam",
 					modal_servershortname_text:			"Initialen",
-					modal_serverurl_text:				"Icoon",
+					modal_servericon_text:				"Icoon",
 					modal_removeicon_text:				"Verwijder icoon",
+					modal_serverbanner_text:			"Banier",
+					modal_removebanner_text:			"Verwijder banier",
 					modal_tabheader1_text:				"Server",
 					modal_tabheader2_text:				"Icoonkleur",
 					modal_tabheader3_text:				"Tooltipkleur",
@@ -692,8 +808,10 @@ class EditServers {
 					modal_header_text:					"Lokal serverinnstillinger",
 					modal_servername_text:				"Lokalt servernavn",
 					modal_servershortname_text:			"Initialer",
-					modal_serverurl_text:				"Ikon",
+					modal_servericon_text:				"Ikon",
 					modal_removeicon_text:				"Fjern ikon",
+					modal_serverbanner_text:			"Banner",
+					modal_removebanner_text:			"Fjern banner",
 					modal_tabheader1_text:				"Server",
 					modal_tabheader2_text:				"Ikonfarge",
 					modal_tabheader3_text:				"Tooltipfarge",
@@ -711,12 +829,14 @@ class EditServers {
 				return {
 					context_localserversettings_text:	"Lokalne ustawienia serwera",
 					submenu_serversettings_text:		"Zmień ustawienia",
-					submenu_resetsettings_text:				"Resetuj ustawienia",
+					submenu_resetsettings_text:			"Resetuj ustawienia",
 					modal_header_text:					"Lokalne ustawienia serwera",
 					modal_servername_text:				"Lokalna nazwa serwera",
-					modal_servershortname_text:				"Krótka nazwa",
-					modal_serverurl_text:				"Ikona",
+					modal_servershortname_text:			"Krótka nazwa",
+					modal_servericon_text:				"Ikona",
 					modal_removeicon_text:				"Usuń ikonę",
+					modal_serverbanner_text:			"Baner",
+					modal_removebanner_text:			"Usuń baner",
 					modal_tabheader1_text:				"Serwer",
 					modal_tabheader2_text:				"Kolor ikony",
 					modal_tabheader3_text:				"Kolor podpowiedzi",
@@ -738,8 +858,10 @@ class EditServers {
 					modal_header_text:					"Configurações local do servidor",
 					modal_servername_text:				"Nome local do servidor",
 					modal_servershortname_text:			"Iniciais",
-					modal_serverurl_text:				"Icone",
+					modal_servericon_text:				"Icone",
 					modal_removeicon_text:				"Remover ícone",
+					modal_serverbanner_text:			"Bandeira",
+					modal_removebanner_text:			"Remover bandeira",
 					modal_tabheader1_text:				"Servidor",
 					modal_tabheader2_text:				"Cor do ícone",
 					modal_tabheader3_text:				"Cor da tooltip",
@@ -761,8 +883,10 @@ class EditServers {
 					modal_header_text:					"Paikallinen palvelimen asetukset",
 					modal_servername_text:				"Paikallinen palvelimenimi",
 					modal_servershortname_text:			"Nimikirjaimet",
-					modal_serverurl_text:				"Ikonin",
+					modal_servericon_text:				"Ikonin",
 					modal_removeicon_text:				"Poista kuvake",
+					modal_serverbanner_text:			"Banneri",
+					modal_removebanner_text:			"Poista banneri",
 					modal_tabheader1_text:				"Palvelimen",
 					modal_tabheader2_text:				"Ikoninväri",
 					modal_tabheader3_text:				"Tooltipväri",
@@ -784,8 +908,10 @@ class EditServers {
 					modal_header_text:					"Lokal serverinställningar",
 					modal_servername_text:				"Lokalt servernamn",
 					modal_servershortname_text:			"Initialer",
-					modal_serverurl_text:				"Ikon",
+					modal_servericon_text:				"Ikon",
 					modal_removeicon_text:				"Ta bort ikonen",
+					modal_serverbanner_text:			"Banderoll",
+					modal_removebanner_text:			"Ta bort banderoll",
 					modal_tabheader1_text:				"Server",
 					modal_tabheader2_text:				"Ikonfärg",
 					modal_tabheader3_text:				"Tooltipfärg",
@@ -807,8 +933,10 @@ class EditServers {
 					modal_header_text:					"Yerel Sunucu Ayarları",
 					modal_servername_text:				"Yerel Sunucu Adı",
 					modal_servershortname_text:			"Baş harfleri",
-					modal_serverurl_text:				"Simge",
+					modal_servericon_text:				"Simge",
 					modal_removeicon_text:				"Simge kaldır",
+					modal_serverbanner_text:			"Afişi",
+					modal_removebanner_text:			"Afişi kaldır",
 					modal_tabheader1_text:				"Sunucu",
 					modal_tabheader2_text:				"Simge rengi",
 					modal_tabheader3_text:				"Tooltip rengi",
@@ -830,8 +958,10 @@ class EditServers {
 					modal_header_text:					"Místní nastavení serveru",
 					modal_servername_text:				"Místní název serveru",
 					modal_servershortname_text:			"Iniciály",
-					modal_serverurl_text:				"Ikony",
+					modal_servericon_text:				"Ikony",
 					modal_removeicon_text:				"Odstranit ikonu",
+					modal_serverbanner_text:			"Prapor",
+					modal_removebanner_text:			"Odstraňte prapor",
 					modal_tabheader1_text:				"Server",
 					modal_tabheader2_text:				"Barva ikony",
 					modal_tabheader3_text:				"Barva tooltip",
@@ -853,8 +983,10 @@ class EditServers {
 					modal_header_text:					"Настройки за локални cървър",
 					modal_servername_text:				"Локално име на cървър",
 					modal_servershortname_text:			"Инициали",
-					modal_serverurl_text:				"Икона",
+					modal_servericon_text:				"Икона",
 					modal_removeicon_text:				"Премахване на иконата",
+					modal_serverbanner_text:			"Знаме",
+					modal_removebanner_text:			"Премахване на знаме",
 					modal_tabheader1_text:				"Cървър",
 					modal_tabheader2_text:				"Цвят на иконата",
 					modal_tabheader3_text:				"Цвят на подсказка",
@@ -876,8 +1008,10 @@ class EditServers {
 					modal_header_text:					"Настройки локального cервер",
 					modal_servername_text:				"Имя локального cервер",
 					modal_servershortname_text:			"Инициалы",
-					modal_serverurl_text:				"Значок",
+					modal_servericon_text:				"Значок",
 					modal_removeicon_text:				"Удалить значок",
+					modal_serverbanner_text:			"Баннер",
+					modal_removebanner_text:			"Удалить баннер",
 					modal_tabheader1_text:				"Cервер",
 					modal_tabheader2_text:				"Цвет значков",
 					modal_tabheader3_text:				"Цвет подсказка",
@@ -899,8 +1033,10 @@ class EditServers {
 					modal_header_text:					"Налаштування локального cервер",
 					modal_servername_text:				"Локальне ім'я cервер",
 					modal_servershortname_text:			"Ініціали",
-					modal_serverurl_text:				"Іконка",
+					modal_servericon_text:				"Іконка",
 					modal_removeicon_text:				"Видалити піктограму",
+					modal_serverbanner_text:			"Банер",
+					modal_removebanner_text:			"Видалити банер",
 					modal_tabheader1_text:				"Cервер",
 					modal_tabheader2_text:				"Колір ікони",
 					modal_tabheader3_text:				"Колір підказка",
@@ -922,8 +1058,10 @@ class EditServers {
 					modal_header_text:					"ローカルサーバー設定",
 					modal_servername_text:				"ローカルサーバー名",
 					modal_servershortname_text:			"イニシャル",
-					modal_serverurl_text:				"アイコン",
+					modal_servericon_text:				"アイコン",
 					modal_removeicon_text:				"アイコンを削除",
+					modal_serverbanner_text:			"バナー",
+					modal_removebanner_text:			"バナーを削除",
 					modal_tabheader1_text:				"サーバー",
 					modal_tabheader2_text:				"アイコンの色",
 					modal_tabheader3_text:				"ツールチップの色",
@@ -945,8 +1083,10 @@ class EditServers {
 					modal_header_text:					"本地服務器設置",
 					modal_servername_text:				"服務器名稱",
 					modal_servershortname_text:			"聲母",
-					modal_serverurl_text:				"圖標",
+					modal_servericon_text:				"圖標",
 					modal_removeicon_text:				"刪除圖標",
+					modal_serverbanner_text:			"旗幟",
+					modal_removebanner_text:			"刪除橫幅",
 					modal_tabheader1_text:				"服務器",
 					modal_tabheader2_text:				"圖標顏色",
 					modal_tabheader3_text:				"工具提示顏色",
@@ -968,8 +1108,10 @@ class EditServers {
 					modal_header_text:					"로컬 서버 설정",
 					modal_servername_text:				"로컬 서버 이름",
 					modal_servershortname_text:			"머리 글자",
-					modal_serverurl_text:				"상",
+					modal_servericon_text:				"상",
 					modal_removeicon_text:				"상 삭제",
+					modal_serverbanner_text:			"기치",
+					modal_removebanner_text:			"배너 삭제",
 					modal_tabheader1_text:				"서버",
 					modal_tabheader2_text:				"상 색깔",
 					modal_tabheader3_text:				"툴팁 색깔",
@@ -991,8 +1133,10 @@ class EditServers {
 					modal_header_text:					"Local Serversettings",
 					modal_servername_text:				"Local Servername",
 					modal_servershortname_text:			"Initials",
-					modal_serverurl_text:				"Icon",
+					modal_servericon_text:				"Icon",
 					modal_removeicon_text:				"Remove Icon",
+					modal_serverbanner_text:			"Banner",
+					modal_removebanner_text:			"Remove Banner",
 					modal_tabheader1_text:				"Server",
 					modal_tabheader2_text:				"Iconcolor",
 					modal_tabheader3_text:				"Tooltipcolor",
