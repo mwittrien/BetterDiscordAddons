@@ -6,5 +6,5 @@
 	--columns: 2;			/* amount-servercolumns default: 2 */
 	--guildsize: 50;		/* pixel-serversize default: 50 */
 	--guildroundness: 50%;	/* percent-serverroundness default: 50% (round = 50%, square = 0%) */
-	--aligndms: 0;			/* should DMs be aigned in columns: 0 = no, 1 = yes */
+	--aligndms: 0;			/* should DMs be aligned in columns: 0 = no, 1 = yes */
 }
