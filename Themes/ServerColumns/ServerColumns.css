@@ -2,6 +2,7 @@
 	--vcolumns: var(--columns, 2);
 	--vguildsize: var(--guildsize, 50);
 	--vguildroundness: var(--guildroundness, 50%);
+	--valigndms: var(--aligndms, 0);
 }
 .wrapper-1Rf91z {
 	width: calc(1px * ((var(--vguildsize) + 10) * var(--vcolumns) + 35 - 25)) !important;
@@ -29,11 +30,13 @@
 .wrapper-1Rf91z .scroller-2TZvBN .container-11WMXy {
 	margin: 4px 13px 4px -2px !important;
 }
-.wrapper-1Rf91z .scroller-2TZvBN .container-1aNBdK,
 .wrapper-1Rf91z .scroller-2TZvBN #server-search,
 .wrapper-1Rf91z .scroller-2TZvBN .lurkingGuild-3ZJ1gi,
 .wrapper-1Rf91z .scroller-2TZvBN .container-1ETFDs {
 	margin: 4px calc(1px * (((var(--vguildsize) + 10) * (var(--vcolumns) - 1))/2)) !important;
+}
+.wrapper-1Rf91z .scroller-2TZvBN .container-1aNBdK {
+	margin: 4px calc(1px * (((13 * var(--valigndms)) + ((((var(--vguildsize) + 10) * (var(--vcolumns) - 1))/2) * (1 - var(--valigndms)))))) 4px calc(1px * (((-2 * var(--valigndms)) + ((((var(--vguildsize) + 10) * (var(--vcolumns) - 1))/2) * (1 - var(--valigndms)))))) !important;
 }
 .wrapper-1Rf91z .scroller-2TZvBN .circleIconButton-jET_ig,
 .wrapper-1Rf91z .scroller-2TZvBN .lurkingGuild-3ZJ1gi .container-2td-dC {
