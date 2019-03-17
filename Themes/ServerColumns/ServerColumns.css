@@ -64,6 +64,9 @@
 	width: calc(1px * var(--vguildsize)) !important;
 	line-height: calc(1px * var(--vguildsize)) !important;
 }
+.wrapper-1Rf91z .scroller-2TZvBN .container-1aNBdK {
+	height: calc(1px * (var(--vguildsize) + 1)) !important;
+}
 .wrapper-1Rf91z .scroller-2TZvBN .container-2td-dC:not(#bd-pub-li):not(.circleIconButton-jET_ig) {
 	border: none !important;
 }
