@@ -209,5 +209,3 @@ https://raw.githubusercontent.com/XFoxPrower/Quick-Open-Link/master/Quick%20Open
 https://raw.githubusercontent.com/Zerthox/BetterDiscord-Plugins/master/plugins/BetterReplyer.plugin.js
 https://raw.githubusercontent.com/Zerthox/BetterDiscord-Plugins/master/plugins/GuildSeparators.plugin.js
 https://raw.githubusercontent.com/Zerthox/BetterDiscord-Plugins/master/plugins/LinkTooltips.plugin.js
-https://raw.githubusercontent.com/Zerthox/BetterDiscord-Plugins/master/plugins/ThemeCustomizer.plugin.js
-https://raw.githubusercontent.com/Zerthox/BetterDiscord-Plugins/master/plugins/ToggleAll.plugin.js
