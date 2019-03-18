@@ -122,6 +122,7 @@
 .messageGroupBlocked-3wrQQX,
 .action-1lSjCi,
 .or-3THJsp,
+.empty-hejAOj,
 .quickSelectPopoutOption-opKBx9:not(.selected):hover,
 .embed-IeVjo6,
 .embedInner-1-fpTo,
@@ -164,6 +165,7 @@
 	border-radius: 0 !important;
 }
 
+.unwrapped-37iUtM,
 .wrapped-15rg6t.clickable-nnkAZy,
 .enabled-5QKLzu:hover,
 .memberListItem-vHCzSI:hover,
@@ -756,6 +758,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	color: rgb(var(--vaccentcolor)) !important;
 }
 
+.unwrapped-37iUtM:hover,
 .wrapped-15rg6t.clickable-nnkAZy:hover,
 .channels-Ie2l6A [class*="containerDrag"]:before,
 .channels-Ie2l6A [class*="containerDrag"]:after,
