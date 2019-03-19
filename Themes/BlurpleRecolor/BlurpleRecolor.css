@@ -168,6 +168,7 @@
 }
 
 /* BUTTONS */
+.searchSuggestion-2K8OBX:hover,
 .form-236Xmo .btnPrimary-346kfV,
 .button-22FETM,
 .questionMark-CWEQZn,
@@ -183,6 +184,10 @@
 .lookFilled-1Gx00P.hoverBrand-1_Fxlk.hasHover-3X1-zV:hover,
 .lookFilled-1Gx00P.colorBrand-3pXr91 {
 	background: rgb(var(--vaccentcolor)) !important;
+}
+.searchSuggestion-2K8OBX:active,
+.searchSuggestion-2K8OBX:hover {
+	border-color: transparent !important;
 }
 .lookGhost-2Fn_0-.colorBrand-3pXr91 {
 	color: rgb(var(--vaccentcolor)) !important;
@@ -212,6 +217,7 @@
 .questionMark-CWEQZn:hover {
 	background-image: linear-gradient(0deg,rgba(255,255,255,.2),rgba(255,255,255,.2)) !important;
 }
+.searchSuggestion-2K8OBX:hover,
 .form-236Xmo .btnPrimary-346kfV:hover,
 .button-22FETM:hover,
 .btn-1PnLxm.btnPrimary-1jluZW:hover:not(:disabled),
@@ -226,6 +232,7 @@
 .lookFilled-1Gx00P.colorLink-35jkBc:hover {
 	background-image: linear-gradient(0deg,rgba(0,0,0,.1),rgba(0,0,0,.1)) !important;
 }
+.searchSuggestion-2K8OBX:active,
 .form-236Xmo .btnPrimary-346kfV:active,
 .button-22FETM:active,
 .btn-1PnLxm.btnPrimary-1jluZW:active:not(:disabled),

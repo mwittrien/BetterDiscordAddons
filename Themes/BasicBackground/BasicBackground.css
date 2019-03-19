@@ -798,6 +798,9 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	border-color: rgb(var(--vaccentcolor)) !important;
 }
 
+#app-mount .lookOutlined-3sRXeN {
+	background: none !important;
+}
 #app-mount .headerButtonColor-G7_f-V,
 #app-mount .lookFilled-1Gx00P.hoverBrand-1_Fxlk.hasHover-3X1-zV:hover,
 #app-mount .lookFilled-1Gx00P.hoverLink-i1fEKS.hasHover-3X1-zV:hover,
