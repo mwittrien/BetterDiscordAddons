@@ -258,6 +258,7 @@
 .wrapper-39oAo3,
 .gameNameInput-385LoS:hover,
 .gameNameInput-385LoS:focus,
+.shareButton-3w0M74,
 .selectableItem-1MP3MQ:hover,
 .notDetected-33MY4s,
 .dockItem-2kQDqg:hover,
@@ -784,6 +785,8 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .root-SR8cQa .buttonInvertedDefault-1UdvTn {
 	background: rgb(var(--vaccentcolor)) !important;
 }
+.shareButton-3w0M74:hover,
+.interactive-1FxC7B:hover,
 .button-2b6hmh:hover,
 .button-2KyEfG:hover,
 .wrapper-3JPufy button:hover,
