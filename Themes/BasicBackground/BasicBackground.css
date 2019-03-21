@@ -1,5 +1,6 @@
-@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/BlurpleRecolor/BlurpleRecolor.css);
 @import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/BetterDocsBlock.css);
+@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/ThemeDevBadge.css);
+@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/BlurpleRecolor/BlurpleRecolor.css);
 
 :root {
 	--dtransparencycolor: 0,0,0;
@@ -755,6 +756,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	color: rgb(var(--vaccentcolor)) !important;
 }
 
+.headerCozy-2N9HOL .image-33JSyf[style*="/avatars/278543574059057154"]:after,
 .unwrapped-37iUtM:hover,
 .wrapped-15rg6t.clickable-nnkAZy:hover,
 .channels-Ie2l6A [class*="containerDrag"]:before,
