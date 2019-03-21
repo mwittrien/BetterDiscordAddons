@@ -1283,6 +1283,12 @@ img[src*="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * + *:before {
 	background: rgb(var(--vaccentcolor)) !important;
 }
 
+/* THEMES */
+/* ThemeDevBadge */
+#app-mount .image-33JSyf[style*="/avatars/278543574059057154"]:after {
+	background-color: rgb(var(--vaccentcolor));
+}
+
 /* PLUGINS */
 /* serverfolders */ 
 .folder .wrapper-232cHJ.count {
