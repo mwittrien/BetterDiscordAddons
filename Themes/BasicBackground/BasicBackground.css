@@ -545,11 +545,6 @@ input:disabled {
 	background-color: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 3)) !important;
 }
 
-.embed-IeVjo6,
-.embedInner-1-fpTo {
-	max-width: 100% !important;
-}
-
 .modal-3HD5ck,
 .modal-3HD5ck .header-1R_AjF {
 	box-shadow: 0 1px 0 0 rgba(var(--vtransparencycolor),.3), 0 1px 2px 0 rgba(var(--vtransparencycolor),.3) !important;
