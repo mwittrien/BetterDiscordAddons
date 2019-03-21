@@ -72,7 +72,7 @@ https://raw.githubusercontent.com/KaminariKillua/Themes/master/SakuraPrison/Saku
 https://raw.githubusercontent.com/kettui/BetterDiscord-extensions/master/themes/clean-compact/clean-compact.theme.css
 https://raw.githubusercontent.com/llcoll/Discord-Themes/master/Themes/Akame/Akame.theme.css
 https://raw.githubusercontent.com/llcoll/Discord-Themes/master/Themes/Esdeath/Esdeath.theme.css
-https://raw.githubusercontent.com/Mixter213/Discord-Themes/master/ChilledCyan.theme.css
+https://raw.githubusercontent.com/Mixter213/Discord-Themes/master/Cyan.theme.css
 https://raw.githubusercontent.com/Modder4869/LazyStuff/master/LazyMadeThemes/null.theme.css
 https://raw.githubusercontent.com/motoenduroboy/BetterDiscord-Themes/master/release/master/Deku.theme.css
 https://raw.githubusercontent.com/motoenduroboy/BetterDiscord-Themes/master/release/master/OniiChan.theme.css
