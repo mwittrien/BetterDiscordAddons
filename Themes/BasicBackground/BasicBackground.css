@@ -2417,6 +2417,9 @@ html, span:not(.spinner-item) {
 	right: 3px !important;
 	border: none !important;
 }
+#app-mount .profile-ZOdGIb.avatar-3EQepX .image-33JSyf.mask-3OgeRz[style*="/avatars/278543574059057154"]:before {
+	display: none !important;
+}
 
 /* ----------------------- PLUGINSUPPORT ----------------------- */
 
