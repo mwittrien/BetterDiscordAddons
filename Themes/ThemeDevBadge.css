@@ -58,7 +58,7 @@
     padding: 8px 12px !important;
     position: absolute !important;
     z-index: 1002 !important;
-	top: 100px !important;
+	top: 26px !important;
 	left: -55px !important;
 }
 .wrapper-2F3Zv8.profile-ZOdGIb a[href*="/avatars/278543574059057154"]:hover ~ .status-oxiHuE:after,
@@ -69,9 +69,9 @@
     position: absolute !important;
     z-index: 1002 !important;
 	border: 5px solid transparent !important;
-	top: 90px !important;
+	top: 57px !important;
 	left: 4px !important;
-	border-bottom-color: #000 !important;
+	border-top-color: #000 !important;
 }
 .wrapper-2F3Zv8.profile-ZOdGIb a[href*="/avatars/278543574059057154"] ~ .status-oxiHuE,
 .wrapper-2F3Zv8.profile-ZOdGIb .image-33JSyf.mask-3OgeRz[style*="/avatars/278543574059057154"] ~ .status-oxiHuE,
