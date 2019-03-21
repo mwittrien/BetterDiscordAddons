@@ -696,7 +696,6 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	box-shadow: inset 0 1px 0 rgba(var(--vtransparencycolor),.3) !important;
 }
 
-.status-oxiHuE,
 .action-buttons,
 .actionButtons-1sUUug,
 .auditLog-3jNbM6,
@@ -2412,6 +2411,7 @@ html, span:not(.spinner-item) {
 /* ----------------------- THEMESUPPORT ----------------------- */
 
 /* ThemeDevBadge */
+.profile-ZOdGIb.avatar-3EQepX a[href*="/avatars/278543574059057154"] ~ .status-oxiHuE,
 #app-mount .profile-ZOdGIb.avatar-3EQepX .image-33JSyf.mask-3OgeRz[style*="/avatars/278543574059057154"] ~ .status-oxiHuE {
 	top: 3px !important;
 	right: 3px !important;
