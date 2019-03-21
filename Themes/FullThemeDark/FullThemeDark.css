@@ -1,3 +1,5 @@
+@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/BetterDocsBlock.css);
+
 :root {
 	--daccentcolor: 114,137,218;
 	--vaccentcolor: var(--accentcolor,var(--daccentcolor));
