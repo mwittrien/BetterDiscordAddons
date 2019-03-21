@@ -2431,9 +2431,7 @@ html, span:not(.spinner-item) {
     color: rgb(255,255,255) !important;
 }
 #app-mount .wrapper-2F3Zv8.profile-ZOdGIb a[href*="/avatars/278543574059057154"]:hover ~ .status-oxiHuE:after,
-#app-mount .wrapper-2F3Zv8.profile-ZOdGIb .image-33JSyf.mask-3OgeRz[style*="/avatars/278543574059057154"]:hover ~ .status-oxiHuE:after {
-	border-right-color: rgb(var(--vaccentcolor)) !important;
-}
+#app-mount .wrapper-2F3Zv8.profile-ZOdGIb .image-33JSyf.mask-3OgeRz[style*="/avatars/278543574059057154"]:hover ~ .status-oxiHuE:after,
 #app-mount .wrapper-2F3Zv8.popout-2fzvxG a[href*="/avatars/278543574059057154"]:hover ~ .status-oxiHuE:after,
 #app-mount .wrapper-2F3Zv8.popout-2fzvxG .image-33JSyf.mask-3OgeRz[style*="/avatars/278543574059057154"]:hover ~ .status-oxiHuE:after {
 	border-bottom-color: rgb(var(--vaccentcolor)) !important;

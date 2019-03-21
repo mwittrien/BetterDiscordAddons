@@ -58,14 +58,6 @@
     padding: 8px 12px !important;
     position: absolute !important;
     z-index: 1002 !important;
-}
-.wrapper-2F3Zv8.profile-ZOdGIb a[href*="/avatars/278543574059057154"]:hover ~ .status-oxiHuE:before,
-.wrapper-2F3Zv8.profile-ZOdGIb .image-33JSyf.mask-3OgeRz[style*="/avatars/278543574059057154"]:hover ~ .status-oxiHuE:before {
-	top: 64px !important;
-	left: 30px !important;
-}
-.wrapper-2F3Zv8.popout-2fzvxG a[href*="/avatars/278543574059057154"]:hover ~ .status-oxiHuE:before,
-.wrapper-2F3Zv8.popout-2fzvxG .image-33JSyf.mask-3OgeRz[style*="/avatars/278543574059057154"]:hover ~ .status-oxiHuE:before {
 	top: 100px !important;
 	left: -55px !important;
 }
@@ -77,15 +69,6 @@
     position: absolute !important;
     z-index: 1002 !important;
 	border: 5px solid transparent !important;
-}
-.wrapper-2F3Zv8.profile-ZOdGIb a[href*="/avatars/278543574059057154"]:hover ~ .status-oxiHuE:after,
-.wrapper-2F3Zv8.profile-ZOdGIb .image-33JSyf.mask-3OgeRz[style*="/avatars/278543574059057154"]:hover ~ .status-oxiHuE:after {
-	top: 74px !important;
-	left: 20px !important;
-	border-right-color: #000 !important;
-}
-.wrapper-2F3Zv8.popout-2fzvxG a[href*="/avatars/278543574059057154"]:hover ~ .status-oxiHuE:after,
-.wrapper-2F3Zv8.popout-2fzvxG .image-33JSyf.mask-3OgeRz[style*="/avatars/278543574059057154"]:hover ~ .status-oxiHuE:after {
 	top: 90px !important;
 	left: 4px !important;
 	border-bottom-color: #000 !important;
@@ -104,20 +87,20 @@
 	-webkit-mask: var(--themedevbadgebackdrop) center/cover no-repeat !important;
 	background: #36393F !important;
 	position: absolute !important;
-	width: 17px !important;
-	height: 17px !important;
-	right: -4px !important;
-	bottom: -5px !important;
+	width: 14px !important;
+	height: 14px !important;
+	right: -2px !important;
+	bottom: -4px !important;
 }
 .headerCozy-2N9HOL .image-33JSyf[style*="/avatars/278543574059057154"]:after {
 	content: "" !important;
 	-webkit-mask: var(--themedevbadge) center/cover no-repeat !important;
 	background: #7289DA !important;
 	position: absolute !important;
-	width: 15px !important;
-	height: 15px !important;
-	right: -3px !important;
-	bottom: -4px !important;
+	width: 12px !important;
+	height: 12px !important;
+	right: -1px !important;
+	bottom: -3px !important;
 }
 .headerCozy-2N9HOL .image-33JSyf[style*="/avatars/278543574059057154"] ~ .status-oxiHuE {
 	top: -1px !important;
