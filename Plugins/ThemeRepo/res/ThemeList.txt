@@ -183,6 +183,7 @@ https://raw.githubusercontent.com/satoru8/FeaturedArtists/master/lsy/LSY1.theme.
 https://raw.githubusercontent.com/satoru8/FeaturedArtists/master/lsy/LSY2.theme.css
 https://raw.githubusercontent.com/satoru8/FullSizePfp/master/FullSizePfp.theme.css
 https://raw.githubusercontent.com/satoru8/FullTransparency/master/FullTransparency.theme.css
+https://raw.githubusercontent.com/satoru8/Izanami/master/Izanami.theme.css
 https://raw.githubusercontent.com/satoru8/NovaFork/master/Nova.theme.css
 https://raw.githubusercontent.com/satoru8/Nyx/master/Nyx.theme.css
 https://raw.githubusercontent.com/satoru8/StarterTheme/master/StarterTheme.theme.css
