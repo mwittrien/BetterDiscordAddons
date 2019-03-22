@@ -82,6 +82,50 @@
 	bottom: unset !important;
 	border: 3px solid #202225 !important;
 }
+.topSectionPlaying-1J5E4n .wrapper-2F3Zv8.profile-ZOdGIb .image-33JSyf.mask-3OgeRz[style*="/avatars/278543574059057154"]:after,
+.headerPlaying-j0WQBV .wrapper-2F3Zv8.popout-2fzvxG .image-33JSyf.mask-3OgeRz[style*="/avatars/278543574059057154"]:after {
+	filter: brightness(80%) !important;
+}
+.topSectionPlaying-1J5E4n .wrapper-2F3Zv8.profile-ZOdGIb .image-33JSyf.mask-3OgeRz[style*="/avatars/278543574059057154"]:before,
+.headerPlaying-j0WQBV .wrapper-2F3Zv8.popout-2fzvxG .image-33JSyf.mask-3OgeRz[style*="/avatars/278543574059057154"]:before {
+	background: #7289DA !important;
+}
+.topSectionPlaying-1J5E4n .wrapper-2F3Zv8.profile-ZOdGIb a[href*="/avatars/278543574059057154"] ~ .status-oxiHuE,
+.topSectionPlaying-1J5E4n .wrapper-2F3Zv8.profile-ZOdGIb .image-33JSyf.mask-3OgeRz[style*="/avatars/278543574059057154"] ~ .status-oxiHuE,
+.headerPlaying-j0WQBV .wrapper-2F3Zv8.popout-2fzvxG a[href*="/avatars/278543574059057154"] ~ .status-oxiHuE,
+.headerPlaying-j0WQBV .wrapper-2F3Zv8.popout-2fzvxG .image-33JSyf.mask-3OgeRz[style*="/avatars/278543574059057154"] ~ .status-oxiHuE {
+	border-color: #7289DA !important;
+}
+.topSectionSpotify-1lI0-P .wrapper-2F3Zv8.profile-ZOdGIb .image-33JSyf.mask-3OgeRz[style*="/avatars/278543574059057154"]:before,
+.headerSpotify-zpWxgT .wrapper-2F3Zv8.popout-2fzvxG .image-33JSyf.mask-3OgeRz[style*="/avatars/278543574059057154"]:before {
+	background: #1DB954 !important;
+}
+.topSectionSpotify-1lI0-P .wrapper-2F3Zv8.profile-ZOdGIb a[href*="/avatars/278543574059057154"] ~ .status-oxiHuE,
+.topSectionSpotify-1lI0-P .wrapper-2F3Zv8.profile-ZOdGIb .image-33JSyf.mask-3OgeRz[style*="/avatars/278543574059057154"] ~ .status-oxiHuE,
+.headerSpotify-zpWxgT .wrapper-2F3Zv8.popout-2fzvxG a[href*="/avatars/278543574059057154"] ~ .status-oxiHuE,
+.headerSpotify-zpWxgT .wrapper-2F3Zv8.popout-2fzvxG .image-33JSyf.mask-3OgeRz[style*="/avatars/278543574059057154"] ~ .status-oxiHuE {
+	border-color: #1DB954 !important;
+}
+.topSectionStreaming-1Tpf5X .wrapper-2F3Zv8.profile-ZOdGIb .image-33JSyf.mask-3OgeRz[style*="/avatars/278543574059057154"]:before,
+.headerStreaming-2FjmGz .wrapper-2F3Zv8.popout-2fzvxG .image-33JSyf.mask-3OgeRz[style*="/avatars/278543574059057154"]:before {
+	background: #593695 !important;
+}
+.topSectionStreaming-1Tpf5X .wrapper-2F3Zv8.profile-ZOdGIb a[href*="/avatars/278543574059057154"] ~ .status-oxiHuE,
+.topSectionStreaming-1Tpf5X .wrapper-2F3Zv8.profile-ZOdGIb .image-33JSyf.mask-3OgeRz[style*="/avatars/278543574059057154"] ~ .status-oxiHuE,
+.headerStreaming-2FjmGz .wrapper-2F3Zv8.popout-2fzvxG a[href*="/avatars/278543574059057154"] ~ .status-oxiHuE,
+.headerStreaming-2FjmGz .wrapper-2F3Zv8.popout-2fzvxG .image-33JSyf.mask-3OgeRz[style*="/avatars/278543574059057154"] ~ .status-oxiHuE {
+	border-color: #593695 !important;
+}
+.topSectionXbox-3fWLjS .wrapper-2F3Zv8.profile-ZOdGIb .image-33JSyf.mask-3OgeRz[style*="/avatars/278543574059057154"]:before,
+.headerXbox-3G-4PF .wrapper-2F3Zv8.popout-2fzvxG .image-33JSyf.mask-3OgeRz[style*="/avatars/278543574059057154"]:before {
+	background: #107C10 !important;
+}
+.topSectionXbox-3fWLjS .wrapper-2F3Zv8.profile-ZOdGIb a[href*="/avatars/278543574059057154"] ~ .status-oxiHuE,
+.topSectionXbox-3fWLjS .wrapper-2F3Zv8.profile-ZOdGIb .image-33JSyf.mask-3OgeRz[style*="/avatars/278543574059057154"] ~ .status-oxiHuE,
+.headerXbox-3G-4PF .wrapper-2F3Zv8.popout-2fzvxG a[href*="/avatars/278543574059057154"] ~ .status-oxiHuE,
+.headerXbox-3G-4PF .wrapper-2F3Zv8.popout-2fzvxG .image-33JSyf.mask-3OgeRz[style*="/avatars/278543574059057154"] ~ .status-oxiHuE {
+	border-color: #107C10 !important;
+}
 .headerCozy-2N9HOL .image-33JSyf[style*="/avatars/278543574059057154"]:before {
 	content: "" !important;
 	-webkit-mask: var(--themedevbadgebackdrop) center/cover no-repeat !important;
