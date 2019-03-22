@@ -2,10 +2,6 @@
 
 class OldTitleBar {
 	getName () {return "OldTitleBar";}
-//META{"name":"OldTitleBar","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/OldTitleBar","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/OldTitleBar/OldTitleBar.plugin.js"}*//
-
-class OldTitleBar {
-	getName () {return "OldTitleBar";}
 
 	getVersion () {return "1.5.5";}
 
