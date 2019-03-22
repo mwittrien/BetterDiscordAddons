@@ -3,7 +3,7 @@
 class RemoveNicknames {
 	getName () {return "RemoveNicknames";}
 
-	getVersion () {return "1.1.7";}
+	getVersion () {return "1.1.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class RemoveNicknames {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Little Bug","Fixed a little bug that caused some console error output and could mess up names sometimes"]]
+			"fixed":[["System Messages","Fixed the bug where the plugin would mess up system messages like pin messages"]]
 		};
 		
 		this.patchModules = {
@@ -136,9 +136,16 @@ class RemoveNicknames {
 	processClickable (instance, wrapper) {
 		if (!wrapper || !instance.props || !instance.props.className) return;
 		if (instance.props.tag == "a" && instance.props.className.indexOf(BDFDB.disCN.anchorunderlineonhover) > -1) {
-			if (BDFDB.containsClass(wrapper.parentElement, BDFDB.disCN.messagesystemcontent)) {
+			if (BDFDB.containsClass(wrapper.parentElement, BDFDB.disCN.messagesystemcontent) && wrapper.parentElement.querySelector("a") == wrapper) {
 				let message = BDFDB.getKeyInformation({node:wrapper.parentElement, key:"message", up:true});
-				if (message) BDFDB.setInnerText(wrapper, this.getNewName(message.author));
+				if (message) {
+					BDFDB.setInnerText(wrapper, this.getNewName(message.author));
+					if (message.mentions.length == 1) {
+						let seconduser = this.UserUtils.getUser(message.mentions[0]);
+						let secondwrapper = wrapper.parentElement.querySelectorAll("a")[1];
+						if (seconduser && secondwrapper) BDFDB.setInnerText(secondwrapper, this.getNewName(seconduser));
+					}
+				}
 			}
 		}
 		else if (instance.props.tag == "span" && instance.props.className.indexOf(BDFDB.disCN.mention) > -1) {
