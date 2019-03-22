@@ -2,8 +2,12 @@
 
 class OldTitleBar {
 	getName () {return "OldTitleBar";}
+//META{"name":"OldTitleBar","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/OldTitleBar","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/OldTitleBar/OldTitleBar.plugin.js"}*//
 
-	getVersion () {return "1.5.4";}
+class OldTitleBar {
+	getName () {return "OldTitleBar";}
+
+	getVersion () {return "1.5.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +15,7 @@ class OldTitleBar {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Maxmize","Fixed the issue where the maximize button wouldn't properly update between the maximizable and maximized state"]]
+			"fixed":[["Appending","Fixed the issue where the buttons wouldn't show on canary"]]
 		};
 		
 		this.patchModules = {
@@ -206,7 +210,7 @@ class OldTitleBar {
 		if (BDFDB.getData("addOldBar", this, "settings")) {
 			var headerbar = BDFDB.htmlToElement(`<span class="headerbarOTB ${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}"></span>`);
 			this.createButtons(headerbar);
-			let headerbaricon = document.querySelector(BDFDB.dotCNS.channelheaderheaderbardrag + BDFDB.dotCN.flex + " > " + BDFDB.dotCN.channelheadericonmargin);
+			let headerbaricon = document.querySelector(BDFDB.dotCN.channelheaderheaderbardrag + " > * > " + BDFDB.dotCN.channelheadericonmargin);
 			if (headerbaricon) headerbaricon.parentElement.appendChild(headerbar);
 			this.changeMaximizeButtons();
 		}
