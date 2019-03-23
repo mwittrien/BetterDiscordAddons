@@ -7,6 +7,7 @@
 	--vguildroundness: var(--guildroundness, 50%);
 	--valigndms: var(--aligndms, 0);
 }
+
 .wrapper-1Rf91z {
 	width: calc(1px * ((var(--vguildsize) + 10) * var(--vcolumns) + 35 - 25)) !important;
 }
