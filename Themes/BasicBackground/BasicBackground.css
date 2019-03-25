@@ -2263,16 +2263,6 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	background-color: rgb(var(--vaccentcolor)) !important;
 }
 
-/* fix BTTV tooltips */
-.tipsy {
-	opacity: 1 !important;
-}
-.tipsy div {
-	border-radius: 5px;
-	background-color: rgb(var(--vaccentcolor)) !important;
-	padding: 5px; 
-}
-
 /* fix span flickering */
 html, span:not(.spinner-item) {
 	backface-visibility: hidden;
@@ -2310,45 +2300,16 @@ html, span:not(.spinner-item) {
 	border-color: rgb(var(--vaccentcolor)) !important;
 }
 
-/* fix public servers page */
-#pubslayer {
-	background: var(--vbackground) center/cover !important;
-	opacity: 1 !important;
-	animation: none !important;
-} 
-#pubslayer {
-	z-index: 1000 !important;
-}
-#pubslayer > .standardSidebarView-3F1I7i {
-	background: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 3)) !important;
-}
-#pubslayer button,
-.bd-server-card.bd-server-card-pinned:after {
-	background: rgb(var(--vaccentcolor)) !important;
-}
-#pubslayer input {
-	background: rgba(var(--vtransparencycolor),var(--vtransparencyalpha)) !important;
-	border-radius: 3px !important;
-	border-style: solid !important;
-	border-width: 1px !important;
-	box-shadow: none !important;
-	box-sizing: border-box !important;
-	transition: background-color .15s ease,border .15s ease !important;
-}
-#pubslayer input:not(:focus) {
-	border-color: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 3)) !important;
-}
-#pubslayer input:focus {
-	border-color: rgb(var(--vaccentcolor)) !important;
-}
-
 /* group dm name change */
-.input-autosize-input {
+.groupDM-3qU0Ks .channelName-3stJzi {
+	margin-left: 5px;
+}
+.groupDM-3qU0Ks .channelName-3stJzi input.input-autosize-input {
 	box-sizing: border-box !important;
 	border-radius: 3px !important;
 	transition: background-color .15s ease,border .15s ease !important;
 }
-.input-autosize-input:focus {
+.groupDM-3qU0Ks .channelName-3stJzi input.input-autosize-input:focus {
 	background: rgba(var(--vtransparencycolor),var(--vtransparencyalpha)) !important;
 	border: 1px solid rgb(var(--vaccentcolor)) !important;
 }
