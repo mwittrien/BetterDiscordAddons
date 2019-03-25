@@ -464,6 +464,12 @@
 .announcingNitro-3Ptg6m:hover {
 	filter: saturate(50%) brightness(200%);
 }
+.newMessagesBar-mujexs button:last-child {
+	color: hsla(0,0%,100%,.6) !important;
+}
+.newMessagesBar-mujexs button:last-child:hover {
+	color: #FFF !important;
+}
 
 /* BACKGROUND */
 .inviteIcon-DSd8cG,
