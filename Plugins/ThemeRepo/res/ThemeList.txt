@@ -76,6 +76,7 @@ https://raw.githubusercontent.com/llcoll/Discord-Themes/master/Themes/Akame/Akam
 https://raw.githubusercontent.com/llcoll/Discord-Themes/master/Themes/Esdeath/Esdeath.theme.css
 https://raw.githubusercontent.com/Mixter213/Discord/master/Theme/Cyan.theme.css
 https://raw.githubusercontent.com/Modder4869/LazyStuff/master/LazyMadeThemes/null.theme.css
+https://raw.githubusercontent.com/monstrousdev/themes/master/theme-files/Black-Hole.theme.css
 https://raw.githubusercontent.com/motoenduroboy/BetterDiscord-Themes/master/release/master/Deku.theme.css
 https://raw.githubusercontent.com/motoenduroboy/BetterDiscord-Themes/master/release/master/OniiChan.theme.css
 https://raw.githubusercontent.com/motoenduroboy/BetterDiscord-Themes/master/release/master/OrangeisaMassiveWeeb.theme.css
