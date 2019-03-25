@@ -2354,60 +2354,6 @@ html, span:not(.spinner-item) {
 }
 
 
-/* ----------------------- OLDCLASSES ----------------------- */
-
-/* fix twitch and favorite menu */
-#bda-qem-twitch-container .scroller-wrap,
-#bda-qem-favourite-container .scroller-wrap {
-	overflow: hidden;
-	-ms-flex: 1 1 auto;
-	-webkit-box-flex: 1;
-	display: -webkit-box;
-	display: -ms-flexbox;
-	display: flex;
-	flex: 1 1 auto;
-	height: 100%;
-	position: relative;
-}
-#bda-qem-twitch-container .scroller-wrap .scroller,
-#bda-qem-favourite-container .scroller-wrap .scroller {
-	-webkit-box-flex: 1;
-	flex: 1 1 auto;
-	overflow-y: scroll;
-	overflow-x: hidden;
-}
-
-/* fix help modal */ 
-.need-help-modal,
-.need-help-modal .header {
-	box-shadow: 0 1px 0 0 rgba(var(--vtransparencycolor),.3), 0 1px 2px 0 rgba(var(--vtransparencycolor),.3) !important;
-}
-.need-help-modal .footer {
-	box-shadow: inset 0 1px 0 rgba(var(--vtransparencycolor),.1) !important;
-}
-#help-query {
-	background: rgba(var(--vtransparencycolor),var(--vtransparencyalpha)) !important;
-	border-radius: 3px !important;
-	border-style: solid !important;
-	border-width: 1px !important;
-	box-shadow: none !important;
-	box-sizing: border-box !important;
-	color: rgb(255,255,255) !important;
-	font-size: 16px !important;
-	height: 40px !important;
-	margin: 5px 20px !important;
-	outline: none !important;
-	padding: 10px !important;
-	transition: background-color .15s ease,border .15s ease !important;
-}
-#help-query:not(:focus) {
-	border-color: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 3)) !important;
-}
-#help-query:focus {
-	border-color: rgb(var(--vaccentcolor)) !important;
-}
-
-
 /* ----------------------- THEMESUPPORT ----------------------- */
 
 /* ThemeDevBadge */
