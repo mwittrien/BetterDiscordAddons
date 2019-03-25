@@ -255,25 +255,6 @@
 #app-mount .emojiPicker-3m1S-j .categories-1feg4n .item-16cXuq.selected-39BZ4S[aria-label="favorites"] {
 	background-image: url('data:image/svg+xml; utf8, <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" stroke-width="1" stroke="#282B2E" fill="#FFD655"><path d="M11.500 16.250L17.084 19.186L16.018 12.968L20.535 8.564L14.292 7.657L11.500 2.000L8.708 7.657L2.465 8.564L6.982 12.968L5.916 19.186L11.500 16.250"/></svg>');
 }
-#app-mount #bda-qem-twitch-container .scroller-wrap,
-#app-mount #bda-qem-favourite-container .scroller-wrap {
-	overflow: hidden;
-	-ms-flex: 1 1 auto;
-	-webkit-box-flex: 1;
-	display: -webkit-box;
-	display: -ms-flexbox;
-	display: flex;
-	flex: 1 1 auto;
-	height: 100%;
-	position: relative;
-}
-#app-mount #bda-qem-twitch-container .scroller-wrap .scroller,
-#app-mount #bda-qem-favourite-container .scroller-wrap .scroller {
-	-webkit-box-flex: 1;
-	flex: 1 1 auto;
-	overflow-y: scroll;
-	overflow-x: hidden;
-}
 #app-mount #bda-qem-twitch-container .scroller-wrap .scroller::-webkit-scrollbar,
 #app-mount #bda-qem-favourite-container .scroller-wrap .scroller::-webkit-scrollbar {
 	height: 14px;
@@ -288,6 +269,7 @@
 	border-style: solid;
 	border-width: 3px;
 	border-radius: 7px;
+	visibility: visible;
 }
 #app-mount .emojiPicker-3m1S-j .scrollerThemed-2oenus.themeLight-1_DWyY .scroller-2FKFPG::-webkit-scrollbar-thumb,
 #app-mount #bda-qem-twitch-container .scroller-wrap .scroller::-webkit-scrollbar-thumb,
