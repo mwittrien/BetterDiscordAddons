@@ -11,7 +11,7 @@ class ShowHiddenChannels {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Style","Changed the style how hidden channels/categories are displayed a bit"]]
+			"improved":[["Style","Changed the style how hidden channels/categories are displayed a bit"]]
 		};
 		
 		this.patchModules = {
