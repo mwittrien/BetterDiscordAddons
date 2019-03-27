@@ -3,7 +3,7 @@
 class EditUsers {
 	getName () {return "EditUsers";}
 
-	getVersion () {return "3.3.1";}
+	getVersion () {return "3.3.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class EditUsers {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Quick Switcher","Fixed Users not being changed in the Quick Switcher"]]
+			"added":[["App Title","Added an option to enable/disable the plugin to also show the edited name in the app window title/taskbar name"]]
 		};
 		
 		this.labels = {};
@@ -191,7 +191,8 @@ class EditUsers {
 				changeInAuditLog:		{value:true, 	description:"Audit Log"},
 				changeInMemberLog:		{value:true, 	description:"Member Log"},
 				changeInSearchPopout:	{value:true, 	description:"Search Popout"},
-				changeInUserAccount:	{value:true, 	description:"Your Account Information"}
+				changeInUserAccount:	{value:true, 	description:"Your Account Information"},
+				changeInAppTitle:		{value:true, 	description:"Discord App Title (DMs)"}
 			}
 		};
 	}
@@ -215,6 +216,7 @@ class EditUsers {
 		BDFDB.addEventListener(this, settingspanel, "click", ".reset-button", () => {
 			BDFDB.openConfirmModal(this, "Are you sure you want to reset all users?", () => {
 				BDFDB.removeAllData(this, "users");
+				this.changeAppTitle();
 				BDFDB.WebModules.forceAllUpdates(this);
 			});
 		});
@@ -252,7 +254,11 @@ class EditUsers {
 			this.ChannelUtils = BDFDB.WebModules.findByProperties("getChannels","getChannel");
 			this.LastGuildStore = BDFDB.WebModules.findByProperties("getLastSelectedGuildId");
 			this.LastChannelStore = BDFDB.WebModules.findByProperties("getLastSelectedChannelId");
-
+			
+			var observer = new MutationObserver(() => {this.changeAppTitle();});
+			BDFDB.addObserver(this, document.head.querySelector("title"), {name:"appTitleObserver",instance:observer}, {childList:true});
+			this.changeAppTitle();
+			
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
@@ -265,7 +271,10 @@ class EditUsers {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			let data = BDFDB.loadAllData(this, "users");
 			BDFDB.removeAllData(this, "users");
-			try {BDFDB.WebModules.forceAllUpdates(this);} catch (err) {}
+			try {
+				this.changeAppTitle();
+				BDFDB.WebModules.forceAllUpdates(this);
+			} catch (err) {}
 			BDFDB.saveAllData(data, this, "users");
 
 			BDFDB.removeEles(".autocompleteEditUsers", ".autocompleteEditUsersRow");
@@ -320,6 +329,7 @@ class EditUsers {
 					resetitem.addEventListener("click", () => {
 						BDFDB.closeContextMenu(menu);
 						BDFDB.removeData(instance.props.user.id, this, "users");
+						this.changeAppTitle();
 						BDFDB.WebModules.forceAllUpdates(this);
 					});
 				}
@@ -403,6 +413,7 @@ class EditUsers {
 			else {
 				BDFDB.saveData(info.id, {name,tag,url,removeIcon,ignoreTagColor,color1,color2,color3,color4}, this, "users");
 			}
+			this.changeAppTitle();
 			BDFDB.WebModules.forceAllUpdates(this);
 		});
 		usernameinput.focus();
@@ -701,7 +712,20 @@ class EditUsers {
 	processStandardSidebarView (instance, wrapper) {
 		if (this.SettingsUpdated) {
 			delete this.SettingsUpdated;
+			this.changeAppTitle();
 			BDFDB.WebModules.forceAllUpdates(this);
+		}
+	}
+	
+	changeAppTitle () {
+		let channel = this.ChannelUtils.getChannel(this.LastChannelStore.getChannelId());
+		let title = document.head.querySelector("title");
+		if (title && channel && channel.type == 1) {
+			let info = this.UserUtils.getUser(channel.recipients[0]);
+			if (info) {
+				let data = this.getUserData(info.id, title);
+				BDFDB.setInnerText(title, "@" + (data.name || info.username));
+			}
 		}
 	}
 
@@ -985,6 +1009,7 @@ class EditUsers {
 		else if (BDFDB.getParentEle(BDFDB.dotCN.guildsettingsbannedcard, wrapper) || BDFDB.getParentEle(BDFDB.dotCN.guildsettingsinvitecard, wrapper) || BDFDB.getParentEle(BDFDB.dotCN.guildsettingsmembercard, wrapper)) key = "changeInMemberLog";
 		else if (BDFDB.getParentEle(BDFDB.dotCN.searchpopout, wrapper) || BDFDB.getParentEle(BDFDB.dotCN.searchpopoutdmaddpopout, wrapper) || BDFDB.getParentEle(BDFDB.dotCN.quickswitcher, wrapper)) key = "changeInSearchPopout";
 		else if (BDFDB.getParentEle(BDFDB.dotCN.accountinfo, wrapper)) key = "changeInUserAccount";
+		else if (wrapper.parentElement == document.head) key = "changeInAppTitle";
 
 		return !key || settings[key] ? data : {};
 	}
