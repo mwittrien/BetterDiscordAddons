@@ -3,7 +3,7 @@
 class PluginRepo {
 	getName () {return "PluginRepo";} 
 
-	getVersion () {return "1.7.5";}
+	getVersion () {return "1.7.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class PluginRepo {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Loading Issues","Fixed loading issues with Zerthox's plugins and fixed issues where an unloadable plugin would harshly slow down the loading process"]]
+			"fixed":[["Loading Issues","Fixed loading issues with Zerthox's plugins, last time"]]
 		};
 		
 		this.patchModules = {
@@ -437,7 +437,7 @@ class PluginRepo {
 		for (let url in this.loadedPlugins) {
 			let plugin = this.loadedPlugins[url];
 			let instPlugin = window.bdplugins[plugin.getName] ? window.bdplugins[plugin.getName].plugin : null;
-			if (instPlugin && instPlugin.getAuthor().toUpperCase() == plugin.getAuthor.toUpperCase()) plugin.getState = instPlugin.getVersion() != plugin.getVersion ? 1 : 0;
+			if (instPlugin && this.getString(instPlugin.getAuthor()).toUpperCase() == plugin.getAuthor.toUpperCase()) plugin.getState = this.getString(instPlugin.getVersion()) != plugin.getVersion ? 1 : 0;
 			else plugin.getState = 2;
 			plugin.getFav = favorites[url] ? 0 : 1;
 			let data = {
@@ -704,9 +704,7 @@ class PluginRepo {
 						plugin.url = url;
 						this.loadedPlugins[url] = plugin;
 						var instPlugin = window.bdplugins[plugin.getName] ? window.bdplugins[plugin.getName].plugin : null;
-						if (instPlugin && instPlugin.getAuthor().toUpperCase() == plugin.getAuthor.toUpperCase() && instPlugin.getVersion() != plugin.getVersion) {
-							if (PluginUpdates && PluginUpdates.plugins && !PluginUpdates.plugins[url]) outdated++;
-						}
+						if (instPlugin && this.getString(instPlugin.getAuthor()).toUpperCase() == plugin.getAuthor.toUpperCase() && this.getString(instPlugin.getVersion()) != plugin.getVersion && PluginUpdates && PluginUpdates.plugins && !PluginUpdates.plugins[url]) outdated++;
 					}
 					else {
 						webviewqueue.push({body, url});
@@ -793,7 +791,7 @@ class PluginRepo {
 							plugin.url = url;
 							this.loadedPlugins[url] = plugin;
 							var instPlugin = window.bdplugins[plugin.getName] ? window.bdplugins[plugin.getName].plugin : null;
-							if (instPlugin && instPlugin.getAuthor().toUpperCase() == plugin.getAuthor.toUpperCase() && instPlugin.getVersion() != plugin.getVersion) outdated++;
+							if (instPlugin && this.getString(instPlugin.getAuthor()).toUpperCase() == plugin.getAuthor.toUpperCase() && this.getString(instPlugin.getVersion()) != plugin.getVersion) outdated++;
 						}
 						webview.getWebContents().reload();
 						webviewrunning = false;
@@ -802,6 +800,16 @@ class PluginRepo {
 				});
 			}
 		}
+	}
+	
+	getString (obj) {
+		var string = "";
+		if (typeof obj == "string") string = obj;
+		else if (obj && obj.props) {
+			if (typeof obj.props.children == "string") string = obj.props.children;
+			else if (Array.isArray(obj.props.children)) for (let c of obj.props.children) string += typeof c == "string" ? c : this.getString(c);
+		}
+		return string;
 	}
 
 	checkForNewPlugins () {
