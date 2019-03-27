@@ -246,11 +246,9 @@ class DisplayServersAsChannels {
 		var appcontainer = document.querySelector(BDFDB.dotCN.appcontainer);
 		
 		BDFDB.addEventListener(this, wrapper, "mouseenter", BDFDB.dotCN.guild, e => {
-			if (e.currentTarget.tagName && e.currentTarget.querySelector(BDFDB.dotCN.guildserror)) return;
 			BDFDB.appendLocalStyle("HideAllToolTips" + this.name, `${BDFDB.dotCN.tooltip} {display: none !important;}`);
 		});
 		BDFDB.addEventListener(this, wrapper, "mouseleave", BDFDB.dotCN.guild, e => {
-			if (e.currentTarget.tagName && e.currentTarget.querySelector(BDFDB.dotCN.guildserror)) return;
 			BDFDB.removeLocalStyle("HideAllToolTips" + this.name);
 		});
 		
