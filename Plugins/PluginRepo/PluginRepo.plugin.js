@@ -771,9 +771,14 @@ class PluginRepo {
 							var WebModulesFindByProperties = (properties) => {
 								return WebModulesFind(module => properties.every(prop => module[prop] !== undefined));
 							};
+							var React = WebModulesFindByProperties(['createElement', 'cloneElement']);
+							var ReactDOM = WebModulesFindByProperties(['render', 'findDOMNode']);
 							global.BDV2 = {};
-							global.BDV2.react = WebModulesFindByProperties(['createElement', 'cloneElement']);
-							global.BDV2.reactDom = WebModulesFindByProperties(['render', 'findDOMNode']);
+							global.BDV2.react = React;
+							global.BDV2.reactDom = ReactDOM;
+							global.BdApi = {};
+							global.BdApi.React = React;
+							global.BdApi.ReactDOM = ReactDOM;
 							var p = new ` + name + `(); 
 							var data = {
 								"getName":getString(p.getName()),

@@ -206,6 +206,5 @@ https://raw.githubusercontent.com/tony311/betterdiscord-plugins/master/auto-sele
 https://raw.githubusercontent.com/tony311/betterdiscord-plugins/master/tts-events.plugin.js
 https://raw.githubusercontent.com/XFoxPrower/Notice-Me-Senpai/master/Notice%20Me%2C%20Senpai.plugin.js
 https://raw.githubusercontent.com/XFoxPrower/Quick-Open-Link/master/Quick%20Open%20Link.plugin.js
-https://raw.githubusercontent.com/Zerthox/BetterDiscord-Plugins/master/plugins/BetterReplyer.plugin.js
-https://raw.githubusercontent.com/Zerthox/BetterDiscord-Plugins/master/plugins/GuildSeparators.plugin.js
-https://raw.githubusercontent.com/Zerthox/BetterDiscord-Plugins/master/plugins/LinkTooltips.plugin.js
+https://raw.githubusercontent.com/Zerthox/BetterDiscord-Plugins/master/v1/BetterReplyer.plugin.js
+https://raw.githubusercontent.com/Zerthox/BetterDiscord-Plugins/master/v1/GuildSeparators.plugin.js
