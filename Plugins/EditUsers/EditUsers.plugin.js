@@ -3,7 +3,7 @@
 class EditUsers {
 	getName () {return "EditUsers";}
 
-	getVersion () {return "3.3.2";}
+	getVersion () {return "3.3.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,10 +11,10 @@ class EditUsers {
 
 	initConstructor () {
 		this.changelog = {
-			"added":[["App Title","Added an option to enable/disable the plugin to also show the edited name in the app window title/taskbar name"]]
+			"added":[["Invite Modal","Added an option to enable/disable the plugin to also show the edited name in the invitation modal"]]
 		};
 		
-		this.labels = {};
+		this.labels = {}; 
 
 		this.patchModules = {
 			"ChannelTextArea":"componentDidMount",
@@ -23,6 +23,7 @@ class EditUsers {
 			"BannedCard":"componentDidMount",
 			"InviteCard":"componentDidMount",
 			"MemberCard":"componentDidMount",
+			"InvitationCard":"componentDidMount",
 			"TypingUsers":"componentDidUpdate",
 			"MessageUsername":"componentDidMount",
 			"DirectMessage":"componentDidMount",
@@ -184,6 +185,7 @@ class EditUsers {
 				changeInDmCalls:		{value:true, 	description:"Calls/ScreenShares"},
 				changeInTyping:			{value:true, 	description:"Typing List"},
 				changeInFriendList:		{value:true, 	description:"Friend List"},
+				changeInInviteList:		{value:true, 	description:"Invite List"},
 				changeInActivity:		{value:true, 	description:"Activity Page"},
 				changeInUserPopout:		{value:true, 	description:"User Popouts"},
 				changeInUserProfil:		{value:true, 	description:"User Profile Modal"},
@@ -557,6 +559,16 @@ class EditUsers {
 			let username = wrapper.querySelector(BDFDB.dotCN.guildsettingsmembername);
 			if (username) {
 				this.changeName2(instance.props.user, username, instance.props.guild.id);
+				this.changeAvatar(instance.props.user, this.getAvatarDiv(wrapper));
+			}
+		}
+	}
+
+	processInvitationCard (instance, wrapper) {
+		if (instance.props && instance.props.user) {
+			let username = wrapper.querySelector(BDFDB.dotCN.invitemodalinviterowname);
+			if (username) {
+				this.changeName3(instance.props.user, username);
 				this.changeAvatar(instance.props.user, this.getAvatarDiv(wrapper));
 			}
 		}
@@ -1001,6 +1013,7 @@ class EditUsers {
 		else if (BDFDB.getParentEle(BDFDB.dotCN.callavatarwrapper, wrapper) || BDFDB.getParentEle(BDFDB.dotCN.callincoming, wrapper) || BDFDB.getParentEle(BDFDB.dotCN.callcurrentcontainer, wrapper) || BDFDB.getParentEle(BDFDB.dotCN.pictureinpicture, wrapper)) key = "changeInDmCalls";
 		else if (BDFDB.getParentEle(BDFDB.dotCN.typing, wrapper)) key = "changeInTyping";
 		else if (BDFDB.getParentEle(BDFDB.dotCN.friends, wrapper) || BDFDB.getParentEle(BDFDB.dotCN.userprofilebody, wrapper)) key = "changeInFriendList";
+		else if (BDFDB.getParentEle(BDFDB.dotCN.invitemodalinviterow, wrapper)) key = "changeInInviteList";
 		else if (BDFDB.getParentEle(BDFDB.dotCN.activityfeed, wrapper)) key = "changeInActivity";
 		else if (BDFDB.getParentEle(BDFDB.dotCN.userpopout, wrapper)) key = "changeInUserPopout";
 		else if (BDFDB.getParentEle(BDFDB.dotCN.userprofileheader, wrapper)) key = "changeInUserProfil";
