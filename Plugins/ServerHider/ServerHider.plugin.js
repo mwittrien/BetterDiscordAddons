@@ -266,7 +266,7 @@ class ServerHider {
 		if (guilddiv.ServerHiderChangeObserver && typeof guilddiv.ServerHiderChangeObserver.disconnect == "function") guilddiv.ServerHiderChangeObserver.disconnect();
 		if (!visible) {
 			guilddiv.ServerHiderChangeObserver = new MutationObserver(changes => {changes.forEach(change => {
-				if (!change.type == "attributes" && change.attributeName == "draggable") return;
+				if (change.type == "attributes" && change.attributeName == "draggable" || change.attributeName == "source") return;
 				let clearnotifications = false;
 				if (change.type == "attributes" && change.attributeName == "class" && BDFDB.containsClass(change.target, BDFDB.disCN.guild)) clearnotifications = true;
 				if (change.type == "characterData" && change.target.parentElement && BDFDB.containsClass(change.target.parentElement, BDFDB.disCN.badge)) clearnotifications = true;

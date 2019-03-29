@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.1.5";}
+	getVersion () {return "6.1.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,14 +11,14 @@ class ServerFolders {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Changes","Fixed for the new server classes"]]
+			"fixed":[["Separator Issue","Separator would sometimes duplicate at the end of the server list on start up"]]
 		};
 		
 		this.labels = {};
 
 		this.patchModules = {
-			"Guilds":["componentDidMount","componentWillUnmount"],
 			"Guild":["componentDidMount","componentWillUnmount"],
+			"Guilds":["componentDidMount","componentWillUnmount"],
 			"StandardSidebarView":"componentWillUnmount"
 		};
 
@@ -1036,7 +1036,7 @@ class ServerFolders {
 		BDFDB.toggleEles(guilddiv, false);
 		if (guilddiv.ServerFoldersChangeObserver && typeof guilddiv.ServerFoldersChangeObserver.disconnect == "function") guilddiv.ServerFoldersChangeObserver.disconnect();
 		guilddiv.ServerFoldersChangeObserver = new MutationObserver(changes => {changes.forEach(change => {
-			if (change.type == "attributes" && change.attributeName == "draggable") return;
+			if (change.type == "attributes" && change.attributeName == "draggable" || change.attributeName == "source") return;
 			let updatefolder = false;
 			if (change.type == "attributes" && change.attributeName == "class" && BDFDB.containsClass(change.target, BDFDB.disCN.guild)) updatefolder = true;
 			if (change.type == "characterData" && change.target.parentElement && BDFDB.containsClass(change.target.parentElement, BDFDB.disCN.badge)) updatefolder = true;
@@ -1077,13 +1077,16 @@ class ServerFolders {
 			this.toggleFolderContent(true);
 
 			let settings = BDFDB.getAllData(this, "settings");
-
-			setTimeout(() => {
+			
+			let open = () => {
 				if (this.foldercontent) {
 					if (settings.addSeparators && this.foldercontent.querySelectorAll(BDFDB.dotCN.guild).length) this.foldercontentguilds.appendChild(BDFDB.htmlToElement(`<div class="${BDFDB.disCN.guildseparator} folderseparator" folder="${folderdiv.id}"></div>`));
 					includedServers.forEach(guilddiv => {this.updateCopyInFolderContent(guilddiv, folderdiv);});
 				}
-			}, settings.closeOtherFolders && this.foldercontent.querySelectorAll(BDFDB.dotCN.guild).length ? 300 : 0);
+			}
+
+			if (settings.closeOtherFolders && this.foldercontent.querySelectorAll(BDFDB.dotCN.guild).length) setTimeout(open, 300);
+			else open();
 		}
 		else this.closeFolderContent(folderdiv);
 
@@ -1137,6 +1140,7 @@ class ServerFolders {
 		if (!info) return;
 		let guildcopy = guilddiv.cloneNode(true);
 		guildcopy.setAttribute("guild", info.id);
+		guildcopy.setAttribute("folder", folderdiv.id);
 		BDFDB.addClass(guildcopy, "copy");
 		BDFDB.toggleEles(guildcopy, true);
 		guildcopy.addEventListener("mouseenter", () => {

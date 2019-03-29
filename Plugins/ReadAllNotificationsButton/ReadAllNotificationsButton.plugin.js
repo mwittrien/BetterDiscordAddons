@@ -214,7 +214,7 @@ class ReadAllNotificationsButton {
 			case "de":		//german
 				return {
 					context_guilds_text:		"Server",
-					context_mutedguilds_text:	"Stummgeschaltete Server",
+					context_mutedguilds_text:	"Stummgeschaltene Server",
 					context_dms_text:			"Direktnachrichten"
 				};
 			case "es":		//spanish
