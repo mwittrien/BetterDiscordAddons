@@ -17,8 +17,8 @@ class ServerFolders {
 		this.labels = {};
 
 		this.patchModules = {
-			"Guild":["componentDidMount","componentWillUnmount"],
 			"Guilds":["componentDidMount","componentWillUnmount"],
+			"Guild":["componentDidMount","componentWillUnmount"],
 			"StandardSidebarView":"componentWillUnmount"
 		};
 
