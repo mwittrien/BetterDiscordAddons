@@ -3,7 +3,7 @@
 class ShowHiddenChannels {
 	getName () {return "ShowHiddenChannels";}
 
-	getVersion () {return "2.4.6";}
+	getVersion () {return "2.4.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -357,7 +357,7 @@ class ShowHiddenChannels {
 			else if (settings.showAllowedUsers && channel.permissionOverwrites[id].type == "member" && ((channel.permissionOverwrites[id].allow | this.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].allow || (channel.permissionOverwrites[id].allow | this.Permissions.CONNECT) == channel.permissionOverwrites[id].allow)) {
 				let user = this.UserUtils.getUser(id);
 				let member = this.MemberUtils.getMember(guild.id,id);
-				if (user && member) allowedUsers.push(Object.assign({name:user.username},member));
+				if (user && member) allowedUsers.push(Object.assign({name:user.username,id:user.id},member));
 			}
 			if (settings.showDeniedRoles && channel.permissionOverwrites[id].type == "role" && ((channel.permissionOverwrites[id].deny | this.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].deny || (channel.permissionOverwrites[id].deny | this.Permissions.CONNECT) == channel.permissionOverwrites[id].deny)) {
 				deniedRoles.push(guild.roles[id]);
@@ -366,7 +366,7 @@ class ShowHiddenChannels {
 			else if (settings.showDeniedUsers && channel.permissionOverwrites[id].type == "member" && ((channel.permissionOverwrites[id].deny | this.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].deny || (channel.permissionOverwrites[id].deny | this.Permissions.CONNECT) == channel.permissionOverwrites[id].deny)) {
 				let user = this.UserUtils.getUser(id);
 				let member = this.MemberUtils.getMember(guild.id, id);
-				if (user && member) deniedUsers.push(Object.assign({name:user.username},member));
+				if (user && member) deniedUsers.push(Object.assign({name:user.username,id:user.id},member));
 			}
 		}
 		if (settings.showAllowedRoles && allowed && !everyoneDenied) {
