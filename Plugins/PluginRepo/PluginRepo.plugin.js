@@ -3,7 +3,7 @@
 class PluginRepo {
 	getName () {return "PluginRepo";} 
 
-	getVersion () {return "1.7.6";}
+	getVersion () {return "1.7.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class PluginRepo {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Loading Issues","Fixed loading issues with Zerthox's plugins, last time"]]
+			"improved":[["Loading Speed","Increased Loading Speed"]]
 		};
 		
 		this.patchModules = {
@@ -743,65 +743,79 @@ class PluginRepo {
 			let name = body.replace(new RegExp("\\s*\:\\s*", "g"), ":").split('"name":"');
 			if (name.length > 1) {
 				name = name[1].split('"')[0];
-				webview.getWebContents().executeJavaScript(body).then(() => {
-					webview.getWebContents().executeJavaScript(`
-						try {
-							var getString = (obj) => {
-								var string = "";
-								if (typeof obj == "string") string = obj;
-								else if (obj && obj.props) {
-									if (typeof obj.props.children == "string") string = obj.props.children;
-									else if (Array.isArray(obj.props.children)) for (let c of obj.props.children) string += typeof c == "string" ? c : getString(c);
+				webview.getWebContents().executeJavaScript(`
+					try {
+						${body}
+						var getString = function (obj) {
+							var string = "";
+							if (typeof obj == "string") string = obj;
+							else if (obj && obj.props) {
+								if (typeof obj.props.children == "string") string = obj.props.children;
+								else if (Array.isArray(obj.props.children)) for (let c of obj.props.children) string += typeof c == "string" ? c : getString(c);
+							}
+							return string;
+						};
+						var WebModulesFind = function (filter) {
+							const id = "PluginRepo-WebModules";
+							const req = typeof(global.window.webpackJsonp) == "function" ? global.window.webpackJsonp([], {[id]: (module, exports, req) => exports.default = req}, [id]).default : global.window.webpackJsonp.push([[], {[id]: (module, exports, req) => module.exports = req}, [[id]]]);
+							delete req.m[id];
+							delete req.c[id];
+							for (let m in req.c) {
+								if (req.c.hasOwnProperty(m)) {
+									var module = req.c[m].exports;
+									if (module && module.__esModule && module.default && filter(module.default)) return module.default;
+									if (module && filter(module)) return module;
 								}
-								return string;
-							};
-							var WebModulesFind = (filter) => {
-								const id = "PluginRepo-WebModules";
-								const req = typeof(global.window.webpackJsonp) == "function" ? global.window.webpackJsonp([], {[id]: (module, exports, req) => exports.default = req}, [id]).default : global.window.webpackJsonp.push([[], {[id]: (module, exports, req) => module.exports = req}, [[id]]]);
-								delete req.m[id];
-								delete req.c[id];
-								for (let m in req.c) {
-									if (req.c.hasOwnProperty(m)) {
-										var module = req.c[m].exports;
-										if (module && module.__esModule && module.default && filter(module.default)) return module.default;
-										if (module && filter(module)) return module;
-									}
-								}
-							};
-							var WebModulesFindByProperties = (properties) => {
-								return WebModulesFind(module => properties.every(prop => module[prop] !== undefined));
-							};
-							var React = WebModulesFindByProperties(['createElement', 'cloneElement']);
-							var ReactDOM = WebModulesFindByProperties(['render', 'findDOMNode']);
-							global.BDV2 = {};
-							global.BDV2.react = React;
-							global.BDV2.reactDom = ReactDOM;
-							global.BdApi = {};
-							global.BdApi.React = React;
-							global.BdApi.ReactDOM = ReactDOM;
-							var p = new ` + name + `(); 
-							var data = {
-								"getName":getString(p.getName()),
-								"getAuthor":getString(p.getAuthor()),
-								"getVersion":getString(p.getVersion()),
-								"getDescription":getString(p.getDescription())
-							}; 
-							Promise.resolve(data);
-						}
-						catch (err) {
-							Promise.resolve(null);
-						}`
-					).then(plugin => {
-						if (plugin) {
-							plugin.url = url;
-							this.loadedPlugins[url] = plugin;
-							var instPlugin = window.bdplugins[plugin.getName] ? window.bdplugins[plugin.getName].plugin : null;
-							if (instPlugin && this.getString(instPlugin.getAuthor()).toUpperCase() == plugin.getAuthor.toUpperCase() && this.getString(instPlugin.getVersion()) != plugin.getVersion) outdated++;
-						}
-						webview.getWebContents().reload();
-						webviewrunning = false;
-						runInWebview();
-					});
+							}
+						};
+						var WebModulesFindByProperties = function (properties) {
+							properties = Array.isArray(properties) ? properties : Array.from(arguments);
+							var module = WebModulesFind(module => properties.every(prop => module[prop] !== undefined));
+							if (!module) {
+								module = {};
+								for (let property of properties) module[property] = property;
+							}
+							return module;
+						};
+						var WebModulesFindByName = function (name) {
+							return WebModulesFind(module => module.displayName === name);
+						};
+						var React = WebModulesFindByProperties('createElement', 'cloneElement');
+						var ReactDOM = WebModulesFindByProperties('render', 'findDOMNode');
+						global.BDV2 = {};
+						global.BDV2.react = React;
+						global.BDV2.reactDom = ReactDOM;
+						global.BDV2.WebpackModules = {};
+						global.BDV2.WebpackModules.find = WebModulesFind;
+						global.BDV2.WebpackModules.findByUniqueProperties = WebModulesFindByProperties;
+						global.BDV2.WebpackModules.findByDisplayName = WebModulesFindByName;
+						global.BdApi = {};
+						global.BdApi.React = React;
+						global.BdApi.ReactDOM = ReactDOM;
+						global.BdApi.findModule = WebModulesFind;
+						global.BdApi.findModuleByProps = WebModulesFindByProperties;
+						var p = new ${name}();
+						var data = {
+							"getName":getString(p.getName()),
+							"getAuthor":getString(p.getAuthor()),
+							"getVersion":getString(p.getVersion()),
+							"getDescription":getString(p.getDescription())
+						};
+						Promise.resolve(data);
+					}
+					catch (err) {
+						Promise.resolve(err);
+					}`
+				).then(plugin => {
+					if (BDFDB.isObject(plugin)) {
+						plugin.url = url;
+						this.loadedPlugins[url] = plugin;
+						var instPlugin = window.bdplugins[plugin.getName] ? window.bdplugins[plugin.getName].plugin : null;
+						if (instPlugin && this.getString(instPlugin.getAuthor()).toUpperCase() == plugin.getAuthor.toUpperCase() && this.getString(instPlugin.getVersion()) != plugin.getVersion) outdated++;
+					}
+					webview.getWebContents().reload();
+					webviewrunning = false;
+					runInWebview();
 				});
 			}
 		}
