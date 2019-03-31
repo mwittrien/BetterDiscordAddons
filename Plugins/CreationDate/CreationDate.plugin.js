@@ -49,7 +49,7 @@ class CreationDate {
 		this.defaults = {
 			settings: {
 				addInUserPopout:		{value:true, 		description:"Add in User Popouts:"},
-				addInUserProfil:		{value:true, 		description:"Add in User Profil Modal:"},
+				addInUserProfil:		{value:true, 		description:"Add in User Profile Modal:"},
 				displayTime:			{value:true, 		description:"Display the Time in the Timestamp:"},
 				displayDate:			{value:true, 		description:"Display the Date in the Timestamp:"},
 				cutSeconds:				{value:false, 		description:"Cut off Seconds of the Time:"},
