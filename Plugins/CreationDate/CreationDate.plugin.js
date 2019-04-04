@@ -231,7 +231,7 @@ class CreationDate {
 		let choice = BDFDB.getData("creationDateLang", this, "choices");
 		let nametag = container.querySelector(BDFDB.dotCN.nametag);
 		let joinedAtDate = container.querySelector(".joinedAtDate");
-		container.insertBefore(BDFDB.htmlToElement(`<div class="creationDate DevilBro-textscrollwrapper ${BDFDB.disCN.textrow}" style="max-width: ${BDFDB.getRects(BDFDB.getParentEle(popout ? BDFDB.dotCN.userpopoutheader : BDFDB.dotCN.userprofileheaderinfo, container)).width - 20}px !important;"><div class="DevilBro-textscroll">${this.labels.createdat_text + " " + this.getTimestamp(this.languages[choice].id, info.createdAt)}</div></div>`), joinedAtDate ? joinedAtDate.nextSibling : (nametag ? nametag.nextSibling : null));
+		container.insertBefore(BDFDB.htmlToElement(`<div class="creationDate DevilBro-textscrollwrapper ${BDFDB.disCN.textrow}" style="max-width: ${BDFDB.getRects(BDFDB.getParentEle(popout ? BDFDB.dotCN.userpopoutheader : BDFDB.dotCN.userprofileheaderinfo, container)).width - 20}px !important;"><div class="DevilBro-textscroll">${this.labels.createdat_text.replace("{{time}}", this.getTimestamp(this.languages[choice].id, info.createdAt))}</div></div>`), joinedAtDate ? joinedAtDate.nextSibling : (nametag ? nametag.nextSibling : null));
 		BDFDB.initElements(container.parentElement, this);
 		if (popout && popout.style.transform.indexOf("translateY(-1") == -1) {
 			let arect = BDFDB.getRects(document.querySelector(BDFDB.dotCN.appmount));
@@ -298,87 +298,87 @@ class CreationDate {
 		switch (BDFDB.getDiscordLanguage().id) {
 			case "hr":		//croatian
 				return {
-					createdat_text:				"Izrađen"
+					createdat_text:				"Izrađen {{time}}"
 				};
 			case "da":		//danish
 				return {
-					createdat_text:				"Oprettet den"
+					createdat_text:				"Oprettet den {{time}}"
 				};
 			case "de":		//german
 				return {
-					createdat_text:				"Erstellt am"
+					createdat_text:				"Erstellt am {{time}}"
 				};
 			case "es":		//spanish
 				return {
-					createdat_text:				"Creado el"
+					createdat_text:				"Creado el {{time}}"
 				};
 			case "fr":		//french
 				return {
-					createdat_text:				"Créé le"
+					createdat_text:				"Créé le {{time}}"
 				};
 			case "it":		//italian
 				return {
-					createdat_text:				"Creato il"
+					createdat_text:				"Creato il {{time}}"
 				};
 			case "nl":		//dutch
 				return {
-					createdat_text:				"Gemaakt op"
+					createdat_text:				"Gemaakt op {{time}}"
 				};
 			case "no":		//norwegian
 				return {
-					createdat_text:				"Opprettet på"
+					createdat_text:				"Opprettet på {{time}}"
 				};
 			case "pl":		//polish
 				return {
-					createdat_text:				"Utworzono"
+					createdat_text:				"Utworzono {{time}}"
 				};
 			case "pt-BR":	//portuguese (brazil)
 				return {
-					createdat_text:				"Criado em"
+					createdat_text:				"Criado em {{time}}"
 				};
 			case "fi":		//finnish
 				return {
-					createdat_text:				"Luotu"
+					createdat_text:				"Luotu {{time}}"
 				};
 			case "sv":		//swedish
 				return {
-					createdat_text:				"Skapat den"
+					createdat_text:				"Skapat den {{time}}"
 				};
 			case "tr":		//turkish
 				return {
-					createdat_text:				"Oluşturma tarihi"
+					createdat_text:				"Oluşturma tarihi {{time}}"
 				};
 			case "cs":		//czech
 				return {
-					createdat_text:				"Vytvořeno dne"
+					createdat_text:				"Vytvořeno dne {{time}}"
 				};
 			case "bg":		//bulgarian
 				return {
-					createdat_text:				"Създадена на"
+					createdat_text:				"Създадена на {{time}}"
 				};
 			case "ru":		//russian
 				return {
-					createdat_text:				"Создано"
+					createdat_text:				"Создано {{time}}"
 				};
 			case "uk":		//ukrainian
 				return {
-					createdat_text:				"Створено"
+					createdat_text:				"Створено {{time}}"
 				};
 			case "ja":		//japanese
 				return {
-					createdat_text:				"作成日"
+					createdat_text:				"{{time}} 作成日"
 				};
 			case "zh-TW":	//chinese (traditional)
 				return {
-					createdat_text:				"創建於"
+					createdat_text:				"創建於 {{time}}"
 				};
 			case "ko":		//korean
 				return {
-					createdat_text:				"생성 일"
+					createdat_text:				"{{time}} 생성 일"
 				};
 			default:		//default: english
 				return {
-					createdat_text:				"Created on"
+					createdat_text:				"Created on {{time}}"
 				};
 		}
 	}

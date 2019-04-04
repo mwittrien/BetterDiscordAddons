@@ -242,7 +242,7 @@ class JoinedAtDate {
 					let choice = BDFDB.getData("joinedAtDateLang", this, "choices");
 					let nametag = container.querySelector(BDFDB.dotCN.nametag);
 					let creationDate = container.querySelector(".creationDate");
-					container.insertBefore(BDFDB.htmlToElement(`<div class="joinedAtDate DevilBro-textscrollwrapper ${BDFDB.disCN.textrow}" style="max-width: ${BDFDB.getRects(BDFDB.getParentEle(popout ? BDFDB.dotCN.userpopoutheader : BDFDB.dotCN.userprofileheaderinfo, container)).width - 20}px !important;"><div class="DevilBro-textscroll">${this.labels.joinedat_text + " " + this.getTimestamp(this.languages[choice].id, timestamp)}</div></div>`), creationDate ? creationDate : (nametag ? nametag.nextSibling : null));
+					container.insertBefore(BDFDB.htmlToElement(`<div class="joinedAtDate DevilBro-textscrollwrapper ${BDFDB.disCN.textrow}" style="max-width: ${BDFDB.getRects(BDFDB.getParentEle(popout ? BDFDB.dotCN.userpopoutheader : BDFDB.dotCN.userprofileheaderinfo, container)).width - 20}px !important;"><div class="DevilBro-textscroll">${this.labels.joinedat_text.replace("{{time}}", this.getTimestamp(this.languages[choice].id, timestamp))}</div></div>`), creationDate ? creationDate : (nametag ? nametag.nextSibling : null));
 					BDFDB.initElements(container.parentElement, this);
 					if (popout && popout.style.transform.indexOf("translateY(-1") == -1) {
 						let arect = BDFDB.getRects(document.querySelector(BDFDB.dotCN.appmount));
@@ -320,87 +320,87 @@ class JoinedAtDate {
 		switch (BDFDB.getDiscordLanguage().id) {
 			case "hr":		//croatian
 				return {
-					joinedat_text:				"Pridružio"
+					joinedat_text:				"Pridružio {{time}}"
 				};
 			case "da":		//danish
 				return {
-					joinedat_text:				"Tilmeldt den"
+					joinedat_text:				"Tilmeldt den {{time}}"
 				};
 			case "de":		//german
 				return {
-					joinedat_text:				"Beigetreten am"
+					joinedat_text:				"Beigetreten am {{time}}"
 				};
 			case "es":		//spanish
 				return {
-					joinedat_text:				"Unido el"
+					joinedat_text:				"Unido el {{time}}"
 				};
 			case "fr":		//french
 				return {
-					joinedat_text:				"Inscrit le"
+					joinedat_text:				"Inscrit le {{time}}"
 				};
 			case "it":		//italian
 				return {
-					joinedat_text:				"Iscritto il"
+					joinedat_text:				"Iscritto il {{time}}"
 				};
 			case "nl":		//dutch
 				return {
-					joinedat_text:				"Aangesloten op"
+					joinedat_text:				"Aangesloten op {{time}}"
 				};
 			case "no":		//norwegian
 				return {
-					joinedat_text:				"Ble med på"
+					joinedat_text:				"Ble med på {{time}}"
 				};
 			case "pl":		//polish
 				return {
-					joinedat_text:				"Dołączył"
+					joinedat_text:				"Dołączył {{time}}"
 				};
 			case "pt-BR":	//portuguese (brazil)
 				return {
-					joinedat_text:				"Inscreveu-se em"
+					joinedat_text:				"Inscreveu-se em {{time}}"
 				};
 			case "fi":		//finnish
 				return {
-					joinedat_text:				"Liittynyt"
+					joinedat_text:				"Liittynyt {{time}}"
 				};
 			case "sv":		//swedish
 				return {
-					joinedat_text:				"Anlände den"
+					joinedat_text:				"Anlände den {{time}}"
 				};
 			case "tr":		//turkish
 				return {
-					joinedat_text:				"Katıldı"
+					joinedat_text:				"Katıldı {{time}}"
 				};
 			case "cs":		//czech
 				return {
-					joinedat_text:				"Přihlásil dne"
+					joinedat_text:				"Přihlásil dne {{time}}"
 				};
 			case "bg":		//bulgarian
 				return {
-					joinedat_text:				"Се присъедини на"
+					joinedat_text:				"Се присъедини на {{time}}"
 				};
 			case "ru":		//russian
 				return {
-					joinedat_text:				"Присоединился"
+					joinedat_text:				"Присоединился {{time}}"
 				};
 			case "uk":		//ukrainian
 				return {
-					joinedat_text:				"Приєднався"
+					joinedat_text:				"Приєднався {{time}}"
 				};
 			case "ja":		//japanese
 				return {
-					joinedat_text:				"に参加しました"
+					joinedat_text:				"{{time}} に参加しました"
 				};
 			case "zh-TW":	//chinese (traditional)
 				return {
-					joinedat_text:				"加入了"
+					joinedat_text:				"加入了 {{time}}"
 				};
 			case "ko":		//korean
 				return {
-					joinedat_text:				"에 가입"
+					joinedat_text:				"{{time}} 에 가입"
 				};
 			default:		//default: english
 				return {
-					joinedat_text:				"Joined on"
+					joinedat_text:				"Joined on {{time}}"
 				};
 		}
 	}
