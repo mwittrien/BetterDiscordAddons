@@ -199,7 +199,6 @@ https://raw.githubusercontent.com/samogot/betterdiscord-plugins/master/v1/1lib_d
 https://raw.githubusercontent.com/samogot/betterdiscord-plugins/master/v1/full_offline_list.plugin.js
 https://raw.githubusercontent.com/samogot/betterdiscord-plugins/master/v1/no_send_scroll.plugin.js
 https://raw.githubusercontent.com/samogot/betterdiscord-plugins/master/v1/quoter.plugin.js
-https://raw.githubusercontent.com/satoru8/spoilerAlert/master/spoilerAlert.plugin.js
 https://raw.githubusercontent.com/TheDarkBomber/BD-Server-Themes/master/serverTheme.plugin.js
 https://raw.githubusercontent.com/tony311/betterdiscord-plugins/master/afk-deafen.plugin.js
 https://raw.githubusercontent.com/tony311/betterdiscord-plugins/master/auto-select-server.plugin.js
