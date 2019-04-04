@@ -61,7 +61,7 @@
     padding: 8px 12px !important;
     position: absolute !important;
     z-index: 1002 !important;
-	top: 26px !important;
+	top: 25px !important;
 	left: -55px !important;
 	pointer-events: none !important;
 }
@@ -73,7 +73,7 @@
     position: absolute !important;
     z-index: 1002 !important;
 	border: 5px solid transparent !important;
-	top: 57px !important;
+	top: 56px !important;
 	left: 4px !important;
 	border-top-color: #000 !important;
 	pointer-events: none !important;
