@@ -192,7 +192,6 @@ https://raw.githubusercontent.com/satoru8/Izanami/master/Izanami.theme.css
 https://raw.githubusercontent.com/satoru8/NovaFork/master/Nova.theme.css
 https://raw.githubusercontent.com/satoru8/Nyx/master/Nyx.theme.css
 https://raw.githubusercontent.com/satoru8/StarterTheme/master/StarterTheme.theme.css
-https://raw.githubusercontent.com/satoru8/Void/master/Void.theme.css
 https://raw.githubusercontent.com/TakosThings/Metro-for-Discord/master/dist/Metro_for_Discord.theme.css
 https://raw.githubusercontent.com/tehbasshunter/theme-fixes/master/Overwatch.theme.css
 https://raw.githubusercontent.com/tehbasshunter/theme-fixes/master/Space_Nova.theme.css
