@@ -42,6 +42,10 @@
 	background-color: #2B2C31;
 	border: none;
 }
+#app-mount .modal-3HD5ck {
+    background-color: #36393F;
+    box-shadow: 0 0 0 1px rgba(32,34,37,.6), 0 2px 10px 0 rgba(0,0,0,.2);
+}
 #app-mount .footer-2yfCgX {
 	background-color: #2F3136;
 	box-shadow: inset 0 1px 0 rgba(47,49,54,.6);
@@ -304,6 +308,11 @@
     background-color: rgba(32,34,37,.6);
     border: 2px solid transparent;
     border-radius: 4px;
+}
+
+[style*="/assets/a13cfdd7220132fff399a76c3ed64519.svg"],
+[src*="/assets/a13cfdd7220132fff399a76c3ed64519.svg"] {
+	filter: brightness(85%) invert(100%);
 }
 
 body #ace_settingsmenu {
