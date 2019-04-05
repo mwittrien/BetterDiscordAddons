@@ -706,7 +706,7 @@ class PluginRepo {
 						var instPlugin = window.bdplugins[plugin.getName] ? window.bdplugins[plugin.getName].plugin : null;
 						if (instPlugin && this.getString(instPlugin.getAuthor()).toUpperCase() == plugin.getAuthor.toUpperCase() && this.getString(instPlugin.getVersion()) != plugin.getVersion && PluginUpdates && PluginUpdates.plugins && !PluginUpdates.plugins[url]) outdated++;
 					}
-					else {
+					else if (webview && typeof webview.getWebContents == "function") {
 						webviewqueue.push({body, url});
 						runInWebview();
 					}
