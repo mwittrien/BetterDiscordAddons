@@ -74,6 +74,7 @@
 .media-engine-video,
 .auditLog-3jNbM6,
 .embedContainer-26S24y,
+.embedInner-1-fpTo,
 .assetWrapper-2Qw_5D,
 .messagesWrapper-3lZDfY,
 .container-1YxwTf code,
@@ -122,8 +123,6 @@
 .or-3THJsp,
 .empty-hejAOj,
 .quickSelectPopoutOption-opKBx9:not(.selected):hover,
-.embed-IeVjo6,
-.embedInner-1-fpTo,
 .changeDetails-bk98pu,
 .paginationItem-2lUq0s:not(.selectedPage-3cFHgU),
 .Select-control,
@@ -141,6 +140,7 @@
 	background: rgba(var(--vtransparencycolor),var(--vtransparencyalpha)) !important;
 }
 
+.embed-IeVjo6,
 .players-1zg2l8,
 .wrapper-3UweLa,
 .inset-GQDQYw,
