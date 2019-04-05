@@ -436,12 +436,15 @@
 .betaTag-1tngRx,
 .improved-1F5LIN,
 .regionSelect-3lf4eE:not(:hover) button,
+[style^="color: rgb(114, 137, 218)"],
+[style*=" color: rgb(114, 137, 218)"],
 [style^="color: #7289da"],
 [style*=" color: #7289da"],
 [style^="color: #7289DA"],
 [style*=" color: #7289DA"],
-[style^="color: rgb(114, 137, 218)"],
-[style*=" color: rgb(114, 137, 218)"] {
+[color="rgb(114, 137, 218)"],
+[color="#7289da"],
+[color="#7289DA"] {
 	color: rgb(var(--vaccentcolor)) !important;
 }
 [style^="color: rgba(114, 137, 218, 0.9)"],
@@ -546,9 +549,12 @@
 .regionSelect-3lf4eE:hover button,
 .toast-brand,
 .noticeBrand-3nQBC_,
+[style*="background-color: rgb(114, 137, 218)"],
 [style*="background-color: #7289da"],
 [style*="background-color: #7289DA"],
-[style*="background-color: rgb(114, 137, 218)"] {
+[background-color="rgb(114, 137, 218)"],
+[background-color="#7289da"],
+[background-color="#7289DA"] {
 	background-color: rgb(var(--vaccentcolor)) !important;
 }
 .themeBrand-2qTyWV.container-fEIfjO,
@@ -622,9 +628,12 @@
 .checkbox-3kaeSU .checkboxInner-3yjcPe .checkboxElement-1qV33p:checked + span,
 .checkbox-3kaeSU .checkboxInner-3yjcPe.alt-6FvZrq .checkboxElement-1qV33p:checked + span:after,
 .item-26Dhrx[style*="border-color: rgb(114, 137, 218)"] .checked-3_4uQ9,
+[style*="border-color: rgb(114, 137, 218)"],
 [style*="border-color: #7289da"],
 [style*="border-color: #7289DA"],
-[style*="border-color: rgb(114, 137, 218)"] {
+[border-color="rgb(114, 137, 218)"],
+[border-color="#7289da"],
+[border-color="#7289DA"] {
 	border-color: rgb(var(--vaccentcolor)) !important;
 }
 [style*="border-color: rgba(114, 137, 218, 0.9)"] {
