@@ -61,6 +61,9 @@ window.onmessage = function (e) {
 		}
 	}
 };
+window.require = function () {
+	return () => {};
+};
 window.getString = function (obj) {
 	var string = "";
 	if (typeof obj == "string") string = obj;
