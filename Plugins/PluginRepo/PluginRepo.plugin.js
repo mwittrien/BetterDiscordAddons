@@ -54,7 +54,7 @@ class PluginRepo {
 			</svg>`;
 
 		this.frameMarkup = 
-			`<iframe class="discordSandbox" style="position: absolute !important; opacity: 0 !important;" src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/DiscordPreview.html"></iframe>`;
+			`<iframe class="discordSandbox" style="position: absolute !important; opacity: 0 !important; pointer-events: none !important;" src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/DiscordPreview.html"></iframe>`;
 
 		this.pluginEntryMarkup =
 			`<li class="pluginEntry ${BDFDB.disCNS._reposettingsclosed + BDFDB.disCN._repocheckboxitem}">
