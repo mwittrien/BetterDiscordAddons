@@ -27,6 +27,7 @@ window.onmessage = function (e) {
 				document.body.firstElementChild.style.removeProperty("display");
 				break;
 			case "Eval":
+				window.evalResult = null;
 				if (e.data.jsstring) eval(`(() => {${e.data.jsstring}})()`);
 				window.parent.postMessage({origin:"DiscordPreview",reason:"EvalResult",result:window.evalResult},"*");
 				break;
