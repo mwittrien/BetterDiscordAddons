@@ -6,15 +6,17 @@ window.onkeyup = function (e) {
 	window.parent.postMessage({origin:"DiscordPreview",reason:"KeyUp",which},"*");
 };
 window.onmessage = function (e) {
-	if (typeof e.data === "object" && e.data.origin == "ThemeRepo") {
+	if (typeof e.data === "object" && (e.data.origin == "PluginRepo" || e.data.origin == "ThemeRepo")) {
 		switch (e.data.reason) {
 			case "OnLoad":
 				document.body.innerHTML = document.body.innerHTML.replace(/\t|\n|\r/g, "");
-				document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_USERNAMESMALL/gi, e.data.username.toLowerCase());
-				document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_USERNAME/gi, e.data.username);
-				document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_USERID/gi, e.data.id);
-				document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_AVATAR/gi, "url(" + e.data.avatar.split('"').join('') + ")");
-				document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_DISCRIMINATOR/gi, e.data.discriminator);
+				if (e.data.username) {
+					document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_USERNAMESMALL/gi, e.data.username.toLowerCase());
+					document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_USERNAME/gi, e.data.username);
+				}
+				if (e.data.id) document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_USERID/gi, e.data.id);
+				if (e.data.avatar) document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_AVATAR/gi, "url(" + e.data.avatar.split('"').join('') + ")");
+				if (e.data.discriminator) document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_DISCRIMINATOR/gi, e.data.discriminator);
 				if (e.data.nativecss) {
 					var theme = document.createElement("link");
 					theme.classList.add(e.data.reason);
