@@ -28,7 +28,7 @@ window.onmessage = function (e) {
 				break;
 			case "Eval":
 				window.evalResult = null;
-				if (e.data.jsstring) eval(`(() => {${e.data.jsstring}})()`);
+				if (e.data.jsstring) window.eval(`(() => {${e.data.jsstring}})()`);
 				window.parent.postMessage({origin:"DiscordPreview",reason:"EvalResult",result:window.evalResult},"*");
 				break;
 			case "NewTheme":
