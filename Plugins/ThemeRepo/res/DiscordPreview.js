@@ -72,7 +72,7 @@ window.getString = function (obj) {
 };
 window.WebModulesFind = function (filter) {
 	const id = "PluginRepo-WebModules";
-	const req = typeof(global.window.webpackJsonp) == "function" ? global.window.webpackJsonp([], {[id]: (module, exports, req) => exports.default = req}, [id]).default : global.window.webpackJsonp.push([[], {[id]: (module, exports, req) => module.exports = req}, [[id]]]);
+	const req = typeof(window.webpackJsonp) == "function" ? window.webpackJsonp([], {[id]: (module, exports, req) => exports.default = req}, [id]).default : window.webpackJsonp.push([[], {[id]: (module, exports, req) => module.exports = req}, [[id]]]);
 	delete req.m[id];
 	delete req.c[id];
 	for (let m in req.c) {
