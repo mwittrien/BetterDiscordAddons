@@ -3,7 +3,7 @@
 class CompleteTimestamps {
 	getName () {return "CompleteTimestamps";}
 
-	getVersion () {return "1.3.1";}
+	getVersion () {return "1.3.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,11 +11,12 @@ class CompleteTimestamps {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Arabic Fix","Selecting and copying messages no longer copies the invisible arabic fix divider"]]
+			"added":[["Embed Timestamp","Added the option to also change timestamps in embed timestamps (for Example Quotes)"]]
 		};
 		
 		this.patchModules = {
 			"MessageGroup":["componentDidMount","componentDidUpdate"],
+			"Embed":["componentDidMount","componentDidUpdate"],
 			"StandardSidebarView":"componentWillUnmount"
 		};
 
@@ -24,6 +25,7 @@ class CompleteTimestamps {
 		this.defaults = {
 			settings: {
 				showInChat:		{value:true, 	description:"Replace Chat Timestamp with Complete Timestamp:"},
+				showInEmbed:	{value:true, 	description:"Replace Embed Timestamp with Complete Timestamp:"},
 				showOnHover:	{value:false, 	description:"Also show Timestamp when you hover over a message:"},
 				changeForEdit:	{value:false, 	description:"Change the Time for the Edited Time Tooltips:"},
 				displayTime:	{value:true, 	description:"Display the Time in the Timestamp:"},
@@ -217,6 +219,14 @@ class CompleteTimestamps {
 
 	processMessageGroup (instance, wrapper) {
 		if (BDFDB.getData("showInChat", this, "settings")) for (let stamp of wrapper.querySelectorAll("time[datetime]")) this.changeTimestamp(stamp);
+	}
+
+	processEmbed (instance, wrapper) {
+		let embed = BDFDB.getReactValue(instance, "props.embed");
+		let footer = wrapper.querySelector(BDFDB.dotCN.embedfootertext);
+		if (footer && embed && embed.footer && embed.timestamp && BDFDB.getData("showInEmbed", this, "settings")) {
+			footer.lastChild.textContent = this.getTimestamp(this.languages[BDFDB.getData("creationDateLang", this, "choices")].id, embed.timestamp._i);
+		}
 	}
 
 	processStandardSidebarView (instance, wrapper) {
