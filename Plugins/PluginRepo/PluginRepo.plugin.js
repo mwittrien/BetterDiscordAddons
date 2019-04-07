@@ -3,7 +3,7 @@
 class PluginRepo {
 	getName () {return "PluginRepo";} 
 
-	getVersion () {return "1.7.7";}
+	getVersion () {return "1.7.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class PluginRepo {
 
 	initConstructor () {
 		this.changelog = {
-			"improved":[["Loading Speed","Increased Loading Speed"]]
+			"fixed":[["Canary","Due to internal changes with Discords Electron Version, the plugin was rendered broken on some Canary instances or was heavily slowed down, this issue was fixed and made PluginRepo load the Plugins of the Repo a lot faster too"]]
 		};
 		
 		this.patchModules = {
@@ -52,6 +52,9 @@ class PluginRepo {
 				<path d="M0.000 183.023 L 0.000 366.046 46.377 366.046 L 92.754 366.046 92.754 312.629 L 92.754 259.213 127.223 259.213 C 174.433 259.213,187.432 257.146,210.766 245.926 C 311.105 197.681,301.344 41.358,195.859 7.193 C 173.603 -0.015,173.838 0.000,80.846 0.000 L 0.000 0.000 0.000 183.023 M157.615 88.195 C 193.007 97.413,198.827 152.678,166.407 171.674 C 158.993 176.019,155.494 176.398,122.807 176.398 L 92.754 176.398 92.754 131.677 L 92.754 86.957 122.807 86.957 C 146.807 86.957,153.819 87.206,157.615 88.195" stroke="none" fill="#7289da" fill-rule="evenodd"></path>
 				<path d="M226.647 3.824 C 258.085 21.580,282.721 54.248,291.095 89.281 C 292.183 93.834,293.041 95.659,294.560 96.655 C 310.880 107.348,312.400 140.701,297.286 156.464 C 293.685 160.221,293.134 161.348,291.162 169.006 C 282.026 204.468,259.916 235.185,230.701 253.002 C 229.548 253.705,235.510 262.261,270.237 309.731 L 311.131 365.631 355.565 365.846 L 400.000 366.060 400.000 348.309 L 400.000 330.557 364.338 285.630 L 328.676 240.703 333.494 238.892 C 373.356 223.907,395.248 189.691,399.313 136.020 C 404.504 67.495,372.510 19.710,311.375 4.675 C 294.592 0.548,287.694 -0.000,252.482 0.000 L 219.876 0.000 226.647 3.824 M202.899 265.964 C 183.869 272.635,168.536 274.960,139.752 275.540 L 116.770 276.003 116.770 321.024 L 116.770 366.046 163.975 366.046 L 211.180 366.046 211.180 314.700 C 211.180 286.460,210.901 263.386,210.559 263.425 C 210.217 263.464,206.770 264.607,202.899 265.964" stroke="none" fill="#7f8186" fill-rule="evenodd"></path>
 			</svg>`;
+
+		this.frameMarkup = 
+			`<iframe class="discordSandbox" style="position: absolute !important; opacity: 0 !important;" src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/DiscordPreview.html"></iframe>`;
 
 		this.pluginEntryMarkup =
 			`<li class="pluginEntry ${BDFDB.disCNS._reposettingsclosed + BDFDB.disCN._repocheckboxitem}">
@@ -309,7 +312,7 @@ class PluginRepo {
 			clearInterval(this.updateInterval);
 			clearTimeout(this.loading.timeout);
 
-			BDFDB.removeEles("webview[webview-pluginrepo]",".pluginrepo-notice",".bd-pluginrepobutton",".pluginrepo-loadingicon",BDFDB.dotCN.app + " > .repo-loadingwrapper:empty");
+			BDFDB.removeEles("iframe.discordSanxbox",".pluginrepo-notice",".bd-pluginrepobutton",".pluginrepo-loadingicon",BDFDB.dotCN.app + " > .repo-loadingwrapper:empty");
 
 			BDFDB.unloadMessage(this);
 		}
@@ -565,9 +568,9 @@ class PluginRepo {
 	}
 
 	loadPlugins () {
-		BDFDB.removeEles("webview[webview-pluginrepo]",".pluginrepo-loadingicon");
-		var getPluginInfo, createWebview, runInWebview;
-		var webview, webviewrunning = false, webviewqueue = [], outdated = 0, i = 0;
+		BDFDB.removeEles("iframe.discordSanxbox",".pluginrepo-loadingicon");
+		var getPluginInfo, createFrame, runInFrame;
+		var frame, framerunning = false, framequeue = [], outdated = 0, i = 0;
 		var tags = ["getName", "getVersion", "getAuthor", "getDescription"];
 		var seps = ["\"", "\'", "\`"];
 		let request = require("request");
@@ -592,17 +595,19 @@ class PluginRepo {
 				loadingicon.addEventListener("mouseenter", () => {BDFDB.createTooltip("Loading PluginRepo",loadingicon,{type:"left",delay:500});})
 				loadingiconwrapper.appendChild(loadingicon);
 
-				createWebview().then(() => {
+				createFrame().then(() => {
 					getPluginInfo(() => {
 						if (!this.started) {
 							clearTimeout(this.loading.timeout);
-							BDFDB.removeEles(webview);
+							BDFDB.removeEles(frame);
+							if (frame && frame.messageReceived) window.removeEventListener("message", frame.messageReceived);
 							return;
 						}
 						var finishCounter = 0, finishInterval = setInterval(() => { 
-							if ((webviewqueue.length == 0 && !webviewrunning) || finishCounter > 300 || !this.loading.is) {
+							if ((framequeue.length == 0 && !framerunning) || finishCounter > 300 || !this.loading.is) {
 								clearInterval(finishInterval);
-								BDFDB.removeEles(webview, loadingicon, ".pluginrepo-loadingicon");
+								BDFDB.removeEles(frame, loadingicon, ".pluginrepo-loadingicon");
+								if (frame && frame.messageReceived) window.removeEventListener("message", frame.messageReceived);
 								if (!loadingiconwrapper.firstChild) BDFDB.removeEles(loadingiconwrapper);
 								clearTimeout(this.loading.timeout);
 								this.loading = {is:false, timeout:null, amount:this.loading.amount};
@@ -655,32 +660,21 @@ class PluginRepo {
 						/* code is minified -> add newlines */
 						bodycopy = body.replace(new RegExp("}", "g"), "}\n");
 					}
-					if (url != "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/PluginRepo/PluginRepo.plugin.js" && body.indexOf("const config = {") > -1 && body.indexOf("index.js") > -1 && body.indexOf("discord_id") > -1 && body.indexOf("github_raw") > -1) {
-						let configstring = body.split("const config = {")[1].split("};")[0].replace(/[\n\r\t]/g, "").replace(/:\s|\s:/g, ":").replace(/["'`]:/g, ":").replace(/([{,])["'`]/g, "$1").split("info:{")[1].split(",github:")[0];
-						for (let tag of tags) {
-							let result = tag != "getAuthor" ? new RegExp(tag.replace("get", "").toLowerCase() + ":([\"|\'|\`]).*\\1","gi").exec(configstring) : /authors:\[{name:([\"|\'|\`]).*\1/gi.exec(configstring);
-							if (result) {
-								var separator = result[1];
-								result = result[0].replace(new RegExp("\\\\" + separator, "g"), separator).split(separator);
-								if (result.length > 2) {
-									result = tag != "getDescription" ? result[1] : result.slice(1, -1).join(separator).replace(new RegExp("\\\\n", "g"), "<br>").replace(new RegExp("\\\\", "g"), "");
-									plugin[tag] = tag != "getVersion" ? result.charAt(0).toUpperCase() + result.slice(1) : result;
-								}
+					let configreg = /(module\.exports|config)\s*=\s*\{\n*\r*\t*["'`]*info["'`]*\s*:\s*/i.exec(bodycopy);
+					if (url != "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/PluginRepo/PluginRepo.plugin.js" && configreg) {
+						try {
+							let config = JSON.parse('{"info":' + bodycopy.substring(configreg.index).split(configreg[0])[1].split("};")[0] + '}');
+							plugin.getName = config.info.name.charAt(0).toUpperCase() + config.info.name.slice(1);
+							plugin.getDescription = config.info.description.charAt(0).toUpperCase() + config.info.description.slice(1);
+							plugin.getVersion = config.info.version;
+							plugin.getAuthor = "";
+							if (typeof config.info.author == "string") plugin.getAuthor = config.info.author.charAt(0).toUpperCase() + config.info.author.slice(1);
+							else if (typeof config.info.authors == "string") plugin.getAuthor = config.info.authors.charAt(0).toUpperCase() + config.info.authors.slice(1);
+							else if (Array.isArray(config.info.authors)) for (let author of config.info.authors) {
+								plugin.getAuthor += (plugin.getAuthor + (plugin.getAuthor ? ", " : "") + (typeof author == "string" ? author : author.name));
 							}
 						}
-					}
-					else if (url.indexOf("https://raw.githubusercontent.com/samogot/") > -1) {
-						let configstring = body.replace(/[\n\r\t]/g, "").split('module.exports = {"info": {')[1].split("};")[0].replace(/:\s|\s:/g, ":").replace(/["'`]:/g, ":").replace(/([{,])["'`]/g, "$1");
-						for (let tag of tags) {
-							let result = tag != "getAuthor" ? new RegExp(tag.replace("get", "").toLowerCase() + ":([\"|\'|\`]).*\\1","gi").exec(configstring) : /authors:\[([\"|\'|\`]).*\1/gi.exec(configstring);
-							if (result) {
-								var separator = result[1];
-								result = result[0].replace(new RegExp("\\\\" + separator, "g"), separator).split(separator);
-								if (result.length > 2) {
-									plugin[tag] = tag != "getVersion" ? result[1].charAt(0).toUpperCase() + result[1].slice(1) : result[1];
-								}
-							}
-						}
+						catch (err) {}
 					}
 					else {
 						for (let tag of tags) {
@@ -697,18 +691,16 @@ class PluginRepo {
 						}
 					}
 					let valid = true;
-					for (let tag of tags) {
-						if (!plugin[tag] || plugin[tag].length > 10000) valid = false;
-					}
+					for (let tag of tags) if (!plugin[tag] || plugin[tag].length > 10000) valid = false;
 					if (valid) {
 						plugin.url = url;
 						this.loadedPlugins[url] = plugin;
 						var instPlugin = window.bdplugins[plugin.getName] ? window.bdplugins[plugin.getName].plugin : null;
 						if (instPlugin && this.getString(instPlugin.getAuthor()).toUpperCase() == plugin.getAuthor.toUpperCase() && this.getString(instPlugin.getVersion()) != plugin.getVersion && PluginUpdates && PluginUpdates.plugins && !PluginUpdates.plugins[url]) outdated++;
 					}
-					else if (webview && typeof webview.getWebContents == "function") {
-						webviewqueue.push({body, url});
-						runInWebview();
+					else if (frame && frame.contentWindow) {
+						framequeue.push({body, url});
+						runInFrame();
 					}
 				}
 				i++;
@@ -716,84 +708,62 @@ class PluginRepo {
 			});
 		}
 
-		createWebview = () => {
+		createFrame = () => {
+			var markup = this.frameMarkup;
 			return new Promise(function(callback) {
-				webview = document.createElement("webview");
-				webview.src = "https://discordapp.com/";
-				webview.setAttribute("webview-PluginRepo", null);
-				webview.style.setProperty("opacity", "0", "important");
-				webview.style.setProperty("pointer-events", "none", "important");
-				webview.startTimeout = setTimeout(() => {
+				frame = BDFDB.htmlToElement(markup);
+				frame.startTimeout = setTimeout(() => {
 					callback();
 				},600000);
-				webview.addEventListener("dom-ready", () => {
-					clearTimeout(webview.startTimeout);
-					callback();
-				});
-				document.body.appendChild(webview);
+				frame.messageReceived = e => {
+					if (typeof e.data === "object" && e.data.origin == "DiscordPreview") {
+						switch (e.data.reason) {
+							case "OnLoad":
+								frame.contentWindow.postMessage({origin:"PluginRepo",reason:"OnLoad"},"*");
+								callback();
+								break;
+						}
+					}
+				};
+				window.addEventListener("message", frame.messageReceived);
+				
+				document.body.appendChild(frame);
 			});
 		}
 
-		runInWebview = () => {
-			if (webviewrunning) return;
-			let webviewdata = webviewqueue.shift();
-			if (!webviewdata) return;
-			webviewrunning = true;
-			let {body, url} = webviewdata;
+		runInFrame = () => {
+			if (framerunning) return;
+			let framedata = framequeue.shift();
+			if (!framedata) return;
+			framerunning = true;
+			let {body, url} = framedata;
 			let name = body.replace(new RegExp("\\s*\:\\s*", "g"), ":").split('"name":"');
 			if (name.length > 1) {
 				name = name[1].split('"')[0];
-				webview.getWebContents().executeJavaScript(`
+				var processResult = plugin => {
+					if (BDFDB.isObject(plugin)) {
+						plugin.url = url;
+						this.loadedPlugins[url] = plugin;
+						var instPlugin = window.bdplugins[plugin.getName] ? window.bdplugins[plugin.getName].plugin : null;
+						if (instPlugin && this.getString(instPlugin.getAuthor()).toUpperCase() == plugin.getAuthor.toUpperCase() && this.getString(instPlugin.getVersion()) != plugin.getVersion) outdated++;
+					}
+					framerunning = false;
+					runInFrame();
+				};
+				var evalResultReceived = e => {
+					if (typeof e.data === "object" && e.data.origin == "DiscordPreview") {
+						switch (e.data.reason) {
+							case "EvalResult":
+								window.removeEventListener("message", evalResultReceived);
+								processResult(e.data.result);
+								break;
+						}
+					}
+				};
+				window.addEventListener("message", evalResultReceived);
+				frame.contentWindow.postMessage({origin:"PluginRepo",reason:"Eval",jsstring:`
 					try {
 						${body}
-						var getString = function (obj) {
-							var string = "";
-							if (typeof obj == "string") string = obj;
-							else if (obj && obj.props) {
-								if (typeof obj.props.children == "string") string = obj.props.children;
-								else if (Array.isArray(obj.props.children)) for (let c of obj.props.children) string += typeof c == "string" ? c : getString(c);
-							}
-							return string;
-						};
-						var WebModulesFind = function (filter) {
-							const id = "PluginRepo-WebModules";
-							const req = typeof(global.window.webpackJsonp) == "function" ? global.window.webpackJsonp([], {[id]: (module, exports, req) => exports.default = req}, [id]).default : global.window.webpackJsonp.push([[], {[id]: (module, exports, req) => module.exports = req}, [[id]]]);
-							delete req.m[id];
-							delete req.c[id];
-							for (let m in req.c) {
-								if (req.c.hasOwnProperty(m)) {
-									var module = req.c[m].exports;
-									if (module && module.__esModule && module.default && filter(module.default)) return module.default;
-									if (module && filter(module)) return module;
-								}
-							}
-						};
-						var WebModulesFindByProperties = function (properties) {
-							properties = Array.isArray(properties) ? properties : Array.from(arguments);
-							var module = WebModulesFind(module => properties.every(prop => module[prop] !== undefined));
-							if (!module) {
-								module = {};
-								for (let property of properties) module[property] = property;
-							}
-							return module;
-						};
-						var WebModulesFindByName = function (name) {
-							return WebModulesFind(module => module.displayName === name);
-						};
-						var React = WebModulesFindByProperties('createElement', 'cloneElement');
-						var ReactDOM = WebModulesFindByProperties('render', 'findDOMNode');
-						global.BDV2 = {};
-						global.BDV2.react = React;
-						global.BDV2.reactDom = ReactDOM;
-						global.BDV2.WebpackModules = {};
-						global.BDV2.WebpackModules.find = WebModulesFind;
-						global.BDV2.WebpackModules.findByUniqueProperties = WebModulesFindByProperties;
-						global.BDV2.WebpackModules.findByDisplayName = WebModulesFindByName;
-						global.BdApi = {};
-						global.BdApi.React = React;
-						global.BdApi.ReactDOM = ReactDOM;
-						global.BdApi.findModule = WebModulesFind;
-						global.BdApi.findModuleByProps = WebModulesFindByProperties;
 						var p = new ${name}();
 						var data = {
 							"getName":getString(p.getName()),
@@ -801,22 +771,12 @@ class PluginRepo {
 							"getVersion":getString(p.getVersion()),
 							"getDescription":getString(p.getDescription())
 						};
-						Promise.resolve(data);
+						window.evalResult = data;
 					}
 					catch (err) {
-						Promise.resolve(err);
+						window.evalResult = null;
 					}`
-				).then(plugin => {
-					if (BDFDB.isObject(plugin)) {
-						plugin.url = url;
-						this.loadedPlugins[url] = plugin;
-						var instPlugin = window.bdplugins[plugin.getName] ? window.bdplugins[plugin.getName].plugin : null;
-						if (instPlugin && this.getString(instPlugin.getAuthor()).toUpperCase() == plugin.getAuthor.toUpperCase() && this.getString(instPlugin.getVersion()) != plugin.getVersion) outdated++;
-					}
-					webview.getWebContents().reload();
-					webviewrunning = false;
-					runInWebview();
-				});
+				},"*");
 			}
 		}
 	}
