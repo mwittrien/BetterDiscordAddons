@@ -1,3 +1,5 @@
+window.global = window;
+
 window.onload = function () {
 	window.parent.postMessage({origin:"DiscordPreview",reason:"OnLoad"},"*");
 };
