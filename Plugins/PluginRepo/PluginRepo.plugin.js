@@ -312,7 +312,13 @@ class PluginRepo {
 			clearInterval(this.updateInterval);
 			clearTimeout(this.loading.timeout);
 
-			BDFDB.removeEles("iframe.discordSanxbox",".pluginrepo-notice",".bd-pluginrepobutton",".pluginrepo-loadingicon",BDFDB.dotCN.app + " > .repo-loadingwrapper:empty");
+			BDFDB.removeEles(".pluginrepo-notice",".bd-pluginrepobutton",".pluginrepo-loadingicon",BDFDB.dotCN.app + " > .repo-loadingwrapper:empty");
+			
+			var frame = document.querySelector("iframe.discordSandbox");
+			if (frame) {
+				window.removeEventListener("message", frame.messageReceived);
+				frame.remove();
+			}
 
 			BDFDB.unloadMessage(this);
 		}
@@ -568,7 +574,7 @@ class PluginRepo {
 	}
 
 	loadPlugins () {
-		BDFDB.removeEles("iframe.discordSanxbox",".pluginrepo-loadingicon");
+		BDFDB.removeEles("iframe.discordSandbox",".pluginrepo-loadingicon");
 		var getPluginInfo, createFrame, runInFrame;
 		var frame, framerunning = false, framequeue = [], outdated = 0, i = 0;
 		var tags = ["getName", "getVersion", "getAuthor", "getDescription"];
