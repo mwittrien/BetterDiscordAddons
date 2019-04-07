@@ -12,6 +12,7 @@ window.onmessage = function (e) {
 		switch (e.data.reason) {
 			case "OnLoad":
 				document.body.innerHTML = document.body.innerHTML.replace(/\t|\n|\r/g, "");
+				if (e.data.webpackJsonp) window.webpackJsonp = e.data.webpackJsonp;
 				if (e.data.username) {
 					document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_USERNAMESMALL/gi, e.data.username.toLowerCase());
 					document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_USERNAME/gi, e.data.username);
