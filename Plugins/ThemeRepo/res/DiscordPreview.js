@@ -12,7 +12,6 @@ window.onmessage = function (e) {
 		switch (e.data.reason) {
 			case "OnLoad":
 				document.body.innerHTML = document.body.innerHTML.replace(/\t|\n|\r/g, "");
-				if (e.data.webpackJsonp) window.webpackJsonp = e.data.webpackJsonp;
 				if (e.data.username) {
 					document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_USERNAMESMALL/gi, e.data.username.toLowerCase());
 					document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_USERNAME/gi, e.data.username);
@@ -72,6 +71,9 @@ window.getString = function (obj) {
 		else if (Array.isArray(obj.props.children)) for (let c of obj.props.children) string += typeof c == "string" ? c : getString(c);
 	}
 	return string;
+};
+window.webpackJsonp = function () {
+	return {default:{m:{},c:{}}};
 };
 window.WebModulesFind = function (filter) {
 	const id = "PluginRepo-WebModules";
