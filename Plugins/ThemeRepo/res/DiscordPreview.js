@@ -53,3 +53,49 @@ window.onmessage = function (e) {
 		}
 	}
 };
+window.getString = function (obj) {
+	var string = "";
+	if (typeof obj == "string") string = obj;
+	else if (obj && obj.props) {
+		if (typeof obj.props.children == "string") string = obj.props.children;
+		else if (Array.isArray(obj.props.children)) for (let c of obj.props.children) string += typeof c == "string" ? c : getString(c);
+	}
+	return string;
+};
+window.WebModulesFind = function (filter) {
+	const id = "PluginRepo-WebModules";
+	const req = typeof(global.window.webpackJsonp) == "function" ? global.window.webpackJsonp([], {[id]: (module, exports, req) => exports.default = req}, [id]).default : global.window.webpackJsonp.push([[], {[id]: (module, exports, req) => module.exports = req}, [[id]]]);
+	delete req.m[id];
+	delete req.c[id];
+	for (let m in req.c) {
+		if (req.c.hasOwnProperty(m)) {
+			var module = req.c[m].exports;
+			if (module && module.__esModule && module.default && filter(module.default)) return module.default;
+			if (module && filter(module)) return module;
+		}
+	}
+};
+window.WebModulesFindByProperties = function (properties) {
+	properties = Array.isArray(properties) ? properties : Array.from(arguments);
+	var module = WebModulesFind(module => properties.every(prop => module[prop] !== undefined));
+	if (!module) {
+		module = {};
+		for (let property of properties) module[property] = property;
+	}
+	return module;
+};
+window.WebModulesFindByName = function (name) {
+	return WebModulesFind(module => module.displayName === name);
+};
+window.BDV2 = {};
+window.BDV2.react = window.React;
+window.BDV2.reactDom = window.ReactDOM;
+window.BDV2.WebpackModules = {};
+window.BDV2.WebpackModules.find = window.WebModulesFind;
+window.BDV2.WebpackModules.findByUniqueProperties = window.WebModulesFindByProperties;
+window.BDV2.WebpackModules.findByDisplayName = window.WebModulesFindByName;
+window.BdApi = {};
+window.BdApi.React = window.React;
+window.BdApi.ReactDOM = window.ReactDOM;
+window.BdApi.findModule = window.WebModulesFind;
+window.BdApi.findModuleByProps = window.WebModulesFindByProperties;
