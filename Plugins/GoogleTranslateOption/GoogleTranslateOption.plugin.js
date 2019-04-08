@@ -3,13 +3,17 @@
 class GoogleTranslateOption {
 	getName () {return "GoogleTranslateOption";}
 
-	getVersion () {return "1.6.5";} 
+	getVersion () {return "1.6.7";} 
 
-	getAuthor () {return "DevilBro, square";}
+	getAuthor () {return "DevilBro";}
 
-	getDescription () {return "Adds a Google Translate option to your context menu, which shows a preview of the translated text and on click will open the selected text in Google Translate. Also adds a translation button to your textareas, which will automatically translate the text for you before it is being send. DeepLApi written by square. Thanks ;)";}
+	getDescription () {return "Adds a Google Translate option to your context menu, which shows a preview of the translated text and on click will open the selected text in Google Translate. Also adds a translation button to your textareas, which will automatically translate the text for you before it is being send.";}
 
 	initConstructor () {
+		this.changelog = {
+			"fixed":[["DeepL","DeepL support was removed because Discord changed their electron version to the beta 5, which no longer supports webviews like they used to. This will not be readded by me in the future, DeepL caused a lot of issues and the way it was implemented caused a log of bugs anyways. Do not bother me about it"]]
+		};
+		
 		this.labels = {};
 
 		this.patchModules = {
@@ -28,9 +32,6 @@ class GoogleTranslateOption {
 			settings: {
 				addTranslateButton:		{value:true, 		description:"Adds an translate button to the chatbar."},
 				sendOriginalMessage:	{value:false, 		description:"Send the original message together with the translation."}
-			},
-			translators: {
-				useGoogle:				{value:true, 		choice1:"DeepL", 		choice2:"Google",		popout:true}
 			},
 			choices: {
 				inputContext:			{value:"auto", 		place:"Context", 		direction:"Input",		popout:false, 		description:"Input Language in selected Messages:"},
@@ -119,213 +120,8 @@ class GoogleTranslateOption {
 							<input type="checkbox" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}" id="translating-checkbox">
 						</div>
 					</div>
-					${Object.keys(this.defaults.translators).map((key, i) =>
-					`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
-						<h3 class="${BDFDB.disCNS.flex + BDFDB.disCNS.justifystart + BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Translator:</h3>
-						<h3 class="${BDFDB.disCNS.flex + BDFDB.disCNS.justifystart + BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.translators[key].choice1}</h3>
-						<div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCNS.switchthemedefault + BDFDB.disCN.switchvalueunchecked}" style="flex: 0 0 auto;">
-							<input type="checkbox" value="translators ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch translators-switch">
-						</div>
-						<h3 class="${BDFDB.disCNS.flex + BDFDB.disCNS.justifyend + BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.translators[key].choice2}</h3>
-					</div>`).join("")}
 				</div>
 			</div>`;
-
-		this.DeepLTranslateAPI = function () {
-			var INPUT, OUTPUT, clearInput, current, domReady, enabled, executeScript, getLanguage, getOutput, langI, langO, setInput, setLanguage, timer, wc, webview;
-			var _extends = Object.assign || function (target) {
-				for (var i = 1; i < arguments.length; i++) {
-					var source = arguments[i];for (var key in source) {
-						if (Object.prototype.hasOwnProperty.call(source, key)) {
-							target[key] = source[key];
-						}
-					}
-				}return target;
-			}
-			class DeepLTranslateAPI {
-				start() {
-					enabled = true;
-					webview = document.createElement("webview");
-					webview.style.visibility = "hidden";
-					webview.id = "wvDeepLTranslateAPI";
-					webview.partition = "persist:DeepLTranslateAPI";
-					webview.addEventListener("dom-ready", async function () {
-						wc = webview.getWebContents();
-						webview.setAudioMuted(true);
-						domReady = await executeScript(function () {
-							var tas = document.querySelectorAll("textarea");
-							window["INPUT"] = tas[0];
-							window["OUTPUT"] = tas[1];
-							return Promise.resolve(true);
-						});
-					});
-					webview.src = "https://www.deepl.com/translator";
-					document.body.appendChild(webview);
-				}
-
-				stop() {
-					enabled = domReady = false;
-					// webview.terminate()
-					webview.remove();
-					if (timer) {
-						cancelAnimationFrame(timer);
-					}
-					if (current != null) {
-						current.reject(new Error("DeepLTranslateAPI was stopped."));
-					}
-					webview = wc = langI = langO = current = timer = null;
-				}
-
-				isReady() {
-					return domReady;
-				}
-
-				translate(text) {
-					return new Promise(function (resolve, reject) {
-						if (langI === langO) {
-							return resolve(text);
-						}
-						if (!enabled) {
-							return reject(new Error("DeepLTranslateAPI is disabled!"));
-						}
-						if (!domReady) {
-							return reject(new Error("DeepL didn't load (yet?)!"));
-						}
-						if (current != null) {
-							current.reject(new Error("Can only translate so much."));
-						}
-						current = { resolve, reject };
-						(async function () {
-							var __unchanged__, valueNew, valueOld;
-							valueOld = await getOutput();
-							({ __unchanged__ } = await setInput(text));
-							if (true === __unchanged__) {
-								valueOld = void 0;
-							}
-							if (timer) {
-								return;
-							}
-							// todo: figgure out event based change on output
-							while (enabled && valueOld === (valueNew = await getOutput())) {
-								await new Promise(function (c) {
-									return timer = requestAnimationFrame(c);
-								});
-							}
-							current.resolve(valueNew);
-							timer = current = null;
-						})();
-					});
-				}
-
-				setInputLanguage(lang) {
-					return setLanguage(true, lang);
-				}
-
-				setOutputLanguage(lang) {
-					return setLanguage(false, lang);
-				}
-
-				getInputLanguage(lang) {
-					return getLanguage(true);
-				}
-
-				getOutputLanguage(lang) {
-					return getLanguage(false);
-				}
-
-				clearInput() {
-					return clearInput();
-				}
-
-			};
-
-			webview = wc = current = timer = null;
-
-			enabled = domReady = false;
-
-			langI = langO = "auto";
-
-			INPUT = "#_ta0#input#DeepLTranslateAPI#";
-
-			OUTPUT = "#_ta1#output#DeepLTranslateAPI#";
-
-			executeScript = function (replace, func) {
-				var code, k, v;
-				if (!func) {
-					func = replace;
-					replace = { INPUT, OUTPUT };
-				} else {
-					replace = _extends({ INPUT, OUTPUT }, replace);
-				}
-				code = "(" + func.toString() + ")()";
-				for (k in replace) {
-					v = replace[k];
-					if ("string" === typeof v) {
-						v = v.split("\n").join("\\n");
-						v = v.replace(/[^\w\d\s]/g, "\\$&");
-					}
-					code = code.split(k).join(v);
-				}
-				return wc.executeJavaScript(code);
-			};
-
-			setInput = function (text) {
-				return executeScript({ text }, function () {
-					return Promise.resolve(window["INPUT"].value === "text" ? {
-						__unchanged__: true
-					} : (window["INPUT"].value = "text", window["INPUT"].dispatchEvent(new Event("change")), window["INPUT"].value));
-				});
-			};
-
-			getOutput = function () {
-				return executeScript(function () {
-					return Promise.resolve(window["OUTPUT"].value);
-				});
-			};
-
-			setLanguage = async function (inputOrOutput, lang) {
-				if (!domReady) {
-					throw new Error("DeepL didn't load (yet?)!");
-				}
-				lang = !lang || lang === "auto" ? lang : lang.toUpperCase();
-				if (!(lang === "DE" || lang === "EN" || lang === "FR" || lang === "ES" || lang === "IT" || lang === "NL" || lang === "PL" || inputOrOutput && "auto" === lang)) {
-					throw new Error(`${lang} is not a supported language!`);
-				}
-				if (inputOrOutput) {
-					langI = lang;
-				} else {
-					if (langI === (langO = lang)) {
-						return;
-					}
-				}
-				await executeScript({
-					inputOrOutput,
-					__lang____: lang
-				}, function () {
-					document.querySelector(`.lmt__language_select--${inputOrOutput ? "source" : "target"} li[dl-value=__lang____]`).click();
-				});
-			};
-
-			getLanguage = async function (inputOrOutput) {
-				if (!domReady) {
-					throw new Error("DeepL didn't load (yet?)!");
-				}
-				return await executeScript({ inputOrOutput }, function () {
-					return Promise.resolve(document.querySelector(`.lmt__language_select--${inputOrOutput ? "source" : "target"}`).getAttribute("dl-value"));
-				});
-			};
-
-			clearInput = async function () {
-				if (!domReady) {
-					throw new Error("DeepL didn't load (yet?)!");
-				}
-				await executeScript(function () {
-					document.querySelector(".lmt__clear_text_button").click();
-				});
-			};
-
-			return DeepLTranslateAPI;
-		}.call(this);
 
 		this.css = `
 			${BDFDB.dotCNS.textareawrapall + BDFDB.dotCN.textareainner} {
@@ -390,7 +186,6 @@ class GoogleTranslateOption {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		var choices = 	BDFDB.getAllData(this, "choices"); 
 		var settings = 	BDFDB.getAllData(this, "settings"); 
-		var translators = 	BDFDB.getAllData(this, "translators"); 
 		var settingshtml = `<div class="${this.name}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="DevilBro-settings-inner">`;
 		for (let key in choices) {
 			let choice = this.getLanguageChoice(key);
@@ -398,9 +193,6 @@ class GoogleTranslateOption {
 		}
 		for (let key in settings) {
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
-		}
-		for (let key in translators) {
-			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.flex + BDFDB.disCNS.justifystart + BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Translator:</h3><h3 class="${BDFDB.disCNS.flex + BDFDB.disCNS.justifystart + BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.translators[key].choice1}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="translators ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch translators-switch"${translators[key] ? " checked" : ""}></div><h3 class="${BDFDB.disCNS.flex + BDFDB.disCNS.justifyend + BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.translators[key].choice2}</h3></div>`;
 		}
 		settingshtml += `</div></div>`;
 
@@ -454,8 +246,6 @@ class GoogleTranslateOption {
 
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
-			this.stopDeepL();
-
 			document.querySelectorAll(BDFDB.dotCN.message + ".translated").forEach(message => {
 				this.resetMessage(message);
 			});
@@ -468,17 +258,6 @@ class GoogleTranslateOption {
 
 
 	// begin of own functions
-
-	startDeepL () {
-		this.stopDeepL();
-		this.DeepLTranslate = new this.DeepLTranslateAPI();
-		this.DeepLTranslate.start();
-	}
-
-	stopDeepL () {
-		if (this.DeepLTranslate && typeof this.DeepLTranslate.stop === "function") this.DeepLTranslate.stop();
-		this.DeepLTranslate = undefined;
-	}
 
 	changeLanguageStrings () {
 		this.messageTranslateContextEntryMarkup = 		this.messageTranslateContextEntryMarkup.replace("REPLACE_context_messagetranslateoption_text", this.labels.context_messagetranslateoption_text);
@@ -537,14 +316,10 @@ class GoogleTranslateOption {
 			BDFDB.languages,
 			{"binary":	{name:"Binary",		id:"binary",	integrated:false,	dic:false,	deepl:true}}
 		);
-		if (!BDFDB.getData("useGoogle", this, "translators")) {
-			this.languages = BDFDB.filterObject(this.languages, (lang) => {return lang.deepl == true ? lang : null});
-			this.startDeepL();
-		}
-		else this.stopDeepL();
 	}
 
 	getLanguageChoice (direction, place) {
+		this.setLanguage();
 		var type = typeof place === "undefined" ? direction : direction.toLowerCase() + place.charAt(0).toUpperCase() + place.slice(1).toLowerCase();
 		var choice = BDFDB.getData(type, this, "choices");
 		choice = this.languages[choice] ? choice : Object.keys(this.languages)[0];
@@ -695,24 +470,14 @@ class GoogleTranslateOption {
 				finishTranslation(translation, exceptions, input, output, toast);
 			}
 			else {
-				if (BDFDB.getData("useGoogle", this, "translators")) {
-					require("request")(this.getGoogleTranslateApiURL(input.id, output.id, newtext), (error, response, result) => {
-						if (!error && result) {
-							result = JSON.parse(result);
-							result[0].forEach((array) => {translation += array[0];});
-							if (this.languages[result[2]]) input.name = this.languages[result[2]].name;
-							finishTranslation(translation, exceptions, input, output, toast);
-						}
-					});
-				}
-				else {
-					this.DeepLTranslate.setInputLanguage(input.id);
-					this.DeepLTranslate.setOutputLanguage(output.id);
-					this.DeepLTranslate.translate(newtext).then((translation) => {
-						if (newtext.lastIndexOf(".") != newtext.length-1 && translation.lastIndexOf(".") == translation.length-1) translation = translation.slice(0,-1);
+				require("request")(this.getGoogleTranslateApiURL(input.id, output.id, newtext), (error, response, result) => {
+					if (!error && result) {
+						result = JSON.parse(result);
+						result[0].forEach((array) => {translation += array[0];});
+						if (this.languages[result[2]]) input.name = this.languages[result[2]].name;
 						finishTranslation(translation, exceptions, input, output, toast);
-					});
-				}
+					}
+				});
 			}
 		}
 		else {
@@ -794,17 +559,6 @@ class GoogleTranslateOption {
 		translatecheckbox.addEventListener("click", () => {
 			BDFDB.toggleClass(button, BDFDB.disCN.textareabuttonactive, translatecheckbox.checked);
 			this.translating = translatecheckbox.checked;
-		});
-
-		var translators = BDFDB.getAllData(this, "translators");
-		translatepopout.querySelectorAll(".translators-switch").forEach(translatorcheckbox => {
-			translatorcheckbox.checked = translators[translatorcheckbox.value.split(" ")[1]];
-			translatorcheckbox.addEventListener("click", () => {
-				document.removeEventListener("mousedown", removePopout);
-				translatepopout.remove();
-				BDFDB.removeClass(button, "popout-open");
-				setImmediate(() => {this.openTranslatePopout(button);});
-			});
 		});
 
 		var removePopout = e => {
