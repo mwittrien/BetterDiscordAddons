@@ -3,7 +3,7 @@
 class GoogleTranslateOption {
 	getName () {return "GoogleTranslateOption";}
 
-	getVersion () {return "1.6.7";} 
+	getVersion () {return "1.6.6";} 
 
 	getAuthor () {return "DevilBro";}
 
