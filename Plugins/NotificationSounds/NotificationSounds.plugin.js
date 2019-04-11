@@ -3,7 +3,7 @@
 class NotificationSounds {
 	getName () {return "NotificationSounds";}
 
-	getVersion () {return "3.2.9";}
+	getVersion () {return "3.3.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class NotificationSounds {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Settings","Fixed the bug where you couldn't save the muted settings"]]
+			"fixed":[["Incoming Sound","Maybe this fixes it ¯\\_(ツ)_/¯"]]
 		};
 		
 		this.patchModules = {
@@ -129,7 +129,7 @@ class NotificationSounds {
 			for (var key of ["category","song"]) {
 				settingshtml += `<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 33%;"><h5 class="${BDFDB.disCNS.h5 + BDFDB.disCNS.title + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.h5defaultmargin + BDFDB.disCN.marginbottom4}">${key}:</h5><div class="${BDFDB.disCN.selectwrap}"><div type="${type}" option="${key}" value="${this.choices[type][key]}" class="${BDFDB.disCNS.select + BDFDB.disCNS.selectsingle + BDFDB.disCN.selecthasvalue}"><div class="${BDFDB.disCN.selectcontrol}"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignbaseline + BDFDB.disCNS.nowrap + BDFDB.disCN.selectvalue}" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.primary + BDFDB.disCN.weightnormal}" style="padding:0;">${this.choices[type][key]}</div></div><span class="${BDFDB.disCN.selectarrowzone}"><span class="${BDFDB.disCN.selectarrow}"></span></span></div></div></div></div>`;
 			}
-			settingshtml += `<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 33%;"><h5 class="${BDFDB.disCNS.h5 + BDFDB.disCNS.title + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.h5defaultmargin + BDFDB.disCN.marginbottom4}">volume:</h5><div type="${type}" class="${BDFDB.disCN.slider}"><input type="number" class="${type}-volume ${BDFDB.disCN.sliderinput} volumeInput" value="${this.choices[type].volume}" readonly=""><div class="${BDFDB.disCN.sliderbar}"><div class="${BDFDB.disCN.sliderbarfill}" style="width: ${this.choices[type].volume}%;"></div></div><div class="${BDFDB.disCN.slidertrack}"><div class="${BDFDB.disCN.slidergrabber} marginTop" style="left: ${this.choices[type].volume}%;"></div></div></div></div>`;
+			settingshtml += `<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 33%;"><h5 class="${BDFDB.disCNS.h5 + BDFDB.disCNS.title + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.h5defaultmargin + BDFDB.disCN.marginbottom4}">volume:</h5><div type="${type}" class="${BDFDB.disCN.slider}"><input type="number" class="${type}-volume ${BDFDB.disCN.sliderinput} volumeInput" value="${this.choices[type].volume}" readonly=""><div class="${BDFDB.disCN.sliderbar}"><div class="${BDFDB.disCN.sliderbarfill}" style="width: ${this.choices[type].volume}%;"></div></div><div class="${BDFDB.disCN.slidertrack}"><div class="${BDFDB.disCN.slidergrabber}" style="left: ${this.choices[type].volume}%;"></div></div></div></div>`;
 			settingshtml += `</div></div>`;
 		}
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Show unimplemented Sounds</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}" id="input-unimplemented"></div></div>`;
@@ -320,7 +320,7 @@ class NotificationSounds {
 		var grabber = e.currentTarget;
 		var track = grabber.parentNode;
 		var slider = track.parentNode;
-		var input = slider.querySelector(".volumeInput");
+		var input = slider.querySelector(BDFDB.dotCN.sliderinput);
 		var bar = slider.querySelector(BDFDB.dotCN.sliderbarfill);
 		var type = slider.getAttribute("type");
 
@@ -468,7 +468,6 @@ class NotificationSounds {
 		BDFDB.WebModules.patch(instance, "stopRinging", this, {instead: stop});
 		BDFDB.WebModules.patch(instance._reactInternalFiber.type.prototype, "startRinging", this, {instead: play});
 		BDFDB.WebModules.patch(instance._reactInternalFiber.type.prototype, "stopRinging", this, {instead: stop});
-		BDFDB.WebModules.unpatch(instance._reactInternalFiber.type.prototype, this.patchModules[instancetype], this);
 	}
 
 	processIncomingCalls (instance, wrapper) {
