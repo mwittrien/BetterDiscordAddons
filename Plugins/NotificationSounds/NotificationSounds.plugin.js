@@ -3,7 +3,7 @@
 class NotificationSounds {
 	getName () {return "NotificationSounds";}
 
-	getVersion () {return "3.3.1";}
+	getVersion () {return "3.3.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,12 +11,11 @@ class NotificationSounds {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Incoming Sound","Maybe this fixes it ¯\\_(ツ)_/¯"]]
+			"fixed":[["Outgoing Sound","Outgoing sound should now finally be completely fixed"]]
 		};
 		
 		this.patchModules = {
 			"IncomingCalls":"componentDidMount",
-			"PrivateChannelCall":"componentDidMount",
 			"StandardSidebarView":"componentWillUnmount"
 		};
 
@@ -228,9 +227,10 @@ class NotificationSounds {
 				}
 			}});
 
-			BDFDB.WebModules.patch(BDFDB.WebModules.findByProperties("playSound"), "playSound", this, {instead: e => {
+			var SoundUtils = BDFDB.WebModules.findByProperties("playSound", "createSound");
+			BDFDB.WebModules.patch(SoundUtils, "playSound", this, {instead: e => {
 				setImmediate(() => {
-					var type = e.methodArguments[0];
+					let type = e.methodArguments[0];
 					if (type == "message1") {
 						if (this.firedEvents["dm"]) this.firedEvents["dm"] = false;
 						else if (this.firedEvents["mentioned"]) this.firedEvents["mentioned"] = false;
@@ -238,6 +238,23 @@ class NotificationSounds {
 					}
 					else this.playAudio(type);
 				});
+			}});
+			BDFDB.WebModules.patch(SoundUtils, "createSound", this, {after: e => {
+				let type = e.methodArguments[0];
+				let audio = new Audio();
+				audio.src = this.choices[type].src;
+				audio.volume = this.choices[type].volume/100;
+				e.returnValue.play = () => {
+					if (!audio.paused || this.dontPlayAudio(type)) return;
+					audio.loop = false;
+					audio.play();
+				};
+				e.returnValue.loop = () => {
+					if (!audio.paused || this.dontPlayAudio(type)) return;
+					audio.loop = true;
+					audio.play();
+				};
+				e.returnValue.stop = () => {audio.pause();}
 			}});
 
 			this.loadAudios();
@@ -453,29 +470,20 @@ class NotificationSounds {
 		setTimeout(() => {this.firedEvents[type] = false;},3000);
 	}
 
-	patchCallingSound (instance, instancetype, type) {
+	processIncomingCalls (instance, wrapper) {
 		let audio = new Audio();
 		let play = () => {
-			if (!audio.paused || this.dontPlayAudio(type)) return;
+			if (!audio.paused || this.dontPlayAudio("call_ringing")) return;
 			audio.loop = true;
-			audio.src = this.choices[type].src;
-			audio.volume = this.choices[type].volume/100;
+			audio.src = this.choices["call_ringing"].src;
+			audio.volume = this.choices["call_ringing"].volume/100;
 			audio.play();
 		};
 		let stop = () => {audio.pause();}
-		instance.stopRinging();
 		BDFDB.WebModules.patch(instance, "startRinging", this, {instead: play});
 		BDFDB.WebModules.patch(instance, "stopRinging", this, {instead: stop});
 		BDFDB.WebModules.patch(instance._reactInternalFiber.type.prototype, "startRinging", this, {instead: play});
 		BDFDB.WebModules.patch(instance._reactInternalFiber.type.prototype, "stopRinging", this, {instead: stop});
-	}
-
-	processIncomingCalls (instance, wrapper) {
-		this.patchCallingSound(instance, "IncomingCalls", "call_ringing");
-	}
-
-	processPrivateChannelCall (instance, wrapper) {
-		this.patchCallingSound(instance, "PrivateChannelCall", "call_calling");
 	}
 
 	processStandardSidebarView (instance, wrapper) {
