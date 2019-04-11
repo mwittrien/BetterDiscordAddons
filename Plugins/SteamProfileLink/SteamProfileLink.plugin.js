@@ -3,11 +3,17 @@
 class SteamProfileLink {
 	getName () {return "SteamProfileLink";}
 
-	getVersion () {return "1.0.5";}
+	getVersion () {return "1.0.6";}
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Opens any Steam links in Steam instead of your internet browser.";}
+
+	initConstructor () {
+		this.changelog = {
+			"improved":[["Activity + Store Links","Plugin now covers any links in the Discord Activity and Store"]]
+		};
+	}
 
 	//legacy
 	load () {}
@@ -34,11 +40,11 @@ class SteamProfileLink {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
 
-			BDFDB.addEventListener(this, document, "click", "a[href^='https://steamcommunity.'],a[href^='https://store.steampowered.']", e => {
-				e.originalEvent.preventDefault();
-				e.originalEvent.stopImmediatePropagation();
-				if (require("electron").shell.openExternal("steam://openurl/" + e.currentTarget.href));
-				else window.open(e.currentTarget.href, "_blank");
+			BDFDB.addEventListener(this, document, "click", "a[href^='https://steamcommunity.'], a[href^='https://store.steampowered.'], a[href*='a.akamaihd.net/'][href*='steam']", e => {this.openInSteam(e, e.currentTarget.href);});
+
+			BDFDB.addEventListener(this, document, "click", BDFDB.dotCN.cardstore + BDFDB.dotCN.cardstoreinteractive, e => {
+				let news = BDFDB.getReactValue(e.currentTarget, "return.return.memoizedProps.news");
+				if (news && news.url && news.url.includes("steam")) this.openInSteam(e, news.url);
 			});
 		}
 		else {
@@ -49,7 +55,17 @@ class SteamProfileLink {
 
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			BDFDB.removeEles(".urlCheckFrame");
+			
 			BDFDB.unloadMessage(this);
 		}
+	}
+	
+	openInSteam (e, url) {
+		BDFDB.stopEvent(e);
+		require("request")(url, (error, response, body) => {
+			if (require("electron").shell.openExternal("steam://openurl/" + response.request.href));
+			else window.open(response.request.href, "_blank");
+		});
 	}
 }
