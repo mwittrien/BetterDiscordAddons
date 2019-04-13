@@ -3,7 +3,7 @@
 class GoogleTranslateOption {
 	getName () {return "GoogleTranslateOption";}
 
-	getVersion () {return "1.6.6";} 
+	getVersion () {return "1.6.7";} 
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class GoogleTranslateOption {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["DeepL","DeepL support was removed because Discord changed their electron version to the beta 5, which no longer supports webviews like they used to. This will not be readded by me in the future, DeepL caused a lot of issues and the way it was implemented caused a log of bugs anyways. Do not bother me about it"]]
+			"fixed":[["Recognize Binary when Auto is selected","GTO now tries to auto translate from binary, if a string contains only 0s and 1s (excluding whitespaces)"]]
 		};
 		
 		this.labels = {};
@@ -463,10 +463,18 @@ class GoogleTranslateOption {
 			toast.interval = setInterval(() => {
 				toast.textContent = toast.textContent.indexOf(".....") > -1 ? "Translating. Please wait" : toast.textContent + ".";
 			},500);
-			if (input.id == "binary" || output.id == "binary") {
-				if (input.id == "binary" && output.id != "binary") 			translation = this.binary2string(newtext);
-				else if (input.id != "binary" && output.id == "binary") 	translation = this.string2binary(newtext);
-				else if (input.id == "binary" && output.id == "binary") 	translation = newtext;
+			if (input.id == "binary" || output.id == "binary" || input.id == "auto" && /^[0-1]*$/.test(newtext.replace(/\s/g, ""))) {
+				if ((input.id == "binary" || input.id == "auto") && output.id != "binary") {
+					input.name = "Binary";
+					translation = this.binary2string(newtext);
+				}
+				else if (input.id != "binary" && output.id == "binary") {
+					translation = this.string2binary(newtext);
+				}
+				else if ((input.id == "binary" || input.id == "auto") && output.id == "binary") {
+					input.name = "binary";
+					translation = newtext;
+				}
 				finishTranslation(translation, exceptions, input, output, toast);
 			}
 			else {
@@ -625,7 +633,7 @@ class GoogleTranslateOption {
 
 	binary2string (binary) {
 		var string = "";
-		binary = binary.replace(new RegExp(" ", "g"), "");
+		binary = binary.replace(/\n/g, "00001010").replace(/\r/g, "00001101").replace(/\t/g, "00001001").replace(/\s/g, "");
 		if (/^[0-1]*$/.test(binary)) {
 			var eightdigits = "";
 			var counter = 0;
@@ -639,9 +647,7 @@ class GoogleTranslateOption {
 				}
 			}
 		}
-		else {
-			BDFDB.showToast("Invalid binary format. Only use 0s and 1s.", {type:"error"});
-		}
+		else BDFDB.showToast("Invalid binary format. Only use 0s and 1s.", {type:"error"});
 		return string;
 	}
 
