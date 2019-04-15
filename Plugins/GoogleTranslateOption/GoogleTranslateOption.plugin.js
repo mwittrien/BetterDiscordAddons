@@ -3,7 +3,7 @@
 class GoogleTranslateOption {
 	getName () {return "GoogleTranslateOption";}
 
-	getVersion () {return "1.6.7";} 
+	getVersion () {return "1.6.8";} 
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class GoogleTranslateOption {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Recognize Binary when Auto is selected","GTO now tries to auto translate from binary, if a string contains only 0s and 1s (excluding whitespaces)"]]
+			"added":[["Braille/Morse","Added the languages Braille (as 6-dot) and Morse (international) to the list of supported languages"]]
 		};
 		
 		this.labels = {};
@@ -27,6 +27,14 @@ class GoogleTranslateOption {
 
 		this.doTranslate = false;
 		this.translating = false;
+		
+		this.brailleConverter = {
+			"0":"⠴", "1":"⠂", "2":"⠆", "3":"⠒", "4":"⠲", "5":"⠢", "6":"⠖", "7":"⠶", "8":"⠦", "9":"⠔", "!":"⠮", "\"":"⠐", "#":"⠼", "$":"⠫", "%":"⠩", "&":"⠯", "'":"⠄", "(":"⠷", ")":"⠾", "*":"⠡", "+":"⠬", ",":"⠠", "-":"⠤", ".":"⠨", "/":"⠌", ":":"⠱", ";":"⠰", "<":"⠣", "=":"⠿", ">":"⠜", "?":"⠹", "@":"⠈", "a":"⠁", "b":"⠃", "c":"⠉", "d":"⠙", "e":"⠑", "f":"⠋", "g":"⠛", "h":"⠓", "i":"⠊", "j":"⠚", "k":"⠅", "l":"⠇", "m":"⠍", "n":"⠝", "o":"⠕", "p":"⠏", "q":"⠟", "r":"⠗", "s":"⠎", "t":"⠞", "u":"⠥", "v":"⠧", "w":"⠺", "x":"⠭", "y":"⠽", "z":"⠵", "[":"⠪", "\\":"⠳", "]":"⠻", "^":"⠘", "⠁":"a", "⠂":"1", "⠃":"b", "⠄":"'", "⠅":"k", "⠆":"2", "⠇":"l", "⠈":"@", "⠉":"c", "⠊":"i", "⠋":"f", "⠌":"/", "⠍":"m", "⠎":"s", "⠏":"p", "⠐":"\"", "⠑":"e", "⠒":"3", "⠓":"h", "⠔":"9", "⠕":"o", "⠖":"6", "⠗":"r", "⠘":"^", "⠙":"d", "⠚":"j", "⠛":"g", "⠜":">", "⠝":"n", "⠞":"t", "⠟":"q", "⠠":", ", "⠡":"*", "⠢":"5", "⠣":"<", "⠤":"-", "⠥":"u", "⠦":"8", "⠧":"v", "⠨":".", "⠩":"%", "⠪":"[", "⠫":"$", "⠬":"+", "⠭":"x", "⠮":"!", "⠯":"&", "⠰":";", "⠱":":", "⠲":"4", "⠳":"\\", "⠴":"0", "⠵":"z", "⠶":"7", "⠷":"(", "⠸":"_", "⠹":"?", "⠺":"w", "⠻":"]", "⠼":"#", "⠽":"y", "⠾":")", "⠿":"=", "_":"⠸"
+		};
+		
+		this.morseConverter = {
+			"0":"−−−−−", "1":"·−−−−", "2":"··−−−", "3":"···−−", "4":"····−", "5":"·····", "6":"−····", "7":"−−···", "8":"−−−··", "9":"−−−−·", "!":"−·−·−−", "\"":"·−··−·", "$":"···−··−", "&":"·−···", "'":"·−−−−·", "(":"−·−−·", ")":"−·−−·−", "+":"·−·−·", ",":"−−··−−", "-":"−····−", ".":"·−·−·−", "/":"−··−·", ":":"−−−···", ";":"−·−·−·", "=":"−···−", "?":"··−−··", "@":"·−−·−·", "a":"·−", "b":"−···", "c":"−·−·", "d":"−··", "e":"·", "f":"··−·", "g":"−−·", "h":"····", "i":"··", "j":"·−−−", "k":"−·−", "l":"·−··", "m":"−−", "n":"−·", "o":"−−−", "p":"·−−·", "q":"−−·−", "r":"·−·", "s":"···", "t":"−", "u":"··−", "v":"···−", "w":"·−−", "x":"−··−", "y":"−·−−", "z":"−−··", "·":"e", "··":"i", "···":"s", "····":"h", "·····":"5", "····−":"4", "···−":"v", "···−··−":"$", "···−−":"3", "··−":"u", "··−·":"f", "··−−··":"?", "··−−·−":"_", "··−−−":"2", "·−":"a", "·−·":"r", "·−··":"l", "·−···":"&", "·−··−·":"\"", "·−·−·":"+", "·−·−·−":".", "·−−":"w", "·−−·":"p", "·−−·−·":"@", "·−−−":"j", "·−−−−":"1", "·−−−−·":"'", "−":"t", "−·":"n", "−··":"d", "−···":"b", "−····":"6", "−····−":"-", "−···−":"=", "−··−":"x", "−··−·":"/", "−·−":"k", "−·−·":"c", "−·−·−·":";", "−·−·−−":"!", "−·−−":"y", "−·−−·":"(", "−·−−·−":")", "−−":"m", "−−·":"g", "−−··":"z", "−−···":"7", "−−··−−":",", "−−·−":"q", "−−−":"o", "−−−··":"8", "−−−···":":", "−−−−·":"9", "−−−−−":"0", "_":"··−−·−"
+		};
 
 		this.defaults = {
 			settings: {
@@ -312,9 +320,11 @@ class GoogleTranslateOption {
 
 	setLanguage () {
 		this.languages = Object.assign({},
-			{"auto":	{name:"Auto",		id:"auto",		integrated:false,	dic:false,	deepl:true}},
+			{"auto":	{name:"Auto",			id:"auto",		integrated:false,	dic:false}},
 			BDFDB.languages,
-			{"binary":	{name:"Binary",		id:"binary",	integrated:false,	dic:false,	deepl:true}}
+			{"binary":	{name:"Binary",			id:"binary",	integrated:false,	dic:false}},
+			{"braille":	{name:"Braille 6-dot",	id:"braille",	integrated:false,	dic:false}},
+			{"morse":	{name:"Morse",			id:"morse",		integrated:false,	dic:false}}
 		);
 	}
 
@@ -448,10 +458,12 @@ class GoogleTranslateOption {
 	}
 
 	translateText (text, type, callback) {
-		var finishTranslation = (translation, exceptions, input, output, toast) => {
+		var toast = null, finishTranslation = (translation, exceptions, input, output, toast) => {
 			if (translation) translation = this.addExceptions(translation, exceptions);
-			clearInterval(toast.interval);
-			toast.close();
+			if (toast) {
+				clearInterval(toast.interval);
+				toast.close();
+			}
 			callback(translation, input, output);
 		};
 		var [newtext, exceptions, translate] = this.removeExceptions(text.trim(), type);
@@ -459,30 +471,36 @@ class GoogleTranslateOption {
 		var output = Object.assign({}, this.languages[this.getLanguageChoice("output", type)]);
 		var translation = "";
 		if (translate) {
-			var toast = BDFDB.showToast("Translating. Please wait", {timeout:0});
+			toast = BDFDB.showToast("Translating. Please wait", {timeout:0});
 			toast.interval = setInterval(() => {
 				toast.textContent = toast.textContent.indexOf(".....") > -1 ? "Translating. Please wait" : toast.textContent + ".";
 			},500);
-			if (input.id == "binary" || output.id == "binary" || input.id == "auto" && /^[0-1]*$/.test(newtext.replace(/\s/g, ""))) {
-				if ((input.id == "binary" || input.id == "auto") && output.id != "binary") {
-					input.name = "Binary";
-					translation = this.binary2string(newtext);
+			var specialcase = this.checkForSpecialCase(newtext, input);
+			if (specialcase) {
+				input.name = specialcase.name;
+				switch (specialcase.id) {
+					case "binary": newtext = this.binary2string(newtext); break;
+					case "braille": newtext = this.braille2string(newtext); break;
+					case "morse": newtext = this.morse2string(newtext); break;
 				}
-				else if (input.id != "binary" && output.id == "binary") {
-					translation = this.string2binary(newtext);
+			}
+			if (output.id == "binary" || output.id == "braille" || output.id == "morse") {
+				switch (output.id) {
+					case "binary": newtext = this.string2binary(newtext); break;
+					case "braille": newtext = this.string2braille(newtext); break;
+					case "morse": newtext = this.string2morse(newtext); break;
 				}
-				else if ((input.id == "binary" || input.id == "auto") && output.id == "binary") {
-					input.name = "binary";
-					translation = newtext;
-				}
-				finishTranslation(translation, exceptions, input, output, toast);
+				finishTranslation(newtext, exceptions, input, output, toast);
 			}
 			else {
 				require("request")(this.getGoogleTranslateApiURL(input.id, output.id, newtext), (error, response, result) => {
 					if (!error && result) {
 						result = JSON.parse(result);
-						result[0].forEach((array) => {translation += array[0];});
-						if (this.languages[result[2]]) input.name = this.languages[result[2]].name;
+						if (result) {
+							result[0].forEach((array) => {translation += array[0];});
+							if (!specialcase && this.languages[result[2]]) input.name = this.languages[result[2]].name;
+						}
+						else translation = text;
 						finishTranslation(translation, exceptions, input, output, toast);
 					}
 				});
@@ -492,6 +510,78 @@ class GoogleTranslateOption {
 			translation = text;
 			finishTranslation(translation, exceptions, input, output, toast);
 		}
+	}
+	
+	checkForSpecialCase (text, input) {
+		if (input.id == "binary" || input.id == "braille" || input.id == "morse") return input;
+		else if (input.id == "auto") {
+			if (/^[0-1]*$/.test(text.replace(/\s/g, ""))) {
+				return {id: "binary", name: "Binary"};
+			}
+			else if (/^[⠁⠂⠃⠄⠅⠆⠇⠈⠉⠊⠋⠌⠍⠎⠏⠐⠑⠒⠓⠔⠕⠖⠗⠘⠙⠚⠛⠜⠝⠞⠟⠠⠡⠢⠣⠤⠥⠦⠧⠨⠩⠪⠫⠬⠭⠮⠯⠰⠱⠲⠳⠴⠵⠶⠷⠸⠹⠺⠻⠼⠽⠾⠿]*$/.test(text.replace(/\s/g, ""))) {
+				return {id: "braille", name: "Braille 6-dot"};
+			}
+			else if (/^[/|·−._-]*$/.test(text.replace(/\s/g, ""))) {
+				return {id: "morse", name: "Morse"};
+			}
+		}
+		return null; 
+	}
+
+	string2binary (string) {
+		var binary = "";
+		for (let character of string) binary += parseInt(character.charCodeAt(0).toString(2)).toPrecision(8).split(".").reverse().join("").toString() + " ";
+		return binary;
+	}
+
+	string2braille (string) {
+		var braille = "";
+		for (let character of string) braille += this.brailleConverter[character.toLowerCase()] ? this.brailleConverter[character.toLowerCase()] : character;
+		return braille;
+	}
+
+	string2morse (string) {
+		string = string.replace(/ /g, "%%%%%%%%%%");
+		var morse = "";
+		for (let character of string) morse += (this.morseConverter[character.toLowerCase()] ? this.morseConverter[character.toLowerCase()] : character) + " ";
+		morse = morse.split("\n");
+		for (let i in morse) morse[i] = morse[i].trim();
+		return morse.join("\n").replace(/% % % % % % % % % % /g, "/ ");
+	}
+
+	binary2string (binary) {
+		var string = "";
+		binary = binary.replace(/\n/g, "00001010").replace(/\r/g, "00001101").replace(/\t/g, "00001001").replace(/\s/g, "");
+		if (/^[0-1]*$/.test(binary)) {
+			var eightdigits = "";
+			var counter = 0;
+			for (var digit of binary) {
+				eightdigits += digit;
+				counter++;
+				if (counter > 7) {
+					string += String.fromCharCode(parseInt(eightdigits,2).toString(10));
+					eightdigits = "";
+					counter = 0;
+				}
+			}
+		}
+		else BDFDB.showToast("Invalid binary format. Only use 0s and 1s.", {type:"error"});
+		return string;
+	}
+
+	braille2string (braille) {
+		var string = "";
+		for (let character of braille) string += this.brailleConverter[character.toLowerCase()] ? this.brailleConverter[character.toLowerCase()] : character;
+		return string;
+	}
+
+	morse2string (morse) {
+		var string = "";
+		for (let word of morse.replace(/[_-]/g, "−").replace(/\./g, "·").replace(/\r|\t/g, "").split(/\/|\||\n/g)) {
+			for (let characterstr of word.trim().split(" ")) string += this.morseConverter[characterstr] ? this.morseConverter[characterstr] : characterstr;
+			string += " ";
+		}
+		return string.trim();
 	}
 
 	addExceptions (string, exceptions) {
@@ -625,37 +715,13 @@ class GoogleTranslateOption {
 		return BDFDB.htmlToElement(menuhtml);
 	}
 
-	string2binary (string) {
-		var binary = "";
-		for (var character of string) binary += parseInt(character.charCodeAt(0).toString(2)).toPrecision(8).split(".").reverse().join("").toString() + " ";
-		return binary;
-	}
-
-	binary2string (binary) {
-		var string = "";
-		binary = binary.replace(/\n/g, "00001010").replace(/\r/g, "00001101").replace(/\t/g, "00001001").replace(/\s/g, "");
-		if (/^[0-1]*$/.test(binary)) {
-			var eightdigits = "";
-			var counter = 0;
-			for (var digit of binary) {
-				eightdigits += digit;
-				counter++;
-				if (counter > 7) {
-					string += String.fromCharCode(parseInt(eightdigits,2).toString(10));
-					eightdigits = "";
-					counter = 0;
-				}
-			}
-		}
-		else BDFDB.showToast("Invalid binary format. Only use 0s and 1s.", {type:"error"});
-		return string;
-	}
-
 	getGoogleTranslateApiURL (input, output, text) {
+		input = BDFDB.languages[input] ? input : "auto";
 		return "https://translate.googleapis.com/translate_a/single?client=gtx&sl=" + input + "&tl=" + output + "&dt=t&ie=UTF-8&oe=UTF-8&q=" + encodeURIComponent(text);
 	}
 
 	getGoogleTranslatePageURL (input, output, text) {
+		input = BDFDB.languages[input] ? input : "auto";
 		return "https://translate.google.com/#" + input + "/" + output + "/" + encodeURIComponent(text);
 	}
 
