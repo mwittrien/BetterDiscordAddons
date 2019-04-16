@@ -484,9 +484,9 @@ class ThemeRepo {
 						var avatar = BDFDB.getUserAvatar();
 						var nativecss = document.querySelector("head link[rel='stylesheet'][integrity]");
 						nativecss = nativecss && nativecss.href ? nativecss.href : null;
-						frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"OnLoad",framekey,username,id,discriminator,avatar,nativecss},"*");
-						frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"DarkLight",framekey,checked:darklightinput.checked,light:BDFDB.disCN.themelight,dark:BDFDB.disCN.themedark},"*");
-						frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"Normalize",framekey,checked:normalizeinput.checked},"*");
+						frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"OnLoad",username,id,discriminator,avatar,nativecss},"*");
+						frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"DarkLight",checked:darklightinput.checked,light:BDFDB.disCN.themelight,dark:BDFDB.disCN.themedark},"*");
+						frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"Normalize",checked:normalizeinput.checked},"*");
 						break;
 					case "KeyUp":
 						keyPressed(e.data);
@@ -499,7 +499,6 @@ class ThemeRepo {
 		window.addEventListener("message", messageReceived);
 		
 		var frame = BDFDB.htmlToElement(this.frameMarkup);
-		var framekey = Math.round(Math.random()*10000000000000000);
 		var themeRepoModal = BDFDB.htmlToElement(this.themeRepoModalMarkup);
 		var hiddenSettings = BDFDB.loadAllData(this, "hidden");
 		var darklightinput = themeRepoModal.querySelector("#input-darklight");
@@ -528,17 +527,17 @@ class ThemeRepo {
 		}
 
 		darklightinput.addEventListener("change", e => {
-			frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"DarkLight",framekey,checked:darklightinput.checked,light:BDFDB.disCN.themelight,dark:BDFDB.disCN.themedark},"*");
+			frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"DarkLight",checked:darklightinput.checked,light:BDFDB.disCN.themelight,dark:BDFDB.disCN.themedark},"*");
 		});
 		normalizeinput.addEventListener("change", e => {
-			frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"Normalize",framekey,checked:normalizeinput.checked},"*");
+			frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"Normalize",checked:normalizeinput.checked},"*");
 		});
 		customcssinput.addEventListener("change", e => {
 			var customCSS = document.querySelector("style#customcss");
-			if (customCSS && customCSS.innerText.length > 0) frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"CustomCSS",framekey,checked:customcssinput.checked,css:customCSS.innerText},"*");
+			if (customCSS && customCSS.innerText.length > 0) frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"CustomCSS",checked:customcssinput.checked,css:customCSS.innerText},"*");
 		});
 		themefixerinput.addEventListener("change", e => {
-			frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"ThemeFixer",framekey,checked:themefixerinput.checked,css:this.themeFixerCSS},"*");
+			frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"ThemeFixer",checked:themefixerinput.checked,css:this.themeFixerCSS},"*");
 		});
 		themeRepoModal.querySelector("#download-themefixer").addEventListener("click", e => {
 			this.createThemeFile("ThemeFixer.theme.css", `//META{"name":"ThemeFixer","description":"ThemeFixerCSS for transparent themes","author":"DevilBro","version":"1.0.1"}*//\n\n` + this.themeFixerCSS);
