@@ -620,7 +620,7 @@ class ThemeRepo {
 		entry.querySelector(BDFDB.dotCN._repoversion).innerHTML = data.version;
 		entry.querySelector(BDFDB.dotCN._repoauthor).innerHTML = data.author;
 		entry.querySelector(BDFDB.dotCN._repodescription).innerHTML = data.description;
-		if (data.new) entry.querySelector(BDFDB.dotCN._repoheadertitle).appendChild(BDFDB.htmlToElement(`<span class="newentries-tag ${BDFDB.disCNS.bottag + BDFDB.disCNS.bottagregular + BDFDB.disCN.bottagnametag}" style="background-color: rgb(250, 166, 26) !important; color: white !important; padding: 1px 3px; font-size: 10px; top: -2px;">NEW</span>`));
+		if (data.new == 0) entry.querySelector(BDFDB.dotCN._repoheadertitle).appendChild(BDFDB.htmlToElement(`<span class="newentries-tag ${BDFDB.disCNS.bottag + BDFDB.disCNS.bottagregular + BDFDB.disCN.bottagnametag}" style="background-color: rgb(250, 166, 26) !important; color: white !important; padding: 1px 3px; font-size: 10px; top: -2px;">NEW</span>`));
 		let favbutton = entry.querySelector(BDFDB.dotCN.giffavoritebutton);
 		BDFDB.toggleClass(favbutton, BDFDB.disCN.giffavoriteselected, data.fav == 0);
 		favbutton.addEventListener("click", e => {
