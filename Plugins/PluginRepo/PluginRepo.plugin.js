@@ -3,7 +3,7 @@
 class PluginRepo {
 	getName () {return "PluginRepo";} 
 
-	getVersion () {return "1.7.9";}
+	getVersion () {return "1.8.0";}
 
 	getAuthor () {return "DevilBro";}
 

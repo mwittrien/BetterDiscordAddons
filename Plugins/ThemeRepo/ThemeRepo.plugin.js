@@ -3,7 +3,7 @@
 class ThemeRepo {
 	getName () {return "ThemeRepo";}
 
-	getVersion () {return "1.7.9";}
+	getVersion () {return "1.8.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -337,8 +337,8 @@ class ThemeRepo {
 			this.loading = {is:false, timeout:null, amount:0};
 			this.loadThemes();
 		});
-		console.log(settingshtml);
-		console.log(settingspanel);
+
+		return settingspanel;
 	}
 
 	//legacy
@@ -497,7 +497,7 @@ class ThemeRepo {
 
 		document.addEventListener("keyup", keyPressed);
 		window.addEventListener("message", messageReceived);
-
+		
 		var frame = BDFDB.htmlToElement(this.frameMarkup);
 		var themeRepoModal = BDFDB.htmlToElement(this.themeRepoModalMarkup);
 		var hiddenSettings = BDFDB.loadAllData(this, "hidden");
