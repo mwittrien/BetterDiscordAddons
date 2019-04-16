@@ -663,7 +663,7 @@ class PluginRepo {
 								if ((settings.notifyNewentries || settings.notifyNewentries == undefined) && newentries > 0) {
 									var oldbarbutton = document.querySelector(".pluginrepo-newentries-notice " + BDFDB.dotCN.noticedismiss);
 									if (oldbarbutton) oldbarbutton.click();
-									var bar = BDFDB.createNotificationsBar(`There are ${newentries} new Plugin${newentries == 1 ? "" : "s"} in the Repo. Check:`,{type:"success",btn:"PluginRepo",selector:"pluginrepo-notice pluginrepo-newentries-notice"});
+									var bar = BDFDB.createNotificationsBar(`There ${newentries == 1 ? "is" : "are"} ${newentries} new Plugin${newentries == 1 ? "" : "s"} in the Repo. Check:`,{type:"success",btn:"PluginRepo",selector:"pluginrepo-notice pluginrepo-newentries-notice"});
 									bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", e => {
 										this.openPluginRepoModal({forcedSort:"new",forcedOrder:"asc"});
 										bar.querySelector(BDFDB.dotCN.noticedismiss).click();
