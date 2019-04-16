@@ -585,7 +585,6 @@ class ThemeRepo {
 			let instTheme = window.bdthemes[this.loadedThemes[url].name];
 			if (instTheme && instTheme.author.toUpperCase() == theme.author.toUpperCase()) theme.state = instTheme.version != theme.version ? 1 : 0;
 			else theme.state = 2;
-			theme.fav = favorites[url] ? 0 : 1;
 			let data = {
 				url: theme.url,
 				search: (theme.name + " " + theme.version + " " + theme.author + " " + theme.description).toUpperCase(),
@@ -593,8 +592,8 @@ class ThemeRepo {
 				version: theme.version,
 				author: theme.author,
 				description: theme.description,
-				fav: theme.fav,
-				new: !this.cachedThemes.includes(url),
+				fav: favorites[url] ? 0 : 1,
+				new: !this.cachedThemes.includes(url) ? 0 : 1,
 				state: theme.state,
 				css: theme.css
 			};
@@ -783,7 +782,7 @@ class ThemeRepo {
 						if (oldbarbutton) oldbarbutton.click();
 						var bar = BDFDB.createNotificationsBar(`There are ${newentries} new Theme${newentries == 1 ? "" : "s"} in the Repo. Check:`,{type:"success",btn:"ThemeRepo",selector:"themerepo-notice themerepo-newentries-notice"});
 						bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", e => {
-							this.openThemeRepoModal({forcedSort:"new",forcedOrder:"desc"});
+							this.openThemeRepoModal({forcedSort:"new",forcedOrder:"asc"});
 							bar.querySelector(BDFDB.dotCN.noticedismiss).click();
 						});
 					}

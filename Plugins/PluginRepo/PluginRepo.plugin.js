@@ -473,7 +473,6 @@ class PluginRepo {
 			let instPlugin = window.bdplugins[plugin.getName] ? window.bdplugins[plugin.getName].plugin : null;
 			if (instPlugin && this.getString(instPlugin.getAuthor()).toUpperCase() == plugin.getAuthor.toUpperCase()) plugin.getState = this.getString(instPlugin.getVersion()) != plugin.getVersion ? 1 : 0;
 			else plugin.getState = 2;
-			plugin.getFav = favorites[url] ? 0 : 1;
 			let data = {
 				url: plugin.url,
 				search: (plugin.getName + " " + plugin.getVersion + " " + plugin.getAuthor + " " + plugin.getDescription).toUpperCase(),
@@ -481,8 +480,8 @@ class PluginRepo {
 				version: plugin.getVersion,
 				author: plugin.getAuthor,
 				description: plugin.getDescription ? plugin.getDescription : "No Description found.",
-				fav: plugin.getFav,
-				new: !this.cachedPlugins.includes(url),
+				fav: favorites[url] ? 0 : 1,
+				new: !this.cachedPlugins.includes(url) ? 0 : 1,
 				state: plugin.getState
 			};
 			pluginRepoModal.entries[url] = data;
@@ -666,7 +665,7 @@ class PluginRepo {
 									if (oldbarbutton) oldbarbutton.click();
 									var bar = BDFDB.createNotificationsBar(`There are ${newentries} new Plugin${newentries == 1 ? "" : "s"} in the Repo. Check:`,{type:"success",btn:"PluginRepo",selector:"pluginrepo-notice pluginrepo-newentries-notice"});
 									bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", e => {
-										this.openPluginRepoModal({forcedSort:"new",forcedOrder:"desc"});
+										this.openPluginRepoModal({forcedSort:"new",forcedOrder:"asc"});
 										bar.querySelector(BDFDB.dotCN.noticedismiss).click();
 									});
 								}
