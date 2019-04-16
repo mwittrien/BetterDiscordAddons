@@ -732,7 +732,8 @@ class ThemeRepo {
 		var getThemeInfo, outdated = 0, newentries = 0, i = 0;
 		var tags = ["name","description","author","version"];
 		var newentriesdata = BDFDB.loadAllData(this, "newentriesdata");
-		this.cachedThemes = newentriesdata.urlbase64 ? atob(newentriesdata.urlbase64).split("\n") : [];
+		var newentriesdata = BDFDB.loadAllData(this, "newentriesdata"), ownlist = BDFDB.loadData("ownlist", this, "ownlist") || [];
+		this.cachedThemes = (newentriesdata.urlbase64 ? atob(newentriesdata.urlbase64).split("\n") : []).concat(ownlist);
 		let request = require("request");
 		request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/ThemeList.txt", (error, response, result) => {
 			if (!error && result) {
@@ -740,7 +741,7 @@ class ThemeRepo {
 				BDFDB.saveData("urlbase64", btoa(result), this, "newentriesdata");
 				this.loadedThemes = {};
 				this.grabbedThemes = result.split("\n");
-				this.foundThemes = this.grabbedThemes.concat(BDFDB.loadData("ownlist", this, "ownlist") || []);
+				this.foundThemes = this.grabbedThemes.concat(ownlist);
 				this.loading = {is:true, timeout:setTimeout(() => {
 					clearTimeout(this.loading.timeout);
 					if (this.started) {

@@ -608,8 +608,8 @@ class PluginRepo {
 		var frame, framerunning = false, framequeue = [], outdated = 0, newentries = 0, i = 0;
 		var tags = ["getName", "getVersion", "getAuthor", "getDescription"];
 		var seps = ["\"", "\'", "\`"];
-		var newentriesdata = BDFDB.loadAllData(this, "newentriesdata");
-		this.cachedPlugins = newentriesdata.urlbase64 ? atob(newentriesdata.urlbase64).split("\n") : [];
+		var newentriesdata = BDFDB.loadAllData(this, "newentriesdata"), ownlist = BDFDB.loadData("ownlist", this, "ownlist") || [];
+		this.cachedPlugins = (newentriesdata.urlbase64 ? atob(newentriesdata.urlbase64).split("\n") : []).concat(ownlist);
 		let request = require("request");
 		request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/PluginRepo/res/PluginList.txt", (error, response, result) => {
 			if (!error && result) {
@@ -617,7 +617,7 @@ class PluginRepo {
 				BDFDB.saveData("urlbase64", btoa(result), this, "newentriesdata");
 				this.loadedPlugins = {};
 				this.grabbedPlugins = result.split("\n");
-				this.foundPlugins = this.grabbedPlugins.concat(BDFDB.loadData("ownlist", this, "ownlist") || []);
+				this.foundPlugins = this.grabbedPlugins.concat(ownlist);
 				this.loading = {is:true, timeout:setTimeout(() => {
 					clearTimeout(this.loading.timeout);
 					if (this.started) {
