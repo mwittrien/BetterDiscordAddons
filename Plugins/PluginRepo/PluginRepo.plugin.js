@@ -3,7 +3,7 @@
 class PluginRepo {
 	getName () {return "PluginRepo";} 
 
-	getVersion () {return "1.7.8";}
+	getVersion () {return "1.7.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,8 @@ class PluginRepo {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Canary","Due to internal changes with Discords Electron Version, the plugin was rendered broken on some Canary instances or was heavily slowed down, this issue was fixed and made PluginRepo load the Plugins of the Repo a lot faster too"]]
+			"added":[["New Entries","Plugin Repo now tells you when there is a new entry, which hasn't been loaded before"]],
+			"improved":[["New/Outdated Entries Notification","Notification for new or outdated entries can be disabled"]]
 		};
 		
 		this.patchModules = {
@@ -25,7 +26,8 @@ class PluginRepo {
 				version:		"Version",
 				description:	"Description",
 				state:			"Update State",
-				fav:			"Favorites"
+				fav:			"Favorites",
+				new:			"New Plugins"
 			},
 			order: {
 				asc:			"Ascending",
@@ -35,6 +37,7 @@ class PluginRepo {
 
 		this.loading = {is:false, timeout:null, amount:0};
 
+		this.cachedPlugins = [];
 		this.grabbedPlugins = [];
 		this.foundPlugins = [];
 		this.loadedPlugins = {};
@@ -201,6 +204,13 @@ class PluginRepo {
 				</div>
 			</div>`;
 
+		this.defaults = {
+			settings: {
+				notifyOutdated:		{value:true, 		description:"Notifies you when one of your Plugins is outdated."},
+				notifyNewentries:	{value:true, 		description:"Notifies you when there are new entries in the Repo."}
+			}
+		};
+
 		this.css = `
 			${BDFDB.dotCN.app} > .repo-loadingwrapper {
 				position: absolute;
@@ -242,7 +252,11 @@ class PluginRepo {
 
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
+		var settings = 	BDFDB.getAllData(this, "settings");
 		var settingshtml = `<div class="${this.name}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="DevilBro-settings-inner">`;
+		for (let key in settings) {
+			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
+		}
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">Add Plugin:</h3><input type="text" placeholder="Insert Raw Github Link of Plugin (https://raw.githubusercontent.com/...)" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16}" id="input-pluginurl" style="flex: 1 1 auto;"><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} btn-add btn-addplugin" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}"></div></button></div>`;
 		settingshtml += `<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Your additional Plugin List:</h3><div class="DevilBro-settings-inner-list plugin-list ${BDFDB.disCN.marginbottom8}">`;
 		var ownlist = BDFDB.loadData("ownlist", this, "ownlist") || [];
@@ -398,7 +412,7 @@ class PluginRepo {
 		});
 	}
 
-	openPluginRepoModal (showOnlyOutdated = false) {
+	openPluginRepoModal (options = {}) {
 		if (this.loading.is) {
 			BDFDB.showToast(`Plugins are still being fetched. Try again in some seconds.`, {type:"danger"});
 			return;
@@ -406,11 +420,22 @@ class PluginRepo {
 
 		var pluginRepoModal = BDFDB.htmlToElement(this.pluginRepoModalMarkup);
 		var hiddenSettings = BDFDB.loadAllData(this, "hidden");
-		pluginRepoModal.querySelector("#input-hideupdated").checked = hiddenSettings.updated || showOnlyOutdated;
-		pluginRepoModal.querySelector("#input-hideoutdated").checked = hiddenSettings.outdated && !showOnlyOutdated;
-		pluginRepoModal.querySelector("#input-hidedownloadable").checked = hiddenSettings.downloadable || showOnlyOutdated;
+		pluginRepoModal.querySelector("#input-hideupdated").checked = hiddenSettings.updated || options.showOnlyOutdated;
+		pluginRepoModal.querySelector("#input-hideoutdated").checked = hiddenSettings.outdated && !options.showOnlyOutdated;
+		pluginRepoModal.querySelector("#input-hidedownloadable").checked = hiddenSettings.downloadable || options.showOnlyOutdated;
 		if (!BDFDB.isRestartNoMoreEnabled()) pluginRepoModal.querySelector("#RNMoption").remove();
-		else pluginRepoModal.querySelector("#input-rnmstart").checked = BDFDB.loadData("RNMstart", this, "settings");
+		else pluginRepoModal.querySelector("#input-rnmstart").checked = BDFDB.loadData("RNMstart", this, "RNMstart");
+		
+		if (options.forcedSort && this.sortings.sort[options.forcedSort]) {
+			var sortinput = pluginRepoModal.querySelector(".sort-filter " + BDFDB.dotCN.quickselectvalue);
+			orderinput.innerText = this.sortings.sort[options.forcedSort];
+			orderinput.setAttribute('option', options.forcedSort);
+		}
+		if (options.forcedOrder && this.sortings.order[options.forcedOrder]) {
+			var orderinput = pluginRepoModal.querySelector(".order-filter " + BDFDB.dotCN.quickselectvalue);
+			orderinput.innerText = this.sortings.order[options.forcedOrder];
+			orderinput.setAttribute('option', options.forcedOrder);
+		}
 
 		BDFDB.addChildEventListener(pluginRepoModal, "keyup", BDFDB.dotCN.searchbarinput, () => {
 			clearTimeout(pluginRepoModal.searchTimeout);
@@ -425,7 +450,7 @@ class PluginRepo {
 			BDFDB.saveData(e.currentTarget.value, e.currentTarget.checked, this, "hidden");
 		});
 		BDFDB.addChildEventListener(pluginRepoModal, "change", "#input-rnmstart", e => {
-			BDFDB.saveData("RNMstart", e.currentTarget.checked, this, "settings");
+			BDFDB.saveData("RNMstart", e.currentTarget.checked, this, "RNMstart");
 		});
 		BDFDB.addChildEventListener(pluginRepoModal, "click", ".sort-filter", e => {
 			BDFDB.createSortPopout(e.currentTarget, this.sortPopoutMarkup, () => {this.sortEntries(pluginRepoModal);});
@@ -457,6 +482,7 @@ class PluginRepo {
 				author: plugin.getAuthor,
 				description: plugin.getDescription ? plugin.getDescription : "No Description found.",
 				fav: plugin.getFav,
+				new: !this.cachedPlugins.includes(url),
 				state: plugin.getState
 			};
 			pluginRepoModal.entries[url] = data;
@@ -480,6 +506,7 @@ class PluginRepo {
 		entry.querySelector(BDFDB.dotCN._repoversion).innerHTML = data.version;
 		entry.querySelector(BDFDB.dotCN._repoauthor).innerHTML = data.author;
 		entry.querySelector(BDFDB.dotCN._repodescription).innerHTML = data.description;
+		if (data.new) entry.querySelector(BDFDB.dotCN._repoheadertitle).appendChild(BDFDB.htmlToElement(`<span class="newentries-tag ${BDFDB.disCNS.bottag + BDFDB.disCNS.bottagregular + BDFDB.disCN.bottagnametag}" style="background-color: rgb(250, 166, 26) !important; color: white !important; padding: 1px 3px; font-size: 10px; top: -2px;">NEW</span>`));
 		let favbutton = entry.querySelector(BDFDB.dotCN.giffavoritebutton);
 		BDFDB.toggleClass(favbutton, BDFDB.disCN.giffavoriteselected, data.fav == 0);
 		favbutton.addEventListener("click", e => {
@@ -553,7 +580,8 @@ class PluginRepo {
 		if (pluginRepoModal.querySelector("#input-hidedownloadable").checked) 	entries = BDFDB.filterObject(entries, entry => {return entry.state > 1 ? null : entry;});
 		entries = BDFDB.filterObject(entries, entry => {return entry.search.indexOf(searchstring) > -1 ? entry : null;});
 
-		entries = BDFDB.sortObject(entries, pluginRepoModal.querySelector(".sort-filter " + BDFDB.dotCN.quickselectvalue).getAttribute("option"));
+		let sortfilter = pluginRepoModal.querySelector(".sort-filter " + BDFDB.dotCN.quickselectvalue).getAttribute("option");
+		entries = BDFDB.sortObject(entries, sortfilter == "new" && !pluginRepoModal.querySelector(".newentries-tag") ? "name" : sortfilter);
 		if (pluginRepoModal.querySelector(".order-filter " + BDFDB.dotCN.quickselectvalue).getAttribute("option") == "desc") entries = BDFDB.reverseObject(entries);
 
 		let entrypositions = Object.keys(entries);
@@ -575,13 +603,18 @@ class PluginRepo {
 
 	loadPlugins () {
 		BDFDB.removeEles("iframe.discordSandbox",".pluginrepo-loadingicon");
+		var settings = BDFDB.loadAllData(this, "settings");
 		var getPluginInfo, createFrame, runInFrame;
-		var frame, framerunning = false, framequeue = [], outdated = 0, i = 0;
+		var frame, framerunning = false, framequeue = [], outdated = 0, newentries = 0, i = 0;
 		var tags = ["getName", "getVersion", "getAuthor", "getDescription"];
 		var seps = ["\"", "\'", "\`"];
+		var newentriesdata = BDFDB.loadAllData(this, "newentriesdata");
+		this.cachedPlugins = newentriesdata.urlbase64 ? atob(newentriesdata.urlbase64).split("\n") : [];
 		let request = require("request");
 		request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/PluginRepo/res/PluginList.txt", (error, response, result) => {
-			if (response) {
+			if (!error && result) {
+				result = result.replace(/[\r\t]/g, "");
+				BDFDB.saveData("urlbase64", btoa(result), this, "newentriesdata");
 				this.loadedPlugins = {};
 				this.grabbedPlugins = result.split("\n");
 				this.foundPlugins = this.grabbedPlugins.concat(BDFDB.loadData("ownlist", this, "ownlist") || []);
@@ -619,12 +652,21 @@ class PluginRepo {
 								this.loading = {is:false, timeout:null, amount:this.loading.amount};
 								console.log(`%c[${this.name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Finished fetching Plugins.");
 								if (document.querySelector(".bd-pluginrepobutton")) BDFDB.showToast(`Finished fetching Plugins.`, {type:"success"});
-								if (outdated > 0) {
-									var oldbarbutton = document.querySelector(".pluginrepo-notice " + BDFDB.dotCN.noticedismiss);
+								if ((settings.notifyOutdated || settings.notifyOutdated == undefined) && outdated > 0) {
+									var oldbarbutton = document.querySelector(".pluginrepo-outdate-notice " + BDFDB.dotCN.noticedismiss);
 									if (oldbarbutton) oldbarbutton.click();
-									var bar = BDFDB.createNotificationsBar(`${outdated} of your Plugins ${outdated == 1 ? "is" : "are"} outdated. Check:`,{type:"danger",btn:"PluginRepo",selector:"pluginrepo-notice"});
+									var bar = BDFDB.createNotificationsBar(`${outdated} of your Plugins ${outdated == 1 ? "is" : "are"} outdated. Check:`,{type:"danger",btn:"PluginRepo",selector:"pluginrepo-notice pluginrepo-outdate-notice"});
 									bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", e => {
-										this.openPluginRepoModal(true);
+										this.openPluginRepoModal({showOnlyOutdated:true});
+										bar.querySelector(BDFDB.dotCN.noticedismiss).click();
+									});
+								}
+								if ((settings.notifyNewentries || settings.notifyNewentries == undefined) && newentries > 0) {
+									var oldbarbutton = document.querySelector(".pluginrepo-newentries-notice " + BDFDB.dotCN.noticedismiss);
+									if (oldbarbutton) oldbarbutton.click();
+									var bar = BDFDB.createNotificationsBar(`There are ${newentries} new Plugin${newentries == 1 ? "" : "s"} in the Repo. Check:`,{type:"success",btn:"PluginRepo",selector:"pluginrepo-notice pluginrepo-newentries-notice"});
+									bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", e => {
+										this.openPluginRepoModal({forcedSort:"new",forcedOrder:"desc"});
 										bar.querySelector(BDFDB.dotCN.noticedismiss).click();
 									});
 								}
@@ -632,7 +674,7 @@ class PluginRepo {
 									let wrongUrls = [];
 									for (let url of this.foundPlugins) if (url && !this.loadedPlugins[url] && !wrongUrls.includes(url)) wrongUrls.push(url);
 									if (wrongUrls.length > 0) {
-										var bar = BDFDB.createNotificationsBar(`PluginRepo: ${wrongUrls.length} Plugin${wrongUrls.length > 1 ? "s" : ""} could not be loaded.`, {type:"danger",btn:"List",selector:"pluginrepo-notice"});
+										var bar = BDFDB.createNotificationsBar(`PluginRepo: ${wrongUrls.length} Plugin${wrongUrls.length > 1 ? "s" : ""} could not be loaded.`, {type:"danger",btn:"List",selector:"pluginrepo-notice pluginrepo-fail-notice"});
 										bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", e => {
 											var toast = BDFDB.showToast(wrongUrls.join("\n"),{type:"error"});
 											toast.style.overflow = "hidden";
@@ -653,8 +695,7 @@ class PluginRepo {
 				callback();
 				return;
 			}
-			let url = this.foundPlugins[i].replace(new RegExp("[\\r|\\n|\\t]", "g"), "");
-			this.foundPlugins[i] = url;
+			let url = this.foundPlugins[i];
 			request(url, (error, response, body) => {
 				if (!response) {
 					if (url && BDFDB.getAllIndexes(this.foundPlugins, url).length < 2) this.foundPlugins.push(url);
@@ -703,6 +744,7 @@ class PluginRepo {
 						this.loadedPlugins[url] = plugin;
 						var instPlugin = window.bdplugins[plugin.getName] ? window.bdplugins[plugin.getName].plugin : null;
 						if (instPlugin && this.getString(instPlugin.getAuthor()).toUpperCase() == plugin.getAuthor.toUpperCase() && this.getString(instPlugin.getVersion()) != plugin.getVersion && PluginUpdates && PluginUpdates.plugins && !PluginUpdates.plugins[url]) outdated++;
+						if (!this.cachedPlugins.includes(url)) newentries++;
 					}
 					else if (frame && frame.contentWindow) {
 						framequeue.push({body, url});
@@ -752,6 +794,7 @@ class PluginRepo {
 						this.loadedPlugins[url] = plugin;
 						var instPlugin = window.bdplugins[plugin.getName] ? window.bdplugins[plugin.getName].plugin : null;
 						if (instPlugin && this.getString(instPlugin.getAuthor()).toUpperCase() == plugin.getAuthor.toUpperCase() && this.getString(instPlugin.getVersion()) != plugin.getVersion) outdated++;
+						if (!this.cachedPlugins.includes(url)) newentries++;
 					}
 					framerunning = false;
 					runInFrame();
