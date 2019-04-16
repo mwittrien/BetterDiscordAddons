@@ -604,7 +604,7 @@ class PluginRepo {
 		BDFDB.removeEles("iframe.discordSandbox",".pluginrepo-loadingicon");
 		var settings = BDFDB.loadAllData(this, "settings");
 		var getPluginInfo, createFrame, runInFrame;
-		var frame, framerunning = false, framequeue = [], outdated = 0, newentries = 0, i = 0;
+		var frame, framekey = Math.round(Math.random()*10000000000000000), framerunning = false, framequeue = [], outdated = 0, newentries = 0, i = 0;
 		var tags = ["getName", "getVersion", "getAuthor", "getDescription"];
 		var seps = ["\"", "\'", "\`"];
 		var newentriesdata = BDFDB.loadAllData(this, "newentriesdata"), ownlist = BDFDB.loadData("ownlist", this, "ownlist") || [];
@@ -763,10 +763,10 @@ class PluginRepo {
 					callback();
 				},600000);
 				frame.messageReceived = e => {
-					if (typeof e.data === "object" && e.data.origin == "DiscordPreview") {
+					if (typeof e.data === "object" && e.data.origin == "DiscordPreview" && e.data.framekey == framekey) {
 						switch (e.data.reason) {
 							case "OnLoad":
-								frame.contentWindow.postMessage({origin:"PluginRepo",reason:"OnLoad"},"*");
+								frame.contentWindow.postMessage({origin:"PluginRepo",reason:"OnLoad",framekey},"*");
 								callback();
 								break;
 						}
@@ -799,7 +799,7 @@ class PluginRepo {
 					runInFrame();
 				};
 				var evalResultReceived = e => {
-					if (typeof e.data === "object" && e.data.origin == "DiscordPreview") {
+					if (typeof e.data === "object" && e.data.origin == "DiscordPreview" && e.data.framekey == framekey) {
 						switch (e.data.reason) {
 							case "EvalResult":
 								window.removeEventListener("message", evalResultReceived);
@@ -809,7 +809,7 @@ class PluginRepo {
 					}
 				};
 				window.addEventListener("message", evalResultReceived);
-				frame.contentWindow.postMessage({origin:"PluginRepo",reason:"Eval",jsstring:`
+				frame.contentWindow.postMessage({origin:"PluginRepo",reason:"Eval",framekey,jsstring:`
 					try {
 						${body}
 						var p = new ${name}();
