@@ -12,13 +12,17 @@
 .userPopout-3XzG_A .wrapper-2F3Zv8.popout-2fzvxG .image-33JSyf.mask-3OgeRz[style*="/avatars/278543574059057154"]:before {
 	content: "" !important;
 	-webkit-mask: var(--themedevbadgebackdrop) center/cover no-repeat !important;
-	background: #202225 !important;
+	background: #F6F6F7 !important;
 	position: absolute !important;
     z-index: 1002 !important;
 	width: 29px !important;
 	height: 29px !important;
 	right: -4px !important;
 	bottom: -7px !important;
+}
+.theme-dark .root-SR8cQa .wrapper-2F3Zv8.profile-ZOdGIb .image-33JSyf.mask-3OgeRz[style*="/avatars/278543574059057154"]:before,
+.theme-dark .userPopout-3XzG_A .wrapper-2F3Zv8.popout-2fzvxG .image-33JSyf.mask-3OgeRz[style*="/avatars/278543574059057154"]:before {
+	background: #202225 !important;
 }
 .root-SR8cQa .wrapper-2F3Zv8.profile-ZOdGIb .image-33JSyf.mask-3OgeRz[style*="/avatars/278543574059057154"]:after,
 .userPopout-3XzG_A .wrapper-2F3Zv8.popout-2fzvxG .image-33JSyf.mask-3OgeRz[style*="/avatars/278543574059057154"]:after {
