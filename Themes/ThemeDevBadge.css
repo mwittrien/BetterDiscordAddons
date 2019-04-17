@@ -134,12 +134,15 @@
 .headerCozy-2N9HOL .image-33JSyf[style*="/avatars/278543574059057154"]:before {
 	content: "" !important;
 	-webkit-mask: var(--themedevbadgebackdrop) center/cover no-repeat !important;
-	background: #36393F !important;
+	background: #FFFFFF !important;
 	position: absolute !important;
 	width: 14px !important;
 	height: 14px !important;
 	right: -2px !important;
 	bottom: -4px !important;
+}
+.theme-dark .headerCozy-2N9HOL .image-33JSyf[style*="/avatars/278543574059057154"]:before {
+	background: #36393F !important;
 }
 .headerCozy-2N9HOL .image-33JSyf[style*="/avatars/278543574059057154"]:after {
 	content: "" !important;
