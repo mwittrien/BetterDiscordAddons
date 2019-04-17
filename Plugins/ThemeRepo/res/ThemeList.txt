@@ -128,6 +128,7 @@ https://raw.githubusercontent.com/NFLD99/Better-Discord/master/Theme_File/X-Miss
 https://raw.githubusercontent.com/nirewen/Discordify/master/Discordify.theme.css
 https://raw.githubusercontent.com/ObserverOfTime/DiscordThemes/master/NewNihilism/dist/NewNihilism.theme.css
 https://raw.githubusercontent.com/Pierce01/Opacity/master/OpacityMaxBun.theme.css
+https://raw.githubusercontent.com/puckzxz/NotAnotherAnimeTheme/master/NotAnotherAnimeThemeSCSL.theme.css
 https://raw.githubusercontent.com/Quietess/Casual-Dark/master/Casual_Dark.theme.css
 https://raw.githubusercontent.com/qwerasd205/qwerasd205.github.io/master/CompactServerList.theme.css
 https://raw.githubusercontent.com/qwerasd205/qwerasd205.github.io/master/Dyslexia.theme.css
