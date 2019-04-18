@@ -164,19 +164,23 @@
 }
 
 /* TOOLTIP / POPOUT */
+.tooltip-2QfLtc.tooltipBrand-g03Nz8:not(.tooltip-customcolor),
 .tooltip-1OS-Ti.brand-3tBTjG:not(.tooltip-customcolor) {
 	color: rgb(255,255,255) !important;
 	background-color: rgb(var(--vaccentcolor)) !important;
 }
+.tooltip-2QfLtc.tooltipRight-2JM5PQ.tooltipBrand-g03Nz8:not(.tooltip-customcolor) .tooltipPointer-3ZfirK,
 .tooltip-1OS-Ti.right-KM_vfY.brand-3tBTjG:not(.tooltip-customcolor):after {
 	border-right-color: rgb(var(--vaccentcolor)) !important;
 }
 .popoutTopRight-3BzFIE.arrowAlignmentTop-iGQczz:before,
 .popoutRight-2ZVwL-.arrowAlignmentTop-iGQczz:before,
+.tooltip-2QfLtc.tooltipTop-XDDSxx.tooltipBrand-g03Nz8:not(.tooltip-customcolor) .tooltipPointer-3ZfirK,
 .tooltip-1OS-Ti.top-1pTh1F.brand-3tBTjG:not(.tooltip-customcolor):after {
 	border-top-color: rgb(var(--vaccentcolor)) !important;
 }
 .popoutLeft-30WmrD.arrowAlignmentTop-iGQczz:before,
+.tooltip-2QfLtc.tooltipLeft-3EDOk1.tooltipBrand-g03Nz8:not(.tooltip-customcolor) .tooltipPointer-3ZfirK,
 .tooltip-1OS-Ti.left-1wV7VO.brand-3tBTjG:not(.tooltip-customcolor):after {
 	border-left-color: rgb(var(--vaccentcolor)) !important;
 }
@@ -189,6 +193,7 @@
 .popoutBottomLeft-JehOp2.arrowAlignmentTop-iGQczz:before,
 .popoutBottomRight-2JrySt.arrowAlignmentMiddle-136iao:before,
 .popoutBottomRight-2JrySt.arrowAlignmentTop-iGQczz:before,
+.tooltip-2QfLtc.tooltipBottom-3ARrEK.tooltipBrand-g03Nz8:not(.tooltip-customcolor) .tooltipPointer-3ZfirK,
 .tooltip-1OS-Ti.bottom-19kp6S.brand-3tBTjG:not(.tooltip-customcolor):after {
 	border-bottom-color: rgb(var(--vaccentcolor)) !important;
 }

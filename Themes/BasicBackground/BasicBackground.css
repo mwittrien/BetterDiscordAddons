@@ -960,20 +960,25 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 }
 
 .bubble-3qRl2J,
+.tooltip-2QfLtc:not(.tooltipRed-8-9NeP):not(.tooltipYellow-E7eIBE):not(.tooltipGreen-WdeQwd):not(.tooltip-customcolor),
 .tooltip-1OS-Ti:not(.red-m6f4-H):not(.green-hbUqD5):not(.yellow-1oq44m):not(.tooltip-customcolor) {
 	color: rgb(255,255,255) !important;
 	background-color: rgb(var(--vaccentcolor)) !important;
 }
+.tooltip-2QfLtc.tooltipRight-2JM5PQ:not(.tooltipRed-8-9NeP):not(.tooltipYellow-E7eIBE):not(.tooltipGreen-WdeQwd):not(.tooltip-customcolor) .tooltipPointer-3ZfirK,
 .tooltip-1OS-Ti.right-KM_vfY:not(.red-m6f4-H):not(.green-hbUqD5):not(.yellow-1oq44m):not(.tooltip-customcolor):after {
 	border-right-color: rgb(var(--vaccentcolor)) !important;
 }
 .bubble-3qRl2J:before,
+.tooltip-2QfLtc.tooltipTop-XDDSxx:not(.tooltipRed-8-9NeP):not(.tooltipYellow-E7eIBE):not(.tooltipGreen-WdeQwd):not(.tooltip-customcolor) .tooltipPointer-3ZfirK,
 .tooltip-1OS-Ti.top-1pTh1F:not(.red-m6f4-H):not(.green-hbUqD5):not(.yellow-1oq44m):not(.tooltip-customcolor):after {
 	border-top-color: rgb(var(--vaccentcolor)) !important;
 }
+.tooltip-2QfLtc.tooltipLeft-3EDOk1:not(.tooltipRed-8-9NeP):not(.tooltipYellow-E7eIBE):not(.tooltipGreen-WdeQwd):not(.tooltip-customcolor) .tooltipPointer-3ZfirK,
 .tooltip-1OS-Ti.left-1wV7VO:not(.red-m6f4-H):not(.green-hbUqD5):not(.yellow-1oq44m):not(.tooltip-customcolor):after {
 	border-left-color: rgb(var(--vaccentcolor)) !important;
 }
+.tooltip-2QfLtc.tooltipBottom-3ARrEK:not(.tooltipRed-8-9NeP):not(.tooltipYellow-E7eIBE):not(.tooltipGreen-WdeQwd):not(.tooltip-customcolor) .tooltipPointer-3ZfirK,
 .tooltip-1OS-Ti.bottom-19kp6S:not(.red-m6f4-H):not(.green-hbUqD5):not(.yellow-1oq44m):not(.tooltip-customcolor):after {
 	border-bottom-color: rgb(var(--vaccentcolor)) !important;
 }
