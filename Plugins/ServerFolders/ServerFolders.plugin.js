@@ -100,7 +100,7 @@ class ServerFolders {
 		this.serverContextEntryMarkup =
 			`<div class="${BDFDB.disCN.contextmenuitemgroup}">
 				<div class="${BDFDB.disCN.contextmenuitem} serverfolders-item ${BDFDB.disCN.contextmenuitemsubmenu}">
-					<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_servercontext_serverfolders_text</div></span>
+					<span class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">REPLACE_servercontext_serverfolders_text</div></span>
 					<div class="${BDFDB.disCN.contextmenuhint}"></div>
 				</div>
 			</div>`;
@@ -109,15 +109,15 @@ class ServerFolders {
 			`<div class="${BDFDB.disCN.contextmenu} serverfolders-submenu">
 				<div class="${BDFDB.disCN.contextmenuitemgroup}">
 					<div class="${BDFDB.disCN.contextmenuitem} createfolder-item">
-						<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_serversubmenu_createfolder_text</div></span>
+						<span class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">REPLACE_serversubmenu_createfolder_text</div></span>
 						<div class="${BDFDB.disCN.contextmenuhint}"></div>
 					</div>
 					<div class="${BDFDB.disCN.contextmenuitem} addtofolder-item ${BDFDB.disCN.contextmenuitemsubmenu}">
-						<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_serversubmenu_addtofolder_text</div></span>
+						<span class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">REPLACE_serversubmenu_addtofolder_text</div></span>
 						<div class="${BDFDB.disCN.contextmenuhint}"></div>
 					</div>
 					<div class="${BDFDB.disCN.contextmenuitem} removefromfolder-item">
-						<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_serversubmenu_removefromfolder_text</div></span>
+						<span class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">REPLACE_serversubmenu_removefromfolder_text</div></span>
 						<div class="${BDFDB.disCN.contextmenuhint}"></div>
 					</div>
 				</div>
@@ -134,11 +134,11 @@ class ServerFolders {
 			`<div class="${BDFDB.disCN.contextmenu} serverfolder-contextmenu">
 				<div class="${BDFDB.disCN.contextmenuitemgroup}">
 					<div class="${BDFDB.disCN.contextmenuitem} unreadfolder-item ${BDFDB.disCN.contextmenuitemdisabled}">
-						<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_foldercontext_unreadfolder_text</div></span>
+						<span class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">REPLACE_foldercontext_unreadfolder_text</div></span>
 						<div class="${BDFDB.disCN.contextmenuhint}"></div>
 					</div>
 					<div class="${BDFDB.disCN.contextmenuitem} autounreadfolder-item ${BDFDB.disCN.contextmenuitemtoggle}">
-						<div class="${BDFDB.disCN.contextmenulabel} DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_foldercontext_autounreadfolder_text</div></div>
+						<div class="${BDFDB.disCN.contextmenulabel} BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">REPLACE_foldercontext_autounreadfolder_text</div></div>
 						<div class="${BDFDB.disCNS.contextmenucheckbox + BDFDB.disCN.contextmenucheckbox2}">
 							<div class="${BDFDB.disCN.contextmenucheckboxinner}">
 								<input class="${BDFDB.disCN.contextmenucheckboxelement}" type="checkbox">
@@ -148,15 +148,15 @@ class ServerFolders {
 						</div>
 					</div>
 					<div class="${BDFDB.disCN.contextmenuitem} foldersettings-item">
-						<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_foldercontext_foldersettings_text</div></span>
+						<span class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">REPLACE_foldercontext_foldersettings_text</div></span>
 						<div class="${BDFDB.disCN.contextmenuhint}"></div>
 					</div>
 					<div class="${BDFDB.disCN.contextmenuitem} createfolder-item">
-						<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_foldercontext_createfolder_text</div></span>
+						<span class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">REPLACE_foldercontext_createfolder_text</div></span>
 						<div class="${BDFDB.disCN.contextmenuhint}"></div>
 					</div>
 					<div class="${BDFDB.disCN.contextmenuitem} removefolder-item ${BDFDB.disCN.contextmenuitemdanger}">
-						<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">REPLACE_foldercontext_removefolder_text</div></span>
+						<span class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">REPLACE_foldercontext_removefolder_text</div></span>
 						<div class="${BDFDB.disCN.contextmenuhint}"></div>
 					</div>
 				</div>
@@ -184,7 +184,7 @@ class ServerFolders {
 			</div>`;
 
 		this.folderSettingsModalMarkup =
-			`<span class="${this.name}-modal DevilBro-modal">
+			`<span class="${this.name}-modal BDFDB-modal">
 				<div class="${BDFDB.disCN.backdrop}"></div>
 				<div class="${BDFDB.disCN.modal}">
 					<div class="${BDFDB.disCN.modalinner}">
@@ -343,7 +343,7 @@ class ServerFolders {
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		let settings = BDFDB.getAllData(this, "settings"); 
-		let settingshtml = `<div class="${this.name}-settings DevilBro-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="DevilBro-settings-inner">`;
+		let settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;
 		for (let key in settings) {
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
 		}
@@ -457,7 +457,7 @@ class ServerFolders {
 	}
 
 	onGuildContextMenu (instance, menu) {
-		if (document.querySelector(".DevilBro-modal")) return;
+		if (document.querySelector(".BDFDB-modal")) return;
 		if (instance.props && instance.props.target && instance.props.guild && instance.props.type == "GUILD_ICON_BAR" && !menu.querySelector(".serverfolders-item")) {
 			let serverContextEntry = BDFDB.htmlToElement(this.serverContextEntryMarkup);
 			let devgroup = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:menu,name:["DeveloperModeGroup","MessageDeveloperModeGroup"]}));
@@ -484,7 +484,7 @@ class ServerFolders {
 							for (let i = 0; i < folders.length; i++) {
 								let foundfolderdiv = folders[i];
 								let name = foundfolderdiv.getAttribute("foldername");
-								let folderentry = BDFDB.htmlToElement(`<div class="${BDFDB.disCN.contextmenuitem} addtospecificfolder-item"><span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">${name ? BDFDB.encodeToHTML(name) : (this.labels.modal_tabheader1_text + " #" + (i+1))}</div></span><div class="${BDFDB.disCN.contextmenuhint}"></div></div>`);
+								let folderentry = BDFDB.htmlToElement(`<div class="${BDFDB.disCN.contextmenuitem} addtospecificfolder-item"><span class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">${name ? BDFDB.encodeToHTML(name) : (this.labels.modal_tabheader1_text + " #" + (i+1))}</div></span><div class="${BDFDB.disCN.contextmenuhint}"></div></div>`);
 								folderentry.addEventListener("click", () => {
 									BDFDB.closeContextMenu(menu);
 									this.addServerToFolder(instance.props.guild, foundfolderdiv);

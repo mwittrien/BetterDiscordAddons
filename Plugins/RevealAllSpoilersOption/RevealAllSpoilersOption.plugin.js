@@ -13,7 +13,7 @@ class RevealAllSpoilersOption {
 		this.messageContextEntryMarkup =
 			`<div class="${BDFDB.disCN.contextmenuitemgroup}">
 				<div class="${BDFDB.disCN.contextmenuitem} revealspoilers-item">
-					<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">Reveal all Spoilers</div></span>
+					<span class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">Reveal all Spoilers</div></span>
 					<div class="${BDFDB.disCN.contextmenuhint}"></div>
 				</div>
 			</div>`;

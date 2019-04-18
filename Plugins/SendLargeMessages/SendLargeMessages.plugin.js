@@ -39,7 +39,7 @@ class SendLargeMessages {
 			}`;
 
 		this.sendMessageModalMarkup =
-			`<span class="${this.name}-modal DevilBro-modal">
+			`<span class="${this.name}-modal BDFDB-modal">
 				<div class="${BDFDB.disCN.backdrop}"></div>
 				<div class="${BDFDB.disCN.modal}">
 					<div class="${BDFDB.disCN.modalinner}">

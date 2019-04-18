@@ -279,7 +279,7 @@ class DisplayServersAsChannels {
 		if (!info || !info.div) return;
 		var avatar = info.div.querySelector(BDFDB.dotCN.guildicon);
 		if (avatar) {
-			avatar.innerHTML = `<span class="DevilBro-textscrollwrapper" speed=3><div class="DevilBro-textscroll">${BDFDB.encodeToHTML(info.name || info.folderName || "")}</div></span>`;
+			avatar.innerHTML = `<span class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">${BDFDB.encodeToHTML(info.name || info.folderName || "")}</div></span>`;
 			BDFDB.initElements(avatar, this);
 			if (info.features && info.features.has("VERIFIED") && !info.features.has("FAKE_VERIFIED") && !info.div.querySelector(".DSAC-verification-badge")) {
 				info.div.insertBefore(BDFDB.htmlToElement(this.verificationBadgeMarkup), info.div.firstElementChild);
