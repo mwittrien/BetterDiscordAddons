@@ -3,7 +3,7 @@
 class EditUsers {
 	getName () {return "EditUsers";}
 
-	getVersion () {return "3.3.3";}
+	getVersion () {return "3.3.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class EditUsers {
 
 	initConstructor () {
 		this.changelog = {
-			"added":[["Invite Modal","Added an option to enable/disable the plugin to also show the edited name in the invitation modal"]]
+			"fixed":[["Canary/PTB","Fixed the plugin for canary and ptb"]]
 		};
 		
 		this.labels = {}; 
@@ -966,13 +966,26 @@ class EditUsers {
 	changeVoiceUser (info, username) {
 		if (!info || !username || !username.parentElement) return;
 		if (username.EditUsersChangeObserver && typeof username.EditUsersChangeObserver.disconnect == "function") username.EditUsersChangeObserver.disconnect();
+		username.removeEventListener("mouseover", username.mouseoverListenerEditUsers);
+		username.removeEventListener("mouseout", username.mouseoutListenerEditUsers);
 		let data = this.getUserData(info.id, username);
 		if (data.name || data.color1 || username.getAttribute("changed-by-editusers")) {
 			let member = this.MemberUtils.getMember(this.LastGuildStore.getGuildId(), info.id) || {};
 			let color1 = BDFDB.colorCONVERT(data.color1 || (BDFDB.isPluginEnabled("BetterRoleColors") ? member.colorString : ""), "RGB");
 			BDFDB.setInnerText(username, data.name || member.nick || info.username);
-			username.style.setProperty("color", BDFDB.containsClass(username, BDFDB.disCN.voicenamedefault) ? BDFDB.colorCHANGE(color1, -50) : color1, "important");
+			if (username.EditUsersHovered) colorHover();
+			else colorDefault();
 			if (data.name || data.color1) {
+				username.mouseoverListenerEditUsers = () => {
+					username.EditUsersHovered = true;
+					colorHover();
+				};
+				username.mouseoutListenerEditUsers = () => {
+					delete username.EditUsersHovered;
+					colorDefault();
+				};
+				username.parentElement.parentElement.addEventListener("mouseover", username.mouseoverListenerEditUsers);
+				username.parentElement.parentElement.addEventListener("mouseout", username.mouseoutListenerEditUsers);
 				username.EditUsersChangeObserver = new MutationObserver((changes, _) => {
 					username.EditUsersChangeObserver.disconnect();
 					this.changeVoiceUser(info, username);
@@ -980,6 +993,12 @@ class EditUsers {
 				username.EditUsersChangeObserver.observe(username, {attributes:true});
 			}
 			else username.removeAttribute("changed-by-editusers");
+			function colorDefault() {
+				username.style.setProperty("color", BDFDB.containsClass(username, BDFDB.disCN.voicenamespeaking) ? color1 : BDFDB.colorCHANGE(color1, -50), "important");
+			}
+			function colorHover() {
+				username.style.setProperty("color", color1, "important");
+			}
 		}
 	}
 
