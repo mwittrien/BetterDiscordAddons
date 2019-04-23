@@ -222,8 +222,15 @@
 #app-mount #bda-qem button:first-of-type {
 	border-left: none;
 }
-#app-mount .emojiPicker-3m1S-j .searchBar-2_Yu-C .searchBarInner-1_Tg2R input::placeholder {
-	color: #999;
+#app-mount .emojiPicker-3m1S-j .container-2XeR5Z {
+	background-color: #202225;
+}
+#app-mount .emojiPicker-3m1S-j .container-2XeR5Z .input-1Rv96N {
+    color: #b9bbbe;
+}
+#app-mount .emojiPicker-3m1S-j .container-2XeR5Z .input-1Rv96N::placeholder,
+#app-mount .emojiPicker-3m1S-j .container-2XeR5Z .icon-3cZ1F_ {
+    color: #72767d;
 }
 #app-mount .emojiPicker-3m1S-j .searchBar-2_Yu-C .icon-3cZ1F_.visible-3V0mGj {
 	opacity: 0.3;
@@ -253,11 +260,11 @@
 	filter: brightness(80%) invert(100%) saturate(0%);
 }
 #app-mount .emojiPicker-3m1S-j .categories-1feg4n .item-16cXuq[aria-label="favorites"] {
-	background-image: url('data:image/svg+xml; utf8, <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" stroke-width="1" stroke="#8E95A5" fill="transparent"><path d="M11.500 16.250L17.084 19.186L16.018 12.968L20.535 8.564L14.292 7.657L11.500 2.000L8.708 7.657L2.465 8.564L6.982 12.968L5.916 19.186L11.500 16.250"/></svg>');
+	background-image: url('data:image/svg+xml; utf8, <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" stroke-width="1" stroke="rgb(142, 149, 165)" fill="transparent"><path d="M11.500 16.250L17.084 19.186L16.018 12.968L20.535 8.564L14.292 7.657L11.500 2.000L8.708 7.657L2.465 8.564L6.982 12.968L5.916 19.186L11.500 16.250"/></svg>');
 }
 #app-mount .emojiPicker-3m1S-j .categories-1feg4n .item-16cXuq[aria-label="favorites"]:hover,
 #app-mount .emojiPicker-3m1S-j .categories-1feg4n .item-16cXuq.selected-39BZ4S[aria-label="favorites"] {
-	background-image: url('data:image/svg+xml; utf8, <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" stroke-width="1" stroke="#282B2E" fill="#FFD655"><path d="M11.500 16.250L17.084 19.186L16.018 12.968L20.535 8.564L14.292 7.657L11.500 2.000L8.708 7.657L2.465 8.564L6.982 12.968L5.916 19.186L11.500 16.250"/></svg>');
+	background-image: url('data:image/svg+xml; utf8, <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" stroke-width="1" stroke="rgb(40, 43, 46)" fill="rgb(255, 214, 85)"><path d="M11.500 16.250L17.084 19.186L16.018 12.968L20.535 8.564L14.292 7.657L11.500 2.000L8.708 7.657L2.465 8.564L6.982 12.968L5.916 19.186L11.500 16.250"/></svg>');
 }
 #app-mount #bda-qem-twitch-container .scroller-wrap .scroller::-webkit-scrollbar,
 #app-mount #bda-qem-favourite-container .scroller-wrap .scroller::-webkit-scrollbar {
