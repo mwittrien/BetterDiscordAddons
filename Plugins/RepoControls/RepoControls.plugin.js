@@ -3,7 +3,7 @@
 class RepoControls {
 	getName () {return "RepoControls";}
 
-	getVersion () {return "1.2.7";}
+	getVersion () {return "1.2.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class RepoControls {
 
 	initConstructor () {
 		this.changelog = {
-			"added":[["Edit Feature","Added the feature to add an edit button to all plugin/theme entries that on click opens the file in your choosen default editor application"]]
+			"fixed":[["Canary/PTB","Fixed the plugin for canary and ptb"]]
 		};
 		
 		this.patchModules = {
@@ -38,13 +38,6 @@ class RepoControls {
 
 		this.repoControlsMarkup = 
 			`<div class="repo-controls ${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
-				<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCNS.searchbar + BDFDB.disCN.size14}" style="flex: 1 1 auto;">
-					<input class="${BDFDB.disCN.searchbarinput}" value="" placeholder="Search for ..." style="flex: 1 1 auto;">
-					<div class="${BDFDB.disCN.searchbariconwrap}">
-						<i class="${BDFDB.disCNS.searchbaricon + BDFDB.disCNS.searchbareyeglass + BDFDB.disCN.searchbarvisible}"></i>
-						<i class="${BDFDB.disCNS.searchbaricon + BDFDB.disCN.searchbarclear}"></i>
-					</div>
-				</div>
 				<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}" style="flex: 0 1 auto;">
 					<button action="add" type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorgreen + BDFDB.disCNS.buttonsizeicon + BDFDB.disCN.buttongrow} btn-enableall" style="flex: 0 0 auto;">
 						<div class="${BDFDB.disCN.buttoncontents}">Enable All</div>
@@ -287,6 +280,7 @@ class RepoControls {
 		let sortings = BDFDB.getAllData(this, "sortings");
 
 		let repocontrols = BDFDB.htmlToElement(this.repoControlsMarkup);
+		repocontrols.insertBefore(BDFDB.createSearchBar("small"), repocontrols.firstElementChild);
 		BDFDB.initElements(repocontrols, this);
 		container.parentElement.insertBefore(repocontrols, container);
 

@@ -3,7 +3,7 @@
 class ThemeRepo {
 	getName () {return "ThemeRepo";}
 
-	getVersion () {return "1.8.0";}
+	getVersion () {return "1.8.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,8 +11,7 @@ class ThemeRepo {
 
 	initConstructor () {
 		this.changelog = {
-			"added":[["New Entries","Theme Repo now tells you when there is a new entry, which hasn't been loaded before"]],
-			"improved":[["New/Outdated Entries Notification","Notification for new or outdated entries can be disabled"]]
+			"fixed":[["Canary/PTB","Fixed the plugin for canary and ptb"]]
 		};
 		
 		this.patchModules = {
@@ -129,13 +128,6 @@ class ThemeRepo {
 								<div class="${BDFDB.disCNS.tabbar + BDFDB.disCN.tabbartop}">
 									<div tab="themes" class="${BDFDB.disCNS.settingsitem + BDFDB.disCN.tabbaritem}">Themes</div>
 									<div tab="settings" class="${BDFDB.disCNS.settingsitem + BDFDB.disCN.tabbaritem}">Settings</div>
-								</div>
-								<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCNS.searchbar + BDFDB.disCN.size14}" style="flex: 1 1 auto;">
-									<input class="${BDFDB.disCN.searchbarinput}" value="" placeholder="Search for ..." style="flex: 1 1 auto;">
-									<div class="${BDFDB.disCN.searchbariconwrap}">
-										<i class="${BDFDB.disCNS.searchbaricon + BDFDB.disCNS.searchbareyeglass + BDFDB.disCN.searchbarvisible}"></i>
-										<i class="${BDFDB.disCNS.searchbaricon + BDFDB.disCN.searchbarclear}"></i>
-									</div>
 								</div>
 								<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.quickselect}">
 									<div class="${BDFDB.disCN.quickselectlabel}">Sort by:</div>
@@ -500,6 +492,8 @@ class ThemeRepo {
 		
 		var frame = BDFDB.htmlToElement(this.frameMarkup);
 		var themeRepoModal = BDFDB.htmlToElement(this.themeRepoModalMarkup);
+		var tabbar = themeRepoModal.querySelector(BDFDB.dotCN.tabbar);
+		tabbar.parentElement.insertBefore(BDFDB.createSearchBar("small"), tabbar.nextElementSibling);
 		var hiddenSettings = BDFDB.loadAllData(this, "hidden");
 		var darklightinput = themeRepoModal.querySelector("#input-darklight");
 		var normalizeinput = themeRepoModal.querySelector("#input-normalize");
