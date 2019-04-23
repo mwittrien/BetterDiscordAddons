@@ -18,6 +18,7 @@ class PersonalPins {
 
 		this.patchModules = {
 			"HeaderBar":["componentDidMount","componentDidUpdate"],
+			"HeaderBarContainer":["componentDidMount","componentDidUpdate"],
 			"Message":"componentDidMount",
 			"MessageOptionPopout":"componentDidMount"
 		};
@@ -268,6 +269,10 @@ class PersonalPins {
 				BDFDB.setContextHint(pinitem, bdplugins.MessageUtilities.plugin.getActiveShortcutString("__Note_Message"));
 			}
 		}
+	}
+	
+	processHeaderBarContainer (instance, wrapper) {
+		this.processHeaderBar(instance, wrapper);
 	}
 
 	processHeaderBar (instance, wrapper) {
