@@ -16,6 +16,7 @@ class OldTitleBar {
 		
 		this.patchModules = {
 			"HeaderBar":["componentDidMount","componentDidUpdate"],
+			"HeaderBarContainer":["componentDidMount","componentDidUpdate"],
 			"StandardSidebarView":["componentDidMount","componentWillUnmount"],
 			"AuthWrapper":["componentDidMount","componentWillUnmount"]
 		};
@@ -199,6 +200,10 @@ class OldTitleBar {
 	// begin of own functions
 
 	processHeaderBar (instance, wrapper) {
+		this.addTitleBar();
+	}
+
+	processHeaderBarContainer (instance, wrapper) {
 		this.addTitleBar();
 	}
 
