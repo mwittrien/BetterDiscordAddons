@@ -3,7 +3,7 @@
 class ReadAllNotificationsButton {
 	getName () {return "ReadAllNotificationsButton";}
 
-	getVersion () {return "1.4.3";}
+	getVersion () {return "1.4.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ReadAllNotificationsButton {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Changes","Fixed for the new server classes"]]
+			"fixed":[["Canary/PTB","Fixed the plugin for canary and ptb"]]
 		};
 		
 		this.patchModules = {
@@ -39,18 +39,33 @@ class ReadAllNotificationsButton {
 			</div>`;
 
 		this.RANbuttonMarkup = 
-			`<div class="${BDFDB.disCN.guild} RANbutton-frame" id="bd-pub-li" style="height: 20px; margin-bottom: 10px;">
+			!BDFDB.DiscordClassModules.HomeIcon.button ? `<div class="${BDFDB.disCN.guild} RANbutton-frame" id="bd-pub-li" style="height: 20px; margin-bottom: 10px;">
 				<div class="${BDFDB.disCN.guildinner}" style="height: 20px; border-radius: 4px;">
 					<a>
 						<div class="RANbutton" id="bd-pub-button" style="line-height: 20px; font-size: 12px;">read all</div>
 					</a>
 				</div>
+			</div>` : `<div class="${BDFDB.disCN.guildouter} RANbutton-frame">
+				<div class="${BDFDB.disCN.homebutton} RANbutton" style="height: 20px;">read all</div>
 			</div>`;
 
 		this.RAMbuttonMarkup = 
 			`<button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemin + BDFDB.disCN.buttongrow} RAMbutton" style="flex: 0 0 auto; margin-left: 25px; height: 25px;">
 				<div class="${BDFDB.disCN.buttoncontents}">Clear Mentions</div>
 			</button>`;
+			
+		this.css = `
+			.RANbutton-frame {
+				margin-bottom: 10px;
+			}
+			.RANbutton {
+				cursor: pointer;
+				border-radius: 4px;
+				font-size: 12px;
+				font-weight: 500;
+				line-height: 1.3;
+			}
+		`;
 
 		this.defaults = {
 			settings: {
@@ -143,6 +158,7 @@ class ReadAllNotificationsButton {
 		let guildseparator = wrapper.querySelector(BDFDB.dotCN.guildseparator);
 		if (guildseparator) {
 			let ranbutton = BDFDB.htmlToElement(this.RANbuttonMarkup);
+			guildseparator = BDFDB.containsClass(guildseparator.parentElement, BDFDB.disCN.guildouter) ? guildseparator.parentElement : guildseparator;
 			guildseparator.parentElement.insertBefore(ranbutton, guildseparator);
 			ranbutton.addEventListener("click", () => {
 				let settings = BDFDB.getAllData(this, "settings");
