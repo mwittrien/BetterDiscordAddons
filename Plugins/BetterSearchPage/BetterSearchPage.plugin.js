@@ -3,7 +3,7 @@
 class BetterSearchPage {
 	getName () {return "BetterSearchPage";}
 
-	getVersion () {return "1.0.6";}
+	getVersion () {return "1.0.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class BetterSearchPage {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Language Issues","Fixed the bug where the plugin wouldn't work with certain languages"]]
+			"fixed":[["Canary/PTB","Fixed the plugin for canary and ptb"]]
 		};
 		
 		this.patchModules = {
@@ -21,7 +21,7 @@ class BetterSearchPage {
 
 		this.css = `
 			.BSP-pagination-button {
-				background: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="30" height="25"><g fill="#737f8d" fill-rule="evenodd" clip-rule="evenodd"><path xmlns="http://www.w3.org/2000/svg" d="M17.338 12.485c-4.156 4.156-8.312 8.312-12.468 12.467-1.402-1.402-2.805-2.804-4.207-4.206 2.756-2.757 5.513-5.514 8.27-8.27C6.176 9.72 3.419 6.963.663 4.207L4.87 0c-.058-.059 12.555 12.562 12.468 12.485z"/><path xmlns="http://www.w3.org/2000/svg" d="M17.338 12.485c-4.156 4.156-8.312 8.312-12.468 12.467-1.402-1.402-2.805-2.804-4.207-4.206 2.756-2.757 5.513-5.514 8.27-8.27C6.176 9.72 3.419 6.963.663 4.207L4.87 0c-.058-.059 12.555 12.562 12.468 12.485z" transform="translate(12 0)"/></g></svg>') 50%/9px 12px no-repeat;
+				background: url('data:image/svg+xml; base64, PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMCIgaGVpZ2h0PSIyNSI+PGcgZmlsbD0iIzczN2Y4ZCIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgZD0iTTE3LjMzOCAxMi40ODVjLTQuMTU2IDQuMTU2LTguMzEyIDguMzEyLTEyLjQ2OCAxMi40NjctMS40MDItMS40MDItMi44MDUtMi44MDQtNC4yMDctNC4yMDYgMi43NTYtMi43NTcgNS41MTMtNS41MTQgOC4yNy04LjI3QzYuMTc2IDkuNzIgMy40MTkgNi45NjMuNjYzIDQuMjA3TDQuODcgMGMtLjA1OC0uMDU5IDEyLjU1NSAxMi41NjIgMTIuNDY4IDEyLjQ4NXoiLz48cGF0aCB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGQ9Ik0xNy4zMzggMTIuNDg1Yy00LjE1NiA0LjE1Ni04LjMxMiA4LjMxMi0xMi40NjggMTIuNDY3LTEuNDAyLTEuNDAyLTIuODA1LTIuODA0LTQuMjA3LTQuMjA2IDIuNzU2LTIuNzU3IDUuNTEzLTUuNTE0IDguMjctOC4yN0M2LjE3NiA5LjcyIDMuNDE5IDYuOTYzLjY2MyA0LjIwN0w0Ljg3IDBjLS4wNTgtLjA1OSAxMi41NTUgMTIuNTYyIDEyLjQ2OCAxMi40ODV6IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxMiAwKSIvPjwvZz48L3N2Zz4=') 50%/9px 12px no-repeat;
 				border: 1px solid rgba(79,84,92,.16);
 				border-radius: 2px;
 				cursor: pointer;
@@ -32,7 +32,7 @@ class BetterSearchPage {
 				width: 18px;
 			}
 			${BDFDB.dotCN.themedark} .BSP-pagination-button {
-				background-image: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="30" height="25"><g fill="#FFF" fill-rule="evenodd" clip-rule="evenodd"><path xmlns="http://www.w3.org/2000/svg" d="M17.338 12.485c-4.156 4.156-8.312 8.312-12.468 12.467-1.402-1.402-2.805-2.804-4.207-4.206 2.756-2.757 5.513-5.514 8.27-8.27C6.176 9.72 3.419 6.963.663 4.207L4.87 0c-.058-.059 12.555 12.562 12.468 12.485z" /><path xmlns="http://www.w3.org/2000/svg" d="M17.338 12.485c-4.156 4.156-8.312 8.312-12.468 12.467-1.402-1.402-2.805-2.804-4.207-4.206 2.756-2.757 5.513-5.514 8.27-8.27C6.176 9.72 3.419 6.963.663 4.207L4.87 0c-.058-.059 12.555 12.562 12.468 12.485z" transform="translate(12 0)"/></g></svg>');
+				background-image: url('data:image/svg+xml; base64, PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMCIgaGVpZ2h0PSIyNSI+PGcgZmlsbD0iI0ZGRiIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgZD0iTTE3LjMzOCAxMi40ODVjLTQuMTU2IDQuMTU2LTguMzEyIDguMzEyLTEyLjQ2OCAxMi40NjctMS40MDItMS40MDItMi44MDUtMi44MDQtNC4yMDctNC4yMDYgMi43NTYtMi43NTcgNS41MTMtNS41MTQgOC4yNy04LjI3QzYuMTc2IDkuNzIgMy40MTkgNi45NjMuNjYzIDQuMjA3TDQuODcgMGMtLjA1OC0uMDU5IDEyLjU1NSAxMi41NjIgMTIuNDY4IDEyLjQ4NXoiIC8+PHBhdGggeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiBkPSJNMTcuMzM4IDEyLjQ4NWMtNC4xNTYgNC4xNTYtOC4zMTIgOC4zMTItMTIuNDY4IDEyLjQ2Ny0xLjQwMi0xLjQwMi0yLjgwNS0yLjgwNC00LjIwNy00LjIwNiAyLjc1Ni0yLjc1NyA1LjUxMy01LjUxNCA4LjI3LTguMjdDNi4xNzYgOS43MiAzLjQxOSA2Ljk2My42NjMgNC4yMDdMNC44NyAwYy0uMDU4LS4wNTkgMTIuNTU1IDEyLjU2MiAxMi40NjggMTIuNDg1eiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTIgMCkiLz48L2c+PC9zdmc+');
 				border: 1px solid hsla(0,0%,100%,.16);
 			}
 			.BSP-pagination-button.BSP-pagination-first {
