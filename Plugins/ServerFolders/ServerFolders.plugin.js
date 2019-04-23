@@ -207,10 +207,10 @@ class ServerFolders {
 							</div>
 							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCNS.marginbottom8 + BDFDB.disCN.tabbarcontainer}" style="flex: 0 0 auto; padding-right: 12px;">
 								<div class="${BDFDB.disCNS.tabbar + BDFDB.disCN.tabbartop}">
-									<div tab="folder" class="${BDFDB.disCNS.settingsitemdefault + BDFDB.disCNS.settingsitem + BDFDB.disCNS.settingsnotselected + BDFDB.disCN.tabbaritem}">REPLACE_modal_tabheader1_text</div>
-									<div tab="icon" class="${BDFDB.disCNS.settingsitemdefault + BDFDB.disCNS.settingsitem + BDFDB.disCNS.settingsnotselected + BDFDB.disCN.tabbaritem}">REPLACE_modal_tabheader2_text</div>
-									<div tab="tooltip" class="${BDFDB.disCNS.settingsitemdefault + BDFDB.disCNS.settingsitem + BDFDB.disCNS.settingsnotselected + BDFDB.disCN.tabbaritem}">REPLACE_modal_tabheader3_text</div>
-									<div tab="custom" class="${BDFDB.disCNS.settingsitemdefault + BDFDB.disCNS.settingsitem + BDFDB.disCNS.settingsnotselected + BDFDB.disCN.tabbaritem}">REPLACE_modal_tabheader4_text</div>
+									<div tab="folder" class="${BDFDB.disCNS.settingsitem + BDFDB.disCN.tabbaritem}">REPLACE_modal_tabheader1_text</div>
+									<div tab="icon" class="${BDFDB.disCNS.settingsitem + BDFDB.disCN.tabbaritem}">REPLACE_modal_tabheader2_text</div>
+									<div tab="tooltip" class="${BDFDB.disCNS.settingsitem + BDFDB.disCN.tabbaritem}">REPLACE_modal_tabheader3_text</div>
+									<div tab="custom" class="${BDFDB.disCNS.settingsitem + BDFDB.disCN.tabbaritem}">REPLACE_modal_tabheader4_text</div>
 								</div>
 							</div>
 							<div class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.modalcontent + BDFDB.disCNS.scrollerthemed + BDFDB.disCN.themeghosthairline}">

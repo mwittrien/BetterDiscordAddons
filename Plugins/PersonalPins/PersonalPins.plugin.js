@@ -51,9 +51,9 @@ class PersonalPins {
 						</div>
 						<div class="${BDFDB.disCN.tabbarheadercontainer}" style="flex: 0 0 auto;">
 							<div class="${BDFDB.disCNS.tabbarheader + BDFDB.disCN.tabbartop}">
-								<div tab="channel" class="${BDFDB.disCNS.settingsitemdefault + BDFDB.disCNS.settingsitem + BDFDB.disCNS.settingsnotselected + BDFDB.disCN.tabbarheaderitem}">REPLACE_popout_channel_text</div>
-								<div tab="server" class="${BDFDB.disCNS.settingsitemdefault + BDFDB.disCNS.settingsitem + BDFDB.disCNS.settingsnotselected + BDFDB.disCN.tabbarheaderitem}">REPLACE_popout_server_text</div>
-								<div tab="allservers" class="${BDFDB.disCNS.settingsitemdefault + BDFDB.disCNS.settingsitem + BDFDB.disCNS.settingsnotselected + BDFDB.disCN.tabbarheaderitem}">REPLACE_popout_allservers_text</div>
+								<div tab="channel" class="${BDFDB.disCNS.settingsitem + BDFDB.disCN.tabbarheaderitem}">REPLACE_popout_channel_text</div>
+								<div tab="server" class="${BDFDB.disCNS.settingsitem + BDFDB.disCN.tabbarheaderitem}">REPLACE_popout_server_text</div>
+								<div tab="allservers" class="${BDFDB.disCNS.settingsitem + BDFDB.disCN.tabbarheaderitem}">REPLACE_popout_allservers_text</div>
 							</div>
 							<div class="${BDFDB.disCN.recentmentionsmentionfilter}" style="padding-right: 15px;">
 								<div class="${BDFDB.disCN.recentmentionsmentionfilterlabel}">REPLACE_popout_sort_text:</div>
