@@ -3,7 +3,7 @@
 class BetterFriendCount {
 	getName () {return "BetterFriendCount";}
 
-	getVersion () {return "1.1.2";}
+	getVersion () {return "1.1.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class BetterFriendCount {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Canary/PTB","Fixed the plugin for canary and ptb"]]
+			"fixed":[["New Classes","Fixed the plugin for the new class update"]]
 		};
 		
 		this.patchModules = {
@@ -97,10 +97,20 @@ class BetterFriendCount {
 		for (let type in this.relationshipTypes) relationshipCount[this.relationshipTypes[type]] = 0;
 		for (let id in relationships) relationshipCount[this.relationshipTypes[relationships[id]]]++;
 		let badgeclass = BDFDB.disCN.badgewrapper;
-		tabitems[0].appendChild(BDFDB.htmlToElement(`<div class="${badgeclass} betterfriendcount-badge friendcount">${relationshipCount.FRIEND}</div>`));
-		tabitems[1].appendChild(BDFDB.htmlToElement(`<div class="${badgeclass} betterfriendcount-badge onlinefriendcount">${this.UserMetaStore.getOnlineFriendCount()}</div>`));
-		tabitems[2].appendChild(BDFDB.htmlToElement(`<div class="${badgeclass} betterfriendcount-badge requestincount">${relationshipCount.PENDING_INCOMING}</div>`));
-		tabitems[2].appendChild(BDFDB.htmlToElement(`<div class="${badgeclass} betterfriendcount-badge requestoutcount">${relationshipCount.PENDING_OUTGOING}</div>`));
-		tabitems[3].appendChild(BDFDB.htmlToElement(`<div class="${badgeclass} betterfriendcount-badge blockedcount">${relationshipCount.BLOCKED}</div>`));
+		for (let item of tabitems) switch (BDFDB.getReactValue(item, "return.memoizedProps.id")) {
+			case "ALL":
+				item.appendChild(BDFDB.htmlToElement(`<div class="${badgeclass} betterfriendcount-badge friendcount">${relationshipCount.FRIEND}</div>`));
+				break;
+			case "ONLINE":
+				item.appendChild(BDFDB.htmlToElement(`<div class="${badgeclass} betterfriendcount-badge onlinefriendcount">${this.UserMetaStore.getOnlineFriendCount()}</div>`));
+				break;
+			case "PENDING":
+				item.appendChild(BDFDB.htmlToElement(`<div class="${badgeclass} betterfriendcount-badge requestincount">${relationshipCount.PENDING_INCOMING}</div>`));
+				item.appendChild(BDFDB.htmlToElement(`<div class="${badgeclass} betterfriendcount-badge requestoutcount">${relationshipCount.PENDING_OUTGOING}</div>`));
+				break;
+			case "BLOCKED":
+				item.appendChild(BDFDB.htmlToElement(`<div class="${badgeclass} betterfriendcount-badge blockedcount">${relationshipCount.BLOCKED}</div>`));
+				break;
+		}
 	}
 }
