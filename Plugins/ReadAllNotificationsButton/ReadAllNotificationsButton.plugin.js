@@ -11,7 +11,7 @@ class ReadAllNotificationsButton {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["New classes","Fixed the plugin for the new class update"]]
+			"fixed":[["New Classes","Fixed the plugin for the new class update"]]
 		};
 		
 		this.patchModules = {
