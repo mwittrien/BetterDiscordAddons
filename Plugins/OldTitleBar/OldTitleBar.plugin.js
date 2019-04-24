@@ -48,54 +48,28 @@ class OldTitleBar {
 		this.dividerMarkup = `<div class="buttonOTB dividerOTB ${BDFDB.disCN.channelheaderdivider}"></div>`;
 
 		this.reloadButtonMarkup = 
-			BDFDB.DiscordClassModules.HeaderBar.iconMargin ? `<span class="${BDFDB.disCN.channelheadericonmargin} buttonOTB reloadButtonOTB">
-				<svg class="${BDFDB.disCNS.channelheadericoninactive + BDFDB.disCN.channelheadericon}" xmlns="http://www.w3.org/2000/svg">
-					<g fill="none" class="${BDFDB.disCN.channelheadericonforeground}" fill-rule="evenodd">
-						<path fill="currentColor" transform="translate(4,4)" d="M17.061,7.467V0l-2.507,2.507C13.013,0.96,10.885,0,8.528,0C3.813,0,0.005,3.819,0.005,8.533s3.808,8.533,8.523,8.533c3.973,0,7.301-2.72,8.245-6.4h-2.219c-0.88,2.485-3.237,4.267-6.027,4.267c-3.536,0-6.4-2.864-6.4-6.4s2.864-6.4,6.4-6.4c1.765,0,3.349,0.736,4.507,1.893l-3.44,3.44H17.061z"/>
-					</g>
-				</svg>
-			</span>`
-			: `<div class="${BDFDB.disCNS.channelheadericonwrapper + BDFDB.disCN.channelheadericonclickable} buttonOTB reloadButtonOTB">
+			`<div class="${BDFDB.disCNS.channelheadericonwrapper + BDFDB.disCN.channelheadericonclickable} buttonOTB reloadButtonOTB">
 				<svg class="${BDFDB.disCN.channelheadericon}" xmlns="http://www.w3.org/2000/svg">
 					<path fill="currentColor" stroke="none" transform="translate(4,4)" d="M17.061,7.467V0l-2.507,2.507C13.013,0.96,10.885,0,8.528,0C3.813,0,0.005,3.819,0.005,8.533s3.808,8.533,8.523,8.533c3.973,0,7.301-2.72,8.245-6.4h-2.219c-0.88,2.485-3.237,4.267-6.027,4.267c-3.536,0-6.4-2.864-6.4-6.4s2.864-6.4,6.4-6.4c1.765,0,3.349,0.736,4.507,1.893l-3.44,3.44H17.061z"/>
 				</svg>
 			</div>`;
 
 		this.minButtonMarkup = 
-			BDFDB.DiscordClassModules.HeaderBar.iconMargin ? `<span class="${BDFDB.disCN.channelheadericonmargin} buttonOTB minButtonOTB">
-				<svg class="${BDFDB.disCNS.channelheadericoninactive + BDFDB.disCN.channelheadericon}" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
-					<g fill="none" class="${BDFDB.disCN.channelheadericonforeground}" fill-rule="evenodd">
-						<path stroke-width="2" stroke="currentColor" fill="none" d="M6 18 l13 0"/>
-					</g>
-				</svg>
-			</span>`
-			: `<div class="${BDFDB.disCNS.channelheadericonwrapper + BDFDB.disCN.channelheadericonclickable} buttonOTB minButtonOTB">
+			`<div class="${BDFDB.disCNS.channelheadericonwrapper + BDFDB.disCN.channelheadericonclickable} buttonOTB minButtonOTB">
 				<svg class="${BDFDB.disCN.channelheadericon}" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
 					<path stroke-width="2" stroke="currentColor" fill="none" d="M6 18 l13 0"/>
 				</svg>
 			</div>`;
 
 		this.maxButtonMarkup = 
-			BDFDB.DiscordClassModules.HeaderBar.iconMargin ? `<span class="${BDFDB.disCN.channelheadericonmargin} buttonOTB maxButtonOTB">
-				<svg class="${BDFDB.disCNS.channelheadericoninactive + BDFDB.disCN.channelheadericon}" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
-					<g fill="none" class="${BDFDB.disCN.channelheadericonforeground}" fill-rule="evenodd"></g>
-				</svg>
-			</span>`
-			: `<div class="${BDFDB.disCNS.channelheadericonwrapper + BDFDB.disCN.channelheadericonclickable} buttonOTB maxButtonOTB">
+			`<div class="${BDFDB.disCNS.channelheadericonwrapper + BDFDB.disCN.channelheadericonclickable} buttonOTB maxButtonOTB">
 				<svg class="${BDFDB.disCN.channelheadericon}" xmlns="http://www.w3.org/2000/svg" width="26" height="26"><g></g></svg>
 			</div>`;
 		this.maxButtonInnerMin = `<path stroke-width="2" stroke="currentColor" fill="none" d="M6 6 l13 0 l0 13 l-13 0 l0 -13"/>`;
 		this.maxButtonInnerMax = `<path stroke-width="2" stroke="currentColor" fill="none" d="M6 9 l10 0 l0 10 l-10 0 l0 -10 m3 -3 l10 0 l0 10"/>`;
 
 		this.closeButtonMarkup = 
-			BDFDB.DiscordClassModules.HeaderBar.iconMargin ? `<span class="${BDFDB.disCN.channelheadericonmargin} buttonOTB closeButtonOTB">
-				<svg class="${BDFDB.disCNS.channelheadericoninactive + BDFDB.disCN.channelheadericon}" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
-					<g fill="none" class="${BDFDB.disCN.channelheadericonforeground}" fill-rule="evenodd">
-						<path stroke-width="2" stroke="currentColor" d="M6 6 l13 13 m0 -13 l-13 13"/>
-					</g>
-				</svg>
-			</span>`
-			: `<div class="${BDFDB.disCNS.channelheadericonwrapper + BDFDB.disCN.channelheadericonclickable} buttonOTB closeButtonOTB">
+			`<div class="${BDFDB.disCNS.channelheadericonwrapper + BDFDB.disCN.channelheadericonclickable} buttonOTB closeButtonOTB">
 				<svg class="${BDFDB.disCN.channelheadericon}" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
 					<path stroke-width="2" stroke="currentColor" fill="none" d="M6 6 l13 13 m0 -13 l-13 13"/>
 				</svg>
@@ -228,7 +202,7 @@ class OldTitleBar {
 		if (BDFDB.getData("addOldBar", this, "settings")) {
 			var headerbar = BDFDB.htmlToElement(`<span class="headerbarOTB ${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}"></span>`);
 			this.createButtons(headerbar);
-			let headerbaricon = BDFDB.DiscordClassModules.HeaderBar.toolbar ? document.querySelector(BDFDB.dotCN.channelheadertoolbar + " > " + BDFDB.dotCN.channelheadericonwrapper) : document.querySelector(BDFDB.dotCN.channelheadertoolbar2 + " > " + BDFDB.dotCN.channelheadericonmargin);
+			let headerbaricon = document.querySelector(BDFDB.dotCN.channelheadertoolbar + " > " + BDFDB.dotCN.channelheadericonwrapper);
 			if (headerbaricon) headerbaricon.parentElement.appendChild(headerbar);
 			this.changeMaximizeButtons();
 		}

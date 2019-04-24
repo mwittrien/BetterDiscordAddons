@@ -3,7 +3,7 @@
 class ReadAllNotificationsButton {
 	getName () {return "ReadAllNotificationsButton";}
 
-	getVersion () {return "1.4.4";}
+	getVersion () {return "1.4.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ReadAllNotificationsButton {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Canary/PTB","Fixed the plugin for canary and ptb"]]
+			"fixed":[["New classes","Fixed the plugin for the new class update"]]
 		};
 		
 		this.patchModules = {
@@ -39,13 +39,7 @@ class ReadAllNotificationsButton {
 			</div>`;
 
 		this.RANbuttonMarkup = 
-			!BDFDB.DiscordClassModules.HomeIcon.button ? `<div class="${BDFDB.disCN.guild} RANbutton-frame" id="bd-pub-li" style="height: 20px; margin-bottom: 10px;">
-				<div class="${BDFDB.disCN.guildinner}" style="height: 20px; border-radius: 4px;">
-					<a>
-						<div class="RANbutton" id="bd-pub-button" style="line-height: 20px; font-size: 12px;">read all</div>
-					</a>
-				</div>
-			</div>` : `<div class="${BDFDB.disCN.guildouter} RANbutton-frame">
+			`<div class="${BDFDB.disCN.guildouter} RANbutton-frame">
 				<div class="${BDFDB.disCN.homebutton} RANbutton" style="height: 20px;">read all</div>
 			</div>`;
 
@@ -158,8 +152,7 @@ class ReadAllNotificationsButton {
 		let guildseparator = wrapper.querySelector(BDFDB.dotCN.guildseparator);
 		if (guildseparator) {
 			let ranbutton = BDFDB.htmlToElement(this.RANbuttonMarkup);
-			guildseparator = BDFDB.containsClass(guildseparator.parentElement, BDFDB.disCN.guildouter) ? guildseparator.parentElement : guildseparator;
-			guildseparator.parentElement.insertBefore(ranbutton, guildseparator);
+			guildseparator.parentElement.parentElement.insertBefore(ranbutton, guildseparator.parentElement);
 			ranbutton.addEventListener("click", () => {
 				let settings = BDFDB.getAllData(this, "settings");
 				if (settings.includeGuilds) BDFDB.markGuildAsRead(settings.includeMuted ? BDFDB.readServerList() : BDFDB.readUnreadServerList());
@@ -188,7 +181,7 @@ class ReadAllNotificationsButton {
 	processDirectMessage (instance, wrapper, methodnames) {
 		let ranbutton = document.querySelector(".RANbutton-frame");
 		let guildseparator = wrapper.parentElement.parentElement.querySelector(BDFDB.dotCN.guildseparator);
-		if (ranbutton && guildseparator) guildseparator.parentElement.insertBefore(ranbutton, guildseparator);
+		if (ranbutton && guildseparator) guildseparator.parentElement.parentElement.insertBefore(ranbutton, guildseparator.parentElement);
 	}
 
 	processRecentMentions (instance, wrapper) {

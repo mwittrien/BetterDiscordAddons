@@ -97,8 +97,6 @@ https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Themes/Bl
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Themes/FullThemeDark/FullThemeDark.theme.css
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Themes/ServerColumns/ServerColumns.theme.css
 https://raw.githubusercontent.com/Mylan719/Discord-light-theme/master/Discord Light-Blue.theme.css
-https://raw.githubusercontent.com/Narugokyu/modern-n-cozy/master/modern-n-cozy.theme.css
-https://raw.githubusercontent.com/Narugokyu/nova-theme/master/space_nova.theme.css
 https://raw.githubusercontent.com/NFLD99/Better-Discord/master/Mini_Themes/Avatars.theme.css
 https://raw.githubusercontent.com/NFLD99/Better-Discord/master/Mini_Themes/Font.theme.css
 https://raw.githubusercontent.com/NFLD99/Better-Discord/master/Mini_Themes/Make_Names_Clean.theme.css
