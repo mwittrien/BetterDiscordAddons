@@ -858,7 +858,6 @@ class EditUsers {
 		wrapper = BDFDB.containsClass(wrapper, BDFDB.disCN.guildicon) ? wrapper.parentElement.parentElement.parentElement : wrapper;
 		wrapper.removeEventListener("mouseenter", wrapper.tooltipListenerEditUsers);
 		if (data.name) {
-			console.log(wrapper);
 			wrapper.tooltipListenerEditUsers = () => {
 				BDFDB.createTooltip(data.name, wrapper, {type,selector:"EditUsers-tooltip",css:`body ${BDFDB.dotCN.tooltip}:not(.EditUsers-tooltip) {display: none !important;}`});
 			};
