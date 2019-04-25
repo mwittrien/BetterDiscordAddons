@@ -3,7 +3,7 @@
 class ServerHider {
 	getName () {return "ServerHider";}
 
-	getVersion () {return "6.0.5";}
+	getVersion () {return "6.0.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,13 +11,13 @@ class ServerHider {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["New Classes","Fixed the plugin for the new class update"]]
+			"fixed":[["Start up","Fixed a Bug where some servers wouldn't get hidden on start up"]]
 		};
 		
 		this.labels = {};
 
 		this.patchModules = {
-			"Guild":"componentDidMount"
+			"Guild":["componentDidMount","componentDidUpdate"]
 		};
 
 		this.serverHiderModalMarkup =
@@ -206,10 +206,11 @@ class ServerHider {
 		}
 	}
 
-	processGuild (instance, wrapper) {
-		if (instance.currentType && instance.currentType == "GUILD" && instance.props && instance.props.guild) {
+	processGuild (instance, wrapper, methodnames) {
+		if (instance.currentType && (instance.currentType == "GUILD" || instance.currentType.ownerId) && instance.props && instance.props.guild) {
 			let hiddenservers = BDFDB.loadData("hiddenservers", this, "hiddenservers") || [];
-			this.toggleServer(instance.props.guild, wrapper, !hiddenservers.includes(instance.props.guild.id));
+			if (methodnames.includes("componentDidMount")) this.toggleServer(instance.props.guild, wrapper, !hiddenservers.includes(instance.props.guild.id));
+			if (methodnames.includes("componentDidUpdate") && hiddenservers.includes(instance.props.guild.id) && instance.props.unread) this.unreadServer(instance.props.guild.id);
 		}
 	}
 
@@ -270,29 +271,15 @@ class ServerHider {
 		BDFDB.toggleEles(guilddiv, visible);
 		let hiddenservers = BDFDB.loadData("hiddenservers", this, "hiddenservers") || [];
 		BDFDB.removeFromArray(hiddenservers, info.id);
-		if (guilddiv.ServerHiderChangeObserver && typeof guilddiv.ServerHiderChangeObserver.disconnect == "function") guilddiv.ServerHiderChangeObserver.disconnect();
 		if (!visible) {
-			guilddiv.ServerHiderChangeObserver = new MutationObserver(changes => {changes.forEach(change => {
-				if (change.type == "attributes" && change.attributeName == "draggable" || change.attributeName == "source") return;
-				let clearnotifications = false;
-				if (change.type == "attributes" && change.attributeName == "style" && BDFDB.containsClass(change.target, BDFDB.disCN.guildpillitem)) clearnotifications = true;
-				if (change.type == "characterData" && change.target.parentElement && BDFDB.containsClass(change.target.parentElement, BDFDB.disCN.guildbadgenumberbadge)) clearnotifications = true;
-				if (change.addedNodes.length) change.addedNodes.forEach(node => {if (node.tagName && BDFDB.containsClass(node, BDFDB.disCN.guildlowerbadge)) clearnotifications = true;});
-				if (clearnotifications) this.unreadServer(guilddiv, info.id);
-			});});
-			guilddiv.ServerHiderChangeObserver.observe(guilddiv, {attributes:true, childList:true, characterData: true, subtree:true});
-			if (guilddiv.querySelector(BDFDB.dotCN.guildpillitem).style.getPropertyValue("opacity") > 0 || guilddiv.querySelector(BDFDB.dotCN.guildbadgenumberbadge)) this.unreadServer(guilddiv, info.id);
+			if (BDFDB.getReactValue(guilddiv, "return.stateNode.props").unread) this.unreadServer(info.id);
 			hiddenservers.push(info.id);
 		}
 		BDFDB.saveData("hiddenservers", hiddenservers, this, "hiddenservers");
 	}
 	
-	unreadServer (guilddiv, id) {
-		if (BDFDB.getData("clearNotifications", this, "settings") && !guilddiv.ServerHiderChanged) {
-			guilddiv.ServerHiderChanged = true;
-			BDFDB.markGuildAsRead(id);
-			setTimeout(() => {delete guilddiv.ServerHiderChanged;},5000);
-		}
+	unreadServer (id) {
+		if (BDFDB.getData("clearNotifications", this, "settings")) BDFDB.markGuildAsRead(id);
 	}
 
 	setLabelsByLanguage () {
