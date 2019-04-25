@@ -3,7 +3,7 @@
 class ReadAllNotificationsButton {
 	getName () {return "ReadAllNotificationsButton";}
 
-	getVersion () {return "1.4.5";}
+	getVersion () {return "1.4.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -40,7 +40,7 @@ class ReadAllNotificationsButton {
 
 		this.RANbuttonMarkup = 
 			`<div class="${BDFDB.disCN.guildouter} RANbutton-frame">
-				<div class="${BDFDB.disCN.homebutton} RANbutton" style="height: 20px;">read all</div>
+				<div class="${BDFDB.disCN.guildiconacronym} RANbutton" style="height: 20px;">read all</div>
 			</div>`;
 
 		this.RAMbuttonMarkup = 
