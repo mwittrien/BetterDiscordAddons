@@ -39,7 +39,7 @@ class ReadAllNotificationsButton {
 			</div>`;
 
 		this.RANbuttonMarkup = 
-			`<div class="${BDFDB.disCN.guildouter} RANbutton-frame">
+			`<div class="${BDFDB.disCN.guildouter} RANbutton-frame" style="height: 20px;">
 				<div class="${BDFDB.disCN.guildiconacronym} RANbutton" style="height: 20px;">read all</div>
 			</div>`;
 
