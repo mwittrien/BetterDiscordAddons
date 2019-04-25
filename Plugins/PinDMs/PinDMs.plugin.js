@@ -86,7 +86,7 @@ class PinDMs {
 								<rect x="28" y="28" width="24" height="24" rx="12" ry="12" transform="translate(-20 20)" fill="black"></rect>
 							</mask>
 							<foreignObject mask="" x="0" y="0" width="48" height="48">
-								<a class="${BDFDB.disCN.guildiconwrapper}" href="" draggable="false">
+								<a class="${BDFDB.disCN.guildiconwrapper}" draggable="false">
 									<img class="${BDFDB.disCN.guildicon}" src="" width="48" height="48" draggable="false"></img>
 								</a>
 							</foreignObject>
@@ -94,7 +94,7 @@ class PinDMs {
 						<div class="${BDFDB.disCN.guildbadgewrapper}">
 							<div class="${BDFDB.disCN.guildupperbadge} pin-badge" style="opacity: 1; transform: translate(0px, 0px);">
 								<div class="${BDFDB.disCNS.guildbadgeiconbadge + BDFDB.disCN.guildbadgeiconbadge2}" style="width: 16px; padding-right: 1px;">
-									<svg class="${BDFDB.disCN.guildbadgeicon}" width="24" height="24" viewBox="0 0 520 520">
+									<svg class="${BDFDB.disCN.guildbadgeicon}" name="Nova_Pin" width="24" height="24" viewBox="0 0 520 520">
 										<g fill="white">
 											<path d="M291.31, 402.761L109.241, 220.693C79.073, 190.525, 30.166, 190.526, 0, 220.692l291.31, 291.31C321.474, 481.835, 321.476, 432.927, 291.31, 402.761z"></path>
 											<polygon points="273.104, 111.449 154.758, 211.589 300.412, 357.242 400.55, 238.898"></polygon>
@@ -664,15 +664,22 @@ class PinDMs {
 			let count = this.UnreadUtils.getUnreadCount(id);
 			let masks = pinneddmdiv.querySelectorAll("mask rect");
 			let pill = pinneddmdiv.querySelector(BDFDB.dotCN.dmpill);
-			let pinbadge = pinneddmdiv.querySelector(BDFDB.dotCN.guildupperbadge);
-			let countbadge = pinneddmdiv.querySelector(BDFDB.dotCN.guildlowerbadge);
+			let iconbadge = pinneddmdiv.querySelector(BDFDB.dotCN.guildupperbadge);
+			let notificationbadge = pinneddmdiv.querySelector(BDFDB.dotCN.guildlowerbadge);
+			
 			BDFDB.toggleClass(pinneddmdiv, "has-new-messages", count > 0);
 			BDFDB.toggleEles(pill, count > 0);
-			BDFDB.toggleEles(pinbadge, showpin);
-			BDFDB.toggleEles(countbadge, count > 0);
-			countbadge.firstElementChild.innerText = count;
+			
+			BDFDB.toggleEles(iconbadge, showpin);
+			notificationbadge.firstElementChild.innerText = count;
+			notificationbadge.firstElementChild.style.setProperty("width", `${count > 99 ? 30 : (count > 9 ? 22 : 16)}px`);
+			notificationbadge.firstElementChild.style.setProperty("padding-right", `${count > 99 ? 0 : (count > 9 ? 0 : 1)}px`);
+			BDFDB.toggleEles(notificationbadge, count > 0);
+			
 			masks[0].setAttribute("transform", showpin ? "translate(0 0)" : "translate(20 -20)");
 			masks[1].setAttribute("transform", count > 0 ? "translate(0 0)" : "translate(20 20)");
+			masks[1].setAttribute("x", `${count > 99 ? 14 : (count > 9 ? 22 : 28)}`);
+			masks[1].setAttribute("width", `${count > 99 ? 38 : (count > 9 ? 30 : 24)}`);
 		}
 	}
 
