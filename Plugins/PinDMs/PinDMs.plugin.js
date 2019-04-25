@@ -80,12 +80,12 @@ class PinDMs {
 					</div>
 					<div tabindex="0" class="${BDFDB.disCNS.dmcontainer + BDFDB.disCN.guildinner}" role="button">
 						<svg width="48" height="48" viewBox="0 0 48 48" class="${BDFDB.disCN.guildsvg}">
-							<mask id="PIN153de927-414f-4fff-b774-77fc8a0b7889" fill="black" x="0" y="0" width="48" height="48">
+							<mask id="" fill="black" x="0" y="0" width="48" height="48">
 								<path d="M48 24C48 37.2548 37.2548 48 24 48C10.7452 48 0 37.2548 0 24C0 10.7452 10.7452 0 24 0C37.2548 0 48 10.7452 48 24Z" fill="white"></path>
 								<rect x="28" y="-4" width="24" height="24" rx="12" ry="12" transform="translate(0 0)" fill="black"></rect>
 								<rect x="28" y="28" width="24" height="24" rx="12" ry="12" transform="translate(-20 20)" fill="black"></rect>
 							</mask>
-							<foreignObject mask="url(#PIN153de927-414f-4fff-b774-77fc8a0b7889)" x="0" y="0" width="48" height="48">
+							<foreignObject mask="" x="0" y="0" width="48" height="48">
 								<a class="${BDFDB.disCN.guildiconwrapper}" href="" draggable="false">
 									<img class="${BDFDB.disCN.guildicon}" src="" width="48" height="48" draggable="false"></img>
 								</a>
@@ -120,12 +120,10 @@ class PinDMs {
 					</div>
 					<div tabindex="0" class="${BDFDB.disCNS.dmcontainer + BDFDB.disCN.guildinner}" role="button">
 						<svg width="48" height="48" viewBox="0 0 48 48" class="${BDFDB.disCN.guildsvg}">
-							<mask id="PIN153de927-414f-4fff-b774-77fc8a0b7889" fill="black" x="0" y="0" width="48" height="48">
+							<mask id="PINDMSDRAG" fill="black" x="0" y="0" width="48" height="48">
 								<path d="M48 24C48 37.2548 37.2548 48 24 48C10.7452 48 0 37.2548 0 24C0 10.7452 10.7452 0 24 0C37.2548 0 48 10.7452 48 24Z" fill="white"></path>
-								<rect x="28" y="-4" width="24" height="24" rx="12" ry="12" transform="translate(0 0)" fill="black"></rect>
-								<rect x="28" y="28" width="24" height="24" rx="12" ry="12" transform="translate(0 0)" fill="black"></rect>
 							</mask>
-							<foreignObject mask="url(#PIN153de927-414f-4fff-b774-77fc8a0b7889)" x="0" y="0" width="48" height="48">
+							<foreignObject mask="url(#PINDMSDRAG)" x="0" y="0" width="48" height="48">
 								<div class="${BDFDB.disCN.guildplaceholder}"></div>
 							</foreignObject>
 						</svg>
@@ -549,6 +547,8 @@ class PinDMs {
 			let info = this.ChannelUtils.getChannel(id);
 			if (info) {
 				let dmdiv = BDFDB.htmlToElement(this.recentDMMarkup);
+				dmdiv.querySelector("mask").setAttribute("id", "PINDMS" + id);
+				dmdiv.querySelector("foreignObject").setAttribute("mask", "url(#PINDMS" + id + ")");
 				let user = info.type == 1 ? this.UserUtils.getUser(info.recipients[0]) : null;
 				dmdiv.setAttribute("channelid", id);
 				anker.parentElement.insertBefore(dmdiv, anker.nextSibling);
