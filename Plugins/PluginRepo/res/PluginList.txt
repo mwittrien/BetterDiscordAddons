@@ -207,3 +207,4 @@ https://raw.githubusercontent.com/XFoxPrower/Notice-Me-Senpai/master/Notice%20Me
 https://raw.githubusercontent.com/XFoxPrower/Quick-Open-Link/master/Quick%20Open%20Link.plugin.js
 https://raw.githubusercontent.com/Zerthox/BetterDiscord-Plugins/master/v1/BetterReplyer.plugin.js
 https://raw.githubusercontent.com/Zerthox/BetterDiscord-Plugins/master/v1/GuildSeparators.plugin.js
+https://raw.githubusercontent.com/Zerthox/BetterDiscord-Plugins/master/v1/OnlineFriendCount.plugin.js
