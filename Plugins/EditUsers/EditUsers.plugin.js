@@ -3,7 +3,7 @@
 class EditUsers {
 	getName () {return "EditUsers";}
 
-	getVersion () {return "3.3.4";}
+	getVersion () {return "3.3.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class EditUsers {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Canary/PTB","Fixed the plugin for canary and ptb"]]
+			"fixed":[["Start up","Fixed a Bug where some servers wouldn't get hidden on start up"]]
 		};
 		
 		this.labels = {}; 
@@ -37,7 +37,7 @@ class EditUsers {
 			"StandardSidebarView":"componentWillUnmount"
 		};
 
-		this.avatarselector = BDFDB.dotCNC.avatarinner + BDFDB.dotCNC.avatarimage + BDFDB.dotCNC.callavatarwrapper + BDFDB.dotCNC.voiceavatarcontainer + "[class*='avatar-']";
+		this.avatarselector = BDFDB.dotCNC.guildicon + BDFDB.dotCNC.avatarinner + BDFDB.dotCNC.avatarimage + BDFDB.dotCNC.callavatarwrapper + BDFDB.dotCNC.voiceavatarcontainer + "[class*='avatar-']";
 
 		this.css = `
 			${BDFDB.dotCN.bottag} {
