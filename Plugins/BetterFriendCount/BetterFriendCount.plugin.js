@@ -79,7 +79,7 @@ class BetterFriendCount {
 	// begin of own functions
 
 	processTabBar (instance, wrapper) {
-		if (instance.props && instance.props.children) for (let child of instance.props.children) if ((child.key || child.props.id) == "ADD_FRIEND") this.addCountNumbers(wrapper);
+		if (instance.props && instance.props.children) for (let child of instance.props.children) if ((child.key || (child.props && child.props.id)) == "ADD_FRIEND") this.addCountNumbers(wrapper);
 	}
 
 	processNameTag (instance, wrapper) {
