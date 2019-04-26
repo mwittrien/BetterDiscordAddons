@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.1.8";}
+	getVersion () {return "6.1.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,15 +11,15 @@ class ServerFolders {
 
 	initConstructor () {
 		this.changelog = {
-			"added":[["Nothing","Some of you people seriously need to change your way of how you take stuff for granted. The amount of people not properly researching whether my stuff is currently being fixed and spamming me with stupid questions in DMs was way too damn high. Some of you better donate to me, because at the end of the day I am still doing this shit for free"]],
-			"fixed":[["New Classes","Fixed the plugin for the new class update, still need to copy the hover behaviour of the native server elements but most stuff works for now"]]
+			"added":[["Everything","Thanks you for all the people that actually reached out to me and donated to me <3"]],
+			"fixed":[["Rest","Fixed all left over bugs (Hover animation, Servers in Folders not updating properly, Audio/Video Icon being stuck on a Folder, unread pill not showing on Folders, Folder Icon Colors not being customizable)"]]
 		};
 		
 		this.labels = {};
 
 		this.patchModules = {
 			"Guilds":["componentDidMount","componentWillUnmount"],
-			"Guild":["componentDidMount","componentDidUpdate","componentWillUnmount"],
+			"Guild":["componentDidMount","componentWillUnmount"],
 			"StandardSidebarView":"componentWillUnmount"
 		};
 
@@ -73,11 +73,11 @@ class ServerFolders {
 			${BDFDB.dotCN.guildouter}.serverfolders-dragpreview ${BDFDB.dotCNS.guildinner + BDFDB.dotCN.guildiconwrapper},
 			${BDFDB.dotCN.guildouter}.serverfolders-dragpreview ${BDFDB.dotCNS.guildinner + BDFDB.dotCNS.guildiconwrapper + BDFDB.dotCN.guildicon} {
 				border-radius: 50% !important;
-				width: 50px !important;
-				height: 50px !important;
+				width: 48px !important;
+				height: 48px !important;
 			}
-			${BDFDB.dotCN.guildouter}.serverfolders-dragpreview ${BDFDB.dotCN.guildlowerbadge},
-			${BDFDB.dotCN.guildouter}.serverfolders-dragpreview ${BDFDB.dotCN.guildupperbadge} {
+			${BDFDB.dotCN.guildouter}.serverfolders-dragpreview ${BDFDB.dotCN.guildpillwrapper},
+			${BDFDB.dotCN.guildouter}.serverfolders-dragpreview ${BDFDB.dotCN.guildbadgewrapper} {
 				display: none !important;
 			}
 			${BDFDB.dotCN.guildouter}.serverfolders-dragpreview ${BDFDB.dotCN.guildiconacronym} {
@@ -169,18 +169,18 @@ class ServerFolders {
 		this.folderIconMarkup =
 			`<div class="${BDFDB.disCN.guildouter} folder">
 				<div class="${BDFDB.disCNS.guildpillwrapper + BDFDB.disCN.guildpill}">
-					<span class="${BDFDB.disCN.guildpillitem}"></span>
+					<span class="${BDFDB.disCN.guildpillitem}" style="opacity: 0; height: 8px; transform: translate3d(0px, 0px, 0px);"></span>
 				</div>
 				<div tabindex="0" class="${BDFDB.disCNS.guildcontainer + BDFDB.disCN.guildinner}" role="button">
 					<svg width="48" height="48" viewBox="0 0 48 48" class="${BDFDB.disCN.guildsvg}">
 						<mask id="" fill="black" x="0" y="0" width="48" height="48">
-							<path d="M48 24C48 37.2548 37.2548 48 24 48C10.7452 48 0 37.2548 0 24C0 10.7452 10.7452 0 24 0C37.2548 0 48 10.7452 48 24Z" fill="white"></path>
+							<path d="M0 0 l50 0l0 50l-50 0l0 -50Z" fill="white"></path>
 							<rect x="28" y="-4" width="24" height="24" rx="12" ry="12" transform="translate(20 -20)" fill="black"></rect>
 							<rect x="28" y="28" width="24" height="24" rx="12" ry="12" transform="translate(20 20)" fill="black"></rect>
 							<rect x="-4" y="-4" width="24" height="24" rx="12" ry="12" transform="translate(-20 -20)" fill="black"></rect>
 						</mask>
 						<foreignObject mask="" x="0" y="0" width="48" height="48">
-							<a class="${BDFDB.disCN.guildiconwrapper}" draggable="false">
+							<a class="${BDFDB.disCN.guildiconwrapper}" draggable="false" style="border-radius: 50%;">
 								<img class="${BDFDB.disCN.guildicon}" src="" width="48" height="48" draggable="false"></img>
 							</a>
 						</foreignObject>
@@ -425,6 +425,7 @@ class ServerFolders {
 			BDFDB.loadMessage(this);
 
 			this.GuildUtils = BDFDB.WebModules.findByProperties("getGuilds","getGuild");
+			this.CurrentGuildStore = BDFDB.WebModules.findByProperties("getLastSelectedGuildId");
 			this.DiscordConstants = BDFDB.WebModules.findByProperties("Permissions", "ActivityTypes", "StatusTypes");
 			this.Animations = BDFDB.WebModules.findByProperties("spring");
 
@@ -564,7 +565,7 @@ class ServerFolders {
 	}
 
 	processGuild (instance, wrapper, methodnames) {
-		if (instance.currentType = "GUILD" && instance.props && instance.props.guild) {
+		if (instance.currentType && (instance.currentType == "GUILD" || instance.currentType.ownerId) && instance.props && instance.props.guild) {
 			if (methodnames.includes("componentDidMount")) {
 				let folderdiv = this.getFolderOfServer(instance.props.guild);
 				if (folderdiv && !wrapper.getAttribute("folder")) {
@@ -599,18 +600,6 @@ class ServerFolders {
 				if (folderdiv) {
 					BDFDB.removeEles(this.foldercontent.querySelectorAll(`[guild="${instance.props.guild.id}"]`));
 					this.updateFolderNotifications(folderdiv);
-				}
-			}
-			if (methodnames.includes("componentDidUpdate") && !wrapper.ServerFoldersChanged && wrapper.ServerFoldersCachedHTML != wrapper.outerHTML) {
-				let folderdiv = this.getFolderOfServer(instance.props.guild);
-				if (folderdiv) {
-					wrapper.ServerFoldersChanged = true;
-					setTimeout(() => {
-						wrapper.ServerFoldersCachedHTML = wrapper.outerHTML;
-						this.updateCopyInFolderContent(wrapper, folderdiv);
-						this.updateFolderNotifications(folderdiv);
-					}, 500);
-					setTimeout(() => {delete wrapper.ServerFoldersChanged;}, 1000);
 				}
 			}
 		}
@@ -1089,14 +1078,40 @@ class ServerFolders {
 		if (!Node.prototype.isPrototypeOf(guilddiv) || !folderdiv) return;
 		guilddiv.setAttribute("folder", folderdiv.id);
 		BDFDB.toggleEles(guilddiv, false);
+		if (guilddiv.ServerFoldersChangeObserver && typeof guilddiv.ServerFoldersChangeObserver.disconnect == "function") guilddiv.ServerFoldersChangeObserver.disconnect();
+		guilddiv.ServerFoldersChangeObserver = new MutationObserver(changes => {changes.forEach(change => {
+			if (change.type == "attributes" && change.attributeName == "draggable" || change.attributeName == "source") return;
+			let updatefolder = false, updatecopy = false;
+			if (change.type == "attributes" && change.attributeName == "style" && BDFDB.containsClass(change.target, BDFDB.disCN.guildpillitem)) {
+				let opacity = change.target.style.getPropertyValue("opacity");
+				let height = change.target.style.getPropertyValue("height");
+				let oldopacity = change.oldValue.split("opacity: ")[1].split(";")[0];
+				let oldheight = change.oldValue.split("height: ")[1].split(";")[0];
+				if (parseInt(opacity*10) == parseFloat(opacity*10) && oldopacity != opacity || parseInt(height*10) == parseFloat(height*10) && oldheight != height) {
+					updatefolder = true;
+					updatecopy = true;
+				}
+			}
+			if (change.type == "attributes" && change.attributeName == "style" && (BDFDB.containsClass(change.target, BDFDB.disCN.guildupperbadge) || BDFDB.containsClass(change.target, BDFDB.disCN.guildlowerbadge))) {
+				let opacity = change.target.style.getPropertyValue("opacity");
+				let oldopacity = change.oldValue.split("opacity: ")[1].split(";")[0];
+				if (parseInt(opacity*10) == parseFloat(opacity*10) && oldopacity != opacity) {
+					updatefolder = true;
+					updatecopy = true;
+				}
+			}
+			if (updatecopy) this.updateCopyInFolderContent(guilddiv, folderdiv);
+			if (updatefolder) this.updateFolderNotifications(folderdiv);
+		});});
+		guilddiv.ServerFoldersChangeObserver.observe(guilddiv, {attributes:true, childList:true, characterData: true, subtree:true, attributeOldValue:true});
 	}
 
 	unhideServer (guilddiv) {
 		if (!Node.prototype.isPrototypeOf(guilddiv)) return;
 		guilddiv.removeAttribute("folder");
 		BDFDB.toggleEles(guilddiv, true);
-		delete guilddiv.ServerFoldersChanged; 
-		delete guilddiv.ServerFoldersCachedHTML; 
+		if (guilddiv.ServerFoldersChangeObserver && typeof guilddiv.ServerFoldersChangeObserver.disconnect == "function") guilddiv.ServerFoldersChangeObserver.disconnect();
+		delete guilddiv.ServerFoldersChangeObserver;
 	}
 
 	toggleFolderContent (forceOpenClose) {
@@ -1183,17 +1198,26 @@ class ServerFolders {
 		if (!guilddiv || !folderdiv || !this.foldercontent) return;
 		let info = this.GuildUtils.getGuild(BDFDB.getServerID(guilddiv));
 		if (!info) return;
+		let props = BDFDB.getReactValue(guilddiv, "return.stateNode.props");
 		let guildcopy = guilddiv.cloneNode(true);
 		let guildcopyinner = guildcopy.querySelector(BDFDB.dotCN.guildcontainer);
+		let guildiconwrapper = guildcopy.querySelector(BDFDB.dotCN.guildiconwrapper);
+		let guildpillitem = guildcopy.querySelector(BDFDB.dotCN.guildpillitem);
 		guildcopy.setAttribute("guild", info.id);
 		guildcopy.setAttribute("folder", folderdiv.id);
+		guildiconwrapper.style.setProperty("border-radius", props.selected ? "30%" : "50%");
+		guildiconwrapper.style.setProperty("overflow", "hidden");
+		guildpillitem.style.setProperty("opacity", props.selected ? 1 : (props.unread ? 0.7 : 0));
+		guildpillitem.style.setProperty("height", props.selected ? "40px" : "8px");
+		guildpillitem.style.setProperty("transform", "translate3d(0px, 0px, 0px)");
 		guildcopy.querySelector("mask").setAttribute("id", "SERVERFOLDERSCOPY" + info.id);
+		guildcopy.querySelector("mask path").setAttribute("d", "M0 0 l50 0l0 50l-50 0l0 -50Z");
 		guildcopy.querySelector("foreignObject").setAttribute("mask", "url(#SERVERFOLDERSCOPY" + info.id + ")");
 		BDFDB.addClass(guildcopy, "copy");
 		BDFDB.toggleEles(guildcopy, true);
 		guildcopyinner.addEventListener("mouseenter", () => {
 			let EditServersData = BDFDB.isPluginEnabled("EditServers") ? BDFDB.loadData(info.id, "EditServers", "servers") : null;
-			if (EditServersData) bdplugins.EditServers.plugin.changeTooltip(info, guildcopy, "right");
+			if (EditServersData) bdplugins.EditServers.plugin.changeTooltip(info, guildcopyinner, "right");
 			else {
 				let folderData = BDFDB.loadData(folderdiv.id, this, "folders") || {};
 				let bgColor = BDFDB.colorCONVERT(folderData.copyTooltipColor ? folderData.color3 : null, "RGB");
@@ -1324,14 +1348,17 @@ class ServerFolders {
 			let folderdivbadges = folderdiv.querySelector(BDFDB.dotCN.guildbadgewrapper);
 			let masks = folderdiv.querySelectorAll("mask rect");
 			
-			let mentions = 0, audioenabled = false, videoenabled = false;
+			let mentions = 0, unread = false, audioenabled = false, videoenabled = false;
 
 			includedServers.forEach(div => {
 				let props = BDFDB.getReactValue(div, "return.stateNode.props");
 				mentions += parseInt(props.badge);
+				if (props.unread) unread = true;
 				if (props.audio) audioenabled = true;
 				if (props.video) videoenabled = true;
 			});
+			
+			folderdiv.querySelector(BDFDB.dotCN.guildpillitem).style.setProperty("opacity", unread ? 0.7 : 0);
 			
 			let showcount = BDFDB.getData("showCountBadge", this, "settings");
 			let notificationbadge = folderdiv.querySelector(BDFDB.dotCN.guildlowerbadge + ".notifications");
@@ -1354,10 +1381,10 @@ class ServerFolders {
 			masks[2].setAttribute("width", `${includedServers.length > 99 ? 38 : (includedServers.length > 9 ? 30 : 24)}`);
 			
 			if (audioenabled) folderdivbadges.appendChild(BDFDB.htmlToElement(`<div class="${BDFDB.disCN.guildupperbadge} audio-badge" style="opacity: 1; transform: translate(0px, 0px);"><div class="${BDFDB.disCNS.guildbadgeiconbadge + BDFDB.disCN.guildbadgeiconbadge2}"><svg name="Nova_Speaker" class="${BDFDB.disCN.guildbadgeicon}" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M11.383 3.07904C11.009 2.92504 10.579 3.01004 10.293 3.29604L6 8.00204H3C2.45 8.00204 2 8.45304 2 9.00204V15.002C2 15.552 2.45 16.002 3 16.002H6L10.293 20.71C10.579 20.996 11.009 21.082 11.383 20.927C11.757 20.772 12 20.407 12 20.002V4.00204C12 3.59904 11.757 3.23204 11.383 3.07904ZM14 5.00195V7.00195C16.757 7.00195 19 9.24595 19 12.002C19 14.759 16.757 17.002 14 17.002V19.002C17.86 19.002 21 15.863 21 12.002C21 8.14295 17.86 5.00195 14 5.00195ZM14 9.00195C15.654 9.00195 17 10.349 17 12.002C17 13.657 15.654 15.002 14 15.002V13.002C14.551 13.002 15 12.553 15 12.002C15 11.451 14.551 11.002 14 11.002V9.00195Z"></path></svg></div></div>`));
-			else BDFDB.removeEles(folderdivbadges.querySelector(".audio-badge"));
+			else BDFDB.removeEles(folderdivbadges.querySelectorAll(".audio-badge"));
 			
 			if (videoenabled) folderdivbadges.appendChild(BDFDB.htmlToElement(`<div class="${BDFDB.disCN.guildupperbadge} video-badge" style="opacity: 1; transform: translate(0px, 0px);"><div class="${BDFDB.disCNS.guildbadgeiconbadge + BDFDB.disCN.guildbadgeiconbadge2}"><svg name="Nova_Camera" class="${BDFDB.disCN.guildbadgeicon}" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M20.526 8.149C20.231 7.966 19.862 7.951 19.553 8.105L17 9.382V8C17 6.897 16.103 6 15 6H6C4.897 6 4 6.897 4 8V16C4 17.104 4.897 18 6 18H15C16.103 18 17 17.104 17 16V14.618L19.553 15.894C19.694 15.965 19.847 16 20 16C20.183 16 20.365 15.949 20.526 15.851C20.82 15.668 21 15.347 21 15V9C21 8.653 20.82 8.332 20.526 8.149Z"></path></svg></div></div>`));
-			else BDFDB.removeEles(folderdivbadges.querySelector(".video-badge"));
+			else BDFDB.removeEles(folderdivbadges.querySelectorAll(".video-badge"));
 			
 			if (document.contains(folderdiv) && BDFDB.containsClass(folderdiv, "open") && !this.foldercontent.querySelector(`[folder="${folderdiv.id}"]`)) this.openCloseFolder(folderdiv);
 		}
@@ -1374,42 +1401,56 @@ class ServerFolders {
 	}
 
 	addHoverBehaviour (div) {
-		return;
-		/* based on stuff from Zerebos */
-		let divinner = div.querySelector(BDFDB.dotCN.guildinner);
-		let divicon = div.querySelector(BDFDB.dotCN.guildicon);
-		let backgroundColor = new this.Animations.Value(0);
-		backgroundColor
-			.interpolate({
-				inputRange: [0, 1],
-				outputRange: [this.DiscordConstants.Colors.CHANNELS_GREY, this.DiscordConstants.Colors.BRAND_PURPLE]
-			})
-			.addListener((value) => {
-				if (BDFDB.containsClass(divicon, BDFDB.disCN.avatarnoicon)) {
-					let comp = BDFDB.colorCONVERT(value.value, "RGBCOMP");
-					if (comp) divinner.style.setProperty("background-color", `rgb(${comp[0]}, ${comp[1]}, ${comp[2]})`);
-				}
-			});
+		let diviconwrapper = div.querySelector(BDFDB.dotCN.guildiconwrapper);
+		let divpillitem = div.querySelector(BDFDB.dotCN.guildpillitem);
+		
+		let pillvisible = divpillitem.style.getPropertyValue("opacity") != 0;
+		
+		let guild = div.getAttribute("guild");
 
 		let borderRadius = new this.Animations.Value(0);
 		borderRadius
 			.interpolate({
 				inputRange: [0, 1],
-				outputRange: [25, 15]
+				outputRange: [50, 30]
 			})
 			.addListener((value) => {
-				divinner.style.setProperty("border-radius", `${value.value}px`);
+				diviconwrapper.style.setProperty("border-radius", `${value.value}%`);
 			});
 
-		let animate = (v) => {
+		let pillHeight = new this.Animations.Value(0);
+		pillHeight
+			.interpolate({
+				inputRange: [0, 1],
+				outputRange: [8, 20]
+			})
+			.addListener((value) => {
+				divpillitem.style.setProperty("height", `${value.value}px`);
+			});
+
+		let pillOpacity = new this.Animations.Value(0);
+		pillOpacity
+			.interpolate({
+				inputRange: [0, 1],
+				outputRange: [0, 0.7]
+			})
+			.addListener((value) => {
+				if (!pillvisible) divpillitem.style.setProperty("opacity", `${value.value}`);
+			});
+		
+		let animate = (v, up) => {
 			this.Animations.parallel([
-				this.Animations.timing(backgroundColor, {toValue: v, duration: 200}),
-				this.Animations.spring(borderRadius, {toValue: v, friction: 3})
+				this.Animations.timing(borderRadius, {toValue: v, duration: 200}),
+				this.Animations.spring(pillHeight, {toValue: v, friction: 5}),
+				this.Animations.timing(pillOpacity, {toValue: v, duration: 200}),
 			]).start();
 		};
 
-		div.addEventListener("mouseenter", () => {animate(1);})
-		div.addEventListener("mouseleave", () => {if (!BDFDB.containsClass(div, BDFDB.disCN.guildselected)) animate(0);});
+		div.addEventListener("mouseenter", () => {
+			pillvisible = divpillitem.style.getPropertyValue("opacity") != 0;
+			if (!guild || (this.CurrentGuildStore.getGuildId() != guild)) animate(1, true);
+		})
+		div.addEventListener("mouseleave", () => {if (!guild || (this.CurrentGuildStore.getGuildId() != guild)) animate(0, false);});
 	}
 
 	setLabelsByLanguage () {
