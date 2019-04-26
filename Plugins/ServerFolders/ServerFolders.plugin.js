@@ -82,6 +82,7 @@ class ServerFolders {
 			}
 			${BDFDB.dotCN.guildouter}.serverfolders-dragpreview ${BDFDB.dotCN.guildiconacronym} {
 				color: white !important;
+				background-color: #444 !important;
 				border-radius: 50% !important;
 				overflow: hidden !important;
 			}
