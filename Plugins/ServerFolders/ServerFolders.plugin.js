@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.1.9";}
+	getVersion () {return "6.2.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -182,7 +182,7 @@ class ServerFolders {
 							<rect x="-4" y="-4" width="24" height="24" rx="12" ry="12" transform="translate(-20 -20)" fill="black"></rect>
 						</mask>
 						<foreignObject mask="" x="0" y="0" width="48" height="48">
-							<a class="${BDFDB.disCN.guildiconwrapper}" draggable="false" style="border-radius: 50%;">
+							<a class="${BDFDB.disCN.guildiconwrapper}" draggable="false" style="border-radius: 50%; overflow: hidden;">
 								<img class="${BDFDB.disCN.guildicon}" src="" width="48" height="48" draggable="false"></img>
 							</a>
 						</foreignObject>
