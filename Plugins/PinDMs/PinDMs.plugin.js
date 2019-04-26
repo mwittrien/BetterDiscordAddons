@@ -3,7 +3,7 @@
 class PinDMs {
 	getName () {return "PinDMs";}
 
-	getVersion () {return "1.3.9";}
+	getVersion () {return "1.4.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class PinDMs {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Changes","Fixed for the new server classes"]]
+			"fixed":[["Hover Behaviour","Added the native hover behaviour to the pinned DMs"]]
 		};
 		
 		this.patchModules = {
@@ -76,17 +76,17 @@ class PinDMs {
 			`<div class="pinned-dm" style="opacity: 1; height: 56px; transform: scale(1);">
 				<div class="${BDFDB.disCN.guildouter}">
 					<div class="${BDFDB.disCNS.guildpillwrapper + BDFDB.disCN.dmpill}">
-						<span class="${BDFDB.disCN.guildpillitem}" style="opacity: 0.7; height: 8px; transform: translate3d(0px, 0px, 0px);"></span>
+						<span class="${BDFDB.disCN.guildpillitem}" style="opacity: 0; height: 8px; transform: translate3d(0px, 0px, 0px);"></span>
 					</div>
 					<div tabindex="0" class="${BDFDB.disCNS.dmcontainer + BDFDB.disCN.guildinner}" role="button">
 						<svg width="48" height="48" viewBox="0 0 48 48" class="${BDFDB.disCN.guildsvg}">
 							<mask id="" fill="black" x="0" y="0" width="48" height="48">
-								<path d="M48 24C48 37.2548 37.2548 48 24 48C10.7452 48 0 37.2548 0 24C0 10.7452 10.7452 0 24 0C37.2548 0 48 10.7452 48 24Z" fill="white"></path>
+								<path d="M0 0 l50 0l0 50l-50 0l0 -50Z" fill="white"></path>
 								<rect x="28" y="-4" width="24" height="24" rx="12" ry="12" transform="translate(0 0)" fill="black"></rect>
 								<rect x="28" y="28" width="24" height="24" rx="12" ry="12" transform="translate(-20 20)" fill="black"></rect>
 							</mask>
 							<foreignObject mask="" x="0" y="0" width="48" height="48">
-								<a class="${BDFDB.disCN.guildiconwrapper}" draggable="false">
+								<a class="${BDFDB.disCN.guildiconwrapper}" draggable="false" style="border-radius: 50%;">
 									<img class="${BDFDB.disCN.guildicon}" src="" width="48" height="48" draggable="false"></img>
 								</a>
 							</foreignObject>
@@ -204,6 +204,7 @@ class PinDMs {
 			this.ChannelUtils = BDFDB.WebModules.findByProperties("getChannels", "getChannel");
 			this.PrivateChannelUtils = BDFDB.WebModules.findByProperties("ensurePrivateChannel");
 			this.ChannelSwitchUtils = BDFDB.WebModules.findByProperties("selectPrivateChannel");
+			this.CurrentChannelStore = BDFDB.WebModules.findByProperties("getLastSelectedChannelId");
 			this.UnreadUtils = BDFDB.WebModules.findByProperties("getUnreadCount");
 			this.DiscordConstants = BDFDB.WebModules.findByProperties("Permissions", "ActivityTypes", "StatusTypes");
 			this.Animations = BDFDB.WebModules.findByProperties("spring");
@@ -246,6 +247,13 @@ class PinDMs {
 
 			BDFDB.unloadMessage(this);
 		}
+	}
+	
+	onSwitch () {
+		let oldselectedpin = BDFDB.getParentEle(".pinned-dm", document.querySelector(`.pinned-dm ${BDFDB.dotCN.guildpillitem}[style*="height: 40px"]`));
+		let newselectedpin = document.querySelector(`.pinned-dm[channelid="${this.CurrentChannelStore.getChannelId()}"]`);
+		if (oldselectedpin) this.updatePinnedRecent(oldselectedpin.getAttribute("channelid"));
+		if (newselectedpin) this.updatePinnedRecent(newselectedpin.getAttribute("channelid"));
 	}
 
 
@@ -547,12 +555,15 @@ class PinDMs {
 			let info = this.ChannelUtils.getChannel(id);
 			if (info) {
 				let dmdiv = BDFDB.htmlToElement(this.recentDMMarkup);
+				let dmdivinner = dmdiv.querySelector(BDFDB.dotCN.dmcontainer);
+				let dmiconwrapper = dmdiv.querySelector(BDFDB.dotCN.guildiconwrapper);
+				dmiconwrapper.style.setProperty("border-radius", this.CurrentChannelStore.getChannelId() == id ? "30%" : "50%");
+				dmiconwrapper.style.setProperty("overflow", "hidden");
 				dmdiv.querySelector("mask").setAttribute("id", "PINDMS" + id);
 				dmdiv.querySelector("foreignObject").setAttribute("mask", "url(#PINDMS" + id + ")");
 				let user = info.type == 1 ? this.UserUtils.getUser(info.recipients[0]) : null;
 				dmdiv.setAttribute("channelid", id);
 				anker.parentElement.insertBefore(dmdiv, anker.nextSibling);
-				let dmdivinner = dmdiv.querySelector(BDFDB.dotCN.dmcontainer);
 				let avatar = dmdiv.querySelector(BDFDB.dotCN.guildicon);
 				let dmname = info.name;
 				if (!dmname && info.recipients.length > 0) {
@@ -620,8 +631,8 @@ class PinDMs {
 					document.addEventListener("mousemove", mousemove);
 					document.addEventListener("mouseup", mouseup);
 				});
-				//this.addHoverBehaviour(dmdiv);
 				this.updatePinnedRecent(id);
+				this.addHoverBehaviour(dmdiv, id);
 				this.hideNativeDM(id);
 			}
 		}
@@ -659,16 +670,21 @@ class PinDMs {
 	updatePinnedRecent (id) {
 		let pinneddmdiv = document.querySelector(`.pinned-dm[channelid="${id}"]`);
 		if (Node.prototype.isPrototypeOf(pinneddmdiv)) {
-			let showpin = BDFDB.getData("showPinIcon", this, "settings");
-			let dmdiv = BDFDB.getDmDiv(id);
 			let count = this.UnreadUtils.getUnreadCount(id);
-			let masks = pinneddmdiv.querySelectorAll("mask rect");
-			let pill = pinneddmdiv.querySelector(BDFDB.dotCN.dmpill);
+			let showpin = BDFDB.getData("showPinIcon", this, "settings");
+			
+			let dmdiv = BDFDB.getDmDiv(id);
+			let pinneddmiconwrapper = pinneddmdiv.querySelector(BDFDB.dotCN.guildiconwrapper);
+			let pinneddmdivpill = pinneddmdiv.querySelector(BDFDB.dotCN.guildpillitem);
 			let iconbadge = pinneddmdiv.querySelector(BDFDB.dotCN.guildupperbadge);
 			let notificationbadge = pinneddmdiv.querySelector(BDFDB.dotCN.guildlowerbadge);
 			
 			BDFDB.toggleClass(pinneddmdiv, "has-new-messages", count > 0);
-			BDFDB.toggleEles(pill, count > 0);
+			let selected = this.CurrentChannelStore.getChannelId() == id;
+			pinneddmiconwrapper.style.setProperty("border-radius", selected ? "30%" : "50%");
+			pinneddmdivpill.style.setProperty("opacity", selected ? 1 : (count ? 0.7 : 0));
+			pinneddmdivpill.style.setProperty("height", selected ? "40px" : "8px");
+			pinneddmdivpill.style.setProperty("transform", "translate3d(0px, 0px, 0px)");
 			
 			BDFDB.toggleEles(iconbadge, showpin);
 			notificationbadge.firstElementChild.innerText = count;
@@ -676,6 +692,7 @@ class PinDMs {
 			notificationbadge.firstElementChild.style.setProperty("padding-right", `${count > 99 ? 0 : (count > 9 ? 0 : 1)}px`);
 			BDFDB.toggleEles(notificationbadge, count > 0);
 			
+			let masks = pinneddmdiv.querySelectorAll("mask rect");
 			masks[0].setAttribute("transform", showpin ? "translate(0 0)" : "translate(20 -20)");
 			masks[1].setAttribute("transform", count > 0 ? "translate(0 0)" : "translate(20 20)");
 			masks[1].setAttribute("x", `${count > 99 ? 14 : (count > 9 ? 22 : 28)}`);
@@ -699,7 +716,59 @@ class PinDMs {
 		}
 	}
 
-	addHoverBehaviour (div) {
+	addHoverBehaviour (div, id) {
+		let divinner = div.querySelector(BDFDB.dotCN.dmcontainer);
+		let diviconwrapper = div.querySelector(BDFDB.dotCN.guildiconwrapper);
+		let divpillitem = div.querySelector(BDFDB.dotCN.guildpillitem);
+		
+		let pillvisible = divpillitem.style.getPropertyValue("opacity") != 0;
+
+		let borderRadius = new this.Animations.Value(0);
+		borderRadius
+			.interpolate({
+				inputRange: [0, 1],
+				outputRange: [50, 30]
+			})
+			.addListener((value) => {
+				diviconwrapper.style.setProperty("border-radius", `${value.value}%`);
+			});
+
+		let pillHeight = new this.Animations.Value(0);
+		pillHeight
+			.interpolate({
+				inputRange: [0, 1],
+				outputRange: [8, 20]
+			})
+			.addListener((value) => {
+				divpillitem.style.setProperty("height", `${value.value}px`);
+			});
+
+		let pillOpacity = new this.Animations.Value(0);
+		pillOpacity
+			.interpolate({
+				inputRange: [0, 1],
+				outputRange: [0, 0.7]
+			})
+			.addListener((value) => {
+				if (!pillvisible) divpillitem.style.setProperty("opacity", `${value.value}`);
+			});
+		
+		let animate = (v, up) => {
+			this.Animations.parallel([
+				this.Animations.timing(borderRadius, {toValue: v, duration: 200}),
+				this.Animations.spring(pillHeight, {toValue: v, friction: 5}),
+				this.Animations.timing(pillOpacity, {toValue: v, duration: 200}),
+			]).start();
+		};
+
+		divinner.addEventListener("mouseenter", () => {
+			pillvisible = divpillitem.style.getPropertyValue("opacity") != 0;
+			if (this.CurrentChannelStore.getChannelId() != id) animate(1, true);
+		})
+		divinner.addEventListener("mouseleave", () => {if (this.CurrentChannelStore.getChannelId() != id) animate(0, false);});
+	}
+
+	addHoverBehaviour2 (div) {
 		/* based on stuff from Zerebos */
 		let divinner = div.querySelector(BDFDB.dotCN.guildinner);
 		let divicon = div.querySelector(BDFDB.dotCN.dmguildavatarinner);
