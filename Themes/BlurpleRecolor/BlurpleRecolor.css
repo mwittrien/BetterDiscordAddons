@@ -151,6 +151,7 @@
 .guildIcon-lQ0uiM:not(.guildIconImage-3qTk45):not(.guildIconExpired-2Qcq05),
 .guildAvatarWithoutIcon-1sTmE_,
 .acronym-2mOFsV:hover,
+.acronym-2mOFsV.selected-bZ3Lue,
 .button-OhfaWu.selected-wSa2KV {
 	background-color: rgb(var(--vaccentcolor)) !important;
 }
