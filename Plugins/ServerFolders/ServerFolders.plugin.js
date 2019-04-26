@@ -1403,6 +1403,7 @@ class ServerFolders {
 	}
 
 	addHoverBehaviour (div) {
+		let divinner = div.querySelector(BDFDB.dotCN.guildcontainer);
 		let diviconwrapper = div.querySelector(BDFDB.dotCN.guildiconwrapper);
 		let divpillitem = div.querySelector(BDFDB.dotCN.guildpillitem);
 		
@@ -1448,11 +1449,11 @@ class ServerFolders {
 			]).start();
 		};
 
-		div.addEventListener("mouseenter", () => {
+		divinner.addEventListener("mouseenter", () => {
 			pillvisible = divpillitem.style.getPropertyValue("opacity") != 0;
 			if (!guild || (this.CurrentGuildStore.getGuildId() != guild)) animate(1, true);
 		})
-		div.addEventListener("mouseleave", () => {if (!guild || (this.CurrentGuildStore.getGuildId() != guild)) animate(0, false);});
+		divinner.addEventListener("mouseleave", () => {if (!guild || (this.CurrentGuildStore.getGuildId() != guild)) animate(0, false);});
 	}
 
 	setLabelsByLanguage () {
