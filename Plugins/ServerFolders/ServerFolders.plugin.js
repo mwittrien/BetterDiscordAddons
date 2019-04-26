@@ -682,7 +682,7 @@ class ServerFolders {
 						icons.openicon = openicon;
 						this.changeImgColor(color1, color2, folderIcons[iconID].closedicon, (closedicon) => {
 							icons.closedicon = closedicon;
-							folderdiv.querySelector(BDFDB.dotCN.avataricon).style.setProperty("background-image", `url(${isOpen ? icons.openicon : icons.closedicon})`);
+							folderdiv.querySelector(BDFDB.dotCN.guildicon).setAttribute("src", `${isOpen ? icons.openicon : icons.closedicon}`);
 							BDFDB.saveData(folderID, {folderID,folderName,position,iconID,icons,copyTooltipColor,color1,color2,color3,color4,servers}, this, "folders");
 						});
 					});
@@ -690,7 +690,7 @@ class ServerFolders {
 				else {
 					icons.openicon = folderIcons[iconID].openicon;
 					icons.closedicon = folderIcons[iconID].closedicon;
-					folderdiv.querySelector(BDFDB.dotCN.avataricon).style.setProperty("background-image", `url(${isOpen ? icons.openicon : icons.closedicon})`);
+					folderdiv.querySelector(BDFDB.dotCN.guildicon).setAttribute("src", `${isOpen ? icons.openicon : icons.closedicon}`);
 					BDFDB.saveData(folderID, {folderID,folderName,position,iconID,icons,copyTooltipColor,color1,color2,color3,color4,servers}, this, "folders");
 				}
 			}
@@ -1137,6 +1137,8 @@ class ServerFolders {
 		
 		data.isOpen = isClosed;
 		BDFDB.saveData(folderdiv.id, data, this, "folders");
+		
+		this.updateFolderNotifications(folderdiv);
 	}
 
 	closeFolderContent (folderdiv) {
@@ -1227,7 +1229,7 @@ class ServerFolders {
 						BDFDB.toggleEles(guildcopy, false);
 						this.updateDragPreview(dragpreview, e3);
 						if (this.foldercontent.contains(e3.target)) {
-							hovcopy = BDFDB.containsClass(e3.target, "folderseparatorouter") ? e3.target : BDFDB.getParentEle(BDFDB.dotCN.guildouter + ".copy", e3.target);
+							hovcopy = BDFDB.getParentEle(BDFDB.dotCN.guildouter, e3.target);
 							if (hovcopy && hovcopy.getAttribute("folder") == folderdiv.id) this.foldercontentguilds.insertBefore(placeholder, hovcopy.nextSibling);
 							else hovcopy = null;
 						}
