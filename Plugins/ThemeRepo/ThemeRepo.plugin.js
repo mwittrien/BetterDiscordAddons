@@ -837,9 +837,8 @@ class ThemeRepo {
 	}
 
 	checkForNewThemes () {
-		let request = require("request");
-		request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/ThemeList.txt", (error, response, result) => {
-			if (response && !BDFDB.equals(result.split("\n"), this.grabbedThemes)) {
+		require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/ThemeList.txt", (error, response, result) => {
+			if (response && !BDFDB.equals(result.replace(/\t|\r/g, "").split("\n"), this.grabbedThemes)) {
 				this.loading = {is:false, timeout:null, amount:0};
 				this.loadThemes();
 			}
@@ -847,8 +846,7 @@ class ThemeRepo {
 	}
 
 	downloadTheme (data) {
-		let request = require("request");
-		request(data.url, (error, response, body) => {
+		require("request")(data.url, (error, response, body) => {
 			if (error) {
 				BDFDB.showToast(`Unable to download Theme "${data.name}".`, {type:"danger"});
 			}
