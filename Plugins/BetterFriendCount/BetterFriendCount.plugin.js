@@ -3,7 +3,7 @@
 class BetterFriendCount {
 	getName () {return "BetterFriendCount";}
 
-	getVersion () {return "1.1.4";}
+	getVersion () {return "1.1.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -95,7 +95,7 @@ class BetterFriendCount {
 		let relationships = this.FriendUtils.getRelationships(), relationshipCount = {};
 		for (let type in this.relationshipTypes) relationshipCount[this.relationshipTypes[type]] = 0;
 		for (let id in relationships) relationshipCount[this.relationshipTypes[relationships[id]]]++;
-		for (let item of tabitems) switch (BDFDB.getReactValue(item, "return.return.memoizedProps.id")) {
+		for (let item of tabitems) switch (BDFDB.getReactValue(item, "return.memoizedProps.id") || BDFDB.getReactValue(item, "return.return.memoizedProps.id")) {
 			case "ALL":
 				item.appendChild(this.createBadge(relationshipCount.FRIEND, "friendcount"));
 				break;
