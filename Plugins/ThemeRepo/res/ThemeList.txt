@@ -152,7 +152,7 @@ https://raw.githubusercontent.com/satoru8/Addons/master/Compact/Combo/AutoHideGu
 https://raw.githubusercontent.com/satoru8/Addons/master/Compact/Guilds/AutoHideGuilds.theme.css
 https://raw.githubusercontent.com/satoru8/Addons/master/Compact/Memberlist/CompactMemberlist.theme.css
 https://raw.githubusercontent.com/satoru8/Addons/master/Compact/Memberlist/MembersAutoHide.theme.css
-https://raw.githubusercontent.com/satoru8/Addons/master/Compact/Settings/CompactSettings.theme.css			
+https://raw.githubusercontent.com/satoru8/Addons/master/Compact/Settings/CompactSettings.theme.css
 https://raw.githubusercontent.com/satoru8/Addons/master/Compact/Settings/SettingsAutoHide.theme.css
 https://raw.githubusercontent.com/satoru8/Addons/master/Compact/Title/CompactTitle.theme.css
 https://raw.githubusercontent.com/satoru8/Addons/master/Emoji/LargeEmojiPicker.theme.css
