@@ -312,6 +312,7 @@
 	padding: 1px;
 }
 
+.channelTextArea-rNsIhG,
 .categoryHeader-1D7Tqy,
 .premiumApplicationsHeader-Zmkm5e,
 .headerPurchase-2z_nch,
@@ -2244,6 +2245,11 @@ html, span:not(.spinner-item) {
 }
 
 /* ----------------------- PLUGINSUPPORT ----------------------- */
+
+/* DateViewer */
+#dv-main {
+	border-color: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 3)) !important;
+}
 
 /* MemberCount */
 #MemberCount:after,
