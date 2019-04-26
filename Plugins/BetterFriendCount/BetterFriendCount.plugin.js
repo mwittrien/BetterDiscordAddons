@@ -3,7 +3,7 @@
 class BetterFriendCount {
 	getName () {return "BetterFriendCount";}
 
-	getVersion () {return "1.1.3";}
+	getVersion () {return "1.1.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -20,11 +20,10 @@ class BetterFriendCount {
 		};
 
 		this.css = `
-			${BDFDB.dotCNS.friends + BDFDB.dotCNS.settingstabbar + BDFDB.dotCN.badge}:not(.betterfriendcount-badge), 
-			${BDFDB.dotCNS.friends + BDFDB.dotCNS.settingstabbar + BDFDB.dotCN.badgewrapper}:not(.betterfriendcount-badge) {
+			${BDFDB.dotCNS.friends + BDFDB.dotCNS.settingstabbar + BDFDB.dotCN.settingstabbarbadge}:not(.betterfriendcount-badge) {
 				display: none !important;
 			}
-			${BDFDB.dotCNS.friends + BDFDB.dotCNS.settingstabbar + BDFDB.dotCN.badgewrapper}.betterfriendcount-badge {
+			${BDFDB.dotCNS.friends + BDFDB.dotCNS.settingstabbar + BDFDB.dotCN.settingstabbarbadge}.betterfriendcount-badge {
 				margin-left: 5px !important;
 			}
 		`;
@@ -96,21 +95,24 @@ class BetterFriendCount {
 		let relationships = this.FriendUtils.getRelationships(), relationshipCount = {};
 		for (let type in this.relationshipTypes) relationshipCount[this.relationshipTypes[type]] = 0;
 		for (let id in relationships) relationshipCount[this.relationshipTypes[relationships[id]]]++;
-		let badgeclass = BDFDB.disCN.badgewrapper;
-		for (let item of tabitems) switch (BDFDB.getReactValue(item, "return.memoizedProps.id")) {
+		for (let item of tabitems) switch (BDFDB.getReactValue(item, "return.return.memoizedProps.id")) {
 			case "ALL":
-				item.appendChild(BDFDB.htmlToElement(`<div class="${badgeclass} betterfriendcount-badge friendcount">${relationshipCount.FRIEND}</div>`));
+				item.appendChild(this.createBadge(relationshipCount.FRIEND, "friendcount"));
 				break;
 			case "ONLINE":
-				item.appendChild(BDFDB.htmlToElement(`<div class="${badgeclass} betterfriendcount-badge onlinefriendcount">${this.UserMetaStore.getOnlineFriendCount()}</div>`));
+				item.appendChild(this.createBadge(this.UserMetaStore.getOnlineFriendCount(), "onlinefriendcount"));
 				break;
 			case "PENDING":
-				item.appendChild(BDFDB.htmlToElement(`<div class="${badgeclass} betterfriendcount-badge requestincount">${relationshipCount.PENDING_INCOMING}</div>`));
-				item.appendChild(BDFDB.htmlToElement(`<div class="${badgeclass} betterfriendcount-badge requestoutcount">${relationshipCount.PENDING_OUTGOING}</div>`));
+				item.appendChild(this.createBadge(relationshipCount.PENDING_INCOMING, "requestincount"));
+				item.appendChild(this.createBadge(relationshipCount.PENDING_OUTGOING, "requestoutcount"));
 				break;
 			case "BLOCKED":
-				item.appendChild(BDFDB.htmlToElement(`<div class="${badgeclass} betterfriendcount-badge blockedcount">${relationshipCount.BLOCKED}</div>`));
+				item.appendChild(this.createBadge(relationshipCount.BLOCKED, "blockedcount"));
 				break;
 		}
+	}
+	
+	createBadge (amount, type) {
+		return BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.settingstabbarbadge + BDFDB.disCN.guildbadgenumberbadge} betterfriendcount-badge ${type}" style="background-color: rgb(240, 71, 71); width: ${amount > 99 ? 30 : (amount > 9 ? 22 : 16)}px; padding-right: ${amount > 99 ? 0 : (amount > 9 ? 0 : 1)}px;">${amount}</div>`)
 	}
 }
