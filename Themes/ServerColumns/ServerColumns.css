@@ -4,7 +4,6 @@
 :root {
 	--vcolumns: var(--columns, 3);
 	--vguildsize: var(--guildsize, 50);
-	--vguildroundness: var(--guildroundness, 50%);
 	--valigndms: var(--aligndms, 1);
 }
 
@@ -31,10 +30,11 @@
 .wrapper-1Rf91z .listItem-2P_4kh {
 	margin: 4px 13px 4px -2px !important;
 }
-.wrapper-1Rf91z #server-search,
-.wrapper-1Rf91z .lurkingGuild-3ZJ1gi,
-.wrapper-1Rf91z .blob-1PX1Gp {
+.wrapper-1Rf91z #server-search {
 	margin: 4px calc(1px * (((var(--vguildsize) + 10) * (var(--vcolumns) - 1))/2)) !important;
+}
+.wrapper-1Rf91z .blob-1PX1Gp {
+	margin: 4px calc(1px * (((var(--vguildsize) + 10) * (var(--vcolumns) - 1))/2)) 4px calc(1px * ((((var(--vguildsize) + 10) * (var(--vcolumns) - 1))/2) + 2)) !important;
 }
 .wrapper-1Rf91z .blob-3RT82C {
 	margin: 0 calc(1px * ((((var(--vguildsize) + 10) * (var(--vcolumns) - 1))/2) * (1 - var(--valigndms)))) 0 calc(1px * (((0 * var(--valigndms)) + ((((var(--vguildsize) + 10) * (var(--vcolumns) - 1))/2) * (1 - var(--valigndms)))))) !important;
@@ -43,20 +43,36 @@
 	width: auto !important;
 }
 .wrapper-1Rf91z .svg-1X37T1,
-.wrapper-1Rf91z .icon-27yU2q,
 .wrapper-1Rf91z .wrapper-25eVIn {
 	height: calc(1px * var(--vguildsize)) !important;
 	width: calc(1px * var(--vguildsize)) !important;
 }
 .wrapper-1Rf91z .homeIcon-tEMBK1 {
-	height: calc(1px * var(--vguildsize) * (20/50)) !important;
-	width: calc(1px * var(--vguildsize) * (28/50)) !important;
+	height: calc(1px * (var(--vguildsize) * (8/50) + 12)) !important;
+	width: calc(1px * (var(--vguildsize) * (16/50) + 12)) !important;
 }
 .wrapper-1Rf91z .scroller-2TZvBN > div[style*="height"]:not([class]) {
 	height: calc(1px * var(--vguildsize) * (58/50)) !important;
 }
+.wrapper-1Rf91z .upperBadge-2XnnGB .base-PmTxvP {
+	transform: translate(calc(1.5px * ((50 - var(--vguildsize))/10)), calc(-1.5px * ((50 - var(--vguildsize))/10))) scale(calc(var(--vguildsize)/50)) !important;
+}
+.wrapper-1Rf91z .upperBadge-2XnnGB.count .base-PmTxvP {
+	transform: translate(calc(-1.5px * ((50 - var(--vguildsize))/10)), calc(-1.5px * ((50 - var(--vguildsize))/10))) scale(calc(var(--vguildsize)/50)) !important;
+}
+.wrapper-1Rf91z .lowerBadge-29hYVK .base-PmTxvP {
+	transform: translate(calc(1.5px * ((50 - var(--vguildsize))/10)), calc(1.5px * ((50 - var(--vguildsize))/10))) scale(calc(var(--vguildsize)/50)) !important;
+}
+.wrapper-1Rf91z .lowerBadge-29hYVK.unread-count-badge .base-PmTxvP {
+	transform: translate(calc(-1.5px * ((50 - var(--vguildsize))/10)), calc(1.5px * ((50 - var(--vguildsize))/10))) scale(calc(var(--vguildsize)/50)) !important;
+}
+.wrapper-1Rf91z .wrapper-sa6paO {
+	top: -5px !important;
+	height: calc(1px * (var(--vguildsize) + 10)) !important;
+	transform: scaleY(calc(var(--vguildsize)/50)) !important;
+}
 .wrapper-1Rf91z .pill-2uzAFe {
-	top: 4px !important;
+	top: -2px !important;
 	left: calc(1px * ((((var(--vguildsize) + 10) * (var(--vcolumns) - 1))/2) - 7)) !important;
 }
 .wrapper-1Rf91z .pill-1m5BUr {
