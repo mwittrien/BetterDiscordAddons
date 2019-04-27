@@ -3,15 +3,15 @@
 class MessageUtilities {
 	getName () {return "MessageUtilities";}
 
-	getVersion () {return "1.5.0";}
+	getVersion () {return "1.5.1";}
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Offers a number of useful message options. Remap the keybindings in the settings.";}
 
-	initConstructor () {	
+	initConstructor () {
 		this.changelog = {
-			"fixed":[["Deleting Clyde/Error","Properly delete Clyde messages and message that failed to send now"]]
+			"fixed":[["New Select Classes","The Dropdown-Select element got new classes on canary, this update will prevent stable from breaking once the class change is pushed to stable"]]
 		};
 		
 		this.bindings = {};
@@ -65,7 +65,7 @@ class MessageUtilities {
 			if (!this.defaults.bindings[action].plugin || BDFDB.isPluginEnabled(this.defaults.bindings[action].plugin)) {
 				settingshtml += `<div class="${action}-key-settings"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.bindings[action].name}:</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${action}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[action] ? " checked" : ""}></div></div><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">`;
 				for (let click of this.clicks) {
-					settingshtml += `<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 20%;"><h5 class="${BDFDB.disCNS.h5 + BDFDB.disCNS.title + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.h5defaultmargin + BDFDB.disCN.marginbottom4}">${click}:</h5><div class="${BDFDB.disCN.selectwrap}"><div type="${action}" option="${click}" value="${bindings[action][click]}" class="${BDFDB.disCNS.select + BDFDB.disCNS.selectsingle + BDFDB.disCN.selecthasvalue}"><div class="${BDFDB.disCN.selectcontrol}"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignbaseline + BDFDB.disCNS.nowrap + BDFDB.disCN.selectvalue}" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.primary + BDFDB.disCN.weightnormal}" style="padding:0;">${this.clickMap[bindings[action][click]]}</div></div><span class="${BDFDB.disCN.selectarrowzone}"><span class="${BDFDB.disCN.selectarrow}"></span></span></div></div></div></div>`;
+					settingshtml += `<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 20%;"><h5 class="${BDFDB.disCNS.h5 + BDFDB.disCNS.title + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.h5defaultmargin + BDFDB.disCN.marginbottom4}">${click}:</h5>${BDFDB.createSelectMenu(this.createSelectChoice(bindings[action][click]), bindings[action][click], action + " " + click)}</div>`;
 				}
 				for (let key of this.keys) {
 					settingshtml += `<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 40%;"><h5 class="${BDFDB.disCNS.h5 + BDFDB.disCNS.title + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.h5defaultmargin + BDFDB.disCN.marginbottom4}">${key}:<label class="reset-recorder" style="float: right; padding-right: 5px; cursor: pointer;">✖</label></h5><div type="${action}" option="${key}" value="${bindings[action][key]}" class="${BDFDB.disCNS.hotkeycontainer + BDFDB.disCNS.hotkeycontainer2 + BDFDB.disCN.hotkeyhasvalue}"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCNS.hotkeylayout + BDFDB.disCN.hotkeylayout2}" style="flex: 1 1 auto;"><input type="text" placeholder="${this.keyboardMap[bindings[action][key]]}" readonly="" value="${this.keyboardMap[bindings[action][key]]}" class="${BDFDB.disCNS.hotkeyinput + BDFDB.disCNS.hotkeyinput2 + BDFDB.disCN.hotkeybase}" style="flex: 1 1 auto;"></input><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCN.nowrap}" style="flex: 0 1 auto; margin: 0px;"><button type="button" class="${BDFDB.disCNS.hotkeybutton + BDFDB.disCNS.hotkeybutton2 + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookghost + BDFDB.disCNS.buttoncolorgrey + BDFDB.disCNS.buttonsizemin + BDFDB.disCN.buttongrow}"><div class="${BDFDB.disCN.buttoncontents}"><span class="${BDFDB.disCN.hotkeytext}">${BDFDB.LanguageStrings.SHORTCUT_RECORDER_BUTTON_EDIT}</span><span class="${BDFDB.disCN.hotkeyediticon}"/></div></button></div></div></div></div>`;
@@ -80,10 +80,12 @@ class MessageUtilities {
 
 		BDFDB.initElements(settingspanel, this);
 
-		BDFDB.addEventListener(this, settingspanel, "click", BDFDB.dotCN.selectcontrol, e => {this.openDropdownMenu(e);})
 		BDFDB.addEventListener(this, settingspanel, "click", BDFDB.dotCN.hotkeycontainer, e => {this.startRecording(settingspanel, e);})
 		BDFDB.addEventListener(this, settingspanel, "click", ".reset-recorder", e => {this.resetRecorder(settingspanel, e);})
 		BDFDB.addEventListener(this, settingspanel, "click", ".reset-button", () => {this.resetAll(settingspanel);});
+		BDFDB.addEventListener(this, settingspanel, "click", BDFDB.dotCN.selectcontrol, e => {
+			BDFDB.openDropdownMenu(e, this.saveSelectChoice.bind(this), this.createSelectChoice.bind(this), this.clickMap, "inSettings");
+		});
 
 		return settingspanel;
 	}
@@ -159,52 +161,19 @@ class MessageUtilities {
 			});
 		});
 	}
-
-	openDropdownMenu (e) {
-		let selectControl = e.currentTarget;
-		let selectWrap = selectControl.parentElement;
-		let plugincard = BDFDB.getParentEle("li", selectWrap);
-
-		if (!plugincard || BDFDB.containsClass(selectWrap, BDFDB.disCN.selectisopen)) return;
-
-		BDFDB.addClass(selectWrap, BDFDB.disCN.selectisopen);
-		plugincard.style.setProperty("overflow", "visible", "important");
-
-		let action = selectWrap.getAttribute("type");
-		let option = selectWrap.getAttribute("option");
-		let value = selectWrap.getAttribute("value");
-
-		let selectMenu = this.createDropdownMenu(action, value);
-		selectWrap.appendChild(selectMenu);
-
-		BDFDB.addChildEventListener(selectMenu, "mousedown", BDFDB.dotCN.selectoption, e2 => {
-			let binding = BDFDB.getData(action, this, "bindings");
-			let selection = e2.currentTarget.getAttribute("value");
-			selectWrap.setAttribute("value", selection);
-			selectControl.querySelector(BDFDB.dotCN.title).innerText = e2.currentTarget.textContent;
-			binding[option] = parseInt(selection);
-			BDFDB.saveData(action, binding, this, "bindings");
-		});
-
-		var removeMenu = e2 => {
-			if (e2.target.parentElement != selectMenu) {
-				document.removeEventListener("mousedown", removeMenu);
-				selectMenu.remove();
-				plugincard.style.removeProperty("overflow");
-				setTimeout(() => {BDFDB.removeClass(selectWrap, BDFDB.disCN.selectisopen);},100);
-			}
-		};
-		document.addEventListener("mousedown", removeMenu);
-	}
-
-	createDropdownMenu (action, value) {
-		let menuhtml = `<div class="${BDFDB.disCN.selectmenuouter}"><div class="${BDFDB.disCN.selectmenu}">`;
-		for (let i in this.clickMap) {
-			let isSelected = i == value ? ` ${BDFDB.disCN.selectselected}` : ``;
-			menuhtml += `<div value="${i}" class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignbaseline + BDFDB.disCNS.nowrap + BDFDB.disCN.selectoption + isSelected}" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.primary + BDFDB.disCN.weightnormal}">${this.clickMap[i]}</div></div>`
+	
+	saveSelectChoice (selectWrap, type, choice) {
+		if (type && choice) {
+			selectWrap.querySelector(BDFDB.dotCN.title).innerText = this.clickMap[choice];
+			type = type.split(" ");
+			let binding = BDFDB.getData(type[0], this, "bindings");
+			binding[type[1]] = parseInt(choice);
+			BDFDB.saveData(type[0], binding, this, "bindings");
 		}
-		menuhtml += `</div></div>`;
-		return BDFDB.htmlToElement(menuhtml);
+	}
+	
+	createSelectChoice (key) {
+		return `<div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.primary + BDFDB.disCNS.weightnormal + BDFDB.disCN.cursorpointer}" style="padding: 0;">${this.clickMap[key]}</div>`;
 	}
 
 	startRecording (settingspanel, e) {
@@ -277,12 +246,8 @@ class MessageUtilities {
 
 	checkIfBindingIsValid (binding, doneclick) {
 		let valid = true;
-		for (let click of this.clicks) {
-			if (binding[click] != doneclick) valid = false;
-		}
-		for (let key of this.keys) {
-			if (!BDFDB.pressedKeys.includes(binding[key]) && binding[key] != 0) valid = false;
-		}
+		for (let click of this.clicks) if (binding[click] != doneclick) valid = false;
+		for (let key of this.keys) if (!BDFDB.pressedKeys.includes(binding[key]) && binding[key] != 0) valid = false;
 		return valid;
 	}
 
