@@ -3,7 +3,7 @@
 class EditServers {
 	getName () {return "EditServers";}
 
-	getVersion () {return "1.9.7";} 
+	getVersion () {return "1.9.8";} 
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class EditServers {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["New Classes","Fixed the plugin for the new class update"]]
+			"fixed":[["Bug in Quickswitcher","Fixed a bug in the quick switcher that wouldn't make the servername get changed"]]
 		};
 		
 		this.labels = {};
@@ -349,7 +349,7 @@ class EditServers {
 		}
 		else if (instance.props.tag == "div" && instance.props.className.indexOf(BDFDB.disCN.quickswitchresult) > -1) {
 			let guild = BDFDB.getReactValue(instance, "_reactInternalFiber.return.return.memoizedProps.guild");
-			if (guild) this.changeGuildName(result.record, wrapper.querySelector(BDFDB.dotCN.quickswitchresultmatch));
+			if (guild) this.changeGuildName(guild, wrapper.querySelector(BDFDB.dotCN.quickswitchresultmatch));
 			else {
 				let channel = BDFDB.getReactValue(instance, "_reactInternalFiber.return.return.memoizedProps.channel");
 				if (channel && channel.guild_id) this.changeGuildName(this.GuildUtils.getGuild(channel.guild_id), wrapper.querySelector(BDFDB.dotCN.quickswitchresultmisccontainer));
