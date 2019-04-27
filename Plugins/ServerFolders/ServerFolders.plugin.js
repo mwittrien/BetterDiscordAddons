@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.2.0";}
+	getVersion () {return "6.2.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -12,7 +12,7 @@ class ServerFolders {
 	initConstructor () {
 		this.changelog = {
 			"added":[["Everything","Thanks you for all the people that actually reached out to me and donated to me <3"]],
-			"fixed":[["Rest","Fixed all left over bugs (Hover animation, Servers in Folders not updating properly, Audio/Video Icon being stuck on a Folder, unread pill not showing on Folders, Folder Icon Colors not being customizable)"]]
+			"fixed":[["Unread and Settings","Fixed the issue where the unread indicator wouldn't disappear if the only unread server was the selected on and fixed the issue where the extra settings for folders wouldn't work properly"]]
 		};
 		
 		this.labels = {};
@@ -430,6 +430,20 @@ class ServerFolders {
 			this.CurrentGuildStore = BDFDB.WebModules.findByProperties("getLastSelectedGuildId");
 			this.DiscordConstants = BDFDB.WebModules.findByProperties("Permissions", "ActivityTypes", "StatusTypes");
 			this.Animations = BDFDB.WebModules.findByProperties("spring");
+
+			var observer = new MutationObserver(changes => {changes.forEach(change => {
+				let nodes = [].concat(change.addedNodes, change.removedNodes);
+				if (nodes) {nodes.forEach(node => {
+					if (node && BDFDB.containsClass(node, BDFDB.disCN.channelunread)) {
+						let id = this.CurrentGuildStore.getGuildId();
+						if (id) {
+							let folderdiv = this.getFolderOfServer(id);
+							if (folderdiv) this.updateFolderNotifications(folderdiv);
+						}
+					}
+				});}
+			});});
+			BDFDB.addObserver(this, BDFDB.dotCN.appmount, {name:"unreadChannelObserver",instance:observer}, {childList: true, subtree:true});
 
 			BDFDB.WebModules.forceAllUpdates(this, "Guilds");
 		}
@@ -1072,7 +1086,7 @@ class ServerFolders {
 		let id = Node.prototype.isPrototypeOf(idOrInfoOrEle) ? BDFDB.getServerID(idOrInfoOrEle) : (typeof idOrInfoOrEle == "object" ? idOrInfoOrEle.id : idOrInfoOrEle);
 		if (!id) return;
 		let folders = BDFDB.loadAllData(this, "folders");
-		for (let folderid in folders) for (let serverid of folders[folderid].servers) if (serverid == id) return document.querySelector("#" + folderid);
+		for (let folderid in folders) for (let serverid of folders[folderid].servers) if (serverid == id) return document.querySelector(".folder#" + folderid);
 		return null;
 	}
 
@@ -1154,8 +1168,6 @@ class ServerFolders {
 		
 		data.isOpen = isClosed;
 		BDFDB.saveData(folderdiv.id, data, this, "folders");
-		
-		this.updateFolderNotifications(folderdiv);
 	}
 
 	closeFolderContent (folderdiv) {
