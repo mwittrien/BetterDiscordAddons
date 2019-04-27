@@ -438,7 +438,7 @@ class ServerFolders {
 						let id = this.CurrentGuildStore.getGuildId();
 						if (id) {
 							let folderdiv = this.getFolderOfServer(id);
-							if (folderdiv) this.updateFolderNotifications(folderdiv);
+							if (folderdiv) setTimeout(() => {this.updateFolderNotifications(folderdiv);}, 1000);
 						}
 					}
 				});}
