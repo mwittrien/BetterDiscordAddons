@@ -3,7 +3,7 @@
 class ReadAllNotificationsButton {
 	getName () {return "ReadAllNotificationsButton";}
 
-	getVersion () {return "1.4.6";}
+	getVersion () {return "1.4.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ReadAllNotificationsButton {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["New Classes","Fixed the plugin for the new class update"]]
+			"fixed":[["Button above home button","Fixed the issue where the read all button would sometimes appear above the home button"]]
 		};
 		
 		this.patchModules = {
@@ -149,10 +149,10 @@ class ReadAllNotificationsButton {
 
 	processGuilds (instance, wrapper) {
 		BDFDB.removeEles(".RANbutton-frame");
-		let guildseparator = wrapper.querySelector(BDFDB.dotCN.guildseparator);
-		if (guildseparator) {
+		let insertnode = this.getInsertNode();
+		if (insertnode) {
 			let ranbutton = BDFDB.htmlToElement(this.RANbuttonMarkup);
-			guildseparator.parentElement.parentElement.insertBefore(ranbutton, guildseparator.parentElement);
+			insertnode.parentElement.insertBefore(ranbutton, insertnode);
 			ranbutton.addEventListener("click", () => {
 				let settings = BDFDB.getAllData(this, "settings");
 				if (settings.includeGuilds) BDFDB.markGuildAsRead(settings.includeMuted ? BDFDB.readServerList() : BDFDB.readUnreadServerList());
@@ -180,8 +180,8 @@ class ReadAllNotificationsButton {
 
 	processDirectMessage (instance, wrapper, methodnames) {
 		let ranbutton = document.querySelector(".RANbutton-frame");
-		let guildseparator = wrapper.parentElement.parentElement.querySelector(BDFDB.dotCN.guildseparator);
-		if (ranbutton && guildseparator) guildseparator.parentElement.parentElement.insertBefore(ranbutton, guildseparator.parentElement);
+		let insertnode = this.getInsertNode();
+		if (ranbutton && insertnode) insertnode.parentElement.insertBefore(ranbutton, insertnode);
 	}
 
 	processRecentMentions (instance, wrapper) {
@@ -204,6 +204,16 @@ class ReadAllNotificationsButton {
 			instance.loadMore();
 			setTimeout(() => {this.clearMentions(instance, wrapper);},3000);
 		}
+	}
+	
+	getInsertNode () {
+		let homebutton = BDFDB.getParentEle(BDFDB.dotCN.guildouter, document.querySelector(BDFDB.dotCN.homebuttonicon));
+		let nextsibling = homebutton.nextElementSibling, insertnode = null;
+		while (nextsibling && insertnode == null) {
+			if (nextsibling.querySelector(`${BDFDB.dotCN.guildseparator}:not(.folderseparator)`)) insertnode = nextsibling;
+			nextsibling = nextsibling.nextElementSibling
+		}
+		return insertnode;
 	}
 	
 	setLabelsByLanguage () {
