@@ -208,7 +208,6 @@
 .divider-3573oO,
 .divider-1pnAR2,
 .divider-3FBTu8,
-.wrapper-2lTRaf,
 .header-GwIGlr,
 .item-PXvHYJ:not(.selected-3s45Ha):not(.tabBarItem-1b8RUP):not(.tabBarItem-1Cg-MI):not([style*="background-color"]):hover,
 .selectableItem-1MP3MQ:hover,
@@ -522,9 +521,7 @@ input:disabled {
 .partyMemberBackground-aSF9mc,
 .friendsAction-__WNE9:not(:hover),
 .button-mM-y8i:hover,
-.container-1aNBdK.pinned:before,
-.container-2td-dC:after,
-.container-1aNBdK:after {
+.iconBadge-2wi9r4 {
 	background-color: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 3)) !important;
 }
 
@@ -964,11 +961,6 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 
 .newMessagesBar-mujexs button:hover {
 	text-decoration: underline;
-}
-
-#bd-pub-button,
-.wrapper-2lTRaf {
-	transition: background 500ms ease !important;
 }
 
 .privateChannels-1nO12o .channel-2QD9_O .close-3hZ5Ni:not(:hover) {
