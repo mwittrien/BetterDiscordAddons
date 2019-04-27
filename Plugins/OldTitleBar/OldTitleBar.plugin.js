@@ -243,6 +243,7 @@ class OldTitleBar {
 		var closebutton = BDFDB.htmlToElement(this.closeButtonMarkup);
 		bar.appendChild(closebutton);
 		closebutton.querySelector(BDFDB.dotCN.channelheadericon).addEventListener("click", () => {this.window.close();});
+		if (BDFDB.containsClass(bar, "settingsTitlebarOTB")) BDFDB.removeEles(bar.querySelector(".dividerOTB"));
 	}
 
 	changeMaximizeButtons () {
