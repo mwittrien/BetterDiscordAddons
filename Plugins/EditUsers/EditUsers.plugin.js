@@ -3,7 +3,7 @@
 class EditUsers {
 	getName () {return "EditUsers";}
 
-	getVersion () {return "3.3.5";}
+	getVersion () {return "3.3.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class EditUsers {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Start up","Fixed a Bug where some servers wouldn't get hidden on start up"]]
+			"fixed":[["DM Header","Fixed the issue where the changed DM header would be stuck when changing channels"]]
 		};
 		
 		this.labels = {}; 
@@ -32,6 +32,7 @@ class EditUsers {
 			"PictureInPictureVideo":"componentDidMount",
 			"PrivateChannel":["componentDidMount","componentDidUpdate"],
 			"HeaderBar":["componentDidMount","componentDidUpdate"],
+			"HeaderBarContainer":["componentDidMount","componentDidUpdate"],
 			"Clickable":"componentDidMount",
 			"MessageContent":["componentDidMount","componentDidUpdate"],
 			"StandardSidebarView":"componentWillUnmount"
@@ -630,6 +631,10 @@ class EditUsers {
 		}
 	}
 
+	processHeaderBarContainer (instance, wrapper) {
+		this.processHeaderBar(instance, wrapper);
+	}
+	
 	processHeaderBar (instance, wrapper) {
 		let channel_id = BDFDB.getReactValue(instance, "_reactInternalFiber.return.memoizedProps.channelId");
 		if (channel_id) {

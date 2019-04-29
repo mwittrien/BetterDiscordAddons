@@ -3,7 +3,7 @@
 class EditChannels {
 	getName () {return "EditChannels";}
 
-	getVersion () {return "3.9.3";}
+	getVersion () {return "3.9.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class EditChannels {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Canary/PTB","Fixed the plugin for canary and ptb"]]
+			"fixed":[["Channel Header","Fixed the issue where the changed channel header would be stuck when changing channels"]]
 		};
 		
 		this.labels = {};
@@ -23,6 +23,7 @@ class EditChannels {
 			"ChannelCategoryItem":"componentDidMount",
 			"ChannelItem":"componentDidMount",
 			"HeaderBar":["componentDidMount","componentDidUpdate"],
+			"HeaderBarContainer":["componentDidMount","componentDidUpdate"],
 			"Clickable":"componentDidMount",
 			"StandardSidebarView":"componentWillUnmount"
 		};
@@ -353,6 +354,10 @@ class EditChannels {
 		if (instance.props && instance.props.channel) {
 			this.changeChannel(instance.props.channel, wrapper.querySelector(BDFDB.dotCN.channelname));
 		}
+	}
+	
+	processHeaderBarContainer (instance, wrapper) {
+		this.processHeaderBar(instance, wrapper);
 	}
 
 	processHeaderBar (instance, wrapper) {
