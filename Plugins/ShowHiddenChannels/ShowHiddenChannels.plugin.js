@@ -72,7 +72,7 @@ class ShowHiddenChannels {
 				showDeniedUsers:		{value:true,	description:"Show denied Users on hover:"},
 				showForNormal:			{value:false,	description:"Also show Roles/Users for allowed channels:"},
 				showTopic:				{value:false, 	description:"Show the topic of hidden channels:"},
-				showVoiceUsers:			{value:false, 	description:"Show current Users in a Voice channel:"}
+				showVoiceUsers:			{value:false, 	description:"Show current Users in a Voice channel (on hover):"}
 			},
 			amounts: {
 				hoverDelay:				{value:0, 		min:0,	description:"Tooltip delay in millisec:"}
