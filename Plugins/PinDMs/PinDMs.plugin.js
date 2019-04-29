@@ -3,7 +3,7 @@
 class PinDMs {
 	getName () {return "PinDMs";}
 
-	getVersion () {return "1.4.1";}
+	getVersion () {return "1.4.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class PinDMs {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Unread Pill","Fixed the issue where the unread indicator would get stuck if you quickly hover between folders/servers"]]
+			"fixed":[["Unread Pill","Fuck those new hover animations REEEEEE"]]
 		};
 		
 		this.patchModules = {
@@ -250,10 +250,7 @@ class PinDMs {
 	}
 	
 	onSwitch () {
-		let oldselectedpin = BDFDB.getParentEle(".pinned-dm", document.querySelector(`.pinned-dm ${BDFDB.dotCN.guildpillitem}[style*="height: 40px"]`));
-		let newselectedpin = document.querySelector(`.pinned-dm[channelid="${this.CurrentChannelStore.getChannelId()}"]`);
-		if (oldselectedpin) this.updatePinnedRecent(oldselectedpin.getAttribute("channelid"));
-		if (newselectedpin) this.updatePinnedRecent(newselectedpin.getAttribute("channelid"));
+		for (let pin of document.querySelectorAll(".pinned-dm")) this.updatePinnedRecent(pin.getAttribute("channelid"));
 	}
 
 
@@ -730,7 +727,7 @@ class PinDMs {
 				outputRange: [50, 30]
 			})
 			.addListener((value) => {
-				diviconwrapper.style.setProperty("border-radius", `${value.value}%`);
+				diviconwrapper.style.setProperty("border-radius", `${this.CurrentChannelStore.getChannelId() == id ? 30 : value.value}%`);
 			});
 
 		let pillHeight = new this.Animations.Value(0);
@@ -740,7 +737,7 @@ class PinDMs {
 				outputRange: [8, 20]
 			})
 			.addListener((value) => {
-				divpillitem.style.setProperty("height", `${value.value}px`);
+				divpillitem.style.setProperty("height", `${this.CurrentChannelStore.getChannelId() == id ? 40 : value.value}px`);
 			});
 
 		let pillOpacity = new this.Animations.Value(0);
@@ -750,7 +747,7 @@ class PinDMs {
 				outputRange: [0, 0.7]
 			})
 			.addListener((value) => {
-				divpillitem.style.setProperty("opacity", `${value.value}`);
+				divpillitem.style.setProperty("opacity", `${this.CurrentChannelStore.getChannelId() == id ? 1 : value.value}`);
 			});
 		
 		let animate = (v) => {
