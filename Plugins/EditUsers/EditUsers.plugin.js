@@ -3,7 +3,7 @@
 class EditUsers {
 	getName () {return "EditUsers";}
 
-	getVersion () {return "3.3.6";}
+	getVersion () {return "3.3.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -638,7 +638,8 @@ class EditUsers {
 	processHeaderBar (instance, wrapper) {
 		let channel_id = BDFDB.getReactValue(instance, "_reactInternalFiber.return.memoizedProps.channelId");
 		if (channel_id) {
-			let username = wrapper.querySelector(BDFDB.dotCN.channelheaderchannelname);
+			let username = wrapper.querySelector(BDFDB.dotCN.channelheaderheaderbartitle);
+			username = username && username.firstElementChild ? wrapper.querySelector(BDFDB.dotCN.channelheaderchannelname) : username;
 			if (username) {
 				let channel = this.ChannelUtils.getChannel(channel_id);
 				if (channel) {

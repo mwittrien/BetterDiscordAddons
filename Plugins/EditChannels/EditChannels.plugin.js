@@ -3,7 +3,7 @@
 class EditChannels {
 	getName () {return "EditChannels";}
 
-	getVersion () {return "3.9.4";}
+	getVersion () {return "3.9.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -364,7 +364,7 @@ class EditChannels {
 		let channel_id = BDFDB.getReactValue(instance, "props.channelId") || BDFDB.getReactValue(instance, "_reactInternalFiber.return.memoizedProps.channelId");
 		if (channel_id) {
 			let channelname = wrapper.querySelector(BDFDB.dotCN.channelheaderheaderbartitle);
-			channelname = channelname.firstElementChild ? wrapper.querySelector(BDFDB.dotCN.channelheaderchannelname) : channelname;
+			channelname = channelname && channelname.firstElementChild ? wrapper.querySelector(BDFDB.dotCN.channelheaderchannelname) : channelname;
 			if (channelname) {
 				let channel = this.ChannelUtils.getChannel(channel_id);
 				if (channel) {
