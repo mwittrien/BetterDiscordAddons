@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.2.1";}
+	getVersion () {return "6.2.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -12,7 +12,7 @@ class ServerFolders {
 	initConstructor () {
 		this.changelog = {
 			"added":[["Everything","Thanks you for all the people that actually reached out to me and donated to me <3"]],
-			"fixed":[["Unread and Settings","Fixed the issue where the unread indicator wouldn't disappear if the only unread server was the selected on and fixed the issue where the extra settings for folders wouldn't work properly"]]
+			"fixed":[["Unread Pill","Fixed the issue where the unread indicator would get stuck if you quickly hover between folders/servers"]]
 		};
 		
 		this.labels = {};
@@ -1450,22 +1450,35 @@ class ServerFolders {
 				outputRange: [0, 0.7]
 			})
 			.addListener((value) => {
-				if (!pillvisible) divpillitem.style.setProperty("opacity", `${value.value}`);
+				divpillitem.style.setProperty("opacity", `${value.value}`);
 			});
 		
-		let animate = (v, up) => {
+		let animate = (v) => {
 			this.Animations.parallel([
 				this.Animations.timing(borderRadius, {toValue: v, duration: 200}),
-				this.Animations.spring(pillHeight, {toValue: v, friction: 5}),
+				this.Animations.spring(pillHeight, {toValue: v, friction: 5})
+			]).start();
+		};
+		
+		let animate2 = (v) => {
+			this.Animations.parallel([
 				this.Animations.timing(pillOpacity, {toValue: v, duration: 200}),
 			]).start();
 		};
 
 		divinner.addEventListener("mouseenter", () => {
 			pillvisible = divpillitem.style.getPropertyValue("opacity") != 0;
-			if (!guild || (this.CurrentGuildStore.getGuildId() != guild)) animate(1, true);
+			if (!guild || (this.CurrentGuildStore.getGuildId() != guild)) {
+				animate(1);
+				if (!pillvisible) animate2(1);
+			}
 		})
-		divinner.addEventListener("mouseleave", () => {if (!guild || (this.CurrentGuildStore.getGuildId() != guild)) animate(0, false);});
+		divinner.addEventListener("mouseleave", () => {
+			if (!guild || (this.CurrentGuildStore.getGuildId() != guild)) {
+				animate(0);
+				if (!pillvisible) animate2(0);
+			}
+		});
 	}
 
 	setLabelsByLanguage () {

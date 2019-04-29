@@ -3,7 +3,7 @@
 class PinDMs {
 	getName () {return "PinDMs";}
 
-	getVersion () {return "1.4.0";}
+	getVersion () {return "1.4.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class PinDMs {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Hover Behaviour","Added the native hover behaviour to the pinned DMs"]]
+			"fixed":[["Unread Pill","Fixed the issue where the unread indicator would get stuck if you quickly hover between folders/servers"]]
 		};
 		
 		this.patchModules = {
@@ -750,22 +750,35 @@ class PinDMs {
 				outputRange: [0, 0.7]
 			})
 			.addListener((value) => {
-				if (!pillvisible) divpillitem.style.setProperty("opacity", `${value.value}`);
+				divpillitem.style.setProperty("opacity", `${value.value}`);
 			});
 		
-		let animate = (v, up) => {
+		let animate = (v) => {
 			this.Animations.parallel([
 				this.Animations.timing(borderRadius, {toValue: v, duration: 200}),
-				this.Animations.spring(pillHeight, {toValue: v, friction: 5}),
+				this.Animations.spring(pillHeight, {toValue: v, friction: 5})
+			]).start();
+		};
+		
+		let animate2 = (v) => {
+			this.Animations.parallel([
 				this.Animations.timing(pillOpacity, {toValue: v, duration: 200}),
 			]).start();
 		};
 
 		divinner.addEventListener("mouseenter", () => {
 			pillvisible = divpillitem.style.getPropertyValue("opacity") != 0;
-			if (this.CurrentChannelStore.getChannelId() != id) animate(1, true);
+			if (this.CurrentChannelStore.getChannelId() != id) {
+				animate(1);
+				if (!pillvisible) animate2(1);
+			}
 		})
-		divinner.addEventListener("mouseleave", () => {if (this.CurrentChannelStore.getChannelId() != id) animate(0, false);});
+		divinner.addEventListener("mouseleave", () => {
+			if (this.CurrentChannelStore.getChannelId() != id) {
+				animate(0);
+				if (!pillvisible) animate2(0);
+			}
+		});
 	}
 
 	addHoverBehaviour2 (div) {
