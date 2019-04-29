@@ -36,7 +36,7 @@ class ShowHiddenChannels {
 
 		this.channelMarkup = 
 			`<div class="${BDFDB.disCN.channelcontainerdefault} hidden-channel">
-				<div tabindex="0" class="${BDFDB.disCNS.channeliconvisibility + BDFDB.disCN.channelwrapper}" role="button">
+				<div tabindex="0" class="${BDFDB.disCNS.channeliconvisibility + BDFDB.disCNS.channelwrapper + BDFDB.disCN.channelmodelocked}" role="button">
 					<div class="${BDFDB.disCN.channelcontent}">
 						<svg class="${BDFDB.disCN.channelicon}" width="24" height="24" viewBox="0 0 24 24">
 							<path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d=""></path>
