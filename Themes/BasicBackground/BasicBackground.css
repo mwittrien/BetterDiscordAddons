@@ -946,6 +946,15 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .wrapper-1ucjTd .actionIcon-2Hi9ZG:hover {
 	transform: scale(1.3) !important;
 }
+.wrapper-1ucjTd .users-i_3-kL {
+	background: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 2)) !important;
+}
+.wrapper-1ucjTd .total-3tKGEB {
+	background: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 4)) !important;
+}
+.wrapper-1ucjTd .total-3tKGEB:after {
+	border-right-color: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 3)) !important;
+}
 
 .emptyState-N8MHmB,
 .content-1zhNsr,
