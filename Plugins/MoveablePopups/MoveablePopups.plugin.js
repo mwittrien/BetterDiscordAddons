@@ -3,11 +3,17 @@
 class MoveablePopups {
 	getName () {return "MoveablePopups";}
 
-	getVersion () {return "1.1.2";}
+	getVersion () {return "1.1.3";}
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Adds the feature to move all popups and modals around like on a normal desktop. Ctrl + drag with your left mousebutton to drag element.";}
+
+	initConstructor () {
+		this.changelog = {
+			"fixed":[["Moved Modal Container","Fixed selector for new modal container"]]
+		};
+	}
 
 	//legacy
 	load () {}
@@ -67,7 +73,7 @@ class MoveablePopups {
 					}
 				);
 			});
-			BDFDB.addObserver(this, BDFDB.dotCN.app + " ~ [class^='theme-']:not([class*='popouts'])", {name:"modalObserver",instance:observer}, {childList: true});
+			BDFDB.addObserver(this, `${BDFDB.dotCN.popouts} ~ .${BDFDB.getDiscordTheme()}`, {name:"modalObserver",instance:observer}, {childList: true});
 		}
 		else {
 			console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
@@ -87,12 +93,7 @@ class MoveablePopups {
 	makeMoveable (div) {
 		div.removeEventListener("click", div.clickMovablePopups);
 		div.removeEventListener("mousedown", div.mousedownMovablePopups);
-		div.clickMovablePopups = e => {
-			if (this.dragging) {
-				e.stopPropagation();
-				e.preventDefault();
-			}
-		};
+		div.clickMovablePopups = e => {if (this.dragging) BDFDB.stopEvent(e);};
 		div.mousedownMovablePopups = e => {
 			if (!e.ctrlKey) return;
 			div.style.setProperty("position", "fixed", "important");

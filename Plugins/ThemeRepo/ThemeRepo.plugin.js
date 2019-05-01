@@ -847,61 +847,43 @@ class ThemeRepo {
 
 	downloadTheme (data) {
 		require("request")(data.url, (error, response, body) => {
-			if (error) {
-				BDFDB.showToast(`Unable to download Theme "${data.name}".`, {type:"danger"});
-			}
-			else {
-				let filename = data.url.split("/");
-				this.createThemeFile(filename[filename.length - 1], body);
-			}
+			if (error) BDFDB.showToast(`Unable to download Theme "${data.name}".`, {type:"danger"});
+			else this.createThemeFile(data.url.split("/").pop(), body);
 		});
 	}
 
 	createThemeFile (filename, content) {
-		let fileSystem = require("fs");
-		let path = require("path");
-		var file = path.join(BDFDB.getThemesFolder(), filename);
-		fileSystem.writeFile(file, content, (error) => {
-			if (error) {
-				BDFDB.showToast(`Unable to save Theme "${filename}".`, {type:"danger"});
-			}
-			else {
-				BDFDB.showToast(`Successfully saved Theme "${filename}".`, {type:"success"});
-			}
+		fileSystem.writeFile(require("path").join(BDFDB.getThemesFolder(), filename), content, (error) => {
+			if (error) BDFDB.showToast(`Unable to save Theme "${filename}".`, {type:"danger"});
+			else BDFDB.showToast(`Successfully saved Theme "${filename}".`, {type:"success"});
 		});
 	}
 
 	applyTheme (data) {
-		var name = data.name;
-		if (BDFDB.isThemeEnabled(name) == false) {
-			BDFDB.removeEles(`style#${name}`);
-			document.head.appendChild(BDFDB.htmlToElement(`<style id=${name}>${data.css}</style>`));
-			themeCookie[name] = true;
+		if (BDFDB.isThemeEnabled(data.name) == false) {
+			BDFDB.removeEles(`style#${data.name}`);
+			document.head.appendChild(BDFDB.htmlToElement(`<style id=${data.name}>${data.css}</style>`));
+			themeCookie[data.name] = true;
 			themeModule.saveThemeData();
-			console.log(`%c[${this.name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Applied Theme " + name + ".");
+			console.log(`%c[${this.name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Applied Theme " + data.name + ".");
 		}
 	}
 
 	deleteThemeFile (data) {
-		let fileSystem = require("fs");
-		let path = require("path");
-		let filename = data.url.split("/");
-		filename = filename[filename.length - 1];
-		var file = path.join(BDFDB.getThemesFolder(), filename);
-		fileSystem.unlink(file, (error) => {
+		let filename = data.url.split("/").pop();
+		require("fs").unlink(require("path").join(BDFDB.getThemesFolder(), filename), (error) => {
 			if (error) BDFDB.showToast(`Unable to delete Theme "${filename}".`, {type:"danger"});
 			else BDFDB.showToast(`Successfully deleted Theme "${filename}".`, {type:"success"});
 		});
 	}
 
 	removeTheme (data) {
-		var name = data.name;
-		if (BDFDB.isThemeEnabled(name) == true) {
-			BDFDB.removeEles(`style#${name}`);
-			themeCookie[name] = false;
-			delete bdthemes[name];
+		if (BDFDB.isThemeEnabled(data.name) == true) {
+			BDFDB.removeEles(`style#${data.name}`);
+			themeCookie[data.name] = false;
+			delete bdthemes[data.name];
 			themeModule.saveThemeData();
-			console.log(`%c[${this.name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Removed Theme " + name + ".");
+			console.log(`%c[${this.name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Removed Theme " + data.name + ".");
 		}
 	}
 }

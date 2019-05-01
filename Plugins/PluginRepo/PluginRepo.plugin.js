@@ -844,60 +844,42 @@ class PluginRepo {
 
 	downloadPlugin (data) {
 		require("request")(data.url, (error, response, body) => {
-			if (error) {
-				BDFDB.showToast(`Unable to download Plugin "${plugin.getName}".`, {type:"danger"});
-			}
-			else {
-				let filename = data.url.split("/");
-				this.createPluginFile(filename[filename.length - 1], body);
-			}
+			if (error) BDFDB.showToast(`Unable to download Plugin "${plugin.getName}".`, {type:"danger"});
+			else this.createPluginFile(data.url.split("/").pop(), body);
 		});
 	}
 
 	createPluginFile (filename, content) {
-		let fileSystem = require("fs");
-		let path = require("path");
-		var file = path.join(BDFDB.getPluginsFolder(), filename);
-		fileSystem.writeFile(file, content, (error) => {
-			if (error) {
-				BDFDB.showToast(`Unable to save Plugin "${filename}".`, {type:"danger"});
-			}
-			else {
-				BDFDB.showToast(`Successfully saved Plugin "${filename}".`, {type:"success"});
-			}
+		require("fs").writeFile(require("path").join(BDFDB.getPluginsFolder(), filename), content, (error) => {
+			if (error) BDFDB.showToast(`Unable to save Plugin "${filename}".`, {type:"danger"});
+			else BDFDB.showToast(`Successfully saved Plugin "${filename}".`, {type:"success"});
 		});
 	}
 
 	startPlugin (data) {
-		var name = data.name;
-		if (BDFDB.isPluginEnabled(name) == false) {
-			bdplugins[name].plugin.start();
-			pluginCookie[name] = true;
+		if (BDFDB.isPluginEnabled(data.name) == false) {
+			bdplugins[data.name].plugin.start();
+			pluginCookie[data.name] = true;
 			pluginModule.savePluginData();
-			console.log(`%c[${this.name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Started Plugin " + name + ".");
+			console.log(`%c[${this.name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Started Plugin " + data.name + ".");
 		}
 	}
 
 	deletePluginFile (data) {
-		let fileSystem = require("fs");
-		let path = require("path");
-		let filename = data.url.split("/");
-		filename = filename[filename.length - 1];
-		var file = path.join(BDFDB.getPluginsFolder(), filename);
-		fileSystem.unlink(file, (error) => {
+		let filename = data.url.split("/").pop();
+		require("fs").unlink(require("path").join(BDFDB.getPluginsFolder(), filename), (error) => {
 			if (error) BDFDB.showToast(`Unable to delete Plugin "${filename}".`, {type:"danger"});
 			else BDFDB.showToast(`Successfully deleted Plugin "${filename}".`, {type:"success"});
 		});
 	}
 
 	stopPlugin (data) {
-		var name = data.name;
-		if (BDFDB.isPluginEnabled(name) == true) {
-			bdplugins[name].plugin.stop();
-			pluginCookie[name] = false;
-			delete bdplugins[name];
+		if (BDFDB.isPluginEnabled(data.name) == true) {
+			bdplugins[data.name].plugin.stop();
+			pluginCookie[data.name] = false;
+			delete bdplugins[data.name];
 			pluginModule.savePluginData();
-			console.log(`%c[${this.name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Stopped Plugin " + name + ".");
+			console.log(`%c[${this.name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Stopped Plugin " + data.name + ".");
 		}
 	}
 }

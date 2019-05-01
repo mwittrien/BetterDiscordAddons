@@ -3,18 +3,24 @@
 class FriendNotifications {
 	getName () {return "FriendNotifications";}
 
-	getVersion () {return "1.1.8";}
+	getVersion () {return "1.1.9";}
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Notifies you when a friend either logs in or out. Click the Online Friend-Counter to display a timelog of the current session.";}
 
 	initConstructor () {
+		this.changelog = {
+			"fixed":[["Missing Friend Counter","Falls back to a check interval if the Online Counter isn't rendered. Timelog can now also be viewed in the settings"]]
+		};
+		
 		this.patchModules = {
 			"FriendsOnline":["componentDidMount","componentDidUpdate"]
 		};
 
 		this.friendsOnlineList = {};
+
+		this.checkInterval = null;
 
 		this.timeLog = [];
 
@@ -151,6 +157,7 @@ class FriendNotifications {
 		}
 		settingshtml += `</div>`;
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Batch set Users:</h3><button type="button" do-disable=true class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttoncolorprimary + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} disable-all" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Disable</div></button><button type="button" do-toast=true class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} toast-all" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Toast</div></button>${"Notification" in window ? `<button type="button" do-desktop=true class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorgreen + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} desktop-all" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Desktop</div></button>` : ``}</div>`;
+		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Timelog of LogIns/-Outs:</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} btn-timelog" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Timelog</div></button></div>`;
 		settingshtml += `</div></div>`;
 
 		let settingspanel = BDFDB.htmlToElement(settingshtml);
@@ -201,6 +208,7 @@ class FriendNotifications {
 			BDFDB.saveAllData(disabledata, this, "disabled");
 			BDFDB.saveAllData(desktopdata, this, "desktop");
 		});
+		BDFDB.addEventListener(this, settingspanel, "click", ".btn-timelog", () => {this.showTimeLog();});
 
 		return settingspanel;
 	}
@@ -241,6 +249,8 @@ class FriendNotifications {
 				this.friendsOnlineList[id] = this.UserMetaStore.getStatus(id) != "offline";
 			}
 
+			this.startInterval();
+
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
@@ -250,6 +260,7 @@ class FriendNotifications {
 
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			clearInterval(this.checkInterval);
 			BDFDB.unloadMessage(this);
 		}
 	}
@@ -294,7 +305,13 @@ class FriendNotifications {
 	processFriendsOnline (instance, wrapper) {
 		BDFDB.addEventListener(this, wrapper, "mouseenter", () => {BDFDB.createTooltip("Timelog", wrapper, {type:"right"});});
 		BDFDB.addEventListener(this, wrapper, "click", () => {this.showTimeLog();});
+		
+		clearInterval(this.checkInterval);
 
+		this.checkFriends();
+	}
+	
+	checkFriends () {
 		let settings = BDFDB.getAllData(this, "settings");
 		for (let id of this.FriendUtils.getFriendIDs()) {
 			let online = this.UserMetaStore.getStatus(id) != "offline";
@@ -331,6 +348,18 @@ class FriendNotifications {
 			}
 			this.friendsOnlineList[id] = online;
 		}
+	}
+
+	startInterval () {
+		clearInterval(this.checkInterval);
+		let oldcount = this.UserMetaStore.getOnlineFriendCount(), newcount = 0;
+		this.checkInterval = setInterval(() => {
+			newcount = this.UserMetaStore.getOnlineFriendCount();
+			if (oldcount != newcount) {
+				oldcount = newcount;
+				this.checkFriends();
+			}
+		},10000);
 	}
 
 	showTimeLog () {
