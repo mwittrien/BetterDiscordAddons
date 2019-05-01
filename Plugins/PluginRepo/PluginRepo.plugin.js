@@ -49,8 +49,8 @@ class PluginRepo {
 				<div class="${BDFDB.disCN.contextmenuhint}"></div>
 			</div>`;
 
-		this.pluginRepoLoadingIconMarkup =
-			`<svg class="pluginrepo-loadingicon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="40" height="30" viewBox="0 0 483 382">
+		this.pluginRepoIconMarkup =
+			`<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="34" height="31" viewBox="0 0 400 382">
 				<path d="M0.000 183.023 L 0.000 366.046 46.377 366.046 L 92.754 366.046 92.754 312.629 L 92.754 259.213 127.223 259.213 C 174.433 259.213,187.432 257.146,210.766 245.926 C 311.105 197.681,301.344 41.358,195.859 7.193 C 173.603 -0.015,173.838 0.000,80.846 0.000 L 0.000 0.000 0.000 183.023 M157.615 88.195 C 193.007 97.413,198.827 152.678,166.407 171.674 C 158.993 176.019,155.494 176.398,122.807 176.398 L 92.754 176.398 92.754 131.677 L 92.754 86.957 122.807 86.957 C 146.807 86.957,153.819 87.206,157.615 88.195" stroke="none" fill="#7289da" fill-rule="evenodd"></path>
 				<path d="M226.647 3.824 C 258.085 21.580,282.721 54.248,291.095 89.281 C 292.183 93.834,293.041 95.659,294.560 96.655 C 310.880 107.348,312.400 140.701,297.286 156.464 C 293.685 160.221,293.134 161.348,291.162 169.006 C 282.026 204.468,259.916 235.185,230.701 253.002 C 229.548 253.705,235.510 262.261,270.237 309.731 L 311.131 365.631 355.565 365.846 L 400.000 366.060 400.000 348.309 L 400.000 330.557 364.338 285.630 L 328.676 240.703 333.494 238.892 C 373.356 223.907,395.248 189.691,399.313 136.020 C 404.504 67.495,372.510 19.710,311.375 4.675 C 294.592 0.548,287.694 -0.000,252.482 0.000 L 219.876 0.000 226.647 3.824 M202.899 265.964 C 183.869 272.635,168.536 274.960,139.752 275.540 L 116.770 276.003 116.770 321.024 L 116.770 366.046 163.975 366.046 L 211.180 366.046 211.180 314.700 C 211.180 286.460,210.901 263.386,210.559 263.425 C 210.217 263.464,206.770 264.607,202.899 265.964" stroke="none" fill="#7f8186" fill-rule="evenodd"></path>
 			</svg>`;
@@ -210,6 +210,9 @@ class PluginRepo {
 				right: 0;
 				z-index: 1000;
 				animation: repo-loadingwrapper-fade 3s infinite ease;
+			}
+			${BDFDB.dotCN.app} > .repo-loadingwrapper > * {
+				margin: 0 5px;
 			}
 			@keyframes repo-loadingwrapper-fade {
 				from {opacity: 0.1;}
@@ -623,7 +626,8 @@ class PluginRepo {
 					loadingiconwrapper = BDFDB.htmlToElement(`<div class="repo-loadingwrapper"></div>`);
 					document.querySelector(BDFDB.dotCN.app).appendChild(loadingiconwrapper);
 				}
-				var loadingicon = BDFDB.htmlToElement(this.pluginRepoLoadingIconMarkup);
+				var loadingicon = BDFDB.htmlToElement(this.pluginRepoIconMarkup);
+				BDFDB.addClass(loadingicon, "pluginrepo-loadingicon");
 				loadingicon.addEventListener("mouseenter", () => {BDFDB.createTooltip("Loading PluginRepo",loadingicon,{type:"left",delay:500});})
 				loadingiconwrapper.appendChild(loadingicon);
 
@@ -648,7 +652,7 @@ class PluginRepo {
 								if ((settings.notifyOutdated || settings.notifyOutdated == undefined) && outdated > 0) {
 									var oldbarbutton = document.querySelector(".pluginrepo-outdate-notice " + BDFDB.dotCN.noticedismiss);
 									if (oldbarbutton) oldbarbutton.click();
-									var bar = BDFDB.createNotificationsBar(`${outdated} of your Plugins ${outdated == 1 ? "is" : "are"} outdated. Check:`,{type:"danger",btn:"PluginRepo",selector:"pluginrepo-notice pluginrepo-outdate-notice"});
+									var bar = BDFDB.createNotificationsBar(`${outdated} of your Plugins ${outdated == 1 ? "is" : "are"} outdated. Check:`,{type:"danger",btn:"PluginRepo",selector:"pluginrepo-notice pluginrepo-outdate-notice", customicon:this.pluginRepoIconMarkup});
 									bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", e => {
 										this.openPluginRepoModal({showOnlyOutdated:true});
 										bar.querySelector(BDFDB.dotCN.noticedismiss).click();
@@ -657,7 +661,7 @@ class PluginRepo {
 								if ((settings.notifyNewentries || settings.notifyNewentries == undefined) && newentries > 0) {
 									var oldbarbutton = document.querySelector(".pluginrepo-newentries-notice " + BDFDB.dotCN.noticedismiss);
 									if (oldbarbutton) oldbarbutton.click();
-									var bar = BDFDB.createNotificationsBar(`There ${newentries == 1 ? "is" : "are"} ${newentries} new Plugin${newentries == 1 ? "" : "s"} in the Repo. Check:`,{type:"success",btn:"PluginRepo",selector:"pluginrepo-notice pluginrepo-newentries-notice"});
+									var bar = BDFDB.createNotificationsBar(`There ${newentries == 1 ? "is" : "are"} ${newentries} new Plugin${newentries == 1 ? "" : "s"} in the Repo. Check:`,{type:"success",btn:"PluginRepo",selector:"pluginrepo-notice pluginrepo-newentries-notice", customicon:this.pluginRepoIconMarkup});
 									bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", e => {
 										this.openPluginRepoModal({forcedSort:"new",forcedOrder:"asc"});
 										bar.querySelector(BDFDB.dotCN.noticedismiss).click();
@@ -667,7 +671,7 @@ class PluginRepo {
 									let wrongUrls = [];
 									for (let url of this.foundPlugins) if (url && !this.loadedPlugins[url] && !wrongUrls.includes(url)) wrongUrls.push(url);
 									if (wrongUrls.length > 0) {
-										var bar = BDFDB.createNotificationsBar(`PluginRepo: ${wrongUrls.length} Plugin${wrongUrls.length > 1 ? "s" : ""} could not be loaded.`, {type:"danger",btn:"List",selector:"pluginrepo-notice pluginrepo-fail-notice"});
+										var bar = BDFDB.createNotificationsBar(`PluginRepo: ${wrongUrls.length} Plugin${wrongUrls.length > 1 ? "s" : ""} could not be loaded.`, {type:"danger",btn:"List",selector:"pluginrepo-notice pluginrepo-fail-notice", customicon:this.pluginRepoIconMarkup});
 										bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", e => {
 											var toast = BDFDB.showToast(wrongUrls.join("\n"),{type:"error"});
 											toast.style.overflow = "hidden";

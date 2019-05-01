@@ -54,8 +54,8 @@ class ThemeRepo {
 				<div class="${BDFDB.disCN.contextmenuhint}"></div>
 			</div>`;
 
-		this.themeRepoLoadingIconMarkup = 
-			`<svg class="themerepo-loadingicon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="42" height="31" viewBox="0 0 483 332">
+		this.themeRepoIconMarkup = 
+			`<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="36" height="31" viewBox="20 0 400 332">
 				<path d="M0.000 39.479 L 0.000 78.957 43.575 78.957 L 87.151 78.957 87.151 204.097 L 87.151 329.236 129.609 329.236 L 172.067 329.236 172.067 204.097 L 172.067 78.957 215.642 78.957 L 259.218 78.957 259.218 39.479 L 259.218 0.000 129.609 0.000 L 0.000 0.000 0.000 39.479" stroke="none" fill="#7289da" fill-rule="evenodd"></path>
 				<path d="M274.115 38.624 L 274.115 77.248 280.261 77.734 C 309.962 80.083,325.986 106.575,313.378 132.486 C 305.279 149.131,295.114 152.700,255.800 152.700 L 230.168 152.700 230.168 123.277 L 230.168 93.855 208.566 93.855 L 186.965 93.855 186.965 211.546 L 186.965 329.236 208.566 329.236 L 230.168 329.236 230.168 277.068 L 230.168 224.899 237.268 225.113 L 244.368 225.326 282.215 277.095 L 320.062 328.864 360.031 329.057 L 400.000 329.249 400.000 313.283 L 400.000 297.317 367.924 256.908 L 335.848 216.499 340.182 214.869 C 376.035 201.391,395.726 170.616,399.382 122.342 C 405.008 48.071,360.214 0.000,285.379 0.000 L 274.115 0.000 274.115 38.624" stroke="none" fill="#7f8186" fill-rule="evenodd"></path>
 			</svg>`;
@@ -747,7 +747,8 @@ class ThemeRepo {
 					loadingiconwrapper = BDFDB.htmlToElement(`<div class="repo-loadingwrapper"></div>`);
 					document.querySelector(BDFDB.dotCN.app).appendChild(loadingiconwrapper);
 				}
-				var loadingicon = BDFDB.htmlToElement(this.themeRepoLoadingIconMarkup);
+				var loadingicon = BDFDB.htmlToElement(this.themeRepoIconMarkup);
+				BDFDB.addClass(loadingicon, "themerepo-loadingicon");
 				loadingicon.addEventListener("mouseenter", () => {BDFDB.createTooltip("Loading ThemeRepo",loadingicon,{type:"left",delay:500});})
 				loadingiconwrapper.appendChild(loadingicon);
 
@@ -762,10 +763,10 @@ class ThemeRepo {
 					this.loading = {is:false, timeout:null, amount:this.loading.amount};
 					console.log(`%c[${this.name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Finished fetching Themes.");
 					if (document.querySelector(".bd-themerepobutton")) BDFDB.showToast(`Finished fetching Themes.`, {type:"success"});
-					if ((settings.notifyOutdated || settings.notifyOutdated == undefined) && outdated > 0) {
+					if ((settings.notifyOutdated || settings.notifyOutdated == undefined) && outdated > -1) {
 						var oldbarbutton = document.querySelector(".themerepo-outdate-notice " + BDFDB.dotCN.noticedismiss);
 						if (oldbarbutton) oldbarbutton.click();
-						var bar = BDFDB.createNotificationsBar(`${outdated} of your Themes ${outdated == 1 ? "is" : "are"} outdated. Check:`,{type:"danger",btn:"ThemeRepo",selector:"themerepo-notice themerepo-outdate-notice"});
+						var bar = BDFDB.createNotificationsBar(`${outdated} of your Themes ${outdated == 1 ? "is" : "are"} outdated. Check:`,{type:"danger",btn:"ThemeRepo",selector:"themerepo-notice themerepo-outdate-notice", customicon:this.themeRepoIconMarkup});
 						bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", e => {
 							this.openThemeRepoModal({showOnlyOutdated:true});
 							bar.querySelector(BDFDB.dotCN.noticedismiss).click();
@@ -774,7 +775,7 @@ class ThemeRepo {
 					if ((settings.notifyNewentries || settings.notifyNewentries == undefined) && newentries > 0) {
 						var oldbarbutton = document.querySelector(".themerepo-newentries-notice " + BDFDB.dotCN.noticedismiss);
 						if (oldbarbutton) oldbarbutton.click();
-						var bar = BDFDB.createNotificationsBar(`There ${newentries == 1 ? "is" : "are"} ${newentries} new Theme${newentries == 1 ? "" : "s"} in the Repo. Check:`,{type:"success",btn:"ThemeRepo",selector:"themerepo-notice themerepo-newentries-notice"});
+						var bar = BDFDB.createNotificationsBar(`There ${newentries == 1 ? "is" : "are"} ${newentries} new Theme${newentries == 1 ? "" : "s"} in the Repo. Check:`,{type:"success",btn:"ThemeRepo",selector:"themerepo-notice themerepo-newentries-notice", customicon:this.themeRepoIconMarkup});
 						bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", e => {
 							this.openThemeRepoModal({forcedSort:"new",forcedOrder:"asc"});
 							bar.querySelector(BDFDB.dotCN.noticedismiss).click();
@@ -784,7 +785,7 @@ class ThemeRepo {
 						let wrongUrls = [];
 						for (let url of this.foundThemes) if (url && !this.loadedThemes[url] && !wrongUrls.includes(url)) wrongUrls.push(url);
 						if (wrongUrls.length > 0) {
-							var bar = BDFDB.createNotificationsBar(`ThemeRepo: ${wrongUrls.length} Theme${wrongUrls.length > 1 ? "s" : ""} could not be loaded.`, {type:"danger",btn:"List",selector:"themerepo-notice"});
+							var bar = BDFDB.createNotificationsBar(`ThemeRepo: ${wrongUrls.length} Theme${wrongUrls.length > 1 ? "s" : ""} could not be loaded.`, {type:"danger",btn:"List",selector:"themerepo-notice", customicon:this.themeRepoIconMarkup});
 							bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", e => {
 								var toast = BDFDB.showToast(wrongUrls.join("\n"),{type:"error"});
 								toast.style.overflow = "hidden";
