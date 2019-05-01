@@ -53,6 +53,7 @@
 	animation: none !important;
 }
 
+.autocompleteHeaderBackground-30T70q,
 .pageWrapper-1PgVDX,
 .container-16j22k,
 .appMount-3lHmkl,
@@ -208,6 +209,7 @@
 .ui-tab-bar-separator,
 .separator-gCa7yv,
 .separator-1N1EBC,
+.separator-2c4hi3,
 .divider-3573oO,
 .divider-1pnAR2,
 .divider-3FBTu8,
@@ -277,6 +279,10 @@
 .guildsAdd-21_IdK {
 	border-color: transparent !important;
 	background: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 3)) !important;
+}
+
+.row-rrHHJU.selected-1pIgLL {
+	background: linear-gradient(90deg,rgba(var(--vtransparencycolor),0.3) 90%,rgba(var(--vtransparencycolor),0)) !important;
 }
 
 .searchBoxInputWrapper-nKncfu {
@@ -902,6 +908,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	border-color: rgb(var(--vaccentcolor)) !important;
 }
 
+.input-3Xdcic,
 .icon-22AiRD[name="Activity"],
 .icon-22AiRD[name="Library"],
 .icon-22AiRD[name="NitroWheel"],
@@ -928,6 +935,9 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 #app-mount .hasMore-sul95G button {
 	opacity: 1 !important;
 	color: rgb(255,255,255) !important;
+}
+.input-3Xdcic::placeholder {
+	color: rgb(150,150,150) !important;
 }
 .wrapper-1ucjTd:hover .icon-1_QxNX,
 .wrapper-1ucjTd:hover .actionIcon-2Hi9ZG {
@@ -1264,6 +1274,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	display: none !important;
 }
 
+.bd-modal,
 .searchResultsContainer-1ma_dc,
 .autocomplete-1vrmpx,
 .contextMenu-HLZMGh,
@@ -1286,6 +1297,8 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	box-shadow: none !important;
 	overflow: visible !important;
 }
+.bd-modal:after,
+.bd-modal:before,
 .searchResultsContainer-1ma_dc:after,
 .searchResultsContainer-1ma_dc:before,
 .autocomplete-1vrmpx:after,
@@ -1324,6 +1337,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	z-index: -1;
 	pointer-events: none;
 }
+.bd-modal:after,
 .searchResultsContainer-1ma_dc:after,
 .autocomplete-1vrmpx:after,
 .contextMenu-HLZMGh:after,
@@ -1345,6 +1359,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	left: 0;
 	background: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 3));
 }
+.bd-modal:before,
 .searchResultsContainer-1ma_dc:before,
 .autocomplete-1vrmpx:before,
 .contextMenu-HLZMGh:before,
@@ -1628,7 +1643,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	background: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 3)) !important;
 }
 .root-SR8cQa .listRow-hutiT_:hover {
-	background: linear-gradient(90deg,rgba(var(--vtransparencycolor),0.3) 90%,rgba(var(--vtransparencycolor),0));
+	background: linear-gradient(90deg,rgba(var(--vtransparencycolor),0.3) 90%,rgba(var(--vtransparencycolor),0)) !important;
 }
 .root-SR8cQa .connectedAccount-36nQx7 {
 	border: none !important;	
