@@ -128,6 +128,7 @@
 .Select-control,
 .wrapper-29NfPK,
 .container-2XeR5Z,
+.container-cMG81i,
 .searchBar-3dMhjb,
 .searchBar-2_Yu-C,
 .searchResultsWrap-2DKFzt,
@@ -146,6 +147,8 @@
 .players-1zg2l8,
 .wrapper-3UweLa,
 .inset-GQDQYw,
+.section-2VKIPC,
+.multipleIconWrapper-1PjkRO,
 .multipleIconWrapper-2TXVB4,
 .section-3TvauS,
 .recentlyPlayedContainer-2F3MqS,
@@ -360,21 +363,6 @@
 input:disabled {
 	background: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 3)) !important;
 	filter: brightness(50%) !important;
-}
-
-.linkButtonIcon-Mlm5d6:not([style*="color"]),
-.nameSelectedText-sp_EUw:not([style*="color"]),
-.nameHoveredText-1uO31y:not([style*="color"]),
-.nameSelectedVoice-1qSph5:not([style*="color"]),
-.nameHoveredVoice-YJ1Vfd:not([style*="color"]) {
-	color: rgb(255,255,255) !important;
-}
-.colorSelectedText-1y4Wvs:not([style*="color"]) path,
-.colorHoveredText-OZnAgu:not([style*="color"]) path,
-.colorSelectedVoice-Xcb_9R:not([style*="color"]) path,
-.colorHoveredVoice-1kucsK:not([style*="color"]) path {
-	color: rgb(255,255,255) !important;
-	opacity: 1 !important;
 }
 
 .content-Qb0rXO {
@@ -914,6 +902,10 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	border-color: rgb(var(--vaccentcolor)) !important;
 }
 
+.icon-22AiRD[name="Activity"],
+.icon-22AiRD[name="Library"],
+.icon-22AiRD[name="NitroWheel"],
+.icon-22AiRD[name="PersonWaving"],
 .item-PXvHYJ.selected-3s45Ha:not(.tabBarItem-1b8RUP):not(.tabBarItem-1Cg-MI),
 .close-18n9bP,
 .requirements-dEriwm,
