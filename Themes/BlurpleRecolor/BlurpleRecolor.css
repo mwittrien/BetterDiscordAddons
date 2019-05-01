@@ -1359,11 +1359,11 @@ img[src*="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * + *:before {
 .folder .wrapper-232cHJ.count {
 	background: rgb(var(--vaccentcolor)) !important;
 }
-/* friendnotifications */ 
-.DevilBro-settings .type-toast {
+/* friendnotifications/stalkernotifications */ 
+.BDFDB-settings .type-toast {
 	background-color: rgb(var(--vaccentcolor)) !important;
 }
-.DevilBro-settings .settings-avatar:not(.disabled):not(.desktop) {
+.BDFDB-settings .settings-avatar:not(.disabled):not(.desktop) {
 	border-color: rgb(var(--vaccentcolor)) !important;
 }
 /* hideutils */
