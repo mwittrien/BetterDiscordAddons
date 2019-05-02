@@ -766,7 +766,7 @@ class ThemeRepo {
 					if ((settings.notifyOutdated || settings.notifyOutdated == undefined) && outdated > 0) {
 						var oldbarbutton = document.querySelector(".themerepo-outdate-notice " + BDFDB.dotCN.noticedismiss);
 						if (oldbarbutton) oldbarbutton.click();
-						var bar = BDFDB.createNotificationsBar(`${outdated} of your Themes ${outdated == 1 ? "is" : "are"} outdated. Check:`,{type:"danger",btn:"ThemeRepo",selector:"themerepo-notice themerepo-outdate-notice", customicon:this.themeRepoIconMarkup});
+						var bar = BDFDB.createNotificationsBar(`${outdated} of your Themes ${outdated == 1 ? "is" : "are"} outdated. Check:`,{type:"danger",btn:"ThemeRepo",selector:"themerepo-notice themerepo-outdate-notice", customicon:this.themeRepoIconMarkup.replace(/#7289da/gi,"#FFF").replace(/#7f8186/gi,"#B9BBBE")});
 						bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", e => {
 							this.openThemeRepoModal({showOnlyOutdated:true});
 							bar.querySelector(BDFDB.dotCN.noticedismiss).click();
@@ -775,7 +775,7 @@ class ThemeRepo {
 					if ((settings.notifyNewentries || settings.notifyNewentries == undefined) && newentries > 0) {
 						var oldbarbutton = document.querySelector(".themerepo-newentries-notice " + BDFDB.dotCN.noticedismiss);
 						if (oldbarbutton) oldbarbutton.click();
-						var bar = BDFDB.createNotificationsBar(`There ${newentries == 1 ? "is" : "are"} ${newentries} new Theme${newentries == 1 ? "" : "s"} in the Repo. Check:`,{type:"success",btn:"ThemeRepo",selector:"themerepo-notice themerepo-newentries-notice", customicon:this.themeRepoIconMarkup});
+						var bar = BDFDB.createNotificationsBar(`There ${newentries == 1 ? "is" : "are"} ${newentries} new Theme${newentries == 1 ? "" : "s"} in the Repo. Check:`,{type:"success",btn:"ThemeRepo",selector:"themerepo-notice themerepo-newentries-notice", customicon:this.themeRepoIconMarkup.replace(/#7289da/gi,"#FFF").replace(/#7f8186/gi,"#B9BBBE")});
 						bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", e => {
 							this.openThemeRepoModal({forcedSort:"new",forcedOrder:"asc"});
 							bar.querySelector(BDFDB.dotCN.noticedismiss).click();
@@ -785,7 +785,7 @@ class ThemeRepo {
 						let wrongUrls = [];
 						for (let url of this.foundThemes) if (url && !this.loadedThemes[url] && !wrongUrls.includes(url)) wrongUrls.push(url);
 						if (wrongUrls.length > 0) {
-							var bar = BDFDB.createNotificationsBar(`ThemeRepo: ${wrongUrls.length} Theme${wrongUrls.length > 1 ? "s" : ""} could not be loaded.`, {type:"danger",btn:"List",selector:"themerepo-notice", customicon:this.themeRepoIconMarkup});
+							var bar = BDFDB.createNotificationsBar(`ThemeRepo: ${wrongUrls.length} Theme${wrongUrls.length > 1 ? "s" : ""} could not be loaded.`, {type:"danger",btn:"List",selector:"themerepo-notice", customicon:this.themeRepoIconMarkup.replace(/#7289da/gi,"#FFF").replace(/#7f8186/gi,"#B9BBBE")});
 							bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", e => {
 								var toast = BDFDB.showToast(wrongUrls.join("\n"),{type:"error"});
 								toast.style.overflow = "hidden";

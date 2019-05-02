@@ -652,7 +652,7 @@ class PluginRepo {
 								if ((settings.notifyOutdated || settings.notifyOutdated == undefined) && outdated > 0) {
 									var oldbarbutton = document.querySelector(".pluginrepo-outdate-notice " + BDFDB.dotCN.noticedismiss);
 									if (oldbarbutton) oldbarbutton.click();
-									var bar = BDFDB.createNotificationsBar(`${outdated} of your Plugins ${outdated == 1 ? "is" : "are"} outdated. Check:`,{type:"danger",btn:"PluginRepo",selector:"pluginrepo-notice pluginrepo-outdate-notice", customicon:this.pluginRepoIconMarkup});
+									var bar = BDFDB.createNotificationsBar(`${outdated} of your Plugins ${outdated == 1 ? "is" : "are"} outdated. Check:`,{type:"danger",btn:"PluginRepo",selector:"pluginrepo-notice pluginrepo-outdate-notice", customicon:this.pluginRepoIconMarkup.replace(/#7289da/gi,"#FFF").replace(/#7f8186/gi,"#B9BBBE")});
 									bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", e => {
 										this.openPluginRepoModal({showOnlyOutdated:true});
 										bar.querySelector(BDFDB.dotCN.noticedismiss).click();
@@ -661,7 +661,7 @@ class PluginRepo {
 								if ((settings.notifyNewentries || settings.notifyNewentries == undefined) && newentries > 0) {
 									var oldbarbutton = document.querySelector(".pluginrepo-newentries-notice " + BDFDB.dotCN.noticedismiss);
 									if (oldbarbutton) oldbarbutton.click();
-									var bar = BDFDB.createNotificationsBar(`There ${newentries == 1 ? "is" : "are"} ${newentries} new Plugin${newentries == 1 ? "" : "s"} in the Repo. Check:`,{type:"success",btn:"PluginRepo",selector:"pluginrepo-notice pluginrepo-newentries-notice", customicon:this.pluginRepoIconMarkup});
+									var bar = BDFDB.createNotificationsBar(`There ${newentries == 1 ? "is" : "are"} ${newentries} new Plugin${newentries == 1 ? "" : "s"} in the Repo. Check:`,{type:"success",btn:"PluginRepo",selector:"pluginrepo-notice pluginrepo-newentries-notice", customicon:this.pluginRepoIconMarkup.replace(/#7289da/gi,"#FFF").replace(/#7f8186/gi,"#B9BBBE")});
 									bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", e => {
 										this.openPluginRepoModal({forcedSort:"new",forcedOrder:"asc"});
 										bar.querySelector(BDFDB.dotCN.noticedismiss).click();
@@ -671,7 +671,7 @@ class PluginRepo {
 									let wrongUrls = [];
 									for (let url of this.foundPlugins) if (url && !this.loadedPlugins[url] && !wrongUrls.includes(url)) wrongUrls.push(url);
 									if (wrongUrls.length > 0) {
-										var bar = BDFDB.createNotificationsBar(`PluginRepo: ${wrongUrls.length} Plugin${wrongUrls.length > 1 ? "s" : ""} could not be loaded.`, {type:"danger",btn:"List",selector:"pluginrepo-notice pluginrepo-fail-notice", customicon:this.pluginRepoIconMarkup});
+										var bar = BDFDB.createNotificationsBar(`PluginRepo: ${wrongUrls.length} Plugin${wrongUrls.length > 1 ? "s" : ""} could not be loaded.`, {type:"danger",btn:"List",selector:"pluginrepo-notice pluginrepo-fail-notice", customicon:this.pluginRepoIconMarkup.replace(/#7289da/gi,"#FFF").replace(/#7f8186/gi,"#B9BBBE")});
 										bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", e => {
 											var toast = BDFDB.showToast(wrongUrls.join("\n"),{type:"error"});
 											toast.style.overflow = "hidden";
