@@ -3,7 +3,7 @@
 class EditChannels {
 	getName () {return "EditChannels";}
 
-	getVersion () {return "3.9.5";}
+	getVersion () {return "3.9.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class EditChannels {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Channel Header","Fixed the issue where the changed channel header would be stuck when changing channels"]]
+			"fixed":[["Channel Header","Fixed the issue where the changed channel header would be reset by EditUsers"]]
 		};
 		
 		this.labels = {};
@@ -20,8 +20,8 @@ class EditChannels {
 			"ChannelTextArea":"componentDidMount",
 			"AuditLog":"componentDidMount",
 			"InviteCard":"componentDidMount",
-			"ChannelCategoryItem":"componentDidMount",
-			"ChannelItem":"componentDidMount",
+			"ChannelCategoryItem":["componentDidMount","componentDidUpdate"],
+			"ChannelItem":["componentDidMount","componentDidUpdate"],
 			"HeaderBar":["componentDidMount","componentDidUpdate"],
 			"HeaderBarContainer":["componentDidMount","componentDidUpdate"],
 			"Clickable":"componentDidMount",
@@ -346,13 +346,13 @@ class EditChannels {
 
 	processChannelCategoryItem (instance, wrapper) {
 		if (instance.props && instance.props.channel) {
-			this.changeChannel(instance.props.channel, wrapper.querySelector(BDFDB.dotCN.categoryname));
+			this.changeChannel(instance.props.channel, wrapper.querySelector(BDFDB.dotCN.categoryname), true);
 		}
 	}
 
 	processChannelItem (instance, wrapper) {
 		if (instance.props && instance.props.channel) {
-			this.changeChannel(instance.props.channel, wrapper.querySelector(BDFDB.dotCN.channelname));
+			this.changeChannel(instance.props.channel, wrapper.querySelector(BDFDB.dotCN.channelname), true);
 		}
 	}
 	
@@ -364,11 +364,10 @@ class EditChannels {
 		let channel_id = BDFDB.getReactValue(instance, "props.channelId") || BDFDB.getReactValue(instance, "_reactInternalFiber.return.memoizedProps.channelId");
 		if (channel_id) {
 			let channelname = wrapper.querySelector(BDFDB.dotCN.channelheaderheaderbartitle);
-			channelname = channelname && channelname.firstElementChild ? wrapper.querySelector(BDFDB.dotCN.channelheaderchannelname) : channelname;
 			if (channelname) {
 				let channel = this.ChannelUtils.getChannel(channel_id);
 				if (channel) {
-					if (channel.type == 0) this.changeChannel(channel, channelname);
+					if (channel.type == 0 || channel.type == 2) this.changeChannel(channel, channelname);
 					else {
 						if (channel.type == 1) channel = this.UserUtils.getUser(channel.recipients[0]) || channel;
 						if (channelname.EditChannelsChangeObserver && typeof channelname.EditChannelsChangeObserver.disconnect == "function") channelname.EditChannelsChangeObserver.disconnect();
@@ -429,47 +428,67 @@ class EditChannels {
 		}
 	}
 
-	changeChannel (info, channelname) {
+	changeChannel (info, channelname, hoverlistener = false) {
 		if (!info || !channelname || !channelname.parentElement) return;
-		if (channelname.EditChannelsChangeObserver && typeof channelname.EditChannelsChangeObserver.disconnect == "function") channelname.EditChannelsChangeObserver.disconnect();
-		let data = this.getChannelData(info.id, channelname);
-		if (data.name || data.color || channelname.parentElement.getAttribute("changed-by-editchannels")) {
-			let color = this.chooseColor(channelname, data.color);
-			channelname.style.setProperty("color", color, "important");
-			BDFDB.setInnerText(channelname, data.name || info.name); 
-			let iconparent = BDFDB.containsClass(channelname, BDFDB.disCN.quickswitchresultmatch) ? channelname.parentElement.parentElement : channelname.parentElement;
-			if (!BDFDB.containsClass(channelname, BDFDB.disCN.autocompletedescription)) {
-				let settings = BDFDB.getAllData(this, "settings");
-				iconparent.querySelectorAll('svg [stroke]:not([stroke="none"]').forEach(icon => {
-					let iconcolor = color && BDFDB.getParentEle(BDFDB.dotCN.channelheadertitle, icon) ? BDFDB.colorSETALPHA(color, 0.6) : color;
-					if (!icon.getAttribute("oldstroke")) icon.setAttribute("oldstroke", icon.getAttribute("stroke"));
-					icon.setAttribute("stroke", iconcolor && settings.changeChannelIcon ? iconcolor : icon.getAttribute("oldstroke"), "important");
-					icon.style.setProperty("stroke", iconcolor && settings.changeChannelIcon ? iconcolor : icon.getAttribute("oldstroke"), "important");
-				});
-				iconparent.querySelectorAll('svg [fill]:not([fill="none"]').forEach(icon => {
-					let iconcolor = color && BDFDB.getParentEle(BDFDB.dotCN.channelheadertitle, icon) ? BDFDB.colorSETALPHA(color, 0.6) : color;
-					if (!icon.getAttribute("oldfill")) icon.setAttribute("oldfill", icon.getAttribute("fill"));
-					icon.setAttribute("fill", iconcolor && settings.changeChannelIcon ? iconcolor : icon.getAttribute("oldfill"), "important");
-					icon.style.setProperty("fill", iconcolor && settings.changeChannelIcon ? iconcolor : icon.getAttribute("oldfill"), "important");
-				});
-				let unread = iconparent.parentElement.querySelector(BDFDB.dotCN.channelunread);
-				if (unread) unread.style.setProperty("background-color", color && settings.changeUnreadIndicator ? color : null, "important");
-			}
-			if (data.name || data.color) {
-				channelname.parentElement.setAttribute("changed-by-editchannels", true);
-				channelname.EditChannelsChangeObserver = new MutationObserver((changes, _) => {
-					changes.forEach(
-						(change, i) => {
-							if (change.type == "childList" && change.addedNodes.length && change.target.tagName && (change.target.tagName == "SVG" || change.target.querySelector("svg")) || change.type == "attributes" && change.attributeName == "class" && change.target.className.length && change.target.className.indexOf("name") > -1 || change.type == "attributes" && change.attributeName == "style" && BDFDB.containsClass(change.target, BDFDB.disCN.channelheaderchannelname)) {
-								channelname.EditChannelsChangeObserver.disconnect();
-								this.changeChannel(info, channelname);
+		var change = () => {
+			if (channelname.EditChannelsChangeObserver && typeof channelname.EditChannelsChangeObserver.disconnect == "function") channelname.EditChannelsChangeObserver.disconnect();
+			let data = this.getChannelData(info.id, channelname);
+			if (data.name || data.color || channelname.parentElement.getAttribute("changed-by-editchannels")) {
+				let color = this.chooseColor(channelname, data.color);
+				channelname.style.setProperty("color", color, "important");
+				BDFDB.setInnerText(channelname, data.name || info.name); 
+				let iconparent = BDFDB.containsClass(channelname, BDFDB.disCN.quickswitchresultmatch) ? channelname.parentElement.parentElement : channelname.parentElement;
+				if (!BDFDB.containsClass(channelname, BDFDB.disCN.autocompletedescription)) {
+					let settings = BDFDB.getAllData(this, "settings");
+					iconparent.querySelectorAll('svg [stroke]:not([stroke="none"]').forEach(icon => {
+						let iconcolor = color && BDFDB.getParentEle(BDFDB.dotCN.channelheadertitle, icon) ? BDFDB.colorSETALPHA(color, 0.6) : color;
+						if (!icon.getAttribute("oldstroke")) icon.setAttribute("oldstroke", icon.getAttribute("stroke"));
+						icon.setAttribute("stroke", iconcolor && settings.changeChannelIcon ? iconcolor : icon.getAttribute("oldstroke"), "important");
+						icon.style.setProperty("stroke", iconcolor && settings.changeChannelIcon ? iconcolor : icon.getAttribute("oldstroke"), "important");
+					});
+					iconparent.querySelectorAll('svg [fill]:not([fill="none"]').forEach(icon => {
+						let iconcolor = color && BDFDB.getParentEle(BDFDB.dotCN.channelheadertitle, icon) ? BDFDB.colorSETALPHA(color, 0.6) : color;
+						if (!icon.getAttribute("oldfill")) icon.setAttribute("oldfill", icon.getAttribute("fill"));
+						icon.setAttribute("fill", iconcolor && settings.changeChannelIcon ? iconcolor : icon.getAttribute("oldfill"), "important");
+						icon.style.setProperty("fill", iconcolor && settings.changeChannelIcon ? iconcolor : icon.getAttribute("oldfill"), "important");
+					});
+					let unread = iconparent.parentElement.querySelector(BDFDB.dotCN.channelunread);
+					if (unread) unread.style.setProperty("background-color", color && settings.changeUnreadIndicator ? color : null, "important");
+				}
+				if (data.name || data.color) {
+					channelname.parentElement.setAttribute("changed-by-editchannels", true);
+					channelname.EditChannelsChangeObserver = new MutationObserver((changes, _) => {
+						changes.forEach(
+							(change, i) => {
+								if (change.type == "childList" && change.addedNodes.length && change.target.tagName && (change.target.tagName == "SVG" || change.target.querySelector("svg")) || change.type == "attributes" && change.attributeName == "class" && change.target.className.length && change.target.className.indexOf("name") > -1 || change.type == "attributes" && change.attributeName == "style" && BDFDB.containsClass(change.target, BDFDB.disCN.channelheaderheaderbartitle)) {
+									channelname.EditChannelsChangeObserver.disconnect();
+									this.changeChannel(info, channelname);
+								}
 							}
-						}
-					);
-				});
-				channelname.EditChannelsChangeObserver.observe(iconparent, {attributes:true, childList:true, subtree:true});
+						);
+					});
+					channelname.EditChannelsChangeObserver.observe(iconparent, {attributes:true, childList:true, subtree:true});
+				}
+				else channelname.parentElement.removeAttribute("changed-by-editchannels");
 			}
-			else channelname.parentElement.removeAttribute("changed-by-editchannels");
+		}
+		change();
+		if (hoverlistener) {
+			let wrapper = info.type == 4 ? BDFDB.getParentEle(BDFDB.dotCN.categorywrapper, channelname) : BDFDB.getParentEle(BDFDB.dotCN.channelwrapper, channelname);
+			if (wrapper) {
+				wrapper.removeEventListener("mouseover", wrapper.mouseoverListenerEditChannels);
+				wrapper.removeEventListener("mouseout", wrapper.mouseoutListenerEditChannels);
+				wrapper.mouseoverListenerEditChannels = () => {
+					channelname.EditChannelsHovered = true;
+					change();
+				};
+				wrapper.mouseoutListenerEditChannels = () => {
+					delete channelname.EditChannelsHovered;
+					change();
+				};
+				wrapper.addEventListener("mouseover", wrapper.mouseoverListenerEditChannels);
+				wrapper.addEventListener("mouseout", wrapper.mouseoutListenerEditChannels);
+			}
 		}
 	}
 
@@ -537,9 +556,11 @@ class EditChannels {
 
 	chooseColor (channelname, color) {
 		if (color && channelname) {
+			let hovered = channelname.EditChannelsHovered;
+			channelname = BDFDB.containsClass(channelname, BDFDB.disCN.channelname) ? channelname.parentElement.parentElement : channelname;
 			let classname = channelname.className ? channelname.className.toLowerCase() : "";
 			if (classname.indexOf("muted") > -1 || classname.indexOf("locked") > -1) color = BDFDB.colorCHANGE(color, -0.5);
-			else if (classname.indexOf("selected") > -1 || classname.indexOf("hovered") > -1 || classname.indexOf("unread") > -1 || classname.indexOf("connected") > -1) color = BDFDB.colorCHANGE(color, 0.5);
+			else if (hovered || classname.indexOf("selected") > -1 || classname.indexOf("hovered") > -1 || classname.indexOf("unread") > -1 || classname.indexOf("connected") > -1) color = BDFDB.colorCHANGE(color, 0.5);
 			return BDFDB.colorCONVERT(color, "RGB");
 		}
 		return null;
