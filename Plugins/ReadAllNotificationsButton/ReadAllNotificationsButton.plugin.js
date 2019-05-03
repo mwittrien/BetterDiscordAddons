@@ -3,7 +3,7 @@
 class ReadAllNotificationsButton {
 	getName () {return "ReadAllNotificationsButton";}
 
-	getVersion () {return "1.4.7";}
+	getVersion () {return "1.4.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,11 +11,11 @@ class ReadAllNotificationsButton {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Button above home button","Fixed the issue where the read all button would sometimes appear above the home button"]]
+			"fixed":[["Issue with other plugins","Fixed the issue where the 'read all' button would move aroudn the serverlist, when another plugin forces server list to rerender"]]
 		};
 		
 		this.patchModules = {
-			"Guilds":"componentDidMount",
+			"Guilds":["componentDidMount","componentDidUpdate"],
 			"RecentMentions":"componentDidMount",
 			"DirectMessage":"componentDidMount"
 		};
@@ -208,6 +208,7 @@ class ReadAllNotificationsButton {
 	
 	getInsertNode () {
 		let homebutton = BDFDB.getParentEle(BDFDB.dotCN.guildouter, document.querySelector(BDFDB.dotCN.homebuttonicon));
+		if (!homebutton) return null;
 		let nextsibling = homebutton.nextElementSibling, insertnode = null;
 		while (nextsibling && insertnode == null) {
 			if (nextsibling.querySelector(`${BDFDB.dotCN.guildseparator}:not(.folderseparator)`)) insertnode = nextsibling;
