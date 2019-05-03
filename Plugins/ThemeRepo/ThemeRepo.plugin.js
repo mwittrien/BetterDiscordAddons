@@ -854,7 +854,7 @@ class ThemeRepo {
 	}
 
 	createThemeFile (filename, content) {
-		fileSystem.writeFile(require("path").join(BDFDB.getThemesFolder(), filename), content, (error) => {
+		require("fs").writeFile(require("path").join(BDFDB.getThemesFolder(), filename), content, (error) => {
 			if (error) BDFDB.showToast(`Unable to save Theme "${filename}".`, {type:"danger"});
 			else BDFDB.showToast(`Successfully saved Theme "${filename}".`, {type:"success"});
 		});
