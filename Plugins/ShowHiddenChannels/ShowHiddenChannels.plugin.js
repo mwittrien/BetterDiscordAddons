@@ -3,7 +3,7 @@
 class ShowHiddenChannels {
 	getName () {return "ShowHiddenChannels";}
 
-	getVersion () {return "2.4.8";}
+	getVersion () {return "2.4.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ShowHiddenChannels {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["New Classes","Fixed the plugin for the new class update"]]
+			"added":[["Show Category Name","Added an option that shows the name of the category of a hidden channel in the tooltip (if the channel is the child of a category)"]]
 		};
 		
 		this.patchModules = {
@@ -72,6 +72,7 @@ class ShowHiddenChannels {
 				showDeniedRoles:		{value:true,	inner:true,		description:"Denied Roles:"},
 				showDeniedUsers:		{value:true,	inner:true,		description:"Specifically denied Users:"},
 				showTopic:				{value:false, 	inner:true,		description:"The Topic of the Channel:"},
+				showChannelCategory:	{value:false, 	inner:true,		description:"The Category of the Channel:"},
 				showVoiceUsers:			{value:false, 	inner:true,		description:"All currently connected Users of a Voice Channel:"}
 			},
 			amounts: {
@@ -345,6 +346,9 @@ class ShowHiddenChannels {
 			allowedRoles.push({"name":"@everyone"});
 		}
 		var htmlString = ``;
+		if (settings.showChannelCategory && !allowed && channel.parent_id) {
+			htmlString += `<div class="${BDFDB.disCN.marginbottom4}">Category:</div><div class="${BDFDB.disCNS.flex + BDFDB.disCN.wrap}"><div class="${BDFDB.disCNS.userpopoutrole + BDFDB.disCNS.flex + BDFDB.disCNS.aligncenter + BDFDB.disCN.wrap + BDFDB.disCNS.size12 + BDFDB.disCN.weightmedium} SHC-category" style="border-color: rgba(255, 255, 255, 0.6); height: unset !important; padding-top: 5px; padding-bottom: 5px; max-width: ${window.outerWidth/3}px; text-transform: uppercase;">${BDFDB.encodeToHTML(this.ChannelUtils.getChannel(channel.parent_id).name)}</div></div>`;
+		}
 		if (settings.showTopic && !allowed && channel.topic && channel.topic.replace(/[\t\n\r\s]/g, "")) {
 			htmlString += `<div class="${BDFDB.disCN.marginbottom4}">Topic:</div><div class="${BDFDB.disCNS.flex + BDFDB.disCN.wrap}"><div class="${BDFDB.disCNS.userpopoutrole + BDFDB.disCNS.flex + BDFDB.disCNS.aligncenter + BDFDB.disCN.wrap + BDFDB.disCNS.size12 + BDFDB.disCN.weightmedium} SHC-topic" style="border-color: rgba(255, 255, 255, 0.6); height: unset !important; padding-top: 5px; padding-bottom: 5px; max-width: ${window.outerWidth/3}px">${BDFDB.encodeToHTML(channel.topic)}</div></div>`;
 		}
