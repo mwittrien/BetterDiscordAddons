@@ -53,6 +53,7 @@
 	animation: none !important;
 }
 
+.emptySearchResults-1ba__I,
 .bd-modal-body,
 .pageWrapper-1PgVDX,
 .container-16j22k,
@@ -211,6 +212,7 @@
 .separator-gCa7yv,
 .separator-1N1EBC,
 .separator-2c4hi3,
+.friendsColumnSeparator-3MqtMA,
 .divider-3573oO,
 .divider-1pnAR2,
 .divider-3FBTu8,
@@ -227,7 +229,9 @@
 .attachment-33OFj0,
 .wrapper-CU3qI5:hover,
 .wrapper-1ucjTd:hover .content-3at_AU,
+.wrapper-1ucjTd:active .content-3at_AU,
 .listDefault-2y5Z9D .clickable-23RaYz:hover .content-3xS9Lh,
+.listDefault-2y5Z9D .clickable-23RaYz:active .content-3xS9Lh,
 .userHovered-2_fT4Z,
 .container-1YxwTf .inline,
 .container-1YxwTf pre,
@@ -273,7 +277,7 @@
 .invite-18yqGF,
 .close-18n9bP:hover,
 .guildSeparator-3s64Iy,
-.circleIconButton-jET_ig:not(:hover),
+.circleIconButton-jET_ig:not(.selected-ugP_am),
 .noIcon-1a_FrS,
 .acronym-2mOFsV:not(.selected-bZ3Lue):not(:hover),
 .button-OhfaWu:not(.selected-wSa2KV):not(:hover),
@@ -321,6 +325,10 @@
 	padding: 1px;
 }
 
+.rowWrapper-2fB6P0 + .rowWrapper-2fB6P0 .row-ZLfFhY,
+.header-39GIC8,
+.headerCell-3L6rFG,
+.friendsTableHeader-32yE7d,
 .channelTextArea-rNsIhG,
 .categoryHeader-1D7Tqy,
 .premiumApplicationsHeader-Zmkm5e,
@@ -342,6 +350,7 @@
 }
 
 .header-2o-2hj:not(.banner-1TiK82),
+.searchBar-6Kv8R2,
 .title-3qD0b-,
 .container-1r6BKw {
 	box-shadow: 0 1px 0 rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 3)), 0 2px 0 rgba(var(--vtransparencycolor),.06) !important;
