@@ -86,6 +86,7 @@
 .wrapper-1Rf91z .guildSeparator-3s64Iy {
 	width: calc(1px * ((var(--vguildsize) + 10) * var(--vcolumns) - 10)) !important;
 	margin: 5px 0 !important;
+	display: block !important;
 }
 .wrapper-1Rf91z .guildsError-b7zR5H {
 	height: calc(1px * var(--vguildsize)) !important;
