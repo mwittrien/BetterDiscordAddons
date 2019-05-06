@@ -41,6 +41,11 @@
 .wrapper-1Rf91z .blob-3RT82C {
 	margin: 0 calc(1px * ((((var(--vguildsize) + 10) * (var(--vcolumns) - 1))/2) * (1 - var(--valigndms)))) 0 calc(1px * (((0 * var(--valigndms)) + ((((var(--vguildsize) + 10) * (var(--vcolumns) - 1))/2) * (1 - var(--valigndms)))))) !important;
 }
+.wrapper-1Rf91z .blobContainer-239gwq,
+.wrapper-1Rf91z .circleButtonMask-2VNJsN,
+.wrapper-1Rf91z .guildsError-b7zR5H {
+	margin: 0 !important;
+}
 .wrapper-1Rf91z .listItem-2P_4kh {
 	width: auto !important;
 }
