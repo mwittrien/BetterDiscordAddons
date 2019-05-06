@@ -21,12 +21,13 @@
 	padding: 0 !important;
 }
 .wrapper-1Rf91z .scrollerWrap-1IAIlv .scroller-2TZvBN {
-	padding: 10px 0 10px 10px !important;
 }
-.wrapper-1Rf91z .scroller-2TZvBN {
-	display: flex;
-	flex-flow: row wrap;
-	align-content: flex-start;
+.wrapper-1Rf91z .scrollerWrap-1IAIlv .scroller-2TZvBN {
+	padding: 10px 0 10px 10px !important;
+	margin: 0 !important;
+	display: flex !important;
+	flex-flow: row wrap !important;
+	align-content: flex-start !important;
 }
 .wrapper-1Rf91z .listItem-2P_4kh {
 	margin: 4px 13px 4px -2px !important;
