@@ -8,6 +8,7 @@
 }
 
 .wrapper-1Rf91z,
+.wrapper-1Rf91z.foldercontent.foldercontentopen,
 .wrapper-1Rf91z .unreadMentionsIndicatorTop-gA6RCh,
 .wrapper-1Rf91z .unreadMentionsIndicatorBottom-BXS58x {
 	width: calc(1px * ((var(--vguildsize) + 10) * var(--vcolumns) + 35 - 25)) !important;
