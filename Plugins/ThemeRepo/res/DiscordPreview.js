@@ -98,7 +98,7 @@ window.WebModulesFindByProperties = function (properties) {
 	return module;
 };
 window.WebModulesFindByName = function (name) {
-	return WebModulesFind(module => module.displayName === name);
+	return WebModulesFind(module => module.displayName === name) || "";
 };
 window.BDV2 = {};
 window.BDV2.react = window.React;
