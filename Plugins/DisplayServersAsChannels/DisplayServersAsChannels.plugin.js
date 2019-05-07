@@ -217,8 +217,8 @@ class DisplayServersAsChannels {
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCNS.guildcontainer + BDFDB.dotCN.guildinner}:hover .DSAC-name {
 				opacity: 0.9;
 			}
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.homebutton} .DSAC-name,
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildbuttoninner} .DSAC-name{
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildouter}.DSAC-selected ${BDFDB.dotCN.guildinner} .DSAC-name,
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildouter}.DSAC-selected ${BDFDB.dotCN.guildinner}:hover .DSAC-name {
 				opacity: 1;
 			}
 			.DSAC-styled .serverfolders-dragpreview .DSAC-name {
