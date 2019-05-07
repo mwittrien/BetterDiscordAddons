@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.2.3";}
+	getVersion () {return "6.2.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ServerFolders {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Issue with other plugins","Fixed the issue where Folders would be moved to the top of the serverlist, when another plugin forces server list to rerender"]]
+			"fixed":[["Folder Icon","Fixed the Folder Icon to use the same HTML structure as normal guilds"]]
 		};
 		
 		this.labels = {};
@@ -172,26 +172,28 @@ class ServerFolders {
 				<div class="${BDFDB.disCNS.guildpillwrapper + BDFDB.disCN.guildpill}">
 					<span class="${BDFDB.disCN.guildpillitem}" style="opacity: 0; height: 8px; transform: translate3d(0px, 0px, 0px);"></span>
 				</div>
-				<div tabindex="0" class="${BDFDB.disCNS.guildcontainer + BDFDB.disCN.guildinner}" role="button">
-					<svg width="48" height="48" viewBox="0 0 48 48" class="${BDFDB.disCN.guildsvg}">
-						<mask id="" fill="black" x="0" y="0" width="48" height="48">
-							<path d="M0 0 l50 0l0 50l-50 0l0 -50Z" fill="white"></path>
-							<rect x="28" y="-4" width="24" height="24" rx="12" ry="12" transform="translate(20 -20)" fill="black"></rect>
-							<rect x="28" y="28" width="24" height="24" rx="12" ry="12" transform="translate(20 20)" fill="black"></rect>
-							<rect x="-4" y="-4" width="24" height="24" rx="12" ry="12" transform="translate(-20 -20)" fill="black"></rect>
-						</mask>
-						<foreignObject mask="" x="0" y="0" width="48" height="48">
-							<a class="${BDFDB.disCN.guildiconwrapper}" draggable="false" style="border-radius: 50%; overflow: hidden;">
-								<img class="${BDFDB.disCN.guildicon}" src="" width="48" height="48" draggable="false"></img>
-							</a>
-						</foreignObject>
-					</svg>
-					<div class="${BDFDB.disCN.guildbadgewrapper}">
-						<div class="${BDFDB.disCN.guildlowerbadge} notifications" style="opacity: 1; transform: translate(0px, 0px); display: none;">
-							<div class="${BDFDB.disCN.guildbadgenumberbadge}" style="background-color: rgb(240, 71, 71); width: 16px; padding-right: 1px;">0</div>
-						</div>
-						<div class="${BDFDB.disCN.guildupperbadge} count" style="opacity: 1; transform: translate(0px, 0px); display: none;">
-							<div class="${BDFDB.disCN.guildbadgenumberbadge}" style="background-color: rgb(114, 137, 218); width: 16px; padding-right: 1px;">0</div>
+				<div class="${BDFDB.disCN.guildcontainer}" draggable="false">
+					<div class="${BDFDB.disCN.guildinner}">
+						<svg width="48" height="48" viewBox="0 0 48 48" class="${BDFDB.disCN.guildsvg}">
+							<mask id="" fill="black" x="0" y="0" width="48" height="48">
+								<path d="M0 0 l50 0l0 50l-50 0l0 -50Z" fill="white"></path>
+								<rect x="28" y="-4" width="24" height="24" rx="12" ry="12" transform="translate(20 -20)" fill="black"></rect>
+								<rect x="28" y="28" width="24" height="24" rx="12" ry="12" transform="translate(20 20)" fill="black"></rect>
+								<rect x="-4" y="-4" width="24" height="24" rx="12" ry="12" transform="translate(-20 -20)" fill="black"></rect>
+							</mask>
+							<foreignObject mask="" x="0" y="0" width="48" height="48">
+								<a class="${BDFDB.disCN.guildiconwrapper}" draggable="false" style="border-radius: 50%; overflow: hidden;">
+									<img class="${BDFDB.disCN.guildicon}" src="" width="48" height="48" draggable="false"></img>
+								</a>
+							</foreignObject>
+						</svg>
+						<div class="${BDFDB.disCN.guildbadgewrapper}">
+							<div class="${BDFDB.disCN.guildlowerbadge} notifications" style="opacity: 1; transform: translate(0px, 0px); display: none;">
+								<div class="${BDFDB.disCN.guildbadgenumberbadge}" style="background-color: rgb(240, 71, 71); width: 16px; padding-right: 1px;">0</div>
+							</div>
+							<div class="${BDFDB.disCN.guildupperbadge} count" style="opacity: 1; transform: translate(0px, 0px); display: none;">
+								<div class="${BDFDB.disCN.guildbadgenumberbadge}" style="background-color: rgb(114, 137, 218); width: 16px; padding-right: 1px;">0</div>
+							</div>
 						</div>
 					</div>
 				</div>
