@@ -3,7 +3,7 @@
 class DisplayServersAsChannels {
 	getName () {return "DisplayServersAsChannels";}
 
-	getVersion () {return "1.2.2";}
+	getVersion () {return "1.2.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class DisplayServersAsChannels {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["DM Switch Issue","Fixed the issue where the Servers would revert back after switching between DMs/Servers"]]
+			"fixed":[["Fixed for new Classes","Plugins works again and was further improved"]]
 		};
 		
 		this.patchModules = {
@@ -28,169 +28,216 @@ class DisplayServersAsChannels {
 			</svg>`;
 
 		this.css = `
-			.bd-minimal.DSAC-styled ${BDFDB.dotCN.guildswrapper},
-			.bd-minimal.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildsscrollerwrap},
-			.bd-minimal.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guilds} {
-				width: 160px;
-			}
 			.DSAC-styled ${BDFDB.dotCN.guildswrapper},
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildsscrollerwrap},
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guilds} {
-				width: 240px;
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guilds},
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildswrapperunreadmentionsindicatortop},
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildswrapperunreadmentionsindicatorbottom} {
+				width: 240px !important;
 			}
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guilds + BDFDB.dotCN.scroller}::-webkit-scrollbar-thumb {
 				background-color: rgb(22, 24, 27);
 			}
-			.bd-minimal.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guild}:not(#bd-pub-li),
-			.bd-minimal.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guild}:not(#bd-pub-li) ${BDFDB.dotCN.guildinner},
-			.bd-minimal.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guild}:not(#bd-pub-li) ${BDFDB.dotCN.guildinner} a,
-			.bd-minimal.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guild}:not(#bd-pub-li) ${BDFDB.dotCNS.guildinner + BDFDB.dotCN.guildicon} {
-				height: 20px;
+			#bd-pub-li,
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCNS.guildcontainer + BDFDB.dotCN.guildicon},
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCNS.guildcontainer + BDFDB.dotCN.guildiconacronym} {
+				display: none !important;
 			}
-			.bd-minimal.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guild}:not(#bd-pub-li) ${BDFDB.dotCNS.guildinner + BDFDB.dotCN.guildicon} {
-				line-height: 20px;
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guilds} > div[style*="height"]:not([class]) {
+				margin-top: 8px;
 			}
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guild}:not(#bd-pub-li),
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guild}:not(#bd-pub-li) ${BDFDB.dotCN.guildinner},
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guild}:not(#bd-pub-li) ${BDFDB.dotCN.guildinner} a,
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guild}:not(#bd-pub-li) ${BDFDB.dotCNS.guildinner + BDFDB.dotCN.guildicon} {
-				margin-left: 0px;
-				height: 32px;
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guilds} > div[style*="height"]:not([class]) + div[style*="height"]:not([class]) {
+				margin-top: 0px;
 			}
-			.bd-minimal.DSAC-styled ${BDFDB.dotCN.guildswrapper} #bd-pub-li,
-			.bd-minimal.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.homebuttoncontainer},
-			.bd-minimal.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.dmguild} {
-				margin-left: 55px;
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.dmcontainer} {
+				margin-left: 5px;
 			}
-			.bd-minimal.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.friendsonline} {
-				margin-left: 40px;
-			}
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildseparator} {
-				margin-left: 0px;
-			}
-			.DSAC-styled ${BDFDB.dotCN.guildswrapper} #bd-pub-li,
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.homebuttoncontainer},
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.dmguild} {
-				margin-left: 80px;
-			}
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.friendsonline} {
-				margin-left: 70px;
-			}
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guild}.folder.open ${BDFDB.dotCN.guildicon} {
-				text-decoration: underline;
-			}
-			.bd-minimal.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildseparator}, 
-			.bd-minimal.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guild}:not(#bd-pub-li) {
-				width: 130px;
-			}
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildseparator}, 
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guild}:not(#bd-pub-li) {
-				width: 215px;
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildouter} {
 				box-sizing: border-box;
-				opacity: 0.4;
 				padding-left: 5px;
-				border-radius: 3px;
 				align-items: center;
 				justify-content: flex-start;
 			}
-			.bd-minimal.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildplaceholder},
-			.bd-minimal.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildserrorcontainer},
-			.bd-minimal.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildserror},
-			.bd-minimal.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildsaddcontainer},
-			.bd-minimal.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildsadd},
-			.bd-minimal.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildsdiscoverycontainer},
-			.bd-minimal.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guild} + div[class=""],
-			.bd-minimal.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildserrorcontainer} + div[class=""] {
-				width: 130px;
-				height: 22px;
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildouter} {
+				width: auto !important;
+				height: auto !important;
+				min-height: 16px !important;
+				margin: 2px 0 !important;
 			}
-			.bd-minimal.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildserror} {
-				font-size: 14px;
-				line-height: 20px;
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildcontainer},
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCNS.guildcontainer + BDFDB.dotCN.guildinner},
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.homebuttoncontainer + BDFDB.dotCN.guildinner},
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildbuttoncontainer + BDFDB.dotCN.guildinner},
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCNS.guildcontainer + BDFDB.dotCN.guildiconwrapper},
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCNS.homebuttoncontainer + BDFDB.dotCN.guildiconwrapper},
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCNS.guildbuttoncontainer + BDFDB.dotCN.guildiconwrapper},
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildbuttoninner},
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildserror},
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildplaceholder} {
+				height: 32px !important;
 			}
-			.bd-minimal.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildsadd + BDFDB.dotCN.guildsaddinner} {
-				font-size: 24px;
-				line-height: 32px;
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildseparator} {
+				width: 230px !important;
 			}
-			.bd-minimal.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildsadd} svg {
-				width: 16px;
-				height: 16px;
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCNS.guildcontainer},
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCNS.guildcontainer + BDFDB.dotCN.guildsvg},
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCNS.homebuttoncontainer + BDFDB.dotCN.guildsvg},
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCNS.guildbuttoncontainer + BDFDB.dotCN.guildsvg},
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCNS.guildcontainer + BDFDB.dotCN.guildiconwrapper},
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCNS.homebuttoncontainer + BDFDB.dotCN.guildiconwrapper},
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCNS.guildbuttoncontainer + BDFDB.dotCN.guildiconwrapper},
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildbuttoninner},
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildplaceholder} {
+				width: 225px !important;
 			}
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildserror} {
-				line-height: 29px;
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCNS.guildcontainer + BDFDB.dotCN.guildinner},
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.homebuttoncontainer + BDFDB.dotCN.guildinner},
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildbuttoncontainer + BDFDB.dotCN.guildinner},
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildserror} {
+				width: 222px !important;
+				display: flex !important;
 			}
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildplaceholder},
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildserrorcontainer},
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildserror},
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildsaddcontainer},
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildsadd},
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildsdiscoverycontainer},
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guild} + div[class=""],
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildserrorcontainer} + div[class=""] {
-				width: 215px;
-				border-radius: 3px;
-				height: 32px;
-				margin-bottom: 10px;
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildcontainer} foreignObject,
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.homebuttoncontainer} foreignObject,
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildbuttoncontainer} foreignObject {
+				width: 225px !important;
+				mask: none;
+				x: -88px;
 			}
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guild}:not(#bd-pub-li):not([style*="display: none"]) {
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildpill},
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildbuttonpill},
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.homebuttonpill} {
+				top: -8px;
+				transform: scaleY(calc(32/50));
+			}
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCNS.guildpill + BDFDB.dotCN.guildpillitem},
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCNS.guildbuttonpill + BDFDB.dotCN.guildpillitem},
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCNS.homebuttonpill + BDFDB.dotCN.guildpillitem} {
+				min-height: calc(8px * (50/32));
+			}
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildouter} .RANbutton,
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.homebuttoncontainer},
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildbuttoncontainer},
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildcontainer} {
+				margin-left: 3px;
+			}
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.homebutton},
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildbuttoninner} {
 				display: flex;
+				justify-content: flex-start;
+				align-items: center;
+				padding-right: 5px;
 			}
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guild + BDFDB.dotCN.guildunread}:not(#bd-pub-li) {
-				opacity: 0.7;
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildbuttoninner} svg {
+				margin-right: 3px;
 			}
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guild + BDFDB.notCN.guildselected}:not(#bd-pub-li):hover {
-				opacity: 0.9;
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.homebutton} svg {
+				margin-right: 8px;
+			}
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildserror} {
+				border-radius: 3px;
+				margin-left: 3px;
+				font-size: 0;
+			}
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCNS.guildcontainer + BDFDB.dotCN.guildbadgewrapper} {
+				display: flex;
+				flex: 0 0;
+				position: static;
+			}
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCNS.guildcontainer + BDFDB.dotCN.guildlowerbadge},
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCNS.guildcontainer + BDFDB.dotCN.guildupperbadge} {
+				position: static;
+				margin-top: 7px;
+				margin-right: 3px;
+			}
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter} .DSAC-verification-badge {
+				margin-top: 3px;
+			}
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildouter} .DSAC-name {
+				flex: 1 1;
+				width: 215px;
+				margin: 0 5px;
+				font-size: 16px;
+				font-weight: 400;
+				line-height: 32px;
+				color: white;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				pointer-events: none;
+			}
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildouter} .DSAC-icon {
+				font-size: 20px;
+				margin-right: 13px;
+			}
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildserror} .DSAC-name {
+				margin-left: 4px;
+			}
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.homebutton} .DSAC-name,
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildbuttoninner} .DSAC-name {
+				color: currentColor;
+			}
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.homebutton} .DSAC-name {
+				margin-top: 2px;
+			}
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildouter}.RANbutton-frame,
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildouter} .RANbutton {
+				width: 230px !important;
+				height: 32px !important;
+			}
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildouter} .RANbutton {
+				display: block !important;
+				color: white !important;
+				font-weight: 400 !important;
+				font-size: 16px !important;
+				line-height: 32px !important;
+				padding-left: 5px !important;
+				text-transform: capitalize !important;
+			}
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildouter}.folder.open .DSAC-name {
+				text-decoration: underline;
+			}
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCNS.guildcontainer + BDFDB.dotCN.guildinner},
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.homebuttoncontainer + BDFDB.dotCN.guildinner},
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildbuttoncontainer + BDFDB.dotCN.guildinner} {
+				background-color: transparent;
+				border-radius: 3px;
+				overflow: hidden;
+			}
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCNS.guildcontainer + BDFDB.dotCN.guildinner}:hover {
 				background-color: rgba(79,84,92,.3);
 			}
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guild + BDFDB.dotCN.guildselected}:not(#bd-pub-li) {
-				opacity: 1;
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildouter}.DSAC-selected ${BDFDB.dotCN.guildinner},
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildouter}.DSAC-selected ${BDFDB.dotCN.guildinner}:hover {
 				background-color: rgba(79,84,92,.6);
 			}
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guild + BDFDB.dotCN.guilddragfix} {
-				flex: 1 1 auto;
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCNS.guildcontainer + BDFDB.dotCN.guildinner} .DSAC-name {
+				opacity: 0.4;
 			}
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guild + BDFDB.dotCNS.guildaudio + BDFDB.dotCN.guilddragfix},
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guild + BDFDB.dotCNS.guildvideo + BDFDB.dotCN.guilddragfix} {
-				padding-right: 20px;
-				margin-right: 5px;
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCNS.guildcontainer + BDFDB.dotCN.guildinner}:hover .DSAC-name {
+				opacity: 0.9;
 			}
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guild + BDFDB.dotCNS.guildaudio + BDFDB.dotCN.guilddragfix} {
-				background: url(/assets/382ca83d9dc390c4be715248bb4864f4.svg) right no-repeat !important;
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.homebutton} .DSAC-name,
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildbuttoninner} .DSAC-name{
+				opacity: 1;
 			}
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guild + BDFDB.dotCNS.guildvideo + BDFDB.dotCN.guilddragfix} {
-				background: url(/assets/c46f51f425c824899b6138ea2b61b41d.svg) right no-repeat !important;
-			}
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guild + BDFDB.dotCN.badge} {
-				position: static;
-				margin: 0 3px;
-			}
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guild}:not(#bd-pub-li) ${BDFDB.dotCN.guildinner},
-			.bd-minimal.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guild}:not(#bd-pub-li) ${BDFDB.dotCN.guildinner} {
-				width: unset;
-			}
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guild + BDFDB.dotCN.guildinner}[style*="background-color:"]:not([style*="background-color: rgb(47, 49, 54)"]),
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guild}:not(#bd-pub-li) ${BDFDB.dotCN.guildinner} {
-				background-color: transparent !important;
-				border-radius: 0px !important;
-				position: relative;
-			}
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guild + BDFDB.dotCNS.guildaudio + BDFDB.dotCN.guildinner}:after,
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guild + BDFDB.dotCNS.guildvideo + BDFDB.dotCN.guildinner}:after {
-				display: none !important;
-			}
-			.bd-minimal.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guild + BDFDB.dotCN.guildicon} {
-				font-size: 14px !important;
-			}
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guild + BDFDB.dotCN.guildicon} {
-				background: transparent !important;
-				font-size: 16px !important;
+			.DSAC-styled .serverfolders-dragpreview .DSAC-name {
+				color: white;
+				font-size: 16px;
+				font-weight: 400;
+				width: 200px;
+				height: 32px;
 				line-height: 32px;
-				white-space: nowrap;
-				text-align: left;
-				position: absolute;
-				left: 0;
-				right: 0;
-				width: unset;
+				margin-top: 9px;
+				padding-left: 5px;
+				text-overflow: ellipsis;
+				overflow: hidden;
+				background-color: rgba(79,84,92,.6);
+				border-radius: 3px;
+			}
+			.DSAC-styled .serverfolders-dragpreview ${BDFDB.dotCN.guildiconacronym},
+			.DSAC-styled .serverfolders-dragpreview ${BDFDB.dotCN.guildicon} {
+				display: none;
 			}`;
 	}
 
@@ -222,6 +269,19 @@ class DisplayServersAsChannels {
 			BDFDB.addClass(document.body, "DSAC-styled");
 
 			BDFDB.WebModules.forceAllUpdates(this);
+			
+			BDFDB.addEventListener(this, document, "mouseenter", BDFDB.dotCN.guildouter, e => {
+				if (e.currentTarget.querySelector(BDFDB.dotCNC.guildcontainer + BDFDB.dotCNC.homebuttoncontainer + BDFDB.dotCN.guildbuttoncontainer)) {
+					BDFDB.appendLocalStyle("HideAllToolTips" + this.name, `${BDFDB.dotCN.tooltip} {display: none !important;}`);
+				}
+			});
+			BDFDB.addEventListener(this, document, "mouseleave", BDFDB.dotCN.guildouter, e => {
+				if (e.currentTarget.querySelector(BDFDB.dotCNC.guildcontainer + BDFDB.dotCNC.homebuttoncontainer + BDFDB.dotCN.guildbuttoncontainer) && !document.querySelector(BDFDB.dotCN.guildcontainer + ":hover," + BDFDB.dotCN.homebuttoncontainer + ":hover," + BDFDB.dotCN.guildbuttoncontainer + ":hover")) {
+					BDFDB.removeLocalStyle("HideAllToolTips" + this.name);
+				}
+			});
+			
+			this.onSwitch();
 		}
 		else {
 			console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
@@ -230,12 +290,18 @@ class DisplayServersAsChannels {
 
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
-			BDFDB.readServerList().forEach(info => {this.resetServer(info);});
-			document.querySelectorAll(BDFDB.dotCN.guild + ".folder").forEach(folderdiv => {this.resetServer(this.getFolderObject(folderdiv));});
-			BDFDB.removeClasses("DSAC-styled");
-			BDFDB.removeEles(".DSAC-verification-badge");
+			BDFDB.removeClasses("DSAC-styled, .DSAC-selected");
+			BDFDB.removeEles(".DSAC-verification-badge, .DSAC-name, .DSAC-icon");
 
 			BDFDB.unloadMessage(this);
+		}
+	}
+
+	onSwitch () {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			BDFDB.removeClasses("DSAC-selected");
+			let serverObj = BDFDB.getSelectedServer();
+			if (serverObj) BDFDB.addClass(serverObj.div, "DSAC-selected"); 
 		}
 	}
 
@@ -243,57 +309,59 @@ class DisplayServersAsChannels {
 	// begin of own functions
 	
 	processGuilds (instance, wrapper) {
-		var appcontainer = document.querySelector(BDFDB.dotCN.appcontainer);
-		
-		BDFDB.addEventListener(this, wrapper, "mouseenter", BDFDB.dotCN.guild, e => {
-			BDFDB.appendLocalStyle("HideAllToolTips" + this.name, `${BDFDB.dotCN.tooltip} {display: none !important;}`);
-		});
-		BDFDB.addEventListener(this, wrapper, "mouseleave", BDFDB.dotCN.guild, e => {
-			BDFDB.removeLocalStyle("HideAllToolTips" + this.name);
-		});
-		
-		var observer = new MutationObserver((changes, _) => {
-			changes.forEach(
-				(change, i) => {
-					var addedNodes = change.addedNodes;
-					if (change.attributeName == "class" && change.oldValue && change.oldValue.indexOf(BDFDB.disCN.guildplaceholder) > -1)  addedNodes = [change.target];
-					if (change.attributeName == "draggable" && change.oldValue && change.oldValue == "false")  addedNodes = [change.target.parentElement];
-					if (addedNodes) {
-						addedNodes.forEach((node) => {
-							if (node && BDFDB.containsClass(node, BDFDB.disCN.guild) && !node.querySelector(BDFDB.dotCN.guildserror)) {
-								if (BDFDB.containsClass(node, "folder")) this.changeServer(this.getFolderObject(node));
-								else this.changeServer(BDFDB.getServerData(node));
-							}
-						});
-					}
-				}
-			);
-		});
+		var observer = new MutationObserver((changes, _) => {changes.forEach((change, i) => {if (change.addedNodes) {change.addedNodes.forEach((node) => {
+			if (node && BDFDB.containsClass(node, BDFDB.disCN.guildouter) && !node.querySelector(BDFDB.dotCN.guildserror)) {
+				if (BDFDB.containsClass(node, "folder")) this.changeServer(this.getFolderObject(node));
+				else this.changeServer(BDFDB.getServerData(node));
+			}
+			if (node && (node = node.querySelector(BDFDB.dotCN.guildserror)) != null) {
+				this.changeError(node);
+			}
+		});}});});
 		BDFDB.addObserver(this, BDFDB.dotCN.guilds, {name:"serverListObserver",instance:observer}, {childList: true, subtree:true, attributes:true, attributeFilter: ["class", "draggable"], attributeOldValue: true});
 
 		BDFDB.readServerList().forEach(info => {this.changeServer(info);});
-		document.querySelectorAll(BDFDB.dotCN.guild + ".folder").forEach(folderdiv => {this.changeServer(this.getFolderObject(folderdiv));});
+		document.querySelectorAll(BDFDB.dotCN.guildouter + ".folder").forEach(folderdiv => {this.changeServer(this.getFolderObject(folderdiv));});
+		document.querySelectorAll(BDFDB.dotCN.homebuttoncontainer).forEach(homebuttoncontainer => {this.changeHome(homebuttoncontainer);});
+		document.querySelectorAll(BDFDB.dotCN.guildbuttoncontainer).forEach(guildbuttoncontainer => {this.changeButton(guildbuttoncontainer);});
+		document.querySelectorAll(BDFDB.dotCN.guildserror).forEach(guildserror => {this.changeError(guildserror);});
 	}
 
 	changeServer (info) {
 		if (!info || !info.div) return;
-		var avatar = info.div.querySelector(BDFDB.dotCN.guildicon);
-		if (avatar) {
-			avatar.innerHTML = `<span class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">${BDFDB.encodeToHTML(info.name || info.folderName || "")}</div></span>`;
-			BDFDB.initElements(avatar, this);
-			if (info.features && info.features.has("VERIFIED") && !info.features.has("FAKE_VERIFIED") && !info.div.querySelector(".DSAC-verification-badge")) {
-				info.div.insertBefore(BDFDB.htmlToElement(this.verificationBadgeMarkup), info.div.firstElementChild);
+		var guildbadgewrapper = info.div.querySelector(BDFDB.dotCN.guildbadgewrapper);
+		if (guildbadgewrapper) {
+			BDFDB.removeEles(guildbadgewrapper.parentElement.querySelectorAll(".DSAC-verification-badge, .DSAC-name"));
+			if (info.features && info.features.has("VERIFIED") && info.features.has("FAKE_VERIFIED")) {
+				guildbadgewrapper.parentElement.insertBefore(BDFDB.htmlToElement(this.verificationBadgeMarkup), guildbadgewrapper);
 			}
+			guildbadgewrapper.parentElement.insertBefore(BDFDB.htmlToElement(`<div class="DSAC-name">${BDFDB.encodeToHTML(info.name || info.folderName || "")}</div>`), guildbadgewrapper);
 		}
 	}
 
-	resetServer (info) {
-		if (!info || !info.div) return;
-		var avatar = info.div.querySelector(BDFDB.dotCN.guildicon);
-		if (avatar) {
-			avatar.innerHTML = BDFDB.encodeToHTML(info.icon ? "" : (info.acronym || ""));
-			BDFDB.removeEles(info.div.querySelectorAll(".DSAC-verification-badge"));
+	changeHome (div) {
+		if (!div) return;
+		var homebutton = div.querySelector(BDFDB.dotCN.homebutton);
+		if (homebutton) {
+			BDFDB.removeEles(homebutton.querySelectorAll(".DSAC-name"));
+			homebutton.insertBefore(BDFDB.htmlToElement(`<div class="DSAC-name">${BDFDB.encodeToHTML(BDFDB.getReactValue(div, "return.return.return.stateNode.props.text") || "")}</div>`), homebutton.firstElementChild);
 		}
+	}
+	
+	changeButton (div) {
+		if (!div) return;
+		var guildbuttoninner = div.querySelector(BDFDB.dotCN.guildbuttoninner);
+		if (guildbuttoninner) {
+			BDFDB.removeEles(guildbuttoninner.querySelectorAll(".DSAC-name"));
+			guildbuttoninner.insertBefore(BDFDB.htmlToElement(`<div class="DSAC-name">${BDFDB.encodeToHTML(BDFDB.getReactValue(div, "return.return.return.stateNode.props.text") || "")}</div>`), guildbuttoninner.firstElementChild);
+		}
+	}
+	
+	changeError (div) {
+		if (!div) return;
+		BDFDB.removeEles(div.querySelectorAll(".DSAC-name, .DSAC-icon"));
+		div.insertBefore(BDFDB.htmlToElement(`<div class="DSAC-name">Server Outage</div>`), div.firstChild);
+		div.appendChild(BDFDB.htmlToElement(`<div class="DSAC-icon">!</div>`));
 	}
 
 	getFolderObject (folderdiv) {
