@@ -3,7 +3,7 @@
 class ServerHider {
 	getName () {return "ServerHider";}
 
-	getVersion () {return "6.0.6";}
+	getVersion () {return "6.0.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ServerHider {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Start up","Fixed a Bug where some servers wouldn't get hidden on start up"]]
+			"fixed":[["Server Object","Changes in the Server Object broke the plugin"]]
 		};
 		
 		this.labels = {};
@@ -207,7 +207,7 @@ class ServerHider {
 	}
 
 	processGuild (instance, wrapper, methodnames) {
-		if (instance.currentType && (instance.currentType == "GUILD" || instance.currentType.ownerId) && instance.props && instance.props.guild) {
+		if (instance.props && instance.props.guild) {
 			let hiddenservers = BDFDB.loadData("hiddenservers", this, "hiddenservers") || [];
 			if (methodnames.includes("componentDidMount")) this.toggleServer(instance.props.guild, wrapper, !hiddenservers.includes(instance.props.guild.id));
 			if (methodnames.includes("componentDidUpdate") && hiddenservers.includes(instance.props.guild.id) && instance.props.unread) this.unreadServer(instance.props.guild.id);

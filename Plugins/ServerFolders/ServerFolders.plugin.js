@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.2.4";}
+	getVersion () {return "6.2.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ServerFolders {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Folder Icon","Fixed the Folder Icon to use the same HTML structure as normal guilds"]]
+			"fixed":[["Server Object","Changes in the Server Object broke the plugin"]]
 		};
 		
 		this.labels = {};
@@ -588,7 +588,7 @@ class ServerFolders {
 	}
 
 	processGuild (instance, wrapper, methodnames) {
-		if (instance.currentType && (instance.currentType == "GUILD" || instance.currentType.ownerId) && instance.props && instance.props.guild) {
+		if (instance.props && instance.props.guild) {
 			if (methodnames.includes("componentDidMount")) {
 				let folderdiv = this.getFolderOfServer(instance.props.guild);
 				if (folderdiv && !wrapper.getAttribute("folder")) {

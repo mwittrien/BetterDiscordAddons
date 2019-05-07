@@ -3,7 +3,7 @@
 class EditServers {
 	getName () {return "EditServers";}
 
-	getVersion () {return "1.9.8";} 
+	getVersion () {return "1.9.9";} 
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class EditServers {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Bug in Quickswitcher","Fixed a bug in the quick switcher that wouldn't make the servername get changed"]]
+			"fixed":[["Server Object","Changes in the Server Object broke the plugin"]]
 		};
 		
 		this.labels = {};
@@ -316,7 +316,7 @@ class EditServers {
 	}
 	
 	processGuild (instance, wrapper) {
-		if (instance.currentType && (instance.currentType == "GUILD" || instance.currentType.ownerId) && instance.props && instance.props.guild) {
+		if (instance.props && instance.props.guild) {
 			let icon = wrapper.querySelector(BDFDB.dotCN.guildicon + ":not(.fake-guildicon), " + BDFDB.dotCN.guildiconacronym + ":not(.fake-guildacronym)");
 			if (!icon) return;
 			this.changeGuildIcon(instance.props.guild, icon);
