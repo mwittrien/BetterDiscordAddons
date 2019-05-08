@@ -48,7 +48,6 @@ https://raw.githubusercontent.com/Gibbu/BetterDiscord-Themes/master/AdjustableSe
 https://raw.githubusercontent.com/Gibbu/BetterDiscord-Themes/master/HorizontalServerlist/zHorizontalServerlist.theme.css
 https://raw.githubusercontent.com/Gibbu/BetterDiscord-Themes/master/SimplyDarkDiscord/SimplyDarkDiscord-Dark.theme.css
 https://raw.githubusercontent.com/Gibbu/BetterDiscord-Themes/master/TrueLight/TrueLight.theme.css
-https://raw.githubusercontent.com/goodname69/blurple-theme/master/Blurpler.theme.css
 https://raw.githubusercontent.com/goodname69/Mojave/master/Mojave.theme.css
 https://raw.githubusercontent.com/HansAnonymous/BD-Themes-and-Plugins/master/Themes/Glossy-Cyan/Glossy-Cyan.H.theme.css
 https://raw.githubusercontent.com/HansAnonymous/BD-Themes-and-Plugins/master/Themes/HansAnonymousAdditions/HAA.theme.css
