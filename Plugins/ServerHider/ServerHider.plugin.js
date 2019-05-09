@@ -284,7 +284,8 @@ class ServerHider {
 	
 	isInFolder (id) {
 		if (!BDFDB.isPluginEnabled("ServerFolders")) return false;
-		for (let folder in BDFDB.loadAllData("ServerFolders", "folders")) if ((folder.servers || []).includes(id)) return true;
+		let folders = BDFDB.loadAllData("ServerFolders", "folders");
+		for (let folderid in folders) if ((folders[folderid].servers || []).includes(id)) return true;
 		return false;
 	}
 
