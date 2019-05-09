@@ -279,7 +279,13 @@ class ServerHider {
 	}
 	
 	unreadServer (id) {
-		if (BDFDB.getData("clearNotifications", this, "settings")) BDFDB.markGuildAsRead(id);
+		if (BDFDB.getData("clearNotifications", this, "settings") && this.isInFolder(id)) BDFDB.markGuildAsRead(id);
+	}
+	
+	isInFolder (id) {
+		if (!BDFDB.isPluginEnabled("ServerFolders")) return false;
+		for (let folder in BDFDB.loadAllData(this, "folders")) if ((folder.servers || []).includes(id)) return true;
+		return false;
 	}
 
 	setLabelsByLanguage () {
