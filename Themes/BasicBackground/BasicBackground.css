@@ -893,6 +893,15 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	stroke: rgb(var(--vaccentcolor)) !important;
 }
 
+.input-1Rv96N,
+.searchBar-3dMhjb {
+	color: rgb(255,255,255) !important;
+}
+.input-1Rv96N::placeholder,
+.public-DraftEditorPlaceholder-root,
+.icon-3cZ1F_ {
+	color: rgb(140,140,140) !important;
+}
 .searchBarInner-1_Tg2R,
 .searchBar-1MOL6S {
 	border-radius: 5px !important;
