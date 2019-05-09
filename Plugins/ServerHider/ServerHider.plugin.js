@@ -279,7 +279,7 @@ class ServerHider {
 	}
 	
 	unreadServer (id) {
-		if (BDFDB.getData("clearNotifications", this, "settings") && this.isInFolder(id)) BDFDB.markGuildAsRead(id);
+		if (BDFDB.getData("clearNotifications", this, "settings") && !this.isInFolder(id)) BDFDB.markGuildAsRead(id);
 	}
 	
 	isInFolder (id) {
