@@ -3,7 +3,7 @@
 class DisplayServersAsChannels {
 	getName () {return "DisplayServersAsChannels";}
 
-	getVersion () {return "1.2.3";}
+	getVersion () {return "1.2.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,8 @@ class DisplayServersAsChannels {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Fixed for new Classes","Plugins works again and was further improved"]]
+			"fixed":[["Servers","Fixed the issue where server wouldn't properly get changed when they are added to the serverlist"]],
+			"fixed":[["Server Add Button","Fixed the issue where the server add button wouldn't properly get changed sometimes"]]
 		};
 		
 		this.patchModules = {
@@ -314,7 +315,10 @@ class DisplayServersAsChannels {
 				if (BDFDB.containsClass(node, "folder")) this.changeServer(this.getFolderObject(node));
 				else this.changeServer(BDFDB.getServerData(node));
 			}
-			if (node && (node = node.querySelector(BDFDB.dotCN.guildserror)) != null) {
+			if (node && node.tagName && (node = node.querySelector(BDFDB.dotCN.guildbuttoncontainer)) != null) {
+				this.changeButton(node);
+			}
+			if (node && node.tagName && (node = node.querySelector(BDFDB.dotCN.guildserror)) != null) {
 				this.changeError(node);
 			}
 		});}});});
@@ -332,7 +336,7 @@ class DisplayServersAsChannels {
 		var guildbadgewrapper = info.div.querySelector(BDFDB.dotCN.guildbadgewrapper);
 		if (guildbadgewrapper) {
 			BDFDB.removeEles(guildbadgewrapper.parentElement.querySelectorAll(".DSAC-verification-badge, .DSAC-name"));
-			if (info.features && info.features.has("VERIFIED") && info.features.has("FAKE_VERIFIED")) {
+			if (info.features && info.features.has("VERIFIED") && !info.features.has("FAKE_VERIFIED")) {
 				guildbadgewrapper.parentElement.insertBefore(BDFDB.htmlToElement(this.verificationBadgeMarkup), guildbadgewrapper);
 			}
 			guildbadgewrapper.parentElement.insertBefore(BDFDB.htmlToElement(`<div class="DSAC-name">${BDFDB.encodeToHTML(info.name || info.folderName || "")}</div>`), guildbadgewrapper);
