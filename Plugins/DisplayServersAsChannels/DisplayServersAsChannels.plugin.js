@@ -11,8 +11,7 @@ class DisplayServersAsChannels {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Servers","Fixed the issue where server wouldn't properly get changed when they are added to the serverlist"]],
-			"fixed":[["Server Add Button","Fixed the issue where the server add button wouldn't properly get changed sometimes"]]
+			"fixed":[["Servers","Fixed the issue where server wouldn't properly get changed when they are added to the serverlist"],["Server Add Button","Fixed the issue where the server add button wouldn't properly get changed sometimes"]]
 		};
 		
 		this.patchModules = {
