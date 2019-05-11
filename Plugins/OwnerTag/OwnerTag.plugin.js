@@ -3,7 +3,7 @@
 class OwnerTag {
 	getName () {return "OwnerTag";}
 
-	getVersion () {return "1.0.9";}
+	getVersion () {return "1.1.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class OwnerTag {
 
 	initConstructor () {
 		this.changelog = {
-			"added":[["Admin Tags","You can now enable the plugin to also add tags for users with administration rights, you can also set a unique tagname for such people"]]
+			"fixed":[["Crown Duplicate","Fixed the issue where the owner crown might get duplicated"]]
 		};
 		
 		this.patchModules = {
@@ -19,6 +19,11 @@ class OwnerTag {
 			"MessageUsername":["componentDidMount","componentDidUpdate"],
 			"StandardSidebarView":"componentWillUnmount"
 		};
+		
+		this.css = `
+			${BDFDB.dotCNS.member + BDFDB.dotCN.memberownericon}:not(.owner-tag-crown) {
+				display: none;
+			}`;
 
 		this.defaults = {
 			settings: {
@@ -40,7 +45,7 @@ class OwnerTag {
 
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-		var settings = BDFDB.getAllData(this, "settings"); 
+		var settings = BDFDB.getAllData(this, "settings");
 		var inputs = BDFDB.getAllData(this, "inputs"); 
 		var settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;
 		for (let key in inputs) {
@@ -177,8 +182,8 @@ class OwnerTag {
 			if (isbright && settings.useBlackFont) tag.style.setProperty(invert ? "background-color" : "color", "black", "important");
 			wrapper.insertBefore(tag, wrapper.querySelector(".TRE-tag,svg[name=MobileDevice]"));
 		}
-		else if (!wrapper.querySelector(BDFDB.dotCN.ownericon)) {
-			let crown = BDFDB.htmlToElement(`<svg name="Crown" class="owner-tag-crown ${isowner ? "owner-tag-owner" : "owner-tag-admin"} ${BDFDB.disCNS.ownericon + BDFDB.disCN.memberownericon}" width="24" height="24" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd"><path fill="${isowner ? "#faa61a" : "#b3b3b3"}" fill-rule="nonzero" d="M2,11 L0,0 L5.5,7 L9,0 L12.5,7 L18,0 L16,11 L2,11 L2,11 Z M16,14 C16,14.5522847 15.5522847,15 15,15 L3,15 C2.44771525,15 2,14.5522847 2,14 L2,13 L16,13 L16,14 Z" transform="translate(3 4)"></path><rect width="24" height="24"></rect></g></svg>`);
+		else {
+			let crown = BDFDB.htmlToElement(`<svg name="Crown" class="owner-tag-crown ${isowner ? "owner-tag-owner" : "owner-tag-admin"} ${BDFDB.disCNS.membericon + BDFDB.disCN.memberownericon}" width="24" height="24" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd"><path fill="${isowner ? "#faa61a" : "#b3b3b3"}" fill-rule="nonzero" d="M2,11 L0,0 L5.5,7 L9,0 L12.5,7 L18,0 L16,11 L2,11 L2,11 Z M16,14 C16,14.5522847 15.5522847,15 15,15 L3,15 C2.44771525,15 2,14.5522847 2,14 L2,13 L16,13 L16,14 Z" transform="translate(3 4)"></path><rect width="24" height="24"></rect></g></svg>`);
 			crown.addEventListener("mouseenter", () => {
 				BDFDB.createTooltip(isowner ? (channel.type == 3 ? BDFDB.LanguageStrings.GROUP_OWNER : BDFDB.LanguageStrings.GUILD_OWNER) : BDFDB.LanguageStrings.ADMINISTRATOR, crown, {type: "top"});
 			});
