@@ -204,7 +204,7 @@ class LastMessageDate {
 	}
 
 	addLastMessageDate (info, container, popout) {
-		if (!info || info.isLocalBot() || !container || container.querySelector(".lastMessageDate")) return;
+		if (!info || info.discriminator == "0000" || !container || container.querySelector(".lastMessageDate")) return;
 		let guildid = this.CurrentGuildStore.getGuildId();
 		let isguild = !!guildid;
 		guildid = guildid || this.CurrentChannelStore.getChannelId();

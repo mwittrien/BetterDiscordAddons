@@ -3,13 +3,17 @@
 class BadgesEverywhere {
 	getName () {return "BadgesEverywhere";} 
 
-	getVersion () {return "1.2.3";}
+	getVersion () {return "1.2.4";}
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Displays Badges (Nitro, HypeSquad, etc...) in the chat/memberlist/userpopout. Thanks for Zerebos' help.";}
 
 	initConstructor () {
+		this.changelog = {
+			"fixed":[["Icons","Fixed the issue where the badge image wouldn't be contained within the badge"]]
+		};
+		
 		this.patchModules = {
 			"NameTag":"componentDidMount",
 			"MessageUsername":"componentDidMount",
@@ -18,6 +22,9 @@ class BadgesEverywhere {
 
 		this.css = ` 
 			.BE-badge {
+				background-size: contain;
+				background-position: center;
+				background-repeat: no-repeat;
 				display: inline-block;
 				height: 17px !important;
 				margin: 0 2px !important;
