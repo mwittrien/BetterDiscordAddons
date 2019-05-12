@@ -3,15 +3,20 @@
 class ImageZoom {
 	getName () {return "ImageZoom";}
 
-	getVersion () {return "1.0.1";}
+	getVersion () {return "1.0.2";}
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Allows you to zoom in opened Images by holding left clicking on them in the Image Modal.";}
 
 	initConstructor () {
+		this.changelog = {
+			"fixed":[["Lense","Fixed the issue where the lesen wouldn't properly clip the zoomed image"]]
+		};
+		
 		this.patchModules = {
-			"ImageModal":["componentDidMount","componentWillUnmount"]
+			"ImageModal":["componentDidMount","componentWillUnmount"],
+			"Icon":["componentDidMount","componentWillUnmount"],
 		}
 
 		this.zoomSettingsContextMarkup = 
@@ -48,10 +53,6 @@ class ImageZoom {
 
 		this.css = `
 			.imagezoom-lense {
-				pointer-events: none !important;
-				z-index: 10000 !important;
-				position: absolute !important;
-				border-radius: 50% !important;
 				border: 2px solid rgb(114, 137, 218);
 			}
 			.imagezoom-backdrop {
@@ -163,8 +164,8 @@ class ImageZoom {
 						let imgrects = BDFDB.getRects(img);
 						let settings = BDFDB.getAllData(this, "settings");
 						
-						let lense = BDFDB.htmlToElement(`<div class="imagezoom-lense" style="overflow: hidden !important; width: ${settings.lensesize}px !important; height: ${settings.lensesize}px !important;"><${img.tagName} class="imagezoom-pane" src="${img.src}" style="width: ${imgrects.width * settings.zoomlevel}px; height: ${imgrects.height * settings.zoomlevel}px; position:fixed !important;"${img.tagName == "VIDEO" ? " loop autoplay" : ""}></${img.tagName}></div>`);
-						let pane = lense.firstElementChild;
+						let lense = BDFDB.htmlToElement(`<div class="imagezoom-lense" style="clip-path: circle(${(settings.lensesize/2) + 2}px at center) !important; border-radius: 50% !important; pointer-events: none !important; z-index: 10000 !important; width: ${settings.lensesize}px !important; height: ${settings.lensesize}px !important; position: fixed !important;"><div class="imagezoom-lense-inner" style="position: absolute !important; top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important; clip-path: circle(${settings.lensesize/2}px at center) !important;"><${img.tagName} class="imagezoom-pane" src="${img.src}" style="width: ${imgrects.width * settings.zoomlevel}px; height: ${imgrects.height * settings.zoomlevel}px; position: fixed !important;"${img.tagName == "VIDEO" ? " loop autoplay" : ""}></${img.tagName}></div></div>`);
+						let pane = lense.querySelector(".imagezoom-pane");
 						let backdrop = BDFDB.htmlToElement(`<div class="imagezoom-backdrop" style="background: rgba(0,0,0,0.2) !important;"></div>`);
 						document.querySelector(BDFDB.dotCN.appmount).appendChild(lense);
 						document.querySelector(BDFDB.dotCN.appmount).appendChild(backdrop);
