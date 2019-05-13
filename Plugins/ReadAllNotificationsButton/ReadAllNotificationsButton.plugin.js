@@ -3,7 +3,7 @@
 class ReadAllNotificationsButton {
 	getName () {return "ReadAllNotificationsButton";}
 
-	getVersion () {return "1.4.8";}
+	getVersion () {return "1.4.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ReadAllNotificationsButton {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Issue with other plugins","Fixed the issue where the 'read all' button would move aroudn the serverlist, when another plugin forces server list to rerender"]]
+			"added":[["Muted Servers","Added an extra contextmenu option to only read muted servers and also relabeled the other options"]]
 		};
 		
 		this.patchModules = {
@@ -23,12 +23,16 @@ class ReadAllNotificationsButton {
 		this.RANcontextMenuMarkup = 
 			`<div class="${BDFDB.disCN.contextmenu} RANbutton-contextmenu">
 				<div class="${BDFDB.disCN.contextmenuitemgroup}">
-					<div class="${BDFDB.disCN.contextmenuitem} readguilds-item">
-						<span class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">REPLACE_context_guilds_text</div></span>
+					<div class="${BDFDB.disCN.contextmenuitem} readunreadguilds-item">
+						<span class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">REPLACE_context_unreadguilds_text</div></span>
 						<div class="${BDFDB.disCN.contextmenuhint}"></div>
 					</div>
 					<div class="${BDFDB.disCN.contextmenuitem} readmutedguilds-item">
 						<span class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">REPLACE_context_mutedguilds_text</div></span>
+						<div class="${BDFDB.disCN.contextmenuhint}"></div>
+					</div>
+					<div class="${BDFDB.disCN.contextmenuitem} readguilds-item">
+						<span class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">REPLACE_context_guilds_text</div></span>
 						<div class="${BDFDB.disCN.contextmenuhint}"></div>
 					</div>
 					<div class="${BDFDB.disCN.contextmenuitem} readdms-item">
@@ -142,8 +146,9 @@ class ReadAllNotificationsButton {
 	// begin of own functions
 
 	changeLanguageStrings () {
-		this.RANcontextMenuMarkup = 	this.RANcontextMenuMarkup.replace("REPLACE_context_guilds_text", this.labels.context_guilds_text);
+		this.RANcontextMenuMarkup = 	this.RANcontextMenuMarkup.replace("REPLACE_context_unreadguilds_text", this.labels.context_unreadguilds_text);
 		this.RANcontextMenuMarkup = 	this.RANcontextMenuMarkup.replace("REPLACE_context_mutedguilds_text", this.labels.context_mutedguilds_text);
+		this.RANcontextMenuMarkup = 	this.RANcontextMenuMarkup.replace("REPLACE_context_guilds_text", this.labels.context_guilds_text);
 		this.RANcontextMenuMarkup = 	this.RANcontextMenuMarkup.replace("REPLACE_context_dms_text", this.labels.context_dms_text);
 	}
 
@@ -160,11 +165,15 @@ class ReadAllNotificationsButton {
 			});
 			ranbutton.addEventListener("contextmenu", e => {
 				let RANcontextMenu = BDFDB.htmlToElement(this.RANcontextMenuMarkup);
-				RANcontextMenu.querySelector(".readguilds-item").addEventListener("click", () => {
+				RANcontextMenu.querySelector(".readunreadguilds-item").addEventListener("click", () => {
 					BDFDB.removeEles(RANcontextMenu);
 					BDFDB.markGuildAsRead(BDFDB.readUnreadServerList());
 				});
 				RANcontextMenu.querySelector(".readmutedguilds-item").addEventListener("click", () => {
+					BDFDB.removeEles(RANcontextMenu);
+					BDFDB.markGuildAsRead(BDFDB.readMutedServerList());
+				});
+				RANcontextMenu.querySelector(".readguilds-item").addEventListener("click", () => {
 					BDFDB.removeEles(RANcontextMenu);
 					BDFDB.markGuildAsRead(BDFDB.readServerList());
 				});
@@ -221,128 +230,149 @@ class ReadAllNotificationsButton {
 		switch (BDFDB.getDiscordLanguage().id) {
 			case "hr":		//croatian
 				return {
-					context_guilds_text:		"Poslužitelji",
-					context_mutedguilds_text:	"Prigušeni Poslužitelji",
-					context_dms_text:			"Prikvacene Izravne"
+					context_unreadguilds_text:	"Nepročitani poslužitelji",
+					context_mutedguilds_text:	"Prigušeni poslužitelje",
+					context_guilds_text:		"Sve poslužitelje",
+					context_dms_text:			"Prikvacene izravne"
 				};
 			case "da":		//danish
 				return {
-					context_guilds_text:		"Servere",
-					context_mutedguilds_text:	"Dæmpede Servere",
-					context_dms_text:			"Private Beskeder"
+					context_unreadguilds_text:	"Ulæste servere",
+					context_mutedguilds_text:	"Dæmpede servere",
+					context_guilds_text:		"Alle servere",
+					context_dms_text:			"Private beskeder"
 				};
 			case "de":		//german
 				return {
-					context_guilds_text:		"Server",
+					context_unreadguilds_text:	"Ungelesene Server",
 					context_mutedguilds_text:	"Stummgeschaltene Server",
+					context_guilds_text:		"Alle Server",
 					context_dms_text:			"Direktnachrichten"
 				};
 			case "es":		//spanish
 				return {
-					context_guilds_text:		"Servidores",
+					context_unreadguilds_text:	"Servidores no leídos",
 					context_mutedguilds_text:	"Servidores silenciados",
+					context_guilds_text:		"Todos los servidores",
 					context_dms_text:			"Mensajes directos"
 				};
 			case "fr":		//french
 				return {
-					context_guilds_text:		"Serveurs",
+					context_unreadguilds_text:	"Serveurs non lus",
 					context_mutedguilds_text:	"Serveurs en sourdine",
+					context_guilds_text:		"Tous les serveurs",
 					context_dms_text:			"Messages privés"
 				};
 			case "it":		//italian
 				return {
-					context_guilds_text:		"Server",
-					context_mutedguilds_text:	"Server disattivati",
+					context_unreadguilds_text:	"Server non letti",
+					context_mutedguilds_text:	"Server mutate",
+					context_guilds_text:		"Tutti i server",
 					context_dms_text:			"Messaggi diretti"
 				};
 			case "nl":		//dutch
 				return {
-					context_guilds_text:		"Servers",
-					context_mutedguilds_text:	"Gedempte Servers",
-					context_dms_text:			"Prive Berichten"
+					context_unreadguilds_text:	"Ongelezen servers",
+					context_mutedguilds_text:	"Gedempte servers",
+					context_guilds_text:		"Alle servers",
+					context_dms_text:			"Prive berichten"
 				};
 			case "no":		//norwegian
 				return {
-					context_guilds_text:		"Servere",
-					context_mutedguilds_text:	"Dempet Servere",
+					context_unreadguilds_text:	"Uleste servere",
+					context_mutedguilds_text:	"Dempet servere",
+					context_guilds_text:		"Alle servere",
 					context_dms_text:			"Direktemeldinger"
 				};
 			case "pl":		//polish
 				return {
-					context_guilds_text:		"Serwery",
-					context_mutedguilds_text:	"Wyciszone Serwery",
-					context_dms_text:			"Prywatne Wiadomości"
+					context_unreadguilds_text:	"Nieprzeczytane serwery",
+					context_mutedguilds_text:	"Wyciszone serwery",
+					context_guilds_text:		"Wszystkie serwery",
+					context_dms_text:			"Prywatne wiadomości"
 				};
 			case "pt-BR":	//portuguese (brazil)
 				return {
-					context_guilds_text:		"Servidores",
-					context_mutedguilds_text:	"Servidores Silenciosos",
-					context_dms_text:			"Mensagens Diretas"
+					context_unreadguilds_text:	"Servidores não lidos",
+					context_mutedguilds_text:	"Servidores silenciosos",
+					context_guilds_text:		"Todos os servidores",
+					context_dms_text:			"Mensagens diretas"
 				};
 			case "fi":		//finnish
 				return {
-					context_guilds_text:		"Palvelimet",
-					context_mutedguilds_text:	"Mykistetyt Palvelimet",
+					context_unreadguilds_text:	"Lukemattomia palvelimet",
+					context_mutedguilds_text:	"Mykistetyt palvelimet",
+					context_guilds_text:		"Kaikki palvelimet",
 					context_dms_text:			"Yksityisviestit"
 				};
 			case "sv":		//swedish
 				return {
-					context_guilds_text:		"Servrar",
-					context_mutedguilds_text:	"Dämpade Servrar",
+					context_unreadguilds_text:	"Olästa servrar",
+					context_mutedguilds_text:	"Dämpade servrar",
+					context_guilds_text:		"Alla servrar",
 					context_dms_text:			"Direktmeddelanden"
 				};
 			case "tr":		//turkish
 				return {
-					context_guilds_text:		"Sunucular",
-					context_mutedguilds_text:	"Sessiz Sunucular",
-					context_dms_text:			"Özel Mesajlar"
+					context_unreadguilds_text:	"Okunmamış sunucular",
+					context_mutedguilds_text:	"Sessiz sunucular",
+					context_guilds_text:		"Tüm sunucular",
+					context_dms_text:			"Özel mesajlar"
 				};
 			case "cs":		//czech
 				return {
-					context_guilds_text:		"Servery",
-					context_mutedguilds_text:	"Tlumené Servery",
-					context_dms_text:			"Přímé Zpráva"
+					context_unreadguilds_text:	"Nepřečtené servery",
+					context_mutedguilds_text:	"Tlumené servery",
+					context_guilds_text:		"Všechny servery",
+					context_dms_text:			"Přímé zpráva"
 				};
 			case "bg":		//bulgarian
 				return {
-					context_guilds_text:		"Сървъри",
-					context_mutedguilds_text:	"приглушени Сървъри",
-					context_dms_text:			"директно Съобщение"
+					context_unreadguilds_text:	"Непрочетени сървъри",
+					context_mutedguilds_text:	"Приглушени сървъри",
+					context_guilds_text:		"Всички сървъри",
+					context_dms_text:			"Директно съобщение"
 				};
 			case "ru":		//russian
 				return {
-					context_guilds_text:		"Серверы",
-					context_mutedguilds_text:	"Отключенные Серверы",
-					context_dms_text:			"Прямые Сообщения"
+					context_unreadguilds_text:	"Непрочитанные серверы",
+					context_mutedguilds_text:	"Отключенные серверы",
+					context_guilds_text:		"Все серверы",
+					context_dms_text:			"Прямые сообщения"
 				};
 			case "uk":		//ukrainian
 				return {
-					context_guilds_text:		"Сервери",
-					context_mutedguilds_text:	"Приглушені Сервери",
+					context_unreadguilds_text:	"Непрочитаних серверів",
+					context_mutedguilds_text:	"Приглушені сервери",
+					context_guilds_text:		"Всі сервери",
 					context_dms_text:			"Прямі Повідомлення"
 				};
 			case "ja":		//japanese
 				return {
-					context_guilds_text:		"サーバー",
+					context_unreadguilds_text:	"未読サーバー",
 					context_mutedguilds_text:	"ミュートサーバー",
+					context_guilds_text:		"すべてのサーバー",
 					context_dms_text:			"ダイレクトメッセージ"
 				};
 			case "zh-TW":	//chinese (traditional)
 				return {
-					context_guilds_text:		"服務器",
+					context_unreadguilds_text:	"未讀服務器",
 					context_mutedguilds_text:	"靜音服務器",
+					context_guilds_text:		"所有服務器",
 					context_dms_text:			"直接消息",
 				};
 			case "ko":		//korean
 				return {
-					context_guilds_text:		"서버",
+					context_unreadguilds_text:	"읽지 않은 서버",
 					context_mutedguilds_text:	"음소거 된 서버",
+					context_guilds_text:		"모든 서버",
 					context_dms_text:			"직접 메시지"
 				};
 			default:		//default: english
 				return {
-					context_guilds_text:		"Servers",
+					context_unreadguilds_text:	"Unread Servers",
 					context_mutedguilds_text:	"Muted Servers",
+					context_guilds_text:		"All Servers",
 					context_dms_text:			"Direct Messages"
 				};
 		}
