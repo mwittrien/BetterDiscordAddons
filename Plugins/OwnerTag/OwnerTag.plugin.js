@@ -3,7 +3,7 @@
 class OwnerTag {
 	getName () {return "OwnerTag";}
 
-	getVersion () {return "1.1.0";}
+	getVersion () {return "1.1.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class OwnerTag {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Crown Duplicate","Fixed the issue where the owner crown might get duplicated"]]
+			"added":[["Native Crown Option","Added an option to disable the hiding of the native crown, allowing you to have the written owner tag and the crown"]]
 		};
 		
 		this.patchModules = {
@@ -19,11 +19,6 @@ class OwnerTag {
 			"MessageUsername":["componentDidMount","componentDidUpdate"],
 			"StandardSidebarView":"componentWillUnmount"
 		};
-		
-		this.css = `
-			${BDFDB.dotCNS.member + BDFDB.dotCN.memberownericon}:not(.owner-tag-crown) {
-				display: none;
-			}`;
 
 		this.defaults = {
 			settings: {
@@ -33,7 +28,8 @@ class OwnerTag {
 				addInUserProfil:		{value:true, 	inner:true,		description:"User Profile Modal"},
 				useRoleColor:			{value:true, 	inner:false,	description:"Use the Rolecolor instead of the default blue."},
 				useBlackFont:			{value:false, 	inner:false,	description:"Instead of darkening the Rolecolor on bright colors use black font."},
-				useCrown:				{value:false, 	inner:false,	description:"Use the Crown OwnerIcon instead of the OwnerTag."},
+				useCrown:				{value:false, 	inner:false,	description:"Use the Crown Icon instead of the OwnerTag."},
+				hideNativeCrown:		{value:true, 	inner:false,	description:"Hide the native Crown Icon (not the Plugin one)."},
 				addForAdmins:			{value:false, 	inner:false,	description:"Also add the Tag for any user with Admin rights."}
 			},
 			inputs: {
@@ -101,6 +97,8 @@ class OwnerTag {
 			this.LastChannelStore = BDFDB.WebModules.findByProperties("getLastSelectedChannelId");
 
 			BDFDB.WebModules.forceAllUpdates(this);
+			
+			this.addHideCSS();
 		}
 		else {
 			console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
@@ -156,6 +154,7 @@ class OwnerTag {
 			delete this.SettingsUpdated;
 			BDFDB.removeEles(".owner-tag, .owner-tag-crown");
 			BDFDB.WebModules.forceAllUpdates(this);
+			this.addHideCSS();
 		}
 	}
 
@@ -189,5 +188,10 @@ class OwnerTag {
 			});
 			wrapper.insertBefore(crown, wrapper.querySelector(".TRE-tag,svg[name=MobileDevice]"));
 		}
+	}
+	
+	addHideCSS () {
+		if (BDFDB.getData("hideNativeCrown", this, "settings")) BDFDB.appendLocalStyle(this.name + "HideCrown", `${BDFDB.dotCNS.member + BDFDB.dotCN.memberownericon}:not(.owner-tag-crown) {display: none;}`);
+		else BDFDB.removeLocalstyle(this.name + "HideCrown");
 	}
 }
