@@ -190,7 +190,7 @@ class CompleteTimestamps {
 	processEmbed (instance, wrapper) {
 		let embed = BDFDB.getReactValue(instance, "props.embed");
 		let footer = wrapper.querySelector(BDFDB.dotCN.embedfootertext);
-		if (footer && embed && embed.footer && embed.timestamp && BDFDB.getData("showInEmbed", this, "settings")) {
+		if (footer && embed && embed.timestamp && BDFDB.getData("showInEmbed", this, "settings")) {
 			footer.lastChild.textContent = this.getTimestamp(this.languages[BDFDB.getData("creationDateLang", this, "choices")].id, embed.timestamp._i);
 		}
 	}
