@@ -645,29 +645,6 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	background: rgba(var(--vtransparencycolor), var(--vguildchanneltransparency)) !important;
 }
 
-/* OLD BANNER */
-.container-2Rl01u.banner-1TiK82.pinnedBanner-31szAF {
-	background: transparent !important;
-}
-.container-2Rl01u.banner-1TiK82:not(.pinnedBanner-31szAF) {
-	-webkit-mask: linear-gradient(rgb(24, 25, 28) 50%, rgba(47, 49, 54, 0) 100%) !important;
-}
-.container-2Rl01u.banner-1TiK82:not(.pinnedBanner-31szAF) .header-2o-2hj {
-	bottom: unset;
-	box-shadow: none;
-}
-.container-2Rl01u.banner-1TiK82:not(.pinnedBanner-31szAF) .header-2o-2hj .name-3YKhmS {
-	text-shadow: -1px -1px 1px #000, 1px -1px 1px #000, -1px 1px 1px #000, 1px 1px 1px #000;
-}
-.container-2Rl01u.banner-1TiK82.pinnedBanner-31szAF .header-2o-2hj:hover,
-.container-2Rl01u:not(.banner-1TiK82) .header-2o-2hj:not(.banner-1TiK82):hover {
-	background: rgba(var(--vtransparencycolor), .1) !important;
-}
-.scroller-2wx7Hm.pinnedBanner-fd4XS4 {
-	margin-top: 48px !important;
-	padding-top: 82px !important;
-}
-
 .members-1998pB {
 	box-sizing: content-box !important;
 	background: rgba(var(--vtransparencycolor), var(--vmemberlistransparency)) !important;
@@ -676,6 +653,10 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 
 .wrapper-9ppXpy {
 	box-shadow: inset 0 1px 0 rgba(var(--vtransparencycolor),.3) !important;
+}
+
+.bannerImage-1jOskm {
+	-webkit-mask: linear-gradient(rgb(24, 25, 28) 60%, rgba(47, 49, 54, 0) 100%) !important;
 }
 
 .actionButtons-1sUUug,
