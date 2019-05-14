@@ -317,10 +317,13 @@ html:only-child > head + body > div#app-mount.appMount-3lHmkl > div.app-19_DXt >
 	background-image: none !important;
 	border-radius: 0 !important;
 	box-sizing: border-box !important;
+	max-height: unset !important;
+	min-height: unset !important;
 	height: 100vh !important;
+	max-width: unset !important;
+	min-width: unset !important;
 	width: 100vw !important;
-	padding: 0 !important;
-	padding-top: calc(50vh - 60px) !important;
+	padding: calc(50vh - 60px) 0 0 0 !important;
 	margin: 0 !important;
 	display: inline !important;
 	opacity: 1 !important;
@@ -332,5 +335,7 @@ html:only-child > head + body > div#app-mount.appMount-3lHmkl > div.app-19_DXt >
 	bottom: 0 !important;
 	right: 0 !important;
 	z-index: 10000000 !important;
+	animation: unset !important;
+	transform: unset !important;
 	pointer-events: none !important;
 }
