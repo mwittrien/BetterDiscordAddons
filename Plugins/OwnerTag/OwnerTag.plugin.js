@@ -3,7 +3,7 @@
 class OwnerTag {
 	getName () {return "OwnerTag";}
 
-	getVersion () {return "1.1.1";}
+	getVersion () {return "1.1.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -108,6 +108,9 @@ class OwnerTag {
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.removeEles(".owner-tag, .owner-tag-crown");
+			
+			BDFDB.removeLocalStyle(this.name + "HideCrown");
+			
 			BDFDB.unloadMessage(this);
 		}
 	}
@@ -191,7 +194,8 @@ class OwnerTag {
 	}
 	
 	addHideCSS () {
-		if (BDFDB.getData("hideNativeCrown", this, "settings")) BDFDB.appendLocalStyle(this.name + "HideCrown", `${BDFDB.dotCNS.member + BDFDB.dotCN.memberownericon}:not(.owner-tag-crown) {display: none;}`);
-		else BDFDB.removeLocalstyle(this.name + "HideCrown");
+		var settings = BDFDB.getAllData(this, "settings");
+		if (settings.hideNativeCrown || settings.useCrown) BDFDB.appendLocalStyle(this.name + "HideCrown", `${BDFDB.dotCNS.member + BDFDB.dotCN.memberownericon}:not(.owner-tag-crown) {display: none;}`);
+		else BDFDB.removeLocalStyle(this.name + "HideCrown");
 	}
 }
