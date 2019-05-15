@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.2.5";}
+	getVersion () {return "6.2.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ServerFolders {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Server Object","Changes in the Server Object broke the plugin"]]
+			"fixed":[["Lags","Fixed some minor lags"]]
 		};
 		
 		this.labels = {};
@@ -568,10 +568,9 @@ class ServerFolders {
 					wrapper.parentElement.insertBefore(this.foldercontent, wrapper.nextElementSibling);
 					this.foldercontentguilds = this.foldercontent.querySelector(BDFDB.dotCN.guilds);
 				}
-				let folders = BDFDB.loadAllData(this, "folders"), sortedFolders = [];
-				for (let id in folders) sortedFolders[folders[id].position] = folders[id];
-				for (let data of sortedFolders) if (data && !wrapper.querySelector(BDFDB.dotCN.guildouter + ".folder#" + data.folderID)) {
-					let folderdiv = this.createFolderDiv(data);
+				let folders = BDFDB.sortObject(BDFDB.loadAllData(this, "folders"), "position");
+				for (let folderID in folders) if (folderID && !wrapper.querySelector(BDFDB.dotCN.guildouter + ".folder#" + folderID)) {
+					let folderdiv = this.createFolderDiv(folders[folderID]);
 					this.readIncludedServerList(folderdiv).forEach(guilddiv => {this.hideServer(guilddiv, folderdiv);});
 				}
 				BDFDB.WebModules.forceAllUpdates(this, "Guild");
@@ -580,8 +579,10 @@ class ServerFolders {
 			else setTimeout(process, 5000);
 		}
 		if (methodnames.includes("componentDidUpdate")) {
-			let folders = BDFDB.loadAllData(this, "folders")
-			for (let folderdiv of document.querySelectorAll(BDFDB.dotCN.guildouter + ".folder")) {
+			let serverAndFolders = this.getAllServersAndFolders();
+			let folders = BDFDB.loadAllData(this, "folders");
+			let foundfolders = serverAndFolders.filter(ele => BDFDB.containsClass(ele, "folder"));
+			if (Object.keys(folders).length != foundfolders.length) for (let folderdiv of document.querySelectorAll(BDFDB.dotCN.guildouter + ".folder")) {
 				if (folders[folderdiv.id]) this.insertFolderDiv(folders[folderdiv.id], folderdiv);
 			}
 		}
@@ -1034,7 +1035,7 @@ class ServerFolders {
 	insertFolderDiv (data, folderdiv) {
 		folderdiv.remove();
 		let serversandfolders = this.getAllServersAndFolders();
-		let insertnode = serversandfolders[data.position > serversandfolders.length - 1 ? serversandfolders.length - 1 : data.position];
+		let insertnode = serversandfolders[data.position == -1 || data.position > serversandfolders.length - 1 ? serversandfolders.length - 1 : data.position];
 		if (insertnode) insertnode.parentElement.insertBefore(folderdiv, insertnode);
 		else {
 			insertnode = BDFDB.getParentEle(BDFDB.dotCN.guildouter, document.querySelector(BDFDB.dotCNS.guilds + BDFDB.dotCN.guildbuttoncontainer));
