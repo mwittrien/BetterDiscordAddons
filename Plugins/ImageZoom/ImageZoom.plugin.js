@@ -130,7 +130,7 @@ class ImageZoom {
 			let start = performance.now();
 			let waitForImg = setInterval(() => {
 				let img = modal.querySelector(BDFDB.dotCNS.imagewrapper + "img," + BDFDB.dotCNS.imagewrapper + "video");
-				if (img && img.src) {
+				if (img && img.src && !BDFDB.containsClass(img, BDFDB.disCN.imageplaceholder)) {
 					clearInterval(waitForImg);
 					img.setAttribute("draggable", "false");
 					inner.firstElementChild.appendChild(BDFDB.htmlToElement(`<span class="${BDFDB.disCN.downloadlink} imagezoom-separator" style="margin: 0px 5px;"> | </div>`));
