@@ -3,7 +3,7 @@
 class UserNotes {
 	getName () {return "UserNotes";}
 
-	getVersion () {return "1.0.1";}
+	getVersion () {return "1.0.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -140,7 +140,7 @@ class UserNotes {
 
 		let userNotesModal = BDFDB.htmlToElement(this.userNotesModalMarkup);
 		let noteinput = userNotesModal.querySelector("#modal-inputtext")
-		userNotesModal.querySelector(BDFDB.dotCN.modalguildname).text(info.username);
+		userNotesModal.querySelector(BDFDB.dotCN.modalguildname).innerText = info.username || "";
 		noteinput.value = note;
 		noteinput.setAttribute("placeholder", note);
 		BDFDB.appendModal(userNotesModal);
