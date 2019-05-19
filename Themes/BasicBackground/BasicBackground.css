@@ -178,7 +178,9 @@
 .unwrapped-37iUtM,
 .wrapped-15rg6t.clickable-nnkAZy,
 .enabled-5QKLzu:hover,
+.partyMemberOverflow-1tfvpb,
 .memberListItem-vHCzSI:hover,
+.memberListItem-2ZX2pl:hover,
 .popoutContainer-3WC9HR:hover,
 .modal-1UGdnR .header,
 .modal-1UGdnR .footer,
@@ -359,6 +361,7 @@
 }
 
 .header-2o-2hj:not(.banner-1TiK82),
+.header-2o-2hj:not(.withBanner-3j8ruM),
 .searchBar-6Kv8R2,
 .title-3qD0b-,
 .container-1r6BKw {
