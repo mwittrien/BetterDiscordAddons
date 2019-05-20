@@ -3,7 +3,7 @@
 class BadgesEverywhere {
 	getName () {return "BadgesEverywhere";} 
 
-	getVersion () {return "1.2.5";}
+	getVersion () {return "1.2.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class BadgesEverywhere {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Tooltips","Fixed some issues with the tooltips"]]
+			"improved":[["Nitro","Nitro badge now shows the subscription date instead of the name (can be turned off)"]]
 		};
 		
 		this.patchModules = {
@@ -61,7 +61,8 @@ class BadgesEverywhere {
 				showInPopout:		{value:true, 	description:"Show Badge in User Popout."},
 				showInChat:			{value:true, 	description:"Show Badge in Chat Window."},
 				showInMemberList:	{value:true, 	description:"Show Badge in Member List."},
-				useColoredVersion:	{value:true, 	description:"Use colored version of the Badges for Chat and Members."}
+				useColoredVersion:	{value:true, 	description:"Use colored version of the Badges for Chat and Members."},
+				showNitroDate:		{value:true, 	description:"Show the subscription date for Nitro Badges"}
 			},
 			badges: {
 				1:			{value:true, 	name:"Staff",					selector:"profileBadgeStaff"},
@@ -182,6 +183,7 @@ class BadgesEverywhere {
 			this.APIModule.get(this.DiscordConstants.Endpoints.USER_PROFILE(info.id)).then(result => {
 				let usercopy = Object.assign({},result.body.user);
 				if (result.body.premium_since) usercopy.flags += 2048;
+				usercopy.premium_since = result.body.premium_since;
 				this.loadedusers[info.id] = usercopy;
 				for (let queredobj of this.requestedusers[info.id]) this.addToWrapper(info, queredobj[0], queredobj[1]);
 			});
@@ -204,7 +206,7 @@ class BadgesEverywhere {
 			if ((this.loadedusers[info.id].flags | flag) == this.loadedusers[info.id].flags && badges[flag]) {
 				let badge = BDFDB.htmlToElement(`<div class="BE-badge BE-badge-${this.defaults.badges[flag].name.replace(/ /g, "")} BE-badge-${type} ${this.BadgeClasses[this.defaults.badges[flag].selector]}"></div>`);
 				badgewrapper.appendChild(badge);
-				badge.addEventListener("mouseenter", () => {BDFDB.createTooltip(this.defaults.badges[flag].name, badge, {type:"top", style:"white-space: nowrap"});});
+				badge.addEventListener("mouseenter", () => {BDFDB.createTooltip(flag == 2048 && settings.showNitroDate ? BDFDB.LanguageStringsFormat("PREMIUM_BADGE_TOOLTIP", new Date(this.loadedusers[info.id].premium_since)) : this.defaults.badges[flag].name, badge, {type:"top", style:"white-space: nowrap; max-width: unset"});});
 			}
 		}
 		if (badgewrapper.firstChild) wrapper.insertBefore(badgewrapper, wrapper.querySelector(".owner-tag,.TRE-tag,svg[name=MobileDevice]"));
