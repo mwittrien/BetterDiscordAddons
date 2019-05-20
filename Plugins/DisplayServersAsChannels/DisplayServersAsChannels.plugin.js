@@ -335,7 +335,7 @@ class DisplayServersAsChannels {
 		var guildbadgewrapper = info.div.querySelector(BDFDB.dotCN.guildbadgewrapper);
 		if (guildbadgewrapper) {
 			BDFDB.removeEles(guildbadgewrapper.parentElement.querySelectorAll(".DSAC-verification-badge, .DSAC-name"));
-			if (info.features && info.features.has("VERIFIED") && !info.features.has("FAKE_VERIFIED")) {
+			if (info.features && info.features.has("VERIFIED")) {
 				guildbadgewrapper.parentElement.insertBefore(BDFDB.htmlToElement(this.verificationBadgeMarkup), guildbadgewrapper);
 			}
 			guildbadgewrapper.parentElement.insertBefore(BDFDB.htmlToElement(`<div class="DSAC-name">${BDFDB.encodeToHTML(info.name || info.folderName || "")}</div>`), guildbadgewrapper);

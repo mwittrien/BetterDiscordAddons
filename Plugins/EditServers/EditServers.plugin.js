@@ -3,7 +3,7 @@
 class EditServers {
 	getName () {return "EditServers";}
 
-	getVersion () {return "1.9.9";} 
+	getVersion () {return "2.0.0";} 
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,14 +11,14 @@ class EditServers {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Server Object","Changes in the Server Object broke the plugin"]]
+			"improved":[["Server Banners","Setting a banner no longer fucks around with the VERIFY flag"]]
 		};
 		
 		this.labels = {};
 
 		this.patchModules = {
 			"Guild":"componentDidMount",
-			"GuildIcon":"componentDidMount",
+			"GuildIconWrapper":"componentDidMount",
 			"GuildHeader":["componentDidMount","componentDidUpdate"],
 			"Clickable":"componentDidMount"
 		};
@@ -244,8 +244,7 @@ class EditServers {
 			BDFDB.saveAllData(data, this, "servers");
 			
 			for (let guildobj of BDFDB.readServerList()) if (guildobj.instance) {
-				delete guildobj.instance.props.guild.savedbanner;
-				delete guildobj.instance.props.guild.savedsplash;
+				delete guildobj.instance.props.guild.EditServersCachedBanner;
 			}
 
 			BDFDB.unloadMessage(this);
@@ -324,7 +323,7 @@ class EditServers {
 		}
 	}
 	
-	processGuildIcon (instance, wrapper) {
+	processGuildIconWrapper (instance, wrapper) {
 		if (instance.props && instance.props.guild) {
 			let icon = wrapper.classList && BDFDB.containsClass(wrapper, BDFDB.disCN.avataricon) ? wrapper : wrapper.querySelector(BDFDB.dotCN.avataricon);
 			if (!icon) return;
@@ -594,7 +593,7 @@ class EditServers {
 
 	getGuildData (id, wrapper) {
 		let data = BDFDB.loadData(id, this, "servers");
-		this.setVerifiedFlags(id, data);
+		this.setBanner(id, data);
 		if (!data) return {};
 		let allenabled = true, settings = BDFDB.getAllData(this, "settings");
 		for (let i in settings) if (!settings[i]) {
@@ -611,41 +610,12 @@ class EditServers {
 		return !key || settings[key] ? data : {};
 	}
 	
-	setVerifiedFlags (id, data) {
+	setBanner (id, data) {
 		data = data || {};
 		let guild = this.GuildUtils.getGuild(id);
 		if (!guild) return;
-		if (!guild.savedbanner && guild.banner) guild.savedbanner = guild.banner;
-		if (!guild.savedsplash && guild.splash) guild.savedsplash = guild.splash;
-		if (guild.features.has("VERIFIED") && !guild.features.has("FAKE_VERIFIED")) guild.features.add("ORIG_VERIFIED");
-		if (!data.removeBanner && !guild.features.has("ORIG_VERIFIED")) {
-			if (data.banner || id == "410787888507256842") {
-				guild.features.add("VERIFIED");
-				guild.features.add("FAKE_VERIFIED");
-				if (data.banner) {
-					guild.banner = data.banner;
-					guild.splash = data.banner;
-				}
-			}
-			else {
-				guild.features.delete("VERIFIED");
-				guild.features.delete("FAKE_VERIFIED");
-				guild.banner = null;
-				guild.splash = null;
-			}
-		}
-		if (data.removeBanner) {
-			guild.features.delete("VERIFIED");
-			guild.features.delete("FAKE_VERIFIED");
-			guild.banner = null;
-			guild.splash = null;
-		}
-		if (!data.removeBanner && !data.banner && guild.features.has("ORIG_VERIFIED")) {
-			if (guild.savedbanner) guild.banner = guild.savedbanner;
-			if (guild.savedsplash) guild.splash = guild.savedsplash;
-			guild.features.add("VERIFIED");
-			guild.features.delete("ORIG_VERIFIED");
-		}
+		if (guild.EditServersCachedBanner === undefined) guild.EditServersCachedBanner = guild.banner;
+		guild.banner = data.removeBanner ? null : (data.banner || guild.EditServersCachedBanner);
 	}
 	
 	updateGuildSidebar() {
