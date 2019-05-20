@@ -3,7 +3,7 @@
 class ShowHiddenChannels {
 	getName () {return "ShowHiddenChannels";}
 
-	getVersion () {return "2.4.9";}
+	getVersion () {return "2.5.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ShowHiddenChannels {
 
 	initConstructor () {
 		this.changelog = {
-			"added":[["Show Category Name","Added an option that shows the name of the category of a hidden channel in the tooltip (if the channel is the child of a category)"]]
+			"improved":[["Channel Types","More accurately catches the types of hidden channels"],["Fallback","Added an icon/type fallback for new channel types"]]
 		};
 		
 		this.patchModules = {
@@ -38,8 +38,12 @@ class ShowHiddenChannels {
 			`<div class="${BDFDB.disCN.channelcontainerdefault} hidden-channel">
 				<div tabindex="0" class="${BDFDB.disCNS.channeliconvisibility + BDFDB.disCNS.channelwrapper + BDFDB.disCN.channelmodelocked}" role="button">
 					<div class="${BDFDB.disCN.channelcontent}">
-						<svg class="${BDFDB.disCN.channelicon}" width="24" height="24" viewBox="0 0 24 24">
-							<path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d=""></path>
+						<svg class="${BDFDB.disCN.channelicon} hidden-icon" width="24" height="24" viewBox="0 0 24 24">
+							<mask fill="black">
+								<path d="M0 0H24V24H0Z" fill="white"></path>
+								<path d="M24 0H13V12H24Z" fill="black"></path>
+							</mask>
+							<path class="hidden-icon-inner" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d=""></path>
 							<path fill="currentColor" d="M21.025 5V4C21.025 2.88 20.05 2 19 2C17.95 2 17 2.88 17 4V5C16.4477 5 16 5.44772 16 6V9C16 9.55228 16.4477 10 17 10H19H21C21.5523 10 22 9.55228 22 9V5.975C22 5.43652 21.5635 5 21.025 5ZM20 5H18V4C18 3.42857 18.4667 3 19 3C19.5333 3 20 3.42857 20 4V5Z"></path>
 						</svg>
 						<div class="${BDFDB.disCN.channelname}"></div>
@@ -49,21 +53,37 @@ class ShowHiddenChannels {
 			</div>`;
 			
 		this.channelMessage = {
-			TEXT: `enter the hidden text channel`,
-			VOICE: `enter the hidden voice channel`,
-			CATEGORY: `open the hidden category`
+			GUILD_TEXT: `enter the hidden text channel`,
+			GUILD_VOICE: `enter the hidden voice channel`,
+			GUILD_NEWS: `enter the hidden news channel`,
+			GUILD_STORE: `enter the hidden store channel`,
+			GUILD_CATEGORY: `open the hidden category`,
+			DEFAULT: `open the channel`,
 		}
 			
 		this.channelIcons = {
-			TEXT: `M14 8C14 7.44772 13.5523 7 13 7H9.76001L10.3657 3.58738C10.4201 3.28107 10.1845 3 9.87344 3H8.88907C8.64664 3 8.43914 3.17391 8.39677 3.41262L7.76001 7H4.18011C3.93722 7 3.72946 7.17456 3.68759 7.41381L3.51259 8.41381C3.45905 8.71977 3.69449 9 4.00511 9H7.41001L6.35001 15H2.77011C2.52722 15 2.31946 15.1746 2.27759 15.4138L2.10259 16.4138C2.04905 16.7198 2.28449 17 2.59511 17H6.00001L5.39427 20.4126C5.3399 20.7189 5.57547 21 5.88657 21H6.87094C7.11337 21 7.32088 20.8261 7.36325 20.5874L8.00001 17H14L13.3943 20.4126C13.3399 20.7189 13.5755 21 13.8866 21H14.8709C15.1134 21 15.3209 20.8261 15.3632 20.5874L16 17H19.5799C19.8228 17 20.0306 16.8254 20.0724 16.5862L20.2474 15.5862C20.301 15.2802 20.0655 15 19.7549 15H16.35L16.6758 13.1558C16.7823 12.5529 16.3186 12 15.7063 12C15.2286 12 14.8199 12.3429 14.7368 12.8133L14.3504 15H8.35045L9.41045 9H13C13.5523 9 14 8.55228 14 8Z`,
-			VOICE: `M11.383 3.07904C11.009 2.92504 10.579 3.01004 10.293 3.29604L6 8.00204H3C2.45 8.00204 2 8.45304 2 9.00204V15.002C2 15.552 2.45 16.002 3 16.002H6L10.293 20.71C10.579 20.996 11.009 21.082 11.383 20.927C11.757 20.772 12 20.407 12 20.002V4.00204C12 3.59904 11.757 3.23204 11.383 3.07904ZM19 5.00195V7.00195C18.857 0.00195 19 12.24595 19 12.002C19 14.759 16.757 17.002 14 17.002V19.002C17.86 19.002 21 15.863 21 12.002C21 12.14295 22.86 12.00195 19 12.00195ZM14 9.00195C15.654 9.00195 17 10.349 17 12.002C17 13.657 15.654 15.002 14 15.002V13.002C14.551 13.002 15 12.553 15 12.002C15 11.451 14.551 11.002 14 11.002V9.00195Z`,
-			CATEGORY: `M9.6,1.6 L9.6,6.4 L3.2,6.4 L3.2,1.6 L9.6,1.6 Z M16,16 L22.4,16 L22.4,20.8 L16,20.8 L16,16.533333328 L16,16 Z M14.4,12.8 L8,12.8 L8,17.6 L14.4,17.6 L14.4,20.8 L8,20.8 L4.8,20.8 L4.8,8 L8,8 L8,9.6 L14.4,9.6 L14.4,12.8 Z`
+			GUILD_TEXT: `M5.88657 21C5.57547 21 5.3399 20.7189 5.39427 20.4126L6.00001 17H2.59511C2.28449 17 2.04905 16.7198 2.10259 16.4138L2.27759 15.4138C2.31946 15.1746 2.52722 15 2.77011 15H6.35001L7.41001 9H4.00511C3.69449 9 3.45905 8.71977 3.51259 8.41381L3.68759 7.41381C3.72946 7.17456 3.93722 7 4.18011 7H7.76001L8.39677 3.41262C8.43914 3.17391 8.64664 3 8.88907 3H9.87344C10.1845 3 10.4201 3.28107 10.3657 3.58738L9.76001 7H15.76L16.3968 3.41262C16.4391 3.17391 16.6466 3 16.8891 3H17.8734C18.1845 3 18.4201 3.28107 18.3657 3.58738L17.76 7H21.1649C21.4755 7 21.711 7.28023 21.6574 7.58619L21.4824 8.58619C21.4406 8.82544 21.2328 9 20.9899 9H17.41L16.35 15H19.7549C20.0655 15 20.301 15.2802 20.2474 15.5862L20.0724 16.5862C20.0306 16.8254 19.8228 17 19.5799 17H16L15.3632 20.5874C15.3209 20.8261 15.1134 21 14.8709 21H13.8866C13.5755 21 13.3399 20.7189 13.3943 20.4126L14 17H8.00001L7.36325 20.5874C7.32088 20.8261 7.11337 21 6.87094 21H5.88657ZM9.41045 9L8.35045 15H14.3504L15.4104 9H9.41045Z`,
+			GUILD_VOICE: `M11.383 3.07904C11.009 2.92504 10.579 3.01004 10.293 3.29604L6 8.00204H3C2.45 8.00204 2 8.45304 2 9.00204V15.002C2 15.552 2.45 16.002 3 16.002H6L10.293 20.71C10.579 20.996 11.009 21.082 11.383 20.927C11.757 20.772 12 20.407 12 20.002V4.00204C12 3.59904 11.757 3.23204 11.383 3.07904ZM14 5.00195V7.00195C16.757 7.00195 19 9.24595 19 12.002C19 14.759 16.757 17.002 14 17.002V19.002C17.86 19.002 21 15.863 21 12.002C21 8.14295 17.86 5.00195 14 5.00195ZM14 9.00195C15.654 9.00195 17 10.349 17 12.002C17 13.657 15.654 15.002 14 15.002V13.002C14.551 13.002 15 12.553 15 12.002C15 11.451 14.551 11.002 14 11.002V9.00195Z`,
+			GUILD_NEWS: `M22 7H19V3C19 2.448 18.553 2 18 2H2C1.447 2 1 2.448 1 3V21C1 21.552 1.447 22 2 22H20C20.266 22 20.52 21.895 20.707 21.707L22.707 19.707C22.895 19.519 23 19.265 23 18.999V7.999C23 7.448 22.553 7 22 7ZM9 18.999H3V16.999H9V18.999ZM9 15.999H3V13.999H9V15.999ZM9 13H3V11H9V13ZM16 18.999H10V16.999H16V18.999ZM16 15.999H10V13.999H16V15.999ZM16 13H10V11H16V13ZM16 8H3V5H16V8ZM21 18.585L20.586 18.999H19V8.999H21V18.585Z`,
+			GUILD_STORE: `M21.707 13.293l-11-11C10.519 2.105 10.266 2 10 2H3c-.553 0-1 .447-1 1v7c0 .266.105.519.293.707l11 11c.195.195.451.293.707.293s.512-.098.707-.293l7-7c.391-.391.391-1.023 0-1.414zM7 9c-1.106 0-2-.896-2-2 0-1.106.894-2 2-2 1.104 0 2 .894 2 2 0 1.104-.896 2-2 2z`,
+			GUILD_CATEGORY: `M9.6 1.6 L9.6 6.4 L3.2 6.4 L3.2 1.6 L9.6 1.6 Z M16 16 L22.4 16 L22.4 20.8 L16 20.8 L16 16.533333328 L16 16 Z M14.4 12.8 L8 12.8 L8 17.6 L14.4 17.6 L14.4 20.8 L8 20.8 L4.8 20.8 L4.8 8 L8 8 L8 9.6 L14.4 9.6 L14.4 12.8 Z`,
+			DEFAULT: `M 11.44 0 c 4.07 0 8.07 1.87 8.07 6.35 c 0 4.13 -4.74 5.72 -5.75 7.21 c -0.76 1.11 -0.51 2.67 -2.61 2.67 c -1.37 0 -2.03 -1.11 -2.03 -2.13 c 0 -3.78 5.56 -4.64 5.56 -7.76 c 0 -1.72 -1.14 -2.73 -3.05 -2.73 c -4.07 0 -2.48 4.19 -5.56 4.19 c -1.11 0 -2.07 -0.67 -2.07 -1.94 C 4 2.76 7.56 0 11.44 0 z M 11.28 18.3 c 1.43 0 2.61 1.17 2.61 2.61 c 0 1.43 -1.18 2.61 -2.61 2.61 c -1.43 0 -2.61 -1.17 -2.61 -2.61 C 8.68 19.48 9.85 18.3 11.28 18.3 z`
+		};
+		
+		this.settingsMap = {
+			GUILD_TEXT: "showText",
+			GUILD_VOICE: "showVoice",
+			GUILD_NEWS: "showNews",
+			GUILD_STORE: "showStore",
+			GUILD_CATEGORY: "showCategory"
 		};
 
 		this.defaults = {
 			settings: {
 				showText:				{value:true, 	inner:false,	description:"Show hidden Textchannels:"},
 				showVoice:				{value:true, 	inner:false,	description:"Show hidden Voicechannels:"},
+				showNews:				{value:true, 	inner:false,	description:"Show hidden Newschannels:"},
+				showStore:				{value:true, 	inner:false,	description:"Show hidden Storechannels:"},
 				showCategory:			{value:false, 	inner:false,	description:"Show hidden Categories:"},
 				showForNormal:			{value:false,	inner:false,	description:"Also show Roles/Users for visible Channels on hover:"},
 				showAllowedRoles:		{value:true,	inner:true,		description:"Allowed Roles:"},
@@ -219,9 +239,7 @@ class ShowHiddenChannels {
 		var settings = BDFDB.getAllData(this, "settings"); 
 		var count = 0;
 		for (let type in this.ChannelTypes) {
-			if (!settings.showText && type == "GUILD_TEXT" || !settings.showVoice && type == "GUILD_VOICE" || !settings.showCategory && type == "GUILD_CATEGORY") {
-				hiddenChannels[this.ChannelTypes[type]] = [];
-			}
+			if (this.settingsMap[type] && !settings[this.settingsMap[type]]) hiddenChannels[this.ChannelTypes[type]] = [];
 			BDFDB.sortArrayByKey(hiddenChannels[this.ChannelTypes[type]], "name");
 			count += hiddenChannels[this.ChannelTypes[type]].length;
 		}
@@ -239,9 +257,7 @@ class ShowHiddenChannels {
 				BDFDB.saveData(guild.id, visibile, this, "categorystatus");
 			});
 
-			for (let hiddenChannel of hiddenChannels[0]) this.createChannel(guild, category, hiddenChannel, "TEXT");
-			for (let hiddenChannel of hiddenChannels[2]) this.createChannel(guild, category, hiddenChannel, "VOICE");
-			for (let hiddenChannel of hiddenChannels[4]) this.createChannel(guild, category, hiddenChannel, "CATEGORY");
+			for (let type in this.ChannelTypes) for (let hiddenChannel of hiddenChannels[this.ChannelTypes[type]]) this.createChannel(guild, category, hiddenChannel, type);
 			
 			var isvisibile = BDFDB.loadData(guild.id, this, "categorystatus") === true;
 			BDFDB.toggleClass(wrapper, BDFDB.disCN.categorycollapsed, !isvisibile);
@@ -264,13 +280,16 @@ class ShowHiddenChannels {
 	createChannel (guild, category, info, type) {
 		let channel = BDFDB.htmlToElement(this.channelMarkup);
 		channel.querySelector(BDFDB.dotCN.channelname).innerText = info.name;
-		channel.querySelector(BDFDB.dotCNS.channelicon + "path").setAttribute("d", this.channelIcons[type]);
+		channel.querySelector(BDFDB.dotCNS.channelicon + "mask").setAttribute("id", `showHiddenChannelsMask${info.id}`);
+		let iconinner = channel.querySelector(BDFDB.dotCNS.channelicon + ".hidden-icon-inner");
+		iconinner.setAttribute("d", this.channelIcons[type] ? this.channelIcons[type] : this.channelIcons.DEFAULT);
+		iconinner.setAttribute("mask", `url(#showHiddenChannelsMask${info.id})`);
 		this.setReactInstanceOfChannel(info, channel);
 		BDFDB.addChildEventListener(channel, "mouseenter mouseleave", BDFDB.dotCN.channelwrapper, e => {
 			this.showAccessRoles(guild, info, e, false);
 		});
 		channel.addEventListener("click", () => {
-			BDFDB.showToast(`You can not ${this.channelMessage[type]}&nbsp;&nbsp;<strong>${BDFDB.encodeToHTML(info.name)}</strong>.`, {type:"error", html:true});
+			BDFDB.showToast(`You can not ${this.channelMessage[type] ? this.channelMessage[type] : this.channelMessage.DEFAULT}&nbsp;&nbsp;<strong>${BDFDB.encodeToHTML(info.name)}</strong>.`, {type:"error", html:true});
 		});
 		channel.addEventListener("contextmenu", e => {
 			this.createHiddenObjContextMenu(guild, info, type, e);
@@ -352,7 +371,7 @@ class ShowHiddenChannels {
 		if (settings.showTopic && !allowed && channel.topic && channel.topic.replace(/[\t\n\r\s]/g, "")) {
 			htmlString += `<div class="${BDFDB.disCN.marginbottom4}">Topic:</div><div class="${BDFDB.disCNS.flex + BDFDB.disCN.wrap}"><div class="${BDFDB.disCNS.userpopoutrole + BDFDB.disCNS.flex + BDFDB.disCNS.aligncenter + BDFDB.disCN.wrap + BDFDB.disCNS.size12 + BDFDB.disCN.weightmedium} SHC-topic" style="border-color: rgba(255, 255, 255, 0.6); height: unset !important; padding-top: 5px; padding-bottom: 5px; max-width: ${window.outerWidth/3}px">${BDFDB.encodeToHTML(channel.topic)}</div></div>`;
 		}
-		if (settings.showVoiceUsers && (!allowed || e.currentTarget.querySelector(BDFDB.dotCN.channelnamelockedvoice)) && channel.type == 2) {
+		if (settings.showVoiceUsers && (!allowed || e.currentTarget.querySelector(BDFDB.dotCN.channelnamelockedvoice)) && channel.type == this.ChannelTypes.GUILD_VOICE) {
 			let voicestates = this.VoiceUtils.getVoiceStatesForChannel(guild.id, channel.id);
 			if (voicestates.length > 0) {
 				htmlString += `<div class="${BDFDB.disCN.marginbottom4}">Connected Voice Users:</div><div class="${BDFDB.disCNS.flex + BDFDB.disCN.wrap}">`;
