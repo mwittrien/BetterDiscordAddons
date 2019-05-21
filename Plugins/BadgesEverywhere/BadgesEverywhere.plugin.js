@@ -65,19 +65,29 @@ class BadgesEverywhere {
 				showNitroDate:		{value:true, 	description:"Show the subscription date for Nitro Badges"}
 			},
 			badges: {
-				1:			{value:true, 	name:"Staff",					selector:"profileBadgeStaff"},
-				2:			{value:true, 	name:"Partner",					selector:"profileBadgePartner"},
-				4:			{value:true, 	name:"HypeSquad",				selector:"profileBadgeHypesquad"},
-				8:			{value:true, 	name:"BugHunter",				selector:"profileBadgeBugHunter"},
-				16:			{value:false, 	name:"MFASMS",					selector:false},
-				32:			{value:false, 	name:"PROMODISMISSED",			selector:false},
-				64:			{value:true, 	name:"HypeSquad Bravery",		selector:"profileBadgeHypeSquadOnlineHouse1"},
-				128:		{value:true, 	name:"HypeSquad Brilliance",	selector:"profileBadgeHypeSquadOnlineHouse2"},
-				256:		{value:true, 	name:"HypeSquad Balance",		selector:"profileBadgeHypeSquadOnlineHouse3"},
-				512:		{value:true, 	name:"Early Supporter",			selector:"profileBadgeEarlySupporter"},
-				2048:		{value:true, 	name:"Nitro",					selector:"profileBadgePremium"}
+				"STAFF1":						{value:true, 	name:"Staff",					selector:"profileBadgeStaff"},
+				"PARTNER":						{value:true, 	name:"Partner",					selector:"profileBadgePartner"},
+				"HYPESQUAD":					{value:true, 	name:"HypeSquad",				selector:"profileBadgeHypesquad"},
+				"BUG_HUNTER":					{value:true, 	name:"BugHunter",				selector:"profileBadgeBugHunter"},
+				"MFA_SMS":						{value:false, 	name:"MFASMS",					selector:false},
+				"PREMIUM_PROMO_DISMISSED":		{value:false, 	name:"PROMODISMISSED",			selector:false},
+				"HYPESQUAD_ONLINE_HOUSE_1":		{value:true, 	name:"HypeSquad Bravery",		selector:"profileBadgeHypeSquadOnlineHouse1"},
+				"HYPESQUAD_ONLINE_HOUSE_2":		{value:true, 	name:"HypeSquad Brilliance",	selector:"profileBadgeHypeSquadOnlineHouse2"},
+				"HYPESQUAD_ONLINE_HOUSE_3":		{value:true, 	name:"HypeSquad Balance",		selector:"profileBadgeHypeSquadOnlineHouse3"},
+				"PREMIUM_EARLY_SUPPORTER":		{value:true, 	name:"Early Supporter",			selector:"profileBadgeEarlySupporter"},
+				"NITRO":						{value:true, 	name:"Nitro",					selector:"profileBadgePremium"}
 			}
 		};
+		
+		var UserFlags = BDFDB.WebModules.findByProperties("UserFlags").UserFlags;
+		for (let flagname in UserFlags) if (this.defaults.badges[flagname]) {
+			this.defaults.badges[UserFlags[flagname]] = this.defaults.badges[flagname];
+			delete this.defaults.badges[flagname];
+		}
+		this.nitroflag = Math.pow(2, Object.keys(UserFlags).length);
+		this.defaults.badges[this.nitroflag] = this.defaults.badges.NITRO;
+		delete this.defaults.badges.NITRO;
+		for (let flag in this.defaults.badges) if (!this.defaults.badges[flag].selector || isNaN(parseInt(flag))) delete this.defaults.badges[flag];
 	}
 
 	getSettingsPanel () {
@@ -131,8 +141,6 @@ class BadgesEverywhere {
 			this.DiscordConstants = BDFDB.WebModules.findByProperties("Permissions", "ActivityTypes", "StatusTypes");
 			this.BadgeClasses = BDFDB.WebModules.findByProperties("profileBadgeStaff","profileBadgePremium");
 
-			for (let flag in this.defaults.badges) if (!this.defaults.badges[flag].selector) delete this.defaults.badges[flag];
-
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
@@ -182,7 +190,7 @@ class BadgesEverywhere {
 			this.requestedusers[info.id] = [[wrapper,type]];
 			this.APIModule.get(this.DiscordConstants.Endpoints.USER_PROFILE(info.id)).then(result => {
 				let usercopy = Object.assign({},result.body.user);
-				if (result.body.premium_since) usercopy.flags += 2048;
+				if (result.body.premium_since) usercopy.flags += this.nitroflag;
 				usercopy.premium_since = result.body.premium_since;
 				this.loadedusers[info.id] = usercopy;
 				for (let queredobj of this.requestedusers[info.id]) this.addToWrapper(info, queredobj[0], queredobj[1]);
@@ -206,7 +214,7 @@ class BadgesEverywhere {
 			if ((this.loadedusers[info.id].flags | flag) == this.loadedusers[info.id].flags && badges[flag]) {
 				let badge = BDFDB.htmlToElement(`<div class="BE-badge BE-badge-${this.defaults.badges[flag].name.replace(/ /g, "")} BE-badge-${type} ${this.BadgeClasses[this.defaults.badges[flag].selector]}"></div>`);
 				badgewrapper.appendChild(badge);
-				badge.addEventListener("mouseenter", () => {BDFDB.createTooltip(flag == 2048 && settings.showNitroDate ? BDFDB.LanguageStringsFormat("PREMIUM_BADGE_TOOLTIP", new Date(this.loadedusers[info.id].premium_since)) : this.defaults.badges[flag].name, badge, {type:"top", style:"white-space: nowrap; max-width: unset"});});
+				badge.addEventListener("mouseenter", () => {BDFDB.createTooltip(flag == this.nitroflag && settings.showNitroDate ? BDFDB.LanguageStringsFormat("PREMIUM_BADGE_TOOLTIP", new Date(this.loadedusers[info.id].premium_since)) : this.defaults.badges[flag].name, badge, {type:"top", style:"white-space: nowrap; max-width: unset"});});
 			}
 		}
 		if (badgewrapper.firstChild) wrapper.insertBefore(badgewrapper, wrapper.querySelector(".owner-tag,.TRE-tag,svg[name=MobileDevice]"));
