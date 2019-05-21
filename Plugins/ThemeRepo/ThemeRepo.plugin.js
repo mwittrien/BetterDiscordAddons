@@ -3,7 +3,7 @@
 class ThemeRepo {
 	getName () {return "ThemeRepo";}
 
-	getVersion () {return "1.8.1";}
+	getVersion () {return "1.8.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ThemeRepo {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Canary/PTB","Fixed the plugin for canary and ptb"]]
+			"fixed":[["Special Snowflake","Fixed the fetching of the themes for the person who just started randomizing his github repo"]]
 		};
 		
 		this.patchModules = {
@@ -576,11 +576,12 @@ class ThemeRepo {
 		themeRepoModal.entries = {};
 		for (let url in this.loadedThemes) {
 			let theme = this.loadedThemes[url];
-			let instTheme = window.bdthemes[this.loadedThemes[url].name];
+			let instTheme = window.bdthemes[theme.name];
 			if (instTheme && instTheme.author.toUpperCase() == theme.author.toUpperCase()) theme.state = instTheme.version != theme.version ? 1 : 0;
 			else theme.state = 2;
 			let data = {
 				url: theme.url,
+				requesturl: theme.requesturl,
 				search: (theme.name + " " + theme.version + " " + theme.author + " " + theme.description).toUpperCase(),
 				name: theme.name,
 				version: theme.version,
@@ -630,13 +631,13 @@ class ThemeRepo {
 		let gitbutton = entry.querySelector(".gitIcon");
 		gitbutton.addEventListener("click", e => {
 			var giturl = null;
-			if (data.url.indexOf("https://raw.githubusercontent.com") == 0) {
-				var temp = data.url.replace("//raw.githubusercontent", "//github").split("/");
+			if (data.requesturl.indexOf("https://raw.githubusercontent.com") == 0) {
+				var temp = data.requesturl.replace("//raw.githubusercontent", "//github").split("/");
 				temp.splice(5, 0, "blob");
 				giturl = temp.join("/");
 			}
-			else if (data.url.indexOf("https://gist.githubusercontent.com/") == 0) {
-				giturl = data.url.replace("//gist.githubusercontent", "//gist.github").split("/raw/")[0];
+			else if (data.requesturl.indexOf("https://gist.githubusercontent.com/") == 0) {
+				giturl = data.requesturl.replace("//gist.githubusercontent", "//gist.github").split("/raw/")[0];
 			}
 			if (giturl) window.open(giturl, "_blank");
 		});
@@ -722,77 +723,83 @@ class ThemeRepo {
 	loadThemes () {
 		BDFDB.removeEles(".themerepo-loadingicon");
 		var settings = BDFDB.loadAllData(this, "settings");
-		var getThemeInfo, outdated = 0, newentries = 0, i = 0;
+		var getThemeInfo, outdated = 0, newentries = 0, i = 0, NFLDreplace = null;
 		var tags = ["name","description","author","version"];
-		var newentriesdata = BDFDB.loadAllData(this, "newentriesdata");
 		var newentriesdata = BDFDB.loadAllData(this, "newentriesdata"), ownlist = BDFDB.loadData("ownlist", this, "ownlist") || [];
 		this.cachedThemes = (newentriesdata.urlbase64 ? atob(newentriesdata.urlbase64).split("\n") : []).concat(ownlist);
-		let request = require("request");
-		request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/ThemeList.txt", (error, response, result) => {
-			if (!error && result) {
-				result = result.replace(/[\r\t]/g, "");
-				BDFDB.saveData("urlbase64", btoa(result), this, "newentriesdata");
+		var request = require("request");
+		request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/ThemeList.txt", (error, response, body) => {
+			if (!error && body) {
+				body = body.replace(/[\r\t]/g, "");
+				BDFDB.saveData("urlbase64", btoa(body), this, "newentriesdata");
 				this.loadedThemes = {};
-				this.grabbedThemes = result.split("\n");
-				this.foundThemes = this.grabbedThemes.concat(ownlist);
-				this.loading = {is:true, timeout:setTimeout(() => {
-					clearTimeout(this.loading.timeout);
-					if (this.started) {
-						if (this.loading.is && this.loading.amount < 4) setTimeout(() => {this.loadThemes();},10000);
-						this.loading = {is: false, timeout:null, amount:this.loading.amount};
+				this.grabbedThemes = body.split("\n");
+				request("https://github.com/NFLD99/Better-Discord", (error2, response2, body2) => {
+					if (!error2 && body2) {
+						NFLDreplace = /\/NFLD99\/Better-Discord\/tree\/master\/Themes_[^"]+">([^<]+)/i.exec(body2);
+						NFLDreplace = NFLDreplace && NFLDreplace.length > 1 ? NFLDreplace[1] : null;
 					}
-				},1200000), amount:this.loading.amount+1};
-				var loadingiconwrapper = document.querySelector(BDFDB.dotCN.app + "> .repo-loadingwrapper");
-				if (!loadingiconwrapper) {
-					loadingiconwrapper = BDFDB.htmlToElement(`<div class="repo-loadingwrapper"></div>`);
-					document.querySelector(BDFDB.dotCN.app).appendChild(loadingiconwrapper);
-				}
-				var loadingicon = BDFDB.htmlToElement(this.themeRepoIconMarkup);
-				BDFDB.addClass(loadingicon, "themerepo-loadingicon");
-				loadingicon.addEventListener("mouseenter", () => {BDFDB.createTooltip("Loading ThemeRepo",loadingicon,{type:"left",delay:500});})
-				loadingiconwrapper.appendChild(loadingicon);
-
-				getThemeInfo(() => {
-					if (!this.started) {
+					this.foundThemes = this.grabbedThemes.concat(ownlist);
+					
+					this.loading = {is:true, timeout:setTimeout(() => {
 						clearTimeout(this.loading.timeout);
-						return;
+						if (this.started) {
+							if (this.loading.is && this.loading.amount < 4) setTimeout(() => {this.loadThemes();},10000);
+							this.loading = {is: false, timeout:null, amount:this.loading.amount};
+						}
+					},1200000), amount:this.loading.amount+1};
+					var loadingiconwrapper = document.querySelector(BDFDB.dotCN.app + "> .repo-loadingwrapper");
+					if (!loadingiconwrapper) {
+						loadingiconwrapper = BDFDB.htmlToElement(`<div class="repo-loadingwrapper"></div>`);
+						document.querySelector(BDFDB.dotCN.app).appendChild(loadingiconwrapper);
 					}
-					BDFDB.removeEles(loadingicon, ".themerepo-loadingicon");
-					if (!loadingiconwrapper.firstChild) BDFDB.removeEles(loadingiconwrapper);
-					clearTimeout(this.loading.timeout);
-					this.loading = {is:false, timeout:null, amount:this.loading.amount};
-					console.log(`%c[${this.name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Finished fetching Themes.");
-					if (document.querySelector(".bd-themerepobutton")) BDFDB.showToast(`Finished fetching Themes.`, {type:"success"});
-					if ((settings.notifyOutdated || settings.notifyOutdated == undefined) && outdated > 0) {
-						var oldbarbutton = document.querySelector(".themerepo-outdate-notice " + BDFDB.dotCN.noticedismiss);
-						if (oldbarbutton) oldbarbutton.click();
-						var bar = BDFDB.createNotificationsBar(`${outdated} of your Themes ${outdated == 1 ? "is" : "are"} outdated. Check:`,{type:"danger",btn:"ThemeRepo",selector:"themerepo-notice themerepo-outdate-notice", customicon:this.themeRepoIconMarkup.replace(/#7289da/gi,"#FFF").replace(/#7f8186/gi,"#B9BBBE")});
-						bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", e => {
-							this.openThemeRepoModal({showOnlyOutdated:true});
-							bar.querySelector(BDFDB.dotCN.noticedismiss).click();
-						});
-					}
-					if ((settings.notifyNewentries || settings.notifyNewentries == undefined) && newentries > 0) {
-						var oldbarbutton = document.querySelector(".themerepo-newentries-notice " + BDFDB.dotCN.noticedismiss);
-						if (oldbarbutton) oldbarbutton.click();
-						var bar = BDFDB.createNotificationsBar(`There ${newentries == 1 ? "is" : "are"} ${newentries} new Theme${newentries == 1 ? "" : "s"} in the Repo. Check:`,{type:"success",btn:"ThemeRepo",selector:"themerepo-notice themerepo-newentries-notice", customicon:this.themeRepoIconMarkup.replace(/#7289da/gi,"#FFF").replace(/#7f8186/gi,"#B9BBBE")});
-						bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", e => {
-							this.openThemeRepoModal({forcedSort:"new",forcedOrder:"asc"});
-							bar.querySelector(BDFDB.dotCN.noticedismiss).click();
-						});
-					}
-					if (BDFDB.myData.id == "278543574059057154") {
-						let wrongUrls = [];
-						for (let url of this.foundThemes) if (url && !this.loadedThemes[url] && !wrongUrls.includes(url)) wrongUrls.push(url);
-						if (wrongUrls.length > 0) {
-							var bar = BDFDB.createNotificationsBar(`ThemeRepo: ${wrongUrls.length} Theme${wrongUrls.length > 1 ? "s" : ""} could not be loaded.`, {type:"danger",btn:"List",selector:"themerepo-notice", customicon:this.themeRepoIconMarkup.replace(/#7289da/gi,"#FFF").replace(/#7f8186/gi,"#B9BBBE")});
+					var loadingicon = BDFDB.htmlToElement(this.themeRepoIconMarkup);
+					BDFDB.addClass(loadingicon, "themerepo-loadingicon");
+					loadingicon.addEventListener("mouseenter", () => {BDFDB.createTooltip("Loading ThemeRepo",loadingicon,{type:"left",delay:500});})
+					loadingiconwrapper.appendChild(loadingicon);
+
+					getThemeInfo(() => {
+						if (!this.started) {
+							clearTimeout(this.loading.timeout);
+							return;
+						}
+						BDFDB.removeEles(loadingicon, ".themerepo-loadingicon");
+						if (!loadingiconwrapper.firstChild) BDFDB.removeEles(loadingiconwrapper);
+						clearTimeout(this.loading.timeout);
+						this.loading = {is:false, timeout:null, amount:this.loading.amount};
+						console.log(`%c[${this.name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Finished fetching Themes.");
+						if (document.querySelector(".bd-themerepobutton")) BDFDB.showToast(`Finished fetching Themes.`, {type:"success"});
+						if ((settings.notifyOutdated || settings.notifyOutdated == undefined) && outdated > 0) {
+							var oldbarbutton = document.querySelector(".themerepo-outdate-notice " + BDFDB.dotCN.noticedismiss);
+							if (oldbarbutton) oldbarbutton.click();
+							var bar = BDFDB.createNotificationsBar(`${outdated} of your Themes ${outdated == 1 ? "is" : "are"} outdated. Check:`,{type:"danger",btn:"ThemeRepo",selector:"themerepo-notice themerepo-outdate-notice", customicon:this.themeRepoIconMarkup.replace(/#7289da/gi,"#FFF").replace(/#7f8186/gi,"#B9BBBE")});
 							bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", e => {
-								var toast = BDFDB.showToast(wrongUrls.join("\n"),{type:"error"});
-								toast.style.overflow = "hidden";
-								console.log(wrongUrls.length == 1 ? wrongUrls[0] : wrongUrls);
+								this.openThemeRepoModal({showOnlyOutdated:true});
+								bar.querySelector(BDFDB.dotCN.noticedismiss).click();
 							});
 						}
-					}
+						if ((settings.notifyNewentries || settings.notifyNewentries == undefined) && newentries > 0) {
+							var oldbarbutton = document.querySelector(".themerepo-newentries-notice " + BDFDB.dotCN.noticedismiss);
+							if (oldbarbutton) oldbarbutton.click();
+							var bar = BDFDB.createNotificationsBar(`There ${newentries == 1 ? "is" : "are"} ${newentries} new Theme${newentries == 1 ? "" : "s"} in the Repo. Check:`, {type:"success", btn:"ThemeRepo", selector:"themerepo-notice themerepo-newentries-notice", customicon:this.themeRepoIconMarkup.replace(/#7289da/gi,"#FFF").replace(/#7f8186/gi,"#B9BBBE")});
+							bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", e => {
+								this.openThemeRepoModal({forcedSort:"new",forcedOrder:"asc"});
+								bar.querySelector(BDFDB.dotCN.noticedismiss).click();
+							});
+						}
+						if (BDFDB.myData.id == "278543574059057154") {
+							let wrongUrls = [];
+							for (let url of this.foundThemes) if (url && !this.loadedThemes[url] && !wrongUrls.includes(url)) wrongUrls.push(url);
+							if (wrongUrls.length > 0) {
+								var bar = BDFDB.createNotificationsBar(`ThemeRepo: ${wrongUrls.length} Theme${wrongUrls.length > 1 ? "s" : ""} could not be loaded.`, {type:"danger", btn:"List", selector:"themerepo-notice", customicon:this.themeRepoIconMarkup.replace(/#7289da/gi,"#FFF").replace(/#7f8186/gi,"#B9BBBE")});
+								bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", e => {
+									var toast = BDFDB.showToast(wrongUrls.join("\n"),{type:"error"});
+									toast.style.overflow = "hidden";
+									console.log(wrongUrls.length == 1 ? wrongUrls[0] : wrongUrls);
+								});
+							}
+						}
+					});
 				});
 			}
 		});
@@ -803,7 +810,8 @@ class ThemeRepo {
 				return;
 			}
 			let url = this.foundThemes[i];
-			request(url, (error, response, body) => {
+			let requesturl = NFLDreplace && url.includes("NFLD99/Better-Discord/master/Themes") ? url.replace("master/Themes", "master/" + NFLDreplace) : url;
+			request(requesturl, (error, response, body) => {
 				if (!response) {
 					if (url && BDFDB.getAllIndexes(this.foundThemes, url).length < 2) this.foundThemes.push(url);
 				}
@@ -824,6 +832,7 @@ class ThemeRepo {
 						if (valid) {
 							theme.css = text.split("\n").slice(1).join("\n").replace(new RegExp("[\\r|\\n|\\t]", "g"), "");
 							theme.url = url;
+							theme.requesturl = requesturl;
 							this.loadedThemes[url] = theme;
 							var instTheme = window.bdthemes[theme.name];
 							if (instTheme && instTheme.author.toUpperCase() == theme.author.toUpperCase() && instTheme.version != theme.version) outdated++;
@@ -847,9 +856,9 @@ class ThemeRepo {
 	}
 
 	downloadTheme (data) {
-		require("request")(data.url, (error, response, body) => {
+		require("request")(data.requesturl, (error, response, body) => {
 			if (error) BDFDB.showToast(`Unable to download Theme "${data.name}".`, {type:"danger"});
-			else this.createThemeFile(data.url.split("/").pop(), body);
+			else this.createThemeFile(data.requesturl.split("/").pop(), body);
 		});
 	}
 
@@ -871,7 +880,7 @@ class ThemeRepo {
 	}
 
 	deleteThemeFile (data) {
-		let filename = data.url.split("/").pop();
+		let filename = data.requesturl.split("/").pop();
 		require("fs").unlink(require("path").join(BDFDB.getThemesFolder(), filename), (error) => {
 			if (error) BDFDB.showToast(`Unable to delete Theme "${filename}".`, {type:"danger"});
 			else BDFDB.showToast(`Successfully deleted Theme "${filename}".`, {type:"success"});
