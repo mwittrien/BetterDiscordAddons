@@ -25,6 +25,7 @@
 	--vbackdropblur: var(--backdropblur,var(--dblur));
 }
 
+#pubslayerroot:before,
 .container-16j22k:before,
 .appMount-3lHmkl:before {
 	content: "";
@@ -32,7 +33,7 @@
 	left: 0;
 	right: 0;
 	bottom: 0;
-	position: absolute;
+	position: fixed;
 	background: var(--vbackground) center/cover !important;
 	filter: blur(var(--vbackgroundblur)) !important;
 }
@@ -179,7 +180,6 @@
 .wrapped-15rg6t.clickable-nnkAZy,
 .enabled-5QKLzu:hover,
 .partyMemberOverflow-1tfvpb,
-.twitchSectionPlayButton-2RamGG,
 .memberListItem-vHCzSI:hover,
 .memberListItem-2ZX2pl:hover,
 .popoutContainer-3WC9HR:hover,
@@ -286,11 +286,22 @@
 .guildSeparator-3s64Iy,
 .circleIconButton-jET_ig:not(.selected-ugP_am),
 .noIcon-1a_FrS,
+#bd-pub-button:not(:hover),
 .acronym-2mOFsV:not(.selected-bZ3Lue):not(:hover),
 .button-OhfaWu:not(.selected-wSa2KV):not(:hover),
 .guildsAdd-21_IdK {
 	border-color: transparent !important;
 	background: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 3)) !important;
+}
+
+.twitchSectionPlayButton-2RamGG {
+	background-image: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M12.3333 10.002V22.002L22.3333 16.002L12.3333 10.002Z" fill="rgb(185,187,190)"/></svg>') !important;
+	background-color: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 3)) !important;
+	border-radius: 50%;
+	object-position: -99999px -99999px;
+}
+.twitchSectionPlayButton-2RamGG:hover {
+	background-color: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 4)) !important;
 }
 
 .row-rrHHJU.selected-1pIgLL {
