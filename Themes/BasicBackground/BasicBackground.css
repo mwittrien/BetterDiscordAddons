@@ -25,7 +25,6 @@
 	--vbackdropblur: var(--backdropblur,var(--dblur));
 }
 
-#pubslayerroot:before,
 .container-16j22k:before,
 .appMount-3lHmkl:before {
 	content: "";
@@ -1963,6 +1962,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	transition: unset !important;
 	animation: unset !important;
 }
+.layer-3QrUeG.publicServersOpen:first-child[style*="opacity"],
 .layer-3QrUeG.stop-animations:first-child[style*="opacity"] {
 	opacity: 0 !important;
 }
@@ -2183,11 +2183,6 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 }
 .role-2irmRk .roleCircleButton-377y0l:hover {
 	opacity: 1 !important;
-	z-index: 2000 !important;
-}
-
-/* public server list */
-#pubslayerroot {
 	z-index: 2000 !important;
 }
 
