@@ -11,7 +11,7 @@ class DisplayServersAsChannels {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Servers","Fixed the issue where server wouldn't properly get changed when they are added to the serverlist"],["Server Add Button","Fixed the issue where the server add button wouldn't properly get changed sometimes"]]
+			"fixed":[["Public Button","Fixed CSS for public server button"]]
 		};
 		
 		this.patchModules = {
@@ -38,7 +38,6 @@ class DisplayServersAsChannels {
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guilds + BDFDB.dotCN.scroller}::-webkit-scrollbar-thumb {
 				background-color: rgb(22, 24, 27);
 			}
-			#bd-pub-li,
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCNS.guildcontainer + BDFDB.dotCN.guildicon},
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCNS.guildcontainer + BDFDB.dotCN.guildiconacronym} {
 				display: none !important;
@@ -185,7 +184,9 @@ class DisplayServersAsChannels {
 				width: 230px !important;
 				height: 32px !important;
 			}
+			#bd-pub-button,
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildouter} .RANbutton {
+				border-radius: 3px !important;
 				display: block !important;
 				color: white !important;
 				font-weight: 400 !important;
@@ -193,6 +194,7 @@ class DisplayServersAsChannels {
 				line-height: 32px !important;
 				padding-left: 5px !important;
 				text-transform: capitalize !important;
+				text-align: left !important;
 			}
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildouter}.folder.open .DSAC-name {
 				text-decoration: underline;
@@ -210,6 +212,12 @@ class DisplayServersAsChannels {
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildouter}.DSAC-selected ${BDFDB.dotCN.guildinner},
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildouter}.DSAC-selected ${BDFDB.dotCN.guildinner}:hover {
 				background-color: rgba(79,84,92,.6);
+			}
+			#bd-pub-button {
+				transition: background-color .15s ease-out,color .15s ease-out;
+			}
+			#bd-pub-button:hover {
+				background-color: rgb(114,137,218);
 			}
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCNS.guildcontainer + BDFDB.dotCN.guildinner} .DSAC-name {
 				opacity: 0.4;

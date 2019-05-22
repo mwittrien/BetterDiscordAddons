@@ -150,10 +150,14 @@
 /* GUILDICON */
 .guildIcon-lQ0uiM:not(.guildIconImage-3qTk45):not(.guildIconExpired-2Qcq05),
 .guildAvatarWithoutIcon-1sTmE_,
+#bd-pub-button:hover,
 .acronym-2mOFsV:hover,
 .acronym-2mOFsV.selected-bZ3Lue,
 .button-OhfaWu.selected-wSa2KV {
 	background-color: rgb(var(--vaccentcolor)) !important;
+}
+#bd-pub-button {
+	transition: background-color .15s ease-out,color .15s ease-out;
 }
 
 /* TOOLTIP / POPOUT */
