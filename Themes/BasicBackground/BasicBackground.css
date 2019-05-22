@@ -2186,6 +2186,11 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	z-index: 2000 !important;
 }
 
+/* public server list */
+#pubslayerroot {
+	z-index: 2000 !important;
+}
+
 /* selection */ 
 ::selection {
 	background: rgb(var(--vaccentcolor)) !important;
