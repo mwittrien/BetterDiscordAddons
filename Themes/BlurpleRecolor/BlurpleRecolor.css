@@ -154,6 +154,7 @@
 .acronym-2mOFsV:hover,
 .acronym-2mOFsV.selected-bZ3Lue,
 .button-OhfaWu.selected-wSa2KV {
+	color: white !important;
 	background-color: rgb(var(--vaccentcolor)) !important;
 }
 #bd-pub-button {
