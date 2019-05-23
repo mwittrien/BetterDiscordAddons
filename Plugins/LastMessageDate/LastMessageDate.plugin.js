@@ -226,7 +226,7 @@ class LastMessageDate {
 			};
 			if (this.loadedusers[guildid][info.id]) addTimestamp(this.loadedusers[guildid][info.id]);
 			else this.APIModule.get((isguild ? this.DiscordConstants.Endpoints.SEARCH_GUILD(guildid) : this.DiscordConstants.Endpoints.SEARCH_CHANNEL(guildid)) + "?author_id=" + info.id).then(result => {
-				if (result && result.body && Array.isArray(result.body.messages[0])) {
+				if (result && result.body && result.body.messages && Array.isArray(result.body.messages[0])) {
 					for (let message of result.body.messages[0]) if (message.hit && message.author.id == info.id) {
 						let timestamp = new Date(message.timestamp);
 						this.loadedusers[guildid][info.id] = timestamp;
