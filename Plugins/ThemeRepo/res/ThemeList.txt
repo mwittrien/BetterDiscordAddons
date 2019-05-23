@@ -171,11 +171,9 @@ https://raw.githubusercontent.com/satoru8/CleanDark/master/CleanDark.theme.css
 https://raw.githubusercontent.com/satoru8/CleanDark/master/CleanDarkBG.theme.css
 https://raw.githubusercontent.com/satoru8/Collection/master/Anime/Chloe.theme.css
 https://raw.githubusercontent.com/satoru8/Collection/master/Anime/KirishimaTouka.theme.css
-https://raw.githubusercontent.com/satoru8/Collection/master/Anime/Kirito.theme.css
 https://raw.githubusercontent.com/satoru8/Collection/master/Anime/Madoka.theme.css
 https://raw.githubusercontent.com/satoru8/Collection/master/Anime/Miku.theme.css
 https://raw.githubusercontent.com/satoru8/Collection/master/Anime/Miku2.theme.css
-https://raw.githubusercontent.com/satoru8/Collection/master/Anime/yugioh.theme.css
 https://raw.githubusercontent.com/satoru8/Collection/master/Games/mhw.theme.css
 https://raw.githubusercontent.com/satoru8/ExampleTheme/master/ExampleTheme.theme.css
 https://raw.githubusercontent.com/satoru8/FeaturedArtists/master/lsy/LSY1.theme.css
