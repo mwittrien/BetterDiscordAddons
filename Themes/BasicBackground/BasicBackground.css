@@ -371,8 +371,7 @@
 	border-color: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 6)) !important;
 }
 
-.header-2o-2hj:not(.banner-1TiK82),
-.header-2o-2hj:not(.withBanner-3j8ruM),
+.header-2o-2hj:not(.banner-1TiK82):not(.withBanner-3j8ruM),
 .searchBar-6Kv8R2,
 .title-3qD0b-,
 .container-1r6BKw {
