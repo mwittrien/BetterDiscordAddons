@@ -3,7 +3,7 @@
 class ShowHiddenChannels {
 	getName () {return "ShowHiddenChannels";}
 
-	getVersion () {return "2.5.0";}
+	getVersion () {return "2.5.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ShowHiddenChannels {
 
 	initConstructor () {
 		this.changelog = {
-			"improved":[["Channel Types","More accurately catches the types of hidden channels"],["Fallback","Added an icon/type fallback for new channel types"]]
+			"fixed":[["News/Store","Fixed the issue where News/Store channels were always marked as hidden"]]
 		};
 		
 		this.patchModules = {
@@ -224,17 +224,10 @@ class ShowHiddenChannels {
 						}
 					}
 				}
-				else {
-					let shownChannelsOfType = channel.type == 0 && shownChannels.SELECTABLE ? shownChannels.SELECTABLE : shownChannels[channel.type];
-					if (shownChannelsOfType) for (let shownChannel of shownChannelsOfType) if (shownChannel.channel.id == channel.id) {
-						isHidden = false;
-						break;
-					}
-				}
+				if (BDFDB.isUserAllowedTo("VIEW_CHANNEL", BDFDB.myData.id, channel.id)) isHidden = false;
 				if (isHidden) hiddenChannels[channel.type].push(channel);
 			}
 		}
-
 
 		var settings = BDFDB.getAllData(this, "settings"); 
 		var count = 0;
@@ -305,7 +298,6 @@ class ShowHiddenChannels {
 			if (!scroller || scroller.lastChild.previousSibling == category) return;
 			category.remove();
 			let count = parseInt(scroller.lastChild.previousSibling.className.split("-")[1])+1;
-			category.className = "container-" + count + " container-hidden";
 			scroller.insertBefore(category, scroller.lastChild);
 		}
 	}
