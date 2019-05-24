@@ -251,10 +251,9 @@ class ServerHider {
 		serverCopy.style.setProperty("margin", "0");
 		serverCopy.style.setProperty("width", "48px");
 		serverCopy.style.setProperty("height", "48px");
-		serverCopy.style.setProperty("margin", "0");
-		let inner = serverCopy.querySelector("foreignObject");
-		inner.removeAttribute("mask");
-		inner.style.setProperty("border-radius", "50%");
+		serverCopy.style.setProperty("overflow", "hidden");
+		serverCopy.style.setProperty("border-radius", "50%");
+		serverCopy.querySelector("foreignObject").removeAttribute("mask");
 		BDFDB.toggleEles(serverCopy, true);
 		serverCopy.addEventListener("click", e => {
 			BDFDB.stopEvent(e);
