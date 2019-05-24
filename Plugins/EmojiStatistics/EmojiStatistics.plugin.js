@@ -3,13 +3,17 @@
 class EmojiStatistics {
 	getName () {return "EmojiStatistics";}
 
-	getVersion () {return "2.8.0";}
+	getVersion () {return "2.8.1";}
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Adds some helpful options to show you more information about emojis and emojiservers.";}
 
 	initConstructor () {
+		this.changelog = {
+			"fixed":[["Picker","Fixed the issue where the picker wouldn't close on clicking the Statistics Button"]]
+		};
+		
 		this.labels = {};
 
 		this.patchModules = {
@@ -250,7 +254,8 @@ class EmojiStatistics {
 				let emojiStatisticsButton = BDFDB.htmlToElement(`<div class="emojistatistics-button"></div>`);
 				emojipickerdiversityselector.parentElement.insertBefore(emojiStatisticsButton, emojipickerdiversityselector);
 				emojiStatisticsButton.addEventListener("click", () => {
-					let close = BDFDB.getReactValue(instance, "_reactInternalFiber.return.return.return.return.return.stateNode.close");
+					let close = BDFDB.getReactValue(instance, "_reactInternalFiber.return.return.return.return.stateNode.close");
+					console.log(instance);
 					if (close) close();
 					this.showEmojiInformationModal();
 				});
@@ -349,12 +354,19 @@ class EmojiStatistics {
 
 	createCopyOfServer (info) {
 		let serverCopy = info.div.cloneNode(true);
+		BDFDB.removeEles(serverCopy.querySelectorAll(BDFDB.dotCNC.guildpill + BDFDB.dotCNC.guildbadgewrapper + "mask"));
+		serverCopy.style.setProperty("margin", "0");
+		serverCopy.style.setProperty("width", "48px");
+		serverCopy.style.setProperty("height", "48px");
+		serverCopy.style.setProperty("overflow", "hidden");
+		serverCopy.style.setProperty("border-radius", "50%");
+		serverCopy.querySelector("foreignObject").removeAttribute("mask");
 		BDFDB.toggleEles(serverCopy, true);
-		BDFDB.removeClass(serverCopy, BDFDB.disCN.guildunread, BDFDB.disCN.guildselected);
-		serverCopy.style.setProperty("pointer-events", "none", "important");
-		let serverInner = serverCopy.querySelector(BDFDB.dotCN.guildinner);
-		serverInner.style.removeProperty("background-color");
-		serverInner.style.removeProperty("border-radius");
+		serverCopy.addEventListener("click", e => {
+			BDFDB.stopEvent(e);
+			info.div.querySelector("a").click();
+		});
+		serverCopy.addEventListener("contextmenu", e => {BDFDB.openGuildContextMenu(info.div, e);});
 		return serverCopy;
 	}
 
