@@ -5,13 +5,13 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.7.7";}
+	getVersion () {return "1.7.8";} 
 
 	getAuthor () {return "DevilBro";}
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Canary/PTB","Fixed the plugin for canary and ptb"]]
+			"fixed":[["Channel Divider","Clicking the channel name in the message divider now properly switches to the channel again"]]
 		};
 		
 		this.labels = {};
@@ -175,15 +175,30 @@ class PersonalPins {
 	start () {
 		if (!global.BDFDB) global.BDFDB = {myPlugins:{}};
 		if (global.BDFDB && global.BDFDB.myPlugins && typeof global.BDFDB.myPlugins == "object") global.BDFDB.myPlugins[this.getName()] = this;
-		var libraryScript = document.querySelector('head script[src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js"]');
-		if (!libraryScript || performance.now() - libraryScript.getAttribute("date") > 600000) {
+		var libraryScript = document.querySelector('head script#BDFDBLibraryScript');
+		if (!libraryScript || (performance.now() - libraryScript.getAttribute("date")) > 600000) {
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
+			libraryScript.setAttribute("id", "BDFDBLibraryScript");
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
 			libraryScript.setAttribute("date", performance.now());
-			libraryScript.addEventListener("load", () => {if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();});
+			libraryScript.addEventListener("load", () => {this.initialize();});
 			document.head.appendChild(libraryScript);
+			this.libLoadTimeout = setTimeout(() => {
+				libraryScript.remove();
+				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
+					if (body) {
+						libraryScript = document.createElement("script");
+						libraryScript.setAttribute("id", "BDFDBLibraryScript");
+						libraryScript.setAttribute("type", "text/javascript");
+						libraryScript.setAttribute("date", performance.now());
+						libraryScript.innerText = body;
+						document.head.appendChild(libraryScript);
+					}
+					this.initialize();
+				});
+			}, 15000);
 		}
 		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
@@ -194,7 +209,7 @@ class PersonalPins {
 			if (this.started) return;
 			BDFDB.loadMessage(this); 
 
-			this.SelectChannelUtils = BDFDB.WebModules.findByProperties("selectGuild","selectChannel");
+			this.SelectChannelUtils = BDFDB.WebModules.findByProperties("selectPrivateChannel","selectChannel");
 			this.GuildUtils = BDFDB.WebModules.findByProperties("getGuilds","getGuild");
 			this.ChannelUtils = BDFDB.WebModules.findByProperties("getChannels","getChannel");
 			this.UserUtils = BDFDB.WebModules.findByProperties("getUsers","getUser");
@@ -367,7 +382,7 @@ class PersonalPins {
 				let noteArray = [];
 				for (let id in notes) {noteArray.push(notes[id]);}
 				BDFDB.sortArrayByKey(noteArray, notespopout.querySelector(BDFDB.dotCN.recentmentionsmentionfiltervalue).getAttribute("option"));
-				for (let noteData of noteArray) this.appendNote(container, noteData, placeholder);
+				for (let noteData of noteArray) this.appendNote(notespopout, container, noteData, placeholder);
 				let searchstring = notespopout.querySelector(BDFDB.dotCN.searchbarinput).value.replace(/[<|>]/g, "");
 				if (searchstring) for (let note of notespopout.querySelectorAll(BDFDB.dotCN.messagegroupwrapper)) {
 					note.innerHTML = BDFDB.highlightText(note.innerHTML, searchstring);
@@ -381,7 +396,7 @@ class PersonalPins {
 		}
 	}
 
-	appendNote (container, noteData, placeholder) {
+	appendNote (notespopout, container, noteData, placeholder) {
 		if (!container || !noteData) return;
 		let server = this.GuildUtils.getGuild(noteData.guild_id) || {};
 		let channel = this.ChannelUtils.getChannel(noteData.channel_id) || {};
