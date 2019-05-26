@@ -3,7 +3,7 @@
 class EditUsers {
 	getName () {return "EditUsers";}
 
-	getVersion () {return "3.3.7";}
+	getVersion () {return "3.3.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class EditUsers {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["DM Header","Fixed the issue where the changed DM header would be stuck when changing channels"]]
+			"fixed":[["Mentions","Fixed the issue where mentions wouldn't get changed correctly"]]
 		};
 		
 		this.labels = {}; 
@@ -238,27 +238,6 @@ class EditUsers {
 			libraryScript = document.createElement("script");
 			libraryScript.setAttribute("id", "BDFDBLibraryScript");
 			libraryScript.setAttribute("type", "text/javascript");
-			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
-			libraryScript.setAttribute("date", performance.now());
-			libraryScript.addEventListener("load", () => {this.initialize();});
-			document.head.appendChild(libraryScript);
-			this.libLoadTimeout = setTimeout(() => {
-				libraryScript.remove();
-				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
-					if (body) {
-						libraryScript = document.createElement("script");
-						libraryScript.setAttribute("id", "BDFDBLibraryScript");
-						libraryScript.setAttribute("type", "text/javascript");
-						libraryScript.setAttribute("date", performance.now());
-						libraryScript.innerText = body;
-						document.head.appendChild(libraryScript);
-					}
-					this.initialize();
-				});
-			}, 15000);
-		}
-		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
-		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
 			libraryScript.setAttribute("date", performance.now());
 			libraryScript.addEventListener("load", () => {this.initialize();});
@@ -675,7 +654,6 @@ class EditUsers {
 		let channel_id = BDFDB.getReactValue(instance, "props.channelId") || BDFDB.getReactValue(instance, "_reactInternalFiber.return.memoizedProps.channelId");
 		if (channel_id) {
 			let username = wrapper.querySelector(BDFDB.dotCN.channelheaderheaderbartitle);
-			username = username && username.firstElementChild ? wrapper.querySelector(BDFDB.dotCN.channelheaderchannelname) : username;
 			if (username) {
 				let channel = this.ChannelUtils.getChannel(channel_id);
 				if (channel) {
@@ -704,7 +682,11 @@ class EditUsers {
 		}
 		else if (instance.props.tag == "span" && instance.props.className.indexOf(BDFDB.disCN.mention) > -1) {
 			let render = BDFDB.getReactValue(instance, "_reactInternalFiber.return.return.stateNode.props.render");
-			if (typeof render == "function") this.changeMention(render().props.user, wrapper);
+			if (typeof render == "function") {
+				var props = render().props;
+				if (props && props.user) this.changeMention(props.user, wrapper);
+				else if (props && props.userId) this.changeMention(this.UserUtils.getUser(props.userId), wrapper);
+			}
 		}
 		else if (instance.props.tag == "div" && instance.props.className.indexOf(BDFDB.disCN.voiceuser) > -1) {
 			let user = BDFDB.getReactValue(instance, "_reactInternalFiber.return.memoizedProps.user");
