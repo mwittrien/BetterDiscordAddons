@@ -3,7 +3,7 @@
 class EmojiStatistics {
 	getName () {return "EmojiStatistics";}
 
-	getVersion () {return "2.8.1";}
+	getVersion () {return "2.8.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class EmojiStatistics {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Picker","Fixed the issue where the picker wouldn't close on clicking the Statistics Button"]]
+			"added":[["Total Amounts","Added the total amount in the header title for each category"]]
 		};
 		
 		this.labels = {};
@@ -270,7 +270,6 @@ class EmojiStatistics {
 				emojipickerdiversityselector.parentElement.insertBefore(emojiStatisticsButton, emojipickerdiversityselector);
 				emojiStatisticsButton.addEventListener("click", () => {
 					let close = BDFDB.getReactValue(instance, "_reactInternalFiber.return.return.return.return.stateNode.close");
-					console.log(instance);
 					if (close) close();
 					this.showEmojiInformationModal();
 				});
