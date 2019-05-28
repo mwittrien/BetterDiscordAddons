@@ -17,60 +17,14 @@ html[class="gr__betterdocs_us" i] body #app-mount {
 	visibility: visible !important;
 }
 
-#app-mount .containerCozy-jafyvG .markup-2BOw-j > .anchor-3Z-8Bb[href*="www.discordsource." i]::after,
-#app-mount .containerCozy-jafyvG .markup-2BOw-j > .anchor-3Z-8Bb[href*="://discordsource." i]::after,
-#app-mount .containerCozy-jafyvG .markup-2BOw-j > .anchor-3Z-8Bb[href*="www.betterdocs." i]::after,
-#app-mount .containerCozy-jafyvG .markup-2BOw-j > .anchor-3Z-8Bb[href*="://betterdocs." i]::after {
+#app-mount .container-1YxwTf .markup-2BOw-j > .anchor-3Z-8Bb[href*="www.discordsource." i]:after,
+#app-mount .container-1YxwTf .markup-2BOw-j > .anchor-3Z-8Bb[href*="://discordsource." i]:after,
+#app-mount .container-1YxwTf .markup-2BOw-j > .anchor-3Z-8Bb[href*="www.betterdocs." i]:after,
+#app-mount .container-1YxwTf .markup-2BOw-j > .anchor-3Z-8Bb[href*="://betterdocs." i]:after {
 	content: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAARCAYAAAA7bUf6AAAABHNCSVQICAgIfAhkiAAAAXhJREFUOI2d1L9LG3EYx/H3JymJlDaJdPEPcM0/4BQQ7qTYtbg5dBCKlAoupavgoFAK9g/I1KFjwOS+lJJFF7e6ODSTdLI0P1Dwit7TKfFyfhPbPNPd9/k8L57vcCc8ZaBBGD43eAtUgVNJH0qtVlNg2bzGhmu1uV6x+FJm20hVj/9dsF+K4y9qt6/HkG4QrCMtC1aBed92meoKGonZt3nn6gLoheEV8PgfhrN1VYmiJ7nhy6QQudwicOFrGgwAhsjPCchNpdnsALGvKTi/Q6QfDy7uR87Sm3ydBQGiEXKbJIczAIkKBTdCnjl3jtnp/wiCo1Kj8WuEAEja82Sf9lZWOsDCvY7Z7vBxhJTi+DPQyUT/YPYOuMycn5Sda95D1G7fkCSvSX8bZoZkQJICrpN8/lXmauPVDYKPkt54rjYc2CxH0af0WS4bqiwtbUmq+wAz28kC3k0ArFZ71C8UDpA2UsJu2bn3vl/B1OoHwVovDI9/B8GLabm/bjd480H/iv8AAAAASUVORK5CYII=') !important;
 	position: relative !important;
 	top: 3px !important;
 	margin: 0 2px !important;
-}
-
-#app-mount .embedLink-1G1K1D[href*="www.discordsource." i],
-#app-mount .containerCozy-jafyvG .markup-2BOw-j .anchor-3Z-8Bb:not(.channelLink-2TxEu3):not(.guildsError-3cFMtY):not(.guildsError-b7zR5H):not(.embedAuthorName-3mnTWj):not(.downloadButton-1bWXpg):not(.downloadLink-1ywL9o)[href*="www.discordsource." i],
-#app-mount .embedLink-1G1K1D[href*="://discordsource." i],
-#app-mount .containerCozy-jafyvG .markup-2BOw-j .anchor-3Z-8Bb:not(.channelLink-2TxEu3):not(.guildsError-3cFMtY):not(.guildsError-b7zR5H):not(.embedAuthorName-3mnTWj):not(.downloadButton-1bWXpg):not(.downloadLink-1ywL9o)[href*="://discordsource." i],
-#app-mount .embedLink-1G1K1D[href*="www.betterdocs." i],
-#app-mount .containerCozy-jafyvG .markup-2BOw-j .anchor-3Z-8Bb:not(.channelLink-2TxEu3):not(.guildsError-3cFMtY):not(.guildsError-b7zR5H):not(.embedAuthorName-3mnTWj):not(.downloadButton-1bWXpg):not(.downloadLink-1ywL9o)[href*="www.betterdocs." i],
-#app-mount .embedLink-1G1K1D[href*="://betterdocs." i],
-#app-mount .containerCozy-jafyvG .markup-2BOw-j .anchor-3Z-8Bb:not(.channelLink-2TxEu3):not(.guildsError-3cFMtY):not(.guildsError-b7zR5H):not(.embedAuthorName-3mnTWj):not(.downloadButton-1bWXpg):not(.downloadLink-1ywL9o)[href*="://betterdocs." i] {
-	color: #f04747 !important;
-	pointer-events: none !important;
-}
-
-#app-mount .embedLink-1G1K1D[href*="www.discordsource." i]::selection,
-#app-mount .containerCozy-jafyvG .markup-2BOw-j .anchor-3Z-8Bb[href*="www.discordsource." i]::selection,
-#app-mount .embedLink-1G1K1D[href*="://discordsource." i]::selection,
-#app-mount .containerCozy-jafyvG .markup-2BOw-j .anchor-3Z-8Bb[href*="://discordsource." i]::selection,
-#app-mount .embedLink-1G1K1D[href*="www.betterdocs." i]::selection,
-#app-mount .containerCozy-jafyvG .markup-2BOw-j .anchor-3Z-8Bb[href*="www.betterdocs." i]::selection,
-#app-mount .embedLink-1G1K1D[href*="://betterdocs." i]::selection,
-#app-mount .containerCozy-jafyvG .markup-2BOw-j .anchor-3Z-8Bb[href*="://betterdocs." i]::selection {
-	background-color: transparent !important;
-}
-
-#app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="www.discordsource." i]:before,
-#app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="://discordsource." i]:before,
-#app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="www.betterdocs." i]:before,
-#app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="://betterdocs." i]:before {
-	color: #bbb !important;
-	border: 2px solid #f04747 !important;
-	background: #202225 var(--warningbetterdocs) bottom right/100px no-repeat !important;
-	padding: 10px !important;
-	padding-right: 100px !important;
-	margin-top: -33px !important;
-	margin-left: -20px !important;
-	border-radius: 5px !important;
-	text-align: justify !important;
-	position: absolute !important;
-	font-weight: bold !important;
-	height: 100% !important;
-	box-sizing: border-box !important;
-	white-space: pre-wrap !important;
-	overflow: hidden !important;
-	letter-spacing: 0 !important;
-	content: "BetterDocs/DiscordSource is not an official source, and should be treated as such. The owner posts peoples themes and plugins without their permission, and also contains content that would not be found on the official BetterDiscord repos. This means it probably contains harmful plugins that could either get you into trouble with discord, or steal user account info. Please stay safe, and download from official sources only." !important;
 }
 
 #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="www.discordsource." i],
@@ -87,56 +41,113 @@ html[class="gr__betterdocs_us" i] body #app-mount {
 	display: none !important;
 }
 
-#app-mount .embed-IeVjo6 .anchor-3Z-8Bb[href*="www.discordsource." i][href*="/preview" i]:before,
-#app-mount .embed-IeVjo6 .anchor-3Z-8Bb[href*="://discordsource." i][href*="/preview" i]:before,
-#app-mount .embed-IeVjo6 .anchor-3Z-8Bb[href*="www.betterdocs." i][href*="/preview" i]:before,
-#app-mount .embed-IeVjo6 .anchor-3Z-8Bb[href*="://betterdocs." i][href*="/preview" i]:before {
-	width: auto !important;
-	line-height: 17px !important;
-	height: 100% !important;
-	z-index: 2 !important;
-	padding: 10px !important;
-	color: #bbb !important;
-	background: #202225 var(--warningbetterdocs) top/30% no-repeat !important;
-	display: flex !important;
-	text-align: justify !important;
+#app-mount .embedLink-1G1K1D[href*="www.discordsource." i],
+#app-mount .container-1YxwTf .markup-2BOw-j .anchor-3Z-8Bb:not(.channelLink-2TxEu3):not(.guildsError-3cFMtY):not(.guildsError-b7zR5H):not(.embedAuthorName-3mnTWj):not(.downloadButton-1bWXpg):not(.downloadLink-1ywL9o)[href*="www.discordsource." i],
+#app-mount .embedLink-1G1K1D[href*="://discordsource." i],
+#app-mount .container-1YxwTf .markup-2BOw-j .anchor-3Z-8Bb:not(.channelLink-2TxEu3):not(.guildsError-3cFMtY):not(.guildsError-b7zR5H):not(.embedAuthorName-3mnTWj):not(.downloadButton-1bWXpg):not(.downloadLink-1ywL9o)[href*="://discordsource." i],
+#app-mount .embedLink-1G1K1D[href*="www.betterdocs." i],
+#app-mount .container-1YxwTf .markup-2BOw-j .anchor-3Z-8Bb:not(.channelLink-2TxEu3):not(.guildsError-3cFMtY):not(.guildsError-b7zR5H):not(.embedAuthorName-3mnTWj):not(.downloadButton-1bWXpg):not(.downloadLink-1ywL9o)[href*="www.betterdocs." i],
+#app-mount .embedLink-1G1K1D[href*="://betterdocs." i],
+#app-mount .container-1YxwTf .markup-2BOw-j .anchor-3Z-8Bb:not(.channelLink-2TxEu3):not(.guildsError-3cFMtY):not(.guildsError-b7zR5H):not(.embedAuthorName-3mnTWj):not(.downloadButton-1bWXpg):not(.downloadLink-1ywL9o)[href*="://betterdocs." i] {
+	color: #f04747 !important;
+	pointer-events: none !important;
+}
+
+#app-mount .embedLink-1G1K1D[href*="www.discordsource." i]::selection,
+#app-mount .container-1YxwTf .markup-2BOw-j .anchor-3Z-8Bb[href*="www.discordsource." i]::selection,
+#app-mount .embedLink-1G1K1D[href*="://discordsource." i]::selection,
+#app-mount .container-1YxwTf .markup-2BOw-j .anchor-3Z-8Bb[href*="://discordsource." i]::selection,
+#app-mount .embedLink-1G1K1D[href*="www.betterdocs." i]::selection,
+#app-mount .container-1YxwTf .markup-2BOw-j .anchor-3Z-8Bb[href*="www.betterdocs." i]::selection,
+#app-mount .embedLink-1G1K1D[href*="://betterdocs." i]::selection,
+#app-mount .container-1YxwTf .markup-2BOw-j .anchor-3Z-8Bb[href*="://betterdocs." i]::selection {
+	background-color: transparent !important;
+}
+
+#app-mount .wrapper-35wsBm .icon-3o6xvg[style*="/icons/153708594091655168" i]:after,
+#app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="www.discordsource." i]:before,
+#app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="://discordsource." i]:before,
+#app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="www.betterdocs." i]:before,
+#app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="://betterdocs." i]:before {
 	align-content: center !important;
 	align-items: center !important;
+	background: #FDFDFD var(--warningbetterdocs) !important;
+	background-repeat: no-repeat !important;
+	border: 1px solid #EEEEEE !important;
+	border-left: 3px solid #f04747 !important;
+	border-radius: 5px !important;
+	box-sizing: border-box !important;
+	color: rgba(79,83,91,.9) !important;
+	display: flex !important;
+	font-weight: 600 !important;
+	letter-spacing: 0 !important;
+	position: absolute !important;
+	text-align: justify !important;
 	white-space: pre-wrap !important;
+	width: 100% !important;
+	z-index: 2 !important;
+	cursor: not-allowed !important;
+}
+#app-mount .theme-dark .wrapper-35wsBm .icon-3o6xvg[style*="/icons/153708594091655168" i]:after,
+#app-mount .theme-dark .embed-IeVjo6 .embedLink-1G1K1D[href*="www.discordsource." i]:before,
+#app-mount .theme-dark .embed-IeVjo6 .embedLink-1G1K1D[href*="://discordsource." i]:before,
+#app-mount .theme-dark .embed-IeVjo6 .embedLink-1G1K1D[href*="www.betterdocs." i]:before,
+#app-mount .theme-dark .embed-IeVjo6 .embedLink-1G1K1D[href*="://betterdocs." i]:before {
+	color: hsla(0,0%,100%,.6) !important;
+	border-color: #313338 !important;
+	border-left-color: #f04747 !important;
+	background-color: #34363C !important;
+}
+
+#app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="www.discordsource." i]:before,
+#app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="://discordsource." i]:before,
+#app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="www.betterdocs." i]:before,
+#app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="://betterdocs." i]:before {
 	content: "BetterDocs/DiscordSource is not an official source, and should be treated as such. The owner posts peoples themes and plugins without their permission, and also contains content that would not be found on the official BetterDiscord repos. This means it probably contains harmful plugins that could either get you into trouble with discord, or steal user account info. Please stay safe, and download from official sources only." !important;
+	background-position: bottom right !important;
+	background-size: 100px !important;
+	height: 105% !important;
+	margin-top: -34px !important;
+	margin-left: -14px !important;
+	overflow: hidden !important;
+	padding-left: 10px !important;
+	padding-right: 100px !important;
+}
+#app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="www.discordsource." i][href*="/preview" i]:before,
+#app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="://discordsource." i][href*="/preview" i]:before,
+#app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="www.betterdocs." i][href*="/preview" i]:before,
+#app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="://betterdocs." i][href*="/preview" i]:before {
+	background-position: top !important;
+	background-size: 30% !important;
+	padding-right: 10px !important;
 }
 
 #app-mount .markup-2BOw-j .anchor-3Z-8Bb:not(.channelLink-2TxEu3):not(.guildsError-3cFMtY):not(.guildsError-b7zR5H):not(.embedAuthorName-3mnTWj):not(.downloadButton-1bWXpg):not(.downloadLink-1ywL9o)[href*="discordapp.com/invite/D4cAkXX" i] {
 	color: transparent !important;
 	cursor: not-allowed !important;
-	pointer-events: none !important;
 	letter-spacing: -1000px !important;
+	pointer-events: none !important;
 }
 
 #app-mount .markup-2BOw-j .anchor-3Z-8Bb[href*="discordapp.com/invite/D4cAkXX" i]:after {
 	content: "Harmful invite detected - BetterDocs/DiscordSource" !important;
 	color: #f04747 !important;
-	font-weight: bold !important;
-	pointer-events: none !important;
+	font-weight: 600 !important;
 	letter-spacing: 0 !important;
+	pointer-events: none !important;
 }
 
-#app-mount .wrapper-35wsBm .icon-3o6xvg[style*="/icons/153708594091655168" i]::after {
-	content: "BetterDocs/DiscordSource is not an official source of themes and plugins\a and should not be trusted. The creator posts content\a without permission and it may have harmful plugins.\a Do not use BetterDocs/DiscordSource." !important;
-	color: #bbb !important;
-	background: #202225 var(--warningbetterdocs) left/auto 100% no-repeat !important;
-	border: 2px solid #f04747 !important;
-	padding: 10px 10px 10px 100px !important;
-	margin-top: -35px !important;
-	margin-left: -17px !important;
-	border-radius: 5px !important;
-	text-align: justify !important;
-	position: absolute !important;
-	font-weight: bold !important;
-	letter-spacing: 0 !important;
+#app-mount .wrapper-35wsBm .icon-3o6xvg[style*="/icons/153708594091655168" i]:after {
+	content: "BetterDocs/DiscordSource is not an official source of themes and plugins and should not be trusted. The creator posts content without permission and it may have harmful plugins. Do not use BetterDocs/DiscordSource." !important;
+	background-position: left !important;
+	background-size: auto 100% !important;
 	font-size: 15px !important;
-	width: 300px !important;
-	height: 73px !important;
+	height: 100px !important;
+	margin-top: -35px !important;
+	margin-left: -10px !important;
+	padding-left: 110px !important;
+	padding-right: 10px !important;
+	width: 450px !important;
 }
 
 #app-mount .wrapper-35wsBm .icon-3o6xvg[style*="/icons/153708594091655168" i] ~ .button-3To2tQ {
