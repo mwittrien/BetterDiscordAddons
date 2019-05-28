@@ -3,7 +3,7 @@
 class EmojiStatistics {
 	getName () {return "EmojiStatistics";}
 
-	getVersion () {return "2.8.2";}
+	getVersion () {return "2.8.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,8 @@ class EmojiStatistics {
 
 	initConstructor () {
 		this.changelog = {
-			"added":[["Total Amounts","Added the total amount in the header title for each category"]]
+			"added":[["Total Amounts","Added the total amount in the header title for each category"]],
+			"fixed":[["Reload","Fixed the issue where clicking a sever in the statistics modal would reload Discord"]]
 		};
 		
 		this.labels = {};
@@ -69,25 +70,20 @@ class EmojiStatistics {
 				width: 50px;
 			}
 
-			.${this.name}-modal .titles-entry .modal-titlesname-label,
-			.${this.name}-modal .emojiserver-entry .modal-emojiname-label {
-				width: 300px;
-			}
-
 			.${this.name}-modal .titles-entry .modal-sorttitle-label {
 				cursor: pointer;
 			}
 
-			.${this.name}-modal .titles-entry .modal-titlestotal-label,
-			.${this.name}-modal .titles-entry .modal-titlesglobal-label,
-			.${this.name}-modal .titles-entry .modal-titleslocal-label,
-			.${this.name}-modal .titles-entry .modal-titlescopies-label,
-			.${this.name}-modal .emojiserver-entry .modal-emojitotal-label,
-			.${this.name}-modal .emojiserver-entry .modal-emojiglobal-label,
-			.${this.name}-modal .emojiserver-entry .modal-emojilocal-label,
-			.${this.name}-modal .emojiserver-entry .modal-emojicopies-label {
+			.${this.name}-modal .titles-entry .modal-sorttitle-label,
+			.${this.name}-modal .emojiserver-entry .modal-emojiserver-label {
 				text-align: center;
-				width: 82px;
+				width: 122px;
+			}
+
+			.${this.name}-modal .titles-entry .modal-titlesname-label,
+			.${this.name}-modal .emojiserver-entry .modal-emojiname-label {
+				text-align: left;
+				width: 300px;
 			}
 
 			.emojistatistics-button {
@@ -149,11 +145,11 @@ class EmojiStatistics {
 		this.emojiserverEntryMarkup =
 			`<div class="emojiserver-entry">
 				<div class="modal-emojiserver-icon"></div>
-				<label class="modal-emojiname-label">modal-emojiname-label</label>
-				<label class="modal-emojitotal-label">modal-emojitotal-label</label>
-				<label class="modal-emojiglobal-label">modal-emojiglobal-label</label>
-				<label class="modal-emojilocal-label">modal-emojilocal-label</label>
-				<label class="modal-emojicopies-label">modal-emojicopies-label</label>
+				<label class="modal-emojiserver-label modal-emojiname-label">modal-emojiname-label</label>
+				<label class="modal-emojiserver-label modal-emojitotal-label">modal-emojitotal-label</label>
+				<label class="modal-emojiserver-label modal-emojiglobal-label">modal-emojiglobal-label</label>
+				<label class="modal-emojiserver-label modal-emojilocal-label">modal-emojilocal-label</label>
+				<label class="modal-emojiserver-label modal-emojicopies-label">modal-emojicopies-label</label>
 			</div>`;
 
 		this.defaults = {
@@ -307,22 +303,16 @@ class EmojiStatistics {
 
 		var titleEntry = BDFDB.htmlToElement(this.emojiserverTitlesMarkup);
 		titlescontainer.appendChild(titleEntry);
+		var entries = [], index = 0, totalGlobal = 0, totalLocal = 0, totalCopies = 0;
 		BDFDB.addChildEventListener(titleEntry, "click", ".modal-sorttitle-label ", e => {
 			var oldTitle = e.currentTarget.innerText;
-
-			var reverse = oldTitle.indexOf("▼") < 0 ? false : true;
-
-			titleEntry.querySelector(".modal-titlesname-label").innerText = this.labels.modal_titlesname_text;
-			titleEntry.querySelector(".modal-titlestotal-label").innerText = this.labels.modal_titlestotal_text;
-			titleEntry.querySelector(".modal-titlesglobal-label").innerText = this.labels.modal_titlesglobal_text;
-			titleEntry.querySelector(".modal-titleslocal-label").innerText = this.labels.modal_titleslocal_text;
-			titleEntry.querySelector(".modal-titlescopies-label").innerText = this.labels.modal_titlescopies_text;
-
-			var sortKey = "index";
+			
+			this.resetTitles(titleEntry, totalGlobal, totalLocal, totalCopies);
+			
+			var reverse = oldTitle.indexOf("▼") < 0 ? false : true, sortKey = "index";
 			if (oldTitle.indexOf("▲") < 0) {
 				sortKey = e.currentTarget.getAttribute("sortkey");
-				var title = this.labels["modal_titles" + sortKey + "_text"];
-				e.currentTarget.innerText = oldTitle.indexOf("▼") < 0 ? title + "▼" : title + "▲";
+				e.currentTarget.innerText = oldTitle.indexOf("▼") < 0 ? e.currentTarget.innerText + "▼" : e.currentTarget.innerText + "▲";
 			}
 
 			BDFDB.sortArrayByKey(entries, sortKey);
@@ -331,7 +321,6 @@ class EmojiStatistics {
 			this.updateAllEntries(entriescontainer, entries);
 		});
 
-		var entries = [], index = 0;
 		for (let info of BDFDB.readServerList()) {
 			let amountGlobal = 0, amountLocal = 0, amountCopies = 0;
 			for (let emoji of this.GuildEmojis.getGuildEmoji(info.id)) {
@@ -344,18 +333,31 @@ class EmojiStatistics {
 				}
 			}
 			var emojiEntry = BDFDB.htmlToElement(this.emojiserverEntryMarkup);
-			emojiEntry.querySelector(".modal-emojiserver-icon").innerHTML = this.createCopyOfServer(info).outerHTML;
+			emojiEntry.querySelector(".modal-emojiserver-icon").appendChild(this.createCopyOfServer(info));
 			emojiEntry.querySelector(".modal-emojiname-label").innerText = info.name || "";
 			emojiEntry.querySelector(".modal-emojitotal-label").innerText = amountGlobal + amountLocal;
 			emojiEntry.querySelector(".modal-emojiglobal-label").innerText = amountGlobal;
 			emojiEntry.querySelector(".modal-emojilocal-label").innerText = amountLocal;
 			emojiEntry.querySelector(".modal-emojicopies-label").innerText = amountCopies;
 			entries.push({div:emojiEntry, index:index++, name:info.name || "", total:amountGlobal+amountLocal, global:amountGlobal, local:amountLocal, copies:amountCopies});
+			totalGlobal += amountGlobal;
+			totalLocal += amountLocal;
+			totalCopies += amountCopies;
 		}
+			
+		this.resetTitles(titleEntry, totalGlobal, totalLocal, totalCopies);
 
 		BDFDB.appendModal(emojiInformationModal);
 
 		this.updateAllEntries(entriescontainer, entries);
+	}
+	
+	resetTitles (titleEntry, totalGlobal, totalLocal, totalCopies) {
+		titleEntry.querySelector(".modal-titlesname-label").innerText = this.labels.modal_titlesname_text;
+		titleEntry.querySelector(".modal-titlestotal-label").innerText = `${this.labels.modal_titlestotal_text} (${totalGlobal + totalLocal})`;
+		titleEntry.querySelector(".modal-titlesglobal-label").innerText = `${this.labels.modal_titlesglobal_text} (${totalGlobal})`;
+		titleEntry.querySelector(".modal-titleslocal-label").innerText = `${this.labels.modal_titleslocal_text} (${totalLocal})`;
+		titleEntry.querySelector(".modal-titlescopies-label").innerText = `${this.labels.modal_titlescopies_text} (${totalCopies})`;
 	}
 
 	updateAllEntries (entriescontainer, entries) {
