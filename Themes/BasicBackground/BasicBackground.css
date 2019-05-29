@@ -621,6 +621,9 @@ input:disabled {
 .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC:after {
 	height: 32px;
 }
+.titleBar-AC4pGV.typeMacOS-3EmCyP {
+	width: 0;
+}
 
 .chat-3bRxxu form {
 	box-shadow: 0 -1px 0 rgba(var(--vtransparencycolor),.3) !important;
