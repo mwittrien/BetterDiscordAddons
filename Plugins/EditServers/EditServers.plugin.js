@@ -3,7 +3,7 @@
 class EditServers {
 	getName () {return "EditServers";}
 
-	getVersion () {return "2.0.0";} 
+	getVersion () {return "2.0.1";} 
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class EditServers {
 
 	initConstructor () {
 		this.changelog = {
-			"improved":[["Server Banners","Setting a banner no longer fucks around with the VERIFY flag"]]
+			"improved":[["ServerFolders bug","Fixed a bug that prevented tooltips from showing when an edited server is in a folder"]]
 		};
 		
 		this.labels = {};
@@ -577,6 +577,7 @@ class EditServers {
 				BDFDB.createTooltip(data.name || info.name, wrapper, {type,selector:"EditServers-tooltip",style:`color: ${fontColor} !important; background-color: ${bgColor} !important; border-color: ${bgColor} !important;`,css:`body ${BDFDB.dotCN.tooltip}:not(.EditServers-tooltip) {display: none !important;}`});
 			};
 			wrapper.addEventListener("mouseenter", wrapper.tooltipListenerEditServers);
+			if (document.querySelector(BDFDB.dotCN.guildcontainer + ":hover") == wrapper) wrapper.tooltipListenerEditServers();
 		}
 	}
 

@@ -1258,8 +1258,8 @@ class ServerFolders {
 		BDFDB.addClass(guildcopy, "copy");
 		BDFDB.toggleEles(guildcopy, true);
 		guildcopyinner.addEventListener("mouseenter", () => {
-			let EditServersData = BDFDB.isPluginEnabled("EditServers") ? BDFDB.loadData(info.id, "EditServers", "servers") : null;
-			if (EditServersData) bdplugins.EditServers.plugin.changeTooltip(info, guildcopyinner, "right");
+			let ESdata = BDFDB.isPluginEnabled("EditServers") ? bdplugins.EditServers.plugin.getGuildData(info.id, guildcopyinner) : null;
+			if (ESdata && (ESdata.name || ESdata.color3 || ESdata.color4)) bdplugins.EditServers.plugin.changeTooltip(info, guildcopyinner, "right");
 			else {
 				let folderData = BDFDB.loadData(folderdiv.id, this, "folders") || {};
 				let bgColor = BDFDB.colorCONVERT(folderData.copyTooltipColor ? folderData.color3 : null, "RGB");
