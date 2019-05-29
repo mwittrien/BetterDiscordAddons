@@ -10,7 +10,7 @@
 	--warningbdbguildlogo: var(--BetterDocsBlockerWarnLogo3,var(--dwarningbdbguildlogo));
 	
 	--warningbdbred: var(--BetterDocsBlockerRed,#F04747);
-	--warningbdbbackgroundlght: var(--BetterDocsBlockerBlack1,#FDFDFD);
+	--warningbdbbackgroundlight: var(--BetterDocsBlockerBlack1,#FDFDFD);
 	--warningbdbbackgrounddark: var(--BetterDocsBlockerBlack1,#34363C);
 	--warningbdbborderlight: var(--BetterDocsBlockerRed,#EEEEEE);
 	--warningbdbborderdark: var(--BetterDocsBlockerRed,#313338);
