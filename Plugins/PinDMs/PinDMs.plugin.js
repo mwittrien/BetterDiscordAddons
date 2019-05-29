@@ -3,7 +3,7 @@
 class PinDMs {
 	getName () {return "PinDMs";}
 
-	getVersion () {return "1.4.2";}
+	getVersion () {return "1.4.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class PinDMs {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Unread Pill","Fuck those new hover animations REEEEEE"]]
+			"fixed":[["Vanished Direct Message","Fixed issue where the direct message icon of a user might vanish after a reload"]]
 		};
 		
 		this.patchModules = {
@@ -443,7 +443,10 @@ class PinDMs {
 			}
 			let pinnedRecents = BDFDB.loadAllData(this, "pinnedRecents");
 			if (pinnedRecents[instance.props.channel.id] != undefined) {
-				if (methodnames.includes("componentDidMount")) this.hideNativeDM(instance.props.channel.id);
+				if (methodnames.includes("componentDidMount")) {
+					if (!document.querySelector(`.pinned-dm[channelid="${instance.props.channel.id}"]`)) this.addPinnedRecent(instance.props.channel.id);
+					else this.hideNativeDM(instance.props.channel.id);
+				}
 				this.updatePinnedRecent(instance.props.channel.id);
 			}
 		}
@@ -593,7 +596,12 @@ class PinDMs {
 					BDFDB.createTooltip(FreshEditUsersData.name || dmname, dmdivinner, {selector:(BDFDB.isObjectEmpty(FreshEditUsersData) ? "" : "EditUsers-tooltip"),type:"right"});
 				});
 				avatar.parentElement.addEventListener("click", e => {
-					this.ChannelSwitchUtils.selectPrivateChannel(id);
+					if (user) {
+						let DMid = this.ChannelUtils.getDMFromUserId(user.id)
+						if (DMid) this.ChannelSwitchUtils.selectPrivateChannel(DMid);
+						else this.PrivateChannelUtils.openPrivateChannel(BDFDB.myData.id, user.id);
+					}
+					else this.ChannelSwitchUtils.selectPrivateChannel(id);
 					BDFDB.stopEvent(e);
 				});
 				avatar.parentElement.addEventListener("contextmenu", e => {
