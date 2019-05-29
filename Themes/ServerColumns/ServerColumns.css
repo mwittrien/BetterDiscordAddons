@@ -7,6 +7,7 @@
 	--valigndms: var(--aligndms, 1);
 }
 
+.titleBar-AC4pGV.typeMacOS-3EmCyP,
 .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC,
 .wrapper-1Rf91z,
 .wrapper-1Rf91z.foldercontent.foldercontentopen,
@@ -20,9 +21,6 @@
 .titleBar-AC4pGV.typeMacOS-3EmCyP.typeMacOSWithFrame-3R_i5S .macButtons-2MuSAC {
 	margin-top: 0 !important;
 	margin-right: 0 !important;
-}
-.titleBar-AC4pGV.typeMacOS-3EmCyP {
-	width: 0 !important;
 }
 .wrapper-1Rf91z .scrollerWrap-1IAIlv {
 	width: calc(1px * ((var(--vguildsize) + 10) * var(--vcolumns) + 35)) !important;
