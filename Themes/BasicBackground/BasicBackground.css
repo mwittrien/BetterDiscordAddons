@@ -596,6 +596,11 @@ input:disabled {
 	height: 100%;
 	background: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 2)) !important;
 }
+.titleBar-AC4pGV.typeMacOS-3EmCyP ~ * .container-16j22k:after,
+.titleBar-AC4pGV.typeMacOS-3EmCyP ~ * .backdrop-1wrmKB:after {
+	top: 0;
+}
+
 .container-16j22k .content-1-zrf2 {
 	position: relative !important;
 }
