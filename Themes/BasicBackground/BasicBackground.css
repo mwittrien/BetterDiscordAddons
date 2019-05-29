@@ -604,8 +604,7 @@ input:disabled {
 	z-index: 100 !important;
 }
 
-.titleBar-AC4pGV:not(.typeMacOS-3EmCyP):after,
-.titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC:after {
+.titleBar-AC4pGV:after {
 	content: "";
 	pointer-events: none !important;
 	position: absolute;
@@ -618,12 +617,10 @@ input:disabled {
 .titleBar-AC4pGV:not(.typeMacOS-3EmCyP):after {
 	height: 22px;
 }
-.titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC:after {
+.titleBar-AC4pGV.typeMacOS-3EmCyP:after {
 	height: 32px;
 }
-.titleBar-AC4pGV.typeMacOS-3EmCyP {
-	width: 0;
-}
+.titleBar-AC4pGV.typeMacOS-3EmCyP,
 .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
 	width: 72px;
 }
