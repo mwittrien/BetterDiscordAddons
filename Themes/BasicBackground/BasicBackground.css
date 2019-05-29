@@ -624,6 +624,13 @@ input:disabled {
 .titleBar-AC4pGV.typeMacOS-3EmCyP {
 	width: 0;
 }
+.titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
+	width: 72px;
+}
+.titleBar-AC4pGV.typeMacOS-3EmCyP.typeMacOSWithFrame-3R_i5S .macButtons-2MuSAC {
+	margin-top: 0;
+	margin-right: 0;
+}
 
 .chat-3bRxxu form {
 	box-shadow: 0 -1px 0 rgba(var(--vtransparencycolor),.3) !important;
@@ -2009,23 +2016,23 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	left: calc(50vw - 300px) !important;
 	border-radius: 5px !important;
 	padding-right: 20px !important;
-    box-shadow: 0 0 0 1px rgba(32,34,37,.6), 0 2px 10px 0 rgba(0,0,0,.2) !important;
+	box-shadow: 0 0 0 1px rgba(32,34,37,.6), 0 2px 10px 0 rgba(0,0,0,.2) !important;
 }
 #ace_settingsmenu::-webkit-scrollbar {
-    height: 8px !important;
-    width: 8px !important;
+	height: 8px !important;
+	width: 8px !important;
 }
 #ace_settingsmenu::-webkit-scrollbar-thumb {
-    background-color: rgba(32,34,37,.6) !important;
-    border: 2px solid transparent !important;
-    border-radius: 4px !important;
+	background-color: rgba(32,34,37,.6) !important;
+	border: 2px solid transparent !important;
+	border-radius: 4px !important;
 }
 #ace_settingsmenu::-webkit-scrollbar-track {
-    background-color: transparent !important;
-    border: 2px solid transparent !important;
+	background-color: transparent !important;
+	border: 2px solid transparent !important;
 }
 #ace_settingsmenu .ace_optionsMenuEntry {
-    height: 40px !important;
+	height: 40px !important;
 	display: flex !important;
 	align-items: center !important;
 	justify-content: flex-start !important;
@@ -2035,34 +2042,34 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	background: none !important;
 }
 #ace_settingsmenu > *:last-child {
-    color: #f6f6f7 !important;
+	color: #f6f6f7 !important;
 	float: right !important;
 }
 #ace_settingsmenu .ace_optionsMenuEntry label {
-    color: #f6f6f7 !important;
-    font-size: 16px !important;
-    line-height: 24px !important;
-    cursor: pointer !important;
-    flex: 1 0 auto !important;
-    font-weight: 500 !important;
+	color: #f6f6f7 !important;
+	font-size: 16px !important;
+	line-height: 24px !important;
+	cursor: pointer !important;
+	flex: 1 0 auto !important;
+	font-weight: 500 !important;
 	margin-right: 10px !important;
 }
 #ace_settingsmenu .ace_optionsMenuEntry input[type="text"],
 #ace_settingsmenu .ace_optionsMenuEntry select {
 	box-sizing: border-box !important;
-    flex: 0 1 auto !important;
+	flex: 0 1 auto !important;
 	width: 200px !important;
 	float: none !important !important;
-    background-color: rgba(0,0,0,.1) !important;
-    border-color: rgba(0,0,0,.3) !important;
-    color: #f6f6f7 !important;
-    height: 40px !important;
-    padding: 10px !important;
-    border-radius: 3px !important;
-    border-style: solid !important;
-    border-width: 1px !important;
-    transition: background-color .15s ease,border .15s ease !important;
-    font-size: 16px !important;
+	background-color: rgba(0,0,0,.1) !important;
+	border-color: rgba(0,0,0,.3) !important;
+	color: #f6f6f7 !important;
+	height: 40px !important;
+	padding: 10px !important;
+	border-radius: 3px !important;
+	border-style: solid !important;
+	border-width: 1px !important;
+	transition: background-color .15s ease,border .15s ease !important;
+	font-size: 16px !important;
 }
 #ace_settingsmenu .ace_optionsMenuEntry input[type="text"]:hover,
 #ace_settingsmenu .ace_optionsMenuEntry select:hover {
@@ -2073,44 +2080,44 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	border-color: rgb(var(--vaccentcolor)) !important;
 }
 #ace_settingsmenu .ace_optionsMenuEntry select option {
-    background-color: #303339 !important;
-    color: #f6f6f7 !important;
+	background-color: #303339 !important;
+	color: #f6f6f7 !important;
 }
 #ace_settingsmenu input[type="checkbox"] {
-    position: relative !important;
-    width: 44px !important;
-    height: 24px !important;
+	position: relative !important;
+	width: 44px !important;
+	height: 24px !important;
 	float: none !important;
 }
 #ace_settingsmenu input[type="checkbox"]:before {
-    content: "" !important;
-    display: block !important;
-    position: relative !important;
-    width: 44px !important;
-    height: 24px !important;
-    background: #72767d !important;
-    border-radius: 14px !important;
-    transition: background .15s ease-in-out,box-shadow .15s ease-in-out,border .15s ease-in-out !important;
+	content: "" !important;
+	display: block !important;
+	position: relative !important;
+	width: 44px !important;
+	height: 24px !important;
+	background: #72767d !important;
+	border-radius: 14px !important;
+	transition: background .15s ease-in-out,box-shadow .15s ease-in-out,border .15s ease-in-out !important;
 }
 #ace_settingsmenu input[type="checkbox"]:checked:before {
-    background: rgb(var(--vaccentcolor)) !important;
+	background: rgb(var(--vaccentcolor)) !important;
 }
 #ace_settingsmenu input[type="checkbox"]:after {
-    content: "" !important;
-    display: block !important;
-    width: 18px !important;
-    height: 18px !important;
-    position: absolute !important;
-    top: 3px !important;
-    left: 3px !important;
-    bottom: 3px !important;
-    background: #f6f6f7 !important;
-    border-radius: 10px !important;
-    transition: all .15s ease !important;
-    box-shadow: 0 3px 1px 0 rgba(0,0,0,.05), 0 2px 2px 0 rgba(0,0,0,.1), 0 3px 3px 0 rgba(0,0,0,.05) !important;
+	content: "" !important;
+	display: block !important;
+	width: 18px !important;
+	height: 18px !important;
+	position: absolute !important;
+	top: 3px !important;
+	left: 3px !important;
+	bottom: 3px !important;
+	background: #f6f6f7 !important;
+	border-radius: 10px !important;
+	transition: all .15s ease !important;
+	box-shadow: 0 3px 1px 0 rgba(0,0,0,.05), 0 2px 2px 0 rgba(0,0,0,.1), 0 3px 3px 0 rgba(0,0,0,.05) !important;
 }
 #ace_settingsmenu input[type="checkbox"]:checked:after {
-    transform: translateX(20px) !important;
+	transform: translateX(20px) !important;
 }
 .ace_closeButton {
 	position: absolute !important;
@@ -2120,8 +2127,8 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	right: calc(50vw - 313px) !important;
 	z-index: 10000 !important;
 	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) * 3)) !important !important;
-    border-radius: 50% !important;
-    border: 2px solid #72767d !important;
+	border-radius: 50% !important;
+	border: 2px solid #72767d !important;
 	padding: 0 !important;
 	cursor: pointer !important;
 }
@@ -2304,8 +2311,8 @@ html, span:not(.spinner-item) {
 #app-mount .root-SR8cQa .wrapper-2F3Zv8.profile-ZOdGIb .image-33JSyf.mask-3OgeRz[style*="/avatars/278543574059057154"]:hover ~ .status-oxiHuE:before,
 #app-mount .userPopout-3XzG_A .wrapper-2F3Zv8.popout-2fzvxG a[href*="/avatars/278543574059057154"]:hover ~ .status-oxiHuE:before,
 #app-mount .userPopout-3XzG_A .wrapper-2F3Zv8.popout-2fzvxG .image-33JSyf.mask-3OgeRz[style*="/avatars/278543574059057154"]:hover ~ .status-oxiHuE:before {
-    background-color: rgb(var(--vaccentcolor)) !important;
-    color: rgb(255,255,255) !important;
+	background-color: rgb(var(--vaccentcolor)) !important;
+	color: rgb(255,255,255) !important;
 }
 #app-mount .root-SR8cQa .wrapper-2F3Zv8.profile-ZOdGIb a[href*="/avatars/278543574059057154"]:hover ~ .status-oxiHuE:after,
 #app-mount .root-SR8cQa .wrapper-2F3Zv8.profile-ZOdGIb .image-33JSyf.mask-3OgeRz[style*="/avatars/278543574059057154"]:hover ~ .status-oxiHuE:after,

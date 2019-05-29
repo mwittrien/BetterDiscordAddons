@@ -17,6 +17,10 @@
 .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
 	padding-right: calc(1px * ((var(--vguildsize) + 10) * var(--vcolumns) - 50)) !important;
 }
+.titleBar-AC4pGV.typeMacOS-3EmCyP.typeMacOSWithFrame-3R_i5S .macButtons-2MuSAC {
+    margin-top: 0 !important;
+    margin-right: 0 !important;
+}
 .titleBar-AC4pGV.typeMacOS-3EmCyP {
 	width: 0 !important;
 }
