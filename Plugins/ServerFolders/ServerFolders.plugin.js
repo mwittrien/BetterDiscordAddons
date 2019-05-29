@@ -471,6 +471,7 @@ class ServerFolders {
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.resetAllElements();
+			BDFDB.removeClasses("foldercontentopened");
 			BDFDB.removeEles(this.foldercontent, BDFDB.dotCN.guildswrapper + ".foldercontent", ".serverfolder-contextmenu");
 			BDFDB.unloadMessage(this);
 		}
@@ -1163,6 +1164,7 @@ class ServerFolders {
 		forceOpenClose = forceOpenClose === undefined ? BDFDB.containsClass(this.foldercontent, "foldercontentclosed") : forceOpenClose;
 		BDFDB.toggleClass(this.foldercontent, "foldercontentopen", forceOpenClose);
 		BDFDB.toggleClass(this.foldercontent, "foldercontentclosed", !forceOpenClose);
+		BDFDB.toggleClass(document.body, "foldercontentopened", forceOpenClose);
 	}
 
 	openCloseFolder (folderdiv) {

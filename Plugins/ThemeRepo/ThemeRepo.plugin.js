@@ -491,7 +491,11 @@ class ThemeRepo {
 						var avatar = BDFDB.getUserAvatar();
 						var nativecss = document.querySelector("head link[rel='stylesheet'][integrity]");
 						nativecss = nativecss && nativecss.href ? nativecss.href : null;
-						frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"OnLoad",username,id,discriminator,avatar,nativecss},"*");
+						var app = document.querySelector(BDFDB.dotCN.app);
+						app = app ? app.className : null;
+						var titlebar = document.querySelector(BDFDB.dotCN.titlebar);
+						titlebar = titlebar ? titlebar.outerHTML : null;
+						frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"OnLoad",username,id,discriminator,avatar,nativecss,app,titlebar},"*");
 						frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"DarkLight",checked:darklightinput.checked,light:BDFDB.disCN.themelight,dark:BDFDB.disCN.themedark},"*");
 						frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"Normalize",checked:normalizeinput.checked},"*");
 						break;
