@@ -611,9 +611,13 @@ input:disabled {
 	z-index: -1;
 	top: 0;
 	left: 0;
-	width: 100%;
+	width: 100vw;
 	height: 22px;
 	background: rgba(var(--vtransparencycolor),calc((var(--vtransparencyalpha) * 3) + var(--vguildchanneltransparency))) !important;
+}
+
+.titleBar-AC4pGV .macButtons-2MuSAC {
+    padding: 5px 10px;
 }
 
 .chat-3bRxxu form {
