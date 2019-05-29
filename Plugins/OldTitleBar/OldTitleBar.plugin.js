@@ -3,7 +3,7 @@
 class OldTitleBar {
 	getName () {return "OldTitleBar";}
 
-	getVersion () {return "1.5.6";}
+	getVersion () {return "1.5.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class OldTitleBar {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Canary/PTB","Fixed the plugin for canary and ptb"]]
+			"fixed":[["Mac OSX","Fixed the plugin for Mac OSX"]]
 		};
 		
 		this.patchModules = {
@@ -27,6 +27,14 @@ class OldTitleBar {
 			.hidden-by-OTB ${BDFDB.dotCN.titlebar},
 			.hidden-by-OTB ${BDFDB.dotCN.titlebar} + ${BDFDB.dotCNS.app + BDFDB.dotCN.splashbackground}:before {
 				display: none !important;
+			}
+			
+			.hidden-by-OTB .platform-osx ${BDFDB.dotCN.guildswrapper} {
+				margin-top: 0;
+			}
+			
+			.hidden-by-OTB .platform-osx ${BDFDB.dotCN.guilds} {
+				padding-top: 10px;
 			}
 
 			body:not(.settingsTitlebarOTB-added) ${BDFDB.dotCN.channelheaderheaderbar} {
