@@ -105,9 +105,10 @@ html[class="gr__betterdocs_us" i] body #app-mount {
 #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="://discordsource." i]:before,
 #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="www.betterdocs." i]:before,
 #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="://betterdocs." i]:before {
-	content: "BetterDocs/DiscordSource is not an official source, and should be treated as such. The owner posts peoples themes and plugins without their permission, and also contains content that would not be found on the official BetterDiscord repos. This means it probably contains harmful plugins that could either get you into trouble with discord, or steal user account info. Please stay safe, and download from official sources only." !important;
+	content: "BetterDocs/DiscordSource is not an official source, and should be treated as such. The owner posts peoples' themes and plugins without their permission, and also hosts content that would not be found on the official BetterDiscord repos. This means it probably contains harmful plugins that could either get you into trouble with Discord or steal user account info. Please stay safe, and download from official sources only." !important;
 	background-position: bottom right !important;
 	background-size: 100px !important;
+	font-size: 0.95em !important;
 	height: 105% !important;
 	margin-top: -34px !important;
 	margin-left: -14px !important;
