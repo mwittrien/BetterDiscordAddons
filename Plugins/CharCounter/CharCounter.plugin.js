@@ -47,8 +47,9 @@ class CharCounter {
 			#charcounter {
 				display: block;
 				position: absolute;
-				z-index: 1000;
+				z-index: 1000; 
 				pointer-events: none;
+				font-size: 15px;
 			}
 			#charcounter.normal {
 				right: 0;
