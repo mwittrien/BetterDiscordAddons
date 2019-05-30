@@ -398,6 +398,8 @@
 .theme-light .headerIcon-3bqya6,
 .theme-light .container-2mdxGH,
 .tierMarkerInProgress-24LMzJ .currentTierIcon-2gcTCn.tier3Icon-Ku4Ahe,
+.animatedEmojiIcon-nv4AeV, 
+.animatedGuildIcon-T0S3hV,
 .verified-1eC5dy,
 .operations-36ENbA > a,
 .skipTips-2ftiX7 a,
@@ -600,6 +602,7 @@
 [style*="background-color: rgba(114, 137, 218, 0)"] {
 	background-color: rgba(var(--vaccentcolor), 0) !important;
 }
+.tierHeaderUnlocked-1n-OTI,
 .tierMarkerAccomplished-2MiXeg,
 .grandfatheredMessage-1BnHtv,
 .gradientBar-1XmvR-,
