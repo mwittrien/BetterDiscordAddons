@@ -397,6 +397,9 @@
 .theme-light .premiumPlanName-24zBVw,
 .theme-light .headerIcon-3bqya6,
 .theme-light .container-2mdxGH,
+.iconUpload-2NcdyV,
+.iconBadge-XKKcFP,
+.premiumGuildIcon-BhwtRn,
 .tierMarkerInProgress-24LMzJ .currentTierIcon-2gcTCn.tier3Icon-Ku4Ahe,
 .animatedEmojiIcon-nv4AeV, 
 .animatedGuildIcon-T0S3hV,
@@ -1185,31 +1188,7 @@ img[src*="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * + *:before {
 	-webkit-mask: url(https://canary.discordapp.com/assets/676bfec9f4343f6fcdf0a12ae313a3de.svg);
 }
 
-.feature-1n9XFi .icon-14WJ89 {
-	-webkit-mask-size: cover;
-	background: rgb(var(--vaccentcolor)) !important;
-}
-.feature-1n9XFi .discriminatorIcon-3st22V {
-	-webkit-mask: url(https://discordapp.com/assets/b49d0bf2dbceef78ef5c053abeede707.svg);
-}
-.feature-1n9XFi .animatedIcon-3voig8 {
-	-webkit-mask: url(https://discordapp.com/assets/7fe83c179ad0b8a37b90bf06676becd5.svg);
-}
-.feature-1n9XFi .screenshareIcon-3W8gU- {
-	-webkit-mask: url(https://discordapp.com/assets/06fe195638e795625247efe3bb3df83e.svg);
-}
-.feature-1n9XFi .emojiIcon-35v9tC {
-	-webkit-mask: url(https://discordapp.com/assets/0879903c882aaba515871056c5507f05.svg);
-}
-.feature-1n9XFi .uploadIcon-6evKTP {
-	-webkit-mask: url(https://discordapp.com/assets/2c6c372e4c3d582c57eaa57c3fcfdd2c.svg);
-}
-.feature-1n9XFi .badgeIcon-1sJyLH {
-	-webkit-mask: url(https://discordapp.com/assets/df0e29b16d71bdad333880b2488075be.svg);
-}
-.feature-1n9XFi .feature-BGH8y4 {
-	position: relative !important;
-}
+
 .feature-BGH8y4 .icon-3j1dJB,
 .feature-BGH8y4 .icon-3j1dJB:before,
 .feature-BGH8y4 .icon-3j1dJB:after {
