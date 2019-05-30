@@ -397,6 +397,7 @@
 .theme-light .premiumPlanName-24zBVw,
 .theme-light .headerIcon-3bqya6,
 .theme-light .container-2mdxGH,
+.tierMarkerInProgress-24LMzJ .currentTierIcon-2gcTCn.tier3Icon-Ku4Ahe,
 .verified-1eC5dy,
 .operations-36ENbA > a,
 .skipTips-2ftiX7 a,
@@ -498,6 +499,7 @@
 
 /* BACKGROUND */
 .bd-server-card.bd-server-card-pinned:after,
+.barForeground-3KglC8,
 .inviteIcon-DSd8cG,
 .modalNewUser-3IRw8L .stepsWrap-3bDM3D .steps-370EKx li.on-1OjN9V,
 .modalNewUser-3IRw8L .stepsWrap-3bDM3D .steps-370EKx li.on-1OjN9V + .divider-3Ozccb,
@@ -598,6 +600,7 @@
 [style*="background-color: rgba(114, 137, 218, 0)"] {
 	background-color: rgba(var(--vaccentcolor), 0) !important;
 }
+.tierMarkerAccomplished-2MiXeg,
 .grandfatheredMessage-1BnHtv,
 .gradientBar-1XmvR-,
 .noticePremiumGrandfathered-ollUxF {
