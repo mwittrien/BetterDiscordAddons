@@ -1,6 +1,6 @@
 # BetterDiscordAddons [![Paypal][paypal-badge]][paypal-link]
 
-[paypal-badge]: https://img.shields.io/badge/Paypal-Donate!-%2300457C.svg?logo=paypal&style=flat-square
+[paypal-badge]: https://img.shields.io/badge/Paypal-Donate!-%2300457C.svg?logo=paypal&style=flat
 [paypal-link]: https://paypal.me/MircoWittrien
 
 A series of plugins and themes for BetterDiscord. If you got any question hit me up on Discord DevilBro#4401
