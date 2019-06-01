@@ -46,7 +46,7 @@ https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Theme
 https://raw.githubusercontent.com/fluffingtons/fulldark/master/fulldark.theme.css
 https://raw.githubusercontent.com/Gibbu/BetterDiscord-Themes/master/AdjustableServerWidth/AdjustableServerWidth.theme.css
 https://raw.githubusercontent.com/Gibbu/BetterDiscord-Themes/master/HorizontalServerlist/zHorizontalServerlist.theme.css
-https://raw.githubusercontent.com/Gibbu/BetterDiscord-Themes/master/SimplyDarkDiscord/SimplyDarkDiscord.theme.css
+https://raw.githubusercontent.com/Gibbu/BetterDiscord-Themes/master/SimplyDark/SimplyDark.theme.css
 https://raw.githubusercontent.com/Gibbu/BetterDiscord-Themes/master/TrueLight/TrueLight.theme.css
 https://raw.githubusercontent.com/HansAnonymous/BD-Themes-and-Plugins/master/Themes/Glossy-Cyan/Glossy-Cyan.H.theme.css
 https://raw.githubusercontent.com/HansAnonymous/BD-Themes-and-Plugins/master/Themes/HansAnonymousAdditions/HAA.theme.css
