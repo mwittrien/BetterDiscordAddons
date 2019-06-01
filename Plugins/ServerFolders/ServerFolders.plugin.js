@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.2.6";}
+	getVersion () {return "6.2.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ServerFolders {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Lags","Fixed some minor lags"]]
+			"fixed":[["Animated Server Icons","Animated server icons are now properly animated in the foldercontent"]]
 		};
 		
 		this.labels = {};
@@ -1246,6 +1246,7 @@ class ServerFolders {
 		let guildcopy = guilddiv.cloneNode(true);
 		let guildcopyinner = guildcopy.querySelector(BDFDB.dotCN.guildcontainer);
 		let guildiconwrapper = guildcopy.querySelector(BDFDB.dotCN.guildiconwrapper);
+		let guildicon = guildcopy.querySelector(BDFDB.dotCN.guildicon);
 		let guildpillitem = guildcopy.querySelector(BDFDB.dotCN.guildpillitem);
 		guildcopy.setAttribute("guild", info.id);
 		guildcopy.setAttribute("folder", folderdiv.id);
@@ -1268,6 +1269,10 @@ class ServerFolders {
 				let fontColor = BDFDB.colorCONVERT(folderData.copyTooltipColor ? folderData.color4 : null, "RGB");
 				BDFDB.createTooltip(info.name, guildcopyinner, {type:"right",style:`color: ${fontColor} !important; background-color: ${bgColor} !important; border-color: ${bgColor} !important;`});
 			}
+			if (guildicon && guildicon.src && info.icon && info.icon.startsWith("a_") && info.features.has("ANIMATED_ICON") && guildicon.src.includes("discordapp.com/icons/"))guildicon.src = guildicon.src.replace(".webp", ".gif");
+		});
+		guildcopyinner.addEventListener("mouseleave", () => {
+			if (guildicon && guildicon.src && info.icon && info.icon.startsWith("a_") && info.features.has("ANIMATED_ICON") && guildicon.src.includes("discordapp.com/icons/"))guildicon.src = guildicon.src.replace(".gif", ".webp");
 		});
 		guildcopy.addEventListener("click", e => {
 			BDFDB.stopEvent(e);
