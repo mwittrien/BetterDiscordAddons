@@ -315,7 +315,7 @@ class JoinedAtDate {
 				};
 			case "fr":		//french
 				return {
-					joinedat_text:				"Inscrit le {{time}}"
+					joinedat_text:				"Rejoint le {{time}}"
 				};
 			case "it":		//italian
 				return {
