@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.2.7";}
+	getVersion () {return "6.2.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,16 +11,19 @@ class ServerFolders {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Animated Server Icons","Animated server icons are now properly animated in the foldercontent"]]
+			"fixed":[["Animated Server Icons","Animated server icons are now properly animated in the foldercontent"]],
+			"improved":[["Notifications","Improved the speed in which the notification indicators are displayed on the servers and folders"]]
 		};
 		
 		this.labels = {};
 
 		this.patchModules = {
 			"Guilds":["componentDidMount","componentDidUpdate","componentWillUnmount"],
-			"Guild":["componentDidMount","componentWillUnmount"],
+			"Guild":["componentDidMount","componentDidUpdate","componentWillUnmount"],
 			"StandardSidebarView":"componentWillUnmount"
 		};
+		
+		this.cachedGuildState = {};
 
 		this.css = `
 			.${this.name}-modal .ui-icon-picker-icon {
@@ -447,20 +450,6 @@ class ServerFolders {
 			this.DiscordConstants = BDFDB.WebModules.findByProperties("Permissions", "ActivityTypes", "StatusTypes");
 			this.Animations = BDFDB.WebModules.findByProperties("spring");
 
-			var observer = new MutationObserver(changes => {changes.forEach(change => {
-				let nodes = [].concat(change.addedNodes, change.removedNodes);
-				if (nodes) {nodes.forEach(node => {
-					if (node && BDFDB.containsClass(node, BDFDB.disCN.channelunread)) {
-						let id = this.CurrentGuildStore.getGuildId();
-						if (id) {
-							let folderdiv = this.getFolderOfServer(id);
-							if (folderdiv) setTimeout(() => {this.updateFolderNotifications(folderdiv);}, 5000);
-						}
-					}
-				});}
-			});});
-			BDFDB.addObserver(this, BDFDB.dotCN.appmount, {name:"unreadChannelObserver",instance:observer}, {childList: true, subtree:true});
-
 			BDFDB.WebModules.forceAllUpdates(this, "Guilds");
 		}
 		else {
@@ -607,6 +596,7 @@ class ServerFolders {
 	processGuild (instance, wrapper, methodnames) {
 		if (instance.props && instance.props.guild) {
 			if (methodnames.includes("componentDidMount")) {
+				this.cachedGuildState[instance.props.guild.id] = this.getGuildState(instance);
 				let folderdiv = this.getFolderOfServer(instance.props.guild);
 				if (folderdiv && !wrapper.getAttribute("folder")) {
 					this.hideServer(wrapper, folderdiv);
@@ -635,6 +625,17 @@ class ServerFolders {
 					}
 				});
 			}
+			if (methodnames.includes("componentDidUpdate")) {
+				let state = this.getGuildState(instance);
+				if (!BDFDB.equals(state, this.cachedGuildState[instance.props.guild.id])) {
+					this.cachedGuildState[instance.props.guild.id] = state;
+					let folderdiv = this.getFolderOfServer(instance.props.guild);
+					if (folderdiv) setImmediate(() => {
+						this.updateCopyInFolderContent(wrapper, folderdiv);
+						this.updateFolderNotifications(folderdiv);
+					});
+				}
+			}
 			if (methodnames.includes("componentWillUnmount")) {
 				let folderdiv = this.getFolderOfServer(instance.props.guild);
 				if (folderdiv) {
@@ -650,6 +651,12 @@ class ServerFolders {
 			delete this.SettingsUpdated;
 			this.foldercontent.querySelectorAll(BDFDB.dotCN.guildouter + ".folder").forEach(folderdiv => {this.updateFolderNotifications(folderdiv);});
 		}
+	}
+	
+	getGuildState (instance) {
+		let state = {};
+		for (let key in instance.props) if (typeof instance.props[key] != "object" && typeof instance.props[key] != "function") state[key] = instance.props[key];
+		return state;
 	}
 
 	showFolderSettings (folderdiv) {
@@ -1123,40 +1130,12 @@ class ServerFolders {
 		if (!Node.prototype.isPrototypeOf(guilddiv) || !folderdiv) return;
 		guilddiv.setAttribute("folder", folderdiv.id);
 		BDFDB.toggleEles(guilddiv, false);
-		if (guilddiv.ServerFoldersChangeObserver && typeof guilddiv.ServerFoldersChangeObserver.disconnect == "function") guilddiv.ServerFoldersChangeObserver.disconnect();
-		guilddiv.ServerFoldersChangeObserver = new MutationObserver(changes => {changes.forEach(change => {
-			if (change.type == "attributes" && change.attributeName == "draggable" || change.attributeName == "source") return;
-			let updatefolder = false, updatecopy = false;
-			if (change.type == "attributes" && change.attributeName == "style" && BDFDB.containsClass(change.target, BDFDB.disCN.guildpillitem)) {
-				let opacity = change.target.style.getPropertyValue("opacity");
-				let height = change.target.style.getPropertyValue("height");
-				let oldopacity = change.oldValue.split("opacity: ")[1].split(";")[0];
-				let oldheight = change.oldValue.split("height: ")[1].split(";")[0];
-				if (parseInt(opacity*10) == parseFloat(opacity*10) && oldopacity != opacity || parseInt(height*10) == parseFloat(height*10) && oldheight != height) {
-					updatefolder = true;
-					updatecopy = true;
-				}
-			}
-			if (change.type == "attributes" && change.attributeName == "style" && (BDFDB.containsClass(change.target, BDFDB.disCN.guildupperbadge) || BDFDB.containsClass(change.target, BDFDB.disCN.guildlowerbadge))) {
-				let opacity = change.target.style.getPropertyValue("opacity");
-				let oldopacity = change.oldValue.split("opacity: ")[1].split(";")[0];
-				if (parseInt(opacity*10) == parseFloat(opacity*10) && oldopacity != opacity) {
-					updatefolder = true;
-					updatecopy = true;
-				}
-			}
-			if (updatecopy) this.updateCopyInFolderContent(guilddiv, folderdiv);
-			if (updatefolder) this.updateFolderNotifications(folderdiv);
-		});});
-		guilddiv.ServerFoldersChangeObserver.observe(guilddiv, {attributes:true, childList:true, characterData: true, subtree:true, attributeOldValue:true});
 	}
 
 	unhideServer (guilddiv) {
 		if (!Node.prototype.isPrototypeOf(guilddiv)) return;
 		guilddiv.removeAttribute("folder");
 		BDFDB.toggleEles(guilddiv, true);
-		if (guilddiv.ServerFoldersChangeObserver && typeof guilddiv.ServerFoldersChangeObserver.disconnect == "function") guilddiv.ServerFoldersChangeObserver.disconnect();
-		delete guilddiv.ServerFoldersChangeObserver;
 	}
 
 	toggleFolderContent (forceOpenClose) {
