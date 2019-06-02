@@ -3,7 +3,7 @@
 class BadgesEverywhere {
 	getName () {return "BadgesEverywhere";} 
 
-	getVersion () {return "1.2.8";}
+	getVersion () {return "1.2.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,8 @@ class BadgesEverywhere {
 
 	initConstructor () {
 		this.changelog = {
-			"improved":[["Guild Boost","Changed the general guild boost badge in a way that it's displayed everywhere in all servers and added the option to add the badge for the boosting of the current server"]]
+			"improved":[["Guild Boost","Changed the general guild boost badge in a way that it's displayed everywhere in all servers and added the option to add the badge for the boosting of the current server"]],
+			"fixed":[["Message Username","Fixed the issue that moved the message username when a badge was appended"]]
 		};
 		
 		this.patchModules = {
@@ -21,6 +22,9 @@ class BadgesEverywhere {
 		};
 
 		this.css = ` 
+			${BDFDB.dotCN.messageheadercozymeta} > span[class=""] {
+				display: inline-flex;
+			}
 			.BE-badge {
 				position: relative;
 				background-size: contain;
@@ -33,9 +37,6 @@ class BadgesEverywhere {
 			}
 			.BE-badge.BE-badge-list:not(.BE-badge-CurrentGuildBoost) {
 				top: 1px !important;
-			}
-			.BE-badge.BE-badge-chat:not(.BE-badge-CurrentGuildBoost) {
-				top: 3px !important;
 			}
 			.BE-badge.BE-badge-popout:not(.BE-badge-CurrentGuildBoost) {
 				top: 3px !important;
@@ -126,10 +127,10 @@ class BadgesEverywhere {
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">Display Badges:</h3></div><div class="BDFDB-settings-inner-list">`;
 		for (let flag in badges) {
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.badges[flag].name}</h3><span class="BE-badges BE-badges-settings ${BDFDB.disCN.userprofiletopsectionplaying}" style="all: unset !important;">`;
-			if (Array.isArray(this.defaults.badges[flag].types)) for (let type of this.defaults.badges[flag].types) settingshtml += `<div class="BE-badge BE-badge-GuildSubscription} ${this.BadgeClasses[this.defaults.badges[flag].selector + type]}"></div>`;
+			if (Array.isArray(this.defaults.badges[flag].types)) for (let type of this.defaults.badges[flag].types) settingshtml += `<div class="BE-badge ${this.BadgeClasses[this.defaults.badges[flag].selector + type]}"></div>`;
 			else settingshtml += `<div class="BE-badge ${this.BadgeClasses[this.defaults.badges[flag].selector]}"></div>`;
 			settingshtml += `</span><span class="BE-badges BE-badges-settings ${BDFDB.disCN.userprofiletopsectionnormal}" style="all: unset !important;">`
-			if (Array.isArray(this.defaults.badges[flag].types)) for (let type of this.defaults.badges[flag].types) settingshtml += `<div class="BE-badge BE-badge-GuildSubscription} ${this.BadgeClasses[this.defaults.badges[flag].selector + type]}"></div>`;
+			if (Array.isArray(this.defaults.badges[flag].types)) for (let type of this.defaults.badges[flag].types) settingshtml += `<div class="BE-badge ${this.BadgeClasses[this.defaults.badges[flag].selector + type]}"></div>`;
 			else settingshtml += `<div class="BE-badge ${this.BadgeClasses[this.defaults.badges[flag].selector]}"></div>`;
 			settingshtml += `</span><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="badges ${flag}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${badges[flag] ? " checked" : ""}></div></div>`;
 		}
