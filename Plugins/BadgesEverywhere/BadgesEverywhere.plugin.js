@@ -3,7 +3,7 @@
 class BadgesEverywhere {
 	getName () {return "BadgesEverywhere";} 
 
-	getVersion () {return "1.2.9";}
+	getVersion () {return "1.3.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -22,6 +22,7 @@ class BadgesEverywhere {
 		};
 
 		this.css = ` 
+			${BDFDB.dotCN.messageheadercozymeta} > span[class="popout-open"],
 			${BDFDB.dotCN.messageheadercozymeta} > span[class=""] {
 				display: inline-flex;
 			}
