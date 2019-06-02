@@ -22,8 +22,7 @@ class BadgesEverywhere {
 		};
 
 		this.css = ` 
-			${BDFDB.dotCN.messageheadercozymeta} > span[class="popout-open"],
-			${BDFDB.dotCN.messageheadercozymeta} > span[class=""] {
+			${BDFDB.dotCN.messageheadercozymeta} > span:first-child {
 				display: inline-flex;
 			}
 			.BE-badge {
