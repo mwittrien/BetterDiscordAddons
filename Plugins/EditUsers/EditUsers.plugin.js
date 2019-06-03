@@ -3,7 +3,7 @@
 class EditUsers {
 	getName () {return "EditUsers";}
 
-	getVersion () {return "3.3.8";}
+	getVersion () {return "3.3.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class EditUsers {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Mentions","Fixed the issue where mentions wouldn't get changed correctly"]]
+			"fixed":[["Tags","Fixed the issue where tags were bigger than they should be"]]
 		};
 		
 		this.labels = {}; 
@@ -41,16 +41,17 @@ class EditUsers {
 		this.avatarselector = BDFDB.dotCNC.guildicon + BDFDB.dotCNC.avatarinner + BDFDB.dotCNC.avatarimage + BDFDB.dotCNC.callavatarwrapper + BDFDB.dotCNC.voiceavatarcontainer + "[class*='avatar-']";
 
 		this.css = `
-			${BDFDB.dotCN.bottag} {
-				top: -4px;
-				position: relative;
-				margin-left: 1ch;
+			${BDFDB.dotCNS.message + BDFDB.dotCN.messageheadercozy} {
+				padding-top: 0;
 			}
-			${BDFDB.dotCNS.guildsettingsmembercard + BDFDB.dotCN.bottag},
-			${BDFDB.dotCNS.userpopoutheadertagwithnickname + BDFDB.dotCN.bottag},
-			${BDFDB.dotCNS.friendscolumn + BDFDB.dotCN.bottag},
-			${BDFDB.dotCN.memberusername} ~ ${BDFDB.dotCN.bottag} {
+			${BDFDB.dotCNC.userpopoutheadertagnonickname + BDFDB.dotCNC.userpopoutheadernamewrapper + BDFDB.dotCN.messageheadercozymeta} > span:first-child {
+				display: inline-flex;
+			}
+			${BDFDB.dotCN.bottag} {
+				height: 13px;
 				top: 0px;
+				position: relative;
+				margin: 0 0 0 1ch;
 			}
 			${BDFDB.dotCN.messagegroupcompact} ${BDFDB.dotCN.bottag} {
 				margin-right: 6px;
@@ -838,6 +839,7 @@ class EditUsers {
 	
 	changeBotTags (data, username, member) {
 		for (let tag of username.parentElement.querySelectorAll(BDFDB.dotCN.bottag)) {
+			let isBRCenabled = BDFDB.isPluginEnabled("BetterRoleColors");
 			let invert = tag.className.indexOf(BDFDB.disCN.bottaginvert) > -1;
 			let tagcolor =  BDFDB.colorCONVERT(data.color1 || (isBRCenabled || BDFDB.containsClass(tag, "owner-tag-rolecolor") ? member.colorString : null), "RGB");
 			tagcolor = BDFDB.colorISBRIGHT(tagcolor) ? BDFDB.colorCHANGE(tagcolor, -0.3) : tagcolor;

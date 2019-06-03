@@ -3,7 +3,7 @@
 class BadgesEverywhere {
 	getName () {return "BadgesEverywhere";} 
 
-	getVersion () {return "1.3.0";}
+	getVersion () {return "1.3.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -21,8 +21,11 @@ class BadgesEverywhere {
 			"StandardSidebarView":"componentWillUnmount"
 		};
 
-		this.css = ` 
-			${BDFDB.dotCN.messageheadercozymeta} > span:first-child {
+		this.css = `
+			${BDFDB.dotCNS.message + BDFDB.dotCN.messageheadercozy} {
+				padding-top: 0;
+			}
+			${BDFDB.dotCNC.userpopoutheadertagnonickname + BDFDB.dotCNC.userpopoutheadernamewrapper + BDFDB.dotCN.messageheadercozymeta} > span:first-child {
 				display: inline-flex;
 			}
 			.BE-badge {
