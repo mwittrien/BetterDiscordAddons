@@ -3,7 +3,7 @@
 class BadgesEverywhere {
 	getName () {return "BadgesEverywhere";} 
 
-	getVersion () {return "1.3.1";}
+	getVersion () {return "1.3.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -12,7 +12,7 @@ class BadgesEverywhere {
 	initConstructor () {
 		this.changelog = {
 			"improved":[["Guild Boost","Changed the general guild boost badge in a way that it's displayed everywhere in all servers and added the option to add the badge for the boosting of the current server"]],
-			"fixed":[["Message Username","Fixed the issue that moved the message username when a badge was appended"]]
+			"fixed":[["Message Username","Fixed the issue that moved the message username when a badge was appended"],["Badges","Some badges didn't get added properly"]]
 		};
 		
 		this.patchModules = {
@@ -85,18 +85,18 @@ class BadgesEverywhere {
 				showNitroDate:		{value:true, 	description:"Show the subscription date for Nitro/Boost Badges"}
 			},
 			badges: {
-				"STAFF":						{value:true, 	name:"STAFF_BADGE_TOOLTIP",					selector:"profileBadgeStaff"},
-				"PARTNER":						{value:true, 	name:"PARTNER_BADGE_TOOLTIP",				selector:"profileBadgePartner"},
-				"HYPESQUAD":					{value:true, 	name:"HYPESQUAD_BADGE_TOOLTIP",				selector:"profileBadgeHypesquad"},
-				"BUG_HUNTER":					{value:true, 	name:"BUG_HUNTER_BADGE_TOOLTIP",			selector:"profileBadgeBugHunter"},
-				"MFA_SMS":						{value:false, 	name:null,									selector:false},
-				"PREMIUM_PROMO_DISMISSED":		{value:false, 	name:null,									selector:false},
-				"HYPESQUAD_ONLINE_HOUSE_1":		{value:true, 	name:"HypeSquad Bravery",					selector:"profileBadgeHypeSquadOnlineHouse1"},
-				"HYPESQUAD_ONLINE_HOUSE_2":		{value:true, 	name:"HypeSquad Brilliance",				selector:"profileBadgeHypeSquadOnlineHouse2"},
-				"HYPESQUAD_ONLINE_HOUSE_3":		{value:true, 	name:"HypeSquad Balance",					selector:"profileBadgeHypeSquadOnlineHouse3"},
-				"PREMIUM_EARLY_SUPPORTER":		{value:true, 	name:"EARLY_SUPPORTER_TOOLTIP",				selector:"profileBadgeEarlySupporter"},
-				"NITRO":						{value:true, 	name:"Nitro",								selector:"profileBadgePremium"},
-				"GUILD_BOOST":					{value:true, 	name:"Nitro Guild Boost", 					selector:"profileGuildSubscriberlvl",		types:[1,2,3,4]},
+				"STAFF":					{value:true, 	id:"Staff",					name:"STAFF_BADGE_TOOLTIP",			selector:"profileBadgeStaff"},
+				"PARTNER":					{value:true, 	id:"Partner",				name:"PARTNER_BADGE_TOOLTIP",		selector:"profileBadgePartner"},
+				"HYPESQUAD":				{value:true, 	id:"HypeSquad",				name:"HYPESQUAD_BADGE_TOOLTIP",		selector:"profileBadgeHypesquad"},
+				"BUG_HUNTER":				{value:true, 	id:"BugHunter",				name:"BUG_HUNTER_BADGE_TOOLTIP",	selector:"profileBadgeBugHunter"},
+				"MFA_SMS":					{value:false, 	id:null,					name:null,							selector:false},
+				"PREMIUM_PROMO_DISMISSED":	{value:false, 	id:null,					name:null,							selector:false},
+				"HYPESQUAD_ONLINE_HOUSE_1":	{value:true, 	id:"HypeSquadBravery",		name:"HypeSquad Bravery",			selector:"profileBadgeHypeSquadOnlineHouse1"},
+				"HYPESQUAD_ONLINE_HOUSE_2":	{value:true, 	id:"HypeSquadBrilliance",	name:"HypeSquad Brilliance",		selector:"profileBadgeHypeSquadOnlineHouse2"},
+				"HYPESQUAD_ONLINE_HOUSE_3":	{value:true, 	id:"HypeSquadBalance",		name:"HypeSquad Balance",			selector:"profileBadgeHypeSquadOnlineHouse3"},
+				"PREMIUM_EARLY_SUPPORTER":	{value:true, 	id:"EarlySupporter",		name:"EARLY_SUPPORTER_TOOLTIP",		selector:"profileBadgeEarlySupporter"},
+				"NITRO":					{value:true, 	id:"Nitro",					name:"Nitro",						selector:"profileBadgePremium"},
+				"GUILD_BOOST":				{value:true, 	id:"NitroGuildBoost",		name:"Nitro Guild Boost", 			selector:"profileGuildSubscriberlvl",	types:[1,2,3,4]},
 			},
 			indicators: {
 				"CURRENT_GUILD_BOOST":			{value:true, 	name:"Current Nitro Guild Boost", 			markup:`<div class="BE-badge BE-badge-CurrentGuildBoost"><svg aria-label="Nitro boosting since May 31, 2019" name="PremiumGuildSubscriberBadge" class="BE-badge-CurrentGuildBoost-inner ${BDFDB.disCNS.memberpremiumicon + BDFDB.disCN.membericon}" aria-hidden="false" width="24" height="24" viewBox="0 0 8 12" style="margin: 0;"><path d="M4 0L0 4V8L4 12L8 8V4L4 0ZM7 7.59L4 10.59L1 7.59V4.41L4 1.41L7 4.41V7.59Z" fill="currentColor"></path><path d="M2 4.83V7.17L4 9.17L6 7.17V4.83L4 2.83L2 4.83Z" fill="currentColor"></path></svg></div>`},
@@ -130,11 +130,11 @@ class BadgesEverywhere {
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">Display Badges:</h3></div><div class="BDFDB-settings-inner-list">`;
 		for (let flag in badges) {
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.badges[flag].name}</h3><span class="BE-badges BE-badges-settings ${BDFDB.disCN.userprofiletopsectionplaying}" style="all: unset !important;">`;
-			if (Array.isArray(this.defaults.badges[flag].types)) for (let type of this.defaults.badges[flag].types) settingshtml += `<div class="BE-badge ${this.BadgeClasses[this.defaults.badges[flag].selector + type]}"></div>`;
-			else settingshtml += `<div class="BE-badge ${this.BadgeClasses[this.defaults.badges[flag].selector]}"></div>`;
+			if (Array.isArray(this.defaults.badges[flag].types)) for (let type of this.defaults.badges[flag].types) settingshtml += `<div class="BE-badge BE-badge-${this.defaults.badges[flag].id} ${this.BadgeClasses[this.defaults.badges[flag].selector + type]}"></div>`;
+			else settingshtml += `<div class="BE-badge BE-badge-${this.defaults.badges[flag].id} ${this.BadgeClasses[this.defaults.badges[flag].selector]}"></div>`;
 			settingshtml += `</span><span class="BE-badges BE-badges-settings ${BDFDB.disCN.userprofiletopsectionnormal}" style="all: unset !important;">`
-			if (Array.isArray(this.defaults.badges[flag].types)) for (let type of this.defaults.badges[flag].types) settingshtml += `<div class="BE-badge ${this.BadgeClasses[this.defaults.badges[flag].selector + type]}"></div>`;
-			else settingshtml += `<div class="BE-badge ${this.BadgeClasses[this.defaults.badges[flag].selector]}"></div>`;
+			if (Array.isArray(this.defaults.badges[flag].types)) for (let type of this.defaults.badges[flag].types) settingshtml += `<div class="BE-badge BE-badge-${this.defaults.badges[flag].id} ${this.BadgeClasses[this.defaults.badges[flag].selector + type]}"></div>`;
+			else settingshtml += `<div class="BE-badge BE-badge-${this.defaults.badges[flag].id} ${this.BadgeClasses[this.defaults.badges[flag].selector]}"></div>`;
 			settingshtml += `</span><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="badges ${flag}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${badges[flag] ? " checked" : ""}></div></div>`;
 		}
 		for (let flag in indicators) {
@@ -273,7 +273,7 @@ class BadgesEverywhere {
 		let badgewrapper = BDFDB.htmlToElement(`<span class="BE-badges BE-badges-${type} ${!settings.useColoredVersion || (header && !BDFDB.containsClass(header, BDFDB.disCN.userpopoutheadernormal)) ? BDFDB.disCN.userprofiletopsectionplaying : BDFDB.disCN.userprofiletopsectionnormal}" style="all: unset !important; order: 9 !important;"></span>`);
 		for (let flag in this.defaults.badges) {
 			if ((this.loadedusers[info.id].flags | flag) == this.loadedusers[info.id].flags && badges[flag]) {
-				let badge = BDFDB.htmlToElement(`<div class="BE-badge BE-badge-${this.defaults.badges[flag].name.replace(/ /g, "")} BE-badge-${type} ${this.BadgeClasses[this.defaults.badges[flag].selector + (flag == this.boostflag ? this.GuildBoostUtils.getUserLevel(this.loadedusers[info.id].premium_guild_since) : "")]}"></div>`);
+				let badge = BDFDB.htmlToElement(`<div class="BE-badge BE-badge-${this.defaults.badges[flag].id} BE-badge-${type} ${this.BadgeClasses[this.defaults.badges[flag].selector + (flag == this.boostflag ? this.GuildBoostUtils.getUserLevel(this.loadedusers[info.id].premium_guild_since) : "")]}"></div>`);
 				badgewrapper.appendChild(badge);
 				badge.addEventListener("mouseenter", () => {
 					let text = this.defaults.badges[flag].name;
