@@ -47,6 +47,9 @@ class BadgesEverywhere {
 			.BE-badge.BE-badge-list.BE-badge-CurrentGuildBoost {
 				top: -2px !important;
 			}
+			.BE-badge.BE-badge-chat.BE-badge-CurrentGuildBoost {
+				top: -3px !important;
+			}
 			.BE-badge:not(.BE-badge-settings):first-of-type {
 				margin-left: 5px !important;
 			}
