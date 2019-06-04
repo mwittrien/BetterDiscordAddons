@@ -35,6 +35,7 @@ class BadgesEverywhere {
 				background-repeat: no-repeat;
 				display: inline-flex;
 				align-items: center;
+				justify-content: center;
 				height: 17px !important;
 				margin: 0 2px !important;
 			}
