@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.2.8";}
+	getVersion () {return "6.2.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,8 +11,8 @@ class ServerFolders {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Animated Server Icons","Animated server icons are now properly animated in the foldercontent"]],
-			"improved":[["Notifications","Improved the speed in which the notification indicators are displayed on the servers and folders"]]
+			"fixed":[["Mentions","Fixed mentions not updating properly"]],
+			"improved":[["BD Guild classes","Added the BD classes for folders"]]
 		};
 		
 		this.labels = {};
@@ -171,7 +171,7 @@ class ServerFolders {
 			</div>`;
 
 		this.folderIconMarkup =
-			`<div class="${BDFDB.disCN.guildouter} folder">
+			`<div class="${BDFDB.disCNS.guildouter + BDFDB.disCN._bdguild} folder">
 				<div class="${BDFDB.disCNS.guildpillwrapper + BDFDB.disCN.guildpill}">
 					<span class="${BDFDB.disCN.guildpillitem}" style="opacity: 0; height: 8px; transform: translate3d(0px, 0px, 0px);"></span>
 				</div>
@@ -203,7 +203,7 @@ class ServerFolders {
 			</div>`;
 
 		this.dragPlaceholderMarkup =
-			`<div class="${BDFDB.disCN.guildouter} foldercopyplaceholder">
+			`<div class="${BDFDB.disCNS.guildouter + BDFDB.disCN._bdguild} foldercopyplaceholder">
 				<div class="${BDFDB.disCNS.guildpillwrapper + BDFDB.disCN.guildpill}">
 					<span class="${BDFDB.disCN.guildpillitem}"></span>
 				</div>
@@ -630,10 +630,10 @@ class ServerFolders {
 				if (!BDFDB.equals(state, this.cachedGuildState[instance.props.guild.id])) {
 					this.cachedGuildState[instance.props.guild.id] = state;
 					let folderdiv = this.getFolderOfServer(instance.props.guild);
-					if (folderdiv) setImmediate(() => {
+					if (folderdiv) setTimeout(() => {
 						this.updateCopyInFolderContent(wrapper, folderdiv);
 						this.updateFolderNotifications(folderdiv);
-					});
+					},1000);
 				}
 			}
 			if (methodnames.includes("componentWillUnmount")) {
@@ -709,6 +709,7 @@ class ServerFolders {
 			
 			if (folderName) folderdiv.setAttribute("foldername", folderName);
 			else folderdiv.removeAttribute("foldername");
+			folderdiv.querySelector(BDFDB.dotCN.guildiconwrapper).setAttribute("aria-label", folderName || "");
 
 			if (iconID != oldIconID || !BDFDB.equals(color1, oldColor1) || !BDFDB.equals(color2, oldColor2)) {
 				let folderIcons = this.loadAllIcons();
@@ -940,10 +941,12 @@ class ServerFolders {
 	createFolderDiv (data) {
 		let folderdiv = BDFDB.htmlToElement(this.folderIconMarkup);
 		let folderdivinner = folderdiv.querySelector(BDFDB.dotCN.guildcontainer);
+		let foldericonwrapper = folderdiv.querySelector(BDFDB.dotCN.guildiconwrapper);
 		this.insertFolderDiv(data, folderdiv);
 
 		folderdiv.id = data.folderID;
 		folderdiv.setAttribute("foldername", data.folderName);
+		foldericonwrapper.setAttribute("aria-label", data.folderName);
 		BDFDB.addClass(folderdiv, "closed");
 		folderdiv.querySelector("mask").setAttribute("id", "SERVERFOLDERS" + data.folderID);
 		folderdiv.querySelector("foreignObject").setAttribute("mask", "url(#SERVERFOLDERS" + data.folderID + ")");
@@ -1163,7 +1166,7 @@ class ServerFolders {
 			
 			let open = () => {
 				if (this.foldercontent) {
-					if (settings.addSeparators && this.foldercontent.querySelectorAll(BDFDB.dotCN.guildcontainer).length) this.foldercontentguilds.appendChild(BDFDB.htmlToElement(`<div class="${BDFDB.disCN.guildouter} folderseparatorouter" folder="${folderdiv.id}"><div class="${BDFDB.disCN.guildseparator} folderseparator"></div></div>`));
+					if (settings.addSeparators && this.foldercontent.querySelectorAll(BDFDB.dotCN.guildcontainer).length) this.foldercontentguilds.appendChild(BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.guildouter + BDFDB.disCN._bdguildseparator} folderseparatorouter" folder="${folderdiv.id}"><div class="${BDFDB.disCN.guildseparator} folderseparator"></div></div>`));
 					includedServers.forEach(guilddiv => {this.updateCopyInFolderContent(guilddiv, folderdiv);});
 				}
 			}
@@ -1373,6 +1376,8 @@ class ServerFolders {
 		let unreadServers = BDFDB.readUnreadServerList(includedServers);
 		if (unreadServers.length > 0 && data.autounread) BDFDB.markGuildAsRead(unreadServers);
 		else {
+			let folderpill = folderdiv.querySelector(BDFDB.dotCN.guildpill);
+			let folderpillitem = folderdiv.querySelector(BDFDB.dotCN.guildpillitem);
 			let folderdivbadges = folderdiv.querySelector(BDFDB.dotCN.guildbadgewrapper);
 			let masks = folderdiv.querySelectorAll("mask rect");
 			
@@ -1386,7 +1391,12 @@ class ServerFolders {
 				if (props.video) videoenabled = true;
 			});
 			
-			folderdiv.querySelector(BDFDB.dotCN.guildpillitem).style.setProperty("opacity", unread ? 0.7 : 0);
+			BDFDB.toggleClass(folderdiv, BDFDB.disCN._bdguildunread, unread);
+			BDFDB.toggleClass(folderdiv, BDFDB.disCN._bdguildaudio, audioenabled);
+			BDFDB.toggleClass(folderdiv, BDFDB.disCN._bdguildvideo, videoenabled);
+			
+			BDFDB.toggleClass(folderpill, BDFDB.disCN._bdpillunread, unread);
+			folderpillitem.style.setProperty("opacity", unread ? 0.7 : 0);
 			
 			let showcount = BDFDB.getData("showCountBadge", this, "settings");
 			let notificationbadge = folderdiv.querySelector(BDFDB.dotCN.guildlowerbadge + ".notifications");

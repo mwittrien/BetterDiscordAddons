@@ -3,17 +3,13 @@
 class EditServers {
 	getName () {return "EditServers";}
 
-	getVersion () {return "2.0.1";} 
+	getVersion () {return "2.0.2";} 
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	initConstructor () {
-		this.changelog = {
-			"improved":[["ServerFolders bug","Fixed a bug that prevented tooltips from showing when an edited server is in a folder"]]
-		};
-		
+	initConstructor () {		
 		this.labels = {};
 
 		this.patchModules = {
@@ -522,9 +518,11 @@ class EditServers {
 		if (!info || !icon || !icon.parentElement) return;
 		if (icon.EditServersChangeObserver && typeof icon.EditServersChangeObserver.disconnect == "function") icon.EditServersChangeObserver.disconnect();
 		let data = this.getGuildData(info.id, icon);
-		if (data.url || data.shortName || data.removeIcon || icon.getAttribute("changed-by-editservers")) {
+		if (data.url || data.name || data.shortName || data.removeIcon || icon.getAttribute("changed-by-editservers")) {
 			let url = data.url || BDFDB.getGuildIcon(info.id);
+			let name = data.name || info.name || "";
 			let shortname = data.url ? "" : (data.shortName ? data.shortName : (info.icon && !data.removeIcon ? "" : info.acronym));
+			if (BDFDB.containsClass(icon.parentElement, BDFDB.disCN.guildiconwrapper)) icon.parentElement.setAttribute("aria-label", name);
 			if (icon.tagName == "IMG") {
 				icon.setAttribute("src", data.removeIcon ? null : url);
 				let removeicon = data.removeIcon && BDFDB.containsClass(icon, BDFDB.disCN.guildicon);
@@ -550,7 +548,7 @@ class EditServers {
 					icon.style.setProperty("background-size", "cover");
 				}
 			}
-			if (data.url || data.shortName || data.removeIcon) {
+			if (data.url || data.name || data.shortName || data.removeIcon) {
 				icon.setAttribute("changed-by-editservers", true);
 				icon.EditServersChangeObserver = new MutationObserver((changes, _) => {
 					changes.forEach(
