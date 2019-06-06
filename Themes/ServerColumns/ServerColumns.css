@@ -52,6 +52,7 @@ body.foldercontentopened .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
 .wrapper-1Rf91z .blob-1PX1Gp {
 	margin: 0 calc(1px * (((var(--vguildsize) + 10) * (var(--vcolumns) - 1))/2)) 4px calc(1px * ((((var(--vguildsize) + 10) * (var(--vcolumns) - 1))/2) + 2)) !important;
 }
+.wrapper-1Rf91z .listItemWrapper-3X98Pc,
 .wrapper-1Rf91z .blob-3RT82C {
 	margin: 0 calc(1px * ((((var(--vguildsize) + 10) * (var(--vcolumns) - 1))/2) * (1 - var(--valigndms)))) 0 calc(1px * (((0 * var(--valigndms)) + ((((var(--vguildsize) + 10) * (var(--vcolumns) - 1))/2) * (1 - var(--valigndms)))))) !important;
 }
