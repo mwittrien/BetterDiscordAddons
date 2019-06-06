@@ -120,16 +120,18 @@ class PinDMs {
 					<div class="${BDFDB.disCNS.guildpillwrapper + BDFDB.disCN.dmpill}">
 						<span class="${BDFDB.disCN.guildpillitem}"></span>
 					</div>
-					<div tabindex="0" class="${BDFDB.disCNS.dmcontainer + BDFDB.disCN.guildinner}" role="button">
-						<svg width="48" height="48" viewBox="0 0 48 48" class="${BDFDB.disCN.guildsvg}">
-							<mask id="PINDMSDRAG" fill="black" x="0" y="0" width="48" height="48">
-								<path d="M48 24C48 37.2548 37.2548 48 24 48C10.7452 48 0 37.2548 0 24C0 10.7452 10.7452 0 24 0C37.2548 0 48 10.7452 48 24Z" fill="white"></path>
-							</mask>
-							<foreignObject mask="url(#PINDMSDRAG)" x="0" y="0" width="48" height="48">
-								<div class="${BDFDB.disCN.guildplaceholder}"></div>
-							</foreignObject>
-						</svg>
-						<div class="${BDFDB.disCN.guildbadgewrapper}"></div>
+					<div class="${BDFDB.disCN.guildinnerwrapper}">
+						<div class="${BDFDB.disCN.guildinner}">
+							<svg width="48" height="48" viewBox="0 0 48 48" class="${BDFDB.disCN.guildsvg}">
+								<mask id="PINDMSDRAG" fill="black" x="0" y="0" width="48" height="48">
+									<path d="M48 24C48 37.2548 37.2548 48 24 48C10.7452 48 0 37.2548 0 24C0 10.7452 10.7452 0 24 0C37.2548 0 48 10.7452 48 24Z" fill="white"></path>
+								</mask>
+								<foreignObject mask="url(#PINDMSDRAG)" x="0" y="0" width="48" height="48">
+									<div class="${BDFDB.disCN.guildplaceholder}"></div>
+								</foreignObject>
+							</svg>
+							<div class="${BDFDB.disCN.guildbadgewrapper}"></div>
+						</div>
 					</div>
 				</div>
 			</div>`;
@@ -572,7 +574,7 @@ class PinDMs {
 			let info = this.ChannelUtils.getChannel(id);
 			if (info) {
 				let dmdiv = BDFDB.htmlToElement(this.recentDMMarkup);
-				let dmdivinner = dmdiv.querySelector(BDFDB.dotCN.dmcontainer);
+				let dmdivinner = dmdiv.querySelector(BDFDB.dotCN.guildinnerwrapper);
 				let dmiconwrapper = dmdiv.querySelector(BDFDB.dotCN.guildiconwrapper);
 				dmiconwrapper.style.setProperty("border-radius", this.CurrentChannelStore.getChannelId() == id ? "30%" : "50%");
 				dmiconwrapper.style.setProperty("overflow", "hidden");
