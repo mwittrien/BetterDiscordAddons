@@ -3,13 +3,17 @@
 class EditServers {
 	getName () {return "EditServers";}
 
-	getVersion () {return "2.0.2";} 
+	getVersion () {return "2.0.3";} 
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	initConstructor () {		
+	initConstructor () {
+		this.changelog = {
+			"fixed":[["Animated Icons","EditServers no longer breaks animated icons when something else but the server icon is edited"]]
+		};	
+		
 		this.labels = {};
 
 		this.patchModules = {
@@ -553,6 +557,7 @@ class EditServers {
 				icon.EditServersChangeObserver = new MutationObserver((changes, _) => {
 					changes.forEach(
 						(change, i) => {
+							if (!data.url && !data.removeIcon && change.type == "attributes" && change.attributeName == "src" && change.target.src.indexOf(".gif") > -1) return;
 							icon.EditServersChangeObserver.disconnect();
 							this.changeGuildIcon(info, icon);
 						}
