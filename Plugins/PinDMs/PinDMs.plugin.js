@@ -3,7 +3,7 @@
 class PinDMs {
 	getName () {return "PinDMs";}
 
-	getVersion () {return "1.4.4";}
+	getVersion () {return "1.4.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -741,7 +741,7 @@ class PinDMs {
 	}
 
 	addHoverBehaviour (div, id) {
-		let divinner = div.querySelector(BDFDB.dotCN.dmcontainer);
+		let divinner = div.querySelector(BDFDB.dotCN.guildinnerwrapper);
 		let diviconwrapper = div.querySelector(BDFDB.dotCN.guildiconwrapper);
 		let divpillitem = div.querySelector(BDFDB.dotCN.guildpillitem);
 		
