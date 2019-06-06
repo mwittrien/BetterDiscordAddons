@@ -405,6 +405,7 @@
 .theme-light .premiumPlanName-24zBVw,
 .theme-light .headerIcon-3bqya6,
 .theme-light .container-2mdxGH,
+.foreground-2EIns2,
 .durationThumbnail-2_vk0i,
 .premiumIcon-2IFPOX,
 .tierUnlocked-25K6Kv,
@@ -414,6 +415,7 @@
 .tierMarkerInProgress-24LMzJ .currentTierIcon-2gcTCn.tier3Icon-Ku4Ahe,
 .animatedEmojiIcon-nv4AeV, 
 .animatedGuildIcon-T0S3hV,
+.uploadIcon-2eU0gH,
 .verified-1eC5dy,
 .operations-36ENbA > a,
 .skipTips-2ftiX7 a,
@@ -616,7 +618,11 @@
 [style*="background-color: rgba(114, 137, 218, 0)"] {
 	background-color: rgba(var(--vaccentcolor), 0) !important;
 }
+.tierAccomplished-2eXPdI,
+.tierCurrent-Lw7-4E,
+.tierDefault-2qaRkD,
 .tierHeaderUnlocked-1n-OTI,
+.tierHeaderUnlockedBackground-MW5XJU,
 .tierMarkerAccomplished-2MiXeg,
 .grandfatheredMessage-1BnHtv,
 .gradientBar-1XmvR-,
