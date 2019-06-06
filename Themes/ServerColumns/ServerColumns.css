@@ -99,7 +99,7 @@ body.foldercontentopened .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
 	left: calc(1px * ((((var(--vguildsize) + 10) * (var(--vcolumns) - 1))/2) - 7)) !important;
 }
 .wrapper-1Rf91z .pill-1m5BUr {
-	left: calc(1px * (((13 * var(--valigndms)) + ((((var(--vguildsize) + 10) * (var(--vcolumns) - 1))/2) * (1 - var(--valigndms)))) - 7)) !important;
+	left: calc(1px * (((13 * var(--valigndms)) + ((((var(--vguildsize) + 10) * (var(--vcolumns) - 1))/2) * (1 - var(--valigndms)))) - 21)) !important;
 }
 .wrapper-1Rf91z .pill-31IEus,
 .wrapper-1Rf91z .pill-3YxEhL {
