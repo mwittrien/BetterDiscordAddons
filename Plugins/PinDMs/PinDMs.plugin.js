@@ -78,7 +78,7 @@ class PinDMs {
 					<div class="${BDFDB.disCNS.guildpillwrapper + BDFDB.disCN.dmpill}">
 						<span class="${BDFDB.disCN.guildpillitem}" style="opacity: 0; height: 8px; transform: translate3d(0px, 0px, 0px);"></span>
 					</div>
-					<div class="${BDFDB.disCN.dmcontainer}">
+					<div class="${BDFDB.disCN.guildinnerwrapper}">
 						<div class="${BDFDB.disCN.guildinner}">
 							<svg width="48" height="48" viewBox="0 0 48 48" class="${BDFDB.disCN.guildsvg}">
 								<mask id="" fill="black" x="0" y="0" width="48" height="48">
