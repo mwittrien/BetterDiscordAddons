@@ -18,6 +18,7 @@
 	--vguildchanneltransparency: var(--guildchanneltransparency,var(--dguildchanneltransparency));
 	--vmemberlistransparency: var(--memberlistransparency,var(--dmemberlistransparency));
 	--vaccentcolor: var(--accentcolor,var(--daccentcolor));
+	--vlinkcolor: var(--vaccentcolor);
 	--vbackground: var(--background,var(--dbackground));
 	--vbackdrop: var(--backdrop,var(--dbackdrop));
 	--vbackgroundblur: var(--backgroundblur,var(--dblur));
