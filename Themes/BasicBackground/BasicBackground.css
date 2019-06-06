@@ -2405,11 +2405,11 @@ html, span:not(.spinner-item) {
 .DSAC-styled .wrapper-1Rf91z .listItem-2P_4kh .blobContainer-239gwq .wrapper-25eVIn:hover {
 	background-color: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 3)) !important;
 }
-.DSAC-styled .wrapper-1Rf91z .listItem-2P_4kh.DSAC-selected .wrapper-25eVIn,
-.DSAC-styled .wrapper-1Rf91z .listItem-2P_4kh.DSAC-selected .wrapper-25eVIn:hover {
+.DSAC-styled .wrapper-1Rf91z .listItem-2P_4kh.bd-selected .wrapper-25eVIn,
+.DSAC-styled .wrapper-1Rf91z .listItem-2P_4kh.bd-selected .wrapper-25eVIn:hover {
 	background-color: rgb(var(--vaccentcolor)) !important;
 }
-.DSAC-styled .wrapper-1Rf91z .listItem-2P_4kh.DSAC-selected .wrapper-25eVIn path[fill="#7289da"] {
+.DSAC-styled .wrapper-1Rf91z .listItem-2P_4kh.bd-selected .wrapper-25eVIn path[fill="#7289da"] {
 	stroke: black;
 	stroke-width: 0.5px;
 }
