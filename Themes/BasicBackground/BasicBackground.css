@@ -714,6 +714,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 }
 
 .bannerImage-1jOskm {
+	background-size: 0, cover;
 	-webkit-mask: linear-gradient(rgb(24, 25, 28) 60%, rgba(47, 49, 54, 0) 100%) !important;
 }
 
