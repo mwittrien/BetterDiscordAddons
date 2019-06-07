@@ -48,6 +48,7 @@ class EditUsers {
 				display: inline-flex;
 			}
 			${BDFDB.dotCN.bottag} {
+				line-height: 13px;
 				height: 13px;
 				top: unset;
 				bottom: 0px;
@@ -56,6 +57,9 @@ class EditUsers {
 			}
 			${BDFDB.dotCNC.userpopoutheaderbottag + BDFDB.dotCN.userpopoutheaderbottagwithnickname} {
 				bottom: 4px;
+			}
+			${BDFDB.dotCNS.userpopoutheadertagwithnickname + BDFDB.dotCN.userpopoutheaderbottagwithnickname} {
+				bottom: 0px;
 			}
 			${BDFDB.dotCN.userprofilebottag} {
 				bottom: 3px;
