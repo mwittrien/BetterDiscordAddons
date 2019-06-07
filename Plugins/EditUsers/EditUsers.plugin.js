@@ -3,7 +3,7 @@
 class EditUsers {
 	getName () {return "EditUsers";}
 
-	getVersion () {return "3.3.9";}
+	getVersion () {return "3.4.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class EditUsers {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Tags","Fixed the issue where tags were bigger than they should be"]]
+			"fixed":[["Compact Mode","Fixed for compact mode .. who uses this anyways"]]
 		};
 		
 		this.labels = {}; 
@@ -44,17 +44,25 @@ class EditUsers {
 			${BDFDB.dotCNS.message + BDFDB.dotCN.messageheadercozy} {
 				padding-top: 0;
 			}
-			${BDFDB.dotCNC.userpopoutheadertagnonickname + BDFDB.dotCNC.userpopoutheadernamewrapper + BDFDB.dotCN.messageheadercozymeta} > span:first-child {
+			${BDFDB.dotCN.messageheadercozymeta} > span:first-child {
 				display: inline-flex;
 			}
 			${BDFDB.dotCN.bottag} {
 				height: 13px;
-				top: 0px;
+				top: unset;
+				bottom: 0px;
 				position: relative;
 				margin: 0 0 0 1ch;
 			}
-			${BDFDB.dotCN.messagegroupcompact} ${BDFDB.dotCN.bottag} {
+			${BDFDB.dotCNC.userpopoutheaderbottag + BDFDB.dotCN.userpopoutheaderbottagwithnickname} {
+				bottom: 4px;
+			}
+			${BDFDB.dotCN.userprofilebottag} {
+				bottom: 3px;
+			}
+			${BDFDB.dotCN.bottagmessagecompact} {
 				margin-right: 6px;
+				bottom: 3px;
 			}`;
 
 		this.userContextEntryMarkup =

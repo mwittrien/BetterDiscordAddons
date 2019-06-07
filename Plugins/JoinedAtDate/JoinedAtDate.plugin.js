@@ -3,7 +3,7 @@
 class JoinedAtDate {
 	getName () {return "JoinedAtDate";}
 
-	getVersion () {return "1.1.0";}
+	getVersion () {return "1.1.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class JoinedAtDate {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["New Select Classes","The Dropdown-Select element got new classes on canary, this update will prevent stable from breaking once the class change is pushed to stable"]]
+			"fixed":[["Order","Fixed order of LastMessageDate, JoinedAtDate, CreationDate"]]
 		};
 		
 		this.labels = {};
@@ -220,12 +220,10 @@ class JoinedAtDate {
 				if (document.contains(container)) {
 					let choice = BDFDB.getData("joinedAtDateLang", this, "choices");
 					let nametag = container.querySelector(BDFDB.dotCN.nametag);
-					let creationDate = container.querySelector(".creationDate");
-					container.insertBefore(BDFDB.htmlToElement(`<div class="joinedAtDate BDFDB-textscrollwrapper ${BDFDB.disCN.textrow}" style="max-width: ${BDFDB.getRects(BDFDB.getParentEle(popout ? BDFDB.dotCN.userpopoutheader : BDFDB.dotCN.userprofileheaderinfo, container)).width - 20}px !important;"><div class="BDFDB-textscroll">${this.labels.joinedat_text.replace("{{time}}", this.getTimestamp(this.languages[choice].id, timestamp))}</div></div>`), creationDate ? creationDate : (nametag ? nametag.nextSibling : null));
-					BDFDB.initElements(container.parentElement, this);
+					container.insertBefore(BDFDB.htmlToElement(`<div class="joinedAtDate BDFDB-textscrollwrapper ${BDFDB.disCN.textrow}" style="max-width: ${BDFDB.getRects(BDFDB.getParentEle(popout ? BDFDB.dotCN.userpopoutheader : BDFDB.dotCN.userprofileheaderinfo, container)).width - 20}px !important; order: 7 !important;"><div class="BDFDB-textscroll">${this.labels.joinedat_text.replace("{{time}}", this.getTimestamp(this.languages[choice].id, timestamp))}</div></div>`), nametag ? nametag.nextSibling : null);
+					BDFDB.initElements(container, this);
 					if (popout && popout.style.transform.indexOf("translateY(-1") == -1) {
-						let arect = BDFDB.getRects(document.querySelector(BDFDB.dotCN.appmount));
-						let prect = BDFDB.getRects(popout);
+						let arect = BDFDB.getRects(document.querySelector(BDFDB.dotCN.appmount)), prect = BDFDB.getRects(popout);
 						popout.style.setProperty("top", (prect.y + prect.height > arect.height ? (arect.height - prect.height) : prect.y) + "px");
 					}
 				}

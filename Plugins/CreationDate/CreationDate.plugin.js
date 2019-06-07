@@ -3,7 +3,7 @@
 class CreationDate {
 	getName () {return "CreationDate";}
 
-	getVersion () {return "1.2.7";}
+	getVersion () {return "1.2.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class CreationDate {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["New Select Classes","The Dropdown-Select element got new classes on canary, this update will prevent stable from breaking once the class change is pushed to stable"]]
+			"fixed":[["Order","Fixed order of LastMessageDate, JoinedAtDate, CreationDate"]]
 		};
 		
 		this.labels = {};
@@ -138,7 +138,7 @@ class CreationDate {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
-
+			
 			this.languages = Object.assign({"own":{name:"Own",id:"own",integrated:false,dic:false}},BDFDB.languages);
 
 			BDFDB.WebModules.forceAllUpdates(this);
@@ -209,12 +209,10 @@ class CreationDate {
 		if (!info || !container || container.querySelector(".creationDate")) return;
 		let choice = BDFDB.getData("creationDateLang", this, "choices");
 		let nametag = container.querySelector(BDFDB.dotCN.nametag);
-		let joinedAtDate = container.querySelector(".joinedAtDate");
-		container.insertBefore(BDFDB.htmlToElement(`<div class="creationDate BDFDB-textscrollwrapper ${BDFDB.disCN.textrow}" style="max-width: ${BDFDB.getRects(BDFDB.getParentEle(popout ? BDFDB.dotCN.userpopoutheader : BDFDB.dotCN.userprofileheaderinfo, container)).width - 20}px !important;"><div class="BDFDB-textscroll">${this.labels.createdat_text.replace("{{time}}", this.getTimestamp(this.languages[choice].id, info.createdAt))}</div></div>`), joinedAtDate ? joinedAtDate.nextSibling : (nametag ? nametag.nextSibling : null));
-		BDFDB.initElements(container.parentElement, this);
+		container.insertBefore(BDFDB.htmlToElement(`<div class="creationDate BDFDB-textscrollwrapper ${BDFDB.disCN.textrow}" style="max-width: ${BDFDB.getRects(BDFDB.getParentEle(popout ? BDFDB.dotCN.userpopoutheader : BDFDB.dotCN.userprofileheaderinfo, container)).width - 20}px !important; order: 8 !important;"><div class="BDFDB-textscroll">${this.labels.createdat_text.replace("{{time}}", this.getTimestamp(this.languages[choice].id, info.createdAt))}</div></div>`), nametag ? nametag.nextSibling : null);
+		BDFDB.initElements(container, this);
 		if (popout && popout.style.transform.indexOf("translateY(-1") == -1) {
-			let arect = BDFDB.getRects(document.querySelector(BDFDB.dotCN.appmount));
-			let prect = BDFDB.getRects(popout);
+			let arect = BDFDB.getRects(document.querySelector(BDFDB.dotCN.appmount)), prect = BDFDB.getRects(popout);
 			popout.style.setProperty("top", (prect.y + prect.height > arect.height ? (arect.height - prect.height) : prect.y) + "px");
 		}
 	}

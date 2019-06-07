@@ -3,7 +3,7 @@
 class BadgesEverywhere {
 	getName () {return "BadgesEverywhere";} 
 
-	getVersion () {return "1.3.2";}
+	getVersion () {return "1.3.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,8 +11,8 @@ class BadgesEverywhere {
 
 	initConstructor () {
 		this.changelog = {
-			"improved":[["Guild Boost","Changed the general guild boost badge in a way that it's displayed everywhere in all servers and added the option to add the badge for the boosting of the current server"]],
-			"fixed":[["Message Username","Fixed the issue that moved the message username when a badge was appended"],["Badges","Some badges didn't get added properly"]]
+			"improved":[["Compact Mode","Changed badge placement in user popout to look more like the user profile and to fix issues with long nicknames"]],
+			"fixed":[["Compact Mode","Fixed for compact mode .. who uses this anyways"]]
 		};
 		
 		this.patchModules = {
@@ -25,7 +25,7 @@ class BadgesEverywhere {
 			${BDFDB.dotCNS.message + BDFDB.dotCN.messageheadercozy} {
 				padding-top: 0;
 			}
-			${BDFDB.dotCNC.userpopoutheadertagnonickname + BDFDB.dotCNC.userpopoutheadernamewrapper + BDFDB.dotCN.messageheadercozymeta} > span:first-child {
+			${BDFDB.dotCN.messageheadercozymeta} > span:first-child {
 				display: inline-flex;
 			}
 			.BE-badge {
@@ -45,11 +45,17 @@ class BadgesEverywhere {
 			.BE-badge.BE-badge-popout:not(.BE-badge-CurrentGuildBoost) {
 				top: 3px !important;
 			}
+			${BDFDB.dotCN.messageheadercompact} .BE-badge.BE-badge-chat:not(.BE-badge-CurrentGuildBoost) {
+				top: 3px !important;
+			}
 			.BE-badge.BE-badge-list.BE-badge-CurrentGuildBoost {
 				top: -2px !important;
 			}
 			.BE-badge.BE-badge-chat.BE-badge-CurrentGuildBoost {
 				top: -3px !important;
+			}
+			${BDFDB.dotCN.messageheadercompact} .BE-badge.BE-badge-chat.BE-badge-CurrentGuildBoost {
+				top: 0px !important;
 			}
 			.BE-badge:not(.BE-badge-settings):first-of-type {
 				margin-left: 5px !important;
@@ -226,8 +232,7 @@ class BadgesEverywhere {
 			this.addBadges(instance.props.user, wrapper, "list");
 		}
 		else if (BDFDB.containsClass(wrapper, BDFDB.disCN.userpopoutheadertag) && BDFDB.getData("showInPopout", this, "settings")) {
-			wrapper = BDFDB.containsClass(wrapper, BDFDB.disCN.userpopoutheadertagwithnickname) && wrapper.previousSibling ? wrapper.previousSibling : wrapper;
-			this.addBadges(instance.props.user, wrapper, "popout");
+			this.addBadges(instance.props.user, BDFDB.getParentEle(BDFDB.dotCN.userpopoutheadertext, wrapper), "popout");
 		}
 	}
 
@@ -294,6 +299,18 @@ class BadgesEverywhere {
 			badgewrapper.appendChild(badge);
 			badge.addEventListener("mouseenter", () => {BDFDB.createTooltip(settings.showNitroDate ? BDFDB.LanguageStringsFormat("PREMIUM_GUILD_SUBSCRIPTION_TOOLTIP", new Date(member.premiumSince)) : "Boosting current server", badge, {type:"top", style:"white-space: nowrap; max-width: unset"});});
 		}
-		if (badgewrapper.firstChild) wrapper.insertBefore(badgewrapper, wrapper.querySelector(".owner-tag,.TRE-tag,svg[name=MobileDevice]"));
+		if (badgewrapper.firstChild) {
+			if (header) {
+				wrapper.insertBefore(badgewrapper, wrapper.querySelector(BDFDB.dotCN.nametag).nextElementSibling);
+				let popout = header.parentElement.parentElement;
+				if (popout.style.transform.indexOf("translateY(-1") == -1) {
+					let arect = BDFDB.getRects(document.querySelector(BDFDB.dotCN.appmount)), prect = BDFDB.getRects(popout);
+					popout.style.setProperty("top", (prect.y + prect.height > arect.height ? (arect.height - prect.height) : prect.y) + "px");
+				}
+			}
+			else {
+				wrapper.insertBefore(badgewrapper, wrapper.querySelector(".owner-tag,.TRE-tag,svg[name=MobileDevice]"));
+			}
+		}
 	}
 }
