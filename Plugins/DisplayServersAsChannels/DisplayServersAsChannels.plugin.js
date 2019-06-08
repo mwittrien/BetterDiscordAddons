@@ -3,7 +3,7 @@
 class DisplayServersAsChannels {
 	getName () {return "DisplayServersAsChannels";}
 
-	getVersion () {return "1.2.5";}
+	getVersion () {return "1.2.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -38,6 +38,16 @@ class DisplayServersAsChannels {
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guilds + BDFDB.dotCN.scroller}::-webkit-scrollbar-thumb {
 				background-color: rgb(22, 24, 27);
 			}
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildouter} {
+				box-sizing: border-box;
+				padding-left: 5px;
+				align-items: center;
+				justify-content: flex-start;
+				width: auto !important;
+				height: auto !important;
+				min-height: 16px !important;
+				margin: 2px 0 !important;
+			}
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildpill} + * ${BDFDB.dotCN.guildicon},
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildpill} + * ${BDFDB.dotCN.guildiconacronym} {
 				display: none !important;
@@ -50,18 +60,6 @@ class DisplayServersAsChannels {
 			}
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.dmpill} + * {
 				margin-left: 5px;
-			}
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildouter} {
-				box-sizing: border-box;
-				padding-left: 5px;
-				align-items: center;
-				justify-content: flex-start;
-			}
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildouter} {
-				width: auto !important;
-				height: auto !important;
-				min-height: 16px !important;
-				margin: 2px 0 !important;
 			}
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildcontainer},
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill} + ${BDFDB.dotCN.guildinner},
@@ -100,6 +98,7 @@ class DisplayServersAsChannels {
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildpillwrapper + BDFDB.notCNS.dmpill + BDFDB.dotCN.guildpillitem} {
 				min-height: calc(8px * (50/32));
 			}
+			.DSAC-styled #bd-pub-button,
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildouter} .RANbutton,
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill} + * {
 				margin-left: 3px;
@@ -163,12 +162,14 @@ class DisplayServersAsChannels {
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.homebutton} .DSAC-name {
 				margin-top: 2px;
 			}
+			.DSAC-styled #bd-pub-li,
+			.DSAC-styled #bd-pub-button,
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildouter}.RANbutton-frame,
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildouter} .RANbutton {
 				width: 230px !important;
 				height: 32px !important;
 			}
-			#bd-pub-button,
+			.DSAC-styled #bd-pub-button,
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildouter} .RANbutton {
 				border-radius: 3px !important;
 				display: block !important;
@@ -196,10 +197,10 @@ class DisplayServersAsChannels {
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildouter + BDFDB.dotCNS._bdguildselected + BDFDB.dotCN.guildinner}:hover {
 				background-color: rgba(79,84,92,.6);
 			}
-			#bd-pub-button {
+			.DSAC-styled #bd-pub-button {
 				transition: background-color .15s ease-out,color .15s ease-out;
 			}
-			#bd-pub-button:hover {
+			.DSAC-styled bd-pub-button:hover {
 				background-color: rgb(114,137,218);
 			}
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildpill} + * ${BDFDB.dotCN.guildinner} .DSAC-name {
