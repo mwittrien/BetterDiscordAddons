@@ -169,7 +169,6 @@ class ReadAllNotificationsButton {
 
 	processGuilds (instance, wrapper, methodnames) {
 		if (methodnames.includes("componentDidMount") || (methodnames.includes("componentDidUpdate") && document.querySelector(".bd-guild ~ .RANbutton-frame"))) {
-			console.log(instance);
 			BDFDB.removeEles(".RANbutton-frame");
 			let insertnode = this.getInsertNode();
 			if (insertnode) {
