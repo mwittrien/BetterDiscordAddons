@@ -167,38 +167,41 @@ class ReadAllNotificationsButton {
 		this.RANcontextMenuMarkup = 	this.RANcontextMenuMarkup.replace("REPLACE_context_dms_text", this.labels.context_dms_text);
 	}
 
-	processGuilds (instance, wrapper) {
-		BDFDB.removeEles(".RANbutton-frame");
-		let insertnode = this.getInsertNode();
-		if (insertnode) {
-			let ranbutton = BDFDB.htmlToElement(this.RANbuttonMarkup);
-			insertnode.parentElement.insertBefore(ranbutton, insertnode);
-			ranbutton.addEventListener("click", () => {
-				let settings = BDFDB.getAllData(this, "settings");
-				if (settings.includeGuilds) BDFDB.markGuildAsRead(settings.includeMuted ? BDFDB.readServerList() : BDFDB.readUnreadServerList());
-				if (settings.includeDMs) BDFDB.markChannelAsRead(BDFDB.readDmList());
-			});
-			ranbutton.addEventListener("contextmenu", e => {
-				let RANcontextMenu = BDFDB.htmlToElement(this.RANcontextMenuMarkup);
-				RANcontextMenu.querySelector(".readunreadguilds-item").addEventListener("click", () => {
-					BDFDB.removeEles(RANcontextMenu);
-					BDFDB.markGuildAsRead(BDFDB.readUnreadServerList());
+	processGuilds (instance, wrapper, methodnames) {
+		if (methodnames.includes("componentDidMount") || (methodnames.includes("componentDidUpdate") && document.querySelector(".bd-guild ~ .RANbutton-frame"))) {
+			console.log(instance);
+			BDFDB.removeEles(".RANbutton-frame");
+			let insertnode = this.getInsertNode();
+			if (insertnode) {
+				let ranbutton = BDFDB.htmlToElement(this.RANbuttonMarkup);
+				insertnode.parentElement.insertBefore(ranbutton, insertnode);
+				ranbutton.addEventListener("click", () => {
+					let settings = BDFDB.getAllData(this, "settings");
+					if (settings.includeGuilds) BDFDB.markGuildAsRead(settings.includeMuted ? BDFDB.readServerList() : BDFDB.readUnreadServerList());
+					if (settings.includeDMs) BDFDB.markChannelAsRead(BDFDB.readDmList());
 				});
-				RANcontextMenu.querySelector(".readmutedguilds-item").addEventListener("click", () => {
-					BDFDB.removeEles(RANcontextMenu);
-					BDFDB.markGuildAsRead(BDFDB.readMutedServerList());
+				ranbutton.addEventListener("contextmenu", e => {
+					let RANcontextMenu = BDFDB.htmlToElement(this.RANcontextMenuMarkup);
+					RANcontextMenu.querySelector(".readunreadguilds-item").addEventListener("click", () => {
+						BDFDB.removeEles(RANcontextMenu);
+						BDFDB.markGuildAsRead(BDFDB.readUnreadServerList());
+					});
+					RANcontextMenu.querySelector(".readmutedguilds-item").addEventListener("click", () => {
+						BDFDB.removeEles(RANcontextMenu);
+						BDFDB.markGuildAsRead(BDFDB.readMutedServerList());
+					});
+					RANcontextMenu.querySelector(".readguilds-item").addEventListener("click", () => {
+						BDFDB.removeEles(RANcontextMenu);
+						BDFDB.markGuildAsRead(BDFDB.readServerList());
+					});
+					RANcontextMenu.querySelector(".readdms-item").addEventListener("click", () => {
+						BDFDB.removeEles(RANcontextMenu);
+						BDFDB.markChannelAsRead(BDFDB.readDmList());
+					});
+					BDFDB.appendContextMenu(RANcontextMenu, e);
 				});
-				RANcontextMenu.querySelector(".readguilds-item").addEventListener("click", () => {
-					BDFDB.removeEles(RANcontextMenu);
-					BDFDB.markGuildAsRead(BDFDB.readServerList());
-				});
-				RANcontextMenu.querySelector(".readdms-item").addEventListener("click", () => {
-					BDFDB.removeEles(RANcontextMenu);
-					BDFDB.markChannelAsRead(BDFDB.readDmList());
-				});
-				BDFDB.appendContextMenu(RANcontextMenu, e);
-			});
-			BDFDB.addClass(wrapper, "RAN-added");
+				BDFDB.addClass(wrapper, "RAN-added");
+			}
 		}
 	}
 
