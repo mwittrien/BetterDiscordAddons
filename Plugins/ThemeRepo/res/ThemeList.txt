@@ -19,13 +19,6 @@ https://raw.githubusercontent.com/CurimuChizu/CC-Themes/master/CC-Themes/ReZero.
 https://raw.githubusercontent.com/Dddsasul/TeamKappa-theme/master/ClearDiscord.theme.css
 https://raw.githubusercontent.com/Dddsasul/TeamKappa-theme/master/JustBlack.theme.css
 https://raw.githubusercontent.com/denBot/Cyan-Firewatch/master/cyan-firewatch.theme.css
-https://raw.githubusercontent.com/denBot/Simplistic-CSS/master/DubaiOrange.theme.css
-https://raw.githubusercontent.com/denBot/Simplistic-CSS/master/Green.theme.css
-https://raw.githubusercontent.com/denBot/Simplistic-CSS/master/MawaresShade.theme.css
-https://raw.githubusercontent.com/denBot/Simplistic-CSS/master/OceanicBlue.theme.css
-https://raw.githubusercontent.com/denBot/Simplistic-CSS/master/Pink.theme.css
-https://raw.githubusercontent.com/denBot/Simplistic-CSS/master/Simplified-Blue.theme.css
-https://raw.githubusercontent.com/denBot/Simplistic-CSS/master/Simplified-Green.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Theme_Group_1/Bubble.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Theme_Group_1/Chocola.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/Theme_Group_1/NoGameNoLife.theme.css
