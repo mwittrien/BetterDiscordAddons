@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.2.9";}
+	getVersion () {return "6.3.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ServerFolders {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Mentions","Fixed mentions not updating properly"]],
+			"fixed":[["Mentions","Fixed mentions not updating properly"],["AutoPlayGifs","Now works properly with AutoPlayGifs"]],
 			"improved":[["BD Guild classes","Added the BD classes for folders"]]
 		};
 		
@@ -1251,10 +1251,14 @@ class ServerFolders {
 				let fontColor = BDFDB.colorCONVERT(folderData.copyTooltipColor ? folderData.color4 : null, "RGB");
 				BDFDB.createTooltip(info.name, guildcopyinner, {type:"right",style:`color: ${fontColor} !important; background-color: ${bgColor} !important; border-color: ${bgColor} !important;`});
 			}
-			if (guildicon && guildicon.src && info.icon && info.icon.startsWith("a_") && info.features.has("ANIMATED_ICON") && guildicon.src.includes("discordapp.com/icons/"))guildicon.src = guildicon.src.replace(".webp", ".gif");
+			if (guildicon && guildicon.src && info.icon && info.icon.startsWith("a_") && info.features.has("ANIMATED_ICON") && guildicon.src.includes("discordapp.com/icons/")) {
+				guildicon.src = guildicon.src.replace(".webp", ".gif");
+			}
 		});
 		guildcopyinner.addEventListener("mouseleave", () => {
-			if (guildicon && guildicon.src && info.icon && info.icon.startsWith("a_") && info.features.has("ANIMATED_ICON") && guildicon.src.includes("discordapp.com/icons/"))guildicon.src = guildicon.src.replace(".gif", ".webp");
+			if (guildicon && guildicon.src && info.icon && info.icon.startsWith("a_") && info.features.has("ANIMATED_ICON") && guildicon.src.includes("discordapp.com/icons/") && !this.isAutoPlayGif()) {
+				guildicon.src = guildicon.src.replace(".gif", ".webp");
+			}
 		});
 		guildcopy.addEventListener("click", e => {
 			BDFDB.stopEvent(e);
@@ -1321,6 +1325,10 @@ class ServerFolders {
 		this.addHoverBehaviour(guildcopy);
 
 		return guildcopy;
+	}
+	
+	isAutoPlayGif () {
+		return BDFDB.isPluginEnabled("AutoPlayGifs") && bdplugins && bdplugins.AutoPlayGifs && bdplugins.AutoPlayGifs.plugin && bdplugins.AutoPlayGifs.plugin.settings && bdplugins.AutoPlayGifs.plugin.settings.guildList;
 	}
 
 	createDragPreview (div, e) {
