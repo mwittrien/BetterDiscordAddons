@@ -270,7 +270,7 @@ class PersonalPins {
 				this.addMessageToNotes(instance.props.message, instance.props.target, instance.props.channel);
 			});
 			if (BDFDB.isPluginEnabled("MessageUtilities")) {
-				BDFDB.setContextHint(pinitem, bdplugins.MessageUtilities.plugin.getActiveShortcutString("__Note_Message"));
+				BDFDB.setContextHint(pinitem, window.bdplugins.MessageUtilities.plugin.getActiveShortcutString("__Note_Message"));
 			}
 		}
 	}
@@ -410,12 +410,12 @@ class PersonalPins {
 		let channelname = messagedivider.querySelector(BDFDB.dotCN.messagespopoutchannelname);
 		channelname.innerText = (noteData.guild_id == "@me" ? " @" : " #") + (channel.name || noteData.channel_name);
 		if (noteData.guild_id != "@me" && BDFDB.isPluginEnabled("EditChannels")) {
-			bdplugins.EditChannels.plugin.changeChannel2({id:noteData.channel_id,name:noteData.channel_name}, channelname);
+			window.bdplugins.EditChannels.plugin.changeChannel2({id:noteData.channel_id,name:noteData.channel_name}, channelname);
 		}
 		else if (noteData.guild_id == "@me" && BDFDB.isPluginEnabled("EditUsers")) {
 			let dmuser_id = channel && channel.type == 1 ? channel.recipients[0] : noteData.dmuser_id;
 			if (dmuser_id) {
-				bdplugins.EditUsers.plugin.changeName2({id:dmuser_id,username:noteData.channel_name}, channelname);
+				window.bdplugins.EditUsers.plugin.changeName2({id:dmuser_id,username:noteData.channel_name}, channelname);
 				if (channelname.innerText.indexOf("@") != 0) channelname.innerText = "@" + channelname.innerText;
 			}
 		}
@@ -427,15 +427,15 @@ class PersonalPins {
 		username.innerText = user.username || noteData.author_name;
 		username.style.setProperty("color", member.colorString || noteData.color);
 		if (BDFDB.isPluginEnabled("EditUsers")) {
-			bdplugins.EditUsers.plugin.changeName({id:noteData.author_id,username:noteData.author_name}, username, noteData.guild_id);
-			if (user.id) bdplugins.EditUsers.plugin.changeAvatar({id:noteData.author_id,username:noteData.author_name}, avatar);
-			bdplugins.EditUsers.plugin.addTag({id:noteData.author_id,username:noteData.author_name}, username.parentElement, " " + BDFDB.disCN.bottagnametag);
+			window.bdplugins.EditUsers.plugin.changeName({id:noteData.author_id,username:noteData.author_name}, username, noteData.guild_id);
+			if (user.id) window.bdplugins.EditUsers.plugin.changeAvatar({id:noteData.author_id,username:noteData.author_name}, avatar);
+			window.bdplugins.EditUsers.plugin.addTag({id:noteData.author_id,username:noteData.author_name}, username.parentElement, " " + BDFDB.disCN.bottagnametag);
 		}
 		let timestamp = message.querySelector(BDFDB.dotCN.messagetimestampcozy);
 		timestamp.innerText = date.toLocaleString(BDFDB.getDiscordLanguage().id);
 		timestamp.setAttribute("datetime", date);
 		if (BDFDB.isPluginEnabled("CompleteTimestamps") && BDFDB.loadData("showInChat", "CompleteTimestamps", "settings")) {
-			bdplugins.CompleteTimestamps.plugin.changeTimestamp(timestamp);
+			window.bdplugins.CompleteTimestamps.plugin.changeTimestamp(timestamp);
 		}
 		message.querySelector(BDFDB.dotCN.messagemarkup).innerHTML = noteData.markup.replace(`<span class="edited">`,`<span class="${BDFDB.disCN.messageedited}">`);
 		message.querySelector(BDFDB.dotCN.messageaccessory).innerHTML = noteData.accessory;

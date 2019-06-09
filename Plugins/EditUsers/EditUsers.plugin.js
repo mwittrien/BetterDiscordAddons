@@ -753,7 +753,7 @@ class EditUsers {
 				let channel = this.ChannelUtils.getChannel(message.channel_id) || {};
 				let member = this.MemberUtils.getMember(channel.guild_id, message.author.id) || {};
 				let data = this.getUserData(message.author.id, wrapper);
-				markup.style.setProperty("color", settingsCookie["bda-gs-7"] ? BDFDB.colorCONVERT(data.color1 || member.colorString, "RGB") : null, "important");
+				markup.style.setProperty("color", window.settingsCookie["bda-gs-7"] ? BDFDB.colorCONVERT(data.color1 || member.colorString, "RGB") : null, "important");
 			}
 		}
 	}
@@ -973,7 +973,7 @@ class EditUsers {
 		let data = this.getUserData(info.id, mention);
 		let member = this.MemberUtils.getMember(this.LastGuildStore.getGuildId(), info.id) || {};
 		let color1 = BDFDB.colorCONVERT(data.color1 || (BDFDB.isPluginEnabled("BetterRoleColors") ? member.colorString : null), "RGBCOMP");
-		let name = data.name ? data.name : (BDFDB.isPluginEnabled("RemoveNicknames") ? bdplugins.RemoveNicknames.plugin.getNewName(info) : member.nick || info.username);
+		let name = data.name ? data.name : (BDFDB.isPluginEnabled("RemoveNicknames") ? window.bdplugins.RemoveNicknames.plugin.getNewName(info) : member.nick || info.username);
 		BDFDB.setInnerText(mention, "@" + name);
 		if (mention.EditUsersHovered) colorHover();
 		else colorDefault();

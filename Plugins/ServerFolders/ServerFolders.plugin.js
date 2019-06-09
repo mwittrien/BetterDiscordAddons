@@ -1243,8 +1243,8 @@ class ServerFolders {
 		BDFDB.addClass(guildcopy, "copy");
 		BDFDB.toggleEles(guildcopy, true);
 		guildcopyinner.addEventListener("mouseenter", () => {
-			let ESdata = BDFDB.isPluginEnabled("EditServers") ? bdplugins.EditServers.plugin.getGuildData(info.id, guildcopyinner) : null;
-			if (ESdata && (ESdata.name || ESdata.color3 || ESdata.color4)) bdplugins.EditServers.plugin.changeTooltip(info, guildcopyinner, "right");
+			let ESdata = BDFDB.isPluginEnabled("EditServers") ? window.bdplugins.EditServers.plugin.getGuildData(info.id, guildcopyinner) : null;
+			if (ESdata && (ESdata.name || ESdata.color3 || ESdata.color4)) window.bdplugins.EditServers.plugin.changeTooltip(info, guildcopyinner, "right");
 			else {
 				let folderData = BDFDB.loadData(folderdiv.id, this, "folders") || {};
 				let bgColor = BDFDB.colorCONVERT(folderData.copyTooltipColor ? folderData.color3 : null, "RGB");
@@ -1328,7 +1328,7 @@ class ServerFolders {
 	}
 	
 	isAutoPlayGif () {
-		return BDFDB.isPluginEnabled("AutoPlayGifs") && bdplugins && bdplugins.AutoPlayGifs && bdplugins.AutoPlayGifs.plugin && bdplugins.AutoPlayGifs.plugin.settings && bdplugins.AutoPlayGifs.plugin.settings.guildList;
+		return BDFDB.isPluginEnabled("AutoPlayGifs") && window.bdplugins && window.bdplugins.AutoPlayGifs && window.bdplugins.AutoPlayGifs.plugin && window.bdplugins.AutoPlayGifs.plugin.settings && window.bdplugins.AutoPlayGifs.plugin.settings.guildList;
 	}
 
 	createDragPreview (div, e) {

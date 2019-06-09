@@ -519,7 +519,7 @@ class ThemeRepo {
 		var customcssinput = themeRepoModal.querySelector("#input-customcss");
 		var themefixerinput = themeRepoModal.querySelector("#input-themefixer");
 		darklightinput.checked = BDFDB.getDiscordTheme() == BDFDB.disCN.themelight;
-		normalizeinput.checked = settingsCookie["fork-ps-4"] == true;
+		normalizeinput.checked = window.settingsCookie["fork-ps-4"] == true;
 		customcssinput.checked = false;
 		themefixerinput.checked = false;
 		themeRepoModal.querySelector("#input-hideupdated").checked = hiddenSettings.updated || options.showOnlyOutdated;
@@ -892,8 +892,8 @@ class ThemeRepo {
 		if (BDFDB.isThemeEnabled(data.name) == false) {
 			BDFDB.removeEles(`style#${data.name}`);
 			document.head.appendChild(BDFDB.htmlToElement(`<style id=${data.name}>${data.css}</style>`));
-			themeCookie[data.name] = true;
-			themeModule.saveThemeData();
+			window.themeCookie[data.name] = true;
+			window.themeModule.saveThemeData();
 			console.log(`%c[${this.name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Applied Theme " + data.name + ".");
 		}
 	}
@@ -909,9 +909,9 @@ class ThemeRepo {
 	removeTheme (data) {
 		if (BDFDB.isThemeEnabled(data.name) == true) {
 			BDFDB.removeEles(`style#${data.name}`);
-			themeCookie[data.name] = false;
-			delete bdthemes[data.name];
-			themeModule.saveThemeData();
+			window.themeCookie[data.name] = false;
+			delete window.bdthemes[data.name];
+			window.themeModule.saveThemeData();
 			console.log(`%c[${this.name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Removed Theme " + data.name + ".");
 		}
 	}

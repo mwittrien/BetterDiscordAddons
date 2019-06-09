@@ -88,7 +88,7 @@ class RevealAllSpoilersOption {
 				this.revealAllSpoilers(messagediv);
 			});
 			if (BDFDB.isPluginEnabled("MessageUtilities")) {
-				BDFDB.setContextHint(revealitem, bdplugins.MessageUtilities.plugin.getActiveShortcutString("__Reveal_Spoilers"));
+				BDFDB.setContextHint(revealitem, window.bdplugins.MessageUtilities.plugin.getActiveShortcutString("__Reveal_Spoilers"));
 			}
 		}
 	}

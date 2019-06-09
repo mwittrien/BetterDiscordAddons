@@ -877,9 +877,9 @@ class PluginRepo {
 
 	startPlugin (data) {
 		if (BDFDB.isPluginEnabled(data.name) == false) {
-			bdplugins[data.name].plugin.start();
-			pluginCookie[data.name] = true;
-			pluginModule.savePluginData();
+			window.bdplugins[data.name].plugin.start();
+			window.pluginCookie[data.name] = true;
+			window.pluginModule.savePluginData();
 			console.log(`%c[${this.name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Started Plugin " + data.name + ".");
 		}
 	}
@@ -894,10 +894,10 @@ class PluginRepo {
 
 	stopPlugin (data) {
 		if (BDFDB.isPluginEnabled(data.name) == true) {
-			bdplugins[data.name].plugin.stop();
-			pluginCookie[data.name] = false;
-			delete bdplugins[data.name];
-			pluginModule.savePluginData();
+			window.bdplugins[data.name].plugin.stop();
+			window.pluginCookie[data.name] = false;
+			delete window.bdplugins[data.name];
+			window.pluginModule.savePluginData();
 			console.log(`%c[${this.name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Stopped Plugin " + data.name + ".");
 		}
 	}

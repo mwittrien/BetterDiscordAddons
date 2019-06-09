@@ -186,7 +186,7 @@ class OwnerTag {
 		let isowner = channel.ownerId == info.id || guild && guild.ownerId == info.id;
 		if (!(isowner || (settings.addForAdmins && BDFDB.isUserAllowedTo("ADMINISTRATOR", info.id)))) return;
 		let member = settings.useRoleColor ? (this.MemberUtils.getMember(channel.guild_id, info.id) || {}) : {};
-		let EditUsersData = BDFDB.isPluginEnabled("EditUsers") ? bdplugins.EditUsers.plugin.getUserData(info.id, wrapper) : {};
+		let EditUsersData = BDFDB.isPluginEnabled("EditUsers") ? window.bdplugins.EditUsers.plugin.getUserData(info.id, wrapper) : {};
 		if (!settings.useCrown) {
 			let tag = BDFDB.htmlToElement(`<span class="owner-tag ${isowner ? "owner-tag-owner" : "owner-tag-admin"} owner-${type}-tag ${(settings.useRoleColor ? "owner-tag-rolecolor " : "") + BDFDB.disCN.bottag + (selector ? (" " + selector) : "")}" style="order: 10 !important;">${BDFDB.getData(isowner ? "ownTagName" : "ownAdminTagName", this, "inputs")}</span>`);
 			let invert = false;

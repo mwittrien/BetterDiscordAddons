@@ -286,7 +286,7 @@ class GoogleTranslateOption {
 				this.translateMessage(instance.props.message, instance.props.target, instance.props.channel);
 			});
 			if (BDFDB.isPluginEnabled("MessageUtilities")) {
-				BDFDB.setContextHint(translateitem, bdplugins.MessageUtilities.plugin.getActiveShortcutString("__Translate_Message"));
+				BDFDB.setContextHint(translateitem, window.bdplugins.MessageUtilities.plugin.getActiveShortcutString("__Translate_Message"));
 			}
 			let text = document.getSelection().toString();
 			if (text) {
