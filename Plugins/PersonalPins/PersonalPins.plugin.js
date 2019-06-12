@@ -5,13 +5,13 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.7.8";} 
+	getVersion () {return "1.7.9";} 
 
 	getAuthor () {return "DevilBro";}
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Channel Divider","Clicking the channel name in the message divider now properly switches to the channel again"]]
+			"fixed":[["Switching","Fixed the issue where you had to click the button twice after switching servers"]]
 		};
 		
 		this.labels = {};
@@ -280,7 +280,7 @@ class PersonalPins {
 	}
 
 	processHeaderBar (instance, wrapper) {
-		BDFDB.removeEles(".notes-button");
+		if (wrapper.querySelector(".notes-button")) return;
 		let search = wrapper.querySelector(BDFDB.dotCN.channelheadersearch);
 		if (!search) return;
 		let notesbutton = BDFDB.htmlToElement(this.notesButtonMarkup);
