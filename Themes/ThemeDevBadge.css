@@ -165,10 +165,10 @@
 	bottom: -3px !important;
 }
 .headerCozy-2N9HOL .image-33JSyf[style*="/avatars/278543574059057154"] ~ .status-oxiHuE {
-	top: -1px !important;
-	right: -1px !important;
+	top: 0px !important;					/* 1px for mask */
+	/* right: 1px !important;				enable for mask */
 	bottom: unset !important;
-	border: 1px solid #FFFFFF !important;
+	border: 0px solid #FFFFFF !important; 	/* 1px for mask */
 }
 .theme-dark .headerCozy-2N9HOL .image-33JSyf[style*="/avatars/278543574059057154"] ~ .status-oxiHuE {
 	border-color: #36393F !important;
