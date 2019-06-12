@@ -344,7 +344,7 @@ class ShowHiddenChannels {
 		var myMember = this.MemberUtils.getMember(guild.id, BDFDB.myData.id);
 		var allowedRoles = [], allowedUsers = [], overwrittenRoles = [], deniedRoles = [], deniedUsers = [];
 		var everyoneDenied = false;
-		for (let id in channel.permissionOverwrites) {
+		for (let id in channel.permissionOverwrites) if (guild.roles[id]) {
 			if (settings.showAllowedRoles && channel.permissionOverwrites[id].type == "role" && (guild.roles[id].name != "@everyone") && ((channel.permissionOverwrites[id].allow | this.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].allow || (channel.permissionOverwrites[id].allow | this.Permissions.CONNECT) == channel.permissionOverwrites[id].allow)) {
 				if (myMember.roles.includes(id) && !allowed) {
 					if (settings.showOverWrittenRoles) overwrittenRoles.push(guild.roles[id]);
