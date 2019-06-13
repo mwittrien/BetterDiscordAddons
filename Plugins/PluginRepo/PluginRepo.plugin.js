@@ -772,10 +772,6 @@ class PluginRepo {
 				getPluginInfo(callback);
 			});
 		}
-	
-		getLoadingTooltipText () {
-			return `Loading PluginRepo - [${Object.keys(this.loadedPlugins).length}/${Object.keys(this.grabbedPlugins).length}]`;
-		}
 
 		createFrame = () => {
 			var markup = this.frameMarkup;
@@ -849,6 +845,10 @@ class PluginRepo {
 				},"*");
 			}
 		}
+	}
+	
+	getLoadingTooltipText () {
+		return `Loading PluginRepo - [${Object.keys(this.loadedPlugins).length}/${Object.keys(this.grabbedPlugins).length}]`;
 	}
 	
 	getString (obj) {
