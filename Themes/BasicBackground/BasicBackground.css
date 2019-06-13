@@ -10,6 +10,7 @@
 	--dmemberlistransparency: 0.0;
 	--daccentcolor: 190,78,180;
 	--dbackground: url(https://mwittrien.github.io/BetterDiscordAddons/ThemesV2/BasicBackground/background.jpg);
+	--dbackgroundsize: cover;
 	--dbackdrop: rgba(0,0,0,0.4);
 	--dblur: 0px;
 	--vtransparencycolor: var(--transparencycolor,var(--dtransparencycolor));
@@ -20,6 +21,7 @@
 	--vaccentcolor: var(--accentcolor,var(--daccentcolor));
 	--vlinkcolor: var(--vaccentcolor);
 	--vbackground: var(--background,var(--dbackground));
+	--vbackgroundsize: var(--backgroundsize,var(--dbackgroundsize));
 	--vbackdrop: var(--backdrop,var(--dbackdrop));
 	--vbackgroundblur: var(--backgroundblur,var(--dblur));
 	--vpopoutblur: var(--popoutblur,var(--dblur));
@@ -34,7 +36,7 @@
 	right: 0;
 	bottom: 0;
 	position: fixed;
-	background: var(--vbackground) center/cover !important;
+	background: var(--vbackground) center/var(--vbackgroundsize) !important;
 	filter: blur(var(--vbackgroundblur)) !important;
 }
 
@@ -1462,7 +1464,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	bottom: -1px;
 	right: -1px;
 	left: -1px;
-	background: var(--vbackground) center/cover;
+	background: var(--vbackground) center/var(--vbackgroundsize);
 	filter: blur(var(--vpopoutblur));
 	background-attachment: fixed;
 }
@@ -1495,7 +1497,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	background: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 3));
 }
 .header-39GIC8:before {
-	background: var(--vbackground) center/cover;
+	background: var(--vbackground) center/var(--vbackgroundsize);
 	filter: blur(var(--vpopoutblur));
 	background-attachment: fixed;
 }
@@ -2201,7 +2203,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	background: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 3)) !important;
 }
 #ace_settingsmenu:before {
-	background: var(--vbackground) center/cover !important;
+	background: var(--vbackground) center/var(--vbackgroundsize) !important;
 	filter: blur(var(--vpopoutblur)) !important;
 	background-attachment: fixed !important;
 }
@@ -2379,7 +2381,7 @@ html, span:not(.spinner-item) {
 	background: rgba(var(--vtransparencycolor),calc((var(--vtransparencyalpha) * 3.1) + var(--vmemberlistransparency) * 0.6));
 }
 #MemberCount:before {
-	background: var(--vbackground) center/cover;
+	background: var(--vbackground) center/var(--vbackgroundsize);
 	filter: blur(var(--vbackgroundblur));
 	background-attachment: fixed;
 }
@@ -2451,7 +2453,7 @@ html, span:not(.spinner-item) {
 .bf-toolbar:before {
 	border-radius: 4px !important;
 	z-index: 100 !important;
-	background: var(--vbackground) center/cover !important;
+	background: var(--vbackground) center/var(--vbackgroundsize) !important;
 	filter: blur(var(--vpopoutblur)) !important;
 	background-attachment: fixed !important;
 }
