@@ -643,7 +643,7 @@ class PluginRepo {
 				}
 				var loadingicon = BDFDB.htmlToElement(this.pluginRepoIconMarkup);
 				BDFDB.addClass(loadingicon, "pluginrepo-loadingicon");
-				loadingicon.addEventListener("mouseenter", () => {BDFDB.createTooltip("Loading PluginRepo",loadingicon,{type:"left",delay:500});})
+				loadingicon.addEventListener("mouseenter", () => {BDFDB.createTooltip(this.getLoadingTooltipText(),loadingicon,{type:"left",delay:500,style:"max-width:unset;",selector:"pluginrepo-loading-tooltip"});})
 				loadingiconwrapper.appendChild(loadingicon);
 
 				createFrame().then(() => {
@@ -764,8 +764,17 @@ class PluginRepo {
 					}
 				}
 				i++;
+				var loadingtooltip = document.querySelector(".pluginrepo-loading-tooltip");
+				if (loadingtooltip) {
+					BDFDB.setInnerText(loadingtooltip.firstElementChild, this.getLoadingTooltipText());
+					BDFDB.updateTooltipPosition(loadingtooltip);
+				}
 				getPluginInfo(callback);
 			});
+		}
+	
+		getLoadingTooltipText () {
+			return `Loading PluginRepo - [${Object.keys(this.loadedPlugins).length}/${Object.keys(this.grabbedPlugins).length}]`;
 		}
 
 		createFrame = () => {

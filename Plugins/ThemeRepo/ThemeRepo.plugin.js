@@ -774,7 +774,7 @@ class ThemeRepo {
 					}
 					var loadingicon = BDFDB.htmlToElement(this.themeRepoIconMarkup);
 					BDFDB.addClass(loadingicon, "themerepo-loadingicon");
-					loadingicon.addEventListener("mouseenter", () => {BDFDB.createTooltip("Loading ThemeRepo",loadingicon,{type:"left",delay:500});})
+					loadingicon.addEventListener("mouseenter", () => {BDFDB.createTooltip(this.getLoadingTooltipText(),loadingicon,{type:"left",delay:500,style:"max-width:unset;",selector:"themerepo-loading-tooltip"});})
 					loadingiconwrapper.appendChild(loadingicon);
 
 					getThemeInfo(() => {
@@ -860,9 +860,18 @@ class ThemeRepo {
 					}
 				}
 				i++;
+				var loadingtooltip = document.querySelector(".themerepo-loading-tooltip");
+				if (loadingtooltip) {
+					BDFDB.setInnerText(loadingtooltip.firstElementChild, this.getLoadingTooltipText());
+					BDFDB.updateTooltipPosition(loadingtooltip);
+				}
 				getThemeInfo(callback);
 			});
 		}
+	}
+	
+	getLoadingTooltipText () {
+		return `Loading ThemeRepo - [${Object.keys(this.loadedThemes).length}/${Object.keys(this.grabbedThemes).length}]`;
 	}
 
 	checkForNewThemes () {
