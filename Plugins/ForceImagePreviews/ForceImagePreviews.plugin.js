@@ -3,13 +3,17 @@
 class ForceImagePreviews {
 	getName () {return "ForceImagePreviews";}
 
-	getVersion () {return "1.1.1";}
+	getVersion () {return "1.1.2";}
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Forces embedded Image Previews, if Discord doesn't do it itself. Caution: Externals Images can contain malicious code and reveal your IP!";}
 
 	initConstructor () {
+		this.changelog = {
+			"fixed":[["GIFs","Fixed the issue where gifs would be forced as a preview even tho the native preview was rendered"]]
+		};
+		
 		this.patchModules = {
 			"Message":"componentDidMount"
 		};
@@ -72,7 +76,6 @@ class ForceImagePreviews {
 
 	// begin of own functions
 
-
 	processMessage (instance, wrapper) {
 		if (instance.props && instance.props.message) {
 			let accessory = wrapper.querySelector(BDFDB.dotCN.messageaccessory);
@@ -110,7 +113,7 @@ class ForceImagePreviews {
 							height = 300;
 						}
 						let checkedsrc = itemsrc.indexOf("imgur.com/") > -1 ? ("imgur.com/" + itemsrc.split("/")[3].split(".")[0]) : itemsrc;
-						if (!accessory.querySelector(`${BDFDB.dotCN.embedimage}[href*="${checkedsrc}"]`)) {
+						if (!accessory.querySelector(`${BDFDB.dotCN.embedimage}[href*="${checkedsrc}"],${BDFDB.dotCN.embedgifv}[href*="${checkedsrc}"]`)) {
 							let embed = BDFDB.htmlToElement(`<div class="FIP-embed ${BDFDB.disCNS.embed + BDFDB.disCN.embedwrapper}"><a class="${BDFDB.disCNS.imagewrapper + BDFDB.disCNS.imagezoom + BDFDB.disCN.embedimage}" href="${itemsrc}" rel="noreferrer noopener" target="_blank" style="width: ${width}px; height: ${height}px;"><img src="${itemsrc}" style="width: ${width}px; height: ${height}px;"></a></div>`);
 							this.insertEmbed(embed, previmage, links, accessory);
 						}
