@@ -266,7 +266,7 @@ class ThemeRepo {
 				top: 0 !important;
 			}
 			iframe.discordPreview ~ ${BDFDB.dotCNS.appmount + BDFDB.dotCN.titlebar},
-			iframe.discordPreview ~ ${BDFDB.dotCNS.appmount + BDFDB.dotCN.app} {
+			iframe.discordPreview ~ ${BDFDB.dotCNS.appmount + BDFDB.dotCN.app} > *:not(.toasts):not(.bd-toasts) {
 				opacity: 0 !important;
 				visibility: hidden !important;
 			}
@@ -482,7 +482,11 @@ class ThemeRepo {
 		};
 
 		var messageReceived = e => {
-			if (typeof e.data === "object" && e.data.origin == "DiscordPreview") {
+			if (!document.contains(frame)) {
+				document.removeEventListener("keyup", keyPressed);
+				window.removeEventListener("message", messageReceived);
+			}
+			else if (typeof e.data === "object" && e.data.origin == "DiscordPreview") {
 				switch (e.data.reason) {
 					case "OnLoad":
 						var username = BDFDB.myData.username;
@@ -752,7 +756,7 @@ class ThemeRepo {
 				body = body.replace(/[\r\t]/g, "");
 				BDFDB.saveData("urlbase64", btoa(body), this, "newentriesdata");
 				this.loadedThemes = {};
-				this.grabbedThemes = body.split("\n");
+				this.grabbedThemes = body.split("\n").filter(n => n);
 				request("https://github.com/NFLD99/Better-Discord", (error2, response2, body2) => {
 					if (!error2 && body2) {
 						NFLDreplace = /\/NFLD99\/Better-Discord\/tree\/master\/Themes_[^"]+">([^<]+)/i.exec(body2);
@@ -911,7 +915,7 @@ class ThemeRepo {
 		let filename = data.requesturl.split("/").pop();
 		require("fs").unlink(require("path").join(BDFDB.getThemesFolder(), filename), (error) => {
 			if (error) BDFDB.showToast(`Unable to delete Theme "${filename}".`, {type:"danger"});
-			else BDFDB.showToast(`Successfully deleted Theme "${filename}".`, {type:"success"});
+			else BDFDB.showToast(`Successfully deleted Theme "${filename}".`);
 		});
 	}
 

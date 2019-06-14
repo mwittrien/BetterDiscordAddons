@@ -627,7 +627,7 @@ class PluginRepo {
 				result = result.replace(/[\r\t]/g, "");
 				BDFDB.saveData("urlbase64", btoa(result), this, "newentriesdata");
 				this.loadedPlugins = {};
-				this.grabbedPlugins = result.split("\n");
+				this.grabbedPlugins = result.split("\n").filter(n => n);
 				this.foundPlugins = this.grabbedPlugins.concat(ownlist);
 				this.loading = {is:true, timeout:setTimeout(() => {
 					clearTimeout(this.loading.timeout);
@@ -781,7 +781,10 @@ class PluginRepo {
 					callback();
 				},600000);
 				frame.messageReceived = e => {
-					if (typeof e.data === "object" && e.data.origin == "DiscordPreview") {
+					if (!document.contains(frame)) {
+						window.removeEventListener("message", frame.messageReceived);
+					}
+					else if (typeof e.data === "object" && e.data.origin == "DiscordPreview") {
 						switch (e.data.reason) {
 							case "OnLoad":
 								frame.contentWindow.postMessage({origin:"PluginRepo",reason:"OnLoad"},"*");
@@ -897,7 +900,7 @@ class PluginRepo {
 		let filename = data.url.split("/").pop();
 		require("fs").unlink(require("path").join(BDFDB.getPluginsFolder(), filename), (error) => {
 			if (error) BDFDB.showToast(`Unable to delete Plugin "${filename}".`, {type:"danger"});
-			else BDFDB.showToast(`Successfully deleted Plugin "${filename}".`, {type:"success"});
+			else BDFDB.showToast(`Successfully deleted Plugin "${filename}".`);
 		});
 	}
 
