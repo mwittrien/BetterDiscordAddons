@@ -3,7 +3,7 @@
 class GoogleTranslateOption {
 	getName () {return "GoogleTranslateOption";}
 
-	getVersion () {return "1.6.9";} 
+	getVersion () {return "1.7.0";} 
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class GoogleTranslateOption {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["New Select Classes","The Dropdown-Select element got new classes on canary, this update will prevent stable from breaking once the class change is pushed to stable"]]
+			"improved":[["API rate limit","Now warns you after you got rate limited by Google for their Translate-API if you used the plugin too frequently. This is not something I can fix"]]
 		};
 		
 		this.labels = {};
@@ -454,13 +454,18 @@ class GoogleTranslateOption {
 	}
 
 	translateText (text, type, callback) {
-		var toast = null, finishTranslation = (translation, exceptions, input, output, toast) => {
+		var toast = null;
+		var finishTranslation = (translation, exceptions, input, output, toast) => {
 			if (translation) translation = this.addExceptions(translation, exceptions);
 			if (toast) {
 				clearInterval(toast.interval);
 				toast.close();
 			}
 			callback(translation, input, output);
+		};
+		var translationError = (exceptions, input, output, toast) => {
+			BDFDB.showToast("Could not translate message, you most likely got rate limited by Google for today due to too frequent usage of their Translate-API.", {type:"error",timeout:15000});
+			finishTranslation(null, exceptions, input, output, toast);
 		};
 		var [newtext, exceptions, translate] = this.removeExceptions(text.trim(), type);
 		var input = Object.assign({}, this.languages[this.getLanguageChoice("input", type)]);
@@ -491,14 +496,20 @@ class GoogleTranslateOption {
 			else {
 				require("request")(this.getGoogleTranslateApiURL(input.id, output.id, newtext), (error, response, result) => {
 					if (!error && result) {
-						result = JSON.parse(result);
-						if (result) {
-							result[0].forEach((array) => {translation += array[0];});
-							if (!specialcase && this.languages[result[2]]) input.name = this.languages[result[2]].name;
+						try {
+							result = JSON.parse(result);
+							if (result) {
+								result[0].forEach((array) => {translation += array[0];});
+								if (!specialcase && this.languages[result[2]]) input.name = this.languages[result[2]].name;
+							}
+							else translation = text;
+							finishTranslation(translation, exceptions, input, output, toast);
 						}
-						else translation = text;
-						finishTranslation(translation, exceptions, input, output, toast);
+						catch (err) {
+							translationError(exceptions, input, output, toast);
+						}
 					}
+					else translationError(exceptions, input, output, toast);
 				});
 			}
 		}
