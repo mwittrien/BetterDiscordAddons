@@ -3,7 +3,7 @@
 class EditUsers {
 	getName () {return "EditUsers";}
 
-	getVersion () {return "3.4.0";}
+	getVersion () {return "3.4.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class EditUsers {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Compact Mode","Fixed for compact mode .. who uses this anyways"]]
+			"fixed":[["Account Details","Fixed the changes for the account container"]]
 		};
 		
 		this.labels = {}; 
@@ -19,6 +19,7 @@ class EditUsers {
 		this.patchModules = {
 			"ChannelTextArea":"componentDidMount",
 			"NameTag":"componentDidMount",
+			"Account":"componentDidMount",
 			"AuditLog":"componentDidMount",
 			"BannedCard":"componentDidMount",
 			"InviteCard":"componentDidMount",
@@ -532,10 +533,17 @@ class EditUsers {
 	}
 
 	processNameTag (instance, wrapper) {
-		let username = wrapper.parentElement.querySelector("." + (BDFDB.containsClass(wrapper, BDFDB.disCN.userpopoutheadertagwithnickname) ? BDFDB.disCN.userpopoutheadernickname : instance.props.usernameClass).replace(/ /g, "."));
-		this.changeName(instance.props.user, username);
-		this.changeAvatar(instance.props.user, this.getAvatarDiv(wrapper));
-		this.addTag(instance.props.user, username.parentElement, BDFDB.disCN.bottagnametag + (instance.props.botClass ? (" " + instance.props.botClass) : ""));
+		let username = wrapper.parentElement.parentElement.querySelector("." + (BDFDB.containsClass(wrapper, BDFDB.disCN.userpopoutheadertagwithnickname) ? BDFDB.disCN.userpopoutheadernickname : instance.props.usernameClass).replace(/ /g, "."));
+		if (username) {
+			this.changeName(instance.props.user, username);
+			this.changeAvatar(instance.props.user, this.getAvatarDiv(wrapper));
+			this.addTag(instance.props.user, username.parentElement, BDFDB.disCN.bottagnametag + (instance.props.botClass ? (" " + instance.props.botClass) : ""));
+		}
+	}
+
+	processAccount (instance, wrapper) {
+		let user = BDFDB.getReactValue(instance, "_reactInternalFiber.child.stateNode.props.currentUser");
+		if (user) this.changeName(user, wrapper.querySelector(BDFDB.dotCN.accountinfousername));
 	}
 
 	processMessageUsername (instance, wrapper) {
