@@ -3,7 +3,7 @@
 class ShowHiddenChannels {
 	getName () {return "ShowHiddenChannels";}
 
-	getVersion () {return "2.5.2";}
+	getVersion () {return "2.5.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ShowHiddenChannels {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Allowed/Denied Users","Fixed issue where allowed/denied users aren't displayed"]]
+			"fixed":[["PermissionsViewer","Readded support for PermissionsViewer"]]
 		};
 		
 		this.patchModules = {
@@ -325,7 +325,17 @@ class ShowHiddenChannels {
 
 	createHiddenObjContextMenu (guild, channel, type, e) {
 		BDFDB.stopEvent(e);
-		var contextMenu = BDFDB.htmlToElement(`<div class="${BDFDB.disCN.contextmenu} showhiddenchannels-contextmenu">${BDFDB.isPluginEnabled("PermissionsViewer") ? '<div class="' + BDFDB.disCN.contextmenuitemgroup + '"><div class="' + BDFDB.disCN.contextmenuitem + '" style="display: none !important;"></div></div>' : ''}<div class="${BDFDB.disCN.contextmenuitemgroup}"><div class="${BDFDB.disCN.contextmenuitem} copyid-item"><span>${BDFDB.LanguageStrings.COPY_ID}</span><div class="${BDFDB.disCN.contextmenuhint}"></div></div></div></div>`);
+		var contextMenu = BDFDB.htmlToElement(`<div class="${BDFDB.disCN.contextmenu} showhiddenchannels-contextmenu">${BDFDB.isPluginEnabled("PermissionsViewer") ? '<div class="' + BDFDB.disCN.contextmenuitemgroup + '"><div class="' + BDFDB.disCN.contextmenuitem + '" style="display: none !important;"></div></div>' : ''}<div class="${BDFDB.disCN.contextmenuitemgroup}"><div class="${BDFDB.disCN.contextmenuitem} permissionviewer-item"><span></span><div class="${BDFDB.disCN.contextmenuhint}"></div></div><div class="${BDFDB.disCN.contextmenuitem} copyid-item"><span>${BDFDB.LanguageStrings.COPY_ID}</span><div class="${BDFDB.disCN.contextmenuhint}"></div></div></div></div>`);
+		var permissionvieweritem = contextMenu.querySelector(".permissionviewer-item");
+		if (BDFDB.isPluginEnabled("PermissionsViewer")) {
+			permissionvieweritem.firstElementChild.innerText = window.bdplugins.PermissionsViewer.plugin.strings.contextMenuLabel;
+			permissionvieweritem.addEventListener("click", () => {
+				contextMenu.remove();
+				if (!Object.keys(channel.permissionOverwrites).length) BDFDB.showToast(`#${channel.name} has no permission overrides`, {type: "info"});
+				else window.bdplugins.PermissionsViewer.plugin.showModal(window.bdplugins.PermissionsViewer.plugin.createModalChannel(channel.name, channel, guild));
+			});
+		}
+		else BDFDB.removeEles(permissionvieweritem);
 		var reactInstance = BDFDB.React.createElement(contextMenu);
 		reactInstance.memoizedProps = {displayName:"ChannelDeleteGroup",guild,channel};
 		reactInstance.return = {memoizedProps:{type:("CHANNEL_LIST_" + type),guild,channel}};
