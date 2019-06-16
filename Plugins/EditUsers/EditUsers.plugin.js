@@ -3,7 +3,7 @@
 class EditUsers {
 	getName () {return "EditUsers";}
 
-	getVersion () {return "3.4.1";}
+	getVersion () {return "3.4.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -543,7 +543,10 @@ class EditUsers {
 
 	processAccount (instance, wrapper) {
 		let user = BDFDB.getReactValue(instance, "_reactInternalFiber.child.stateNode.props.currentUser");
-		if (user) this.changeName(user, wrapper.querySelector(BDFDB.dotCN.accountinfousername));
+		if (user) {
+			this.changeName(user, wrapper.querySelector(BDFDB.dotCN.accountinfousername));
+			this.changeAvatar(user, this.getAvatarDiv(wrapper));
+		}
 	}
 
 	processMessageUsername (instance, wrapper) {
