@@ -3,7 +3,7 @@
 class DisplayServersAsChannels {
 	getName () {return "DisplayServersAsChannels";}
 
-	getVersion () {return "1.2.6";}
+	getVersion () {return "1.2.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,11 +11,12 @@ class DisplayServersAsChannels {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["New Guild Classes","Fixed for the new guild classes that are already present in canary"]]
+			"added":[["Width settings","Added the option to change the width of the changed server list"]]
 		};
 		
 		this.patchModules = {
-			"Guilds":"componentDidMount"
+			"Guilds":"componentDidMount",
+			"StandardSidebarView":"componentWillUnmount"
 		};
 		
 		this.verificationBadgeMarkup =
@@ -27,13 +28,200 @@ class DisplayServersAsChannels {
 				</g>
 			</svg>`;
 
-		this.css = `
+		this.defaults = {
+			amounts: {
+				serverListWidth:				{value:240, 	min:45,		description:"Server list width in px:"}
+			}
+		};
+	}
+
+	getSettingsPanel () {
+		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
+		var amounts = BDFDB.getAllData(this, "amounts");
+		var settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;
+		for (let key in amounts) {
+			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCN.flexchild}" style="flex: 0 0 50%;">${this.defaults.amounts[key].description}</h3><div class="${BDFDB.disCN.inputwrapper} inputNumberWrapper ${BDFDB.disCNS.vertical +  BDFDB.disCNS.flex + BDFDB.disCNS.directioncolumn}" style="flex: 1 1 auto;"><span class="numberinput-buttons-zone"><span class="numberinput-button-up"></span><span class="numberinput-button-down"></span></span><input type="number"${(!isNaN(this.defaults.amounts[key].min) && this.defaults.amounts[key].min !== null ? ' min="' + this.defaults.amounts[key].min + '"' : '') + (!isNaN(this.defaults.amounts[key].max) && this.defaults.amounts[key].max !== null ? ' max="' + this.defaults.amounts[key].max + '"' : '')} option="${key}" value="${amounts[key]}" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16} amount-input"></div></div>`;
+		}
+		settingshtml += `</div>`;
+		settingshtml += `</div></div>`;
+
+		let settingspanel = BDFDB.htmlToElement(settingshtml);
+
+		BDFDB.initElements(settingspanel, this);
+
+		return settingspanel;
+	}
+
+	//legacy
+	load () {}
+
+	start () {
+		if (!global.BDFDB) global.BDFDB = {myPlugins:{}};
+		if (global.BDFDB && global.BDFDB.myPlugins && typeof global.BDFDB.myPlugins == "object") global.BDFDB.myPlugins[this.getName()] = this;
+		var libraryScript = document.querySelector('head script#BDFDBLibraryScript');
+		if (!libraryScript || (performance.now() - libraryScript.getAttribute("date")) > 600000) {
+			if (libraryScript) libraryScript.remove();
+			libraryScript = document.createElement("script");
+			libraryScript.setAttribute("id", "BDFDBLibraryScript");
+			libraryScript.setAttribute("type", "text/javascript");
+			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
+			libraryScript.setAttribute("date", performance.now());
+			libraryScript.addEventListener("load", () => {this.initialize();});
+			document.head.appendChild(libraryScript);
+			this.libLoadTimeout = setTimeout(() => {
+				libraryScript.remove();
+				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
+					if (body) {
+						libraryScript = document.createElement("script");
+						libraryScript.setAttribute("id", "BDFDBLibraryScript");
+						libraryScript.setAttribute("type", "text/javascript");
+						libraryScript.setAttribute("date", performance.now());
+						libraryScript.innerText = body;
+						document.head.appendChild(libraryScript);
+					}
+					this.initialize();
+				});
+			}, 15000);
+		}
+		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
+		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
+	}
+
+	initialize () {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			if (this.started) return;
+			BDFDB.loadMessage(this);
+			
+			BDFDB.addClass(document.body, "DSAC-styled");
+			
+			this.addCSS();
+
+			BDFDB.WebModules.forceAllUpdates(this);
+			
+			BDFDB.addEventListener(this, document, "mouseenter", BDFDB.dotCN.guildouter, e => {
+				if (e.currentTarget.querySelector(BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill + "+ *")) BDFDB.appendLocalStyle("HideAllToolTips" + this.name, `${BDFDB.dotCN.tooltip} {display: none !important;}`);
+			});
+			BDFDB.addEventListener(this, document, "mouseleave", BDFDB.dotCN.guildouter, e => {
+				if (e.currentTarget.querySelector(BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill + "+ *") && !document.querySelector(BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill + "+ *:hover")) BDFDB.removeLocalStyle("HideAllToolTips" + this.name);
+			});
+		}
+		else {
+			console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
+		}
+	}
+
+	stop () {
+		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			BDFDB.removeClasses("DSAC-styled");
+			BDFDB.removeEles(".DSAC-verification-badge, .DSAC-name, .DSAC-icon");
+			
+			BDFDB.removeLocalStyle("HideAllToolTips" + this.name);
+			
+			BDFDB.removeLocalStyle("DSACStyle" + this.name);
+			
+			for (let changedSVG of document.querySelectorAll(BDFDB.dotCN.guildsvg + "[DSAC-oldViewBox")) {
+				changedSVG.setAttribute("viewBox", changedSVG.getAttribute("DSAC-oldViewBox"));
+				changedSVG.removeAttribute("DSAC-oldViewBox");
+			}
+
+			BDFDB.unloadMessage(this);
+		}
+	}
+
+
+	// begin of own functions
+	
+	processGuilds (instance, wrapper) {
+		var observer = new MutationObserver((changes, _) => {changes.forEach((change, i) => {if (change.addedNodes) {change.addedNodes.forEach((node) => {
+			if (node && BDFDB.containsClass(node, BDFDB.disCN.guildouter) && !node.querySelector(BDFDB.dotCN.guildserror)) {
+				if (BDFDB.containsClass(node, "folder")) this.changeServer(this.getFolderObject(node));
+				else this.changeServer(BDFDB.getServerData(node));
+			}
+			if (node && node.tagName && (node = node.querySelector(BDFDB.dotCN.guildbuttoncontainer)) != null) {
+				this.changeButton(node);
+			}
+			if (node && node.tagName && (node = node.querySelector(BDFDB.dotCN.guildserror)) != null) {
+				this.changeError(node);
+			}
+		});}});});
+		BDFDB.addObserver(this, BDFDB.dotCN.guilds, {name:"serverListObserver",instance:observer}, {childList: true, subtree:true, attributes:true, attributeFilter: ["class", "draggable"], attributeOldValue: true});
+
+		BDFDB.readServerList().forEach(info => {this.changeServer(info);});
+		document.querySelectorAll(BDFDB.dotCN.guildouter + ".folder").forEach(folderdiv => {this.changeServer(this.getFolderObject(folderdiv));});
+		document.querySelectorAll(BDFDB.dotCN.homebuttonpill + " + *").forEach(homebuttoncontainer => {this.changeHome(homebuttoncontainer);});
+		document.querySelectorAll(BDFDB.dotCN.guildbuttonpill + " + *").forEach(guildbuttoncontainer => {this.changeButton(guildbuttoncontainer);});
+		document.querySelectorAll(BDFDB.dotCN.guildserror).forEach(guildserror => {this.changeError(guildserror);});
+	}
+
+	processStandardSidebarView (instance, wrapper) {
+		if (this.SettingsUpdated) {
+			delete this.SettingsUpdated;
+			this.addCSS();
+		}
+	}
+
+	changeServer (info) {
+		if (!info || !info.div) return;
+		var guildbadgewrapper = info.div.querySelector(BDFDB.dotCN.guildbadgewrapper);
+		if (guildbadgewrapper) {
+			BDFDB.removeEles(guildbadgewrapper.parentElement.querySelectorAll(".DSAC-verification-badge, .DSAC-name"));
+			if (info.features && info.features.has("VERIFIED")) {
+				guildbadgewrapper.parentElement.insertBefore(BDFDB.htmlToElement(this.verificationBadgeMarkup), guildbadgewrapper);
+			}
+			guildbadgewrapper.parentElement.insertBefore(BDFDB.htmlToElement(`<div class="DSAC-name">${BDFDB.encodeToHTML(info.name || info.folderName || "")}</div>`), guildbadgewrapper);
+		}
+		this.changeSVG(info.div);
+	}
+
+	changeHome (div) {
+		if (!div) return;
+		var homebutton = div.querySelector(BDFDB.dotCN.homebutton);
+		if (homebutton) {
+			BDFDB.removeEles(homebutton.querySelectorAll(".DSAC-name"));
+			homebutton.insertBefore(BDFDB.htmlToElement(`<div class="DSAC-name">${BDFDB.encodeToHTML(BDFDB.LanguageStrings.HOME)}</div>`), homebutton.firstElementChild);
+		}
+		this.changeSVG(div);
+	}
+	
+	changeButton (div) {
+		if (!div) return;
+		var guildbuttoninner = div.querySelector(BDFDB.dotCN.guildbuttoninner);
+		if (guildbuttoninner) {
+			BDFDB.removeEles(guildbuttoninner.querySelectorAll(".DSAC-name"));
+			guildbuttoninner.insertBefore(BDFDB.htmlToElement(`<div class="DSAC-name">${BDFDB.encodeToHTML(BDFDB.getKeyInformation({node:div, key:"text", up:true}) || "")}</div>`), guildbuttoninner.firstElementChild);
+		}
+		this.changeSVG(div);
+	}
+	
+	changeSVG (div) {
+		var guildsvg = div.querySelector(BDFDB.dotCN.guildsvg);
+		if (guildsvg && !guildsvg.getAttribute("DSAC-oldViewBox")) {
+			guildsvg.setAttribute("DSAC-oldViewBox", guildsvg.getAttribute("viewBox"));
+			guildsvg.removeAttribute("viewBox");
+		}
+	}
+	
+	changeError (div) {
+		if (!div) return;
+		BDFDB.removeEles(div.querySelectorAll(".DSAC-name, .DSAC-icon"));
+		div.insertBefore(BDFDB.htmlToElement(`<div class="DSAC-name">Server Outage</div>`), div.firstChild);
+		div.appendChild(BDFDB.htmlToElement(`<div class="DSAC-icon">!</div>`));
+	}
+
+	getFolderObject (folderdiv) {
+		var data = BDFDB.loadData(folderdiv.id, "ServerFolders", "folders");
+		return data ? Object.assign({div:folderdiv}, data) : null;
+	}
+	
+	addCSS () {
+		var listwidth = BDFDB.getData("serverListWidth", this, "amounts");
+		BDFDB.appendLocalStyle("DSACStyle" + this.name, `
 			.DSAC-styled ${BDFDB.dotCN.guildswrapper},
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildsscrollerwrap},
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guilds},
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildswrapperunreadmentionsindicatortop},
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildswrapperunreadmentionsindicatorbottom} {
-				width: 240px !important;
+				width: ${listwidth}px !important;
 			}
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guilds + BDFDB.dotCN.scroller}::-webkit-scrollbar-thumb {
 				background-color: rgb(22, 24, 27);
@@ -71,25 +259,24 @@ class DisplayServersAsChannels {
 				height: 32px !important;
 			}
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildseparator} {
-				width: 230px !important;
+				width: ${listwidth - 10}px !important;
 			}
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCNS.guildcontainer},
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill} + * ${BDFDB.dotCN.guildsvg},
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill} + * ${BDFDB.dotCN.guildiconwrapper},
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildbuttoninner},
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildplaceholder} {
-				width: 225px !important;
+				width: ${listwidth - 15}px !important;
 			}
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill} + ${BDFDB.dotCN.guildinner},
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill} + * ${BDFDB.dotCN.guildinner},
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildserror} {
-				width: 222px !important;
+				width: ${listwidth - 18}px !important;
 				display: flex !important;
 			}
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill} + * foreignObject {
-				width: 225px !important;
+				width: ${listwidth - 15}px !important;
 				mask: none;
-				x: -88px;
 			}
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill} {
 				top: -8px;
@@ -137,7 +324,7 @@ class DisplayServersAsChannels {
 			}
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildouter} .DSAC-name {
 				flex: 1 1;
-				width: 215px;
+				width: ${listwidth - 25}px;
 				margin: 0 5px;
 				font-size: 16px;
 				font-weight: 400;
@@ -166,7 +353,7 @@ class DisplayServersAsChannels {
 			.DSAC-styled #bd-pub-button,
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildouter}.RANbutton-frame,
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildouter} .RANbutton {
-				width: 230px !important;
+				width: ${listwidth - 10}px !important;
 				height: 32px !important;
 			}
 			.DSAC-styled #bd-pub-button,
@@ -217,7 +404,7 @@ class DisplayServersAsChannels {
 				color: white;
 				font-size: 16px;
 				font-weight: 400;
-				width: 200px;
+				width: ${listwidth - 20}px;
 				height: 32px;
 				line-height: 32px;
 				margin-top: 9px;
@@ -230,140 +417,6 @@ class DisplayServersAsChannels {
 			.DSAC-styled .serverfolders-dragpreview ${BDFDB.dotCN.guildiconacronym},
 			.DSAC-styled .serverfolders-dragpreview ${BDFDB.dotCN.guildicon} {
 				display: none;
-			}`;
-	}
-
-	//legacy
-	load () {}
-
-	start () {
-		if (!global.BDFDB) global.BDFDB = {myPlugins:{}};
-		if (global.BDFDB && global.BDFDB.myPlugins && typeof global.BDFDB.myPlugins == "object") global.BDFDB.myPlugins[this.getName()] = this;
-		var libraryScript = document.querySelector('head script#BDFDBLibraryScript');
-		if (!libraryScript || (performance.now() - libraryScript.getAttribute("date")) > 600000) {
-			if (libraryScript) libraryScript.remove();
-			libraryScript = document.createElement("script");
-			libraryScript.setAttribute("id", "BDFDBLibraryScript");
-			libraryScript.setAttribute("type", "text/javascript");
-			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js");
-			libraryScript.setAttribute("date", performance.now());
-			libraryScript.addEventListener("load", () => {this.initialize();});
-			document.head.appendChild(libraryScript);
-			this.libLoadTimeout = setTimeout(() => {
-				libraryScript.remove();
-				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
-					if (body) {
-						libraryScript = document.createElement("script");
-						libraryScript.setAttribute("id", "BDFDBLibraryScript");
-						libraryScript.setAttribute("type", "text/javascript");
-						libraryScript.setAttribute("date", performance.now());
-						libraryScript.innerText = body;
-						document.head.appendChild(libraryScript);
-					}
-					this.initialize();
-				});
-			}, 15000);
-		}
-		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
-		this.startTimeout = setTimeout(() => {this.initialize();}, 30000);
-	}
-
-	initialize () {
-		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
-			if (this.started) return;
-			BDFDB.loadMessage(this);
-			
-			BDFDB.addClass(document.body, "DSAC-styled");
-
-			BDFDB.WebModules.forceAllUpdates(this);
-			
-			BDFDB.addEventListener(this, document, "mouseenter", BDFDB.dotCN.guildouter, e => {
-				if (e.currentTarget.querySelector(BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill + "+ *")) BDFDB.appendLocalStyle("HideAllToolTips" + this.name, `${BDFDB.dotCN.tooltip} {display: none !important;}`);
-			});
-			BDFDB.addEventListener(this, document, "mouseleave", BDFDB.dotCN.guildouter, e => {
-				if (e.currentTarget.querySelector(BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill + "+ *") && !document.querySelector(BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill + "+ *:hover")) BDFDB.removeLocalStyle("HideAllToolTips" + this.name);
-			});
-		}
-		else {
-			console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
-		}
-	}
-
-	stop () {
-		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
-			BDFDB.removeClasses("DSAC-styled");
-			BDFDB.removeEles(".DSAC-verification-badge, .DSAC-name, .DSAC-icon");
-			
-			BDFDB.removeLocalStyle("HideAllToolTips" + this.name);
-
-			BDFDB.unloadMessage(this);
-		}
-	}
-
-
-	// begin of own functions
-	
-	processGuilds (instance, wrapper) {
-		var observer = new MutationObserver((changes, _) => {changes.forEach((change, i) => {if (change.addedNodes) {change.addedNodes.forEach((node) => {
-			if (node && BDFDB.containsClass(node, BDFDB.disCN.guildouter) && !node.querySelector(BDFDB.dotCN.guildserror)) {
-				if (BDFDB.containsClass(node, "folder")) this.changeServer(this.getFolderObject(node));
-				else this.changeServer(BDFDB.getServerData(node));
-			}
-			if (node && node.tagName && (node = node.querySelector(BDFDB.dotCN.guildbuttoncontainer)) != null) {
-				this.changeButton(node);
-			}
-			if (node && node.tagName && (node = node.querySelector(BDFDB.dotCN.guildserror)) != null) {
-				this.changeError(node);
-			}
-		});}});});
-		BDFDB.addObserver(this, BDFDB.dotCN.guilds, {name:"serverListObserver",instance:observer}, {childList: true, subtree:true, attributes:true, attributeFilter: ["class", "draggable"], attributeOldValue: true});
-
-		BDFDB.readServerList().forEach(info => {this.changeServer(info);});
-		document.querySelectorAll(BDFDB.dotCN.guildouter + ".folder").forEach(folderdiv => {this.changeServer(this.getFolderObject(folderdiv));});
-		document.querySelectorAll(BDFDB.dotCN.homebuttonpill + " + *").forEach(homebuttoncontainer => {this.changeHome(homebuttoncontainer);});
-		document.querySelectorAll(BDFDB.dotCN.guildbuttonpill + " + *").forEach(guildbuttoncontainer => {this.changeButton(guildbuttoncontainer);});
-		document.querySelectorAll(BDFDB.dotCN.guildserror).forEach(guildserror => {this.changeError(guildserror);});
-	}
-
-	changeServer (info) {
-		if (!info || !info.div) return;
-		var guildbadgewrapper = info.div.querySelector(BDFDB.dotCN.guildbadgewrapper);
-		if (guildbadgewrapper) {
-			BDFDB.removeEles(guildbadgewrapper.parentElement.querySelectorAll(".DSAC-verification-badge, .DSAC-name"));
-			if (info.features && info.features.has("VERIFIED")) {
-				guildbadgewrapper.parentElement.insertBefore(BDFDB.htmlToElement(this.verificationBadgeMarkup), guildbadgewrapper);
-			}
-			guildbadgewrapper.parentElement.insertBefore(BDFDB.htmlToElement(`<div class="DSAC-name">${BDFDB.encodeToHTML(info.name || info.folderName || "")}</div>`), guildbadgewrapper);
-		}
-	}
-
-	changeHome (div) {
-		if (!div) return;
-		var homebutton = div.querySelector(BDFDB.dotCN.homebutton);
-		if (homebutton) {
-			BDFDB.removeEles(homebutton.querySelectorAll(".DSAC-name"));
-			homebutton.insertBefore(BDFDB.htmlToElement(`<div class="DSAC-name">${BDFDB.encodeToHTML(BDFDB.LanguageStrings.HOME)}</div>`), homebutton.firstElementChild);
-		}
-	}
-	
-	changeButton (div) {
-		if (!div) return;
-		var guildbuttoninner = div.querySelector(BDFDB.dotCN.guildbuttoninner);
-		if (guildbuttoninner) {
-			BDFDB.removeEles(guildbuttoninner.querySelectorAll(".DSAC-name"));
-			guildbuttoninner.insertBefore(BDFDB.htmlToElement(`<div class="DSAC-name">${BDFDB.encodeToHTML(BDFDB.getKeyInformation({node:div, key:"text", up:true}) || "")}</div>`), guildbuttoninner.firstElementChild);
-		}
-	}
-	
-	changeError (div) {
-		if (!div) return;
-		BDFDB.removeEles(div.querySelectorAll(".DSAC-name, .DSAC-icon"));
-		div.insertBefore(BDFDB.htmlToElement(`<div class="DSAC-name">Server Outage</div>`), div.firstChild);
-		div.appendChild(BDFDB.htmlToElement(`<div class="DSAC-icon">!</div>`));
-	}
-
-	getFolderObject (folderdiv) {
-		var data = BDFDB.loadData(folderdiv.id, "ServerFolders", "folders");
-		return data ? Object.assign({div:folderdiv}, data) : null;
+			}`);
 	}
 }
