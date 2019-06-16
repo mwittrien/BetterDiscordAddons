@@ -3,7 +3,7 @@
 class ShowHiddenChannels {
 	getName () {return "ShowHiddenChannels";}
 
-	getVersion () {return "2.5.1";}
+	getVersion () {return "2.5.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ShowHiddenChannels {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["News/Store","Fixed the issue where News/Store channels were always marked as hidden"]]
+			"fixed":[["Allowed/Denied Users","Fixed issue where allowed/denied users aren't displayed"]]
 		};
 		
 		this.patchModules = {
@@ -344,8 +344,8 @@ class ShowHiddenChannels {
 		var myMember = this.MemberUtils.getMember(guild.id, BDFDB.myData.id);
 		var allowedRoles = [], allowedUsers = [], overwrittenRoles = [], deniedRoles = [], deniedUsers = [];
 		var everyoneDenied = false;
-		for (let id in channel.permissionOverwrites) if (guild.roles[id]) {
-			if (settings.showAllowedRoles && channel.permissionOverwrites[id].type == "role" && (guild.roles[id].name != "@everyone") && ((channel.permissionOverwrites[id].allow | this.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].allow || (channel.permissionOverwrites[id].allow | this.Permissions.CONNECT) == channel.permissionOverwrites[id].allow)) {
+		for (let id in channel.permissionOverwrites) {
+			if (settings.showAllowedRoles && channel.permissionOverwrites[id].type == "role" && (guild.roles[id] && guild.roles[id].name != "@everyone") && ((channel.permissionOverwrites[id].allow | this.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].allow || (channel.permissionOverwrites[id].allow | this.Permissions.CONNECT) == channel.permissionOverwrites[id].allow)) {
 				if (myMember.roles.includes(id) && !allowed) {
 					if (settings.showOverWrittenRoles) overwrittenRoles.push(guild.roles[id]);
 				}
@@ -360,7 +360,7 @@ class ShowHiddenChannels {
 			}
 			if (settings.showDeniedRoles && channel.permissionOverwrites[id].type == "role" && ((channel.permissionOverwrites[id].deny | this.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].deny || (channel.permissionOverwrites[id].deny | this.Permissions.CONNECT) == channel.permissionOverwrites[id].deny)) {
 				deniedRoles.push(guild.roles[id]);
-				if (guild.roles[id].name == "@everyone") everyoneDenied = true;
+				if (guild.roles[id] && guild.roles[id].name == "@everyone") everyoneDenied = true;
 			}
 			else if (settings.showDeniedUsers && channel.permissionOverwrites[id].type == "member" && ((channel.permissionOverwrites[id].deny | this.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].deny || (channel.permissionOverwrites[id].deny | this.Permissions.CONNECT) == channel.permissionOverwrites[id].deny)) {
 				let user = this.UserUtils.getUser(id);
