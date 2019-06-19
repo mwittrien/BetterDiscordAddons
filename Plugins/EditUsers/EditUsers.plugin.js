@@ -11,7 +11,7 @@ class EditUsers {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Account Details","Fixed the changes for the account container"]]
+			"fixed":[["Settings and Tags","Fixed"]]
 		};
 		
 		this.labels = {}; 
