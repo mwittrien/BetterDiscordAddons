@@ -3,7 +3,7 @@
 class EditUsers {
 	getName () {return "EditUsers";}
 
-	getVersion () {return "3.4.3";}
+	getVersion () {return "3.4.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -59,7 +59,7 @@ class EditUsers {
 			${BDFDB.dotCNC.userpopoutheaderbottag + BDFDB.dotCN.userpopoutheaderbottagwithnickname} {
 				bottom: 4px;
 			}
-			${BDFDB.dotCNS.userpopoutheadertagwithnickname + BDFDB.dotCN.userpopoutheaderbottagwithnickname} {
+			${BDFDB.dotCNS.userpopoutheadertagnonickname + BDFDB.dotCNC.userpopoutheaderbottag + BDFDB.dotCNS.userpopoutheadertagwithnickname + BDFDB.dotCN.userpopoutheaderbottagwithnickname} {
 				bottom: 0px;
 			}
 			${BDFDB.dotCN.userprofilebottag} {
@@ -1076,7 +1076,7 @@ class EditUsers {
 		else if (BDFDB.getParentEle(BDFDB.dotCN.textareawrapchat, wrapper)) key = "changeInChatTextarea";
 		else if (BDFDB.getParentEle(BDFDB.dotCN.voiceuser, wrapper)) key = "changeInVoiceChat";
 		else if (BDFDB.getParentEle(BDFDB.dotCN.members, wrapper)) key = "changeInMemberList";
-		else if (BDFDB.getParentEle(BDFDB.dotCN.dmguild, wrapper)) key = "changeInRecentDms";
+		else if (BDFDB.getParentEle(BDFDB.dotCN.guildouter, wrapper)) key = "changeInRecentDms";
 		else if (BDFDB.getParentEle(BDFDB.dotCN.dmchannels, wrapper)) key = "changeInDmsList";
 		else if (BDFDB.getParentEle(BDFDB.dotCN.channelheaderheaderbar, wrapper)) key = "changeInDmHeader";
 		else if (BDFDB.getParentEle(BDFDB.dotCN.callavatarwrapper, wrapper) || BDFDB.getParentEle(BDFDB.dotCN.callincoming, wrapper) || BDFDB.getParentEle(BDFDB.dotCN.callcurrentcontainer, wrapper) || BDFDB.getParentEle(BDFDB.dotCN.pictureinpicture, wrapper)) key = "changeInDmCalls";

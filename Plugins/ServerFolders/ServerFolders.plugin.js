@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.3.0";}
+	getVersion () {return "6.3.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,8 +11,7 @@ class ServerFolders {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Mentions","Fixed mentions not updating properly"],["AutoPlayGifs","Now works properly with AutoPlayGifs"]],
-			"improved":[["BD Guild classes","Added the BD classes for folders"]]
+			"fixed":[["Settings","Fixed collision between ForceCloseAllFolders and ForceOpenFolderOfSelectedServer Settings"]],
 		};
 		
 		this.labels = {};
@@ -603,9 +602,12 @@ class ServerFolders {
 					this.updateCopyInFolderContent(wrapper, folderdiv);
 					this.updateFolderNotifications(folderdiv);
 				}
-				BDFDB.addEventListener(this, wrapper, "click", () => {
-					if (BDFDB.getData("closeAllFolders", this, "settings")) document.querySelectorAll(BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildouter + ".folder.open").forEach(openFolder => {this.openCloseFolder(openFolder);});
-				});
+				BDFDB.addEventListener(this, wrapper, "click", () => {setImmediate(() => {
+					var newsettings = BDFDB.getAllData(this, "settings")
+					if (newsettings.closeAllFolders) document.querySelectorAll(BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildouter + ".folder.open").forEach(openFolder => {
+						if (!newsettings.forceOpenFolder || !this.foldercontent.querySelector(`${BDFDB.dotCN.guildouter}[folder="${openFolder.id}"][guild="${this.CurrentGuildStore.getGuildId()}"]`)) this.openCloseFolder(openFolder);
+					});
+				})});
 				BDFDB.addEventListener(this, wrapper, "mousedown", e => {
 					if (BDFDB.pressedKeys.includes(17)) {
 						BDFDB.stopEvent(e);
@@ -1265,8 +1267,7 @@ class ServerFolders {
 			if (BDFDB.pressedKeys.includes(46)) this.removeServerFromFolder(info, folderdiv);
 			else {
 				let settings = BDFDB.getAllData(this, "settings");
-				if (settings.closeAllFolders) document.querySelectorAll(BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildouter + ".folder.open").forEach(openFolder => {this.openCloseFolder(openFolder);});
-				else if (settings.closeTheFolder) this.openCloseFolder(folderdiv);
+				if (!settings.closeAllFolders && settings.closeTheFolder) this.openCloseFolder(folderdiv);
 				guilddiv.querySelector("a").click();
 			}
 		});
@@ -1389,11 +1390,12 @@ class ServerFolders {
 			let folderdivbadges = folderdiv.querySelector(BDFDB.dotCN.guildbadgewrapper);
 			let masks = folderdiv.querySelectorAll("mask rect");
 			
-			let mentions = 0, unread = false, audioenabled = false, videoenabled = false;
+			let mentions = 0, unread = false, selected = false, audioenabled = false, videoenabled = false;
 
 			includedServers.forEach(div => {
 				let props = BDFDB.getReactValue(div, "return.stateNode.props");
 				mentions += parseInt(props.badge);
+				if (props.selected) selected = true;
 				if (props.unread) unread = true;
 				if (props.audio) audioenabled = true;
 				if (props.video) videoenabled = true;
