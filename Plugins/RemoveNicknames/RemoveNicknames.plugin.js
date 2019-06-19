@@ -3,7 +3,7 @@
 class RemoveNicknames {
 	getName () {return "RemoveNicknames";}
 
-	getVersion () {return "1.1.9";}
+	getVersion () {return "1.2.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class RemoveNicknames {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Mentions","Fixed the issue where mentions wouldn't get changed correctly"]]
+			"improved":[["EditUsers","Works better with EditUsers now"]]
 		};
 		
 		this.patchModules = {
@@ -122,8 +122,9 @@ class RemoveNicknames {
 		if (EditUsersData && EditUsersData.name) return EditUsersData.name;
 		let settings = BDFDB.getAllData(this, "settings");
 		let member = this.MemberUtils.getMember(this.LastGuildStore.getGuildId(), info.id);
-		if (this.reseting || !member || !member.nick || info.id == BDFDB.myData.id && !settings.replaceOwn) return member && member.nick ? member.nick : info.username;
-		return settings.addNickname ? (settings.swapPositions ? (member.nick + " (" + info.username + ")") : (info.username + " (" + member.nick + ")")) : info.username;
+		let nick = EditUsersData && EditUsersData.name ? EditUsersData.name : (member && member.nick ? member.nick : null);
+		if (this.reseting || !nick || info.id == BDFDB.myData.id && !settings.replaceOwn) return nick || info.username;
+		return settings.addNickname ? (settings.swapPositions ? (nick + " (" + info.username + ")") : (info.username + " (" + nick + ")")) : info.username;
 	}
 
 	processNameTag (instance, wrapper) {

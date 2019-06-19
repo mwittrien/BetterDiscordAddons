@@ -3,7 +3,7 @@
 class EditUsers {
 	getName () {return "EditUsers";}
 
-	getVersion () {return "3.4.2";}
+	getVersion () {return "3.4.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -19,7 +19,7 @@ class EditUsers {
 		this.patchModules = {
 			"ChannelTextArea":"componentDidMount",
 			"NameTag":"componentDidMount",
-			"Account":"componentDidMount",
+			"Account":["componentDidMount","componentDidUpdate"],
 			"AuditLog":"componentDidMount",
 			"BannedCard":"componentDidMount",
 			"InviteCard":"componentDidMount",
