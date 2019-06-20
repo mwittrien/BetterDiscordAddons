@@ -871,7 +871,6 @@ class ThemeRepo {
 							var instTheme = window.bdthemes[theme.name];
 							if (instTheme && instTheme.author.toUpperCase() == theme.author.toUpperCase() && instTheme.version != theme.version) outdated++;
 							if (!this.cachedThemes.includes(url)) newentries++;
-							if (!(hasMETAline < 20 && hasMETAline > -1)) console.log(theme);
 						}
 					}
 				}
