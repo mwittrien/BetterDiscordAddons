@@ -3,7 +3,7 @@
 class ThemeRepo {
 	getName () {return "ThemeRepo";}
 
-	getVersion () {return "1.8.2";}
+	getVersion () {return "1.8.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ThemeRepo {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Special Snowflake","Fixed the fetching of the themes for the person who just started randomizing his github repo"]]
+			"fixed":[["New META syntax","Fixed the fetching for the new META syntax used by BD"]]
 		};
 		
 		this.patchModules = {
@@ -841,25 +841,37 @@ class ThemeRepo {
 				else if (body && body.indexOf("404: Not Found") != 0 && response.statusCode == 200) {
 					let theme = {};
 					let text = body;
-					if (text.split("*//").length > 1 && text.split("\n").length > 1) {
-						for (let tag of tags) {
-							let result = text.replace(new RegExp("\\s*\:\\s*", "g"), ":").replace(new RegExp("\\s*\}\\s*", "g"), "}").split('"' + tag + '":"');
-							result = result.length > 1 ? result[1].split('",')[0].split('"}')[0] : null;
-							result = result && tag != "version" ? result.charAt(0).toUpperCase() + result.slice(1) : result;
-							theme[tag] = result;
+					if ((text.split("*//").length > 1 || text.indexOf("/**") == 0) && text.split("\n").length > 1) {
+						var hasMETAline = text.replace(/\s/g, "").indexOf("//META{");
+						if (hasMETAline < 20 && hasMETAline > -1) {
+							var searchtext = text.replace(/\s*:\s*/g, ":").replace(/\s*}\s*/g, "}");
+							for (let tag of tags) {
+								let result = searchtext.split('"' + tag + '":"');
+								result = result.length > 1 ? result[1].split('",')[0].split('"}')[0] : null;
+								result = result && tag != "version" ? result.charAt(0).toUpperCase() + result.slice(1) : result;
+								theme[tag] = result;
+							}
+						}
+						else {
+							var searchtext = text.replace(/[\r\t| ]*\*\s*/g, "*");
+							for (let tag of tags) {
+								let result = searchtext.split('@' + tag + ' ');
+								result = result.length > 1 ? result[1].split('\n')[0] : null;
+								result = result && tag != "version" ? result.charAt(0).toUpperCase() + result.slice(1) : result;
+								theme[tag] = result;
+							}
 						}
 						let valid = true;
-						for (let tag of tags) {
-							if (theme[tag] === null) valid = false;
-						}
+						for (let tag of tags) if (theme[tag] === null) valid = false;
 						if (valid) {
-							theme.css = text.split("\n").slice(1).join("\n").replace(new RegExp("[\\r|\\n|\\t]", "g"), "");
+							theme.css = hasMETAline < 20 && hasMETAline > -1 ? text.split("\n").slice(1).join("\n").replace(/[\r|\n|\t]/g, "") : text.replace(/[\r|\n|\t]/g, "");
 							theme.url = url;
 							theme.requesturl = requesturl;
 							this.loadedThemes[url] = theme;
 							var instTheme = window.bdthemes[theme.name];
 							if (instTheme && instTheme.author.toUpperCase() == theme.author.toUpperCase() && instTheme.version != theme.version) outdated++;
 							if (!this.cachedThemes.includes(url)) newentries++;
+							if (!(hasMETAline < 20 && hasMETAline > -1)) console.log(theme);
 						}
 					}
 				}

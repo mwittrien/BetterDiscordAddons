@@ -213,7 +213,7 @@ class SendLargeMessages {
 	}
 
 	formatText (text) {
-		text = text.replace(new RegExp("\t", 'g'), "	");
+		text = text.replace(/\t/g, "	");
 		let longwords = text.match(/[\S]{1800,}/gm);
 		for (let i in longwords) {
 			let longword = longwords[i];

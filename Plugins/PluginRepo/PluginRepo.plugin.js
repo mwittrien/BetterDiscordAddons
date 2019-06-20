@@ -717,7 +717,7 @@ class PluginRepo {
 					let bodycopy = body;
 					if (body.length / body.split("\n").length > 1000) {
 						/* code is minified -> add newlines */
-						bodycopy = body.replace(new RegExp("}", "g"), "}\n");
+						bodycopy = body.replace(/}/g, "}\n");
 					}
 					let configreg = /(module\.exports|config)\s*=\s*\{\n*\r*\t*["'`]*info["'`]*\s*:\s*/i.exec(bodycopy);
 					if (url != "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/PluginRepo/PluginRepo.plugin.js" && configreg) {
@@ -743,7 +743,7 @@ class PluginRepo {
 								let separator = result[1];
 								result = result[0].replace(new RegExp("\\\\" + separator, "g"), separator).split(separator);
 								if (result.length > 2) {
-									result = result.slice(1, -1).join(separator).replace(new RegExp("\\\\n", "g"), "<br>").replace(new RegExp("\\\\", "g"), "");
+									result = result.slice(1, -1).join(separator).replace(/\\n/g, "<br>").replace(/\\/g, "");
 									plugin[tag] = tag != "getVersion" ? result.charAt(0).toUpperCase() + result.slice(1) : result;
 								}
 							}
@@ -805,7 +805,7 @@ class PluginRepo {
 			if (!framedata) return;
 			framerunning = true;
 			let {body, url} = framedata;
-			let name = body.replace(new RegExp("\\s*\:\\s*", "g"), ":").split('"name":"');
+			let name = body.replace(/\s*:\s*/g, ":").split('"name":"');
 			if (name.length > 1) {
 				name = name[1].split('"')[0];
 				var processResult = plugin => {
