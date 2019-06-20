@@ -3,7 +3,7 @@
 class BadgesEverywhere {
 	getName () {return "BadgesEverywhere";} 
 
-	getVersion () {return "1.3.3";}
+	getVersion () {return "1.3.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,8 +11,7 @@ class BadgesEverywhere {
 
 	initConstructor () {
 		this.changelog = {
-			"improved":[["Compact Mode","Changed badge placement in user popout to look more like the user profile and to fix issues with long nicknames"]],
-			"fixed":[["Compact Mode","Fixed for compact mode .. who uses this anyways"]]
+			"fixed":[["Showing at the bottom","Badges are now properlly at the bottom even when a custom status is set"]]
 		};
 		
 		this.patchModules = {
@@ -27,6 +26,10 @@ class BadgesEverywhere {
 			}
 			${BDFDB.dotCN.messageheadercozymeta} > span:first-child {
 				display: inline-flex;
+			}
+			${BDFDB.dotCN.userpopoutcustomstatus}:not(:last-child) {
+				margin-top: 4px;
+				margin-bottom: 4px;
 			}
 			.BE-badge {
 				position: relative;
@@ -279,7 +282,7 @@ class BadgesEverywhere {
 		let indicators = BDFDB.getAllData(this, "indicators");
 		let settings = BDFDB.getAllData(this, "settings");
 		let header = BDFDB.getParentEle(BDFDB.dotCN.userpopoutheader, wrapper);
-		let badgewrapper = BDFDB.htmlToElement(`<span class="BE-badges BE-badges-${type} ${!settings.useColoredVersion || (header && !BDFDB.containsClass(header, BDFDB.disCN.userpopoutheadernormal)) ? BDFDB.disCN.userprofiletopsectionplaying : BDFDB.disCN.userprofiletopsectionnormal}" style="all: unset !important; order: 9 !important;"></span>`);
+		let badgewrapper = BDFDB.htmlToElement(`<span class="BE-badges BE-badges-${type} ${!settings.useColoredVersion || (header && !BDFDB.containsClass(header, BDFDB.disCN.userpopoutheadernormal)) ? BDFDB.disCN.userprofiletopsectionplaying : BDFDB.disCN.userprofiletopsectionnormal}" style="all: unset !important;"></span>`);
 		for (let flag in this.defaults.badges) {
 			if ((this.loadedusers[info.id].flags | flag) == this.loadedusers[info.id].flags && badges[flag]) {
 				let badge = BDFDB.htmlToElement(`<div class="BE-badge BE-badge-${this.defaults.badges[flag].id} BE-badge-${type} ${this.BadgeClasses[this.defaults.badges[flag].selector + (flag == this.boostflag ? this.GuildBoostUtils.getUserLevel(this.loadedusers[info.id].premium_guild_since) : "")]}"></div>`);
@@ -301,7 +304,7 @@ class BadgesEverywhere {
 		}
 		if (badgewrapper.firstChild) {
 			if (header) {
-				wrapper.insertBefore(badgewrapper, wrapper.querySelector(BDFDB.dotCN.nametag).nextElementSibling);
+				header.firstElementChild.appendChild(badgewrapper);
 				let popout = header.parentElement.parentElement;
 				if (popout.style.transform.indexOf("translateY(-1") == -1) {
 					let arect = BDFDB.getRects(document.querySelector(BDFDB.dotCN.appmount)), prect = BDFDB.getRects(popout);
