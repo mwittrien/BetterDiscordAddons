@@ -3,7 +3,7 @@
 class CreationDate {
 	getName () {return "CreationDate";}
 
-	getVersion () {return "1.2.8";}
+	getVersion () {return "1.2.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class CreationDate {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Order","Fixed order of LastMessageDate, JoinedAtDate, CreationDate"]]
+			"fixed":[["Showing at top","Fixed issue where dates would be listed at the top in the profile the first time a profile was opened or when a custom status is set"]]
 		};
 		
 		this.labels = {};
@@ -207,14 +207,25 @@ class CreationDate {
 
 	addCreationDate (info, container, popout) {
 		if (!info || !container || container.querySelector(".creationDate")) return;
-		let choice = BDFDB.getData("creationDateLang", this, "choices");
-		let nametag = container.querySelector(BDFDB.dotCN.nametag);
-		container.insertBefore(BDFDB.htmlToElement(`<div class="creationDate BDFDB-textscrollwrapper ${BDFDB.disCN.textrow}" style="max-width: ${BDFDB.getRects(BDFDB.getParentEle(popout ? BDFDB.dotCN.userpopoutheader : BDFDB.dotCN.userprofileheaderinfo, container)).width - 20}px !important; order: 8 !important;"><div class="BDFDB-textscroll">${this.labels.createdat_text.replace("{{time}}", this.getTimestamp(this.languages[choice].id, info.createdAt))}</div></div>`), nametag ? nametag.nextSibling : null);
-		BDFDB.initElements(container, this);
-		if (popout && popout.style.transform.indexOf("translateY(-1") == -1) {
-			let arect = BDFDB.getRects(document.querySelector(BDFDB.dotCN.appmount)), prect = BDFDB.getRects(popout);
-			popout.style.setProperty("top", (prect.y + prect.height > arect.height ? (arect.height - prect.height) : prect.y) + "px");
-		}
+		let addTimestamp = (timestamp) => {
+			if (document.contains(container)) {
+				BDFDB.removeEles(container.querySelectorAll(".creationDate"));
+				if (BDFDB.isObject(container.CreationDateObserver)) container.CreationDateObserver.disconnect();
+				let choice = BDFDB.getData("creationDateLang", this, "choices");
+				let nametag = container.querySelector(BDFDB.dotCN.nametag);
+				container.insertBefore(BDFDB.htmlToElement(`<div class="creationDate BDFDB-textscrollwrapper ${BDFDB.disCN.textrow}" style="max-width: ${BDFDB.getRects(BDFDB.getParentEle(popout ? BDFDB.dotCN.userpopoutheader : BDFDB.dotCN.userprofileheaderinfo, container)).width - 20}px !important; order: 8 !important;"><div class="BDFDB-textscroll">${this.labels.createdat_text.replace("{{time}}", this.getTimestamp(this.languages[choice].id, timestamp))}</div></div>`), nametag ? nametag.nextSibling : null);
+				BDFDB.initElements(container, this);
+				if (popout && popout.style.transform.indexOf("translateY(-1") == -1) {
+					let arect = BDFDB.getRects(document.querySelector(BDFDB.dotCN.appmount)), prect = BDFDB.getRects(popout);
+					popout.style.setProperty("top", (prect.y + prect.height > arect.height ? (arect.height - prect.height) : prect.y) + "px");
+				}
+				container.CreationDateObserver = new MutationObserver((changes, _) => {changes.forEach((change, i) => {change.addedNodes.forEach((node) => {
+					if (node && BDFDB.containsClass(node, BDFDB.disCN.nametag)) addTimestamp(timestamp);
+				});});});
+				container.CreationDateObserver.observe(container, {childList: true, subtree:true});
+			}
+		};
+		addTimestamp(info.createdAt);
 	}
 
 	getTimestamp (languageid, time) {

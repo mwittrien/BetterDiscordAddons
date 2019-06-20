@@ -3,7 +3,7 @@
 class LastMessageDate {
 	getName () {return "LastMessageDate";}
 
-	getVersion () {return "1.0.5";}
+	getVersion () {return "1.0.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class LastMessageDate {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Order","Fixed order of LastMessageDate, JoinedAtDate, CreationDate"]]
+			"fixed":[["Showing at top","Fixed issue where dates would be listed at the top in the profile the first time a profile was opened or when a custom status is set"]]
 		};
 		
 		this.labels = {};
@@ -227,6 +227,8 @@ class LastMessageDate {
 			if (!this.loadedusers[guildid]) this.loadedusers[guildid] = {};
 			let addTimestamp = (timestamp) => {
 				if (document.contains(container)) {
+					BDFDB.removeEles(container.querySelectorAll(".lastMessageDate"));
+					if (BDFDB.isObject(container.LastMessageDateObserver)) container.LastMessageDateObserver.disconnect();
 					let choice = BDFDB.getData("lastMessageDateLang", this, "choices");
 					let nametag = container.querySelector(BDFDB.dotCN.nametag);
 					container.insertBefore(BDFDB.htmlToElement(`<div class="lastMessageDate BDFDB-textscrollwrapper ${BDFDB.disCN.textrow}" style="max-width: ${BDFDB.getRects(BDFDB.getParentEle(popout ? BDFDB.dotCN.userpopoutheader : BDFDB.dotCN.userprofileheaderinfo, container)).width - 20}px !important; order: 6 !important;"><div class="BDFDB-textscroll">${this.labels.lastmessage_text.replace("{{time}}", timestamp == "never" ? "---" : this.getTimestamp(this.languages[choice].id, timestamp))}</div></div>`), nametag ? nametag.nextSibling : null);
@@ -235,21 +237,25 @@ class LastMessageDate {
 						let arect = BDFDB.getRects(document.querySelector(BDFDB.dotCN.appmount)), prect = BDFDB.getRects(popout);
 						popout.style.setProperty("top", (prect.y + prect.height > arect.height ? (arect.height - prect.height) : prect.y) + "px");
 					}
+					container.LastMessageDateObserver = new MutationObserver((changes, _) => {changes.forEach((change, i) => {change.addedNodes.forEach((node) => {
+						if (node && BDFDB.containsClass(node, BDFDB.disCN.nametag)) addTimestamp(timestamp);
+					});});});
+					container.LastMessageDateObserver.observe(container, {childList: true, subtree:true});
 				}
 			};
 			if (this.loadedusers[guildid][info.id]) addTimestamp(this.loadedusers[guildid][info.id]);
 			else this.APIModule.get((isguild ? this.DiscordConstants.Endpoints.SEARCH_GUILD(guildid) : this.DiscordConstants.Endpoints.SEARCH_CHANNEL(guildid)) + "?author_id=" + info.id).then(result => {
 				if (result && result.body && result.body.messages && Array.isArray(result.body.messages[0])) {
 					for (let message of result.body.messages[0]) if (message.hit && message.author.id == info.id) {
-						let timestamp = new Date(message.timestamp);
-						this.loadedusers[guildid][info.id] = timestamp;
-						addTimestamp(timestamp);
+						let lastmessagedate = new Date(message.timestamp);
+						this.loadedusers[guildid][info.id] = lastmessagedate;
+						addTimestamp(lastmessagedate);
 					}
 				}
 				else {
-					let timestamp = "never";
-					this.loadedusers[guildid][info.id] = timestamp;
-					addTimestamp(timestamp);
+					let lastmessagedate = "never";
+					this.loadedusers[guildid][info.id] = lastmessagedate;
+					addTimestamp(lastmessagedate);
 				}
 			});
 		}

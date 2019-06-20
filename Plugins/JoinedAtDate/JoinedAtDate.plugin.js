@@ -3,7 +3,7 @@
 class JoinedAtDate {
 	getName () {return "JoinedAtDate";}
 
-	getVersion () {return "1.1.1";}
+	getVersion () {return "1.1.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class JoinedAtDate {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Order","Fixed order of LastMessageDate, JoinedAtDate, CreationDate"]]
+			"fixed":[["Showing at top","Fixed issue where dates would be listed at the top in the profile the first time a profile was opened or when a custom status is set"]]
 		};
 		
 		this.labels = {};
@@ -216,8 +216,10 @@ class JoinedAtDate {
 		let guildid = this.CurrentGuildStore.getGuildId();
 		if (guildid) {
 			if (!this.loadedusers[guildid]) this.loadedusers[guildid] = {};
-			let timestamp, addTimestamp = (timestamp) => {
+			let addTimestamp = (timestamp) => {
 				if (document.contains(container)) {
+					BDFDB.removeEles(container.querySelectorAll(".joinedAtDate"));
+					if (BDFDB.isObject(container.JoinedAtDateObserver)) container.JoinedAtDateObserver.disconnect();
 					let choice = BDFDB.getData("joinedAtDateLang", this, "choices");
 					let nametag = container.querySelector(BDFDB.dotCN.nametag);
 					container.insertBefore(BDFDB.htmlToElement(`<div class="joinedAtDate BDFDB-textscrollwrapper ${BDFDB.disCN.textrow}" style="max-width: ${BDFDB.getRects(BDFDB.getParentEle(popout ? BDFDB.dotCN.userpopoutheader : BDFDB.dotCN.userprofileheaderinfo, container)).width - 20}px !important; order: 7 !important;"><div class="BDFDB-textscroll">${this.labels.joinedat_text.replace("{{time}}", this.getTimestamp(this.languages[choice].id, timestamp))}</div></div>`), nametag ? nametag.nextSibling : null);
@@ -226,14 +228,18 @@ class JoinedAtDate {
 						let arect = BDFDB.getRects(document.querySelector(BDFDB.dotCN.appmount)), prect = BDFDB.getRects(popout);
 						popout.style.setProperty("top", (prect.y + prect.height > arect.height ? (arect.height - prect.height) : prect.y) + "px");
 					}
+					container.JoinedAtDateObserver = new MutationObserver((changes, _) => {changes.forEach((change, i) => {change.addedNodes.forEach((node) => {
+						if (node && BDFDB.containsClass(node, BDFDB.disCN.nametag)) addTimestamp(timestamp);
+					});});});
+					container.JoinedAtDateObserver.observe(container, {childList: true, subtree:true});
 				}
 			};
 			if (this.loadedusers[guildid][info.id]) addTimestamp(this.loadedusers[guildid][info.id]);
 			else this.APIModule.get(this.DiscordConstants.Endpoints.GUILD_MEMBER(guildid,info.id)).then(result => {
 				if (result && result.body) {
-					timestamp = new Date(result.body.joined_at);
-					this.loadedusers[guildid][info.id] = timestamp;
-					addTimestamp(timestamp);
+					let joineddate = new Date(result.body.joined_at);
+					this.loadedusers[guildid][info.id] = joineddate;
+					addTimestamp(joineddate);
 				}
 			});
 		}
