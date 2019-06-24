@@ -793,15 +793,15 @@ class EditUsers {
 		if (!info || !username || !username.parentElement) return;
 		if (username.EditUsersChangeObserver && typeof username.EditUsersChangeObserver.disconnect == "function") username.EditUsersChangeObserver.disconnect();
 		let data = this.getUserData(info.id, username);
+		let member = this.MemberUtils.getMember(guildid, info.id) || {};
+		this.changeBotTags(data, username, member);
 		if (data.name || data.color1 || data.color2 || username.getAttribute("changed-by-editusers")) {
-			let member = this.MemberUtils.getMember(guildid, info.id) || {};
 			let isBRCenabled = BDFDB.isPluginEnabled("BetterRoleColors");
 			let usenick = !BDFDB.containsClass(username, BDFDB.disCN.userprofileusername) && !BDFDB.containsClass(username.parentElement, BDFDB.disCN.userprofilelistname, BDFDB.disCN.accountinfodetails, false) && member.nick;
 			let usemembercolor = !BDFDB.containsClass(username.parentElement, BDFDB.disCN.userprofilelistname) && (BDFDB.containsClass(username, BDFDB.disCN.memberusername, BDFDB.disCN.messageusername, false) || isBRCenabled);
 			username.style.setProperty("color", BDFDB.colorCONVERT(data.color1 || (usemembercolor ? member.colorString : null), "RGB"), "important");
 			username.style.setProperty("background-color", BDFDB.colorCONVERT(data.color2, "RGB"), "important");
 			BDFDB.setInnerText(username, data.name || (usenick ? member.nick : info.username));
-			this.changeBotTags(data, username, member);
 			if (data.name || data.color1 || data.color2) {
 				username.setAttribute("changed-by-editusers", true);
 				username.EditUsersChangeObserver = new MutationObserver((changes, _) => {
@@ -818,11 +818,11 @@ class EditUsers {
 		if (!info || !username || !username.parentElement) return;
 		if (username.EditUsersChangeObserver && typeof username.EditUsersChangeObserver.disconnect == "function") username.EditUsersChangeObserver.disconnect();
 		let data = this.getUserData(info.id, username);
+		let member = this.MemberUtils.getMember(guildid, info.id) || {};
+		this.changeBotTags(data, username, member);
 		if (data.name || data.color1 || username.getAttribute("changed-by-editusers")) {
-			let member = this.MemberUtils.getMember(guildid, info.id) || {};
 			username.style.setProperty("color", BDFDB.colorCONVERT(data.color1 || (BDFDB.isPluginEnabled("BetterRoleColors") ? member.colorString : null), "RGB"), "important");
 			BDFDB.setInnerText(username, data.name || member.nick || info.username);
-			this.changeBotTags(data, username, member);
 			if (data.name || data.color1) {
 				username.setAttribute("changed-by-editusers", true);
 				username.EditUsersChangeObserver = new MutationObserver((changes, _) => {
@@ -861,7 +861,7 @@ class EditUsers {
 	}
 	
 	changeBotTags (data, username, member) {
-		for (let tag of username.parentElement.querySelectorAll(BDFDB.dotCN.bottag)) {
+		for (let tag of username.parentElement.parentElement.querySelectorAll(BDFDB.dotCN.bottag)) {
 			let isBRCenabled = BDFDB.isPluginEnabled("BetterRoleColors");
 			let invert = tag.className.indexOf(BDFDB.disCN.bottaginvert) > -1;
 			let tagcolor =  BDFDB.colorCONVERT(data.color1 || (isBRCenabled || BDFDB.containsClass(tag, "owner-tag-rolecolor") ? member.colorString : null), "RGB");
