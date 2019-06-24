@@ -3,7 +3,7 @@
 class RemoveNicknames {
 	getName () {return "RemoveNicknames";}
 
-	getVersion () {return "1.2.0";}
+	getVersion () {return "1.2.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -118,18 +118,17 @@ class RemoveNicknames {
 
 	getNewName (info) {
 		if (!info) return null;
-		let EditUsersData = BDFDB.isPluginEnabled("EditUsers") ? BDFDB.loadData(info.id, "EditUsers", "users") : null;
-		if (EditUsersData && EditUsersData.name) return EditUsersData.name;
 		let settings = BDFDB.getAllData(this, "settings");
-		let member = this.MemberUtils.getMember(this.LastGuildStore.getGuildId(), info.id);
-		let nick = EditUsersData && EditUsersData.name ? EditUsersData.name : (member && member.nick ? member.nick : null);
-		if (this.reseting || !nick || info.id == BDFDB.myData.id && !settings.replaceOwn) return nick || info.username;
-		return settings.addNickname ? (settings.swapPositions ? (nick + " (" + info.username + ")") : (info.username + " (" + nick + ")")) : info.username;
+		let member = this.MemberUtils.getMember(this.LastGuildStore.getGuildId(), info.id) || {};
+		let EditUsersData = (BDFDB.isPluginEnabled("EditUsers") ? BDFDB.loadData(info.id, "EditUsers", "users") : null) || {};
+		if (this.reseting || !member.nick || info.id == BDFDB.myData.id && !settings.replaceOwn) return EditUsersData.name || member.nick || info.username;
+		var username = EditUsersData.name || info.username;
+		return settings.addNickname ? (settings.swapPositions ? (member.nick + " (" + username + ")") : (username + " (" + member.nick + ")")) : username;
 	}
 
 	processNameTag (instance, wrapper) {
-		if (wrapper && !BDFDB.containsClass(wrapper, BDFDB.disCN.userprofilenametag)) {
-			let username = wrapper.parentElement.querySelector("." + (BDFDB.containsClass(wrapper, BDFDB.disCN.userpopoutheadertagwithnickname) ? BDFDB.disCN.userpopoutheadernickname : instance.props.usernameClass).replace(/ /g, "."));
+		if (wrapper && !BDFDB.containsClass(wrapper, BDFDB.disCN.userprofilenametag, BDFDB.disCN.userpopoutheadertag, false)) {
+			let username = wrapper.parentElement.querySelector("." + instance.props.usernameClass.replace(/ /g, "."));
 			if (username) BDFDB.setInnerText(username, this.getNewName(instance.props.user));
 		}
 	}
