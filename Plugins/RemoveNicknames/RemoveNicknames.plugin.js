@@ -3,7 +3,7 @@
 class RemoveNicknames {
 	getName () {return "RemoveNicknames";}
 
-	getVersion () {return "1.2.1";}
+	getVersion () {return "1.2.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class RemoveNicknames {
 
 	initConstructor () {
 		this.changelog = {
-			"improved":[["EditUsers","Works better with EditUsers now"]]
+			"improved":[["Normalized Classes","Normalized Classes no longer make the plugin be rendered useless in the member list"]]
 		};
 		
 		this.patchModules = {
@@ -127,7 +127,7 @@ class RemoveNicknames {
 	}
 
 	processNameTag (instance, wrapper) {
-		if (wrapper && !BDFDB.containsClass(wrapper, BDFDB.disCN.userprofilenametag, BDFDB.disCN.userpopoutheadertag, false)) {
+		if (wrapper && !BDFDB.getParentEle(BDFDB.dotCNC.userprofile + BDFDB.dotCN.userpopout, wrapper)) {
 			let username = wrapper.parentElement.querySelector("." + instance.props.usernameClass.replace(/ /g, "."));
 			if (username) BDFDB.setInnerText(username, this.getNewName(instance.props.user));
 		}
