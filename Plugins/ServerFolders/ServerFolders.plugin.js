@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.3.1";}
+	getVersion () {return "6.3.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ServerFolders {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Settings","Fixed collision between ForceCloseAllFolders and ForceOpenFolderOfSelectedServer Settings"]],
+			"fixed":[["Server Outage","Fixed issue where servers that return from an outage would not be hidden by the plugin"]],
 		};
 		
 		this.labels = {};
@@ -636,6 +636,15 @@ class ServerFolders {
 						this.updateCopyInFolderContent(wrapper, folderdiv);
 						this.updateFolderNotifications(folderdiv);
 					},1000);
+				}
+				else if (!wrapper.getAttribute("folder")) {
+					this.cachedGuildState[instance.props.guild.id] = this.getGuildState(instance);
+					let folderdiv = this.getFolderOfServer(instance.props.guild);
+					if (folderdiv) {
+						this.hideServer(wrapper, folderdiv);
+						this.updateCopyInFolderContent(wrapper, folderdiv);
+						this.updateFolderNotifications(folderdiv);
+					}
 				}
 			}
 			if (methodnames.includes("componentWillUnmount")) {
