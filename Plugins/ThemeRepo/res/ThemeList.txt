@@ -198,3 +198,4 @@ https://raw.githubusercontent.com/Zerthox/ClearVision/master/themes/special/Clea
 https://raw.githubusercontent.com/Zerthox/ClearVision/master/themes/special/ClearVision_Winter.theme.css
 https://raw.githubusercontent.com/Zerthox/Discord-Color-Accent/master/CustomColorAccent.theme.css
 https://raw.githubusercontent.com/Zerthox/Material-Icon-Theme/master/Material_Icon.theme.css
+https://raw.githubusercontent.com/Leo40Git/BetterDiscord-UnreadPulse/master/UnreadPulse.theme.css
