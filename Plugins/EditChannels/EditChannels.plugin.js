@@ -3,7 +3,7 @@
 class EditChannels {
 	getName () {return "EditChannels";}
 
-	getVersion () {return "3.9.6";}
+	getVersion () {return "3.9.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class EditChannels {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Channel Header","Fixed the issue where the changed channel header would be reset by EditUsers"]]
+			"fixed":[["No Perms Text","Fixed the issue whee the no permission text was replaced by the default channel text"]]
 		};
 		
 		this.labels = {};
@@ -300,9 +300,9 @@ class EditChannels {
 		if (channel) {
 			var textarea = wrapper.querySelector("textarea");
 			if (!textarea) return;
-			if (channel.type == 0 && instance.props.type == "normal") {
+			if (channel.type == 0 && instance.props.type == "normal" && !instance.props.disabled) {
 				let data = this.getChannelData(channel.id, wrapper);
-				wrapper.querySelector("textarea").setAttribute("placeholder", BDFDB.LanguageStrings.TEXTAREA_PLACEHOLDER.replace("{{channel}}", "#" + (data.name || channel.name)));
+				wrapper.querySelector("textarea").setAttribute("placeholder", BDFDB.LanguageStringsFormat("TEXTAREA_PLACEHOLDER", "#" + (data.name || channel.name)));
 			}
 			BDFDB.removeEventListener(this, textarea);
 			if (BDFDB.getData("changeInAutoComplete", this, "settings")) {

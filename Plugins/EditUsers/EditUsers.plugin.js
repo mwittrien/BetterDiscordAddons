@@ -486,7 +486,7 @@ class EditUsers {
 		if (channel) {
 			var textarea = wrapper.querySelector("textarea");
 			if (!textarea) return;
-			if (instance.props.type == "normal" && channel.type == 1) {
+			if (channel.type == 1 && instance.props.type == "normal" && !instance.props.disabled) {
 				let user = this.UserUtils.getUser(channel.recipients[0]);
 				if (user) {
 					let data = this.getUserData(user.id, wrapper);
