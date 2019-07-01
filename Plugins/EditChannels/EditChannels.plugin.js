@@ -3,7 +3,7 @@
 class EditChannels {
 	getName () {return "EditChannels";}
 
-	getVersion () {return "3.9.7";}
+	getVersion () {return "3.9.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class EditChannels {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["No Perms Text","Fixed the issue whee the no permission text was replaced by the default channel text"]]
+			"added":[["Inheriting","You can now inherit the color of a category to the channels below it"]]
 		};
 		
 		this.labels = {};
@@ -88,6 +88,12 @@ class EditChannels {
 											<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">REPLACE_modal_colorpicker1_text</h3>
 										</div>
 										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8} swatches" style="flex: 1 1 auto;"></div>
+										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
+											<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">REPLACE_modal_inheritcolor_text</h3>
+											<div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;">
+												<input type="checkbox" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}" id="input-inheritcolor">
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -230,6 +236,7 @@ class EditChannels {
 		this.channelSettingsModalMarkup = 	this.channelSettingsModalMarkup.replace("REPLACE_modal_header_text", this.labels.modal_header_text);
 		this.channelSettingsModalMarkup = 	this.channelSettingsModalMarkup.replace("REPLACE_modal_channelname_text", this.labels.modal_channelname_text);
 		this.channelSettingsModalMarkup = 	this.channelSettingsModalMarkup.replace("REPLACE_modal_colorpicker1_text", this.labels.modal_colorpicker1_text);
+		this.channelSettingsModalMarkup = 	this.channelSettingsModalMarkup.replace("REPLACE_modal_inheritcolor_text", this.labels.modal_inheritcolor_text);
 		this.channelSettingsModalMarkup = 	this.channelSettingsModalMarkup.replace("REPLACE_btn_save_text", this.labels.btn_save_text);
 	}
 
@@ -262,14 +269,17 @@ class EditChannels {
 	}
 
 	showChannelSettings (info) {
-		var {name,color} = BDFDB.loadData(info.id, this, "channels") || {}
+		var {name,color,inheritColor} = BDFDB.loadData(info.id, this, "channels") || {}
 
 		let channelSettingsModal = BDFDB.htmlToElement(this.channelSettingsModalMarkup);
 		let channelnameinput = channelSettingsModal.querySelector("#input-channelname");
+		let inheritcolorinput = channelSettingsModal.querySelector("#input-inheritcolor");
 
 		channelSettingsModal.querySelector(BDFDB.dotCN.modalguildname).innerText = info.name;
 		channelnameinput.value = name || "";
 		channelnameinput.setAttribute("placeholder", info.name);
+		if (info.type == 4) inheritcolorinput.checked = inheritColor;
+		else BDFDB.removeEles(inheritcolorinput.parentElement.parentElement);
 		BDFDB.setColorSwatches(channelSettingsModal, color);
 
 		BDFDB.appendModal(channelSettingsModal);
@@ -284,12 +294,10 @@ class EditChannels {
 				else if (color[0] > 225 && color[1] > 225 && color[2] > 225) color = BDFDB.colorCHANGE(color, -30);
 			}
 
-			if (name == null && color == null) {
-				BDFDB.removeData(info.id, this, "channels");
-			}
-			else {
-				BDFDB.saveData(info.id, {name,color}, this, "channels");
-			}
+			inheritColor = inheritcolorinput.checked;
+
+			if (name == null && color == null) BDFDB.removeData(info.id, this, "channels");
+			else BDFDB.saveData(info.id, {name,color,inheritColor}, this, "channels");
 			BDFDB.WebModules.forceAllUpdates(this);
 		});
 		channelnameinput.focus();
@@ -447,7 +455,7 @@ class EditChannels {
 		if (!info || !channelname || !channelname.parentElement) return;
 		var change = () => {
 			if (channelname.EditChannelsChangeObserver && typeof channelname.EditChannelsChangeObserver.disconnect == "function") channelname.EditChannelsChangeObserver.disconnect();
-			let data = this.getChannelData(info.id, channelname);
+			let data = this.getChannelData(info.id, info.parent_id, channelname);
 			if (data.name || data.color || channelname.parentElement.getAttribute("changed-by-editchannels")) {
 				let color = this.chooseColor(channelname, data.color);
 				channelname.style.setProperty("color", color, "important");
@@ -510,7 +518,7 @@ class EditChannels {
 	changeChannel2 (info, channelname) {
 		if (!info || !channelname || !channelname.parentElement) return;
 		if (channelname.EditChannelsChangeObserver && typeof channelname.EditChannelsChangeObserver.disconnect == "function") channelname.EditChannelsChangeObserver.disconnect();
-		let data = this.getChannelData(info.id, channelname);
+		let data = this.getChannelData(info.id, info.parent_id, channelname);
 		if (data.name || data.color || channelname.getAttribute("changed-by-editchannels")) {
 			channelname.style.setProperty("color", this.chooseColor(channelname, data.color), "important");
 			BDFDB.setInnerText(channelname, "#" + (data.name || info.name));
@@ -537,7 +545,7 @@ class EditChannels {
 		if (mention.EditChannelsChangeObserver && typeof mention.EditChannelsChangeObserver.disconnect == "function") mention.EditChannelsChangeObserver.disconnect();
 		mention.removeEventListener("mouseover", mention.mouseoverListenerEditChannels);
 		mention.removeEventListener("mouseout", mention.mouseoutListenerEditChannels);
-		let data = this.getChannelData(info.id, mention);
+		let data = this.getChannelData(info.id, info.parent_id, mention);
 		let color = BDFDB.colorCONVERT(data.color, "RGBCOMP");
 		BDFDB.setInnerText(mention, "#" + (data.name || info.name));
 		if (mention.EditChannelsHovered) colorHover();
@@ -545,7 +553,7 @@ class EditChannels {
 		mention.mouseoverListenerEditChannels = () => {
 			mention.EditChannelsHovered = true;
 			colorHover();
-			let categorydata = this.getChannelData(categoryinfo.id, mention);
+			let categorydata = this.getChannelData(categoryinfo.id, null, mention);
 			if (categorydata.name) BDFDB.createTooltip(categorydata.name, mention, {type:"top",selector:"EditChannels-tooltip",css:`body ${BDFDB.dotCN.tooltip}:not(.EditChannels-tooltip) {display: none !important;}`});
 		};
 		mention.mouseoutListenerEditChannels = () => {
@@ -581,9 +589,12 @@ class EditChannels {
 		return null;
 	}
 	
-	getChannelData (id, wrapper) {
+	getChannelData (id, categoryid, wrapper) {
 		let data = BDFDB.loadData(id, this, "channels");
-		if (!data) return {};
+		let categorydata = categoryid ? BDFDB.loadData(categoryid, this, "channels") : null;
+		if (!data && (!categorydata || (categorydata && !categorydata.color && !categorydata.inheritColor))) return {};
+		if (!data) data = {};
+		data.color = data.color ? data.color : (categorydata && categorydata.color && categorydata.inheritColor ? categorydata.color : null);
 		let allenabled = true, settings = BDFDB.getAllData(this, "settings");
 		for (let i in settings) if (!settings[i]) {
 			allenabled = false;
@@ -692,6 +703,7 @@ class EditChannels {
 					modal_header_text:						"Postavke lokalnih kanala",
 					modal_channelname_text:					"Naziv lokalnog kanala",
 					modal_colorpicker1_text:				"Boja lokalnog kanala",
+					modal_inheritcolor_text:				"Naslijedi boju u potkanale",
 					btn_cancel_text:						"Prekid",
 					btn_save_text:							"Uštedjeti"
 				};
@@ -703,6 +715,7 @@ class EditChannels {
 					modal_header_text:						"Lokal kanalindstillinger",
 					modal_channelname_text:					"Lokalt kanalnavn",
 					modal_colorpicker1_text:				"Lokal kanalfarve",
+					modal_inheritcolor_text:				"Arve farve til subkanaler",
 					btn_cancel_text:						"Afbryde",
 					btn_save_text:							"Spare"
 				};
@@ -714,6 +727,7 @@ class EditChannels {
 					modal_header_text:						"Lokale Kanaleinstellungen",
 					modal_channelname_text:					"Lokaler Kanalname",
 					modal_colorpicker1_text:				"Lokale Kanalfarbe",
+					modal_inheritcolor_text:				"Farbe an Unterkanäle vererben",
 					btn_cancel_text:						"Abbrechen",
 					btn_save_text:							"Speichern"
 				};
@@ -725,6 +739,7 @@ class EditChannels {
 					modal_header_text:						"Ajustes local de canal",
 					modal_channelname_text:					"Nombre local del canal",
 					modal_colorpicker1_text:				"Color local del canal",
+					modal_inheritcolor_text:				"Heredar color a sub-canales",
 					btn_cancel_text:						"Cancelar",
 					btn_save_text:							"Guardar"
 				};
@@ -736,6 +751,7 @@ class EditChannels {
 					modal_header_text:						"Paramètres locale du canal",
 					modal_channelname_text:					"Nom local du canal",
 					modal_colorpicker1_text:				"Couleur locale de la chaîne",
+					modal_inheritcolor_text:				"Hériter de la couleur sur les sous-canaux",
 					btn_cancel_text:						"Abandonner",
 					btn_save_text:							"Enregistrer"
 				};
@@ -747,6 +763,7 @@ class EditChannels {
 					modal_header_text:						"Impostazioni locale canale",
 					modal_channelname_text:					"Nome locale canale",
 					modal_colorpicker1_text:				"Colore locale canale",
+					modal_inheritcolor_text:				"Eredita colore per sub-canali",
 					btn_cancel_text:						"Cancellare",
 					btn_save_text:							"Salvare"
 				};
@@ -758,6 +775,7 @@ class EditChannels {
 					modal_header_text:						"Lokale kanaalinstellingen",
 					modal_channelname_text:					"Lokale kanaalnaam",
 					modal_colorpicker1_text:				"Lokale kanaalkleur",
+					modal_inheritcolor_text:				"Overerving van kleuren naar subkanalen",
 					btn_cancel_text:						"Afbreken",
 					btn_save_text:							"Opslaan"
 				};
@@ -769,6 +787,7 @@ class EditChannels {
 					modal_header_text:						"Lokal kanalinnstillinger",
 					modal_channelname_text:					"Lokalt kanalnavn",
 					modal_colorpicker1_text:				"Lokal kanalfarge",
+					modal_inheritcolor_text:				"Arve farge til underkanaler",
 					btn_cancel_text:						"Avbryte",
 					btn_save_text:							"Lagre"
 				};
@@ -780,6 +799,7 @@ class EditChannels {
 					modal_header_text:						"Lokalne ustawienia kanału",
 					modal_channelname_text:					"Lokalna nazwa kanału",
 					modal_colorpicker1_text:				"Lokalny kolor kanału",
+					modal_inheritcolor_text:				"Dziedzicz kolor do podkanałów",
 					btn_cancel_text:						"Anuluj",
 					btn_save_text:							"Zapisz"
 				};
@@ -791,6 +811,7 @@ class EditChannels {
 					modal_header_text:						"Configurações local do canal",
 					modal_channelname_text:					"Nome local do canal",
 					modal_colorpicker1_text:				"Cor local do canal",
+					modal_inheritcolor_text:				"Herdar cor aos sub-canais",
 					btn_cancel_text:						"Cancelar",
 					btn_save_text:							"Salvar"
 				};
@@ -802,6 +823,7 @@ class EditChannels {
 					modal_header_text:						"Paikallinen kanavan asetukset",
 					modal_channelname_text:					"Paikallinen kanavanimi",
 					modal_colorpicker1_text:				"Paikallinen kanavanväri",
+					modal_inheritcolor_text:				"Hävitä väri alikanaville",
 					btn_cancel_text:						"Peruuttaa",
 					btn_save_text:							"Tallentaa"
 				};
@@ -813,6 +835,7 @@ class EditChannels {
 					modal_header_text:						"Lokal kanalinställningar",
 					modal_channelname_text:					"Lokalt kanalnamn",
 					modal_colorpicker1_text:				"Lokal kanalfärg",
+					modal_inheritcolor_text:				"Inherit färg till subkanaler",
 					btn_cancel_text:						"Avbryta",
 					btn_save_text:							"Spara"
 				};
@@ -824,6 +847,7 @@ class EditChannels {
 					modal_header_text:						"Yerel Kanal Ayarları",
 					modal_channelname_text:					"Yerel Kanal Adı",
 					modal_colorpicker1_text:				"Yerel Kanal Rengi",
+					modal_inheritcolor_text:				"Renkleri alt kanallara miras alma",
 					btn_cancel_text:						"Iptal",
 					btn_save_text:							"Kayıt"
 				};
@@ -835,6 +859,7 @@ class EditChannels {
 					modal_header_text:						"Místní nastavení kanálu",
 					modal_channelname_text:					"Místní název kanálu",
 					modal_colorpicker1_text:				"Místní barvy kanálu",
+					modal_inheritcolor_text:				"Zdědit barvu na subkanály",
 					btn_cancel_text:						"Zrušení",
 					btn_save_text:							"Uložit"
 				};
@@ -846,6 +871,7 @@ class EditChannels {
 					modal_header_text:						"Настройки за локални канали",
 					modal_channelname_text:					"Локално име на канал",
 					modal_colorpicker1_text:				"Локален цветен канал",
+					modal_inheritcolor_text:				"Наследи цвета до подканали",
 					btn_cancel_text:						"Зъбести",
 					btn_save_text:							"Cпасяване"
 				};
@@ -857,6 +883,7 @@ class EditChannels {
 					modal_header_text:						"Настройки локального канала",
 					modal_channelname_text:					"Имя локального канала",
 					modal_colorpicker1_text:				"Цвет локального канала",
+					modal_inheritcolor_text:				"Наследовать цвет на подканалы",
 					btn_cancel_text:						"Отмена",
 					btn_save_text:							"Cпасти"
 				};
@@ -868,6 +895,7 @@ class EditChannels {
 					modal_header_text:						"Налаштування локального каналу",
 					modal_channelname_text:					"Локальне ім'я каналу",
 					modal_colorpicker1_text:				"Колір місцевого каналу",
+					modal_inheritcolor_text:				"Успадковують колір до підканалів",
 					btn_cancel_text:						"Скасувати",
 					btn_save_text:							"Зберегти"
 				};
@@ -879,6 +907,7 @@ class EditChannels {
 					modal_header_text:						"ローカルチャネル設定",
 					modal_channelname_text:					"ローカルチャネル名",
 					modal_colorpicker1_text:				"ローカルチャネルの色",
+					modal_inheritcolor_text:				"サブチャンネルに色を継承",
 					btn_cancel_text:						"キャンセル",
 					btn_save_text:							"セーブ"
 				};
@@ -890,6 +919,7 @@ class EditChannels {
 					modal_header_text:						"本地頻道設置",
 					modal_channelname_text:					"本地頻道名稱",
 					modal_colorpicker1_text:				"本地頻道顏色",
+					modal_inheritcolor_text:				"繼承子通道的顏色",
 					btn_cancel_text:						"取消",
 					btn_save_text:							"保存"
 				};
@@ -901,6 +931,7 @@ class EditChannels {
 					modal_header_text:						"로컬 채널 설정",
 					modal_channelname_text:					"로컬 채널 이름",
 					modal_colorpicker1_text:				"지역 채널 색깔",
+					modal_inheritcolor_text:				"하위 채널에 색상 상속",
 					btn_cancel_text:						"취소",
 					btn_save_text:							"저장"
 				};
@@ -912,6 +943,7 @@ class EditChannels {
 					modal_header_text:						"Local Channelsettings",
 					modal_channelname_text:					"Local Channelname",
 					modal_colorpicker1_text:				"Local Channelcolor",
+					modal_inheritcolor_text:				"Inherit color to Sub-Channels",
 					btn_cancel_text:						"Cancel",
 					btn_save_text:							"Save"
 				};
