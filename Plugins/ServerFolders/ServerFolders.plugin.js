@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.3.2";}
+	getVersion () {return "6.3.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,14 +11,14 @@ class ServerFolders {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Server Outage","Fixed issue where servers that return from an outage would not be hidden by the plugin"]],
+			"fixed":[["Server Outage","Fixed issue where servers that return from an outage would not be hidden by the plugin (for real this time)"]],
 		};
 		
 		this.labels = {};
 
 		this.patchModules = {
 			"Guilds":["componentDidMount","componentDidUpdate","componentWillUnmount"],
-			"Guild":["componentDidMount","componentDidUpdate","componentWillUnmount"],
+			"Guild":["componentDidMount","componentDidUpdate","render","componentWillUnmount"],
 			"StandardSidebarView":"componentWillUnmount"
 		};
 		
@@ -637,10 +637,12 @@ class ServerFolders {
 						this.updateFolderNotifications(folderdiv);
 					},1000);
 				}
-				else if (!wrapper.getAttribute("folder")) {
-					this.cachedGuildState[instance.props.guild.id] = this.getGuildState(instance);
+			}
+			if (methodnames.includes("render")) {
+				if (!wrapper.getAttribute("folder")) {
 					let folderdiv = this.getFolderOfServer(instance.props.guild);
 					if (folderdiv) {
+						this.cachedGuildState[instance.props.guild.id] = this.getGuildState(instance);
 						this.hideServer(wrapper, folderdiv);
 						this.updateCopyInFolderContent(wrapper, folderdiv);
 						this.updateFolderNotifications(folderdiv);
