@@ -56,6 +56,7 @@
 	animation: none !important;
 }
 
+.pageButton-MknE-_:not(.activeButton-1BJAiN),
 .emptySearchResults-1ba__I,
 .bd-modal-body,
 .pageWrapper-1PgVDX,
@@ -278,7 +279,7 @@
 .searchBox-3Y2Vi7,
 .css-1wqqa50-container,
 .css-bacguy-container,
-.pageButton-MknE-_:not(.activeButton-1BJAiN):hover,
+.pageButton-MknE-_:not(.activeButton-1BJAiN):not(:disabled):hover,
 .selectorSelected-1_M1WV,
 .searchOption-8nCYo-.selected-1r_nkg,
 .friendSelected--wQP3f,
