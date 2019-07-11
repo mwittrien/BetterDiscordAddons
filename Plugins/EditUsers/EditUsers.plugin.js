@@ -59,7 +59,7 @@ class EditUsers {
 			${BDFDB.dotCNC.userpopoutheaderbottag + BDFDB.dotCN.userpopoutheaderbottagwithnickname} {
 				bottom: 4px;
 			}
-			${BDFDB.dotCNS.userpopoutheadertagnonickname + BDFDB.dotCNC.userpopoutheaderbottag + BDFDB.dotCNS.userpopoutheadertagwithnickname + BDFDB.dotCN.userpopoutheaderbottagwithnickname} {
+			${BDFDB.dotCNS.userpopoutheadertagwithnickname + BDFDB.dotCN.userpopoutheaderbottagwithnickname} {
 				bottom: 0px;
 			}
 			${BDFDB.dotCN.userprofilebottag} {
