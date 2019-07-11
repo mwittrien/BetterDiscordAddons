@@ -169,7 +169,7 @@ class CharCounter {
 
 		BDFDB.addClass(input.parentElement.parentElement, "charcounter-added");
 		if (type == "nickname") input.setAttribute("maxlength", 32);
-		BDFDB.addEventListener(this, input, "keydown click", e => {
+		BDFDB.addEventListener(this, input, "keydown click change", e => {
 			clearTimeout(input.charcountertimeout);
 			input.charcountertimeout = setTimeout(() => {updateCounter();},100);
 		});
