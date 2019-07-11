@@ -56,7 +56,7 @@ class EditUsers {
 				position: relative;
 				margin: 0 0 0 1ch;
 			}
-			${BDFDB.dotCNC.userpopoutheaderbottag + BDFDB.dotCN.userpopoutheaderbottagwithnickname} {
+			${BDFDB.dotCN.userpopoutheaderbottagwithnickname} {
 				bottom: 4px;
 			}
 			${BDFDB.dotCNS.userpopoutheadertagwithnickname + BDFDB.dotCN.userpopoutheaderbottagwithnickname} {

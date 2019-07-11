@@ -3,7 +3,7 @@
 class CharCounter {
 	getName () {return "CharCounter";}
 
-	getVersion () {return "1.3.4";}
+	getVersion () {return "1.3.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,13 +11,13 @@ class CharCounter {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Context Menu","Fixed the issue where the plugin would break the copy/paste actions via the textarea contextmenu"]]
+			"fixed":[["Nickname Modal","Fixed for the nickname modal"]]
 		};
 		
 		this.patchModules = {
 			"ChannelTextArea":"componentDidMount",
 			"Note":"componentDidMount",
-			"Modal":"componentDidMount"
+			"ChangeNickname":"componentDidMount"
 		};
 
 		this.maxLenghts = {
@@ -149,11 +149,9 @@ class CharCounter {
 		this.appendCounter(wrapper.firstElementChild, BDFDB.containsClass(wrapper, BDFDB.disCN.usernotepopout) ? "popout" : (BDFDB.containsClass(wrapper, BDFDB.disCN.usernoteprofile) ? "profile" : null), false);
 	}
 
-	processModal (instance, wrapper) {
-		if (instance.props && instance.props.tag == "form") {
-			let reset = wrapper.querySelector(BDFDB.dotCN.reset);
-			if (reset && BDFDB.getInnerText(reset.firstElementChild) == BDFDB.LanguageStrings.RESET_NICKNAME) this.appendCounter(wrapper.querySelector(BDFDB.dotCN.inputdefault), "nickname", false);
-		}
+	processChangeNickname (instance, wrapper) {
+		let reset = wrapper.querySelector(BDFDB.dotCN.reset);
+		if (reset && BDFDB.getInnerText(reset.firstElementChild) == BDFDB.LanguageStrings.RESET_NICKNAME) this.appendCounter(wrapper.querySelector(BDFDB.dotCN.inputdefault), "nickname", false);
 	}
 
 	appendCounter (input, type, parsing) {
