@@ -151,8 +151,8 @@
 .sidebarRegion-VFTUkN,
 :not(.tab-content) > .standardSidebarView-3F1I7i,
 .card-3Qj_Yx,
-.container-1UB9sr,
-.container-2Thooq,
+.container-1giJp5,
+.container-3baos1,
 .listeningAlong-2UPsxf,
 .reactors-Blmlhw {
 	background: rgba(var(--vtransparencycolor),var(--vtransparencyalpha)) !important;
@@ -389,7 +389,7 @@
 .css-oc2jo8-control,
 .messageGroupBlocked-3wrQQX,
 .input-cIJ7To:not(:focus),
-.container-1UB9sr,
+.container-1giJp5,
 .cardPrimaryEditable-3KtE4g {
 	border-color: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 3)) !important;
 }
