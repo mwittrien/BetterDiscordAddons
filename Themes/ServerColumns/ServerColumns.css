@@ -130,7 +130,8 @@ body.foldercontentopened .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
 }
 .wrapper-1Rf91z .friendsOnline-2JkivW,
 .wrapper-1Rf91z #bd-pub-li,
-.wrapper-1Rf91z .RANbutton-frame {
+.wrapper-1Rf91z .RANbutton-frame,
+.wrapper-1Rf91z #sort-button {
 	text-align: center !important;
 	margin: 4px calc(1px * (((var(--vguildsize) + 10) * (var(--vcolumns) - 1) - ((var(--vguildsize)*4/5) + 10) + var(--vguildsize))/2)) 4px calc(1px * (((var(--vguildsize) + 10) * (var(--vcolumns) - 1) - ((var(--vguildsize)*4/5) + 10) + var(--vguildsize))/2)) !important;
 }
