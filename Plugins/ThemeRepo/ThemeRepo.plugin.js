@@ -3,7 +3,7 @@
 class ThemeRepo {
 	getName () {return "ThemeRepo";}
 
-	getVersion () {return "1.8.3";}
+	getVersion () {return "1.8.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ThemeRepo {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["New META syntax","Fixed the fetching for the new META syntax used by BD"]]
+			"fixed":[["Refetch","Fixed refetching occuring every x hours"]]
 		};
 		
 		this.patchModules = {
@@ -891,7 +891,7 @@ class ThemeRepo {
 
 	checkForNewThemes () {
 		require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/ThemeList.txt", (error, response, result) => {
-			if (response && !BDFDB.equals(result.replace(/\t|\r/g, "").split("\n"), this.grabbedThemes)) {
+			if (response && !BDFDB.equals(result.replace(/\t|\r/g, "").split("\n").filter(n => n), this.grabbedThemes)) {
 				this.loading = {is:false, timeout:null, amount:0};
 				this.loadThemes();
 			}

@@ -3,7 +3,7 @@
 class PluginRepo {
 	getName () {return "PluginRepo";} 
 
-	getVersion () {return "1.8.1";}
+	getVersion () {return "1.8.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class PluginRepo {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Canary/PTB","Fixed the plugin for canary and ptb"]]
+			"fixed":[["Refetch","Fixed refetching occuring every x hours"]]
 		};
 		
 		this.patchModules = {
@@ -866,7 +866,7 @@ class PluginRepo {
 
 	checkForNewPlugins () {
 		require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/PluginRepo/res/PluginList.txt", (error, response, result) => {
-			if (response && !BDFDB.equals(result.replace(/\t|\r/g, "").split("\n"), this.grabbedPlugins)) {
+			if (response && !BDFDB.equals(result.replace(/\t|\r/g, "").split("\n").filter(n => n), this.grabbedPlugins)) {
 				this.loading = {is:false, timeout:null, amount:0};
 				this.loadPlugins();
 			}
