@@ -151,7 +151,7 @@ https://raw.githubusercontent.com/satoru8/Addons/master/FriendsList.theme.css
 https://raw.githubusercontent.com/satoru8/Addons/master/FullScreenServerSettingsMenu/fullScreenServerSettingsMenu.theme.css
 https://raw.githubusercontent.com/satoru8/Addons/master/FullScreenStatusPicker/fullScreenStatusPicker.theme.css
 https://raw.githubusercontent.com/satoru8/Addons/master/GlowBadges/GlowingBadges.theme.css
-https://raw.githubusercontent.com/satoru8/Addons/master/Guild3xHover/Guild3xHover.theme.css
+https://raw.githubusercontent.com/satoru8/Addons/master/Guild2xHover/Guild2xHover.theme.css
 https://raw.githubusercontent.com/satoru8/Addons/master/GlowStatus.theme.css
 https://raw.githubusercontent.com/satoru8/Addons/master/LargeChatAvatars.theme.css
 https://raw.githubusercontent.com/satoru8/Addons/master/Library.theme.css
