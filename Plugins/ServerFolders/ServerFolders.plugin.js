@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.3.3";}
+	getVersion () {return "6.3.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ServerFolders {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Server Outage","Fixed issue where servers that return from an outage would not be hidden by the plugin (for real this time)"]],
+			"fixed":[["👽","Let's raid Area 51"]],
 		};
 		
 		this.labels = {};
@@ -199,6 +199,10 @@ class ServerFolders {
 						</div>
 					</div>
 				</div>
+				<div class="${BDFDB.disCN.guildedgewrapper}" aria-hidden="true">
+					<span class="${BDFDB.disCN.guildedge}"></span>
+					<span class="${BDFDB.disCN.guildedge}"></span>
+				</div>
 			</div>`;
 
 		this.dragPlaceholderMarkup =
@@ -207,11 +211,8 @@ class ServerFolders {
 					<span class="${BDFDB.disCN.guildpillitem}"></span>
 				</div>
 				<div tabindex="0" class="${BDFDB.disCNS.guildcontainer + BDFDB.disCN.guildinner}" role="button">
-					<svg width="48" height="48" viewBox="0 0 48 48" class="${BDFDB.disCN.guildsvg}">
-						<mask id="SERVERFOLDERSDRAG" fill="black" x="0" y="0" width="48" height="48">
-							<path d="M48 24C48 37.2548 37.2548 48 24 48C10.7452 48 0 37.2548 0 24C0 10.7452 10.7452 0 24 0C37.2548 0 48 10.7452 48 24Z" fill="white"></path>
-						</mask>
-						<foreignObject mask="url(#SERVERFOLDERSDRAG)" x="0" y="0" width="48" height="48">
+					<svg width="48" height="48" viewBox="0 0 48 48" class="${BDFDB.disCN.guildplaceholdermask}">
+						<foreignObject mask="url(#svg-mask-squircle)" x="0" y="0" width="48" height="48">
 							<div class="${BDFDB.disCN.guildplaceholder}"></div>
 						</foreignObject>
 					</svg>
