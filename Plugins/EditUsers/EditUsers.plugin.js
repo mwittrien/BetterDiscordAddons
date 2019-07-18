@@ -907,7 +907,7 @@ class EditUsers {
 			if (avatar.tagName == "IMG") avatar.setAttribute("src", data.removeIcon ? null : (data.url || BDFDB.getUserAvatar(info.id)));
 			else {
 				let url = data.removeIcon ? null : ("url(" + (data.url || BDFDB.getUserAvatar(info.id)) + ")");
-				if (url && BDFDB.containsClass(avatar, BDFDB.disCN.avatarmaskprofile) && url.search(/discordapp\.com\/avatars\/[0-9]*\/a_/) > -1) url = url.replace(".webp)", ".gif)");
+				if (url && BDFDB.getParentEle(BDFDB.dotCN.userprofile, avatar) && url.search(/discordapp\.com\/avatars\/[0-9]*\/a_/) > -1) url = url.replace(".webp)", ".gif)");
 				avatar.style.setProperty("background-image", url);
 				if (data.url && !data.removeIcon) {
 					avatar.style.setProperty("background-position", "center");
@@ -916,14 +916,10 @@ class EditUsers {
 			}
 			if (data.url || data.removeIcon) {
 				avatar.setAttribute("changed-by-editusers", true);
-				avatar.EditUsersChangeObserver = new MutationObserver((changes, _) => {
-					changes.forEach(
-						(change, i) => {
-							avatar.EditUsersChangeObserver.disconnect();
-							this.changeAvatar(info, avatar);
-						}
-					);
-				});
+				avatar.EditUsersChangeObserver = new MutationObserver((changes, _) => {changes.forEach((change, i) => {
+					avatar.EditUsersChangeObserver.disconnect();
+					this.changeAvatar(info, avatar);
+				});});
 				avatar.EditUsersChangeObserver.observe(avatar, {attributes:true});
 			}
 			else avatar.removeAttribute("changed-by-editusers");
