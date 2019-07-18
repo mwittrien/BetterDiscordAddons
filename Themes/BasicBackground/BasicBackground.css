@@ -105,6 +105,7 @@
 .modal-3c3bKg .modal-yWgWj-,
 .modal-3c3bKg .slide-2pHaq5,
 .react-datepicker,
+.member-3W1lQa .content-OzHfo4,
 .container-PNkimc,
 .container-1r6BKw,
 .titleBar-AC4pGV,
@@ -254,8 +255,8 @@
 .ui-tab-bar-item:hover,
 .friendsRow-2yicud:hover,
 .channel-2QD9_O:hover a,
-.member-3W1lQa:hover .content-OzHfo4,
-.member-3W1lQa.popout-open .content-OzHfo4,
+.member-3W1lQa:hover,
+.member-3W1lQa.popout-open,
 .input-3yHnCz,
 .attachment-33OFj0,
 .wrapper-CU3qI5:hover,
@@ -608,7 +609,7 @@ input:disabled {
 
 .header-GwIGlr,
 .changeDetails-bk98pu,
-.member-3W1lQa .content-OzHfo4,
+.member-3W1lQa,
 .channel-2QD9_O,
 .wrapper-CU3qI5:hover,
 .userHovered-2_fT4Z {
