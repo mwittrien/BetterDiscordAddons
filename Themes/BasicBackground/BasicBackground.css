@@ -2366,6 +2366,11 @@ html, span:not(.spinner-item) {
 	background-color: rgb(var(--vaccentcolor)) !important;
 	color: rgb(255,255,255) !important;
 }
+#app-mount .root-SR8cQa .wrapper-2F3Zv8[user_by_BDFDB="278543574059057154"]:after,
+#app-mount .root-SR8cQa .wrapper-3t9DeA[user_by_BDFDB="278543574059057154"]:after,
+#app-mount .userPopout-3XzG_A .avatarWrapper-3H_478[user_by_BDFDB="278543574059057154"]:after {
+	filter: unset !important;
+}
 #app-mount .root-SR8cQa .wrapper-2F3Zv8[user_by_BDFDB="278543574059057154"]:not(.statusHovered):hover + .headerInfo-30uryT:after,
 #app-mount .root-SR8cQa .wrapper-3t9DeA[user_by_BDFDB="278543574059057154"]:not(.statusHovered):hover + .headerInfo-30uryT:after {
 	border-right-color: rgb(var(--vaccentcolor)) !important;
