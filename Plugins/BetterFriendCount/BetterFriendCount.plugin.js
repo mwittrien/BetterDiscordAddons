@@ -3,7 +3,7 @@
 class BetterFriendCount {
 	getName () {return "BetterFriendCount";}
 
-	getVersion () {return "1.1.5";}
+	getVersion () {return "1.1.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,12 +11,12 @@ class BetterFriendCount {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["New Classes","Fixed the plugin for the new class update"]]
+			"fixed":[["New Structure","Fixed issues that will occure once the avatar/name changes from canary will hit stable/ptb"]]
 		};
 		
 		this.patchModules = {
 			"TabBar":"componentDidMount",
-			"NameTag":["componentWillMount","componentWillUnmount"]
+			"FriendRow":["componentWillMount","componentWillUnmount"]
 		};
 
 		this.css = `
@@ -97,8 +97,8 @@ class BetterFriendCount {
 		if (instance.props && instance.props.children) for (let child of instance.props.children) if ((child.key || (child.props && child.props.id)) == "ADD_FRIEND") this.addCountNumbers(wrapper);
 	}
 
-	processNameTag (instance, wrapper) {
-		if (wrapper.parentElement && BDFDB.containsClass(wrapper.parentElement, BDFDB.disCN.friendscolumn)) this.addCountNumbers();
+	processFriendRow (instance, wrapper) {
+		this.addCountNumbers();
 	}
 
 	addCountNumbers (wrapper = document.querySelector(BDFDB.dotCNS.friends + BDFDB.dotCN.settingstabbar)) {
