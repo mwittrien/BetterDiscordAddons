@@ -3,7 +3,7 @@
 class EditUsers {
 	getName () {return "EditUsers";}
 
-	getVersion () {return "3.4.4";}
+	getVersion () {return "3.4.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,14 +11,17 @@ class EditUsers {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Settings and Tags","Fixed"]]
+			"fixed":[["New Structure","Fixed issues that will occur once the avatar/name changes from canary will hit stable/ptb"]]
 		};
 		
 		this.labels = {}; 
 
 		this.patchModules = {
 			"ChannelTextArea":"componentDidMount",
-			"NameTag":"componentDidMount",
+			"ChannelMember":"componentDidMount",
+			"UserPopout":"componentDidMount",
+			"UserProfile":"componentDidMount",
+			"FriendRow":"componentDidMount",
 			"Account":["componentDidMount","componentDidUpdate"],
 			"AuditLog":"componentDidMount",
 			"BannedCard":"componentDidMount",
@@ -39,7 +42,7 @@ class EditUsers {
 			"StandardSidebarView":"componentWillUnmount"
 		};
 
-		this.avatarselector = BDFDB.dotCNC.guildicon + BDFDB.dotCNC.avatarinner + BDFDB.dotCNC.avatarimage + BDFDB.dotCNC.callavatarwrapper + BDFDB.dotCNC.voiceavatarcontainer + "[class*='avatar-']";
+		this.avatarselector = BDFDB.dotCNC.guildicon + BDFDB.dotCNC.avatar + BDFDB.dotCNC.avatarinner + BDFDB.dotCNC.avatarimage + BDFDB.dotCNC.callavatarwrapper + BDFDB.dotCNC.voiceavatarcontainer + "[class*='avatar-']:not(.avatar-28BJzY)";
 
 		this.css = `
 			${BDFDB.dotCNS.message + BDFDB.dotCN.messageheadercozy} {
@@ -531,13 +534,39 @@ class EditUsers {
 			}
 		}
 	}
-
-	processNameTag (instance, wrapper) {
-		let username = wrapper.parentElement.parentElement.querySelector("." + (BDFDB.containsClass(wrapper, BDFDB.disCN.userpopoutheadertagwithnickname) ? BDFDB.disCN.userpopoutheadernickname : instance.props.usernameClass).replace(/ /g, "."));
+	
+	processChannelMember (instance, wrapper) {
+		let username = wrapper.querySelector(BDFDB.dotCN.memberusername);
 		if (username) {
 			this.changeName(instance.props.user, username);
 			this.changeAvatar(instance.props.user, this.getAvatarDiv(wrapper));
-			this.addTag(instance.props.user, username.parentElement, BDFDB.disCN.bottagnametag + (instance.props.botClass ? (" " + instance.props.botClass) : ""));
+			this.addTag(instance.props.user, username.parentElement, BDFDB.disCN.bottagnametag);
+		}
+	}
+
+	processUserPopout (instance, wrapper) {
+		let username = wrapper.querySelector(BDFDB.dotCNC.userpopoutheadertagusernamenonickname + BDFDB.dotCN.userpopoutheadernickname);
+		if (username) {
+			this.changeName(instance.props.user, username);
+			this.changeAvatar(instance.props.user, this.getAvatarDiv(wrapper));
+			this.addTag(instance.props.user, username.parentElement, BDFDB.disCN.bottagnametag);
+		}
+	}
+
+	processUserProfile (instance, wrapper) {
+		let username = wrapper.querySelector(BDFDB.dotCN.userprofileusername);
+		if (username) {
+			this.changeName(instance.props.user, username);
+			this.changeAvatar(instance.props.user, this.getAvatarDiv(wrapper));
+			this.addTag(instance.props.user, username.parentElement, BDFDB.disCN.bottagnametag);
+		}
+	}
+
+	processFriendRow (instance, wrapper) {
+		let username = wrapper.querySelector(BDFDB.dotCN.friendsusername);
+		if (username) {
+			this.changeName(instance.props.user, username);
+			this.changeAvatar(instance.props.user, this.getAvatarDiv(wrapper));
 		}
 	}
 
@@ -558,7 +587,7 @@ class EditUsers {
 				this.changeName(message.author, username, channel.guild_id);
 				if (!BDFDB.containsClass(wrapper.parentElement, BDFDB.disCN.messageheadercompact)) this.changeAvatar(message.author, this.getAvatarDiv(wrapper));
 				let messagegroup = BDFDB.getParentEle(BDFDB.dotCN.messagegroup, wrapper);
-				this.addTag(message.author, wrapper, BDFDB.disCN.bottagmessage + " " + (BDFDB.containsClass(messagegroup, BDFDB.disCN.messagegroupcozy) ? BDFDB.disCN.bottagmessagecozy : BDFDB.disCN.bottagmessagecompact));
+				this.addTag(message.author, wrapper, BDFDB.containsClass(messagegroup, BDFDB.disCN.messagegroupcozy) ? BDFDB.disCN.bottagmessagecozy : BDFDB.disCN.bottagmessagecompact);
 			}
 		}
 	}
@@ -665,7 +694,7 @@ class EditUsers {
 	processPrivateChannel (instance, wrapper) {
 		if (instance.props && instance.props.user) {
 			let username = wrapper.querySelector(BDFDB.dotCN.dmchannelname);
-			this.changePrivateChannel(instance.props.user, username.firstElementChild ? username.firstElementChild : username);
+			this.changePrivateChannel(instance.props.user, username && username.firstElementChild ? username.firstElementChild : username);
 			this.changeAvatar(instance.props.user, this.getAvatarDiv(wrapper));
 		}
 	}
@@ -923,7 +952,7 @@ class EditUsers {
 			let color3 = BDFDB.colorCONVERT(!data.ignoreTagColor ? data.color3 : member.colorString, "RGB");
 			let color4 = !data.ignoreTagColor && data.color4 ? BDFDB.colorCONVERT(data.color4, "RGB") : (BDFDB.colorISBRIGHT(color3) ? "black" : "white");
 			let tag = document.createElement("span");
-			tag.className = "EditUsers-tag " + BDFDB.disCN.bottag + (selector ? (" " + selector) : "");
+			tag.className = "EditUsers-tag " + BDFDB.disCN.bottagregular + (selector ? (" " + selector) : "");
 			tag.innerText = data.tag;
 			tag.style.setProperty("background-color", color3, "important");
 			tag.style.setProperty("color", color4, "important");
