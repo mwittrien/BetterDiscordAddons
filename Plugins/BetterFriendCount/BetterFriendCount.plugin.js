@@ -11,7 +11,7 @@ class BetterFriendCount {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["New Structure","Fixed issues that will occure once the avatar/name changes from canary will hit stable/ptb"]]
+			"fixed":[["New Structure","Fixed issues that will occur once the avatar/name changes from canary will hit stable/ptb"]]
 		};
 		
 		this.patchModules = {

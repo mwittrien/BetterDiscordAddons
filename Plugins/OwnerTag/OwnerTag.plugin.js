@@ -3,7 +3,7 @@
 class OwnerTag {
 	getName () {return "OwnerTag";}
 
-	getVersion () {return "1.1.3";}
+	getVersion () {return "1.1.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,12 +11,14 @@ class OwnerTag {
 
 	initConstructor () {
 		this.changelog = {
-			"improved":[["Crown","Changed the crown to the new crown icon"]]
+			"fixed":[["New Structure","Fixed issues that will occur once the avatar/name changes from canary will hit stable/ptb"]]
 		};
 		
 		this.patchModules = {
-			"NameTag":["componentDidMount","componentDidUpdate"],
+			"ChannelMember":["componentDidMount","componentDidUpdate"],
 			"MessageUsername":["componentDidMount","componentDidUpdate"],
+			"UserPopout":["componentDidMount","componentDidUpdate"],
+			"UserProfile":["componentDidMount","componentDidUpdate"],
 			"StandardSidebarView":"componentWillUnmount"
 		};
 
@@ -142,18 +144,16 @@ class OwnerTag {
 		this.SettingsUpdated = true;
 	}
 
-	processNameTag (instance, wrapper) {
-		let container = null;
-		if (!instance.props || !wrapper.classList) return;
-		else if (BDFDB.containsClass(wrapper, BDFDB.disCN.membernametag) && BDFDB.getData("addInMemberList", this, "settings")) {
-			this.addOwnerTag(instance.props.user, null, wrapper, "list", BDFDB.disCN.bottagnametag + (instance.props.botClass ? (" " + instance.props.botClass) : ""), container);
-		}
-		else if ((container = BDFDB.getParentEle(BDFDB.dotCN.userpopout, wrapper)) != null && BDFDB.getData("addInUserPopout", this, "settings")) {
-			this.addOwnerTag(instance.props.user, null, wrapper, "popout", BDFDB.disCN.bottagnametag + (instance.props.botClass ? (" " + instance.props.botClass) : ""), container);
-		}
-		else if ((container = BDFDB.getParentEle(BDFDB.dotCN.userprofile, wrapper)) != null && BDFDB.getData("addInUserProfil", this, "settings")) {
-			this.addOwnerTag(instance.props.user, null, wrapper, "profile", BDFDB.disCN.bottagnametag + (instance.props.botClass ? (" " + instance.props.botClass) : ""), container);
-		}
+	processChannelMember (instance, wrapper) {
+		if (instance.props && BDFDB.getData("addInMemberList", this, "settings")) this.addOwnerTag(instance.props.user, null, wrapper.querySelector(BDFDB.dotCN.nametag), "list", BDFDB.disCN.bottagnametag, null);
+	}
+	
+	processUserPopout (instance, wrapper) {
+		if (instance.props && BDFDB.getData("addInUserPopout", this, "settings")) this.addOwnerTag(instance.props.user, null, wrapper.querySelector(BDFDB.dotCN.nametag), "popout", BDFDB.disCN.bottagnametag, wrapper);
+	}
+	
+	processUserProfile (instance, wrapper) {
+		if (instance.props && BDFDB.getData("addInUserProfil", this, "settings")) this.addOwnerTag(instance.props.user, null, wrapper.querySelector(BDFDB.dotCN.nametag), "profile", BDFDB.disCN.bottagnametag, wrapper);
 	}
 
 	processMessageUsername (instance, wrapper, methodnames) {
@@ -162,7 +162,7 @@ class OwnerTag {
 			let username = wrapper.querySelector(BDFDB.dotCN.messageusername);
 			if (username) {
 				let messagegroup = BDFDB.getParentEle(BDFDB.dotCN.messagegroup, wrapper);
-				this.addOwnerTag(message.author, message.channel_id, username.parentElement, "chat", BDFDB.disCN.bottagmessage + " " + (BDFDB.containsClass(messagegroup, BDFDB.disCN.messagegroupcozy) ? BDFDB.disCN.bottagmessagecozy : BDFDB.disCN.bottagmessagecompact), null);
+				this.addOwnerTag(message.author, message.channel_id, username.parentElement, "chat", BDFDB.containsClass(messagegroup, BDFDB.disCN.messagegroupcozy) ? BDFDB.disCN.bottagmessagecozy : BDFDB.disCN.bottagmessagecompact, null);
 			}
 		}
 	}

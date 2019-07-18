@@ -3,7 +3,7 @@
 class RemoveNicknames {
 	getName () {return "RemoveNicknames";}
 
-	getVersion () {return "1.2.2";}
+	getVersion () {return "1.2.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,13 +11,13 @@ class RemoveNicknames {
 
 	initConstructor () {
 		this.changelog = {
-			"improved":[["Normalized Classes","Normalized Classes no longer make the plugin be rendered useless in the member list"]]
+			"fixed":[["New Structure","Fixed issues that will occur once the avatar/name changes from canary will hit stable/ptb"]]
 		};
 		
 		this.patchModules = {
-			"NameTag":"componentDidMount",
-			"TypingUsers":"componentDidUpdate",
+			"ChannelMember":"componentDidMount",
 			"MessageUsername":"componentDidMount",
+			"TypingUsers":"componentDidUpdate",
 			"Clickable":"componentDidMount",
 			"StandardSidebarView":"componentWillUnmount"
 		};
@@ -126,10 +126,11 @@ class RemoveNicknames {
 		return settings.addNickname ? (settings.swapPositions ? (member.nick + " (" + username + ")") : (username + " (" + member.nick + ")")) : username;
 	}
 
-	processNameTag (instance, wrapper) {
-		if (wrapper && !BDFDB.getParentEle(BDFDB.dotCNC.userprofile + BDFDB.dotCN.userpopout, wrapper)) {
-			let username = wrapper.parentElement.querySelector("." + instance.props.usernameClass.replace(/ /g, "."));
-			if (username) BDFDB.setInnerText(username, this.getNewName(instance.props.user));
+	processChannelMember (instance, wrapper) {
+		let user = BDFDB.getReactValue(instance, "props.user");
+		if (user) {
+			let username = wrapper.querySelector(BDFDB.dotCN.memberusername);
+			if (username) BDFDB.setInnerText(username, this.getNewName(user));
 		}
 	}
 

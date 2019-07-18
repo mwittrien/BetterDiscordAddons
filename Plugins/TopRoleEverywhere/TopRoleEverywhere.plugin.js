@@ -3,15 +3,19 @@
 class TopRoleEverywhere {
 	getName () {return "TopRoleEverywhere";}
 
-	getVersion () {return "2.7.9";}
+	getVersion () {return "2.8.0";}
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Adds the highest role of a user as a tag.";}
 
 	initConstructor () {
+		this.changelog = {
+			"fixed":[["New Structure","Fixed issues that will occur once the avatar/name changes from canary will hit stable/ptb"]]
+		};
+		
 		this.patchModules = {
-			"NameTag":"componentDidMount",
+			"ChannelMember":"componentDidMount",
 			"MessageUsername":"componentDidMount",
 			"StandardSidebarView":"componentWillUnmount"
 		};
@@ -132,8 +136,8 @@ class TopRoleEverywhere {
 
 	// begin of own functions
 
-	processNameTag (instance, wrapper) {
-		if (instance.props && BDFDB.containsClass(wrapper, BDFDB.disCN.membernametag) && BDFDB.getData("showInMemberList", this, "settings")) {
+	processChannelMember (instance, wrapper) {
+		if (instance.props && BDFDB.getData("showInMemberList", this, "settings")) {
 			this.addRoleTag(instance.props.user, wrapper.querySelector(BDFDB.dotCN.memberusername), "list");
 		}
 	}

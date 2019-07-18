@@ -3,7 +3,7 @@
 class BadgesEverywhere {
 	getName () {return "BadgesEverywhere";} 
 
-	getVersion () {return "1.3.4";}
+	getVersion () {return "1.3.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,12 +11,13 @@ class BadgesEverywhere {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Showing at the bottom","Badges are now properlly at the bottom even when a custom status is set"]]
+			"fixed":[["New Structure","Fixed issues that will occur once the avatar/name changes from canary will hit stable/ptb"]]
 		};
 		
 		this.patchModules = {
-			"NameTag":"componentDidMount",
+			"ChannelMember":"componentDidMount",
 			"MessageUsername":"componentDidMount",
+			"UserPopout":"componentDidMount",
 			"StandardSidebarView":"componentWillUnmount"
 		};
 
@@ -229,14 +230,8 @@ class BadgesEverywhere {
 
 	// begin of own functions
 
-	processNameTag (instance, wrapper) { 
-		if (!wrapper.classList || !instance || !instance.props) return;
-		else if (BDFDB.containsClass(wrapper, BDFDB.disCN.membernametag) && BDFDB.getData("showInMemberList", this, "settings")) {
-			this.addBadges(instance.props.user, wrapper, "list");
-		}
-		else if (BDFDB.containsClass(wrapper, BDFDB.disCN.userpopoutheadertag) && BDFDB.getData("showInPopout", this, "settings")) {
-			this.addBadges(instance.props.user, BDFDB.getParentEle(BDFDB.dotCN.userpopoutheadertext, wrapper), "popout");
-		}
+	processChannelMember (instance, wrapper) {
+		if (instance.props && BDFDB.getData("showInMemberList", this, "settings")) this.addBadges(instance.props.user, wrapper.querySelector(BDFDB.dotCN.nametag), "list");
 	}
 
 	processMessageUsername (instance, wrapper) {
@@ -245,6 +240,10 @@ class BadgesEverywhere {
 			let username = wrapper.querySelector(BDFDB.dotCN.messageusername);
 			if (username && BDFDB.getData("showInChat", this, "settings")) this.addBadges(message.author, wrapper, "chat");
 		}
+	}
+	
+	processUserPopout (instance, wrapper) {
+		if (instance.props && BDFDB.getData("showInPopout", this, "settings")) this.addBadges(instance.props.user, wrapper.querySelector(BDFDB.dotCN.userpopoutheadertext), "popout");
 	}
 
 	processStandardSidebarView (instance, wrapper) {
