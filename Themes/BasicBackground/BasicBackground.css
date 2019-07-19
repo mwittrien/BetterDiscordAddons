@@ -154,6 +154,7 @@
 .card-3Qj_Yx,
 .container-1giJp5,
 .container-3baos1,
+.panel-VoWSbJ,
 .listeningAlong-2UPsxf,
 .reactors-Blmlhw {
 	background: rgba(var(--vtransparencycolor),var(--vtransparencyalpha)) !important;
@@ -393,6 +394,7 @@
 .messageGroupBlocked-3wrQQX,
 .input-cIJ7To:not(:focus),
 .container-1giJp5,
+.activityPanel-28dQGo,
 .cardPrimaryEditable-3KtE4g {
 	border-color: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 3)) !important;
 }
