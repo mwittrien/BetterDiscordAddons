@@ -3,7 +3,7 @@
 class GoogleTranslateOption {
 	getName () {return "GoogleTranslateOption";}
 
-	getVersion () {return "1.7.0";} 
+	getVersion () {return "1.7.1";} 
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class GoogleTranslateOption {
 
 	initConstructor () {
 		this.changelog = {
-			"improved":[["API rate limit","Now warns you after you got rate limited by Google for their Translate-API if you used the plugin too frequently. This is not something I can fix"]]
+			"improved":[["Classname","Classname fix"]]
 		};
 		
 		this.labels = {};
@@ -399,7 +399,7 @@ class GoogleTranslateOption {
 	}
 
 	processMessageOptionPopout (instance, wrapper) {
-		if (instance.props.message && instance.props.channel && instance._reactInternalFiber.memoizedProps.target && !wrapper.querySelector(".personalpin-itembtn")) {
+		if (instance.props.message && instance.props.channel && instance._reactInternalFiber.memoizedProps.target && !wrapper.querySelector(".googletranslateoption-itembtn")) {
 			let {messagediv, pos} = this.getMessageAndPos(instance._reactInternalFiber.memoizedProps.target);
 			if (!messagediv || pos == -1) return;
 			let popoutTranslateEntry = BDFDB.htmlToElement(BDFDB.containsClass(messagediv, "translated") ? this.popoutUntranslateEntryMarkup : this.popoutTranslateEntryMarkup);
