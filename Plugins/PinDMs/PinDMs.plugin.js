@@ -805,44 +805,6 @@ class PinDMs {
 		});
 	}
 
-	addHoverBehaviour2 (div) {
-		/* based on stuff from Zerebos */
-		let divinner = div.querySelector(BDFDB.dotCN.guildinner);
-		let divicon = div.querySelector(BDFDB.dotCN.dmguildavatarinner);
-		let backgroundColor = new this.Animations.Value(0);
-		backgroundColor
-			.interpolate({
-				inputRange: [0, 1],
-				outputRange: [this.DiscordConstants.Colors.CHANNELS_GREY, this.DiscordConstants.Colors.BRAND_PURPLE]
-			})
-			.addListener((value) => {
-				if (BDFDB.containsClass(divicon, BDFDB.disCN.avatarnoicon)) {
-					let comp = BDFDB.colorCONVERT(value.value, "RGBCOMP");
-					if (comp) divinner.style.setProperty("background-color", `rgb(${comp[0]}, ${comp[1]}, ${comp[2]})`);
-				}
-			});
-
-		let borderRadius = new this.Animations.Value(0);
-		borderRadius
-			.interpolate({
-				inputRange: [0, 1],
-				outputRange: [25, 15]
-			})
-			.addListener((value) => {
-				divinner.style.setProperty("border-radius", `${value.value}px`);
-			});
-
-		let animate = (v) => {
-			this.Animations.parallel([
-				this.Animations.timing(backgroundColor, {toValue: v, duration: 200}),
-				this.Animations.spring(borderRadius, {toValue: v, friction: 3})
-			]).start();
-		};
-
-		div.addEventListener("mouseenter", () => {animate(1);})
-		div.addEventListener("mouseleave", () => {if (!BDFDB.containsClass(div, BDFDB.disCN.guildselected)) animate(0);});
-	}
-
 	setLabelsByLanguage () {
 		switch (BDFDB.getDiscordLanguage().id) {
 			case "hr":		//croatian

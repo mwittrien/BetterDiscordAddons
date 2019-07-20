@@ -42,7 +42,7 @@ class EditUsers {
 			"StandardSidebarView":"componentWillUnmount"
 		};
 
-		this.avatarselector = BDFDB.dotCNC.guildicon + BDFDB.dotCNC.avatar + BDFDB.dotCNC.avatarinner + BDFDB.dotCNC.avatarimage + BDFDB.dotCNC.callavatarwrapper + BDFDB.dotCNC.voiceavatarcontainer + "[class*='avatar-']:not(.avatar-28BJzY)";
+		this.avatarselector = BDFDB.dotCNC.guildicon + BDFDB.dotCNC.avatar + BDFDB.dotCNC.callavatarwrapper + BDFDB.dotCN.voiceavatarcontainer;
 
 		this.css = `
 			${BDFDB.dotCNS.message + BDFDB.dotCN.messageheadercozy} {
