@@ -3,7 +3,7 @@
 class BadgesEverywhere {
 	getName () {return "BadgesEverywhere";} 
 
-	getVersion () {return "1.3.5";}
+	getVersion () {return "1.3.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -281,7 +281,7 @@ class BadgesEverywhere {
 		let indicators = BDFDB.getAllData(this, "indicators");
 		let settings = BDFDB.getAllData(this, "settings");
 		let header = BDFDB.getParentEle(BDFDB.dotCN.userpopoutheader, wrapper);
-		let badgewrapper = BDFDB.htmlToElement(`<span class="BE-badges BE-badges-${type} ${!settings.useColoredVersion || (header && !BDFDB.containsClass(header, BDFDB.disCN.userpopoutheadernormal)) ? BDFDB.disCN.userprofiletopsectionplaying : BDFDB.disCN.userprofiletopsectionnormal}" style="all: unset !important;"></span>`);
+		let badgewrapper = BDFDB.htmlToElement(`<span class="BE-badges BE-badges-${type} ${!settings.useColoredVersion || (header && !BDFDB.containsClass(header, BDFDB.disCN.userpopoutheadernormal)) ? BDFDB.disCN.userprofiletopsectionplaying : BDFDB.disCN.userprofiletopsectionnormal}" style="all: unset !important; display: flex !important; flex-direction: row !important;"></span>`);
 		for (let flag in this.defaults.badges) {
 			if ((this.loadedusers[info.id].flags | flag) == this.loadedusers[info.id].flags && badges[flag]) {
 				let badge = BDFDB.htmlToElement(`<div class="BE-badge BE-badge-${this.defaults.badges[flag].id} BE-badge-${type} ${this.BadgeClasses[this.defaults.badges[flag].selector + (flag == this.boostflag ? this.GuildBoostUtils.getUserLevel(this.loadedusers[info.id].premium_guild_since) : "")]}"></div>`);
