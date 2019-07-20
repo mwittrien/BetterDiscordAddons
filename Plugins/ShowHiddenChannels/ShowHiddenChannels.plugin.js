@@ -3,7 +3,7 @@
 class ShowHiddenChannels {
 	getName () {return "ShowHiddenChannels";}
 
-	getVersion () {return "2.5.4";}
+	getVersion () {return "2.5.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ShowHiddenChannels {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Padding","Fixed some padding issues"]]
+			"fixed":[["New Structure","Fixed issues that will occur once the avatar/name changes from canary will hit stable/ptb"]]
 		};
 		
 		this.patchModules = {
@@ -397,7 +397,7 @@ class ShowHiddenChannels {
 					let member = this.MemberUtils.getMember(guild.id, voicestate.userId);
 					if (user && member) {
 						let color = member.colorString ? BDFDB.colorCONVERT(member.colorString, "RGBCOMP") : [255,255,255];
-						htmlString += `<div class="${BDFDB.disCNS.userpopoutrole + BDFDB.disCNS.flex + BDFDB.disCNS.aligncenter} SHC-voiceuser" style="padding-left: 0; border-color: rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.6);"><div class="${BDFDB.disCNS.avatarimage + BDFDB.disCN.avatarxsmall}" style="margin-right: 4px; z-index: 1003; background-image: url(${BDFDB.getUserAvatar(user.id)});"></div><div class="${BDFDB.disCN.userpopoutrolecircle}" style="background-color: rgb(${color[0]}, ${color[1]}, ${color[2]});"></div><div class="${BDFDB.disCNS.userpopoutrolename}">${BDFDB.encodeToHTML(member.nick || user.username)}</div></div>`;
+						htmlString += `<div class="${BDFDB.disCNS.userpopoutrole + BDFDB.disCNS.flex + BDFDB.disCNS.aligncenter} SHC-voiceuser" style="padding-left: 0; border-color: rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.6);"><div class="${BDFDB.disCN.avatarwrapper}" role="img" aria-label="${user.username}" aria-hidden="false" style="width: 22px; height: 18px; z-index: 1003;"><svg width="18" height="18" viewBox="0 0 18 18" class="${BDFDB.disCN.avatarmask}" aria-hidden="true"><foreignObject x="0" y="0" width="18" height="18" mask="url(#svg-mask-avatar-default)"><img src="${BDFDB.getUserAvatar(user.id)}" alt=" " class="${BDFDB.disCN.avatar}" aria-hidden="true"></foreignObject></svg></div><div class="${BDFDB.disCN.userpopoutrolecircle}" style="background-color: rgb(${color[0]}, ${color[1]}, ${color[2]});"></div><div class="${BDFDB.disCNS.userpopoutrolename}">${BDFDB.encodeToHTML(member.nick || user.username)}</div></div>`;
 					}
 				}
 				htmlString += `</div>`;
