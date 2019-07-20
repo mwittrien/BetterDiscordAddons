@@ -1,6 +1,6 @@
 //META{"name":"EditUsers","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditUsers","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/EditUsers/EditUsers.plugin.js"}*//
 
-class EditUsers {
+class EditUsers { 
 	getName () {return "EditUsers";}
 
 	getVersion () {return "3.4.6";}
