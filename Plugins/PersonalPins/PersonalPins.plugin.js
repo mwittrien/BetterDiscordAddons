@@ -5,13 +5,13 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.7.9";} 
+	getVersion () {return "1.8.0";} 
 
 	getAuthor () {return "DevilBro";}
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Switching","Fixed the issue where you had to click the button twice after switching servers"]]
+			"fixed":[["New Structure","Fixed issues that will occur once the avatar/name changes from canary will hit stable/ptb"]]
 		};
 		
 		this.labels = {};
@@ -114,8 +114,14 @@ class PersonalPins {
 					<div class="${BDFDB.disCNS.messagespopoutcontainercozybounded + BDFDB.disCNS.messagegroup + BDFDB.disCN.messagegroupcozy}">
 						<div class="${BDFDB.disCNS.messagespopoutmessagegroupcozy + BDFDB.disCNS.messagecozy + BDFDB.disCN.message}" aria-disabled="true">
 							<div class="${BDFDB.disCN.messageheadercozy}">
-								<div tabindex="-1" aria-hidden="true" class="${BDFDB.disCNS.avatarwrapper + BDFDB.disCNS.avatarlarge + BDFDB.disCN.avatar}" role="button">
-									<div class="${BDFDB.disCNS.avatarimage + BDFDB.disCN.avatarlarge}"></div>
+								<div class="${BDFDB.disCN.messageavatar}" aria-hidden="true">
+									<div class="${BDFDB.disCN.avatarwrapper}" role="img" aria-hidden="true" style="width: 40px; height: 40px;">
+										<svg width="49" height="40" viewBox="0 0 49 40" class="${BDFDB.disCN.avatarmask}" aria-hidden="true">
+											<foreignObject x="0" y="0" width="40" height="40" mask="url(#svg-mask-avatar-default)">
+												<img src="" alt=" " class="${BDFDB.disCN.avatar}" aria-hidden="true">
+											</foreignObject>
+										</svg>
+									</div>
 								</div>
 								<h2 class="${BDFDB.disCN.messageheadercozymeta}">
 									<span class="">
@@ -421,8 +427,8 @@ class PersonalPins {
 		}
 		let guildname = messagedivider.querySelector(BDFDB.dotCN.messagespopoutguildname);
 		guildname.innerText = server.name || noteData.guild_name;
-		let avatar = message.querySelector(BDFDB.dotCN.avatarimage);
-		avatar.style.setProperty("background-image", `url(${user.id ? BDFDB.getUserAvatar(user.id) : noteData.avatar})`);
+		let avatar = message.querySelector(BDFDB.dotCN.avatar);
+		avatar.setAttribute("src", `${user.id ? BDFDB.getUserAvatar(user.id) : noteData.avatar}`);
 		let username = message.querySelector(BDFDB.dotCN.messageusername);
 		username.innerText = user.username || noteData.author_name;
 		username.style.setProperty("color", member.colorString || noteData.color);
