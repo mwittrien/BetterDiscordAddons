@@ -12,7 +12,7 @@
 	width: 22px !important;
 	height: 22px !important;
 	left: 0px !important;
-	bottom: -1px !important;
+	bottom: -2px !important;
 	pointer-events: none !important;
 }
 .root-SR8cQa .topSectionPlaying-1J5E4n .wrapper-3t9DeA[user_by_BDFDB="278543574059057154"]:after,
@@ -27,10 +27,10 @@
 	background: #F6F6F7 !important;
 	position: absolute !important;
     z-index: 1002 !important;
-	width: 33px !important;
-	height: 33px !important;
-	left: -5px !important;
-	bottom: -8px !important;
+	width: 37px !important;
+	height: 37px !important;
+	left: -7px !important;
+	bottom: -11px !important;
 	pointer-events: none !important;
 }
 .theme-dark .root-SR8cQa .wrapper-3t9DeA[user_by_BDFDB="278543574059057154"]:before,
@@ -102,9 +102,9 @@
 	-webkit-mask: var(--themedevbadgebackdrop) center/cover no-repeat !important;
 	background: #FFFFFF !important;
 	position: absolute !important;
-	width: 16px !important;
-	height: 16px !important;
-	left: -2px !important;
+	width: 20px !important;
+	height: 20px !important;
+	left: -3.5px !important;
 	bottom: -5px !important;
 	z-index: 1 !important;
 }
@@ -116,9 +116,9 @@
 	-webkit-mask: var(--themedevbadge) center/cover no-repeat !important;
 	background: #7289DA !important;
 	position: absolute !important;
-	width: 12px !important;
-	height: 12px !important;
-	left: -1px !important;
+	width: 14px !important;
+	height: 14px !important;
+	left: -2px !important;
 	bottom: -3px !important;
 	z-index: 2 !important;
 }
