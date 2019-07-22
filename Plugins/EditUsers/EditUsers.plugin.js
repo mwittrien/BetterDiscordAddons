@@ -3,7 +3,7 @@
 class EditUsers {
 	getName () {return "EditUsers";}
 
-	getVersion () {return "3.4.6";}
+	getVersion () {return "3.4.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,14 +11,14 @@ class EditUsers {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["New Structure","Fixed issues that will occur once the avatar/name changes from canary will hit stable/ptb"]]
+			"fixed":[["Typing","Fixed the issue where changes would disappear when a user is typing"],["New Structure","Fixed issues that will occur once the avatar/name changes from canary will hit stable/ptb"]]
 		};
 		
 		this.labels = {}; 
 
 		this.patchModules = {
 			"ChannelTextArea":"componentDidMount",
-			"ChannelMember":"componentDidMount",
+			"ChannelMember":["componentDidMount","componentDidUpdate"],
 			"UserPopout":["componentDidMount","componentDidUpdate"],
 			"UserProfile":["componentDidMount","componentDidUpdate"],
 			"FriendRow":"componentDidMount",
@@ -29,7 +29,7 @@ class EditUsers {
 			"MemberCard":"componentDidMount",
 			"InvitationCard":"componentDidMount",
 			"TypingUsers":"componentDidUpdate",
-			"MessageUsername":"componentDidMount",
+			"MessageUsername":["componentDidMount","componentDidUpdate"],
 			"DirectMessage":"componentDidMount",
 			"CallAvatar":"componentDidMount",
 			"VideoTile":"componentDidMount",
