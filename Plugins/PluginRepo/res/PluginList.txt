@@ -46,6 +46,7 @@ https://raw.githubusercontent.com/Jiiks/BetterDiscordApp/master/Plugins/clock.pl
 https://raw.githubusercontent.com/Jiiks/BetterDiscordApp/master/Plugins/dblClickEdit.plugin.js
 https://raw.githubusercontent.com/kosshishub/BetterCustomCSS-BD-plugin/master/BetterCustomCSS.plugin.js
 https://raw.githubusercontent.com/l0c4lh057/BetterDiscordStuff/master/Plugins/Minespoiler/Minespoiler.plugin.js
+https://raw.githubusercontent.com/l0c4lh057/BetterDiscordStuff/master/Plugins/TypingIndicator/TypingIndicator.plugin.js
 https://raw.githubusercontent.com/leogx9r/DiscordCrypt/master/build/discordCrypt.plugin.js
 https://raw.githubusercontent.com/mashirochan/Mashiro-chan/master/Plugins/AutoServerSelect/AutoServerSelect.plugin.js
 https://raw.githubusercontent.com/mashirochan/Mashiro-chan/master/Plugins/CheckAllPluginsButton/CheckAllPluginsButton.plugin.js
@@ -96,6 +97,7 @@ https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/C
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ChatAliases/ChatAliases.plugin.js
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ChatFilter/ChatFilter.plugin.js
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/CompleteTimestamps/CompleteTimestamps.plugin.js
+https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/CopyRawMessage/CopyRawMessage.plugin.js
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/CreationDate/CreationDate.plugin.js
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/DisplayServersAsChannels/DisplayServersAsChannels.plugin.js
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/EditChannels/EditChannels.plugin.js
