@@ -3,7 +3,7 @@
 class BadgesEverywhere {
 	getName () {return "BadgesEverywhere";} 
 
-	getVersion () {return "1.3.6";}
+	getVersion () {return "1.3.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class BadgesEverywhere {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["New Structure","Fixed issues that will occur once the avatar/name changes from canary will hit stable/ptb"]]
+			"fixed":[["New Structure","Fixed issues that will occur once the avatar/name changes from canary will hit stable/ptb","Fixed compatibility with ChatUserIDsRedux"]]
 		};
 		
 		this.patchModules = {
@@ -22,6 +22,10 @@ class BadgesEverywhere {
 		};
 
 		this.css = `
+			${BDFDB.dotCN.message + BDFDB.dotCN.messageheadercozy} ${BDFDB.dotCN.messageheadercozymeta} {
+				display: flex;
+				position: relative;
+			}
 			${BDFDB.dotCNS.message + BDFDB.dotCN.messageheadercozy} {
 				padding-top: 0;
 			}
@@ -277,6 +281,7 @@ class BadgesEverywhere {
 
 	addToWrapper (info, wrapper, type) {
 		BDFDB.removeEles(wrapper.querySelectorAll(".BE-badges"));
+		if (wrapper.getAttribute("class") == "") wrapper = wrapper.parentElement;
 		let badges = BDFDB.getAllData(this, "badges");
 		let indicators = BDFDB.getAllData(this, "indicators");
 		let settings = BDFDB.getAllData(this, "settings");
@@ -311,7 +316,13 @@ class BadgesEverywhere {
 				}
 			}
 			else {
-				wrapper.insertBefore(badgewrapper, wrapper.querySelector(".owner-tag,.TRE-tag,svg[name=MobileDevice]"));
+				if (wrapper.localName == "h2") {
+					wrapper.setAttribute("style", "all: unset !important;");
+					if (wrapper.className.includes("Compact")) wrapper.appendChild(badgewrapper);
+					else wrapper.insertBefore(badgewrapper, wrapper.querySelector("time"));
+				} else {
+					wrapper.insertBefore(badgewrapper, wrapper.querySelector(".owner-tag,.TRE-tag,svg[name=MobileDevice]"));
+				}
 			}
 		}
 	}
