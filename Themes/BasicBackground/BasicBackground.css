@@ -326,6 +326,20 @@
 	background: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 3)) !important;
 }
 
+.expandedFolderBackground-2sPsd- {
+	border-radius: 15px !important;
+}
+.expandedFolderBackground-2sPsd-.collapsed-1GMuSb {
+	background: transparent !important;
+}
+.expandedFolderBackground-2sPsd-:not(.collapsed-1GMuSb) {
+	background: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 2)) !important;
+}
+.expandedFolderBackground-2sPsd-:not(.collapsed-1GMuSb).selected-2vZ0oV,
+.folder-21wGz3 {
+	background: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 3)) !important;
+}
+
 .twitchSectionPlayButton-2RamGG {
 	background-image: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M12.3333 10.002V22.002L22.3333 16.002L12.3333 10.002Z" fill="rgb(185,187,190)"/></svg>') !important;
 	background-color: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 3)) !important;
