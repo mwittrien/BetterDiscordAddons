@@ -157,6 +157,9 @@ body.foldercontentopened .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
 .wrapper-1Rf91z .wrapper-21YSNc .expandedGuilds-1JMD4M .listItem-2P_4kh {
 	margin: 6px 0 !important;
 }
+.wrapper-1Rf91z .wrapper-21YSNc .expandedGuilds-1JMD4M .listItem-2P_4kh:last-child {
+	margin-bottom: 0;
+}
 .wrapper-1Rf91z .expandedGuilds-1JMD4M {
 	margin-left: -1px !important;
 	padding-left: 1px !important;

@@ -326,18 +326,24 @@
 	background: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 3)) !important;
 }
 
+.wrapper-21YSNc {
+	margin-bottom: 8px !important;
+}
 .expandedFolderBackground-2sPsd- {
-	border-radius: 15px !important;
-}
-.expandedFolderBackground-2sPsd-.collapsed-1GMuSb {
-	background: transparent !important;
-}
-.expandedFolderBackground-2sPsd-:not(.collapsed-1GMuSb) {
 	background: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 2)) !important;
+	border-radius: 15px !important;
+	top: 0 !important;
+	bottom: 0 !important;
 }
-.expandedFolderBackground-2sPsd-:not(.collapsed-1GMuSb).selected-2vZ0oV,
+.expandedFolderBackground-2sPsd-:not(.collapsed-1GMuSb).hover-2ji_A7,
 .folder-21wGz3 {
 	background: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 3)) !important;
+}
+.expandedGuilds-1JMD4M {
+	height: auto !important;
+}
+.expandedGuilds-1JMD4M .listItem-2P_4kh:last-child {
+	margin-bottom: 0 !important;
 }
 
 .twitchSectionPlayButton-2RamGG {
