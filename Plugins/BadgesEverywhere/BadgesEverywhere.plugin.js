@@ -3,7 +3,7 @@
 class BadgesEverywhere {
 	getName () {return "BadgesEverywhere";} 
 
-	getVersion () {return "1.3.6";}
+	getVersion () {return "1.3.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class BadgesEverywhere {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["New Structure","Fixed issues that will occur once the avatar/name changes from canary will hit stable/ptb"]]
+			"fixed":[["ChatIDRedux","Fixed an issue with ChatIDRedux"]]
 		};
 		
 		this.patchModules = {
@@ -25,7 +25,7 @@ class BadgesEverywhere {
 			${BDFDB.dotCNS.message + BDFDB.dotCN.messageheadercozy} {
 				padding-top: 0;
 			}
-			${BDFDB.dotCN.messageheadercozymeta} > span:first-child {
+			${BDFDB.dotCN.messageheadercozymeta} > span[class=""] {
 				display: inline-flex;
 			}
 			${BDFDB.dotCN.userpopoutcustomstatus}:not(:last-child) {
