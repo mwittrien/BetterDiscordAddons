@@ -32,8 +32,7 @@ class BadgesEverywhere {
 				display: inline-flex;
 				align-items: center;
 			}
-			${BDFDB.dotCN.messageheadercompact} > span.popout-open .username-_4ZSMR,
-			${BDFDB.dotCN.messageheadercompact} > span[class=""] .username-_4ZSMR {
+			${BDFDB.dotCNS.messageheadercompact + BDFDB.dotCN.messageusername} {
 				text-indent: 0px;
 			}
 			${BDFDB.dotCN.userpopoutcustomstatus}:not(:last-child) {
