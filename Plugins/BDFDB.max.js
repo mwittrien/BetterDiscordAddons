@@ -4400,6 +4400,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		switchvalue: ['Switch', 'value'],
 		switchvaluechecked: ['Switch', 'valueChecked'],
 		switchvalueunchecked: ['Switch', 'valueUnchecked'],
+		systempad: ['Scroller', 'systemPad'],
 		tabbar: ['UserProfile', 'tabBar'],
 		tabbarcontainer: ['UserProfile', 'tabBarContainer'],
 		tabbarheader: ['RecentMentions', 'tabBar'],
