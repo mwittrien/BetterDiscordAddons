@@ -4967,7 +4967,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		#pluginNotice #outdatedPlugins span:hover {
 			text-decoration: underline;
 		}
-		${BDFDB.dotCNC.tooltips + BDFDB.dotCN.tooltipinner} {
+		${BDFDB.dotCN.tooltipinner} {
 			z-index: 100000000;
 		}
 		${BDFDB.dotCN.tooltipinner}.tooltip-customcolor ${BDFDB.dotCN.tooltippointer} {
