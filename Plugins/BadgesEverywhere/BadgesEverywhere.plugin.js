@@ -3,7 +3,7 @@
 class BadgesEverywhere {
 	getName () {return "BadgesEverywhere";} 
 
-	getVersion () {return "1.3.8";}
+	getVersion () {return "1.3.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -45,7 +45,7 @@ class BadgesEverywhere {
 				margin: 0 2px !important;
 			}
 			.BE-badge.BE-badge-list:not(.BE-badge-CurrentGuildBoost) {
-				top: 1px !important;
+				top: 0px !important;
 			}
 			.BE-badge.BE-badge-popout:not(.BE-badge-CurrentGuildBoost) {
 				top: 3px !important;
