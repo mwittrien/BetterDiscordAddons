@@ -3,7 +3,7 @@
 class BadgesEverywhere {
 	getName () {return "BadgesEverywhere";} 
 
-	getVersion () {return "1.3.9";}
+	getVersion () {return "1.4.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -25,9 +25,16 @@ class BadgesEverywhere {
 			${BDFDB.dotCNS.message + BDFDB.dotCN.messageheadercozy} {
 				padding-top: 0;
 			}
+			${BDFDB.dotCN.messageheadercompact} > span.popout-open,
+			${BDFDB.dotCN.messageheadercompact} > span[class=""],
 			${BDFDB.dotCN.messageheadercozymeta} > span.popout-open,
 			${BDFDB.dotCN.messageheadercozymeta} > span[class=""] {
 				display: inline-flex;
+				align-items: center;
+			}
+			${BDFDB.dotCN.messageheadercompact} > span.popout-open .username-_4ZSMR,
+			${BDFDB.dotCN.messageheadercompact} > span[class=""] .username-_4ZSMR {
+				text-indent: 0px;
 			}
 			${BDFDB.dotCN.userpopoutcustomstatus}:not(:last-child) {
 				margin-top: 4px;
@@ -44,23 +51,20 @@ class BadgesEverywhere {
 				height: 17px !important;
 				margin: 0 2px !important;
 			}
-			.BE-badge.BE-badge-list:not(.BE-badge-CurrentGuildBoost) {
-				top: 0px !important;
-			}
 			.BE-badge.BE-badge-popout:not(.BE-badge-CurrentGuildBoost) {
 				top: 3px !important;
 			}
-			${BDFDB.dotCN.messageheadercompact} .BE-badge.BE-badge-chat:not(.BE-badge-CurrentGuildBoost) {
-				top: 3px !important;
+			.BE-badge.BE-badge-popout.BE-badge-CurrentGuildBoost {
+				top: 1px !important;
 			}
 			.BE-badge.BE-badge-list.BE-badge-CurrentGuildBoost {
 				top: -2px !important;
 			}
 			.BE-badge.BE-badge-chat.BE-badge-CurrentGuildBoost {
-				top: -3px !important;
+				top: -1px !important;
 			}
 			${BDFDB.dotCN.messageheadercompact} .BE-badge.BE-badge-chat.BE-badge-CurrentGuildBoost {
-				top: 0px !important;
+				top: -2px !important;
 			}
 			.BE-badge:not(.BE-badge-settings):first-of-type {
 				margin-left: 5px !important;
