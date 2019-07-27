@@ -3,7 +3,7 @@
 class TopRoleEverywhere {
 	getName () {return "TopRoleEverywhere";}
 
-	getVersion () {return "2.8.0";}
+	getVersion () {return "2.8.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class TopRoleEverywhere {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["New Structure","Fixed issues that will occur once the avatar/name changes from canary will hit stable/ptb"]]
+			"fixed":[["Overflow","Long role names now properly overflow with overflow ellipsis"]]
 		};
 		
 		this.patchModules = {
@@ -24,26 +24,29 @@ class TopRoleEverywhere {
 			.TRE-tag {
 				border-radius: 3px;
 				box-sizing: border-box;
-				display: inline-block;
+				display: block;
 				flex-shrink: 0;
 				font-size: 10px;
 				font-weight: 500;
 				height: 15px;
 				line-height: 13px;
 				margin-left: 6px;
-				overflow: hidden;
 				padding: 1px 2px;
-				text-overflow: ellipsis;
-				text-transform: uppercase;
 				text-indent: 0px !important;
 				vertical-align: top;
+				white-space: nowrap;
+			}
+			.TRE-tag .role-inner {
+				overflow: hidden;
+				text-overflow: ellipsis;
+				text-transform: uppercase;
 			}
 			${BDFDB.dotCN.messagegroupcompact} .TRE-tag {
 				margin-left: 2px;
 				margin-right: 6px;
 			}`;
 
-		this.tagMarkup = `<span class="TRE-tag"><span class="role-inner"></span></span>`;
+		this.tagMarkup = `<div class="TRE-tag"><div class="role-inner"></div></div>`;
 
 		this.defaults = {
 			settings: {
