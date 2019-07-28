@@ -55,6 +55,9 @@ class EditUsers {
 				display: inline-flex;
 				align-items: center;
 			}
+			${BDFDB.dotCNS.messageheadercompact + BDFDB.dotCN.messageusername} {
+				text-indent: 0px;
+			}
 			${BDFDB.dotCN.bottag} {
 				line-height: 13px;
 				height: 13px;

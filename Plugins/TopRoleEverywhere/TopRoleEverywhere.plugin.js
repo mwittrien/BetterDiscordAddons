@@ -31,6 +31,9 @@ class TopRoleEverywhere {
 				display: inline-flex;
 				align-items: center;
 			}
+			${BDFDB.dotCNS.messageheadercompact + BDFDB.dotCN.messageusername} {
+				text-indent: 0px;
+			}
 			.TRE-tag {
 				border-radius: 3px;
 				box-sizing: border-box;
