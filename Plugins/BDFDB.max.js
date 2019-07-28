@@ -1861,29 +1861,38 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		for (let info of BDFDB.readDmList()) if (info && info.id == id) return info;
 		return null;
 	};
-
+	
 	var unreadingchannels = false;
 	BDFDB.markChannelAsRead = function (channels) {
 		if (!channels) return;
 		var UnreadUtils = BDFDB.WebModules.findByProperties("getOldestUnreadMessageId");
-		var ChannelAckUtils = BDFDB.WebModules.findByProperties("ack", "localAck");
-		if (!UnreadUtils || !ChannelAckUtils) return;
+		var APIModule = BDFDB.WebModules.findByProperties("getAPIBaseURL");
+		var DiscordConstants = BDFDB.WebModules.findByProperties("Permissions", "ActivityTypes", "StatusTypes");
+		if (!UnreadUtils || !APIModule || !DiscordConstants) return;
 		else if (unreadingchannels) return BDFDB.showToast("Already marking some channels as unread, please wait...", {type:"error"});
 		unreadingchannels = true;
 		channels = Array.isArray(channels) ? channels : (typeof channels == "string" || typeof channels == "number" ? Array.of(channels) : Array.from(channels));
-		var unread = () => {
+		var limitcheck, unread = () => {
 			var channel = channels.pop();
 			if (!channel) {
+				clearTimeout(limitcheck);
 				unreadingchannels = false;
-				return;
+				return BDFDB.showToast("Finished marking all channels as unread", {type:"success"});
 			}
 			else {
 				let id = Node.prototype.isPrototypeOf(channel) ? (BDFDB.getChannelID(channel) || BDFDB.getDmID(channel)) : channel && typeof channel == 'object' ? channel.id : channel;
-				if (id) {
-					let messageid = UnreadUtils.getOldestUnreadMessageId(id);
-					if (messageid) ChannelAckUtils.ack(id, true, true);
+				let messageid = id ? UnreadUtils.getOldestUnreadMessageId(id) : null;
+				if (id && messageid) {
+					clearTimeout(limitcheck);
+					limitcheck = setTimeout(() => {
+						unreadingchannels = false;
+						BDFDB.showToast("You have been rate limited by Discord for too quickly marking a lot of channels as unread, please wait a bit...", {type:"error"});
+					}, 10000);
+					APIModule.post({body:{}, url:DiscordConstants.Endpoints.MESSAGE_ACK(id, messageid)}).then(() => {
+						setTimeout(unread, Math.floor((Math.random() * (3000 - 1000)) + 1000)); 
+					});
 				}
-				setTimeout(unread, Math.floor((Math.random() * (3000 - 1000)) + 1000)); 
+				else unread();
 			}
 		}
 		unread();
@@ -1892,21 +1901,32 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	var unreadingguilds = false;
 	BDFDB.markGuildAsRead = function (servers) {
 		if (!servers) return;
-		var GuildManageUtils = BDFDB.WebModules.findByProperties('markGuildAsRead');
-		if (!GuildManageUtils) return;
+		var APIModule = BDFDB.WebModules.findByProperties("getAPIBaseURL");
+		var DiscordConstants = BDFDB.WebModules.findByProperties("Permissions", "ActivityTypes", "StatusTypes");
+		if (!APIModule || !DiscordConstants) return;
 		else if (unreadingguilds) return BDFDB.showToast("Already marking some servers as unread, please wait...", {type:"error"});
 		unreadingguilds = true;
 		servers = Array.isArray(servers) ? servers : (typeof servers == "string" || typeof servers == "number" ? Array.of(servers) : Array.from(servers));
-		var unread = () => {
+		var limitcheck, unread = () => {
 			var server = servers.pop();
 			if (!server) {
+				clearTimeout(limitcheck);
 				unreadingguilds = false;
-				return;
+				return BDFDB.showToast("Finished marking all servers as unread", {type:"success"});
 			}
 			else {
 				let id = Node.prototype.isPrototypeOf(server) ? BDFDB.getServerID(server) : server && typeof server == 'object' ? server.id : server;
-				if (id) GuildManageUtils.markGuildAsRead(id);
-				setTimeout(unread, Math.floor((Math.random() * (3000 - 1000)) + 1000)); 
+				if (id) {
+					clearTimeout(limitcheck);
+					limitcheck = setTimeout(() => {
+						unreadingguilds = false;
+						BDFDB.showToast("You have been rate limited by Discord for too quickly marking a lot of servers as unread, please wait a bit...", {type:"error"});
+					}, 10000);
+					APIModule.post({body:{}, url:DiscordConstants.Endpoints.GUILD_ACK(id)}).then(() => {
+						setTimeout(unread, Math.floor((Math.random() * (3000 - 1000)) + 1000)); 
+					});
+				}
+				else unread();
 			}
 		}
 		unread();
