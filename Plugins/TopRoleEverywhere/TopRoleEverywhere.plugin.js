@@ -21,19 +21,6 @@ class TopRoleEverywhere {
 		};
 
 		this.css = `
-			${BDFDB.dotCNS.message + BDFDB.dotCN.messageheadercozy} {
-				padding-top: 0;
-			}
-			${BDFDB.dotCN.messageheadercompact} > span.popout-open,
-			${BDFDB.dotCN.messageheadercompact} > span[class=""],
-			${BDFDB.dotCN.messageheadercozymeta} > span.popout-open,
-			${BDFDB.dotCN.messageheadercozymeta} > span[class=""] {
-				display: inline-flex;
-				align-items: center;
-			}
-			${BDFDB.dotCNS.messageheadercompact + BDFDB.dotCN.messageusername} {
-				text-indent: 0px;
-			}
 			.TRE-tag {
 				border-radius: 3px;
 				box-sizing: border-box;

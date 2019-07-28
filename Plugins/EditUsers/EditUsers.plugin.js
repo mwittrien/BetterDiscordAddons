@@ -45,19 +45,6 @@ class EditUsers {
 		this.avatarselector = BDFDB.dotCNC.guildicon + BDFDB.dotCNC.avatar + BDFDB.dotCNC.callavatarwrapper + BDFDB.dotCN.voiceavatarcontainer;
 
 		this.css = `
-			${BDFDB.dotCNS.message + BDFDB.dotCN.messageheadercozy} {
-				padding-top: 0;
-			}
-			${BDFDB.dotCN.messageheadercompact} > span.popout-open,
-			${BDFDB.dotCN.messageheadercompact} > span[class=""],
-			${BDFDB.dotCN.messageheadercozymeta} > span.popout-open,
-			${BDFDB.dotCN.messageheadercozymeta} > span[class=""] {
-				display: inline-flex;
-				align-items: center;
-			}
-			${BDFDB.dotCNS.messageheadercompact + BDFDB.dotCN.messageusername} {
-				text-indent: 0px;
-			}
 			${BDFDB.dotCN.bottag} {
 				line-height: 13px;
 				height: 13px;

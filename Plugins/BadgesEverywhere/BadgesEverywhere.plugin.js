@@ -22,19 +22,6 @@ class BadgesEverywhere {
 		};
 
 		this.css = `
-			${BDFDB.dotCNS.message + BDFDB.dotCN.messageheadercozy} {
-				padding-top: 0;
-			}
-			${BDFDB.dotCN.messageheadercompact} > span.popout-open,
-			${BDFDB.dotCN.messageheadercompact} > span[class=""],
-			${BDFDB.dotCN.messageheadercozymeta} > span.popout-open,
-			${BDFDB.dotCN.messageheadercozymeta} > span[class=""] {
-				display: inline-flex;
-				align-items: center;
-			}
-			${BDFDB.dotCNS.messageheadercompact + BDFDB.dotCN.messageusername} {
-				text-indent: 0px;
-			}
 			${BDFDB.dotCN.userpopoutcustomstatus}:not(:last-child) {
 				margin-top: 4px;
 				margin-bottom: 4px;
