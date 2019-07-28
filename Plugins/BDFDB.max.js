@@ -1862,30 +1862,22 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		return null;
 	};
 	
-	var unreadingchannels = false;
 	BDFDB.markChannelAsRead = function (channels) {
 		if (!channels) return;
 		var UnreadUtils = BDFDB.WebModules.findByProperties("getOldestUnreadMessageId");
 		var APIModule = BDFDB.WebModules.findByProperties("getAPIBaseURL");
 		var DiscordConstants = BDFDB.WebModules.findByProperties("Permissions", "ActivityTypes", "StatusTypes");
 		if (!UnreadUtils || !APIModule || !DiscordConstants) return;
-		else if (unreadingchannels) return BDFDB.showToast("Already marking some channels as unread, please wait...", {type:"error"});
-		unreadingchannels = true;
 		channels = Array.isArray(channels) ? channels : (typeof channels == "string" || typeof channels == "number" ? Array.of(channels) : Array.from(channels));
 		var limitcheck, unread = () => {
 			var channel = channels.pop();
-			if (!channel) {
-				clearTimeout(limitcheck);
-				unreadingchannels = false;
-				return BDFDB.showToast("Finished marking all channels as unread", {type:"success"});
-			}
+			if (!channel) clearTimeout(limitcheck);
 			else {
 				let id = Node.prototype.isPrototypeOf(channel) ? (BDFDB.getChannelID(channel) || BDFDB.getDmID(channel)) : channel && typeof channel == 'object' ? channel.id : channel;
 				let messageid = id ? UnreadUtils.getOldestUnreadMessageId(id) : null;
 				if (id && messageid) {
 					clearTimeout(limitcheck);
 					limitcheck = setTimeout(() => {
-						unreadingchannels = false;
 						BDFDB.showToast("You have been rate limited by Discord for too quickly marking a lot of channels as unread, please wait a bit...", {type:"error"});
 					}, 10000);
 					APIModule.post({body:{}, url:DiscordConstants.Endpoints.MESSAGE_ACK(id, messageid)}).then(() => {
@@ -1898,28 +1890,20 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		unread();
 	};
 
-	var unreadingguilds = false;
 	BDFDB.markGuildAsRead = function (servers) {
 		if (!servers) return;
 		var APIModule = BDFDB.WebModules.findByProperties("getAPIBaseURL");
 		var DiscordConstants = BDFDB.WebModules.findByProperties("Permissions", "ActivityTypes", "StatusTypes");
 		if (!APIModule || !DiscordConstants) return;
-		else if (unreadingguilds) return BDFDB.showToast("Already marking some servers as unread, please wait...", {type:"error"});
-		unreadingguilds = true;
 		servers = Array.isArray(servers) ? servers : (typeof servers == "string" || typeof servers == "number" ? Array.of(servers) : Array.from(servers));
 		var limitcheck, unread = () => {
 			var server = servers.pop();
-			if (!server) {
-				clearTimeout(limitcheck);
-				unreadingguilds = false;
-				return BDFDB.showToast("Finished marking all servers as unread", {type:"success"});
-			}
+			if (!server) clearTimeout(limitcheck);
 			else {
 				let id = Node.prototype.isPrototypeOf(server) ? BDFDB.getServerID(server) : server && typeof server == 'object' ? server.id : server;
 				if (id) {
 					clearTimeout(limitcheck);
 					limitcheck = setTimeout(() => {
-						unreadingguilds = false;
 						BDFDB.showToast("You have been rate limited by Discord for too quickly marking a lot of servers as unread, please wait a bit...", {type:"error"});
 					}, 10000);
 					APIModule.post({body:{}, url:DiscordConstants.Endpoints.GUILD_ACK(id)}).then(() => {
