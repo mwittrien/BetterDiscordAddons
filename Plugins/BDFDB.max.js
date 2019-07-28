@@ -1731,21 +1731,23 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	};
 
 	BDFDB.readUnreadServerList = function (servers) {
-		var found = [];
-		for (let info of servers === undefined || !Array.isArray(servers) ? BDFDB.readServerList() : servers) {
-			let div = Node.prototype.isPrototypeOf(info) ? info : info && info.div ? info.div : null;
-			let props = BDFDB.getReactValue(div, "return.stateNode.props");
-			if (props && (props.unread || props.badge > 0)) found.push(info);
+		var found = [], UnreadUtils = BDFDB.WebModules.findByProperties("hasUnread", "getUnreadGuilds");
+		for (let eleOrInfoOrId of servers === undefined || !Array.isArray(servers) ? BDFDB.readServerList() : servers) {
+			if (!eleOrInfoOrId) return null;
+			let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.getServerID(eleOrInfoOrId) : typeof eleOrInfoOrId == 'object' ? eleOrInfoOrId.id : eleOrInfoOrId;
+			id = typeof id == 'number' ? id.toFixed() : id;
+			if (id && UnreadUtils.hasUnread(id)) found.push(eleOrInfoOrId);
 		}
 		return found;
 	};
 
 	BDFDB.readMutedServerList = function (servers) {
-		var found = [], UnreadUtils = BDFDB.WebModules.findByProperties("isGuildOrCategoryOrChannelMuted");
-		for (let info of servers === undefined || !Array.isArray(servers) ? BDFDB.readServerList() : servers) {
-			let div = Node.prototype.isPrototypeOf(info) ? info : info && info.div ? info.div : null;
-			let id = BDFDB.getReactValue(div, "return.stateNode.props.guild.id");
-			if (id && UnreadUtils.isGuildOrCategoryOrChannelMuted(id)) found.push(info);
+		var found = [], MutedUtils = BDFDB.WebModules.findByProperties("isGuildOrCategoryOrChannelMuted");
+		for (let eleOrInfoOrId of servers === undefined || !Array.isArray(servers) ? BDFDB.readServerList() : servers) {
+			if (!eleOrInfoOrId) return null;
+			let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.getServerID(eleOrInfoOrId) : typeof eleOrInfoOrId == 'object' ? eleOrInfoOrId.id : eleOrInfoOrId;
+			id = typeof id == 'number' ? id.toFixed() : id;
+			if (id && MutedUtils.isGuildOrCategoryOrChannelMuted(id)) found.push(eleOrInfoOrId);
 		}
 		return found;
 	};
@@ -1860,28 +1862,54 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		return null;
 	};
 
+	var unreadingchannels = false;
 	BDFDB.markChannelAsRead = function (channels) {
 		if (!channels) return;
 		var UnreadUtils = BDFDB.WebModules.findByProperties("getOldestUnreadMessageId");
-		var ChannelAckUtils = BDFDB.WebModules.findByProperties("ack","localAck");
+		var ChannelAckUtils = BDFDB.WebModules.findByProperties("ack", "localAck");
 		if (!UnreadUtils || !ChannelAckUtils) return;
-		for (let info of Array.isArray(channels) ? channels : (typeof channels == "string" || typeof channels == "number" ? Array.of(channels) : Array.from(channels))) {
-			let id = Node.prototype.isPrototypeOf(info) ? (BDFDB.getChannelID(info) || BDFDB.getDmID(info)) : info && typeof info == 'object' ? info.id : info;
-			if (id) {
-				let messageid = UnreadUtils.getOldestUnreadMessageId(id);
-				if (messageid) ChannelAckUtils.ack(id, true, true);
+		else if (unreadingchannels) return BDFDB.showToast("Already marking some channels as unread, please wait...", {type:"error"});
+		unreadingchannels = true;
+		channels = Array.isArray(channels) ? channels : (typeof channels == "string" || typeof channels == "number" ? Array.of(channels) : Array.from(channels));
+		var unread = () => {
+			var channel = channels.pop();
+			if (!channel) {
+				unreadingchannels = false;
+				return;
+			}
+			else {
+				let id = Node.prototype.isPrototypeOf(channel) ? (BDFDB.getChannelID(channel) || BDFDB.getDmID(channel)) : channel && typeof channel == 'object' ? channel.id : channel;
+				if (id) {
+					let messageid = UnreadUtils.getOldestUnreadMessageId(id);
+					if (messageid) ChannelAckUtils.ack(id, true, true);
+				}
+				setTimeout(unread, Math.floor((Math.random() * (3000 - 1000)) + 1000)); 
 			}
 		}
+		unread();
 	};
 
+	var unreadingguilds = false;
 	BDFDB.markGuildAsRead = function (servers) {
 		if (!servers) return;
 		var GuildManageUtils = BDFDB.WebModules.findByProperties('markGuildAsRead');
 		if (!GuildManageUtils) return;
-		for (let info of Array.isArray(servers) ? servers : (typeof servers == "string" || typeof servers == "number" ? Array.of(servers) : Array.from(servers))) {
-			let id = Node.prototype.isPrototypeOf(info) ? BDFDB.getServerID(info) : info && typeof info == 'object' ? info.id : info;
-			if (id) GuildManageUtils.markGuildAsRead(id);
+		else if (unreadingguilds) return BDFDB.showToast("Already marking some servers as unread, please wait...", {type:"error"});
+		unreadingguilds = true;
+		servers = Array.isArray(servers) ? servers : (typeof servers == "string" || typeof servers == "number" ? Array.of(servers) : Array.from(servers));
+		var unread = () => {
+			var server = servers.pop();
+			if (!server) {
+				unreadingguilds = false;
+				return;
+			}
+			else {
+				let id = Node.prototype.isPrototypeOf(server) ? BDFDB.getServerID(server) : server && typeof server == 'object' ? server.id : server;
+				if (id) GuildManageUtils.markGuildAsRead(id);
+				setTimeout(unread, Math.floor((Math.random() * (3000 - 1000)) + 1000)); 
+			}
 		}
+		unread();
 	};
 
 	BDFDB.saveAllData = function (data, plugin, key) {
