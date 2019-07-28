@@ -1869,7 +1869,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		var DiscordConstants = BDFDB.WebModules.findByProperties("Permissions", "ActivityTypes", "StatusTypes");
 		if (!UnreadUtils || !APIModule || !DiscordConstants) return;
 		channels = Array.isArray(channels) ? channels : (typeof channels == "string" || typeof channels == "number" ? Array.of(channels) : Array.from(channels));
-		var limitcheck, unread = () => {
+		var limitcheck, multi = channels.length > 1, unread = () => {
 			var channel = channels.pop();
 			if (!channel) clearTimeout(limitcheck);
 			else {
@@ -1877,7 +1877,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				let messageid = id ? UnreadUtils.getOldestUnreadMessageId(id) : null;
 				if (id && messageid) {
 					clearTimeout(limitcheck);
-					limitcheck = setTimeout(() => {
+					if (channels) limitcheck = setTimeout(() => {
 						BDFDB.showToast("You have been rate limited by Discord for too quickly marking a lot of channels as unread, please wait a bit...", {type:"error"});
 					}, 10000);
 					APIModule.post({body:{}, url:DiscordConstants.Endpoints.MESSAGE_ACK(id, messageid)}).then(() => {
@@ -1896,14 +1896,14 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		var DiscordConstants = BDFDB.WebModules.findByProperties("Permissions", "ActivityTypes", "StatusTypes");
 		if (!APIModule || !DiscordConstants) return;
 		servers = Array.isArray(servers) ? servers : (typeof servers == "string" || typeof servers == "number" ? Array.of(servers) : Array.from(servers));
-		var limitcheck, unread = () => {
+		var limitcheck, multi = servers.length > 1, unread = () => {
 			var server = servers.pop();
 			if (!server) clearTimeout(limitcheck);
 			else {
 				let id = Node.prototype.isPrototypeOf(server) ? BDFDB.getServerID(server) : server && typeof server == 'object' ? server.id : server;
 				if (id) {
 					clearTimeout(limitcheck);
-					limitcheck = setTimeout(() => {
+					if (multi) limitcheck = setTimeout(() => {
 						BDFDB.showToast("You have been rate limited by Discord for too quickly marking a lot of servers as unread, please wait a bit...", {type:"error"});
 					}, 10000);
 					APIModule.post({body:{}, url:DiscordConstants.Endpoints.GUILD_ACK(id)}).then(() => {
